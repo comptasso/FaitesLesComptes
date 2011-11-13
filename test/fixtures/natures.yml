@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  organism_id: 1
+  comment: MyText
+
+two:
+  name: MyString
+  organism_id: 1
+  comment: MyText

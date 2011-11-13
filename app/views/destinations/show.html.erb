@@ -1,0 +1,26 @@
+
+<%= content_for :bandeau do %>
+
+<%= icon_to 'nouveau.png', new_destination_path %>
+<%= icon_to 'modifier.png', edit_destination_path(@destination) %>
+<%= icon_to 'retour.png', destinations_path %>
+<% end -%>
+<fieldset><legend>Description de destination </legend>
+
+<p>
+  <b>Name:</b>
+  <%= @destination.name %>
+</p>
+
+<p>
+  <b>Organism:</b>
+  <%= @destination.organism_id %>
+</p>
+
+<p>
+  <b>Comment:</b>
+  <%= @destination.comment %>
+</p>
+
+</fieldset>
+

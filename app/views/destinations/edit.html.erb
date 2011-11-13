@@ -1,0 +1,17 @@
+<%= content_for :bandeau do %>
+
+<%= icon_to 'nouveau.png', new_destination_path %>
+<%= icon_to 'afficher.png', @destination %>
+<%= icon_to 'retour.png', destinations_path %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification destination
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+

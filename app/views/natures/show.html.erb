@@ -1,0 +1,26 @@
+
+<%= content_for :bandeau do %>
+
+<%= icon_to 'nouveau.png', new_nature_path %>
+<%= icon_to 'modifier.png', edit_nature_path(@nature) %>
+<%= icon_to 'retour.png', natures_path %>
+<% end -%>
+<fieldset><legend>Description de nature </legend>
+
+<p>
+  <b>Name:</b>
+  <%= @nature.name %>
+</p>
+
+<p>
+  <b>Organism:</b>
+  <%= @nature.organism_id %>
+</p>
+
+<p>
+  <b>Comment:</b>
+  <%= @nature.comment %>
+</p>
+
+</fieldset>
+

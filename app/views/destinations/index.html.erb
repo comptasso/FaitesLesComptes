@@ -1,0 +1,30 @@
+<%= content_for :bandeau do %>
+<%= icon_to 'nouveau.png', new_destination_path %>
+<% end -%>
+
+<fieldset><legend> Liste des destinations </legend>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Organism</th>
+    <th>Comment</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @destinations.each do |destination| %>
+  <tr>
+    <td><%= destination.name %></td>
+    <td><%= destination.organism_id %></td>
+    <td><%= destination.comment %></td>
+    <td><%= icon_to 'afficher.png', destination %></td>
+    <td><%= icon_to 'modifier.png', edit_destination_path(destination) %></td>
+    <td><%= icon_to 'supprimer.png', destination, :confirm => 'Etes vous sur ?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+</fieldset>
+
+
