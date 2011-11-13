@@ -1,8 +1,8 @@
 <%= content_for :bandeau do %>
 
-<%= icon_to 'nouveau.png', new_line_path %>
-<%= icon_to 'afficher.png', @line %>
-<%= icon_to 'retour.png', lines_path %>
+<%= icon_to 'nouveau.png', new_listing_line_path(@listing) %>
+<%= icon_to 'afficher.png', [@listing,@line] %>
+<%= icon_to 'retour.png', listing_lines_path(@listing) %>
 <% end -%>
 
 <fieldset>

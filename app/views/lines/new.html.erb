@@ -1,11 +1,11 @@
 <%= content_for :bandeau do %>
 
-<%= icon_to 'retour.png', lines_path %>
+<%= icon_to 'retour.png', listing_lines_path(@listing) %>
 <% end -%>
 
 <fieldset>
   <legend>
-    Nouveau line
+    Nouvelle ligne
   </legend>
 
 <%= render 'form' %>

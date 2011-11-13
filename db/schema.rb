@@ -11,12 +11,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111113140717) do
+ActiveRecord::Schema.define(:version => 20111113145713) do
 
   create_table "destinations", :force => true do |t|
     t.string   "name"
     t.integer  "organism_id"
     t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lines", :force => true do |t|
+    t.date     "line_date"
+    t.string   "narration"
+    t.integer  "nature_id"
+    t.integer  "destination_id"
+    t.decimal  "debit",          :precision => 2, :scale => 10
+    t.decimal  "credit",         :precision => 2, :scale => 10
+    t.integer  "listing_id"
+    t.boolean  "locked",                                        :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

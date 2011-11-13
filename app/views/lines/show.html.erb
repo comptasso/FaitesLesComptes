@@ -1,15 +1,15 @@
 
 <%= content_for :bandeau do %>
 
-<%= icon_to 'nouveau.png', new_line_path %>
-<%= icon_to 'modifier.png', edit_line_path(@line) %>
-<%= icon_to 'retour.png', lines_path %>
+<%= icon_to 'nouveau.png', new_listing_line_path(@listing) %>
+<%= icon_to 'modifier.png', edit_listing_line_path(@listing,@line) %>
+<%= icon_to 'retour.png', listing_lines_path(@listing) %>
 <% end -%>
 <fieldset><legend>Description de line </legend>
 
 <p>
   <b>Date:</b>
-  <%= @line.date %>
+  <%= @line.line_date %>
 </p>
 
 <p>

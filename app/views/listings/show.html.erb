@@ -1,20 +1,15 @@
-<p id="notice"><%= notice %></p>
+<%= content_for :bandeau do %>
 
-<p>
-  <b>Title:</b>
-  <%= @listing.title %>
-</p>
+<%= icon_to 'nouveau.png', new_organism_listing_path(@organism) %>
+<%= icon_to 'modifier.png', edit_organism_listing_path(@organism,@listing) %>
+<%= icon_to 'retour.png', organism_listings_path(@organism) %>
+<% end -%>
+<fieldset>
+  <legend><%= @organism.title %> - <%= @organism.description %></legend>
 
-<p>
-  <b>Description:</b>
-  <%= @listing.description %>
-</p>
+ <%= image_tag(@listing.image_url, class: 'list_image') %>
+ <%= @listing.title %>
+</fieldset>
+<p><%=  link_to 'Nouvelle ligne', new_listing_line_path(@listing) %></p>
+<p>Ici il y aura donc la liste des écritures*</p>
 
-<p>
-  <b>Image url:</b>
-  <%= @listing.image_url %>
-</p>
-
-
-<%= link_to 'Edit', edit_organism_listing_path(@organism,@listing) %> |
-<%= link_to 'Back', organism_listings_path(@organism) %>

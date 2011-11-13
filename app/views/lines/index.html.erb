@@ -1,5 +1,5 @@
 <%= content_for :bandeau do %>
-<%= icon_to 'nouveau.png', new_line_path %>
+<%= icon_to 'nouveau.png', new_listing_line_path(@listing) %>
 <% end -%>
 
 <fieldset><legend> Liste des lines </legend>
@@ -28,9 +28,9 @@
     <td><%= line.credit %></td>
     <td><%= line.listing_id %></td>
     <td><%= line.locked %></td>
-    <td><%= icon_to 'afficher.png', line %></td>
-    <td><%= icon_to 'modifier.png', edit_line_path(line) %></td>
-    <td><%= icon_to 'supprimer.png', line, :confirm => 'Etes vous sur ?', :method => :delete %></td>
+    <td><%= icon_to 'afficher.png', [@listing, line] %></td>
+    <td><%= icon_to 'modifier.png', edit_listing_line_path(@listing,line) %></td>
+    <td><%= icon_to 'supprimer.png', [@listing,line], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

@@ -1,14 +1,14 @@
 class CreateLines < ActiveRecord::Migration
   def change
     create_table :lines do |t|
-      t.date :date
+      t.date :line_date
       t.string :narration
       t.integer :nature_id
       t.integer :destination_id
-      t.decimal :debit
-      t.decimal :credit
+      t.decimal :debit, scale: 10, precision: 2
+      t.decimal :credit, scale: 10, precision: 2
       t.integer :listing_id
-      t.boolean :locked
+      t.boolean :locked, default: false
 
       t.timestamps
     end

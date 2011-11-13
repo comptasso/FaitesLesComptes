@@ -1,15 +1,21 @@
-<%= simple_form_for(@line) do |f| %>
+<%= simple_form_for [@listing,@line] do |f| %>
   <%= f.error_notification %>
 
   <div class="inputs">
-    <%= f.input :date %>
+
+     
+ <%= f.input(:line_date)  %>
+    
+
     <%= f.input :narration %>
-    <%= f.input :nature_id %>
-    <%= f.input :destination_id %>
+    <%= f.association :nature %>
+    <%= f.association :destination %>
     <%= f.input :debit %>
     <%= f.input :credit %>
-    <%= f.input :listing_id %>
-    <%= f.input :locked %>
+
+    
+    
+    <%= f.input :locked,:label=>'Verrouillé', as: :radio %>
   </div>
 
   <div class="actions">
