@@ -1,9 +1,10 @@
 
 <%= content_for :bandeau do %>
 
-<%= icon_to 'nouveau.png', new_destination_path %>
-<%= icon_to 'modifier.png', edit_destination_path(@destination) %>
-<%= icon_to 'retour.png', destinations_path %>
+<%= icon_to 'nouveau.png', new_organism_destination_path(@organism) %>
+<%= icon_to 'modifier.png', edit_organism_destination_path(@organism,@destination) %>
+<%= icon_to 'retour.png', organism_destinations_path(@organism) %>
+
 <% end -%>
 <fieldset><legend>Description de destination </legend>
 

@@ -9,15 +9,8 @@
 
 
 
-<table>
-  <thead>
-  <th>Titre</th>
-  <th>Description</th>
-  </thead>
-  <tbody>
-    <%= render @organism.listings %>
-  </tbody>
-  <tr></tr>
-</table>
+  <p><%= link_to 'Liste des journaux', organism_listings_path(@organism) %></p>
+   <p><%= link_to 'Liste des destination', organism_destinations_path(@organism) %></p>
+    <p><%= link_to 'Liste des natures', organism_natures_path(@organism) %></p>
 
 </fieldset>

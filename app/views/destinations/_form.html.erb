@@ -1,10 +1,10 @@
-<%= simple_form_for(@destination) do |f| %>
+<%= simple_form_for([@organism,@destination]) do |f| %>
   <%= f.error_notification %>
 
   <div class="inputs">
     <%= f.input :name %>
-    <%= f.input :organism_id %>
-    <%= f.input :comment %>
+   
+    <%= f.input :comment, input_html: {rows: 4} %>
   </div>
 
   <div class="actions">

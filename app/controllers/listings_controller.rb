@@ -85,10 +85,5 @@ class ListingsController < ApplicationController
     end
   end
 
-  private
-
-  def find_organism
-    @organism=Organism.find(params[:organism_id])
-  end
-
+ 
 end

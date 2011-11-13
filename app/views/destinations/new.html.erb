@@ -1,11 +1,11 @@
 <%= content_for :bandeau do %>
 
-<%= icon_to 'retour.png', destinations_path %>
+<%= icon_to 'retour.png', organism_destinations_path(@organism) %>
 <% end -%>
 
 <fieldset>
   <legend>
-    Nouveau destination
+    Nouvelle destination pour <%=  @organism.title %>
   </legend>
 
 <%= render 'form' %>

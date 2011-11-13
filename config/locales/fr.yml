@@ -15,6 +15,12 @@ fr:
         title: Titre
       organism:
         title: Titre
+      destination:
+        name: Nom
+        comment: Commentaire
+      nature:
+        name: Nom
+        comment: Commentaire
 
   helpers:
     select:
@@ -26,3 +32,9 @@ fr:
       organism:
         create: "Créer l'organisme"
         update: "Modifier cet organisme"
+      destination:
+        create: "Créer la destination"
+        update: "Mettre à jour"
+      nature:
+        create: "Créer la nature"
+        update: "Mettre à jour"

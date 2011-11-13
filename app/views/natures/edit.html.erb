@@ -1,8 +1,8 @@
 <%= content_for :bandeau do %>
 
-<%= icon_to 'nouveau.png', new_nature_path %>
-<%= icon_to 'afficher.png', @nature %>
-<%= icon_to 'retour.png', natures_path %>
+<%= icon_to 'nouveau.png', new_organism_nature_path(@organism) %>
+<%= icon_to 'afficher.png', [@organism,@nature] %>
+<%= icon_to 'retour.png', organism_natures_path(@organism) %>
 <% end -%>
 
 <fieldset>
