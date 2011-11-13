@@ -1,0 +1,15 @@
+<h1>Liste des journaux de <%= @organism.title %> </h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th>Title</th>
+    <th></th>
+  </tr>
+
+<%= render @listings %>
+</table>
+
+<br />
+
+<%= link_to 'Nouveau Journal', new_organism_listing_path(@organism) %>

@@ -1,0 +1,12 @@
+<%%= content_for :bandeau do %>
+
+<%%= icon_to 'retour.png', <%= index_helper %>_path %>
+<%% end -%>
+
+<fieldset>
+  <legend>
+    Nouveau <%= singular_table_name %>
+  </legend>
+
+<%%= render 'form' %>
+</fieldset>

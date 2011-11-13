@@ -1,0 +1,17 @@
+<%= content_for :bandeau do %>
+
+<%= icon_to 'nouveau.png', new_organism_path %>
+<%= icon_to 'afficher.png', @organism %>
+<%= icon_to 'retour.png', organisms_path %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification organism
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+

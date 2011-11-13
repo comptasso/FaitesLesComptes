@@ -1,0 +1,79 @@
+/*
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require_self
+ *= require_tree . 
+*/
+#bandeau {
+background: #fff;
+height: 16px;
+margin-right: 10px;
+margin-bottom: 10px;
+
+}
+
+fieldset {
+  background: #efe;
+  margin-left: 0px;
+  margin-bottom: 10px;
+}
+
+fieldset legend {
+color: #dfd;
+background: #141;
+font-family: sans-serif;
+padding: 0.2em 1em;
+}
+
+/* stylesheets/application.css */
+.simple_form label {
+  float: left;
+  width: 120px;
+  text-align: right;
+  margin: 2px 10px;
+  font-weight: bold;
+}
+
+.simple_form div.input {
+  margin-bottom: 10px;
+ }
+
+ .inputs_inline label{
+     float: none;
+ }
+
+.simple_form div.boolean, .simple_form input[type='submit'] {
+  margin-left: 40px;
+}
+
+.simple_form div.boolean label, .simple_form label.collection_radio {
+  float: none;
+  margin: 0;
+}
+
+.simple_form label.collection_radio {
+  margin-right: 10px;
+  margin-left: 2px;
+}
+
+.simple_form .error {
+  clear: left;
+  margin-left: 120px;
+  font-size: 12px;
+  color: yellow;
+  display: block;
+}
+
+.simple_form .hint {
+  clear: left;
+  margin-left: 140px;
+  font-size: 12px;
+  color: #555;
+  display: block;
+  font-style: italic;
+}
+
+.simple_form abbr {
+    color: red;
+}

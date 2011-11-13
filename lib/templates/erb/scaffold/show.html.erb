@@ -1,0 +1,18 @@
+
+<%%= content_for :bandeau do %>
+
+<%%= icon_to 'nouveau.png', new_<%= singular_table_name %>_path %>
+<%%= icon_to 'modifier.png', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>) %>
+<%%= icon_to 'retour.png', <%= index_helper %>_path %>
+<%% end -%>
+<fieldset><legend>Description de <%= singular_table_name %> </legend>
+
+<% for attribute in attributes -%>
+<p>
+  <b><%= attribute.human_name %>:</b>
+  <%%= @<%= singular_table_name %>.<%= attribute.name %> %>
+</p>
+
+<% end -%>
+</fieldset>
+

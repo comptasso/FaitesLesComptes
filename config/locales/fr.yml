@@ -1,0 +1,28 @@
+## YAML Template.
+---
+fr:
+  labels:
+    Title: Titre
+
+  general:
+    Title: Titre
+    update: 'Mettre à jour'
+    back: 'Retour'
+
+  activerecord:
+    attributes:
+      listing:
+        title: Titre
+      organism:
+        title: Titre
+
+  helpers:
+    select:
+      prompt: "Veuillez sélectionner"
+    submit:
+      listing:
+        create: "Créer un journal"
+        update: "Modifier ce journal"
+      organism:
+        create: "Créer l'organisme"
+        update: "Modifier cet organisme"

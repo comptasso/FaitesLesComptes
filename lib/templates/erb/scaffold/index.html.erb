@@ -1,0 +1,30 @@
+<%%= content_for :bandeau do %>
+<%%= icon_to 'nouveau.png', new_<%= singular_table_name %>_path %>
+<%% end -%>
+
+<fieldset><legend> Liste des <%= table_name %> </legend>
+<table>
+  <tr>
+<% for attribute in attributes -%>
+    <th><%= attribute.human_name %></th>
+<% end -%>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<%% @<%= plural_table_name %>.each do |<%= singular_table_name %>| %>
+  <tr>
+<% for attribute in attributes -%>
+    <td><%%= <%= singular_table_name %>.<%= attribute.name %> %></td>
+<% end -%>
+    <td><%%= icon_to 'afficher.png', <%= singular_table_name %> %></td>
+    <td><%%= icon_to 'modifier.png', edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %></td>
+    <td><%%= icon_to 'supprimer.png', <%= singular_table_name %>, :confirm => 'Etes vous sur ?', :method => :delete %></td>
+  </tr>
+<%% end %>
+</table>
+
+</fieldset>
+
+

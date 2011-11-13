@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Title:</b>
+  <%= @listing.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @listing.description %>
+</p>
+
+<p>
+  <b>Image url:</b>
+  <%= @listing.image_url %>
+</p>
+
+
+<%= link_to 'Edit', edit_organism_listing_path(@organism,@listing) %> |
+<%= link_to 'Back', organism_listings_path(@organism) %>
