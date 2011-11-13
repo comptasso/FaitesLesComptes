@@ -1,14 +1,12 @@
 <%= simple_form_for [@listing,@line] do |f| %>
   <%= f.error_notification %>
 
-  <div class="inputs">
 
+<div class="inputs_inline" id="entry_lines" style="display: inline;">
      
- <%= f.input(:line_date)  %>
-    
-
-    <%= f.input :narration %>
-    <%= f.association :nature %>
+ <%= f.input :line_date, label: 'Date'  %>
+ <%= f.input :narration %>
+ <%= f.association :nature %>
     <%= f.association :destination %>
     <%= f.input :debit %>
     <%= f.input :credit %>

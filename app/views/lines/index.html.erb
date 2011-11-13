@@ -2,7 +2,7 @@
 <%= icon_to 'nouveau.png', new_listing_line_path(@listing) %>
 <% end -%>
 
-<fieldset><legend> Liste des lines </legend>
+<fieldset><legend> Listing </legend>
 <table>
   <tr>
     <th>Date</th>
@@ -11,7 +11,7 @@
     <th>Destination</th>
     <th>Debit</th>
     <th>Credit</th>
-    <th>Listing</th>
+    
     <th>Locked</th>
     <th></th>
     <th></th>
@@ -20,13 +20,12 @@
 
 <% @lines.each do |line| %>
   <tr>
-    <td><%= line.date %></td>
+    <td><%= line.line_date %></td>
     <td><%= line.narration %></td>
-    <td><%= line.nature_id %></td>
-    <td><%= line.destination_id %></td>
+    <td><%= line.nature.name %></td>
+    <td><%= line.destination.name %></td>
     <td><%= line.debit %></td>
     <td><%= line.credit %></td>
-    <td><%= line.listing_id %></td>
     <td><%= line.locked %></td>
     <td><%= icon_to 'afficher.png', [@listing, line] %></td>
     <td><%= icon_to 'modifier.png', edit_listing_line_path(@listing,line) %></td>
