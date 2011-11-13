@@ -1,0 +1,18 @@
+<%= simple_form_for(@line) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="inputs">
+    <%= f.input :date %>
+    <%= f.input :narration %>
+    <%= f.input :nature_id %>
+    <%= f.input :destination_id %>
+    <%= f.input :debit %>
+    <%= f.input :credit %>
+    <%= f.input :listing_id %>
+    <%= f.input :locked %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,0 +1,40 @@
+<%= content_for :bandeau do %>
+<%= icon_to 'nouveau.png', new_line_path %>
+<% end -%>
+
+<fieldset><legend> Liste des lines </legend>
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Narration</th>
+    <th>Nature</th>
+    <th>Destination</th>
+    <th>Debit</th>
+    <th>Credit</th>
+    <th>Listing</th>
+    <th>Locked</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @lines.each do |line| %>
+  <tr>
+    <td><%= line.date %></td>
+    <td><%= line.narration %></td>
+    <td><%= line.nature_id %></td>
+    <td><%= line.destination_id %></td>
+    <td><%= line.debit %></td>
+    <td><%= line.credit %></td>
+    <td><%= line.listing_id %></td>
+    <td><%= line.locked %></td>
+    <td><%= icon_to 'afficher.png', line %></td>
+    <td><%= icon_to 'modifier.png', edit_line_path(line) %></td>
+    <td><%= icon_to 'supprimer.png', line, :confirm => 'Etes vous sur ?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+</fieldset>
+
+

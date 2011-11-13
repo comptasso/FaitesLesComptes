@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  date: 2011-11-13
+  narration: MyString
+  nature_id: 1
+  destination_id: 1
+  debit: 9.99
+  credit: 9.99
+  listing_id: 1
+  locked: false
+
+two:
+  date: 2011-11-13
+  narration: MyString
+  nature_id: 1
+  destination_id: 1
+  debit: 9.99
+  credit: 9.99
+  listing_id: 1
+  locked: false

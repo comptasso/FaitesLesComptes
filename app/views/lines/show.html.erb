@@ -1,0 +1,51 @@
+
+<%= content_for :bandeau do %>
+
+<%= icon_to 'nouveau.png', new_line_path %>
+<%= icon_to 'modifier.png', edit_line_path(@line) %>
+<%= icon_to 'retour.png', lines_path %>
+<% end -%>
+<fieldset><legend>Description de line </legend>
+
+<p>
+  <b>Date:</b>
+  <%= @line.date %>
+</p>
+
+<p>
+  <b>Narration:</b>
+  <%= @line.narration %>
+</p>
+
+<p>
+  <b>Nature:</b>
+  <%= @line.nature_id %>
+</p>
+
+<p>
+  <b>Destination:</b>
+  <%= @line.destination_id %>
+</p>
+
+<p>
+  <b>Debit:</b>
+  <%= @line.debit %>
+</p>
+
+<p>
+  <b>Credit:</b>
+  <%= @line.credit %>
+</p>
+
+<p>
+  <b>Listing:</b>
+  <%= @line.listing_id %>
+</p>
+
+<p>
+  <b>Locked:</b>
+  <%= @line.locked %>
+</p>
+
+</fieldset>
+

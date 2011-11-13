@@ -1,0 +1,17 @@
+<%= content_for :bandeau do %>
+
+<%= icon_to 'nouveau.png', new_line_path %>
+<%= icon_to 'afficher.png', @line %>
+<%= icon_to 'retour.png', lines_path %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification line
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+

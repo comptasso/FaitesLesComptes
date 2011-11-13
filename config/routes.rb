@@ -1,6 +1,8 @@
 Faitesvoscomptes::Application.routes.draw do
   
 
+  resources :lines
+
   resources :organisms do
     resources :listings
     resources :destinations
