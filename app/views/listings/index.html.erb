@@ -1,15 +1,28 @@
-<h1>Liste des journaux de <%= @organism.title %> </h1>
+
+
+<%= content_for :menu do %>
+<%= render 'organisms/menu' %>
+<%= icon_to 'navigation90.png', organisms_path %>
+<%= icon_to 'nouveau.png', new_organism_listing_path(@organism) %>
+<% end %>
+
+<fieldset>
+  <legend>
+    Liste des journaux
+  </legend>
+
+
 
 <table>
   <tr>
     <th></th>
-    <th>Title</th>
+    <th></th>
     <th></th>
   </tr>
 
 <%= render @listings %>
 </table>
 
-<br />
+</fieldset>
 
-<%= link_to 'Nouveau Journal', new_organism_listing_path(@organism) %>
+

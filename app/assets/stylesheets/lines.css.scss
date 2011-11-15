@@ -2,5 +2,11 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .inputs_inline div.input {
-  display: inline;
+    display: inline;
+}
+
+.lines {
+    .debit, .credit {
+        text-align: right;
+    }
 }

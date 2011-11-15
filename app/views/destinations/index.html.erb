@@ -1,8 +1,10 @@
-<%= content_for :bandeau do %>
-<%= icon_to 'nouveau.png', new_organism_destination_path(@organism) %>
-<% end -%>
 
-<fieldset><legend> Liste des destinations de <%= link_to @organism.title, organism_path(@organism) %> </legend>
+<%= content_for :menu do %>
+<%= render 'organisms/menu' %>
+<%= icon_to 'nouveau.png', new_organism_destination_path(@organism) %>
+
+<% end %>
+<fieldset><legend> Liste des destinations</legend>
 <table>
   <tr>
     <th>Nom</th>

@@ -1,16 +1,12 @@
+<%= content_for :menu do %>
 
-<%= content_for :bandeau do %>
-
-<%= icon_to 'nouveau.png', new_organism_path %>
-<%= icon_to 'modifier.png', edit_organism_path(@organism) %>
-<%= icon_to 'retour.png', organisms_path %>
-<% end -%>
-<fieldset><legend><%= @organism.title %> - <%= @organism.description %></legend>
+<%= icon_to 'navigation90.png', organisms_path %>
 
 
+<%= render 'menu' %>
+<% end %>
+<div>
+  ICI on pourra mettre des infos de type graphique sur le suivi du compte
 
-  <p><%= link_to 'Liste des journaux', organism_listings_path(@organism) %></p>
-   <p><%= link_to 'Liste des destination', organism_destinations_path(@organism) %></p>
-    <p><%= link_to 'Liste des natures', organism_natures_path(@organism) %></p>
 
-</fieldset>
+</div>

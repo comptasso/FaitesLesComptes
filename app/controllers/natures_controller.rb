@@ -15,17 +15,7 @@ class NaturesController < ApplicationController
     end
   end
 
-  # GET /natures/1
-  # GET /natures/1.json
-  def show
-    @nature = @organism.natures.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @nature }
-    end
-  end
-
+ 
   # GET /natures/new
   # GET /natures/new.json
   def new

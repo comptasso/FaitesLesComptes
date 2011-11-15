@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Faitesvoscomptes</title>
-  <%= stylesheet_link_tag    "application" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body class='<%= controller.controller_name %>'>
-  <div id="bandeau"  ><%= yield :bandeau %>
-   <span id="notice"><%= notice %></span>
-   <span id="alert"><%= alert %></span>
+  <head>
+    <title>Faitesvoscomptes</title>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <div id="header">
+     <div id="logo">Faites vos comptes !</div>
+    <div id ="organism">
+      <%= @organism.title if @organism %> - <span class="description"><%= @organism.description  if @organism %></span>
+    </div>
   </div>
 
-<%= yield %>
+
+
+  <body class='<%= controller.controller_name %>'>
+
+     <nav id="menu">
+    <%= yield :menu %>
+  </nav>
+
+
+    <div id="bandeau"  ><%= yield :bandeau %>
+      <span id="notice"><%= notice %></span>
+      <span id="alert"><%= alert %></span>
+    </div>
+
+ 
+  <%= yield %>
 
 </body>
 </html>

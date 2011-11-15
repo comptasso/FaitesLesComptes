@@ -1,8 +1,10 @@
-<%= content_for :bandeau do %>
-<%= icon_to 'nouveau.png', new_organism_nature_path(@organism) %>
-<% end -%>
 
-<fieldset><legend> Liste des natures pour <%= link_to @organism.title, organism_path(@organism) %></legend>
+<%= content_for :menu do %>
+<%= render 'organisms/menu' %>
+<%= icon_to 'nouveau.png', new_organism_nature_path(@organism) %>
+
+<% end %>
+<fieldset><legend> Liste des natures</legend>
 <table>
   <tr>
     <th>Nom</th>

@@ -14,16 +14,7 @@ class LinesController < ApplicationController
     end
   end
 
-  # GET /lines/1
-  # GET /lines/1.json
-  def show
-    @line = @listing.lines.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @line }
-    end
-  end
+ 
 
   # GET /lines/new
   # GET /lines/new.json
@@ -88,5 +79,6 @@ class LinesController < ApplicationController
   private
   def find_listing
     @listing=Listing.find(params[:listing_id])
+    @organism=@listing.organism
   end
 end

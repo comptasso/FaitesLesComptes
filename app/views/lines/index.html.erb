@@ -2,11 +2,11 @@
 <%= icon_to 'nouveau.png', new_listing_line_path(@listing) %>
 <% end -%>
 
-<fieldset><legend> Listing </legend>
+<fieldset><legend> Listing <%= link_to  @listing.title, organism_listing_path(@organism, @listing) %></legend>
 <table>
   <tr>
     <th>Date</th>
-    <th>Narration</th>
+    <th>Libellé</th>
     <th>Nature</th>
     <th>Destination</th>
     <th>Debit</th>
@@ -20,14 +20,14 @@
 
 <% @lines.each do |line| %>
   <tr>
-    <td><%= line.line_date %></td>
+    <td><%=l line.line_date %></td>
     <td><%= line.narration %></td>
     <td><%= line.nature.name %></td>
     <td><%= line.destination.name %></td>
-    <td><%= line.debit %></td>
-    <td><%= line.credit %></td>
+    <td class="debit"><%= line.debit %></td>
+    <td class="credit"><%= line.credit %></td>
     <td><%= line.locked %></td>
-    <td><%= icon_to 'afficher.png', [@listing, line] %></td>
+    
     <td><%= icon_to 'modifier.png', edit_listing_line_path(@listing,line) %></td>
     <td><%= icon_to 'supprimer.png', [@listing,line], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
