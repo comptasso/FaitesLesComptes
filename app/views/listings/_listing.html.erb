@@ -16,6 +16,7 @@
   <td class="list_actions">
     <%= icon_to 'afficher.png', [@organism,listing] %><br/>
     <%= icon_to 'modifier.png', edit_organism_listing_path(@organism, listing) %><br/>
-    <%= icon_to 'supprimer.png', [@organism,listing], confirm: 'Are you sure?', method: :delete %>
+    <%= icon_to 'supprimer.png', [@organism,listing], confirm: 'Are you sure?', method: :delete %><br/>
+    <%= icon_to 'nouveau.png', new_listing_line_path(listing) %>
   </td>
   </tr>

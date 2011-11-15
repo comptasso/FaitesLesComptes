@@ -64,7 +64,7 @@ class DestinationsController < ApplicationController
 
     respond_to do |format|
       if @destination.update_attributes(params[:destination])
-        format.html { redirect_to [@organism,@destination], notice: 'Destination was successfully updated.' }
+        format.html { redirect_to organism_destinations_path(@organism), notice: 'Destination was successfully updated.' }
         format.json { head :ok }
       else
         format.html { render action: "edit" }

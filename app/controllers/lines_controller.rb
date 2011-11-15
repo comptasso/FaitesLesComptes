@@ -39,7 +39,7 @@ class LinesController < ApplicationController
 
     respond_to do |format|
       if @line.save
-        format.html { redirect_to [@listing, @line], notice: 'La ligne a été créée.' }
+        format.html { redirect_to listing_lines_url(@listing), notice: 'La ligne a été créée.' }
         format.json { render json: @line, status: :created, location: @line }
       else
         format.html { render action: "new" }

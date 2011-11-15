@@ -10,7 +10,7 @@
     <th>Nom</th>
     
     <th>Commentaire</th>
-    <th></th>
+   
     <th></th>
     <th></th>
   </tr>
@@ -20,7 +20,7 @@
     <td><%= nature.name %></td>
     
     <td><%= nature.comment %></td>
-    <td><%= icon_to 'afficher.png', [@organism,nature] %></td>
+    
     <td><%= icon_to 'modifier.png', edit_organism_nature_path(@organism,nature) %></td>
     <td><%= icon_to 'supprimer.png', [@organism, nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
