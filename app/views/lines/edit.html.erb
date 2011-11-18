@@ -1,4 +1,4 @@
-<%= content_for :bandeau do %>
+<%= content_for :menu do %>
 
 <%= icon_to 'nouveau.png', new_listing_line_path(@listing) %>
 <%= icon_to 'afficher.png', [@listing,@line] %>
@@ -7,7 +7,7 @@
 
 <fieldset>
   <legend>
-    Modification line
+    Modification d'une ligne
   </legend>
 
 <%= render 'form' %>

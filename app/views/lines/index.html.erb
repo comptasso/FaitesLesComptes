@@ -1,8 +1,12 @@
-<%= content_for :bandeau do %>
+<%= content_for :menu do %>
+<% @organism.listings.reject!{|l| l==@listing}.each do  |m| %>
+    <%=  link_to m.title, listing_lines_path(m) %>
+<% end %>
 <%= icon_to 'nouveau.png', new_listing_line_path(@listing) %>
+<%= icon_to 'navigation90.png', organism_listings_path(@organism) %>
 <% end -%>
 
-<fieldset><legend> Listing <%= link_to  @listing.title, organism_listing_path(@organism, @listing) %></legend>
+<fieldset><legend><%=  @listing.title %></legend>
 <table>
   <tr>
     <th>Date</th>
@@ -24,14 +28,20 @@
     <td><%= line.narration %></td>
     <td><%= line.nature.name %></td>
     <td><%= line.destination.name %></td>
-    <td class="debit"><%= line.debit %></td>
-    <td class="credit"><%= line.credit %></td>
+    <td class="nombre"><%= debit_credit(line.debit) %></td>
+    <td class="nombre"><%= debit_credit(line.credit) %></td>
     <td><%= line.locked %></td>
     
     <td><%= icon_to 'modifier.png', edit_listing_line_path(@listing,line) %></td>
     <td><%= icon_to 'supprimer.png', [@listing,line], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
 <% end %>
+  <tr class="totaux">
+    <td></td> <td></td> <td></td>
+    <td>Totaux</td>
+    <td class="nombre"><%=  debit_credit(@total_debit) %></td>
+    <td class="nombre"><%=  debit_credit(@total_credit) %></td>
+  </tr>
 </table>
 
 </fieldset>

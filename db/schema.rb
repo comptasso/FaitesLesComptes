@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111113145713) do
+ActiveRecord::Schema.define(:version => 20111116194115) do
 
   create_table "destinations", :force => true do |t|
     t.string   "name"
@@ -26,10 +26,10 @@ ActiveRecord::Schema.define(:version => 20111113145713) do
     t.string   "narration"
     t.integer  "nature_id"
     t.integer  "destination_id"
-    t.decimal  "debit",          :precision => 2, :scale => 10
-    t.decimal  "credit",         :precision => 2, :scale => 10
+    t.decimal  "debit",          :default => 0.0
+    t.decimal  "credit",         :default => 0.0
     t.integer  "listing_id"
-    t.boolean  "locked",                                        :default => false
+    t.boolean  "locked",         :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

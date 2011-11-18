@@ -210,3 +210,6 @@ fr:
       nature:
         create: "Créer la nature"
         update: "Mettre à jour"
+      line:
+        create: 'Créer'
+        update: 'Sauver'

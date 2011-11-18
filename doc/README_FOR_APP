@@ -1,2 +1,16 @@
 Use this README file to introduce your application and point to useful places in the API for learning more.
 Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+
+
+Etape actuelle :
+ OK - Il faut faire une mise en page de la saisie des lignes pour avoir le formulaire de saisie en une seule ligne
+ OK - Franciser le bouton créer ligne
+
+OK - Voir comment on revient au menu des journaux
+
+Faire les validations avec les presences obligatoires
+
+OK - Ordonner les listes de lignes par date.
+
+Question : la validation doit-elle se faire dans la saisie; probablement pas. plutôt à
+prévoir dans l'affichage des listes (voir ce que j'ai déja fait dans comptasso).

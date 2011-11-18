@@ -7,6 +7,9 @@ class LinesController < ApplicationController
   # GET /lines.json
   def index
     @lines = @listing.lines.all
+    @total_debit=@lines.sum(&:debit)
+    @total_credit=@lines.sum(&:credit)
+
 
     respond_to do |format|
       format.html # index.html.erb
