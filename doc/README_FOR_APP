@@ -8,9 +8,12 @@ Etape actuelle :
 
 OK - Voir comment on revient au menu des journaux
 
-Faire les validations avec les presences obligatoires
+OK - Faire les validations avec les presences obligatoires
 
 OK - Ordonner les listes de lignes par date.
 
-Question : la validation doit-elle se faire dans la saisie; probablement pas. plutôt à
-prévoir dans l'affichage des listes (voir ce que j'ai déja fait dans comptasso).
+Changer l'épaisseur de border top dans les sous totaux
+Mettre les valeurs par défaut à 0,00 dans la saisie
+Faire un sous menu mois pour les listings
+Mettre en place la validation des écritures dans lines#index
+Voir pour un pick date
