@@ -17,6 +17,21 @@ class LinesController < ApplicationController
     end
   end
 
+
+  # appelé par l'icone clé dans l'affichage des lignes pour
+  # verrouiller la ligne concernée.
+  # la mise à jour de la vue est faite par lock.js.erb qui
+  # cache les icones modifier et delete, ainsi que l'icone clé et
+  # fait apparaître l'icone verrou fermé.
+  def lock
+    @line=Line.find(params[:id])
+    if @line.update_attribute(:locked, true)
+      respond_to do |format|
+        format.js # appelle validate.js.erb
+      end
+    end
+  end
+
  
 
   # GET /lines/new

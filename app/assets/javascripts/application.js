@@ -7,3 +7,15 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+
+ // fonction permettant de modifier un attribut booléen
+ // le script retourné par la fonction est alors utilisé pour remplacer le lien.
+ // utilisé notamment dans le verrouillage des écritures
+
+
+ $(document).ready(function (){
+  $('a[id ^=lock_open]').click(function(){
+   $.post($(this).attr('href'), null,null,"script") ;
+   return false;
+  });
+   });

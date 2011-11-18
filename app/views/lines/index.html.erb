@@ -16,8 +16,8 @@
     <th>Debit</th>
     <th>Credit</th>
     
-    <th>Locked</th>
     <th><%= icon_to 'nouveau.png', new_listing_line_path(@listing) %></th>
+    <th></th>
     <th></th>
    
   </tr>
@@ -30,10 +30,18 @@
     <td><%= line.destination.name if line.destination %></td>
     <td class="nombre"><%= debit_credit(line.debit) %></td>
     <td class="nombre"><%= debit_credit(line.credit) %></td>
-    <td><%= line.locked %></td>
+         <td class="td_line"> <%= line.locked? ? image_tag("icones/stock_lock.png", class: 'icon_menu') : icon_to('verrouiller.png',
+  lock_listing_line_path(@listing, line),
+:title=>"Verouiller l'écriture", :id=>"lock_open_#{line.id}") %>
+
+        <%= image_tag("icones/stock_lock.png", :style=>'display: none;') unless line.locked? %>
+
+
+
+   </td>
     
-    <td><%= icon_to 'modifier.png', edit_listing_line_path(@listing,line) %></td>
-    <td><%= icon_to 'supprimer.png', [@listing,line], :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
+    <td><%= icon_to 'modifier.png', edit_listing_line_path(@listing,line),  :id=>"edit_#{line.id}"  unless line.locked? %></td>
+    <td><%= icon_to 'supprimer.png', [@listing,line],  :id=>"delete_#{line.id}", :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
   </tr>
 <% end %>
   <tr class="totaux">
