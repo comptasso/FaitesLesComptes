@@ -10,4 +10,6 @@ class Line < ActiveRecord::Base
 #  def debit
 #    debit.printf('%.2f', self.debit)
 #  end
+
+  
 end

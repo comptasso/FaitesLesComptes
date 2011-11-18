@@ -2,7 +2,7 @@
 <% @organism.listings.reject!{|l| l==@listing}.each do  |m| %>
     <%=  link_to m.title, listing_lines_path(m) %>
 <% end %>
-<%= icon_to 'nouveau.png', new_listing_line_path(@listing) %>
+
 <%= icon_to 'navigation90.png', organism_listings_path(@organism) %>
 <% end -%>
 
@@ -17,9 +17,9 @@
     <th>Credit</th>
     
     <th>Locked</th>
+    <th><%= icon_to 'nouveau.png', new_listing_line_path(@listing) %></th>
     <th></th>
-    <th></th>
-    <th></th>
+   
   </tr>
 
 <% @lines.each do |line| %>
@@ -33,7 +33,7 @@
     <td><%= line.locked %></td>
     
     <td><%= icon_to 'modifier.png', edit_listing_line_path(@listing,line) %></td>
-    <td><%= icon_to 'supprimer.png', [@listing,line], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+    <td><%= icon_to 'supprimer.png', [@listing,line], :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
   </tr>
 <% end %>
   <tr class="totaux">

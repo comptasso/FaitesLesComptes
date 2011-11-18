@@ -12,8 +12,10 @@ OK - Faire les validations avec les presences obligatoires
 
 OK - Ordonner les listes de lignes par date.
 
-Changer l'épaisseur de border top dans les sous totaux
+OK - Changer l'épaisseur de border top dans les sous totaux
 OK - Formater les valeurs dans la saisie des lignes
-Faire un sous menu mois pour les listings
+
 Mettre en place la validation des écritures dans lines#index
+Revoir la place du plus dans lines#index
+Faire un sous menu mois pour les listings
 Voir pour un pick date
