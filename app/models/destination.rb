@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 class Destination < ActiveRecord::Base
   belongs_to :organism
   has_many :lines
