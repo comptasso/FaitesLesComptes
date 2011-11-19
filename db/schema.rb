@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111116194115) do
+ActiveRecord::Schema.define(:version => 20111119150227) do
 
   create_table "destinations", :force => true do |t|
     t.string   "name"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20111116194115) do
     t.boolean  "locked",         :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "reference"
   end
 
   create_table "listings", :force => true do |t|

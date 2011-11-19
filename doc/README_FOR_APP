@@ -19,12 +19,29 @@ OK - Mettre en place la validation des écritures dans lines#index
 OK - Revoir la place du plus dans lines#index
 OK - Faire un sous menu mois pour les listings
 
-Après create il faudrait être dans le mois que l'on vient de saisir
-Mettre un ordre par défaut dans les selections destinations et natures
-Quand on fait +, mettre le bon mois dans le date select
+ OK - Après create il faudrait être dans le mois que l'on vient de saisir
+OK - Mettre un ordre par défaut dans les selections destinations et natures
+OK - Quand on fait +, mettre le bon mois dans le date select
 
 
 Mettre en place des écritures avec répétition
+  La logique est de faire une écriture mais avec des champs complémentaires dans le
+formulaire : répéter pendant X mois/trimestres.
+Les X écritures sont générées avec la date remplie. Comme il faut garder une trace des
+écritures associées, il faut ajouter un champ réf unique pour ces écritures.
+A modifier : en fait c'est un champ copied_id qui doit être rempli de l'id de l'écriture mère
+Il faudra pour la modification : que l'on puisse supprimer une seule instance.
+Que l'on puisse supprimer toutes les instances futures.
+OK - Donc ajout d'une zone répétition avec un champ référence  plus
+OK -les infos du nombre de périodes et la nature de celle ci.
+OK - Ajout d'un champ reference dans le modèle
+OK - Dans le controlleur, gestion des lignes d'écritures (ou faire un controller spécifique)
+Le bouton create renvoie sur multi_create s'il y a un params x répétitions.
+
+Voir le mois qui est affiché quand on supprime une écriture
+
+
+
 Mettre en place une rubrique moyen de paiement
 
 Faire que la touche plus puisse être actionnée par le clavier

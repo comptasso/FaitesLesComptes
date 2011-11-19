@@ -11,11 +11,12 @@ Faitesvoscomptes::Application.routes.draw do
 
   resources :listings do
     resources :lines do
-       member do
-         get 'lock'
-            post 'lock' # pour la requete ajax
+      member do
+         
+        post 'lock' # pour la requete ajax
 
-          end
+      end
+      
     end
   end
 
