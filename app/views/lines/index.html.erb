@@ -6,7 +6,13 @@
 <%= icon_to 'navigation90.png', organism_listings_path(@organism) %>
 <% end -%>
 
-<fieldset><legend><%=  @listing.title %></legend>
+<%= content_for :submenu do %>
+   <%  @submenu_list.each_with_index do |mois,i| %>
+      <%=   link_to(mois, listing_lines_path(@listing, mois: i)) %>
+      <%  end %>
+<% end %>
+
+<fieldset><legend><%=  @listing.title%> - Mois de <%=l(Date.today.beginning_of_year.months_since(@mois.to_i), :format=>:month_year) %></legend>
 <table>
   <tr>
     <th>Date</th>

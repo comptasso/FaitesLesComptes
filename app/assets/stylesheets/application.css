@@ -123,11 +123,26 @@ fieldset legend {
 #menu {
     height: 16px;
     background-color: #141;
-
  }
 
- #menu a{
+ #submenu {
+     height: 16px;
+    background-color: #9c9;
+}
 
+#submenu a {
+    color: white;
+    text-decoration: none;
+     padding: 0px 10px;
+     border-right-style:solid;
+     border-width:  1px;
+}
+
+#submenu a:hover{
+    background-color: #141;
+}
+
+ #menu a{
      text-transform:uppercase ;
      color:white;
      text-decoration: none;
@@ -136,13 +151,8 @@ fieldset legend {
      border-width:  1px;
 }
 
-
-
 #menu a:hover{
     background-color: #9c9;
-
-    /*font-weight: bold;*/
-
 }
 
 

@@ -6,6 +6,9 @@ class LinesController < ApplicationController
   # GET /lines
   # GET /lines.json
   def index
+    @submenu_list=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+    @mois = params[:mois] || (Date.today.month - 1)
+
     @lines = @listing.lines.all
     @total_debit=@lines.sum(&:debit)
     @total_credit=@lines.sum(&:credit)
