@@ -3,12 +3,14 @@
 class LinesController < ApplicationController
 
   before_filter :find_listing
+  before_filter :fill_mois, only: [:index, :new]
+
   # GET /lines
   # GET /lines.json
   def index
     # TODO - à terme cette liste sera construite à partir des infos de l'exercice date de début et de fin.
     @submenu_list=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-    @mois = params[:mois] || (Date.today.month - 1)
+    
     date=Date.today.beginning_of_year.months_since(@mois.to_i)
     @solde_debit_avant=@listing.lines.solde_debit_avant(date)
     @solde_credit_avant=@listing.lines.solde_credit_avant(date)
@@ -43,7 +45,7 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.json
   def new
-    @line =@listing.lines.new
+    @line =@listing.lines.new(line_date: Date.today.beginning_of_year.months_since(@mois.to_i))
 
     respond_to do |format|
       format.html # new.html.erb
@@ -63,7 +65,8 @@ class LinesController < ApplicationController
 
     respond_to do |format|
       if @line.save
-        format.html { redirect_to listing_lines_url(@listing), notice: 'La ligne a été créée.' }
+        mois=(@line.line_date.month)-1
+        format.html { redirect_to listing_lines_url(@listing,mois: mois), notice: 'La ligne a été créée.' }
         format.json { render json: @line, status: :created, location: @line }
       else
         format.html { render action: "new" }
@@ -106,5 +109,9 @@ class LinesController < ApplicationController
   def find_listing
     @listing=Listing.find(params[:listing_id])
     @organism=@listing.organism
+  end
+
+  def fill_mois
+    @mois = params[:mois] || (Date.today.month - 1)
   end
 end

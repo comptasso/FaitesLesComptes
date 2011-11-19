@@ -1,82 +1,76 @@
 <%= content_for :menu do %>
-<% @organism.listings.reject!{|l| l==@listing}.each do  |m| %>
+  <% @organism.listings.reject!{|l| l==@listing}.each do  |m| %>
     <%=  link_to m.title, listing_lines_path(m) %>
-<% end %>
-
-<%= icon_to 'navigation90.png', organism_listings_path(@organism) %>
+  <% end %>
+  <%= icon_to 'navigation90.png', organism_listings_path(@organism), title: 'Liste des livres' %>
 <% end -%>
 
 <%= content_for :submenu do %>
-   <%  @submenu_list.each_with_index do |mois,i| %>
-      <%=   link_to(mois, listing_lines_path(@listing, mois: i)) %>
-      <%  end %>
+  <%  @submenu_list.each_with_index do |mois,i| %>
+    <%=   link_to(mois, listing_lines_path(@listing, mois: i)) %>
+  <%  end %>
 <% end %>
 
 <fieldset><legend><%=  @listing.title%> - Mois de <%=l(Date.today.beginning_of_year.months_since(@mois.to_i), :format=>:month_year) %></legend>
-<table>
-  <thead>
-  <tr>
-    <th>Date</th>
-    <th>Libellé</th>
-    <th>Nature</th>
-    <th>Destination</th>
-    <th>Debit</th>
-    <th>Credit</th>
-    
-    <th><%= icon_to 'nouveau.png', new_listing_line_path(@listing) %></th>
-    <th></th>
-    <th></th>
-   
-  </tr>
-  </thead>
-  <tbody>
-     <tr class="reports">
-    <td></td> <td></td> <td></td>
-    <td>Reports</td>
-    <td class="nombre"><%=  debit_credit(@solde_debit_avant) %></td>
-    <td class="nombre"><%=  debit_credit(@solde_credit_avant) %></td>
-  </tr>
-<% @lines.each do |line| %>
-  
-  <tr>
-    <td><%=l line.line_date %></td>
-    <td><%= line.narration %></td>
-    <td><%= line.nature.name if line.nature %></td>
-    <td><%= line.destination.name if line.destination %></td>
-    <td class="nombre"><%= debit_credit(line.debit) %></td>
-    <td class="nombre"><%= debit_credit(line.credit) %></td>
-         <td class="td_line"> <%= line.locked? ? image_tag("icones/stock_lock.png", class: 'icon_menu') : icon_to('verrouiller.png',
-  lock_listing_line_path(@listing, line),
-:title=>"Verouiller l'écriture", :id=>"lock_open_#{line.id}") %>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Libellé</th>
+        <th>Nature</th>
+        <th>Destination</th>
+        <th>Debit</th>
+        <th>Credit</th>
 
-        <%= image_tag("icones/stock_lock.png",class: 'icon_menu', :style=>'display: none;') unless line.locked? %>
+        <th><%= icon_to 'nouveau.png', new_listing_line_path(@listing, mois: @mois) %></th>
+        <th></th>
+        <th></th>
 
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="reports">
+        <td></td> <td></td> <td></td>
+        <td>Reports</td>
+        <td class="nombre"><%=  debit_credit(@solde_debit_avant) %></td>
+        <td class="nombre"><%=  debit_credit(@solde_credit_avant) %></td>
+      </tr>
+      <% @lines.each do |line| %>
 
+        <tr>
+          <td><%=l line.line_date %></td>
+          <td><%= line.narration %></td>
+          <td><%= line.nature.name if line.nature %></td>
+          <td><%= line.destination.name if line.destination %></td>
+          <td class="nombre"><%= debit_credit(line.debit) %></td>
+          <td class="nombre"><%= debit_credit(line.credit) %></td>
+          <td class="td_line"> <%= line.locked? ? image_tag("icones/stock_lock.png", class: 'icon_menu') : icon_to('verrouiller.png',
+                lock_listing_line_path(@listing, line),
+                :title=>"Verouiller l'écriture", :id=>"lock_open_#{line.id}") %>
+              <%= image_tag("icones/stock_lock.png",class: 'icon_menu', :style=>'display: none;') unless line.locked? %>
+              </td>
+              <td><%= icon_to 'modifier.png', edit_listing_line_path(@listing,line),  :id=>"edit_#{line.id}"  unless line.locked? %></td>
+              <td><%= icon_to 'supprimer.png', [@listing,line],  :id=>"delete_#{line.id}", :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr class="totaux">
+            <td></td> <td></td> <td></td>
+            <td>Totaux du mois</td>
+            <td class="nombre"><%=  debit_credit(@total_debit) %></td>
+            <td class="nombre"><%=  debit_credit(@total_credit) %></td>
+          </tr>
+          <tr class="totaux_generaux">
+            <td></td> <td></td> <td></td>
+            <td>Totaux généraux</td>
+            <td class="nombre"><%=  debit_credit(@total_debit + @solde_debit_avant) %></td>
+            <td class="nombre"><%=  debit_credit(@total_credit+ @solde_credit_avant) %></td>
+          </tr>
 
-   </td>
-    
-    <td><%= icon_to 'modifier.png', edit_listing_line_path(@listing,line),  :id=>"edit_#{line.id}"  unless line.locked? %></td>
-    <td><%= icon_to 'supprimer.png', [@listing,line],  :id=>"delete_#{line.id}", :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
-  </tr>
-<% end %>
-  </tbody>
-  <tfoot>
-  <tr class="totaux">
-    <td></td> <td></td> <td></td>
-    <td>Totaux du mois</td>
-    <td class="nombre"><%=  debit_credit(@total_debit) %></td>
-    <td class="nombre"><%=  debit_credit(@total_credit) %></td>
-  </tr>
-  <tr class="totaux_generaux">
-    <td></td> <td></td> <td></td>
-    <td>Totaux généraux</td>
-    <td class="nombre"><%=  debit_credit(@total_debit + @solde_debit_avant) %></td>
-    <td class="nombre"><%=  debit_credit(@total_credit+ @solde_credit_avant) %></td>
-  </tr>
+        </tfoot>
+      </table>
 
-  </tfoot>
-</table>
-
-</fieldset>
+    </fieldset>
 
 

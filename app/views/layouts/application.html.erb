@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Faitesvoscomptes</title>
+    <title>Faites les comptes !</title>
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
   <div id="header">
-     <div id="logo">Faites vos comptes !</div>
+     <div id="logo">Faites les comptes !</div>
     <div id ="organism">
       <%= @organism.title if @organism %> - <span class="description"><%= @organism.description  if @organism %></span>
     </div>

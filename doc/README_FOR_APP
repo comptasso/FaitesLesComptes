@@ -17,8 +17,19 @@ OK - Formater les valeurs dans la saisie des lignes
 
 OK - Mettre en place la validation des écritures dans lines#index
 OK - Revoir la place du plus dans lines#index
-Faire un sous menu mois pour les listings
+OK - Faire un sous menu mois pour les listings
+
+Après create il faudrait être dans le mois que l'on vient de saisir
+Mettre un ordre par défaut dans les selections destinations et natures
+Quand on fait +, mettre le bon mois dans le date select
+
+
+Mettre en place des écritures avec répétition
+Mettre en place une rubrique moyen de paiement
+
+Faire que la touche plus puisse être actionnée par le clavier
+
+-------------------------- Point d'étape
 Mettre en place une validation globale de la page
 Voir pour un pick date
 Mettre dans le modèle une validation qui empêche la modification si verrouillé
-

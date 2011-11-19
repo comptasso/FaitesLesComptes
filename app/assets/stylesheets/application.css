@@ -124,7 +124,7 @@ fieldset legend {
 }
 
 #menu {
-    height: 16px;
+    height: 18px;
     background-color: #141;
  }
 
@@ -149,13 +149,31 @@ fieldset legend {
      text-transform:uppercase ;
      color:white;
      text-decoration: none;
-     padding: 0px 10px;
+     padding: 0px 8px;
      border-right-style:solid;
-     border-width:  1px;
+     border-right-width:  1px;
+     
 }
 
 #menu a:hover{
     background-color: #9c9;
+}
+
+#menu a.icon_menu {
+    margin: 0px;
+    padding: 0px 8px;
+    border-style: none;
+    border-left-style: solid;
+    border-width: 0px;
+    border-left-width: 1px;
+    color:white;
+    text-decoration: none;
+    
+}
+
+#menu a.icon_menu img {
+    height: 16px;
+    width: 16px;
 }
 
 

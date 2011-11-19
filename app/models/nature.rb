@@ -6,6 +6,7 @@ class Nature < ActiveRecord::Base
   validates :organism_id, :presence=>true
   
    has_many :lines
+   default_scope order: 'name ASC'
 
   before_destroy :ensure_no_lines
 
