@@ -53,6 +53,9 @@
     
     margin-right: 10px;
     margin-bottom: 10px;
+
+    border-top-style: double;
+    border-top-width: 1px;
 }
 
 fieldset {

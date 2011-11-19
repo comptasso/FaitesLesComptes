@@ -10,19 +10,26 @@ class Line < ActiveRecord::Base
   default_scope order: 'line_date ASC'
 
   scope :mois, lambda { |date| where('line_date >= ? AND line_date <= ?', date.beginning_of_month, date.end_of_month) }
- 
+
+  def self.solde_debit_avant(date)
+    Line.where('line_date < ?', date).sum(:debit)
+  end
+
+  def self.solde_credit_avant(date)
+    Line.where('line_date < ?', date).sum(:credit)
+  end
 
   # before_validation :default_debit_credit
-#
-#
-#
-#  private
-#
-#  def default_debit_credit
-#    # ici il faudrait plutôt mettre à zero tout ce qui n'est pas un nombre
-#    debit ||= 0.0
-#    credit ||= 0.0
-#  end
+  #
+  #
+  #
+  #  private
+  #
+  #  def default_debit_credit
+  #    # ici il faudrait plutôt mettre à zero tout ce qui n'est pas un nombre
+  #    debit ||= 0.0
+  #    credit ||= 0.0
+  #  end
 
   
 end

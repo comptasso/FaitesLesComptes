@@ -6,12 +6,13 @@ class LinesController < ApplicationController
   # GET /lines
   # GET /lines.json
   def index
+    # TODO - à terme cette liste sera construite à partir des infos de l'exercice date de début et de fin.
     @submenu_list=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
     @mois = params[:mois] || (Date.today.month - 1)
     date=Date.today.beginning_of_year.months_since(@mois.to_i)
-
+    @solde_debit_avant=@listing.lines.solde_debit_avant(date)
+    @solde_credit_avant=@listing.lines.solde_credit_avant(date)
     @lines = @listing.lines.mois(date).all
-    
     @total_debit=@lines.sum(&:debit)
     @total_credit=@lines.sum(&:credit)
 
@@ -75,10 +76,12 @@ class LinesController < ApplicationController
   # PUT /lines/1.json
   def update
     @line = @listing.lines.find(params[:id])
+    
 
     respond_to do |format|
       if @line.update_attributes(params[:line])
-        format.html { redirect_to [@listing,@line], notice: 'Line was successfully updated.' }
+        mois=(@line.line_date.month) -1
+        format.html { redirect_to listing_lines_url(@listing, mois: mois) }#], notice: 'Line was successfully updated.')}
         format.json { head :ok }
       else
         format.html { render action: "edit" }

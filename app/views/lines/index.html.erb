@@ -14,6 +14,7 @@
 
 <fieldset><legend><%=  @listing.title%> - Mois de <%=l(Date.today.beginning_of_year.months_since(@mois.to_i), :format=>:month_year) %></legend>
 <table>
+  <thead>
   <tr>
     <th>Date</th>
     <th>Libellé</th>
@@ -27,8 +28,16 @@
     <th></th>
    
   </tr>
-
+  </thead>
+  <tbody>
+     <tr class="reports">
+    <td></td> <td></td> <td></td>
+    <td>Reports</td>
+    <td class="nombre"><%=  debit_credit(@solde_debit_avant) %></td>
+    <td class="nombre"><%=  debit_credit(@solde_credit_avant) %></td>
+  </tr>
 <% @lines.each do |line| %>
+  
   <tr>
     <td><%=l line.line_date %></td>
     <td><%= line.narration %></td>
@@ -50,12 +59,22 @@
     <td><%= icon_to 'supprimer.png', [@listing,line],  :id=>"delete_#{line.id}", :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
   </tr>
 <% end %>
+  </tbody>
+  <tfoot>
   <tr class="totaux">
     <td></td> <td></td> <td></td>
-    <td>Totaux</td>
+    <td>Totaux du mois</td>
     <td class="nombre"><%=  debit_credit(@total_debit) %></td>
     <td class="nombre"><%=  debit_credit(@total_credit) %></td>
   </tr>
+  <tr class="totaux_generaux">
+    <td></td> <td></td> <td></td>
+    <td>Totaux généraux</td>
+    <td class="nombre"><%=  debit_credit(@total_debit + @solde_debit_avant) %></td>
+    <td class="nombre"><%=  debit_credit(@total_credit+ @solde_credit_avant) %></td>
+  </tr>
+
+  </tfoot>
 </table>
 
 </fieldset>
