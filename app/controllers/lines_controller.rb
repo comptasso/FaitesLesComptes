@@ -8,8 +8,10 @@ class LinesController < ApplicationController
   def index
     @submenu_list=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
     @mois = params[:mois] || (Date.today.month - 1)
+    date=Date.today.beginning_of_year.months_since(@mois.to_i)
 
-    @lines = @listing.lines.all
+    @lines = @listing.lines.mois(date).all
+    
     @total_debit=@lines.sum(&:debit)
     @total_credit=@lines.sum(&:credit)
 

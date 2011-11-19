@@ -9,6 +9,9 @@ class Line < ActiveRecord::Base
 
   default_scope order: 'line_date ASC'
 
+  scope :mois, lambda { |date| where('line_date >= ? AND line_date <= ?', date.beginning_of_month, date.end_of_month) }
+ 
+
   # before_validation :default_debit_credit
 #
 #
