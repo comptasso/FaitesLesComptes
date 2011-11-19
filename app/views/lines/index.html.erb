@@ -34,7 +34,7 @@
   lock_listing_line_path(@listing, line),
 :title=>"Verouiller l'écriture", :id=>"lock_open_#{line.id}") %>
 
-        <%= image_tag("icones/stock_lock.png", :style=>'display: none;') unless line.locked? %>
+        <%= image_tag("icones/stock_lock.png",class: 'icon_menu', :style=>'display: none;') unless line.locked? %>
 
 
 

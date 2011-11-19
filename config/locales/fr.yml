@@ -193,7 +193,14 @@ fr:
       nature:
         name: Nom
         comment: Commentaire
-
+    errors:
+     models:
+      line:
+        attributes:
+          debit:
+            not_a_number: 'doit être un nombre'
+          credit:
+            not_a_number: 'doit être un nombre'
   helpers:
     select:
       prompt: "Veuillez sélectionner"

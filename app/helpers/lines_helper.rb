@@ -5,5 +5,13 @@ module LinesHelper
     else
       number_with_precision(montant, precision: 2)
     end
+  rescue
+    ''
+  end
+
+  def two_decimals(montant)
+    sprintf('%0.02f',montant)
+  rescue
+    '0.00'
   end
 end

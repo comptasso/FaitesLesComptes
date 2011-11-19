@@ -20,4 +20,5 @@ OK - Revoir la place du plus dans lines#index
 Faire un sous menu mois pour les listings
 Mettre en place une validation globale de la page
 Voir pour un pick date
+Mettre dans le modèle une validation qui empêche la modification si verrouillé
 
