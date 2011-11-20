@@ -51,9 +51,9 @@
               </td>
               <td>
                 <%  if line.multiple %>
-                <%= icon_to 'detail.png', listing_multiple_line_path(@listing,line) %>
+                  <%= icon_to 'detail.png', listing_multiple_line_path(@listing,line) %>
                 <%  else %>
-<%= icon_to 'modifier.png', edit_listing_line_path(@listing,line),  :id=>"edit_#{line.id}"  unless line.locked? %>
+                  <%= icon_to 'modifier.png', edit_listing_line_path(@listing,line),  :id=>"edit_#{line.id}"  unless line.locked? %>
                 <% end %>
               </td>
 

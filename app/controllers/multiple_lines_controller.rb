@@ -8,7 +8,12 @@ class MultipleLinesController < ApplicationController
   # GET /multiple_lines
   def index
     # fait une liste de toutes les lignes multiples
-    @mlines=@listing.lines.group(:copied_id)
+    mlines=@listing.lines.where('multiple=?',true).group(:copied_id).all
+    @t=[]
+    mlines.each { |ml| @t << ml.multiple_info }
+
+
+
   end
 
   
@@ -20,6 +25,8 @@ class MultipleLinesController < ApplicationController
     redirect_to listing_line_path(@listing, @mline) unless @mline.multiple
     # récupérer toutes les lignes relevant de cette écriture mutliple
     @mlines=@listing.lines.multiple(@mline.copied_id)
+    @total_debit=@mlines.sum(:debit)
+    @total_credit=@mlines.sum(:credit)
   end
 
   def new
@@ -44,14 +51,22 @@ class MultipleLinesController < ApplicationController
     end
   end
 
-  def update
-  end
+#  def update
+#  end
 
+  # DELETE /multiple_lines/1
+  # DELETE /multiple_lines/1.json
   def destroy
+#    @line = @listing.lines.find(params[:id])
+#    @line.destroy
+#    respond_to do |format|
+#      format.html { redirect_to listing_lines_url(@listing) }
+#      format.json { head :ok }
+#    end
   end
 
-  def edit
-  end
+#  def edit
+#  end
 
    private
   def find_listing

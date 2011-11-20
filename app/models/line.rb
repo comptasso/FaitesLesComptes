@@ -21,6 +21,24 @@ class Line < ActiveRecord::Base
     Line.where('line_date < ?', date).sum(:credit)
   end
 
+  def multiple_info
+    if self.multiple
+      # on veut avoir le nombre
+      t= Line.multiple(self.copied_id)
+      { nombre: t.size, first_date: t.first.line_date,
+        last_date: t.last.line_date,
+        narration: self.narration,
+        destination: self.destination_name,
+        nature: self.nature_name,
+        debit: self.debit,
+        credit: self.credit,
+        total: t.sum(:debit)+ t.sum(:credit)
+      }
+    end
+  end
+
+
+
   def repete(number, period)
     d=self.line_date
     self.multiple=true
@@ -59,6 +77,17 @@ class Line < ActiveRecord::Base
   #    debit ||= 0.0
   #    credit ||= 0.0
   #  end
+
+  protected
+
+  
+  def destination_name
+    self.destination ? self.destination.name : 'non indiqué'
+  end
+
+  def nature_name
+    self.nature ? self.nature.name : 'non indiqué'
+  end
 
   
 end

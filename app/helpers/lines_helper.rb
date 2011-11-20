@@ -10,11 +10,7 @@ module LinesHelper
     ''
   end
 
-  def two_decimals(montant)
-    sprintf('%0.02f',montant)
-  rescue
-    '0.00'
-  end
+ 
 
   def submenu(listing)
     t=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']

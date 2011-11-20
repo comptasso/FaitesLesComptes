@@ -14,5 +14,9 @@ module ApplicationHelper
     link_to image_tag(img_path, :alt=> alt), options, html_options
   end
 
-
+ def two_decimals(montant)
+    sprintf('%0.02f',montant)
+  rescue
+    '0.00'
+  end
 end

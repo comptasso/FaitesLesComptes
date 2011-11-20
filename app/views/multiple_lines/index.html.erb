@@ -1,2 +1,35 @@
-<h1>MultipleLines#index</h1>
-<p>Find me in app/views/multiple_lines/index.html.erb</p>
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Premier montant</th>
+      <th>Dernier montant</th>
+      <th>Narration</th>
+      <th>Destination</th>
+      <th>Nature</th>
+      <th>Débit</th>
+      <th>Credit</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @t.each do |ml| %>
+    <tr>
+      <td class="nombre"><%=  ml[:nombre] %></td>
+      <td class="date"><%=l ml[:first_date] %></td>
+      <td class="date"><%=l ml[:last_date] %></td>
+      <td><%= ml[:narration] %></td>
+      <td><%= ml[:destination] %></td>
+      <td><%= ml[:nature] %></td>
+      <td class="nombre"><%= two_decimals ml[:debit] %></td>
+      <td class="nombre"><%= two_decimals ml[:credit] %></td>
+      <td class="nombre"><%= two_decimals ml[:total] %></td>
+
+
+    </tr>
+    <% end %>
+  </tbody>
+</table>
