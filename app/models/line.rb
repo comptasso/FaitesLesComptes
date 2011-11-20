@@ -32,7 +32,8 @@ class Line < ActiveRecord::Base
         nature: self.nature_name,
         debit: self.debit,
         credit: self.credit,
-        total: t.sum(:debit)+ t.sum(:credit)
+        total: t.sum(:debit)+ t.sum(:credit),
+        copied_id: self.copied_id
       }
     end
   end
@@ -53,6 +54,7 @@ class Line < ActiveRecord::Base
       t << self.copy(new_date)
     end
     t.each { |l| l.save}
+    return t.size
   rescue
     self.multiple=false
   end

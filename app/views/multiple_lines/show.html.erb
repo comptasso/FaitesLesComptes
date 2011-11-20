@@ -7,9 +7,12 @@
 
 <%= content_for :submenu do %>
   <%= link_to 'Ecritures multiples', listing_multiple_lines_path(@listing) %>
+<%= icon_to 'modifier.png', edit_listing_multiple_line_path(@listing.id, @mlines.first.copied_id) %>
 <% end %>
 
-<fieldset><legend><%=  @listing.title%> - Affichage d'écriture multiple - Total : <%= @mlines.count %> lignes </legend>
+<fieldset><legend><%=  @listing.title%> - Affichage d'écriture multiple - Total : <%= @mlines.count %> lignes - 
+  
+  </legend>
   <table>
     <thead>
       <tr>

@@ -17,6 +17,7 @@ class LinesController < ApplicationController
     @lines = @listing.lines.mois(date).all
     @total_debit=@lines.sum(&:debit)
     @total_credit=@lines.sum(&:credit)
+    @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
 
 
     respond_to do |format|

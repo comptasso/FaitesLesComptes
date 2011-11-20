@@ -51,7 +51,7 @@
               </td>
               <td>
                 <%  if line.multiple %>
-                  <%= icon_to 'detail.png', listing_multiple_line_path(@listing,line) %>
+                  <%= icon_to 'detail.png', listing_multiple_line_path(@listing,line.copied_id) %>
                 <%  else %>
                   <%= icon_to 'modifier.png', edit_listing_line_path(@listing,line),  :id=>"edit_#{line.id}"  unless line.locked? %>
                 <% end %>
@@ -73,6 +73,12 @@
             <td>Totaux généraux</td>
             <td class="nombre"><%=  debit_credit(@total_debit + @solde_debit_avant) %></td>
             <td class="nombre"><%=  debit_credit(@total_credit+ @solde_credit_avant) %></td>
+          </tr>
+          <tr class="totaux_generaux">
+            <td></td> <td></td> <td></td>
+            <td>Solde</td>
+            <td class="nombre"><%=  debit_credit(-@solde) if @solde < 0  %></td>
+            <td class="nombre"><%=  debit_credit(@solde) if @solde > 0  %></td>
           </tr>
 
         </tfoot>

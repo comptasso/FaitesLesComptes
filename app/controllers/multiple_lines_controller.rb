@@ -11,20 +11,16 @@ class MultipleLinesController < ApplicationController
     mlines=@listing.lines.where('multiple=?',true).group(:copied_id).all
     @t=[]
     mlines.each { |ml| @t << ml.multiple_info }
-
-
-
   end
 
   
-  ## GET /multiple_line/1/edit
+  ## GET /multiple_line/1/show
+  # le paramètre transmis n'est pas l'id de la ligne mais le copied_id
+  # permettant, par le scope mutiple, de récupérer toutes les lignes
+  # correspondantes
   def show
-    # récupérer la ligne
-    @mline=@listing.lines.find(params[:id])
-    # vérifier qu'on est bien sur une multiple et sinon renvoyer sur le controller line
-    redirect_to listing_line_path(@listing, @mline) unless @mline.multiple
     # récupérer toutes les lignes relevant de cette écriture mutliple
-    @mlines=@listing.lines.multiple(@mline.copied_id)
+    @mlines=@listing.lines.multiple(params[:id])
     @total_debit=@mlines.sum(:debit)
     @total_credit=@mlines.sum(:credit)
   end
@@ -33,16 +29,18 @@ class MultipleLinesController < ApplicationController
     @mline=@listing.lines.new(line_date: Date.today.beginning_of_year.months_since(@mois.to_i))
   end
 
+  
+
   def create
-@mline = @listing.lines.new(params[:line])
+    @mline = @listing.lines.new(params[:line])
 
     respond_to do |format|
       if @mline.save
          if params[:repete][:nombre].to_i > 0 # ici on crée les autres lignes...
-            @mline.repete(params[:repete][:nombre].to_i,params[:repete][:periode])
+            nb = @mline.repete(params[:repete][:nombre].to_i,params[:repete][:periode])
          end
-        mois=(@mline.line_date.month)-1
-        format.html { redirect_to listing_lines_url(@listing,mois: mois), notice: 'Les lignes ont été créées.' }
+       
+        format.html { redirect_to listing_multiple_lines_path(@listing), notice: "#{nb} lignes ont été créées." }
         format.json { render json: @line, status: :created, location: @line }
       else
         format.html { render action: "new" }
@@ -51,18 +49,40 @@ class MultipleLinesController < ApplicationController
     end
   end
 
-#  def update
-#  end
+  # EDIT ne peut changer que les éléments communs. On ne peut changer 
+  # le nombre de répétitions, ni la période
+  def edit
+  # le paramètre transmis n'est pas l'id de la ligne mais le copied_id
+  # permettant, par le scope mutiple, de récupérer toutes les lignes
+  # correspondantes
+    @mline=@listing.lines.multiple(params[:id]).first
+  end
+
+  def update
+    # on récupère le tableau des lignes
+   @mlines = @listing.lines.multiple(params[:id])
+    respond_to do |format|
+      # on fait la mise à jour de chacune
+      if @mlines.each { |l| l.update_attributes(params[:line]) }
+
+        format.html { redirect_to listing_multiple_line_path(@listing, params[:id]) , notice: 'La ligne multiple a été mise à jour.'}
+        format.json { head :ok }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @line.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # DELETE /multiple_lines/1
   # DELETE /multiple_lines/1.json
   def destroy
-#    @line = @listing.lines.find(params[:id])
-#    @line.destroy
-#    respond_to do |format|
-#      format.html { redirect_to listing_lines_url(@listing) }
-#      format.json { head :ok }
-#    end
+    @mlines = @listing.lines.multiple(params[:id])
+    @mlines.each {|l| l.destroy}
+    respond_to do |format|
+      format.html { redirect_to listing_multiple_lines_url(@listing) }
+      format.json { head :ok }
+    end
   end
 
 #  def edit
