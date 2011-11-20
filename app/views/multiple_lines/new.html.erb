@@ -4,7 +4,7 @@
 <% end -%>
 
 <%= content_for :submenu do %>
-<%= link_to 'Ecritures unique', new_listing_line_path(@listing) %>
+<%= link_to 'Ecritures uniques', new_listing_line_path(@listing) %>
 <% end %>
 
 <fieldset>
@@ -13,26 +13,21 @@
   </legend>
 <%  SimpleForm.wrapper_tag = :td %>
 
- 
-
 <%=  simple_form_for([@listing,@mline],:url => listing_multiple_lines_path, :method => :post )  do |f| %>
-  , :url => listing_multiple_line_path(@listing, @mline), :action=>:create, :method => :put)  do |f| 
-
   <%= f.error_notification %>
 
-
-<div class="inputs_inline" id="entry_lines" >
+  <div class="inputs_inline" id="entry_lines" >
 
   <table>
     <thead>
+      <tr>
     <th>Date</th>
     <th>Libellé</th>
     <th>Nature</th>
     <th>Destination</th>
     <th>Débit</th>
     <th>Crédit</th>
-
-
+      </tr>
     </thead>
     <tbody>
       <tr>
@@ -46,9 +41,8 @@
 
   </tr>
       <tr>
-        <td>Répéter pendant </td>
-        <td><%= text_field :repete, :nombre, :size=>4, :class=>'numeric' %></td>
-        <td><%= select(:repete, :periode, ['Semaines', 'Mois', 'Trimestres'])  %></td>
+        <td>Répéter pendant <%= text_field :repete, :nombre, :size=>4, :class=>'numeric' %></td>
+        <td><%= select(:repete, :periode, ['Semaines', 'Mois', 'Trimestres'], {:selected=>'Mois'})  %></td>
        <td><%= f.button :submit %></td>
       </tr>
   </tbody>

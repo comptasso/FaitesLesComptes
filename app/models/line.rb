@@ -24,6 +24,7 @@ class Line < ActiveRecord::Base
   def repete(number, period)
     d=self.line_date
     self.multiple=true
+    self.copied_id=self.id
     t=[self]
     number.times do |i|
       case period
