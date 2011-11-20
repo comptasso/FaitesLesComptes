@@ -29,17 +29,7 @@
   <%=  f.input :credit , label: false, input_html: {size: 12, value: two_decimals(@line.credit) } %>
          <td><%= f.button :submit %></td>
   </tr>
-      <tr>
-       
-        <td><%= text_field :repete, :nombre %></td>
-        <td><%= select(:repete, :periode, ['Semaines', 'Mois', 'Trimestres'])  %></td>
-       
-
-
-       <td><%= f.button :submit %></td>
-      </tr>
-
-  </tbody>
+        </tbody>
     </table>
   </div>
 <% end %>

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class MultipleLinesController < ApplicationController
 
   before_filter :find_listing
@@ -26,7 +27,21 @@ class MultipleLinesController < ApplicationController
   end
 
   def create
+@mline = @listing.lines.new(params[:line])
 
+    respond_to do |format|
+      if @mline.save
+         if params[:repete][:nombre].to_i > 0 # ici on crée les autres lignes...
+            @mline.repete(params[:repete][:nombre].to_i,params[:repete][:periode])
+         end
+        mois=(@mline.line_date.month)-1
+        format.html { redirect_to listing_lines_url(@listing,mois: mois), notice: 'Les lignes ont été créées.' }
+        format.json { render json: @line, status: :created, location: @line }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @line.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def update

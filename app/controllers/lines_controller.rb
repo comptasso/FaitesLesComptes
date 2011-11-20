@@ -66,11 +66,7 @@ class LinesController < ApplicationController
        
     respond_to do |format|
       if @line.save
-         if params[:repete][:nombre].to_i > 0 # ici on crée les autres lignes...
-           puts 'je suis dans le if'
-            t=@line.repete(params[:repete][:nombre].to_i,params[:repete][:periode])
-            t.each {|l| l.save}
-         end
+         
         mois=(@line.line_date.month)-1
         format.html { redirect_to listing_lines_url(@listing,mois: mois), notice: 'La ligne a été créée.' }
         format.json { render json: @line, status: :created, location: @line }

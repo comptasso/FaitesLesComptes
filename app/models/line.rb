@@ -23,17 +23,20 @@ class Line < ActiveRecord::Base
 
   def repete(number, period)
     d=self.line_date
+    self.multiple=true
     t=[self]
     number.times do |i|
-       case period
-          when 'Semaines' then new_date = d+(i+1)*7
-          when 'Mois' then new_date= d.months_since(i+1)
-          when 'Trimestres' then new_date=d.months_since(3*(i+1))
-        end
-       t << self.copy(new_date)
-       end
-       t
+      case period
+      when 'Semaines' then new_date = d+(i+1)*7
+      when 'Mois' then new_date= d.months_since(i+1)
+      when 'Trimestres' then new_date=d.months_since(3*(i+1))
+      end
+      t << self.copy(new_date)
     end
+    t.each { |l| l.save}
+  rescue
+    self.multiple=false
+  end
 
   
   # crée une ligne à partir d'une ligne existante en changeant la date

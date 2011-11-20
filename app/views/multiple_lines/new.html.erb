@@ -13,7 +13,10 @@
   </legend>
 <%  SimpleForm.wrapper_tag = :td %>
 
-<%=  simple_form_for [@listing, @mline]  do |f| %>
+ 
+
+<%=  simple_form_for([@listing,@mline],:url => listing_multiple_lines_path, :method => :post )  do |f| %>
+  , :url => listing_multiple_line_path(@listing, @mline), :action=>:create, :method => :put)  do |f| 
 
   <%= f.error_notification %>
 
@@ -52,4 +55,5 @@
     </table>
 </div>
   <% end %>
+
   </fieldset>
