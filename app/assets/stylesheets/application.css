@@ -145,13 +145,24 @@ fieldset legend {
     background-color: #141;
 }
 
- #menu a{
+#menu {
      text-transform:uppercase ;
+     color:yellow;
+     padding: 0px 8px;
+ /*    border-right-style:solid;
+     border-right-width:  1px;*/
+}
+
+ #menu a{
+     
      color:white;
      text-decoration: none;
      padding: 0px 8px;
-     border-right-style:solid;
+     margin: 0px;
+ /*    border-right-style:solid;
      border-right-width:  1px;
+     border-left-style:solid;
+     border-left-width:  1px; */
      
 }
 
@@ -178,41 +189,6 @@ fieldset legend {
 
 
 
-.sous_menu{
-
-    background-color:coral;
-
-    color:#888;
-
-
-
-}
-
-
-
-.sous_menu a{
-
-    color:white;
-
-    text-decoration:none;
-
-    padding: 0px 10px;
-
-    margin: 0px;
-
-    border-right-style:solid;
-
-    border-width:  1px;
-
-}
-
-
-
-.sous_menu a:hover {
-
-    color:black;
-
-}
 
 .icon_menu {
     float: right;

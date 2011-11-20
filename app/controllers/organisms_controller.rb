@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 class OrganismsController < ApplicationController
   # GET /organisms
   # GET /organisms.json
@@ -44,7 +46,7 @@ class OrganismsController < ApplicationController
 
     respond_to do |format|
       if @organism.save
-        format.html { redirect_to @organism, notice: 'Organism was successfully created.' }
+        format.html { redirect_to @organism, notice: "Création de l'organisme effectuée" }
         format.json { render json: @organism, status: :created, location: @organism }
       else
         format.html { render action: "new" }
@@ -60,7 +62,7 @@ class OrganismsController < ApplicationController
 
     respond_to do |format|
       if @organism.update_attributes(params[:organism])
-        format.html { redirect_to @organism, notice: 'Organism was successfully updated.' }
+        format.html { redirect_to @organism, notice: "Modification de l'organisme effectuée" }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
