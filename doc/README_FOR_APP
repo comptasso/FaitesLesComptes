@@ -36,15 +36,14 @@ OK - Dans le controlleur, gestion des lignes d'écritures (ou faire un controlle
 
 OK - Faire la mise en page de show multiple
 OK - Faire le index
-Il faudra pour la modification : que l'on puisse supprimer une seule instance.
-Que l'on puisse supprimer toutes les instances futures.
-Problématique du edit/update
-Problématique du destroy
+OK - Il faudra pour la modification : que l'on puisse supprimer une seule instance.
 
+      Que l'on puisse supprimer toutes les instances futures.
+
+OK - Problématique du edit/update
+OK - Problématique du destroy
 
 Voir le mois qui est affiché quand on supprime une écriture
-
-
 
 Mettre en place une rubrique moyen de paiement
 
