@@ -11,6 +11,7 @@ class Line < ActiveRecord::Base
   default_scope order: 'line_date ASC'
 
   scope :mois, lambda { |date| where('line_date >= ? AND line_date <= ?', date.beginning_of_month, date.end_of_month) }
+  scope :multiple, lambda {|copied_id| where('copied_id = ?', copied_id)}
 
   def self.solde_debit_avant(date)
     Line.where('line_date < ?', date).sum(:debit)

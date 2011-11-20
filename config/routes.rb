@@ -3,6 +3,20 @@ Faitesvoscomptes::Application.routes.draw do
 
   
 
+#  get "multiple_lines/index"
+#
+#  get "multiple_lines/show"
+#
+#  get "multiple_lines/new"
+#
+#  get "multiple_lines/create"
+#
+#  get "multiple_lines/update"
+#
+#  get "multiple_lines/destroy"
+#
+#  get "multiple_lines/edit"
+
   resources :organisms do
     resources :listings
     resources :destinations
@@ -10,6 +24,7 @@ Faitesvoscomptes::Application.routes.draw do
   end
 
   resources :listings do
+    resources :multiple_lines
     resources :lines do
       member do
          

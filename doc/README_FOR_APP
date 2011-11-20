@@ -30,6 +30,7 @@ formulaire : répéter pendant X mois/trimestres.
 Les X écritures sont générées avec la date remplie. Comme il faut garder une trace des
 écritures associées, il faut ajouter un champ réf unique pour ces écritures.
 A modifier : en fait c'est un champ copied_id qui doit être rempli de l'id de l'écriture mère
+plus un champ multiple booleen pour avoir un test facile
 Il faudra pour la modification : que l'on puisse supprimer une seule instance.
 Que l'on puisse supprimer toutes les instances futures.
 OK - Donc ajout d'une zone répétition avec un champ référence  plus
