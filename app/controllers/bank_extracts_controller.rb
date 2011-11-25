@@ -9,6 +9,10 @@ class BankExtractsController < ApplicationController
   # GET /bank_extracts.json
   def index
     @bank_extracts = @listing.bank_extracts.all
+    if @bank_extracts.size == 0
+      redirect_to new_listing_bank_extract_url(@listing)
+      return
+    end
 
     respond_to do |format|
       format.html # index.html.erb

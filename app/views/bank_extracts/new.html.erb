@@ -1,11 +1,12 @@
-<%= content_for :bandeau do %>
+<%= content_for :submenu do %>
 
-<%= icon_to 'retour.png', listing_bank_extracts_path(@listing) %>
+<%= icon_to 'navigation90.png', listing_bank_extracts_path(@listing) if @listing.bank_extracts.count > 0 %>
+<%= icon_to 'navigation90.png', organism_listings_path(@organism) unless @listing.bank_extracts.count > 0 %>
 <% end -%>
 
 <fieldset>
   <legend>
-    Nouveau bank_extract
+    Création d'un extrait de compte
   </legend>
 
 <%= render 'form' %>

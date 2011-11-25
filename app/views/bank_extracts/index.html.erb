@@ -1,7 +1,10 @@
+<%= content_for :menu do %>
 
+<% end %>
 
 <%= content_for :submenu do %>
 <%= icon_to 'nouveau.png', new_listing_bank_extract_path(@listing) %>
+<%= icon_to 'navigation90.png', organism_listings_path(@organism) %>
 <% end -%>
 
 <fieldset><legend> Liste des extraits de comptes - Journal : <%= @listing.title %> </legend>
