@@ -1,38 +1,21 @@
 Faitesvoscomptes::Application.routes.draw do
-  
-
-  
-
-#  get "multiple_lines/index"
-#
-#  get "multiple_lines/show"
-#
-#  get "multiple_lines/new"
-#
-#  get "multiple_lines/create"
-#
-#  get "multiple_lines/update"
-#
-#  get "multiple_lines/destroy"
-#
-#  get "multiple_lines/edit"
 
   resources :organisms do
     resources :listings
     resources :destinations
     resources :natures
-  end
 
+  end
+  
   resources :listings do
     resources :multiple_lines
+    resources :bank_extracts
     resources :lines do
       member do
-         
         post 'lock' # pour la requete ajax
-
       end
-      
     end
+    
   end
 
 

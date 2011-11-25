@@ -1,7 +1,4 @@
-<%#
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
-%>
+
 
 <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
   <td>
@@ -19,5 +16,9 @@
     <%= icon_to 'modifier.png', edit_organism_listing_path(@organism, listing) %><br/>
     <%= icon_to 'supprimer.png', [@organism,listing], confirm: 'Are you sure?', method: :delete %><br/>
    
+  </td>
+  <td>
+   Ici des info complémentaires pour aller sur un relevé bancaire<br/>
+   <%= link_to 'Extraits', new_listing_bank_extract_path(listing) %>
   </td>
   </tr>

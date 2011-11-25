@@ -1,0 +1,48 @@
+
+
+<%= content_for :submenu do %>
+<%= icon_to 'nouveau.png', new_listing_bank_extract_path(@listing) %>
+<% end -%>
+
+<fieldset><legend> Liste des extraits de comptes - Journal : <%= @listing.title %> </legend>
+<table>
+  <tr>
+
+    <th>Référence </th>
+    <th>Du</th>
+    <th>Au</th>
+    
+    <th>Solde initial</th>
+    <th>Total débit</th>
+    <th>Total crédit</th>
+    <th>Solde final</th>
+    
+    <th>Validé</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @bank_extracts.each do |bank_extract| %>
+  <tr>
+    <td><%= bank_extract.reference %></td>
+    <td><%=l bank_extract.du %></td>
+    <td><%=l bank_extract.au %></td>
+    <td class="numeric"><%= two_decimals(bank_extract.begin_sold) %></td>
+     <td class="numeric"><%= two_decimals(bank_extract.total_debit) %></td>
+    <td class="numeric"><%= two_decimals(bank_extract.total_credit) %></td>
+    <td class="numeric"><%= two_decimals(bank_extract.end_sold) %></td>
+    
+    
+    
+    <td><%= bank_extract.validated %></td>
+   
+   
+    <td><%= icon_to 'modifier.png', edit_listing_bank_extract_path(@listing,bank_extract) %></td>
+    <td><%= icon_to 'supprimer.png', [@listing,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+</fieldset>
+
+

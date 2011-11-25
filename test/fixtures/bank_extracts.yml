@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  begin_sold: 9.99
+  end_sold: 9.99
+  reference: MyString
+  listing_id: 1
+  begin_date: 2011-11-23
+  end_date: 2011-11-23
+  validated: false
+  total_debit: 9.99
+  total_credit: 9.99
+
+two:
+  begin_sold: 9.99
+  end_sold: 9.99
+  reference: MyString
+  listing_id: 1
+  begin_date: 2011-11-23
+  end_date: 2011-11-23
+  validated: false
+  total_debit: 9.99
+  total_credit: 9.99

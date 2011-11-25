@@ -1,0 +1,12 @@
+<%= content_for :bandeau do %>
+
+<%= icon_to 'retour.png', listing_bank_extracts_path(@listing) %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Nouveau bank_extract
+  </legend>
+
+<%= render 'form' %>
+</fieldset>

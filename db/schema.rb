@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111119150227) do
+ActiveRecord::Schema.define(:version => 20111123190507) do
+
+  create_table "bank_extracts", :force => true do |t|
+    t.integer  "listing_id"
+    t.string   "reference"
+    t.date     "du"
+    t.date     "au"
+    t.decimal  "begin_sold",   :precision => 2, :scale => 10, :default => 0.0
+    t.decimal  "total_debit",  :precision => 2, :scale => 10, :default => 0.0
+    t.decimal  "total_credit", :precision => 2, :scale => 10, :default => 0.0
+    t.boolean  "validated",                                   :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "destinations", :force => true do |t|
     t.string   "name"
@@ -26,14 +39,15 @@ ActiveRecord::Schema.define(:version => 20111119150227) do
     t.string   "narration"
     t.integer  "nature_id"
     t.integer  "destination_id"
-    t.decimal  "debit",          :default => 0.0
-    t.decimal  "credit",         :default => 0.0
+    t.decimal  "debit",           :default => 0.0
+    t.decimal  "credit",          :default => 0.0
     t.integer  "listing_id"
-    t.boolean  "locked",         :default => false
+    t.boolean  "locked",          :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "copied_id"
-    t.boolean  "multiple",       :default => false
+    t.boolean  "multiple",        :default => false
+    t.integer  "bank_extract_id"
   end
 
   create_table "listings", :force => true do |t|

@@ -1,35 +1,32 @@
 <%  SimpleForm.wrapper_tag = :td %>
 
 <%=  simple_form_for [@listing, @line]  do |f| %>
-   
+
   <%= f.error_notification %>
 
 
-<div class="inputs_inline" id="entry_lines" >
+  <div class="inputs_inline" id="entry_lines" >
 
-  <table>
-    <thead>
-    <th>Date</th>
-    <th>Libellé</th>
-    <th>Nature</th>
-    <th>Destination</th>
-    <th>Débit</th>
-    <th>Crédit</th>
-   
-    
-    </thead>
-    <tbody>
-      <tr>
-       
-  <%=  f.input :line_date, label: false  %>
-  <%=  f.input :narration, label: false, input_html: {size: 20 } %>
-  <%=  f.association :nature , label: false  %>
-  <%=  f.association :destination , label: false  %>
-  <%=  f.input :debit , label: false, input_html: {size: 12, value: two_decimals(@line.debit) } %>
-  <%=  f.input :credit , label: false, input_html: {size: 12, value: two_decimals(@line.credit) } %>
-         <td><%= f.button :submit %></td>
-  </tr>
-        </tbody>
+    <table>
+      <thead>
+      <th>Date</th>
+      <th>Libellé</th>
+      <th>Nature</th>
+      <th>Destination</th>
+      <th>Débit</th>
+      <th>Crédit</th>
+      </thead>
+      <tbody>
+        <tr>
+          <%=  f.input :line_date, label: false  %>
+          <%=  f.input :narration, label: false, input_html: {size: 20 } %>
+          <%=  f.association :nature ,  :collection => @organism.natures.all(:order => 'name'), :prompt => "Quoi ?", label: false  %>
+          <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'), :prompt => "Pour qui ?", label: false  %>
+          <%=  f.input :debit , label: false, input_html: {size: 12, value: two_decimals(@line.debit) } %>
+          <%=  f.input :credit , label: false, input_html: {size: 12, value: two_decimals(@line.credit) } %>
+          <td><%= f.button :submit %></td>
+        </tr>
+      </tbody>
     </table>
   </div>
 <% end %>

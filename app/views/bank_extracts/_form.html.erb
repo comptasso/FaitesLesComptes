@@ -1,0 +1,24 @@
+
+<%  SimpleForm.wrapper_tag = :div %>
+<%= simple_form_for([@listing, @bank_extract]) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="inputs">
+
+      <%= f.association :listing, collection: @organism.listings.all(:order => 'title'), label: 'Journal' %>
+    <%= f.input :reference, label: 'Référence' %>
+  
+    <%= f.input :du %>
+    <%= f.input :au %>
+
+    <%= f.input :begin_sold, label: 'Solde initial', input_html:{ value: two_decimals(@bank_extract.begin_sold)} %>
+     <%= f.input :total_debit, label: 'Total débit', input_html:{ value: two_decimals(@bank_extract.total_debit)}  %>
+    <%= f.input :total_credit, label: 'Total crédit', input_html:{ value: two_decimals(@bank_extract.total_credit)}  %>
+    
+    <div id="end_sold"><label>Solde final </label> <span class="numeric" id="span_end_sold"> <%=  @bank_extract.end_sold %></span></div>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

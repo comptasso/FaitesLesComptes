@@ -1,0 +1,16 @@
+<%= content_for :menu do %>
+
+<%= icon_to 'nouveau.png', new_listing_bank_extract_path(@listing) %>
+<%= icon_to 'navigation90.png', listing_bank_extracts_path(@listing) %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification de relevé bancaire
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+
