@@ -1,8 +1,9 @@
-<%= content_for :bandeau do %>
+<%= content_for :submenu do %>
 
 
 <%= icon_to 'modifier.png', edit_organism_listing_path(@organism,@listing) %>
 <%= icon_to 'retour.png', organism_listings_path(@organism) %>
+
 <% end -%>
 <fieldset>
   <legend><%= @organism.title %> - <%= @organism.description %></legend>

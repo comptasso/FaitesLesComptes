@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 class ListingsController < ApplicationController
 
   before_filter :find_organism
@@ -48,7 +50,7 @@ class ListingsController < ApplicationController
 
     respond_to do |format|
       if @listing.save
-        format.html { redirect_to [@organism, @listing], notice: 'Listing was successfully created.' }
+        format.html { redirect_to [@organism, @listing], notice: 'Le journal a été crée.' }
         format.json { render json: @listing, status: :created, location: @listing }
       else
         format.html { render action: "new" }
@@ -64,7 +66,7 @@ class ListingsController < ApplicationController
 
     respond_to do |format|
       if @listing.update_attributes(params[:listing])
-        format.html { redirect_to [@organism, @listing] , notice: 'Listing was successfully updated.' }
+        format.html { redirect_to [@organism, @listing] , notice: 'Le journal a été mis à jour.' }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
