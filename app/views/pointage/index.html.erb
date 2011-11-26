@@ -14,14 +14,13 @@
  
 <tbody>
 <% unless @lines.empty? %>
-
+  <tr> <%= render 'lines/table_header'  %></tr>
        <%  @lines.each do |line | %>
-      <tr>
-       <%= render :partial=>'lines/line', :object=>line %>
 
-  
-  
-     </tr>
+      <tr <%=  line.bank_extract_id ? "class='pointed'" : "class='not_pointed'"  %> >
+       
+       <%= render :partial=>'lines/line', :object=>line %>
+      </tr>
     <% end %>
 <% end %>
 </tbody>
