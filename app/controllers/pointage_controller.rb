@@ -5,7 +5,8 @@ class PointageController < ApplicationController
   before_filter :find_bk_extract
 
   def index
-    @lines=@bank_extract.lines
+    # on affiche les lignes non pointées et celles affectées à cet extrait
+    @lines=@listing.lines.where('bank_extract_id = ? OR bank_extract_id IS NULL', @bank_extract.id)
   end
 
   def edit

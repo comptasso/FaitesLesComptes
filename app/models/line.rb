@@ -7,6 +7,7 @@ class Line < ActiveRecord::Base
   belongs_to :bank_extract
 
   validates :debit, :credit, numericality: true
+  validates :line_date, presence: true
  
 
   default_scope order: 'line_date ASC'

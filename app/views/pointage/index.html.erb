@@ -1,17 +1,29 @@
-
+<%= content_for :menu  do %>
+<%= icon_to 'navigation90.png', listing_bank_extracts_path(@listing), :title=>'Retour vers la liste des extraits' %>
+<% end %>
 <fieldset>
   <legend>
      Pointage de l'extrait <%= @bank_extract.reference %>
   </legend>
-
-    Afficher les données de l'extrait de compte
-
-plus les écarts
-  
-  
+  <table>
+    <tr>  <%= render 'bank_extracts/table_header' %></tr>
+    <tr><%= render @bank_extract %>  </tr>
+  </table>
 </fieldset>
+<table>
+ 
+<tbody>
+<% unless @lines.empty? %>
 
+       <%  @lines.each do |line | %>
+      <tr>
+       <%= render :partial=>'lines/line', :object=>line %>
 
+  
+  
+     </tr>
+    <% end %>
+<% end %>
+</tbody>
 
-
-et la liste des lignes
+</table>

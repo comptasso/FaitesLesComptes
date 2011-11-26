@@ -11,16 +11,7 @@
 <table>
   <tr>
 
-    <th>Référence </th>
-    <th>Du</th>
-    <th>Au</th>
-    
-    <th>Solde initial</th>
-    <th>Total débit</th>
-    <th>Total crédit</th>
-    <th>Solde final</th>
-    
-    <th>Validé</th>
+  <%= render 'table_header' %>
     <th></th>
     <th></th>
     <th></th>
@@ -28,18 +19,8 @@
 
 <% @bank_extracts.each do |bank_extract| %>
   <tr>
-    <td><%= bank_extract.reference %></td>
-    <td><%=l bank_extract.begin_date %></td>
-    <td><%=l bank_extract.end_date %></td>
-    <td class="numeric"><%= two_decimals(bank_extract.begin_sold) %></td>
-     <td class="numeric"><%= two_decimals(bank_extract.total_debit) %></td>
-    <td class="numeric"><%= two_decimals(bank_extract.total_credit) %></td>
-    <td class="numeric"><%= two_decimals(bank_extract.end_sold) %></td>
-    
-    
-    
-    <td><%= bank_extract.validated %></td>
-   
+
+    <%= render :partial=>'bank_extract' , :object=>bank_extract %>
    
     <td><%= icon_to 'modifier.png', edit_listing_bank_extract_path(@listing,bank_extract) %></td>
     <td><%= icon_to 'supprimer.png', [@listing,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete %></td>

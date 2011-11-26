@@ -1,3 +1,3 @@
 # coding: utf-8
 
-puts "Hello World"
+puts "Bonjour Jean-Claude"
