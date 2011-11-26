@@ -25,7 +25,8 @@ class BankExtractsController < ApplicationController
   # GET /bank_extracts/new
   # GET /bank_extracts/new.json
   def new
-    @bank_extract = @listing.bank_extracts.build
+
+    @bank_extract = @listing.bank_extracts.build(begin_sold: @listing.extract_sold)
 
     respond_to do |format|
       format.html # new.html.erb

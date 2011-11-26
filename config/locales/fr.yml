@@ -175,6 +175,7 @@ fr:
 
   labels:
     Title: Titre
+    
 
   general:
     Title: Titre
@@ -193,6 +194,16 @@ fr:
       nature:
         name: Nom
         comment: Commentaire
+      bank_extract:
+        begin_sold: 'Solde initial'
+        end_sold: 'Solde final'
+        total_debit: 'Total débit'
+        total_credit: 'Total crédit'
+        begin_date: Du
+        end_date: Au
+        reference: Référence
+        listing: Journal
+
     errors:
      models:
       line:
@@ -220,3 +231,6 @@ fr:
       line:
         create: 'Créer'
         update: 'Sauver'
+      bank_extract:
+        create: 'Créer'
+        update: Enregistrer

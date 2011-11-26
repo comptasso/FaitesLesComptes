@@ -16,8 +16,8 @@ ActiveRecord::Schema.define(:version => 20111123190507) do
   create_table "bank_extracts", :force => true do |t|
     t.integer  "listing_id"
     t.string   "reference"
-    t.date     "du"
-    t.date     "au"
+    t.date     "begin_date"
+    t.date     "end_date"
     t.decimal  "begin_sold",   :precision => 2, :scale => 10, :default => 0.0
     t.decimal  "total_debit",  :precision => 2, :scale => 10, :default => 0.0
     t.decimal  "total_credit", :precision => 2, :scale => 10, :default => 0.0

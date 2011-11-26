@@ -3,8 +3,8 @@ class CreateBankExtracts < ActiveRecord::Migration
     create_table :bank_extracts do |t|
       t.integer :listing_id
       t.string :reference
-      t.date :du
-      t.date :au
+      t.date :begin_date
+      t.date :end_date
       t.decimal :begin_sold,scale: 10, precision: 2,  default: 0
       
       t.decimal :total_debit,scale: 10, :precision=>2, default: 0

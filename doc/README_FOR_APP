@@ -42,6 +42,26 @@ OK - Il faudra pour la modification : que l'on puisse supprimer une seule instan
 
 OK - Problématique du edit/update
 OK - Problématique du destroy
+-------------------------------------------------------------------
+OK - Mise en place des relevés de comptes
+Traduction des éléments du formulaire relevé
+
+Pointage de comptes :
+- il faut passer en mode pointage => création d'un controlleur 
+- ce qui doit afficher l'écart avec les écritures associées au relevé
+- au choix soit les écritures correspondant au relevé
+- ou celles correspondant à celles qui ne sont pas pointées
+- ou les deux mais avec des comportements différents (couleurs et fonds)
+
+Le mode pointage doit permettre de transformer le curseur lorsqu'il passe sur une ligne non pointée
+Un clic associé la ligne
+un autre clic désassocie la ligne
+les soldes et les écarts sont recalculés
+
+Lorsqu'on est bon, il devient possible de valider et verrouiller les associations.
+
+-------------------------------------------------------------------
+Gérer la question du verrouillage des relevés (icones et actions)
 
 Voir le mois qui est affiché quand on supprime une écriture
 
