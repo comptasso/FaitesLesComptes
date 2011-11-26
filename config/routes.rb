@@ -1,5 +1,11 @@
 Faitesvoscomptes::Application.routes.draw do
 
+ 
+   match 'bank_extract/:id/pointage/index' => 'pointage#index',  :as => :pointage
+   match "bank_extract/:id/pointage/:id/edit" => 'pointage#edit', :as=> :edit_pointage
+
+  
+
   resources :organisms do
     resources :listings
     resources :destinations
@@ -8,8 +14,12 @@ Faitesvoscomptes::Application.routes.draw do
   end
   
   resources :listings do
+
     resources :multiple_lines
-    resources :bank_extracts
+    resources :bank_extracts 
+      
+      
+   
     resources :lines do
       member do
         post 'lock' # pour la requete ajax

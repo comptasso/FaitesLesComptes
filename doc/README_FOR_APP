@@ -44,10 +44,12 @@ OK - Problématique du edit/update
 OK - Problématique du destroy
 -------------------------------------------------------------------
 OK - Mise en place des relevés de comptes
-Traduction des éléments du formulaire relevé
+OK Traduction des éléments du formulaire relevé
 
-Pointage de comptes :
-- il faut passer en mode pointage => création d'un controlleur 
+Pointage de comptes : Je crée une branche pointage car je ne suis pas trop sur de moi
+- il faut passer en mode pointage => création d'un controlleur
+OK    le controlleur doit avoir une action d'affichage (index avec des options)
+    une action par js pour les pointages : donc edit
 - ce qui doit afficher l'écart avec les écritures associées au relevé
 - au choix soit les écritures correspondant au relevé
 - ou celles correspondant à celles qui ne sont pas pointées
