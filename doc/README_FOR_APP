@@ -53,7 +53,7 @@ OK    le controlleur doit avoir une action d'affichage (index avec des options)
 - ce qui doit afficher l'écart avec les écritures associées au relevé
 - au choix soit les écritures correspondant au relevé
 - ou celles correspondant à celles qui ne sont pas pointées
-- ou les deux mais avec des comportements différents (couleurs et fonds)
+OK  ou les deux mais avec des comportements différents (couleurs et fonds)
 
 Le mode pointage doit permettre de transformer le curseur lorsqu'il passe sur une ligne non pointée
 Un clic associé la ligne

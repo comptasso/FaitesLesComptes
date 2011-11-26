@@ -1,28 +1,38 @@
 <%= content_for :menu  do %>
-<%= icon_to 'navigation90.png', listing_bank_extracts_path(@listing), :title=>'Retour vers la liste des extraits' %>
+  <%= icon_to 'navigation90.png', listing_bank_extracts_path(@listing), :title=>'Retour vers la liste des extraits' %>
 <% end %>
 <fieldset>
   <legend>
-     Pointage de l'extrait <%= @bank_extract.reference %>
+    Pointage de l'extrait <%= @bank_extract.reference %>
   </legend>
   <table>
     <tr>  <%= render 'bank_extracts/table_header' %></tr>
     <tr><%= render @bank_extract %>  </tr>
+    <tr>
+      <td>Lignes pointées</td>
+      <td></td>
+      <td></td>
+      <td class="numeric"><%= two_decimals @bank_extract.begin_sold %> </td>
+      <td class="numeric"><%= two_decimals @bank_extract.total_lines_debit %> </td>
+      <td class="numeric"><%= two_decimals @bank_extract.total_lines_credit %></td>
+      <td class="numeric"><%= two_decimals @bank_extract.lines_sold %></td>
+      <td></td>
+    </tr>
   </table>
 </fieldset>
 <table>
- 
-<tbody>
-<% unless @lines.empty? %>
-  <tr> <%= render 'lines/table_header'  %></tr>
-       <%  @lines.each do |line | %>
 
-      <tr <%=  line.bank_extract_id ? "class='pointed'" : "class='not_pointed'"  %> >
-       
-       <%= render :partial=>'lines/line', :object=>line %>
-      </tr>
+  <tbody>
+    <% unless @lines.empty? %>
+      <tr> <%= render 'lines/table_header'  %></tr>
+      <%  @lines.each do |line | %>
+
+        <tr <%=  line.bank_extract_id ? "class='pointed'" : "class='not_pointed'"  %> >
+
+          <%= render :partial=>'lines/line', :object=>line %>
+        </tr>
+      <% end %>
     <% end %>
-<% end %>
-</tbody>
+  </tbody>
 
 </table>

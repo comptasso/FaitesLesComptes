@@ -3,6 +3,6 @@
           <td><%= line.narration %></td>
           <td><%= line.nature.name if line.nature %></td>
           <td><%= line.destination.name if line.destination %></td>
-          <td class="nombre"><%= debit_credit(line.debit) %></td>
-          <td class="nombre"><%= debit_credit(line.credit) %></td>
+          <td class="numeric"><%= debit_credit(line.debit) %></td>
+          <td class="numeric"><%= debit_credit(line.credit) %></td>
  
