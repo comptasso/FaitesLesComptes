@@ -1,8 +1,9 @@
 Faitesvoscomptes::Application.routes.draw do
 
  
-   match 'bank_extract/:id/pointage/index' => 'pointage#index',  :as => :pointage
-   match "bank_extract/:id/pointage/:id/edit" => 'pointage#edit', :as=> :edit_pointage
+   match 'bank_extract/:bank_extract_id/pointage/index' => 'pointage#index',  :as => :pointage
+   match "bank_extract/:bank_extract_id/pointage/:id/pointe" => 'pointage#pointe', :as=> :pointe, :method=>:post
+   match "bank_extract/:bank_extract_id/pointage/:id/depointe" => 'pointage#depointe', :as=> :depointe,:method=>:post
 
   
 

@@ -1,6 +1,13 @@
 <%= content_for :menu  do %>
   <%= icon_to 'navigation90.png', listing_bank_extracts_path(@listing), :title=>'Retour vers la liste des extraits' %>
 <% end %>
+
+<%= content_for :submenu do %>
+  
+<%= link_to 'Essai de fenetre popup pour créer une nouvelle ligne',
+          new_listing_line_path(@listing) ,
+          onclick: "window.open(this.href,'create_company', 'height=600, width=600');return false;" %>
+<% end %>
 <fieldset>
   <legend>
     Pointage de l'extrait <%= @bank_extract.reference %>
@@ -21,15 +28,28 @@
   </table>
 </fieldset>
 <table>
+  <thead>
+     <tr>
+        <%= render 'lines/table_header'  %>
+       <th></th>
+     </tr>
+  </thead>
 
   <tbody>
     <% unless @lines.empty? %>
-      <tr> <%= render 'lines/table_header'  %></tr>
+     
       <%  @lines.each do |line | %>
 
-        <tr <%=  line.bank_extract_id ? "class='pointed'" : "class='not_pointed'"  %> >
+        <tr <%=  line.pointed? ?  "class='pointed'" : "class='not_pointed'"  %> >
 
           <%= render :partial=>'lines/line', :object=>line %>
+          <td>
+            <% if line.pointed? %>
+             <%= button_to 'Dépointer', depointe_path(@bank_extract.id,line.id) %>
+            <% else %>
+             <%= button_to 'Pointer', pointe_path(@bank_extract.id, line.id) %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     <% end %>

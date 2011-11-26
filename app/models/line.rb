@@ -68,6 +68,11 @@ class Line < ActiveRecord::Base
     l.line_date=new_date
     l
   end
+
+  # répond à la question si une ligne est affectée à un extrait bancaire ou non.
+  def pointed?
+    self.bank_extract_id
+  end
   
 
   # before_validation :default_debit_credit

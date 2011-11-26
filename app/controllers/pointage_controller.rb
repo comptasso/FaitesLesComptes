@@ -9,13 +9,24 @@ class PointageController < ApplicationController
     @lines=@listing.lines.where('bank_extract_id = ? OR bank_extract_id IS NULL', @bank_extract.id)
   end
 
-  def edit
+  def pointe
+   line=Line.find(params[:id])
+   line.update_attribute(:bank_extract_id, @bank_extract.id)
+   
+   redirect_to pointage_url(@bank_extract)
+  end
+
+   def depointe
+   line=Line.find(params[:id])
+   line.update_attribute(:bank_extract_id, nil)
+   
+   redirect_to pointage_url(@bank_extract)
   end
 
   private
 
   def find_bk_extract
-    @bank_extract=BankExtract.find(params[:id])
+    @bank_extract=BankExtract.find(params[:bank_extract_id])
     @listing=@bank_extract.listing
     @organism= @listing.organism
   rescue
