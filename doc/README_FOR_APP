@@ -52,7 +52,7 @@ OK  le controlleur doit avoir une action d'affichage des lignes du relevé et de
 OK avec des comportements différents
 OK action pour les pointages et dépointages sans javascript
 
-- Ajouter icone plus pour ajouter une écriture facilement (voir si une fenêtre superposée ne serait pas adaptée)
+
 
 - Partie javascript
 Supprimer les boutons et visualiser le mode pointage par un changement de forme du curseur
@@ -60,8 +60,7 @@ OK - Un clic associé la ligne
 OK - un autre clic désassocie la ligne
 OK - les soldes et les écarts sont recalculés
 ---------------------------------------------------------------------
-Faire une vue show de bank extract avec les lignes associées. Et les écarts de soldes.
-Très similaire donc à celle de pointage
+OK - Faire une vue show de bank extract avec les lignes associées. Et les écarts de soldes. Très similaire donc à celle de pointage
 
 Lorsqu'on est bon, il devient possible de valider et verrouiller les associations.
   Visualiser le fait qu'on est bon par un changement de couleur du solde
@@ -69,9 +68,14 @@ Lorsqu'on est bon, il devient possible de valider et verrouiller les association
   L'action verouiller doit modifier le champ validated de l'extrait et également celui des lignes associées
   L'action renvoie ensuite à la vue show de bank_extract
 
--------------------------------------------------------------------
-Gérer la question du verrouillage des relevés (icones et actions)
+--------------------------------------------------------------------
 
+
+Ajouter icone plus pour ajouter une écriture facilement (voir si une fenêtre superposée ne serait pas adaptée)
+Affichage des données par type de dépenses ou de nature
+Recherche de lignes
+
+--------------------------------------------------------------------
 Voir le mois qui est affiché quand on supprime une écriture
 
 Mettre en place une rubrique moyen de paiement
