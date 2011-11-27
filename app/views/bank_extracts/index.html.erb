@@ -15,15 +15,17 @@
     <th></th>
     <th></th>
     <th></th>
+    <th></th>
   </tr>
 
 <% @bank_extracts.each do |bank_extract| %>
   <tr>
 
     <%= render :partial=>'bank_extract' , :object=>bank_extract %>
-   
+    <td><%= icon_to 'afficher.png', [@listing, bank_extract] %></td>
     <td><%= icon_to 'modifier.png', edit_listing_bank_extract_path(@listing,bank_extract) %></td>
     <td><%= icon_to 'supprimer.png', [@listing,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+
     <td><%= link_to 'Pointage', pointage_path(bank_extract) %> </td>
   </tr>
 <% end %>

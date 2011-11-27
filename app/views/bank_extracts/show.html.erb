@@ -1,0 +1,40 @@
+<%= content_for :menu  do %>
+  <%= icon_to 'navigation90.png', listing_bank_extracts_path(@listing), :title=>'Retour vers la liste des extraits' %>
+<% end %>
+
+<%= content_for :submenu do %>
+  <%= link_to 'pointage', pointage_path(@bank_extract) %>
+<% end %>
+<fieldset>
+  <legend>
+    Affichage de l'extrait <%= @bank_extract.reference %>
+  </legend>
+  <table>
+    <tr> <%= render 'bank_extracts/table_header' %></tr>
+    <tr> <%= render @bank_extract %>  </tr>
+    <tr> <%= render 'pointage/pointed_lines_header' %></tr>
+  </table>
+</fieldset>
+<table>
+  <thead>
+    <tr>
+      <%= render 'lines/table_header'  %>
+
+    </tr>
+  </thead>
+
+  <tbody>
+    <% unless @lines.empty? %>
+
+      <% @lines.each do  |line| %>
+        <tr>
+          <%=  render line %>
+        </tr>
+      <% end %>
+
+
+    <% end %>
+  </tbody>
+
+</table>
+

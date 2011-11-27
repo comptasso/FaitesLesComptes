@@ -20,6 +20,11 @@ class BankExtractsController < ApplicationController
     end
   end
 
+  def show
+    @bank_extract = BankExtract.find(params[:id])
+    @lines=@bank_extract.lines
+  end
+
  
 
   # GET /bank_extracts/new
