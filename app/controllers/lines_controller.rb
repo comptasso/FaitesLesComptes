@@ -46,7 +46,7 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.json
   def new
-    @line =@listing.lines.new(line_date: Date.today.beginning_of_year.months_since(@mois.to_i))
+    @line =@listing.lines.new(line_date: Date.today)
 
     respond_to do |format|
       format.html # new.html.erb
