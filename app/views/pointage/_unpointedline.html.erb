@@ -1,0 +1,3 @@
+ 
+    <%= render :partial=>'lines/line', :object=>unpointedline %>
+    <td>    <%= button_to 'Pointer', pointe_path(@bank_extract.id, unpointedline.id), remote: true %> </td>

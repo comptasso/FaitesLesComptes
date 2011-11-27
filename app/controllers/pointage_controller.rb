@@ -10,17 +10,24 @@ class PointageController < ApplicationController
   end
 
   def pointe
-   line=Line.find(params[:id])
-   line.update_attribute(:bank_extract_id, @bank_extract.id)
+   @line=Line.find(params[:id])
+   @line.update_attribute(:bank_extract_id, @bank_extract.id)
+   respond_to do |format|
+      format.html { redirect_to pointage_url(@bank_extract)}
+      format.js
+    end
    
-   redirect_to pointage_url(@bank_extract)
   end
 
    def depointe
-   line=Line.find(params[:id])
-   line.update_attribute(:bank_extract_id, nil)
+   @line=Line.find(params[:id])
+   @line.update_attribute(:bank_extract_id, nil)
+    respond_to do |format|
+      format.html { redirect_to pointage_url(@bank_extract)}
+      format.js
+    end
    
-   redirect_to pointage_url(@bank_extract)
+  
   end
 
   private
