@@ -1,8 +1,8 @@
 
-          <td><%=l line.line_date %></td>
-          <td><%= line.narration %></td>
-          <td><%= line.nature.name if line.nature %></td>
-          <td><%= line.destination.name if line.destination %></td>
-          <td class="numeric"><%= debit_credit(line.debit) %></td>
-          <td class="numeric"><%= debit_credit(line.credit) %></td>
+          <td class="clickable"><%=l line.line_date %></td>
+          <td class="clickable"><%= line.narration %></td>
+          <td class="clickable"><%= line.nature.name if line.nature %></td>
+          <td class="clickable"><%= line.destination.name if line.destination %></td>
+          <td class="numeric clickable"><%= debit_credit(line.debit) %></td>
+          <td class="numeric clickable"><%= debit_credit(line.credit) %></td>
  

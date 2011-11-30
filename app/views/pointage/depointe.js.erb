@@ -2,3 +2,7 @@ $('tr#tr_line_<%= @line.id %>').removeClass('pointed').addClass('not_pointed');
 $('tr#tr_line_<%= @line.id %>').html("<%=j render partial: 'unpointedline', :object=>@line %>");
 $('#total_lines_debit').text("<%=j two_decimals @bank_extract.total_lines_debit %>");
 <%= render 'sold' %>
+$('td.clickable').click(function(){
+    $(this).parent().find(':submit').click();
+});
+$('.button').hide();

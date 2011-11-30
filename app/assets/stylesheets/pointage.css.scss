@@ -7,8 +7,12 @@
         }
     .not_pointed {
         background-color: pink;
+        
+        cursor: url(icones/stock_lock_open.png),auto;
+       
         }
     .pointed {
         background-color: #EFE;
+        cursor: url(icones/supprimer.png),auto;
         }
     }

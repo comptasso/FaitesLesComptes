@@ -64,7 +64,7 @@ OK - les soldes et les écarts sont recalculés
 ---------------------------------------------------------------------
 OK - Faire une vue show de bank extract avec les lignes associées. Et les écarts de soldes. Très similaire donc à celle de pointage
 
-Lorsqu'on est bon, il devient possible de valider et verrouiller les associations. c'est dans le partiel _sold.js.erb
+OK - Lorsqu'on est bon, il devient possible de valider et verrouiller les associations. c'est dans le partiel _sold.js.erb
 OK-  Visualiser le fait qu'on est bon par un changement de couleur du solde
 OK -Afficher un lien (bouton, icone) pour verrouiller le relevé bancaire
 OK -  on ne peut pas accéder au pointage si le compte est validé
@@ -74,7 +74,7 @@ OK -  L'action renvoie ensuite à la vue show de bank_extract
 --------------------------------------------------------------------
 
 
-Ajouter icone plus pour ajouter une écriture facilement (voir si une fenêtre superposée ne serait pas adaptée)
+Ajouter icone plus pour ajouter une écriture facilement avec une fenêtre superposée
 Affichage des données par type de dépenses ou de nature
 Recherche de lignes
 

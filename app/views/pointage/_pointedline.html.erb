@@ -1,4 +1,4 @@
  
     <%= render :partial=>'lines/line', :object=>pointedline %>
-    <td><%=  button_to 'Dépointer', depointe_path(@bank_extract.id,pointedline.id), :remote=>true, :id=>"line_#{pointedline.id}" %> </td>
+    <td class="button"><%=  button_to 'Dépointer', depointe_path(@bank_extract.id,pointedline.id), :remote=>true, :id=>"line_#{pointedline.id}" %> </td>
  
