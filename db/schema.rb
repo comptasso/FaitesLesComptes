@@ -11,17 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111123190507) do
+ActiveRecord::Schema.define(:version => 20111130180817) do
 
   create_table "bank_extracts", :force => true do |t|
     t.integer  "listing_id"
     t.string   "reference"
     t.date     "begin_date"
     t.date     "end_date"
-    t.decimal  "begin_sold",   :precision => 2, :scale => 10, :default => 0.0
-    t.decimal  "total_debit",  :precision => 2, :scale => 10, :default => 0.0
-    t.decimal  "total_credit", :precision => 2, :scale => 10, :default => 0.0
-    t.boolean  "validated",                                   :default => false
+    t.decimal  "begin_sold",   :default => 0.0
+    t.decimal  "total_debit",  :default => 0.0
+    t.decimal  "total_credit", :default => 0.0
+    t.boolean  "locked",       :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

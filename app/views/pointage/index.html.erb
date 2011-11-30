@@ -13,9 +13,13 @@
     Pointage de l'extrait <%= @bank_extract.reference %>
   </legend>
   <table>
-    <tr> <%= render 'bank_extracts/table_header' %></tr>
-    <tr> <%= render @bank_extract %>  </tr>
-    <tr> <%= render 'pointed_lines_header' %></tr>
+    <tr> <%= render 'bank_extracts/table_header' %>
+      <th>
+<%= icon_to  'verrouiller.png', lock_listing_bank_extract_path(@listing,@bank_extract), :id=>'verrouiller', :method=>:post %>
+      </th>
+    </tr>
+    <tr> <%= render @bank_extract %><td></td>  </tr>
+    <tr> <%= render 'pointed_lines_header' %><td></td></tr>
   </table>
 </fieldset>
 <table>

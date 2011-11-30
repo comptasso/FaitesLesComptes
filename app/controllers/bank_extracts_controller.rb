@@ -25,7 +25,21 @@ class BankExtractsController < ApplicationController
     @lines=@bank_extract.lines
   end
 
- 
+ def lock
+   @bank_extract = BankExtract.find(params[:id])
+   # ici on change les attributs false
+   @bank_extract.locked=true
+   @bank_extract.lines.all.each {|l| l.update_attribute(:locked, true) }
+
+   if @bank_extract.save
+     flash[:notice]= "Relévé validé et verrouillé"
+
+   else
+     flash[:alert]= "Une erreur n'a pas permis de valider le relevé"
+     
+   end
+     redirect_to listing_bank_extract_url(@listing,@bank_extract)
+ end
 
   # GET /bank_extracts/new
   # GET /bank_extracts/new.json

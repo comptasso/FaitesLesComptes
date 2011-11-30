@@ -9,7 +9,7 @@ class CreateBankExtracts < ActiveRecord::Migration
       
       t.decimal :total_debit,scale: 10, :precision=>2, default: 0
       t.decimal :total_credit, scale: 10,:precision=>2, default: 0
-      t.boolean :validated, :default=> false
+      t.boolean :locked, :default=> false
       t.timestamps
     end
 

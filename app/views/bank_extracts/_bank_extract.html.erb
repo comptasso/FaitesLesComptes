@@ -1,11 +1,11 @@
 <td><%= bank_extract.reference %></td>
     <td><%=l bank_extract.begin_date %></td>
     <td><%=l bank_extract.end_date %></td>
-    <td class="numeric"><%= two_decimals(bank_extract.begin_sold) %></td>
-     <td class="numeric"><%= two_decimals(bank_extract.total_debit) %></td>
-    <td class="numeric"><%= two_decimals(bank_extract.total_credit) %></td>
-    <td class="numeric"><%= two_decimals(bank_extract.end_sold) %></td>
+    <td class="numeric" id="begin_sold"><%= two_decimals(bank_extract.begin_sold) %></td>
+     <td class="numeric" id="total_debit"><%= two_decimals(bank_extract.total_debit) %></td>
+    <td class="numeric" id="total_credit"><%= two_decimals(bank_extract.total_credit) %></td>
+    <td class="numeric" id="end_sold"><%= two_decimals(bank_extract.end_sold) %></td>
 
 
 
-    <td><%= bank_extract.validated %></td>
+  

@@ -55,18 +55,21 @@ OK action pour les pointages et dépointages sans javascript
 
 
 - Partie javascript
-Supprimer les boutons et visualiser le mode pointage par un changement de forme du curseur
+
+TODO Supprimer les boutons et visualiser le mode pointage par un changement de forme du curseur
+
 OK - Un clic associé la ligne
 OK - un autre clic désassocie la ligne
 OK - les soldes et les écarts sont recalculés
 ---------------------------------------------------------------------
 OK - Faire une vue show de bank extract avec les lignes associées. Et les écarts de soldes. Très similaire donc à celle de pointage
 
-Lorsqu'on est bon, il devient possible de valider et verrouiller les associations.
-  Visualiser le fait qu'on est bon par un changement de couleur du solde
-  Afficher un lien (bouton, icone) pour verrouiller le relevé bancaire
-  L'action verouiller doit modifier le champ validated de l'extrait et également celui des lignes associées
-  L'action renvoie ensuite à la vue show de bank_extract
+Lorsqu'on est bon, il devient possible de valider et verrouiller les associations. c'est dans le partiel _sold.js.erb
+OK-  Visualiser le fait qu'on est bon par un changement de couleur du solde
+OK -Afficher un lien (bouton, icone) pour verrouiller le relevé bancaire
+OK -  on ne peut pas accéder au pointage si le compte est validé
+OK -  L'action verouiller doit modifier le champ validated de l'extrait et également celui des lignes associées
+OK -  L'action renvoie ensuite à la vue show de bank_extract
 
 --------------------------------------------------------------------
 

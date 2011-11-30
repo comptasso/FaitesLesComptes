@@ -17,8 +17,11 @@ Faitesvoscomptes::Application.routes.draw do
   resources :listings do
 
     resources :multiple_lines
-    resources :bank_extracts 
-      
+    resources :bank_extracts do
+       member do
+        post 'lock'
+      end
+    end
       
    
     resources :lines do

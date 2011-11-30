@@ -6,6 +6,11 @@ class PointageController < ApplicationController
 
   def index
     # on affiche les lignes non pointées et celles affectées à cet extrait
+    if @bank_extract.locked?
+      flash[:alert]= "Un compte bancaire validé est déja pointé"
+      redirect_to listing_bank_extracts_url(@listing)
+      return
+    end
     @lines=@listing.lines.where('bank_extract_id = ? OR bank_extract_id IS NULL', @bank_extract.id)
   end
 
