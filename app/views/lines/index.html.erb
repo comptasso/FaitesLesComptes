@@ -8,6 +8,7 @@
 <%= content_for :submenu do %>
   <%  @submenu_list.each_with_index do |mois,i| %>
     <%=   link_to(mois, listing_lines_path(@listing, mois: i)) %>
+<%= link_to 'nouveau', new_listing_lines_path(@listing), id: '#new_line_link' %>
   <%  end %>
 <% end %>
 

@@ -28,3 +28,10 @@ function $f_zero(){
      // return false; jQuery dit qu'il faut retourner false mais alors on perd l'affichage du curseur
  }
 
+     $(document).ready(function() {
+        $('#add_line_link').facebox({
+            loadingImage : '/images/loading.gif',
+        closeImage   : '/images/closelabel.gif'
+        });
+    });
+

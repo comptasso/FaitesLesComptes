@@ -2,6 +2,8 @@
 
 class LinesController < ApplicationController
 
+  layout :choose_layout
+
   before_filter :find_listing
   before_filter :fill_mois, only: [:index, :new]
 
@@ -70,10 +72,12 @@ class LinesController < ApplicationController
          
         mois=(@line.line_date.month)-1
         format.html { redirect_to listing_lines_url(@listing,mois: mois), notice: 'La ligne a été créée.' }
+        forrmat.js {render action: redirect} # redirection via js
         format.json { render json: @line, status: :created, location: @line }
       else
         format.html { render action: "new" }
         format.json { render json: @line.errors, status: :unprocessable_entity }
+        format.js { render :new}
       end
     end
   end
@@ -116,5 +120,10 @@ class LinesController < ApplicationController
 
   def fill_mois
     @mois = params[:mois] || (Date.today.month - 1)
+  end
+
+  
+  def choose_layout
+    (request.xhr?) ? nil : 'application'
   end
 end
