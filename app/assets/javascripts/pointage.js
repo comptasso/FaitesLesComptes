@@ -15,11 +15,12 @@ function $check_sold(){
 }
 
 jQuery(function (){
-$check_sold();
+    $check_sold();
 
-$('td.clickable').click(function(){
-    $(this).parent().find(':submit').click();
-});
+    $('td.clickable').click(function(){
+        $(this).parent().find(':submit').click();
+    });
 
-$('.button').hide();
+    $('.pointage .button').hide();
+
 });

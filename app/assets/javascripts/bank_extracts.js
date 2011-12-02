@@ -17,21 +17,3 @@
      //$('.bank_extracts input#bank_extract_begin_sold').color('red');
  }
 
-
-
-//#MiseEnForme =
-//#    zeroNumber: (number) ->
-//#        '0.00' if @ == ''
-//
-//#    emptyNumber: (number) ->
-//#        ' ' if number = 0.00
-//
-//#$ ->
-//#    $('#bank_extract_begin_sold').blur ->
-//#        @value = MiseEnForme.zeroNumber(@value)
-//#        @value
-//
-//#jQuery ->
-//#    $('#bank_extract_begin_sold').focus ->
-//#        @value = MiseEnForme.emptyNumber(@value)
-//#        @value

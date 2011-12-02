@@ -29,27 +29,29 @@ function $f_zero(){
  }
 
 
-  $.facebox.settings.closeImage = '/assets/closelabel.png';
+ $.facebox.settings.closeImage = '/assets/closelabel.png';
  $.facebox.settings.loadingImage = '/assets/loading.gif';
 
 
+
+function pausecomp(ms) {
+ms += new Date().getTime();
+while (new Date() < ms){}
+}
+
+
+
+
  jQuery(document).ready(function($) {
-  $('a[rel*=facebox]').facebox()
+  $('a[rel*=facebox]').facebox();
 })
 
-//     $(document).ready(function() {
-//        $('#new_line_link').facebox({
-//            loadingImage : '/images/loading.gif',
-//        closeImage   : '/images/closelabel.png'
-//        });
-//      $(document).bind('reveal.facebox', function() {
-//            $('.button').submit(function() {
-//                $.post(this.action, $(this).serialize(), null, "script");
-//                return false;
-//            });
-//        });
-//
-//
-//    });
-//
+     $(document).ready(function() {
+        $(document).bind('reveal.facebox', function() {
+          $('#new_line').submit(function() {
+                $.post(this.action, $(this).serialize(), null, "script");
+                return false;
+            });
+        });
+      });
 

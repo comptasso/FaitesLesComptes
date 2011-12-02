@@ -72,12 +72,14 @@ class LinesController < ApplicationController
       if @line.save
         mois=(@line.line_date.month)-1
         format.html { redirect_to listing_lines_url(@listing,mois: mois), notice: 'La ligne a été créée.' }
-        format.js {render action: redirect} # redirection via js
+
+
+       format.js { render :redirect } # redirection via js
         format.json { render json: @line, status: :created, location: @line }
       else
         format.html { render action: "new" }
         format.json { render json: @line.errors, status: :unprocessable_entity }
-        format.js { render :new}
+        format.js 
       end
     end
   end
