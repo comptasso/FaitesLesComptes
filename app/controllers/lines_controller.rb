@@ -53,6 +53,7 @@ class LinesController < ApplicationController
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @line }
+      
     end
   end
 
@@ -69,10 +70,9 @@ class LinesController < ApplicationController
        
     respond_to do |format|
       if @line.save
-         
         mois=(@line.line_date.month)-1
         format.html { redirect_to listing_lines_url(@listing,mois: mois), notice: 'La ligne a été créée.' }
-        forrmat.js {render action: redirect} # redirection via js
+        format.js {render action: redirect} # redirection via js
         format.json { render json: @line, status: :created, location: @line }
       else
         format.html { render action: "new" }

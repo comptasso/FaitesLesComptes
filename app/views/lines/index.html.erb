@@ -8,8 +8,9 @@
 <%= content_for :submenu do %>
   <%  @submenu_list.each_with_index do |mois,i| %>
     <%=   link_to(mois, listing_lines_path(@listing, mois: i)) %>
-<%= link_to 'nouveau', new_listing_lines_path(@listing), id: '#new_line_link' %>
+
   <%  end %>
+<%= link_to 'nouveau', new_listing_line_path(@listing), id: 'new_line_link' %>
 <% end %>
 
 <fieldset><legend><%=  @listing.title%> - Mois de <%=l(Date.today.beginning_of_year.months_since(@mois.to_i), :format=>:month_year) %></legend>
@@ -80,4 +81,6 @@
 
     </fieldset>
 
-
+<div>
+  <%= link_to 'test', new_listing_line_path(@listing), rel: 'facebox' %>
+</div>

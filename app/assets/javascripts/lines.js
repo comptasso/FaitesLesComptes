@@ -28,10 +28,28 @@ function $f_zero(){
      // return false; jQuery dit qu'il faut retourner false mais alors on perd l'affichage du curseur
  }
 
-     $(document).ready(function() {
-        $('#add_line_link').facebox({
-            loadingImage : '/images/loading.gif',
-        closeImage   : '/images/closelabel.gif'
-        });
-    });
+
+  $.facebox.settings.closeImage = '/assets/closelabel.png';
+ $.facebox.settings.loadingImage = '/assets/loading.gif';
+
+
+ jQuery(document).ready(function($) {
+  $('a[rel*=facebox]').facebox()
+})
+
+//     $(document).ready(function() {
+//        $('#new_line_link').facebox({
+//            loadingImage : '/images/loading.gif',
+//        closeImage   : '/images/closelabel.png'
+//        });
+//      $(document).bind('reveal.facebox', function() {
+//            $('.button').submit(function() {
+//                $.post(this.action, $(this).serialize(), null, "script");
+//                return false;
+//            });
+//        });
+//
+//
+//    });
+//
 
