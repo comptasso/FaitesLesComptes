@@ -8,8 +8,13 @@
     <%= f.association :listing, collection: @organism.listings.all(:order => 'title') %>
     <%= f.input :reference %>
   
-    <%= f.input :begin_date %>
-    <%= f.input :end_date %>
+  
+    <div class="input date optionnal">
+    <label>Du</label>
+     <%= picker_date :pick_date_from, Date.today.years_ago(5), Date.today.years_since(5) , @bank_extract.begin_date %>
+    <label class="inline">Au</label>
+     <%= picker_date :pick_date_to, Date.today.years_ago(5), Date.today.years_since(5) , @bank_extract.end_date %>
+    </div>
 
     <%= f.input :begin_sold, input_html:{ value: two_decimals(@bank_extract.begin_sold)} %>
      <%= f.input :total_debit, input_html:{ value: two_decimals(@bank_extract.total_debit)}  %>

@@ -3,7 +3,7 @@
 class BankExtractsController < ApplicationController
 
   before_filter :find_listing_and_organism
-
+before_filter :get_dates, only: [:create, :update]
 
   # GET /bank_extracts
   # GET /bank_extracts.json
@@ -46,6 +46,8 @@ class BankExtractsController < ApplicationController
   def new
 
     @bank_extract = @listing.bank_extracts.build(begin_sold: @listing.extract_sold)
+    @bank_extract.begin_date= @listing.last_bank_extract_day + 1
+    @bank_extract.end_date= @bank_extract.begin_date.months_since(1)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -107,5 +109,11 @@ class BankExtractsController < ApplicationController
   def find_listing_and_organism
     @listing=Listing.find(params[:listing_id])
     @organism=@listing.organism
+  end
+
+  def get_dates
+    params[:bank_extract][:begin_date]= picker_to_date(params[:pick_date_from])
+    params[:bank_extract][:end_date] = picker_to_date(params[:pick_date_to])
+
   end
 end

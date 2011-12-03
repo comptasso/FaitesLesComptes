@@ -14,4 +14,10 @@ class Listing < ActiveRecord::Base
     0
   end
 
+  def last_bank_extract_day
+    self.bank_extracts.order(:end_date).last.end_date
+  rescue
+    Date.today.beginning_of_month
+  end
+
 end
