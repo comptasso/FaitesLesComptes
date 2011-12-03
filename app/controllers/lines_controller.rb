@@ -5,7 +5,7 @@ class LinesController < ApplicationController
   layout :choose_layout
 
   before_filter :find_listing
-  before_filter :fill_mois, only: [:index, :new]
+  before_filter :fill_mois, only: [:index, :new, :create]
 
   # GET /lines
   # GET /lines.json
@@ -13,13 +13,7 @@ class LinesController < ApplicationController
     # TODO - à terme cette liste sera construite à partir des infos de l'exercice date de début et de fin.
     @submenu_list=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
     
-    date=Date.today.beginning_of_year.months_since(@mois.to_i)
-    @solde_debit_avant=@listing.lines.solde_debit_avant(date)
-    @solde_credit_avant=@listing.lines.solde_credit_avant(date)
-    @lines = @listing.lines.mois(date).all
-    @total_debit=@lines.sum(&:debit)
-    @total_credit=@lines.sum(&:credit)
-    @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
+  fill_soldes
 
 
     respond_to do |format|
@@ -74,7 +68,10 @@ class LinesController < ApplicationController
         format.html { redirect_to listing_lines_url(@listing,mois: mois), notice: 'La ligne a été créée.' }
 
 
-       format.js { render :redirect } # redirection via js
+       format.js do
+          fill_soldes
+          render :redirect
+       end # redirection via js
         format.json { render json: @line, status: :created, location: @line }
       else
         format.html { render action: "new" }
@@ -127,5 +124,16 @@ class LinesController < ApplicationController
   
   def choose_layout
     (request.xhr?) ? nil : 'application'
+  end
+
+  def fill_soldes
+      date=Date.today.beginning_of_year.months_since(@mois.to_i)
+    @lines = @listing.lines.mois(date).all
+    @solde_debit_avant=@listing.lines.solde_debit_avant(date)
+    @solde_credit_avant=@listing.lines.solde_credit_avant(date)
+
+    @total_debit=@lines.sum(&:debit)
+    @total_credit=@lines.sum(&:credit)
+    @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
   end
 end

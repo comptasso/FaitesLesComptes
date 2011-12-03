@@ -19,68 +19,20 @@
       <tr>
         <%= render 'table_header' %>
 
-        <th><%= icon_to 'nouveau.png', new_listing_line_path(@listing, mois: @mois) %></th>
+        <th><%= icon_to 'nouveau.png', new_listing_line_path(@listing, mois: @mois), rel: 'facebox' %></th>
         <th></th>
         <th></th>
 
       </tr>
     </thead>
-    <tbody>
-      <tr class="reports">
-        <td></td> <td></td> <td></td>
-        <td>Reports</td>
-        <td class="nombre"><%=  debit_credit(@solde_debit_avant) %></td>
-        <td class="nombre"><%=  debit_credit(@solde_credit_avant) %></td>
-      </tr>
-      
+   <tbody id="table_lines">
+      <%= render 'table_lines'  %>
 
-        <%  @lines.each do |line |%>
-      <tr>
-       <%= render :partial=>'line', :object=>line %>
-
-                <td class="td_line"> <%= line.locked? ? image_tag("icones/stock_lock.png", class: 'icon_menu') : icon_to('verrouiller.png',
-                lock_listing_line_path(@listing, line),
-                :title=>"Verouiller l'écriture", :id=>"lock_open_#{line.id}") %>
-              <%= image_tag("icones/stock_lock.png",class: 'icon_menu', :style=>'display: none;') unless line.locked? %>
-              </td>
-              <td>
-                <%  if line.multiple %>
-                  <%= icon_to 'detail.png', listing_multiple_line_path(@listing,line.copied_id) %>
-                <%  else %>
-                  <%= icon_to 'modifier.png', edit_listing_line_path(@listing,line),  :id=>"edit_#{line.id}"  unless line.locked? %>
-                <% end %>
-              </td>
-
-              <td><%= icon_to 'supprimer.png', [@listing,line],  :id=>"delete_#{line.id}", :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
-            </tr> 
-
-            <% end %>
-        </tbody>
-        <tfoot>
-          <tr class="totaux">
-            <td></td> <td></td> <td></td>
-            <td>Totaux du mois</td>
-            <td class="nombre"><%=  debit_credit(@total_debit) %></td>
-            <td class="nombre"><%=  debit_credit(@total_credit) %></td>
-          </tr>
-          <tr class="totaux_generaux">
-            <td></td> <td></td> <td></td>
-            <td>Totaux généraux</td>
-            <td class="nombre"><%=  debit_credit(@total_debit + @solde_debit_avant) %></td>
-            <td class="nombre"><%=  debit_credit(@total_credit+ @solde_credit_avant) %></td>
-          </tr>
-          <tr class="totaux_generaux">
-            <td></td> <td></td> <td></td>
-            <td>Solde</td>
-            <td class="nombre"><%=  debit_credit(-@solde) if @solde < 0  %></td>
-            <td class="nombre"><%=  debit_credit(@solde) if @solde > 0  %></td>
-          </tr>
-
-        </tfoot>
+   </tbody>
+   <tfoot id="table_foot">
+     <%= render 'table_foot' %>
+   </tfoot>
       </table>
 
     </fieldset>
 
-<div>
-  <%= link_to 'test', new_listing_line_path(@listing), rel: 'facebox' %>
-</div>

@@ -1,0 +1,32 @@
+
+      <tr class="reports">
+        <td></td> <td></td> <td></td>
+        <td>Reports</td>
+        <td class="nombre"><%=  debit_credit(@solde_debit_avant) %></td>
+        <td class="nombre"><%=  debit_credit(@solde_credit_avant) %></td>
+      </tr>
+
+
+        <%  @lines.each do |line |%>
+      <tr>
+       <%= render :partial=>'line', :object=>line %>
+
+                <td class="td_line"> <%= line.locked? ? image_tag("icones/stock_lock.png", class: 'icon_menu') : icon_to('verrouiller.png',
+                lock_listing_line_path(@listing, line),
+                :title=>"Verouiller l'écriture", :id=>"lock_open_#{line.id}") %>
+              <%= image_tag("icones/stock_lock.png",class: 'icon_menu', :style=>'display: none;') unless line.locked? %>
+              </td>
+              <td>
+                <%  if line.multiple %>
+                  <%= icon_to 'detail.png', listing_multiple_line_path(@listing,line.copied_id) %>
+                <%  else %>
+                  <%= icon_to 'modifier.png', edit_listing_line_path(@listing,line),  :id=>"edit_#{line.id}"  unless line.locked? %>
+                <% end %>
+              </td>
+
+              <td><%= icon_to 'supprimer.png', [@listing,line],  :id=>"delete_#{line.id}", :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
+            </tr>
+
+            <% end %>
+
+      
