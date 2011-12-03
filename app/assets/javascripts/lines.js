@@ -20,6 +20,10 @@
      }
     })
  });
+
+ $(document).ready(function() {
+    $('#all_table_lines').dataTable();
+} );
  
 
  

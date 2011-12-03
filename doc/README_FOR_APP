@@ -3,8 +3,8 @@ Run "rake doc:app" to generate API documentation for your models, controllers, h
 
 
 Etape actuelle :
- OK - Il faut faire une mise en page de la saisie des lignes pour avoir le formulaire de saisie en une seule ligne
- OK - Franciser le bouton créer ligne
+OK - Il faut faire une mise en page de la saisie des lignes pour avoir le formulaire de saisie en une seule ligne
+OK - Franciser le bouton créer ligne
 
 OK - Voir comment on revient au menu des journaux
 
@@ -19,7 +19,7 @@ OK - Mettre en place la validation des écritures dans lines#index
 OK - Revoir la place du plus dans lines#index
 OK - Faire un sous menu mois pour les listings
 
- OK - Après create il faudrait être dans le mois que l'on vient de saisir
+OK - Après create il faudrait être dans le mois que l'on vient de saisir
 OK - Mettre un ordre par défaut dans les selections destinations et natures
 OK - Quand on fait +, mettre le bon mois dans le date select
 
@@ -75,17 +75,37 @@ OK -  L'action renvoie ensuite à la vue show de bank_extract
 
 
 OK - Ajouter icone plus pour ajouter une écriture facilement avec une fenêtre superposée
-Affichage des données par type de dépenses ou de nature
+Mettre en place les bonnes icones pour le pointage
+
 Recherche de lignes
+Revoir la navigation pour plus de confort
+-----------------------Affichage des données par type de dépenses ou de nature
+Faire un controlleur spécialisé.
+Doit afficher une table
+
+Ajouter la possibilité de choisir une plage de date
 
 --------------------------------------------------------------------
 Voir le mois qui est affiché quand on supprime une écriture
-
-Mettre en place une rubrique moyen de paiement
+Voir pour mettre en place une notion d'exercice (en fait c'est virtuel - cela permet simplement de faire
+des conditions select.
+Mettre en place une rubrique moyen de paiement dans les lignes (peut être en lien avec la logique TSI  - cf. plus loin).
 
 OK - Faire que la touche plus puisse être actionnée par le clavier
 
--------------------------- Point d'étape
+---------------------pick date et autres goodies
+OK - pick date mis en place d'une manière générale
+OK - formulaire modifié pour bank_extract
+Faire les autres formulaires.
+Indiquer le solde des comptes
+-------------------------- Autres sujets à moyen terme
 Mettre en place une validation globale de la page
-Voir pour un pick date
+Gérer les validations
+
 Mettre dans le modèle une validation qui empêche la modification si verrouillé
+Utiliser la logique TSI pour distinguer les différents types de listings (et de lignes?)
+Donc peut être faire des modèles achats/ventes/banques/caisse
+et des modèles de lignes (repetées, multiple).
+Pouvoir faire un export
+Pouvoir faire une édition
+Graphiques

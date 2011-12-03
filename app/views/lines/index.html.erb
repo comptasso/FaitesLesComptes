@@ -14,7 +14,7 @@
 <% end %>
 
 <fieldset><legend><%=  @listing.title%> - Mois de <%=l(Date.today.beginning_of_year.months_since(@mois.to_i), :format=>:month_year) %></legend>
-  <table>
+  <table id="all_table_lines">
     <thead>
       <tr>
         <%= render 'table_header' %>

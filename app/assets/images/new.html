@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Posts: new</title>
+  <link href="new_fichiers/scaffold.css" media="screen" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<p style="color: green"></p>
+<a href="http://subdom.sodie.info/posts/new">New Post</a>
+<h1>New post</h1>
+
+<form action="/posts" class="new_post" id="new_post" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" value="kETBXlPcQj0CJHY/qBI3z5iliJWiQZPc/2IrvpVLdDw=" type="hidden"></div>
+  
+
+  <p>
+    <label for="post_title">Title</label><br>
+    <input value="datepicker avec jquery" id="post_title" name="post[title]" size="30" type="text">
+  </p>
+  <p>
+    <label for="post_body">Body</label><br>
+    <textarea cols="80" id="post_body" name="post[body]" rows="20">jquery
+ ui permet de faire assez facilement un date picker
+
+Voir la mise en oeuvre concrète sur les fichiers : 
+J'ai fait une fonction helper pour créer facilement un input en donnant 
+les limites supérieures et inférieures et une valeur. Ces limites sont 
+stockées dans des data-jcmin et data-jcmax
+
+Le helper donne la class input_date au champ de saisie 
+
+Une fonction dans application.js permet connecte alors chaque champ de 
+cette classe à un date_picker en remplissant les données correctement. 
+
+Il y a un fichier time_format.rb dans les initializers qui permet 
+d'avoir le bon format dans le date_picker.
+</textarea>
+  </p>
+  <p>
+    <label for="post_published">Published</label><br>
+    <input name="post[published]" value="0" type="hidden"><input id="post_published" name="post[published]" value="1" type="checkbox">
+  </p>
+  <p>
+    <input id="post_submit" name="commit" value="Create" type="submit">
+  </p>
+</form>
+
+<a href="http://subdom.sodie.info/posts">Back</a>
+
+
+
+</body></html>
