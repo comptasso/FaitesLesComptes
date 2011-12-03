@@ -10,7 +10,7 @@
     <%=   link_to(mois, listing_lines_path(@listing, mois: i)) %>
 
   <%  end %>
-<%= link_to 'nouveau', new_listing_line_path(@listing), id: 'new_line_link' %>
+
 <% end %>
 
 <fieldset><legend><%=  @listing.title%> - Mois de <%=l(Date.today.beginning_of_year.months_since(@mois.to_i), :format=>:month_year) %></legend>
@@ -19,7 +19,7 @@
       <tr>
         <%= render 'table_header' %>
 
-        <th><%= icon_to 'nouveau.png', new_listing_line_path(@listing, mois: @mois), rel: 'facebox' %></th>
+        <th><%= icon_to 'nouveau.png', new_listing_line_path(@listing, mois: @mois), rel: 'facebox' ,id: 'new_line_link' %></th>
         <th></th>
         <th></th>
 
