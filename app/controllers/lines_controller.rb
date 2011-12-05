@@ -28,14 +28,14 @@ class LinesController < ApplicationController
   # la mise à jour de la vue est faite par lock.js.erb qui
   # cache les icones modifier et delete, ainsi que l'icone clé et
   # fait apparaître l'icone verrou fermé.
-  def lock
-    @line=Line.find(params[:id])
-    if @line.update_attribute(:locked, true)
-      respond_to do |format|
-        format.js # appelle validate.js.erb
-      end
-    end
-  end
+#  def lock
+#    @line=Line.find(params[:id])
+#    if @line.update_attribute(:locked, true)
+#      respond_to do |format|
+#        format.js # appelle validate.js.erb
+#      end
+#    end
+#  end
 
  
 
@@ -52,9 +52,9 @@ class LinesController < ApplicationController
   end
 
   # GET /lines/1/edit
-  def edit
-    @line = @book.lines.find(params[:id])
-  end
+#  def edit
+#    @line = @book.lines.find(params[:id])
+#  end
 
   
   # POST /lines
@@ -83,33 +83,33 @@ class LinesController < ApplicationController
 
   # PUT /lines/1
   # PUT /lines/1.json
-  def update
-    @line = @book.lines.find(params[:id])
-    
-
-    respond_to do |format|
-      if @line.update_attributes(params[:line])
-        mois=(@line.line_date.month) -1
-        format.html { redirect_to book_lines_url(@book, mois: mois) }#], notice: 'Line was successfully updated.')}
-        format.json { head :ok }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @line.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+#  def update
+#    @line = @book.lines.find(params[:id])
+#
+#
+#    respond_to do |format|
+#      if @line.update_attributes(params[:line])
+#        mois=(@line.line_date.month) -1
+#        format.html { redirect_to book_lines_url(@book, mois: mois) }#], notice: 'Line was successfully updated.')}
+#        format.json { head :ok }
+#      else
+#        format.html { render action: "edit" }
+#        format.json { render json: @line.errors, status: :unprocessable_entity }
+#      end
+#    end
+#  end
 
   # DELETE /lines/1
   # DELETE /lines/1.json
-  def destroy
-    @line = @book.lines.find(params[:id])
-    @line.destroy
-
-    respond_to do |format|
-      format.html { redirect_to book_lines_url(@book) }
-      format.json { head :ok }
-    end
-  end
+#  def destroy
+#    @line = @book.lines.find(params[:id])
+#    @line.destroy
+#
+#    respond_to do |format|
+#      format.html { redirect_to book_lines_url(@book) }
+#      format.json { head :ok }
+#    end
+#  end
 
   private
   def find_book

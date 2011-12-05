@@ -82,16 +82,15 @@ OK - Transformer listing en book
     changer l'entête du modèle
     changer les routes
     changer les différentes apparitions de listing dans tous les autres fichier (listing, Listing, listings...).
+OK Mettre en place une rubrique moyen de paiement dans les lignes
 
+pick_date pour la saisie des lignes
 
 Quand on est dans un livre, le menu devrait proposer les autres livres
 On devrait supprimer les icones dans l'affichage des lignes (ainsi que les fonctions lock et ce qui va avec)
 
-
-
-
 Utiliser la logique TSI pour distinguer les différents types de listings (et de lignes?)
-OK Mettre en place une rubrique moyen de paiement dans les lignes
+
 
 
 -----------------------Affichage des données par type de dépenses ou de nature

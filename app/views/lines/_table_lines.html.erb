@@ -11,20 +11,7 @@
       <tr>
        <%= render :partial=>'line', :object=>line %>
 
-                <td class="td_line"> <%= line.locked? ? image_tag("icones/stock_lock.png", class: 'icon_menu') : icon_to('verrouiller.png',
-                lock_book_line_path(@book, line),
-                :title=>"Verouiller l'écriture", :id=>"lock_open_#{line.id}") %>
-              <%= image_tag("icones/stock_lock.png",class: 'icon_menu', :style=>'display: none;') unless line.locked? %>
-              </td>
-              <td>
-                <%  if line.multiple %>
-                  <%= icon_to 'detail.png', book_multiple_line_path(@book,line.copied_id) %>
-                <%  else %>
-                  <%= icon_to 'modifier.png', edit_book_line_path(@book,line),  :id=>"edit_#{line.id}"  unless line.locked? %>
-                <% end %>
-              </td>
-
-              <td><%= icon_to 'supprimer.png', [@book,line],  :id=>"delete_#{line.id}", :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
+        
             </tr>
 
             <% end %>
