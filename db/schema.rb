@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111204075512) do
+ActiveRecord::Schema.define(:version => 20111205050746) do
 
   create_table "bank_extracts", :force => true do |t|
     t.integer  "book_id"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(:version => 20111204075512) do
     t.string   "copied_id"
     t.boolean  "multiple",        :default => false
     t.integer  "bank_extract_id"
+    t.string   "payment_mode"
   end
 
   create_table "natures", :force => true do |t|

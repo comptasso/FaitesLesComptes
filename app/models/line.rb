@@ -9,7 +9,7 @@ class Line < ActiveRecord::Base
   validates :debit, :credit, numericality: true
   validates :line_date, presence: true
 
-  PAYMENTS_MODE= %w(CB Chèque Espèces Prélèvement Virement)
+  PAYMENT_MODES= %w(CB Chèque Espèces Prélèvement Virement)
  
 
   default_scope order: 'line_date ASC'

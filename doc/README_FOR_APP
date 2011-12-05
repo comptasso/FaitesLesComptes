@@ -76,7 +76,7 @@ OK -  L'action renvoie ensuite à la vue show de bank_extract
 
 OK - Ajouter icone plus pour ajouter une écriture facilement avec une fenêtre superposée
 OK -Mettre en place les bonnes icones pour le pointage
-Transformer listing en book
+OK - Transformer listing en book
     changer le nom de la table par une migration et tous les liens listing id en book id
     changer le nom des fichiers vue/controller/modèles
     changer l'entête du modèle
@@ -84,13 +84,14 @@ Transformer listing en book
     changer les différentes apparitions de listing dans tous les autres fichier (listing, Listing, listings...).
 
 
-
+Quand on est dans un livre, le menu devrait proposer les autres livres
+On devrait supprimer les icones dans l'affichage des lignes (ainsi que les fonctions lock et ce qui va avec)
 
 
 
 
 Utiliser la logique TSI pour distinguer les différents types de listings (et de lignes?)
-Mettre en place une rubrique moyen de paiement dans les lignes (peut être en lien avec la logique TSI  - cf. plus loin).
+OK Mettre en place une rubrique moyen de paiement dans les lignes
 
 
 -----------------------Affichage des données par type de dépenses ou de nature
@@ -113,6 +114,7 @@ OK - pick date mis en place d'une manière générale
 OK - formulaire modifié pour bank_extract
 Faire les autres formulaires.
 Indiquer le solde des comptes
+
 -------------------------- Autres sujets à moyen terme
 Mettre en place une validation globale de la page
 Gérer les validations

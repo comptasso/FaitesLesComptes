@@ -50,7 +50,7 @@ class BooksController < ApplicationController
 
     respond_to do |format|
       if @book.save
-        format.html { redirect_to [@organism, @book], notice: 'Le journal a été crée.' }
+        format.html { redirect_to organism_books_url(@organism), notice: 'Le livre a été crée.' }
         format.json { render json: @book, status: :created, location: @book }
       else
         format.html { render action: "new" }
@@ -66,7 +66,7 @@ class BooksController < ApplicationController
 
     respond_to do |format|
       if @book.update_attributes(params[:book])
-        format.html { redirect_to [@organism, @book] , notice: 'Le journal a été mis à jour.' }
+        format.html { redirect_to organism_books_url(@organism) , notice: 'Le livre a été mis à jour.' }
         format.json { head :ok }
       else
         format.html { render action: "edit" }

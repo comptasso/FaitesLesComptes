@@ -1,11 +1,11 @@
 Ce fichier décrit les fonctionnalités attendues selon les versions
 
 010 : version minimum de départ :
-- création d'un organisme (modif suppression)
-- gestion des journaux recettes/dépenses
-- gestion des destinations
-- gestion des natures
-- saisie d'écritures
++ création d'un organisme (modif suppression)
++ gestion des journaux recettes/dépenses
++ gestion des destinations
++ gestion des natures
++ saisie d'écritures
 - remise en banque
 - affichage du journal de banques
 - affichage du journal de caisse

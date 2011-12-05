@@ -202,7 +202,7 @@ fr:
         begin_date: Du
         end_date: Au
         reference: Référence
-        book: Journal
+        book: Livre
 
     errors:
      models:
@@ -217,8 +217,8 @@ fr:
       prompt: "Veuillez sélectionner"
     submit:
       book:
-        create: "Créer un journal"
-        update: "Modifier ce journal"
+        create: "Créer le livre"
+        update: "Modifier ce livre"
       organism:
         create: "Créer l'organisme"
         update: "Modifier cet organisme"

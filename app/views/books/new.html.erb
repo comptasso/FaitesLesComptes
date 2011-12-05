@@ -1,5 +1,17 @@
-<h1>Quel cahier de comptes voulez vous créer ?</h1>
+<%= content_for :submenu do %>
+
+
+<%= icon_to 'retour.png', organism_books_path(@organism) %>
+
+<% end -%>
+
+<fieldset>
+  <legend>
+    Création d'un livre
+  </legend>
 
 <%= render 'form' %>
 
-<%= link_to t('general.back'), organism_books_path(@organism) %>
+
+
+</fieldset>

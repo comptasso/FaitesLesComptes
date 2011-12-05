@@ -7,19 +7,20 @@
  jQuery(function (){
     $('.decimal').live('focus', $f_empty); //vide le champ s'il est à zero (pour faciliter la saisie)
     $('.decimal').live('blur',$f_zero); // met zero dans le champ s'il est vide
-
+ });
  $(document).keyup(function (e) {
      if(e.which == 17) isCtrl=false;
- }).keydown(function (e) {
+ }).keydown(function(e) {
      if(e.which == 17) isCtrl=true;
      if(e.which == 78 && isCtrl == true) {
          e.stopPropagation();
          $('#new_line_link').click();
-
          return false;
      }
-    })
- });
+    });
+
+
+
 
  $(document).ready(function() {
     $('#all_table_lines').dataTable();

@@ -9,7 +9,7 @@
   <div id="header">
      <div id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
     <div id ="organism">
-      <%= @organism.title if @organism %> - <span class="description"><%= @organism.description  if @organism %></span>
+      <%= link_to @organism.title, @organism unless @organism.nil? %> - <span class="description"><%= @organism.description  unless @organism.nil? %></span>
     </div>
   </div>
 
