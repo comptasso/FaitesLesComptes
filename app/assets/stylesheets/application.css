@@ -26,6 +26,14 @@
     text-align: center;
 }
 
+#header #logo a {
+    text-decoration: none;
+}
+
+#header #logo a:hover {
+    background: #9c9;
+}
+
 #header #organism {
     position:absolute;
     left: 400px;

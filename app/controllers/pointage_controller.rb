@@ -8,10 +8,10 @@ class PointageController < ApplicationController
     # on affiche les lignes non pointées et celles affectées à cet extrait
     if @bank_extract.locked?
       flash[:alert]= "Un compte bancaire validé est déja pointé"
-      redirect_to listing_bank_extracts_url(@listing)
+      redirect_to book_bank_extracts_url(@book)
       return
     end
-    @lines=@listing.lines.where('bank_extract_id = ? OR bank_extract_id IS NULL', @bank_extract.id)
+    @lines=@book.lines.where('bank_extract_id = ? OR bank_extract_id IS NULL', @bank_extract.id)
   end
 
   def pointe
@@ -39,8 +39,8 @@ class PointageController < ApplicationController
 
   def find_bk_extract
     @bank_extract=BankExtract.find(params[:bank_extract_id])
-    @listing=@bank_extract.listing
-    @organism= @listing.organism
+    @book=@bank_extract.book
+    @organism= @book.organism
   rescue
     # TODO faire ici un log de l'anomalie
     flash[:notice] = "L'extrait de compte n'a pas été trouvé"

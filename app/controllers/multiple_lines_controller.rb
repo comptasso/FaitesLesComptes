@@ -1,14 +1,14 @@
 # -*- encoding : utf-8 -*-
 class MultipleLinesController < ApplicationController
 
-  before_filter :find_listing
+  before_filter :find_book
   before_filter :fill_mois, only: [:index, :new]
 
 
   # GET /multiple_lines
   def index
     # fait une liste de toutes les lignes multiples
-    mlines=@listing.lines.where('multiple=?',true).group(:copied_id).all
+    mlines=@book.lines.where('multiple=?',true).group(:copied_id).all
     @t=[]
     mlines.each { |ml| @t << ml.multiple_info }
   end
@@ -20,19 +20,19 @@ class MultipleLinesController < ApplicationController
   # correspondantes
   def show
     # récupérer toutes les lignes relevant de cette écriture mutliple
-    @mlines=@listing.lines.multiple(params[:id])
+    @mlines=@book.lines.multiple(params[:id])
     @total_debit=@mlines.sum(:debit)
     @total_credit=@mlines.sum(:credit)
   end
 
   def new
-    @mline=@listing.lines.new(line_date: Date.today.beginning_of_year.months_since(@mois.to_i))
+    @mline=@book.lines.new(line_date: Date.today.beginning_of_year.months_since(@mois.to_i))
   end
 
   
 
   def create
-    @mline = @listing.lines.new(params[:line])
+    @mline = @book.lines.new(params[:line])
 
     respond_to do |format|
       if @mline.save
@@ -40,7 +40,7 @@ class MultipleLinesController < ApplicationController
             nb = @mline.repete(params[:repete][:nombre].to_i,params[:repete][:periode])
          end
        
-        format.html { redirect_to listing_multiple_lines_path(@listing), notice: "#{nb} lignes ont été créées." }
+        format.html { redirect_to book_multiple_lines_path(@book), notice: "#{nb} lignes ont été créées." }
         format.json { render json: @line, status: :created, location: @line }
       else
         format.html { render action: "new" }
@@ -55,17 +55,17 @@ class MultipleLinesController < ApplicationController
   # le paramètre transmis n'est pas l'id de la ligne mais le copied_id
   # permettant, par le scope mutiple, de récupérer toutes les lignes
   # correspondantes
-    @mline=@listing.lines.multiple(params[:id]).first
+    @mline=@book.lines.multiple(params[:id]).first
   end
 
   def update
     # on récupère le tableau des lignes
-   @mlines = @listing.lines.multiple(params[:id])
+   @mlines = @book.lines.multiple(params[:id])
     respond_to do |format|
       # on fait la mise à jour de chacune
       if @mlines.each { |l| l.update_attributes(params[:line]) }
 
-        format.html { redirect_to listing_multiple_line_path(@listing, params[:id]) , notice: 'La ligne multiple a été mise à jour.'}
+        format.html { redirect_to book_multiple_line_path(@book, params[:id]) , notice: 'La ligne multiple a été mise à jour.'}
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -77,10 +77,10 @@ class MultipleLinesController < ApplicationController
   # DELETE /multiple_lines/1
   # DELETE /multiple_lines/1.json
   def destroy
-    @mlines = @listing.lines.multiple(params[:id])
+    @mlines = @book.lines.multiple(params[:id])
     @mlines.each {|l| l.destroy}
     respond_to do |format|
-      format.html { redirect_to listing_multiple_lines_url(@listing) }
+      format.html { redirect_to book_multiple_lines_url(@book) }
       format.json { head :ok }
     end
   end
@@ -89,9 +89,9 @@ class MultipleLinesController < ApplicationController
 #  end
 
    private
-  def find_listing
-    @listing=Listing.find(params[:listing_id])
-    @organism=@listing.organism
+  def find_book
+    @book=book.find(params[:book_id])
+    @organism=@book.organism
   end
 
   def fill_mois

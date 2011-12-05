@@ -1,16 +1,16 @@
 <%= content_for :menu do %>
-  <% @organism.listings.reject!{|l| l==@listing}.each do  |m| %>
-    <%=  link_to m.title, listing_lines_path(m) %>
+  <% @organism.books.reject!{|l| l==@book}.each do  |m| %>
+    <%=  link_to m.title, book_lines_path(m) %>
   <% end %>
-  <%= icon_to 'navigation90.png', organism_listings_path(@organism), title: 'Liste des livres' %>
+  <%= icon_to 'navigation90.png', organism_books_path(@organism), title: 'Liste des livres' %>
 <% end -%>
 
 <%= content_for :submenu do %>
-  <%= link_to 'Ecritures multiples', listing_multiple_lines_path(@listing) %>
-<%= icon_to 'modifier.png', edit_listing_multiple_line_path(@listing.id, @mlines.first.copied_id) %>
+  <%= link_to 'Ecritures multiples', book_multiple_lines_path(@book) %>
+<%= icon_to 'modifier.png', edit_book_multiple_line_path(@book.id, @mlines.first.copied_id) %>
 <% end %>
 
-<fieldset><legend><%=  @listing.title%> - Affichage d'écriture multiple - Total : <%= @mlines.count %> lignes - 
+<fieldset><legend><%=  @book.title%> - Affichage d'écriture multiple - Total : <%= @mlines.count %> lignes -
   
   </legend>
   <table>
@@ -41,17 +41,17 @@
           <td class="nombre"><%= debit_credit(line.debit) %></td>
           <td class="nombre"><%= debit_credit(line.credit) %></td>
           <td class="td_line"> <%= line.locked? ? image_tag("icones/stock_lock.png", class: 'icon_menu') : icon_to('verrouiller.png',
-                lock_listing_line_path(@listing, line),
+                lock_book_line_path(@book, line),
                 :title=>"Verouiller l'écriture", :id=>"lock_open_#{line.id}") %>
               <%= image_tag("icones/stock_lock.png",class: 'icon_menu', :style=>'display: none;') unless line.locked? %>
               </td>
               <td>
 
-                  <%= icon_to 'modifier.png', edit_listing_line_path(@listing,line),  :id=>"edit_#{line.id}"  unless line.locked? %>
+                  <%= icon_to 'modifier.png', edit_book_line_path(@book,line),  :id=>"edit_#{line.id}"  unless line.locked? %>
 
               </td>
 
-              <td><%= icon_to 'supprimer.png', [@listing,line],  :id=>"delete_#{line.id}", :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
+              <td><%= icon_to 'supprimer.png', [@book,line],  :id=>"delete_#{line.id}", :confirm => 'Etes vous sur ?', :method => :delete  unless line.locked?  %></td>
             </tr>
           <% end %>
         </tbody>

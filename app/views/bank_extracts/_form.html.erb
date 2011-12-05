@@ -1,11 +1,11 @@
 
 <%  SimpleForm.wrapper_tag = :div %>
-<%= simple_form_for([@listing, @bank_extract]) do |f| %>
+<%= simple_form_for([@book, @bank_extract]) do |f| %>
   <%= f.error_notification %>
 
   <div class="inputs">
 
-    <%= f.association :listing, collection: @organism.listings.all(:order => 'title') %>
+    <%= f.association :book, collection: @organism.books.all(:order => 'title') %>
     <%= f.input :reference %>
   
   

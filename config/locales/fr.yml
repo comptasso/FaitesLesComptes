@@ -184,7 +184,7 @@ fr:
 
   activerecord:
     attributes:
-      listing:
+      book:
         title: Titre
       organism:
         title: Titre
@@ -202,7 +202,7 @@ fr:
         begin_date: Du
         end_date: Au
         reference: Référence
-        listing: Journal
+        book: Journal
 
     errors:
      models:
@@ -216,7 +216,7 @@ fr:
     select:
       prompt: "Veuillez sélectionner"
     submit:
-      listing:
+      book:
         create: "Créer un journal"
         update: "Modifier ce journal"
       organism:

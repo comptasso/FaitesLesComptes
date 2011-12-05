@@ -1,20 +1,20 @@
 <%= content_for :menu do %>
 
-<%= icon_to 'retour.png', listing_lines_path(@listing) %>
+<%= icon_to 'retour.png', book_lines_path(@book) %>
 <% end -%>
 
 <%= content_for :submenu do %>
-<%= link_to 'Ecritures uniques', new_listing_line_path(@listing) %>
+<%= link_to 'Ecritures uniques', new_book_line_path(@book) %>
 <% end %>
 
 <fieldset>
   <legend>
-    <%=  @listing.title.capitalize %> : modification ligne multiple
+    <%=  @book.title.capitalize %> : modification ligne multiple
   </legend>
 
 <%  SimpleForm.wrapper_tag = :td %>
 
-<%=  simple_form_for([@listing,@mline],:url => listing_multiple_line_path(:listing_id=>@listing.id, :id=>@mline.id), :method => :put )  do |f| %>
+<%=  simple_form_for([@book,@mline],:url => book_multiple_line_path(:book_id=>@book.id, :id=>@mline.id), :method => :put )  do |f| %>
   <%= f.error_notification %>
 
   <div class="inputs_inline" id="entry_lines" >

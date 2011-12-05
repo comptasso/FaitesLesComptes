@@ -1,18 +1,18 @@
 
 <%= content_for :menu do %>
-  <% @organism.listings.reject!{|l| l==@listing}.each do  |m| %>
-    <%=  link_to m.title, listing_lines_path(m) %>
+  <% @organism.books.reject!{|l| l==@book}.each do  |m| %>
+    <%=  link_to m.title, book_lines_path(m) %>
   <% end %>
-  <%= icon_to 'navigation90.png', organism_listings_path(@organism), title: 'Liste des livres' %>
+  <%= icon_to 'navigation90.png', organism_books_path(@organism), title: 'Liste des livres' %>
 
 <% end -%>
 
 <%= content_for :submenu do %>
-  <%= icon_to 'nouveau.png', new_listing_multiple_line_path(@listing), title: 'Ajouter une écriture multiple' %>
+  <%= icon_to 'nouveau.png', new_book_multiple_line_path(@book), title: 'Ajouter une écriture multiple' %>
 <% end %>
 <fieldset>
   <legend>
-     Liste des écritures multiples du journal <%= @listing.title %>
+     Liste des écritures multiples du journal <%= @book.title %>
   </legend>
 
 <table>
@@ -44,9 +44,9 @@
       <td class="nombre"><%= two_decimals ml[:debit] %></td>
       <td class="nombre"><%= two_decimals ml[:credit] %></td>
       <td class="nombre"><%= two_decimals ml[:total] %></td>
-      <td> <%= icon_to 'detail.png', listing_multiple_line_path(@listing,ml[:copied_id]) %></td>
-      <td> <%= icon_to 'modifier.png', edit_listing_multiple_line_path(@listing,ml[:copied_id]) %></td>
-      <td> <%= icon_to 'supprimer.png', { :controller => "multiple_lines", :action => "destroy", :listing_id =>@listing.id,
+      <td> <%= icon_to 'detail.png', book_multiple_line_path(@book,ml[:copied_id]) %></td>
+      <td> <%= icon_to 'modifier.png', edit_book_multiple_line_path(@book,ml[:copied_id]) %></td>
+      <td> <%= icon_to 'supprimer.png', { :controller => "multiple_lines", :action => "destroy", :book_id =>@book.id,
   id: ml[:copied_id]} , :confirm => 'Etes vous sur ?', :method => :delete  %></td>
     </tr>
     <% end %>

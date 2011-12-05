@@ -2,15 +2,15 @@
 
 class BankExtractsController < ApplicationController
 
-  before_filter :find_listing_and_organism
+  before_filter :find_book_and_organism
 before_filter :get_dates, only: [:create, :update]
 
   # GET /bank_extracts
   # GET /bank_extracts.json
   def index
-    @bank_extracts = @listing.bank_extracts.all
+    @bank_extracts = @book.bank_extracts.all
     if @bank_extracts.size == 0
-      redirect_to new_listing_bank_extract_url(@listing)
+      redirect_to new_book_bank_extract_url(@book)
       return
     end
 
@@ -38,15 +38,15 @@ before_filter :get_dates, only: [:create, :update]
      flash[:alert]= "Une erreur n'a pas permis de valider le relevé"
      
    end
-     redirect_to listing_bank_extract_url(@listing,@bank_extract)
+     redirect_to book_bank_extract_url(@book,@bank_extract)
  end
 
   # GET /bank_extracts/new
   # GET /bank_extracts/new.json
   def new
 
-    @bank_extract = @listing.bank_extracts.build(begin_sold: @listing.extract_sold)
-    @bank_extract.begin_date= @listing.last_bank_extract_day + 1
+    @bank_extract = @book.bank_extracts.build(begin_sold: @book.extract_sold)
+    @bank_extract.begin_date= @book.last_bank_extract_day + 1
     @bank_extract.end_date= @bank_extract.begin_date.months_since(1)
 
     respond_to do |format|
@@ -67,7 +67,7 @@ before_filter :get_dates, only: [:create, :update]
 
     respond_to do |format|
       if @bank_extract.save
-        format.html { redirect_to listing_bank_extracts_path(@listing), notice: "L'extrait de compte a été créé." }
+        format.html { redirect_to book_bank_extracts_path(@book), notice: "L'extrait de compte a été créé." }
         format.json { render json: @bank_extract, status: :created, location: @bank_extract }
       else
         format.html { render action: "new" }
@@ -83,7 +83,7 @@ before_filter :get_dates, only: [:create, :update]
 
     respond_to do |format|
       if @bank_extract.update_attributes(params[:bank_extract])
-        format.html { redirect_to listing_bank_extracts_path(@listing), notice: "L'extrait a été modifié " }
+        format.html { redirect_to book_bank_extracts_path(@book), notice: "L'extrait a été modifié " }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -99,16 +99,16 @@ before_filter :get_dates, only: [:create, :update]
     @bank_extract.destroy
 
     respond_to do |format|
-      format.html { redirect_to listing_bank_extracts_url(@listing) }
+      format.html { redirect_to book_bank_extracts_url(@book) }
       format.json { head :ok }
     end
   end
 
   private
 
-  def find_listing_and_organism
-    @listing=Listing.find(params[:listing_id])
-    @organism=@listing.organism
+  def find_book_and_organism
+    @book=book.find(params[:book_id])
+    @organism=@book.organism
   end
 
   def get_dates

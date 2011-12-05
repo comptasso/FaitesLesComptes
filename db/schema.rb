@@ -11,10 +11,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111130180817) do
+ActiveRecord::Schema.define(:version => 20111204075512) do
 
   create_table "bank_extracts", :force => true do |t|
-    t.integer  "listing_id"
+    t.integer  "book_id"
     t.string   "reference"
     t.date     "begin_date"
     t.date     "end_date"
@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(:version => 20111130180817) do
     t.boolean  "locked",       :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "books", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.string   "image_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "organism_id"
   end
 
   create_table "destinations", :force => true do |t|
@@ -41,22 +50,13 @@ ActiveRecord::Schema.define(:version => 20111130180817) do
     t.integer  "destination_id"
     t.decimal  "debit",           :default => 0.0
     t.decimal  "credit",          :default => 0.0
-    t.integer  "listing_id"
+    t.integer  "book_id"
     t.boolean  "locked",          :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "copied_id"
     t.boolean  "multiple",        :default => false
     t.integer  "bank_extract_id"
-  end
-
-  create_table "listings", :force => true do |t|
-    t.string   "title"
-    t.text     "description"
-    t.string   "image_url"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "organism_id"
   end
 
   create_table "natures", :force => true do |t|

@@ -1,6 +1,6 @@
 <%  SimpleForm.wrapper_tag = :td %>
 
-<%=  simple_form_for([@listing,@mline],:url => listing_multiple_lines_path, :method => :post )  do |f| %>
+<%=  simple_form_for([@book,@mline],:url => book_multiple_lines_path, :method => :post )  do |f| %>
   <%= f.error_notification %>
 
   <div class="inputs_inline" id="entry_lines" >

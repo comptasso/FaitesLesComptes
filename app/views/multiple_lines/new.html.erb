@@ -1,15 +1,15 @@
 <%= content_for :menu do %>
 
-<%= icon_to 'retour.png', listing_lines_path(@listing) %>
+<%= icon_to 'retour.png', book_lines_path(@book) %>
 <% end -%>
 
 <%= content_for :submenu do %>
-<%= link_to 'Ecritures uniques', new_listing_line_path(@listing) %>
+<%= link_to 'Ecritures uniques', new_book_line_path(@book) %>
 <% end %>
 
 <fieldset>
   <legend>
-    <%=  @listing.title.capitalize %> : nouvelle ligne multiple
+    <%=  @book.title.capitalize %> : nouvelle ligne multiple
   </legend>
 
 <%= render 'form' %>

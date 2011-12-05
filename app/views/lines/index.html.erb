@@ -1,25 +1,25 @@
 <%= content_for :menu do %>
-  <% @organism.listings.reject!{|l| l==@listing}.each do  |m| %>
-    <%=  link_to m.title, listing_lines_path(m) %>
+  <% @organism.books.reject!{|l| l==@book}.each do  |m| %>
+    <%=  link_to m.title, book_lines_path(m) %>
   <% end %>
-  <%= icon_to 'navigation90.png', organism_listings_path(@organism), title: 'Liste des livres' %>
+  <%= icon_to 'navigation90.png', organism_books_path(@organism), title: 'Liste des livres' %>
 <% end -%>
 
 <%= content_for :submenu do %>
   <%  @submenu_list.each_with_index do |mois,i| %>
-    <%=   link_to(mois, listing_lines_path(@listing, mois: i)) %>
+    <%=   link_to(mois, book_lines_path(@book, mois: i)) %>
 
   <%  end %>
 
 <% end %>
 
-<fieldset><legend><%=  @listing.title%> - Mois de <%=l(Date.today.beginning_of_year.months_since(@mois.to_i), :format=>:month_year) %></legend>
-  <table id="all_table_lines">
+<fieldset><legend><%=  @book.title%> - Mois de <%=l(Date.today.beginning_of_year.months_since(@mois.to_i), :format=>:month_year) %></legend>
+  <table>
     <thead>
       <tr>
         <%= render 'table_header' %>
 
-        <th><%= icon_to 'nouveau.png', new_listing_line_path(@listing, mois: @mois), rel: 'facebox' ,id: 'new_line_link' %></th>
+        <th><%= icon_to 'nouveau.png', new_book_line_path(@book, mois: @mois), rel: 'facebox' ,id: 'new_line_link' %></th>
         <th></th>
         <th></th>
 

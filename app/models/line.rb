@@ -1,13 +1,15 @@
 # -*- encoding : utf-8 -*-
 
 class Line < ActiveRecord::Base
-  belongs_to :listing
+  belongs_to :book
   belongs_to :destination
   belongs_to :nature
   belongs_to :bank_extract
 
   validates :debit, :credit, numericality: true
   validates :line_date, presence: true
+
+  PAYMENTS_MODE= %w(CB Chèque Espèces Prélèvement Virement)
  
 
   default_scope order: 'line_date ASC'

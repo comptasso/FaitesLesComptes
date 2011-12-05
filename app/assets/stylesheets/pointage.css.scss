@@ -8,11 +8,11 @@
     .not_pointed {
         background-color: pink;
         
-        cursor: url(icones/stock_lock_open.png),auto;
+        cursor: url(icones/chain--plus.png),auto;
        
         }
     .pointed {
         background-color: #EFE;
-        cursor: url(icones/supprimer.png),auto;
+        cursor: url(icones/chain--minus.png),auto;
         }
     }

@@ -7,7 +7,7 @@
     <%= csrf_meta_tags %>
   </head>
   <div id="header">
-     <div id="logo">Faites les comptes !</div>
+     <div id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
     <div id ="organism">
       <%= @organism.title if @organism %> - <span class="description"><%= @organism.description  if @organism %></span>
     </div>

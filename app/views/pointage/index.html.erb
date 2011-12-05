@@ -1,11 +1,11 @@
 <%= content_for :menu  do %>
-  <%= icon_to 'navigation90.png', listing_bank_extracts_path(@listing), :title=>'Retour vers la liste des extraits' %>
+  <%= icon_to 'navigation90.png', book_bank_extracts_path(@book), :title=>'Retour vers la liste des extraits' %>
 <% end %>
 
 <%= content_for :submenu do %>
   
 <%= link_to 'Essai de fenetre popup pour créer une nouvelle ligne',
-          new_listing_line_path(@listing) ,
+          new_book_line_path(@book) ,
           onclick: "window.open(this.href,'create_company', 'height=600, width=600');return false;" %>
 <% end %>
 <fieldset>
@@ -15,7 +15,7 @@
   <table>
     <tr> <%= render 'bank_extracts/table_header' %>
       <th>
-<%= icon_to  'verrouiller.png', lock_listing_bank_extract_path(@listing,@bank_extract), :id=>'verrouiller', :method=>:post %>
+<%= icon_to  'verrouiller.png', lock_book_bank_extract_path(@book,@bank_extract), :id=>'verrouiller', :method=>:post %>
       </th>
     </tr>
     <tr> <%= render @bank_extract %><td></td>  </tr>

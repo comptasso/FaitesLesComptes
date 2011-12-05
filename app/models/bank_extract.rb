@@ -1,5 +1,5 @@
 class BankExtract < ActiveRecord::Base
-  belongs_to :listing
+  belongs_to :book
   has_many :lines
 
   validates :begin_sold, :total_debit, :total_credit, :numericality=>true

@@ -12,12 +12,12 @@ module LinesHelper
 
  
 
-  def submenu(listing)
+  def submenu(book)
     t=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-     content_tag :div, link_to('Janvier', listing_lines_path(listing, 'Janvier'=> 0))
+     content_tag :div, link_to('Janvier', book_lines_path(book, 'Janvier'=> 0))
     content_tag :div do
       t.each_with_index do |mois,i|
-         link_to(mois, listing_lines_path(listing, "#{mois}"=> i)) 
+         link_to(mois, book_lines_path(book, "#{mois}"=> i))
       end
     end
   end

@@ -4,7 +4,7 @@ class LinesController < ApplicationController
 
   layout :choose_layout
 
-  before_filter :find_listing
+  before_filter :find_book
   before_filter :fill_mois, only: [:index, :new, :create]
 
   # GET /lines
@@ -42,7 +42,7 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.json
   def new
-    @line =@listing.lines.new(line_date: Date.today)
+    @line =@book.lines.new(line_date: Date.today)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -53,19 +53,19 @@ class LinesController < ApplicationController
 
   # GET /lines/1/edit
   def edit
-    @line = @listing.lines.find(params[:id])
+    @line = @book.lines.find(params[:id])
   end
 
   
   # POST /lines
   # POST /lines.json
   def create
-    @line = @listing.lines.new(params[:line])
+    @line = @book.lines.new(params[:line])
        
     respond_to do |format|
       if @line.save
         mois=(@line.line_date.month)-1
-        format.html { redirect_to listing_lines_url(@listing,mois: mois), notice: 'La ligne a été créée.' }
+        format.html { redirect_to book_lines_url(@book,mois: mois), notice: 'La ligne a été créée.' }
 
 
        format.js do
@@ -84,13 +84,13 @@ class LinesController < ApplicationController
   # PUT /lines/1
   # PUT /lines/1.json
   def update
-    @line = @listing.lines.find(params[:id])
+    @line = @book.lines.find(params[:id])
     
 
     respond_to do |format|
       if @line.update_attributes(params[:line])
         mois=(@line.line_date.month) -1
-        format.html { redirect_to listing_lines_url(@listing, mois: mois) }#], notice: 'Line was successfully updated.')}
+        format.html { redirect_to book_lines_url(@book, mois: mois) }#], notice: 'Line was successfully updated.')}
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -102,19 +102,19 @@ class LinesController < ApplicationController
   # DELETE /lines/1
   # DELETE /lines/1.json
   def destroy
-    @line = @listing.lines.find(params[:id])
+    @line = @book.lines.find(params[:id])
     @line.destroy
 
     respond_to do |format|
-      format.html { redirect_to listing_lines_url(@listing) }
+      format.html { redirect_to book_lines_url(@book) }
       format.json { head :ok }
     end
   end
 
   private
-  def find_listing
-    @listing=Listing.find(params[:listing_id])
-    @organism=@listing.organism
+  def find_book
+    @book=Book.find(params[:book_id])
+    @organism=@book.organism
   end
 
   def fill_mois
@@ -128,9 +128,9 @@ class LinesController < ApplicationController
 
   def fill_soldes
       date=Date.today.beginning_of_year.months_since(@mois.to_i)
-    @lines = @listing.lines.mois(date).all
-    @solde_debit_avant=@listing.lines.solde_debit_avant(date)
-    @solde_credit_avant=@listing.lines.solde_credit_avant(date)
+    @lines = @book.lines.mois(date).all
+    @solde_debit_avant=@book.lines.solde_debit_avant(date)
+    @solde_credit_avant=@book.lines.solde_credit_avant(date)
 
     @total_debit=@lines.sum(&:debit)
     @total_credit=@lines.sum(&:credit)

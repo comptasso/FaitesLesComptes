@@ -1,0 +1,25 @@
+Ce fichier décrit les fonctionnalités attendues selon les versions
+
+010 : version minimum de départ :
+- création d'un organisme (modif suppression)
+- gestion des journaux recettes/dépenses
+- gestion des destinations
+- gestion des natures
+- saisie d'écritures
+- remise en banque
+- affichage du journal de banques
+- affichage du journal de caisse
+- affichage des soles
+
+011 : aménagements mineurs à la 10 du genre navigation
+
+015 : gestion de différents types d'écritures
+- écritures de dépenses répétées
+- virements interne
+
+020 : editions et recherche d'écriture
+- affichage d'un tableau des recettes/dépenses sur une période
+- editions papier des suivis recettes/dépenses
+- affichage graphique de solde
+
+030 : génération d'écritures plus comptables

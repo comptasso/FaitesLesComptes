@@ -3,7 +3,7 @@
 <%= content_for :menu do %>
 <%= render 'organisms/menu' %>
 
-<%= icon_to 'nouveau.png', new_organism_listing_path(@organism) %>
+<%= icon_to 'nouveau.png', new_organism_book_path(@organism) %>
 <%= icon_to 'navigation90.png', organisms_path %>
 <% end %>
 
@@ -22,7 +22,7 @@
     <th></th>
   </tr>
 
-<%= render @listings %>
+<%= render @books %>
 </table>
 
 </fieldset>

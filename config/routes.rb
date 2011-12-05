@@ -8,13 +8,13 @@ Faitesvoscomptes::Application.routes.draw do
   
 
   resources :organisms do
-    resources :listings
+    resources :books
     resources :destinations
     resources :natures
 
   end
   
-  resources :listings do
+  resources :books do
 
     resources :multiple_lines
     resources :bank_extracts do

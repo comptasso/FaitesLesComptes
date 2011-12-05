@@ -1,7 +1,7 @@
 <%= content_for :menu do %>
 
 
-<%= icon_to 'retour.png', listing_lines_path(@listing, mois: (@line.line_date.month)-1) %>
+<%= icon_to 'retour.png', book_lines_path(@book, mois: (@line.line_date.month)-1) %>
 <% end -%>
 
 <fieldset>
