@@ -86,7 +86,7 @@ OK Mettre en place une rubrique moyen de paiement dans les lignes
 
 pick_date pour la saisie des lignes
 
-Quand on est dans un livre, le menu devrait proposer les autres livres
+OK - Quand on est dans un livre, le menu devrait proposer les autres livres (déja fait)
 On devrait supprimer les icones dans l'affichage des lignes (ainsi que les fonctions lock et ce qui va avec)
 
 Utiliser la logique TSI pour distinguer les différents types de listings (et de lignes?)

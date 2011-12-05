@@ -7,52 +7,9 @@
 }
 
 .lines {
-    .nombre {
+    .nombre, .numeric {
         text-align: right;
     }
 
-    tfoot {
-        text-align: right;
-        font-weight: bold;
-        .totaux {
-            td {
-                padding-right: 1em;
-            }
-            .nombre {
-                border-top: 1px solid;
-                padding-right: 0;
-
-            }
-        }
-
-        .totaux_generaux {
-            td {
-                padding-right: 1em;
-            }
-            .nombre {
-                border-top-style: double;
-                padding-right: 0;
-            }
-        }
-
     }
-    .reports {
-        text-align: right;
-        font-weight: bold;
-        td {
-            padding-right: 1em;
-            }
-        .nombre {
-              padding-right: 0;
-            }
-    }
-
-    table {
-        width: 100%;
-        font-size: 10px;
-    }
-
-    .numeric {
-        text-align: right;
-    }
-}
+   

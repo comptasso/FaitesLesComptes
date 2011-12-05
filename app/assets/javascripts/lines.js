@@ -23,7 +23,7 @@
 
 
  $(document).ready(function() {
-    $('#all_table_lines').dataTable();
+    $('.data_table').dataTable();
 } );
  
 
