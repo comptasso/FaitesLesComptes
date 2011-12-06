@@ -95,16 +95,20 @@ OK - remettre les totaux de page (header et footer) - pour l'instant je n'ai fai
 
 OK - pick_date pour la saisie des lignes
 
-Aligner les soldes dans lines#index
-Styler les lignes de soldes
+OK - Aligner les soldes dans lines#index
+Ok - Styler les lignes de soldes
 
 
 -----------------------Affichage des données par type de dépenses ou de nature
 Faire un controlleur spécialisé.
 Doit afficher une table
 Recherche de lignes
+
+--------------------------------------------------
 Revoir la navigation pour plus de confort
 Ajouter la possibilité de choisir une plage de date
+
+Faire une remise de chèques à la banque
 
 --------------------------------------------------------------------
 Voir le mois qui est affiché quand on supprime une écriture

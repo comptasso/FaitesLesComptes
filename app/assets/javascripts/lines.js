@@ -83,15 +83,9 @@ $(document).ready(function() {
 
             /* Modify the footer row to match what we want */
             var nCells = nRow.getElementsByTagName('th');
-            nCells[1].innerHTML =  iPageDebit.toFixed(2);
-            nCells[2].innerHTML =  iPageCredit.toFixed(2);
-//            var nGlobals = nRow.getElementsByTagName('tr#global th');
-//            nGlobals[1].innerHTML =  iTotalDebit;
-//            nGlobals[2].innerHTML =  iTotalCredit;
-//             var nSolds = nRow.getElementsByTagName('tr#solds th');
-//            nSolds[1].innerHTML =  'bonjour';
-//            nSolds[2].innerHTML =  'Bonsoir';
-            
+            nCells[1].innerHTML =  iPageDebit.toFixed(2) +'<br/>'+ iTotalDebit.toFixed(2);
+            nCells[2].innerHTML =  iPageCredit.toFixed(2)+'<br/>'+ iTotalCredit.toFixed(2);
+          
         }
 
     });
