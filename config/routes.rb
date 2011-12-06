@@ -11,7 +11,9 @@ Faitesvoscomptes::Application.routes.draw do
     resources :books
     resources :destinations
     resources :natures
-
+    member do
+      get 'stats'
+    end
   end
   
   resources :books do

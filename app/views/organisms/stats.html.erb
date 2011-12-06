@@ -1,0 +1,45 @@
+<%= content_for :menu do %>
+
+<%= icon_to 'navigation90.png', organisms_path %>
+<% end %>
+<%= content_for :submenu do %>
+<%= link_to_unless_current 'Nature', stats_organism_path(@organism, by: :nature), title: 'Analyser les recettes et dépenses par nature'  %>
+<%= link_to_unless_current 'Destination', stats_organism_path(@organism, by: :destination), title: 'Analyser les recettes et dépenses par destination'  %>
+<% end %>
+
+<fieldset>
+  <legend>
+    Analyse des <%= params[:by].pluralize %>
+  </legend>
+
+  <%= form_tag stats_organism_path(@organism),
+:method => :get, :style=>"display: inline;"  do %>
+   <label for="pick_date_from">Du : </label>
+   <%= picker_date :pick_date_from, Date.today.beginning_of_year.years_ago(5), Date.today.end_of_year.years_since(5), @date_from %>
+    <label for="pick_date_to">Au : </label>
+   <%= picker_date :pick_date_to, Date.today.beginning_of_year.years_ago(5), Date.today.end_of_year.years_since(5), @date_to %>
+
+
+<%= submit_tag 'Rafraichir', :class=>'button' %>
+<% end %>
+
+</fieldset>
+
+<table>
+  <thead>
+    <tr>
+      <th>Destination</th>
+      <th>Débit</th>
+      <th>Crédit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @lines.each do |l| %>
+    <tr>
+      <td><%=  l.destination.name if l.destination %></td>
+      <td><%=  l.debit %></td>
+      <td><%=  l.credit %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
