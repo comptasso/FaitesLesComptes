@@ -1,21 +1,19 @@
 
-          <tr class="totaux">
-            <td></td> <td></td> <td></td>
-            <td>Totaux du mois</td>
-            <td class="nombre"><%=  debit_credit(@total_debit) %></td>
-            <td class="nombre"><%=  debit_credit(@total_credit) %></td>
-          </tr>
-          <tr class="totaux_generaux">
-            <td></td> <td></td> <td></td>
-            <td>Totaux généraux</td>
-            <td class="nombre"><%=  debit_credit(@total_debit + @solde_debit_avant) %></td>
-            <td class="nombre"><%=  debit_credit(@total_credit+ @solde_credit_avant) %></td>
-          </tr>
-          <tr class="totaux_generaux">
-            <td></td> <td></td> <td></td>
-            <td>Solde</td>
-            <td class="nombre"><%=  debit_credit(-@solde) if @solde < 0  %></td>
-            <td class="nombre"><%=  debit_credit(@solde) if @solde > 0  %></td>
-          </tr>
+
+             <tr id="totaux">
+      <th colspan="4" style="text-align:right" rowspan="1" >Totaux:</th>
+<th rowspan="1" colspan="1" class="nombre"><%=  debit_credit(@total_debit) %></th>
+<th rowspan="1" colspan="1" class="nombre"><%=  debit_credit(@total_credit) %></th>
+<th></th>
+    </tr>
+
+      <tr id="global">
+      <th colspan="4" style="text-align:right" rowspan="1" >Totaux globaux:</th>
+<th rowspan="1" colspan="1" class="nombre"><%=  debit_credit(@total_debit+ @solde_debit_avant) %></th>
+<th rowspan="1" colspan="1" class="nombre"><%=  debit_credit(@total_credit+ @solde_credit_avant) %></th>
+<th></th>
+    </tr>
+         
+        
 
 

@@ -23,6 +23,23 @@ $(document).keyup(function (e) {
     }
 });
 
+// fonction pour transformer une chaine en float
+function stringToFloat(data){
+   var d= 0.0;
+   if (data != '')
+     d=data.replace(/,/, '.' );
+    return (parseFloat(d));
+}
+
+//  function total_amount(plusieurs){
+//    var $total=0.00;
+//      $(plusieurs).each(function() {
+//         var q=parseFloat(this.value,10);
+//         $total += q;
+//      });
+//      return $total;
+//}
+
 
 
 // mise en forme des table
@@ -30,15 +47,53 @@ $(document).ready(function() {
     $('.data_table').dataTable({
 
         "oLanguage": {
-                "sUrl": "/frenchdatatable.txt"
+            "sUrl": "/frenchdatatable.txt"
+        },
+
+        "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
+            /*
+             * Calculate the total market share for all browsers in this table (ie inc. outside
+             * the pagination)
+             */
+            var iTotalDebit = 0;
+            for ( var i=0 ; i<aaData.length ; i++ )
+            {
+                iTotalDebit += stringToFloat(aaData[i][4]*1);
             }
-//        "oLanguage": {
-//            "sLengthMenu": "Affiche _MENU_ lignes par page",
-//            "sZeroRecords": "Aucune ligne",
-//            "sInfo": "Affichage de  _START_ à _END_ sur _TOTAL_ lignes",
-//            "sInfoEmpty": "Affiche de 0 à 0 sur 0 lignes",
-//            "sInfoFiltered": "(filtré à partir de _MAX_ lignes)"
-//        }
+
+            /* Calculate the market share for browsers on this page */
+            var iPageDebit = 0.0
+            for ( var i=iStart ; i<iEnd ; i++ )
+            {
+                iPageDebit += stringToFloat(aaData[aiDisplay[i] ][4]);
+            }
+
+            var iTotalCredit = 0.0
+            for ( var i=0 ; i<aaData.length ; i++ )
+            {
+                iTotalCredit += stringToFloat(aaData[i][5]);
+            }
+
+            /* Calculate the market share for browsers on this page */
+            var iPageCredit = 0.0;
+            for ( var i=iStart ; i<iEnd ; i++ )
+            {
+                iPageCredit += stringToFloat(aaData[ aiDisplay[i] ][5]);
+            }
+
+            /* Modify the footer row to match what we want */
+            var nCells = nRow.getElementsByTagName('th');
+            nCells[1].innerHTML =  iPageDebit.toFixed(2);
+            nCells[2].innerHTML =  iPageCredit.toFixed(2);
+//            var nGlobals = nRow.getElementsByTagName('tr#global th');
+//            nGlobals[1].innerHTML =  iTotalDebit;
+//            nGlobals[2].innerHTML =  iTotalCredit;
+//             var nSolds = nRow.getElementsByTagName('tr#solds th');
+//            nSolds[1].innerHTML =  'bonjour';
+//            nSolds[2].innerHTML =  'Bonsoir';
+            
+        }
+
     });
 });
  
