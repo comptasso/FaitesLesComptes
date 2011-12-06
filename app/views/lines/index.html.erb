@@ -10,7 +10,7 @@
     <%=   link_to(mois, book_lines_path(@book, mois: i)) %>
 
   <%  end %>
-  <%= icon_to 'nouveau.png', new_book_line_path(@book, mois: @mois), rel: 'facebox' ,id: 'new_line_link' %>
+  <%= icon_to 'nouveau.png', new_book_line_path(@book, mois: @mois) ,id: 'new_line_link' %>
 <% end %>
 
 <fieldset><legend><%=  @book.title%> - Mois de <%=l(Date.today.beginning_of_year.months_since(@mois.to_i), :format=>:month_year) %></legend>

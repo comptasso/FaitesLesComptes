@@ -65,7 +65,7 @@ class LinesController < ApplicationController
     respond_to do |format|
       if @line.save
         mois=(@line.line_date.month)-1
-        format.html { redirect_to book_lines_url(@book,mois: mois), notice: 'La ligne a été créée.' }
+        format.html { redirect_to new_book_line_url(@book,mois: mois), notice: 'La ligne a été créée.' }
 
 
        format.js do
