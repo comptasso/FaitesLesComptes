@@ -89,7 +89,7 @@ OK Mettre en place une rubrique moyen de paiement dans les lignes
 
 OK - Quand on est dans un livre, le menu devrait proposer les autres livres (déja fait)
 OK - On devrait supprimer les icones dans l'affichage des lignes (ainsi que les fonctions lock et ce qui va avec)
-retrouver les images dans data_table
+OK - retrouver les images dans data_table
 internationalisation de data_table
 remettre les totaux de page (header et footer)
 
