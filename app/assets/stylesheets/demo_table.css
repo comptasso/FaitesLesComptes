@@ -457,6 +457,15 @@ tr.even.gradeU td.sorting_3 {
 	background-color: #e2e2e2;
 }
 
+tbody tr.even:hover, tbody tr.even td.highlighted {
+	background-color: #ECFFB3;
+}
+
+tbody tr.odd:hover, tbody tr.odd td.highlighted {
+	background-color: #E6FF99;
+}
+
+
 
 /*
  * Row highlighting example

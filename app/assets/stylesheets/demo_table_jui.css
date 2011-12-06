@@ -187,7 +187,7 @@ table.display {
 table.display tfoot th {
 	padding: 3px 0px 3px 10px;
 	font-weight: bold;
-	font-weight: normal;
+	/*font-weight: normal;*/
 }
 
 table.display tr.heading2 td {

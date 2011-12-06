@@ -90,13 +90,13 @@ OK Mettre en place une rubrique moyen de paiement dans les lignes
 OK - Quand on est dans un livre, le menu devrait proposer les autres livres (déja fait)
 OK - On devrait supprimer les icones dans l'affichage des lignes (ainsi que les fonctions lock et ce qui va avec)
 OK - retrouver les images dans data_table
-internationalisation de data_table
-remettre les totaux de page (header et footer)
+OK - internationalisation de data_table
+OK - remettre les totaux de page (header et footer) - pour l'instant je n'ai fait que le pied de page. Il faut voir le besoin réel
 
-pick_date pour la saisie des lignes
+OK - pick_date pour la saisie des lignes
 
-Utiliser la logique TSI pour distinguer les différents types de listings (et de lignes?)
-
+Aligner les soldes dans lines#index
+Styler les lignes de soldes
 
 
 -----------------------Affichage des données par type de dépenses ou de nature
@@ -111,7 +111,7 @@ Voir le mois qui est affiché quand on supprime une écriture
 Voir pour mettre en place une notion d'exercice (en fait c'est virtuel - cela permet simplement de faire
 des conditions select.
 
-
+Utiliser la logique TSI pour distinguer les différents types de listings (et de lignes?)
 OK - Faire que la touche plus puisse être actionnée par le clavier
 
 ---------------------pick date et autres goodies

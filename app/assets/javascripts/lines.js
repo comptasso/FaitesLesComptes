@@ -44,7 +44,7 @@ function stringToFloat(data){
 
 // mise en forme des table
 $(document).ready(function() {
-    $('.data_table').dataTable({
+   var oTable= $('.data_table').dataTable({
 
         "oLanguage": {
             "sUrl": "/frenchdatatable.txt"
@@ -95,6 +95,14 @@ $(document).ready(function() {
         }
 
     });
+
+     $('td', oTable.fnGetNodes()).hover( function() {
+        var iCol = $('td', this.parentNode).index(this) % 6;
+        var nTrs = oTable.fnGetNodes();
+        $('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
+    }, function() {
+        $('td.highlighted', oTable.fnGetNodes()).removeClass('highlighted');
+    } );
 });
  
 

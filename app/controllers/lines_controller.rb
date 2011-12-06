@@ -60,6 +60,7 @@ class LinesController < ApplicationController
   # POST /lines
   # POST /lines.json
   def create
+    get_date
     @line = @book.lines.new(params[:line])
        
     respond_to do |format|
@@ -136,4 +137,9 @@ class LinesController < ApplicationController
     @total_credit=@lines.sum(&:credit)
     @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
   end
+
+   def get_date
+    params[:line][:line_date]= picker_to_date(params[:pick_date_line])
+   end
+
 end

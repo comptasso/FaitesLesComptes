@@ -1,13 +1,13 @@
 
 
-             <tr id="totaux">
+             <tr class="total" id="totaux">
       <th colspan="4" style="text-align:right" rowspan="1" >Totaux:</th>
 <th rowspan="1" colspan="1" class="nombre"><%=  debit_credit(@total_debit) %></th>
 <th rowspan="1" colspan="1" class="nombre"><%=  debit_credit(@total_credit) %></th>
 <th></th>
     </tr>
 
-      <tr id="global">
+      <tr class="total" id="global">
       <th colspan="4" style="text-align:right" rowspan="1" >Totaux globaux:</th>
 <th rowspan="1" colspan="1" class="nombre"><%=  debit_credit(@total_debit+ @solde_debit_avant) %></th>
 <th rowspan="1" colspan="1" class="nombre"><%=  debit_credit(@total_credit+ @solde_credit_avant) %></th>

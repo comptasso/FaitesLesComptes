@@ -20,7 +20,10 @@
       </thead>
       <tbody>
         <tr>
-          <%=  f.input :line_date, label: false  %>
+          <td>
+          <%= picker_date :pick_date_line, Date.today.years_ago(5), Date.today.years_since(5) , @line.line_date %>
+          </td>
+          <%#=  f.input :line_date, label: false  %>
           <%=  f.input :narration, label: false, input_html: {size: 20 } %>
           <%=  f.association :nature ,  :collection => @organism.natures.all(:order => 'name'), :prompt => "Quoi ?", label: false  %>
           <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'), :prompt => "Pour qui ?", label: false  %>
