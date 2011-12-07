@@ -23,32 +23,22 @@ $(document).keyup(function (e) {
     }
 });
 
-// fonction pour transformer une chaine en float
-function stringToFloat(data){
-   var d= 0.0;
-   if (data != '')
-     d=data.replace(/,/, '.' );
-    return (parseFloat(d));
-}
 
-//  function total_amount(plusieurs){
-//    var $total=0.00;
-//      $(plusieurs).each(function() {
-//         var q=parseFloat(this.value,10);
-//         $total += q;
-//      });
-//      return $total;
-//}
 
 
 
 // mise en forme des table
-$(document).ready(function() {
-   var oTable= $('.data_table').dataTable({
+jQuery(function() {
+if ($('.lines .data_table').length != 0) {
+
+
+   var oTable= $('.lines .data_table').dataTable(
+     {
 
         "oLanguage": {
             "sUrl": "/frenchdatatable.txt"
         },
+
 
         "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
             /*
@@ -58,7 +48,7 @@ $(document).ready(function() {
             var iTotalDebit = 0;
             for ( var i=0 ; i<aaData.length ; i++ )
             {
-                iTotalDebit += stringToFloat(aaData[i][4]*1);
+                iTotalDebit += stringToFloat(aaData[i][4]);
             }
 
             /* Calculate the market share for browsers on this page */
@@ -90,6 +80,7 @@ $(document).ready(function() {
 
     });
 
+
      $('td', oTable.fnGetNodes()).hover( function() {
         var iCol = $('td', this.parentNode).index(this) % 6;
         var nTrs = oTable.fnGetNodes();
@@ -97,6 +88,7 @@ $(document).ready(function() {
     }, function() {
         $('td.highlighted', oTable.fnGetNodes()).removeClass('highlighted');
     } );
+}
 });
  
 
@@ -120,8 +112,8 @@ function $f_zero(){
 }
 
 
-$.facebox.settings.closeImage = '/assets/closelabel.png';
-$.facebox.settings.loadingImage = '/assets/loading.gif';
+//$.facebox.settings.closeImage = '/assets/closelabel.png';
+//$.facebox.settings.loadingImage = '/assets/loading.gif';
 
 
 //
@@ -133,16 +125,16 @@ $.facebox.settings.loadingImage = '/assets/loading.gif';
 
 
 
-jQuery(document).ready(function($) {
-    $('a[rel*=facebox]').facebox();
-})
-
-$(document).ready(function() {
-    $(document).bind('reveal.facebox', function() {
-        $('#new_line').submit(function() {
-            $.post(this.action, $(this).serialize(), null, "script");
-            return false;
-        });
-    });
-});
+//jQuery(document).ready(function($) {
+//    $('a[rel*=facebox]').facebox();
+//})
+//
+//$(document).ready(function() {
+//    $(document).bind('reveal.facebox', function() {
+//        $('#new_line').submit(function() {
+//            $.post(this.action, $(this).serialize(), null, "script");
+//            return false;
+//        });
+//    });
+//});
 

@@ -2,9 +2,13 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .organisms {
-  #bandeau {
-   .title {
- font_weight: bold;
-}
-}
+    #bandeau {
+        .title {
+            font_weight: bold;
+        }
+    }
+    .numeric {
+        text-align: right;
+         padding: 3px 10px;
+    }
 }

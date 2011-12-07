@@ -12,20 +12,18 @@
     Analyse des <%= params[:by].pluralize %>
   </legend>
 
-  <%= form_tag stats_organism_path(@organism),
-:method => :get, :style=>"display: inline;"  do %>
+  <%= form_tag stats_organism_path(@organism),:method => :get, :style=>"display: inline;"  do %>
+
    <label for="pick_date_from">Du : </label>
-   <%= picker_date :pick_date_from, Date.today.beginning_of_year.years_ago(5), Date.today.end_of_year.years_since(5), @date_from %>
+   <%= picker_date :pick_date_from, Date.today.beginning_of_year.years_ago(4), Date.today.end_of_year.years_since(4), @date_from %>
     <label for="pick_date_to">Au : </label>
-   <%= picker_date :pick_date_to, Date.today.beginning_of_year.years_ago(5), Date.today.end_of_year.years_since(5), @date_to %>
-
-
+   <%= picker_date :pick_date_to, Date.today.beginning_of_year.years_ago(4), Date.today.end_of_year.years_since(4), @date_to %>
 <%= submit_tag 'Rafraichir', :class=>'button' %>
 <% end %>
 
 </fieldset>
 
-<table>
+<table class="data_table display">
   <thead>
     <tr>
       <th>Destination</th>
@@ -33,12 +31,17 @@
       <th>Crédit</th>
     </tr>
   </thead>
+   <tfoot id="table_foot">
+
+     <%= render 'table_foot' %>
+   </tfoot>
   <tbody>
     <% @lines.each do |l| %>
     <tr>
       <td><%=  l.destination.name if l.destination %></td>
-      <td><%=  l.debit %></td>
-      <td><%=  l.credit %></td>
+       <td class="numeric"><%= debit_credit(l.debit) %></td>
+          <td class="numeric"><%= debit_credit(l.credit) %></td>
+     
     </tr>
     <% end %>
   </tbody>
