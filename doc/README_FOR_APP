@@ -105,10 +105,20 @@ OK - Doit afficher une table
 OK- Recherche de lignes
 
 --------------------------------------------------
-Revoir la navigation pour plus de confort
+OK- Revoir la navigation pour plus de confort
 OK - Ajouter la possibilité de choisir une plage de date
 
 Faire une remise de chèques à la banque
+    Création d'un modèle compte bancaire et intégration au logiciel
+    Création d'un modèle remise chèque migration/vue
+    On affiche les chèques qui ne sont toujours pas remis à l'encaissement(probablement avec des nested attributes)
+    On sélectionne ces chèques par des cases à cocher
+    On valide ce qui mène à la vue show
+    La vue index affiche les remises faites.
+    On peut faire un delete
+    On peut modifier une remise chèque.
+
+
 
 --------------------------------------------------------------------
 Voir le mois qui est affiché quand on supprime une écriture

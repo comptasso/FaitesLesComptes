@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  number: MyString
+  bank: MyString
+  comment: MyText
+  address: MyText
+  opened_at: 2011-12-07
+  organism_id: 1
+
+two:
+  number: MyString
+  bank: MyString
+  comment: MyText
+  address: MyText
+  opened_at: 2011-12-07
+  organism_id: 1

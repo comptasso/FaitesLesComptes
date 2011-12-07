@@ -1,0 +1,37 @@
+<%= content_for :submenu do %>
+<%= icon_to 'nouveau.png', new_organism_bank_account_path(@organism) %>
+<% end -%>
+
+<fieldset><legend> Liste des comptes bancaires </legend>
+<table class="data_table">
+  <tr>
+    <th>Banque</th>
+    <th>Numéro</th>
+    
+    <th>Commentaire</th>
+    <th>Adresse</th>
+    <th>Ouvert le</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @bank_accounts.each do |bank_account| %>
+  <tr>
+    <td><%= bank_account.bank %></td>
+    <td><%= bank_account.number %></td>
+    
+    <td><%= bank_account.comment %></td>
+    <td><%= bank_account.address %></td>
+    <td><%=l bank_account.opened_at if bank_account.opened_at.is_a?(Date) %></td>
+    
+    <td><%= icon_to 'afficher.png', [@organism,bank_account] %></td>
+    <td><%= icon_to 'modifier.png', edit_organism_bank_account_path(@organism,bank_account) %></td>
+    <td><%= icon_to 'supprimer.png',[@organism,bank_account], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+</fieldset>
+
+

@@ -1,0 +1,41 @@
+
+<%= content_for :bandeau do %>
+
+<%= icon_to 'nouveau.png', new_bank_account_path %>
+<%= icon_to 'modifier.png', edit_bank_account_path(@bank_account) %>
+<%= icon_to 'retour.png', bank_accounts_path %>
+<% end -%>
+<fieldset><legend>Description de bank_account </legend>
+
+<p>
+  <b>Number:</b>
+  <%= @bank_account.number %>
+</p>
+
+<p>
+  <b>Bank:</b>
+  <%= @bank_account.bank %>
+</p>
+
+<p>
+  <b>Comment:</b>
+  <%= @bank_account.comment %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%= @bank_account.address %>
+</p>
+
+<p>
+  <b>Opened at:</b>
+  <%= @bank_account.opened_at %>
+</p>
+
+<p>
+  <b>Organism:</b>
+  <%= @bank_account.organism_id %>
+</p>
+
+</fieldset>
+
