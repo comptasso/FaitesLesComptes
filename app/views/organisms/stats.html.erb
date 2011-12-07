@@ -9,7 +9,7 @@
 
 <fieldset>
   <legend>
-    Analyse des <%= params[:by].pluralize %>
+    Analyse des <%= @demand.pluralize %>
   </legend>
 
   <%= form_tag stats_organism_path(@organism),:method => :get, :style=>"display: inline;"  do %>
@@ -26,7 +26,7 @@
 <table class="data_table display">
   <thead>
     <tr>
-      <th>Destination</th>
+      <th><%=  @demand.capitalize %></th>
       <th>Débit</th>
       <th>Crédit</th>
     </tr>
@@ -38,7 +38,8 @@
   <tbody>
     <% @lines.each do |l| %>
     <tr>
-      <td><%=  l.destination.name if l.destination %></td>
+      <td><%=  l.destination.name if l.destination && @demand == 'destination' %>
+      <%=  l.nature.name if l.nature && @demand == 'nature' %></td>
        <td class="numeric"><%= debit_credit(l.debit) %></td>
           <td class="numeric"><%= debit_credit(l.credit) %></td>
      

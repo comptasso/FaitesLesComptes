@@ -87,9 +87,14 @@ class OrganismsController < ApplicationController
     @date_from = params[:pick_date_from] ? picker_to_date(params[:pick_date_from]) : Date.today.beginning_of_year
     @date_to = params[:pick_date_to] ? picker_to_date(params[:pick_date_to]) : Date.today.end_of_year
     @organism=Organism.find(params[:id])
-    @lines = @organism.lines.includes(params[:by]).select("destination_id, sum(debit) as debit, sum(credit) as credit").group("destination_id")
+    @demand=params[:by] # soit nature soit destination
+    @lines = @organism.lines.includes(params[:by]).select("#{@demand}_id, sum(debit) as debit, sum(credit) as credit").group("#{@demand}_id")
     @total_debit=0
     @total_credit=0
 
   end
+
+
+
+
 end
