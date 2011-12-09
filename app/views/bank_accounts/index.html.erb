@@ -3,7 +3,8 @@
 <% end -%>
 
 <fieldset><legend> Liste des comptes bancaires </legend>
-<table>
+<table class="data_table display">
+  <thead>
   <tr>
     <th>Banque</th>
     <th>Numéro</th>
@@ -16,7 +17,8 @@
    
     
   </tr>
-
+  </thead>
+  <tbody>
 <% @bank_accounts.each do |bank_account| %>
   <tr>
     <td><%= bank_account.bank %></td>
@@ -32,6 +34,7 @@
     
   </tr>
 <% end %>
+  </tbody>
 </table>
 
 </fieldset>

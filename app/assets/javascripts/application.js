@@ -69,6 +69,7 @@ jQuery(function($){
 // FIXME traiter le cas ou data == nil
 // fonction pour transformer une chaine en float
 function stringToFloat(jcdata){
+
     if (jcdata == undefined) {return 0.0;}
     var d = String(jcdata).replace(/,/, '.' );
     if (isNaN(d)) {    return 0.0;}
@@ -79,3 +80,5 @@ function stringToFloat(jcdata){
     }
 
 }
+
+

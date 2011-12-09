@@ -52,3 +52,5 @@ jQuery.fn.dataTableExt.oSort['numeric-comma-desc'] = function(a,b) {
     y = parseFloat( y );
     return ((x < y) ?  1 : ((x > y) ? -1 : 0));
 };
+
+
