@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111207141503) do
+ActiveRecord::Schema.define(:version => 20111207174346) do
 
   create_table "bank_accounts", :force => true do |t|
     t.string   "number"
@@ -46,6 +46,13 @@ ActiveRecord::Schema.define(:version => 20111207141503) do
     t.integer  "organism_id"
   end
 
+  create_table "check_deposits", :force => true do |t|
+    t.integer  "bank_account_id"
+    t.date     "deposit_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "destinations", :force => true do |t|
     t.string   "name"
     t.integer  "organism_id"
@@ -59,16 +66,17 @@ ActiveRecord::Schema.define(:version => 20111207141503) do
     t.string   "narration"
     t.integer  "nature_id"
     t.integer  "destination_id"
-    t.decimal  "debit",           :default => 0.0
-    t.decimal  "credit",          :default => 0.0
+    t.decimal  "debit",            :default => 0.0
+    t.decimal  "credit",           :default => 0.0
     t.integer  "book_id"
-    t.boolean  "locked",          :default => false
+    t.boolean  "locked",           :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "copied_id"
-    t.boolean  "multiple",        :default => false
+    t.boolean  "multiple",         :default => false
     t.integer  "bank_extract_id"
     t.string   "payment_mode"
+    t.integer  "check_deposit_id"
   end
 
   create_table "natures", :force => true do |t|

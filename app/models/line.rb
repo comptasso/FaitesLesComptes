@@ -5,6 +5,7 @@ class Line < ActiveRecord::Base
   belongs_to :destination
   belongs_to :nature
   belongs_to :bank_extract
+  belongs_to :bank_deposit
 
   validates :debit, :credit, numericality: true
   validates :line_date, presence: true

@@ -1,0 +1,12 @@
+<%= simple_form_for([@bank_account, @check_deposit]) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="inputs">
+    <%= f.association :bank_account, :collection => @organism.bank_accounts.map {|b| [b.number, b.id]}, :prompt => "Numero de compte ?" %>
+    <%= f.input :deposit_date %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

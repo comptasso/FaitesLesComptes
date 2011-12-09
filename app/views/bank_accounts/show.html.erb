@@ -1,41 +1,42 @@
 
-<%= content_for :bandeau do %>
+<%= content_for :submenu do %>
 
-<%= icon_to 'nouveau.png', new_bank_account_path %>
-<%= icon_to 'modifier.png', edit_bank_account_path(@bank_account) %>
-<%= icon_to 'retour.png', bank_accounts_path %>
+<%= icon_to 'nouveau.png', new_organism_bank_account_path %>
+<%= icon_to 'modifier.png', edit_organism_bank_account_path(@bank_account) %>
+<%= icon_to 'retour.png', :back %>
+<%= icon_to 'supprimer.png',[@organism,bank_account], :confirm => 'Etes vous sur ?', :method => :delete %>
+
 <% end -%>
-<fieldset><legend>Description de bank_account </legend>
+<fieldset><legend>Informations sur un compte bancaire</legend>
 
-<p>
-  <b>Number:</b>
-  <%= @bank_account.number %>
-</p>
-
-<p>
-  <b>Bank:</b>
+  <p>
+  <b>Banque:</b>
   <%= @bank_account.bank %>
 </p>
 
+
 <p>
-  <b>Comment:</b>
+  <b>Numéro:</b>
+  <%= @bank_account.number %>
+</p>
+
+
+<p>
+  <b>Commentaire:</b>
   <%= @bank_account.comment %>
 </p>
 
 <p>
-  <b>Address:</b>
+  <b>Adresse:</b>
   <%= @bank_account.address %>
 </p>
 
 <p>
-  <b>Opened at:</b>
-  <%= @bank_account.opened_at %>
+  <b>Ouvert le:</b>
+  <%=l @bank_account.opened_at %>
 </p>
 
-<p>
-  <b>Organism:</b>
-  <%= @bank_account.organism_id %>
-</p>
+
 
 </fieldset>
 

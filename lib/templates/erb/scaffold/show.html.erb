@@ -1,9 +1,9 @@
 
-<%%= content_for :bandeau do %>
+<%%= content_for :submenu do %>
 
 <%%= icon_to 'nouveau.png', new_<%= singular_table_name %>_path %>
 <%%= icon_to 'modifier.png', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>) %>
-<%%= icon_to 'retour.png', <%= index_helper %>_path %>
+<%%= icon_to 'retour.png', :back %>
 <%% end -%>
 <fieldset><legend>Description de <%= singular_table_name %> </legend>
 

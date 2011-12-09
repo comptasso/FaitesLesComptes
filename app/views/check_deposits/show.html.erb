@@ -1,0 +1,21 @@
+
+<%= content_for :submenu do %>
+
+<%= icon_to 'nouveau.png', new_bank_account_check_deposit_path(@bank_account) %>
+<%= icon_to 'modifier.png', edit_bank_account_check_deposit_path(@bank_account,@check_deposit) %>
+<%= icon_to 'navigation90.png', bank_account_check_deposits_path(@bank_account) %>
+<% end -%>
+<fieldset><legend>Remise de chèques</legend>
+
+<p>
+  <b>Numéro de compte:</b>
+  <%= @check_deposit.bank_account.number %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%=l @check_deposit.deposit_date %>
+</p>
+
+</fieldset>
+

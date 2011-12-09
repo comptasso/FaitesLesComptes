@@ -1,0 +1,17 @@
+<%= content_for :bandeau do %>
+
+<%= icon_to 'nouveau.png', new_check_deposit_path %>
+<%= icon_to 'afficher.png', @check_deposit %>
+<%= icon_to 'retour.png', check_deposits_path %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification check_deposit
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+

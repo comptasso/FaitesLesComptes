@@ -3,7 +3,7 @@
 <% end -%>
 
 <fieldset><legend> Liste des comptes bancaires </legend>
-<table class="data_table">
+<table>
   <tr>
     <th>Banque</th>
     <th>Numéro</th>
@@ -13,7 +13,8 @@
     <th>Ouvert le</th>
     <th></th>
     <th></th>
-    <th></th>
+   
+    
   </tr>
 
 <% @bank_accounts.each do |bank_account| %>
@@ -26,8 +27,9 @@
     <td><%=l bank_account.opened_at if bank_account.opened_at.is_a?(Date) %></td>
     
     <td><%= icon_to 'afficher.png', [@organism,bank_account] %></td>
-    <td><%= icon_to 'modifier.png', edit_organism_bank_account_path(@organism,bank_account) %></td>
-    <td><%= icon_to 'supprimer.png',[@organism,bank_account], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+    <td><%= link_to 'Remise chq', new_bank_account_check_deposit_path(bank_account) %></td>
+    
+    
   </tr>
 <% end %>
 </table>

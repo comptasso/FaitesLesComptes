@@ -1,8 +1,8 @@
-<%%= content_for :bandeau do %>
+<%%= content_for :submenu do %>
 <%%= icon_to 'nouveau.png', new_<%= singular_table_name %>_path %>
 <%% end -%>
 
-<fieldset><legend> Liste des <%= table_name %> </legend>
+<fieldset><legend> Liste des <%=t table_name %> </legend>
 <table>
   <tr>
 <% for attribute in attributes -%>
