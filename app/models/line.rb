@@ -17,6 +17,8 @@ class Line < ActiveRecord::Base
 
   scope :mois, lambda { |date| where('line_date >= ? AND line_date <= ?', date.beginning_of_month, date.end_of_month) }
   scope :multiple, lambda {|copied_id| where('copied_id = ?', copied_id)}
+ # scope :payment_mode, lambda {|mode| where('payment_mode = ?', mode)}
+  scope :non_depose, where('payment_mode = ?', 'Chèque').where('check_deposit_id IS NULL')
 
   def self.solde_debit_avant(date)
     Line.where('line_date < ?', date).sum(:debit)

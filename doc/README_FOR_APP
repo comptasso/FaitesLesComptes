@@ -111,9 +111,9 @@ OK - Ajouter la possibilité de choisir une plage de date
 Faire une remise de chèques à la banque
 OK    Création d'un modèle compte bancaire et intégration au logiciel
 OK   Création d'un modèle remise chèque (migration/vue)
-    On affiche les chèques qui ne sont toujours pas remis à l'encaissement(probablement avec des nested attributes)
-    On sélectionne ces chèques par des cases à cocher
-    On valide ce qui mène à la vue show
+     On affiche les chèques qui ne sont toujours pas remis à l'encaissement(probablement avec des nested attributes)
+     On sélectionne ces chèques par des cases à cocher
+     On valide ce qui mène à la vue show
 OK  La vue index affiche les remises faites.
     On peut faire un delete
     On peut modifier une remise chèque.
@@ -133,6 +133,7 @@ OK - pick date mis en place d'une manière générale
 OK - formulaire modifié pour bank_extract
 Faire les autres formulaires.
 Indiquer le solde des comptes
+on pourrait supprimer le tri (et autres indicateurs visuels) pour la liste des comptes
 
 -------------------------- Autres sujets à moyen terme
 Mettre en place une validation globale de la page

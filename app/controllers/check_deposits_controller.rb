@@ -29,6 +29,9 @@ class CheckDepositsController < ApplicationController
   # GET /check_deposits/new.json
   def new
     @check_deposit = @bank_account.check_deposits.new
+    @lines=@organism.lines.non_depose
+    @total_debit=@lines.sum(:debit)
+    @total_credit=@lines.sum(:credit)
 
     respond_to do |format|
       format.html # new.html.erb
