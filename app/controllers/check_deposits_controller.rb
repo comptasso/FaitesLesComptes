@@ -27,16 +27,30 @@ class CheckDepositsController < ApplicationController
 
   # GET /check_deposits/new
   # GET /check_deposits/new.json
+  # new permet de créer un check deposit, ie simplement fixer la banque et la date
+  # puis la main est passée à fill
   def new
     @check_deposit = @bank_account.check_deposits.new
-    @lines=@organism.lines.non_depose
-    @total_debit=@lines.sum(:debit)
-    @total_credit=@lines.sum(:credit)
-
+    
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @check_deposit }
     end
+  end
+
+
+  # GET /check_deposits/1/fill
+  # fill permet de choisir les chèques que l'on va associer à la remise de chèque
+  def fill
+    @check_deposit = CheckDeposit.find(params[:id])
+    @checks=@check_deposit.lines.all
+    @total_checks_debit=@checks.sum(:debit)
+    @total_checks_credit=@checks.sum(:credit)
+
+    @lines=@organism.lines.non_depose
+    @total_lines_debit=@lines.sum(:debit)
+    @total_lines_credit=@lines.sum(:credit)
+
   end
 
   # GET /check_deposits/1/edit
@@ -51,7 +65,7 @@ class CheckDepositsController < ApplicationController
 
     respond_to do |format|
       if @check_deposit.save
-        format.html { redirect_to [@bank_account, @check_deposit], notice: 'La remise de chèques a été créée.' }
+        format.html { redirect_to fill_bank_account_check_deposit_url(@bank_account, @check_deposit), notice: 'La remise de chèques a été créée.' }
         format.json { render json: @check_deposit, status: :created, location: @check_deposit }
       else
         format.html { render action: "new" }

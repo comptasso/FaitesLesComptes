@@ -8,26 +8,7 @@
     Nouvelle remise de chèques
   </legend>
 <%= render 'form' %>
- <table class="data_table display">
-    <thead>
-      <tr>
-        <%= render 'lines/table_header' %>
-     </tr>
-    </thead>
-   <tbody id="table_lines">
-      <%= render 'lines/table_lines'  %>
-   </tbody>
-  <tfoot id="table_foot">
-         <tr class="total" id="totaux">
-      <th colspan="4" style="text-align:right" rowspan="1" >Totaux:<br/>Totaux globaux:</th>
-      <th rowspan="1" colspan="1" class="numeric"><%=  debit_credit(@total_debit) %><br/><%=  debit_credit(@total_debit) %></th>
-      <th rowspan="1" colspan="1" class="numeric"><%=  debit_credit(@total_credit) %><br/><%=  debit_credit(@total_credit) %></th>
-<th></th>
-    </tr>
-     
-   </tfoot>
-
-      </table>
-
-
 </fieldset>
+
+Attention à  la problématique de laq mise à jour. Il faut aussi un champ pour valider
+la remise et ne plus pouvoir la modifier.

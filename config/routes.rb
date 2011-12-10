@@ -22,7 +22,11 @@ Faitesvoscomptes::Application.routes.draw do
   end
 
   resources :bank_accounts do
-    resources :check_deposits
+    resources :check_deposits do
+      member do
+        get 'fill'
+      end
+    end
   end
   
   resources :books do
