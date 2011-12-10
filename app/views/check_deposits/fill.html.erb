@@ -1,0 +1,30 @@
+<%= content_for :submenu do %>
+
+  <%= icon_to 'retour.png', :back %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Sélection des chèques à remettre
+  </legend>
+
+  Affichage des données
+
+  <table class="data_table display">
+ <%= render 'thead' %>
+  <%= render partial: 'tbody', :object=>@checks unless @checks.empty? %>
+  <%= render partial: 'tfoot', :object=>@total_checks_credit %>
+</table>
+
+
+</fieldset>
+
+<h3>Sélection des chèques à remettre</h3>
+
+
+<table class="data_table display">
+  <%= render 'thead' %>
+  <%= render partial: 'tbody', :object=>@lines unless @lines.empty? %>
+   <%= render partial: 'tfoot', :object=>@total_lines_credit %>
+ 
+</table>
