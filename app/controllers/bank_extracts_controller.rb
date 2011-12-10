@@ -107,7 +107,7 @@ before_filter :get_dates, only: [:create, :update]
   private
 
   def find_book_and_organism
-    @book=book.find(params[:book_id])
+    @book=Book.find(params[:book_id])
     @organism=@book.organism
   end
 
