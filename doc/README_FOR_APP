@@ -124,6 +124,11 @@ OK  La vue index affiche les remises faites.
 
 
 --------------------------------------------------------------------
+Voir si les logiques de lock des lines ont encore du sens
+Retirer les liens entre books et bank_extracts (un bank_extract appartient à un organisme et à une banque mais pas à un livre)
+
+La création d'un compte bancaire doit permettre l'affichage d'un livre de banque adapté, construit à partir des lignes et des remises chèques
+
 Voir le mois qui est affiché quand on supprime une écriture
 Voir pour mettre en place une notion d'exercice (en fait c'est virtuel - cela permet simplement de faire
 des conditions select.

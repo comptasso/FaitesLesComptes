@@ -36,6 +36,8 @@ Faitesvoscomptes::Application.routes.draw do
   resources :books do
 
     resources :multiple_lines
+    # TODO probablement inadapté si on ne relie pas le bank_extracts à un books A voir.
+    # TODO voir si les post lock sont bien utiles. Peut être à supprimer.
     resources :bank_extracts do
        member do
         post 'lock'

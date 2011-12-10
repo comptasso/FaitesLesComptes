@@ -12,6 +12,10 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 - affichage des soles
 
 011 : aménagements mineurs à la 10 du genre navigation
+      nettoyage des locks des lines
+      suppression de l'ensemble des liens entre book et bank_extract
+      liste des comptes bancaires - supprimer l'usage des data table
+
 
 015 : gestion de différents types d'écritures
 - écritures de dépenses répétées
