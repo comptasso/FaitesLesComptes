@@ -1,17 +1,43 @@
-<%= content_for :bandeau do %>
+<%= content_for :menu do %>
 
-<%= icon_to 'nouveau.png', new_check_deposit_path %>
-<%= icon_to 'afficher.png', @check_deposit %>
-<%= icon_to 'retour.png', check_deposits_path %>
+<%= icon_to 'nouveau.png', new_bank_account_check_deposit_path(@bank_account) %>
+<%= icon_to 'afficher.png', [@bank_account, @check_deposit] %>
+<%= icon_to 'navigation90.png', bank_account_check_deposits_path(@bank_account) %>
 <% end -%>
 
 <fieldset>
   <legend>
-    Modification check_deposit
+    Modification d'une remise chèque
   </legend>
 
 <%= render 'form' %>
+
+   <%= render 'title' %>
+
+  <table class="data_table display"  id="check_added">
+   <thead>
+    <%= render 'thead' %>
+    <th>Action</th>
+  </thead>
+
+     <tbody>
+  <%= render partial: 'tbodyadded', :object=>@checks.all  %>
+     </tbody>
+  <%= render partial: 'tfoot', :object=>@total_checks_credit %>
+
+</table>
 </fieldset>
 
+<h3>Sélection des chèques à remettre</h3>
+
+
+<table class="data_table display" id="check_not_added">
+  <%= render 'thead' %>
+   <tbody>
+  <%= render partial: 'tbodynotadded', :object=>@lines  %>
+   </tbody>
+   <%= render partial: 'tfoot', :object=>@total_lines_credit %>
+
+</table>
 
 

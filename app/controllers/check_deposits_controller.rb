@@ -18,6 +18,7 @@ class CheckDepositsController < ApplicationController
   # GET /check_deposits/1.json
   def show
     @check_deposit = CheckDeposit.find(params[:id])
+    compute_deposited_checks
 
     respond_to do |format|
       format.html # show.html.erb
@@ -43,7 +44,7 @@ class CheckDepositsController < ApplicationController
   # fill permet de choisir les chèques que l'on va associer à la remise de chèque
   def fill
     @check_deposit = CheckDeposit.find(params[:id])
-    compute_instance_var
+    compute_var
   end
 
   def add_check
@@ -51,7 +52,7 @@ class CheckDepositsController < ApplicationController
     @check_deposit=CheckDeposit.find(params[:id])
     @line.check_deposit_id=@check_deposit.id
     @line.save
-    compute_instance_var
+    compute_var
     respond_to do |format|
       format.html # new.html.erb
       format.js {render 'toggle_check'}
@@ -64,7 +65,7 @@ class CheckDepositsController < ApplicationController
     @check_deposit=CheckDeposit.find(params[:id])
     @line.check_deposit_id=nil
     @line.save
-    compute_instance_var
+    compute_var
     respond_to do |format|
       format.html # new.html.erb
       format.js {render 'toggle_check'}
@@ -73,7 +74,9 @@ class CheckDepositsController < ApplicationController
 
   # GET /check_deposits/1/edit
   def edit
+   
     @check_deposit = CheckDeposit.find(params[:id])
+     compute_var
   end
 
   # POST /check_deposits
@@ -127,10 +130,18 @@ class CheckDepositsController < ApplicationController
     @organism=@bank_account.organism
   end
 
-  def compute_instance_var
-    @checks=@check_deposit.lines
+  def compute_deposited_checks
+     @checks=@check_deposit.lines
     @total_checks_credit=@checks.sum(:credit)
+  end
+
+  def compute_non_deposited_checks
     @lines=@organism.lines.non_depose
     @total_lines_credit=@lines.sum(:credit)
+  end
+
+  def compute_var
+    compute_deposited_checks
+    compute_non_deposited_checks
   end
 end

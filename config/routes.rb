@@ -27,7 +27,8 @@ Faitesvoscomptes::Application.routes.draw do
       member do
         get 'fill'
          post 'add_check'
-      post 'remove_check'
+         post 'remove_check'
+       
       end
     end
   end

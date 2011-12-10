@@ -1,17 +1,22 @@
 <%= content_for :submenu do %>
 
-  <%= icon_to 'retour.png', :back %>
+  <%= icon_to 'navigation90.png',[@bank_account, @check_deposit] %>
 <% end -%>
 
 <fieldset>
   <legend>
     Sélection des chèques à remettre
+    
   </legend>
 
-  <h3>Date : <%=l @check_deposit.deposit_date %> - Compte : <% @bank_account.bank %> - <%= @bank_account.number %></h3>
+  <%= render 'title' %>
 
   <table class="data_table display"  id="check_added">
- <%= render 'thead' %>
+   <thead>
+    <%= render 'thead' %>
+    <th>Action</th>
+  </thead>
+ 
      <tbody>
   <%= render partial: 'tbodyadded', :object=>@checks.all  %>
      </tbody>

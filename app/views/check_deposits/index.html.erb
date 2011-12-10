@@ -1,5 +1,6 @@
 <%= content_for :submenu do %>
 <%= icon_to 'nouveau.png', new_bank_account_check_deposit_path(@bank_account) %>
+<%= icon_to 'navigation90.png', organism_books_path(@organism) %>
 <% end -%>
 
 <fieldset><legend> Liste des remises de chèques </legend>
@@ -7,6 +8,8 @@
   <tr>
     <th>Compte numéro</th>
     <th>Date de la remise</th>
+    <th>Montant</th>
+    <th></th>
     <th></th>
     <th></th>
    
@@ -17,7 +20,9 @@
   <tr>
     <td><%= check_deposit.bank_account.number %></td>
     <td><%=l check_deposit.deposit_date %></td>
+    <td class="numeric"><%= debit_credit check_deposit.lines.sum(:credit) %></td>
     <td><%= icon_to 'afficher.png', bank_account_check_deposit_path(@bank_account, check_deposit) %></td>
+    <td><%= icon_to 'modifier.png', edit_bank_account_check_deposit_path(@bank_account, check_deposit) %></td>
     <td> <%= icon_to 'supprimer.png', [@bank_account, check_deposit], :confirm => 'Etes vous sur ?', :method => :delete %></td>
    
   </tr>

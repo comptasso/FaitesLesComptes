@@ -6,16 +6,24 @@
 <%= icon_to 'navigation90.png', bank_account_check_deposits_path(@bank_account) %>
 <% end -%>
 <fieldset><legend>Remise de chèques</legend>
+ <%= render 'title' %>
 
-<p>
-  <b>Numéro de compte:</b>
-  <%= @check_deposit.bank_account.number %>
-</p>
+   <table class="data_table display"  id="check_added">
+ <%= render 'thead' %>
+     <tbody>
+           <%  @checks.each do |line |%>
+      <tr>
+     <%= render partial: 'line', object: line %>
 
-<p>
-  <b>Date:</b>
-  <%=l @check_deposit.deposit_date %>
-</p>
+      </tr>
+    <% end %>
+
+
+     </tbody>
+  <%= render partial: 'tfoot', :object=>@total_checks_credit %>
+
+</table>
+
 
 </fieldset>
 
