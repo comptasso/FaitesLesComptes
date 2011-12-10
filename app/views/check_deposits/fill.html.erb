@@ -8,7 +8,9 @@
     Sélection des chèques à remettre
   </legend>
 
-  Affichage des données
+  <h3>Date : <%=l @check_deposit.deposit_date %> - Compte : <% @bank_account.bank %> - <%= @bank_account.number %></h3>
+
+  <% if @checks.any? %>
 
   <table class="data_table display">
  <%= render 'thead' %>
@@ -16,7 +18,7 @@
   <%= render partial: 'tfoot', :object=>@total_checks_credit %>
 </table>
 
-
+<% end %>
 </fieldset>
 
 <h3>Sélection des chèques à remettre</h3>

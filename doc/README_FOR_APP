@@ -119,6 +119,7 @@ Prévoir un bouton pour faire une validation globale
 OK  La vue index affiche les remises faites.
     On peut faire un delete
     On peut modifier une remise chèque.
+Faire une redirection avec un flah si pas de chèque à remettre (et griser le lien)
 
 
 

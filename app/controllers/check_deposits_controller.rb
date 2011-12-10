@@ -51,6 +51,11 @@ class CheckDepositsController < ApplicationController
     @total_lines_debit=@lines.sum(:debit)
     @total_lines_credit=@lines.sum(:credit)
 
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @check_deposit }
+    end
+
   end
 
   # GET /check_deposits/1/edit

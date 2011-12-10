@@ -7,6 +7,8 @@
           <td class="clickable"><%= line.destination.name if line.destination %></td>
 
           <td class="numeric clickable"><%= debit_credit(line.credit) %></td>
+          <td><%= button_for_check(line) %></td>
+           
       </tr>
     <% end %>
   </tbody>
