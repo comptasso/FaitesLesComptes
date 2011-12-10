@@ -1,0 +1,6 @@
+<td class="clickable"><%=l line.line_date %></td>
+<td class="clickable"><%= line.narration %></td>
+
+<td class="clickable"><%= line.destination.name if line.destination %></td>
+
+<td class="numeric clickable"><%= debit_credit(line.credit) %></td>

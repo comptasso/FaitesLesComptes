@@ -18,6 +18,7 @@ Faitesvoscomptes::Application.routes.draw do
     resources :natures
     member do
       get 'stats'
+     
     end
   end
 
@@ -25,6 +26,8 @@ Faitesvoscomptes::Application.routes.draw do
     resources :check_deposits do
       member do
         get 'fill'
+         post 'add_check'
+      post 'remove_check'
       end
     end
   end

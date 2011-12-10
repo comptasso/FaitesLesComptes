@@ -10,23 +10,24 @@
 
   <h3>Date : <%=l @check_deposit.deposit_date %> - Compte : <% @bank_account.bank %> - <%= @bank_account.number %></h3>
 
-  <% if @checks.any? %>
-
-  <table class="data_table display">
+  <table class="data_table display"  id="check_added">
  <%= render 'thead' %>
-  <%= render partial: 'tbody', :object=>@checks unless @checks.empty? %>
+     <tbody>
+  <%= render partial: 'tbodyadded', :object=>@checks.all  %>
+     </tbody>
   <%= render partial: 'tfoot', :object=>@total_checks_credit %>
-</table>
 
-<% end %>
+</table>
 </fieldset>
 
 <h3>Sélection des chèques à remettre</h3>
 
 
-<table class="data_table display">
+<table class="data_table display" id="check_not_added">
   <%= render 'thead' %>
-  <%= render partial: 'tbody', :object=>@lines unless @lines.empty? %>
+   <tbody>
+  <%= render partial: 'tbodynotadded', :object=>@lines  %>
+   </tbody>
    <%= render partial: 'tfoot', :object=>@total_lines_credit %>
  
 </table>

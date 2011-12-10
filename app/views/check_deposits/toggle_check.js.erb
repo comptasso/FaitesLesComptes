@@ -1,0 +1,4 @@
+$('#check_added tbody').html("<%=j  render partial: 'tbodyadded', :object=>@checks  %>");
+$('#check_not_added tbody').html("<%=j render partial: 'tbodynotadded', :object=>@lines  %>");
+$('#check_added #total_added_checks').text("<%=j debit_credit @total_checks_credit %>");
+$('#check_not_added #total_added_checks').text("<%=j debit_credit @total_lines_credit %>");
