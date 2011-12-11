@@ -32,6 +32,7 @@ class CheckDepositsController < ApplicationController
   # new permet de créer un check deposit, ie simplement fixer la banque et la date
   # puis la main est passée à fill
   def new
+    compute_non_deposited_checks
     @check_deposit = @bank_account.check_deposits.new(deposit_date: Date.today)
     
     respond_to do |format|
@@ -61,19 +62,19 @@ class CheckDepositsController < ApplicationController
     
   end
 
-  def add_all_checks
-    @check_deposit=CheckDeposit.find(params[:id])
-    @organism.lines.non_depose.all.each {|l| l.update_attribute(:check_deposit_id, @check_deposit.id); l.save}
-    respond_to do |format|
-      if @check_deposit.save
-        format.html { redirect_to bank_account_check_deposit_url(@bank_account, @check_deposit), notice: 'La remise de chèques a été créée.' }
-        format.json { render json: @check_deposit, status: :created, location: @check_deposit }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @check_deposit.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+#  def add_all_checks
+#    @check_deposit=CheckDeposit.find(params[:id])
+#
+#    respond_to do |format|
+#      if @check_deposit.save
+#        format.html { redirect_to bank_account_check_deposit_url(@bank_account, @check_deposit), notice: 'La remise de chèques a été créée.' }
+#        format.json { render json: @check_deposit, status: :created, location: @check_deposit }
+#      else
+#        format.html { render action: "new" }
+#        format.json { render json: @check_deposit.errors, status: :unprocessable_entity }
+#      end
+#    end
+#  end
 
   def remove_check
     @line=Line.find(params[:line_id])
@@ -97,11 +98,22 @@ class CheckDepositsController < ApplicationController
   # POST /check_deposits
   # POST /check_deposits.json
   def create
+
     @check_deposit = @bank_account.check_deposits.new(params[:check_deposit])
+
 
     respond_to do |format|
       if @check_deposit.save
-        format.html { redirect_to fill_bank_account_check_deposit_url(@bank_account, @check_deposit), notice: 'La remise de chèques a été créée.' }
+
+        format.html {
+          flash[:notice]= 'La remise de chèques a été créée.'
+           if params[:commit] == 'Tout remettre'
+           @organism.lines.non_depose.all.each {|l| l.update_attribute(:check_deposit_id, @check_deposit.id); l.save}
+           redirect_to bank_account_check_deposit_url(@bank_account, @check_deposit)
+           else
+          redirect_to fill_bank_account_check_deposit_url(@bank_account, @check_deposit)
+           end
+          }
         format.json { render json: @check_deposit, status: :created, location: @check_deposit }
       else
         format.html { render action: "new" }
