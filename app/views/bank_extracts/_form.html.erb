@@ -11,7 +11,7 @@
   
     <div class="input date optionnal">
     <label>Du</label>
-     <%= picker_date :pick_date_from, Date.today.years_ago(5), Date.today.years_since(5) , @bank_extract.begin_date %>
+     <%= picker_date :pick_date_from, Date.today.years_ago(5), Date.today.years_since(5) , @bank_extract.deposit_date %>
     <label class="inline">Au</label>
      <%= picker_date :pick_date_to, Date.today.years_ago(5), Date.today.years_since(5) , @bank_extract.end_date %>
     </div>

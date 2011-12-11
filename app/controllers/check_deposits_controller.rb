@@ -3,6 +3,7 @@
 class CheckDepositsController < ApplicationController
 
   before_filter :find_bank_account_and_organism
+  before_filter :get_pick_date, only: [:create,:update]
   # GET /check_deposits
   # GET /check_deposits.json
   def index
@@ -31,7 +32,7 @@ class CheckDepositsController < ApplicationController
   # new permet de créer un check deposit, ie simplement fixer la banque et la date
   # puis la main est passée à fill
   def new
-    @check_deposit = @bank_account.check_deposits.new
+    @check_deposit = @bank_account.check_deposits.new(deposit_date: Date.today)
     
     respond_to do |format|
       format.html # new.html.erb
@@ -143,5 +144,9 @@ class CheckDepositsController < ApplicationController
   def compute_var
     compute_deposited_checks
     compute_non_deposited_checks
+  end
+
+  def get_pick_date
+    params[:check_deposit][:deposit_date]= picker_to_date(params[:pick_date])
   end
 end

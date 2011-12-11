@@ -113,7 +113,7 @@ OK    Création d'un modèle compte bancaire et intégration au logiciel
 OK   Création d'un modèle remise chèque (migration/vue)
 OK     On affiche les chèques qui ne sont toujours pas remis à l'encaissement
 OK     On sélectionne ces chèques par boutons ce qui affiche le chèque dans la table supérieure
-     Prévoir un bouton pour faire une validation globale
+     Prévoir un bouton pour faire une sélection globale
 OK  On valide, ce qui mène à la vue show
 OK  La vue index affiche les remises faites.
     Le delete d'une remise doit enlever le ckeck_deposit_id des lignes

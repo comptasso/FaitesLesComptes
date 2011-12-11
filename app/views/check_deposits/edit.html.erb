@@ -17,10 +17,10 @@
   <table class="data_table display"  id="check_added">
    <thead>
     <%= render 'thead' %>
-    <th>Action</th>
+   
   </thead>
 
-     <tbody>
+      <tbody id="added_body">
   <%= render partial: 'tbodyadded', :object=>@checks.all  %>
      </tbody>
   <%= render partial: 'tfoot', :object=>@total_checks_credit %>
@@ -33,7 +33,7 @@
 
 <table class="data_table display" id="check_not_added">
   <%= render 'thead' %>
-   <tbody>
+   <tbody id="not_added_body">
   <%= render partial: 'tbodynotadded', :object=>@lines  %>
    </tbody>
    <%= render partial: 'tfoot', :object=>@total_lines_credit %>
