@@ -116,8 +116,8 @@ OK     On sélectionne ces chèques par boutons ce qui affiche le chèque dans l
 OK    Prévoir un bouton pour faire une sélection globale
 OK  On valide, ce qui mène à la vue show
 OK  La vue index affiche les remises faites.
-    Le delete d'une remise doit enlever le ckeck_deposit_id des lignes
-    On peut modifier une remise chèque. FIXME - La question de ce qu'on modifie est à regarder
+OK    Le delete d'une remise doit enlever le ckeck_deposit_id des lignes
+  
     Faire une redirection avec un flash si pas de chèque à remettre (et griser le lien)
     Il faudrait afficher l'icone imprimer dès lors qu'il y a un chèque dans la table des remises
 

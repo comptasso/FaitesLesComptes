@@ -7,6 +7,8 @@ class CheckDepositsController < ApplicationController
   # GET /check_deposits
   # GET /check_deposits.json
   def index
+    compute_non_deposited_checks
+   flash[:notice]="Il y a #{@lines.count} chèques à remettre à l'encaissement pour un montant de #{sprintf('%0.02f', @lines.sum(:credit))} €"
     @check_deposits = @organism.check_deposits.all
 
     respond_to do |format|
@@ -29,10 +31,14 @@ class CheckDepositsController < ApplicationController
 
   # GET /check_deposits/new
   # GET /check_deposits/new.json
-  # new permet de créer un check deposit, ie simplement fixer la banque et la date
-  # puis la main est passée à fill
+  
   def new
+
     compute_non_deposited_checks
+    if @lines.count == 0
+    redirect_to  bank_account_check_deposits_url(@bank_account), alert: "Il n'y a pas de chèques à remettre"
+    return
+    end
     @check_deposit = @bank_account.check_deposits.new(deposit_date: Date.today)
     
     respond_to do |format|
@@ -61,20 +67,6 @@ class CheckDepositsController < ApplicationController
       end
     
   end
-
-#  def add_all_checks
-#    @check_deposit=CheckDeposit.find(params[:id])
-#
-#    respond_to do |format|
-#      if @check_deposit.save
-#        format.html { redirect_to bank_account_check_deposit_url(@bank_account, @check_deposit), notice: 'La remise de chèques a été créée.' }
-#        format.json { render json: @check_deposit, status: :created, location: @check_deposit }
-#      else
-#        format.html { render action: "new" }
-#        format.json { render json: @check_deposit.errors, status: :unprocessable_entity }
-#      end
-#    end
-#  end
 
   def remove_check
     @line=Line.find(params[:line_id])

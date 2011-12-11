@@ -1,5 +1,5 @@
 <%= content_for :submenu do %>
-<%= icon_to 'nouveau.png', new_bank_account_check_deposit_path(@bank_account) %>
+<%= icon_to 'nouveau.png', new_bank_account_check_deposit_path(@bank_account) unless @lines.count == 0 %>
 <%= icon_to 'navigation90.png', organism_books_path(@organism) %>
 <% end -%>
 
