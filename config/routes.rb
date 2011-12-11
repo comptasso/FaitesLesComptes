@@ -28,7 +28,7 @@ Faitesvoscomptes::Application.routes.draw do
         get 'fill'
          post 'add_check'
          post 'remove_check'
-       
+         post 'add_all_checks'
       end
     end
   end

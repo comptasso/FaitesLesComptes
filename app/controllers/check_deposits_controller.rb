@@ -61,6 +61,20 @@ class CheckDepositsController < ApplicationController
     
   end
 
+  def add_all_checks
+    @check_deposit=CheckDeposit.find(params[:id])
+    @organism.lines.non_depose.all.each {|l| l.update_attribute(:check_deposit_id, @check_deposit.id); l.save}
+    respond_to do |format|
+      if @check_deposit.save
+        format.html { redirect_to bank_account_check_deposit_url(@bank_account, @check_deposit), notice: 'La remise de chèques a été créée.' }
+        format.json { render json: @check_deposit, status: :created, location: @check_deposit }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @check_deposit.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   def remove_check
     @line=Line.find(params[:line_id])
     @check_deposit=CheckDeposit.find(params[:id])

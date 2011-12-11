@@ -146,7 +146,7 @@ on pourrait supprimer le tri (et autres indicateurs visuels) pour la liste des c
 -------------------------- Autres sujets à moyen terme
 Mettre en place une validation globale de la page
 Gérer les validations
-
+FIXME : gérer le problème du edit des bank_deposit : si on modifie les chèques remis et qu'on abandonne, en fait c'est quand même enregistré.
 Mettre dans le modèle une validation qui empêche la modification si verrouillé
 
 Donc peut être faire des modèles achats/ventes/banques/caisse
