@@ -6,10 +6,10 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 + gestion des destinations
 + gestion des natures
 + saisie d'écritures
-- remise en banque
++ remise en banque
 - affichage du journal de banques
 - affichage du journal de caisse
-- affichage des soles
+- affichage des soldes
 
 011 : aménagements mineurs à la 10 du genre navigation
       nettoyage des locks des lines

@@ -1,0 +1,49 @@
+# -*- encoding : utf-8 -*-
+
+# BankLines est un controller spécialisé pour afficher les lignes qui relèvent
+# d'une écriture bancaire attachée à un compte
+# Elle hérite de LinesController car en fait c'est la même logique
+# Book devient simplement ici le livre de banque
+#
+
+
+
+class BankLinesController < LinesController
+
+  before_filter :find_book
+
+# la méthode index est héritée de LinesController
+  def index
+    # TODO - à terme cette liste sera construite à partir des infos de l'exercice date de début et de fin.
+    @submenu_list=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+
+  fill_soldes
+
+    respond_to do |format|
+      format.html 
+      format.json { render json: @lines }
+    end
+  end
+
+  private
+
+  def find_book
+    @book=BankAccount.find(params[:bank_account_id])
+    @organism=@book.organism
+  end
+
+  # TODO a modifier pour faire la sélection
+#  def fill_soldes
+#      date=Date.today.beginning_of_year.months_since(@mois.to_i)
+#    @lines = @book.lines.mois(date).all
+#    @solde_debit_avant=@book.lines.solde_debit_avant(date)
+#    @solde_credit_avant=@book.lines.solde_credit_avant(date)
+#
+#    @total_debit=@lines.sum(&:debit)
+#    @total_credit=@lines.sum(&:credit)
+#    @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
+#  end
+
+
+
+end

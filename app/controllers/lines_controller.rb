@@ -112,7 +112,7 @@ class LinesController < ApplicationController
 #    end
 #  end
 
-  private
+  protected
   def find_book
     @book=Book.find(params[:book_id])
     @organism=@book.organism

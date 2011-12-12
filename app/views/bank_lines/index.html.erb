@@ -1,0 +1,33 @@
+<%= content_for :menu do %>
+
+  <%= icon_to 'navigation90.png', organism_bank_accounts_path(@organism), title: 'Liste des comptes bancaires' %>
+<% end -%>
+
+<%= content_for :submenu do %>
+  <%  @submenu_list.each_with_index do |mois,i| %>
+    <%=   link_to(mois, bank_account_bank_lines_path(@book, mois: i)) %>
+
+  <%  end %>
+
+<% end %>
+
+<fieldset><legend>Livre de banque - <%=  @book.bank %> - <%= @book.number %></legend>
+  <table class="data_table display">
+    <thead>
+      <tr>
+        <%= render 'lines/table_header' %>
+     </tr>
+    </thead>
+   <tbody id="table_lines">
+      <%= render 'lines/table_lines'  %>
+   </tbody>
+  <tfoot id="table_foot">
+
+     <%= render 'lines/table_foot' %>
+   </tfoot>
+
+      </table>
+
+    </fieldset>
+
+

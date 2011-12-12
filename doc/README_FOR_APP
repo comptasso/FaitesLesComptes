@@ -108,7 +108,7 @@ OK- Recherche de lignes
 OK- Revoir la navigation pour plus de confort
 OK - Ajouter la possibilité de choisir une plage de date
 
-Faire une remise de chèques à la banque
+--------------------- Faire une remise de chèques à la banque
 OK    Création d'un modèle compte bancaire et intégration au logiciel
 OK   Création d'un modèle remise chèque (migration/vue)
 OK     On affiche les chèques qui ne sont toujours pas remis à l'encaissement
@@ -117,14 +117,18 @@ OK    Prévoir un bouton pour faire une sélection globale
 OK  On valide, ce qui mène à la vue show
 OK  La vue index affiche les remises faites.
 OK    Le delete d'une remise doit enlever le ckeck_deposit_id des lignes
-  
-    Faire une redirection avec un flash si pas de chèque à remettre (et griser le lien)
-    Il faudrait afficher l'icone imprimer dès lors qu'il y a un chèque dans la table des remises
+OK    Faire une redirection avec un flash si pas de chèque à remettre
 
-
-
-
+--------------------Affichage journal de banque (BankLines) ------------------------
+Faire un controlleur avec vues index (peut être une sous classe de Lines
+Dépend de bank_account qui est un before filter
+Mettre l'accès
+Avoir un scope des lignes qui trouve les lignes relevant d'un compte et de type bancaire
+Vue index
 --------------------------------------------------------------------
+Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné
+
+
 Voir si les logiques de lock des lines ont encore du sens
 Retirer les liens entre books et bank_extracts (un bank_extract appartient à un organisme et à une banque mais pas à un livre)
 
@@ -157,3 +161,4 @@ et des modèles de lignes (repetées, multiple).
 Pouvoir faire un export
 Pouvoir faire une édition
 Graphiques
+ Il faudrait afficher l'icone imprimer dès lors qu'il y a un chèque dans la table des remises

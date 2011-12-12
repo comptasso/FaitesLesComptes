@@ -28,7 +28,7 @@
     <td><%= bank_account.address %></td>
     <td><%=l bank_account.opened_at if bank_account.opened_at.is_a?(Date) %></td>
     
-    <td><%= icon_to 'afficher.png', [@organism,bank_account] %></td>
+    <td><%= icon_to 'afficher.png', bank_account_bank_lines_path(bank_account) %></td>
     <td><%= link_to 'Remise chq', new_bank_account_check_deposit_path(bank_account) %></td>
     
     
