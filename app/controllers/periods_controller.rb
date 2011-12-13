@@ -16,16 +16,7 @@ class PeriodsController < ApplicationController
     end
   end
 
-  # GET /periods/1
-  # GET /periods/1.json
-  def show
-    @period = Period.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @period }
-    end
-  end
+  
 
   # GET /periods/new
   # GET /periods/new.json
