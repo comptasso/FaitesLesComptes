@@ -2,7 +2,7 @@ Faitesvoscomptes::Application.routes.draw do
 
  
   
-  resources :periods
+  
 
   # get 'bank_lines/index'
 
@@ -15,6 +15,7 @@ Faitesvoscomptes::Application.routes.draw do
   
 
   resources :organisms do
+    resources :periods
     resources :bank_accounts
 
     resources :books

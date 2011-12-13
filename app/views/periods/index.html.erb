@@ -1,0 +1,36 @@
+<%= content_for :menu do %>
+<%= render 'organisms/menu' %>
+
+
+<% end %>
+
+<% content_for :submenu do %>
+
+  <%= icon_to 'nouveau.png',new_organism_period_path(@organism), :alt=>'Nouvel exercice',
+    :title=>'Créer un nouvel exercice' unless @organism.nb_open_periods >= 2 %>
+<% end %>
+<fieldset><legend><%= @periods.empty? ? "Aucun exercice" : "Liste des exercices" %></legend>
+  <% unless @periods.empty? %>
+    <table class="striped">
+      <thead>
+      <tr>
+       
+        <th>Début</th>
+        <th>Fin</th>
+        <th>Statut</th>
+       
+      </tr>
+      </thead>
+      <tbody>
+      <% @periods.each do |period| %>
+        <tr>
+          
+          <td><%=l period.start_date %></td>
+          <td><%=l period.close_date %></td>
+          <td><%= period.open? 'Ouvert' : 'Fermé' %> </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</fieldset>
