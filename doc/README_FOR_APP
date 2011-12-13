@@ -127,7 +127,9 @@ Avoir un scope des lignes qui trouve les lignes relevant d'un compte et de type 
 Vue index
 --------------------------------------------------------------------
 Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné
-
+Il faut traiter l'affichage des différentes années
+Quand on saisit plusieurs le même montant, on pourrait avoir un bouton qui affiche
+la même trame de ligne (soit un bouton spécifique, soit un mode de saisie).
 
 Voir si les logiques de lock des lines ont encore du sens
 Retirer les liens entre books et bank_extracts (un bank_extract appartient à un organisme et à une banque mais pas à un livre)
