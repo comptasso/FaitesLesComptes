@@ -48,18 +48,18 @@ class Period < ActiveRecord::Base
   # Les classes ...validator sont des classes spécifiques de validator pour les exercices
 
   # Valide que le start_date est le lendemain du close date de l'exercice précédent
-#  class ContiguousValidator < ActiveModel::EachValidator
-#    def validate_each(record, attribute, value)
-#      record.errors[attribute] << "ne peut avoir un trou dans les dates #{record.previous_period.close_date}" if record.previous_period && record.previous_period.close_date != (value - 1.day)
-#    end
-#  end
-#
-#  # Valide que le close_date est bien postérieur au start_date
-#  class ChronoValidator < ActiveModel::EachValidator
-#    def validate_each(record, attribute, value)
-#      record.errors[attribute] << "la date de cloture doit être postérieure à l'ouverture" if value < record.start_date
-#    end
-#  end
+  class ContiguousValidator < ActiveModel::EachValidator
+    def validate_each(record, attribute, value)
+      record.errors[attribute] << "ne peut avoir un trou dans les dates #{record.previous_period.close_date}" if record.previous_period && record.previous_period.close_date != (value - 1.day)
+    end
+  end
+
+  # Valide que le close_date est bien postérieur au start_date
+  class ChronoValidator < ActiveModel::EachValidator
+    def validate_each(record, attribute, value)
+      record.errors[attribute] << "la date de cloture doit être postérieure à l'ouverture" if value < record.start_date
+    end
+  end
 
  
   belongs_to :organism
@@ -67,8 +67,8 @@ class Period < ActiveRecord::Base
   validates :organism_id, :presence=>true
 
 # TODO revoir les validations
-#  validates :close_date, :presence=>true,:chrono=>true
-#  validates :start_date, :presence=>true,:contiguous => true
+  validates :close_date, :presence=>true,:chrono=>true
+  validates :start_date, :presence=>true,:contiguous => true
 
 
   # TODO changer le update should not reopen en utilisant un des validate
