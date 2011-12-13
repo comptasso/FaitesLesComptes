@@ -6,7 +6,7 @@
 
   <div class="inputs">
     <%= f.input(:start_date, :discard_day => true,
-      :hint=>'Premier jour du mois de ...' ) %>
+      :hint=>'Premier jour du mois de ...' , :disabled=>@start_date_picker) %>
     <%= f.input :close_date ,:discard_day => true, :start_year => @begin_year,:end_year=>@end_year,
       :hint=>'Dernier jour du mois de...' %>
   </div>

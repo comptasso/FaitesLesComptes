@@ -21,12 +21,15 @@ class PeriodsController < ApplicationController
   # GET /periods/new
   # GET /periods/new.json
   def new
-    if @organism.periods.any? 
-      start_date=@organism.periods.last.close_date +1
+    @start_date_picker=false
+    if @organism.periods.any?
+      start_date=(@organism.periods.last.close_date) +1
+      @start_date_picker=true
     else
       start_date=Date.today.beginning_of_year
     end
-    @period = @organism.periods.new(:start_date=>start_date)
+    close_date=start_date.years_since(1)-1
+    @period = @organism.periods.new(:start_date=>start_date, :close_date=>close_date)
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @period }
@@ -42,10 +45,10 @@ class PeriodsController < ApplicationController
   # POST /periods.json
   def create
     @period = @organism.periods.new(params[:period])
-
+    @period.start_date=@organism.periods.last_day + 1.day unless @organism.periods.empty?
     respond_to do |format|
       if @period.save
-        format.html { redirect_to organisms_periods_path(@organism), notice: "L'exercice a été créé" }
+        format.html { redirect_to organism_periods_path(@organism), notice: "L'exercice a été créé" }
         format.json { render json: @period, status: :created, location: @period }
       else
         format.html { render action: "new" }
