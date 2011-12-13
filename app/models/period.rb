@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 # == Schema Information
 # Schema version: 20110515121214
 #
@@ -39,7 +41,7 @@
 # TODO mettre ceci dans une transaction
 
 
-require 'utilities'
+
 
 class Period < ActiveRecord::Base
 
@@ -110,14 +112,21 @@ class Period < ActiveRecord::Base
     self.open ? false : true
   end
 
- 
- 
 
+ 
+  # TODO à revoir avec les fonctions de type distance in ...
   def nb_months
-    Utilities::nb_mois(self.close_date, self.start_date)+1 # plus un pour tenir compte des bornes
+    first_date=[self.close_date, self.start_date].min.beginning_of_month
+    last_date=[self.close_date, self.start_date].max.beginning_of_month
+    i=0
+    while first_date < last_date
+      i+=1
+      first_date=first_date.months_since(1)
+    end
+    return i+1
   end
 
-   # renvoie le nombre de jour d'un mois donné de l'exercice
+  # renvoie le nombre de jour d'un mois donné de l'exercice
   # mois period est un entier démarrant à 0
   def nb_jour_mois(mois_period)
     self.start_date.months_since(mois_period).end_of_month.day
@@ -133,7 +142,7 @@ class Period < ActiveRecord::Base
     when date > self.close_date then  self.journals.last(:order=>'jmonth ASC').jmonth
     when date < self.start_date then  self.journals.first(:order=>'jmonth ASC').jmonth
     else # cas où la date est dans la période
-      Utilities.nb_mois(self.start_date, date )
+      self.nb_mois(self.start_date, date )
     end
     month_number
   end
@@ -169,7 +178,7 @@ class Period < ActiveRecord::Base
   alias all_accounts_except_children_of_collective_account all_accounts_except_coca
 
   def all_active_accounts_except_coca
-        self.accounts.reject {|a| a.inactive? || a.is_child_of_collective_account?}
+    self.accounts.reject {|a| a.inactive? || a.is_child_of_collective_account?}
   end
 
   # general_balance est une méthode qui construit une balance générale
@@ -184,8 +193,8 @@ class Period < ActiveRecord::Base
     # TODO ajouter des messages - éventuellement un rescue
     # bizarre comme approche avec le numéro de compte et non l'id
     # TODO ceci est débile car c'est une AREL
-#    raise ArgumentError unless self.accounts.where('acc_number= ?', acc_number_from)
-#    raise ArgumentError unless self.accounts.where('acc_number= ?', acc_number_to)
+    #    raise ArgumentError unless self.accounts.where('acc_number= ?', acc_number_from)
+    #    raise ArgumentError unless self.accounts.where('acc_number= ?', acc_number_to)
     date_from ||= self.start_date
     date_to ||= self.close_date
     GeneralBalance.new(self.id, acc_number_from, acc_number_to, date_from, date_to)
@@ -244,11 +253,11 @@ class Period < ActiveRecord::Base
       # l'entry existe, on créé les lignes
       as.each do |a| #a pour account
         if a.solde.abs  > 0 # pour chaque compte dont le solde est à zero
-        # il faut que le compte existe 
-        npa=np.accounts.find_by_acc_number(a.acc_number)
-        if npa.nil? # ou le créer
-          npa=np.accounts.create!(:acc_number=>a.acc_number,:name=>a.name, :comment=>a.comment, :regroupement=>a.regroupement)
-        end
+          # il faut que le compte existe
+          npa=np.accounts.find_by_acc_number(a.acc_number)
+          if npa.nil? # ou le créer
+            npa=np.accounts.create!(:acc_number=>a.acc_number,:name=>a.name, :comment=>a.comment, :regroupement=>a.regroupement)
+          end
           e.lines.build(:account_id=>npa.id, :amount=>a.solde.abs , :dc=> a.solde > 0 ? true : false )
         end
       end # on a fait tous les reports
@@ -256,11 +265,11 @@ class Period < ActiveRecord::Base
       # il reste à faire l'écriture du report proprement dit (autrement dit d'équilibrer l'écriture
       report= e.total_debit - e.total_credit # on calcule le solde
       if report != 0
-      report_account = np.accounts.where('acc_number=?', '12').first
-      e.lines.build(:account_id=>report_account.id, :amount=>report , :dc=> true )
+        report_account = np.accounts.where('acc_number=?', '12').first
+        e.lines.build(:account_id=>report_account.id, :amount=>report , :dc=> true )
       end
       e.save
-     return e.lines.size
+      return e.lines.size
     rescue
       return 0
     end
@@ -309,21 +318,21 @@ class Period < ActiveRecord::Base
     # tous les journaux doivent être fermés
     self.errors.add(:lock, 'Tous les journaux ne sont pas fermés; ') if self.journals.where('open=?', true).any?
     # l'exercice précédent, s'il existe, doit être ferme
-  self.errors.add(:lock, "L'exercice précédent n'est pas fermé; ") if self.previous_period && self.previous_period.open
-   # il faut un exercice suivant
-   np=self.next_period
-   self.errors.add(:lock, "Pas d'exercice suivant; ") if np.nil?
-   return false if self.errors[:lock].any?
-   # il faut un compte pour le report du résultat
-   self.errors.add(:lock, "Pas de compte de report à nouveau") if np.accounts.where('acc_number=?', '12').first.nil?
-   # il faut un journal d'OD
-   jod=np.journals.where('jmonth=?',0).where('abbreviation=?', 'OD').first
-   self.errors.add(:lock, "Pas de journal d'OD dans l'exercice suivant; ") if jod.nil?
-   return false if self.errors[:lock].any?
-   # qui doit être ouvert
-   # TODO il faut interdire de fermer un mois si l'exercice précédent n'est pas clos
-   self.errors.add(:lock, "Le journal d'OD de l'exercice suivant est fermé; ") unless jod.open
-   self.errors[:lock].any? ? false : true
+    self.errors.add(:lock, "L'exercice précédent n'est pas fermé; ") if self.previous_period && self.previous_period.open
+    # il faut un exercice suivant
+    np=self.next_period
+    self.errors.add(:lock, "Pas d'exercice suivant; ") if np.nil?
+    return false if self.errors[:lock].any?
+    # il faut un compte pour le report du résultat
+    self.errors.add(:lock, "Pas de compte de report à nouveau") if np.accounts.where('acc_number=?', '12').first.nil?
+    # il faut un journal d'OD
+    jod=np.journals.where('jmonth=?',0).where('abbreviation=?', 'OD').first
+    self.errors.add(:lock, "Pas de journal d'OD dans l'exercice suivant; ") if jod.nil?
+    return false if self.errors[:lock].any?
+    # qui doit être ouvert
+    # TODO il faut interdire de fermer un mois si l'exercice précédent n'est pas clos
+    self.errors.add(:lock, "Le journal d'OD de l'exercice suivant est fermé; ") unless jod.open
+    self.errors[:lock].any? ? false : true
 
   end
 

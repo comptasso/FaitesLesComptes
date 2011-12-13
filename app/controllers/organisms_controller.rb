@@ -16,6 +16,7 @@ class OrganismsController < ApplicationController
   # GET /organisms/1.json
   def show
     @organism = Organism.find(params[:id])
+    session[:exercice]=@organism.periods.last
 
     respond_to do |format|
       format.html # show.html.erb

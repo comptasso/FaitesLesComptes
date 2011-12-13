@@ -127,9 +127,9 @@ Avoir un scope des lignes qui trouve les lignes relevant d'un compte et de type 
 Vue index
 --------------------------------------------------------------------
 Modification du sous menu lines pour avoir l'année - ce qui renvoie à la logique des exercices
-    j'introduis le modèle Period qui vient de comptasso et je l'adapte
-    faire la migration
-    faire les vues et adapter le controller
+OK - j'introduis le modèle Period qui vient de comptasso et je l'adapte
+OK - faire la migration
+OK - faire les vues et adapter le controller
     on crée un helper qui fait l'affichage
     on met l'année dans une session lorsqu'on change d'année
 
