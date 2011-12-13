@@ -8,7 +8,7 @@ class PeriodsController < ApplicationController
   # GET /periods
   # GET /periods.json
   def index
-    @periods = @organsim.periods.all
+    @periods = @organism.periods.all
 
     respond_to do |format|
       format.html # index.html.erb

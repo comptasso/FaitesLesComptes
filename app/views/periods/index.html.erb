@@ -27,7 +27,7 @@
           
           <td><%=l period.start_date %></td>
           <td><%=l period.close_date %></td>
-          <td><%= period.open? 'Ouvert' : 'Fermé' %> </td>
+          <td><%= period.open? ? 'Ouvert' : 'Fermé' %> </td>
         </tr>
       <% end %>
       </tbody>
