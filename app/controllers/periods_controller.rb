@@ -45,7 +45,7 @@ class PeriodsController < ApplicationController
   # POST /periods.json
   def create
     @period = @organism.periods.new(params[:period])
-    @period.start_date=@organism.periods.last_day + 1.day unless @organism.periods.empty?
+    @period.start_date=@organism.periods.last.close_date + 1.day unless @organism.periods.empty?
     respond_to do |format|
       if @period.save
         format.html { redirect_to organism_periods_path(@organism), notice: "L'exercice a été créé" }
