@@ -120,12 +120,18 @@ OK    Le delete d'une remise doit enlever le ckeck_deposit_id des lignes
 OK    Faire une redirection avec un flash si pas de chèque à remettre
 
 --------------------Affichage journal de banque (BankLines) ------------------------
-Faire un controlleur avec vues index (peut être une sous classe de Lines
+OK - Faire un controlleur avec vues index (peut être une sous classe de Lines
 Dépend de bank_account qui est un before filter
 Mettre l'accès
 Avoir un scope des lignes qui trouve les lignes relevant d'un compte et de type bancaire
 Vue index
 --------------------------------------------------------------------
+Modification du sous menu lines pour avoir l'année - ce qui renvoie à la logique des exercices
+    on crée un helper qui fait l'affichage
+    on met l'année dans une session lorsqu'on change d'année
+
+
+
 Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné
 Il faut traiter l'affichage des différentes années
 Quand on saisit plusieurs le même montant, on pourrait avoir un bouton qui affiche
