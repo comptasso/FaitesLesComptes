@@ -6,8 +6,8 @@
 <%= render 'menu' %>
 <% end %>
 <%= content_for :submenu do %>
-<%= link_to 'Nature', stats_organism_path(@organism, by: :nature), title: 'Analyser les recettes et dépenses par nature'  %>
-<%= link_to 'Destination', stats_organism_path(@organism, by: :destination), title: 'Analyser les recettes et dépenses par destination'  %>
+<%= link_to 'Analyse par Nature', stats_organism_path(@organism, by: :nature), title: 'Analyser les recettes et dépenses par nature'  %>
+<%= link_to 'Analyse par Destination', stats_organism_path(@organism, by: :destination), title: 'Analyser les recettes et dépenses par destination'  %>
 <% end %>
 
 

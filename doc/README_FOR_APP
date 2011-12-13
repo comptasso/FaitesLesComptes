@@ -132,7 +132,6 @@ Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le 
 Voir si les logiques de lock des lines ont encore du sens
 Retirer les liens entre books et bank_extracts (un bank_extract appartient à un organisme et à une banque mais pas à un livre)
 
-La création d'un compte bancaire doit permettre l'affichage d'un livre de banque adapté, construit à partir des lignes et des remises chèques
 
 Voir le mois qui est affiché quand on supprime une écriture
 Voir pour mettre en place une notion d'exercice (en fait c'est virtuel - cela permet simplement de faire
@@ -142,14 +141,21 @@ Utiliser la logique TSI pour distinguer les différents types de listings (et de
 OK - Faire que la touche plus puisse être actionnée par le clavier
 
 ---------------------pick date et autres goodies
+on ne peut pas éditer un compte bancaire
 OK - pick date mis en place d'une manière générale
 OK - formulaire modifié pour bank_extract
 Faire les autres formulaires.
 Indiquer le solde des comptes
 on pourrait supprimer le tri (et autres indicateurs visuels) pour la liste des comptes
-
+Quand on démarre l'affichage d'organisme est /organisms (car il n'y en n'a pas encore)
+Régler la problématique des images (dans l'affichage des livres) peut être avoir une dizaine d'images type
+Revoir navigation
+Supprimer l'affichage des header et foot dans l'index des comptes bancaires
+trouver une icone pour remise chèque
 -------------------------- Autres sujets à moyen terme
 Mettre en place une validation globale de la page
+Faire une zone paramètres (ou administration)
+Créer des natures de recettes et des natures de dépenses
 
 Gérer les validations
 Ne pas pouvoir supprimer une remise chèque qui a été pointée

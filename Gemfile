@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.1.0'
-gem 'therubyracer'
+# gem 'therubyracer'
 gem 'simple_form'
 
 # Bundle edge Rails instead:
