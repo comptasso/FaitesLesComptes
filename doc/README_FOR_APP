@@ -141,7 +141,9 @@ Utiliser la logique TSI pour distinguer les différents types de listings (et de
 OK - Faire que la touche plus puisse être actionnée par le clavier
 
 ---------------------pick date et autres goodies
-on ne peut pas éditer un compte bancaire
+on ne peut pas éditer un compte bancaire (il n'y a pas d'accès)
+quand on crée une écriture, le bouton créer remet new (ce qui est une bonne idée,
+mais il faudrait qu'il conserve la date
 OK - pick date mis en place d'une manière générale
 OK - formulaire modifié pour bank_extract
 Faire les autres formulaires.

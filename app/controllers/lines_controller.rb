@@ -42,7 +42,7 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.json
   def new
-    @line =@book.lines.new(line_date: Date.today)
+    @line =@book.lines.new(line_date: flash[:date] || Date.today)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -60,9 +60,9 @@ class LinesController < ApplicationController
   # POST /lines
   # POST /lines.json
   def create
-    get_date
+    flash[:date]= get_date
     @line = @book.lines.new(params[:line])
-       
+     
     respond_to do |format|
       if @line.save
         mois=(@line.line_date.month)-1
