@@ -21,8 +21,12 @@ class PeriodsController < ApplicationController
   # GET /periods/new
   # GET /periods/new.json
   def new
-    @period = @organism.periods.new
-
+    if @organism.periods.any? 
+      start_date=@organism.periods.last.close_date +1
+    else
+      start_date=Date.today.beginning_of_year
+    end
+    @period = @organism.periods.new(:start_date=>start_date)
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @period }
