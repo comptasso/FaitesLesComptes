@@ -4,7 +4,7 @@ class CreatePeriods < ActiveRecord::Migration
       t.date :start_date
       t.date :close_date
       t.integer :organism_id
-      t.boolean :open
+      t.boolean :open, :default=>true
 
       t.timestamps
     end

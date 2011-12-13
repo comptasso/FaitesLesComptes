@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111207174346) do
+ActiveRecord::Schema.define(:version => 20111213055942) do
 
   create_table "bank_accounts", :force => true do |t|
     t.string   "number"
@@ -90,6 +90,15 @@ ActiveRecord::Schema.define(:version => 20111207174346) do
   create_table "organisms", :force => true do |t|
     t.string   "title"
     t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "periods", :force => true do |t|
+    t.date     "start_date"
+    t.date     "close_date"
+    t.integer  "organism_id"
+    t.boolean  "open",        :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -1,8 +1,14 @@
+# -*- encoding : utf-8 -*-
+
+
 class PeriodsController < ApplicationController
+
+   before_filter :find_organism
+
   # GET /periods
   # GET /periods.json
   def index
-    @periods = Period.all
+    @periods = @organsim.periods.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -24,7 +30,7 @@ class PeriodsController < ApplicationController
   # GET /periods/new
   # GET /periods/new.json
   def new
-    @period = Period.new
+    @period = @organism.periods.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -40,7 +46,7 @@ class PeriodsController < ApplicationController
   # POST /periods
   # POST /periods.json
   def create
-    @period = Period.new(params[:period])
+    @period = @organism.periods.new(params[:period])
 
     respond_to do |format|
       if @period.save

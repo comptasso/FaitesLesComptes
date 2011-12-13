@@ -127,11 +127,14 @@ Avoir un scope des lignes qui trouve les lignes relevant d'un compte et de type 
 Vue index
 --------------------------------------------------------------------
 Modification du sous menu lines pour avoir l'année - ce qui renvoie à la logique des exercices
+    j'introduis le modèle Period qui vient de comptasso et je l'adapte
+    faire la migration
+    faire les vues et adapter le controller
     on crée un helper qui fait l'affichage
     on met l'année dans une session lorsqu'on change d'année
 
 
-
+Dans l'affichage des livres, on devrait avoir un link_to_unless_current pour le livre en cours
 Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné
 Il faut traiter l'affichage des différentes années
 Quand on saisit plusieurs le même montant, on pourrait avoir un bouton qui affiche
