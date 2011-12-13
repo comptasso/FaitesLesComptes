@@ -1,0 +1,6 @@
+
+<fieldset><legend><%= @structure.name %> : Modification d'un exercice</legend>
+<%= render 'form' %>
+</fieldset>
+<%= link_to 'Afficher', structure_period_path(@structure,@period) %> |
+<%= link_to 'Retour', structure_periods_path(@structure) %>

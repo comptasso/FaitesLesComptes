@@ -1,0 +1,12 @@
+<%  content_for :bandeau do %>
+
+  <%= icon_to 'retour.png', structure_path(@structure) %>
+<%  end %>
+
+<fieldset><legend><%= @structure.name %> : création d'un exercice</legend>
+
+<%= render 'form' %>
+
+ 
+</fieldset>
+

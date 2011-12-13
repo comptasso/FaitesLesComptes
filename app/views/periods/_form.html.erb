@@ -1,0 +1,30 @@
+<%= simple_form_for [@structure, @period] do |f| %>
+  <%= f.error_notification %>
+
+<%= @current_action %>
+  <div class="inputs">
+    <%= f.input(:start_date, :discard_day => true,
+      :hint=>'Premier jour du mois de ...' , :disabled => true ) %>
+    <%= f.input :close_date ,:discard_day => true, :start_year => @begin_year,:end_year=>@end_year,
+      :hint=>'Dernier jour du mois de...' %>
+   
+  </div>
+<!-- TODO la séléction de l'année ne doit pas pouvoir offrir 2012 si l'exercice commence en janvier 2013 -->
+ <%= label_tag(:plan_comptable) %>
+<% unless @first %>
+ <%= select_tag(:plan_comptable,
+   options_for_select([["Plan de l'exercice précédent", 'previous'],
+       ['Plan abrégé', 'db/PlanComptable/plan_abrege.yml'],
+       ['Plan complet', 'db/PlanComptable/plan.yml']])) %>
+<% else %>
+<%= select_tag(:plan_comptable,
+   options_for_select([["Plan de l'exercice précédent", 'previous'],
+       ['Plan abrégé', 'db/PlanComptable/plan_abrege.yml'],
+       ['Plan complet', 'db/PlanComptable/plan.yml']], :disabled=>'previous')) %>
+<% end %>
+<br/><br/>
+<!-- TODO faire le fichier  plancomplet.yml -->
+
+<%= spinner_button(f) %>
+
+<% end %>
