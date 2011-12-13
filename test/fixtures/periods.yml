@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  start_date: 2011-12-13
+  close_date: 2011-12-13
+  organism_id: 1
+  open: false
+
+two:
+  start_date: 2011-12-13
+  close_date: 2011-12-13
+  organism_id: 1
+  open: false

@@ -2,6 +2,8 @@ Faitesvoscomptes::Application.routes.draw do
 
  
   
+  resources :periods
+
   # get 'bank_lines/index'
 
  
