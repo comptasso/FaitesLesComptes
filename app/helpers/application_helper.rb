@@ -28,4 +28,10 @@ module ApplicationHelper
       :class=>'input_date', :value=>value.to_formatted_s(:date_picker),
       :size=>8}
   end
+
+ def period_session
+   session[:period] ||= @organism.periods.last if @organism
+ end
+
+ 
 end
