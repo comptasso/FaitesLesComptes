@@ -6,7 +6,7 @@
 <% end -%>
 
 <%= content_for :submenu do %>
- 
+ <%= submenu_helper(@book) %>
 
   <%= icon_to 'nouveau.png', new_book_line_path(@book, mois: @mois) ,id: 'new_line_link' %>
 <% end %>
@@ -29,5 +29,5 @@
       </table>
 
     </fieldset>
-essai de submenu 
- <%= submenu_helper(@book) %>
+<%= @period.exercice %>
+ 

@@ -29,9 +29,6 @@ module ApplicationHelper
       :size=>8}
   end
 
- def period_session
-   session[:period] ||= @organism.periods.last if @organism
- end
 
  
 end
