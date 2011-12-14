@@ -5,7 +5,7 @@
 
 <%= content_for :submenu do %>
  <span><%=  link_to_if @period.previous_period?, '<<', previous_period_organism_period_path(@organism,@period) %></span>
- <%= submenu_helper(@book, @period) %>
+ <%= banksubmenu_helper(@book, @period) %>
 <span><%= link_to_if @period.next_period? ,'>>', next_period_organism_period_path(@organism,@period) %></span>
 
 
@@ -31,5 +31,4 @@
       </table>
 
     </fieldset>
-Bonjour
-<%= @period.nil?  ? 'period est nul' : @period.exercice %>
+

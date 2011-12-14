@@ -34,9 +34,7 @@ Faitesvoscomptes::Application.routes.draw do
   end
 
   resources :bank_accounts do
-    member do
-     
-    end
+
     resources :check_deposits do
       member do
         get 'fill'
