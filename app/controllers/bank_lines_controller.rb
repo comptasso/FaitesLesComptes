@@ -10,17 +10,16 @@
 
 class BankLinesController < LinesController
 
-  before_filter :find_book
+  before_filter :find_book, :current_period, :fill_mois
+ 
 
 # la méthode index est héritée de LinesController
   def index
-    # TODO - à terme cette liste sera construite à partir des infos de l'exercice date de début et de fin.
-    @submenu_list=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-
-  fill_soldes
+  
+     fill_soldes
 
     respond_to do |format|
-      format.html 
+      format.html {render 'bank_lines/index'}
       format.json { render json: @lines }
     end
   end

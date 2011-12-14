@@ -4,10 +4,12 @@
 <% end -%>
 
 <%= content_for :submenu do %>
-  <%  @submenu_list.each_with_index do |mois,i| %>
-    <%=   link_to(mois, bank_account_bank_lines_path(@book, mois: i)) %>
+ <span><%=  link_to_if @period.previous_period?, '<<', previous_period_organism_period_path(@organism,@period) %></span>
+ <%= submenu_helper(@book, @period) %>
+<span><%= link_to_if @period.next_period? ,'>>', next_period_organism_period_path(@organism,@period) %></span>
 
-  <%  end %>
+
+ 
 
 <% end %>
 
@@ -29,5 +31,5 @@
       </table>
 
     </fieldset>
-
-
+Bonjour
+<%= @period.nil?  ? 'period est nul' : @period.exercice %>

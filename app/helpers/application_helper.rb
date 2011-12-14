@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 module ApplicationHelper
   # icon_to s'utilise comme link_to mais prend
   # en argument le nom d'un fichier placé dans le sous répertorie icones/
@@ -29,6 +31,21 @@ module ApplicationHelper
       :size=>8}
   end
 
+def submenu_helper(book, period)
+   t=[]
+   if period
+     t= period.list_months
+   else
+    t=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+   end
 
+   content_tag :span do
+     s=''
+     t.each_with_index do |mois, i|
+        s += concat(link_to(mois, book_lines_path(book, "mois"=> i)))
+    end
+    s
+  end
+end
  
 end

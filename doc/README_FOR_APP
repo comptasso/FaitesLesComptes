@@ -130,10 +130,10 @@ Modification du sous menu lines pour avoir l'année - ce qui renvoie à la logiq
 OK - j'introduis le modèle Period qui vient de comptasso et je l'adapte
 OK - faire la migration
 OK - faire les vues et adapter le controller
-    on crée un helper qui fait l'affichage
-    on met l'année dans une session lorsqu'on change d'année
+OK - on crée un helper qui fait l'affichage
+OK - on met l'année dans une session lorsqu'on change d'année
 
-
+-----------------------------------------------------------------------
 Dans l'affichage des livres, on devrait avoir un link_to_unless_current pour le livre en cours
 Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné
 Il faut traiter l'affichage des différentes années
