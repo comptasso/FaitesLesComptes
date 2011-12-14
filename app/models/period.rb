@@ -252,6 +252,7 @@ class Period < ActiveRecord::Base
     raise 'date is not inside the period limits' if date < self.start_date || date > self.close_date
     d=self.start_date
     mois=0
+    # FIXME probablement un problème de -1 A tester
     while date > d
       d=d.months_since(1)
       mois +=1

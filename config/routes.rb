@@ -15,7 +15,13 @@ Faitesvoscomptes::Application.routes.draw do
   
 
   resources :organisms do
-    resources :periods
+    resources :periods do
+      member do
+        get 'previous'
+        get 'next'
+      end
+    end
+
     resources :bank_accounts
 
     resources :books
