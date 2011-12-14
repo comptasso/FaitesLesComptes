@@ -16,6 +16,18 @@ class PeriodsController < ApplicationController
     end
   end
 
+  def previous_period
+@period=Period.find(params[:id]).previous_period
+session[:period]=@period.id
+redirect_to :back
+  end
+
+  def next_period
+@period=Period.find(params[:id]).next_period
+session[:period]=@period.id
+redirect_to :back
+  end
+
   
 
   # GET /periods/new

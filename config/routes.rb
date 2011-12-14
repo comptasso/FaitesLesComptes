@@ -17,8 +17,8 @@ Faitesvoscomptes::Application.routes.draw do
   resources :organisms do
     resources :periods do
       member do
-        get 'previous'
-        get 'next'
+        get 'previous_period'
+        get 'next_period'
       end
     end
 
