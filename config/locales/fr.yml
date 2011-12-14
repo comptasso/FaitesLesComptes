@@ -8,6 +8,7 @@ fr:
       long: "%e %B %Y"
       only_day: "%e"
       month_year: "%B %Y"
+      month: "%B"
       picker: "%d %m %Y"
       short_month_year: "%b %Y"
     day_names:

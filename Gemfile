@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.1.0'
-# gem 'therubyracer'
+gem 'execjs' # au lieu de therubyracer qui ne marche pas sous windows
 gem 'simple_form'
 
 # Bundle edge Rails instead:

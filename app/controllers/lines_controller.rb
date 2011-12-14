@@ -117,11 +117,9 @@ class LinesController < ApplicationController
   end
 
   def fill_mois
-    if @period
-      @mois=@period.start_date.months_since(params[:mois] || 0)
-    else
-      @mois = params[:mois] || (Date.today.month - 1)
-    end
+    return @mois = params[:mois] if params[:mois]
+    return @mois = @period.guess_month if @period
+    @mois= Date.today.month - 1
   end
 
   
@@ -130,10 +128,14 @@ class LinesController < ApplicationController
   end
 
   def fill_soldes
-    date=Date.today.beginning_of_year.months_since(@mois.to_i)
-    @lines = @book.lines.mois(date).all
-    @solde_debit_avant=@book.lines.solde_debit_avant(date)
-    @solde_credit_avant=@book.lines.solde_credit_avant(date)
+    if @period
+      @date=@period.start_date.months_since(@mois.to_i)
+    else
+      @date= Date.today.beginning_of_year.months_since(@mois.to_i)
+    end
+    @lines = @book.lines.mois(@date).all
+    @solde_debit_avant=@book.lines.solde_debit_avant(@date)
+    @solde_credit_avant=@book.lines.solde_credit_avant(@date)
 
     @total_debit=@lines.sum(&:debit)
     @total_credit=@lines.sum(&:credit)

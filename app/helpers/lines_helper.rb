@@ -10,9 +10,14 @@ module LinesHelper
     ''
   end
 
- def submenu_helper(book)
+ def submenu_helper(book, period)
+   t=[]
+   if period
+     t= period.list_months
+   else
     t=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-    content_tag :div do
+   end
+     content_tag :div do
     r=''
     t.each_with_index do |mois, i|
         r += concat(link_to(mois, book_lines_path(book, "mois"=> i)))
@@ -20,4 +25,6 @@ module LinesHelper
     r
     end
  end
+
+
 end

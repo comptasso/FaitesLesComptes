@@ -6,12 +6,12 @@
 <% end -%>
 
 <%= content_for :submenu do %>
- <%= submenu_helper(@book) %>
+ <%= submenu_helper(@book, @period) %>
 
   <%= icon_to 'nouveau.png', new_book_line_path(@book, mois: @mois) ,id: 'new_line_link' %>
 <% end %>
 
-<fieldset><legend><%=  @book.title%> - Mois de <%=l(Date.today.beginning_of_year.months_since(@mois.to_i), :format=>:month_year) %></legend>
+<fieldset><legend><%=  @book.title%> - Mois de <%=l(@date, :format=>:month_year) %></legend>
   <table class="data_table display">
     <thead>
       <tr>

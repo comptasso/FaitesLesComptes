@@ -129,6 +129,16 @@ class Period < ActiveRecord::Base
     self.start_date.months_since(mois_period).end_of_month.day
   end
 
+  def list_months
+    t=[]
+    d=self.start_date
+    while d < self.close_date
+      t << I18n::l(d,:format=>:month)
+      d=d.months_since(1)
+    end
+    t
+  end
+
  
 
   # permet d'indiquer l'exercice sous la forme d'une chaine de caractère
@@ -226,7 +236,29 @@ class Period < ActiveRecord::Base
 #
 #  end
 
-  
+  # renvoie le mois le plus adapté pour un exercice
+  # si la date du jour est au sein de l'exercice, renvoie le mois correspondant
+  # si la date du jour est avant l'exercice, renvoie le premier mois
+  # si elle est après, renvoie le dernier mois
+  #
+  def guess_month(date=Date.today)
+    return 0 if date < self.start_date
+    return self.nb_months - 1 if date > self.close_date
+    return current_month(date)
+  end
+
+  # renvoie le mois de l'exercice correspondant à une date qui est dans les limites de l'exercice
+  def current_month(date=Date.today)
+    raise 'date is not inside the period limits' if date < self.start_date || date > self.close_date
+    d=self.start_date
+    mois=0
+    while date > d
+      d=d.months_since(1)
+      mois +=1
+    end
+    return mois
+  end
+
 
   protected
 
