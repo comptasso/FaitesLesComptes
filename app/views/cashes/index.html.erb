@@ -1,0 +1,34 @@
+<%= content_for :submenu do %>
+<%= icon_to 'nouveau.png', new_cash_path %>
+<% end -%>
+
+<fieldset><legend> Liste des  <%=t cashes %></legend>
+<table>
+  <tr>
+
+    <th>Organism</th>
+
+    <th>Name</th>
+
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @cashes.each do |cash| %>
+  <tr>
+
+    <td><%= cash.organism_id %></td>
+
+    <td><%= cash.name %></td>
+
+    <td><%= icon_to 'afficher.png', cash %></td>
+    <td><%= icon_to 'modifier.png', edit_cash_path(cash) %></td>
+    <td><%= icon_to 'supprimer.png', cash, :confirm => 'Etes vous sur ?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+</fieldset>
+
+

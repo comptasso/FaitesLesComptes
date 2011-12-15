@@ -124,7 +124,7 @@ OK - Faire un controlleur avec vues index (peut être une sous classe de Lines
 OK - Dépend de bank_account qui est un before filter
 ok - Mettre un lien pour y accéder
 OK - Avoir un scope des lignes qui trouve les lignes relevant d'un compte et de type bancaire
-Vue index
+OK - Vue index
 --------------------------------------------------------------------
 Modification du sous menu lines pour avoir l'année - ce qui renvoie à la logique des exercices
 OK - j'introduis le modèle Period qui vient de comptasso et je l'adapte

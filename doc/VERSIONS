@@ -6,8 +6,10 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 + gestion des destinations
 + gestion des natures
 + saisie d'écritures
++ gestion des comptes bancaires
 + remise en banque
-- affichage du journal de banques
++ affichage du journal de banques
+- gestion des caisses
 - affichage du journal de caisse
 - affichage des soldes
 

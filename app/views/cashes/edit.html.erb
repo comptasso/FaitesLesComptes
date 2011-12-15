@@ -1,0 +1,17 @@
+<%= content_for :bandeau do %>
+
+<%= icon_to 'nouveau.png', new_cash_path %>
+<%= icon_to 'afficher.png', @cash %>
+<%= icon_to 'retour.png', :back %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification cash
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+
