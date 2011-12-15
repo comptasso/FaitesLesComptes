@@ -14,7 +14,13 @@
 <div>
   <p>ICI on pourra mettre des infos de type graphique sur le suivi du compte</p>
   <p>Par exemple un lien direct sur les livres </p>
-  
+  <% @bank_accounts.each do |ba| %>
+  Solde du compte <%=   ba.bank %> - <%= ba.number %> : <%= ba.sold %>
+  <% end %>
+
+   <% @cashes.each do |ca| %>
+  Solde de la caisse <%=   ca.name %> : <%= ca.sold %>
+  <% end %>
 
 
 </div>

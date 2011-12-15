@@ -17,6 +17,8 @@ class OrganismsController < ApplicationController
   def show
     @organism = Organism.find(params[:id])
     session[:exercice]=@organism.periods.last
+    @bank_accounts=@organism.bank_accounts.all
+    @cashes=@organism.cashes.all
 
     respond_to do |format|
       format.html # show.html.erb

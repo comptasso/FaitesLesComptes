@@ -125,6 +125,7 @@ OK - Dépend de bank_account qui est un before filter
 ok - Mettre un lien pour y accéder
 OK - Avoir un scope des lignes qui trouve les lignes relevant d'un compte et de type bancaire
 OK - Vue index
+     Il faut impérativement faire un bank_account_id pour les lignes
 --------------------------------------------------------------------
 Modification du sous menu lines pour avoir l'année - ce qui renvoie à la logique des exercices
 OK - j'introduis le modèle Period qui vient de comptasso et je l'adapte
@@ -134,10 +135,14 @@ OK - on crée un helper qui fait l'affichage
 OK - on met l'année dans une session lorsqu'on change d'année
 
 -----------------------------------------------------------------------
+OK Création du modèle cas pour faire des livres de caisse
+OK - création du controller cash_lines pour afficher les mouvements en espèces
+Mettre en place des datatable pour bank et cash_lines index
+
 Dans l'affichage des livres, on devrait avoir un link_to_unless_current pour le livre en cours
-Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné
-Il faut traiter l'affichage des différentes années
-Quand on saisit plusieurs le même montant, on pourrait avoir un bouton qui affiche
+Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)
+OK - Il faut traiter l'affichage des différentes années
+Quand on saisit plusieurs fois le même montant, on pourrait avoir un bouton qui affiche
 la même trame de ligne (soit un bouton spécifique, soit un mode de saisie).
 
 Voir si les logiques de lock des lines ont encore du sens
@@ -145,11 +150,9 @@ Retirer les liens entre books et bank_extracts (un bank_extract appartient à un
 
 
 Voir le mois qui est affiché quand on supprime une écriture
-Voir pour mettre en place une notion d'exercice (en fait c'est virtuel - cela permet simplement de faire
-des conditions select.
 
 Utiliser la logique TSI pour distinguer les différents types de listings (et de lignes?)
-OK - Faire que la touche plus puisse être actionnée par le clavier
+A refaire ou revoir - Faire que la touche plus puisse être actionnée par le clavier
 
 ---------------------pick date et autres goodies
 on ne peut pas éditer un compte bancaire (il n'y a pas d'accès)
