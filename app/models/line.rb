@@ -11,6 +11,7 @@ class Line < ActiveRecord::Base
   validates :line_date, presence: true
 
   PAYMENT_MODES= %w(CB Chèque Espèces Prélèvement Virement)
+  BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
  
 
   default_scope order: 'line_date ASC'
@@ -19,6 +20,8 @@ class Line < ActiveRecord::Base
   scope :multiple, lambda {|copied_id| where('copied_id = ?', copied_id)}
  # scope :payment_mode, lambda {|mode| where('payment_mode = ?', mode)}
   scope :non_depose, where('payment_mode = ?', 'Chèque').where('check_deposit_id IS NULL')
+  scope :bank, where(:payment_mode => BANK_PAYMENT_MODES)
+  scope :cash, where(:payment_mode => 'Espèces')
 
   def self.solde_debit_avant(date)
     Line.where('line_date < ?', date).sum(:debit)

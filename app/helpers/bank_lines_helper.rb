@@ -12,7 +12,7 @@ module BankLinesHelper
    content_tag :span do
      s=''
      t.each_with_index do |mois, i|
-        s += concat(link_to(mois, bank_account_bank_lines_path(bank_account, "mois"=> i)))
+        s += concat(link_to_unless_current(mois, bank_account_bank_lines_path(bank_account, "mois"=> i)))
     end
     s
   end

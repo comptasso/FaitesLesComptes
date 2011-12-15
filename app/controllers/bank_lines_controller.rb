@@ -32,16 +32,20 @@ class BankLinesController < LinesController
   end
 
   # TODO a modifier pour faire la sélection
-#  def fill_soldes
-#      date=Date.today.beginning_of_year.months_since(@mois.to_i)
-#    @lines = @book.lines.mois(date).all
-#    @solde_debit_avant=@book.lines.solde_debit_avant(date)
-#    @solde_credit_avant=@book.lines.solde_credit_avant(date)
-#
-#    @total_debit=@lines.sum(&:debit)
-#    @total_credit=@lines.sum(&:credit)
-#    @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
-#  end
+  def fill_soldes
+   if @period
+      @date=@period.start_date.months_since(@mois.to_i)
+    else
+      @date= Date.today.beginning_of_year.months_since(@mois.to_i)
+    end
+    @lines = @book.lines.mois(@date).bank.all
+    @solde_debit_avant=@book.lines.solde_debit_avant(@date)
+    @solde_credit_avant=@book.lines.solde_credit_avant(@date)
+
+    @total_debit=@lines.sum(&:debit)
+    @total_credit=@lines.sum(&:credit)
+    @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
+  end
 
 
 
