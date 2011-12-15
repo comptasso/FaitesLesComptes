@@ -1,18 +1,11 @@
 
 <%= content_for :submenu do %>
 
-<%= icon_to 'nouveau.png', new_cash_path %>
-<%= icon_to 'modifier.png', edit_cash_path(@cash) %>
+<%= icon_to 'nouveau.png', new_organism_cash_path(@organism) %>
+<%= icon_to 'modifier.png', edit_organism_cash_path(@organism,@cash) %>
 <%= icon_to 'retour.png', :back %>
 <% end -%>
-<fieldset><legend>Description de cash </legend>
-
-
-<p>
-  <b>Organism:</b>
-  <%= @cash.organism_id %>
-</p>
-
+<fieldset><legend>Description de la caisse </legend>
 
 <p>
   <b>Name:</b>

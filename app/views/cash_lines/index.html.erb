@@ -1,11 +1,11 @@
 <%= content_for :menu do %>
 
-  <%= icon_to 'navigation90.png', organism_cash_accounts_path(@organism), title: 'Liste des caisses' %>
+  <%= icon_to 'navigation90.png', organism_cashes_path(@organism), title: 'Liste des caisses' %>
 <% end -%>
 
 <%= content_for :submenu do %>
  <span><%=  link_to_if @period.previous_period?, '<<', previous_period_organism_period_path(@organism,@period) %></span>
- <%= banksubmenu_helper(@book, @period) %>
+ <%= cashsubmenu_helper(@book, @period) %>
 <span><%= link_to_if @period.next_period? ,'>>', next_period_organism_period_path(@organism,@period) %></span>
 
 
@@ -13,7 +13,7 @@
 
 <% end %>
 
-<fieldset><legend>Livre de caisse - <%=  @book.cash %></legend>
+<fieldset><legend>Livre de caisse - <%=  @book.name %></legend>
   <table class="data_table display">
     <thead>
       <tr>

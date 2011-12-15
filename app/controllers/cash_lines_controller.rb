@@ -27,7 +27,7 @@ class CashLinesController < LinesController
   private
 
   def find_book
-    @book=CashAccount.find(params[:cash_account_id])
+    @book=Cash.find(params[:cash_id])
     @organism=@book.organism
   end
 
@@ -39,8 +39,8 @@ class CashLinesController < LinesController
       @date= Date.today.beginning_of_year.months_since(@mois.to_i)
     end
     @lines = @book.lines.mois(@date).cash.all
-    @solde_debit_avant=@book.lines.solde_debit_avant(@date)
-    @solde_credit_avant=@book.lines.solde_credit_avant(@date)
+    @solde_debit_avant=@book.lines.cash.solde_debit_avant(@date)
+    @solde_credit_avant=@book.lines.cash.solde_credit_avant(@date)
 
     @total_debit=@lines.sum(&:debit)
     @total_credit=@lines.sum(&:credit)

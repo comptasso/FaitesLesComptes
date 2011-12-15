@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 module CashLinesHelper
 
-  def cashsubmenu_helper(cash_account, period)
+  def cashsubmenu_helper(cash, period)
    t=[]
    if period
      t= period.list_months
@@ -12,7 +12,7 @@ module CashLinesHelper
    content_tag :span do
      s=''
      t.each_with_index do |mois, i|
-        s += concat(link_to_unless_current(mois, cash_account_lines_path(cash_account, "mois"=> i)))
+        s += concat(link_to_unless_current(mois, cash_lines_path(cash, "mois"=> i)))
     end
     s
   end

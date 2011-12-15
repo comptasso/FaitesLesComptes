@@ -1,13 +1,13 @@
 <%= content_for :bandeau do %>
 
-<%= icon_to 'nouveau.png', new_cash_path %>
-<%= icon_to 'afficher.png', @cash %>
+<%= icon_to 'nouveau.png', new_organism_cash_path(@organism) %>
+<%= icon_to 'afficher.png', [@organism,@cash] %>
 <%= icon_to 'retour.png', :back %>
 <% end -%>
 
 <fieldset>
   <legend>
-    Modification cash
+    Modification de la caisse
   </legend>
 
 <%= render 'form' %>

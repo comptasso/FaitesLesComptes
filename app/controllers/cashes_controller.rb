@@ -1,8 +1,12 @@
+# -*- encoding : utf-8 -*-
 class CashesController < ApplicationController
+
+  before_filter :find_organism
+
   # GET /cashes
   # GET /cashes.json
   def index
-    @cashes = Cash.all
+    @cashes = @organism.cashes.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -24,7 +28,7 @@ class CashesController < ApplicationController
   # GET /cashes/new
   # GET /cashes/new.json
   def new
-    @cash = Cash.new
+    @cash = @organism.cashes.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -40,11 +44,11 @@ class CashesController < ApplicationController
   # POST /cashes
   # POST /cashes.json
   def create
-    @cash = Cash.new(params[:cash])
+    @cash = @organism.cashes.new(params[:cash])
 
     respond_to do |format|
       if @cash.save
-        format.html { redirect_to @cash, notice: 'Cash was successfully created.' }
+        format.html { redirect_to organism_cashes_url(@organism), notice: 'La caisse a été créée' }
         format.json { render json: @cash, status: :created, location: @cash }
       else
         format.html { render action: "new" }
@@ -60,7 +64,7 @@ class CashesController < ApplicationController
 
     respond_to do |format|
       if @cash.update_attributes(params[:cash])
-        format.html { redirect_to @cash, notice: 'Cash was successfully updated.' }
+        format.html { redirect_to organism_cashes_url(@organism), notice: 'La caisse a été modifiée.' }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -76,7 +80,7 @@ class CashesController < ApplicationController
     @cash.destroy
 
     respond_to do |format|
-      format.html { redirect_to cashes_url }
+      format.html { redirect_to organism_cashes_url(@organism) }
       format.json { head :ok }
     end
   end

@@ -216,6 +216,8 @@ fr:
       period:
         start_date: 'Début'
         close_date: 'Fin'
+      cash:
+        name: 'Nom'
 
     errors:
      models:
@@ -255,5 +257,8 @@ fr:
         update: Enregistrer
       period:
         create: "Créer l'exercice"
+        update: 'Enregistrer'
+      cash:
+        create: 'Créer la caisse'
         update: 'Enregistrer'
 
