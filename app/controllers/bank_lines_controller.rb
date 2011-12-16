@@ -38,7 +38,7 @@ class BankLinesController < LinesController
     else
       @date= Date.today.beginning_of_year.months_since(@mois.to_i)
     end
-    @lines = @book.lines.mois(@date).bank.all
+    @lines = @book.lines.mois(@date).all
     @solde_debit_avant=@book.lines.solde_debit_avant(@date)
     @solde_credit_avant=@book.lines.solde_credit_avant(@date)
 

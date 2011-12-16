@@ -6,6 +6,8 @@ class Line < ActiveRecord::Base
   belongs_to :nature
   belongs_to :bank_extract
   belongs_to :bank_deposit
+  belongs_to :bank_account
+  belongs_to :cash_id
 
   validates :debit, :credit, numericality: true
   validates :line_date, presence: true
@@ -20,8 +22,7 @@ class Line < ActiveRecord::Base
   scope :multiple, lambda {|copied_id| where('copied_id = ?', copied_id)}
  # scope :payment_mode, lambda {|mode| where('payment_mode = ?', mode)}
   scope :non_depose, where('payment_mode = ?', 'Chèque').where('check_deposit_id IS NULL')
-  scope :bank, where(:payment_mode => BANK_PAYMENT_MODES)
-  scope :cash, where(:payment_mode => 'Espèces')
+ 
 
   def self.solde_debit_avant(date)
     Line.where('line_date < ?', date).sum(:debit)

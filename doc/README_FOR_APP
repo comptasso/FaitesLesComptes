@@ -137,6 +137,13 @@ OK - on met l'année dans une session lorsqu'on change d'année
 -----------------------------------------------------------------------
 OK Création du modèle cas pour faire des livres de caisse
 OK - création du controller cash_lines pour afficher les mouvements en espèces
+Problème pour les bank lines et cash lines qui ne sont pas liés aux différentes caisses et comptes bancaire
+Il existe déja un bank_account_id et il faudrait créer un cash_id
+mais on se retrouve dans la saisie des lignes à devoir gérer deux champs ou
+à fusionner le champ.
+On pourrait avoir les deux champs et mettre du java script pour faire la sélection avec du hidden et du show
+ou un seul champ (du type caisse qui soit avec un type (en clair faire du TSI))
+
 Mettre en place des datatable pour bank et cash_lines index
 
 Dans l'affichage des livres, on devrait avoir un link_to_unless_current pour le livre en cours
