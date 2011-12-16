@@ -7,7 +7,7 @@ class Line < ActiveRecord::Base
   belongs_to :bank_extract
   belongs_to :bank_deposit
   belongs_to :bank_account
-  belongs_to :cash_id
+  belongs_to :cash
 
   validates :debit, :credit, numericality: true
   validates :line_date, presence: true

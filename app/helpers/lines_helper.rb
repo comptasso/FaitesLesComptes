@@ -23,6 +23,7 @@ module LinesHelper
      s=''
      t.each_with_index do |mois, i|
         s += concat(link_to_unless_current(mois, book_lines_path(book, "mois"=> i)))
+        
     end
     s
   end
