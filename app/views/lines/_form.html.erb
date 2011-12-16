@@ -1,44 +1,33 @@
-<%  SimpleForm.wrapper_tag = :td %>
+<%  SimpleForm.wrapper_tag = :span %>
 
 <%=  simple_form_for [@book, @line]  do |f| %>
 
   <%= f.error_notification %>
 
 
-  <div class="inputs_inline" id="entry_lines" >
+  <div class="inputs" id="entry_lines" >
 
-    <table>
-      <thead>
-      <th>Date</th>
-      <th>Libellé</th>
-      <th>Nature</th>
-      <th>Destination</th>
-      <th>Débit</th>
-      <th>Crédit</th>
-       <th>Paiement</th>
-       <th id="th_bank">Cpte bancaire</th>
-       <th id="th_cash">Caisse</th>
-      <th></th>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
+    <p>   <label>Date : </label>
           <%= picker_date :pick_date_line, Date.today.years_ago(5), Date.today.years_since(5) , @line.line_date %>
-          </td>
-          <%#=  f.input :line_date, label: false  %>
-          <%=  f.input :narration, label: false, input_html: {size: 20 } %>
-          <%=  f.association :nature ,  :collection => @organism.natures.all(:order => 'name'), :prompt => "Quoi ?", label: false  %>
-          <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'), :prompt => "Pour qui ?", label: false  %>
-          <%=  f.input :debit , label: false, input_html: {size: 12, value: two_decimals(@line.debit) } %>
-          <%=  f.input :credit , label: false, input_html: {size: 12, value: two_decimals(@line.credit) } %>
-           <%=  f.input :payment_mode , label: false, collection: Line::PAYMENT_MODES %>
-          <%= f.input :bank_account_id,label: false, collection: @organism.bank_accounts.all(:order=>'bank'),
+             
+          <%=  f.input :narration,  input_html: {size: 20 } %>
+    </p>
+    <p>
+          <%=  f.association :nature ,  :collection => @organism.natures.all(:order => 'name'), :prompt => "Quoi ?" %>
+          <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'), :prompt => "Pour qui ?" %>
+    </p>      <%=  f.input :debit , input_html: {size: 12, value: two_decimals(@line.debit) } %>
+          <%=  f.input :credit, input_html: {size: 12, value: two_decimals(@line.credit) } %>
+    <p>
+           <%=  f.input :payment_mode , collection: Line::PAYMENT_MODES %>
+          <%= f.input :bank_account_id, collection: @organism.bank_accounts.all(:order=>'bank'),
           input_html: {id: 'td_bank'}%>
-          <%= f.input :cash_id, lable:false, collection: @organism.cashes.all(order: :name),
+          <%= f.input :cash_id, collection: @organism.cashes.all(order: :name),
           input_html: {id: 'td_cash'} %>
-          <td><%=  f.button :submit, id: 'new_line_button' %></td>
-        </tr>
-      </tbody>
-    </table>
+      </p>
   </div>
+          <div id="actions"
+<%=  f.button :submit, id: 'new_line_button' %>
+  </div>
+   
+ 
 <% end %>

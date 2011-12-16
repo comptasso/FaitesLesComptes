@@ -218,6 +218,10 @@ fr:
         close_date: 'Fin'
       cash:
         name: 'Nom'
+      line:
+        payment_mode: 'Mode de réglement'
+        bank_account_id: 'Compte bancaire'
+        cash_id: 'Caisse'
 
     errors:
      models:
