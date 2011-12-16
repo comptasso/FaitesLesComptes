@@ -16,7 +16,12 @@ class OrganismsController < ApplicationController
   # GET /organisms/1.json
   def show
     @organism = Organism.find(params[:id])
-    session[:exercice]=@organism.periods.last
+    if @organism.periods.empty?
+      flash[:alert]= 'Vous devez créer un exercice pour cet organisme'
+      redirect_to new_organism_period_url(@organism)
+      return
+    end
+    session[:period]=@organism.periods.last
     @bank_accounts=@organism.bank_accounts.all
     @cashes=@organism.cashes.all
 

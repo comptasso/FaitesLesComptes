@@ -257,7 +257,7 @@ class Period < ActiveRecord::Base
       d=d.months_since(1)
       mois +=1
     end
-    return mois
+    return mois-1
   end
 
 
