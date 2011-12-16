@@ -38,9 +38,9 @@ class CashLinesController < LinesController
     else
       @date= Date.today.beginning_of_year.months_since(@mois.to_i)
     end
-    @lines = @book.lines.mois(@date).cash.all
-    @solde_debit_avant=@book.lines.cash.solde_debit_avant(@date)
-    @solde_credit_avant=@book.lines.cash.solde_credit_avant(@date)
+    @lines = @book.lines.mois(@date).all
+    @solde_debit_avant=@book.lines.solde_debit_avant(@date)
+    @solde_credit_avant=@book.lines.solde_credit_avant(@date)
 
     @total_debit=@lines.sum(&:debit)
     @total_credit=@lines.sum(&:credit)

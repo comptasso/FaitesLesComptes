@@ -22,7 +22,7 @@
 
     <td><%= cash.name %></td>
 
-    <td><%= icon_to 'afficher.png', cash_account_lines_path(cash) %></td>
+    <td><%= icon_to 'afficher.png', cash_lines_path(cash) %></td>
     <td><%= icon_to 'modifier.png', edit_organism_cash_path(@organism,cash) %></td>
     <td><%= icon_to 'supprimer.png', [@organism,cash], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
