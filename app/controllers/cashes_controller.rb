@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class CashesController < ApplicationController
 
-  before_filter :find_organism
+  before_filter :find_organism,  :current_period
 
   # GET /cashes
   # GET /cashes.json

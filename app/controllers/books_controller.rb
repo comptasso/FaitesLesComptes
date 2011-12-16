@@ -2,7 +2,7 @@
 
 class BooksController < ApplicationController
 
-  before_filter :find_organism
+  before_filter :find_organism, :current_period
 
 
   # GET /books

@@ -4,13 +4,14 @@ class LinesController < ApplicationController
 
   layout :choose_layout
 
-  before_filter :find_book, :current_period
+  before_filter :find_book,   :current_period
   before_filter :fill_mois, only: [:index, :new, :create]
 
   # GET /lines
   # GET /lines.json
   def index
-     
+    
+
     fill_soldes
 
 
@@ -117,9 +118,7 @@ class LinesController < ApplicationController
   end
 
   def fill_mois
-    return @mois = params[:mois] if params[:mois]
-    return @mois = @period.guess_month if @period
-    @mois= Date.today.month - 1
+    @mois = params[:mois] || @period.guess_month
   end
 
   
@@ -128,11 +127,8 @@ class LinesController < ApplicationController
   end
 
   def fill_soldes
-    if @period
-      @date=@period.start_date.months_since(@mois.to_i)
-    else
-      @date= Date.today.beginning_of_year.months_since(@mois.to_i)
-    end
+    @date=@period.start_date.months_since(@mois.to_i)
+   
     @lines = @book.lines.mois(@date).all
     @solde_debit_avant=@book.lines.solde_debit_avant(@date)
     @solde_credit_avant=@book.lines.solde_credit_avant(@date)

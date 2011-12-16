@@ -16,7 +16,7 @@ class CashLinesController < LinesController
 # la méthode index est héritée de LinesController
   def index
   
-     fill_soldes
+    fill_soldes
 
     respond_to do |format|
       format.html {render 'cash_lines/index'}
