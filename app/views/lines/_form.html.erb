@@ -19,11 +19,11 @@
 <%=  f.input :debit , input_html: {size: 12, value: two_decimals(@line.debit) } unless (@book.type=='IncomeBook') %>
           <%=  f.input :credit, input_html: {size: 12, value: two_decimals(@line.credit) } unless (@book.type=='OutcomeBook') %>
     
-           <%=  f.input :payment_mode , collection: Line::PAYMENT_MODES %>
-          <%= f.input :bank_account_id, collection: @organism.bank_accounts.all(:order=>'bank'),
-          input_html: {id: 'td_bank'}%>
+           <%= f.input :payment_mode , collection: Line::PAYMENT_MODES %>
+          <%= f.input :bank_account_id, collection: @organism.bank_accounts.all(:order=>'number'), label_method: :number, value_method: :id,
+          input_html: {id: 'td_bank'} %>
           <%= f.input :cash_id, collection: @organism.cashes.all(order: :name),
-          input_html: {id: 'td_cash'} %>
+          input_html: {id: 'td_cash'}  %>
       </p>
   </div>
 <div id="actions">

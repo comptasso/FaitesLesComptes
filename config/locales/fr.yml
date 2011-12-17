@@ -205,7 +205,7 @@ fr:
         reference: Référence
         book: Livre
       bank_account:
-        bank: Banque
+        name: Nom de la Banque
         comment: Commentaire
         number: 'N° de compte'
         address: Adresse

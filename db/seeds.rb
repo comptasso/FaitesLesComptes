@@ -17,7 +17,7 @@ Organism.all.each do |o|
   Period.create(:organism_id=>o.id, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)
   i=IncomeBook.create({:title=>'Recettes', :description=>'Le livre des recettes', :image_url=>'argent_liquide.jpg', :organism_id=>o.id})
   ob=OutcomeBook.create({:title=>'Dépenses', :description=>'Le livre des dépenses', :image_url=>'argent_liquide.jpg', :organism_id=>o.id})
-  b=BankAccount.create({:bank=>'Finansol', :number=>'98745TG12', :organism_id=>o.id})
+  b=BankAccount.create({:name=>'Finansol', :number=>'98745TG12', :organism_id=>o.id})
   c=Cash.create({ :organism_id=>o.id, :name=>'Caisse'})
 
   NATURES.each do |n|
