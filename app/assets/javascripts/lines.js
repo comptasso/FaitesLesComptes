@@ -112,29 +112,14 @@ function $f_zero(){
 }
 
 
-//$.facebox.settings.closeImage = '/assets/closelabel.png';
-//$.facebox.settings.loadingImage = '/assets/loading.gif';
-
-
+//jQuery(function(){
 //
-//function pausecomp(ms) {
-//ms += new Date().getTime();
-//while (new Date() < ms){}
-//}
-
-
-
-
-//jQuery(document).ready(function($) {
-//    $('a[rel*=facebox]').facebox();
-//})
-//
-//$(document).ready(function() {
-//    $(document).bind('reveal.facebox', function() {
-//        $('#new_line').submit(function() {
-//            $.post(this.action, $(this).serialize(), null, "script");
-//            return false;
-//        });
-//    });
+//    $('#td_cash').hide(); //vide le champ s'il est à zero (pour faciliter la saisie)
+////    $('#td_bank').live('blur',$f_zero); // met zero dans le champ s'il est vide
 //});
-
+//
+//function $f_empty(){
+//    if (this.value == '0.00') {
+//        this.value='';
+//    }
+//
