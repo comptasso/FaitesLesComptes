@@ -126,8 +126,8 @@ ok - Mettre un lien pour y accéder
 OK - Avoir un scope des lignes qui trouve les lignes relevant d'un compte et de type bancaire
 OK - Vue index
 OK - Il faut impérativement faire un bank_account_id pour les lignes
---------------------------------------------------------------------
-Modification du sous menu lines pour avoir l'année - ce qui renvoie à la logique des exercices
+
+----------------Modification du sous menu lines pour avoir l'année - ce qui renvoie à la logique des exercices
 OK - j'introduis le modèle Period qui vient de comptasso et je l'adapte
 OK - faire la migration
 OK - faire les vues et adapter le controller
@@ -138,7 +138,14 @@ OK - on met l'année dans une session lorsqu'on change d'année
 OK Création du modèle cash pour faire des livres de caisse
 OK - création du controller cash_lines pour afficher les mouvements en espèces
 OK - Il existe déja un bank_account_id et il faudrait créer un cash_id
-Mettre les deux champs et mettre du java script pour faire la sélection avec du hidden et du show
+
+----------- aménagement formulaire de saisie des lignes --------------
+s'il n'y a qu'une caisse et qu'un compte bancaire pas besoin de sélectionner
+le form doit donc être différent selon les cas avec des champs hidden
+Quatre cas de figure à traiter (faire deux partiels - un pour la banque, un pour la caisse)
+Saisie des écritures : mettre du java script pour faire la sélection avec du hidden et du show sur les champs cash et banques
+
+-----------------
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)
 OK - Création de la sous classe Dépenses

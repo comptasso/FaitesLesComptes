@@ -11,11 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111216193243) do
+ActiveRecord::Schema.define(:version => 20111217072250) do
 
   create_table "bank_accounts", :force => true do |t|
     t.string   "number"
-    t.string   "bank"
+    t.string   "name"
     t.text     "comment"
     t.text     "address"
     t.date     "opened_at"
