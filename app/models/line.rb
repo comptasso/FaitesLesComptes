@@ -14,6 +14,17 @@ class Line < ActiveRecord::Base
 
   PAYMENT_MODES= %w(CB Chèque Espèces Prélèvement Virement)
   BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
+
+  before_save :check_bank_and_cash_ids
+
+  # Si le paiement est Especes, mettre à nil le bank_account_id
+  # Autrement mettre à nil le cash_id
+  # si le paiement est en chèque et que bank_extract n'est pas rempli alors mettre à nil le bank_account_id
+  def check_bank_and_cash_ids
+    self.bank_account_id = nil if self.payment_mode == 'Espèces'
+    self.cash_id = nil unless self.payment_mode =='Espèces'
+    self.bank_account_id = nil if self.payment_mode == 'Chèque' && self.bank_extract_id.nil?
+  end
  
 
   default_scope order: 'line_date ASC'

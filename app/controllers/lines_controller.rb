@@ -41,7 +41,7 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.json
   def new
-    @line =@book.lines.new(line_date: flash[:date] || Date.today)
+    @line =@book.lines.new(line_date: flash[:date] || Date.today, :cash_id=>@organism.cashes.first.id, :bank_account_id=>@organism.bank_accounts.first.id)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -113,7 +113,7 @@ class LinesController < ApplicationController
 
   protected
   def find_book
-    @book=Book.find(params[:book_id])
+    @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
     @organism=@book.organism
   end
 

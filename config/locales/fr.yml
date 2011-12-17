@@ -220,7 +220,7 @@ fr:
         name: 'Nom'
       line:
         payment_mode: 'Mode de réglement'
-        bank_account_id: 'Compte bancaire'
+        bank_account: 'Compte bancaire'
         cash_id: 'Caisse'
 
     errors:
