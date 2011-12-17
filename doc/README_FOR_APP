@@ -140,10 +140,8 @@ OK - création du controller cash_lines pour afficher les mouvements en espèces
 OK - Il existe déja un bank_account_id et il faudrait créer un cash_id
 
 ----------- aménagement formulaire de saisie des lignes --------------
-s'il n'y a qu'une caisse et qu'un compte bancaire pas besoin de sélectionner
-le form doit donc être différent selon les cas avec des champs hidden
-Quatre cas de figure à traiter (faire deux partiels - un pour la banque, un pour la caisse)
-Saisie des écritures : mettre du java script pour faire la sélection avec du hidden et du show sur les champs cash et banques
+OK - s'il n'y a qu'une caisse et qu'un compte bancaire pas besoin de sélectionner
+OK - Saisie des écritures : mettre du java script pour faire la sélection avec du hidden et du show sur les champs cash et banques
 
 -----------------
 
@@ -157,8 +155,8 @@ Ajouter un lien pour avoir l'accès à la liste des remises chèques
 Mettre en place des datatable pour bank et cash_lines index
 
 Dans l'affichage des livres, on devrait avoir un link_to_unless_current pour le livre en cours
-OK Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)
-Fixme : affichage du nom du compte bancaire dans le formulaire de saisie des lignes
+OK - Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)
+OK - : affichage du nom du compte bancaire dans le formulaire de saisie des lignes
 OK - Il faut traiter l'affichage des différentes années
 Quand on saisit plusieurs fois le même montant, on pourrait avoir un bouton qui affiche
 la même trame de ligne (soit un bouton spécifique, soit un mode de saisie).

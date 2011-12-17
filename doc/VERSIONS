@@ -11,7 +11,7 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 + affichage du journal de banques
 + gestion des caisses
 + affichage du journal de caisse
-- affichage des soldes
++ affichage des soldes
 
 012 : faire une interface adminsitrateur et revoir l'ensemble de la navigation
       plus bricoles listées dans le readme
