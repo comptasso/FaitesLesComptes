@@ -58,8 +58,8 @@ class CheckDepositsController < ApplicationController
   def add_check
     @line=Line.find(params[:line_id])
     @check_deposit=CheckDeposit.find(params[:id])
-    @line.check_deposit_id=@check_deposit.id
-    @line.save
+    @line.update_attributes(:check_deposit_id=>@check_deposit.id, :bank_account_id=>@check_deposit.bank_account.id)
+   
     compute_var
     respond_to do |format|
       format.html # new.html.erb
@@ -71,8 +71,8 @@ class CheckDepositsController < ApplicationController
   def remove_check
     @line=Line.find(params[:line_id])
     @check_deposit=CheckDeposit.find(params[:id])
-    @line.check_deposit_id=nil
-    @line.save
+    @line.update_attributes(:check_deposit_id=>nil, :bank_account_id=>nil)
+    
     compute_var
     respond_to do |format|
       format.html # new.html.erb
@@ -100,7 +100,10 @@ class CheckDepositsController < ApplicationController
         format.html {
           flash[:notice]= 'La remise de chèques a été créée.'
            if params[:commit] == 'Tout remettre'
-           @organism.lines.non_depose.all.each {|l| l.update_attribute(:check_deposit_id, @check_deposit.id); l.save}
+           @organism.lines.non_depose.all.each do |l|
+             l.update_attributes(:check_deposit_id=>@check_deposit.id, :bank_account_id=>@check_deposit.bank_account.id)
+             l.save
+           end
            redirect_to bank_account_check_deposit_url(@bank_account, @check_deposit)
            else
           redirect_to fill_bank_account_check_deposit_url(@bank_account, @check_deposit)
