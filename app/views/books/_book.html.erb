@@ -14,7 +14,7 @@
     <%= icon_to 'afficher.png', book_lines_path(book, :mois=>@period.guess_month) %> <br/>
     <%= icon_to 'nouveau.png', new_book_line_path(book), title: 'Ecrire une nouvelle ligne' %><br/>
     <%= icon_to 'modifier.png', edit_organism_book_path(@organism, book) %><br/>
-    <%= icon_to 'supprimer.png', [@organism,book], confirm: 'Are you sure?', method: :delete %><br/>
+    <%= icon_to 'supprimer.png', organism_book_path(@organism, book), confirm: 'Are you sure?', method: :delete %><br/>
    
   </td>
  

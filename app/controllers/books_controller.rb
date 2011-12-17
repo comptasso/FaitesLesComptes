@@ -46,7 +46,11 @@ class BooksController < ApplicationController
   # POST /books
   # POST /books.json
   def create
-    @book = @organism.books.build(params[:book])
+    if params[:book_type] == 'Income'
+    @book = @organism.income_books.build(params[:book])
+    else
+      @book= @organism.outcome_books.build(params[:book])
+    end
 
     respond_to do |format|
       if @book.save
@@ -78,11 +82,11 @@ class BooksController < ApplicationController
   # DELETE /books/1
   # DELETE /books/1.json
   def destroy
-    @book = book.find(params[:id])
+    @book = Book.find(params[:id])
     @book.destroy
 
     respond_to do |format|
-      format.html { redirect_to books_url }
+      format.html { redirect_to organism_books_url(@organism) }
       format.json { head :ok }
     end
   end

@@ -28,6 +28,8 @@ Faitesvoscomptes::Application.routes.draw do
     resources :bank_accounts
     resources :cashes
     resources :books
+    resources :income_books
+    resources :outcome_books
     resources :destinations
     resources :natures
     member do
@@ -66,6 +68,12 @@ Faitesvoscomptes::Application.routes.draw do
       end
     end
     
+  end
+   resources :income_books do
+    resources :lines
+  end
+ resources :outcome_books do
+    resources :lines
   end
 
 

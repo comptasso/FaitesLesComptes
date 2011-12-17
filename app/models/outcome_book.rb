@@ -1,0 +1,3 @@
+class OutcomeBook < Book
+
+end

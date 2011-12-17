@@ -3,7 +3,7 @@ class Book < ActiveRecord::Base
   has_many :lines, dependent: :destroy
   has_many :bank_extracts, dependent: :destroy
 
-
+ validates :title, presence: true
 
   # Méthode qui donne le montant du dernier solde bancaire
   # par ordre de date

@@ -11,13 +11,14 @@
           <%= picker_date :pick_date_line, Date.today.years_ago(5), Date.today.years_since(5) , @line.line_date %>
              
           <%=  f.input :narration,  input_html: {size: 20 } %>
-    </p>
-    <p>
+   
           <%=  f.association :nature ,  :collection => @organism.natures.all(:order => 'name'), :prompt => "Quoi ?" %>
           <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'), :prompt => "Pour qui ?" %>
-    </p>      <%=  f.input :debit , input_html: {size: 12, value: two_decimals(@line.debit) } %>
-          <%=  f.input :credit, input_html: {size: 12, value: two_decimals(@line.credit) } %>
-    <p>
+       </p>
+       <p>
+<%=  f.input :debit , input_html: {size: 12, value: two_decimals(@line.debit) } unless (@book.type=='IncomeBook') %>
+          <%=  f.input :credit, input_html: {size: 12, value: two_decimals(@line.credit) } unless (@book.type=='OutcomeBook') %>
+    
            <%=  f.input :payment_mode , collection: Line::PAYMENT_MODES %>
           <%= f.input :bank_account_id, collection: @organism.bank_accounts.all(:order=>'bank'),
           input_html: {id: 'td_bank'}%>
@@ -28,6 +29,6 @@
 <div id="actions">
 <%=  f.button :submit, id: 'new_line_button' %>
   </div>
-   
- 
-<% end %>
+ <% end %>
+
+

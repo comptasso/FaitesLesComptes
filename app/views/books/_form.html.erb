@@ -19,6 +19,12 @@
     <%= f.label :description %><br />
     <%= f.text_area :description, rows: 4 %>
   </div>
+<div>
+  <%= f.label 'Recettes ' %>
+  <%=  radio_button_tag :book_type, 'Income' %>
+  <%= f.label 'Dépenses ' %>
+   <%= radio_button_tag :book_type, 'Outcome' %>
+</div>
   <div class="field">
     <%= f.label :image_url %><br />
     <%= f.text_field :image_url %>

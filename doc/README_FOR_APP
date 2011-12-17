@@ -135,19 +135,22 @@ OK - on crée un helper qui fait l'affichage
 OK - on met l'année dans une session lorsqu'on change d'année
 
 -----------------------------------------------------------------------
-OK Création du modèle cas pour faire des livres de caisse
+OK Création du modèle cash pour faire des livres de caisse
 OK - création du controller cash_lines pour afficher les mouvements en espèces
-Problème pour les bank lines et cash lines qui ne sont pas liés aux différentes caisses et comptes bancaire
-Il existe déja un bank_account_id et il faudrait créer un cash_id
-mais on se retrouve dans la saisie des lignes à devoir gérer deux champs ou
-à fusionner le champ.
-On pourrait avoir les deux champs et mettre du java script pour faire la sélection avec du hidden et du show
-ou un seul champ (du type caisse qui soit avec un type (en clair faire du TSI))
+OK - Il existe déja un bank_account_id et il faudrait créer un cash_id
+Mettre les deux champs et mettre du java script pour faire la sélection avec du hidden et du show
+
+OK -Création de la sous classe Recettes (IncomeBook < Book)
+OK - Création de la sous classe Dépenses
+Modification du form Book
+Modification de views/lines/_form pour n'afficher crédit
+Changer income et outcome en sales and expenses
 
 Mettre en place des datatable pour bank et cash_lines index
 
 Dans l'affichage des livres, on devrait avoir un link_to_unless_current pour le livre en cours
-Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)
+OK Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)
+Fixme : affichage du nom du compte bancaire
 OK - Il faut traiter l'affichage des différentes années
 Quand on saisit plusieurs fois le même montant, on pourrait avoir un bouton qui affiche
 la même trame de ligne (soit un bouton spécifique, soit un mode de saisie).
