@@ -111,15 +111,39 @@ function $f_zero(){
 // return false; jQuery dit qu'il faut retourner false mais alors on perd l'affichage du curseur
 }
 
+// masque les champs de saisie de banque et de caisse s'il n'y a qu'un seul élément dans la liste'
+jQuery(function(){
+// if ($('#line_bank_account_id option').size() <= 1 ) {
+    $('#td_bank').hide() ; 
+   // }
+ //   if ($('#line_cash_id option').size() <= 1 ) {
+    $('#td_cash').hide() ; 
+  //  }
+ 
+});
 
-//jQuery(function(){
+jQuery(function (){
+    
+    $('#line_payment_mode').live('change', $f_td_bank_cash); //vide le champ s'il est à zero (pour faciliter la saisie)
+   
+});
+
 //
-//    $('#td_cash').hide(); //vide le champ s'il est à zero (pour faciliter la saisie)
-////    $('#td_bank').live('blur',$f_zero); // met zero dans le champ s'il est vide
-//});
-//
-//function $f_empty(){
-//    if (this.value == '0.00') {
-//        this.value='';
-//    }
-//
+function $f_td_bank_cash(){
+   // $('#mise_au_point').text($('#line_payment_mode').val())
+   $('#mise_au_point').text($('#line_cash_id option').size())
+    // s'il y a plus d'un élément dans td_bank et si le mode de payemnt est autre que Espèces alors afficher td_bank et masquer td_cash
+    if ( ($('#line_payment_mode').val() != 'Espèces'))
+    {$('#td_cash').hide();
+       if  ($('#line_bank_account_id option').size() > 1)
+        {$('#td_bank').show();}
+    }
+    
+    // s'il y a plus d'un élément dans td_bank et si le mode de payemnt est autre que Espèces alors afficher td_bank et masquer td_cash'
+  if (($('#line_payment_mode').val() == 'Espèces'))
+    {     $('#td_bank').hide();
+        if  ($('#line_cash_id option').size() > 1)
+    { $('#td_cash').show();}
+    }
+    }
+

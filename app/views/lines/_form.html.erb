@@ -19,14 +19,16 @@
       <%=  f.input :debit , input_html: {size: 12, value: two_decimals(@line.debit) } unless (@book.type=='IncomeBook') %>
       <%=  f.input :credit, input_html: {size: 12, value: two_decimals(@line.credit) } unless (@book.type=='OutcomeBook') %>
 
-      <%= f.input :payment_mode , collection: Line::PAYMENT_MODES %>
-      <span id="td_bank" <%=  "style = 'display: none'"   if @organism.bank_accounts.count <= 1 %> > <%= f.association :bank_account, :collection => @organism.bank_accounts.all, label_method: :number %>  </span>
-      <span id="td_cash" <%=  "style='display: none'" if @organism.cashes.count <= 1 %> > <%= f.association :cash, :collection => @organism.cashes.all %></span>
+      <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement' %>
+      <span id="td_bank" > <%= f.association :bank_account, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>  </span>
+      <span id="td_cash" > <%= f.association :cash, :collection => @organism.cashes.all, :include_blank=> false %></span>
     </p>
   </div>
   <div id="actions">
     <%=  f.button :submit, id: 'new_line_button' %>
   </div>
 <% end %>
+
+<div id="mise_au_point"></div>
 
 

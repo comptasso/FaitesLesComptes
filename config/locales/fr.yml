@@ -221,7 +221,7 @@ fr:
       line:
         payment_mode: 'Mode de réglement'
         bank_account: 'Compte bancaire'
-        cash_id: 'Caisse'
+        cash: 'Caisse'
 
     errors:
      models:
