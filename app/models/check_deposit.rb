@@ -6,7 +6,7 @@ class CheckDeposit < ActiveRecord::Base
   before_destroy :remove_check_deposit_id_in_lines
 
   def total
-    self.lines.sum(&:credit)
+    self.lines.sum(:credit)
   end
 
   private

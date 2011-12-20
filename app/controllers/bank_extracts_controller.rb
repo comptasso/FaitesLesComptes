@@ -22,7 +22,8 @@ before_filter :get_dates, only: [:create, :update]
 
   def show
     @bank_extract = BankExtract.find(params[:id])
-    @bank_extract_lines=@bank_extract.lines_to_point
+    @bank_extract_lines=@bank_extract.bank_extract_lines
+    @lines_to_point = @bank_account.lines_to_point
   end
 
  def lock

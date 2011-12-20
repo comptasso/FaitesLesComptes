@@ -21,17 +21,18 @@ class BankAccount < ActiveRecord::Base
   end
 
  def not_pointed_lines
-    Line.find_by_sql("SELECT id, narration, debit, credit, payment_mode
+  ls=  Line.find_by_sql("SELECT id, narration, debit, credit, payment_mode, line_date
     FROM LINES WHERE (BANK_ACCOUNT_ID = #{self.id} AND ((PAYMENT_MODE != 'Chèque') or (credit < 0.001))) AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE LINE_ID = LINES.ID)")
+    ls.map {|l| BankExtractLine.new(:line_id=>l.id)}
+
  end
 
  def not_pointed_check_deposits
-    self.check_deposits.where('pointed = ?', false).all.map {|cd|  [cd.id, "remise chèque du #{cd.deposit_date}",
-      0.0, total, "remise ch"]}
+    self.check_deposits.where('pointed = ?', false).all.map {|cd| BankExtractLine.new(:check_deposit_id=>cd.id)}
  end
 
  def lines_to_point
-   self.not_pointed_lines << self.not_pointed_check_deposits
+   self.not_pointed_lines +  self.not_pointed_check_deposits
  end
 
 end

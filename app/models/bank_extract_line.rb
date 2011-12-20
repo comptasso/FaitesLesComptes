@@ -7,16 +7,18 @@ class BankExtractLine < ActiveRecord::Base
 
   attr_reader :date, :payment, :narration, :debit, :credit
 
-  def after_initialize
-    if self.line_id
+  after_initialize :prepare_datas
+
+  def prepare_datas
+    if self.line_id != nil
       l=self.line
       @date = l.line_date
-      @debit= l.line.debit
-      @credit=l.line.credit
-      @payment=l.line.payment
-      @narration = l.line.narration
-    elsif self.check_deposit_id
-      cd=self.check_deposit_id
+      @debit= l.debit
+      @credit=l.credit
+      @payment=l.payment_mode
+      @narration = l.narration
+    elsif self.check_deposit_id != nil
+      cd=self.check_deposit
       @date=cd.deposit_date
       @debit=0
       @credit=cd.total

@@ -15,6 +15,8 @@
     
   </table>
 </fieldset>
+En fait il faut faire une table à gauche avec le relevé, une autre à droite avec les écritures envisagées. 
+<div>Extrait bancaire
 <table>
   <thead>
     <tr>
@@ -39,4 +41,35 @@
   </tbody>
 
 </table>
+</div>
 
+<div>Ecritures à pointer -
+<table>
+  <thead>
+    <tr>
+
+      <th>Date</th>
+      <th>Libellé</th>
+      <th>Type</th>
+      <th>Debit</th>
+      <th>Crédit</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  
+
+      <% @lines_to_point.each do  |ltp| %>
+        <tr>
+          <td><%= ltp.date %> </td>
+          <td><%= ltp.narration %> </td>
+          <td><%= ltp.payment %> </td>
+          <td><%= ltp.debit %> </td>
+          <td><%= ltp.credit %> </td>
+        </tr>
+      <% end %>
+    
+  </tbody>
+
+</table>
+</div>

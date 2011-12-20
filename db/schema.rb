@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111220205809) do
+ActiveRecord::Schema.define(:version => 20111220212017) do
 
   create_table "bank_accounts", :force => true do |t|
     t.string   "number"
@@ -29,20 +29,20 @@ ActiveRecord::Schema.define(:version => 20111220205809) do
     t.integer  "line_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "check_deposit_id"
   end
 
   create_table "bank_extracts", :force => true do |t|
-    t.integer  "book_id"
+    t.integer  "bank_account_id"
     t.string   "reference"
     t.date     "begin_date"
     t.date     "end_date"
-    t.decimal  "begin_sold",   :default => 0.0
-    t.decimal  "total_debit",  :default => 0.0
-    t.decimal  "total_credit", :default => 0.0
-    t.boolean  "locked",       :default => false
+    t.decimal  "begin_sold",      :default => 0.0
+    t.decimal  "total_debit",     :default => 0.0
+    t.decimal  "total_credit",    :default => 0.0
+    t.boolean  "locked",          :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "pointed",      :default => false
   end
 
   create_table "books", :force => true do |t|
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(:version => 20111220205809) do
     t.date     "deposit_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "pointed",         :default => false
   end
 
   create_table "destinations", :force => true do |t|

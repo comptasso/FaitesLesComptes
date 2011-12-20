@@ -148,7 +148,12 @@ OK - Création d'une table bank_extract_line qui appartient à un bank_extract,
 OK - avec un champ rang, un champ line_id, un champ check_deposit_id
 OK - hook after initialize pour remplir les infos selon que la ligne renvoie à une ligne ou à une remise chèque
 OK - Une bank_extract_line affiche des infos simplifiées telles que line_date, narration, montant (on n'a plus la nature ni la destination)
+J'en suis au moment ou on peut afficher les infos dans le bank_extract#show.
+Il faut afficher d'un côté les écritures du relevé, de l'autres les écritures à pointer
+
 Quand on crée un relevé, l'action after create tente d'affecter les lignes qui ne sont pas déja sur un relevé
+
+
 Gestion ensuite de l'ajustement d'un relevé - améliorer les fonctionnalités avec des glisser-déposer
 
 
