@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111220045412) do
+ActiveRecord::Schema.define(:version => 20111220204730) do
 
   create_table "bank_accounts", :force => true do |t|
     t.string   "number"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20111220045412) do
     t.boolean  "locked",       :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "pointed",      :default => false
   end
 
   create_table "books", :force => true do |t|

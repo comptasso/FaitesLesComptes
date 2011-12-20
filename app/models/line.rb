@@ -24,7 +24,7 @@ class Line < ActiveRecord::Base
   def check_bank_and_cash_ids
     self.bank_account_id = nil if self.payment_mode == 'Espèces'
     self.cash_id = nil unless self.payment_mode =='Espèces'
-    self.bank_account_id = nil if self.payment_mode == 'Chèque' && self.bank_extract_id.nil?
+    self.bank_account_id = nil if self.credit > 0.001 && self.payment_mode == 'Chèque' && self.bank_extract_id.nil?
   end
  
 
@@ -32,9 +32,15 @@ class Line < ActiveRecord::Base
 
   scope :mois, lambda { |date| where('line_date >= ? AND line_date <= ?', date.beginning_of_month, date.end_of_month) }
   scope :multiple, lambda {|copied_id| where('copied_id = ?', copied_id)}
- # scope :payment_mode, lambda {|mode| where('payment_mode = ?', mode)}
-  scope :non_depose, where('payment_mode = ?', 'Chèque').where('check_deposit_id IS NULL')
  
+ scope :not_checks_received, where('payment_mode != ? OR credit <= 0', 'Chèque')
+# scope :not_pointed,
+  scope :checks_received, where('payment_mode = ? AND credit > 0', 'Chèque')
+  
+  scope :non_depose, checks_received.where('check_deposit_id IS NULL')
+
+
+
 
   def self.solde_debit_avant(date)
     Line.where('line_date < ?', date).sum(:debit)

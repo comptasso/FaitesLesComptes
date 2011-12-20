@@ -44,8 +44,15 @@ Organism.all.each do |o|
   10.times do
      Line.create({
     :line_date=>Date.today.beginning_of_month+rand(28),:narration=>'Dépenses', :book_id=>ob.id,
-      :nature_id=>Random.new.rand(2..4), :destination_id=>Random.new.rand(1..2), :debit=>rand(50), :cash_id=>c.id,
+      :nature_id=>Random.new.rand(2..4), :destination_id=>Random.new.rand(1..2), :credit=>0.0, :debit=>rand(50), :cash_id=>c.id,
       :payment_mode=>'Espèces'})
+  end
+
+  2.times do
+     Line.create({
+    :line_date=>Date.today.beginning_of_month+rand(28),:narration=>'Dépenses par chèques', :book_id=>ob.id,
+      :nature_id=>Random.new.rand(2..4), :destination_id=>Random.new.rand(1..2), :credit=>0.0, :debit=>rand(50), :bank_account_id=>b.id,
+      :payment_mode=>'Chèque'})
   end
 end
 
