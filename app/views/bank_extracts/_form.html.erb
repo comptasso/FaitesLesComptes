@@ -1,17 +1,17 @@
 
 <%  SimpleForm.wrapper_tag = :div %>
-<%= simple_form_for([@book, @bank_extract]) do |f| %>
+<%= simple_form_for([@organism, @bank_account, @bank_extract]) do |f| %>
   <%= f.error_notification %>
 
   <div class="inputs">
 
-    <%= f.association :book, collection: @organism.books.all(:order => 'title') %>
+    <%= f.association :bank_account %>
     <%= f.input :reference %>
   
   
     <div class="input date optionnal">
     <label>Du</label>
-     <%= picker_date :pick_date_from, Date.today.years_ago(5), Date.today.years_since(5) , @bank_extract.deposit_date %>
+     <%= picker_date :pick_date_from, Date.today.years_ago(5), Date.today.years_since(5) , @bank_extract.begin_date %>
     <label class="inline">Au</label>
      <%= picker_date :pick_date_to, Date.today.years_ago(5), Date.today.years_since(5) , @bank_extract.end_date %>
     </div>

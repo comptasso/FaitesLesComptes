@@ -3,11 +3,11 @@
 <% end %>
 
 <%= content_for :submenu do %>
-<%= icon_to 'nouveau.png', new_book_bank_extract_path(@book) %>
-<%= icon_to 'navigation90.png', organism_books_path(@organism) %>
+<%= icon_to 'nouveau.png', new_organism_bank_account_bank_extract_path(@organism, @bank_account) %>
+<%= icon_to 'navigation90.png', organism_bank_accounts_path(@organism) %>
 <% end -%>
 
-<fieldset><legend> Liste des extraits de comptes - Journal : <%= @book.title %> </legend>
+<fieldset><legend> Liste des extraits de comptes - Banque : <%= @bank_account.name %> </legend>
 <table>
   <tr>
 
@@ -22,9 +22,9 @@
   <tr>
 
     <%= render :partial=>'bank_extract' , :object=>bank_extract %>
-    <td><%= icon_to 'afficher.png', [@book, bank_extract] %></td>
-    <td><%= icon_to 'modifier.png', edit_book_bank_extract_path(@book,bank_extract) %></td>
-    <td><%= icon_to 'supprimer.png', [@book,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+    <td><%= icon_to 'afficher.png', [@organism, @bank_account, bank_extract] %></td>
+    <td><%= icon_to 'modifier.png', edit_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract) %></td>
+    <td><%= icon_to 'supprimer.png', [@organism, @bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete %></td>
 
     <td><%= link_to 'Pointage', pointage_path(bank_extract) unless bank_extract.locked? %> </td>
   </tr>

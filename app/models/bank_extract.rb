@@ -1,6 +1,6 @@
 class BankExtract < ActiveRecord::Base
-  belongs_to :book
-  has_many :lines
+  belongs_to :bank_account
+  has_many :bank_extract_lines
 
   validates :begin_sold, :total_debit, :total_credit, :numericality=>true
 
@@ -9,7 +9,7 @@ class BankExtract < ActiveRecord::Base
   end
 
   def total_lines_debit
-    self.lines.sum(:debit)
+    self.bank_extract_lines.sum(:debit)
   end
 
   def total_lines_credit

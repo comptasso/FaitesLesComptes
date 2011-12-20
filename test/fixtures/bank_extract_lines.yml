@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  rang: 1
+  bank_extract_id: 1
+
+two:
+  rang: 1
+  bank_extract_id: 1

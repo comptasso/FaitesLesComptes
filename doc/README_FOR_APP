@@ -143,7 +143,16 @@ OK - Il existe déja un bank_account_id et il faudrait créer un cash_id
 OK - s'il n'y a qu'une caisse et qu'un compte bancaire pas besoin de sélectionner
 OK - Saisie des écritures : mettre du java script pour faire la sélection avec du hidden et du show sur les champs cash et banques
 
------------------
+-----------------révision du modèle de bank_line-------------
+OK - Création d'une table bank_extract_line qui appartient à un bank_extract, 
+OK - avec un champ rang, un champ line_id, un champ check_deposit_id
+OK - hook after initialize pour remplir les infos selon que la ligne renvoie à une ligne ou à une remise chèque
+OK - Une bank_extract_line affiche des infos simplifiées telles que line_date, narration, montant (on n'a plus la nature ni la destination)
+Quand on crée un relevé, l'action after create tente d'affecter les lignes qui ne sont pas déja sur un relevé
+Gestion ensuite de l'ajustement d'un relevé - améliorer les fonctionnalités avec des glisser-déposer
+
+
+
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)
 OK - Création de la sous classe Dépenses

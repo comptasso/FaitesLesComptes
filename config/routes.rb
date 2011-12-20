@@ -6,14 +6,16 @@ Faitesvoscomptes::Application.routes.draw do
 
   
 
+  
+
   # get 'bank_lines/index'
 
   match 'cash/:cash_id/cash_lines/index' => 'cash_lines#index', :as=>:cash_lines
 
-   match 'bank_account/:bank_account_id/bank_lines/index' => 'bank_lines#index', :as=>:bank_account_bank_lines
+  # match 'bank_account/:bank_account_id/bank_lines/index' => 'bank_lines#index', :as=>:bank_account_bank_lines
    match 'bank_extract/:bank_extract_id/pointage/index' => 'pointage#index',  :as => :pointage
-   match "bank_extract/:bank_extract_id/pointage/:id/pointe" => 'pointage#pointe', :as=> :pointe, :method=>:post
-   match "bank_extract/:bank_extract_id/pointage/:id/depointe" => 'pointage#depointe', :as=> :depointe,:method=>:post
+  # match "bank_extract/:bank_extract_id/pointage/:id/pointe" => 'pointage#pointe', :as=> :pointe, :method=>:post
+  # match "bank_extract/:bank_extract_id/pointage/:id/depointe" => 'pointage#depointe', :as=> :depointe,:method=>:post
 
   
 
@@ -25,7 +27,11 @@ Faitesvoscomptes::Application.routes.draw do
       end
     end
 
-    resources :bank_accounts
+    resources :bank_accounts do
+      resources :bank_extracts do
+        resources :bank_extract_lines
+      end
+    end
     resources :cashes
     resources :books
     resources :income_books

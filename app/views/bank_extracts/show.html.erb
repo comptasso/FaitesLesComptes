@@ -1,5 +1,5 @@
 <%= content_for :menu  do %>
-  <%= icon_to 'navigation90.png', book_bank_extracts_path(@book), :title=>'Retour vers la liste des extraits' %>
+  <%= icon_to 'navigation90.png', organism_bank_account_bank_extracts_path(@organism, @bank_account), :title=>'Retour vers la liste des extraits' %>
 <% end %>
 
 <%= content_for :submenu do %>
@@ -12,23 +12,27 @@
   <table>
     <tr> <%= render 'bank_extracts/table_header' %></tr>
     <tr> <%= render @bank_extract %>  </tr>
-    <tr> <%= render 'pointage/pointed_lines_header' %></tr>
+    
   </table>
 </fieldset>
 <table>
   <thead>
     <tr>
-      <%= render 'lines/table_header'  %>
-
+      <th>Numero</th>
+      <th>Date</th>
+      <th>Libellé</th>
+      <th>Type</th>
+      <th>Debit</th>
+      <th>Crédit</th>
     </tr>
   </thead>
 
   <tbody>
-    <% unless @lines.empty? %>
+    <% unless @bank_extract_lines.empty? %>
 
-      <% @lines.each do  |line| %>
+      <% @bank_extract_lines.each do  |bank_extract_line| %>
         <tr>
-          <%=  render line %>
+          <%=  render bank_extract_line %>
         </tr>
       <% end %>
     <% end %>
