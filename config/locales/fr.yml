@@ -209,7 +209,7 @@ fr:
         comment: Commentaire
         number: 'N° de compte'
         address: Adresse
-        opened_at: 'Ouvert le'
+       
       check_deposit:
         bank_account: 'Numéro de compte'
         deposit_date: 'Date'

@@ -46,7 +46,7 @@ class BankAccountsController < ApplicationController
   # POST /bank_accounts
   # POST /bank_accounts.json
   def create
-    params[:bank_account][:opened_at]= picker_to_date(params[:pick_date_opened_at])
+   
     @bank_account = @organism.bank_accounts.new(params[:bank_account])
 
     respond_to do |format|
@@ -63,7 +63,7 @@ class BankAccountsController < ApplicationController
   # PUT /bank_accounts/1
   # PUT /bank_accounts/1.json
   def update
-    params[:bank_account][:opened_at]= picker_to_date(params[:pick_date_opened_at])
+   
     @bank_account = BankAccount.find(params[:id])
 
     respond_to do |format|

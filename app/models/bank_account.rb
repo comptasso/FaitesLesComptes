@@ -25,9 +25,13 @@ class BankAccount < ActiveRecord::Base
     FROM LINES WHERE (BANK_ACCOUNT_ID = #{self.id} AND ((PAYMENT_MODE != 'Chèque') or (credit < 0.001))) AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE LINE_ID = LINES.ID)")
  end
 
- def not_pointed_check_deposit
+ def not_pointed_check_deposits
     self.check_deposits.where('pointed = ?', false).all.map {|cd|  [cd.id, "remise chèque du #{cd.deposit_date}",
       0.0, total, "remise ch"]}
+ end
+
+ def lines_to_point
+   self.not_pointed_lines << self.not_pointed_check_deposits
  end
 
 end

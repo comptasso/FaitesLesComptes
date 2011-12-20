@@ -8,8 +8,7 @@
     
     <%= f.input :comment , input_html: {rows: 4} %>
     <%= f.input :address, input_html: {rows: 4}%>
-    <label>Ouvert le</label>
-    <%= picker_date :pick_date_opened_at, Date.today.years_ago(5), Date.today.years_since(5) , @bank_account.opened_at %>
+   
    
   </div>
 

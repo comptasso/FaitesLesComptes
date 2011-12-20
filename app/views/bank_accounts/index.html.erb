@@ -11,7 +11,7 @@
     
     <th>Commentaire</th>
     <th>Adresse</th>
-    <th>Ouvert le</th>
+  
     <th></th>
     <th></th>
    
@@ -26,7 +26,7 @@
     
     <td><%= bank_account.comment %></td>
     <td><%= bank_account.address %></td>
-    <td><%=l bank_account.opened_at if bank_account.opened_at.is_a?(Date) %></td>
+  
     
     <td><%= icon_to 'afficher.png', organism_bank_account_bank_extracts_path(@organism, bank_account) %></td>
     <td><%= link_to 'Remise chq', new_bank_account_check_deposit_path(bank_account) %></td>
