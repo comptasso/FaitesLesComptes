@@ -1,7 +1,7 @@
 <tr>
-  <td>bank_extract_line.rang</td>
-  <td>bank_extract_line.date</td>
-  <td>bank_extract_line.narration</td>
-  <td>bank_extract_line.debit</td>
-  <td>bank_extract_line.credit</td>
+  <td><%= bank_extract_line.rang %></td>
+  <td><%=l bank_extract_line.date %></td>
+  <td><%= bank_extract_line.narration %></td>
+  <td><%= debit_credit bank_extract_line.debit %></td>
+  <td><%= debit_credit bank_extract_line.credit %></td>
 </tr>

@@ -6,7 +6,7 @@
  *= require_tree . 
 */
 #header {
-
+ 
 
     height: 80px;
 
@@ -58,10 +58,11 @@
 
 #bandeau {
     background: #fff;
-    
+    border-bottom: 1px solid;
     margin-right: 10px;
     margin-bottom: 10px;
-
+  
+  
 }
 
 fieldset {

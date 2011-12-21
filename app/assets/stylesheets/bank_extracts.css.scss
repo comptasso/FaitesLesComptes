@@ -23,15 +23,71 @@
 
     #end_sold {
         font-weight: bold;
-        
-        margin: 2px 10px;
-        }
-    span.numeric {
-         margin: 2px 10px;
-        }
 
-        .inline {
-            float: none;
+        margin: 2px 10px;
+    }
+    span.numeric {
+        margin: 2px 10px;
+    }
+
+    .inline {
+        float: none;
+    }
+    div#zone {
+        div#extract {
+            border: 1px solid;
+            display: inline-block;
+            width: 45%;
+            h3 {
+                text-align: center;
             }
+            table {
+                width: 100%;
+                thead {
+
+                    border-bottom-style: solid;
+
+                    border-bottom-width: 1px;
+
+                    border-bottom-color: orange;
+
+
+                }
+
+            }
+
+
+        }
+        div#arrows {
+            display: inline-block;
+            background-color: aqua;
+            width: 8%;
+            text-align: center;
+
+
+        }
+        div#to_point {
+            border: 1px solid;
+            display: inline-block;
+            
+            width: 45%;
+
+            h3 {
+                text-align: center;
+            }
+            table {
+                width: 100%;
+                thead tr th {
+                    border-bottom-style: solid;
+
+                    border-bottom-width: 1px;
+
+                    border-bottom-color: orange;}
+
+                td.date {text-align: center;}
+            }
+        }
+    }
+
 
 }
