@@ -8,6 +8,7 @@ gem 'simple_form'
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
+gem 'acts_as_list'
 
 
 # Gems used only for assets and not required

@@ -36,17 +36,17 @@ class BankExtractsController < ApplicationController
     params.each do |key, value|
       if key.to_s =~ /^line_(\d+)/
         l=Line.find($1.to_i)
-        rang= BankExtract.find(params[:id]).bank_extract_lines.count + 1
-        puts "creation d'un bank line à partir d'une ligne - line id #{l.id} rang : #{rang} "
+    #    position= BankExtract.find(params[:id]).bank_extract_lines.count + 1
+    #    puts "creation d'un bank line à partir d'une ligne - line id #{l.id} position : #{position} "
         # construction d'une bank_extract_line
-        BankExtractLine.create!(bank_extract_id: @bank_extract.id, line_id: l.id, rang: rang )
+        BankExtractLine.create!(bank_extract_id: @bank_extract.id, line_id: l.id) #, position: position )
       end
       if key.to_s =~ /^check_deposit_(\d+)/
-        rang= BankExtract.find(params[:id]).bank_extract_lines.count + 1
+       # position= BankExtract.find(params[:id]).bank_extract_lines.count + 1
         cd=CheckDeposit.find($1.to_i)
        # construction d'une bank_extract_line
-       puts "creation d'un bank line à partir d'un check_deposit - check_deposit_id #{cd.id} rang : #{rang} "
-        BankExtractLine.create!(bank_extract_id: @bank_extract.id, check_deposit_id: cd.id, rang: rang )
+      # puts "creation d'un bank line à partir d'un check_deposit - check_deposit_id #{cd.id} position : #{position} "
+        BankExtractLine.create!(bank_extract_id: @bank_extract.id, check_deposit_id: cd.id) #, position: position )
       end
     end
     redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)

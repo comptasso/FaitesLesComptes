@@ -5,18 +5,21 @@ class BankExtractLine < ActiveRecord::Base
   belongs_to :check_deposit
   belongs_to :line
 
-  validates :rang, uniqueness: true
+  acts_as_list :scope => :bank_extract
+
+ # validates :position, uniqueness: true
 
   attr_reader :date, :payment, :narration, :debit, :credit, :blid
 
   after_save :link_to_source
 
-  before_destroy :remove_link_to_source
+  before_destroy :remove_link_to_source, :renumber
 
   after_initialize :prepare_datas
 
   def prepare_datas
     if self.line_id != nil
+      # TODO remplacer ces self.line par Line.find...
       l=self.line
       @date = l.line_date
       @debit= l.debit
@@ -47,4 +50,10 @@ class BankExtractLine < ActiveRecord::Base
     self.line.update_attribute(:bank_extract_id, nil) if self.line_id
     self.check_deposit.update_attribute(:bank_extract_id, nil) if self.check_deposit_id
   end
+
+  def renumber
+
+  end
+
+  
 end
