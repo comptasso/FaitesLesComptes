@@ -10,10 +10,15 @@
     Affichage de l'extrait <%= @bank_extract.reference %>
   </legend>
   <table>
-    <tr> <%= render 'bank_extracts/table_header' %></tr>
-    <tr> <%= render @bank_extract %>  </tr>
-    
+    <tr> <%= render 'bank_extracts/table_header' %><th></th></tr>
+    <tr> <%= render @bank_extract %>
+      <td>
+        <%= button_to 'Valider et verrouiller les lignes',
+          lock_organism_bank_account_bank_extract_path(@organism,@bank_account, @bank_extract) if @bank_extract.lockable? %>
+      </td>
+    </tr>
   </table>
+
 </fieldset>
 
 <div id="zone">
@@ -22,7 +27,7 @@
   <thead>
     <tr>
       <th></th>
-      <th>Numero</th>
+      <th>Pos°</th>
       <th>Date</th>
       <th>Libellé</th>
       <th>Type</th>
@@ -31,27 +36,36 @@
     </tr>
   </thead>
   <%= form_tag depointe_organism_bank_account_bank_extract_path(@organism, @bank_account, @bank_extract) do -%>
-  <tbody>
-    <% unless @bank_extract_lines.empty? %>
 
+    <% unless @bank_extract_lines.empty? %>
+  <tbody>
       <% @bank_extract_lines.each do  |bank_extract_line| %>
         <tr>
           <td><%= check_box_tag "bank_extract_line_#{bank_extract_line.id}" %> </td>
           <%=  render bank_extract_line %>
         </tr>
       <% end %>
+         </tbody>
+         <tfoot>
+           <tr>
+             <td></td><td></td><td></td><td></td>
+             <td>Totaux</td>
+             <td class="total numeric"><%= debit_credit(@bank_extract.total_lines_debit) %></td>
+             <td class="total numeric"><%= debit_credit(@bank_extract.total_lines_credit) %></td>
+             <td></td>
+           </tr>
+         </tfoot>
     <% end %>
-  </tbody>
+ 
 
 </table>
 
         <div><%= submit_tag 'Renvoie' %></div>
  <% end -%>
 </div>
+
 <div id="arrows">
-  <<
-  <br />
-  >>
+  <a id="left_arrow" href="#"> << </a>&nbsp; | &nbsp;<a id="right_arrow" href=""> >> </a>
 </div>
 
 <div id="to_point"><h3>Ecritures à pointer</h3>

@@ -22,8 +22,8 @@ class BankExtractsController < ApplicationController
 
   def show
     @bank_extract = BankExtract.find(params[:id])
-    @bank_extract_lines=@bank_extract.bank_extract_lines
-    @lines_to_point = @bank_account.lines_to_point
+    @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
+    @lines_to_point = @bank_account.lines_to_point unless @bank_extract.locked?
   end
 
   # récupération des paramètres de type line et check_deposit
@@ -39,14 +39,16 @@ class BankExtractsController < ApplicationController
     #    position= BankExtract.find(params[:id]).bank_extract_lines.count + 1
     #    puts "creation d'un bank line à partir d'une ligne - line id #{l.id} position : #{position} "
         # construction d'une bank_extract_line
-        BankExtractLine.create!(bank_extract_id: @bank_extract.id, line_id: l.id) #, position: position )
+        bl=BankExtractLine.new(bank_extract_id: @bank_extract.id, line_id: l.id) #, position: position )
+        bl.save
       end
       if key.to_s =~ /^check_deposit_(\d+)/
        # position= BankExtract.find(params[:id]).bank_extract_lines.count + 1
         cd=CheckDeposit.find($1.to_i)
        # construction d'une bank_extract_line
       # puts "creation d'un bank line à partir d'un check_deposit - check_deposit_id #{cd.id} position : #{position} "
-        BankExtractLine.create!(bank_extract_id: @bank_extract.id, check_deposit_id: cd.id) #, position: position )
+        bl=BankExtractLine.new(bank_extract_id: @bank_extract.id, check_deposit_id: cd.id) #, position: position )
+        bl.save
       end
     end
     redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
@@ -63,16 +65,12 @@ class BankExtractsController < ApplicationController
     @bank_extract = BankExtract.find(params[:id])
     # ici on change les attributs false
     @bank_extract.locked=true
-    @bank_extract.bank_extract_lines.all.each {|l| l.update_attribute(:locked, true) }
-
     if @bank_extract.save
       flash[:notice]= "Relévé validé et verrouillé"
-
     else
       flash[:alert]= "Une erreur n'a pas permis de valider le relevé"
-     
     end
-    redirect_to book_bank_extract_url(@bank_account,@bank_extract)
+    redirect_to organism_bank_account_bank_extract_url(@organism, @bank_account,@bank_extract)
   end
 
   # GET /bank_extracts/new

@@ -32,6 +32,7 @@ Faitesvoscomptes::Application.routes.draw do
         member do
           post 'pointe'
           post 'depointe'
+          post 'lock'
         end
         resources :bank_extract_lines
       end

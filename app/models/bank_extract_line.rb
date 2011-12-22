@@ -7,13 +7,14 @@ class BankExtractLine < ActiveRecord::Base
 
   acts_as_list :scope => :bank_extract
 
- # validates :position, uniqueness: true
+#  default_scope order: :position  !! ne pas utiliser crée un bug dans la gestion des positions
+# avec acts_as_list
 
   attr_reader :date, :payment, :narration, :debit, :credit, :blid
 
   after_save :link_to_source
 
-  before_destroy :remove_link_to_source, :renumber
+  before_destroy :remove_link_to_source
 
   after_initialize :prepare_datas
 
@@ -51,9 +52,5 @@ class BankExtractLine < ActiveRecord::Base
     self.check_deposit.update_attribute(:bank_extract_id, nil) if self.check_deposit_id
   end
 
-  def renumber
-
-  end
-
-  
+   
 end

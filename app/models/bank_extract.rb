@@ -18,17 +18,21 @@ class BankExtract < ActiveRecord::Base
 #    # on regarde toutes celles antérieures à la date de fin du relevé
 #    # et on les associe
 #  end
+
+  def lockable?
+    !self.locked? && self.equality?
+  end
   
   def end_sold
     begin_sold+total_credit-total_debit
   end
 
   def total_lines_debit
-    self.bank_extract_lines.sum(:debit)
+    self.bank_extract_lines.all.sum(&:debit)
   end
 
   def total_lines_credit
-    self.bank_extract_lines.sum(:credit)
+    self.bank_extract_lines.all.sum(&:credit)
   end
 
   def diff_debit
@@ -39,6 +43,10 @@ class BankExtract < ActiveRecord::Base
     self.total_credit - self.total_lines_credit
   end
 
+  def equality?
+    (self.diff_debit.abs < 0.001) && (self.diff_credit < 0.001)
+  end
+
   def lines_sold
     self.total_lines_credit - self.total_lines_debit
   end
@@ -47,5 +55,9 @@ class BankExtract < ActiveRecord::Base
     self.begin_sold + self.lines_sold - self.end_sold
   end
 
+  private
 
+  def fill_bank_extract_lines
+    # TODO fill_bank_extract_lines
+  end
 end
