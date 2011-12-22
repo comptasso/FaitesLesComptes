@@ -28,7 +28,7 @@ class BankAccount < ActiveRecord::Base
  end
 
  def not_pointed_check_deposits
-    self.check_deposits.where('pointed = ?', false).all.map {|cd| BankExtractLine.new(:check_deposit_id=>cd.id)}
+    self.check_deposits.where('bank_extract_id IS NULL').map {|cd| BankExtractLine.new(:check_deposit_id=>cd.id)}
  end
 
  def lines_to_point

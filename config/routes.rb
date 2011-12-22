@@ -29,6 +29,10 @@ Faitesvoscomptes::Application.routes.draw do
 
     resources :bank_accounts do
       resources :bank_extracts do
+        member do
+          post 'pointe'
+          post 'depointe'
+        end
         resources :bank_extract_lines
       end
     end

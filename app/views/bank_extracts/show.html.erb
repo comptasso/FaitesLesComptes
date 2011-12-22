@@ -21,6 +21,7 @@
 <table>
   <thead>
     <tr>
+      <th></th>
       <th>Numero</th>
       <th>Date</th>
       <th>Libellé</th>
@@ -29,12 +30,13 @@
       <th>Crédit</th>
     </tr>
   </thead>
-
+  <%= form_tag depointe_organism_bank_account_bank_extract_path(@organism, @bank_account, @bank_extract) do -%>
   <tbody>
     <% unless @bank_extract_lines.empty? %>
 
       <% @bank_extract_lines.each do  |bank_extract_line| %>
         <tr>
+          <td><%= check_box_tag "bank_extract_line_#{bank_extract_line.id}" %> </td>
           <%=  render bank_extract_line %>
         </tr>
       <% end %>
@@ -42,6 +44,9 @@
   </tbody>
 
 </table>
+
+        <div><%= submit_tag 'Renvoie' %></div>
+ <% end -%>
 </div>
 <div id="arrows">
   <<
@@ -53,7 +58,7 @@
 <table>
   <thead>
     <tr>
-
+      <th></th>
       <th>Date</th>
       <th>Libellé</th>
       <th>Type</th>
@@ -61,12 +66,14 @@
       <th>Crédit</th>
     </tr>
   </thead>
-
+  <%= form_tag pointe_organism_bank_account_bank_extract_path(@organism, @bank_account, @bank_extract) do -%>
   <tbody>
   
+ 
 
       <% @lines_to_point.each do  |ltp| %>
-        <tr id="bank_line_#{ltp.id}">
+        <tr id="bank_line_<%= ltp.blid %>">
+          <td><%= check_box_tag "#{ltp.blid}" %> </td>
           <td class="date"><%=l ltp.date %> </td>
           <td><%= ltp.narration %> </td>
           <td><%= ltp.payment %> </td>
@@ -74,9 +81,11 @@
           <td class="numeric"><%= debit_credit ltp.credit %> </td>
         </tr>
       <% end %>
-    
+ 
   </tbody>
 
 </table>
+      <div><%= submit_tag 'Déplace' %></div>
+ <% end -%>
 </div>
 </div>

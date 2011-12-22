@@ -3,7 +3,7 @@
 class BankExtractsController < ApplicationController
 
   before_filter :find_organism, :find_bank_account
-before_filter :get_dates, only: [:create, :update]
+  before_filter :get_dates, only: [:create, :update]
 
   # GET /bank_extracts
   # GET /bank_extracts.json
@@ -26,21 +26,54 @@ before_filter :get_dates, only: [:create, :update]
     @lines_to_point = @bank_account.lines_to_point
   end
 
- def lock
-   @bank_extract = BankExtract.find(params[:id])
-   # ici on change les attributs false
-   @bank_extract.locked=true
-   @bank_extract.bank_extract_lines.all.each {|l| l.update_attribute(:locked, true) }
+  # récupération des paramètres de type line et check_deposit
+  # si le hash est une ligne : la récupérer mettre le bank_extract_id à jour
+  # si le hash est un check_deposit, le récupérer avec son id et le mettre à jour
+  def pointe
+    @bank_extract = BankExtract.find(params[:id])
+   
 
-   if @bank_extract.save
-     flash[:notice]= "Relévé validé et verrouillé"
+    params.each do |key, value|
+      if key.to_s =~ /^line_(\d+)/
+        l=Line.find($1.to_i)
+        rang= BankExtract.find(params[:id]).bank_extract_lines.count + 1
+        puts "creation d'un bank line à partir d'une ligne - line id #{l.id} rang : #{rang} "
+        # construction d'une bank_extract_line
+        BankExtractLine.create!(bank_extract_id: @bank_extract.id, line_id: l.id, rang: rang )
+      end
+      if key.to_s =~ /^check_deposit_(\d+)/
+        rang= BankExtract.find(params[:id]).bank_extract_lines.count + 1
+        cd=CheckDeposit.find($1.to_i)
+       # construction d'une bank_extract_line
+       puts "creation d'un bank line à partir d'un check_deposit - check_deposit_id #{cd.id} rang : #{rang} "
+        BankExtractLine.create!(bank_extract_id: @bank_extract.id, check_deposit_id: cd.id, rang: rang )
+      end
+    end
+    redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
+    
+  end
 
-   else
-     flash[:alert]= "Une erreur n'a pas permis de valider le relevé"
+  def depointe
+    @bank_extract = BankExtract.find(params[:id])
+    params.each { |key, value| BankExtractLine.find($1.to_i).destroy if key.to_s =~ /^bank_extract_line_(\d+)/ }
+    redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
+  end
+
+  def lock
+    @bank_extract = BankExtract.find(params[:id])
+    # ici on change les attributs false
+    @bank_extract.locked=true
+    @bank_extract.bank_extract_lines.all.each {|l| l.update_attribute(:locked, true) }
+
+    if @bank_extract.save
+      flash[:notice]= "Relévé validé et verrouillé"
+
+    else
+      flash[:alert]= "Une erreur n'a pas permis de valider le relevé"
      
-   end
-     redirect_to book_bank_extract_url(@bank_account,@bank_extract)
- end
+    end
+    redirect_to book_bank_extract_url(@bank_account,@bank_extract)
+  end
 
   # GET /bank_extracts/new
   # GET /bank_extracts/new.json
