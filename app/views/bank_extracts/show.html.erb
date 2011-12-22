@@ -26,13 +26,16 @@
 <table>
   <thead>
     <tr>
+     
       <th></th>
       <th>Pos°</th>
+
       <th>Date</th>
       <th>Libellé</th>
       <th>Type</th>
       <th>Debit</th>
       <th>Crédit</th>
+       <th></th>
     </tr>
   </thead>
   <%= form_tag depointe_organism_bank_account_bank_extract_path(@organism, @bank_account, @bank_extract) do -%>
@@ -40,9 +43,13 @@
     <% unless @bank_extract_lines.empty? %>
   <tbody>
       <% @bank_extract_lines.each do  |bank_extract_line| %>
+    
         <tr>
-          <td><%= check_box_tag "bank_extract_line_#{bank_extract_line.id}" %> </td>
+         
+<%= up_down(bank_extract_line.id) %>
+         
           <%=  render bank_extract_line %>
+            <td><%= check_box_tag "bank_extract_line_#{bank_extract_line.id}" %> </td>
         </tr>
       <% end %>
          </tbody>
