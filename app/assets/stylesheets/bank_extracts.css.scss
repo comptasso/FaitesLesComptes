@@ -47,7 +47,7 @@
             }
             table {
                 width: 100%;
-                thead {
+                thead tr th{
 
                     border-bottom-style: solid;
 
@@ -64,7 +64,7 @@
         }
         div#arrows {
             display: inline-block;
-            background-color: aqua;
+            background-color: orange;
             width: 8%;
             text-align: center;
 

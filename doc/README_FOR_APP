@@ -148,13 +148,14 @@ OK - Création d'une table bank_extract_line qui appartient à un bank_extract,
 OK - avec un champ rang, un champ line_id, un champ check_deposit_id
 OK - hook after initialize pour remplir les infos selon que la ligne renvoie à une ligne ou à une remise chèque
 OK - Une bank_extract_line affiche des infos simplifiées telles que line_date, narration, montant (on n'a plus la nature ni la destination)
-J'en suis au moment ou on peut afficher les infos dans le bank_extract#show.
-Il faut afficher d'un côté les écritures du relevé, de l'autres les écritures à pointer
+OK - J'en suis au moment ou on peut afficher les infos dans le bank_extract#show.
+OK - Il faut afficher d'un côté les écritures du relevé, de l'autres les écritures à pointer
 
 Quand on crée un relevé, l'action after create tente d'affecter les lignes qui ne sont pas déja sur un relevé
+OK - Gestion ensuite de l'ajustement d'un relevé - améliorer les fonctionnalités
 
-
-Gestion ensuite de l'ajustement d'un relevé - améliorer les fonctionnalités avec des glisser-déposer
+Validation du relevé et verrouillage des lignes correspondantes
+Extract#show n'affiche alors plus que la tableau des bank_extract_lines
 
 
 
@@ -164,9 +165,11 @@ OK - Création de la sous classe Dépenses
 Modification du form Book
 OK - Modification de views/lines/_form pour n'afficher crédit
 Changer income et outcome en sales and expenses
+Rebaptiser bank_extract_lines en bank_lines
 Si on supprime une remise de chèques, il faut traiter les chèques
 Ajouter un lien pour avoir l'accès à la liste des remises chèques
 Mettre en place des datatable pour bank et cash_lines index
+
 
 Dans l'affichage des livres, on devrait avoir un link_to_unless_current pour le livre en cours
 OK - Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)

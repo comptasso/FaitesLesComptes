@@ -26,7 +26,7 @@
     <td><%= icon_to 'modifier.png', edit_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract) %></td>
     <td><%= icon_to 'supprimer.png', [@organism, @bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete %></td>
 
-    <td><%= link_to 'Pointage', pointage_path(bank_extract) unless bank_extract.locked? %> </td>
+    <td><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract) unless bank_extract.locked? %> </td>
   </tr>
 <% end %>
 </table>

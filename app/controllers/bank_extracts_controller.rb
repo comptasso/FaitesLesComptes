@@ -23,7 +23,14 @@ class BankExtractsController < ApplicationController
   def show
     @bank_extract = BankExtract.find(params[:id])
     @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
-    @lines_to_point = @bank_account.lines_to_point unless @bank_extract.locked?
+  end
+
+   def pointage
+
+    @bank_extract = BankExtract.find(params[:id])
+    redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract) if @bank_extract.locked
+    @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
+    @lines_to_point = @bank_account.lines_to_point
   end
 
   # récupération des paramètres de type line et check_deposit
@@ -51,14 +58,14 @@ class BankExtractsController < ApplicationController
         bl.save
       end
     end
-    redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
+    redirect_to pointage_organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
     
   end
 
   def depointe
     @bank_extract = BankExtract.find(params[:id])
     params.each { |key, value| BankExtractLine.find($1.to_i).destroy if key.to_s =~ /^bank_extract_line_(\d+)/ }
-    redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
+    redirect_to pointage_organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
   end
 
   def lock
@@ -99,7 +106,7 @@ class BankExtractsController < ApplicationController
 
     respond_to do |format|
       if @bank_extract.save
-        format.html { redirect_to organism_bank_account_bank_extract_path(@organism, @bank_account, @bank_extract), notice: "L'extrait de compte a été créé." }
+        format.html { redirect_to pointage_organism_bank_account_bank_extract_path(@organism, @bank_account, @bank_extract), notice: "L'extrait de compte a été créé." }
         format.json { render json: @bank_extract, status: :created, location: @bank_extract }
       else
         format.html { render action: "new" }
@@ -131,7 +138,7 @@ class BankExtractsController < ApplicationController
     @bank_extract.destroy
 
     respond_to do |format|
-      format.html { redirect_to book_bank_extracts_url(@bank_account) }
+      format.html { redirect_to organism_bank_account_bank_extracts_url(@organism, @bank_account) }
       format.json { head :ok }
     end
   end

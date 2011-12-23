@@ -17,6 +17,7 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
       plus bricoles listées dans le readme
       suppression de l'ensemble des liens entre book et bank_extract
       liste des comptes bancaires - supprimer l'usage des data table
+      gestion du pointage des comptes bancaire
 
 012 :faire une interface administrateur
 

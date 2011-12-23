@@ -1,10 +1,12 @@
 class BankExtract < ActiveRecord::Base
   belongs_to :bank_account
-  has_many :bank_extract_lines
+  has_many :bank_extract_lines, dependent: :destroy
 
   validates :begin_sold, :total_debit, :total_credit, :numericality=>true
 
   after_create :fill_bank_extract_lines
+  after_save :lock_lines_if_locked
+
 
 
 #  def fill_bank_extract_lines
@@ -60,4 +62,11 @@ class BankExtract < ActiveRecord::Base
   def fill_bank_extract_lines
     # TODO fill_bank_extract_lines
   end
+
+  def lock_lines_if_locked
+     if self.locked
+       self.bank_extract_lines.all.each {|bl| bl.lock_line}
+     end
+  end
+
 end

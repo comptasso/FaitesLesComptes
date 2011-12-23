@@ -39,6 +39,17 @@ class BankExtractLine < ActiveRecord::Base
     end
     
   end
+
+  # lock_line verrouille la ligne d'écriture. Ceci est appelé par bank_extract (after_save)
+  # lorsque l'on verrouille le relevé
+  # Seules les lignes d'écritures sont verrouillées (pas les remises de chèques) car
+  # il s'agit seulement de se conformer à la législation qui impose de ne plus
+  # pouvoir modifier des écritures après inscription au journal
+  def lock_line
+    if self.line_id && !self.line.locked
+      self.line.update_attribute(:locked,true)
+    end
+  end
   
   private
 
