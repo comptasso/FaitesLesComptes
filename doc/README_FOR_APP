@@ -165,7 +165,7 @@ Modification du form Book
 OK - Modification de views/lines/_form pour n'afficher crédit
 Changer income et outcome en sales and expenses
 Rebaptiser bank_extract_lines en bank_lines
-Si on supprime une remise de chèques, il faut traiter les chèques
+OK - Si on supprime une remise de chèques, il faut traiter les chèques
 Ajouter un lien pour avoir l'accès à la liste des remises chèques
 Mettre en place des datatable pour bank et cash_lines index
 
