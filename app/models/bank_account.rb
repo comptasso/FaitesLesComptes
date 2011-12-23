@@ -9,7 +9,7 @@ class BankAccount < ActiveRecord::Base
   # par ordre de date
   
   def last_bank_extract_sold
-    self.last_bank_extract.sold
+    self.last_bank_extract.end_sold
   rescue
     0
   end
@@ -29,6 +29,33 @@ class BankAccount < ActiveRecord::Base
     FROM LINES WHERE (BANK_ACCOUNT_ID = #{self.id} AND ((PAYMENT_MODE != 'Chèque') or (credit < 0.001))) AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE LINE_ID = LINES.ID)")
  end
 
+ #  totalise débit et crédit de toutes les lignes non pointées
+ def total_debit_np_lines
+   np_lines.sum(&:debit)
+ end
+
+  #  totalise débit et crédit de toutes les lignes non pointées
+ def total_credit_np_lines
+   np_lines.sum(&:credit)
+ end
+
+
+ # fait le total débit des lignes non pointées et des remises chèqures déposées
+ # donc en fait c'est le total débit des lignes.
+ # cette méthode est là par souci de symétrie avec total_credit_np
+ def total_debit_np
+   self.total_debit_np_lines
+ end
+
+ # fait le total crédit des lignes non pointées et des remises chèqures déposées
+ def total_credit_np
+   self.total_credit_np_lines +  self.total_credit_np_check_deposits
+ end
+
+ def sold_np
+   self.total_credit_np - self.total_debit_np
+ end
+
  # crée des bank_extract_lines à partir des lignes non pointées
  def not_pointed_lines
   self.np_lines.map {|l| BankExtractLine.new(:line_id=>l.id)}
@@ -37,6 +64,10 @@ class BankAccount < ActiveRecord::Base
 # Trouve toutes les remises de chèques qui ne sont pas encore pointées
  def np_check_deposits
    self.check_deposits.where('bank_extract_id IS NULL')
+ end
+
+ def total_credit_np_check_deposits
+   self.np_check_deposits.all.sum(&:total)
  end
 
  # Crée des bank_extract_lines à partir des check_deposits non pointés
@@ -48,7 +79,7 @@ class BankAccount < ActiveRecord::Base
    self.not_pointed_lines +  self.not_pointed_check_deposits
  end
 
- private
+
 
  def last_bank_extract
     self.bank_extracts.order(:end_date).last

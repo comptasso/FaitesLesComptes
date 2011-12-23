@@ -14,5 +14,13 @@ class Organism < ActiveRecord::Base
   def nb_open_periods
     Period.where('organism_id=? AND open = ?', self.id, true).count
   end
+
+  def number_of_non_deposited_checks
+    self.lines.non_depose.count
+  end
+
+  def value_of_non_deposited_checks
+    self.lines.non_depose.sum(:credit)
+  end
   
 end

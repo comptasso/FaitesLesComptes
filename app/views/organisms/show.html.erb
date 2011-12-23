@@ -14,13 +14,20 @@
 <div>
   <p>ICI on pourra mettre des infos de type graphique sur le suivi du compte</p>
   <p>Par exemple un lien direct sur les livres </p>
-  <% @bank_accounts.each do |ba| %>
-  Solde du compte <%=   ba.name %> - <%= ba.number %> :  A faire
-  <% end %>
+ <% @bank_accounts.each do |ba| %>
+  <h4><%=   ba.name %> - <%= ba.number %> </h4>
+  <span class="alert"> <%= "Attention, le pointage du dernier relevé n'est pas encore effectué" unless ba.bank_extracts.last.locked  %> </span><br />
+    Dernier relevé du compte le <%=l ba.bank_extracts.last.end_date %> - Solde : <%= debit_credit(ba.last_bank_extract_sold) %> <br />
+    <%=   ba.lines_to_point.count %> écritures non encore prises en compte par la banque : 
+    Débit :<%= debit_credit ba.total_debit_np  %> - Crédit : <%= debit_credit ba.total_credit_np %><br/>
+    Solde théorique calculé : <%= debit_credit(ba.last_bank_extract_sold + ba.sold_np) %>
+ <% end %>
   <br />
    <% @cashes.each do |ca| %>
-  Solde de la caisse <%=   ca.name %> : <%= ca.sold %>
+  <h4><%= ca.name %> </h4>
+  Solde de la caisse : <%= debit_credit ca.sold %>
   <% end %>
-
-
+  <br />
+  <h4>Chèques à déposer</h4>
+  Nombre : <%= @organism.number_of_non_deposited_checks %> - Montant total : <%= debit_credit @organism.value_of_non_deposited_checks %>
 </div>
