@@ -102,7 +102,7 @@ Ok - Styler les lignes de soldes
 -----------------------Affichage des données par type de dépenses ou de nature
 OK - Faire un controlleur spécialisé.
 OK - Doit afficher une table
-OK- Recherche de lignes
+OK - Recherche de lignes
 
 --------------------------------------------------
 OK- Revoir la navigation pour plus de confort
@@ -151,11 +151,10 @@ OK - Une bank_extract_line affiche des infos simplifiées telles que line_date, 
 OK - J'en suis au moment ou on peut afficher les infos dans le bank_extract#show.
 OK - Il faut afficher d'un côté les écritures du relevé, de l'autres les écritures à pointer
 
-Quand on crée un relevé, l'action after create tente d'affecter les lignes qui ne sont pas déja sur un relevé
+OK - Quand on crée un relevé, l'action after create tente d'affecter les lignes qui ne sont pas déja sur un relevé
 OK - Gestion ensuite de l'ajustement d'un relevé - améliorer les fonctionnalités
-
-Validation du relevé et verrouillage des lignes correspondantes
-Extract#show n'affiche alors plus que la tableau des bank_extract_lines
+OK - Validation du relevé et verrouillage des lignes correspondantes
+OK - Extract#show n'affiche alors plus que la tableau des bank_extract_lines
 
 
 
