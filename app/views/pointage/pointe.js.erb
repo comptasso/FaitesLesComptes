@@ -1,8 +1,0 @@
-$('tr#tr_line_<%= @line.id %>').removeClass('not_pointed').addClass('pointed');
-$('tr#tr_line_<%= @line.id %>').html("<%=j render partial: 'pointedline', :object=>@line %>");
-<%= render 'sold' %>
-// ici il faut attacher l'action click
-$('td.clickable').click(function(){
-    $(this).parent().find(':submit').click();
-});
-$('.button').hide();

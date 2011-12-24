@@ -1,12 +1,11 @@
 Faitesvoscomptes::Application.routes.draw do
 
- 
-  
-  
-
-  
-
-  
+scope 'admin' do
+  resources :bank_accounts
+  resources :destinations
+  resources :natures
+  resources :cashes
+end
 
   # get 'bank_lines/index'
 

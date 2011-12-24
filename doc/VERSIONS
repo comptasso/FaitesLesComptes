@@ -14,12 +14,11 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 + affichage des soldes
 
 012 : faire une interface adminsitrateur et revoir l'ensemble de la navigation
-      plus bricoles listées dans le readme
-      suppression de l'ensemble des liens entre book et bank_extract
-      liste des comptes bancaires - supprimer l'usage des data table
-      gestion du pointage des comptes bancaire
-
-012 :faire une interface administrateur
+-  plus bricoles listées dans le readme
++  suppression de l'ensemble des liens entre book et bank_extract
+-  liste des comptes bancaires - supprimer l'usage des data table
++  gestion du pointage des comptes bancaire
+-  faire une interface administrateur
 
 
 015 : gestion de différents types d'écritures
@@ -32,6 +31,8 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 - affichage graphique de solde
 
 025 : mise en place des tests et refactorisation
+
+028 : pointage des comptes bancaires avec des actions remote plutôt que par rafraichissement de la page
 
 030 : génération d'écritures plus comptables
 
