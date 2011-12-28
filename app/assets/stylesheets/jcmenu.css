@@ -7,8 +7,11 @@
 */
 #menu {
     width: 100%;
-    background: #9c9;
+    
     float: left;
+    background-color: #9c9;
+    text-transform:uppercase ;
+    border-bottom: 1px black solid;
 }
 
 #menu ul {
@@ -24,7 +27,7 @@ font: bold 11px/16px arial, helvetica, sans-serif;
 display: block;
 border-width: 1px;
 border-style: solid;
-border-color: #ccc #888 #555 #bbb;
+/* border-color: #ccc #888 #555 #bbb;*/
 margin: 0;
 padding: 2px 3px;
 }
@@ -69,3 +72,58 @@ nav#menu ul li:hover ul,
 nav#menu ul ul li:hover ul,
 nav#menu ul ul ul li:hover ul
 {display: block;}
+
+
+ #submenu {
+     padding-top: 20px;
+    height: 20px;
+    background-color: #9c9;
+}
+
+#submenu a {
+    border: none;
+    color: white;
+    text-decoration: none;
+     padding: 0px 10px;
+     border-right-style:solid;
+     border-width:  1px;
+     line-height: 16px;
+}
+
+#submenu a:hover{
+    background-color: #141;
+}
+
+
+/* #menu a{
+     color:white;
+     text-decoration: none;
+     padding: 0px 8px;
+     margin: 0px;
+ }*/
+
+/*#menu a:hover{
+    background-color: #9c9;
+}*/
+
+#menu a.icon_menu, #submenu a.icon_menu {
+    margin: 0px;
+    padding: 0px 8px;
+    border-style: none;
+    border-left-style: solid;
+    border-width: 0px;
+    border-left-width: 1px;
+    color:white;
+    text-decoration: none;
+
+}
+
+#menu a.icon_menu img {
+    height: 16px;
+    width: 16px;
+}
+
+.icon_menu {
+    float: right;
+}
+

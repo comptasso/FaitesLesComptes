@@ -58,8 +58,8 @@
 
 #bandeau {
     background: #fff;
-    border-bottom: 1px solid;
-    margin-right: 10px;
+    
+    padding-top: 22px;
     margin-bottom: 10px;
   
   
@@ -128,79 +128,6 @@ fieldset legend {
 
 .simple_form abbr {
     color: red;
-}
-
-#menu {
-    height: 22px;
-    background-color: #141;
- }
-
- #submenu {
-    height: 20px;
-    background-color: #9c9;
-}
-
-#submenu a {
-    border: none;
-    color: white;
-    text-decoration: none;
-     padding: 0px 10px;
-     border-right-style:solid;
-     border-width:  1px;
-     line-height: 16px;
-}
-
-#submenu a:hover{
-    background-color: #141;
-}
-
-#menu {
-     text-transform:uppercase ;
-     color:yellow;
-     padding: 0px 8px;
- /*    border-right-style:solid;
-     border-right-width:  1px;*/
-}
-
- #menu a{
-     
-     color:white;
-     text-decoration: none;
-     padding: 0px 8px;
-     margin: 0px;
- /*    border-right-style:solid;
-     border-right-width:  1px;
-     border-left-style:solid;
-     border-left-width:  1px; */
-     
-}
-
-#menu a:hover{
-    background-color: #9c9;
-}
-
-#menu a.icon_menu, #submenu a.icon_menu {
-    margin: 0px;
-    padding: 0px 8px;
-    border-style: none;
-    border-left-style: solid;
-    border-width: 0px;
-    border-left-width: 1px;
-    color:white;
-    text-decoration: none;
-    
-}
-
-#menu a.icon_menu img {
-    height: 16px;
-    width: 16px;
-}
-
-
-
-
-.icon_menu {
-    float: right;
 }
 
 
