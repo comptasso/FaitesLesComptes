@@ -3,7 +3,7 @@
 class Admin::OrganismsController < ApplicationController
   # GET /organisms
   # GET /organisms.json
-  before_filter :fill_flash
+ 
 
   def index
     @organisms = Organism.all
@@ -104,9 +104,6 @@ class Admin::OrganismsController < ApplicationController
 
   end
 
-def fill_flash
-  flash[:notice] = 'je suis dans le controller admin'
-end
 
 
 end

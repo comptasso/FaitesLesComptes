@@ -1,32 +1,35 @@
 <%= content_for :menu do %>
 
-<%= icon_to 'navigation90.png', organisms_path %>
+  <%= icon_to 'navigation90.png', organisms_path %>
 
 
-<%= render 'menu' %>
+  <%= render 'menu' %>
 <% end %>
 <%= content_for :submenu do %>
-<%= link_to 'Analyse par Nature', stats_organism_path(@organism, by: :nature), title: 'Analyser les recettes et dépenses par nature'  %>
-<%= link_to 'Analyse par Destination', stats_organism_path(@organism, by: :destination), title: 'Analyser les recettes et dépenses par destination'  %>
+  <%= link_to 'Analyse par Nature', stats_organism_path(@organism, by: :nature), title: 'Analyser les recettes et dépenses par nature'  %>
+  <%= link_to 'Analyse par Destination', stats_organism_path(@organism, by: :destination), title: 'Analyser les recettes et dépenses par destination'  %>
 <% end %>
 
 
 <div>
   <p>ICI on pourra mettre des infos de type graphique sur le suivi du compte</p>
   <p>Par exemple un lien direct sur les livres </p>
- <% @bank_accounts.each do |ba| %>
-  <h4><%=   ba.name %> - <%= ba.number %> </h4>
-  <span class="alert"> <%= "Attention, le pointage du dernier relevé n'est pas encore effectué" unless ba.bank_extracts.last.locked  %> </span><br />
-    Dernier relevé du compte le <%=l ba.bank_extracts.last.end_date %> - Solde : <%= debit_credit(ba.last_bank_extract_sold) %> <br />
-    <%=   ba.lines_to_point.count %> écritures non encore prises en compte par la banque : 
-    Débit :<%= debit_credit ba.total_debit_np  %> - Crédit : <%= debit_credit ba.total_credit_np %><br/>
-    Solde théorique calculé : <%= debit_credit(ba.last_bank_extract_sold + ba.sold_np) %>
- <% end %>
+  <% @bank_accounts.each do |ba| %>
+    <h4><%=   ba.name %> - <%= ba.number %> </h4>
+    <% if ba.bank_extracts.any? %>
+      <span class="alert"> <%= "Attention, le pointage du dernier relevé n'est pas encore effectué" unless ba.bank_extracts.last.locked  %> </span><br />
+       Dernier relevé du compte le <%=l ba.bank_extracts.last.end_date %> - Solde : <%= debit_credit(ba.last_bank_extract_sold) %> <br />
+    <% end %>
+
+  <%=   ba.lines_to_point.count %> écritures non encore prises en compte par la banque :
+  Débit :<%= debit_credit ba.total_debit_np  %> - Crédit : <%= debit_credit ba.total_credit_np %><br/>
+  Solde théorique calculé : <%= debit_credit(ba.last_bank_extract_sold + ba.sold_np) %>
+<% end %>
   <br />
-   <% @cashes.each do |ca| %>
+<% @cashes.each do |ca| %>
   <h4><%= ca.name %> </h4>
   Solde de la caisse : <%= debit_credit ca.sold %>
-  <% end %>
+<% end %>
   <br />
   <h4>Chèques à déposer</h4>
   Nombre : <%= @organism.number_of_non_deposited_checks %> - Montant total : <%= debit_credit @organism.value_of_non_deposited_checks %>
