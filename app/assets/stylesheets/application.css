@@ -55,6 +55,14 @@
     font-variant: normal;
 }
 
+#zone_admin {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    font-style: italic;
+    font-size: smaller;
+}
+
 
 #bandeau {
     background: #fff;
