@@ -157,7 +157,16 @@ OK - Validation du relevé et verrouillage des lignes correspondantes
 OK - Extract#show n'affiche alors plus que la tableau des bank_extract_lines
 
 ------------------------- Création de la zone admin ------------------------
-
+OK - Mise en place de la zone
+OK - mise en place du menu
+OK - transfert des différentes actions dans la zone admin
+OK - organism
+OK -     book
+    bank_accounts
+    cash
+    natures
+    destination
+    periods
 
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)

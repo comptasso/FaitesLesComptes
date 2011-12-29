@@ -17,6 +17,7 @@
 
 
   <nav id="menu">
+    <%= render 'admin/organisms/menu' if @organism %>
     <%= yield :menu %>
   </nav>
  

@@ -53,7 +53,7 @@ end
     resources :income_books
     resources :outcome_books
     resources :destinations
-    resources :natures
+    resources :natures, only: :index
     member do
       get 'stats'
      

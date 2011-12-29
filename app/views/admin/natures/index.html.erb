@@ -1,0 +1,32 @@
+
+<%= content_for :menu do %>
+
+<%= icon_to 'nouveau.png', new_admin_organism_nature_path(@organism) %>
+
+<% end %>
+<fieldset><legend> Liste des natures</legend>
+<table>
+  <tr>
+    <th>Nom</th>
+    
+    <th>Commentaire</th>
+   
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @natures.each do |nature| %>
+  <tr>
+    <td><%= nature.name %></td>
+    
+    <td><%= nature.comment %></td>
+    
+    <td><%= icon_to 'modifier.png', edit_admin_organism_nature_path(@organism,nature) %></td>
+    <td><%= icon_to 'supprimer.png', [:admin,@organism, nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+</fieldset>
+
+

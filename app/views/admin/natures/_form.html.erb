@@ -1,6 +1,6 @@
 <%  SimpleForm.wrapper_tag = :div %>
 
-<%= simple_form_for([@organism,@nature]) do |f| %>
+<%= simple_form_for([:admin,@organism,@nature]) do |f| %>
   <%= f.error_notification %>
 
   <div class="inputs">

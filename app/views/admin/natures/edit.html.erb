@@ -1,0 +1,17 @@
+<%= content_for :menu do %>
+
+<%= icon_to 'nouveau.png', new_admin_organism_nature_path(@organism) %>
+<%= icon_to 'afficher.png', [:admin,@organism,@nature] %>
+<%= icon_to 'retour.png', admin_organism_natures_path(@organism) %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification nature
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+
