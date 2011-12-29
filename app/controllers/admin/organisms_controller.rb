@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 
-class Admin::OrganismsController < ApplicationController
+class Admin::OrganismsController < Admin::ApplicationController
   # GET /organisms
   # GET /organisms.json
  
