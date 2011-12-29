@@ -12,19 +12,15 @@ jQuery(function (){
 
 // fonction permettant de cliquer sur l'id new_line_link avec la combinaison
 // de touches Ctrl+N
-$(document).keyup(function (e) {
-    if(e.which == 17) isCtrl=false;
-}).keydown(function(e) {
-    if(e.which == 17) isCtrl=true;
-    if(e.which == 78 && isCtrl == true) {
+$(document).keyup(function (e) { if (e.which == 17) isCtrl=false;});
+$(document).keydown(function(e) {
+    if (e.which == 17) isCtrl=true;
+    if (e.which == 78 && isCtrl == true) {
         e.stopPropagation();
         $('#new_line_link').click();
         return false;
     }
 });
-
-
-
 
 
 // mise en forme des table

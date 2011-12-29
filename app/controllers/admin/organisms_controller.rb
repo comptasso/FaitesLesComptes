@@ -20,13 +20,9 @@ class Admin::OrganismsController < Admin::ApplicationController
     @organism = Organism.find(params[:id])
     if @organism.periods.empty?
       flash[:alert]= 'Vous devez créer un exercice pour cet organisme'
-      redirect_to new_organism_period_url(@organism)
+      redirect_to new_admin_organism_period_url(@organism)
       return
     end
-    session[:period]=@organism.periods.last
-    @bank_accounts=@organism.bank_accounts.all
-    @cashes=@organism.cashes.all
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @organism }
@@ -56,7 +52,7 @@ class Admin::OrganismsController < Admin::ApplicationController
 
     respond_to do |format|
       if @organism.save
-        format.html { redirect_to @organism, notice: "Création de l'organisme effectuée" }
+        format.html { redirect_to [:admin,@organism], notice: "Création de l'organisme effectuée" }
         format.json { render json: @organism, status: :created, location: @organism }
       else
         format.html { render action: "new" }
@@ -72,7 +68,7 @@ class Admin::OrganismsController < Admin::ApplicationController
 
     respond_to do |format|
       if @organism.update_attributes(params[:organism])
-        format.html { redirect_to @organism, notice: "Modification de l'organisme effectuée" }
+        format.html { redirect_to [:admin, @organism], notice: "Modification de l'organisme effectuée" }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -88,22 +84,10 @@ class Admin::OrganismsController < Admin::ApplicationController
     @organism.destroy
 
     respond_to do |format|
-      format.html { redirect_to organisms_url }
+      format.html { redirect_to admin_organisms_url }
       format.json { head :ok }
     end
   end
 
-  def stats
-    @date_from = params[:pick_date_from] ? picker_to_date(params[:pick_date_from]) : Date.today.beginning_of_year
-    @date_to = params[:pick_date_to] ? picker_to_date(params[:pick_date_to]) : Date.today.end_of_year
-    @organism=Organism.find(params[:id])
-    @demand=params[:by] # soit nature soit destination
-    @lines = @organism.lines.includes(params[:by]).select("#{@demand}_id, sum(debit) as debit, sum(credit) as credit").group("#{@demand}_id")
-    @total_debit=0
-    @total_credit=0
-
-  end
-
-
-
+ 
 end
