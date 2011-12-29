@@ -24,7 +24,7 @@ end
 
   
 
-  resources :organisms do
+  resources :organisms , :only=> [:index, :show] do
     resources :periods do
       member do
         get 'previous_period'
@@ -49,7 +49,7 @@ end
       end
     end
     resources :cashes
-    resources :books
+    resources :books, :only=>[:index, :show]
     resources :income_books
     resources :outcome_books
     resources :destinations

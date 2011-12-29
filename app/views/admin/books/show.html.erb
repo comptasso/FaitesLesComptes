@@ -1,0 +1,24 @@
+<%= content_for :menu do %>
+<%= render 'admin/organisms/menu' %>
+
+<%= icon_to 'modifier.png', edit_admin_organism_book_path(@organism,@book) %>
+<%= icon_to 'retour.png', admin_organism_books_path(@organism) %>
+
+<% end -%>
+<fieldset>
+  <legend>Détail</legend>
+<p>
+  <b>Image :</b>
+  <%= image_tag(@book.image_url, class: 'list_image') %>
+
+</p>
+<p><b>Titre : </b> <%= @book.title %></p>
+<p><b>Description : </b> <%= @book.description %></p>
+<p><b>Type de livre : </b> <%= @book.class.to_s %></p>
+<p><b>Créé le : </b> <%= @book.created_at %></p>
+<p><b>Mis à jour le </b> <%= @book.updated_at %></p>
+
+
+</fieldset>
+
+

@@ -1,10 +1,16 @@
 class Book < ActiveRecord::Base
   belongs_to :organism
   has_many :lines, dependent: :destroy
-  has_many :bank_extracts, dependent: :destroy
-
- validates :title, presence: true
-
  
+  
+  validates :title, presence: true
+
+  def book_type
+    nil
+  end
+
+  def book_type=(type)
+    nil
+  end
 
 end

@@ -2,7 +2,8 @@
   <li><h2>LIVRES</h2>
 
     <ul>
-      <% @organism.books.each do |b| %>
+       <li><%= link_to 'Listes des livres', admin_organism_books_path(@organism) %></li>
+      <% @organism.books.reject {|r| r.new_record? }.each do |b| %>
         <li><%= link_to b.title, admin_organism_book_path(@organism,b)  %>
           <ul>
             <li> <%= link_to 'Modifier', edit_admin_organism_book_path(@organism, b) %></li>
@@ -51,13 +52,13 @@
       <% @organism.bank_accounts.each do |b| %>
         <li><%= link_to b.number, admin_organism_bank_account_path(@organism,b)  %>
           <ul>
-            <li><%=link_to  'Modifier', edit_admin_organism_bank_account_path(b)  %></li>
+            <li><%=  link_to  'Modifier', edit_admin_organism_bank_account_path(@organism, b)  %></li>
 
             <li><%= link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' %></li>
           </ul>
         </li>
       <% end %>
-
+ <li><%= link_to 'Nouveau', new_admin_organism_bank_account_path(@organism) %></li>
     </ul>
   </li>
 </ul>
@@ -68,13 +69,13 @@
       <% @organism.cashes.each do |b| %>
         <li><%= link_to b.name, admin_organism_cash_path(@organism,b)  %>
           <ul>
-            <li><%=link_to  'Modifier', edit_admin_organism_cash_path(b)  %></li>
+            <li><%=link_to  'Modifier', edit_admin_organism_cash_path(@organism, b)  %></li>
 
             <li><%= link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' , method: :delete %></li>
           </ul>
         </li>
       <% end %>
-
+<li><%= link_to 'Nouveau', new_admin_organism_cash_path(@organism) %></li>
     </ul>
   </li>
 </ul>

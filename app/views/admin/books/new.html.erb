@@ -1,0 +1,16 @@
+<%= content_for :menu do %>
+<%= render 'admin/organisms/menu' %>
+<%= icon_to 'navigation90.png', admin_organism_books_path(@organism) %>
+
+<% end -%>
+
+<fieldset>
+  <legend>
+    Création d'un livre
+  </legend>
+
+<%= render 'form' %>
+
+
+
+</fieldset>

@@ -156,6 +156,7 @@ OK - Gestion ensuite de l'ajustement d'un relevé - améliorer les fonctionnalit
 OK - Validation du relevé et verrouillage des lignes correspondantes
 OK - Extract#show n'affiche alors plus que la tableau des bank_extract_lines
 
+------------------------- Création de la zone admin ------------------------
 
 
 
@@ -202,7 +203,7 @@ Supprimer l'affichage des header et foot dans l'index des comptes bancaires
 trouver une icone pour remise chèque
 -------------------------- Autres sujets à moyen terme
 Mettre en place une validation globale de la page
-Faire une zone paramètres (ou administration)
+
 Créer des natures de recettes et des natures de dépenses
 
 Gérer les validations

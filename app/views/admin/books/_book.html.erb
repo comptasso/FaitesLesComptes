@@ -1,0 +1,21 @@
+
+
+<tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+  <td>
+    <%= image_tag(book.image_url, class: 'list_image') %>
+  </td>
+  <td class="list_description" >
+    <dl>
+      <dt><%= book.title %></dt>
+      <dd><%= truncate(strip_tags(book.description), length: 80)  %></dd>
+    </dl>
+  </td>
+  <td class="list_actions">
+    <%= icon_to 'detail.png', admin_organism_book_path(@organism, book) %> <br/>
+  
+    <%= icon_to 'modifier.png', edit_admin_organism_book_path(@organism, book) %><br/>
+    <%= icon_to 'supprimer.png', admin_organism_book_path(@organism, book), confirm: 'Etes vous sur ?', method: :delete %><br/>
+   
+  </td>
+ 
+  </tr>

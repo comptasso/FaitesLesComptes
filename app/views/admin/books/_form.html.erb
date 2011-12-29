@@ -1,7 +1,9 @@
-<%= form_for [@organism, @book] do |f| %>
+
+<%= form_for :book, url: jc_url(@organism,@book), method: jc_method(@book) do |f| %>
+
   <% if @book.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@book.errors.count, "error") %> prohibited this book from being saved:</h2>
+      <h2><%= pluralize(@book.errors.count, "erreurs") %> n'ont pas permis d'enregistrer ce livre : </h2>
 
       <ul>
       <% @book.errors.full_messages.each do |msg| %>
@@ -21,15 +23,16 @@
   </div>
 <div>
   <%= f.label 'Recettes ' %>
-  <%=  radio_button_tag :book_type, 'Income' %>
+  <%=  radio_button "book", :book_type, 'Income', disabled: !@book.new_record? %>
   <%= f.label 'Dépenses ' %>
-   <%= radio_button_tag :book_type, 'Outcome' %>
+   <%= radio_button "book", :book_type, 'Outcome', disabled: !@book.new_record? %>
 </div>
   <div class="field">
     <%= f.label :image_url %><br />
     <%= f.text_field :image_url %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit 'Enregistrer' %>
   </div>
-<% end %>
+
+  <% end %>
