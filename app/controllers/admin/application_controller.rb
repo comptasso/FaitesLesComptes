@@ -1,11 +1,11 @@
 class Admin::ApplicationController < ActionController::Base
+  layout 'admin/layouts/application'
+
   protect_from_forgery
 
   def find_organism
     @organism=Organism.find(params[:organism_id]) if params[:organism_id]
   end
-
-  logger.debug 'je suis dans admin#application_controller'
 
   helper_method :picker_to_date
 

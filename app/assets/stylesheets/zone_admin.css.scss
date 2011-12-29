@@ -1,0 +1,73 @@
+/*
+    Document   : zone_admin.css
+    Created on : 29 déc. 2011, 07:20:16
+    Author     : jcl
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/*
+   TODO customize this sample style
+   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+
+thème couleur principale 9cd avec en plus foncé 4ca5c3 et 2a6a7f
+thème suggéré 378aa5 et bbb avec fff
+*/
+
+.admin {
+#header {
+
+
+    height: 40px;
+
+    background-color: #9cd;
+   
+
+    #logo {
+    width: 500px;
+    height: 100%;
+    background: #9cd;
+
+    font: small-caps 36px/36px "Times New Roman" , serif;
+    color: #378aa5;
+    text-align: left;
+    padding-left: 0.5em;
+     a {
+    text-decoration: none;
+}
+ a:hover {
+    background: #9cd;
+}
+}
+#zone_admin {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    font-style: italic;
+    font-size: smaller;
+}
+}
+#bandeau {
+    background: #fff;
+
+    padding-top: 22px;
+    margin-bottom: 10px;
+
+
+}
+fieldset {
+    background: e5f2f6;
+    margin-left: 0px;
+    margin-bottom: 10px;
+    legend {
+    color: #dfd;
+    background: #378aa5;
+    font-family: sans-serif;
+    padding: 0.2em 1em;
+}
+}
+
+nav#menu {
+        background-color: #9cd;
+        }
+    }

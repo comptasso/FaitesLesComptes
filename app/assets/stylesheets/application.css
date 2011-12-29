@@ -8,16 +8,16 @@
 #header {
  
 
-    height: 80px;
+    height: 40px;
 
     background-color: #9c9;
-     border-bottom: 2px solid;
+     
 }
 
 
 
 #header #logo {
-    width: 250px;
+    width: 500px;
     height: 100%;
     background: #9c9;
    
@@ -37,8 +37,8 @@
 #header #organism {
     position:absolute;
     left: 400px;
-    top: 50px;
-    padding-left: 400px;
+    top: 10px;
+    padding-left: 500px;
     padding-bottom: 5px;
     font: small-caps 16px/16px "Times New Roman" , serif;
     font-weight: 700;

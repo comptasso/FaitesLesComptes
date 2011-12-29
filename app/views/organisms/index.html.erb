@@ -1,6 +1,6 @@
 <%= content_for :menu do %>
-<%= link_to 'zone admin', admin_organisms_path %>
-  <%= icon_to 'nouveau.png', new_organism_path %>
+
+ 
 <% end -%>
 
 <fieldset><legend> Liste des organismes </legend>
@@ -9,8 +9,7 @@
     <th>Title</th>
     <th>Description</th>
     <th></th>
-    <th></th>
-    <th></th>
+  
   </tr>
 
 <% @organisms.each do |organism| %>
@@ -18,8 +17,7 @@
     <td><%= organism.title %></td>
     <td><%= organism.description %></td>
     <td><%= icon_to 'afficher.png', organism %></td>
-    <td><%= icon_to 'modifier.png', edit_organism_path(organism) %></td>
-    <td><%= icon_to 'supprimer.png', organism, :confirm => 'Etes vous sur ?', :method => :delete %></td>
+   
   </tr>
 <% end %>
 </table>

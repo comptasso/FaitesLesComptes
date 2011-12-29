@@ -3,6 +3,30 @@
 # and open the template in the editor.
 %>
 
-<%= "show.html" %>
-Dans la vue show de la zone admin
-<%=  link_to 'oganismes', organisms_path %>
+<%=  content_for :menu do %>
+
+<% end %>
+
+
+<fieldset><legend> Liste des organismes </legend>
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @organisms.each do |organism| %>
+  <tr>
+    <td><%= organism.title %></td>
+    <td><%= organism.description %></td>
+    <td><%= icon_to 'afficher.png', [:admin,organism] %></td>
+    <td><%= icon_to 'modifier.png', edit_admin_organism_path(organism) %></td>
+    <td><%= icon_to 'supprimer.png', [:admin,organism], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+</fieldset>
