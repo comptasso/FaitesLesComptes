@@ -1,7 +1,16 @@
 Faitesvoscomptes::Application.routes.draw do
 
 namespace 'admin' do
-  resources :organisms
+  resources :organisms do
+    resources :books
+    resources :income_books
+    resources :outcome_books
+    resources :natures
+    resources :destinations
+    resources :bank_accounts
+    resources :cashes
+    resources :periods
+  end
 end
 
   # get 'bank_lines/index'
