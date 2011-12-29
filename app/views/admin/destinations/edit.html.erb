@@ -1,0 +1,17 @@
+<%= content_for :menu do %>
+
+<%= icon_to 'nouveau.png', new_admin_organism_destination_path(@organism) %>
+<%= icon_to 'afficher.png', admin_organism_destination_path(@organism,@destination) %>
+<%= icon_to 'retour.png', admin_organism_destinations_path(@organism) %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification destination
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+

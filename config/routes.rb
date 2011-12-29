@@ -52,7 +52,7 @@ end
     resources :books, :only=>[:index, :show]
     resources :income_books
     resources :outcome_books
-    resources :destinations
+    resources :destinations, only: :index
     resources :natures, only: :index
     member do
       get 'stats'

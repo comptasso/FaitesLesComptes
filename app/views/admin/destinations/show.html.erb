@@ -1,0 +1,27 @@
+
+<%= content_for :menu do %>
+
+<%= icon_to 'nouveau.png', new_admin_organism_destination_path(@organism) %>
+<%= icon_to 'modifier.png', edit_admin_organism_destination_path(@organism,@destination) %>
+<%= icon_to 'retour.png', admin_organism_destinations_path(@organism) %>
+
+<% end -%>
+<fieldset><legend>Description de destination </legend>
+
+<p>
+  <b>Name:</b>
+  <%= @destination.name %>
+</p>
+
+<p>
+  <b>Organism:</b>
+  <%= @destination.organism_id %>
+</p>
+
+<p>
+  <b>Comment:</b>
+  <%= @destination.comment %>
+</p>
+
+</fieldset>
+
