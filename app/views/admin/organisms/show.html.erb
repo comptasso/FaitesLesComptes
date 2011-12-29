@@ -1,0 +1,36 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+
+<%= content_for :menu do %>
+<%= render 'menu' %>
+<%= icon_to 'nouveau.png', new_organism_path %>
+<%= icon_to 'modifier.png', edit_organism_path(@organism) %>
+<%= icon_to 'retour.png', :back %>
+<% end -%>
+<fieldset><legend>Description de l'organisme</legend>
+
+
+<p>
+  <b>Titre :</b>
+  <%= @organism.title %>
+</p>
+
+<p>
+  <b>Description :</b>
+  <%= @organism.description %>
+</p>
+
+<p>
+  <b>Crée le :</b>
+  <%=l @organism.created_at %>
+</p>
+
+<p>
+  <b>Mis à jour le :</b>
+  <%=l @organism.updated_at %>
+</p>
+
+</fieldset>
+

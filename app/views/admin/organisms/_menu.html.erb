@@ -1,0 +1,64 @@
+<ul>
+  <li><h2>TODO FAIRE LE MENU</h2>
+
+      <ul>
+        <% @organism.books.each do |b| %>
+        <li><%= link_to b.title, organism_book_path(@organism,b)  %>
+        <ul>
+          <li> <%= link_to 'Ecrire', new_book_line_path(b) %></li>
+          <li><%= link_to 'Afficher', organism_book_path(@organism,b) %></li>
+        </ul>
+       <% end %>
+        </li>
+
+      </ul>
+
+  </li>
+</ul>
+
+<ul>
+  <li><h2>Banques</h2>
+     <ul>
+    <% @organism.bank_accounts.each do |b| %>
+     <li><%= link_to b.number, organism_book_path(@organism,b)  %>
+       <ul>
+        <li><%=link_to  'Remise', new_bank_account_check_deposit_path(b)  %></li>
+        <% if b.bank_extracts.any? %>
+        <li><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.bank_extracts.last)  %></li>
+        <% end %>
+        <li><%= link_to 'Afficher', organism_bank_account_path(@organism, b) %></li>
+       </ul>
+    <% end %>
+     </li>
+         </ul>
+  </li>
+</ul>
+
+<ul>
+  <li><h2>Caisse</h2>
+     <ul>
+    <% @organism.cashes.each do |c| %>
+     <li><%= link_to c.name, organism_cash_path(@organism,c)  %>
+       <ul>
+         <li><%= link_to 'Afficher', organism_cash_path(@organism, c) %></li>
+       </ul>
+    <% end %>
+     </li>
+         </ul>
+  </li>
+</ul>
+
+<ul>
+  <li><h2>Analyses</h2>
+    <ul>
+      <li>
+<%= link_to 'Par Nature', stats_organism_path(@organism, by: :nature), title: 'Analyser les recettes et dépenses par nature'  %>
+      </li>
+      <li>
+<%= link_to 'Par Destination', stats_organism_path(@organism, by: :destination), title: 'Analyser les recettes et dépenses par destination'  %>
+      </li>
+
+
+    </ul>
+  </li>
+</ul>
