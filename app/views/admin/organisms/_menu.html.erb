@@ -74,6 +74,7 @@
             <li><%=  link_to  'Modifier', edit_admin_organism_bank_account_path(@organism, b)  %></li>
 
             <li><%= link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' %></li>
+            <li><%= link_to 'Extraits de comptes', admin_organism_bank_account_bank_extracts_path(@organism, b) %></li>
           </ul>
         </li>
       <% end %>

@@ -1,0 +1,45 @@
+<%= content_for :menu do %>
+  <%= icon_to 'navigation90.png', :back %>
+<% end -%>
+
+<fieldset><legend> Liste des extraits de comptes - Banque : <%= @bank_account.name %> - <%= @bank_account.number %>  </legend>
+  <table>
+    <tr>
+
+      <th>Réf</th>
+      <th>Du</th>
+      <th>Au</th>
+      <th>Solde initial</th>
+      <th>Total débit</th>
+      <th>Total crédit</th>
+      <th>Solde final</th>
+      <th>Statut</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+
+    <% @bank_extracts.each do |be| %>
+      <tr>
+
+        <td><%= be.reference %></td>
+         <td><%=l be.begin_date %></td>
+         <td><%=l be.end_date %></td>
+         <td class="numeric"><%= debit_credit be.begin_sold %></td>
+         <td class="numeric"><%= debit_credit be.total_debit %></td>
+         <td class="numeric"><%= debit_credit be.total_credit %></td>
+         <td class="numeric"><%= debit_credit be.end_sold %></td>
+         <td><%= be.status %></td>
+        <td><%= icon_to 'afficher.png', [@organism, @bank_account, be] %></td>
+        <td><%= icon_to 'modifier.png', edit_organism_bank_account_bank_extract_path(@organism, @bank_account,be)  %></td>
+        <td><%= icon_to 'supprimer.png', [@organism, @bank_account,be], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+        <td><%= link_to_if be.locked?, 'Déverrouille', unlock_admin_organism_bank_account_bank_extract_path(@organism, @bank_account,be)  %> </td>
+     
+      </tr>
+    <% end %>
+  </table>
+
+</fieldset>
+
+

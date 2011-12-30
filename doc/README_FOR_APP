@@ -183,33 +183,50 @@ OK - Faire en sorte que le mois soit correctement pris en compte par link_to_unl
 OK - Mise en forme du mois lorsqu'il est current
 OK - Pointage ne doit apparaître dans le menu que s'il y a des comptes à pointer
 
+OK - Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)
+OK - : affichage du nom du compte bancaire dans le formulaire de saisie des lignes
+OK - Il faut traiter l'affichage des différentes années
 
-Traiter la question du pointage dans la zone admin - que mettre ?
-L'affichage de l'exercice n'a pas forcément de sens pour des opérations non spécifiquement comptables comme une remise de chèque
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)
 OK - Création de la sous classe Dépenses
 OK - Modification du form Book
 OK - Modification de views/lines/_form pour n'afficher crédit
-Changer income et outcome en sales and expenses
-Rebaptiser bank_extract_lines en bank_lines
 OK - Si on supprime une remise de chèques, il faut traiter les chèques
 OK - Ajouter un lien pour avoir l'accès à la liste des remises chèques
+
+OK - Retirer les liens entre books et bank_extracts (un bank_extract appartient à un organisme et à une banque mais pas à un livre)
+OK - on ne peut pas éditer un compte bancaire (il n'y a pas d'accès)
+
+OK - pick date mis en place d'une manière générale
+OK - formulaire modifié pour bank_extract
+OK - Indiquer le solde des comptes
+OK - on pourrait supprimer le tri (et autres indicateurs visuels) pour la liste des comptes
+OK - Quand on démarre l'affichage d'organisme est /organisms (car il n'y en n'a pas encore)
+OK - Régler la problématique des images (dans l'affichage des livres) peut être avoir une dizaine d'images type
+OK - Revoir navigation
+
+OK - Faire les initiales pour le compte bancaire
+Traiter la question du pointage des comptes dans la zone admin - que mettre ? Edition et suppression des comptes yc ceux pointés
+L'affichage de l'exercice n'a pas forcément de sens pour des opérations non spécifiquement comptables comme une remise de chèque
+Changer income et outcome en sales and expenses
+Rebaptiser bank_extract_lines en bank_lines
+
+
 Avoir accès au journal de caisse et pouvoir y faire des pointages (ou en tout cas un contrôle)
 Mettre en place des datatable pour bank et cash_lines index
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
 (avoir un form qui demande le type pour la création, mais pas pour l'édition)
+quand on crée une écriture, le bouton créer remet new (ce qui est une bonne idée,
+mais il faudrait qu'il conserve la date
 
 
-OK - Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)
-OK - : affichage du nom du compte bancaire dans le formulaire de saisie des lignes
-OK - Il faut traiter l'affichage des différentes années
 
 Quand on saisit plusieurs fois le même montant, on pourrait avoir un bouton qui affiche
 la même trame de ligne (soit un bouton spécifique, soit un mode de saisie).
 
 Voir si les logiques de lock des lines ont encore du sens
-OK - Retirer les liens entre books et bank_extracts (un bank_extract appartient à un organisme et à une banque mais pas à un livre)
+
 
 Voir le mois qui est affiché quand on supprime une écriture
 
@@ -217,17 +234,6 @@ Utiliser la logique TSI pour distinguer les différents types de listings (et de
 A refaire ou revoir - Faire que la touche plus puisse être actionnée par le clavier
 
 ---------------------pick date et autres goodies
-OK - on ne peut pas éditer un compte bancaire (il n'y a pas d'accès)
-quand on crée une écriture, le bouton créer remet new (ce qui est une bonne idée,
-mais il faudrait qu'il conserve la date
-OK - pick date mis en place d'une manière générale
-OK - formulaire modifié pour bank_extract
-Faire les autres formulaires.
-OK - Indiquer le solde des comptes
-OK - on pourrait supprimer le tri (et autres indicateurs visuels) pour la liste des comptes
-OK - Quand on démarre l'affichage d'organisme est /organisms (car il n'y en n'a pas encore)
-OK - Régler la problématique des images (dans l'affichage des livres) peut être avoir une dizaine d'images type
-OK - Revoir navigation
 
 
 Il y a une erreur en line#new lorsqu'il n'y a pas encore de caisse ni de banque

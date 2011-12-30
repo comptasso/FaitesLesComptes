@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 class BankExtract < ActiveRecord::Base
   belongs_to :bank_account
   has_many :bank_extract_lines, dependent: :destroy
@@ -43,6 +45,10 @@ class BankExtract < ActiveRecord::Base
     self.begin_sold + self.lines_sold - self.end_sold
   end
 
+  def status
+    self.locked? ? 'Verrouillé' : 'Non Verrouillé'
+  end
+
   private
 
   # méthode appelée après la création d'un bank_extract
@@ -63,5 +69,7 @@ class BankExtract < ActiveRecord::Base
        self.bank_extract_lines.all.each {|bl| bl.lock_line}
      end
   end
+
+
 
 end

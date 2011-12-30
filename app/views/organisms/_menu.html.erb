@@ -34,7 +34,7 @@
   <li><h2>Banques</h2>
      <ul>
     <% @organism.bank_accounts.each do |b| %>
-     <li><%= link_to b.number, organism_bank_account_path(@organism,b)  %>
+     <li><%= link_to b.to_s, organism_bank_account_path(@organism,b)  %>
        <ul>
         <li><%=link_to  'Remises chèques', bank_account_check_deposits_path(b)  %></li>
         <li><%= link_to 'Nlle Remise', new_bank_account_check_deposit_path(b) %></li>

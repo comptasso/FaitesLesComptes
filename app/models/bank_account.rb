@@ -89,4 +89,13 @@ class BankAccount < ActiveRecord::Base
    self.bank_extracts.reject {|r| r.locked}.count > 0 ? true :false
  end
 
+ def acronym
+   self.name.gsub(/[a-z\séèùôîûâ]/, '')
+ end
+
+ def to_s
+   self.acronym + ' ' + self.number
+ end
 end
+
+

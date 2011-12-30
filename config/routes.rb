@@ -7,7 +7,13 @@ namespace 'admin' do
     resources :outcome_books
     resources :natures
     resources :destinations
-    resources :bank_accounts
+    resources :bank_accounts do
+      resources :bank_extracts, :only=>[:index, :edit, :destroy] do
+        member do
+          get 'unlock'
+        end
+      end
+    end
     resources :cashes
     resources :periods
   end
