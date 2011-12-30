@@ -4,9 +4,9 @@
 <% end -%>
 
 <%= content_for :submenu do %>
- <span><%=  link_to_if @period.previous_period?, '<<', previous_period_organism_period_path(@organism,@period) %></span>
+ <span><%=  link_to_if @period.previous_period?, '<<', previous_organism_period_path(@organism,@period) %></span>
  <%= banksubmenu_helper(@book, @period) %>
-<span><%= link_to_if @period.next_period? ,'>>', next_period_organism_period_path(@organism,@period) %></span>
+<span><%= link_to_if @period.next_period? ,'>>', next_organism_period_path(@organism,@period) %></span>
 
 
  

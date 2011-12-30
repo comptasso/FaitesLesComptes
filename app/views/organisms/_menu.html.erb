@@ -6,7 +6,7 @@
         <li><%= link_to b.title, organism_book_path(@organism,b)  %>
         <ul>
           <li> <%= link_to 'Ecrire', new_book_line_path(b) %></li>
-          <li><%= link_to 'Afficher', organism_book_path(@organism,b) %></li>
+          <li><%= link_to 'Afficher', book_lines_path(b) %></li>
         </ul>
        <% end %>
         </li>
@@ -57,7 +57,22 @@
       <li>
 <%= link_to 'Par Destination', stats_organism_path(@organism, by: :destination), title: 'Analyser les recettes et dépenses par destination'  %>
       </li>
+    </ul>
+  </li>
+</ul>
 
+<ul>
+  <li><h2>Exercices</h2>
+    <ul>
+      <li>
+<%= link_to 'Afficher', organism_periods_path(@organism)  %>
+      </li>
+      <% if @period %>
+      <li>
+        <%= link_to 'Précédent', previous_organism_period_path(@organism,@period) if @period.previous_period? %>
+        <%= link_to 'Suivant', next_organism_period_path(@organism,@period) if @period.next_period? %>
+      </li>
+<% end %>
 
     </ul>
   </li>

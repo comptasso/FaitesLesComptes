@@ -85,7 +85,8 @@
   <li><h2>Exercices</h2>
     <ul>
       <% @organism.periods.each do |c| %>
-        <li><%= link_to c.to_s, admin_organism_periods_path(@organism) %>
+        <li><%= link_to c.exercice, admin_organism_periods_path(@organism) %>
+
           <ul>
             
             <li><%= link_to 'Clore -TODO', admin_organism_periods_path(@organism) if c.open %></li>
@@ -94,6 +95,7 @@
           </ul>
         </li>
       <% end %>
+        <li><%= link_to 'Nouveau', new_admin_organism_period_path(@organism) %></li>
     </ul>
 
   </li>

@@ -166,13 +166,16 @@ OK - bank_accounts
 OK - cash
 OK - natures
 OK - destination
-      periods
+OK - periods
 
 ----------------------------------------------------------------
-Mettre en place l'intitulé pour l'exercice dans le menu admin
-Ajouter exercices dans le menu public
-
+OK - Mettre en place l'intitulé pour l'exercice dans le menu admin
+OK - Ajouter exercices dans le menu public
+changer les actions previous_period et next_period en previous et next
+retrouver l'affichage des lignes des livres de recettes et dépenses
+Le passage de la zone admin à la zone public devrait conserver l'organisme
 La création d'un organisme devrait créer un exercice et deux livres par défaut
+Supprimer la sélection de l'asset image pour les livres
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)
 OK - Création de la sous classe Dépenses
