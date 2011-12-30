@@ -1,6 +1,6 @@
-<%  content_for :bandeau do %>
+<%  content_for :menu do %>
 
-  <%= icon_to 'retour.png', organism_path(@organism) %>
+  <%= icon_to 'retour.png', :back %>
 <%  end %>
 
 <fieldset><legend><%= @organism.title %> : création d'un exercice</legend>

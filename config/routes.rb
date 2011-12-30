@@ -25,7 +25,7 @@ end
   
 
   resources :organisms , :only=> [:index, :show] do
-    resources :periods do
+    resources :periods, :only=> [:index, :show] do
       member do
         get 'previous_period'
         get 'next_period'

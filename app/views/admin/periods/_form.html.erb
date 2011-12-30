@@ -1,6 +1,11 @@
+<%  content_for :menu do %>
+   <%= icon_to 'retour.png', :back %>
+<%  end %>
+
+
 <%  SimpleForm.wrapper_tag = :div %>
 
-<%= simple_form_for [@organism, @period] do |f| %>
+<%= simple_form_for [:admin,@organism, @period] do |f| %>
   <%= f.error_notification %>
 
 

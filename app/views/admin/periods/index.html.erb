@@ -1,10 +1,14 @@
 <%= content_for :menu do %>
-<%= render 'organisms/menu' %>
-
-
+ <%= icon_to 'nouveau.png',new_admin_organism_period_path(@organism), :alt=>'Nouvel exercice',
+    :title=>'Créer un nouvel exercice' unless @organism.nb_open_periods >= 2 %>
 <% end %>
 
 
+
+
+
+
+ 
 <fieldset><legend><%= @periods.empty? ? "Aucun exercice" : "Liste des exercices" %></legend>
   <% unless @periods.empty? %>
     <table class="striped">

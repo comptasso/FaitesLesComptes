@@ -85,11 +85,11 @@
   <li><h2>Exercices</h2>
     <ul>
       <% @organism.periods.each do |c| %>
-        <li><%= link_to c.to_s, admin_organism_period_path(@organism,c) %>
+        <li><%= link_to c.to_s, admin_organism_periods_path(@organism) %>
           <ul>
-            <li><%= link_to 'Afficher', admin_organism_period_path(@organism, c) %></li>
-            <li><%= link_to 'Clore -TODO', admin_organism_period_path(@organism, c) if c.open %></li>
-            <li><%= link_to 'Archiver -TODO', admin_organism_period_path(@organism, c) unless c.open %></li>
+            
+            <li><%= link_to 'Clore -TODO', admin_organism_periods_path(@organism) if c.open %></li>
+            <li><%= link_to 'Archiver -TODO', admin_organism_periods_path(@organism) unless c.open %></li>
             <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>
           </ul>
         </li>

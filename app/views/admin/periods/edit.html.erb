@@ -1,0 +1,9 @@
+<%  content_for :menu do %>
+<%= icon_to 'detail.png', admin_organism_period_path(@organism,@period) %> 
+
+
+  <%= icon_to 'retour.png', :back %>
+<%  end %>
+<fieldset><legend><%= @organism.name %> : Modification d'un exercice</legend>
+<%= render 'form' %>
+</fieldset>

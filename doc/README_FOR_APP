@@ -162,12 +162,17 @@ OK - mise en place du menu
 OK - transfert des différentes actions dans la zone admin
 OK - organism
 OK -     book
-      bank_accounts
-      cash
+OK - bank_accounts
+OK - cash
 OK - natures
 OK - destination
       periods
 
+----------------------------------------------------------------
+Mettre en place l'intitulé pour l'exercice dans le menu admin
+Ajouter exercices dans le menu public
+
+La création d'un organisme devrait créer un exercice et deux livres par défaut
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)
 OK - Création de la sous classe Dépenses
