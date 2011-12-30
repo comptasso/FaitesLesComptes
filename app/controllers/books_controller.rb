@@ -3,19 +3,6 @@
 class BooksController < ApplicationController
 
  
-
-
-  # GET /books
-  # GET /books.json
-  def index
-    @books = @organism.books.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @books }
-    end
-  end
-
   # GET /books/1
   # GET /books/1.json
   def show

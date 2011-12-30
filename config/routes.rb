@@ -49,7 +49,7 @@ end
       end
     end
     resources :cashes, :only=> [:index, :show]
-    resources :books, :only=>[:index, :show]
+    resources :books, :only=>[:show]
     resources :income_books
     resources :outcome_books
     resources :destinations, only: :index
