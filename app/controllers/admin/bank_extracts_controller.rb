@@ -3,8 +3,12 @@
 # Les extraits bancaires ne sont pas du domaine de la zone admin,
 # cependant dans la zone de saisie, lorsqu'un extrait est pointé, il n'y a plus
 # d'accès pour le modifier, le supprimer, et le pointer.
-# La vue index ici permet de retrouver ces liens pour les extraits ce qui
+# La vue index permet alors de retrouver ces liens pour les extraits ce qui
 # permet de supprimer un extrait pour le refaire si on le souhaite.
+#
+# Cele veut dire qu'on pourrait avoir accès à la suppression d'extraits
+# par l'interface publique en rentrant directement dans la ligne d'adresse.
+#
 class Admin::BankExtractsController < Admin::ApplicationController
 
   before_filter  :find_bank_account
