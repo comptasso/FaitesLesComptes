@@ -1,5 +1,5 @@
 <%= content_for :menu do %>
-
+<%= icon_to 'nouveau.png', new_admin_organism_bank_account_path(@organism) %>
 <% end -%>
 
 <fieldset><legend> Liste des comptes bancaires </legend>
@@ -12,8 +12,7 @@
     <th>Commentaire</th>
     <th>Adresse</th>
   
-    <th></th>
-    <th></th>
+   
    
     
   </tr>
@@ -28,9 +27,7 @@
     <td><%= bank_account.address %></td>
   
     
-    <td><%= icon_to 'afficher.png', organism_bank_account_bank_extracts_path(@organism, bank_account) %></td>
-    <td><%= link_to 'Remise chq', new_bank_account_check_deposit_path(bank_account) %></td>
-    
+  
     
   </tr>
 <% end %>

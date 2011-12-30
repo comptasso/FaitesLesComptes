@@ -1,0 +1,17 @@
+<%= content_for :menu do %>
+
+<%= icon_to 'nouveau.png', new_admin_organism_bank_account_path(@organism) %>
+<%= icon_to 'afficher.png', [:admin,@organism,@bank_account] %>
+<%= icon_to 'retour.png', :back %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modificationd'un compte bancaire
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+

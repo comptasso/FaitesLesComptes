@@ -162,11 +162,11 @@ OK - mise en place du menu
 OK - transfert des différentes actions dans la zone admin
 OK - organism
 OK -     book
-    bank_accounts
-    cash
-    natures
-    destination
-    periods
+      bank_accounts
+      cash
+OK - natures
+OK - destination
+      periods
 
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)
@@ -178,7 +178,8 @@ Rebaptiser bank_extract_lines en bank_lines
 OK - Si on supprime une remise de chèques, il faut traiter les chèques
 Ajouter un lien pour avoir l'accès à la liste des remises chèques
 Mettre en place des datatable pour bank et cash_lines index
-
+Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
+(avoir un form qui demande le type pour la création, mais pas pour l'édition)
 
 Dans l'affichage des livres, on devrait avoir un link_to_unless_current pour le livre en cours
 OK - Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)

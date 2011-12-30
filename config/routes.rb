@@ -32,7 +32,7 @@ end
       end
     end
 
-    resources :bank_accounts do
+    resources :bank_accounts, :only=> [:index, :show] do
       resources :bank_extracts do
         member do
           get 'pointage'
@@ -48,7 +48,7 @@ end
         end
       end
     end
-    resources :cashes
+    resources :cashes, :only=> [:index, :show]
     resources :books, :only=>[:index, :show]
     resources :income_books
     resources :outcome_books

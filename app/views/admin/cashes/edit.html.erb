@@ -1,0 +1,17 @@
+<%= content_for :menu do %>
+
+<%= icon_to 'nouveau.png', new_admin_organism_cash_path(@organism) %>
+<%= icon_to 'afficher.png', [:admin,@organism,@cash] %>
+<%= icon_to 'retour.png', :back %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification de la caisse
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+

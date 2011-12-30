@@ -1,5 +1,5 @@
-<%= content_for :submenu do %>
-<%= icon_to 'nouveau.png', new_organism_cash_path(@organism) %>
+<%= content_for :menu do %>
+
 <% end -%>
 
 <fieldset><legend>Liste des caisses</legend>
@@ -11,8 +11,7 @@
     <th>Nom</th>
 
     <th></th>
-    <th></th>
-    <th></th>
+ 
   </tr>
 
 <% @cashes.each do |cash| %>
@@ -23,8 +22,7 @@
     <td><%= cash.name %></td>
 
     <td><%= icon_to 'afficher.png', cash_lines_path(cash, :mois=>@period.guess_month) %></td>
-    <td><%= icon_to 'modifier.png', edit_organism_cash_path(@organism,cash) %></td>
-    <td><%= icon_to 'supprimer.png', [@organism,cash], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+ 
   </tr>
 <% end %>
 </table>

@@ -1,9 +1,10 @@
 
 <%= content_for :menu do %>
 
-
+<%= icon_to 'nouveau.png', new_admin_organism_bank_account_path %>
+<%= icon_to 'modifier.png', edit_admin_organism_bank_account_path(@bank_account) %>
 <%= icon_to 'retour.png', :back %>
-
+<%= icon_to 'supprimer.png',[:admin, @organism,@bank_account], :confirm => 'Etes vous sur ?', :method => :delete %>
 
 <% end -%>
 <fieldset><legend>Informations sur un compte bancaire</legend>

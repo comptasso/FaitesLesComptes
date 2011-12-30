@@ -1,5 +1,5 @@
 <%  SimpleForm.wrapper_tag = :p %>
-<%= simple_form_for [@organism,@bank_account] do |f| %>
+<%= simple_form_for [:admin,@organism,@bank_account] do |f| %>
   <%= f.error_notification %>
 
   <div class="inputs">
@@ -8,8 +8,6 @@
     
     <%= f.input :comment , input_html: {rows: 4} %>
     <%= f.input :address, input_html: {rows: 4}%>
-   
-   
   </div>
 
   <div class="actions">
