@@ -52,7 +52,8 @@ class Admin::OrganismsController < Admin::ApplicationController
 
     respond_to do |format|
       if @organism.save
-        format.html { redirect_to [:admin,@organism], notice: "Création de l'organisme effectuée" }
+        format.html { redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
+          Il vous faut maintenant créer un exercice pour cet organisme" }
         format.json { render json: @organism, status: :created, location: @organism }
       else
         format.html { render action: "new" }

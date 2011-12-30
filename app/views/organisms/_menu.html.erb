@@ -26,7 +26,7 @@
         <% if b.bank_extracts.any? %>
         <li><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.bank_extracts.last)  %></li>
         <% end %>
-        <li><%= link_to 'Afficher', organism_bank_account_path(@organism, b) %></li>
+        <li><%= link_to 'Extraits de comptes', organism_bank_account_bank_extracts_path(@organism, b) %></li>
        </ul>
     <% end %>
      </li>

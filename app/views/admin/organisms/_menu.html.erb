@@ -8,17 +8,15 @@
           <ul>
             <li> <%= link_to 'Modifier', edit_admin_organism_path(r) %></li>
             <li> <%= link_to 'Supprimer',[:admin,r] %></li>
-
           </ul>
         </li>
       <% end %>
-
-      <li><%= link_to 'Nouveau', new_admin_organism_path(@organism) %></li>
+      <li><%= link_to 'Nouveau', new_admin_organism_path %></li>
     </ul>
 
   </li>
 </ul>
-
+<% if @organism.id %>
 <ul>
   <li><h2>LIVRES</h2>
 
@@ -122,3 +120,4 @@
   </li>
 </ul>
 
+<% end %>

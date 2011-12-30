@@ -122,7 +122,7 @@ OK    Faire une redirection avec un flash si pas de chèque à remettre
 --------------------Affichage journal de banque (BankLines) ------------------------
 OK - Faire un controlleur avec vues index (peut être une sous classe de Lines
 OK - Dépend de bank_account qui est un before filter
-ok - Mettre un lien pour y accéder
+OK - Mettre un lien pour y accéder
 OK - Avoir un scope des lignes qui trouve les lignes relevant d'un compte et de type bancaire
 OK - Vue index
 OK - Il faut impérativement faire un bank_account_id pour les lignes
@@ -173,11 +173,12 @@ OK - Mettre en place l'intitulé pour l'exercice dans le menu admin
 OK - Ajouter exercices dans le menu public
 OK - changer les actions previous_period et next_period en previous et next
 OK - retrouver l'affichage des lignes des livres de recettes et dépenses
-Le passage de la zone admin à la zone public devrait conserver l'organisme
+OK - Le passage de la zone admin à la zone public devrait conserver l'organisme
 La création d'un organisme devrait créer un exercice et deux livres par défaut
 Régler le bug de l'affichage de l'exercice (il n'est pas connecté à l'organisme) 
 Supprimer la sélection de l'asset image pour les livres
 Faire en sorte que le mois soit correctement pris en compte par link_to_unless_current lorsqu'on arrive directt sur les lignes des livres
+pointage ne doit apparaître dans le menu que s'il y a des comptes à pointer
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)
 OK - Création de la sous classe Dépenses
@@ -199,7 +200,7 @@ Quand on saisit plusieurs fois le même montant, on pourrait avoir un bouton qui
 la même trame de ligne (soit un bouton spécifique, soit un mode de saisie).
 
 Voir si les logiques de lock des lines ont encore du sens
-Retirer les liens entre books et bank_extracts (un bank_extract appartient à un organisme et à une banque mais pas à un livre)
+OK - Retirer les liens entre books et bank_extracts (un bank_extract appartient à un organisme et à une banque mais pas à un livre)
 
 
 Voir le mois qui est affiché quand on supprime une écriture
@@ -208,17 +209,17 @@ Utiliser la logique TSI pour distinguer les différents types de listings (et de
 A refaire ou revoir - Faire que la touche plus puisse être actionnée par le clavier
 
 ---------------------pick date et autres goodies
-on ne peut pas éditer un compte bancaire (il n'y a pas d'accès)
+OK - on ne peut pas éditer un compte bancaire (il n'y a pas d'accès)
 quand on crée une écriture, le bouton créer remet new (ce qui est une bonne idée,
 mais il faudrait qu'il conserve la date
 OK - pick date mis en place d'une manière générale
 OK - formulaire modifié pour bank_extract
 Faire les autres formulaires.
-Indiquer le solde des comptes
+OK - Indiquer le solde des comptes
 on pourrait supprimer le tri (et autres indicateurs visuels) pour la liste des comptes
 Quand on démarre l'affichage d'organisme est /organisms (car il n'y en n'a pas encore)
 Régler la problématique des images (dans l'affichage des livres) peut être avoir une dizaine d'images type
-Revoir navigation
+OK - Revoir navigation
 Supprimer l'affichage des header et foot dans l'index des comptes bancaires
 trouver une icone pour remise chèque
 -------------------------- Autres sujets à moyen terme
@@ -236,4 +237,4 @@ et des modèles de lignes (repetées, multiple).
 Pouvoir faire un export
 Pouvoir faire une édition
 Graphiques
- Il faudrait afficher l'icone imprimer dès lors qu'il y a un chèque dans la table des remises
+Il faudrait afficher l'icone imprimer dès lors qu'il y a un chèque dans la table des remises
