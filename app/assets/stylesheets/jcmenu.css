@@ -82,14 +82,20 @@ nav#menu ul ul ul li:hover ul
     background-color: #9c9;
 }
 
+#submenu > span > span {
+    color: #141;
+     border-right-style:solid;
+     border-left-style:solid;
+     border-width:  1px;
+     border-color: white;
+     padding: 0px 10px;
+}
+
 #submenu a {
     border: none;
     color: white;
     text-decoration: none;
-     padding: 0px 10px;
-     border-right-style:solid;
-     border-width:  1px;
-     line-height: 16px;
+    line-height: 16px;
 }
 
 #submenu a:hover{

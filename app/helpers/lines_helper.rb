@@ -22,8 +22,11 @@ module LinesHelper
    content_tag :span do
      s=''
      t.each_with_index do |mois, i|
-        s += concat(link_to_unless_current(mois, book_lines_path(book, "mois"=> i)))
-        
+
+        u =  content_tag :span do
+             link_to_unless_current(mois, book_lines_path(book, "mois"=> i))
+        end
+        s += concat(u)
     end
     s
   end

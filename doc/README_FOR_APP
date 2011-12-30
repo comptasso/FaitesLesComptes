@@ -180,7 +180,7 @@ OK - Voir pourquoi il refuse de supprimer un organism
 OK - Supprimer la sélection de l'asset image pour les livres
 OK - Mettre la description en title du lien book
 OK - Faire en sorte que le mois soit correctement pris en compte par link_to_unless_current lorsqu'on arrive directt sur les lignes des livres
-Mise en forme du mois lorsqu'il est current
+OK - Mise en forme du mois lorsqu'il est current
 Pointage ne doit apparaître dans le menu que s'il y a des comptes à pointer
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)
@@ -219,11 +219,11 @@ OK - pick date mis en place d'une manière générale
 OK - formulaire modifié pour bank_extract
 Faire les autres formulaires.
 OK - Indiquer le solde des comptes
-on pourrait supprimer le tri (et autres indicateurs visuels) pour la liste des comptes
+OK - on pourrait supprimer le tri (et autres indicateurs visuels) pour la liste des comptes
 Quand on démarre l'affichage d'organisme est /organisms (car il n'y en n'a pas encore)
 Régler la problématique des images (dans l'affichage des livres) peut être avoir une dizaine d'images type
 OK - Revoir navigation
-Supprimer l'affichage des header et foot dans l'index des comptes bancaires
+
 trouver une icone pour remise chèque
 
 Il y a une erreur en line#new lorsqu'il n'y a pas encore de caisse ni de banque
