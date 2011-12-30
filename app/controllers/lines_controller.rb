@@ -10,12 +10,8 @@ class LinesController < ApplicationController
   # GET /lines
   # GET /lines.json
   def index
-    
-
-    fill_soldes
-
-
-    respond_to do |format|
+     fill_soldes
+     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @lines }
     end
@@ -112,7 +108,12 @@ class LinesController < ApplicationController
   end
 
   def fill_mois
-    @mois = params[:mois] || @period.guess_month
+    if params[:mois]
+    @mois = params[:mois]
+    else
+      @mois= @period.guess_month
+      redirect_to book_lines_url(@book, mois: @mois)
+    end
   end
 
   
