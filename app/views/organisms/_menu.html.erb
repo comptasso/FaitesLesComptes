@@ -36,11 +36,13 @@
     <% @organism.bank_accounts.each do |b| %>
      <li><%= link_to b.number, organism_bank_account_path(@organism,b)  %>
        <ul>
-        <li><%=link_to  'Remise', new_bank_account_check_deposit_path(b)  %></li>
-        <% if b.bank_extracts.any? %>
-        <li><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.bank_extracts.last)  %></li>
+        <li><%=link_to  'Remises chèques', bank_account_check_deposits_path(b)  %></li>
+        <li><%= link_to 'Nlle Remise', new_bank_account_check_deposit_path(b) %></li>
+        <% if b.unpointed_bank_extract? %>
+        <li><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.last_bank_extract)  %></li>
         <% end %>
         <li><%= link_to 'Extraits de comptes', organism_bank_account_bank_extracts_path(@organism, b) %></li>
+        <li><%= link_to 'Nouvel Extrait', new_organism_bank_account_bank_extract_path(@organism,b) %> </li>
        </ul>
     <% end %>
      </li>

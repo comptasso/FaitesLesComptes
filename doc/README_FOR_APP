@@ -181,7 +181,11 @@ OK - Supprimer la sélection de l'asset image pour les livres
 OK - Mettre la description en title du lien book
 OK - Faire en sorte que le mois soit correctement pris en compte par link_to_unless_current lorsqu'on arrive directt sur les lignes des livres
 OK - Mise en forme du mois lorsqu'il est current
-Pointage ne doit apparaître dans le menu que s'il y a des comptes à pointer
+OK - Pointage ne doit apparaître dans le menu que s'il y a des comptes à pointer
+
+
+Traiter la question du pointage dans la zone admin - que mettre ?
+L'affichage de l'exercice n'a pas forcément de sens pour des opérations non spécifiquement comptables comme une remise de chèque
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)
 OK - Création de la sous classe Dépenses
@@ -190,21 +194,22 @@ OK - Modification de views/lines/_form pour n'afficher crédit
 Changer income et outcome en sales and expenses
 Rebaptiser bank_extract_lines en bank_lines
 OK - Si on supprime une remise de chèques, il faut traiter les chèques
-Ajouter un lien pour avoir l'accès à la liste des remises chèques
+OK - Ajouter un lien pour avoir l'accès à la liste des remises chèques
+Avoir accès au journal de caisse et pouvoir y faire des pointages (ou en tout cas un contrôle)
 Mettre en place des datatable pour bank et cash_lines index
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
 (avoir un form qui demande le type pour la création, mais pas pour l'édition)
 
-Dans l'affichage des livres, on devrait avoir un link_to_unless_current pour le livre en cours
+
 OK - Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)
 OK - : affichage du nom du compte bancaire dans le formulaire de saisie des lignes
 OK - Il faut traiter l'affichage des différentes années
+
 Quand on saisit plusieurs fois le même montant, on pourrait avoir un bouton qui affiche
 la même trame de ligne (soit un bouton spécifique, soit un mode de saisie).
 
 Voir si les logiques de lock des lines ont encore du sens
 OK - Retirer les liens entre books et bank_extracts (un bank_extract appartient à un organisme et à une banque mais pas à un livre)
-
 
 Voir le mois qui est affiché quand on supprime une écriture
 
@@ -220,11 +225,10 @@ OK - formulaire modifié pour bank_extract
 Faire les autres formulaires.
 OK - Indiquer le solde des comptes
 OK - on pourrait supprimer le tri (et autres indicateurs visuels) pour la liste des comptes
-Quand on démarre l'affichage d'organisme est /organisms (car il n'y en n'a pas encore)
-Régler la problématique des images (dans l'affichage des livres) peut être avoir une dizaine d'images type
+OK - Quand on démarre l'affichage d'organisme est /organisms (car il n'y en n'a pas encore)
+OK - Régler la problématique des images (dans l'affichage des livres) peut être avoir une dizaine d'images type
 OK - Revoir navigation
 
-trouver une icone pour remise chèque
 
 Il y a une erreur en line#new lorsqu'il n'y a pas encore de caisse ni de banque
 

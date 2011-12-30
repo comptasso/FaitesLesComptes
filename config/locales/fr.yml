@@ -203,6 +203,7 @@ fr:
         begin_date: Du
         end_date: Au
         reference: Référence
+        bank_account: 'Compte bancaire'
         book: Livre
       bank_account:
         name: Nom de la Banque

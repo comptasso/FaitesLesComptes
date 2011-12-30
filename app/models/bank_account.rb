@@ -23,6 +23,7 @@ class BankAccount < ActiveRecord::Base
   rescue
     Date.today.beginning_of_month - 1
   end
+
  # trouve toutes les lignes non pointées -np pour not pointed
  def np_lines
    Line.find_by_sql("SELECT id, narration, debit, credit, payment_mode, line_date
@@ -52,6 +53,7 @@ class BankAccount < ActiveRecord::Base
    self.total_credit_np_lines +  self.total_credit_np_check_deposits
  end
 
+ # solde des lignes non pointées
  def sold_np
    self.total_credit_np - self.total_debit_np
  end
@@ -79,10 +81,12 @@ class BankAccount < ActiveRecord::Base
    self.not_pointed_lines +  self.not_pointed_check_deposits
  end
 
-
-
  def last_bank_extract
     self.bank_extracts.order(:end_date).last
   end
+
+ def unpointed_bank_extract?
+   self.bank_extracts.reject {|r| r.locked}.count > 0 ? true :false
+ end
 
 end

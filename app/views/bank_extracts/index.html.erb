@@ -3,33 +3,35 @@
 <% end %>
 
 <%= content_for :submenu do %>
-<%= icon_to 'nouveau.png', new_organism_bank_account_bank_extract_path(@organism, @bank_account) %>
-<%= icon_to 'navigation90.png', organism_bank_accounts_path(@organism) %>
+  <%= icon_to 'nouveau.png', new_organism_bank_account_bank_extract_path(@organism, @bank_account) %>
+  <%= icon_to 'navigation90.png', organism_bank_accounts_path(@organism) %>
 <% end -%>
 
 <fieldset><legend> Liste des extraits de comptes - Banque : <%= @bank_account.name %> </legend>
-<table>
-  <tr>
+  <table>
+    <tr>
 
-  <%= render 'table_header' %>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+      <%= render 'table_header' %>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
 
-<% @bank_extracts.each do |bank_extract| %>
-  <tr>
+    <% @bank_extracts.each do |bank_extract| %>
+      <tr>
 
-    <%= render :partial=>'bank_extract' , :object=>bank_extract %>
-    <td><%= icon_to 'afficher.png', [@organism, @bank_account, bank_extract] %></td>
-    <td><%= icon_to 'modifier.png', edit_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract) %></td>
-    <td><%= icon_to 'supprimer.png', [@organism, @bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+        <%= render :partial=>'bank_extract' , :object=>bank_extract %>
+        <td><%= icon_to 'afficher.png', [@organism, @bank_account, bank_extract] %></td>
+        <% unless bank_extract.locked? %>
+          <td><%= icon_to 'modifier.png', edit_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract)  %></td>
+          <td><%= icon_to 'supprimer.png', [@organism, @bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete %></td>
 
-    <td><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract) unless bank_extract.locked? %> </td>
-  </tr>
-<% end %>
-</table>
+          <td><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract)  %> </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
 
 </fieldset>
 
