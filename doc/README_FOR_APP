@@ -176,6 +176,7 @@ OK - retrouver l'affichage des lignes des livres de recettes et dépenses
 OK - Le passage de la zone admin à la zone public devrait conserver l'organisme
 OK - La création d'un organisme devrait créer un exercice et deux livres par défaut
 OK - Régler le bug de l'affichage de l'exercice (il n'est pas connecté à l'organisme)
+Voir pourquoi il refuse de supprimer un organism
 Supprimer la sélection de l'asset image pour les livres
 Faire en sorte que le mois soit correctement pris en compte par link_to_unless_current lorsqu'on arrive directt sur les lignes des livres
 pointage ne doit apparaître dans le menu que s'il y a des comptes à pointer

@@ -7,7 +7,7 @@
         <li><%= link_to r.title, admin_organism_path(r)  %>
           <ul>
             <li> <%= link_to 'Modifier', edit_admin_organism_path(r) %></li>
-            <li> <%= link_to 'Supprimer',[:admin,r] %></li>
+            <li> <%= link_to 'Supprimer',[:admin,r], confirm: 'Etes vous sûr ?', method: :delete %></li>
           </ul>
         </li>
       <% end %>
@@ -16,7 +16,7 @@
 
   </li>
 </ul>
-<% if @organism.id %>
+<% if (@organism  && !@organism.new_record?) %>
 <ul>
   <li><h2>LIVRES</h2>
 
