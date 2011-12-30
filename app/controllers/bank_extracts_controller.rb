@@ -2,7 +2,7 @@
 
 class BankExtractsController < ApplicationController
 
-  before_filter :find_organism, :find_bank_account
+  before_filter  :find_bank_account
   before_filter :get_dates, only: [:create, :update]
 
   # GET /bank_extracts

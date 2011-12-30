@@ -1,6 +1,8 @@
 class Admin::ApplicationController < ActionController::Base
   layout 'admin/layouts/application'
 
+  before_filter :find_organism, :current_period
+
   protect_from_forgery
 
   def find_organism
@@ -28,6 +30,8 @@ class Admin::ApplicationController < ActionController::Base
       nil
     end
   end
+
+private
 
    def current_period
    pid = session[:period] ||= @organism.periods.last.id if @organism

@@ -2,7 +2,7 @@
 
 class Admin::NaturesController < Admin::ApplicationController
 
-  before_filter :find_organism
+  
 
   # GET /natures
   # GET /natures.json

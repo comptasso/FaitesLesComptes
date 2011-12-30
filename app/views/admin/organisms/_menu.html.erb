@@ -104,7 +104,7 @@
   <li><h2>Exercices</h2>
     <ul>
       <% @organism.periods.each do |c| %>
-        <li><%= link_to c.exercice, admin_organism_periods_path(@organism) %>
+        <li><%= link_to c.exercice, admin_organism_period_path(@organism, c) %>
 
           <ul>
             

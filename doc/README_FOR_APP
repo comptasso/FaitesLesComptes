@@ -174,8 +174,8 @@ OK - Ajouter exercices dans le menu public
 OK - changer les actions previous_period et next_period en previous et next
 OK - retrouver l'affichage des lignes des livres de recettes et dépenses
 OK - Le passage de la zone admin à la zone public devrait conserver l'organisme
-La création d'un organisme devrait créer un exercice et deux livres par défaut
-Régler le bug de l'affichage de l'exercice (il n'est pas connecté à l'organisme) 
+OK - La création d'un organisme devrait créer un exercice et deux livres par défaut
+OK - Régler le bug de l'affichage de l'exercice (il n'est pas connecté à l'organisme)
 Supprimer la sélection de l'asset image pour les livres
 Faire en sorte que le mois soit correctement pris en compte par link_to_unless_current lorsqu'on arrive directt sur les lignes des livres
 pointage ne doit apparaître dans le menu que s'il y a des comptes à pointer
@@ -222,6 +222,24 @@ Régler la problématique des images (dans l'affichage des livres) peut être av
 OK - Revoir navigation
 Supprimer l'affichage des header et foot dans l'index des comptes bancaires
 trouver une icone pour remise chèque
+
+Il y a une erreur en line#new lorsqu'il n'y a pas encore de caisse ni de banque
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -------------------------- Autres sujets à moyen terme
 Mettre en place une validation globale de la page
 

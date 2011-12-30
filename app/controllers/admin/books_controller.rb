@@ -2,7 +2,7 @@
 
 class Admin::BooksController < Admin::ApplicationController
 
-  before_filter :find_organism, :current_period
+
 
 
   # GET /books

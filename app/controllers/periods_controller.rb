@@ -3,7 +3,7 @@
 
 class PeriodsController < ApplicationController
 
-  before_filter :find_organism
+
 
   # GET /periods
   # GET /periods.json

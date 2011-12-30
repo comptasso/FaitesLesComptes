@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 class Admin::DestinationsController < Admin::ApplicationController
-  before_filter :find_organism
+
 
   # GET /destinations
   # GET /destinations.json

@@ -49,12 +49,6 @@ class LinesController < ApplicationController
       
     end
   end
-
-  # GET /lines/1/edit
-  #  def edit
-  #    @line = @book.lines.find(params[:id])
-  #  end
-
   
   # POST /lines
   # POST /lines.json

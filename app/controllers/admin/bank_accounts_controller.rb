@@ -2,7 +2,7 @@
 
 class Admin::BankAccountsController < Admin::ApplicationController
 
-  before_filter :find_organism, :current_period
+
 
   # GET /bank_accounts
   # GET /bank_accounts.json

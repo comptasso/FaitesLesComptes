@@ -3,7 +3,7 @@
 
 class Admin::PeriodsController < Admin::ApplicationController
 
-  before_filter :find_organism
+  
 
   # GET /periods
   # GET /periods.json
@@ -14,6 +14,12 @@ class Admin::PeriodsController < Admin::ApplicationController
       format.html # index.html.erb
       format.json { render json: @periods }
     end
+  end
+
+  def show
+    @period=Period.find(params[:id])
+    session[:period]=@period.id
+    redirect_to admin_organism_periods_path(@organism)
   end
 
   
@@ -49,6 +55,7 @@ class Admin::PeriodsController < Admin::ApplicationController
     
     respond_to do |format|
       if @period.save
+         session[:period]=@period.id
         format.html { redirect_to admin_organism_periods_path(@organism), notice: "L'exercice a été créé" }
         format.json { render json: @period, status: :created, location: @period }
       else
@@ -65,6 +72,7 @@ class Admin::PeriodsController < Admin::ApplicationController
 
     respond_to do |format|
       if @period.update_attributes(params[:period])
+         session[:period]=@period.id
         format.html { redirect_to admin_organism_periods_path(@organism), notice: "L'exercice a été modifié" }
         format.json { head :ok }
       else
