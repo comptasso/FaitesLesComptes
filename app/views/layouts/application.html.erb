@@ -9,9 +9,9 @@
    <body class='<%= controller.controller_name %>'>
   <div id="header">
      <div id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
-     <div id="zone_admin"><%= link_to 'Administration', ((@organism.id !=nil) ? admin_organism_path(@organism) : admin_organisms_path ) %></div>
+     <div id="zone_admin"><%= link_to 'Administration', ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path ) %></div>
     <div id ="organism">
-      <%= link_to @organism.title, @organism unless @organism.nil? %>  <span class="description"><%= @period.exercice unless @period.nil? %></span>
+      <%= link_to @organism.title, @organism if (@organism && !@organism.new_record?) %>  <span class="description"><%= @period.exercice unless @period.nil? %></span>
     </div>
   </div>
 

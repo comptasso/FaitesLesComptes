@@ -27,10 +27,7 @@
   <%= f.label 'Dépenses ' %>
    <%= radio_button "book", :book_type, 'Outcome', disabled: !@book.new_record? %>
 </div>
-  <div class="field">
-    <%= f.label :image_url %><br />
-    <%= f.text_field :image_url %>
-  </div>
+  
   <div class="actions">
     <%= f.submit 'Enregistrer' %>
   </div>
