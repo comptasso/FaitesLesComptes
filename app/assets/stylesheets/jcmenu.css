@@ -75,7 +75,9 @@ nav#menu ul ul ul li:hover ul
 
 
  #submenu {
-    margin-top: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
     height: 20px;
     background-color: #9c9;
 }

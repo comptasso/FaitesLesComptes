@@ -171,11 +171,13 @@ OK - periods
 ----------------------------------------------------------------
 OK - Mettre en place l'intitulé pour l'exercice dans le menu admin
 OK - Ajouter exercices dans le menu public
-changer les actions previous_period et next_period en previous et next
-retrouver l'affichage des lignes des livres de recettes et dépenses
+OK - changer les actions previous_period et next_period en previous et next
+OK - retrouver l'affichage des lignes des livres de recettes et dépenses
 Le passage de la zone admin à la zone public devrait conserver l'organisme
 La création d'un organisme devrait créer un exercice et deux livres par défaut
+Régler le bug de l'affichage de l'exercice (il n'est pas connecté à l'organisme) 
 Supprimer la sélection de l'asset image pour les livres
+Faire en sorte que le mois soit correctement pris en compte par link_to_unless_current lorsqu'on arrive directt sur les lignes des livres
 
 OK -Création de la sous classe Recettes (IncomeBook < Book)
 OK - Création de la sous classe Dépenses

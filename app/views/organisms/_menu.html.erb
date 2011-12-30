@@ -3,7 +3,7 @@
     
       <ul>
         <% @organism.books.each do |b| %>
-        <li><%= link_to b.title, organism_book_path(@organism,b)  %>
+        <li><%= link_to b.title, book_lines_path(b)  %>
         <ul>
           <li> <%= link_to 'Ecrire', new_book_line_path(b) %></li>
           <li><%= link_to 'Afficher', book_lines_path(b) %></li>

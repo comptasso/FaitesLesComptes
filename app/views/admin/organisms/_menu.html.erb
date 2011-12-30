@@ -1,4 +1,25 @@
 <ul>
+  <li><h2>ORGANISMES</h2>
+
+    <ul>
+       <li><%= link_to 'Listes des organismes', admin_organisms_path %></li>
+      <% Organism.all.reject {|r| r.new_record? }.each do |r| %>
+        <li><%= link_to r.title, admin_organism_path(r)  %>
+          <ul>
+            <li> <%= link_to 'Modifier', edit_admin_organism_path(r) %></li>
+            <li> <%= link_to 'Supprimer',[:admin,r] %></li>
+
+          </ul>
+        </li>
+      <% end %>
+
+      <li><%= link_to 'Nouveau', new_admin_organism_path(@organism) %></li>
+    </ul>
+
+  </li>
+</ul>
+
+<ul>
   <li><h2>LIVRES</h2>
 
     <ul>
