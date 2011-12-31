@@ -149,24 +149,24 @@ function $f_td_bank_cash(){
 $.facebox.settings.closeImage = '/assets/closelabel.png';
 $.facebox.settings.loadingImage = '/assets/loading.gif';
 
-$(document).ready(function() {
-    $('#new_line_link').facebox();
-    $(document).bind('reveal.facebox', function() {
-        $('#new_line').submit(function() {
-            $.post(this.action, $(this).serialize(), null, "script");
-            return false;
-        });
-        $('.input_date').datepicker(
-        {
-            dateFormat: 'dd/mm/yy',
-            buttonImage: '/assets/cal.gif',
-            buttonImageOnly: true,
-            showOn: 'both',
-            minDate: $('.input_date').attr('data-jcmin'),
-            maxDate: $('.input_date').attr('data-jcmax')
-        }
-        );
-    });
-});
+//$(document).ready(function() {
+//    $('#new_line_link').facebox();
+//    $(document).bind('reveal.facebox', function() {
+//        $('#new_line').submit(function() {
+//            $.post(this.action, $(this).serialize(), null, "script");
+//            return false;
+//        });
+//        $('.input_date').datepicker(
+//        {
+//            dateFormat: 'dd/mm/yy',
+//            buttonImage: '/assets/cal.gif',
+//            buttonImageOnly: true,
+//            showOn: 'both',
+//            minDate: $('.input_date').attr('data-jcmin'),
+//            maxDate: $('.input_date').attr('data-jcmax')
+//        }
+//        );
+//    });
+//});
 
 

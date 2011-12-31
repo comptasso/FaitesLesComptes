@@ -1,11 +1,10 @@
 $.facebox.close();
-<%#*oTable.fnAddData( [%>
-		<%#=l @line.line_date %> ,
-		<%#= @line.narration %>,
-		<%#= @line.nature %>,
-		<%#= @line.destination %>,
-                <%#= debit_credit  @line.debit %>,
-                <%#= debit_credit @line.credit %>,
-                <%#= @line.payment_mode %>] );
-	
+$('.lines .data_table').dataTable().fnAddData(["<%=l @line.line_date %>",
+"<%= @line.narration %>",
+"<%= @line.nature.name %>",
+"<%= @line.destination.name %>",
+"<%= debit_credit @line.debit %>",
+"<%= debit_credit @line.credit %>",
+"<%= @line.payment_mode %>"]);
+
  
