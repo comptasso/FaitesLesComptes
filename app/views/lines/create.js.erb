@@ -1,7 +1,5 @@
-    $('#facebox .content').html(" <%= j render 'form' %>");
 
-
-
+$('#facebox .content').html(" <%= j render 'form' %>");
     
     $('#new_line').submit(function() {
         $.post(this.action, $(this).serialize(), null, "script");

@@ -12,11 +12,13 @@ jQuery(function (){
 
 // fonction permettant de cliquer sur l'id new_line_link avec la combinaison
 // de touches Ctrl+N
+var isCtrl=false;
 $(document).keyup(function (e) { if (e.which == 17) isCtrl=false;});
 $(document).keydown(function(e) {
     if (e.which == 17) isCtrl=true;
     if (e.which == 78 && isCtrl == true) {
         e.stopPropagation();
+        $('legend').text('Bonjour');
         $('#new_line_link').click();
         return false;
     }
@@ -142,4 +144,29 @@ function $f_td_bank_cash(){
     { $('#td_cash').show();}
     }
     }
+
+
+$.facebox.settings.closeImage = '/assets/closelabel.png';
+$.facebox.settings.loadingImage = '/assets/loading.gif';
+
+$(document).ready(function() {
+    $('#new_line_link').facebox();
+    $(document).bind('reveal.facebox', function() {
+        $('#new_line').submit(function() {
+            $.post(this.action, $(this).serialize(), null, "script");
+            return false;
+        });
+        $('.input_date').datepicker(
+        {
+            dateFormat: 'dd/mm/yy',
+            buttonImage: '/assets/cal.gif',
+            buttonImageOnly: true,
+            showOn: 'both',
+            minDate: $('.input_date').attr('data-jcmin'),
+            maxDate: $('.input_date').attr('data-jcmax')
+        }
+        );
+    });
+});
+
 

@@ -4,12 +4,16 @@ class LinesController < ApplicationController
 
   layout :choose_layout
 
-  before_filter :find_book,   :current_period
-  before_filter :fill_mois, only: [:index, :new, :create]
+ # pour être sur d'avoir l'organisme avant d'appeler le before filter de 
+ # application_controller qui va remplir le period (lequel est utile pour les soldes)
+  prepend_before_filter :find_book
+ 
+  before_filter :fill_mois, only: [:index, :new]
 
   # GET /lines
   # GET /lines.json
   def index
+     logger.debug 'dans index'
      fill_soldes
      respond_to do |format|
       format.html # index.html.erb
@@ -37,6 +41,7 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.json
   def new
+     logger.debug 'dans new'
     @line =@book.lines.new(line_date: flash[:date] || Date.today, :cash_id=>@organism.cashes.first.id, :bank_account_id=>@organism.bank_accounts.first.id)
 
     respond_to do |format|
@@ -49,21 +54,24 @@ class LinesController < ApplicationController
   # POST /lines
   # POST /lines.json
   def create
-    flash[:date]= get_date
+    logger.debug 'dans create'
+   get_date
     @line = @book.lines.new(params[:line])
-     
+     logger.debug (@line)
+     puts @line.inspect
     respond_to do |format|
       if @line.save
         mois=(@line.line_date.month)-1
         format.html { redirect_to new_book_line_url(@book,mois: mois), notice: 'La ligne a été créée.' }
-
-
+         # redirection via js
         format.js do
+          logger.debug 'dans create if line.save'
           fill_soldes
           render :redirect
-        end # redirection via js
+        end
         format.json { render json: @line, status: :created, location: @line }
       else
+        logger.debug @line.errors
         format.html { render action: "new" }
         format.json { render json: @line.errors, status: :unprocessable_entity }
         format.js 
@@ -105,6 +113,8 @@ class LinesController < ApplicationController
   def find_book
     @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
     @organism=@book.organism
+    logger.debug @book
+    logger.debug @organism.inspect
   end
 
   def fill_mois
