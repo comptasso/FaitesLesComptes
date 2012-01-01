@@ -230,9 +230,9 @@ OK - Mettre des icones à la place de verrouillé/déverrouillé.
 JE LAISSE - L'affichage de l'exercice n'a pas forcément de sens pour des opérations non spécifiquement comptables comme une remise de chèque
 
 
-Changer income et outcome en sales and expenses
-Rebaptiser bank_extract_lines en bank_lines
+
 Avoir accès au journal de caisse et pouvoir y faire des pointages (ou en tout cas un contrôle)
+
 Mettre en place des datatable pour bank et cash_lines index
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
 (avoir un form qui demande le type pour la création, mais pas pour l'édition)
@@ -247,6 +247,9 @@ la même trame de ligne (soit un bouton spécifique, soit un mode de saisie).
 
 Voir si les logiques de lock des lines ont encore du sens
 
+
+Changer income et outcome en sales and expenses
+Rebaptiser bank_extract_lines en bank_lines
 
 Voir le mois qui est affiché quand on supprime une écriture
 

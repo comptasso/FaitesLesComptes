@@ -54,7 +54,11 @@ end
         end
       end
     end
-    resources :cashes, :only=> [:index, :show]
+    resources :cashes, :only=> [:index, :show] do
+      member do
+        get 'controle'
+      end
+    end
     resources :books, :only=>[:show]
     resources :income_books
     resources :outcome_books

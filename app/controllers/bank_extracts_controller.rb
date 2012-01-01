@@ -25,7 +25,7 @@ class BankExtractsController < ApplicationController
     @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
   end
 
-   def pointage
+  def pointage
 
     @bank_extract = BankExtract.find(params[:id])
     redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract) if @bank_extract.locked
@@ -38,8 +38,6 @@ class BankExtractsController < ApplicationController
   # si le hash est un check_deposit, le récupérer avec son id et le mettre à jour
   def pointe
     @bank_extract = BankExtract.find(params[:id])
-   
-
     params.each do |key, value|
       if key.to_s =~ /^line_(\d+)/
         l=Line.find($1.to_i)

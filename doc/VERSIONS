@@ -20,14 +20,16 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 +  gestion du pointage des comptes bancaire
 +  faire une interface administrateur
 
-013 : modification de structure (bank_lines, income et outcome,...
+013 : getion de la caisse
+- les pointages
+- l'affichage des lignes
+
+014 : modification de structure (bank_lines, income et outcome,...
 - bank_extract_lines
 - income
 - outcome
 
-014 : getion de la caisse
-- les pointages
-- l'affichage des lignes
+
 
 015 : gestion de différents types d'écritures
 - écritures de dépenses répétées

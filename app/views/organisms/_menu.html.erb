@@ -57,6 +57,7 @@
      <li><%= link_to c.name, organism_cash_path(@organism,c)  %>
        <ul>
          <li><%= link_to 'Afficher', organism_cash_path(@organism, c) %></li>
+         <li><%= link_to 'Contrôle', controle_organism_cash_path(@organism, c) %></li>
        </ul>
     <% end %>
      </li>
