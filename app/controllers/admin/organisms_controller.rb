@@ -23,6 +23,15 @@ class Admin::OrganismsController < Admin::ApplicationController
       redirect_to new_admin_organism_period_url(@organism)
       return
     end
+    # on trouve l'exercice à partir de la session mais si on a changé d'organisme
+    # il faut changer la session et on charge le dernier exercice par défaut
+    begin
+      @period = @organism.periods.find(session[:period])
+    rescue
+      @period = @organism.periods.last
+      session[:period]=@period.id
+    end
+  
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @organism }

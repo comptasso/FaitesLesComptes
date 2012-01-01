@@ -85,9 +85,14 @@ class BankAccount < ActiveRecord::Base
     self.bank_extracts.order(:end_date).last
   end
 
- def unpointed_bank_extract?
-   self.bank_extracts.reject {|r| r.locked}.count > 0 ? true :false
+ def first_bank_extract_to_point
+   self.bank_extracts.where('locked = ?', false).first(:order=>'begin_date ASC')
  end
+
+ def unpointed_bank_extract?
+   self.bank_extracts.where('locked = ?', false).count > 0 ? true :false
+ end
+
 
  def acronym
    self.name.gsub(/[a-z\séèùôîûâ]/, '')

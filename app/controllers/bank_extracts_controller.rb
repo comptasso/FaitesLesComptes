@@ -122,7 +122,7 @@ class BankExtractsController < ApplicationController
 
     respond_to do |format|
       if @bank_extract.update_attributes(params[:bank_extract])
-        format.html { redirect_to organism_bank_account_bank_extract_path(@organism, @bank_account, @bank_extract), notice: "L'extrait a été modifié " }
+        format.html { redirect_to pointage_organism_bank_account_bank_extract_path(@organism, @bank_account, @bank_extract), notice: "L'extrait a été modifié " }
         format.json { head :ok }
       else
         format.html { render action: "edit" }

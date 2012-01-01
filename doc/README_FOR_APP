@@ -218,23 +218,21 @@ OK - Enlever le 1 qui s'affiche dans le formulaire new_line
 OK - Le flash notice, la ligne a été créee pourrait être plus explicite (cas où on est interrompu et on ne sait plus très bien ou on en est).
 OK - Revoir la date par défaut (qui devrait être liée au mois qu'on consulte et non à Date.today et prendre en compte les limites de l'exercices
 OK - Dans le form new_line, il faudrait limiter les dates avec les limites de l'exercice.
-
-Il y a un bug dans l'affichage des exercices (qui semble ne pas prendre en compte un changement d'organisme) - en fait le line _new envoie sur l'index
-mais avec le mois de déc 2011 ! Et j'ai un lien avec mois =-1
-
-Le pointage ne marche pas bien quand il y a plusierus comptes à pointer
-
+OK - Il y a un bug dans l'affichage des exercices (qui semble ne pas prendre en compte un changement d'organisme) - en fait le line _new envoie sur l'index
+     mais avec le mois de déc 2011 ! Et j'ai un lien avec mois =-1
+OK - Le pointage ne marche pas bien quand il y a plusieurs relevés à pointer
+L'exercice n'est pas affiché dans la zone admin
 Traiter la question du pointage des comptes dans la zone admin - que mettre ? Edition et suppression des comptes yc ceux pointés
-L'affichage de l'exercice n'a pas forcément de sens pour des opérations non spécifiquement comptables comme une remise de chèque
+JE LAISSE - L'affichage de l'exercice n'a pas forcément de sens pour des opérations non spécifiquement comptables comme une remise de chèque
+
+
 Changer income et outcome en sales and expenses
 Rebaptiser bank_extract_lines en bank_lines
-
 Avoir accès au journal de caisse et pouvoir y faire des pointages (ou en tout cas un contrôle)
 Mettre en place des datatable pour bank et cash_lines index
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
 (avoir un form qui demande le type pour la création, mais pas pour l'édition)
-quand on crée une écriture, le bouton créer remet new (ce qui est une bonne idée,
-mais il faudrait qu'il conserve la date
+quand on crée une écriture, le bouton créer remet new (ce qui est une bonne idée, mais il faudrait qu'il conserve la date
 
 Problématique des deux cartes (Amex et CB) en fait c'est un autre compte et le pb est un pb de virement entre les deux.
 Problématique des retraits espèces ... (qui est un transfert)

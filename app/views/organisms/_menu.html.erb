@@ -39,7 +39,7 @@
         <li><%=link_to  'Remises chèques', bank_account_check_deposits_path(b)  %></li>
         <li><%= link_to 'Nlle Remise', new_bank_account_check_deposit_path(b) %></li>
         <% if b.unpointed_bank_extract? %>
-        <li><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.last_bank_extract)  %></li>
+        <li><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.first_bank_extract_to_point)  if b.unpointed_bank_extract? %></li>
         <% end %>
         <li><%= link_to 'Extraits de comptes', organism_bank_account_bank_extracts_path(@organism, b) %></li>
         <li><%= link_to 'Nouvel Extrait', new_organism_bank_account_bank_extract_path(@organism,b) %> </li>
