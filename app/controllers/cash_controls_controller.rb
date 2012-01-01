@@ -6,7 +6,6 @@ class CashControlsController < ApplicationController
   end
 
   def new
-
     @cash=@organism.cashes.find(params[:cash_id])
     @previous_cash_control=@cash.cash_controls.last(:order=>'date ASC')
     @cash_control=@cash.cash_controls.new(:date=>Date.today)

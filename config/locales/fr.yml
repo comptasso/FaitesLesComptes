@@ -223,6 +223,8 @@ fr:
         payment_mode: 'Mode de réglement'
         bank_account: 'Compte bancaire'
         cash: 'Caisse'
+      cash_control:
+        amount: Montant
 
     errors:
      models:
@@ -232,6 +234,10 @@ fr:
             not_a_number: 'doit être un nombre'
           credit:
             not_a_number: 'doit être un nombre'
+      cash_control:
+        attributes:
+          amount: 'doit être un nombre'
+
   helpers:
     select:
       prompt: "Veuillez sélectionner"
@@ -265,5 +271,8 @@ fr:
         update: 'Enregistrer'
       cash:
         create: 'Créer la caisse'
+        update: 'Enregistrer'
+      cash_control:
+        create: 'Enregistrer'
         update: 'Enregistrer'
 

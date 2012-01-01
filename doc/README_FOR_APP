@@ -238,7 +238,7 @@ OK - Faire une fonction Controle pour la caisse et l'insérer dans le menu
 Créer une table cash_control et les accessoires (controller, vue, formulaire)
 Le pointage de caisse doit verrouiller les lignes
 Mettre dans la zone admin l'accès à la liste des pointages de caisses
-
+Date min du dernier date_picker devrait être le dernier cash control
 
 Mettre en place un datatable pour cash_lines index
 Faire que la modif se fasse dans une modalbox
