@@ -2,12 +2,13 @@
 
 class LinesController < ApplicationController
 
-  layout :choose_layout
+  
+
+  layout :choose_layout # inutile maintenant car lié à l'utilisation de modalbox
 
  # pour être sur d'avoir l'organisme avant d'appeler le before filter de 
  # application_controller qui va remplir le period (lequel est utile pour les soldes)
   prepend_before_filter :find_book
- 
   before_filter :fill_mois, only: [:index, :new]
 
   # GET /lines
@@ -56,27 +57,23 @@ class LinesController < ApplicationController
   # POST /lines.json
   def create
     flash[:date]= get_date # permet de transmettre la date à l'écriture suivante
-    logger.debug 'dans create'
-   get_date
     @line = @book.lines.new(params[:line])
-     logger.debug (@line)
-     puts @line.inspect
     respond_to do |format|
       if @line.save
         mois=(@line.line_date.month)-1
-        format.html { redirect_to new_book_line_url(@book,mois: mois), notice: 'La ligne a été créée.' }
-         # redirection via js
-        format.js do
-          logger.debug 'dans create if line.save'
-          fill_soldes
-          render :redirect
-        end
+        format.html { redirect_to new_book_line_url(@book,mois: mois), 
+          notice: "La ligne #{@line.narration} - Débit : #{two_decimals @line.debit} - Crédit : #{two_decimals @line.credit} a été créée." }
+         # redirection via js non utilisé actuellement - sera utile pour faire une modalbox
+#        format.js do
+#          logger.debug 'dans create if line.save'
+#          fill_soldes
+#          render :redirect
+#        end
         format.json { render json: @line, status: :created, location: @line }
       else
-        logger.debug @line.errors
         format.html { render action: "new" }
         format.json { render json: @line.errors, status: :unprocessable_entity }
-        format.js 
+       # format.js
       end
     end
   end
@@ -120,7 +117,7 @@ class LinesController < ApplicationController
   protected
 
   def default_values
-    @new_date=flash[:date] || Date.today
+    @new_date=flash[:date] || @period.start_date.months_since(@mois.to_i)
     @cash_id=@organism.main_cash_id
     @bank_id=@organism.main_bank_id
   end
@@ -128,17 +125,15 @@ class LinesController < ApplicationController
   def find_book
     @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
     @organism=@book.organism
-    logger.debug @book
-    logger.debug @organism.inspect
   end
 
   def fill_mois
     if params[:mois]
-    @mois = params[:mois]
+      @mois = params[:mois]
     else
       @mois= @period.guess_month
-       redirect_to book_lines_url(@book, mois: @mois) if params[:action]==:index
-       redirect_to new_book_line_url(@book,mois: @mois) if params[:action]==:new
+      redirect_to book_lines_url(@book, mois: @mois) if (params[:action]=='index')
+     redirect_to new_book_line_url(@book,mois: @mois) if params[:action]=='new'
     end
   end
 
