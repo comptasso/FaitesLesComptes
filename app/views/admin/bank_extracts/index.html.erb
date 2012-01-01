@@ -31,10 +31,14 @@
          <td class="numeric"><%= debit_credit be.total_credit %></td>
          <td class="numeric"><%= debit_credit be.end_sold %></td>
          <td><%= be.status %></td>
+
         <td><%= icon_to 'afficher.png', [@organism, @bank_account, be] %></td>
-        <td><%= icon_to 'modifier.png', edit_organism_bank_account_bank_extract_path(@organism, @bank_account,be)  %></td>
-        <td><%= icon_to 'supprimer.png', [@organism, @bank_account,be], :confirm => 'Etes vous sur ?', :method => :delete %></td>
-        <td><%= link_to_if be.locked?, 'Déverrouille', unlock_admin_organism_bank_account_bank_extract_path(@organism, @bank_account,be)  %> </td>
+         <% if be.locked? %>
+         <td><%= icon_to 'deverrouiller.png', unlock_admin_organism_bank_account_bank_extract_path(@organism, @bank_account,be) %> </td>
+         <% else %>
+        <td><%= icon_to 'modifier.png', edit_organism_bank_account_bank_extract_path(@organism, @bank_account,be)   %></td>
+        <td><%= icon_to 'supprimer.png', [@organism, @bank_account,be], :confirm => 'Etes vous sur ?', :method => :delete  %></td>
+       <%  end %>
      
       </tr>
     <% end %>

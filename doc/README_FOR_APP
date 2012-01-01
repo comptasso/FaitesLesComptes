@@ -221,8 +221,12 @@ OK - Dans le form new_line, il faudrait limiter les dates avec les limites de l'
 OK - Il y a un bug dans l'affichage des exercices (qui semble ne pas prendre en compte un changement d'organisme) - en fait le line _new envoie sur l'index
      mais avec le mois de déc 2011 ! Et j'ai un lien avec mois =-1
 OK - Le pointage ne marche pas bien quand il y a plusieurs relevés à pointer
-L'exercice n'est pas affiché dans la zone admin
-Traiter la question du pointage des comptes dans la zone admin - que mettre ? Edition et suppression des comptes yc ceux pointés
+OK - L'exercice n'est pas affiché dans la zone admin
+OK Traiter la question du pointage des comptes dans la zone admin - que mettre ? Edition et suppression des comptes yc ceux pointés
+OK - Enlever les icones modifier/supprimé pour un extrait verrouillé
+OK - Mettre des icones à la place de verrouillé/déverrouillé.
+
+
 JE LAISSE - L'affichage de l'exercice n'a pas forcément de sens pour des opérations non spécifiquement comptables comme une remise de chèque
 
 
