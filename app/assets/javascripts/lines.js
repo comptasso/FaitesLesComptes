@@ -33,7 +33,18 @@ jQuery(function() {
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
             },
+ "aoColumns": [
+            null,
+            null,
+            null,
+            null,
+             null,
+            null,
+            null,
 
+            {"bSortable": false},
+            {"bSortable": false}
+            ],
 
             "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
                 /*
@@ -77,7 +88,7 @@ jQuery(function() {
 
 
         $('td', oTable.fnGetNodes()).hover( function() {
-            var iCol = $('td', this.parentNode).index(this) % 6;
+            var iCol = $('td', this.parentNode).index(this) % 8;
             var nTrs = oTable.fnGetNodes();
             $('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
         }, function() {

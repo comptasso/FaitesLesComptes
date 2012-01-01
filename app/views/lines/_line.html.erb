@@ -6,4 +6,6 @@
           <td class="numeric clickable"><%= debit_credit(line.debit) %></td>
           <td class="numeric clickable"><%= debit_credit(line.credit) %></td>
           <td class="clickable"><%= line.payment_mode %></td>
+          <td class="icon"><%=  icon_to 'modifier.png', edit_book_line_path(@book,line) unless line.locked? %></td>
+          <td class="icon"><%=  icon_to 'supprimer.png', [@book,line], confirm: 'Etes vous sûr?', method: :delete unless line.locked? %></td>
  

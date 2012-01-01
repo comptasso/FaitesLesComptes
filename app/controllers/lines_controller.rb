@@ -81,35 +81,41 @@ class LinesController < ApplicationController
     end
   end
 
+  def edit
+    @line = @book.lines.find(params[:id])
+  end
+  
+  
+  
   # PUT /lines/1
   # PUT /lines/1.json
-  #  def update
-  #    @line = @book.lines.find(params[:id])
-  #
-  #
-  #    respond_to do |format|
-  #      if @line.update_attributes(params[:line])
-  #        mois=(@line.line_date.month) -1
-  #        format.html { redirect_to book_lines_url(@book, mois: mois) }#], notice: 'Line was successfully updated.')}
-  #        format.json { head :ok }
-  #      else
-  #        format.html { render action: "edit" }
-  #        format.json { render json: @line.errors, status: :unprocessable_entity }
-  #      end
-  #    end
-  #  end
+    def update
+      @line = @book.lines.find(params[:id])
+  
+  
+      respond_to do |format|
+        if @line.update_attributes(params[:line])
+          mois=(@line.line_date.month) -1
+          format.html { redirect_to book_lines_url(@book, mois: mois) }#], notice: 'Line was successfully updated.')}
+          format.json { head :ok }
+        else
+          format.html { render action: "edit" }
+          format.json { render json: @line.errors, status: :unprocessable_entity }
+        end
+      end
+    end
 
   # DELETE /lines/1
   # DELETE /lines/1.json
-  #  def destroy
-  #    @line = @book.lines.find(params[:id])
-  #    @line.destroy
-  #
-  #    respond_to do |format|
-  #      format.html { redirect_to book_lines_url(@book) }
-  #      format.json { head :ok }
-  #    end
-  #  end
+    def destroy
+     @line = @book.lines.find(params[:id])
+      @line.destroy
+  
+      respond_to do |format|
+        format.html { redirect_to book_lines_url(@book) }
+        format.json { head :ok }
+      end
+    end
 
   protected
 
