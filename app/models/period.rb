@@ -247,13 +247,13 @@ class Period < ActiveRecord::Base
     return current_month(date)
   end
 
+    protected
   # renvoie le mois de l'exercice correspondant à une date qui est dans les limites de l'exercice
   def current_month(date=Date.today)
     raise 'date is not inside the period limits' if date < self.start_date || date > self.close_date
     d=self.start_date
     mois=0
-    # FIXME probablement un problème de -1 A tester
-    while date > d
+    while date >= d
       d=d.months_since(1)
       mois +=1
     end
@@ -261,7 +261,7 @@ class Period < ActiveRecord::Base
   end
 
 
-  protected
+
 
   # on ne peut jamais changer la date de début d'un exercice créé.
   # soit c'est le premier et la date de début a été fixée lors de la création

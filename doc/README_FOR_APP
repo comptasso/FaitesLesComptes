@@ -215,8 +215,8 @@ OK - Depenses écrire envoie sur afficher et non sur newline
 OK - Pouvoir modifier les lignes non pointées
 OK - Enlever le 1 qui s'affiche dans le formulaire new_line
 OK - Problématique des deux cartes (Amex et CB) en fait c'est un autre compte et le pb est un pb de virement entre les deux.
-Le flash notice, la ligne a été créee pourrait être plus explicite (cas où on est interrompu et on ne sait plus très bien ou on en est).
-Revoir la date par défaut (qui devrait être liée au mois qu'on consulte et non à Date.today et prendre en compte les limites de l'exercices
+OK - Le flash notice, la ligne a été créee pourrait être plus explicite (cas où on est interrompu et on ne sait plus très bien ou on en est).
+OK - Revoir la date par défaut (qui devrait être liée au mois qu'on consulte et non à Date.today et prendre en compte les limites de l'exercices
 Dans le form new_line, il faudrait limiter les dates avec les limites de l'exercice.
 Problématique des retraits espèces ... (qui est un transfert)
 Il y a un bug dans l'affichage des exercices (qui semble ne pas prendre en compte un changement d'organisme) - en fait le line _new envoie sur l'index

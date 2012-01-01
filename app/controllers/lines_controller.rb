@@ -42,9 +42,7 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.json
   def new
-     logger.debug 'dans new'
-     default_values
-    @line =@book.lines.new(line_date: @new_date, :cash_id=>@cash_id, :bank_account_id=>@bank_id)
+   @line =@book.lines.new(line_date: flash[:date] || @period.start_date.months_since(@mois.to_i), :cash_id=>@organism.main_cash_id, :bank_account_id=>@organism.main_bank_id)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -52,7 +50,8 @@ class LinesController < ApplicationController
       
     end
   end
-  
+
+
   # POST /lines
   # POST /lines.json
   def create
@@ -116,12 +115,7 @@ class LinesController < ApplicationController
 
   protected
 
-  def default_values
-    @new_date=flash[:date] || @period.start_date.months_since(@mois.to_i)
-    @cash_id=@organism.main_cash_id
-    @bank_id=@organism.main_bank_id
-  end
-
+ 
   def find_book
     @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
     @organism=@book.organism
