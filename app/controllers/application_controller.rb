@@ -5,13 +5,15 @@ class ApplicationController < ActionController::Base
 
   helper_method :two_decimals
 
+ private
+ 
   def two_decimals(montant)
     sprintf('%0.02f',montant)
   rescue
     '0.00'
   end
 
-  private
+ 
 
   def find_organism
     @organism=Organism.find(params[:organism_id]) if params[:organism_id]
