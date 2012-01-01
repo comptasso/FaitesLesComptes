@@ -126,7 +126,7 @@ class LinesController < ApplicationController
       @mois = params[:mois]
     else
       @mois= @period.guess_month
-      redirect_to book_lines_url(@book, mois: @mois) if (params[:action]=='index')
+     redirect_to book_lines_url(@book, mois: @mois) if (params[:action]=='index')
      redirect_to new_book_line_url(@book,mois: @mois) if params[:action]=='new'
     end
   end

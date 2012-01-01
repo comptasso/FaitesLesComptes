@@ -10,14 +10,12 @@
 
 class CashLinesController < LinesController
 
-  before_filter :find_book, :current_period, :fill_mois
+#  before_filter :find_book, :fill_mois
  
 
 # la méthode index est héritée de LinesController
   def index
-  
     fill_soldes
-
     respond_to do |format|
       format.html {render 'cash_lines/index'}
       format.json { render json: @lines }
@@ -31,21 +29,26 @@ class CashLinesController < LinesController
     @organism=@book.organism
   end
 
-  # TODO a modifier pour faire la sélection
-  def fill_soldes
-   if @period
-      @date=@period.start_date.months_since(@mois.to_i)
+  def fill_mois
+    if params[:mois]
+      @mois = params[:mois]
     else
-      @date= Date.today.beginning_of_year.months_since(@mois.to_i)
+      @mois= @period.guess_month
+     redirect_to organism_cash_cash_lines_url(@book, mois: @mois) if (params[:action]=='index')
     end
-    @lines = @book.lines.mois(@date).all
-    @solde_debit_avant=@book.lines.solde_debit_avant(@date)
-    @solde_credit_avant=@book.lines.solde_credit_avant(@date)
-
-    @total_debit=@lines.sum(&:debit)
-    @total_credit=@lines.sum(&:credit)
-    @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
   end
+
+  # TODO a modifier pour faire la sélection
+#  def fill_soldes
+#    @date=@period.start_date.months_since(@mois.to_i)
+#    @lines = @book.lines.mois(@date).all
+#    @solde_debit_avant=@book.lines.solde_debit_avant(@date)
+#    @solde_credit_avant=@book.lines.solde_credit_avant(@date)
+#
+#    @total_debit=@lines.sum(&:debit)
+#    @total_credit=@lines.sum(&:credit)
+#    @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
+#  end
 
 
 

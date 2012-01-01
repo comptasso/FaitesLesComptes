@@ -6,15 +6,21 @@ module CashLinesHelper
    if period
      t= period.list_months
    else
-    t=['Jan', 'Fév', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+     t=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
    end
-
-   content_tag :span do
+ content_tag :span do
      s=''
      t.each_with_index do |mois, i|
-        s += concat(link_to_unless_current(mois, cash_lines_path(cash, "mois"=> i)))
+
+        u =  content_tag :span do
+             link_to_unless_current(mois, organism_cash_cash_lines_path(@organism,cash, "mois"=> i))
+        end
+        s += concat(u)
     end
     s
   end
+
+
+   
 end
 end

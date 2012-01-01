@@ -21,7 +21,7 @@ end
 
   # get 'bank_lines/index'
 
-  match 'cash/:cash_id/cash_lines/index' => 'cash_lines#index', :as=>:cash_lines
+   # match 'cash/:cash_id/cash_lines/index' => 'cash_lines#index', :as=>:cash_lines
 
   # match 'bank_account/:bank_account_id/bank_lines/index' => 'bank_lines#index', :as=>:bank_account_bank_lines
   # match 'bank_extract/:bank_extract_id/pointage/index' => 'pointage#index',  :as => :pointage
@@ -58,6 +58,7 @@ end
       member do
         get 'controle'
       end
+      resources :cash_lines
     end
     resources :books, :only=>[:show]
     resources :income_books

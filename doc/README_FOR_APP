@@ -231,9 +231,19 @@ JE LAISSE - L'affichage de l'exercice n'a pas forcément de sens pour des opéra
 
 
 
-Avoir accès au journal de caisse et pouvoir y faire des pointages (ou en tout cas un contrôle)
+---------------- Avoir accès au journal de caisse et pouvoir y faire des pointages (ou en tout cas un contrôle)
+OK - remise en route de cash_lines#index
+OK - Modifier le menu pour un accès à cash_lines
+OK - Faire une fonction Controle pour la caisse et l'insérer dans le menu
+Créer une table cash_control
+Le pointage de caisse doit verrouiller les lignes
+Mettre dans la zone admin l'accès à la liste des pointages de caisses
 
-Mettre en place des datatable pour bank et cash_lines index
+Mettre en place un datatable pour cash_lines index
+Faire que la modif se fasse dans une modalbox
+
+-----------------------------------------------------------------------------------------------
+
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
 (avoir un form qui demande le type pour la création, mais pas pour l'édition)
 quand on crée une écriture, le bouton créer remet new (ce qui est une bonne idée, mais il faudrait qu'il conserve la date
