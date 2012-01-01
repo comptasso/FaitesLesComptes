@@ -139,7 +139,7 @@ class Period < ActiveRecord::Base
     t
   end
 
- 
+
 
   # permet d'indiquer l'exercice sous la forme d'une chaine de caractère
   # du type Exercice 2011 si period correspond à une année pleine

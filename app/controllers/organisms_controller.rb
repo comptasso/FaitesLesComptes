@@ -21,7 +21,7 @@ class OrganismsController < ApplicationController
       redirect_to new_organism_period_url(@organism)
       return
     end
-    session[:period]=@organism.periods.last
+    @period= session[:period] ? Period.find(session[:period]) : @organism.periods.last
     @bank_accounts=@organism.bank_accounts.all
     @cashes=@organism.cashes.all
 

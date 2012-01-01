@@ -8,7 +8,7 @@
   <div class="inputs" id="entry_lines" >
 
     <p>   <label>Date : </label>
-      <%= picker_date :pick_date_line, Date.today.years_ago(5), Date.today.years_since(5) , @line.line_date %>
+      <%= picker_date :pick_date_line, @period.start_date, @period.close_date , @line.line_date %>
 
       <%=  f.input :narration,  input_html: {size: 20 } %>
 
