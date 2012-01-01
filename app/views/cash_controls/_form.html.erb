@@ -1,0 +1,22 @@
+
+<%  SimpleForm.wrapper_tag = :div %>
+<%= simple_form_for([@organism, @cash, @cash_control]) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="inputs">
+
+    <div class="input date">
+
+      <label>Le</label>
+     <%= picker_date :pick_date_at, Date.today.years_ago(5), Date.today.years_since(5) , @cash_control.date %>
+    </div>
+
+    <%= f.input :amount, input_html: { value: two_decimals(@cash_control.amount)} %>
+
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
+

@@ -1,0 +1,15 @@
+<%= content_for :menu do %>
+
+<%= icon_to 'navigation90.png', organism_cashes_path(@organism) %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Réalisation d'un contrôle de la caisse <%= @cash.name %>
+  </legend>
+  <% unless @previous_cash_control.nil? %>
+  <p>Dernier contrôle de caisse effectué le <%=l @previous_cash_control.date %> - Montant relevé : <%= two_decimals(@previous_cash_control.amount) %></p>
+<% end %>
+  <p>Solde théorique de la caisse : <%= debit_credit @cash.sold %></p>
+<%= render 'form' %>
+</fieldset>

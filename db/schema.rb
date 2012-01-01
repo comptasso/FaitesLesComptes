@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111231051854) do
+ActiveRecord::Schema.define(:version => 20120101133918) do
 
   create_table "bank_accounts", :force => true do |t|
     t.string   "number"
@@ -52,6 +52,14 @@ ActiveRecord::Schema.define(:version => 20111231051854) do
     t.datetime "updated_at"
     t.integer  "organism_id"
     t.string   "type"
+  end
+
+  create_table "cash_controls", :force => true do |t|
+    t.integer  "cash_id"
+    t.decimal  "amount"
+    t.date     "date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "cashes", :force => true do |t|

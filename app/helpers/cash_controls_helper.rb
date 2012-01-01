@@ -1,0 +1,2 @@
+module CashControlsHelper
+end

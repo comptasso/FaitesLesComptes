@@ -25,9 +25,9 @@ class CashesController < ApplicationController
     end
   end
 
-  def controle
-    render text: 'dans controle caisse'
-  end
+#  def controle
+#    render text: 'dans controle caisse'
+#  end
 
  
 end

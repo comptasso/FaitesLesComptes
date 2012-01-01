@@ -1,5 +1,7 @@
 Faitesvoscomptes::Application.routes.draw do
 
+  
+
 namespace 'admin' do
   resources :organisms do
     resources :books
@@ -55,9 +57,10 @@ end
       end
     end
     resources :cashes, :only=> [:index, :show] do
-      member do
-        get 'controle'
-      end
+#      member do
+#        get 'controle'
+#      end
+      resources :cash_controls
       resources :cash_lines
     end
     resources :books, :only=>[:show]
