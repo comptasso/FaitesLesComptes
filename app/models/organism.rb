@@ -27,6 +27,32 @@ class Organism < ActiveRecord::Base
     self.lines.non_depose.sum(:credit)
   end
 
+  # indique si organisme peut écrire des lignes de comptes, ce qui exige qu'il y ait des livres
+  # et aussi un compte bancaire ou une caisse
+  # Utilisé par le partial _menu pour savoir s'il faut afficher la rubrique ecrire
+  #
+  def can_write_line?
+    if (self.income_books.any? || self.outcome_books.any?) && (self.bank_accounts.any? || self.cashes.any?)
+      true
+    else
+      false
+    end
+  end
+  
+  # Renvoie la caisse principale (utilisée en priorité)
+  # en l'occurence actuellement la première trouvée ou nil s'il n'y en a pas
+  # Utilisé dans le controller line pour préremplir les select.
+  # utilisé également dans le form pour afficher ou non le select cash
+  def main_cash_id
+   self.cashes.any?  ? self.cashes.first.id  :  nil
+  end
+  
+  def main_bank_id
+    self.cashes.any?  ? self.cashes.first.id  :  nil
+  end
+
+  private
+
   def create_default
     self.income_books.create(:title=>'Recettes', :description=>'Livre des recettes')
     self.outcome_books.create(title: 'Dépenses', description: 'Livre des dépenses')

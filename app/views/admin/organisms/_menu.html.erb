@@ -104,11 +104,9 @@
 <ul>
   <li><h2>Exercices</h2>
     <ul>
-      <% @organism.periods.each do |c| %>
+      <% @organism.periods.reject {|r| r.new_record? }.each do |c| %>
         <li><%= link_to c.exercice, admin_organism_period_path(@organism, c) %>
-
           <ul>
-            
             <li><%= link_to 'Clore -TODO', admin_organism_periods_path(@organism) if c.open %></li>
             <li><%= link_to 'Archiver -TODO', admin_organism_periods_path(@organism) unless c.open %></li>
             <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>

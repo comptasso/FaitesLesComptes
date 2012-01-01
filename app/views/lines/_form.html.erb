@@ -19,7 +19,7 @@
       <%=  f.input :debit , input_html: {size: 12, value: two_decimals(@line.debit) } unless (@book.type=='IncomeBook') %>
       <%=  f.input :credit, input_html: {size: 12, value: two_decimals(@line.credit) } unless (@book.type=='OutcomeBook') %>
 
-      <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement' %>
+      <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement', disabled: "#{'Espèces' unless @organism.cashes.any?}" %>
       <span id="td_bank" > <%= f.association :bank_account, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>  </span>
       <span id="td_cash" > <%= f.association :cash, :collection => @organism.cashes.all, :include_blank=> false %></span>
     </p>

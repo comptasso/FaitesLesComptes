@@ -207,11 +207,24 @@ OK - Régler la problématique des images (dans l'affichage des livres) peut êt
 OK - Revoir navigation
 
 OK - Faire les initiales pour le compte bancaire
+
+OK - la rubrique écrire n'apparait que s'il y a au moins un compte ou une caisse
+OK - Line new exige (à tort) qu'il y ait une caisse et un compte bancaire. Ne devrait pas être obligatoire. Modifier le form en conséquence.
+OK - la rubrique espèces est disabled s'il n'y a pas de caisse
+Depenses écrire envoie sur afficher et non sur newline
+Pouvoir modifier les lignes non pointées
+Enlever le 1 qui s'affiche dans le formulaire new_line
+Problématique des deux cartes (Amex et CB).
+Le flash notice, la ligne a été créer pourrait être plus explicite (cas où on est interrompu et on ne sait plus très bien ou on en est).
+Problématique des retraits espèces ... (qui est un transfert)
+Il y a un bug dans l'affichage des exercices (qui semble ne pas prendre en compte un changement d'organisme) - en fait le line _new envoie sur l'index
+mais avec le mois de déc 2011 ! Et j'ai un lien avec mois =-1
+Dans le form new_line, il faudrait limiter les dates avec les limites de l'exercice.
+
 Traiter la question du pointage des comptes dans la zone admin - que mettre ? Edition et suppression des comptes yc ceux pointés
 L'affichage de l'exercice n'a pas forcément de sens pour des opérations non spécifiquement comptables comme une remise de chèque
 Changer income et outcome en sales and expenses
 Rebaptiser bank_extract_lines en bank_lines
-
 
 Avoir accès au journal de caisse et pouvoir y faire des pointages (ou en tout cas un contrôle)
 Mettre en place des datatable pour bank et cash_lines index

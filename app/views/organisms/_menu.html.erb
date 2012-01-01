@@ -19,7 +19,7 @@
         <% @organism.books.each do |b| %>
         <li><%= link_to b.title, book_lines_path(b), title: b.description  %>
         <ul>
-          <li> <%= link_to 'Ecrire', new_book_line_path(b) %></li>
+          <li> <%= link_to 'Ecrire', new_book_line_path(b)  if @organism.can_write_line? %></li>
           <li><%= link_to 'Afficher', book_lines_path(b) %></li>
         </ul>
        <% end %>

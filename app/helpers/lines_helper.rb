@@ -32,6 +32,13 @@ module LinesHelper
   end
 end
 
+  # affiche la liste des modes de paiement en prenant en compte l'existence d'une banque ou
+  # d'une caisse pour limiter les options
+  def paiment_mode_select
+    # cas où il n'y a qu'une caisse 
+
+  end
+
  
 
 
