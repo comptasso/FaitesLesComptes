@@ -211,7 +211,7 @@ OK - Faire les initiales pour le compte bancaire
 OK - la rubrique écrire n'apparait que s'il y a au moins un compte ou une caisse
 OK - Line new exige (à tort) qu'il y ait une caisse et un compte bancaire. Ne devrait pas être obligatoire. Modifier le form en conséquence.
 OK - la rubrique espèces est disabled s'il n'y a pas de caisse
-Depenses écrire envoie sur afficher et non sur newline
+OK - Depenses écrire envoie sur afficher et non sur newline
 Pouvoir modifier les lignes non pointées
 Enlever le 1 qui s'affiche dans le formulaire new_line
 Problématique des deux cartes (Amex et CB).
