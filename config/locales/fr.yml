@@ -236,7 +236,8 @@ fr:
             not_a_number: 'doit être un nombre'
       cash_control:
         attributes:
-          amount: 'doit être un nombre'
+          amount:
+            greater_than_or_equal_to: 'doît être positif ou nul'
 
   helpers:
     select:

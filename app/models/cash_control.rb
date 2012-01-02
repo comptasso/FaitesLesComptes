@@ -13,7 +13,7 @@ class CashControl < ActiveRecord::Base
   belongs_to :cash
 
   validates :date, :cash_id, :amount, presence: true
-  validates :amount, numericality: true
+  validates_numericality_of :amount, :greater_than_or_equal_to=>0.0
 
   scope :for_period, lambda {|p| where('date >= ? and date <= ?', p.start_date, p.close_date).order('date ASC')}
 

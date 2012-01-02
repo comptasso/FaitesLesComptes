@@ -22,6 +22,9 @@ class CashControlsController < ApplicationController
     if @cash_control.save
       redirect_to organism_cash_cash_controls_url(@organism, @cash)
     else
+      @previous_cash_control=@cash.cash_controls.for_period(@period).last(:order=>'date ASC')
+      @min_date, @max_date = @cash.range_date_for_cash_control(@period)
+      @date=@cash_control.date || [Date.today, @max_date].min
       render :new
     end
   end
@@ -32,6 +35,9 @@ params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
      if @cash_control.update_attributes(params[:cash_control])
       redirect_to organism_cash_cash_controls_url(@organism, @cash)
     else
+      @previous_cash_control=@cash.cash_controls.for_period(@period).last(:order=>'date ASC')
+      @min_date, @max_date = @cash.range_date_for_cash_control(@period)
+      @date=@cash_control.date || [Date.today, @max_date].min
       render :edit
     end
   end
@@ -67,7 +73,7 @@ params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
     else
       @mois= @period.guess_month
      redirect_to organism_cash_cash_controls_url(@organism, @cash, mois: @mois.to_i) if (params[:action]=='index')
-     redirect_to organism_cash_cash_control_url(@organism, @cash, mois: @mois.to_i) if params[:action]=='new'
+     redirect_to new_organism_cash_cash_control_url(@organism, @cash, mois: @mois.to_i) if params[:action]=='new'
     end
   end
 
