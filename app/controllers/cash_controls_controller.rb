@@ -66,8 +66,8 @@ params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
       @mois = params[:mois]
     else
       @mois= @period.guess_month
-     redirect_to organism_cash_cash_controls_url(@organism, @cash, mois: @mois) if (params[:action]=='index')
-     redirect_to organism_cash_cash_control_url(@organism, @cash, mois: @mois) if params[:action]=='new'
+     redirect_to organism_cash_cash_controls_url(@organism, @cash, mois: @mois.to_i) if (params[:action]=='index')
+     redirect_to organism_cash_cash_control_url(@organism, @cash, mois: @mois.to_i) if params[:action]=='new'
     end
   end
 

@@ -244,6 +244,7 @@ OK - Voir mise en forme du formulaire de saisie.
 OK -  Mettre dans la zone admin l'accès à la liste des pointages de caisses
 OK - Actuellement, il n'y a pas de destruction - fait dans la zone Admin
 OK - Il faudrait faire une présentation avec les mois comme pour les cash_lines
+
 Si l'on verrouille une caisse avec un écart, faut-il passer une écriture écart de caisse
 Rajouter une info sur le dashboard
 Voir les implications d'une saisie antérieure à un contrôle de caisse

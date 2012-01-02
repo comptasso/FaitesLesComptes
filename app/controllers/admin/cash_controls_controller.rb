@@ -31,7 +31,7 @@ class Admin::CashControlsController < Admin::ApplicationController
       @mois = params[:mois]
     else
       @mois= @period.guess_month
-     redirect_to admin_organism_cash_cash_controls_url(@organism, @cash, mois: @mois) if (params[:action]=='index')
+     redirect_to admin_organism_cash_cash_controls_url(@organism, @cash, mois: @mois) 
 
     end
   end
