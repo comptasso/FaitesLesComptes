@@ -11,6 +11,7 @@ class LinesController < ApplicationController
   prepend_before_filter :find_book
   before_filter :fill_mois, only: [:index, :new]
 
+
   # GET /lines
   # GET /lines.json
   def index
@@ -86,8 +87,8 @@ class LinesController < ApplicationController
   # PUT /lines/1
   # PUT /lines/1.json
     def update
+      get_date
       @line = @book.lines.find(params[:id])
-  
   
       respond_to do |format|
         if @line.update_attributes(params[:line])

@@ -1,2 +1,12 @@
-<h1>CashControls#edit</h1>
-<p>Find me in app/views/cash_controls/edit.html.erb</p>
+<%= content_for :menu do %>
+
+<%= icon_to 'navigation90.png', organism_cashes_path(@organism) %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification d'un contrôle de la caisse <%= @cash.name %>
+  </legend>
+  <p>Solde théorique de la caisse au <%= l @cash_control.date %> : <%= debit_credit @cash.sold(@cash_control.date) %></p>
+<%= render 'form' %>
+</fieldset>

@@ -38,6 +38,7 @@ class Line < ActiveRecord::Base
   scope :checks_received, where('payment_mode = ? AND credit > 0', 'Chèque')
   
   scope :non_depose, checks_received.where('check_deposit_id IS NULL')
+  scope :period, lambda {|p| where('line_date >= ? AND line_date <= ?', p.start_date, p.close_date)}
 
 
 

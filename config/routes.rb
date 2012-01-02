@@ -60,7 +60,11 @@ end
 #      member do
 #        get 'controle'
 #      end
-      resources :cash_controls
+      resources :cash_controls do
+        member do
+          put 'lock'
+        end
+      end
       resources :cash_lines
     end
     resources :books, :only=>[:show]

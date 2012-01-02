@@ -3,15 +3,23 @@
   <table>
     <thead>
       <tr>
-    <th>Date</th><th>Montant relevé</th><th>Montant théorique</th><th>Actions</th>
+        <th>Date</th><th>Montant relevé</th><th>Montant théorique</th><th>Ecart de caisse</th><th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <% @cash_controls.each do |r| %>
       <tr>
-        <td><%=l  r.date %></td><td class="numeric"><%=  two_decimals r.amount %></td>
-        <td><%= @cash.sold(r.date) %></td><td></td>
-      </tr>
+        <td><%=l  r.date %></td>
+        <td class="numeric"><%= two_decimals r.amount %></td>
+        <td class="numeric"><%= two_decimals @cash.sold(r.date) %></td>
+        <td class="numeric"><%= debit_credit r.amount- @cash.sold(r.date) %></td>
+        <td>
+          <%= icon_to 'modifier.png', edit_organism_cash_cash_control_path(@organism,@cash,r) unless r.locked? %>
+          <%= icon_to 'verrouiller.png', lock_organism_cash_cash_control_path(@organism,@cash,r),
+            :confirm=>"Cette action verrouille le pointage de caisse ainsi que les écritures de caisse correspondantes \n#{cash_difference(r)}\nConfirmez vous ?" ,
+            :method=>:put unless r.locked? %>
+          </td>
+       </tr>
       <% end %>
     </tbody>
   </table>

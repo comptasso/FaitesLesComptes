@@ -17,5 +17,18 @@ class CashControl < ActiveRecord::Base
 
   scope :for_period, lambda {|p| where('date >= ? and date <= ?', p.start_date, p.close_date).order('date ASC')}
 
- 
+  before_update :lock_lines_if_locked
+
+  private
+
+  # verrouille les lignes correspondantes à un contrôle de caisse
+  def lock_lines_if_locked
+    period = self.cash.organism.find_period(self.date) # on trouve l'exercice correspondant à ce contrôle de caisse
+    # Trouver les lignes de cette caiss de l'exercice, antérieures à la date du contrôle et non verrouillées
+    if self.locked == true # si les lignes 
+      self.cash.lines.period(period).where('lines.line_date <= ?',self.date).where('locked = ?', false).each    do |l|
+        l.update_attribute(:locked, true)
+      end
+    end
+  end
 end

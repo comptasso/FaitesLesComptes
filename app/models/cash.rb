@@ -3,6 +3,8 @@ class Cash < ActiveRecord::Base
   has_many :lines
   has_many :cash_controls
 
+
+
   # calcule le solde d'une caisse à une date donnée en partant du début de l'exercice 
   # qui inclut cette date
   def sold(date=Date.today)
