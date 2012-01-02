@@ -246,7 +246,7 @@ OK - Actuellement, il n'y a pas de destruction - fait dans la zone Admin
 OK - Il faudrait faire une présentation avec les mois comme pour les cash_lines
 OK - Rajouter une info sur le dashboard de organism
 OK - Mettre en place un datatable pour cash_lines index
-Mettre en place une validation qui impose que le montant soit positif ou nul
+OK - Mettre en place une validation qui impose que le montant soit positif ou nul
 -----------------------------------------------------------------------------------------------
 
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
