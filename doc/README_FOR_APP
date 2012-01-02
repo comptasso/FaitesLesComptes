@@ -238,8 +238,8 @@ OK - Faire une fonction Controle pour la caisse et l'insérer dans le menu
 OK - Créer une table cash_control et les accessoires (controller, vue, formulaire)
 OK - Le pointage de caisse doit verrouiller les lignes
 ?? Mettre dans la zone admin l'accès à la liste des pointages de caisses
-Date min du dernier date_picker devrait être le dernier cash control ou le premier jour de l'exercice
-Date max le jour actuel ou le dernier jour de l'exercice
+OK - Date min du dernier date_picker devrait être le dernier cash control ou le premier jour de l'exercice
+OK - Date max le jour actuel ou le dernier jour de l'exercice
 Voir mise en forme du formulaire de saisie.
 Actuellement, il n'y a pas de destruction
 Il faudrait faire une présentation avec les mois comme pour les cash_lines

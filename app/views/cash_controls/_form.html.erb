@@ -8,10 +8,10 @@
     <div class="input date">
 
       <label>Le</label>
-     <%= picker_date :pick_date_at, @min_date, Date.today , @cash_control.date %>
+     <%= picker_date :pick_date_at, @min_date, @max_date , @cash_control.date %>
     </div>
 
-    <%= f.input :amount, input_html: { value: two_decimals(@cash_control.amount)} %>
+    <%= f.input :amount, input_html: { value: two_decimals(@cash_control.amount), class: "nombre", size: '5'} %>
 
   </div>
 

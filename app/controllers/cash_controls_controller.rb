@@ -11,10 +11,10 @@ class CashControlsController < ApplicationController
 
   def new
     @cash=@organism.cashes.find(params[:cash_id])
-    @previous_cash_control=@cash.cash_controls.last(:order=>'date ASC')
-    @min_date=@organism.find_period.start_date
-    @min_date = @previous_cash_control.date unless @previous_cash_control.nil?
-    @cash_control=@cash.cash_controls.new(:date=>Date.today)
+    @previous_cash_control=@cash.cash_controls.for_period(@period).last(:order=>'date ASC')
+    @min_date, @max_date = @cash.range_date_for_cash_control(@period)
+    @date=[Date.today, @max_date].min
+    @cash_control=@cash.cash_controls.new(:date=>@date)
   end
 
   def create
@@ -42,7 +42,9 @@ params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
   def edit
     @cash=@organism.cashes.find(params[:cash_id])
     @cash_control=@cash.cash_controls.find(params[:id])
-  end
+    @min_date, @max_date = @period.start_date, @period.close_date
+    @date=@cash_control.date
+   end
 
   # lock permet de verrouiller un controle de caisse, 
   # ce qui a pour effet (par un after_update) de verrouiller les lignes qui le concernent
