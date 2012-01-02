@@ -17,6 +17,10 @@ class CashControl < ActiveRecord::Base
 
   scope :for_period, lambda {|p| where('date >= ? and date <= ?', p.start_date, p.close_date).order('date ASC')}
 
+  # sélectionne tous les contrôles de caisse relevant d'un mois donné pour une période donnée
+  scope :mois, lambda {|p,mois| where('date >= ? AND date <= ?', 
+      p.start_date.months_since(mois.to_i).beginning_of_month, p.start_date.months_since(mois.to_i).end_of_month).order('date ASC')}
+
   before_update :lock_lines_if_locked
 
 

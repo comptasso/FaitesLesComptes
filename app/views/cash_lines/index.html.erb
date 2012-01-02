@@ -3,12 +3,6 @@
 <% end -%>
 
 
-
-
-
-
-
-
 <fieldset><legend>Livre de caisse - <%=  @book.name %></legend>
   <div id="submenu">
     <span><%=  link_to_if @period.previous_period?, '<<', previous_organism_period_path(@organism,@period) %></span>

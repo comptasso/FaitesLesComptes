@@ -1,5 +1,8 @@
 <fieldset>
   <legend>Liste des contrôles : <%= @cash.name %> </legend>
+    <div id="submenu">
+        <%= admin_cash_control_submenu_helper(@cash, @period) %>
+    </div>
   <table>
     <thead>
       <tr>
@@ -10,9 +13,9 @@
       <% @cash_controls.each do |r| %>
       <tr>
         <td><%=l  r.date %></td>
-        <td class="numeric"><%= two_decimals r.amount %></td>
-        <td class="numeric"><%= two_decimals @cash.sold(r.date) %></td>
-        <td class="numeric"><%= debit_credit r.amount- @cash.sold(r.date) %></td>
+        <td class="nombre"><%= debit_credit r.amount %></td>
+        <td class="nombre"><%= debit_credit @cash.sold(r.date) %></td>
+        <td class="nombre"><%= debit_credit r.amount- @cash.sold(r.date) %></td>
         <td>
           <%= icon_to 'modifier.png', edit_organism_cash_cash_control_path(@organism,@cash,r) unless r.locked? %>
           <%= icon_to 'verrouiller.png', lock_organism_cash_cash_control_path(@organism,@cash,r),
