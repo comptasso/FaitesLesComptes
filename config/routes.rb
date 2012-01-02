@@ -16,7 +16,9 @@ namespace 'admin' do
         end
       end
     end
-    resources :cashes
+    resources :cashes do
+      resources :cash_controls, only: [:index, :destroy]
+    end
     resources :periods
   end
 end

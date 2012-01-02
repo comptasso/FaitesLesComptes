@@ -89,6 +89,7 @@
       <% @organism.cashes.reject {|r| r.new_record? }.each do |b| %>
         <li><%= link_to b.name, admin_organism_cash_path(@organism,b)  %>
           <ul>
+            <li><%= link_to 'Contrôles', admin_organism_cash_cash_controls_path(@organism,b) %>  </li>
             <li><%=link_to  'Modifier', edit_admin_organism_cash_path(@organism, b)  %></li>
 
             <li><%= link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' , method: :delete %></li>

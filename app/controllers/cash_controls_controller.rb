@@ -6,9 +6,7 @@ class CashControlsController < ApplicationController
     @cash_controls=@cash.cash_controls.for_period(@period)
   end
 
-  def show
-  end
-
+  
   def new
     @cash=@organism.cashes.find(params[:cash_id])
     @previous_cash_control=@cash.cash_controls.for_period(@period).last(:order=>'date ASC')
