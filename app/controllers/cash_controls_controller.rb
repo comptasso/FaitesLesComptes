@@ -1,5 +1,7 @@
 class CashControlsController < ApplicationController
   def index
+    @cash=@organism.cashes.find(params[:cash_id])
+    @cash_controls=@cash.cash_controls.for_period(@period)
   end
 
   def show
@@ -12,11 +14,11 @@ class CashControlsController < ApplicationController
   end
 
   def create
-     params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
+    params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
     @cash=@organism.cashes.find(params[:cash_id])
     @cash_control=@cash.cash_controls.new(params[:cash_control])
     if @cash_control.save
-      redirect_to organism_url(@organism)
+      redirect_to organism_cash_cash_controls_url(@organism, @cash)
     else
       render :new
     end

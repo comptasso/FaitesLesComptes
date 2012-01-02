@@ -240,6 +240,8 @@ Le pointage de caisse doit verrouiller les lignes
 Mettre dans la zone admin l'accès à la liste des pointages de caisses
 Date min du dernier date_picker devrait être le dernier cash control
 
+Rajouter une info sur le dashboard
+
 Mettre en place un datatable pour cash_lines index
 Faire que la modif se fasse dans une modalbox
 

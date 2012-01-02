@@ -51,6 +51,16 @@ class Organism < ActiveRecord::Base
     self.cashes.any?  ? self.cashes.first.id  :  nil
   end
 
+  # find_period trouve l'exercice relatif à une date donnée
+  # utilisé par exemple pour calculer le solde d'une caisse à une date donnée
+  # par défaut la date est celle du jour
+  def find_period(date=Date.today)
+    period_array = self.periods.all.select {|p| p.start_date <= date && p.close_date >= date}
+    raise 'No period fits with the date' if period_array.empty?
+    raise 'OverlapPeriods - Two or more periods found' if period_array.size > 1 
+    period_array.first
+  end
+
   private
 
   def create_default
