@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 class CashControlsController < ApplicationController
   def index
     @cash=@organism.cashes.find(params[:cash_id])
@@ -10,6 +12,8 @@ class CashControlsController < ApplicationController
   def new
     @cash=@organism.cashes.find(params[:cash_id])
     @previous_cash_control=@cash.cash_controls.last(:order=>'date ASC')
+    @min_date=@organism.find_period.start_date
+    @min_date = @previous_cash_control.date unless @previous_cash_control.nil?
     @cash_control=@cash.cash_controls.new(:date=>Date.today)
   end
 

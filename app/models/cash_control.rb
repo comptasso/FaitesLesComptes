@@ -19,6 +19,8 @@ class CashControl < ActiveRecord::Base
 
   before_update :lock_lines_if_locked
 
+
+
   private
 
   # verrouille les lignes correspondantes à un contrôle de caisse
