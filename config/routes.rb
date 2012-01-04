@@ -58,7 +58,7 @@ end
         end
       end
     end
-    resources :cashes, :only=> [:index, :show] do
+    resources :cashes, :only=> [:show] do
 #      member do
 #        get 'controle'
 #      end

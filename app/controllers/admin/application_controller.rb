@@ -34,7 +34,7 @@ class Admin::ApplicationController < ActionController::Base
   end
 
   def current_period
-    pid = session[:period] ||= @organism.periods.last.id if @organism
+    pid = session[:period] ||= (@organism.periods.last.id if  (@organism && @organism.periods.any?))
     @period= Period.find(pid) if pid
   end
 

@@ -30,9 +30,13 @@
   <div>
   <h4><%= ca.name %> </h4>
   <p>Solde de la caisse : <%= debit_credit ca.sold %></p>
-  <p>Dernier contrôle de caisse en date du <%=l ca.cash_controls.order('date ASC').last.date if ca.cash_controls.any? %>
-    <span class="alert"><%= cash_difference(ca.cash_controls.order('date ASC').last) %></span>
+  <% if ca.cash_controls.any?  %>
+  <p>Dernier contrôle de caisse en date du <%=l ca.cash_controls.order('date ASC').last.date  %>
+    <span class="alert"><%= cash_difference(ca.cash_controls.order('date ASC').last ) %></span>
   </p>
+  <% else %>
+  <span class="alert">Pas encore de contrôle de caisse à ce jour</span>
+  <% end %>
   </div>
 <% end %>
   <br />

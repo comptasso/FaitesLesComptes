@@ -1,19 +1,6 @@
 # -*- encoding : utf-8 -*-
 class CashesController < ApplicationController
 
- 
-
-  # GET /cashes
-  # GET /cashes.json
-  def index
-    @cashes = @organism.cashes.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @cashes }
-    end
-  end
-
   # GET /cashes/1
   # GET /cashes/1.json
   def show
@@ -25,9 +12,6 @@ class CashesController < ApplicationController
     end
   end
 
-#  def controle
-#    render text: 'dans controle caisse'
-#  end
 
  
 end
