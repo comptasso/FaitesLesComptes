@@ -9,6 +9,8 @@ gem 'simple_form'
 
 gem 'sqlite3'
 gem 'acts_as_list'
+gem 'prawn'
+gem 'prawnto'
 
 
 # Gems used only for assets and not required
