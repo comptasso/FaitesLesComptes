@@ -20,7 +20,7 @@ class LinesController < ApplicationController
      respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @lines }
-      format.pdf {@listing = Listing.new(@period, @month, @lines)
+      format.pdf {@listing = Listing.new(@period, @month, @book)
         
       }
     end
