@@ -1,10 +1,7 @@
 <%= content_for :menu do %>
+<%=  icon_to 'detail.png', book_lines_path(@book, mois: @mois, :format=>'pdf') %>
   
 <% end -%>
-
-<%= content_for :submenu do %>
-
-<% end %>
 
 <fieldset><legend><%=  @book.title%> - Mois de <%=l(@date, :format=>:month_year) %></legend>
 
