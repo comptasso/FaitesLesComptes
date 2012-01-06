@@ -6,26 +6,30 @@
 class Listing
   NB_PER_PAGE=25
 
+  attr_reader :lines
+
   def initialize(period, month, book)
     @organism=period.organism
     @period=period
     @month=month
     @book=book
-    @lines = @book.lines.period_month(@period, @month).all
+    @lines = @book.lines.period_month(@period, @month).order(:line_date).all
   end
 
-  # calcule le nombre de page du listing
+  # calcule le nombre de page du listing en divisant le nombre de lignes
+  # par un float qui est le nombre de lignes par pages,
+  # puis arrondi au nombre supérieur
   def total_pages
-    @lines.size/NB_PER_PAGE
+    (@lines.size/NB_PER_PAGE.to_f).ceil
   end
 
   # renvoie les lignes correspondant à la page demandée
   def page(n)
-    n=n-1 # pour partir d'une numérotation à zero
+    n = n-1 # pour partir d'une numérotation à zero
     return nil if n > self.total_pages
     @lines[(NB_PER_PAGE*n)..(NB_PER_PAGE*(n+1)-1)].map do |item|
       [
-        I18n::l(item.line_date),
+        item.line_date,
         item.narration,
         item.nature ? item.nature.name : '-' ,
         item.destination ? item.destination.name : '-',
