@@ -5,6 +5,8 @@
 
 <% end %>
 <fieldset><legend> Liste des natures</legend>
+
+  <h3>Recettes</h3>
 <table>
   <tr>
     <th>Nom</th>
@@ -15,12 +17,39 @@
     <th></th>
   </tr>
 
-<% @natures.each do |nature| %>
+
+
+<% @recettes.each do |nature| %>
   <tr>
     <td><%= nature.name %></td>
     
     <td><%= nature.comment %></td>
     
+    <td><%= icon_to 'modifier.png', edit_organism_nature_path(@organism,nature) %></td>
+    <td><%= icon_to 'supprimer.png', [@organism, nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+   <h3>Dépenses</h3>
+<table>
+  <tr>
+    <th>Nom</th>
+
+    <th>Commentaire</th>
+
+    <th></th>
+    <th></th>
+  </tr>
+
+
+
+<% @depenses.each do |nature| %>
+  <tr>
+    <td><%= nature.name %></td>
+
+    <td><%= nature.comment %></td>
+
     <td><%= icon_to 'modifier.png', edit_organism_nature_path(@organism,nature) %></td>
     <td><%= icon_to 'supprimer.png', [@organism, nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>

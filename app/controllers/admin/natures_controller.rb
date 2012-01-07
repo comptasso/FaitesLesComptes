@@ -7,7 +7,8 @@ class Admin::NaturesController < Admin::ApplicationController
   # GET /natures
   # GET /natures.json
   def index
-    @natures = @organism.natures.all
+    @recettes = @organism.natures.recettes
+    @depenses = @organism.natures.depenses
 
     respond_to do |format|
       format.html # index.html.erb
