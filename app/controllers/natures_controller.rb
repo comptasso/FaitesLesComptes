@@ -15,6 +15,12 @@ class NaturesController < ApplicationController
     end
   end
 
+  def stats
+    @recettes=@organism.natures.recettes
+    @depenses=@organism.natures.depenses
+
+  end
+
  
  
 end

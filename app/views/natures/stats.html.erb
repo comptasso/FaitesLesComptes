@@ -1,0 +1,35 @@
+
+<table class="data_table">
+  <thead>
+    <tr>
+      <th>Nature</th>
+      <% @period.list_months_year.each do |my| %>
+        <%=  content_tag :th,my  %>
+      <% end %>
+      <th>Cumul</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+    <% @recettes.each do |r| %>
+      <tr>
+        <td><%= r.name %></td>
+        <% r.stat_with_cumul(@period).each do |val| %>
+          <%=  content_tag :td, debit_credit(val), :class=>'nombre'  %>
+        <% end %>
+      </tr>
+    <% end %>
+    <% @depenses.each do |r| %>
+      <tr>
+        <td><%= r.name %></td>
+        <% r.stat_with_cumul(@period).each do |val| %>
+          <%=  content_tag :td, debit_credit(val), :class=>'nombre'   %>
+        <% end %>
+      </tr>
+    <% end %>
+
+
+  </tbody>
+</table>
+

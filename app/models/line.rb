@@ -42,9 +42,6 @@ class Line < ActiveRecord::Base
   scope :period_month, lambda {|p,m| where('line_date >= ? AND line_date <= ?', p.start_date.months_since(m), p.start_date.months_since(m).end_of_month) }
   scope :cumul_period_month, lambda {|p,m| where('line_date >= ? AND line_date <=?', p.start_date, p.start_date.months_since(m).end_of_month)}
 
-
-
-
   def self.solde_debit_avant(date)
     Line.where('line_date < ?', date).sum(:debit)
   end

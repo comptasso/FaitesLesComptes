@@ -255,9 +255,10 @@ OK - Modifier les formulaires pour avoir les natures recettes pour les livres de
 Localisation du formualire avec les boutons radio
 
 Modifier l'approche des statistiques par natures
-    il faut mettre stat dans le controller natures/destinations plutot que dans organism
-    Créer une classe report avec un array des totaux par mois
-    Refaire l'affichage de la vue (avec possibilité de filtrer par destination /ou inversement)
+OK - il faut mettre stat dans le controller natures/destinations plutot que dans organism
+OK - Créer une classe report avec un array des totaux par mois : en fait j'ai juste fait une méthode
+OK - Refaire l'affichage de la vue
+     avec possibilité de filtrer par destination /ou inversement
     Transformer en datatable.
 --------------------------------------------------------------------------
 

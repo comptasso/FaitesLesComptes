@@ -9,9 +9,24 @@ class Nature < ActiveRecord::Base
 
    default_scope order: 'name ASC'
    scope :recettes, where('income_outcome = ?', true)
-    scope :depenses, where('income_outcome = ?', false)
+   scope :depenses, where('income_outcome = ?', false)
 
   before_destroy :ensure_no_lines
+
+ # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
+  def stat(period)
+    org=period.organism
+    period.nb_months.times.map do |m|
+     d = org.lines.period_month(period,m).where('nature_id = ?', self.id).sum(:debit)
+     c = org.lines.period_month(period,m).where('nature_id = ?', self.id).sum(:credit)
+     c-d
+     end
+  end
+
+  def stat_with_cumul(period)
+    s =self.stat(period)
+    s << s.sum
+  end
 
   private
 

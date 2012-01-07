@@ -129,14 +129,14 @@ class Period < ActiveRecord::Base
     self.start_date.months_since(mois_period).end_of_month.day
   end
 
+ # retourne une liste des mois de l'exercice localisée par exemple janvier février,...
   def list_months
-    t=[]
-    d=self.start_date
-    while d < self.close_date
-      t << I18n::l(d,:format=>:month)
-      d=d.months_since(1)
-    end
-    t
+    self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>'%Y'}
+  end
+
+  # retourne une liste des mois de l'ex localisée sous forme fév. 11 mar. 11 ...
+  def list_months_year
+    self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>'%b %y'}
   end
 
 
