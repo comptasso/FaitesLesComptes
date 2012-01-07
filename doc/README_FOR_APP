@@ -250,11 +250,11 @@ OK - Mettre en place une validation qui impose que le montant soit positif ou nu
 
 -----------------------Edition papier livres, natures et destinations------------------------------------------------------------------------
 OK - Faire le fond Brouillard - trouver comment avoir les images dans prawn
+OK - Mettre en place les catégories dépenses et recettes pour natures - un boolean en fait
+OK - Modifier les formulaires pour avoir les natures recettes pour les livres de recettes, et id pour dépenses
+Localisation du formualire avec les boutons radio
 
-Mettre en place les catégories dépenses et recettes pour natures 
-Modifier les formulaires pour avoir les natures recettes pour les livres de recettes, et id pour dépenses
-
-Modifier l'approche des statistiques
+Modifier l'approche des statistiques par natures
     il faut mettre stat dans le controller natures/destinations plutot que dans organism
     Créer une classe report avec un array des totaux par mois
     Refaire l'affichage de la vue (avec possibilité de filtrer par destination /ou inversement)
