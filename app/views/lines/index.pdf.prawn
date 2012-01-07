@@ -1,5 +1,4 @@
-prawn_document(:page_size => 'A4', :page_layout => :landscape,
-:background=>"#{Rails.root.to_s}/public/images/argent_liquide.jpg") do |pdf|
+prawn_document(:page_size => 'A4', :page_layout => :landscape) do |pdf|
 #         :info => {
 #:Title => "Edition du livre #{@book.title}",:Author => "John Doe",:Subject => "Comptabilité",
 # :Keywords => "#{@book.title} comptabilité, #{@organism.title}",:Creator => "#{@organism.title}",
@@ -8,8 +7,27 @@ prawn_document(:page_size => 'A4', :page_layout => :landscape,
 #        :background=>'/assets/images/argent_liquide.jpg' }
 
 
+
+
 width=pdf.bounds.right
 time=l Time.now
+
+pdf.create_stamp("brouillard") do
+pdf.rotate(45) do
+pdf.fill_color "bbbbbbb"
+
+pdf.font_size(120) do
+ pdf.text_rendering_mode(:stroke) do
+  pdf.draw_text("Brouillard", :at=>[250, -150])
+ end
+end
+pdf.fill_color "000000"
+end
+end
+
+
+
+
 
 # la table des pages
 @listing.total_pages.times do |t|
@@ -62,6 +80,8 @@ end
         row(0).style {|c| c.font_style=:bold; c.align=:center }
          
      end
+
+pdf.stamp "brouillard" if @listing.brouillard?
 
     pdf.start_new_page unless ((t+1) == @listing.total_pages)
 end

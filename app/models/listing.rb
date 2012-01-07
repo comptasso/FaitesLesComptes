@@ -11,7 +11,7 @@ class Listing
   def initialize(period, month, book)
     @organism=period.organism
     @period=period
-    @month=month
+    @month=month.to_i
     @book=book
     @lines = @book.lines.period_month(@period, @month).order(:line_date).all
   end
@@ -54,6 +54,17 @@ class Listing
    def total_credit
     @lines.sum(&:credit)
   end
+
+   # indique si le listing doit être considéré comme un brouillard
+   # ou une édition définitive.
+   # Cela se fait en regardant si toutes les lignes sont locked?
+   def brouillard?
+     if @lines.any? {|l| !l.locked? }
+       return true
+     else
+       return false
+     end
+   end
 
 end
 
