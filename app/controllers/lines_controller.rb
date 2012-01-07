@@ -11,7 +11,6 @@ class LinesController < ApplicationController
   prepend_before_filter :find_book
   before_filter :fill_mois, only: [:index, :new]
 
-
   # GET /lines
   # GET /lines.json
   def index
@@ -45,7 +44,11 @@ class LinesController < ApplicationController
   # GET /lines/new.json
   def new
    @line =@book.lines.new(line_date: flash[:date] || @period.start_date.months_since(@mois.to_i), :cash_id=>@organism.main_cash_id, :bank_account_id=>@organism.main_bank_id)
-
+   if @book.class.to_s == 'IncomeBook'
+     @natures=@organism.natures.recettes
+   else
+     @natures=@organism.natures.depenses
+   end
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @line }

@@ -12,7 +12,7 @@
 
       <%=  f.input :narration,  input_html: {size: 20 } %>
 
-      <%=  f.association :nature ,  :collection => @organism.natures.all(:order => 'name'), :prompt => "Quoi ?" %>
+      <%=  f.association :nature ,  :collection => @natures, :prompt => "Quoi ?" %>
       <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'), :prompt => "Pour qui ?" %>
     </p>
     <p>
