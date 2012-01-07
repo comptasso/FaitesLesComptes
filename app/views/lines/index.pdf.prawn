@@ -1,3 +1,13 @@
+prawn_document(:page_size => 'A4', :page_layout => :landscape,
+:background=>"#{Rails.root.to_s}/public/images/argent_liquide.jpg") do |pdf|
+#         :info => {
+#:Title => "Edition du livre #{@book.title}",:Author => "John Doe",:Subject => "Comptabilité",
+# :Keywords => "#{@book.title} comptabilité, #{@organism.title}",:Creator => "#{@organism.title}",
+# :Producer => "FaitesLesComptes with Prawn",
+# :CreationDate => Time.now} } do |pdf|
+#        :background=>'/assets/images/argent_liquide.jpg' }
+
+
 width=pdf.bounds.right
 time=l Time.now
 
@@ -56,3 +66,4 @@ end
     pdf.start_new_page unless ((t+1) == @listing.total_pages)
 end
 
+end

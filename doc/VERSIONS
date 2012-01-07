@@ -24,20 +24,14 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 + les pointages
 + l'affichage des lignes
 
-014 : modification de structure (bank_lines, income et outcome,...
-- bank_extract_lines
-- income
-- outcome
-
-
 
 015 : gestion de différents types d'écritures
 - écritures de dépenses répétées
 - virements interne
 
 020 : editions et recherche d'écriture
-+ affichage d'un tableau des recettes/dépenses sur une période
-- editions papier des suivis recettes/dépenses
+- affichage d'un tableau des recettes/dépenses sur une période
++ editions papier des suivis recettes/dépenses
 - édition papier d'une remise chèque
 - affichage graphique de solde
 

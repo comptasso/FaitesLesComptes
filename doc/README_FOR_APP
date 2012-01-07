@@ -247,7 +247,19 @@ OK - Il faudrait faire une présentation avec les mois comme pour les cash_lines
 OK - Rajouter une info sur le dashboard de organism
 OK - Mettre en place un datatable pour cash_lines index
 OK - Mettre en place une validation qui impose que le montant soit positif ou nul
------------------------------------------------------------------------------------------------
+
+-----------------------Edition papier livres, natures et destinations------------------------------------------------------------------------
+Faire le fond Brouillard - trouver comment avoir les images dans prawn
+
+Pouvoir verrouiller un mois dans Period
+Mettre en place les catégories dépenses et recettes pour natures et destinations
+
+Régler le bug de rafraîchir dans l'affichage des natures et des destinations.
+Faire l'édition papier des mois sur natures et destinations
+
+--------------------------------------------------------------------------
+
+
 
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
 (avoir un form qui demande le type pour la création, mais pas pour l'édition)
