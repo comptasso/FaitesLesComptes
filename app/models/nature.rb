@@ -23,8 +23,17 @@ class Nature < ActiveRecord::Base
      end
   end
 
-  def stat_with_cumul(period)
-    s =self.stat(period)
+  def stat_filtered(period, destination_id)
+    org=period.organism
+    period.nb_months.times.map do |m|
+     d = org.lines.period_month(period,m).where('nature_id = ?', self.id).where('destination_id=?', destination_id).sum(:debit)
+     c = org.lines.period_month(period,m).where('nature_id = ?', self.id).where('destination_id=?', destination_id).sum(:credit)
+     c-d
+     end
+  end
+
+  def stat_with_cumul(period, destination_id = 0)
+    s = (destination_id == 0) ? self.stat(period) : self.stat_filtered(period, destination_id)
     s << s.sum
   end
 

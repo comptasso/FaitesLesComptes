@@ -1,4 +1,14 @@
+<fieldset><legend>
+    Statistiques par natures
+  </legend>
 
+  <%= form_tag stats_organism_natures_path(@organism),:method => :get, :style=>"display: inline;"  do %>
+
+   <label for="destination">Destination : </label>
+     <%= select_tag :destination, options_for_select([['Toutes', 0]] + @organism.destinations.collect {|d| [d.name, d.id]}, @filter) %>
+     <%= submit_tag 'Rafraichir', :class=>'button' %>
+<% end %>
+</fieldset>
 <table class="data_table">
   <thead>
     <tr>
@@ -15,7 +25,7 @@
     <% @recettes.each do |r| %>
       <tr>
         <td><%= r.name %></td>
-        <% r.stat_with_cumul(@period).each do |val| %>
+        <% r.stat_with_cumul(@period, @filter).each do |val| %>
           <%=  content_tag :td, debit_credit(val), :class=>'nombre'  %>
         <% end %>
       </tr>
@@ -23,7 +33,7 @@
     <% @depenses.each do |r| %>
       <tr>
         <td><%= r.name %></td>
-        <% r.stat_with_cumul(@period).each do |val| %>
+        <% r.stat_with_cumul(@period, @filter).each do |val| %>
           <%=  content_tag :td, debit_credit(val), :class=>'nombre'   %>
         <% end %>
       </tr>

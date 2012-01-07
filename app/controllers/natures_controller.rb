@@ -16,9 +16,10 @@ class NaturesController < ApplicationController
   end
 
   def stats
+    @filter=params[:destination].to_i || 0
     @recettes=@organism.natures.recettes
     @depenses=@organism.natures.depenses
-
+   
   end
 
  
