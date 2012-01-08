@@ -13,7 +13,22 @@ class Nature < ActiveRecord::Base
 
   before_destroy :ensure_no_lines
 
- # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
+ 
+ # stat with cumul fournit un tableau comportant le total des lignes pour la nature
+ # pour chaque mois plus un cumul de ce montant en dernière position
+ # fait appel selon le cas à deux méthodes protected stat ou stat_filtered.
+  def stat_with_cumul(period, destination_id = 0)
+    s = (destination_id == 0) ? self.stat(period) : self.stat_filtered(period, destination_id)
+    s << s.sum
+
+  end
+
+  
+
+  protected
+
+  # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
+  # pour toutes les destinations confondues
   def stat(period)
     org=period.organism
     period.nb_months.times.map do |m|
@@ -23,6 +38,8 @@ class Nature < ActiveRecord::Base
      end
   end
 
+  # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
+  # pour une destination donnée
   def stat_filtered(period, destination_id)
     org=period.organism
     period.nb_months.times.map do |m|
@@ -30,11 +47,6 @@ class Nature < ActiveRecord::Base
      c = org.lines.period_month(period,m).where('nature_id = ?', self.id).where('destination_id=?', destination_id).sum(:credit)
      c-d
      end
-  end
-
-  def stat_with_cumul(period, destination_id = 0)
-    s = (destination_id == 0) ? self.stat(period) : self.stat_filtered(period, destination_id)
-    s << s.sum
   end
 
   private

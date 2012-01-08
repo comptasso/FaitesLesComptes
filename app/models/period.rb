@@ -131,7 +131,7 @@ class Period < ActiveRecord::Base
 
  # retourne une liste des mois de l'exercice localisée par exemple janvier février,...
   def list_months
-    self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>'%Y'}
+    self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>'%B'}
   end
 
   # retourne une liste des mois de l'ex localisée sous forme fév. 11 mar. 11 ...

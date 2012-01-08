@@ -260,17 +260,11 @@ OK - Créer une classe report avec un array des totaux par mois : en fait j'ai j
 OK - Refaire l'affichage de la vue
 OK - Avec possibilité de filtrer par destination
      Transformer en datatable.
+     Supprimer l'affichage par page de datatable ? OU voir comment on peut faire un sorting intelligent (on affiche tout)
+     Ajouter des totaux (voire des sous totaux)
      Voir une approche similaire pour les statistiques par destinations
+     Faire une version imprimée ?? 
 --------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
 
 
 
@@ -301,7 +295,7 @@ A refaire ou revoir - Faire que la touche plus puisse être actionnée par le cl
 ---------------------pick date et autres goodies
 
 Faire que la modif se fasse dans une modalbox
-Il y a une erreur en line#new lorsqu'il n'y a pas encore de caisse ni de banque
+
 
 
 
