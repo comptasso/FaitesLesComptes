@@ -19,15 +19,10 @@ class NaturesController < ApplicationController
     @filter=params[:destination].to_i || 0
     @recettes=@organism.natures.recettes
     @depenses=@organism.natures.depenses
-#    @total_recettes=totals(@recettes)
-#    @total_depenses=totals(@depenses)
+    @total_recettes=@period.stat_income_year(@filter)
+    @total_depenses=@period.stat_outcome_year(@filter)
   end
 
-  private
-
-  def totals(arr)
-
-  end
 
  
  

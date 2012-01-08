@@ -20,6 +20,17 @@
 
     </tr>
   </thead>
+     <tfoot>
+    <tr>
+      <th>Total Recettes <br />Total Dépenses<br />Total Différence </th>
+       <% @total_recettes.size.times do |index| %>
+      <th class="nombre"><%=  debit_credit @total_recettes[index] %><br />
+<%=debit_credit  @total_depenses[index] %><br />
+<%=debit_credit(@total_recettes[index]+@total_depenses[index])  %></th>
+      <% end %>
+    </tr>
+
+    </tfoot>
   <tbody>
 
     <% @recettes.each do |r| %>
@@ -41,19 +52,9 @@
 
 
   </tbody>
-  <tfoot id="table_foot">
-    <tr>
-      <td>Total Recettes</td>
-    </tr>
-      <tr>
-      <td>Total Dépenses</td>
-    </tr>
-     <tr>
-      <td>Total Différence</td>
-    </tr>
 
+ 
+  </table>
 
-
-   </tfoot>
-</table>
+   
 

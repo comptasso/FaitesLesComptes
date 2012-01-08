@@ -23,9 +23,7 @@ class Nature < ActiveRecord::Base
 
   end
 
-  
-
-  protected
+   protected
 
   # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
   # pour toutes les destinations confondues

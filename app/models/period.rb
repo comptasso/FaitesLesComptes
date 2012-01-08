@@ -154,6 +154,46 @@ class Period < ActiveRecord::Base
     end
     r
   end
+  
+   # renvoie le mois le plus adapté pour un exercice
+  # si la date du jour est au sein de l'exercice, renvoie le mois correspondant
+  # si la date du jour est avant l'exercice, renvoie le premier mois
+  # si elle est après, renvoie le dernier mois
+  #
+  def guess_month(date=Date.today)
+    return 0 if date < self.start_date
+    return self.nb_months - 1 if date > self.close_date
+    return current_month(date)
+  end
+
+
+
+  # fournit un tableau donnant les recettes mensuelles avec cumul
+  def stat_income_year
+   s= self.nb_months.times.collect {|m| self.stat_income(m)}
+   s << s.sum
+  end
+
+   # fournit un tableau donnant les dépenses mensuelles avec cumul
+  def stat_outcome_year
+    s= self.nb_months.times.collect {|m| self.stat_outcome(m)}
+    s << s.sum
+  end
+
+  
+
+  # donne le montant des recettes pour un mois donné de l'exercice
+  def stat_income(mois)
+    arr=self.organism.lines.period_month(self, mois).all :joins=>:nature, :conditions=>{'natures'=>{'income_outcome'=>true}}
+    arr.sum(&:credit)-arr.sum(&:debit)
+  end
+
+# donne le montant des dépenses pour un mois donné de l'exercice
+  def stat_outcome(mois)
+    arr=self.organism.lines.period_month(self, mois).all :joins=>:nature, :conditions=>{'natures'=>{'income_outcome'=>false}}
+    arr.sum(&:credit)-arr.sum(&:debit)
+  end
+
 
  
 
@@ -236,16 +276,7 @@ class Period < ActiveRecord::Base
 #
 #  end
 
-  # renvoie le mois le plus adapté pour un exercice
-  # si la date du jour est au sein de l'exercice, renvoie le mois correspondant
-  # si la date du jour est avant l'exercice, renvoie le premier mois
-  # si elle est après, renvoie le dernier mois
-  #
-  def guess_month(date=Date.today)
-    return 0 if date < self.start_date
-    return self.nb_months - 1 if date > self.close_date
-    return current_month(date)
-  end
+ 
 
     protected
   # renvoie le mois de l'exercice correspondant à une date qui est dans les limites de l'exercice
