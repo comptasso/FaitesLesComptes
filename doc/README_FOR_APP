@@ -259,10 +259,11 @@ OK - il faut mettre stat dans le controller natures/destinations plutot que dans
 OK - Créer une classe report avec un array des totaux par mois : en fait j'ai juste fait une méthode
 OK - Refaire l'affichage de la vue
 OK - Avec possibilité de filtrer par destination
-     Transformer en datatable.
+OK - Transformer en datatable.
      Supprimer l'affichage par page de datatable ? OU voir comment on peut faire un sorting intelligent (on affiche tout)
-     Ajouter des totaux (voire des sous totaux)
-     Voir une approche similaire pour les statistiques par destinations
+OK   Ajouter des totaux (voire des sous totaux)
+    Problème il faut filtrer par destination donc revoir les méthodes ad hoc de période
+    Supprimer la partie stat destination
      Faire une version imprimée ?? 
 --------------------------------------------------------------------------
 

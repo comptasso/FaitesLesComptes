@@ -169,14 +169,24 @@ class Period < ActiveRecord::Base
 
 
   # fournit un tableau donnant les recettes mensuelles avec cumul
-  def stat_income_year
-   s= self.nb_months.times.collect {|m| self.stat_income(m)}
+  def stat_income_year(destination_id=0)
+    s=[]
+    if destination_id==0
+   self.nb_months.times.collect {|m| s << self.stat_income(m)}
+    else
+self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_id)}
+    end
    s << s.sum
   end
 
-   # fournit un tableau donnant les dépenses mensuelles avec cumul
-  def stat_outcome_year
-    s= self.nb_months.times.collect {|m| self.stat_outcome(m)}
+   # fournit un tableau donnant les dépenses mensuelles avec cumul mais avec filtre sur la destination
+  def stat_outcome_year(destination_id=0)
+    s=[]
+     if destination_id==0
+     self.nb_months.times.collect {|m| s << self.stat_outcome(m)}
+    else
+     self.nb_months.times.collect {|m| s << self.stat_outcome_filtered(m,destination_id)}
+    end
     s << s.sum
   end
 
@@ -194,6 +204,17 @@ class Period < ActiveRecord::Base
     arr.sum(&:credit)-arr.sum(&:debit)
   end
 
+  def stat_income_filtered(mois, filter)
+    arr=self.organism.lines.period_month(self, mois).all :joins=>[:nature,:destination],
+      :conditions=>{'natures'=>{'income_outcome'=>true}, 'destinations'=>{'id'=>filter}}
+    arr.sum(&:credit)-arr.sum(&:debit)
+  end
+
+  def stat_outcome_filtered(mois, filter)
+    arr=self.organism.lines.period_month(self, mois).all :joins=>[:nature,:destination],
+      :conditions=>{'natures'=>{'income_outcome'=>false}, 'destinations'=>{'id'=>filter}}
+    arr.sum(&:credit)-arr.sum(&:debit)
+  end
 
  
 
