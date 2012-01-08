@@ -263,12 +263,19 @@ OK - Transformer en datatable.
 ??   Supprimer l'affichage par page  ATTENDRE DE VOIR AVEC PLUS DE NATURESde datatable ? OU voir comment on peut faire un sorting intelligent (on affiche tout)
 OK   Ajouter des totaux (voire des sous totaux)
 OK     Problème il faut filtrer par destination donc revoir les méthodes ad hoc de période
-     Supprimer la partie stat destination
+OK     Supprimer la partie stat destination
      Traiter le pb du nombre de mois pour le highlight de datatable
+    Modifier l'icone print pour le pdf de lines
 ??   Faire une version imprimée ??
 ??    Il faudrait un ordre pour les natures ??
 --------------------------------------------------------------------------
-ON démarre la partie compte/fisca
+---------------ON démarre la partie compte/fisca---------------------
+   création du scaffold account dans un namespace compta + magration
+   revoir les modèles de templates pour les prochains scaffold
+   faire l'espace de nom dans routes
+   intégrer les relations has_many natures et has_many lines through natures
+   revoir le menu admin pour gérer cette ressource
+
 
 
 

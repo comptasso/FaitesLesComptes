@@ -2,6 +2,8 @@ Faitesvoscomptes::Application.routes.draw do
 
   
 
+  namespace :compta do resources :accounts end
+
 namespace 'admin' do
   resources :organisms do
     resources :books

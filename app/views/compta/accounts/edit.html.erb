@@ -1,0 +1,17 @@
+<%= content_for :bandeau do %>
+
+<%= icon_to 'nouveau.png', new_compta_account_path %>
+<%= icon_to 'afficher.png', @compta_account %>
+<%= icon_to 'retour.png', :back %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification compta_account
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+
