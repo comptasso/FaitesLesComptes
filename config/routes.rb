@@ -78,10 +78,7 @@ end
         get 'stats'
       end
     end
-    member do
-      get 'stats'
-     
-    end
+   
   end
 
   resources :bank_accounts do

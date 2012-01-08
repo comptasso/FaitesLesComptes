@@ -260,13 +260,15 @@ OK - Créer une classe report avec un array des totaux par mois : en fait j'ai j
 OK - Refaire l'affichage de la vue
 OK - Avec possibilité de filtrer par destination
 OK - Transformer en datatable.
-     Supprimer l'affichage par page de datatable ? OU voir comment on peut faire un sorting intelligent (on affiche tout)
+??   Supprimer l'affichage par page  ATTENDRE DE VOIR AVEC PLUS DE NATURESde datatable ? OU voir comment on peut faire un sorting intelligent (on affiche tout)
 OK   Ajouter des totaux (voire des sous totaux)
-    Problème il faut filtrer par destination donc revoir les méthodes ad hoc de période
-    Supprimer la partie stat destination
-     Faire une version imprimée ?? 
+OK     Problème il faut filtrer par destination donc revoir les méthodes ad hoc de période
+     Supprimer la partie stat destination
+     Traiter le pb du nombre de mois pour le highlight de datatable
+??   Faire une version imprimée ??
+??    Il faudrait un ordre pour les natures ??
 --------------------------------------------------------------------------
-
+ON démarre la partie compte/fisca
 
 
 

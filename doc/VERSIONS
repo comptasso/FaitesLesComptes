@@ -14,7 +14,7 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 + affichage des soldes
 
 012 : faire une interface adminsitrateur et revoir l'ensemble de la navigation
-  plus bricoles listées dans le readme
++ plus bricoles listées dans le readme
 +  suppression de l'ensemble des liens entre book et bank_extract
 +  liste des comptes bancaires - supprimer l'usage des data table
 +  gestion du pointage des comptes bancaire
@@ -24,27 +24,30 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 + les pointages
 + l'affichage des lignes
 
+020 : zone compta/fisca
+génération d'écritures plus comptables
+edition de la 2065
+cloture d'exercice
 
-015 : gestion de différents types d'écritures
+
+021 : gestion de différents types d'écritures
 - écritures de dépenses répétées
 - virements interne
 
-020 : editions et recherche d'écriture
-- affichage d'un tableau des recettes/dépenses sur une période
+022 : editions et recherche d'écriture
++ affichage d'un tableau des recettes/dépenses sur une période
 + editions papier des suivis recettes/dépenses
+
+023  faire la documentation
+
+030 : mise en place des tests et refactorisation
+- mise en place des validations pour les <> modèles
+
+031 : pointage des comptes bancaires avec des actions remote plutôt que par rafraichissement de la page
 - édition papier d'une remise chèque
 - affichage graphique de solde
 
-022  faire la documentation
 
-025 : mise en place des tests et refactorisation
-- mise en place des validations pour les <> modèles
-
-028 : pointage des comptes bancaires avec des actions remote plutôt que par rafraichissement de la page
-
-030 : zone compta/fisca
-génération d'écritures plus comptables
-edition de la 2065
 
 040 : gestion de la TVA
 
