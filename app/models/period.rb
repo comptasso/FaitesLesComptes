@@ -63,6 +63,9 @@ class Period < ActiveRecord::Base
 
  
   belongs_to :organism
+
+  has_many :accounts,  :class_name => 'Compta::Account'
+
   
   validates :organism_id, :presence=>true
 

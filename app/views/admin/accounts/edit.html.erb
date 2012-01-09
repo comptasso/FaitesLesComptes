@@ -1,0 +1,17 @@
+<%= content_for :menu do %>
+
+<%= icon_to 'nouveau.png', new_admin_organism_period_account_path %>
+<%= icon_to 'afficher.png', :admin, @organism, @period,@compta_account %>
+<%= icon_to 'retour.png', :back %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification Compte
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+

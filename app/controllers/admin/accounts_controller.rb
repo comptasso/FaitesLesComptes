@@ -1,8 +1,9 @@
-class Compta::AccountsController < ApplicationController
+# -*- encoding : utf-8 -*-
+class Admin::AccountsController < Admin::ApplicationController
   # GET /compta/accounts
   # GET /compta/accounts.json
   def index
-    @compta_accounts = Compta::Account.all
+    @compta_accounts = @period.accounts.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -24,7 +25,7 @@ class Compta::AccountsController < ApplicationController
   # GET /compta/accounts/new
   # GET /compta/accounts/new.json
   def new
-    @compta_account = Compta::Account.new
+    @compta_account = @period.accounts.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -40,11 +41,11 @@ class Compta::AccountsController < ApplicationController
   # POST /compta/accounts
   # POST /compta/accounts.json
   def create
-    @compta_account = Compta::Account.new(params[:compta_account])
+    @compta_account = @period.new(params[:compta_account])
 
     respond_to do |format|
       if @compta_account.save
-        format.html { redirect_to @compta_account, notice: 'Account was successfully created.' }
+        format.html { redirect_to admin_organism_accounts_path(@organism,@period), notice: 'Le compte a été créé.' }
         format.json { render json: @compta_account, status: :created, location: @compta_account }
       else
         format.html { render action: "new" }
@@ -56,11 +57,11 @@ class Compta::AccountsController < ApplicationController
   # PUT /compta/accounts/1
   # PUT /compta/accounts/1.json
   def update
-    @compta_account = Compta::Account.find(params[:id])
+    @compta_account = @period.accounts.find(params[:id])
 
     respond_to do |format|
       if @compta_account.update_attributes(params[:compta_account])
-        format.html { redirect_to @compta_account, notice: 'Account was successfully updated.' }
+        format.html { redirect_to admin_organism_accounts_path(@organism,@period), notice: 'Le compte a été mis à jour' }
         format.json { head :ok }
       else
         format.html { render action: "edit" }

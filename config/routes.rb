@@ -2,7 +2,12 @@ Faitesvoscomptes::Application.routes.draw do
 
   
 
-  namespace :compta do resources :accounts end
+  namespace :compta do
+    resources :periods do
+      resources :accounts
+    end
+  end
+
 
 namespace 'admin' do
   resources :organisms do
@@ -21,7 +26,9 @@ namespace 'admin' do
     resources :cashes do
       resources :cash_controls, only: [:index, :destroy]
     end
-    resources :periods
+    resources :periods do
+      resources :accounts
+    end
   end
 end
 

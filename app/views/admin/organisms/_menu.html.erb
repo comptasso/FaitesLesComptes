@@ -111,6 +111,7 @@
             <li><%= link_to 'Clore -TODO', admin_organism_periods_path(@organism) if c.open %></li>
             <li><%= link_to 'Archiver -TODO', admin_organism_periods_path(@organism) unless c.open %></li>
             <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>
+            <li><%= link_to 'Comptes', admin_organism_period_accounts_path(@organism, c)  %></li>
           </ul>
         </li>
       <% end %>
@@ -119,5 +120,7 @@
 
   </li>
 </ul>
+
+
 
 <% end %>

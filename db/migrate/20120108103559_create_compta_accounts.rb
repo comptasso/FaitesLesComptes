@@ -3,7 +3,7 @@ class CreateComptaAccounts < ActiveRecord::Migration
     create_table :compta_accounts do |t|
       t.string :number
       t.string :title
-      t.boolean :used
+      t.boolean :used, :default=>true
       t.integer :period_id
 
       t.timestamps
