@@ -25,7 +25,7 @@ class Admin::AccountsController < Admin::ApplicationController
   # GET /compta/accounts/new
   # GET /compta/accounts/new.json
   def new
-    @compta_account = @period.accounts.new
+    @account = @period.accounts.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -35,7 +35,7 @@ class Admin::AccountsController < Admin::ApplicationController
 
   # GET /compta/accounts/1/edit
   def edit
-    @compta_account = Compta::Account.find(params[:id])
+    @account = Compta::Account.find(params[:id])
   end
 
   # POST /compta/accounts
