@@ -17,8 +17,8 @@
   <tr>
     <td><%= compta_account.number %></td>
     <td><%= compta_account.title %></td>
-    <td><%= compta_account.used %></td>
-    <td><%= icon_to 'afficher.png', [@organism,@period,compta_account] %></td>
+    <td><%=t_used compta_account %></td>
+    <td><%= icon_to 'afficher.png', [:admin,@organism,@period,compta_account] %></td>
     <td><%= icon_to 'modifier.png', edit_admin_organism_period_account_path(@organism, @period, compta_account) %></td>
     <td><%= icon_to 'supprimer.png', [:admin,@organism,@period,compta_account], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>

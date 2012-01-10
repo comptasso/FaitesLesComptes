@@ -1,4 +1,4 @@
-<%%= content_for :bandeau do %>
+<%%= content_for :menu do %>
 
 <%%= icon_to 'nouveau.png', new_<%= singular_table_name %>_path %>
 <%%= icon_to 'afficher.png', @<%= singular_table_name %> %>
@@ -7,7 +7,7 @@
 
 <fieldset>
   <legend>
-    Modification <%= singular_table_name %>
+    Modification <%%= t <%= singular_table_name %> %>
   </legend>
 
 <%%= render 'form' %>

@@ -1,11 +1,11 @@
 
-<%%= content_for :submenu do %>
+<%%= content_for :menu do %>
 
 <%%= icon_to 'nouveau.png', new_<%= singular_table_name %>_path %>
 <%%= icon_to 'modifier.png', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>) %>
 <%%= icon_to 'retour.png', :back %>
 <%% end -%>
-<fieldset><legend>Description de <%= singular_table_name %> </legend>
+<fieldset><legend>Description de <%%= t <%= singular_table_name %> %></legend>
 
 <% for attribute in attributes -%>
 <p>

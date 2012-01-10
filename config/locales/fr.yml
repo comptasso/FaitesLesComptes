@@ -177,6 +177,7 @@ fr:
 
   labels:
     Title: Titre
+    Used: Utilisé
     
 
   general:
@@ -226,6 +227,11 @@ fr:
         cash: 'Caisse'
       cash_control:
         amount: Montant
+      account:
+        title: Intitulé
+        number: Numéro
+        used: Utilisé
+
 
     errors:
      models:
@@ -277,4 +283,7 @@ fr:
       cash_control:
         create: 'Enregistrer'
         update: 'Enregistrer'
+      account:
+        create: Créer le compte
+        update: 'Mettre à jour'
 

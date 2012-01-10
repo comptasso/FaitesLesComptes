@@ -13,6 +13,15 @@
 
 ActiveRecord::Schema.define(:version => 20120108103559) do
 
+  create_table "accounts", :force => true do |t|
+    t.string   "number"
+    t.string   "title"
+    t.boolean  "used",       :default => true
+    t.integer  "period_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "bank_accounts", :force => true do |t|
     t.string   "number"
     t.string   "name"
@@ -76,15 +85,6 @@ ActiveRecord::Schema.define(:version => 20120108103559) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "bank_extract_id"
-  end
-
-  create_table "compta_accounts", :force => true do |t|
-    t.string   "number"
-    t.string   "title"
-    t.boolean  "used",       :default => true
-    t.integer  "period_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "destinations", :force => true do |t|

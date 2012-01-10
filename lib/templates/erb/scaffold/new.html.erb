@@ -1,11 +1,11 @@
-<%%= content_for :submenu do %>
+<%%= content_for :menu do %>
 
 <%%= icon_to 'retour.png', :back %>
 <%% end -%>
 
 <fieldset>
   <legend>
-    Nouveau <%%=t singular_table_name %>
+    Nouveau <%%=t <%= singular_table_name %>
   </legend>
 
 <%%= render 'form' %>

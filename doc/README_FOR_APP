@@ -270,12 +270,13 @@ OK   Modifier l'icone print pour le pdf de lines
 ??   Il faudrait un ordre pour les natures ??
 --------------------------------------------------------------------------
 --------------- Démarrage la partie compte/fisca---------------------
-   création du scaffold account dans un namespace compta + magration
-   revoir les modèles de templates pour les prochains scaffold
-OK   faire l'espace de nom dans routes
+OK - création du scaffold account dans un namespace compta + migration
+     revoir les modèles de templates pour les prochains scaffold
+OK faire l'espace de nom dans routes
    intégrer les relations has_many natures et has_many lines through natures
-   revoir le menu admin pour gérer cette ressource
-   permettre de charger les comptes à partir d'un fichier
+OK  revoir le menu admin pour gérer cette ressource
+    mettre les validations spécifiques
+    permettre de charger les comptes à partir d'un fichier
 
 
 

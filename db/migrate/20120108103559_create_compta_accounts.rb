@@ -1,6 +1,6 @@
 class CreateComptaAccounts < ActiveRecord::Migration
   def change
-    create_table :compta_accounts do |t|
+    create_table :accounts do |t|
       t.string :number
       t.string :title
       t.boolean :used, :default=>true

@@ -1,25 +1,25 @@
 
 <%= content_for :menu do %>
 
-<%= icon_to 'nouveau.png', new_admin_organism_period_account_path(@organims, @period) %>
-<%= icon_to 'modifier.png', edit_admin_organism_period_account_path(@organism,@period,@compta_account) %>
+<%= icon_to 'nouveau.png', new_admin_organism_period_account_path(@organism, @period) %>
+<%= icon_to 'modifier.png', edit_admin_organism_period_account_path(@organism,@period,@account) %>
 <%= icon_to 'retour.png', :back %>
 <% end -%>
 <fieldset><legend><%= @organism.title %> - <%= @period.exercice %> - Description du compte </legend>
 
 <p>
-  <b>Number:</b>
-  <%= @compta_account.number %>
+  <b>Numéro :</b>
+  <%= @account.number %>
 </p>
 
 <p>
-  <b>Title:</b>
-  <%= @compta_account.title %>
+  <b>Intitulé :</b>
+  <%= @account.title %>
 </p>
 
 <p>
-  <b>Used:</b>
-  <%= @compta_account.used %>
+  <b>Utilisé :</b>
+  <%=t_used @account %>
 </p>
 
 </fieldset>
