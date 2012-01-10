@@ -184,6 +184,7 @@ fr:
     Title: Titre
     update: 'Mettre à jour'
     back: 'Retour'
+    number: Numéro
 
   activerecord:
     attributes:
@@ -245,6 +246,10 @@ fr:
         attributes:
           amount:
             greater_than_or_equal_to: 'doît être positif ou nul'
+      account:
+        attributes:
+          number:
+            invalid: "Numéro invalide"
 
   helpers:
     select:

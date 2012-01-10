@@ -41,15 +41,15 @@ class Admin::AccountsController < Admin::ApplicationController
   # POST /compta/accounts
   # POST /compta/accounts.json
   def create
-    @compta_account = @period.accounts.new(params[:account])
+    @account = @period.accounts.new(params[:account])
 
     respond_to do |format|
-      if @compta_account.save
+      if @account.save
         format.html { redirect_to admin_organism_period_accounts_path(@organism,@period), notice: 'Le compte a été créé.' }
-        format.json { render json: @compta_account, status: :created, location: @compta_account }
+        format.json { render json: @account, status: :created, location: @account }
       else
         format.html { render action: "new" }
-        format.json { render json: @compta_account.errors, status: :unprocessable_entity }
+        format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -57,15 +57,15 @@ class Admin::AccountsController < Admin::ApplicationController
   # PUT /compta/accounts/1
   # PUT /compta/accounts/1.json
   def update
-    @compta_account = @period.accounts.find(params[:id])
+    @account = @period.accounts.find(params[:id])
 
     respond_to do |format|
-      if @compta_account.update_attributes(params[:account])
+      if @account.update_attributes(params[:account])
         format.html { redirect_to admin_organism_period_accounts_path(@organism,@period), notice: 'Le compte a été mis à jour' }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
-        format.json { render json: @compta_account.errors, status: :unprocessable_entity }
+        format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
   end
