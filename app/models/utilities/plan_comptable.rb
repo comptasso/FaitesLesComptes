@@ -1,15 +1,15 @@
 # coding: utf-8
+
+# Plan Comptable est une classe rattachée à un exercice
+# qui permet de lire un fichier yml et de créer les comptes pour l'exercice concerné
 class Utilities::PlanComptable
 
-  def initialize(period_id)
-    @pid=period_id
-  end
-
+  
  # crée des comptes à partir d'un fichier source
  # A terme d'autres type de sources seront possibles. Il faudra modifier
  # ou surcharger load_accounts
-  def create_accounts(source)
-    p=Period.find(@pid)
+  def create_accounts(period_id, source)
+    p=Period.find(period_id)
     nba=p.accounts.count # nb de comptes existants pour cet exercice
     t=self.load_accounts("#{Rails.root}/app/assets/plans/#{source}")
     raise 'Erreur lors du chargement du fichier' if t.is_a?(String)

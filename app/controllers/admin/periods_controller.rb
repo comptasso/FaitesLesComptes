@@ -103,10 +103,8 @@ class Admin::PeriodsController < Admin::ApplicationController
 
   def create_plan
     @period = @organism.periods.find(params[:id])
-    pc=Utilities::PlanComptable.new(@period.id)
-    nb_accounts = pc.create_accounts(params[:fichier])
-    
-    flash[:notice] = "#{nb_accounts} ont été créés"
+   nb_accounts=Utilities::PlanComptable.new.create_accounts(@period.id, params[:fichier])
+    flash[:notice] = "#{nb_accounts} comptes ont été créés"
     
   rescue
     flash[:alert] = "Erreur dans la création des comptes"
