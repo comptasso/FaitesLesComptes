@@ -1,211 +1,211 @@
 ---
-- name: Capital
-  number: '101'
-- name: Ecarts de réévaluation
-  number: '105'
-- name: Réserve légale
-  number: '1061'
-- name: Réserves statutaires ou contractuelles
-  number: '1063'
-- name: Réserves réglementées
-  number: '1064'
-- name: Autres réserves
-  number: '1068'
-- name: Compte de l'exploitant
-  number: '108'
-- name: Résultat de l'exercice (bénéfice ou perte)
-  number: '12'
-- name: Amortissements dérogatoires
-  number: '145'
-- name: Provision spéciale de réévaluation
-  number: '146'
-- name: Plus-values réinvesties
-  number: '147'
-- name: Autres provisions réglementées
-  number: '148'
-- name: Provisions pour risques et charges
-  number: '15'
-- name: Emprunts et dettes assimilées
-  number: '16'
-- name: Immobilisations incorporelles
-  number: '20'
-- name: Frais d'établissement
-  number: '201'
-- name: Droit au bail
-  number: '206'
-- name: Fonds commercial
-  number: '207'
-- name: Autres immobilisations incorporelles
-  number: '208'
-- name: Immobilisations corporelles
-  number: '21'
-- name: Immobilisations en cours
-  number: '23'
-- name: Autres immobilisations financières
-  number: '27'
-- name: Amortissements des immobilisations incorporelles
-  number: '280'
-- name: Amortissements des immobilisations corporelles
-  number: '281'
-- name: Dépréciations des immobilisations incorporelles
-  number: '290'
-- name: Dépréciations des immobilisations corporelles
-  number: '291'
-- name: Provisions pour dépréciation des autres immobilisations financières
-  number: '297'
-- name: Matières premières et fournitures
-  number: '31'
-- name: Autres approvisionnements
-  number: '32'
-- name: En-cours de production de biens
-  number: '33'
-- name: En-cours de production de services
-  number: '34'
-- name: Stocks de produits
-  number: '35'
-- name: Stocks de marchandises
-  number: '37'
-- name: Provisions pour dépréciation des matières premières et fournitures
-  number: '391'
-- name: Provisions pour dépréciation des autres approvisionnements
-  number: '392'
-- name: Provisions pour dépréciation des en-cours de production de biens
-  number: '393'
-- name: Provisions pour dépréciation des en-cours de production de services
-  number: '394'
-- name: Provisions pour dépréciation des stocks de produits
-  number: '395'
-- name: Provisions pour dépréciation des stocks de marchandises
-  number: '397'
-- name: Fournisseurs et Comptes rattachés
-  number: '400'
-- name: Fournisseurs débiteurs
-  number: '409'
-- name: Clients et comptes rattachés
-  number: '410'
-- name: Clients créditeurs
-  number: '419'
-- name: Personnel - Rémunérations dues
-  number: '421'
-- name: Personnel - Charges à payer et produits à recevoir
-  number: '428'
-- name: Sécurité sociale et autres organismes sociaux
-  number: '43'
-- name: Etat - Impôts sur les bénéfices
-  number: '444'
-- name: Etat - Taxes sur le chiffre d'affaires
-  number: '445'
-- name: Autres impôts, taxes et versements assimilés
-  number: '447'
-- name: Groupe et associés
-  number: '45'
-- name: Associés - Comptes courants
-  number: '455'
-- name: Débiteurs divers et créditeurs divers
-  number: '46'
-- name: Comptes transitoires ou d'attente
-  number: '47'
-- name: Charges à répartir sur plusieurs exercices
-  number: '481'
-- name: Charges constatées d'avance
-  number: '486'
-- name: Produits constatés d'avance
-  number: '487'
-- name: Provisions pour dépréciation des comptes de clients
-  number: '491'
-- name: Provisions pour dépréciation des comptes de débiteurs divers
-  number: '496'
-- name: Valeurs mobiliéres de placement
-  number: '50'
-- name: Banques, établissements financiers et assimilés
-  number: '51'
-- name: Caisse
-  number: '53'
-- name: Régies d'avance et accréditifs
-  number: '54'
-- name: Virements internes
-  number: '58'
-- name: Provisions pour dépréciation des valeurs mobiliéres de placement
-  number: '590'
-- name: Achats (sauf 603)
-  number: '60'
-- name: Variations des stocks approvisionnements et marchandises
-  number: '603'
-- name: Services extérieurs
-  number: '61'
-- name: Impôts, taxes et versements assimilés
-  number: '63'
-- name: Rémunérations du personnel
-  number: '641'
-- name: Rémunération du travail de l'exploitant
-  number: '644'
-- name: Charges de sécurité sociale et de prévoyance
-  number: '645'
-- name: Cotisations sociales personnelles de l'exploitant
-  number: '646'
-- name: Autres charges de gestion courante
-  number: '65'
-- name: Charges financiéres
-  number: '66'
-- name: Charges exceptionnelles
-  number: '67'
-- name: Dotations aux amortissements et aux provisions - Charges d'exploitation
-  number: '681'
-- name: Dotations aux amortissements et aux provisions - Charges financiéres
-  number: '686'
-- name: Dotations aux amortissements et aux provisions - Charges exceptionnelles
-  number: '687'
-- name: Participation des salariés aux résultats
-  number: '691'
-- name: Impéts sur les bénéfices
-  number: '695'
-- name: Imposition forfaitaire annuelle des sociétés
-  number: '697'
-- name: Produits - Reports en arriére des déficits
-  number: '699'
-- name: Ventes de produits finis
-  number: '701'
-- name: Prestations de services
-  number: '706'
-- name: Ventes de marchandises
-  number: '707'
-- name: Produits des activités annexes
-  number: '708'
-- name: Rabais, remises et ristournes accordés par l'entreprise
-  number: '709'
-- name: Variation des stocks en-cours de production, produits
-  number: '713'
-- name: Production immobilisée
-  number: '72'
-- name: Subventions d'exploitation
-  number: '74'
-- name: Autres produits de gestion courante
-  number: '75'
-- name: Jetons de présence et rémunérations d'administrateurs, gérants
-  number: '753'
-- name: Ristournes peréues des coopératives provenant des excédents
-  number: '754'
-- name: Quotes-parts de résultat sur opérations faites en commun
-  number: '755'
-- name: Produits financiers
-  number: '76'
-- name: Produits exceptionnels
-  number: '77'
-- name: Reprises sur amortissements et provisions
-  number: '781'
-- name: Reprises sur provisions pour risques
-  number: '786'
-- name: Reprises sur provisions
-  number: '787'
-- name: Transferts de charges
-  number: '79'
-- name: Engagements
-  number: '80'
-- name: Engagements donnés
-  number: '801'
-- name: Contrepartie des engagements
-  number: '809'
-- name: Résultat en instance d'affectation
-  number: '88'
-- name: Bilan
-  number: '89'
+- number: '101'
+  title: Capital
+- number: '105'
+  title: Ecarts de réévaluation
+- number: '1061'
+  title: Réserve légale
+- number: '1063'
+  title: Réserves statutaires ou contractuelles
+- number: '1064'
+  title: Réserves réglementées
+- number: '1068'
+  title: Autres réserves
+- number: '108'
+  title: Compte de l'exploitant
+- number: '12'
+  title: Résultat de l'exercice (bénéfice ou perte)
+- number: '145'
+  title: Amortissements dérogatoires
+- number: '146'
+  title: Provision spéciale de réévaluation
+- number: '147'
+  title: Plus-values réinvesties
+- number: '148'
+  title: Autres provisions réglementées
+- number: '15'
+  title: Provisions pour risques et charges
+- number: '16'
+  title: Emprunts et dettes assimilées
+- number: '20'
+  title: Immobilisations incorporelles
+- number: '201'
+  title: Frais d'établissement
+- number: '206'
+  title: Droit au bail
+- number: '207'
+  title: Fonds commercial
+- number: '208'
+  title: Autres immobilisations incorporelles
+- number: '21'
+  title: Immobilisations corporelles
+- number: '23'
+  title: Immobilisations en cours
+- number: '27'
+  title: Autres immobilisations financières
+- number: '280'
+  title: Amortissements des immobilisations incorporelles
+- number: '281'
+  title: Amortissements des immobilisations corporelles
+- number: '290'
+  title: Dépréciations des immobilisations incorporelles
+- number: '291'
+  title: Dépréciations des immobilisations corporelles
+- number: '297'
+  title: Provisions pour dépréciation des autres immobilisations financières
+- number: '31'
+  title: Matières premières et fournitures
+- number: '32'
+  title: Autres approvisionnements
+- number: '33'
+  title: En-cours de production de biens
+- number: '34'
+  title: En-cours de production de services
+- number: '35'
+  title: Stocks de produits
+- number: '37'
+  title: Stocks de marchandises
+- number: '391'
+  title: Provisions pour dépréciation des matières premières et fournitures
+- number: '392'
+  title: Provisions pour dépréciation des autres approvisionnements
+- number: '393'
+  title: Provisions pour dépréciation des en-cours de production de biens
+- number: '394'
+  title: Provisions pour dépréciation des en-cours de production de services
+- number: '395'
+  title: Provisions pour dépréciation des stocks de produits
+- number: '397'
+  title: Provisions pour dépréciation des stocks de marchandises
+- number: '400'
+  title: Fournisseurs et Comptes rattachés
+- number: '409'
+  title: Fournisseurs débiteurs
+- number: '410'
+  title: Clients et comptes rattachés
+- number: '419'
+  title: Clients créditeurs
+- number: '421'
+  title: Personnel - Rémunérations dues
+- number: '428'
+  title: Personnel - Charges à payer et produits à recevoir
+- number: '43'
+  title: Sécurité sociale et autres organismes sociaux
+- number: '444'
+  title: Etat - Impôts sur les bénéfices
+- number: '445'
+  title: Etat - Taxes sur le chiffre d'affaires
+- number: '447'
+  title: Autres impôts, taxes et versements assimilés
+- number: '45'
+  title: Groupe et associés
+- number: '455'
+  title: Associés - Comptes courants
+- number: '46'
+  title: Débiteurs divers et créditeurs divers
+- number: '47'
+  title: Comptes transitoires ou d'attente
+- number: '481'
+  title: Charges à répartir sur plusieurs exercices
+- number: '486'
+  title: Charges constatées d'avance
+- number: '487'
+  title: Produits constatés d'avance
+- number: '491'
+  title: Provisions pour dépréciation des comptes de clients
+- number: '496'
+  title: Provisions pour dépréciation des comptes de débiteurs divers
+- number: '50'
+  title: Valeurs mobiliéres de placement
+- number: '51'
+  title: Banques, établissements financiers et assimilés
+- number: '53'
+  title: Caisse
+- number: '54'
+  title: Régies d'avance et accréditifs
+- number: '58'
+  title: Virements internes
+- number: '590'
+  title: Provisions pour dépréciation des valeurs mobiliéres de placement
+- number: '60'
+  title: Achats (sauf 603)
+- number: '603'
+  title: Variations des stocks approvisionnements et marchandises
+- number: '61'
+  title: Services extérieurs
+- number: '63'
+  title: Impôts, taxes et versements assimilés
+- number: '641'
+  title: Rémunérations du personnel
+- number: '644'
+  title: Rémunération du travail de l'exploitant
+- number: '645'
+  title: Charges de sécurité sociale et de prévoyance
+- number: '646'
+  title: Cotisations sociales personnelles de l'exploitant
+- number: '65'
+  title: Autres charges de gestion courante
+- number: '66'
+  title: Charges financiéres
+- number: '67'
+  title: Charges exceptionnelles
+- number: '681'
+  title: Dotations aux amortissements et aux provisions - Charges d'exploitation
+- number: '686'
+  title: Dotations aux amortissements et aux provisions - Charges financiéres
+- number: '687'
+  title: Dotations aux amortissements et aux provisions - Charges exceptionnelles
+- number: '691'
+  title: Participation des salariés aux résultats
+- number: '695'
+  title: Impéts sur les bénéfices
+- number: '697'
+  title: Imposition forfaitaire annuelle des sociétés
+- number: '699'
+  title: Produits - Reports en arriére des déficits
+- number: '701'
+  title: Ventes de produits finis
+- number: '706'
+  title: Prestations de services
+- number: '707'
+  title: Ventes de marchandises
+- number: '708'
+  title: Produits des activités annexes
+- number: '709'
+  title: Rabais, remises et ristournes accordés par l'entreprise
+- number: '713'
+  title: Variation des stocks en-cours de production, produits
+- number: '72'
+  title: Production immobilisée
+- number: '74'
+  title: Subventions d'exploitation
+- number: '75'
+  title: Autres produits de gestion courante
+- number: '753'
+  title: Jetons de présence et rémunérations d'administrateurs, gérants
+- number: '754'
+  title: Ristournes peréues des coopératives provenant des excédents
+- number: '755'
+  title: Quotes-parts de résultat sur opérations faites en commun
+- number: '76'
+  title: Produits financiers
+- number: '77'
+  title: Produits exceptionnels
+- number: '781'
+  title: Reprises sur amortissements et provisions
+- number: '786'
+  title: Reprises sur provisions pour risques
+- number: '787'
+  title: Reprises sur provisions
+- number: '79'
+  title: Transferts de charges
+- number: '80'
+  title: Engagements
+- number: '801'
+  title: Engagements donnés
+- number: '809'
+  title: Contrepartie des engagements
+- number: '88'
+  title: Résultat en instance d'affectation
+- number: '89'
+  title: Bilan

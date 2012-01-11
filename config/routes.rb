@@ -27,6 +27,10 @@ namespace 'admin' do
       resources :cash_controls, only: [:index, :destroy]
     end
     resources :periods do
+      member do
+        get 'select_plan'
+        post 'create_plan'
+      end
       resources :accounts
     end
   end

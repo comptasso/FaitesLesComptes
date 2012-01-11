@@ -2,7 +2,7 @@
   <li><h2>ORGANISMES</h2>
 
     <ul>
-       <li><%= link_to 'Listes des organismes', admin_organisms_path %></li>
+      <li><%= link_to 'Listes des organismes', admin_organisms_path %></li>
       <% Organism.all.reject {|r| r.new_record? }.each do |r| %>
         <li><%= link_to r.title, admin_organism_path(r)  %>
           <ul>
@@ -17,110 +17,129 @@
   </li>
 </ul>
 <% if (@organism  && !@organism.new_record?) %>
-<ul>
-  <li><h2>LIVRES</h2>
+  <ul>
+    <li><h2>LIVRES</h2>
 
-    <ul>
-       <li><%= link_to 'Listes des livres', admin_organism_books_path(@organism) %></li>
-      <% @organism.books.reject {|r| r.new_record? }.each do |b| %>
-        <li><%= link_to b.title, admin_organism_book_path(@organism,b)  %>
-          <ul>
-            <li> <%= link_to 'Modifier', edit_admin_organism_book_path(@organism, b) %></li>
-            <li> <%= link_to 'Supprimer',[:admin,@organism, b] %></li>
+      <ul>
+        <li><%= link_to 'Listes des livres', admin_organism_books_path(@organism) %></li>
+        <% @organism.books.reject {|r| r.new_record? }.each do |b| %>
+          <li><%= link_to b.title, admin_organism_book_path(@organism,b)  %>
+            <ul>
+              <li> <%= link_to 'Modifier', edit_admin_organism_book_path(@organism, b) %></li>
+              <li> <%= link_to 'Supprimer',[:admin,@organism, b] %></li>
 
-          </ul>
-        </li>
-      <% end %>
+            </ul>
+          </li>
+        <% end %>
 
-      <li><%= link_to 'Nouveau', new_admin_organism_book_path(@organism) %></li>
-    </ul>
+        <li><%= link_to 'Nouveau', new_admin_organism_book_path(@organism) %></li>
+      </ul>
 
-  </li>
-</ul>
+    </li>
+  </ul>
 
-<ul>
-  <li><h2>Natures</h2>
-    <ul>
+  <ul>
+    <li><h2>Natures</h2>
+      <ul>
 
-      <li><%= link_to 'Afficher', admin_organism_natures_path(@organism)  %></li>
+        <li><%= link_to 'Afficher', admin_organism_natures_path(@organism)  %></li>
 
-      <li><%=link_to  'Nouveau', new_admin_organism_nature_path(@organism)  %></li>
-
-
-    </ul>
-  </li>
-</ul>
-
-<ul>
-  <li><h2>Destinations</h2>
-    <ul>
-
-      <li><%= link_to 'Afficher', admin_organism_destinations_path(@organism)  %></li>
-
-      <li><%=link_to  'Nouveau', new_admin_organism_destination_path(@organism)  %></li>
+        <li><%=link_to  'Nouveau', new_admin_organism_nature_path(@organism)  %></li>
 
 
-    </ul>
-  </li>
-</ul>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><h2>Destinations</h2>
+      <ul>
+
+        <li><%= link_to 'Afficher', admin_organism_destinations_path(@organism)  %></li>
+
+        <li><%=link_to  'Nouveau', new_admin_organism_destination_path(@organism)  %></li>
 
 
-<ul>
-  <li><h2>Banques</h2>
-    <ul>
-      <% @organism.bank_accounts.reject {|r| r.new_record? }.each do |b| %>
-        <li><%= link_to b.number, admin_organism_bank_account_path(@organism,b)  %>
-          <ul>
-            <li><%=  link_to  'Modifier', edit_admin_organism_bank_account_path(@organism, b)  %></li>
-
-            <li><%= link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' %></li>
-            <li><%= link_to 'Extraits de comptes', admin_organism_bank_account_bank_extracts_path(@organism, b) %></li>
-          </ul>
-        </li>
-      <% end %>
- <li><%= link_to 'Nouveau', new_admin_organism_bank_account_path(@organism) %></li>
-    </ul>
-  </li>
-</ul>
-
-<ul>
-  <li><h2>Caisses</h2>
-    <ul>
-      <% @organism.cashes.reject {|r| r.new_record? }.each do |b| %>
-        <li><%= link_to b.name, admin_organism_cash_path(@organism,b)  %>
-          <ul>
-            <li><%= link_to 'Contrôles', admin_organism_cash_cash_controls_path(@organism,b) %>  </li>
-            <li><%=link_to  'Modifier', edit_admin_organism_cash_path(@organism, b)  %></li>
-
-            <li><%= link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' , method: :delete %></li>
-          </ul>
-        </li>
-      <% end %>
-<li><%= link_to 'Nouveau', new_admin_organism_cash_path(@organism) %></li>
-    </ul>
-  </li>
-</ul>
+      </ul>
+    </li>
+  </ul>
 
 
-<ul>
-  <li><h2>Exercices</h2>
-    <ul>
-      <% @organism.periods.reject {|r| r.new_record? }.each do |c| %>
-        <li><%= link_to c.exercice, admin_organism_period_path(@organism, c) %>
-          <ul>
-            <li><%= link_to 'Clore -TODO', admin_organism_periods_path(@organism) if c.open %></li>
-            <li><%= link_to 'Archiver -TODO', admin_organism_periods_path(@organism) unless c.open %></li>
-            <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>
-            <li><%= link_to 'Comptes', admin_organism_period_accounts_path(@organism, c)  %></li>
-          </ul>
-        </li>
-      <% end %>
+  <ul>
+    <li><h2>Banques</h2>
+      <ul>
+        <% @organism.bank_accounts.reject {|r| r.new_record? }.each do |b| %>
+          <li><%= link_to b.number, admin_organism_bank_account_path(@organism,b)  %>
+            <ul>
+              <li><%=  link_to  'Modifier', edit_admin_organism_bank_account_path(@organism, b)  %></li>
+
+              <li><%= link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' %></li>
+              <li><%= link_to 'Extraits de comptes', admin_organism_bank_account_bank_extracts_path(@organism, b) %></li>
+            </ul>
+          </li>
+        <% end %>
+        <li><%= link_to 'Nouveau', new_admin_organism_bank_account_path(@organism) %></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><h2>Caisses</h2>
+      <ul>
+        <% @organism.cashes.reject {|r| r.new_record? }.each do |b| %>
+          <li><%= link_to b.name, admin_organism_cash_path(@organism,b)  %>
+            <ul>
+              <li><%= link_to 'Contrôles', admin_organism_cash_cash_controls_path(@organism,b) %>  </li>
+              <li><%=link_to  'Modifier', edit_admin_organism_cash_path(@organism, b)  %></li>
+
+              <li><%= link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' , method: :delete %></li>
+            </ul>
+          </li>
+        <% end %>
+        <li><%= link_to 'Nouveau', new_admin_organism_cash_path(@organism) %></li>
+      </ul>
+    </li>
+  </ul>
+
+
+  <ul>
+    <li><h2>Exercices</h2>
+      <ul>
+        <% @organism.periods.reject {|r| r.new_record? }.each do |c| %>
+          <li><%= link_to c.exercice, admin_organism_period_path(@organism, c) %>
+            <ul>
+              <li><%= link_to 'Clore -TODO', admin_organism_periods_path(@organism) if c.open %></li>
+              <li><%= link_to 'Archiver -TODO', admin_organism_periods_path(@organism) unless c.open %></li>
+              <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>
+
+            </ul>
+          </li>
+        <% end %>
         <li><%= link_to 'Nouveau', new_admin_organism_period_path(@organism) %></li>
-    </ul>
+      </ul>
 
-  </li>
-</ul>
+    </li>
+  </ul>
+
+<% if  @period.persisted? %>
+<ul>
+    <li><h2>Comptes</h2>
+      <ul>
+
+          <li><%= link_to 'Plan Comptable', admin_organism_period_accounts_path(@organism,@period)  %>
+            <ul>
+              <li><%= link_to 'Gérer les comptes',  admin_organism_period_accounts_path(@organism,@period) %></li>
+              <li><%= link_to 'Importer', select_plan_admin_organism_period_path(@organism, @period)  %></li>
 
 
+            </ul>
+          </li>
+     
+        <li><%= link_to 'Relier aux natures - TODO', new_admin_organism_period_account_path(@organism, @period) %></li>
+      </ul>
+
+    </li>
+  </ul>
+<% end %>
 
 <% end %>

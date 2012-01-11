@@ -219,6 +219,11 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
     arr.sum(&:credit)-arr.sum(&:debit)
   end
 
+  def create_account_from_file(source)
+    pc= Utilities::PlanComptable.new
+    pc.create_accounts(self.id, source)
+  end
+
  
 
 #  # report_entries écrit dans l'exercice suivant l'écriture d'ouverture de
