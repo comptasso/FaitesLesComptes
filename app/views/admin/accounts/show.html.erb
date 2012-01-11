@@ -3,7 +3,7 @@
 
 <%= icon_to 'nouveau.png', new_admin_organism_period_account_path(@organism, @period) %>
 <%= icon_to 'modifier.png', edit_admin_organism_period_account_path(@organism,@period,@account) %>
-<%= icon_to 'retour.png', :back %>
+<%= icon_to 'navigation90.png', admin_organism_period_accounts_path(@organism,@period) %>
 <% end -%>
 <fieldset><legend><%= @organism.title %> - <%= @period.exercice %> - Description du compte </legend>
 

@@ -271,12 +271,23 @@ OK   Modifier l'icone print pour le pdf de lines
 --------------------------------------------------------------------------
 --------------- Démarrage la partie compte/fisca---------------------
 OK - création du scaffold account dans un namespace compta + migration
-     revoir les modèles de templates pour les prochains scaffold
-OK faire l'espace de nom dans routes
+OK - revoir les modèles de templates pour les prochains scaffold
+OK - faire l'espace de nom dans routes
    intégrer les relations has_many natures et has_many lines through natures
-OK  revoir le menu admin pour gérer cette ressource
-    mettre les validations spécifiques
-    permettre de charger les comptes à partir d'un fichier
+OK - revoir le menu admin pour gérer cette ressource
+OK - mettre les validations spécifiques
+    Utiliser le hint de html5 (et non le hint en dessous du champ de saisie de simple_form_for)
+     modifier l'affichage de la table accounts (datatable ?)
+---------    permettre de charger les comptes à partir d'un fichier
+OK - faire une class plan_comptable
+OK - création d'un répertoire dans assets pour stocker les modèles de plan comptable
+OK - modification des plan recopiés pour être compatible avec la nouvelle structure de table
+capable de lire les comptes à partir d'un fichier
+pouvant être appelé par Period
+Period pouvant créer des comptes à partir du template fourni par ce fichier
+?? transformation de cette classe en modèle avec des tables ?
+
+   
 
 
 

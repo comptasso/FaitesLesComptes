@@ -2,7 +2,7 @@
   <%= f.error_notification %>
 
   <div class="inputs">
-    <%= f.input :number , :hint=>'2 chiffres ou plus suivis éventuellement de lettres capitales' %> :disabled=>!@account.new_record?%>
+    <%= f.input :number , :hint=>'2 chiffres ou plus suivis éventuellement de lettres capitales',:disabled=>!@account.new_record?%>
     <%= f.input :title %>
     <%= f.input :used %>
   </div>

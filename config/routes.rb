@@ -2,11 +2,11 @@ Faitesvoscomptes::Application.routes.draw do
 
   
 
-  namespace :compta do
-    resources :periods do
-      resources :accounts
-    end
-  end
+#  namespace :compta do
+#    resources :periods do
+#      resources :accounts
+#    end
+#  end
 
 
 namespace 'admin' do
