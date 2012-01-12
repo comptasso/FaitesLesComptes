@@ -11,7 +11,7 @@
     </div>
     <%= f.input :name %>
     <%= f.input :comment, input_html: {rows: 4} %>
-    <%= f.association :accounts, :collection => @period.accounts.all(:order => 'title'), :prompt => "Choisissez un compte" %>
+    <%= f.association :accounts, :collection => @period.accounts.classe_6_and_7.all(:order => 'number'), :prompt => "Choisissez un compte" %>
 
   </div>
 

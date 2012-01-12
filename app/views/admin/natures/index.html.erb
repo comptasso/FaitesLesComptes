@@ -13,7 +13,8 @@
     <th>Nom</th>
 
     <th>Commentaire</th>
-
+    <th>Rattaché au compte n°</th>
+<th>Libellé du compte</th>
     <th></th>
     <th></th>
   </tr>
@@ -25,7 +26,8 @@
     <td><%= nature.name %></td>
 
     <td><%= nature.comment %></td>
-
+    <td><%= nature.accounts.first.number %> </td>
+    <td><%= nature.accounts.first.title %> </td>
     <td><%= icon_to 'modifier.png', edit_admin_organism_nature_path(@organism,nature) %></td>
     <td><%= icon_to 'supprimer.png', [:admin,@organism, nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
@@ -38,7 +40,8 @@
     <th>Nom</th>
 
     <th>Commentaire</th>
-
+   <th>Rattaché au compte n°</th>
+    <th>Libellé du compte</th>
     <th></th>
     <th></th>
   </tr>
@@ -50,7 +53,8 @@
     <td><%= nature.name %></td>
 
     <td><%= nature.comment %></td>
-
+    <td><%= nature.accounts.first.number if nature.accounts.any? %> </td>
+    <td><%= nature.accounts.first.title if nature.accounts.any? %> </td>
     <td><%= icon_to 'modifier.png', edit_admin_organism_nature_path(@organism,nature) %></td>
     <td><%= icon_to 'supprimer.png', [:admin,@organism, nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
