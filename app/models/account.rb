@@ -14,7 +14,6 @@
 
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development
 
-require "#{Rails.root}/app/models/specific_validator"
 
 class Account < ActiveRecord::Base
   belongs_to :period
@@ -32,6 +31,6 @@ class Account < ActiveRecord::Base
   validates :period_id, :presence=>true
   validates :title, :presence=>true
 
-
-
+  scope :classe_6, where('number LIKE ?', '6%')
+scope :classe_7, where('number LIKE ?', '7%')
 end
