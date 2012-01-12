@@ -9,9 +9,9 @@ jQuery(function() {
 
          });
 
-
+        var nCells=$('tbody tr:nth-child(1) td').length;
         $('td', oTable.fnGetNodes()).hover( function() {
-            var iCol = $('td', this.parentNode).index(this) % 14;
+            var iCol = $('td', this.parentNode).index(this) % nCells;
             var nTrs = oTable.fnGetNodes();
             $('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
         }, function() {
