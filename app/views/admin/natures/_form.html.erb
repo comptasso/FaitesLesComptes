@@ -4,12 +4,9 @@
   <%= f.error_notification %>
 
   <div class="inputs">
-    <div class="input" >
-      <label>Nature </label>
-    <%= f.radio_button(:income_outcome, true)  %> Recette
-   <%= f.radio_button(:income_outcome, false)  %> Dépense
-    </div>
-    <%= f.input :name %>
+     <label>Nature </label>
+  <%=  f.collection_radio :income_outcome, [[true, 'Recettes'] ,[false, 'Dépenses']], :first, :last, :label=>'Nature' %>
+     <%= f.input :name %>
     <%= f.input :comment, input_html: {rows: 4} %>
     <%= f.association :accounts, :collection => @period.accounts.classe_6_and_7.all(:order => 'number'), :prompt => "Choisissez un compte" %>
 
