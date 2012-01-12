@@ -2,6 +2,7 @@
 class Nature < ActiveRecord::Base
  
   belongs_to :organism
+  has_and_belongs_to_many :accounts
 
   validates :organism_id, :presence=>true
   
@@ -21,6 +22,11 @@ class Nature < ActiveRecord::Base
     s = (destination_id == 0) ? self.stat(period) : self.stat_filtered(period, destination_id)
     s << s.sum
 
+  end
+
+  # trouve le compte de l'exercice auquel est rattaché cette nature
+  def period_account(period)
+    self.accounts.where('period_id = ?', period.id).first
   end
 
    protected

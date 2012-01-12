@@ -121,10 +121,10 @@
     </li>
   </ul>
 
-<% if  @period.persisted? %>
-<ul>
-    <li><h2>Comptes</h2>
-      <ul>
+  <% if  @period.persisted? %>
+    <ul>
+      <li><h2>Comptes</h2>
+        <ul>
 
           <li><%= link_to 'Plan Comptable', admin_organism_period_accounts_path(@organism,@period)  %>
             <ul>
@@ -134,12 +134,17 @@
 
             </ul>
           </li>
-     
-        <li><%= link_to 'Relier aux natures - TODO', new_admin_organism_period_account_path(@organism, @period) %></li>
-      </ul>
 
-    </li>
-  </ul>
-<% end %>
+          <li><%= link_to 'Relier aux natures', new_admin_organism_period_account_path(@organism, @period) %>
+            <ul>
+              <li><%= link_to 'Recettes', mapping_admin_organism_natures_path(@organism, :type=>'incomes') %> </li>
+               <li><%= link_to 'Dépenses', mapping_admin_organism_natures_path(@organism, :type=>'outcomes') %> </li>
+            </ul>
+          </li>
+        </ul>
+
+      </li>
+    </ul>
+  <% end %>
 
 <% end %>

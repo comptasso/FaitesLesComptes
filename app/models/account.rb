@@ -18,6 +18,7 @@ require "#{Rails.root}/app/models/specific_validator"
 
 class Account < ActiveRecord::Base
   belongs_to :period
+  has_and_belongs_to_many :natures
 
    # la validator cant_change est dans le fichier specific_validator.rb
   validates :number, :presence=>true, :format=>{:with=>/\A[1-9]{1}[0-9]{1}[A-Z0-9]{0,8}\Z/}, :cant_change=>true

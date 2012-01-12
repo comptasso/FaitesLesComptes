@@ -14,7 +14,11 @@ namespace 'admin' do
     resources :books
     resources :income_books
     resources :outcome_books
-    resources :natures
+    resources :natures do
+      collection do
+        get 'mapping'
+      end
+    end
     resources :destinations
     resources :bank_accounts do
       resources :bank_extracts, :only=>[:index, :edit, :destroy] do

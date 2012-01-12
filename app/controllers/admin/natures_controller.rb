@@ -16,6 +16,16 @@ class Admin::NaturesController < Admin::ApplicationController
     end
   end
 
+  # affiche l'index des natures (soit recettes soit dépenses selon le params[:type]
+  # avec la possibilité de rattacher les natures à des comptes (classe 6 ou 7)
+  # là aussi selon le params
+  def mapping
+    @natures = case params[:type]
+      when 'incomes' then @organism.natures.recettes
+      when 'outcomes' then @organism.natures.depenses
+    end
+  end
+
  
   # GET /natures/new
   # GET /natures/new.json
