@@ -264,7 +264,7 @@ OK - Transformer en datatable.
 OK   Ajouter des totaux (voire des sous totaux)
 OK   Problème il faut filtrer par destination donc revoir les méthodes ad hoc de période
 OK   Supprimer la partie stat destination
-     Traiter le pb du nombre de mois pour le highlight de datatable
+OK - Traiter le pb du nombre de mois pour le highlight de datatable
 OK   Modifier l'icone print pour le pdf de lines
 ??   Faire une version imprimée ??
 ??   Il faudrait un ordre pour les natures ??

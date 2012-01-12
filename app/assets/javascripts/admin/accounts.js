@@ -7,7 +7,7 @@ jQuery(function() {
                 "sUrl": "/frenchdatatable.txt"
             },
  "aoColumns": [
-            null,
+            { "sType": "string" },
             null,
             null,
            {"bSortable": false}
