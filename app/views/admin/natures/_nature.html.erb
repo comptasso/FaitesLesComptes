@@ -1,10 +1,14 @@
-<td>
-  <%= nature.name %>
-</td>
-<td>
-  <%= nature.comment %>
-</td>
-<td>
-  <%= nature.period_account(@period) %>
-</td>
-
+<tr>
+  <td>
+    <%= nature.name %>
+  </td>
+  <td>
+    <%= nature.comment %>
+  </td>
+  <td>
+    <%= nature.period_account(@period) %>
+  </td>
+  <td>
+    <%= icon_to 'modifier.png', edit_admin_organism_nature_path(@organism,nature) %>
+  </td>
+</tr>

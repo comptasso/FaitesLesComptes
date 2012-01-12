@@ -288,13 +288,15 @@ OK - Period pouvant créer des comptes à partir du template fourni par ce fichi
 OK - Modif du menu pour pouvoir utiliser cette fonctionnalité
 ?? transformation de cette classe en modèle avec des tables ?
 --------------relier les natures et les comptes
-?? Devrait-on raccrocher les natures aux exercices ??
-
-    intégrer les relations has_many natures et has_many lines through natures
+NON Devrait-on raccrocher les natures aux exercices ??
+OK - intégrer les relations has_many natures et has_many lines through natures
+OK - modification du form natures#edit
     les natures de type recettes doivent être rattachées aux comptes 7
     les natures de type dépenses ...
+    revoir la vue index des natures
+    ainsi que le show s'il existe.
 
-?? ou faire un used comme pour les comptes
+
    
 
 

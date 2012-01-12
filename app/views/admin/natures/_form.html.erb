@@ -4,10 +4,15 @@
   <%= f.error_notification %>
 
   <div class="inputs">
-    <%= f.input :income_outcome, :as=>:radio %>
+    <div class="input" >
+      <label>Nature </label>
+    <%= f.radio_button(:income_outcome, true)  %> Recette
+   <%= f.radio_button(:income_outcome, false)  %> Dépense
+    </div>
     <%= f.input :name %>
-   
     <%= f.input :comment, input_html: {rows: 4} %>
+    <%= f.association :accounts, :collection => @period.accounts.all(:order => 'title'), :prompt => "Choisissez un compte" %>
+
   </div>
 
   <div class="actions">
