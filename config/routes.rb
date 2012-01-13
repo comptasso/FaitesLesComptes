@@ -7,6 +7,9 @@ Faitesvoscomptes::Application.routes.draw do
     resources :periods do
       resources :accounts
     end
+    resources :accounts do
+      resources :lines
+    end
   end
 
 

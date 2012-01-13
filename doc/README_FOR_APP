@@ -298,9 +298,12 @@ OK - faire du javascript pour mettre à jour la liste des comptes possibles
 ------------faire une vue de comptes à partir des lignes et des natures dans la partie compta
 OK - faire un layout compta
 OK - faire un accès
-faire le menu de la zone compta
-Afficher index comptes
+OK - faire le menu de la zone compta
+OK - Afficher index comptes
 afficher show comptes (limité à la période)
+pas d'affichage du menu comptes s'il n'y a pas de comptes
+il faut que les natures soit reliées au compte de l'exercice en cours (et non à tous les comptes)
+ce qui pose le pb de la création ou de la mise à jour
 
 ----------------- Faire le modèle Cerfa -----------------------------------
 

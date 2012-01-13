@@ -1,0 +1,25 @@
+<%= content_for :menu do %>
+<%= icon_to 'retour.png', :back %>
+<% end %>
+
+<fieldset>
+  <legend>
+    Ecritures du compte <%= @account.long_name %>
+  </legend>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Libellé</th>
+        <th>Destination</th>
+        <th>Débit</th>
+        <th>Crédit</th>
+      </tr>
+    </thead>
+    <tbody>
+<%= render @lines %>
+    </tbody>
+  </table>
+</fieldset>
+
+<%= "#{@account.lines.count} lignes de comptes "%>
