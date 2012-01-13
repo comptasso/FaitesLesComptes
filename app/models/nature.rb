@@ -30,6 +30,7 @@ class Nature < ActiveRecord::Base
     self.accounts.where('period_id = ?', period.id).first
   end
 
+ 
    protected
 
   # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
