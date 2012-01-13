@@ -1,0 +1,26 @@
+<fieldset><legend>Description de l'organisme</legend>
+
+
+<p>
+  <b>Titre :</b>
+  <%= @organism.title %>
+</p>
+
+<p>
+  <b>Description :</b>
+  <%= @organism.description %>
+</p>
+
+<p>
+  <b>Crée le :</b>
+  <%=l @organism.created_at %>
+</p>
+
+<p>
+  <b>Mis à jour le :</b>
+  <%=l @organism.updated_at %>
+</p>
+
+</fieldset>
+
+

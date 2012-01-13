@@ -1,7 +1,7 @@
 class Compta::ApplicationController < ActionController::Base
   layout 'compta/layouts/application'
 
-  before_filter :find_organism, :current_period
+  before_filter :current_period_and_organism
 
   protect_from_forgery
 
@@ -33,9 +33,10 @@ class Compta::ApplicationController < ActionController::Base
     end
   end
 
-  def current_period
+  def current_period_and_organism
     pid = session[:period] ||= (@organism.periods.last.id if  (@organism && @organism.periods.any?))
     @period= Period.find(pid) if pid
+    @organism=@period.organism
   end
 
 end
