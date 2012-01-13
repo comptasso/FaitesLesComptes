@@ -294,8 +294,13 @@ OK - modification du form natures#edit
 OK - les natures de type recettes doivent être rattachées aux comptes 7
 OK - les natures de type dépenses ...
 OK - revoir la vue index des natures
-     faire du javascript pour mettre à jour la liste des comptes possibles
-      faire une vue de comptes à partir des lignes et des natures dans la partie compta
+OK - faire du javascript pour mettre à jour la liste des comptes possibles
+------------faire une vue de comptes à partir des lignes et des natures dans la partie compta
+faire un layout compta
+faire un accès
+faire le menu de la zone compta
+Afficher index comptes
+afficher show comptes (limité à la période)
 
 ----------------- Faire le modèle Cerfa -----------------------------------
 

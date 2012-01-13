@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Faites les comptes ! Administration</title>
+    <title>Faites les comptes ! Compta</title>
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
-  <body class='<%= controller.controller_name %> admin'>
+  <body class='<%= controller.controller_name %> compta'>
   <div id="header">
      <div id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
-     <div id="zone_admin">
+     <div id="zone_compta">
 <%= link_to 'Public',  ((@organism && !@organism.new_record?) ? organism_path(@organism) : organisms_path )  %>
-       <%= link_to 'Compta',  ((@organism.persisted?) ? compta_organism_path(@organism) : compta_organisms_path )  %>
+       <%= link_to 'Administration',  ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path )  %>
      </div>
     <div id ="organism">
       <%= link_to @organism.title, @organism if (@organism && !@organism.new_record?) %>  <span class="description"><%= @period.exercice unless @period.nil? %></span>
@@ -20,14 +20,14 @@
 
 
   <nav id="menu">
-    <%= render 'admin/organisms/menu'%>
+    <%= render 'compta/organisms/menu'%>
     <%= yield :menu %>
   </nav>
  
  
 
 
-    <div id="bandeau"  ><%= yield :bandeau %>
+    <div id="bandeau"  >
       <span id="notice"><%= notice %></span>
       <span id="alert"><%= alert %></span>
     </div>

@@ -1,0 +1,15 @@
+<ul>
+  <li><h2>ORGANISMES</h2>
+
+    <ul>
+      <li><%= link_to 'Listes des organismes', compta_organisms_path %></li>
+      <% Organism.all.reject {|r| r.new_record? }.each do |r| %>
+        <li><%= link_to r.title, admin_organism_path(r)  %>
+
+        </li>
+      <% end %>
+     
+    </ul>
+
+  </li>
+</ul>

@@ -35,9 +35,9 @@ function change_radio(){
 
 jQuery(function() {
 
-change_radio();
+change_radio(); // gestion des comptes sélectionnables à l'affichage'
 $('[type=radio]').click(function() {
-    change_radio();
+    change_radio(); // gestion en cas de changement 
 });
 
 });

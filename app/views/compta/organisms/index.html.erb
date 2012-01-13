@@ -1,0 +1,21 @@
+<% content_for :menu do %>
+
+<% end %>
+<fieldset><legend> Liste des organismes </legend>
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+
+  </tr>
+
+<% @organisms.each do |organism| %>
+  <tr>
+    <td><%= organism.title %></td>
+    <td><%= organism.description %></td>
+   
+  </tr>
+<% end %>
+</table>
+
+</fieldset>
