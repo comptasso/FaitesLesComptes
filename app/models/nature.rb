@@ -5,7 +5,7 @@ class Nature < ActiveRecord::Base
   has_and_belongs_to_many :accounts
 
   validates :organism_id, :presence=>true
-  validates :account_ids, :fit_type=>true
+#  validates :account_ids, :fit_type=>true retiré car on ne crée plus l'assoc avec le compte dans le form nature
   
    has_many :lines
 
