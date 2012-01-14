@@ -27,8 +27,8 @@ jQuery(function (){
 
 // mise en forme des tables de lignes
 jQuery(function() {
-    if ($('.lines .data_table').length != 0) {
-        var oTable= $('.lines .data_table').dataTable(
+    if ($('.public_lines .data_table').length != 0) {
+        var oTable= $('.public_lines .data_table').dataTable(
         {
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"

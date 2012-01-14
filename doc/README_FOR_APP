@@ -300,10 +300,12 @@ OK - faire un layout compta
 OK - faire un accès
 OK - faire le menu de la zone compta
 OK - Afficher index comptes
-afficher show comptes (limité à la période)
-pas d'affichage du menu comptes s'il n'y a pas de comptes
-il faut que les natures soit reliées au compte de l'exercice en cours (et non à tous les comptes)
-ce qui pose le pb de la création ou de la mise à jour
+OK - afficher show comptes (limité à la période)
+OK - pas d'affichage du menu comptes s'il n'y a pas de comptes
+OK - il faut que les natures soit reliées au compte de l'exercice en cours (et non à tous les comptes)
+OK - ce qui pose le pb de la création ou de la mise à jour
+Vérifier que l'on a bien les lignes qu'il faut et pas d'un autre exercice
+Interdire cet affichage si des natures ne sont pas associées à la compta
 
 ----------------- Faire le modèle Cerfa -----------------------------------
 

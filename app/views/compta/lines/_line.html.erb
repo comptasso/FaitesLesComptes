@@ -1,3 +1,5 @@
 <tr>
-  <td>line.line_date  </td><td>line.narration  </td><td>line.destination  </td><td>line.debit </td><td>line.credit  </td>
+  <td><%=l  line.line_date  %></td><td><%=  line.narration  %> </td>
+  <td><%=  line.destination.name if line.destination  %> </td>
+  <td class="nombre"><%=debit_credit  line.debit %> </td><td class="nombre"><%=debit_credit  line.credit %>  </td>
 </tr>

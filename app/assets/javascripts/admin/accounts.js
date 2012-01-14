@@ -77,23 +77,25 @@ $('optgroup[label=Dépenses] option').attr('disabled', false);
 
 
 jQuery(function() {
-
+if ($('.accounts input#account_number').length != 0) {
 var acc= $('input#account_number').val();
 toggle_recettes_depenses(acc);
 $('input#account_number').change(function(){
    toggle_recettes_depenses($('input#account_number').val());
 });
-
+}
 });
 
 function toggle_recettes_depenses(acc) {
+active_depenses();
+active_recettes();
     if (acc.match(new RegExp('\^'+ '6'))) {
     desac_recettes();
-    active_depenses();
+  
 }
 
 if (acc.match(new RegExp('\^'+ '7'))) {
-    active_recettes();
+  
     desac_depenses();
 }
 

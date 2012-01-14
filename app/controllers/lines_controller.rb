@@ -14,7 +14,7 @@ class LinesController < ApplicationController
   # GET /lines
   # GET /lines.json
   def index
-     logger.debug 'dans index'
+  
      fill_soldes
      respond_to do |format|
       format.html # index.html.erb
