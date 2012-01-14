@@ -26,8 +26,16 @@ class Nature < ActiveRecord::Base
   end
 
   # trouve le compte de l'exercice auquel est rattaché cette nature
-  def period_account(period)
-    self.accounts.where('period_id = ?', period.id).first
+  # TODO faire un test de cohérence, il ne doit y en avoir qu'un
+  def account_id(period)
+    self.accounts.where('period_id = ?', period.id).first.id
+  rescue
+    nil
+  end
+
+   # vérifie si la nature est rattachée à un compte
+  def linked_to_account?(period)
+    self.account_id(period).is_a?(Account) ? true : false
   end
 
  
