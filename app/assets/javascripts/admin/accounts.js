@@ -49,7 +49,7 @@ jQuery(function() {
 //function change_classe(){
 // //   _test2.attr("checked") != "undefined" && _test2.attr("checked") == "checked");
 // var rec_dep= $('#account_number').val();
-//  var myregexp = new RegExp('\^'+ '6');
+//  
 // var dep = $('#nature_income_outcome_false');
 //    if (rec_dep.match(myregexp)) {toggle_classe('7',false); toggle_classe('6', true);}
 //    if (!rec_dep.match(myregexp)) {toggle_classe('7',true); toggle_classe('6', false);}
@@ -59,13 +59,43 @@ jQuery(function() {
 
 
 
-//jQuery(function() {
-//
-//change_radio(); // gestion des comptes sélectionnables à l'affichage'
-//$('[type=radio]').click(function() {
-//    change_radio(); // gestion en cas de changement
-//});
-//
-//});
+function desac_recettes() {
+$('optgroup[label=Recettes] option').attr('disabled', 'disabled');
+}
 
+function desac_depenses() {
+$('optgroup[label=Dépenses] option').attr('disabled', 'disabled');
+}
+function active_recettes() {
+$('optgroup[label=Recettes] option').attr('disabled', false);
+}
+
+function active_depenses() {
+$('optgroup[label=Dépenses] option').attr('disabled', false);
+}
+
+
+
+jQuery(function() {
+
+var acc= $('input#account_number').val();
+toggle_recettes_depenses(acc);
+$('input#account_number').change(function(){
+   toggle_recettes_depenses($('input#account_number').val());
+});
+
+});
+
+function toggle_recettes_depenses(acc) {
+    if (acc.match(new RegExp('\^'+ '6'))) {
+    desac_recettes();
+    active_depenses();
+}
+
+if (acc.match(new RegExp('\^'+ '7'))) {
+    active_recettes();
+    desac_depenses();
+}
+
+}
 
