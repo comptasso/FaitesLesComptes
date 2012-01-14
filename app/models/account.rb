@@ -41,4 +41,9 @@ class Account < ActiveRecord::Base
    [number, title].join(' ')
   end
 
+  # retourne le premier caractère du numéro de compte
+  def classe
+    self.number[0]
+  end
+
 end

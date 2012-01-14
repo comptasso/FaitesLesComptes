@@ -2,9 +2,10 @@
   <%= f.error_notification %>
 
   <div class="inputs">
-    <%= f.input :number ,:input_html=>{:placeholder=>'2 à 8 chiffres', :size=>'20'},:disabled=>!@account.new_record?%>
+    <%= f.input :number ,:input_html=>{:placeholder=>'2 à 8 chiffres', :size=>'20'},:disabled=>!@account.new_record? %>
     <%= f.input :title %>
     <%= f.input :used %>
+    <%= f.association :natures,  :collection => @organism.natures.all(:order => 'name'), %>
   </div>
 
   <div class="actions">

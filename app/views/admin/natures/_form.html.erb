@@ -11,8 +11,7 @@
      <%= f.input :name %>
     <%= f.input :comment, input_html: {rows: 4} %>
   
-    <%= f.association :accounts, :collection => @period.accounts.classe_6_and_7.all(:order => 'number'),
-      :label_method=>:long_name,:value_method=>:id, :prompt => "Choisissez un compte" %>
+   
   </div>
 
   <div class="actions">

@@ -12,6 +12,8 @@ class Nature < ActiveRecord::Base
    default_scope order: 'name ASC'
    scope :recettes, where('income_outcome = ?', true)
    scope :depenses, where('income_outcome = ?', false)
+# marche mais inutilisé à ce stade
+#      scope :ad_hoc, lambda{|classe| (classe.to_i == 6) ? where('income_outcome = ?', false) : where('income_outcome = ?', true)}
 
   before_destroy :ensure_no_lines
 
@@ -36,6 +38,10 @@ class Nature < ActiveRecord::Base
    # vérifie si la nature est rattachée à un compte
   def linked_to_account?(period)
     self.account_id(period).is_a?(Account) ? true : false
+  end
+
+  def in_out_to_s
+    self.income_outcome ? 'Recettes' : 'Dépenses'
   end
 
  
