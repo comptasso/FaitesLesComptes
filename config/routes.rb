@@ -3,7 +3,9 @@ Faitesvoscomptes::Application.routes.draw do
   
 
   namespace :compta do
-    resources :organisms
+    resources :organisms do
+      resources :periods
+    end
     resources :periods do
       resources :accounts
     end

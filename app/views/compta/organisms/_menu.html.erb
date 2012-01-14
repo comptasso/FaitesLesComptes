@@ -4,7 +4,8 @@
     <ul>
       <li><%= link_to 'Listes des organismes', compta_organisms_path %></li>
       <% Organism.all.reject {|r| r.new_record? }.each do |r| %>
-        <li><%= link_to r.title, compta_organism_path(r)  %>
+        <li>
+<%= link_to r.title, compta_organism_path(r)  %>
 
         </li>
       <% end %>
@@ -14,6 +15,8 @@
   </li>
 </ul>
 
+
+<% unless @period.nil? %>
 <ul>
   <li><h2>Comptes</h2>
 
@@ -23,3 +26,21 @@
 
   </li>
 </ul>
+<% end %>
+
+<% unless @organism.nil? %>
+
+<ul>
+    <li><h2>Exercices</h2>
+      <ul>
+        <% @organism.periods.each do |c| %>
+          <li><%= link_to c.exercice, compta_organism_period_path(@organism, c) %>
+            
+          </li>
+        <% end %>
+
+      </ul>
+
+    </li>
+  </ul>
+<% end %>

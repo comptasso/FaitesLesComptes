@@ -81,4 +81,32 @@ function stringToFloat(jcdata){
 
 }
 
+// mise en forme des table
+// il y a différents types de table, celle ci est une table sans total mais avec la première col qui doit être classée en asci
+jQuery(function() {
+    if ($('.simple_data_table_ascisort').length != 0) {
+   var oTable= $('.simple_data_table_ascisort').dataTable({
+
+        "oLanguage": {
+            "sUrl": "/frenchdatatable.txt"
+        },
+        "aoColumns": [
+            { "sType": "string" },
+            null,
+            null,
+           {"bSortable": false}
+            ]
+   });
+
+     var nb_col=$('tr td:nth-child(1)').length;
+     $('td', oTable.fnGetNodes()).hover( function() {
+        var iCol = $('td', this.parentNode).index(this) % nb_col;
+        var nTrs = oTable.fnGetNodes();
+        $('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
+    }, function() {
+        $('td.highlighted', oTable.fnGetNodes()).removeClass('highlighted');
+    } );
+
+}
+});
 

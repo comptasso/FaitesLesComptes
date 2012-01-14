@@ -1,7 +1,9 @@
+# -*- encoding : utf-8 -*-
+
 class Compta::ApplicationController < ActionController::Base
   layout 'compta/layouts/application'
 
-  before_filter :current_period_and_organism
+  before_filter :current_period_and_organism, :check_natures
 
   protect_from_forgery
 
@@ -36,7 +38,18 @@ class Compta::ApplicationController < ActionController::Base
   def current_period_and_organism
     pid = session[:period] ||= (@organism.periods.last.id if  (@organism && @organism.periods.any?))
     @period= Period.find(pid) if pid
-    @organism=@period.organism
+    @organism=@period.organism unless @period.nil?
   end
 
+  # vérifie que toutes les natures sont associées à un compte de l'exercice,
+  # renvoie false ou true selon que le controle est correct
+  def check_natures
+    if (@organism && @period)
+      unless !@organism.all_natures_linked_to_account?(@period)
+        flash[:alert]='Des natures ne sont pas reliées à des comptes'
+        return false
+      end
+    end
+  end
+  true
 end
