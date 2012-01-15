@@ -94,10 +94,10 @@ class Admin::AccountsController < Admin::ApplicationController
   def modify_mapping
     if params[:type]== 'incomes'
     @accounts=@period.accounts.classe_7
-    @unlinked_natures=@organism.natures.recettes.reject {|r| r.linked_to_account?(@period) }
+    @unlinked_natures=@period.natures.recettes.without_account
     elsif params[:type]== 'outcomes'
     @accounts=@period.accounts.classe_6
-    @unlinked_natures=@organism.natures.depenses.reject {|r| r.linked_to_account?(@period) }
+    @unlinked_natures=@period.natures.depenses.without_account
     else
      redirect_to mapping_admin_organism_period_accounts_url(@organism,@period)
     end
@@ -105,6 +105,6 @@ class Admin::AccountsController < Admin::ApplicationController
 
   def mapping
     @accounts=@period.accounts
-    @unlinked_natures=@organism.array_natures_not_linked(@period)
+    @unlinked_natures=@period.accounts.without_account
   end
 end
