@@ -315,9 +315,9 @@ OK - Modifier les relations des modèles
 OK - Modifier les routes
 OK - Du coup, on peut créer de nature qu'avec un period
 OK - Revoir les menus et les vues en conséquence
-    Revoir la gestion du rattachement à partir de natures : en cours, faire la javascript
-    Revoir la gestion gestion du mapping à partir de account : voir l'affichage
-    La création du périod suivant doit dès lors recopier les natures
+OK - Revoir la gestion du rattachement à partir de natures : en cours, faire la javascript
+     Revoir la gestion gestion du mapping à partir de account : voir l'affichage
+     La création du périod suivant doit dès lors recopier les natures
      Proposer une balance
      Factoriser les jQuery datatable
 
