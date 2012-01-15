@@ -41,7 +41,7 @@ namespace 'admin' do
       end
       resources :accounts do
         collection do
-          get :mapping
+          get :mapping, :modify_mapping
         end
       end
     end

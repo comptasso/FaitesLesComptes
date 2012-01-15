@@ -61,7 +61,16 @@ class Admin::AccountsController < Admin::ApplicationController
 
     respond_to do |format|
       if @account.update_attributes(params[:account])
-        format.html { redirect_to admin_organism_period_accounts_path(@organism,@period), notice: 'Le compte a été mis à jour' }
+        format.html {
+          if @organism.all_natures_linked_to_account?(@period)
+          redirect_to admin_organism_period_accounts_path(@organism,@period), notice: 'Le compte a été mis à jour'
+          else
+            flash[:alert]= 'Toutes les natures ne sont pas reliées à des comptes'
+            way = @organism.array_natures_not_linked(@period).first.income_outcome ? 'incomes' : 'outcomes'
+            redirect_to modify_mapping_admin_organism_period_accounts_path(@organism,@period,type: way)
+            end
+
+            }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -82,7 +91,20 @@ class Admin::AccountsController < Admin::ApplicationController
     end
   end
 
+  def modify_mapping
+    if params[:type]== 'incomes'
+    @accounts=@period.accounts.classe_7
+    @unlinked_natures=@organism.natures.recettes.reject {|r| r.linked_to_account?(@period) }
+    elsif params[:type]== 'outcomes'
+    @accounts=@period.accounts.classe_6
+    @unlinked_natures=@organism.natures.depenses.reject {|r| r.linked_to_account?(@period) }
+    else
+     redirect_to mapping_admin_organism_period_accounts_url(@organism,@period)
+    end
+  end
+
   def mapping
-    
+    @accounts=@period.accounts
+    @unlinked_natures=@organism.array_natures_not_linked(@period)
   end
 end

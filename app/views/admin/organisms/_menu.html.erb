@@ -137,8 +137,8 @@
 
           <li><%= link_to 'Relier aux natures', mapping_admin_organism_period_accounts_path(@organism, @period) %>
             <ul>
-              <li><%= link_to 'Recettes', mapping_admin_organism_period_accounts_path(@organism, @period,:type=>'incomes') %> </li>
-               <li><%= link_to 'Dépenses', mapping_admin_organism_period_accounts_path(@organism, @period,:type=>'outcomes') %> </li>
+              <li><%= link_to 'Recettes', modify_mapping_admin_organism_period_accounts_path(@organism, @period,:type=>'incomes') %> </li>
+               <li><%= link_to 'Dépenses', modify_mapping_admin_organism_period_accounts_path(@organism, @period,:type=>'outcomes') %> </li>
             </ul>
           </li>
         </ul>

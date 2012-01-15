@@ -63,8 +63,14 @@ class Organism < ActiveRecord::Base
 
   # informe si toutes les natures sont bien reliées à un compte
   def all_natures_linked_to_account?(period)
-    self.natures.reject{|r| r.linked_to_account?(period)}.any?
+    self.array_natures_not_linked.any?
   end
+
+  def array_natures_not_linked(period)
+    self.natures.reject {|r| r.linked_to_account?(period)}
+  end
+
+
 
   private
 

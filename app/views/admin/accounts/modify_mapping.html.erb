@@ -1,7 +1,3 @@
-<%#
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
-%>
 
 <fieldset>
   <legend>
@@ -11,7 +7,7 @@
   <div class="mapping_accounts">
     <ul>
     <% @accounts.each  do |account| %>
-      <li> <%= account.title %>
+      <li> <%=link_to  account.title, edit_admin_organism_period_account_path(@organism,@period,account) %>
         <ul>
           <% account.natures.each do |nature| %>
           <%= content_tag :li, nature.name %>
