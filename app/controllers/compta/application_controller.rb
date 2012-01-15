@@ -47,9 +47,9 @@ class Compta::ApplicationController < ActionController::Base
     if (@organism && @period)
       unless !@organism.all_natures_linked_to_account?(@period)
         flash[:alert]='Des natures ne sont pas reliées à des comptes'
-        return false
+        
       end
     end
   end
-  true
+ 
 end

@@ -12,8 +12,9 @@ class Nature < ActiveRecord::Base
    default_scope order: 'name ASC'
    scope :recettes, where('income_outcome = ?', true)
    scope :depenses, where('income_outcome = ?', false)
-# marche mais inutilisé à ce stade
-#      scope :ad_hoc, lambda{|classe| (classe.to_i == 6) ? where('income_outcome = ?', false) : where('income_outcome = ?', true)}
+ #  scope :affected, lambda{|pid| where('period_id=?').all,:joins=> :accounts_natures }
+   scope :without_account, joins('left outer join accounts_natures on natures.id=accounts_natures.nature_id').where('accounts_natures.account_id is null')
+
 
   before_destroy :ensure_no_lines
 

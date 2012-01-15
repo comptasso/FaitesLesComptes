@@ -307,8 +307,9 @@ OK - ce qui pose le pb de la création ou de la mise à jour
     Vérifier que l'on a bien les lignes qu'il faut et pas d'un autre exercice
 OK - prévenir si des natures ne sont pas associées à des comptes
 OK - Faire un data table pour la liste des comptes
-Ne pas proposer les natures déjà associées à des comptes dans le formulaire sur les comptes (zone admin)
-Proposer une balance
+  Ne pas proposer les natures déjà associées à des comptes dans le formulaire sur les comptes (zone admin)
+  Proposer une balance
+  Factoriser les jQuery datatable
 
 
 ----------------- Faire le modèle Cerfa -----------------------------------

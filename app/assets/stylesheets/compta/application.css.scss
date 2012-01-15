@@ -5,18 +5,23 @@ thème couleur principale 9cd avec en plus foncé 4ca5c3 et 2a6a7f
 thème suggéré 378aa5 et bbb avec fff
 */
 
-// e33800 491200 FF9d7d
+//
+
+$clear: #FAF999;
+$dark: #5d5c04;
+$medium: #e3e32d;
+
 
 .compta {
     #header {
        height: 45px;
-        background-color: #e33800;
+        background-color: $medium;
         #logo {
             width: 500px;
             height: 100%;
-            background: #e33800;
+            background: $medium;
             font: small-caps 36px/36px "Times New Roman" , serif;
-            color: #491200;
+            color: $clear;
             text-align: left;
             padding-left: 0.5em;
             padding-top: 5px;
@@ -26,7 +31,7 @@ thème suggéré 378aa5 et bbb avec fff
                 padding-bottom :0px;
             }
             a:hover {
-                background: #9cd;
+                background: $medium;
 
             }
         }
@@ -45,22 +50,22 @@ thème suggéré 378aa5 et bbb avec fff
 
     }
     fieldset {
-        background: e33800;
+        background: $clear;
         margin-left: 0px;
         margin-bottom: 10px;
         legend {
-            color: #e33800;
-            background: #491200;
+            color: $medium;
+            background: $dark;
             font-family: sans-serif;
             padding: 0.2em 1em;
         }
     }
 
     nav#menu {
-        background-color: #e33800;
+        background-color: $medium;
 
-        h2 {background-color: #491200;}
-        a {background-color: #e33800;}
+        h2 {background-color: $dark;}
+        a {background-color: $dark;}
         a:hover {background-color: #FFF;}
     }
 
