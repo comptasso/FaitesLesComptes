@@ -2,7 +2,7 @@
     Statistiques par natures
   </legend>
 
-  <%= form_tag stats_organism_natures_path(@organism),:method => :get, :style=>"display: inline;"  do %>
+  <%= form_tag stats_organism_period_natures_path(@organism, @period),:method => :get, :style=>"display: inline;"  do %>
 
    <label for="destination">Destination : </label>
      <%= select_tag :destination, options_for_select([['Toutes', 0]] + @organism.destinations.collect {|d| [d.name, d.id]}, @filter) %>

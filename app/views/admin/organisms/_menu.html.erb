@@ -42,9 +42,9 @@
     <li><h2>Natures</h2>
       <ul>
 
-        <li><%= link_to 'Afficher', admin_organism_natures_path(@organism)  %></li>
+        <li><%= link_to 'Afficher', admin_organism_period_natures_path(@organism,@period)  %></li>
 
-        <li><%=link_to  'Nouveau', new_admin_organism_nature_path(@organism)  %></li>
+        <li><%=link_to  'Nouveau', new_admin_organism_period_nature_path(@organism, @period)  %></li>
 
 
       </ul>

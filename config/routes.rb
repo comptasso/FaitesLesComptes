@@ -20,9 +20,7 @@ namespace 'admin' do
     resources :books
     resources :income_books
     resources :outcome_books
-    resources :natures do
-      
-    end
+    
     resources :destinations
     resources :bank_accounts do
       resources :bank_extracts, :only=>[:index, :edit, :destroy] do
@@ -39,7 +37,8 @@ namespace 'admin' do
         get 'select_plan'
         post 'create_plan'
       end
-      resources :accounts do
+    resources :natures
+    resources :accounts do
         collection do
           get :mapping, :modify_mapping
         end
@@ -61,6 +60,11 @@ end
 
   resources :organisms , :only=> [:index, :show] do
     resources :periods, :only=> [:index, :show] do
+      resources :natures, only: :index do
+      collection do
+        get 'stats'
+      end
+    end
       member do
         get 'previous'
         get 'next'
@@ -98,11 +102,7 @@ end
     resources :income_books
     resources :outcome_books
     resources :destinations, only: :index
-    resources :natures, only: :index do
-      collection do
-        get 'stats'
-      end
-    end
+    
    
   end
 

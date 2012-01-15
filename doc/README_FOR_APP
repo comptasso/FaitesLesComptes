@@ -309,8 +309,10 @@ OK - prévenir si des natures ne sont pas associées à des comptes
 OK - Faire un data table pour la liste des comptes
 OK - déplacé la logique du mapping sur account
 ---- Refonte de nature - abandon du habtm -----------------------------------
-Faire la migration pour que nature soit rattachée à period plutôt qu'à organism
-Supprimer la table habtm
+OK - Faire la migration pour que nature soit rattachée à period plutôt qu'à organism
+OK - Supprimer la table habtm
+OK - Modifier les relations des modèles
+OK - Modifier les routes
 Du coup, on peut créer de nature qu'avec un period
 La création du périod suivant doit recopier les natures
 Revoir les menus et les vues en conséquence
@@ -319,7 +321,10 @@ Revoir la gestion gestion du mapping à partir de account
      Proposer une balance
      Factoriser les jQuery datatable
 
-
+Revoir la vue index de nature dans public qui propose des actions qui relèvent de admin
+Peut être idem pour destination
+Il serait plus judicieux de faire un stat controller car le controller nature n'a plus qu'une méthode stats
+et stats traite de natures et de destinations
 ----------------- Faire le modèle Cerfa -----------------------------------
 
 

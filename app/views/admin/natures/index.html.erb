@@ -1,7 +1,7 @@
 
 <%= content_for :menu do %>
 
-<%= icon_to 'nouveau.png', new_admin_organism_nature_path(@organism) %>
+<%= icon_to 'nouveau.png', new_admin_organism_period_nature_path(@organism, @period) %>
 
 <% end %>
 <fieldset><legend> Liste des natures </legend>
@@ -28,8 +28,8 @@
     <td><%= nature.comment %></td>
     <td><%= account_number(nature, @period.id)  %> </td>
     <td><%= account_title(nature, @period.id) %> </td>
-    <td><%= icon_to 'modifier.png', edit_admin_organism_nature_path(@organism,nature) %></td>
-    <td><%= icon_to 'supprimer.png', [:admin,@organism, nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+    <td><%= icon_to 'modifier.png', edit_admin_organism_period_nature_path(@organism,@period,nature) %></td>
+    <td><%= icon_to 'supprimer.png', [:admin,@organism,@period, nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
@@ -55,8 +55,8 @@
     <td><%= nature.comment %></td>
      <td><%= account_number(nature, @period.id)  %> </td>
     <td><%= account_title(nature, @period.id) %> </td>
-    <td><%= icon_to 'modifier.png', edit_admin_organism_nature_path(@organism,nature) %></td>
-    <td><%= icon_to 'supprimer.png', [:admin,@organism, nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+    <td><%= icon_to 'modifier.png', edit_admin_organism_period_nature_path(@organism,@period,nature) %></td>
+    <td><%= icon_to 'supprimer.png', [:admin,@organism, @period,nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

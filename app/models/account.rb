@@ -17,7 +17,7 @@
 
 class Account < ActiveRecord::Base
   belongs_to :period
-  has_and_belongs_to_many :natures
+  has_many :natures
   has_many :lines, :through=>:natures
 
    # la validator cant_change est dans le fichier specific_validator.rb

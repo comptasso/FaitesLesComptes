@@ -1,15 +1,15 @@
 # -*- encoding : utf-8 -*-
 class Nature < ActiveRecord::Base
  
-  belongs_to :organism
-  has_and_belongs_to_many :accounts
+  belongs_to :period
+  belongs_to :account
 
-  validates :organism_id, :presence=>true
+  validates :period_id, :presence=>true
 #  validates :account_ids, :fit_type=>true retiré car on ne crée plus l'assoc avec le compte dans le form nature
   
    has_many :lines
 
-   default_scope order: 'name ASC'
+#   default_scope order: 'name ASC'
    scope :recettes, where('income_outcome = ?', true)
    scope :depenses, where('income_outcome = ?', false)
  #  scope :affected, lambda{|pid| where('period_id=?').all,:joins=> :accounts_natures }
