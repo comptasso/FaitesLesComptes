@@ -105,6 +105,6 @@ class Admin::AccountsController < Admin::ApplicationController
 
   def mapping
     @accounts=@period.accounts
-    @unlinked_natures=@period.accounts.without_account
+    @unlinked_natures=@period.natures.without_account
   end
 end
