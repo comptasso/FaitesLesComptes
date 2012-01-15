@@ -12,8 +12,14 @@
     <%= f.input :comment, input_html: {rows: 4} %>
   
 
-    <%= f.association :account, :collection => @period.accounts.classe_6_and_7.all(:order => 'number'),
-      :label_method=>:long_name,:value_method=>:id, :prompt => "Choisissez un compte" %>
+
+    <div class="input">
+      <%= f.label 'Compte de rattachement' %>
+    <%= select_tag  :account,
+      grouped_options_for_select([ ['Recettes', options_for_select(@period.accounts.classe_7.collect {|a| [a.long_name, a.id]})],
+        ['Dépenses', options_for_select(@period.accounts.classe_6.collect {|a| [a.long_name, a.id]})]]), :prompt=>'Compte de rattachement' %>
+    </div>
+ 
   </div>
 
   <div class="actions">

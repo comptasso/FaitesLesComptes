@@ -32,6 +32,7 @@ class Admin::NaturesController < Admin::ApplicationController
 
   # GET /natures/1/edit
   def edit
+#    @period=Period.find(params[:period_id])
     @nature = @period.natures.find(params[:id])
   end
 

@@ -313,11 +313,11 @@ OK - Faire la migration pour que nature soit rattachée à period plutôt qu'à 
 OK - Supprimer la table habtm
 OK - Modifier les relations des modèles
 OK - Modifier les routes
-Du coup, on peut créer de nature qu'avec un period
-La création du périod suivant doit recopier les natures
-Revoir les menus et les vues en conséquence
-Refair la question du rattachement à des comptes
-Revoir la gestion gestion du mapping à partir de account
+OK - Du coup, on peut créer de nature qu'avec un period
+OK - Revoir les menus et les vues en conséquence
+    Revoir la gestion du rattachement à partir de natures : en cours, faire la javascript
+    Revoir la gestion gestion du mapping à partir de account : voir l'affichage
+    La création du périod suivant doit dès lors recopier les natures
      Proposer une balance
      Factoriser les jQuery datatable
 
