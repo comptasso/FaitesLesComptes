@@ -11,7 +11,7 @@
      <div id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
      <div id="zone_admin">
 <%= link_to 'Public',  ((@organism && !@organism.new_record?) ? organism_path(@organism) : organisms_path )  %>
-       <%= link_to 'Compta',  ((@organism.persisted?) ? compta_organism_path(@organism) : compta_organisms_path )  %>
+       <%= link_to 'Compta',  ((@organism  && @organism.persisted?) ? compta_organism_path(@organism) : compta_organisms_path )  %>
      </div>
     <div id ="organism">
       <%= link_to @organism.title, @organism if (@organism && !@organism.new_record?) %>  <span class="description"><%= @period.exercice unless @period.nil? %></span>
