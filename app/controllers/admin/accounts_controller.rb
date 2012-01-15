@@ -62,11 +62,11 @@ class Admin::AccountsController < Admin::ApplicationController
     respond_to do |format|
       if @account.update_attributes(params[:account])
         format.html {
-          if @organism.all_natures_linked_to_account?(@period)
+          if @period.all_natures_linked_to_account?
           redirect_to admin_organism_period_accounts_path(@organism,@period), notice: 'Le compte a été mis à jour'
           else
             flash[:alert]= 'Toutes les natures ne sont pas reliées à des comptes'
-            way = @organism.array_natures_not_linked(@period).first.income_outcome ? 'incomes' : 'outcomes'
+            way = @period.array_natures_not_linked.first.income_outcome ? 'incomes' : 'outcomes'
             redirect_to modify_mapping_admin_organism_period_accounts_path(@organism,@period,type: way)
             end
 

@@ -26,8 +26,8 @@
     <td><%= nature.name %></td>
 
     <td><%= nature.comment %></td>
-    <td><%= account_number(nature, @period.id)  %> </td>
-    <td><%= account_title(nature, @period.id) %> </td>
+    <td><%= nature.account.number if nature.account  %> </td>
+    <td><%= nature.account.title if nature.account %> </td>
     <td><%= icon_to 'modifier.png', edit_admin_organism_period_nature_path(@organism,@period,nature) %></td>
     <td><%= icon_to 'supprimer.png', [:admin,@organism,@period, nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
@@ -53,8 +53,8 @@
     <td><%= nature.name %></td>
 
     <td><%= nature.comment %></td>
-     <td><%= account_number(nature, @period.id)  %> </td>
-    <td><%= account_title(nature, @period.id) %> </td>
+    <td><%= nature.account.number if nature.account  %> </td>
+    <td><%= nature.account.title if nature.account %> </td>
     <td><%= icon_to 'modifier.png', edit_admin_organism_period_nature_path(@organism,@period,nature) %></td>
     <td><%= icon_to 'supprimer.png', [:admin,@organism, @period,nature], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>

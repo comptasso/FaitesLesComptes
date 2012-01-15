@@ -225,6 +225,16 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
     pc.create_accounts(self.id, source)
   end
 
+  # informe si toutes les natures sont bien reliées à un compte
+  def all_natures_linked_to_account?
+    self.array_natures_not_linked.any? ? false : true
+  end
+
+  def array_natures_not_linked
+    self.natures.without_account.all
+  end
+
+
  
 
 #  # report_entries écrit dans l'exercice suivant l'écriture d'ouverture de

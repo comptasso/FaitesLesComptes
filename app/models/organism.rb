@@ -61,17 +61,7 @@ class Organism < ActiveRecord::Base
     period_array.first
   end
 
-  # informe si toutes les natures sont bien reliées à un compte
-  def all_natures_linked_to_account?(period)
-    self.array_natures_not_linked.any?
-  end
-
-  def array_natures_not_linked(period)
-    self.natures.reject {|r| r.linked_to_account?(period)}
-  end
-
-
-
+  
   private
 
   def create_default
