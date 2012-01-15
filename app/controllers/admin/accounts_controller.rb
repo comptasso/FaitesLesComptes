@@ -81,4 +81,8 @@ class Admin::AccountsController < Admin::ApplicationController
       format.json { head :ok }
     end
   end
+
+  def mapping
+    
+  end
 end

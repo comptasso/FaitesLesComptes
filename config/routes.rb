@@ -21,9 +21,7 @@ namespace 'admin' do
     resources :income_books
     resources :outcome_books
     resources :natures do
-      collection do
-        get 'mapping'
-      end
+      
     end
     resources :destinations
     resources :bank_accounts do
@@ -41,7 +39,11 @@ namespace 'admin' do
         get 'select_plan'
         post 'create_plan'
       end
-      resources :accounts
+      resources :accounts do
+        collection do
+          get :mapping
+        end
+      end
     end
   end
 end
