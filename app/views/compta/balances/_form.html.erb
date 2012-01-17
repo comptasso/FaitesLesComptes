@@ -4,13 +4,15 @@
     <label for="end_date">Au : </label>
    <%= picker_date :end_date, @period.start_date, @period.close_date, @end_date %>
 
-<label>du compte : </label>
+    <br />
+
+<label>Du compte : </label>
 <%= select_tag :begin_account, options_from_collection_for_select(@period.accounts.order('number ASC').all,:number, :long_name,
   :selected=>@begin_account.number) %>
 
-<label>au compte : </label>
+<label>Au compte : </label>
 <%= select_tag :end_account, options_from_collection_for_select(@period.accounts.order('number ASC').all, :number, :long_name,
   :selected=>@end_account.number) %>
-
+<br />
 <%= submit_tag 'Afficher', :class=>'button' %>
 <% end %>

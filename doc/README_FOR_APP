@@ -325,7 +325,10 @@ OK - faire une classe balance
 OK - faire une méthode pour account qui calcule les totaux débit et crédit de ce compte
 OK - controller balance
 OK - vue balance
-introduire la gestion d'une date et de compte pour la balance
+OK - introduire introduire la gestion d'une date et de compte pour la balance
+Mettre des totaux aux colonnes - on pourrait faire une méthode balance_line dans account et avoir ainsi un hash dans la vue
+Faire la mise en forme de la vue balance (ligne de la table)
+Impression de la balance
 
 
      Factoriser les jQuery datatable

@@ -41,6 +41,17 @@ class Account < ActiveRecord::Base
    [number, title].join(' ')
   end
 
+  def balance_line(from, to)
+    {:number=>self.number, :title=>self.title,
+      :cumul_debit_before=>self.cumulated_before(from, :debit),
+       :cumul_credit_before=>self.cumulated_before(from, :credit),
+       :movement_debit=>self.movement(from,to, :debit),
+       :movement_credit=>self.movement(from,to, :credit),
+       :cumul_debit_at=>self.cumulated_at(to,:debit),
+        :cumul_credit_at=>self.cumulated_at(to,:credit)
+      }
+  end
+
   # retourne le premier caractère du numéro de compte
   def classe
     self.number[0]
@@ -52,16 +63,6 @@ class Account < ActiveRecord::Base
 
    def cumulated_at(date, dc)
     self.lines.where('line_date <= ?',date).sum(dc)
-  end
-
-   # le total debit pour un jour donné
-  def debit(date)
-self.lines.where('line_date=?',date).sum(:debit)
-  end
-
-  # le total crédit pour un jour donné
-  def credit(date)
-self.lines.where('line_date=?',date).sum(:credit)
   end
 
   # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
