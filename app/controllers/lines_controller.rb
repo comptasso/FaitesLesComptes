@@ -45,9 +45,9 @@ class LinesController < ApplicationController
   def new
    @line =@book.lines.new(line_date: flash[:date] || @period.start_date.months_since(@mois.to_i), :cash_id=>@organism.main_cash_id, :bank_account_id=>@organism.main_bank_id)
    if @book.class.to_s == 'IncomeBook'
-     @natures=@organism.natures.recettes
+     @natures=@period.natures.recettes
    else
-     @natures=@organism.natures.depenses
+     @natures=@period.natures.depenses
    end
     respond_to do |format|
       format.html # new.html.erb

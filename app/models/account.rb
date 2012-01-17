@@ -46,4 +46,13 @@ class Account < ActiveRecord::Base
     self.number[0]
   end
 
+  def debit(date)
+
+  end
+
+  def credit(date)
+
+  end
+
+
 end

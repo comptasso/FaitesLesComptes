@@ -319,7 +319,15 @@ OK - Revoir la gestion du rattachement à partir de natures : en cours, faire la
 OK - Revoir la gestion gestion du mapping à partir de account : voir l'affichage
 OK - La création du périod suivant doit dès lors recopier les comptes et les natures
 OK - et rattacher les nouvelles natures aux nouveaux comptes de la même manière
-     Proposer une balance
+revoir le rattachement à nature deans la saisie des lignes - il en faut prendre que les natures de l'exercice
+----------------     Proposer une balance
+OK - faire une classe balance
+faire une méthode pour account qui calcule les totaux débit et crédit de ce compte
+controller balance
+vue balance
+introduire la gestion d'une date pour la balance
+
+
      Factoriser les jQuery datatable
 
 Revoir la vue index de nature dans public qui propose des actions qui relèvent de admin

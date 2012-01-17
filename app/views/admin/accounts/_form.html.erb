@@ -10,8 +10,8 @@
 
     <div class="input">
       <%= f.label 'Natures' %>
-    <%= select_tag  'account[nature_ids][]',  grouped_options_for_select([ ['Recettes', options_for_select(@organism.natures.recettes.collect {|n| [n.name, n.id]})],
-        ['Dépenses', options_for_select(@organism.natures.depenses.collect {|n| [n.name, n.id]})]]), {:multiple=>true , :size=>10} %>
+    <%= select_tag  'account[nature_ids][]',  grouped_options_for_select([ ['Recettes', options_for_select(@period.natures.recettes.collect {|n| [n.name, n.id]})],
+        ['Dépenses', options_for_select(@period.natures.depenses.collect {|n| [n.name, n.id]})]]), {:multiple=>true , :size=>10} %>
     </div>
   </div>
 
