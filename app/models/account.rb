@@ -46,13 +46,30 @@ class Account < ActiveRecord::Base
     self.number[0]
   end
 
+  def cumulated_before(date, dc)
+    self.lines.where('line_date < ?',date).sum(dc)
+  end
+
+   def cumulated_at(date, dc)
+    self.lines.where('line_date <= ?',date).sum(dc)
+  end
+
+   # le total debit pour un jour donné
   def debit(date)
-
+self.lines.where('line_date=?',date).sum(:debit)
   end
 
+  # le total crédit pour un jour donné
   def credit(date)
-
+self.lines.where('line_date=?',date).sum(:credit)
   end
+
+  # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
+  def movement(from, to, dc)
+    self.lines.where('line_date >= ? AND line_date <= ?', from, to ).sum(dc)
+  end
+
+
 
 
 end

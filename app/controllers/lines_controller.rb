@@ -145,8 +145,8 @@ class LinesController < ApplicationController
     @date=@period.start_date.months_since(@mois.to_i)
    
     @lines = @book.lines.mois(@date).all
-    @solde_debit_avant=@book.lines.solde_debit_avant(@date)
-    @solde_credit_avant=@book.lines.solde_credit_avant(@date)
+    @solde_debit_avant=@book.cumulated_debit_before(@date)
+    @solde_credit_avant=@book.cumulated_credit_before(@date)
 
     @total_debit=@lines.sum(&:debit)
     @total_credit=@lines.sum(&:credit)

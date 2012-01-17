@@ -67,7 +67,7 @@ class Admin::AccountsController < Admin::ApplicationController
           else
             flash[:alert]= 'Toutes les natures ne sont pas reliées à des comptes'
             way = @period.array_natures_not_linked.first.income_outcome ? 'incomes' : 'outcomes'
-            redirect_to modify_mapping_admin_organism_period_accounts_path(@organism,@period,type: way)
+            redirect_to mapping_admin_organism_period_accounts_path(@organism,@period,type: way)
             end
 
             }

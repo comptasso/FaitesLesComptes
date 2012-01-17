@@ -7,9 +7,11 @@ Faitesvoscomptes::Application.routes.draw do
       resources :periods
     end
     resources :periods do
+      resource :balance
       resources :accounts
     end
     resources :accounts do
+      
       resources :lines
     end
   end

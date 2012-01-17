@@ -1,0 +1,33 @@
+<%= content_for :menu do %>
+
+<% end %>
+<fieldset>
+  <legend>Balance <%= @period.exercice %> </legend>
+  <%= render partial: 'form' %>
+</fieldset>
+<table>
+  <thead>
+    <tr>
+      <th colspan="2"></th><th colspan="2">Soldes au <%=l @begin_date %> </th><th colspan="2">Mouvement de la période</th>
+      <th colspan="2">Soldes au <%= l @end_date %> </th>
+    </tr>
+    <tr>
+
+      <th>Numéro</th><th>Libellé</th><th>Debit</th><th>Crédit</th><th>Débit</th><th>Crédit</th><th>Débit</th><th>Crédit</th>
+    </tr>
+
+  </thead>
+  <tbody>
+    <% @accounts.each do |account| %>
+    <tr>
+      <td><%= account.number%></td><td><%= account.title %></td>
+       <td class="nombre"><%= debit_credit(account.cumulated_before(@begin_date, :debit)) %></td>
+         <td class="nombre"><%= debit_credit(account.cumulated_before(@begin_date, :credit)) %></td>
+         <td class="nombre"><%= debit_credit(account.movement(@begin_date,@end_date, :debit)) %></td>
+         <td class="nombre"><%= debit_credit(account.movement(@begin_date,@end_date, :debit)) %></td>
+      <td class="nombre"><%= debit_credit(account.cumulated_at(@end_date, :debit)) %></td>
+      <td class="nombre"><%= debit_credit(account.cumulated_at(@end_date,:credit)) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

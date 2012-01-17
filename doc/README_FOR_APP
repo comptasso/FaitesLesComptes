@@ -319,13 +319,13 @@ OK - Revoir la gestion du rattachement à partir de natures : en cours, faire la
 OK - Revoir la gestion gestion du mapping à partir de account : voir l'affichage
 OK - La création du périod suivant doit dès lors recopier les comptes et les natures
 OK - et rattacher les nouvelles natures aux nouveaux comptes de la même manière
-revoir le rattachement à nature deans la saisie des lignes - il en faut prendre que les natures de l'exercice
+OK - revoir le rattachement à nature deans la saisie des lignes - il en faut prendre que les natures de l'exercice
 ----------------     Proposer une balance
 OK - faire une classe balance
-faire une méthode pour account qui calcule les totaux débit et crédit de ce compte
-controller balance
-vue balance
-introduire la gestion d'une date pour la balance
+OK - faire une méthode pour account qui calcule les totaux débit et crédit de ce compte
+OK - controller balance
+OK - vue balance
+introduire la gestion d'une date et de compte pour la balance
 
 
      Factoriser les jQuery datatable

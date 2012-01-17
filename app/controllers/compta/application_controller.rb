@@ -45,7 +45,7 @@ class Compta::ApplicationController < ActionController::Base
   # renvoie false ou true selon que le controle est correct
   def check_natures
     if (@period)
-      unless !@period.all_natures_linked_to_account?
+      unless @period.all_natures_linked_to_account?
         flash[:alert]='Des natures ne sont pas reliées à des comptes'
         
       end
