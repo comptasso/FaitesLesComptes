@@ -80,6 +80,7 @@ class Period < ActiveRecord::Base
   before_create :should_not_have_more_than_two_open_periods, :fix_days
   before_save :should_not_exceed_24_months, 
     :cant_change_close_date_if_next_period
+  after_create :copy_accounts, :copy_natures
  
 
   # TODO voir la gestion des effacer dans les vues et dans le modèle.
@@ -381,6 +382,31 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
   def fix_days
     self.start_date=self.start_date.beginning_of_month
     self.close_date=self.close_date.end_of_month
+  end
+
+  private
+
+  # recopie les comptes de l'exercice précédent (s'il y en a un)
+  def copy_accounts
+return unless self.previous_period?
+    pp=self.previous_period
+    pp.accounts.all.each do |a|
+      self.accounts.create! :number=>a.number, title: a.title, used: a.used
+    end
+  end
+
+  # recopie les natures de l'exercice précédent 's'il y en a un)
+  def copy_natures
+    return unless self.previous_period?
+    pp=self.previous_period
+    pp.natures.all.each do |n|
+      nn = {name: n.name, comment: n.comment, income_outcome: n.income_outcome} # on commence à construire le hash
+      if n.account_id # cas où il y avait un rattachement à un compte
+        previous_account=pp.accounts.find(n.account_id) # on identifie le compte de rattachement
+        nn[:account_id] = self.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
+      end
+      self.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
+    end
   end
 
 

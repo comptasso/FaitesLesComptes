@@ -91,20 +91,18 @@ class Admin::AccountsController < Admin::ApplicationController
     end
   end
 
-  def modify_mapping
-    if params[:type]== 'incomes'
+  
+
+  def mapping
+     if params[:type]== 'incomes'
     @accounts=@period.accounts.classe_7
     @unlinked_natures=@period.natures.recettes.without_account
     elsif params[:type]== 'outcomes'
     @accounts=@period.accounts.classe_6
     @unlinked_natures=@period.natures.depenses.without_account
-    else
-     redirect_to mapping_admin_organism_period_accounts_url(@organism,@period)
-    end
-  end
-
-  def mapping
+     else
     @accounts=@period.accounts
     @unlinked_natures=@period.natures.without_account
+     end
   end
 end

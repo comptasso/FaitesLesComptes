@@ -1,0 +1,17 @@
+ <div class="mapping_accounts">
+    <h3>Liste des comptes et natures rattachées</h3>
+    <ul>
+    <% @accounts.each  do |account| %>
+      <li> <%= account.long_name %>
+        <%= icon_to 'chain.png', edit_admin_organism_period_account_path(@organism,@period,account) %>
+        <ul>
+          <% account.natures.each do |nature| %>
+          <%= content_tag :li, nature.name %>
+          <% end %>
+        </ul>
+      </li>
+
+    <% end %>
+       </ul>
+  </div>
+

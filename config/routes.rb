@@ -40,7 +40,7 @@ namespace 'admin' do
     resources :natures
     resources :accounts do
         collection do
-          get :mapping, :modify_mapping
+          get :mapping
         end
       end
     end

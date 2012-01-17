@@ -1,0 +1,9 @@
+ <div class="mapping_natures">
+   <h3>Liste des natures orphelines</h3>
+    <ul>
+    <% @unlinked_natures.each  do |nature| %>
+      <li> <%= nature.name %></li>
+
+    <% end %>
+       </ul>
+  </div>

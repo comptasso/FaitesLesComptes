@@ -101,6 +101,8 @@ class Admin::PeriodsController < Admin::ApplicationController
     @period = @organism.periods.find(params[:id])
   end
 
+
+  # POST création du plan comptable après le select_plan
   def create_plan
     @period = @organism.periods.find(params[:id])
    nb_accounts=Utilities::PlanComptable.new.create_accounts(@period.id, params[:fichier])
