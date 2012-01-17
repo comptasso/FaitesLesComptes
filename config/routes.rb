@@ -11,7 +11,6 @@ Faitesvoscomptes::Application.routes.draw do
       resources :accounts
     end
     resources :accounts do
-      
       resources :lines
     end
   end

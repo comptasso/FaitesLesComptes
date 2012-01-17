@@ -21,7 +21,11 @@
     <% @accounts.each do |account| %>
     <% bl=account.balance_line(@begin_date,@end_date) %>
     <tr>
-      <td><%= bl[:number] %></td><td><%= bl[:title] %></td>
+      <td><%= bl[:number] %></td>
+      <td>
+        <%= bl[:title] %>
+        <%= icon_to 'afficher.png', compta_account_lines_path(account)  %>
+      </td>
        <td class="nombre"><%= debit_credit(bl[:cumul_debit_before]) %></td>
          <td class="nombre"><%= debit_credit(bl[:cumul_credit_before]) %></td>
          <td class="nombre"><%= debit_credit(bl[:movement_debit]) %></td>

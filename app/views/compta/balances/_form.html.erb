@@ -14,5 +14,5 @@
 <%= select_tag :end_account, options_from_collection_for_select(@period.accounts.order('number ASC').all, :number, :long_name,
   :selected=>@end_account.number) %>
 <br />
-<%= submit_tag 'Afficher', :class=>'button' %>
+<%= submit_tag 'Rafraichir', :class=>'button' %>
 <% end %>
