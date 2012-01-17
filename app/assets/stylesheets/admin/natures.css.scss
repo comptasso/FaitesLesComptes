@@ -1,0 +1,33 @@
+/*
+    Document   : natures.css
+    Created on : 17 janv. 2012, 06:45:34
+    Author     : jcl
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/*
+   TODO customize this sample style
+   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+*/
+
+.admin {
+    .natures {
+        .mapping_accounts {
+            display: inline-block;
+            width: 48%;
+            vertical-align: top;
+                    }
+         .mapping_natures {
+             display: inline-block;
+             width: 48%;
+             vertical-align: top;
+             }
+         a {
+             float: none;
+             margin-left: 10px;
+             }
+        }
+
+    
+}

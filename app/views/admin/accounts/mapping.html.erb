@@ -3,15 +3,17 @@
 # and open the template in the editor.
 %>
 
-<fieldset>
+<fieldset class="natures">
   <legend>
     Liste des comptes et des natures non rattachées à des comptes
   </legend>
 
   <div class="mapping_accounts">
+    <h3>Liste des comptes et natures attachées</h3>
     <ul>
     <% @accounts.each  do |account| %>
-      <li> <%= account.title %>
+      <li> <%= account.long_name %>
+        <%= icon_to 'chain.png', edit_admin_organism_period_account_path(@organism,@period,account), title: 'Modifier les rattachements' %>
         <ul>
           <% account.natures.each do |nature| %>
           <%= content_tag :li, nature.name %>
@@ -24,9 +26,13 @@
   </div>
 
   <div class="mapping_natures">
+    <h3>Liste des natures orphelines</h3>
     <ul>
     <% @unlinked_natures.each  do |nature| %>
-      <li> <%= nature.name %></li>
+      <li>
+          <%= nature.name %>
+
+      </li>
 
     <% end %>
        </ul>
