@@ -32,6 +32,7 @@ class Account < ActiveRecord::Base
   validates :period_id, :presence=>true
   validates :title, :presence=>true
 
+  scope :classe, lambda {|i| where('number LIKE ?', "#{i}%")}
   scope :classe_6, where('number LIKE ?', '6%')
   scope :classe_7, where('number LIKE ?', '7%')
   scope :classe_6_and_7, where('number LIKE ? OR number LIKE ?', '6%', '7%')

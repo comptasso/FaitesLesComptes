@@ -79,4 +79,23 @@ class Admin::NaturesController < Admin::ApplicationController
       format.json { head :ok }
     end
   end
+
+  def link_nature
+    @account=@period.accounts.find(params[:account_id])
+    @nature=@period.natures.find(params[:id])
+    @nature.update_attribute(:account_id, @account.id)
+    respond_to do |format|
+      format.html { redirect_to admin_organism_period_accounts_url(@period.organism,@period) }
+      format.js { render nothing: true }
+    end
+  end
+
+   def unlink_nature
+    @nature=@period.natures.find(params[:id])
+    @nature.update_attribute(:account_id, nil)
+    respond_to do |format|
+      format.html { redirect_to mapping_admin_organism_period_accounts_url(@period.organism,@period) }
+      format.js { render nothing: true }
+    end
+  end
 end

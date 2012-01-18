@@ -1,17 +1,24 @@
- <div class="mapping_accounts">
-    <h3>Liste des comptes et natures rattachées</h3>
-    <ul>
-    <% @accounts.each  do |account| %>
-      <li> <%= account.long_name %>
-        <%= icon_to 'chain.png', edit_admin_organism_period_account_path(@organism,@period,account) %>
+ <div class="mapping_accounts" id="accordion">
+   <% 9.times do |i| %>
+   <h3><a href="#">Comptes de classe <%= i %></a></h3>
+   <div>
+
+   <ul class="list_accounts">
+    <% @accounts.classe(i).all.each  do |account| %>
+      <li class="account_list" id="account_<%= account.id  %>"> <%= account.long_name %>
+        <%# icon_to 'chain.png', edit_admin_organism_period_account_path(@organism,@period,account) %>
         <ul>
           <% account.natures.each do |nature| %>
-          <%= content_tag :li, nature.name %>
+              <%= content_tag_for :li, nature do %>
+                 <%=  nature.name %> <%= icon_to 'chain.png', unlink_nature_admin_period_nature_path(@period,nature), :method=>:post %>
+              <% end %>
           <% end %>
         </ul>
       </li>
 
     <% end %>
        </ul>
+    </div>
+   <% end %>
   </div>
 

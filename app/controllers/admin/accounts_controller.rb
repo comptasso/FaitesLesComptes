@@ -105,4 +105,6 @@ class Admin::AccountsController < Admin::ApplicationController
     @unlinked_natures=@period.natures.without_account
      end
   end
+
+  
 end

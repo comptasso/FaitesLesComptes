@@ -101,3 +101,58 @@ if (acc.match(new RegExp('\^'+ '7'))) {
 
 }
 
+
+//$(document).ajaxSend(function(e, xhr, options) {
+//  var token = $("meta[name='csrf-token']").attr("content");
+//  xhr.setRequestHeader("X-CSRF-Token", token);
+//});
+
+$(function() {
+		$( "#accordion" ).accordion();
+	});
+
+$(function() {
+   $('.nature').draggable({
+       revert: "invalid",
+       cursor: "move",
+       helper: "clone"
+   });
+   $('.account_list').droppable({
+      over: function() {
+          $(this).removeClass('out').addClass('over');
+      },
+      out: function() {
+          $(this).removeClass('over').addClass('out');
+      },
+      drop: function(event, ui) {
+         // $(this).find(".")
+          $(this).removeClass('over').addClass('out');
+           // faire la requete ajax
+
+          ui.draggable.appendTo($(this).find('ul'));
+          var naturid=ui.draggable.attr('id').match(/\d*$/);
+          var accountid=$(this).attr('id').match(/\d*$/);
+        //   alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid);
+          $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid) ;
+      // return false;
+      }
+   });
+
+   $('.mapping_natures').droppable({
+       over: function() {
+          $(this).removeClass('out').addClass('over');
+      },
+      out: function() {
+          $(this).removeClass('over').addClass('out');
+      },
+      drop: function(event, ui) {
+         // $(this).find(".")
+          $(this).removeClass('over').addClass('out');
+           // faire la requete ajax l' élément à la liste '
+          ui.draggable.appendTo($(this).find('ul'));
+          var naturid=ui.draggable.attr('id').match(/\d*$/);
+    //       alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
+          $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature") ;
+   }
+   });
+});

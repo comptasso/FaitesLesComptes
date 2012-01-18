@@ -2,7 +2,9 @@
    <h3>Liste des natures orphelines</h3>
     <ul>
     <% @unlinked_natures.each  do |nature| %>
-      <li> <%= nature.name %></li>
+      <%= content_tag_for :li, nature do %>
+      <%=  nature.name %> 
+      <% end %>
 
     <% end %>
        </ul>

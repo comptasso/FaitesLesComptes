@@ -46,6 +46,13 @@ namespace 'admin' do
       end
     end
   end
+  resources :periods do
+    resources :natures do
+      member do
+        post :link_nature, :unlink_nature
+      end
+    end
+  end
 end
 
   # get 'bank_lines/index'
