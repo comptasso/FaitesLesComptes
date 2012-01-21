@@ -18,13 +18,13 @@
 
   </thead>
   <tbody>
-    <% @accounts.each do |account| %>
-    <% bl=account.balance_line(@begin_date,@end_date) %>
+    
+    <% @balance.balance_lines.each do |bl| %>
     <tr>
       <td><%= bl[:number] %></td>
       <td>
         <%= bl[:title] %>
-        <%= icon_to 'afficher.png', compta_account_lines_path(account)  %>
+        <%= icon_to 'afficher.png', compta_account_lines_path(bl[:account_id]) unless bl[:empty]  %>
       </td>
        <td class="nombre"><%= debit_credit(bl[:cumul_debit_before]) %></td>
          <td class="nombre"><%= debit_credit(bl[:cumul_credit_before]) %></td>
@@ -35,4 +35,15 @@
     </tr>
     <% end %>
   </tbody>
+
+    <tfoot>
+      <tr class="total" id="totaux">
+  <th colspan="2" style="text-align:right" rowspan="1" >
+    Totaux:
+  </th>
+  <% @balance.total_balance.each do |value|  %>
+  <%= content_tag :th, debit_credit(value), class: 'nombre' %>
+  <% end %>
+</tr>
+    </tfoot>
 </table>

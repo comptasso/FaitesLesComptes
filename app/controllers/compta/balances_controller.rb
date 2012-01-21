@@ -3,9 +3,9 @@
 class Compta::BalancesController < Compta::ApplicationController
 
   before_filter :fill_dates
-  # pour l'instant show ne fait qu'une balance sur la totalité de l'exercice
+  
   def show
-    
+    @balance=Compta::Balance.new(@period, @accounts, @begin_date, @start_date)
   end
   
   def new   
@@ -13,6 +13,7 @@ class Compta::BalancesController < Compta::ApplicationController
   end
   
   def create
+    @balance=Compta::Balance.new(@period, @accounts, @begin_date, @start_date)
     render 'show'
   end
   

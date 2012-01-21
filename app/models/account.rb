@@ -42,18 +42,10 @@ class Account < ActiveRecord::Base
    [number, title].join(' ')
   end
 
-  def balance_line(from, to)
-    {:number=>self.number, :title=>self.title,
-      :cumul_debit_before=>self.cumulated_before(from, :debit),
-       :cumul_credit_before=>self.cumulated_before(from, :credit),
-       :movement_debit=>self.movement(from,to, :debit),
-       :movement_credit=>self.movement(from,to, :credit),
-       :cumul_debit_at=>self.cumulated_at(to,:debit),
-        :cumul_credit_at=>self.cumulated_at(to,:credit)
-      }
-  end
+ 
 
   # retourne le premier caractère du numéro de compte
+  # attention classe avec un E, il s'agit d'une logique de comptable
   def classe
     self.number[0]
   end
@@ -69,6 +61,10 @@ class Account < ActiveRecord::Base
   # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
   def movement(from, to, dc)
     self.lines.where('line_date >= ? AND line_date <= ?', from, to ).sum(dc)
+  end
+
+  def lines_empty?(from=self.period.start_date, to=self.period.close_date)
+    self.lines.where('line_date >= ? AND line_date <= ?', from, to ).empty?
   end
 
 

@@ -327,26 +327,21 @@ OK - controller balance
 OK - vue balance
 OK - introduire introduire la gestion d'une date et de compte pour la balance
 OK - mis des liens pour l'affichage individuel des comptes
-A faire également dans le plan de compte
-Mettre des totaux aux colonnes - on pourrait faire une méthode balance_line dans account et avoir ainsi un hash dans la vue
-Datatable ?
+OK - A faire également dans le plan de compte
+OK - Mettre des totaux aux colonnes de la balance - on pourrait faire une méthode balance_line dans account et avoir ainsi un hash dans la vue
 Faire la mise en forme de la vue balance (trait séparant les colonnes ? ou datatable)
 Impression de la balance avec prawn
 
-
+-----------------------------------------------------------------------------------------------
      Factoriser les jQuery datatable
+Le datatable de compta#lines ne marche pas
+? - Datatable  pour la balance
 
 Revoir la vue index de nature dans public qui propose des actions qui relèvent de admin
 Peut être idem pour destination
 Il serait plus judicieux de faire un stat controller car le controller nature n'a plus qu'une méthode stats
 et stats traite de natures et de destinations
------------------ Faire le modèle Cerfa -----------------------------------
-
-
------------------ Relier des comptes à un formulaire
-
-
-   
+-----------------------------------------------------------------
 
 
 
