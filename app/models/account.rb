@@ -66,7 +66,10 @@ class Account < ActiveRecord::Base
   def lines_empty?(from=self.period.start_date, to=self.period.close_date)
     self.lines.where('line_date >= ? AND line_date <= ?', from, to ).empty?
   end
-
+  
+  def all_lines_locked?(from=self.period.start_date, to=self.period.close_date)
+    self.lines.where('line_date >= ? AND line_date <= ?', from, to ).any? {|l| !l.locked? } ? true : false
+  end
 
 
 

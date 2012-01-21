@@ -1,5 +1,5 @@
 <%= content_for :menu do %>
-
+<%=  icon_to 'printer.png', compta_period_balance_path(@period, :format=>'pdf') %>
 <% end %>
 <fieldset>
   <legend>Balance <%= @period.exercice %> </legend>
@@ -47,3 +47,5 @@
 </tr>
     </tfoot>
 </table>
+
+

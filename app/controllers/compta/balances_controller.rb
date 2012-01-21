@@ -11,7 +11,11 @@ class Compta::BalancesController < Compta::ApplicationController
   before_filter :fill_dates, :build_balance
   
   def show
-    
+     respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @lines }
+      format.pdf 
+    end
   end
 
   def create

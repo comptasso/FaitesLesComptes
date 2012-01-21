@@ -329,8 +329,8 @@ OK - introduire introduire la gestion d'une date et de compte pour la balance
 OK - mis des liens pour l'affichage individuel des comptes
 OK - A faire également dans le plan de compte
 OK - Mettre des totaux aux colonnes de la balance - on pourrait faire une méthode balance_line dans account et avoir ainsi un hash dans la vue
-Faire la mise en forme de la vue balance (trait séparant les colonnes ? ou datatable)
-Impression de la balance avec prawn
+OK - Faire la mise en forme de la vue balance (trait séparant les colonnes ? ou datatable)
+OK - Impression de la balance avec prawn
 
 -----------------------------------------------------------------------------------------------
      Factoriser les jQuery datatable

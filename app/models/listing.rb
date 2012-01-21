@@ -1,8 +1,9 @@
 # coding: utf-8
 
 # Classe destinée à imprimer les tables de lignes. Listing est construit
-# à partir d'une collection de lignes, appartenant à un mois et un exercice
+# à partir d'un exercice, d'un mois au sein de cet exercice et d'un livre
 #
+
 class Listing
   NB_PER_PAGE=25
 

@@ -66,7 +66,9 @@ $medium: #e3e32d;
 
         h2 {background-color: $dark;}
         a {background-color: $dark;}
+        a.icon_menu {background-color: $medium;}
         a:hover {background-color: #FFF;}
+        
     }
 
 }
