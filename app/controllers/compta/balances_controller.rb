@@ -1,19 +1,21 @@
 # coding: utf-8
-
+# Classe destinée à afficher une balance des comptes entre deux dates et pour une série de comptes
+# La méthode fill_date permet de remplir les dates recherchées et les comptes par défaut
+# ou sur la base des paramètres.
+# Show affiche ainsi la balance par défaut
+# Un formulaire inclus dans la vue permet de faire un post qui aboutit à create, reconstruit une balance et
+# affiche show
+#
 class Compta::BalancesController < Compta::ApplicationController
 
-  before_filter :fill_dates
+  before_filter :fill_dates, :build_balance
   
   def show
-    @balance=Compta::Balance.new(@period, @accounts, @begin_date, @start_date)
+    
   end
-  
-  def new   
-      
-  end
-  
+
   def create
-    @balance=Compta::Balance.new(@period, @accounts, @begin_date, @start_date)
+    
     render 'show'
   end
   
@@ -32,5 +34,9 @@ class Compta::BalancesController < Compta::ApplicationController
 
     @begin_account=@accounts.all.first
     @end_account=@accounts.all.last
+  end
+
+  def build_balance
+     @balance=Compta::Balance.new(@period, @accounts, @begin_date, @start_date)
   end
 end
