@@ -1,17 +1,14 @@
  <div class="mapping_accounts" id="accordion">
-   <% 9.times do |i| %>
+   <% 6.upto(7) do |i| %>
    <h3><a href="#">Comptes de classe <%= i %></a></h3>
    <div>
 
    <ul class="list_accounts">
     <% @accounts.classe(i).all.each  do |account| %>
-      <li class="account_list" id="account_<%= account.id  %>"> <%= account.long_name %>
-        <%# icon_to 'chain.png', edit_admin_organism_period_account_path(@organism,@period,account) %>
+      <li class="account_list_<%=i %>" id="account_<%= account.id  %>"> <%= account.long_name %>
         <ul>
           <% account.natures.each do |nature| %>
-              <%= content_tag_for :li, nature do %>
-                 <%=  nature.name %> <%= icon_to 'chain.png', unlink_nature_admin_period_nature_path(@period,nature), :method=>:post %>
-              <% end %>
+             <%= render partial: 'li_nature', object: nature, locals: {r: (nature.income_outcome? ? 'recettes' : 'depenses')} %>
           <% end %>
         </ul>
       </li>

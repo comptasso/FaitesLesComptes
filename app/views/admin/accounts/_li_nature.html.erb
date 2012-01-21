@@ -1,0 +1,5 @@
+ <%= content_tag_for :li, li_nature, class: "nature_#{r}" do %>
+                 <%=  li_nature.name %>
+                 <%= icon_to 'chain-unchain.png', unlink_nature_admin_period_nature_path(@period,li_nature),
+                   :method=>:post, remote: true, class: "unchain"  %>
+              <% end %>

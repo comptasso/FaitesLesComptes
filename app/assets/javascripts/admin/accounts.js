@@ -6,11 +6,15 @@ jQuery(function() {
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
             },
- "aoColumns": [
-            { "sType": "string" },
+            "aoColumns": [
+            {
+                "sType": "string"
+            },
             null,
             null,
-           {"bSortable": false}
+            {
+                "bSortable": false
+            }
             ]
 
         });
@@ -60,44 +64,44 @@ jQuery(function() {
 
 
 function desac_recettes() {
-$('optgroup[label=Recettes] option').attr('disabled', 'disabled');
+    $('optgroup[label=Recettes] option').attr('disabled', 'disabled');
 }
 
 function desac_depenses() {
-$('optgroup[label=Dépenses] option').attr('disabled', 'disabled');
+    $('optgroup[label=Dépenses] option').attr('disabled', 'disabled');
 }
 function active_recettes() {
-$('optgroup[label=Recettes] option').attr('disabled', false);
+    $('optgroup[label=Recettes] option').attr('disabled', false);
 }
 
 function active_depenses() {
-$('optgroup[label=Dépenses] option').attr('disabled', false);
+    $('optgroup[label=Dépenses] option').attr('disabled', false);
 }
 
 
 
 jQuery(function() {
-if ($('.accounts input#account_number').length != 0) {
-var acc= $('input#account_number').val();
-toggle_recettes_depenses(acc);
-$('input#account_number').change(function(){
-   toggle_recettes_depenses($('input#account_number').val());
-});
-}
+    if ($('.accounts input#account_number').length != 0) {
+        var acc= $('input#account_number').val();
+        toggle_recettes_depenses(acc);
+        $('input#account_number').change(function(){
+            toggle_recettes_depenses($('input#account_number').val());
+        });
+    }
 });
 
 function toggle_recettes_depenses(acc) {
-active_depenses();
-active_recettes();
+    active_depenses();
+    active_recettes();
     if (acc.match(new RegExp('\^'+ '6'))) {
-    desac_recettes();
+        desac_recettes();
   
-}
+    }
 
-if (acc.match(new RegExp('\^'+ '7'))) {
+    if (acc.match(new RegExp('\^'+ '7'))) {
   
-    desac_depenses();
-}
+        desac_depenses();
+    }
 
 }
 
@@ -108,51 +112,90 @@ if (acc.match(new RegExp('\^'+ '7'))) {
 //});
 
 $(function() {
-		$( "#accordion" ).accordion();
-	});
+    $( "#accordion" ).accordion({
+        autoHeight: false,
+        collapsible: true       
+    });
+    $('.orphan_natures').accordion({
+        autoHeight: false,
+        collapsible: true
+    });
+});
 
 $(function() {
-   $('.nature').draggable({
-       revert: "invalid",
-       cursor: "move",
-       helper: "clone"
-   });
-   $('.account_list').droppable({
-      over: function() {
-          $(this).removeClass('out').addClass('over');
-      },
-      out: function() {
-          $(this).removeClass('over').addClass('out');
-      },
-      drop: function(event, ui) {
-         // $(this).find(".")
-          $(this).removeClass('over').addClass('out');
-           // faire la requete ajax
+    $('.nature').draggable({
+        revert: "invalid",
+        cursor: "move",
+        helper: "clone"
+    });
 
-          ui.draggable.appendTo($(this).find('ul'));
-          var naturid=ui.draggable.attr('id').match(/\d*$/);
-          var accountid=$(this).attr('id').match(/\d*$/);
-        //   alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid);
-          $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid) ;
-      // return false;
-      }
-   });
+    $('.account_list_6').droppable({
+        accept: ".nature_depenses",
+        over: function() {
+            $(this).removeClass('out').addClass('over');
+        },
+        out: function() {
+            $(this).removeClass('over').addClass('out');
+        },
+        drop: function(event, ui) {
+            // $(this).find(".")
+            $(this).removeClass('over').addClass('out');
+            // faire la requete ajax
 
-   $('.mapping_natures').droppable({
-       over: function() {
-          $(this).removeClass('out').addClass('over');
-      },
-      out: function() {
-          $(this).removeClass('over').addClass('out');
-      },
-      drop: function(event, ui) {
-         // $(this).find(".")
-          $(this).removeClass('over').addClass('out');
-           // faire la requete ajax l' élément à la liste '
-          ui.draggable.appendTo($(this).find('ul'));
-          var naturid=ui.draggable.attr('id').match(/\d*$/);
-    //       alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
-          $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature") ;
-   }
-   });
+            ui.draggable.appendTo($(this).find('ul'));
+            var naturid=ui.draggable.attr('id').match(/\d*$/);
+            var accountid=$(this).attr('id').match(/\d*$/);
+            //   alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid);
+      //      $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid) ;
+       $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature", "account_id="+ accountid) ;
+        // return false;
+        }
+    });
+
+    $('.account_list_7').droppable({
+        accept: ".nature_recettes",
+        over: function() {
+            $(this).removeClass('out').addClass('over');
+        },
+        out: function() {
+            $(this).removeClass('over').addClass('out');
+        },
+        drop: function(event, ui) {
+            // $(this).find(".")
+            $(this).removeClass('over').addClass('out');
+            // faire la requete ajax
+
+            ui.draggable.appendTo($(this).find('ul'));
+            var naturid=ui.draggable.attr('id').match(/\d*$/);
+            var accountid=$(this).attr('id').match(/\d*$/);
+            //   alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid);
+            $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature", "account_id="+ accountid) ;
+        // return false;
+        }
+    });
+
+
+
+
+    $('.orphan_natures').droppable({
+        over: function() {
+            $(this).removeClass('out').addClass('over');
+        },
+        out: function() {
+            $(this).removeClass('over').addClass('out');
+        },
+        drop: function(event, ui) {
+            // $(this).find(".")
+            $(this).removeClass('over').addClass('out');
+            // faire la requete ajax l' élément à la liste '
+            ui.draggable.appendTo($(this).find('ul'));
+            var naturid=ui.draggable.attr('id').match(/\d*$/);
+            //       alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
+            $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature") ;
+        }
+    });
 });
+
+//jQuery(function(){
+//    $('.list_accounts .unchain').
+//})

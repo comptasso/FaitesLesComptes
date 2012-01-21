@@ -1,0 +1,8 @@
+<%#*// utilisé lorsque l'on veut retirer un lien entre un compte et une nature%>
+<%#*// l'action doit donc transférer la nature de son emplacement dans la partie gauche (le compte de classe 6 ou 7)%>
+<%#*// vers l'emplacement de la partie droite : le volet dépenses ou recettes%>
+<%#*// on trouve le li id='nature_NN' class=nature_depenses ou nature_recettes%>
+var nid= "<%=j  "#nature_#{@nature.id}" %>";
+var h3= "<%=j "ul#{@nature.income_outcome? ? '#recettes' : '#depenses'}"  %>";
+$(nid).detach().appendTo(h3);
+
