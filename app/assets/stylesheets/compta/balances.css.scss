@@ -1,18 +1,55 @@
 /*
-    Document   : balances.css
-    Created on : 17 janv. 2012, 16:31:57
-    Author     : jcl
-    Description:
-        Purpose of the stylesheet follows.
+Document   : balances.css
+Created on : 17 janv. 2012, 16:31:57
+Author     : jcl
+Description:
+Purpose of the stylesheet follows.
 */
 
 /*
-   TODO customize this sample style
-   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+TODO customize this sample style
+Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
 */
 
 .compta_balances {
     .nombre {
         text-align: right;
-                }
+        padding: 3px 10px;
+    }
+    table.balance {
+        border-collapse: collapse;
+
+    thead {
+        tr:nth-child(1) th {
+                border: solid 1px;
+                background-color: orange;
+                padding: 3px 10px;
+            }
+
+        tr:nth-child(1) th:nth-child(1) {
+                border: none;
+                background-color: transparent;
+            }
+     
+        tr:nth-child(2) th{
+            border: solid 1px;
+        }
+    }
+    tbody {
+
+        td {
+            border-left: solid 1px;
+            border-right: solid 1px;
+            padding: 3px 10px;
+
+        }
+    }
+    tfoot {
+        tr th {
+            border: solid 1px;
+            padding: 3px 10px;
+            text-align: right;
+        }
+    }
+    }
 }

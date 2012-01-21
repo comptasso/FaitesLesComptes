@@ -5,7 +5,7 @@
   <legend>Balance <%= @period.exercice %> </legend>
   <%= render partial: 'form' %>
 </fieldset>
-<table>
+<table class="balance">
   <thead>
     <tr>
       <th colspan="2"></th><th colspan="2">Soldes au <%=l @begin_date %> </th><th colspan="2">Mouvement de la période</th>
@@ -38,8 +38,8 @@
 
     <tfoot>
       <tr class="total" id="totaux">
-  <th colspan="2" style="text-align:right" rowspan="1" >
-    Totaux:
+  <th colspan="2" rowspan="1" >
+    Totaux
   </th>
   <% @balance.total_balance.each do |value|  %>
   <%= content_tag :th, debit_credit(value), class: 'nombre' %>
