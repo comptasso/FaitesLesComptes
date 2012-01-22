@@ -1,5 +1,6 @@
 <%= content_for :menu do %>
 <%=  icon_to 'printer.png', book_lines_path(@book, mois: @mois, :format=>'pdf') %>
+<%=  icon_to 'report-excel.png', book_lines_path(@book, mois: @mois, :format=>'csv'), title: 'CSV' %>
   
 <% end -%>
 

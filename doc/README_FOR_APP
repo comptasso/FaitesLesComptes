@@ -332,6 +332,13 @@ OK - Mettre des totaux aux colonnes de la balance - on pourrait faire une métho
 OK - Faire la mise en forme de la vue balance (trait séparant les colonnes ? ou datatable)
 OK - Impression de la balance avec prawn
 
+-------------------CSV ----------------------------
+OK - Recettes et dépenses du mois au format CSV
+?? - Faire un export CSV des recettes ou dépenses de l'année
+
+-------------------- Sauvegarde/Restauration--------------------
+
+
 -----------------------------------------------------------------------------------------------
      Factoriser les jQuery datatable
 Le datatable de compta#lines ne marche pas

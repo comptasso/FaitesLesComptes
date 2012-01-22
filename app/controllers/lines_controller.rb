@@ -20,6 +20,7 @@ class LinesController < ApplicationController
       format.html # index.html.erb
       format.json { render json: @lines }
       format.pdf { @listing = Listing.new(@period, @mois, @book) }
+      format.csv {render :layout=>false}
     end
   end
 
@@ -131,7 +132,7 @@ class LinesController < ApplicationController
       @mois = params[:mois]
     else
       @mois= @period.guess_month
-     redirect_to book_lines_url(@book, mois: @mois) if (params[:action]=='index')
+     redirect_to book_lines_url(@book, mois: @mois, :format=>params[:format]) if (params[:action]=='index')
      redirect_to new_book_line_url(@book,mois: @mois) if params[:action]=='new'
     end
   end

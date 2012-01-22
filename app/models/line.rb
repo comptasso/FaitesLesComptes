@@ -107,6 +107,12 @@ class Line < ActiveRecord::Base
   def pointed?
     self.bank_extract_id
   end
+
+  def to_csv
+    ["#{I18n::l self.line_date}", "#{self.narration}", "#{self.destination_name}",
+      "#{self.nature_name}",
+      "#{self.debit}", "#{self.credit}", "#{self.payment_mode}"]
+  end
   
 
   # before_validation :default_debit_credit

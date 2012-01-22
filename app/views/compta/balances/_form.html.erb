@@ -1,5 +1,5 @@
 <%= form_tag compta_period_balance_path(@period),:style=>"display: inline;"  do %>
-   <label for="begin_date">Au : </label>
+   <label for="begin_date">Du : </label>
    <%= picker_date :begin_date, @period.start_date, @period.close_date, @begin_date %>
     <label for="end_date">Au : </label>
    <%= picker_date :end_date, @period.start_date, @period.close_date, @end_date %>
