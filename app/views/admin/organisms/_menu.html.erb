@@ -111,8 +111,12 @@
           <li><%= link_to c.exercice, admin_organism_period_path(@organism, c) %>
             <ul>
               <li><%= link_to 'Clore -TODO', admin_organism_periods_path(@organism) if c.open %></li>
-              <li><%= link_to 'Archiver -TODO', admin_organism_periods_path(@organism) unless c.open %></li>
+             
               <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>
+
+              <li><%= link_to 'Sauver', archive_admin_organism_period_restore_path(@organism, @period), :confirm=>"Sauvegarder les données de l'exercice sur un fichier ?" %></li>
+              <li><%= link_to 'Restaurer', restore_admin_organism_period_restore_path(@organism, @period), :confirm=>"Restaurer les données de l'exercice sur un fichier ?" %></li>
+
 
             </ul>
           </li>
@@ -143,6 +147,8 @@
                <li><%= link_to 'Dépenses',mapping_admin_organism_period_accounts_path(@organism, @period,:type=>'outcomes') %> </li>
             </ul>
           </li>
+
+         
         </ul>
 
       </li>

@@ -38,6 +38,12 @@ namespace 'admin' do
         get 'select_plan'
         post 'create_plan'
       end
+      resource :restore do
+        member do
+         get 'archive'
+         get 'restore'
+        end
+      end
     resources :natures
     resources :accounts do
         collection do

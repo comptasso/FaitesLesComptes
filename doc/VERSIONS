@@ -25,9 +25,8 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 + l'affichage des lignes
 
 020 : zone compta/fisca
-creer un modèle account
-génération d'écritures plus comptables
-edition de la 2065
++ creer un modèle account
++ csv des livres
 cloture d'exercice
 
 
@@ -41,6 +40,8 @@ cloture d'exercice
 
 023  faire la documentation
 
+024 sauvegarde et restauration
+
 030 : mise en place des tests et refactorisation
 - mise en place des validations pour les <> modèles
 
@@ -50,6 +51,9 @@ cloture d'exercice
 
 
 
-040 : gestion de la TVA
+040 :
+génération d'écritures plus comptables
+edition de la 2065
+gestion de la TVA
 
 050 : edition de factures
