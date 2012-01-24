@@ -9,7 +9,8 @@ class BankExtract < ActiveRecord::Base
   after_create :fill_bank_extract_lines
   after_save :lock_lines_if_locked
 
-  
+  scope :period, lambda {|p| where('(begin_date < ? AND close_date > ?)  OR (begin_date < ? AND close_date > ? ) OR (begin_date  > ? AND close_date  < ?)',
+      p.start_date, p.start_date, p.close_date, p.close_date, p.start_date, p.close_date) }
 
   def lockable?
     !self.locked? && self.equality?

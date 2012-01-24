@@ -5,7 +5,7 @@ class Line < ActiveRecord::Base
   belongs_to :destination
   belongs_to :nature
   belongs_to :bank_extract
-  belongs_to :bank_deposit
+  belongs_to :check_deposit
   belongs_to :bank_account
   belongs_to :cash
   has_one :bank_extract_line
