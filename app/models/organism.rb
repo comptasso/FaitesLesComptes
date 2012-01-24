@@ -5,10 +5,13 @@ class Organism < ActiveRecord::Base
   has_many :destinations, dependent: :destroy
   has_many :natures, through: :periods
   has_many :bank_accounts, dependent: :destroy
+  has_many :bank_extracts, through: :bank_accounts
+  has_many :bank_extract_lines, through: :bank_extracts
   has_many :lines, :through=>:books
   has_many :check_deposits, through: :bank_accounts
   has_many :periods, dependent: :destroy
   has_many :cashes, dependent: :destroy
+  has_many :cash_controls, through: :cashes
   has_many :income_books, dependent: :destroy
   has_many :outcome_books, dependent: :destroy
 

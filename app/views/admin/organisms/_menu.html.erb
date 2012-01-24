@@ -115,7 +115,7 @@
               <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>
 
               <li><%= link_to 'Sauver', archive_admin_organism_period_restore_path(@organism, @period), :confirm=>"Sauvegarder les données de l'exercice sur un fichier ?" %></li>
-              <li><%= link_to 'Restaurer', restore_admin_organism_period_restore_path(@organism, @period), :confirm=>"Restaurer les données de l'exercice sur un fichier ?" %></li>
+              <li><%= link_to 'Restaurer', new_admin_organism_period_restore_path(@organism, @period) %></li>
 
 
             </ul>

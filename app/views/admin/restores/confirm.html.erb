@@ -1,0 +1,14 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+<div>
+  <%= @info %>
+</div>
+
+<div>
+  <% @datas.each_pair do |k,a| %>
+  <h4><%= k.to_s %> </h4>
+  <%= content_tag :p, a.inspect %>
+  <% end %>
+</div>

@@ -9,6 +9,8 @@ class BankExtract < ActiveRecord::Base
   after_create :fill_bank_extract_lines
   after_save :lock_lines_if_locked
 
+  
+
   def lockable?
     !self.locked? && self.equality?
   end
