@@ -64,8 +64,8 @@ class Period < ActiveRecord::Base
  
   belongs_to :organism
 
-  has_many :accounts
-  has_many :natures
+  has_many :accounts, :dependent=>:destroy
+  has_many :natures,  :dependent=>:destroy
 
   
   validates :organism_id, :presence=>true

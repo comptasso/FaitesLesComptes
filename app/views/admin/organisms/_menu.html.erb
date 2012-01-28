@@ -7,7 +7,7 @@
         <li><%= link_to r.title, admin_organism_path(r)  %>
           <ul>
             <li> <%= link_to 'Modifier', edit_admin_organism_path(r) %></li>
-            <li> <%= link_to 'Sauvegarder', archive_admin_organism_restore_path(r),
+            <li> <%= link_to 'Sauvegarder', archive_admin_organism_path(r),
                 :confirm=>"Sauvegarder les données de l'exercice sur un fichier ?",
                 :title=>"Fait une sauvegarde de toutes les données de #{r.title}" %></li>
             <li> <%= link_to 'Supprimer',[:admin,r], confirm: 'Etes vous sûr ?', method: :delete %></li>
@@ -16,7 +16,7 @@
         </li>
       <% end %>
       <li><%= link_to 'Nouveau', new_admin_organism_path %></li>
-       <li><%= link_to 'Importer', admin_restore_path ,
+       <li><%= link_to 'Importer', new_admin_restore_path ,
          :confirm=>"Créer un nouvel organisme à partir d'un fichier ?",
                 :title=>"Permet de créer un organisme à partir d'un fichier de sauvegarde" %>
        </li>

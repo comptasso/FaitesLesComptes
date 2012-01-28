@@ -11,29 +11,23 @@ class Admin::RestoresController < Admin::ApplicationController
   end
 
   def create
-    # ici on récupère le fichier 
-    tmp = params[:file_upload].tempfile
-    # TODO vérifier l'extension
+     @just_filename = File.basename(params[:file_upload].original_filename)
     message=''
-    message += "Erreur : l'extension du fichier ne correspond pas.\n" unless (params[:file_upload].original_filename =~ /jcl$/)
+    message += "Erreur : l'extension du fichier ne correspond pas.\n" unless (@just_filename =~ /.yml$/)
     if message != ''
-
       flash[:alert]=message
       render :new
       return
     end
-
-    # require_models
+    # ici on récupère le fichier 
+    tmp = params[:file_upload].tempfile
     a=Admin::Archive.new
     a.parse_file(tmp)
-
     if a.valid?
-
-      @datas=a.datas
-      a.rebuild_organism
-      @restores=a.restores
-      @info=a.info
-      render :confirm
+       @datas=a.datas
+      File.open("#{Rails.root}/tmp/#{@just_filename}", 'w') {|f| f.write a.datas.to_yaml}
+ 
+       render :confirm
     else
       message += a.list_errors
       flash[:alert]=message
@@ -45,39 +39,38 @@ class Admin::RestoresController < Admin::ApplicationController
 
 
   def archive
-    tmp_file="#{Rails.root}/tmp/#{@organism.title}_#{@period.exercice}.jcl"
+    @organism=Organism.find(params[:id])
+    tmp_file_name="#{Rails.root}/tmp/#{@organism.title}.yml"
     # Créer un fichier : y écrirer les infos de l'exercice
     a=Admin::Archive.new
-    a.collect_datas(@period)
+    a.collect_datas(@organism)
+    File.open(tmp_file_name, 'w') {|f| f.write a.datas.to_yaml}
+    send_file tmp_file_name, type: 'text/yml'
+    File.delete(tmp_file_name)
+  end
+
+  def rebuild
+    a= Admin::Archive.new
+    tmp_file_name="#{Rails.root}/tmp/#{params[:file_name]}"
+    y=''
+    File.open(tmp_file_name,'r') {|f| y =f.read}
+   
+    a.parse_file(y)
+    @datas=a.datas
+    if a.valid?
+ #     render text: @datas.to_s
+      a.rebuild_organism
+
+    else
+      flash[:alert]= "Une erreur de lecture du fichier n'a pas permis de reconstituer les données"
       
-    File.open(tmp_file, 'w') {|f| f.write a.datas.to_yaml}
-    send_file tmp_file, type: 'application/jcl'
+    end
+    redirect_to admin_organisms_path
 
   end
 
-  def restore
 
-  end
-
-  private
-
-
-  # TODO voir si on ne pourrait pas faire ça dynamiquement 
-  def require_models
-    require 'destination'
-    require 'nature'
-    require 'bank_account'
-    require 'cash'
-    require 'bank_extract'
-    require 'line'
-    require 'book'
-    require 'income_book'
-    require 'outcome_book'
-    require 'bank_extract_line'
-    require 'check_deposit'
-    require 'cash_control'
-    require 'account'
-  end
+  
 
 
 end

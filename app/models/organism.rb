@@ -14,6 +14,7 @@ class Organism < ActiveRecord::Base
   has_many :cash_controls, through: :cashes
   has_many :income_books, dependent: :destroy
   has_many :outcome_books, dependent: :destroy
+  has_many :accounts, through: :periods
 
   after_create :create_default
 

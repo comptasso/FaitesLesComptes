@@ -2,20 +2,49 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 %>
-<div>
-  <%= @info %>
-</div>
+<h3>Les élements suivants seront importés</h3>
 
-<div style="width: 48%; display: inline-block; vertical-align: top">
-  <% @datas.each_pair do |k,a| %>
-  <h4><%= k.to_s %> </h4>
-  <%= content_tag :p, a.inspect %>
-  <% end %>
-</div>
+<h4>Organisme</h4>
+<p>Un nouvel organisme intitulé <%= content_tag :em, @datas[:organism].title %> sera créé </p>
 
-<div style="width: 48%; display: inline-block; vertical-align: top">
-  <% @restores.each_pair do |k,a| %>
-  <h4><%= k.to_s %> </h4>
-  <%= content_tag :p, a.inspect %>
+<h4>Exercices</h4>
+<ul>
+<% @datas[:periods].each do |p| %>
+<%= content_tag :li, "Création de #{p.exercice}" %>
+<% end %>
+</ul>
+
+<h4>Liste des destinations qui seront créées</h4>
+<ul>
+  <% @datas[:destinations].each do |d| %>
+  <%= content_tag :li, d.name %>
   <% end %>
-</div>
+</ul>
+
+<h4>Liste des natures qui seront créées</h4>
+<ul>
+  <% @datas[:natures].map {|n| n.name}.each do |name| %>
+  <%= content_tag :li, name %>
+  <% end %>
+</ul>
+
+<h4>Liste des livres qui seront créées</h4>
+<ul>
+  <% @datas[:books].each do |d| %>
+  <%= content_tag :li, d.title %>
+  <% end %>
+</ul>
+
+<h4>Seront également restaurés</h4>
+<ul>
+  <li><%= @datas[:accounts].count %> Comptes comptables</li>
+  <li><%= @datas[:bank_accounts].count %> Comptes bancaires ainsi que les remises de chèques et les extraits bancaires correspondant</li>
+  <li><%= @datas[:cashes].count %> Caisses ainsi que les contrôles de caisse associés</li>
+  <li><%= @datas[:lines].count %> Lignes d'écritures </li>
+   
+</ul>
+
+<%= form_tag rebuild_admin_restore_path(:file_name=>@just_filename) do %>
+ <div>  <%= submit_tag "Confirmer l'importation"  %></div>
+
+<% end %>

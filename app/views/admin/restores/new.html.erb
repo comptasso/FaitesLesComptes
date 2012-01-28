@@ -13,7 +13,7 @@
   </legend>
 
   
-<%= form_tag admin_organism_period_restore_path(@organism,@period), :multipart => true do %>
+<%= form_tag admin_restore_path, :multipart => true do %>
   <label for="file">Fichier source</label> <%= file_field_tag "file_upload" %>
   <div>  <%= submit_tag 'Restaurer'%></div>
 <% end %>

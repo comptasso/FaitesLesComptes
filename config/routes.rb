@@ -17,13 +17,16 @@ Faitesvoscomptes::Application.routes.draw do
 
 
 namespace 'admin' do
-  match 'restore' => 'restores#new'
+  resource :restore do
+    member do
+      post 'rebuild'
+    end
+  end
   resources :organisms do
-     resource :restore do
-        member do
-         get 'archive'
+       member do
+         get 'archive', :controller=>:restores, :action=>:archive
         end
-      end
+      
     resources :books
     resources :income_books
     resources :outcome_books
