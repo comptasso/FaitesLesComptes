@@ -12,40 +12,43 @@ class Admin::RestoresController < Admin::ApplicationController
 
   def create
     # ici on récupère le fichier 
-  tmp = params[:file_upload].tempfile
+    tmp = params[:file_upload].tempfile
     # TODO vérifier l'extension
-  message=''
-  message += "Erreur : l'extension du fichier ne correspond pas.\n" unless (params[:file_upload].original_filename =~ /jcl$/)
-  if message != ''
+    message=''
+    message += "Erreur : l'extension du fichier ne correspond pas.\n" unless (params[:file_upload].original_filename =~ /jcl$/)
+    if message != ''
 
       flash[:alert]=message
       render :new
       return
-  end
+    end
 
-  require_models
-  a=Admin::Archive.new
-  @datas =  a.parse_file(tmp)
+    # require_models
+    a=Admin::Archive.new
+    a.parse_file(tmp)
 
     if a.valid?
-        
-        @info=a.info
-        render :confirm
+
+      @datas=a.datas
+      a.rebuild_organism
+      @restores=a.restores
+      @info=a.info
+      render :confirm
     else
       message += a.list_errors
       flash[:alert]=message
       render :new
     end
  
- end
+  end
 
 
 
-   def archive
-     tmp_file="#{Rails.root}/tmp/#{@organism.title}_#{@period.exercice}.jcl"
-      # Créer un fichier : y écrirer les infos de l'exercice
-      a=Admin::Archive.new
-      a.collect_datas(@period)
+  def archive
+    tmp_file="#{Rails.root}/tmp/#{@organism.title}_#{@period.exercice}.jcl"
+    # Créer un fichier : y écrirer les infos de l'exercice
+    a=Admin::Archive.new
+    a.collect_datas(@period)
       
     File.open(tmp_file, 'w') {|f| f.write a.datas.to_yaml}
     send_file tmp_file, type: 'application/jcl'

@@ -17,7 +17,13 @@ Faitesvoscomptes::Application.routes.draw do
 
 
 namespace 'admin' do
+  match 'restore' => 'restores#new'
   resources :organisms do
+     resource :restore do
+        member do
+         get 'archive'
+        end
+      end
     resources :books
     resources :income_books
     resources :outcome_books
@@ -38,12 +44,7 @@ namespace 'admin' do
         get 'select_plan'
         post 'create_plan'
       end
-      resource :restore do
-        member do
-         get 'archive'
-         get 'restore'
-        end
-      end
+      
     resources :natures
     resources :accounts do
         collection do

@@ -6,8 +6,15 @@
   <%= @info %>
 </div>
 
-<div>
+<div style="width: 48%; display: inline-block; vertical-align: top">
   <% @datas.each_pair do |k,a| %>
+  <h4><%= k.to_s %> </h4>
+  <%= content_tag :p, a.inspect %>
+  <% end %>
+</div>
+
+<div style="width: 48%; display: inline-block; vertical-align: top">
+  <% @restores.each_pair do |k,a| %>
   <h4><%= k.to_s %> </h4>
   <%= content_tag :p, a.inspect %>
   <% end %>
