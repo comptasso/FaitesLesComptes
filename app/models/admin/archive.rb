@@ -19,11 +19,11 @@ require 'account'
 
 class Admin::Archive
 
-  attr_reader  :errors, :datas, :restores
+  attr_reader  :errors, :datas
 
   def initialize
     @errors=[]
-    @restores={}
+    
     @datas={}
   end
   
@@ -73,7 +73,7 @@ class Admin::Archive
 
   def rebuild_organism
     self.rebuild_organism_and_direct_children
-    @restores[:periods].each do |p|
+    @datas[:periods].each do |p|
       self.rebuild_period_and_children(p)
     end
   end
@@ -83,45 +83,47 @@ class Admin::Archive
   # utilisée pour recharger un nouvel organism dans une compta
   # TODO faire tout ceci dans une transaction en cas de problème
   def rebuild_organism_and_direct_children
-     @restores[:organism] =Organism.update_attributes!(:title=>@datas[:organism].title, :description=>@datas[:organism].description)
-      self.rebuild(:destinations, :organism, @restores[:organism].id)
-      self.rebuild(:bank_accounts,:organism, @restores[:organism].id) # bank_accounts
-   @restores[:bank_accounts].each do |r| # les extraits bancaires
+    a=@datas[:organism].attributes
+    a.delete 'id'
+    @datas[:organism].update_attributes!(a)
+     # Organism.update_attributes!(:title=>@datas[:organism].title, :description=>@datas[:organism].description)
+      self.rebuild(:destinations, :organism, @datas[:organism].id)
+      self.rebuild(:bank_accounts,:organism, @datas[:organism].id) # bank_accounts
+   @datas[:bank_accounts].each do |r| # les extraits bancaires
       self.rebuild(:bank_extracts, :bank_account, r.id)
     end
-  @restores[:bank_extracts].each do |r|
+  @datas[:bank_extracts].each do |r|
       self.rebuild(:check_deposits, :bank_extract, r.id) # les remises de chèques
     end
-    self.rebuild(:cashes, :organism, @restores[:organism].id)
-   @restores[:cashes].each do |c|
+    self.rebuild(:cashes, :organism, @datas[:organism].id)
+   @datas[:cashes].each do |c|
       self.rebuild(:cash_controls, :cash, c.id)
     end
-   self.rebuild(:books, :organism, @restores[:organism].id)
-   self.rebuild(:periods, :organism, @restores[:organism].id)
+   self.rebuild(:books, :organism, @datas[:organism].id)
+   self.rebuild(:periods, :organism, @datas[:organism].id)
 
   end
 
   def rebuild_period_and_children(period)
         # Les natures qui appartiennent à une période mais qui ont un lien avec un account
-    @restores[:natures]= []
+   
     @datas[:natures].each do |n|
-      Rails.logger.debug n.inspect
+      
       new_attributes=n.attributes
       new_attributes.delete 'id'
       new_attributes[:period_id]=period.id
-      Rails.logger.debug new_attributes
+    
       if n.account_id
         bi= @datas[:accounts].index {|r| r.id == n.account_id}
 
-        Rails.logger.debug "taille de restores : #{@restores[:accounts].size}"
-       Rails.logger.debug "l'index du compte est #{bi} "
-        new_attributes[:account_id]=@restores[:accounts][bi].id if bi
+        new_attributes[:account_id]=@datas[:accounts][bi].id if bi
       end
-      @restores[:natures] << Nature.update_attributes!(new_attributes)
+
+      n.update_attributes!(new_attributes)
     end
  
 
- @restores[:lines]=[]
+ 
     @datas[:lines].each do |l|
 # l a un book_id, destination_id, nature_id, bank_account_id, check_deposit_id, bank_extract_id, cash_id
 # il faut à chaque fois trouver le id d'origine et le id de destination
@@ -134,19 +136,19 @@ new_attributes[:bank_account_id]=substitute(l,:bank_accounts) if l.bank_account_
 new_attributes[:bank_extract_id]=substitute(l,:bank_extracts) if l.bank_extract_id
 new_attributes[:cash_id]=substitute(l,:cashes) if l.cash_id
 new_attributes[:check_deposit_id]=substitute(l,:check_deposits) if l.check_deposit_id
-@restores[:lines] << Line.update_attributes!(new_attributes)
+ l.update_attributes!(new_attributes)
 
     end
 
   # Les lignes d'un extrait bancaire
-    @restores[:bank_extract_lines]= []
+    
     @datas[:bank_extract_lines].each do |bel|
       new_attributes=bel.attributes
       new_attributes.delete 'id'
       new_attributes[:bank_extract_id]=substitute(bel,:bank_extracts) if bel.bank_extract_id
       new_attributes[:check_deposit_id]=substitute(bel,:check_deposits) if bel.check_deposit_id
       new_attributes[:line_id]=substitute(bel,:lines) if bel.line_id
-      @restores[:bank_extract_lines] << BankExtractLine.update_attributes!(new_attributes)
+      bel.update_attributes!(new_attributes)
     end
  end
 
@@ -154,7 +156,7 @@ def substitute(inst, sym_model)
   sym_model_id=sym_model.to_s.singularize + '_id'
   bi=@datas[sym_model].index {|r| r.id == inst.instance_eval(sym_model_id)}
   raise 'NoncoherentDatas' if bi.nil?
-  @restores[sym_model][bi].id
+  @datas[sym_model][bi].id
 end
 
   protected
@@ -163,11 +165,13 @@ end
 # rebuild remplit le restores[:attribute] qui est un Array,
 # rebuild est utile pour construire les dépendances du type has_many - belongs_to
   def rebuild(attribute, parent, parent_id)
-    @restores[attribute]=[]
+    
     @datas[attribute].each do |a|
     aa=a.attributes
+    aa.delete 'id'
     aa[parent.to_s  + '_id']=parent_id
-    @restores[attribute] <<  attribute.to_s.capitalize.singularize.camelize.constantize.update_attributes!(aa)
+    a.update_attributes!(aa)
+      # attribute.to_s.capitalize.singularize.camelize.constantize.update_attributes!(aa)
     end
 
   end
