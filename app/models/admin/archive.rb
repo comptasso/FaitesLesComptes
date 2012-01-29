@@ -30,8 +30,8 @@ class Admin::Archive
   # FIXME voir si psych permet de vérifier la validité du fichier
   def parse_file(archive)
     @datas = YAML.load(archive)
-#  rescue
-#    @errors << "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
+  rescue
+    @errors << "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
   end
 
   # à partir d'un exercice, collect_data constitue un hash reprenant l'ensemble des données
@@ -83,7 +83,7 @@ class Admin::Archive
   # utilisée pour recharger un nouvel organism dans une compta
   # TODO faire tout ceci dans une transaction en cas de problème
   def rebuild_organism_and_direct_children
-     @restores[:organism] =Organism.create!(:title=>@datas[:organism].title, :description=>@datas[:organism].description)
+     @restores[:organism] =Organism.update_attributes!(:title=>@datas[:organism].title, :description=>@datas[:organism].description)
       self.rebuild(:destinations, :organism, @restores[:organism].id)
       self.rebuild(:bank_accounts,:organism, @restores[:organism].id) # bank_accounts
    @restores[:bank_accounts].each do |r| # les extraits bancaires
@@ -117,7 +117,7 @@ class Admin::Archive
        Rails.logger.debug "l'index du compte est #{bi} "
         new_attributes[:account_id]=@restores[:accounts][bi].id if bi
       end
-      @restores[:natures] << Nature.create!(new_attributes)
+      @restores[:natures] << Nature.update_attributes!(new_attributes)
     end
  
 
@@ -134,7 +134,7 @@ new_attributes[:bank_account_id]=substitute(l,:bank_accounts) if l.bank_account_
 new_attributes[:bank_extract_id]=substitute(l,:bank_extracts) if l.bank_extract_id
 new_attributes[:cash_id]=substitute(l,:cashes) if l.cash_id
 new_attributes[:check_deposit_id]=substitute(l,:check_deposits) if l.check_deposit_id
-@restores[:lines] << Line.create!(new_attributes)
+@restores[:lines] << Line.update_attributes!(new_attributes)
 
     end
 
@@ -146,13 +146,14 @@ new_attributes[:check_deposit_id]=substitute(l,:check_deposits) if l.check_depos
       new_attributes[:bank_extract_id]=substitute(bel,:bank_extracts) if bel.bank_extract_id
       new_attributes[:check_deposit_id]=substitute(bel,:check_deposits) if bel.check_deposit_id
       new_attributes[:line_id]=substitute(bel,:lines) if bel.line_id
-      @restores[:bank_extract_lines] << BankExtractLine.create!(new_attributes)
+      @restores[:bank_extract_lines] << BankExtractLine.update_attributes!(new_attributes)
     end
  end
 
 def substitute(inst, sym_model)
   sym_model_id=sym_model.to_s.singularize + '_id'
   bi=@datas[sym_model].index {|r| r.id == inst.instance_eval(sym_model_id)}
+  raise 'NoncoherentDatas' if bi.nil?
   @restores[sym_model][bi].id
 end
 
@@ -166,7 +167,7 @@ end
     @datas[attribute].each do |a|
     aa=a.attributes
     aa[parent.to_s  + '_id']=parent_id
-    @restores[attribute] <<  attribute.to_s.capitalize.singularize.camelize.constantize.create!(aa)
+    @restores[attribute] <<  attribute.to_s.capitalize.singularize.camelize.constantize.update_attributes!(aa)
     end
 
   end
