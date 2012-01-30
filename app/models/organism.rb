@@ -69,8 +69,11 @@ class Organism < ActiveRecord::Base
   private
 
   def create_default
+    logger.debug 'je suis dans create default'
     self.income_books.create(:title=>'Recettes', :description=>'Livre des recettes')
+    logger.debug  'création livre recettes'
     self.outcome_books.create(title: 'Dépenses', description: 'Livre des dépenses')
+    logger.debug 'creation livre dépenses'
   end
   
 end

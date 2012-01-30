@@ -8,7 +8,7 @@
           <ul>
             <li> <%= link_to 'Modifier', edit_admin_organism_path(r) %></li>
             <li> <%= link_to 'Sauvegarder', archive_admin_organism_path(r),
-                :confirm=>"Sauvegarder les données de l'exercice sur un fichier ?",
+                :confirm=>"Sauvegarder les données de l'organisme sur un fichier ?",
                 :title=>"Fait une sauvegarde de toutes les données de #{r.title}" %></li>
             <li> <%= link_to 'Supprimer',[:admin,r], confirm: 'Etes vous sûr ?', method: :delete %></li>
            

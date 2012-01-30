@@ -25,6 +25,8 @@ Organism.all.each do |o|
   DESTINATIONS.each do |n|
   Destination.create({ :organism_id=>o.id, :name=>n})
   end
+
+  i=IncomeBook.first
   
   Line.create([{
      :line_date=>Date.today,:narration=>'Vente de conseil', :book_id=>i.id,
@@ -39,6 +41,8 @@ Organism.all.each do |o|
       :nature_id=>1, :destination_id=>1, :credit=>rand(1000), :payment_mode=>'Espèces', :cash_id=>c.id}
 
   ])
+
+  ob=OutcomeBook.first
 
   10.times do
      Line.create({
