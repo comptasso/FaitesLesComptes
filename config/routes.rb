@@ -2,6 +2,8 @@ Faitesvoscomptes::Application.routes.draw do
 
   
 
+  
+
   namespace :compta do
     resources :organisms do
       resources :periods
@@ -17,16 +19,15 @@ Faitesvoscomptes::Application.routes.draw do
 
 
 namespace 'admin' do
+ 
   resource :restore do
     member do
       post 'rebuild'
     end
   end
   resources :organisms do
-       member do
-         get 'archive', :controller=>:restores, :action=>:archive
-        end
       
+    resources :archives 
     resources :books
     resources :income_books
     resources :outcome_books

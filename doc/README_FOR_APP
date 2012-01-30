@@ -339,16 +339,13 @@ OK - Recettes et dépenses du mois au format CSV
 ------------------------- Cloture d'exercice -----------------
 
 -------------------- Sauvegarde/Restauration--------------------
-on doit être capable de sauvegarder les informations 
-d'une entreprise sur un fichier et de pouvoir les restaurer - on commence par ça
-action dans la zone admin - modifier le menu sauvegarder - importer
-sauvegarder doit écrire un répertoire avec les fichiers avec les différentes infos des tables de l'organimes (ou plusieurs fichiers .yml -sql ?)
-restaurer doit lire le répertoire et vérifier qu'il trouve tous les fichiers puis créer les données si elle n'existent pas
-Si elles existent, la vue indique qu'il y a déja des données qui seront écrasées.
+OK - on doit être capable de sauvegarder les informations d'une entreprise sur un fichier et de pouvoir les restaurer - on commence par ça
+OK - action dans la zone admin - modifier le menu sauvegarder - importer
+OK - sauvegarder doit écrire un répertoire avec les fichiers avec les différentes infos des tables de l'organimes (ou plusieurs fichiers .yml -sql ?)
+OK - restaurer doit lire le répertoire et vérifier qu'il trouve tous les fichiers puis créer les données si elle n'existent pas
+OK - Si elles existent, la vue indique quelles données seront créées.
 
-d'un exercice sur un fichier et de pouvoir les restaurer
-ce qui veut dire l'organisme, l'exercice, les natures, les destinations, les comptes les lignes, les caisses et les banques
-les remises de chèques, les rapprochements bancaires,et ???
+Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 Le logiciel doit indiquer si les modifs ont été faites et de quand date la dernière sauvegarde
 ex de fonctionnement - le logiciel sur une clé et la sauvegarde sur un PC (ou l'inverse)
 

@@ -15,6 +15,7 @@ class Organism < ActiveRecord::Base
   has_many :income_books, dependent: :destroy
   has_many :outcome_books, dependent: :destroy
   has_many :accounts, through: :periods
+  has_many :archives,  dependent: :destroy
 
   after_create :create_default
 

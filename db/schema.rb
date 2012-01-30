@@ -11,13 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120115084152) do
+ActiveRecord::Schema.define(:version => 20120130143059) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
     t.string   "title"
     t.boolean  "used",       :default => true
     t.integer  "period_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "archives", :force => true do |t|
+    t.integer  "organism_id", :null => false
+    t.string   "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

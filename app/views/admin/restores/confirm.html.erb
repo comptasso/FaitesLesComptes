@@ -1,7 +1,23 @@
-<%#
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
-%>
+<%= content_for :menu do %>
+<%= icon_to 'retour.png', :back %>
+<% end %>
+
+<fieldset>
+  <legend>
+    Importation d'un fichier
+  </legend>
+
+  <p>Commentaire : <%= @datas[:comment] %> </p>
+    <p>Fichier généré le : <%#= @datas[:created_at] %> </p>
+  
+  <%= form_tag rebuild_admin_restore_path(:file_name=>@just_filename) do %>
+ <div>  <%= submit_tag "Confirmer l'importation"  %></div>
+
+<% end %>
+
+</fieldset>
+
+
 <h3>Les élements suivants seront importés</h3>
 
 <h4>Organisme</h4>
@@ -44,7 +60,3 @@
    
 </ul>
 
-<%= form_tag rebuild_admin_restore_path(:file_name=>@just_filename) do %>
- <div>  <%= submit_tag "Confirmer l'importation"  %></div>
-
-<% end %>

@@ -32,5 +32,12 @@
   <%=l @organism.updated_at %>
 </p>
 
+<% if @organism.archives.any? %>
+<p>
+ <b>Dernière sauvegarde le :</b>
+ <%= l @organism.archives.order(:created_at).last.created_at %>
+</p>
+<% end %>
+
 </fieldset>
 

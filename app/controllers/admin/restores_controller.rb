@@ -1,7 +1,9 @@
 # coding: utf-8
 
 # La classe restore fait les différentes opérations de restauration d'un fichier
-# 
+# new permet d'afficher la vue qui demande quel fichier importer
+# puis create parse les données et affiche la vue confirm
+# laquelle contien un bouton de confirmation qui renvoie sur l'action rebuild. 
 #
 
 require 'organism'
@@ -21,6 +23,7 @@ require 'cash_control'
 require 'account'
 
 class Admin::RestoresController < Admin::ApplicationController
+
 
   def new
     
@@ -54,17 +57,7 @@ class Admin::RestoresController < Admin::ApplicationController
 
 
 
-  def archive
-    @organism=Organism.find(params[:id])
-    tmp_file_name="#{Rails.root}/tmp/#{@organism.title}.yml"
-    # Créer un fichier : y écrirer les infos de l'exercice
-    a=Admin::Archive.new
-    a.collect_datas(@organism)
-    File.open(tmp_file_name, 'w') {|f| f.write a.datas.to_yaml}
-    send_file tmp_file_name, type: 'text/yml'
-    File.delete(tmp_file_name)
-  end
-
+ 
   def rebuild
     a= Admin::Archive.new
     tmp_file_name="#{Rails.root}/tmp/#{params[:file_name]}"

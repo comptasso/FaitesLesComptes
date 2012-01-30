@@ -1,0 +1,28 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+
+<%= content_for :menu do %>
+<%= icon_to 'retour.png', :back %>
+<% end %>
+
+<fieldset>
+  <legend>
+    Création d'un fichier de sauvegarde
+
+  </legend>
+  
+   <%= form_for [:admin , @organism, @archive] do |f|  %>
+  
+ <div class="inputs">
+   <%= f.label 'Commentaire :' %>
+    <%= f.text_area :comment, rows: 4 %>
+  </div>
+
+   <div class="actions">
+    <%= f.submit 'Créer le fichier' %>
+  </div>
+<% end %>
+
+</fieldset>

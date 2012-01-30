@@ -1,34 +1,10 @@
 # coding: utf-8
 
-# la class Archive est destinée à stocker un exercice comptable
-# et à le restaurer
-require 'organism'
-require 'period'
-require 'bank_account'
-require 'destination'
-require 'nature'
-require 'cash'
-require 'bank_extract'
-require 'line'
-require 'book'
-require 'income_book'
-require 'outcome_book'
-require 'bank_extract_line'
-require 'check_deposit'
-require 'cash_control'
-require 'account'
+class Archive < ActiveRecord::Base
+  belongs_to :organism
 
+  attr_reader  :datas, :restores
 
-class Admin::Archive
-  
-  attr_reader  :errors, :datas, :restores
-
-  def initialize
-    @errors=[]
-    @restores={}
-    @datas={}
-  end
-  
   # FIXME voir si psych permet de vérifier la validité du fichier
   def parse_file(archive)
     @datas = YAML.load(archive)
@@ -38,8 +14,11 @@ class Admin::Archive
 
   # à partir d'un exercice, collect_data constitue un hash reprenant l'ensemble des données
   # de cet exercice
-  def collect_datas(organism)
-    @datas[:organism]=organism
+  def collect_datas
+    @datas={}
+    @datas[:comment]=self.comment
+    @datas[:created_at]=self.created_at
+    @datas[:organism]=self.organism
     @datas[:periods]=organism.periods.all
     @datas[:bank_accounts]=organism.bank_accounts.all
     @datas[:destinations]=organism.destinations.all
@@ -54,26 +33,18 @@ class Admin::Archive
     @datas[:bank_extract_lines]=organism.bank_extract_lines.all
   end
 
- 
+
   def list_errors
     self.errors.join('\n')
   end
 
-  def valid?
-    self.errors.count == 0 ? true : false
-  end
-
-  # on cherche l'organisme concerné par l'archive
-  def organism
-    @datas[:organism]
-  end
-
-
+  
   def organism_exists?
     Organism.where('title = ? ', self.organism.title).nil? ? false : true
   end
 
   def rebuild_organism
+    @restores={}
     Organism.transaction do
       self.rebuild_organism_and_direct_children
     if @restores[:periods]
@@ -95,7 +66,7 @@ class Admin::Archive
     a=@datas[:organism].attributes
     a.delete 'id'
     @restores[:organism]= Organism.create!(a)
-    
+
     self.rebuild(:destinations, :organism, @restores[:organism].id)
     self.rebuild(:bank_accounts,:organism, @restores[:organism].id)
     @restores[:bank_accounts].each do |r| # les extraits bancaires
@@ -122,13 +93,13 @@ class Admin::Archive
 
   def rebuild_period_and_children(period)
     # Les natures qui appartiennent à une période mais qui ont un lien avec un account
-   
+
     @datas[:natures].each do |n|
-      
+
       new_attributes=n.attributes
       new_attributes.delete 'id'
       new_attributes[:period_id]=period.id
-    
+
       if n.account_id
         bi= @datas[:accounts].index {|r| r.id == n.account_id}
 
@@ -137,9 +108,9 @@ class Admin::Archive
 
       Nature.create!(new_attributes)
     end
- 
 
- 
+
+
     @datas[:lines].each do |l|
       # l a un book_id, destination_id, nature_id, bank_account_id, check_deposit_id, bank_extract_id, cash_id
       # il faut à chaque fois trouver le id d'origine et le id de destination
@@ -157,7 +128,7 @@ class Admin::Archive
     end
 
     # Les lignes d'un extrait bancaire
-    
+
     @datas[:bank_extract_lines].each do |bel|
       new_attributes=bel.attributes
       new_attributes.delete 'id'
@@ -175,7 +146,7 @@ class Admin::Archive
     @datas[sym_model][bi].id
   end
 
- 
+
   # attribute est un symbole qui renvoie à ce qu'on cherche à reconstituer
   # parent est un autre symbole indiquant le parent
   # rebuild remplit le restores[:attribute] qui est un Array,
@@ -193,6 +164,5 @@ class Admin::Archive
     Rails.logger.info "reconstitution de #{@restores[attribute].size} #{attribute.to_s}"
 
   end
-
 
 end
