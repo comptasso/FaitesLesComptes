@@ -107,14 +107,8 @@
         <% @organism.periods.reject {|r| r.new_record? }.each do |c| %>
           <li><%= link_to c.exercice, admin_organism_period_path(@organism, c) %>
             <ul>
-              <li><%= link_to 'Clore -TODO', admin_organism_periods_path(@organism) if c.open %></li>
-             
               <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>
-
-            
-
-
-            </ul>
+             </ul>
           </li>
         <% end %>
         <li><%= link_to 'Nouveau', new_admin_organism_period_path(@organism) %></li>

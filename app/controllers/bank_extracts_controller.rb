@@ -66,6 +66,10 @@ class BankExtractsController < ApplicationController
     redirect_to pointage_organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
   end
 
+
+  # lock est appelé par le bouton 'valider et verrouillé' de la vue pointage html
+  # bouton qui est lui même affiché que lorsque les soldes sont concordants avec les lignes affichées
+  # dans le modèle bank_extract, un after save verrouille alors les lignes correspondantes
   def lock
     @bank_extract = BankExtract.find(params[:id])
     # ici on change les attributs false

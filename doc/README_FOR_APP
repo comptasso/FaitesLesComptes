@@ -339,9 +339,17 @@ OK - Recettes et dépenses du mois au format CSV
 ------------------------- Cloture d'exercice -----------------
 Refaire une fonction lockable pour l'exercice
 Revoir le menu car c'est une action rare
-Faire les méthodes pour les report des soldes
+les règles sont
+OK -    que le pointage d'un compte bancaire doit verrouiller les lignes associées
+OK -     que le pointage de caisse doit verrouilles les lignes associées
+    il faut pouvoir verrouiller inidviduellement des lignes résiduelles et donc les lister si nécessaire
+
+Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
+
+Revoir le style du menu pour link_if
 
 ----------------------Suppression d'un exercice-----------------
+Est-il raisonnable de supprimer un exercice (à ce stade de développement)
 Question les livres sont-ils dépendant de l'organisme ou d'un exercice ?
 
 -------------------- Sauvegarde/Restauration--------------------

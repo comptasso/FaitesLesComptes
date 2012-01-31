@@ -66,6 +66,7 @@ class Period < ActiveRecord::Base
 
   has_many :accounts, :dependent=>:destroy
   has_many :natures,  :dependent=>:destroy
+  has_many :lines, :through=>:natures
 
   
   validates :organism_id, :presence=>true
@@ -294,28 +295,20 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
   # qu'il soit ouvert
   # que tous ses journaux soit fermés
   # que l'exercice précédent soit fermé
-#  def is_lockable?
-#    self.errors.add(:lock, 'Exercice déja fermé') unless self.open
-#    # tous les journaux doivent être fermés
-#    self.errors.add(:lock, 'Tous les journaux ne sont pas fermés; ') if self.journals.where('open=?', true).any?
-#    # l'exercice précédent, s'il existe, doit être ferme
-#    self.errors.add(:lock, "L'exercice précédent n'est pas fermé; ") if self.previous_period && self.previous_period.open
-#    # il faut un exercice suivant
+  def lockable?
+    self.errors.add(:lock, 'Exercice déja fermé') unless self.open
+    # tous les journaux doivent être fermés
+    self.errors.add(:lock, "L'exercice précédent n'est pas fermé; ") if self.previous_period && self.previous_period.open
+    # toutes les lignes doivent être verrouillées
+    self.errors.add(:lock, "Toutes les lignes d'écritures ne sont pas verrouillées") if self.lines.where('locked IS ? ',false).count > 0
+ # il faut un exercice suivant
 #    np=self.next_period
 #    self.errors.add(:lock, "Pas d'exercice suivant; ") if np.nil?
 #    return false if self.errors[:lock].any?
-#    # il faut un compte pour le report du résultat
-#    self.errors.add(:lock, "Pas de compte de report à nouveau") if np.accounts.where('acc_number=?', '12').first.nil?
-#    # il faut un journal d'OD
-#    jod=np.journals.where('jmonth=?',0).where('abbreviation=?', 'OD').first
-#    self.errors.add(:lock, "Pas de journal d'OD dans l'exercice suivant; ") if jod.nil?
-#    return false if self.errors[:lock].any?
-#    # qui doit être ouvert
-#    # TODO il faut interdire de fermer un mois si l'exercice précédent n'est pas clos
-#    self.errors.add(:lock, "Le journal d'OD de l'exercice suivant est fermé; ") unless jod.open
-#    self.errors[:lock].any? ? false : true
-#
-#  end
+    # il faut un compte pour le report du résultat
+    self.errors[:lock].any? ? false : true
+
+  end
 
  
 
