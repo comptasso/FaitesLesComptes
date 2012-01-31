@@ -43,18 +43,19 @@ class Archive < ActiveRecord::Base
     Organism.where('title = ? ', self.organism.title).nil? ? false : true
   end
 
+
+  # rebuild organism reconstruit l'ensemble de la hiérarchie des données et renvoie true si
+  # succès, sinon renvoie false
   def rebuild_organism
     @restores={}
     Organism.transaction do
       self.rebuild_organism_and_direct_children
-    if @restores[:periods]
-      @restores[:periods].each do |p|
-        self.rebuild_period_and_children(p)
-      end
-    end
+      @restores[:periods].each { |p| self.rebuild_period_and_children(p) } if @restores[:periods]
+      true
      end
   rescue ActiveRecord::RecordInvalid => invalid
     Rails.logger.warn 'Erreur dans la reconstitution des données'
+    false
   end
 
 
@@ -93,57 +94,63 @@ class Archive < ActiveRecord::Base
 
   def rebuild_period_and_children(period)
     # Les natures qui appartiennent à une période mais qui ont un lien avec un account
-
+    @restores[:natures]=[]
     @datas[:natures].each do |n|
 
       new_attributes=n.attributes
       new_attributes.delete 'id'
       new_attributes[:period_id]=period.id
-
       if n.account_id
         bi= @datas[:accounts].index {|r| r.id == n.account_id}
-
         new_attributes[:account_id]=@datas[:accounts][bi].id if bi
       end
-
-      Nature.create!(new_attributes)
+      @restores[:natures] << Nature.create!(new_attributes)
     end
 
 
-
+@restores[:lines]= []
     @datas[:lines].each do |l|
       # l a un book_id, destination_id, nature_id, bank_account_id, check_deposit_id, bank_extract_id, cash_id
       # il faut à chaque fois trouver le id d'origine et le id de destination
+      # FIXME ceci ne marche pas ....
       new_attributes=l.attributes
       new_attributes.delete 'id'
-      new_attributes[:book_id]=substitute(l,:books) if l.book_id
-      new_attributes[:destination_id]=substitute(l,:destinations) if l.destination_id
-      new_attributes[:nature_id]=substitute(l,:natures) if l.nature_id
-      new_attributes[:bank_account_id]=substitute(l,:bank_accounts) if l.bank_account_id
-      new_attributes[:bank_extract_id]=substitute(l,:bank_extracts) if l.bank_extract_id
-      new_attributes[:cash_id]=substitute(l,:cashes) if l.cash_id
-      new_attributes[:check_deposit_id]=substitute(l,:check_deposits) if l.check_deposit_id
-      Line.create!(new_attributes)
+      new_attributes[:book_id]=substitute(l,:books) unless l.book_id.nil?
+      new_attributes[:destination_id]=substitute(l,:destinations) unless l.destination_id.nil?
+      new_attributes[:nature_id]=substitute(l,:natures) unless l.nature_id.nil?
+      new_attributes[:bank_account_id]=substitute(l,:bank_accounts) unless l.bank_account_id.nil?
+      new_attributes[:bank_extract_id]=substitute(l,:bank_extracts) unless l.bank_extract_id.nil?
+      new_attributes[:cash_id]=substitute(l,:cashes) unless l.cash_id.nil?
+      new_attributes[:check_deposit_id]=substitute(l,:check_deposits) unless l.check_deposit_id.nil?
+      new_line=Line.new(new_attributes)
+      if  new_line.valid?
+         @restores[:lines] << Line.create!(new_attributes)
+      else
+        logger.debug new_line.errors.all
+      end
+     
 
     end
 
     # Les lignes d'un extrait bancaire
-
+    @restores[:bank_extract_lines]=[]
     @datas[:bank_extract_lines].each do |bel|
       new_attributes=bel.attributes
       new_attributes.delete 'id'
       new_attributes[:bank_extract_id]=substitute(bel,:bank_extracts) if bel.bank_extract_id
       new_attributes[:check_deposit_id]=substitute(bel,:check_deposits) if bel.check_deposit_id
       new_attributes[:line_id]=substitute(bel,:lines) if bel.line_id
-      bel.create!(new_attributes)
+      @restores[:bank_extract_lines] << BankExtractLine.create!(new_attributes)
     end
   end
 
   def substitute(inst, sym_model)
+    logger.debug "Dans substitute #{sym_model.to_s}"
     sym_model_id=sym_model.to_s.singularize + '_id'
     bi=@datas[sym_model].index {|r| r.id == inst.instance_eval(sym_model_id)}
+    logger.debug "index : #{bi}"
     raise 'NoncoherentDatas' if bi.nil?
-    @datas[sym_model][bi].id
+    @restores[sym_model][bi].id
   end
 
 

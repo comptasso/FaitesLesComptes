@@ -4,7 +4,11 @@
 %>
 
 <%=  content_for :menu do %>
-
+<%= icon_to  'nouveau.png', new_admin_organism_path %>
+       <%= icon_to 'restauration.png', new_admin_restore_path ,
+         :confirm=>"Créer un nouvel organisme à partir d'un fichier ?",
+                :title=>"Permet de créer un organisme à partir d'un fichier de sauvegarde" %>
+       
 <% end %>
 
 
@@ -13,18 +17,21 @@
   <tr>
     <th>Title</th>
     <th>Description</th>
-    <th></th>
-    <th></th>
-    <th></th>
+    <th>Dernière sauvegarde</th>
+    <th>Sélectionner</th>
+    
   </tr>
 
 <% @organisms.each do |organism| %>
   <tr>
-    <td><%= organism.title %></td>
+    <td>
+
+  <%= link_to organism.title, admin_organism_path(organism) %></td>
     <td><%= organism.description %></td>
+    <td><%=l organism.archives.last.created_at  unless organism.archives.empty? %>
+<%= icon_to 'sauvegarde.png', new_admin_organism_archive_path(organism),
+              :title=>"Fait une sauvegarde de toutes les données de l'organism" %></td>
     <td><%= icon_to 'afficher.png', [:admin,organism] %></td>
-    <td><%= icon_to 'modifier.png', edit_admin_organism_path(organism) %></td>
-    <td><%= icon_to 'supprimer.png', [:admin,organism], :confirm => 'Etes vous sur ?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

@@ -344,10 +344,8 @@ OK - action dans la zone admin - modifier le menu sauvegarder - importer
 OK - sauvegarder doit écrire un répertoire avec les fichiers avec les différentes infos des tables de l'organimes (ou plusieurs fichiers .yml -sql ?)
 OK - restaurer doit lire le répertoire et vérifier qu'il trouve tous les fichiers puis créer les données si elle n'existent pas
 OK - Si elles existent, la vue indique quelles données seront créées.
-
-Modifier le nom du fichier et voir le nettoyage du fichier temporaire
-Le logiciel doit indiquer si les modifs ont été faites et de quand date la dernière sauvegarde
-ex de fonctionnement - le logiciel sur une clé et la sauvegarde sur un PC (ou l'inverse)
+OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
+OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
 
 -----------------------------------------------------------------------------------------------
      Factoriser les jQuery datatable
@@ -389,7 +387,7 @@ A refaire ou revoir - Faire que la touche plus puisse être actionnée par le cl
 ---------------------pick date et autres goodies
 
 Faire que la modif se fasse dans une modalbox
-
+Faire un nettoyage du fichier temporaire pour le cas des importations qui se passent mal ?
 
 
 

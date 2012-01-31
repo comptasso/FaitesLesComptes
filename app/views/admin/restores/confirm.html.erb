@@ -8,7 +8,7 @@
   </legend>
 
   <p>Commentaire : <%= @datas[:comment] %> </p>
-    <p>Fichier généré le : <%#= @datas[:created_at] %> </p>
+    <p>Fichier généré le : <%=l @datas[:created_at] %> </p>
   
   <%= form_tag rebuild_admin_restore_path(:file_name=>@just_filename) do %>
  <div>  <%= submit_tag "Confirmer l'importation"  %></div>
