@@ -337,6 +337,12 @@ OK - Recettes et dépenses du mois au format CSV
 ?? - Faire un export CSV des recettes ou dépenses de l'année
 
 ------------------------- Cloture d'exercice -----------------
+Refaire une fonction lockable pour l'exercice
+Revoir le menu car c'est une action rare
+Faire les méthodes pour les report des soldes
+
+----------------------Suppression d'un exercice-----------------
+Question les livres sont-ils dépendant de l'organisme ou d'un exercice ?
 
 -------------------- Sauvegarde/Restauration--------------------
 OK - on doit être capable de sauvegarder les informations d'une entreprise sur un fichier et de pouvoir les restaurer - on commence par ça

@@ -29,10 +29,11 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 + csv des livres
 cloture d'exercice
 
+021 : dashboard
+faire différentes sections
+possibilités de les arranger
+graphe sur les données financières
 
-021 : gestion de différents types d'écritures
-- écritures de dépenses répétées
-- virements interne
 
 022 : editions et recherche d'écriture
 + affichage d'un tableau des recettes/dépenses sur une période
@@ -41,6 +42,8 @@ cloture d'exercice
 023  faire la documentation
 
 024 sauvegarde et restauration
++ sauvegarde
++ restauration
 
 030 : mise en place des tests et refactorisation
 - mise en place des validations pour les <> modèles
@@ -49,7 +52,9 @@ cloture d'exercice
 - édition papier d'une remise chèque
 - affichage graphique de solde
 
-
+032 : gestion de différents types d'écritures
+- écritures de dépenses répétées
+- virements interne
 
 040 :
 génération d'écritures plus comptables
@@ -57,3 +62,5 @@ edition de la 2065
 gestion de la TVA
 
 050 : edition de factures
+
+060 : suppression d'un exercice

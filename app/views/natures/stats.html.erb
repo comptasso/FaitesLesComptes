@@ -24,7 +24,8 @@
     <tr>
       <th>Total Recettes <br />Total Dépenses<br />Total Différence </th>
        <% @total_recettes.size.times do |index| %>
-      <th class="nombre"><%=  debit_credit @total_recettes[index] %><br />
+      <th class="nombre">
+<%=  debit_credit @total_recettes[index] %><br />
 <%=debit_credit  @total_depenses[index] %><br />
 <%=debit_credit(@total_recettes[index]+@total_depenses[index])  %></th>
       <% end %>
