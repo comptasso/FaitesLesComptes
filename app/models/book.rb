@@ -1,4 +1,7 @@
 class Book < ActiveRecord::Base
+
+  # utilities::sold définit les méthodes cumulated_debit_before(date) et
+  # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
   
   belongs_to :organism
