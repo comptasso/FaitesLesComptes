@@ -1,5 +1,13 @@
 # -*- encoding : utf-8 -*-
 
+# le modèle BanExtractLine représente une ligne d'un relevé bancaire.
+# Cette ligne peut correspondre à une ligne d'un livre de recettes ou de dépenses 
+# du moment qu'il s'agit d'une opération bancaire (pas d'espèces évidemment).
+# Par exemple un prélèvement ou un virement
+# Mais ce peut être aussi une remise de chèque.qui elle même renvoie (has_many)
+# lines. 
+#
+
 class BankExtractLine < ActiveRecord::Base
   belongs_to :bank_extract
   belongs_to :check_deposit
@@ -44,11 +52,13 @@ class BankExtractLine < ActiveRecord::Base
   # lorsque l'on verrouille le relevé
   # Seules les lignes d'écritures sont verrouillées (pas les remises de chèques) car
   # il s'agit seulement de se conformer à la législation qui impose de ne plus
-  # pouvoir modifier des écritures après inscription au journal
+  # pouvoir modifier des écritures après inscription au journal.
+  # En fait il faut aussi verrouiller les lignes d'écritures qui ont nourri une remise de chèque
   def lock_line
-    if self.line_id && !self.line.locked
-      self.line.update_attribute(:locked,true)
-    end
+    # si c'est une ligne qui n'est pas déja verrouillée, on la verrouille
+    self.line.update_attribute(:locked,true) if (self.line_id && !self.line.locked)
+    # si c'est une remise de chèque on verrouille les lignes correspondantes
+    self.check_deposit.lines.each {|l| l.update_attribute(:locked, true)} if self.check_deposit_id
   end
   
   private

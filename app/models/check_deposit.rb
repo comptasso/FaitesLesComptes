@@ -13,7 +13,8 @@ class CheckDeposit < ActiveRecord::Base
 
   def remove_check_deposit_id_in_lines
     self.lines.each do |l|
-      l.update_attribute(:check_deposit_id, nil)
+      l.update_attribute(:check_deposit_id, nil) # on retire le check_deposit mais
+      # on s'interdit de retirer locked au cas où il aurait été mis.
       l.save
     end
   end
