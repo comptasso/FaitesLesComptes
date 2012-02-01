@@ -342,7 +342,11 @@ Revoir le menu car c'est une action rare
 les règles sont
 OK -    que le pointage d'un compte bancaire doit verrouiller les lignes associées
 OK -     que le pointage de caisse doit verrouilles les lignes associées
-    il faut pouvoir verrouiller inidviduellement des lignes résiduelles et donc les lister si nécessaire
+    les contrôles de caisse devraient pouvoir verrouiller les lignes correspondantes sans une action spécifique
+    le pointage d'une remise chèque devrait verrouiller les lignes correspondant à la remise de chèque
+    il faut pouvoir verrouiller inidviduellement des lignes résiduelles
+OK -  et donc les lister si nécessaire
+
 
 Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
 
@@ -361,7 +365,8 @@ OK - Si elles existent, la vue indique quelles données seront créées.
 OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
 
------------------------------------------------------------------------------------------------
+--------------------Divers---------------------------------------------------------------------------
+supprimer la session de period 
      Factoriser les jQuery datatable
 Le datatable de compta#lines ne marche pas
 ? - Datatable  pour la balance
