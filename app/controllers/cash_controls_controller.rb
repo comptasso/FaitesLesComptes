@@ -30,7 +30,7 @@ class CashControlsController < ApplicationController
   end
 
   def update
-params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
+    params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
     @cash_control=@cash.cash_controls.find(params[:id])
      if @cash_control.update_attributes(params[:cash_control])
       redirect_to organism_cash_cash_controls_url(@organism, @cash)
@@ -49,7 +49,7 @@ params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
    end
 
   # lock permet de verrouiller un controle de caisse, 
-  # ce qui a pour effet (par un after_update) de verrouiller les lignes qui le concernent
+  # ce qui a pour effet (par un before_update) de verrouiller les lignes qui le concernent
   def lock
     @cash_control=@cash.cash_controls.find(params[:id])
     if @cash_control.update_attribute(:locked, true)

@@ -340,13 +340,14 @@ OK - Recettes et dépenses du mois au format CSV
 Refaire une fonction lockable pour l'exercice
 Revoir le menu car c'est une action rare
 les règles sont
-OK -    que le pointage d'un compte bancaire doit verrouiller les lignes associées
-OK -     que le pointage de caisse doit verrouilles les lignes associées
-    les contrôles de caisse devraient pouvoir verrouiller les lignes correspondantes sans une action spécifique
-    le pointage d'une remise chèque devrait verrouiller les lignes correspondant à la remise de chèque
+OK - que le pointage d'un compte bancaire doit verrouiller les lignes associées
+NON  - que le pointage de caisse doit verrouiller automatiquement les lignes associées (voir commentaire sur les différentes situations dans le
+        modèle cash_control
+OK - les contrôles de caisse devraient pouvoir verrouiller les lignes correspondantes sans une action spécifique
+OK - Le pointage d'une remise chèque devrait verrouiller les lignes correspondant à la remise de chèque
     il faut pouvoir verrouiller inidviduellement des lignes résiduelles
 OK -  et donc les lister si nécessaire
-
+BUG - paeriod.lines ne marche pas car through natures et du coup ne trouve pas celles qui n'auraient pas de nature (faire que nature soit obligatoire).
 
 Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
 

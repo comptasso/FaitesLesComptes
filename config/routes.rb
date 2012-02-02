@@ -18,58 +18,62 @@ Faitesvoscomptes::Application.routes.draw do
   end
 
 
-namespace 'admin' do
+  namespace 'admin' do
  
-  resource :restore do
-    member do
-      post 'rebuild'
-    end
-  end
-  resources :organisms do
-      
-    resources :archives 
-    resources :books
-    resources :income_books
-    resources :outcome_books
-    
-    resources :destinations
-    resources :bank_accounts do
-      resources :bank_extracts, :only=>[:index, :edit, :destroy] do
-        member do
-          get 'unlock'
-        end
+    resource :restore do
+      member do
+        post 'rebuild'
       end
     end
-    resources :cashes do
-      resources :cash_controls, only: [:index, :destroy]
+    resources :organisms do
+      
+      resources :archives
+      resources :books
+      resources :income_books
+      resources :outcome_books
+    
+      resources :destinations
+      resources :bank_accounts do
+        resources :bank_extracts, :only=>[:index, :edit, :destroy] do
+          member do
+            get 'unlock'
+          end
+        end
+      end
+      resources :cashes do
+        resources :cash_controls, only: [:index, :destroy]
+      end
+      resources :periods do
+        member do
+          get 'select_plan'
+          post 'close'
+          post 'create_plan'
+        end
+        resources :lines do
+          member do
+            post 'lock'
+          end
+        end
+        resources :natures
+        resources :accounts do
+          collection do
+            get :mapping
+          end
+        end
+      end
     end
     resources :periods do
-      member do
-        get 'select_plan'
-        post 'close'
-        post 'create_plan'
-      end
-    resources :lines
-    resources :natures
-    resources :accounts do
-        collection do
-          get :mapping
+      resources :natures do
+        member do
+          post :link_nature, :unlink_nature
         end
       end
     end
-  end
-  resources :periods do
-    resources :natures do
-      member do
-        post :link_nature, :unlink_nature
-      end
-    end
-  end
-end
+  end  # FIN DE ADMIN
 
   # get 'bank_lines/index'
 
-   # match 'cash/:cash_id/cash_lines/index' => 'cash_lines#index', :as=>:cash_lines
+  # match 'cash/:cash_id/cash_lines/index' => 'cash_lines#index', :as=>:cash_lines
 
   # match 'bank_account/:bank_account_id/bank_lines/index' => 'bank_lines#index', :as=>:bank_account_bank_lines
   # match 'bank_extract/:bank_extract_id/pointage/index' => 'pointage#index',  :as => :pointage
@@ -81,10 +85,10 @@ end
   resources :organisms , :only=> [:index, :show] do
     resources :periods, :only=> [:index, :show] do
       resources :natures, only: :index do
-      collection do
-        get 'stats'
+        collection do
+          get 'stats'
+        end
       end
-    end
       member do
         get 'previous'
         get 'next'
@@ -108,9 +112,9 @@ end
       end
     end
     resources :cashes, :only=> [:show] do
-#      member do
-#        get 'controle'
-#      end
+      #      member do
+      #        get 'controle'
+      #      end
       resources :cash_controls do
         member do
           put 'lock'
@@ -131,8 +135,8 @@ end
     resources :check_deposits do
       member do
         get 'fill'
-         post 'add_check'
-         post 'remove_check'
+        post 'add_check'
+        post 'remove_check'
         
       end
     end
@@ -144,7 +148,7 @@ end
     # TODO probablement inadapté si on ne relie pas le bank_extracts à un books A voir.
     # TODO voir si les post lock sont bien utiles. Peut être à supprimer.
     resources :bank_extracts do
-       member do
+      member do
         post 'lock'
       end
     end
@@ -157,14 +161,14 @@ end
     end
     
   end
-   resources :income_books do
+  resources :income_books do
     resources :lines
   end
- resources :outcome_books do
+  resources :outcome_books do
     resources :lines
   end
 
-root to: 'organisms#index'
+  root to: 'organisms#index'
   
 
   # The priority is based upon order of creation:
