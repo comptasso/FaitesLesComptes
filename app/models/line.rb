@@ -13,6 +13,7 @@ class Line < ActiveRecord::Base
   validates :debit, :credit, numericality: true
   validates :line_date, presence: true
   validates :nature_id, presence: true
+  validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit=>true if :locked?
 
   PAYMENT_MODES= %w(CB Chèque Espèces Prélèvement Virement)
   BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)

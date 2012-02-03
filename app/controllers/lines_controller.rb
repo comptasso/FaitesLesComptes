@@ -9,6 +9,7 @@ class LinesController < ApplicationController
  # application_controller qui va remplir le period (lequel est utile pour les soldes)
   prepend_before_filter :find_book
   before_filter :fill_mois, only: [:index, :new]
+  before_filter :fill_natures, :only=>[:new,:edit]
 
   # GET /lines
   # GET /lines.json
@@ -44,11 +45,7 @@ class LinesController < ApplicationController
   # GET /lines/new.json
   def new
    @line =@book.lines.new(line_date: flash[:date] || @period.start_date.months_since(@mois.to_i), :cash_id=>@organism.main_cash_id, :bank_account_id=>@organism.main_bank_id)
-   if @book.class.to_s == 'IncomeBook'
-     @natures=@period.natures.recettes
-   else
-     @natures=@period.natures.depenses
-   end
+ 
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @line }
@@ -134,6 +131,14 @@ class LinesController < ApplicationController
      redirect_to book_lines_url(@book, mois: @mois, :format=>params[:format]) if (params[:action]=='index')
      redirect_to new_book_line_url(@book,mois: @mois) if params[:action]=='new'
     end
+  end
+
+  def fill_natures
+    if @book.class.to_s == 'IncomeBook'
+     @natures=@period.natures.recettes
+   else
+     @natures=@period.natures.depenses
+   end
   end
 
   

@@ -179,13 +179,14 @@ fr:
     Title: Titre
     Used: Utilisé
    
-    
+  Line: ligne
 
   general:
     Title: Titre
     update: 'Mettre à jour'
     back: 'Retour'
     number: Numéro
+
 
   activerecord:
     attributes:

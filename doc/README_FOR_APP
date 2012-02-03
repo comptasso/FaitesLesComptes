@@ -348,11 +348,15 @@ OK - Le pointage d'une remise chèque devrait verrouiller les lignes corresponda
 OK - il faut pouvoir verrouiller inidviduellement des lignes résiduelles
 OK -  et donc les lister si nécessaire
 OK - paeriod.lines ne marche pas car through natures et du coup ne trouve pas celles qui n'auraient pas de nature (faire que nature soit obligatoire).
-Changer lockable? en closable?
-Améliorer les messages dans le controller periods
-Fait on une page de confirmation de l'action
-Revoir les actions pour interdire l'écriture sur les lignes (ou de nouvelles lignes) si l'exercice est clos.
+OK - Changer lockable? en closable?
+OK - Améliorer les messages dans le controller periods
+----------------------------------
+
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
+OK Revoir les validations pour interdire l'écriture sur les lignes (ou de nouvelles lignes) si l'exercice est clos.
+   Revoir les menus pour ne pas accéder aux possibilités d'éditer les lignes ??
+
+
 Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
 
 Revoir le style du menu pour link_if
