@@ -345,10 +345,14 @@ NON  - que le pointage de caisse doit verrouiller automatiquement les lignes ass
         modèle cash_control
 OK - les contrôles de caisse devraient pouvoir verrouiller les lignes correspondantes sans une action spécifique
 OK - Le pointage d'une remise chèque devrait verrouiller les lignes correspondant à la remise de chèque
-    il faut pouvoir verrouiller inidviduellement des lignes résiduelles
+OK - il faut pouvoir verrouiller inidviduellement des lignes résiduelles
 OK -  et donc les lister si nécessaire
-BUG - paeriod.lines ne marche pas car through natures et du coup ne trouve pas celles qui n'auraient pas de nature (faire que nature soit obligatoire).
-
+OK - paeriod.lines ne marche pas car through natures et du coup ne trouve pas celles qui n'auraient pas de nature (faire que nature soit obligatoire).
+Changer lockable? en closable?
+Améliorer les messages dans le controller periods
+Fait on une page de confirmation de l'action
+Revoir les actions pour interdire l'écriture sur les lignes (ou de nouvelles lignes) si l'exercice est clos.
+? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
 
 Revoir le style du menu pour link_if
@@ -365,6 +369,8 @@ OK - restaurer doit lire le répertoire et vérifier qu'il trouve tous les fichi
 OK - Si elles existent, la vue indique quelles données seront créées.
 OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
+
+----------------------------- Dash board--------------------------------------
 
 --------------------Divers---------------------------------------------------------------------------
 supprimer la session de period 

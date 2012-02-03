@@ -46,7 +46,7 @@ Faitesvoscomptes::Application.routes.draw do
       resources :periods do
         member do
           get 'select_plan'
-          post 'close'
+          get 'close'
           post 'create_plan'
         end
         resources :lines do

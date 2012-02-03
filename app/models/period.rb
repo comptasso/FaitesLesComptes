@@ -295,18 +295,18 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
   # qu'il soit ouvert
   # que tous ses journaux soit fermés
   # que l'exercice précédent soit fermé
-  def lockable?
-    self.errors.add(:lock, 'Exercice déja fermé') unless self.open
+  def closable?
+    self.errors.add(:close, 'Exercice déja fermé') unless self.open
     # tous les journaux doivent être fermés
-    self.errors.add(:lock, "L'exercice précédent n'est pas fermé; ") if self.previous_period && self.previous_period.open
+    self.errors.add(:close, "L'exercice précédent n'est pas fermé; ") if self.previous_period && self.previous_period.open
     # toutes les lignes doivent être verrouillées
-    self.errors.add(:lock, "Toutes les lignes d'écritures ne sont pas verrouillées") if self.lines.where('locked IS ? ',false).count > 0
+    self.errors.add(:close, "Toutes les lignes d'écritures ne sont pas verrouillées") if self.lines.where('locked IS ? ',false).count > 0
  # il faut un exercice suivant
 #    np=self.next_period
 #    self.errors.add(:lock, "Pas d'exercice suivant; ") if np.nil?
 #    return false if self.errors[:lock].any?
     # il faut un compte pour le report du résultat
-    self.errors[:lock].any? ? false : true
+    self.errors[:close].any? ? false : true
 
   end
 

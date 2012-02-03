@@ -29,8 +29,8 @@
           <td><%=l period.start_date %></td>
           <td><%=l period.close_date %></td>
           <td><%= period.open? ? 'Ouvert' : 'Fermé' %> </td>
-          <td><%= link_to 'Clôre', close_admin_organism_period_path(@organism, period) if period.lockable? %>
-          <%= link_to 'Ecritures non verrouillées', admin_organism_period_lines_path(@organism, period, :status=>'open') unless period.lockable? %>
+          <td><%= link_to 'Clôre', close_admin_organism_period_path(@organism, period) if period.closable? %>
+          <%= link_to 'Ecritures non verrouillées', admin_organism_period_lines_path(@organism, period, :status=>'open') unless period.closable? %>
           </td>
         </tr>
       <% end %>

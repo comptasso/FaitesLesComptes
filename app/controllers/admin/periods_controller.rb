@@ -146,8 +146,25 @@ class Admin::PeriodsController < Admin::ApplicationController
      
   end
 
+ # TODO - probablement à effacer - non utilisé
   def restore
     
+  end
+
+  # action de cloture d'un exercice
+  # problématique de confirmation
+  def close
+    if @period.closable?
+      @period.close
+      redirect_to admin_organism_period_path(@period, @period)
+    else
+     @periods=@organism.periods
+     alert= "#{@period.exercice} ne peut être clos : \n"
+     @period.errors[:close].each {|e| alert += '- ' + e + "\n"}
+     flash[:alert]= alert
+     render :index
+    end
+
   end
 
 
