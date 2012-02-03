@@ -352,9 +352,9 @@ OK - Changer lockable? en closable?
 OK - Améliorer les messages dans le controller periods
 ----------------------------------
 
-? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
+
 OK Revoir les validations pour interdire l'écriture sur les lignes (ou de nouvelles lignes) si l'exercice est clos.
-   Revoir les menus pour ne pas accéder aux possibilités d'éditer les lignes ??
+  ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 
 
 Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
