@@ -1,7 +1,7 @@
 // Place all the styles related to the Organisms controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.organisms {
+.public_organisms {
     #bandeau {
         .title {
             font_weight: bold;
@@ -9,9 +9,45 @@
     }
     .numeric {
         text-align: right;
-         padding: 3px 10px;
+        padding: 3px 10px;
     }
     .alert {
         color: red;
+    }
+    .pave {
+        display: inline-block;
+        height:200px;
+        width: 400px;
+       
+        border: solid 1px;
+        margin-bottom: 4px;
+        h2 {
+            margin: 0px;
+            padding: 12px 10px;
         }
+
+    }
+    .income h2 {
+
+        background-color: green;
+
+    }
+    .outcome h2 {
+
+        background-color: pink;
+    }
+    .bank h2 {
+        background-color: #A19B9E;
+        }
+        .cash h2 {
+        background-color: lightblue;
+        }
+            .result h2 {
+        background-color: goldenrod;
+        }
+        .message h2 {
+            background-color : khaki;
+            }
+
+
 }

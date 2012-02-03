@@ -350,18 +350,18 @@ OK -  et donc les lister si nécessaire
 OK - paeriod.lines ne marche pas car through natures et du coup ne trouve pas celles qui n'auraient pas de nature (faire que nature soit obligatoire).
 OK - Changer lockable? en closable?
 OK - Améliorer les messages dans le controller periods
-----------------------------------
-
-
 OK Revoir les validations pour interdire l'écriture sur les lignes (ou de nouvelles lignes) si l'exercice est clos.
-  ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
+---------------------------- Dashboard d'un organisme ------------------------
+Organiser la page en section 
 
 
-Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
 
-Revoir le style du menu pour link_if
 
 ----------------------Suppression d'un exercice-----------------
+  ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
+mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer.
+Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
+
 Est-il raisonnable de supprimer un exercice (à ce stade de développement)
 Question les livres sont-ils dépendant de l'organisme ou d'un exercice ?
 
