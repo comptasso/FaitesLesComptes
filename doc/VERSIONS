@@ -27,7 +27,8 @@ Ce fichier décrit les fonctionnalités attendues selon les versions
 020 : zone compta/fisca
 + creer un modèle account
 + csv des livres
-cloture d'exercice
++ cloture d'exercice
+zone consult et saisie
 
 021 : dashboard
 faire différentes sections
@@ -39,7 +40,7 @@ graphe sur les données financières
 + affichage d'un tableau des recettes/dépenses sur une période
 + editions papier des suivis recettes/dépenses
 
-023  faire la documentation
+023  faire la documentation et l'aide
 
 024 sauvegarde et restauration
 + sauvegarde
