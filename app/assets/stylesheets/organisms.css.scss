@@ -16,7 +16,8 @@
     }
     .pave {
         display: inline-block;
-        height:200px;
+        /* h eight:200px; */
+        
         width: 400px;
        
         border: solid 1px;
@@ -25,6 +26,14 @@
             margin: 0px;
             padding: 12px 10px;
         }
+        p {
+            display: block;
+            margin: 5px;
+            }
+        .bar_graph {
+            height: 150px;
+            margin-left: 5px;
+            }
 
     }
     .income h2 {

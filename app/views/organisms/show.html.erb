@@ -6,13 +6,23 @@
 
 <% @organism.income_books.each do |ib| %>
 <%= content_tag :div, :class=>"pave income"  do %>
-<h2>Livre des <%=  ib.title %></h2>
+<h2>
+  Livre des <%=  ib.title %>
+   <%= icon_to 'modifier.png', new_book_line_path(ib) %>
+  <%= icon_to 'detail.png', book_lines_path(ib) %>
+  
+</h2>
+<div class="datas_for_graph">
+  <%= ib.monthly_datas(@period) %>
+</div>
+<div class="bar_graph" id="chart1"></div>
 <% end %>
 <% end %>
 
 <% @organism.outcome_books.each do |ib| %>
 <%= content_tag :div, :class=>"pave outcome"  do %>
 <h2>Livre des <%=  ib.title %></h2>
+<div class="bar_graph" >Ici un graphe</div>
 <% end %>
 <% end %>
 
@@ -26,19 +36,22 @@
 
 <%= content_tag :div, :class=>"pave result"  do %>
 <h2>Résultat</h2>
-
+<div class="bar_graph" >Ici un graphe</div>
 <% end %>
 
 <% @organism.bank_accounts.each do |ba| %>
 <%= content_tag :div, :class=>"pave bank"  do %>
 <h2>Compte <%=   ba.name %> - <%= ba.number %></h2>
  <% if ba.bank_extracts.any? %>
+<p>
       <span class="alert"> <%= "Attention, le pointage du dernier relevé n'est pas encore effectué" unless ba.bank_extracts.last.locked  %> </span><br />
-       Dernier relevé du compte le <%=l ba.bank_extracts.last.end_date %> - Solde : <%= debit_credit(ba.last_bank_extract_sold) %> <br />
+       Dernier relevé du compte le <%=l ba.bank_extracts.last.end_date %> - Solde : <%= debit_credit(ba.last_bank_extract_sold) %>
+</p>
     <% end %>
-        <%=   ba.lines_to_point.count %> écritures non encore prises en compte par la banque :
+<p>        <%=   ba.lines_to_point.count %> écritures non encore prises en compte par la banque <br/>
   Débit :<%= debit_credit ba.total_debit_np  %> - Crédit : <%= debit_credit ba.total_credit_np %><br/>
   Solde théorique calculé : <%= debit_credit(ba.last_bank_extract_sold + ba.sold_np) %>
+</p>
 <% end %>
 <% end %>
 

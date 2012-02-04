@@ -18,5 +18,18 @@ class Book < ActiveRecord::Base
 #    nil
 #  end
 
+  # calcule le total des lignes pour chacun des mois de l'exercice transmis en paramètres
+  # renvoie deux arrays, le premier donnant le mois, le second donnant le total credit - debit des lignes des mois
+def monthly_datas(period)
+     sql="select  strftime('%m-%Y', line_date) as Month, sum(credit) -sum(debit) as total_month  FROM lines WHERE line_date >= '#{period.start_date}'
+  AND line_date <= '#{period.close_date}' AND lines.book_id = #{self.id} GROUP BY Month"
+    md= Line.connection.select_all(sql)
+    months = period.nb_months.times.map {|m| period.start_date.months_since(m).strftime('%m-%Y')}
+    datas= months.map do |m|
+      result = md.detect {|r| r['Month'] == m }
+      result && result["total_month"] || 0
+    end
+    return [months,datas]
+   end
 
 end
