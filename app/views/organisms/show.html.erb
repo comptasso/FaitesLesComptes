@@ -14,7 +14,7 @@
 </h2>
 
 <div class="datas_for_graph" id="datas_<%= book.id%>" style="display: none;">
-  
+  <span id="series_<%= book.id %>"><%= book.series.join(';') %>  </span>
   <span id="months_list_<%= book.id %>">  <%= book.months(@period, '%b').join(';') %></span>
   <span id="datas_list_<%= book.id %>">  <%= book.datas.join(';') %></span>
   <span id="previous_datas_list_<%= book.id %>">  <%= book.previous_datas.join(';') %></span>

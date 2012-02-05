@@ -6,7 +6,7 @@ class Book < ActiveRecord::Base
   
   belongs_to :organism
   has_many :lines, dependent: :destroy
-  attr_reader :months, :datas, :previous_datas
+  attr_reader :months, :datas, :previous_datas, :series
   
   validates :title, presence: true
 
@@ -26,6 +26,8 @@ class Book < ActiveRecord::Base
     period.list_months(format)
   end
 
+  
+
   protected
 
   # calcule le total des lignes pour chacun des mois de l'exercice transmis en paramètres
@@ -38,9 +40,19 @@ def monthly_datas_for_chart(period)
       result = md.detect {|r| r['Month'] == m }
       result && result["total_month"] || 0
     end
-    @previous_datas=self.previous_period_monthly_datas(period)
+   
+    self.previous_period_monthly_datas(period)
+    self.prepare_series(period)
     
  end
+
+def prepare_series(period)
+    if period.previous_period?
+    @series = [period.previous_period.exercice, period.exercice ]
+    else
+    @series=  [period.exercice]
+    end
+  end
 
 def previous_period_monthly_datas(period)
   if period.previous_period?
@@ -54,8 +66,9 @@ def previous_period_monthly_datas(period)
       result && result["total_month"] || 0
     end
   else
-    return period.nb_months.times.map {|m| 0}
+    @previous_datas =  period.nb_months.times.map {|m| 0}
   end
+ 
 end
 
 
