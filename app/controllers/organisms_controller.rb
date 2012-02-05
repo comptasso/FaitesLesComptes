@@ -12,6 +12,8 @@ class OrganismsController < ApplicationController
     end
   end
 
+
+
   # GET /organisms/1
   # GET /organisms/1.json
   def show
@@ -31,6 +33,8 @@ class OrganismsController < ApplicationController
     end
     @bank_accounts=@organism.bank_accounts.all
     @cashes=@organism.cashes.all
+    @books=@organism.books.all
+    @books.each {|b| b.prepare_graph(@period)}
 
     respond_to do |format|
       format.html # show.html.erb

@@ -18,9 +18,15 @@ class Book < ActiveRecord::Base
 #    nil
 #  end
 
+  def prepare_graph(period)
+    monthly_datas_for_chart(period)
+  end
+
   def months(period,format)
     period.list_months(format)
   end
+
+  protected
 
   # calcule le total des lignes pour chacun des mois de l'exercice transmis en paramètres
   # renvoie deux arrays, le premier donnant le mois, le second donnant le total credit - debit des lignes des mois
@@ -33,7 +39,7 @@ def monthly_datas_for_chart(period)
       result && result["total_month"] || 0
     end
     @previous_datas=self.previous_period_monthly_datas(period)
-   return @datas 
+    
  end
 
 def previous_period_monthly_datas(period)
