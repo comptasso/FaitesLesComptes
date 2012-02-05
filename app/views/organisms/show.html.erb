@@ -12,8 +12,10 @@
   <%= icon_to 'detail.png', book_lines_path(ib) %>
   
 </h2>
-<div class="datas_for_graph">
-  <%= ib.monthly_datas(@period) %>
+<div class="datas_for_graph" style="display: none;">
+  <span id="months_list">  <%= ib.months(@period, '%b').join(';') %></span>
+  <span id="datas_list">  <%= ib.monthly_datas_for_chart(@period).join(';') %></span>
+  <span id="previous_datas_list">  <%= ib.previous_datas.join(';') %></span>
 </div>
 <div class="bar_graph" id="chart1"></div>
 <% end %>

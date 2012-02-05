@@ -58,13 +58,17 @@ jQuery(function() {
 }
 }); // fin de jQuery application#data_table
 
+function s_to_f(element,index,array){
+    return parseFloat(element);
+}
+
 $(document).ready(function(){
-    var s1 = [200, 600, 700, 1000, 500,600,300,240,450,640,500,241];
-    var s2 = [460, -210, 690, 820,0,0,0,0,0,0,0,0,];
+    var s1 =$('#datas_list').text().split(';').map(s_to_f);
+    var s2 =$('#previous_datas_list').text().split(';').map(s_to_f); 
    
     // Can specify a custom tick Array.
     // Ticks should match up one for each y value (category) in the series.
-    var ticks = ['J', 'F','M','A','M','J','J','A','S','O','N','D'];
+    var ticks = $('#months_list').text().split(';');
 
     var plot1 = $.jqplot('chart1', [s1, s2], {
         // The "seriesDefaults" option is an options object that will
@@ -73,14 +77,15 @@ $(document).ready(function(){
             renderer:$.jqplot.BarRenderer,
             rendererOptions: {
                 fillToZero: true,
-             barPadding: 0,      // number of pixels between adjacent bars in the same
-                                // group (same category or bin).
-            barMargin: 5,      // number of pixels between adjacent groups of bars.
-            barDirection: 'vertical', // vertical or horizontal.
-            barWidth: null,     // width of the bars.  null to calculate automatically.
-            shadowOffset: 2,    // offset from the bar edge to stroke the shadow.
-            shadowDepth: 5,     // nuber of strokes to make for the shadow.
-            shadowAlpha: 0.8 }  // transparency of the shadow.}
+                barPadding: 0,      // number of pixels between adjacent bars in the same
+                                    // group (same category or bin).
+                barMargin: 5,      // number of pixels between adjacent groups of bars.
+                barDirection: 'vertical', // vertical or horizontal.
+                barWidth: null,     // width of the bars.  null to calculate automatically.
+                shadowOffset: 2,    // offset from the bar edge to stroke the shadow.
+                shadowDepth: 5,     // nuber of strokes to make for the shadow.
+                shadowAlpha: 0.8 // transparency of the shadow.
+            }
         },
 
 
@@ -110,7 +115,7 @@ $(document).ready(function(){
             // not touch, the grid boundaries.  1.2 is the default padding.
             yaxis: {
                 pad: 1.05,
-                tickOptions: {formatString: '€%d'}
+                tickOptions: {formatString: '\u20ac%d'}
             }
         }
     });

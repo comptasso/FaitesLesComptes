@@ -6,7 +6,7 @@ class Book < ActiveRecord::Base
   
   belongs_to :organism
   has_many :lines, dependent: :destroy
- 
+  attr_reader :months, :datas, :previous_datas
   
   validates :title, presence: true
 
@@ -18,17 +18,40 @@ class Book < ActiveRecord::Base
 #    nil
 #  end
 
+  def months(period,format)
+    period.list_months(format)
+  end
+
   # calcule le total des lignes pour chacun des mois de l'exercice transmis en paramètres
   # renvoie deux arrays, le premier donnant le mois, le second donnant le total credit - debit des lignes des mois
-def monthly_datas(period)
+def monthly_datas_for_chart(period)
      sql="select  strftime('%m-%Y', line_date) as Month, sum(credit) -sum(debit) as total_month  FROM lines WHERE line_date >= '#{period.start_date}'
   AND line_date <= '#{period.close_date}' AND lines.book_id = #{self.id} GROUP BY Month"
     md= Line.connection.select_all(sql)
-    datas= period.list_months('%m-%Y').map do |m|
+    @datas= self.months(period,'%m-%Y').map do |m|
       result = md.detect {|r| r['Month'] == m }
       result && result["total_month"] || 0
     end
-    return [period.list_months('%b'),datas]
-   end
+    @previous_datas=self.previous_period_monthly_datas(period)
+   return @datas 
+ end
+
+def previous_period_monthly_datas(period)
+  if period.previous_period?
+    close =period.start_date - 1
+    start =close - (period.close_date - period.start_date)
+    sql="select  strftime('%m-%Y', line_date) as Month, sum(credit) -sum(debit) as total_month  FROM lines WHERE line_date >= '#{start}'
+  AND line_date <= '#{close}' AND lines.book_id = #{self.id} GROUP BY Month"
+   md= Line.connection.select_all(sql)
+    @previous_datas= self.months(period,'%m-%Y').map do |m|
+      result = md.detect {|r| r['Month'] == m }
+      result && result["total_month"] || 0
+    end
+  else
+    return period.nb_months.times.map {|m| 0}
+  end
+end
+
+
 
 end
