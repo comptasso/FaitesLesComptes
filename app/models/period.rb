@@ -146,6 +146,13 @@ class Period < ActiveRecord::Base
   end
 
 
+  #TODO refactoriser les deux méthodes ci-dessus, grâce à celle ci qui est également
+  # utilisée par Book#monthly_datas 
+  def list_months(format)
+    self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>format}
+  end
+
+
 
   # permet d'indiquer l'exercice sous la forme d'une chaine de caractère
   # du type Exercice 2011 si period correspond à une année pleine
