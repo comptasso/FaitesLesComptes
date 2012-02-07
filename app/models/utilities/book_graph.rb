@@ -1,4 +1,9 @@
 # coding: utf-8
+#
+# BookGraph est destiné a représente le graphe d'un livre de comptes sur des périodes mensuelles
+# Il est initialisé par le book et l'exercice.
+# Si l'exercice n'est pas fourni, il s'agit du dernier existant
+#
 class Utilities::BookGraph
 
   attr_reader :legend, :ticks, :first_serie, :second_serie, :period, :book, :nb_values

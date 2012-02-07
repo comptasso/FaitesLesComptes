@@ -7,7 +7,6 @@ class CreateBankExtractLines < ActiveRecord::Migration
       t.integer :bank_extract_id
       t.timestamps
     end
-
-    rename_column :bank_extracts,:bank_account_id, :book_id
+ 
   end
 end

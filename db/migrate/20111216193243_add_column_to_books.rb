@@ -1,4 +1,4 @@
-class AddColumnToTableLines < ActiveRecord::Migration
+class AddColumnToBooks < ActiveRecord::Migration
   def change
     add_column :books, :type, :string
   end
