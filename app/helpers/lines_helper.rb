@@ -18,7 +18,7 @@ module LinesHelper
   def submenu_helper(book, period)
     t=[]
     if period
-      t= period.list_months
+      t= period.list_months('%b')
     else
       t=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
     end

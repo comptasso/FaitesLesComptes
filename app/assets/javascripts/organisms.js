@@ -72,20 +72,20 @@ $(document).ready(function(){
         var s1 =$('#datas_list_' + id).text().split(';').map(s_to_f); // ainsi que les données de l'exercice qui sont dans un champ caché'
         var s2 =$('#previous_datas_list_'+id).text().split(';').map(s_to_f); // les données de l'ex précédent (0 s'il n'y en a pas)'
         var series=$('#series_' + id).text().split(';');
-        var t=[]
-        var label
+        var t=[];
+        var label=[];
+
+        // il peut y avoir des organismes avec un seul exercice et d'autres avec deux
+        // on construit donc le tableau des séries et les labels en fonctions de la longueur de series
+        // array qui contient le nom des exercices.
 if (series.length == 1) {
     t=[s1];
-    label=[{label: series[0]}]
+    label=[{label: series[0]}];
 }
 else {
-    t=[s2,s1]
-    label=[{label: series[0]},{label: series[1]} ]
+    t=[s2,s1];
+    label=[{label: series[0]},{label: series[1]} ];
 }
-
-
-// on dessine soit 1 soit 2 séries
-
 
 
         // Can specify a custom tick Array.
@@ -172,11 +172,16 @@ else {
                 yaxis: {
                     pad: 1.05,
                     tickOptions: {
-                        formatString: '€%d'
+                        formatString: '\u20ac%d'
                     }
                 }
             }
         });
-   
+   $('#chart_'+id).bind('jqplotDataClick',
+            function (ev, seriesIndex, pointIndex, data) {
+           //    $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+               window.location =("/books/"+id+"/lines?mois="+pointIndex+".html");
+            });
+
   });
 });
