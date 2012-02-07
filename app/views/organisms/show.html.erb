@@ -14,10 +14,10 @@
 </h2>
 
 <div class="datas_for_graph" id="datas_<%= book.id%>" style="display: none;">
-  <span id="series_<%= book.id %>"><%= book.series.join(';') %>  </span>
-  <span id="months_list_<%= book.id %>">  <%= book.months(@period, '%b').join(';') %></span>
-  <span id="datas_list_<%= book.id %>">  <%= book.datas.join(';') %></span>
-  <span id="previous_datas_list_<%= book.id %>">  <%= book.previous_datas.join(';') %></span>
+  <span id="series_<%= book.id %>"><%= book.monthly_graph.legend.join(';') %>  </span>
+  <span id="months_list_<%= book.id %>">  <%= book.monthly_graph.ticks.join(';') %></span>
+  <span id="datas_list_<%= book.id %>">  <%= book.monthly_graph.first_serie.join(';')  %></span>
+  <span id="previous_datas_list_<%= book.id %>">  <%= book.monthly_graph.first_serie.join(';') %></span>
 </div>
 <div class="bar_graph" id="chart_<%= book.id %>"></div>
 <% end %>
