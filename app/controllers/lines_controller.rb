@@ -1,7 +1,6 @@
 # -*- encoding : utf-8 -*-
 
 class LinesController < ApplicationController
- 
 
   layout :choose_layout # inutile maintenant car lié à l'utilisation de modalbox
 

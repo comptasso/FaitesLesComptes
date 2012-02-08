@@ -120,6 +120,7 @@ GEM
     simple_form (1.5.0)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
+    spork (0.8.5)
     sprockets (2.0.3)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -154,6 +155,7 @@ DEPENDENCIES
   rspec-rails (= 2.6.1)
   sass-rails (~> 3.1.0)
   simple_form
+  spork
   sqlite3
   therubyracer
   turn

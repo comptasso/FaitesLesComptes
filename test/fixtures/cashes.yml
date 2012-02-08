@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
-
-one:
-  organism_id: 1
-  name: MyString
-
-two:
-  organism_id: 1
-  name: MyString

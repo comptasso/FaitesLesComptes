@@ -12,14 +12,13 @@ class OrganismsController < ApplicationController
     end
   end
 
-
-
-  # GET /organisms/1
+  # GET /organisms/1 test watcher
   # GET /organisms/1.json
   def show
     @organism = Organism.find(params[:id])
+    
     if @organism.periods.empty?
-      flash[:alert]= 'Vous devez créer un exercice pour cet organisme'
+      flash[:alert]= 'Vous devez créer au moins un exercice pour cet organisme'
       redirect_to new_organism_period_url(@organism)
       return
     end
