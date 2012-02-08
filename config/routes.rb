@@ -4,6 +4,8 @@ Faitesvoscomptes::Application.routes.draw do
 
   
 
+  
+
   namespace :compta do
     resources :organisms do
       resources :periods
@@ -167,6 +169,8 @@ Faitesvoscomptes::Application.routes.draw do
   resources :outcome_books do
     resources :lines
   end
+
+  resources :users
 
   root to: 'organisms#index'
   
