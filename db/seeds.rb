@@ -1,62 +1,55 @@
-# -*- encoding : utf-8 -*-
+# coding: utf-8
 
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
+# Création d'une base de données test complète pour le développement
 #
-# Examples:
+# Organism est une petite association culturelle
 #
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+o = Organism.create({:title=>'Association des amoureux des locomotives', :description=>'Notre association entetient et expose des locomtives anciennes'})
 
-NATURES= %w( Conseils 'Marchandises Carburant Déplacements Fournitures)
-DESTINATIONS= %w(Lille Dunkerque)
+# Avec deux lieux d'activité : LILLE et VALENCIENNES qui sont donc ainsi des destinations
+   lille = Destination.create({ :organism_id=>o.id, :name=>'Lille'})
+   valenciennes = Destination.create({ :organism_id=>o.id, :name=>'Valenciennes'})
 
-Organism.create({:title=>'autoentreprise', :description=>'petite entreprise'})# , {:title=>'CE ste', :description=>'Le CE de la société'}])
+# Il y a un livre des recettes et un livre de dépenses
+recettes = o.income_books(title: 'Recettes')
+depenses = o.outcome_books(title: 'Dépenses')
 
-Organism.all.each do |o|
-  per=Period.create(:organism_id=>o.id, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)
-  
-  b=BankAccount.create({:name=>'Finansol', :number=>'98745TG12', :organism_id=>o.id})
-  c=Cash.create({ :organism_id=>o.id, :name=>'Caisse'})
+# Il y a un compte bancaire et deux caisses
+o.bank_accounts.create(number: '124578A', name: 'Micro Banque')
+o.cashes.create(name: 'Lille')
+o.cashes.create(name: 'Valenciennes')
 
-  NATURES.each do |n|
-  Nature.create({ :period_id=>per.id, :name=>n})
-  end
-  DESTINATIONS.each do |n|
-  Destination.create({ :organism_id=>o.id, :name=>n})
-  end
+# Trois exercices figurent dans la base de données :
+# le premier 2010 est un exercice commencé au 1er avril avec une clôture au 31 décembre. Il sera verrouillé plus loin après
+# création des écritures
+per_2010 = Period.create(:organism_id=>o.id, :start_date=>Date.civil(2010,04,01), :close_date=>Date.civil(2010,12,31))
+# le second 2011 est achevé mais non verrouillé
+per_2011 = Period.create(:organism_id=>o.id, :start_date=>Date.civil(2011,01,01), :close_date=>Date.civil(2011,12,31))
 
-  i=IncomeBook.first
-  
-  Line.create([{
-     :line_date=>Date.today,:narration=>'Vente de conseil', :book_id=>i.id,
-      :nature_id=>1, :destination_id=>1, :credit=>1245, :bank_account_id=>b.id,
-      :payment_mode=>'Virement'},
 
-    {  :line_date=>(Date.today.beginning_of_month+rand(28)),:narration=>'Vente de conseils', :book_id=>i.id,
-      :nature_id=>1, :destination_id=>1, :credit=>rand(1000), :payment_mode=>'Chèque'},
-     { :line_date=>(Date.today.beginning_of_month+rand(28)),:narration=>'Diagnostic', :book_id=>i.id,
-      :nature_id=>1, :destination_id=>1, :credit=>rand(1000), :payment_mode=>'Chèque'},
-      { :line_date=>(Date.today.beginning_of_month+rand(28)),:narration=>'Boissons', :book_id=>i.id,
-      :nature_id=>1, :destination_id=>1, :credit=>rand(1000), :payment_mode=>'Espèces', :cash_id=>c.id}
+# les natures de dépenses sont les mêmes pour les trois organismes
+RECETTES= %w(subventions  cotisations dons sorties)
+DEPENSES= %w(pièces de rechange, salaires, charges sociales, locaux, fournitures de bureaux)
 
-  ])
-
-  ob=OutcomeBook.first
-
-  10.times do
-     Line.create({
-    :line_date=>Date.today.beginning_of_month+rand(28),:narration=>'Dépenses', :book_id=>ob.id,
-      :nature_id=>Random.new.rand(2..4), :destination_id=>Random.new.rand(1..2), :credit=>0.0, :debit=>rand(50), :cash_id=>c.id,
-      :payment_mode=>'Espèces'})
-  end
-
-  2.times do
-     Line.create({
-    :line_date=>Date.today.beginning_of_month+rand(28),:narration=>'Dépenses par chèques', :book_id=>ob.id,
-      :nature_id=>Random.new.rand(2..4), :destination_id=>Random.new.rand(1..2), :credit=>0.0, :debit=>rand(50), :bank_account_id=>b.id,
-      :payment_mode=>'Chèque'})
+# Création des natures pour les 3 exercices
+RECETTES.each do |r|
+  o.periods.each do |p|
+    p.natures.create(name: r, income_outcome: true)
   end
 end
 
+RECETTES.each do |r|
+  o.periods.each do |p|
+    p.natures.create(name: r, income_outcome: false)
+  end
+end
 
+# le troisième 2012 est en cours. Il doit être créé après fermeture du premier
+per_2010.close
+per_2012 = Period.create(:organism_id=>o.id, :start_date=>Date.civil(2012,01,01), :close_date=>Date.civil(2012,12,31))
+RECETTES.each do |r|
+  per_2012.natures.create(name: r, income_outcome: true)
+end
+DEPENSES.each do |r|
+  per_2012.natures.create(name: r, income_outcome: false)
+end

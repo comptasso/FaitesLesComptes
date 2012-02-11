@@ -99,13 +99,14 @@ class Period < ActiveRecord::Base
   end
 
 
-  # trouve l'exercice suivant
+  # trouve l'exercice suivant en recherchant l'exercice qui à la première date qui soit au dela de close_date de l'exercice actuel
+  # renvoie lui même s'il n'y en a pas
   def next_period
     Period.first(:conditions=>['organism_id = ? AND start_date > ?', self.organism_id, self.close_date],
-      :order=>'start_date DESC')
+      :order=>'start_date ASC')
   end
 
-  # indique s'il y a un exercice suivant
+  # indique s'il y a un exercice suivant en testant si l'exercice suivant est différent de lui même
   def next_period?
     next_period ? true : false
   end
@@ -113,6 +114,10 @@ class Period < ActiveRecord::Base
   # indique si l'exercice est clos
   def is_closed?
     self.open ? false : true
+  end
+
+  def lock
+    self.update_attribute(:open, false) if self.closable?
   end
 
 

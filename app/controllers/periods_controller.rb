@@ -22,8 +22,8 @@ class PeriodsController < ApplicationController
   end
 
   def next
-    @period=Period.find(params[:id]).next_period
-    session[:period]=@period.id
+    @period=Period.find(params[:id])
+    session[:period]=@period.next_period.id if @period.next_period?
     redirect_to :back
   end
 
