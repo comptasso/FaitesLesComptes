@@ -61,6 +61,8 @@ end
 
 
 
+
+
 def run_test_matching(thing_to_match)
 
   matches = all_specs.grep(/#{thing_to_match}/i)
@@ -71,6 +73,13 @@ def run_test_matching(thing_to_match)
 #  if !matches.empty? && run(matches.join(' '))
 #    run_all_tests unless @all_tests_passing
 #  end
+end
+
+def run_test_erb_matching(thing_to_match)
+  matches= all_specs.grep(/#{thing_to_match}/i)
+  puts 'Aucun fichier spec matching' if matches.empty?
+  puts matches.join(';' ) unless matches.empty?
+
 end
 
 def run_all_tests

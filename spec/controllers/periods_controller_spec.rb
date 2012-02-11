@@ -4,7 +4,6 @@
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require 'organism'
 
 describe PeriodsController do
 
@@ -18,7 +17,7 @@ describe PeriodsController do
     @p_2012= @organism.periods.create(start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))
 
     Period.count.should == 3 
-    # periods_controller = PeriodsController.new
+   
   end
 
     describe 'GET next' do

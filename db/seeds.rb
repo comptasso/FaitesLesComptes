@@ -34,7 +34,7 @@ DEPENSES= %w(pièces de rechange, salaires, charges sociales, locaux, fourniture
 # Création des natures pour les 3 exercices
 RECETTES.each do |r|
   o.periods.each do |p|
-    p.natures.create(name: r, income_outcome: true)
+    p.natures.create!(name: r, income_outcome: true)
   end
 end
 

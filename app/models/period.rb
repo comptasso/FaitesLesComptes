@@ -50,7 +50,9 @@ class Period < ActiveRecord::Base
   # Valide que le start_date est le lendemain du close date de l'exercice précédent
   class ContiguousValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)
-      record.errors[attribute] << "ne peut avoir un trou dans les dates #{record.previous_period.close_date}" if record.previous_period && record.previous_period.close_date != (value - 1.day)
+     if record.previous_period? && record.previous_period.close_date != (value - 1.day)
+      record.errors[attribute] << "ne peut avoir un trou dans les dates #{record.previous_period.close_date}"
+     end
     end
   end
 
@@ -88,14 +90,17 @@ class Period < ActiveRecord::Base
 
   # TODO mettre dans la migration que start_date et close_date sont obligatoires
  
-  # Trouve l'exercice précédent
+ # trouve l'exercice précédent en recherchant le premier exercice
+ # avec la date de cloture < au start_date de l'exercice actuel
+  # renvoie lui même s'il n'y en a pas
   def previous_period
     Period.first(:conditions=>['organism_id = ? AND close_date < ?', self.organism_id, self.start_date],
-      :order=>'close_date DESC')
+      :order=>'close_date DESC') || self
   end
-  # indique s'il y a un exercice précédent
+
+  # indique s'il y a un exercice précédent en testant si previous period renvoie un exercice différent de self
   def previous_period?
-    previous_period ? true : false
+    (previous_period.id == self.id) ? false : true
   end
 
 
@@ -103,12 +108,12 @@ class Period < ActiveRecord::Base
   # renvoie lui même s'il n'y en a pas
   def next_period
     Period.first(:conditions=>['organism_id = ? AND start_date > ?', self.organism_id, self.close_date],
-      :order=>'start_date ASC')
+      :order=>'start_date ASC') || self
   end
 
   # indique s'il y a un exercice suivant en testant si l'exercice suivant est différent de lui même
   def next_period?
-    next_period ? true : false
+    next_period == self ? false : true
   end
 
   # indique si l'exercice est clos
@@ -116,7 +121,7 @@ class Period < ActiveRecord::Base
     self.open ? false : true
   end
 
-  def lock
+  def close
     self.update_attribute(:open, false) if self.closable?
   end
 
@@ -310,7 +315,7 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
   def closable?
     self.errors.add(:close, 'Exercice déja fermé') unless self.open
     # tous les journaux doivent être fermés
-    self.errors.add(:close, "L'exercice précédent n'est pas fermé; ") if self.previous_period && self.previous_period.open
+    self.errors.add(:close, "L'exercice précédent n'est pas fermé; ") if self.previous_period? && self.previous_period.open
     # toutes les lignes doivent être verrouillées
     self.errors.add(:close, "Toutes les lignes d'écritures ne sont pas verrouillées") if self.lines.where('locked IS ? ',false).count > 0
  # il faut un exercice suivant
