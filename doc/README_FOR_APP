@@ -352,14 +352,14 @@ OK - Changer lockable? en closable?
 OK - Améliorer les messages dans le controller periods
 OK Revoir les validations pour interdire l'écriture sur les lignes (ou de nouvelles lignes) si l'exercice est clos.
 ---------------------------- Dashboard d'un organisme ------------------------
-Organiser la page en section 
-
-
+Organiser la page en section
+Construire les graphes
+Faire un fichier seed.rb permettant de valider les graphes du dashboard
 
 
 ----------------------Suppression d'un exercice-----------------
   ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
-mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer.
+mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?
 Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
 
 Est-il raisonnable de supprimer un exercice (à ce stade de développement)
@@ -374,7 +374,11 @@ OK - Si elles existent, la vue indique quelles données seront créées.
 OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
 
------------------------------ Dash board--------------------------------------
+------------------Conifguration ------------------------------
+OK - watchr
+OK - spork
+OK - rspec
+OK - création d'un script de lancement des différentes commandes
 
 --------------------Divers---------------------------------------------------------------------------
 supprimer la session de period 

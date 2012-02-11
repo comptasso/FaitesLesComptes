@@ -12,7 +12,9 @@ watch('^spec/(.*)_spec\.rb') do |m|
   run_test_matching(m[1])
 end
 watch('^app/(.*)\.rb') { |m| puts "Modification de #{m[1]}"; run_test_matching(m[1]) }
+watch('^app/(.*)\.erb') { |m|  puts "Modification de #{m[1]}"; run_test_matching(m[1]) }
 #END:SPECS
+
 
 #START:MIGRATION
 watch('^db/migrate/(.*)\.rb') { |m| check_migration(m[1]) }
@@ -20,6 +22,7 @@ watch('^db/migrate/(.*)\.rb') { |m| check_migration(m[1]) }
 
 #START:ALL_TESTS
 watch('^spec/spec_helper\.rb') { run_all_tests }
+watch('^app/views/layouts/.*\.erb') { run_all_tests }
 #END:ALL_TESTS
 
 #START: SCSS with SASS --CHECK
@@ -28,6 +31,15 @@ watch('^app/assets/stylesheets/(.*\.scss)') do |m|
     puts "checked #{m[1]}"
 end
 # END: SCSS
+
+#START: JS
+watch('^(app/assets/javascripts/(.*)\.js)') do |m|
+ jslint_check("#{m[1]}")
+end
+
+watch('^(spec/javascripts/(.*)\.js)') do |m|
+ jslint_check("#{m[1]}")
+end
 
 #START:SPECS
 def all_specs
@@ -67,4 +79,10 @@ end
 def check_migration migration_file
     system("clear; rake db:migrate:reset RAILS_ENV=test --trace")
     run_test_matching(migration_file)
+end
+
+def jslint_check(files_to_check)
+ system('clear')
+ puts "checking #{files_to_check}"
+ system("jslint #{files_to_check}")
 end

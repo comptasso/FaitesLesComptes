@@ -1,0 +1,17 @@
+<%= content_for :menu do %>
+
+<%= icon_to 'nouveau.png', new_user_path %>
+<%= icon_to 'afficher.png', @user %>
+<%= icon_to 'retour.png', :back %>
+<% end -%>
+
+<fieldset>
+  <legend>
+    Modification <%= t 'user' %>
+  </legend>
+
+<%= render 'form' %>
+</fieldset>
+
+
+
