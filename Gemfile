@@ -39,4 +39,5 @@ group :development, :test do
   gem 'turn', :require => false
   gem 'rspec-rails', '2.6.1'
   gem 'spork'
+  gem 'jasmine'
 end

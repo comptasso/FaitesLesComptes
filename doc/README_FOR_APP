@@ -379,6 +379,8 @@ OK - watchr
 OK - spork
 OK - rspec
 OK - création d'un script de lancement des différentes commandes
+Jasmine -commencé l'installation mais pas fini car je n'ai pas actuellement de test à faire.
+Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 
 --------------------Divers---------------------------------------------------------------------------
 supprimer la session de period 
