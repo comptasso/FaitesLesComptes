@@ -34,6 +34,9 @@ class OrganismsController < ApplicationController
     @cashes=@organism.cashes.all
     @books=@organism.books.all
     @books.each {|b| b.prepare_graph(@period)}
+    # problème avec les soldes si la date du jour est postérieure à la date de clôture 
+    # du dernier exercice - probablement il faut trouver plus élégant
+    @date=[@organism.periods.last.close_date, Date.today].min
 
     respond_to do |format|
       format.html # show.html.erb

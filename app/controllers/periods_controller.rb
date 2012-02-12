@@ -3,7 +3,7 @@
 
 class PeriodsController < ApplicationController
 
-
+# FIXME : dans la vue index : quand un exercice est fermé, l'action cloture ne doit rien proposer
 
   # GET /periods
   # GET /periods.json

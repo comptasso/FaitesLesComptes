@@ -56,7 +56,7 @@
 <% @organism.cashes.each do |ca| %>
 <%= content_tag :div, :class=>"pave cash"  do %>
 <h2>Caisse <%=  ca.name %></h2>
- <p>Solde de la caisse : <%= debit_credit ca.sold %></p>
+ <p>Solde de la caisse : <%= debit_credit ca.sold(@date) %></p>
   <% if ca.cash_controls.any?  %>
   <p>Dernier contrôle de caisse en date du <%=l ca.cash_controls.order('date ASC').last.date  %>
     <span class="alert"><%= cash_difference(ca.cash_controls.order('date ASC').last ) %></span>
