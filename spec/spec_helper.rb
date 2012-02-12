@@ -41,7 +41,7 @@ end
   # This code will be run each time you run your specs.
  Spork.each_run do
   
-  Dir["#{Rails.root}/app/models/*.rb"].each { |f| load f }
+  Dir["#{Rails.root}/app/models/**/*.rb"].each { |f| load f }
 end 
 
 
