@@ -172,7 +172,7 @@ class Period < ActiveRecord::Base
     if self.start_date==self.start_date.beginning_of_year
       r= 'Exercice ' << self.start_date.year.to_s
     else
-      r= '- de ' << (I18n::l self.start_date, :format=>:short_month_year)
+      r= 'de ' << (I18n::l self.start_date, :format=>:short_month_year)
       r << ' à ' << (I18n::l self.close_date, :format=>:short_month_year)
     end
     r

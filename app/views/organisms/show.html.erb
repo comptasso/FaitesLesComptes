@@ -2,8 +2,6 @@
   <%= icon_to 'navigation90.png', organisms_path %>
 <% end %>
 
-<div id="info1">Mon infà</div>
-
 <% @books.each do |book| %>
 <%= content_tag :div, :class=>"pave book #{book.type} ", :id=>"book_graph_#{book.id}"  do %>
 <h2>
@@ -14,10 +12,10 @@
 </h2>
 
 <div class="datas_for_graph" id="datas_<%= book.id%>" style="display: none;">
-  <span id="series_<%= book.id %>"><%= book.monthly_graph.legend.join(';') %>  </span>
-  <span id="months_list_<%= book.id %>">  <%= book.monthly_graph.ticks.join(';') %></span>
-  <span id="datas_list_<%= book.id %>">  <%= book.monthly_graph.first_serie.join(';')  %></span>
-  <span id="previous_datas_list_<%= book.id %>">  <%= book.monthly_graph.first_serie.join(';') %></span>
+  <span id="series_<%= book.id %>"><%= book.graphic.legend.join(';') %>  </span>
+  <span id="months_list_<%= book.id %>">  <%= book.graphic.ticks.join(';') %></span>
+  <span id="datas_list_<%= book.id %>">  <%= book.graphic.series[1].join(';')  %></span>
+  <span id="previous_datas_list_<%= book.id %>">  <%= book.graphic.series[0].join(';') %></span>
 </div>
 <div class="bar_graph" id="chart_<%= book.id %>"></div>
 <% end %>

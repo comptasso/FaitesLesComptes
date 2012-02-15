@@ -33,7 +33,8 @@ class OrganismsController < ApplicationController
     @bank_accounts=@organism.bank_accounts.all
     @cashes=@organism.cashes.all
     @books=@organism.books.all
-    @books.each {|b| b.prepare_graph(@period)}
+       
+    @books.each {|b| b.default_graphic}
     # problème avec les soldes si la date du jour est postérieure à la date de clôture 
     # du dernier exercice - probablement il faut trouver plus élégant
     @date=[@organism.periods.last.close_date, Date.today].min

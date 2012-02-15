@@ -35,7 +35,7 @@ RECETTES= {'subventions'=>'708',  'cotisations'=>'706',  'dons'=>'708', 'sorties
 
 DEPENSES= {'pièces de rechange'=>'61', 'salaires'=>'641', 'charges sociales'=>'645', 'locaux'=>'61', 'fournitures de bureaux'=>'61'}
 
-# Création des natures pour les 3 exercices avec rattachement aux comptes adéquats
+# Création des natures pour le 1er exercices avec rattachement aux comptes adéquats
 RECETTES.each do |k,a|
     acc =per_2010.accounts.find_by_number(a)
     per_2010.natures.create!(name: k, income_outcome: true, account_id: acc.id)
@@ -59,6 +59,7 @@ end
 # Verrouillage de toutes les lignes d'écritures de per_2010 (pour pouvoir le fermer)
 per_2010.lines.all.each {|l| l.update_attribute(:locked, true)}
 per_2010.close
+
 per_2012 = Period.create!(:organism_id=>o.id, :start_date=>Date.civil(2012,01,01), :close_date=>Date.civil(2012,12,31))
 
 3.times do |t| # pour 2012 on ne remplit que les 3 premiers mois
