@@ -353,7 +353,7 @@ OK - Améliorer les messages dans le controller periods
 OK Revoir les validations pour interdire l'écriture sur les lignes (ou de nouvelles lignes) si l'exercice est clos.
 ---------------------------- Dashboard d'un organisme ------------------------
 Organiser la page en section
-Construire les graphes
+OK - Construire les graphes
 Faire un fichier seed.rb permettant de valider les graphes du dashboard
 
 
@@ -374,7 +374,7 @@ OK - Si elles existent, la vue indique quelles données seront créées.
 OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
 
-------------------Conifguration ------------------------------
+------------------Configuration ------------------------------
 OK - watchr
 OK - spork
 OK - rspec

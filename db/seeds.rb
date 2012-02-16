@@ -11,6 +11,8 @@ o = Organism.create({:title=>'Association des amoureux des locomotives', :descri
 # Avec deux lieux d'activité : LILLE et VALENCIENNES qui sont donc ainsi des destinations
    lille = Destination.create({ :organism_id=>o.id, :name=>'Lille'})
    valenciennes = Destination.create({ :organism_id=>o.id, :name=>'Valenciennes'})
+   global = Destination.create({ :organism_id=>o.id, :name=>'Global'})
+
 
 # Il y a un livre des recettes et un livre de dépenses
 recettes = o.income_books(title: 'Recettes')
@@ -46,22 +48,24 @@ DEPENSES.each do |k,a|
     per_2010.natures.create(name: k, income_outcome: false, account_id: acc.id)
 end
 
-per_2010.nb_months.times do |t|
-  FillDatas::fill_lines(per_2010, t, t)
-end
+# remplissage des écritures de 2010
+FillDatas::fill_full_period(per_2010)
+
 # le second 2011 est achevé mais non fermé
 per_2011 = Period.create(:organism_id=>o.id, :start_date=>Date.civil(2011,01,01), :close_date=>Date.civil(2011,12,31))
-per_2011.nb_months.times do |t|
-  FillDatas::fill_lines(per_2011, t, 10+t)
-end
+
+# remplissage des écritures de 2011
+FillDatas::fill_full_period(per_2011)
+
+
 # le troisième 2012 est en cours. Il ne peut être créé qu'après fermeture du premier
 # règle comme quoi on ne peut avoir 3 exercices ouverts
 # Verrouillage de toutes les lignes d'écritures de per_2010 (pour pouvoir le fermer)
 per_2010.lines.all.each {|l| l.update_attribute(:locked, true)}
 per_2010.close
 
+# EXERCICE 2012
 per_2012 = Period.create!(:organism_id=>o.id, :start_date=>Date.civil(2012,01,01), :close_date=>Date.civil(2012,12,31))
+# remplissage des écritures de 2011
+FillDatas::fill_first_quarter(per_2012)
 
-3.times do |t| # pour 2012 on ne remplit que les 3 premiers mois
-  FillDatas::fill_lines(per_2012, t, 20+t)
-end
