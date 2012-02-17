@@ -17,7 +17,8 @@ module FillDatas
     fill_subventions(period, [2,8])
     fill_loyers(period)
     fill_salaires(period)
-    fill_charges_sociales(period, 'charges sociales', 'Dépenses', 'Global', 'Virement')
+    fill_charges_sociales(period)
+    fill_pieces_de_rechange(period)
   end
 
   def self.fill_first_quarter(period)
@@ -27,6 +28,7 @@ module FillDatas
     fill_subventions(period, [2])
     fill_loyers(period,3)
     fill_salaires(period, %w(janvier12  février12 mars12))
+    fill_pieces_de_rechange(period, 3)
     # pas de charges sociale encore sur T1 puisqu'on s'arrête à fin mars
   end
 
@@ -75,8 +77,8 @@ module FillDatas
 
  
 
-   def self.fill_charges_sociales(period, nature, book_type, destination, payment_mode,months=nil)
-    h= prepare_ids(period, nature,book_type, destination, payment_mode)
+   def self.fill_charges_sociales(period,months=nil)
+    h= prepare_ids(period, 'charges sociales', 'Dépenses', 'Global', 'Virement')
     amount=(1800 + (h[:start_date].year-Period.first.start_date.year)*0.025)*3*0.43 # 1800 € au départ + 2.5 % d'augmentation par an
     # 3 fois car on les paye par trimestre, et 43% de taux de charge
     months ||= period.list_months('%m').select { |m| m.to_i%3 == 0 }
@@ -84,9 +86,25 @@ module FillDatas
         Line.create(line_date: h[:start_date].months_since(m.to_i).end_of_month ,
         narration: "charges sociales trimestrielles", nature_id: h[:nature_id],
         destination_id: h[:destination_id], # Lille
-        debit: amount, book_id: h[:book_id], payment_mode: payment_mode,
+        debit: amount, book_id: h[:book_id], payment_mode: h[:payment_mode],
         bank_account_id: h[:bank_account_id])
    end
+   end
+
+    def self.fill_pieces_de_rechange(period,months=nil)
+    h= prepare_ids(period, 'pièces de rechanges', 'Dépenses', 'Global', 'Chèque')
+    destination_ids=period.organism.destinations.all.map {|d| d.id}
+    nb_months ||= period.nb_months
+     nb_months.times do |m|
+       amount = m%2 == 0 ? (nb_months-m)*100+100 : m*50
+        Line.create(line_date: h[:start_date].months_since(m) + 15 ,
+        narration: 'pièces pour locomotive', nature_id: h[:nature_id],
+       destination_id: destination_ids[m%3], # les destinations sont soit Global soit Lille soit Valenciennes
+       # on choisit donc ces destinations à tour de rôle
+        debit: amount, book_id: h[:book_id], payment_mode: h[:payment_mode],
+        bank_account_id: h[:bank_account_id])
+    end
+
    end
 
 
@@ -123,6 +141,7 @@ module FillDatas
      h[:destinations_id]=period.organism.destinations.find_by_name(destination).id
      h[:bank_account_id] = period.organism.bank_accounts.first.id if payment_mode == 'Virement'
      h[:book_id]=period.organism.outcome_books(title: book_type).first.id
+     h[:payment_mode]= payment_mode
      h
    end
 
