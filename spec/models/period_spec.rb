@@ -6,15 +6,15 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Period do
-
+ 
   before(:each) do
-      @organism= Organism.create(title: 'test asso')
+      @organism= Organism.create(title: 'test asso') 
       @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
       @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
       @organism.periods.count.should == 2
     end
 
-  context "avec  2 exercices" do
+  context "avec  2 exercices" do 
     
     it 'should respond is_closed when closed' do
       @p_2010.is_closed?.should be_false
@@ -55,24 +55,28 @@ describe Period do
       end
 
       it "without datas, a period can produce a monthly result" do
-        @p_2010.monthly_result(3).should be(0)
+        @p_2010.monthly_result('03-2010').should == 0
       end
 
     context 'the result is calculated from books' do
-      def feed_datas(period, factor)
-         period.nb_months.times.map {|t| {'Month'=>"#{format('%02d',t)}", 'total_month'=> factor*t } }
-      end
 
+      let(:b1) {stub_model(IncomeBook)}
+      let(:b2) {stub_model(OutcomeBook)}
+     
       before(:each) do
-        @recettes= @organism.income_books.first
-        @depenses=@organism.outcome_books.first
-        @recettes.stub(:monthly_datas).with(@p_2011).and_return(feed_datas(@p_2011, 10))
-        @depenses.stub(:monthly_datas).with(@p_2011).and_return(feed_datas(@p_2011, 5))
+
+        @p_2011.stub_chain(:books, :all).and_return([b1,b2])
+        b1.stub(:monthly_sold).with('03-2011').and_return(30000)
+        b2.stub(:monthly_sold).with('03-2011').and_return(-12000)
 
       end
 
-      it "check the monthly result" do
-        @p_2011.monthly_result(3).should == 20 
+      it "check the monthly result" do 
+#        @p_2011.books.first.should_receive(:monthly_sold).with('03-2011').and_return(30000)
+#        @p_2011.books.first.monthly_sold('03-2011').should == 30000
+        
+        @p_2011.monthly_result('03-2011').should == 18000
+
       end
 
     end

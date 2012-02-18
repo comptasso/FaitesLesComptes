@@ -5,15 +5,12 @@
 #
 module Utilities::Resultat
   def monthly_results
-    self.nb_months.times.map {|m| self.monthly_result(m)}
+    self.list_months('%m-%Y').map {|m| self.monthly_result(m)}
   end
 
+  # m est de la forme 'mm-yyyy'
   def monthly_result(m)
-    r=0
-    self.books.each do |b|
-       r += b.monthly_datas(self)[m]['total_month']
-    end
-    r
+    self.books.all.sum {|b| b.monthly_sold(m)}
   end
 
 

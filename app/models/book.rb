@@ -49,6 +49,7 @@ class Book < ActiveRecord::Base
 
   # renvoie le solde d'un livre pour un mois donné au format mm-yyyy
   def monthly_sold(month)
+    
     ls=self.lines.month(month)
     ls.sum(:credit)-ls.sum(:debit)
 
