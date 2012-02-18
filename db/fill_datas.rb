@@ -83,7 +83,10 @@ module FillDatas
     # 3 fois car on les paye par trimestre, et 43% de taux de charge
     months ||= period.list_months('%m').select { |m| m.to_i%3 == 0 }
     months.each do |m|
-        Line.create(line_date: h[:start_date].months_since(m.to_i).end_of_month ,
+      # on paye les charges le 5 du mois mais on veut enregistrer celle du dernier trimestre 
+      # dans l'exercice donc au 31 décembre
+        date= [h[:start_date].months_since(m.to_i) + 5, period.close_date].min
+        Line.create(line_date: date ,
         narration: "charges sociales trimestrielles", nature_id: h[:nature_id],
         destination_id: h[:destination_id], # Lille
         debit: amount, book_id: h[:book_id], payment_mode: h[:payment_mode],
@@ -92,11 +95,11 @@ module FillDatas
    end
 
     def self.fill_pieces_de_rechange(period,months=nil)
-    h= prepare_ids(period, 'pièces de rechanges', 'Dépenses', 'Global', 'Chèque')
+    h= prepare_ids(period, 'pièces de rechange', 'Dépenses', 'Global', 'Chèque')
     destination_ids=period.organism.destinations.all.map {|d| d.id}
-    nb_months ||= period.nb_months
-     nb_months.times do |m|
-       amount = m%2 == 0 ? (nb_months-m)*100+100 : m*50
+    months ||= period.nb_months
+     months.times do |m|
+       amount = m%2 == 0 ? (months-m)*100+100 : m*50
         Line.create(line_date: h[:start_date].months_since(m) + 15 ,
         narration: 'pièces pour locomotive', nature_id: h[:nature_id],
        destination_id: destination_ids[m%3], # les destinations sont soit Global soit Lille soit Valenciennes
