@@ -3,6 +3,10 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .public_organisms {
 
+    pre {  // pre est utilisé pour afficher les informations de debuggage
+        clear: both;
+        }
+
      td.jqplot-display-legend {
             font-size: 8pt;
             }
@@ -23,7 +27,8 @@
     }
     .pave {
         display: inline-block;
-        /* h eight:200px; */
+        float: left;
+        
         
         width: 400px;
        
@@ -58,13 +63,13 @@
     .bank h2 {
         background-color: #A19B9E;
         }
-        .cash h2 {
+    .cash h2 {
         background-color: lightblue;
         }
-            .result h2 {
+    .result h2 {
         background-color: goldenrod;
         }
-        .message h2 {
+    .message h2 {
             background-color : khaki;
             }
 

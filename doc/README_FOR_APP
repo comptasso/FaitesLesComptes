@@ -354,7 +354,12 @@ OK Revoir les validations pour interdire l'écriture sur les lignes (ou de nouve
 ---------------------------- Dashboard d'un organisme ------------------------
 Organiser la page en section
 OK - Construire les graphes
-Faire un fichier seed.rb permettant de valider les graphes du dashboard
+A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
+
+
+-------------------- FIXME ------------------------------------
+Quand on clique sur une colonne de graphe, on aboutit sur le bon mois mais pas forcément sur le bon exercice
+Quand on est dans un exercice clos, on ne devrait pas pouvoir faire new_line (et le menu ne devrait pas nous le proposer)
 
 
 ----------------------Suppression d'un exercice-----------------
