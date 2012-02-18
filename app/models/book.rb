@@ -24,17 +24,16 @@ class Book < ActiveRecord::Base
   def one_year_monthly_graphic
     period = self.organism.periods.last
     mg= Utilities::Graphic.new(self.ticks(period))
-    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(period) )
+    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(period.list_months('%m-%Y')) )
     mg
   end
 
-  def two_years_monthly_graphic(last_period)
-    mg= Utilities::Graphic.new(self.ticks(last_period))
-    months= last_period.list_months('%m') # les mois du dernier exercice servent de référence
-    pp=last_period.previous_period
-
-    mg.add_serie(:legend=>pp.exercice, :datas=>self.monthly_datas_for_chart(pp, months) )
-    mg.add_serie(:legend=>last_period.exercice, :datas=>self.monthly_datas_for_chart(last_period) )
+  def two_years_monthly_graphic(period)
+    mg= Utilities::Graphic.new(self.ticks(period))
+    months= period.list_months('%m-%Y') # les mois du dernier exercice servent de référence
+    pp=period.previous_period
+    mg.add_serie(:legend=>pp.exercice, :datas=>previous_year_monthly_datas_for_chart(months) )
+    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(months) )
     mg
   end
 
@@ -48,14 +47,15 @@ class Book < ActiveRecord::Base
     @monthly_solds = a
   end
 
-#
-#  def monthly_datas(period)
-#    sql="select  strftime('%m', line_date) as Month, sum(credit) -sum(debit) as total_month  FROM lines WHERE line_date >= '#{period.start_date}'
-#          AND line_date <= '#{period.close_date}' AND lines.book_id = #{self.id} GROUP BY Month#"
-#    Line.connection.select_all(sql)
-#  end
+  # renvoie le solde d'un livre pour un mois donné au format mm-yyyy
+  def monthly_sold(month)
+    ls=self.lines.month(month)
+    ls.sum(:credit)-ls.sum(:debit)
 
-  protected
+  end
+
+
+ #  protected
 
   def ticks(period)
     period.list_months('%b')
@@ -69,15 +69,19 @@ class Book < ActiveRecord::Base
   #
   # FIXME il y aura un problème avec les exercices de plus de 12 mois. - A réfléchir
   #
-  def monthly_datas_for_chart(period, months=nil)
-    months ||= period.list_months('%m')
-    md = self.monthly_datas(period)
-    datas= months.map do |m|
-      result = md.detect {|r| r["Month"] == m }
-      result && result["total_month"] || 0 # cette partie est utile pour mettre des zeros sur les mois qui n'auraient pas de valeur
+  def monthly_datas_for_chart(months)
+     months.map {|m| self.monthly_sold(m)}
+ end
+
+ def previous_year_monthly_datas_for_chart(months)
+   a=[]
+   months.each do |m|
+       month= m[/^\d{2}/]
+       year = m[/\d{4}$/].to_i - 1
+   a << self.monthly_sold("#{month}-#{year}")
     end
-    datas
-  end
+    a
+ end
 
   
 

@@ -8,7 +8,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 describe Utilities::Graphic do
   let(:t) {%w(jan fev mar avr mai juin jui aout sept oct nov dec)}
   before(:each) do
-    @graphic = Utilities::Graphic.new(t)
+    @graphic = Utilities::Graphic.new(t) 
   end
 
   it "ticks should be attr readable" do
@@ -108,7 +108,7 @@ context "after adding a serie" do
      @graphic2.should == @graphic 
     end
 
-  end
+  end 
 
   
 
