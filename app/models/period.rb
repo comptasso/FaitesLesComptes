@@ -45,6 +45,8 @@
 
 class Period < ActiveRecord::Base
 
+  include Utilities::Resultat 
+
   # Les classes ...validator sont des classes spécifiques de validator pour les exercices
 
   # Valide que le start_date est le lendemain du close date de l'exercice précédent
@@ -65,6 +67,7 @@ class Period < ActiveRecord::Base
 
  
   belongs_to :organism
+  has_many :books, :through=>:organism
 
   has_many :accounts, :dependent=>:destroy
   has_many :natures,  :dependent=>:destroy

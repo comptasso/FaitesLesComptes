@@ -352,7 +352,7 @@ OK - Changer lockable? en closable?
 OK - Améliorer les messages dans le controller periods
 OK Revoir les validations pour interdire l'écriture sur les lignes (ou de nouvelles lignes) si l'exercice est clos.
 ---------------------------- Dashboard d'un organisme ------------------------
-Organiser la page en section
+OK - Organiser la page en section
 OK - Construire les graphes
 A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
 

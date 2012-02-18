@@ -19,7 +19,7 @@ describe Period do
     it 'should respond is_closed when closed' do
       @p_2010.is_closed?.should be_false
       @p_2010.closable? #.should be_true
-      @p_2010.errors[:close].should == []
+      @p_2010.errors[:close].should == [] 
       @p_2010.close
       @p_2010.is_closed?.should be_true
     end
@@ -46,4 +46,36 @@ describe Period do
     end
   end
 
+  # result est un module qui est destiné à produire les résultats mensuels d'un exercice
+  describe "resultat" do
+      it "a period can produce a result for each_month" do
+        @p_2011.monthly_results.should be_an_instance_of(Array)
+        @p_2011.monthly_results.size.should == @p_2011.nb_months
+        @p_2010.monthly_results.size.should == @p_2010.nb_months
+      end
+
+      it "without datas, a period can produce a monthly result" do
+        @p_2010.monthly_result(3).should be(0)
+      end
+
+    context 'the result is calculated from books' do
+      def feed_datas(period, factor)
+         period.nb_months.times.map {|t| {'Month'=>"#{format('%02d',t)}", 'total_month'=> factor*t } }
+      end
+
+      before(:each) do
+        @recettes= @organism.income_books.first
+        @depenses=@organism.outcome_books.first
+        @recettes.stub(:monthly_datas).with(@p_2011).and_return(feed_datas(@p_2011, 10))
+        @depenses.stub(:monthly_datas).with(@p_2011).and_return(feed_datas(@p_2011, 5))
+
+      end
+
+      it "check the monthly result" do
+        @p_2011.monthly_result(3).should == 20 
+      end
+
+    end
+  end
+ 
 end

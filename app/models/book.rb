@@ -9,7 +9,7 @@ class Book < ActiveRecord::Base
    
   validates :title, presence: true 
  
-  attr_reader :graphic
+  attr_reader :graphic, :monthly_solds
   
   def default_graphic
     if self.organism.periods.count > 1
@@ -38,6 +38,23 @@ class Book < ActiveRecord::Base
     mg
   end
 
+  # renvoie les soldes mensuels du livre pour l'ensemble des mois de l'exercice
+  def monthly_datas(period)
+    a={}
+    period.list_months('%m-%Y').each do |m|
+      ls= self.lines.month(m)
+      a[m] =(ls.sum(:credit) - ls.sum(:debit))
+    end
+    @monthly_solds = a
+  end
+
+#
+#  def monthly_datas(period)
+#    sql="select  strftime('%m', line_date) as Month, sum(credit) -sum(debit) as total_month  FROM lines WHERE line_date >= '#{period.start_date}'
+#          AND line_date <= '#{period.close_date}' AND lines.book_id = #{self.id} GROUP BY Month#"
+#    Line.connection.select_all(sql)
+#  end
+
   protected
 
   def ticks(period)
@@ -62,11 +79,7 @@ class Book < ActiveRecord::Base
     datas
   end
 
-  def monthly_datas(period)
-    sql="select  strftime('%m', line_date) as Month, sum(credit) -sum(debit) as total_month  FROM lines WHERE line_date >= '#{period.start_date}'
-          AND line_date <= '#{period.close_date}' AND lines.book_id = #{self.id} GROUP BY Month"
-    Line.connection.select_all(sql)
-  end
+  
 
 
 end

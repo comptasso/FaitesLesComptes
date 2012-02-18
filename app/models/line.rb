@@ -44,7 +44,9 @@ class Line < ActiveRecord::Base
   scope :period, lambda {|p| where('line_date >= ? AND line_date <= ?', p.start_date, p.close_date)}
   scope :period_month, lambda {|p,m| where('line_date >= ? AND line_date <= ?', p.start_date.months_since(m), p.start_date.months_since(m).end_of_month) }
   scope :cumul_period_month, lambda {|p,m| where('line_date >= ? AND line_date <=?', p.start_date, p.start_date.months_since(m).end_of_month)}
-
+  scope :month, lambda {|month_year| where('line_date >= ? AND line_date <= ?',
+      Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1),
+      Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1).end_of_month    )}
 
   # Ces fonctions de classe semblent marcher avec un arel.
   # néanmoins, elles pourraient être perturbantes si on ne filtre pas assez bien en amont les lignes que l'on veut.
@@ -56,6 +58,11 @@ class Line < ActiveRecord::Base
     Line.where('line_date < ?', date).sum(:credit)
   end
 
+# # monthly sold donne le solde d'un mois fourni au format mm-yyyy
+ def self.monthly_sold(month)
+   lines = Line.month(month)
+   lines.sum(:credit) - lines.sum(:debit)
+ end
 
 
 

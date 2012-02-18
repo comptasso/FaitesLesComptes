@@ -233,6 +233,69 @@ describe Book do
 
   # FIXME voir ce qu'on peut faire pour gérer les exercices de plus de douze mois (cas fréquent à la création)
   # TODO tester monthly_datas en situation réelle pour s'assurer que le stub répond bien à la réalité
+  
+  # je veux que monthly datas retourne
+  describe "new_monthly_datas" do
+
+    def data_arrays(period)
+      year=period.start_date.year
+      (1..12).map {|t| {"Month"=>"#{format('%02d',t)}-#{year}", 'total_month'=> 2*t}  }
+    end
+
+    def hash_datas_arrays(period)
+      year=period.start_date.year
+      h={}
+      (1..12).map {|t| h["#{format('%02d',t)}-#{year}"]=70 }
+      h
+    end
+
+    let(:period) {stub_model(Period, :start_date=>Date.civil(2012,01,01), :close_date=>Date.civil(2012,12,31))}
+    let(:arl) {double(Arel)}
+
+    before(:each) do
+     @book = Book.new
+     (1..12).map {|t| "#{format('%02d',t)}-#{2012}"}.each do |m| 
+        @book.stub_chain(:lines,:month).with(m).and_return(arl)
+
+     end
+      arl.stub(:sum).with(:credit).and_return(120)
+      arl.stub(:sum).with(:debit).and_return(50)
+
+    end
+
+    it 'checks list months' do
+      period.list_months('%m-%Y').should == (1..12).map {|i| "#{format('%02d',i)}-2012"}
+    end
+
+    it "new_monthly_datas returns a hash" do
+      @book.new_monthly_datas(period).should == hash_datas_arrays(period)
+    end
+    
+  end
+  
+  describe 'monthly_sold' do
+ 
+    def hash_datas 
+      h={}
+      (1..12).map {|t| h["#{format('%02d',t)}-#{2012}"]=700*t }
+      h
+    end
+    
+    before(:each) do
+      @book=Book.new
+      @book.stub(:monthly_solds).and_return(hash_datas)
+    end
+
+    it "monthly_sold return the sold of a specific month" do
+     
+      @book.monthly_solds.should be_a(Hash)
+      (1..12).each do |i|
+        @book.monthly_solds["#{format('%02d',i)}-2012"].should == 700*i
+      end
+     
+    end
+
+  end
 
 end
 

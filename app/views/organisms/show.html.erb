@@ -34,7 +34,8 @@
 
 <%= content_tag :div, :class=>"pave result"  do %>
 <h2>Résultat</h2>
-<div class="bar_graph" >Ici un graphe</div>
+<%= result_datas %>
+<div class="bar_graph">Ici un graphe</div>
 <% end %>
 
 <% @organism.bank_accounts.each do |ba| %>
