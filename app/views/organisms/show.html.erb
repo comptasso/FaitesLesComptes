@@ -5,14 +5,14 @@
 <div>
 
 <% @books.each do |book| %>
-<%= content_tag :div, :class=>"pave book #{book.type} ", :id=>"book_graph_#{book.id}"  do %>
+<%= content_tag :div, :class=>"pave  #{book.type}" do %>
 <h2>
   Livre des <%=  book.title %>
    <%= icon_to 'modifier.png', new_book_line_path(book) %>
   <%= icon_to 'detail.png', book_lines_path(book) %>
   
 </h2>
-
+<%= content_tag_for(:div, book, class: 'monthly_graphic') do %>
 <div class="datas_for_graph" id="datas_<%= book.id%>" style="display: none;">
   <span id="series_<%= book.id %>"><%= book.graphic.legend.join(';') %>  </span>
   <span id="months_list_<%= book.id %>">  <%= book.graphic.ticks.join(';') %></span>
@@ -22,11 +22,13 @@
 <div class="bar_graph" id="chart_<%= book.id %>"></div>
 <% end %>
 <% end %>
+<% end %>
 
 
 
-<%= content_tag :div, :class=>"pave book result", :id=>"book_graph_0"  do %>
+<%= content_tag :div, :class=>"pave result"   do %>
 <h2>Résultat</h2>
+<div class="monthly_graphic" id="monthly_graphic_book_0">
 <div class="datas_for_graph" id="datas_0"  style="display: none;">
   <span id="series_0"><%= @graph_result.legend.join(';') %>  </span>
   <span id="months_list_0">  <%= @graph_result.ticks.join(';') %></span>
@@ -35,6 +37,7 @@
 </div>
 
 <div class="bar_graph" id="chart_0"></div>
+</div>
 <% end %>
 
 <%= content_tag :div, :class=>"pave message"  do %>

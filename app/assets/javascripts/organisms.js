@@ -69,7 +69,7 @@ function s_to_f(element,index,array){
 // fonction pour tracer les graphes qui apparaissent dans la page organism#show
 $(document).ready(function(){
     $.jqplot.config.enablePlugins = true; // semble indispensable pour le highlighter
-    $('.book').each(function() { // pour chacun des livres
+    $('.monthly_graphic').each(function() { // pour chacun des livres
         var id=this.id.match(/\d+$/); // on récupère l'id'
         var s1 =$('#datas_list_' + id).text().split(';').map(s_to_f); // ainsi que les données de l'exercice qui sont dans un champ caché'
         var s2 =$('#previous_datas_list_'+id).text().split(';').map(s_to_f); // les données de l'ex précédent (0 s'il n'y en a pas)'
