@@ -10,7 +10,27 @@ module Utilities::Resultat
 
   # m est de la forme 'mm-yyyy'
   def monthly_result(m)
-    self.books.all.sum {|b| b.monthly_sold(m)}
+    books.all.sum {|b| b.monthly_sold(m)}
+  end
+
+  def default_graphic
+    dg=Utilities::Graphic.new(self.list_months('%b'))
+    pp=self.previous_period
+    dg.add_serie({:legend=>pp.exercice, :datas=>self.previous_monthly_results})
+    dg.add_serie({:legend=>self.exercice, :datas=>self.monthly_results})
+    dg
+  end
+
+ 
+
+  def previous_monthly_results
+    pp=self.previous_period
+    self.list_months('%m-%Y').map do |m|
+      year= ((m[/\d{4}$/]).to_i) -1
+      n="#{m[/^\d{2}/]}-#{year}"
+      pp.monthly_result(n)
+    end
+    
   end
 
 

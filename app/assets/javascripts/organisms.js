@@ -1,4 +1,4 @@
-// mise en forme des table
+// mise en forme des tables
 jQuery(function() {
     if ($('.organisms .data_table').length != 0) {
         var oTable= $('.organisms .data_table').dataTable({
@@ -58,6 +58,8 @@ jQuery(function() {
     }
 }); // fin de jQuery application#data_table
 
+
+// petite fonction helper pour transformer des strings en float
 function s_to_f(element,index,array){
     return parseFloat(element);
 }
@@ -71,7 +73,7 @@ $(document).ready(function(){
         var id=this.id.match(/\d+$/); // on récupère l'id'
         var s1 =$('#datas_list_' + id).text().split(';').map(s_to_f); // ainsi que les données de l'exercice qui sont dans un champ caché'
         var s2 =$('#previous_datas_list_'+id).text().split(';').map(s_to_f); // les données de l'ex précédent (0 s'il n'y en a pas)'
-        var series=$('#series_' + id).text().split(';');
+        var series=$('#series_' + id).text().split(';'); // la légende
         var t=[];
         var label=[];
 
@@ -86,7 +88,6 @@ else {
     t=[s2,s1];
     label=[{label: series[0]},{label: series[1]} ];
 }
-
 
         // Can specify a custom tick Array.
         // Ticks should match up one for each y value (category) in the series.

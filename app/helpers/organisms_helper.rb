@@ -5,7 +5,7 @@ module OrganismsHelper
   def result_datas
     content_tag :div, :class=>"datas_for_graph", :id=>"datas_result" do #, style="display: none;"> do
         content_tag :span, :id=>"series_result" do
-           result.legend.join(';')
+           @graph_result.legend.join(';')
         end
     end
 #  <span id#="months_list_<%= book.id %>">  <%= book.graphic.ticks.join(';') %></span>

@@ -35,7 +35,9 @@ class OrganismsController < ApplicationController
     @books=@organism.books.all
        
     @books.each {|b| b.default_graphic}
-    # problème avec les soldes si la date du jour est postérieure à la date de clôture 
+    @graph_result=@period.default_graphic
+    
+    # Ce min est un hack car il y a un problème avec les soldes si la date du jour est postérieure à la date de clôture
     # du dernier exercice - probablement il faut trouver plus élégant
     @date=[@organism.periods.last.close_date, Date.today].min
 
