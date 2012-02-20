@@ -4,6 +4,8 @@
 # donnant les résultats mensuels
 #
 module Utilities::Resultat
+  attr_reader :graphic
+
   def monthly_results
     self.list_months('%m-%Y').map {|m| self.monthly_result(m)}
   end
@@ -19,6 +21,10 @@ module Utilities::Resultat
     dg.add_serie({:legend=>pp.exercice, :datas=>self.previous_monthly_results})
     dg.add_serie({:legend=>self.exercice, :datas=>self.monthly_results})
     dg
+  end
+
+  def build_default_graphic
+    @graphic=default_graphic
   end
 
  

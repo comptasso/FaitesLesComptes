@@ -1,11 +1,9 @@
-
-<span>test </span>
-<%= content_tag_for(:div, graphic, class: 'monthly_graphic') do %>
-<div class="datas_for_graph" id="datas_<%= graphic.id%>" style="display: none;">
-  <span id="series_<%= graphic.id %>"><%= graphic.graphic.legend.join(';') %>  </span>
-  <span id="months_list_<%= graphic.id %>">  <%= graphic.graphic.ticks.join(';') %></span>
-  <span id="datas_list_<%= graphic.id %>">  <%= graphic.graphic.series[1].join(';')  %></span>
-  <span id="previous_datas_list_<%= graphic.id %>">  <%= graphic.graphic.series[0].join(';') %></span>
+<div id='<%=  "book_#{id}" %>' class="monthly_graphic">
+<div class="datas_for_graph" id="datas_<%= id%>" style="display: none;">
+  <span id="series_<%= id %>"><%= graphic.graphic.legend.join(';') %>  </span>
+  <span id="months_list_<%= id %>">  <%= graphic.graphic.ticks.join(';') %></span>
+  <span id="datas_list_<%= id %>">  <%= graphic.graphic.series[1].join(';')  %></span>
+  <span id="previous_datas_list_<%= id %>">  <%= graphic.graphic.series[0].join(';') %></span>
 </div>
-<div class="bar_graph" id="chart_<%= graphic.id %>"></div>
-<% end %>
+<div class="bar_graph" id="chart_<%= id %>"></div>
+</div>
