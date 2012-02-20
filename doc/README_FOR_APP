@@ -359,8 +359,8 @@ retirer de seeds les lignes avant le début de l'activité
 interdire cette possibilité
 
 les graphes par défaut devraient tenir compte de la période
-insérer un nouveau div pour les graphes
-changer la classe graphe dans organsisms.js et dans show
+OK - insérer un nouveau div pour les graphes
+OK - changer la classe graphe dans organsisms.js et dans show
 fair un helper
 traiter le cas d'un seul exercice
 voir pour faire un plugin de la fonction javascript
