@@ -69,32 +69,28 @@ function s_to_f(element,index,array){
 // fonction pour tracer les graphes qui apparaissent dans la page organism#show
 $(document).ready(function(){
     $.jqplot.config.enablePlugins = true; // semble indispensable pour le highlighter
+
+    // on récupère les données
     $('.monthly_graphic').each(function() { // pour chacun des livres
         var id=this.id.match(/\d+$/); // on récupère l'id'
-        var s1 =$('#datas_list_' + id).text().split(';').map(s_to_f); // ainsi que les données de l'exercice qui sont dans un champ caché'
-        var s2 =$('#previous_datas_list_'+id).text().split(';').map(s_to_f); // les données de l'ex précédent (0 s'il n'y en a pas)'
-        var series=$('#series_' + id).text().split(';'); // la légende
-        var t=[];
-        var label=[];
+        var legend=$(this).find('.legend').text().split(';'); // la légende
+        var ticks = $(this).find('.ticks').text().split(';'); // les mois (là aussi vient d'un span caché)
+        
+       
+  
+   // on construit les variables qui seront utilisées par jqplot
+         var s=[];
+         var label=[];
 
-        // il peut y avoir des organismes avec un seul exercice et d'autres avec deux
-        // on construit donc le tableau des séries et les labels en fonctions de la longueur de series
-        // array qui contient le nom des exercices.
-if (series.length == 1) {
-    t=[s1];
-    label=[{label: series[0]}];
-}
-else {
-    t=[s2,s1];
-    label=[{label: series[0]},{label: series[1]} ];
-}
+      // et on les remplit
+       
+        for (var i=0; i<=legend.length; i++) {
+            label[i]={label: legend[i]}; // la légende
+             s[i] =$(this).find('.series_'+i).text().split(';').map(s_to_f); // les données
 
-        // Can specify a custom tick Array.
-        // Ticks should match up one for each y value (category) in the series.
-        var ticks = $('#months_list_'+id).text().split(';'); // les mois (là aussi vient d'un span caché)
-     // var ticks=['J','F','M','A','M','J','J','A','S','O','N','D'];
-
-        var plot2 = $.jqplot('chart_'+id, t, {
+        }
+            
+        var plot2 = $.jqplot('chart_'+id, s, {
             // The "seriesDefaults" option is an options object that will
             // be applied to all series in the chart.
             seriesDefaults:{
@@ -178,6 +174,10 @@ else {
                 }
             }
         });
+
+
+   // fonction permettant d'affichier la page correspondant à une colonne de graphe
+   // FIXME ne prend pas en compte la périod
    $('#chart_'+id).bind('jqplotDataClick',
             function (ev, seriesIndex, pointIndex, data) {
            //    $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
