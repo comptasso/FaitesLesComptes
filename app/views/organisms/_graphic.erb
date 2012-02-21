@@ -1,9 +1,10 @@
 <div id='<%=  "book_#{id}" %>' class="monthly_graphic">
-<div class="datas_for_graph" id="datas_<%= id%>" style="display: none;">
+<div class="datas_for_graph"  style="display: none;">
   <span class="legend"><%= graphic.legend.join(';') %>  </span>
   <span class="ticks">  <%= graphic.ticks.join(';') %></span>
-  <span class="series_1">  <%= graphic.series[1].join(';')  %></span>
-  <span class="series_0">  <%= graphic.series[0].join(';') %></span>
+  <% graphic.series.each_with_index do |s,i| %>
+  <span class="series_<%= i %>">  <%= graphic.series[i].join(';')  %></span>
+ <% end %>
 </div>
 <div class="bar_graph" id="chart_<%= id %>"></div>
 </div>

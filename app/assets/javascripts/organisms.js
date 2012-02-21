@@ -70,26 +70,24 @@ function s_to_f(element,index,array){
 $(document).ready(function(){
     $.jqplot.config.enablePlugins = true; // semble indispensable pour le highlighter
 
-    // on récupère les données
-    $('.monthly_graphic').each(function() { // pour chacun des livres
+    // on récupère les données à partir de span hidden
+    $('.monthly_graphic').each(function() { // pour chacun des graphiques mensuels (chacun des livres plus result)
         var id=this.id.match(/\d+$/); // on récupère l'id'
         var legend=$(this).find('.legend').text().split(';'); // la légende
-        var ticks = $(this).find('.ticks').text().split(';'); // les mois (là aussi vient d'un span caché)
-        
-       
-  
+        var ticks = $(this).find('.ticks').text().split(';'); // les mois 
+     
    // on construit les variables qui seront utilisées par jqplot
          var s=[];
          var label=[];
 
-      // et on les remplit
-       
-        for (var i=0; i<=legend.length; i++) {
-            label[i]={label: legend[i]}; // la légende
-             s[i] =$(this).find('.series_'+i).text().split(';').map(s_to_f); // les données
+   // et on les remplit par une boucle qui prend la dimension de légende pour construire
+       for (var i=0; i<=legend.length; i++) {
+            label[i]={label: legend[i]}; // la table des légendes
+             s[i] =$(this).find('.series_'+i).text().split(';').map(s_to_f); // et chaque série de données
 
         }
-            
+
+        // puis on trace le graphique avec ses options
         var plot2 = $.jqplot('chart_'+id, s, {
             // The "seriesDefaults" option is an options object that will
             // be applied to all series in the chart.
@@ -176,13 +174,15 @@ $(document).ready(function(){
         });
 
 
-   // fonction permettant d'affichier la page correspondant à une colonne de graphe
-   // FIXME ne prend pas en compte la périod
+   // avant de relier les colonnes des graphes à l'affichage du livre correspondant
+   // FIXME ne prend pas en compte la période
+   if (id > 0) {   // le graphe 0 est celui des résultats - il n'est donc pas relié
    $('#chart_'+id).bind('jqplotDataClick',
             function (ev, seriesIndex, pointIndex, data) {
            //    $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
                window.location =("/books/"+id+"/lines?mois="+pointIndex+".html");
             });
+   }
 
   });
 });
