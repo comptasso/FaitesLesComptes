@@ -104,8 +104,9 @@ describe Period do
         @p_2011.default_graphic.should be_an_instance_of(Utilities::Graphic) 
       end
 
-      context "check the default graphic" do
+      context "check the default graphic with two periods" do
         before(:each) do
+          @p_2011.stub(:previous_period).and_return(@p_2010)
           @graphic= @p_2011.default_graphic 
         end
 
@@ -118,7 +119,6 @@ describe Period do
         it "the first with ..."   do
           b1.monthly_sold('04-2010').should == 1400
           b1.monthly_sold('03-2010').should == 0
-          pending 'FIXME problème de stub je pense'
           @graphic.series[0].should == P2010_RESULTS
         end
 
@@ -126,10 +126,28 @@ describe Period do
           @graphic.series[1].should == P2011_RESULTS
         end
 
-        it "test construction graphique avec un seul exercice"
+        
 
       end
+      
+      context "check the default graphic with two periods" do
+        before(:each) do
+          @p_2011.stub(:previous_period?).and_return(false)
+          @graphic= @p_2011.default_graphic 
+        end
 
+      it "shoudl have only one serie" do
+        @graphic.should have(1).serie
+      end
+
+        it "check the legend"  do
+          @graphic.legend.should == ['Exercice 2011']
+        end
+
+        it "check the datas" do
+          @graphic.series[0].should == P2011_RESULTS
+        end
+      end
     end
   end
  

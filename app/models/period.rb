@@ -89,7 +89,7 @@ class Period < ActiveRecord::Base
   after_create :copy_accounts, :copy_natures
  
 
-  # TODO voir la gestion des effacer dans les vues et dans le modèle.
+  # TODO voir la gestion des effacer dans les vues et dans le modèle. 
 
   # TODO mettre dans la migration que start_date et close_date sont obligatoires
  

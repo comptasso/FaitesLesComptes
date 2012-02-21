@@ -34,8 +34,10 @@ class OrganismsController < ApplicationController
     @cashes=@organism.cashes.all
     @books=@organism.books.all
        
+
+    # TODO faire une méthode graphic qui évite d'avoir à construire le graphique par défaut
     @books.each {|b| b.default_graphic}
-    @period.build_default_graphic
+   
     
     # Ce min est un hack car il y a un problème avec les soldes si la date du jour est postérieure à la date de clôture
     # du dernier exercice - probablement il faut trouver plus élégant

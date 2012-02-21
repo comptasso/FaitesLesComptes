@@ -1,10 +1,10 @@
 # coding: utf-8
 
 # ce module est destiné à est inclus dans period pour ajouter des fonctionnalités 
-# donnant les résultats mensuels
+# donnant les résultats mensuels et permettant de construire un graphe
 #
 module Utilities::Resultat
-  attr_reader :graphic
+  
 
   def monthly_results
     self.list_months('%m-%Y').map {|m| self.monthly_result(m)}
@@ -17,14 +17,15 @@ module Utilities::Resultat
 
   def default_graphic
     dg=Utilities::Graphic.new(self.list_months('%b'))
-    pp=self.previous_period
-    dg.add_serie({:legend=>pp.exercice, :datas=>self.previous_monthly_results})
+    dg.add_serie({:legend=>previous_period.exercice, :datas=>self.previous_monthly_results}) if previous_period?
     dg.add_serie({:legend=>self.exercice, :datas=>self.monthly_results})
     dg
   end
 
-  def build_default_graphic
-    @graphic=default_graphic
+
+
+  def graphic
+    @graphic ||= default_graphic
   end
 
  
