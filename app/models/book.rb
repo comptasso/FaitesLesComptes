@@ -15,16 +15,15 @@ class Book < ActiveRecord::Base
     if self.organism.periods.count > 1
       @graphic = two_years_monthly_graphic(self.organism.periods.last)
     elsif self.organism.periods.count == 1
-      @graphic= one_year_monthly_graphic
+      @graphic= one_year_monthly_graphic(self.organism.periods.last)
     else
       @graphic=nil
     end
   end
 
-  def one_year_monthly_graphic
-    period = self.organism.periods.last
+  def one_year_monthly_graphic(period)
     mg= Utilities::Graphic.new(self.ticks(period))
-    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(period.list_months('%m-%Y')) )
+    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(period.list_months('%m-%Y')), :period_id=>period.id )
     mg
   end
 
@@ -32,8 +31,8 @@ class Book < ActiveRecord::Base
     mg= Utilities::Graphic.new(self.ticks(period))
     months= period.list_months('%m-%Y') # les mois du dernier exercice servent de référence
     pp=period.previous_period
-    mg.add_serie(:legend=>pp.exercice, :datas=>previous_year_monthly_datas_for_chart(months) )
-    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(months) )
+    mg.add_serie(:legend=>pp.exercice, :datas=>previous_year_monthly_datas_for_chart(months), :period_id=>pp.id )
+    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(months), :period_id=>period.id )
     mg
   end
 

@@ -74,7 +74,8 @@ $(document).ready(function(){
     $('.monthly_graphic').each(function() { // pour chacun des graphiques mensuels (chacun des livres plus result)
         var id=this.id.match(/\d+$/); // on récupère l'id'
         var legend=$(this).find('.legend').text().split(';'); // la légende
-        var ticks = $(this).find('.ticks').text().split(';'); // les mois 
+        var ticks = $(this).find('.ticks').text().split(';'); // les mois
+        var period_ids = $(this).find('.period_ids').text().split(';'); // les mois
      
    // on construit les variables qui seront utilisées par jqplot
          var s=[];
@@ -84,7 +85,6 @@ $(document).ready(function(){
        for (var i=0; i<=legend.length; i++) {
             label[i]={label: legend[i]}; // la table des légendes
              s[i] =$(this).find('.series_'+i).text().split(';').map(s_to_f); // et chaque série de données
-
         }
 
         // puis on trace le graphique avec ses options
@@ -180,7 +180,7 @@ $(document).ready(function(){
    $('#chart_'+id).bind('jqplotDataClick',
             function (ev, seriesIndex, pointIndex, data) {
            //    $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
-               window.location =("/books/"+id+"/lines?mois="+pointIndex+".html");
+               window.location =("/books/"+id+"/lines?mois="+pointIndex+"&period_id="+period_ids[seriesIndex]);
             });
    }
 

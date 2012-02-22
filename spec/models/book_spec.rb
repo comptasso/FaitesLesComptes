@@ -28,6 +28,21 @@ describe Book do
       @book.ticks(p2010).should be_an(Array)
 # TODO contoler la qualité des ticks
     end
+    
+    context 'testing a one year graphic' do
+      
+      before(:each) do
+        @graphic= @book.one_year_monthly_graphic(p2010)
+      end
+      
+       it "should know the period_id" do 
+      @graphic.period_ids.should == [p2010.id]
+# TODO contoler la qualité des ticks
+    end
+      
+    end
+
+
    
     # deux exercices de 12 mois commençant en janvier chacun
     context "testing monthly_graphic with two periods of the same length" do
@@ -60,8 +75,8 @@ describe Book do
           @graphic.nb_series.should == 2
         end
 
-        it "verfi de graphic" do
-          puts @graphic.inspect
+        it "should return period_ids" do
+          @graphic.period_ids.should == [p2010.id, p2011.id]
         end
 
         it "second datas serie is equal to datas build from period" do
@@ -136,7 +151,7 @@ describe Book do
           end
        it "build a one_year_graphic" do
          @book.organism.periods.count.should == 1
-         @book.default_graphic.should == @book.one_year_monthly_graphic
+         @book.default_graphic.should == @book.one_year_monthly_graphic(p2)
        end
      end
 

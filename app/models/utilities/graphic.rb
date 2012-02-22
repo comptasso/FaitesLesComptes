@@ -10,19 +10,21 @@
 #
   class  Utilities::Graphic
 
-    attr_reader :ticks, :series, :legend
+    attr_reader :ticks, :series, :legend, :period_ids
 
     def initialize(ticks)
       raise 'Ticks should be an array with at least one element' unless ticks.is_a?(Array) && !ticks.empty?
        @ticks=ticks
        @series=[]
        @legend=[]
+       @period_ids=[]
     end
 
     def add_serie(serie)
       check_serie(serie)
       @series << serie[:datas]
       @legend << serie[:legend]
+      @period_ids << serie[:period_id]
       true
     end
 
@@ -36,6 +38,7 @@
     self.series.each_with_index do |s,i|
       return false if s != graph.series[i]
     end
+    return false if self.period_ids != graph.period_ids
     return true
 
   end
