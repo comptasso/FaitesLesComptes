@@ -350,24 +350,24 @@ OK -  et donc les lister si nécessaire
 OK - paeriod.lines ne marche pas car through natures et du coup ne trouve pas celles qui n'auraient pas de nature (faire que nature soit obligatoire).
 OK - Changer lockable? en closable?
 OK - Améliorer les messages dans le controller periods
-OK Revoir les validations pour interdire l'écriture sur les lignes (ou de nouvelles lignes) si l'exercice est clos.
+OK - Revoir les validations pour interdire l'écriture sur les lignes (ou de nouvelles lignes) si l'exercice est clos.
 ---------------------------- Dashboard d'un organisme ------------------------
 OK - Organiser la page en section
 OK - Construire les graphes
 A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
 retirer de seeds les lignes avant le début de l'activité
-interdire cette possibilité
+interdire cette possibilité dans le modèle line
 
-les graphes par défaut devraient tenir compte de la période
+OK - les graphes par défaut devraient tenir compte de la période
 OK - insérer un nouveau div pour les graphes
 OK - changer la classe graphe dans organsisms.js et dans show
 OK - fair un helper pour l'affichage des graphes
-traiter le cas d'un seul exercice
+OK - traiter le cas d'un seul exercice
 voir pour faire un plugin de la fonction javascript
 
 
 -------------------- FIXME ------------------------------------
-Quand on clique sur une colonne de graphe, on aboutit sur le bon mois mais pas forcément sur le bon exercice
+OK - Quand on clique sur une colonne de graphe, on aboutit sur le bon mois mais pas forcément sur le bon exercice
 Quand on est dans un exercice clos, on ne devrait pas pouvoir faire new_line (et le menu ne devrait pas nous le proposer)
 
 

@@ -61,8 +61,10 @@ class Organism < ActiveRecord::Base
   # par défaut la date est celle du jour
   def find_period(date=Date.today)
     period_array = self.periods.all.select {|p| p.start_date <= date && p.close_date >= date}
-    raise 'No period fits with the date' if period_array.empty?
-    raise 'OverlapPeriods - Two or more periods found' if period_array.size > 1 
+    if period_array.empty?
+      Rails.logger.warn 'organism#find_period a été appelée avec une date pour laquelle il n y a pas d exercice'
+       return nil if period_array.empty?
+    end
     period_array.first
   end
 

@@ -13,8 +13,11 @@ describe Organism do
       @organism.periods.count.should == 2
     end
 
-  it "should desc" do
-    # TODO
+  it "doit trouver l'exercice avec une date" do
+    @organism.find_period(Date.civil(2010,5,15)).should == @p_2010
+    @organism.find_period(Date.civil(2011,6,15)).should == @p_2011
+    @organism.find_period(Date.civil(1990,5,15)).should == nil
+    
   end
 end
 

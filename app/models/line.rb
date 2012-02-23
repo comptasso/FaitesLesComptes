@@ -10,9 +10,24 @@ class Line < ActiveRecord::Base
   belongs_to :cash
   has_one :bank_extract_line
 
-  validates :debit, :credit, numericality: true
+  class MustBelongToPeriodValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    o= record.book.organism
+    record.errors[attribute] << "Date manquante" if value == nil
+    record.errors[attribute] << "Doit être une date" unless value.is_a?(Date)
+    if value.is_a?(Date)
+    unless o.find_period(value)
+      Rails.logger.warn "Record Line invalide - line_date n'appartient à aucun exercice"
+      record.errors[attribute] << "Impossible d'enregistrer la ligne car la date n'appartient à aucun exercice"
+     end
+    end
+  end
+end
+
+  validates :debit, :credit, numericality: true, format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :line_date, presence: true
   validates :nature_id, presence: true
+  validates :line_date, must_belong_to_period: true
   # FIXME
  #  validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit=>true if :locked?
 
@@ -21,15 +36,7 @@ class Line < ActiveRecord::Base
 
   before_save :check_bank_and_cash_ids
 
-  # Si le paiement est Especes, mettre à nil le bank_account_id
-  # Autrement mettre à nil le cash_id
-  # si le paiement est en chèque et que bank_extract n'est pas rempli alors mettre à nil le bank_account_id
-  def check_bank_and_cash_ids
-    self.bank_account_id = nil if self.payment_mode == 'Espèces'
-    self.cash_id = nil unless self.payment_mode =='Espèces'
-    self.bank_account_id = nil if self.credit > 0.001 && self.payment_mode == 'Chèque' && self.bank_extract_id.nil?
-  end
- 
+  
 
   default_scope order: 'line_date ASC'
 
@@ -147,6 +154,16 @@ class Line < ActiveRecord::Base
   def nature_name
     self.nature ? self.nature.name : 'non indiqué'
   end
+
+  # Si le paiement est Especes, mettre à nil le bank_account_id
+  # Autrement mettre à nil le cash_id
+  # si le paiement est en chèque et que bank_extract n'est pas rempli alors mettre à nil le bank_account_id
+  def check_bank_and_cash_ids
+    self.bank_account_id = nil if self.payment_mode == 'Espèces'
+    self.cash_id = nil unless self.payment_mode =='Espèces'
+    self.bank_account_id = nil if self.credit > 0.001 && self.payment_mode == 'Chèque' && self.bank_extract_id.nil?
+  end
+
 
   
 end

@@ -10,7 +10,7 @@ class LinesController < ApplicationController
   before_filter :change_period, only: [:index] # pour permettre de changer de period quand on clique sur une
   # des barres du graphe.qui est affiché par organism#show
   before_filter :fill_mois, only: [:index, :new]
-  before_filter :fill_natures, :only=>[:new,:edit]
+  before_filter :fill_natures, :only=>[:new,:edit] # pour faire la saisie des natures en fonction du livre concerné
 
   # GET /lines
   # GET /lines.json
@@ -134,6 +134,9 @@ class LinesController < ApplicationController
     end
   end
 
+
+  # TODO ici il faut remplacer cette méthode par une méthode period.natures_for_book(@book) qui choisira les natures qui
+  # conviennent à la classe du livre.
   def fill_natures
     if @book.class.to_s == 'IncomeBook'
       @natures=@period.natures.recettes
@@ -149,11 +152,9 @@ class LinesController < ApplicationController
 
   def fill_soldes
     @date=@period.start_date.months_since(@mois.to_i)
-   
     @lines = @book.lines.mois(@date).all
     @solde_debit_avant=@book.cumulated_debit_before(@date)
     @solde_credit_avant=@book.cumulated_credit_before(@date)
-
     @total_debit=@lines.sum(&:debit)
     @total_credit=@lines.sum(&:credit)
     @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit

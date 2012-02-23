@@ -49,6 +49,8 @@ class Period < ActiveRecord::Base
 
   # Les classes ...validator sont des classes spécifiques de validator pour les exercices
 
+  # TODO voir à mettre ces validators dans app/validators
+
   # Valide que le start_date est le lendemain du close date de l'exercice précédent
   class ContiguousValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)
@@ -79,6 +81,8 @@ class Period < ActiveRecord::Base
 # TODO revoir les validations
   validates :close_date, :presence=>true,:chrono=>true
   validates :start_date, :presence=>true,:contiguous => true
+
+  
 
 
   # TODO changer le update should not reopen en utilisant un des validate
@@ -153,6 +157,7 @@ class Period < ActiveRecord::Base
 #    self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>'%B'}
 #  end
 
+  # TODO à supprimer après avoir fait un format par défault dans list_months
   # retourne une liste des mois de l'ex localisée sous forme fév. 11 mar. 11 ...
   def list_months_year
     self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>'%b %y'}
@@ -205,7 +210,10 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
    s << s.sum
   end
 
-   # fournit un tableau donnant les dépenses mensuelles avec cumul mais avec filtre sur la destination
+
+  # TODO voir si ces fonctions sont utilisées et sont bien justifiées
+
+  # fournit un tableau donnant les dépenses mensuelles avec cumul mais avec filtre sur la destination
   def stat_outcome_year(destination_id=0)
     s=[]
      if destination_id==0
