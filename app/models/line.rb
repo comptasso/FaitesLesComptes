@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 class Line < ActiveRecord::Base
+
   belongs_to :book
   belongs_to :destination
   belongs_to :nature
@@ -10,19 +11,19 @@ class Line < ActiveRecord::Base
   belongs_to :cash
   has_one :bank_extract_line
 
-  class MustBelongToPeriodValidator < ActiveModel::EachValidator
-  def validate_each(record, attribute, value)
-    o= record.book.organism
-    record.errors[attribute] << "Date manquante" if value == nil
-    record.errors[attribute] << "Doit être une date" unless value.is_a?(Date)
-    if value.is_a?(Date)
-    unless o.find_period(value)
-      Rails.logger.warn "Record Line invalide - line_date n'appartient à aucun exercice"
-      record.errors[attribute] << "Impossible d'enregistrer la ligne car la date n'appartient à aucun exercice"
-     end
-    end
-  end
-end
+#  class MustBelongToPeriodValidator < ActiveModel::EachValidator
+#  def validate_each(record, attribute, value)
+#    o= record.book.organism
+#    record.errors[attribute] << "Date manquante" if value == nil
+#    record.errors[attribute] << "Doit être une date" unless value.is_a?(Date)
+#    if value.is_a?(Date)
+#    unless o.find_period(value)
+#      Rails.logger.warn "Record Line invalide - line_date n'appartient à aucun exercice"
+#      record.errors[attribute] << "Impossible d'enregistrer la ligne car la date n'appartient à aucun exercice"
+#     end
+#    end
+#  end
+#end
 
   validates :debit, :credit, numericality: true, format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :line_date, presence: true
