@@ -10,14 +10,21 @@ class Book < ActiveRecord::Base
   validates :title, presence: true 
  
   attr_reader :graphic, :monthly_solds
-  
-  def default_graphic
-    if self.organism.periods.count > 1
-      @graphic = two_years_monthly_graphic(self.organism.periods.last)
-    elsif self.organism.periods.count == 1
-      @graphic= one_year_monthly_graphic(self.organism.periods.last)
+
+
+  def graphic(period=nil)
+    @graphic ||= default_graphic(period)
+  end
+
+  # construit un graphique des données mensuelles du livre par défaut avec deux exercices
+  #
+  def default_graphic(period=nil)
+    period ||= self.organism.periods.last
+    return nil unless period # il n'y a aucun exercice
+    if period.previous_period?
+      @graphic = two_years_monthly_graphic(period)
     else
-      @graphic=nil
+      @graphic= one_year_monthly_graphic(period)
     end
   end
 

@@ -9,19 +9,11 @@ let(:book) {stub_model(Book) }
 
 before(:each) do
 
-
-#    @p=Period.create!(:organism_id=>@o.id, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))
-#
-#
-#  @p.should be_an_instance_of(Period)
-#  @p.start_date.should == Date.civil(2012,01,01)
-  
     assign(:line, stub_model(Line,
       :line_date => Date.today
     ).as_new_record)
     assign(:book, stub_model(IncomeBook, :title=>'Recettes'))
     assign(:period, stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31)) )
-    assign(:organism, stub_model(Organism))
     assign(:organism, o)
     
     o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))

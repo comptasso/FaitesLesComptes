@@ -130,8 +130,8 @@ $(document).ready(function(){
             // the legend to overflow the container.
             legend: {
            renderer: $.jqplot.EnhancedLegendRenderer,
-                numberRows: 1,
-                numberColumns: 2,
+              //  numberRows: 1,
+              //  numberColumns: 2,
                 show: true,
                 placement: 'insideGrid',
                 location: 'ne',
@@ -139,7 +139,7 @@ $(document).ready(function(){
                 textColor: 'blue',
                 rendererOptions: {
                     numberRows: 1,
-                    numberColumns: 2
+                    numberColumns: legend.length
                 }
 
             },
