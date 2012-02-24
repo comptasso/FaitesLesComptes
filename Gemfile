@@ -40,4 +40,5 @@ group :development, :test do
   gem 'rspec-rails', '2.6.1'
   gem 'spork'
   gem 'jasmine'
+  # gem 'database_cleaner'
 end

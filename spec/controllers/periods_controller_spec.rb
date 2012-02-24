@@ -1,6 +1,3 @@
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
-
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
@@ -9,13 +6,17 @@ describe PeriodsController do
 
   context 'testing with 3 periods how to change form one to another period' do
 
-  before(:each) do
-    @organism= Organism.create(title: 'Test Asso')
+  before(:each) do 
+    
+    Period.count.should == 0
+    @organism= Organism.create(title: 'nouveTest Asso')
     @p_2010= @organism.periods.create(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
-    @p_2010.close
+    Period.count.should == 1
+      @p_2010.close   
+    @p_2010.should be_is_closed
     @p_2011= @organism.periods.create(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
+     Period.count.should == 2
     @p_2012= @organism.periods.create(start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))
-
     Period.count.should == 3 
    
   end
