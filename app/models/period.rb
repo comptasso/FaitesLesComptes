@@ -49,7 +49,7 @@ class Period < ActiveRecord::Base
 
   # Les classes ...validator sont des classes spécifiques de validator pour les exercices
 
-  # TODO voir à mettre ces validators dans app/validators
+  # TODO voir à mettre ces validators dans lib/validators
 
   # Valide que le start_date est le lendemain du close date de l'exercice précédent
   class ContiguousValidator < ActiveModel::EachValidator

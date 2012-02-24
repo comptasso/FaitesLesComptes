@@ -47,9 +47,8 @@ end
 #START:SPECS
 
 def run(files_to_run)
-  puts files_to_run
-  system("rspec --drb --format doc #{files_to_run}")
- # system("rspec --drb #{files_to_run}")
+ # system("rspec --drb --format doc #{files_to_run}")
+  system("rspec --drb #{files_to_run}")
 end
 #END:SPECS
 
@@ -70,9 +69,9 @@ def run_test_matching(thing_to_match)
   puts matches.join(';' ) unless matches.empty?
   run(matches.join(' ')) unless matches.empty?
 
-#  if !matches.empty? && run(matches.join(' '))
-#    run_all_tests unless @all_tests_passing
-#  end
+  if !matches.empty? && run(matches.join(' '))
+    run_all_tests unless @all_tests_passing
+  end
 end
 
 def run_test_erb_matching(thing_to_match)

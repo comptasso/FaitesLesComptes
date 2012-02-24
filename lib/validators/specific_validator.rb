@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-# La classe specific_validator est destinée à contenir les validateurs spécifiques qui
+# Le fichier specific_validator est destinée à contenir les validateurs spécifiques qui
 # sont utilisés par différents modèles
 
 

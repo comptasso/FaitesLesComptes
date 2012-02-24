@@ -369,7 +369,7 @@ voir pour faire un plugin de la fonction javascript
 -------------------- FIXME ------------------------------------
 OK - Quand on clique sur une colonne de graphe, on aboutit sur le bon mois mais pas forcément sur le bon exercice
 Quand on est dans un exercice clos, on ne devrait pas pouvoir faire new_line (et le menu ne devrait pas nous le proposer)
-
+revoir l'organisation des validators
 
 ----------------------Suppression d'un exercice-----------------
   ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos

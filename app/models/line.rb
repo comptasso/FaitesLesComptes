@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 
 class Line < ActiveRecord::Base
+include Validations
+
 
   belongs_to :book
   belongs_to :destination
@@ -11,41 +13,44 @@ class Line < ActiveRecord::Base
   belongs_to :cash
   has_one :bank_extract_line
 
-#  class MustBelongToPeriodValidator < ActiveModel::EachValidator
-#  def validate_each(record, attribute, value)
-#    o= record.book.organism
-#    record.errors[attribute] << "Date manquante" if value == nil
-#    record.errors[attribute] << "Doit être une date" unless value.is_a?(Date)
-#    if value.is_a?(Date)
-#    unless o.find_period(value)
-#      Rails.logger.warn "Record Line invalide - line_date n'appartient à aucun exercice"
-#      record.errors[attribute] << "Impossible d'enregistrer la ligne car la date n'appartient à aucun exercice"
-#     end
-#    end
-#  end
-#end
+  before_validation :sold_debit_credit # une ligne ne peut avoir debit et credit simultanément
+  # TODO voir pour remplacer les champ par amount et boolean et faire des virtual attributes
+
+
+  # pour interdire qu'une ligne ait un debit et un credit rempli.
+  # FIXME : faire plutôt un validator qui crée une erreur sur ce cas de figure de toute façon anormal
+  # et un autre pour éviter les doubles zeros
+  def sold_debit_credit
+    # ici il faudrait plutôt mettre à zero tout ce qui n'est pas un nombre
+    self.debit ||= 0.0
+    self.credit ||= 0.0
+    if self.credit > self.debit
+      self.credit= self.credit-self.debit; self.debit =0
+    else
+      self.debit= self.debit-self.credit; self.credit = 0
+    end
+  end
 
   validates :debit, :credit, numericality: true, format: {with: /^-?\d*(.\d{0,2})?$/}
-  validates :line_date, presence: true
+  validates :line_date, presence: true, must_belong_to_period: true
   validates :nature_id, presence: true
-  validates :line_date, must_belong_to_period: true
+  validates_with NotNullAmount
+  # validates :book_id, presence: true
   # FIXME
- #  validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit=>true if :locked?
+  #  validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit=>true if :locked?
 
   PAYMENT_MODES= %w(CB Chèque Espèces Prélèvement Virement)
   BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
 
   before_save :check_bank_and_cash_ids
 
-  
-
   default_scope order: 'line_date ASC'
 
   scope :mois, lambda { |date| where('line_date >= ? AND line_date <= ?', date.beginning_of_month, date.end_of_month) }
   scope :multiple, lambda {|copied_id| where('copied_id = ?', copied_id)}
  
- scope :not_checks_received, where('payment_mode != ? OR credit <= 0', 'Chèque')
-# scope :not_pointed,
+  scope :not_checks_received, where('payment_mode != ? OR credit <= 0', 'Chèque')
+
   scope :checks_received, where('payment_mode = ? AND credit > 0', 'Chèque')
   
   scope :non_depose, checks_received.where('check_deposit_id IS NULL')
@@ -66,17 +71,17 @@ class Line < ActiveRecord::Base
     Line.where('line_date < ?', date).sum(:credit)
   end
 
-# # monthly sold donne le solde d'un mois fourni au format mm-yyyy
- def self.monthly_sold(month)
-   lines = Line.month(month)
-   lines.sum(:credit) - lines.sum(:debit)
- end
+  # # monthly sold donne le solde d'un mois fourni au format mm-yyyy
+  def self.monthly_sold(month)
+    lines = Line.month(month)
+    lines.sum(:credit) - lines.sum(:debit)
+  end
 
 
 
 
-  def multiple_info
-    if self.multiple
+  def multiple_info 
+    if self.multiple 
       # on veut avoir le nombre
       t= Line.multiple(self.copied_id)
       { nombre: t.size, first_date: t.first.line_date,
@@ -133,17 +138,13 @@ class Line < ActiveRecord::Base
   end
   
 
-  # before_validation :default_debit_credit
-  #
-  #
-  #
-  #  private
-  #
-  #  def default_debit_credit
-  #    # ici il faudrait plutôt mettre à zero tout ce qui n'est pas un nombre
-  #    debit ||= 0.0
-  #    credit ||= 0.0
-  #  end
+  before_validation :default_debit_credit
+
+  def default_debit_credit
+    # ici il faudrait plutôt mettre à zero tout ce qui n'est pas un nombre
+    debit ||= 0.0
+    credit ||= 0.0
+  end
 
   protected
 

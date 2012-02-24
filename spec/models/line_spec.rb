@@ -16,7 +16,7 @@ describe Line do
    describe "creation de ligne" do
     before(:each) do
       @l=Line.new(:book_id=>@ib.id, :credit=>200 , :line_date=>Date.civil(2012,01,02), :nature_id=>@n.id)
-    
+     
     end
 
     it "should be valid" do
@@ -33,22 +33,35 @@ describe Line do
     end
     it 'debit credit doivent être des nombres avec deux décimales maximum' do
       @l.should_not be_valid if @l.credit= 2.321
-      @l.should_not be_valid if @l.credit= '54a2.01'
+      
       @l.should be_valid if @l.credit=2.32
       @l.should be_valid if @l.credit=-502.32 
  
-    end   
+    end
+
+    it 'si les données rentrées ne sont pas des chiffres tronque les infos' do
+      @l.credit= '54a2.01'
+      @l.valid? 
+      @l.credit.should == 54
+    end
+
+    it 'debit ou credit ne peuvent être tous les deux à zero' do
+     @l.credit=@l.debit=0
+     @l.should_not be_valid
+   end
+
     it 'doit avoir une nature_id' do
       @l.nature_id=nil
       @l.should_not be_valid
     end
-    it 'ne peut pas avoir débit et credit remplis simultanément' do
-      pending
+    it 'fait le solde lorsque débit et crédit sont simultanément remplis' do
       @l.debit=20
-      @l.should_not be_valid
+      @l.valid?
+      @l.credit.should == 180
+      @l.should be_valid
     end
 
-    it 'line_date doit correspondre à un exercice' do
+    it 'line_date doit correspondre à un exercice' do 
       @l.line_date=Date.civil(1999,01,01)
       @l.should_not be_valid
     end
@@ -58,20 +71,27 @@ describe Line do
       @l.should_not be_valid
     end
 
-    it "should belongs to a book"
+    it "should belongs to a book" do
+      @l.book_id=nil; @l.should_not be_valid
+    end
+
+    it 'line and book should be coherent' # un livre de recettes avec des crédits et un livre de dépenses avec des débits
   end
 
   context "vérification des lignes et des soldes sur quelques mois" do
 
   before(:each) do
     # la somme de 0 à 9 est égale à 45
-   
-    10.times {|t| Line.create!(:book_id=>@ib.id, :line_date=>Date.civil(2012,01,t+2), :credit=>2*t , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ob.id, :line_date=>Date.civil(2012,01,t+2), :debit=>t , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ib.id, :line_date=>Date.civil(2012,02,t+2), :credit=>3*t , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ob.id, :line_date=>Date.civil(2012,02,t+2), :debit=>2*t , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ib.id, :line_date=>Date.civil(2012,03,t+2), :credit=>4*t , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ob.id, :line_date=>Date.civil(2012,04,t+2), :debit=>5*t , :nature_id=>@n.id) }
+#    @l= Line.create(:book_id=>@ib.id, :line_date=>Date.civil(2012,01,2), :credit=>234, :nature_id=>@n.id)
+#    @l.valid?
+#    @l.errors.messages.should == {}
+#   
+    10.times {|t| Line.create!(:book_id=>@ib.id, :line_date=>Date.civil(2012,01,t+2), :credit=>2*t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create(:book_id=>@ob.id, :line_date=>Date.civil(2012,01,t+2), :debit=>t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create(:book_id=>@ib.id, :line_date=>Date.civil(2012,02,t+2), :credit=>3*t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create(:book_id=>@ob.id, :line_date=>Date.civil(2012,02,t+2), :debit=>2*t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create(:book_id=>@ib.id, :line_date=>Date.civil(2012,03,t+2), :credit=>4*t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create(:book_id=>@ob.id, :line_date=>Date.civil(2012,04,t+2), :debit=>5*t+1 , :nature_id=>@n.id) }
 
   end
   context 'verification que les lignes sont bien là' do
@@ -93,8 +113,8 @@ describe Line do
   it "give a monthly sold" do
     Line.monthly_sold('01-2012').should == 45
     Line.monthly_sold('02-2012').should == 45
-    Line.monthly_sold('03-2012').should == 180
-    Line.monthly_sold('04-2012').should == -225
+    Line.monthly_sold('03-2012').should == 190
+    Line.monthly_sold('04-2012').should == -235
   end
 
   end
