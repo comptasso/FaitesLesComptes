@@ -177,10 +177,14 @@ class Period < ActiveRecord::Base
   # ou de Mars 2011 à Février 2012 si c'est à cheval sur l'année civile.
   def exercice
     r=''
-    if self.start_date==self.start_date.beginning_of_year
+    # année civile
+    if self.start_date==self.start_date.beginning_of_year && self.close_date == self.start_date.end_of_year
       r= 'Exercice ' << self.start_date.year.to_s
+    elsif self.start_date.year == self.close_date.year # on n'est pas sur une année civile mais dans la même année
+      r << (I18n::l self.start_date, :format=>'%b')
+      r << ' à ' << (I18n::l self.close_date, :format=>:short_month_year)
     else
-      r= 'de ' << (I18n::l self.start_date, :format=>:short_month_year)
+      r << (I18n::l self.start_date, :format=>:short_month_year)
       r << ' à ' << (I18n::l self.close_date, :format=>:short_month_year)
     end
     r

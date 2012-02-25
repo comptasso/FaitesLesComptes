@@ -81,18 +81,14 @@
 <ul id="menu_exercices">
   <li><h2>Exercices</h2>
     <ul>
-      <li>
-<%= link_to 'Afficher', organism_periods_path(@organism)  %>
-      </li>
-      <% if @period %>
-      <li>
-        <%= link_to 'Précédent', previous_organism_period_path(@organism,@period) if @period.previous_period? %>
-        <%= link_to 'Suivant', next_organism_period_path(@organism,@period) if @period.next_period? %>
-      </li>
-<% end %>
+   
+      <%  @organism.periods.each do |p| %>
+   <%=   content_tag :li, (link_to p.exercice, change_organism_period_path(@organism, p)) %>
+      <% end %>
 
     </ul>
   </li>
 </ul>
 <% end %>
 
+ 

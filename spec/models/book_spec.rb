@@ -185,12 +185,12 @@ describe Book do
       end
 
       it "graphic(p2) return correct legend " do
-        @book.graphic(p2).legend.should == ['de sept. 2009 à déc. 2010', 'Exercice 2011']
+        @book.graphic(p2).legend.should == ['sept. 2009 à déc. 2010', 'Exercice 2011']
       end
 
       it "graphic(p1) is a one year graphic" do
         @book.graphic(p1).should have(1).serie
-         @book.graphic(p1).legend.should == ['de sept. 2009 à déc. 2010']
+         @book.graphic(p1).legend.should == ['sept. 2009 à déc. 2010']
       end
 
       it "graphic with argument period buil a different graphic" do

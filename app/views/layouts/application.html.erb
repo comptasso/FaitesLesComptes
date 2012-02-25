@@ -14,7 +14,10 @@
      <div id="zone_admin"><%= link_to 'Administration', ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path ) %>
       <%= link_to 'Compta', ((@organism && !@organism.new_record?) ? compta_organism_path(@organism) : compta_organisms_path ) %></div>
     <div id ="organism">
-      <%= link_to @organism.title, @organism if (@organism && !@organism.new_record?) %>  <span class="description"><%= @period.exercice unless @period.nil? %></span>
+      <% if (@organism && !@organism.new_record?) %>
+      <%= link_to @organism.title, @organism  %><br/>
+      <p class="description"><%= @period.exercice unless @period.nil? %></p>
+      <% end %>
     </div>
   </div>
 

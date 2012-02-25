@@ -15,17 +15,15 @@ class PeriodsController < ApplicationController
     end
   end
 
-  def previous
-    @period=Period.find(params[:id]).previous_period
+  # change d'exercice sans pour autant afficher l'exercice concerné
+  # utile par exemple quand on veut rester dans les livres en changeant d'exercice
+  def change
+    @period=Period.find(params[:id])
     session[:period]=@period.id
     redirect_to :back
   end
 
-  def next
-    @period=Period.find(params[:id])
-    session[:period]=@period.next_period.id if @period.next_period?
-    redirect_to :back
-  end
+  
 
   
 

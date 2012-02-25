@@ -15,18 +15,17 @@
 }
 
 #header #logo {
-    width: 500px;
+    width: 400px;
     height: 100%;
     background: #9c9;
-   
-    font: small-caps 36px/36px "Times New Roman" , serif;
+    font: small-caps 33px/33px "Times New Roman" , serif;
     color: #282;
     text-align: center;
 }
 
 #header #logo a {
     text-decoration: none;
-}
+   }
 
 #header #logo a:hover {
     background: #9c9;
@@ -34,9 +33,9 @@
 
 #header #organism {
     position:absolute;
-    left: 400px;
+    left: 500px;
     top: 10px;
-    padding-left: 120px;
+    padding-left: 5px;
     padding-bottom: 5px;
     font: small-caps 16px/16px "Times New Roman" , serif;
     font-weight: 700;
@@ -48,6 +47,8 @@
     font-style: italic;
     font-size: small;
     font-variant: normal;
+    margin: 0px;
+    text-align: center;
     color: #141;
 }
 

@@ -111,7 +111,7 @@ describe Period do
         end
 
         it "should have a legend" do 
-          @graphic.legend.should == ['de avr. 2010 à déc. 2010', 'Exercice 2011']
+          @graphic.legend.should == ['avr. à déc. 2010', 'Exercice 2011']
         end
         it "should have two séries" do 
           @graphic.should have(2).series

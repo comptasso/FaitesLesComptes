@@ -32,16 +32,14 @@ describe "organisms/show.html.erb" do
 
     it 'affiche la partie Exercices du menu' do
       rendered.should match('Exercices')
-      rendered.should match('Précédent')
-      # rendered.should match('Suivant')
+      
     end
 
     it 'affiche le sous menu Exercices' do
       rendered.should have_selector('ul#menu_exercices') do |menu|
-        menu.should have_selector('li',content: 'Afficher')
-        menu.should have_selector('a', href: organism_periods_path(o))
-        menu.should have_selector('li',content: '2011')
-        menu.should have_selector('li',content: '2012')
+        menu.should have_selector('a', href: change_organism_period_path(o,p2011), content: 'Exercice 2011')
+        menu.should have_selector('a', href: change_organism_period_path(o,p2012), content: 'Exercice 2012')
+       
       end
  
     end

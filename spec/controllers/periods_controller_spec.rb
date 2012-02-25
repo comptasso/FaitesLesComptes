@@ -25,21 +25,21 @@ describe PeriodsController do
 
   it "should select 2011 if 2010"  do
     request.env["HTTP_REFERER"]=organisms_url
-    get :next, :organism_id=>@organism.id, :id=>@p_2010.id
+    get :change, :organism_id=>@organism.id, :id=>@p_2011.id
     session[:period].should == @p_2011.id
   end
 
       it "should select 2012 if 2011"  do
          request.env["HTTP_REFERER"]=organisms_url
-    get :next, :organism_id=>@organism.id, :id=>@p_2011.id
+    get :change, :organism_id=>@organism.id, :id=>@p_2012.id
     session[:period].should == @p_2012.id
       end
  
 
       it "should select 2012 if 2012"  do
         request.env["HTTP_REFERER"]=organisms_url
-    get :next, :organism_id=>@organism.id, :id=>@p_2012.id
-    session[:period].should == @p_2012.id
+    get :change, :organism_id=>@organism.id, :id=>@p_2010.id
+    session[:period].should == @p_2010.id
   end
 end
   end

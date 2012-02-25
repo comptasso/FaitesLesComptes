@@ -92,8 +92,8 @@ Faitesvoscomptes::Application.routes.draw do
         end
       end
       member do
-        get 'previous'
-        get 'next'
+        get 'change'
+        
       end
     end
 
