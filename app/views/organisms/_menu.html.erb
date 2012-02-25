@@ -22,9 +22,9 @@
           <li> <%= link_to 'Ecrire', new_book_line_path(b)  if @organism.can_write_line? %></li>
           <li><%= link_to 'Afficher', book_lines_path(b) %></li>
         </ul>
+          </li>
        <% end %>
-        </li>
-       
+              
       </ul>
    
   </li>
@@ -34,19 +34,19 @@
   <li><h2>Banques</h2>
      <ul>
     <% @organism.bank_accounts.each do |b| %>
-     <li><%= link_to b.to_s, organism_bank_account_path(@organism,b)  %>
-       <ul>
-        <li><%=link_to  'Remises chèques', bank_account_check_deposits_path(b)  %></li>
-        <li><%= link_to 'Nlle Remise', new_bank_account_check_deposit_path(b) %></li>
-        <% if b.unpointed_bank_extract? %>
-        <li><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.first_bank_extract_to_point)  if b.unpointed_bank_extract? %></li>
-        <% end %>
-        <li><%= link_to 'Extraits de comptes', organism_bank_account_bank_extracts_path(@organism, b) %></li>
-        <li><%= link_to 'Nouvel Extrait', new_organism_bank_account_bank_extract_path(@organism,b) %> </li>
-       </ul>
+        <li><%= link_to b.to_s, organism_bank_account_path(@organism,b)  %>
+            <ul>
+              <li><%=link_to  'Remises chèques', bank_account_check_deposits_path(b)  %></li>
+              <li><%= link_to 'Nlle Remise', new_bank_account_check_deposit_path(b) %></li>
+              <% if b.unpointed_bank_extract? %>
+                  <li><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.first_bank_extract_to_point)  if b.unpointed_bank_extract? %></li>
+               <% end %>
+              <li><%= link_to 'Extraits de comptes', organism_bank_account_bank_extracts_path(@organism, b) %></li>
+              <li><%= link_to 'Nouvel Extrait', new_organism_bank_account_bank_extract_path(@organism,b) %> </li>
+            </ul>
+        </li>
     <% end %>
-     </li>
-         </ul>
+    </ul>
   </li>
 </ul>
 
@@ -60,8 +60,9 @@
          <li><%= link_to 'Contrôles', organism_cash_cash_controls_path(@organism, c) %></li>
          <li><%= link_to 'Ajouter', new_organism_cash_cash_control_path(@organism, c) %></li>
        </ul>
+       </li>
     <% end %>
-     </li>
+     
          </ul>
   </li>
 </ul>
@@ -77,7 +78,7 @@
   </li>
 </ul>
 
-<ul>
+<ul id="menu_exercices">
   <li><h2>Exercices</h2>
     <ul>
       <li>
