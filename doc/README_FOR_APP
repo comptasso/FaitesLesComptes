@@ -356,7 +356,8 @@ OK - Organiser la page en section
 OK - Construire les graphes
 A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
 retirer de seeds les lignes avant le début de l'activité
-interdire cette possibilité dans le modèle line
+
+OK - interdire cette possibilité dans le modèle line
 
 OK - les graphes par défaut devraient tenir compte de la période
 OK - insérer un nouveau div pour les graphes
@@ -367,6 +368,7 @@ voir pour faire un plugin de la fonction javascript
 
 
 -------------------- FIXME ------------------------------------
+qaund on clique sur un élément il affiche à tort un changement d'exercice
 OK - Quand on clique sur une colonne de graphe, on aboutit sur le bon mois mais pas forcément sur le bon exercice
 Quand on est dans un exercice clos, on ne devrait pas pouvoir faire new_line (et le menu ne devrait pas nous le proposer)
 revoir l'organisation des validators
@@ -374,10 +376,11 @@ revoir l'organisation des validators
 ----------------------Suppression d'un exercice-----------------
   ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?
+Question les livres sont-ils dépendant de l'organisme ou d'un exercice ?
 Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
 
 Est-il raisonnable de supprimer un exercice (à ce stade de développement)
-Question les livres sont-ils dépendant de l'organisme ou d'un exercice ?
+
 
 -------------------- Sauvegarde/Restauration--------------------
 OK - on doit être capable de sauvegarder les informations d'une entreprise sur un fichier et de pouvoir les restaurer - on commence par ça

@@ -170,13 +170,14 @@ class LinesController < ApplicationController
   # TODO Il serait peut être plus judicieux de se déconnecter complètement de la notion d'exercice 
   # pour avoir alors un appel avec month et year, ce qui oterait toute ambiguité. 
   def change_period
-    if params[:period_id]
-       @period = @organism.periods.find(params[:period_id])
-    if session[:period] != @period_id
+
+    session_period = session[:period]
+    flash[:notice] = "La session[:period]= #{session[:period]} tandis que params[:period_id] = #{params[:period_id]} "
+    if params[:period_id] &&  (params[:period_id].to_i != session[:period])
+      @period = @organism.periods.find(params[:period_id])
       session[:period]=@period.id
-      flash[:alert]= "Attention, vous avez changé d'exercice"
+      flash[:alert]= "Attention, vous avez changé d'exercice - params[:period_id]= #{params[:period_id]}"
       redirect_to book_lines_url(params[:book_id], :mois=>params[:mois])
-    end
     end
   end
 
