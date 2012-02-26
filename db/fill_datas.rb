@@ -14,7 +14,7 @@ module FillDatas
     period.nb_months.times do |t|
       fill_lines(period, t, t)
     end
-    fill_subventions(period, [2,8])
+    fill_subventions(period, [4,8])
     fill_loyers(period)
     fill_salaires(period)
     fill_charges_sociales(period)
