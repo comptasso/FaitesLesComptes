@@ -8,7 +8,7 @@ class CheckDepositsController < ApplicationController
   # GET /check_deposits.json
   def index
     compute_non_deposited_checks
-   flash[:notice]="Il y a #{@lines.count} chèques à remettre à l'encaissement pour un montant de #{sprintf('%0.02f', @lines.sum(:credit))} €"
+    flash[:notice]="Il y a #{@lines.count} chèques à remettre à l'encaissement pour un montant de #{sprintf('%0.02f', @lines.sum(:credit))} €"
     @check_deposits = @organism.check_deposits.all
 
     respond_to do |format|
@@ -21,7 +21,7 @@ class CheckDepositsController < ApplicationController
   # GET /check_deposits/1.json
   def show
     @check_deposit = CheckDeposit.find(params[:id])
-    compute_deposited_checks
+   
 
     respond_to do |format|
       format.html # show.html.erb
@@ -71,7 +71,7 @@ class CheckDepositsController < ApplicationController
   def remove_check
     @line=Line.find(params[:line_id])
     @check_deposit=CheckDeposit.find(params[:id])
-    @line.update_attributes(:check_deposit_id=>nil, :bank_account_id=>nil)
+    @check_deposit.remove_check(@line)
     
     compute_var
     respond_to do |format|
@@ -154,7 +154,7 @@ class CheckDepositsController < ApplicationController
 
   def compute_deposited_checks
      @checks=@check_deposit.lines
-    @total_checks_credit=@checks.sum(:credit)
+     @total_checks_credit=@check_deposit.total
   end
 
   def compute_non_deposited_checks

@@ -1,69 +1,51 @@
 # coding: utf-8
 
 class CheckDeposit < ActiveRecord::Base
-  has_many :lines
+  has_many :lines, dependent: :nullify
   belongs_to :bank_account
   has_one :bank_extract_line
 
-  attr_reader :picked_checks
-
-  after_initialize :create_picked_checks
-  after_save :update_lines
-  
+  attr_reader :total
 
   validates :bank_account, :presence=>true
 
-  before_validation :check_if_list_line_empty
+  before_validation :not_empty
+
+  after_initialize :set_total
   # list_lines ne doit pas être vide
-  before_destroy :remove_check_deposit_id_in_lines
+ 
+  # FIXME : le problème ici est que total ne fonctionne pas pour les nouveaux enregistrements
+  # car l'id est null et rails fait la somme des enregistrements qui ont check_depositçid == null
+  # après une première sauvegarde, les montants sont corrects
+  
 
-
-  def total
-    lines.sum(:credit)
-  end
-
-  # TODO voir si on garde cette partie avec les @picked_checks.
-  # le problème est que tant que check_deposit n'est pas sauvé les associations lines ne sont
-  # pas totalement opérationnelles. On pourrait choisir de sauver d'emblée le check_deposit pour se simplifier la vie.
-
-  def total_picked_checks
-    @picked_checks.sum {|c| c.credit}
-  end
-
-  def remove_picked_check(line)
-    @picked_checks.delete_if {|c| c == line}
-  end
-
-  # remove check retire un chèque qui est DEJA associé à la remise de chèque
-  # ce qui veut dire qu'elle a déja été sauvée
   def remove_check(line)
-    line.update_attribute(:check_deposit, nil)
+    lines.delete(line)
+     @total -= line.credit
   end
 
+  
   def pick_check(line)
-    @picked_checks << line
+    lines <<  line
+    @total += line.credit 
   end
 
   def pick_all_checks
-    @picked_checks=Line.non_depose.all
+    lines << Line.non_depose.all
+    @total += Line.non_depose.sum(:credit) if new_record?
   end
 
   private
 
-  def remove_check_deposit_id_in_lines
-    puts 'dans le callback'
-    lines.delete(lines)
+  def not_empty
+    if lines.empty?
+      self.errors[:base] <<  'Il doit y avoir au moins un chèque dans une remise'
+    end
   end
 
-  def update_lines
-    @picked_checks.each {|l| l.update_attribute(:check_deposit_id, id); l.save} if @picked_checks
+  def set_total
+    @total = new_record? ? 0 : lines.sum(:credit)
   end
 
-  def check_if_list_line_empty
-    self.errors[:base] <<  'Il doit y avoir au moins un chèque dans une remise' unless @picked_checks && !@picked_checks.empty?
-  end
-
-  def create_picked_checks
-    @picked_checks=[]
-  end
+  
 end

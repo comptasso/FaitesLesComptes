@@ -11,19 +11,16 @@
    <table class="data_table display"  id="check_added">
  <%= render 'thead' %>
      <tbody>
-           <%  @checks.each do |line |%>
+           <%  @check_deposit.lines.each do |line |%>
       <tr>
      <%= render partial: 'line', object: line %>
-
       </tr>
     <% end %>
 
-
      </tbody>
-  <%= render partial: 'tfoot', :object=>@total_checks_credit %>
+  <%= render partial: 'tfoot', :object=>@check_deposit.total %>
 
 </table>
-
 
 </fieldset>
 
