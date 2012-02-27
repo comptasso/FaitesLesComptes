@@ -17,7 +17,19 @@ class CheckDeposit < ActiveRecord::Base
   # FIXME : le problème ici est que total ne fonctionne pas pour les nouveaux enregistrements
   # car l'id est null et rails fait la somme des enregistrements qui ont check_depositçid == null
   # après une première sauvegarde, les montants sont corrects
-  
+
+  def self.total_to_pick(organism)
+    organism.lines.non_depose.sum(:credit)
+  end
+
+  def self.nb_to_pick(organism)
+    organism.lines.non_depose.count
+  end
+
+
+  def self.lines_to_pick(organism)
+    organism.lines.non_depose
+  end
 
   def remove_check(line)
     lines.delete(line)
@@ -31,8 +43,8 @@ class CheckDeposit < ActiveRecord::Base
   end
 
   def pick_all_checks
-    lines << Line.non_depose.all
-    @total += Line.non_depose.sum(:credit) if new_record?
+    lines << self.bank_account.organism.lines.non_depose.all
+    @total += self.bank_account.organism.lines.non_depose.sum(:credit) if new_record?
   end
 
   private

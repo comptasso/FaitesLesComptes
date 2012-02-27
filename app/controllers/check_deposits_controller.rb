@@ -3,14 +3,14 @@
 class CheckDepositsController < ApplicationController
 
   before_filter :find_bank_account_and_organism
+  before_filter :find_non_deposited_checks
   before_filter :get_pick_date, only: [:create,:update]
 
   # GET /check_deposits
   # GET /check_deposits.json
   def index
-    @lines=@organism.lines.non_depose
-    @total_lines_credit=@lines.sum(:credit)
-    flash[:notice]="Il y a #{@lines.count} chèques à remettre à l'encaissement pour un montant de #{sprintf('%0.02f', @lines.sum(:credit))} €"
+   
+    flash[:notice]="Il y a #{@nb_to_pick} chèques à remettre à l'encaissement pour un montant de #{sprintf('%0.02f', @lines.sum(:credit))} €"
     @check_deposits = @organism.check_deposits.all
 
     respond_to do |format|
@@ -148,6 +148,12 @@ class CheckDepositsController < ApplicationController
   def find_bank_account_and_organism
     @bank_account=BankAccount.find(params[:bank_account_id])
     @organism=@bank_account.organism
+  end
+
+  def find_non_deposited_checks
+    @lines = CheckDeposit.lines_to_pick(@organism)
+    @total_lines_credit=CheckDeposit.total_to_pick(@organism)
+    @nb_to_pick=CheckDeposit.nb_to_pick(@organism)
   end
 
   def get_pick_date
