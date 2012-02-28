@@ -144,7 +144,12 @@ describe CheckDeposit do
       Line.all.each {|l|  l.check_deposit_id.should == nil}
     end
 
+    context "après rattachement à un extrait de compte" do
 
+     it "ne peut plus être modifié"
+     it "ne peut plus être détruit"
+
+    end
   end
 
   context "avec deux organismes" do

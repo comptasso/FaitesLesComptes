@@ -7,16 +7,10 @@ class CheckDepositsController < ApplicationController
   before_filter :get_pick_date, only: [:create,:update]
 
   # GET /check_deposits
-  # GET /check_deposits.json
   def index
-   
-    flash[:notice]="Il y a #{@nb_to_pick} chèques à remettre à l'encaissement pour un montant de #{sprintf('%0.02f', @lines.sum(:credit))} €"
+    flash[:notice]="Il y a #{@nb_to_pick} chèques à remettre à l'encaissement 
+        pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick > 0
     @check_deposits = @organism.check_deposits.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @check_deposits }
-    end
   end
 
   # GET /check_deposits/1
@@ -33,18 +27,11 @@ class CheckDepositsController < ApplicationController
   # GET /check_deposits/new.json
   
   def new
-    @lines=@organism.lines.non_depose
-    @total_lines_credit=@lines.sum(:credit)
-    if @lines.count == 0
+    if @nb_to_pick < 1
       redirect_to  bank_account_check_deposits_url(@bank_account), alert: "Il n'y a pas de chèques à remettre"
       return
     end
     @check_deposit = @bank_account.check_deposits.new(deposit_date: Date.today)
-    
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @check_deposit }
-    end
   end
 
 

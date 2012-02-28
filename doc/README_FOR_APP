@@ -368,6 +368,17 @@ OK - traiter le cas d'un seul exercice
 voir pour faire un plugin de la fonction graphe  javascript
 
 
+On peut retirer le flash sur les chèques en attentes d'enregistrement dans la vue organisme car cela
+apparait sur le dashboard (et en plus c'était peut être tous organismes mélangés).
+
+--------------------- refonte de check_deposit--------------------
+OK - revoir le modèle pour avoir les méthodes dans le modèle plutôt que dans le controller
+Le dashboard devrait proposer une icone pour faire une remise de chèque dans le pavé messages
+La vue index devrait proposer l'icone plus s'il y a des chèques
+le menu banque - nouvelle remise de chèque devrait est indisponible si pas de chèque à remettre
+Il faudrait interdire pick_all_checks si bank_account n'est pas dispo ?
+
+
 -------------------- FIXME ------------------------------------
 qaund on clique sur un élément il affiche à tort un changement d'exercice
 OK - Quand on clique sur une colonne de graphe, on aboutit sur le bon mois mais pas forcément sur le bon exercice

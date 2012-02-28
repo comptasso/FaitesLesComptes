@@ -5,6 +5,7 @@
 
 <fieldset><legend> Liste des remises de chèques </legend>
 <table>
+  <thead>
   <tr>
     <th>Compte numéro</th>
     <th>Date de la remise</th>
@@ -15,18 +16,20 @@
    
     
   </tr>
-
+  </thead>
+  <tbody>
 <% @check_deposits.each do |check_deposit| %>
   <tr>
     <td><%= check_deposit.bank_account.number %></td>
     <td><%=l check_deposit.deposit_date %></td>
-    <td class="numeric"><%= debit_credit check_deposit.lines.sum(:credit) %></td>
+    <td class="numeric"><%= debit_credit check_deposit.total %></td>
     <td><%= icon_to 'afficher.png', bank_account_check_deposit_path(@bank_account, check_deposit) %></td>
-    <td><%= icon_to 'modifier.png', edit_bank_account_check_deposit_path(@bank_account, check_deposit) %></td>
+    <td><%= icon_to 'modifier.png', edit_bank_account_check_deposit_path(@bank_account, check_deposit) unless check_deposit.bank_extract_line %></td>
     <td> <%= icon_to 'supprimer.png', [@bank_account, check_deposit], :confirm => 'Etes vous sur ?', :method => :delete %></td>
    
   </tr>
 <% end %>
+  </tbody>
 </table>
 
 </fieldset>
