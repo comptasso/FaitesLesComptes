@@ -25,7 +25,8 @@
     <td class="numeric"><%= debit_credit check_deposit.total %></td>
     <td><%= icon_to 'afficher.png', bank_account_check_deposit_path(@bank_account, check_deposit) %></td>
     <td><%= icon_to 'modifier.png', edit_bank_account_check_deposit_path(@bank_account, check_deposit) unless check_deposit.bank_extract_line %></td>
-    <td> <%= icon_to 'supprimer.png', [@bank_account, check_deposit], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+    <td> <%= icon_to 'supprimer.png', [@bank_account, check_deposit],
+                :confirm => 'Etes vous sur ?', :method => :delete unless check_deposit.bank_extract_line  %></td>
    
   </tr>
 <% end %>

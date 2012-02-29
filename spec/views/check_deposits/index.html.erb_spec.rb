@@ -19,10 +19,11 @@ describe "check_deposits/index.html.erb" do
   before(:each) do
     [cd1, cd2].each do |cd|
       cd.stub(:bank_account).and_return(ba)
-      cd.stub(:bank_extract_line).and_return(false)
+      
     end
-#    cd1.stub(:lines).and_return([l0,l1,l2,l3,l4])
-#    cd2.stub(:lines).and_return([l5,l6,l7,l8,l9])
+
+    cd1.stub(:bank_extract_line).and_return(1) # la remise de chèque n° 1 est pointée
+cd2.stub(:bank_extract_line).and_return(nil)
     cd1.should_receive(:total).and_return(10)
     cd2.should_receive(:total).and_return(35)
 
@@ -59,6 +60,7 @@ describe "check_deposits/index.html.erb" do
       assert_select "tbody tr", count: 2
     end
 
+    
     context "chaque ligne affiche ..." do
 
       it "le numéro de compte" do
@@ -93,11 +95,7 @@ describe "check_deposits/index.html.erb" do
     
     end
 
-    context "quand la remise de chèque est pointée" do
-
-      before(:each) do
-        cd1.stub(:bank_extract_line).and_return(true)
-      end
+    context "quand la remise de chèque est pointée, ie elle est reliée à une bank_extract_line" do
 
       it "le lien affichage est toujours disponible" do
        assert_select('tr:nth-child(1) td:nth-child(4) img[src= ?]' , '/assets/icones/afficher.png')
@@ -109,7 +107,7 @@ describe "check_deposits/index.html.erb" do
       end
 
       it 'ni le lien suppression' do
-        assert_select('tr:nth-child(2) > td:nth-child(6) a[href=?]', bank_account_check_deposit_path(ba, cd2), false)
+        assert_select('tr:nth-child(1) > td:nth-child(6) a[href=?]', bank_account_check_deposit_path(ba, cd1), false)
       end
     end
 

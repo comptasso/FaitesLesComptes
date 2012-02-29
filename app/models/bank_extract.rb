@@ -59,12 +59,12 @@ class BankExtract < ActiveRecord::Base
   # prend l'ensemble des lignes non pointées et 
   # crée des bank_extract_lines pour toutes les lignes dont les dates sont inférieures à la date de clôture
   def fill_bank_extract_lines
-    npl=self.bank_account.np_lines
-    npl.reject! {|l| l.line_date > self.end_date}
-    npl.each {|l| BankExtractLine.create!(bank_extract_id: self.id, line_id: l.id)}
-    cdl=self.bank_account.np_check_deposits
-    cdl.reject! {|l| l.deposit_date > self.end_date}
-    cdl.each {|l| BankExtractLine.create!(bank_extract_id: self.id, check_deposit_id: l.id)}
+    npl=bank_account.np_lines
+    npl.reject! {|l| l.line_date > end_date}
+    npl.each {|l| BankExtractLine.create!(bank_extract_id: id, line_id: l.id)}
+    cdl=bank_account.np_check_deposits
+    cdl.reject! {|l| l.deposit_date > end_date}
+    cdl.each {|l| BankExtractLine.create!(bank_extract_id: id, check_deposit_id: l.id)}
   end
 
   def lock_lines_if_locked

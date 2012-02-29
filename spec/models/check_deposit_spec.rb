@@ -14,11 +14,9 @@ describe CheckDeposit do
         @l1=@b.lines.create!(line_date: Date.today, credit: 44, payment_mode:'Chèque', nature: @n)
         @l2=@b.lines.create!(line_date: Date.today, credit: 101, payment_mode:'Chèque', nature: @n)
         @l3=@b.lines.create!(line_date: Date.today, credit: 300, payment_mode:'Chèque', nature: @n)
-
-
-        
-
   end
+
+  it "reste à traiter la question de l'enregistrement des bank_account_id dans les lignes"
 
   describe "vérif de la situation de départ" do
     it "3 chèques à déposer" do
@@ -27,7 +25,7 @@ describe CheckDeposit do
 
     it "ne doit pas prétendre fonctionner sans un rattachement à un compte bancaire" do
       @ch= CheckDeposit.new
-      expect { @check_deposit.pick_all_checks}.to raise_error
+      expect { @ch.pick_all_checks}.to raise_error
     end
   end
 
@@ -49,18 +47,23 @@ describe CheckDeposit do
   describe "controle de la validité" do
 
     before(:each) do
-      @check_deposit = @ba.check_deposits.new
+      @check_deposit = @ba.check_deposits.new(deposit_date: (Date.today +1))
     end
 
-    it 'bank_account est diposnible' do
+    it 'bank_account est présent' do
       @check_deposit.bank_account.should == @ba
     end
     
     
     it "n'est valide qu avec au moins une ligne" do
-      @check_deposit.bank_account = @ba
       @check_deposit.save.should == false
     end
+
+    it "n'est pas valide sans date" do
+      @check_deposit.pick_all_checks
+      @check_deposit.deposit_date = nil
+      @check_deposit.save.should == false
+     end
   
     it 'est valide avec un compte bancaire et au moins un chèque' do
       @check_deposit.bank_account=@ba
@@ -69,7 +72,7 @@ describe CheckDeposit do
     end
 
   end
-
+ 
 
   describe "controle des méthodes" do
 
@@ -114,7 +117,7 @@ describe CheckDeposit do
    describe "après sauvegarde" do
  
    before(:each) do
-      @check_deposit = @ba.check_deposits.new
+      @check_deposit = @ba.check_deposits.new(deposit_date: (Date.today +2))
       @check_deposit.pick_all_checks
       @check_deposit.save!
     end
@@ -144,13 +147,63 @@ describe CheckDeposit do
       Line.all.each {|l|  l.check_deposit_id.should == nil}
     end
 
+    describe "le rattachement à un extrait de compte" do
+       before(:each) do
+        @ba.np_check_deposits.should == [@check_deposit]
+        @be=@ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
+        @bel=@be.bank_extract_lines.create!
+        @check_deposit.bank_extract_line = @bel
+      end
+
+      it "entraine la mise à jour des lignes de chèques" do
+         @check_deposit.save!
+         Line.all.each {|l|  l.bank_account_id.should == @ba.id}
+      end
+   
     context "après rattachement à un extrait de compte" do
 
-     it "ne peut plus être modifié"
-     it "ne peut plus être détruit"
+      before(:each) do
+        @check_deposit.update_attribute(:bank_extract_line, @bel)
+      end
+
+     it "la date ne peut plus être modifiée" do
+       @check_deposit.deposit_date= Date.today+6
+       @check_deposit.should_not be_valid
+     end
+
+      it "la banque ne peut plus être modifiée" do
+        @ba2=@o.bank_accounts.create!(number: 'Un autre compte')
+        @check_deposit.bank_account = @ba2
+        @check_deposit.should_not be_valid
+      end
+
+     it "ne peut plus être détruit" do
+       @check_deposit.destroy.should == false
+     end
+
+      it "ne peut plus retirer de chèque" do
+        t=@check_deposit.total
+        @check_deposit.remove_check(@l2)
+        @check_deposit.total.should == t
+      end
+
+      it "ne peut plus ajouter de chèque" do
+         @l4=@b.lines.create!(line_date: Date.today, credit: 300, payment_mode:'Chèque', nature: @n)
+        t=@check_deposit.total
+        @check_deposit.pick_check(@l4)
+        @check_deposit.total.should == t
+      end
+
+      it "pick_al_checks ne doit rien faire non plus sauf un warn dans le logger" do
+        Rails.logger.should_receive(:warn)
+        @check_deposit.pick_all_checks
+      end
+
 
     end
-  end
+
+    end # fin du rattachement à un extrait de compte
+  end 
 
   context "avec deux organismes" do
     before(:each) do
