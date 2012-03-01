@@ -165,7 +165,7 @@ include Validations
 
     self.bank_account_id = nil if self.payment_mode == 'Espèces'
     self.cash_id = nil unless self.payment_mode =='Espèces'
-    self.bank_account_id = nil if self.credit > 0.001 && self.payment_mode == 'Chèque' && self.bank_extract_id.nil?
+  #   self.bank_account_id = nil if self.credit > 0.001 && self.payment_mode == 'Chèque' && self.bank_extract_id.nil?
   end
 
 

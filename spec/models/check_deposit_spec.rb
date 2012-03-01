@@ -14,6 +14,7 @@ describe CheckDeposit do
         @l1=@b.lines.create!(line_date: Date.today, credit: 44, payment_mode:'Chèque', nature: @n)
         @l2=@b.lines.create!(line_date: Date.today, credit: 101, payment_mode:'Chèque', nature: @n)
         @l3=@b.lines.create!(line_date: Date.today, credit: 300, payment_mode:'Chèque', nature: @n)
+        @l5=@b.lines.create!(line_date: Date.today, credit: 50000, payment_mode:'Virement', nature: @n)
   end
 
   it "reste à traiter la question de l'enregistrement des bank_account_id dans les lignes"
@@ -44,13 +45,13 @@ describe CheckDeposit do
   end
 
 
-  describe "controle de la validité" do
+  describe "controle de la validité : un check_deposit" do
 
     before(:each) do
       @check_deposit = @ba.check_deposits.new(deposit_date: (Date.today +1))
     end
 
-    it 'bank_account est présent' do
+    it "n'est valide qu'avec un bank_account" do
       @check_deposit.bank_account.should == @ba
     end
     
@@ -68,25 +69,30 @@ describe CheckDeposit do
     it 'est valide avec un compte bancaire et au moins un chèque' do
       @check_deposit.bank_account=@ba
       @check_deposit.pick_all_checks
+      @check_deposit.valid?
+      @check_deposit.errors.messages.should == {}
       @check_deposit.save.should == true
     end
 
   end
  
 
-  describe "controle des méthodes" do
+  describe "Controle des méthodes" do
 
     before(:each) do
-      @check_deposit = @ba.check_deposits.new
+      @check_deposit = @ba.check_deposits.new(deposit_date: Date.today)
     end
 
     it 'pick_all_checks récupère tous les chèques' do
       @check_deposit.pick_all_checks
-      @check_deposit.lines.should == Line.all
+      @check_deposit.lines.should == [@l1,@l2,@l3]
     end
 
+    it "un nouvel enregistrement a son total à zero" do
+      @check_deposit.total.should == 0
+    end
 
-    context "lorsque la remise est un nouvel enregistrement, il faut que la fonction total fonctionne" do
+    context "lorsque la remise est un nouvel enregistrement, la fonction total fonctionne" do
 
       before(:each) do
         @check_deposit.pick_all_checks
@@ -112,23 +118,50 @@ describe CheckDeposit do
 
     end
 
+    context "vérification du callback remove" do
+
+      it "toutes les lignes ont un bank_account_id à nil" do
+         [@l1,@l2,@l3].each {|l| l.bank_account_id.should == nil}
+      end
+
+      it "retirer un chèque de la remise enlève son bank_account_id" do
+        @check_deposit.pick_check(@l2)
+        @check_deposit.save!
+        Line.find_by_credit(101).bank_account_id.should == @check_deposit.bank_account_id
+        @check_deposit.remove_check(@l2)
+        @l2.bank_account_id.should == nil
+      end
+
+
+    end
+
   end
 
    describe "après sauvegarde" do
  
    before(:each) do
-      @check_deposit = @ba.check_deposits.new(deposit_date: (Date.today +2))
+      @check_deposit = @ba.check_deposits.new(deposit_date: (Date.today +2)) 
       @check_deposit.pick_all_checks
       @check_deposit.save!
     end
 
-    it 'sauver ne met pas à jour le champ bank_account_id' do # il est mis à jour lors du pointage du compte
-       Line.all.each {|l|  l.bank_account_id.should == nil}
+    it 'sauver devrait avoir mis à jour les champs bank_account_id' do
+      @check_deposit.bank_account_id.should == @ba.id
+      @check_deposit.total.should == 445
+      ls= Line.find_all_by_payment_mode('Chèque')
+      ls.size.should == 3
+      ls.each {|l|  l.bank_account_id.should == @check_deposit.bank_account_id }
     end
 
      it 'remove a check' do
-        @check_deposit.remove_check(@l2)
+        @check_deposit.save!
+        l2=@check_deposit.lines.where('credit = 101').first
+        @check_deposit.remove_check(l2)
         @check_deposit.total.should == 344
+        @check_deposit.save!
+        Line.find_by_credit(101).bank_account_id.should == nil
+        Line.find_by_credit(44).bank_account_id.should == @check_deposit.bank_account_id
+        Line.find_by_credit(300).bank_account_id.should == @check_deposit.bank_account_id
       end
 
       it 'add_check' do
@@ -157,7 +190,8 @@ describe CheckDeposit do
 
       it "entraine la mise à jour des lignes de chèques" do
          @check_deposit.save!
-         Line.all.each {|l|  l.bank_account_id.should == @ba.id}
+         Line.where('check_deposit_id=?', @check_deposit_id).all.each {|l|  l.bank_account_id.should == @ba.id}
+         
       end
    
     context "après rattachement à un extrait de compte" do
@@ -223,5 +257,24 @@ describe CheckDeposit do
       @cd2.total.should == 2300+2101+244
     end
   end
+
+  describe "Ne pas mélanger les chèques de deux organismes" do
+    before(:each) do
+      @o2=Organism.create!(title: 'Autre société')
+        @p2=@o2.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
+        @ba2=@o2.bank_accounts.create!(number: '123456Z')
+        @b2=@o2.income_books.create!(title: 'Recettes')
+        @n2=@p2.natures.create!(name: 'ventes')
+        @ligne1=@b2.lines.create!(line_date: Date.today, credit: 44, payment_mode:'Chèque', nature: @n)
+    end
+
+    it "Line non depose a maintenant 4 éléments appartenant à 2 organismes" do
+      Line.non_depose.count.should == 4
+      @o.lines.non_depose.count.should == 3
+      @o2.lines.non_depose.count.should == 1
+    end
+
+  end
+
 end
 

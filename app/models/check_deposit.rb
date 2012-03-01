@@ -14,18 +14,27 @@
 
 
 class CheckDeposit < ActiveRecord::Base
-  has_many :lines, dependent: :nullify
+
+  # La condition est mise ici pour éviter que check_deposit.new soit associée d'emblée
+  # à toutes les lignes qui n'ont pas de check_depsoit_id
+  # L'objectif est que check_deposit soit capable de donner la somme des chèques en partant de zero
   belongs_to :bank_account
+  has_many :lines, dependent: :nullify,
+                    conditions: 'check_deposit_id IS NOT NULL',
+                    
+                    after_remove: :nil_bank_account_id
+
+#  has_many :pending_checks,  class_name: 'Line',
+#              dependent: :nullify,
+#              conditions: {:bank_account_id => nil,
+#                            :payment_mode => 'Chèque',
+#                            'credit > 0',
+#                            :book_id => [1,2]
+#              }
+                                          
+
   # c'est la présence de bank_extract_line qui indique que le check_deposit à été pointé et ne peut plus être modifié
   has_one :bank_extract_line
-
-  attr_reader :total
-
-   # Le problème ici est que total ne fonctionne pas pour les nouveaux enregistrements
-  # car l'id est null et rails fait la somme des enregistrements qui ont check_depositçid == null
-  # après une première sauvegarde, les montants sont corrects. D'oû la nécessité de cette
-  # méthode set_total pour avoir une variable d'instance total.
-  after_initialize :set_total
 
   validates :bank_account, :deposit_date, :presence=>true
   validates :deposit_date,:bank_account_id, :cant_change=>true  if :bank_extract_line
@@ -33,10 +42,15 @@ class CheckDeposit < ActiveRecord::Base
 
   before_validation :not_empty # une remise chèque vide n'a pas de sens
 
-  before_save :update_lines_if_bank_extract_line
+  after_save :update_lines_if_bank_extract_line, :update_bank_account_id_for_lines
 
   before_destroy :cant_destroy_when_pointed
 
+  
+  def book_ids
+    return [1]
+    bank_account.organism.books.all.map {|m| m.id}.join(',')
+  end
  
 
   def self.total_to_pick(organism)
@@ -52,46 +66,50 @@ class CheckDeposit < ActiveRecord::Base
     organism.lines.non_depose
   end
 
+ # utilisation de total et non de sum car on ne veut pas avoir une somme par requete sql
+ # mais une somme qui prenne effectivement en compte les lignes qui sont dans la 
+ # target de l'association has_many
+  def total
+    total=0
+    lines.each {|l| total += l.credit}
+    total
+  end
+
   def remove_check(line)
     if bank_extract_line
       logger.warn "Tentative de retirer une ligne à la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
-      return @total
+      return total
     end
     lines.delete(line)
-     @total -= line.credit
+    return total
   end
 
   
   def pick_check(line)
     if bank_extract_line
       logger.warn "Tentative d'ajouter une ligne à la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
-      return @total
+      return total
     end
     lines <<  line
-    @total += line.credit 
+    return total
   end
 
   def pick_all_checks
     if bank_extract_line
       logger.warn "Tentative d'appler pick_all_checks sur la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
-      return @total
+      return total
     end
-    lines << self.bank_account.organism.lines.non_depose.all
-    @total += self.bank_account.organism.lines.non_depose.sum(:credit) if new_record?
+    bank_account.organism.lines.non_depose.all.each {|l| lines << l}
+    return total
   end
 
   private
 
   def not_empty
-       self.errors[:base] <<  'Il doit y avoir au moins un chèque dans une remise' unless @total > 0
+       self.errors[:base] <<  'Il doit y avoir au moins un chèque dans une remise' unless total > 0
   end
 
-  def set_total
-    @total = new_record? ? 0 : lines.sum(:credit)
-  end
-
-  private
-
+  
   def cant_destroy_when_pointed
     if bank_extract_line
     logger.warn "Tentative de détruire la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
@@ -101,13 +119,24 @@ class CheckDeposit < ActiveRecord::Base
 
  # mise à jour des lignes lorsque la remise chèques est pointée
   def update_lines_if_bank_extract_line
-
     if bank_extract_line
       logger.info "Mise à jour des lignes par before_save de check_deposit #{id} (méthode : update_lines_if_bank_extract_line"
-       lines.each { |l| l.update_attributes(:bank_extract_id=>bank_extract_line.bank_extract.id ,:bank_account_id=> bank_account_id)  }
+       lines.each { |l| l.update_attributes(:bank_extract_id=>bank_extract_line.bank_extract.id)  }
     end
      
   end
 
+  def update_bank_account_id_for_lines
+    # puts "nombre de lignes : #{lines.size} -- bank_account_id : #{bank_account.id}"
+    lines.each {|l| l.update_attribute(:bank_account_id, bank_account.id)}
+  end
+
+#  def fill_bank_account_id(line)
+#    line.bank_account_id =bank_account_id
+#  end
+
+  def nil_bank_account_id(line)
+    line.update_attribute(:bank_account_id, nil)
+  end
   
 end
