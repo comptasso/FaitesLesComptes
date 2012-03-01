@@ -40,7 +40,7 @@ describe CheckDeposit do
     end
 
     it "la classe donne le tableau des chèques à encaisser" do
-      CheckDeposit.lines_to_pick(@o).should == [@l1,@l2,@l3]
+      CheckDeposit.checks_to_pick(@o).should == [@l1,@l2,@l3]
     end
   end
 
@@ -85,7 +85,7 @@ describe CheckDeposit do
 
     it 'pick_all_checks récupère tous les chèques' do
       @check_deposit.pick_all_checks
-      @check_deposit.lines.should == [@l1,@l2,@l3]
+      @check_deposit.checks.should == [@l1,@l2,@l3]
     end
 
     it "un nouvel enregistrement a son total à zero" do
@@ -155,7 +155,7 @@ describe CheckDeposit do
 
      it 'remove a check' do
         @check_deposit.save!
-        l2=@check_deposit.lines.where('credit = 101').first
+        l2=@check_deposit.checks.where('credit = 101').first
         @check_deposit.remove_check(l2)
         @check_deposit.total.should == 344
         @check_deposit.save!
