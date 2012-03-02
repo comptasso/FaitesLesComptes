@@ -99,7 +99,7 @@ describe CheckDeposit do
       end
 
       it 'total renvoie le total des lignes associées' do
-        @check_deposit.total_checks.total.should == 445
+        @check_deposit.total_checks.should == 445
       end
 
       it 'quand on retire un chèque, total est mis à jour' do
@@ -111,9 +111,9 @@ describe CheckDeposit do
         @check_deposit.total_checks.should == 445
         @check_deposit.checks.delete(@l1)
         @check_deposit.checks.delete(@l3)
-        @check_deposit.checks.total.should == 101
+        @check_deposit.total_checks.should == 101
         @check_deposit.checks << @l3
-        @check_deposit.checks.total.should == 401
+        @check_deposit.total_checks.should == 401
       end
 
     end
