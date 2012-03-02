@@ -6,5 +6,3 @@ puts @o
 puts @b
 @cd=@b.check_deposits.new(:deposit_date=>Date.today)
 puts @cd
-@cd.define_organism(@o)
-puts CheckDeposit.bids

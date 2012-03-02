@@ -20,7 +20,7 @@ describe CheckDeposit do
  
   describe "vérif de la situation de départ" do
     it "3 chèques à déposer" do
-      Line.non_depose.all.should have(3).elements
+      @o.pending_checks.should have(3).elements
     end
 
     it "ne doit pas prétendre fonctionner sans un rattachement à un compte bancaire" do
@@ -39,7 +39,7 @@ describe CheckDeposit do
     end
 
     it "la classe donne le tableau des chèques à encaisser" do
-      CheckDeposit.checks_to_pick(@o).should == [@l1,@l2,@l3]
+      CheckDeposit.pending_checks(@o).should == [@l1,@l2,@l3]
     end
   end
 
@@ -266,8 +266,8 @@ describe CheckDeposit do
 
     it "Line non depose a maintenant 4 éléments appartenant à 2 organismes" do
       Line.non_depose.count.should == 4
-      @o.lines.non_depose.count.should == 3
-      @o2.lines.non_depose.count.should == 1
+      @o.pending_checks.count.should == 3
+      @o2.pending_checks.count.should == 1
     end
 
   end
