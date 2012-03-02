@@ -34,27 +34,9 @@ class CheckDeposit < ActiveRecord::Base
                     proxy_association.target.inject(0) {|i,l| i += l.credit}
                   end
 
-                  def proprio
-                    puts proxy_association.owner
-                  end
-
-
+               
                end
 
-def self.organism(organism)
-   @@organism=organism
-end
-
-  def self.bids
-    puts @@organism
-    raise "Organism n est pas defini et donc on ne peut trouver les livres" unless @@organism
-    @@organism.books.select(:id).collect {|m| m.id }
-  end
-
-  def define_organism(organism)
-    @@organism=organism
-  end
-       
 
   # c'est la présence de bank_extract_line qui indique que le check_deposit à été pointé et ne peut plus être modifié
   has_one :bank_extract_line

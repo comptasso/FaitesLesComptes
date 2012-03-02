@@ -189,7 +189,6 @@ describe CheckDeposit do
       end
 
       it "entraine la mise à jour des lignes de chèques" do
-        @check_deposit.define_organism(@o)
         @check_deposit.save!
         Line.where('check_deposit_id=?', @check_deposit_id).all.each {|l|  l.bank_account_id.should == @ba.id}
          
