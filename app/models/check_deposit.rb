@@ -21,10 +21,39 @@ class CheckDeposit < ActiveRecord::Base
   belongs_to :bank_account
   has_many :checks, class_name: 'Line',
                     dependent: :nullify,
-                    conditions: 'check_deposit_id IS NOT NULL',
-                    
-                    after_remove: :nil_bank_account_id
+                    conditions: 'credit > 0 and payment_mode = "Chèque" ', # and book_id IN ("#{bids}")',
+                    before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
+                    after_remove: :nil_bank_account_id,
+                    before_add: :cant_if_pointed  do
 
+
+                 # utilisation de total avec inject et non de sum car on ne veut pas avoir une somme par requete sql
+                 # mais une somme qui prenne effectivement en compte les lignes qui sont dans la
+                 # target de l'association has_many
+                  def total
+                    proxy_association.target.inject(0) {|i,l| i += l.credit}
+                  end
+
+                  def proprio
+                    puts proxy_association.owner
+                  end
+
+
+               end
+
+def self.organism(organism)
+   @@organism=organism
+end
+
+  def self.bids
+    puts @@organism
+    raise "Organism n est pas defini et donc on ne peut trouver les livres" unless @@organism
+    @@organism.books.select(:id).collect {|m| m.id }
+  end
+
+  def define_organism(organism)
+    @@organism=organism
+  end
        
 
   # c'est la présence de bank_extract_line qui indique que le check_deposit à été pointé et ne peut plus être modifié
@@ -54,47 +83,23 @@ class CheckDeposit < ActiveRecord::Base
     organism.lines.non_depose
   end
 
- # utilisation de total et non de sum car on ne veut pas avoir une somme par requete sql
- # mais une somme qui prenne effectivement en compte les lignes qui sont dans la 
- # target de l'association has_many
-  def total
-    total=0
-    checks.each {|l| total += l.credit}
-    total
-  end
-
-  def remove_check(line)
-    if bank_extract_line
-      logger.warn "Tentative de retirer une ligne à la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
-      return total
-    end
-    checks.delete(line)
-    return total
-  end
-
-  
-  def pick_check(line)
-    if bank_extract_line
-      logger.warn "Tentative d'ajouter une ligne à la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
-      return total
-    end
-    checks <<  line
-    return total
-  end
 
   def pick_all_checks
-    if bank_extract_line
-      logger.warn "Tentative d'appler pick_all_checks sur la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
-      return total
-    end
     bank_account.organism.lines.non_depose.all.each {|l| checks << l}
-    return total
   end
 
   private
 
   def not_empty
-       self.errors[:base] <<  'Il doit y avoir au moins un chèque dans une remise' unless total > 0
+       self.errors[:base] <<  'Il doit y avoir au moins un chèque dans une remise' if checks.empty?
+  end
+
+  def cant_if_pointed(line)
+    if bank_extract_line
+      logger.warn "Tentative de retirer une ligne à la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
+      raise 'Impossible de retirer un chèque d une remise pointée'
+    end
+  
   end
 
   
