@@ -1,14 +1,15 @@
 
-<%= content_for :submenu do %>
+<%= content_for :menu do %>
 
 <%= icon_to 'nouveau.png', new_bank_account_check_deposit_path(@bank_account) %>
 <%= icon_to 'modifier.png', edit_bank_account_check_deposit_path(@bank_account,@check_deposit) %>
 <%= icon_to 'navigation90.png', bank_account_check_deposits_path(@bank_account) %>
 <% end -%>
-<fieldset><legend>Remise de chèques</legend>
+
+<fieldset><legend>Remise de chèques : liste des chèques</legend>
  <%= render 'title' %>
 
-   <table class="data_table display"  id="check_added">
+   <table   id="check_added">
  <%= render 'thead' %>
      <tbody>
            <%  @check_deposit.checks.each do |check |%>

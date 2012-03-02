@@ -8,7 +8,7 @@ describe CheckDeposit do
 
     @o=Organism.create!(title: 'test check_deposit')
     @p=@o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
-    @ba=@o.bank_accounts.create!(number: '123456Z')
+    @ba=@o.bank_accounts.create!(name: 'La Banque', number: '123456Z')
     @b=@o.income_books.create!(title: 'Recettes')
     @n=@p.natures.create!(name: 'ventes')
     @l1=@b.lines.create!(line_date: Date.today, credit: 44, payment_mode:'Chèque', nature: @n)
@@ -206,7 +206,7 @@ describe CheckDeposit do
         end
 
         it "la banque ne peut plus être modifiée" do
-          @ba2=@o.bank_accounts.create!(number: 'Un autre compte')
+          @ba2=@o.bank_accounts.create!(name: "L'autre Banque", number: 'Un autre compte')
           @check_deposit.bank_account = @ba2
           @check_deposit.should_not be_valid
         end
@@ -239,7 +239,7 @@ describe CheckDeposit do
     before(:each) do
       @o2=Organism.create!(title: 'autre société')
       @p2=@o2.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
-      @ba2=@o2.bank_accounts.create!(number: '987654321Z')
+      @ba2=@o2.bank_accounts.create!(name: 'BBIC', number: '987654321Z')
       @b2=@o2.income_books.create!(title: 'Recettes')
       @n2=@p2.natures.create!(name: 'ventes')
       @l21=@b2.lines.create!(line_date: Date.today, credit: 244, payment_mode:'Chèque', nature: @n)
@@ -258,7 +258,7 @@ describe CheckDeposit do
     before(:each) do
       @o2=Organism.create!(title: 'Autre société')
       @p2=@o2.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
-      @ba2=@o2.bank_accounts.create!(number: '123456Z')
+      @ba2=@o2.bank_accounts.create!(name: 'IBAN', number: '123456Z')
       @b2=@o2.income_books.create!(title: 'Recettes')
       @n2=@p2.natures.create!(name: 'ventes')
       @ligne1=@b2.lines.create!(line_date: Date.today, credit: 44, payment_mode:'Chèque', nature: @n)

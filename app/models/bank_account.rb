@@ -7,6 +7,8 @@ class BankAccount < ActiveRecord::Base
 
   # Méthode qui donne le montant du dernier solde bancaire
   # par ordre de date
+
+  validates :name,  presence: true
   
   def last_bank_extract_sold
     self.last_bank_extract.end_sold

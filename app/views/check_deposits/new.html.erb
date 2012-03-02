@@ -8,22 +8,29 @@
     Nouvelle remise de chèques
   </legend>
 <%= render 'form' %>
-</fieldset>
-<h3>Chèques disponibles pour remises à l'encaissement</h3>
-<table class="data_table display" id="check_not_added">
+
+<h3>Chèques inclus dans la remise de chèques</h3>
+<table  class="" id="check_not_added">
   <%= render 'thead' %>
   <tbody id="not_added_body">
+      <%= render partial: 'tbodyadded', object: @check_deposit.target_checks %>
+  </tbody>
+   <%= render partial: 'tfoot', :object=>@check_deposit.total_checks %>
 
-     <%  @lines.each do |line |%>
+</table>
+</fieldset>
+<h3>Chèques disponibles pour remises à l'encaissement</h3>
+<table  id="check_to_add">
+  <%= render 'thead' %>
+  <tbody id="to_add_body">
+
+     <%  @check_deposit.tank_checks do |check |%>
       <tr>
-      <%= render partial: 'line', object: line %>
-
-
+      <%= render partial: 'line', object: check %>
       </tr>
     <% end %>
 
- 
   </tbody>
-   <%= render partial: 'tfoot', :object=>@total_lines_credit %>
+   <%= render partial: 'tfoot', :object=>@check_deposit.tank_checks.sum(&:credit) %>
 
 </table>

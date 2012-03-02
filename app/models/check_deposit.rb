@@ -47,6 +47,23 @@ class CheckDeposit < ActiveRecord::Base
     organism.pending_checks
   end
 
+  def target_checks
+    association(:checks).target
+  end
+
+  # TODO vérifier que cette idée est valable aussi pour edit
+  # tank est le réservoir des chèques à remettre
+  # il est calculé par checks dont on retire target_checks
+  def tank_checks
+    linked=target_checks
+    if new_record?
+      list = checks.all # requet de tous les chèques avec ID nul, credit, mode de paiement chèque et organism
+    else
+      list = organism.pending_checks.all # check_deposit a une id donc il faut lire directement les pending_checks
+    end
+    list.reject {|check| linked.include? check }
+  end
+
   # total checks fait la somme des chèques qui sont dans la cible de l'association.
   # cette approche est nécessaire car un module intégré donne un résultat vide
   def total_checks

@@ -1,8 +1,8 @@
 
     <%  tbodyadded.each do |line |%>
-      <tr>
+      <tr id="<%= line.id %>" >
      <%= render partial: 'line', object: line %>
-          <td><%=  button_to "Retirer", remove_check_bank_account_check_deposit_path(@bank_account, @check_deposit, :line_id=>line.id), remote:true  %></td>
+          <td><%# button_to "Retirer", remove_check_bank_account_check_deposit_path(@bank_account, @check_deposit, :line_id=>line.id), remote:true  %></td>
            
       </tr>
     <% end %>
