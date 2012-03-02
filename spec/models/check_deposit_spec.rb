@@ -89,7 +89,7 @@ describe CheckDeposit do
     end
 
     it "un nouvel enregistrement a son total à zero" do
-      @check_deposit.checks.total.should == 0
+      @check_deposit.total_checks.should == 0
     end
 
     context "lorsque la remise est un nouvel enregistrement, la fonction total fonctionne" do
@@ -99,16 +99,16 @@ describe CheckDeposit do
       end
 
       it 'total renvoie le total des lignes associées' do
-        @check_deposit.checks.total.should == 445
+        @check_deposit.total_checks.total.should == 445
       end
 
       it 'quand on retire un chèque, total est mis à jour' do
         @check_deposit.checks.delete(@l2)
-        @check_deposit.checks.total.should == 344
+        @check_deposit.total_checks.should == 344
       end
 
       it 'idem après ajout de chèque' do
-        @check_deposit.checks.total.should == 445
+        @check_deposit.total_checks.should == 445
         @check_deposit.checks.delete(@l1)
         @check_deposit.checks.delete(@l3)
         @check_deposit.checks.total.should == 101
@@ -250,7 +250,7 @@ describe CheckDeposit do
 
     it "should not mix the checks of the two organisms" do
       @cd2.pick_all_checks
-      @cd2.checks.total.should == 2300+2101+244
+      @cd2.total_checks.should == 2300+2101+244
     end
   end
 

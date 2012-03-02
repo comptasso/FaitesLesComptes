@@ -19,7 +19,7 @@ recettes = o.income_books(title: 'Recettes')
 depenses = o.outcome_books(title: 'Dépenses')
 
 # Il y a un compte bancaire et deux caisses
-o.bank_accounts.create(number: '124578A', name: 'Micro Banque')
+ba=o.bank_accounts.create(number: '124578A', name: 'Micro Banque')
 o.cashes.create(name: 'Lille')
 o.cashes.create(name: 'Valenciennes')
 
@@ -68,4 +68,16 @@ per_2010.close
 per_2012 = Period.create!(:organism_id=>o.id, :start_date=>Date.civil(2012,01,01), :close_date=>Date.civil(2012,12,31))
 # remplissage des écritures de 2011
 FillDatas::fill_first_quarter(per_2012)
+
+# remplissage des remises de chèques
+puts "re"
+date=per_2010.start_date + 14 # on part du début du premier exeercice
+while date < Date.civil(2012,02,29) # jusqu'au 29 février (pour laisser des chèques non remis en banque
+ cd= ba.check_deposits.new(deposit_date: date)
+ cd.checks.where(['line_date < ?', date]).all.each do |c|
+   cd.checks << c
+ end
+ cd.save! unless cd.checks.empty?
+ date +=14 # on fait une remise de chèque toutes les deux semaines
+end
 

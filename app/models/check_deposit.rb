@@ -20,15 +20,17 @@ class CheckDeposit < ActiveRecord::Base
                     conditions: Proc.new {"credit > 0 and payment_mode='Chèque' and book_id IN (#{self.bids}) "},
                     before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
                     after_remove: :nil_bank_account_id,
-                    before_add: :cant_if_pointed  do
-
-                 # utilisation de total avec inject et non de sum car on ne veut pas avoir une somme par requete sql
-                 # mais une somme qui prenne effectivement en compte les lignes qui sont dans la
-                 # target de l'association has_many
-                  def total
-                    proxy_association.target.inject(0) {|i,l| i += l.credit}
-                  end
-               end
+                    before_add: :cant_if_pointed
+#                  do
+#
+#                 # utilisation de total avec inject et non de sum car on ne veut pas avoir une somme par requete sql
+#                 # mais une somme qui prenne effectivement en compte les lignes qui sont dans la
+#                 # target de l'association has_many
+#                  def total
+#                    self.sum(:credit)
+#                    # proxy_association.target.inject(0) {|i,l| i += l.credit}
+#                  end
+#               end
 
   def bids
     raise "Modèle CheckDeposit - Impossible de trouver les livres sans avoir l'organisme" if self.bank_account_id == nil
@@ -51,6 +53,10 @@ class CheckDeposit < ActiveRecord::Base
   # permet de trouver les check à encaisser
   def self.pending_checks(organism)
     organism.pending_checks
+  end
+
+  def total_checks
+    checks.all.inject(0) {|i,l| i += l.credit}
   end
 
   # donne le total des chèques à encaisser pour cet organisme

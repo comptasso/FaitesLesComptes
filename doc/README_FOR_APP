@@ -355,7 +355,7 @@ OK - Revoir les validations pour interdire l'écriture sur les lignes (ou de nou
 OK - Organiser la page en section
 OK - Construire les graphes
 A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
-revoir le modèle remise de chèques
+OK -revoir le modèle remise de chèques
 voir comment est géré le remplissage des bank_account_id des lignes après remplissage ou pointage de la remise
 OK - retirer de seeds les lignes avant le début de l'activité
 

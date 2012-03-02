@@ -10,7 +10,7 @@ class CheckDepositsController < ApplicationController
   def index
     flash[:notice]="Il y a #{@nb_to_pick} chèques à remettre à l'encaissement 
         pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick > 0
-    @check_deposits = @organism.check_deposits.all
+    @check_deposits = @organism.check_deposits.where(['deposit_date > ? and deposit_date < ?', @period.start_date, @period.close_date])
   end
 
   # GET /check_deposits/1
@@ -138,7 +138,7 @@ class CheckDepositsController < ApplicationController
   end
 
   def find_non_deposited_checks
-    @lines = CheckDeposit.lines_to_pick(@organism)
+    @lines = CheckDeposit.pending_checks(@organism)
     @total_lines_credit=CheckDeposit.total_to_pick(@organism)
     @nb_to_pick=CheckDeposit.nb_to_pick(@organism)
   end
