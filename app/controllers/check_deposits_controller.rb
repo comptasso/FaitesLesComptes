@@ -41,80 +41,66 @@ class CheckDepositsController < ApplicationController
 #  end
 
   # TODO effacer la vue fill
+  # TODO supprimer les routes remove et add check
 
-  def add_check
-    @line=Line.find(params[:line_id])
-    @check_deposit=CheckDeposit.find(params[:id])
-    @line.update_attributes(:check_deposit_id=>@check_deposit.id, :bank_account_id=>@check_deposit.bank_account.id)
-    @lines=@organism.lines.non_depose
-    @total_lines_credit=@lines.sum(:credit)
-    respond_to do |format|
-      format.html # new.html.erb
-      format.js {render 'toggle_check'}
-      end
-    
-  end
+#  def add_check
+#    @line=Line.find(params[:line_id])
+#    @check_deposit=CheckDeposit.find(params[:id])
+#    @line.update_attributes(:check_deposit_id=>@check_deposit.id, :bank_account_id=>@check_deposit.bank_account.id)
+#    @lines=@organism.lines.non_depose
+#    @total_lines_credit=@lines.sum(:credit)
+#    respond_to do |format|
+#      format.html # new.html.erb
+#      format.js {render 'toggle_check'}
+#      end
+#
+#  end
 
-  def remove_check
-    @line=Line.find(params[:line_id])
-    @check_deposit=CheckDeposit.find(params[:id])
-    @check_deposit.remove_check(@line)
-    @lines=@organism.lines.non_depose
-    @total_lines_credit=@lines.sum(:credit)
-    respond_to do |format|
-      format.html # new.html.erb
-      format.js {render 'toggle_check'}
-    end
-  end
+#  def remove_check
+#    @line=Line.find(params[:line_id])
+#    @check_deposit=CheckDeposit.find(params[:id])
+#    @check_deposit.remove_check(@line)
+#    @lines=@organism.lines.non_depose
+#    @total_lines_credit=@lines.sum(:credit)
+#    respond_to do |format|
+#      format.html # new.html.erb
+#      format.js {render 'toggle_check'}
+#    end
+#  end
 
   # GET /check_deposits/1/edit
   def edit
     @check_deposit = CheckDeposit.find(params[:id])
-    @lines=@organism.lines.non_depose
-    @total_lines_credit=@lines.sum(:credit)
+    
   end
 
   # POST /check_deposits
   # POST /check_deposits.json
   def create
+    #  @bank_account a été créé par le before_filter
     @check_deposit = @bank_account.check_deposits.new(params[:check_deposit])
-
-    respond_to do |format|
-      if @check_deposit.save
-        format.html {
-          flash[:notice]= 'La remise de chèques a été créée.'
-           if params[:commit] == 'Tout remettre'
-           @organism.lines.non_depose.all.each do |l|
-             l.update_attributes(:check_deposit_id=>@check_deposit.id, :bank_account_id=>@check_deposit.bank_account.id)
-             l.save
-           end
-           redirect_to bank_account_check_deposit_url(@bank_account, @check_deposit)
-           else
-          redirect_to fill_bank_account_check_deposit_url(@bank_account, @check_deposit)
-           end
-          }
-        format.json { render json: @check_deposit, status: :created, location: @check_deposit }
+    
+      if @check_deposit.save!
+         flash[:notice]= 'La remise de chèques a été créée.'
+         redirect_to [@bank_account, @check_deposit]
       else
-        format.html { render action: "new" }
-        format.json { render json: @check_deposit.errors, status: :unprocessable_entity }
+         render action: "new" 
       end
-    end
+    
   end
 
   # PUT /check_deposits/1
   # PUT /check_deposits/1.json
   def update
     @check_deposit = CheckDeposit.find(params[:id])
-
-    respond_to do |format|
+    
       if @check_deposit.update_attributes(params[:check_deposit])
-        format.html { redirect_to  [@bank_account, @check_deposit], notice: 'La remise de chèque a été modifiée.' }
-        format.json { head :ok }
+        redirect_to  [@bank_account, @check_deposit], notice: 'La remise de chèque a été modifiée.' 
       else
-        format.html { render action: "edit" }
-        format.json { render json: @check_deposit.errors, status: :unprocessable_entity }
+        render action: "edit" 
+        
       end
-    end
+    
   end
 
   # DELETE /check_deposits/1

@@ -1,6 +1,6 @@
 <%= content_for :menu do %>
 
-<%= icon_to 'nouveau.png', new_bank_account_check_deposit_path(@bank_account) %>
+<%= icon_to 'nouveau.png', new_bank_account_check_deposit_path(@bank_account) if @nb_to_pick > 1 %>
 <%= icon_to 'afficher.png', [@bank_account, @check_deposit] %>
 <%= icon_to 'navigation90.png', bank_account_check_deposits_path(@bank_account) %>
 <% end -%>
@@ -10,34 +10,11 @@
     Modification d'une remise chèque
   </legend>
 
-<%= render 'edit_form' %>
 
-   <%= render 'title' %>
+<%= render 'form' %>
 
-  <table class="data_table display"  id="check_added">
-   <thead>
-    <%= render 'thead' %>
    
-  </thead>
-
-      <tbody id="added_body">
-  <%= render partial: 'tbodyadded', :object=>@checks.all  %>
-     </tbody>
-  <%= render partial: 'tfoot', :object=>@total_checks_credit %>
-
-</table>
 </fieldset>
 
-<h3>Sélection des chèques à remettre</h3>
-
-
-<table class="data_table display" id="check_not_added">
-  <%= render 'thead' %>
-   <tbody id="not_added_body">
-  <%= render partial: 'tbodynotadded', :object=>@lines  %>
-   </tbody>
-   <%= render partial: 'tfoot', :object=>@total_lines_credit %>
-
-</table>
 
 

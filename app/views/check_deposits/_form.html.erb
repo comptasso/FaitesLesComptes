@@ -1,5 +1,12 @@
 <%  SimpleForm.wrapper_tag = :span %>
 
+<p>
+  Il faut modifier la collection pour qu'elle prenne en compte les checks de la remise plus les chèques non déposés
+  en faisant deux groupes - chèques inclus et chèques disponibles<br/>
+  Plus remise en forme du formulaire.Et modifier l'affichage.
+  Ne pas oublier de supprimer les vues add et remove chèques plus les routes correpsondantes
+</p>
+
 <%= simple_form_for([@bank_account, @check_deposit]) do |f| %>
   <%= f.error_notification %>
 
@@ -10,10 +17,11 @@
     <%# f.input :deposit_date, value: Date.today , label: false %>
     Compte bancaire : 
     <%= f.association :bank_account, :collection => @organism.bank_accounts.map {|b| [b.number, b.id]}, :prompt => "Numero de compte ?", :label=>false %>
-  
+    Chèques
+    <%= f.association :checks, :collection => @organism.lines.non_depose.map {|c| [(l c.line_date)+ ' '+ c.credit.to_f.to_s, c.id]}, :prompt => 'Chèques à remettre', :label=> false %>
 
   
-    <%= f.button :submit, value: 'Tout remettre' %>
-     <%= f.button :submit, value: 'Choisir les chèques à remettre' %>
+    <%= f.button :submit, value: 'Valider' %>
+     
     </div>
   <% end %>
