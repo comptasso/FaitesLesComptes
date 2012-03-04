@@ -61,7 +61,8 @@ module FillDatas
   end
 
    def self.fill_salaires(period, nb_months=nil)
-    h= prepare_ids(period, 'salaires', 'Dépenses', 'Global', 'Virement')
+    puts 'salaires'
+     h= prepare_ids(period, 'salaires', 'Dépenses', 'Global', 'Virement')
     start_date=period.start_date
     amount=1800*(1 + (start_date.year-Period.first.start_date.year)*0.025 )# 1800 € au départ + 2.5 % d'augmentation par an
     nb_months ||= period.list_months('%B')
@@ -78,7 +79,8 @@ module FillDatas
  
 
    def self.fill_charges_sociales(period,months=nil)
-    h= prepare_ids(period, 'charges sociales', 'Dépenses', 'Global', 'Virement')
+   puts 'charges sociales'
+     h= prepare_ids(period, 'charges sociales', 'Dépenses', 'Global', 'Virement')
     amount=(1800 + (h[:start_date].year-Period.first.start_date.year)*0.025)*3*0.43 # 1800 € au départ + 2.5 % d'augmentation par an
     # 3 fois car on les paye par trimestre, et 43% de taux de charge
     months ||= period.list_months('%m').select { |m| m.to_i%3 == 0 }
@@ -95,6 +97,8 @@ module FillDatas
    end
 
     def self.fill_pieces_de_rechange(period,months=nil)
+    puts 'pièces de rechange'
+
     h= prepare_ids(period, 'pièces de rechange', 'Dépenses', 'Global', 'Chèque')
     destination_ids=period.organism.destinations.all.map {|d| d.id}
     months ||= period.nb_months
@@ -123,6 +127,8 @@ module FillDatas
     nature_id=period.natures.find_by_name('subventions').id
     destination_id =period.organism.destinations.find_by_name('Global').id
     book_id=period.organism.income_books(title: 'Recettes').first.id
+    bank_account_id=period.organism.bank_accounts.first.id
+    puts 'remplissage des subventions'
     months.each do |m|
 
       Line.create!(line_date: start_date.months_since(m) + m ,
@@ -130,7 +136,8 @@ module FillDatas
         destination_id: destination_id, # on alterne une fois sur deux Lille et une autre fois Valenciennes
         credit: amount + m*1000, 
         book_id: book_id,
-        payment_mode: 'Virement')
+        payment_mode: 'Virement',
+      bank_account_id: bank_account_id)
     end
 
   end

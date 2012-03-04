@@ -1,9 +1,9 @@
 
 <%= content_for :menu do %>
 
-<%= icon_to 'nouveau.png', new_bank_account_check_deposit_path(@bank_account) if @nb_to_pick > 0 %>
-<%= icon_to 'modifier.png', edit_bank_account_check_deposit_path(@bank_account,@check_deposit) %>
-<%= icon_to 'navigation90.png', bank_account_check_deposits_path(@bank_account) %>
+<%= icon_to 'nouveau.png', new_organism_bank_account_check_deposit_path(@organism, @bank_account) if @nb_to_pick > 0 %>
+<%= icon_to 'modifier.png', edit_organism_bank_account_check_deposit_path(@organism, @bank_account,@check_deposit) %>
+<%= icon_to 'navigation90.png', organism_bank_account_check_deposits_path(@organism, @bank_account) %>
 <% end -%>
 
 <fieldset><legend>Remise de chèques : liste des chèques</legend>

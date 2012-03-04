@@ -40,7 +40,7 @@ class BankExtractLine < ActiveRecord::Base
       cd=self.check_deposit
       @date=cd.deposit_date
       @debit=0
-      @credit=cd.total
+      @credit=cd.total_checks
       @narration = 'remise de cheques'
       @payment = 'Chèques'
       @blid="check_deposit_#{cd.id}"

@@ -42,7 +42,6 @@ class BankAccount < ActiveRecord::Base
    np_lines.sum(&:credit)
  end
 
-
  # fait le total débit des lignes non pointées et des remises chèqures déposées
  # donc en fait c'est le total débit des lignes.
  # cette méthode est là par souci de symétrie avec total_credit_np
@@ -61,6 +60,7 @@ class BankAccount < ActiveRecord::Base
  end
 
  # crée des bank_extract_lines à partir des lignes non pointées
+ # TODO faire la création (si c'est vraiment une bonne idée avec self.bank_extract_lines.new
  def not_pointed_lines
   self.np_lines.map {|l| BankExtractLine.new(:line_id=>l.id)}
  end
@@ -71,7 +71,7 @@ class BankAccount < ActiveRecord::Base
  end
 
  def total_credit_np_check_deposits
-   self.np_check_deposits.all.sum(&:total)
+   self.np_check_deposits.all.sum(&:total_checks)
  end
 
  # Crée des bank_extract_lines à partir des check_deposits non pointés
@@ -97,11 +97,11 @@ class BankAccount < ActiveRecord::Base
 
 
  def acronym
-   self.name.gsub(/[a-z\séèùôîûâ]/, '')
+   name.gsub(/[a-z\séèùôîûâ]/, '')
  end
 
  def to_s
-   self.acronym + ' ' + self.number
+   "#{acronym} #{number}"
  end
 end
 

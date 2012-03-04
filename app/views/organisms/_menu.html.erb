@@ -36,8 +36,8 @@
     <% @organism.bank_accounts.each do |b| %>
         <li><%= link_to b.to_s, organism_bank_account_path(@organism,b)  %>
             <ul>
-              <li><%=link_to  'Remises chèques', bank_account_check_deposits_path(b)  %></li>
-              <li><%= link_to 'Nlle Remise', new_bank_account_check_deposit_path(b) %></li>
+              <li><%=link_to  'Remises chèques', organism_bank_account_check_deposits_path(@organism,b)  %></li>
+              <li><%= link_to 'Nlle Remise', new_organism_bank_account_check_deposit_path(@organism,b) %></li>
               <% if b.unpointed_bank_extract? %>
                   <li><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.first_bank_extract_to_point)  if b.unpointed_bank_extract? %></li>
                <% end %>

@@ -1,11 +1,6 @@
 Faitesvoscomptes::Application.routes.draw do
 
   
-
-  
-
-  
-
   namespace :compta do
     resources :organisms do
       resources :periods
@@ -82,7 +77,7 @@ Faitesvoscomptes::Application.routes.draw do
   # match "bank_extract/:bank_extract_id/pointage/:id/pointe" => 'pointage#pointe', :as=> :pointe, :method=>:post
   # match "bank_extract/:bank_extract_id/pointage/:id/depointe" => 'pointage#depointe', :as=> :depointe,:method=>:post
 
-  
+ # DEBUTde la zone public
 
   resources :organisms , :only=> [:index, :show] do
     resources :periods, :only=> [:index, :show] do
@@ -130,20 +125,14 @@ Faitesvoscomptes::Application.routes.draw do
     resources :destinations, only: :index
     
    
-  end
+  
 
   resources :bank_accounts do
-
-    resources :check_deposits do
-      member do
-        get 'fill'
-        post 'add_check'
-        post 'remove_check'
-        
-      end
-    end
+    resources :check_deposits 
   end
-  
+
+  end
+
   resources :books do
 
     resources :multiple_lines

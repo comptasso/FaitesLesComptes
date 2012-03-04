@@ -70,7 +70,7 @@ per_2012 = Period.create!(:organism_id=>o.id, :start_date=>Date.civil(2012,01,01
 FillDatas::fill_first_quarter(per_2012)
 
 # remplissage des remises de chèques
-puts "re"
+puts "rempplissage des remises de chèques"
 date=per_2010.start_date + 14 # on part du début du premier exeercice
 while date < Date.civil(2012,02,29) # jusqu'au 29 février (pour laisser des chèques non remis en banque
  cd= ba.check_deposits.new(deposit_date: date)
@@ -79,5 +79,39 @@ while date < Date.civil(2012,02,29) # jusqu'au 29 février (pour laisser des ch�
  end
  cd.save! unless cd.checks.empty?
  date +=14 # on fait une remise de chèque toutes les deux semaines
+end
+
+# création des extraits bancaires
+puts "création des extraits bancaires"
+date=per_2010.start_date # on part du début du premier exercice
+sold = 0
+while date < Date.civil(2012,03,01) # jusqu'au 29 février (pour laisser des chèques non remis en banque
+  total_credit=total_debit=0
+ be= ba.bank_extracts.new(begin_date: date, end_date: date.end_of_month, begin_sold: sold)
+ # on fait le remplissage des bank_extract avec les écritures qui sont dans la période
+ nplines = ba.np_lines.select {|l| l.line_date < date.end_of_month}
+ nplines.each do |npl|
+  be.bank_extract_lines.new(:line_id=>npl.id)
+ end
+ total_credit += nplines.sum(&:credit)
+ total_debit += nplines.sum(&:debit)
+ # on fait également le remplissage avec les remises de chèques qui sont dans la période
+ rem_checks = ba.check_deposits.where(['deposit_date < ? and bank_extract_id IS NULL', date.end_of_month])
+ rem_checks.each do |rc|
+  be.bank_extract_lines.new(:check_deposit_id=>rc.id)
+  puts "remise chèques n° #{rc.id} pour un montant de #{rc.checks.sum(:credit)}"
+  total_credit += rc.checks.sum(:credit)
+ end
+ 
+ # maintenant on remplit les totaux
+ be.total_debit=total_debit
+ be.total_credit=total_credit
+ be.reference="#{I18n.l date, format: '%y%m'}"
+ be.save!
+ # fait par le after_save de bank_extract
+ # rem_checks.each {|rc| rc.update_attribute(:bank_extract_id, be.id) } # on met à jour les remises chèques pour ne plus les prendre en compte
+ puts "Création de l'extrait #{be.id} Débit : #{be.total_debit} - Crédit : #{be.total_credit}"
+ sold += be.total_credit-be.total_debit
+ date = date.months_since(1) # on fait une remise de chèque tous les mois
 end
 

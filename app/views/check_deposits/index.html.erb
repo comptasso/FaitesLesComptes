@@ -1,7 +1,7 @@
 <%= content_for :menu do %>
 
 <%= icon_to 'navigation90.png',:back %>
-<%= icon_to 'nouveau.png', new_bank_account_check_deposit_path(@bank_account) if (@nb_to_pick && @nb_to_pick > 0)  %>
+<%= icon_to 'nouveau.png', new_organism_bank_account_check_deposit_path(@organims, @bank_account) if (@nb_to_pick && @nb_to_pick > 0)  %>
 <% end -%>
 
 <fieldset><legend> Banque <%= @bank_account.to_s %> - Liste des remises de chèques </legend>

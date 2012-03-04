@@ -138,14 +138,6 @@ include Validations
   end
   
 
-  before_validation :default_debit_credit
-
-  def default_debit_credit
-    # ici il faudrait plutôt mettre à zero tout ce qui n'est pas un nombre
-    debit ||= 0.0
-    credit ||= 0.0
-  end
-
   protected
 
   
