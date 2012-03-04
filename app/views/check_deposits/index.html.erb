@@ -1,7 +1,7 @@
 <%= content_for :menu do %>
 
 <%= icon_to 'navigation90.png',:back %>
-<%= icon_to 'nouveau.png', new_organism_bank_account_check_deposit_path(@organims, @bank_account) if (@nb_to_pick && @nb_to_pick > 0)  %>
+<%= icon_to 'nouveau.png', new_organism_bank_account_check_deposit_path(@organism, @bank_account) if (@nb_to_pick && @nb_to_pick > 0)  %>
 <% end -%>
 
 <fieldset><legend> Banque <%= @bank_account.to_s %> - Liste des remises de chèques </legend>
@@ -26,9 +26,9 @@
     <td><%=l check_deposit.deposit_date %></td>
     <td class="numeric"><%= check_deposit.checks.size %></td>
     <td class="numeric"><%= debit_credit check_deposit.checks.sum(:credit) %></td>
-    <td><%= icon_to 'afficher.png', bank_account_check_deposit_path(@bank_account, check_deposit) %></td>
-    <td><%= icon_to 'modifier.png', edit_bank_account_check_deposit_path(@bank_account, check_deposit) unless check_deposit.bank_extract_line %></td>
-    <td> <%= icon_to 'supprimer.png', [@bank_account, check_deposit],
+    <td><%= icon_to 'afficher.png', organism_bank_account_check_deposit_path(@organism, @bank_account, check_deposit) %></td>
+    <td><%= icon_to 'modifier.png', edit_organism_bank_account_check_deposit_path(@organism, @bank_account, check_deposit) unless check_deposit.bank_extract_line %></td>
+    <td> <%= icon_to 'supprimer.png', [@organism, @bank_account, check_deposit],
                 :confirm => 'Etes vous sur ?', :method => :delete unless check_deposit.bank_extract_line  %></td>
   </tr>
 <% end %>

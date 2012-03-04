@@ -1,27 +1,25 @@
-<%  SimpleForm.wrapper_tag = :span %>
+<%  SimpleForm.wrapper_tag = :div %>
 
-<p>
-  Il faut modifier la collection pour qu'elle prenne en compte les checks de la remise plus les chèques non déposés
-  en faisant deux groupes - chèques inclus et chèques disponibles<br/>
-  Plus remise en forme du formulaire.Et modifier l'affichage.
-  Ne pas oublier de supprimer les vues add et remove chèques plus les routes correpsondantes
-</p>
-
-<%= simple_form_for([@bank_account, @check_deposit]) do |f| %>
+<%= simple_form_for([@organism, @bank_account, @check_deposit]) do |f| %>
   <%= f.error_notification %>
 
   <div class="inputs">
-
-    <label>Date :</label>
+   
+    <label>Date</label>
      <%= picker_date :pick_date, Date.today.years_ago(5), Date.today.years_since(5) , @check_deposit.deposit_date %>
-    <%# f.input :deposit_date, value: Date.today , label: false %>
-    Compte bancaire : 
-    <%= f.association :bank_account, :collection => @organism.bank_accounts.map {|b| [b.number, b.id]}, :prompt => "Numero de compte ?", :label=>false %>
-    Chèques
-    <%= f.association :checks, :collection => @organism.lines.non_depose.map {|c| [(l c.line_date)+ ' '+ c.credit.to_f.to_s, c.id]}, :prompt => 'Chèques à remettre', :label=> false %>
-
+   
+    
+    <%= f.association :bank_account, :collection => @organism.bank_accounts.map {|b| [b.number, b.id]}, :prompt => "Numero de compte ?", :label=>'Compte' %>
   
-    <%= f.button :submit, value: 'Valider' %>
+
+    <label>Chèques</label>
+    <%= f.grouped_collection_select :check_ids, options_for_checks(@check_deposit), :checks, :name, :id, :check_for_select,{}, {multiple: true, size: 10}  %>
      
+    <%# f.association :checks, :collection => @organism.lines.non_depose.map {|c| [(l c.line_date)+ ' '+ c.credit.to_f.to_s, c.id]},
+      :prompt => 'Chèques à remettre', :label=> 'Chèques' , :input_html=> {size: 10 } %>
+
+
+    <%= f.button :submit, value: 'Valider' %>
+
     </div>
   <% end %>

@@ -48,7 +48,11 @@ class CheckDeposit < ActiveRecord::Base
   end
 
   def target_checks
+    if new_record?
     association(:checks).target
+    else
+      checks.all
+    end
   end
 
   # TODO vérifier que cette idée est valable aussi pour edit
@@ -57,9 +61,9 @@ class CheckDeposit < ActiveRecord::Base
   def tank_checks
     linked=target_checks
     if new_record?
-      list = checks.all # requet de tous les chèques avec ID nul, credit, mode de paiement chèque et organism
+      list = checks.all # requete de tous les chèques avec ID nul, credit, mode de paiement chèque et organism
     else
-      list = organism.pending_checks.all # check_deposit a une id donc il faut lire directement les pending_checks
+      list = bank_account.organism.pending_checks.all # check_deposit a une id donc il faut lire directement les pending_checks
     end
     list.reject {|check| linked.include? check }
   end

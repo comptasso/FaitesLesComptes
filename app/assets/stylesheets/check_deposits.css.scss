@@ -4,12 +4,18 @@
 .public_check_deposits {
     
     .inputs {
+            input { margin-bottom: 10px; }
             .input { padding-right: 10px; }
-            .button { float: right; }
+            
     }
     
     .numeric {
         text-align: right;
         padding: 3px 10px;
     }
+
+    select {
+        vertical-align: top;
+        
+        }
 }

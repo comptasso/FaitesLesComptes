@@ -4,7 +4,7 @@ class CheckDepositsController < ApplicationController
 
   # ligne ajoutée pour les tests car sinon ces before_filter qui sont dans application_controller ne sont pas exécutés
   # et du coup des variables comme @organism et @period restent à nil.
- # before_filter :find_organism, :current_period
+  before_filter :find_organism, :current_period
 
   before_filter :find_bank_account_and_organism 
   before_filter :find_non_deposited_checks
@@ -50,7 +50,7 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
     
     if @check_deposit.save!
       flash[:notice]= 'La remise de chèques a été créée.'
-      redirect_to [@bank_account, @check_deposit]
+      redirect_to [@organism, @bank_account, @check_deposit]
     else
       render action: "new"
     end
@@ -63,7 +63,7 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
     @check_deposit = CheckDeposit.find(params[:id])
     
     if @check_deposit.update_attributes(params[:check_deposit])
-      redirect_to  [@bank_account, @check_deposit], notice: 'La remise de chèque a été modifiée.'
+      redirect_to  [@organism,@bank_account, @check_deposit], notice: 'La remise de chèque a été modifiée.'
     else
       render action: "edit"
         

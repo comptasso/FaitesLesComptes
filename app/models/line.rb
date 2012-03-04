@@ -136,7 +136,12 @@ include Validations
       "#{self.nature_name}",
       "#{self.debit}", "#{self.credit}", "#{self.payment_mode}"]
   end
-  
+
+
+  # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
+  def check_for_select
+  "#{I18n.l line_date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',credit)}"
+  end
 
   protected
 
