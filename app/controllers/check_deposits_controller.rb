@@ -49,8 +49,8 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
     @check_deposit = @bank_account.check_deposits.new(params[:check_deposit])
     
     if @check_deposit.save!
-      flash[:notice]= 'La remise de chèques a été créée.'
-      redirect_to [@organism, @bank_account, @check_deposit]
+     
+      redirect_to  organism_bank_account_check_deposits_url, notice: 'La remise de chèques a été créée.'
     else
       render action: "new"
     end
@@ -63,7 +63,7 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
     @check_deposit = CheckDeposit.find(params[:id])
     
     if @check_deposit.update_attributes(params[:check_deposit])
-      redirect_to  [@organism,@bank_account, @check_deposit], notice: 'La remise de chèque a été modifiée.'
+      redirect_to  organism_bank_account_check_deposits_url, notice: 'La remise de chèque a été modifiée.'
     else
       render action: "edit"
         
@@ -76,11 +76,7 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
   def destroy
     @check_deposit = CheckDeposit.find(params[:id])
     @check_deposit.destroy
-
-    respond_to do |format|
-      format.html { redirect_to bank_account_check_deposits_url(@bank_accounts) }
-      format.json { head :ok }
-    end
+    redirect_to organism_bank_account_check_deposits_url(@organism, @bank_accounts) 
   end
 
   private
@@ -88,8 +84,6 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
   def find_bank_account_and_organism
     @bank_account=BankAccount.find(params[:bank_account_id])
     # TODO peut être ajouter ici un controle pour être sur de la cohérence
-    # ou plut$ot revoir les routes pour avoir organism dans le path
-    # @organism=@bank_account.organism
   end
 
   def find_non_deposited_checks
