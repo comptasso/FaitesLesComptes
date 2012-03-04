@@ -4,7 +4,7 @@ class CheckDepositsController < ApplicationController
 
   # ligne ajoutée pour les tests car sinon ces before_filter qui sont dans application_controller ne sont pas exécutés
   # et du coup des variables comme @organism et @period restent à nil.
-  before_filter :find_organism, :current_period
+  before_filter :find_organism, :current_period      
 
   before_filter :find_bank_account_and_organism 
   before_filter :find_non_deposited_checks

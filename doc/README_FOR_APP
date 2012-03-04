@@ -376,9 +376,9 @@ Dans la vue bank_extract.new, il ya un pb de mise en page des deux pick_dates
 --------------------- refonte de check_deposit--------------------
 OK - revoir le modèle pour avoir les méthodes dans le modèle plutôt que dans le controller
 Le dashboard devrait proposer une icone pour faire une remise de chèque dans le pavé messages
-La vue index devrait proposer l'icone plus s'il y a des chèques
+OK - La vue index devrait proposer l'icone plus s'il y a des chèques
 le menu banque - nouvelle remise de chèque devrait est indisponible si pas de chèque à remettre
-Il faudrait interdire pick_all_checks si bank_account n'est pas dispo ?
+??? Il faudrait interdire pick_all_checks si bank_account n'est pas dispo ?
 
 
 -------------------- FIXME ------------------------------------

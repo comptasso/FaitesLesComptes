@@ -5,7 +5,7 @@ require 'lines_helper'
 
 describe "check_deposits/index.html.erb" do
   let(:o) {mock_model(Organism, title: 'spec cd')}
-  let(:ba)  {mock_model(BankAccount, number: '124578AZ')}
+  let(:ba)  {mock_model(BankAccount, number: '124578AZ', name: 'IBAN')}
   let(:cd1) {mock_model(CheckDeposit, bank_account_id: ba.id, deposit_date: Date.today - 5)}
   let(:cd2) {mock_model(CheckDeposit, bank_account_id: ba.id, deposit_date: Date.today - 20)}
 
@@ -20,7 +20,7 @@ describe "check_deposits/index.html.erb" do
     [cd1, cd2].each do |cd|
       cd.stub(:bank_account).and_return(ba)
   end
-
+    ba.stub!(:to_s).and_return('124578AZ')
     cd1.stub(:bank_extract_line).and_return(1) # la remise de chèque n° 1 est pointée
     cd2.stub(:bank_extract_line).and_return(nil)
 
@@ -39,15 +39,16 @@ describe "check_deposits/index.html.erb" do
       it 'le menu doit apparaître'
   end
 
+  
   describe "controle du corps" do
-
+pending
     before(:each) do
         render
       end
 
     it "affiche la légende du fieldset" do
       
-      assert_select "legend", :text => "Liste des remises de chèques"
+      assert_select "legend", :text => "Banque 124578AZ - Liste des remises de chèques"
     end
     
     it "affiche la table desw remises de chèques" do
@@ -77,19 +78,19 @@ describe "check_deposits/index.html.erb" do
 
       it "les liens pour l'affichage" do
         assert_select("tr:nth-child(2) td:nth-child(5) img[src='/assets/icones/afficher.png']")
-        assert_select('tr:nth-child(2) td:nth-child(5) a[href=?]',bank_account_check_deposit_path(ba, cd2))
+        assert_select('tr:nth-child(2) td:nth-child(5) a[href=?]',organism_bank_account_check_deposit_path(o,ba, cd2))
       end
 
       
 
       it "le lien pour la modification" do
         assert_select('tr:nth-child(2) td:nth-child(6) img[src=?]','/assets/icones/modifier.png')
-        assert_select('tr:nth-child(2) td:nth-child(6) a[href=?]',edit_bank_account_check_deposit_path(ba, cd2))
+        assert_select('tr:nth-child(2) td:nth-child(6) a[href=?]',edit_organism_bank_account_check_deposit_path(o,ba, cd2))
       end
 
       it "le lien pour la suppression" do
         assert_select('tr:nth-child(2) > td:nth-child(7)  img[src=?]','/assets/icones/supprimer.png')
-        assert_select('tr:nth-child(2) > td:nth-child(7) a[href=?]', bank_account_check_deposit_path(ba, cd2))
+        assert_select('tr:nth-child(2) > td:nth-child(7) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd2))
       end
 
     
@@ -99,15 +100,15 @@ describe "check_deposits/index.html.erb" do
 
       it "le lien affichage est toujours disponible" do
        assert_select('tr:nth-child(1) td:nth-child(5) img[src= ?]' , '/assets/icones/afficher.png')
-       assert_select('tr:nth-child(1) td:nth-child(5) a[href=?]', bank_account_check_deposit_path(ba, cd1))
+       assert_select('tr:nth-child(1) td:nth-child(5) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd1))
       end
 
       it "mais pas le lien modification" do
-        assert_select('tr:nth-child(1) td:nth-child(6) a[href=?]',edit_bank_account_check_deposit_path(ba, cd1), false)
+        assert_select('tr:nth-child(1) td:nth-child(6) a[href=?]',edit_organism_bank_account_check_deposit_path(o,ba, cd1), false)
       end
 
       it 'ni le lien suppression' do
-        assert_select('tr:nth-child(1) > td:nth-child(7) a[href=?]', bank_account_check_deposit_path(ba, cd1), false)
+        assert_select('tr:nth-child(1) > td:nth-child(7) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd1), false)
       end
     end
 

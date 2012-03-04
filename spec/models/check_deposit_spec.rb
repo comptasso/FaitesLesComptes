@@ -147,7 +147,7 @@ describe CheckDeposit do
 
     it 'sauver devrait avoir mis à jour les champs bank_account_id' do
       @check_deposit.bank_account_id.should == @ba.id
-      @check_deposit.total.should == 445
+      @check_deposit.total_checks.should == 445
       ls= Line.find_all_by_payment_mode('Chèque')
       ls.size.should == 3
       ls.each {|l|  l.bank_account_id.should == @check_deposit.bank_account_id }
@@ -157,7 +157,7 @@ describe CheckDeposit do
       @check_deposit.save!
       l2=@check_deposit.checks.where('credit = 101').first
       @check_deposit.checks.delete(l2)
-      @check_deposit.total.should == 344
+      @check_deposit.total_checks.should == 344
       @check_deposit.save!
       Line.find_by_credit(101).bank_account_id.should == nil
       Line.find_by_credit(44).bank_account_id.should == @check_deposit.bank_account_id
@@ -165,12 +165,12 @@ describe CheckDeposit do
     end
 
     it 'add_check' do
-      @check_deposit.total.should == 445
+      @check_deposit.total_checks.should == 445
       @check_deposit.checks.delete(@l1)
       @check_deposit.checks.delete(@l3)
-      @check_deposit.total.should == 101
+      @check_deposit.total_checks.should == 101
       @check_deposit.checks << @l3
-      @check_deposit.total.should == 401
+      @check_deposit.total_checks.should == 401
     end
 
     it 'lorsquon détruit la remise les lignes sont mises à jour' do
