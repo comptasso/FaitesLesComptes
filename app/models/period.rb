@@ -45,8 +45,9 @@
 
 class Period < ActiveRecord::Base
 
-  include Utilities::Resultat 
+  include Utilities::JcGraphic
 
+ 
   # Les classes ...validator sont des classes spécifiques de validator pour les exercices
 
   # TODO voir à mettre ces validators dans lib/validators
@@ -201,6 +202,15 @@ class Period < ActiveRecord::Base
     return current_month(date)
   end
 
+
+  # donne les soldes de chaque mois, est appelé par le module JcGraphic pour constuire les graphes
+  def monthly_value(m)
+    books.all.sum {|b| b.monthly_value(m)}
+  end
+
+  def monthly_results
+    list_months('%m-%Y').map {|m| monthly_value(m)}
+  end
 
 
   # fournit un tableau donnant les recettes mensuelles avec cumul

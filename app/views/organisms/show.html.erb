@@ -11,8 +11,8 @@
           <%= icon_to 'modifier.png', new_book_line_path(book) %>
           <%= icon_to 'detail.png', book_lines_path(book) %>
     </h2>
-   <% bl = Proc.new {|m| monthly_sold(m)} %>
-    <%= render partial: 'graphic', object: book.graphic(@period, &bl) , :locals=>{id: "book_#{book.id}"} %>
+   
+    <%= render partial: 'graphic', object: book.graphic(@period) , :locals=>{id: "book_#{book.id}"} %>
   </div>
 <% end %>
 
@@ -20,16 +20,8 @@
 
 <%= content_tag :div, :class=>"pave result" do %>
   <h2>Résultat</h2>
-  <%= render partial: 'graphic', object: @period.graphic , :locals=>{id: 'book_0'} %>
+  <%= render partial: 'graphic', object: @period.graphic(@period) , :locals=>{id: 'book_0'} %>
 <% end %>
-
-<%= content_tag :div, :class=>"pave message"  do %>
-<h2>Messages</h2>
-<p>
- <%= @organism.number_of_non_deposited_checks %> chèques à déposer pour un montant total de <%= debit_credit @organism.value_of_non_deposited_checks %>
-</p>
-<% end %>
-
 
 <% @organism.bank_accounts.each do |ba| %>
 <%= content_tag :div, :class=>"pave bank"  do %>
@@ -59,6 +51,7 @@
   <% else %>
   <span class="alert">Pas encore de contrôle de caisse à ce jour</span>
   <% end %>
+  <%= render partial: 'graphic', object: ca.graphic(@period) , :locals=>{id: "cash_#{ca.id}" } %>
 <% end %>
 <% end %>
   

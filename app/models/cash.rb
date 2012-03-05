@@ -2,6 +2,14 @@ class Cash < ActiveRecord::Base
    # utilities::sold définit les méthodes cumulated_debit_before(date) et
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
+
+  include Utilities::JcGraphic
+
+  # monthly_value est nécessaire pour le module Utilities::JcGraphic
+  def monthly_value(mmyyyy)
+    month= mmyyyy[/^\d{2}/]; year = mmyyyy[/\d{4}$/]
+    sold Date.civil(year.to_i, month.to_i, 1).end_of_month
+  end
   
   belongs_to :organism
   has_many :lines
@@ -9,10 +17,12 @@ class Cash < ActiveRecord::Base
 
   # calcule le solde d'une caisse à une date donnée en partant du début de l'exercice 
   # qui inclut cette date
+  # TODO en fait j'ai modifié ce comportement pour ne pas avoir ce problème de report
+  # A réfléchir
   def sold(date=Date.today)
-    period=self.organism.find_period(date)
-    ls= self.lines.where('line_date >= ? AND line_date <= ?', period.start_date, date)
-    return ls.sum(:credit)-ls.sum(:debit)
+    # period=self.organism.find_period(date)
+    ls= self.lines.where('line_date <= ?', date)
+    date <= Date.today ? ls.sum(:credit)-ls.sum(:debit) : 0
   end
 
   # Calcule les dates possibles pour un contrôle de caisse en fonction de l'exercice,

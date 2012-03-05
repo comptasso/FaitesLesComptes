@@ -64,7 +64,7 @@ describe Period do
       let(:b2) {stub_model(OutcomeBook)}
      
       P2011_RESULTS = [-5, 10,25,40,55,70,85,100,115,130,145,160]
-       P2010_RESULTS = [0,0,0,400, 550, 700, 850, 1000, 1150, 1300, 1450, 1600]
+      P2010_RESULTS = [0,0,0,400, 550, 700, 850, 1000, 1150, 1300, 1450, 1600]
   
  
       before(:each) do
@@ -72,22 +72,22 @@ describe Period do
         @p_2011.stub_chain(:books, :all).and_return([b1,b2])
         @p_2010.stub_chain(:books, :all).and_return([b1,b2])
         @p_2011.list_months('%m-%Y').each do |m|
-          b1.stub(:monthly_sold).with(m).and_return(100 + 10*(m[/^\d{2}/].to_i) )
-          b2.stub(:monthly_sold).with(m).and_return(-120 + 5*(m[/^\d{2}/].to_i) )
+          b1.stub(:monthly_value).with(m).and_return(100 + 10*(m[/^\d{2}/].to_i) )
+          b2.stub(:monthly_value).with(m).and_return(-120 + 5*(m[/^\d{2}/].to_i) )
         end
         @p_2010.list_months('%m-%Y').each do |m|
-          b1.stub(:monthly_sold).with(m).and_return(1000 + 100*(m[/^\d{2}/].to_i) )
-          b2.stub(:monthly_sold).with(m).and_return(-1200 + 50*(m[/^\d{2}/].to_i) )
+          b1.stub(:monthly_value).with(m).and_return(1000 + 100*(m[/^\d{2}/].to_i) )
+          b2.stub(:monthly_value).with(m).and_return(-1200 + 50*(m[/^\d{2}/].to_i) )
         end
         (1..3).each do |i|
           my="#{format('%02d',i)}-2010" 
-          b1.stub(:monthly_sold).with(my).and_return(0)
-          b2.stub(:monthly_sold).with(my).and_return(0)
+          b1.stub(:monthly_value).with(my).and_return(0)
+          b2.stub(:monthly_value).with(my).and_return(0)
         end
       end
 
       it "check the monthly result" do 
-        @p_2011.monthly_result('03-2011').should == 25
+        @p_2011.monthly_value('03-2011').should == 25
       end
 
       it 'check_previous_period' do
@@ -101,24 +101,25 @@ describe Period do
 
 
       it 'have a default graphic method' do
-        @p_2011.default_graphic.should be_an_instance_of(Utilities::Graphic) 
+        @p_2011.graphic(@p_2011).should be_an_instance_of(Utilities::Graphic)
       end
 
       context "check the default graphic with two periods" do
         before(:each) do
           @p_2011.stub(:previous_period).and_return(@p_2010)
-          @graphic= @p_2011.default_graphic 
+          @graphic= @p_2011.graphic(@p_2011)
         end
 
-        it "should have a legend" do 
+        it "should have a legend" do  
           @graphic.legend.should == ['avr. à déc. 2010', 'Exercice 2011']
         end
         it "should have two séries" do 
           @graphic.should have(2).series
         end
+
         it "the first with ..."   do
-          b1.monthly_sold('04-2010').should == 1400
-          b1.monthly_sold('03-2010').should == 0
+          b1.monthly_value('04-2010').should == 1400
+          b1.monthly_value('03-2010').should == 0
           @graphic.series[0].should == P2010_RESULTS
         end
 
@@ -133,18 +134,33 @@ describe Period do
       context "check the default graphic with two periods" do
         before(:each) do
           @p_2011.stub(:previous_period?).and_return(false)
-          @graphic= @p_2011.default_graphic 
+          @graphic= @p_2011.default_graphic(@p_2011)
+#          @p_2011.list_months('%m-%Y').each_with_index do |m,i|
+#            @p_2011.stub(:monthly_value).with(m).and_return(P2011_RESULTS[i])
+#          end
         end
 
       it "shoudl have only one serie" do
         @graphic.should have(1).serie
+
+
       end
+
+        it "checks_list_months" do
+          @p_2011.list_months('%m-%Y').should == %w(01-2011 02-2011 03-2011 04-2011 05-2011 06-2011 07-2011 08-2011 09-2011 10-2011 11-2011 12-2011)
+        end
+
+
+        it "checks the monthly_values" do
+          @p_2011.monthly_datas_for_chart(@p_2011.list_months('%m-%Y')).should == P2011_RESULTS
+        end
 
         it "check the legend"  do
           @graphic.legend.should == ['Exercice 2011']
         end
 
         it "check the datas" do
+          @p_2011.monthly_value('01-2011').should == -5
           @graphic.series[0].should == P2011_RESULTS
         end
       end
