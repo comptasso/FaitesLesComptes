@@ -91,18 +91,7 @@ class BankAccount < ActiveRecord::Base
 
  protected
 
-# Crée des bank_extract_lines à partir des check_deposits non pointés
- def not_pointed_check_deposits
-    self.np_check_deposits.map {|cd| BankExtractLine.new(:check_deposit_id=>cd.id)}
- end
-
- # crée des bank_extract_lines à partir des lignes non pointées
- # TODO faire la création (si c'est vraiment une bonne idée avec self.bank_extract_lines.new
- def not_pointed_lines
-  self.np_lines.map {|l| BankExtractLine.new(:line_id=>l.id)}
- end
-
- #  totalise débit et crédit de toutes les lignes non pointées
+#  totalise débit et crédit de toutes les lignes non pointées
  def total_debit_np_lines
    np_lines.sum(&:debit)
  end
