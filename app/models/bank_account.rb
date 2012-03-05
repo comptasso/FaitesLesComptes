@@ -103,6 +103,7 @@ class BankAccount < ActiveRecord::Base
 end
 
 # PARTIE CREATION DE GRAPHIQUE
+# TODO mettre ceci dans un module puisque c'est fortement dupliqué avec la même chose dans Book
 class BankAccount < ActiveRecord::Base
 
   attr_reader :graphic
@@ -115,11 +116,11 @@ class BankAccount < ActiveRecord::Base
    def default_graphic(period=nil)
     period ||= self.organism.periods.last
     return nil unless period # il n'y a aucun exercice
-#    if period.previous_period?
-#      @graphic = two_years_monthly_graphic(period)
-#    else
+    if period.previous_period?
+     @graphic = two_years_monthly_graphic(period)
+  else
       @graphic= one_year_monthly_graphic(period)
-#   end
+    end
   end
 
    # la construction d'un graphique sur un an
@@ -129,18 +130,40 @@ class BankAccount < ActiveRecord::Base
     mg
   end
 
+   # construction d'un graphique sur deux ans
+  def two_years_monthly_graphic(period)
+    mg= Utilities::Graphic.new(self.ticks(period))
+    months= period.list_months('%m-%Y') # les mois du dernier exercice servent de référence
+    pp=period.previous_period
+    mg.add_serie(:legend=>pp.exercice, :datas=>previous_year_monthly_datas_for_chart(months), :period_id=>pp.id )
+    mg.add_serie(:legend=>period.exercice, :datas=>monthly_datas_for_chart(months), :period_id=>period.id )
+    mg
+  end
+
+
   def ticks(period)
     period.list_months('%b')
   end
 
+  # accepte surtout le format mm-yyyy (ou encore mm/yyyyy)
+  def monthly_sold(mmyyyy)
+    month= mmyyyy[/^\d{2}/]; year = mmyyyy[/\d{4}$/]
+    be= bank_extracts.find_by_month_and_year(month, year) 
+    be ? be.end_sold : 0 # s'il y a  un extrait correspondant, donne son solde, sinon zero
+  end
+
+  def previous_year_monthly_sold(mmyyyy)
+    month= mmyyyy[/^\d{2}/];
+    year = ((mmyyyy[/\d{4}$/].to_i) -1).to_s
+    monthly_sold(month+year)
+  end
+
   def monthly_datas_for_chart(months)
-    # pour chaque mois donné on prend le bank_extract à la fin du mois
-    # et on construit le array
-    months.collect do |m|
-      month= m[/^\d{2}/]
-      year = m[/\d{4}$/]
-      bank_extracts.find_by_month_and_year(month, year).end_sold
-    end
+     months.collect {|m| monthly_sold(m) }
+  end
+
+  def previous_year_monthly_datas_for_chart(months)
+    months.collect {|m| previous_year_monthly_sold(m)}
   end
 
 

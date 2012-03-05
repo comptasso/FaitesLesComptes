@@ -72,6 +72,7 @@ $(document).ready(function(){
 
     // on récupère les données à partir de span hidden
     $('.monthly_graphic').each(function() { // pour chacun des graphiques mensuels (chacun des livres plus result)
+        var complete_id=this.id
         var id=this.id.match(/\d+$/); // on récupère l'id'
         var legend=$(this).find('.legend').text().split(';'); // la légende
         var ticks = $(this).find('.ticks').text().split(';'); // les mois
@@ -86,9 +87,9 @@ $(document).ready(function(){
             label[i]={label: legend[i]}; // la table des légendes
              s[i] =$(this).find('.series_'+i).text().split(';').map(s_to_f); // et chaque série de données
         }
-
+        var zone_dessin = $(this).find('.bar_graph');
         // puis on trace le graphique avec ses options
-        var plot2 = $.jqplot('chart_'+id, s, {
+        var plot2 = $.jqplot('chart_'+complete_id, s, {
             // The "seriesDefaults" option is an options object that will
             // be applied to all series in the chart.
             seriesDefaults:{

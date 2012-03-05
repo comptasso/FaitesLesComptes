@@ -9,12 +9,16 @@ class BankExtract < ActiveRecord::Base
   after_create :fill_bank_extract_lines
   after_save :lock_lines_if_locked
 
+
+  # FIXME ; je pense que ce scope ne marche pas car ce n'est pas close_date mais end_date
   scope :period, lambda {|p| where('(begin_date < ? AND close_date > ?)  OR (begin_date < ? AND close_date > ? ) OR (begin_date  > ? AND close_date  < ?)',
       p.start_date, p.start_date, p.close_date, p.close_date, p.start_date, p.close_date) }
 
   def self.find_by_month_and_year(m,y)
-    d=Date.civil(y,m,1).end_of_month
-    BankExtract.order('end_date ASC').where(['end_date < ?', d]).last
+    m = m.to_i ; y = y=y.to_i
+    debut=Date.civil(y,m,1)
+    fin=debut.end_of_month
+    BankExtract.order('end_date ASC').where(['end_date >= ? and end_date <= ?', debut, fin]).last
   end
 
   def lockable?
