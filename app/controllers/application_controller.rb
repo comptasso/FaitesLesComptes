@@ -1,8 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  before_filter :find_organism
-  before_filter :current_period if @organism
+  before_filter :find_organism, :current_period
 
   helper_method :two_decimals
 
@@ -17,7 +16,7 @@ class ApplicationController < ActionController::Base
  
 
   def find_organism
-    @organism=Organism.find(params[:organism_id]) if params[:organism_id]
+     @organism=Organism.find(params[:organism_id]) if params[:organism_id]
   end
 
   helper_method :picker_to_date
@@ -43,9 +42,14 @@ class ApplicationController < ActionController::Base
   end
 
   def current_period
+
+    
+    if @organism
     pid = session[:period] ||= (@organism.periods.order(:start_date).last.id if (@organism && @organism.periods.any?))
     
     @period= Period.find(pid) if pid
+    end
+   
   end
 
 end

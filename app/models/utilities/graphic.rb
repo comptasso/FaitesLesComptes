@@ -22,7 +22,7 @@
     def initialize(ticks)
       raise 'Ticks should be an array with at least one element' unless ticks.is_a?(Array) && !ticks.empty?
        @ticks=ticks
-       @series=[]
+       @series=[]  
        @legend=[]
        @period_ids=[]
     end

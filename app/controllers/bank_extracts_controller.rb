@@ -8,15 +8,10 @@ class BankExtractsController < ApplicationController
   # GET /bank_extracts
   # GET /bank_extracts.json
   def index
-    @bank_extracts = @bank_account.bank_extracts.all
+    @bank_extracts = @bank_account.bank_extracts.period(@period).all 
     if @bank_extracts.size == 0
       redirect_to new_organism_bank_account_bank_extract_url(@organism,@bank_account)
       return
-    end
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @bank_extracts }
     end
   end
 

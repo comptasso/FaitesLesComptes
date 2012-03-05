@@ -11,7 +11,8 @@
           <%= icon_to 'modifier.png', new_book_line_path(book) %>
           <%= icon_to 'detail.png', book_lines_path(book) %>
     </h2>
-    <%= render partial: 'graphic', object: book.graphic(@period) , :locals=>{id: "book_#{book.id}"} %>
+   <% bl = Proc.new {|m| monthly_sold(m)} %>
+    <%= render partial: 'graphic', object: book.graphic(@period, &bl) , :locals=>{id: "book_#{book.id}"} %>
   </div>
 <% end %>
 

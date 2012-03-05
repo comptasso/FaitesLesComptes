@@ -12,7 +12,7 @@ module Utilities::Resultat
 
   # m est de la forme 'mm-yyyy'
   def monthly_result(m)
-    books.all.sum {|b| b.monthly_sold(m)}
+    books.all.sum {|b| b.monthly_value(m)}
   end
 
   def default_graphic

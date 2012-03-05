@@ -1,6 +1,3 @@
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
-
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
@@ -77,7 +74,7 @@ describe Utilities::Graphic do
       end
 
       it "the legend is now an array with two elements" do
-        @graphic.legend.should have(2).elements
+        @graphic.legend.should have(2).elements 
       end
 
       it "with name serie 1 and serie 2" do
