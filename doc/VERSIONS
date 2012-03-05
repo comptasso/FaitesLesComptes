@@ -32,7 +32,6 @@ zone consult et saisie
 
 021 : dashboard
 + faire différentes sections
-possibilités de les arranger
 graphe sur les données financières
 
 
@@ -51,7 +50,7 @@ graphe sur les données financières
 
 031 : pointage des comptes bancaires avec des actions remote plutôt que par rafraichissement de la page
 - édition papier d'une remise chèque
-- affichage graphique de solde
++ affichage graphique de solde
 
 032 : gestion de différents types d'écritures
 - écritures de dépenses répétées
@@ -65,3 +64,6 @@ gestion de la TVA
 050 : edition de factures
 
 060 : suppression d'un exercice
+
+Au dela
+dashboard : possibilités d'arranger les paves

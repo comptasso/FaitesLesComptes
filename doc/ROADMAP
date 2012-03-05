@@ -355,6 +355,8 @@ OK - Revoir les validations pour interdire l'écriture sur les lignes (ou de nou
 OK - Organiser la page en section
 OK - Construire les graphes
 A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
+ie : indiquer que les extraits de compte bancaires sont pointés
+et rajouter quelques contrôles de caisse
 OK - revoir le modèle remise de chèques
 OK - gérer le remplissage des bank_account_id des lignes après remplissage ou pointage de la remise
 OK - retirer de seeds les lignes avant le début de l'activité
@@ -367,6 +369,10 @@ OK - changer la classe graphe dans organsisms.js et dans show
 OK - fair un helper pour l'affichage des graphes
 OK - traiter le cas d'un seul exercice
 voir pour faire un plugin de la fonction graphe  javascript
+
+OK - rajouter les graphes pour les comptes bancaires
+transformer les méthodes graphiques en modules
+rajouter les graphes pour les caisses
 
 
 On peut retirer le flash sur les chèques en attentes d'enregistrement dans la vue organisme car cela
@@ -386,6 +392,9 @@ qaund on clique sur un élément il affiche à tort un changement d'exercice
 OK - Quand on clique sur une colonne de graphe, on aboutit sur le bon mois mais pas forcément sur le bon exercice
 Quand on est dans un exercice clos, on ne devrait pas pouvoir faire new_line (et le menu ne devrait pas nous le proposer)
 revoir l'organisation des validators
+
+-------------------- Virements internes --------------------------------
+
 
 ----------------------Suppression d'un exercice-----------------
   ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos

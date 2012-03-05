@@ -178,9 +178,8 @@ $(document).ready(function(){
    // avant de relier les colonnes des graphes à l'affichage du livre correspondant
    // FIXME ne prend pas en compte la période
    if (id > 0) {   // le graphe 0 est celui des résultats - il n'est donc pas relié
-   $('#chart_'+id).bind('jqplotDataClick',
+   $('#chart_book_'+ id).bind('jqplotDataClick',
             function (ev, seriesIndex, pointIndex, data) {
-           //    $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
                window.location =("/books/"+id+"/lines?mois="+pointIndex+"&period_id="+period_ids[seriesIndex]);
             });
    }
