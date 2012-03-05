@@ -1,0 +1,59 @@
+Logiciel de comptabilité simplifiée.
+
+Ce programme est destiné à tenir une comptabilité de trésorerie de façon simple pour les non
+professionnels tout en ayant les qualités et contraintes d'un logiciel professionnel
+
+Il est divisé en trois zones : Public ou Saisie Consult, Admin et Compta
+
+La zone Public permet de faire les opérations courantes de façon intuitive,
+la zone admin permet de faire des opérations plus spécifiques comme la création d'un
+nouveau compte bancaire
+La zone compta permet de faire les éditions comptables proprement dites
+
+Les différents modèles utilisés sont :
+- organism pour désigner une structure quelconque : particulier, association, commerçant,...
+- period pour désigner un exercice
+- nature pour désigner une nature de dépenses ou recettes. Les natures sont rattachées à period
+et permettent dans la zone compta de faire le lien avec les comptes comptables. Cela permet
+de créer une nature Loyer ou Electricité et de relier cette nature au compte Loyer pour le premier
+et au compte Energie pour le second. Ou à un seul compte Prestations Extérieures si on le souhaite
+- destination, rattaché à organism et non à period, permet d'obtenir une autre division des informations,
+division analytique, par exemple, Voyage de Noel, ou Cadeau Fête des Mères pour un CE
+- Book qui sont les livres de recettes (IncomeBook) et de dépenses (OutcomeBook).
+- Line, coeur du logiciel qui enregistre les lignes d'écriture
+
+Line a la structure suivante :
+    t.date     "line_date" : la date de l'opération
+    t.string   "narration" : libellé
+    t.integer  "nature_id" : la nature
+    t.integer  "destination_id" : la desination
+    t.decimal  "debit",       :un montant sachant que des validations font que
+    t.decimal  "credit",        débit et crédit ne peuvent être remplis tous les deux
+    t.integer  "book_id"      : le livre de rattachement
+    t.boolean  "locked",      : l'indication que l'écriture est verrouillée et ne peut plus être modifiée
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "copied_id"    # Champs non utilisés actuellement destinés à
+    t.boolean  "multiple",    # gérer des abonnements
+    t.integer  "bank_extract_id" : l'extrait de compte correspondant à l'écriture
+    t.string   "payment_mode"   : le mode de payement
+    t.integer  "check_deposit_id"  : si c'est un chèque, il y a un rattachement à une remise de chèque
+    t.integer  "cash_id"         : si c'est en espèces, il y a rattachement à une caisse
+    t.integer  "bank_account_id" : si ce n'est pas en espèces, il y a rattachement à un compte bancaire.
+
+- BankAccount, rattché à Organism permet de suivre les comptes bancaires. Il n'y a pas de livre
+de banque à proprement parler. En fait il est construit à partir des informations qui figurent
+dans la table ligne. Toute ligne rattachée au bank_account_id forme le livre de banque
+- Cash : les caisses. De même toutes lignes rattachée à un cash_id forme le livre de caisse.
+
+Pour faire le pointage des comptes (absolument indispensable dans une comtpabilité de trésorerie),
+nous disposons de
+- BankExtract qui enregistre les relevés de comptes, chacun étant constitué de
+- BankExtractLine qui corresponde à une ligne du relevé. Il y a nottament un champ line_id
+
+Le pointage du compte se traduit par le remplissage de line_id dans BankExtractLine.
+Pour les remises de chèques, c'est le champ check_deposit_id qui est rempli.
+
+
+
+

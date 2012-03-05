@@ -32,15 +32,7 @@ class BankAccount < ActiveRecord::Base
     FROM LINES WHERE (BANK_ACCOUNT_ID = #{self.id} AND ((PAYMENT_MODE != 'Chèque') or (credit < 0.001))) AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE LINE_ID = LINES.ID)")
  end
 
- #  totalise débit et crédit de toutes les lignes non pointées
- def total_debit_np_lines
-   np_lines.sum(&:debit)
- end
-
-  #  totalise débit et crédit de toutes les lignes non pointées
- def total_credit_np_lines
-   np_lines.sum(&:credit)
- end
+ 
 
  # fait le total débit des lignes non pointées et des remises chèqures déposées
  # donc en fait c'est le total débit des lignes.
@@ -59,11 +51,7 @@ class BankAccount < ActiveRecord::Base
    self.total_credit_np - self.total_debit_np
  end
 
- # crée des bank_extract_lines à partir des lignes non pointées
- # TODO faire la création (si c'est vraiment une bonne idée avec self.bank_extract_lines.new
- def not_pointed_lines
-  self.np_lines.map {|l| BankExtractLine.new(:line_id=>l.id)}
- end
+ 
 
 # Trouve toutes les remises de chèques qui ne sont pas encore pointées
  def np_check_deposits
@@ -74,13 +62,10 @@ class BankAccount < ActiveRecord::Base
    self.np_check_deposits.all.sum(&:total_checks)
  end
 
- # Crée des bank_extract_lines à partir des check_deposits non pointés
- def not_pointed_check_deposits
-    self.np_check_deposits.map {|cd| BankExtractLine.new(:check_deposit_id=>cd.id)}
- end
+ 
 
- def lines_to_point
-   self.not_pointed_lines +  self.not_pointed_check_deposits
+ def nb_lines_to_point
+   np_lines.size + np_check_deposits.count
  end
 
  def last_bank_extract
@@ -103,6 +88,31 @@ class BankAccount < ActiveRecord::Base
  def to_s
    "#{acronym} #{number}"
  end
+
+ protected
+
+# Crée des bank_extract_lines à partir des check_deposits non pointés
+ def not_pointed_check_deposits
+    self.np_check_deposits.map {|cd| BankExtractLine.new(:check_deposit_id=>cd.id)}
+ end
+
+ # crée des bank_extract_lines à partir des lignes non pointées
+ # TODO faire la création (si c'est vraiment une bonne idée avec self.bank_extract_lines.new
+ def not_pointed_lines
+  self.np_lines.map {|l| BankExtractLine.new(:line_id=>l.id)}
+ end
+
+ #  totalise débit et crédit de toutes les lignes non pointées
+ def total_debit_np_lines
+   np_lines.sum(&:debit)
+ end
+
+  #  totalise débit et crédit de toutes les lignes non pointées
+ def total_credit_np_lines
+   np_lines.sum(&:credit)
+ end
+
+
 end
 
 

@@ -39,7 +39,7 @@
        Dernier relevé du compte le <%=l ba.bank_extracts.last.end_date %> - Solde : <%= debit_credit(ba.last_bank_extract_sold) %>
 </p>
     <% end %>
-<p>        <%=   ba.lines_to_point.count %> écritures non encore prises en compte par la banque <br/>
+<p>        <%=   ba.nb_lines_to_point %> écritures non encore prises en compte par la banque <br/>
   Débit :<%= debit_credit ba.total_debit_np  %> - Crédit : <%= debit_credit ba.total_credit_np %><br/>
   Solde théorique calculé : <%= debit_credit(ba.last_bank_extract_sold + ba.sold_np) %>
 </p>
