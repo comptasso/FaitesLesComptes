@@ -12,6 +12,11 @@ class BankExtract < ActiveRecord::Base
   scope :period, lambda {|p| where('(begin_date < ? AND close_date > ?)  OR (begin_date < ? AND close_date > ? ) OR (begin_date  > ? AND close_date  < ?)',
       p.start_date, p.start_date, p.close_date, p.close_date, p.start_date, p.close_date) }
 
+  def self.find_by_month_and_year(m,y)
+    d=Date.civil(y,m,1).end_of_month
+    BankExtract.order('end_date ASC').where(['end_date < ?', d]).last
+  end
+
   def lockable?
     !self.locked? && self.equality?
   end

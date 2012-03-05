@@ -32,8 +32,6 @@ class BankAccount < ActiveRecord::Base
     FROM LINES WHERE (BANK_ACCOUNT_ID = #{self.id} AND ((PAYMENT_MODE != 'Chèque') or (credit < 0.001))) AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE LINE_ID = LINES.ID)")
  end
 
- 
-
  # fait le total débit des lignes non pointées et des remises chèqures déposées
  # donc en fait c'est le total débit des lignes.
  # cette méthode est là par souci de symétrie avec total_credit_np
@@ -104,4 +102,48 @@ class BankAccount < ActiveRecord::Base
 
 end
 
+# PARTIE CREATION DE GRAPHIQUE
+class BankAccount < ActiveRecord::Base
 
+  attr_reader :graphic
+
+  # permet de retourner ou de créer la variable d'instance
+  def graphic(period=nil)
+    @graphic ||= default_graphic(period)
+  end
+
+   def default_graphic(period=nil)
+    period ||= self.organism.periods.last
+    return nil unless period # il n'y a aucun exercice
+#    if period.previous_period?
+#      @graphic = two_years_monthly_graphic(period)
+#    else
+      @graphic= one_year_monthly_graphic(period)
+#   end
+  end
+
+   # la construction d'un graphique sur un an
+  def one_year_monthly_graphic(period)
+    mg= Utilities::Graphic.new(self.ticks(period))
+    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(period.list_months('%m-%Y')), :period_id=>period.id )
+    mg
+  end
+
+  def ticks(period)
+    period.list_months('%b')
+  end
+
+  def monthly_datas_for_chart(months)
+    # pour chaque mois donné on prend le bank_extract à la fin du mois
+    # et on construit le array
+    months.collect do |m|
+      month= m[/^\d{2}/]
+      year = m[/\d{4}$/]
+      bank_extracts.find_by_month_and_year(month, year).end_sold
+    end
+  end
+
+
+
+
+end
