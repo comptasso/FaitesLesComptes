@@ -1,0 +1,11 @@
+<div id='<%= "#{id}" %>' class="line_monthly_graphic">
+<div class="datas_for_graph"  style="display: none;">
+  <span class="legend"><%= line_graphic.legend.join(';') %>  </span>
+  <span class="ticks">  <%= line_graphic.ticks.join(';') %></span>
+  <span class="period_ids"><%= line_graphic.period_ids.join(';') %></span>
+  <% line_graphic.series.each_with_index do |s,i| %>
+  <span class="series_<%= i %>">  <%= line_graphic.series[i].join(';')  %></span>
+ <% end %>
+</div>
+<div class="line_graph"  id="chart_<%= id %>"></div>
+</div>

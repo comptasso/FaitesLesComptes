@@ -53,9 +53,16 @@ jQuery(function () {
 }); // fin de jQuery application#data_table
 
 
-// petite fonction helper pour transformer des strings en float
+// petite fonction helper pour transformer des strings en float.
+// si ce n'est pas un nombre, transforme NaN en null. Ceci est
+// nécessaire pour ne pas générer d'erreur lorsqu'une donnée
+// est absente. Cas d'un exercice incomplet par exemple.
 function s_to_f(element) {
-    return parseFloat(element);
+    var e = parseFloat(element);
+    if (isNaN(e)) {
+        e = null
+    }
+    return e
 }
 
 
@@ -201,7 +208,7 @@ $(document).ready(function () {
             label[i] = {
                 label: legend[i]
             }; // la table des légendes
-            s[i] = $(this).find('.series_' + i).text().split(';').map(parseFloat); // et chaque série de données
+            s[i] = $(this).find('.series_' + i).text().split(';').map(s_to_f); // et chaque série de données
         }
         $.jqplot('chart_' + complete_id, s, {
             seriesDefaults: {
@@ -257,7 +264,7 @@ $(document).ready(function () {
                 yaxis: {
                     pad: 1.05,
                     tickOptions: {
-                        formatString: '\u20ac %d'
+                        formatString: "\u20ac %d"
                     }
                 }
             }

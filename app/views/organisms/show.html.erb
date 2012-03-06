@@ -25,25 +25,25 @@
 
 <% @organism.bank_accounts.each do |ba| %>
 <%= content_tag :div, :class=>"pave bank"  do %>
-<h2>Compte <%=   ba.name %> - <%= ba.number %></h2>
+<h2>Compte <%= ba.number %> = <%= number_to_currency ba.sold  %>
+ <%= icon_to 'detail.png', organism_bank_account_path(@organism, ba) %></h2>
  <% if ba.bank_extracts.any? %>
 <p>
       <span class="alert"> <%= "Attention, le pointage du dernier relevé n'est pas encore effectué" unless ba.bank_extracts.last.locked  %> </span><br />
        Dernier relevé du compte le <%=l ba.bank_extracts.last.end_date %> - Solde : <%= debit_credit(ba.last_bank_extract_sold) %>
 </p>
     <% end %>
-<p>        <%=   ba.nb_lines_to_point %> écritures non encore prises en compte par la banque <br/>
-  Débit :<%= debit_credit ba.total_debit_np  %> - Crédit : <%= debit_credit ba.total_credit_np %><br/>
-  Solde théorique calculé : <%= debit_credit(ba.last_bank_extract_sold + ba.sold_np) %>
-</p>
+
   <%= render partial: 'line_graphic', object: ba.graphic(@period) , :locals=>{id: "bank_#{ba.id}" } %>
 <% end %>
 <% end %>
 
 <% @organism.cashes.each do |ca| %>
 <%= content_tag :div, :class=>"pave cash"  do %>
-<h2>Caisse <%=  ca.name %></h2>
- <p>Solde de la caisse : <%= debit_credit ca.sold(@date) %></p>
+<h2>Caisse <%=  ca.name %> = <%= number_to_currency ca.sold(@date) %>
+  <%= icon_to 'detail.png', organism_cash_cash_lines_path(@organism, ca) %>
+</h2>
+ 
   <% if ca.cash_controls.any?  %>
   <p>Dernier contrôle de caisse en date du <%=l ca.cash_controls.order('date ASC').last.date  %>
     <span class="alert"><%= cash_difference(ca.cash_controls.order('date ASC').last ) %></span>

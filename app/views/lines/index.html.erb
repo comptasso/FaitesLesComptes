@@ -7,9 +7,9 @@
 <fieldset class="public_lines"><legend><%=  @book.title%> - Mois de <%=l(@date, :format=>:month_year) %></legend>
 
    <div id="submenu">
-    <span><%=  link_to_if @period.previous_period?, '<<', change_organism_period_path(@organism,@period) %></span>
+    <span><%=  link_to_if @period.previous_period?, '<<', change_organism_period_path(@organism,@period.previous_period) %></span>
  <%= submenu_helper(@book, @period) %>
-<span><%= link_to_if @period.next_period? ,'>>', change_organism_period_path(@organism,@period) %></span>
+<span><%= link_to_if @period.next_period? ,'>>', change_organism_period_path(@organism,@period.next_period) %></span>
 
   <%= icon_to 'nouveau.png', new_book_line_path(@book, mois: @mois) ,id: 'new_line_link' %>
     </div>
