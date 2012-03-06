@@ -5,10 +5,11 @@
 # graphique tel que défini par Utilities::Graphic
 # La méthode pour calculer le solde est :
 # - soit par défaut monthly_value(date)
-# - soit une méthode fournie en deuxième argument qui appellera date (par exemple pour les Cash, il y a sold qui fournit l'info
+# - soit une méthode fournie par la varaible d'instance @chart_value_method
+# typiquement la variable d'instance est fixée à l'initialisation par un after_initialize
 module Utilities::JcGraphic
 
-     # permet de retourner ou de créer la variable d'instance
+   # permet de retourner ou de créer la variable d'instance
   # ce qui fait une sorte de cache puisque graphic est ensuite appelé à plusieurs
   # reprises pour founir ses différentes éléments
   def graphic(period)

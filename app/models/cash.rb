@@ -21,12 +21,9 @@ class Cash < ActiveRecord::Base
     date <= Date.today ? ls.sum(:credit)-ls.sum(:debit) : 0
   end
 
-  after_initialize :define_chart_method
 
-
- 
-
-
+  # permet de définir la méthode utilisée par le module JcGraphic pour la construction des graphiques, en l'occurence sold
+  after_initialize {  @chart_value_method = :sold }
 
   
   # Calcule les dates possibles pour un contrôle de caisse en fonction de l'exercice,
@@ -39,12 +36,9 @@ class Cash < ActiveRecord::Base
     return min_date, [period.close_date, Date.today].min
   end
 
-  private
+ 
 
-  def define_chart_method
-    @chart_value_method = :sold
-  end
-
+  
 
 
 
