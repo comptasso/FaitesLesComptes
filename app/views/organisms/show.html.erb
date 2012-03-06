@@ -21,7 +21,7 @@
 <%= content_tag :div, :class=>"pave result" do %>
   <h2>Résultat</h2>
   <%= render partial: 'graphic', object: @period.graphic(@period) , :locals=>{id: 'book_0'} %>
-<% end %>
+<% end %>‘
 
 <% @organism.bank_accounts.each do |ba| %>
 <%= content_tag :div, :class=>"pave bank"  do %>
@@ -51,7 +51,8 @@
   <% else %>
   <span class="alert">Pas encore de contrôle de caisse à ce jour</span>
   <% end %>
-  <%= render partial: 'graphic', object: ca.graphic(@period) , :locals=>{id: "cash_#{ca.id}" } %>
+  
+  <%= render partial: 'graphic', object: ca.graphic(@period, :test_module)  , :locals=>{id: "cash_#{ca.id}" } %>
 <% end %>
 <% end %>
   

@@ -5,6 +5,11 @@ class Cash < ActiveRecord::Base
 
   include Utilities::JcGraphic
 
+
+
+  def test_module(m)
+    2000
+  end
   # monthly_value est nécessaire pour le module Utilities::JcGraphic
   def monthly_value(mmyyyy)
     month= mmyyyy[/^\d{2}/]; year = mmyyyy[/\d{4}$/]
