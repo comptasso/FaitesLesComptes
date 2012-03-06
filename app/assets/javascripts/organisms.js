@@ -54,7 +54,7 @@ jQuery(function () {
 
 
 // petite fonction helper pour transformer des strings en float
-function s_to_f(element, index, array) {
+function s_to_f(element) {
     return parseFloat(element);
 }
 
@@ -67,18 +67,20 @@ $(document).ready(function () {
     // on récupère les données à partir de span hidden
     $('.monthly_graphic').each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
         var complete_id = this.id,
-            id = this.id.match(/\d+$/), // on récupère l'id'
-            legend = $(this).find('.legend').text().split(';'), // la légende
-            ticks = $(this).find('.ticks').text().split(';'), // les mois
-            period_ids = $(this).find('.period_ids').text().split(';'), // les mois
-    // on construit les variables qui seront utilisées par jqplot
-            s = [],
-            label = [],
-            i = 0;
+        id = this.id.match(/\d+$/), // on récupère l'id'
+        legend = $(this).find('.legend').text().split(';'), // la légende
+        ticks = $(this).find('.ticks').text().split(';'), // les mois
+        period_ids = $(this).find('.period_ids').text().split(';'), // les mois
+        // on construit les variables qui seront utilisées par jqplot
+        s = [],
+        label = [],
+        i = 0;
 
-   // et on les remplit par une boucle qui prend la dimension de légende pour construire
+        // et on les remplit par une boucle qui prend la dimension de légende pour construire
         for (i = 0; i <= legend.length; i += 1) {
-            label[i] = {label: legend[i]}; // la table des légendes
+            label[i] = {
+                label: legend[i]
+            }; // la table des légendes
             s[i] = $(this).find('.series_' + i).text().split(';').map(s_to_f); // et chaque série de données
         }
         //var zone_dessin = $(this).find('.bar_graph');
@@ -88,7 +90,9 @@ $(document).ready(function () {
             // be applied to all series in the chart.
             seriesDefaults: {
                 renderer: $.jqplot.BarRenderer,
-                pointLabels: { show: false},
+                pointLabels: {
+                    show: false
+                },
                 rendererOptions: {
                     fillToZero: true,
                     barPadding: 0,      // number of pixels between adjacent bars in the same
@@ -96,10 +100,10 @@ $(document).ready(function () {
                     barMargin: 5,      // number of pixels between adjacent groups of bars.
                     barDirection: 'vertical', // vertical or horizontal.
                     barWidth: 10,     // width of the bars.  null to calculate automatically.
-                    shadowOffset: 2,    // offset from the bar edge to stroke the shadow.
-                    shadowDepth: 5,     // nuber of strokes to make for the shadow.
-                    shadowAlpha: 0.8 // transparency of the shadow.
-                    //, location: 'e', edgeTolerance: -15 }
+                    shadowOffset: 0,    // offset from the bar edge to stroke the shadow.
+                    shadowDepth: 0,     // nuber of strokes to make for the shadow.
+                    shadowAlpha: 0 // transparency of the shadow.
+                //, location: 'e', edgeTolerance: -15 }
                 }
             },
 
@@ -109,7 +113,7 @@ $(document).ready(function () {
             // is specified for each series.
             series: label,
             highlighter: {
-                sizeAdjust: 10,
+                sizeAdjust: 2,
                 tooltipLocation: 'n',
                 tooltipAxes: 'y',
                 tooltipFormatString: '%.2f',
@@ -121,8 +125,8 @@ $(document).ready(function () {
             // the legend to overflow the container.
             legend: {
                 renderer: $.jqplot.EnhancedLegendRenderer,
-              //  numberRows: 1,
-              //  numberColumns: 2,
+                //  numberRows: 1,
+                //  numberColumns: 2,
                 show: true,
                 placement: 'insideGrid',
                 location: 'ne',
@@ -153,25 +157,109 @@ $(document).ready(function () {
                         showGridline: false
                     }
                 },
-               // Pad the y axis just a little so bars can get close to, but
+                // Pad the y axis just a little so bars can get close to, but
                 // not touch, the grid boundaries.  1.2 is the default padding.
                 yaxis: {
                     pad: 1.05,
                     tickOptions: {
-                        formatString: '\u20ac%d'
+                        formatString: '\u20ac %d'
                     }
                 }
             }
         });
 
 
-   // avant de relier les colonnes des graphes à l'affichage du livre correspondant
-   // FIXME ne prend pas en compte la période
+        // avant de relier les colonnes des graphes à l'affichage du livre correspondant
         if (id > 0) {   // le graphe 0 est celui des résultats - il n'est donc pas relié
-            $('#chart_book_' + id).bind('jqplotDataClick',
+            $('#chart_bar_book_' + id).bind('jqplotDataClick',
                 function (ev, seriesIndex, pointIndex, data) {
                     window.location = ("/books/" + id + "/lines?mois=" + pointIndex + "&period_id=" + period_ids[seriesIndex]);
                 });
         }
+
+        
+    });
+});
+
+$(document).ready(function () {
+    // $.jqplot.config.enablePlugins = true; // semble indispensable pour le highlighter
+
+    // on récupère les données à partir de span hidden
+    $('.line_monthly_graphic').each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
+        var complete_id = this.id,
+        id = this.id.match(/\d+$/), // on récupère l'id'
+        legend = $(this).find('.legend').text().split(';'), // la légende
+        ticks = $(this).find('.ticks').text().split(';'), // les mois
+        // period_ids = $(this).find('.period_ids').text().split(';'), // les mois
+        // on construit les variables qui seront utilisées par jqplot
+        s = [],
+        label = [],
+        i = 0;
+
+        // et on les remplit par une boucle qui prend la dimension de légende pour construire
+        for (i = 0; i <= legend.length; i += 1) {
+            label[i] = {
+                label: legend[i]
+            }; // la table des légendes
+            s[i] = $(this).find('.series_' + i).text().split(';').map(s_to_f); // et chaque série de données
+        }
+        $.jqplot('chart_' + complete_id, s, {
+            seriesDefaults: {
+                pointLabels: {
+                    show: false
+                }
+            },
+            series: label,
+            highlighter: {
+                sizeAdjust: 5,
+                tooltipLocation: 'n',
+                tooltipAxes: 'y',
+                useAxesFormatters: true
+            },
+            legend: {
+                renderer: $.jqplot.EnhancedLegendRenderer,
+                //  numberRows: 1,
+                //  numberColumns: 2,
+                show: true,
+                placement: 'insideGrid',
+                location: 'ne',
+                fontSize: '8pt',
+                textColor: 'blue',
+                rendererOptions: {
+                    numberRows: 1,
+                    numberColumns: legend.length
+                }
+            },
+            cursor: {
+                show: false,
+                zoom: false,
+                looseZoom: false,
+                showTooltip: false
+            },
+            axes: {
+                // Use a category axis on the x axis and use our custom ticks.
+                xaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer,
+                    ticks: ticks,
+                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                    tickOptions: {
+                        angle: 0,
+                        fontSize: '8pt',
+                        showMark: true,
+                        showGridline: false
+                    }
+                },
+
+                // Pad the y axis just a little so bars can get close to, but
+                // not touch, the grid boundaries.  1.2 is the default padding.
+                yaxis: {
+                    pad: 1.05,
+                    tickOptions: {
+                        formatString: '\u20ac %d'
+                    }
+                }
+            }
+
+        });
     });
 });

@@ -36,7 +36,7 @@
   Débit :<%= debit_credit ba.total_debit_np  %> - Crédit : <%= debit_credit ba.total_credit_np %><br/>
   Solde théorique calculé : <%= debit_credit(ba.last_bank_extract_sold + ba.sold_np) %>
 </p>
-  <%= render partial: 'graphic', object: ba.graphic(@period) , :locals=>{id: "bank_#{ba.id}" } %>
+  <%= render partial: 'line_graphic', object: ba.graphic(@period) , :locals=>{id: "bank_#{ba.id}" } %>
 <% end %>
 <% end %>
 
@@ -52,7 +52,7 @@
   <span class="alert">Pas encore de contrôle de caisse à ce jour</span>
   <% end %>
   
-  <%= render partial: 'graphic', object: ca.graphic(@period)  , :locals=>{id: "cash_#{ca.id}" } %>
+  <%= render partial: 'line_graphic', object: ca.graphic(@period)  , :locals=>{id: "cash_#{ca.id}" } %>
 <% end %>
 <% end %>
   
