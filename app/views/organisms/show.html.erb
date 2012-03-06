@@ -52,7 +52,7 @@
   <span class="alert">Pas encore de contrôle de caisse à ce jour</span>
   <% end %>
   
-  <%= render partial: 'graphic', object: ca.graphic(@period, :test_module)  , :locals=>{id: "cash_#{ca.id}" } %>
+  <%= render partial: 'graphic', object: ca.graphic(@period)  , :locals=>{id: "cash_#{ca.id}" } %>
 <% end %>
 <% end %>
   
