@@ -107,10 +107,10 @@ end
 class BankAccount < ActiveRecord::Base
  include Utilities::JcGraphic
 
-  # accepte surtout le format mm-yyyy (ou encore mm/yyyyy)
-  def monthly_value(mmyyyy)
-    month= mmyyyy[/^\d{2}/]; year = mmyyyy[/\d{4}$/]
-    be= bank_extracts.find_by_month_and_year(month, year) 
+ 
+ # monthly_value est la méthode par défaut utilisée par JcGraphic pour avoir la valeur d'un mois
+  def monthly_value(date)
+    be=bank_extracts.find_nearest(date)
     be ? be.end_sold : 0 # s'il y a  un extrait correspondant, donne son solde, sinon zero
   end
 

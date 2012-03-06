@@ -57,6 +57,8 @@ include Validations
   scope :period, lambda {|p| where('line_date >= ? AND line_date <= ?', p.start_date, p.close_date)}
   scope :period_month, lambda {|p,m| where('line_date >= ? AND line_date <= ?', p.start_date.months_since(m), p.start_date.months_since(m).end_of_month) }
   scope :cumul_period_month, lambda {|p,m| where('line_date >= ? AND line_date <=?', p.start_date, p.start_date.months_since(m).end_of_month)}
+
+  # TODO voir si ce scope est encore utilisé
   scope :month, lambda {|month_year| where('line_date >= ? AND line_date <= ?',
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1),
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1).end_of_month    )}

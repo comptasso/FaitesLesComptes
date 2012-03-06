@@ -378,6 +378,7 @@ rajouter les graphes pour les caisses
 On peut retirer le flash sur les chèques en attentes d'enregistrement dans la vue organisme car cela
 apparait sur le dashboard (et en plus c'était peut être tous organismes mélangés).
 Dans la vue bank_extract.new, il ya un pb de mise en page des deux pick_dates
+Faire une classe month pour Period ?
 
 --------------------- refonte de check_deposit--------------------
 OK - revoir le modèle pour avoir les méthodes dans le modèle plutôt que dans le controller

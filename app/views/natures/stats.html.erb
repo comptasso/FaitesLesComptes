@@ -13,7 +13,7 @@
   <thead>
     <tr>
       <th>Nature</th>
-      <% @period.list_months_year.each do |my| %>
+      <% @period.list_months('%b %y').each do |my| %>
         <%=  content_tag :th,my  %>
       <% end %>
       <th>Cumul</th>

@@ -13,7 +13,7 @@ describe Period do
 
   context "avec  2 exercices" do 
     
-    it 'should respond is_closed when closed' do 
+    it 'should respond is_closed when closed' do  
       @p_2010.is_closed?.should be_false
       @p_2010.closable? #.should be_true
       @p_2010.errors[:close].should == [] 
@@ -71,23 +71,23 @@ describe Period do
 
         @p_2011.stub_chain(:books, :all).and_return([b1,b2])
         @p_2010.stub_chain(:books, :all).and_return([b1,b2])
-        @p_2011.list_months('%m-%Y').each do |m|
-          b1.stub(:monthly_value).with(m).and_return(100 + 10*(m[/^\d{2}/].to_i) )
-          b2.stub(:monthly_value).with(m).and_return(-120 + 5*(m[/^\d{2}/].to_i) )
+        @p_2011.list_end_months.each do |m|
+          b1.stub(:monthly_value).with(m).and_return(100 + 10*(m.month))
+          b2.stub(:monthly_value).with(m).and_return(-120 + 5*(m.month) )
         end
-        @p_2010.list_months('%m-%Y').each do |m|
-          b1.stub(:monthly_value).with(m).and_return(1000 + 100*(m[/^\d{2}/].to_i) )
-          b2.stub(:monthly_value).with(m).and_return(-1200 + 50*(m[/^\d{2}/].to_i) )
+        @p_2010.list_end_months.each do |m|
+          b1.stub(:monthly_value).with(m).and_return(1000 + 100*(m.month) )
+          b2.stub(:monthly_value).with(m).and_return(-1200 + 50*(m.month) )
         end
         (1..3).each do |i|
-          my="#{format('%02d',i)}-2010" 
+          my=Date.civil(2010,i,1).end_of_month
           b1.stub(:monthly_value).with(my).and_return(0)
           b2.stub(:monthly_value).with(my).and_return(0)
         end
       end
 
       it "check the monthly result" do 
-        @p_2011.monthly_value('03-2011').should == 25
+        @p_2011.monthly_value(Date.civil(2011,03,31)).should == 25
       end
 
       it 'check_previous_period' do
@@ -118,8 +118,8 @@ describe Period do
         end
 
         it "the first with ..."   do
-          b1.monthly_value('04-2010').should == 1400
-          b1.monthly_value('03-2010').should == 0
+          b1.monthly_value(Date.civil(2010,04,30)).should == 1400
+          b1.monthly_value(Date.civil(2010,03,31)).should == 0
           @graphic.series[0].should == P2010_RESULTS
         end
 
@@ -131,7 +131,7 @@ describe Period do
 
       end
       
-      context "check the default graphic with two periods" do
+      context "check the default graphic with two periods" do 
         before(:each) do
           @p_2011.stub(:previous_period?).and_return(false)
           @graphic= @p_2011.default_graphic(@p_2011)
@@ -152,7 +152,7 @@ describe Period do
 
 
         it "checks the monthly_values" do
-          @p_2011.monthly_datas_for_chart(@p_2011.list_months('%m-%Y')).should == P2011_RESULTS
+          @p_2011.monthly_datas_for_chart(@p_2011.list_end_months).should == P2011_RESULTS
         end
 
         it "check the legend"  do
@@ -160,7 +160,7 @@ describe Period do
         end
 
         it "check the datas" do
-          @p_2011.monthly_value('01-2011').should == -5
+          @p_2011.monthly_value(Date.civil(2011,01,31)).should == -5
           @graphic.series[0].should == P2011_RESULTS
         end
       end

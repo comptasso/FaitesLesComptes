@@ -19,7 +19,6 @@ class Book < ActiveRecord::Base
   validates :title, presence: true  
  
   attr_reader  :monthly_solds
- 
 
   # renvoie les soldes mensuels du livre pour l'ensemble des mois de l'exercice
   def monthly_datas(period)
@@ -31,11 +30,13 @@ class Book < ActiveRecord::Base
     a
   end
 
-  # renvoie le solde d'un livre pour un mois donné au format mm-yyyy
-  def monthly_value(month)
-    ls=self.lines.month(month)
+  # renvoie le solde d'un livre pour un mois déterminé par date
+  def monthly_value(date)
+    ls=self.lines.mois(date)
+    # TODO : on peut certainement faire mieux sur le plan de la requête
     ls.sum(:credit)-ls.sum(:debit)
   end
+
 
 
 

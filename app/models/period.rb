@@ -153,22 +153,17 @@ class Period < ActiveRecord::Base
     self.start_date.months_since(mois_period).end_of_month.day
   end
 
- # retourne une liste des mois de l'exercice localisée par exemple janvier février,...
-#  def list_months
-#    self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>'%B'}
-#  end
-
-  # TODO à supprimer après avoir fait un format par défault dans list_months
-  # retourne une liste des mois de l'ex localisée sous forme fév. 11 mar. 11 ...
-  def list_months_year
-    self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>'%b %y'}
-  end
-
-
+  
   #TODO refactoriser les deux méthodes ci-dessus, grâce à celle ci qui est également
   # utilisée par Book#monthly_datas 
   def list_months(format)
     self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>format}
+  end
+
+  # retourne la date du dernier jour du mois
+  # utilie pour les collecte de données en fin de mois
+  def list_end_months
+    self.nb_months.times.map {|m| start_date.months_since(m).end_of_month }
   end
 
 
@@ -204,12 +199,13 @@ class Period < ActiveRecord::Base
 
 
   # donne les soldes de chaque mois, est appelé par le module JcGraphic pour constuire les graphes
-  def monthly_value(m)
-    books.all.sum {|b| b.monthly_value(m)}
+  def monthly_value(date)
+    books.all.sum {|b| b.monthly_value(date) }
   end
 
+  # TODO utilisée ??
   def monthly_results
-    list_months('%m-%Y').map {|m| monthly_value(m)}
+    list_end_months.map {|m| monthly_value(m)}
   end
 
 

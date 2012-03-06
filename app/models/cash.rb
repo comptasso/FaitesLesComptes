@@ -3,24 +3,15 @@ class Cash < ActiveRecord::Base
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
 
-  include Utilities::JcGraphic
+   include Utilities::JcGraphic
 
-
-
-  def test_module(m)
-    2000
-  end
-  # monthly_value est nécessaire pour le module Utilities::JcGraphic
-  def monthly_value(mmyyyy)
-    month= mmyyyy[/^\d{2}/]; year = mmyyyy[/\d{4}$/]
-    sold Date.civil(year.to_i, month.to_i, 1).end_of_month
-  end
+  attr_reader :chart_value_method
   
   belongs_to :organism
   has_many :lines
   has_many :cash_controls
 
-  # calcule le solde d'une caisse à une date donnée en partant du début de l'exercice 
+  # calcule le solde d'une caisse à une date donnée en partant du début de l'exercice
   # qui inclut cette date
   # TODO en fait j'ai modifié ce comportement pour ne pas avoir ce problème de report
   # A réfléchir
@@ -30,6 +21,14 @@ class Cash < ActiveRecord::Base
     date <= Date.today ? ls.sum(:credit)-ls.sum(:debit) : 0
   end
 
+  after_initialize :define_chart_method
+
+
+ 
+
+
+
+  
   # Calcule les dates possibles pour un contrôle de caisse en fonction de l'exercice,
   # de la date du jour et des contrôles antérieurs.
   # on ne peut saisir un contrôle antérieur aux contrôles existants.
@@ -39,6 +38,13 @@ class Cash < ActiveRecord::Base
     min_date= last_cc ? [period.start_date, last_cc.date].max : period.start_date
     return min_date, [period.close_date, Date.today].min
   end
+
+  private
+
+  def define_chart_method
+    @chart_value_method = :sold
+  end
+
 
 
 

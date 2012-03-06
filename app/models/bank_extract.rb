@@ -14,9 +14,11 @@ class BankExtract < ActiveRecord::Base
   scope :period, lambda {|p| where('(begin_date <= ? AND end_date >= ?)  OR (begin_date <= ? AND end_date >= ? ) OR (begin_date  >= ? AND end_date  <= ?)',
       p.start_date, p.start_date, p.close_date, p.close_date, p.start_date, p.close_date).order(:begin_date) }
 
-  def self.find_by_month_and_year(m,y)
-    m = m.to_i ; y = y=y.to_i
-    debut=Date.civil(y,m,1)
+
+  # on cherche le relevé de compte qui soit dans le mois de date, mais le plus proche de la
+  # fin du mois
+  def self.find_nearest(date)
+    debut=date.beginning_of_month
     fin=debut.end_of_month
     BankExtract.order('end_date ASC').where(['end_date >= ? and end_date <= ?', debut, fin]).last
   end
