@@ -5,7 +5,7 @@ class Cash < ActiveRecord::Base
 
    include Utilities::JcGraphic
 
-  attr_reader :chart_value_method
+  # attr_reader :chart_value_method
   
   belongs_to :organism
   has_many :lines
@@ -22,10 +22,12 @@ class Cash < ActiveRecord::Base
   end
 
 
-  # permet de définir la méthode utilisée par le module JcGraphic pour la construction des graphiques, en l'occurence sold
-  after_initialize {  @chart_value_method = :sold }
+  # méthode utilisée par le module JcGraphic pour la construction des graphiques
+  def monthly_value(date)
+     ls= self.lines.where('line_date <= ?', date)
+    date <= Date.today ? ls.sum(:credit)-ls.sum(:debit) : 'null'
+  end
 
-  
   # Calcule les dates possibles pour un contrôle de caisse en fonction de l'exercice,
   # de la date du jour et des contrôles antérieurs.
   # on ne peut saisir un contrôle antérieur aux contrôles existants.

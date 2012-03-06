@@ -111,7 +111,9 @@ class BankAccount < ActiveRecord::Base
  # monthly_value est la méthode par défaut utilisée par JcGraphic pour avoir la valeur d'un mois
   def monthly_value(date)
     be=bank_extracts.find_nearest(date)
-    be ? be.end_sold : 0 # s'il y a  un extrait correspondant, donne son solde, sinon zero
+    be ? be.end_sold : 'null' # s'il y a  un extrait correspondant, donne son solde, sinon null
+    # jqplot traduira ce null en rien par la fonction parseFloat qui est appelée lors de la
+    # construction des graphes
   end
 
 end

@@ -201,15 +201,17 @@ $(document).ready(function () {
             label[i] = {
                 label: legend[i]
             }; // la table des légendes
-            s[i] = $(this).find('.series_' + i).text().split(';').map(s_to_f); // et chaque série de données
+            s[i] = $(this).find('.series_' + i).text().split(';').map(parseFloat); // et chaque série de données
         }
         $.jqplot('chart_' + complete_id, s, {
             seriesDefaults: {
                 pointLabels: {
                     show: false
-                }
+                 },
+                  lineWidth: 2,
+                 markerOptions: { size: 3, style:"circle" }
             },
-            series: label,
+          series: label,
             highlighter: {
                 sizeAdjust: 5,
                 tooltipLocation: 'n',

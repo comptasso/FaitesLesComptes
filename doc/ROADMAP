@@ -372,13 +372,17 @@ voir pour faire un plugin de la fonction graphe  javascript
 
 OK - rajouter les graphes pour les comptes bancaires
 OK - transformer les méthodes graphiques en modules
-rajouter les graphes pour les caisses
+OK - rajouter les graphes pour les caisses
 
+modifier seeds pour avoir deux caisses avec des mouvements différents
+inclure le sold dans le titre des pavés caisse et banque
+Peut être retirer tous les messages des pavés et les regrouper - dans un div spécifique
+Rendre les titres cliquables et/ou mettre les icones comme pour books.
 
 On peut retirer le flash sur les chèques en attentes d'enregistrement dans la vue organisme car cela
 apparait sur le dashboard (et en plus c'était peut être tous organismes mélangés).
 Dans la vue bank_extract.new, il ya un pb de mise en page des deux pick_dates
-Faire une classe month pour Period ?
+
 
 --------------------- refonte de check_deposit--------------------
 OK - revoir le modèle pour avoir les méthodes dans le modèle plutôt que dans le controller
@@ -433,6 +437,7 @@ Revoir la vue index de nature dans public qui propose des actions qui relèvent 
 Peut être idem pour destination
 Il serait plus judicieux de faire un stat controller car le controller nature n'a plus qu'une méthode stats
 et stats traite de natures et de destinations
+Faire une classe month pour Period ?
 -----------------------------------------------------------------
 
 
