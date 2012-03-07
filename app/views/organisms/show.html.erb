@@ -41,7 +41,7 @@
 <% @organism.cashes.each do |ca| %>
 <%= content_tag :div, :class=>"pave cash"  do %>
 <h2>Caisse <%=  ca.name %> = <%= number_to_currency ca.sold(@date) %>
-  <%= icon_to 'detail.png', organism_cash_cash_lines_path(@organism, ca) %>
+  <%= icon_to 'detail.png', cash_cash_lines_path(ca) %>
 </h2>
  
   <% if ca.cash_controls.any?  %>

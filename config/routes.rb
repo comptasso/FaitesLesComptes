@@ -77,7 +77,7 @@ Faitesvoscomptes::Application.routes.draw do
   # match "bank_extract/:bank_extract_id/pointage/:id/pointe" => 'pointage#pointe', :as=> :pointe, :method=>:post
   # match "bank_extract/:bank_extract_id/pointage/:id/depointe" => 'pointage#depointe', :as=> :depointe,:method=>:post
 
- # DEBUTde la zone public
+  # DEBUTde la zone public
 
   resources :organisms , :only=> [:index, :show] do
     resources :periods, :only=> [:index, :show] do
@@ -108,17 +108,7 @@ Faitesvoscomptes::Application.routes.draw do
         end
       end
     end
-    resources :cashes, :only=> [:show] do
-      #      member do
-      #        get 'controle'
-      #      end
-      resources :cash_controls do
-        member do
-          put 'lock'
-        end
-      end
-      resources :cash_lines
-    end
+    
     resources :books, :only=>[:show]
     resources :income_books
     resources :outcome_books
@@ -127,9 +117,9 @@ Faitesvoscomptes::Application.routes.draw do
    
   
 
-  resources :bank_accounts do
-    resources :check_deposits 
-  end
+    resources :bank_accounts do
+      resources :check_deposits
+    end
 
   end
 
@@ -157,6 +147,14 @@ Faitesvoscomptes::Application.routes.draw do
   end
   resources :outcome_books do
     resources :lines
+  end
+  resources :cashes, :only=> [:show] do
+    resources :cash_controls do
+      member do
+        put 'lock'
+      end
+    end
+    resources :cash_lines
   end
 
   resources :users

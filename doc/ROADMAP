@@ -375,7 +375,7 @@ OK - transformer les méthodes graphiques en modules
 OK - rajouter les graphes pour les caisses
 
 modifier seeds pour avoir deux caisses avec des mouvements différents
-inclure le sold dans le titre des pavés caisse et banque
+OK - inclure le sold dans le titre des pavés caisse et banque
 Peut être retirer tous les messages des pavés et les regrouper - dans un div spécifique
 Rendre les titres cliquables et/ou mettre les icones comme pour books.
 
@@ -428,6 +428,7 @@ Jasmine -commencé l'installation mais pas fini car je n'ai pas actuellement de 
 Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 
 --------------------Divers---------------------------------------------------------------------------
+Revoir la page index de organism (title et mise en page)
 supprimer la session de period 
      Factoriser les jQuery datatable
 Le datatable de compta#lines ne marche pas

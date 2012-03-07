@@ -5,9 +5,9 @@
 
 <fieldset><legend>Livre de caisse - <%=  @book.name %></legend>
   <div id="submenu">
-    <span><%=  link_to_if @period.previous_period?, '<<', previous_organism_period_path(@organism,@period) %></span>
+    <span><%=  link_to_if @period.previous_period?, '<<', change_organism_period_path(@organism,@period.previous_period) %></span>
     <%= cashsubmenu_helper(@book, @period) %>
-    <span><%= link_to_if @period.next_period? ,'>>', next_organism_period_path(@organism,@period) %></span>
+    <span><%= link_to_if @period.next_period? ,'>>', change_organism_period_path(@organism,@period.next_period) %></span>
   </div>
 
   <table class="data_table display">

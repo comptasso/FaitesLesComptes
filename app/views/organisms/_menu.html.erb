@@ -54,11 +54,11 @@
   <li><h2>Caisse</h2>
      <ul>
     <% @organism.cashes.each do |c| %>
-     <li><%= link_to c.name, organism_cash_path(@organism,c)  %>
+     <li><%= link_to c.name, cash_path(c)  %>
        <ul>
-         <li><%= link_to 'Afficher', organism_cash_cash_lines_path(@organism, c) %></li>
-         <li><%= link_to 'Contrôles', organism_cash_cash_controls_path(@organism, c) %></li>
-         <li><%= link_to 'Ajouter', new_organism_cash_cash_control_path(@organism, c) %></li>
+         <li><%= link_to 'Afficher', cash_cash_lines_path(c) %></li>
+         <li><%= link_to 'Contrôles', cash_cash_controls_path(c) %></li>
+         <li><%= link_to 'Ajouter', new_cash_cash_control_path(c) %></li>
        </ul>
        </li>
     <% end %>
