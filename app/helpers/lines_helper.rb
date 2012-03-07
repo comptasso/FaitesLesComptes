@@ -15,22 +15,13 @@ module LinesHelper
   end
 
  
+ # consstruit une série de liens à partir des mois de l'exercice pour naviguer d'un mois
+ # à l'autre
   def submenu_helper(book, period)
-    t=[]
-    if period
-      t= period.list_months('%b')
-    else
-      t=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',' Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-    end
-
-    content_tag :span do
+     content_tag :span do
       s=''
-      t.each_with_index do |mois, i|
-
-        u =  content_tag :span do
-          link_to_unless_current(mois, book_lines_path(book, "mois"=> i))
-        end
-        s += concat(u)
+       period.list_months('%b').each_with_index do |mois, i|
+        s += concat(content_tag(:span) { link_to_unless_current(mois, book_lines_path(book, "mois"=> i)) })
       end
       s
     end
