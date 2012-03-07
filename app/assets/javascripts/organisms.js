@@ -201,29 +201,8 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-    // $.jqplot.config.enablePlugins = true; // semble indispensable pour le highlighter
-
-    // on récupère les données à partir de span hidden
-    $('.line_monthly_graphic').each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
-        var complete_id = this.id,
-            id = this.id.match(/\d+$/), // on récupère l'id'
-            legend = $(this).find('.legend').text().split(';'), // la légende
-            ticks = $(this).find('.ticks').text().split(';'), // les mois
-            // period_ids = $(this).find('.period_ids').text().split(';'), // les mois
-            // on construit les variables qui seront utilisées par jqplot
-            s = [],
-            label = [],
-            i = 0;
-
-        // et on les remplit par une boucle qui prend la dimension de légende pour construire
-        for (i = 0; i <= legend.length; i += 1) {
-            label[i] = {
-                label: legend[i]
-            }; // la table des légendes
-            s[i] = $(this).find('.series_' + i).text().split(';').map(s_to_f); // et chaque série de données
-        }
-        $.jqplot('chart_' + complete_id, s, {
+function options_for_graph(all_datas, type) {
+    var options = {
             seriesDefaults: {
                 pointLabels: {
                     show: false
@@ -234,7 +213,7 @@ $(document).ready(function () {
                     style: "circle"
                 }
             },
-            series: label,
+            series: all_datas.dlabel,
             highlighter: {
                 sizeAdjust: 5,
                 tooltipLocation: 'n',
@@ -252,7 +231,7 @@ $(document).ready(function () {
                 textColor: 'blue',
                 rendererOptions: {
                     numberRows: 1,
-                    numberColumns: legend.length
+                    numberColumns: all_datas.dlegend.length
                 }
             },
             cursor: {
@@ -265,7 +244,80 @@ $(document).ready(function () {
                 // Use a category axis on the x axis and use our custom ticks.
                 xaxis: {
                     renderer: $.jqplot.CategoryAxisRenderer,
-                    ticks: ticks,
+                    ticks: all_datas.dticks,
+                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                    tickOptions: {
+                        angle: 0,
+                        fontSize: '8pt',
+                        showMark: true,
+                        showGridline: false
+                    }
+                },
+
+                // Pad the y axis just a little so bars can get close to, but
+                // not touch, the grid boundaries.  1.2 is the default padding.
+                yaxis: {
+                    pad: 1.05,
+                    tickOptions: {
+                        formatString: "\u20ac %d"
+                    }
+                }
+            }
+    };
+    return options;
+}
+
+$(document).ready(function () {
+    // $.jqplot.config.enablePlugins = true; // semble indispensable pour le highlighter
+    var all_datas, options;
+    
+    // on récupère les données à partir de span hidden
+    $('.line_monthly_graphic').each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
+        all_datas = recup_graph_datas(this);
+        options = options_for_graph(all_datas, 'normal')
+        $.jqplot('chart_' + all_datas.dcomplete_id, all_datas.dseries, {
+            seriesDefaults: {
+                pointLabels: {
+                    show: false
+                },
+                lineWidth: 2,
+                markerOptions: {
+                    size: 3,
+                    style: "circle"
+                }
+            },
+            series: all_datas.dlabel,
+            highlighter: {
+                sizeAdjust: 5,
+                tooltipLocation: 'n',
+                tooltipAxes: 'y',
+                useAxesFormatters: true
+            },
+            legend: {
+                renderer: $.jqplot.EnhancedLegendRenderer,
+                //  numberRows: 1,
+                //  numberColumns: 2,
+                show: true,
+                placement: 'insideGrid',
+                location: 'ne',
+                fontSize: '8pt',
+                textColor: 'blue',
+                rendererOptions: {
+                    numberRows: 1,
+                    numberColumns: all_datas.dlegend.length
+                }
+            },
+            cursor: {
+                show: false,
+                zoom: false,
+                looseZoom: false,
+                showTooltip: false
+            },
+            axes: {
+                // Use a category axis on the x axis and use our custom ticks.
+                xaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer,
+                    ticks: all_datas.dticks,
                     tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                     tickOptions: {
                         angle: 0,
