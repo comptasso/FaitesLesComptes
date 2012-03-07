@@ -12,7 +12,7 @@
           <%= icon_to 'detail.png', book_lines_path(book) %>
     </h2>
    
-    <%= render partial: 'graphic', object: book.graphic(@period) , :locals=>{id: "book_#{book.id}"} %>
+    <%= render partial: 'bar_graphic', object: book.graphic(@period) , :locals=>{id: "book_#{book.id}"} %>
   </div>
 <% end %>
 
@@ -20,7 +20,7 @@
 
 <%= content_tag :div, :class=>"pave result" do %>
   <h2>Résultat</h2>
-  <%= render partial: 'graphic', object: @period.graphic(@period) , :locals=>{id: 'book_0'} %>
+  <%= render partial: 'bar_graphic', object: @period.graphic(@period) , :locals=>{id: 'book_0'} %>
 <% end %>‘
 
 <% @organism.bank_accounts.each do |ba| %>

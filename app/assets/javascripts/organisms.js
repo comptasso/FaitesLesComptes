@@ -68,11 +68,12 @@ function s_to_f(element) {
 // cette fonction récupère les informations cachées qui sont inclus dans un DOM
 // à partir de l'id et des classes legend, ticks, period_ids et series'
 function recup_graph_datas(element) {
-    var complete_id, id, legend, ticks, period_ids, s = [], label = [], i = 0;
+    var complete_id, type, id, legend, ticks, period_ids, s = [], label = [], i = 0;
     $(element).each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
         // on construit les variables qui seront utilisées par jqplot
         complete_id = this.id;
-        id = this.id.match(/\d+$/); // on récupère l'id'
+        type = $(this).attr('class').split('_')[0];
+        id = this.id.match(/\d+$/)[0]; // on récupère l'id et comme match retourne un array on prend le premier'
         legend = $(this).find('.legend').text().split(';'); // la légende
         ticks = $(this).find('.ticks').text().split(';'); // les mois
         period_ids = $(this).find('.period_ids').text().split(';'); // les mois
@@ -92,7 +93,8 @@ function recup_graph_datas(element) {
         dticks: ticks,
         dperiod_ids: period_ids,
         dseries: s,
-        dlabel: label
+        dlabel: label,
+        dtype: type
     };
 }
 
@@ -102,7 +104,7 @@ function recup_graph_datas(element) {
 // prend les données d'un graphe (fournies par un appel à recup_graph_datas)
 // et un type de graphe ('normal' ou 'bar') et construit les options qui seront 
 // nécessaires pour jqplot (legende, séries, ticks,...)
-function options_for_graph(all_datas, type) {
+function options_for_graph(all_datas) {
     var options = {
             seriesDefaults: {
                 pointLabels: {
@@ -164,8 +166,10 @@ function options_for_graph(all_datas, type) {
                     }
                 }
             }
-        }; // default options pour un graphe normal
-    if (type === 'bar') { // ici on surcharge seriesDefaults pour prendre en compte
+        }; // fin des default options pour un graphe normal
+
+// ici on surcharge seriesDefaults pour les graphes de type 'bar'
+    if (all_datas.dtype === 'bar') {
         // le renderer bar et ces options
         options.seriesDefaults = {
             renderer: $.jqplot.BarRenderer,
@@ -189,33 +193,41 @@ function options_for_graph(all_datas, type) {
     return options;
 }
 
+function bind_bars(all_datas) {
+    $('#chart_' + all_datas.dcomplete_id).bind('jqplotDataClick',
+        function (ev, seriesIndex, pointIndex, data) {
+            window.location = ("/books/" + all_datas.did + "/lines?mois=" + pointIndex + "&period_id=" + all_datas.dperiod_ids[seriesIndex]);
+        });
+}
+
+// la fonctio monthly_graphic est appelée par des éléments du class
+// .bar_... ou .line... et fait le travail de tracé de graphique et 
+// éventuellement de liens avec les évènements clics sur les barres pour 
+// les objets de type book (sauf book 0 qui est le résultat)
+function monthly_graphic(element) {
+    var all_datas, options;
+    // pour chacun des graphiques mensuels 
+    all_datas = recup_graph_datas(element);  // on récupère les données à partir de span hidden
+    options = options_for_graph(all_datas); // on construit les options
+    $.jqplot('chart_' + all_datas.dcomplete_id, all_datas.dseries, options); // et on trace dans l'id chart_cash_id_1 ou chart_book_id_2'
+    // puis on relie les colonnes des graphes à l'affichage du livre correspondant lorsqu'il s'agit d'un book
+    // et lorsque ce n'est pas le book 0 qui est celui du résultats
+    if (all_datas.dcomplete_id.match(/book/) && all_datas.did > 0) {
+        bind_bars(all_datas); // fait le lien avec les barres
+    }
+}
+
+
+
 // fonction pour tracer les graphes qui apparaissent dans la page organism#show
 $(document).ready(function () {
-    var all_datas, options;
     $.jqplot.config.enablePlugins = true; // semble indispensable pour le highlighter
-
-    $('.monthly_graphic').each(function () {
-        all_datas = recup_graph_datas(this); // on récupère les données à partir de span hidden
-        options = options_for_graph(all_datas, 'bar');
-        // puis on trace le graphique avec ses options
-        $.jqplot('chart_' + all_datas.dcomplete_id, all_datas.dseries, options);
-
-        // avant de relier les colonnes des graphes à l'affichage du livre correspondant
-        if (all_datas.did > 0) {   // le graphe 0 est celui des résultats - il n'est donc pas relié
-            $('#chart_bar_book_' + all_datas.did).bind('jqplotDataClick',
-                function (ev, seriesIndex, pointIndex, data) {
-                    window.location = ("/books/" + all_datas.did + "/lines?mois=" + pointIndex + "&period_id=" + all_datas.dperiod_ids[seriesIndex]);
-                });
-        }
+    $('.bar_monthly_graphic').each(function () {
+        monthly_graphic(this); // on trace le graphe qui renvoie l'ensemble des données
     });
-});
-
-$(document).ready(function () {
-    var all_datas, options;
-
-    $('.line_monthly_graphic').each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
-        all_datas = recup_graph_datas(this);  // on récupère les données à partir de span hidden
-        options = options_for_graph(all_datas, 'normal'); // on construit les options
-        $.jqplot('chart_' + all_datas.dcomplete_id, all_datas.dseries, options); // et on trace
+    // trace un graphe sous forme de ligne pour les classes line_monthly_graphic
+    // en pratique les comptes bancaires et les caisses
+    $('.line_monthly_graphic').each(function () {
+        monthly_graphic(this);
     });
 });
