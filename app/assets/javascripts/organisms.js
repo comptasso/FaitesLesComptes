@@ -60,9 +60,9 @@ jQuery(function () {
 function s_to_f(element) {
     var e = parseFloat(element);
     if (isNaN(e)) {
-        e = null
+        e = null;
     }
-    return e
+    return e;
 }
 
 // cette fonction récupère les informations cachées qui sont inclus dans un DOM
@@ -80,7 +80,7 @@ function recup_graph_datas(element) {
         for (i = 0; i <= legend.length; i += 1) {
             label[i] = {
                 label: legend[i] // la table des légendes
-            }; 
+            };
             s[i] = $(this).find('.series_' + i).text().split(';').map(s_to_f); // et chaque série de données
         }
     });
@@ -93,8 +93,7 @@ function recup_graph_datas(element) {
         dperiod_ids: period_ids,
         dseries: s,
         dlabel: label
-        
-    }
+    };
 }
 
 
@@ -102,10 +101,10 @@ function recup_graph_datas(element) {
 $(document).ready(function () {
     var all_datas;
     $.jqplot.config.enablePlugins = true; // semble indispensable pour le highlighter
-    
+
     $('.monthly_graphic').each(function () {
-       // on récupère les données à partir de span hidden
-       all_datas = recup_graph_datas(this)
+        // on récupère les données à partir de span hidden
+        all_datas = recup_graph_datas(this);
 
         // puis on trace le graphique avec ses options
         $.jqplot('chart_' + all_datas.dcomplete_id, all_datas.dseries, {
@@ -199,8 +198,6 @@ $(document).ready(function () {
                     window.location = ("/books/" + all_datas.did + "/lines?mois=" + pointIndex + "&period_id=" + all_datas.dperiod_ids[seriesIndex]);
                 });
         }
-
-        
     });
 });
 
@@ -210,14 +207,14 @@ $(document).ready(function () {
     // on récupère les données à partir de span hidden
     $('.line_monthly_graphic').each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
         var complete_id = this.id,
-        id = this.id.match(/\d+$/), // on récupère l'id'
-        legend = $(this).find('.legend').text().split(';'), // la légende
-        ticks = $(this).find('.ticks').text().split(';'), // les mois
-        // period_ids = $(this).find('.period_ids').text().split(';'), // les mois
-        // on construit les variables qui seront utilisées par jqplot
-        s = [],
-        label = [],
-        i = 0;
+            id = this.id.match(/\d+$/), // on récupère l'id'
+            legend = $(this).find('.legend').text().split(';'), // la légende
+            ticks = $(this).find('.ticks').text().split(';'), // les mois
+            // period_ids = $(this).find('.period_ids').text().split(';'), // les mois
+            // on construit les variables qui seront utilisées par jqplot
+            s = [],
+            label = [],
+            i = 0;
 
         // et on les remplit par une boucle qui prend la dimension de légende pour construire
         for (i = 0; i <= legend.length; i += 1) {
@@ -234,7 +231,7 @@ $(document).ready(function () {
                 lineWidth: 2,
                 markerOptions: {
                     size: 3,
-                    style:"circle"
+                    style: "circle"
                 }
             },
             series: label,
