@@ -65,34 +65,50 @@ function s_to_f(element) {
     return e
 }
 
+// cette fonction récupère les informations cachées qui sont inclus dans un DOM
+// à partir de l'id et des classes legend, ticks, period_ids et series'
+function recup_graph_datas(element) {
+    var complete_id, id, legend, ticks, period_ids, s = [], label = [], i = 0;
+    $(element).each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
+        // on construit les variables qui seront utilisées par jqplot
+        complete_id = this.id;
+        id = this.id.match(/\d+$/); // on récupère l'id'
+        legend = $(this).find('.legend').text().split(';'); // la légende
+        ticks = $(this).find('.ticks').text().split(';'); // les mois
+        period_ids = $(this).find('.period_ids').text().split(';'); // les mois
+        // et on les remplit par une boucle qui prend la dimension de légende pour construire
+        for (i = 0; i <= legend.length; i += 1) {
+            label[i] = {
+                label: legend[i] // la table des légendes
+            }; 
+            s[i] = $(this).find('.series_' + i).text().split(';').map(s_to_f); // et chaque série de données
+        }
+    });
+    // on retourne maintenant l'objet ainsi construit reprenant la totalité des infos
+    return {
+        dcomplete_id: complete_id,
+        did: id,
+        dlegend: legend,
+        dticks: ticks,
+        dperiod_ids: period_ids,
+        dseries: s,
+        dlabel: label
+        
+    }
+}
 
 
 // fonction pour tracer les graphes qui apparaissent dans la page organism#show
 $(document).ready(function () {
+    var all_datas;
     $.jqplot.config.enablePlugins = true; // semble indispensable pour le highlighter
+    
+    $('.monthly_graphic').each(function () {
+       // on récupère les données à partir de span hidden
+       all_datas = recup_graph_datas(this)
 
-    // on récupère les données à partir de span hidden
-    $('.monthly_graphic').each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
-        var complete_id = this.id,
-        id = this.id.match(/\d+$/), // on récupère l'id'
-        legend = $(this).find('.legend').text().split(';'), // la légende
-        ticks = $(this).find('.ticks').text().split(';'), // les mois
-        period_ids = $(this).find('.period_ids').text().split(';'), // les mois
-        // on construit les variables qui seront utilisées par jqplot
-        s = [],
-        label = [],
-        i = 0;
-
-        // et on les remplit par une boucle qui prend la dimension de légende pour construire
-        for (i = 0; i <= legend.length; i += 1) {
-            label[i] = {
-                label: legend[i]
-            }; // la table des légendes
-            s[i] = $(this).find('.series_' + i).text().split(';').map(s_to_f); // et chaque série de données
-        }
-        //var zone_dessin = $(this).find('.bar_graph');
         // puis on trace le graphique avec ses options
-        $.jqplot('chart_' + complete_id, s, {
+        $.jqplot('chart_' + all_datas.dcomplete_id, all_datas.dseries, {
             // The "seriesDefaults" option is an options object that will
             // be applied to all series in the chart.
             seriesDefaults: {
@@ -118,7 +134,7 @@ $(document).ready(function () {
             // Custom labels for the series are specified with the "label"
             // option on the series option.  Here a series option object
             // is specified for each series.
-            series: label,
+            series: all_datas.dlabel,
             highlighter: {
                 sizeAdjust: 2,
                 tooltipLocation: 'n',
@@ -141,7 +157,7 @@ $(document).ready(function () {
                 textColor: 'blue',
                 rendererOptions: {
                     numberRows: 1,
-                    numberColumns: legend.length
+                    numberColumns: all_datas.dlegend.length
                 }
 
             },
@@ -155,7 +171,7 @@ $(document).ready(function () {
                 // Use a category axis on the x axis and use our custom ticks.
                 xaxis: {
                     renderer: $.jqplot.CategoryAxisRenderer,
-                    ticks: ticks,
+                    ticks: all_datas.dticks,
                     tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                     tickOptions: {
                         angle: 0,
@@ -177,10 +193,10 @@ $(document).ready(function () {
 
 
         // avant de relier les colonnes des graphes à l'affichage du livre correspondant
-        if (id > 0) {   // le graphe 0 est celui des résultats - il n'est donc pas relié
-            $('#chart_bar_book_' + id).bind('jqplotDataClick',
+        if (all_datas.did > 0) {   // le graphe 0 est celui des résultats - il n'est donc pas relié
+            $('#chart_bar_book_' + all_datas.did).bind('jqplotDataClick',
                 function (ev, seriesIndex, pointIndex, data) {
-                    window.location = ("/books/" + id + "/lines?mois=" + pointIndex + "&period_id=" + period_ids[seriesIndex]);
+                    window.location = ("/books/" + all_datas.did + "/lines?mois=" + pointIndex + "&period_id=" + all_datas.dperiod_ids[seriesIndex]);
                 });
         }
 
@@ -214,11 +230,14 @@ $(document).ready(function () {
             seriesDefaults: {
                 pointLabels: {
                     show: false
-                 },
-                  lineWidth: 2,
-                 markerOptions: { size: 3, style:"circle" }
+                },
+                lineWidth: 2,
+                markerOptions: {
+                    size: 3,
+                    style:"circle"
+                }
             },
-          series: label,
+            series: label,
             highlighter: {
                 sizeAdjust: 5,
                 tooltipLocation: 'n',
