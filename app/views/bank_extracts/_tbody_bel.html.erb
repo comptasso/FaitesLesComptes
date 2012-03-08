@@ -1,0 +1,16 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+
+<tbody>
+   <% tbody_bel.each do  |bank_extract_line| %>
+       <tr>
+          <%= up_down(bank_extract_line)  %>
+          <%= render bank_extract_line %>
+          <td>
+            <%= check_box_tag "bank_extract_line_#{bank_extract_line.id}" %>
+          </td>
+       </tr>
+   <% end %>
+</tbody>

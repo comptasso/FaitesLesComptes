@@ -42,6 +42,7 @@
             border: 1px solid;
             display: inline-block;
             width: 45%;
+            vertical-align: top;
             h3 {
                 text-align: center;
             }
@@ -64,15 +65,19 @@
         }
         div#arrows {
             display: inline-block;
-            background-color: orange;
             width: 8%;
+            padding-top: 80px;
             text-align: center;
+            a:hover {
+                background-color: #fff;
+                }
 
 
         }
         div#to_point {
             border: 1px solid;
             display: inline-block;
+            vertical-align: top;
             
             width: 45%;
 

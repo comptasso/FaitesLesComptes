@@ -43,18 +43,8 @@
 
 
     <% unless @bank_extract_lines.empty? %>
-  <tbody>
-      <% @bank_extract_lines.each do  |bank_extract_line| %>
 
-        <tr>
-          <%= up_down(bank_extract_line)  %>
-          <%=  render bank_extract_line %>
-          
-            <td><%= check_box_tag "bank_extract_line_#{bank_extract_line.id}" %> </td>
-       
-        </tr>
-      <% end %>
-         </tbody>
+  <%= render partial: 'tbody_bel' , object: @bank_extract_lines  %>
          <tfoot>
            <tr class="total">
             
@@ -76,7 +66,10 @@
 
   <% unless @locked %>
 <div id="arrows">
-  <a id="left_arrow" href="#"> << </a>&nbsp; | &nbsp;<a id="right_arrow" href=""> >> </a>
+
+  <a id="left_arrow" href="#"><%= image_tag('BlurMetalLi6.gif', size: "24x24")  %> </a>
+  <br/>
+  <a id="right_arrow" href=""><%= image_tag('BlurMetalLj6.gif', size: "24x24")  %> </a>
 </div>
 
 <div id="to_point"><h3>Ecritures à pointer</h3>

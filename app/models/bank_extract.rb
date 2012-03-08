@@ -9,7 +9,7 @@ class BankExtract < ActiveRecord::Base
   after_create :fill_bank_extract_lines
   after_save :lock_lines_if_locked
 
-
+# TODO add a chrono validator
   
   scope :period, lambda {|p| where('(begin_date <= ? AND end_date >= ?)  OR (begin_date <= ? AND end_date >= ? ) OR (begin_date  >= ? AND end_date  <= ?)',
       p.start_date, p.start_date, p.close_date, p.close_date, p.start_date, p.close_date).order(:begin_date) }
@@ -21,6 +21,11 @@ class BankExtract < ActiveRecord::Base
     debut=date.beginning_of_month
     fin=debut.end_of_month
     BankExtract.order('end_date ASC').where(['end_date >= ? and end_date <= ?', debut, fin]).last
+  end
+
+  # indique si l'extrait est le premier de ce compte bancaire qui doive être pointé
+  def first_to_point?
+    id == bank_account.first_extract_to_point.id
   end
 
   def lockable?
@@ -69,6 +74,8 @@ class BankExtract < ActiveRecord::Base
   # tente de pré remplir les lignes du relevé bancaire 
   # prend l'ensemble des lignes non pointées et 
   # crée des bank_extract_lines pour toutes les lignes dont les dates sont inférieures à la date de clôture
+
+  # TODO mieux utiliser la requete sql
   def fill_bank_extract_lines
     npl=bank_account.np_lines
     npl.reject! {|l| l.line_date > end_date}

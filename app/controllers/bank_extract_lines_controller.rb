@@ -5,13 +5,18 @@ class BankExtractLinesController < ApplicationController
   def up
       @bank_line=BankExtractLine.find(params[:id])
       @bank_line.move_higher
-      redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
+       respond_to do |format|
+      format.html {redirect_to pointage_organism_bank_account_bank_extract_url(@organism, @bank_account, @bank_extract)}
+      format.js
+    end
+      
+      
   end
 
   def down
       @bank_line=BankExtractLine.find(params[:id])
       @bank_line.move_lower
-      redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
+      redirect_to pointage_organism_bank_account_bank_extract_url(@organism, @bank_account, @bank_extract) 
   end
 
   private

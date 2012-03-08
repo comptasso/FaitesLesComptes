@@ -89,14 +89,14 @@ while date < Date.civil(2012,03,01) # jusqu'au 29 février (pour laisser des ch�
   total_credit=total_debit=0
  be= ba.bank_extracts.new(begin_date: date, end_date: date.end_of_month, begin_sold: sold)
  # on fait le remplissage des bank_extract avec les écritures qui sont dans la période
- nplines = ba.np_lines.select {|l| l.line_date < date.end_of_month}
+ nplines = ba.np_lines.select {|l| l.line_date <= date.end_of_month}
  nplines.each do |npl|
   be.bank_extract_lines.new(:line_id=>npl.id)
  end
  total_credit += nplines.sum(&:credit)
  total_debit += nplines.sum(&:debit)
  # on fait également le remplissage avec les remises de chèques qui sont dans la période
- rem_checks = ba.check_deposits.where(['deposit_date < ? and bank_extract_id IS NULL', date.end_of_month])
+ rem_checks = ba.check_deposits.where(['deposit_date <= ? and bank_extract_id IS NULL', date.end_of_month])
  rem_checks.each do |rc|
   be.bank_extract_lines.new(:check_deposit_id=>rc.id)
   puts "remise chèques n° #{rc.id} pour un montant de #{rc.checks.sum(:credit)}"

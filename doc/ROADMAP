@@ -354,9 +354,7 @@ OK - Revoir les validations pour interdire l'écriture sur les lignes (ou de nou
 ---------------------------- Dashboard d'un organisme ------------------------
 OK - Organiser la page en section
 OK - Construire les graphes
-A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
-ie : indiquer que les extraits de compte bancaires sont pointés
-et rajouter quelques contrôles de caisse
+
 OK - revoir le modèle remise de chèques
 OK - gérer le remplissage des bank_account_id des lignes après remplissage ou pointage de la remise
 OK - retirer de seeds les lignes avant le début de l'activité
@@ -368,16 +366,22 @@ OK - insérer un nouveau div pour les graphes
 OK - changer la classe graphe dans organsisms.js et dans show
 OK - fair un helper pour l'affichage des graphes
 OK - traiter le cas d'un seul exercice
-voir pour faire un plugin de la fonction graphe  javascript
+OK - voir pour faire un plugin de la fonction graphe  javascript : en fait grande refactorisation
 
 OK - rajouter les graphes pour les comptes bancaires
 OK - transformer les méthodes graphiques en modules
 OK - rajouter les graphes pour les caisses
 
+A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
+ie : indiquer que les extraits de compte bancaires sont pointés
+et rajouter quelques contrôles de caisse
 modifier seeds pour avoir deux caisses avec des mouvements différents
+
+Fixme : après up ou down dans un check deposit, il n'affiche plus l'action pointage
+
 OK - inclure le sold dans le titre des pavés caisse et banque
 Peut être retirer tous les messages des pavés et les regrouper - dans un div spécifique
-Rendre les titres cliquables et/ou mettre les icones comme pour books.
+OK -Rendre les titres cliquables et/ou mettre les icones comme pour books.
 
 On peut retirer le flash sur les chèques en attentes d'enregistrement dans la vue organisme car cela
 apparait sur le dashboard (et en plus c'était peut être tous organismes mélangés).

@@ -168,8 +168,9 @@ module FillDatas
     destinations=period.organism.destinations.map{|d| d.id}
     book_id=period.organism.books.find_by_type('IncomeBook').id
     8.times do |t|
+      dest = t%3 == 0 ? destinations[0] : destinations[1]  # on alterne une fois sur deux Lille et deux fois sur 3 à Valenciennes
       Line.create!(line_date:start+2*t, narration: 'cotisation', nature_id: nature_id,
-        destination_id: destinations[t%2], # on alterne une fois sur deux Lille et une autre fois Valenciennes
+        destination_id: dest,
         credit: amount, book_id: book_id, payment_mode: 'Chèque')
     end
     cashes=period.organism.cashes.map{|d| d.id}

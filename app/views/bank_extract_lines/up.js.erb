@@ -1,0 +1,9 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+
+$('#added_body').html("<%=j  render partial: 'tbodyadded', :object=>@checks  %>");
+$('#not_added_body').html("<%=j render partial: 'tbodynotadded', :object=>@lines  %>");
+$('#check_added #total_added_checks').text("<%=j debit_credit @total_checks_credit %>");
+$('#check_not_added #total_added_checks').text("<%=j debit_credit @total_lines_credit %>");

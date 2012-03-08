@@ -53,6 +53,10 @@ class BankAccount < ActiveRecord::Base
    last_bank_extract_sold + sold_np
  end
 
+ def first_extract_to_point
+   bank_extracts.where('locked = ?', false).order('begin_date ASC').first
+ end
+
  
 
 # Trouve toutes les remises de chèques qui ne sont pas encore pointées
@@ -64,6 +68,23 @@ class BankAccount < ActiveRecord::Base
    self.np_check_deposits.all.sum(&:total_checks)
  end
 
+
+ 
+ # crée des bank_extract_lines à partir des lignes non pointées
+ # méthode utilisée pour le pointage des comptes par bank_extract_controller
+ def not_pointed_check_deposits
+    self.np_check_deposits.map {|cd| BankExtractLine.new(:check_deposit_id=>cd.id)}
+ end
+
+def lines_to_point
+   self.not_pointed_lines +  self.not_pointed_check_deposits
+end
+
+ def not_pointed_lines
+  self.np_lines.map {|l| BankExtractLine.new(:line_id=>l.id)}
+ end
+
+ 
  
 
  def nb_lines_to_point

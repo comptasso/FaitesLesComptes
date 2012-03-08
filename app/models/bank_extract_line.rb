@@ -58,7 +58,7 @@ class BankExtractLine < ActiveRecord::Base
     # si c'est une ligne qui n'est pas déja verrouillée, on la verrouille
     self.line.update_attribute(:locked,true) if (self.line_id && !self.line.locked)
     # si c'est une remise de chèque on verrouille les lignes correspondantes
-    self.check_deposit.lines.each {|l| l.update_attribute(:locked, true)} if self.check_deposit_id
+    self.check_deposit.checks.each {|l| l.update_attribute(:locked, true)} if self.check_deposit_id
   end
   
   private

@@ -49,7 +49,7 @@ class CheckDeposit < ActiveRecord::Base
 
   def target_checks
     if new_record?
-    association(:checks).target
+      association(:checks).target
     else
       checks.all
     end
@@ -71,7 +71,11 @@ class CheckDeposit < ActiveRecord::Base
   # total checks fait la somme des chèques qui sont dans la cible de l'association.
   # cette approche est nécessaire car un module intégré donne un résultat vide
   def total_checks
-    association(:checks).target.sum {|l|  l.credit}
+    if new_record?
+      return association(:checks).target.sum {|l|  l.credit}
+    else
+      checks.sum(:credit)
+    end
   end
 
   # donne le total des chèques à encaisser pour cet organisme
