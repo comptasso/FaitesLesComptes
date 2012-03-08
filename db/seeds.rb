@@ -126,3 +126,13 @@ puts "Verrouillage des extraits bancaires sauf le dernier"
     be.locked = true
     be.save!
  end
+
+puts "création de contrôles de caisse"
+Cash.all.each do |c|
+  date=per_2010.start_date + 6
+  while date < Date.civil(2012,02,29)
+    c.cash_controls.create!(date: date, amount: c.sold(date), locked: true)
+    date += 7
+  end
+
+end

@@ -11,13 +11,19 @@ module FillDatas
   end
 
   def self.fill_full_period(period)
+    puts 'remplissage des lignes'
     period.nb_months.times do |t|
       fill_lines(period, t, t)
     end
+    puts 'remplissage des subventions'
     fill_subventions(period, [4,8])
+    puts 'remplissage des loyers'
     fill_loyers(period)
+    puts 'remplissage des salaires'
     fill_salaires(period)
+    puts 'remplissage des charges sociales'
     fill_charges_sociales(period)
+    puts 'remplissage des pièces de rachange'
     fill_pieces_de_rechange(period)
   end
 
@@ -35,6 +41,7 @@ module FillDatas
 
   # pour toutes les écritures à périodicité mensuelle
   def self.fill_lines(period, month, decalage)
+    
     self.fill_cotisations(period, month, decalage)
   end
 
@@ -158,7 +165,7 @@ module FillDatas
   # fill_lines va remplir les lignes de comptes pour un mois (month) d'un exercice (period)
   # les montants sont prédéterminés mais décalage permet de les modifier
   def self.fill_cotisations(period, month, decalage)
-    puts 'remplissage des cotisations'
+    
     # on a dix cotisations qui rentrent dont 7 en chèque et 3 en espéces
     # 2 sur la caisse de Lille, l'autre sur la caisse de Valenciennes
     # le montant est de 80 € plus décalage

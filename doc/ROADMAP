@@ -372,12 +372,13 @@ OK - rajouter les graphes pour les comptes bancaires
 OK - transformer les méthodes graphiques en modules
 OK - rajouter les graphes pour les caisses
 
-A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
+OK - A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
 
 OK - indiquer que les extraits de compte bancaires sont pointés
 
-et rajouter quelques contrôles de caisse
+OK - et rajouter quelques contrôles de caisse
 alignement des nombres dans les cash_controls
+mettre des icones pour naviguer facilement entre les controles et l'affichafe
 
 OK - modifier seeds pour avoir deux caisses avec des mouvements différents
 
@@ -387,8 +388,6 @@ OK - inclure le sold dans le titre des pavés caisse et banque
 Retirer tous les messages des pavés et les regrouper - dans un div spécifique
 OK -Rendre les titres cliquables et/ou mettre les icones comme pour books.
 
-On peut retirer le flash sur les chèques en attentes d'enregistrement dans la vue organisme car cela
-apparait sur le dashboard (et en plus c'était peut être tous organismes mélangés).
 Dans la vue bank_extract.new, il ya un pb de mise en page des deux pick_dates
 
 
@@ -410,7 +409,7 @@ revoir l'organisation des validators
 
 
 ----------------------Suppression d'un exercice-----------------
-  ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
+? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?
 Question les livres sont-ils dépendant de l'organisme ou d'un exercice ?
 Question : que fait on des lignes qui ne sont pas validées par un relevé bancaire - par ex un chèque qui n'aurait pas été encaissé par le fournisseur
