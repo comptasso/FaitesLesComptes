@@ -43,8 +43,9 @@
 
 
     <% unless @bank_extract_lines.empty? %>
-
+  <tbody>
   <%= render partial: 'tbody_bel' , object: @bank_extract_lines  %>
+  </tbody>
          <tfoot>
            <tr class="total">
             

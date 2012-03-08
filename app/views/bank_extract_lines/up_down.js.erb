@@ -1,0 +1,8 @@
+<%#
+# appelé par la méthode up ou down de bank_extract_lines_controller pour retracer la table
+# des bank_extract_lines dans pointage
+%>
+
+$('#extract tbody').html("<%=j  render partial: 'bank_extracts/tbody_bel', :object=>@bank_lines  %>");
+$('<%= "#tr_bank_extract_line_#{@bank_line.id}" %>').effect('highlight', {color: '#b2fee3'}, 3000);
+

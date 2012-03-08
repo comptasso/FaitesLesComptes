@@ -20,7 +20,7 @@ module BankExtractsHelper
     unless bl.last?
       concat(link_to image_tag('datatable/demi_sort_desc.png'),
         down_organism_bank_account_bank_extract_bank_extract_line_path(@organism,@bank_account, @bank_extract,bl.id),
-        method: :post)
+        method: :post, remote: true)
     else
       concat('')
     end
