@@ -71,7 +71,7 @@ class BankExtractsController < ApplicationController
   def lock
     @bank_extract = BankExtract.find(params[:id])
     # ici on change les attributs false
-    @bank_extract.locked=true
+    @bank_extract.locked = true
     if @bank_extract.save
       flash[:notice]= "Relévé validé et verrouillé"
     else

@@ -1,28 +1,16 @@
 # -*- encoding : utf-8 -*-
 
 class OrganismsController < ApplicationController
-  # GET /organisms
-  # GET /organisms.json
-
-  # TODO peut être supprimer la vue de tous les organismes puisqu'il y a le menu pour les sélectionner
-  # et que la vue index devrait être réservée à la zone admin
-  def index
-    @organisms = Organism.all
-  end
-
+ 
   # GET /organisms/1 test watcher
   # GET /organisms/1.json
   def show
     @organism = Organism.find(params[:id])
-
-
     if @organism.periods.empty?
       flash[:alert]= 'Vous devez créer au moins un exercice pour cet organisme'
       redirect_to new_organism_period_url(@organism)
       return
     end
-
-
     # on trouve l'exercice à partir de la session mais si on a changé d'organisme
     # il faut changer la session et on charge le dernier exercice par défaut
     # TODO pas joli ce rescue général

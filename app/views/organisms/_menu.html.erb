@@ -1,16 +1,13 @@
 <ul>
   <li><h2>ORGANISMES</h2>
-
     <ul>
-       <li><%= link_to 'Listes des organismes', organisms_path %></li>
-      <% Organism.all.reject {|r| r.new_record? }.each do |r| %>
+      <% Organism.all.each do |r| %> <!-- reject {|r| r.new_record? }.each do |r| %> -->
         <li><%= link_to r.title, organism_path(r)  %></li>
       <% end %>
-  
     </ul>
-
   </li>
 </ul>
+<!--TODO normalement dans ce menu (de la zone Public), il ne peut pas y avoir de new_record? -->
 <% if (@organism  && !@organism.new_record?) %>
 <ul>
   <li><h2>Livres</h2>

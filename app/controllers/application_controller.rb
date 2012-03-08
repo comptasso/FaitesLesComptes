@@ -3,23 +3,28 @@ class ApplicationController < ActionController::Base
 
   before_filter :find_organism, :current_period
 
-  helper_method :two_decimals
+  helper_method :two_decimals, :picker_to_date
 
- private
+  private
+
+  def find_organism
+    @organism=Organism.find(params[:organism_id]) if params[:organism_id]
+  end
+
+  # HELPER_METHODS
+
+  def current_period
+    if @organism
+      pid = session[:period] ||= (@organism.periods.order(:start_date).last.id if (@organism && @organism.periods.any?))
+      @period= Period.find(pid) if pid
+    end
+  end
  
   def two_decimals(montant)
     sprintf('%0.02f',montant)
   rescue
     '0.00'
   end
-
- 
-
-  def find_organism
-     @organism=Organism.find(params[:organism_id]) if params[:organism_id]
-  end
-
-  helper_method :picker_to_date
 
   # picker_to_date est utilisée pour transformer le retour du widget
   # date picker qui est sous la forme "dd/mm/aaaa".Alors que Date.civil
@@ -41,15 +46,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def current_period
-
-    
-    if @organism
-    pid = session[:period] ||= (@organism.periods.order(:start_date).last.id if (@organism && @organism.periods.any?))
-    
-    @period= Period.find(pid) if pid
-    end
-   
-  end
+  
 
 end

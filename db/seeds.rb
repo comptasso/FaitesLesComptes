@@ -113,5 +113,16 @@ while date < Date.civil(2012,03,01) # jusqu'au 29 février (pour laisser des ch�
  puts "Création de l'extrait #{be.id} Débit : #{be.total_debit} - Crédit : #{be.total_credit}"
  sold += be.total_credit-be.total_debit
  date = date.months_since(1) # on fait une remise de chèque tous les mois
+
+
+
+
+
 end
 
+puts "Verrouillage des extraits bancaires sauf le dernier"
+ nb = BankExtract.count
+ BankExtract.limit(nb-1).each do |be|
+    be.locked = true
+    be.save!
+ end

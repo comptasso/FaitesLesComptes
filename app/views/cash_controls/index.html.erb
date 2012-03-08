@@ -17,8 +17,8 @@
         <td class="nombre"><%= debit_credit @cash.sold(r.date) %></td>
         <td class="nombre"><%= debit_credit r.amount- @cash.sold(r.date) %></td>
         <td>
-          <%= icon_to 'modifier.png', edit_organism_cash_cash_control_path(@organism,@cash,r) unless r.locked? %>
-          <%= icon_to 'verrouiller.png', lock_organism_cash_cash_control_path(@organism,@cash,r),
+          <%= icon_to 'modifier.png', edit_cash_cash_control_path(@cash,r) unless r.locked? %>
+          <%= icon_to 'verrouiller.png', lock_cash_cash_control_path(@cash,r),
             :confirm=>"Cette action verrouille le pointage de caisse ainsi que les écritures de caisse correspondantes \n#{cash_difference(r)}\nConfirmez vous ?" ,
             :method=>:put unless r.locked? %>
           </td>

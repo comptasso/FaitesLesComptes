@@ -373,14 +373,18 @@ OK - transformer les méthodes graphiques en modules
 OK - rajouter les graphes pour les caisses
 
 A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
-ie : indiquer que les extraits de compte bancaires sont pointés
-et rajouter quelques contrôles de caisse
-modifier seeds pour avoir deux caisses avec des mouvements différents
 
-Fixme : après up ou down dans un check deposit, il n'affiche plus l'action pointage
+OK - indiquer que les extraits de compte bancaires sont pointés
+
+et rajouter quelques contrôles de caisse
+alignement des nombres dans les cash_controls
+
+OK - modifier seeds pour avoir deux caisses avec des mouvements différents
+
+OK - après up ou down dans un check deposit, il n'affiche plus l'action pointage
 
 OK - inclure le sold dans le titre des pavés caisse et banque
-Peut être retirer tous les messages des pavés et les regrouper - dans un div spécifique
+Retirer tous les messages des pavés et les regrouper - dans un div spécifique
 OK -Rendre les titres cliquables et/ou mettre les icones comme pour books.
 
 On peut retirer le flash sur les chèques en attentes d'enregistrement dans la vue organisme car cela
