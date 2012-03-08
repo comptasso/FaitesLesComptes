@@ -47,7 +47,8 @@ zone consult et saisie
 030 : mise en place des tests et refactorisation
 - mise en place des validations pour les <> modèles
 
-031 : pointage des comptes bancaires avec des actions remote plutôt que par rafraichissement de la page
+031 : différents goodies pour améliorer l'expérience utilisateur
+pointage des comptes bancaires avec des actions remote plutôt que par rafraichissement de la page
 - édition papier d'une remise chèque
 + affichage graphique de solde
 

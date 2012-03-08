@@ -2,7 +2,14 @@
   <%= icon_to 'navigation90.png', organisms_path %>
 <% end %>
 
-
+<div class="pave message">
+  <h2> Message </h2>
+  <ul>
+    <% infos(@organism).each do |mess| %>
+    <%= content_tag :li, mess %>
+        <% end %>
+  </ul>
+</div>
 
 <% @books.each do |book| %>
   <div class="pave">
@@ -27,13 +34,7 @@
 <%= content_tag :div, :class=>"pave bank"  do %>
 <h2>Compte <%= ba.number %> = <%= number_to_currency ba.sold  %>
  <%= icon_to 'detail.png', organism_bank_account_path(@organism, ba) %></h2>
- <% if ba.bank_extracts.any? %>
-<p>
-      <span class="alert"> <%= "Attention, le pointage du dernier relevé n'est pas encore effectué" unless ba.bank_extracts.last.locked  %> </span><br />
-       Dernier relevé du compte le <%=l ba.bank_extracts.last.end_date %> - Solde : <%= debit_credit(ba.last_bank_extract_sold) %>
-</p>
-    <% end %>
-
+ 
   <%= render partial: 'line_graphic', object: ba.graphic(@period) , :locals=>{id: "bank_#{ba.id}" } %>
 <% end %>
 <% end %>
@@ -44,13 +45,7 @@
   <%= icon_to 'detail.png', cash_cash_lines_path(ca) %>
 </h2>
  
-  <% if ca.cash_controls.any?  %>
-  <p>Dernier contrôle de caisse en date du <%=l ca.cash_controls.order('date ASC').last.date  %>
-    <span class="alert"><%= cash_difference(ca.cash_controls.order('date ASC').last ) %></span>
-  </p>
-  <% else %>
-  <span class="alert">Pas encore de contrôle de caisse à ce jour</span>
-  <% end %>
+ 
   
   <%= render partial: 'line_graphic', object: ca.graphic(@period)  , :locals=>{id: "cash_#{ca.id}" } %>
 <% end %>

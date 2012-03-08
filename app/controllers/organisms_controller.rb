@@ -21,9 +21,7 @@ class OrganismsController < ApplicationController
       session[:period]=@period.id
     end
 
-    if @organism.number_of_non_deposited_checks > 0
-      flash[:notice]= "Message : #{@organism.number_of_non_deposited_checks} chèques à déposer pour un montant total de #{two_decimals @organism.value_of_non_deposited_checks}"
-    end
+    
     
     @bank_accounts=@organism.bank_accounts.all
     @cashes=@organism.cashes.all
@@ -35,6 +33,8 @@ class OrganismsController < ApplicationController
 
   
   end
+
+ 
 
  
 

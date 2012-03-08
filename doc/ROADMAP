@@ -354,52 +354,43 @@ OK - Revoir les validations pour interdire l'écriture sur les lignes (ou de nou
 ---------------------------- Dashboard d'un organisme ------------------------
 OK - Organiser la page en section
 OK - Construire les graphes
-
 OK - revoir le modèle remise de chèques
 OK - gérer le remplissage des bank_account_id des lignes après remplissage ou pointage de la remise
 OK - retirer de seeds les lignes avant le début de l'activité
-
 OK - interdire cette possibilité dans le modèle line
-
 OK - les graphes par défaut devraient tenir compte de la période
 OK - insérer un nouveau div pour les graphes
 OK - changer la classe graphe dans organsisms.js et dans show
 OK - fair un helper pour l'affichage des graphes
 OK - traiter le cas d'un seul exercice
 OK - voir pour faire un plugin de la fonction graphe  javascript : en fait grande refactorisation
-
 OK - rajouter les graphes pour les comptes bancaires
 OK - transformer les méthodes graphiques en modules
 OK - rajouter les graphes pour les caisses
-
-OK - A finir Faire un fichier seed.rb permettant de valider les graphes du dashboard
-
+OK - Faire un fichier seed.rb permettant de valider les graphes du dashboard
 OK - indiquer que les extraits de compte bancaires sont pointés
-
 OK - et rajouter quelques contrôles de caisse
-alignement des nombres dans les cash_controls
-mettre des icones pour naviguer facilement entre les controles et l'affichafe
-
 OK - modifier seeds pour avoir deux caisses avec des mouvements différents
-
-OK - après up ou down dans un check deposit, il n'affiche plus l'action pointage
-
 OK - inclure le sold dans le titre des pavés caisse et banque
+
 Retirer tous les messages des pavés et les regrouper - dans un div spécifique
+Le dashboard devrait proposer une icone pour faire une remise de chèque dans le pavé messages
+revoir ou on atterrit quand on clique sur compte bancaire
+
 OK -Rendre les titres cliquables et/ou mettre les icones comme pour books.
-
-Dans la vue bank_extract.new, il ya un pb de mise en page des deux pick_dates
-
 
 --------------------- refonte de check_deposit--------------------
 OK - revoir le modèle pour avoir les méthodes dans le modèle plutôt que dans le controller
-Le dashboard devrait proposer une icone pour faire une remise de chèque dans le pavé messages
 OK - La vue index devrait proposer l'icone plus s'il y a des chèques
 le menu banque - nouvelle remise de chèque devrait est indisponible si pas de chèque à remettre
 ??? Il faudrait interdire pick_all_checks si bank_account n'est pas dispo ?
+OK - après up ou down dans un check deposit, il doit afficher l'action pointage
 
 
 -------------------- FIXME ------------------------------------
+alignement des nombres dans les cash_controls
+mettre des icones pour naviguer facilement entre les controles et l'affichage des contrôles de caisse
+Dans la vue bank_extract.new, il ya un pb de mise en page des deux pick_dates
 qaund on clique sur un élément il affiche à tort un changement d'exercice
 OK - Quand on clique sur une colonne de graphe, on aboutit sur le bon mois mais pas forcément sur le bon exercice
 Quand on est dans un exercice clos, on ne devrait pas pouvoir faire new_line (et le menu ne devrait pas nous le proposer)
@@ -435,7 +426,7 @@ Jasmine -commencé l'installation mais pas fini car je n'ai pas actuellement de 
 Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 
 --------------------Divers---------------------------------------------------------------------------
-Revoir la page index de organism (title et mise en page)
+OK - Revoir la page index de organism (title et mise en page) : en fait je l'ai supprimée dans la partie consult
 supprimer la session de period 
      Factoriser les jQuery datatable
 Le datatable de compta#lines ne marche pas
@@ -447,10 +438,6 @@ Il serait plus judicieux de faire un stat controller car le controller nature n'
 et stats traite de natures et de destinations
 Faire une classe month pour Period ?
 -----------------------------------------------------------------
-
-
-
-
 
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
 (avoir un form qui demande le type pour la création, mais pas pour l'édition)
@@ -467,7 +454,7 @@ Voir si les logiques de lock des lines ont encore du sens
 
 
 Changer income et outcome en sales and expenses
-Rebaptiser bank_extract_lines en bank_lines
+NON - Rebaptiser bank_extract_lines en bank_lines; C'est une mauvaise idée car bank_lines a un sens: cela correspond aux lignes construite à partir de lines et non de bank_extracts
 
 Voir le mois qui est affiché quand on supprime une écriture
 
@@ -480,20 +467,6 @@ Faire que la modif se fasse dans une modalbox
 Faire un nettoyage du fichier temporaire pour le cas des importations qui se passent mal ?
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -------------------------- Autres sujets à moyen terme
 Mettre en place une validation globale de la page
 
@@ -501,12 +474,10 @@ Créer des natures de recettes et des natures de dépenses
 
 Gérer les validations
 Ne pas pouvoir supprimer une remise chèque qui a été pointée
-FIXME : gérer le problème du edit des bank_deposit : si on modifie les chèques remis et qu'on abandonne, en fait c'est quand même enregistré.
+OK - gérer le problème du edit des check_deposit : si on modifie les chèques remis et qu'on abandonne, en fait c'est quand même enregistré.
 Mettre dans le modèle une validation qui empêche la modification si verrouillé
 
 Donc peut être faire des modèles achats/ventes/banques/caisse
 et des modèles de lignes (repetées, multiple).
-Pouvoir faire un export
-Pouvoir faire une édition
-Graphiques
+
 Il faudrait afficher l'icone imprimer dès lors qu'il y a un chèque dans la table des remises
