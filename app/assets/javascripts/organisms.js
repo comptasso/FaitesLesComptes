@@ -217,8 +217,6 @@ function monthly_graphic(element) {
     }
 }
 
-
-
 // fonction pour tracer les graphes qui apparaissent dans la page organism#show
 $(document).ready(function () {
     $.jqplot.config.enablePlugins = true; // semble indispensable pour le highlighter
@@ -231,3 +229,11 @@ $(document).ready(function () {
         monthly_graphic(this);
     });
 });
+
+$(document).ready(function () {
+    $('#mail_ul').hide();
+    $('#mail_img').click(function() {
+        $('#mail_ul').toggle('slow');
+        
+    });
+})

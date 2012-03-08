@@ -3,9 +3,12 @@
 <% end %>
 
 <div class="pave message">
-  <h2> Message </h2>
-  <ul>
-    <% infos(@organism).each do |mess| %>
+  <h2>
+    Vous avez <%= pluralize infos(@organism).size, 'message' %>
+    <%= image_tag 'icones/mail-open.png', id: 'mail_img' %>
+  </h2>
+  <ul id="mail_ul">
+   <% infos(@organism).each do |mess| %>
     <%= content_tag :li, mess %>
         <% end %>
   </ul>
@@ -33,7 +36,7 @@
 <% @organism.bank_accounts.each do |ba| %>
 <%= content_tag :div, :class=>"pave bank"  do %>
 <h2>Compte <%= ba.number %> = <%= number_to_currency ba.sold  %>
- <%= icon_to 'detail.png', organism_bank_account_path(@organism, ba) %></h2>
+ <%= icon_to 'detail.png', organism_bank_account_bank_extract_path(@organism, ba, ba.bank_extracts.order('begin_date').last) %></h2>
  
   <%= render partial: 'line_graphic', object: ba.graphic(@period) , :locals=>{id: "bank_#{ba.id}" } %>
 <% end %>

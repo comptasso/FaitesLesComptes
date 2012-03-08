@@ -2,7 +2,6 @@
 
 module OrganismsHelper
 
-
   def infos(org)
     m=[]
     if org.number_of_non_deposited_checks > 0
