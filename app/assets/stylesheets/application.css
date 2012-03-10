@@ -6,7 +6,7 @@
  *= require_tree . 
 */
 #header {
-    height: 40px;
+    height: 44px;
     background-color: #9c9;
 }
 
@@ -17,6 +17,7 @@
 #header #logo {
     width: 400px;
     height: 100%;
+    padding-top: 5px;
     background: #9c9;
     font: small-caps 33px/33px "Times New Roman" , serif;
     color: #282;
@@ -25,10 +26,13 @@
 
 #header #logo a {
     text-decoration: none;
+    line-height: 28px;
    }
 
 #header #logo a:hover {
     background: #9c9;
+    margin : 0px;
+    padding: 0px;
 }
 
 #header #organism {
@@ -58,6 +62,11 @@
     right: 1em;
     font-style: italic;
     font-size: smaller;
+}
+
+#zone_admin a:hover {
+    color: #FFF;
+    background: #141;
 }
 
 

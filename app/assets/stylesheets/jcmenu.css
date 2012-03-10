@@ -45,8 +45,8 @@ text-decoration: none;
 }
 
 #menu a:hover {
-color: #a00;
-background: #fff;
+color: #FFF;
+background: #141;
 }
 
 #menu li {position: relative;}
@@ -118,9 +118,7 @@ nav#menu ul ul ul li:hover ul
     margin: 0px;
     padding: 0px 8px;
     border-style: none;
-    border-left-style: solid;
     border-width: 0px;
-    border-left-width: 1px;
     color:white;
     text-decoration: none;
 

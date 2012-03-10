@@ -6,11 +6,10 @@ var $, jQuery, stringToFloat;
 // et associé le click sur l'enveloppe au toggle des messages
 $(document).ready(function () {
     $('#mail_ul').hide();
-    $('#mail_img').click(function() {
+    $('#mail_img').click(function () {
         $('#mail_ul').toggle();
- 
     });
-})
+});
 
 // mise en forme des tables
 jQuery(function () {

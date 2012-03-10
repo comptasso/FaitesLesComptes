@@ -1,6 +1,6 @@
 Faitesvoscomptes::Application.routes.draw do
 
-  
+  # namespace COMPTA
   namespace :compta do
     resources :organisms do
       resources :periods
@@ -13,8 +13,9 @@ Faitesvoscomptes::Application.routes.draw do
       resources :lines
     end
   end
+# fin du namespace COMPTA
 
-
+  # namespace ADMIN
   namespace 'admin' do
  
     resource :restore do
@@ -81,16 +82,17 @@ Faitesvoscomptes::Application.routes.draw do
 
   resources :organisms , :only=> [:index, :show] do
     resources :periods, :only=> [:index, :show] do
+      member do
+        get 'change' # pour changer d'exercice
+      end
       resources :natures, only: :index do
         collection do
-          get 'stats'
+          get 'stats' # statistiques de recettes et dépenses par natures
         end
       end
-      member do
-        get 'change'
-        
-      end
     end
+
+    resources :check_deposits, :only=>:new # pour faire des remises de chèques
 
     resources :bank_accounts, :only=> [:index, :show] do
       resources :bank_extracts do

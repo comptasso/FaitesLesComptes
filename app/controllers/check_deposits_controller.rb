@@ -4,9 +4,9 @@ class CheckDepositsController < ApplicationController
 
   # ligne ajoutée pour les tests car sinon ces before_filter qui sont dans application_controller ne sont pas exécutés
   # et du coup des variables comme @organism et @period restent à nil.
-  before_filter :find_organism, :current_period      
+  # before_filter :find_organism, :current_period
 
-  before_filter :find_bank_account_and_organism 
+  before_filter :find_bank_account, except: :new
   before_filter :find_non_deposited_checks
   before_filter :get_pick_date, only: [:create,:update]
 
@@ -25,13 +25,16 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
 
   # GET /check_deposits/new
   # GET /check_deposits/new.json
-  
   def new
     if @nb_to_pick < 1
       redirect_to  bank_account_check_deposits_url(@bank_account), alert: "Il n'y a pas de chèques à remettre"
       return
     end
-    @check_deposit = @bank_account.check_deposits.new(deposit_date: Date.today)
+    @check_deposit = CheckDeposit.new(deposit_date: Date.today)
+    if params[:bank_account_id]
+      @bank_account=@organism.bank_accounts.find(params[:bank_account_id])
+      @check_deposit.bank_account_id = @bank_account.id
+    end
     @check_deposit.pick_all_checks # par défaut on remet tous les chèques disponibles
   end
 
@@ -81,9 +84,8 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
 
   private
 
-  def find_bank_account_and_organism
-    @bank_account=BankAccount.find(params[:bank_account_id])
-    # TODO peut être ajouter ici un controle pour être sur de la cohérence
+  def find_bank_account
+    @bank_account=@organism.bank_accounts.find(params[:bank_account_id])
   end
 
   def find_non_deposited_checks

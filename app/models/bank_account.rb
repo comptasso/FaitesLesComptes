@@ -53,13 +53,11 @@ class BankAccount < ActiveRecord::Base
    last_bank_extract_sold + sold_np
  end
 
- def first_extract_to_point
-   bank_extracts.where('locked = ?', false).order('begin_date ASC').first
+ def first_bank_extract_to_point
+   self.bank_extracts.where('locked = ?', false).order('begin_date ASC').first
  end
 
- 
-
-# Trouve toutes les remises de chèques qui ne sont pas encore pointées
+ # Trouve toutes les remises de chèques qui ne sont pas encore pointées
  def np_check_deposits
    self.check_deposits.where('bank_extract_id IS NULL')
  end
@@ -95,9 +93,7 @@ end
     self.bank_extracts.order(:end_date).last
   end
 
- def first_bank_extract_to_point
-   self.bank_extracts.where('locked = ?', false).first(:order=>'begin_date ASC')
- end
+ 
 
  def unpointed_bank_extract?
    self.bank_extracts.where('locked = ?', false).count > 0 ? true :false

@@ -8,8 +8,12 @@
     <%= image_tag 'icones/mail-open.png', id: 'mail_img' %>
   </h2>
   <ul id="mail_ul">
+    
    <% infos(@organism).each do |mess| %>
-    <%= content_tag :li, mess %>
+    <%= content_tag :li do %>
+    <%=  mess[:text] %>
+    <%= mess[:icon] if mess[:icon] %>
+    <% end %>
         <% end %>
   </ul>
 </div>
