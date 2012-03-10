@@ -52,8 +52,8 @@ describe Period do
         @p_2010.monthly_results.size.should == @p_2010.nb_months
       end
 
-      it "without datas, a period can produce a monthly result" do
-        @p_2010.monthly_result('03-2010').should == 0
+      it "without datas, a period return 0" do
+        @p_2010.monthly_value(Date.civil(2010,03,01)).should == 0
       end
 
     context 'the result is calculated from books' do

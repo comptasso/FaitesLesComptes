@@ -2,6 +2,16 @@
 /*jslint browser: true */
 var $, jQuery, stringToFloat;
 
+// fonction qui masque le contenu de la zone message dans le dashboard
+// et associé le click sur l'enveloppe au toggle des messages
+$(document).ready(function () {
+    $('#mail_ul').hide();
+    $('#mail_img').click(function() {
+        $('#mail_ul').toggle();
+ 
+    });
+})
+
 // mise en forme des tables
 jQuery(function () {
     if ($('.organisms .data_table').length !== 0) {
@@ -230,10 +240,3 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-    $('#mail_ul').hide();
-    $('#mail_img').click(function() {
-        $('#mail_ul').toggle('slow');
-        
-    });
-})

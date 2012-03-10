@@ -5,7 +5,9 @@ module OrganismsHelper
   def infos(org)
     m=[]
     if org.number_of_non_deposited_checks > 0
-      m << "#{@organism.number_of_non_deposited_checks} chèques à déposer pour un montant total de #{two_decimals @organism.value_of_non_deposited_checks}"
+      m << "#{@organism.number_of_non_deposited_checks} chèques à déposer pour \
+            un montant total de #{two_decimals @organism.value_of_non_deposited_checks} #{image_tag 'nouveau.png'}"
+#           #{icon_to 'nouveau.png'}, new_organism_check_deposit_path(org)}
     end
     org.bank_accounts.each  do |ba|
       if ba.bank_extracts.any?

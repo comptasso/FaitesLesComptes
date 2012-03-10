@@ -52,8 +52,8 @@ describe Book do
  
       before(:each) do
         p2011.stub(:previous_period).and_return(p2010)
-        @book.stub(:monthly_datas_for_chart).with(p2011.list_months('%m-%Y')).and_return(datas2011)
-        @book.stub(:previous_year_monthly_datas_for_chart).with(p2011.list_months('%m-%Y')).and_return(datas2010)
+        @book.stub(:monthly_datas_for_chart).with(p2011.list_end_months).and_return(datas2011)
+        @book.stub(:previous_year_monthly_datas_for_chart).with(p2011.list_end_months).and_return(datas2010)
       end
 
       it "should have a two_years_monthly_graphic method" do
@@ -61,7 +61,7 @@ describe Book do
       end
 
       it "check previous_year_monthly..." do
-        @book.previous_year_monthly_datas_for_chart(p2011.list_months('%m-%Y')).should == datas2010
+        @book.previous_year_monthly_datas_for_chart(p2011.list_end_months).should == datas2010
       end
 
       context "check the two_years_monthly_graphic method" do
@@ -94,7 +94,7 @@ describe Book do
     
 
     def period_datas
-      (4..12).map {|t|  t}   +  (1..3).map {|t| t  }
+      (4..12).map {|v| v } + (1..3).map {|v| v}
     end
 
     let(:p1) {stub_model(Period, :start_date=>Date.civil(2010,04,01), :close_date=>Date.civil(2011,03,31))}
@@ -102,8 +102,8 @@ describe Book do
 
     before(:each) do
       @book = Book.new
-      @book.stub(:monthly_datas_for_chart).with(p2.list_months('%m-%Y')).and_return(period_datas)
-      @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_months('%m-%Y')).and_return(period_datas)
+      @book.stub(:monthly_datas_for_chart).with(p2.list_end_months).and_return(period_datas)
+      @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_end_months).and_return(period_datas)
       @graphic=@book.two_years_monthly_graphic(p2)
     end
 
@@ -125,8 +125,8 @@ describe Book do
     let(:p2) {stub_model(Period, :start_date=>Date.civil(2011,01,01), :close_date=>Date.civil(2011,12,31))} # exercice de 12 mois
     before(:each) do
       @book = Book.new
-      @book.stub(:monthly_datas_for_chart).with(p2.list_months('%m-%Y')).and_return(range_period_datas(1..12))
-      @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_months('%m-%Y')).and_return(range_period_datas(1..12))
+      @book.stub(:monthly_datas_for_chart).with(p2.list_end_months).and_return(range_period_datas(1..12))
+      @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_end_months).and_return(range_period_datas(1..12))
 
 
     end
@@ -140,7 +140,7 @@ describe Book do
 
       it "build a two_years_monthly_graphic" do
         @book.organism.periods.count.should == 2
-        @book.default_graphic.should == @book.two_years_monthly_graphic(p2)
+        @book.default_graphic(p2).should == @book.two_years_monthly_graphic(p2)
       end 
     end
 
@@ -151,7 +151,7 @@ describe Book do
       end
       it "build a one_year_graphic" do
         @book.organism.periods.count.should == 1
-        @book.default_graphic.should == @book.one_year_monthly_graphic(p2)
+        @book.default_graphic(p2).should == @book.one_year_monthly_graphic(p2)
       end
     end
 
@@ -163,21 +163,13 @@ describe Book do
         p3.stub(:previous_period).and_return(p2)
         p2.stub(:previous_period).and_return(p1)
         @book.stub_chain(:organism, :periods).and_return([p1,p2,p3])
-        @book.stub(:previous_year_monthly_datas_for_chart).with(p3.list_months('%m-%Y')).and_return(range_period_datas(1..12))
-        @book.stub(:monthly_datas_for_chart).with(p3.list_months('%m-%Y')).and_return(range_period_datas(13..24))
-        @book.stub(:monthly_datas_for_chart).with(p1.list_months('%m-%Y')).and_return(range_period_datas(1..16))
+        @book.stub(:previous_year_monthly_datas_for_chart).with(p3.list_end_months).and_return(range_period_datas(1..12))
+        @book.stub(:monthly_datas_for_chart).with(p3.list_end_months).and_return(range_period_datas(13..24))
+        @book.stub(:monthly_datas_for_chart).with(p1.list_end_months).and_return(range_period_datas(1..16))
       end
 
       it "should return a graphic" do
-        @book.graphic.should be_an_instance_of(Utilities::Graphic)
-      end
-
-      it "should accept period as an argument" do
-        @book.graphic(p3).should be_an_instance_of(Utilities::Graphic)
-      end
-
-      it "graphic without argument =default_graphic with last_period" do
-        @book.graphic.should == @book.default_graphic
+        @book.graphic(p2).should be_an_instance_of(Utilities::Graphic)
       end
 
       it "graphic(p3) returns correct legend" do
@@ -191,10 +183,6 @@ describe Book do
       it "graphic(p1) is a one year graphic" do
         @book.graphic(p1).should have(1).serie
          @book.graphic(p1).legend.should == ['sept. 2009 à déc. 2010']
-      end
-
-      it "graphic with argument period buil a different graphic" do
-        @book.graphic(p2).should_not == @book.default_graphic
       end
 
     end

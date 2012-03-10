@@ -252,7 +252,7 @@ OK - Mettre en place une validation qui impose que le montant soit positif ou nu
 OK - Faire le fond Brouillard - trouver comment avoir les images dans prawn
 OK - Mettre en place les catégories dépenses et recettes pour natures - un boolean en fait
 OK - Modifier les formulaires pour avoir les natures recettes pour les livres de recettes, et id pour dépenses
-     Localisation du formualire avec les boutons radio
+     Localisation (traduction) du formualire avec les boutons radio
 
 Modifier l'approche des statistiques par natures
 OK - il faut mettre stat dans le controller natures/destinations plutot que dans organism
@@ -288,7 +288,7 @@ OK - Period pouvant créer des comptes à partir du template fourni par ce fichi
 OK - Modif du menu pour pouvoir utiliser cette fonctionnalité
 ?? transformation de cette classe en modèle avec des tables ?
 --------------relier les natures et les comptes
-NON Devrait-on raccrocher les natures aux exercices ??
+OK - Oui : Devrait-on raccrocher les natures aux exercices ??
 OK - intégrer les relations has_many natures et has_many lines through natures
 OK - modification du form natures#edit
 OK - les natures de type recettes doivent être rattachées aux comptes 7
@@ -372,11 +372,9 @@ OK - indiquer que les extraits de compte bancaires sont pointés
 OK - et rajouter quelques contrôles de caisse
 OK - modifier seeds pour avoir deux caisses avec des mouvements différents
 OK - inclure le sold dans le titre des pavés caisse et banque
-
-Retirer tous les messages des pavés et les regrouper - dans un div spécifique
+OK - Retirer tous les messages des pavés et les regrouper - dans un div spécifique
 Le dashboard devrait proposer une icone pour faire une remise de chèque dans le pavé messages
-revoir ou on atterrit quand on clique sur compte bancaire
-
+OK - revoir ou on atterrit quand on clique sur compte bancaire
 OK -Rendre les titres cliquables et/ou mettre les icones comme pour books.
 
 --------------------- refonte de check_deposit--------------------

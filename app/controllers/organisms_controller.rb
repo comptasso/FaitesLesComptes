@@ -1,6 +1,12 @@
 # -*- encoding : utf-8 -*-
 
 class OrganismsController < ApplicationController
+
+  # renvoie vers show s'il n'y a qu'un seul organisme
+  def index
+    @organisms=Organism.all
+    redirect_to @organisms.first if @organisms.count == 1
+  end
  
   # GET /organisms/1 test watcher
   # GET /organisms/1.json
@@ -20,9 +26,7 @@ class OrganismsController < ApplicationController
       @period = @organism.periods.last
       session[:period]=@period.id
     end
-
-    
-    
+ 
     @bank_accounts=@organism.bank_accounts.all
     @cashes=@organism.cashes.all
     @books=@organism.books.all
@@ -30,8 +34,7 @@ class OrganismsController < ApplicationController
     # Ce min est nécessaire car il y a un problème avec les soldes si la date du jour est postérieure à la date de clôture
     # du dernier exercice - probablement il faut trouver plus élégant
     @date=[@organism.periods.last.close_date, Date.today].min
-
-  
+ 
   end
 
  
