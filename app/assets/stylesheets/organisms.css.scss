@@ -28,9 +28,10 @@
     .pave {
         display: inline-block;
         float: left;
-        width: 32.5%;
+        width: 430px;
         border: solid 1px;
-        margin: 4px;
+        margin-top: 18px;
+        margin-right: 9px;
 
         h2 {
             margin: 0px;
@@ -67,8 +68,8 @@
         background-color: goldenrod;
         }
     .message {
-        width: 99%;
-        margin: 4px;
+        width: 100%;
+        margin: 0px;
         h2 {
             background-color : khaki;
             }

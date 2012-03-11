@@ -387,16 +387,18 @@ OK - après up ou down dans un check deposit, il doit afficher l'action pointage
 
 -------------------- FIXME ------------------------------------
 OK - hover rend illisible le style des menus
-Voir l'icone plus dans organism de la zone admin
 admin_organism_index : l'icone restauration devrait avoir une flèche
 dans admin#naturenew (form), le rattachement à un compte devrait être disable si pas de compte
-alignement des nombres dans les cash_controls
+alignement des nombres dans les cash_control
+modifier la zone message pour que les messages soient générés par les modèles et non par le helper
 mettre des icones pour naviguer facilement entre les controles et l'affichage des contrôles de caisse
 Dans la vue bank_extract.new, il ya un pb de mise en page des deux pick_dates
 qaund on clique sur un élément il affiche à tort un changement d'exercice
 OK - Quand on clique sur une colonne de graphe, on aboutit sur le bon mois mais pas forcément sur le bon exercice
 Quand on est dans un exercice clos, on ne devrait pas pouvoir faire new_line (et le menu ne devrait pas nous le proposer)
 revoir l'organisation des validators
+Dans la zone admin quand on affiche les natures, le hover sur les icones est vert foncé (id pour la partie zone compta) il faudrait bleu foncé.
+Destination show n'a guère de sens dans la partie admin (supprimer la vue et l'action ?).
 
 -------------------- Virements internes --------------------------------
 

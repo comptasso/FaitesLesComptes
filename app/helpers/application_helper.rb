@@ -35,11 +35,11 @@ module ApplicationHelper
    content_tag(:div, id: "organism") do
       if (@organism && !@organism.new_record?)
          html = []
-         html << link_to(sanitize(@organism.title), @organism )
+         html << content_tag(:p) {link_to(sanitize(@organism.title), @organism )}
          html << content_tag(:p, :class=> "description") do
              @period.exercice unless @period.nil?
          end
-         html.join('<br/>').html_safe
+         html.join('').html_safe
       end
    end
  end
