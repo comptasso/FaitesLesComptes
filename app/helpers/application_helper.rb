@@ -31,6 +31,17 @@ module ApplicationHelper
       :size=>8}
   end
 
+ def header_organism
+   content_tag(:div, id: "organism") do
+      if (@organism && !@organism.new_record?)
+         link_to(@organism.title, @organism )
+         content_tag(:p, :class=> "description") do
+             @period.exercice unless @period.nil?
+         end
+      end
+   end
+ end
+
 
  
 end

@@ -30,7 +30,7 @@
     <td><%= organism.description %></td>
     <td><%=l organism.archives.last.created_at  unless organism.archives.empty? %>
 <%= icon_to 'sauvegarde.png', new_admin_organism_archive_path(organism),
-              :title=>"Fait une sauvegarde de toutes les données de l'organism" %></td>
+              :title=>"Fait une sauvegarde de toutes les données de l'organisme" %></td>
     <td><%= icon_to 'afficher.png', [:admin,organism] %></td>
   </tr>
 <% end %>

@@ -1,12 +1,17 @@
 # -*- encoding : utf-8 -*-
 
 module OrganismsHelper
-
-
-  
+ 
   def infos(org)
 
     m=[]
+    if org.natures.count == 0
+      info = {}
+      info[:text] = "Vous devez créez des natures de recettes et de dépenses pour pouvoir saisir des écritures dans les livres"
+      info[:icon] = icon_to('nouveau.png', new_admin_organism_period_nature_path(org, @period), title: 'Créer une nature')
+      m << info
+    end
+
     if org.number_of_non_deposited_checks > 0
       info= {}
       info[:text] = "#{org.number_of_non_deposited_checks} chèques à déposer pour \

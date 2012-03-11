@@ -7,33 +7,30 @@
     <%= csrf_meta_tags %>
   </head>
   <body class='<%=  "compta_#{controller.controller_name}" %> compta'>
-  <div id="header">
-     <div id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
-     <div id="zone_compta">
-<%= link_to 'Public',  ((@organism && !@organism.new_record?) ? organism_path(@organism) : organisms_path )  %>
-       <%= link_to 'Administration',  ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path )  %>
-     </div>
-    <div id ="organism">
-      <%= link_to @organism.title, @organism if (@organism && !@organism.new_record?) %>  <span class="description"><%= @period.exercice unless @period.nil? %></span>
+    <div id="header">
+      <div id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
+      <div id="zone_compta">
+        <%= link_to 'Public',  ((@organism && !@organism.new_record?) ? organism_path(@organism) : organisms_path )  %>
+        <%= link_to 'Administration',  ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path )  %>
+      </div>
+      <div id ="organism">
+        <%= link_to @organism.title, @organism if (@organism && !@organism.new_record?) %>  <span class="description"><%= @period.exercice unless @period.nil? %></span>
+      </div>
     </div>
-  </div>
 
 
   <nav id="menu">
     <%= render 'compta/organisms/menu'%>
     <%= yield :menu %>
   </nav>
- 
- 
+
+  <div id="bandeau"  >
+    <span id="notice"><%= notice %></span>
+    <span id="alert"><%= alert %></span>
+  </div>
 
 
-    <div id="bandeau"  >
-      <span id="notice"><%= notice %></span>
-      <span id="alert"><%= alert %></span>
-    </div>
-
- 
   <%= yield %>
-<%= debug params %>
+  <%= debug params if RAILS_ENV == 'development' %>
 </body>
 </html>

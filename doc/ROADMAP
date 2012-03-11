@@ -373,7 +373,7 @@ OK - et rajouter quelques contrôles de caisse
 OK - modifier seeds pour avoir deux caisses avec des mouvements différents
 OK - inclure le sold dans le titre des pavés caisse et banque
 OK - Retirer tous les messages des pavés et les regrouper - dans un div spécifique
-Le dashboard devrait proposer une icone pour faire une remise de chèque dans le pavé messages
+OK - Le dashboard devrait proposer une icone pour faire une remise de chèque dans le pavé messages
 OK - revoir ou on atterrit quand on clique sur compte bancaire
 OK -Rendre les titres cliquables et/ou mettre les icones comme pour books.
 
@@ -386,6 +386,10 @@ OK - après up ou down dans un check deposit, il doit afficher l'action pointage
 
 
 -------------------- FIXME ------------------------------------
+OK - hover rend illisible le style des menus
+Voir l'icone plus dans organism de la zone admin
+admin_organism_index : l'icone restauration devrait avoir une flèche
+dans admin#naturenew (form), le rattachement à un compte devrait être disable si pas de compte
 alignement des nombres dans les cash_controls
 mettre des icones pour naviguer facilement entre les controles et l'affichage des contrôles de caisse
 Dans la vue bank_extract.new, il ya un pb de mise en page des deux pick_dates

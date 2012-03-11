@@ -4,13 +4,11 @@
 %>
 
 <%= content_for :menu do %>
-
-<%= icon_to 'nouveau.png', new_admin_organism_path %>
-<%= icon_to 'modifier.png', edit_admin_organism_path(@organism) %>
-<%= icon_to 'retour.png', :back %>
+  <%= icon_to 'modifier.png', edit_admin_organism_path(@organism) %>
+  <%= icon_to 'retour.png', :back %>
 <% end -%>
-<fieldset><legend>Description de l'organisme</legend>
 
+<fieldset><legend>Description de l'organisme</legend>
 
 <p>
   <b>Titre :</b>

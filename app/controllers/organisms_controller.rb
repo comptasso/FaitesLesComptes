@@ -4,9 +4,16 @@ class OrganismsController < ApplicationController
 
   # renvoie vers show s'il n'y a qu'un seul organisme
   def index
-    @organisms=Organism.all
-    redirect_to @organisms.first if @organisms.count == 1
-  end
+   reset_session
+   case Organism.count
+   when 0 then redirect_to new_admin_organism_path
+   when 1
+      @organisms=Organism.all
+      redirect_to organism_path(Organism.first)
+   else
+      @organisms=Organism.all
+   end
+  end 
  
   # GET /organisms/1 test watcher
   # GET /organisms/1.json
