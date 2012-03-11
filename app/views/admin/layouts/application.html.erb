@@ -13,12 +13,7 @@
         <%= link_to 'Public',  ((@organism && !@organism.new_record?) ? organism_path(@organism) : organisms_path )  %>
         <%= link_to 'Compta',  ((@organism  && @organism.persisted?) ? compta_organism_path(@organism) : compta_organisms_path )  %>
       </div>
-      <div id ="organism">
-        <% if (@organism && !@organism.new_record?) %>
-          <%= link_to @organism.title, @organism  %><br/>
-          <p class="description"><%= @period.exercice unless @period.nil? %></p>
-        <% end %>
-      </div>
+     <%= header_organism %>
     </div>
 
 
@@ -34,6 +29,6 @@
 
 
   <%= yield %>
-<%#= debug params if RAILS_ENV == 'development' %>
+<%= debug params if Rails.env == 'development' %>
 </body>
 </html>

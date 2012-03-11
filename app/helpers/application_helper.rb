@@ -34,10 +34,12 @@ module ApplicationHelper
  def header_organism
    content_tag(:div, id: "organism") do
       if (@organism && !@organism.new_record?)
-         link_to(@organism.title, @organism )
-         content_tag(:p, :class=> "description") do
+         html = []
+         html << link_to(sanitize(@organism.title), @organism )
+         html << content_tag(:p, :class=> "description") do
              @period.exercice unless @period.nil?
          end
+         html.join('<br/>').html_safe
       end
    end
  end

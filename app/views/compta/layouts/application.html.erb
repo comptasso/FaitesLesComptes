@@ -9,13 +9,12 @@
   <body class='<%=  "compta_#{controller.controller_name}" %> compta'>
     <div id="header">
       <div id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
+       <%= header_organism %>
       <div id="zone_compta">
         <%= link_to 'Public',  ((@organism && !@organism.new_record?) ? organism_path(@organism) : organisms_path )  %>
         <%= link_to 'Administration',  ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path )  %>
       </div>
-      <div id ="organism">
-        <%= link_to @organism.title, @organism if (@organism && !@organism.new_record?) %>  <span class="description"><%= @period.exercice unless @period.nil? %></span>
-      </div>
+      
     </div>
 
 
@@ -31,6 +30,6 @@
 
 
   <%= yield %>
-  <%= debug params if RAILS_ENV == 'development' %>
+  <%= debug params if Rails.env == 'development' %>
 </body>
 </html>
