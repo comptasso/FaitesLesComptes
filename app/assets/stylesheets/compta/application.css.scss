@@ -35,12 +35,22 @@ $medium: #e3e32d;
 
             }
         }
+        #organism {
+           a:hover {
+                 color: #FFF;
+                 background: $dark;
+               }
+            }
         #zone_compta {
             position: absolute;
             top: 1em;
             right: 1em;
             font-style: italic;
             font-size: smaller;
+            a:hover {
+                 color: #FFF;
+                 background: $dark;
+               }
         }
     }
     #bandeau {
@@ -65,9 +75,13 @@ $medium: #e3e32d;
         background-color: $medium;
 
         h2 {background-color: $dark;}
-        a {background-color: $dark;}
+        a {background-color: $medium;}
+        a:hover {
+            color: #FFF;
+                    background: $dark;
+                    }
         a.icon_menu {background-color: $medium;}
-        a:hover {background-color: #FFF;}
+        
         
     }
 
