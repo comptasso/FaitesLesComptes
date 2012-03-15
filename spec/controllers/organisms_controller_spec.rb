@@ -72,7 +72,66 @@ describe OrganismsController do
   end
 
   describe 'GET show' do
-    it 'Les spec de Organism get show restent à faire'
+
+    let(:o) {mock_model(Organism, name: 'Spec Firm')}
+    let(:p) {mock_model(Period, :start_date=>Date.civil(2012,1,1), :close_date=>Date.civil(2012,12,31))}
+    let(:c) {mock_model(Cash)}
+    let(:ba1) {mock_model(BankAccount)}
+    let(:ib) {mock_model(IncomeBook) }
+    let(:ob) {mock_model(OutcomeBook) }
+
+    before(:each) do
+      Organism.stub(:find).and_return(o)
+      o.stub(:periods).and_return([p])
+      o.stub_chain(:bank_accounts, :all).and_return([ba1])
+      o.stub_chain(:cashes, :all).and_return([c])
+      o.stub_chain(:books, :all).and_return([ib,ob])
+      o.stub_chain(:periods, :empty?).and_return(false)
+    end
+    
+    it 'doit rendre la vue show' do
+      get :show, :id=>o.id
+      response.should render_template('show')
+    end
+
+    it 'doit assigner les différentes variables pour show' do
+      get :show, :id=>o.id
+      assigns(:organism).should == o
+      assigns(:cashes).should == [c]
+      assigns(:bank_accounts).should == [ba1]
+      assigns(:books).should == [ib,ob]
+      
+    end
+
+    it 'period doit être recherché par la session' do
+      session[:period] = p.id
+      o.stub_chain(:periods, :find).with(p.id).and_return(p)
+      get :show, :id=>o.id
+      assigns(:period).should == p
+    end
+
+    it "si pas de session alors period est la dernière" do
+      session[:period]=nil
+      o.stub_chain(:periods, :find).with(nil).and_raise('error')
+      o.stub_chain(:periods, :last).and_return(p)
+      get :show, :id=>o.id
+      assigns(:period).should == p
+      session[:period].should == p.id
+
+    end
+
+    it 'assign l array pave' do
+      get :show, :id=>o.id
+      assigns[:paves].should be_an_instance_of(Array)
+    end
+
+    it 'paves doit avoir 5 éléments' do
+      # income et outcomme books, résultat, bank_account et cash
+      get :show, :id=>o.id
+      assigns[:paves].size.should == 5
+    end
+
+
   end
 
 end

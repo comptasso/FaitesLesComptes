@@ -29,7 +29,7 @@ class OrganismsController < ApplicationController
     # TODO pas joli ce rescue général
     begin
       @period = @organism.periods.find(session[:period])
-    rescue
+    rescue 
       @period = @organism.periods.last
       session[:period]=@period.id
     end
@@ -41,7 +41,14 @@ class OrganismsController < ApplicationController
     # Ce min est nécessaire car il y a un problème avec les soldes si la date du jour est postérieure à la date de clôture
     # du dernier exercice - probablement il faut trouver plus élégant
     @date=[@organism.periods.last.close_date, Date.today].min
- 
+
+    # Construction des éléments des paves
+    @paves=[]
+    @paves += @books
+    @paves << @period
+    @paves += @bank_accounts
+    @paves += @cashes
+    
   end
 
  

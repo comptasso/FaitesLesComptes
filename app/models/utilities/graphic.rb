@@ -1,5 +1,3 @@
-
-
 # coding: utf-8
 
 # Cette classe permet de représenter un graphique
