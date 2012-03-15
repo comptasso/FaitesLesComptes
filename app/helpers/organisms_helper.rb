@@ -17,7 +17,7 @@ module OrganismsHelper
       info[:text] = "#{org.number_of_non_deposited_checks} chèques à déposer pour \
             un montant total de #{number_to_currency org.value_of_non_deposited_checks}"
       info[:icon] = icon_to('nouveau.png', new_organism_check_deposit_path(org))
-    m << info
+      m << info
     end
 
     org.bank_accounts.each  do |ba|
@@ -32,37 +32,33 @@ module OrganismsHelper
       
       unless ca.cash_controls.any?
         info={}
-      info[:text] = "Caisse #{ca.name} : Pas encore de contrôle de caisse à ce jour"
-      info[:icon] = icon_to 'pointer.png', new_cash_cash_control_path(ca)
-      m << info
+        info[:text] = "Caisse #{ca.name} : Pas encore de contrôle de caisse à ce jour"
+        info[:icon] = icon_to 'pointer.png', new_cash_cash_control_path(ca)
+        m << info
       end
       if ca.cash_controls.any?
         info={}
-         cash_control = ca.cash_controls.order('date ASC').last
-         delta =((cash_control.amount - ca.sold(cash_control.date)).abs)
-         if delta > 0.001
-            info[:text] = "Caisse #{ca.name} : Ecart de caisse de  #{delta}" if delta > 0.001
-            info[:icon] = icon_to 'detail.png', cash_cash_control_path(ca, cash_control)
-            m << info
-         end
-       end
+        cash_control = ca.cash_controls.order('date ASC').last
+        delta =((cash_control.amount - ca.sold(cash_control.date)).abs)
+        if delta > 0.001
+          info[:text] = "Caisse #{ca.name} : Ecart de caisse de  #{delta}" if delta > 0.001
+          info[:icon] = icon_to 'detail.png', cash_cash_control_path(ca, cash_control)
+          m << info
+        end
+      end
     end
     return m
   end
 
   def pave(p, html_class)
-    case p.class.name
-   when 'IncomeBook'
-     render partial: 'book_pave', object: p, locals: {:position => html_class}
-  when 'OutcomeBook'
-   render partial: 'book_pave', object: p,  locals: {:position => html_class}
-  when 'Period'
-    render partial: 'result_pave', object: p,  locals: {:position => html_class}
-  when 'BankAccount'
-    render partial: 'book_pave', object: p,  locals: {:position => html_class}
-  when 'Cash'
-    render partial: 'cash_pave', object: p,  locals: {:position => html_class}
+    partial =   case p.class.name
+    when 'IncomeBook' then  'book_pave'
+    when 'OutcomeBook' then  'book_pave'
+    when 'Period' then 'result_pave'
+    when 'BankAccount' then 'book_pave'
+    when 'Cash' then 'cash_pave'
     end
+    render partial: partial, object: p,  locals: {:position => html_class}
   end
 
  
