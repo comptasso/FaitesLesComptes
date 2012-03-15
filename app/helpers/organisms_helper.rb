@@ -50,16 +50,16 @@ module OrganismsHelper
     return m
   end
 
-  def book_pave(book)
-    content_tag(:div, class: "pave") do
-        content_tag(:h2) do
-       "Livre des #{book.title}" +
-       icon_to('modifier.png', new_book_line_path(book)) +
-        icon_to('detail.png', book_lines_path(book))
-        end +
-        render(partial: 'bar_graphic', object: book.graphic(@period) , :locals=>{id: "book_#{book.id}"} )
-    end
-  end
+#  def book_pave(book)
+#    content_tag(:div, class: "pave") do
+#        content_tag(:h2) do
+#       "Livre des #{book.title}" +
+#       icon_to('modifier.png', new_book_line_path(book)) +
+#        icon_to('detail.png', book_lines_path(book))
+#        end +
+#        render(partial: 'bar_graphic', object: book.graphic(@period) , :locals=>{id: "book_#{book.id}"} )
+#    end
+#  end
 
  
 

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-
+# TODO  Effacer ou utiliser
 # la class pave sert à construire les paves sur le dashboard,
 # à terme, elle poura mémoriser les préférences utilisateurs
 # mais dans l'immédiat, c'est une classe minimaliste

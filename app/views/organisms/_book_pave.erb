@@ -1,0 +1,9 @@
+<div class="pave">
+    <h2 class='<%= book_pave.type %>' >
+          Livre des <%=  book_pave.title %>
+          <%= icon_to 'modifier.png', new_book_line_path(book_pave) %>
+          <%= icon_to 'detail.png', book_lines_path(book_pave) %>
+    </h2>
+
+    <%= render partial: 'bar_graphic', object: book_pave.graphic(@period) , :locals=>{id: "book_#{book_pave.id}"} %>
+  </div>

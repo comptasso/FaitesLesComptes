@@ -18,45 +18,15 @@
   </ul>
 </div>
 
-<% @books.each do |book| %>
-  <div class="pave">
-    <h2 class='<%= book.type %>' >
-          Livre des <%=  book.title %>
-          <%= icon_to 'modifier.png', new_book_line_path(book) %>
-          <%= icon_to 'detail.png', book_lines_path(book) %>
-    </h2>
-   
-    <%= render partial: 'bar_graphic', object: book.graphic(@period) , :locals=>{id: "book_#{book.id}"} %>
-  </div>
-<% end %>
+<%= render partial: 'book_pave', collection: @books %>
+<%= render partial: 'result_pave', object: @period %>
 
 
 
-<%= content_tag :div, :class=>"pave result" do %>
-  <h2>Résultat</h2>
-  <%= render partial: 'bar_graphic', object: @period.graphic(@period) , :locals=>{id: 'book_0'} %>
-<% end %>‘
 
-<% @organism.bank_accounts.each do |ba| %>
-<%= content_tag :div, :class=>"pave bank"  do %>
-<h2>Compte <%= ba.number %> = <%= number_to_currency ba.sold  %>
- <%= icon_to 'detail.png', organism_bank_account_bank_extract_path(@organism, ba, ba.bank_extracts.order('begin_date').last) %></h2>
- 
-  <%= render partial: 'line_graphic', object: ba.graphic(@period) , :locals=>{id: "bank_#{ba.id}" } %>
-<% end %>
-<% end %>
+<%= render partial: 'bank_pave', collection: @organism.bank_accounts %>
+<%= render partial: 'cash_pave', collection: @organism.cashes %>
 
-<% @organism.cashes.each do |ca| %>
-<%= content_tag :div, :class=>"pave cash"  do %>
-<h2>Caisse <%=  ca.name %> = <%= number_to_currency ca.sold(@date) %>
-  <%= icon_to 'detail.png', cash_cash_lines_path(ca) %>
-</h2>
- 
- 
-  
-  <%= render partial: 'line_graphic', object: ca.graphic(@period)  , :locals=>{id: "cash_#{ca.id}" } %>
-<% end %>
-<% end %>
-  
+
 
 
