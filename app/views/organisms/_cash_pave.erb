@@ -1,4 +1,4 @@
-<%= content_tag :div, :class=>"pave cash"  do %>
+<%= content_tag :div, :class=>"pave cash #{position}"  do %>
 
 <h2>Caisse <%=  cash_pave.name %> = <%= number_to_currency cash_pave.sold(@date) %>
   <%= icon_to 'detail.png', cash_cash_lines_path(cash_pave) %>

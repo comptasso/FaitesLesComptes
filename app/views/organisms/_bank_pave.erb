@@ -1,5 +1,5 @@
 
-<%= content_tag :div, :class=>"pave bank"  do %>
+<%= content_tag :div, :class=>"pave bank #{position}"  do %>
 <h2>Compte <%= bank_pave.number %> = <%= number_to_currency bank_pave.sold  %>
  <%= icon_to 'detail.png', organism_bank_account_bank_extract_path(@organism, bank_pave, bank_pave.bank_extracts.order('begin_date').last) %></h2>
 

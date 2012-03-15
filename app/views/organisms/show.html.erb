@@ -18,15 +18,11 @@
   </ul>
 </div>
 
-<%= render partial: 'book_pave', collection: @books %>
-<%= render partial: 'result_pave', object: @period %>
+<% @paves.in_groups_of(3, false) do |p|  %>
+  <%= pave(p[0], 'left') %>
+  <%= pave(p[1], 'middle') %>
+  <%= pave(p[2], 'right') %>
 
-
-
-
-<%= render partial: 'bank_pave', collection: @organism.bank_accounts %>
-<%= render partial: 'cash_pave', collection: @organism.cashes %>
-
-
+<% end %>
 
 
