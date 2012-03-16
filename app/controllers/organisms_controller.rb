@@ -4,15 +4,15 @@ class OrganismsController < ApplicationController
 
   # renvoie vers show s'il n'y a qu'un seul organisme
   def index
-   reset_session
-   case Organism.count
-   when 0 then redirect_to new_admin_organism_path
-   when 1
+    reset_session
+    case Organism.count
+    when 0 then redirect_to new_admin_organism_path
+    when 1
       @organisms=Organism.all
       redirect_to organism_path(Organism.first)
-   else
+    else
       @organisms=Organism.all
-   end
+    end
   end 
  
   # GET /organisms/1 test watcher
@@ -21,39 +21,22 @@ class OrganismsController < ApplicationController
     @organism = Organism.find(params[:id])
     if @organism.periods.empty?
       flash[:alert]= 'Vous devez créer au moins un exercice pour cet organisme'
-      redirect_to new_organism_period_url(@organism)
+      redirect_to new_admin_organism_period_url(@organism)
       return
     end
-    # on trouve l'exercice à partir de la session mais si on a changé d'organisme
-    # il faut changer la session et on charge le dernier exercice par défaut
-    # TODO pas joli ce rescue général
-    begin
-      @period = @organism.periods.find(session[:period])
-    rescue 
-      @period = @organism.periods.last
-      session[:period]=@period.id
-    end
- 
-    @bank_accounts=@organism.bank_accounts.all
-    @cashes=@organism.cashes.all
-    @books=@organism.books.all
-       
+  
+    current_period
     # Ce min est nécessaire car il y a un problème avec les soldes si la date du jour est postérieure à la date de clôture
     # du dernier exercice - probablement il faut trouver plus élégant
     @date=[@organism.periods.last.close_date, Date.today].min
 
     # Construction des éléments des paves
     @paves=[]
-    @paves += @books
+    @paves += @organism.books.all
     @paves << @period
-    @paves += @bank_accounts
-    @paves += @cashes
+    @paves += @organism.bank_accounts.all
+    @paves += @organism.cashes.all
     
   end
-
- 
-
- 
-
 
 end

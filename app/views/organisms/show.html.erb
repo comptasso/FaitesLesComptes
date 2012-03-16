@@ -19,9 +19,9 @@
 </div>
 
 <% @paves.in_groups_of(3, false) do |p|  %>
-  <%= pave(p[0], 'left') %>
-  <%= pave(p[1], 'middle') %>
-  <%= pave(p[2], 'right') %>
+  <%= draw_pave(p[0], 'left') %>
+  <%= draw_pave(p[1], 'middle') %>
+  <%= draw_pave(p[2], 'right') %>
 
 <% end %>
 

@@ -8,7 +8,7 @@ describe CheckDepositsController do
     @o=Organism.create!(title: 'test check_deposit')
     @p_2012=@o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year) # année 2012
     @p_2011=@o.periods.create!(start_date: (@p_2012.start_date - 365) , close_date: (@p_2012.start_date - 1)) # année 2011
-    @ba=@o.bank_accounts.create!(name: 'AiD', number: '123456Z')
+    @ba=@o.bank_accounts.create!(name: 'AiD', number: '123456Z', organism_id: @o.id)
     @b=@o.income_books.create!(title: 'Recettes')
     @n=@p_2012.natures.create!(name: 'ventes')
     @n_2011=@p_2011.natures.create!(name: 'ventes')
@@ -35,10 +35,12 @@ describe CheckDepositsController do
         CheckDeposit.stub!(:nb_to_pick).and_return 0
       end
 
+      it "verif du before filter" do
+        get :index, :bank_account_id=>@ba.id, :organism_id=>@o.id
+      end
+
       it "vérification de l'initialisation" do
-        Organism.stub!(:find).and_return(@o)
-        BankAccount.should_receive(:find).with(@ba.id.to_s).and_return(@ba)
-        get :index, :bank_account_id=>@ba.id.to_s, :organism_id=>@o.id.to_s
+        get :index, :bank_account_id=>@ba.id, :organism_id=>@o.id.to_s
         assigns[:period].should == @p_2012
         assigns[:organism].should == @o
         assigns[:bank_account].should == @ba

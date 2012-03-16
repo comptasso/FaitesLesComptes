@@ -85,14 +85,16 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
   private
 
   def find_bank_account
-    @bank_account=@organism.bank_accounts.find(params[:bank_account_id])
+    bas= @organism.bank_accounts
+    @bank_account= bas.find(params[:bank_account_id])
+   # @bank_account=@organism.bank_accounts.find(params[:bank_account_id])
   end
 
   def find_non_deposited_checks
     @lines = CheckDeposit.pending_checks(@organism)
     @total_lines_credit=CheckDeposit.total_to_pick(@organism)
     @nb_to_pick=CheckDeposit.nb_to_pick(@organism)
-  end
+  end 
 
   def get_pick_date
     params[:check_deposit][:deposit_date]= picker_to_date(params[:pick_date])

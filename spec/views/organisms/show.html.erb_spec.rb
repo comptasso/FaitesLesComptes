@@ -2,7 +2,10 @@
 
 require 'spec_helper'
 
+
 describe "organisms/show.html.erb" do
+  
+
 
 let(:o) {stub_model(Organism) }
 let(:ibook) {stub_model(IncomeBook, :title=>'Recettes') }
@@ -21,9 +24,8 @@ before(:each) do
     obook.stub_chain(:organism, :all).and_return([p2011, p2012])
     assign(:books, [ibook,obook])
     assign(:period, p2012 )
+    assign(:paves, [ibook,obook,p2012])
     # assign(:p2011, p2011 )
-   
-
     o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))
    end
 

@@ -375,7 +375,9 @@ OK - inclure le sold dans le titre des pavés caisse et banque
 OK - Retirer tous les messages des pavés et les regrouper - dans un div spécifique
 OK - Le dashboard devrait proposer une icone pour faire une remise de chèque dans le pavé messages
 OK - revoir ou on atterrit quand on clique sur compte bancaire
-OK -Rendre les titres cliquables et/ou mettre les icones comme pour books.
+OK - Rendre les titres cliquables et/ou mettre les icones comme pour books.
+OK - Faire une collections de paves pour pouvoir utiliser une fonction in_group_of
+Mettre en place des formats adaptés pour les pavés de gauche, milieu et droite
 
 --------------------- refonte de check_deposit--------------------
 OK - revoir le modèle pour avoir les méthodes dans le modèle plutôt que dans le controller

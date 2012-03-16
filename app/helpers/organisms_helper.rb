@@ -50,7 +50,9 @@ module OrganismsHelper
     return m
   end
 
-  def pave(p, html_class)
+  # appelé par la vue organism#show pour dessiner chacun des pavés qui figurent 
+  # dans le dash board.
+  def draw_pave(p, html_class)
     partial =   case p.class.name
     when 'IncomeBook' then  'book_pave'
     when 'OutcomeBook' then  'book_pave'

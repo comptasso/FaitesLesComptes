@@ -22,6 +22,7 @@ describe "organisms/show.html.erb" do
     assign(:books, [ibook,obook])
     assign(:period, p2012 ) 
     o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))
+    assign(:paves, [ibook, obook, p2012])
   end
 
   describe 'Partie Exercices du menu' do

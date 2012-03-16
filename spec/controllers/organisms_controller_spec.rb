@@ -87,6 +87,8 @@ describe OrganismsController do
       o.stub_chain(:cashes, :all).and_return([c])
       o.stub_chain(:books, :all).and_return([ib,ob])
       o.stub_chain(:periods, :empty?).and_return(false)
+      o.stub_chain(:periods, :order, :last, :id).and_return(p.id)
+      Period.stub(:find).with(p.id).and_return(p)
     end
     
     it 'doit rendre la vue show' do
@@ -94,13 +96,9 @@ describe OrganismsController do
       response.should render_template('show')
     end
 
-    it 'doit assigner les différentes variables pour show' do
+    it 'doit assigner l organisme' do
       get :show, :id=>o.id
       assigns(:organism).should == o
-      assigns(:cashes).should == [c]
-      assigns(:bank_accounts).should == [ba1]
-      assigns(:books).should == [ib,ob]
-      
     end
 
     it 'period doit être recherché par la session' do

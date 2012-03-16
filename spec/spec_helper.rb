@@ -51,6 +51,7 @@ end
   
   Dir["#{Rails.root}/app/models/**/*.rb"].each { |f| load f }
   Dir["#{Rails.root}/app/controllers/**/*.rb"].each { |f| load f }
+  Dir["#{Rails.root}/app/helpers/**/*.rb"].each { |f| load f }
 
 #  RSpec.configure do |config|
 #
