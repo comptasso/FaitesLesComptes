@@ -3,9 +3,13 @@
  * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require_self
- *= require_tree . 
+ *  require_tree .
+ *= require twitter/bootstrap
 */
-#grid {
+
+/* ce style a été défini pour pouvoir afficher la grille par superposition
+probablement obsolète depuis que je suis passé à bootstrap*/
+/*#grid {
     margin: 0px;
     position: absolute;
     top: 0px;
@@ -17,168 +21,10 @@
     opacity: 0.3;
     background-repeat: repeat;
     background-color: pink;
-}
+}*/
 
-
-
-#header {
-    height: 54px;
-    width: 100%;
-    background-color: #9c9;
-    
-}
-
-.test{
-    font-size: 8pt;
-}
-
-#header #logo {
-    float: left;
-    width: 342px;
-    height: 100%;
-    /* padding-top: 5px;*/
-    background: #9c9;
-    font: small-caps 33px/33px "Times New Roman" , serif;
-    color: #282;
-    text-align: center;
-    display: inline;
-}
-
-#header #logo a {
-    text-decoration: none;
-    line-height: 54px;
-    padding-top: 10px;
-   }
-
-#header #logo a:hover {
-    background: #9c9;
-    margin : 0px;
-    padding: 0px;
-}
-
-#header #organism {
-    float: left;
-    margin-left: 108px;
-    height: 54px;
-    width: 432px;
-    
-   
-}
-
-#header #organism p {
-    font: small-caps 16px/16px "Times New Roman" , serif;
-    font-weight: 700;
-    line-height: 18px;
-    margin: 0px;
-    margin-top: 9px;
-    color: #141;
-    
-    text-align: center;
-}
-
-#header #organism p a:hover {
-    color: #FFF;
-}
-
-#header #organism .description {
-    font-style: italic;
-    font-size: small;
-    font-variant: normal;
-    margin-top: 0px;
-    
-    
-}
-
-#zone_admin {
-    float: right;
-    margin-right: 0px;
-    height: 18px;
-    width: 360px;
-    
-    text-align: right;
-    font-style: italic;
-    font-size: smaller;
-}
-
-#zone_admin a {
-    margin-right: 9px
-}
-
-#zone_admin a:hover {
-    color: #FFF;
-    background: #141;
-}
-
-
-#bandeau {
-    background: #fff;
-    margin-bottom: 10px;
-    padding-top: 22px;
-}
-
-fieldset {
-    background: #efe;
-    margin-left: 0px;
+.row-pave{
+    margin-top :5px;
     margin-bottom: 10px;
 }
-
-fieldset legend {
-    color: #dfd;
-    background: #141;
-    font-family: sans-serif;
-    padding: 0.2em 1em;
-}
-
-/* stylesheets/application.css */
-.simple_form label {
-    float: left;
-    width: 120px;
-    text-align: right;
-    margin: 2px 10px;
-    font-weight: bold;
-}
-
-.simple_form div.input {
-    margin-bottom: 10px;
-}
-
-.inputs_inline label{
-    float: none;
-}
-
-.simple_form div.boolean, .simple_form input[type='submit'] {
-    margin-left: 40px;
-}
-
-.simple_form div.boolean label, .simple_form label.collection_radio {
-    float: none;
-    margin: 0;
-}
-
-.simple_form label.collection_radio {
-    margin-right: 10px;
-    margin-left: 2px;
-}
-
-.simple_form .error {
-    clear: left;
-    /*margin-left: 120px;*/
-    font-size: 12px;
-    color: yellow;
-    display: block;
-}
-
-.simple_form .hint {
-    clear: left;
-    margin-left: 140px;
-    font-size: 12px;
-    color: #555;
-    display: block;
-    font-style: italic;
-}
-
-.simple_form abbr {
-    color: red;
-}
-
 

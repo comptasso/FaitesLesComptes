@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.2.0'
-gem 'therubyracer' #execjs sous windows
+ # gem 'therubyracer' execjs sous windows
 gem 'simple_form'
 
 # Bundle edge Rails instead:
@@ -19,6 +19,7 @@ group :assets do
   gem 'sass-rails', "  ~> 3.2.0"
   gem 'coffee-rails', "~> 3.2.0"
   gem 'uglifier'
+  gem 'less-rails-bootstrap'
 end
 
 gem 'jquery-rails'

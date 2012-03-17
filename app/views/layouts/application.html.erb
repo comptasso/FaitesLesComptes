@@ -8,16 +8,17 @@
       
     <%= csrf_meta_tags %>
   </head>
-   <body class='<%= "public_#{controller.controller_name}" %>'>
+  <body class="container-fluid <%= 'public_'+controller.controller_name %>">
    <%# content_tag(:div, :id=>"grid") %>
         
    
-  <div id="header">
-      <div id="zone_admin"><%= link_to 'Administration', ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path ) %>
-      <%= link_to 'Compta', ((@organism && !@organism.new_record?) ? compta_organism_path(@organism) : compta_organisms_path ) %></div>
+  <div class="row-fluid" id="header">
+      
  
-     <div id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
+     <div class="span4" id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
       <%= header_organism %>
+     <div class="span4" id="zone_admin"><%= link_to 'Administration', ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path ) %>
+      <%= link_to 'Compta', ((@organism && !@organism.new_record?) ? compta_organism_path(@organism) : compta_organisms_path ) %></div>
         </div>
 
   <nav id="menu">

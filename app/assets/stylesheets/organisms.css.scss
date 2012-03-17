@@ -27,14 +27,8 @@
     }
     .pave {
         display: inline-block;
-        float: left;
-        width: 430px;
-        border: solid 1px;
-        margin-top: 18px;
-        margin-right: 9px;
-
+                
         h2 {
-            
             margin: 0px;
             padding: 9px 9px;
         }
@@ -43,22 +37,18 @@
             margin: 5px;
             }
         .bar_graph {
-           
             margin-left: 5px;
-            
-       
             }
 
     }
     h2.IncomeBook  {
-
         background-color: green;
-
     }
-    h2.OutcomeBook {
 
+    h2.OutcomeBook {
         background-color: pink;
     }
+
     .bank h2 {
         background-color: #A19B9E;
         }
@@ -69,9 +59,6 @@
         background-color: goldenrod;
         }
     .message {
-        width: 100%;
-       
-        margin: 0px;
         h2 {
             background-color : khaki;
             }

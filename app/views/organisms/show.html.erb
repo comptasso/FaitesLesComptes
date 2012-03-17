@@ -2,7 +2,8 @@
   <%= icon_to 'navigation90.png', organisms_path %>
 <% end %>
 
-<div class="pave message">
+<div class="row-fluid">
+<div class="span12 row-pave message">
   <h2>
     Vous avez <%= pluralize infos(@organism).size, 'message' %>
     <%= image_tag 'icones/mail-open.png', id: 'mail_img' %>
@@ -17,12 +18,14 @@
         <% end %>
   </ul>
 </div>
+</div>
 
 <% @paves.in_groups_of(3, false) do |p|  %>
-  <%= draw_pave(p[0], 'left') %>
-  <%= draw_pave(p[1], 'middle') %>
-  <%= draw_pave(p[2], 'right') %>
-
+<div class ="row-fluid row-pave">
+  <%= draw_pave(p[0], 'span4') if p[0] %>
+  <%= draw_pave(p[1], 'span4') if p[1] %>
+  <%= draw_pave(p[2], 'span4') if p[2] %>
+</div>
 <% end %>
 
 

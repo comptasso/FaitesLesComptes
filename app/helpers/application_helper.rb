@@ -32,7 +32,7 @@ module ApplicationHelper
   end
 
  def header_organism
-   content_tag(:div, id: "organism") do
+   content_tag(:div, class: "span4", id: "organism") do
       if (@organism && !@organism.new_record?)
          html = []
          html << content_tag(:p) {link_to(sanitize(@organism.title), @organism )}
