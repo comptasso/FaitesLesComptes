@@ -3,13 +3,13 @@
 require 'spec_helper'
 require 'lines_helper'
 
-describe "check_deposits/index.html.erb" do
+describe "check_deposits/index" do
   let(:o) {mock_model(Organism, title: 'spec cd')}
   let(:ba)  {mock_model(BankAccount, number: '124578AZ', name: 'IBAN')}
   let(:cd1) {mock_model(CheckDeposit, bank_account_id: ba.id, deposit_date: Date.today - 5)}
   let(:cd2) {mock_model(CheckDeposit, bank_account_id: ba.id, deposit_date: Date.today - 20)}
 
-  10.times do |t|
+  10.times do |t| 
     s=('l'+t.to_s).to_sym
     let(s) {mock_model(Line, :amount=>(t+1))}
   end
@@ -41,7 +41,7 @@ describe "check_deposits/index.html.erb" do
 
   
   describe "controle du corps" do
-pending
+# pending
     before(:each) do
         render
       end

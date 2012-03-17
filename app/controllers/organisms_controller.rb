@@ -2,7 +2,9 @@
 
 class OrganismsController < ApplicationController
 
-  # renvoie vers show s'il n'y a qu'un seul organisme
+  # renvoie vers new s'il n'y pas d'organisme
+  # et vers show s'il n'y a qu'un seul organisme
+  # si plus d'un affiche la vue par défaut
   def index
     reset_session
     case Organism.count

@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 
-describe "organisms/show.html.erb" do
+describe "organisms/show" do
   
 
 

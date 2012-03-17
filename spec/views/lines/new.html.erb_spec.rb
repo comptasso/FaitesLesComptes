@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 
-describe "lines/new.html.erb" do
-
+describe "lines/new" do 
+ 
 let(:o) {stub_model(Organism) }
 let(:book) {stub_model(Book) }
 
