@@ -3,29 +3,37 @@
 <%=  simple_form_for [@book, @line]  do |f| %>
 
   <%= f.error_notification %>
-
-
   <div class="inputs" id="entry_lines" >
-
-    <p>   <label>Date : </label>
+    <div class="span3">   <label>Date : </label>
       <%= picker_date :pick_date_line, @period.start_date, @period.close_date , @line.line_date %>
-
+    </div>
+    <div class="span3">
       <%=  f.input :narration,  :label=>'Libellé', input_html: {size: 20 } %>
-
+    </div>
+    <div class="span3">
       <%=  f.association :nature ,  :collection => @natures, :prompt => "Quoi ?" %>
+      </div>
+    <div class="span3">
       <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'), :prompt => "Pour qui ?" %>
-    </p>
-    <p>
+    </div>
+     <div class="span3">
       <%=  f.input :debit , input_html: {size: 12, value: two_decimals(@line.debit) } unless (@book.type=='IncomeBook') %>
+     </div>
+    <div class="span3">
       <%=  f.input :credit, input_html: {size: 12, value: two_decimals(@line.credit) } unless (@book.type=='OutcomeBook') %>
-
-      <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement', disabled: "#{'Espèces' unless @organism.cashes.any?}" %>
-      <span id="td_bank" > <%= f.association :bank_account, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>  </span>
+    </div>
+    <div class="span3">
+  <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement', disabled: "#{'Espèces' unless @organism.cashes.any?}" %>
+    </div>
+    <div class="span3">
+    <span id="td_bank" > <%= f.association :bank_account, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>  </span>
+      </div>
+    <div class="span3">
       <span id="td_cash" > <%= f.association :cash, :collection => @organism.cashes.all, :include_blank=> false %></span>
-    </p>
-  </div>
+    </div>
   <div id="actions">
     <%=  f.button :submit, id: 'new_line_button' %>
+  </div>
   </div>
 <% end %>
 

@@ -46,7 +46,7 @@ module ApplicationHelper
 
  def header_title
    html = sanitize(@organism.title)
-   html += " #{@period.exercice}" unless @period.nil?
+   html += " : #{@period.exercice}" unless @period.nil?
  end
 
 

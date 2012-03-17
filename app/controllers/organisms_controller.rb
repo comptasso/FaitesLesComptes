@@ -36,7 +36,7 @@ class OrganismsController < ApplicationController
     @paves=[]
     @paves += @organism.books.all
     @paves << @period
-    @paves += @organism.bank_accounts.all
+    @paves += @organism.bank_accounts.all.select {|ba| ba.bank_extracts.any? }
     @paves += @organism.cashes.all
     
   end

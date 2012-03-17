@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= header_title %></title>
+    <title>Faites les comptes !</title>
     <%= stylesheet_link_tag    "application" %>
  
    <%= javascript_include_tag "application" %>
@@ -12,22 +12,25 @@
    <%# content_tag(:div, :id=>"grid") %>
         
    
-  <div class="row-fluid" id="header">
-      <div class="span4" id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
-      <%# header_organism %>
-     <div class="span4" id="zone_admin"><%= link_to 'Administration', ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path ) %>
-      <%= link_to 'Compta', ((@organism && !@organism.new_record?) ? compta_organism_path(@organism) : compta_organisms_path ) %></div>
-        </div>
+  <div class="navbar">
+    <div class="navbar navbar-inner">
+      <div class="container">
+    <a class="brand"><%= header_title %></a>
+    <ul class="nav nav-pills pull-right">
+    <li class="active"><a href="#">Saisie/Consult</a></li>
+    <li><%=  link_to 'Administration', ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path )%></li>
+    <li><%= link_to 'Compta', ((@organism && !@organism.new_record?) ? compta_organism_path(@organism) : compta_organisms_path ) %></li>
+    </ul>
+  </div>
+  </div>
+   </div>
 
-  <div class="navbar" id="menu">
-    <a class="brand">Faites les comptes !</a>
-    <div class="navbar-inner">
-    <div class="container" >
+
+  <div>
     <%= render 'organisms/menu' %>
-    <%= yield :menu %>
-    </div>
+  
   </div>
-  </div>
+ 
 
  
 

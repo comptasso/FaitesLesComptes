@@ -3,12 +3,13 @@
 <% end %>
 
 <div class="row-fluid">
-<div class="span12 row-pave message">
+<div class="span12 row-pave pave message">
   <h2>
     Vous avez <%= pluralize infos(@organism).size, 'message' %>
     <%= image_tag 'icones/mail-open.png', id: 'mail_img' %>
   </h2>
-  <ul id="mail_ul">
+  <div id="mail_ul">
+  <ul>
     
    <% infos(@organism).each do |mess| %>
     <%= content_tag :li do %>
@@ -17,6 +18,7 @@
     <% end %>
         <% end %>
   </ul>
+  </div>
 </div>
 </div>
 

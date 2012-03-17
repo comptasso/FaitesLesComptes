@@ -1,7 +1,6 @@
-<div class="nav-collapse">
-  <ul class="nav">
-    <li class="dropdown">
 
+  <ul class="nav nav-tabs">
+    <li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> ">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         ORGANISMES
         <b class="caret"></b>
@@ -16,7 +15,7 @@
 
     <!--TODO normalement dans ce menu (de la zone Public), il ne peut pas y avoir de new_record? -->
     <% if (@organism  && !@organism.new_record?) %>
-<li class="dropdown">
+<li class="dropdown <%= 'active' if controller.controller_name =='lines'  %>">
 
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         LIVRES
@@ -34,7 +33,7 @@
       </ul>
     </li>
       
-<li class="dropdown">
+<li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
 
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         BANQUES
@@ -55,7 +54,7 @@
       </ul>
     </li>
 
-<li class="dropdown">
+<li class="dropdown <%= 'active' if controller.controller_name =='cash_lines'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
      
       CAISSES
@@ -73,7 +72,7 @@
 
         </ul>
       </li>
-<li class="dropdown">
+<li class="dropdown <%= 'active' if controller.controller_name =='natures'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         ANALYSES
         <b class="caret"></b>
@@ -87,23 +86,20 @@
         </ul>
       </li>
 
-<li class="dropdown">
+<li class="dropdown <%= 'active' if controller.controller_name =='periods'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         EXERCICES
         <b class="caret"></b>
       </a>
       <ul class="dropdown-menu">
-
-
-
           <%  @organism.periods.each do |p| %>
             <%=   content_tag :li,  (link_to p.exercice, change_organism_period_path(@organism, p)) %>
           <% end %>
-
         </ul>
       </li>
-
     <% end %>
+      <li>
+          <%= yield :menu %>
+      </li>
   </ul>
 
-</div>

@@ -5,11 +5,11 @@
 
     pre {  // pre est utilisé pour afficher les informations de debuggage
         clear: both;
-        }
+    }
 
-     td.jqplot-display-legend {
-            font-size: 8pt;
-            }
+    td.jqplot-display-legend {
+        font-size: 8pt;
+    }
 
 
 
@@ -27,51 +27,79 @@
     }
     .pave {
         display: inline-block;
-                
+
         h2 {
             margin: 0px;
-            padding: 9px 9px;
+            padding: 3px 10px;
         }
         p {
             display: block;
             margin: 5px;
-            }
+        }
         .bar_graph {
             margin-left: 5px;
-            }
+        }
 
     }
-    h2.IncomeBook  {
-        background-color: green;
+    .income_book {
+        h2  {
+            background-color: green;
+        }
+        div {
+            background-color: #EEE;
+        }
     }
 
-    h2.OutcomeBook {
+    .outcome_book {
+               h2 {
         background-color: pink;
     }
+     div {
+            background-color: #EEE;
+        }
+    }
 
-    .bank h2 {
+
+    .bank {
+                h2 {
         background-color: #A19B9E;
+    } 
+        div {
+            background-color: #EEE;
         }
-    .cash h2 {
+    }
+
+    .cash {
+                h2 {
         background-color: lightblue;
+    }
+     div {
+            background-color: #EEE;
         }
-    .result h2 {
+    }
+
+    .result {
+                h2 {
         background-color: goldenrod;
+    }
+     div {
+            background-color: #EEE;
         }
+    }
     .message {
         h2 {
             background-color : khaki;
-            }
+        }
+        div {
+            background-color: #EEE;
+            padding: 10px 0px 5px 0px;
+
         li {
-            line-hight: 20px;
-        a:hover {
-             backgraound-color: #141;
-            }
-        .icon_menu {
-            float: none;
-            }
-            }
-            }
+          .icon_menu { float: none;}
+                    }
+}
+       
+    }
 
 
 }
