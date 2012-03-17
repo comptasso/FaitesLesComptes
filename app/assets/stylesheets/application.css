@@ -28,6 +28,7 @@ probablement obsolète depuis que je suis passé à bootstrap*/
     margin-bottom: 10px;
 }
 
-.navbar-inner {
-background-image: -moz-linear-gradient(center top , #114411, #114411);
+.brand {
+    padding-left: 20px;
 }
+

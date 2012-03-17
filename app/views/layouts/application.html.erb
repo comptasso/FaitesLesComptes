@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Faites les comptes !</title>
+    <title><%= header_title %></title>
     <%= stylesheet_link_tag    "application" %>
  
    <%= javascript_include_tag "application" %>
@@ -14,12 +14,13 @@
    
   <div class="row-fluid" id="header">
       <div class="span4" id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
-      <%= header_organism %>
+      <%# header_organism %>
      <div class="span4" id="zone_admin"><%= link_to 'Administration', ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path ) %>
       <%= link_to 'Compta', ((@organism && !@organism.new_record?) ? compta_organism_path(@organism) : compta_organisms_path ) %></div>
         </div>
 
   <div class="navbar" id="menu">
+    <a class="brand">Faites les comptes !</a>
     <div class="navbar-inner">
     <div class="container" >
     <%= render 'organisms/menu' %>

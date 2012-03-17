@@ -1,3 +1,6 @@
+.navbar-inner {
+background-image: -moz-linear-gradient(center top , #114411, #114411);
+}
 
 
 #menu a.icon_menu, #submenu a.icon_menu {
