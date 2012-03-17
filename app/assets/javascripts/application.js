@@ -8,7 +8,7 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require_tree .
-
+//
 //
 //
 //
@@ -25,6 +25,8 @@ $(document).ready(function () {
         return false;
     });
 });
+
+$('.dropdown-toggle').dropdown();
 
 
 // fonction utilisée pour afficher un date picker pour chaque champ de class

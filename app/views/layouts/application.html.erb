@@ -13,18 +13,20 @@
         
    
   <div class="row-fluid" id="header">
-      
- 
-     <div class="span4" id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
+      <div class="span4" id="logo"><%= link_to 'Faites les comptes !', organisms_path %></div>
       <%= header_organism %>
      <div class="span4" id="zone_admin"><%= link_to 'Administration', ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path ) %>
       <%= link_to 'Compta', ((@organism && !@organism.new_record?) ? compta_organism_path(@organism) : compta_organisms_path ) %></div>
         </div>
 
-  <nav id="menu">
+  <div class="navbar" id="menu">
+    <div class="navbar-inner">
+    <div class="container" >
     <%= render 'organisms/menu' %>
     <%= yield :menu %>
-  </nav>
+    </div>
+  </div>
+  </div>
 
  
 
