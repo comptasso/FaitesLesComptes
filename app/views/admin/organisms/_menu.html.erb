@@ -1,148 +1,89 @@
-<ul>
-  <li><h2>ORGANISMES</h2>
-
-    <ul>
+<ul class="nav nav-tabs">
+  <li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> ">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      ORGANISMES
+      <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
       <li><%= link_to 'Listes des organismes', admin_organisms_path %></li>
+      <%= content_tag(:li, :class=>"divider"){} %>
       <% Organism.all.reject {|r| r.new_record? }.each do |r| %>
         <li>
-            <%= link_to r.title, admin_organism_path(r)  %>
+          <%= link_to r.title, admin_organism_path(r)  %>
         </li>
       <% end %>
-     
     </ul>
-
   </li>
-</ul>
-<% if (@organism  && !@organism.new_record?) %>
-  <ul>
-    <li><h2>LIVRES</h2>
 
-      <ul>
-        <li><%= link_to 'Listes des livres', admin_organism_books_path(@organism) %></li>
-        <% @organism.books.reject {|r| r.new_record? }.each do |b| %>
-          <li><%= link_to b.title, admin_organism_book_path(@organism,b)  %>
-            <ul>
-              <li> <%= link_to 'Modifier', edit_admin_organism_book_path(@organism, b) %></li>
-              <li> <%= link_to 'Supprimer',[:admin,@organism, b] %></li>
-
-            </ul>
-          </li>
-        <% end %>
-
-        <li><%= link_to 'Nouveau', new_admin_organism_book_path(@organism) %></li>
-      </ul>
-
+  <% if (@organism  && !@organism.new_record?) %>
+    <li class="dropdown <%= 'active' if controller.controller_name =='lines'  %>">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
+      <%= admin_menu_books(@organism.books) %>
     </li>
-  </ul>
 
+    
 
-<% if @period.persisted? %>
-  <ul>
-    <li><h2>Natures</h2>
-      <ul>
-
-        <li><%= link_to 'Afficher', admin_organism_period_natures_path(@organism,@period)  %></li>
-
-        <li><%=link_to  'Nouveau', new_admin_organism_period_nature_path(@organism, @period)  %></li>
-
-
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
-    <li><h2>Destinations</h2>
-      <ul>
-
+    <li class="dropdown <%= 'active' if controller.controller_name =='destinations'  %>">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">DESTINATIONS<b class="caret"></b></a>
+      <ul class="dropdown-menu">
         <li><%= link_to 'Afficher', admin_organism_destinations_path(@organism)  %></li>
-
         <li><%=link_to  'Nouveau', new_admin_organism_destination_path(@organism)  %></li>
-
-
       </ul>
     </li>
-  </ul>
-<% end %>
 
-  <ul>
-    <li><h2>Banques</h2>
-      <ul>
-        <% @organism.bank_accounts.reject {|r| r.new_record? }.each do |b| %>
-          <li><%= link_to b.number, admin_organism_bank_account_path(@organism,b)  %>
-            <ul>
-              <li><%=  link_to  'Modifier', edit_admin_organism_bank_account_path(@organism, b)  %></li>
-
-              <li><%= link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' %></li>
-              <li><%= link_to 'Extraits de comptes', admin_organism_bank_account_bank_extracts_path(@organism, b) %></li>
-            </ul>
-          </li>
-        <% end %>
-        <li><%= link_to 'Nouveau', new_admin_organism_bank_account_path(@organism) %></li>
-      </ul>
+    <li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">BANQUES<b class="caret"></b></a>
+      <%= admin_menu_banks(@organism.bank_accounts) %>
     </li>
-  </ul>
 
-  <ul>
-    <li><h2>Caisses</h2>
-      <ul>
-        <% @organism.cashes.reject {|r| r.new_record? }.each do |b| %>
-          <li><%= link_to b.name, admin_organism_cash_path(@organism,b)  %>
-            <ul>
-              <li><%= link_to 'Contrôles', admin_organism_cash_cash_controls_path(@organism,b) %>  </li>
-              <li><%=link_to  'Modifier', edit_admin_organism_cash_path(@organism, b)  %></li>
-
-              <li><%= link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' , method: :delete %></li>
-            </ul>
-          </li>
-        <% end %>
-        <li><%= link_to 'Nouveau', new_admin_organism_cash_path(@organism) %></li>
-      </ul>
+    <li class="dropdown <%= 'active' if controller.controller_name =='admin_cashes'  %>">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">CAISSES<b class="caret"></b></a>
+      <%= admin_menu_cashes(@organism.cashes) %>
     </li>
-  </ul>
 
 
-  <ul>
-    <li><h2>Exercices</h2>
-      <ul>
+    <li class="dropdown <%= 'active' if controller.controller_name =='admin_periods'  %>">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">EXERCICES<b class="caret"></b></a>
+      <ul class="dropdown-menu">
         <% @organism.periods.reject {|r| r.new_record? }.each do |c| %>
-          <li><%= link_to c.exercice, admin_organism_period_path(@organism, c) %>
-            <ul>
-              <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>
-             </ul>
-          </li>
+          <li><%= link_to c.exercice, admin_organism_period_path(@organism, c) %></li>
+          <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>
         <% end %>
         <li><%= link_to 'Nouveau', new_admin_organism_period_path(@organism) %></li>
       </ul>
-
     </li>
-  </ul>
 
-  <% if  @period.persisted? %>
-    <ul>
-      <li><h2>Comptes</h2>
-        <ul>
-
-          <li><%= link_to 'Plan Comptable', admin_organism_period_accounts_path(@organism,@period)  %>
-            <ul>
-              <li><%= link_to 'Gérer les comptes',  admin_organism_period_accounts_path(@organism,@period) %></li>
-              <li><%= link_to 'Importer', select_plan_admin_organism_period_path(@organism, @period)  %></li>
+    <% if  @period.persisted? %>
 
 
-            </ul>
-          </li>
+      <li class="dropdown <%= 'active' if controller.controller_name =='natures'  %>">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">NATURES<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Afficher', admin_organism_period_natures_path(@organism,@period)  %></li>
+          <li><%=link_to  'Nouveau', new_admin_organism_period_nature_path(@organism, @period)  %></li>
+        </ul>
+      </li>
+   
 
-          <li><%= link_to 'Relier aux natures', mapping_admin_organism_period_accounts_path(@organism, @period) %>
-            <ul>
-              <li><%= link_to 'Recettes', mapping_admin_organism_period_accounts_path(@organism, @period,:type=>'incomes') %> </li>
-               <li><%= link_to 'Dépenses',mapping_admin_organism_period_accounts_path(@organism, @period,:type=>'outcomes') %> </li>
-            </ul>
-          </li>
-
-         
+      <li class="dropdown <%= 'active' if controller.controller_name =='admin_accounts'  %>">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">COMPTES<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Plan Comptable', admin_organism_period_accounts_path(@organism,@period)  %></li>
+          <li><%= link_to 'Gérer les comptes',  admin_organism_period_accounts_path(@organism,@period) %></li>
+          <li><%= link_to 'Importer', select_plan_admin_organism_period_path(@organism, @period)  %></li>
+          <%=  content_tag(:li, :class=>"divider"){} %>
+          <li><%= link_to 'Relier aux natures', mapping_admin_organism_period_accounts_path(@organism, @period) %>  </li>
+          <li><%= link_to 'Recettes', mapping_admin_organism_period_accounts_path(@organism, @period,:type=>'incomes') %> </li>
+          <li><%= link_to 'Dépenses',mapping_admin_organism_period_accounts_path(@organism, @period,:type=>'outcomes') %> </li>
         </ul>
 
       </li>
-    </ul>
+
   <% end %>
 
 <% end %>
+<!-- pas très bien nommé, la suite affiche les icones -->
+      <li>
+          <%= yield :menu %>
+      </li>
+</ul>
