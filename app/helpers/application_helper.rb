@@ -23,12 +23,12 @@ module ApplicationHelper
   end
 
  def picker_date(field,date_min,date_max,value=Date.today)
-  
-    return   text_field_tag field,{},
+   content_tag(:span) do
+    text_field_tag(field,{},
       {'data-jcmin'=>"#{date_min.to_formatted_s(:date_picker)}",
       'data-jcmax'=>"#{date_max.to_formatted_s(:date_picker)}",
-      :class=>'input_date', :value=>value.to_formatted_s(:date_picker),
-      :size=>8}
+      :class=>'input_date span2', :value=>value.to_formatted_s(:date_picker)}) 
+   end
   end
 
  def header_organism

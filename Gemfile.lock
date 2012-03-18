@@ -181,7 +181,7 @@ DEPENDENCIES
   rails (= 3.2.0)
   rspec-rails (= 2.8.1)
   sass-rails (~> 3.2.0)
-  simple_form
+  simple_form (~> 2.0.1)
   spork
   sqlite3
   turn

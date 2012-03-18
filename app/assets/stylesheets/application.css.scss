@@ -9,6 +9,7 @@
 $clear: #FAF999;
 $dark: #114411;
 $medium: #32c732;
+$siteWidth: 70px;
 
 .row-pave{
     margin-top :5px;
@@ -43,3 +44,6 @@ ul.dropdown-menu li a:hover {
     label {
         display: inline-block;
         }
+.span2-16 {
+    width: $siteWidth+$siteWidth+12px;
+    }

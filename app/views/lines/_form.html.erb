@@ -1,42 +1,38 @@
-<%  SimpleForm.wrapper_tag = :span %>
 
-<%=  simple_form_for [@book, @line]  do |f| %>
+
+<div class="inputs" id="entry_lines" >
+<%=  simple_form_for([@book, @line], :html=> {class: 'form-inline'})  do |f| %>
 
   <%= f.error_notification %>
-  <div class="inputs" id="entry_lines" >
-    <div class="span3">   <label>Date : </label>
-      <%= picker_date :pick_date_line, @period.start_date, @period.close_date , @line.line_date %>
-    </div>
-    <div class="span3">
-      <%=  f.input :narration,  :label=>'Libellé', input_html: {size: 20 } %>
-    </div>
-    <div class="span3">
-      <%=  f.association :nature ,  :collection => @natures, :prompt => "Quoi ?" %>
-      </div>
-    <div class="span3">
-      <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'), :prompt => "Pour qui ?" %>
-    </div>
-     <div class="span3">
-      <%=  f.input :debit , input_html: {size: 12, value: two_decimals(@line.debit) } unless (@book.type=='IncomeBook') %>
-     </div>
-    <div class="span3">
-      <%=  f.input :credit, input_html: {size: 12, value: two_decimals(@line.credit) } unless (@book.type=='OutcomeBook') %>
-    </div>
-    <div class="span3">
-  <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement', disabled: "#{'Espèces' unless @organism.cashes.any?}" %>
-    </div>
-    <div class="span3">
+  <p>
+     <label class="span2">Date</label><%= picker_date :pick_date_line, @period.start_date, @period.close_date , @line.line_date %>
+  
+      <%=  f.input :narration,  :label=>'Libellé', label_html: {class: "span2-16"}, input_html: {class: "span6" } %>
+  </p>
+  <p>
+   
+      <%=  f.association :nature ,  :collection => @natures, :prompt => "Quoi ?", label_html: {class: "span2"}, input_html: {class: "span3 " } %>
+  
+      <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'),
+        :prompt => "Pour qui ?" , label_html: {class: "span1"}, input_html: {class: "span3"} %>
+ </p>
+ <p>
+      <%=  f.input :debit ,label_html: {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.debit) } unless (@book.type=='IncomeBook') %>
+  
+      <%=  f.input :credit,label_html: {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.credit) } unless (@book.type=='OutcomeBook') %>
+ 
+      <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
+        disabled: "#{'Espèces' unless @organism.cashes.any?}", label_html: {class: "span2"}, input_html: {class: "span2"} %>
+  
     <span id="td_bank" > <%= f.association :bank_account, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>  </span>
-      </div>
-    <div class="span3">
+   
       <span id="td_cash" > <%= f.association :cash, :collection => @organism.cashes.all, :include_blank=> false %></span>
-    </div>
-  <div id="actions">
-    <%=  f.button :submit, id: 'new_line_button' %>
-  </div>
-  </div>
+ </p>
+    <%=  f.button :submit, id: 'new_line_button', class: "btn-success offset2 span2" %>
+ 
+  
 <% end %>
-
+</div>
 <div id="mise_au_point"></div>
 
 
