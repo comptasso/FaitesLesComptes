@@ -5,10 +5,10 @@
 <%= icon_to 'retour.png', organism_books_path(@organism) %>
 
 <% end -%>
-<fieldset>
-  <legend><%= @organism.title %> - <%= @organism.description %></legend>
+<div class="champ">
+  <h3><%= @organism.title %> - <%= @organism.description %></h3><div class="inner-champ">
 
  
  <%= @book.title %>
-</fieldset>
+</div></div>
 

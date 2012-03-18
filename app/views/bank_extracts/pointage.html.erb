@@ -5,10 +5,10 @@
 <%= content_for :submenu do %>
  
 <% end %>
-<fieldset>
-  <legend>
+<div class="champ">
+  <h3>
     Affichage de l'extrait <%= @bank_extract.reference %>
-  </legend>
+  </h3><div class="inner-champ">
   <table>
     <tr> <%= render 'bank_extracts/table_header' %><th></th></tr>
     <tr> <%= render @bank_extract %>
@@ -19,7 +19,7 @@
     </tr>
   </table>
 
-</fieldset>
+</div></div>
 
 <div id="zone">
 <div id="extract"><h3>Extrait bancaire</h3>

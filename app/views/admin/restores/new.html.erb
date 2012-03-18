@@ -7,10 +7,10 @@
 <%= icon_to 'retour.png', :back %>
 <% end %>
 
-<fieldset>
-  <legend>
+<div class="champ">
+  <h3>
     Restauration des données d'un exercice à partir d'un fichier
-  </legend>
+  </h3><div class="inner-champ">
 
   
 <%= form_tag admin_restore_path, :multipart => true do %>
@@ -20,4 +20,4 @@
  
 
 
-</fieldset>
+</div></div>

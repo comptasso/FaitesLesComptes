@@ -10,9 +10,9 @@
 <%= icon_to 'modifier.png', edit_book_multiple_line_path(@book.id, @mlines.first.copied_id) %>
 <% end %>
 
-<fieldset><legend><%=  @book.title%> - Affichage d'écriture multiple - Total : <%= @mlines.count %> lignes -
+<div class="champ"> lignes -
   
-  </legend>
+  </h3><div class="inner-champ">
   <table>
     <thead>
       <tr>
@@ -67,4 +67,4 @@
         </tfoot>
       </table>
 
-    </fieldset>
+    </div></div>

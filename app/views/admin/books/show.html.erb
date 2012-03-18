@@ -5,8 +5,8 @@
 <%= icon_to 'retour.png', admin_organism_books_path(@organism) %>
 
 <% end -%>
-<fieldset>
-  <legend>Détail</legend>
+<div class="champ">
+  <h3>Détail</h3><div class="inner-champ">
 
 <p><b>Titre : </b> <%= @book.title %></p>
 <p><b>Description : </b> <%= @book.description %></p>
@@ -15,6 +15,6 @@
 <p><b>Mis à jour le </b> <%= @book.updated_at %></p>
 
 
-</fieldset>
+</div></div>
 
 

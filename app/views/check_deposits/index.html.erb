@@ -4,7 +4,7 @@
 <%= icon_to 'nouveau.png', new_organism_bank_account_check_deposit_path(@organism, @bank_account) if (@nb_to_pick && @nb_to_pick > 0)  %>
 <% end -%>
 
-<fieldset><legend> Banque <%= @bank_account.to_s %> - Liste des remises de chèques </legend>
+<div class="champ">
 <table>
   <thead>
   <tr>
@@ -35,6 +35,6 @@
   </tbody>
 </table>
 
-</fieldset>
+</div></div>
 
 

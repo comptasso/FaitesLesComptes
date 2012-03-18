@@ -5,7 +5,7 @@
 <% end %>
 
 
-<fieldset><legend><%= @periods.empty? ? "Aucun exercice" : "Liste des exercices" %></legend>
+<div class="champ">
   <% unless @periods.empty? %>
     <table class="striped">
       <thead>
@@ -29,4 +29,4 @@
       </tbody>
     </table>
   <% end %>
-</fieldset>
+</div></div>

@@ -1,6 +1,6 @@
-<fieldset><legend>
+<div class="champ">
     Statistiques par natures
-  </legend>
+  </h3><div class="inner-champ">
 
   <%= form_tag stats_organism_period_natures_path(@organism, @period),:method => :get, :style=>"display: inline;"  do %>
 
@@ -8,7 +8,7 @@
      <%= select_tag :destination, options_for_select([['Toutes', 0]] + @organism.destinations.collect {|d| [d.name, d.id]}, @filter) %>
      <%= submit_tag 'Rafraichir', :class=>'button' %>
 <% end %>
-</fieldset>
+</div></div>
 <table class="data_table display">
   <thead>
     <tr>

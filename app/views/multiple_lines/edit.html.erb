@@ -7,10 +7,10 @@
 <%= link_to 'Ecritures uniques', new_book_line_path(@book) %>
 <% end %>
 
-<fieldset>
-  <legend>
+<div class="champ">
+  <h3>
     <%=  @book.title.capitalize %> : modification ligne multiple
-  </legend>
+  </h3><div class="inner-champ">
 
 <%  SimpleForm.wrapper_tag = :td %>
 
@@ -49,4 +49,4 @@
 </div>
   <% end %>
 
-  </fieldset>
+  </div></div>

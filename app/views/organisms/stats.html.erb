@@ -7,10 +7,10 @@
 <%= link_to_unless_current 'Destination', stats_organism_path(@organism, by: :destination), title: 'Analyser les recettes et dépenses par destination'  %>
 <% end %>
 
-<fieldset>
-  <legend>
+<div class="champ">
+  <h3>
     Analyse des <%= @demand.pluralize %>
-  </legend>
+  </h3><div class="inner-champ">
 
   <%= form_tag stats_organism_path(@organism),:method => :get, :style=>"display: inline;"  do %>
 
@@ -21,7 +21,7 @@
 <%= submit_tag 'Rafraichir', :class=>'button' %>
 <% end %>
 
-</fieldset>
+</div></div>
 
 <table class="data_table display">
   <thead>

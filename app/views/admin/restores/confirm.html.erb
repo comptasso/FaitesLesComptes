@@ -2,10 +2,10 @@
 <%= icon_to 'retour.png', :back %>
 <% end %>
 
-<fieldset>
-  <legend>
+<div class="champ">
+  <h3>
     Importation d'un fichier
-  </legend>
+  </h3><div class="inner-champ">
 
   <p>Commentaire : <%= @datas[:comment] %> </p>
     <p>Fichier généré le : <%=l @datas[:created_at] %> </p>
@@ -15,7 +15,7 @@
 
 <% end %>
 
-</fieldset>
+</div></div>
 
 
 <h3>Les élements suivants seront importés</h3>

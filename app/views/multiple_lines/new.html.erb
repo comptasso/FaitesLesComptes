@@ -7,10 +7,10 @@
 <%= link_to 'Ecritures uniques', new_book_line_path(@book) %>
 <% end %>
 
-<fieldset>
-  <legend>
+<div class="champ">
+  <h3>
     <%=  @book.title.capitalize %> : nouvelle ligne multiple
-  </legend>
+  </h3><div class="inner-champ">
 
 <%= render 'form' %>
-  </fieldset>
+  </div></div>

@@ -3,10 +3,10 @@
 <%= icon_to 'retour.png', 'back' %>
 <% end -%>
 
-<fieldset>
-  <legend>
+<div class="champ">
+  <h3>
     Modification d'un contrôle de la caisse <%= @cash.name %>
-  </legend>
+  </h3><div class="inner-champ">
   <p>Solde théorique de la caisse au <%= l @cash_control.date %> : <%= debit_credit @cash.sold(@cash_control.date) %></p>
 <%= render 'form' %>
-</fieldset>
+</div></div>

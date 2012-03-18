@@ -1,5 +1,5 @@
-<fieldset>
-  <legend>Liste des contrôles : <%= @cash.name %> </legend>
+<div class="champ">
+  <h3>Liste des contrôles : <%= @cash.name %> </h3><div class="inner-champ">
     <div id="submenu">
         <%= admin_cash_control_submenu_helper(@cash, @period) %>
     </div>
@@ -23,4 +23,4 @@
       <% end %>
     </tbody>
   </table>
-</fieldset>
+</div></div>

@@ -4,7 +4,7 @@
   
 <% end -%>
 
-<fieldset class="public_lines"><legend><%=  @book.title%> - Mois de <%=l(@date, :format=>:month_year) %></legend>
+<div class="champ">
 
    <div id="submenu">
     <span><%=  link_to_if @period.previous_period?, '<<', change_organism_period_path(@organism,@period.previous_period) %></span>
@@ -30,6 +30,6 @@
 
       </table>
 
-    </fieldset>
+    </div></div>
 
  

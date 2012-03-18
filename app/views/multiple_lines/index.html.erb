@@ -10,10 +10,10 @@
 <%= content_for :submenu do %>
   <%= icon_to 'nouveau.png', new_book_multiple_line_path(@book), title: 'Ajouter une écriture multiple' %>
 <% end %>
-<fieldset>
-  <legend>
+<div class="champ">
+  <h3>
      Liste des écritures multiples du journal <%= @book.title %>
-  </legend>
+  </h3><div class="inner-champ">
 
 <table>
   <thead>
@@ -52,4 +52,4 @@
     <% end %>
   </tbody>
 </table>
-</fieldset>
+</div></div>
