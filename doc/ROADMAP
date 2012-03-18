@@ -386,6 +386,13 @@ le menu banque - nouvelle remise de chèque devrait est indisponible si pas de c
 ??? Il faudrait interdire pick_all_checks si bank_account n'est pas dispo ?
 OK - après up ou down dans un check deposit, il doit afficher l'action pointage
 
+----------------------mise en place de bootstrap --------------------
+OK - installation de twitter bootstrap
+OK - refonte du layout public
+OK - refont de layout admin
+refonte du layout compta
+modif des fieldset et legend sur toutes les vues
+
 
 -------------------- FIXME ------------------------------------
 OK - hover rend illisible le style des menus
@@ -404,7 +411,12 @@ Destination show n'a guère de sens dans la partie admin (supprimer la vue et l'
 
 -------------------- Virements internes --------------------------------
 
-
+--------------------- Remarques lors des essais ---------------------------
+Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
+Et peut être aussi une référence de facture
+OK - Utiliser bootstrap pour l'affichage des flash
+Une ligne a pu être saisie sans mode de paiement
+Modifier ce qui apparait dans le flash lors de la saisie d'une ligne 
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?

@@ -23,10 +23,7 @@
     <%= yield :menu %>
   </nav>
 
-  <div id="bandeau"  >
-    <span id="notice"><%= notice %></span>
-    <span id="alert"><%= alert %></span>
-  </div>
+   <%= render 'layouts/bandeau' %>
 
 
   <%= yield %>

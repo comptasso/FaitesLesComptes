@@ -49,6 +49,5 @@ module ApplicationHelper
    html += " : #{@period.exercice}" unless @period.nil?
  end
 
-
  
 end

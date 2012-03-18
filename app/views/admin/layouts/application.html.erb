@@ -28,10 +28,7 @@
           <%= render 'admin/organisms/menu'%>
         </div>
 
-        <div id="bandeau"  ><%= yield :bandeau %>
-          <span id="notice"><%= notice %></span>
-          <span id="alert"><%=simple_format alert %></span>
-        </div>
+  <%= render 'layouts/bandeau' %>
 
         <%= yield %>
       </div>
