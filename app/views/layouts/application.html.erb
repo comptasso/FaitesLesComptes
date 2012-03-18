@@ -8,7 +8,8 @@
       
     <%= csrf_meta_tags %>
   </head>
-  <body class="container-fluid <%= 'public_'+controller.controller_name %>">
+  <body class="<%= 'public_'+controller.controller_name %>">
+    <div class="container-fluid">
    <%# content_tag(:div, :id=>"grid") %>
         
    
@@ -24,24 +25,22 @@
   </div>
   </div>
    </div>
-
+ <div class="row-fluid">
 
   <div>
     <%= render 'organisms/menu' %>
   
   </div>
  
-
- 
-
-
-    <div id="bandeau"  ><%= yield :bandeau %>
+   <div id="bandeau"  ><%= yield :bandeau %>
       <span id="notice"><%= notice %></span>
       <span id="alert"><%= alert %></span>
     </div>
 
- 
+
   <%= yield %>
-<%= debug params if Rails.env == 'development' %>
+    </div>
+<%# debug params if Rails.env == 'development' %>
+    </div>
 </body>
 </html>

@@ -4,10 +4,12 @@
 <% end -%>
 
 
-<fieldset>
-  <legend>
+<div class="champ">
+  <h3>
     <%=  @book.title.capitalize %> : nouvelle ligne
-  </legend>
-
+  </h3>
+  
+  <div class="inner-champ">
 <%= render 'form' %>
-</fieldset>
+    </div>
+</div>

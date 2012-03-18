@@ -6,14 +6,11 @@
   <%= f.error_notification %>
   <p>
      <label class="span2">Date</label><%= picker_date :pick_date_line, @period.start_date, @period.close_date , @line.line_date %>
-  
-      <%=  f.input :narration,  :label=>'Libellé', label_html: {class: "span2-16"}, input_html: {class: "span6" } %>
+     <%= f.input :narration,  :label=>'Libellé ', label_html: {class: "span2"}, input_html: {class: "span6" } %>
   </p>
   <p>
-   
-      <%=  f.association :nature ,  :collection => @natures, :prompt => "Quoi ?", label_html: {class: "span2"}, input_html: {class: "span3 " } %>
-  
-      <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'),
+     <%=  f.association :nature ,  :collection => @natures, :prompt => "Quoi ?", label_html: {class: "span2"}, input_html: {class: "span3 " } %>
+     <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'),
         :prompt => "Pour qui ?" , label_html: {class: "span1"}, input_html: {class: "span3"} %>
  </p>
  <p>
@@ -28,11 +25,11 @@
    
       <span id="td_cash" > <%= f.association :cash, :collection => @organism.cashes.all, :include_blank=> false %></span>
  </p>
-    <%=  f.button :submit, id: 'new_line_button', class: "btn-success offset2 span2" %>
+    <%=  f.button :submit, id: 'new_line_button', class: "btn-primary offset2 span2" %>
  
   
 <% end %>
 </div>
-<div id="mise_au_point"></div>
+
 
 

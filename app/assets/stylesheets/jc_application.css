@@ -7,13 +7,18 @@
 */
 
 
-fieldset {
+.inner-champ {
+    padding-top: 20px;
+    padding-bottom: 2px;
     background: #efe;
     }
 
-fieldset legend {
+.champ h3 {
     color: #dfd;
     background: #141;
+    padding-left: 20px;
+
+    
 /*    font-family: sans-serif;*/
     }
 
@@ -71,6 +76,11 @@ fieldset legend {
 
 .simple_form abbr {
     color: red;
+}
+
+img.ui-datepicker-trigger {
+    margin-left: -20px;
+    margin-right: 4px;
 }
 
 
