@@ -14,77 +14,31 @@
 
 
     <!--TODO normalement dans ce menu (de la zone Public), il ne peut pas y avoir de new_record? -->
-    <% if (@organism  && !@organism.new_record?) %>
-<li class="dropdown <%= 'active' if controller.controller_name =='lines'  %>">
+<% if (@organism  && !@organism.new_record?) %>
 
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        LIVRES
-        <b class="caret"></b>
-      </a>
-      <ul class="dropdown-menu">
-        <% @organism.books.each do |b| %>
-            <li class="nav-header"><%= link_to b.title, book_lines_path(b), title: b.description  %></li>
-            <li> <%= link_to 'Ecrire', new_book_line_path(b)  if @organism.can_write_line? %></li>
-            <li><%= link_to 'Afficher', book_lines_path(b) %></li>
-            
-            <li class="divider"></li>
-            
-        <% end %>
-      </ul>
-    </li>
+<li class="dropdown <%= 'active' if controller.controller_name =='lines'  %>">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
+  <%= menu_books(@organism.books) %>
+</li>
       
 <li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
-
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        BANQUES
-        <b class="caret"></b>
-      </a>
-      <ul class="dropdown-menu">
-        <% @organism.bank_accounts.each do |b| %>
-           <li class="nav-header"><%= link_to b.to_s, organism_bank_account_path(@organism,b)  %></li>
-           <li><%= link_to  'Remises chèques', organism_bank_account_check_deposits_path(@organism,b)  %></li>
-           <li><%= link_to 'Nlle Remise', new_organism_bank_account_check_deposit_path(@organism,b) %></li>
-           <li><%= link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.first_bank_extract_to_point)  if b.unpointed_bank_extract? %></li>
-           <li><%= link_to 'Extraits de comptes', organism_bank_account_bank_extracts_path(@organism, b) %></li>
-           <li><%= link_to 'Nouvel Extrait', new_organism_bank_account_bank_extract_path(@organism,b) %> </li>
-           <li class="divider"></li>
-
-
-        <% end %>
-      </ul>
-    </li>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">BANQUES<b class="caret"></b></a>
+  <%= menu_banks(@organism.bank_accounts) %>
+</li>
 
 <li class="dropdown <%= 'active' if controller.controller_name =='cash_lines'  %>">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-     
-      CAISSES
-    <b class="caret"></b>
-      </a>
-      <ul class="dropdown-menu">
-          <% @organism.cashes.each do |c| %>
-            <li class="nav-header"><%= link_to c.name, cash_path(c)  %></li>
-              
-                <li><%= link_to 'Afficher', cash_cash_lines_path(c) %></li>
-                <li><%= link_to 'Listes contrôles', cash_cash_controls_path(c) %></li>
-                <li><%= link_to 'Ajouter controle ', new_cash_cash_control_path(c) %></li>
-                <li class="divider"></li>
-          <% end %>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">CAISSES<b class="caret"></b></a>
+  <%= menu_cashes(@organism.cashes)  %>
+</li>
 
-        </ul>
-      </li>
 <li class="dropdown <%= 'active' if controller.controller_name =='natures'  %>">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        ANALYSES
-        <b class="caret"></b>
-      </a>
-      <ul class="dropdown-menu">
-       
-          <li class="nav-header">
-            <%= link_to 'Par Nature', stats_organism_period_natures_path(@organism,@period), title: 'Analyser les recettes et dépenses par nature'  %>
-          </li>
-
-        </ul>
-      </li>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">ANALYSES<b class="caret"></b></a>
+  <ul class="dropdown-menu">
+    <li class="nav-header">
+      <%= link_to 'Par Nature', stats_organism_period_natures_path(@organism,@period), title: 'Analyser les recettes et dépenses par nature'  %>
+    </li>
+  </ul>
+</li>
 
 <li class="dropdown <%= 'active' if controller.controller_name =='periods'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -97,7 +51,9 @@
           <% end %>
         </ul>
       </li>
-    <% end %>
+<% end %>
+
+<!-- pas très bien nommé, la suite affiche les icones -->
       <li>
           <%= yield :menu %>
       </li>

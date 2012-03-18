@@ -63,7 +63,57 @@ module OrganismsHelper
     render partial: partial_and_class[0], object: p,  locals: {:position => "#{partial_and_class[1]} #{html_class}" }
   end
 
- 
+
+  # menu books prend une collection de livres et crée les entrées de menu correspondants
+  # join permet de séparer les entrées entre les différents livres
+  def menu_books(books)
+    content_tag(:ul, :class=>"dropdown-menu") do
+      html = []
+      books.each do |b|
+         inner =  content_tag(:li, :class=>"nav-header") { link_to b.title, book_lines_path(b), title: b.description}
+         inner += content_tag(:li) { link_to 'Ecrire', new_book_line_path(b)}  if @organism.can_write_line?
+         inner += content_tag(:li) { link_to 'Afficher', book_lines_path(b) }
+         html << inner
+      end
+      html.join(content_tag(:li, :class=>"divider"){}).html_safe
+    end
+  end
+
+  # menu bnaks prend une collection de comptes bancaires et crée les entrées de menu correspondants
+  # join permet de séparer les entrées entre les différents comptes
+  def menu_banks(banks)
+    content_tag(:ul, :class=>"dropdown-menu") do
+      html = []
+      banks.each do |b|
+         inner =  content_tag(:li, :class=>"nav-header") { link_to b.to_s, organism_bank_account_path(@organism,b)}
+         inner += content_tag(:li) { link_to 'Nlle Remise', new_organism_bank_account_check_deposit_path(@organism,b)}
+         inner += content_tag(:li) { link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.first_bank_extract_to_point)}  if b.unpointed_bank_extract?
+         inner += content_tag(:li) { link_to 'Extraits de comptes', organism_bank_account_bank_extracts_path(@organism, b)}
+         inner += content_tag(:li) { link_to 'Nouvel Extrait', new_organism_bank_account_bank_extract_path(@organism,b)}
+         html << inner
+      end
+      html.join(content_tag(:li, :class=>"divider"){}).html_safe
+    end
+  end
+
+  def menu_cashes(cashes)
+    content_tag(:ul, :class=>"dropdown-menu") do
+      html = []
+      cashes.each do |c|
+         inner =  content_tag(:li, :class=>"nav-header") {link_to c.name, cash_path(c) }
+         inner += content_tag(:li) {  link_to 'Afficher', cash_cash_lines_path(c)}
+         inner += content_tag(:li) {link_to 'Listes contrôles', cash_cash_controls_path(c) }
+         inner += content_tag(:li) {link_to 'Ajouter controle ', new_cash_cash_control_path(c) }
+         html << inner
+      end
+      html.join(content_tag(:li, :class=>"divider"){}).html_safe
+    end
+  end
+
+
+
+
+
 
 end
 
