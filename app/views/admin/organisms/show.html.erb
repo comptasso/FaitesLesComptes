@@ -5,6 +5,7 @@
 
 <%= content_for :menu do %>
   <%= icon_to 'modifier.png', edit_admin_organism_path(@organism) %>
+  <%= icon_to 'nouveau.png', new_admin_organism_path %>
   <%= icon_to 'retour.png', :back %>
 <% end -%>
 
@@ -13,8 +14,10 @@
   <h3>
     Description de l'organisme
   </h3>
-  <div class="inner-champ">
+</div>
+  <div class="row-fluid inner-champ">
 
+   
 <p>
   <b>Titre :</b>
   <%= @organism.title %>
@@ -41,6 +44,5 @@
  <%= l @organism.archives.order(:created_at).last.created_at %>
 </p>
 <% end %>
-
+ 
    </div>
-</div>
