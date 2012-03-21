@@ -4,14 +4,14 @@
 .public_organisms {
 
     // mise en forme des data_table
- 
 
-/*    .top_table {
-        clear: both;
-        }
+
+    /*    .top_table {
+    clear: both;
+    }
     table.data_table tbody {
-        clear: both;
-        }*/
+    clear: both;
+    }*/
 
     pre {  // pre est utilisé pour afficher les informations de debuggage
         clear: both;
@@ -21,13 +21,6 @@
         font-size: 8pt;
     }
 
-
-
-    #bandeau {
-        .title {
-            font-weight: bold;
-        }
-    }
     .numeric {
         text-align: right;
         padding: 3px 10px;
@@ -41,74 +34,55 @@
         h2 {
             margin: 0px;
             padding: 3px 10px;
+            border-radius: 4px 4px 0px 0px;
         }
         p {
             display: block;
             margin: 5px;
         }
-        .bar_graph {
-            margin-left: 5px;
+        .bar_graph, .line_graph {
+            border-radius: 0px 0px 4px 4px;
+            background-color: #DDD;
+        }
+        .bar_monthly_graphic, .jqplot-xaxis, .jqplot-yaxis {
+            border-radius: 0px 0px 4px 4px;
         }
 
     }
-    .income_book {
-        h2  {
-            background-color: green;
-        }
-        div {
-            background-color: #EEE;
-        }
+    .income_book h2{
+        background-color: green;
     }
 
-    .outcome_book {
-               h2 {
+    .outcome_book h2{
         background-color: pink;
     }
-     div {
-            background-color: #EEE;
-        }
-    }
 
-
-    .bank {
-                h2 {
+    .bank h2 {
         background-color: #A19B9E;
-    } 
-        div {
-            background-color: #EEE;
-        }
     }
 
-    .cash {
-                h2 {
+    .cash h2 {
         background-color: lightblue;
     }
-     div {
-            background-color: #EEE;
-        }
-    }
 
-    .result {
-                h2 {
+    .result h2 {
         background-color: goldenrod;
     }
-     div {
-            background-color: #EEE;
-        }
-    }
+
     .message {
         h2 {
             background-color : khaki;
+            border-radius: 4px 4px 4px 4px;
         }
         div {
             background-color: #EEE;
             padding: 10px 0px 5px 0px;
 
-        li {
-          .icon_menu { float: none;}
-                    }
-}
-       
+            li {
+                .icon_menu { float: none;}
+            }
+        }
+
     }
 
 

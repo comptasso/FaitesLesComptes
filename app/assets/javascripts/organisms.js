@@ -66,7 +66,12 @@ $.extend($.fn.dataTableExt.oPagination, {
                 sClass,
                 iStart,
                 iEnd,
-                iHalf = Math.floor(iListLength / 2);
+                iHalf = Math.floor(iListLength / 2),
+                jcf = function (e) {
+                    e.preventDefault();
+                    oSettings._iDisplayStart = (parseInt($('a', this).text(), 10) - 1) * oPaging.iLength;
+                    fnDraw(oSettings);
+                };
 
             if (oPaging.iTotalPages < iListLength) {
                 iStart = 1;
@@ -91,11 +96,7 @@ $.extend($.fn.dataTableExt.oPagination, {
                     sClass = (j === oPaging.iPage + 1) ? 'class="active"' : '';
                     $('<li ' + sClass + '><a href="#">' + j + '</a></li>')
                         .insertBefore($('li:last', an[i])[0])
-                        .bind('click', function (e) {
-                            e.preventDefault();
-                            oSettings._iDisplayStart = (parseInt($('a', this).text(), 10) - 1) * oPaging.iLength;
-                            fnDraw(oSettings);
-                        });
+                        .bind('click', jcf);
                 }
 
                 // Add / remove disabled classes from the static elements
@@ -125,14 +126,12 @@ jQuery(function () {
     if ($('.public_organisms .data_table').length !== 0) {
         /* Table initialisation */
         $('.public_organisms .data_table').dataTable({
-            "sDom": "r>t"
+            "sDom": "<'row'r>t",
+            "bAutoWidth": false,
+            "oLanguage": {
+                "sUrl": "/frenchdatatable.txt"
+            }
         });
-        ////    <'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-        ////		"sPaginationType": "bootstrap",
-        ////		"oLanguage": {
-        ////			"sUrl": "/frenchdatatable.txt"
-        ////		}
-        //	} );
     }
 });
    //    fin de jQuery application#data_table
