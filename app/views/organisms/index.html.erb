@@ -1,27 +1,30 @@
 <%= content_for :menu do %>
-
  
 <% end -%>
 
-<div class="champ">
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Description</th>
-    <th></th>
-  
-  </tr>
 
+<div class="champ">
+  <h3>Liste des organismes</h3>
+</div>
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed data_table">
+  <thead>
+  <tr>
+    <th class="span4">Title</th>
+    <th class="span6">Description </th>
+    <th class="span2">Action</th>
+ </tr>
+  </thead>
+  <tbody>
 <% @organisms.each do |organism| %>
   <tr>
     <td><%= organism.title %></td>
     <td><%= organism.description %></td>
     <td><%= icon_to 'afficher.png', organism %></td>
-   
   </tr>
 <% end %>
+  </tbody>
 </table>
 
-</div></div>
+
 
 
