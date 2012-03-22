@@ -1,13 +1,16 @@
-<%  SimpleForm.wrapper_tag = :div %>
-<%= simple_form_for([:admin,@organism]) do |f| %>
+ <div class="inputs">
+<%= simple_form_for([:admin,@organism], :html=> {class: 'form-inline'}) do |f| %>
   <%= f.error_notification %>
+   <p>
+ 
+    <%= f.input :title, label_html: {class: "span2"}, input_html: {class: "span3"} %>
+     </</p>
+   <p>
+    <%= f.input :description, label_html: {class: "span2"}, input_html: {class: "span3", rows: 4} %>
+   </p>
 
-  <div class="inputs">
-    <%= f.input :title %>
-    <%= f.input :description, input_html: {rows: 4} %>
-  </div>
-
-  <div class="actions">
-    <%= f.button :submit %>
-  </div>
+ 
+    <%= f.button :submit, class: "btn-primary offset2 span2" %>
+  
 <% end %>
+  </div>

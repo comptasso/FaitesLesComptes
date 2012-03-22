@@ -6,6 +6,7 @@
 <%= content_for :menu do %>
   <%= icon_to 'modifier.png', edit_admin_organism_path(@organism) %>
   <%= icon_to 'nouveau.png', new_admin_organism_path %>
+  <%= icon_to 'supprimer.png', [:admin, @organism], :confirm=>"Cette action est irréversible \nEtes vous sûr ?", :method=>:delete %>
   <%= icon_to 'retour.png', :back %>
 <% end -%>
 

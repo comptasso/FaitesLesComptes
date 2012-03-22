@@ -1,12 +1,27 @@
 # coding: utf-8
 
+
+
+
 class Archive < ActiveRecord::Base
+  MODELS=%w(Organism Period BankAccount Destination Line BankExtract CheckDeposit Cash CashControl Book Account Nature BankExtractLine IncomeBook OutcomeBook)
+
   belongs_to :organism
 
   attr_reader  :datas, :restores
 
   # FIXME voir si psych permet de vérifier la validité du fichier
+  def create_class(class_name, superclass, &block)
+     klass = Class.new superclass, &block
+     Object.const_set class_name, klass
+  end
+
   def parse_file(archive)
+    require 'yaml'
+    MODELS.each do |model_name|
+      create_class(model_name, ActiveRecord::Base)
+    end
+
     @datas = YAML.load(archive)
     #  rescue
     #    @errors << "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"

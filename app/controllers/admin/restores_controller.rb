@@ -40,7 +40,7 @@ class Admin::RestoresController < Admin::ApplicationController
     end
     # ici on récupère le fichier 
     tmp = params[:file_upload].tempfile
-    a=Admin::Archive.new
+    a = Archive.new
     a.parse_file(tmp)
     if a.valid?
       @datas=a.datas
@@ -55,7 +55,7 @@ class Admin::RestoresController < Admin::ApplicationController
   end
  
   def rebuild
-    a= Admin::Archive.new
+    a= Archive.new
     tmp_file_name="#{Rails.root}/tmp/#{params[:file_name]}"
     a.parse_file(File.open(tmp_file_name,'r') {|f| f.read})
     if  a.rebuild_organism

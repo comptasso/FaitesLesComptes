@@ -398,6 +398,7 @@ modif des fieldset et legend sur toutes les vues
 OK - hover rend illisible le style des menus
 admin_organism_index : l'icone restauration devrait avoir une flèche
 dans admin#naturenew (form), le rattachement à un compte devrait être disable si pas de compte
+quand on efface un organisme qui n'a pas d'exercice il y a une erreur
 alignement des nombres dans les cash_control
 modifier la zone message pour que les messages soient générés par les modèles et non par le helper
 mettre des icones pour naviguer facilement entre les controles et l'affichage des contrôles de caisse

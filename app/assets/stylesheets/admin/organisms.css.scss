@@ -1,0 +1,32 @@
+/*
+    Document   : organisms.css
+    Created on : 21 mars 2012, 19:24:12
+    Author     : jcl
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/*
+   TODO customize this sample style
+   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+*/
+
+.admin_organisms {
+    table a {
+        padding-left: 4px;
+        padding-right: 4px;
+        text-align: left;
+        img {
+            margin-left: 4px;
+            margin-right: 4px;
+            }
+        }
+
+    table a:hover {
+    background-color: #DBFFDB;
+    text-decoration: none;
+}
+
+
+
+    }

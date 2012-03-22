@@ -91,12 +91,13 @@ class Admin::OrganismsController < Admin::ApplicationController
   # DELETE /organisms/1.json
   def destroy
     @organism = Organism.find(params[:id])
-    @organism.destroy
-
-    respond_to do |format|
-      format.html { redirect_to admin_organisms_url }
-      format.json { head :ok }
+    if @organism.destroy
+      session[:period] = nil
+      redirect_to admin_organisms_url
+    else
+      render
     end
+    
   end
 
  
