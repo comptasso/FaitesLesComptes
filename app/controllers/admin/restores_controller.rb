@@ -6,21 +6,21 @@
 # laquelle contien un bouton de confirmation qui renvoie sur l'action rebuild. 
 #
 
-require 'organism'
-require 'period'
-require 'bank_account'
-require 'destination'
-require 'nature'
-require 'cash'
-require 'bank_extract'
-require 'line'
-require 'book'
-require 'income_book'
-require 'outcome_book'
-require 'bank_extract_line'
-require 'check_deposit'
-require 'cash_control'
-require 'account'
+#require 'organism'
+#require 'period'
+#require 'bank_account'
+#require 'destination'
+#require 'nature'
+#require 'cash'
+#require 'bank_extract'
+#require 'line'
+#require 'book'
+#require 'income_book'
+#require 'outcome_book'
+#require 'bank_extract_line'
+#require 'check_deposit'
+#require 'cash_control'
+#require 'account'
 
 class Admin::RestoresController < Admin::ApplicationController
 

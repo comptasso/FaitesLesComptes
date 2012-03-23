@@ -4,8 +4,8 @@
 
 
 class Archive < ActiveRecord::Base
-  MODELS=%w(Organism Period BankAccount Destination Line BankExtract CheckDeposit Cash CashControl Book Account Nature BankExtractLine IncomeBook OutcomeBook)
-
+  MODELS=%w(organism period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book)
+  
   belongs_to :organism
 
   attr_reader  :datas, :restores
@@ -19,9 +19,9 @@ class Archive < ActiveRecord::Base
   def parse_file(archive)
     require 'yaml'
     MODELS.each do |model_name|
-      create_class(model_name, ActiveRecord::Base)
+      load(model_name + '.rb')
     end
-
+    
     @datas = YAML.load(archive)
     #  rescue
     #    @errors << "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
