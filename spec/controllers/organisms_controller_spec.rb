@@ -88,6 +88,7 @@ describe OrganismsController do
       o.stub_chain(:books, :all).and_return([ib,ob])
       o.stub_chain(:periods, :empty?).and_return(false)
       o.stub_chain(:periods, :order, :last, :id).and_return(p.id)
+      ba1.stub(:bank_extracts).and_return([])
       Period.stub(:find).with(p.id).and_return(p)
     end
     
@@ -123,8 +124,14 @@ describe OrganismsController do
       assigns[:paves].should be_an_instance_of(Array)
     end
 
-    it 'paves doit avoir 5 éléments' do
-      # income et outcomme books, résultat, bank_account et cash
+    it 'paves doit avoir 4 éléments' do
+      # income et outcomme books, résultat, cash, mais pas bank_account car il n(y a pas de bak_extract
+      get :show, :id=>o.id
+      assigns[:paves].size.should == 4
+    end
+
+    it 'lorsque bank_account a un bank_extract il y a 5 pavés' do
+      ba1.stub_chain(:bank_extracts, :any?).and_return(true)
       get :show, :id=>o.id
       assigns[:paves].size.should == 5
     end

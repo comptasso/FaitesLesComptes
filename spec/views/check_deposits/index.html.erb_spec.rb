@@ -47,8 +47,7 @@ describe "check_deposits/index" do
       end
 
     it "affiche la légende du fieldset" do
-      
-      assert_select "legend", :text => "Banque 124578AZ - Liste des remises de chèques"
+       assert_select "h3", :text => "Banque compte n°124578AZ : liste des remises de chèques"
     end
     
     it "affiche la table desw remises de chèques" do

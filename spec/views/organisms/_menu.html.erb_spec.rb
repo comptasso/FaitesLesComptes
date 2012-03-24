@@ -17,8 +17,8 @@ describe "organisms/show.html.erb" do
     p2012.stub(:previous_period).and_return(p2011)
     ibook.stub(:organism).and_return(o)
     obook.stub(:organism).and_return(o)
-    ibook.stub_chain(:organism, :all).and_return([p2011, p2012])
-    obook.stub_chain(:organism, :all).and_return([p2011, p2012])
+   # ibook.stub_chain(:organism, :all).and_return([p2011, p2012])
+   # obook.stub_chain(:organism, :all).and_return([p2011, p2012])
     assign(:books, [ibook,obook])
     assign(:period, p2012 ) 
     o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))
@@ -32,18 +32,14 @@ describe "organisms/show.html.erb" do
     end
 
     it 'affiche la partie Exercices du menu' do
-      rendered.should match('Exercices')
-      
+      rendered.should match('EXERCICES')
     end
 
-    it 'affiche le sous menu Exercices' do
-      rendered.should have_selector('ul#menu_exercices') do |menu|
-        menu.should have_selector('a', href: change_organism_period_path(o,p2011), content: 'Exercice 2011')
-        menu.should have_selector('a', href: change_organism_period_path(o,p2012), content: 'Exercice 2012')
-       
-      end
- 
+    it "affiche le sous menu exercice" do
+      rendered.should match( organism_period_path(o, p2011))
     end
+
+
 
   end
 

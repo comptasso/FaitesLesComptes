@@ -3,7 +3,7 @@
 # La classe restore fait les différentes opérations de restauration d'un fichier
 # new permet d'afficher la vue qui demande quel fichier importer
 # puis create parse les données et affiche la vue confirm
-# laquelle contien un bouton de confirmation qui renvoie sur l'action rebuild. 
+# laquelle contient un bouton de confirmation qui renvoie sur l'action rebuild.
 #
 
 #require 'organism'

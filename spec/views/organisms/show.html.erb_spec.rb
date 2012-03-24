@@ -29,6 +29,8 @@ before(:each) do
     o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))
    end
 
+  # TODO revoir complètement car probablement totalement false positive
+
   it "renders show organism with graphics" do
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers

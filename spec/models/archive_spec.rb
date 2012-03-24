@@ -18,7 +18,7 @@ before(:each) do
       @file.close
     end
 
-    it "should parse the file" do
+    it "should parse the file" do 
       expect {@archive.parse_file(@file)}.to_not raise_error
     end
 
@@ -29,6 +29,8 @@ before(:each) do
       @archive.datas[:income_books].first.should be_an_instance_of(IncomeBook)
       @archive.datas[:outcome_books].first.should be_an_instance_of(OutcomeBook)
     end
+
+    
   end
 
   context "testing restore_line" do
@@ -86,6 +88,21 @@ before(:each) do
     end
 
 end
+
+  describe "title" do
+    before(:each) do
+      @org=Organism.create(title: 'test spec')
+      @archive=@org.archives.new
+      @archive.save!
+    end
+
+
+    it 'title doit etre consitué du titre et du timestamp' do
+      d=@archive.created_at.to_s
+      e=d[/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/].gsub(' ', '_')
+      @archive.title.should == 'test_spec_' + e + '_UTC'
+    end
+  end
 
   
 end

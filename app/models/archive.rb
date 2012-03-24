@@ -7,7 +7,10 @@
 # ajouter un checksum md5 pour empêcher les modifs externes
 
 class Archive < ActiveRecord::Base
-  MODELS=%w(organism period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book)
+
+  # organism est traité à part car c'est le modèle mère de tous les autres
+  # pour que l'archive fonctionne, il faut que le modèle organism puisse accéder à tous les autres modèles directement ou au travers de through
+  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book)
   
   belongs_to :organism
 
@@ -29,17 +32,12 @@ class Archive < ActiveRecord::Base
 
   def parse_file(archive)
     require 'yaml'
+    load('organism.rb')
     MODELS.each do |model_name|
       load(model_name + '.rb')
     end
     
     @datas = YAML.load(archive)
-    # ici on sépare les books selon les deux catégories
-    # TODO à effacer ensuite puisque ce sera fait d'emblée
-    @datas[:income_books] = @datas[:books].select {|b| b.type == 'IncomeBook'}
-    @datas[:outcome_books] = @datas[:books].select {|b| b.type == 'OutcomeBook'}
-
-
   rescue  Psych::SyntaxError
     errors[:base] = "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
   end
@@ -47,22 +45,16 @@ class Archive < ActiveRecord::Base
   # à partir d'un exercice, collect_data constitue un hash reprenant l'ensemble des données
   # de cet exercice
   def collect_datas
-    @datas[:comment]=self.comment
-    @datas[:created_at]=self.created_at
-    @datas[:organism]=self.organism
-    @datas[:periods]=organism.periods.all
-    @datas[:bank_accounts]=organism.bank_accounts.all
-    @datas[:destinations]=organism.destinations.all
-    @datas[:lines] =organism.lines.all
-    @datas[:bank_extracts]=organism.bank_extracts.all
-    @datas[:check_deposits]=organism.check_deposits.all
-    @datas[:cashes]=organism.cashes.all
-    @datas[:cash_controls]=organism.cash_controls.all
-    @datas[:income_books]=organism.income_books.all
-    @datas[:outcome_books]=organism.outome_books.all
-    @datas[:accounts]=organism.accounts.all
-    @datas[:natures]=organism.natures.all
-    @datas[:bank_extract_lines]=organism.bank_extract_lines.all
+    @datas[:comment] = self.comment
+    @datas[:created_at] = self.created_at
+    @datas[:organism] = self.organism
+    MODELS.each do |m|
+      @datas[m.pluralize.to_sym] = organism.instance_eval(m.pluralize).all
+    end
+  end
+
+  def title
+    (organism.title + ' ' + created_at.to_s).split.join('_')
   end
 
 
@@ -188,10 +180,7 @@ class Archive < ActiveRecord::Base
   # se fait à partir du titre qui doit être unique
   def substitute_book(l)
     title = @datas[:books].select {|b| b.id == l.book_id }.first[:title]
-    puts "le title recherché est #{title}"
-    @restores[:books].each {|b| puts b.inspect}
     @restores[:books].select {|b| b.title == title}.first.id
-    
   end
 
 
