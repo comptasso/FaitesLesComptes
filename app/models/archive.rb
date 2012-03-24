@@ -1,8 +1,7 @@
 # coding: utf-8
 
 
-# TODO ajouter un timestamp dans le nom du fichier de sauvegarde
-# modifier les noms (supprimer les blancs, dasherize)
+# TODO ajouter un commentaire dans le comment de la restauration
 # ajouter une vérification dans la reconstruction (du type nb d'objects total et montant des lignes
 # ajouter un checksum md5 pour empêcher les modifs externes
 

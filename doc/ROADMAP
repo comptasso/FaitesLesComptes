@@ -390,8 +390,8 @@ OK - après up ou down dans un check deposit, il doit afficher l'action pointage
 OK - installation de twitter bootstrap
 OK - refonte du layout public
 OK - refont de layout admin
-refonte du layout compta
-modif des fieldset et legend sur toutes les vues
+OK - refonte du layout compta
+OK - modif des fieldset et legend sur toutes les vues
 
 
 -------------------- FIXME ------------------------------------
