@@ -10,10 +10,11 @@ class Archive < ActiveRecord::Base
 
   attr_reader  :datas, :restores
 
+
   # FIXME voir si psych permet de vérifier la validité du fichier
   def create_class(class_name, superclass, &block)
-     klass = Class.new superclass, &block
-     Object.const_set class_name, klass
+    klass = Class.new superclass, &block
+    Object.const_set class_name, klass
   end
 
   def parse_file(archive)
@@ -23,8 +24,8 @@ class Archive < ActiveRecord::Base
     end
     
     @datas = YAML.load(archive)
-    #  rescue
-    #    @errors << "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
+  rescue  Psych::SyntaxError
+    errors[:base] = "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
   end
 
   # à partir d'un exercice, collect_data constitue un hash reprenant l'ensemble des données
@@ -50,7 +51,7 @@ class Archive < ActiveRecord::Base
 
 
   def list_errors
-    self.errors.join('\n')
+    self.errors.messages.map { |k,m| m }.join('\n')
   end
 
   
@@ -67,7 +68,7 @@ class Archive < ActiveRecord::Base
       self.rebuild_organism_and_direct_children
       @restores[:periods].each { |p| self.rebuild_period_and_children(p) } if @restores[:periods]
       true
-     end
+    end
   rescue ActiveRecord::RecordInvalid => invalid
     Rails.logger.warn 'Erreur dans la reconstitution des données'
     false
@@ -123,7 +124,7 @@ class Archive < ActiveRecord::Base
     end
 
 
-@restores[:lines]= []
+    @restores[:lines]= []
     @datas[:lines].each do |l|
       # l a un book_id, destination_id, nature_id, bank_account_id, check_deposit_id, bank_extract_id, cash_id
       # il faut à chaque fois trouver le id d'origine et le id de destination
@@ -139,7 +140,7 @@ class Archive < ActiveRecord::Base
       new_attributes[:check_deposit_id]=substitute(l,:check_deposits) unless l.check_deposit_id.nil?
       new_line=Line.new(new_attributes)
       if  new_line.valid?
-         @restores[:lines] << Line.create!(new_attributes)
+        @restores[:lines] << Line.create!(new_attributes)
       else
         logger.debug new_line.errors.all
       end

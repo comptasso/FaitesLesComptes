@@ -1,0 +1,731 @@
+---
+:comment: première sauvegarde
+:created_at: 2012-03-21 18:25:53.672048039Z
+:organism: !ruby/object:Organism
+  attributes:
+    id: 1
+    title: Mes comptes perso
+    description: ''
+    created_at: 2012-03-10 19:16:16.441227000Z
+    updated_at: 2012-03-10 19:16:16.441227000Z
+:periods:
+- !ruby/object:Period
+  attributes:
+    id: 1
+    start_date: 2012-01-01
+    close_date: 2012-12-31
+    organism_id: 1
+    open: true
+    created_at: 2012-03-10 19:16:29.848575000Z
+    updated_at: 2012-03-10 19:16:29.848575000Z
+:bank_accounts:
+- !ruby/object:BankAccount
+  attributes:
+    id: 1
+    number: '50348351022'
+    name: Crédit Agricole
+    comment: ! 'Compte courant '
+    address: rue du Molinel
+    organism_id: 1
+    created_at: 2012-03-17 18:29:04.483268000Z
+    updated_at: 2012-03-17 18:29:04.483268000Z
+:destinations:
+- !ruby/object:Destination
+  attributes:
+    id: 6
+    name: Foyer
+    organism_id: 1
+    comment: Les dépenses générales pour les courses,...Non identifiables spécifiquement.
+    created_at: 2012-03-11 15:42:37.687696000Z
+    updated_at: 2012-03-11 15:42:37.687696000Z
+    income_outcome: false
+- !ruby/object:Destination
+  attributes:
+    id: 2
+    name: Frais engagés pour FLC
+    organism_id: 1
+    comment: ''
+    created_at: 2012-03-11 15:41:15.901306000Z
+    updated_at: 2012-03-11 15:41:15.901306000Z
+    income_outcome: false
+- !ruby/object:Destination
+  attributes:
+    id: 1
+    name: Frais pour SECAFI
+    organism_id: 1
+    comment: ''
+    created_at: 2012-03-11 15:40:53.557927000Z
+    updated_at: 2012-03-11 15:40:53.557927000Z
+    income_outcome: false
+- !ruby/object:Destination
+  attributes:
+    id: 4
+    name: Maison
+    organism_id: 1
+    comment: ''
+    created_at: 2012-03-11 15:41:37.388375000Z
+    updated_at: 2012-03-11 15:41:37.388375000Z
+    income_outcome: false
+- !ruby/object:Destination
+  attributes:
+    id: 5
+    name: Maison Cabourg
+    organism_id: 1
+    comment: ''
+    created_at: 2012-03-11 15:41:51.025218000Z
+    updated_at: 2012-03-11 15:41:51.025218000Z
+    income_outcome: false
+- !ruby/object:Destination
+  attributes:
+    id: 7
+    name: Moi
+    organism_id: 1
+    comment: Les dépenses perso, par exemple, vêtements pour moi.
+    created_at: 2012-03-11 15:43:17.107747000Z
+    updated_at: 2012-03-11 15:43:17.107747000Z
+    income_outcome: false
+- !ruby/object:Destination
+  attributes:
+    id: 3
+    name: Thomas
+    organism_id: 1
+    comment: ''
+    created_at: 2012-03-11 15:41:26.378431000Z
+    updated_at: 2012-03-11 15:41:26.378431000Z
+    income_outcome: false
+:lines:
+- !ruby/object:Line
+  attributes:
+    id: 10
+    line_date: 2012-02-29
+    narration: Invitation Sophie Vanlaeres et Manu Blanco
+    nature_id: 8
+    destination_id: 1
+    debit: 86.9
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:26:11.653917000Z
+    updated_at: 2012-03-18 09:26:11.653917000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 20
+    line_date: 2012-03-02
+    narration: Nourriture Cabourg
+    nature_id: 6
+    destination_id: 7
+    debit: 9.16
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 17:40:26.170114000Z
+    updated_at: 2012-03-18 17:40:26.170114000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 21
+    line_date: 2012-03-02
+    narration: Bricolage pour Cabourg
+    nature_id: 9
+    destination_id: 5
+    debit: 28.15
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 17:50:34.824113000Z
+    updated_at: 2012-03-18 17:50:34.824113000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 12
+    line_date: 2012-03-03
+    narration: Péage retour Cabourg
+    nature_id: 7
+    destination_id: 7
+    debit: 8.4
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:27:47.230357000Z
+    updated_at: 2012-03-18 09:27:47.230357000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 13
+    line_date: 2012-03-03
+    narration: retour Cabourg péage
+    nature_id: 7
+    destination_id: 7
+    debit: 5.5
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:28:08.352856000Z
+    updated_at: 2012-03-18 09:28:08.352856000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 14
+    line_date: 2012-03-03
+    narration: Pégae Pont de Normandie
+    nature_id: 7
+    destination_id: 7
+    debit: 5.2
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:28:31.499952000Z
+    updated_at: 2012-03-18 09:28:31.499952000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 15
+    line_date: 2012-03-03
+    narration: Péage retour Cabourg
+    nature_id: 7
+    destination_id: 7
+    debit: 1.7
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:28:54.586066000Z
+    updated_at: 2012-03-18 09:28:54.586066000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 16
+    line_date: 2012-03-03
+    narration: Péage retour Cabourg
+    nature_id: 7
+    destination_id: 7
+    debit: 1.0
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:29:10.455301000Z
+    updated_at: 2012-03-18 09:29:10.455301000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 11
+    line_date: 2012-03-06
+    narration: Cora
+    nature_id: 6
+    destination_id: 6
+    debit: 55.51
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:26:51.000901000Z
+    updated_at: 2012-03-18 09:26:51.000901000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 17
+    line_date: 2012-03-08
+    narration: Réparation chaudière (Théret)
+    nature_id: 9
+    destination_id: 4
+    debit: 288.6
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 17:10:08.025296000Z
+    updated_at: 2012-03-18 17:10:08.025296000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: Chèque
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 8
+    line_date: 2012-03-09
+    narration: cora
+    nature_id: 6
+    destination_id: 6
+    debit: 9.72
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:24:19.121584000Z
+    updated_at: 2012-03-18 17:42:44.590087000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 9
+    line_date: 2012-03-09
+    narration: Cora
+    nature_id: 6
+    destination_id: 6
+    debit: 59.83
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:24:47.345365000Z
+    updated_at: 2012-03-18 09:24:47.345365000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 7
+    line_date: 2012-03-10
+    narration: Poissonnier
+    nature_id: 6
+    destination_id: 6
+    debit: 26.63
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:23:07.555274000Z
+    updated_at: 2012-03-18 09:23:07.555274000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 6
+    line_date: 2012-03-11
+    narration: Marché +
+    nature_id: 6
+    destination_id: 6
+    debit: 20.47
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:22:33.369962000Z
+    updated_at: 2012-03-18 09:22:33.369962000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 4
+    line_date: 2012-03-12
+    narration: Marché +
+    nature_id: 6
+    destination_id: 6
+    debit: 33.95
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:21:07.298877000Z
+    updated_at: 2012-03-18 09:21:07.298877000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 5
+    line_date: 2012-03-12
+    narration: Livres informatique Le furet du Nord
+    nature_id: 2
+    destination_id: 2
+    debit: 47.45
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:21:55.681302000Z
+    updated_at: 2012-03-18 09:21:55.681302000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 3
+    line_date: 2012-03-13
+    narration: Carnet métro paris
+    nature_id: 7
+    destination_id: 1
+    debit: 12.7
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:20:17.407180000Z
+    updated_at: 2012-03-18 09:20:17.407180000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 1
+    line_date: 2012-03-16
+    narration: Cora
+    nature_id: 6
+    destination_id: 6
+    debit: 27.39
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:16:48.196950000Z
+    updated_at: 2012-03-18 09:16:48.196950000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 2
+    line_date: 2012-03-17
+    narration: Poissonnier
+    nature_id: 6
+    destination_id: 6
+    debit: 27.93
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 09:17:50.952284000Z
+    updated_at: 2012-03-18 09:17:50.952284000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: CB
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 19
+    line_date: 2012-03-18
+    narration: Cadeau anniversaire Marina
+    nature_id: 2
+    destination_id: 7
+    debit: 50.0
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 17:38:55.115253000Z
+    updated_at: 2012-03-18 17:38:55.115253000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: Chèque
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+- !ruby/object:Line
+  attributes:
+    id: 22
+    line_date: 2012-03-19
+    narration: Inventaire caisse premier jour
+    nature_id: 11
+    destination_id: !!null 
+    debit: 0.0
+    credit: 40.0
+    book_id: 1
+    locked: false
+    created_at: 2012-03-21 17:32:09.817551000Z
+    updated_at: 2012-03-21 17:32:09.817551000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: Espèces
+    check_deposit_id: !!null 
+    cash_id: 1
+    bank_account_id: !!null 
+- !ruby/object:Line
+  attributes:
+    id: 23
+    line_date: 2012-03-20
+    narration: Sandwich
+    nature_id: 8
+    destination_id: 7
+    debit: 3.05
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-21 17:33:04.373070000Z
+    updated_at: 2012-03-21 17:33:04.373070000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: Espèces
+    check_deposit_id: !!null 
+    cash_id: 1
+    bank_account_id: !!null 
+- !ruby/object:Line
+  attributes:
+    id: 24
+    line_date: 2012-03-21
+    narration: sandwich
+    nature_id: 8
+    destination_id: 7
+    debit: 3.05
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-21 17:33:24.275320000Z
+    updated_at: 2012-03-21 17:33:24.275320000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: Espèces
+    check_deposit_id: !!null 
+    cash_id: 1
+    bank_account_id: !!null 
+- !ruby/object:Line
+  attributes:
+    id: 18
+    line_date: 2012-03-28
+    narration: Frais d'inscription ISEG
+    nature_id: 10
+    destination_id: 3
+    debit: 600.0
+    credit: 0.0
+    book_id: 2
+    locked: false
+    created_at: 2012-03-18 17:14:07.796584000Z
+    updated_at: 2012-03-18 17:14:07.796584000Z
+    copied_id: !!null 
+    multiple: false
+    bank_extract_id: !!null 
+    payment_mode: Chèque
+    check_deposit_id: !!null 
+    cash_id: !!null 
+    bank_account_id: 1
+:bank_extracts: []
+:check_deposits: []
+:cashes:
+- !ruby/object:Cash
+  attributes:
+    id: 1
+    organism_id: 1
+    name: Porte monnaie
+    created_at: 2012-03-17 07:13:38.941033000Z
+    updated_at: 2012-03-17 07:13:38.941033000Z
+:cash_controls:
+- !ruby/object:CashControl
+  attributes:
+    id: 1
+    cash_id: 1
+    amount: 40.0
+    date: 2012-03-19
+    created_at: 2012-03-21 17:28:37.521149000Z
+    updated_at: 2012-03-21 17:28:37.521149000Z
+    locked: false
+:books:
+- !ruby/object:IncomeBook
+  attributes:
+    id: 1
+    title: Recettes
+    description: Livre des recettes
+    created_at: 2012-03-10 19:16:16.737197000Z
+    updated_at: 2012-03-10 19:16:16.737197000Z
+    organism_id: 1
+    type: IncomeBook
+- !ruby/object:OutcomeBook
+  attributes:
+    id: 2
+    title: Dépenses
+    description: Livre des dépenses
+    created_at: 2012-03-10 19:16:16.748044000Z
+    updated_at: 2012-03-10 19:16:16.748044000Z
+    organism_id: 1
+    type: OutcomeBook
+:accounts: []
+:natures:
+- !ruby/object:Nature
+  attributes:
+    id: 1
+    name: Revenus du travail
+    comment: Salaires notamment
+    created_at: 2012-03-11 15:36:51.572724000Z
+    updated_at: 2012-03-11 15:36:51.572724000Z
+    income_outcome: true
+    period_id: 1
+    account_id: !!null 
+- !ruby/object:Nature
+  attributes:
+    id: 2
+    name: Autres courses
+    comment: Pour les courses diverses que l'on souhaite identifier par rapport aux
+      courses nourritures
+    created_at: 2012-03-11 15:37:39.389282000Z
+    updated_at: 2012-03-18 14:59:02.818007000Z
+    income_outcome: false
+    period_id: 1
+    account_id: !!null 
+- !ruby/object:Nature
+  attributes:
+    id: 3
+    name: Frais bancaires
+    comment: ''
+    created_at: 2012-03-11 15:39:09.240005000Z
+    updated_at: 2012-03-11 15:39:09.240005000Z
+    income_outcome: false
+    period_id: 1
+    account_id: !!null 
+- !ruby/object:Nature
+  attributes:
+    id: 4
+    name: Assurances
+    comment: ''
+    created_at: 2012-03-11 15:39:27.067047000Z
+    updated_at: 2012-03-11 15:39:27.067047000Z
+    income_outcome: false
+    period_id: 1
+    account_id: !!null 
+- !ruby/object:Nature
+  attributes:
+    id: 5
+    name: Energie
+    comment: ''
+    created_at: 2012-03-11 15:39:37.764323000Z
+    updated_at: 2012-03-11 15:39:37.764323000Z
+    income_outcome: false
+    period_id: 1
+    account_id: !!null 
+- !ruby/object:Nature
+  attributes:
+    id: 6
+    name: Courses nourritures
+    comment: Principalement nourriture, peut aussi contenir des achats divers
+    created_at: 2012-03-18 09:15:52.313833000Z
+    updated_at: 2012-03-18 09:15:52.313833000Z
+    income_outcome: false
+    period_id: 1
+    account_id: !!null 
+- !ruby/object:Nature
+  attributes:
+    id: 7
+    name: Déplacements
+    comment: ! "pour les déplacement professionnels et perso. \r\nOn distingue par
+      la nature si besoin"
+    created_at: 2012-03-18 09:19:14.761750000Z
+    updated_at: 2012-03-18 09:19:14.761750000Z
+    income_outcome: false
+    period_id: 1
+    account_id: !!null 
+- !ruby/object:Nature
+  attributes:
+    id: 8
+    name: Restaurant
+    comment: ''
+    created_at: 2012-03-18 09:25:48.894378000Z
+    updated_at: 2012-03-18 09:25:48.894378000Z
+    income_outcome: false
+    period_id: 1
+    account_id: !!null 
+- !ruby/object:Nature
+  attributes:
+    id: 9
+    name: Entretien et réparations
+    comment: ''
+    created_at: 2012-03-18 17:09:09.014982000Z
+    updated_at: 2012-03-18 17:09:09.014982000Z
+    income_outcome: false
+    period_id: 1
+    account_id: !!null 
+- !ruby/object:Nature
+  attributes:
+    id: 10
+    name: Formation
+    comment: En fait les dépenses pour l'école de commerce de Thomas
+    created_at: 2012-03-18 17:13:34.678062000Z
+    updated_at: 2012-03-18 17:13:34.678062000Z
+    income_outcome: false
+    period_id: 1
+    account_id: !!null 
+- !ruby/object:Nature
+  attributes:
+    id: 11
+    name: Opérations Diverses
+    comment: Pour tous les éléments qui ne rentrent pas dans une logique de recette
+      dépenses. Par ex les virements entre comptes.
+    created_at: 2012-03-21 17:31:13.653587000Z
+    updated_at: 2012-03-21 17:31:29.960152000Z
+    income_outcome: true
+    period_id: 1
+    account_id: !!null 
+:bank_extract_lines: []

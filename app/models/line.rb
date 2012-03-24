@@ -39,8 +39,8 @@ include Validations
   # FIXME
   #  validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit=>true if :locked?
 
-  PAYMENT_MODES= %w(CB Chèque Espèces Prélèvement Virement)
-  BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
+  PAYMENT_MODES ||= %w(CB Chèque Espèces Prélèvement Virement)
+  BANK_PAYMENT_MODES ||= %w(CB Chèque Prélèvement Virement)
 
   before_save :check_bank_and_cash_ids
 

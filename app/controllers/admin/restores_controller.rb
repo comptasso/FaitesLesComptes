@@ -42,7 +42,7 @@ class Admin::RestoresController < Admin::ApplicationController
     tmp = params[:file_upload].tempfile
     a = Archive.new
     a.parse_file(tmp)
-    if a.valid?
+    unless a.errors.any?
       @datas=a.datas
       File.open("#{Rails.root}/tmp/#{@just_filename}", 'w') {|f| f.write a.datas.to_yaml}
       render :confirm
