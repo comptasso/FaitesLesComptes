@@ -5,11 +5,33 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 describe Admin::ArchivesController do 
   let(:org) {mock_model(Organism, title: 'test archives')}
   let(:arch) {mock_model(Archive)}
+
   
   before(:each) do
     Organism.stub(:find).and_return(org)
     controller.stub(:current_period).and_return(nil)
     org.stub_chain(:archives, :new).and_return(arch)
+  end
+
+  describe 'GET index' do
+  
+    let(:arch2) {mock_model(Archive)}
+    
+    before(:each) do
+      org.stub_chain(:archives, :all).and_return([arch, arch2])
+    end
+
+    it 'render index' do
+
+      get :index, organism_id: org.id
+      response.should render_template('index')
+    end
+
+    it 'assigns @archives' do
+
+      get :index, organism_id: org.id
+      assigns[:archives].should == [arch, arch2]
+    end
   end
 
   describe 'GET new' do

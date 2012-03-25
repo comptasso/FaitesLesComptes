@@ -1,0 +1,20 @@
+= content_for :menu do
+  = icon_to  'nouveau.png', new_admin_organism_archive_path(@organism) 
+
+.champ
+  %h3 Liste des archives
+%table.table.table-striped.table-bordered.table-condensed.data_table
+  %thead
+    %tr
+      %th.span2 Date
+      %th.span6 Commentaire
+      %th.span1 Actions
+  %tbody
+    - @archives.each do |archive|
+      %tr
+        %td= l archive.created_at
+        %td= archive.comment
+        %td
+          = icon_to 'modifier.png', edit_admin_organism_archive_path(@organism, archive)
+          = icon_to 'supprimer.png', [:admin, @organism, archive], confirm: "Cette action est irréversible \nEtes vous sûr ?", method: :delete
+         

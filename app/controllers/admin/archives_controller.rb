@@ -27,6 +27,8 @@ class Admin::ArchivesController < Admin::ApplicationController
       File.open(@tmp_file_name, 'w') {|f| f.write @archive.datas.to_yaml}
       send_file @tmp_file_name, type: 'text/yml'
       File.delete(@tmp_file_name)
+      # redirect_to admin_organism_archives_url(@organism)
+      return
     else
       render new
     end
