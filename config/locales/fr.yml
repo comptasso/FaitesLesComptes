@@ -178,6 +178,7 @@ fr:
   labels:
     Title: Titre
     Used: Utilisé
+    
    
   Line: ligne
 
@@ -190,6 +191,8 @@ fr:
 
   activerecord:
     attributes:
+      archive:
+        comment: Commentaire
       book:
         title: Titre
       organism:
@@ -257,6 +260,8 @@ fr:
     select:
       prompt: "Veuillez sélectionner"
     submit:
+      archive:
+        create: "Créer et télécharger"
       book:
         create: "Créer le livre"
         update: "Modifier ce livre"

@@ -4,25 +4,23 @@
 %>
 
 <%= content_for :menu do %>
-<%= icon_to 'retour.png', :back %>
+  <%= icon_to 'retour.png', :back %>
 <% end %>
 
 <div class="champ">
   <h3>
     Création d'un fichier de sauvegarde
 
-  </h3><div class="inner-champ">
-  
-   <%= form_for [:admin , @organism, @archive] do |f|  %>
-  
- <div class="inputs">
-   <%= f.label 'Commentaire :' %>
-    <%= f.text_area :comment, rows: 4 %>
-  </div>
+  </h3><div class="inner-champ row-fluid">
+    <p>
+    <%= simple_form_for [:admin , @organism, @archive] do |f|  %>
+      <%=  f.input :comment ,  label_html: {class: "span2"},
+          input_html: {class: "span6"} %>
+    </p>
+    <p class="offset1">
+      <%=  f.button :submit, id: 'new_archive_button', class: "btn-primary span2" %>
+      </</p>
+      
+    <% end %>
 
-   <div class="actions">
-    <%= f.submit 'Créer le fichier' %>
-  </div>
-<% end %>
-
-</div></div>
+  </div></div>
