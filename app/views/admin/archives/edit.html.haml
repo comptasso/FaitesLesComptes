@@ -1,0 +1,9 @@
+= content_for :menu do
+  = icon_to  'retour.png', :back
+
+.champ
+  %h3 Création d'un fichier de sauvegarde
+  .inner-champ.row-fluid
+    = simple_form_for [:admin , @organism, @archive] do |f|
+      %p=  f.input :comment ,  label_html: {class: "span2"}, input_html: {class: "span6"}
+      %p.offset1= f.button :submit, id: 'new_archive_button', class: "btn-primary span2"

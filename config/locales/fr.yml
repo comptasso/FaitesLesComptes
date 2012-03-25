@@ -262,6 +262,7 @@ fr:
     submit:
       archive:
         create: "Créer et télécharger"
+        update: "Modifier le commentaire"
       book:
         create: "Créer le livre"
         update: "Modifier ce livre"

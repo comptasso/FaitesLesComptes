@@ -13,6 +13,19 @@ class Admin::ArchivesController < Admin::ApplicationController
     @archive=@organism.archives.find(params[:id])
   end
 
+  def edit
+    @archive=@organism.archives.find(params[:id])
+  end
+
+  def update
+    @archive=@organism.archives.find(params[:id])
+    if @archive.update_attributes(params[:archive])
+      redirect_to admin_organism_archives_url(@organism)
+    else
+      render :edit
+    end
+  end
+
   def new
     @archive=@organism.archives.new
   end 
@@ -27,8 +40,6 @@ class Admin::ArchivesController < Admin::ApplicationController
       File.open(@tmp_file_name, 'w') {|f| f.write @archive.datas.to_yaml}
       send_file @tmp_file_name, type: 'text/yml'
       File.delete(@tmp_file_name)
-      # redirect_to admin_organism_archives_url(@organism)
-      return
     else
       render new
     end

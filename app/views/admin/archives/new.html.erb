@@ -12,8 +12,9 @@
     Création d'un fichier de sauvegarde
 
   </h3><div class="inner-champ row-fluid">
-    <p>
+    
     <%= simple_form_for [:admin , @organism, @archive] do |f|  %>
+    <p>
       <%=  f.input :comment ,  label_html: {class: "span2"},
           input_html: {class: "span6"} %>
     </p>
