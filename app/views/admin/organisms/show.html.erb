@@ -5,6 +5,7 @@
 
 <%= content_for :menu do %>
   <%= icon_to 'modifier.png', edit_admin_organism_path(@organism) %>
+  <%= icon_to 'pointer.png', admin_organism_archives_path(@organism), title: 'liste des archives pour cet organisme' %>
   <%= icon_to 'sauvegarde.png', new_admin_organism_archive_path(@organism),
               :title=>"Fait une sauvegarde de toutes les données de l'organisme" %>
   <%= icon_to 'supprimer.png', [:admin, @organism], :confirm=>"Cette action est irréversible \nEtes vous sûr ?", :method=>:delete %>

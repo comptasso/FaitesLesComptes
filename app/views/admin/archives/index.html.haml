@@ -17,5 +17,5 @@
         %td= archive.comment
         %td
           = icon_to 'modifier.png', edit_admin_organism_archive_path(@organism, archive)
-          = icon_to 'supprimer.png', [:admin, @organism, archive], confirm: "Cette action est irréversible \nEtes vous sûr ?", method: :delete
+          = icon_to 'supprimer.png', [:admin, @organism, archive], confirm: "Cette action est irréversible \nEtes vous sûr ?\n", method: :delete
          

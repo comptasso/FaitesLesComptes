@@ -1,0 +1,7 @@
+.row-fluid
+  - if flash[:notice]
+    .alert.notice
+      %strong= flash[:notice]
+  - if flash[:alert]
+    .alert
+      %strong= flash[:alert]
