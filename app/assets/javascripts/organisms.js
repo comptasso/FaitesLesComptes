@@ -11,10 +11,6 @@ $(document).ready(function () {
     });
 });
 
-// instruction de data-tables pour s'adapter à bootstrap'
-$.extend($.fn.dataTableExt.oStdClasses, {
-    "sWrapper": "dataTables_wrapper form-inline"
-});
 
 /*jslint nomen: true*/
 
@@ -29,6 +25,7 @@ jQuery(function () {
     if ($('.public_organisms .data_table').length !== 0) {
         /* Table initialisation */
         $('.public_organisms .data_table').dataTable({
+
             "sDom": "<'row'r>t",
             "bAutoWidth": false,
             "oLanguage": {
