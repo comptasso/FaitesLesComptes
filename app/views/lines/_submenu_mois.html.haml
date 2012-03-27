@@ -1,4 +1,4 @@
-%ul.nav.nav-pills.mois.offset3
+%ul.mois
   - @period.list_months('%b').each_with_index do |mois, i|
     %li{:class=>"#{'active' if current_page?(:mois => i)}" }
       = link_to_unless_current(mois, book_lines_path(@book, "mois"=> i))

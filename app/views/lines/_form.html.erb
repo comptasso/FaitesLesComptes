@@ -1,7 +1,7 @@
 
 
 <div class="inputs" id="entry_lines" >
-<%=  simple_form_for([@book, @line], :html=> {class: 'form-inline'})  do |f| %>
+<%=  simple_form_for([@book, @line])  do |f| %>
 
   <%= f.error_notification %>
   <p>
@@ -25,8 +25,9 @@
    
       <span id="td_cash" > <%= f.association :cash, :collection => @organism.cashes.all, :include_blank=> false %></span>
  </p>
+ <p  class="offset2">
     <%=  f.button :submit, id: 'new_line_button', class: "btn-primary offset2 span2" %>
- 
+ </p>
   
 <% end %>
 </div>
