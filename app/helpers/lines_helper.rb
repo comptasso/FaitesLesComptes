@@ -17,14 +17,16 @@ module LinesHelper
  
  # consstruit une série de liens à partir des mois de l'exercice pour naviguer d'un mois
  # à l'autre
-  def submenu_helper(book, period)
-     content_tag :span do
-      s=''
-       period.list_months('%b').each_with_index do |mois, i|
-        s += concat(content_tag(:span) { link_to_unless_current(mois, book_lines_path(book, "mois"=> i)) })
+  def submenu_helper(book, mois, period )
+    html = []
+    content_tag :ul, class: "nav nav-pills mois offset3" do
+        period.list_months('%b').each_with_index do |mois, i|
+        html << content_tag(:li , :class=> "#{'active' if current_page?(:mois => i) }" ) { link_to_unless_current(mois, book_lines_path(book, "mois"=> i)) }
       end
-      s
+     html << content_tag(:li) {icon_to('nouveau.png', new_book_line_path(book, mois: mois) ,id: 'new_line_link') }
+    html.join('').html_safe
     end
+     
   end
 
   # page est un tableau de lignes

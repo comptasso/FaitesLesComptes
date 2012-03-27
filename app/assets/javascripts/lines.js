@@ -15,7 +15,7 @@ jQuery(function() {
     if ($('.public_lines .data_table').length != 0) {
         var oTable= $('.public_lines .data_table').dataTable(
         {
-           "sDom": "<'row-fluid'<'span8'l><'span4' f> r>t<'row-fluid'<'span8'i><'span4'p> >",
+           "sDom": "<'row-fluid'<'span9'l><'span3' f> r>t<'row-fluid'<'span8'i><'span4'p> >",
            
             "bAutoWidth": false,
             "oLanguage": {
