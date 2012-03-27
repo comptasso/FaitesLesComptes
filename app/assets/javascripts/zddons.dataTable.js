@@ -1,7 +1,7 @@
 /* 
  * Fichier ajouté par JC pour avoir des fonctionnalités nouvelles de DataTable
- * J'y rajoute les deux premirèes méthodes qui sont indiquées pour
- * une adaptation de datatable et de bootstrap
+ * La première partie permet une adaptation de datatable et de bootstrap
+ * La deuxième partie apporte des ajouts pour pouvoir trier sur des nombres avec une décimale.
  */
 
 // instruction de data-tables pour s'adapter à bootstrap'

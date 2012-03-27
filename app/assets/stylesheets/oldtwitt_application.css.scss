@@ -14,12 +14,13 @@ $siteWidth: 70px;
 }
 
  div.dataTables_length label select {
-    display: inline-block;
+    width: 100px;;
+    
 }
 
- div.dataTables_filter label input {
+/*div.dataTables_filter label input {
     display: inline-block;
-}
+}*/
 
 div.dataTables_wrapper {
     padding-top: 8px;
