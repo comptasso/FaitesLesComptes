@@ -11,11 +11,19 @@ div.dataTables_length label {
 	float: left;
 	text-align: left;
         padding-left: 20px; /* modif par jcl */
+ }
 
+ div.dataTables_length {
+    display: inline-block;
 }
+
 
 div.dataTables_length select {
 	width: 75px;
+}
+
+div.dataTables_filter {
+    display: inline-block;
 }
 
 div.dataTables_filter label {

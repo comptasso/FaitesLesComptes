@@ -15,11 +15,13 @@ jQuery(function() {
     if ($('.public_lines .data_table').length != 0) {
         var oTable= $('.public_lines .data_table').dataTable(
         {
-           // "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p> >",
+           "sDom": "<'row-fluid'<'span8'l><'span4' f> r>t<'row-fluid'<'span8'i><'span4'p> >",
+           
             "bAutoWidth": false,
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
             },
+            "sPaginationType": "bootstrap",
  "aoColumns": [
             null,
             null,
@@ -77,7 +79,6 @@ jQuery(function() {
 });
  
 
- 
 
 // série de fonction qui prépare les champs débit et crédit pour la saisie
 // quand on entre dans un champ qui est à 0, on le vide

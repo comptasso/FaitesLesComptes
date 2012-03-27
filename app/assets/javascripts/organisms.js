@@ -26,7 +26,7 @@ jQuery(function () {
         /* Table initialisation */
         $('.public_organisms .data_table').dataTable({
 
-            "sDom": "<'row'r>t",
+            "sDom": "<'row-fluid'<'span6'l><'span6' f> r>t<'row-fluid'p>",
             "bAutoWidth": false,
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"

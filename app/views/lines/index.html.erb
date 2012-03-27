@@ -5,30 +5,26 @@
 <% end -%>
 
 <div class="champ">
-
    <div id="submenu">
-    <span><%=  link_to_if @period.previous_period?, '<<', change_organism_period_path(@organism,@period.previous_period) %></span>
- <%= submenu_helper(@book, @period) %>
-<span><%= link_to_if @period.next_period? ,'>>', change_organism_period_path(@organism,@period.next_period) %></span>
-
-  <%= icon_to 'nouveau.png', new_book_line_path(@book, mois: @mois) ,id: 'new_line_link' %>
+      <span><%=  link_to_if @period.previous_period?, '<<', change_organism_period_path(@organism,@period.previous_period) %></span>
+             <%= submenu_helper(@book, @period) %>
+      <span><%= link_to_if @period.next_period? ,'>>', change_organism_period_path(@organism,@period.next_period) %></span>
+      <%= icon_to 'nouveau.png', new_book_line_path(@book, mois: @mois) ,id: 'new_line_link' %>
     </div>
-  
-  <table class="data_table display">
+  <div class="row-fluid">
+  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed data_table" >
     <thead>
       <tr>
         <%= render 'table_header' %>
-     </tr>
+      </tr>
     </thead>
    <tbody id="table_lines">
       <%= render 'table_lines'  %>
    </tbody>
-  <tfoot id="table_foot">
-
+   <tfoot id="table_foot">
      <%= render 'table_foot' %>
    </tfoot>
-
-      </table>
-
-    </div>
+  </table>
+  </div>
+ </div>
  

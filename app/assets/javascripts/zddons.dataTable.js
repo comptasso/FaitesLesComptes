@@ -9,6 +9,14 @@ $.extend($.fn.dataTableExt.oStdClasses, {
     "sWrapper": "dataTables_wrapper form-inline"
 });
 
+// NOTE : je n'utilise pas l'extension pour avoir le style bootstrap pour le tri
+// car je préfère le style dataTables avec les petites icones images qui sont plus parlantes'
+//$.extend( $.fn.dataTableExt.oStdClasses, {
+//    "sSortAsc": "header headerSortDown",
+//    "sSortDesc": "header headerSortUp",
+//    "sSortable": "header"
+//} );
+
 
 /* API method to get paging information */
 $.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings) {
