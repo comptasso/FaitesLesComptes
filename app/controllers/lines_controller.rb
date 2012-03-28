@@ -137,6 +137,8 @@ class LinesController < ApplicationController
 
   # TODO ici il faut remplacer cette méthode par une méthode period.natures_for_book(@book) qui choisira les natures qui
   # conviennent à la classe du livre.
+  # FIXME render new ne repassant pas par les filtres les @natures du formulaire sont toutes les natures
+  # et non pas seulement celles relatives au book
   def fill_natures
     if @book.class.to_s == 'IncomeBook'
       @natures=@period.natures.recettes

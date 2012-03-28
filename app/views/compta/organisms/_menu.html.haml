@@ -1,0 +1,26 @@
+%ul.nav.nav-tabs
+  %li.dropdown{:class=>((controller.controller_name == 'organisms') ? 'active' : '')}
+    %a{:href=>'#', :class=>'dropdown-toggle',:data=>{:toggle=>'dropdown'} }
+      ORGANISMES
+      %b.caret
+    %ul.dropdown-menu
+      %li= link_to('Listes des organismes', compta_organisms_path)
+      %li.divider
+      - Organism.all.reject {|r| r.new_record? }.each do |r|
+        %li= link_to(r.title, compta_organism_path(r))
+  - unless @period.nil?
+    %li.dropdown{:class=>((controller.controller_name == 'accounts') ? 'active' : '')}
+      %a{:href=>'#', :class=>'dropdown-toggle', :data=>{:toggle=>'dropdown'} }
+        COMPTES
+        %b.caret
+      %ul.dropdown-menu
+        %li= link_to('Plan comptable', compta_period_accounts_path(@period))
+        %li= link_to('Balance', compta_period_balance_path(@period))
+  - unless @organism.nil?
+    %li.dropdown{:class=>((controller.controller_name == 'periods') ? 'active' : '')}
+      %a{:href=>'#', :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }
+        EXERCICES
+        %b.caret
+      %ul.dropdown-menu
+        - @organism.periods.each do |c|
+          %li= link_to(c.exercice, compta_organism_period_path(@organism, c))

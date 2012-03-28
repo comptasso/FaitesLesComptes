@@ -15,7 +15,7 @@
             <a class="brand"><%= header_title %></a>
             <ul class="nav nav-pills pull-right">
 
-              <li>   <%= link_to 'Public',  ((@organism && !@organism.new_record?) ? organism_path(@organism) : organisms_path )  %></li>
+              <li>   <%= link_to 'Saisie/Consult',  ((@organism && !@organism.new_record?) ? organism_path(@organism) : organisms_path )  %></li>
               <li class="active"><a href="#">Administration</a></li>
               <li>  <%= link_to 'Compta',  ((@organism  && @organism.persisted?) ? compta_organism_path(@organism) : compta_organisms_path )  %></li>
             </ul>
