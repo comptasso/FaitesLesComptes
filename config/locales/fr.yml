@@ -247,6 +247,8 @@ fr:
             not_a_number: 'doit être un nombre'
           credit:
             not_a_number: 'doit être un nombre'
+          nature_id:
+            blank: 'champ obligatoire'
       cash_control:
         attributes:
           amount:

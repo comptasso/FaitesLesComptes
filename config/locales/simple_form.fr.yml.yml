@@ -9,7 +9,7 @@ fr:
       # When using html, text and mark won't be used.
       # html: '<abbr title="required">*</abbr>'
     error_notification:
-      default_message: "Des erreurs ont été trouvées, merci de vérifier :"
+      default_message: "Des erreurs ont été trouvées !"
     # Labels and hints examples
     # labels:
     #   password: 'Password'

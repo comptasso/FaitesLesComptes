@@ -50,11 +50,29 @@ SimpleForm.setup do |config|
     b.use :placeholder
     b.use :label
     b.wrapper :tag => 'span', :class => 'controls' do |ba|
-      ba.use :input
       ba.use :error, :wrap_with => { :tag => 'span', :class => 'help-inline' }
+      ba.use :input
       ba.use :hint,  :wrap_with => { :tag => 'p', :class => 'help-block' }
     end
   end
+  
+  # wrapper ajouté par jcl pour avoir l'affichage de l'erreur en dessous du label en petit
+  # dérivié du wrapper précédent (bootstrap)
+  config.wrappers :jc_bootstrap, :tag => 'span', :class => 'control-group', :error_class => 'error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.wrapper :jc_wrapper, :tag => 'ul' do |ba|
+      ba.wrapper :tag=> 'li', :class=>'list_label' do |bal|
+        bal.use :label
+      end
+        ba.use :error, :wrap_with => { :tag => 'li', :class => 'help-inline' }
+    end
+    b.wrapper :tag => 'span', :class => 'controls' do |ba|
+      ba.use :input
+      ba.use :hint,  :wrap_with => { :tag => 'p', :class => 'help-block' }
+    end
+  end
+
 
   config.wrappers :prepend, :tag => 'div', :class => "control-group", :error_class => 'error' do |b|
     b.use :html5
@@ -86,7 +104,7 @@ SimpleForm.setup do |config|
   # Check the Bootstrap docs (http://twitter.github.com/bootstrap)
   # to learn about the different styles for forms and inputs,
   # buttons and other elements.
-  config.default_wrapper = :bootstrap
+  config.default_wrapper = :jc_bootstrap
 
   # Define the way to render check boxes / radio buttons with labels.
   # Defaults to :nested for bootstrap config.

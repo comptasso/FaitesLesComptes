@@ -11,8 +11,28 @@
         text-align: right;
         
     }
-    form p {clear: both; }
+    form {
+        padding-top: 8px;
+        }
     form input, form select { float: left; }
+    .controls {position: relative;}
+    form ul  {
+        list-style: none;
+        padding-right: 10px;
+        li label  { padding-right: 0px;}
+
+
+        }
+    span.error{
+        margin-bottom: 0;
+        }
+    .help-inline {
+        float: right;
+        font-size: 83%;
+        font-style: italic;         
+        margin-top: -10px;
+            }
+    
    
 
     table.data_table {width: 100%; }
