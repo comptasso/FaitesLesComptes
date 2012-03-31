@@ -1,7 +1,11 @@
 # -*- encoding : utf-8 -*-
 
 class Line < ActiveRecord::Base
-include Validations
+  # apporte la validation 
+  include Validations
+
+  PAYMENT_MODES ||= %w(CB Chèque Espèces Prélèvement Virement)
+  BANK_PAYMENT_MODES ||= %w(CB Chèque Prélèvement Virement)
 
 
   belongs_to :book
@@ -34,13 +38,15 @@ include Validations
   validates :debit, :credit, numericality: true, format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :line_date, presence: true, must_belong_to_period: true
   validates :nature_id, presence: true
+  validates :narration, presence: true
+  validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
+    :message => "valeur inconnue" }
   validates_with NotNullAmount
   # validates :book_id, presence: true
   # FIXME
   #  validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit=>true if :locked?
 
-  PAYMENT_MODES ||= %w(CB Chèque Espèces Prélèvement Virement)
-  BANK_PAYMENT_MODES ||= %w(CB Chèque Prélèvement Virement)
+  
 
   before_save :check_bank_and_cash_ids
 
@@ -63,7 +69,7 @@ include Validations
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1),
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1).end_of_month    )}
 
-  # Ces fonctions de classe semblent marcher avec un arel.
+  # FIXME Ces fonctions de classe semblent marcher avec un arel.
   # néanmoins, elles pourraient être perturbantes si on ne filtre pas assez bien en amont les lignes que l'on veut.
   def self.solde_debit_avant(date)
     Line.where('line_date < ?', date).sum(:debit)
@@ -74,6 +80,7 @@ include Validations
   end
 
   # # monthly sold donne le solde d'un mois fourni au format mm-yyyy
+  # FIXME va poser des problèmes avec plusieurs organismes
   def self.monthly_sold(month)
     lines = Line.month(month)
     lines.sum(:credit) - lines.sum(:debit)

@@ -23,6 +23,7 @@ module ApplicationHelper
   end
 
  def picker_date(field,date_min,date_max,value=Date.today)
+   # TODO traiter le cas d'une date non valable
    content_tag(:span, :class=>"picker_date") do
     text_field_tag(field,{},
       {'data-jcmin'=>"#{date_min.to_formatted_s(:date_picker)}",

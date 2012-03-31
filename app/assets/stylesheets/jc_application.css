@@ -57,14 +57,6 @@ border-radius: 4px 4px 0px 0px;
     margin-left: 2px;
 }
 
-.simple_form .error {
-    clear: left;
-    /*margin-left: 120px;*/
-    font-size: 12px;
-    color: yellow;
-    display: block;
-}
-
 .simple_form .hint {
     clear: left;
     margin-left: 140px;

@@ -12,10 +12,10 @@ describe CheckDepositsController do
     @b=@o.income_books.create!(title: 'Recettes')
     @n=@p_2012.natures.create!(name: 'ventes')
     @n_2011=@p_2011.natures.create!(name: 'ventes')
-    @l1=@b.lines.create!(line_date: Date.today, credit: 44, payment_mode:'Chèque', nature: @n)
-    @l2=@b.lines.create!(line_date: Date.today, credit: 101, payment_mode:'Chèque', nature: @n)
-    @l3=@b.lines.create!(line_date: Date.today, credit: 300, payment_mode:'Chèque', nature: @n)
-    @l4=@b.lines.create!(line_date: Date.today - 365 , credit: 150, payment_mode:'Chèque', nature: @n_2011) # une écriture de 2011
+    @l1=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
+    @l2=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 101, payment_mode:'Chèque', nature: @n)
+    @l3=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
+    @l4=@b.lines.create!(line_date: Date.today - 365 ,:narration=>'ligne de test', credit: 150, payment_mode:'Chèque', nature: @n_2011) # une écriture de 2011
     @cd1= @ba.check_deposits.new(deposit_date: Date.today)
     @cd1.checks << @l1
     @cd1.save!

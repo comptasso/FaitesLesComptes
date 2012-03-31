@@ -11,10 +11,10 @@ describe CheckDeposit do
     @ba=@o.bank_accounts.create!(name: 'La Banque', number: '123456Z')
     @b=@o.income_books.create!(title: 'Recettes')
     @n=@p.natures.create!(name: 'ventes')
-    @l1=@b.lines.create!(line_date: Date.today, credit: 44, payment_mode:'Chèque', nature: @n)
-    @l2=@b.lines.create!(line_date: Date.today, credit: 101, payment_mode:'Chèque', nature: @n)
-    @l3=@b.lines.create!(line_date: Date.today, credit: 300, payment_mode:'Chèque', nature: @n)
-    @l5=@b.lines.create!(line_date: Date.today, credit: 50000, payment_mode:'Virement', nature: @n)
+    @l1=@b.lines.create!(line_date: Date.today, :narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
+    @l2=@b.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 101, payment_mode:'Chèque', nature: @n)
+    @l3=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
+    @l5=@b.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 50000, payment_mode:'Virement', nature: @n)
   end
 
  
@@ -222,7 +222,7 @@ describe CheckDeposit do
         end
 
         it "ne peut plus ajouter de chèque" do
-          @l4=@b.lines.create!(line_date: Date.today, credit: 300, payment_mode:'Chèque', nature: @n)
+          @l4=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
        
           expect {@check_deposit.checks << @l4}.to raise_error
         
@@ -242,9 +242,9 @@ describe CheckDeposit do
       @ba2=@o2.bank_accounts.create!(name: 'BBIC', number: '987654321Z')
       @b2=@o2.income_books.create!(title: 'Recettes')
       @n2=@p2.natures.create!(name: 'ventes')
-      @l21=@b2.lines.create!(line_date: Date.today, credit: 244, payment_mode:'Chèque', nature: @n)
-      @l22=@b2.lines.create!(line_date: Date.today, credit: 2101, payment_mode:'Chèque', nature: @n)
-      @l23=@b2.lines.create!(line_date: Date.today, credit: 2300, payment_mode:'Chèque', nature: @n)
+      @l21=@b2.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 244, payment_mode:'Chèque', nature: @n)
+      @l22=@b2.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 2101, payment_mode:'Chèque', nature: @n)
+      @l23=@b2.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 2300, payment_mode:'Chèque', nature: @n)
       @cd2=@ba2.check_deposits.new
     end
 
@@ -261,7 +261,7 @@ describe CheckDeposit do
       @ba2=@o2.bank_accounts.create!(name: 'IBAN', number: '123456Z')
       @b2=@o2.income_books.create!(title: 'Recettes')
       @n2=@p2.natures.create!(name: 'ventes')
-      @ligne1=@b2.lines.create!(line_date: Date.today, credit: 44, payment_mode:'Chèque', nature: @n)
+      @ligne1=@b2.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 44, payment_mode:'Chèque', nature: @n)
     end
 
     it "Line non depose a maintenant 4 éléments appartenant à 2 organismes" do

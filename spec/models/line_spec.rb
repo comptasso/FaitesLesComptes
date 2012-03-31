@@ -15,16 +15,31 @@ describe Line do
 
    describe "creation de ligne" do
     before(:each) do
-      @l=Line.new(:book_id=>@ib.id, :credit=>200 , :line_date=>Date.civil(2012,01,02), :nature_id=>@n.id)
+      @l=Line.new(:book_id=>@ib.id, :credit=>200 ,:narration=>'ligne de test',
+        :line_date=>Date.civil(2012,01,02), :nature_id=>@n.id, :payment_mode=> 'Espèces')
      
     end
 
     it "should be valid" do
-
         @l.valid?
         @l.errors.messages.should == {}
       #@l.errors.should == []
+    end 
+
+    it "should not be valid without payement_mode" do
+      @l.payment_mode=nil
+      @l.should_not be_valid
     end
+
+    it "payment mode should be a valid word" do
+      @l.payment_mode = 'bonjour'
+      @l.should_not be_valid
+    end
+
+    it "should not be valid whitout narration" do
+      @l.narration = nil
+      @l.should_not be_valid
+    end 
 
    
     it 'should have a line_date' do
@@ -32,9 +47,8 @@ describe Line do
       @l.should_not be_valid
     end
     it 'debit credit doivent être des nombres avec deux décimales maximum' do
-      @l.should_not be_valid if @l.credit= 2.321
-      
-      @l.should be_valid if @l.credit=2.32
+      @l.should_not be_valid if @l.credit = 2.321
+    @l.should be_valid if @l.credit=2.32
       @l.should be_valid if @l.credit=-502.32 
  
     end
@@ -86,12 +100,12 @@ describe Line do
 #    @l.valid?
 #    @l.errors.messages.should == {}
 #   
-    10.times {|t| Line.create!(:book_id=>@ib.id, :line_date=>Date.civil(2012,01,t+2), :credit=>2*t+1 , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ob.id, :line_date=>Date.civil(2012,01,t+2), :debit=>t+1 , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ib.id, :line_date=>Date.civil(2012,02,t+2), :credit=>3*t+1 , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ob.id, :line_date=>Date.civil(2012,02,t+2), :debit=>2*t+1 , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ib.id, :line_date=>Date.civil(2012,03,t+2), :credit=>4*t+1 , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ob.id, :line_date=>Date.civil(2012,04,t+2), :debit=>5*t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', :payment_mode=> 'Espèces',  :line_date=>Date.civil(2012,01,t+2), :credit=>2*t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'premier mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,01,t+2), :debit=>t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'deuxième mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :credit=>3*t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'deuxième mois credit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :debit=>2*t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'troisième mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,03,t+2), :credit=>4*t+1 , :nature_id=>@n.id) }
+    10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'troisième mois credit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,04,t+2), :debit=>5*t+1 , :nature_id=>@n.id) }
 
   end
   context 'verification que les lignes sont bien là' do

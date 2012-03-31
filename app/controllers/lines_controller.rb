@@ -163,6 +163,7 @@ class LinesController < ApplicationController
   end
 
   def get_date
+    # TODO voir ce qu'il se passe quand la date n'est pas valide ?
     params[:line][:line_date]= picker_to_date(params[:pick_date_line])
   end
 

@@ -249,6 +249,10 @@ fr:
             not_a_number: 'doit être un nombre'
           nature_id:
             blank: 'champ obligatoire'
+          narration:
+            blank: 'champ obligatoire'
+          payment_mode:
+            blank: 'champ obligatoire'
       cash_control:
         attributes:
           amount:

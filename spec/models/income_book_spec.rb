@@ -15,10 +15,10 @@ describe IncomeBook do
 
     @b=@o.income_books.create!(title: 'Recettes')
     @n=@p.natures.create!(name: 'ventes')
-    @l1=@b.lines.create!(line_date: Date.today, credit: 44, payment_mode:'Chèque', nature: @n)
-    @l2=@b.lines.create!(line_date: Date.today, credit: 101, payment_mode:'Chèque', nature: @n)
-    @l3=@b.lines.create!(line_date: Date.today, credit: 300, payment_mode:'Chèque', nature: @n)
-    @l5=@b.lines.create!(line_date: Date.today, credit: 50000, payment_mode:'Virement', nature: @n)
+    @l1=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
+    @l2=@b.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 101, payment_mode:'Chèque', nature: @n)
+    @l3=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
+    @l5=@b.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 50000, payment_mode:'Virement', nature: @n)
     end
   
 
