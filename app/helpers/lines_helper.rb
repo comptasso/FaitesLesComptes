@@ -4,17 +4,7 @@
 module LinesHelper
     require 'csv'
 
-  def debit_credit(montant)
-    if montant > -0.01 && montant < 0.01
-      '-'
-    else
-      number_with_precision(montant, :precision=> 2)
-    end
-  rescue
-    ''
-  end
-
- 
+  
  # consstruit une série de liens à partir des mois de l'exercice pour naviguer d'un mois
  # à l'autre
   def submenu_helper(book, mois, period )

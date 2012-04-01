@@ -2,15 +2,18 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+
 describe Line do
+  include OrganismFixture 
   
   
-  before(:each) do
-    @o=Organism.create!(title: 'test_line')
-    @ib=IncomeBook.create!(organism_id: @o.id, title: 'Recettes')
-    @ob=OutcomeBook.create!(organism_id:@o.id, title: "Dépenses")
-    @p=Period.create!(:organism_id=>@o.id, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))
-    @n=Nature.create!(name: 'Essai', period_id: @p.id)
+  before(:all) do
+    create_minimal_organism
+#    @o=Organism.create!(title: 'test_line')
+#    @ib=IncomeBook.create!(organism_id: @o.id, title: 'Recettes')
+#    @ob=OutcomeBook.create!(organism_id:@o.id, title: "Dépenses")
+#    @p=Period.create!(:organism_id=>@o.id, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))
+#    @n=Nature.create!(name: 'Essai', period_id: @p.id)
   end
 
    describe "creation de ligne" do

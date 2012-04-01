@@ -54,7 +54,7 @@ class Organism < ActiveRecord::Base
   end
   
   def main_bank_id
-    self.cashes.any?  ? self.cashes.first.id  :  nil
+    self.bank_accounts.any?  ? self.bank_accounts.first.id  :  nil
   end
 
   # find_period trouve l'exercice relatif à une date donnée

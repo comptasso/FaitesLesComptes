@@ -1,36 +1,52 @@
 
 
 <div class="inputs row-fluid" id="entry_lines" >
-<%=  simple_form_for([@book, @line])  do |f| %>
 
-  <%= f.error_notification %>
-  <div class="span12">
-     <label class="span2">Date</label><%= picker_date :pick_date_line, @period.start_date, @period.close_date , @line.line_date %>
-     <%= f.input :narration,  :label=>'Libellé ', :jc_wrapper_html=>{:class=>'span2'}, input_html: {class: "span6" } %>
-  </div>
-  <div  class="span12">
-     <%=  f.association :nature , :jc_wrapper_html=>{:class=>'span2'}, :collection => @natures, :prompt => "Quoi ?", input_html: {class: "span3 " } %>
-     <%=  f.association :destination, :collection => @organism.destinations.all(:order => 'name'),
-        :prompt => "Pour qui ?" ,  :jc_wrapper_html=>{class: "span1"}, input_html: {class: "span3"} %>
- </div>
- <div class="span12">
-      <%=  f.input :debit , :jc_wrapper_html=> {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.debit) } unless (@book.type=='IncomeBook') %>
-  
-      <%=  f.input :credit, :jc_wrapper_html=> {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.credit) } unless (@book.type=='OutcomeBook') %>
- 
-      <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
-        disabled: "#{'Espèces' unless @organism.cashes.any?}",  :jc_wrapper_html=> {class: "span2"}, input_html: {class: "span2"} %>
-  
-    <span id="td_bank" > <%= f.association :bank_account, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>  </span>
-   
-      <span id="td_cash" > <%= f.association :cash, :collection => @organism.cashes.all, :include_blank=> false %></span>
- </div>
- <div class="offset2">
-    <%=  f.button :submit, id: 'new_line_button', class: "btn-primary span2" %>
- </div>
-  
-<% end %>
+  <%=  simple_form_for([@book, @line])  do |f| %>
+
+    <%= f.error_notification %>
+    <div class="row-fluid">
+      <div class="span12">
+        <span class="control-group select required">
+          <ul class="span2">
+            <li class="list-label"><label class="select required control-label" for="pick_date_line">Date</label></li>
+          </ul>
+          <%= picker_date :pick_date_line, @period.start_date, @period.close_date , @line.line_date %>
+        </span>
+        <%= f.input :narration,  :label=>'Libellé ', :jclabel_wrapper_html=>{:class=>'span2'}, input_html: {class: "span6" } %>
+        </div>
+    
+
+      <div class="row-fluid">
+        <div class="span12">
+          <%=  f.association :nature , :jclabel_wrapper_html=>{:class=>'span2'}, :collection => @natures, :prompt => "Quoi ?", input_html: {class: "span3 " } %>
+          <%=  f.association :destination, :collection =>@organism.destinations.all(:order => 'name'),
+              :prompt => "Pour qui ?" ,  :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: "span3"} %>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+         <div class="span12">
+            <%=  f.input :debit , :jclabel_wrapper_html=> {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.debit) } unless (@book.type=='IncomeBook') %>
+            <%=  f.input :credit, :jclabel_wrapper_html=> {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.credit) } unless (@book.type=='OutcomeBook') %>
+            <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
+                          disabled: "#{'Espèces' unless @organism.cashes.any?}",  :jclabel_wrapper_html=> {class: "span2"}, input_html: {class: "span2"} %>
+            <span id="td_bank" > <%= f.association :bank_account, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>  </span>
+            <span id="td_cash" > <%= f.association :cash, :collection => @organism.cashes.all, :include_blank=> false %></span>
+          </div>
+       </div>
+
+       <div class="row">
+          <div class="offset2 span2 clear">
+             <%=  f.button :submit, id: 'new_line_button', class: "btn-primary span2" %>
+          </div>
+       </div>
+    </div>
+  <% end %>
 </div>
 
 
+
+
+              
 

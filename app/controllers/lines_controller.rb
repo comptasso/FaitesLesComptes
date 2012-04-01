@@ -2,6 +2,7 @@
 
 class LinesController < ApplicationController
 
+  # TODO check utility 
   layout :choose_layout # inutile maintenant car lié à l'utilisation de modalbox
 
   # pour être sur d'avoir l'organisme avant d'appeler le before filter de
@@ -13,7 +14,7 @@ class LinesController < ApplicationController
   before_filter :fill_natures, :only=>[:new,:edit] # pour faire la saisie des natures en fonction du livre concerné
 
   # GET /lines
-  # GET /lines.json
+  # GET /lines.json 
   def index
     fill_soldes
     respond_to do |format|
@@ -46,12 +47,11 @@ class LinesController < ApplicationController
   # GET /lines/new.json
   def new
     @line =@book.lines.new(line_date: flash[:date] || @period.start_date.months_since(@mois.to_i), :cash_id=>@organism.main_cash_id, :bank_account_id=>@organism.main_bank_id)
- 
+    @previous_line = Line.find(flash[:previous_line_id]) if flash[:previous_line_id]
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @line }
-      
-    end
+     end
   end
 
 
@@ -62,9 +62,9 @@ class LinesController < ApplicationController
     @line = @book.lines.new(params[:line])
     respond_to do |format|
       if @line.save
+        flash[:previous_line_id]=@line.id
         mois=(@line.line_date.month)-1
-        format.html { redirect_to new_book_line_url(@book,mois: mois), 
-          notice: "La ligne #{@line.narration} - Débit : #{two_decimals @line.debit} - Crédit : #{two_decimals @line.credit} a été créée." }
+        format.html { redirect_to new_book_line_url(@book,mois: mois) }
         # redirection via js non utilisé actuellement - sera utile pour faire une modalbox
         #        format.js do
         #          logger.debug 'dans create if line.save'
@@ -118,6 +118,7 @@ class LinesController < ApplicationController
 
   protected
 
+ 
  
   def find_book
     @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )

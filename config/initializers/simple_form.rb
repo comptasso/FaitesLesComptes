@@ -58,18 +58,20 @@ SimpleForm.setup do |config|
   
   # wrapper ajouté par jcl pour avoir l'affichage de l'erreur en dessous du label en petit
   # dérivié du wrapper précédent (bootstrap)
-  config.wrappers :jc_bootstrap, :tag => 'span', :class => 'control-group', :error_class => 'error' do |b|
+  config.wrappers :jc_bootstrap, :class => 'control-group', :error_class => 'error' do |b|
     b.use :html5
     b.use :placeholder
-    b.wrapper :jc_wrapper, :tag => 'ul' do |ba|
-      ba.wrapper :tag=> 'li', :class=>'list_label' do |bal|
-        bal.use :label
-      end
+    b.wrapper :jcglobal_wrapper do |baba|
+      baba.wrapper :jclabel_wrapper, :tag => 'ul' do |ba|
+        ba.wrapper :tag=> 'li', :class=>'list_label' do |bal|
+          bal.use :label
+        end
         ba.use :error, :wrap_with => { :tag => 'li', :class => 'help-inline' }
-    end
-    b.wrapper :tag => 'span', :class => 'controls' do |ba|
-      ba.use :input
-      ba.use :hint,  :wrap_with => { :tag => 'p', :class => 'help-block' }
+      end
+      baba.wrapper :tag => 'span', :class => 'controls' do |ba|
+        ba.use :input
+        ba.use :hint,  :wrap_with => { :tag => 'p', :class => 'help-block' }
+      end
     end
   end
 
