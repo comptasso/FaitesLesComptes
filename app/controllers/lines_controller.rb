@@ -47,7 +47,7 @@ class LinesController < ApplicationController
   # GET /lines/new.json
   def new
     @line =@book.lines.new(line_date: flash[:date] || @period.start_date.months_since(@mois.to_i), :cash_id=>@organism.main_cash_id, :bank_account_id=>@organism.main_bank_id)
-    @previous_line = Line.find(flash[:previous_line_id]) if flash[:previous_line_id]
+    @previous_line = Line.find_by_id(flash[:previous_line_id]) if flash[:previous_line_id]
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @line }
@@ -65,12 +65,6 @@ class LinesController < ApplicationController
         flash[:previous_line_id]=@line.id
         mois=(@line.line_date.month)-1
         format.html { redirect_to new_book_line_url(@book,mois: mois) }
-        # redirection via js non utilisé actuellement - sera utile pour faire une modalbox
-        #        format.js do
-        #          logger.debug 'dans create if line.save'
-        #          fill_soldes
-        #          render :redirect
-        #        end
         format.json { render json: @line, status: :created, location: @line }
       else
         format.html { render action: "new" }
@@ -111,7 +105,7 @@ class LinesController < ApplicationController
     @line.destroy
   
     respond_to do |format|
-      format.html { redirect_to book_lines_url(@book) }
+      format.html { redirect_to book_lines_url(@book, :mois=>@period.guess_month(@line.line_date)) }
       format.json { head :ok }
     end
   end

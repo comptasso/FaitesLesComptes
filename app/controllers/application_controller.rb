@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :find_organism, :current_period
 
-  helper_method :two_decimals, :picker_to_date, :debit_credit
+  helper_method :two_decimals, :picker_to_date
 
   private
 
@@ -46,15 +46,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def debit_credit(montant)
-    if montant > -0.01 && montant < 0.01
-      '-'
-    else
-      number_with_precision(montant, :precision=> 2)
-    end
-  rescue
-    ''
-  end
+  
 
   
 

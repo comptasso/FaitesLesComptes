@@ -3,6 +3,20 @@
 <%= icon_to 'retour.png', book_lines_path(@book) %>
 <% end -%>
 
+<% if @previous_line %>
+<div class="alert notice">
+  <a class="close" data-dismiss="alert">x</a>
+  <strong>
+    <table>
+      <tbody><tr><td>
+            Ligne créée :
+          </td>
+            <%= render 'line', line: @previous_line %></tr></tbody>
+      </table>
+  </strong>
+</div>
+<% end %>
+
 
 <div class="champ">
   <h3>

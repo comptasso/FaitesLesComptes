@@ -352,13 +352,13 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
 
     protected
   # renvoie le mois de l'exercice correspondant à une date qui est dans les limites de l'exercice
-  def current_month(date=Date.today)
+  def current_month(date = Date.today)
     raise 'date is not inside the period limits' if date < self.start_date || date > self.close_date
     d=self.start_date
-    mois=0
+    mois = 0
     while date >= d
       d=d.months_since(1)
-      mois +=1
+      mois += 1
     end
     return mois-1
   end
