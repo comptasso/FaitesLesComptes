@@ -7,12 +7,13 @@
     <%= f.error_notification %>
     <div class="row-fluid">
       <div class="span12">
-        <span class="control-group select required">
+        <div class="control-group select required">
           <ul class="span2">
-            <li class="list-label"><label class="select required control-label" for="pick_date_line">Date</label></li>
+            <li class="list-label"><label class="select required control-label" for="pick_date_line">
+                <abbr title="exigé">*</abbr> Date</label></li>
           </ul>
           <%= picker_date :pick_date_line, @period.start_date, @period.close_date , @line.line_date %>
-        </span>
+        </div>
         <%= f.input :narration,  :label=>'Libellé ', :jclabel_wrapper_html=>{:class=>'span2'}, input_html: {class: "span6" } %>
         </div>
     
@@ -27,8 +28,8 @@
 
       <div class="row-fluid">
          <div class="span12">
-            <%=  f.input :debit , :jclabel_wrapper_html=> {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.debit) } unless (@book.type=='IncomeBook') %>
-            <%=  f.input :credit, :jclabel_wrapper_html=> {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.credit) } unless (@book.type=='OutcomeBook') %>
+            <%=  f.input :debit , :jclabel_wrapper_html=> {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.debit) } if (@book.type=='OutcomeBook') %>
+            <%=  f.input :credit, :jclabel_wrapper_html=> {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.credit) } if (@book.type=='IncomeBook') %>
             <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
                           disabled: "#{'Espèces' unless @organism.cashes.any?}",  :jclabel_wrapper_html=> {class: "span2"}, input_html: {class: "span2"} %>
             <span id="td_bank" > <%= f.association :bank_account, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>  </span>
