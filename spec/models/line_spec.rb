@@ -7,7 +7,7 @@ describe Line do
   include OrganismFixture 
   
   
-  before(:all) do
+  before(:each) do 
     create_minimal_organism
 #    @o=Organism.create!(title: 'test_line')
 #    @ib=IncomeBook.create!(organism_id: @o.id, title: 'Recettes')

@@ -1,0 +1,106 @@
+/* 
+Document   : jc_application
+Created on : 17 mars 2012, 09:09:07
+Author     : jcl
+Description:
+Purpose of the stylesheet follows.
+*/
+
+
+
+.inner-champ {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background: #dbffdb;
+    border-radius: 0px 0px 4px 4px;
+}
+
+.champ h3 {
+    color: #fff;
+    background: #271;
+    padding-left: 20px;
+    border-radius: 4px 4px 0px 0px;
+
+    /*    font-family: sans-serif;*/
+}
+
+/* stylesheets/application.css */
+.simple_form label {
+    padding-right: 10px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.simple_form div.input {
+    margin-bottom: 10px;
+}
+
+.inputs_inline label{
+    float: none;
+}
+
+
+.simple_form div.boolean {
+    margin-left: 40px;
+}
+
+.simple_form div.boolean label, .simple_form label.collection_radio {
+    float: none;
+    margin: 0;
+}
+
+.simple_form label.collection_radio {
+    margin-right: 10px;
+    margin-left: 2px;
+}
+
+.simple_form .hint {
+    clear: left;
+    margin-left: 140px;
+    font-size: 12px;
+    color: #555;
+    display: block;
+    font-style: italic;
+}
+
+.simple_form abbr {
+    color: red;
+}
+
+.picker_date img {
+    float: left;
+    padding-top: 4px;
+}
+
+img.ui-datepicker-trigger {
+    margin-left: -20px;
+    margin-right: 4px;
+}
+
+form {
+    padding-top: 8px;
+}
+
+/* permet  d'avoir une mise en page de formulaire fluide */
+.row-fluid form input, .row-fluid form select { float: left; }
+
+.controls {position: relative;}
+form ul  {
+    list-style: none;
+    li label  { padding-right: 0px;}
+}
+span.error{
+    margin-bottom: 0;
+}
+.control-group {
+    margin-bottom: 0;
+}
+.help-inline {
+    float: right;
+    font-size: 83%;
+    font-style: italic;
+    margin-top: -10px;
+    padding-right: 10px;
+}
+
+

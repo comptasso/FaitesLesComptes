@@ -197,6 +197,13 @@ class Period < ActiveRecord::Base
     return current_month(date)
   end
 
+  # contrepartie de guess_month, renvoie une date d'un mois défini par
+  # la variable month. En pratique, renvoie le premier jour du mois
+  # La valeur par défaut renvoie le premier jour de l'exercice
+  def guess_date(month=0)
+    start_date.months_since(month.to_i)
+  end
+
 
   # donne les soldes de chaque mois, est appelé par le module JcGraphic pour constuire les graphes
   def monthly_value(date)

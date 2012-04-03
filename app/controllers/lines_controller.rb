@@ -2,7 +2,7 @@
 
 class LinesController < ApplicationController
 
-  # TODO check utility 
+  # TODO verifier 'utilité de ce choose layout
   layout :choose_layout # inutile maintenant car lié à l'utilisation de modalbox
 
   # pour être sur d'avoir l'organisme avant d'appeler le before filter de
@@ -15,14 +15,14 @@ class LinesController < ApplicationController
 
   # GET /lines
   # GET /lines.json 
-  def index
+  def index 
     fill_soldes
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @lines }
       format.pdf { @listing = Listing.new(@period, @mois, @book) }
       format.csv {render :layout=>false}
-      
+  
     end
   end
 
@@ -83,7 +83,7 @@ class LinesController < ApplicationController
   # PUT /lines/1
   # PUT /lines/1.json
   def update
-    get_date
+    get_date # transforme la params[:picker_to_date] en params[:line][:line_date]
     @line = @book.lines.find(params[:id])
   
     respond_to do |format|
@@ -148,7 +148,7 @@ class LinesController < ApplicationController
   end
 
   def fill_soldes
-    @date=@period.start_date.months_since(@mois.to_i)
+    @date=@period.guess_date(@mois) 
     @lines = @book.lines.mois(@date).all
     @solde_debit_avant=@book.cumulated_debit_before(@date)
     @solde_credit_avant=@book.cumulated_credit_before(@date)

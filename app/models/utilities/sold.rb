@@ -2,8 +2,6 @@
 
 module Utilities::Sold
 
-  
-
   def cumulated_debit_before(date)
     self.lines.where('line_date < ?', date).sum(:debit)
   end

@@ -14,7 +14,7 @@ describe OrganismsController do
     
     context 'whithout Organism' do
       it 'should redirect to admin new if no organism' do
-        Organism.stub(:all).and_return(nil)
+        Organism.stub(:count).and_return(0)
         get :index
         response.should redirect_to new_admin_organism_path
       end
