@@ -16,7 +16,16 @@ class LinesController < ApplicationController
   # GET /lines
   # GET /lines.json 
   def index 
-    fill_soldes
+    @date = @period.guess_date(@mois)
+    @monthly_extract=Utilities::MonthlyBookExtract.new(@book, @date)
+#    @lines = @book.lines.mois(@date).all
+#    @solde_debit_avant = @book.cumulated_debit_before(@date)
+#    @solde_credit_avant = @book.cumulated_credit_before(@date)
+#    @total_debit = @lines.sum(&:debit)
+#    @total_credit = @lines.sum(&:credit)
+#    @solde = @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
+#
+#    fill_soldes
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @lines }
@@ -147,15 +156,7 @@ class LinesController < ApplicationController
     (request.xhr?) ? nil : 'application'
   end
 
-  def fill_soldes
-    @date=@period.guess_date(@mois) 
-    @lines = @book.lines.mois(@date).all
-    @solde_debit_avant=@book.cumulated_debit_before(@date)
-    @solde_credit_avant=@book.cumulated_credit_before(@date)
-    @total_debit=@lines.sum(&:debit)
-    @total_credit=@lines.sum(&:credit)
-    @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
-  end
+  
 
   def get_date
     # TODO voir ce qu'il se passe quand la date n'est pas valide ?
