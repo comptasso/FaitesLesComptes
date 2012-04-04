@@ -25,9 +25,11 @@ prawn_document(:page_size => 'A4', :page_layout => :landscape) do |pdf|
             y_position = pdf.cursor
             # la boîte de gauche
             pdf.bounding_box [0, y_position], :width => 200, :height => 40 do
-                pdf.text @organism.title
-                pdf.text @period.exercice
-                pdf.text "Mois : #{l(@period.start_date.months_since(@mois.to_i),:format=> :month).capitalize}"
+                pdf.font_size(12) do
+                    pdf.text @organism.title
+                    pdf.text @period.exercice
+                    pdf.text "Mois : #{l(@period.start_date.months_since(@mois.to_i),:format=> :month).capitalize}"
+                end
             end
             # la boite du centre
             pdf.bounding_box [100, y_position], :width => width-200, :height => 40 do
@@ -35,8 +37,10 @@ prawn_document(:page_size => 'A4', :page_layout => :landscape) do |pdf|
             end
             # le pavé de droite
             pdf.bounding_box [width-100, y_position], :width => 100, :height => 40 do
-                pdf.text "#{time}", :align=>:right
-                pdf.text "Page #{t+1}/#{@listing.total_pages}",:align=>:right
+                pdf.font_size(12) do
+                    pdf.text "#{time}", :align=>:right
+                    pdf.text "Page #{t+1}/#{@listing.total_pages}",:align=>:right
+                end
             end
 
         end
