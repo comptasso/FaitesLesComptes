@@ -24,8 +24,8 @@ describe LinesController do
       assigns[:organism].should == @o
     end
 
-    it "should call fill_soldes" do
-      @controller.should_receive(:fill_soldes)
+    it "should create a monthly_book_extract" do
+      Utilities::MonthlyBookExtract.should_receive(:new).with(@ob, @p.start_date.months_since(4))
       get :index, :outcome_book_id=>@ob.id, :mois=>4
     end
 
@@ -39,6 +39,13 @@ describe LinesController do
       get :index, :outcome_book_id=>@ob.id, :mois=>4
       assigns[:date].should == Date.civil(2012,5,1)
     end
+
+    it "should render index view" do
+      get :index, :outcome_book_id=>@ob.id, :mois=>4
+      response.should render_template(:index)
+    end
+
+    it 'traiter le cas ou mois n est pas rempli'
   end
 
   describe 'GET edit' do

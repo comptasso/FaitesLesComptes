@@ -2,31 +2,38 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-#describe "vue organisme"  do
-#
-#  let(:o) {stub_model(Organism) }
-#  let(:ibook) {stub_model(IncomeBook, :title=>'Recettes') }
-#  let(:obook) { stub_model(OutcomeBook, title: 'Dépenses')}
-#  let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))}
-#  let(:p2011) {stub_model(Period, start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31)) }
-#
-#  before(:each) do
-#   # assign(:organism, o)
-#    o.stub(:periods).and_return([p2011,p2012])
-#    p2012.stub(:previous_period?).and_return(true)
-#    p2012.stub(:previous_period).and_return(p2011)
-#    ibook.stub(:organism).and_return(o)
-#    obook.stub(:organism).and_return(o)
-#    ibook.stub_chain(:organism, :all).and_return([p2011, p2012])
-#    obook.stub_chain(:organism, :all).and_return([p2011, p2012])
-#  #  assign(:books, [ibook,obook])
-#  #  assign(:period, p2012 )
-#    o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))
-#  end
-#
-#  it "should render the dashboard" do
-#    visit organism_path(o)
-#    page.should have_content('Exercices')
-#   end
-#end
+describe "vue organisme"  do
+  context "quand il n'y a aucun organisme" do
+    it 'root aboutit vers new_organism' do
+      visit root_path
+      response.should contain('Nouvel organisme')
+    end
+
+    it 'création du nouvel organisme' do
+      visit root_path
+      fill_in 'Titre', :with=>'Association TRI'
+      click_button 'Créer'
+      response.should contain('créer un exercice')
+    end
+
+context 'un organisme est créé' do
+  before(:each) do
+    visit root_path
+    fill_in 'Titre', :with=>'Association TRI'
+    click_button 'Créer'
+  end
+
+    it 'création de l exercice' do
+      select 'janvier', :from=>'period_start_date_2i'
+      select '2011', :form=>'period_start_date_1i'
+      select 'décembre', :from=>'period_close_date_2i'
+      select '2011', :form=>'period_close_date_1i'
+      click_button "Créer l'exercice"
+    end
+
+      it 'créer quelques autres cas'
+  end
+  end
+end
+
 

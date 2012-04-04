@@ -4,8 +4,10 @@
 # à partir d'un exercice, d'un mois au sein de cet exercice et d'un livre
 #
 
+# TODO ceci ressemble très fort à MonthlyBookExtract, factorisation ?
+
 class Listing
-  NB_PER_PAGE=25
+  NB_PER_PAGE=30
 
   attr_reader :lines
 
@@ -14,6 +16,7 @@ class Listing
     @period=period
     @month=month.to_i
     @book=book
+    # TODO on peut revoir avec le scope mois de lines
     @lines = @book.lines.period_month(@period, @month).order(:line_date).all
   end
 
@@ -31,9 +34,9 @@ class Listing
     @lines[(NB_PER_PAGE*n)..(NB_PER_PAGE*(n+1)-1)].map do |item|
       [
         item.line_date,
-        item.narration,
-        item.nature ? item.nature.name : '-' ,
-        item.destination ? item.destination.name : '-',
+        item.narration.truncate(50),
+        item.nature ? item.nature.name.truncate(22) : '-' ,
+        item.destination ? item.destination.name.truncate(22) : '-',
         item.debit,
         item.credit
       ]
