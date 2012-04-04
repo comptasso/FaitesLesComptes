@@ -45,7 +45,11 @@ describe LinesController do
       response.should render_template(:index)
     end
 
-    it 'traiter le cas ou mois n est pas rempli'
+    it 'traiter le cas ou mois n est pas rempli' do
+      m = (Date.today.month)-1
+      get :index, :outcome_book_id=>@ob.id
+      response.should redirect_to(book_lines_path(@ob, :mois=>m))
+    end
   end
 
   describe 'GET edit' do
@@ -59,12 +63,13 @@ describe LinesController do
       assigns[:line]=@l
     end
 
+    it "should render edit" do
+      get :edit, :income_book_id=>@ib.id, :id=>@l.id
+      response.should render_template(:edit)
+    end
+
 
   end
-
-  
-
-
 
   describe 'POST delete' do 
     before(:each) do
@@ -111,6 +116,11 @@ describe LinesController do
       it 'new line date est préremplie' do
         get :new, income_book_id: @ib.id, mois: 4
         assigns[:line].line_date.should == Date.civil(2012,5,1)
+      end
+
+      it 'affiche la vue new' do
+        get :new, income_book_id: @ib.id, mois: 4
+        response.should render_template(:new)
       end
 
       it 'previous line existe' do

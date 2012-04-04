@@ -34,16 +34,13 @@ class ApplicationController < ActionController::Base
   # La fonctin retourne un objet Date ou nil si la string ne permet pas de former
   # une date valide
   #
+
+  # TODO mettre dans un before save
   def picker_to_date(string)
-    return string unless string.is_a?(String)
-    return nil if string.empty?
-    s=string.split('/')
-    return nil unless s.size==3
-    begin
-      return Date.civil(*s.reverse.map{|e| e.to_i})
-    rescue
-      nil
-    end
+    s = string.split('/')
+    Date.civil(*s.reverse.map{|e| e.to_i})
+  rescue
+    @period.guess_date
   end
 
   
