@@ -12,7 +12,7 @@
             <li class="list-label"><label class="select required control-label" for="pick_date_line">
                 <abbr title="exigé">*</abbr> Date</label></li>
           </ul>
-          <%= picker_date :pick_date_line, @period.start_date, @period.close_date , @line.line_date %>
+          <%= picker_date :line_pick_date, @period.start_date, @period.close_date , @line.pick_date %>
         </div>
         <%= f.input :narration,  :label=>'Libellé ', :jclabel_wrapper_html=>{:class=>'span2'}, input_html: {class: "span6" } %>
         </div>

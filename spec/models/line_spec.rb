@@ -9,12 +9,9 @@ describe Line do
   
   before(:each) do 
     create_minimal_organism
-#    @o=Organism.create!(title: 'test_line')
-#    @ib=IncomeBook.create!(organism_id: @o.id, title: 'Recettes')
-#    @ob=OutcomeBook.create!(organism_id:@o.id, title: "Dépenses")
-#    @p=Period.create!(:organism_id=>@o.id, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))
-#    @n=Nature.create!(name: 'Essai', period_id: @p.id)
   end
+
+
 
    describe "creation de ligne" do
     before(:each) do
@@ -91,6 +88,24 @@ describe Line do
     it "should belongs to a book" do
       @l.book_id=nil; @l.should_not be_valid
     end
+
+    describe 'attribut virtuel pick_date' do
+      it 'should answer to pick_date' do
+        @l.pick_date.should == '02/01/2012'
+      end
+
+      it "should answer to pick_date=" do
+        @l.pick_date = '03/04/2012'
+        @l.line_date.should == Date.civil(2012,4,3)
+      end
+
+      context "when date is invalid" do
+        it "doesn't raise error but add error to model" do
+          @l.pick_date = '31/04/2012'
+          @l.should have(1).errors 
+        end
+      end
+  end
 
     it 'line and book should be coherent' # un livre de recettes avec des crédits et un livre de dépenses avec des débits
   end

@@ -60,10 +60,11 @@ class LinesController < ApplicationController
   # POST /lines
   # POST /lines.json
   def create
-    flash[:date]= get_date # permet de transmettre la date à l'écriture suivante
+   # flash[:date]= get_date # permet de transmettre la date à l'écriture suivante
     @line = @book.lines.new(params[:line])
     respond_to do |format|
       if @line.save
+        flash[:date]=@line.line_date
         flash[:previous_line_id]=@line.id
         mois=(@line.line_date.month)-1
         format.html { redirect_to new_book_line_url(@book,mois: mois) }
@@ -151,10 +152,10 @@ class LinesController < ApplicationController
 
   
 
-  def get_date
-    # TODO voir ce qu'il se passe quand la date n'est pas valide ?
-    params[:line][:line_date]= picker_to_date(params[:pick_date_line])
-  end
+#  def get_date
+#    # TODO voir ce qu'il se passe quand la date n'est pas valide ?
+#    params[:line][:line_date]= picker_to_date(params[:pick_date_line])
+#  end
 
   
   # change period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice

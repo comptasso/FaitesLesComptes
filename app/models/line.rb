@@ -20,7 +20,6 @@ class Line < ActiveRecord::Base
   before_validation :sold_debit_credit # une ligne ne peut avoir debit et credit simultanément
   # TODO voir pour remplacer les champ par amount et boolean et faire des virtual attributes
 
-
   # pour interdire qu'une ligne ait un debit et un credit rempli.
   # FIXME : faire plutôt un validator qui crée une erreur sur ce cas de figure de toute façon anormal
   # et un autre pour éviter les doubles zeros
@@ -85,47 +84,62 @@ class Line < ActiveRecord::Base
     lines = Line.month(month)
     lines.sum(:credit) - lines.sum(:debit)
   end
-
-
-
-
-  def multiple_info 
-    if self.multiple 
-      # on veut avoir le nombre
-      t= Line.multiple(self.copied_id)
-      { nombre: t.size, first_date: t.first.line_date,
-        last_date: t.last.line_date,
-        narration: self.narration,
-        destination: self.destination_name,
-        nature: self.nature_name,
-        debit: self.debit,
-        credit: self.credit,
-        total: t.sum(:debit)+ t.sum(:credit),
-        copied_id: self.copied_id
-      }
-    end
+  
+  def pick_date
+    line_date ? (I18n::l line_date) : nil
   end
 
-
-
-  def repete(number, period)
-    d=self.line_date
-    self.multiple=true
-    self.copied_id=self.id
-    t=[self]
-    number.times do |i|
-      case period
-      when 'Semaines' then new_date = d+(i+1)*7
-      when 'Mois' then new_date= d.months_since(i+1)
-      when 'Trimestres' then new_date=d.months_since(3*(i+1))
-      end
-      t << self.copy(new_date)
-    end
-    t.each { |l| l.save}
-    return t.size
-  rescue
-    self.multiple=false
+  def pick_date=(string)
+    s = string.split('/')
+    self.line_date = Date.civil(*s.reverse.map{|e| e.to_i})
+  rescue ArgumentError
+    self.errors[:line_date] << 'Date invalide'
+    nil
   end
+  
+
+
+
+
+
+
+#  def multiple_info
+#    if self.multiple
+#      # on veut avoir le nombre
+#      t= Line.multiple(self.copied_id)
+#      { nombre: t.size, first_date: t.first.line_date,
+#        last_date: t.last.line_date,
+#        narration: self.narration,
+#        destination: self.destination_name,
+#        nature: self.nature_name,
+#        debit: self.debit,
+#        credit: self.credit,
+#        total: t.sum(:debit)+ t.sum(:credit),
+#        copied_id: self.copied_id
+#      }
+#    end
+#  end
+#
+#
+#
+#  def repete(number, period)
+#    d=self.line_date
+#    self.multiple=true
+#    self.copied_id=self.id
+#    t=[self]
+#    number.times do |i|
+#      case period
+#      when 'Semaines' then new_date = d+(i+1)*7
+#      when 'Mois' then new_date= d.months_since(i+1)
+#      when 'Trimestres' then new_date=d.months_since(3*(i+1))
+#      end
+#      t << self.copy(new_date)
+#    end
+#    t.each { |l| l.save}
+#    return t.size
+#  rescue
+#    self.multiple=false
+#  end
 
   
   # crée une ligne à partir d'une ligne existante en changeant la date

@@ -89,9 +89,16 @@ describe LinesController do
 
  describe 'POST create' do
    context "post successful" do
+     it "creates a line" do
+       post :create, :income_book_id=>@ib.id,
+         :line=>{ :nature_id=>@n.id,  :pick_date=>'01/04/2012',  :narration=>'ligne valide', :credit=>25.00, :payment_mode=>'Chèque',
+       :bank_account_id=>@ba.id}, commit: 'Créer'
+       assigns[:line].should be_valid
+     end
+
      it 'fill a previous_line_id flash whenline is saved' do
-       post :create, :income_book_id=>@ib.id,:pick_date_line=>'01/04/2012',
-         :line=>{ :nature_id=>@n.id,    :narration=>'ligne valide', :credit=>25.00, :payment_mode=>'Chèque',
+       post :create, :income_book_id=>@ib.id,
+         :line=>{ :pick_date=>'01/04/2012',:nature_id=>@n.id,    :narration=>'ligne valide', :credit=>25.00, :payment_mode=>'Chèque',
        :bank_account_id=>@ba.id}, commit: 'Créer'
        flash[:previous_line_id].should ==  Line.order('id ASC').last.id
      end   
@@ -108,8 +115,8 @@ describe LinesController do
 
     context 'Avec une ligne créée précédemment' do
       before(:each) do
-        post :create, :income_book_id=>@ib.id,:pick_date_line=>'01/05/2012',
-         :line=>{ :nature_id=>@n.id,    :narration=>'ligne valide pour tester le flash de previous line', :credit=>25.00, :payment_mode=>'Chèque',
+        post :create, :income_book_id=>@ib.id,
+         :line=>{ :nature_id=>@n.id,  :pick_date=>'01/05/2012',  :narration=>'ligne valide pour tester le flash de previous line', :credit=>25.00, :payment_mode=>'Chèque',
        :bank_account_id=>@ba.id}, commit: 'Créer'
       end
 
