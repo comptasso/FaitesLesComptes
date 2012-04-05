@@ -21,11 +21,16 @@ before(:each) do
 
   it "renders new line  form" do
     render
-
     # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "form", :action => book_lines_path(book), :method => "post" do
-      assert_select "input#pick_date_line", :name => "pick_date_line"
+      assert_select "form", :action => book_lines_path(book), :method => "post" do
+      assert_select "input#line_pick_date", :name => "line[pick_date]"
     end
+  end
+
+  it 'shows the required mark for 5 fields' do
+    pending
+    render
+    response.should contain('*', count: 5)
   end
 end
 

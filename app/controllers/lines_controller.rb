@@ -74,7 +74,7 @@ class LinesController < ApplicationController
         format.json { render json: @line.errors, status: :unprocessable_entity }
         # format.js
       end
-    end
+    end 
   end
 
   def edit
@@ -86,7 +86,7 @@ class LinesController < ApplicationController
   # PUT /lines/1
   # PUT /lines/1.json
   def update
-    get_date # transforme la params[:picker_to_date] en params[:line][:line_date]
+    
     @line = @book.lines.find(params[:id])
   
     respond_to do |format|
@@ -151,11 +151,6 @@ class LinesController < ApplicationController
   end
 
   
-
-#  def get_date
-#    # TODO voir ce qu'il se passe quand la date n'est pas valide ?
-#    params[:line][:line_date]= picker_to_date(params[:pick_date_line])
-#  end
 
   
   # change period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice

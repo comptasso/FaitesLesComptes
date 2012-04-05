@@ -398,7 +398,9 @@ OK - modif des fieldset et legend sur toutes les vues
 OK - hover rend illisible le style des menus
 OK - changer public en saisie/consult dans le menu admin et compta
 OK - dans line#new voir comment on gère les erreurs avec nature blank?
-quand on rentre une date erronée, cela crée une erreur
+OK - quand on rentre une date erronée, cela crée une erreur
+il faudrait une étoile pour les champs crédit et débit
+il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date
 admin_organism_index : l'icone restauration devrait avoir une flèche
 dans admin#naturenew (form), le rattachement à un compte devrait être disable si pas de compte
 quand on efface un organisme qui n'a pas d'exercice il y a une erreur

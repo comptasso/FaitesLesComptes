@@ -12,6 +12,17 @@ describe LinesController do
     create_minimal_organism   
   end
 
+  describe 'POST update' do
+    before(:each) do
+      @l=@ib.lines.create!(:line_date=>Date.today,narration: 'libellé test', credit: 25,:nature_id=>@n.id, payment_mode: 'Chèque', bank_account_id: @ba.id)
+    end
+
+    it ' à faire' do
+      put :update,book_id: @ib.id,  id: @l.id, line: {narration: 'libellé corrigé'}
+      Line.find(@l.id).narration.should == 'libellé corrigé'
+    end
+  end
+
   describe 'GET index' do
     it "should find the right book" do
      # controller.should_receive(:find_book)

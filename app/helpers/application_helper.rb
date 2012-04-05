@@ -30,7 +30,7 @@ module ApplicationHelper
     text_field_tag(field,{},
       {'data-jcmin'=>"#{date_min.to_formatted_s(:date_picker)}",
       'data-jcmax'=>"#{date_max.to_formatted_s(:date_picker)}",
-      :class=>'input_date span2', :value=>value, :name=>"line[pick_date]"})
+      :class=>'input_date span2', :value=>value})
    end
   end
 
