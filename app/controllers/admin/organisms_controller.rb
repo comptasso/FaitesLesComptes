@@ -17,7 +17,10 @@ class Admin::OrganismsController < Admin::ApplicationController
   # GET /organisms/1
   # GET /organisms/1.json
   def show
+    reset_session if (params[:id] != session[:organism])
     @organism = Organism.find(params[:id])
+    session[:organism] = @organism.id if @organism
+    
     if @organism.periods.empty?
       flash[:alert]= 'Vous devez créer un exercice pour cet organisme'
       redirect_to new_admin_organism_period_url(@organism)
