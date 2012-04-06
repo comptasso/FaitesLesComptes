@@ -33,7 +33,7 @@ module LinesHelper
   def lines_to_csv
       CSV.generate do |csv|
       csv << ['Date', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement']
-    @lines.each do |line|
+    @monthly_extract.lines.each do |line|
       csv << line.to_csv
     end
   end

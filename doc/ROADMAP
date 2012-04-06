@@ -400,7 +400,7 @@ OK - changer public en saisie/consult dans le menu admin et compta
 OK - dans line#new voir comment on gère les erreurs avec nature blank?
 OK - quand on rentre une date erronée, cela crée une erreur
 OK - Le changement d'organisme devrait supprimer la session[:period]
-adapter lines csv à monthly_extract
+OK -adapter lines csv à monthly_extract
 mettre un titre d'onglet plus adapaté pour les pdf
 Affichage du message caisse <b>porte_monnaie<b> alors que je veux du gras
 il faudrait une étoile pour les champs crédit et débit
