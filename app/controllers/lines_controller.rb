@@ -23,7 +23,7 @@ class LinesController < ApplicationController
       format.html # index.html.erb
       format.json { render json: @lines }
       format.pdf { @listing = Listing.new(@period, @mois, @book) }
-      format.csv {render @monthly_extract.to_csv,:layout=>false}
+      format.csv {render :layout=>false}
   
     end
   end
