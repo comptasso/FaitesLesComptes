@@ -33,9 +33,11 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
     @check_deposit = CheckDeposit.new(deposit_date: Date.today)
     if params[:bank_account_id]
       @bank_account=@organism.bank_accounts.find(params[:bank_account_id])
-      @check_deposit.bank_account_id = @bank_account.id
+    else
+      @bank_account = @organism.bank_accounts.first
     end
-    @check_deposit.pick_all_checks # par défaut on remet tous les chèques disponibles
+    @check_deposit.bank_account_id = @bank_account.id
+    @check_deposit.pick_all_checks(@organism) # par défaut on remet tous les chèques disponibles pour cet organisme
   end
 
 
