@@ -41,11 +41,11 @@ class Line < ActiveRecord::Base
   validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
     :message => "valeur inconnue" }
   validates_with NotNullAmount
-  # validates :book_id, presence: true
+  validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
+  validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire
+ 
   # FIXME
   #  validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit=>true if :locked?
-
-  
 
   before_save :check_bank_and_cash_ids
 
