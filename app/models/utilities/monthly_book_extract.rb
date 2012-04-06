@@ -35,20 +35,31 @@ class Utilities::MonthlyBookExtract
     credit_before + total_credit - debit_before - total_debit
   end
 
+
+  def to_csv
+    CSV.generate do |csv|
+      csv << ['Date', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement']
+      lines.each do |line|
+        csv << line.to_csv
+      end
+    end
+  end
+
+
   
 
-#  def cumulated_debit_before(date)
-#    self.lines.where('line_date < ?', date).sum(:debit)
-#  end
-#  def cumulated_credit_before(date)
-#    self.lines.where('line_date < ?', date).sum(:credit)
-#  end
-#   def cumulated_debit_at(date)
-#    self.lines.where('line_date <= ?', date).sum(:debit)
-#  end
-#  def cumulated_credit_at(date)
-#    self.lines.where('line_date <= ?', date).sum(:credit)
-#  end
+    #  def cumulated_debit_before(date)
+    #    self.lines.where('line_date < ?', date).sum(:debit)
+    #  end
+    #  def cumulated_credit_before(date)
+    #    self.lines.where('line_date < ?', date).sum(:credit)
+    #  end
+    #   def cumulated_debit_at(date)
+    #    self.lines.where('line_date <= ?', date).sum(:debit)
+    #  end
+    #  def cumulated_credit_at(date)
+    #    self.lines.where('line_date <= ?', date).sum(:credit)
+    #  end
 
 
-end
+  end
