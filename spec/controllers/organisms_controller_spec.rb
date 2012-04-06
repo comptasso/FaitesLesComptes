@@ -102,21 +102,46 @@ describe OrganismsController do
       assigns(:organism).should == o
     end
 
-    it 'period doit être recherché par la session' do
-      session[:period] = p.id
-      o.stub_chain(:periods, :find).with(p.id).and_return(p)
-      get :show, :id=>o.id
-      assigns(:period).should == p
+    describe 'gestion de la session organism' do
+      it 'fill session[:organism]' do
+        get :show, :id=>o.id
+        session[:organism].should == o.id
+      end
+
+      it 'si on réappelle show pour le même organisme on ne change pas la session' do
+        session[:organism] = o.id
+        get :show, :id=>o.id
+        session[:organism].should == o.id
+      end
+
+      it 'si on appelle show pour un autre organisme, on change la session' do
+        session[:organism] = o.id.to_s
+        o2 = stub_model(Organism, title: 'deuxième Organisme')
+        Organism.should_receive(:find).with(o2.id.to_s).and_return(o2)
+        get :show, :id => o2.id
+        session[:organism].should == o2.id
+        session[:period].should be_nil
+      end
+
     end
 
-    it "si pas de session alors period est la dernière" do
-      session[:period]=nil
-      o.stub_chain(:periods, :find).with(nil).and_raise('error')
-      o.stub_chain(:periods, :last).and_return(p)
-      get :show, :id=>o.id
-      assigns(:period).should == p
-      session[:period].should == p.id
 
+    describe 'gestion de la session period' do
+      it 'period doit être recherché par la session' do
+        session[:period] = p.id
+        o.stub_chain(:periods, :find).with(p.id).and_return(p)
+        get :show, :id=>o.id
+        assigns(:period).should == p
+      end
+
+      it "si pas de session alors period est la dernière" do
+        session[:period]=nil
+        o.stub_chain(:periods, :find).with(nil).and_raise('error')
+        o.stub_chain(:periods, :last).and_return(p)
+        get :show, :id=>o.id
+        assigns(:period).should == p
+        session[:period].should == p.id
+      end
     end
 
     it 'assign l array pave' do

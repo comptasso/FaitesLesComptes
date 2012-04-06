@@ -2,6 +2,8 @@
 
 class OrganismsController < ApplicationController
 
+  
+
   # renvoie vers new s'il n'y pas d'organisme
   # et vers show s'il n'y a qu'un seul organisme
   # si plus d'un affiche la vue par défaut
@@ -15,12 +17,15 @@ class OrganismsController < ApplicationController
     else
       @organisms=Organism.all
     end
-  end 
+  end
  
   # GET /organisms/1 test watcher
   # GET /organisms/1.json
   def show
+    reset_session if (params[:id] != session[:organism])
     @organism = Organism.find(params[:id])
+    session[:organism] = @organism.id if @organism
+
     if @organism.periods.empty?
       flash[:alert]= 'Vous devez créer au moins un exercice pour cet organisme'
       redirect_to new_admin_organism_period_url(@organism)
