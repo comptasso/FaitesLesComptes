@@ -116,10 +116,10 @@ jQuery(function (){
 function $f_td_bank_cash(){
 
     // s'il y a plus d'un élément dans td_bank et si le mode de payemnt est autre que Espèces alors afficher td_bank et masquer td_cash
-    if ( ($('#line_payment_mode').val() != 'Espèces'))
+    if ( ($('#line_payment_mode').val() != 'Espèces')  )
     {
         $('#td_cash').hide();
-        if  ($('#line_bank_account_id option').size() > 1)
+        if  (($('#line_bank_account_id option').size() > 1) && ($('#line_payment_mode').val() != 'Chèque'))
         {
             $('#td_bank').show();
         }
@@ -133,6 +133,13 @@ function $f_td_bank_cash(){
         {
             $('#td_cash').show();
         }
+    }
+
+     // si le mode de paiement est chèque alors il ne faut rien afficher. La remise décidera de la banque'
+    if (($('#line_payment_mode').val() == 'Chèque'))
+    {
+        $('#td_bank').hide();
+        $('#td_cash').hide();
     }
 }
 

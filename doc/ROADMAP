@@ -402,7 +402,7 @@ OK - quand on rentre une date erronée, cela crée une erreur
 OK - Le changement d'organisme devrait supprimer la session[:period]
 OK -adapter lines csv à monthly_extract
 OK - mettre un titre d'onglet plus adapaté pour les pdf
-Quand on enregistre un chèque, le champ banque ne devrait pas apparaître (ce devrait être lors de la remise)
+OK - Quand on enregistre un chèque, le champ banque ne devrait pas apparaître (ce devrait être lors de la remise)
 Affichage du message caisse <b>porte_monnaie<b> alors que je veux du gras
 Les icones des pavés sont passées à gauche
 OK - ajouter remises chèques dans le menu banques
