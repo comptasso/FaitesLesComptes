@@ -1,0 +1,25 @@
+/*
+    Document   : periods.css
+    Created on : 7 avr. 2012, 18:52:40
+    Author     : jcl
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/*
+   TODO customize this sample style
+   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+*/
+
+.admin_periods {
+    p {
+        font-style: italic;
+        padding-top: 6px;
+        font-weight: smaller;
+        color: gray;
+        }
+
+    select {
+         margin-right: 8px;
+            }
+}

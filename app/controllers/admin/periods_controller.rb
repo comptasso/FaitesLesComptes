@@ -19,7 +19,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   def show
     @period=Period.find(params[:id])
     session[:period]=@period.id
-    redirect_to admin_organism_periods_path(@organism)
+    redirect_to admin_organism_periods_path(@organism) 
   end
 
   
@@ -27,19 +27,20 @@ class Admin::PeriodsController < Admin::ApplicationController
   # GET /periods/new
   # GET /periods/new.json
   def new
-    @start_date_picker=false
+    @disable_start_date = true
+    @begin_year = @end_year = nil
     if @organism.periods.any?
       start_date=(@organism.periods.last.close_date) +1
-      @start_date_picker=true
+      # begin_year and end_year limit the select in the the view
+      @begin_year = start_date.year
+      @end_year = @begin_year + 2 #
     else
+      @disable_start_date = false
       start_date=Date.today.beginning_of_year
     end
-    close_date=start_date.years_since(1)-1
+    close_date=start_date.years_since(1)-1 
     @period = @organism.periods.new(:start_date=>start_date, :close_date=>close_date)
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @period }
-    end
+    
   end
 
   # GET /periods/1/edit
@@ -106,7 +107,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   # POST création du plan comptable après le select_plan
   def create_plan
     @period = @organism.periods.find(params[:id])
-   nb_accounts=Utilities::PlanComptable.new.create_accounts(@period.id, params[:fichier])
+    nb_accounts=Utilities::PlanComptable.new.create_accounts(@period.id, params[:fichier])
     flash[:notice] = "#{nb_accounts} comptes ont été créés"
     
   rescue

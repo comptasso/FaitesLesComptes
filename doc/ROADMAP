@@ -405,6 +405,7 @@ OK - mettre un titre d'onglet plus adapaté pour les pdf
 OK - Quand on enregistre un chèque, le champ banque ne devrait pas apparaître (ce devrait être lors de la remise)
 Affichage du message caisse <b>porte_monnaie<b> alors que je veux du gras
 Les icones des pavés sont passées à gauche
+Le menu admin n'identifie pas l'onglet sur lequel on est
 OK - ajouter remises chèques dans le menu banques
 OK - il faudrait une étoile pour les champs crédit et débit
 il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date

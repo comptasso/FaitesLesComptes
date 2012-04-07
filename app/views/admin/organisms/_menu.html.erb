@@ -31,18 +31,18 @@
       </ul>
     </li>
 
-    <li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
+    <li class="dropdown <%= 'active' if controller.controller_name =='bankaccounts'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">BANQUES<b class="caret"></b></a>
       <%= admin_menu_banks(@organism.bank_accounts) %>
     </li>
 
-    <li class="dropdown <%= 'active' if controller.controller_name =='admin_cashes'  %>">
+    <li class="dropdown <%= 'active' if controller.controller_name =='cashes'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">CAISSES<b class="caret"></b></a>
       <%= admin_menu_cashes(@organism.cashes) %>
     </li>
 
 
-    <li class="dropdown <%= 'active' if controller.controller_name =='admin_periods'  %>">
+    <li class="dropdown <%= 'active' if controller.controller_name =='periods'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">EXERCICES<b class="caret"></b></a>
       <ul class="dropdown-menu">
         <% @organism.periods.reject {|r| r.new_record? }.each do |c| %>
