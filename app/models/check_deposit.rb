@@ -97,6 +97,18 @@ class CheckDeposit < ActiveRecord::Base
     org.pending_checks.all.each {|l| checks << l}
   end
 
+  def pick_date
+    deposit_date ? (I18n::l deposit_date) : nil
+  end
+
+  def pick_date=(string)
+    s = string.split('/')
+    self.deposit_date = Date.civil(*s.reverse.map{|e| e.to_i})
+  rescue ArgumentError
+    self.errors[:deposit_date] << 'Date invalide'
+    nil
+  end
+
   private
 
  # appelé par before_save pour éviter les remises chèques vides

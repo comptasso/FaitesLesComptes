@@ -1,25 +1,40 @@
-<%  SimpleForm.wrapper_tag = :div %>
+<div class="inputs row-fluid" id="new_check_deposit" >
 
 <%= simple_form_for([@organism, @bank_account, @check_deposit]) do |f| %>
   <%= f.error_notification %>
 
-  <div class="inputs">
-   
-    <label>Date</label>
-     <%= picker_date :pick_date, Date.today.years_ago(5), Date.today.years_since(5) , @check_deposit.deposit_date %>
-   
-    
-    <%= f.association :bank_account, :collection => @organism.bank_accounts.map {|b| [b.number, b.id]}, :prompt => "Numero de compte ?", :label=>'Compte' %>
-  
+   <div class="row-fluid">
+      <div class="span12">
+        <div class="control-group select required">
+          <ul class="span2">
+            <li class="list-label"><label class="select required control-label" for="pick_date_line">
+                <abbr title="exigé">*</abbr> Date</label></li>
+          </ul>
+          <%= picker_date 'check_deposit[pick_date]', Date.today.years_ago(5), Date.today.years_since(5) , @check_deposit.pick_date %>
+        </div>
+          <%= f.association :bank_account,  :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: "span2"}, :collection => @organism.bank_accounts.map {|b| [b.number, b.id]}, :prompt => "Numero de compte ?", :label=>'Compte' %>
+          <%= f.association :checks, :jclabel_wrapper_html=>{class: "span1"}, :label=> 'Chèques', input_html: {class: "span4", multiple: true, size: 10},
+                :collection => options_for_checks(@check_deposit), :as => :grouped_select, :group_method => :checks, :group_label_method=> :name,
+              :label_method=> :check_for_select, :value_method=> :id %>
+      <%#          :collection => option_groups_from_collection_for_select( options_for_checks(@check_deposit), :checks, :name, :id, :check_for_select) %>
+           
 
-    <label>Chèques</label>
-    <%= f.grouped_collection_select :check_ids, options_for_checks(@check_deposit), :checks, :name, :id, :check_for_select,{}, {multiple: true, size: 10}  %>
-     
+          <%#= f.grouped_collection_select :check_ids, options_for_checks(@check_deposit), :checks, :name, :id, :check_for_select,{}, {}  %>
+
     <%# f.association :checks, :collection => @organism.lines.non_depose.map {|c| [(l c.line_date)+ ' '+ c.credit.to_f.to_s, c.id]},
       :prompt => 'Chèques à remettre', :label=> 'Chèques' , :input_html=> {size: 10 } %>
 
 
-    <%= f.button :submit, value: 'Valider' %>
+      </div>
+
+       <div class="row">
+          <div class="offset2 span2 clear">
+             <%=  f.button :submit, :id=>'edit_check_deposit_button', :class=> "btn-primary span2" %>
+          </div>
+       </div>
+
+
 
     </div>
   <% end %>
+</div>

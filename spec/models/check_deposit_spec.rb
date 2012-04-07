@@ -43,6 +43,14 @@ describe CheckDeposit do
     end
   end
 
+  describe "création d'un chèque" do
+    it "save the right date" do
+    cd = @ba.check_deposits.new pick_date: '01/04/2012'
+    cd.pick_all_checks
+    cd.save!
+    cd.deposit_date.should == Date.civil(2012,4,1)
+  end
+  end 
 
   describe "controle de la validité : un check_deposit" do
 
@@ -51,7 +59,7 @@ describe CheckDeposit do
     end
 
     it "n'est valide qu'avec un bank_account" do
-      @check_deposit.bank_account.should == @ba
+      @check_deposit.bank_account.should == @ba 
     end
     
     

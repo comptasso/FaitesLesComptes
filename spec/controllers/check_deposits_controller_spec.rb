@@ -12,10 +12,10 @@ describe CheckDepositsController do
     @b=@o.income_books.create!(title: 'Recettes')
     @n=@p_2012.natures.create!(name: 'ventes')
     @n_2011=@p_2011.natures.create!(name: 'ventes')
-    @l1=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
-    @l2=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 101, payment_mode:'Chèque', nature: @n)
-    @l3=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
-    @l4=@b.lines.create!(line_date: Date.today - 365 ,:narration=>'ligne de test', credit: 150, payment_mode:'Chèque', nature: @n_2011) # une écriture de 2011
+    @l1=@b.lines.create!(line_date: (Date.today-1),:narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
+    @l2=@b.lines.create!(line_date: (Date.today-2),:narration=>'ligne de test', credit: 101, payment_mode:'Chèque', nature: @n)
+    @l3=@b.lines.create!(line_date: (Date.today-3),:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
+    @l4=@b.lines.create!(line_date: (Date.today - 365) ,:narration=>'ligne de test', credit: 150, payment_mode:'Chèque', nature: @n_2011) # une écriture de 2011
     @cd1= @ba.check_deposits.new(deposit_date: Date.today)
     @cd1.checks << @l1
     @cd1.save!
@@ -81,11 +81,20 @@ describe CheckDepositsController do
 
      
       it "ne prend que les remises de chèques qui sont dans l'exercice demandé" do
-        @cd4=@ba.check_deposits.new(deposit_date: Date.today-365)
+        c= CheckDeposit.count
+        @cd4=@ba.check_deposits.new(deposit_date: (Date.today)-365)
         @cd4.checks << @l4
-        @cd4.save!
+        @cd4.save
+        CheckDeposit.count.should == c+1
+        @cd4.deposit_date.should == (Date.today)-365
+        get :index, :bank_account_id=>@ba2.id,  :organism_id=>@o.id.to_s
+        assigns[:check_deposits].should == [@cd2]
+        pending 'assign[:period] does not change @period'
         session[:period]= @p_2011.id
+        # get :controller=>:period, :method=>:change, :id=>@p_2011.id
         get :index, :bank_account_id=>@ba.id,  :organism_id=>@o.id.to_s
+        assigns[:period].should == @p_2011
+        assigns[:period].start_date.should == (Date.today - 365).beginning_of_year
         assigns(:check_deposits).should == [@cd4]
       end
 
@@ -113,6 +122,18 @@ describe CheckDepositsController do
       end
     end
 
-  end
-end # fin de index
+  end # fin de index
 
+
+describe 'GET create' do
+  context "when check_deposit is valid" do
+    it 'should save the check deposit' 
+    
+    it 'should have the right date' do
+      post :create, :bank_account_id=>@ba2.id, :organism_id=>@o.id.to_s,
+        :check_deposit=>{:pick_date=>'02/04/2012', :check_ids=>[@l1.id, @l2.id]}
+    end
+  end
+end
+
+  end

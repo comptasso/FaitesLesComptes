@@ -8,13 +8,13 @@ class CheckDepositsController < ApplicationController
 
   before_filter :find_bank_account, except: :new
   before_filter :find_non_deposited_checks
-  before_filter :get_pick_date, only: [:create,:update]
+  
 
   # GET /check_deposits
   def index
     flash[:notice]="Il y a #{@nb_to_pick} chèques à remettre à l'encaissement \
 pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick > 0
-    @check_deposits = @bank_account.check_deposits.where(['deposit_date > ? and deposit_date < ?', @period.start_date, @period.close_date]).all
+    @check_deposits = @bank_account.check_deposits.where(['deposit_date >= ? and deposit_date <= ?', @period.start_date, @period.close_date]).all
   end
   
   # GET /check_deposits/1
@@ -27,14 +27,14 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
   # GET /check_deposits/new.json
   def new
     if @nb_to_pick < 1
-      redirect_to  bank_account_check_deposits_url(@bank_account), alert: "Il n'y a pas de chèques à remettre"
+      redirect_to  :back, alert: "Il n'y a pas de chèques à remettre"
       return
     end
     @check_deposit = CheckDeposit.new(deposit_date: Date.today)
     if params[:bank_account_id]
       @bank_account=@organism.bank_accounts.find(params[:bank_account_id])
     else
-      @bank_account = @organism.bank_accounts.first
+      @bank_account = @organism.bank_accounts.first 
     end
     @check_deposit.bank_account_id = @bank_account.id
     @check_deposit.pick_all_checks(@organism) # par défaut on remet tous les chèques disponibles pour cet organisme
@@ -87,9 +87,7 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
   private
 
   def find_bank_account
-    bas= @organism.bank_accounts
-    @bank_account= bas.find(params[:bank_account_id])
-   # @bank_account=@organism.bank_accounts.find(params[:bank_account_id])
+    @bank_account=@organism.bank_accounts.find(params[:bank_account_id])
   end
 
   def find_non_deposited_checks
@@ -98,7 +96,5 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
     @nb_to_pick=CheckDeposit.nb_to_pick(@organism)
   end 
 
-  def get_pick_date
-    params[:check_deposit][:deposit_date]= picker_to_date(params[:pick_date])
-  end
+  
 end

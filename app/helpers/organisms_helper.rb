@@ -86,6 +86,7 @@ module OrganismsHelper
       html = []
       banks.each do |b|
          inner =  content_tag(:li, :class=>"nav-header") { link_to b.to_s, organism_bank_account_path(@organism,b)}
+         inner += content_tag(:li) { link_to 'Liste remises', organism_bank_account_check_deposits_path(@organism,b)}
          inner += content_tag(:li) { link_to 'Nlle Remise', new_organism_bank_account_check_deposit_path(@organism,b)}
          inner += content_tag(:li) { link_to 'Pointage', pointage_organism_bank_account_bank_extract_path(@organism,b, b.first_bank_extract_to_point)}  if b.unpointed_bank_extract?
          inner += content_tag(:li) { link_to 'Extraits de comptes', organism_bank_account_bank_extracts_path(@organism, b)}

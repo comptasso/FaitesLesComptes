@@ -402,14 +402,18 @@ OK - quand on rentre une date erronée, cela crée une erreur
 OK - Le changement d'organisme devrait supprimer la session[:period]
 OK -adapter lines csv à monthly_extract
 mettre un titre d'onglet plus adapaté pour les pdf
+Quand on enregistre un chèque, le champ banque ne devrait pas apparaître (ce devrait être lors de la remise)
 Affichage du message caisse <b>porte_monnaie<b> alors que je veux du gras
+Les icones des pavés sont passées à gauche
+ajouter remises chèques dans le menu banques
 OK - il faudrait une étoile pour les champs crédit et débit
 il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date
 admin_organism_index : l'icone restauration devrait avoir une flèche
 dans admin#naturenew (form), le rattachement à un compte devrait être disable si pas de compte
 quand on efface un organisme qui n'a pas d'exercice il y a une erreur
 alignement des nombres dans les cash_control
-l'icone plus pour la remise de chèque déclanche une erreur
+OK - l'icone plus pour la remise de chèque déclanche une erreur
+Traiter le cas où l'on n'a pas encore de banque (crée une erreur ?)
 
 modifier la zone message pour que les messages soient générés par les modèles et non par le helper
 
