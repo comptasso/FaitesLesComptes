@@ -403,11 +403,12 @@ OK - Le changement d'organisme devrait supprimer la session[:period]
 OK -adapter lines csv à monthly_extract
 OK - mettre un titre d'onglet plus adapaté pour les pdf
 OK - Quand on enregistre un chèque, le champ banque ne devrait pas apparaître (ce devrait être lors de la remise)
-Affichage du message caisse <b>porte_monnaie<b> alors que je veux du gras
-Les icones des pavés sont passées à gauche
-Le menu admin n'identifie pas l'onglet sur lequel on est
+OK - Affichage du message caisse <b>porte_monnaie<b> alors que je veux du gras
+OK - Les icones des pavés sont passées à gauche
+OK - Le menu admin n'identifie pas l'onglet sur lequel on est
 OK - ajouter remises chèques dans le menu banques
 OK - il faudrait une étoile pour les champs crédit et débit
+on ne peut plus modifier check_deposit
 il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date
 admin_organism_index : l'icone restauration devrait avoir une flèche
 dans admin#naturenew (form), le rattachement à un compte devrait être disable si pas de compte

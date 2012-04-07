@@ -41,7 +41,7 @@ module OrganismsHelper
         cash_control = ca.cash_controls.order('date ASC').last
         delta =((cash_control.amount - ca.sold(cash_control.date)).abs)
         if delta > 0.001
-          info[:text] = "Caisse <b>#{sanitize ca.name}</b> : Ecart de caisse de  #{delta}" if delta > 0.001
+          info[:text] = "Caisse <b>#{sanitize ca.name}</b> : Ecart de caisse de  #{delta}".html_safe if delta > 0.001
           info[:icon] = icon_to 'detail.png', cash_cash_control_path(ca, cash_control)
           m << info
         end
