@@ -1,4 +1,4 @@
-prawn_document(:page_size => 'A4', :page_layout => :landscape) do |pdf|
+prawn_document(:filename=>"#{@organism.title}-#{@book.title}-#{l Time.now}.pdf", :page_size => 'A4', :page_layout => :landscape) do |pdf|
 
     width=pdf.bounds.right
     time=l Time.now
