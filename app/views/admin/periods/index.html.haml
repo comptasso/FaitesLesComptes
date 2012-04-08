@@ -1,0 +1,30 @@
+= content_for :menu do
+  = icon_to 'nouveau.png',new_admin_organism_period_path(@organism), :alt=>'Nouvel exercice',
+    :title=>'Créer un nouvel exercice' unless @organism.nb_open_periods >= 2 
+
+.champ
+  %h3 Liste des exercices
+      
+  - unless @periods.empty?
+    .row-fluid
+      %table.table-striped.table-bordered.table-condensed.span6(cellpadding="0" cellspacing="0" border="0")
+        %thead
+          %tr
+            %th.span1 Début
+            %th.span1 Fin
+            %th.span1 Statut
+            %th.span3 Actions
+
+
+        %tbody
+          - @periods.each do |period|
+            %tr
+
+              %td=l period.start_date
+              %td=l period.close_date
+              %td= period.open? ? 'Ouvert' : 'Fermé'
+              %td
+                %span= link_to 'Clôre', close_admin_organism_period_path(@organism, period) if period.closable?
+                %span= link_to 'Ecritures non verrouillées', admin_organism_period_lines_path(@organism, period, :status=>'open') unless period.closable?
+                %span= icon_to 'supprimer.png', [:admin, @organism, period], confirm: 'Etes vous sur ?', method: :delete
+

@@ -22,7 +22,11 @@ class Organism < ActiveRecord::Base
 
    # retourne le nombre d'exercices ouverts de l'organisme
   def nb_open_periods
-    Period.where('organism_id=? AND open = ?', self.id, true).count
+    periods.where('open = ?', true).count
+  end
+
+  def max_open_periods?
+    nb_open_periods >=2 ? true :false
   end
 
   def number_of_non_deposited_checks

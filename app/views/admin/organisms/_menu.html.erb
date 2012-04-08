@@ -47,9 +47,10 @@
       <ul class="dropdown-menu">
         <% @organism.periods.reject {|r| r.new_record? }.each do |c| %>
           <li><%= link_to c.exercice, admin_organism_period_path(@organism, c) %></li>
-          <li><%= link_to 'Supprimer', [:admin, @organism, c], confirm: 'Etes vous sur', method: :delete %></li>
+         
         <% end %>
-        <li><%= link_to 'Nouveau', new_admin_organism_period_path(@organism) %></li>
+        <%=  content_tag(:li, :class=>"divider"){} %>
+        <li><%= link_to_unless(@organism.max_open_periods?, 'Nouveau', new_admin_organism_period_path(@organism)) {|name| content_tag(:span, :class=>'disable') {name} }%></li>
       </ul>
     </li>
 
