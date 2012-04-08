@@ -203,6 +203,7 @@ fr:
       nature:
         name: Nom
         comment: Commentaire
+        Depenses: Dépenses
       bank_extract:
         begin_sold: 'Solde initial'
         end_sold: 'Solde final'
@@ -261,6 +262,12 @@ fr:
         attributes:
           number:
             invalid: "Numéro invalide"
+      nature:
+        attributes:
+          name:
+            blank: 'champ obligatoire'
+          income_outcome:
+            blank: 'champ obligatoire'
 
   helpers:
     select:

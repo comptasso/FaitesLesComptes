@@ -20,6 +20,8 @@ class Organism < ActiveRecord::Base
 
   after_create :create_default
 
+  validates :title, :presence=>true
+
    # retourne le nombre d'exercices ouverts de l'organisme
   def nb_open_periods
     periods.where('open = ?', true).count
