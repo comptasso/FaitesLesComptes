@@ -133,7 +133,13 @@ class Period < ActiveRecord::Base
     self.update_attribute(:open, false) if self.closable?
   end
 
+  def recettes_accounts
+    accounts.classe_7.all
+  end
 
+  def depenses_accounts
+    accounts.classe_6.all
+  end
  
   # TODO à revoir avec les fonctions de type distance in ...
   def nb_months

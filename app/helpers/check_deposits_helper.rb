@@ -14,9 +14,9 @@ end
 
 # Petite classe pour construire la sélection des chèques d'une remise de chèques
 # Cette classe permet de construire un groupe d'options pour la remise
-# Usage : OptionsForSelect('Chèques inclus', :target, check_deposit)
+# Usage : OptionsForCheckSelect('Chèques inclus', :target, check_deposit)
 # Le type peut être target (déja dans la remise de chèques) ou :tank (le réservoir)
-class OptionsForSelect
+class OptionsForChecksSelect
   attr_reader:name
 
   def initialize(titre, type, check_deposit)
@@ -42,7 +42,7 @@ end
 # Helper permettant de construire les options pour le form
 #
 def options_for_checks(check_deposit)
-  [OptionsForSelect.new('Déja inclus', :target, check_deposit), OptionsForSelect.new('Non inclus',:tank, check_deposit)]
+  [OptionsForChecksSelect.new('Déja inclus', :target, check_deposit), OptionsForSelect.new('Non inclus',:tank, check_deposit)]
 end
 
 

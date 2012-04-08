@@ -1,28 +1,19 @@
-<%  SimpleForm.wrapper_tag = :div %>
-
-<%= simple_form_for([:admin,@organism,@period,@nature]) do |f| %>
+ <div class="inputs">
+<%= simple_form_for([:admin,@organism,@period,@nature],  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
   <%= f.error_notification %>
 
-  <div class="inputs">
-    <div class="input">
-     <label>Type </label>
-  <%=  f.collection_radio :income_outcome, [[true, 'Recettes'] ,[false, 'Dépenses']], :first, :last, :label=>'Nature' %>
-    </div>
-     <%= f.input :name %>
-    <%= f.input :comment, input_html: {rows: 4} %>
-  
+         <%= f.input :name,  label_html: {class: "span2"}, input_html: {class: "span3"} %>
+   <%= f.input :comment, label_html: {class: "span2"}, input_html: {rows: 4, class: "span3"} %>
 
+   <%= f.input :income_outcome, :label=>'Type', label_html: {class: "span2"}, input_html: {class: "span3"} , :collection=>['Recettes', 'Depenses'], :as=>:radio_buttons %>
 
-    <div class="input">
-      <%= f.label 'Compte de rattachement' %>
-    <%= select_tag  :account,
-      grouped_options_for_select([ ['Recettes', options_for_select(@period.accounts.classe_7.collect {|a| [a.long_name, a.id]})],
-        ['Dépenses', options_for_select(@period.accounts.classe_6.collect {|a| [a.long_name, a.id]})]]), :prompt=>'Compte de rattachement' %>
-    </div>
- 
-  </div>
+   <%= f.association :account, :label_html=>{class: "span2"}, :label=> 'Compte associé', input_html: {class: "span4", size: 10},
+                :collection => options_for_natures(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :name,
+                :label_method=> :long_name, :value_method=> :id %>
 
-  <div class="actions">
-    <%= f.button :submit %>
-  </div>
+   <div class="form-actions offset2">
+    <%= f.button :submit, class: "btn-primary span2" %>
+   </div>
 <% end %>
+  </div>
+

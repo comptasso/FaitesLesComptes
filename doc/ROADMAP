@@ -412,8 +412,8 @@ OK - on ne peut plus modifier check_deposit - voir la question du validator cant
 OK - périod - suppression ne devrait pas eêtre dans le menu
 OK - il faudrait un trait avant nouveau
 OK - mettre suppression de period dans la table index des periods et revoir la mise en page
-on ne doit pas voir la proposition nouveau si on ne peut pas créer l'exercice
-
+OK - on ne doit pas voir la proposition nouveau si on ne peut pas créer l'exercice
+Period#index ne devrait pas présenter clore comme action lorsqu'on vient de le créer et qu'il n'y a pas d'organisme.
 
 
 
