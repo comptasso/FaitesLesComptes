@@ -408,7 +408,7 @@ OK - Les icones des pavés sont passées à gauche
 OK - Le menu admin n'identifie pas l'onglet sur lequel on est
 OK - ajouter remises chèques dans le menu banques
 OK - il faudrait une étoile pour les champs crédit et débit
-on ne peut plus modifier check_deposit
+on ne peut plus modifier check_deposit - voir la question du validator cant change
 il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date
 admin_organism_index : l'icone restauration devrait avoir une flèche
 dans admin#naturenew (form), le rattachement à un compte devrait être disable si pas de compte

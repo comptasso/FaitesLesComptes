@@ -148,9 +148,15 @@ describe CheckDeposit do
   describe "après sauvegarde" do
  
     before(:each) do
-      @check_deposit = @ba.check_deposits.new(deposit_date: (Date.today +2)) 
+      date = Date.today + 2
+      @check_deposit = @ba.check_deposits.new(deposit_date: date)
+      @check_deposit.deposit_date.should == (Date.today + 2)
       @check_deposit.pick_all_checks
       @check_deposit.save!
+    end
+
+    it "a sauvé la bonne date" do
+      @check_deposit.deposit_date.should == (Date.today + 2)
     end
 
     it 'sauver devrait avoir mis à jour les champs bank_account_id' do
@@ -181,11 +187,23 @@ describe CheckDeposit do
       @check_deposit.total_checks.should == 401
     end
 
+    it 'on peut détruire la remise' do
+      expect {@check_deposit.destroy}.to change{CheckDeposit.count}.by(-1)
+    end
+
     it 'lorsquon détruit la remise les lignes sont mises à jour' do
-      CheckDeposit.count.should == 1
       @check_deposit.destroy
-      CheckDeposit.count.should == 0
       Line.all.each {|l|  l.check_deposit_id.should == nil}
+    end
+
+    it "on peut changer la date" do
+      @check_deposit.deposit_date += 2
+      @check_deposit.should be_valid
+    end
+
+    it "on peut changer le compte bancaire" do
+      @check_deposit.bank_account_id = 9999 
+      @check_deposit.should be_valid
     end
 
     describe "le rattachement à un extrait de compte" do

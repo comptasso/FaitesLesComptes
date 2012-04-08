@@ -32,8 +32,9 @@ class CheckDeposit < ActiveRecord::Base
   # c'est la présence de bank_extract_line qui indique que le check_deposit à été pointé et ne peut plus être modifié
   has_one :bank_extract_line
 
-  validates :bank_account, :deposit_date, :presence=>true
-  validates :deposit_date,:bank_account_id, :cant_change=>true  if :bank_extract_line
+  validates :bank_account_id, :deposit_date, :presence=>true
+  validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :has_bank_extract_line?
+ 
  
   before_validation :not_empty # une remise chèque vide n'a pas de sens
 
@@ -154,6 +155,11 @@ class CheckDeposit < ActiveRecord::Base
   # remet à nil le champ bank_account_id des lignes lorsqu'on les retire de la remise de chèques
   def nil_bank_account_id(line)
     line.update_attribute(:bank_account_id, nil)
+  end
+
+ 
+  def has_bank_extract_line?
+    bank_extract_line ? true : false
   end
   
 end
