@@ -14,17 +14,7 @@ class Admin::DestinationsController < Admin::ApplicationController
     end
   end
 
-  # GET /destinations/1
-  # GET /destinations/1.json
-  def show
-    @destination = @organism.destinations.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @destination }
-    end
-  end
-
+  
   # GET /destinations/new
   # GET /destinations/new.json
   def new

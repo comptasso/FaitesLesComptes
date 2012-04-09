@@ -262,6 +262,10 @@ fr:
         attributes:
           number:
             invalid: "Numéro invalide"
+      destination:
+        attributes:
+          name:
+            blank: 'champ obligatoire'
       nature:
         attributes:
           name:
