@@ -1,12 +1,3 @@
-
-<!--      <tr class="reports">
-        <td></td> <td></td> <td></td>
-        <td>Reports</td>
-        <td class="nombre"><%=  debit_credit(@solde_debit_avant) %></td>
-        <td class="nombre"><%=  debit_credit(@solde_credit_avant) %></td>
-      </tr>
--->
-
 <%  @monthly_extract.lines.each do |line |%>
   <tr>
     <%= render :partial=>'lines/line', :object=>line %>

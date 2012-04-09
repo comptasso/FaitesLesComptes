@@ -14,7 +14,6 @@
         %tr
           %td= destination.name
           %td= destination.comment
-          %td= icon_to('afficher.png', [:admin,@organism,destination])                            |
-             << icon_to('modifier.png', edit_admin_organism_destination_path(@organism,destination))  |
+          %td= icon_to('modifier.png', edit_admin_organism_destination_path(@organism,destination))  |
              << (icon_to('supprimer.png', [:admin,@organism,destination],:confirm => 'Etes vous sur ?', :method => :delete) if destination.lines.empty?)        |
 

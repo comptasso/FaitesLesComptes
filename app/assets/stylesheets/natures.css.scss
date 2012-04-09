@@ -1,9 +1,24 @@
 // Place all the styles related to the Natures controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.natures {
+.public_natures {
     .nombre, .numeric {
         text-align: right;
         padding: 3px 10px;
     }
+
+    .control-label {
+          font-weight: bold;
+    padding-right: 10px;
+    text-align: right;
+  
+          }
+     form {
+        float: right;
+       }
+
+     form input.btn {
+         margin-left: 8px;
+       margin-right: 8px;
+         }
     }
