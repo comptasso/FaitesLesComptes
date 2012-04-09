@@ -7,9 +7,9 @@ module Admin::OrganismsHelper
   def admin_menu_books(books)
     content_tag(:ul, :class=>"dropdown-menu") do
       html = []
-      html << content_tag(:li) {link_to 'Listes des livres', admin_organism_books_path(@organism)} +
-      content_tag(:li) {link_to 'Nouveau', new_admin_organism_book_path(@organism)} +
-      content_tag(:li, :class=>"divider"){}
+      html << content_tag(:li) { link_to 'Listes des livres', admin_organism_books_path(@organism) } +
+              content_tag(:li) {link_to 'Nouveau', new_admin_organism_book_path(@organism)}
+      
       books.reject {|r| r.new_record? }.each do |b|
          inner =  content_tag(:li, :class=>"nav-header") { link_to b.title, admin_organism_book_path(@organism,b)}
          inner += content_tag(:li) {link_to 'Modifier', edit_admin_organism_book_path(@organism, b)}
