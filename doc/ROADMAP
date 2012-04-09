@@ -417,7 +417,13 @@ Period#index ne devrait pas présenter clore comme action lorsqu'on vient de le 
 
 il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date
 admin_organism_index : l'icone restauration devrait avoir une flèche
+----------------------------- admin natures ---------------------------------------
 OK - dans admin#naturenew (form), le rattachement à un compte devrait être disable si pas de compte
+OK - income_outcome doit être obligatoire
+la vue index ne doit pas proposer delete si des écritures sont rattachées à nature
+
+
+
 quand on efface un organisme qui n'a pas d'exercice il y a une erreur
 
 alignement des nombres dans les cash_control

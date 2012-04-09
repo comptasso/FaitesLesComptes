@@ -266,6 +266,7 @@ fr:
         attributes:
           name:
             blank: 'champ obligatoire'
+            taken: 'déjà pris'
           income_outcome:
             blank: 'champ obligatoire'
 

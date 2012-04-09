@@ -1,4 +1,13 @@
 # -*- encoding : utf-8 -*-
+
+
+# La classe Nature permet une indirection entre les comptes d'un exercice
+# et le type de dépenses ou de recettes correspondant
+# Le choix de relier Nature aux Account d'une Period, permet de 
+# modifier les natures d'un exercice à l'autre (ainsi que le rattachement aux 
+# comptes). 
+# 
+#
 class Nature < ActiveRecord::Base
  
   belongs_to :period
@@ -6,17 +15,18 @@ class Nature < ActiveRecord::Base
 
   validates :period_id, :presence=>true
   validates :name, :presence=>true
-#  validates :income_outcome, :presence=>true
-#  validates :account_ids, :fit_type=>true retiré car on ne crée plus l'assoc avec le compte dans le form nature
+  validates :name, :uniqueness=>{ :scope=>[:income_outcome, :period_id] }
+  validates :income_outcome, :inclusion => { :in => [true, false] }
+
+  # TODO rajouter avec un if pour coller avec le type de compte
+  # validates :account_ids, :fit_type=>true retiré car on ne crée plus l'assoc avec le compte dans le form nature
   
    has_many :lines
 
-#   default_scope order: 'name ASC'
+
    scope :recettes, where('income_outcome = ?', true)
    scope :depenses, where('income_outcome = ?', false)
    scope :without_account, where('account_id IS NULL')
-
-
 
   before_destroy :ensure_no_lines
 
