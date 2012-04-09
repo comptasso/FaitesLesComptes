@@ -1,0 +1,20 @@
+= content_for :menu do
+  = icon_to 'nouveau.png', new_admin_organism_destination_path(@organism)
+
+.champ
+  %h3 Liste des Destinations
+  %table.table.table-striped.table-bordered.table-condensed(cellpadding="0" cellspacing="0" border="0")
+    %thead
+      %tr
+        %th Nom
+        %th Commentaire
+        %th Actions
+    %tbody
+      - @destinations.each do |destination|
+        %tr
+          %td= destination.name
+          %td= destination.comment
+          %td= icon_to('afficher.png', [:admin,@organism,destination])                            |
+             << icon_to('modifier.png', edit_admin_organism_destination_path(@organism,destination))  |
+             << (icon_to('supprimer.png', [:admin,@organism,destination],:confirm => 'Etes vous sur ?', :method => :delete) if destination.lines.empty?)        |
+

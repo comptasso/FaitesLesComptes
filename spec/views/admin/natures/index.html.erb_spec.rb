@@ -55,7 +55,7 @@ describe 'admin/natures/index'  do
     end
   end
 
-   it "each row should show edit icon" do
+   it "each row should show delete icon" do
     render
     rendered.should have_selector('tbody tr') do |row|
       row.should have_selector('img', :src=>'/assets/icones/supprimer.png')
@@ -69,7 +69,7 @@ describe 'admin/natures/index'  do
     rendered.should have_selector('tbody tr:first-child') do |row|
       row.should_not have_selector('img', :src=>'/assets/icones/supprimer.png') 
     end
-  end
+  end 
 
 
 end
