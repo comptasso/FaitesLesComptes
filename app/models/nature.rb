@@ -6,7 +6,7 @@ class Nature < ActiveRecord::Base
 
   validates :period_id, :presence=>true
   validates :name, :presence=>true
-  validates :income_outcome, :presence=>true
+#  validates :income_outcome, :presence=>true
 #  validates :account_ids, :fit_type=>true retiré car on ne crée plus l'assoc avec le compte dans le form nature
   
    has_many :lines

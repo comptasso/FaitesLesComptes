@@ -1,0 +1,10 @@
+= content_for :menu do
+  = icon_to 'nouveau.png', new_admin_organism_period_nature_path(@organism, @period)
+
+.champ
+  %h3
+    Recettes
+  = render :partial=>'table_natures', :locals=>{:list=>@recettes}
+  %h3
+    Dépenses
+  = render :partial=>'table_natures', :locals=>{:list=>@depenses}
