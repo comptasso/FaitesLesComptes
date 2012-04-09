@@ -2,9 +2,7 @@
   = icon_to 'nouveau.png', new_admin_organism_period_nature_path(@organism, @period)
 
 .champ
-  %h3
-    Recettes
+  %h3 Natures du type Recettes
   = render :partial=>'table_natures', :locals=>{:list=>@recettes}
-  %h3
-    Dépenses
+  %h3 Natures du type Dépenses
   = render :partial=>'table_natures', :locals=>{:list=>@depenses}
