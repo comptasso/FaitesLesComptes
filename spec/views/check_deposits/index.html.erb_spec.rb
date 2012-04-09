@@ -83,11 +83,13 @@ describe "check_deposits/index" do
       
 
       it "le lien pour la modification" do
+        pending
         assert_select('tr:nth-child(2) td:nth-child(6) img[src=?]','/assets/icones/modifier.png')
         assert_select('tr:nth-child(2) td:nth-child(6) a[href=?]',edit_organism_bank_account_check_deposit_path(o,ba, cd2))
       end
 
       it "le lien pour la suppression" do
+        pending
         assert_select('tr:nth-child(2) > td:nth-child(7)  img[src=?]','/assets/icones/supprimer.png')
         assert_select('tr:nth-child(2) > td:nth-child(7) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd2))
       end
