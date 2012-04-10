@@ -3,7 +3,7 @@
 class IncomeBook < Book
 
    def book_type
-     'Income'
+     'Recettes'
    end
 
    

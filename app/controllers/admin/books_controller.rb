@@ -52,7 +52,7 @@ class Admin::BooksController < Admin::ApplicationController
     
     respond_to do |format|
       if @book.update_attributes(params[:book])
-        format.html { redirect_to admin_organism_books_url(@organism) , notice: 'Le livre a bien été mis à jour.' }
+        format.html { redirect_to admin_organism_books_url(@organism) , notice: 'Le livre a été mis à jour.' }
         format.json { head :ok }
       else
         format.html { render action: "edit" }

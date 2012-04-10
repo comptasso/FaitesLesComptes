@@ -1,6 +1,7 @@
+# coding: utf-8
 class OutcomeBook < Book
 
    def book_type
-     'Outcome'
+     'Dépenses'
    end
 end
