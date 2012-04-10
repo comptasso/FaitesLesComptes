@@ -15,15 +15,21 @@
 
 
 <table>
+  <thead> 
   <tr>
-    
-    <th></th>
-    <th></th>
+    <th>Titre</th>
+    <th>Description</th>
+    <th>Type de livre</th>
+    <th>Créé le</th>
+    <th>Mis à jour le</th>
+    <th>Actions</th>
    
   </tr>
-
+  </thead>
+  <tbody>
 <%= render partial: 'book', collection: @books %>
-</table>
+  </tbody>
+</table> 
 
 </div></div>
 
