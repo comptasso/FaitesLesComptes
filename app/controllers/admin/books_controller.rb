@@ -9,22 +9,13 @@ class Admin::BooksController < Admin::ApplicationController
   # GET /books.json
   def index
     @books = @organism.books.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @books }
-    end
   end
 
   
   # GET /books/new
   # GET /books/new.json
   def new
-    @book = @organism.books.build
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @book }
-    end
+    @book=@organism.books.build
   end
 
   # GET /books/1/edit
@@ -35,13 +26,15 @@ class Admin::BooksController < Admin::ApplicationController
   # POST /books
   # POST /books.json
   def create
-    if params[:book_type] == 'Income'
+    # rendu nécessaire par la single table inheritance
+    type = params[:book][:book_type]
+    params[:book].delete :book_type
+    if type == 'IncomeBook'
       @book = @organism.income_books.build(params[:book])
-    else
+    else # OutcomeBook par défaut
       @book= @organism.outcome_books.build(params[:book])
     end
-
-    respond_to do |format|
+     respond_to do |format|
       if @book.save
         format.html { redirect_to admin_organism_books_url(@organism), notice: 'Le livre a été crée.' }
         format.json { render json: @book, status: :created, location: @book }
@@ -56,7 +49,8 @@ class Admin::BooksController < Admin::ApplicationController
   # PUT /books/1.json
   def update
     @book = @organism.books.find(params[:id])
-
+  # rendu nécessaire par la single table inheritance
+    params[:book] = params[:income_book] || params[:outcome_book]
     respond_to do |format|
       if @book.update_attributes(params[:book])
         format.html { redirect_to admin_organism_books_url(@organism) , notice: 'Le livre a bien été mis à jour.' }

@@ -8,8 +8,19 @@
   <h3>
     Création d'un livre
   </h3><div class="inner-champ">
-
-<%= render 'form' %>
+ <div class="inputs">
+<%= simple_form_for([:admin, @organism, @book], :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
+  <%= f.error_notification %>
+   <%= f.input :title,  label_html: {class: "span2"}, input_html: {class: "span3"} %>
+   <%= f.input :description, label_html: {class: "span2"}, input_html: {rows: 4, class: "span3"} %>
+   <%= f.input :book_type, :label=>'Type', label_html: {class: "span2"}, input_html: {class: "span3"} ,
+           :collection=>[['Recettes','IncomeBook'], ['Dépenses', 'OutcomeBook']],
+         label_method: :first, value_method: :last, :as=>:radio_buttons %>
+  <div class="form-actions offset2">
+    <%= f.button :submit, class: "btn-primary span2" %>
+   </div>
+<% end %>
+  </div>
 
 
 

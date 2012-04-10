@@ -284,6 +284,12 @@ fr:
       book:
         create: "Créer le livre"
         update: "Modifier ce livre"
+      income_book:
+        create: "Créer le livre"
+        update: "Modifier ce livre"
+      outcome_book:
+        create: "Créer le livre"
+        update: "Modifier ce livre"
       organism:
         create: "Créer l'organisme"
         update: "Modifier cet organisme"

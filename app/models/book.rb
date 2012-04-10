@@ -38,13 +38,8 @@ class Book < ActiveRecord::Base
     ls.sum(:credit)-ls.sum(:debit)
   end
 
-
-
-
-  
- 
-
-  
-
+  def book_type
+    self.class.name
+  end
 
 end
