@@ -38,8 +38,23 @@ class Book < ActiveRecord::Base
     ls.sum(:credit)-ls.sum(:debit)
   end
 
+
+
   def book_type
     self.class.name
   end
+  
+  # astuces trouvéexs dans le site suivant
+  # http://code.alexreisner.com/articles/single-table-inheritance-in-rails.html
+  def self.inherited(child)
+  child.instance_eval do
+    def model_name
+      Book.model_name
+    end
+  end
+  super
+end
+
+
 
 end

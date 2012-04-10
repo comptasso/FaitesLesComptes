@@ -49,8 +49,7 @@ class Admin::BooksController < Admin::ApplicationController
   # PUT /books/1.json
   def update
     @book = @organism.books.find(params[:id])
-  # rendu nécessaire par la single table inheritance
-    params[:book] = params[:income_book] || params[:outcome_book]
+    
     respond_to do |format|
       if @book.update_attributes(params[:book])
         format.html { redirect_to admin_organism_books_url(@organism) , notice: 'Le livre a bien été mis à jour.' }
