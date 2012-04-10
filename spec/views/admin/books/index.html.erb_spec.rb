@@ -62,7 +62,7 @@ describe 'admin/books/index' do
 
       it "title row should show creation date" do
         rendered.should have_selector('thead tr th') do |cell|
-          cell.should contain('Créé le' )
+          cell.should contain('Créé le' ) 
         end
       end
 
@@ -96,6 +96,6 @@ describe 'admin/books/index' do
       end
     end
   end 
-  
+      
 end
 

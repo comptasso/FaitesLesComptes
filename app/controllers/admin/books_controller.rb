@@ -16,22 +16,11 @@ class Admin::BooksController < Admin::ApplicationController
     end
   end
 
-  # GET /books/1
-  # GET /books/1.json
-  def show
-    @book = @organism.books.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @book }
-    end
-  end
-
+  
   # GET /books/new
   # GET /books/new.json
   def new
     @book = @organism.books.build
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @book }
