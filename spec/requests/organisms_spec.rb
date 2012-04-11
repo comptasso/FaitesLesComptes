@@ -6,14 +6,14 @@ describe "vue organisme"  do
   context "quand il n'y a aucun organisme" do
     it 'root aboutit vers new_organism' do
       visit root_path
-      response.should contain('Nouvel organisme')
+      page.should have_content('Nouvel organisme')
     end
 
     it 'création du nouvel organisme' do
       visit root_path
       fill_in 'Titre', :with=>'Association TRI'
       click_button 'Créer'
-      response.should contain('créer un exercice')
+      page.should have_content('créer un exercice')
     end
 
 context 'un organisme est créé' do

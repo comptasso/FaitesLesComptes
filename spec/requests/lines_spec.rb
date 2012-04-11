@@ -19,7 +19,7 @@ describe 'vue lines' do
 
   it "affiche la page new" do
     visit new_book_line_path(@ob)
-    response.should contain('nouvelle ligne') 
+    page.should have_content('nouvelle ligne')
     Line.count.should == 0
   end
 
@@ -31,8 +31,6 @@ describe 'vue lines' do
     fill_in 'line_debit', with: 50.21
     select 'Chèque'
     click_button 'Créer'
-    assigns[:line].errors.count.should == 0
-    assigns[:line].pick_date.should == '01/04/2012'
     Line.count.should == 1  
   end 
 
@@ -45,7 +43,7 @@ describe 'vue lines' do
     select 'Chèque'
     click_button 'Créer'
     Line.count.should == 0
-    response.should contain('nouvelle ligne')
+    page.should have_content('nouvelle ligne')
     end
 
 

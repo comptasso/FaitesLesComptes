@@ -12,7 +12,7 @@ describe 'vue books index' do
   end
   
   before(:each) do
-    Book.count.should == 0
+    Book.count.should == 0 
     create_minimal_organism 
 
   end
@@ -22,16 +22,14 @@ describe 'vue books index' do
     Book.count.should == 2
   end
 
-  it 'checks selenium' do
-    selenium.dragdrop("id=photo_123", "+350, 0") 
-  end
+
 
   describe 'new book' do
     
     it "affiche la page new" do
       visit new_admin_organism_book_path(@o)
-      response.should contain("Création d'un livre")
-      response.should contain('Type')
+      page.should have_content("Création d'un livre")
+      page.should have_content('Type')
     
     end
 
@@ -46,19 +44,20 @@ describe 'vue books index' do
     end
 
   end
-
+ 
   describe 'index' do
 
-    it 'dans la vue index,un livre peut être détruit' do
+    it 'dans la vue index,un livre peut être détruit', :js=>true do
       @o.income_books.create!(:title=>'livre de test')
       @o.should have(3).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_books_path(@o)
-      within 'table tr:nth-child(3)' do |scope|
-        scope.should contain('livre de test')
-        scope.click_link 'Supprimer'
+      within 'tbody tr:nth-child(3)' do
+        page.should have_content('livre de test')
+        page.click_link 'Supprimer'
       end
-      click_link 'OK'
+      alert = page.driver.browser.switch_to.alert
+      alert.accept
       @o.should have(2).books
     end
 
@@ -67,7 +66,7 @@ describe 'vue books index' do
     it 'on peut le choisir dans la vue index pour le modifier' do
       visit admin_organism_books_path(@o)
       click_link "Modifier"
-      response.should contain("Modification d'un livre") 
+      page.should have_content("Modification d'un livre")
     end
 
   end

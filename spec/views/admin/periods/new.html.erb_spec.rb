@@ -11,7 +11,7 @@ describe 'admin/periods/new'  do
 
   it "GET new" do
     render
-    rendered.should contain('Nouvel exercice')
+    rendered.should have_content('Nouvel exercice')
   end
 
   it 'form shows janvier' do

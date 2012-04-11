@@ -41,7 +41,7 @@ group :development, :test do
   gem 'rspec-rails', '2.8.1'
   gem 'spork'
 #  gem 'webrat'
-#  gem 'database_cleaner'
+  gem 'database_cleaner'
 #  gem 'selenium-client'
   gem 'capybara'
 #  gem 'jasmine'
