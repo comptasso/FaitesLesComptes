@@ -46,6 +46,7 @@ class Book < ActiveRecord::Base
   
   # astuces trouvéexs dans le site suivant
   # http://code.alexreisner.com/articles/single-table-inheritance-in-rails.html
+  # également ajouté un chargement des enfants dans l'initilizer development.rb
   def self.inherited(child)
   child.instance_eval do
     def model_name

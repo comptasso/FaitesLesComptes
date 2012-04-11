@@ -36,6 +36,10 @@ config.active_record.mass_assignment_sanitizer = :strict
 config.active_record.auto_explain_threshold_in_seconds = 0.5
 
 
+# ajouté par jc pour charger les enfants de Book car les classes sont lazy loaded dans 
+#  l'environnement développement
+%w[income_book outcome_book].each { |c| require_dependency File.join("app","models","#{c}.rb") }
+
 
 
 end

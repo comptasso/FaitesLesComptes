@@ -414,6 +414,8 @@ OK - il faudrait un trait avant nouveau
 OK - mettre suppression de period dans la table index des periods et revoir la mise en page
 OK - on ne doit pas voir la proposition nouveau si on ne peut pas créer l'exercice
 
+reprendre le formulaire nature en utilisant l'astuce pour book
+
 Period#index ne devrait pas présenter clore comme action lorsqu'on vient de le créer et qu'il n'y a pas d'organisme.
 
 il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date
