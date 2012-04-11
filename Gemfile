@@ -40,7 +40,9 @@ group :development, :test do
   gem 'turn', :require => false
   gem 'rspec-rails', '2.8.1'
   gem 'spork'
-  gem 'webrat'
+#  gem 'webrat'
+#  gem 'database_cleaner'
+#  gem 'selenium-client'
   gem 'capybara'
 #  gem 'jasmine'
   

@@ -11,17 +11,6 @@
     Modification d'un livre
   </h3><div class="inner-champ">
 
- <div class="inputs">
-<%= simple_form_for([:admin,@organism,@book], # :url=>admin_organism_book_path(@organism, @book),
-  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
-  <%= f.error_notification %>
-   <%= f.input :title,  label_html: {class: "span2"}, input_html: {class: "span3"} %>
-   <%= f.input :description, label_html: {class: "span2"}, input_html: {rows: 4, class: "span3"} %>
- 
-  <div class="form-actions offset2">
-    <%= f.button :submit, class: "btn-primary span2" %>
-   </div>
-<% end %>
-  </div>
+ <%= render 'form'  %>
 
 </div></div>

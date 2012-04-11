@@ -13,13 +13,17 @@ describe 'vue books index' do
   
   before(:each) do
     Book.count.should == 0
-    create_minimal_organism
+    create_minimal_organism 
 
   end
 
   it 'check minimal organism' do
     Organism.count.should == 1
     Book.count.should == 2
+  end
+
+  it 'checks selenium' do
+    selenium.dragdrop("id=photo_123", "+350, 0") 
   end
 
   describe 'new book' do
@@ -31,15 +35,19 @@ describe 'vue books index' do
     
     end
 
-    it 'remplir correctement le formulaire crée une nouvelle ligne' do
+    it 'remplir correctement le formulaire crée une nouvelle ligne' do 
       visit new_admin_organism_book_path(@o)
       fill_in 'book[title]', :with=>'Recettes test'
       fill_in 'book[description]', :with=>'Un deuxième livre de recettes'
       choose 'Recettes'
       click_button 'Créer le livre'
       @o.books.count.should == 3
-      @o.books.last.book_type.should == 'Recettes'
+      @o.books.last.book_type.should == 'IncomeBook'
     end
+
+  end
+
+  describe 'index' do
 
     it 'dans la vue index,un livre peut être détruit' do
       @o.income_books.create!(:title=>'livre de test')
@@ -48,9 +56,9 @@ describe 'vue books index' do
       visit admin_organism_books_path(@o)
       within 'table tr:nth-child(3)' do |scope|
         scope.should contain('livre de test')
-        pending 'impossible de cliquer sur la box de confirmation sans selenium'
         scope.click_link 'Supprimer'
       end
+      click_link 'OK'
       @o.should have(2).books
     end
 
@@ -59,25 +67,22 @@ describe 'vue books index' do
     it 'on peut le choisir dans la vue index pour le modifier' do
       visit admin_organism_books_path(@o)
       click_link "Modifier"
-      response.should contain("Modification d'un livre")
+      response.should contain("Modification d'un livre") 
     end
 
-    it 'dans la vue edit, le type n est pas disponible' do
-      visit edit_admin_organism_book_path(@o, @o.books.last)
-      response.should_not contain('Type')
-    end
+  end
 
-    it 'mais on peut changer les deux autres champs' do
+  describe 'edit' do
+
+    it 'On peut changer les deux autres champs' do
       visit edit_admin_organism_book_path(@o, @o.books.last)
       fill_in 'book[title]', :with=>'modif du titre'
       click_button 'Modifier ce livre'
-      response.should contain('modif du titre') # on est revenu dans le template index
-      # et la modif est prise en compte.
+      current_url.should match /\/admin\/organisms\/#{@o.id}\/books$/
     end
 
-  
- 
-
   end
+
+
 end
 

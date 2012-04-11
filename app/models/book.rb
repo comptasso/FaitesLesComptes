@@ -18,7 +18,7 @@ class Book < ActiveRecord::Base
    
   # TODO introduce uniqueness
   validates :title, presence: true
- 
+  
   attr_reader  :monthly_solds
 
   # renvoie les soldes mensuels du livre pour l'ensemble des mois de l'exercice

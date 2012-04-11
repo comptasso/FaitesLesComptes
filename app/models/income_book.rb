@@ -2,9 +2,7 @@
 
 class IncomeBook < Book
 
-   def book_type
-     'Recettes'
-   end
+   
 
    
 end

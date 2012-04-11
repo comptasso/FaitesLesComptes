@@ -14,8 +14,8 @@ describe 'admin/books/new' do
     end
 
     it "should have title h3" do
-      rendered.should have_selector('h3') do |h3|
-        h3.should contain "Création d'un livre"
+      rendered.should have_selector('h3') do |h3| 
+        h3.should contain "Création d'un livre" 
       end
     end
 

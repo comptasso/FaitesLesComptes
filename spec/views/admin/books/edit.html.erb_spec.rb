@@ -35,10 +35,10 @@ describe 'admin/books/edit' do
       end
     end
 
-    it "form should bot have two radio buttons" do
+    it "the radio buttons should be deselected " do
       rendered.should have_selector('form') do |form|
-        form.should_not have_selector('input' ,:name=>'book[book_type]', :count=> 2 )
-      end
+        form.should have_selector('input' ,:name=>'book[book_type]', :disabled=>'disabled' ) 
+      end 
     end
 
     it "form should have submit button" do
