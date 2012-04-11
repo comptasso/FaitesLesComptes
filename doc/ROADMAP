@@ -415,6 +415,7 @@ OK - mettre suppression de period dans la table index des periods et revoir la m
 OK - on ne doit pas voir la proposition nouveau si on ne peut pas créer l'exercice
 
 reprendre le formulaire nature en utilisant l'astuce pour book pour les boutons radio
+réduire le menu admin livres à liste et nouveau puisque les actions sont dispo dans la liste
 
 Period#index ne devrait pas présenter clore comme action lorsqu'on vient de le créer et qu'il n'y a pas d'organisme.
 

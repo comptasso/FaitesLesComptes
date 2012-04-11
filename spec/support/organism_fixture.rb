@@ -8,11 +8,18 @@ module OrganismFixture
   # une nature. 
   def create_minimal_organism
     @o = Organism.create!(title: 'test_line')
-    @ib = IncomeBook.create!(organism_id: @o.id, title: 'Recettes')
-    @ob = OutcomeBook.create!(organism_id:@o.id, title: "Dépenses")
+    @ib = @o.income_books.first # les livres sont créés par un after_create
+    @ob = @o.outcome_books.first
     @p = Period.create!(:organism_id=>@o.id, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))
     @n = Nature.create!(name: 'Essai', period_id: @p.id)
     @ba = @o.bank_accounts.create!(name: '124578ZA')
+    
+  end
+
+  def clean_test_database
+    os=Organism.all
+    os.each {|oss| oss.destroy }
+    Organism.count.should == 0
     
   end
 
