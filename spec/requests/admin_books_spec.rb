@@ -14,12 +14,11 @@ describe 'vue books index' do
   before(:each) do
     Book.count.should == 0 
     create_minimal_organism 
-
   end
 
   it 'check minimal organism' do
     Organism.count.should == 1
-    Book.count.should == 2
+    Book.count.should == 2 
   end
 
 
@@ -53,10 +52,10 @@ describe 'vue books index' do
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_books_path(@o)
       within 'tbody tr:nth-child(3)' do
-        page.should have_content('livre de test')
+        page.should have_content('livre de test') 
         page.click_link 'Supprimer'
       end
-      alert = page.driver.browser.switch_to.alert
+       alert = page.driver.browser.switch_to.alert
       alert.accept
       @o.should have(2).books
     end
@@ -65,7 +64,7 @@ describe 'vue books index' do
 
     it 'on peut le choisir dans la vue index pour le modifier' do
       visit admin_organism_books_path(@o)
-      click_link "Modifier"
+      click_link "icon_modifier_book_#{@ob.id.to_s}"
       page.should have_content("Modification d'un livre")
     end
 

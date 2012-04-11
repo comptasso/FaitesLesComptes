@@ -56,19 +56,19 @@ describe 'vue books index' do
       page.should have_selector('tbody', :count=>2)
     end
 
-#    it 'dans la vue index,une nature peut être détruite', :js=>true do
-#      @p.natures.create!(:name=>'deuxième nature', :income_outcome=>false)
-#      @p.should have(2).natures
-#      # à ce stade chacun des livres est vierge et peut donc être détruit.
-#      visit admin_organism_period_natures_path(@o, @p)
-#      within 'tbody:last tr:nth-child(2)' do
-#        page.should have_content('deuxième nature')
-#        page.click_link 'Supprimer'
-#      end
-#      alert = page.driver.browser.switch_to.alert
-#      alert.accept
-#      @p.should have(1).natures
-#    end
+    it 'dans la vue index,une nature peut être détruite', :js=>true do
+      @p.natures.create!(:name=>'deuxième nature', :income_outcome=>false)
+      @p.should have(2).natures
+      # à ce stade chacun des livres est vierge et peut donc être détruit.
+      visit admin_organism_period_natures_path(@o, @p)
+      within 'tbody:last tr:nth-child(2)' do
+        page.should have_content('deuxième nature')
+        page.click_link 'Supprimer'
+      end
+      alert = page.driver.browser.switch_to.alert
+      alert.accept
+      @p.should have(1).natures
+    end
 
     
 
@@ -78,7 +78,7 @@ describe 'vue books index' do
         page.should have_selector 'img', :title=>'Modifier'
         click_link("icon_modifier_#{@n.id}")
       end
-      current_url.should match /natures\/#{@n.id.to_s}\/edit$/ # retour à la vue index
+      current_url.should match /.*natures\/#{@n.id.to_s}\/edit$/ # retour à la vue index
     end
 
   end
