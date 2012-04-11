@@ -3,5 +3,5 @@
   %td= nature.comment
   %td= nature.account.number if nature.account
   %td= nature.account.title if nature.account
-  %td= icon_to('modifier.png', edit_admin_organism_period_nature_path(@organism,@period,nature)) |
-    <<  (icon_to('supprimer.png', [:admin,@organism,@period, nature], :confirm => 'Etes vous sur ?', :method => :delete) if nature.lines.empty? ) |
+  %td= icon_to('modifier.png', edit_admin_organism_period_nature_path(@organism,@period,nature), :id=>"icon_modifier_#{nature.id}") |
+    <<  (icon_to('supprimer.png', [:admin,@organism,@period, nature], :confirm => 'Etes vous sur ?',  :method => :delete) if nature.lines.empty? ) |

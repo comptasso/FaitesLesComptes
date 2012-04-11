@@ -5,8 +5,9 @@
          <%= f.input :name,  label_html: {class: "span2"}, input_html: {class: "span3"} %>
    <%= f.input :comment, label_html: {class: "span2"}, input_html: {rows: 4, class: "span3"} %>
 
-   <%= f.input :income_outcome, :label=>'Type', label_html: {class: "span2"}, input_html: {class: "span3"} , :collection=>radio_options_for_nature,
-         label_method: :name, value_method: :value, :as=>:radio_buttons %>
+   <%= f.input :income_outcome, :label=>'Type', label_html: {class: "span2"}, input_html: {class: "span3"} , 
+         :collection=>[['Recettes', true], ['Dépenses', false]],
+         label_method: :first, value_method: :last, :as=>:radio_buttons %>
 
    <%= f.association :account, :label_html=>{class: "span2"}, :label=> 'Compte associé', input_html: {class: "span4", size: 10},
                 :collection => options_for_natures(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :name,

@@ -12,7 +12,7 @@ describe Nature do
   end
 
   it "should be valid" do
-    @nature.should be_valid
+    @nature.should be_valid 
   end
 
   it 'should not be valid without period' do
