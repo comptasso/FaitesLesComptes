@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 describe 'admin/destinations/index' do
-
+ include JcCapybara
   before(:each) do
     assign(:organism, stub_model(Organism))
     @destinations = []
@@ -18,30 +18,26 @@ describe 'admin/destinations/index' do
     end
     
     it "should have title h3" do
-      rendered.should have_selector('h3') do |h3|
-        h3.should contain 'Liste des Destinations'
-      end
+      page.find('h3').text.should match  'Liste des Destinations'
+      
     end
 
     it "should have one table" do
-      rendered.should have_selector('table', :count=>1)
+      page.all('table').should have(1).element
     end
 
     it "table body should have one line" do
-      rendered.should have_selector('table tbody') do |tbody|
-        tbody.should have_selector('tr', :count=>2)
-      end
+      page.all('tbody tr').should have(2).elements
     end
+
     it "each row should show edit icon" do
-      rendered.should have_selector('tbody tr') do |row|
-        row.should have_selector('img', :src=>'/assets/icones/modifier.png')
-      end
+      page.find('tr img:first')[:src].should match /\/assets\/icones\/modifier.png/
+      
     end
 
     it "each row should show delete icon" do
-      rendered.should have_selector('tbody tr') do |row|
-        row.should have_selector('img', :src=>'/assets/icones/supprimer.png')
-      end
+      page.find('tr a:last').find('img')[:src].should match /\/assets\/icones\/supprimer.png/
+      
     end
   end 
 
@@ -51,10 +47,7 @@ describe 'admin/destinations/index' do
     it "with a line, row should not propose supprimer" do
       @destinations.first.stub_chain(:lines, :empty?).and_return(false)
       render
-
-      rendered.should have_selector('tbody tr:first-child') do |row|
-        row.should_not have_selector('img', :src=>"/assets/icones/supprimer.png")
-      end
+      page.should_not have_css('tbody tr:first img[src="/assets/icones/supprimer.png"]')
     end
   end
 end

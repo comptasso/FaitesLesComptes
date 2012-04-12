@@ -420,9 +420,9 @@ Idem pour le menu banque
 ---------------------REVOIR TOUTES LES SPEC DES VIEWS SUITE AU PASSAGE A CAPYBARA
 OK - admin bank_accounts index
 OK - admin books index
-admin books new
-admin books edit
-admin destinations +
+OK - admin books new
+OK - admin books edit
+OK admin destinations
 OK - admin natures index
 admin periods
 

@@ -3,6 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 describe 'admin/books/new' do
+  include JcCapybara
   before(:each) do
     assign(:organism, stub_model(Organism))
     @book = stub_model(Book).as_new_record
@@ -14,39 +15,30 @@ describe 'admin/books/new' do
     end
 
     it "should have title h3" do
-      rendered.should have_selector('h3') do |h3| 
-        h3.should contain "Création d'un livre" 
-      end
+      page.find('h3').text.should ==  "Création d'un livre"
+      
     end
 
     it "should have one form" do
-      rendered.should have_selector('form', :count=>1)
+      page.all('form').should have(1).element
     end
 
     it "form should have field title" do
-      rendered.should have_selector('form') do |form|
-        form.should have_selector('input', :name=>'book[title]')
-      end
+      page.should have_css('form input[name="book[title]"]')
     end
 
-    it "form should have field description" do
-      rendered.should have_selector('form') do |form|
-        form.should have_selector('textarea', :name=>'book[description]')
-      end
+    it "form should have field title" do
+      page.should have_css('form textarea[name="book[description]"]')
     end
 
-    it "form should have two radio buttons" do
-      rendered.should have_selector('form') do |form|
-        form.should have_selector('input' ,:name=>'book[book_type]', :count=> 2 )
-      end
+    it "form should have field title" do
+      page.all('form input[name="book[book_type]"]').should have(2).elements
     end
 
-    it "form should have submit button" do
-      rendered.should have_selector('form') do |form|
-        form.should have_selector('input' ,:type=>'submit', :value=>'Créer le livre')
-      end
+    it "form should have field title" do
+      page.find('form input[type="submit"]').value.should == 'Créer le livre'
     end
- 
+
     
   end
  
