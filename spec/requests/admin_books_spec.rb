@@ -2,15 +2,20 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+RSpec.configure do |c|
+#  c.filter = {:js=> true }
+#  c.exclusion_filter = {:js=> true }
+end
+
 # spec request for testing admin books
 
 describe 'vue books index' do
   include OrganismFixture 
 
-  before(:all) do
-    clean_test_database 
-  end
-  
+#  before(:all) do
+#    clean_test_database
+#  end
+#
   before(:each) do
     Book.count.should == 0 
     create_minimal_organism 
@@ -59,8 +64,6 @@ describe 'vue books index' do
       alert.accept
       @o.should have(2).books
     end
-
-    it 'un livre avec des écritures ne présente pas de lien destruction'
 
     it 'on peut le choisir dans la vue index pour le modifier' do
       visit admin_organism_books_path(@o)

@@ -27,34 +27,6 @@ def options_for_natures(period)
 end
 
 
-# class auxiliaire pour permettre d'avoir l'accent dans la collection radio button
-class Depenses
-
-  def name
-    'Dépenses'
-  end
-
-  def value
-    false
-  end
-
-end
-
-class Recettes
-  def name
-    'Recettes'
-  end
-
-  def value
-    true
-  end
-
-
-end
-
-def radio_options_for_nature
-  [Recettes.new, Depenses.new]
-end
 
 
 

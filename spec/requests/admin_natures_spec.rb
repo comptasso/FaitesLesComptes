@@ -2,9 +2,14 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-# spec request for testing admin books
+RSpec.configure do |c|
+#  c.filter = {:js=> true }
+#  c.exclusion_filter = {:js=> true }
+end
 
-describe 'vue books index' do
+# spec request for testing admin books 
+
+describe 'vue natures index' do
   include OrganismFixture 
 
   before(:all) do
@@ -31,7 +36,6 @@ describe 'vue books index' do
       visit new_admin_organism_period_nature_path(@o, @p)
       page.should have_content("Nouvelle Nature")
       page.should have_content('Type')
-    
     end
 
     it 'remplir correctement le formulaire crée une nouvelle nature' do
@@ -67,7 +71,8 @@ describe 'vue books index' do
       end
       alert = page.driver.browser.switch_to.alert
       alert.accept
-      @p.should have(1).natures
+      current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/ 
+      page.should have_selector 'tbody:last tr', :count=>1
     end
 
     

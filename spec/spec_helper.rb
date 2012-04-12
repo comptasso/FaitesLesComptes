@@ -78,7 +78,10 @@ RSpec.configure do |config|
   end
 end
 
+end
 
+RSpec.configure do |c|
+ # c.exclusion_filter = {:js=> true }
 end 
 
 

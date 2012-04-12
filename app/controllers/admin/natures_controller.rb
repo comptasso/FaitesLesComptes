@@ -75,7 +75,7 @@ class Admin::NaturesController < Admin::ApplicationController
     @nature.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_organism_period_natures_url(@period) }
+      format.html { redirect_to admin_organism_period_natures_url(@organism, @period) }
       format.json { head :ok }
     end
   end
