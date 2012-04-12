@@ -2,13 +2,19 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-describe 'admin/books/index' do
+describe 'admin/bank_accounts/index' do
+  include JcCapybara
+  # include Capybara::DS
+  #  def table
+  #    page.find('table').content
+  #  end
+   
   before(:each) do
     assign(:organism, stub_model(Organism))
-    @books=[]
-    @books << stub_model(IncomeBook, title: 'Recettes')
-    @books << stub_model(OutcomeBook, title: 'Dépenses')
-    @books.each do |b|
+    @bank_accounts=[]
+    @bank_accounts << stub_model(BankAccount, name: 'JC Bank', number: 'BA1', comment: 'un commentaire', address: '22, rue de Lille')
+    @bank_accounts << stub_model(BankAccount, number: 'BA2')
+    @bank_accounts.each do |b|
       b.stub(:created_at).and_return(Time.now)
       b.stub(:updated_at).and_return(Time.now)
     end
@@ -16,84 +22,71 @@ describe 'admin/books/index' do
 
   context 'mise en page générale' do
     before(:each) do
-      render
-    end
+      render 
+    end 
 
     it "should have title h3" do
-      rendered.should have_selector('h3') do |h3|
-        h3.should contain 'Liste des livres'
-      end
+      page.find('h3').should have_content 'Liste des comptes bancaires'
     end
 
     it "should have one table" do
-      rendered.should have_selector('table', :count=>1)
+      page.should have_css('table', :count=>1)
     end
 
-    it "table body should have two lines" do
-      rendered.should have_selector('table tbody') do |tbody|
-        tbody.should have_selector('tr', :count=>2)
-      end
+    it 'mise au point de la chaine de test' do
+      page.find('table tbody').should have_css('tr', :count=>2)
     end
 
-    it "each row should show edit icon" do
-      rendered.should have_selector('tbody tr') do |row|
-        row.should have_selector('img', :src=>'/assets/icones/modifier.png')
-      end
+    #    it 'shows the page' do
+    #      page.find('tbody tr').should == 'ligne'
+    #    end
+    
+
+    it "each row should show 2 icons (edit and delete)" do
+      page.find('tbody tr').should have_css('img',:count=>2)
     end
 
     it "each row should show delete icon" do
-      rendered.should have_selector('tbody tr') do |row|
-        row.should have_selector('img', :src=>'/assets/icones/supprimer.png')
+      page.all('tbody tr img').first[:src].should match /\/assets\/icones\/modifier.png/
+    end
+
+    it "each row should show delete icon" do
+      page.all('tbody tr img').last[:src].should == '/assets/icones/supprimer.png'
+    end
+
+    context 'title row' do
+      it "shows Banque" do
+        page.find('thead th:first').text.should == 'Banque'
+        page.find(:css,'thead th:nth-child(2)').text.should == 'Numéro'
+        page.find(:css,'thead th:nth-child(3)').text.should == 'Commentaire'
+        page.find(:css,'thead th:nth-child(4)').text.should == 'Adresse' 
+        page.find(:css,'thead th:nth-child(5)').text.should == 'Créé le'
+        page.find(:css,'thead th:nth-child(6)').text.should == 'Modifié le'
+        page.find(:css,'thead th:nth-child(7)').text.should == 'Actions'
+
       end
     end
 
-    context 'les titres des colonnes' do
-      it "title row should show Titre" do
-        rendered.should have_selector('thead tr th') do |cell|
-          cell.should contain('Titre' )
-        end
-      end
-
-      it "title row should show Description" do
-        rendered.should have_selector('thead tr th') do |cell|
-          cell.should contain('Description' )
-        end
-      end
-
-      it "title row should show creation date" do
-        rendered.should have_selector('thead tr th') do |cell|
-          cell.should contain('Créé le' ) 
-        end
-      end
-
-      it "title row should show update date" do
-        rendered.should have_selector('thead tr th') do |cell|
-          cell.should contain('Mis à jour le' )
-        end
-      end
-
-      it "title row should show Actions" do
-        rendered.should have_selector('thead tr th') do |cell|
-          cell.should contain('Actions' )
-        end
-      end
-
-      it "title row should show book type" do
-        rendered.should have_selector('thead tr th') do |cell|
-          cell.should contain('Type de livre' )
-        end
+    context 'check content of a row' do
+      it "shows the relevant informations" do
+        @ba=@bank_accounts.first
+        page.find('tbody tr td:nth-child(1)').text.should == @ba.name
+        page.find('tbody tr td:nth-child(2)').text.should == @ba.number
+        page.find('tbody tr td:nth-child(3)').text.should == @ba.comment
+        page.find('tbody tr td:nth-child(4)').text.should == @ba.address
+        page.find('tbody tr td:nth-child(5)').text.should == l(@ba.created_at)
+        page.find('tbody tr td:nth-child(6)').text.should == l(@ba.updated_at)
       end
     end
- end
-   # on ne peut le traiter comme les autres car le render ne doit pas arriver
+
+  end
+  # on ne peut le traiter comme les autres car le render ne doit pas arriver
   # avant le stub_chain
   context 'test de l affichage de l icone destroy' do
     it "with a line, row should not propose supprimer" do
-      @books.first.stub_chain(:lines, :empty?).and_return(false)
+      @bank_accounts.first.stub_chain(:bank_extracts, :empty?).and_return(false)
       render
-      rendered.should have_selector('tbody tr:first-child') do |row|
-        row.should_not have_selector('img', :src=>"/assets/icones/supprimer.png")
-      end
+      page.should_not have_css('tbody tr:first img[src="/assets/icones/supprimer.png"]')
     end
   end 
       

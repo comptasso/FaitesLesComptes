@@ -42,7 +42,7 @@ group :development, :test do
   gem 'spork'
   gem 'launchy'
   gem 'database_cleaner'
-#  gem 'selenium-client'
+  
   gem 'capybara'
 #  gem 'jasmine'
   
