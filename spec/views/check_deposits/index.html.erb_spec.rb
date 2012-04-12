@@ -4,6 +4,8 @@ require 'spec_helper'
 require 'lines_helper'
 
 describe "check_deposits/index" do
+  include JcCapybara
+
   let(:o) {mock_model(Organism, title: 'spec cd')}
   let(:ba)  {mock_model(BankAccount, number: '124578AZ', name: 'IBAN')}
   let(:cd1) {mock_model(CheckDeposit, bank_account_id: ba.id, deposit_date: Date.today - 5)}

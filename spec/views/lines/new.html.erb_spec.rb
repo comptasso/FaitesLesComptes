@@ -30,7 +30,7 @@ before(:each) do
   it 'shows the required mark for 5 fields' do
     pending
     render
-    response.should contain('*', count: 5)
+    response.should contain('*', count: 5) 
   end
 end
 

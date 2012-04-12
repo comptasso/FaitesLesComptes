@@ -3,6 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 describe 'admin/periods/new'  do
+  include JcCapybara
   let(:o) {stub_model(Organism)}
 
   before(:each) do
@@ -11,32 +12,32 @@ describe 'admin/periods/new'  do
 
   it "GET new" do
     render
-    rendered.should have_content('Nouvel exercice')
+    page.should have_content('Nouvel exercice')
   end
 
   it 'form shows janvier' do
     render
-    rendered.should have_selector('form select', :content=>"janvier", :id=>'period_start_date_2i')
+    page.find('form select#period_start_date_2i option[selected="selected"]').text.should  == "janvier"
   end
 
   it 'form shows the year' do
     render
-    rendered.should have_selector('form select', :content=>"#{Date.today.year}", :id=>'period_start_date_1i')
+    page.find('form select#period_start_date_1i').value.should == "#{Date.today.year}"
   end
   
   it 'form shows the field close_date' do
     render
-    rendered.should have_selector('form select', :content=>"décembre", :id=>'period_close_date_2i')
+    page.find('form select#period_close_date_2i option[selected="selected"]').text.should == "décembre"
   end
 
   it 'form shows the year for close date' do
     render
-    rendered.should have_selector('form select', :content=>"#{Date.today.year}", :id=>'period_close_date_1i')
+    page.find('form select#period_close_date_1i').value.should == "#{Date.today.year}"
   end
 
   it 'form shoudl have submit button' do
     render
-    rendered.should have_selector('input', :class=>'btn btn-primary span2', :value=>"Créer l'exercice")
+    page.find('input[class="btn btn-primary span2"]').value.should == "Créer l'exercice"
   end
 end
 

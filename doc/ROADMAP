@@ -422,14 +422,10 @@ OK - admin bank_accounts index
 OK - admin books index
 OK - admin books new
 OK - admin books edit
-OK admin destinations
+OK - admin destinations
 OK - admin natures index
-admin periods
-
-check_deposits
-lines
-organism
-users
+OK - admin periods new
+OK - check_deposits lines organism users
 -------------------------------------------------------------
 Period#index ne devrait pas présenter clore comme action lorsqu'on vient de le créer et qu'il n'y a pas d'organisme.
 
