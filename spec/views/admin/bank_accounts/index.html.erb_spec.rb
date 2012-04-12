@@ -4,11 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 describe 'admin/bank_accounts/index' do
   include JcCapybara
-  # include Capybara::DS
-  #  def table
-  #    page.find('table').content
-  #  end
-   
+  
   before(:each) do
     assign(:organism, stub_model(Organism))
     @bank_accounts=[]
