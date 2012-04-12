@@ -1,16 +1,17 @@
-<%  SimpleForm.wrapper_tag = :p %>
-<%= simple_form_for [:admin,@organism,@bank_account] do |f| %>
+ <div class="inputs">
+<%= simple_form_for([:admin,@organism,@bank_account], :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
   <%= f.error_notification %>
 
-  <div class="inputs">
-    <%= f.input :name %>
-    <%= f.input :number %>
+ 
+    <%= f.input :name,  label_html: {class: "span2"}, input_html: {class: "span3"}%>
+    <%= f.input :number,  label_html: {class: "span2"}, input_html: {class: "span3"} %>
     
-    <%= f.input :comment , input_html: {rows: 4} %>
-    <%= f.input :address, input_html: {rows: 4}%>
+    <%= f.input :comment , label_html: {class: "span2"}, input_html: {rows: 4, class: "span3"} %>
+    <%= f.input :address,  label_html: {class: "span2"}, input_html: {rows: 4, class: "span3"} %>
   </div>
 
-  <div class="actions">
-    <%= f.button :submit %>
+  <div class="form-actions offset2">
+    <%= f.button :submit, class: "btn-primary span2"  %>
   </div>
 <% end %>
+

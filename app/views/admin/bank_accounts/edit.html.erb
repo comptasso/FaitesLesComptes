@@ -1,17 +1,17 @@
 <%= content_for :menu do %>
-
-<%= icon_to 'nouveau.png', new_admin_organism_bank_account_path(@organism) %>
-<%= icon_to 'afficher.png', [:admin,@organism,@bank_account] %>
-<%= icon_to 'retour.png', :back %>
+  <%= icon_to 'nouveau.png', new_admin_organism_bank_account_path(@organism) %>
+  <%= icon_to 'afficher.png', [:admin,@organism,@bank_account] %>
+  <%= icon_to 'retour.png', :back %>
 <% end -%>
 
 <div class="champ">
   <h3>
     Modificationd'un compte bancaire
-  </h3><div class="inner-champ">
-
-<%= render 'form' %>
-</div></div>
+  </h3>
+  <div class="inner-champ">
+    <%= render 'form' %>
+  </div>
+</div>
 
 
 

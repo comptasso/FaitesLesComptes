@@ -110,3 +110,9 @@ span.error{
     margin-top: 0px;
     }
 
+    td p {
+      margin-left: 0px; /*Pour éviter que simple format de bank_account address laisse une marge à gauche */
+      }
+.input-prepend textarea {
+  margin-bottom: 4px;
+  }
