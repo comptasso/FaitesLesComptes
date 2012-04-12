@@ -15,34 +15,17 @@ module Admin::OrganismsHelper
 
 def admin_menu_banks(banks)
     content_tag(:ul, :class=>"dropdown-menu") do
-      html = []
-      html << content_tag(:li) {link_to 'Listes des comptes', admin_organism_bank_accounts_path(@organism)} +
+      content_tag(:li) {link_to 'Listes des comptes', admin_organism_bank_accounts_path(@organism)} +
       content_tag(:li) { link_to 'Nouveau', new_admin_organism_bank_account_path(@organism)}
-      
-      banks.reject {|r| r.new_record? }.each do |b|
-         inner =  content_tag(:li, :class=>"nav-header") { link_to b.number, admin_organism_bank_account_path(@organism,b) }
-         inner += content_tag(:li) {link_to  'Modifier', edit_admin_organism_bank_account_path(@organism, b)}
-         inner += content_tag(:li) { link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' }
-         html << inner
-      end
-      html.join(content_tag(:li, :class=>"divider"){}).html_safe
     end
+     
   end
   
 def admin_menu_cashes(cashes)
     content_tag(:ul, :class=>"dropdown-menu") do
-      html = []
-      html << content_tag(:li) {link_to 'Listes des comptes', admin_organism_cashes_path(@organism)} +
+       content_tag(:li) {link_to 'Listes des comptes', admin_organism_cashes_path(@organism)} +
        content_tag(:li) { link_to 'Nouveau', new_admin_organism_cash_path(@organism)}
-      
-      cashes.reject {|r| r.new_record? }.each do |b|
-         inner =  content_tag(:li, :class=>"nav-header") { link_to b.name, admin_organism_cash_path(@organism,b) }
-         inner += content_tag(:li) {link_to  'Modifier', edit_admin_organism_cash_path(@organism, b)}
-         inner += content_tag(:li) { link_to 'Supprimer', [:admin, @organism, b], confirm: 'Etes vous sur ?' }
-         html << inner
-      end
-      html.join(content_tag(:li, :class=>"divider"){}).html_safe
-    end
+     end
   end
 
 

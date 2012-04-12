@@ -415,7 +415,7 @@ OK - mettre suppression de period dans la table index des periods et revoir la m
 OK - on ne doit pas voir la proposition nouveau si on ne peut pas créer l'exercice
 OK - reprendre le formulaire nature en utilisant l'astuce pour book pour les boutons radio
 OK - réduire le menu admin livres à liste et nouveau puisque les actions sont dispo dans la liste
-Idem pour le menu banque
+OK - Idem pour le menu banque et caisse qui sont maintenant cohérents
 
 ---------------------REVOIR TOUTES LES SPEC DES VIEWS SUITE AU PASSAGE A CAPYBARA
 OK - admin bank_accounts index
