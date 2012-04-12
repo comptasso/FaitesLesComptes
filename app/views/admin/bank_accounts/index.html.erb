@@ -1,24 +1,21 @@
 <%= content_for :menu do %>
 <%= icon_to 'nouveau.png', new_admin_organism_bank_account_path(@organism) %>
 <% end -%>
-<h3>Liste des comptes bancaires</h3>
+
 <div class="champ">
-<table>
+  <h3>Liste des comptes bancaires</h3>
+<table class="table table-striped table-bordered table-condensed" cellpadding="0" cellspacing="0" border="0">
   <thead>
   <tr>
-    <th>Banque</th>
-    <th>Numéro</th>
+    <th class="span2" class="span2">Banque</th>
+    <th class="span1" class="span2">Numéro</th>
     
-    <th>Commentaire</th>
-    <th>Adresse</th>
-    <th>Créé le</th>
-    <th>Modifié le</th>
+    <th class="span2">Commentaire</th>
+    <th class="span2">Adresse</th>
+    <th class="span2">Créé le</th>
+    <th class="span2">Modifié le</th>
     
-    <th>Actions</th>
-  
-   
-   
-    
+    <th class="span1">Actions</th>
   </tr>
   </thead>
   <tbody>
@@ -28,7 +25,7 @@
     <td><%= bank_account.number %></td>
     
     <td><%= bank_account.comment %></td>
-    <td><%= bank_account.address %></td>
+    <td><%=simple_format bank_account.address %></td>
     <td><%= l bank_account.created_at %></td>
     <td><%= l bank_account.updated_at %></td>
     <td>
