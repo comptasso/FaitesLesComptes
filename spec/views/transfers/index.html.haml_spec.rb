@@ -1,32 +1,40 @@
+# coding utf-8
+
 require 'spec_helper'
 
 describe "transfers/index" do
+  include JcCapybara
+
   before(:each) do
+    assign(:organism, mock_model(Organism, title: 'spec cd'))
+        assign(:debitable, mock_model(BankAccount, name: 'Debix', number: '1254'))
+        assign(:creditable, mock_model(BankAccount, name: 'Debix', number: '6789'))
+        assign(:organism, mock_model(Organism, title: 'spec cd'))
+
     assign(:transfers, [
       stub_model(Transfer,
-        :narration => "Narration",
-        :debited_id => 1,
-        :credited_id => 1,
-        :amount => 1.5
+        :narration => "Premier virement",  
+       :debitable => assigns(:debitable),
+        :creditable => assigns(:creditable),
+        :amount => 1.5,
+        :date=> Date.today
       ),
       stub_model(Transfer,
-        :narration => "Narration",
-        :debited_id => 1,
-        :credited_id => 1,
-        :amount => 1.5
+        :narration => "Deuxieme Virement",
+        :debitable => assigns(:debitable),
+        :creditable => assigns(:creditable),
+        :amount => 150,
+        :date=> (Date.today-5)
       )
     ])
   end
 
-  it "renders a list of transfers" do
+  it "renders a list of transfers", :js=>true do
     render
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td", :text => "Narration".to_s, :count => 2
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td", :text => 1.to_s, :count => 2
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td", :text => 1.to_s, :count => 2
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td", :text => 1.5.to_s, :count => 2
+    
+    page.all('table').should have(1).elements
+    page.find('table tbody').all('tr').should have(2).rows
+    
+    
   end
 end

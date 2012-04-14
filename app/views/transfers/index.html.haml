@@ -1,26 +1,28 @@
 %h1 Listing transfers
 
 %table
-  %tr
-    %th Date
-    %th Narration
-    %th Debited
-    %th Credited
-    %th Amount
-    %th
-    %th
-    %th
-
-  - @transfers.each do |transfer|
+  %thead
     %tr
-      %td= transfer.date
-      %td= transfer.narration
-      %td= transfer.debited_id
-      %td= transfer.credited_id
-      %td= transfer.amount
-      %td= link_to 'Show', transfer
-      %td= link_to 'Edit', edit_organism_transfer_path(@organism, transfer)
-      %td= link_to 'Destroy', [@organism, transfer], :confirm => 'Are you sure?', :method => :delete
+      %th Date
+      %th Amount
+      %th Narration
+      %th Debited
+      %th Credited
+
+      
+      %th
+      %th
+  %tbody
+    - @transfers.each do |transfer|
+      %tr
+        %td= transfer.date
+        %td= transfer.amount
+        %td= transfer.narration
+        %td= transfer.debitable
+        %td= transfer.creditable
+
+        %td= link_to 'Edit', edit_organism_transfer_path(@organism, transfer)
+        %td= link_to 'Destroy', [@organism, transfer], :confirm => 'Are you sure?', :method => :delete
 
 
 

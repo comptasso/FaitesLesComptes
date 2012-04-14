@@ -45,14 +45,11 @@ describe TransfersController do
     {}
   end
 
- describe 'init' do
-   it 'organism a deux comptes bancaires' do
-   @o.should have(2).bank_accounts
- end
- end
-
-  
-
+  describe 'init' do
+    it 'organism a deux comptes bancaires' do
+      @o.should have(2).bank_accounts
+    end
+  end
 
   describe "GET index" do
     it "assigns all transfers as @transfers" do
