@@ -18,7 +18,7 @@
   <% if (@organism  && !@organism.new_record?) %>
     <li class="dropdown <%= 'active' if controller.controller_name =='lines'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
-      <%= admin_menu_books(@organism.books) %>
+      <%= admin_menu('book') %>
     </li>
 
     
@@ -33,12 +33,12 @@
 
     <li class="dropdown <%= 'active' if controller.controller_name =='bankaccounts'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">BANQUES<b class="caret"></b></a>
-      <%= admin_menu_banks(@organism.bank_accounts) %>
+      <%= admin_menu('bank_account') %>
     </li>
 
     <li class="dropdown <%= 'active' if controller.controller_name =='cashes'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">CAISSES<b class="caret"></b></a>
-      <%= admin_menu_cashes(@organism.cashes) %>
+      <%= admin_menu('cash') %>
     </li>
 
 
