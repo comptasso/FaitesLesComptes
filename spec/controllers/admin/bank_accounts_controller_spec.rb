@@ -47,7 +47,7 @@ describe Admin::BankAccountsController do
   describe "GET new" do
     it "assigns a new bank_account as @bank_account" do
       get :new,  :organism_id=>o.id.to_s
-      assigns(:bank_account).should be_a_new(BankAccount)
+      assigns(:bank_account).should be_a_new(BankAccount) 
       assigns(:bank_account).organism.should == o 
     end
   end
@@ -76,7 +76,7 @@ describe Admin::BankAccountsController do
 
       it "redirects to the created bank_account" do
         post :create, :organism_id=>o.id.to_s,  :bank_account => valid_attributes
-        response.should redirect_to(admin_organism_bank_account_url(o))
+        response.should redirect_to(admin_organism_bank_accounts_url(o))
       end 
     end
 
@@ -85,7 +85,7 @@ describe Admin::BankAccountsController do
         # Trigger the behavior that occurs when invalid params are submitted
         BankAccount.any_instance.stub(:save).and_return(false)
         post :create, :organism_id=>o.id.to_s,  :bank_account => {}
-        assigns(:bank_account).should be_a_new(bank_account)
+        assigns(:bank_account).should be_a_new(BankAccount)
       end
 
       it "re-renders the 'new' template" do
@@ -105,7 +105,7 @@ describe Admin::BankAccountsController do
         # specifies that the bank_account created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        BankAccount..any_instance.should_receive(:update_attributes).with({'these' => 'params'})
+        BankAccount.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
         put :update,:organism_id=>o.id.to_s,  :id => bank_account.id, :bank_account => {'these' => 'params'}
       end
 
@@ -146,7 +146,7 @@ describe Admin::BankAccountsController do
       bank_account = o.bank_accounts.create! valid_attributes
       expect {
         delete :destroy,:organism_id=>o.id.to_s,  :id => bank_account.id.to_s
-      }.to change(BankAcccount, :count).by(-1)
+      }.to change(o.bank_accounts, :count).by(-1)
     end 
 
     it "redirects to the bank_accounts list" do
