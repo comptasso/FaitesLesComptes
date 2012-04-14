@@ -10,14 +10,12 @@ end
 # spec request for testing admin books
 
 describe 'vue books index' do
-  include OrganismFixture 
+  include OrganismFixture
 
-#  before(:all) do
-#    clean_test_database
-#  end
-#
+
   before(:each) do
-    Book.count.should == 0 
+    clean_test_database
+    Book.count.should == 0
     create_minimal_organism 
   end
 
@@ -52,7 +50,7 @@ describe 'vue books index' do
   describe 'index' do
 
     it 'dans la vue index,un livre peut être détruit', :js=>true do
-      @o.income_books.create!(:title=>'livre de test')
+      @o.income_books.create!(:title=>'livre de test') 
       @o.should have(3).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_books_path(@o)

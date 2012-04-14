@@ -1,5 +1,5 @@
  <div class="inputs">
-<%= simple_form_for([:admin,@organism,@book], # :url=>admin_organism_book_path(@organism, @book),
+<%= simple_form_for([:admin,@organism,@book], 
   :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
   <%= f.error_notification %>
    <%= f.input :title,  label_html: {class: "span2"}, input_html: {class: "span3"} %>

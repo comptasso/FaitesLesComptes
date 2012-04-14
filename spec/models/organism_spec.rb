@@ -1,6 +1,3 @@
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
-
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
@@ -48,7 +45,7 @@ describe Organism do
     context 'with one bank account' do
        
       before(:each) do
-        @ba = @organism.bank_accounts.create!(name: '124578ZA')
+        @ba = @organism.bank_accounts.create!(name: 'CrédiX', number: '124578ZA')
       end
 
       it "should give the main bank id" do
@@ -58,8 +55,8 @@ describe Organism do
 
       context 'with another bank account' do
         it 'main_bank_id should returns the first one' do
-          @organism.bank_accounts.create!(name: '124577ZA')
-          @organism.bank_accounts.create!(name: '124576ZA')
+          @organism.bank_accounts.create!(name: 'CrédiX', number: '124577ZA')
+          @organism.bank_accounts.create!(name: 'CrédiX', number: '124576ZA')
           @organism.main_bank_id.should == @organism.bank_accounts.first.id
         end
       end

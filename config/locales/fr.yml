@@ -203,7 +203,6 @@ fr:
       nature:
         name: Nom
         comment: Commentaire
-        Depenses: Dépenses
       bank_extract:
         begin_sold: 'Solde initial'
         end_sold: 'Solde final'
@@ -217,7 +216,7 @@ fr:
       bank_account:
         name: Nom de la Banque
         comment: Commentaire
-        number: 'N° de compte'
+        number: "N° de compte"
         address: Adresse
        
       check_deposit:
@@ -241,38 +240,34 @@ fr:
 
 
     errors:
-     models:
-      line:
-        attributes:
-          debit:
-            not_a_number: 'doit être un nombre'
-          credit:
-            not_a_number: 'doit être un nombre'
-          nature_id:
-            blank: 'champ obligatoire'
-          narration:
-            blank: 'champ obligatoire'
-          payment_mode:
-            blank: 'champ obligatoire'
-      cash_control:
-        attributes:
-          amount:
-            greater_than_or_equal_to: 'doît être positif ou nul'
-      account:
-        attributes:
-          number:
-            invalid: "Numéro invalide"
-      destination:
-        attributes:
-          name:
-            blank: 'champ obligatoire'
-      nature:
-        attributes:
-          name:
-            blank: 'champ obligatoire'
-            taken: 'déjà pris'
-          income_outcome:
-            blank: 'champ obligatoire'
+      models:
+        line:
+          attributes:
+            debit:
+              not_a_number: 'doit être un nombre'
+            credit:
+              not_a_number: 'doit être un nombre'
+            nature_id:
+              blank: 'champ obligatoire'
+            narration:
+              blank: 'champ obligatoire'
+            payment_mode:
+              blank: 'champ obligatoire'
+        bank_account:
+          attributes:
+            name:
+              blank: "champ obligatoire"
+            number:
+              blank: "champ obligatoire"
+              taken: "déjà utilisé"
+        cash_control:
+          attributes:
+            amount:
+              greater_than_or_equal_to: "doît être positif ou nul"
+        account:
+          attributes:
+            number:
+              invalid: "Numéro invalide"
 
   helpers:
     select:
@@ -282,12 +277,6 @@ fr:
         create: "Créer et télécharger"
         update: "Modifier le commentaire"
       book:
-        create: "Créer le livre"
-        update: "Modifier ce livre"
-      income_book:
-        create: "Créer le livre"
-        update: "Modifier ce livre"
-      outcome_book:
         create: "Créer le livre"
         update: "Modifier ce livre"
       organism:
@@ -306,7 +295,7 @@ fr:
         create: 'Créer'
         update: Enregistrer
       bank_account:
-        create: Créer
+        create: "Créer le compte"
         update: Enregistrer
       check_deposit:
         create: 'Créer'
