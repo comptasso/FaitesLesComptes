@@ -11,6 +11,8 @@ class Cash < ActiveRecord::Base
   has_many :lines
   has_many :cash_controls
 
+  validates :name, :presence=>true, :uniqueness=>{:scope=>:organism_id}
+
   # calcule le solde d'une caisse à une date donnée en partant du début de l'exercice
   # qui inclut cette date
   # TODO en fait j'ai modifié ce comportement pour ne pas avoir ce problème de report
