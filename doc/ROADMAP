@@ -443,7 +443,7 @@ OK - l'icone plus pour la remise de chèque déclanche une erreur
 Traiter le cas où l'on n'a pas encore de banque (crée une erreur ?)
 
 modifier la zone message pour que les messages soient générés par les modèles et non par le helper
-revoir la logique de archive (il semble qu'il subsiste une grande partie dans le contrôleur).
+revoir la logique de archives (il semble qu'il subsiste une grande partie dans le contrôleur).
 mettre des icones pour naviguer facilement entre les controles et l'affichage des contrôles de caisse
 Dans la vue bank_extract.new, il ya un pb de mise en page des deux pick_dates
 qaund on clique sur un élément il affiche à tort un changement d'exercice
@@ -454,6 +454,7 @@ OK - Dans la zone admin quand on affiche les natures, le hover sur les icones es
 OK - Destination show n'a guère de sens dans la partie admin (supprimer la vue et l'action ?).
 
 -------------------- Virements internes --------------------------------
+
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)

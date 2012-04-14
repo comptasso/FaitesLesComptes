@@ -3,6 +3,7 @@
 require 'spec_helper'
 
 describe "organisms/show.html.erb" do
+  include JcCapybara
 
   let(:o) {stub_model(Organism) }
   let(:ibook) {stub_model(IncomeBook, :title=>'Recettes') }
@@ -25,6 +26,23 @@ describe "organisms/show.html.erb" do
     assign(:paves, [ibook, obook, p2012])
   end
 
+  describe 'Partie Virements du menu' do
+    before(:each) do
+      render :template=>'organisms/show', :layout=>'layouts/application'
+    end
+
+    it 'affiche le menu Virement' do
+      rendered.should match('VIREMENTS')  
+    end
+
+    it 'affiche le sous menu Afficher' do
+      rendered.should match('Afficher')
+      rendered.should match('Nouveau')
+    end
+
+    it 'affiche la sous rubrique Nouveau'
+  end
+
   describe 'Partie Exercices du menu' do
 
     before(:each) do
@@ -32,7 +50,7 @@ describe "organisms/show.html.erb" do
     end
 
     it 'affiche la partie Exercices du menu' do
-      rendered.should match('EXERCICES')
+      rendered.should match('EXERCICES') 
     end
 
     it "affiche le sous menu exercice" do

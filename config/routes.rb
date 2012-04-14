@@ -29,6 +29,7 @@ Faitesvoscomptes::Application.routes.draw do
       resources :books
       resources :income_books
       resources :outcome_books
+      
     
       resources :destinations
       resources :bank_accounts do
@@ -115,7 +116,7 @@ Faitesvoscomptes::Application.routes.draw do
     resources :income_books
     resources :outcome_books
     resources :destinations, only: :index
-    
+    resources :transfers
    
   
 
