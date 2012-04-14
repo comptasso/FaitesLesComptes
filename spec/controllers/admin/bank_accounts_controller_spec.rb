@@ -18,78 +18,80 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe UsersController do
+describe Admin::BankAccountsController do 
 
+  let(:o) {Organism.create!(title: 'TEST')}
   # This should return the minimal set of attributes required to create a valid
-  # User. As you add validations to User, be sure to
+  # bank_account. As you add validations to bank_account, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
+    {name: 'CrediX', number: '5555', organism_id: o.id}
   end
 
   describe "GET index" do
-    it "assigns all users as @users" do
-      user = User.create! valid_attributes
-      get :index
-      assigns(:users).should eq([user])
+    it "assigns all bank_accounts as @bank_accounts" do
+      ba = o.bank_accounts.create! valid_attributes
+      get :index, :organism_id=>o.id.to_s
+      assigns(:bank_accounts).should eq([ba])
     end
   end
 
   describe "GET show" do
-    it "assigns the requested user as @user" do
-      user = User.create! valid_attributes
-      get :show, :id => user.id.to_s
-      assigns(:user).should eq(user)
+    it "assigns the requested bank_account as @bank_account" do
+      bank_account = o.bank_accounts.create! valid_attributes
+      get :show, :organism_id=>o.id.to_s, :id => bank_account.id.to_s
+      assigns(:bank_account).should eq(bank_account)
     end
   end
 
   describe "GET new" do
-    it "assigns a new user as @user" do
-      get :new
-      assigns(:user).should be_a_new(User)
+    it "assigns a new bank_account as @bank_account" do
+      get :new,  :organism_id=>o.id.to_s
+      assigns(:bank_account).should be_a_new(BankAccount)
+      assigns(:bank_account).organism.should == o 
     end
   end
 
-  describe "GET edit" do
-    it "assigns the requested user as @user" do
-      user = User.create! valid_attributes
-      get :edit, :id => user.id.to_s
-      assigns(:user).should eq(user)
+  describe "GET edit" do 
+    it "assigns the requested bank_account as @bank_account" do
+      bank_account = o.bank_accounts.create! valid_attributes
+      get :edit, :id => bank_account.id.to_s
+      assigns(:bank_account).should eq(bank_account)
     end
   end
 
   describe "POST create" do
     describe "with valid params" do
-      it "creates a new User" do
+      it "creates a new bank_account" do
         expect {
-          post :create, :user => valid_attributes
-        }.to change(User, :count).by(1)
+          post :create, :organism_id=>o.id.to_s, :bank_account => valid_attributes
+        }.to change(BankAccount, :count).by(1)
       end
 
-      it "assigns a newly created user as @user" do
-        post :create, :user => valid_attributes
-        assigns(:user).should be_a(User)
-        assigns(:user).should be_persisted
+      it "assigns a newly created bank_account as @bank_account" do
+        post :create, :organism_id=>o.id.to_s, :bank_account => valid_attributes
+        assigns(:bank_account).should be_a(BankAccount)
+        assigns(:bank_account).should be_persisted
       end
 
-      it "redirects to the created user" do
-        post :create, :user => valid_attributes
-        response.should redirect_to(User.last)
-      end
+      it "redirects to the created bank_account" do
+        post :create, :organism_id=>o.id.to_s,  :bank_account => valid_attributes
+        response.should redirect_to(admin_organism_bank_account_url(o))
+      end 
     end
 
     describe "with invalid params" do
-      it "assigns a newly created but unsaved user as @user" do
+      it "assigns a newly created but unsaved bank_account as @bank_account" do
         # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        post :create, :user => {}
-        assigns(:user).should be_a_new(User)
+        BankAccount.any_instance.stub(:save).and_return(false)
+        post :create, :organism_id=>o.id.to_s,  :bank_account => {}
+        assigns(:bank_account).should be_a_new(bank_account)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        post :create, :user => {}
+        BankAccount.any_instance.stub(:save).and_return(false)
+        post :create,:organism_id=>o.id.to_s,  :bank_account => {}
         response.should render_template("new")
       end
     end
@@ -97,60 +99,60 @@ describe UsersController do
 
   describe "PUT update" do
     describe "with valid params" do
-      it "updates the requested user" do
-        user = User.create! valid_attributes
-        # Assuming there are no other users in the database, this
-        # specifies that the User created on the previous line
+      it "updates the requested bank_account" do
+        bank_account = o.bank_accounts.create! valid_attributes
+        # Assuming there are no other bank_accounts in the database, this
+        # specifies that the bank_account created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        User.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => user.id, :user => {'these' => 'params'}
+        BankAccount..any_instance.should_receive(:update_attributes).with({'these' => 'params'})
+        put :update,:organism_id=>o.id.to_s,  :id => bank_account.id, :bank_account => {'these' => 'params'}
       end
 
-      it "assigns the requested user as @user" do
-        user = User.create! valid_attributes
-        put :update, :id => user.id, :user => valid_attributes
-        assigns(:user).should eq(user)
+      it "assigns the requested bank_account as @bank_account" do
+        bank_account = o.bank_accounts.create! valid_attributes
+        put :update,:organism_id=>o.id.to_s,  :id => bank_account.id, :bank_account => valid_attributes
+        assigns(:bank_account).should eq(bank_account)
       end
 
-      it "redirects to the user" do
-        user = User.create! valid_attributes
-        put :update, :id => user.id, :user => valid_attributes
-        response.should redirect_to(user)
+      it "redirects to the bank_account" do
+        bank_account = o.bank_accounts.create! valid_attributes
+        put :update, :organism_id=>o.id.to_s, :id => bank_account.id, :bank_account => valid_attributes
+        response.should redirect_to(admin_organism_bank_accounts_url(o))
       end
     end
 
     describe "with invalid params" do
-      it "assigns the user as @user" do
-        user = User.create! valid_attributes
+      it "assigns the bank_account as @bank_account" do
+        bank_account = o.bank_accounts.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        put :update, :id => user.id.to_s, :user => {}
-        assigns(:user).should eq(user)
+        BankAccount.any_instance.stub(:save).and_return(false)
+        put :update, :organism_id=>o.id.to_s, :id => bank_account.id.to_s, :bank_account => {}
+        assigns(:bank_account).should eq(bank_account)
       end
 
       it "re-renders the 'edit' template" do
-        user = User.create! valid_attributes
+        bank_account = o.bank_accounts.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        put :update, :id => user.id.to_s, :user => {}
+        BankAccount.any_instance.stub(:save).and_return(false)
+        put :update,:organism_id=>o.id.to_s,  :id => bank_account.id.to_s, :bank_account => {}
         response.should render_template("edit")
       end
     end
   end
 
   describe "DELETE destroy" do
-    it "destroys the requested user" do
-      user = User.create! valid_attributes
+    it "destroys the requested bank_account" do
+      bank_account = o.bank_accounts.create! valid_attributes
       expect {
-        delete :destroy, :id => user.id.to_s
-      }.to change(User, :count).by(-1)
+        delete :destroy,:organism_id=>o.id.to_s,  :id => bank_account.id.to_s
+      }.to change(BankAcccount, :count).by(-1)
     end 
 
-    it "redirects to the users list" do
-      user = User.create! valid_attributes
-      delete :destroy, :id => user.id.to_s
-      response.should redirect_to(users_url)
+    it "redirects to the bank_accounts list" do
+      bank_account = o.bank_accounts.create! valid_attributes
+      delete :destroy,:organism_id=>o.id.to_s,  :id => bank_account.id.to_s
+      response.should redirect_to(admin_organism_bank_accounts_url(o))
     end
   end
 
