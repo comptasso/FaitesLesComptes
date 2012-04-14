@@ -10,6 +10,8 @@ class Cash < ActiveRecord::Base
   belongs_to :organism
   has_many :lines
   has_many :cash_controls
+  has_many :d_transfers, :as=>:debitable, :class_name=>'Transfer'
+  has_many :c_transfers, :as=>:creditable, :class_name=>'Transfer'
 
   validates :name, :presence=>true, :uniqueness=>{:scope=>:organism_id}
 

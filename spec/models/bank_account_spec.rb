@@ -13,6 +13,8 @@ describe BankAccount do
     @bb=@o.bank_accounts.new(:name=>'Crédit Universel', :number=>'1254L')
   end
 
+  context 'controle des validités' do
+
   it "should be valid" do
     @bb.should be_valid
   end
@@ -33,7 +35,18 @@ describe BankAccount do
     @bb.should_not be_valid 
   end
 
-  
+  end
+
+  context 'transferts' do
+
+    it 'has a method debit_transfers' do
+      @ba.d_transfers.should  == []
+    end
+
+    it 'has a method credit_transfers' do
+      @ba.c_transfers.should  == []
+    end
+  end
 
 end
 

@@ -17,6 +17,7 @@ class Organism < ActiveRecord::Base
   has_many :accounts, through: :periods
   has_many :archives,  dependent: :destroy
   has_many :pending_checks, through: :books
+  has_many :transfers
 
   after_create :create_default
 

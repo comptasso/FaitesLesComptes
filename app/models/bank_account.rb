@@ -4,7 +4,8 @@ class BankAccount < ActiveRecord::Base
   belongs_to :organism
   has_many :check_deposits
   has_many :bank_extracts
-
+  has_many :d_transfers, :as=>:debitable, :class_name=>'Transfer'
+  has_many :c_transfers, :as=>:creditable, :class_name=>'Transfer'
   
   validates :number, :uniqueness=>{:scope=>[:organism_id, :name]}
   validates :name, :number,  presence: true

@@ -317,4 +317,7 @@ fr:
       account:
         create: Créer le compte
         update: 'Mettre à jour'
+      transfer:
+        create: Enregistrer
+        update: Modifier ce virement
 

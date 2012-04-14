@@ -1,5 +1,7 @@
 Faitesvoscomptes::Application.routes.draw do
 
+  resources :transfers
+
   # namespace COMPTA
   namespace :compta do
     resources :organisms do

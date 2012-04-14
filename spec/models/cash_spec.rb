@@ -10,6 +10,7 @@ describe BankAccount do
     @c=@o.cashes.new(:name=>'Magasin')
   end
 
+  context 'test constraints' do
   it "should be valid" do
     @c.should be_valid
   end
@@ -25,7 +26,23 @@ describe BankAccount do
     @c.should_not be_valid 
   end
 
+  end
   
+  context 'transferts' do
+
+    before(:each) do
+      @c=@o.cashes.create!(name:'Magasin')
+    end
+
+    it 'has a method debit_transfers' do
+      @c.d_transfers.should  == []
+    end
+
+    it 'has a method credit_transfers' do
+      @c.c_transfers.should  == []
+    end
+  end
+
 
 end
 

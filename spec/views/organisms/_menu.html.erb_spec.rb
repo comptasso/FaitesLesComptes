@@ -32,15 +32,17 @@ describe "organisms/show.html.erb" do
     end
 
     it 'affiche le menu Virement' do
-      rendered.should match('VIREMENTS')  
+      page.find('ul#menu_general').should have_content('VIREMENTS')
     end
 
     it 'affiche le sous menu Afficher' do
-      rendered.should match('Afficher')
-      rendered.should match('Nouveau')
+      page.find('li#menu_transfer').should have_content('Afficher')
+      
     end
 
-    it 'affiche la sous rubrique Nouveau'
+    it 'affiche la sous rubrique Nouveau' do
+      page.find('li#menu_transfer').should have_content('Nouveau')
+    end
   end
 
   describe 'Partie Exercices du menu' do
