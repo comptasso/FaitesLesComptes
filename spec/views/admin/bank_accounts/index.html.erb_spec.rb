@@ -33,11 +33,6 @@ describe 'admin/bank_accounts/index' do
       page.find('table tbody').should have_css('tr', :count=>2)
     end
 
-    #    it 'shows the page' do
-    #      page.find('tbody tr').should == 'ligne'
-    #    end
-    
-
     it "each row should show 2 icons (edit and delete)" do
       page.find('tbody tr').should have_css('img',:count=>2)
     end

@@ -3,32 +3,30 @@
 <% end -%>
 
 <div class="champ">
-<table>
+  <h3>Liste des caisses</h3>
+<table class="table table-striped table-bordered table-condensed" cellpadding="0" cellspacing="0" border="0">
+  <thead>
   <tr>
-
-   
-
     <th>Nom</th>
-
-    <th></th>
-    <th></th>
- 
+    <th>Créée le</th>
+    <th>Mis à jour le</th>
+    <th>Actions</th>
   </tr>
-
+  </thead>
+  <tbody>
 <% @cashes.each do |cash| %>
   <tr>
-
-  
-
     <td><%= cash.name %></td>
-
-    
-    <td><%= icon_to 'modifier.png', edit_admin_organism_cash_path(@organism,cash) %></td>
-    <td><%= icon_to 'supprimer.png', [:admin,@organism,cash], :confirm => 'Etes vous sur ?', :method => :delete %></td>
+  <td><%= l cash.created_at %></td>
+    <td><%= l cash.updated_at %></td>
+    <td><%= icon_to 'modifier.png', edit_admin_organism_cash_path(@organism,cash) %>
+         <%=   icon_to 'supprimer.png', [:admin,@organism,cash], :confirm => 'Etes vous sur ?', 
+           :method => :delete if cash.cash_controls.empty?%></td>
   </tr>
 <% end %>
+  </tbody>
 </table>
 
-</div></div>
+</div>
 
 
