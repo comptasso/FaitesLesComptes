@@ -260,6 +260,11 @@ fr:
             number:
               blank: "champ obligatoire"
               taken: "déjà utilisé"
+        cash:
+          attributes:
+            name:
+              blank: 'champ obligatoire'
+              taken: "déjà utilisé"
         cash_control:
           attributes:
             amount:

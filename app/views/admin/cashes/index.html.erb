@@ -8,6 +8,7 @@
   <thead>
   <tr>
     <th>Nom</th>
+    <th>Commentaire</th>
     <th>Créée le</th>
     <th>Mis à jour le</th>
     <th>Actions</th>
@@ -17,9 +18,10 @@
 <% @cashes.each do |cash| %>
   <tr>
     <td><%= cash.name %></td>
+    <td><%= cash.comment %></td>
   <td><%= l cash.created_at %></td>
     <td><%= l cash.updated_at %></td>
-    <td><%= icon_to 'modifier.png', edit_admin_organism_cash_path(@organism,cash) %>
+    <td><%= icon_to 'modifier.png', edit_admin_organism_cash_path(@organism,cash), :id=>"icon_modifier_cash_#{cash.id}" %>
          <%=   icon_to 'supprimer.png', [:admin,@organism,cash], :confirm => 'Etes vous sur ?', 
            :method => :delete if cash.cash_controls.empty?%></td>
   </tr>
