@@ -1,3 +1,5 @@
+# coding: utf-8
+
 class Transfer < ActiveRecord::Base
 
   belongs_to :organism
@@ -9,6 +11,10 @@ class Transfer < ActiveRecord::Base
   validates :creditable_id, :creditable_type, :presence=>true
   validates :amount, numericality: true
   # argument virtuel pour la saisie des dates
+
+  validate :amount_cant_be_null, :required_fill_debitable, :required_fill_creditable
+  validate :different_debit_and_credit
+
   def pick_date
     date ? (I18n::l date) : nil
   end
@@ -44,4 +50,26 @@ class Transfer < ActiveRecord::Base
   def fill_creditable
     [creditable_type, creditable_id].join('_')
   end
+
+  private
+
+  def amount_cant_be_null
+    errors.add :amount, 'nul !' if amount == 0
+  end
+
+  def required_fill_debitable
+    errors.add :fill_debitable, 'champ obligatoire' if (debitable_id == nil || debitable_type == nil)
+  end
+
+  def required_fill_creditable
+    errors.add :fill_creditable, 'champ obligatoire' if (creditable_id == nil || creditable_type == nil)
+  end
+
+  def different_debit_and_credit
+    if fill_debitable == fill_creditable
+      errors.add :fill_debitable, 'identiques !'
+      errors.add :fill_creditable, 'identiques !'
+    end
+  end
+
 end

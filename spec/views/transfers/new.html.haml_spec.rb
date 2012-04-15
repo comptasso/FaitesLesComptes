@@ -26,9 +26,7 @@ describe "transfers/new" do
 
   it 'forms points to'
 
-  it 'check fields' do
-    
-  end
+  it 'check fields' 
 
 
   it 'check the select fill_debitable' do

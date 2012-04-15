@@ -27,7 +27,7 @@ describe 'vue transfer index' do
 
 
 
-  describe 'new book' do
+  describe 'new transfer' do
     
     it "affiche la page new" do
       visit new_organism_transfer_path(@o)
@@ -53,6 +53,36 @@ describe 'vue transfer index' do
       t.should be_an_instance_of(Transfer)
       t.debitable.should == @ba
       t.creditable.should == @bb
+    end
+
+    context 'le remplir incorrectement' do
+
+      before(:each) do
+      visit new_organism_transfer_path(@o)
+      fill_in 'transfer[pick_date]', :with=>'14/04/2012'
+      fill_in 'transfer[narration]', :with=>'Premier virement'
+      fill_in 'transfer[amount]', :with=>'123.50'
+      within('#transfer_fill_debitable') do
+        select('DX 123Z')
+      end
+      within('#transfer_fill_creditable') do
+        select('DX 123Y')
+      end
+
+      end
+
+      it 'sans montant reaffiche la vue' do
+        fill_in 'transfer[amount]', :with=>'bonjour'
+        click_button 'Enregistrer'
+        page.should have_content 'Nouveau virement'
+      end
+
+      it 'affiche des message d erreurs' do
+        fill_in 'transfer[amount]', :with=>''
+        click_button 'Enregistrer'
+        
+        page.should have_content 'champ obligatoire'
+      end
     end
 
   end

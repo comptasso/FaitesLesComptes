@@ -273,6 +273,12 @@ fr:
           attributes:
             number:
               invalid: "Numéro invalide"
+        transfer:
+          attributes:
+            amount:
+              blank: 'champ obligatoire'
+              not_a_number: 'nombre'
+
 
   helpers:
     select:

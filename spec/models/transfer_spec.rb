@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require 'spec_helper'
 
 describe Transfer do
@@ -104,7 +106,46 @@ describe Transfer do
       @transfer.amount = 'bonjour'
       @transfer.should_not be_valid
     end
+
+    it 'debitable and creditable should be different' do
+      @transfer.debitable = @transfer.creditable
+      @transfer.should_not be_valid
+    end
+
   end
 
+
+  describe 'errors' do
+
+    before(:each) do
+      @transfer=Transfer.new(valid_attributes)
+    end
+
+    it 'champ obligatoire when a required field is missing' do
+      @transfer.amount = nil
+      @transfer.valid?
+      @transfer.errors[:amount].should == ['champ obligatoire', 'nombre']
+    end
+
+    it 'montant ne peut être nul' do
+      @transfer.amount = 0
+      @transfer.valid?
+      @transfer.errors[:amount].should == ['nul !']
+    end
+
+    it 'champ obligatoire pour debitable' do
+      @transfer.debitable=nil
+      @transfer.valid?
+      @transfer.errors[:fill_debitable].should == ['champ obligatoire']
+    end
+
+     it 'champ obligatoire pour creditable' do
+      @transfer.creditable=nil
+      @transfer.valid?
+      @transfer.errors[:fill_creditable].should == ['champ obligatoire']
+    end
+
+
+  end
 
 end
