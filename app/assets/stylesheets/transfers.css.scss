@@ -1,7 +1,12 @@
 // Place all the styles related to the Transfers controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.public_transfers {
 
-  th.numeric, td.numeric {text-align: right;}
+.public_transfers {
+  
+  th.numeric, .numeric
+  {
+    text-align: right;
   }
+  
+}

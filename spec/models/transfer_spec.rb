@@ -1,9 +1,15 @@
 require 'spec_helper'
 
 describe Transfer do
+  include OrganismFixture
+
+  before(:each) do
+    create_minimal_organism
+    @bb=@o.bank_accounts.create!(name: 'DebiX', number: '123Y')
+  end
 
   def valid_attributes
-    {}
+    {date: Date.today, debitable: @ba, creditable: @bb, amount: 1.5, organism_id: @o.id}
   end
 
   context 'virtual attribute pick date' do
@@ -13,7 +19,6 @@ describe Transfer do
     end
     
     it "should store date for a valid pick_date" do
-      
       @transfer.pick_date = '06/06/1955'
       @transfer.date.should == Date.civil(1955,6,6)
    end
@@ -43,7 +48,8 @@ describe Transfer do
     end
 
   end
-describe 'virtual attribute creditable' do
+
+  describe 'virtual attribute creditable' do
 
      before(:each) do
       @transfer=Transfer.new(:creditable_type=>'Model', :creditable_id=>'9')
@@ -60,6 +66,44 @@ describe 'virtual attribute creditable' do
       @transfer.fill_creditable.should == 'Model_9'
     end
 
+  end
+
+  describe 'validations' do
+
+    before(:each) do
+      @transfer=Transfer.new(valid_attributes)
+    end
+
+    it 'should be valid with valid attributes' do
+      @transfer.should be_valid
+    end
+
+    it 'but not without a date' do
+      @transfer.date = nil
+      @transfer.should_not be_valid
+    end
+
+    it 'nor without amount' do
+      @transfer.amount = nil
+      @transfer.should_not be_valid
+    end
+
+    it 'nor without debitable' do
+
+      @transfer.debitable = nil
+      @transfer.should_not be_valid
+
+    end
+
+    it 'nor without creditable' do
+      @transfer.debitable = nil
+      @transfer.should_not be_valid
+    end
+
+    it 'amount should be a number' do
+      @transfer.amount = 'bonjour'
+      @transfer.should_not be_valid
+    end
   end
 
 

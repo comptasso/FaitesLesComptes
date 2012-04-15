@@ -4,6 +4,10 @@ class Transfer < ActiveRecord::Base
   belongs_to :debitable, :polymorphic=>true
   belongs_to :creditable, :polymorphic=>true
 
+  validates :date, :amount, :presence=>true
+  validates :debitable_id, :debitable_type, :presence=>true
+  validates :creditable_id, :creditable_type, :presence=>true
+  validates :amount, numericality: true
   # argument virtuel pour la saisie des dates
   def pick_date
     date ? (I18n::l date) : nil
