@@ -106,9 +106,14 @@ end
    name.gsub(/[a-z\séèùôîûâ]/, '')
  end
 
+ # utilisée dans les select pour avoir un champ plus sympathique que le seul numéro
  def to_s
    "#{acronym} #{number}"
  end
+
+  def to_option
+    "#{self.class.name}_#{id}"
+  end
 
  protected
 

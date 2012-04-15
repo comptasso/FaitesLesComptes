@@ -42,7 +42,7 @@ end
 # Helper permettant de construire les options pour le form
 #
 def options_for_checks(check_deposit)
-  [OptionsForChecksSelect.new('Déja inclus', :target, check_deposit), OptionsForSelect.new('Non inclus',:tank, check_deposit)]
+  [OptionsForChecksSelect.new('Déja inclus', :target, check_deposit), OptionsForChecksSelect.new('Non inclus',:tank, check_deposit)]
 end
 
 

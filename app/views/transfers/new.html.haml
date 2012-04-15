@@ -1,5 +1,9 @@
-%h1 Nouveau virement
+= content_for :menu do
+  = icon_to 'retour.png', :back
 
-= render 'form'
+.champ
+  %h3 Nouveau virement
+  .inner_champ
+    = render 'form'
 
 

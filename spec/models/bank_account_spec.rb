@@ -48,5 +48,17 @@ describe BankAccount do
     end
   end
 
+  context 'annex methods' do
+
+
+    it 'to_s return name' do
+      @ba.to_s.should == 'CM 124578ABC'
+    end
+
+    it 'to_option return cash_id' do
+      @ba.to_option.should == "BankAccount_#{@ba.id}"
+    end
+  end
+
 end
 

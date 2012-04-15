@@ -27,6 +27,20 @@ describe BankAccount do
   end
 
   end
+
+  context 'annex methods' do
+    before(:each) do
+      @c=@o.cashes.create!(:name=>'Magasin')
+    end
+
+    it 'to_s return name' do
+      @c.to_s.should == @c.name
+    end
+
+    it 'to_option return cash_id' do
+      @c.to_option.should == "Cash_#{@c.id}"
+    end
+  end
   
   context 'transferts' do
 

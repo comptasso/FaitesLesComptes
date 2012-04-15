@@ -42,7 +42,13 @@ class Cash < ActiveRecord::Base
     return min_date, [period.close_date, Date.today].min
   end
 
- 
+  def to_s
+    name
+  end
+
+  def to_option
+    "#{self.class.name}_#{id}"
+  end
 
   
 
