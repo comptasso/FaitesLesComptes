@@ -35,7 +35,11 @@ describe TransfersController do
   # Transfer. As you add validations to Transfer, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {:amount=>1245, :debitable=>@ba, :creditable=>@bb, :narration=>'Premier virement', :date=>Date.today}
+    {:amount=>1245.to_s, :debitable_id=>@ba.id, :debitable_type=>'BankAccount',
+      :creditable_id=>@bb.id,:creditable_type=>'BankAccount',
+      :narration=>'Premier virement', :date=>Date.today,
+      :organism_id=>@o.id
+      }
   end
   
   # This should return the minimal set of values that should be in the session
@@ -69,7 +73,7 @@ describe TransfersController do
 
   describe "GET new" do
     it "assigns a new transfer as @transfer" do
-      get :new, {:organism_id=>@o.to_param}, valid_session
+      get :new, {:organism_id=>@o.id}, valid_session
       assigns(:transfer).should be_a_new(Transfer)
     end
   end
@@ -77,7 +81,7 @@ describe TransfersController do
   describe "GET edit" do
     it "assigns the requested transfer as @transfer" do
       transfer = Transfer.create! valid_attributes
-      get :edit, {:organism_id=>@o.to_param,:id => transfer.to_param}, valid_session
+      get :edit, {:organism_id=>@o.id,:id => transfer.to_param}, valid_session
       assigns(:transfer).should eq(transfer)
     end
   end
@@ -86,7 +90,7 @@ describe TransfersController do
     describe "with valid params" do
       it "creates a new Transfer" do
         expect {
-          post :create, {:organism_id=>@o.to_param,:transfer => valid_attributes}, valid_session
+          post :create, {:organism_id=>@o.id,:transfer => valid_attributes}, valid_session
         }.to change(Transfer, :count).by(1)
       end
 

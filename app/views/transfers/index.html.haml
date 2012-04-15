@@ -1,28 +1,34 @@
-%h1 Listing transfers
+= content_for :menu do
+  = icon_to 'navigation90.png',:back
+  = icon_to 'nouveau.png', new_organism_transfer_path(@organism)
 
-%table
-  %thead
-    %tr
-      %th Date
-      %th Amount
-      %th Narration
-      %th Debited
-      %th Credited
 
-      
-      %th
-      %th
-  %tbody
-    - @transfers.each do |transfer|
+
+.champ
+  %h3 Liste des virements
+
+  %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0")
+    %thead
       %tr
-        %td= transfer.date
-        %td= transfer.amount
-        %td= transfer.narration
-        %td= transfer.debitable
-        %td= transfer.creditable
+        %th.span1 Date
+        %th.span5 Libellé
+        %th.span1.numeric Montant
+        %th.span2 Débité
+        %th.span2 Crédité
+        %th.span1 Actions
 
-        %td= link_to 'Edit', edit_organism_transfer_path(@organism, transfer)
-        %td= link_to 'Destroy', [@organism, transfer], :confirm => 'Are you sure?', :method => :delete
+    %tbody
+      - @transfers.each do |transfer|
+        %tr
+          %td= l transfer.date
+          %td= transfer.narration
+          %td.numeric= two_decimals transfer.amount
+          %td= show_transferable transfer.debitable
+          %td= show_transferable transfer.creditable
+
+          %td
+            = icon_to 'modifier.png', edit_organism_transfer_path(@organism, transfer)
+            = icon_to 'supprimer.png', [@organism, transfer], :confirm => 'Are you sure?', :method => :delete
 
 
 

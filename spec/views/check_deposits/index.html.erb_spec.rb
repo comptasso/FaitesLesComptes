@@ -21,7 +21,7 @@ describe "check_deposits/index" do
   before(:each) do
     [cd1, cd2].each do |cd|
       cd.stub(:bank_account).and_return(ba)
-  end
+    end
     ba.stub!(:to_s).and_return('124578AZ')
     cd1.stub(:bank_extract_line).and_return(1) # la remise de chèque n° 1 est pointée
     cd2.stub(:bank_extract_line).and_return(nil)
@@ -38,27 +38,25 @@ describe "check_deposits/index" do
   end
 
   describe "controle du menu" do
-      it 'le menu doit apparaître'
+    it 'le menu doit apparaître'
   end
 
   
   describe "controle du corps" do
-# pending
+
     before(:each) do
-        render
-      end
+      render
+    end
 
     it "affiche la légende du fieldset" do
-       assert_select "h3", :text => "Banque compte n°124578AZ : liste des remises de chèques"
+      assert_select "h3", :text => "Banque compte n°124578AZ : liste des remises de chèques"
     end
     
     it "affiche la table desw remises de chèques" do
-   
       assert_select "table tbody", count: 1
     end
     
     it "affiche les lignes (ici deux)" do
-    
       assert_select "tbody tr", count: 2
     end
 
@@ -69,8 +67,7 @@ describe "check_deposits/index" do
         assert_select('tr:nth-child(2) td', :text=>cd2.bank_account.number)
       end
       it "la date" do
-
-        assert_select('tr:nth-child(2) td:nth-child(2)', :text=>I18n::l(cd2.deposit_date))
+       assert_select('tr:nth-child(2) td:nth-child(2)', :text=>I18n::l(cd2.deposit_date))
       end
       
       it "le montant (formatté avec une virgule et deux décimales)" do
@@ -102,8 +99,8 @@ describe "check_deposits/index" do
     context "quand la remise de chèque est pointée, ie elle est reliée à une bank_extract_line" do
 
       it "le lien affichage est toujours disponible" do
-       assert_select('tr:nth-child(1) td:nth-child(5) img[src= ?]' , '/assets/icones/afficher.png')
-       assert_select('tr:nth-child(1) td:nth-child(5) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd1))
+        assert_select('tr:nth-child(1) td:nth-child(5) img[src= ?]' , '/assets/icones/afficher.png')
+        assert_select('tr:nth-child(1) td:nth-child(5) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd1))
       end
 
       it "mais pas le lien modification" do
