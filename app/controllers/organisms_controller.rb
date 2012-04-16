@@ -23,7 +23,7 @@ class OrganismsController < ApplicationController
   # GET /organisms/1.json
   def show
     # TODO introduire ce même mécanisme sur les parties compta et admin
-    reset_session if (params[:id] != session[:organism])
+    reset_session if (params[:id] != session[:organism].to_s)
     @organism = Organism.find(params[:id])
     session[:organism] = @organism.id if @organism
     if @organism.periods.empty?

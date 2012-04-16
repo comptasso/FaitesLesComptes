@@ -430,7 +430,7 @@ OK - check_deposits lines organism users
 Period#index ne devrait pas présenter clore comme action lorsqu'on vient de le créer et qu'il n'y a pas d'écritures.
 Problème pour le changement d'exercice avec tentative (on arrive toujours au plus récent)
 Quand il n'y a pas de chèque à remettre on peut cliquer sur nlle remise et il ne se passe rien
-
+Modifier le style des liens vus dans les menus
 il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date
 admin_organism_index : l'icone restauration devrait avoir une flèche
 ----------------------------- admin natures ---------------------------------------

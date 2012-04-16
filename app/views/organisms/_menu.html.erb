@@ -52,7 +52,7 @@
       </a>
       <ul class="dropdown-menu">
           <%  @organism.periods.each do |p| %>
-            <%=   content_tag :li,  (link_to p.exercice, change_organism_period_path(@organism, p)) %>
+            <%=   content_tag :li,  (link_to p.exercice, change_organism_period_path(@organism, p.id)) %>
           <% end %>
         </ul>
       </li>

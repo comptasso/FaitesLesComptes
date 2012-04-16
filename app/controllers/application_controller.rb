@@ -9,9 +9,8 @@ class ApplicationController < ActionController::Base
 
   def find_organism
     if params[:organism_id]
-      Rails.logger.info "Changement d'organisme : ancien id = #{session[:organism]} nouvel_id #{params[:organism]}" if (params[:organism_id] != session[:organism])
-      # TODO voir si on fait le changement d'organisme ou au contraire si on l'interdit
-      reset_session if (params[:organism_id] != session[:organism])
+      Rails.logger.info "Changement d'organisme : ancien id = #{session[:organism]} nouvel_id #{params[:organism_id]}" if (params[:organism_id] != session[:organism].to_s)
+      reset_session if (params[:organism_id] != session[:organism].to_s)
       @organism = Organism.find(params[:organism_id]) if params[:organism_id]
       session[:organism] = @organism.id if @organism
     end
@@ -23,6 +22,7 @@ class ApplicationController < ActionController::Base
       pid = session[:period] ||= (@organism.periods.order(:start_date).last.id if (@organism && @organism.periods.any?))
       @period= Period.find(pid) if pid
     end
+     Rails.logger.info "Dans find_period avec session[:period] = #{session[:period]}"
   end
 
   # HELPER_METHODS
