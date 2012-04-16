@@ -21,25 +21,36 @@ describe "transfers/new" do
   end
 
   it 'view has one form' do
+    render
     page.all('form').should have(1).element
   end
 
-  it 'forms points to'
-
-  it 'check fields' 
-
-
-  it 'check the select fill_debitable' do
+  it 'forms points to' do
+   @t = assign(:transfer, stub_model(Transfer).as_new_record )
     render
-    # FIXME : en fait ce devrait être 4 mais j'ai toujours une option vide
-    page.find('#transfer_fill_debitable_id').all('option').should have(5).elements
-    page.find('#transfer_fill_debitable_id').all('option').should have(5).elements 
+    assert_select "form", :action => organism_transfers_path(@o), :method => "post"
+  end
+
+  it 'check fields' do
+    render
+    page.should have_css('input#transfer_amount')
+    page.should have_css('input#transfer_narration')
+    page.should have_css('input#transfer_pick_date')
+    page.should have_css('.btn')
+  end
+
+
+  it 'check the select ' do
+    render
+    
+    page.find('#transfer_fill_debitable').all('option').should have(4).elements
+    page.find('#transfer_fill_creditable').all('option').should have(4).elements
   end
   
    it 'value should show class and id' do
     render
-    page.find('#transfer_fill_debitable_id').find('option:nth-child(2)').value.should match /BankAccount_\d*/
-    page.find('#transfer_fill_creditable_id').find('option:nth-child(2)').value.should match /BankAccount_\d*/
+    page.find('#transfer_fill_debitable').find('option:nth-child(2)').value.should match /BankAccount_\d*/
+    page.find('#transfer_fill_creditable').find('option:nth-child(2)').value.should match /BankAccount_\d*/
   end
 
  

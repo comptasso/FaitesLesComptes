@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 
-require 'rubygems' 
+require 'rubygems'  
 require 'spork'
 
 Spork.prefork do
@@ -81,8 +81,8 @@ end
 end
 
 RSpec.configure do |c| 
- # c.exclusion_filter = {:js=> true }
-end 
+#   c.exclusion_filter = {:js=> true }
+end  
 
 
 

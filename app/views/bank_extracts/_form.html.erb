@@ -5,9 +5,9 @@
 
   <div class="inputs">
 
-    <%= f.association :bank_account %>
+    <%= f.association :bank_account, :include_blank=>false %>
     <%= f.input :reference %>
-  
+    
   
     <div class="input date optionnal">
     <label>Du</label>

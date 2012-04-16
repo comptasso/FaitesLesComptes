@@ -12,9 +12,15 @@
           </ul>
           <%= picker_date 'check_deposit[pick_date]', Date.today.years_ago(5), Date.today.years_since(5) , @check_deposit.pick_date %>
         </div>
-          <%= f.association :bank_account,  :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: "span2"}, :collection => @organism.bank_accounts.map {|b| [b.number, b.id]}, :prompt => "Numero de compte ?", :label=>'Compte' %>
-          <%= f.association :checks, :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: "span4"},  :collection => @organism.lines.non_depose.map {|c| [c.check_for_select, c.id]},
-            :prompt => 'Chèques à remettre', :label=> 'Chèques' %>
+          <%= f.association :bank_account,  :jclabel_wrapper_html=>{class: "span1"},
+              input_html: {:class=> "span2"},
+              :collection => @organism.bank_accounts.map {|b| [b.number, b.id]},
+              :prompt => "Numero de compte ?", :label=>'Compte' %>
+
+          <%= f.association :checks, :jclabel_wrapper_html=>{class: "span1"}, 
+              input_html: {:class=> "span4"},
+              :collection => @organism.lines.non_depose.map {|c| [c.check_for_select, c.id]},
+              :prompt => 'Chèques à remettre', :label=> 'Chèques' %>
       </div>
    
        <div class="row">

@@ -52,7 +52,7 @@ describe BankAccount do
 
 
     it 'to_s return name' do
-      @ba.to_s.should == 'CM 124578ABC'
+      @ba.to_s.should == 'DX 123Z'
     end
 
     it 'to_option return cash_id' do

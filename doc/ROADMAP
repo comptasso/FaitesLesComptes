@@ -427,8 +427,8 @@ OK - admin natures index
 OK - admin periods new
 OK - check_deposits lines organism users
 -------------------------------------------------------------
-Period#index ne devrait pas présenter clore comme action lorsqu'on vient de le créer et qu'il n'y a pas d'organisme.
-Problème pour le changement d'exercice
+Period#index ne devrait pas présenter clore comme action lorsqu'on vient de le créer et qu'il n'y a pas d'écritures.
+Problème pour le changement d'exercice avec tentative (on arrive toujours au plus récent)
 Quand il n'y a pas de chèque à remettre on peut cliquer sur nlle remise et il ne se passe rien
 
 il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date
@@ -456,7 +456,9 @@ OK - Dans la zone admin quand on affiche les natures, le hover sur les icones es
 OK - Destination show n'a guère de sens dans la partie admin (supprimer la vue et l'action ?).
 
 -------------------- Virements internes --------------------------------
-
+OK - mise en place du modèle et des vues et des spec associées
+voir pour afficher en javascript les soldes après transfert
+revoir du coup l'affichage de bank_extract_lines
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
