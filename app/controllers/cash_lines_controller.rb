@@ -15,20 +15,21 @@ class CashLinesController < LinesController
 
 # la méthode index est héritée de LinesController
   def index
-    @monthly_extract = Utilities::MonthlyCashExtract.new(@book, @date)
+    @date = @period.guess_date(@mois)
+    @monthly_extract = Utilities::MonthlyCashExtract.new(@cash, @date)
     # FIXME remplacer fill_soldes par qqc qui ressemble à MonthlyBookExtract
 
     respond_to do |format|
-      format.html {render 'cash_lines/index'}
-      format.json { render json: @lines }
+      format.html 
+      
     end
   end
 
   private
 
   def find_book
-    @book=Cash.find(params[:cash_id])
-    @organism=@book.organism
+    @cash=Cash.find(params[:cash_id])
+    @organism=@cash.organism
   end
 
   def fill_mois
@@ -36,7 +37,7 @@ class CashLinesController < LinesController
       @mois = params[:mois]
     else
       @mois= @period.guess_month
-     redirect_to cash_cash_lines_url(@book, mois: @mois) if (params[:action]=='index')
+     redirect_to cash_cash_lines_url(@cash, mois: @mois) if (params[:action]=='index')
     end
   end
 

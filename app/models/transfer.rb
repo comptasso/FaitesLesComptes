@@ -87,8 +87,10 @@ class Transfer < ActiveRecord::Base
   def build_debit_line
     if debitable_type == 'Cash'
       @cash_id = debitable_id
+      @bank_account_id = nil
     elsif debitable_type == 'BankAccount'
       @bank_account_id = debitable_id
+      @cash_id = nil
     end
     Line.new(:line_date=> date, :narration=>narration, :credit=> 0,
       :debit=>amount, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id ,
@@ -100,8 +102,10 @@ class Transfer < ActiveRecord::Base
   def build_credit_line
     if creditable_type == 'Cash'
       @cash_id = creditable_id
+      @bank_account_id = nil
     elsif creditable_type == 'BankAccount'
       @bank_account_id = creditable_id
+      @cash_id = nil
     end
     Line.new(:line_date=> date, :narration=>narration, :credit=>amount,
       :debit=>0, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id,
