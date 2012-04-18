@@ -15,6 +15,8 @@ class Transfer < ActiveRecord::Base
   validate :amount_cant_be_null, :required_fill_debitable, :required_fill_creditable
   validate :different_debit_and_credit
 
+  after_create :create_lines
+
   def pick_date
     date ? (I18n::l date) : nil
   end
@@ -71,9 +73,17 @@ class Transfer < ActiveRecord::Base
 #      where('date >= ? AND date <= ?').all
 #  end
 #
-#  
-  # build_debit_line construit la ligne d'écriture débitrice à partir d'un virement
-  #
+ private
+
+ # retourne l'id du journal d'OD correspondant à l'organisme dont dépent transfer
+ # 
+ # utilisée par build_debit_line et build_credit_line pour construire les lignes
+  def od_id
+   self.organism.od_books.first.id
+ end
+
+ # build_debit_line construit la ligne d'écriture débitrice correspondant au 
+ # virement
   def build_debit_line
     if debitable_type == 'Cash'
       @cash_id = debitable_id
@@ -81,7 +91,8 @@ class Transfer < ActiveRecord::Base
       @bank_account_id = debitable_id
     end
     Line.new(:line_date=> date, :narration=>narration, :credit=> 0,
-      :debit=>amount, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id  )
+      :debit=>amount, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id ,
+     :book_id=>od_id)
   end
   
   # build_credit_line construit la ligne d'écriture créditrice à partir d'un
@@ -93,10 +104,22 @@ class Transfer < ActiveRecord::Base
       @bank_account_id = creditable_id
     end
     Line.new(:line_date=> date, :narration=>narration, :credit=>amount,
-      :debit=>0, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id  )
+      :debit=>0, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id,
+    :book_id=>od_id)
   end
 
-  private
+  
+
+  # applé par after create; validate => false car ces lignes n'ont pas de nature
+  # ni de mode de payment
+  # TODO voir s'il ne faut pas passer par une STI pour line avec des validates
+  # conditionnels pour éviter cette manoeuvre dangereuse.
+  # Normalement, puisque le transfer est valide (car on est après un after_create
+  # il ne devrait pas y avoir de problème particulier
+  def create_lines
+    build_debit_line.save!(:validate => false)
+    build_credit_line.save!(:validate => false)
+  end
 
   def amount_cant_be_null
     errors.add :amount, 'nul !' if amount == 0
@@ -116,5 +139,7 @@ class Transfer < ActiveRecord::Base
       errors.add :fill_creditable, 'identiques !'
     end
   end
+
+
 
 end

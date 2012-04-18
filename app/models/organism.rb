@@ -14,6 +14,7 @@ class Organism < ActiveRecord::Base
   has_many :cash_controls, through: :cashes
   has_many :income_books, dependent: :destroy
   has_many :outcome_books, dependent: :destroy
+  has_many :od_books, dependent: :destroy
   has_many :accounts, through: :periods
   has_many :archives,  dependent: :destroy
   has_many :pending_checks, through: :books
@@ -80,11 +81,12 @@ class Organism < ActiveRecord::Base
   private
 
   def create_default
-    logger.debug 'je suis dans create default'
+    logger.debug 'Création des livres par défaut'
     self.income_books.create(:title=>'Recettes', :description=>'Livre des recettes')
     logger.debug  'création livre recettes'
     self.outcome_books.create(title: 'Dépenses', description: 'Livre des dépenses')
     logger.debug 'creation livre dépenses'
+    self.od_books.create(:title=>'OD', description: 'Opérations Diverses')
   end
   
 end

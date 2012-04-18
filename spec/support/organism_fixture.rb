@@ -10,6 +10,7 @@ module OrganismFixture
     @o = Organism.create!(title: 'test_line')
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
+    @od = @o.od_books.first
     @p = Period.create!(:organism_id=>@o.id, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))
     @n = Nature.create!(name: 'Essai', period_id: @p.id, :income_outcome=>false)
     @ba = @o.bank_accounts.create!(name: 'DebiX', number: '123Z')

@@ -15,7 +15,7 @@ class CashLinesController < LinesController
 
 # la méthode index est héritée de LinesController
   def index
-    fill_soldes
+    @monthly_extract = Utilities::MonthlyCashExtract.new(@book, @date)
     # FIXME remplacer fill_soldes par qqc qui ressemble à MonthlyBookExtract
 
     respond_to do |format|

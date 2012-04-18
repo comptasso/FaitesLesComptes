@@ -150,18 +150,16 @@ describe Transfer do
 
   describe 'class method lines' do
     before(:each) do
-      @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50, :creditable_id=>1, :creditable_type=>'Cash' )
+      @t= Transfer.new(:date=>Date.today, :narration=>'test',
+        :organism_id=> @o.id, :amount=>123.50, :creditable_id=>1, :creditable_type=>'Cash' )
     end
 
-    it 'should build somes lines when a cash and a month is given' do
-      pending
-      ca =stub_model(Cash)
-      ca.stub(:lines).and_return('ligne1', 'ligne2')
-      Transfer.lines(ca, 4,2012).should == ['ligne1', 'ligne2']
+    it 'has a method for returning od_id' do
+      @t.send(:od_id).should == @o.od_books.first.id
     end
 
     it 'transfer create a credit line' do
-      l = @t.build_credit_line
+      l = @t.send(:build_credit_line)
       l.should be_an_instance_of Line
       l[:line_date].should == Date.today
       l[:narration].should == 'test'
@@ -171,22 +169,36 @@ describe Transfer do
       l[:bank_account_id].should == nil
     end
 
-    it 'create a debit line for a bank_account' do
-      @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50, :creditable_id=>1, :creditable_type=>'BankAccount' )
-      l = @t.build_credit_line
-      l[:cash_id].should == nil
-      l[:bank_account_id].should == 1
+    it 'can build a debit line for a bank_account' do
+      @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
+        :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
+        :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
+      :organism_id=>@o.id)
+      l = @t.send(:build_debit_line)
+        l[:cash_id].should == nil
+      l[:bank_account_id].should == @bb.id
     end
 
-    it 'create credit line as well' do
+    it 'create debit line as well' do
       @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
-        :creditable_id=>1, :creditable_type=>'BankAccount',
-        :debitable_id=>1, :debitable_type =>'BankAccount')
-      l = @t.build_debit_line
+        :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
+        :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
+        :organism_id=>@o.id)
+      l = @t.send(:build_debit_line)
       l[:credit].should == 0
       l[:debit].should == @t.amount  
       l[:cash_id].should == nil
-      l[:bank_account_id].should == 1
+      l[:bank_account_id].should == @bb.id
+      
+    end
+
+    it 'save transfer create the two lines' do
+      @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
+        :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
+        :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
+        :organism_id=>@o.id)
+      @t.should be_valid
+      expect {@t.save}.to change {Line.count}.by(2)
     end
 
 

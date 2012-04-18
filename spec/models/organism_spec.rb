@@ -3,6 +3,33 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Organism do
+   def valid_attributes
+    {:title =>'Test ASSO'}
+  end
+
+
+  describe 'creation' do
+    before(:each) do
+      @organism= Organism.new valid_attributes
+    end
+
+    it 'should be valid with a title' do
+      @organism.should be_valid
+    end
+
+     it 'should not be valid without title' do
+       @organism.title = nil
+       @organism.should_not be_valid
+     end
+
+     it 'should create 3 books' do
+       expect {@organism.save}.to change {Book.count}.by(3)
+     end
+
+  end
+
+  context 'when there is one period' do
+
   before(:each) do
     @organism= Organism.create!(title: 'test asso')
     @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
@@ -88,6 +115,8 @@ describe Organism do
         end
       end
     end
+  end
+
   end
 end
 

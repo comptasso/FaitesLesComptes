@@ -10,7 +10,7 @@ class MustBelongToPeriodValidator < ActiveModel::EachValidator
       record.errors[attribute] << "Incapable de trouver un exercice car impossible de déterminer l'organisme"
       return
     end
-    o= record.book.organism
+    o = record.book.organism
     record.errors[attribute] << "Date manquante" if value == nil
     record.errors[attribute] << "Doit être une date" unless value.is_a?(Date)
     if value.is_a?(Date)
