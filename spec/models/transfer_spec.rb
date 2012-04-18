@@ -148,4 +148,48 @@ describe Transfer do
 
   end
 
+  describe 'class method lines' do
+    before(:each) do
+      @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50, :creditable_id=>1, :creditable_type=>'Cash' )
+    end
+
+    it 'should build somes lines when a cash and a month is given' do
+      pending
+      ca =stub_model(Cash)
+      ca.stub(:lines).and_return('ligne1', 'ligne2')
+      Transfer.lines(ca, 4,2012).should == ['ligne1', 'ligne2']
+    end
+
+    it 'transfer create a credit line' do
+      l = @t.build_credit_line
+      l.should be_an_instance_of Line
+      l[:line_date].should == Date.today
+      l[:narration].should == 'test'
+      l[:credit].should == 123.50
+      l[:debit].should == 0.0
+      l[:cash_id].should == 1
+      l[:bank_account_id].should == nil
+    end
+
+    it 'create a debit line for a bank_account' do
+      @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50, :creditable_id=>1, :creditable_type=>'BankAccount' )
+      l = @t.build_credit_line
+      l[:cash_id].should == nil
+      l[:bank_account_id].should == 1
+    end
+
+    it 'create credit line as well' do
+      @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
+        :creditable_id=>1, :creditable_type=>'BankAccount',
+        :debitable_id=>1, :debitable_type =>'BankAccount')
+      l = @t.build_debit_line
+      l[:credit].should == 0
+      l[:debit].should == @t.amount  
+      l[:cash_id].should == nil
+      l[:bank_account_id].should == 1
+    end
+
+
+  end
+
 end

@@ -16,7 +16,7 @@ class Book < ActiveRecord::Base
     :class_name=>'Line',
     :conditions=>'payment_mode = "Chèque" and credit > 0 and check_deposit_id IS NULL'
    
-  # TODO introduce uniqueness
+  # TODO introduce uniqueness and scope
   validates :title, presence: true
   
   attr_reader  :monthly_solds

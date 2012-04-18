@@ -51,6 +51,51 @@ class Transfer < ActiveRecord::Base
     [creditable_type, creditable_id].join('_')
   end
 
+#  # trouve l'ensemble des transferts correspondant au modèle
+#  # et au mois donné
+#  def self.debitable_lines(model, month, year)
+#    # TODO incorporer ensuite les limites month et year
+#    begin_date = Date.civil(year, month, 1).beginning_of_month
+#    end_date = begin_date.end_of_month
+#    # récupérer les virements correspondants
+#    Transfer.where('debitable_type = ? AND debitable_id = ?', model.class.name, model.id ).
+#      where('date >= ? AND date <= ?').all
+#  end
+#
+#  def self.creditable_lines(model, month, year)
+#    # TODO incorporer ensuite les limites month et year
+#    begin_date = Date.civil(year, month, 1).beginning_of_month
+#    end_date = begin_date.end_of_month
+#    # récupérer les virements correspondants
+#    Transfer.where('debitable_type = ? AND debitable_id = ?', model.class.name, model.id ).
+#      where('date >= ? AND date <= ?').all
+#  end
+#
+#  
+  # build_debit_line construit la ligne d'écriture débitrice à partir d'un virement
+  #
+  def build_debit_line
+    if debitable_type == 'Cash'
+      @cash_id = debitable_id
+    elsif debitable_type == 'BankAccount'
+      @bank_account_id = debitable_id
+    end
+    Line.new(:line_date=> date, :narration=>narration, :credit=> 0,
+      :debit=>amount, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id  )
+  end
+  
+  # build_credit_line construit la ligne d'écriture créditrice à partir d'un
+  # virement
+  def build_credit_line
+    if creditable_type == 'Cash'
+      @cash_id = creditable_id
+    elsif creditable_type == 'BankAccount'
+      @bank_account_id = creditable_id
+    end
+    Line.new(:line_date=> date, :narration=>narration, :credit=>amount,
+      :debit=>0, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id  )
+  end
+
   private
 
   def amount_cant_be_null

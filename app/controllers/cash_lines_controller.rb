@@ -16,6 +16,8 @@ class CashLinesController < LinesController
 # la méthode index est héritée de LinesController
   def index
     fill_soldes
+    # FIXME remplacer fill_soldes par qqc qui ressemble à MonthlyBookExtract
+
     respond_to do |format|
       format.html {render 'cash_lines/index'}
       format.json { render json: @lines }

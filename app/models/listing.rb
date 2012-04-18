@@ -3,9 +3,7 @@
 # Classe destinée à imprimer les tables de lignes. Listing est construit
 # à partir d'un exercice, d'un mois au sein de cet exercice et d'un livre
 #
-
 # TODO ceci ressemble très fort à MonthlyBookExtract, factorisation ?
-
 class Listing
   NB_PER_PAGE=30
 
@@ -17,6 +15,7 @@ class Listing
     @month=month.to_i
     @book=book
     # TODO on peut revoir avec le scope mois de lines
+    # ou carrement se passer de period
     @lines = @book.lines.period_month(@period, @month).order(:line_date).all
   end
 
@@ -61,7 +60,11 @@ class Listing
 
    # indique si le listing doit être considéré comme un brouillard
    # ou une édition définitive.
+   #
    # Cela se fait en regardant si toutes les lignes sont locked?
+   #
+   # TODO attention avec les livres virtuels tels que CashBook
+   # il faut peut être que transfer ait un champ locked?
    def brouillard?
      if @lines.any? {|l| !l.locked? }
        return true
