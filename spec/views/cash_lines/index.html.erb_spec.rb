@@ -23,7 +23,7 @@ describe "cash_lines/index" do
     assign(:period, p)
     assign(:cash, c)
     assign(:monthly_extract, mce)
-    p.stub(:list_months).and_return %w(jan fév mar avr mai jui jui aou sept oct nov déc)
+    p.stub(:list_months).and_return %w(jan fév mar avr mai jui jui aou sept oct nov déc) 
     mce.stub(:lines).and_return([cl1,cl2])
     [cl1, cl2].each {|l| l.stub(:nature).and_return(n) }
     [cl1, cl2].each {|l| l.stub(:destination).and_return(nil) }
@@ -82,7 +82,7 @@ describe "cash_lines/index" do
 
     it 'peut avoir un lien modifier pointant vers transfer' do
       page.find("tbody tr:first td:nth-child(7)").all('img').first[:src].should == '/assets/icones/modifier.png'
-      page.find("tbody tr:first a")[:href].should == '/transfers/10/edit' 
+      page.find("tbody tr:first a")[:href].should == "/organisms/#{o.id}/transfers/10/edit"
     end 
   end
   

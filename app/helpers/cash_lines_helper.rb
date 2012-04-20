@@ -11,7 +11,7 @@ module CashLinesHelper
   def cash_line_actions(line)
     html = ''
       if line.owner_type == 'Transfer'
-        html <<  icon_to('modifier.png', edit_transfer_path(line.owner_id)) unless line.locked?
+        html <<  icon_to('modifier.png', edit_organism_transfer_path(@organism, line.owner_id)) unless line.locked?
       else
         html <<  icon_to('modifier.png', edit_book_line_path(line.book_id, line)) unless line.locked?
         html <<  icon_to('supprimer.png', [line.book,line], confirm: 'Etes vous sûr?', method: :delete) unless line.locked?
