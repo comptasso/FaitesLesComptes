@@ -151,6 +151,23 @@ describe Line do
 
   end
 
+  context 'une ligne est sauvée' do
+
+    before(:each) do
+     @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
+       :payment_mode=> 'Espèces',  :line_date=>Date.today,
+       :credit=>2.50 , :nature_id=>@n.id)
+      end
+
+
+    it 'a line locked cant be destroyed' do
+      @l.update_attribute(:locked, true)
+      expect {@l.destroy }.not_to change {Line.count}
+      
+    end
+
+  end
+
  
 end
 

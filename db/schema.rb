@@ -11,22 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120414160814) do
+ActiveRecord::Schema.define(:version => 20120419041717) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
     t.string   "title"
     t.boolean  "used",       :default => true
     t.integer  "period_id"
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "archives", :force => true do |t|
     t.integer  "organism_id", :null => false
     t.string   "comment"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "bank_accounts", :force => true do |t|
@@ -35,16 +35,16 @@ ActiveRecord::Schema.define(:version => 20120414160814) do
     t.text     "comment"
     t.text     "address"
     t.integer  "organism_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "bank_extract_lines", :force => true do |t|
     t.integer  "position"
     t.integer  "bank_extract_id"
     t.integer  "line_id"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "check_deposit_id"
   end
 
@@ -53,19 +53,19 @@ ActiveRecord::Schema.define(:version => 20120414160814) do
     t.string   "reference"
     t.date     "begin_date"
     t.date     "end_date"
-    t.decimal  "begin_sold",      :precision => 2, :scale => 10, :default => 0.0
-    t.decimal  "total_debit",     :precision => 2, :scale => 10, :default => 0.0
-    t.decimal  "total_credit",    :precision => 2, :scale => 10, :default => 0.0
-    t.boolean  "locked",                                         :default => false
-    t.datetime "created_at",                                                        :null => false
-    t.datetime "updated_at",                                                        :null => false
+    t.decimal  "begin_sold",      :default => 0.0
+    t.decimal  "total_debit",     :default => 0.0
+    t.decimal  "total_credit",    :default => 0.0
+    t.boolean  "locked",          :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "books", :force => true do |t|
     t.string   "title"
     t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "organism_id"
     t.string   "type"
   end
@@ -74,24 +74,24 @@ ActiveRecord::Schema.define(:version => 20120414160814) do
     t.integer  "cash_id"
     t.decimal  "amount"
     t.date     "date"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "locked",     :default => false
   end
 
   create_table "cashes", :force => true do |t|
     t.integer  "organism_id"
     t.string   "name"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "comment"
   end
 
   create_table "check_deposits", :force => true do |t|
     t.integer  "bank_account_id"
     t.date     "deposit_date"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "bank_extract_id"
   end
 
@@ -99,8 +99,8 @@ ActiveRecord::Schema.define(:version => 20120414160814) do
     t.string   "name"
     t.integer  "organism_id"
     t.text     "comment"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "income_outcome", :default => false
   end
 
@@ -109,26 +109,28 @@ ActiveRecord::Schema.define(:version => 20120414160814) do
     t.string   "narration"
     t.integer  "nature_id"
     t.integer  "destination_id"
-    t.decimal  "debit",            :precision => 2, :scale => 10, :default => 0.0
-    t.decimal  "credit",           :precision => 2, :scale => 10, :default => 0.0
+    t.decimal  "debit",            :default => 0.0
+    t.decimal  "credit",           :default => 0.0
     t.integer  "book_id"
-    t.boolean  "locked",                                          :default => false
-    t.datetime "created_at",                                                         :null => false
-    t.datetime "updated_at",                                                         :null => false
+    t.boolean  "locked",           :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "copied_id"
-    t.boolean  "multiple",                                        :default => false
+    t.boolean  "multiple",         :default => false
     t.integer  "bank_extract_id"
     t.string   "payment_mode"
     t.integer  "check_deposit_id"
     t.integer  "cash_id"
     t.integer  "bank_account_id"
+    t.integer  "owner_id"
+    t.string   "owner_type"
   end
 
   create_table "natures", :force => true do |t|
     t.string   "name"
     t.text     "comment"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "income_outcome", :default => false
     t.integer  "period_id"
     t.integer  "account_id"
@@ -137,8 +139,8 @@ ActiveRecord::Schema.define(:version => 20120414160814) do
   create_table "organisms", :force => true do |t|
     t.string   "title"
     t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "periods", :force => true do |t|
@@ -146,8 +148,8 @@ ActiveRecord::Schema.define(:version => 20120414160814) do
     t.date     "close_date"
     t.integer  "organism_id"
     t.boolean  "open",        :default => true
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "transfers", :force => true do |t|
@@ -165,8 +167,8 @@ ActiveRecord::Schema.define(:version => 20120414160814) do
 
   create_table "users", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

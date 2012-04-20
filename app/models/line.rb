@@ -1,12 +1,14 @@
 # -*- encoding : utf-8 -*-
 
 class Line < ActiveRecord::Base
-  # apporte la validation 
+  # apporte la validation
+  # TODO à retirer
   include Validations
 
   PAYMENT_MODES ||= %w(CB Chèque Espèces Prélèvement Virement)
   BANK_PAYMENT_MODES ||= %w(CB Chèque Prélèvement Virement)
 
+  before_destroy :cant_change_if_locked
 
   belongs_to :book
   belongs_to :destination
@@ -15,7 +17,9 @@ class Line < ActiveRecord::Base
   belongs_to :check_deposit
   belongs_to :bank_account
   belongs_to :cash
+  belongs_to :owner, :polymorphic=>true
   has_one :bank_extract_line
+
 
   before_validation :sold_debit_credit # une ligne ne peut avoir debit et credit simultanément
   # TODO voir pour remplacer les champ par amount et boolean et faire des virtual attributes
@@ -189,6 +193,10 @@ class Line < ActiveRecord::Base
         self.cash_id = nil unless self.payment_mode =='Espèces'
     end
  
+  end
+
+  def cant_change_if_locked
+    !locked
   end
 
 

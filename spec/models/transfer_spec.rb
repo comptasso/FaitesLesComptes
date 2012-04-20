@@ -23,7 +23,7 @@ describe Transfer do
     it "should store date for a valid pick_date" do
       @transfer.pick_date = '06/06/1955'
       @transfer.date.should == Date.civil(1955,6,6)
-   end
+    end
 
     it 'should return formatted date' do
       @transfer.date =  Date.civil(1955,6,6)
@@ -34,7 +34,7 @@ describe Transfer do
 
   describe 'virtual attribute fill_debitable' do
 
-     before(:each) do
+    before(:each) do
       @transfer=Transfer.new(:debitable_type=>'Model', :debitable_id=>'9')
     end
     
@@ -53,7 +53,7 @@ describe Transfer do
 
   describe 'virtual attribute creditable' do
 
-     before(:each) do
+    before(:each) do
       @transfer=Transfer.new(:creditable_type=>'Model', :creditable_id=>'9')
     end
 
@@ -139,7 +139,7 @@ describe Transfer do
       @transfer.errors[:fill_debitable].should == ['champ obligatoire']
     end
 
-     it 'champ obligatoire pour creditable' do
+    it 'champ obligatoire pour creditable' do
       @transfer.creditable=nil
       @transfer.valid?
       @transfer.errors[:fill_creditable].should == ['champ obligatoire']
@@ -167,15 +167,16 @@ describe Transfer do
       l[:debit].should == 0.0
       l[:cash_id].should == 1
       l[:bank_account_id].should == nil
+      
     end
 
     it 'can build a debit line for a bank_account' do
       @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
         :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
         :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
-      :organism_id=>@o.id)
+        :organism_id=>@o.id)
       l = @t.send(:build_debit_line)
-        l[:cash_id].should == nil
+      l[:cash_id].should == nil
       l[:bank_account_id].should == @bb.id
     end
 
@@ -192,16 +193,62 @@ describe Transfer do
       
     end
 
-    it 'save transfer create the two lines' do
-      @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
-        :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
-        :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
-        :organism_id=>@o.id)
-      @t.should be_valid
-      expect {@t.save}.to change {Line.count}.by(2)
+
+    context 'check save and after_create' do
+
+      before(:each) do
+        @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
+          :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
+          :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
+          :organism_id=>@o.id)
+      end
+
+
+      it 'save transfer create the two lines' do
+        @t.should be_valid
+        expect {@t.save}.to change {Line.count}.by(2)
+      end
+
+      it 'save transfer create the two lines' do
+        @t.save!
+        @t.should have(2).lines
+      end
+
+      context do
+
+        before(:each) do
+          @t.save!
+        end
+        it 'destroy the transfer should delete the two lines' do
+          expect {@t.destroy}.to change {Line.count}.by(-2)
+        end
+        it 'destroy the transfer is impossible if any line locked' do
+          @t.lines.first.update_attribute(:locked, true)
+          expect {@t.destroy}.not_to change {Line.count}
+        end
+
+        it 'destroy the transfer is impossible if any line locked' do
+          @t.lines.last.update_attribute(:locked, true)
+          @t.should_not be_destroyable
+          expect {@t.destroy}.not_to change {Transfer.count}
+        end
+
+        it 'can return the debited line or the credited line' do
+          @t.line_debit.should == @t.lines.select { |l| l.debit != 0 }.first
+          @t.line_credit.should == @t.lines.select { |l| l.credit != 0 }.first
+        end
+
+        it 'can say what it can edit' do
+          @t.line_debit.update_attribute(:locked, true)
+          @t.debit_editable?.should be_false
+          @t.credit_editable?.should be_true
+        end
+
+
+        it 'modify transfer change lines adequatly'
+        it 'modify transfer debit or credit is not possibile if locked'
+      end
     end
-
-
   end
 
 end

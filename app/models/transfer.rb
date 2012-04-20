@@ -2,21 +2,23 @@
 
 class Transfer < ActiveRecord::Base
 
+  after_create :create_lines
+  before_destroy :should_be_destroyable
+
   belongs_to :organism
   belongs_to :debitable, :polymorphic=>true
   belongs_to :creditable, :polymorphic=>true
+  has_many   :lines, :as=>:owner, :dependent=>:destroy
 
   validates :date, :amount, :presence=>true
   validates :debitable_id, :debitable_type, :presence=>true
   validates :creditable_id, :creditable_type, :presence=>true
   validates :amount, numericality: true
-  # argument virtuel pour la saisie des dates
-
   validate :amount_cant_be_null, :required_fill_debitable, :required_fill_creditable
   validate :different_debit_and_credit
 
-  after_create :create_lines
-
+ 
+  # argument virtuel pour la saisie des dates
   def pick_date
     date ? (I18n::l date) : nil
   end
@@ -37,6 +39,7 @@ class Transfer < ActiveRecord::Base
     self.debitable_id = elements.last
   end
 
+
   def fill_debitable
     [debitable_type, debitable_id].join('_')
   end
@@ -53,27 +56,35 @@ class Transfer < ActiveRecord::Base
     [creditable_type, creditable_id].join('_')
   end
 
-#  # trouve l'ensemble des transferts correspondant au modèle
-#  # et au mois donné
-#  def self.debitable_lines(model, month, year)
-#    # TODO incorporer ensuite les limites month et year
-#    begin_date = Date.civil(year, month, 1).beginning_of_month
-#    end_date = begin_date.end_of_month
-#    # récupérer les virements correspondants
-#    Transfer.where('debitable_type = ? AND debitable_id = ?', model.class.name, model.id ).
-#      where('date >= ? AND date <= ?').all
-#  end
-#
-#  def self.creditable_lines(model, month, year)
-#    # TODO incorporer ensuite les limites month et year
-#    begin_date = Date.civil(year, month, 1).beginning_of_month
-#    end_date = begin_date.end_of_month
-#    # récupérer les virements correspondants
-#    Transfer.where('debitable_type = ? AND debitable_id = ?', model.class.name, model.id ).
-#      where('date >= ? AND date <= ?').all
-#  end
-#
+  def line_debit
+    lines.where('debit <> ?', 0).first
+  end
+
+  def line_credit
+    lines.where('credit <> ?', 0).first
+  end
+
+  def debit_editable?
+    !line_debit.locked?
+  end
+
+  def credit_editable?
+    !line_credit.locked?
+  end
+
+
+  # inidque si le transfer peut être détruit en vérifiant qu'aucune ligne n'a été verrouillée
+  def destroyable?
+    lines.select {|l| l.locked? }.empty?
+  end
+
  private
+
+  # callback appelé par before_destroy pour empêcher la destruction des lignes
+  # et du transfer si une ligne est verrouillée
+  def should_be_destroyable
+    return self.destroyable?
+  end
 
  # retourne l'id du journal d'OD correspondant à l'organisme dont dépent transfer
  # 
@@ -92,8 +103,8 @@ class Transfer < ActiveRecord::Base
       @bank_account_id = debitable_id
       @cash_id = nil
     end
-    Line.new(:line_date=> date, :narration=>narration, :credit=> 0,
-      :debit=>amount, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id ,
+    lines.build(:line_date=> date, :narration=>narration, :credit=> 0,
+      :debit=>amount, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id , 
      :book_id=>od_id)
   end
   
@@ -107,7 +118,7 @@ class Transfer < ActiveRecord::Base
       @bank_account_id = creditable_id
       @cash_id = nil
     end
-    Line.new(:line_date=> date, :narration=>narration, :credit=>amount,
+    lines.new(:line_date=> date, :narration=>narration, :credit=>amount,
       :debit=>0, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id,
     :book_id=>od_id)
   end
@@ -124,6 +135,8 @@ class Transfer < ActiveRecord::Base
     build_debit_line.save!(:validate => false)
     build_credit_line.save!(:validate => false)
   end
+
+  
 
   def amount_cant_be_null
     errors.add :amount, 'nul !' if amount == 0
@@ -143,6 +156,8 @@ class Transfer < ActiveRecord::Base
       errors.add :fill_creditable, 'identiques !'
     end
   end
+
+
 
 
 
