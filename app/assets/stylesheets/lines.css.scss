@@ -18,38 +18,20 @@
         padding-left: 4px;
         }
 
+}
+// affichage des mois dans les titres h3 des vues lines, mais aussi cash_lines
 
-
-  
-/*    form input, form select { float: left; }
-   
-   
-    span.error{
-        margin-bottom: 0;
-        }
-  
-    .help-inline {
-        float: right;
-        font-size: 83%;
-        font-style: italic;         
-        margin-top: -10px;
-            }
-   */
-   
-
-    
-
-    ul.mois {
+h3  ul.mois {
         display: inline-block;
         text-decoration: none;
         list-style: disc outside none;
         float: right;
         font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
         font-size: 13px;
-        
+
        > li {
             display: inline-block;
-            
+
             padding-left: 12px;
             padding-right: 12px;
             line-height: 14px;
@@ -72,9 +54,6 @@
 
         }
      > li.active  {color: #11ad11;}
-    
+
 
   }
-
-}
-   

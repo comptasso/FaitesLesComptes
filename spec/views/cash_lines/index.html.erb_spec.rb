@@ -2,7 +2,6 @@
 
 require 'spec_helper'
 
-
 describe "cash_lines/index" do
   include JcCapybara
 
@@ -19,10 +18,7 @@ describe "cash_lines/index" do
   let(:cl2) {mock_model(Line, :line_date=>Date.today, :narration=>'autre ligne', :debit=>'54', :nature_id=>n.id)}
 
 
-
   before(:each) do
-
-
     assign(:organism, o)
     assign(:period, p)
     assign(:cash, c)
@@ -34,19 +30,18 @@ describe "cash_lines/index" do
     [cl1, cl2].each {|l| l.stub(:locked?).and_return(false) }
     [cl1, cl2].each {|l| l.stub(:book_id).and_return(1) }
     [cl1, cl2].each {|l| l.stub(:book).and_return(mock_model(Book)) }
-   
-   
+    [cl1, cl2].each {|l| l.stub(:owner_type).and_return(nil) } 
   end
 
  
-  describe "controle du corps" do
+  describe "controle du corps" do  
 
     before(:each) do 
       render 
     end
 
     it "affiche la légende du fieldset" do
-      assert_select "h3", :text => "Caisse Magasin"
+      page.find('h3').should have_content "Caisse Magasin"
     end
 
     it "affiche la table desw remises de chèques" do
@@ -57,71 +52,38 @@ describe "cash_lines/index" do
       assert_select "tbody tr", count: 2
     end
 
-    it 'une cash line locked ne peut être éditée' do
+    it 'une cash_line non verrouillée peut être éditée et supprimée' do
+      page.find("tbody tr:first td:nth-child(7)").all('img').first[:src].should == '/assets/icones/modifier.png'
       page.find("tbody tr:first td:nth-child(7)").all('img').last[:src].should == '/assets/icones/supprimer.png'
+    end
+  end
 
-#      first_row=page.find('tbody tr:first')
-#    first_row.all('img').should have(2).icons
-#    first_row.all('img').first[:src].should == '/assets/icones/modifier.png'
-#    first_row.all('img').last[:src].should == '/assets/icones/supprimer.png' 
+  context 'avec des lines locked' do
+    before(:each) do
+       [cl1, cl2].each {|l| l.stub(:locked?).and_return(true) }
+        render
     end
 
-    it 'une cash_line locked ne peut être détruite'
-    it 'une cash_line venant de transfer doit être éditée via transfer'
-
-
-    #    context "chaque ligne affiche ..." do
-    #
-    #      it "le numéro de compte" do
-    #        assert_select('tr:nth-child(2) td', :text=>cd2.bank_account.number)
-    #      end
-    #      it "la date" do
-    #       assert_select('tr:nth-child(2) td:nth-child(2)', :text=>I18n::l(cd2.deposit_date))
-    #      end
-    #
-    #      it "le montant (formatté avec une virgule et deux décimales)" do
-    #        assert_select('tr:nth-child(2) td:nth-child(4)', :text=>'35,00')
-    #      end
-    #
-    #      it "les liens pour l'affichage" do
-    #        assert_select("tr:nth-child(2) td:nth-child(5) img[src='/assets/icones/afficher.png']")
-    #        assert_select('tr:nth-child(2) td:nth-child(5) a[href=?]',organism_bank_account_check_deposit_path(o,ba, cd2))
-    #      end
-    #
-    #
-    #
-    #      it "le lien pour la modification" do
-    #        pending
-    #        assert_select('tr:nth-child(2) td:nth-child(6) img[src=?]','/assets/icones/modifier.png')
-    #        assert_select('tr:nth-child(2) td:nth-child(6) a[href=?]',edit_organism_bank_account_check_deposit_path(o,ba, cd2))
-    #      end
-    #
-    #      it "le lien pour la suppression" do
-    #        pending
-    #        assert_select('tr:nth-child(2) > td:nth-child(7)  img[src=?]','/assets/icones/supprimer.png')
-    #        assert_select('tr:nth-child(2) > td:nth-child(7) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd2))
-    #      end
-    #
-    #
-    #    end
-
-    #    context "quand la remise de chèque est pointée, ie elle est reliée à une bank_extract_line" do
-    #
-    #      it "le lien affichage est toujours disponible" do
-    #        assert_select('tr:nth-child(1) td:nth-child(5) img[src= ?]' , '/assets/icones/afficher.png')
-    #        assert_select('tr:nth-child(1) td:nth-child(5) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd1))
-    #      end
-    #
-    #      it "mais pas le lien modification" do
-    #        assert_select('tr:nth-child(1) td:nth-child(6) a[href=?]',edit_organism_bank_account_check_deposit_path(o,ba, cd1), false)
-    #      end
-    #
-    #      it 'ni le lien suppression' do
-    #        assert_select('tr:nth-child(1) > td:nth-child(7) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd1), false)
-    #      end
-    #    end
-
-
-
+    it 'une cash line locked n a pas de line pour suppression ou effacement' do
+      page.should_not have_selector("tbody tr:first td:nth-child(7) a")
+    end
   end
+
+  context 'avec une lignes venant de transfer' do
+    before(:each) do
+       [cl1, cl2].each {|l| l.stub(:owner_type).and_return("Transfer") }
+        [cl1, cl2].each {|l| l.stub(:owner_id).and_return(10) }
+        render
+    end
+
+   it 'ne doit y avoir qu un seul lien (modifier)' do
+     page.find("tbody tr:first td:nth-child(7)").all('img').size.should == 1
+   end
+
+    it 'peut avoir un lien modifier pointant vers transfer' do
+      page.find("tbody tr:first td:nth-child(7)").all('img').first[:src].should == '/assets/icones/modifier.png'
+      page.find("tbody tr:first a")[:href].should == '/transfers/10/edit' 
+    end 
+  end
+  
 end
