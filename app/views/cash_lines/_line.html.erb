@@ -1,10 +1,8 @@
-
           <td class="clickable"><%=l line.line_date %></td>
           <td class="clickable"><%= line.narration %></td>
           <td class="clickable"><%= line.nature.name if line.nature %></td>
           <td class="clickable"><%= line.destination.name if line.destination %></td>
           <td class="numeric clickable"><%= debit_credit(line.debit) %></td>
           <td class="numeric clickable"><%= debit_credit(line.credit) %></td>
-          <td class="icon"><%=  icon_to 'modifier.png', edit_book_line_path(line.book_id,line) unless line.locked? %></td>
-          <td class="icon"><%=  icon_to 'supprimer.png', [line.book,line], confirm: 'Etes vous sûr?', method: :delete unless line.locked? %></td>
- 
+          <td class="icon"><%=  icon_to 'modifier.png', edit_book_line_path(line.book_id, line) unless line.locked? %>
+         <%=  icon_to 'supprimer.png', [line.book,line], confirm: 'Etes vous sûr?', method: :delete unless line.locked? %></td>

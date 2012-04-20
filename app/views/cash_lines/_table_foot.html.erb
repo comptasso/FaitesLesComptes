@@ -4,16 +4,15 @@
     Totaux globaux:
   </th>
   <th id="tdebit" rowspan="1" colspan="1" class="numeric">
-    <%=  debit_credit(@total_debit) %><br/>
-    <%=  debit_credit(@total_debit+ @solde_debit_avant) %>
+    <%=  debit_credit(@monthly_extract.total_debit) %><br/>
+    <%=  debit_credit(@monthly_extract.total_debit+ @monthly_extract.debit_before) %>
   </th>
   <th id="tdcredit" rowspan="1" colspan="1" class="numeric">
-    <%=  debit_credit(@total_credit) %><br/>
-    <%=  debit_credit(@total_credit+ @solde_credit_avant) %>
+    <%=  debit_credit(@monthly_extract.total_credit) %><br/>
+    <%=  debit_credit(@monthly_extract.total_credit+ @monthly_extract.credit_before) %>
   </th>
-  <th></th><th></th>
+  <th></th> <th></th>
 </tr>
-
  
          
         
