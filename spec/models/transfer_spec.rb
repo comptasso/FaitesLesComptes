@@ -154,6 +154,12 @@ describe Transfer do
         :organism_id=> @o.id, :amount=>123.50, :creditable_id=>1, :creditable_type=>'Cash' )
     end
 
+    it 'a new record answers false to partial, debit and credit_locked?' do
+      @t.should_not be_partial_locked
+      @t.should_not be_debit_locked
+      @t.should_not be_credit_locked
+    end
+
     it 'has a method for returning od_id' do
       @t.send(:od_id).should == @o.od_books.first.id
     end
@@ -204,6 +210,8 @@ describe Transfer do
       end
 
 
+
+
       it 'save transfer create the two lines' do
         @t.should be_valid
         expect {@t.save}.to change {Line.count}.by(2)
@@ -213,6 +221,8 @@ describe Transfer do
         @t.save!
         @t.should have(2).lines
       end
+
+
 
       context 'with a saved tranfer' do
 

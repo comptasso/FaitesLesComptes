@@ -24,13 +24,17 @@ module ApplicationHelper
 
  # picker_date affiche un widget pour sélectionner une date à partir d'une date 
  # correctement formatée, et de limites.
- def picker_date(field,date_min,date_max,value = Date.today.to_formatted_s(:date_picker) )
-   # TODO traiter le cas d'une date non valable
-   content_tag(:span, :class=>"picker_date") do
-    text_field_tag(field,{},
-      {'data-jcmin'=>"#{date_min.to_formatted_s(:date_picker)}",
+ # appeler cette méthode avec comme dernier argument :disabled=>true permet
+ # d'avoir le champ disabled
+ def picker_date(field, date_min, date_max,value = Date.today.to_formatted_s(:date_picker), jc_options ={} )
+  # TODO traiter le cas d'une date non valable
+  html =  {'data-jcmin'=>"#{date_min.to_formatted_s(:date_picker)}",
       'data-jcmax'=>"#{date_max.to_formatted_s(:date_picker)}",
-      :class=>'input_date span2', :value=>value})
+     :class=>'input_date span2', :value=>value}
+  html.merge!({:disabled=>'disabled'}) if jc_options[:disabled] == true
+
+   content_tag(:span, :class=>"picker_date") do
+    text_field_tag(field,{},html)
    end
   end
 

@@ -21,6 +21,10 @@ describe "transfers/edit" do
 
     @transfer = assign(:transfer, stub_model(Transfer, :pick_date=>'12/04/2012', :fill_creditable=>"BankAccount_1",
         :fill_debitable=>'Cash_2', :amount=>50.23, narration: 'virement'))
+
+    @transfer.stub(:debit_locked?).and_return(false)
+    @transfer.stub(:credit_locked?).and_return(false)
+    @transfer.stub(:partial_locked?).and_return(false)
   end
 
   it "renders the edit transfer form" do
@@ -29,14 +33,31 @@ describe "transfers/edit" do
     assert_select "form", :action => organism_transfers_path(@o), :method => "post" 
   end
 
-  it "renders the view should inquire editable" do
-    @transfer.should_receive(:debit_locked?).and_return(true)
-    @transfer.should_receive(:credit_locked?).and_return(true)
+  describe 'a transfer partially locked has fields disabled' do
+
+   
+  it "debit is locked" do
+    @transfer.should_receive(:partial_locked?).and_return(true, true, true)
     render
     
+    page.find('input#transfer_pick_date')[:disabled].should == 'disabled'
+    page.find('input#transfer_narration')[:disabled].should == 'disabled'
+    page.find('input#transfer_amount')[:disabled].should == 'disabled'
   end
 
   it 'part debit is disable if line_debit locked' do
+     @transfer.should_receive(:debit_locked?).and_return(true)
+     render
+     page.find('select#transfer_fill_debitable')[:disabled].should == 'disabled'
+     page.find('select#transfer_fill_creditable')[:disabled].should be_nil
+  end
+
+    it 'part credit is disable if line_credit locked' do
+    @transfer.should_receive(:credit_locked?).and_return(true)
+     render
+     page.find('select#transfer_fill_creditable')[:disabled].should == 'disabled'
+     page.find('select#transfer_fill_debitable')[:disabled].should be_nil
+  end
 
   end
   

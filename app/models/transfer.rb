@@ -83,11 +83,11 @@ class Transfer < ActiveRecord::Base
   end
 
   def debit_locked?
-    line_debit.locked
+    line_debit ? line_debit.locked : false
   end
 
   def credit_locked?
-    line_credit.locked
+    line_credit ? line_credit.locked : false
   end
   
   def partial_locked?
