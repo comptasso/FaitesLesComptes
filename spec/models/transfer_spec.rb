@@ -264,23 +264,51 @@ describe Transfer do
             @t.save!
             @t.line_credit.bank_account_id.should == @bc.id
           end
+
+          context 'line_debit locked' do
+
+            before(:each) do
+              l= @t.line_debit
+              l.locked = true
+              l.save!(:validate=>false)
+            end
           
-          it 'modify transfer debit or credit is not possibile if locked' do
-            l= @t.line_debit
-            l.locked = true
-            l.save!(:validate=>false)
-            @t.fill_debitable = @model_id
-            @t.save!
-            @t.line_debit.bank_account_id.should == @bb.id
+            it 'modify transfer debit is not possibile if locked' do
+              @t.fill_debitable = @model_id
+              @t.save!
+              @t.line_debit.bank_account_id.should == @bb.id
+            end
+
+            it 'says debit_locked' do
+              @t.should be_debit_locked
+              @t.should be_partial_locked
+              @t.should_not be_credit_locked
+            end
+
+
           end
 
-          it 'modify transfer debit or credit is not possibile if locked' do
-            l= @t.line_credit
-            l.locked = true
-            l.save!(:validate=>false)
-            @t.fill_creditable = @model_id
-            @t.save!
-            @t.line_credit.bank_account_id.should == @ba.id
+          context 'line_credit locked' do
+
+            before(:each) do
+              l= @t.line_credit
+              l.locked = true
+              l.save!(:validate=>false)
+            end
+
+            it 'modify transfer debit or credit is not possibile if locked' do
+
+              @t.fill_creditable = @model_id
+              @t.save!
+              @t.line_credit.bank_account_id.should == @ba.id
+            end
+
+            it 'transfer is credit_locked' do
+              @t.should be_credit_locked
+              @t.should be_partial_locked
+              @t.should_not be_debit_locked
+            end
+
           end
 
         end

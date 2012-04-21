@@ -18,11 +18,11 @@
         = f.input :fill_debitable, :jclabel_wrapper_html=>{class: "span2"}, :label=> 'A débiter', input_html: {class: "span4", size: 8},
                 :collection => [['Banques', @organism.bank_accounts.all],['Caisse',@organism.cashes.all]],
                 :as => :grouped_select, :group_label_method=> :first, :group_method => :last, 
-                :label_method=> :to_s, :value_method=> :to_option, :required=>true,  :include_blank=>false
+                :label_method=> :to_s, :value_method=> :to_option, :required=>true,  :include_blank=>false, :disabled=>@transfer.debit_locked?
         = f.input :fill_creditable, :jclabel_wrapper_html=>{class: "span2"}, :label=> 'A créditer', input_html: {class: "span4", size: 8},
                 :collection => [['Banques', @organism.bank_accounts.all],['Caisse',@organism.cashes.all]],
                 :as => :grouped_select, :group_label_method=> :first, :group_method => :last,
-                :label_method=> :to_s, :value_method=> :to_option,  :required=>true,  :include_blank=>false
+                :label_method=> :to_s, :value_method=> :to_option,  :required=>true,  :include_blank=>false, :disabled=>@transfer.credit_locked?
 
     .row
       .offset2.span2.clear

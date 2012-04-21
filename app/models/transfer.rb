@@ -82,6 +82,18 @@ class Transfer < ActiveRecord::Base
     lines.select {|l| l.locked? }.empty?
   end
 
+  def debit_locked?
+    line_debit.locked
+  end
+
+  def credit_locked?
+    line_credit.locked
+  end
+  
+  def partial_locked?
+    credit_locked? || debit_locked?
+  end
+
  private
 
   # callback appelé par before_destroy pour empêcher la destruction des lignes

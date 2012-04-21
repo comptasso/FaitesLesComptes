@@ -29,10 +29,15 @@ describe "transfers/edit" do
     assert_select "form", :action => organism_transfers_path(@o), :method => "post" 
   end
 
-  it 'with fields with the correct value' do
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
-    pending
-     
-    end
+  it "renders the view should inquire editable" do
+    @transfer.should_receive(:debit_locked?).and_return(true)
+    @transfer.should_receive(:credit_locked?).and_return(true)
+    render
+    
+  end
+
+  it 'part debit is disable if line_debit locked' do
+
+  end
   
 end
