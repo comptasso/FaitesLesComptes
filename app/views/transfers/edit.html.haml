@@ -1,3 +1,5 @@
-%h1 Modification d'un virement
-
-= render 'form'
+= content_for :menu do
+  = icon_to 'retour.png', cashes_cash_lines_path(@cash)
+.champ
+  %h3 Modification de
+  = render 'form'

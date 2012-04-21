@@ -185,7 +185,7 @@ class Line < ActiveRecord::Base
   # Autrement mettre à nil le cash_id
   # si le paiement est en chèque et que bank_extract n'est pas rempli alors mettre à nil le bank_account_id
   def check_bank_and_cash_ids
-  # TODO mettre ici un logger pour aider au débuggage quand on veut tester une mise à jour et qu'elle ne marche pas
+ 
   # TODO probablement des classes lines héritées faciliteraient la chose.
     Rails.logger.debug 'modfication des bank et cash ids'
     if self.nature  # ceci permet de ne pas faire ce contrôle pour les virements qui n'ont pas de nature

@@ -2,7 +2,8 @@
 
 class Transfer < ActiveRecord::Base
 
-  after_create :create_lines
+  
+
   before_destroy :should_be_destroyable
 
   belongs_to :organism
@@ -17,7 +18,10 @@ class Transfer < ActiveRecord::Base
   validate :amount_cant_be_null, :required_fill_debitable, :required_fill_creditable
   validate :different_debit_and_credit
 
- 
+  after_create :create_lines
+  after_update :update_line_debit, :unless=>lambda { self.line_debit.locked }
+  after_update :update_line_credit, :unless=>lambda { self.line_credit.locked }
+
   # argument virtuel pour la saisie des dates
   def pick_date
     date ? (I18n::l date) : nil
@@ -95,32 +99,70 @@ class Transfer < ActiveRecord::Base
 
  # build_debit_line construit la ligne d'écriture débitrice correspondant au 
  # virement
-  def build_debit_line
+  def build_line_debit
+    cash_id = bank_account_id = nil
     if debitable_type == 'Cash'
-      @cash_id = debitable_id
-      @bank_account_id = nil
+      cash_id = debitable_id
+      bank_account_id = nil
     elsif debitable_type == 'BankAccount'
-      @bank_account_id = debitable_id
-      @cash_id = nil
+      bank_account_id = debitable_id
+      cash_id = nil
     end
     lines.build(:line_date=> date, :narration=>narration, :credit=> 0,
-      :debit=>amount, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id , 
+      :debit=>amount, :cash_id=> cash_id, :bank_account_id=> bank_account_id , 
      :book_id=>od_id)
   end
   
   # build_credit_line construit la ligne d'écriture créditrice à partir d'un
   # virement
-  def build_credit_line
+  def build_line_credit
+    cash_id = bank_account_id = nil
     if creditable_type == 'Cash'
-      @cash_id = creditable_id
-      @bank_account_id = nil
+      cash_id = creditable_id
+      bank_account_id = nil
     elsif creditable_type == 'BankAccount'
-      @bank_account_id = creditable_id
-      @cash_id = nil
+      bank_account_id = creditable_id
+      cash_id = nil
     end
     lines.new(:line_date=> date, :narration=>narration, :credit=>amount,
-      :debit=>0, :cash_id=> @cash_id, :bank_account_id=> @bank_account_id,
+      :debit=>0, :cash_id=> cash_id, :bank_account_id=> bank_account_id,
     :book_id=>od_id)
+  end
+
+  # appelé par after_update
+  def update_line_debit
+   
+    cash_id = bank_account_id = nil
+    if debitable_type == 'Cash'
+      cash_id = debitable_id
+      bank_account_id = nil
+    elsif debitable_type == 'BankAccount'
+      bank_account_id = debitable_id
+      cash_id = nil
+    end
+    
+    l=line_debit
+    l.cash_id = cash_id
+    l.bank_account_id = bank_account_id
+    l.save!(:validate => false)
+    
+  end
+
+  # appelé par after_update
+  def update_line_credit
+     cash_id = bank_account_id = nil
+    if creditable_type == 'Cash'
+      cash_id = creditable_id
+      bank_account_id = nil
+    elsif creditable_type == 'BankAccount'
+      bank_account_id = creditable_id
+      cash_id = nil
+    end
+
+    l=line_credit
+    l.cash_id = cash_id
+    l.bank_account_id = bank_account_id
+    l.save!(:validate => false)
   end
 
   
@@ -132,9 +174,11 @@ class Transfer < ActiveRecord::Base
   # Normalement, puisque le transfer est valide (car on est après un after_create
   # il ne devrait pas y avoir de problème particulier
   def create_lines
-    build_debit_line.save!(:validate => false)
-    build_credit_line.save!(:validate => false)
+    build_line_debit.save!(:validate => false)
+    build_line_credit.save!(:validate => false)
   end
+
+
 
   
 

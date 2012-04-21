@@ -461,7 +461,7 @@ voir pour afficher en javascript les soldes après transfert
 revoir du coup l'affichage de bank_extract_lines
 OK - Mise en place de OdBook et création automatique à la création d'un organisme
 OK - faire une fonction lines pour la classe Transfer
-faire un after save pour transfer
+faire un after update pour transfer
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)

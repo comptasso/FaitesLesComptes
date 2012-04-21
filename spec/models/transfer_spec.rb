@@ -148,7 +148,7 @@ describe Transfer do
 
   end
 
-  describe 'class method lines' do
+  describe 'instance method credit and debit lines' do
     before(:each) do
       @t= Transfer.new(:date=>Date.today, :narration=>'test',
         :organism_id=> @o.id, :amount=>123.50, :creditable_id=>1, :creditable_type=>'Cash' )
@@ -159,7 +159,7 @@ describe Transfer do
     end
 
     it 'transfer create a credit line' do
-      l = @t.send(:build_credit_line)
+      l = @t.send(:build_line_credit)
       l.should be_an_instance_of Line
       l[:line_date].should == Date.today
       l[:narration].should == 'test'
@@ -175,7 +175,7 @@ describe Transfer do
         :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
         :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
         :organism_id=>@o.id)
-      l = @t.send(:build_debit_line)
+      l = @t.send(:build_line_debit)
       l[:cash_id].should == nil
       l[:bank_account_id].should == @bb.id
     end
@@ -185,7 +185,7 @@ describe Transfer do
         :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
         :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
         :organism_id=>@o.id)
-      l = @t.send(:build_debit_line)
+      l = @t.send(:build_line_debit)
       l[:credit].should == 0
       l[:debit].should == @t.amount  
       l[:cash_id].should == nil
@@ -214,28 +214,29 @@ describe Transfer do
         @t.should have(2).lines
       end
 
-      context do
+      context 'with a saved tranfer' do
 
         before(:each) do
           @t.save!
-        end
-        it 'destroy the transfer should delete the two lines' do
-          expect {@t.destroy}.to change {Line.count}.by(-2)
-        end
-        it 'destroy the transfer is impossible if any line locked' do
-          @t.lines.first.update_attribute(:locked, true)
-          expect {@t.destroy}.not_to change {Line.count}
-        end
-
-        it 'destroy the transfer is impossible if any line locked' do
-          @t.lines.last.update_attribute(:locked, true)
-          @t.should_not be_destroyable
-          expect {@t.destroy}.not_to change {Transfer.count}
         end
 
         it 'can return the debited line or the credited line' do
           @t.line_debit.should == @t.lines.select { |l| l.debit != 0 }.first
           @t.line_credit.should == @t.lines.select { |l| l.credit != 0 }.first
+        end
+
+        it 'destroy the transfer should delete the two lines' do
+          expect {@t.destroy}.to change {Line.count}.by(-2)
+        end
+        it 'destroy the transfer is impossible if debit_line locked' do
+          @t.line_debit.update_attribute(:locked, true)
+          expect {@t.destroy}.not_to change {Line.count}
+        end
+
+        it 'destroy the transfer is impossible if any line locked' do
+          @t.line_credit.update_attribute(:locked, true)
+          @t.should_not be_destroyable
+          expect {@t.destroy}.not_to change {Transfer.count}
         end
 
         it 'can say what it can edit' do
@@ -244,9 +245,45 @@ describe Transfer do
           @t.credit_editable?.should be_true
         end
 
+        describe 'update' do
 
-        it 'modify transfer change lines adequatly'
-        it 'modify transfer debit or credit is not possibile if locked'
+          before(:each) do
+            @t.line_debit.bank_account_id.should == @bb.id
+            @bc=@o.bank_accounts.create!(name: 'DebiX', number: '456X')
+            @model_id = "BankAccount_#{@bc.id}"
+          end
+
+          it 'modify transfer change lines adequatly' do
+            @t.fill_debitable = @model_id
+            @t.save!
+            @t.line_debit.bank_account_id.should == @bc.id
+          end
+
+          it 'modify transfer change lines adequatly' do
+            @t.fill_creditable = @model_id
+            @t.save!
+            @t.line_credit.bank_account_id.should == @bc.id
+          end
+          
+          it 'modify transfer debit or credit is not possibile if locked' do
+            l= @t.line_debit
+            l.locked = true
+            l.save!(:validate=>false)
+            @t.fill_debitable = @model_id
+            @t.save!
+            @t.line_debit.bank_account_id.should == @bb.id
+          end
+
+          it 'modify transfer debit or credit is not possibile if locked' do
+            l= @t.line_credit
+            l.locked = true
+            l.save!(:validate=>false)
+            @t.fill_creditable = @model_id
+            @t.save!
+            @t.line_credit.bank_account_id.should == @ba.id
+          end
+
+        end
       end
     end
   end
