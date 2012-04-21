@@ -16,7 +16,7 @@ describe 'vue books index' do
   before(:each) do
     clean_test_database
     Book.count.should == 0
-    create_minimal_organism 
+    create_minimal_organism  
   end
 
   it 'check minimal organism' do
@@ -58,9 +58,11 @@ describe 'vue books index' do
         page.should have_content('livre de test') 
         page.click_link 'Supprimer'
       end
-       alert = page.driver.browser.switch_to.alert
+      alert = page.driver.browser.switch_to.alert
       alert.accept
-      @o.should have(3).books
+      sleep 1
+      page.all('tbody tr').should have(3).books 
+      
     end
 
     it 'on peut le choisir dans la vue index pour le modifier' do
