@@ -32,7 +32,7 @@ describe "organisms/show.html.erb" do
     end
 
     it 'affiche le menu Virement' do
-      page.find('ul#menu_general').should have_content('VIREMENTS')
+      page.find('ul#menu_general').should have_content('TRANSFERT')
     end
 
     it 'affiche le sous menu Afficher' do

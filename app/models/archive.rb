@@ -5,11 +5,15 @@
 # ajouter une vérification dans la reconstruction (du type nb d'objects total et montant des lignes
 # ajouter un checksum md5 pour empêcher les modifs externes
 
+# Archive est le modèle qui permet de faire la sauvegarder et la restauration
+# d'une comptabilité entière.
+# La restauration se fait par parse_file(archive) qui construit la variable
+# d'instance @datas, utilisée ensuite pour reconstruire l'ensemble des enregistrements
 class Archive < ActiveRecord::Base
 
   # organism est traité à part car c'est le modèle mère de tous les autres
   # pour que l'archive fonctionne, il faut que le modèle organism puisse accéder à tous les autres modèles directement ou au travers de through
-  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book)
+  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book transfer)
   
   belongs_to :organism
 
@@ -23,19 +27,27 @@ class Archive < ActiveRecord::Base
   end
 
 
+  # TODO create_class ne semble plus utilisé - A supprimer ?
   # FIXME voir si psych permet de vérifier la validité du fichier
+
+  # create_class permet de créer les classes recensées dans MODELS au cas où
+  # celles ci ne sont pas déja chargées en mémoire. C'est le cas en tout
+  # cas en développement
   def create_class(class_name, superclass, &block)
     klass = Class.new superclass, &block
     Object.const_set class_name, klass
   end
 
+
+  # parse_file prend un fichier archive, charge les fichiers nécessaires
+  # load et non require pour être certain de les recharger si nécessaire
+  # et retourne les @datas
   def parse_file(archive)
     require 'yaml'
     load('organism.rb')
     MODELS.each do |model_name|
       load(model_name + '.rb')
     end
-    
     @datas = YAML.load(archive)
   rescue  Psych::SyntaxError
     errors[:base] = "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
@@ -52,11 +64,12 @@ class Archive < ActiveRecord::Base
     end
   end
 
+  # affiche le titre de l'archive à partir de l'organisme et de la date de création
   def title
     (organism.title + ' ' + created_at.to_s).split.join('_')
   end
 
-
+  # donne la liste des erreurs
   def list_errors
     self.errors.messages.map { |k,m| m }.join('\n')
   end
@@ -68,7 +81,8 @@ class Archive < ActiveRecord::Base
 
 
   # rebuild organism reconstruit l'ensemble de la hiérarchie des données et renvoie true si
-  # succès, sinon renvoie false
+  # succès, sinon renvoie false. L'ensemble est fait dans une transaction.
+  # La création des données se fait notamment dans rebuild par un appel à create!
   def rebuild_organism
     Organism.transaction do
       self.rebuild_organism_and_direct_children
@@ -83,7 +97,7 @@ class Archive < ActiveRecord::Base
 
 
   # utilisée par rebuild_organism pour recharger un nouvel organism dans une compta
-  # la méthode utilise skip_callback sur Organism et Period pour éviter les
+  # la méthode utilise skip_callback sur Organism, Period et Transfer pour éviter les
   # construction automatiques de données.
   # ne pas oublier de faire les set_callback à la fin
   def rebuild_organism_and_direct_children
@@ -106,8 +120,12 @@ class Archive < ActiveRecord::Base
     end
     self.rebuild(:income_books, :organism, @restores[:organism].id)
     self.rebuild(:outcome_books, :organism, @restores[:organism].id)
-    @restores[:books] = @restores[:income_books] + @restores[:outcome_books]
-    raise "Nombre de livre anormal" unless @restores[:books].size == 2
+    @restores[:books] = @restores[:income_books] + @restores[:outcome_books] +
+      @restores[:od_books]
+    raise "Nombre de livre anormal" unless @restores[:books].size == 3
+
+    Transfer.skip_callback(:create, :after, :create_lines)
+    self.rebuild(:transfers, :organism, @restores[:organism].id)
 
     Period.skip_callback(:create, :after,:copy_accounts)
     Period.skip_callback(:create, :after, :copy_natures)
@@ -115,7 +133,8 @@ class Archive < ActiveRecord::Base
   rescue
     Rails.logger.debug 'Erreur dans la création de l organisme ou dans les modèles attachés'
   ensure
-    Organism.set_callback(:create, :after,:create_default)
+    Organism.set_callback(:create, :after, :create_default)
+    Transfer.set_callback(:create, :after, :create_lines)
     Period.set_callback(:create, :after,:copy_accounts)
     Period.set_callback(:create, :after, :copy_natures)
   end
@@ -125,12 +144,16 @@ class Archive < ActiveRecord::Base
     @restores[:natures]=[]
     @datas[:natures].each do |n|
 
-      new_attributes=n.attributes
+      new_attributes = n.attributes
       new_attributes.delete 'id'
       new_attributes[:period_id]=period.id
+      # si la nature est rattachée à un compte
+      # cherche l'index, ce qui suppose que les natures ont été créées
+      # dans le même ordre (a priori pas de pb mais peu fiable)
+      # TODO trouver une solution passant par une table de correspondance
       if n.account_id
-        bi= @datas[:accounts].index {|r| r.id == n.account_id}
-        new_attributes[:account_id]=@datas[:accounts][bi].id if bi
+        account_index = @datas[:accounts].index {|account| account.id == n.account_id}
+        new_attributes[:account_id]=@datas[:accounts][account_index].id if account_index
       end
       @restores[:natures] << Nature.create!(new_attributes)
     end
@@ -165,6 +188,7 @@ class Archive < ActiveRecord::Base
     new_attributes[:bank_extract_id]=substitute(l,:bank_extracts) unless l.bank_extract_id.nil?
     new_attributes[:cash_id]=substitute(l,:cashes) unless l.cash_id.nil?
     new_attributes[:check_deposit_id]=substitute(l,:check_deposits) unless l.check_deposit_id.nil?
+    new_attributes[:owner_id]=substitute_owner(l) unless l.owner_id.nil?
     new_line=Line.new(new_attributes)
     if  new_line.valid?
       @restores[:lines] << Line.create!(new_attributes)
@@ -180,6 +204,16 @@ class Archive < ActiveRecord::Base
   def substitute_book(l)
     title = @datas[:books].select {|b| b.id == l.book_id }.first[:title]
     @restores[:books].select {|b| b.title == title}.first.id
+  end
+
+
+  # lit le owner_id et le owner_type
+  # actuellement, il ne peut s'agit que de 'Transfer'
+  # et cherche le transfer correspondant dans la reconstruction
+  def substitute_owner
+    transfer = @datas[:transfers].select {|t| t.id == l.owner_id }.first
+    transfer.delete :id
+    @restores[:transfers].select {|t| t.date == transfer.date && t.narration == transfer.narration && t.amount == transfer.amount}.first.id
   end
 
 
@@ -211,6 +245,8 @@ class Archive < ActiveRecord::Base
   # parent est un autre symbole indiquant le parent
   # rebuild remplit le restores[:attribute] qui est un Array,
   # rebuild est utile pour construire les dépendances du type has_many - belongs_to
+  # pour les dépendances directes d'un parent
+  # Exemple : self.rebuild(:destinations, :organism, @restores[:organism].id)
   def rebuild(attribute, parent, parent_id)
     @restores[attribute]=[]
     return unless @datas[attribute]
