@@ -18,7 +18,9 @@
 
 <li class="dropdown <%= 'active' if controller.controller_name =='lines'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
-  <%= menu_books(@organism.books) %>
+  <ul class="dropdown-menu">
+  <%= render :partial=>'menus/menu_book', :collection=>@organism.books %>
+  </ul>
 </li>
       
 <li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
@@ -32,7 +34,7 @@
 </li>
 
 <li id="menu_transfer" class="dropdown <%= 'active' if controller.controller_name =='transfers'  %>">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown">VIREMENTS<b class="caret"></b></a>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">TRANSFERTS<b class="caret"></b></a>
   <%= menu('transfer')  %>
 </li>
 

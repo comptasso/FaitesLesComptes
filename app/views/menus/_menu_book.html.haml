@@ -1,0 +1,4 @@
+%li.nav-header= link_to menu_book.title, organism_book_path(@organism, menu_book)
+%li= link_to 'Ecrire', new_book_line_path(menu_book)  if (menu_book.type != 'OdBook' && @organism.can_write_line?)
+%li= link_to 'Afficher', book_lines_path(menu_book)
+%li.divider

@@ -1,14 +1,11 @@
 <%= content_for :menu do %>
-
-
-
-<%= icon_to 'retour.png', organism_books_path(@organism) %>
-
+  <%= icon_to 'retour.png', :back %>
 <% end -%>
-<div class="champ">
-  <h3><%= @organism.title %> - <%= @organism.description %></h3><div class="inner-champ">
 
- 
- <%= @book.title %>
-</div></div>
+<div class="champ">
+  <h3>Livre <%= @book.title %> </h3>
+  <div class="inner-champ">
+    <%= @book.description %>
+  </div>
+</div>
 

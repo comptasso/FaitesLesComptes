@@ -64,21 +64,7 @@ module OrganismsHelper
   end
 
 
-  # menu books prend une collection de livres et crée les entrées de menu correspondants
-  # join permet de séparer les entrées entre les différents livres
-  def menu_books(books)
-    content_tag(:ul, :class=>"dropdown-menu") do
-      html = []
-      books.each do |b|
-         inner =  content_tag(:li, :class=>"nav-header") { link_to b.title, book_lines_path(b), title: b.description}
-         inner += content_tag(:li) { link_to 'Ecrire', new_book_line_path(b)}  if @organism.can_write_line?
-         inner += content_tag(:li) { link_to 'Afficher', book_lines_path(b) }
-         html << inner
-      end
-      html.join(content_tag(:li, :class=>"divider"){}).html_safe
-    end
-  end
-
+ 
   # menu bnaks prend une collection de comptes bancaires et crée les entrées de menu correspondants
   # join permet de séparer les entrées entre les différents comptes
   def menu_banks(banks)
