@@ -18,19 +18,24 @@
 
 <li class="dropdown <%= 'active' if controller.controller_name =='lines'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
-  <ul class="dropdown-menu">
-  <%= render :partial=>'menus/menu_book', :collection=>@organism.books %>
-  </ul>
+  <%= content_tag(:ul, :class => "dropdown-menu") do %>
+    <%= render :partial=>'menus/menu_book', :collection=>@organism.books, :spacer_template=>'menus/divider' %>
+  <% end %>
 </li>
       
 <li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">BANQUES<b class="caret"></b></a>
-  <%= menu_banks(@organism.bank_accounts) %>
+  <%= content_tag(:ul, :class => "dropdown-menu") do %>
+    <%= render :partial=>'menus/menu_bank', :collection=>@organism.bank_accounts, :spacer_template=>'menus/divider' %>
+  <% end %>
+ 
 </li>
 
 <li class="dropdown <%= 'active' if controller.controller_name =='cash_lines'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">CAISSES<b class="caret"></b></a>
-  <%= menu_cashes(@organism.cashes)  %>
+  <%= content_tag(:ul, :class => "dropdown-menu") do %>
+    <%= render :partial=>'menus/menu_cash', :collection=>@organism.cashes, :spacer_template=>'menus/divider' %>
+  <% end %>
 </li>
 
 <li id="menu_transfer" class="dropdown <%= 'active' if controller.controller_name =='transfers'  %>">

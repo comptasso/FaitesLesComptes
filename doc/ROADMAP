@@ -470,7 +470,7 @@ utiliser le helper de cash_lines pour lines
 Changer debit credit par dépenses recettes
 Dans le form par De vers
 Dans les income outcome changer debit credit par montant (et une seule colonne).
-
+utiliser des partials pour le menu
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
 Et peut être aussi une référence de facture
