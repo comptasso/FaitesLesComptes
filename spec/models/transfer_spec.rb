@@ -6,6 +6,7 @@ describe Transfer do
   include OrganismFixture
 
   before(:each) do
+    clean_test_database
     create_minimal_organism
     @bb=@o.bank_accounts.create!(name: 'DebiX', number: '123Y')
   end
@@ -240,6 +241,8 @@ describe Transfer do
         end
         it 'destroy the transfer is impossible if debit_line locked' do
           @t.line_debit.update_attribute(:locked, true)
+          @t.destroyable?.should == false
+
           expect {@t.destroy}.not_to change {Line.count}
         end
 

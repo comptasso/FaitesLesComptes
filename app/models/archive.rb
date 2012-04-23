@@ -120,9 +120,10 @@ class Archive < ActiveRecord::Base
     end
     self.rebuild(:income_books, :organism, @restores[:organism].id)
     self.rebuild(:outcome_books, :organism, @restores[:organism].id)
+    self.rebuild(:od_books, :organism, @restores[:organism].id)
     @restores[:books] = @restores[:income_books] + @restores[:outcome_books] +
       @restores[:od_books]
-    raise "Nombre de livre anormal" unless @restores[:books].size == 3
+  
 
     Transfer.skip_callback(:create, :after, :create_lines)
     self.rebuild(:transfers, :organism, @restores[:organism].id)
