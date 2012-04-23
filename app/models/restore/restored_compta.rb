@@ -8,7 +8,7 @@ module Restore
   # RestoredCompta est une class qui permet de reconstruire une compta à partir d'un
   # fichier. On crée la classe en lui passant le nom d'un fichier
   # puis on reconstruit l'ensemble des valeurs dans la data base en
-  # appelant successivement create_organism, create_all_direct_children
+  # appelant successivement create_organism, create_direct_children
   # create sub_children.
 
   # Tout cet enchainement devra être mis dans une transaction
@@ -46,11 +46,11 @@ module Restore
       @restores[:organism].records.first.id
     end
 
-    def create_child(sym_model, parent = nil, pid = nil)
+    def create_child(sym_model) #, parent = nil, pid = nil)
       parent ||= :organism
       pid ||= organism_new_id
-      @restores[sym_model] = restore_model(self, sym_model,parent, pid )
-      @restores[sym_model].restore_records
+      @restores[sym_model] = restore_model(self, sym_model) #,parent, pid )
+      @restores[sym_model].restore_records 
     end
 
 
@@ -59,12 +59,12 @@ module Restore
     end
  
 
-    # create_all_direct_children recréé les enregistrements qui sont
+    # create_direct_children recréé les enregistrements qui sont
     # des enfants directs de organism.
     # Des skip_callback sont mis en place pour éviter les after_create
     # ensure s'assure qu'en tout état de cause les callbasks sont
     # réactivées à la fin de la méthode
-    def create_all_direct_children
+    def create_direct_children
       Transfer.skip_callback(:create, :after, :create_lines)
       Period.skip_callback(:create, :after,:copy_accounts)
       Period.skip_callback(:create, :after, :copy_natures)
@@ -72,30 +72,45 @@ module Restore
         :outcome_books, :od_books, :transfers, :periods].each do |m|
         create_child(m) if @datas[m]
       end
-    ensure
+      
+     ensure
       Transfer.set_callback(:create, :after, :create_lines)
       Period.set_callback(:create, :after,:copy_accounts)
       Period.set_callback(:create, :after, :copy_natures)
     end
 
 
-    # create sub_children est similaire à create_all_direct_children
-    # mais appelle create_child pour les modèles qui ont des enfants
+    # create sub_children est similaire à create_direct_children
+    # mais appelle create_child pour les modèles qui sont des enfants
     def create_sub_children
-      #extraits bancaires
-      @restores[:bank_accounts].records.each { |r| create_child(:bank_extracts, :bank_account, r.id) } unless @restores[:bank_accounts].empty?
-      @restores[:bank_extracts].records.each { |r| create_child(:check_deposits, :bank_extract, r.id) } unless @restores[:bank_extracts].empty?# les remises de chèques
-      @restores[:cashes].records.each { |r| create_child(:cash_controls, :cash, r.id) } unless @restores[:cashes].empty?# les contrôles de caisse
-      @restores[:periods].records.each {|r| create_child(:accounts, :period, r.id)} unless @restores[:periods].empty?# les comptes bancaires
+      [:bank_extracts, :check_deposits, :cash_controls, :accounts].each { |m| create_child(m) if @datas[m] }
+      create_child(:natures) if @datas[:natures]
+      create_child(:lines) if @datas[:lines]
+      # les derniers car ils dépendent de bank_extract mais aussi de lines
+      create_child(:bank_extract_lines) if @datas[:bank_extract_lines]
     end
 
+    
+
     # la particularité des natures c'est qu'ils ont un account_id et un period_id
-    def create_natures
-      unless @restores[:periods].empty?
-        @restores[:periods].records.each do |p|
-          @restores[:natures] = Restore::RestoreModel.new(:natures,:period_id, p.id)
-          @restores[:natures].restore_records(@datas[:natures] )
-        end
+#    def create_natures
+#      unless @restores[:periods].empty?
+#        @restores[:periods].records.each do |p|
+#          @restores[:natures] = Restore::RestoreModel.new(:natures,:period_id, p.id)
+#          @restores[:natures].restore_records(@datas[:natures] )
+#        end
+#      end
+#    end
+
+    # ask_for_id('transfer', 12) doit renvoyer le nouvel id correspondant à la recréation
+    # de ce tansfer dans la compta
+    def ask_id_for(model, old_id)
+      if model != 'book'
+        model =  model.pluralize unless model == 'organism'
+        sym_model = model.to_sym
+        return  @restores[sym_model].new_id(old_id)
+      else
+        return @restores[:income_books].new_id(old_id) || @restores[:outcome_books].new_id(old_id) ||  @restores[:od_books].new_id(old_id)
       end
     end
 
@@ -103,8 +118,8 @@ module Restore
 
 
     # prend un modèle sous forme de symbole et le restaure
-    def restore_model(sender, sym_model, parent = nil, pid = nil)
-      Restore::RestoredModel.new(sender, sym_model, parent, pid)
+    def restore_model(sender, sym_model) #, parent = nil, pid = nil)
+      Restore::RestoredModel.new(sender, sym_model) #, parent, pid)
     end
 
 

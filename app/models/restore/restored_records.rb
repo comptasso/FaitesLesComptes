@@ -6,47 +6,99 @@ module Restore
 
   # cette classe génère les enregistrements restorés par un modèle donné
   # elle est constituée d'un tableau de hash,
-  # chacun des hash ayant old_id, et le nouveau record créé
+  # chacun des hash ayant :old_id, et le nouveau :record créé
 
   # une fois créé :
   # - id_records donne tous le tableau associatif
   # :old_id=>XX, :record=>the_new_record
   # - all_records permet d'avoir un tableau de tous les records
   class RestoredRecords
-    attr_reader :id_records
+    attr_reader :id_records, :compta
     
-    def initialize
+    def initialize(compta)
+      @compta = compta
       @id_records = []
     end
 
-
-    # restore un seul enregistrement
-    # par exemple restore_data[@datas[:organism]
-    # parent est un symbole au singulier
-    def restore_data(data, parent = nil, parent_id = nil)
-        dd = data.attributes
-        new_dd = {:old_id=>data[:id] }
-        dd.delete 'id' # id et type ne peuvent être mass attributed
-        dd.delete 'type'
-        dd[parent.to_s  + '_id'] = parent_id if parent
-        new_dd[:record]  = data.class.name.constantize.create!(dd)
-        @id_records << new_dd
-     end
-
-    # à partir d'un tableau de records, extrait le nom de la class
-    # supprime l'id, créé un nnouveau record du même modèle
-    # stocke l'ancien id et ce nouveau record dans @restore_records
-    def restore_datas(datas, parent = nil, parent_id=nil)
-       datas.each do |d|
-        restore_data(d, parent, parent_id)
-      end
-      Rails.logger.info "reconstitution de #{datas.size} #{datas.first.class.name}"
-    end
 
     # retourne juste les enregistrements
     def all_records
       @id_records.map {|rr| rr[:record]}
     end
+
+
+    def restore_array(datas)
+      datas.each {|d| restore(d)}
+    end
+
+
+    # restore est une fonction générale qui prend un record, l'analyse,
+    # lui substitue les id qui vont bien
+    def restore(data)
+      new_dd = {:old_id=>data[:id] }
+      new_attributes = data.attributes
+      child_id(data).each do |a_id|
+        new_attributes[a_id] = find_id_for(data, a_id)
+      end
+      
+      new_attributes.delete 'id'
+      new_attributes.delete 'type'
+      # efface les attributs id et type de data car ils ne peuvent être mass attributed
+      new_dd[:record]  = data.class.name.constantize.create!(new_attributes)
+      @id_records << new_dd
+    end
+
+
+    # Deux cas de figure, soit il y a un champ polymorphique
+    # soit pas. Le premier cas est traité par une vérification de la présence
+    # du _type
+    def find_id_for(data, a_id)
+      # cas le plus facile, id est nil et on retourne nil
+      return nil if data.attributes[a_id] == nil
+      # cas général
+      model = a_id[/(.*)(_id$)/,1] # le modèle est obtenu en retirant _id par exemple book à partir de book_id
+      # cas polymorphic , alors le modèle est obtenu en lisant le type
+      # par exemple owner_id ne renvoie pas à owner mais a Transfer (que l'on obtient en regardant owner_type)
+      model = model_polymorphic(data, a_id)  if polymorphic?(data, a_id)
+      # maintenant on demande à compta de retourner le nouvel id correspondant
+      # à ce modèle et à cet id
+      # par exemple ask_id_for('Nature', 27) si la ligne aveait un nature_id de 27
+      Rails.logger.warn "Modèle : #{data.inspect} - a_id : #{a_id} "
+      @compta.ask_id_for(model, data.attributes[a_id])
+ 
+    end
+
+    protected
+
+    # on détecte polymorphique en regardant si il y a un _type qui va avec le _id
+    # par exemple si owner_id il y aussi owner_type
+    def polymorphic?(data, a_id)
+      racine = a_id[/(.*)(_id$)/,1]
+      data.attributes.map {|k,v| k }.include?(racine + '_type')
+    end
+
+   
+
+    # renvoie un tableau de tous les champs de data qui se terminent en _id
+    def child_id(data)
+      data.attributes.map {|k,v|  k }.grep(/_id$/)
+    end
+
+    # on détecte polymorphique en regardant si il y a un _type qui va avec le _id
+    # par exemple si owner_id il y aussi owner_type
+    def polymorphic?(data, a_id)
+      racine = a_id[/(.*)(_id$)/,1]
+      data.attributes.map {|k,v| k }.include?(racine + '_type')
+    end
+
+    # par exemple owner_id racine = owner, data.attribtues[:owner_type] = "Transfer"
+    def model_polymorphic(data, a_id)
+      racine = a_id[/(.*)(_id$)/,1]
+      data.attributes[racine + '_type'].underscore
+    end
+
+
+
 
   end
 

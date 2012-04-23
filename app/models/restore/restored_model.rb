@@ -13,10 +13,10 @@ module Restore
 
     attr_reader  :compta
 
-    def initialize(sender, sym_model, parent = nil, parent_id = nil)
+    def initialize(sender, sym_model) #, parent = nil, parent_id = nil)
       @sym_model = sym_model # @model_name = sym_model.to_s.capitalize.singularize.camelize :model_name,
-      @parent_id = parent_id
-      @parent = parent
+#      @parent_id = parent_id
+#      @parent = parent
       @compta = sender
     end
 
@@ -25,15 +25,15 @@ module Restore
     # contenant l'ancien id et le nouveau record
     # les datas sont fournis par l'appel à la méthode correspondante
     def restore_records
-      @r_records = Restore::RestoredRecords.new
-      @r_records.restore_datas(@compta.datas_for(@sym_model), @parent, @parent_id)
+      @r_records = Restore::RestoredRecords.new(@compta)
+      @r_records.restore_array(@compta.datas_for(@sym_model))
     end
 
     # utilisé pour la restauration de records qui ne sont pas dans un array
     # en l'occurence organism
     def restore_record
-      @r_records = Restore::RestoredRecords.new
-      @r_records.restore_data(@compta.datas_for(@sym_model))
+      @r_records = Restore::RestoredRecords.new(@compta)
+      @r_records.restore(@compta.datas_for(@sym_model))
     end
 
     # records demande à restore records de lui donner juste le tableau des
@@ -43,6 +43,7 @@ module Restore
       @r_records.all_records 
     end
 
+    # les id_records sont un tableau de hash consitué de l'anci
     def id_records
       raise 'r_records est vide et les records ne peuvent etre restaures' unless @r_records
       @r_records.id_records
@@ -52,6 +53,13 @@ module Restore
     def empty?
       return true unless @r_records
       @r_records.all_records.empty?
+    end
+
+    # retourne l'id correspondante à un nouvel enregistrement
+    def new_id(old_id)
+      # donc on cherche dans id_records un record qui a pour old_id comme :old_id
+      h = id_records.select {|r| r[:old_id] == old_id}
+      h.empty?  ? nil : h.first[:record].id
     end
 
 

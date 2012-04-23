@@ -30,4 +30,6 @@ describe Restore::RestoredModel do
     @rc.restores[:organism].id_records.should == [{:old_id=>@datas[:organism].id, :record=>@rc.restores[:organism].records.first }]
   end
 
+  
+
 end
