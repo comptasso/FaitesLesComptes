@@ -29,7 +29,21 @@ module Restore
     end
 
     def datas
-      @datas ||= parse_file
+      @datas
+    end
+    
+    # TODO check errors avant toute lecture ou écriture
+
+
+    # rebuild_all_records appelle les trois méthodes accessoires
+    # successivement
+    def rebuild_all_records
+      Organism.transaction do
+      create_organism
+      create_direct_children
+      create_sub_children
+      end
+
     end
 
     def create_organism
@@ -57,7 +71,8 @@ module Restore
     def datas_for(sym_model)
       @datas[sym_model]
     end
- 
+
+    
 
     # create_direct_children recréé les enregistrements qui sont
     # des enfants directs de organism.
