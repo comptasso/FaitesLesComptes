@@ -6,23 +6,8 @@
 # laquelle contient un bouton de confirmation qui renvoie sur l'action rebuild.
 #
 
-#require 'organism'
-#require 'period'
-#require 'bank_account'
-#require 'destination'
-#require 'nature'
-#require 'cash'
-#require 'bank_extract'
-#require 'line'
-#require 'book'
-#require 'income_book'
-#require 'outcome_book'
-#require 'bank_extract_line'
-#require 'check_deposit'
-#require 'cash_control'
-#require 'account'
-
 class Admin::RestoresController < Admin::ApplicationController
+ MODELS = %w(organism period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book od_book transfer)
 
 
   def new
@@ -38,27 +23,25 @@ class Admin::RestoresController < Admin::ApplicationController
       render :new
       return
     end
-    # ici on récupère le fichier 
-    tmp = params[:file_upload].tempfile
-    a = Archive.new
-    a.parse_file(tmp)
-    unless a.errors.any?
-      @datas=a.datas
-      File.open("#{Rails.root}/tmp/#{@just_filename}", 'w') {|f| f.write a.datas.to_yaml}
+    load_models
+    @datas = YAML.load(params[:file_upload].tempfile)
+    unless @error_parsing
+      File.open("#{Rails.root}/tmp/#{@just_filename}", 'w') {|f| f.write @datas.to_yaml}
       render :confirm
     else
-      message += a.list_errors
-      flash[:alert]=message
+      flash[:alert] = @error_parsing
       render :new
     end
  
   end
  
   def rebuild
-    a= Archive.new
     tmp_file_name="#{Rails.root}/tmp/#{params[:file_name]}"
-    a.parse_file(File.open(tmp_file_name,'r') {|f| f.read})
-    if  a.rebuild_organism
+    File.open(tmp_file_name,'r') do |f|
+      @datas = YAML.load(f)
+    end
+    a = Restore::RestoredCompta.new(@datas)
+    if  a.rebuild_all_records
       flash[:notice]= "Importation de l'organisme #{a.datas[:organism].title} effectuée"
     else
       flash[:alert]= "Une erreur de lecture du fichier n'a pas permis de reconstituer les données"
@@ -67,6 +50,28 @@ class Admin::RestoresController < Admin::ApplicationController
     File.delete(tmp_file_name)
     redirect_to admin_organisms_path
   end
+
+  protected
+
+  def load_models
+     MODELS.each { |model_name| load(model_name + '.rb') }
+  end
+
+      # parse_file prend un fichier archive, charge les fichiers nécessaires
+    # load et non require pour être certain de les recharger si nécessaire
+    # et retourne les @datas
+    def parse_file(file_name)
+      load_models
+      ds = {}
+      File.open(file_name, 'r') do |f|
+        ds = YAML.load(f)
+      end
+     ds
+    rescue  Psych::SyntaxError
+      @error_parsing = "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
+    end
+
+
 
 
   

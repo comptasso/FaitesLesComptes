@@ -36,9 +36,10 @@ class CheckDeposit < ActiveRecord::Base
   validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :has_bank_extract_line?
  
  
-  before_validation :not_empty # une remise chèque vide n'a pas de sens
+ # before_validation :not_empty # une remise chèque vide n'a pas de sens
+  # sauf pour la reconstruction d'une compta complète
 
-  after_save :update_checks if :bank_extract_line
+  after_save :update_checks, :if=> :bank_extract_line
   after_save :update_checks_with_bank_account_id
 
   before_destroy :cant_destroy_when_pointed

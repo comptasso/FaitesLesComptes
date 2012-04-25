@@ -40,10 +40,10 @@ class Line < ActiveRecord::Base
 
   validates :debit, :credit, numericality: true, format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :line_date, presence: true, must_belong_to_period: true
-  validates :nature_id, presence: true
+  validates :nature_id, presence: true, :unless=> lambda {self.owner_type == 'Transfer'}
   validates :narration, presence: true
   validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
-    :message => "valeur inconnue" }
+    :message => "valeur inconnue" }, :unless=>lambda { self.owner_type == 'Transfer'}
   validates_with NotNullAmount
   validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
   validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire

@@ -110,6 +110,23 @@ describe Line do
     it 'line and book should be coherent' # un livre de recettes avec des crédits et un livre de dépenses avec des débits
   end
 
+  describe "création d'une ligne de type transfer" do
+
+    before(:each) do
+      @m = Line.new(line_date: "2012-02-22", narration: "retrait", nature_id: nil,
+       destination_id: nil, debit: 50,  credit: 0,
+       book_id: @od.id, locked: false, bank_extract_id: nil, payment_mode: nil,
+       check_deposit_id: nil, cash_id: nil, bank_account_id: 5,
+       owner_id: 12, owner_type: "Transfer")
+    end
+
+    it 'should be valid even without a nature' do
+      @m.valid?
+      @m.should be_valid
+    end
+  end
+
+
   context "vérification des lignes et des soldes sur quelques mois" do
 
   before(:each) do

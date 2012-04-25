@@ -13,10 +13,28 @@ class Archive < ActiveRecord::Base
 
   # organism est traité à part car c'est le modèle mère de tous les autres
   # pour que l'archive fonctionne, il faut que le modèle organism puisse accéder à tous les autres modèles directement ou au travers de through
-  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book transfer)
+  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book od_book transfer)
   
   belongs_to :organism
+  
+  attr_reader :collect
 
+   # à partir d'un exercice, collect_data constitue un hash reprenant l'ensemble des données
+  # de cet exercice
+  def collect_datas
+    @collect= {}
+    @collect[:comment] = self.comment
+    @collect[:created_at] = self.created_at
+    @collect[:organism] = self.organism
+    MODELS.each do |m|
+      @collect[m.pluralize.to_sym] = organism.instance_eval(m.pluralize).all
+    end
+  end
+
+  # affiche le titre de l'archive à partir de l'organisme et de la date de création
+  def title
+    (organism.title + ' ' + created_at.to_s).split.join('_')
+  end
 
   # une instance d'archive peut recréer une compta à partir du fichier chargé
   def restore_compta(archive)
@@ -24,29 +42,29 @@ class Archive < ActiveRecord::Base
   end
 
   
-  
-  # après restore_compte, archive can give the list of original_datas
-  def datas(sym_model = nil)
-    raise 'la comptabilité n pas été reconstruite' unless @restored_compta
-    if sym_model
-      @restored_compta.datas_for(sym_model)
-    else
-      @restored_compta.datas
-    end
-    
-  end
+#
+#  # après restore_compte, archive can give the list of original_datas
+#  def load_datas(sym_model = nil)
+#    raise 'la comptabilité n pas été reconstruite' unless @restored_compta
+#    if sym_model
+#      @restored_compta.datas_for(sym_model)
+#    else
+#      @restored_compta.datas
+#    end
+#
+#  end
 
-  def restores(sym_model)
-    raise 'la comptabilité n pas été reconstruite' unless @restored_compta
-    r = @restored_compta.restores[sym_model]
-    if r && !r.empty?
-      r.records
-    end
-  end
-
-  def rebuild_all_records
-    @restored_compta.rebuild_all_records
-  end
+#  def restores(sym_model)
+#    raise 'la comptabilité n pas été reconstruite' unless @restored_compta
+#    r = @restored_compta.restores[sym_model]
+#    if r && !r.empty?
+#      r.records
+#    end
+#  end
+#
+#  def rebuild_all_records
+#    @restored_compta.rebuild_all_records
+#  end
 
 
   # TODO create_class ne semble plus utilisé - A supprimer ?
@@ -75,21 +93,7 @@ class Archive < ActiveRecord::Base
 #    errors[:base] = "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
 #  end
 
-  # à partir d'un exercice, collect_data constitue un hash reprenant l'ensemble des données
-  # de cet exercice
-  def collect_datas
-    @datas[:comment] = self.comment
-    @datas[:created_at] = self.created_at
-    @datas[:organism] = self.organism
-    MODELS.each do |m|
-      @datas[m.pluralize.to_sym] = organism.instance_eval(m.pluralize).all
-    end
-  end
-
-  # affiche le titre de l'archive à partir de l'organisme et de la date de création
-  def title
-    (organism.title + ' ' + created_at.to_s).split.join('_')
-  end
+ 
 
   # donne la liste des erreurs
   def list_errors

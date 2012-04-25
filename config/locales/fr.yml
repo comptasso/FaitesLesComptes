@@ -278,6 +278,8 @@ fr:
             amount:
               blank: 'champ obligatoire'
               not_a_number: 'nombre'
+      messages:
+        record_invalid: 'Enregistrement invalide'
 
 
   helpers:

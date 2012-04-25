@@ -44,8 +44,11 @@ module Restore
       new_attributes.delete 'id'
       new_attributes.delete 'type'
       # efface les attributs id et type de data car ils ne peuvent être mass attributed
-      new_dd[:record]  = data.class.name.constantize.create!(new_attributes)
+      new_dd[:record] = data.class.name.constantize.new(new_attributes)
+      Rails.logger.debug "#{new_dd[:record].errors.inspect}" unless new_dd[:record].valid?
+      new_dd[:record].save! #  = data.class.name.constantize.create!(new_attributes)
       @id_records << new_dd
+      Rails.logger.debug "#{new_dd.inspect} "
     end
 
 
@@ -63,9 +66,10 @@ module Restore
       # maintenant on demande à compta de retourner le nouvel id correspondant
       # à ce modèle et à cet id
       # par exemple ask_id_for('Nature', 27) si la ligne aveait un nature_id de 27
-      Rails.logger.warn "Modèle : #{data.inspect} - a_id : #{a_id} "
-      @compta.ask_id_for(model, data.attributes[a_id])
- 
+      Rails.logger.debug "Modèle : #{data.inspect} - a_id : #{a_id}  "
+      rid = @compta.ask_id_for(model, data.attributes[a_id])
+      Rails.logger.debug "reponse : #{rid} "
+      rid
     end
 
     protected

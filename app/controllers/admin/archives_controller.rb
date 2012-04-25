@@ -32,7 +32,7 @@ class Admin::ArchivesController < Admin::ApplicationController
      if @archive.save
       @tmp_file_name="#{Rails.root}/tmp/#{@archive.title}.yml"
       @archive.collect_datas
-      File.open(@tmp_file_name, 'w') {|f| f.write @archive.datas.to_yaml}
+      File.open(@tmp_file_name, 'w') {|f| f.write @archive.collect.to_yaml}
       send_file @tmp_file_name, type: 'text/yml'
       File.delete(@tmp_file_name)
     else

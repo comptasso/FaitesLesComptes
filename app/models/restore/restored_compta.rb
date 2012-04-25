@@ -2,7 +2,7 @@
 
 module Restore
 
-  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book transfer)
+  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book od_book transfer)
 
 
   # RestoredCompta est une class qui permet de reconstruire une compta à partir d'un
@@ -11,22 +11,18 @@ module Restore
   # appelant successivement create_organism, create_direct_children
   # create sub_children.
 
-  # Tout cet enchainement devra être mis dans une transaction
   class RestoredCompta
 
-    attr_reader :restores
+    attr_reader :restores, :errors
     
     
-    def initialize(archive_name)
-      @archive_name = archive_name  
+    def initialize(archive_file_datas)
       @errors = {}
       @restores = {}
-      parse_file
+      @datas = archive_file_datas
     end
 
-    def basename
-      File.basename(@archive_name)
-    end
+  
 
     def datas
       @datas
@@ -60,11 +56,9 @@ module Restore
       @restores[:organism].records.first.id
     end
 
-    def create_child(sym_model) #, parent = nil, pid = nil)
-      parent ||= :organism
-      pid ||= organism_new_id
+    def create_child(sym_model, options ={})
       @restores[sym_model] = restore_model(self, sym_model) #,parent, pid )
-      @restores[sym_model].restore_records 
+      @restores[sym_model].restore_records
     end
 
 
@@ -83,6 +77,7 @@ module Restore
       Transfer.skip_callback(:create, :after, :create_lines)
       Period.skip_callback(:create, :after,:copy_accounts)
       Period.skip_callback(:create, :after, :copy_natures)
+      
       [:destinations, :bank_accounts, :cashes, :income_books, 
         :outcome_books, :od_books, :transfers, :periods].each do |m|
         create_child(m) if @datas[m]
@@ -98,11 +93,27 @@ module Restore
     # create sub_children est similaire à create_direct_children
     # mais appelle create_child pour les modèles qui sont des enfants
     def create_sub_children
-      [:bank_extracts, :check_deposits, :cash_controls, :accounts].each { |m| create_child(m) if @datas[m] }
+      create_child(:bank_extracts) if @datas[:bank_extracts]
+  
+      CheckDeposit.skip_callback(:create, :after, :update_checks)
+      CheckDeposit.skip_callback(:create, :after, :update_checks_with_bank_account_id)
+      create_child(:check_deposits) if @datas[:check_deposits]
+
+      create_child(:cash_controls) if @datas[:cash_controls]
+      create_child(:accounts) if @datas[:accounts]
+      
       create_child(:natures) if @datas[:natures]
+
+      Line.skip_callback(:save, :before, :check_bank_and_cash_ids)
       create_child(:lines) if @datas[:lines]
+
       # les derniers car ils dépendent de bank_extract mais aussi de lines
       create_child(:bank_extract_lines) if @datas[:bank_extract_lines]
+
+    ensure
+      CheckDeposit.set_callback(:create, :after, :update_checks)
+      CheckDeposit.set_callback(:create, :after, :update_checks_with_bank_account_id)
+      Line.set_callback(:save, :before, :check_bank_and_cash_ids)
     end
 
     
@@ -120,6 +131,7 @@ module Restore
     # ask_for_id('transfer', 12) doit renvoyer le nouvel id correspondant à la recréation
     # de ce tansfer dans la compta
     def ask_id_for(model, old_id)
+      Rails.logger.debug "RestoredCompta#ask_id_for Modèle : #{model} - id demandée #{old_id} "
       if model != 'book'
         model =  model.pluralize unless model == 'organism'
         sym_model = model.to_sym
@@ -139,22 +151,6 @@ module Restore
 
 
     
-    # parse_file prend un fichier archive, charge les fichiers nécessaires
-    # load et non require pour être certain de les recharger si nécessaire
-    # et retourne les @datas
-    def parse_file
-      require 'yaml'
-      load('organism.rb')
-      MODELS.each do |model_name|
-        load(model_name + '.rb')
-      end
-      File.open(@archive_name, 'r') do |f|
-        @datas = YAML.load(f)
-      end
-    rescue  Psych::SyntaxError
-      errors[:base] = "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
-    end
-
 
 
 

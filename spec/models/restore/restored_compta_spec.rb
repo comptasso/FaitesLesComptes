@@ -5,13 +5,33 @@ require 'yaml'
 
 describe Restore::RestoredCompta do
 
+  it 'check open file' do
+    puts Dir.getwd
+    @g = File.open('spec/test_compta.yml', 'r')
+    @g.should be_an_instance_of(File)
+    @datas = YAML.load(@g)
+    @rc = Restore::RestoredCompta.new(@datas)
+    @rc.datas.should == {'a'=>1}
+  end
+
   describe 'creation' do
+#    before(:each) do
+#      f = File.dirname(__FILE__) + '/../../test_compta.yml'
+#      @rc = Restore::RestoredCompta.new(f)
+#      File.open(f, 'r') do |f|
+#        @datas = YAML.load(f)
+#      end
+#    end
+
     before(:each) do
-      f = File.dirname(__FILE__) + '/../../test_compta.yml'
-      @rc = Restore::RestoredCompta.new(f)
-      File.open(f, 'r') do |f|
-        @datas = YAML.load(f)
-      end
+      @g = File.open(File.dirname(__FILE__) + '/../../test_compta.yml', 'r')
+      @datas = YAML.load(@g)
+      @rc = Restore::RestoredCompta.new(@g)
+    end
+
+
+    after(:each) do
+      @g.close
     end
 
     it 'check values' do
@@ -21,10 +41,6 @@ describe Restore::RestoredCompta do
 
     it 'restore compta is created with a file to load' do
       @rc.should be_an_instance_of(Restore::RestoredCompta)
-    end
-
-    it 'has attribute basename' do
-      @rc.basename.should == 'test_compta.yml' 
     end
 
     it 'can read test_compta.yml' do
