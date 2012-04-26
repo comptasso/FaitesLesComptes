@@ -19,7 +19,7 @@ Spork.prefork do
 #
 #Webrat.configure do |config|
 #  config.mode = :selenium
-#  #optional:
+#  #optional: 
 #  config.application_port = 4567 # defaults to 3001. Avoid Selenium's default port, 4444
 ##  config.application_framework = :sinatra  # could also be :merb. Defaults to :rails
 #  config.application_environment = Rails.env || :test # should equal the environment of the test runner because of database and gem dependencies. Defaults to :test.

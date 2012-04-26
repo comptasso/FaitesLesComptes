@@ -64,6 +64,7 @@ describe CheckDeposit do
     
     
     it "n'est valide qu avec au moins une ligne" do
+      pending 'suppression de cette validation pour arriver à faire la restauration'
       @check_deposit.checks.should be_empty
       @check_deposit.save.should == false
     end

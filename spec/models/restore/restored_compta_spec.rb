@@ -5,19 +5,19 @@ require 'yaml'
 
 describe Restore::RestoredCompta do
 
-  it 'check open file' do
-    puts Dir.getwd
-    @g = File.open('spec/test_compta.yml', 'r')
-    @g.should be_an_instance_of(File)
-    @datas = YAML.load(@g)
-    @rc = Restore::RestoredCompta.new(@datas)
-    @rc.datas.should == {'a'=>1}
-  end
+#  it 'check open file' do
+#    puts Dir.getwd
+#    @g = File.open('spec/test_compta.yml', 'r')
+#    @g.should be_an_instance_of(File)
+#    @datas = YAML.load(@g)
+#    @rc = Restore::RestoredCompta.new(@datas)
+#
+#  end
 
   describe 'creation' do
 #    before(:each) do
 #      f = File.dirname(__FILE__) + '/../../test_compta.yml'
-#      @rc = Restore::RestoredCompta.new(f)
+#      @rc = Restore::RestoredCompta.new(f) 
 #      File.open(f, 'r') do |f|
 #        @datas = YAML.load(f)
 #      end
@@ -26,7 +26,7 @@ describe Restore::RestoredCompta do
     before(:each) do
       @g = File.open(File.dirname(__FILE__) + '/../../test_compta.yml', 'r')
       @datas = YAML.load(@g)
-      @rc = Restore::RestoredCompta.new(@g)
+      @rc = Restore::RestoredCompta.new(@datas)
     end
 
 

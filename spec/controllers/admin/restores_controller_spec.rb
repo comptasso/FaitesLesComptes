@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Admin::RestoresController do
 
@@ -15,7 +15,7 @@ describe Admin::RestoresController do
 
   describe 'POST create' do
     before(:each) do
-      
+       
       @file_name = 'spec/test_compta.yml'
       @file_name.stub(:original_filename).and_return(@file_name)
       @file_name.stub(:tempfile).and_return(@file= File.open(@file_name, 'r'))
@@ -35,19 +35,17 @@ describe Admin::RestoresController do
       response.should render_template(:confirm)
     end
 
-    it "should add a description"
-
+   
     context "the file is malformatted" do
       before(:each) do
-
-      @file_name = 'spec/invalid_test_compta.yml'
-      @file_name.stub(:original_filename).and_return(@file_name)
-      @file_name.stub(:tempfile).and_return(@file= File.open(@file_name, 'r'))
+        @file_name = 'spec/invalid_test_compta.yml'
+        @file_name.stub(:original_filename).and_return(@file_name)
+        @file_name.stub(:tempfile).and_return(@file= File.open(@file_name, 'r'))
     end
 
-      it 'archive should have errors' do
+      it 'archive should have errors' do 
          post :create, :file_upload=>@file_name
-         flash[:alert].should == "Une erreur s'est produite lors de la lecture du fichier, impossible de reconstituer les données de l'exercice"
+         flash[:alert].should == "Lecture des données impossible. Erreur à la ligne 15, colonne 2"
       end
 
       it 'should rerender new' do

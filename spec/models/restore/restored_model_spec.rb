@@ -7,12 +7,12 @@ require 'yaml'
 describe Restore::RestoredModel do
   before(:each) do
     f = File.dirname(__FILE__) + '/../../test_compta.yml'
-    @rc = Restore::RestoredCompta.new(f)
     File.open(f, 'r') do |f|
       @datas = YAML.load(f)
     end
+    @rc = Restore::RestoredCompta.new(@datas)
   end
-
+ 
   it 'restore compta create a restore model by create_organism' do
       @rc.create_organism
       @rc.restores[:organism].should be_an_instance_of(Restore::RestoredModel)
