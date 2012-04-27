@@ -11,22 +11,28 @@ describe Restore::RestoredModel do
       @datas = YAML.load(f)
     end
     @rc = Restore::RestoredCompta.new(@datas)
+    @rc.rebuild_all_records
   end
+
+   it 'create organism should skip call backs' do
+        expect { @rc.restores[:organism] }.not_to change{Book.count}
+    end
+
  
   it 'restore compta create a restore model by create_organism' do
-      @rc.create_organism
+      
       @rc.restores[:organism].should be_an_instance_of(Restore::RestoredModel)
       @rc.restores[:organism].records.first.title.should == @datas[:organism].title
       @rc.restores[:organism].records.first.id.should_not == @datas[:organism].id
     end
 
   it 'restore model knows the compta' do
-    @rc.create_organism
+    
     @rc.restores[:organism].compta.should == @rc
   end
 
   it 'can give access to the restored_records' do
-    @rc.create_organism
+    
     @rc.restores[:organism].id_records.should == [{:old_id=>@datas[:organism].id, :record=>@rc.restores[:organism].records.first }]
   end
 

@@ -6,7 +6,6 @@ describe Transfer do
   include OrganismFixture
 
   before(:each) do
-    clean_test_database
     create_minimal_organism
     @bb=@o.bank_accounts.create!(name: 'DebiX', number: '123Y')
   end
@@ -24,7 +23,7 @@ describe Transfer do
     it "should store date for a valid pick_date" do
       @transfer.pick_date = '06/06/1955'
       @transfer.date.should == Date.civil(1955,6,6)
-    end
+    end 
 
     it 'should return formatted date' do
       @transfer.date =  Date.civil(1955,6,6)
@@ -228,7 +227,7 @@ describe Transfer do
       context 'with a saved tranfer' do
 
         before(:each) do
-          @t.save!
+           @t.save!
         end
 
         it 'can return the debited line or the credited line' do
@@ -241,13 +240,21 @@ describe Transfer do
         end
         it 'destroy the transfer is impossible if debit_line locked' do
           @t.line_debit.update_attribute(:locked, true)
-          @t.destroyable?.should == false
-
+          @t.should_not be_destroyable
           expect {@t.destroy}.not_to change {Line.count}
         end
 
         it 'destroy the transfer is impossible if any line locked' do
-          @t.line_credit.update_attribute(:locked, true)
+          
+          l = @t.line_credit
+          l.locked.should be_false
+          l.locked = true
+          l.save!
+          m= @t.line_credit
+          m.locked.should be_true
+          
+          @t.line_credit.locked.should be_true
+          @t.destroyable?.should  be_false
           @t.should_not be_destroyable
           expect {@t.destroy}.not_to change {Transfer.count}
         end

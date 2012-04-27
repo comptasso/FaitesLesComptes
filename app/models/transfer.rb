@@ -2,7 +2,7 @@
 
 class Transfer < ActiveRecord::Base
 
-  
+  # TODO il faudrait modifier line_debit et line_credit en from et towards
 
   before_destroy :should_be_destroyable
 
@@ -68,10 +68,13 @@ class Transfer < ActiveRecord::Base
     lines.where('credit <> ?', 0).first
   end
 
+
+  # TODO ici mettre un alias avec debit_locked?
   def debit_editable?
     !line_debit.locked?
   end
 
+  # TODO ici mettre un alias avec debit_locked?
   def credit_editable?
     !line_credit.locked?
   end
@@ -82,14 +85,18 @@ class Transfer < ActiveRecord::Base
     lines.select {|l| l.locked? }.empty?
   end
 
+  # pour indiquer que l'on ne peut modifier le compte de donneur
   def debit_locked?
     line_debit ? line_debit.locked : false
   end
 
+  # pour indiquer que l'on ne peut modifier le compte receveur
   def credit_locked?
     line_credit ? line_credit.locked : false
   end
   
+  # utile pour savoir que l'on ne peut toucher aux rubriques montant, narration 
+  # et date
   def partial_locked?
     credit_locked? || debit_locked?
   end
@@ -186,8 +193,8 @@ class Transfer < ActiveRecord::Base
   # Normalement, puisque le transfer est valide (car on est après un after_create
   # il ne devrait pas y avoir de problème particulier
   def create_lines
-    build_line_debit.save!(:validate => false)
-    build_line_credit.save!(:validate => false)
+    build_line_debit.save!
+    build_line_credit.save!
   end
 
 

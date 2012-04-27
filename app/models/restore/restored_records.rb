@@ -27,8 +27,12 @@ module Restore
     end
 
 
+    # Prend un array de records et les reconstruit un par un
+    # retourne le nombre de records reconstruits
     def restore_array(datas)
+      nb_restoration = @id_records.size
       datas.each {|d| restore(d)}
+      @id_records.size - nb_restoration
     end
 
 

@@ -469,6 +469,7 @@ OK Problématique de transfer dont l'identification pour owner_id n'est pas évi
 factoriser le modèle transfert (les lignes qui remplissent debitable et creditable)
 renommer les compta et autres restore en restorer
 voir pour confier la création du record au modèle avec les skip call back dans le modèle
+find_id_for doit anvoyer un message d'erreur utilisable si nécessaire
 
 utiliser le helper de cash_lines pour lines
 Changer debit credit par dépenses recettes

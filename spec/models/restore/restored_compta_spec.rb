@@ -2,131 +2,96 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'yaml'
+require File.expand_path(File.dirname(__FILE__) + '/../../support/similar_model.rb')
+
+class RestoreError < StandardError; end
+
+
+RSpec.configure do |c| 
+  #  c.filter = {:wip => true }
+end
 
 describe Restore::RestoredCompta do
 
-#  it 'check open file' do
-#    puts Dir.getwd
-#    @g = File.open('spec/test_compta.yml', 'r')
-#    @g.should be_an_instance_of(File)
-#    @datas = YAML.load(@g)
-#    @rc = Restore::RestoredCompta.new(@datas)
-#
-#  end
+
+
+  MODELS = %w(periods bank_accounts destinations lines bank_extracts check_deposits cashes cash_controls accounts natures bank_extract_lines income_books outcome_books od_books transfers)
 
   describe 'creation' do
-#    before(:each) do
-#      f = File.dirname(__FILE__) + '/../../test_compta.yml'
-#      @rc = Restore::RestoredCompta.new(f) 
-#      File.open(f, 'r') do |f|
-#        @datas = YAML.load(f)
-#      end
-#    end
 
     before(:each) do
-      @g = File.open(File.dirname(__FILE__) + '/../../test_compta.yml', 'r')
-      @datas = YAML.load(@g)
-      @rc = Restore::RestoredCompta.new(@datas)
-    end
-
-
-    after(:each) do
-      @g.close
+      File.open(File.dirname(__FILE__) + '/../../test_compta2.yml', 'r') do |f|
+        @datas = YAML.load(f)
+      end
+      @rc = Restore::RestoredCompta.new(@datas) 
     end
 
     it 'check values' do
-      @datas.should have(17).elements
+      @datas.should have(19).elements
       @datas[:organism].should be_an_instance_of(Organism)
     end
 
-    it 'restore compta is created with a file to load' do
-      @rc.should be_an_instance_of(Restore::RestoredCompta)
-    end
-
-    it 'can read test_compta.yml' do
-      pending
-      # @rc.file_name.should ==
-    end
-
-    it 'can_build datas' do
-      @rc.datas.should have(17).elements  
-    end
-
    
+   
+    describe 'rebuild all records' do
 
-    it 'check initilize restored_records' do  
-      Organism.count.should == 0
-      @datas[:organism].title.should == 'Mes comptes perso restauration'  
-      rr = Restore::RestoredRecords.new(@rc)
-      expect {rr.restore(@datas[:organism])}.to change {Organism.count}
-    end
-
-    
-
-    it 'create organism should skip call backs' do 
-      expect {@rc.create_organism}.not_to change{Book.count}
-    end
-
-    it 'create direct children' do
-      @rc.create_organism
-      expect {@rc.create_child(:destinations)}.to change{Destination.count}.by(@datas[:destinations].size)
-      @rc.restores[:destinations].records.each do |d|
-        d.organism_id.should == @rc.organism_new_id 
+      before(:each) do
+        @rc.rebuild_all_records
+        @ro = @rc.restores[:organism].records.first
+        @do = @datas[:organism]
       end
-    end
 
-    
-    it 'create_direct_children' do
-      @rc.create_organism
-      @rc.create_direct_children
-      @rc.restores[:destinations].should have(@datas[:destinations].size).records
-      @rc.restores[:income_books].should have(@datas[:income_books].size).records
-      @rc.restores[:income_books].records.first.title.should == 'Recettes'
-      @rc.restores[:income_books].records.first.organism_id.should == @rc.organism_new_id 
-    end
+      it 'recreate organism similar to' do
+        @ro.should be_similar_to @do
+      end
 
-    # on vérifie avec le controle de caisse, enfant de caisse, qu'il existe
-    # puis qu'on peut bien le retrouver en descendant l'arborescence organism->cash->cash_control
-    it 'create_sub_children' do
-      @rc.create_organism
-      @rc.create_direct_children
-      @rc.create_sub_children
-      @rc.restores[:cash_controls].records.should have(1).element 
-      @rc.restores[:organism].records.first.cashes.first.cash_controls.first.should == @rc.restores[:cash_controls].records.first
+      it 'with the exact number of records' do 
+        MODELS.each do |m|
+          @rc.restores[m.to_sym].should have(@datas[m.to_sym].size).records if @datas[m.to_sym]
+        end
+      end
 
-    end
+      it 'all records are similar' do
+        MODELS.each do |m|
+          @rc.restores[m.to_sym].records.each_with_index do |r, i|
+             r.should be_similar_to @datas[m.to_sym][i]
+          end
+        end
+      end
 
- it 'returns the right value when ask_id_for' do
-    @rc.create_organism
-    @rc.create_direct_children
+      it 'chek the arborescence' do
+        @ro.destinations.should be_similar_to @datas[:destinations]
+        @ro.natures.should be_similar_to @datas[:natures]
+        @ro.income_books.should be_similar_to @datas[:income_books]
+      end
 
-    @rc.ask_id_for('organism', @datas[:organism].id).should == @rc.restores[:organism].records.first.id
-    @rc.ask_id_for('destination', @datas[:destinations].first.id).should == @rc.restores[:destinations].records.first.id
+describe 'ask_for_if' do
+
+      it 'returns the right value' do
+        @rc.ask_id_for('organism', @datas[:organism].id).should == @rc.restores[:organism].records.first.id
+        @rc.ask_id_for('destination', @datas[:destinations].first.id).should == @rc.restores[:destinations].records.first.id
+      end
+
+        it 'raise an error when the model is not there'  do
+          expect { @rc.ask_id_for('model_inconnu', 1) }.to raise_error RestoreError,
+            'Aucun enregistrement du type ModelInconnu'
+        end
+
+        it 'raise an error when the id is not present'  do
+         
+         expect { @rc.ask_id_for('destination', 999) }.to raise_error(RestoreError,
+           'Impossible de trouver un enregistrement du type Destination avec comme id 999')
+        end
+
+end
+      it 'checks balance' do
+        pending 'en attente d avoir un fichier test structuré pour pouvoir utiliser la balance comme moyen de controle'
+
+      end
+
    
-  end
 
-    it 'check nature' do
-       @rc.create_organism
-    @rc.create_direct_children
-     @rc.create_sub_children
-     @rc.ask_id_for('nature', 41).should_not be_nil
-     @rc.ask_id_for('destination', 32).should_not be_nil
-     @rc.ask_id_for('book', 14).should_not be_nil
-   end
-
-    it 'create lines' do
-         @rc.create_organism
-    @rc.create_direct_children
-     
-     expect {@rc.create_sub_children}.to change {Line.count}.by(@datas[:lines].size)
     end
-
-    it 'create l ensemble de la compta' do
-     @rc.create_organism
-     @rc.create_direct_children
-     @rc.create_sub_children 
-    end
-
 
   end
 end

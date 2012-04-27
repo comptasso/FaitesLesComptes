@@ -2,66 +2,68 @@
 
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require 'yaml'
+require 'yaml' 
+require File.expand_path(File.dirname(__FILE__) + '/../../support/similar_model.rb')
 
-LINE_ATTRIBUTES =  ["id", "line_date", "narration", "nature_id", "destination_id",
-  "debit", "credit", "book_id", "locked", "created_at", "updated_at",
-  "copied_id", "multiple", "bank_extract_id", "payment_mode",
-  "check_deposit_id", "cash_id", "bank_account_id"]
+
 
 
 describe Restore::RestoredRecords do
   before(:each) do
     f = File.dirname(__FILE__) + '/../../test_compta.yml' 
-    
     File.open(f, 'r') do |f|
       @datas = YAML.load(f)
     end
-    @rc = Restore::RestoredCompta.new(@datas)
+    @rc = Restore::RestoredCompta.new(@datas) 
   end
 
- it 'restore a simple record record' do
-    @rc.create_organism
-    @rc.restores[:organism].compta.should == @rc
-    @rc.restores[:organism].records.first.should be_an_instance_of(Organism) 
-  end
-
-  it 'restore record knows the compta' do
+ 
+  it 'compta référence le restore_compta' do
     @rr = Restore::RestoredRecords.new(@rc)
     @rr.compta.should == @rc 
   end
 
   describe 'ability to analyse and build a record to restore' do
 
+   
+
+
     before(:each) do
       @rr = Restore::RestoredRecords.new(@rc)
       @d = @datas[:destinations].first
+       @rc.create_organism
     end
 
-    describe 'rebuild new attributes' do
+    describe 'similar_to' do
 
-      it 'recrée une une destination' do
-       @rc.create_organism 
-       d =  @rr.restore(@d)
-       d.first[:record].should be_an_instance_of(Destination)
+      it 'deux destinations identiques should be_similar' do
+        @d.should be_similar_to @d
       end
 
-      it 'recrée children et subchildren' do
-        @rc.create_organism
-        @rc.create_direct_children
-         @rc.create_sub_children
-         @rc.restores[:natures].records.should have(@datas[:natures].size).elements
+      it '@d et la restoration de @d devraient être similaires' do
+        @rr.restore_array(@datas[:destinations])
+        @rr.all_records.first.should be_similar_to @d
       end
 
-      it 'recrée une ligne' do
-        @l=@datas[:lines].first
-        puts @l.inspect
-         @rc.create_organism
-        @rc.create_direct_children
-        @rc.create_sub_children
-        @rc.restores.restore(@l).records.first.should be_an_instance_of(Line)
+    end
 
+    describe 'restore_array' do
+
+      it 'le tableau reconstruit  a la même taille que la source' do
+        @rr.restore_array(@datas[:destinations]).should == @datas[:destinations].size
       end
+
+      it 'chaque élément est de même type' do
+        @rr.restore_array(@datas[:destinations])
+        @rr.all_records.each {|r| r.should be_an_instance_of(Destination)}
+      end
+
+      it 'chaque record doit être similaire à la source' do
+        @rr.restore_array(@datas[:destinations])
+        @rr.all_records.each_with_index { |r,i| r.similar_to?(@datas[:destinations][i]).should be_true }
+        @rr.all_records.each_with_index {|r, i| r.should be_similar_to @datas[:destinations][i] }
+      end
+
 
     end
   end

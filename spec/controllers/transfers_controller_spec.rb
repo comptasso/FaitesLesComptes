@@ -33,7 +33,7 @@ describe TransfersController do
 
   # This should return the minimal set of attributes required to create a valid
   # Transfer. As you add validations to Transfer, be sure to
-  # update the return value of this method accordingly.
+  # update the return value of this method accordingly. 
   def valid_attributes
     {:amount=>1245.to_s, :debitable_id=>@ba.id, :debitable_type=>'BankAccount',
       :creditable_id=>@bb.id,:creditable_type=>'BankAccount',

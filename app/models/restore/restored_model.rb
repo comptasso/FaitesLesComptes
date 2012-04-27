@@ -43,6 +43,10 @@ module Restore
       @r_records.all_records 
     end
 
+    def length
+      records.length
+    end
+
     # les id_records sont un tableau de hash consitué de l'anci
     def id_records
       raise 'r_records est vide et les records ne peuvent etre restaures' unless @r_records
