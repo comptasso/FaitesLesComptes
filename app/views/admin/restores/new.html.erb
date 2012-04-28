@@ -10,14 +10,35 @@
 <div class="champ">
   <h3>
     Restauration des données d'un exercice à partir d'un fichier
-  </h3><div class="inner-champ">
-
+  </h3>
   
-<%= form_tag admin_restore_path, :multipart => true do %>
-  <label for="file">Fichier source</label> <%= file_field_tag "file_upload" %>
-  <div>  <%= submit_tag 'Restaurer'%></div>
+  <div class="inner-champ row-fluid">
+   <div class="inputs">
+     <%= form_tag admin_restore_path, :multipart => true, :class=>'simple_form'  do %>
+  <div class="control-group string required row-fluid">
+
+    <label  for="file_upload" class="string required control-label span2">
+       <abbr title="exigé">*</abbr>
+      Fichier source
+    </label>
+      
+    <div class="controls row-fluid">
+         <div class="input-prepend">
+            <%= file_field_tag 'file_upload', class: 'input-file' %>
+         </div>
+    </div>
+ 
+  </div>
+
+
+     <div class="form-actions offset2">
+        <%= submit_tag 'Charger et vérifier le fichier' ,  class: "btn-primary span3" %>
+     </div>
+
+
 <% end %>
  
+   </div>
 
-
-</div></div>
+</div>
+</div>
