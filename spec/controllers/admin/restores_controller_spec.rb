@@ -29,6 +29,8 @@ describe Admin::RestoresController do
       flash[:notice].should == 'Importation de l\'organisme SUCCES effectuée'
     end
 
+    it 'when rebuild echoue'
+ 
   end
 
   describe 'POST create' do

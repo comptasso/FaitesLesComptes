@@ -11,17 +11,18 @@
   <h3>
     Création d'un fichier de sauvegarde
 
-  </h3><div class="inner-champ row-fluid">
-    
-    <%= simple_form_for [:admin , @organism, @archive] do |f|  %>
-    <p>
-      <%=  f.input :comment ,  label_html: {class: "span2"},
-          input_html: {class: "span6"} %>
-    </p>
-    <p class="offset1">
-      <%=  f.button :submit, id: 'new_archive_button', class: "btn-primary span2" %>
-      </</p>
-      
-    <% end %>
+  </h3>
 
-  </div></div>
+  <div class="inner-champ row-fluid">
+    <%= simple_form_for [:admin , @organism, @archive],
+      :wrapper=>:prepend, :html=> {class: 'form-inline'} do |f|  %>
+
+        <%=  f.input :comment ,  label_html: {class: "span2"}, input_html: {class: "span6"} %>
+
+            <div class="form-actions offset2">
+              <%=  f.button :submit, id: 'new_archive_button', class: "btn-primary span3" %>
+            </div>
+       <% end %>
+
+   </div>
+</div>
