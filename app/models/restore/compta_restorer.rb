@@ -2,6 +2,7 @@
 
 class RestoreError < StandardError; end
 
+
 # Le module Restore a pour objet de restaurer une compta
 # il se compose de trois classe RestoredCompta, RestoredModel et RestoredRecords.
 module Restore
@@ -27,7 +28,7 @@ module Restore
   # ask_id_for('destination', 12) renvoie le nouvel id correspondant à cette destination
   # reconstruite
 
-  class RestoredCompta
+  class ComptaRestorer
 
     
 
@@ -42,7 +43,7 @@ module Restore
   
     # rebuild_all_records appelle les trois méthodes accessoires
     # successivement
-    def rebuild_all_records
+    def compta_restore
       Organism.transaction do
         create_organism
         create_direct_children
@@ -76,11 +77,8 @@ module Restore
     protected
 
     def create_organism
-      Organism.skip_callback(:create, :after ,:create_default)
-      @restores[:organism] =  Restore::RestoredModel.new(self, :organism)
+      @restores[:organism] =  Restore::ModelRestorer.new(self, :organism)
       @restores[:organism].restore_record
-    ensure
-      Organism.set_callback(:create, :after, :create_default) 
     end
 
     # create_direct_children recréé les enregistrements qui sont
@@ -89,9 +87,8 @@ module Restore
     # ensure s'assure qu'en tout état de cause les callbasks sont
     # réactivées à la fin de la méthode
     def create_direct_children
-      Transfer.skip_callback(:create, :after, :create_lines)
-      Period.skip_callback(:create, :after,:copy_accounts)
-      Period.skip_callback(:create, :after, :copy_natures)
+      
+     
       
       [:destinations, :bank_accounts, :cashes, :income_books, 
         :outcome_books, :od_books, :transfers, :periods].each do |m|
@@ -99,9 +96,7 @@ module Restore
       end
       
     ensure
-      Transfer.set_callback(:create, :after, :create_lines)
-      Period.set_callback(:create, :after,:copy_accounts)
-      Period.set_callback(:create, :after, :copy_natures)
+      
     end
 
 
@@ -110,8 +105,7 @@ module Restore
     def create_sub_children
       create_restore_model(:bank_extracts) 
   
-      CheckDeposit.skip_callback(:create, :after, :update_checks)
-      CheckDeposit.skip_callback(:create, :after, :update_checks_with_bank_account_id)
+      
       create_restore_model(:check_deposits)
 
       create_restore_model(:cash_controls)
@@ -119,16 +113,13 @@ module Restore
       
       create_restore_model(:natures) 
 
-      Line.skip_callback(:save, :before, :check_bank_and_cash_ids)
+      
       create_restore_model(:lines) 
 
       # les derniers car ils dépendent de bank_extract mais aussi de lines
       create_restore_model(:bank_extract_lines) 
 
-    ensure
-      CheckDeposit.set_callback(:create, :after, :update_checks)
-      CheckDeposit.set_callback(:create, :after, :update_checks_with_bank_account_id)
-      Line.set_callback(:save, :before, :check_bank_and_cash_ids)
+   
     end
 
 
@@ -136,7 +127,7 @@ module Restore
     # par exemple create_restore_model[:destinations]
     def create_restore_model(sym_model)
       if @datas[sym_model]
-        @restores[sym_model] = Restore::RestoredModel.new(self, sym_model)
+        @restores[sym_model] = Restore::ModelRestorer.new(self, sym_model)
         @restores[sym_model].restore_records
       end
     end

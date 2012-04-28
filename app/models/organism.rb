@@ -44,7 +44,6 @@ class Organism < ActiveRecord::Base
   # indique si organisme peut écrire des lignes de comptes, ce qui exige qu'il y ait des livres
   # et aussi un compte bancaire ou une caisse
   # Utilisé par le partial _menu pour savoir s'il faut afficher la rubrique ecrire
-  #
   def can_write_line?
     if (self.income_books.any? || self.outcome_books.any?) && (self.bank_accounts.any? || self.cashes.any?)
       true
@@ -75,6 +74,13 @@ class Organism < ActiveRecord::Base
        return nil if period_array.empty?
     end
     period_array.first
+  end
+
+  def self.restore(new_attributes)
+    Organism.skip_callback(:create, :after ,:create_default)
+    super
+  ensure
+    Organism.set_callback(:create, :after, :create_default)
   end
 
   

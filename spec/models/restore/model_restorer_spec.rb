@@ -4,14 +4,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'yaml'
 
-describe Restore::RestoredModel do
+describe Restore::ModelRestorer do
   before(:each) do
-    f = File.dirname(__FILE__) + '/../../test_compta.yml'
+    f = File.dirname(__FILE__) + '/../../test_compta.yml' 
     File.open(f, 'r') do |f|
       @datas = YAML.load(f)
     end
-    @rc = Restore::RestoredCompta.new(@datas)
-    @rc.rebuild_all_records
+    @rc = Restore::ComptaRestorer.new(@datas)
+    @rc.compta_restore
   end
 
    it 'create organism should skip call backs' do
@@ -21,7 +21,7 @@ describe Restore::RestoredModel do
  
   it 'restore compta create a restore model by create_organism' do
       
-      @rc.restores[:organism].should be_an_instance_of(Restore::RestoredModel)
+      @rc.restores[:organism].should be_an_instance_of(Restore::ModelRestorer)
       @rc.restores[:organism].records.first.title.should == @datas[:organism].title
       @rc.restores[:organism].records.first.id.should_not == @datas[:organism].id
     end

@@ -1,6 +1,27 @@
 # coding: utf-8
 
-# coding: utf-8
+
+# on réouvre le modèle ActiveRecord::Base pour créer une méthode générale
+# restore
+class ActiveRecord::Base
+
+  # restore permet de reconstruire un enregistrement de la compta
+  # l'argument new_attributes doit avoir été préparé, notamment
+  # il ne peut avoir id ni type, et les aaaa_id doivent avoir été fournis
+  # correctement par compta_restorer
+  #
+  # Les modèles qui nécessitent un skip_callback doivent surcharger cette méthode
+  # Renvoie le modèle nouvellement créé
+  def self.restore(new_attributes)
+       restored = self.new(new_attributes)
+       Rails.logger.info "création de #{restored.class.name} with #{restored.attributes}"
+       Rails.logger.warn "Erreur : #{restored.errors.inspect}" unless restored.valid?
+       puts "Erreur : #{restored.errors.inspect}" unless restored.valid?
+       restored.save!
+       restored
+  end
+end
+
 
 module Restore
 
@@ -44,13 +65,20 @@ module Restore
       child_id(data).each do |a_id|
         new_attributes[a_id] = find_id_for(data, a_id)
       end
-      
+
+      # efface les attributs id et type de data car ils ne peuvent être mass attributed
       new_attributes.delete 'id'
       new_attributes.delete 'type'
-      # efface les attributs id et type de data car ils ne peuvent être mass attributed
-      new_dd[:record] = data.class.name.constantize.new(new_attributes)
-      Rails.logger.debug "#{new_dd[:record].errors.inspect}" unless new_dd[:record].valid?
-      new_dd[:record].save! #  = data.class.name.constantize.create!(new_attributes)
+
+      if data.class == Organism
+        new_dd[:record] = Organism.restore(new_attributes)
+        Rails.logger.debug "#{new_dd[:record].errors.inspect}" unless new_dd[:record].valid?
+      else
+        new_dd[:record] = data.class.name.constantize.restore(new_attributes)
+#        new_dd[:record] = data.class.name.constantize.new(new_attributes)
+#        Rails.logger.debug "#{new_dd[:record].errors.inspect}"   unless new_dd[:record].valid?
+#        new_dd[:record].save!
+      end
       @id_records << new_dd
       Rails.logger.debug "#{new_dd.inspect} "
     end

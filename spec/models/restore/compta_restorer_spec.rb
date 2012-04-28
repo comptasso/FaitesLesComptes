@@ -11,9 +11,7 @@ RSpec.configure do |c|
   #  c.filter = {:wip => true }
 end
 
-describe Restore::RestoredCompta do
-
-
+describe Restore::ComptaRestorer do 
 
   MODELS = %w(periods bank_accounts destinations lines bank_extracts check_deposits cashes cash_controls accounts natures bank_extract_lines income_books outcome_books od_books transfers)
 
@@ -23,7 +21,7 @@ describe Restore::RestoredCompta do
       File.open(File.dirname(__FILE__) + '/../../test_compta2.yml', 'r') do |f|
         @datas = YAML.load(f)
       end
-      @rc = Restore::RestoredCompta.new(@datas) 
+      @rc = Restore::ComptaRestorer.new(@datas)
     end
 
     it 'check values' do
@@ -31,12 +29,12 @@ describe Restore::RestoredCompta do
       @datas[:organism].should be_an_instance_of(Organism)
     end
 
+    
    
-   
-    describe 'rebuild all records' do
+    describe 'rebuild all records' do 
 
       before(:each) do
-        @rc.rebuild_all_records
+        @rc.compta_restore
         @ro = @rc.restores[:organism].records.first
         @do = @datas[:organism]
       end
@@ -62,7 +60,7 @@ describe Restore::RestoredCompta do
       it 'chek the arborescence' do
         @ro.destinations.should be_similar_to @datas[:destinations]
         @ro.natures.should be_similar_to @datas[:natures]
-        @ro.income_books.should be_similar_to @datas[:income_books]
+        @ro.income_books.should be_similar_to @datas[:income_books] 
       end
 
 describe 'ask_for_if' do

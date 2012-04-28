@@ -16,13 +16,13 @@ class CheckDeposit < ActiveRecord::Base
   # de l'organisme correspondant.
   belongs_to :bank_account
   has_many :checks, class_name: 'Line',
-                    dependent: :nullify,
-                    conditions: Proc.new {"credit > 0 and payment_mode='Chèque' and book_id IN (#{self.bids}) "},
-                    before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
-                    after_remove: :nil_bank_account_id,
-                    before_add: :cant_if_pointed do
+    dependent: :nullify,
+    conditions: Proc.new {"credit > 0 and payment_mode='Chèque' and book_id IN (#{self.bids}) "},
+    before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
+  after_remove: :nil_bank_account_id,
+    before_add: :cant_if_pointed do
                 
-               end
+  end
 
   def bids
     raise "Modèle CheckDeposit - Impossible de trouver les livres sans avoir l'organisme" if self.bank_account_id == nil
@@ -36,7 +36,7 @@ class CheckDeposit < ActiveRecord::Base
   validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :has_bank_extract_line?
  
  
- # before_validation :not_empty # une remise chèque vide n'a pas de sens
+  # before_validation :not_empty # une remise chèque vide n'a pas de sens
   # sauf pour la reconstruction d'une compta complète
 
   after_save :update_checks, :if=> :bank_extract_line
@@ -111,11 +111,22 @@ class CheckDeposit < ActiveRecord::Base
     nil
   end
 
+  # surcharge de restore qui est définie dans models/restore/restore_records.rb
+  def self.restore(new_attributes)
+    CheckDeposit.skip_callback(:create, :after, :update_checks)
+    CheckDeposit.skip_callback(:create, :after, :update_checks_with_bank_account_id)
+    super
+  ensure
+    CheckDeposit.set_callback(:create, :after, :update_checks)
+    CheckDeposit.set_callback(:create, :after, :update_checks_with_bank_account_id)
+  end
+
+
   private
 
- # appelé par before_save pour éviter les remises chèques vides
+  # appelé par before_save pour éviter les remises chèques vides
   def not_empty
-       self.errors[:base] <<  'Il doit y avoir au moins un chèque dans une remise' if checks.empty?
+    self.errors[:base] <<  'Il doit y avoir au moins un chèque dans une remise' if checks.empty?
   end
 
 
@@ -133,16 +144,16 @@ class CheckDeposit < ActiveRecord::Base
   # appelé par before_destroy pour interdire la destruction d'une remise de chèque pointée
   def cant_destroy_when_pointed
     if bank_extract_line
-    logger.warn "Tentative de détruire la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
-    return false
+      logger.warn "Tentative de détruire la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
+      return false
     end
   end
 
- # mise à jour des lignes lorsque la remise chèques est pointée
+  # mise à jour des lignes lorsque la remise chèques est pointée
   def update_checks
     if bank_extract_line
       logger.info "Mise à jour des lignes par before_save de check_deposit #{id} (méthode : update_checks_if_bank_extract_line"
-       checks.each { |l| l.update_attributes(:bank_extract_id=>bank_extract_line.bank_extract.id)  }
+      checks.each { |l| l.update_attributes(:bank_extract_id=>bank_extract_line.bank_extract.id)  }
     end
      
   end

@@ -9,7 +9,7 @@ module Restore
   # pour enregistrer une compta.
   # RestoreModel utilise alors la classe RestoreRecords pour constuire les
   # enregistrements proprements dits avec un mapping des anciennes id.
-  class RestoredModel
+  class ModelRestorer
 
     attr_reader  :compta
 

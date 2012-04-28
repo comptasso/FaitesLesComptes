@@ -9,12 +9,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../../support/similar_model.
 
 
 describe Restore::RestoredRecords do
-  before(:each) do
-    f = File.dirname(__FILE__) + '/../../test_compta.yml' 
+
+ before(:each) do
+    f = File.dirname(__FILE__) + '/../../test_compta.yml'  
     File.open(f, 'r') do |f|
       @datas = YAML.load(f)
     end
-    @rc = Restore::RestoredCompta.new(@datas) 
+    @rc = Restore::ComptaRestorer.new(@datas) 
   end
 
  
@@ -23,31 +24,24 @@ describe Restore::RestoredRecords do
     @rr.compta.should == @rc 
   end
 
-  describe 'ability to analyse and build a record to restore' do
+  it 'restore_organism' do
+    @rr = Restore::RestoredRecords.new(@rc)
+    @o = mock_model(Organism, title: 'asso des essais', comment: 'mon premier essai')
+    @o.stub(:attributes).and_return('id'=>"#{@o}_id", 'title'=>'asso des essais', 'description'=>'mon premier essai')
+    expect { @rr.restore(@o) }.to change {Organism.count}
+  end
 
-   
 
 
-    before(:each) do
-      @rr = Restore::RestoredRecords.new(@rc)
-      @d = @datas[:destinations].first
-       @rc.create_organism
-    end
+  describe 'ability to analyse and build a record to restore' do 
 
-    describe 'similar_to' do
+     before(:each) do
+       @rr = Restore::RestoredRecords.new(@rc)
+       @d = @datas[:destinations].first
+       @rc.stub(:ask_id_for).and_return(1)
+     end
 
-      it 'deux destinations identiques should be_similar' do
-        @d.should be_similar_to @d
-      end
-
-      it '@d et la restoration de @d devraient être similaires' do
-        @rr.restore_array(@datas[:destinations])
-        @rr.all_records.first.should be_similar_to @d
-      end
-
-    end
-
-    describe 'restore_array' do
+   describe 'restore_array' do
 
       it 'le tableau reconstruit  a la même taille que la source' do
         @rr.restore_array(@datas[:destinations]).should == @datas[:destinations].size

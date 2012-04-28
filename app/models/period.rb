@@ -210,6 +210,17 @@ class Period < ActiveRecord::Base
     start_date.months_since(month.to_i)
   end
 
+  # surcharge de restore qui est définie dans models/restore/restore_records.rb
+  def self.restore(new_attributes)
+      Period.skip_callback(:create, :after,:copy_accounts)
+      Period.skip_callback(:create, :after, :copy_natures)
+    super
+  ensure
+     Period.set_callback(:create, :after,:copy_accounts)
+     Period.set_callback(:create, :after, :copy_natures)
+  end
+
+
 
   # donne les soldes de chaque mois, est appelé par le module JcGraphic pour constuire les graphes
   def monthly_value(date)
