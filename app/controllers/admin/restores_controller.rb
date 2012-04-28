@@ -47,11 +47,10 @@ class Admin::RestoresController < Admin::ApplicationController
     end
  
     def rebuild
-      tmp_file_name="#{Rails.root}/tmp/#{params[:file_name]}"
-      File.open(tmp_file_name,'r')  { |f| @datas = YAML.load(f) }
-      
-      a = Restore::RestoredCompta.new(@datas)
-      if  a.rebuild_all_records
+      tmp_file_name = "#{Rails.root}/tmp/#{params[:file_name]}"
+      read_datas_from_tmp_file(tmp_file_name)
+      a = Restore::ComptaRestorer.new(@datas)
+      if  a.compta_restore
         flash[:notice]= "Importation de l'organisme #{a.datas[:organism].title} effectuée"
       else
         flash[:alert]= "Une erreur de lecture du fichier n'a pas permis de reconstituer les données"
@@ -70,6 +69,10 @@ class Admin::RestoresController < Admin::ApplicationController
     # TODO voir si c'est nécessaire pour un environnement de production
     def require_models
       MODELS.each { |model_name| require(model_name + '.rb') }
+    end
+
+    def read_datas_from_tmp_file(tmp_file_name)
+      File.open(tmp_file_name,'r')  { |f| @datas = YAML.load(f) }
     end
 
  end

@@ -14,25 +14,22 @@ describe Restore::ModelRestorer do
     @rc.compta_restore
   end
 
-   it 'create organism should skip call backs' do
-        expect { @rc.restores[:organism] }.not_to change{Book.count}
-    end
+  it 'create organism should skip call backs' do
+    expect { @rc.restores[:organism] }.not_to change{Book.count}
+  end
 
  
   it 'restore compta create a restore model by create_organism' do
-      
-      @rc.restores[:organism].should be_an_instance_of(Restore::ModelRestorer)
-      @rc.restores[:organism].records.first.title.should == @datas[:organism].title
-      @rc.restores[:organism].records.first.id.should_not == @datas[:organism].id
-    end
+    @rc.restores[:organism].should be_an_instance_of(Restore::ModelRestorer)
+    @rc.restores[:organism].records.first.title.should == @datas[:organism].title
+    @rc.restores[:organism].records.first.id.should_not == @datas[:organism].id
+  end
 
   it 'restore model knows the compta' do
-    
     @rc.restores[:organism].compta.should == @rc
   end
 
   it 'can give access to the restored_records' do
-    
     @rc.restores[:organism].id_records.should == [{:old_id=>@datas[:organism].id, :record=>@rc.restores[:organism].records.first }]
   end
 
