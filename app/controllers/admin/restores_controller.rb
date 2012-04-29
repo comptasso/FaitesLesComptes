@@ -27,7 +27,7 @@ class Admin::RestoresController < Admin::ApplicationController
   # TODO  pour effacer les fichiers temporaires qui s'accumuleraient
   # TODO en utilisation multi user, il faudrait que le fichier porte une identification de son créateur
   def create
-    @just_filename = File.basename(params[:file_upload].original_filename)
+    @just_filename = File.basename(params[:file_upload].original_filename).gsub(/[^\w\.\_]/, '_')
     raise RestoreError, "Erreur : l'extension du fichier ne correspond pas.\n" unless (@just_filename =~ /.yml$/)
     read_and_check_datas
     File.open("#{Rails.root}/tmp/#{@just_filename}", 'wb') {|f| f.write(@datas.to_yaml) } #params[:file_upload].read) }

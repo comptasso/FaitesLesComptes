@@ -39,7 +39,7 @@ describe Admin::RestoresController do
       
 
         before :each do
-          @file = fixture_file_upload("#{File.dirname(__FILE__)}/../../fixtures/files/test_compta2.yml", 'text/yml')
+          @file = fixture_file_upload("spec/fixtures/files/test_compta2.yml", 'text/yml')
           
         end 
       
@@ -66,7 +66,7 @@ describe Admin::RestoresController do
 
        it 'reads datas' do
          post :create, :file_upload => @file
-          File.open("#{File.dirname(__FILE__)}/../../fixtures/files/test_compta2.yml",'r')  { |f| @datas = YAML.load(f) }
+          File.open("spec/fixtures/files/test_compta2.yml",'r')  { |f| @datas = YAML.load(f) }
          assigns[:datas][:periods].should == @datas[:periods]
        end
 
@@ -76,7 +76,7 @@ describe Admin::RestoresController do
     context "the file is malformatted" do
 
       before(:each) do
-        @file = fixture_file_upload("#{File.dirname(__FILE__)}/../../fixtures/files/invalid_test_compta.yml", 'text/yml')
+        @file = fixture_file_upload("spec/fixtures/files/invalid_test_compta.yml", 'text/yml')
         
       end
 
@@ -100,7 +100,7 @@ describe Admin::RestoresController do
     context "the extension is not correct" do
 
       before(:each) do
-        @file = fixture_file_upload("#{File.dirname(__FILE__)}/../../fixtures/files/BlurMetalLb6.gif", 'img/gif')
+        @file = fixture_file_upload("spec/fixtures/files/BlurMetalLb6.gif", 'img/gif')
       end
 
       it 'should flash an alert' do

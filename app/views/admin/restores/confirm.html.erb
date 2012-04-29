@@ -19,9 +19,9 @@
       <p><span><%=  "#{p.exercice}" %></span></p>
 
         <ul>
-          <%= content_tag :li, "Statut : #{p.is_closed? ? 'Fermé' : 'Ouvert'}" %> 
-          <%= content_tag :li, "Total balance : #{p.lines.sum(:credit)}" %>
-          <%= content_tag :li, "Nombre de lignes : #{p.lines.count}" %>
+          <%= content_tag :li, "Statut : #{p.open ? 'Ouvert' : 'Fermé'}" %>
+          <%= content_tag :li, "Total balance : #{@datas[:lines].sum(&:credit)}" %>
+          <%= content_tag :li, "Nombre de lignes : #{@datas[:lines].size}" %>
         </ul>
     
     <% end %>
