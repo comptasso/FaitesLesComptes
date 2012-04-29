@@ -5,12 +5,12 @@
 # puis create parse les données et affiche la vue confirm
 # laquelle contient un bouton de confirmation qui renvoie sur l'action rebuild.
 #
+# En cas de changement d'architecture, ne pas oublier de modifier la liste
+# des modèles dans initializers/constants.rb
+# et de redémarrer le serveur après cette modification
 
 class Admin::RestoresController < Admin::ApplicationController
-  ORGANISM = ['organism']
-  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book od_book transfer)
-  ORGMODELS = ORGANISM + MODELS
-
+  
   class RestoreError < StandardError; end
   
 

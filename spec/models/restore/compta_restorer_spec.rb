@@ -13,8 +13,7 @@ end
 
 describe Restore::ComptaRestorer do 
 
-  MODELS = %w(periods bank_accounts destinations lines bank_extracts check_deposits cashes cash_controls accounts natures bank_extract_lines income_books outcome_books od_books transfers)
-
+  
   describe 'creation' do
 
     before(:each) do
@@ -37,6 +36,7 @@ describe Restore::ComptaRestorer do
         @rc.compta_restore
         @ro = @rc.restores[:organism].records.first
         @do = @datas[:organism]
+        @plural_model = MODELS.map {|m| m.pluralize} 
       end
 
       it 'recreate organism similar to' do
@@ -44,13 +44,13 @@ describe Restore::ComptaRestorer do
       end
 
       it 'with the exact number of records' do 
-        MODELS.each do |m|
+        @plural_model.each do |m|
           @rc.restores[m.to_sym].should have(@datas[m.to_sym].size).records if @datas[m.to_sym]
         end
       end
 
       it 'all records are similar' do
-        MODELS.each do |m|
+        @plural_model.each do |m|
           @rc.restores[m.to_sym].records.each_with_index do |r, i|
              r.should be_similar_to @datas[m.to_sym][i]
           end

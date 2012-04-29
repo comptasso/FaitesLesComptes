@@ -1,20 +1,19 @@
 # coding: utf-8
 
 
-# TODO ajouter un commentaire dans le comment de la restauration
-# ajouter une vérification dans la reconstruction (du type nb d'objects total et montant des lignes
-# ajouter un checksum md5 pour empêcher les modifs externes
-
+# TODO # ajouter une vérification dans la reconstruction (du type nb d'objects total et montant des lignes
+# TODO ?ajouter un checksum md5 pour empêcher les modifs externes
+#
 # Archive est le modèle qui permet de faire la sauvegarder et la restauration
 # d'une comptabilité entière.
 # La restauration se fait par parse_file(archive) qui construit la variable
 # d'instance @datas, utilisée ensuite pour reconstruire l'ensemble des enregistrements
+#
+# Ne pas oublier de modifier la liste des modèles dans initializers/constants.rb
+# et de redémarrer le serveur après cette modification
 class Archive < ActiveRecord::Base
 
-  # organism est traité à part car c'est le modèle mère de tous les autres
-  # pour que l'archive fonctionne, il faut que le modèle organism puisse accéder à tous les autres modèles directement ou au travers de through
-  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book od_book transfer)
-  
+   
   belongs_to :organism
   
   attr_reader :collect
