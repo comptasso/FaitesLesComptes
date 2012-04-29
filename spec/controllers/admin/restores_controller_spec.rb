@@ -16,12 +16,11 @@ describe Admin::RestoresController do
   
   describe 'POST rebuild' do
     before(:each) do
-      @file_name = 'spec/test_compta2.yml'
+      @file_name = 'spec/fixtures/files/test_compta2.yml'
       File.open(@file_name,'r')  { |f| @datas = YAML.load(f) }
     end
 
-    it 'when compta_restore is a success' do
-      
+    it 'affiche un flash en cas de succès' do
       Admin::RestoresController.any_instance.stub(:read_datas_from_tmp_file).and_return nil
       File.stub(:delete).and_return nil
       Restore::ComptaRestorer.any_instance.should_receive(:compta_restore).and_return(true)
