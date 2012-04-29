@@ -7,7 +7,9 @@
 #
 
 class Admin::RestoresController < Admin::ApplicationController
-  MODELS = %w(organism period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book od_book transfer)
+  ORGANISM = ['organism']
+  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book od_book transfer)
+  ORGMODELS = ORGANISM + MODELS
 
   class RestoreError < StandardError; end
   
@@ -21,13 +23,12 @@ class Admin::RestoresController < Admin::ApplicationController
   #  - et crée les données qui seront ensuite utilisées pour la vue de confirmation.
   #  - Crée un fichier temporaire qui sera stocké dans le répertoire tmp
   #  - Et enfin appelle la vue confirm
-  # TODO voir comment on efface les fichiers temporaires qui s'accumuleraient
+  # TODO  pour effacer les fichiers temporaires qui s'accumuleraient
   # TODO en utilisation multi user, il faudrait que le fichier porte une identification de son créateur
   def create
     @just_filename = File.basename(params[:file_upload].original_filename)
     raise RestoreError, "Erreur : l'extension du fichier ne correspond pas.\n" unless (@just_filename =~ /.yml$/)
-    require_models
-    @datas = YAML.load(params[:file_upload].tempfile)
+    read_and_check_datas
     File.open("#{Rails.root}/tmp/#{@just_filename}", 'w') {|f| f.write @datas.to_yaml}
     render :confirm
   rescue  Psych::SyntaxError,  RestoreError => error
@@ -42,37 +43,66 @@ class Admin::RestoresController < Admin::ApplicationController
         "Une erreur s'est produite lors de la lecture du fichier"
       end
     end
-      flash[:alert] = alert
-      render :new
-    end
+    flash[:alert] = alert
+    render :new
+  end
  
-    def rebuild
-      tmp_file_name = "#{Rails.root}/tmp/#{params[:file_name]}"
-      read_datas_from_tmp_file(tmp_file_name)
-      a = Restore::ComptaRestorer.new(@datas)
-      if  a.compta_restore
-        flash[:notice]= "Importation de l'organisme #{a.datas[:organism].title} effectuée"
-      else
-        flash[:alert]= "Une erreur de lecture du fichier n'a pas permis de reconstituer les données"
-      end
-    ensure
-      File.delete(tmp_file_name)
+  def rebuild
+    tmp_file_name = "#{Rails.root}/tmp/#{params[:file_name]}"
+    read_datas_from_tmp_file(tmp_file_name)
+    a = Restore::ComptaRestorer.new(@datas)
+    if  a.compta_restore
+      flash[:notice]= "Importation de l'organisme #{a.datas[:organism].title} effectuée"
       redirect_to admin_organisms_path
+    else
+      raise RestoreError, "ComptaRestorer n'a pas pu reconstuire les données"
     end
+  rescue  RestoreError => error
+    flash[:alert] = "Erreur dans la recontruction des données #{error.message}"
+    redirect_to new_admin_restore_path
+  ensure
+    File.delete(tmp_file_name)
+  end
 
-    protected
+  protected
+
+  # remplit @datas avec les valeurs du fichier uploadé et les contrôle sommairement
+  def read_and_check_datas
+    load_models
+    @datas = YAML.load(params[:file_upload].tempfile)
+    check_datas
+  end
 
 
-    # require models smeble nécessaire pour le parsing, en tout cas en mode développement
-    # pour que le parser connaisse les modèles qu'il trouve dans le fichier et
-    # sache les restaurer
-    # TODO voir si c'est nécessaire pour un environnement de production
-    def require_models
-      MODELS.each { |model_name| require(model_name + '.rb') }
-    end
+  # require models smeble nécessaire pour le parsing, en tout cas en mode développement
+  # pour que le parser connaisse les modèles qu'il trouve dans le fichier et
+  # sache les restaurer.
+  # Require models ne semble pas suffisant donc j'utilise maintenant load_models
+  # TODO voir si c'est nécessaire pour un environnement de production
+  def require_models
+    ORGMODELS.each { |model_name| require(model_name + '.rb') }
+  end
 
-    def read_datas_from_tmp_file(tmp_file_name)
-      File.open(tmp_file_name,'r')  { |f| @datas = YAML.load(f) }
-    end
+  def load_models
+    ORGMODELS.each { |model_name| load(model_name + '.rb') }
+  end
 
- end
+  # vérifie que tous les modèles sont valides, ce qui ne veut pas dire que
+  # la reconstruction des données sera OK car il peut y avoir des incohérences
+  def check_datas
+     raise RestoreError, "Organisme absent" if @datas[:organism].nil?
+     raise RestoreError, "Modèle Organism invalide" unless @datas[:organism].valid?
+     MODELS.each do |m|
+       if @datas[m.pluralize.to_sym]
+         @datas[m.pluralize.to_sym].each  {|r|  raise(RestoreError, "Enregistrement invalide : Modèle #{m} - id #{r.id if r} - #{r.errors.messages}")   unless r.valid? }
+       end
+     end
+    
+  end
+
+  def read_datas_from_tmp_file(tmp_file_name)
+    File.open(tmp_file_name,'r')  { |f| @datas = YAML.load(f) }
+    check_datas
+  end
+
+end
