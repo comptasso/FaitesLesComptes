@@ -30,6 +30,7 @@ class Admin::RestoresController < Admin::ApplicationController
     raise RestoreError, "Erreur : l'extension du fichier ne correspond pas.\n" unless (@just_filename =~ /.yml$/)
     read_and_check_datas
     File.open("#{Rails.root}/tmp/#{@just_filename}", 'w') {|f| f.write @datas.to_yaml}
+    
     render :confirm
   rescue  Psych::SyntaxError,  RestoreError => error
     alert =case error
@@ -70,7 +71,7 @@ class Admin::RestoresController < Admin::ApplicationController
   def read_and_check_datas
     load_models
     @datas = YAML.load(params[:file_upload].tempfile)
-    check_datas
+  #  check_datas
   end
 
 
@@ -89,6 +90,12 @@ class Admin::RestoresController < Admin::ApplicationController
 
   # vérifie que tous les modèles sont valides, ce qui ne veut pas dire que
   # la reconstruction des données sera OK car il peut y avoir des incohérences
+  # FIXME certaines validations font appel à des records existants, comme
+  # line_date, must_belongs_to_period
+  # La restauration marche donc tant que l'ancienne compta est présente
+  # mais ne marche pas lorsque l'ancienne compta est absente (effacée ou autre PC)
+  # check_datas a donc été supprimé de read_and_check_datas
+  # et de read_tadas_from_tmp_file
   def check_datas
      raise RestoreError, "Organisme absent" if @datas[:organism].nil?
      raise RestoreError, "Modèle Organism invalide" unless @datas[:organism].valid?
@@ -102,7 +109,7 @@ class Admin::RestoresController < Admin::ApplicationController
 
   def read_datas_from_tmp_file(tmp_file_name)
     File.open(tmp_file_name,'r')  { |f| @datas = YAML.load(f) }
-    check_datas
+    # check_datas
   end
 
 end

@@ -39,7 +39,8 @@ class Line < ActiveRecord::Base
   end
 
   validates :debit, :credit, numericality: true, format: {with: /^-?\d*(.\d{0,2})?$/}
-  validates :line_date, presence: true, must_belong_to_period: true
+  validates :line_date, presence: true
+  validates :line_date, must_belong_to_period: true
   validates :nature_id, presence: true, :unless=> lambda {self.owner_type == 'Transfer'}
   validates :narration, presence: true
   validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,

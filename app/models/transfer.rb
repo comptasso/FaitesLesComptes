@@ -82,7 +82,7 @@ class Transfer < ActiveRecord::Base
 
   # inidque si le transfer peut être détruit en vérifiant qu'aucune ligne n'a été verrouillée
   def destroyable?
-    lines.select {|l| l.locked? }.empty?
+    self.lines.select {|l| l.locked? }.empty?
   end
 
   # pour indiquer que l'on ne peut modifier le compte de donneur

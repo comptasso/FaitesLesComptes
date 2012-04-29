@@ -36,7 +36,9 @@ describe Restore::ComptaRestorer do
         @rc.compta_restore
         @ro = @rc.restores[:organism].records.first
         @do = @datas[:organism]
-        @plural_model = MODELS.map {|m| m.pluralize} 
+        # on part de MODELS mais on enlève books
+        @plural_model = MODELS.map {|m| m.pluralize}
+        @plural_model.delete('books')
       end
 
       it 'recreate organism similar to' do
@@ -45,6 +47,7 @@ describe Restore::ComptaRestorer do
 
       it 'with the exact number of records' do 
         @plural_model.each do |m|
+          @rc.restores[m.to_sym].should_not be_nil
           @rc.restores[m.to_sym].should have(@datas[m.to_sym].size).records if @datas[m.to_sym]
         end
       end
