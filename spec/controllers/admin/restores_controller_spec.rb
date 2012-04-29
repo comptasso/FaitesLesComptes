@@ -37,68 +37,48 @@ describe Admin::RestoresController do
 
   describe 'POST create' do
     context 'with a correct file' do
-      before(:each) do
-        @file_name = 'spec/test_compta2.yml'
-        @file_name.stub(:original_filename).and_return(@file_name)
-        @file_name.stub(:tempfile).and_return(@file = File.open(@file_name, 'r'))
-      end
+      
+
+        before :each do
+          @file = fixture_file_upload("#{File.dirname(__FILE__)}/../../fixtures/files/test_compta2.yml", 'text/yml')
+          
+        end 
+      
       #
-      after(:each) do
-        @file.close
-        @datas = nil
+#      after(:each) do
+#        @file.close
+#      end
+
+      it 'should assign @just_filename with the basename' do
+        post :create, :file_upload => @file
+        assigns[:just_filename].should == 'test_compta2.yml'
       end
-
-      describe 'mise au point' do
-        it 'Transfer count' do
-          post :create, :file_upload => @file_name, :multipart=>true
-          Transfer.count.should == 0
-        end
-
-      end
-
-
-      #      it 'should assign @just_filename with the basename' do
-      #        post :create, :file_upload => @file_name
-      #        assigns[:just_filename].should == 'test_compta2.yml'
-      #      end
-      #
-      #      it 'assigns @datas with the content of the file' do
-      #        post :create, :file_upload => @file_name
-      #        File.open(@file_name,'r')  { |f| @datas = YAML.load(f) }
-      #        assigns[:datas].should have(19).elements
-      #
-      #      end
 
       it "should not raise error" do
-        post :create, :file_upload => @file_name, :multipart=>true
+        post :create, :file_upload => @file, :multipart=>true
         response.should render_template(:confirm)
       end
 
-      #      it 'reads datas' do
-      #        File.open(@file_name,'r')  { |f| @datas = YAML.load(f) }
-      #        post :create, :file_upload => @file_name
-      #        # FIXME en fait je voudrais assigns[:datas].should == @datas
-      #        # mais les deux hash sont identiques sauf que les clés sont des symboles
-      #        # dans un cas et des string dans l'autres
-      #        # individuellement, cela colle grâce je pense aux méthodes ajoutées par Rails
-      #        # sur les hash
-      #        assigns[:datas][:periods].should == @datas[:periods]
-      #      end
+   
+      it 'assigns @datas with the content of the file' do
+        post :create, :file_upload => @file
+        assigns[:datas].should have(19).elements
+      end
 
-      #      it "should render the view confirm" do
-      #        post :create, :file_upload => @file_name
-      #        flash[:alert].should == nil
-      #        response.should render_template(:confirm)
-      #      end
+       it 'reads datas' do
+         post :create, :file_upload => @file
+          File.open("#{File.dirname(__FILE__)}/../../fixtures/files/test_compta2.yml",'r')  { |f| @datas = YAML.load(f) }
+         assigns[:datas][:periods].should == @datas[:periods]
+       end
 
+    
     end
    
     context "the file is malformatted" do
 
       before(:each) do
-        @file_name = 'spec/invalid_test_compta.yml'
-        @file_name.stub(:original_filename).and_return(@file_name)
-        @file_name.stub(:tempfile).and_return(@file= File.open(@file_name, 'r'))
+        @file = fixture_file_upload("#{File.dirname(__FILE__)}/../../fixtures/files/invalid_test_compta.yml", 'text/yml')
+        
       end
 
       after(:each) do
@@ -106,14 +86,14 @@ describe Admin::RestoresController do
       end
 
       it 'archive should have errors' do
-        pending
-        post :create, :file_upload=>@file_name
+        
+        post :create, :file_upload=>@file
         flash[:alert].should == "Lecture des données impossible. Erreur à la ligne 15, colonne 2"
       end
 
       it 'should rerender new' do
-        pending
-        post :create, :file_upload=>@file_name
+        
+        post :create, :file_upload=>@file
         response.should render_template(:new)
       end
     end
@@ -121,19 +101,18 @@ describe Admin::RestoresController do
     context "the extension is not correct" do
 
       before(:each) do
-        @file_name = './eliminer/test.xml'
-        @file_name.stub(:original_filename).and_return(@file_name)
+        @file = fixture_file_upload("#{File.dirname(__FILE__)}/../../fixtures/files/BlurMetalLb6.gif", 'img/gif')
       end
 
       it 'should flash an alert' do
-        pending
-        post :create, :file_upload=>@file_name
+        
+        post :create, :file_upload=>@file
         flash[:alert].should == "Erreur : l'extension du fichier ne correspond pas.\n"
       end
 
       it 'should rerender new' do
-        pending
-        post :create, :file_upload=>@file_name
+        
+        post :create, :file_upload=>@file
         response.should render_template(:new)
       end
 

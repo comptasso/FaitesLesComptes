@@ -12,14 +12,15 @@
 class Admin::RestoresController < Admin::ApplicationController
   
   class RestoreError < StandardError; end
-  
+   RESTOREMODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control account nature bank_extract_line income_book outcome_book od_book transfer)
+
 
   def new
     
   end
 
   # create 
-  #  - lit le fichier sélectionné avec YAML, 
+  #  - lit le fichier sélectionné avec Psych,
   #  - et crée les données qui seront ensuite utilisées pour la vue de confirmation.
   #  - Crée un fichier temporaire qui sera stocké dans le répertoire tmp
   #  - Et enfin appelle la vue confirm
@@ -29,8 +30,8 @@ class Admin::RestoresController < Admin::ApplicationController
     @just_filename = File.basename(params[:file_upload].original_filename)
     raise RestoreError, "Erreur : l'extension du fichier ne correspond pas.\n" unless (@just_filename =~ /.yml$/)
     read_and_check_datas
-    File.open("#{Rails.root}/tmp/#{@just_filename}", 'w') {|f| f.write @datas.to_yaml}
-    
+    File.open("#{Rails.root}/tmp/#{@just_filename}", 'wb') {|f| f.write(@datas.to_yaml) } #params[:file_upload].read) }
+    # raise 'fichier trop petit' if File.size("#{Rails.root}/tmp/#{@just_filename}") < 1500
     render :confirm
   rescue  Psych::SyntaxError,  RestoreError => error
     alert =case error
@@ -68,9 +69,10 @@ class Admin::RestoresController < Admin::ApplicationController
   protected
 
   # remplit @datas avec les valeurs du fichier uploadé et les contrôle sommairement
+  # TODO en fait le seul objectif ici est de checker mais comme cela ne marche guère
   def read_and_check_datas
-    load_models
-    @datas = YAML.load(params[:file_upload].tempfile)
+    # load_models
+    @datas = Psych.load(params[:file_upload])
   #  check_datas
   end
 
@@ -81,11 +83,12 @@ class Admin::RestoresController < Admin::ApplicationController
   # Require models ne semble pas suffisant donc j'utilise maintenant load_models
   # TODO voir si c'est nécessaire pour un environnement de production
   def require_models
-    ORGMODELS.each { |model_name| require(model_name + '.rb') }
+    (['book'] + ::ORGMODELS).each { |model_name| require(model_name + '.rb') }
   end
 
   def load_models
-    ORGMODELS.each { |model_name| load(model_name + '.rb') }
+   load 'organism.rb'
+   RESTOREMODELS.each { |model_name| load(model_name + '.rb') }
   end
 
   # vérifie que tous les modèles sont valides, ce qui ne veut pas dire que
@@ -99,7 +102,7 @@ class Admin::RestoresController < Admin::ApplicationController
   def check_datas
      raise RestoreError, "Organisme absent" if @datas[:organism].nil?
      raise RestoreError, "Modèle Organism invalide" unless @datas[:organism].valid?
-     MODELS.each do |m|
+     ::MODELS.each do |m|
        if @datas[m.pluralize.to_sym]
          @datas[m.pluralize.to_sym].each  {|r|  raise(RestoreError, "Enregistrement invalide : Modèle #{m} - id #{r.id if r} - #{r.errors.messages}")   unless r.valid? }
        end
@@ -108,7 +111,8 @@ class Admin::RestoresController < Admin::ApplicationController
   end
 
   def read_datas_from_tmp_file(tmp_file_name)
-    File.open(tmp_file_name,'r')  { |f| @datas = YAML.load(f) }
+   #  load_models
+    @datas = Psych.load(File.read(tmp_file_name))
     # check_datas
   end
 
