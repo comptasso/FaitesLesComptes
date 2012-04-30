@@ -457,7 +457,7 @@ OK - Destination show n'a guère de sens dans la partie admin (supprimer la vue 
 
 -------------------- Virements internes --------------------------------
 OK - mise en place du modèle et des vues et des spec associées
-voir pour afficher en javascript les soldes après transfert
+? afficher en javascript les soldes après transfert
 revoir du coup l'affichage de bank_extract_lines
 OK - Mise en place de OdBook et création automatique à la création d'un organisme
 OK - faire une fonction lines pour la classe Transfer
@@ -465,15 +465,15 @@ OK - faire un after update pour transfer
 OK - Changer le titre virements en Transferts
 OK - Livre OD ne doit pas avoir la possibilité d'écrire
 OK - Adapter archive et restore pour pendre en compte les tansferts
-OK Problématique de transfer dont l'identification pour owner_id n'est pas évidente (il pourrait y avoir 2 transferts identiques le même jour).
-factoriser le modèle transfert (les lignes qui remplissent debitable et creditable)
-renommer les compta et autres restore en restorer
+OK - Problématique de transfer dont l'identification pour owner_id n'est pas évidente (il pourrait y avoir 2 transferts identiques le même jour).
+OK - factoriser le modèle transfert (les lignes qui remplissent debitable et creditable)
+OK - renommer les compta et autres restore en restorer
 OK - confier la création du record au modèle avec les skip call back dans le modèle
 find_id_for doit anvoyer un message d'erreur utilisable si nécessaire
-utiliser le helper de cash_lines pour lines
+OK - utiliser le helper de cash_lines pour lines
 OK - request pour archive
-request pour restore
-Changer debit credit par dépenses recettes  dans le form par De vers
+OK - request pour restore
+OK - Changer debit credit par dépenses recettes  dans le form par De vers
 Dans les income outcome changer debit credit par montant (et une seule colonne).
 utiliser des partials pour les menus (A finir pour zone admin et zone compta)
 Voir pour l'affichage du livre OD (plutôt dans la compta ?)

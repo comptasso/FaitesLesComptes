@@ -25,14 +25,14 @@ module Restore
     # contenant l'ancien id et le nouveau record
     # les datas sont fournis par l'appel à la méthode correspondante
     def restore_records
-      @r_records = Restore::RestoredRecords.new(@compta)
+      @r_records = Restore::RecordsRestorer.new(@compta)
       @r_records.restore_array(@compta.datas_for(@sym_model))
     end
 
     # utilisé pour la restauration de records qui ne sont pas dans un array
     # en l'occurence organism
     def restore_record
-      @r_records = Restore::RestoredRecords.new(@compta)
+      @r_records = Restore::RecordsRestorer.new(@compta)
       @r_records.restore(@compta.datas_for(@sym_model))
     end
 

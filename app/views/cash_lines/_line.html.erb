@@ -4,4 +4,4 @@
           <td class="clickable"><%= line.destination.name if line.destination %></td>
           <td class="numeric clickable"><%= debit_credit(line.debit) %></td>
           <td class="numeric clickable"><%= debit_credit(line.credit) %></td>
-       <%= cash_line_actions(line) %>
+       <%= line_actions(line) %>

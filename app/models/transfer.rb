@@ -110,6 +110,17 @@ class Transfer < ActiveRecord::Base
   end
 
  private
+ 
+  # helper
+  
+ # retourne l'id du journal d'OD correspondant à l'organisme dont dépent transfer
+ # 
+ # utilisée par build_debit_line et build_credit_line pour construire les lignes
+  def od_id
+   self.organism.od_books.first.id
+  end
+
+   # callbacks
 
   # callback appelé par before_destroy pour empêcher la destruction des lignes
   # et du transfer si une ligne est verrouillée
@@ -117,98 +128,73 @@ class Transfer < ActiveRecord::Base
     return self.destroyable?
   end
 
- # retourne l'id du journal d'OD correspondant à l'organisme dont dépent transfer
- # 
- # utilisée par build_debit_line et build_credit_line pour construire les lignes
-  def od_id
-   self.organism.od_books.first.id
- end
 
- # build_debit_line construit la ligne d'écriture débitrice correspondant au 
- # virement
-  def build_line_debit
-    cash_id = bank_account_id = nil
-    if debitable_type == 'Cash'
-      cash_id = debitable_id
-      bank_account_id = nil
-    elsif debitable_type == 'BankAccount'
-      bank_account_id = debitable_id
-      cash_id = nil
-    end
-    lines.build(:line_date=> date, :narration=>narration, :credit=> 0,
-      :debit=>amount, :cash_id=> cash_id, :bank_account_id=> bank_account_id , 
-     :book_id=>od_id)
-  end
-  
-  # build_credit_line construit la ligne d'écriture créditrice à partir d'un
-  # virement
-  def build_line_credit
-    cash_id = bank_account_id = nil
-    if creditable_type == 'Cash'
-      cash_id = creditable_id
-      bank_account_id = nil
-    elsif creditable_type == 'BankAccount'
-      bank_account_id = creditable_id
-      cash_id = nil
-    end
-    lines.new(:line_date=> date, :narration=>narration, :credit=>amount,
-      :debit=>0, :cash_id=> cash_id, :bank_account_id=> bank_account_id,
-    :book_id=>od_id)
-  end
-
-  # appelé par after_update
-  def update_line_debit
-   
-    cash_id = bank_account_id = nil
-    if debitable_type == 'Cash'
-      cash_id = debitable_id
-      bank_account_id = nil
-    elsif debitable_type == 'BankAccount'
-      bank_account_id = debitable_id
-      cash_id = nil
-    end
-    
-    l=line_debit
-    l.cash_id = cash_id
-    l.bank_account_id = bank_account_id
-    l.save!(:validate => false)
-    
-  end
-
-  # appelé par after_update
-  def update_line_credit
-     cash_id = bank_account_id = nil
-    if creditable_type == 'Cash'
-      cash_id = creditable_id
-      bank_account_id = nil
-    elsif creditable_type == 'BankAccount'
-      bank_account_id = creditable_id
-      cash_id = nil
-    end
-
-    l=line_credit
-    l.cash_id = cash_id
-    l.bank_account_id = bank_account_id
-    l.save!(:validate => false)
-  end
-
-  
-
-  # applé par after create; validate => false car ces lignes n'ont pas de nature
-  # ni de mode de payment
-  # TODO voir s'il ne faut pas passer par une STI pour line avec des validates
-  # conditionnels pour éviter cette manoeuvre dangereuse.
-  # Normalement, puisque le transfer est valide (car on est après un after_create
-  # il ne devrait pas y avoir de problème particulier
+  # applé par after create
   def create_lines
     build_line_debit.save!
     build_line_credit.save!
   end
 
 
+ # build_debit_line construit la ligne d'écriture débitrice correspondant au 
+ # virement
+  def build_line_debit
+    cash_id, bank_account_id = line_debit_infos
+    lines.build(:line_date=> date, :narration=>narration, :credit=> 0,
+      :debit=>amount, :cash_id=> cash_id, :bank_account_id=> bank_account_id , 
+     :book_id=>od_id)
+  end
 
+  # build_credit_line construit la ligne d'écriture créditrice à partir d'un
+  # virement
+  def build_line_credit
+    cash_id, bank_account_id = line_credit_infos
+    lines.build(:line_date=> date, :narration=>narration, :credit=>amount,
+      :debit=>0, :cash_id=> cash_id, :bank_account_id=> bank_account_id,
+    :book_id=>od_id)
+  end
+
+     # appelé par after_update
+  def update_line_credit
+    cash_id, bank_account_id = line_credit_infos
+    l=line_credit
+    l.cash_id = cash_id
+    l.bank_account_id = bank_account_id
+    l.save!
+  end
+
+
+  # appelé par after_update
+  def update_line_debit
+   cash_id, bank_account_id = line_debit_infos
+    l=line_debit
+    l.cash_id = cash_id
+    l.bank_account_id = bank_account_id
+    l.save!
+
+  end
+
+
+  def line_credit_infos
+    cash_id = bank_account_id = nil
+    case creditable_type
+    when 'Cash' then cash_id = creditable_id
+    when 'BankAccount' then bank_account_id = creditable_id
+    end
+    return [cash_id, bank_account_id]
+  end
+
+  def line_debit_infos
+    cash_id = bank_account_id = nil
+    case debitable_type
+    when 'Cash' then cash_id = debitable_id
+    when 'BankAccount' then bank_account_id = debitable_id
+    end
+    return [cash_id, bank_account_id]
+  end
   
 
+  # validations
   def amount_cant_be_null
     errors.add :amount, 'nul !' if amount == 0
   end

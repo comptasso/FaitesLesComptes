@@ -8,7 +8,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../support/similar_model.
 
 
 
-describe Restore::RestoredRecords do
+describe Restore::RecordsRestorer do
 
  before(:each) do
     f ='spec/fixtures/files/test_compta2.yml'  
@@ -20,12 +20,12 @@ describe Restore::RestoredRecords do
 
  
   it 'compta référence le restore_compta' do
-    @rr = Restore::RestoredRecords.new(@rc)
+    @rr = Restore::RecordsRestorer.new(@rc)
     @rr.compta.should == @rc  
   end
 
   it 'restore_organism' do
-    @rr = Restore::RestoredRecords.new(@rc)
+    @rr = Restore::RecordsRestorer.new(@rc)
     @o = mock_model(Organism, title: 'asso des essais', comment: 'mon premier essai')
     @o.stub(:attributes).and_return('id'=>"#{@o}_id", 'title'=>'asso des essais', 'description'=>'mon premier essai')
     expect { @rr.restore(@o) }.to change {Organism.count}
@@ -36,9 +36,9 @@ describe Restore::RestoredRecords do
   describe 'ability to analyse and build a record to restore' do 
 
      before(:each) do
-       @rr = Restore::RestoredRecords.new(@rc)
+       @rr = Restore::RecordsRestorer.new(@rc)
        @d = @datas[:destinations].first
-       @rc.stub(:ask_id_for).and_return(1)
+       @rc.stub(:ask_id_for).and_return(1) 
      end
 
    describe 'restore_array' do

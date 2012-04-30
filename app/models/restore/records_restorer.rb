@@ -33,7 +33,7 @@ module Restore
   # - id_records donne tous le tableau associatif
   # :old_id=>XX, :record=>the_new_record
   # - all_records permet d'avoir un tableau de tous les records
-  class RestoredRecords
+  class RecordsRestorer
     attr_reader :id_records, :compta
     
     def initialize(compta)
