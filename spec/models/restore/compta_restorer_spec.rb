@@ -17,7 +17,7 @@ describe Restore::ComptaRestorer do
   describe 'creation' do
 
     before(:each) do
-      File.open(File.dirname(__FILE__) + '/../../test_compta2.yml', 'r') do |f|
+      File.open('spec/fixtures/files/test_compta2.yml', 'r') do |f|
         @datas = YAML.load(f)
       end
       @rc = Restore::ComptaRestorer.new(@datas)

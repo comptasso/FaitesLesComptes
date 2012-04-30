@@ -6,7 +6,7 @@ require 'yaml'
 
 describe Restore::ModelRestorer do
   before(:each) do
-    f = File.dirname(__FILE__) + '/../../test_compta.yml' 
+    f = 'spec/fixtures/files/test_compta2.yml'
     File.open(f, 'r') do |f|
       @datas = YAML.load(f)
     end

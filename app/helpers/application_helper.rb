@@ -8,7 +8,8 @@ module ApplicationHelper
   #
   def icon_to(icon_file, options={}, html_options={})
     raise ArgumentError unless icon_file
-    title=alt= icon_file.split('.')[0].capitalize
+    title = alt = icon_file.split('.')[0].capitalize
+
     html_options[:title] ||=title
     html_options[:class] ||= 'icon_menu'
     # html_options[:tabindex]= "-1"

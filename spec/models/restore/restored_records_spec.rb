@@ -11,7 +11,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../support/similar_model.
 describe Restore::RestoredRecords do
 
  before(:each) do
-    f = File.dirname(__FILE__) + '/../../test_compta.yml'  
+    f ='spec/fixtures/files/test_compta2.yml'  
     File.open(f, 'r') do |f|
       @datas = YAML.load(f)
     end
@@ -21,7 +21,7 @@ describe Restore::RestoredRecords do
  
   it 'compta référence le restore_compta' do
     @rr = Restore::RestoredRecords.new(@rc)
-    @rr.compta.should == @rc 
+    @rr.compta.should == @rc  
   end
 
   it 'restore_organism' do
