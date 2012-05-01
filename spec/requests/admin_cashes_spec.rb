@@ -21,7 +21,7 @@ describe 'admin cash' do
 
   it 'check minimal organism' do
     Organism.count.should == 1
-    Cash.count.should == 0
+    Cash.count.should == 1
  end
 
   describe 'new bank_account' do
@@ -39,17 +39,17 @@ describe 'admin cash' do
 
     it 'remplir correctement le formulaire cree une nouvelle ligne' do
       
-      fill_in 'cash[name]', :with=>'Magasin'
+      fill_in 'cash[name]', :with=>'Entrepôt'
       
       click_button "Créer la caisse" # le compte'
       current_url.should match admin_organism_cashes_path(@o)
-      all('tbody tr').should have(1).rows 
+      all('tbody tr').should have(2).rows
       
     end
 
     context 'remplir incorrectement le formulaire' do
     it 'test uniqueness organism, name, number' do
-      @o.cashes.create!(name: 'Magasin')
+     
       fill_in 'cash[name]', :with=>'Magasin'
       click_button "Créer la caisse" # le compte'
       page.should have_content('déjà utilisé')
@@ -70,7 +70,7 @@ describe 'admin cash' do
   describe 'index' do
 
     it 'dans la vue index,une caisse peut être détruit', :js=>true do
-      @o.cashes.create!(:name=>'Magasin')
+     
       @o.should have(1).cashes
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_cashes_path(@o)
@@ -87,10 +87,10 @@ describe 'admin cash' do
     end
 
     it 'on peut le choisir dans la vue index pour le modifier' do
-      @ca = @o.cashes.create!(:name=>'Magasin')
+      
       visit admin_organism_cashes_path(@o)
-      click_link "icon_modifier_cash_#{@ca.id.to_s}"
-      current_url.should match(edit_admin_organism_cash_path(@o,@ca))
+      click_link "icon_modifier_cash_#{@c.id.to_s}"
+      current_url.should match(edit_admin_organism_cash_path(@o,@c))
     end
 
   end
@@ -98,8 +98,8 @@ describe 'admin cash' do
   describe 'edit' do
 
     it 'On peut changer les deux autres champs et revenir à la vue index' do
-      @ca = @o.cashes.create!(:name=>'Magasin')
-      visit edit_admin_organism_cash_path(@o, @ca)
+      
+      visit edit_admin_organism_cash_path(@o, @c)
       fill_in 'cash[name]', :with=>'Entrepôt'
       click_button 'Enregistrer'
       current_url.should match admin_organism_cashes_path(@o)

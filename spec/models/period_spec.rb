@@ -11,7 +11,7 @@ describe Period do
       @organism.periods.count.should == 2
     end
 
-  context "avec  2 exercices" do 
+  context "avec  2 exercices" do  
     
     it 'should respond is_closed when closed' do  
       @p_2010.is_closed?.should be_false

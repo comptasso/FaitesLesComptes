@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
-    c.filter = {:wip=> true }
+  #  c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
@@ -75,18 +75,6 @@ describe Organism do
         @organism.max_open_periods?.should be_false
       end
     end
-
-    describe 'active_period', :wip=>true do
-
-      it 'returns active period' do
-        @organism.active_period.should be_an_instance_of(Period)
-      end
-
-      it 'change period modify active period'
-
-
-    end
-
 
     describe 'main_bank_id' do
       context 'with no account' do

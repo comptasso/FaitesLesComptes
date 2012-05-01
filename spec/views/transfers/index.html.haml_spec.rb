@@ -50,8 +50,8 @@ describe "transfers/index" do
     thead.find('th:nth-child(1)').should have_content 'Date'
     thead.find('th:nth-child(2)').should have_content 'Libellé'
     thead.find('th:nth-child(3)').should have_content 'Montant'
-    thead.find('th:nth-child(4)').should have_content 'Débité'
-    thead.find('th:nth-child(5)').should have_content 'Crédité'
+    thead.find('th:nth-child(4)').should have_content 'De'
+    thead.find('th:nth-child(5)').should have_content 'Vers'
     thead.find('th:nth-child(6)').should have_content 'Actions' 
   end
 

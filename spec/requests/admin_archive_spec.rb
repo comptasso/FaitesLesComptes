@@ -29,7 +29,7 @@ describe 'vue transfer index' do
     it 'remplir la vue et cliquer sur le bouton propose de charger un fichier', :wip=>true do
       visit new_admin_organism_archive_path(@o)
       fill_in 'archive[comment]', :with=>'test archive'
-      filename = 'test_line_'+ Date.today.to_s
+      filename = 'ASSO_TEST_'+ Date.today.to_s
       click_button 'new_archive_button'
       page.response_headers['Content-Disposition'].should match(%r(filename=\"#{filename}))
     end

@@ -16,7 +16,7 @@ describe Archive do
     it 'title doit etre consitué du titre et du timestamp' do
       d=@archive.created_at.to_s
       e=d[/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/].gsub(' ', '_')
-      @archive.title.should == "#{@o.title}_" + e + '_UTC'
+      @archive.title.should == "#{@o.title.split(' ').join('_')}_" + e + '_UTC'
     end
 
     it 'archive can ask the restored compta the datas read' do

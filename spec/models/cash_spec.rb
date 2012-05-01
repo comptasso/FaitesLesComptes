@@ -2,12 +2,12 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe BankAccount do
+describe Cash do
   include OrganismFixture
 
   before(:each) do
     create_minimal_organism
-    @c=@o.cashes.new(:name=>'Magasin')
+    
   end
 
   context 'test constraints' do
@@ -22,16 +22,14 @@ describe BankAccount do
 
   
   it "should have a unique number in the scope of bank and organism" do
-    @o.cashes.create!(name: 'Magasin')
-    @c.should_not be_valid 
+    @cc = @o.cashes.new(name: 'Magasin')
+    @cc.should_not be_valid
   end
 
   end
 
   context 'annex methods' do
-    before(:each) do
-      @c=@o.cashes.create!(:name=>'Magasin')
-    end
+    
 
     it 'to_s return name' do
       @c.to_s.should == @c.name
@@ -44,9 +42,7 @@ describe BankAccount do
   
   context 'transferts' do
 
-    before(:each) do
-      @c=@o.cashes.create!(name:'Magasin')
-    end
+    
 
     it 'has a method debit_transfers' do
       @c.d_transfers.should  == []
