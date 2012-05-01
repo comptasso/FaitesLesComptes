@@ -79,7 +79,6 @@ describe Organism do
     describe 'active_period', :wip=>true do
 
       it 'returns active period' do
-        
         @organism.active_period.should be_an_instance_of(Period)
       end
 

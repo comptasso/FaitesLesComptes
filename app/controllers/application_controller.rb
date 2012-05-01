@@ -8,18 +8,18 @@ class ApplicationController < ActionController::Base
   private
 
   def find_organism
-    if params[:organism_id]
-      Rails.logger.info "Changement d'organisme : ancien id = #{session[:organism]} nouvel_id #{params[:organism_id]}" if (params[:organism_id] != session[:organism].to_s)
-      reset_session if (params[:organism_id] != session[:organism].to_s)
-      @organism = Organism.find(params[:organism_id]) if params[:organism_id]
-      session[:organism] = @organism.id if @organism
+    if params[:organism_id] && (params[:organism_id] != session[:organism].to_s)
+      Rails.logger.info "Changement d'organisme : ancien id = #{session[:organism]} nouvel_id #{params[:organism_id]}" 
+      reset_session
+      session[:organism]=params[:organism_id]
     end
+      @organism = Organism.find(session[:organism]) if session[:organism]
   end
 
   def current_period
     # si on a changé d'organisme, il faut effacer la session[:period]
     if @organism
-      pid = session[:period] ||= (@organism.periods.order(:start_date).last.id if (@organism && @organism.periods.any?))
+      pid = session[:period] ||= (@organism.periods.order(:start_date).last.id if @organism.periods.any?)
       @period= Period.find(pid) if pid
     end
      Rails.logger.info "Dans find_period avec session[:period] = #{session[:period]}"
