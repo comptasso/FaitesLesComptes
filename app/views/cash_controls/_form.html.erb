@@ -1,22 +1,29 @@
+<div class="inputs row-fluid" id="new_check_deposit" >
 
-<%  SimpleForm.wrapper_tag = :div %>
 <%= simple_form_for([@cash, @cash_control]) do |f| %>
   <%= f.error_notification %>
 
-  <div class="inputs">
+   <div class="row-fluid">
+      <div class="span12">
+        <div class="control-group select required">
+          <ul class="span2">
+            <li class="list-label"><label class="select required control-label" for="cash_control_pick_date">
+                <abbr title="exigé">*</abbr> Date</label></li>
+          </ul>
+          <%= picker_date 'cash_control[pick_date]', @min_date, @max_date , @cash_control.pick_date %>
+        </div>
+            </div>
+      </div>
+ 
+         <div class="row-fluid">
+      <div class="span12">
+        <%= f.input :amount,  :jclabel_wrapper_html=>{:class=>'span2'}, :input_html=> { value: two_decimals(@cash_control.amount), class: "numeric span2"} %>
+        </div>
+      </div>
+ 
 
-    <div class="input date">
-
-      <label>Le</label>
-     <%= picker_date :pick_date_at, @min_date, @max_date , @cash_control.date %>
-    </div>
-
-    <%= f.input :amount, input_html: { value: two_decimals(@cash_control.amount), class: "nombre", size: '5'} %>
-
-  </div>
-
-  <div class="actions">
-    <%= f.button :submit %>
-  </div>
+ <div class="form-actions offset2">
+    <%= f.button :submit, class: "btn-primary span2" %>
+   </div>
 <% end %>
-
+</div>

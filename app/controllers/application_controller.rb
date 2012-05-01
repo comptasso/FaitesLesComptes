@@ -42,7 +42,9 @@ class ApplicationController < ActionController::Base
   # une date valide
   #
 
-  # TODO mettre dans un before save
+  # TODO à supprimer en intégrant ces fonctions dans le modèle
+  # déja fait pour line, en cours pour cash_control
+  # voir à les supprimer également dans les parties admin et compta
   def picker_to_date(string)
     s = string.split('/')
     Date.civil(*s.reverse.map{|e| e.to_i})

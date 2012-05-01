@@ -23,7 +23,17 @@ class CashControl < ActiveRecord::Base
 
   before_update :lock_lines_if_locked
 
+  def pick_date
+    date ? (I18n::l date) : nil
+  end
 
+  def pick_date=(string)
+    s = string.split('/')
+    self.date = Date.civil(*s.reverse.map{|e| e.to_i})
+  rescue ArgumentError
+    self.errors[:date] << 'Date invalide'
+    nil
+  end
 
   private
 

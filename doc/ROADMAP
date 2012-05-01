@@ -478,6 +478,16 @@ Dans les income outcome changer debit credit par montant (et une seule colonne).
 utiliser des partials pour les menus (A finir pour zone admin et zone compta)
 Voir pour l'affichage du livre OD (plutôt dans la compta ?)
 Dans la vue admin#organisme, avoir une info sur la dernière activité
+Dans caisse# nouveau remplacer comment par commentaire
+
+----------------------CashControls----------------------------------------
+OK - remplacer les modif de params[:pick_date] par des virtual attributes
+Mettre dans le modèle des méthodes min-date et max-date qui seront utilisées dans le form(ou dans le controller)
+Mettre une variable d'instance @active_period dans organism
+Modifier les before_filter de application pour utiliser cette variable d'instance
+Faire un module pick_date avec une méthode de classe
+Pour pouvoir supprimer tous les recours à picker_date
+
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)

@@ -39,6 +39,8 @@ module ApplicationHelper
    end
   end
 
+ 
+
  def header_organism
    content_tag(:div, class: "span4", id: "organism") do
       if (@organism && !@organism.new_record?)

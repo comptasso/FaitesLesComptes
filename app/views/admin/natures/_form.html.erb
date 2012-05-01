@@ -2,19 +2,19 @@
 <%= simple_form_for([:admin,@organism,@period,@nature],  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
   <%= f.error_notification %>
 
-         <%= f.input :name,  label_html: {class: "span2"}, input_html: {class: "span3"} %>
+   <%= f.input :name,  label_html: {class: "span2"}, input_html: {class: "span3"} %>
    <%= f.input :comment, label_html: {class: "span2"}, input_html: {rows: 4, class: "span3"} %>
-
    <%= f.input :income_outcome, :label=>'Type', label_html: {class: "span2"}, input_html: {class: "span3"} , 
          :collection=>[['Recettes', true], ['Dépenses', false]],
          label_method: :first, value_method: :last, :as=>:radio_buttons %>
-
    <%= f.association :account, :label_html=>{class: "span2"}, :label=> 'Compte associé', input_html: {class: "span4", size: 10},
                 :collection => options_for_natures(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :name,
                 :label_method=> :long_name, :value_method=> :id if @period.accounts.any? %>
 
+
    <div class="form-actions offset2">
     <%= f.button :submit, class: "btn-primary span2" %>
    </div>
-<% end %>
+
+  <% end %>
   </div>

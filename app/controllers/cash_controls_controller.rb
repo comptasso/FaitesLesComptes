@@ -17,8 +17,7 @@ class CashControlsController < ApplicationController
   end
 
   def create
-    params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
-    @cash_control=@cash.cash_controls.new(params[:cash_control])
+        @cash_control=@cash.cash_controls.new(params[:cash_control])
     if @cash_control.save
       redirect_to cash_cash_controls_url(@cash, :mois=>@period.guess_month(@cash_control.date))
     else
@@ -30,7 +29,6 @@ class CashControlsController < ApplicationController
   end
 
   def update
-    params[:cash_control][:date]= picker_to_date(params[:pick_date_at])
     @cash_control=@cash.cash_controls.find(params[:id])
      if @cash_control.update_attributes(params[:cash_control])
       redirect_to cash_cash_controls_url(@cash, :mois=>@period.guess_month(@cash_control.date))

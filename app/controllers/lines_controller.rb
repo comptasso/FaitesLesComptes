@@ -59,11 +59,11 @@ class LinesController < ApplicationController
   # POST /lines
   # POST /lines.json
   def create
-   # flash[:date]= get_date # permet de transmettre la date à l'écriture suivante
+   
     @line = @book.lines.new(params[:line])
     respond_to do |format|
       if @line.save
-        flash[:date]=@line.line_date
+        flash[:date]=@line.line_date # permet de transmettre la date à l'écriture suivante
         flash[:previous_line_id]=@line.id
         mois=(@line.line_date.month)-1
         format.html { redirect_to new_book_line_url(@book,mois: mois) }
