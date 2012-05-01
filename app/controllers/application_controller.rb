@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # fait un reset de la session si on a changé d'organism et sinon
+  # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
     if params[:organism_id] && (params[:organism_id] != session[:organism].to_s)
       Rails.logger.info "Changement d'organisme : ancien id = #{session[:organism]} nouvel_id #{params[:organism_id]}" 
@@ -16,13 +18,16 @@ class ApplicationController < ActionController::Base
       @organism = Organism.find(session[:organism]) if session[:organism]
   end
 
+  # trouve l'exercie à partir de l'organisme et éventuellement de la session
+
   def current_period
-    # si on a changé d'organisme, il faut effacer la session[:period]
-    if @organism
-      pid = session[:period] ||= (@organism.periods.order(:start_date).last.id if @organism.periods.any?)
-      @period= Period.find(pid) if pid
+    if (@organism && session[:period])
+      @period= @organism.periods.find(session[:period])
+    elsif @organism
+      @period = @organism.periods.order(:start_date).last if @organism.periods.any?
+      session[:period] = @period.id
     end
-     Rails.logger.info "Dans find_period avec session[:period] = #{session[:period]}"
+     Rails.logger.info "#current_period : selection de la period #{session[:period]}"
   end
 
   # HELPER_METHODS
