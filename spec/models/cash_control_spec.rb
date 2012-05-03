@@ -115,14 +115,14 @@ describe CashControl do
         # création de lignes
       end
 
-      it 'lock cash_control locked lines' do
-
+      it 'lock cash_control locked lines anterior to cash_control' do
         Line.where('locked IS ?', false).should have(12).elements
         @cash_control.locked = true
         @cash_control.save
         Line.where('locked IS ?', false).should have(12 - @cash_control.date.month).elements
       end
 
+      
     end
 
   end
