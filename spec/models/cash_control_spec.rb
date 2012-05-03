@@ -13,7 +13,7 @@ describe CashControl do
 
   before(:each) do
     create_minimal_organism
-    @cc = @c.cash_controls.new(date: Date.today, amount: 123.45)
+    @cash_control = @c.cash_controls.new(date: Date.today, amount: 123.45)
   end
 
   #  after(:all) do
@@ -24,28 +24,28 @@ describe CashControl do
   context 'test constraints' do
     
     it "should be valid" do
-      @cc.should be_valid
+      @cash_control.should be_valid
     end
 
     it 'not valid without date' do
-      @cc.date = nil
-      @cc.should_not be_valid
+      @cash_control.date = nil
+      @cash_control.should_not be_valid
     end
 
   
     it "nor without amount" do
-      @cc.amount = nil
-      @cc.should_not be_valid
+      @cash_control.amount = nil
+      @cash_control.should_not be_valid
     end
 
     it "nor without cash_id" do
-      @cc.cash_id = nil
-      @cc.should_not be_valid
+      @cash_control.cash_id = nil
+      @cash_control.should_not be_valid
     end
 
     it 'amount is greater than 0' do
-      @cc.amount = -45
-      @cc.should_not be_valid
+      @cash_control.amount = -45
+      @cash_control.should_not be_valid
     end
 
   end
@@ -81,6 +81,50 @@ describe CashControl do
         end
       end
     end
+  end
+
+
+  context 'with a saved cash_control' do
+    before(:each) do
+      @cash_control.save!
+    end
+
+    it 'lock cash control' do
+      @cash_control.should_receive(:lock_lines)
+      @cash_control.locked = true
+      @cash_control.save!
+    end
+
+    it 'update another attribute should not lock_lines' do
+      @cash_control.should_not_receive(:lock_lines)
+      @cash_control.amount = 27
+      @cash_control.save!
+      
+    end
+
+    describe 'lock_lines' do
+
+      before(:each) do
+        date = @p.start_date
+        # on créé une ligne d'écriture par mois relevant de la caisse
+        @p.nb_months.times do |i|
+         Line.create!(narration: "test #{i}", debit: i+1, payment_mode: 'Espèces',
+            nature_id: @n.id, book_id: @ob.id, line_date: date.months_since(i),
+          cash_id: @c.id)
+        end
+        # création de lignes
+      end
+
+      it 'lock cash_control locked lines' do
+
+        Line.where('locked IS ?', false).should have(12).elements
+        @cash_control.locked = true
+        @cash_control.save
+        Line.where('locked IS ?', false).should have(12 - @cash_control.date.month).elements
+      end
+
+    end
+
   end
 
  

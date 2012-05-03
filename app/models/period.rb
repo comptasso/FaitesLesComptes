@@ -85,7 +85,7 @@ class Period < ActiveRecord::Base
 
   
 
-
+  # TODO revoir ces call_backs en utilisant des conditions de type :if
   # TODO changer le update should not reopen en utilisant un des validate
   before_update :fix_days, :cant_change_start_date, :should_not_reopen
   before_create :should_not_have_more_than_two_open_periods, :fix_days
