@@ -2,13 +2,10 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe CashControlsController do
+describe CashLinesController do
    include OrganismFixture
   
- # TODO
-
-
-  before(:each) do
+  before(:each) do 
     # méthode définie dans OrganismFixture et 
     # permettant d'avoir les variables d'instances @organism, @period, 
     # income et outcome book ainsi qu'une nature

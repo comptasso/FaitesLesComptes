@@ -36,11 +36,11 @@ class Cash < ActiveRecord::Base
   # de la date du jour et des contrôles antérieurs.
   # on ne peut saisir un contrôle antérieur aux contrôles existants.
   # utilisé notamment par cash_control_controller#new
-  def range_date_for_cash_control(period)
-    last_cc = self.cash_controls.for_period(period).last(order: 'date ASC')
-    min_date= last_cc ? [period.start_date, last_cc.date].max : period.start_date
-    return min_date, [period.close_date, Date.today].min
-  end
+#  def range_date_for_cash_control(period)
+#    last_cc = self.cash_controls.for_period(period).last(order: 'date ASC')
+#    min_date= last_cc ? [period.start_date, last_cc.date].max : period.start_date
+#    return min_date, [period.close_date, Date.today].min
+#  end
 
   def to_s
     name

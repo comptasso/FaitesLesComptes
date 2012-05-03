@@ -493,7 +493,8 @@ Voir si organism peut répondre à une méthode active_period et donc à min_dat
 Modifier les before_filter de application pour utiliser cette variable d'instance
 Faire un module pick_date avec une méthode de classe
 Pour pouvoir supprimer tous les recours à picker_date
-Revoir le fichier cash_spec (qui est une copie de bank_account_spec)
+OK - Revoir le fichier cash_spec (qui est une copie de bank_account_spec)
+Faire les spec du controller
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)

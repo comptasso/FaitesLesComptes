@@ -32,6 +32,16 @@ describe CashControl do
       @cash_control.should_not be_valid
     end
 
+    it 'not valid if date before min_date' do
+      @cash_control.date = @cash_control.min_date - 1
+      @cash_control.should_not be_valid
+    end
+
+     it 'not valid if date after max_date' do
+      @cash_control.date = @cash_control.max_date + 1.day
+      @cash_control.should_not be_valid
+    end
+
   
     it "nor without amount" do
       @cash_control.amount = nil
@@ -54,7 +64,8 @@ describe CashControl do
     context 'with one period' do
 
       before(:each) do
-        100.times { @c.cash_controls.create(date: (@p.start_date + rand(365)), amount: rand(1000)) }
+        laps = Date.today - @p.start_date
+        10.times { @c.cash_controls.create(date: (@p.start_date + rand(laps).days), amount: rand(1000)) }
       end
 
       it 'mois should get all Lines within specified month' do
@@ -69,14 +80,18 @@ describe CashControl do
       context 'with two periods and 7 cash_controls for @p2' do
 
         before(:each) do
+          # création d'un deuxième exercice
           start_date = @o.periods.last.close_date + 1.day
           close_date = start_date.end_of_year
           @p2 = @o.periods.create!(start_date: start_date, close_date: close_date)
+          # on fait sauter la limite max_date = Date.today pour pouvoir créer des cash controls
+          # qui sont dans le futur
+          CashControl.any_instance.stub(:max_date).and_return(@p2.close_date)
           7.times { @c.cash_controls.create(date: (@p2.start_date + rand(365)), amount: rand(1000)) }
         end
 
         it 'for_period returns cash_controls within this period' do
-           @c.cash_controls.for_period(@p).should have(100).cash_controls
+          @c.cash_controls.for_period(@p).should have(10).cash_controls
           @c.cash_controls.for_period(@p2).should have(7).cash_controls
         end
       end
@@ -100,6 +115,42 @@ describe CashControl do
       @cash_control.amount = 27
       @cash_control.save!
       
+    end
+    
+    describe 'period' do
+
+      it 'should knows its period' do
+      @cash_control.period.should == @p
+      end
+    end
+
+    describe 'min_ and max_date' do
+
+      it 'la date est le début de l exercice' do
+        @cash_control.min_date.should == @p.start_date
+      end
+
+      it '@max_date doit être la fin de l exercice ou la date du jour' do
+        @cash_control.max_date.should == Date.today
+      end
+
+      it '@max_date doit être la fin de l exercice ou la date du jour' do
+        @cash_control.max_date.should == Date.today
+      end
+
+    end
+
+    describe 'previous' do
+
+      it 'cash control without previous one returns nil' do
+        @cash_control.previous.should == nil
+      end
+
+      it 'cash control should knows the previous one' do
+        previous_cash_control = @c.cash_controls.create!(date: Date.today - 1.day, amount: 1)
+        @cash_control.previous.should == previous_cash_control
+      end
+
     end
 
     describe 'lock_lines' do

@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 #
 # CashControl représente une opération de contrôle de la caisse qui consiste
 # à compter la caisse et à enregistrer son montant à la date donnée.
@@ -14,6 +16,16 @@ class CashControl < ActiveRecord::Base
 
   validates :date, :cash_id, :amount, presence: true
   validates_numericality_of :amount, :greater_than_or_equal_to=>0.0
+  validate :date_within_limit
+
+  def date_within_limit
+    if period
+    errors[:date] <<  'Date antérieure au début de l\'exercice' if self.date < min_date
+    errors[:date] << 'Date postérieure à la fin de l\'exercice' if self.date > max_date
+    else
+      errors[:date] << 'Pas d\exercice correspondant à cette date'
+    end
+  end
 
   scope :for_period, lambda {|p| where('date >= ? and date <= ?', p.start_date, p.close_date).order('date ASC')}
 
@@ -35,13 +47,32 @@ class CashControl < ActiveRecord::Base
     nil
   end
 
- # private
+  # trouve l'exercice auquel appartient ce cash_control
+  def period
+    cash.organism.find_period(date) rescue nil
+  end
+
+  # renvoie la date minimum que peut prendre un new cash_control
+  def min_date
+     period.start_date 
+  end
+
+  def max_date
+    date ? [period.close_date, Date.today].min : Date.today
+  end
+
+ def previous
+   cash.cash_controls.for_period(period).order('date DESC').where('date < ?', date).limit(1).first
+ end
+
+
+
+  private
 
   # verrouille les lignes correspondantes à un contrôle de caisse
   def lock_lines
     Rails.logger.info "Verrouillage des lignes de caisse suite au verrouillage du controle de caisse #{id}"
    
-    period = self.cash.organism.find_period(self.date) # on trouve l'exercice correspondant à ce contrôle de caisse
     # Trouver les lignes de cette caisse de l'exercice, antérieures à la date du contrôle et non verrouillées
     if self.locked == true # si les lignes 
       self.cash.lines.period(period).where('lines.line_date <= ?',self.date).where('locked = ?', false).each    do |l|

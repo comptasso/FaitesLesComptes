@@ -10,7 +10,7 @@
             <li class="list-label"><label class="select required control-label" for="cash_control_pick_date">
                 <abbr title="exigé">*</abbr> Date</label></li>
           </ul>
-          <%= picker_date 'cash_control[pick_date]', @min_date, @max_date , @cash_control.pick_date %>
+          <%= picker_date 'cash_control[pick_date]', @cash_control.min_date, @cash_control.max_date , @cash_control.pick_date %>
         </div>
             </div>
       </div>
