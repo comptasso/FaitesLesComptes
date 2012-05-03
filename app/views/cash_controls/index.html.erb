@@ -1,8 +1,10 @@
 <div class="champ">
-  <h3>Liste des contrôles : <%= @cash.name %> </h3><div class="inner-champ">
-    <div id="submenu">
-        <%= cash_control_submenu_helper(@cash, @period) %>
-    </div>
+  <h3>Liste des contrôles : <%= @cash.name %>
+   <%= render 'submenu_mois'  %>
+  </h3>
+  <div class="inner-champ">
+
+ 
   <table>
     <thead>
       <tr>

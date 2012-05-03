@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+
 describe BankExtractsController do
 
   
@@ -28,7 +30,7 @@ describe BankExtractsController do
       brr.should_receive(:all).and_return([be])
       get :index, :organism_id=>o.id.to_s, bank_account_id: ba.id.to_s
       # FIXME this assigns raise an error when written should == p
-      assigns(:period).should_not be_nil
+      assigns(:period).should == p
       assigns(:bank_extracts).should == [be]
     end
   end

@@ -23,8 +23,8 @@ class ApplicationController < ActionController::Base
   def current_period
     if (@organism && session[:period])
       @period= @organism.periods.find(session[:period])
-    elsif @organism
-      @period = @organism.periods.order(:start_date).last if @organism.periods.any?
+    elsif @organism && @organism.periods.any?
+      @period = @organism.periods.order(:start_date).last 
       session[:period] = @period.id
     end
      Rails.logger.info "#current_period : selection de la period #{session[:period]}"

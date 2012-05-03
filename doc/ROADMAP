@@ -481,15 +481,17 @@ Dans la vue admin#organisme, avoir une info sur la dernière activité
 Dans caisse# nouveau remplacer comment par commentaire
 
 REVOIR LES BEFORE FILTER DE ORGANISM DANS LA ZONE ADMIN ET COMPTA
+La vue index des retraits d'argent n'est pas classée
+La liste des natures dans saisie de lignes devrait être classée par ordre alpha
 
 ----------------------CashControls----------------------------------------
 OK - remplacer les modif de params[:pick_date] par des virtual attributes
 Mettre dans le modèle des méthodes min-date et max-date qui seront utilisées dans le form(ou dans le controller)
-Mettre une variable d'instance @active_period dans organism
+Voir si organism peut répondre à une méthode active_period et donc à min_date et max_date
 Modifier les before_filter de application pour utiliser cette variable d'instance
 Faire un module pick_date avec une méthode de classe
 Pour pouvoir supprimer tous les recours à picker_date
-Revoir le fichier cash_spec
+Revoir le fichier cash_spec (qui est une copie de bank_account_spec)
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
