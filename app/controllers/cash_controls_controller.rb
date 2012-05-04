@@ -2,7 +2,8 @@
 
 class CashControlsController < ApplicationController
 
-  before_filter :find_params, :fill_mois
+  before_filter :find_params
+  before_filter :fill_mois, :only=>:index
 
   def index
     @cash_controls=@cash.cash_controls.mois(@period, params[:mois])
@@ -10,7 +11,7 @@ class CashControlsController < ApplicationController
 
   
   def new
-    @cash_control=@cash.cash_controls.new(:date=>Date.today)
+    @cash_control = @cash.cash_controls.new(:date=>Date.today)
   end
 
   def create
@@ -55,7 +56,7 @@ class CashControlsController < ApplicationController
   private
 
   def find_params
-    @cash=Cash.find(params[:cash_id])
+    @cash = Cash.find(params[:cash_id])
     @organism = @cash.organism
     current_period
   end
