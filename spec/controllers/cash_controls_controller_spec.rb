@@ -11,7 +11,7 @@ describe CashControlsController do
    include OrganismFixture
 
   let(:o) {mock_model(Organism)}
-  let(:p) {mock_model(Period, :organism=>o)}
+  let(:p) {mock_model(Period, :organism=>o, :star_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year, :guess_month=>Date.today.month - 1)}
 
   let(:ca) {mock_model(Cash, :organism=>o)}
   let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3), mock_model(CashControl, :date=>Date.today - 1.day, amount: 1) ] }
@@ -19,22 +19,17 @@ describe CashControlsController do
   before(:each) do
     @mois = Date.today.month - 1
     o.stub(:periods).and_return { mock(Arel, :order=>[p], 'any?' =>true) }
-
-    # méthode définie dans OrganismFixture et
-    # permettant d'avoir les variables d'instances @organism, @period, 
-    # income et outcome book ainsi qu'une nature
-#    create_minimal_organism
-#    @ca = @o.cashes.create!(name: 'Caisse')
   end
 
-  before(:each) do
-    Cash.should_receive(:find).with(ca.id.to_s).and_return(ca)
-  end
+#  before(:each) do
+#    
+#  end
 
   
   describe 'GET index'  do
 
     before(:each) do
+      Cash.should_receive(:find).with(ca.id.to_s).and_return(ca)
        ca.stub_chain(:cash_controls, :mois).and_return(ccs)
     end
 
@@ -58,6 +53,16 @@ describe CashControlsController do
       response.should render_template 'index'
     end
 
+#    it 'test un cash_control' do
+#      CashControl.any_instance.stub('jcperiod').and_return(p)
+#      get :index, :cash_id=>ca.id, :mois=>@mois
+#
+#      cc = assigns[:cash_controls].first
+#      cc.should be_an_instance_of(CashControl)
+#      cc.jcperiod.should == p
+#      cc.min_date.should == p.start_date
+#    end
+
 
   end
 
@@ -65,6 +70,7 @@ describe CashControlsController do
 
     before(:each) do
       ca.should_receive(:cash_controls).and_return(CashControl)
+      Cash.should_receive(:find).with(ca.id.to_s).and_return(ca)
       get :new, :cash_id=>ca.id, :mois=>@mois
     end
 
@@ -85,15 +91,24 @@ describe CashControlsController do
   describe 'POST create' do
 
     before(:each) do
-      
+      Cash.stub(:find).with(ca.id.to_s).and_return(ca)
+      ca.stub(:cash_controls).and_return(CashControl)
+      CashControl.any_instance.stub(:date_within_limit).and_return(nil)
+    end
+
+    it 'shoudl render new when not valid' do
+      post :create, :cash_id=>ca.id, :cash_control=> {date: Date.today}
+      response.should render_template 'new'
     end
 
     it 'should redirect to index' do
-      p.stub(:guess_month).and_return(@mois)
-      post :create, :cash_id=>ca.id, :cash_control=> {:date=>Date.today, :amount=>5 }
-      response.should render_template 'index'
+      # ici on triche un peu en mettant cash_id comme paramètre
+      post :create, :cash_id=>ca.id, :cash_control=> {:date=>Date.today, :amount=>5, :cash_id=>ca.id }
+      response.should redirect_to cash_cash_controls_path(ca, :mois=>@mois) 
+ #      assign[:cash_control].min_date.should == p.start_date
     end
 
+  
 
 
   end

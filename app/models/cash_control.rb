@@ -47,7 +47,7 @@ class CashControl < ActiveRecord::Base
     nil
   end
 
-  # trouve l'exercice auquel appartient ce cash_control
+    # trouve l'exercice auquel appartient ce cash_control
   def period
     cash.organism.find_period(date) rescue nil
   end

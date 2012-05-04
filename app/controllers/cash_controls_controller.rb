@@ -3,9 +3,10 @@
 class CashControlsController < ApplicationController
 
   before_filter :find_params
-  before_filter :fill_mois, :only=>:index
+ 
 
   def index
+    params[:mois] ||= @period.guess_month
     @cash_controls=@cash.cash_controls.mois(@period, params[:mois])
   end
 
@@ -36,7 +37,7 @@ class CashControlsController < ApplicationController
 
   def edit
     @cash_control=@cash.cash_controls.find(params[:id])
-    @date=@cash_control.date
+    
    end
 
   # lock permet de verrouiller un controle de caisse, 
@@ -61,13 +62,12 @@ class CashControlsController < ApplicationController
     current_period
   end
 
-  def fill_mois
-    unless params[:mois]
-     mois= @period.guess_month
-     redirect_to cash_cash_controls_url(@cash, mois: mois.to_i) if (params[:action]=='index')
-     redirect_to new_cash_cash_control_url(@cash, mois: mois.to_i) if params[:action]=='new'
-    end
-  end
+#  def fill_mois
+#    unless params[:mois]
+#     mois= @period.guess_month
+#     redirect_to cash_cash_controls_url(@cash, mois: mois.to_i) if (params[:action]=='index')
+#    end
+#  end
 
 
 end
