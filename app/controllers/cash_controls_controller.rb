@@ -10,9 +10,7 @@ class CashControlsController < ApplicationController
 
   
   def new
-   
-   @date = Date.today
-   @cash_control=@cash.cash_controls.new(:date=>@date)
+    @cash_control=@cash.cash_controls.new(:date=>Date.today)
   end
 
   def create

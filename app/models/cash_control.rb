@@ -61,8 +61,19 @@ class CashControl < ActiveRecord::Base
     date ? [period.close_date, Date.today].min : Date.today
   end
 
- def previous
-   cash.cash_controls.for_period(period).order('date DESC').where('date < ?', date).limit(1).first
+
+  # previous renvoie le controle de caisse précédent l'instance actuelle
+  # cette sélection se fait sur la base de la date.
+  # Il se pourrait qu'un problème existe en cas de plusieurs controles de caisse
+  # le même jour, ce qui est peu probable vu la taille des organismes ciblés
+  def previous
+    if persisted?
+   previous_cash = cash.cash_controls.for_period(period).order('date ASC').where('date <= ?', date).limit(2).all rescue nil
+   return nil unless (previous_cash && previous_cash.size == 2)
+   return previous_cash.first
+    else
+    return cash.cash_controls.for_period(period).order('date ASC').where('date <= ?', date).last rescue nil
+    end
  end
 
 

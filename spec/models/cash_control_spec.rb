@@ -142,15 +142,23 @@ describe CashControl do
 
     describe 'previous' do
 
-      it 'cash control without previous one returns nil' do
-        @cash_control.previous.should == nil
-      end
-
-      it 'cash control should knows the previous one' do
+      it 'returns the previous cash_control' do
         previous_cash_control = @c.cash_controls.create!(date: Date.today - 1.day, amount: 1)
         @cash_control.previous.should == previous_cash_control
       end
+      
+      it 'but nil if no previous cash_control' do
+        @cash_control.previous.should be_nil
+      end
 
+      it 'a new cash_control also knows the previous one' do
+        previous_cash_control = @c.cash_controls.create!(date: Date.today - 2.day, amount: 1)
+        @c.cash_controls.new(date: Date.today - 1.day).previous.should == previous_cash_control
+      end
+
+      it 'if it has a date, nil otherwise' do
+       @c.cash_controls.new.previous.should be_nil
+      end
     end
 
     describe 'lock_lines' do
