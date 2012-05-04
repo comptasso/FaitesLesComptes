@@ -62,12 +62,5 @@ class CashControlsController < ApplicationController
     current_period
   end
 
-#  def fill_mois
-#    unless params[:mois]
-#     mois= @period.guess_month
-#     redirect_to cash_cash_controls_url(@cash, mois: mois.to_i) if (params[:action]=='index')
-#    end
-#  end
-
 
 end

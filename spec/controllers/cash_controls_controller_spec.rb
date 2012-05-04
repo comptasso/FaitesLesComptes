@@ -14,7 +14,8 @@ describe CashControlsController do
   let(:p) {mock_model(Period, :organism=>o, :star_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year, :guess_month=>Date.today.month - 1)}
 
   let(:ca) {mock_model(Cash, :organism=>o)}
-  let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3), mock_model(CashControl, :date=>Date.today - 1.day, amount: 1) ] }
+  let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3, :locked=>false),
+      mock_model(CashControl, :date=>Date.today - 1.day, amount: 1, :locked=>false) ] }
   
   before(:each) do
     @mois = Date.today.month - 1
@@ -53,18 +54,7 @@ describe CashControlsController do
       response.should render_template 'index'
     end
 
-#    it 'test un cash_control' do
-#      CashControl.any_instance.stub('jcperiod').and_return(p)
-#      get :index, :cash_id=>ca.id, :mois=>@mois
-#
-#      cc = assigns[:cash_controls].first
-#      cc.should be_an_instance_of(CashControl)
-#      cc.jcperiod.should == p
-#      cc.min_date.should == p.start_date
-#    end
-
-
-  end
+ end
 
   describe 'GET new' do
 
@@ -102,13 +92,91 @@ describe CashControlsController do
     end
 
     it 'should redirect to index' do
-      # ici on triche un peu en mettant cash_id comme paramètre
+      # ici on triche un peu en mettant cash_id comme paramètre, encore que, pas sur
       post :create, :cash_id=>ca.id, :cash_control=> {:date=>Date.today, :amount=>5, :cash_id=>ca.id }
       response.should redirect_to cash_cash_controls_path(ca, :mois=>@mois) 
- #      assign[:cash_control].min_date.should == p.start_date
+
     end
 
-  
+  end
+
+  describe 'GET edit' do
+
+    before(:each) do
+      Cash.stub(:find).with(ca.id.to_s).and_return(ca)
+      ca.stub(:cash_controls).and_return(ccs)
+      ccs.stub(:find).and_return(ccs.first)
+      @cash_control = ccs.first
+    end
+
+    it 'render edit' do
+      
+      get :edit, cash_id: ca.id, id: @cash_control.id
+      response.should render_template 'edit'
+    end
+
+    it 'assigns cash control' do
+      get :edit, cash_id: ca.id, id: @cash_control.id
+      assigns[:cash_control].should == @cash_control
+    end
+
+
+  end
+
+  describe 'PUT create' do
+
+    before(:each) do
+      Cash.stub(:find).with(ca.id.to_s).and_return(ca)
+      ca.stub(:cash_controls).and_return(CashControl)
+
+      @cash_control = ccs.first
+      CashControl.stub(:find).and_return @cash_control
+    end
+
+    it 'redirect_to index when updates all_right' do
+      mois = (Date.today.month) - 1
+      @cash_control.should_receive(:update_attributes).and_return true
+      put :update, cash_id: ca.id, id: @cash_control.id, cash_control: {date: Date.today - 3.day, amount: 100, cash_id: ca.id}
+      response.should redirect_to cash_cash_controls_path(ca, mois: mois)
+    end
+
+    it 'but rerender when update_attributes echoue' do
+      @cash_control.should_receive(:update_attributes).and_return false
+      put :update, cash_id: ca.id, id: @cash_control.id, cash_control: {date: Date.today - 3.day, amount: 100, cash_id: ca.id}
+      response.should render_template 'edit' 
+    end
+
+  end
+
+  describe 'POST lock' do
+    before(:each) do
+      Cash.stub(:find).with(ca.id.to_s).and_return(ca)
+      ca.stub(:cash_controls).and_return(CashControl)
+      @cash_control = ccs.first
+      CashControl.stub(:find).and_return @cash_control
+    end
+
+    it 'when locked is successful' do
+      @cash_control.should_receive(:locked=).and_return(true)
+      @cash_control.should_receive(:save).and_return(true)
+      post :lock, cash_id: ca.id, id: @cash_control.id
+      flash[:notice].should == 'Le contrôle a été verrouillé ainsi que les lignes correspondantes'
+    end
+
+    it 'when lock fails' do
+      @cash_control.should_receive(:locked=).and_return(true)
+      @cash_control.should_receive(:save).and_return(false)
+      post :lock, cash_id: ca.id, id: @cash_control.id
+      flash[:alert].should == "Une erreur s'est produite et n'a pas permis de verrouiller le contrôle de caisse"
+    end
+
+    it 'dans les deux cas redirige vers l action index' do
+      mois = (Date.today.month) - 1
+      @cash_control.should_receive(:locked=).and_return(true)
+      @cash_control.should_receive(:save).and_return(true)
+      post :lock, cash_id: ca.id, id: @cash_control.id
+      response.should redirect_to cash_cash_controls_url(ca, mois: mois)
+    end
 
 
   end
