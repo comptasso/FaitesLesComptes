@@ -488,6 +488,8 @@ J'ai pu créer dans les tests une ligne de dépenses en espèces qui n'avait pas
 Faire un module pick_date avec une méthode de classe
 Pour pouvoir supprimer tous les recours à picker_date
 Vérifier que les controllers controlent bien la bonne classe
+on ne devrait pas pouvoir remettre un chèque qui n'appartient à aucun exercice
+Généraliser la gestion des erreurs dans les picker_date sur la base de ce qui a été fait pour cahs_control
 
 ----------------------CashControls----------------------------------------
 OK - remplacer les modif de params[:pick_date] par des virtual attributes

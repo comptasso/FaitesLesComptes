@@ -5,12 +5,17 @@
 
    <div class="row-fluid">
       <div class="span12">
-        <div class="control-group select required">
+        <div class="control-group select required <%= "error" if @cash_control.errors.messages[:date] %> ">
+          <div>
           <ul class="span2">
             <li class="list-label"><label class="select required control-label" for="cash_control_pick_date">
-                <abbr title="exigé">*</abbr> Date</label></li>
+              <abbr title="exigé">*</abbr> Date</label></li>
+            <% if @cash_control.errors.messages[:date] %>
+              <li class="help-inline"><%= @cash_control.errors.messages[:date].first %></li>
+            <% end %>
           </ul>
           <%= picker_date 'cash_control[pick_date]', @cash_control.min_date, @cash_control.max_date , @cash_control.pick_date %>
+          </div>
         </div>
             </div>
       </div>
