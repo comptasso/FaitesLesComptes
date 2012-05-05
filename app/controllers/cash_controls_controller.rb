@@ -20,7 +20,7 @@ class CashControlsController < ApplicationController
     if @cash_control.save
       redirect_to cash_cash_controls_url(@cash, :mois=>@period.guess_month(@cash_control.date))
     else
-       @date = @cash_control.date || @cash_control.max_date
+      @cash_control.date ||= [Date.today, @period.close_date].min
       render :new
     end
   end
@@ -30,7 +30,7 @@ class CashControlsController < ApplicationController
      if @cash_control.update_attributes(params[:cash_control])
       redirect_to cash_cash_controls_url(@cash, :mois=>@period.guess_month(@cash_control.date))
     else
-      @date = @cash_control.date || @cash_control.max_date
+      @cash_control.date ||= @cash_control.max_date
       render :edit
     end
   end

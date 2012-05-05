@@ -495,7 +495,7 @@ OK - Mettre dans le modèle des méthodes min-date et max-date qui seront utilis
 NON - Voir si organism peut répondre à une méthode active_period et donc à min_date et max_date
 NON - Modifier les before_filter de application pour utiliser cette variable d'instance
 OK - Revoir le fichier cash_spec (qui est une copie de bank_account_spec)
-Faire les spec du controller
+OK - Faire les spec du controller
 voir les messages d'erreur
 spec request
 --------------------- Remarques lors des essais ---------------------------

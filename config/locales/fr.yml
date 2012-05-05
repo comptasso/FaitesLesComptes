@@ -187,6 +187,7 @@ fr:
     update: 'Mettre à jour'
     back: 'Retour'
     number: Numéro
+    test: testing
 
 
   activerecord:
@@ -238,8 +239,10 @@ fr:
         number: Numéro
         used: Utilisé
 
-
     errors:
+      messages:
+        blank: 'Champ obligatoire'
+        record_invalid: 'Enregistrement invalide'
       models:
         line:
           attributes:
@@ -278,8 +281,7 @@ fr:
             amount:
               blank: 'champ obligatoire'
               not_a_number: 'nombre'
-      messages:
-        record_invalid: 'Enregistrement invalide'
+      
 
 
   helpers:

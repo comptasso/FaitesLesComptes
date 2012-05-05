@@ -18,15 +18,7 @@ class CashControl < ActiveRecord::Base
   validates_numericality_of :amount, :greater_than_or_equal_to=>0.0
   validate :date_within_limit
 
-  def date_within_limit
-    if period
-    errors[:date] <<  'Date antérieure au début de l\'exercice' if self.date < min_date
-    errors[:date] << 'Date postérieure à la fin de l\'exercice' if self.date > max_date
-    else
-      errors[:date] << 'Pas d\exercice correspondant à cette date'
-    end
-  end
-
+  
   scope :for_period, lambda {|p| where('date >= ? and date <= ?', p.start_date, p.close_date).order('date ASC')}
 
   # sélectionne tous les contrôles de caisse relevant d'un mois donné pour une période donnée
@@ -47,18 +39,20 @@ class CashControl < ActiveRecord::Base
     nil
   end
 
-    # trouve l'exercice auquel appartient ce cash_control
-  def period
-    cash.organism.find_period(date) rescue nil
-  end
+  
 
   # renvoie la date minimum que peut prendre un new cash_control
-  def min_date
-     period.start_date 
+  # soit à partir d'un exercice, ou s'il n'est pas précisé, à partir
+  # de la date du cash_control, et enfin au besoin prend le début de
+  # l'année en cours
+  def min_date(exercice = nil)
+    return exercice.start_date if exercice
+    return period.start_date if period
+    return Date.today.beginning_of_year
   end
 
   def max_date
-    date ? [period.close_date, Date.today].min : Date.today
+    [period.close_date, Date.today].min rescue Date.today
   end
 
 
@@ -80,6 +74,16 @@ class CashControl < ActiveRecord::Base
 
   private
 
+   def date_within_limit
+    if period
+    errors[:date] <<  'Date antérieure au début de l\'exercice' if self.date < min_date
+    errors[:date] << 'Date postérieure à la fin de l\'exercice' if self.date > max_date
+    else
+      errors[:date] << 'Pas d\'exercice correspondant à cette date'
+    end
+  end
+
+
   # verrouille les lignes correspondantes à un contrôle de caisse
   def lock_lines
     Rails.logger.info "Verrouillage des lignes de caisse suite au verrouillage du controle de caisse #{id}"
@@ -91,5 +95,12 @@ class CashControl < ActiveRecord::Base
       end
     end
   end
+
+    # trouve l'exercice auquel appartient ce cash_control
+  def period
+    cash.organism.find_period(date) rescue nil
+  end
+
+
 end
 
