@@ -6,7 +6,7 @@ describe BankExtractsController do
 
   
   let(:o)  {mock_model(Organism, title: 'The Small Firm')}
-  let(:p)  {mock_model(Period, start_date: Date.civil(2012,01,01), organism_id: o.id, close_date: Date.civil(2012,12,31))}
+  let(:per) {mock_model(Period, :organism=>o, :star_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year, :guess_month=>Date.today.month - 1)}
   let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id: o.id)}
   let(:be) {mock_model(BankExtract, bank_account_id: ba.id, begin_date: Date.civil(2012,01,01), end_date: Date.civil(2012,01,31),
       begin_sold: 120, debit: 450, credit: 1000)}
@@ -17,21 +17,18 @@ describe BankExtractsController do
 
   before(:each) do
     BankAccount.stub!(:find).and_return(ba)
-    Organism.stub!(:find).with(o.id.to_s).and_return(o)
-    o.stub_chain(:periods, :order, :last, :id).and_return(p.id)
-    Period.stub(:find).with(p.id).and_return(p)
+    Organism.stub!(:find).and_return(o)
+    Period.stub!(:find).and_return(per)
+    o.stub_chain(:periods, :order, :last).and_return(per)
     o.stub_chain(:periods, :any?).and_return true
   end
 
   describe "GET index" do
     it "sélectionne les extraits correspondant à l'exercice et les assigns à @bank_extracts" do
-      ba.should_receive(:bank_extracts).and_return(arr)
-      arr.should_receive(:period).and_return(brr)
-      brr.should_receive(:all).and_return([be])
+      ba.stub_chain(:bank_extracts, :period, :all).and_return([be])
       get :index, :organism_id=>o.id.to_s, bank_account_id: ba.id.to_s
-      # FIXME this assigns raise an error when written should == p
-      assigns(:period).should == p
-      assigns(:bank_extracts).should == [be]
+      assigns[:period].should == per
+      assigns[:bank_extracts].should == [be]
     end
   end
 
@@ -43,22 +40,21 @@ describe BankExtractsController do
 
     it "assigns the requested bank_extract as @bank_extract" do
       BankExtract.should_receive(:find).with(be.id.to_s).and_return(be)
-      be.should_receive(:bank_extract_lines).and_return(arr)
-      arr.should_receive(:order).with(:position).and_return(@bel_table)
+      be.stub_chain(:bank_extract_lines, :order).and_return(@bel_table)
       get :show, :organism_id=>o.id.to_s, bank_account_id: ba.id.to_s, id: be.id.to_s
       assigns(:bank_extract).should == be
       assigns(:bank_extract_lines).should == @bel_table
-      assigns(:period).should_not be_nil
+      assigns[:period].should == per
     end
   end
-#
-#  describe "GET new" do
-#    it "assigns a new user as @user" do
-#      get :new
-#      assigns(:user).should be_a_new(User)
-#    end
-#  end
-#
+
+  describe "GET new" do
+    it "assigns a new user as @user" do
+      get :new
+      assigns(:user).should be_a_new(User)
+    end
+  end
+
 #  describe "GET edit" do
 #    it "assigns the requested user as @user" do
 #      user = User.create! valid_attributes

@@ -120,7 +120,7 @@ describe CashControl do
     describe 'period' do
 
       it 'should knows its period' do
-      @cash_control.period.should == @p
+      @cash_control.send(:period).should == @p
       end
     end
 

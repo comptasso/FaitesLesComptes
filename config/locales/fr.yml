@@ -243,13 +243,13 @@ fr:
       messages:
         blank: 'champ obligatoire'
         record_invalid: 'Enregistrement invalide'
-        taken : "dajà utilisé"
+        taken : "déjà utilisé"
         not_a_number: 'doit être un nombre'
       models:
         cash_control:
           attributes:
             amount:
-              greater_than_or_equal_to: "doît être positif ou nul"
+              greater_than_or_equal_to: "doit être positif ou nul"
         account:
           attributes:
             number:

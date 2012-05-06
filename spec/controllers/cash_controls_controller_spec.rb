@@ -13,7 +13,7 @@ describe CashControlsController do
   let(:o) {mock_model(Organism)}
   let(:p) {mock_model(Period, :organism=>o, :star_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year, :guess_month=>Date.today.month - 1)}
 
-  let(:ca) {mock_model(Cash, :organism=>o)}
+  let(:ca) {mock_model(Cash, :organism=>o, :name=>'Magasin')}
   let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3, :locked=>false),
       mock_model(CashControl, :date=>Date.today - 1.day, amount: 1, :locked=>false) ] }
   
@@ -37,6 +37,7 @@ describe CashControlsController do
     it "should find the right cash" do
       get :index, :cash_id=>ca.id, :mois=>@mois
       assigns[:cash].should == ca
+      assigns[:cash].name.should == 'Magasin'
     end
 
     it 'should assign organism' , :wip => true do

@@ -4,25 +4,21 @@
 # d'une écriture attachée à une caisse
 # Elle hérite de LinesController car en fait c'est la même logique
 # Book devient simplement ici le livre de caisse
-#
+# Les before_filter find_book et fill_mois sont une surcharge de ceux définis dans
+# lines_controller
 
 
 
 class CashLinesController < LinesController
 
-#  before_filter :find_book, :fill_mois
- 
+  
 
 # la méthode index est héritée de LinesController
   def index
     @date = @period.guess_date(@mois)
     @monthly_extract = Utilities::MonthlyCashExtract.new(@cash, @date)
-    # FIXME remplacer fill_soldes par qqc qui ressemble à MonthlyBookExtract
-
-    respond_to do |format|
-      format.html 
-      
-    end
+  # TODO voir pour rajouter les mêmes sorties que pour lines controller
+  # à savoir pdf, csv 
   end
 
   private
@@ -33,7 +29,7 @@ class CashLinesController < LinesController
   end
 
   def fill_mois
-    if params[:mois]
+     if params[:mois]
       @mois = params[:mois]
     else
       @mois= @period.guess_month

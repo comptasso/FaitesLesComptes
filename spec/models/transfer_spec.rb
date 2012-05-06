@@ -126,7 +126,7 @@ describe Transfer do
     it 'champ obligatoire when a required field is missing' do
       @tr.amount = nil
       @tr.valid?
-      @tr.errors[:amount].should == ['champ obligatoire', 'nombre']
+      @tr.errors[:amount].should == ['champ obligatoire', 'doit être un nombre']
     end
 
     it 'montant ne peut être nul' do

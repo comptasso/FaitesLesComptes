@@ -488,8 +488,9 @@ J'ai pu créer dans les tests une ligne de dépenses en espèces qui n'avait pas
 Faire un module pick_date avec une méthode de classe
 Pour pouvoir supprimer tous les recours à picker_date
 Vérifier que les controllers controlent bien la bonne classe
-on ne devrait pas pouvoir remettre un chèque qui n'appartient à aucun exercice
+
 Généraliser la gestion des erreurs dans les picker_date sur la base de ce qui a été fait pour cahs_control
+revoir bank_extract_controller_spec
 
 ----------------------CashControls----------------------------------------
 OK - remplacer les modif de params[:pick_date] par des virtual attributes
@@ -498,13 +499,14 @@ NON - Voir si organism peut répondre à une méthode active_period et donc à m
 NON - Modifier les before_filter de application pour utiliser cette variable d'instance
 OK - Revoir le fichier cash_spec (qui est une copie de bank_account_spec)
 OK - Faire les spec du controller
-voir les messages d'erreur
-spec request
+OK - voir les messages d'erreur
+OK - spec request
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
 Et peut être aussi une référence de facture
 OK - Utiliser bootstrap pour l'affichage des flash
 Une ligne a pu être saisie sans mode de paiement
+on ne devrait pas pouvoir remettre un chèque qui n'appartient à aucun exercice
 Modifier ce qui apparait dans le flash lors de la saisie d'une ligne 
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos

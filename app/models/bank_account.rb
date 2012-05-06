@@ -10,22 +10,44 @@ class BankAccount < ActiveRecord::Base
   validates :number, :uniqueness=>{:scope=>[:organism_id, :name]}
   validates :name, :number,  presence: true
   
+ # retourne le dernier extrait de compte bancaire
+ # sur la base de la date de fin
+ def last_bank_extract
+   bank_extracts.order(:end_date).last
+ end
+
   # Méthode qui donne le montant du dernier solde bancaire
   # par ordre de date
   def last_bank_extract_sold
-    self.last_bank_extract.end_sold
+    last_bank_extract.end_sold
   rescue
     0
   end
 
+  # renvoie un array avec débit et crédit du relevé bancaire
   def last_bank_extract_debit_credit
-   return self.last_bank_extract.debit, self.last_bank_extract.credit
+    return last_bank_extract.debit, last_bank_extract.credit
   end
 
+  # renvoie la date de fin du dernier relevé bancaire
   def last_bank_extract_day
     self.bank_extracts.order(:end_date).last.end_date
   rescue
     Date.today.beginning_of_month - 1
+  end
+
+ 
+  def new_bank_extract
+    previous_be = last_bank_extract
+    if previous_be
+      bank_extracts.new(begin_date: previous_be.end_date + 1.day,
+                        end_date: (previous_be.end_date + 1.day).end_of_month,
+                        begin_sold: previous_be.end_sold)
+    else
+      bank_extracts.new(begin_date: Date.today.beginning_of_month,
+                        end_date: Date.today.end_of_month,
+                        begin_sold: 0)
+    end
   end
 
  # trouve toutes les lignes non pointées -np pour not pointed
@@ -69,7 +91,6 @@ class BankAccount < ActiveRecord::Base
  end
 
 
- 
  # crée des bank_extract_lines à partir des lignes non pointées
  # méthode utilisée pour le pointage des comptes par bank_extract_controller
  def not_pointed_check_deposits
@@ -84,16 +105,9 @@ end
   self.np_lines.map {|l| BankExtractLine.new(:line_id=>l.id)}
  end
 
- 
- 
-
  def nb_lines_to_point
    np_lines.size + np_check_deposits.count
  end
-
- def last_bank_extract
-    self.bank_extracts.order(:end_date).last
-  end
 
  
 

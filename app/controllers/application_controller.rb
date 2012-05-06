@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
       session[:organism]=params[:organism_id]
     end
       @organism = Organism.find(session[:organism]) if session[:organism]
+     
   end
 
   # trouve l'exercie à partir de l'organisme et éventuellement de la session
