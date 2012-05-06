@@ -37,6 +37,8 @@ class BankAccount < ActiveRecord::Base
   end
 
  
+ # créé un nouvel extrait bancaire rempli à partir des informations du précédent
+ # le mois courant et zéro si c'est le premier
   def new_bank_extract
     previous_be = last_bank_extract
     if previous_be

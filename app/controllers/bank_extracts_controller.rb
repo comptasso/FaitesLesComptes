@@ -82,14 +82,7 @@ class BankExtractsController < ApplicationController
   # GET /bank_extracts/new
   # GET /bank_extracts/new.json
   def new
-    @bank_extract = @bank_account.bank_extracts.build(begin_sold: @bank_account.last_bank_extract_sold)
-    @bank_extract.begin_date= @bank_account.last_bank_extract_day + 1
-    @bank_extract.end_date= @bank_extract.begin_date.months_since(1) - 1
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @bank_extract }
-    end
+    @bank_extract = @bank_account.new_bank_extract
   end
 
   # GET /bank_extracts/1/edit
