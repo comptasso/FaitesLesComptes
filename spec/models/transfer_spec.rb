@@ -23,13 +23,13 @@ describe Transfer do
     end
     
     it "should store date for a valid pick_date" do
-      @transfer.pick_date = '06/06/1955'
+      @transfer.date_picker = '06/06/1955'
       @transfer.date.should == Date.civil(1955,6,6)
     end 
 
     it 'should return formatted date' do
       @transfer.date =  Date.civil(1955,6,6)
-      @transfer.pick_date.should == '06/06/1955'
+      @transfer.date_picker.should == '06/06/1955'
     end
  
   end

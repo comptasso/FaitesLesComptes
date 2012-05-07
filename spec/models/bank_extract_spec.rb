@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe BankExtract do
+describe BankExtract do 
   before(:each) do
     @o=Organism.create!(title: 'My Little Firm')
     @p_2011=@o.periods.create!(start_date: Date.civil(2011,01,01), close_date:Date.civil(2011,12,31))

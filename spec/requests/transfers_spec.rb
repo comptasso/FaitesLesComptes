@@ -37,7 +37,7 @@ describe 'vue transfer index' do
 
     it 'remplir correctement le formulaire crée une nouvelle ligne' do 
       visit new_organism_transfer_path(@o)
-      fill_in 'transfer[pick_date]', :with=>'14/04/2012'
+      fill_in 'transfer[date_picker]', :with=>'14/04/2012'
       fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
       within('#transfer_fill_debitable') do
@@ -59,7 +59,7 @@ describe 'vue transfer index' do
 
       before(:each) do
       visit new_organism_transfer_path(@o)
-      fill_in 'transfer[pick_date]', :with=>'14/04/2012'
+      fill_in 'transfer[date_picker]', :with=>'14/04/2012'
       fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
       within('#transfer_fill_debitable') do

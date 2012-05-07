@@ -40,7 +40,7 @@ describe "transfers/edit" do
     @transfer.should_receive(:partial_locked?).and_return(true, true, true)
     render
     
-    page.find('input#transfer_pick_date')[:disabled].should == 'disabled'
+    page.find('input#transfer_date_picker')[:disabled].should == 'disabled'
     page.find('input#transfer_narration')[:disabled].should == 'disabled'
     page.find('input#transfer_amount')[:disabled].should == 'disabled'
   end

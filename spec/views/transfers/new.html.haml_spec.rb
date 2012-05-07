@@ -35,7 +35,7 @@ describe "transfers/new" do
     render
     page.should have_css('input#transfer_amount')
     page.should have_css('input#transfer_narration')
-    page.should have_css('input#transfer_pick_date')
+    page.should have_css('input#transfer_date_picker')
     page.should have_css('.btn')
   end
 

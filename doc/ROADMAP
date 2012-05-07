@@ -485,7 +485,7 @@ La vue index des retraits d'argent n'est pas classée
 La liste des natures dans saisie de lignes devrait être classée par ordre alpha
 
 J'ai pu créer dans les tests une ligne de dépenses en espèces qui n'avait pas de caisse
-Faire un module pick_date avec une méthode de classe
+OK - Faire un module pick_date avec une méthode de classe
 Pour pouvoir supprimer tous les recours à picker_date
 Vérifier que les controllers controlent bien la bonne classe
 
