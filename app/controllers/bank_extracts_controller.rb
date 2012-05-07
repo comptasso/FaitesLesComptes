@@ -3,7 +3,7 @@
 class BankExtractsController < ApplicationController
 
   before_filter  :find_bank_account
-  before_filter :get_dates, only: [:create, :update]
+ 
 
   # GET /bank_extracts
   # GET /bank_extracts.json
@@ -140,9 +140,5 @@ class BankExtractsController < ApplicationController
     @bank_account=BankAccount.find(params[:bank_account_id])
   end
 
-  def get_dates
-    params[:bank_extract][:begin_date]= picker_to_date(params[:pick_date_from])
-    params[:bank_extract][:end_date] = picker_to_date(params[:pick_date_to])
-
-  end
+ 
 end

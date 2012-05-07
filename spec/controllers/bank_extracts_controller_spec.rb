@@ -82,7 +82,8 @@ describe BankExtractsController do
   describe "POST create" do
     def valid_params
       {bank_account_id: ba.id,  begin_sold: be.end_sold,
-        total_debit: 11, total_credit: 37 }
+        total_debit: 11, total_credit: 37 , begin_date_picker: '01/05/2012',
+      end_date_picker: '31/05/2012' }
     end
 
     before(:each) do
@@ -93,20 +94,20 @@ describe BankExtractsController do
       it "creates a new BankExtract" do
         expect {
           post :create, :organism_id=>o.id, :bank_account_id=> ba.id,
-          :bank_extract => valid_params, pick_date_from: '01/05/2012', pick_date_to: '31/05/2012'
+          :bank_extract => valid_params
         }.to change(BankExtract, :count).by(1)
       end
 
       it "assigns a newly created bank_extract as @bank_extract" do
         post :create, :organism_id=>o.id, :bank_account_id=> ba.id,
-          :bank_extract => valid_params, pick_date_from: '01/05/2012', pick_date_to: '31/05/2012'
+          :bank_extract => valid_params
         assigns(:bank_extract).should be_a(BankExtract)
         assigns(:bank_extract).should be_persisted
       end
 
       it "redirects to pointage" do
         post :create, :organism_id=>o.id, :bank_account_id=> ba.id,
-          :bank_extract => valid_params, pick_date_from: '01/05/2012', pick_date_to: '31/05/2012'
+          :bank_extract => valid_params
         response.should redirect_to pointage_organism_bank_account_bank_extract_url(o, ba, BankExtract.last)
       end
     end
@@ -116,7 +117,7 @@ describe BankExtractsController do
         # Trigger the behavior that occurs when invalid params are submitted
         BankExtract.any_instance.stub(:save).and_return(false)
         post :create, :organism_id=>o.id, :bank_account_id=> ba.id,
-          :bank_extract => {}, pick_date_from: '01/05/2012', pick_date_to: '31/05/2012'
+          :bank_extract => {}
         assigns(:bank_extract).should be_a_new(BankExtract)
       end
 
@@ -124,7 +125,7 @@ describe BankExtractsController do
         # Trigger the behavior that occurs when invalid params are submitted
         BankExtract.any_instance.stub(:save).and_return(false)
         post :create, :organism_id=>o.id, :bank_account_id=> ba.id,
-          :bank_extract => {}, pick_date_from: '01/05/2012', pick_date_to: '31/05/2012'
+          :bank_extract => {}
         response.should render_template("new")
       end
     end
@@ -134,15 +135,12 @@ describe BankExtractsController do
 
     def valid_attributes
       { "bank_account_id"=> ba.id.to_s,  "begin_sold"=>be.end_sold.to_s,
-        "total_debit"=> 11.to_s, "total_credit"=> 37.to_s , "begin_date"=> be.end_date + 1.day,
-        "end_date"=> be.end_date.months_since(1) }
+        "total_debit"=> 11.to_s, "total_credit"=> 37.to_s , 
+        "begin_date_picker"=> '01/05/2012',
+        "end_date_picker"=> '31/05/2012' }
     end
 
-    def parames
-      { bank_account_id: ba.id.to_s,  begin_sold: be.end_sold.to_s,
-        total_debit: 11.to_s, total_credit: 37.to_s  }
-    end
-
+   
     before(:each) do
       BankExtract.any_instance.stub(:fill_bank_extract_lines).and_return(nil)
     end
@@ -155,21 +153,21 @@ describe BankExtractsController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         BankExtract.any_instance.should_receive(:update_attributes).with(valid_attributes)
-        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => parames,
-          :pick_date_from=>'01/06/2012', :pick_date_to=>'30/06/2012'
+        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, 
+          :bank_extract => valid_attributes
       end
 
       it "assigns the requested user as @user" do
         bank_extract = BankExtract.create! valid_attributes
-        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => parames,
-          :pick_date_from=>'01/06/2012', :pick_date_to=>'30/06/2012'
+        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => valid_attributes
+          
         assigns(:bank_extract).should == bank_extract
       end
 
       it "redirects to the user" do
         bank_extract = BankExtract.create! valid_attributes
-        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => parames,
-          :pick_date_from=>'01/06/2012', :pick_date_to=>'30/06/2012'
+        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => valid_attributes
+         
         response.should redirect_to pointage_organism_bank_account_bank_extract_url(o, ba, bank_extract)
       end
     end
@@ -179,8 +177,8 @@ describe BankExtractsController do
         bank_extract = BankExtract.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         BankExtract.any_instance.stub(:save).and_return(false)
-        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => parames,
-          :pick_date_from=>'01/06/2012', :pick_date_to=>'30/06/2012'
+        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => valid_attributes
+          
         assigns(:bank_extract).should == bank_extract
       end
 
@@ -188,8 +186,8 @@ describe BankExtractsController do
         bank_extract = BankExtract.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         BankExtract.any_instance.stub(:save).and_return(false)
-        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => parames,
-          :pick_date_from=>'01/06/2012', :pick_date_to=>'30/06/2012'
+        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => valid_attributes
+         
         response.should render_template("edit")
       end
     end
