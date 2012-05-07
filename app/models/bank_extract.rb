@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 
 class BankExtract < ActiveRecord::Base
+  include Utilities::PickDateExtension
+  
   belongs_to :bank_account
   has_many :bank_extract_lines, dependent: :destroy
 
@@ -14,38 +16,10 @@ class BankExtract < ActiveRecord::Base
   scope :period, lambda {|p| where('(begin_date <= ? AND end_date >= ?)  OR (begin_date <= ? AND end_date >= ? ) OR (begin_date  >= ? AND end_date  <= ?)',
       p.start_date, p.start_date, p.close_date, p.close_date, p.start_date, p.close_date).order(:begin_date) }
 
-
-  def  self.pick_date_for(*args)
-    
-    #    code = ''
-    #    code << "def #{fn_name}; #{arg} ? (I18n.l #{arg}) : nil; end\n"
-    args.each do |arg|
-      fn_name = arg.to_s + '_picker'
-      send :define_method, fn_name do(arg)
-        value = self.send(arg)
-        value ? (I18n::l value) : nil
-      end
-
-      fn_name = fn_name + '='
-      send :define_method, fn_name do |value|
-        s  = value.split('/')
-        date = Date.civil(*s.reverse.map{|e| e.to_i}) rescue nil
-        if date
-          m_name = arg.to_s + '='
-          self.send(m_name, date)
-        end
-      end
-    end
-    #    class_eval code
-  end
-
-
+  # utilise le module Utilities::PickDateExtension pour créer des virtual attributes 
+  # begin_date_picker et end_date_picker
   pick_date_for :begin_date, :end_date
  
-
-
-
-
   # on cherche le relevé de compte qui soit dans le mois de date, mais le plus proche de la
   # fin du mois
   def self.find_nearest(date)

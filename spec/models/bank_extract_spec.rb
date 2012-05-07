@@ -30,6 +30,10 @@ describe BankExtract do
       @be2.begin_date_picker=I18n.l Date.today
       @be2.begin_date.should == Date.today
     end
+
+    it 'raise error when date is malformatted' do
+     expect { @be2.begin_date_picker = '31/06/2012' }.to raise_error(ArgumentError, 'string cant be transformed to a date')
+    end
   end
 
 
