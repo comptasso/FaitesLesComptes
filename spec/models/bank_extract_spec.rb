@@ -17,6 +17,21 @@ describe BankExtract do
 
   end
 
+  describe 'date_pickers' do
+    it 'begin_date_picker' do
+      @be1.begin_date_picker.should == I18n.l(@be1.begin_date)
+    end
+
+    it 'end_date_picker' do
+      @be1.end_date_picker.should == I18n.l(@be1.end_date)
+    end
+
+    it 'begin_date=' do
+      @be2.begin_date_picker=I18n.l Date.today
+      @be2.begin_date.should == Date.today
+    end
+  end
+
 
   describe "vérification du scope period" do
   it "le scpê de period renvoie @be1 pour 2011 et @be2 pour 2012" do

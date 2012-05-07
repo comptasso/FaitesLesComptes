@@ -2,7 +2,7 @@
 
 class Transfer < ActiveRecord::Base
 
-  # TODO il faudrait modifier line_debit et line_credit en from et towards
+  # TODO ? il faudrait modifier debitable et creditable en from et towards
 
   before_destroy :should_be_destroyable
 
@@ -21,6 +21,8 @@ class Transfer < ActiveRecord::Base
   after_create :create_lines
   after_update :update_line_debit, :unless=>lambda { self.line_debit.locked }
   after_update :update_line_credit, :unless=>lambda { self.line_credit.locked }
+
+
 
   # argument virtuel pour la saisie des dates
   def pick_date
