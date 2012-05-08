@@ -503,6 +503,7 @@ OK - voir les messages d'erreur
 OK - spec request
 ----------------------- BankExtract ------------------------------------
 la liste des comptes bancaires n'est pas lisibles dans le form et doit filtrer l'organisme en cours
+Voir la liste des arguments obligatoires - probablement reprendre les spec du modèles 
 
 
 --------------------- Remarques lors des essais ---------------------------
