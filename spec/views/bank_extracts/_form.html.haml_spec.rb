@@ -36,4 +36,6 @@ describe "bank_extracts/new" do
     page.find('input#bank_extract_begin_date_picker').value.should == '01/05/2012'
   end
 
+  
+
 end

@@ -502,9 +502,11 @@ OK - Faire les spec du controller
 OK - voir les messages d'erreur
 OK - spec request
 ----------------------- BankExtract ------------------------------------
-la liste des comptes bancaires n'est pas lisibles dans le form et doit filtrer l'organisme en cours
-Voir la liste des arguments obligatoires - probablement reprendre les spec du modèles 
-
+OK - on ne sélectionne plus le compte bancairela liste des comptes bancaires n'est pas lisibles dans le form et doit filtrer l'organisme en cours
+OK - Voir la liste des arguments obligatoires - probablement reprendre les spec du modèles
+OK - passer bank_extracts.js au tamis de JS lint
+tester dans la vue la fonction de mise à jour du solde final
+spec_requests
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)

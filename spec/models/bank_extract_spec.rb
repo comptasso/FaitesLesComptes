@@ -57,5 +57,21 @@ describe BankExtract do
     end
 
   end
+
+  describe 'vérification des attributs' do
+
+    it 'end_sold doit être présent' do
+    be = @ba.bank_extracts.new(begin_sold:nil)
+    be.should have(2).errors_on(:begin_sold) # numericality and presence
+  end
+
+    it 'begin_sold doît être un nombre' do
+      be = @ba.bank_extracts.new(begin_sold:'bonjour')
+    be.should have(1).errors_on(:begin_sold) # numericality
+    end
+  end
+
+
+
 end
 

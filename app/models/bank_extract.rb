@@ -7,7 +7,8 @@ class BankExtract < ActiveRecord::Base
   has_many :bank_extract_lines, dependent: :destroy
 
   validates :begin_sold, :total_debit, :total_credit, :numericality=>true
-
+  validates :begin_sold, :total_debit, :total_credit, :presence=>true
+  
   after_create :fill_bank_extract_lines
   after_save :lock_lines_if_locked
 
