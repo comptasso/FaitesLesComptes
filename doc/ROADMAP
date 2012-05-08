@@ -501,6 +501,10 @@ OK - Revoir le fichier cash_spec (qui est une copie de bank_account_spec)
 OK - Faire les spec du controller
 OK - voir les messages d'erreur
 OK - spec request
+----------------------- BankExtract ------------------------------------
+la liste des comptes bancaires n'est pas lisibles dans le form et doit filtrer l'organisme en cours
+
+
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
 Et peut être aussi une référence de facture
