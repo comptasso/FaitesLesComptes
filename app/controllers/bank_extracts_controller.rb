@@ -15,11 +15,7 @@ class BankExtractsController < ApplicationController
     end
   end
 
-  def show
-    @bank_extract = BankExtract.find(params[:id])
-    @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
-  end
-
+  
   # action pour procéder au pointage d'un extrait bancaire
   # récupère l'extrait, les lignes qui lui sont déjà associées et les lignes de ce compte bancaire
   # qui ne sont pas encore associées à un extrait
