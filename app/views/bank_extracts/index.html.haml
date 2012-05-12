@@ -1,0 +1,31 @@
+= content_for :menu do
+  = icon_to 'nouveau.png', new_organism_bank_account_bank_extract_path(@organism, @bank_account)
+  = icon_to 'navigation90.png', organism_bank_accounts_path(@organism)
+
+.champ
+  %h3 Liste des extraits de comptes
+
+%table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0")
+  %thead
+    %tr
+      %th.span1 Référence
+      %th.span1 Du
+      %th.span1 Au
+      %th.span1 Solde initial
+      %th.span1 Total débit
+      %th.span1 Total crédit
+      %th.span1 Solde final
+      %th.span1 Actions
+
+  %tbody
+    - @bank_extracts.each do |bank_extract|
+      %tr
+        = render :partial=>'bank_extract', :object=>bank_extract
+        %td
+          =icon_to 'afficher.png', [@organism, @bank_account, bank_extract]
+          - unless bank_extract.locked?
+            = icon_to('modifier.png', edit_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract)) |
+            << (icon_to('pointer.png', pointage_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract)) if bank_extract.first_to_point?)  |
+            << icon_to('supprimer.png', [@organism, @bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete) |
+ 
+

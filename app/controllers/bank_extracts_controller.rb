@@ -93,7 +93,7 @@ class BankExtractsController < ApplicationController
   # POST /bank_extracts
   # POST /bank_extracts.json
   def create
-    @bank_extract = BankExtract.new(params[:bank_extract])
+    @bank_extract = @bank_account.bank_extracts.new(params[:bank_extract])
 
     respond_to do |format|
       if @bank_extract.save
