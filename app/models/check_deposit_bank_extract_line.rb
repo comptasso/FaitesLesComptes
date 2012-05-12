@@ -10,19 +10,36 @@ class CheckDepositBankExtractLine < BankExtractLine
  #  has_many :check_lines, through:check_deposit
   after_initialize :prepare_datas
 
+  validates :check_deposit_id, presence:true
+
+  
+
   def prepare_datas
       cd=self.check_deposit
-      @date=cd.deposit_date
+      self.date = cd.deposit_date
       @debit=0
       @credit=cd.total_checks
-      @narration = 'remise de cheques'
+      @narration = 'Remise de chèques'
       @payment = 'Chèques'
       @blid="check_deposit_#{cd.id}"
   end
+  
 
-  def link_to_source
-     self.check_deposit.update_attribute(:bank_extract_id, self.bank_extract_id)
+
+  def lines
+    check_deposit.checks if check_deposit
   end
+
+  private
+
+  def not_empty
+    errors.add(:check_deposit, 'non valable car pas de remise de chèque associée') unless lines
+  end
+
+
+#  def link_to_source
+#     self.check_deposit.update_attribute(:bank_extract_id, self.bank_extract_id)
+#  end
 
 
 end

@@ -51,6 +51,11 @@ describe BankExtractLine do
       @bel.should_not be_valid
     end
 
+    it 'type is BankExtractLine' do
+      pending 'peut être que type n est pas rempli si c est la classe de base'
+      @bel.type.should == 'BankExtractLine'
+    end
+
     
   end
 

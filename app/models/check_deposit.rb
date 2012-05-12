@@ -19,7 +19,7 @@ class CheckDeposit < ActiveRecord::Base
     dependent: :nullify,
     conditions: Proc.new {"credit > 0 and payment_mode='Chèque' and book_id IN (#{self.bids}) "},
     before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
-  after_remove: :nil_bank_account_id,
+    after_remove: :nil_bank_account_id,
     before_add: :cant_if_pointed do
                 
   end
