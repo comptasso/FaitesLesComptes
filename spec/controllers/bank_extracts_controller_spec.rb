@@ -109,7 +109,7 @@ describe BankExtractsController do
       it "redirects to pointage" do
         post :create, :organism_id=>o.id, :bank_account_id=> ba.id,
           :bank_extract => valid_params
-        response.should redirect_to pointage_organism_bank_account_bank_extract_url(o, ba, BankExtract.last)
+        response.should redirect_to organism_bank_account_bank_extracts_url(o, ba)
       end
     end
 
@@ -169,7 +169,7 @@ describe BankExtractsController do
         bank_extract = BankExtract.create! valid_attributes
         put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => valid_attributes
          
-        response.should redirect_to pointage_organism_bank_account_bank_extract_url(o, ba, bank_extract)
+        response.should redirect_to organism_bank_account_bank_extracts_url(o, ba)
       end
     end
 

@@ -11,7 +11,7 @@
 class BankExtractLine < ActiveRecord::Base
   belongs_to :bank_extract
   belongs_to :check_deposit
-  belongs_to :line
+  has_and_belongs_to_many :lines
 
   acts_as_list :scope => :bank_extract
 

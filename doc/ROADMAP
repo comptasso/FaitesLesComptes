@@ -509,6 +509,8 @@ OK - suppresion de l'action et de la vue show (qui doit renvoyer à index de ban
 OK - filtrer les actions possibles selon le statut de lock
 tester dans une request la fonction de mise à jour du solde final
 spec_requests
+La saisie d'un montant sans décimales devrait être reformattée pour avoir deux décimales
+Après création on va vers index
 
 -----------------------------BankExtractLine------------------------
 rendre plus complet ce controller en ayant une fonction index

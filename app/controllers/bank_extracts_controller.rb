@@ -93,23 +93,23 @@ class BankExtractsController < ApplicationController
 
     respond_to do |format|
       if @bank_extract.save
-        format.html { redirect_to pointage_organism_bank_account_bank_extract_path(@organism, @bank_account, @bank_extract), notice: "L'extrait de compte a été créé." }
+        format.html { redirect_to organism_bank_account_bank_extracts_url(@organism, @bank_account), notice: "L'extrait de compte a été créé." }
         format.json { render json: @bank_extract, status: :created, location: @bank_extract }
       else
         format.html { render action: "new" }
-        format.json { render json: @bank_extract.errors, status: :unprocessable_entity }
+        format.json { render json: @bank_extract.errors, status: :unprocessable_entity } 
       end
     end
-  end
+  end 
 
   # PUT /bank_extracts/1
-  # PUT /bank_extracts/1.json
+  # PUT /bank_extracts/1.json 
   def update
     @bank_extract = BankExtract.find(params[:id])
 
     respond_to do |format|
       if @bank_extract.update_attributes(params[:bank_extract])
-        format.html { redirect_to pointage_organism_bank_account_bank_extract_path(@organism, @bank_account, @bank_extract), notice: "L'extrait a été modifié " }
+        format.html { redirect_to organism_bank_account_bank_extracts_url(@organism, @bank_account), notice: "L'extrait a été modifié " }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
