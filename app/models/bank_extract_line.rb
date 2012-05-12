@@ -15,9 +15,6 @@ class BankExtractLine < ActiveRecord::Base
 
   acts_as_list :scope => :bank_extract
 
-#  default_scope order: :position  !! ne pas utiliser crée un bug dans la gestion des positions
-# avec acts_as_list
-
   attr_reader :date, :payment, :narration, :debit, :credit, :blid
 
   after_save :link_to_source

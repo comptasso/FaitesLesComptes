@@ -505,8 +505,21 @@ OK - spec request
 OK - on ne sélectionne plus le compte bancairela liste des comptes bancaires n'est pas lisibles dans le form et doit filtrer l'organisme en cours
 OK - Voir la liste des arguments obligatoires - probablement reprendre les spec du modèles
 OK - passer bank_extracts.js au tamis de JS lint
+OK - suppresion de l'action et de la vue show (qui doit renvoyer à index de bank_extract_lines controller)
+OK - filtrer les actions possibles selon le statut de lock
 tester dans une request la fonction de mise à jour du solde final
 spec_requests
+
+-----------------------------BankExtractLine------------------------
+rendre plus complet ce controller en ayant une fonction index
+lui transférer les actions pointage et dépointage
+mettre en place des STI pour une BEL de type remise de chèque et une BEL de type line
+Faire une relation habtm avec les Line
+Revoir le javascript pour faire du drag and drop (pointage-dépointage)
+javascript pour déplacer une bel
+javascript pour afficher les sous lignes
+Faire les vues modales pour créer une nouvelle ligne et scinder une ligne
+Ajouter les icones pour appeler ces actions
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
