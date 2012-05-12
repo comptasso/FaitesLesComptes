@@ -32,21 +32,21 @@ describe BankExtractsController do
     end
   end
 
-  describe "GET show" do
-    before(:each) do
-      # ici création de quelques bank_extract_lines
-      @bel_table= 10.times.map {|t| mock_model(BankExtractLine)}
-    end
-
-    it "assigns the requested bank_extract as @bank_extract" do
-      BankExtract.should_receive(:find).with(be.id.to_s).and_return(be)
-      be.stub_chain(:bank_extract_lines, :order).and_return(@bel_table)
-      get :show, :organism_id=>o.id.to_s, bank_account_id: ba.id.to_s, id: be.id.to_s
-      assigns(:bank_extract).should == be
-      assigns(:bank_extract_lines).should == @bel_table
-      assigns[:period].should == per
-    end
-  end
+#  describe "GET show" do
+#    before(:each) do
+#      # ici création de quelques bank_extract_lines
+#      @bel_table= 10.times.map {|t| mock_model(BankExtractLine)}
+#    end
+#
+#    it "assigns the requested bank_extract as @bank_extract" do
+#      BankExtract.should_receive(:find).with(be.id.to_s).and_return(be)
+#      be.stub_chain(:bank_extract_lines, :order).and_return(@bel_table)
+#      get :show, :organism_id=>o.id.to_s, bank_account_id: ba.id.to_s, id: be.id.to_s
+#      assigns(:bank_extract).should == be
+#      assigns(:bank_extract_lines).should == @bel_table
+#      assigns[:period].should == per
+#    end
+#  end
 
   describe "GET new" do
     before(:each) do
@@ -87,6 +87,7 @@ describe BankExtractsController do
     end
 
     before(:each) do
+      ba.stub(:bank_extracts).and_return(BankExtract)
       BankExtract.any_instance.stub(:fill_bank_extract_lines).and_return(nil)
     end
 

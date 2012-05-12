@@ -5,8 +5,11 @@ class BankExtractLinesController < ApplicationController
 
   before_filter :find_params
 
+  def index
+    @bank_extract_lines = @bank_extract.bank_extract_lines.order('position)')
+  end
+
   def up
-      
       @bank_line.move_higher
       @bank_lines =@bank_line.bank_extract.bank_extract_lines.order('position') # utile pour js, redessiner la table des bank_extract_lines
        respond_to do |format|
