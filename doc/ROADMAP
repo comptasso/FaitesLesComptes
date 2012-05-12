@@ -512,6 +512,8 @@ spec_requests
 La saisie d'un montant sans décimales devrait être reformattée pour avoir deux décimales
 Après création on va vers index
 
+Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
+
 -----------------------------BankExtractLine------------------------
 rendre plus complet ce controller en ayant une fonction index
 lui transférer les actions pointage et dépointage

@@ -4,45 +4,49 @@
 # Cette ligne peut correspondre à une ligne d'un livre de recettes ou de dépenses 
 # du moment qu'il s'agit d'une opération bancaire (pas d'espèces évidemment).
 # Par exemple un prélèvement ou un virement
-# Mais ce peut être aussi une remise de chèque.qui elle même renvoie (has_many)
-# lines. 
+# Mais ce peut être aussi une remise de chèque.qui elle même renvoie à plusieurs lignes.
+#
+# Le modèle a des sous classes : la seule actuellement est check_deposit_bank_extract_line
+# et est représenté par une table comme champs date, position, type, bank_extract_id
+# et check_deposit_id (ce dernier champ ne servant que pour la sous classe
+# CheckDepositBankExtractLine
+#
+# La méthode de classe has_many est surchargée dans CheckDepositBankExtractLine
+# pour pouvoir renvoyer les lines associées
+#
+# Une relation HABTM est définie avec lines, permettant d'avoir une ligne de relevé
+# bancaire qui correspond à plusieurs lignes d'écriture (ex péages regroupés
+# par semaine par les sociétés d'autoroute mais dont les dépenses sont enregistrées
+# ticket par ticket
+# Ou à l'inverse une ligne de dépenses qui aurait donné lieu à une opération bancaire
+# détaillée en deux lignes.
+#
+# Acts as list permet d'utiliser le champ position pour ordonner les lignes du relevé
 #
 
 class BankExtractLine < ActiveRecord::Base
   belongs_to :bank_extract
-  belongs_to :check_deposit
-  has_and_belongs_to_many :lines
+  
+  has_and_belongs_to_many :lines, uniq:true
 
   acts_as_list :scope => :bank_extract
 
-  attr_reader :date, :payment, :narration, :debit, :credit, :blid
+  attr_reader :payment, :narration, :debit, :credit, :blid
 
-  after_save :link_to_source
+  validate :not_empty
+  
+#  after_save :link_to_source
 
-  before_destroy :remove_link_to_source
+#  before_destroy :remove_link_to_source
 
   after_initialize :prepare_datas
 
   def prepare_datas
-    if self.line_id != nil
-      # TODO remplacer ces self.line par Line.find...
-      l=self.line
-      @date = l.line_date
-      @debit= l.debit
-      @credit=l.credit
-      @payment=l.payment_mode
-      @narration = l.narration
-      @blid= "line_#{l.id}" # blid pour bank_line_id
-    elsif self.check_deposit_id != nil
-      cd=self.check_deposit
-      @date=cd.deposit_date
-      @debit=0
-      @credit=cd.total_checks
-      @narration = 'remise de cheques'
-      @payment = 'Chèques'
-      @blid="check_deposit_#{cd.id}"
-    end
-    
+      self.date ||= lines.first.line_date # par défaut on construit les infos de base
+      @payment= lines.first.payment_mode # avec la première ligne associée
+      @narration = lines.first.narration
+      # TODO blid est-il utils
+      @blid= "line_#{lines.first.id}" if lines.count == 1 # blid pour bank_line_id
   end
 
   # lock_line verrouille la ligne d'écriture. Ceci est appelé par bank_extract (after_save)
@@ -57,18 +61,45 @@ class BankExtractLine < ActiveRecord::Base
     # si c'est une remise de chèque on verrouille les lignes correspondantes
     self.check_deposit.checks.each {|l| l.update_attribute(:locked, true)} if self.check_deposit_id
   end
+
+  # debit fait le total débit des lignes.
+  # Ne pas utiliser sum(:debit) qui fait appel à la base de données
+  # puisque les lignes ne sont pas obligatoirement (à ce stade) sauvegardées
+  def debit
+    lines.inject(0) { |x, l| x += l.debit }
+  end
+
+  # Retourne le total des crédits des lignes associées
+  # Ne pas utiliser sum(:debit) qui fait appel à la base de données
+  # puisque les lignes ne sont pas obligatoirement (à ce stade) sauvegardées
+   def credit
+    lines.inject(0) { |x, l| x += l.credit }
+  end
   
   private
 
-  def link_to_source
-    self.line.update_attribute(:bank_extract_id, self.bank_extract_id) if self.line_id
-    self.check_deposit.update_attribute(:bank_extract_id, self.bank_extract_id) if self.check_deposit_id
+   def not_empty
+    if lines.empty?
+    errors.add(:lines, 'cant exist without lines')
+      false
+    else
+      true
+    end
   end
 
-  def remove_link_to_source
-    self.line.update_attribute(:bank_extract_id, nil) if self.line_id
-    self.check_deposit.update_attribute(:bank_extract_id, nil) if self.check_deposit_id
-  end
+#  # appelée par after_save, a pour effet de remplir le champ bank_extract_id qui
+#  # TODO check s'il peut y avoir des lignes rattachées à un compte qui nécessite cette étape
+#  # Oui pour les remises de chèques mais pour les autres ???
+#  # associe la ligne au relevé de compte (en fait c'est normalement peu utile car
+#  # lors de l'enregistrement des lignes, le compte bancaire est déja rempli
+#  def link_to_source
+#    self.lines.each {|l| l.update_attribute(:bank_extract_id, self.bank_extract_id) }
+#  end
+
+#  def remove_link_to_source
+#    self.line.update_attribute(:bank_extract_id, nil) if self.line_id
+#    self.check_deposit.update_attribute(:bank_extract_id, nil) if self.check_deposit_id
+#  end
 
    
 end

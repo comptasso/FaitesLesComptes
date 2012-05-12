@@ -19,7 +19,7 @@ describe BankAccount do
 
   context 'controle des validités' do
 
-    it "should be valid" do
+    it "should be valid" do 
       @bb.should be_valid
     end
 

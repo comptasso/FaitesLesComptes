@@ -18,7 +18,7 @@ class Line < ActiveRecord::Base
   belongs_to :bank_account
   belongs_to :cash
   belongs_to :owner, :polymorphic=>true
-  has_and_belongs_to_many :bank_extract_lines
+  has_and_belongs_to_many :bank_extract_lines, :uniq=>true
 
 
   before_validation :sold_debit_credit # une ligne ne peut avoir debit et credit simultanément

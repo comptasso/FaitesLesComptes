@@ -17,14 +17,43 @@ describe BankExtractLine do
   end
 
   def valid_attributes
-    {bank_extract_id:@be.id, line_id:@l.id}
+    {bank_extract_id:@be.id, lines: [@l]}
   end
 
-  describe 'with valid attributes' do
-    it 'is created' do
-      bel = @be.bank_extract_lines.new(valid_attributes)
-      bel.should be_valid 
-    end 
+  describe 'testing attributes' do
+
+    before(:each) do
+      @bel = BankExtractLine.new(valid_attributes) 
+    end
+
+    it 'is created with valid attributes' do
+      @bel.should be_valid
+    end
+
+    it 'knows the date' do
+      @bel.date.should == Date.today
+    end
+
+    it 'testing attributes readers' do
+      @bel.narration.should == @l.narration
+      @bel.payment.should == @l.payment_mode
+    end
+
+    it 'is able to give debit and credit value' do
+      @bel.save!
+      #@bel.credit.should == @l.credit
+      @bel.debit.should == @l.debit
+    end
+  
+    it 'not valid without lines' do
+      @bel.lines.clear # on retire la seule ligne du tableau de lignes
+      @bel.lines.should have(0).line
+      @bel.should_not be_valid
+    end
+
+    
   end
+
+
 
 end

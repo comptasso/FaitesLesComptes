@@ -9,7 +9,7 @@ class BankExtract < ActiveRecord::Base
   validates :begin_sold, :total_debit, :total_credit, :numericality=>true
   validates :begin_sold, :total_debit, :total_credit, :presence=>true
   
-  after_create :fill_bank_extract_lines
+ # after_create :fill_bank_extract_lines
   after_save :lock_lines_if_locked
 
   # TODO add a chrono validator
@@ -59,7 +59,7 @@ class BankExtract < ActiveRecord::Base
   end
 
   def equality?
-    (self.diff_debit.abs < 0.001) && (self.diff_credit.abs < 0.001)
+    (self.diff_debit.abs < 0.001) && (self.diff_credit.abs < 0.001) 
   end
 
   def lines_sold
