@@ -6,8 +6,10 @@ class BankExtractLinesController < ApplicationController
   before_filter :find_params, :except=>:index
 
   def index
+    @organism=Organism.find(params[:organism_id])
+    @bank_account=BankAccount.find(params[:bank_account_id])
     @bank_extract=BankExtract.find(params[:bank_extract_id])
-    @bank_extract_lines = @bank_extract.bank_extract_lines.order('position)')
+    @bank_extract_lines = @bank_extract.bank_extract_lines.order('position')
   end
 
   def up

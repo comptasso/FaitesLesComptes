@@ -17,5 +17,7 @@ class BankExtractLine < ActiveRecord::Base
   has_and_belongs_to_many :lines, uniq:true
 
   acts_as_list :scope => :bank_extract
-  validate :not_empty
+#  validate :not_empty
+
+  attr_reader :payment, :narration, :debit, :credit, :blid
 end

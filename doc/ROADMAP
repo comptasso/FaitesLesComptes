@@ -515,10 +515,10 @@ Après création on va vers index
 Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
 
 -----------------------------BankExtractLine------------------------
-rendre plus complet ce controller en ayant une fonction index
+OK - rendre plus complet ce controller en ayant une fonction index
 lui transférer les actions pointage et dépointage
-mettre en place des STI pour une BEL de type remise de chèque et une BEL de type line
-Faire une relation habtm avec les Line
+OK - mettre en place des STI pour une BEL de type remise de chèque et une BEL de type line
+OK - Faire une relation habtm avec les Line
 Revoir le javascript pour faire du drag and drop (pointage-dépointage)
 javascript pour déplacer une bel
 javascript pour afficher les sous lignes

@@ -1,0 +1,29 @@
+= content_for :menu do
+  = icon_to 'navigation90.png', organism_bank_account_bank_extracts_path(@organism, @bank_account)
+  
+
+.champ
+  %h3= "Relevé bancaire #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
+
+  %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0")
+    %thead
+      %tr
+        %th.span1 Date
+        %th.span5 Libellé
+        %th.span1.numeric Débit
+        %th.span1.numeric Crédit
+        %th.span1 Actions
+
+    %tbody
+      - @bank_extract_lines.each do |bel|
+        %tr
+          %td= l bel.date
+          %td= bel.narration
+          %td.numeric= two_decimals bel.debit
+          %td.numeric= two_decimals bel.credit
+          
+          %td
+            = icon_to 'supprimer.png', organism_bank_account_bank_extract_bank_extract_line_path(@organism, @bank_account, @bank_extract, bel), :confirm => 'Are you sure?', :method => :delete
+
+
+

@@ -27,7 +27,7 @@
 class StandardBankExtractLine < BankExtractLine
   
 
-  attr_reader :payment, :narration, :debit, :credit, :blid
+  
 
   #  after_save :link_to_source
 
