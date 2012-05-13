@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-    c.filter = {:wip=> true }
+   # c.filter = {:wip=> true }
 end
 
 describe BankExtract do 
@@ -88,14 +88,14 @@ describe BankExtract do
       @l1.save!
       
 
-      @cd = CheckDeposit.create!(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
+      @cd = CheckDeposit.create!(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day)) 
       @cd.checks << @l1
       @cd.save!
 
       @l2 = Line.create!(narration:'bel', line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
 
       @bel1 = CheckDepositBankExtractLine.create!( bank_extract_id:@be2.id, check_deposit_id:@cd.id )
-      @bel2 = BankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2])
+      @bel2 = StandardBankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2])
 
 
     end

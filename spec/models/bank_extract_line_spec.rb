@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe BankExtractLine do
+describe StandardBankExtractLine do
   include OrganismFixture
 
   before(:each) do
@@ -13,50 +13,61 @@ describe BankExtractLine do
       total_debit:2,
       total_credit:5,
       locked:false)
-    @l = Line.create!(narration:'bel', line_date:Date.today, debit:7, credit:0, payment_mode:'Espèces', cash_id:@c.id, book_id:@ob.id, nature_id:@n.id)
+    @d7 = Line.create!(narration:'bel', line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
+    @c29 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:29, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
+     @ch97 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+     @ch5 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:5, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+    @cd = CheckDeposit.create!(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
+    @cd.checks << @ch97 << @ch5
+    @cd.save!
+
+
   end
 
-  def valid_attributes
-    {bank_extract_id:@be.id, lines: [@l]}
-  end
 
-  describe 'testing attributes' do
+  describe 'un extrait bancaire avec les différents éléments' do
 
     before(:each) do
-      @bel = BankExtractLine.new(valid_attributes) 
+      @be.bank_extract_lines << StandardBankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d7])
+      @be.bank_extract_lines << StandardBankExtractLine.new(bank_extract_id:@be.id, :lines=>[@c29])
+      @be.bank_extract_lines << CheckDepositBankExtractLine.new(:check_deposit_id=>@cd.id)
+      @be.save!
     end
 
-    it 'is created with valid attributes' do
-      @bel.should be_valid
+
+    it 'checks values' do
+      @be.total_lines_credit.to_f.should == 131
+      @be.total_lines_debit.to_f.should == 7
     end
 
-    it 'knows the date' do
-      @bel.date.should == Date.today
+    it 'checks positions' do
+      @be.bank_extract_lines.all.map {|bel| bel.credit}.should == [0,29,102]
+      @be.bank_extract_lines.all.map {|bel| bel.debit}.should == [7,0,0]
+      @be.bank_extract_lines.all.map {|bel| bel.position}.should == [1,2,3]
     end
 
-    it 'testing attributes readers' do
-      @bel.narration.should == @l.narration
-      @bel.payment.should == @l.payment_mode
+    describe 'testing move_higher and move_lower' do
+
+      before(:each) do
+        @bel7, @bel29, @bel102 = *@be.bank_extract_lines.all
+      end
+
+      it 'tst du splat' do
+        @be.bank_extract_lines.order('position').all.should  == [@bel7, @bel29, @bel102]
+      end
+
+      it '@bel7 is in first position' do
+        @bel7.position.should == 1
+      end
+
+      it 'move lower' do
+        @bel7.move_lower
+        @be.bank_extract_lines.order('position').all.should  == [@bel29, @bel7, @bel102]
+      end
+
+
     end
 
-    it 'is able to give debit and credit value' do
-      @bel.save!
-      #@bel.credit.should == @l.credit
-      @bel.debit.should == @l.debit
-    end
-  
-    it 'not valid without lines' do
-      @bel.lines.clear # on retire la seule ligne du tableau de lignes
-      @bel.lines.should have(0).line
-      @bel.should_not be_valid
-    end
-
-    it 'type is BankExtractLine' do
-      pending 'peut être que type n est pas rempli si c est la classe de base'
-      @bel.type.should == 'BankExtractLine'
-    end
-
-    
   end
 
 

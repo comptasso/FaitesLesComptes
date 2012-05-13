@@ -30,6 +30,16 @@ class CheckDepositBankExtractLine < BankExtractLine
     check_deposit.checks if check_deposit
   end
 
+  # délègue à total_checks de check_deposit
+  def credit
+    check_deposit.total_checks
+  end
+
+  # Zero car une remise de chèques est toujours au crédit du compte
+  def debit
+    return 0
+  end
+
   private
 
   def not_empty

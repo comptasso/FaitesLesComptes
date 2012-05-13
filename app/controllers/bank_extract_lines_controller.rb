@@ -3,9 +3,10 @@ class BankExtractLinesController < ApplicationController
   # TODO on pourrait modifier les routes pour avoir juste bank_extract_line et récupérer les variables d'instances nécessaires
   # En fait il n'y en probablement plus besoin puisque le format html n'est pas nécessaire pour ce controller
 
-  before_filter :find_params
+  before_filter :find_params, :except=>:index
 
   def index
+    @bank_extract=BankExtract.find(params[:bank_extract_id])
     @bank_extract_lines = @bank_extract.bank_extract_lines.order('position)')
   end
 
