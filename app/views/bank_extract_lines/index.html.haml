@@ -15,15 +15,8 @@
         %th.span1 Actions
 
     %tbody
-      - @bank_extract_lines.each do |bel|
-        %tr
-          %td= l bel.date
-          %td= bel.narration
-          %td.numeric= two_decimals bel.debit
-          %td.numeric= two_decimals bel.credit
-          
-          %td
-            = icon_to 'supprimer.png', organism_bank_account_bank_extract_bank_extract_line_path(@organism, @bank_account, @bank_extract, bel), :confirm => 'Are you sure?', :method => :delete
-
-
+      - @bank_extract_lines.all.each do |bel|
+        = render(partial:'standard_bank_extract_line', :object=>bel) if bel.is_a? StandardBankExtractLine
+        = render(partial:'check_deposit_bank_extract_line', object:bel) if bel.is_a? CheckDepositBankExtractLine
+ 
 

@@ -15,7 +15,7 @@ class CheckDepositBankExtractLine < BankExtractLine
   
 
   def prepare_datas
-      cd=self.check_deposit
+      cd = self.check_deposit
       self.date = cd.deposit_date
       @debit=0
       @credit=cd.total_checks

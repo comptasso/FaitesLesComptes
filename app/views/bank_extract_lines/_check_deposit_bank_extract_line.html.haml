@@ -1,0 +1,8 @@
+%tr
+  %td= l check_deposit_bank_extract_line.date
+  %td= check_deposit_bank_extract_line.narration
+  %td.numeric= two_decimals check_deposit_bank_extract_line.debit
+  %td.numeric= two_decimals check_deposit_bank_extract_line.credit
+
+  %td
+    = icon_to 'supprimer.png', organism_bank_account_bank_extract_bank_extract_line_path(@organism, @bank_account, @bank_extract, check_deposit_bank_extract_line), :confirm => 'Are you sure?', :method => :delete
