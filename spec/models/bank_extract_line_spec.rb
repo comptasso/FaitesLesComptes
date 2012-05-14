@@ -46,6 +46,8 @@ describe StandardBankExtractLine do
       @be.bank_extract_lines.all.map {|bel| bel.position}.should == [1,2,3]
     end
 
+    it 'should have unique lines or unique check_deposit'
+
     describe 'testing move_higher and move_lower' do
 
       before(:each) do

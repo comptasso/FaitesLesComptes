@@ -5,6 +5,8 @@ class BankExtract < ActiveRecord::Base
   
   belongs_to :bank_account
   has_many :bank_extract_lines, dependent: :destroy
+  has_many :standard_bank_extract_lines, dependent: :destroy
+  has_many :check_deposit_bank_extract_lines, dependent: :destroy
 
   validates :begin_sold, :total_debit, :total_credit, :numericality=>true
   validates :begin_sold, :total_debit, :total_credit, :presence=>true
