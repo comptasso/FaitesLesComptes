@@ -7,7 +7,7 @@
 
 class CheckDepositBankExtractLine < BankExtractLine
   belongs_to :check_deposit
- #  has_many :check_lines, through:check_deposit
+  
   after_initialize :prepare_datas
 
   validates :check_deposit_id, presence:true
@@ -25,7 +25,7 @@ class CheckDepositBankExtractLine < BankExtractLine
   end
   
 
-
+  
   def lines
     check_deposit.checks if check_deposit
   end

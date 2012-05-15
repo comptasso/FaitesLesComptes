@@ -1,3 +1,13 @@
 // Place all the styles related to the bank_extract_lines controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.public_bank_extract_lines {
+  .row_detail {
+    
+    font-style: italic;
+    td {
+      font-size: 10px;
+      }
+    }
+
+  }

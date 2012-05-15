@@ -70,6 +70,11 @@ class CheckDeposit < ActiveRecord::Base
     list.reject {|check| linked.include? check }
   end
 
+  # retourne le nombre de chèque dans cette remise
+  def nb_checks
+    checks.count
+  end
+
   # total checks fait la somme des chèques qui sont dans la cible de l'association.
   # cette approche est nécessaire car un module intégré donne un résultat vide
   def total_checks
