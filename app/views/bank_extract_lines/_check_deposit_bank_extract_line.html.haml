@@ -1,8 +1,9 @@
 %tr
   %td
-    - if (check_deposit_bank_extract_line.check_deposit.nb_checks > 1)
-      %span.toggle-detail{:id=>"cd_#{check_deposit_bank_extract_line.check_deposit.id}"} U229E 229F
     = "#{check_deposit_bank_extract_line.position}"
+    - if (check_deposit_bank_extract_line.check_deposit.nb_checks > 1)
+      %span.toggle-detail{:id=>"cd_#{check_deposit_bank_extract_line.check_deposit.id}"} &#x229E;
+    
   %td= l check_deposit_bank_extract_line.date
   %td= check_deposit_bank_extract_line.narration
   %td.numeric= two_decimals check_deposit_bank_extract_line.debit
@@ -12,7 +13,7 @@
     = icon_to 'supprimer.png', organism_bank_account_bank_extract_bank_extract_line_path(@organism, @bank_account, @bank_extract, check_deposit_bank_extract_line), :confirm => 'Are you sure?', :method => :delete
 -if (check_deposit_bank_extract_line.check_deposit.nb_checks > 1)
   - check_deposit_bank_extract_line.lines.each do |check|
-    %tr{:class=>"row_detail", :id=>"detail_#{check.id}" }
+    %tr{:class=>"row_detail cd_#{check_deposit_bank_extract_line.check_deposit.id}", :id=>"detail_#{check.id}" }
       %td
       %td= l check.line_date
       %td= check.narration
