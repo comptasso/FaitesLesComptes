@@ -17,7 +17,12 @@ jQuery(function() {
          }
   });
 
-  $('.public_bank_extract_lines .data_table').dataTable()
+  $('.public_bank_extract_lines .data_table').dataTable({
+      "bPaginate": false,
+      "bLengthChange": false,
+      "bFilter": false,
+      "bInfo": false
+  })
   .rowReordering({
     sURL: window.location + "/reorder"
   });

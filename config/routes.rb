@@ -106,10 +106,6 @@ Faitesvoscomptes::Application.routes.draw do
           post 'lock'
         end
         resources :bank_extract_lines do
-          member do
-            post 'up'
-            post 'down'
-          end
           collection do
             post 'reorder'
           end
