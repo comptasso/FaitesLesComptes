@@ -110,6 +110,9 @@ Faitesvoscomptes::Application.routes.draw do
             post 'up'
             post 'down'
           end
+          collection do
+            post 'reorder'
+          end
         end
       end
     end

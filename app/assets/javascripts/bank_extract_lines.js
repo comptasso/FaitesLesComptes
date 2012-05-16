@@ -18,5 +18,7 @@ jQuery(function() {
   });
 
   $('.public_bank_extract_lines .data_table').dataTable()
-  .rowReordering();
+  .rowReordering({
+    sURL: window.location + "/reorder"
+  });
 });
