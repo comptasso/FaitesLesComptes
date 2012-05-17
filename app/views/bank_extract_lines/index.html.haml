@@ -7,41 +7,54 @@
   .inner-champ
     .row-fluid
       %ul
-        %li.span2
+        %li.offset2.span2
           Solde initial :
-          = two_decimals @bank_extract.begin_sold
+          = debit_credit @bank_extract.begin_sold
         %li.span2.spread
           Total débit :
-          = two_decimals @bank_extract.total_debit
-          = image_tag('icones/exclamation.png', title:'Ecart de pointage') if @bank_extract.diff_debit?
+          = debit_credit @bank_extract.total_debit
+          = image_tag('icones/exclamation.png', title:"Ecart de pointage de #{@bank_extract.diff_debit}") if @bank_extract.diff_debit?
         %li.span2
           Total crédit :
-          = two_decimals @bank_extract.total_credit
-          = image_tag('icones/exclamation.png', title:'Ecart de pointage') if @bank_extract.diff_credit?
+          = debit_credit @bank_extract.total_credit
+          = image_tag('icones/exclamation.png', title:"Ecart de pointage de #{@bank_extract.diff_credit}") if @bank_extract.diff_credit?
         %li.span2
           Solde Final :
-          = two_decimals @bank_extract.end_sold
+          = debit_credit @bank_extract.end_sold
+  .row-fluid
+    .span6
+      %h4 Liste des écritures associées au relevé
+      %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0")
+        %thead
+          %tr
+            %th N°
+            %th Date
+            %th Libellé
+            %th.numeric Débit
+            %th.numeric Crédit
+            %th Actions
 
-  %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0")
-    %thead
-      %tr
-        %th.span1 N°
-        %th.span1 Date
-        %th.span4 Libellé
-        %th.span1.numeric Débit
-        %th.span1.numeric Crédit
-        %th.span1 Actions
+        %tbody.connectedSortable#sortable1
+          - @bank_extract_lines.all.each do |bel|
+            = render(partial:'standard_bank_extract_line', :object=>bel) if bel.is_a? StandardBankExtractLine
+            = render(partial:'check_deposit_bank_extract_line', object:bel) if bel.is_a? CheckDepositBankExtractLine
 
-    %tbody.connectedSortable#sortable1
-      - @bank_extract_lines.all.each do |bel|
-        = render(partial:'standard_bank_extract_line', :object=>bel) if bel.is_a? StandardBankExtractLine
-        = render(partial:'check_deposit_bank_extract_line', object:bel) if bel.is_a? CheckDepositBankExtractLine
+        %tfoot
+          %tr
+            %th.droite{colspan:3, rowspan:1} Totaux
+            %td.numeric= debit_credit @bank_extract.total_lines_debit
+            %td.numeric= debit_credit @bank_extract.total_lines_credit
+            %td
 
-    %tfoot
-      %tr
-        %th.droite{colspan:3, rowspan:1} Totaux
-        %td.numeric= @bank_extract.total_lines_debit
-        %td.numeric= @bank_extract.total_lines_credit
-        %td
- 
+    .span6
+      %h4 Liste des écritures non pointées
+      %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0")
+        %thead
+          %tr
+            %th N°
+            %th Date
+            %th Libellé
+            %th.numeric Débit
+            %th.numeric Crédit
+            %th Actions
 
