@@ -188,14 +188,14 @@
                     var tbody = $(this);
                     var sSelector = "tbody tr";
                     var sGroup = "";
-                    if (properties.bGroupingUsed) {
-                        sGroup = $(ui.item).attr(properties.sDataGroupAttribute);
-						if(sGroup==null || sGroup==undefined){
-							fnCancelSorting(tbody, properties, 3, "Grouping row cannot be moved");
-							return;
-						}
-                        sSelector = "tbody tr[" + properties.sDataGroupAttribute + " ='" + sGroup + "']";
-                    }
+//                    if (properties.bGroupingUsed) {
+//                        sGroup = $(ui.item).attr(properties.sDataGroupAttribute);
+//						if(sGroup==null || sGroup==undefined){
+//							fnCancelSorting(tbody, properties, 3, "Grouping row cannot be moved");
+//							return;
+//						}
+//                        sSelector = "tbody tr[" + properties.sDataGroupAttribute + " ='" + sGroup + "']";
+//                    }
 
                     var oState = fnGetState(sSelector, ui.item.context.id);
 					if(oState.iNewPosition == -1)

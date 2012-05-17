@@ -24,8 +24,9 @@ class BankExtractLinesController < ApplicationController
     else
       (to_position - from_position).times { @bank_extract_line.move_lower }
     end
-    render :nothing=>true
-
+    head :ok
+  rescue
+    head :bad_request
   end
 
   
