@@ -2,7 +2,11 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .public_bank_extract_lines {
-  .numeric {
+  .inner-champ ul {
+    list-style: inside none;
+    font-weight: bold;
+    }
+    .numeric {
     text-align: right;
     }
   .row_detail {
@@ -15,5 +19,13 @@
   .toggle-detail {
     cursor: pointer;
     }
+
+    tfoot{
+        font-weight: bold;
+        .droite {
+          text-align: right;
+          }
+        }
+
 
   }

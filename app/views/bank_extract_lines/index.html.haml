@@ -4,6 +4,23 @@
 
 .champ
   %h3= "Relevé bancaire #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
+  .inner-champ
+    .row-fluid
+      %ul
+        %li.span2
+          Solde initial :
+          = two_decimals @bank_extract.begin_sold
+        %li.span2.spread
+          Total débit :
+          = two_decimals @bank_extract.total_debit
+          = image_tag('icones/exclamation.png', title:'Ecart de pointage') if @bank_extract.diff_debit?
+        %li.span2
+          Total crédit :
+          = two_decimals @bank_extract.total_credit
+          = image_tag('icones/exclamation.png', title:'Ecart de pointage') if @bank_extract.diff_credit?
+        %li.span2
+          Solde Final :
+          = two_decimals @bank_extract.end_sold
 
   %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0")
     %thead
@@ -19,5 +36,12 @@
       - @bank_extract_lines.all.each do |bel|
         = render(partial:'standard_bank_extract_line', :object=>bel) if bel.is_a? StandardBankExtractLine
         = render(partial:'check_deposit_bank_extract_line', object:bel) if bel.is_a? CheckDepositBankExtractLine
+
+    %tfoot
+      %tr
+        %th.droite{colspan:3, rowspan:1} Totaux
+        %td.numeric= @bank_extract.total_lines_debit
+        %td.numeric= @bank_extract.total_lines_credit
+        %td
  
 

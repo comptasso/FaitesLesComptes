@@ -62,7 +62,6 @@
       items: "tr",
       update: function(event, ui) {
         var tbody = $(this);
-        var sSelector = "tbody tr";
         var id = ui.item.context.id;
         
         // la logique est la suivante : data-position donne le numéro de ligne
