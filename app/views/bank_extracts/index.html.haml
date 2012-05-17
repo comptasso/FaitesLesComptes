@@ -26,7 +26,7 @@
             =icon_to 'afficher.png', organism_bank_account_bank_extract_bank_extract_lines_path(@organism, @bank_account, bank_extract)
           -else
             = icon_to('modifier.png', edit_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract)) |
-            << (icon_to('pointer.png', pointage_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract)) if bank_extract.first_to_point?)  |
+            << (icon_to('pointer.png', pointage_organism_bank_account_bank_extract_bank_extract_lines_path(@organism, @bank_account,bank_extract)) if bank_extract.first_to_point?)  |
             << icon_to('supprimer.png', [@organism, @bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete) |
  
 

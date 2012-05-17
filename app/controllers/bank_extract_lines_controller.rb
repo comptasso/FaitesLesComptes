@@ -9,6 +9,10 @@ class BankExtractLinesController < ApplicationController
     @bank_extract_lines = @bank_extract.bank_extract_lines.order('position')
   end
 
+  def pointage
+    @bank_extract_lines = @bank_extract.bank_extract_lines.order('position')
+  end
+
   # reorder est appelé par le drag and drop de la vue (plugin row-reordering). Les paramètres
   # transmis sont les suivants :
   #  - id :- id of the row that is moved. This information is set in the id attribute of the TR element.
