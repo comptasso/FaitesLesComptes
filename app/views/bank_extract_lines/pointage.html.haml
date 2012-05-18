@@ -56,9 +56,9 @@
             %th.numeric Débit
             %th.numeric Crédit
             %th Actions
-          %tbody
+          %tbody.connectedSortable#ltps
             - @lines_to_point.list.each do |ltp|
-              %tr
+              %tr{'class'=>'ltp', 'id'=>"#{ltp[:nature]}_#{ltp[:id]}" }
                 %td= l ltp[:date]
                 %td= ltp[:narration]
                 %td.numeric= debit_credit ltp[:debit]

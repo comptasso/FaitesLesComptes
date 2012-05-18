@@ -56,25 +56,31 @@
 				}
         }
 
+    $('#ltps').sortable({
+      connectWith: ".connectedSortable",
+      items: "tr"
+    });
+
 
     $( "#bels" ).sortable({
       connectWith: ".connectedSortable",
       items: "tr",
+      // limter l appel de update au cas d un tri dans la même liste
+      // et utiliser remove et receive pour traiter les autres cas
       update: function(event, ui) {
         var tbody = $(this);
         var id = ui.item.context.id;
+     //   $('h3').text(ui.item.context.classList[0]);
         
-        // la logique est la suivante : data-position donne le numéro de ligne
-        var tr = $("#" + id); // on a la ligne
+        // la logique est la suivante : data-position donne la position initiale de la ligne
         // après un déplacement data-position est du coup le numéro de ligne d'origine
-        var from = tr.attr('data-position');
+        var from = $("#" + id).attr('data-position');
         // il faut donc trouver à quelle place se trouve le drop
         // chercher quel est le rang en balayant les lignes
         var to = -1;
         $('tr').each(function(index){
           if ($(this).attr('id') == parseInt(id)) {
             to = index;
-   //         $('h3').html("id : " + id + " from : " + from + " to : " + to);
           }
 
         });
