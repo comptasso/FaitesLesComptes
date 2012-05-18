@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 describe BankAccount do
-  include OrganismFixture
+  include OrganismFixture 
 
   before(:each) do
     create_minimal_organism

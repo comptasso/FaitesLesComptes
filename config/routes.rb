@@ -100,9 +100,9 @@ Faitesvoscomptes::Application.routes.draw do
     resources :bank_accounts, :only=> [:index, :show] do
       resources :bank_extracts do
         member do
-          get 'pointage'
-          post 'pointe'
-          post 'depointe'
+ #         get 'pointage'
+ #         post 'pointe'
+ #         post 'depointe'
           post 'lock'
         end
         resources :bank_extract_lines do

@@ -27,15 +27,11 @@
 class StandardBankExtractLine < BankExtractLine
   
 
-  
-
-  #  after_save :link_to_source
+ #  after_save :link_to_source
 
   #  before_destroy :remove_link_to_source
 
   after_initialize :prepare_datas
-
- 
 
   # lock_line verrouille la ligne d'écriture. Ceci est appelé par bank_extract (after_save)
   # lorsque l'on verrouille le relevé
@@ -51,19 +47,26 @@ class StandardBankExtractLine < BankExtractLine
   end
 
   # debit fait le total débit des lignes.
-  # On utilise all.sum(&:debit) pour ne pas faire appel à la base de données
-  # puisque les lignes ne sont pas obligatoirement (à ce stade) sauvegardées
   def debit
-    lines.all.sum(&:debit)
+    lines.sum(:debit)
   end
 
   # Retourne le total des crédits des lignes associées
-  # On utilise all.sum(&:credit) pour ne pas faire appel à la base de données
-  # puisque les lignes ne sont pas obligatoirement (à ce stade) sauvegardées
   def credit
-    lines.all.sum(&:credit)
+    lines.sum(:credit)
   end
+
   
+
+  def prepare_datas
+    raise 'StandardBankExtractLine sans ligne' if lines.empty?
+    self.date ||= lines.first.line_date # par défaut on construit les infos de base
+    @payment= lines.first.payment_mode # avec la première ligne associée
+    @narration = lines.first.narration
+    # TODO blid est-il utils
+    @blid= "line_#{lines.first.id}" if lines.count == 1 # blid pour bank_line_id
+  end
+#
   private
 
   def not_empty
@@ -75,13 +78,7 @@ class StandardBankExtractLine < BankExtractLine
     end
   end
 
-  def prepare_datas
-    self.date ||= lines.first.line_date # par défaut on construit les infos de base
-    @payment= lines.first.payment_mode # avec la première ligne associée
-    @narration = lines.first.narration
-    # TODO blid est-il utils
-    @blid= "line_#{lines.first.id}" if lines.count == 1 # blid pour bank_line_id
-  end
+ 
 
   #  # appelée par after_save, a pour effet de remplir le champ bank_extract_id qui
   #  # TODO check s'il peut y avoir des lignes rattachées à un compte qui nécessite cette étape

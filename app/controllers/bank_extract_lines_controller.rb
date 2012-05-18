@@ -9,9 +9,16 @@ class BankExtractLinesController < ApplicationController
     @bank_extract_lines = @bank_extract.bank_extract_lines.order('position')
   end
 
+  # action pour procéder au pointage d'un extrait bancaire
+  # récupère l'extrait, les lignes qui lui sont déjà associées et les lignes de ce compte bancaire
+  # qui ne sont pas encore associées à un extrait
   def pointage
-    @bank_extract_lines = @bank_extract.bank_extract_lines.order('position')
+    redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract) if @bank_extract.locked
+    @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
+    @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
   end
+
+
 
   # reorder est appelé par le drag and drop de la vue (plugin row-reordering). Les paramètres
   # transmis sont les suivants :

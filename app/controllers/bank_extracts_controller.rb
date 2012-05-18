@@ -16,16 +16,7 @@ class BankExtractsController < ApplicationController
   end
 
   
-  # action pour procéder au pointage d'un extrait bancaire
-  # récupère l'extrait, les lignes qui lui sont déjà associées et les lignes de ce compte bancaire
-  # qui ne sont pas encore associées à un extrait
-  def pointage
-    @bank_extract = BankExtract.find(params[:id])
-    redirect_to organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract) if @bank_extract.locked
-    @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
-    @lines_to_point = @bank_account.lines_to_point
-  end
-
+  
   # récupération des paramètres de type line et check_deposit
   # si le hash est une ligne : la récupérer mettre le bank_extract_id à jour
   # si le hash est un check_deposit, le récupérer avec son id et le mettre à jour

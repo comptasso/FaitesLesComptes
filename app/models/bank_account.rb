@@ -99,15 +99,15 @@ class BankAccount < ActiveRecord::Base
  # crée des bank_extract_lines à partir des lignes non pointées
  # méthode utilisée pour le pointage des comptes par bank_extract_controller
  def not_pointed_check_deposits
-    self.np_check_deposits.map {|cd| BankExtractLine.new(:check_deposit_id=>cd.id)}
+    self.np_check_deposits.map {|cd| c = CheckDepositBankExtractLine.new(check_deposit_id:cd.id); c}
  end
 
-def lines_to_point
+def lines_to_point 
    self.not_pointed_lines +  self.not_pointed_check_deposits
 end
 
  def not_pointed_lines
-  self.np_lines.map {|l| BankExtractLine.new(:line_id=>l.id)}
+   self.np_lines.map {|l| s = StandardBankExtractLine.new; s.add_line(l) ; s }
  end
 
  def nb_lines_to_point

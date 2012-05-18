@@ -23,6 +23,8 @@ class CheckDepositBankExtractLine < BankExtractLine
       @payment = 'Chèques'
       @blid="check_deposit_#{cd.id}"
   end
+
+  
   
 
   

@@ -19,5 +19,6 @@ class BankExtractLine < ActiveRecord::Base
   acts_as_list :scope => :bank_extract
 #  validate :not_empty
 
-  attr_reader :payment, :narration, :debit, :credit, :blid
+  attr_reader :payment, :narration, :debit,  :credit
+  
 end
