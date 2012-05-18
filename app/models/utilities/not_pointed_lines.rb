@@ -25,6 +25,10 @@ module Utilities
       fill_np_lines
     end
 
+    def html_id
+      [nature, id].join('_')
+    end
+
     private
 
     def fill_np_check_deposits
