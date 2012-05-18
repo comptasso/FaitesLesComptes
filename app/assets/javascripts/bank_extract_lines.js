@@ -15,7 +15,7 @@
       // par exemple, je passe la ligne 2 à la ligne 6,
       if (iTo > iFrom) {
         
-        $('#sortable1 tr').each(function(index){
+        $('#bels tr').each(function(index){
           pos = parseInt($(this).attr('data-position'));
          // et la ligne 2 devient la ligne 6
          if (pos == iFrom) {
@@ -30,7 +30,7 @@
 //dans l'autre sens, je passe de la ligne 6 à la ligne 2'
 // donc iFrom = 6 et iTo = 2
       if (iTo < iFrom) {
-          $('#sortable1 tr').each(function(index){
+          $('#bels tr').each(function(index){
           pos = parseInt($(this).attr('data-position'));
           // et la ligne 6 devient la ligne 2
          if (pos == iFrom) {
@@ -57,7 +57,7 @@
         }
 
 
-    $( "#sortable1" ).sortable({
+    $( "#bels" ).sortable({
       connectWith: ".connectedSortable",
       items: "tr",
       update: function(event, ui) {
@@ -79,8 +79,10 @@
 
         });
 
+        // il faut remplacer pointage par reorder
+
         $.ajax({
-          url: window.location.pathname + '/reorder',
+          url: window.location.pathname.replace('pointage', 'reorder'),
           type: 'post',
           data: {
             id: id,
