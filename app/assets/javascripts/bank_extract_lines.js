@@ -79,11 +79,28 @@ jQuery(function() {
     }
   }
 
-  function fnInsertTd(row_id, value){
-    $(row_id + ' td').first().before('<td>' + value + '</td>');
-    
+  function fnCheckTotalDebit(){
+    if ($('#bels_total_debit').text() === $('#total_debit').text()) {
+      $('#img_danger_total_debit').hide();
+    }
+    else {
+      $('#img_danger_total_debit').show();
+    }
   }
 
+  function fnCheckTotalCredit(){
+    if ($('#bels_total_credit').text() === $('#total_credit').text()) {
+      $('#img_danger_total_credit').hide();
+    }
+    else {
+      $('#img_danger_total_credit').show();
+    }
+  }
+
+  // AFFICHER OU MASQUER LES PANNEAUX DANGER A L AFFICHAGE DE LA PAGE
+  fnCheckTotalDebit();
+  fnCheckTotalCredit();
+ 
   // LA TABLE DES LTPS 5LINES TO POINT)
   $('#ltps').sortable({
     connectWith: ".connectedSortable",
@@ -117,7 +134,10 @@ jQuery(function() {
           html_id: id,
           at: place
         },
-        
+        success: function() {
+          fnCheckTotalDebit();
+          fnCheckTotalCredit();
+        },
         
         // ou inversement on annule si erreur
         error: function (jqXHR) {
@@ -133,7 +153,7 @@ jQuery(function() {
     // ou redessiner la table d'arrivée'
     remove: function(event, ui) {
 
-      $('h3').text('remove en action');
+      // $('h3').text('remove en action');
       var tbody = $(this);
       var id = ui.item.context.id;
       var from = $("#" + id).attr('data-position');
@@ -143,7 +163,10 @@ jQuery(function() {
         data: {
           id: id
         },
-        
+        success: function() {
+          fnCheckTotalDebit();
+          fnCheckTotalCredit();
+        },
         // on annule si erreur
         error: function (jqXHR) {
           fnCancelSorting(ui.sender, jqXHR.statusText);
