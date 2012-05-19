@@ -517,9 +517,9 @@ Créer un after_save de la remise de chèques qui fait la liaison entre les lign
 -----------------------------BankExtractLine------------------------
 OK - rendre plus complet ce controller en ayant une fonction index
 OK - dans la vue index afficher les soldes et mouvements et signaler les éventuels écarts
-retirer les images danger lorsque le solde devient correct
+OK - retirer les images danger lorsque le solde devient correct
 plus il faudra un bouton lock à un moment
-retirer le pointeur main sur les indicateurs de filtrage
+OK - retirer le pointeur main sur les indicateurs de filtrage
 OK - lui transférer les actions pointage et dépointage
 OK - mettre en place des STI pour une BEL de type remise de chèque et une BEL de type line
 OK - Faire une relation habtm avec les Line
@@ -528,6 +528,7 @@ OK - javascript pour déplacer une bel
 javascript pour afficher les sous lignes
 Faire les vues modales pour créer une nouvelle ligne et scinder une ligne
 Ajouter les icones pour appeler ces actions
+Revoir sauvegarde et restore compte tenu des nouvelles classes bels
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)

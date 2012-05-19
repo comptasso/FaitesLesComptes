@@ -30,7 +30,7 @@ class BankExtractLinesController < ApplicationController
     @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
     @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
     respond_to do |format|
-      format.js { render :layout=>false }
+      format.js 
     end
   end
 
@@ -47,7 +47,7 @@ class BankExtractLinesController < ApplicationController
       @bel =  @bank_extract.check_deposit_bank_extract_lines.new(check_deposit_id:id)
     when 'standard_line'
       l=Line.find(id)
-      @bel = @bank_extract.standard_bank_extract_lines.new(bank_extract_id:@bank_extract.id, lines:[l])
+      @bel = @bank_extract.standard_bank_extract_lines.new(lines:[l])
     end
 
 

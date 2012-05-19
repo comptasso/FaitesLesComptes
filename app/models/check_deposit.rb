@@ -20,17 +20,17 @@ class CheckDeposit < ActiveRecord::Base
     conditions: Proc.new {"credit > 0 and payment_mode='Chèque' and book_id IN (#{self.bids}) "},
     before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
     after_remove: :nil_bank_account_id,
-    before_add: :cant_if_pointed do
-                
-  end
+    before_add: :cant_if_pointed 
+  
+   # c'est la présence de bank_extract_line qui indique que le check_deposit à été pointé et ne peut plus être modifié
+  has_one :bank_extract_line
 
   def bids
     raise "Modèle CheckDeposit - Impossible de trouver les livres sans avoir l'organisme" if self.bank_account_id == nil
     bank_account.organism.income_books.all.collect {|b| b.id}.join(',')
   end
 
-  # c'est la présence de bank_extract_line qui indique que le check_deposit à été pointé et ne peut plus être modifié
-  has_one :bank_extract_line
+ 
 
   validates :bank_account_id, :deposit_date, :presence=>true
   validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :has_bank_extract_line?

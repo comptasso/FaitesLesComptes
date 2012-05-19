@@ -1,4 +1,18 @@
-
+// fichier appelé par bank_extract_lines controller
 $('table#bels_table tfoot').html(" <%= j render 'belsfoot' %>");
 $('tbody#bels').html(" <%= j render 'belsbody' %>");
 $('tbody#ltps').html(" <%= j render 'ltpsbody' %>");
+
+if (<%= @bank_extract.diff_credit? %> ) {
+$('#img_danger_total_credit').hide();
+}
+else {
+$('#img_danger_total_credit').show();
+}
+
+if (<%= @bank_extract.diff_debit? %> ) {
+$('#img_danger_total_debit').hide();
+}
+else {
+$('#img_danger_total_debit').show();
+}

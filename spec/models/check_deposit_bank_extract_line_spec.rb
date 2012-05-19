@@ -53,6 +53,11 @@ describe CheckDepositBankExtractLine do
       @bel.should_not be_valid
     end
 
+    it 'is not valid without bank_extract_id' do
+      @bel.bank_extract_id = nil
+      @bel.should_not be_valid
+    end
+
     it 'saving the instance fill type field' do
       @bel.save!
       @bel.type.should == 'CheckDepositBankExtractLine'

@@ -101,6 +101,10 @@ jQuery(function() {
   fnCheckTotalDebit();
   fnCheckTotalCredit();
  
+  // lorsque le total crédit change, appel de fnCheckTotalCredit
+  // $('#bels_total_credit').onChange()
+
+
   // LA TABLE DES LTPS 5LINES TO POINT)
   $('#ltps').sortable({
     connectWith: ".connectedSortable",
@@ -164,8 +168,8 @@ jQuery(function() {
           id: id
         },
         success: function() {
-          fnCheckTotalDebit();
-          fnCheckTotalCredit();
+//          fnCheckTotalDebit();
+//          fnCheckTotalCredit();
         },
         // on annule si erreur
         error: function (jqXHR) {
