@@ -30,6 +30,7 @@ class StandardBankExtractLine < BankExtractLine
  #  after_save :link_to_source
 
   #  before_destroy :remove_link_to_source
+  validate :not_empty
 
   after_initialize :prepare_datas
 
@@ -54,6 +55,21 @@ class StandardBankExtractLine < BankExtractLine
   # Retourne le total des crédits des lignes associées
   def credit
     lines.sum(:credit)
+  end
+
+  # regorup prend une standard_bank_extract_line comme argument
+  # et la fusionne avec l'instance.
+  #
+  # Cela signifie que l'on tranfère les lignes de bel à self.
+  # puis que l'on supprime la ligne bel.
+  #
+  def regroup(bel)
+    bel.lines.each do |l|
+      bel.lines.delete(l)
+      lines << l
+    end
+    save
+    bel.destroy
   end
 
   

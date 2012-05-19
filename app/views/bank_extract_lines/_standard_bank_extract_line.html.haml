@@ -6,5 +6,5 @@
   %td.numeric= debit_credit standard_bank_extract_line.credit
 
   %td
-    = image_tag 'icones/chain--plus.png', :id=> "chain_#{standard_bank_extract_line.id}" if standard_bank_extract_line.chainable?
+    = icon_to 'chain--plus.png', regroup_organism_bank_account_bank_extract_bank_extract_line_path(@organism, @bank_account, @bank_extract, standard_bank_extract_line),:remote=>true, :method=>:post if standard_bank_extract_line.chainable?
     = icon_to 'retirer.png', remove_organism_bank_account_bank_extract_bank_extract_line_path(@organism, @bank_account, @bank_extract, standard_bank_extract_line),:remote=>true, :method => :post

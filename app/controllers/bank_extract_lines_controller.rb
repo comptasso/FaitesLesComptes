@@ -19,6 +19,19 @@ class BankExtractLinesController < ApplicationController
   end
 
 
+  # Regroup permet de regrouper deux lignes
+  #
+  def regroup
+    @bank_extract_line = BankExtractLine.find(params[:id])
+    follower = @bank_extract_line.higher_item
+    @bank_extract_line.regroup(follower)
+    @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+
   # appelée par le drag and drop de la vue pointage
   # les paramètres transmis sont
   # -id - id de la ligne qui vient d'être retirée
