@@ -1,0 +1,4 @@
+
+- @bank_extract_lines.all.each do |bel|
+  = render(partial:'standard_bank_extract_line', :object=>bel) if bel.is_a? StandardBankExtractLine
+  = render(partial:'check_deposit_bank_extract_line', object:bel) if bel.is_a? CheckDepositBankExtractLine

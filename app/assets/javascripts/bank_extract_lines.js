@@ -75,7 +75,7 @@ jQuery(function() {
     if(sMessage!= undefined){
       _fnAlert(sMessage, "");
     }else{
-      _fnAlert("Row cannot be moved", "");
+      _fnAlert("La ligne n'a pas pu être déplacée", "");
     }
   }
 
@@ -101,7 +101,7 @@ jQuery(function() {
       var tbody = $('#bels');
       var place = -1;
       var id = ui.item.context.id;
-      var siblings = $("#" + id + ' ~ tr')
+      var siblings = $("#" + id + ' ~ tr') // fonction qui trouve les suivants
       if (siblings.length === 0) {
         place = $('#bels tr').length
       }
@@ -117,19 +117,11 @@ jQuery(function() {
           html_id: id,
           at: place
         },
-        // puis on fait la mise à jour des données de la table
-        success: function (data, txt, jqXhr) {
-          $("#" + id ).removeClass('ltp').
-            addClass('bel').
-            attr('data-position', place.toString());
-          $('h3').text(place.toString() );
-          // ajouter un td en début du contenu et retirer le dernier td
-          fnInsertTd('#' + id, '<td>' + place + '</td>');
-          fnIncRows(parseInt(place) + 1);
-        },
+        
+        
         // ou inversement on annule si erreur
         error: function (jqXHR) {
-          fnCancelSorting(tbody, jqXHR.statusText);
+          fnCancelSorting(ui.sender, jqXHR.statusText);
         }
       })
     },
@@ -151,14 +143,10 @@ jQuery(function() {
         data: {
           id: id
         },
-        // puis on fait la mise à jour des données de la table
-        success: function () {
-          fnDecRows(from);
-
-        },
-        // ou inversement on annule si erreur
+        
+        // on annule si erreur
         error: function (jqXHR) {
-          fnCancelSorting(tbody, jqXHR.statusText);
+          fnCancelSorting(ui.sender, jqXHR.statusText);
         }
       })
     },
@@ -171,10 +159,8 @@ jQuery(function() {
       var tbody = $(this);
       var id = ui.item.context.id;
       // les id des bels sont constituées uniquement de l'id de la BankExtractLine'
-      var matching = id.match(/^\d+$/)
-      if (matching != null) {
-        //   $('h3').text(ui.item.context.classList[0]);
-        $('h3').text('update en action');
+      
+      if (ui.sender === null) {
         // la logique est la suivante : data-position donne la position initiale de la ligne
         // après un déplacement data-position est du coup le numéro de ligne d'origine
         var from = $("#" + id).attr('data-position');
@@ -187,10 +173,7 @@ jQuery(function() {
           }
 
         });
-
-        // Si to est différent de -1, c'est qu'on a déplacé la bel
-        // dans la table des bel donc on fait la mise à jour par reorder
-        if (to != -1) {
+       
         $.ajax({
           // il faut remplacer pointage par reorder
           url: window.location.pathname.replace('pointage', 'reorder'),
@@ -209,7 +192,7 @@ jQuery(function() {
             fnCancelSorting(tbody, jqXHR.statusText);
           }
         });
-      }
+      
       }
 
     }

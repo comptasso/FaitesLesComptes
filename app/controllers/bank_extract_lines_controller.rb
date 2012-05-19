@@ -27,9 +27,10 @@ class BankExtractLinesController < ApplicationController
     @bank_extract_line = BankExtractLine.find(params[:id])
     @bank_extract_line.remove_from_list
     @bank_extract_line.destroy
-    head :ok
-  rescue
-    head :bad_request
+    @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
+    respond_to do |format|
+      format.js
+    end
   end
 
 
@@ -49,12 +50,13 @@ class BankExtractLinesController < ApplicationController
     end
 
 
-    raise "@bel non valable #{html} @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
+    raise "@bel non valide #{html} @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
     @bel.insert_at(params[:at].to_i)
    
     respond_to do |format|
       if @bel.save
-        format.json { render json: @bel, status: :created }
+        @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
+        format.js 
       else
         format.json { render json: @bel.errors, status: :unprocessable_entity }
       end

@@ -1,0 +1,7 @@
+- @lines_to_point.list.each do |ltp|
+  %tr{'class'=>'ltp', 'id'=>"#{ltp[:nature]}_#{ltp[:id]}" }
+    %td= l ltp[:date]
+    %td= ltp[:narration]
+    %td.numeric= debit_credit ltp[:debit]
+    %td.numeric= debit_credit ltp[:credit]
+    %td
