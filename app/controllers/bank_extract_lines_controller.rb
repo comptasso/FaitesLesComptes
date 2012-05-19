@@ -19,8 +19,51 @@ class BankExtractLinesController < ApplicationController
   end
 
 
+  # appelée par le drag and drop de la vue pointage
+  # les paramètres transmis sont
+  # -id - id de la ligne qui vient d'être retirée
+  # -fromPosition qui indique la position initiale de la ligne
+  def remove
+    @bank_extract_line = BankExtractLine.find(params[:id])
+    @bank_extract_line.remove_from_list
+    @bank_extract_line.destroy
+    head :ok
+  rescue
+    head :bad_request
+  end
 
-  # reorder est appelé par le drag and drop de la vue (plugin row-reordering). Les paramètres
+
+  # insert est appelée par le drag and drop de la vue pointage lorsqu'une
+  # non pointed line est transférée dans les bank_extract_line
+  def insert
+    html_id = params[:html_id]
+    html = html_id.split(/_\d+$/).first
+    id = html_id[/\d+$/].to_s
+    @bel = nil
+    case html
+    when 'check_deposit'
+      @bel =  @bank_extract.check_deposit_bank_extract_lines.new(check_deposit_id:id)
+    when 'standard_line'
+      l=Line.find(id)
+      @bel = @bank_extract.standard_bank_extract_lines.new(bank_extract_id:@bank_extract.id, lines:[l])
+    end
+
+
+    raise "@bel non valable #{html} @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
+    @bel.insert_at(params[:at].to_i)
+   
+    respond_to do |format|
+      if @bel.save
+        format.json { render json: @bel, status: :created }
+      else
+        format.json { render json: @bel.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+
+
+  # reorder est appelé par le drag and drop de la vue . Les paramètres
   # transmis sont les suivants :
   #  - id :- id of the row that is moved. This information is set in the id attribute of the TR element.
   #  - fromPosition : initial position of the row that is moved. This was value in the indexing cell of the row that is moved.

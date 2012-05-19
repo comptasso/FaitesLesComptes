@@ -15,12 +15,12 @@ describe Utilities::NotPointedLines do
     mock_model(Line, id:7, narration:'ligne 7', line_date:3.days.ago)])
   end
 
-  it 'html_id retrun standard_xx ou check_deposit_xx' do
+  it 'npl should have 4 lines' do
     npl = Utilities::NotPointedLines.new(@ba)
     npl.list.should have(4).items
   end
 
-
+  
 
 
 end

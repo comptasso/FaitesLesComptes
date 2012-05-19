@@ -18,7 +18,7 @@ describe StandardBankExtractLine do
 
   def valid_attributes
     {bank_extract_id:@be.id, lines: [@l]}
-  end
+  end 
 
   describe 'testing attributes' do
 
