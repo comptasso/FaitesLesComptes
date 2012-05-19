@@ -98,6 +98,8 @@ jQuery(function() {
   }
 
   // AFFICHER OU MASQUER LES PANNEAUX DANGER A L AFFICHAGE DE LA PAGE
+  // la mise à jour est faite par le traitement de la réponse du controller
+  // aux actions remove et insert
   fnCheckTotalDebit();
   fnCheckTotalCredit();
  
@@ -139,8 +141,8 @@ jQuery(function() {
           at: place
         },
         success: function() {
-          fnCheckTotalDebit();
-          fnCheckTotalCredit();
+//          fnCheckTotalDebit();
+//          fnCheckTotalCredit();
         },
         
         // ou inversement on annule si erreur

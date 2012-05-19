@@ -20,5 +20,18 @@ class BankExtractLine < ActiveRecord::Base
 #  validate :not_empty
 
   attr_reader :payment, :narration, :debit,  :credit
+
+  # chainable indique si le bank_extract_line peut être relié à son suivant
+  # Ce n'est possible que si
+  #  - ce n'est pas une remise de chèque
+  #  - ce n'est pas le dernier.
+  #  - le suivant n'est pas une remise de chèque
+  #
+  #
+  def chainable?
+    return false if is_a?(CheckDepositBankExtractLine)
+    return false if last?
+    return true if  !lower_item.is_a?(CheckDepositBankExtractLine) 
+  end
   
 end

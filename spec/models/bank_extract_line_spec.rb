@@ -2,6 +2,11 @@
 
 require 'spec_helper'
 
+RSpec.configure do |c|
+    c.filter = {:wip=> true }
+end
+
+
 describe StandardBankExtractLine do
   include OrganismFixture
 
@@ -65,6 +70,62 @@ describe StandardBankExtractLine do
       it 'move lower' do
         @bel7.move_lower
         @be.bank_extract_lines.order('position').all.should  == [@bel29, @bel7, @bel102]
+      end
+
+
+    end
+
+    describe 'chainable' , :wip=>true do
+
+      before(:each) do
+        @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')
+      end
+
+      it 'a check_deposit_bank_extract_line is not chainable' do
+        @be.bank_extract_lines.order('position').each { |bel| puts "#{bel.type} - #{bel.position}  - #{bel.debit} - #{bel.credit}" }
+
+        @bel102.should be_a(CheckDepositBankExtractLine)
+        @bel102.should_not be_chainable
+      end
+
+      it ' a bel followed by a standard bel is chainable' do
+        @bel7.should be_chainable
+      end
+
+      it ' a bel followed by a check_deposit is not chainable' do
+        @bel29.position.should == 2
+        @bel29.should_not be_chainable
+      end
+
+      it 'move_lower' do
+        @be.bank_extract_lines.order('position').all.should  == [@bel7, @bel29, @bel102]
+        @bel102.move_higher
+        @be.bank_extract_lines.order('position').all.should  == [@bel7, @bel102, @bel29]
+      end
+
+      context 'avec l ordre bel7, 102 et 29' do
+
+        before(:each) do
+          @bel102.move_higher
+          @cel7, @cel102,  @cel29 = *@be.bank_extract_lines.order('position')
+          
+        end
+
+        it 'cel29 est le dernier' do
+          @cel7.position.should == 1
+          @cel102.position.should == 2
+          # @bel102.move_higher
+          @cel29.position.should == 3
+          #be_last
+        end
+
+        it 'aucun n est chainable' do
+          @cel7.should_not be_chainable
+          @cel102.should_not be_chainable
+          @cel29.should_not be_chainable
+        end
+
+
       end
 
 

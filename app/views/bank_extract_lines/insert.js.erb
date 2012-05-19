@@ -1,2 +1,15 @@
 $('tbody#bels').html(" <%= j render 'belsbody' %>");
 $('table#bels_table tfoot').html(" <%= j render 'belsfoot' %>");
+
+
+<% if  @bank_extract.diff_credit? %>
+$('#img_danger_total_credit').show();
+<% else %>
+ $('#img_danger_total_credit').hide();
+ <% end %>
+
+ <% if  @bank_extract.diff_debit? %>
+$('#img_danger_total_debit').show();
+<% else %>
+ $('#img_danger_total_debit').hide();
+ <% end %>
