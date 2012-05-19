@@ -27,9 +27,10 @@ class BankExtractLinesController < ApplicationController
     @bank_extract_line = BankExtractLine.find(params[:id])
     @bank_extract_line.remove_from_list
     @bank_extract_line.destroy
+    @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
     @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
     respond_to do |format|
-      format.js
+      format.js { render :layout=>false }
     end
   end
 

@@ -108,9 +108,11 @@ Faitesvoscomptes::Application.routes.draw do
         resources :bank_extract_lines do
           collection do
             get 'pointage'
+            post 'reorder'
+          end
+          member do
             post 'remove'
             post 'insert'
-            post 'reorder'
           end
         end
       end

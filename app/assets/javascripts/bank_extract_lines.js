@@ -115,7 +115,7 @@ jQuery(function() {
     // lorsqu'on ajoute un membre à la table, il faut envoyer une action
     // insert en indiquant l'id comme params
     receive: function(event, ui) {
-      var tbody = $('#bels');
+      
       var place = -1;
       var id = ui.item.context.id;
       var siblings = $("#" + id + ' ~ tr') // fonction qui trouve les suivants
@@ -128,7 +128,7 @@ jQuery(function() {
 
      
       $.ajax({
-        url: window.location.pathname.replace('pointage', 'insert'),
+        url: window.location.pathname.replace('pointage', id.toString() + '/insert'),
         type: 'post',
         data: {
           html_id: id,
@@ -154,11 +154,11 @@ jQuery(function() {
     remove: function(event, ui) {
 
       // $('h3').text('remove en action');
-      var tbody = $(this);
+      
       var id = ui.item.context.id;
       var from = $("#" + id).attr('data-position');
       $.ajax({
-        url: window.location.pathname.replace('pointage', 'remove'),
+        url: window.location.pathname.replace('pointage', id.toString() + '/remove'),
         type: 'post',
         data: {
           id: id
@@ -179,7 +179,7 @@ jQuery(function() {
     // transferts d'une table à l'autre doù la nécessité d'un filtre
     update: function(event, ui) {
 
-      var tbody = $(this);
+      var tbody = $('#bels');
       var id = ui.item.context.id;
       // les id des bels sont constituées uniquement de l'id de la BankExtractLine'
       
