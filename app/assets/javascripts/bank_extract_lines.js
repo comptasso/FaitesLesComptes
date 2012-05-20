@@ -97,6 +97,9 @@ jQuery(function() {
     }
   }
 
+  // enable les popovers
+  $('img[alt="Detail"]').popover({trigger: 'hover'});
+
   // AFFICHER OU MASQUER LES PANNEAUX DANGER A L AFFICHAGE DE LA PAGE
   // la mise à jour est faite par le traitement de la réponse du controller
   // aux actions remove et insert

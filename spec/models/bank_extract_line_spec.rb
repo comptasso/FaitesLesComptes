@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-    c.filter = {:wip=> true }
+  #  c.filter = {:wip=> true }
 end
 
 
@@ -22,6 +22,7 @@ describe StandardBankExtractLine do
     @c29 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:29, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
      @ch97 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
      @ch5 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:5, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+     @cr = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:27, payment_mode:'Virement', book_id:@ib.id, nature_id:@n.id)
     @cd = CheckDeposit.create!(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
     @cd.checks << @ch97 << @ch5
     @cd.save!
@@ -75,7 +76,7 @@ describe StandardBankExtractLine do
 
     end
 
-    describe 'chainable' , :wip=>true do
+    describe 'chainable'  do
 
       before(:each) do
         @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')
@@ -95,6 +96,13 @@ describe StandardBankExtractLine do
       it ' a bel followed by a check_deposit is not chainable' do
         @bel29.position.should == 2
         @bel29.should_not be_chainable
+      end
+
+      it 'a bel is chainable only if both debit or both credit' , :wip=>true do
+        bel_cr = @be.standard_bank_extract_lines.create!(lines:[@cr])
+        bel_cr.move_to_top
+        bel_cr.should_not be_chainable
+
       end
 
       it 'move_lower' do

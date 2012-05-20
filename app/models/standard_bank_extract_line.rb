@@ -94,6 +94,7 @@ class StandardBankExtractLine < BankExtractLine
   end
 
   
+  # TODO à mettre dans private
   def prepare_datas
     raise 'StandardBankExtractLine sans ligne' if lines.empty?
     self.date ||= lines.first.line_date # par défaut on construit les infos de base

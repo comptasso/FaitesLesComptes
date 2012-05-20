@@ -23,7 +23,7 @@ class BankExtractLinesController < ApplicationController
   #
   def regroup
     @bank_extract_line = BankExtractLine.find(params[:id])
-    follower = @bank_extract_line.higher_item
+    follower = @bank_extract_line.lower_item
     @bank_extract_line.regroup(follower)
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
     respond_to do |format|
