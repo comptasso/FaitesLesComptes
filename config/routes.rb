@@ -111,6 +111,7 @@ Faitesvoscomptes::Application.routes.draw do
             post 'reorder'
           end
           member do
+            post 'degroup'
             post 'regroup'
             post 'remove'
             post 'insert'
