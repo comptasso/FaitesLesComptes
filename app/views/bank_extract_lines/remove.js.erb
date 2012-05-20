@@ -14,3 +14,10 @@ $('#img_danger_total_debit').show();
 <% else %>
  $('#img_danger_total_debit').hide();
  <% end %>
+
+ <% if !@bank_extract.lockable? %>
+$('#lock_bank_extract').hide()
+ <% end %>
+<% if @bank_extract.lockable? %>
+$('#lock_bank_extract').show()
+ <% end %>

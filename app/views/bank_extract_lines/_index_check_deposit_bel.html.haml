@@ -1,0 +1,7 @@
+%tr{:id=>"#{index_check_deposit_bel.id}", 'data-position'=>"#{index_check_deposit_bel.position}" }
+  %td= "#{index_check_deposit_bel.position}"
+  %td= l index_check_deposit_bel.date
+  %td= index_check_deposit_bel.narration
+  %td.numeric= debit_credit index_check_deposit_bel.debit
+  %td.numeric= debit_credit index_check_deposit_bel.credit
+  

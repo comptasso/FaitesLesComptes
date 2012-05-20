@@ -62,26 +62,29 @@ describe StandardBankExtractLine do
   describe 'regroup two lines' do
 
     before(:each) do
-      @l2 = Line.create!(narration:'bel', line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
-      @l3 = Line.create!(narration:'bel', line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
+      @l2 = Line.create!(narration:'première ligne', line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
+      @l3 = Line.create!(narration:'deuxième ligne', line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
       @bel2 = @be.standard_bank_extract_lines.create!(lines:[@l2])
       @bel3 = @be.standard_bank_extract_lines.create!(lines:[@l3])
+      
       @bel2.regroup(@bel3)
     end
 
     it 'is possible to chain two standard lines' do
-   
       @bel2.should have(2).lines
+
     end
 
     it 'after fusion, il ne reste qu une bel' do
-      
       @be.should have(1).bank_extract_lines
     end
 
     it 'le total debit est maintenant de 20' do
-      
       @bel2.debit.should == 20
+    end
+
+    it 'la narration n a pas changé' do
+      @bel2.narration.should == 'première ligne'
     end
 
     describe 'degroup' do
