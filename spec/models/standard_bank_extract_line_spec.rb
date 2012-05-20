@@ -52,7 +52,7 @@ describe StandardBankExtractLine do
     end
 
     it 'type is BankExtractLine' do
-     #  pending 'peut être que type n est pas rempli si c est la classe de base'
+      #  pending 'peut être que type n est pas rempli si c est la classe de base'
       @bel.type.should == 'StandardBankExtractLine'
     end
 
@@ -66,23 +66,61 @@ describe StandardBankExtractLine do
       @l3 = Line.create!(narration:'bel', line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
       @bel2 = @be.standard_bank_extract_lines.create!(lines:[@l2])
       @bel3 = @be.standard_bank_extract_lines.create!(lines:[@l3])
+      @bel2.regroup(@bel3)
     end
 
     it 'is possible to chain two standard lines' do
-      @bel2.regroup(@bel3)
+   
       @bel2.should have(2).lines
     end
 
     it 'after fusion, il ne reste qu une bel' do
-      @bel2.regroup(@bel3)
+      
       @be.should have(1).bank_extract_lines
     end
 
     it 'le total debit est maintenant de 20' do
-      @bel2.regroup(@bel3)
+      
       @bel2.debit.should == 20
     end
 
+    describe 'degroup' do
+
+      before(:each) do
+        @array_bels = @bel2.degroup
+      end
+
+
+      it 'degroup tow lines' do
+        @be.should have(2).bank_extract_lines
+      end
+
+      it 'check array_bels' do
+        @array_bels.should be_an Array
+        @array_bels.each {|bel| bel.should be_a StandardBankExtractLine }
+      end
+
+      it 'first array_bels is similar to @bel2' do
+        @array_bels.first.should have(1).lines
+        @array_bels.first.id.should == @bel2.id
+      end
+
+      it 'first array_bels is similar to @bel2' do
+        @array_bels.first.should have(1).lines
+        @array_bels.first.lines.first.should == @l2
+        @array_bels.first.id.should == @bel2.id
+      end
+
+      it 'last array_bels is similar to @bel3' do
+        @array_bels.last.should have(1).lines
+        @array_bels.last.lines.first.should == @l3
+        # on a bien un nouveau bel
+        @array_bels.last.id.should_not == @bel3.id
+      end
+
+
+
+    end
 
 
   end

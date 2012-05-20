@@ -25,7 +25,7 @@ class BankExtractLinesController < ApplicationController
     @bank_extract_line = BankExtractLine.find(params[:id])
     follower = @bank_extract_line.higher_item
     @bank_extract_line.regroup(follower)
-    @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
+    @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
     respond_to do |format|
       format.js
     end

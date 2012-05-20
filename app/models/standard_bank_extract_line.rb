@@ -72,8 +72,28 @@ class StandardBankExtractLine < BankExtractLine
     bel.destroy
   end
 
-  
+  # degroup décompose l'instance avec plusieurs lignes en autant
+  # d'instance qu'il y a de lignes.
+  #
+  # La position des différentes bels ainsi obtenue est contigue
+  #
+  # La méthode renvoie un tableau composé des bels nouvellement créées.
+  # (la première étant self dépouillée de toutes ses lignes sauf une
+  #
+  def degroup
+    return self if self.lines.size < 2
+    pos = position
+    grp = lines.offset(1).all.map do |l|
+      new_bel = bank_extract.standard_bank_extract_lines.create!(lines:[l])
+      lines.delete(l)
+      new_bel.insert_at(pos + 1)
+      new_bel
+    end
+    grp.insert(0,self)
+    grp 
+  end
 
+  
   def prepare_datas
     raise 'StandardBankExtractLine sans ligne' if lines.empty?
     self.date ||= lines.first.line_date # par défaut on construit les infos de base
