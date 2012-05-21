@@ -63,7 +63,7 @@ class BankExtractsController < ApplicationController
     else
       flash[:alert]= "Une erreur n'a pas permis de valider le relevé"
     end
-    redirect_to organism_bank_account_bank_extract_url(@organism, @bank_account,@bank_extract)
+    redirect_to organism_bank_account_bank_extract_bank_extract_lines_url(@organism, @bank_account,@bank_extract)
   end
 
   # GET /bank_extracts/new

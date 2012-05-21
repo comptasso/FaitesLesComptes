@@ -3,6 +3,11 @@
 
 require 'spec_helper'
 
+RSpec.configure do |c|
+  c.filter = {:wip=>true}
+end
+
+
 describe CheckDepositBankExtractLine do
   include OrganismFixture
 
@@ -15,8 +20,9 @@ describe CheckDepositBankExtractLine do
       total_credit:5,
       locked:false)
     @l = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+    @l2 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:3, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
     @cd = CheckDeposit.create!(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
-    @cd.checks << @l
+    @cd.checks << @l << @l2
     @cd.save!
   end
 
@@ -64,6 +70,18 @@ describe CheckDepositBankExtractLine do
     end
 
 
+  end
+
+  describe 'lock line', :wip=>true do
+    before(:each) do
+      @bel= @be.check_deposit_bank_extract_lines.create!(check_deposit_id:@cd.id)
+    end
+
+    it 'locks each line of checks' do
+      @bel.should have(2).checks
+      @bel.lock_line
+      @cd.checks(true).each { |ch| ch.should be_locked }
+    end
   end
 
 

@@ -2,8 +2,8 @@
   = icon_to 'navigation90.png', organism_bank_account_bank_extracts_path(@organism, @bank_account)
   = icon_to('pointer.png', pointage_organism_bank_account_bank_extract_bank_extract_lines_path(@organism, @bank_account, @bank_extract)) if @bank_extract.first_to_point?
   = icon_to 'stock_lock.png', lock_organism_bank_account_bank_extract_path(@organism,@bank_account, @bank_extract), |
-    title: 'Verrouiller ce relevé ainsi que toutes les lignes associées', |
-    confirm:"Cette action verrouillera ce relevé de compte et toutes les lignes qui sont associées.\nConfirmez vous ?" if  @bank_extract.lockable?
+    title: 'Verrouiller ce relevé ainsi que toutes les lignes associées', method: 'post',                           |
+    confirm:"Cette action verrouillera ce relevé de compte et toutes les lignes qui sont associées.\nConfirmez vous ?" if  @bank_extract.lockable? 
 
 .champ
   %h3= "Relevé bancaire #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
@@ -25,7 +25,7 @@
           Solde Final :
           = debit_credit @bank_extract.end_sold
   .row-fluid
-    .span7
+    .span8
       
       %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0" id="bels_table")
         %thead

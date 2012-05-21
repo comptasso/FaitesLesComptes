@@ -2,6 +2,10 @@
 
 require 'spec_helper'
 
+RSpec.configure do |c|
+  c.filter = {:wip=>true}
+end
+
 describe StandardBankExtractLine do
   include OrganismFixture
 
@@ -13,7 +17,8 @@ describe StandardBankExtractLine do
       total_debit:2,
       total_credit:5,
       locked:false)
-    @l = Line.create!(narration:'bel', line_date:Date.today, debit:7, credit:0, payment_mode:'Espèces', cash_id:@c.id, book_id:@ob.id, nature_id:@n.id)
+    @l = Line.create!(narration:'ligne', line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
+    @l2 = Line.create!(narration:'ligne 2', line_date:Date.today, debit:11, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
   end
 
   def valid_attributes
@@ -128,6 +133,25 @@ describe StandardBankExtractLine do
 
   end
 
+  describe 'lock_line' , :wip=>true do
 
+    before(:each) do
+      @bel = @be.standard_bank_extract_lines.new(lines:[@l])
+    end
+
+    it 'should lock the line' do
+      @l.should_not be_locked
+      @bel.lock_line
+      @l.should be_locked
+    end
+
+    it 'should lock each line' do
+      @bel.lines << @l2
+      @bel.lock_line
+      @l.should be_locked
+      @l2.should be_locked
+    end
+
+  end
 
 end

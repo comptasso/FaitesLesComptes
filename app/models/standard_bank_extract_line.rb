@@ -36,15 +36,11 @@ class StandardBankExtractLine < BankExtractLine
 
   # lock_line verrouille la ligne d'écriture. Ceci est appelé par bank_extract (after_save)
   # lorsque l'on verrouille le relevé
-  # Seules les lignes d'écritures sont verrouillées (pas les remises de chèques) car
-  # il s'agit seulement de se conformer à la législation qui impose de ne plus
-  # pouvoir modifier des écritures après inscription au journal.
-  # En fait il faut aussi verrouiller les lignes d'écritures qui ont nourri une remise de chèque
+  # 
   def lock_line
-    # si c'est une ligne qui n'est pas déja verrouillée, on la verrouille
-    self.line.update_attribute(:locked,true) if (self.line_id && !self.line.locked)
+    self.lines.each {|l| l.update_attribute(:locked,true) unless l.locked? }
     # si c'est une remise de chèque on verrouille les lignes correspondantes
-    self.check_deposit.checks.each {|l| l.update_attribute(:locked, true)} if self.check_deposit_id
+   # self.check_deposit.checks.each {|l| l.update_attribute(:locked, true)} if self.check_deposit_id
   end
 
   # debit fait le total débit des lignes.

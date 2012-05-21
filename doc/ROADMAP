@@ -518,15 +518,21 @@ Créer un after_save de la remise de chèques qui fait la liaison entre les lign
 OK - rendre plus complet ce controller en ayant une fonction index
 OK - dans la vue index afficher les soldes et mouvements et signaler les éventuels écarts
 OK - retirer les images danger lorsque le solde devient correct
-plus il faudra un bouton lock à un moment
+ plus il faudra un bouton lock à un moment
+ revoir l'architecture de check_deposit qui devrait être belongs_to bank_extract_line
+du coup on peut retirer check_deposit_id de la table des bels
+on doit rajouter bel_id à la table de check_deposit et il faudra une vérif de cohérence
+entre check_deposit.bank_account_id et check_deposit.account
 OK - retirer le pointeur main sur les indicateurs de filtrage
 OK - lui transférer les actions pointage et dépointage
 OK - mettre en place des STI pour une BEL de type remise de chèque et une BEL de type line
 OK - Faire une relation habtm avec les Line
 OK - Revoir le javascript pour faire du drag and drop (pointage-dépointage)
 OK - javascript pour déplacer une bel
-javascript pour afficher les sous lignes
-Faire les vues modales pour créer une nouvelle ligne et scinder une ligne
+OK - javascript pour afficher les sous lignes
+Verifier que remove une ligne chainée fonctionne correctement
+Faire les vues modales pour créer une nouvelle ligne
+NON  et scinder une ligne - on attendra de voir si c'est utile
 Ajouter les icones pour appeler ces actions
 Revoir sauvegarde et restore compte tenu des nouvelles classes bels
 

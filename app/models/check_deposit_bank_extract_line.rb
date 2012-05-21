@@ -43,16 +43,28 @@ class CheckDepositBankExtractLine < BankExtractLine
     return 0
   end
 
+  # retourne la liste des chèques associés à la remise
+  def checks
+    check_deposit.checks
+  end
+
+  # lock_line verrouille les lignes d'écriture correspondant
+  # aux chèques de cette remise de .
+  #
+  # Ceci est appelé par bank_extract (after_save)
+  # lorsque l'on verrouille le relevé
+  #
+  def lock_line
+    puts 'dans la méthode lock_line de check_deposit_bank_extract_line'
+    check_deposit.checks.each {|check_line| check_line.update_attribute(:locked, true) unless check_line.locked? }
+  end
+
   private
 
   def not_empty
     errors.add(:check_deposit, 'non valable car pas de remise de chèque associée') unless lines
   end
 
-
-#  def link_to_source
-#     self.check_deposit.update_attribute(:bank_extract_id, self.bank_extract_id)
-#  end
 
 
 end

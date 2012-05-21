@@ -1,7 +1,8 @@
 = content_for :menu do
   = icon_to 'navigation90.png', organism_bank_account_bank_extracts_path(@organism, @bank_account)
   = icon_to 'stock_lock.png', lock_organism_bank_account_bank_extract_path(@organism,@bank_account, @bank_extract), |
-    title: 'Verrouiller ce relevé ainsi que toutes les lignes associées', id:'lock_bank_extract', |
+    title: 'Verrouiller ce relevé ainsi que toutes les lignes associées', |
+    id:'lock_bank_extract', method:'post', |
     confirm:"Cette action verrouillera ce relevé de compte et toutes les lignes qui sont associées.\nConfirmez vous ?" if  @bank_extract.lockable?
   
 

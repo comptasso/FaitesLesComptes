@@ -33,6 +33,7 @@ class BankExtract < ActiveRecord::Base
 
   # indique si l'extrait est le premier de ce compte bancaire qui doive être pointé
   def first_to_point?
+    return false if locked?
     id == bank_account.first_bank_extract_to_point.id
   end
 
