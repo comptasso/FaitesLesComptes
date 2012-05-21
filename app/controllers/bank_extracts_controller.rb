@@ -16,41 +16,7 @@ class BankExtractsController < ApplicationController
   end
 
   
-  
-  # récupération des paramètres de type line et check_deposit
-  # si le hash est une ligne : la récupérer mettre le bank_extract_id à jour
-  # si le hash est un check_deposit, le récupérer avec son id et le mettre à jour
-  def pointe
-    @bank_extract = BankExtract.find(params[:id])
-    params.each do |key, value|
-      if key.to_s =~ /^line_(\d+)/
-        l=Line.find($1.to_i)
-    #    position= BankExtract.find(params[:id]).bank_extract_lines.count + 1
-    #    puts "creation d'un bank line à partir d'une ligne - line id #{l.id} position : #{position} "
-        # construction d'une bank_extract_line
-        bl=BankExtractLine.new(bank_extract_id: @bank_extract.id, line_id: l.id) #, position: position )
-        bl.save
-      end
-      if key.to_s =~ /^check_deposit_(\d+)/
-       # position= BankExtract.find(params[:id]).bank_extract_lines.count + 1
-        cd=CheckDeposit.find($1.to_i)
-       # construction d'une bank_extract_line
-      # puts "creation d'un bank line à partir d'un check_deposit - check_deposit_id #{cd.id} position : #{position} "
-        bl=BankExtractLine.new(bank_extract_id: @bank_extract.id, check_deposit_id: cd.id) #, position: position )
-        bl.save
-      end
-    end
-    redirect_to pointage_organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
-    
-  end
-
-  def depointe
-    @bank_extract = BankExtract.find(params[:id])
-    params.each { |key, value| BankExtractLine.find($1.to_i).destroy if key.to_s =~ /^bank_extract_line_(\d+)/ }
-    redirect_to pointage_organism_bank_account_bank_extract_url(@organism,@bank_account,@bank_extract)
-  end
-
-
+ 
   # lock est appelé par le bouton 'valider et verrouillé' de la vue pointage html
   # bouton qui est lui même affiché que lorsque les soldes sont concordants avec les lignes affichées
   # dans le modèle bank_extract, un after save verrouille alors les lignes correspondantes
