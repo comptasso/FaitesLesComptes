@@ -14,20 +14,23 @@ class BankExtractLine < ActiveRecord::Base
 
   belongs_to :bank_extract
 
-  has_and_belongs_to_many :lines, uniq:true
+  has_and_belongs_to_many :lines, :uniq=>true 
 
   acts_as_list :scope => :bank_extract
-#  validate :not_empty
+
+  # TODO validate :not_empty
 
   attr_reader :payment, :narration, :debit,  :credit
 
+  before_destroy :remove_from_list
+
+ 
   # chainable indique si le bank_extract_line peut être relié à son suivant
   # Ce n'est possible que si
   #  - ce n'est pas une remise de chèque
   #  - ce n'est pas le dernier
   #  - ils ne sont pas du même sens.
   #  - le suivant n'est pas une remise de chèque
-  #
   #
   def chainable?
     return false if is_a?(CheckDepositBankExtractLine)
@@ -36,5 +39,10 @@ class BankExtractLine < ActiveRecord::Base
     return false if  lower_item.is_a?(CheckDepositBankExtractLine)
     true
   end
+
+
+
+
+
   
 end

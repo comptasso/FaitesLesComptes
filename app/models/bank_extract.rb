@@ -6,14 +6,18 @@ class BankExtract < ActiveRecord::Base
   belongs_to :bank_account
   has_many :bank_extract_lines, dependent: :destroy
   has_many :standard_bank_extract_lines, dependent: :destroy
-  has_many :check_deposit_bank_extract_lines, dependent: :destroy
+  has_many :check_deposit_bank_extract_lines, dependent: :destroy 
+  # has_many :check_deposits, :through=>:check_deposit_bank_extract_lines
+
 
   validates :begin_sold, :total_debit, :total_credit, :numericality=>true
   validates :begin_sold, :total_debit, :total_credit, :presence=>true
+   # validates :check_deposits, uniqueness: true
   
  # after_create :fill_bank_extract_lines
   after_save :lock_lines_if_locked
 
+ 
   # TODO add a chrono validator
   
   scope :period, lambda {|p| where('(begin_date <= ? AND end_date >= ?)  OR (begin_date <= ? AND end_date >= ? ) OR (begin_date  >= ? AND end_date  <= ?)',

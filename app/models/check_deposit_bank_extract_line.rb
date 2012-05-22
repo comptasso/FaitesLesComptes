@@ -10,7 +10,7 @@ class CheckDepositBankExtractLine < BankExtractLine
   
   after_initialize :prepare_datas
 
-  validates :check_deposit_id, presence:true
+  validates :check_deposit_id, presence:true, uniqueness:true
   validates :bank_extract_id, presence:true
 
   

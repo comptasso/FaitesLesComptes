@@ -1,8 +1,7 @@
 class BankExtractLinesController < ApplicationController
   
-  # TODO on pourrait modifier les routes pour avoir juste bank_extract_line et récupérer les variables d'instances nécessaires
-  # En fait il n'y en probablement plus besoin puisque le format html n'est pas nécessaire pour ce controller
-
+  # TODO on pourrait modifier les routes pour avoir juste bank_extract_bank_extract_line et récupérer les variables d'instances nécessaires
+ 
   before_filter :find_params, :except=>:reorder
 
   def index
@@ -49,9 +48,8 @@ class BankExtractLinesController < ApplicationController
   # -fromPosition qui indique la position initiale de la ligne
   def remove
     @bank_extract_line = BankExtractLine.find(params[:id])
-    @bank_extract_line.remove_from_list
     @bank_extract_line.destroy
-    @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
+    @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
     @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
     respond_to do |format|
       format.js 
@@ -59,8 +57,14 @@ class BankExtractLinesController < ApplicationController
   end
 
 
-  # insert est appelée par le drag and drop de la vue pointage lorsqu'une
+  # Insert est appelée par le drag and drop de la vue pointage lorsqu'une
   # non pointed line est transférée dans les bank_extract_line
+  #
+  # L'id de la ligne non pointée doit être de la forme
+  # type_id (ex standard_line_766 ou check_deposit_545
+  #
+  # params[:at] indique à quelle position insérer la ligne dans la liste
+  #
   def insert
     html_id = params[:html_id]
     html = html_id.split(/_\d+$/).first
@@ -92,6 +96,7 @@ class BankExtractLinesController < ApplicationController
 
   # reorder est appelé par le drag and drop de la vue . Les paramètres
   # transmis sont les suivants :
+  #
   #  - id :- id of the row that is moved. This information is set in the id attribute of the TR element.
   #  - fromPosition : initial position of the row that is moved. This was value in the indexing cell of the row that is moved.
   #  - toPosition : new position where row is dropped. This value will be placed in the indexing column of the row.
@@ -115,7 +120,6 @@ class BankExtractLinesController < ApplicationController
   private
 
   def find_params
-    
     @organism=Organism.find(params[:organism_id])
     @bank_account=BankAccount.find(params[:bank_account_id])
     @bank_extract=BankExtract.find(params[:bank_extract_id])

@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-   # c.filter = {:wip=> true }
+    c.filter = {:wip=> true }
 end
 
 describe BankExtract do 
@@ -11,7 +11,7 @@ describe BankExtract do
   
   
   before(:each) do
-    create_minimal_organism
+    create_minimal_organism 
     @p2012 = @p
     # @be1 est entièrement en 2011
     @be1= @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2011,10,01), end_date: Date.civil(2011,10,31), begin_sold: 2011, total_credit: 11, total_debit: 10)
@@ -79,7 +79,7 @@ describe BankExtract do
     end
   end
 
-  describe 'contrôle des bank_extract_lines', :wip=>true do
+  describe 'contrôle des bank_extract_lines' do
 
     before(:each) do
       @l1 = Line.new(narration:'bel', line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
@@ -118,6 +118,9 @@ describe BankExtract do
       @be2.total_lines_credit.should == 97
     end
 
+    it 'lines should be unique'
+
+  
   end
 
 

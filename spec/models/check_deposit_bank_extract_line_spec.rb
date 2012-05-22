@@ -4,7 +4,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  c.filter = {:wip=>true}
+ # c.filter = {:wip=>true}
 end
 
 
@@ -69,10 +69,17 @@ describe CheckDepositBankExtractLine do
       @bel.type.should == 'CheckDepositBankExtractLine'
     end
 
+    it 'check_deposit cant belong to two different bels'  do
+      @bel.save!
+      @bel2 = CheckDepositBankExtractLine.new(valid_attributes)
+      @bel2.should_not be_valid
+
+    end
+
 
   end
 
-  describe 'lock line', :wip=>true do
+  describe 'lock line' do
     before(:each) do
       @bel= @be.check_deposit_bank_extract_lines.create!(check_deposit_id:@cd.id)
     end

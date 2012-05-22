@@ -10,7 +10,7 @@ end
 describe StandardBankExtractLine do
   include OrganismFixture
 
-  before(:each) do
+  before(:each) do 
     create_minimal_organism
     @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month,
       end_date:Date.today.end_of_month,
@@ -19,7 +19,7 @@ describe StandardBankExtractLine do
       total_credit:5,
       locked:false)
     @d7 = Line.create!(narration:'bel', line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
-    @c29 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:29, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
+    @d29 = Line.create!(narration:'bel', line_date:Date.today, debit:29, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
      @ch97 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
      @ch5 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:5, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
      @cr = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:27, payment_mode:'Virement', book_id:@ib.id, nature_id:@n.id)
@@ -35,24 +35,35 @@ describe StandardBankExtractLine do
 
     before(:each) do
       @be.bank_extract_lines << StandardBankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d7])
-      @be.bank_extract_lines << StandardBankExtractLine.new(bank_extract_id:@be.id, :lines=>[@c29])
+      @be.bank_extract_lines << StandardBankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d29])
       @be.bank_extract_lines << CheckDepositBankExtractLine.new(:check_deposit_id=>@cd.id)
       @be.save!
     end
 
 
     it 'checks values' do
-      @be.total_lines_credit.to_f.should == 131
-      @be.total_lines_debit.to_f.should == 7
+      @be.total_lines_credit.to_f.should == 102
+      @be.total_lines_debit.to_f.should == 36
     end
 
     it 'checks positions' do
-      @be.bank_extract_lines.all.map {|bel| bel.credit}.should == [0,29,102]
-      @be.bank_extract_lines.all.map {|bel| bel.debit}.should == [7,0,0]
+      @be.bank_extract_lines.all.map {|bel| bel.credit}.should == [0,0,102]
+      @be.bank_extract_lines.all.map {|bel| bel.debit}.should == [7,29,0]
       @be.bank_extract_lines.all.map {|bel| bel.position}.should == [1,2,3]
     end
 
-    it 'should have unique lines or unique check_deposit'
+    it 'une ligne ne peut être rattaché deux fois' do
+      bel = StandardBankExtractLine.create!(bank_extract_id:@be.id, :lines=>[@d7])
+      bel.lines << @d7
+      bel.should have(1).lines
+    end
+
+    # c'est par construction puisque le rattachement d'une remise de chèque
+    # se fait par la méthode belongs_to 
+    # TODO en fait actuellement c'est un has_one (mais une modif est prévue)
+    it 'une remise de chèque ne peut être rattaché deux fois' do
+      true
+    end
 
     describe 'testing move_higher and move_lower' do
 
@@ -83,8 +94,6 @@ describe StandardBankExtractLine do
       end
 
       it 'a check_deposit_bank_extract_line is not chainable' do
-        @be.bank_extract_lines.order('position').each { |bel| puts "#{bel.type} - #{bel.position}  - #{bel.debit} - #{bel.credit}" }
-
         @bel102.should be_a(CheckDepositBankExtractLine)
         @bel102.should_not be_chainable
       end
