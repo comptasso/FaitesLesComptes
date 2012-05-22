@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  #  c.filter = {:wip=> true }
+ #  c.filter = {:wip=> true }
 end
 
 
@@ -52,19 +52,14 @@ describe StandardBankExtractLine do
       @be.bank_extract_lines.all.map {|bel| bel.position}.should == [1,2,3]
     end
 
-    it 'une ligne ne peut être rattaché deux fois' do
-      bel = StandardBankExtractLine.create!(bank_extract_id:@be.id, :lines=>[@d7])
-      bel.lines << @d7
-      bel.should have(1).lines
-    end
-
+   
     # c'est par construction puisque le rattachement d'une remise de chèque
     # se fait par la méthode belongs_to 
     # TODO en fait actuellement c'est un has_one (mais une modif est prévue)
-    it 'une remise de chèque ne peut être rattaché deux fois' do
-      true
-    end
 
+
+
+   
     describe 'testing move_higher and move_lower' do
 
       before(:each) do

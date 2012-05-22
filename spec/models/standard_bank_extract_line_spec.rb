@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  c.filter = {:wip=>true}
+  # c.filter = {:wip=>true}
 end
 
 describe StandardBankExtractLine do
@@ -50,7 +50,7 @@ describe StandardBankExtractLine do
       @bel.debit.should == @l.debit
     end
   
-    it 'not valid without lines' do
+    it 'not valid without lines' do 
       @bel.lines.clear # on retire la seule ligne du tableau de lignes
       @bel.lines.should have(0).line
       @bel.should_not be_valid
@@ -60,6 +60,13 @@ describe StandardBankExtractLine do
       #  pending 'peut être que type n est pas rempli si c est la classe de base'
       @bel.type.should == 'StandardBankExtractLine'
     end
+
+    it  'une ligne ne peut être rattaché deux fois' do 
+      @bel.save!
+      expect { StandardBankExtractLine.new(bank_extract_id:@be.id, :lines=>[@l]) }.
+        to raise_error ArgumentError 
+    end
+
 
     
   end
@@ -133,7 +140,7 @@ describe StandardBankExtractLine do
 
   end
 
-  describe 'lock_line' , :wip=>true do
+  describe 'lock_line'  do
 
     before(:each) do
       @bel = @be.standard_bank_extract_lines.new(lines:[@l])

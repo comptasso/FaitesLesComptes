@@ -14,11 +14,15 @@ class BankExtractLine < ActiveRecord::Base
 
   belongs_to :bank_extract
 
-  has_and_belongs_to_many :lines, :uniq=>true 
+  has_and_belongs_to_many :lines, :before_add=>:not_already_included
+
+
 
   acts_as_list :scope => :bank_extract
 
-  # TODO validate :not_empty
+  # validate :not_empty est délégué aux sous classes
+  # par le biais de sheck_deposit_id :presence=>true
+  # et par le biais d'une mathode not_empty pour StandardBankExtractLine
 
   attr_reader :payment, :narration, :debit,  :credit
 
@@ -40,7 +44,12 @@ class BankExtractLine < ActiveRecord::Base
     true
   end
 
-
+  def not_already_included(line)
+    if line.bank_extract_lines.count > 0
+      logger.warn "tried to include line #{line.id} which was already included in a bank_extract_line"
+      raise ArgumentError
+    end
+  end
 
 
 
