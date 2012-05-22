@@ -80,8 +80,8 @@ class StandardBankExtractLine < BankExtractLine
     return self if self.lines.size < 2
     pos = position
     grp = lines.offset(1).all.map do |l|
-      new_bel = bank_extract.standard_bank_extract_lines.create!(lines:[l])
       lines.delete(l)
+      new_bel = bank_extract.standard_bank_extract_lines.create!(lines:[l])
       new_bel.insert_at(pos + 1)
       new_bel
     end

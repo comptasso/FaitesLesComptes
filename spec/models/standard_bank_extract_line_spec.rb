@@ -71,7 +71,7 @@ describe StandardBankExtractLine do
     
   end
 
-  describe 'regroup two lines' do
+  describe 'degroup and regroup' do
 
     before(:each) do
       @l2 = Line.create!(narration:'première ligne', line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
@@ -82,24 +82,38 @@ describe StandardBankExtractLine do
       @bel2.regroup(@bel3)
     end
 
-    it 'is possible to chain two standard lines' do
-      @bel2.should have(2).lines
+    describe 'regroup' do
+
+      it 'Table Line has 4 lines'  do
+        Line.should have(4).lines
+        @l2.should have(1).bank_extract_lines
+        @l3.should have(1).bank_extract_lines
+        @l2.bank_extract_lines.first.should == @l3.bank_extract_lines.first
+        BankExtractLine.count.should == 1
+      end
+   
+
+    
+
+      it 'is possible to chain two standard lines' do
+        @bel2.should have(2).lines
+      end
+
+      it 'after fusion, il ne reste qu une bel' do
+        @be.should have(1).bank_extract_lines
+      end
+
+      it 'le total debit est maintenant de 20' do
+        @bel2.debit.should == 20
+      end
+
+      it 'la narration n a pas changé' do
+        @bel2.narration.should == 'première ligne'
+      end
 
     end
 
-    it 'after fusion, il ne reste qu une bel' do
-      @be.should have(1).bank_extract_lines
-    end
-
-    it 'le total debit est maintenant de 20' do
-      @bel2.debit.should == 20
-    end
-
-    it 'la narration n a pas changé' do
-      @bel2.narration.should == 'première ligne'
-    end
-
-    describe 'degroup' do
+    describe 'degroup' , :wip=>true do
 
       before(:each) do
         @array_bels = @bel2.degroup
@@ -108,6 +122,16 @@ describe StandardBankExtractLine do
 
       it 'degroup tow lines' do
         @be.should have(2).bank_extract_lines
+        BankExtractLine.count.should == 2
+
+      end
+
+      it 'each line has only one bel' do
+       [@l2, @l3].each {|l| l.should have(1).bank_extract_lines }
+      end
+
+      it 'les lignes ne sont pas touchées par regroup et degroup' do
+        Line.should have(4).lines
       end
 
       it 'check array_bels' do
