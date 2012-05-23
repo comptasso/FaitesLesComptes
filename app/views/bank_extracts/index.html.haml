@@ -1,6 +1,6 @@
 = content_for :menu do
-  = icon_to 'nouveau.png', new_organism_bank_account_bank_extract_path(@organism, @bank_account)
-  = icon_to 'navigation90.png', organism_bank_accounts_path(@organism)
+  = icon_to 'nouveau.png', new_bank_account_bank_extract_path(@bank_account)
+  = icon_to 'navigation90.png', bank_accounts_path
 
 .champ
   %h3 Liste des extraits de comptes
@@ -22,9 +22,9 @@
       %tr
         = render :partial=>'bank_extract', :object=>bank_extract
         %td
-          = icon_to 'afficher.png', organism_bank_account_bank_extract_bank_extract_lines_path(@organism, @bank_account, bank_extract)
-          = icon_to('modifier.png', edit_organism_bank_account_bank_extract_path(@organism, @bank_account,bank_extract)) 
-          = icon_to('pointer.png', pointage_organism_bank_account_bank_extract_bank_extract_lines_path(@organism, @bank_account,bank_extract)) if bank_extract.first_to_point?
-          = icon_to('supprimer.png', [@organism, @bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete)
+          = icon_to 'afficher.png', bank_extract_bank_extract_lines_path(bank_extract)
+          = icon_to('modifier.png', edit_bank_account_bank_extract_path(@bank_account,bank_extract)) 
+          = icon_to('pointer.png', pointage_bank_extract_bank_extract_lines_path(bank_extract)) if bank_extract.first_to_point?
+          = icon_to('supprimer.png', [@bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete)
  
 

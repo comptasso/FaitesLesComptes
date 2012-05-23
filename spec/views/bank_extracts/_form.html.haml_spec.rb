@@ -18,7 +18,7 @@ describe "bank_extracts/new" do
 
   it 'forms points to' do
     render
-    assert_select "form", :action => organism_bank_account_bank_extracts_path(@o, @ba), :method => "post"
+    assert_select "form", :action => bank_account_bank_extracts_path(@ba), :method => "post"
   end
 
   it 'check fields' do 

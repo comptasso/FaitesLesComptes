@@ -1,7 +1,7 @@
 <%= content_for :submenu do %>
 
-  <%= icon_to 'navigation90.png', organism_bank_account_bank_extracts_path(@organism, @bank_account) if @bank_account.bank_extracts.count > 0 %>
-  <%= icon_to 'navigation90.png', organism_bank_accounts_path(@organism) unless @bank_account.bank_extracts.count > 0 %>
+  <%= icon_to 'navigation90.png', bank_account_bank_extracts_path(@bank_account) if @bank_account.bank_extracts.count > 0 %>
+  <%= icon_to 'navigation90.png', bank_accounts_path unless @bank_account.bank_extracts.count > 0 %>
 <% end -%>
 
 <div class="champ">

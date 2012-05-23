@@ -109,7 +109,7 @@ describe BankExtractsController do
       it "redirects to pointage" do
         post :create, :organism_id=>o.id, :bank_account_id=> ba.id,
           :bank_extract => valid_params
-        response.should redirect_to organism_bank_account_bank_extracts_url(o, ba)
+        response.should redirect_to bank_account_bank_extracts_url(ba)
       end
     end
 
@@ -160,7 +160,7 @@ describe BankExtractsController do
 
       it "assigns the requested user as @user" do
         bank_extract = BankExtract.create! valid_attributes
-        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => valid_attributes
+        put :update, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => valid_attributes
           
         assigns(:bank_extract).should == bank_extract
       end
@@ -169,7 +169,7 @@ describe BankExtractsController do
         bank_extract = BankExtract.create! valid_attributes
         put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => valid_attributes
          
-        response.should redirect_to organism_bank_account_bank_extracts_url(o, ba)
+        response.should redirect_to bank_account_bank_extracts_url(ba)
       end
     end
 
@@ -187,7 +187,7 @@ describe BankExtractsController do
         bank_extract = BankExtract.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         BankExtract.any_instance.stub(:save).and_return(false)
-        put :update, organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => valid_attributes
+        put :update, bank_account_id: ba.id, :id => bank_extract.id, :bank_extract => valid_attributes
          
         response.should render_template("edit")
       end
@@ -207,14 +207,14 @@ describe BankExtractsController do
     it "destroys the requested bank_extract" do
       bank_extract = BankExtract.create! valid_attributes
       expect {
-        delete :destroy,  organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id.to_s
+        delete :destroy,  bank_account_id: ba.id, :id => bank_extract.id.to_s
       }.to change(BankExtract, :count).by(-1)
     end
 
     it "redirects to the users list" do 
       bank_extract = BankExtract.create! valid_attributes
       delete :destroy,  organism_id: o.id, bank_account_id: ba.id, :id => bank_extract.id.to_s
-      response.should redirect_to(organism_bank_account_bank_extracts_url o, ba)
+      response.should redirect_to(bank_account_bank_extracts_url ba)
     end
   end
 

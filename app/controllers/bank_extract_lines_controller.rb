@@ -12,7 +12,7 @@ class BankExtractLinesController < ApplicationController
   # récupère l'extrait, les lignes qui lui sont déjà associées et les lignes de ce compte bancaire
   # qui ne sont pas encore associées à un extrait
   def pointage
-    redirect_to organism_bank_account_bank_extract_bank_extract_lines_url(@organism,@bank_account,@bank_extract) if @bank_extract.locked
+    redirect_to bank_extract_bank_extract_lines_url(@bank_extract) if @bank_extract.locked
     @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
     @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
   end
@@ -120,8 +120,9 @@ class BankExtractLinesController < ApplicationController
   private
 
   def find_params
-    @organism=Organism.find(params[:organism_id])
-    @bank_account=BankAccount.find(params[:bank_account_id])
+    
     @bank_extract=BankExtract.find(params[:bank_extract_id])
+    @bank_account = @bank_extract.bank_account
+    @organism = @bank_account.organism
   end
 end

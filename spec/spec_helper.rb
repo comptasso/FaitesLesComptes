@@ -74,14 +74,14 @@ RSpec.configure do |config|
     DatabaseCleaner.start
   end
   config.after :each do
-    DatabaseCleaner.clean 
+    DatabaseCleaner.clean  
   end
 end
 
 end
 
 RSpec.configure do |c| 
-    c.exclusion_filter = {:js=> true }
+  #  c.exclusion_filter = {:js=> true }
 end  
 
 

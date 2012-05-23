@@ -15,7 +15,7 @@ Faitesvoscomptes::Application.routes.draw do
       resources :lines
     end
   end
-# fin du namespace COMPTA
+  # fin du namespace COMPTA
 
   # namespace ADMIN
   namespace 'admin' do
@@ -97,29 +97,7 @@ Faitesvoscomptes::Application.routes.draw do
 
     resources :check_deposits, :only=>:new # pour faire des remises de chèques
 
-    resources :bank_accounts, :only=> [:index, :show] do
-      resources :bank_extracts do
-        member do
- #         get 'pointage'
- #         post 'pointe'
- #         post 'depointe'
-          post 'lock'
-        end
-        resources :bank_extract_lines do
-          collection do
-            get 'pointage'
-            post 'reorder'
-          end
-          member do
-            post 'degroup'
-            post 'regroup'
-            post 'remove'
-            post 'insert'
-          end
-        end
-      end
-    end
-    
+    resources :bank_accounts, :only=> [:index, :show]    
     resources :books, :only=>[:show]
     resources :income_books
     resources :outcome_books
@@ -133,6 +111,31 @@ Faitesvoscomptes::Application.routes.draw do
     end
 
   end
+  
+  resources :bank_accounts do
+    resources :bank_extracts do
+      member do
+        post 'lock'
+      end
+    end
+  end
+
+  resources :bank_extracts do
+    resources :bank_extract_lines do
+      collection do
+        get 'pointage'
+        post 'reorder'
+      end
+      member do
+        post 'degroup'
+        post 'regroup'
+        post 'remove'
+        post 'insert'
+      end
+    end
+  end
+
+
 
   resources :books do
 

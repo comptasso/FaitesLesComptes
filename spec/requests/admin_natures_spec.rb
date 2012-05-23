@@ -52,15 +52,18 @@ describe 'vue natures index' do
  
   describe 'index' do
 
-    it 'affiche deux tables' do
+    before(:each) do
       @p.natures.create!(:name=>'deuxième nature', :income_outcome=>false)
+    end
+
+    it 'affiche deux tables' do
+      
       @p.should have(2).natures
       visit admin_organism_period_natures_path(@o, @p)
       page.should have_selector('tbody', :count=>2)
     end
 
     it 'dans la vue index,une nature peut être détruite', :js=>true do
-      @p.natures.create!(:name=>'deuxième nature', :income_outcome=>false)
       @p.should have(2).natures
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_period_natures_path(@o, @p)

@@ -10,7 +10,7 @@ class BankExtractsController < ApplicationController
   def index
     @bank_extracts = @bank_account.bank_extracts.period(@period).all 
     if @bank_extracts.size == 0
-      redirect_to new_organism_bank_account_bank_extract_url(@organism,@bank_account)
+      redirect_to new_bank_account_bank_extract_url(@bank_account)
       return
     end
   end
@@ -29,7 +29,7 @@ class BankExtractsController < ApplicationController
     else
       flash[:alert]= "Une erreur n'a pas permis de valider le relevé"
     end
-    redirect_to organism_bank_account_bank_extract_bank_extract_lines_url(@organism, @bank_account,@bank_extract)
+    redirect_to bank_extract_bank_extract_lines_url(@bank_extract)
   end
 
   # GET /bank_extracts/new
@@ -50,7 +50,7 @@ class BankExtractsController < ApplicationController
 
     respond_to do |format|
       if @bank_extract.save
-        format.html { redirect_to organism_bank_account_bank_extracts_url(@organism, @bank_account), notice: "L'extrait de compte a été créé." }
+        format.html { redirect_to bank_account_bank_extracts_url(@bank_account), notice: "L'extrait de compte a été créé." }
         format.json { render json: @bank_extract, status: :created, location: @bank_extract }
       else
         format.html { render action: "new" }
@@ -66,7 +66,7 @@ class BankExtractsController < ApplicationController
 
     respond_to do |format|
       if @bank_extract.update_attributes(params[:bank_extract])
-        format.html { redirect_to organism_bank_account_bank_extracts_url(@organism, @bank_account), notice: "L'extrait a été modifié " }
+        format.html { redirect_to bank_account_bank_extracts_url(@bank_account), notice: "L'extrait a été modifié " }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -82,7 +82,7 @@ class BankExtractsController < ApplicationController
     @bank_extract.destroy
 
     respond_to do |format|
-      format.html { redirect_to organism_bank_account_bank_extracts_url(@organism, @bank_account) }
+      format.html { redirect_to bank_account_bank_extracts_url(@bank_account) }
       format.json { head :ok }
     end
   end

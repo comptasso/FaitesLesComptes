@@ -47,7 +47,7 @@ describe 'vue books index' do
 
   end
  
-  describe 'index' do
+  describe 'index' do 
 
     it 'dans la vue index,un livre peut être détruit', :js=>true do
       @o.income_books.create!(:title=>'livre de test') 

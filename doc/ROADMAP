@@ -533,7 +533,7 @@ OK - javascript pour afficher les sous lignes
 revoir les routes pour n'avoir plus que deux niveaux bank_extract_bank_extract_lines
 Verifier que remove une ligne chainée fonctionne correctement
 Faire les vues modales pour créer une nouvelle ligne
-NON  et scinder une ligne - on attendra de voir si c'est utile
+NON scinder une ligne - on attendra de voir si c'est utile
 Ajouter les icones pour appeler ces actions
 Revoir sauvegarde et restore compte tenu des nouvelles classes bels
 
@@ -543,7 +543,10 @@ Et peut être aussi une référence de facture
 OK - Utiliser bootstrap pour l'affichage des flash
 Une ligne a pu être saisie sans mode de paiement
 on ne devrait pas pouvoir remettre un chèque qui n'appartient à aucun exercice
-Modifier ce qui apparait dans le flash lors de la saisie d'une ligne 
+Modifier ce qui apparait dans le flash lors de la saisie d'une ligne
+
+Dans transferts : changer virement en transfert dans le flash et dans le titre h3 de index
+Mettre les natures par ordre alpha dans la saisie d'écritures
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?
