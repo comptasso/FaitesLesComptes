@@ -9,7 +9,7 @@ module Restore
 
 
 
-  # RestoredCompta est une class qui permet de reconstruire une compta à partir d'un
+  # ComptaRestorer est une class qui permet de reconstruire une compta à partir d'un
   # fichier. On crée la classe en lui passant l'ensemble des valeurs, 
   # a priori lues à partir d'un fichier et parsée dans le controller
   # puis on reconstruit l'ensemble des valeurs dans la data base en
@@ -17,7 +17,7 @@ module Restore
   # qui appelle successivement create_organism, create_direct_children
   # create sub_children.
   #
-  # RestoredCompta répond aussi à quelques méthodes :
+  # ComptaRestorer répond aussi à quelques méthodes :
   #
   # datas -> renvoie l'ensemble des données d'origine
   # restores -> est un hash qui contient des RestoredModel
@@ -55,7 +55,7 @@ module Restore
     # ask_id_for('transfer', 12) doit renvoyer le nouvel id correspondant à la recréation
     # de ce tansfer dans la compta
     def ask_id_for(model, old_id)
-      Rails.logger.debug "RestoredCompta#ask_id_for Modèle : #{model} - id demandée #{old_id} "
+      Rails.logger.debug "ComptaRestorer #ask_id_for Modèle : #{model} - id demandée #{old_id} "
       required_model = model
       if model != 'book'
         model =  model.pluralize unless model == 'organism'
@@ -87,9 +87,7 @@ module Restore
     # ensure s'assure qu'en tout état de cause les callbasks sont
     # réactivées à la fin de la méthode
     def create_direct_children
-      
-     
-      
+    
       [:destinations, :bank_accounts, :cashes, :income_books, 
         :outcome_books, :od_books, :transfers, :periods].each do |m|
         create_restore_model(m) 
@@ -104,22 +102,30 @@ module Restore
     # mais appelle create_restore_model pour les modèles qui sont des enfants
     def create_sub_children
       create_restore_model(:bank_extracts) 
-  
-      
       create_restore_model(:check_deposits)
-
       create_restore_model(:cash_controls)
       create_restore_model(:accounts)
-      
-      create_restore_model(:natures) 
-
-      
-      create_restore_model(:lines) 
-
-      # les derniers car ils dépendent de bank_extract mais aussi de lines
+      create_restore_model(:natures)
+      create_restore_model(:lines)
+     # les derniers car ils dépendent de bank_extract mais aussi de lines
       create_restore_model(:bank_extract_lines) 
-
    
+    end
+
+    # méthode pour reconstruire les liaisons habtm
+    # existant entre bank_extract_lines et lines
+    #
+    # La table habtm est sauvegardée sous la forme d'un array de hash
+    # constitué de bank_extract_line_id et line_id
+    #
+    # Il faut donc pour chaque hash chercher la bel correspondante
+    # et lui ajouter la line correspondante
+    #
+    def create_habtm
+      if @datas[:bank_extract_lines_lines]
+        Restore::HabtmRestorer.new(self, :bank_extract_line, :line).
+          restore_records(@datas[:bank_extract_lines_lines])
+      end
     end
 
 

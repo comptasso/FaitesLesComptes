@@ -530,12 +530,14 @@ OK - Faire une relation habtm avec les Line
 OK - Revoir le javascript pour faire du drag and drop (pointage-dépointage)
 OK - javascript pour déplacer une bel
 OK - javascript pour afficher les sous lignes
-revoir les routes pour n'avoir plus que deux niveaux bank_extract_bank_extract_lines
+OK - revoir les routes pour n'avoir plus que deux niveaux bank_extract_bank_extract_lines
 Verifier que remove une ligne chainée fonctionne correctement
 Faire les vues modales pour créer une nouvelle ligne
 NON scinder une ligne - on attendra de voir si c'est utile
 Ajouter les icones pour appeler ces actions
-Revoir sauvegarde et restore compte tenu des nouvelles classes bels
+Revoir sauvegarde et restore compte tenu des nouvelles classes bel
+OK - modif de la classe Archive pour sauvegarder les infos de la table habtm
+création d'une méthode create_habtm pour restaurer les lignes (EN COURS)
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
@@ -547,6 +549,8 @@ Modifier ce qui apparait dans le flash lors de la saisie d'une ligne
 
 Dans transferts : changer virement en transfert dans le flash et dans le titre h3 de index
 Mettre les natures par ordre alpha dans la saisie d'écritures
+
+Dans la sauvegarde, j'avais un cash control sans date, du coup, cela générait une erreur dans la restauration.
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?

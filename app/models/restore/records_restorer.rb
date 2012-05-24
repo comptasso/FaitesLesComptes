@@ -57,8 +57,12 @@ module Restore
     end
 
 
-    # restore est une fonction générale qui prend un record, l'analyse,
+    # Restore est une fonction générale qui prend un record, l'analyse,
     # lui substitue les id qui vont bien
+    #
+    # Puis la méthode appelle Model.restore (définie plus haut par une extension
+    # de ActiveRecord::Base (éventuellement surchargée)
+    #
     def restore(data)
       new_dd = {:old_id=>data[:id] }
       new_attributes = data.attributes
@@ -98,7 +102,7 @@ module Restore
       # maintenant on demande à compta de retourner le nouvel id correspondant
       # à ce modèle et à cet id
       # par exemple ask_id_for('Nature', 27) si la ligne aveait un nature_id de 27
-      Rails.logger.debug "Modèle : #{data.inspect} - a_id : #{a_id}  "
+     # Rails.logger.debug "Modèle : #{data.inspect} - a_id : #{a_id}  "
       rid = @compta.ask_id_for(model, data.attributes[a_id])
       Rails.logger.debug "reponse : #{rid} "
       rid

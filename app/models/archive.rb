@@ -28,6 +28,13 @@ class Archive < ActiveRecord::Base
     MODELS.each do |m|
       @collect[m.pluralize.to_sym] = organism.instance_eval(m.pluralize).all
     end
+    # collecte des infos de la table HABTM bank_extract_line_line
+    # ces informations sont stockées sous la forme d'un tableau de hash
+    bel_lines = []
+    organism.bank_extract_lines.each do |bel|
+      bel.lines.each  { |l|  bel_lines  <<   {:bank_extract_line => bel.id, :line => l.id}  }
+    end
+    @collect[:bank_extract_lines_lines] = bel_lines
   end
 
   # affiche le titre de l'archive à partir de l'organisme et de la date de création

@@ -5,7 +5,7 @@ module Restore
 
   # la classe RestoreModel sert à reconstruire un modèle donné à partir
   # des données d'une sauvegarde.
-  # Elle est appelée par RestoreCompta pour chacun des modèles utilisés
+  # Elle est appelée par ComptaRestorer pour chacun des modèles utilisés
   # pour enregistrer une compta.
   # RestoreModel utilise alors la classe RestoreRecords pour constuire les
   # enregistrements proprements dits avec un mapping des anciennes id.
@@ -20,8 +20,9 @@ module Restore
       @compta = sender
     end
 
-    # à partir d'un tableau d'enregistrement
-    # appelle la classe RestoreRecords pour construire un nouveau tableau
+    # Restore plusieures records à partir d'un tableau d'enregistrement
+    #
+    # Appelle la classe RestoreRecords pour construire un nouveau tableau
     # contenant l'ancien id et le nouveau record
     # les datas sont fournis par l'appel à la méthode correspondante
     def restore_records
@@ -29,8 +30,11 @@ module Restore
       @r_records.restore_array(@compta.datas_for(@sym_model))
     end
 
-    # utilisé pour la restauration de records qui ne sont pas dans un array
+    # Restore un record qui n'est pas dans un array
     # en l'occurence organism
+    #
+    # Pour les modèles qui ont plusieurs records, utiliser restore_records
+    #
     def restore_record
       @r_records = Restore::RecordsRestorer.new(@compta)
       @r_records.restore(@compta.datas_for(@sym_model))
