@@ -1,7 +1,8 @@
 
 <%= content_tag :div, :class=>"pave bank #{position}"  do %>
-<h2>Compte <%= bank_pave.number %> = <%= number_to_currency bank_pave.sold  %>
- <%= icon_to 'detail.png', organism_bank_account_bank_extract_path(@organism, bank_pave, bank_pave.bank_extracts.order('begin_date').last) %></h2>
+<h3>Compte <%= bank_pave.number %> = <%= number_to_currency bank_pave.sold  %>
+ <%= icon_to 'detail.png', bank_account_bank_extracts_path( bank_pave) %>
+</h3>
 
   <%= render partial: 'line_graphic', object: bank_pave.graphic(@period) , :locals=>{id: "bank_#{bank_pave.id}" } %>
 <% end %>

@@ -99,7 +99,22 @@ class StandardBankExtractLine < BankExtractLine
     # TODO blid est-il utils
     @blid= "line_#{lines.first.id}" if lines.count == 1 # blid pour bank_line_id
   end
-#
+
+   # ActiveRecord::Base.restore est définie dans restore_record.rb
+   # prepare_datas n'a aucune utilité dans la phase de restauration et génèrerait une
+   # erreur puisque les lignes ne sont pas encore associées
+   # validate not_empty doit aussi être désactivée le temps de recréer l'association
+  def self.restore(new_attributes)
+    StandardBankExtractLine.skip_callback(:initialize, :after, :prepare_datas)
+    restored = self.new(new_attributes)
+       Rails.logger.info "création de #{restored.class.name} with #{restored.attributes}"
+       Rails.logger.warn "Erreur : #{restored.errors.inspect}" unless restored.valid?
+       restored.save!(:validate=>false) # lors de la restauration la validation not_empty ne peut être effectuée
+       restored
+  ensure
+    StandardBankExtractLine.set_callback(:initialize, :after, :prepare_datas)
+  end
+
   private
 
   def not_empty

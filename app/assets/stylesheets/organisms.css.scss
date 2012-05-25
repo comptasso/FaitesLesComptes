@@ -31,7 +31,7 @@
     .pave {
         display: inline-block;
 
-        h2 {
+        h3 {
             margin: 0px;
             padding: 3px 10px;
             border-radius: 4px 4px 0px 0px;
@@ -53,28 +53,28 @@
         }
 
     }
-    .income_book h2{
+    .income_book h3{
         background-color: green;
     }
 
-    .outcome_book h2{
+    .outcome_book h3{
         background-color: pink;
     }
 
-    .bank h2 {
+    .bank h3 {
         background-color: #A19B9E;
     }
 
-    .cash h2 {
+    .cash h3 {
         background-color: lightblue;
     }
 
-    .result h2 {
+    .result h3 {
         background-color: goldenrod;
     }
 
     .message {
-        h2 {
+        h3 {
             background-color : khaki;
             border-radius: 4px 4px 4px 4px;
         }

@@ -120,7 +120,7 @@ jQuery(function() {
   $( "#bels" ).sortable({
     connectWith: ".connectedSortable",
     items: "tr",
-
+    
     // lorsqu'on ajoute un membre à la table, il faut envoyer une action
     // insert en indiquant l'id comme params
     receive: function(event, ui) {
@@ -128,10 +128,18 @@ jQuery(function() {
       var place = -1;
       var id = ui.item.context.id;
       var siblings = $("#" + id + ' ~ tr') // fonction qui trouve les suivants
-      if (siblings.length === 0) {
+      // #0 est une ligne utilisée pour indiquer qu'on peut faire un drag and drop
+      // si elle est là, la position est forcément la première.
+      if ($('#bels #0').length === 1) {
+        place = 1;
+      }
+      else if (siblings.length === 0) {
+        // c'est le dernier de la liste donc on
+        // prend la longueur de la liste
         place = $('#bels tr').length
       }
       else {
+       // sinon on prend la position du premier suivant
        place =  $(siblings[0]).attr('data-position')
       }
 

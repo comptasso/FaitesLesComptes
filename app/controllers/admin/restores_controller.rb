@@ -12,8 +12,8 @@
 class Admin::RestoresController < Admin::ApplicationController
   
   class RestoreError < StandardError; end
-   RESTOREMODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control account nature bank_extract_line income_book outcome_book od_book transfer)
 
+  RESTOREMODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control account nature bank_extract_line income_book outcome_book od_book transfer)
 
   def new
     
@@ -71,7 +71,7 @@ class Admin::RestoresController < Admin::ApplicationController
   # remplit @datas avec les valeurs du fichier uploadé et les contrôle sommairement
   # TODO en fait le seul objectif ici est de checker mais comme cela ne marche guère
   def read_and_check_datas
-    # load_models
+    require_models
     @datas = Psych.load(params[:file_upload])
   #  check_datas
   end
@@ -83,7 +83,10 @@ class Admin::RestoresController < Admin::ApplicationController
   # Require models ne semble pas suffisant donc j'utilise maintenant load_models
   # TODO voir si c'est nécessaire pour un environnement de production
   def require_models
-    (['book'] + ::ORGMODELS).each { |model_name| require(model_name + '.rb') }
+    ( ::ORGMODELS).each { |model_name| require(model_name + '.rb') }
+#    load 'book.rb'
+#    load 'income_book.rb'
+#    load 'outcome_book.rb'
   end
 
   def load_models

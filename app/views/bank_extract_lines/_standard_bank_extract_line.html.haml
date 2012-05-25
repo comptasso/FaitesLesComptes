@@ -7,11 +7,11 @@
 
   %td
     = icon_to 'retirer.png', remove_bank_extract_bank_extract_line_path(@bank_extract, standard_bank_extract_line),  |
-      :remote=>true, :method => :post                                                                                |
+      :remote=>true, :method => :post                                                                                
     = icon_to 'chain--plus.png', regroup_bank_extract_bank_extract_line_path(@bank_extract, standard_bank_extract_line),:remote=>true,   |
-      :method=>:post, :title=>'Regroupe avec la ligne du dessous' if standard_bank_extract_line.chainable?                               |
+      :method=>:post, :title=>'Regroupe avec la ligne du dessous' if standard_bank_extract_line.chainable?                               
     = icon_to 'chain-unchain.png', degroup_bank_extract_bank_extract_line_path(@bank_extract, standard_bank_extract_line),:remote=>true,    |
-      :method=>:post, :title=>'Dégroupe les lignes' if (standard_bank_extract_line.lines.size > 1)                                          |
+      :method=>:post, :title=>'Dégroupe les lignes' if (standard_bank_extract_line.lines.size > 1)                                          
     = image_tag 'icones/detail.png' ,rel:"popover", 'data-original-title'=> details_title, 'data-content'=>details_for_popover(standard_bank_extract_line) if (standard_bank_extract_line.lines.size > 1)
     
     

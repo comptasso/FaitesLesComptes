@@ -535,9 +535,9 @@ Verifier que remove une ligne chainée fonctionne correctement
 Faire les vues modales pour créer une nouvelle ligne
 NON scinder une ligne - on attendra de voir si c'est utile
 Ajouter les icones pour appeler ces actions
-Revoir sauvegarde et restore compte tenu des nouvelles classes bel
+OK - quand la table des écriture du bank_extract est vide, on ne peut pas faire un drag and drop
 OK - modif de la classe Archive pour sauvegarder les infos de la table habtm
-création d'une méthode create_habtm pour restaurer les lignes (EN COURS)
+OK - création d'une méthode create_habtm pour restaurer les lignes (EN COURS)
 
 --------------------- Remarques lors des essais ---------------------------
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)

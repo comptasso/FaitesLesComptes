@@ -3,50 +3,51 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .public_bank_extract_lines {
   .popover-inner {
-     background-color: #271;
-     width: 400px;
-    }
+    background-color: #271;
+    width: 400px;
+  }
   .popover {
-     // width: 400px;
-    }
+    // width: 400px;
+  }
 
   .centered {
     text-align: center;
-    
-    }
+
+  }
 
   #bels_table, #ltps_table {
     margin-top: 8px;
-    }
-    
-   
+    tbody { height: 40px;}
+  }
+
+
   .inner-champ ul {
     list-style: inside none;
     font-weight: bold;
-    }
-    .numeric {
+  }
+  .numeric {
     text-align: right;
-    }
+  }
   .row_detail {
-    
+
     font-style: italic;
     td {
       font-size: 10px;
-      }
     }
+  }
   .toggle-detail {
     cursor: pointer;
-    }
-
-    tfoot{
-        font-weight: bold;
-        .droite {
-          text-align: right;
-          }
-        }
-   #img_danger_total_debit, #img_danger_total_credit {
-     display: none;
-     }
-
-
   }
+
+  tfoot{
+    font-weight: bold;
+    .droite {
+      text-align: right;
+    }
+  }
+  #img_danger_total_debit, #img_danger_total_credit {
+    display: none;
+  }
+
+
+}

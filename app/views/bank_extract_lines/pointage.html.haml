@@ -26,7 +26,7 @@
           Solde Final :
           = debit_credit @bank_extract.end_sold
   .row-fluid
-    .span7
+    .span6
       
       %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0" id="bels_table")
         %thead
@@ -47,7 +47,7 @@
         %tfoot
           = render :partial=>'belsfoot'
 
-    .span5
+    .span6
       
       %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0" id="ltps_table")
         %thead
@@ -55,10 +55,12 @@
             %th.centered(colspan="4")
               Liste des écritures non pointées
           %tr
+            %th N°
             %th Date
             %th Libellé
             %th.numeric Débit
             %th.numeric Crédit
+            %th Actions
             
           %tbody.connectedSortable#ltps
             = render :partial=>'ltpsbody'
