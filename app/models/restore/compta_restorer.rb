@@ -15,7 +15,7 @@ module Restore
   # puis on reconstruit l'ensemble des valeurs dans la data base en
   # appelant rebuild_all_records
   # qui appelle successivement create_organism, create_direct_children
-  # create sub_children.
+  # create sub_children et en dernier create_habtml 
   #
   # ComptaRestorer répond aussi à quelques méthodes :
   #
@@ -41,13 +41,14 @@ module Restore
     end
 
   
-    # rebuild_all_records appelle les trois méthodes accessoires
+    # rebuild_all_records appelle les quatre méthodes accessoires
     # successivement
     def compta_restore
       Organism.transaction do
         create_organism
         create_direct_children
         create_sub_children
+        create_habtm
       end
 
     end
@@ -66,6 +67,7 @@ module Restore
         new_id = @restores[:income_books].new_id(old_id) || @restores[:outcome_books].new_id(old_id) ||  @restores[:od_books].new_id(old_id)
       end
       raise RestoreError, "Impossible de trouver un enregistrement du type #{required_model.camelize} avec comme id #{old_id}" if new_id.nil?
+      Rails.logger.debug "ComptaRestorer #ask_id_for Modèle : #{model} - id demandée #{old_id} - réponse #{new_id} "
       new_id
     end
 
@@ -123,8 +125,8 @@ module Restore
     #
     def create_habtm
       if @datas[:bank_extract_lines_lines]
-        Restore::HabtmRestorer.new(self, :bank_extract_line, :line).
-          restore_records(@datas[:bank_extract_lines_lines])
+        hr = Restore::HabtmRestorer.new(self, :bank_extract_line, :line)
+          hr.restore_records(@datas[:bank_extract_lines_lines])
       end
     end
 

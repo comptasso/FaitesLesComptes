@@ -18,9 +18,9 @@ module Restore
   class HabtmRestorer
 
     def initialize(sender, sym_model1, sym_model2)
-       @sym_model1 = sym_model1
-       @sym_model2 = sym_model2
-       @compta = sender
+      @sym_model1 = sym_model1
+      @sym_model2 = sym_model2
+      @compta = sender
     end
 
     # restore_records doit être appelé avec un array de hash reprenant
@@ -31,21 +31,30 @@ module Restore
     # substutives et crée le record souhaité
     #
     def restore_records(array_of_infos)
-      model1 = sym_model1.to_s.camelize.constantize
-      model2 = sym_model1.to_s.camelize.constantize
+      # ce callback add_to_list_bottom vient du plugin acts_as_list
+      BankExtractLine.skip_callback(:create, :before, :add_to_list_bottom)
+      StandardBankExtractLine.skip_callback(:initialize, :after, :prepare_datas)
+
+      model1 = @sym_model1.to_s.camelize.constantize
+      model2 = @sym_model2.to_s.camelize.constantize
 
       array_of_infos.each do |a|
         new_id1 = new_id2 = nil
-        new_id1 = compta.ask_id_for(sym_model1.to_s, a[sym_model1])
-        new_id2 = compta.ask_id_for(sym_model2.to_s, a[sym_model2])
+        new_id1 = @compta.ask_id_for(@sym_model1.to_s, a[@sym_model1])
+        new_id2 = @compta.ask_id_for(@sym_model2.to_s, a[@sym_model2])
 
         if (new_id1 && new_id2)
           bel = model1.find(new_id1)
-          bel << model2.find(new_id2)
+          bel.lines << model2.find(new_id2)
           bel.save!
-          rails.logger "Reconstitution de #{sym_model1}_#{sym_model2} with #{new_id1} et #{new_id2}"
+          Rails.logger.debug "Reconstitution de #{@sym_model1}_#{@sym_model2} with #{new_id1} et #{new_id2}"
         end
       end
+    ensure
+      StandardBankExtractLine.set_callback(:initialize, :after, :prepare_datas)
+      BankExtractLine.set_callback(:create, :before, :add_to_list_bottom)
     end
+
+    
   end
 end

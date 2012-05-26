@@ -38,7 +38,7 @@ class BankExtractLine < ActiveRecord::Base
   #
   def chainable?
     return false if is_a?(CheckDepositBankExtractLine)
-    return false if last?
+    return false unless lower_item
     return false if (lower_item.debit == 0 && self.debit != 0) || (self.credit != 0 && lower_item.credit == 0)
     return false if  lower_item.is_a?(CheckDepositBankExtractLine)
     true
@@ -49,6 +49,25 @@ class BankExtractLine < ActiveRecord::Base
       logger.warn "tried to include line #{line.id} which was already included in a bank_extract_line"
       raise ArgumentError
     end
+  end
+
+   # ActiveRecord::Base.restore est définie dans restore_record.rb
+   # prepare_datas n'a aucune utilité dans la phase de restauration et génèrerait une
+   # erreur puisque les lignes ne sont pas encore associées
+   # validate not_empty doit aussi être désactivée le temps de recréer l'association
+  def self.restore(new_attributes)
+    # ce callback add_to_list_bottom vient du plugin acts_as_list
+    BankExtractLine.skip_callback(:create, :before, :add_to_list_bottom) 
+
+    restored = self.new(new_attributes)
+       Rails.logger.info "création de #{restored.class.name} with #{restored.attributes}"
+      # Rails.logger.warn "Erreur : #{restored.errors.inspect}" unless restored.valid?
+       restored.save!(:validate=>false) # lors de la restauration la validation not_empty ne peut être effectuée
+       restored
+  ensure
+     BankExtractLine.set_callback(:create, :before, :add_to_list_bottom)
+
+
   end
 
 

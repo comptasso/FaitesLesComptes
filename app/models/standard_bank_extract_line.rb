@@ -32,7 +32,7 @@ class StandardBankExtractLine < BankExtractLine
   #  before_destroy :remove_link_to_source
   validate :not_empty
 
-  after_initialize :prepare_datas
+ # after_initialize :prepare_datas
 
   # lock_line verrouille la ligne d'écriture. Ceci est appelé par bank_extract (after_save)
   # lorsque l'on verrouille le relevé
@@ -93,11 +93,14 @@ class StandardBankExtractLine < BankExtractLine
   # TODO à mettre dans private
   def prepare_datas
     raise 'StandardBankExtractLine sans ligne' if lines.empty?
-    self.date ||= lines.first.line_date # par défaut on construit les infos de base
-    @payment= lines.first.payment_mode # avec la première ligne associée
-    @narration = lines.first.narration
+    
+       self.date ||= lines.first.line_date # par défaut on construit les infos de base
+       @payment= lines.first.payment_mode # avec la première ligne associée
+       @narration = lines.first.narration
     # TODO blid est-il utils
-    @blid= "line_#{lines.first.id}" if lines.count == 1 # blid pour bank_line_id
+       @blid= "line_#{lines.first.id}" if lines.count == 1 # blid pour bank_line_id
+
+
   end
 
    # ActiveRecord::Base.restore est définie dans restore_record.rb
@@ -105,6 +108,8 @@ class StandardBankExtractLine < BankExtractLine
    # erreur puisque les lignes ne sont pas encore associées
    # validate not_empty doit aussi être désactivée le temps de recréer l'association
   def self.restore(new_attributes)
+    # ce callback add_to_list_bottom vient du plugin acts_as_list
+    BankExtractLine.skip_callback(:create, :before, :add_to_list_bottom)
     StandardBankExtractLine.skip_callback(:initialize, :after, :prepare_datas)
     restored = self.new(new_attributes)
        Rails.logger.info "création de #{restored.class.name} with #{restored.attributes}"
@@ -113,6 +118,7 @@ class StandardBankExtractLine < BankExtractLine
        restored
   ensure
     StandardBankExtractLine.set_callback(:initialize, :after, :prepare_datas)
+    BankExtractLine.set_callback(:create, :before, :add_to_list_bottom)
   end
 
   private

@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  # c.filter = {:wip=>true}
+   c.filter = {:wip=>true}
 end
 
 describe StandardBankExtractLine do
@@ -113,7 +113,7 @@ describe StandardBankExtractLine do
 
     end
 
-    describe 'degroup' , :wip=>true do
+    describe 'degroup'  do
 
       before(:each) do
         @array_bels = @bel2.degroup
@@ -181,6 +181,26 @@ describe StandardBankExtractLine do
       @bel.lock_line
       @l.should be_locked
       @l2.should be_locked
+    end
+
+  end
+
+  describe 'restore' , :wip=>true do
+
+    def new_attributes(n)
+    { position: n,
+    bank_extract_id: 6,
+    check_deposit_id: nil,
+    date: Date.civil(2012,03,01)
+    }
+    end
+    
+
+
+    it 'restore a sbel' do
+      expect {StandardBankExtractLine.restore(new_attributes 1)}.to change {StandardBankExtractLine.count }
+      expect {StandardBankExtractLine.restore(new_attributes 5)}.to change {StandardBankExtractLine.count }
+      expect {StandardBankExtractLine.restore(new_attributes 2)}.to change {StandardBankExtractLine.count }
     end
 
   end
