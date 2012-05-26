@@ -123,10 +123,14 @@ module Restore
     # Il faut donc pour chaque hash chercher la bel correspondante
     # et lui ajouter la line correspondante
     #
+    # La valeur de retour true or false indique s'il y a eu un problème
+    #
     def create_habtm
       if @datas[:bank_extract_lines_lines]
         hr = Restore::HabtmRestorer.new(self, :bank_extract_line, :line)
-          hr.restore_records(@datas[:bank_extract_lines_lines])
+        hr.restore_records(@datas[:bank_extract_lines_lines])
+      else
+        true # Pas de pb si pas de habtm
       end
     end
 

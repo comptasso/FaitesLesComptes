@@ -469,7 +469,7 @@ OK - Problématique de transfer dont l'identification pour owner_id n'est pas é
 OK - factoriser le modèle transfert (les lignes qui remplissent debitable et creditable)
 OK - renommer les compta et autres restore en restorer
 OK - confier la création du record au modèle avec les skip call back dans le modèle
-find_id_for doit anvoyer un message d'erreur utilisable si nécessaire
+find_id_for devrait envoyer un message d'erreur utilisable
 OK - utiliser le helper de cash_lines pour lines
 OK - request pour archive
 OK - request pour restore
@@ -537,9 +537,13 @@ NON scinder une ligne - on attendra de voir si c'est utile
 Ajouter les icones pour appeler ces actions
 OK - quand la table des écriture du bank_extract est vide, on ne peut pas faire un drag and drop
 OK - modif de la classe Archive pour sauvegarder les infos de la table habtm
-OK - création d'une méthode create_habtm pour restaurer les lignes (EN COURS)
+OK - création d'une méthode create_habtm pour restaurer les lignes
+
+
 
 --------------------- Remarques lors des essais ---------------------------
+Revoir l'affichage data_table pour les organismes si plus de 10
+
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
 Et peut être aussi une référence de facture
 OK - Utiliser bootstrap pour l'affichage des flash

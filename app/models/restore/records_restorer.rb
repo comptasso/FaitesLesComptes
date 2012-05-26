@@ -16,7 +16,7 @@ class ActiveRecord::Base
        restored = self.new(new_attributes)
        Rails.logger.info "création de #{restored.class.name} with #{restored.attributes}"
        Rails.logger.warn "Erreur : #{restored.errors.inspect}" unless restored.valid?
-       puts "Erreur : #{restored.errors.inspect}" unless restored.valid?
+       puts "Erreur de restore appelé par ActiveRecord::Base : #{restored.errors.inspect}" unless restored.valid?
        restored.save!
        restored
   end
@@ -66,7 +66,7 @@ module Restore
     def restore(data)
       new_dd = {:old_id=>data[:id] }
       new_attributes = data.attributes
-      child_id(data).each do |a_id|
+      fields_ending_by_id(data).each do |a_id|
         new_attributes[a_id] = find_id_for(data, a_id)
       end
 
@@ -74,35 +74,35 @@ module Restore
       new_attributes.delete 'id'
       new_attributes.delete 'type'
 
+
+      # TODO on doit pouvoir supprimer cet if/else
       if data.class == Organism
         new_dd[:record] = Organism.restore(new_attributes)
         Rails.logger.debug "#{new_dd[:record].errors.inspect}" unless new_dd[:record].valid?
       else
         new_dd[:record] = data.class.name.constantize.restore(new_attributes)
-#        new_dd[:record] = data.class.name.constantize.new(new_attributes)
-#        Rails.logger.debug "#{new_dd[:record].errors.inspect}"   unless new_dd[:record].valid?
-#        new_dd[:record].save!
       end
       @id_records << new_dd
       Rails.logger.debug "#{new_dd.inspect} "
     end
 
 
-    # Deux cas de figure, soit il y a un champ polymorphique
-    # soit pas. Le premier cas est traité par une vérification de la présence
-    # du _type
+    # Find_id_for permet de trouver l'id du record correspondant aux relations
+    # belongs_to.
+    # 
+    # Deux cas de figure selon que le champ est polymorphique
+    # 
     def find_id_for(data, a_id)
       # cas le plus facile, id est nil et on retourne nil
       return nil if data.attributes[a_id] == nil
-      # cas général
-      model = a_id[/(.*)(_id$)/,1] # le modèle est obtenu en retirant _id par exemple book à partir de book_id
+      # cas général : le modèle est obtenu en retirant _id par exemple book à partir de book_id
+      model = a_id[/(.*)(_id$)/,1] 
       # cas polymorphic , alors le modèle est obtenu en lisant le type
       # par exemple owner_id ne renvoie pas à owner mais a Transfer (que l'on obtient en regardant owner_type)
       model = model_polymorphic(data, a_id)  if polymorphic?(data, a_id)
       # maintenant on demande à compta de retourner le nouvel id correspondant
       # à ce modèle et à cet id
-      # par exemple ask_id_for('Nature', 27) si la ligne aveait un nature_id de 27
-     # Rails.logger.debug "Modèle : #{data.inspect} - a_id : #{a_id}  "
+      # par exemple ask_id_for('Nature', 27) si la ligne avait un nature_id de 27
       rid = @compta.ask_id_for(model, data.attributes[a_id])
       Rails.logger.debug "reponse : #{rid} "
       rid
@@ -120,7 +120,7 @@ module Restore
    
 
     # renvoie un tableau de tous les champs de data qui se terminent en _id
-    def child_id(data)
+    def fields_ending_by_id(data)
       data.attributes.map {|k,v|  k }.grep(/_id$/)
     end
 

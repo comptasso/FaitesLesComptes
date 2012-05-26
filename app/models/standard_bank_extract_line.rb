@@ -92,14 +92,14 @@ class StandardBankExtractLine < BankExtractLine
   
   # TODO à mettre dans private
   def prepare_datas
-    raise 'StandardBankExtractLine sans ligne' if lines.empty?
-    
+   #raise 'StandardBankExtractLine sans ligne'
+    unless lines.empty?
        self.date ||= lines.first.line_date # par défaut on construit les infos de base
        @payment= lines.first.payment_mode # avec la première ligne associée
        @narration = lines.first.narration
-    # TODO blid est-il utils
+    # TODO blid est-il utile ?
        @blid= "line_#{lines.first.id}" if lines.count == 1 # blid pour bank_line_id
-
+    end
 
   end
 
@@ -113,7 +113,6 @@ class StandardBankExtractLine < BankExtractLine
     StandardBankExtractLine.skip_callback(:initialize, :after, :prepare_datas)
     restored = self.new(new_attributes)
        Rails.logger.info "création de #{restored.class.name} with #{restored.attributes}"
-       Rails.logger.warn "Erreur : #{restored.errors.inspect}" unless restored.valid?
        restored.save!(:validate=>false) # lors de la restauration la validation not_empty ne peut être effectuée
        restored
   ensure
