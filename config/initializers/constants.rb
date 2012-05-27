@@ -5,6 +5,6 @@
   # ne pas oublier d'ajouter les nouveaux modèles en cas d'évolution de l'architecture de la base
   # ne pas oublier de redémarrer le serveur en cas de modification de ce fichier
   ORGANISM = ['organism']
-  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line standard_bank_extract_line income_book outcome_book od_book transfer)
+  MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book od_book transfer)
   ORGMODELS = ORGANISM + MODELS
 

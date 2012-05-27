@@ -1,29 +1,7 @@
 # -*- encoding : utf-8 -*-
 
-# le modèle BanExtractLine représente une ligne d'un relevé bancaire.
-# Cette ligne peut correspondre à une ligne d'un livre de recettes ou de dépenses 
-# du moment qu'il s'agit d'une opération bancaire (pas d'espèces évidemment).
-# Par exemple un prélèvement ou un virement
-# Mais ce peut être aussi une remise de chèque.qui elle même renvoie à plusieurs lignes.
+# Classe destinée à enregistrer les lignes standard de dépenses et de recettes
 #
-# Le modèle a des sous classes : la seule actuellement est check_deposit_bank_extract_line
-# et est représenté par une table comme champs date, position, type, bank_extract_id
-# et check_deposit_id (ce dernier champ ne servant que pour la sous classe
-# CheckDepositBankExtractLine
-#
-# La méthode de classe has_many est surchargée dans CheckDepositBankExtractLine
-# pour pouvoir renvoyer les lines associées
-#
-# Une relation HABTM est définie avec lines, permettant d'avoir une ligne de relevé
-# bancaire qui correspond à plusieurs lignes d'écriture (ex péages regroupés
-# par semaine par les sociétés d'autoroute mais dont les dépenses sont enregistrées
-# ticket par ticket
-# Ou à l'inverse une ligne de dépenses qui aurait donné lieu à une opération bancaire
-# détaillée en deux lignes.
-#
-# Acts as list permet d'utiliser le champ position pour ordonner les lignes du relevé
-#
-
 class StandardBankExtractLine < BankExtractLine
   
 
@@ -32,7 +10,7 @@ class StandardBankExtractLine < BankExtractLine
   #  before_destroy :remove_link_to_source
   validate :not_empty
 
- # after_initialize :prepare_datas
+  after_initialize :prepare_datas
 
   # lock_line verrouille la ligne d'écriture. Ceci est appelé par bank_extract (after_save)
   # lorsque l'on verrouille le relevé
@@ -43,12 +21,12 @@ class StandardBankExtractLine < BankExtractLine
    # self.check_deposit.checks.each {|l| l.update_attribute(:locked, true)} if self.check_deposit_id
   end
 
-  # debit fait le total débit des lignes.
+  # Retourne le total débit des lignes associées.
   def debit
     lines.sum(:debit)
   end
 
-  # Retourne le total des crédits des lignes associées
+  # Retourne le total crédit des lignes associées
   def credit
     lines.sum(:credit)
   end
@@ -56,8 +34,8 @@ class StandardBankExtractLine < BankExtractLine
   # regorup prend une standard_bank_extract_line comme argument
   # et la fusionne avec l'instance.
   #
-  # Cela signifie que l'on tranfère les lignes de bel à self.
-  # puis que l'on supprime la ligne bel.
+  # Cela signifie que l'on tranfère les lignes de l'argument à self.
+  # puis que l'on supprime l'enregistrement correspondant à l'argument.
   #
   def regroup(bel)
     bel.lines.each do |l|
@@ -68,13 +46,13 @@ class StandardBankExtractLine < BankExtractLine
     bel.destroy
   end
 
-  # degroup décompose l'instance avec plusieurs lignes en autant
-  # d'instance qu'il y a de lignes.
+  # degroup décompose l'instance ayant plusieurs lignes en autant
+  # de StandardBankExtractLine qu'il y a de lignes.
   #
   # La position des différentes bels ainsi obtenue est contigue
   #
   # La méthode renvoie un tableau composé des bels nouvellement créées.
-  # (la première étant self dépouillée de toutes ses lignes sauf une
+  # (la première étant self mais dépouillée de toutes ses lignes sauf une
   #
   def degroup
     return self if self.lines.size < 2
@@ -104,20 +82,21 @@ class StandardBankExtractLine < BankExtractLine
   end
 
    # ActiveRecord::Base.restore est définie dans restore_record.rb
-   # prepare_datas n'a aucune utilité dans la phase de restauration et génèrerait une
-   # erreur puisque les lignes ne sont pas encore associées
-   # validate not_empty doit aussi être désactivée le temps de recréer l'association
+   #
+   # On désactive les callbacks de StandardBankExtractLine et de acts_as_list
+   #
+   # On utilise également validate:false car not_empty doit être désactivée
+   # le temps de recréer l'association
   def self.restore(new_attributes)
-    # ce callback add_to_list_bottom vient du plugin acts_as_list
-    BankExtractLine.skip_callback(:create, :before, :add_to_list_bottom)
+    
     StandardBankExtractLine.skip_callback(:initialize, :after, :prepare_datas)
     restored = self.new(new_attributes)
        Rails.logger.info "création de #{restored.class.name} with #{restored.attributes}"
-       restored.save!(:validate=>false) # lors de la restauration la validation not_empty ne peut être effectuée
+       restored.save!(:validate=>false) 
        restored
   ensure
     StandardBankExtractLine.set_callback(:initialize, :after, :prepare_datas)
-    BankExtractLine.set_callback(:create, :before, :add_to_list_bottom)
+    
   end
 
   private
@@ -130,22 +109,6 @@ class StandardBankExtractLine < BankExtractLine
       true
     end
   end
-
- 
-
-  #  # appelée par after_save, a pour effet de remplir le champ bank_extract_id qui
-  #  # TODO check s'il peut y avoir des lignes rattachées à un compte qui nécessite cette étape
-  #  # Oui pour les remises de chèques mais pour les autres ???
-  #  # associe la ligne au relevé de compte (en fait c'est normalement peu utile car
-  #  # lors de l'enregistrement des lignes, le compte bancaire est déja rempli
-  #  def link_to_source
-  #    self.lines.each {|l| l.update_attribute(:bank_extract_id, self.bank_extract_id) }
-  #  end
-
-  #  def remove_link_to_source
-  #    self.line.update_attribute(:bank_extract_id, nil) if self.line_id
-  #    self.check_deposit.update_attribute(:bank_extract_id, nil) if self.check_deposit_id
-  #  end
 
    
 end

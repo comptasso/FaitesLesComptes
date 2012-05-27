@@ -4,11 +4,34 @@
 # La classe sert de mère pour les différents types de BankExtractLine avec une
 # seule table (STI)
 #
-# Les deux sous classes (actuellement) sont StandardBankExtractLine et
+# Le modèle BanExtractLine représente une ligne d'un relevé bancaire.
+#
+# Cette ligne peut correspondre à une ligne d'un livre de recettes ou de dépenses
+# du moment qu'il s'agit d'une opération bancaire (pas d'espèces évidemment).
+# Par exemple un prélèvement ou un virement
+# Mais ce peut être aussi une remise de chèque.qui elle même renvoie à plusieurs lignes.
+#
+# Le modèle a des sous classes :
+# - StandardBankExtractLine
+# - CheckDepositBankExtractLine
+# et est représenté par une table avec les champs date, position, type, bank_extract_id
+# et check_deposit_id (ce dernier champ ne servant que pour la sous classe
 # CheckDepositBankExtractLine
 #
-# Cette classe recevra les méthodes communes telles que up et down pour la
-# gestion des positions
+# TODO a modifier en changeant le sens de la relation has_one, belongs_to
+#
+# La méthode de classe has_many est surchargée dans CheckDepositBankExtractLine
+# pour pouvoir renvoyer les lines associées
+#
+# Une relation HABTM est définie avec lines, permettant d'avoir une ligne de relevé
+# bancaire qui correspond à plusieurs lignes d'écriture (ex péages regroupés
+# par semaine par les sociétés d'autoroute mais dont les dépenses sont enregistrées
+# ticket par ticket.
+#
+# Ou à l'inverse une ligne de dépenses qui aurait donné lieu à une opération bancaire
+# détaillée en deux lignes sur le relevé.
+#
+# Acts as list permet d'utiliser le champ position pour ordonner les lignes du relevé
 #
 class BankExtractLine < ActiveRecord::Base
 
@@ -21,7 +44,7 @@ class BankExtractLine < ActiveRecord::Base
   acts_as_list :scope => :bank_extract
 
   # validate :not_empty est délégué aux sous classes
-  # par le biais de sheck_deposit_id :presence=>true
+  # par le biais de check_deposit_id :presence=>true
   # et par le biais d'une mathode not_empty pour StandardBankExtractLine
 
   attr_reader :payment, :narration, :debit,  :credit
@@ -44,6 +67,9 @@ class BankExtractLine < ActiveRecord::Base
     true
   end
 
+
+  # appelé par before_add pour s'assurer que la ligne n'est pas déja rattachée
+  # à une ligne d'un relevé bancaire
   def not_already_included(line)
     if line.bank_extract_lines.count > 0
       logger.warn "tried to include line #{line.id} which was already included in a bank_extract_line"

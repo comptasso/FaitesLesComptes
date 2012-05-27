@@ -49,13 +49,12 @@ class CheckDepositBankExtractLine < BankExtractLine
   end
 
   # lock_line verrouille les lignes d'écriture correspondant
-  # aux chèques de cette remise de .
+  # aux chèques de cette remise.
   #
   # Ceci est appelé par bank_extract (after_save)
   # lorsque l'on verrouille le relevé
   #
   def lock_line
-    puts 'dans la méthode lock_line de check_deposit_bank_extract_line'
     check_deposit.checks.each {|check_line| check_line.update_attribute(:locked, true) unless check_line.locked? }
   end
 
