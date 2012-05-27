@@ -531,7 +531,7 @@ OK - Revoir le javascript pour faire du drag and drop (pointage-dépointage)
 OK - javascript pour déplacer une bel
 OK - javascript pour afficher les sous lignes
 OK - revoir les routes pour n'avoir plus que deux niveaux bank_extract_bank_extract_lines
-Verifier que remove une ligne chainée fonctionne correctement
+OK - Verifier que remove une ligne chainée fonctionne correctement
 Faire les vues modales pour créer une nouvelle ligne
 NON scinder une ligne - on attendra de voir si c'est utile
 Ajouter les icones pour appeler ces actions

@@ -43,33 +43,5 @@ describe Archive do
     end
   end
 
- 
-
-
-  #  context 'rebuild from an archive' do
-  #
-  #
-  #    it 'archive is able to create a restored_compta' do
-  #      @archive.restore_compta(@file_name).should be_an_instance_of Restore::RestoredCompta
-  #
-  #    end
-  #
-  #    context 'restore_compta has been called' do
-  #      before(:each) do
-  #        @archive.restore_compta(@file_name)
-  #      end
-  #
-  #
-  #
-  #    it 'can read restored models' do
-  #      pending 'sera sorit de achive'
-  #      @archive.rebuild_all_records
-  #      @archive.restores(:destinations).should have(7).elements
-  #      @archive.restores(:natures).each {|n| puts n.inspect}
-  #      @archive.restores(:lines).should have(@archive.collect[:lines].size).elements
-  #    end
-  #end
-  #
-  #  end
 end
 
