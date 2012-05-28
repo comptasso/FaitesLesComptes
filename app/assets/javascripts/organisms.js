@@ -28,6 +28,7 @@ jQuery(function () {
 
             "sDom": "<'row-fluid'<'span6'l><'span6' f> r>t<'row-fluid'p>",
             "bAutoWidth": false,
+            "sPaginationType": "bootstrap",
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
             }
