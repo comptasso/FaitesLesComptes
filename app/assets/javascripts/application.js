@@ -76,7 +76,7 @@ jQuery(function ($) {
 });
 
 // FIXME traiter le cas ou data == nil
-// fonction pour transformer une chaine en float
+// fonction pour transformer une chaine avec virgule en float
 function stringToFloat(jcdata) {
 
     if (jcdata === undefined) {

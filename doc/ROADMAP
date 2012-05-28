@@ -543,6 +543,7 @@ OK - création d'une méthode create_habtm pour restaurer les lignes
 
 --------------------- Remarques lors des essais ---------------------------
 Mettre sPaginationType: bootstrap dans tous les appels à dataTable
+Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
 
 Revoir l'affichage data_table pour les organismes si plus de 10
 

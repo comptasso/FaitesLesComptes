@@ -25,8 +25,7 @@ jQuery(function () {
     if ($('.public_organisms .data_table').length !== 0) {
         /* Table initialisation */
         $('.public_organisms .data_table').dataTable({
-
-            "sDom": "<'row-fluid'<'span6'l><'span6' f> r>t<'row-fluid'p>",
+            "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
             "bAutoWidth": false,
             "sPaginationType": "bootstrap",
             "oLanguage": {

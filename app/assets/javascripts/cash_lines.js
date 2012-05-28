@@ -1,8 +1,10 @@
 // mise en forme des tables de lignes
 jQuery(function() {
-    if ($('.cash_lines .data_table').length != 0) {
-        var oTable= $('.cash_lines .data_table').dataTable(
+    if ($('.public_cash_lines .data_table').length != 0) {
+        var oTable= $('.public_cash_lines .data_table').dataTable(
         {
+            "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
+            "sPaginationType": "bootstrap",
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
             },
@@ -13,7 +15,6 @@ jQuery(function() {
             null,
              null,
             null,
-            {"bSortable": false},
             {"bSortable": false}
             ],
 
