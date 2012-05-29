@@ -22,17 +22,15 @@ $(document).ready(function () {
 
 // mise en forme de la table index des organismes
 jQuery(function () {
-    if ($('.public_organisms .data_table').length !== 0) {
-        /* Table initialisation */
-        $('.public_organisms .data_table').dataTable({
-            "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
-            "bAutoWidth": false,
-            "sPaginationType": "bootstrap",
-            "oLanguage": {
-                "sUrl": "/frenchdatatable.txt"
-            }
-        });
-    }
+    /* Table initialisation */
+    $('.public_organisms .data_table').dataTable({
+        "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
+        "bAutoWidth": false,
+        "sPaginationType": "bootstrap",
+        "oLanguage": {
+            "sUrl": "/frenchdatatable.txt"
+        }
+    });
 });
    //    fin de jQuery application#data_table
 
