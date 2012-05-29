@@ -28,8 +28,9 @@ jQuery(function (){
 // mise en forme des tables de lignes
 jQuery(function() {
     if ($('.compta_lines .data_table').length != 0) {
-        var oTable= $('.compta_lines .data_table').dataTable(
-        {
+        var oTable= $('.compta_lines .data_table').dataTable( {
+            "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
+            "sPaginationType": "bootstrap",
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
             },

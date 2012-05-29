@@ -13,24 +13,23 @@ jQuery(function (){
 // mise en forme des tables de lignes
 jQuery(function() {
     if ($('.public_lines .data_table').length != 0) {
-        var oTable= $('.public_lines .data_table').dataTable(
-        {
-           "sDom": "<'row-fluid'<'span9'l><'span3' f> r>t<'row-fluid'<'span8'i><'span4'p> >",
-           
+        var oTable= $('.public_lines .data_table').dataTable( {
+            "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
+		    "sPaginationType": "bootstrap",
             "bAutoWidth": false,
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
             },
-            "sPaginationType": "bootstrap",
- "aoColumns": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {"bSortable": false}
+            
+            "aoColumns": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {"bSortable": false}
             ],
 
             "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {

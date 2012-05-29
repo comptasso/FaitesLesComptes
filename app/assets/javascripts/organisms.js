@@ -1,5 +1,6 @@
 "use strict";
 /*jslint browser: true */
+
 var $, jQuery, stringToFloat;
 
 // fonction qui masque le contenu de la zone message dans le dashboard
@@ -11,14 +12,7 @@ $(document).ready(function () {
     });
 });
 
-
 /*jslint nomen: true*/
-
-
-
-
-
-
 
 // mise en forme de la table index des organismes
 jQuery(function () {
