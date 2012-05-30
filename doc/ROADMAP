@@ -518,11 +518,8 @@ Créer un after_save de la remise de chèques qui fait la liaison entre les lign
 OK - rendre plus complet ce controller en ayant une fonction index
 OK - dans la vue index afficher les soldes et mouvements et signaler les éventuels écarts
 OK - retirer les images danger lorsque le solde devient correct
-OK -  plus il faudra un bouton lock à un moment
- revoir l'architecture de check_deposit qui devrait être belongs_to bank_extract_line
-du coup on peut retirer check_deposit_id de la table des bels
-on doit rajouter bel_id à la table de check_deposit et il faudra une vérif de cohérence
-entre check_deposit.bank_account_id et check_deposit.account
+OK - plus il faudra un bouton lock à un moment
+OK - revoir l'architecture de check_deposit qui devrait être belongs_to bank_extract_line
 OK - retirer le pointeur main sur les indicateurs de filtrage
 OK - lui transférer les actions pointage et dépointage
 OK - mettre en place des STI pour une BEL de type remise de chèque et une BEL de type line
@@ -538,8 +535,7 @@ Ajouter les icones pour appeler ces actions
 OK - quand la table des écriture du bank_extract est vide, on ne peut pas faire un drag and drop
 OK - modif de la classe Archive pour sauvegarder les infos de la table habtm
 OK - création d'une méthode create_habtm pour restaurer les lignes
-
-TODO je pense qu'on peut enlever bank_extract_id de check_deposit puisqu'on a le line par check_deposit_bank_extract_line
+Ok - enlever bank_extract_id de check_deposit puisqu'on a le bank_extract par check_deposit_bank_extract_line
 
 --------------------- Remarques lors des essais ---------------------------
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
