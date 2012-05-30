@@ -6,23 +6,25 @@
 # elle a un lien avec une remise de chèques.
 
 class CheckDepositBankExtractLine < BankExtractLine
-  belongs_to :check_deposit
-  
-  after_initialize :prepare_datas
+  has_one :check_deposit
 
-  validates :check_deposit_id, presence:true, uniqueness:true
+ #  before_validation :prepare_datas
+
+  
   validates :bank_extract_id, presence:true
 
-  
+  def narration
+    'Remise de chèques'
+  end
 
-  def prepare_datas
-      cd = self.check_deposit
+  def payment
+    'Chèque'
+  end
+ 
+
+  def add_check_deposit(cd)
       self.date = cd.deposit_date
-      @debit=0
-      @credit=cd.total_checks
-      @narration = 'Remise de chèques'
-      @payment = 'Chèques'
-      @blid="check_deposit_#{cd.id}"
+      self.check_deposit = cd
   end
 
   

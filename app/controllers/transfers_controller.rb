@@ -4,7 +4,7 @@ class TransfersController < ApplicationController
   # GET /transfers
   # GET /transfers.json
   def index
-    @transfers = @organism.transfers.all
+    @transfers = @organism.transfers.order('date ASC')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -46,7 +46,7 @@ class TransfersController < ApplicationController
 
     respond_to do |format|
       if @transfer.save
-        format.html { redirect_to organism_transfers_url(@organism), notice: 'Le virement a été enregistré' }
+        format.html { redirect_to organism_transfers_url(@organism), notice: 'Le transfert a été enregistré' }
        
       else
         format.html { render action: "new" }
@@ -62,7 +62,7 @@ class TransfersController < ApplicationController
 
     respond_to do |format|
       if @transfer.update_attributes(params[:transfer])
-        format.html { redirect_to organism_transfers_url(@organism), notice: 'Virement mis à jour' }
+        format.html { redirect_to organism_transfers_url(@organism), notice: 'Transfert mis à jour' }
         # format.json { head :no_content }
       else
         format.html { render action: "edit" }

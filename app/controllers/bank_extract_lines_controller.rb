@@ -72,7 +72,10 @@ class BankExtractLinesController < ApplicationController
     @bel = nil
     case html
     when 'check_deposit'
-      @bel =  @bank_extract.check_deposit_bank_extract_lines.new(check_deposit_id:id)
+      @bel =  @bank_extract.check_deposit_bank_extract_lines.new
+      # il faut utiliser add_check_deposit pour que @bel ait les infos
+      # associées ramplies - voir le modèle
+      @bel.add_check_deposit(CheckDeposit.find(id))
     when 'standard_line'
       l=Line.find(id)
       @bel = @bank_extract.standard_bank_extract_lines.new(lines:[l])

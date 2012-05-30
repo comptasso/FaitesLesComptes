@@ -27,13 +27,14 @@ describe CheckDepositBankExtractLine do
   end
 
   def valid_attributes
-    {bank_extract_id:@be.id, check_deposit_id:@cd.id}
+    {bank_extract_id:@be.id}
   end
 
   describe 'testing attributes' do
 
     before(:each) do
       @bel = CheckDepositBankExtractLine.new(valid_attributes)
+      @bel.add_check_deposit(@cd)
     end
 
     it 'is created with valid attributes' do
@@ -54,11 +55,7 @@ describe CheckDepositBankExtractLine do
       @bel.debit.should == 0
     end
 
-    it 'not valid without check_deposit_id' do 
-      @bel.check_deposit_id = nil  # on retire la seule ligne du tableau de lignes
-      @bel.should_not be_valid
-    end
-
+   
     it 'is not valid without bank_extract_id' do
       @bel.bank_extract_id = nil
       @bel.should_not be_valid
@@ -69,19 +66,13 @@ describe CheckDepositBankExtractLine do
       @bel.type.should == 'CheckDepositBankExtractLine'
     end
 
-    it 'check_deposit cant belong to two different bels'  do
-      @bel.save!
-      @bel2 = CheckDepositBankExtractLine.new(valid_attributes)
-      @bel2.should_not be_valid
-
-    end
-
-
+    
   end
 
   describe 'lock line' do
     before(:each) do
-      @bel= @be.check_deposit_bank_extract_lines.create!(check_deposit_id:@cd.id)
+      @bel= @be.check_deposit_bank_extract_lines.new
+      @bel.add_check_deposit(@cd)
     end
 
     it 'locks each line of checks' do

@@ -15,6 +15,8 @@ class CheckDeposit < ActiveRecord::Base
   # à toutes les lignes qui correspondant aux chèques en attente d'encaissement
   # de l'organisme correspondant.
   belongs_to :bank_account
+  belongs_to :bank_extract_line, :foreign_key=>:check_deposit_bank_extract_line_id
+  
   has_many :checks, class_name: 'Line',
     dependent: :nullify,
     conditions: Proc.new {"credit > 0 and payment_mode='Chèque' and book_id IN (#{self.bids}) "},
@@ -23,7 +25,7 @@ class CheckDeposit < ActiveRecord::Base
     before_add: :cant_if_pointed 
   
    # c'est la présence de bank_extract_line qui indique que le check_deposit à été pointé et ne peut plus être modifié
-  has_one :bank_extract_line
+  
 
   def bids
     raise "Modèle CheckDeposit - Impossible de trouver les livres sans avoir l'organisme" if self.bank_account_id == nil
@@ -33,7 +35,7 @@ class CheckDeposit < ActiveRecord::Base
  
 
   validates :bank_account_id, :deposit_date, :presence=>true
-  validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :has_bank_extract_line?
+  validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :has_bank_extract_line? 
  
  
   # before_validation :not_empty # une remise chèque vide n'a pas de sens

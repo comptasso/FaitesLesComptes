@@ -542,10 +542,10 @@ OK - création d'une méthode create_habtm pour restaurer les lignes
 
 
 --------------------- Remarques lors des essais ---------------------------
-Mettre sPaginationType: bootstrap dans tous les appels à dataTable
+OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
 
-Revoir l'affichage data_table pour les organismes si plus de 10
+OK - Revoir l'affichage data_table pour les organismes si plus de 10
 
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
 Et peut être aussi une référence de facture
@@ -554,8 +554,11 @@ Une ligne a pu être saisie sans mode de paiement
 on ne devrait pas pouvoir remettre un chèque qui n'appartient à aucun exercice
 Modifier ce qui apparait dans le flash lors de la saisie d'une ligne
 
-Dans transferts : changer virement en transfert dans le flash et dans le titre h3 de index
-Mettre les natures par ordre alpha dans la saisie d'écritures
+OK - Dans transferts : changer virement en transfert dans le flash et dans le titre h3 de index
+OK - Classer les transferts par date
+Transferts  : mettre un affichage par mois pour les virements  ?
+
+OK - Mettre les natures par ordre alpha dans la saisie d'écritures
 
 Dans la sauvegarde, j'avais un cash control sans date, du coup, cela générait une erreur dans la restauration.
 ----------------------Suppression d'un exercice-----------------

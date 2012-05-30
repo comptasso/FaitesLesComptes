@@ -24,8 +24,8 @@ class Nature < ActiveRecord::Base
    has_many :lines
 
 
-   scope :recettes, where('income_outcome = ?', true)
-   scope :depenses, where('income_outcome = ?', false)
+   scope :recettes, where('income_outcome = ?', true).order('name ASC')
+   scope :depenses, where('income_outcome = ?', false).order('name ASC')
    scope :without_account, where('account_id IS NULL')
 
   before_destroy :ensure_no_lines

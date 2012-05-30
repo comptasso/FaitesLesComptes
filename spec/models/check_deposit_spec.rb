@@ -2,12 +2,18 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+
+RSpec.configure do |c|
+  # c.filter = {:wip=> true }
+end
+
+
 describe CheckDeposit do
 
   before(:each) do
 
     @o=Organism.create!(title: 'test check_deposit')
-    @p=@o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
+    @p=@o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year) 
     @ba=@o.bank_accounts.create!(name: 'La Banque', number: '123456Z')
     @b=@o.income_books.create!(title: 'Recettes')
     @n=@p.natures.create!(name: 'ventes')
@@ -207,11 +213,11 @@ describe CheckDeposit do
       @check_deposit.should be_valid
     end
 
-    describe "le rattachement à un extrait de compte" do
+    describe "le rattachement à un extrait de compte" , :wip=>true do
       before(:each) do
         @ba.np_check_deposits.should == [@check_deposit]
-        @be=@ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
-        @bel=@be.bank_extract_lines.create!
+        @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
+        @bel = @be.bank_extract_lines.create!
         @check_deposit.bank_extract_line = @bel
       end
 
