@@ -1,6 +1,6 @@
 %tr{:id=>"#{check_deposit_bank_extract_line.id}", 'data-position'=>"#{check_deposit_bank_extract_line.position}" }
   %td= "#{check_deposit_bank_extract_line.position}"
-  %td= l check_deposit_bank_extract_line.date
+  %td= l check_deposit_bank_extract_line.cdbel_date
   %td= check_deposit_bank_extract_line.narration
   %td.numeric= debit_credit check_deposit_bank_extract_line.debit
   %td.numeric= debit_credit check_deposit_bank_extract_line.credit

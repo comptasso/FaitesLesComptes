@@ -29,7 +29,7 @@ module Utilities
 
     def fill_np_check_deposits
       # Trouve toutes les remises de chèques qui ne sont pas encore pointées
-      @bank_account.check_deposits.where('bank_extract_id IS NULL').each do |cd|
+      @bank_account.check_deposits.where('check_deposit_bank_extract_line_id IS NULL').each do |cd|
         @list << { :nature=> 'check_deposit',
           id:cd.id,
           date:cd.deposit_date,

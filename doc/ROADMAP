@@ -539,7 +539,7 @@ OK - quand la table des écriture du bank_extract est vide, on ne peut pas faire
 OK - modif de la classe Archive pour sauvegarder les infos de la table habtm
 OK - création d'une méthode create_habtm pour restaurer les lignes
 
-
+TODO je pense qu'on peut enlever bank_extract_id de check_deposit puisqu'on a le line par check_deposit_bank_extract_line
 
 --------------------- Remarques lors des essais ---------------------------
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable

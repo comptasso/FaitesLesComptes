@@ -6,12 +6,10 @@
 # elle a un lien avec une remise de chèques.
 
 class CheckDepositBankExtractLine < BankExtractLine
-  has_one :check_deposit
-
- #  before_validation :prepare_datas
-
   
-  validates :bank_extract_id, presence:true
+  has_one :check_deposit, :dependent=>:nullify
+  
+  validates :bank_extract_id, presence:true 
 
   def narration
     'Remise de chèques'
@@ -20,15 +18,16 @@ class CheckDepositBankExtractLine < BankExtractLine
   def payment
     'Chèque'
   end
+
+  def cdbel_date
+    self.date || self.check_deposit.date
+  end
  
 
   def add_check_deposit(cd)
       self.date = cd.deposit_date
       self.check_deposit = cd
   end
-
-  
-  
 
   
   def lines

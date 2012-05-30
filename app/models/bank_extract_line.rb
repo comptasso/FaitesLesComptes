@@ -39,8 +39,6 @@ class BankExtractLine < ActiveRecord::Base
 
   has_and_belongs_to_many :lines, :before_add=>:not_already_included
 
-
-
   acts_as_list :scope => :bank_extract
 
   # validate :not_empty est délégué aux sous classes

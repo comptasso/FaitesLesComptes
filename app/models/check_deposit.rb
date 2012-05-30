@@ -32,8 +32,6 @@ class CheckDeposit < ActiveRecord::Base
     bank_account.organism.income_books.all.collect {|b| b.id}.join(',')
   end
 
- 
-
   validates :bank_account_id, :deposit_date, :presence=>true
   validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :has_bank_extract_line? 
  

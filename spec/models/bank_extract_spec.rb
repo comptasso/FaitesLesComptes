@@ -94,7 +94,9 @@ describe BankExtract do
 
       @l2 = Line.create!(narration:'bel', line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
 
-      @bel1 = CheckDepositBankExtractLine.create!( bank_extract_id:@be2.id, check_deposit_id:@cd.id )
+      @bel1 = CheckDepositBankExtractLine.new( bank_extract_id:@be2.id)
+      @bel1.add_check_deposit(@cd)
+      @bel1.save!
       @bel2 = StandardBankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2])
 
 
