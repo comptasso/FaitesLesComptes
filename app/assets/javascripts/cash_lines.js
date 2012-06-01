@@ -3,8 +3,8 @@ var jQuery, $, stringToFloat;
 
 // mise en forme des tables de lignes
 jQuery(function () {
-    if ($('.public_cash_lines .data_table').length !== 0) {
-        var oTable = $('.public_cash_lines .data_table').dataTable(
+    if ($('.public_cash_lines .cash_lines_table').length !== 0) {
+        var oTable = $('.public_cash_lines .cash_lines_table').dataTable(
                 {
                     "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
                     "sPaginationType": "bootstrap",
@@ -12,6 +12,7 @@ jQuery(function () {
                         "sUrl": "/frenchdatatable.txt"
                     },
                     "aoColumns": [
+                        null,
                         null,
                         null,
                         null,
@@ -35,19 +36,19 @@ jQuery(function () {
                             iPageCredit = 0.0,
                             nCells;
                         for (i = 0; i < aaData.length; i += 1) {
-                            iTotalDebit += stringToFloat(aaData[i][4]);
+                            iTotalDebit += stringToFloat(aaData[i][5]);
                         }
 
                         /* Calculate the market share for browsers on this page */
                         for (i = iStart; i < iEnd; i += 1) {
-                            iPageDebit += stringToFloat(aaData[aiDisplay[i]][4]);
+                            iPageDebit += stringToFloat(aaData[aiDisplay[i]][5]);
                         }
                         for (i = 0; i < aaData.length; i += 1) {
-                            iTotalCredit += stringToFloat(aaData[i][5]);
+                            iTotalCredit += stringToFloat(aaData[i][6]);
                         }
                         /* Calculate the market share for browsers on this page */
                         for (i = iStart; i < iEnd; i += 1) {
-                            iPageCredit += stringToFloat(aaData[aiDisplay[i]][5]);
+                            iPageCredit += stringToFloat(aaData[aiDisplay[i]][6]);
                         }
 
                         /* Modify the footer row to match what we want */

@@ -9,8 +9,8 @@ var jQuery, $, stringToFloat;
 
 // mise en forme des tables de lignes
 jQuery(function () {
-    if ($('.public_lines .data_table').length !== 0) {
-        $('.public_lines .data_table').dataTable({
+    if ($('.lines_table').length !== 0) {
+        $('.lines_table').dataTable({
             "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
 		    "sPaginationType": "bootstrap",
             "bAutoWidth": false,

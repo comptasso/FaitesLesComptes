@@ -546,6 +546,7 @@ OK - Revoir l'affichage data_table pour les organismes si plus de 10
 OK - Le paiment par chèque doit afficher la banque et le champ référence
 OK - Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
 OK - Et peut être aussi une référence de facture
+revoir l'affichage de cash_lines et bank_lines suite à l'insertion de ref
 OK - Utiliser bootstrap pour l'affichage des flash
 Une ligne a pu être saisie sans mode de paiement
 on ne devrait pas pouvoir remettre un chèque qui n'appartient à aucun exercice
