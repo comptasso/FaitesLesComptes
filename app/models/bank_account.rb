@@ -6,6 +6,8 @@ class BankAccount < ActiveRecord::Base
   has_many :bank_extracts
   has_many :d_transfers, :as=>:debitable, :class_name=>'Transfer'
   has_many :c_transfers, :as=>:creditable, :class_name=>'Transfer'
+ 
+  
   
   validates :number, :uniqueness=>{:scope=>[:organism_id, :name]}
   validates :name, :number,  presence: true
@@ -54,7 +56,7 @@ class BankAccount < ActiveRecord::Base
 
  # trouve toutes les lignes non pointées -np pour not pointed
  # les lignes à sélectionner sont celles qui correspondent soit à des lignes rattachées
- # directement au bank_account_id, soit à des dépenses par chèques.
+ # directement au bank_account_id
  # les remises de chèques sont traitées par la méthode np_check_deposit
  def np_lines
    Line.find_by_sql("SELECT id, narration, debit, credit, payment_mode, line_date

@@ -6,7 +6,7 @@ describe Utilities::NotPointedLines do
 
   before(:each) do
     @ba = mock_model(BankAccount)
-    @ba.stub_chain(:check_deposits, :where).and_return(
+    @ba.stub(:np_check_deposits).and_return(
       [mock_model(CheckDeposit, id:1, total_checks:2, date:Date.today ),
         mock_model(CheckDeposit, id:2, total_checks:5, date: 1.day.ago)
       ])
