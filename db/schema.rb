@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(:version => 20120601045538) do
     t.integer  "owner_id"
     t.string   "owner_type"
     t.string   "ref"
+    t.string   "check_number"
   end
 
   create_table "natures", :force => true do |t|

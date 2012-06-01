@@ -230,7 +230,7 @@ fr:
         name: 'Nom'
       line:
         payment_mode: 'Paiement'
-        bank_account: 'Compte bancaire'
+        bank_account: 'Compte'
         cash: 'Caisse'
       cash_control:
         amount: Montant

@@ -543,9 +543,9 @@ OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
 
 OK - Revoir l'affichage data_table pour les organismes si plus de 10
-
+Le paiment par chèque doit afficher la banque et le champ référence
 Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
-Et peut être aussi une référence de facture
+OK - Et peut être aussi une référence de facture
 OK - Utiliser bootstrap pour l'affichage des flash
 Une ligne a pu être saisie sans mode de paiement
 on ne devrait pas pouvoir remettre un chèque qui n'appartient à aucun exercice

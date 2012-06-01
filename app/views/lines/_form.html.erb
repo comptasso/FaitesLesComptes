@@ -1,8 +1,8 @@
 
 
-<div class="inputs row-fluid" id="entry_lines" >
+<div class="inputs row-fluid <%=@book.type.underscore %>" id="entry_lines" >
 
-  <%=  simple_form_for([@book, @line])  do |f| %>
+  <%=  simple_form_for([@book, @line]) do |f| %>
 
     <%= f.error_notification %>
     <div class="row-fluid">
@@ -33,11 +33,17 @@
             <%=  f.input :credit, :jclabel_wrapper_html=> {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.credit) } if (@book.type=='IncomeBook') %>
             <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
                           disabled: "#{'Espèces' unless @organism.cashes.any?}",  :jclabel_wrapper_html=> {class: "span1"}, input_html: {class: "span2"} %>
+          
             <span id="td_bank" >
-<%= f.association :bank_account,  :jclabel_wrapper_html=>{class: "span2"}, input_html: {class: "span2"}, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>
+                <%= f.association :bank_account,  :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: "span2"}, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>
             </span>
+
+            <span id ="td_check_number">
+               <%= f.input :check_number, label:'N° ch.', :jclabel_wrapper_html=>{:class=>'span1'}, input_html: {class: "span2" }  %>
+           </span>
+
             <span id="td_cash" >
-<%= f.association :cash, :jclabel_wrapper_html=>{class: "span2"}, input_html: {class: "span2"}, :collection => @organism.cashes.all, :include_blank=> false %>
+                <%= f.association :cash, :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: "span2"}, :collection => @organism.cashes.all, :include_blank=> false %>
             </span>
           </div>
        </div>
