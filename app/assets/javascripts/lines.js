@@ -96,15 +96,17 @@ function $f_td_bank_cash() {
         $('#td_cash').hide();
 
         //cas d'une dépense payée par chèque'
-        if (($('#line_payment_mode').val() === 'Chèque') && ($('.outcome_book').length > 0)) {
+        if ((payment_mode === 'Chèque') && ($('.outcome_book').length > 0)) {
             // on affiche le champ de saisie du numéro de chèque
             $('#td_check_number').show();
         } else {
             $('#td_check_number').hide();
         }
         // si plusieurs banques on affiche le select
-        if ($('#line_bank_account_id option').size() > 1) {
+        if ((payment_mode !== "") && $('#line_bank_account_id option').size() > 1) {
             $('#td_bank').show();
+        } else {
+            $('#td_bank').hide();
         }
     } else {
     // si le mode de paiement est espèces et qu'il y a plus d'une caisse alors afficher les caisses'
