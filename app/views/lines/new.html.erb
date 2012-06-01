@@ -9,8 +9,8 @@
   <strong>
     <table>
       <tbody><tr><td>
-            Ligne créée :
-          </td>
+            <%= "Ligne n°#{@previous_line.id} créée : "  %>
+            </td>
             <%= render 'line', line: @previous_line %></tr></tbody>
       </table>
   </strong>

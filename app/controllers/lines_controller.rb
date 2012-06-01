@@ -65,7 +65,7 @@ class LinesController < ApplicationController
       if @line.save
         flash[:date]=@line.line_date # permet de transmettre la date à l'écriture suivante
         flash[:previous_line_id]=@line.id
-        mois=(@line.line_date.month)-1
+        mois = (@line.line_date.month)-1
         format.html { redirect_to new_book_line_url(@book,mois: mois) }
         format.json { render json: @line, status: :created, location: @line }
       else
