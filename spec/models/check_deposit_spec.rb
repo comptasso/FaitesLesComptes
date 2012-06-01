@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
-  # c.filter = {:wip=> true }
+   # c.filter = {:wip=> true }
 end
 
 
@@ -152,6 +152,8 @@ describe CheckDeposit do
 
   end
 
+  
+
   describe "après sauvegarde" do
  
     before(:each) do
@@ -213,6 +215,10 @@ describe CheckDeposit do
       @check_deposit.should be_valid
     end
 
+    it 'la remise est identifiée par le scope not_pointed'  do
+      CheckDeposit.not_pointed.should have(1).item
+    end
+
     describe "le rattachement à un extrait de compte" , :wip=>true do
       before(:each) do
         @ba.np_check_deposits.should == [@check_deposit]
@@ -231,6 +237,10 @@ describe CheckDeposit do
 
         before(:each) do
           @check_deposit.update_attribute(:bank_extract_line, @bel)
+        end
+
+        it 'la remise n est plus selectionnée par le scope not_pointed'  do
+          CheckDeposit.not_pointed.should have(0).item
         end
 
         it "la date ne peut plus être modifiée" do

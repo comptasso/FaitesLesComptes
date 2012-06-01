@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120531045724) do
+ActiveRecord::Schema.define(:version => 20120601045538) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(:version => 20120531045724) do
     t.integer  "bank_account_id"
     t.integer  "owner_id"
     t.string   "owner_type"
+    t.string   "ref"
   end
 
   create_table "natures", :force => true do |t|

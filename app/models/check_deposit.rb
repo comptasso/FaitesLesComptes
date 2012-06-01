@@ -24,7 +24,9 @@ class CheckDeposit < ActiveRecord::Base
     after_remove: :nil_bank_account_id,
     before_add: :cant_if_pointed 
   
-   # c'est la présence de bank_extract_line qui indique que le check_deposit à été pointé et ne peut plus être modifié
+  scope :not_pointed, where('bank_extract_line_id IS NULL')
+
+  # c'est la présence de bank_extract_line qui indique que le check_deposit à été pointé et ne peut plus être modifié
   
 
   def bids
