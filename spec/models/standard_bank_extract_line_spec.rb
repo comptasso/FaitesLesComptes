@@ -11,7 +11,7 @@ describe StandardBankExtractLine do
 
   before(:each) do
     create_minimal_organism
-    @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month,
+    @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month, 
       end_date:Date.today.end_of_month,
       begin_sold:1,
       total_debit:2,
@@ -190,7 +190,7 @@ describe StandardBankExtractLine do
     def new_attributes(n)
     { position: n,
     bank_extract_id: 6,
-    check_deposit_id: nil,
+    
     date: Date.civil(2012,03,01)
     }
     end

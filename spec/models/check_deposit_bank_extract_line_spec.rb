@@ -34,7 +34,7 @@ describe CheckDepositBankExtractLine do
 
     before(:each) do
       @bel = CheckDepositBankExtractLine.new(valid_attributes)
-      @bel.add_check_deposit(@cd)
+      @bel.check_deposit = @cd 
     end
 
     it 'is created with valid attributes' do
@@ -42,7 +42,7 @@ describe CheckDepositBankExtractLine do
     end
 
     it 'knows the date' do
-      @bel.date.should == Date.tomorrow
+      @bel.cdbel_date.should == Date.tomorrow
     end
 
     it 'testing attributes readers' do
@@ -52,7 +52,7 @@ describe CheckDepositBankExtractLine do
 
     it 'is able to give debit and credit value' do
       @bel.credit.should == @cd.total_checks
-      @bel.debit.should == 0
+      @bel.debit.should == 0 
     end
 
    
@@ -72,7 +72,7 @@ describe CheckDepositBankExtractLine do
   describe 'lock line' do
     before(:each) do
       @bel= @be.check_deposit_bank_extract_lines.new
-      @bel.add_check_deposit(@cd)
+      @bel.check_deposit = @cd
     end
 
     it 'locks each line of checks' do

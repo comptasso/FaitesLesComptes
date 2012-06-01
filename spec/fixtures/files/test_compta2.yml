@@ -1873,7 +1873,7 @@
     deposit_date: 2012-03-20
     created_at: 2012-04-01 16:58:27.463011000Z
     updated_at: 2012-04-01 16:58:27.463011000Z
-    bank_extract_id: !!null 
+    bank_extract_line_id: !!null
 - !ruby/object:CheckDeposit
   attributes:
     id: 2
@@ -1881,7 +1881,7 @@
     deposit_date: 2012-04-07
     created_at: 2012-04-07 04:21:05.534728000Z
     updated_at: 2012-04-08 05:58:48.263297000Z
-    bank_extract_id: !!null 
+    bank_extract_line_id: !!null
 :cashes:
 - !ruby/object:Cash
   attributes:

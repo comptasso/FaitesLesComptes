@@ -88,7 +88,7 @@ class BankAccount < ActiveRecord::Base
 
  # Trouve toutes les remises de chèques qui ne sont pas encore pointées
  def np_check_deposits
-   self.check_deposits.where('bank_extract_id IS NULL')
+   self.check_deposits.where('bank_extract_line_id IS NULL')
  end
 
  def total_credit_np_check_deposits

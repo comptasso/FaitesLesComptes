@@ -208,7 +208,7 @@ describe CheckDeposit do
       @check_deposit.should be_valid
     end
 
-    it "on peut changer le compte bancaire" do
+    it "on peut changer le compte bancaire" do  
       @check_deposit.bank_account_id = 9999 
       @check_deposit.should be_valid
     end

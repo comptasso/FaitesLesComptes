@@ -8,6 +8,10 @@ describe CashLinesController do
   # TODO faire également les autres actions de cashLinesController_spec
 
 
+  def current_month
+    (Date.today.month) - 1
+  end
+
   before(:each) do
     # méthode définie dans OrganismFixture et 
     # permettant d'avoir les variables d'instances @organism, @period, 
@@ -18,19 +22,19 @@ describe CashLinesController do
   
   describe 'GET index' do
     it "should find the right cash" do
-      get :index, :cash_id=>@c.id, :mois=>4
+      get :index, :cash_id=>@c.id, :mois=>current_month
       assigns[:cash].should == @c
     end
 
     it 'should assign organism' do
-      get :index, :cash_id=>@c.id, :mois=>4
+      get :index, :cash_id=>@c.id, :mois=>current_month
       assigns[:organism].should == @o
     end
 
     it "should create a monthly_book_extract" do
-      Utilities::MonthlyCashExtract.should_receive(:new).with(@c, @p.start_date.months_since(4))
-      get :index, :cash_id=>@c.id, :mois=>4
-      assigns[:mois].should == '4'
+      Utilities::MonthlyCashExtract.should_receive(:new).with(@c, @p.start_date.months_since(current_month))
+      get :index, :cash_id=>@c.id, :mois=>current_month
+      assigns[:mois].should == "#{current_month}"
       assigns[:date].should == Date.today.beginning_of_month
     end
 
@@ -51,9 +55,8 @@ describe CashLinesController do
     end
 
     it 'traiter le cas ou mois n est pas rempli' do
-      m = (Date.today.month)-1
       get :index, :cash_id=>@c.id
-      response.should redirect_to(cash_cash_lines_path(@c, :mois=>m))
+      response.should redirect_to(cash_cash_lines_path(@c, :mois=>current_month))
     end
   end
  

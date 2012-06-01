@@ -53,6 +53,9 @@ module Restore
 
     end
 
+    # TODO gérer le cas de la demande pour un check_deposit_bank_extract_line alors que
+    # la table est bank_extract_line
+
     # ask_id_for('transfer', 12) doit renvoyer le nouvel id correspondant à la recréation
     # de ce tansfer dans la compta
     def ask_id_for(model, old_id)
@@ -104,13 +107,16 @@ module Restore
     # mais appelle create_restore_model pour les modèles qui sont des enfants
     def create_sub_children
       create_restore_model(:bank_extracts) 
-      create_restore_model(:check_deposits)
+      
       create_restore_model(:cash_controls)
       create_restore_model(:accounts)
       create_restore_model(:natures)
-      create_restore_model(:lines)
+      
      # les derniers car ils dépendent de bank_extract mais aussi de lines
       create_restore_model(:bank_extract_lines) 
+      # en dernier car il dépend de check_deposit_bank_extract_lines
+      create_restore_model(:check_deposits)
+      create_restore_model(:lines)
    
     end
 

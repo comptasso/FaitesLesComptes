@@ -4,8 +4,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'yaml'
 require File.expand_path(File.dirname(__FILE__) + '/../../support/similar_model.rb')
 
-class RestoreError < StandardError; end
-
+class RestoreError < StandardError; end   
+ 
 
 RSpec.configure do |c| 
   #  c.filter = {:wip => true }
@@ -25,7 +25,7 @@ describe Restore::ComptaRestorer do
 
     it 'check values' do
       @datas.should have(19).elements
-      @datas[:organism].should be_an_instance_of(Organism)
+      @datas[:organism].should be_an_instance_of(Organism) 
     end
 
     

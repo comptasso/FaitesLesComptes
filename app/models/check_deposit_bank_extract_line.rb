@@ -7,27 +7,27 @@
 
 class CheckDepositBankExtractLine < BankExtractLine
   
-  has_one :check_deposit, :dependent=>:nullify
+  has_one :check_deposit, :dependent=>:nullify, :foreign_key=>"bank_extract_line_id"
   
-  validates :bank_extract_id, presence:true 
+  validates :bank_extract_id, presence:true  
 
   def narration
     'Remise de chèques'
   end
-
+ 
   def payment
     'Chèque'
   end
 
   def cdbel_date
-    self.date || self.check_deposit.date
+    self.date || self.check_deposit.deposit_date
   end
  
 
-  def add_check_deposit(cd)
-      self.date = cd.deposit_date
-      self.check_deposit = cd
-  end
+#  def add_check_deposit(cd)
+#      self.date = cd.deposit_date
+#      self.check_deposit = cd
+#  end
 
   
   def lines

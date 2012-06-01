@@ -36,7 +36,9 @@ describe StandardBankExtractLine do
     before(:each) do
       @be.bank_extract_lines << StandardBankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d7])
       @be.bank_extract_lines << StandardBankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d29])
-      @be.bank_extract_lines << CheckDepositBankExtractLine.new(:check_deposit_id=>@cd.id)
+      cdbel = CheckDepositBankExtractLine.new()
+      cdbel.check_deposit = @cd
+      @be.bank_extract_lines << cdbel 
       @be.save!
     end
 

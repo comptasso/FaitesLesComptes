@@ -15,7 +15,7 @@ class CheckDeposit < ActiveRecord::Base
   # à toutes les lignes qui correspondant aux chèques en attente d'encaissement
   # de l'organisme correspondant.
   belongs_to :bank_account
-  belongs_to :bank_extract_line, :foreign_key=>:check_deposit_bank_extract_line_id
+  belongs_to :bank_extract_line
   
   has_many :checks, class_name: 'Line',
     dependent: :nullify,
