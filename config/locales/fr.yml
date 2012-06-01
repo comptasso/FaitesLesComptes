@@ -229,7 +229,7 @@ fr:
       cash:
         name: 'Nom'
       line:
-        payment_mode: 'Mode de réglement'
+        payment_mode: 'Paiement'
         bank_account: 'Compte bancaire'
         cash: 'Caisse'
       cash_control:
