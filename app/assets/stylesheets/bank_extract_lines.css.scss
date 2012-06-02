@@ -17,7 +17,9 @@
 
   #bels_table, #ltps_table {
     margin-top: 8px;
-    tbody { height: 40px;}
+    tbody { 
+        cursor: move;
+                }
   }
 
 
