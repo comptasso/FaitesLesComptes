@@ -2,25 +2,5 @@ $('tbody#ltps').html(" <%= j render 'ltpsbody' %>");
 $('tbody#bels').html(" <%= j render 'belsbody' %>");
 $('table#bels_table tfoot').html(" <%= j render 'belsfoot' %>");
 
+<%= render :partial=>'icone_danger' %>
 
-
-
-<% if  @bank_extract.diff_credit? %>
-$('#img_danger_total_credit').show().attr('title', '<%=  "Ecart de pointage de #{@bank_extract.diff_credit}" %>');
-<% else %>
- $('#img_danger_total_credit').hide();
- <% end %>
-
- <% if  @bank_extract.diff_debit? %>
-$('#img_danger_total_debit').show().attr('title','<%=  "Ecart de pointage de #{@bank_extract.diff_debit}" %>');
-<% else %>
- $('#img_danger_total_debit').hide();
- <% end %>
-
-
-  <% if !@bank_extract.lockable? %>
-$('#lock_bank_extract').hide()
- <% end %>
-<% if @bank_extract.lockable? %>
-$('#lock_bank_extract').show()
- <% end %>
