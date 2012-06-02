@@ -40,15 +40,7 @@ before(:each) do
     rendered.should have_content 'Ligne n°1 créée'
   end
 
-  it 'le champs nature doit être précédé d une étoile' do
-    render
-    page.all('label').should have(10).items
-    lab = page.all('label')
-    puts lab[3].inspect
-    page.find(:xpath, '//label[@for="line_credit"]').should have_content('*')
-    page.find(:xpath, '//label[@for="line_nature_id"]').should have_content('*')
-   
-  end
+ 
 
   
 end

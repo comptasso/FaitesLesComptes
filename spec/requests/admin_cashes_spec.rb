@@ -59,7 +59,7 @@ describe 'admin cash' do
     it  'test presence name' do
       visit new_admin_organism_cash_path(@o)
       click_button "Créer la caisse" # le compte'
-      page.should have_content('champ obligatoire')
+      page.should have_content('obligatoire')
     end
 
     end

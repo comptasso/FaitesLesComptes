@@ -541,7 +541,7 @@ OK - Voir le doublon de np_check_deposit de bank_account qui se trouve aussi dan
 --------------------- Remarques lors des essais ---------------------------
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
-Saisie des lignes - EN cas de nature non remplie, la page se réaffiche avec erreur mais la liste des natures prend toutes les natures
+OK - Saisie des lignes - EN cas de nature non remplie, la page se réaffiche avec erreur mais la liste des natures prend toutes les natures
 Manque les impressions et le csv pour la caisse (et banque ?)
 OK - Revoir l'affichage data_table pour les organismes si plus de 10
 OK - Le paiment par chèque doit afficher la banque et le champ référence
@@ -549,7 +549,7 @@ OK - Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (
 OK - Et peut être aussi une référence de facture
 OK - revoir l'affichage de cash_lines suite à l'insertion de ref
 OK - Utiliser bootstrap pour l'affichage des flash
-Une ligne a pu être saisie sans mode de paiement
+OK - Une ligne a pu être saisie sans mode de paiement - peut être ancien
 on ne devrait pas pouvoir remettre un chèque qui n'appartient à aucun exercice
 OK - ajouter l'id dans l'info qui suit la saisie d'une ligne
 

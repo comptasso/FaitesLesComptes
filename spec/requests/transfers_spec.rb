@@ -81,7 +81,7 @@ describe 'vue transfer index' do
         fill_in 'transfer[amount]', :with=>''
         click_button 'Enregistrer'
         
-        page.should have_content 'champ obligatoire'
+        page.should have_content 'obligatoire' 
       end
     end
 

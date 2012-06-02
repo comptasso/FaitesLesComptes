@@ -62,7 +62,7 @@ describe 'vue bank_accounts index' do
       visit new_admin_organism_bank_account_path(@o)
       fill_in 'bank_account[name]', :with=>@ba.name
       click_button "Créer le compte" # le compte'
-      page.should have_content('champ obligatoire')
+      page.should have_content('obligatoire')
     end
 
     end
