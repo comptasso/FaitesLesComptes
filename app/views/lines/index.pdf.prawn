@@ -61,15 +61,16 @@ prawn_document(:filename=>"#{@organism.title}-#{@book.title}-#{l Time.now}.pdf",
          end
     end
 
-        # les lignes de la page
+        # les lignes de la page - prawn_prepare_page est défini dans le helper
     pdf.table prawn_prepare_page(@listing.page(t+1)), :row_colors => ["FFFFFF", "DDDDDD"],  :header=> true , :cell_style=>{:padding=> [1,5,1,5] }   do
-        column(0).width=60
-        column(1).width = width - 260 - 2*70 -60
-        column(2).width = 130
+        column(0).width = 60
+        column(1).width = 60
+        column(2).width = width - 260 - 2*70 - 60 - 60
         column(3).width = 130
-        column(4).width=70
+        column(4).width = 130
         column(5).width=70
-        column(4..5).style {|c| c.align=:right}
+        column(6).width=70
+        column(5..6).style {|c| c.align=:right}
         row(0).style {|c| c.font_style=:bold; c.align=:center }
     end
 

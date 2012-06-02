@@ -24,7 +24,7 @@ module LinesHelper
   # les lignes de comptes et qui applique le helper debit_credit aux montants
   def prawn_prepare_page(page)
     page.each  {|l| l[0]=l l[0]; l[4]= debit_credit(l[4]); l[5]=debit_credit(l[5])}
-   page.insert(0, ["Date", "Libellé", "Nature", "Destination", "Débit", "Crédit"])
+   page.insert(0, ["Date","Référence", "Libellé", "Nature", "Destination", "Débit", "Crédit"])
   end
 
   # helper pour afficher les actions d'une cash line,

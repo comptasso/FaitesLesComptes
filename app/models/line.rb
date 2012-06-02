@@ -163,8 +163,12 @@ class Line < ActiveRecord::Base
     self.bank_extract_id
   end
 
+  def self.csv_titles
+    ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement']
+  end
+
   def to_csv
-    [I18n::l(self.line_date), self.narration, "#{self.destination_name}",
+    [I18n::l(self.line_date), self.ref, self.narration, "#{self.destination_name}",
       "#{self.nature_name}",
       self.debit.to_f, self.credit.to_f, "#{self.payment_mode}"]
   end

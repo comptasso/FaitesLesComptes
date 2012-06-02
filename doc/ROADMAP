@@ -512,7 +512,7 @@ spec_requests
 La saisie d'un montant sans décimales devrait être reformattée pour avoir deux décimales
 Après création on va vers index
 
-Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
+NON Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
 
 -----------------------------BankExtractLine------------------------
 OK - rendre plus complet ce controller en ayant une fonction index
@@ -541,6 +541,7 @@ OK - Voir le doublon de np_check_deposit de bank_account qui se trouve aussi dan
 --------------------- Remarques lors des essais ---------------------------
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
+Saisie des lignes - EN cas de nature non remplie, la page se réaffiche avec erreur mais la liste des natures prend toutes les natures
 
 OK - Revoir l'affichage data_table pour les organismes si plus de 10
 OK - Le paiment par chèque doit afficher la banque et le champ référence

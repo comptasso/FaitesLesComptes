@@ -38,7 +38,7 @@ class Utilities::MonthlyBookExtract
 
   def to_csv
     CSV.generate do |csv|
-      csv << ['Date', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement']
+      csv << Line.csv_titles
       lines.each do |line|
         csv << line.to_csv
       end

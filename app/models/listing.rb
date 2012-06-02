@@ -33,7 +33,8 @@ class Listing
     @lines[(NB_PER_PAGE*n)..(NB_PER_PAGE*(n+1)-1)].map do |item|
       [
         item.line_date,
-        item.narration.truncate(50),
+        item.ref,
+        item.narration.truncate(40),
         item.nature ? item.nature.name.truncate(22) : '-' ,
         item.destination ? item.destination.name.truncate(22) : '-',
         item.debit,
