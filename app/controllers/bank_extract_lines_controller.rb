@@ -56,6 +56,43 @@ class BankExtractLinesController < ApplicationController
     end
   end
 
+  # ajoute une ligne de droite (non pointée) au tableau de gauche (en le mettant
+  # donc à la fin)
+  #
+  # Les paramètres sont nature (check_deposit ou standard_line
+  # et line_id (l'id de la ligne)
+  #
+  def ajoute
+    id = params[:line_id]
+    case params[:nature]
+    when 'check_deposit'
+       @bel =  @bank_extract.check_deposit_bank_extract_lines.new
+      # il faut utiliser add_check_deposit pour que @bel ait les infos
+      # associées ramplies - voir le modèle
+      @bel.add_check_deposit(CheckDeposit.find(id))
+    when 'standard_line'
+      l=Line.find(id)
+      @bel = @bank_extract.standard_bank_extract_lines.new(lines:[l])
+    end
+
+     raise "Methode ajoute : @bel non valide @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
+
+    # on redessine les tables
+
+    @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
+
+    respond_to do |format|
+      if @bel.save
+        @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
+        @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
+        format.js 
+      else
+        format.json { render json: @bel.errors, status: :unprocessable_entity }
+      end
+    end
+
+  end
+
 
   # Insert est appelée par le drag and drop de la vue pointage lorsqu'une
   # non pointed line est transférée dans les bank_extract_line

@@ -6,3 +6,7 @@
     %td.numeric= debit_credit ltp[:debit]
     %td.numeric= debit_credit ltp[:credit]
     %td
+      = icon_to 'ajouter.png', ajoute_bank_extract_bank_extract_lines_path(@bank_extract, nature:ltp[:nature], line_id:ltp[:id]),  |
+      :remote=>true, :method => :post
+
+      

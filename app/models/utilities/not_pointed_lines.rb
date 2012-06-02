@@ -31,7 +31,8 @@ module Utilities
     def fill_np_check_deposits
       # Trouve toutes les remises de chèques qui ne sont pas encore pointées
       @bank_account.np_check_deposits.each do |cd|
-        @list << { :nature=> 'check_deposit',
+        @list << {
+          :nature=> 'check_deposit',
           id:cd.id,
           date:cd.deposit_date,
           narration:'Remise de chèque',
@@ -43,7 +44,8 @@ module Utilities
 
     def fill_np_lines
       @bank_account.np_lines.each do |l|
-        @list <<   { :nature=> 'standard_line',
+        @list <<   {
+          :nature=> 'standard_line',
           id:l.id,
           date:l.line_date,
           narration:l.narration,
@@ -54,6 +56,7 @@ module Utilities
       end
     end
 
+    # ordonne la liste selon date asc
     def order_list
       @list.sort! {|a,b| a[:date] <=> b[:date] }
     end

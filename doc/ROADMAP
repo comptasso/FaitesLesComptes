@@ -538,6 +538,9 @@ OK - création d'une méthode create_habtm pour restaurer les lignes
 Ok - enlever bank_extract_id de check_deposit puisqu'on a le bank_extract par check_deposit_bank_extract_line
 OK - Voir le doublon de np_check_deposit de bank_account qui se trouve aussi dans la class NotPointedLines
 
+Remove - insert- et ajoute ne remettent pas à jour l'écart sur les soldes
+Dans un relevé pointé peut on encore déplacer les lignes
+
 --------------------- Remarques lors des essais ---------------------------
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
