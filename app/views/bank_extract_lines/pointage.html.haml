@@ -18,11 +18,11 @@
         %li.span2.spread
           Total débit :
           %span#total_debit= debit_credit @bank_extract.total_debit
-          = image_tag('icones/exclamation.png', title:"Ecart de pointage de #{@bank_extract.diff_debit}", id:"img_danger_total_debit") 
+          = image_tag('icones/exclamation.png', rel:'tooltip', title:"Ecart de pointage de #{debit_credit @bank_extract.diff_debit}", id:"img_danger_total_debit")
         %li.span2
           Total crédit :
           %span#total_credit= debit_credit @bank_extract.total_credit
-          = image_tag('icones/exclamation.png', title:"Ecart de pointage de #{@bank_extract.diff_credit}", id:"img_danger_total_credit")
+          = image_tag('icones/exclamation.png', rel:'tooltip', title:"Ecart de pointage de #{debit_credit @bank_extract.diff_credit}", id:"img_danger_total_credit")
         %li.span2
           Solde Final :
           = debit_credit @bank_extract.end_sold

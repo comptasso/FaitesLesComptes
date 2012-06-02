@@ -100,6 +100,9 @@ jQuery(function() {
   // AFFICHAGE DES POPOVERS
    $('img[alt="Detail"]').popover();
 
+   $('#img_danger_total_debit').tooltip();
+   $('#img_danger_total_credit').tooltip();
+
   // AFFICHER OU MASQUER LES PANNEAUX DANGER A L AFFICHAGE DE LA PAGE
   // la mise à jour est faite par le traitement de la réponse du controller
   // aux actions remove et insert
