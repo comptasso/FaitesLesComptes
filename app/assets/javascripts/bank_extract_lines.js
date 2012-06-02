@@ -151,11 +151,7 @@ jQuery(function() {
           html_id: id,
           at: place
         },
-        success: function() {
-//          fnCheckTotalDebit();
-//          fnCheckTotalCredit();
-        },
-        
+                
         // ou inversement on annule si erreur
         error: function (jqXHR) {
           fnCancelSorting(ui.sender, jqXHR.statusText);
@@ -180,10 +176,7 @@ jQuery(function() {
         data: {
           id: id
         },
-        success: function() {
-//          fnCheckTotalDebit();
-//          fnCheckTotalCredit();
-        },
+     
         // on annule si erreur
         error: function (jqXHR) {
           fnCancelSorting(ui.sender, jqXHR.statusText);
@@ -194,6 +187,7 @@ jQuery(function() {
     //callback utilisée pour le changement d'emplacement à l'intérieur de la table
     // des bank_extract_lines. On ne doit pas appeler update pour les
     // transferts d'une table à l'autre doù la nécessité d'un filtre
+    // basé sur ui.sender 
     update: function(event, ui) {
 
       var tbody = $('#bels');

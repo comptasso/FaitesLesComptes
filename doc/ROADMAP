@@ -445,7 +445,7 @@ OK - l'icone plus pour la remise de chèque déclanche une erreur
 Traiter le cas où l'on n'a pas encore de banque (crée une erreur ?)
 
 modifier la zone message pour que les messages soient générés par les modèles et non par le helper
-revoir la logique de archives (il semble qu'il subsiste une grande partie dans le contrôleur).
+OK - revoir la logique de archives (il semble qu'il subsiste une grande partie dans le contrôleur).
 mettre des icones pour naviguer facilement entre les controles et l'affichage des contrôles de caisse
 Dans la vue bank_extract.new, il ya un pb de mise en page des deux pick_dates
 qaund on clique sur un élément il affiche à tort un changement d'exercice
@@ -458,7 +458,7 @@ OK - Destination show n'a guère de sens dans la partie admin (supprimer la vue 
 -------------------- Virements internes --------------------------------
 OK - mise en place du modèle et des vues et des spec associées
 ? afficher en javascript les soldes après transfert
-revoir du coup l'affichage de bank_extract_lines
+OK - revoir du coup l'affichage de bank_extract_lines
 OK - Mise en place de OdBook et création automatique à la création d'un organisme
 OK - faire une fonction lines pour la classe Transfer
 OK - faire un after update pour transfer
@@ -514,6 +514,9 @@ Après création on va vers index
 
 NON Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
 
+peut-on supprimer un extrait bancaire pointé (actuellement on a l'icone)
+Si on supprime cela met-il correctement à jour les lignes ?
+
 -----------------------------BankExtractLine------------------------
 OK - rendre plus complet ce controller en ayant une fonction index
 OK - dans la vue index afficher les soldes et mouvements et signaler les éventuels écarts
@@ -530,6 +533,7 @@ OK - javascript pour afficher les sous lignes
 OK - revoir les routes pour n'avoir plus que deux niveaux bank_extract_bank_extract_lines
 OK - Verifier que remove une ligne chainée fonctionne correctement
 Faire les vues modales pour créer une nouvelle ligne
+Faire que l'on puisse modifier une saisie de ligne
 NON scinder une ligne - on attendra de voir si c'est utile
 Ajouter les icones pour appeler ces actions
 OK - quand la table des écriture du bank_extract est vide, on ne peut pas faire un drag and drop
@@ -538,7 +542,7 @@ OK - création d'une méthode create_habtm pour restaurer les lignes
 Ok - enlever bank_extract_id de check_deposit puisqu'on a le bank_extract par check_deposit_bank_extract_line
 OK - Voir le doublon de np_check_deposit de bank_account qui se trouve aussi dans la class NotPointedLines
 
-Remove - insert- et ajoute ne remettent pas à jour l'écart sur les soldes
+Remove - insert- et ajoute ne remettent pas à jour l'écart sur les soldes (dans les tips)
 Dans un relevé pointé peut on encore déplacer les lignes
 
 --------------------- Remarques lors des essais ---------------------------
@@ -606,10 +610,10 @@ Faire une classe month pour Period ?
 
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
 (avoir un form qui demande le type pour la création, mais pas pour l'édition)
-quand on crée une écriture, le bouton créer remet new (ce qui est une bonne idée, mais il faudrait qu'il conserve la date
+OK - quand on crée une écriture, le bouton créer remet new (ce qui est une bonne idée, mais il faudrait qu'il conserve la date
 Voir si les deux fonctions two_decimals et debit_credit ne sont pas redondantes.
-Problématique des deux cartes (Amex et CB) en fait c'est un autre compte et le pb est un pb de virement entre les deux.
-Problématique des retraits espèces ... (qui est un transfert)
+OK - Problématique des deux cartes (Amex et CB) en fait c'est un autre compte et le pb est un pb de virement entre les deux.
+OK - Problématique des retraits espèces ... (qui est un transfert)
 
 
 Quand on saisit plusieurs fois le même montant, on pourrait avoir un bouton qui affiche
@@ -635,7 +639,7 @@ Faire un nettoyage du fichier temporaire pour le cas des importations qui se pas
 -------------------------- Autres sujets à moyen terme
 Mettre en place une validation globale de la page
 
-Créer des natures de recettes et des natures de dépenses
+OK - Créer des natures de recettes et des natures de dépenses
 
 Gérer les validations
 Ne pas pouvoir supprimer une remise chèque qui a été pointée
