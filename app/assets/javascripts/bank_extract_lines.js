@@ -151,6 +151,9 @@ jQuery(function() {
           html_id: id,
           at: place
         },
+        success: function () {
+
+        },
                 
         // ou inversement on annule si erreur
         error: function (jqXHR) {
@@ -175,6 +178,9 @@ jQuery(function() {
         type: 'post',
         data: {
           id: id
+        },
+        success: function () {
+
         },
      
         // on annule si erreur
