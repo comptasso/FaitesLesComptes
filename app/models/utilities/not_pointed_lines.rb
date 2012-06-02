@@ -23,6 +23,7 @@ module Utilities
       @bank_account = bank_account
       fill_np_check_deposits
       fill_np_lines
+      order_list
     end
 
     private
@@ -51,6 +52,10 @@ module Utilities
         }
 
       end
+    end
+
+    def order_list
+      @list.sort! {|a,b| a[:date] <=> b[:date] }
     end
 
 

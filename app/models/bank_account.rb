@@ -57,7 +57,9 @@ class BankAccount < ActiveRecord::Base
  # trouve toutes les lignes non pointées -np pour not pointed
  # les lignes à sélectionner sont celles qui correspondent soit à des lignes rattachées
  # directement au bank_account_id
- # les remises de chèques sont traitées par la méthode np_check_deposit
+ # les remises de chèques sont traitées par la méthode np_check_deposit.
+ #
+# Appelé par la classe NotPointedLines 
  def np_lines
    Line.find_by_sql("SELECT id, narration, debit, credit, payment_mode, line_date
     FROM LINES WHERE (BANK_ACCOUNT_ID = #{self.id} AND ((PAYMENT_MODE != 'Chèque') or (credit < 0.001))) AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES_LINES WHERE LINE_ID = LINES.ID)")
@@ -104,13 +106,6 @@ class BankAccount < ActiveRecord::Base
     self.np_check_deposits.map {|cd| c = CheckDepositBankExtractLine.new(check_deposit_id:cd.id); c}
  end
 
-def lines_to_point 
-   self.not_pointed_lines +  self.not_pointed_check_deposits
-end
-
- def not_pointed_lines
-   self.np_lines.map {|l| s = StandardBankExtractLine.new; s.add_line(l) ; s }
- end
 
  def nb_lines_to_point
    np_lines.size + np_check_deposits.count

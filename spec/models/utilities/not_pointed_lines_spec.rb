@@ -20,6 +20,11 @@ describe Utilities::NotPointedLines do
     npl.list.should have(4).items
   end
 
+  it 'list is ordered by date ASC' do
+     npl = Utilities::NotPointedLines.new(@ba)
+     npl.list.map {|l| l[:id] }.should == [7,6,2,1]
+  end
+
   
 
 
