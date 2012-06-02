@@ -19,7 +19,7 @@ describe "cash_lines/index" do
 
 
   before(:each) do
-    assign(:organism, o)
+    assign(:organism, o) 
     assign(:period, p)
     assign(:cash, c)
     assign(:monthly_extract, mce)
@@ -53,8 +53,8 @@ describe "cash_lines/index" do
     end
 
     it 'une cash_line non verrouillée peut être éditée et supprimée' do
-      page.find("tbody tr:first td:nth-child(7)").all('img').first[:src].should == '/assets/icones/modifier.png'
-      page.find("tbody tr:first td:nth-child(7)").all('img').last[:src].should == '/assets/icones/supprimer.png'
+      page.find("tbody tr:first td:nth-child(8)").all('img').first[:src].should == '/assets/icones/modifier.png'
+      page.find("tbody tr:first td:nth-child(8)").all('img').last[:src].should == '/assets/icones/supprimer.png'
     end
   end
 
@@ -65,7 +65,7 @@ describe "cash_lines/index" do
     end
 
     it 'une cash line locked n a pas de line pour suppression ou effacement' do
-      page.should_not have_selector("tbody tr:first td:nth-child(7) a")
+      page.should_not have_selector("tbody tr:first td:nth-child(8) a")
     end
   end
 
@@ -77,11 +77,11 @@ describe "cash_lines/index" do
     end
 
    it 'ne doit y avoir qu un seul lien (modifier)' do
-     page.find("tbody tr:first td:nth-child(7)").all('img').size.should == 1
+     page.find("tbody tr:first td:nth-child(8)").all('img').size.should == 1
    end
 
     it 'peut avoir un lien modifier pointant vers transfer' do
-      page.find("tbody tr:first td:nth-child(7)").all('img').first[:src].should == '/assets/icones/modifier.png'
+      page.find("tbody tr:first td:nth-child(8)").all('img').first[:src].should == '/assets/icones/modifier.png'
       page.find("tbody tr:first a")[:href].should == "/organisms/#{o.id}/transfers/10/edit"
     end 
   end

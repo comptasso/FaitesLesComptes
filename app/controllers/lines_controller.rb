@@ -69,6 +69,7 @@ class LinesController < ApplicationController
         format.html { redirect_to new_book_line_url(@book,mois: mois) }
         format.json { render json: @line, status: :created, location: @line }
       else
+        fill_natures
         format.html { render action: "new" }
         format.json { render json: @line.errors, status: :unprocessable_entity }
         # format.js

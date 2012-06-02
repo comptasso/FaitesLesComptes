@@ -542,7 +542,7 @@ OK - Voir le doublon de np_check_deposit de bank_account qui se trouve aussi dan
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
 Saisie des lignes - EN cas de nature non remplie, la page se réaffiche avec erreur mais la liste des natures prend toutes les natures
-
+Manque les impressions et le csv pour la caisse (et banque ?)
 OK - Revoir l'affichage data_table pour les organismes si plus de 10
 OK - Le paiment par chèque doit afficher la banque et le champ référence
 OK - Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)

@@ -2,7 +2,10 @@
 
 require 'spec_helper'
 
-describe "lines/new" do 
+describe "lines/new" do
+  include JcCapybara
+
+
  
 let(:o) {stub_model(Organism) }
 let(:book) {stub_model(Book) }
@@ -30,18 +33,23 @@ before(:each) do
   end
 
   it 'give the info in a notice if previous line' do
-
-    pending
+    view.stub(:icon_to).and_return('stub icone')
     assign(:previous_line, stub_model(Line, id:1, narration:'test',
         book_id:book.id, debit:0, credit:12, line_date:Date.today, nature:n, destination:d))
     render
-    page.should have_content 'Ligne n°1 créée'
+    rendered.should have_content 'Ligne n°1 créée'
   end
 
-  it 'shows the required mark for 5 fields' do
-    pending
+  it 'le champs nature doit être précédé d une étoile' do
     render
-    response.should contain('*', count: 5) 
+    page.all('label').should have(10).items
+    lab = page.all('label')
+    puts lab[3].inspect
+    page.find(:xpath, '//label[@for="line_credit"]').should have_content('*')
+    page.find(:xpath, '//label[@for="line_nature_id"]').should have_content('*')
+   
   end
+
+  
 end
 

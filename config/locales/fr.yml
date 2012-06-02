@@ -241,7 +241,7 @@ fr:
 
     errors:
       messages:
-        blank: 'champ obligatoire'
+        blank: 'obligatoire'
         record_invalid: 'Enregistrement invalide'
         taken : "déjà utilisé"
         not_a_number: 'doit être un nombre'
