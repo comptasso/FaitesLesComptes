@@ -20,9 +20,15 @@ class Organism < ActiveRecord::Base
   has_many :pending_checks, through: :books
   has_many :transfers
 
+
+
   after_create :create_default
 
   validates :title, :presence=>true
+
+  def public_books
+    books.where('title != ?', 'OD')
+  end
 
    # retourne le nombre d'exercices ouverts de l'organisme
   def nb_open_periods
