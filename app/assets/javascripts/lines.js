@@ -87,7 +87,7 @@ jQuery(function () {
 });
 
 function $f_td_bank_cash() {
-    var payment_mode = $('#line_payment_mode').val();
+    var payment_mode = $('#entry_lines #line_payment_mode').val();
 
     // s'il y a plus d'un élément dans td_bank et si le mode de payemnt est autre que Espèces alors afficher td_bank et masquer td_cash
     if (payment_mode  !== 'Espèces') {
@@ -119,32 +119,15 @@ function $f_td_bank_cash() {
 // gère l'affichage des champs de saisie de banque et de caisse
 // à l'affichage de la page
 jQuery(function () {
+  if ($('#entry_lines').length !== null) {
     $f_td_bank_cash();
-    $('#line_payment_mode').live('change', $f_td_bank_cash);
+  }
+    $('#entry_lines #line_payment_mode').live('change', $f_td_bank_cash);
 });
 
 
 $.facebox.settings.closeImage = '/assets/closelabel.png';
 $.facebox.settings.loadingImage = '/assets/loading.gif';
 
-//$(document).ready(function() {
-//    $('#new_line_link').facebox();
-//    $(document).bind('reveal.facebox', function() {
-//        $('#new_line').submit(function() {
-//            $.post(this.action, $(this).serialize(), null, "script");
-//            return false;
-//        });
-//        $('.input_date').datepicker(
-//        {
-//            dateFormat: 'dd/mm/yy',
-//            buttonImage: '/assets/cal.gif',
-//            buttonImageOnly: true,
-//            showOn: 'both',
-//            minDate: $('.input_date').attr('data-jcmin'),
-//            maxDate: $('.input_date').attr('data-jcmax')
-//        }
-//        );
-//    });
-//});
 
 

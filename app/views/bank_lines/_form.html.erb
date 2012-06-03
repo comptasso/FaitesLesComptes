@@ -2,13 +2,19 @@
 
 <div class="inputs" id="form_bank_account_line" >
 
-  <%=  simple_form_for([@bank_account, @line],  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
+  <%=  simple_form_for([@bank_account, @line],:controller=>:bank_account, :action=>:add_line,  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
 
     <%= f.error_notification %>
    
-      <%= f.association :book, label:'Livre', :collection=>@organism.books,
-        required:true, label_html: {class: "span2"}, input_html: {class: "span2" } %>
-  
+      <%= f.association :book, label:'Livre',
+        :collection=>@organism.public_books,
+        required:true, 
+        label_html: {class: "span2"},
+
+        label_method: lambda {|b| "#{b.class.name == 'IncomeBook' ? 'R' : 'D'} - #{b.title}" },
+        include_blank:false,
+        input_html: {class: "span2" } %>
+
         <div class="control-group select required">
 
 
@@ -31,16 +37,18 @@
        
           <%= f.input :ref, label:'Référence',  label_html: {class: "span2"}, input_html: {class: "span2" }  %>
           <%=  f.association :nature , label_html: {class: "span2"},
-              :collection => @organism.natures.order(:name), :prompt => "Quoi ?",
+              :collection => [Utilities::NaturesCollection.new(@organism, :recettes), Utilities::NaturesCollection.new(@organism, :depenses)],
+              :as => :grouped_select, :group_method=>:natures,
               :required=>true, input_html: {class: "span3 " } %>
-          <%=  f.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
+
+           <%=  f.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
               :prompt => "Pour qui ?" ,  label_html: {class: "span2"}, input_html: {class: "span3"} %>
        
      
 
      
-            <%=  f.input :debit ,  label_html: {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.debit) }  %>
-            <%=  f.input :credit, label_html: {class: "span2"}, input_html: {class: "span2", value: two_decimals(@line.credit) } %>
+            <%=  f.input :debit ,  label_html: {class: "span2"}, input_html: {class: "span2 number", value: two_decimals(@line.debit) }  %>
+            <%=  f.input :credit, label_html: {class: "span2"}, input_html: {class: "span2 number", value: two_decimals(@line.credit) } %>
             <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
                           disabled: 'Espèces',
                            label_html: {class: "span2"},
@@ -49,10 +57,7 @@
            <span id ="td_check_number">
                <%= f.input :check_number, label:'N° ch.', label_html: {class: "span2"}, input_html: {class: "span2" }  %>
            </span>
-           <span id="td_cash" >
-                <%= f.association :cash,  label_html: {class: "span2"}, input_html: {class: "span2"}, :collection => @organism.cashes.all, :include_blank=> false %>
-           </span>
-       
+          
 
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal">Fermer</a>

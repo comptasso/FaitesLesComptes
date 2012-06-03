@@ -18,8 +18,8 @@ function change_radio() {
 //
 //
 jQuery(function () {
-    $('optgroup[label=Dépenses] option').attr('disabled', true);
-    $('optgroup[label=Recettes] option').attr('disabled', true);
+//    $('optgroup[label=Dépenses] option').attr('disabled', true);
+//    $('optgroup[label=Recettes] option').attr('disabled', true);
     change_radio();
     $('.admin_natures form [type=radio]').click(function () {
         change_radio();

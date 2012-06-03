@@ -97,7 +97,10 @@ Faitesvoscomptes::Application.routes.draw do
 
     resources :check_deposits, :only=>:new # pour faire des remises de chèques
 
-    resources :bank_accounts, :only=> [:index, :show]    
+    resources :bank_accounts do
+      post :add_line, :on=>:member
+      get :new_line, :on=>:member ##, :only=> [:index, :show]
+    end
     resources :books, :only=>[:show]
     resources :income_books
     resources :outcome_books

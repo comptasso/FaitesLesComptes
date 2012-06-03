@@ -543,6 +543,7 @@ Ok - enlever bank_extract_id de check_deposit puisqu'on a le bank_extract par ch
 OK - Voir le doublon de np_check_deposit de bank_account qui se trouve aussi dans la class NotPointedLines
 OK - Remove - insert- et ajoute ne remettent pas à jour l'écart sur les soldes (dans les tips)
 Dans un relevé pointé peut on encore déplacer les lignes
+revoir natures.js (j'ai du commenter deux lignes pour éviter un problème dans la boîte modal)
 
 --------------------- Remarques lors des essais ---------------------------
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
