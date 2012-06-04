@@ -2,7 +2,7 @@
 
 <div class="inputs" id="form_bank_account_line" >
 
-  <%=  simple_form_for(@line,:url=>add_line_bank_extract_bank_extract_lines_path(@bank_extract), :method=>:post, :remote=>true,  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
+  <%=  simple_form_for(@line, :url=>create_bank_extract_modal_lines_path(@bank_extract), :method=>:post, :remote=>true,  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
 
     <%= f.error_notification %>
    

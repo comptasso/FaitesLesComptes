@@ -1,5 +1,7 @@
 Faitesvoscomptes::Application.routes.draw do
 
+  get "modallines/create"
+
   resources :transfers
 
   # namespace COMPTA
@@ -124,13 +126,17 @@ Faitesvoscomptes::Application.routes.draw do
   end
 
   resources :bank_extracts do
+    resources :modallines do
+        post :create, on:collection
+      end
     
     resources :bank_extract_lines do
+      
       collection do
         get 'pointage'
         post 'reorder'
         post 'ajoute'
-        post 'add_line'
+        
       end
       member do
         post 'degroup'

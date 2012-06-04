@@ -8,19 +8,7 @@ class BankExtractLinesController < ApplicationController
     @bank_extract_lines = @bank_extract.bank_extract_lines.order('position')
   end
 
-  def add_line
-    params[:line][:bank_account_id] = @bank_account.id
-    @line = Line.new(params[:line])
-    if @line.save!
-      @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
-      respond_to do |format|
-        format.js
-      end
-
-    else
-      render text:"Erreur : #{@line.errors.inspect}"
-    end
-  end
+  
 
   # action pour procéder au pointage d'un extrait bancaire
   # récupère l'extrait, les lignes qui lui sont déjà associées et les lignes de ce compte bancaire
