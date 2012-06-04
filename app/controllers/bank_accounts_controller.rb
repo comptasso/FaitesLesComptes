@@ -34,11 +34,7 @@ class BankAccountsController < ApplicationController
 
 
 
-  def add_line
-    @bank_account = BankAccount.find(params[:id])
-    params[:line][:bank_account_id] = @bank_account.id
-    @line = Line.new(params[:line])
-  end
+ 
 
   
 end

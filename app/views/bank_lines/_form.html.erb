@@ -2,7 +2,7 @@
 
 <div class="inputs" id="form_bank_account_line" >
 
-  <%=  simple_form_for([@bank_account, @line],:controller=>:bank_account, :action=>:add_line,  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
+  <%=  simple_form_for(@line,:url=>add_line_bank_extract_bank_extract_lines_path(@bank_extract), :method=>:post, :remote=>true,  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
 
     <%= f.error_notification %>
    
@@ -49,11 +49,11 @@
      
             <%=  f.input :debit ,  label_html: {class: "span2"}, input_html: {class: "span2 number", value: two_decimals(@line.debit) }  %>
             <%=  f.input :credit, label_html: {class: "span2"}, input_html: {class: "span2 number", value: two_decimals(@line.credit) } %>
+            <%= f.input :bank_account,  label_html: {class: "span2"}, input_html: {class: "span2"}, :disabled=>true %>
             <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
                           disabled: 'Espèces',
                            label_html: {class: "span2"},
                           :required=>true,  input_html: {class: "span2"} %>
-
            <span id ="td_check_number">
                <%= f.input :check_number, label:'N° ch.', label_html: {class: "span2"}, input_html: {class: "span2" }  %>
            </span>

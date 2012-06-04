@@ -116,7 +116,6 @@ Faitesvoscomptes::Application.routes.draw do
   end
   
   resources :bank_accounts do
-    resources :lines # pour pouvoir créer une ligne directement à partir du compte bancaire
     resources :bank_extracts do
       member do
         post 'lock'
@@ -131,12 +130,14 @@ Faitesvoscomptes::Application.routes.draw do
         get 'pointage'
         post 'reorder'
         post 'ajoute'
+        post 'add_line'
       end
       member do
         post 'degroup'
         post 'regroup'
         post 'remove'
         post 'insert'
+        
         
       end
     end
