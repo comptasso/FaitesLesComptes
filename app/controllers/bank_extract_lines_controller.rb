@@ -14,7 +14,7 @@ class BankExtractLinesController < ApplicationController
   # récupère l'extrait, les lignes qui lui sont déjà associées et les lignes de ce compte bancaire
   # qui ne sont pas encore associées à un extrait
   def pointage
-    @line = Line.new(:bank_account_id=>@bank_account.id)
+    @line = Line.new(:bank_account_id=>@bank_account.id, line_date:@bank_extract.begin_date)
     redirect_to bank_extract_bank_extract_lines_url(@bank_extract) if @bank_extract.locked
     @bank_extract_lines=@bank_extract.bank_extract_lines.order(:position)
     @lines_to_point = Utilities::NotPointedLines.new(@bank_account)

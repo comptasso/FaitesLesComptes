@@ -125,11 +125,9 @@ Faitesvoscomptes::Application.routes.draw do
     end
   end
 
+ # match ':controller/:action/:id/with_user/:user_id'
   resources :bank_extracts do
-    resources :modallines do
-        post :create, on:collection
-      end
-    
+    resources :modallines     
     resources :bank_extract_lines do
       
       collection do

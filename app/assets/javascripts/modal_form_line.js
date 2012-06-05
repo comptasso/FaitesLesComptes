@@ -12,11 +12,14 @@
 
 jQuery(function() {
   
-  function $f_book_change() {
+  function $f_modal_book_change() {
     // lire la valeur du champ et déterminer si c'est une recette ou une dépense
     var income_outcome = $('#line_book_id option:selected').text();
-    $('#line_credit').val('0.00');
-    $('#line_debit').val('0.00');
+    $('#form_bank_extract_line #line_credit').val('0.00');
+    $('#form_bank_extract_line #line_debit').val('0.00');
+    if ($('#form_bank_extract_line #line_payment_mode') === 'Chèque') {
+      $('#td_check_number').show();
+    }
 
 
     if (income_outcome.match(/^R/) !== null) {
@@ -34,17 +37,29 @@ jQuery(function() {
     }
   }
 
+  function $f_modal_raz() {
+    $('#line_narration').val('');
+    $('#line_ref').val('');
+    $('#line_nature_id').val('');
+    $('#line_destination_id').val('');
+    $('#line_credit').val('0.00');
+    $('#line_debit').val('0.00');
+    $('#line_payment_mode').val('');
+  }
 
-  $f_book_change();
+
+  $f_modal_book_change();
   // selon la nature du livre, on veut disable les natures qui sont inadaptées
   // Attacher un évènement onChange au champ book
-  $('#form_bank_account_line #line_book_id').live('change', $f_book_change);
-  $('#form_bank_account_line #line_payment_mode').live('change', function() {
+  $('#form_bank_extract_line #line_book_id').live('change', $f_modal_book_change);
+  $('#form_bank_extract_line #line_payment_mode').live('change', function() {
     if ($(this).val() === 'Chèque') {
-      $('#form_bank_account_line #td_check_number').show();
+      $('#form_bank_extract_line #td_check_number').show();
     } else {
-      $('#form_bank_account_line #td_check_number').hide();
+      $('#form_bank_extract_line #td_check_number').hide();
     }
   });
+
+  $('#modal_form_line').on('shown', $f_modal_raz);
   // de même on veut masquer crédit ou débit
 });

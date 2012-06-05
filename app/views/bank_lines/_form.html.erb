@@ -1,8 +1,8 @@
 
 
-<div class="inputs" id="form_bank_account_line" >
+<div class="inputs" id="form_bank_extract_line" >
 
-  <%=  simple_form_for(@line, :url=>create_bank_extract_modal_lines_path(@bank_extract), :method=>:post, :remote=>true,  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
+  <%=  simple_form_for(@line, :url=>bank_extract_modallines_path(@bank_extract), :method=>:post, :remote=>true,  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
 
     <%= f.error_notification %>
    
@@ -60,8 +60,7 @@
           
 
 <div class="modal-footer">
-  <a href="#" class="btn" data-dismiss="modal">Fermer</a>
-  <%=  f.button :submit, id: 'new_line_button', class: "btn-primary span1" %>
+   <%=  f.button :submit, id: 'new_line_button', class: "btn-primary span1" %>
 </div>
   <% end %>
 </div>
