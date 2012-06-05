@@ -8,14 +8,17 @@ class ModallinesController < ApplicationController
 
     params[:line][:bank_account_id] = @bank_account.id
     @line = Line.new(params[:line])
-    if @line.save!
+    if @line.save
       @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
       respond_to do |format|
         format.js
       end
 
     else
-      render text:"Erreur : #{@line.errors.inspect}"
+      respond_to do |format|
+        format.js {render :new }
+      end
+      
     end
 
 
