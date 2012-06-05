@@ -6,8 +6,6 @@
     style: ('display: none;' unless @bank_extract.lockable?), |
     confirm:"Cette action verrouillera ce relevé de compte et toutes les lignes qui sont associées.\nConfirmez vous ?" 
   
-= render :partial=>'new_line'
-
  
 .champ
   %h3= "Relevé bancaire #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
@@ -70,3 +68,4 @@
           %tbody.connectedSortable#ltps
             = render :partial=>'ltpsbody'
 
+= render :partial=>'new_line'
