@@ -9,7 +9,7 @@
       <%= f.association :book, label:'Livre',
         :collection=>@organism.public_books,
         required:true, 
-        label_html: {class: "span2"},
+        label_html: {class: "span1"},
 
         label_method: lambda {|b| "#{b.class.name == 'IncomeBook' ? 'R' : 'D'} - #{b.title}" },
         include_blank:false,
@@ -18,7 +18,7 @@
         <div class="control-group select required">
 
 
-<label class="string optional control-label span2" for="pick_date_line">
+<label class="string optional control-label span1" for="pick_date_line">
   <abbr title="exigé">
     *
   </abbr>
@@ -33,29 +33,29 @@
         </div>
 
 
-        <%= f.input :narration,  :label=>'Libellé ', label_html: {class: "span2"}, input_html: {class: "span3" } %>
+        <%= f.input :narration,  :label=>'Libellé ', label_html: {class: "span1"}, input_html: {class: "span3" } %>
        
-          <%= f.input :ref, label:'Référence',  label_html: {class: "span2"}, input_html: {class: "span2" }  %>
-          <%=  f.association :nature , label_html: {class: "span2"},
+          <%= f.input :ref, label:'Référence',  label_html: {class: "span1"}, input_html: {class: "span2" }  %>
+          <%=  f.association :nature , label_html: {class: "span1"},
               :collection => [Utilities::NaturesCollection.new(@organism, :recettes), Utilities::NaturesCollection.new(@organism, :depenses)],
               :as => :grouped_select, :group_method=>:natures,
               :required=>true, input_html: {class: "span3 " } %>
 
            <%=  f.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
-              :prompt => "Pour qui ?" ,  label_html: {class: "span2"}, input_html: {class: "span3"} %>
+              :prompt => "Pour qui ?" ,  label_html: {class: "span1"}, input_html: {class: "span3"} %>
        
      
 
      
-            <%=  f.input :debit ,  label_html: {class: "span2"}, input_html: {class: "span2 number", value: two_decimals(@line.debit) }  %>
-            <%=  f.input :credit, label_html: {class: "span2"}, input_html: {class: "span2 number", value: two_decimals(@line.credit) } %>
-            <%= f.input :bank_account,  label_html: {class: "span2"}, input_html: {class: "span2"}, :disabled=>true %>
+            <%=  f.input :debit ,  label_html: {class: "span1"}, input_html: {class: "span2 number", value: two_decimals(@line.debit) }  %>
+            <%=  f.input :credit, label_html: {class: "span1"}, input_html: {class: "span2 number", value: two_decimals(@line.credit) } %>
+            <%= f.input :bank_account,  label_html: {class: "span1"}, input_html: {class: "span2"}, :disabled=>true %>
             <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
                           disabled: 'Espèces',
-                           label_html: {class: "span2"},
+                           label_html: {class: "span1"},
                           :required=>true,  input_html: {class: "span2"} %>
            <span id ="td_check_number">
-               <%= f.input :check_number, label:'N° ch.', label_html: {class: "span2"}, input_html: {class: "span2" }  %>
+               <%= f.input :check_number, label:'N° ch.', label_html: {class: "span1"}, input_html: {class: "span2" }  %>
            </span>
           
 

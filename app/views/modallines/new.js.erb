@@ -1,2 +1,17 @@
-$('div.modal-header h3').text('Erreur !');
-$('#modal_body').html(<%= j render partial:'bank_extract_lines/new_line' %>);
+$('div.modal-body').html('<%= j render partial:'form' %>');
+$f_modal_book_change();
+if ($('#form_bank_extract_line #line_payment_mode').val() !== 'Chèque') {
+  $('#form_bank_extract_line #td_check_number').hide();
+}
+
+
+        $('.input_date').datepicker(
+            {
+                dateFormat: 'dd/mm/yy',
+                buttonImage: '/assets/cal.gif',
+                buttonImageOnly: true,
+                showOn: 'both',
+                minDate: $(this).attr('data-jcmin'),
+                maxDate: $(this).attr('data-jcmax')
+            }
+        );

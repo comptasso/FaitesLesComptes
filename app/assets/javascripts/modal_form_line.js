@@ -10,9 +10,7 @@
  * 
  */
 
-jQuery(function() {
-  
-  function $f_modal_book_change() {
+ function $f_modal_book_change() {
     // lire la valeur du champ et déterminer si c'est une recette ou une dépense
     var income_outcome = $('#line_book_id option:selected').text();
     $('#form_bank_extract_line #line_credit').val('0.00');
@@ -37,6 +35,10 @@ jQuery(function() {
     }
   }
 
+
+jQuery(function() {
+  
+ 
   function $f_modal_raz() {
     $('#line_narration').val('');
     $('#line_ref').val('');
