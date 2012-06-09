@@ -38,15 +38,21 @@
             %th N°
             %th Date
             %th Libellé
-            %th.numeric Débit
-            %th.numeric Crédit
+            %th
+              %ul
+                %li Débit
+                %li.numeric#bels_total_debit=  debit_credit @bank_extract.total_lines_debit
+
+            %th
+              %ul
+                %li Crédit
+                %li.numeric#bels_total_credit=  debit_credit @bank_extract.total_lines_credit
             %th Actions
 
         %tbody.connectedSortable#bels
           = render :partial=>'belsbody'
 
-        %tfoot
-          = render :partial=>'belsfoot'
+       
 
     .span6
       
@@ -61,8 +67,8 @@
             %th N°
             %th Date
             %th Libellé
-            %th.numeric Débit
-            %th.numeric Crédit
+            %th Débit
+            %th Crédit
             %th Actions
             
           %tbody.connectedSortable#ltps

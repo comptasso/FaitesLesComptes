@@ -17,9 +17,10 @@
 
   #bels_table, #ltps_table {
     margin-top: 8px;
-    tbody { 
-        cursor: move;
-                }
+    tbody {
+      cursor: move;
+    }
+    
   }
 
 
@@ -50,6 +51,8 @@
   #img_danger_total_debit, #img_danger_total_credit {
     display: none;
   }
-
+  .dataTables_scrollHeadInner table {
+    margin-bottom: 0px;
+  }
 
 }

@@ -114,6 +114,23 @@ jQuery(function() {
   // lorsque le total crédit change, appel de fnCheckTotalCredit
   // $('#bels_total_credit').onChange()
 
+  $('#ltps_table').dataTable( {
+        "sScrollY": "400px",
+        "bPaginate": false,
+        "bScrollCollapse": true,
+        "bFilter": false,
+        'bInfo': false
+    } );
+
+    $('#bels_table').dataTable( {
+        "sScrollY": "400px",
+        "bPaginate": false,
+        "bScrollCollapse": false,
+        "bSort": false,
+        "bFilter": false,
+        'bInfo': false
+    } );
+
 
   // LA TABLE DES LTPS 5LINES TO POINT)
   $('#ltps').sortable({
