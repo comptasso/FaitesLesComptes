@@ -47,7 +47,7 @@
               %ul
                 %li Crédit
                 %li.numeric#bels_total_credit=  debit_credit @bank_extract.total_lines_credit
-            %th Actions
+            %th.actions Actions
 
         %tbody.connectedSortable#bels
           = render :partial=>'belsbody'
@@ -69,7 +69,7 @@
             %th Libellé
             %th Débit
             %th Crédit
-            %th Actions
+            %th.actions Actions
             
           %tbody.connectedSortable#ltps
             = render :partial=>'ltpsbody'

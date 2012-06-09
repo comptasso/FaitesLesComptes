@@ -16,7 +16,7 @@ jQuery(function() {
     var pos;
     // par exemple, je passe la ligne 2 à la ligne 6,
     if (iTo > iFrom) {
-    $('#bels tr').each(function(index){
+      $('#bels tr').each(function(index){
         pos = parseInt($(this).attr('data-position'));
         // et la ligne 2 devient la ligne 6
         if (pos == iFrom) {
@@ -52,20 +52,20 @@ jQuery(function() {
   function fnDecRows(from) {
     var iFrom = parseInt(from);
     $('#bels tr').each( function(index){
-        pos = parseInt($(this).attr('data-position'));
-         if (pos > iFrom) {
-          fnChangeValue($(this), (parseInt(pos)-1).toString());
-        }
+      pos = parseInt($(this).attr('data-position'));
+      if (pos > iFrom) {
+        fnChangeValue($(this), (parseInt(pos)-1).toString());
+      }
     });
   }
 
   function fnIncRows(from) {
     var iFrom = parseInt(from);
     $('#bels tr').each( function(index){
-        pos = parseInt($(this).attr('data-position'));
-         if (pos >= iFrom) {
-          fnChangeValue($(this), (parseInt(pos)+1).toString());
-        }
+      pos = parseInt($(this).attr('data-position'));
+      if (pos >= iFrom) {
+        fnChangeValue($(this), (parseInt(pos)+1).toString());
+      }
     });
   }
 
@@ -98,12 +98,12 @@ jQuery(function() {
   }
 
   // AFFICHAGE DES POPOVERS
-   $('img[alt="Detail"]').popover();
+  $('img[alt="Detail"]').popover();
 
-   $('#img_danger_total_debit').tooltip();
-   $('#img_danger_total_credit').tooltip();
+  $('#img_danger_total_debit').tooltip();
+  $('#img_danger_total_credit').tooltip();
 
-   // $('#myModal').modal();
+  // $('#myModal').modal();
 
   // AFFICHER OU MASQUER LES PANNEAUX DANGER A L AFFICHAGE DE LA PAGE
   // la mise à jour est faite par le traitement de la réponse du controller
@@ -114,22 +114,30 @@ jQuery(function() {
   // lorsque le total crédit change, appel de fnCheckTotalCredit
   // $('#bels_total_credit').onChange()
 
-  $('#ltps_table').dataTable( {
-        "sScrollY": "400px",
-        "bPaginate": false,
-        "bScrollCollapse": true,
-        "bFilter": false,
-        'bInfo': false
-    } );
+  $('#bels_table').dataTable( {
+    "sScrollY": "400px",
+    "bPaginate": false,
+    "bScrollCollapse": false,
+    "bSort": false,
+    "bFilter": false,
+    'bInfo': false
+  } );
 
-    $('#bels_table').dataTable( {
-        "sScrollY": "400px",
-        "bPaginate": false,
-        "bScrollCollapse": false,
-        "bSort": false,
-        "bFilter": false,
-        'bInfo': false
-    } );
+  $('#ltps_table').dataTable( {
+    "sScrollY": "400px",
+    "bPaginate": false,
+    "bScrollCollapse": false,
+    "bFilter": false,
+    'bInfo': false,
+    "aoColumnDefs": [
+    {
+      "bSortable": false,
+      "aTargets": [ 0, 'actions' ]
+    }
+    ]
+  } );
+
+   
 
 
   // LA TABLE DES LTPS 5LINES TO POINT)
@@ -161,8 +169,8 @@ jQuery(function() {
         place = $('#bels tr').length
       }
       else {
-       // sinon on prend la position du premier suivant
-       place =  $(siblings[0]).attr('data-position')
+        // sinon on prend la position du premier suivant
+        place =  $(siblings[0]).attr('data-position')
       }
 
      
