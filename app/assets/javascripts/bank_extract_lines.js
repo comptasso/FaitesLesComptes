@@ -1,6 +1,6 @@
-
-
+ 
 jQuery(function() {
+
   function _fnAlert(message, type) {
     alert(message);
   }
@@ -114,7 +114,7 @@ jQuery(function() {
   // lorsque le total crédit change, appel de fnCheckTotalCredit
   // $('#bels_total_credit').onChange()
 
-  $('#bels_table').dataTable( {
+  var bTable = $('#bels_table').dataTable( {
     "sScrollY": "400px",
     "bPaginate": false,
     "bScrollCollapse": false,
@@ -123,7 +123,7 @@ jQuery(function() {
     'bInfo': false
   } );
 
-  $('#ltps_table').dataTable( {
+  var lTable = $('#ltps_table').dataTable( {
     "sScrollY": "400px",
     "bPaginate": false,
     "bScrollCollapse": false,
@@ -137,7 +137,10 @@ jQuery(function() {
     ]
   } );
 
-   
+ bTable.fnAdjustColumnSizing();
+ lTable.fnAdjustColumnSizing();
+
+    
 
 
   // LA TABLE DES LTPS 5LINES TO POINT)
@@ -182,7 +185,7 @@ jQuery(function() {
           at: place
         },
         success: function () {
-
+       
         },
                 
         // ou inversement on annule si erreur
@@ -210,7 +213,7 @@ jQuery(function() {
           id: id
         },
         success: function () {
-
+   
         },
      
         // on annule si erreur
