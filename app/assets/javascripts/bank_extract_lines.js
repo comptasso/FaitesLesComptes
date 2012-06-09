@@ -1,6 +1,8 @@
  
 jQuery(function() {
 
+  if ($('.public_bank_extract_lines').length === 1) {
+
   function _fnAlert(message, type) {
     alert(message);
   }
@@ -270,6 +272,8 @@ jQuery(function() {
 
     }
   }).disableSelection();
+
+  }
 });
 
   

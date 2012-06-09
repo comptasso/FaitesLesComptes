@@ -532,10 +532,10 @@ OK - javascript pour déplacer une bel
 OK - javascript pour afficher les sous lignes
 OK - revoir les routes pour n'avoir plus que deux niveaux bank_extract_bank_extract_lines
 OK - Verifier que remove une ligne chainée fonctionne correctement
-Faire les vues modales pour créer une nouvelle ligne
-Faire que l'on puisse modifier une saisie de ligne
+OK - Faire les vues modales pour créer une nouvelle ligne
+?? Faire que l'on puisse modifier une saisie de ligne
 NON scinder une ligne - on attendra de voir si c'est utile
-Ajouter les icones pour appeler ces actions
+OK - Ajouter les icones pour appeler ces actions
 OK - quand la table des écriture du bank_extract est vide, on ne peut pas faire un drag and drop
 OK - modif de la classe Archive pour sauvegarder les infos de la table habtm
 OK - création d'une méthode create_habtm pour restaurer les lignes
