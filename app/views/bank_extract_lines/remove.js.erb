@@ -1,5 +1,6 @@
 // fichier appelé par bank_extract_lines controller
-$('table#bels_table tfoot').html(" <%= j render 'belsfoot' %>");
+$('table #bels_total_debit').text(" <%= debit_credit @bank_extract.total_lines_debit  %>");
+$('table #bels_total_credit').text(" <%=  debit_credit @bank_extract.total_lines_credit %>");
 $('tbody#bels').html(" <%= j render 'belsbody' %>");
 $('tbody#ltps').html(" <%= j render 'ltpsbody' %>");
 
