@@ -1,9 +1,4 @@
 
-//
-//// Place all the behaviors and hooks related to the matching controller here.
-// All this logic will automatically be available in application.js.
-// You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
-
 "use strict";
 var jQuery, $, stringToFloat;
 
@@ -11,7 +6,7 @@ var jQuery, $, stringToFloat;
 jQuery(function () {
     if ($('.lines_table').length !== 0) {
         $('.lines_table').dataTable({
-            "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
+            "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span8'i><'span4'p> >",
 		    "sPaginationType": "bootstrap",
             "bAutoWidth": false,
             "oLanguage": {
@@ -30,10 +25,7 @@ jQuery(function () {
             ],
 
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-                /*
-             * Calculate the total market share for all browsers in this table (ie inc. outside
-             * the pagination)
-             */
+             
                 var i = 0,
                     iTotalDebit = 0,
                     iTotalCredit = 0.0,
@@ -86,6 +78,8 @@ jQuery(function () {
     $('.decimal').live('blur', $f_zero); // met zero dans le champ s'il est vide
 });
 
+
+// gère l'affichage des champs banque et caisse
 function $f_td_bank_cash() {
     var payment_mode = $('#entry_lines #line_payment_mode').val();
 
@@ -126,8 +120,8 @@ jQuery(function () {
 });
 
 
-$.facebox.settings.closeImage = '/assets/closelabel.png';
-$.facebox.settings.loadingImage = '/assets/loading.gif';
+//$.facebox.settings.closeImage = '/assets/closelabel.png';
+//$.facebox.settings.loadingImage = '/assets/loading.gif';
 
 
 

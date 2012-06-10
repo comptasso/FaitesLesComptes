@@ -131,11 +131,18 @@ jQuery(function() {
     "bScrollCollapse": false,
     "bFilter": false,
     'bInfo': false,
+    "aaSorting": [[1, 'asc']],
     "aoColumnDefs": [
     {
       "bSortable": false,
       "aTargets": [ 0, 'actions' ]
+    },
+    {
+      "sType": "date-euro",
+      "asSortable": ['asc', 'desc'],
+      "aTargets": ['date-euro'] // les colonnes date au format français ont la classe date-euro
     }
+
     ]
   } );
 
