@@ -86,6 +86,26 @@ describe BankExtract do
       @be.should have(2).errors_on(:begin_sold) # numericality and presence
     end
 
+    it 'pas valide sans begin_date' do
+      @be.begin_date = nil
+      @be.should_not be_valid
+    end
+
+    it 'pas valide sans end_date' do
+      @be.end_date = nil
+      @be.should_not be_valid
+    end
+
+    it 'pas valide sans total_debit' do
+      @be.total_debit = nil
+      @be.should_not be_valid
+    end
+
+    it 'pas valide sans total_credit' do
+      @be.total_credit = nil
+      @be.should_not be_valid
+    end
+
     it 'begin_sold doît être un nombre' do
       @be.begin_sold = 'bonjour'
       @be.should have(1).errors_on(:begin_sold) # numericality
@@ -94,7 +114,7 @@ describe BankExtract do
     
   end
 
-  describe 'when locked' , wip:true do
+  describe 'when locked' do
 
     before(:each) do
       @be = @ba.bank_extracts.create!(:begin_date=>Date.today, end_date:Date.today, begin_sold:1,

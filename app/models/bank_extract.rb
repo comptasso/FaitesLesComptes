@@ -10,8 +10,9 @@ class BankExtract < ActiveRecord::Base
 
   validates :begin_sold, :total_debit, :total_credit, :numericality=>true
   validates :begin_sold, :total_debit, :total_credit, :presence=>true
-
   validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date, :cant_edit_if_locked=>true
+
+  validates :begin_date, :end_date, :presence=>true
   
  # TODO voir si on remet ce after_create
  # after_create :fill_bank_extract_lines
