@@ -9,7 +9,7 @@ describe "transfers/index" do
     assign(:organism, mock_model(Organism, title: 'spec cd'))
     @debitable =     assign(:debitable, mock_model(BankAccount, name: 'Debix', number: '1254'))
     @creditable =     assign(:creditable, mock_model(BankAccount, name: 'Debix', number: '6789'))
-    assign(:organism, mock_model(Organism, title: 'spec cd'))
+   
 
     assign(:transfers, [
         stub_model(Transfer,

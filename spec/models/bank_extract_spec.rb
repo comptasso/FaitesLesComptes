@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-  #   c.filter = {:wip=> true }
+   #  c.filter = {:wip=> true }
 end
 
 describe BankExtract do 
@@ -68,14 +68,45 @@ describe BankExtract do
 
   describe 'vérification des attributs' do
 
+    def valid_attributes
+      {:bank_account_id=>@ba.id, begin_sold:0, total_debit:1,
+      total_credit:2, begin_date:Date.today, end_date:Date.today}
+    end
+
+    before(:each) do
+      @be=BankExtract.new(valid_attributes)
+    end
+
+    it 'valid begin sold' do
+      @be.should be_valid
+    end
+
     it 'end_sold doit être présent' do
-      be = @ba.bank_extracts.new(begin_sold:nil)
-      be.should have(2).errors_on(:begin_sold) # numericality and presence
+      @be.begin_sold = nil
+      @be.should have(2).errors_on(:begin_sold) # numericality and presence
     end
 
     it 'begin_sold doît être un nombre' do
-      be = @ba.bank_extracts.new(begin_sold:'bonjour')
-      be.should have(1).errors_on(:begin_sold) # numericality
+      @be.begin_sold = 'bonjour'
+      @be.should have(1).errors_on(:begin_sold) # numericality
+    end
+
+    
+  end
+
+  describe 'when locked' , wip:true do
+
+    before(:each) do
+      @be = @ba.bank_extracts.create!(:begin_date=>Date.today, end_date:Date.today, begin_sold:1,
+        total_debit:1, total_credit:2)
+      @be.locked = true
+      @be.save!
+    end
+
+    it 'cant be edited' do
+      @be.begin_sold = 0
+      @be.should_not be_valid
+      @be.errors.should have(1).error_on(:begin_sold)
     end
   end
 

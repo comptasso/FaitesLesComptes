@@ -18,13 +18,13 @@
       %th.span1 Actions
 
   %tbody
-    - @bank_extracts.each do |bank_extract|
+    - @bank_extracts.each do |bank_extract| 
       %tr
         = render :partial=>'bank_extract', :object=>bank_extract
         %td
           = icon_to 'afficher.png', bank_extract_bank_extract_lines_path(bank_extract)
-          = icon_to('modifier.png', edit_bank_account_bank_extract_path(@bank_account,bank_extract)) 
+          = icon_to('modifier.png', edit_bank_account_bank_extract_path(@bank_account,bank_extract)) unless bank_extract.locked?
           = icon_to('pointer.png', pointage_bank_extract_bank_extract_lines_path(bank_extract)) if bank_extract.first_to_point?
-          = icon_to('supprimer.png', [@bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete)
+          = icon_to('supprimer.png', [@bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete) unless bank_extract.locked?
  
 

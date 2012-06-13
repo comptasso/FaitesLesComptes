@@ -4,7 +4,8 @@ module JcCapybara
 
  def page
     Capybara::Node::Simple.new(rendered)
-  end
+ end
+
 
 
 end
