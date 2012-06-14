@@ -23,7 +23,7 @@ OK - Après create il faudrait être dans le mois que l'on vient de saisir
 OK - Mettre un ordre par défaut dans les selections destinations et natures
 OK - Quand on fait +, mettre le bon mois dans le date select
 
-
+A REPRENDRE COMPLETEMENT
 OK Mettre en place des écritures avec répétition
   La logique est de faire une écriture mais avec des champs complémentaires dans le
 formulaire : répéter pendant X mois/trimestres.
@@ -481,8 +481,8 @@ Dans la vue admin#organisme, avoir une info sur la dernière activité
 Dans caisse# nouveau remplacer comment par commentaire
 
 REVOIR LES BEFORE FILTER DE ORGANISM DANS LA ZONE ADMIN ET COMPTA
-La vue index des retraits d'argent n'est pas classée
-La liste des natures dans saisie de lignes devrait être classée par ordre alpha
+OK - La vue index des retraits d'argent n'est pas classée
+OK - La liste des natures dans saisie de lignes devrait être classée par ordre alpha
 
 J'ai pu créer dans les tests une ligne de dépenses en espèces qui n'avait pas de caisse
 OK - Faire un module pick_date avec une méthode de classe
@@ -514,7 +514,7 @@ Après création on va vers index
 
 NON Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
 
-peut-on supprimer un extrait bancaire pointé (actuellement on a l'icone)
+OK -  Peut-on supprimer un extrait bancaire pointé (actuellement on a l'icone) - réponse non, c'est bloqué
 Si on supprime cela met-il correctement à jour les lignes ?
 
 -----------------------------BankExtractLine------------------------
@@ -542,7 +542,7 @@ OK - création d'une méthode create_habtm pour restaurer les lignes
 Ok - enlever bank_extract_id de check_deposit puisqu'on a le bank_extract par check_deposit_bank_extract_line
 OK - Voir le doublon de np_check_deposit de bank_account qui se trouve aussi dans la class NotPointedLines
 OK - Remove - insert- et ajoute ne remettent pas à jour l'écart sur les soldes (dans les tips)
-Dans un relevé pointé peut on encore déplacer les lignes
+OUI - Dans un relevé pointé peut on encore déplacer les lignes
 OK - revoir natures.js (j'ai du commenter deux lignes pour éviter un problème dans la boîte modal)
 OK - Tri par date ne marche pas correctement
 faire les spec de modallines controller
@@ -553,7 +553,7 @@ modifier la place de la pagination
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
 OK - repositionner la liste des mois dans les vues (un peu haut dans la ligne verte)
 OK - Les bank_extracts validés ne devraient pas pouvoir être édités ni effacés dans la vue
-dans le modèle
+OK - validation de bank_extracts dans le modèle avec blocage si locked
 OK - Saisie des lignes - EN cas de nature non remplie, la page se réaffiche avec erreur mais la liste des natures prend toutes les natures
 Manque les impressions et le csv pour la caisse et les extraits bancaires
 Mettre le focus dans new_line sur le champ date et faire passer le focus banque après le changement de mode de paiement
@@ -566,7 +566,7 @@ OK - Utiliser bootstrap pour l'affichage des flash
 OK - Une ligne a pu être saisie sans mode de paiement - peut être ancien
 on ne devrait pas pouvoir remettre un chèque qui n'appartient à aucun exercice
 OK - ajouter l'id dans l'info qui suit la saisie d'une ligne
-
+Dans Line.rb, il y a un include validations (qui est dans lib/validators) qui gagnerait à être transformé en validator
 OK - Dans transferts : changer virement en transfert dans le flash et dans le titre h3 de index
 OK - Classer les transferts par date
 Transferts  : mettre un affichage par mois pour les virements  ?
