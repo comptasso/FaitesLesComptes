@@ -15,10 +15,10 @@
         source = "/assets/icones/#{alt}.png"
         locator = ".//img[@src='#{source}']"
         result =  has_selector?(:xpath, locator, options)
-          puts self.inspect if result == false
+          #puts self.inspect if result == false
         if options[:href] && result
           result = has_selector?(:xpath, ".//a[@href='#{options[:href]}']") unless options[:href] == nil
-          puts self.inspect if result == false
+          #puts self.inspect if result == false
         end
         result
       end
