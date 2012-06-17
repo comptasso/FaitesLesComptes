@@ -14,7 +14,7 @@ describe 'vue bank_accounts index' do
   
   
   before(:each) do
-    clean_test_database
+    # clean_test_database
     BankAccount.count.should == 0
     create_minimal_organism 
   end

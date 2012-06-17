@@ -2,24 +2,29 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+
+
 describe 'vue lines' do
   include OrganismFixture
   
   before(:each) do
-    create_minimal_organism 
+    create_minimal_organism
+    #visit organism_path(@o) 
   end
 
-  describe 'new line' do
+  describe 'new line' do 
   
   
   
   before(:each) do
     @line = @ob.lines.new
+     visit organism_path(@p)
   end 
 
   it "affiche la page new" do
+    visit organism_path(@p)
     visit new_book_line_path(@ob)
-    page.should have_content('nouvelle ligne')
+    page.should have_content('nouvelle ligne') 
     Line.count.should == 0
   end
 

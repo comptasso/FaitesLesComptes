@@ -545,7 +545,7 @@ OK - Remove - insert- et ajoute ne remettent pas à jour l'écart sur les soldes
 OUI - Dans un relevé pointé peut on encore déplacer les lignes
 OK - revoir natures.js (j'ai du commenter deux lignes pour éviter un problème dans la boîte modal)
 OK - Tri par date ne marche pas correctement
-faire les spec de modallines controller
+OK - faire les spec de modallines controller
 
 --------------------- Remarques lors des essais ---------------------------
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable

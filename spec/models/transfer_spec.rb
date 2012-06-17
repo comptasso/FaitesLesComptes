@@ -249,14 +249,11 @@ describe Transfer do
         it 'destroy the transfer is impossible if any line locked' do
           
           l = @t.line_credit
-          l.locked.should be_false
+          l.locked.should be_false 
           l.locked = true
           l.save!
-          m= @t.line_credit
-          m.locked.should be_true
           
           @t.line_credit.locked.should be_true
-          @t.destroyable?.should  be_false
           @t.should_not be_destroyable
           expect {@t.destroy}.not_to change {Transfer.count}
         end

@@ -19,7 +19,7 @@ describe 'natures_collection' do
   end
 
   it 'to_s' do
-    Utilities::NaturesCollection.new(o, :recettes).to_s.should == 'Recettes'
+    Utilities::NaturesCollection.new(o, :recettes).name.should == 'Recettes'
   end
 
   it 'test natures returns natures and call the scope' do
@@ -28,5 +28,5 @@ describe 'natures_collection' do
    tn = Utilities::NaturesCollection.new(o, :recettes)
    tn.natures.should == [ns[0], ns[1]]
   end
-
+ 
 end

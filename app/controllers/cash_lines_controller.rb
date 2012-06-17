@@ -32,7 +32,7 @@ class CashLinesController < LinesController
      if params[:mois]
       @mois = params[:mois]
     else
-      @mois= @period.guess_month
+     @mois= @period.guess_month
      redirect_to cash_cash_lines_url(@cash, mois: @mois) if (params[:action]=='index')
     end
   end
