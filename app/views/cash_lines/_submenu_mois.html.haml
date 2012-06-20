@@ -1,4 +1,4 @@
 %ul.mois
   - @period.list_months('%b').each_with_index do |mois, i|
-    %li{:class=>"#{'active' if current_page?(:mois => i)}" }
+    %li{:class=>"#{'active' if current_page?(:cash_id=>@cash, "mois"=>i) }" }
       = link_to_unless_current(mois, cash_cash_lines_path(@cash, "mois"=>i))

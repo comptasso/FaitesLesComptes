@@ -48,7 +48,7 @@ end
 
 def run(files_to_run)
  # system("rspec --drb --format doc #{files_to_run}")
-  system("rspec --drb #{files_to_run} --format documentation")
+  system("rspec --drb #{files_to_run}") # --format documentation")
 end
 #END:SPECS
 

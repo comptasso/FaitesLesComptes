@@ -15,11 +15,12 @@ describe CashControlsController do
 
   let(:ca) {mock_model(Cash, :organism=>o, :name=>'Magasin')}
   let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3, :locked=>false),
-      mock_model(CashControl, :date=>Date.today - 1.day, amount: 1, :locked=>false) ] }
+      mock_model(CashControl, :date=>Date.today - 1.day, amount: 1, :locked=>false) ] } 
   
   before(:each) do
     @mois = Date.today.month - 1
-    o.stub(:periods).and_return { mock(Arel, :order=>[p], 'any?' =>true) }
+    o.stub(:periods).and_return { mock(Arel, :find=>p, :order=>[p], 'any?' =>true) }
+    #@periods_arel.stub(:find).with(p.id).and_return p
   end
 
 #  before(:each) do

@@ -83,6 +83,7 @@ describe BankExtract do
 
     it 'end_sold doit être présent' do
       @be.begin_sold = nil
+      @be.should_not be_valid
       @be.should have(2).errors_on(:begin_sold) # numericality and presence
     end
 

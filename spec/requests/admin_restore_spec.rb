@@ -12,12 +12,13 @@ describe 'restoration de fichier' do
   include OrganismFixture
 
 
-  it 'accès par la vue admin#organism#show' , :js=>true do
+  it 'accès par la vue admin#organism#show' , :js=>true, :wip=>true do 
     visit admin_organisms_path
+    page.find('a', :href=>new_admin_restore_path)
     click_link("Permet de créer un organisme à partir d'un fichier de sauvegarde")
     alert = page.driver.browser.switch_to.alert
     alert.accept
-    sleep 1
+    sleep 5
     current_url.should match new_admin_restore_path  
   end
 

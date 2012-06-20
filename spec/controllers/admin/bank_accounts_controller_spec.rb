@@ -55,7 +55,7 @@ describe Admin::BankAccountsController do
   describe "GET edit" do 
     it "assigns the requested bank_account as @bank_account" do
       bank_account = o.bank_accounts.create! valid_attributes
-      get :edit, :id => bank_account.id.to_s
+      get :edit,organism_id:o.id.to_s, :id => bank_account.id.to_s
       assigns(:bank_account).should eq(bank_account)
     end
   end

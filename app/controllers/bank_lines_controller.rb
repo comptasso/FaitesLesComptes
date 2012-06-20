@@ -29,6 +29,7 @@ class BankLinesController < LinesController
   def find_book
     @book=BankAccount.find(params[:bank_account_id])
     @organism=@book.organism
+    @period= @organism.periods.find(session[:period])
   end
 
   # TODO a modifier pour faire la sélection
