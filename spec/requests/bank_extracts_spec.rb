@@ -13,15 +13,12 @@ describe "BankExtracts" do
   before(:each) do
     create_minimal_organism
     visit organism_path(@o)
-
   end
 
   describe "GET /new_bank_extract" do
-    
 
     it 'the page has a form with 6 input fields' do
       visit new_bank_account_bank_extract_path(@ba)
-      
       page.all('form').should have(1).element
       # 9 inputs dont 1 caché, 1 pour le bouton, 6 pour la saisie et le dernier
       # non disponible pour afficher le solde final
@@ -29,12 +26,13 @@ describe "BankExtracts" do
       page.all(:xpath, '//input[@disabled]').should have(1).element
     end
 
-    it 'filling the elements and click button create a bank_extract' do
+    it 'filling the elements and click button create a bank_extract and redirect to index' do
       visit new_bank_account_bank_extract_path(@ba)
       fill_in('bank_extract_reference', :with=>'Folio 124')
       fill_in('bank_extract_begin_date_picker', :with=>(I18n.l Date.today))
       click_button('Créer')
       page.should have_content("L'extrait de compte a été créé")
+      page.find('.champ h3').should have_content "Liste des extraits de compte"
     end
 
     it 'filling numeric value met a jour le solde final', :js=>true do
@@ -143,7 +141,6 @@ describe "BankExtracts" do
         alert = page.driver.browser.switch_to.alert
         alert.accept
         sleep 1
-          
         page.all('table tbody tr').should have(1).row
       end
     

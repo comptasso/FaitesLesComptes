@@ -508,12 +508,12 @@ OK - passer bank_extracts.js au tamis de JS lint
 OK - suppresion de l'action et de la vue show (qui doit renvoyer à index de bank_extract_lines controller)
 OK - filtrer les actions possibles selon le statut de lock
 OK - tester dans une request la fonction de mise à jour du solde final
-EN COURS - spec_requests
+OK - spec_requests
 La saisie d'un montant sans décimales devrait être reformattée pour avoir deux décimales
-Après création on va vers index
+OK - Après création on va vers index
 Quand aucune banque n'existe, le menu Afficher (dans admin) devrait être disabled
 Supprimer le lien sur banque quand on est dans la zone saisie (le premier item du menu)
-Les menus visités devraient rester en noir
+OK - Les menus visités devraient rester en noir
 Sans extrait de compte, le menu banque ne devrait pas proposer de les afficher
 NON Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
 
