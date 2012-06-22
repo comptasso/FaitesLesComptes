@@ -15,8 +15,8 @@ describe "BankExtracts" do
     visit organism_path(@o)
   end
 
-  describe "GET /new_bank_extract" do
-
+  describe "GET /new_bank_extract" do  
+ 
     it 'the page has a form with 6 input fields' do
       visit new_bank_account_bank_extract_path(@ba)
       page.all('form').should have(1).element

@@ -514,6 +514,9 @@ OK - Après création on va vers index
 BOF - Quand aucune banque n'existe, le menu Afficher (dans admin) devrait être disabled
 OK - Supprimer le lien sur banque quand on est dans la zone saisie (le premier item du menu)
 OK - Faire de même avec Livres et Caisses
+Supprimer les actions show correspondantes dans les routes, le controller et les vues
+Voir à quoi sert aujourd'hui new_line et add_line qui sont dans les routes de bank_account
+On doit pouvoir effacer le controller bank_account de la zone public et donc les vues coorespondantes
 OK - Les menus visités devraient rester en noir
 Sans extrait de compte, le menu banque ne devrait pas proposer de les afficher
 NON Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?

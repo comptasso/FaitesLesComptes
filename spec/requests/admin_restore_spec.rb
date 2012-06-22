@@ -16,7 +16,7 @@ describe 'restoration de fichier' do
     visit admin_organisms_path
     page.find('a', :href=>new_admin_restore_path)
     click_link("Permet de créer un organisme à partir d'un fichier de sauvegarde")
-    alert = page.driver.browser.switch_to.alert
+    alert = page.driver.browser.switch_to.alert 
     alert.accept
     sleep 5
     current_url.should match new_admin_restore_path  
