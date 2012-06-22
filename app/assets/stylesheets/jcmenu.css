@@ -23,3 +23,14 @@
     float: left;
 }
 
+/* Utile pour que les nav-header tels que le numéro de compte ne soient pas cliquable*/
+.dropdown-menu li.no-link > a:hover  {
+    background-color: #FFF;
+    color: #333 !important;
+    text-decoration: none;
+}
+
+li.dropdown > a:hover {
+  color: #333 !important;
+}
+

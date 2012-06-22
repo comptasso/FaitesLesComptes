@@ -511,8 +511,9 @@ OK - tester dans une request la fonction de mise à jour du solde final
 OK - spec_requests
 La saisie d'un montant sans décimales devrait être reformattée pour avoir deux décimales
 OK - Après création on va vers index
-Quand aucune banque n'existe, le menu Afficher (dans admin) devrait être disabled
-Supprimer le lien sur banque quand on est dans la zone saisie (le premier item du menu)
+BOF - Quand aucune banque n'existe, le menu Afficher (dans admin) devrait être disabled
+OK - Supprimer le lien sur banque quand on est dans la zone saisie (le premier item du menu)
+OK - Faire de même avec Livres et Caisses
 OK - Les menus visités devraient rester en noir
 Sans extrait de compte, le menu banque ne devrait pas proposer de les afficher
 NON Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
