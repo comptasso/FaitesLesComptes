@@ -516,7 +516,7 @@ OK - Supprimer le lien sur banque quand on est dans la zone saisie (le premier i
 OK - Faire de même avec Livres et Caisses
 OK - Supprimer les actions show correspondantes dans les routes, le controller et les vues pour bank_account
 OK - On doit pouvoir effacer le controller bank_account de la zone public et donc les vues coorespondantes
-Suppression de ces mêmes actions pour book et cashes
+OK - Suppression de ces mêmes actions pour book et cashes
 OK - Les menus visités devraient rester en noir
 Sans extrait de compte, le menu banque ne devrait pas proposer de les afficher
 Nettoyage de routes concernant books et bank_extracts
@@ -556,6 +556,7 @@ OK - Tri par date ne marche pas correctement
 OK - faire les spec de modallines controller
 
 --------------------- Remarques lors des essais ---------------------------
+Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
 modifier la place de la pagination
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
