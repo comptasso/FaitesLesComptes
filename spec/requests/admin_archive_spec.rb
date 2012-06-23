@@ -23,7 +23,7 @@ describe 'vue transfer index' do
     it 'afficher la vue de organisme puis cliquer sur l icone sauvegarder renvoie sur la vue archive new', :js=>true do
       visit admin_organism_path(@o)
       click_link("Fait une sauvegarde de toutes les données de l'organisme")
-      save_and_open_page
+     # save_and_open_page
       current_url.should match new_admin_organism_archive_path(@o) 
     end
 
