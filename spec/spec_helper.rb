@@ -13,12 +13,12 @@ Spork.prefork do
   require File.expand_path("../../config/environment", __FILE__) 
   require 'rspec/rails'  
   require 'capybara/rspec'
-  require 'capybara/rails'    
+  require 'capybara/rails'  
   
 #  require "webrat"
 #
 #Webrat.configure do |config|
-#  config.mode = :selenium
+#  config.mode = :selenium 
 #  #optional: 
 #  config.application_port = 4567 # defaults to 3001. Avoid Selenium's default port, 4444
 ##  config.application_framework = :sinatra  # could also be :merb. Defaults to :rails
@@ -53,6 +53,8 @@ Spork.prefork do
     # instead of true.
     config.use_transactional_fixtures = false
   end
+
+  Capybara.default_wait_time = 5
 
 
 end

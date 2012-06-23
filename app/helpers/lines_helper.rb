@@ -34,7 +34,7 @@ module LinesHelper
   # TODO cette méthode pourrait être commune avec lines et être également partagée
   # avec bank_lines..
   def line_actions(line)
-    html = ''
+    html = ' '
       if line.owner_type == 'Transfer'
         html <<  icon_to('modifier.png', edit_organism_transfer_path(@organism, line.owner_id)) unless line.locked?
       else

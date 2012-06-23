@@ -98,14 +98,10 @@ Faitesvoscomptes::Application.routes.draw do
     end
 
     resources :check_deposits, :only=>:new # pour faire des remises de chèques
-    resources :books, :only=>[:show]
-    resources :income_books
-    resources :outcome_books
+#    resources :income_books
+#    resources :outcome_books
     resources :destinations, only: :index
     resources :transfers
-   
-  
-
     resources :bank_accounts do
       resources :check_deposits
     end
@@ -143,10 +139,10 @@ Faitesvoscomptes::Application.routes.draw do
   end
 
 
-
+# TODO voir pour supprimer ça
   resources :books do
 
-    resources :multiple_lines
+    # resources :multiple_lines
     # TODO probablement inadapté si on ne relie pas le bank_extracts à un books A voir.
     # TODO voir si les post lock sont bien utiles. Peut être à supprimer.
     resources :bank_extracts do
