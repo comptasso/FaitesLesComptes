@@ -55,7 +55,7 @@ describe Admin::CashesController do
   describe "GET edit" do 
     it "assigns the requested cash as @cash" do
       cash = o.cashes.create! valid_attributes
-      get :edit, :id => cash.id.to_s
+      get :edit, organism_id:o.id.to_s, :id => cash.id.to_s
       assigns(:cash).should eq(cash)
     end
   end

@@ -2,6 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+
 RSpec.configure do |c|
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true }
@@ -10,8 +11,11 @@ end
 # spec request for testing admin books
 
 describe 'vue books index' do
-  include OrganismFixture
 
+ 
+  include OrganismFixture 
+
+    
 
   before(:each) do
     clean_test_database
@@ -47,9 +51,22 @@ describe 'vue books index' do
 
   end
  
-  describe 'index' do 
+  describe 'index' do
 
-    it 'dans la vue index,un livre peut être détruit', :js=>true do
+#    def retry_on_timeout(n = 3, &block)
+#      block.call
+#    rescue Capybara::TimeoutError, Capybara::ElementNotFound => e
+#      if n > 0
+#        puts "Catched error: #{e.message}. #{n-1} more attempts."
+#        retry_on_timeout(n - 1, &block)
+#      else
+#        raise
+#      end
+#    end
+
+
+#   retry_on_timeout do
+     it 'dans la vue index,un livre peut être détruit', :js=>true do
       @o.income_books.create!(:title=>'livre de test') 
       @o.should have(4).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
@@ -58,12 +75,13 @@ describe 'vue books index' do
         page.should have_content('livre de test') 
         page.click_link 'Supprimer'
       end
+      
       alert = page.driver.browser.switch_to.alert
       alert.accept
-      sleep 1
+      sleep 0.5
       page.all('tbody tr').should have(3).books 
-      
-    end
+     end
+#    end
 
     it 'on peut le choisir dans la vue index pour le modifier' do
       visit admin_organism_books_path(@o)

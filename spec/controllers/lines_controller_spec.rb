@@ -1,16 +1,21 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
+
+RSpec.configure do |c|
+  # c.filter = {:wip=>true}
+end
 
 describe LinesController do
    include OrganismFixture
   
   before(:each) do 
     # méthode définie dans OrganismFixture et 
-    # permettant d'avoir les variables d'instances @organism, @period, 
+    # permettant d'avoir les variables d'instances @organism, @period,  
     # income et outcome book ainsi qu'une nature
-    create_minimal_organism   
-  end
+    create_minimal_organism
+    session[:period] = @p.id
+  end 
 
   describe 'POST update' do
     before(:each) do
@@ -69,13 +74,13 @@ describe LinesController do
     end
 
     it "should assign the line" do
-      get :edit, :income_book_id=>@ib.id, :id=>@l.id
-      assigns[:book]=@ib
-      assigns[:line]=@l
+      get :edit, {:income_book_id=>@ib.id, :id=>@l.id}, {:period=>@p.id} 
+      assigns[:book].should == @ib
+      assigns[:line].should == @l
     end
 
     it "should render edit" do
-      get :edit, :income_book_id=>@ib.id, :id=>@l.id
+      get :edit, {:income_book_id=>@ib.id, :id=>@l.id}, {:period=>@p.id}
       response.should render_template(:edit)
     end
 
@@ -117,6 +122,8 @@ describe LinesController do
  end
 
    describe 'Get new' do
+    
+
      it "fill the default values" do
        get :new, income_book_id: @ib.id, mois: 4
        assigns[:line].should be_an_instance_of(Line)

@@ -42,7 +42,7 @@ group :development, :test do
   gem 'spork'
   gem 'launchy'
   gem 'database_cleaner'
-  
+  gem 'selenium-webdriver', '>= 2.22.0'
   gem 'capybara'
 #  gem 'jasmine'
   

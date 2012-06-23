@@ -7,7 +7,7 @@ RSpec.configure do |c|
   #  c.exclusion_filter = {:js=> true }
 end
 
-# spec request for testing admin books
+# spec request for testing admin books 
 
 describe 'vue transfer index' do
   include OrganismFixture 

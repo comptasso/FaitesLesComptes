@@ -74,7 +74,7 @@ describe BankExtract do
     end
 
     before(:each) do
-      @be=BankExtract.new(valid_attributes)
+      @be=BankExtract.new(valid_attributes) 
     end
 
     it 'valid begin sold' do
@@ -83,12 +83,13 @@ describe BankExtract do
 
     it 'end_sold doit être présent' do
       @be.begin_sold = nil
+      @be.should_not be_valid
       @be.should have(2).errors_on(:begin_sold) # numericality and presence
     end
 
-    it 'pas valide sans begin_date' do
+    it 'pas valide sans begin_date' do 
       @be.begin_date = nil
-      @be.should_not be_valid
+      @be.should_not be_valid 
     end
 
     it 'pas valide sans end_date' do

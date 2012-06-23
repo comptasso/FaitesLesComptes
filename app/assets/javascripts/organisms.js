@@ -21,18 +21,23 @@ jQuery(function () {
         "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
         "bAutoWidth": false,
         "sPaginationType": "bootstrap",
+        "aoColumns": [
+            { "sWidth": "40%" },
+            { "sWidth": "50%" },
+            { "sWidth": "10%" },
+        ],
         "oLanguage": {
             "sUrl": "/frenchdatatable.txt"
         }
     });
 });
-   //    fin de jQuery application#data_table
+//    fin de jQuery application#data_table
 
 
-        // petite fonction helper pour transformer des strings en float.
-        // si ce n'est pas un nombre, transforme NaN en null. Ceci est
-        // nécessaire pour ne pas générer d'erreur lorsqu'une donnée
-        // est absente. Cas d'un exercice incomplet par exemple.
+// petite fonction helper pour transformer des strings en float.
+// si ce n'est pas un nombre, transforme NaN en null. Ceci est
+// nécessaire pour ne pas générer d'erreur lorsqu'une donnée
+// est absente. Cas d'un exercice incomplet par exemple.
 function s_to_f(element) {
     var e = parseFloat(element);
     if (isNaN(e)) {
@@ -162,7 +167,7 @@ function options_for_graph(all_datas) {
                 shadowOffset: 0,    // offset from the bar edge to stroke the shadow.
                 shadowDepth: 0,     // nuber of strokes to make for the shadow.
                 shadowAlpha: 0 // transparency of the shadow.
-                //, location: 'e', edgeTolerance: -15 }
+            //, location: 'e', edgeTolerance: -15 }
             }
         };
     }

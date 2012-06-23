@@ -3,7 +3,7 @@
 class BankExtract < ActiveRecord::Base
   include Utilities::PickDateExtension
   
-  belongs_to :bank_account
+  belongs_to :bank_account 
   has_many :bank_extract_lines, dependent: :destroy 
   has_many :standard_bank_extract_lines, dependent: :destroy
   has_many :check_deposit_bank_extract_lines, dependent: :destroy 

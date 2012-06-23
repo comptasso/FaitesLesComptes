@@ -10,7 +10,6 @@
 
 
 class CashLinesController < LinesController
-
   
 
 # la méthode index est héritée de LinesController
@@ -26,13 +25,14 @@ class CashLinesController < LinesController
   def find_book
     @cash=Cash.find(params[:cash_id])
     @organism=@cash.organism
+    @period= @organism.periods.find(session[:period])
   end
 
   def fill_mois
      if params[:mois]
       @mois = params[:mois]
     else
-      @mois= @period.guess_month
+     @mois= @period.guess_month
      redirect_to cash_cash_lines_url(@cash, mois: @mois) if (params[:action]=='index')
     end
   end

@@ -23,11 +23,13 @@ describe 'vue transfer index' do
     it 'afficher la vue de organisme puis cliquer sur l icone sauvegarder renvoie sur la vue archive new', :js=>true do
       visit admin_organism_path(@o)
       click_link("Fait une sauvegarde de toutes les données de l'organisme")
-      current_url.should match new_admin_organism_archive_path(@o)
+     # save_and_open_page
+     page.find('.champ h3').should have_content "Création d'un fichier de sauvegarde"
+     # current_url.should match new_admin_organism_archive_path(@o)
     end
 
     it 'remplir la vue et cliquer sur le bouton propose de charger un fichier', :wip=>true do
-      visit new_admin_organism_archive_path(@o)
+       visit new_admin_organism_archive_path(@o)
       fill_in 'archive[comment]', :with=>'test archive'
       filename = 'ASSO_TEST_'+ Date.today.to_s
       click_button 'new_archive_button'

@@ -8,17 +8,31 @@ RSpec.configure do |c|
   #  c.exclusion_filter = {:js=> true }
 end
 
-describe 'restoration de fichier' do
+describe 'restoration de fichier' do 
   include OrganismFixture
+  def retry_on_timeout(n = 3, &block)
+  block.call
+rescue Capybara::TimeoutError, Capybara::ElementNotFound => e
+  if n > 0
+    puts "Catched error: #{e.message}. #{n-1} more attempts."
+    retry_on_timeout(n - 1, &block)
+  else
+    raise
+  end
+end
 
 
-  it 'accès par la vue admin#organism#show' , :js=>true do
+  it 'accès par la vue admin#organism#show' , :js=>true, :wip=>true do 
     visit admin_organisms_path
+    page.find('a', :href=>new_admin_restore_path)
+    
     click_link("Permet de créer un organisme à partir d'un fichier de sauvegarde")
     alert = page.driver.browser.switch_to.alert
+    sleep 0.1 
     alert.accept
-    sleep 1
-    current_url.should match new_admin_restore_path  
+    page.find('.champ h3').should have_content "Restauration d'un organisme à partir d'un fichier"
+    
+     
   end
 
 
@@ -29,6 +43,7 @@ describe 'restoration de fichier' do
     attach_file('file_upload', "#{File.dirname(__FILE__)}/../fixtures/files/test_compta2.yml")
     click_button('Charger et vérifier le fichier')
     page.should have_content("Importation d'un fichier")
+    sleep 1
     click_button("Confirmer l'importation")
  
     page.all('table tbody tr').should have(1).row

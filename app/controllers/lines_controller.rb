@@ -5,9 +5,13 @@ class LinesController < ApplicationController
   # TODO verifier 'utilité de ce choose layout
   layout :choose_layout # inutile maintenant car lié à l'utilisation de modalbox
 
-  # pour être sur d'avoir l'organisme avant d'appeler le before filter de
-  # application_controller qui va remplir le period (lequel est utile pour les soldes)
-  prepend_before_filter :find_book
+  prepend_before_filter :find_book # remplit @book mais aussi @organism et @period
+
+  skip_before_filter [:find_organism, :current_period]
+  # skip_before_filter :current_period # l'organisme et la période sont identifiée par find_book
+  # TODO le puts qui est dans current_period laisse penser que current_period est appelé . Comprendre pourquoi
+
+    
   before_filter :change_period, only: [:index] # pour permettre de changer de period quand on clique sur une
   # des barres du graphe.qui est affiché par organism#show
   before_filter :fill_mois, only: [:index, :new]
@@ -15,7 +19,7 @@ class LinesController < ApplicationController
 
   # GET /lines
   # GET /lines.json 
-  def index 
+  def index  
     @date = @period.guess_date(@mois)
     @monthly_extract = Utilities::MonthlyBookExtract.new(@book, @date)
 
@@ -78,6 +82,7 @@ class LinesController < ApplicationController
   end
 
   def edit
+    logger.debug LinesController._process_action_callbacks.map(&:filter).join("\n")
     @line = @book.lines.find(params[:id])
   end
   
@@ -120,6 +125,7 @@ class LinesController < ApplicationController
   def find_book
     @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
     @organism=@book.organism
+   @period= @organism.periods.find(session[:period])
   end
 
   def fill_mois
@@ -149,9 +155,6 @@ class LinesController < ApplicationController
   def choose_layout
     (request.xhr?) ? nil : 'application'
   end
-
-  
-
   
   # change period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice
   # à partir du graphe d'accueil. 

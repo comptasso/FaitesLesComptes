@@ -507,16 +507,24 @@ OK - Voir la liste des arguments obligatoires - probablement reprendre les spec 
 OK - passer bank_extracts.js au tamis de JS lint
 OK - suppresion de l'action et de la vue show (qui doit renvoyer à index de bank_extract_lines controller)
 OK - filtrer les actions possibles selon le statut de lock
-tester dans une request la fonction de mise à jour du solde final
-spec_requests
+OK - tester dans une request la fonction de mise à jour du solde final
+OK - spec_requests
 La saisie d'un montant sans décimales devrait être reformattée pour avoir deux décimales
-Après création on va vers index
-
+OK - Après création on va vers index
+BOF - Quand aucune banque n'existe, le menu Afficher (dans admin) devrait être disabled
+OK - Supprimer le lien sur banque quand on est dans la zone saisie (le premier item du menu)
+OK - Faire de même avec Livres et Caisses
+OK - Supprimer les actions show correspondantes dans les routes, le controller et les vues pour bank_account
+OK - On doit pouvoir effacer le controller bank_account de la zone public et donc les vues coorespondantes
+OK - Suppression de ces mêmes actions pour book et cashes
+OK - Les menus visités devraient rester en noir
+Sans extrait de compte, le menu banque ne devrait pas proposer de les afficher
+Nettoyage de routes concernant books et bank_extracts
 NON Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
 
 OK -  Peut-on supprimer un extrait bancaire pointé (actuellement on a l'icone) - réponse non, c'est bloqué
 Si on supprime cela met-il correctement à jour les lignes ?
-
+Améliorer has_icon_matcher (affichage des erreurs, meilleure vérif du href)
 -----------------------------BankExtractLine------------------------
 OK - rendre plus complet ce controller en ayant une fonction index
 OK - dans la vue index afficher les soldes et mouvements et signaler les éventuels écarts
@@ -545,9 +553,10 @@ OK - Remove - insert- et ajoute ne remettent pas à jour l'écart sur les soldes
 OUI - Dans un relevé pointé peut on encore déplacer les lignes
 OK - revoir natures.js (j'ai du commenter deux lignes pour éviter un problème dans la boîte modal)
 OK - Tri par date ne marche pas correctement
-faire les spec de modallines controller
+OK - faire les spec de modallines controller
 
 --------------------- Remarques lors des essais ---------------------------
+Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
 modifier la place de la pagination
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page

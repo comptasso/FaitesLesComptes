@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe "cash_lines/index" do
+describe "cash_lines/index" do 
   include JcCapybara
 
   let(:o) {mock_model(Organism, title: 'spec cd')}
@@ -11,7 +11,7 @@ describe "cash_lines/index" do
       :amount=>250.12, :narration=> 'Retrait')}
   let(:p) {mock_model(Period, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)}
   let(:c) {mock_model(Cash, name: 'Magasin')}
-  let(:n) {mock_model(Nature, :name=>'achat de marchandises')}
+  let(:n) {mock_model(Nature, :name=>'achat de marchandises')} 
   let(:mce) { mock( Utilities::MonthlyCashExtract, :total_credit=>100, :total_debit=>51,
     :debit_before=>20, :credit_before=>10)}
   let(:cl1) { mock_model(Line, :line_date=>Date.today, :narration=>'test', :debit=>'45', :nature_id=>n.id)}
@@ -29,8 +29,8 @@ describe "cash_lines/index" do
     [cl1, cl2].each {|l| l.stub(:destination).and_return(nil) }
     [cl1, cl2].each {|l| l.stub(:locked?).and_return(false) }
     [cl1, cl2].each {|l| l.stub(:book_id).and_return(1) }
-    [cl1, cl2].each {|l| l.stub(:book).and_return(mock_model(Book)) }
-    [cl1, cl2].each {|l| l.stub(:owner_type).and_return(nil) } 
+    [cl1, cl2].each {|l| l.stub(:book).and_return(mock_model(Book)) } 
+    [cl1, cl2].each {|l| l.stub(:owner_type).and_return(nil) }
   end
 
  

@@ -18,8 +18,8 @@ class Utilities::NaturesCollection
 
   def natures
     case @sens
-    when :recettes then @org.natures.recettes.all
-    when :depenses then @org.natures.depenses.all
+    when :recettes then @org.natures.recettes
+    when :depenses then @org.natures.depenses
     end
     
   end
