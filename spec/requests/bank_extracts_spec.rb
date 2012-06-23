@@ -10,6 +10,18 @@ include OrganismFixture
 
 describe "BankExtracts" do
 
+  def retry_on_timeout(n = 3, &block)
+  block.call
+rescue Capybara::TimeoutError, Capybara::ElementNotFound => e
+  if n > 0
+    puts "Catched error: #{e.message}. #{n-1} more attempts."
+    retry_on_timeout(n - 1, &block)
+  else
+    raise
+  end
+end
+
+
   before(:each) do
     create_minimal_organism
     visit organism_path(@o)
@@ -32,24 +44,27 @@ describe "BankExtracts" do
       fill_in('bank_extract_begin_date_picker', :with=>(I18n.l Date.today))
       click_button('Créer')
       page.should have_content("L'extrait de compte a été créé")
-      page.find('.champ h3').should have_content "Liste des extraits de compte"
+      page.find('.champ h3').should have_content "Liste des extraits de compte" 
     end
 
     it 'filling numeric value met a jour le solde final', :js=>true do
 
       visit new_bank_account_bank_extract_path(@ba)
-      end_sold = page.find(:xpath, '//input[@disabled]')
-      end_sold.value.should == '0.00'
-      fill_in('bank_extract_begin_sold', with:'2.50')
-      fill_in('bank_extract_total_debit', with:'1.20')
-      # on fait le deuxième remplissage car end_sold est mis à jour par on_change
-      # et fill_in ne fait déclenche pas on_change à lui tout seul
-      end_sold.value.should == '2.50'
-      fill_in('bank_extract_total_credit', with:'3.15')
-      end_sold.value.should == '1.30'
-      fill_in('bank_extract_reference', :with=>'Folio 124')
-      end_sold.value.should == '4.45'
+      retry_on_timeout do
 
+        end_sold = page.find(:xpath, '//input[@disabled]')
+        end_sold.value.should == '0.00'
+        fill_in('bank_extract_begin_sold', with:'2.50')
+        fill_in('bank_extract_total_debit', with:'1.20')
+        # on fait le deuxième remplissage car end_sold est mis à jour par on_change
+        # et fill_in ne fait déclenche pas on_change à lui tout seul
+        sleep 0.5
+        end_sold.value.should == '2.50'
+        fill_in('bank_extract_total_credit', with:'3.15')
+        end_sold.value.should == '1.30'
+        fill_in('bank_extract_reference', :with=>'Folio 124')
+        end_sold.value.should == '4.45'
+      end
     end
 
    
@@ -130,18 +145,21 @@ describe "BankExtracts" do
           total_debit:3.01, total_credit:1.99)
         @be2.save!
 
-        visit bank_account_bank_extracts_path(@ba)
       end
+
+
       it 'la page index affiche une table avec deux lignes' do
+         visit bank_account_bank_extracts_path(@ba)
         page.all('table tbody tr').should have(2).rows
       end
 
       it 'détruire le premier bank_extract laisse une ligne', :js=>true do
+         visit bank_account_bank_extracts_path(@ba)
         click_link('Supprimer')
         alert = page.driver.browser.switch_to.alert
         alert.accept
         sleep 1
-        page.all('table tbody tr').should have(1).row
+        page.all('table tbody tr').should have(1).row 
       end
     
     end

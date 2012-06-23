@@ -39,7 +39,8 @@ group :development, :test do
   # Pretty printed test output
   gem 'turn', :require => false
   gem 'rspec-rails', '2.8.1'
-  gem 'spork'
+  gem 'watchr'
+  gem 'spork-rails'
   gem 'launchy'
   gem 'database_cleaner'
   gem 'selenium-webdriver', '>= 2.22.0'

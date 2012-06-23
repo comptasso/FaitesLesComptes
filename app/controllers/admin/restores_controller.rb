@@ -69,7 +69,7 @@ class Admin::RestoresController < Admin::ApplicationController
   # remplit @datas avec les valeurs du fichier uploadé et les contrôle sommairement
   def read_datas_from_upload
     # TODO voir si c'est nécessaire pour un environnement de production
-    load_models if Rails.env == 'development'
+    load_models if Rails.env == 'development'  || Rails.env == 'test'
     @datas = Psych.load(params[:file_upload])
   end
 

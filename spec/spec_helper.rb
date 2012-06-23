@@ -1,10 +1,10 @@
 # -*- encoding : utf-8 -*-
 
-require 'rubygems'  
+
 require 'spork'
 
 Spork.prefork do
-  # Loading more in this block will cause your tests to run faster. However,
+  # Loading more in this block will cause your tests to run faster. However, 
   # if you change any configuration or code from libraries loaded here, you'll
   # need to restart spork for it take effect.
 
@@ -54,39 +54,42 @@ Spork.prefork do
     config.use_transactional_fixtures = false
   end
 
-  Capybara.default_wait_time = 5
+  
+RSpec.configure do |config|
 
+config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+ 
+end
 
 end
 
 
   # This code will be run each time you run your specs.
  Spork.each_run do
-  
-  Dir["#{Rails.root}/app/models/**/*.rb"].each { |f| load f }
-  Dir["#{Rails.root}/app/controllers/**/*.rb"].each { |f| load f }
-  Dir["#{Rails.root}/app/helpers/**/*.rb"].each { |f| load f }
 
 
-DatabaseCleaner.strategy = :truncation
-
-RSpec.configure do |config|
-  config.use_transactional_fixtures = false
-  config.before :each do
+ RSpec.configure do |config|
+ config.before(:each) do
     DatabaseCleaner.start
   end
-  config.after :each do
-    DatabaseCleaner.clean  
-  end
-end
 
-end
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+ end
+
+
+
 
 RSpec.configure do |c| 
   #  c.exclusion_filter = {:js=> true } 
 end  
 
-
+ end
 
 
 

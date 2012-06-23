@@ -16,7 +16,7 @@ describe Transfer do
     {date: Date.today, debitable: @ba, creditable: @bb, amount: 1.5, organism_id: @o.id}
   end
 
-  context 'virtual attribute pick date' do
+  describe 'virtual attribute pick date' do
   
     before(:each) do
       @transfer=Transfer.new(valid_attributes)
