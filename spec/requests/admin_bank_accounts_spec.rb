@@ -72,11 +72,12 @@ describe 'vue bank_accounts index' do
  
   describe 'index' , :wip=>true do
 
-    it 'dans la vue index,un compte peut être détruit', :js=>true do
+    it 'dans la vue index,un compte peut être détruit' , :js=>true do
       @o.bank_accounts.create!(:name=>'CrediX', :number=>'987ty')
       @o.should have(2).bank_accounts
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_bank_accounts_path(@o)
+      
       all('tbody tr').should have(2).rows
       within 'tbody tr:nth-child(2)' do
         page.should have_content('CrediX')

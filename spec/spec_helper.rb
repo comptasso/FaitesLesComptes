@@ -3,6 +3,7 @@
 
 require 'spork'
 
+#
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However, 
   # if you change any configuration or code from libraries loaded here, you'll
@@ -13,24 +14,9 @@ Spork.prefork do
   require File.expand_path("../../config/environment", __FILE__)  
   require 'rspec/rails'  
   require 'capybara/rspec'
-  require 'capybara/rails'   
+  require 'capybara/rails'
   
-#  require "webrat"
-#
-#Webrat.configure do |config|
-#  config.mode = :selenium 
-#  #optional: 
-#  config.application_port = 4567 # defaults to 3001. Avoid Selenium's default port, 4444
-##  config.application_framework = :sinatra  # could also be :merb. Defaults to :rails
-#  config.application_environment = Rails.env || :test # should equal the environment of the test runner because of database and gem dependencies. Defaults to :test.
-#end
-
-
-#  require 'capybara/rspec'
-#  require 'capybara/rails'
-
- 
-
+  
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
@@ -44,52 +30,51 @@ Spork.prefork do
     # config.mock_with :flexmock
     # config.mock_with :rr
     config.mock_with :rspec
-
+    config.use_transactional_fixtures = true
+end
     # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
     # config.fixture_path = "#{::Rails.root}/spec/fixtures"
+#class ActiveRecord::Base
+#    mattr_accessor :shared_connection
+#    @@shared_connection = nil
+#
+#    def self.connection
+#      @@shared_connection || retrieve_connection
+#    end
+# end
 
+end
+
+  Spork.each_run do
+
+  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+
+#  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+#DatabaseCleaner.strategy = :truncation
+#
+#RSpec.configure do |config|
+#  config.use_transactional_fixtures = false
+#  config.before :each do
+#    DatabaseCleaner.start
+#  end
+#  config.after :each do
+#    DatabaseCleaner.clean
+#  end
+#
+#
+#  end
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
-    config.use_transactional_fixtures = false
-  end
 
-  
-RSpec.configure do |config|
 
-config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
 
- 
-end
+
+
+
+
 
 end
-
-
-  # This code will be run each time you run your specs.
- Spork.each_run do
-
-
- RSpec.configure do |config|
- config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
- end
-
-
-
-
-RSpec.configure do |c| 
-  #  c.exclusion_filter = {:js=> true } 
-end  
-
- end
 
 
 

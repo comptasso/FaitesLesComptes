@@ -48,7 +48,6 @@ end
     end
 
     it 'filling numeric value met a jour le solde final', :js=>true do
-
       visit new_bank_account_bank_extract_path(@ba)
       retry_on_timeout do
 
