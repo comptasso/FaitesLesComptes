@@ -12,10 +12,6 @@ end
 describe 'vue natures index' do
   include OrganismFixture 
 
-#  before(:all) do
-#    clean_test_database
-#  end
-  
   before(:each) do
     Nature.count.should == 0
     create_minimal_organism 
