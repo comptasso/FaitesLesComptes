@@ -523,7 +523,7 @@ Nettoyage de routes concernant books et bank_extracts
 NON Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
 
 OK -  Peut-on supprimer un extrait bancaire pointé (actuellement on a l'icone) - réponse non, c'est bloqué
-Si on supprime cela met-il correctement à jour les lignes ?
+Si on supprime un extrait bancaire cela met-il correctement à jour les lignes ?
 Améliorer has_icon_matcher (affichage des erreurs, meilleure vérif du href)
 -----------------------------BankExtractLine------------------------
 OK - rendre plus complet ce controller en ayant une fonction index

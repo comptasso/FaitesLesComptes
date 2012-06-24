@@ -2,9 +2,9 @@
 <%= simple_form_for([:admin,@organism,@book], 
   :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
   <%= f.error_notification %>
-   <%= f.input :title,  label_html: {class: "span2"}, input_html: {class: "span3"} %>
-   <%= f.input :description, label_html: {class: "span2"}, input_html: {rows: 4, class: "span3"} %>
-    <%= f.input :book_type, :label=>'Type', label_html: {class: "span2"}, input_html: {class: "span3"} ,
+   <%= f.input :title,  label_html: {class: "span2"} %>
+   <%= f.input :description, label_html: {class: "span2"}, input_html: {rows: 4} %>
+    <%= f.input :book_type, :label=>'Type', label_html: {class: "span2"} ,
            :collection=>[['Recettes','IncomeBook'], ['Dépenses', 'OutcomeBook']],
          label_method: :first, value_method: :last, :as=>:radio_buttons, :required=>true, :disabled=>@book.persisted? %>
 
