@@ -12,26 +12,21 @@
     Restauration d'un organisme à partir d'un fichier
   </h3>
   
-  <div class="inner-champ row-fluid">
+  <div class ="inner-champ">
    <div class="inputs">
-     <%= form_tag admin_restore_path, :multipart => true, :class=>'simple_form'  do %>
-  <div class="control-group string required row-fluid">
-
-    <label  for="file_upload" class="string required control-label span2">
+     <%= form_tag admin_restore_path, :multipart => true, :class=>'simple_form form-horizontal' do  %>
+     <div class="control-group string required">
+      <label  for="file_upload" class="string required control-label">
        <abbr title="exigé">*</abbr>
       Fichier source
     </label>
       
-    <div class="controls row-fluid">
-         <div class="input-prepend">
-            <%= file_field_tag 'file_upload', class: 'input-file' %>
-         </div>
+    <div class="controls">
+       <%= file_field_tag 'file_upload', class: 'input-file' %>
     </div>
  
   </div>
-
-
-     <div class="form-actions offset2">
+     <div class="form-actions">
         <%= submit_tag 'Charger et vérifier le fichier' ,  class: "btn-primary span3" %>
      </div>
 
