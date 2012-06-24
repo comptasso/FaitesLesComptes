@@ -1,37 +1,35 @@
 .inputs.row-fluid#bank_extracts
-  = simple_form_for([@bank_account, @bank_extract]) do |f|
+  = simple_form_for([@bank_account, @bank_extract], :html=> {class: 'form-inline'}) do |f|
     =f.error_notification
     .row-fluid
       .span12
-        = f.input :reference, :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: 'span2'}
-        .control-group.select.required
-          %ul.span1
-            %li.list-label
-              %label.select.required.control-label{:for=>"pick_date_line"}
-                %abbr{:title=>"exigé"}
-                  *
-                Du
+        = f.input :reference, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8'}
+
+        .control-group.select.required.span3
+          %label.select.required.control-label.span4{:for=>"pick_date_line"}
+            %abbr{:title=>"exigé"}
+              *
+            Du
           = picker_date 'bank_extract[begin_date_picker]', Date.today.years_ago(5), Date.today.years_since(5) , @bank_extract.begin_date_picker
-        .control-group.select.required
-          %ul.span1
-            %li.list-label
-              %label.select.required.control-label{:for=>"pick_date_line"}
-                %abbr{:title=>"exigé"}
-                  *
-                Au
+
+        .control-group.select.required.span3
+          %label.select.required.control-label.span4{:for=>"pick_date_line"}
+            %abbr{:title=>"exigé"}
+              *
+            Au
           = picker_date 'bank_extract[end_date_picker]', Date.today.years_ago(5), Date.today.years_since(5) , @bank_extract.end_date_picker
     .row-fluid
       .span12
-        = f.input :begin_sold, :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: 'span2', value: two_decimals(@bank_extract.begin_sold)}
-        = f.input :total_debit, :jclabel_wrapper_html=>{class: "span1"}, input_html: { class: 'span2',value: two_decimals(@bank_extract.total_debit)}
-        = f.input :total_credit, :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: 'span2', value: two_decimals(@bank_extract.total_credit)}
+        = f.input :begin_sold, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8', value: two_decimals(@bank_extract.begin_sold)}
+        = f.input :total_debit, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8', value: two_decimals(@bank_extract.total_debit)}
+        = f.input :total_credit, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8', value: two_decimals(@bank_extract.total_credit)}
         .control-group.decimal.optional
-          %div
-            %ul.span1
-              %li.list_label
-                %label.decimal.control-label Solde final
+          %div.span3
+            %label.decimal.control-label.span4 Solde final
             %span.controls
-              %input.span2.decimal.numeric#span_end_sold{value: two_decimals(@bank_extract.end_sold), disabled: 'disabled' }
-    .row
-      .offset1.span2.clear
-        = f.button :submit, class: "btn-primary span2"
+              %input.span8.decimal.numeric#span_end_sold{value: two_decimals(@bank_extract.end_sold), disabled: 'disabled' }
+    
+    .row-fluid
+      .span12
+        .form-actions.offset8
+          = f.button :submit, class: "btn-primary span3"

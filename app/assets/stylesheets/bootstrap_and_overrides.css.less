@@ -76,7 +76,7 @@ table thead  th ul {
       list-style: none inside none;
     }
 
-.form-horizontal .form-actions {
+.form-horizontal .form-actions, .form-inline .form-actions {
 background-color: @grayLighter;
 margin-top: 9px;
 padding-top: 0px;
@@ -86,6 +86,10 @@ border-top: none;
 .form-horizontal .control-group {
 margin-top: 9px;
 
+}
+
+.form-inline label {
+  padding-left: 8px;
 }
 
 select[class*="span"] {
@@ -115,6 +119,12 @@ border-bottom: none;
 color: red;
 }
 
+input.input_date_picker {
+  background-image: url('cal.gif');
+  background-repeat:no-repeat;
+  background-position:97% 50%;
+}
+
 
 // inséré pour avoir la même couleur dans les liens visités des menus
 li.dropdown a:visited {
@@ -123,6 +133,10 @@ li.dropdown a:visited {
 
 li.dropdown a:hover {
  color: #FFF !important;
+}
+
+input.numeric {
+  text-align: right;
 }
 
 

@@ -38,13 +38,10 @@ $('.dropdown-toggle').dropdown();
 // picker_date qui est dans application_helper. Date min et
 // date max sont transmis par cette fonction sous forme d'attributs  data-jcmin et data-jcmax
 jQuery(function () {
-    jQuery.each($('.input_date'), function (index, val) {
+    jQuery.each($('.input_date_picker'), function (index, val) {
         $(val).datepicker(
             {
                 dateFormat: 'dd/mm/yy',
-                buttonImage: '/assets/cal.gif',
-                buttonImageOnly: true,
-                showOn: 'both',
                 minDate: $(val).attr('data-jcmin'),
                 maxDate: $(val).attr('data-jcmax')
             }
