@@ -2,8 +2,8 @@
 <%= simple_form_for([:admin,@organism,@period,@nature],  :html=> {class: 'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
 
-   <%= f.input :name %>
-   <%= f.input :comment, input_html: {rows: 4} %>
+   <%= f.input :name , input_html: {class:'span4'} %>
+   <%= f.input :comment, input_html: {rows: 4, class: 'span4'} %>
    <%= f.input :income_outcome, :label=>'Type',
          :collection=>[['Recettes', true], ['Dépenses', false]], 
          label_method: :first, value_method: :last, :as=>:inline_radio_buttons %>
