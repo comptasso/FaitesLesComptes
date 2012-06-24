@@ -47,6 +47,10 @@ watch('^app/assets/stylesheets/(.*\.scss)') do |m|
     check_scss(m[1])
     puts "checked #{m[1]}"
 end
+
+def check_scss(scss_file)
+    system("clear; sass --check app/assets/stylesheets/#{scss_file}" )
+end
 # END: SCSS
 
 def jslint_check(files_to_check)
