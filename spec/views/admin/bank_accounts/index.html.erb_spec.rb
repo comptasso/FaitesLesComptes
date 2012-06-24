@@ -12,7 +12,7 @@ describe 'admin/bank_accounts/index' do
     @bank_accounts << stub_model(BankAccount, number: 'BA2')
     @bank_accounts.each do |b|
       b.stub(:created_at).and_return(Time.now)
-      b.stub(:updated_at).and_return(Time.now)
+      b.stub(:updated_at).and_return(Time.now) 
     end
   end
 

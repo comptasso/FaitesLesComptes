@@ -5,9 +5,9 @@ jQuery(function() {
         $('.bank_accounts .data_table').dataTable({
           "sPaginationType": "bootstrap",
             "oLanguage": {
-                "sUrl": "/frenchdatatable.txt"
+                "sUrl": "/frenchdatatable.txt" 
             },
-            "aoColumns": [
+            "aoColumns": [ 
             null,
             null,
             null,
