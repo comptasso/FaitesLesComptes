@@ -24,8 +24,9 @@ Purpose of the stylesheet follows.
     /*    font-family: sans-serif;*/
 }
 
+
 /* stylesheets/application.css */
-.simple_form label {
+/*.simple_form label {
     padding-right: 10px;
     text-align: right;
     font-weight: bold;
@@ -65,7 +66,7 @@ Purpose of the stylesheet follows.
 
 .simple_form abbr {
     color: red;
-}
+}*/
 
 .picker_date img {
     float: left;
@@ -77,14 +78,14 @@ img.ui-datepicker-trigger {
     margin-right: 4px;
 }
 
-form {
+/*form {
     padding-top: 8px;
-}
+}*/
 
 /* permet  d'avoir une mise en page de formulaire fluide */
-.row-fluid form input, .row-fluid form select { float: left; }
+/*.row-fluid form input, .row-fluid form select { float: left; }*/
 
-.controls {position: relative;}
+/*.controls {position: relative;}
 form ul  {
     list-style: none;
     li label  { padding-right: 0px;}
@@ -112,8 +113,8 @@ span.error{
     }
 
     td p {
-      margin-left: 0px; /*Pour éviter que simple format de bank_account address laisse une marge à gauche */
+      margin-left: 0px; Pour éviter que simple format de bank_account address laisse une marge à gauche 
       }
 .input-prepend textarea {
   margin-bottom: 4px;
-  }
+  }*/

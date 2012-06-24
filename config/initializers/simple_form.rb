@@ -50,31 +50,11 @@ SimpleForm.setup do |config|
     b.use :placeholder
     b.use :label
     b.wrapper :tag => 'div', :class => 'controls' do |ba|
-      ba.use :error, :wrap_with => { :tag => 'span', :class => 'help-inline' }
       ba.use :input
+      ba.use :error, :wrap_with => { :tag => 'span', :class => 'help-inline' }
       ba.use :hint,  :wrap_with => { :tag => 'p', :class => 'help-block' }
     end
   end
-  
-  # wrapper ajouté par jcl pour avoir l'affichage de l'erreur en dessous du label en petit
-  # dérivié du wrapper précédent (bootstrap)
-  config.wrappers :jc_bootstrap, :class => 'control-group', :error_class => 'error' do |b|
-    b.use :html5
-    b.use :placeholder
-    b.wrapper :jcglobal_wrapper do |baba|
-      baba.wrapper :jclabel_wrapper, :tag => 'ul' do |ba|
-        ba.wrapper :tag=> 'li', :class=>'list_label' do |bal|
-          bal.use :label
-        end
-        ba.use :error, :wrap_with => { :tag => 'li', :class => 'help-inline' }
-      end
-      baba.wrapper :tag => 'span', :class => 'controls' do |ba|
-        ba.use :input
-        ba.use :hint,  :wrap_with => { :tag => 'p', :class => 'help-block' }
-      end
-    end
-  end
-
 
   config.wrappers :prepend, :tag => 'div', :class => "control-group", :error_class => 'error' do |b|
     b.use :html5
@@ -106,7 +86,7 @@ SimpleForm.setup do |config|
   # Check the Bootstrap docs (http://twitter.github.com/bootstrap)
   # to learn about the different styles for forms and inputs,
   # buttons and other elements.
-  config.default_wrapper = :jc_bootstrap
+  config.default_wrapper = :bootstrap
 
   # Define the way to render check boxes / radio buttons with labels.
   # Defaults to :nested for bootstrap config.
@@ -117,7 +97,9 @@ SimpleForm.setup do |config|
   # Default class for buttons
   config.button_class = 'btn'
 
-  # Method used to tidy up errors.
+  # Method used to tidy up errors. Specify any Rails Array method.
+  # :first lists the first message for each field.
+  # Use :to_sentence to list all errors for each field.
   # config.error_method = :first
 
   # Default tag used for error notification helper.
@@ -193,4 +175,6 @@ SimpleForm.setup do |config|
 
   # Cache SimpleForm inputs discovery
   # config.cache_discovery = !Rails.env.development?
+
+  
 end

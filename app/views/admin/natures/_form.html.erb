@@ -1,19 +1,19 @@
  <div class="inputs">
-<%= simple_form_for([:admin,@organism,@period,@nature],  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
+<%= simple_form_for([:admin,@organism,@period,@nature],  :html=> {class: 'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
 
-   <%= f.input :name,  label_html: {class: "span2"} %>
-   <%= f.input :comment, label_html: {class: "span2"}, input_html: {rows: 4} %>
-   <%= f.input :income_outcome, :label=>'Type', label_html: {class: "span2"} , 
-         :collection=>[['Recettes', true], ['Dépenses', false]],
-         label_method: :first, value_method: :last, :as=>:radio_buttons %>
-   <%= f.association :account, :label_html=>{class: "span2"}, :label=> 'Compte associé', input_html: {size: 10},
+   <%= f.input :name %>
+   <%= f.input :comment, input_html: {rows: 4} %>
+   <%= f.input :income_outcome, :label=>'Type',
+         :collection=>[['Recettes', true], ['Dépenses', false]], 
+         label_method: :first, value_method: :last, :as=>:inline_radio_buttons %>
+   <%= f.association :account, :label=> 'Compte associé', input_html: {size: 10},
                 :collection => options_for_natures(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :name,
                 :label_method=> :long_name, :value_method=> :id if @period.accounts.any? %>
 
 
-   <div class="form-actions offset2">
-    <%= f.button :submit, class: "btn-primary span2" %>
+   <div class="form-actions">
+    <%= f.button :submit, class: "btn-primary" %>
    </div>
 
   <% end %>
