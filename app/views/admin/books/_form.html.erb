@@ -1,14 +1,14 @@
  <div class="inputs">
-<%= simple_form_for([:admin,@organism,@book], 
-  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
+<%= simple_form_for([:admin,@organism,@book],  :html=> {class: 'form-horizontal'} ) do |f| %>
+ 
   <%= f.error_notification %>
-   <%= f.input :title,  label_html: {class: "span2"} %>
-   <%= f.input :description, label_html: {class: "span2"}, input_html: {rows: 4} %>
-    <%= f.input :book_type, :label=>'Type', label_html: {class: "span2"} ,
+   <%= f.input :title %>
+   <%= f.input :description, input_html: {rows: 4} %>
+    <%= f.input :book_type, :label=>'Type',
            :collection=>[['Recettes','IncomeBook'], ['Dépenses', 'OutcomeBook']],
-         label_method: :first, value_method: :last, :as=>:radio_buttons, :required=>true, :disabled=>@book.persisted? %>
+         label_method: :first, value_method: :last, :as=>:inline_radio_buttons, :required=>true, :disabled=>@book.persisted? %>
 
-  <div class="form-actions offset2">
+  <div class="form-actions">
     <%= f.button :submit, class: "btn-primary span2" %>
    </div>
 <% end %>

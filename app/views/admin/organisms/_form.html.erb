@@ -1,12 +1,12 @@
  <div class="inputs">
-<%= simple_form_for([:admin,@organism], :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
+<%= simple_form_for([:admin,@organism], :html=> {class: 'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
    
  
-    <%= f.input :title, label_html: {class: "span2"}, input_html: {class: "span3"} %>
-    <%= f.input :description, label_html: {class: "span2"}, input_html: {class: "span3", rows: 4} %>
+    <%= f.input :title,  input_html: {class: "span3"} %>
+    <%= f.input :description,  input_html: {class: "span3", rows: 4} %>
    
-   <div class="form-actions offset2">
+   <div class="form-actions">
     <%= f.button :submit, class: "btn-primary span2" %>
    </div>
 <% end %>

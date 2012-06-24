@@ -179,6 +179,8 @@ fr:
     Title: Titre
     Used: Utilisé
     
+    
+    
    
   Line: ligne
 
@@ -192,6 +194,7 @@ fr:
 
   activerecord:
     attributes:
+      
       archive:
         comment: Commentaire
       book:
@@ -228,6 +231,7 @@ fr:
         close_date: 'Fin'
       cash:
         name: 'Nom'
+        comment: Commentaire
       line:
         payment_mode: 'Paiement'
         bank_account: 'Compte'
