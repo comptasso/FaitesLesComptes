@@ -1,36 +1,27 @@
-<div class="inputs row-fluid" id="new_check_deposit" >
+<div class="inputs" id="new_check_deposit" >
 
-<%= simple_form_for([@organism, @bank_account, @check_deposit]) do |f| %>
+<%= simple_form_for([@organism, @bank_account, @check_deposit], html:{class:'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
+  <%= f.input :pick_date, :label=> 'Date', input_html: {class: 'span2', date_min:Date.today.years_ago(5), date_max:Date.today.years_since(5)} ,:required => true, :as=>:date_picker %>
 
-   <div class="row-fluid">
-      <div class="span12">
-        <div class="control-group select required">
-          <ul class="span2">
-            <li class="list-label"><label class="select required control-label" for="pick_date_line">
-                <abbr title="exigé">*</abbr> Date</label></li>
-          </ul>
-          <%= picker_date 'check_deposit[pick_date]', Date.today.years_ago(5), Date.today.years_since(5) , @check_deposit.pick_date %>
-        </div>
-          <%= f.association :bank_account,  :jclabel_wrapper_html=>{class: "span1"},
+  <%= f.association :bank_account, 
               input_html: {:class=> "span2"},
               :collection => @organism.bank_accounts.map {|b| [b.number, b.id]},
               :prompt => "Numero de compte ?", :label=>'Compte' %>
 
-          <%= f.association :checks, :jclabel_wrapper_html=>{class: "span1"}, 
+          <%= f.association :checks,
               input_html: {:class=> "span4"},
               :collection => @organism.lines.non_depose.map {|c| [c.check_for_select, c.id]},
               :prompt => 'Chèques à remettre', :label=> 'Chèques' %>
-      </div>
+    
    
-       <div class="row">
-          <div class="offset2 span2 clear">
+       <div class="form-actions">
+          
              <%=  f.button :submit, :id=>'new_check_deposit_button', :class=> "btn-primary span2" %>
-          </div>
+        
        </div>
     
    
 
-    </div>
-  <% end %>
+   <% end %>
 </div>

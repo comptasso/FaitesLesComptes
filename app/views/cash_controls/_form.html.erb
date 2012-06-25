@@ -1,33 +1,24 @@
 <div class="inputs row-fluid" id="new_check_deposit" >
 
-<%= simple_form_for([@cash, @cash_control]) do |f| %>
+<%= simple_form_for([@cash, @cash_control],  :html=> {class: 'form-inline'}) do |f| %>
   <%= f.error_notification %>
 
    <div class="row-fluid">
       <div class="span12">
-        <div class="control-group select required <%= "error" if @cash_control.errors.messages[:date] %> ">
-          <div>
-          <ul class="span2">
-            <li class="list-label"><label class="select required control-label" for="cash_control_pick_date">
-              <abbr title="exigé">*</abbr> Date</label></li>
-            <% if @cash_control.errors.messages[:date] %>
-              <li class="help-inline"><%= @cash_control.errors.messages[:date].first %></li>
-            <% end %>
-          </ul>
-          <%= picker_date 'cash_control[pick_date]', @cash_control.min_date, @cash_control.max_date , @cash_control.pick_date %>
-          </div>
-        </div>
-            </div>
-      </div>
- 
-         <div class="row-fluid">
-      <div class="span12">
-        <%= f.input :amount,  :jclabel_wrapper_html=>{:class=>'span2'}, :input_html=> { value: two_decimals(@cash_control.amount), class: "numeric span2"} %>
+      
+
+  <%= f.input :pick_date, :label=> 'Date', wrapper_html:{class:'span3'}, label_html: {class: 'span4'},
+        input_html: {class: 'span8', date_min:@cash_control.min_date, date_max:@cash_control.max_date} ,:required => true, :as=>:date_picker %>
+
+     
+         
+        <%= f.input :amount,  :wrapper_html=>{:class=>'span3'}, label_html: {class: 'span4'},
+            :input_html=> { value: two_decimals(@cash_control.amount), class: "numeric span8"} %>
         </div>
       </div>
  
 
- <div class="form-actions offset2">
+ <div class="form-actions offset1">
     <%= f.button :submit, class: "btn-primary span2" %>
    </div>
 <% end %>

@@ -6,6 +6,7 @@
 <div class="champ">
   <h3>
     Enregistrement d'un contrôle de la caisse <%= @cash.name %>
+
   </h3><div class="inner-champ">
   <% if @cash_control.previous %>
   <p>Dernier contrôle de caisse effectué le <%=l @cash_control.previous.date %> - Montant relevé : <%= two_decimals(@cash_control.previous.amount) %></p>
