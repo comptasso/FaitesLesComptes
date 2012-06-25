@@ -1,29 +1,24 @@
-.inputs.row-fluid#entry_lines
-  =  simple_form_for([@organism, @transfer])  do |f| 
-    = f.error_notification
+.inputs.row-fluid#transfer
+  = simple_form_for([@organism, @transfer], :html=>{class:'form-inline'})  do |f|
+    =f.error_notification
     .row-fluid
       .span12
-        .control-group.select.required
-          %ul.span2
-            %li.list-label
-              %label.select.required.control-label{:for=>"pick_date_line"}
-                %abbr{:title=>"exigé"}
-                  *
-                Date
-          = picker_date 'transfer[date_picker]', @period.start_date, @period.close_date , @transfer.date_picker, {:disabled=>@transfer.partial_locked?}
-          = f.input :narration,  :label=>'Libellé ', :jclabel_wrapper_html=>{:class=>'span1'}, input_html: {class: "span5" }, :disabled=>@transfer.partial_locked?
-          = f.input :amount , :jclabel_wrapper_html=> {class: "span1"}, input_html: {class: "span2", value: two_decimals(@transfer.amount) },  :disabled=>@transfer.partial_locked?, label: 'Montant'
+        = f.input :date_picker,:label=> 'Du', wrapper_html:{class:'span3'}, label_html:{class: 'span4'}, input_html:{class:'span8', date_min:@period.start_date, date_max:@period.close_date, :disabled=>@transfer.partial_locked?}, :required => true, :as=>:date_picker
+        = f.input :narration,  :label=>'Libellé ', :wrapper_html=>{:class=>'span6'}, label_html:{class:'span2'}, input_html: {class: "span10" }, :disabled=>@transfer.partial_locked?
+        = f.input :amount , :wrapper_html=> {class: "span3"},label_html:{class:'span4'}, input_html: {class: "span8", value: two_decimals(@transfer.amount) },  :disabled=>@transfer.partial_locked?, label: 'Montant'
     .row-fluid
       .span12
-        = f.input :fill_debitable, :jclabel_wrapper_html=>{class: "span2"}, :label=> 'De', input_html: {class: "span4", size: 8},
+        = f.input :fill_debitable, :wrapper_html=>{class: "span3"}, :label=> 'De',label_html: {class: 'span4'}, input_html: {class: "span8", size: 8},
                 :collection => [['Banques', @organism.bank_accounts.all],['Caisse',@organism.cashes.all]],
                 :as => :grouped_select, :group_label_method=> :first, :group_method => :last, 
                 :label_method=> :to_s, :value_method=> :to_option, :required=>true,  :include_blank=>false, :disabled=>@transfer.debit_locked?
-        = f.input :fill_creditable, :jclabel_wrapper_html=>{class: "span2"}, :label=> 'Vers', input_html: {class: "span4", size: 8},
+        = f.input :fill_creditable, :wrapper_html=>{class: "span3"}, :label=> 'Vers',label_html: {class: 'span4'}, input_html: {class: "span8", size: 8},
                 :collection => [['Banques', @organism.bank_accounts.all],['Caisse',@organism.cashes.all]],
                 :as => :grouped_select, :group_label_method=> :first, :group_method => :last,
                 :label_method=> :to_s, :value_method=> :to_option,  :required=>true,  :include_blank=>false, :disabled=>@transfer.credit_locked?
+        
 
-    .row
-      .offset2.span2.clear
-        = f.button :submit, id: 'new_line_button', class: "btn-primary span2"
+    .row-fluid
+      .span12
+        .form-actions.offset4
+          = f.button :submit, id: 'new_line_button', class: "btn-primary span3"
