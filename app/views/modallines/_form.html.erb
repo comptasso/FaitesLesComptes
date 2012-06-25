@@ -2,65 +2,38 @@
 
 <div class="inputs" id="form_bank_extract_line" >
 
-  <%=  simple_form_for(@line, :url=>bank_extract_modallines_path(@bank_extract), :method=>:post, :remote=>true,  :wrapper=>:prepend, :html=> {class: 'form-inline'}) do |f| %>
+  <%=  simple_form_for(@line, :url=>bank_extract_modallines_path(@bank_extract), :method=>:post, :remote=>true,  :html=> {class: 'form-horizontal'}) do |f| %>
 
     <%= f.error_notification %>
    
       <%= f.association :book, label:'Livre',
         :collection=>@organism.public_books,
         required:true, 
-        label_html: {class: "span1"},
-
         label_method: lambda {|b| "#{b.class.name == 'IncomeBook' ? 'R' : 'D'} - #{b.title}" },
-        include_blank:false,
-        input_html: {class: "span2" } %>
+        include_blank:false, input_html: {class: "span4" } %>
 
-        <div class="control-group select required">
-
-
-<label class="string optional control-label span1" for="pick_date_line">
-  <abbr title="exigé">
-    *
-  </abbr>
-  Date
-</label>
-       
-          <div class="controls">
-            <div class="input-prepend">
-          <%= picker_date 'line[pick_date]', @period.start_date, @period.close_date , @line.pick_date %>
-            </div>
-          </div>
-        </div>
-
-
-        <%= f.input :narration,  :label=>'Libellé ', label_html: {class: "span1"}, input_html: {class: "span3" } %>
-       
-          <%= f.input :ref, label:'Référence',  label_html: {class: "span1"}, input_html: {class: "span2" }  %>
-          <%=  f.association :nature , label_html: {class: "span1"},
+    <%= f.input :pick_date, :label=> 'Date', input_html: { class: "span4", date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+    <%= f.input :narration,  :label=>'Libellé ', input_html: {class: "span10" } %>
+    <%= f.input :ref, label:'Référence',  input_html: {class: "span4" }  %>
+    <%=  f.association :nature , 
               :collection => [Utilities::NaturesCollection.new(@organism, :recettes), Utilities::NaturesCollection.new(@organism, :depenses)],
               :as => :grouped_select, :group_method=>:natures,
-              :required=>true, input_html: {class: "span3 " } %>
-
-           <%=  f.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
-              :prompt => "Pour qui ?" ,  label_html: {class: "span1"}, input_html: {class: "span3"} %>
-       
-     
-
-     
-            <%=  f.input :debit ,  label_html: {class: "span1"}, input_html: {class: "span2 number", value: two_decimals(@line.debit) }  %>
-            <%=  f.input :credit, label_html: {class: "span1"}, input_html: {class: "span2 number", value: two_decimals(@line.credit) } %>
-            <%= f.input :bank_account,  label_html: {class: "span1"}, input_html: {class: "span2"}, :disabled=>true %>
+              :required=>true, input_html: {class: "span6 " } %>
+     <%=  f.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
+              :prompt => "Pour qui ?" ,   input_html: {class: "span6"} %>
+     <%=  f.input :debit ,   input_html: {class: "span3 number", value: two_decimals(@line.debit) }  %>
+            <%=  f.input :credit, input_html: {class: "span3 number", value: two_decimals(@line.credit) } %>
+            <%= f.input :bank_account,  input_html: {class: "span4"}, :disabled=>true %>
             <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
                           disabled: 'Espèces',
-                           label_html: {class: "span1"},
-                          :required=>true,  input_html: {class: "span2"} %>
-           <span id ="td_check_number">
-               <%= f.input :check_number, label:'N° ch.', label_html: {class: "span1"}, input_html: {class: "span2" }  %>
-           </span>
-          
+                          :required=>true,  input_html: {class: "span6"} %>
+        
+               <%= f.input :check_number, wrapper_html:{id:'td_check_number'}, label:'N° ch.', input_html: {class: "span4" }  %>
+           
 
-<div class="modal-footer">
-   <%=  f.button :submit, id: 'new_line_button', class: "btn-primary span1" %>
+<div class="form-actions">
+
+   <%=  f.button :submit, id: 'new_line_button', class: "btn-primary span4" %>
 </div>
   <% end %>
 </div>

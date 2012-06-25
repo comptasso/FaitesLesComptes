@@ -567,6 +567,7 @@ OK - Fait un date_picker_input
 
 --------------------- Remarques lors des essais ---------------------------
 Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié
+Dans modallines le form réaffiché est remis à blanc sauf la réf du chèque
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
 modifier la place de la pagination
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
