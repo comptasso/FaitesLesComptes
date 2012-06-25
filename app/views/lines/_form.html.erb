@@ -2,61 +2,52 @@
 
 <div class="inputs row-fluid <%=@book.type.underscore %>" id="entry_lines" >
 
-  <%=  simple_form_for([@book, @line]) do |f| %>
+  <%=  simple_form_for([@book, @line], :html=> {class: 'form-inline'}) do |f| %>
 
     <%= f.error_notification %>
     <div class="row-fluid">
       <div class="span12">
-        <div class="control-group select required">
-          <ul class="span1">
-            <li class="list-label"><label class="select required control-label" for="pick_date_line">
-                <abbr title="exigé">*</abbr> Date</label></li>
-          </ul>
-          <%= picker_date 'line[pick_date]', @period.start_date, @period.close_date , @line.pick_date %>
-        </div>
-        <%= f.input :narration,  :label=>'Libellé ', :jclabel_wrapper_html=>{:class=>'span2'}, input_html: {class: "span6" } %>
+
+        <%= f.input :pick_date, :label=> 'Date', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+        <%= f.input :narration,  :label=>'Libellé ', :wrapper_html=>{:class=>'span6'}, label_html:{class:'span2'}, input_html: {class:"span9" } %>
         </div>
       </div>
 
       <div class="row-fluid">
         <div class="span12">
-          <%= f.input :ref, label:'Référence', :jclabel_wrapper_html=>{:class=>'span1'}, input_html: {class: "span2" }  %>
-          <%=  f.association :nature , :jclabel_wrapper_html=>{:class=>'span2'},
-              :collection => @natures, :prompt => "Quoi ?",
-              :required=>true, input_html: {class: "span3 " } %>
+          <%= f.input :ref, label:'Référence', :wrapper_html=>{:class=>'span3'}, input_html: {class: "span8" } , :label_html=>{class:'span4'} %>
+          <%=  f.association :nature , :wrapper_html=>{:class=>'span3'}, input_html: {class: "span8" } , :label_html=>{class:'span4'},
+              :collection => @natures, :prompt => "Quoi ?", :required=>true,  %>
           <%=  f.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
-              :prompt => "Pour qui ?" ,  :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: "span3"} %>
+              :prompt => "Pour qui ?" ,  :wrapper_html=>{class: "span3"}, input_html: {class: "span8" } , :label_html=>{class:'span4'} %>
         </div>
       </div>
 
       <div class="row-fluid">
          <div class="span12">
-            <%=  f.input :debit , :jclabel_wrapper_html=> {class: "span1"}, input_html: {class: "span2", value: two_decimals(@line.debit) } if (@book.type=='OutcomeBook') %>
-            <%=  f.input :credit, :jclabel_wrapper_html=> {class: "span1"}, input_html: {class: "span2", value: two_decimals(@line.credit) } if (@book.type=='IncomeBook') %>
+            <%=  f.input(:debit , :wrapper_html=> {class: "span3"}, :label_html=>{class:'span4'}, input_html:{class: "span8", value:two_decimals(@line.debit) }) if (@book.type=='OutcomeBook') %>
+            <%=  f.input(:credit, :wrapper_html=> {class: "span3"},  :label_html=>{class:'span4'} ,input_html: {class: "span8", value: two_decimals(@line.credit) }) if (@book.type=='IncomeBook') %>
             <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
                           disabled: "#{'Espèces' unless @organism.cashes.any?}",
-                          :jclabel_wrapper_html=> {class: "span2"},
-                          :required=>true,  input_html: {class: "span2"} %>
+                          :wrapper_html=> {class: "span3"},
+                          :required=>true,  input_html: {class: "span8"}, :label_html=>{class:'span4'} %>
+            <%= f.association :bank_account,  :wrapper_html=>{class: "span3", id:'td_bank'}, input_html: {class: "span8"},:label_html=>{class:'span4'}, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>
+         
+               <%= f.input :check_number, label:'N° ch.', :wrapper_html=>{:class=>'span3', id:'td_check_number'},:label_html=>{class:'span4'}, input_html: {class: "span8" }  %>
+        
 
-          
-            <span id="td_bank" >
-                <%= f.association :bank_account,  :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: "span2"}, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>
-            </span>
-
-            <span id ="td_check_number">
-               <%= f.input :check_number, label:'N° ch.', :jclabel_wrapper_html=>{:class=>'span1'}, input_html: {class: "span2" }  %>
-           </span>
-
-            <span id="td_cash" >
-                <%= f.association :cash, :jclabel_wrapper_html=>{class: "span1"}, input_html: {class: "span2"}, :collection => @organism.cashes.all, :include_blank=> false %>
-            </span>
+           
+                <%= f.association :cash, :wrapper_html=>{class: "span3", id:'td_cash'},:label_html=>{class:'span4'}, input_html: {class: "span8"}, :collection => @organism.cashes.all, :include_blank=> false %>
+        
           </div>
        </div>
 
-       <div class="row">
-          <div class="offset9 span2 clear">
+       <div class="row-fluid">
+         <div class="span12">
+          <div class="form-actions offset1">
              <%=  f.button :submit, id: 'new_line_button', class: "btn-primary span2" %>
           </div>
+         </div>
        </div>
   
   <% end %>

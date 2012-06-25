@@ -556,13 +556,14 @@ OK - Tri par date ne marche pas correctement
 OK - faire les spec de modallines controller
 -----------------------Refonte mise en page suite à évolution bootstrap et firefox --------------
 OK - Refonte des formulaires de la zone admin
-Reste restore à faire
+OK - Reste restore à faire
 Faire également zone public
 et zone compta
 OK - Fait un input spécifique pour radio buttons inline
 Revoir la mise en forme de toutes les tables
 OK refait le fichier railswatchr
 Effacer le fichier rails.watch.rb
+OK - Fait un date_picker_input
 
 --------------------- Remarques lors des essais ---------------------------
 Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié
