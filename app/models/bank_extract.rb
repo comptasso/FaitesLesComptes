@@ -27,7 +27,8 @@ class BankExtract < ActiveRecord::Base
   # utilise le module Utilities::PickDateExtension pour créer des virtual attributes 
   # begin_date_picker et end_date_picker
   pick_date_for :begin_date, :end_date
- 
+
+
   # on cherche le relevé de compte qui soit dans le mois de date, mais le plus proche de la
   # fin du mois
   def self.find_nearest(date)

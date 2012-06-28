@@ -1,6 +1,7 @@
 .inputs.row-fluid#bank_extracts
   = simple_form_for([@bank_account, @bank_extract], :html=> {class: 'form-inline'}) do |f|
     =f.error_notification
+    
     .row-fluid
       .span12
         = f.input :reference, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8'}

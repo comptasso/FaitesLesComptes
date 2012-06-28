@@ -30,7 +30,7 @@ describe 'vue lines' do
 
   it 'remplir correctement le formulaire crée une nouvelle ligne' do
     visit new_book_line_path(@ob)
-    fill_in 'line_pick_date', :with=>'01/04/2012'
+    fill_in 'line_line_date_picker', :with=>'01/04/2012'
     fill_in 'line_narration', :with=>'Ecriture test'
     select 'Essai', :for=>'line_nature_id'
     fill_in 'line_debit', with: 50.21
@@ -41,7 +41,7 @@ describe 'vue lines' do
 
     it 'remplir avec une mauvaise date doit réafficher le formulaire sans enregistrer la ligne' do
       visit new_book_line_path(@ob)
-    fill_in 'line_pick_date', :with=>'31/04/2012'
+    fill_in 'line_line_date_picker', :with=>'31/04/2012'
     fill_in 'line_narration', :with=>'Ecriture test'
     select 'Essai', :for=>'line_nature_id'
     fill_in 'line_debit', with: 50.21

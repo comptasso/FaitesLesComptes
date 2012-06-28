@@ -12,7 +12,7 @@
         label_method: lambda {|b| "#{b.class.name == 'IncomeBook' ? 'R' : 'D'} - #{b.title}" },
         include_blank:false, input_html: {class: "span4" } %>
 
-    <%= f.input :pick_date, :label=> 'Date', input_html: { class: "span4", date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+    <%= f.input :line_date_picker, :label=> 'Date', input_html: { class: "span4", date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
     <%= f.input :narration,  :label=>'Libellé ', input_html: {class: "span10" } %>
     <%= f.input :ref, label:'Référence',  input_html: {class: "span4" }  %>
     <%=  f.association :nature , 

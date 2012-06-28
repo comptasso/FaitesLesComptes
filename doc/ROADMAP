@@ -557,13 +557,16 @@ OK - faire les spec de modallines controller
 -----------------------Refonte mise en page suite à évolution bootstrap et firefox --------------
 OK - Refonte des formulaires de la zone admin
 OK - Reste restore à faire
-Faire également zone public
-et zone compta
+OK - Faire également zone public
+et zone compta (un seul formulaire dans balance)
 OK - Fait un input spécifique pour radio buttons inline
 Revoir la mise en forme de toutes les tables
 OK refait le fichier railswatchr
-Effacer le fichier rails.watch.rb
+OK - Effacer le fichier rails.watch.rb
 OK - Fait un date_picker_input
+Voir l'affichage des erreurs dans les formulaires qui ont des dates (il faut faire errors.add(:pick_date ou similaire)
+
+utiliser pick_date_for dans le modèle line
 
 --------------------- Remarques lors des essais ---------------------------
 Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié
@@ -611,7 +614,7 @@ OK - restaurer doit lire le répertoire et vérifier qu'il trouve tous les fichi
 OK - Si elles existent, la vue indique quelles données seront créées.
 OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
-
+Revoir restore controller que j'ai du commenter entièrement pour éviter d'avoir des erreurs dans la suite de tests
 ------------------Configuration ------------------------------
 OK - watchr
 OK - spork

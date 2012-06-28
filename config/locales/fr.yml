@@ -249,6 +249,7 @@ fr:
         record_invalid: 'Enregistrement invalide'
         taken : "déjà utilisé"
         not_a_number: 'doit être un nombre'
+        not_a_date: 'doit être une date'
       models:
         cash_control:
           attributes:

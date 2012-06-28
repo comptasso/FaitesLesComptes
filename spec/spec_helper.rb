@@ -32,22 +32,13 @@ Spork.prefork do
     config.mock_with :rspec
     config.use_transactional_fixtures = true
 end
-    # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-    # config.fixture_path = "#{::Rails.root}/spec/fixtures"
-#class ActiveRecord::Base
-#    mattr_accessor :shared_connection
-#    @@shared_connection = nil
-#
-#    def self.connection
-#      @@shared_connection || retrieve_connection
-#    end
-# end
+   
 
 end
 
   Spork.each_run do
-
-  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+    ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+  end
 
 #  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
 #DatabaseCleaner.strategy = :truncation
@@ -74,7 +65,7 @@ end
 
 
 
-end
+
 
 
 

@@ -7,7 +7,7 @@ require 'spec_helper'
 #end
 
 include OrganismFixture
-
+ 
 describe "BankExtracts" do
 
   def retry_on_timeout(n = 3, &block)

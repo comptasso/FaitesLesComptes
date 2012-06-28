@@ -23,20 +23,8 @@ class Transfer < ActiveRecord::Base
   after_update :update_line_debit, :unless=>lambda { self.line_debit.locked }
   after_update :update_line_credit, :unless=>lambda { self.line_credit.locked }
 
+  # cf pick_date_extension
   pick_date_for :date
-
-#  # argument virtuel pour la saisie des dates
-#  def pick_date
-#    date ? (I18n::l date) : nil
-#  end
-#
-#  def pick_date=(string)
-#    s = string.split('/')
-#    self.date = Date.civil(*s.reverse.map{|e| e.to_i})
-#  rescue ArgumentError
-#    self.errors[:date] << 'Date invalide'
-#    nil
-#  end
 
   # remplit les champs debitable_type et _id avec les parties 
   # model et id de l'argument.

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe "lines/new" do
+describe "lines/new" do 
   include JcCapybara
 
 
@@ -28,7 +28,7 @@ before(:each) do
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
       assert_select "form", :action => book_lines_path(book), :method => "post" do
-      assert_select "input#line_pick_date", :name => "line[pick_date]"
+      assert_select "input#line_line_date_picker", :name => "line[line_date_picker]"
     end
   end
 

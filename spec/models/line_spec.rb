@@ -89,20 +89,23 @@ describe Line do
       @l.book_id=nil; @l.should_not be_valid
     end
 
-    describe 'attribut virtuel pick_date' do
-      it 'should answer to pick_date' do
-        @l.pick_date.should == '02/01/2012'
+    describe 'attribut virtuel line_date_picker' do
+      it 'should answer to line_date_picker' do
+        @l.line_date_picker.should == '02/01/2012'
       end
 
-      it "should answer to pick_date=" do
-        @l.pick_date = '03/04/2012'
+      it "should answer to line_date_picker=" do
+        @l.line_date_picker = '03/04/2012'
         @l.line_date.should == Date.civil(2012,4,3)
       end
 
       context "when date is invalid" do
         it "doesn't raise error but add error to model" do
-          @l.pick_date = '31/04/2012'
-          @l.should have(1).errors 
+          @l.line_date_picker = '31/04/2012'
+          @l.valid?
+             @l.should have(4).errors
+  #  {:line_date=>["obligatoire", "Date manquante", "Doit être une date"],
+  #   :line_date_picker=>["Date invalide"] 
         end
       end
   end

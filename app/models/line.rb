@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 class Line < ActiveRecord::Base
+  include Utilities::PickDateExtension # apporte les méthodes pick_date_for
   # apporte la validation
   # TODO à retirer
   include Validations
@@ -20,7 +21,8 @@ class Line < ActiveRecord::Base
   belongs_to :owner, :polymorphic=>true  # pour les transferts uniquement (à ce stade)
   has_and_belongs_to_many :bank_extract_lines, :uniq=>true
 
-
+  pick_date_for :line_date
+  
   before_validation :sold_debit_credit # une ligne ne peut avoir debit et credit simultanément
   # TODO voir pour remplacer les champ par amount et boolean et faire des virtual attributes
 
@@ -90,17 +92,17 @@ class Line < ActiveRecord::Base
     lines.sum(:credit) - lines.sum(:debit)
   end
   
-  def pick_date
-    line_date ? (I18n::l line_date) : nil
-  end
-
-  def pick_date=(string)
-    s = string.split('/')
-    self.line_date = Date.civil(*s.reverse.map{|e| e.to_i})
-  rescue ArgumentError
-    self.errors[:line_date] << 'Date invalide'
-    nil
-  end
+#  def pick_date
+#    line_date ? (I18n::l line_date) : nil
+#  end
+#
+#  def pick_date=(string)
+#    s = string.split('/')
+#    self.line_date = Date.civil(*s.reverse.map{|e| e.to_i})
+#  rescue ArgumentError
+#    self.errors[:line_date] << 'Date invalide'
+#    nil
+#  end
   
 # surcharge de restore qui est définie dans models/restore/restore_records.rb
   def self.restore(new_attributes)

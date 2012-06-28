@@ -17,6 +17,7 @@ module Utilities::PickDateExtension
 
   def self.included(base)
     base.extend ClassMethods
+    base.class_eval { alias_method :original_valid?, :valid? }
   end
 
 
@@ -24,28 +25,47 @@ module Utilities::PickDateExtension
     # définition de la méthode de classe pick_date_for
     # laquelle définit une série de méthode getter et setter
     def  pick_date_for(*args)
+
+      dup_errors = ''
       args.each do |arg|
         # definition de arg_picker
-        send :define_method, "#{arg.to_s}_picker" do(arg)
+        send :define_method, "#{arg.to_s}_picker" do 
           value = self.send(arg)
-          value ? (I18n::l value) : nil
+          return value.is_a?(Date) ? (I18n::l value) : instance_eval("@#{arg.to_s}_picker")
         end
 
         # definition de arg_picker=
         send :define_method, "#{arg.to_s}_picker=" do |value|
           s  = value.split('/')
           date = Date.civil(*s.reverse.map{|e| e.to_i}) rescue nil
-          if date
+          if date && date > Date.civil(1900,1,1)
             self.send("#{arg.to_s}=", date)
           else
-            raise ArgumentError, 'string cant be transformed to a date'
+            instance_eval("@#{arg.to_s}_picker = '#{value}'")
+            self.send("#{arg.to_s}=", nil)
+            return value
           end
         end
-      end
+
+
+
+      
+        dup_errors << "self.errors.add(:#{arg}_picker, 'Date invalide') if self.errors.has_key?(:#{arg})\n"
+        dup_errors << "self.errors.delete(:#{arg}_picker) if self.errors.has_key?(:#{arg}_picker) && !self.errors.has_key?(:#{arg})\n"
+      
+   end
+
+      class_eval %Q{
+        def valid?(context = nil)
+          result = original_valid?(context)
+          #{dup_errors}
+          result
+        end
+      }
+   
     
     end
   end
 
 end
-
 

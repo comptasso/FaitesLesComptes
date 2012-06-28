@@ -7,7 +7,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Book do
+describe Book do 
 
   def datas2010
     (1..12).map {|t| 2010 } #(t%3 == 0) ? 100+t*10 : 100-t*5 }

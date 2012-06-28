@@ -8,17 +8,13 @@ RSpec.configure do |c|
   #  c.exclusion_filter = {:js=> true }
 end
 
-describe CashControl do
+describe CashControl do 
   include OrganismFixture
 
   before(:each) do
     create_minimal_organism
     @cash_control = @c.cash_controls.new(date: Date.today, amount: 123.45)
   end
-
-  #  after(:all) do
-  #    clean_test_database
-  #  end
 
   
   context 'test constraints' do
