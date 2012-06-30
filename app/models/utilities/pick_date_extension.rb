@@ -49,8 +49,9 @@ module Utilities::PickDateExtension
 
 
 
-      
-        dup_errors << "self.errors.add(:#{arg}_picker, 'Date invalide') if self.errors.has_key?(:#{arg})\n"
+      # on recopie les erreurs de arg vers ceux de arg_picker. En fait la programmation actuelle ne
+      # fait que recopier la première erreur.
+        dup_errors << "self.errors.add(:#{arg}_picker, self.errors[:#{arg}].first) if self.errors.has_key?(:#{arg})\n"
         dup_errors << "self.errors.delete(:#{arg}_picker) if self.errors.has_key?(:#{arg}_picker) && !self.errors.has_key?(:#{arg})\n"
       
    end

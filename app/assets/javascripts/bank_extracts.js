@@ -17,6 +17,8 @@ function $compute() {
     $('.public_bank_extracts #bank_extract_total_credit').val(montant.toFixed(2));
     montant = parseFloat($('#bank_extract_total_debit').val(), 10);
     $('.public_bank_extracts #bank_extract_total_debit').val(montant.toFixed(2));
+    montant = parseFloat($('#bank_extract_begin_sold').val(), 10);
+    $('.public_bank_extracts #bank_extract_begin_sold').val(montant.toFixed(2));
 }
 
 // les 3 champs de saisie ont la classe décimale

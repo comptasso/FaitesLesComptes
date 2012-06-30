@@ -8,7 +8,7 @@ describe Line do
   
   
   before(:each) do 
-    create_minimal_organism
+    create_minimal_organism 
   end
 
 
@@ -105,7 +105,7 @@ describe Line do
           @l.valid?
              @l.should have(4).errors
   #  {:line_date=>["obligatoire", "Date manquante", "Doit être une date"],
-  #   :line_date_picker=>["Date invalide"] 
+  #   :line_date_picker=>["obligatoire"]
         end
       end
   end
@@ -162,13 +162,7 @@ describe Line do
     end
   end
 
-  it "give a monthly sold" do
-    Line.monthly_sold('01-2012').should == 45
-    Line.monthly_sold('02-2012').should == 45
-    Line.monthly_sold('03-2012').should == 190
-    Line.monthly_sold('04-2012').should == -235
-  end
-
+ 
   end
 
   context 'une ligne est sauvée' do

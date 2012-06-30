@@ -7,7 +7,7 @@ RSpec.configure do |c|
   #  c.exclusion_filter = {:js=> true }
 end
 
-describe 'Cash Control Requests' do
+describe 'Cash Control Requests' do 
   include OrganismFixture 
 
   before(:each) do
@@ -15,10 +15,10 @@ describe 'Cash Control Requests' do
     visit organism_path(@o) 
   end
   
-  describe 'new cash_control' do
+  describe 'new cash_control' do  
     before(:each) do
       
-      visit new_cash_cash_control_path(@c) 
+      visit new_cash_cash_control_path(@c)  
     end
 
 
@@ -27,11 +27,11 @@ describe 'Cash Control Requests' do
       page.should have_content("Enregistrement d'un contrôle de la caisse")
       all('form div.control-group').should have(2).elements # date et amount
 
-    end
+    end  
 
     it 'remplir correctement le formulaire cree une nouvelle ligne' do
 
-      fill_in 'cash_control[pick_date]', :with=> '05/05/2012'
+      fill_in 'cash_control[date_picker]', :with=> '05/05/2012'
       fill_in 'cash_control[amount]', :with=>20.52
       click_button "Enregistrer"
       current_url.should match cash_cash_controls_path(@c)
@@ -42,7 +42,7 @@ describe 'Cash Control Requests' do
     context 'remplir incorrectement le formulaire' do
 
       it 'test amount' do
-        fill_in 'cash_control[pick_date]', :with=> '01/01/2012'
+        fill_in 'cash_control[date_picker]', :with=> '01/01/2012'
         fill_in 'cash_control[amount]', :with=>-20.52
         click_button "Enregistrer"
         page.should have_content('doit être positif ou nul')
@@ -50,10 +50,10 @@ describe 'Cash Control Requests' do
       end
 
       it  'test date' do
-        fill_in 'cash_control[pick_date]', :with=> '01/01/1990'
+        fill_in 'cash_control[date_picker]', :with=> '01/01/1990'
         fill_in 'cash_control[amount]', :with=>20.52
         click_button "Enregistrer"
-        page.should have_content('pas d\'exercice')
+        page.should have_content('Pas d\'exercice')
       end
 
     end

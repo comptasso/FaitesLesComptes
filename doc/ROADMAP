@@ -486,7 +486,7 @@ OK - La liste des natures dans saisie de lignes devrait être classée par ordre
 
 J'ai pu créer dans les tests une ligne de dépenses en espèces qui n'avait pas de caisse
 OK - Faire un module pick_date avec une méthode de classe
-Pour pouvoir supprimer tous les recours à picker_date
+OK - Pour pouvoir supprimer tous les recours à picker_date
 Vérifier que les controllers controlent bien la bonne classe
 
 Généraliser la gestion des erreurs dans les picker_date sur la base de ce qui a été fait pour cash_control
@@ -509,7 +509,7 @@ OK - suppresion de l'action et de la vue show (qui doit renvoyer à index de ban
 OK - filtrer les actions possibles selon le statut de lock
 OK - tester dans une request la fonction de mise à jour du solde final
 OK - spec_requests
-La saisie d'un montant sans décimales devrait être reformattée pour avoir deux décimales
+OK - La saisie d'un montant sans décimales devrait être reformattée pour avoir deux décimales
 OK - Après création on va vers index
 BOF - Quand aucune banque n'existe, le menu Afficher (dans admin) devrait être disabled
 OK - Supprimer le lien sur banque quand on est dans la zone saisie (le premier item du menu)
@@ -518,14 +518,17 @@ OK - Supprimer les actions show correspondantes dans les routes, le controller e
 OK - On doit pouvoir effacer le controller bank_account de la zone public et donc les vues coorespondantes
 OK - Suppression de ces mêmes actions pour book et cashes
 OK - Les menus visités devraient rester en noir
-Sans extrait de compte, le menu banque ne devrait pas proposer de les afficher
+OK - Sans compte bancaire, l'onglet banques ne devrait pas apparaître
+OK - Sans extrait de compte, le menu banque ne devrait pas proposer de les afficher
 Nettoyage de routes concernant books et bank_extracts
 NON Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
 
 OK -  Peut-on supprimer un extrait bancaire pointé (actuellement on a l'icone) - réponse non, c'est bloqué
 Si on supprime un extrait bancaire cela met-il correctement à jour les lignes ?
 Améliorer has_icon_matcher (affichage des erreurs, meilleure vérif du href)
-Contrôler le nombre de décimales
+OK - Contrôler le nombre de décimales
+OK - Création du two_decimals_validator
+OK Mettre en place ce validator dans les autres endroits où l'on renseigne des montants contrôle de caisse, écritures, et encore ?
 -----------------------------BankExtractLine------------------------
 OK - rendre plus complet ce controller en ayant une fonction index
 OK - dans la vue index afficher les soldes et mouvements et signaler les éventuels écarts
@@ -570,6 +573,7 @@ OK - Affichage des erreurs dans les formulaires qui ont des dates (il faut faire
 OK - utiliser pick_date_for dans le modèle line
 
 --------------------- Remarques lors des essais ---------------------------
+caisse affichage des controles (revoir la mise en page)
 pb du tri sur la date dans transfer
 revoir natures pour utiliser le filtre fourni par datatable et pouvoir trier sur la première colonne
 La vue index dans Organism (zone public) ne semble pas utile (à Supprimer ?) . En fait elle sert lorsqu'on arrive sur root sans avoir choisi encore d'organisme

@@ -250,6 +250,7 @@ fr:
         taken : "déjà utilisé"
         not_a_number: 'doit être un nombre'
         not_a_date: 'doit être une date'
+        two_decimals: 'Deux décimales'
       models:
         cash_control:
           attributes:

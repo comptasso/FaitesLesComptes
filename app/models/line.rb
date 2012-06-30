@@ -40,19 +40,22 @@ class Line < ActiveRecord::Base
     end
   end
 
-  validates :debit, :credit, numericality: true, format: {with: /^-?\d*(.\d{0,2})?$/}
+  validates :debit, :credit, numericality: true, two_decimals:true      #, format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :line_date, presence: true
   validates :line_date, must_belong_to_period: true
   validates :nature_id, presence: true, :unless=> lambda {self.owner_type == 'Transfer'}
   validates :narration, presence: true
   validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
     :message => "valeur inconnue" }, :unless=>lambda { self.owner_type == 'Transfer'}
+
+  # C'est fait par un validates_with car cela concerne deux attributes (debit et crédit)
+  # pourra être changé si on passe un seul attribut montant plus un booléen pour le débit/crédit
   validates_with NotNullAmount
   validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
   validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire
  
-  # FIXME
-  #  validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit=>true if :locked?
+  # TODO faire les tests
+  validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit_if_locked=>true
 
   before_save :check_bank_and_cash_ids
 
@@ -87,10 +90,10 @@ class Line < ActiveRecord::Base
 
   # # monthly sold donne le solde d'un mois fourni au format mm-yyyy
   # FIXME va poser des problèmes avec plusieurs organismes
-  def self.monthly_sold(month)
-    lines = Line.month(month)
-    lines.sum(:credit) - lines.sum(:debit)
-  end
+#  def self.monthly_sold(month)
+#    lines = Line.month(month)
+#    lines.sum(:credit) - lines.sum(:debit)
+#  end
   
 #  def pick_date
 #    line_date ? (I18n::l line_date) : nil

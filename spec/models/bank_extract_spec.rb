@@ -39,7 +39,7 @@ describe BankExtract do
       @be2.begin_date_picker = 'bonjour'
       @be2.valid?
       @be2.should have(1).errors_on(:begin_date_picker)
-      @be2.errors[:begin_date_picker].should ==  ['Date invalide']
+      @be2.errors[:begin_date_picker].should ==  ['obligatoire']
     end
   end
 
