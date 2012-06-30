@@ -1,13 +1,13 @@
 
 
 <tr>
-  <td class="span2"><%= book.title %></td>
-  <td class="span3"><%= book.description  %></td>
-  <td class="span2"><%= book.book_type %> </td>
-  <td class="span2"><%= l book.created_at %></td>
-  <td class="span2"><%= l book.updated_at %></td>
+  <td><%= book.title %></td>
+  <td><%= book.description  %></td>
+  <td><%= book.book_type %> </td>
+  <td><%= l book.created_at %></td>
+  <td><%= l book.updated_at %></td>
 
-  <td class="span1">
+  <td>
     <%= icon_to 'modifier.png', edit_admin_organism_book_path(@organism, book), :id=>"icon_modifier_book_#{book.id}" %>
     <%= icon_to 'supprimer.png', admin_organism_book_path(@organism, book), confirm: 'Etes vous sur ?', method: :delete if book.lines.empty? %>
    

@@ -598,6 +598,12 @@ Transferts  : mettre un affichage par mois pour les virements  ?
 OK - Mettre les natures par ordre alpha dans la saisie d'écritures
 
 Dans la sauvegarde, j'avais un cash control sans date, du coup, cela générait une erreur dans la restauration.
+--------------------------Partie comptable ----------------------------
+Ca commence par l'affichage du plan comptable dans la partie admin
+
+
+
+
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?

@@ -9,7 +9,6 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require jquery.dataTables
-//= require tabletools/TableTools
 //= require jquery.jqplot.min
 //= require jqplot
 //= require_tree .
