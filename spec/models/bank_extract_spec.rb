@@ -116,23 +116,43 @@ describe BankExtract do
       @be.begin_sold.should  == 0
     end
 
-    it 'les valeurs sont enregistrees avec 2 decimales' do
-      @be.begin_sold = 1.124
-      @be.save
-      @be.begin_sold.should == 1.12
-    end
-
-     it 'les valeurs sont arrondies par valid' do
+  
+     it 'les valeurs sont arrondies par valid' do 
       @be.begin_sold = 1.124
       @be.valid?
-      @be.begin_sold = 1.12
+      @be.should_not be_valid
+    end
+
+    it 'testing two decimals validators with valid values' do
+     vals = [+1, -1, +1.1, -1.1, +1.12, -1.12, 1.1, 1.12, 256, 256.1, '-.01']
+      vals.each do |v|
+        @be.begin_sold = v
+        @be.valid?
+      
+
+      @be.errors[:begin_sold].should have(0).messages
+      end
+      
+
+    end
+
+    it 'testing two decimals validators with invalid values' do
+     vals = ['b1', -1.254 , '+1.1b', 1.254]
+      vals.each do |v|
+        @be.begin_sold = v
+        @be.valid?
+      
+      @be.errors[:begin_sold].should have_at_least(1).messages
+      end
+
+
     end
 
 
     
   end
 
-  describe 'when locked' do
+  describe 'when locked' do 
 
     before(:each) do
       @be = @ba.bank_extracts.create!(:begin_date=>Date.today, end_date:Date.today, begin_sold:1,
