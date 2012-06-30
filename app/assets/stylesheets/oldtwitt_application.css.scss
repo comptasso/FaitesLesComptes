@@ -18,6 +18,30 @@ $siteWidth: 70px;
     
 }
 
+.dataTables_length {
+    float: left;
+    width: 40%;
+}
+
+.dataTables_filter {
+    float: right;
+    text-align: right;
+    width: 50%;
+}
+
+.dataTables_info {
+    float: left;
+    padding-top: 10px;
+    width: 60%;
+}
+
+.dataTables_paginate {
+    float: right;
+    padding-top: 10px;
+    text-align: right;
+    
+}
+
 /*div.dataTables_filter label input {
     display: inline-block;
 }*/

@@ -564,11 +564,12 @@ Revoir la mise en forme de toutes les tables
 OK refait le fichier railswatchr
 OK - Effacer le fichier rails.watch.rb
 OK - Fait un date_picker_input
-Voir l'affichage des erreurs dans les formulaires qui ont des dates (il faut faire errors.add(:pick_date ou similaire)
+OK - Affichage des erreurs dans les formulaires qui ont des dates (il faut faire errors.add(:pick_date ou similaire)
 
-utiliser pick_date_for dans le modèle line
+OK - utiliser pick_date_for dans le modèle line
 
 --------------------- Remarques lors des essais ---------------------------
+La vue index dans Organism (zone public) ne semble pas utile (à Supprimer)
 Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié
 Dans modallines le form réaffiché est remis à blanc sauf la réf du chèque
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
@@ -629,7 +630,7 @@ supprimer la session de period
      Factoriser les jQuery datatable
 Le datatable de compta#lines ne marche pas
 ? - Datatable  pour la balance
-
+faire des tests pour pick_date_for et le transformer en gem
 Revoir la vue index de nature dans public qui propose des actions qui relèvent de admin
 Peut être idem pour destination
 Il serait plus judicieux de faire un stat controller car le controller nature n'a plus qu'une méthode stats
