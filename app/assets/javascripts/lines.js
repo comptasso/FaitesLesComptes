@@ -6,8 +6,9 @@ var jQuery, $, stringToFloat;
 jQuery(function () {
     if ($('.lines_table').length !== 0) {
         $('.lines_table').dataTable({
-            "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span8'i><'span4'p> >",
-		    "sPaginationType": "bootstrap",
+            "sDom": "lfrtip",
+         //   "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span8'i><'span4'p> >",
+            "sPaginationType": "bootstrap",
             "bAutoWidth": false,
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
@@ -25,7 +26,6 @@ jQuery(function () {
             ],
 
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-             
                 var i = 0,
                     iTotalDebit = 0,
                     iTotalCredit = 0.0,
@@ -113,9 +113,9 @@ function $f_td_bank_cash() {
 // gère l'affichage des champs de saisie de banque et de caisse
 // à l'affichage de la page
 jQuery(function () {
-  if ($('#entry_lines').length !== null) {
-    $f_td_bank_cash();
-  }
+    if ($('#entry_lines').length !== null) {
+        $f_td_bank_cash();
+    }
     $('#entry_lines #line_payment_mode').live('change', $f_td_bank_cash);
 });
 

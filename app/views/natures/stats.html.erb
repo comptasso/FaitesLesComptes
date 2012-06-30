@@ -4,7 +4,7 @@
   </h3>
   <div class="inner-champ row-fluid">
 
-    <%= form_tag stats_organism_period_natures_path(@organism, @period),:method =>:get  do %>
+    <%= form_tag stats_organism_period_natures_path(@organism, @period),:method =>:get, :class=>"span12"  do %>
  <!--     <label for="destination" class="span2 control-label">Destination</label> -->
       <%= select_tag :destination, options_for_select([['Toutes destinations', 0]] + @organism.destinations.collect {|d| [d.name, d.id]}, @filter), :class=>'span3' %>
       <%= submit_tag 'Rafraichir', :class=>'btn-primary btn span2' %>

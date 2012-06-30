@@ -525,6 +525,7 @@ NON Créer un after_save de la remise de chèques qui fait la liaison entre les 
 OK -  Peut-on supprimer un extrait bancaire pointé (actuellement on a l'icone) - réponse non, c'est bloqué
 Si on supprime un extrait bancaire cela met-il correctement à jour les lignes ?
 Améliorer has_icon_matcher (affichage des erreurs, meilleure vérif du href)
+Contrôler le nombre de décimales
 -----------------------------BankExtractLine------------------------
 OK - rendre plus complet ce controller en ayant une fonction index
 OK - dans la vue index afficher les soldes et mouvements et signaler les éventuels écarts
@@ -569,7 +570,10 @@ OK - Affichage des erreurs dans les formulaires qui ont des dates (il faut faire
 OK - utiliser pick_date_for dans le modèle line
 
 --------------------- Remarques lors des essais ---------------------------
-La vue index dans Organism (zone public) ne semble pas utile (à Supprimer)
+pb du tri sur la date dans transfer
+revoir natures pour utiliser le filtre fourni par datatable et pouvoir trier sur la première colonne
+La vue index dans Organism (zone public) ne semble pas utile (à Supprimer ?) . En fait elle sert lorsqu'on arrive sur root sans avoir choisi encore d'organisme
+  mais on pourrait aussi faire un redirect sur la zone admin.
 Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié
 Dans modallines le form réaffiché est remis à blanc sauf la réf du chèque
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable

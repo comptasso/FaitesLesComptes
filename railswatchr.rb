@@ -1,13 +1,3 @@
-def run_spec(file)
-  unless File.exist?(file)
-    puts "#{file} does not exist"
-    return
-  end
-
-  puts "Running #{file}"
-  system "bundle exec rspec #{file} --color --drb"
-  puts
-end
 
 watch("spec/.*/*_spec.rb") do |match|
   run_spec match[0]
@@ -21,9 +11,10 @@ watch("app/(.*).erb") do |match|
   run_spec %{spec/#{match[1]}.erb_spec.rb}
 end
 
-watch("spec/.*/*_spec.erb") do |match|
-  run_spec match[0]
+watch("app/(.*).haml") do |match|
+  run_spec %{spec/#{match[1]}.haml_spec.rb}
 end
+
 
 #START:MIGRATION
 watch('^db/migrate/(.*)\.rb') do |match|
@@ -36,7 +27,7 @@ watch('^(app/assets/javascripts/(.*)\.js)') do |m|
  jslint_check("#{m[1]}")
 end
 
-watch('^(spec/javascripts/(.*)\.js)') do |m|
+watch('^(spec/javascripts/(.*)\.js)') do |m| 
   puts 'Dans watch .js avec appel de jslint';
   jslint_check("#{m[1]}")
 end
@@ -46,6 +37,17 @@ watch('^app/assets/stylesheets/(.*\.scss)') do |m|
   puts 'Dans watch .scss avec appel de check_scss';
     check_scss(m[1])
     puts "checked #{m[1]}"
+end
+
+def run_spec(file)
+  unless File.exist?(file)
+    puts "#{file} does not exist"
+    return
+  end
+
+  puts "Running #{file}"
+  system "bundle exec rspec #{file} --color --drb"
+  puts
 end
 
 

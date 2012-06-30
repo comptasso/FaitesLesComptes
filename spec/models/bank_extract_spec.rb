@@ -87,7 +87,8 @@ describe BankExtract do
     it 'end_sold doit être présent' do
       @be.begin_sold = nil
       @be.should_not be_valid
-      @be.should have(2).errors_on(:begin_sold) # numericality and presence
+      # puts @be.errors.messages
+      @be.should have(3).errors_on(:begin_sold) # numericality presence et format 
     end
 
     it 'pas valide sans begin_date' do 
@@ -112,8 +113,21 @@ describe BankExtract do
 
     it 'begin_sold doît être un nombre' do
       @be.begin_sold = 'bonjour'
-      @be.should have(1).errors_on(:begin_sold) # numericality
+      @be.begin_sold.should  == 0
     end
+
+    it 'les valeurs sont enregistrees avec 2 decimales' do
+      @be.begin_sold = 1.124
+      @be.save
+      @be.begin_sold.should == 1.12
+    end
+
+     it 'les valeurs sont arrondies par valid' do
+      @be.begin_sold = 1.124
+      @be.valid?
+      @be.begin_sold = 1.12
+    end
+
 
     
   end

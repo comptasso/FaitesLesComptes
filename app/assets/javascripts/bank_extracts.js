@@ -7,10 +7,16 @@
 var $, jQuery;
 
 function $compute() {
-    var sold = 0.0;
+    var sold = 0.0,
+        montant = 0.0;
     sold = parseFloat($('#bank_extract_begin_sold').val(), 10) + parseFloat($('#bank_extract_total_credit').val(), 10)
         - parseFloat($('#bank_extract_total_debit').val());
     $('.public_bank_extracts #bank_extract_end_sold').val(sold.toFixed(2));
+    // mise à deux décimales du montant saisi
+    montant = parseFloat($('#bank_extract_total_credit').val(), 10);
+    $('.public_bank_extracts #bank_extract_total_credit').val(montant.toFixed(2));
+    montant = parseFloat($('#bank_extract_total_debit').val(), 10);
+    $('.public_bank_extracts #bank_extract_total_debit').val(montant.toFixed(2));
 }
 
 // les 3 champs de saisie ont la classe décimale

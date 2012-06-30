@@ -6,7 +6,7 @@ jQuery(function () {
     if ($('.public_cash_lines .cash_lines_table').length !== 0) {
         var oTable = $('.public_cash_lines .cash_lines_table').dataTable(
                 {
-                    "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
+                    "sDom": "lfrtip",
                     "sPaginationType": "bootstrap",
                     "oLanguage": {
                         "sUrl": "/frenchdatatable.txt"

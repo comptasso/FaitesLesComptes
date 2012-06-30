@@ -8,12 +8,21 @@ class BankExtract < ActiveRecord::Base
   has_many :standard_bank_extract_lines, dependent: :destroy
   has_many :check_deposit_bank_extract_lines, dependent: :destroy 
 
-  validates :begin_sold, :total_debit, :total_credit, :numericality=>true
-  validates :begin_sold, :total_debit, :total_credit, :presence=>true
+  validates :begin_sold, :total_debit, :total_credit,:presence=>true, :numericality=>true, :format=>{with:/(^\d+(\.\d{0,2})?$|^\.\d{0,2}$)/}
   validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date, :cant_edit_if_locked=>true
 
   validates :begin_date, :end_date, :presence=>true
-  
+
+  before_validation :truncate_numbers
+
+  def truncate_numbers
+    self.begin_sold = self.begin_sold.round(2) if self.begin_sold
+    self.total_credit = self.total_credit.round(2) if self.total_credit
+
+    self.total_debit = self.total_debit.round(2) if self.total_debit
+  end
+
+
  # TODO voir si on remet ce after_create
  # after_create :fill_bank_extract_lines
   after_save :lock_lines_if_locked
