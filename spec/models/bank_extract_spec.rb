@@ -209,6 +209,22 @@ describe BankExtract do
       @be2.total_lines_credit.should == 97
     end
 
+    context 'suppression du bank_extract' do
+      
+    it 'la destruction du bank_extract supprime les bank_extract_lines'  do
+      expect {@be2.destroy}.to change {BankExtractLine.count}.by(-2)
+    end
+
+    it 'et les lines deviennent non rattachées à un bank_extract' do
+      @be2.destroy
+      @be3= @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2012,10,01), end_date: Date.civil(2012,10,31), begin_sold: 2012, total_credit: 11, total_debit: 10)
+      @bel3 = StandardBankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2])
+      @l2.should have(1).bank_extract_lines
+    end
+
+
+    end
+
     it 'lines should be unique'
 
   

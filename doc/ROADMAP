@@ -520,11 +520,11 @@ OK - Suppression de ces mêmes actions pour book et cashes
 OK - Les menus visités devraient rester en noir
 OK - Sans compte bancaire, l'onglet banques ne devrait pas apparaître
 OK - Sans extrait de compte, le menu banque ne devrait pas proposer de les afficher
-Nettoyage de routes concernant books et bank_extracts
+OK - Nettoyage de routes concernant books et bank_extracts
 NON Créer un after_save de la remise de chèques qui fait la liaison entre les lignes et le bank_extract ?
-
 OK -  Peut-on supprimer un extrait bancaire pointé (actuellement on a l'icone) - réponse non, c'est bloqué
-Si on supprime un extrait bancaire cela met-il correctement à jour les lignes ?
+OK - Si on supprime un extrait bancaire cela met-il correctement à jour les lignes ? - les tests sont faits
+A vérifier dans la console et sur la table jointe
 Améliorer has_icon_matcher (affichage des erreurs, meilleure vérif du href)
 OK - Contrôler le nombre de décimales
 OK - Création du two_decimals_validator

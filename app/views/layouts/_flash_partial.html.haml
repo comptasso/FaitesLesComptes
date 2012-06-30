@@ -1,0 +1,9 @@
+.row-fluid
+  - if flash[:notice]
+    .alert.notice
+      %a.close(data-dismiss ="alert") ×
+      %strong= flash[:notice]
+  - if flash[:alert]
+    .alert
+      %a.close(data-dismiss = "alert") ×
+      %strong= flash[:alert]

@@ -18,10 +18,8 @@
 # et check_deposit_id (ce dernier champ ne servant que pour la sous classe
 # CheckDepositBankExtractLine
 #
-# TODO a modifier en changeant le sens de la relation has_one, belongs_to
-#
 # La méthode de classe has_many est surchargée dans CheckDepositBankExtractLine
-# pour pouvoir renvoyer les lines associées
+# pour pouvoir renvoyer les lines de la remise de chèque associées
 #
 # Une relation HABTM est définie avec lines, permettant d'avoir une ligne de relevé
 # bancaire qui correspond à plusieurs lignes d'écriture (ex péages regroupés
@@ -35,6 +33,8 @@
 #
 class BankExtractLine < ActiveRecord::Base
 
+  # TODO mettre une restriction pour transformer ce modèle en modèle virtuel
+
   belongs_to :bank_extract
 
   has_and_belongs_to_many :lines, :before_add=>:not_already_included
@@ -47,7 +47,7 @@ class BankExtractLine < ActiveRecord::Base
 
   attr_reader :payment, :narration, :debit,  :credit
 
-  before_destroy :remove_from_list
+  before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
 
  
   # chainable indique si le bank_extract_line peut être relié à son suivant
