@@ -2,9 +2,8 @@
   <h3>Liste des contrôles : <%= @cash.name %>
    <%= render 'submenu_mois'  %>
   </h3>
-  <div class="inner-champ">
-    <div class="row-fluid">
- <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed data_table span6" >
+  
+ <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed data_table pc50" >
     <thead>
       <tr>
         <th>Date</th>
@@ -15,22 +14,21 @@
       </tr>
     </thead>
     <tbody>
-      <% @cash_controls.each do |r| %>
+      <% @cash_controls.each do |cc| %>
       <tr>
-        <td><%=l  r.date %></td>
-        <td class="nombre"><%= debit_credit r.amount %></td>
-        <td class="nombre"><%= debit_credit @cash.sold(r.date) %></td>
-        <td class="nombre"><%= debit_credit r.amount- @cash.sold(r.date) %></td>
+        <td><%=l  cc.date %></td>
+        <td class="nombre"><%= debit_credit cc.amount %></td>
+        <td class="nombre"><%= debit_credit @cash.sold(cc.date) %></td>
+        <td class="nombre"><%= debit_credit cc.amount- @cash.sold(cc.date) %></td>
         <td>
-          <%= icon_to 'modifier.png', edit_cash_cash_control_path(@cash,r), :id=>"icon_modifier_cash_control_#{r.id}" %>
-          <%= icon_to 'verrouiller.png', lock_cash_cash_control_path(@cash,r),
-            :confirm=>"Cette action verrouille ce pointage de caisse ainsi que les écritures de caisse correspondantes \n#{cash_difference(r)}\nConfirmez vous ?" ,
-            :method=>:put unless r.locked? %>
+          <%= icon_to 'modifier.png', edit_cash_cash_control_path(@cash,cc), :id=>"icon_modifier_cash_control_#{cc.id}" %>
+          <%= icon_to 'verrouiller.png', lock_cash_cash_control_path(@cash,cc),
+            :confirm=>"Cette action verrouille ce pointage de caisse ainsi que les écritures de caisse correspondantes \n#{cash_difference(cc)}\nConfirmez vous ?" ,
+            :method=>:put unless cc.locked? %>
           </td>
        </tr>
       <% end %>
     </tbody>
   </table>
     </div>
-  </div>
-</div>
+

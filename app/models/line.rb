@@ -78,6 +78,9 @@ class Line < ActiveRecord::Base
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1),
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1).end_of_month    )}
 
+  scope :unlocked, where('locked = ?', false)
+  scope :before_including_day, lambda {|d| where('lines.line_date <= ?',d)}
+
   # FIXME Ces fonctions de classe semblent marcher avec un arel.
   # néanmoins, elles pourraient être perturbantes si on ne filtre pas assez bien en amont les lignes que l'on veut.
   def self.solde_debit_avant(date)

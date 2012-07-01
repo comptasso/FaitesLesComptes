@@ -529,6 +529,7 @@ Améliorer has_icon_matcher (affichage des erreurs, meilleure vérif du href)
 OK - Contrôler le nombre de décimales
 OK - Création du two_decimals_validator
 OK Mettre en place ce validator dans les autres endroits où l'on renseigne des montants contrôle de caisse, écritures, et encore ?
+OK - request spec pour l'action edit
 -----------------------------BankExtractLine------------------------
 OK - rendre plus complet ce controller en ayant une fonction index
 OK - dans la vue index afficher les soldes et mouvements et signaler les éventuels écarts
@@ -564,8 +565,8 @@ OK - Reste restore à faire
 OK - Faire également zone public
 et zone compta (un seul formulaire dans balance)
 OK - Fait un input spécifique pour radio buttons inline
-Revoir la mise en forme de toutes les tables
-OK refait le fichier railswatchr
+OK - Revoir la mise en forme de toutes les tables
+OK - refait le fichier railswatchr
 OK - Effacer le fichier rails.watch.rb
 OK - Fait un date_picker_input
 OK - Affichage des erreurs dans les formulaires qui ont des dates (il faut faire errors.add(:pick_date ou similaire)
@@ -576,12 +577,12 @@ OK - utiliser pick_date_for dans le modèle line
 caisse affichage des controles (revoir la mise en page)
 pb du tri sur la date dans transfer
 revoir natures pour utiliser le filtre fourni par datatable et pouvoir trier sur la première colonne
-La vue index dans Organism (zone public) ne semble pas utile (à Supprimer ?) . En fait elle sert lorsqu'on arrive sur root sans avoir choisi encore d'organisme
-  mais on pourrait aussi faire un redirect sur la zone admin.
+NON La vue index dans Organism (zone public) ne semble pas utile (à Supprimer ?) . En fait elle sert lorsqu'on arrive sur root sans avoir choisi encore d'organisme
+??  mais on pourrait aussi faire un redirect sur la zone admin.
 Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié
 Dans modallines le form réaffiché est remis à blanc sauf la réf du chèque
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
-modifier la place de la pagination
+OK - modifier la place de la pagination
 Tester une page de bank_account avec plus de 10 éléments pour voir la mise en page
 OK - repositionner la liste des mois dans les vues (un peu haut dans la ligne verte)
 OK - Les bank_extracts validés ne devraient pas pouvoir être édités ni effacés dans la vue
@@ -598,7 +599,8 @@ OK - Utiliser bootstrap pour l'affichage des flash
 OK - Une ligne a pu être saisie sans mode de paiement - peut être ancien
 on ne devrait pas pouvoir remettre un chèque qui n'appartient à aucun exercice
 OK - ajouter l'id dans l'info qui suit la saisie d'une ligne
-Dans Line.rb, il y a un include validations (qui est dans lib/validators) qui gagnerait à être transformé en validator
+NON - Dans Line.rb, il y a un include validations (qui est dans lib/validators) qui gagnerait à être transformé en validator
+    (faisable mais cette validation traite debit et credit à la fois donc c'est un peu plus compliqué
 OK - Dans transferts : changer virement en transfert dans le flash et dans le titre h3 de index
 OK - Classer les transferts par date
 Transferts  : mettre un affichage par mois pour les virements  ?

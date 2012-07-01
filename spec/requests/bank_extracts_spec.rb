@@ -69,7 +69,7 @@ end
    
   end
 
-  describe 'GET bank_extracts' do
+  describe 'GET INDEX bank_extracts' do
 
     it 'sans extrait la page renvoie sur new' do
       visit bank_account_bank_extracts_path(@ba)
@@ -99,7 +99,7 @@ end
 
       it 'cliquer sur l icone edit mène à la page edit' do
         click_link('Modifier')
-        page.should have_content("Modification de relevé bancaire")
+        page.should have_content("Modification d'un extrait de compte")
       end
 
       it 'cliquer sur l icone afficher mène à la page affichage' do
@@ -120,7 +120,7 @@ end
 
     end
 
-    context 'quand le bank_extract est pointe' , :wip=>true do
+    context 'quand le bank_extract est pointe'  do
       it 'affiche seulement les icones afficher et supprimer' do
         @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
           reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)
@@ -131,7 +131,7 @@ end
       end
     end
 
-    context 'avec deux bank_extracts', :wip=>true do
+    context 'avec deux bank_extracts' do
 
       before(:each) do
         @be1 = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
@@ -163,8 +163,38 @@ end
     
     end
     
+  end 
+
+  describe 'EDIT bank extract', :wip=> true do
+    before(:each) do
+      @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
+        reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)
+        visit edit_bank_account_bank_extract_path(@ba, @be)
+    end
+
+    it 'affiche le formulaire' do
+      f = page.find('form')
+      f.find('#bank_extract_reference').value.should == 'Folio 1'
+      f.find('#bank_extract_begin_sold').value.should == '0.00'
+      f.find('#bank_extract_total_credit').value.should == '1.20'
+      f.find('#bank_extract_total_debit').value.should == '0.55'
+
+    end
+
+    it 'modifier avec une donnée correcte et sauver affiche le flash et renvoie sur index' do
+      fill_in('bank_extract_total_credit', with:'3.15')
+      click_button('Enregistrer')
+      page.should have_content("L'extrait a été modifié")
+      page.find('.champ h3').should have_content "Liste des extraits de compte"
+    end
+
+    it 'avec une valeur sauve la valeur' do
+      fill_in('bank_extract_total_credit', with:'3.152')
+      click_button('Enregistrer')
+      page.should have_content("Des erreurs ont été trouvées") 
+      page.find('.champ h3').should have_content "Modification d'un extrait de compte"
+    end
+
   end
-
-
-  
+ 
 end

@@ -9,7 +9,7 @@
 # Les écritures de caisse ne sont pas à jour.
 #
 # La validation des écritures de caisse doit donc être faites à un moment indépendant
-# et ne peut être faite par un after_create,
+# et ne peut être faite par un after_create
 #
 class CashControl < ActiveRecord::Base
    include Utilities::PickDateExtension
@@ -28,6 +28,7 @@ class CashControl < ActiveRecord::Base
   # sélectionne tous les contrôles de caisse relevant d'un mois donné pour une période donnée
   scope :mois, lambda {|p,mois| where('date >= ? AND date <= ?', 
       p.start_date.months_since(mois.to_i).beginning_of_month, p.start_date.months_since(mois.to_i).end_of_month).order('date ASC')}
+
 
   before_update :lock_lines, :if => lambda { self.changed_attributes.include?("locked") && self.locked == true }
 
@@ -81,8 +82,8 @@ class CashControl < ActiveRecord::Base
     Rails.logger.info "Verrouillage des lignes de caisse suite au verrouillage du controle de caisse #{id}"
    
     # Trouver les lignes de cette caisse de l'exercice, antérieures à la date du contrôle et non verrouillées
-    if self.locked == true # si les lignes 
-      self.cash.lines.period(period).where('lines.line_date <= ?',self.date).where('locked = ?', false).each    do |l|
+    if self.locked == true 
+       self.cash.lines.period(period).before_including_day(self.date).unlocked.each    do |l| 
         l.update_attribute(:locked, true)
       end
     end
