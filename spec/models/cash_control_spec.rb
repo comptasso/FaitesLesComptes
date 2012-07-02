@@ -120,7 +120,13 @@ describe CashControl do
       end
     end
 
-    describe 'min_ and max_date' do
+    describe 'difference' do
+      it 'difference revnoie l ecart entre le contrôle et la valeur de la caisse' do
+        @cash_control.difference.should == @cash_control.amount - @c.sold(@cash_control.date)
+      end
+    end
+
+    describe 'min_ and max_date' do 
 
       it 'la date est le début de l exercice' do
         @cash_control.min_date.should == @p.start_date

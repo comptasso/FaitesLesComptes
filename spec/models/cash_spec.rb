@@ -39,6 +39,15 @@ describe Cash do
       @c.to_option.should == "Cash_#{@c.id}"
     end
   end
+
+  describe 'monthly_values' do
+    it 'returns value at a date'
+
+
+  end
+  
+  
+
   
   context 'transferts' do
 

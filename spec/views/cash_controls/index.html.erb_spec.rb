@@ -15,8 +15,10 @@ describe "cash_controls/index" do
   let(:o) {mock_model(Organism, title: 'spec cd')} 
   let(:p) {mock_model(Period, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)}
   let(:c) {mock_model(Cash, name: 'Magasin')}
-  let(:cc1) {mock_model(CashControl, date:1.week.ago.to_date, amount:10.52, cash_id:c.id, locked?:false, cash:c)}
-  let(:cc2) {mock_model(CashControl, date:Date.today, amount:99.08, cash_id:c.id, locked?:false, cash:c)}
+  let(:cc1) {mock_model(CashControl, date:1.week.ago.to_date, amount:10.52, 
+      cash_id:c.id, locked?:false, cash:c, difference:0, cash_sold:10.52)}
+  let(:cc2) {mock_model(CashControl, date:Date.today, amount:99.08, 
+      cash_id:c.id, locked?:false, cash:c, difference:-2.92, cash_sold:102)} 
   
 #  it 'current_page' , :wip=>true do
 #      render
@@ -30,8 +32,8 @@ describe "cash_controls/index" do
     assign(:cash, c)
     assign(:cash_controls, [cc1,cc2])
     p.stub(:list_months).and_return %w(jan fév mar avr mai jui jui aou sept oct nov déc)
-    c.stub(:sold).with(Date.today).and_return(102)
-    c.stub(:sold).with(1.week.ago.to_date).and_return(10.52)
+#    c.stub(:sold).with(Date.today).and_return(102)
+#    c.stub(:sold).with(1.week.ago.to_date).and_return(10.52)
     view.stub("current_page?").and_return false
   end
 

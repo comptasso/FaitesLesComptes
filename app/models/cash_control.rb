@@ -32,7 +32,14 @@ class CashControl < ActiveRecord::Base
 
   before_update :lock_lines, :if => lambda { self.changed_attributes.include?("locked") && self.locked == true }
 
-  
+  def cash_sold
+    @cash_sold ||= cash.sold(date) 
+  end
+
+
+  def difference
+    amount - cash_sold
+  end
 
   # renvoie la date minimum que peut prendre un new cash_control
   # soit à partir d'un exercice, ou s'il n'est pas précisé, à partir

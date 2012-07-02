@@ -9,7 +9,7 @@
 # typiquement la variable d'instance est fixée à l'initialisation par un after_initialize
 module Utilities::JcGraphic
 
-   # permet de retourner ou de créer la variable d'instance
+  # permet de retourner ou de créer la variable d'instance
   # ce qui fait une sorte de cache puisque graphic est ensuite appelé à plusieurs
   # reprises pour founir ses différentes éléments
   def graphic(period)
@@ -22,7 +22,7 @@ module Utilities::JcGraphic
     if period.previous_period?
       @graphic = two_years_monthly_graphic(period)
     else
-      @graphic= one_year_monthly_graphic(period)
+      @graphic = one_year_monthly_graphic(period)
     end
   end
 

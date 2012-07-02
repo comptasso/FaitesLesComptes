@@ -18,8 +18,8 @@
       <tr>
         <td><%=l  cc.date %></td>
         <td class="nombre"><%= debit_credit cc.amount %></td>
-        <td class="nombre"><%= debit_credit @cash.sold(cc.date) %></td>
-        <td class="nombre"><%= debit_credit cc.amount- @cash.sold(cc.date) %></td>
+        <td class="nombre"><%= debit_credit cc.cash_sold %></td>
+        <td class="nombre"><%= debit_credit cc.difference %></td>
         <td>
           <%= icon_to 'modifier.png', edit_cash_cash_control_path(@cash,cc), :id=>"icon_modifier_cash_control_#{cc.id}" %>
           <%= icon_to 'verrouiller.png', lock_cash_cash_control_path(@cash,cc),
