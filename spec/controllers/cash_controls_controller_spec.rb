@@ -56,6 +56,11 @@ describe CashControlsController do
       response.should render_template 'index'
     end
 
+    it 'without month redirect to url with params month' do
+      get :index, :cash_id=>ca.id
+      response.should redirect_to cash_cash_controls_path(ca, :mois=>(Date.today.month) - 1)
+    end
+
  end
 
   describe 'GET new' do

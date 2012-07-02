@@ -576,6 +576,7 @@ OK - utiliser pick_date_for dans le modèle line
 --------------------- Remarques lors des essais ---------------------------
 OK - caisse affichage des controles (revoir la mise en page)
 Faire une méthode écart de caisse
+dans l'index de cash, la vue courante n'est pas spécifiée lorsqu'on vient du menu général
 pb du tri sur la date dans transfer
 revoir natures pour utiliser le filtre fourni par datatable et pouvoir trier sur la première colonne
 NON La vue index dans Organism (zone public) ne semble pas utile (à Supprimer ?) . En fait elle sert lorsqu'on arrive sur root sans avoir choisi encore d'organisme

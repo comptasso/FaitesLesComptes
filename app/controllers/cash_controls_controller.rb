@@ -3,6 +3,7 @@
 class CashControlsController < ApplicationController
 
   before_filter :find_params
+  before_filter :fill_mois, only: [:index]
  
 
   def index
@@ -60,6 +61,15 @@ class CashControlsController < ApplicationController
     @cash = Cash.find(params[:cash_id])
     @organism = @cash.organism
     current_period
+  end
+
+  def fill_mois
+     if params[:mois]
+      @mois = params[:mois]
+    else
+     @mois= @period.guess_month
+     redirect_to cash_cash_controls_url(@cash, mois: @mois) 
+    end
   end
 
 
