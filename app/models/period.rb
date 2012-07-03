@@ -227,12 +227,7 @@ class Period < ActiveRecord::Base
     books.all.sum {|b| b.monthly_value(date) }
   end
 
-  # TODO utilisée ??
-  def monthly_results
-    list_end_months.map {|m| monthly_value(m)}
-  end
-
-
+  
   # fournit un tableau donnant les recettes mensuelles avec cumul
   def stat_income_year(destination_id=0)
     s=[]
