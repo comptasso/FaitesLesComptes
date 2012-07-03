@@ -46,11 +46,7 @@ describe Period do
   # result est un module qui est destiné à produire les résultats mensuels d'un exercice
   # c'est aussi ce module qui permet de produire les graphiques résultats
   describe "resultat" do
-      it "a period can produce a result for each_month" do
-        @p_2011.monthly_results.should be_an_instance_of(Array)
-        @p_2011.monthly_results.size.should == @p_2011.nb_months
-        @p_2010.monthly_results.size.should == @p_2010.nb_months
-      end
+      
 
       it "without datas, a period return 0" do
         @p_2010.monthly_value(Date.civil(2010,03,01)).should == 0
@@ -94,12 +90,7 @@ describe Period do
         @p_2011.previous_period.should == @p_2010
       end
 
-      it 'monthly_results' do
-        @p_2011.monthly_results.should == P2011_RESULTS
-        @p_2010.monthly_results.should == [400, 550, 700, 850, 1000, 1150, 1300, 1450, 1600]
-      end
-
-
+     
       it 'have a default graphic method' do
         @p_2011.graphic(@p_2011).should be_an_instance_of(Utilities::Graphic)
       end

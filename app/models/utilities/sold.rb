@@ -40,10 +40,11 @@ module Utilities::Sold
     if selector.is_a?(String)
       selector = Date.civil(selector[/\d{4}$/].to_i, selector[/^\d{2}/].to_i,1)
     end
-    lines.select([:debit, :credit, :line_date]).mois(selector).sum('credit - debit') if selector.is_a? Date
+    r = lines.select([:debit, :credit, :line_date]).mois(selector).sum('credit - debit') if selector.is_a? Date
+    return r.to_f  # nécessaire car quand il n'y a pas de lignes, le retour est '0' et non 0
   end
 
-  # Travailler sur un Group_by
+  # Travailler sur un Group_by pour les données par mois
 
 
 
