@@ -20,12 +20,9 @@ class Book < ActiveRecord::Base
   validates :title, presence: true
   
   # renvoie les soldes mensuels du livre pour l'ensemble des mois de l'exercice
+  # sous la forme d'un hash avec comme clé 'mm-yyyy' pour identifier les mois
   def monthly_datas(period)
-    a={}
-    period.list_months('%m-%Y').each do |m|
-      a[m] = monthly_value(m)
-    end
-    a
+    Hash[period.list_months('%m-%Y').map {|m| [m, monthly_value(m)]}]
   end
 
   def book_type
@@ -44,6 +41,6 @@ class Book < ActiveRecord::Base
   super
 end
 
-
+ 
 
 end

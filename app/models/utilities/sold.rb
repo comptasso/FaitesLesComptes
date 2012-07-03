@@ -44,7 +44,7 @@ module Utilities::Sold
     return r.to_f  # nécessaire car quand il n'y a pas de lignes, le retour est '0' et non 0
   end
 
-  # Travailler sur un Group_by pour les données par mois
+ 
 
 
 

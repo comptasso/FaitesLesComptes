@@ -147,7 +147,7 @@ class BankAccount < ActiveRecord::Base
 end
 
 # PARTIE CREATION DE GRAPHIQUE
-# TODO mettre ceci dans un module puisque c'est fortement dupliqué avec la même chose dans Book
+
 class BankAccount < ActiveRecord::Base
  include Utilities::JcGraphic
 

@@ -581,8 +581,9 @@ OK - Dans Cash, monthly_value devrait s'appuyer sur Utilities::Sold
 Remplacer l'icone clé de cach control par l'icone Cadenas
 ne pas afficher index#controles dans le menu si il n'y en a aucun pour une caisse
 dans book.rb monthly_datas renvoie un hash et crée un array ?!
-
+refaire une partie des models#book_spec avec des modèles réels et non des stub
 regarder l'utilisation de group by month pour obtenir directement les soldes mensuels
+Faire du nettoyage dans le modèle Period
 Dans utilitie::Graphic @chart_value_method n'est en fait jamais utilisé
 pb du tri sur la date dans transfer
 revoir natures pour utiliser le filtre fourni par datatable et pouvoir trier sur la première colonne
