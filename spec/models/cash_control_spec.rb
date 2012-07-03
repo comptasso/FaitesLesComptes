@@ -122,7 +122,7 @@ describe CashControl do
 
     describe 'difference' do
       it 'difference revnoie l ecart entre le contrôle et la valeur de la caisse' do
-        @cash_control.difference.should == @cash_control.amount - @c.sold(@cash_control.date)
+        @cash_control.difference.should == @cash_control.amount - @c.sold_at(@cash_control.date)
       end
     end
 

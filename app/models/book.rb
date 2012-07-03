@@ -19,13 +19,10 @@ class Book < ActiveRecord::Base
   # TODO introduce uniqueness and scope
   validates :title, presence: true
   
-  attr_reader  :monthly_solds
-
   # renvoie les soldes mensuels du livre pour l'ensemble des mois de l'exercice
-  # FIXME bizarrre on crée une variable d'instance et en plus un
   def monthly_datas(period)
     a={}
-    @monthly_solds = period.list_months('%m-%Y').collect do |m|
+    period.list_months('%m-%Y').each do |m|
       a[m] = monthly_value(m)
     end
     a
