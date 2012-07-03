@@ -143,14 +143,7 @@ class Period < ActiveRecord::Base
  
   # TODO à revoir avec les fonctions de type distance in ...
   def nb_months
-    first_date=[self.close_date, self.start_date].min.beginning_of_month
-    last_date=[self.close_date, self.start_date].max.beginning_of_month
-    i=0
-    while first_date < last_date
-      i+=1
-      first_date=first_date.months_since(1)
-    end
-    return i+1
+    (close_date.year * 12 + close_date.month) - (start_date.year * 12 + start_date.month) + 1
   end
 
   # renvoie le nombre de jour d'un mois donné de l'exercice
