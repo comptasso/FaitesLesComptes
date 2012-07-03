@@ -580,6 +580,7 @@ OK - dans l'index de cash_control, la vue courante n'est pas spécifiée lorsqu'
 OK - Dans Cash, monthly_value devrait s'appuyer sur Utilities::Sold
 Remplacer l'icone clé de cach control par l'icone Cadenas
 ne pas afficher index#controles dans le menu si il n'y en a aucun pour une caisse
+dans book.rb monthly_datas renvoie un hash et crée un array ?!
 
 regarder l'utilisation de group by month pour obtenir directement les soldes mensuels
 Dans utilitie::Graphic @chart_value_method n'est en fait jamais utilisé

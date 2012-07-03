@@ -33,10 +33,16 @@ module Utilities::Sold
   end
 
   # donne un solde en prenant toutes les lignes du mois correspondant
-  # à cette date;
+  # à cette date; Le selector peut être une date ou une string
+  # sous le format mm-yyyy
   # S'appuie sur le scope mois de Line
-  def monthly_sold(date)
-    select('sold AS debit - credit').lines.mois(date)
+  def monthly_value(selector)
+    if selector.is_a?(String)
+      selector = Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1)
+    end
+    lines.select([:debit, :credit, :line_date]).mois(selector).sum('credit - debit') if selector.is_a? Date
   end
+
+
 
 end

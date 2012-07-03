@@ -22,23 +22,15 @@ class Book < ActiveRecord::Base
   attr_reader  :monthly_solds
 
   # renvoie les soldes mensuels du livre pour l'ensemble des mois de l'exercice
+  # FIXME bizarrre on crée une variable d'instance et en plus un
   def monthly_datas(period)
     a={}
-    @monthly_solds= period.list_months('%m-%Y').collect do |m|
+    @monthly_solds = period.list_months('%m-%Y').collect do |m|
       ls= self.lines.month(m)
       a[m] = ls.sum(:credit) - ls.sum(:debit)
     end
     a
   end
-
-  # renvoie le solde d'un livre pour un mois déterminé par date
-  def monthly_value(date)
-    ls = self.lines.mois(date)
-    # TODO : on peut certainement faire mieux sur le plan de la requête
-    ls.sum(:credit)-ls.sum(:debit)
-  end
-
-
 
   def book_type
     self.class.name
