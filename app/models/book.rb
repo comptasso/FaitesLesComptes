@@ -33,7 +33,7 @@ class Book < ActiveRecord::Base
 
   # renvoie le solde d'un livre pour un mois déterminé par date
   def monthly_value(date)
-    ls=self.lines.mois(date)
+    ls = self.lines.mois(date)
     # TODO : on peut certainement faire mieux sur le plan de la requête
     ls.sum(:credit)-ls.sum(:debit)
   end

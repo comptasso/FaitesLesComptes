@@ -33,7 +33,7 @@ class CashControl < ActiveRecord::Base
   before_update :lock_lines, :if => lambda { self.changed_attributes.include?("locked") && self.locked == true }
 
   def cash_sold
-    @cash_sold ||= cash.sold(date) 
+    @cash_sold ||= cash.sold_at(date)
   end
 
 

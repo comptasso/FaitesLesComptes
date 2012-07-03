@@ -27,10 +27,12 @@ class Cash < ActiveRecord::Base
   # qui inclut cette date
   # TODO en fait j'ai modifié ce comportement pour ne pas avoir ce problème de report
   # A réfléchir
-  def sold(date=Date.today)
-    ls= self.lines.where('line_date <= ?', date)
-    date <= Date.today ? ls.sum(:credit)-ls.sum(:debit) : 0
-  end
+#  def sold(date=Date.today)
+#    ls= self.lines.where('line_date <= ?', date)
+#    date <= Date.today ? ls.sum(:credit)-ls.sum(:debit) : 0
+#  end
+
+
 
 
   # méthode utilisée par le module JcGraphic pour la construction des graphiques
