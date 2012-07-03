@@ -38,10 +38,12 @@ module Utilities::Sold
   # S'appuie sur le scope mois de Line
   def monthly_value(selector)
     if selector.is_a?(String)
-      selector = Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1)
+      selector = Date.civil(selector[/\d{4}$/].to_i, selector[/^\d{2}/].to_i,1)
     end
     lines.select([:debit, :credit, :line_date]).mois(selector).sum('credit - debit') if selector.is_a? Date
   end
+
+  # Travailler sur un Group_by
 
 
 

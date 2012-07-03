@@ -26,8 +26,7 @@ class Book < ActiveRecord::Base
   def monthly_datas(period)
     a={}
     @monthly_solds = period.list_months('%m-%Y').collect do |m|
-      ls= self.lines.month(m)
-      a[m] = ls.sum(:credit) - ls.sum(:debit)
+      a[m] = monthly_value(m)
     end
     a
   end

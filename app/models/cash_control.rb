@@ -41,6 +41,10 @@ class CashControl < ActiveRecord::Base
     amount - cash_sold
   end
 
+  def different?
+    difference.abs > 0.001
+  end
+
   # renvoie la date minimum que peut prendre un new cash_control
   # soit à partir d'un exercice, ou s'il n'est pas précisé, à partir
   # de la date du cash_control, et enfin au besoin prend le début de

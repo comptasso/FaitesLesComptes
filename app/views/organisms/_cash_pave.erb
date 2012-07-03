@@ -1,6 +1,6 @@
 <%= content_tag :div, :class=>"pave cash #{position}"  do %>
 
-<h3>Caisse <%=  cash_pave.name %> = <%= number_to_currency cash_pave.sold(@date) %>
+<h3>Caisse <%=  cash_pave.name %> = <%= number_to_currency cash_pave.sold_at(@date) %>
   <%= icon_to 'detail.png', cash_cash_lines_path(cash_pave) %>
 </h3>
   <%= render partial: 'line_graphic', object: cash_pave.graphic(@period)  , :locals=>{id: "cash_#{cash_pave.id}" } %>
