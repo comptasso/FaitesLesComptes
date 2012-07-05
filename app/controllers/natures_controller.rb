@@ -10,7 +10,7 @@ class NaturesController < ApplicationController
     @total_depenses=@period.stat_outcome_year(@filter)
   end
 
-
+ 
  
  
 end

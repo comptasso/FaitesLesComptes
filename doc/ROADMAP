@@ -583,10 +583,11 @@ OK - ne pas afficher index#controles dans le menu si il n'y en a aucun pour une 
 OK - dans book.rb monthly_datas renvoie un hash et crée un array ?!
 refaire une partie des models#book_spec avec des modèles réels et non des stub
 NON - regarder l'utilisation de group by month pour obtenir directement les soldes mensuels (celà est faisable mais entraîne une dépendance à la base de données pour un avantage faible)
+Faire les spec de natures controller
 Faire du nettoyage dans le modèle Period
 Dans utilitie::Graphic @chart_value_method n'est en fait jamais utilisé
 OK - pb du tri sur la date dans transfer géré par aoColumDefs dans le datatable avec la classe date-euro pour le th de tete de colonne.
-revoir natures pour utiliser le filtre fourni par datatable et pouvoir trier sur la première colonne
+OK - revoir natures pour utiliser le filtre fourni par datatable (NON) et pouvoir trier sur la première colonne
 NON La vue index dans Organism (zone public) ne semble pas utile (à Supprimer ?) . En fait elle sert lorsqu'on arrive sur root sans avoir choisi encore d'organisme
 ??  mais on pourrait aussi faire un redirect sur la zone admin.
 Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié

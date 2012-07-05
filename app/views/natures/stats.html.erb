@@ -2,16 +2,20 @@
   <h3>
     Statistiques par natures
   </h3>
-  <div class="inner-champ row-fluid">
+ </div>
 
-    <%= form_tag stats_organism_period_natures_path(@organism, @period),:method =>:get, :class=>"span12"  do %>
- <!--     <label for="destination" class="span2 control-label">Destination</label> -->
-      <%= select_tag :destination, options_for_select([['Toutes destinations', 0]] + @organism.destinations.collect {|d| [d.name, d.id]}, @filter), :class=>'span3' %>
-      <%= submit_tag 'Rafraichir', :class=>'btn-primary btn span2' %>
+    <%= form_tag stats_organism_period_natures_path(@organism, @period),:method =>:get, :class=>"form-search"  do %>
+     <label for="destination" class="control-label">Filtre</label>
+      <%= select_tag :destination,
+        options_for_select([['Toutes destinations', 0]] + @organism.destinations.collect {|d| [d.name, d.id]}, @filter),
+      :class=>"input-medium" %>
+ 
+    <%= submit_tag 'Rafraichir', :class=>'btn' %>
+ 
     <% end %>
       
-  </div>
-</div>
+  
+
 
 <div class="row-fluid">
 
