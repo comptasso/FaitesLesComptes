@@ -1,6 +1,6 @@
 = content_for :menu do
   = icon_to 'navigation90.png', bank_account_bank_extracts_path(@bank_account)
-  = icon_to 'stock_lock.png', lock_bank_account_bank_extract_path(@bank_account, @bank_extract), |
+  = icon_to 'verrouller.png', lock_bank_account_bank_extract_path(@bank_account, @bank_extract), |
     title: 'Verrouiller ce relevé ainsi que toutes les lignes associées', |
     id:'lock_bank_extract', method:'post', |
     style: ('display: none;' unless @bank_extract.lockable?), |
