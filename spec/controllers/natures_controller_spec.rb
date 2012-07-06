@@ -33,49 +33,49 @@ describe NaturesController do
 
     describe 'Check assigns' do
 
-before(:each) do
-  Organism.stub(:find).with(o.id.to_s).and_return o
-  o.stub_chain(:periods, :order).and_return([p])
-  o.stub_chain(:periods, :any?).and_return(true)
-  p.stub_chain(:natures, :recettes).and_return [nr1, nr2]
-  p.stub_chain(:natures, :depenses).and_return [nd1, nd2, nd3]
+      before(:each) do
+        Organism.stub(:find).with(o.id.to_s).and_return o
+        o.stub_chain(:periods, :order).and_return([p])
+        o.stub_chain(:periods, :any?).and_return(true)
+        p.stub_chain(:natures, :recettes).and_return [nr1, nr2]
+        p.stub_chain(:natures, :depenses).and_return [nd1, nd2, nd3]
   
-end
+      end
 
 
-    it 'assigns @organism and @period' do
-      p.stub(:stat_income_year)
-      p.stub(:stat_outcome_year)
-      get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
-      assigns(:organism).should == o
-      assigns(:period).should == p
-      response.should be_success
+      it 'assigns @organism and @period' do
+        p.stub(:stat_income_year)
+        p.stub(:stat_outcome_year)
+        get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
+        assigns(:organism).should == o
+        assigns(:period).should == p
+        response.should be_success
       
       
-    end
+      end
 
-    it 'redirect without @organism or period' do 
-      expect { get :stats}.to raise_error ActionController::RoutingError
-    end
+      it 'redirect without @organism or period' do
+        expect { get :stats}.to raise_error ActionController::RoutingError
+      end
 
-    it 'assigns @filter with 0 if no params[:filter]' do
-      p.stub(:stat_income_year)
-      p.stub(:stat_outcome_year)
-      get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
-     assigns(:filter).should == 0
-    end
+      it 'assigns @filter with 0 if no params[:filter]' do
+        p.stub(:stat_income_year)
+        p.stub(:stat_outcome_year)
+        get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
+        assigns(:filter).should == 0
+      end
 
-    it 'assigns @total_recettes et @total_depenses' do
-      p.should_receive(:stat_income_year).with(0).and_return ['1', '2']
-      p.should_receive(:stat_outcome_year).with(0).and_return ['a', 'b']
-      get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
-      assigns(:total_recettes).should == ['1', '2']
-      assigns(:total_depenses).should == ['a', 'b']
-    end
+      it 'assigns @total_recettes et @total_depenses' do
+        p.should_receive(:stat_income_year).with(0).and_return ['1', '2']
+        p.should_receive(:stat_outcome_year).with(0).and_return ['a', 'b']
+        get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
+        assigns(:total_recettes).should == ['1', '2']
+        assigns(:total_depenses).should == ['a', 'b']
+      end
 
       it 'assigns depenes et recettes' do
         p.stub(:stat_income_year)
-      p.stub(:stat_outcome_year)
+        p.stub(:stat_outcome_year)
         get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
         assigns(:recettes).should == [nr1, nr2]
         assigns(:depenses).should == [nd1, nd2, nd3]
@@ -84,15 +84,15 @@ end
       it 'with filter' do
         filt = 1
         p.should_receive(:stat_income_year).with(filt).and_return ['1', '2']
-      p.should_receive(:stat_outcome_year).with(filt).and_return ['a', 'b']
+        p.should_receive(:stat_outcome_year).with(filt).and_return ['a', 'b']
         get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s, :destination=>filt.to_s
         assigns(:filter).should == filt
       end
     
+    end
+
+
+
   end
-
-
-
-end
 
 end

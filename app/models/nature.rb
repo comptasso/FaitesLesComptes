@@ -21,21 +21,21 @@ class Nature < ActiveRecord::Base
   # TODO rajouter avec un if pour coller avec le type de compte
   # validates :account_ids, :fit_type=>true retiré car on ne crée plus l'assoc avec le compte dans le form nature
   
-   has_many :lines
+  has_many :lines
 
 
-   scope :recettes, where('income_outcome = ?', true).order('name ASC')
-   scope :depenses, where('income_outcome = ?', false).order('name ASC')
-   scope :without_account, where('account_id IS NULL')
+  scope :recettes, where('income_outcome = ?', true).order('name ASC')
+  scope :depenses, where('income_outcome = ?', false).order('name ASC')
+  scope :without_account, where('account_id IS NULL')
 
   before_destroy :ensure_no_lines
 
  
- # stat with cumul fournit un tableau comportant le total des lignes pour la nature
- # pour chaque mois plus un cumul de ce montant en dernière position
- # fait appel selon le cas à deux méthodes protected stat ou stat_filtered.
-  def stat_with_cumul(period, destination_id = 0)
-    s = (destination_id == 0) ? self.stat(period) : self.stat_filtered(period, destination_id)
+  # stat with cumul fournit un tableau comportant le total des lignes pour la nature
+  # pour chaque mois plus un cumul de ce montant en dernière position
+  # fait appel selon le cas à deux méthodes protected stat ou stat_filtered.
+  def stat_with_cumul(destination_id = 0)
+    s = (destination_id == 0) ? self.stat : self.stat_filtered(destination_id)
     s << s.sum
 
   end
@@ -46,28 +46,22 @@ class Nature < ActiveRecord::Base
   end
 
  
-   protected
+  protected
 
   # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
   # pour toutes les destinations confondues
-  def stat(period)
-    org=period.organism
-    period.nb_months.times.map do |m|
-     d = org.lines.period_month(period,m).where('nature_id = ?', self.id).sum(:debit)
-     c = org.lines.period_month(period,m).where('nature_id = ?', self.id).sum(:credit)
-     c-d
-     end
+  def stat
+    period.list_months('%m%Y').map do |m|
+      lines.month(m).sum('credit-debit').to_f
+    end
   end
 
-  # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
+  # Stat_filtered crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
   # pour une destination donnée
-  def stat_filtered(period, destination_id)
-    org=period.organism
-    period.nb_months.times.map do |m|
-     d = org.lines.period_month(period,m).where('nature_id = ?', self.id).where('destination_id=?', destination_id).sum(:debit)
-     c = org.lines.period_month(period,m).where('nature_id = ?', self.id).where('destination_id=?', destination_id).sum(:credit)
-     c-d
-     end
+  def stat_filtered(destination_id)
+    period.list_months('%m%Y').map do |m|
+      lines.month(m).where('destination_id=?', destination_id).sum('credit-debit').to_f
+    end
   end
 
   private

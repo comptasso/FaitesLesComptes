@@ -49,7 +49,7 @@
       <% @recettes.each do |r| %>
         <tr>
           <td><%= r.name %></td>
-          <% r.stat_with_cumul(@period, @filter).each do |val| %>
+          <% r.stat_with_cumul(@filter).each do |val| %>
             <%=  content_tag :td, debit_credit(val), :class=>'numeric'  %>
           <% end %>
         </tr>
@@ -58,7 +58,7 @@
       <% @depenses.each do |r| %>
         <tr>
           <td><%= r.name %></td>
-          <% r.stat_with_cumul(@period, @filter).each do |val| %>
+          <% r.stat_with_cumul(@filter).each do |val| %>
             <%=  content_tag :td, debit_credit(val), :class=>'numeric'   %>
           <% end %>
         </tr>
