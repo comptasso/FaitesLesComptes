@@ -1,4 +1,7 @@
 # coding: utf-8
+#lib/month_year.rb
+
+require 'date'
 
 class MonthYear
   include Comparable
@@ -24,10 +27,10 @@ class MonthYear
   end
 
   def <=>(other)
-    comparable_string <=> other.comparable.string
+    comparable_string <=> other.comparable_string
   end
 
   def comparable_string
-    (@year+@month).to_i
+    (@year+@month).to_i 
   end
 end
