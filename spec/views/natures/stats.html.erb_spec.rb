@@ -14,12 +14,11 @@ describe "natures/stats" do
   
   before(:each) do
     o.stub(:destinations).and_return ds
-    p.stub(:list_months).with('%b %y').and_return(ListMonths.new(p.start_date, p.close_date))
+    p.stub(:list_months).and_return(ListMonths.new(p.start_date, p.close_date))
     assign(:organism, o)
     assign(:period, p)
     assign(:total_recettes, [1,2,3,4,5,6,7,8,9,10,11,12])
     assign(:total_depenses, [11,12,13,14,15,16,17,18,19, 20, 21, 22])
-
     assign(:recettes, [ mock(Object, name:'recette 1', :stat_with_cumul=>values),mock(Object, name:'recette 2', :stat_with_cumul=>values) ])
     assign(:depenses,  [ mock(Object, name:'depense 1', :stat_with_cumul=>values),mock(Object, name:'depense 2', :stat_with_cumul=>values) ])
     render

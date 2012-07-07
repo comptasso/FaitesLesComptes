@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-  #  c.filter = {:js=> true }
+  #  c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
@@ -68,19 +68,20 @@ describe 'Cash Control Requests' do
      @cc = @c.cash_controls.first
    end
 
-    it 'on peut le choisir dans la vue index pour le modifier' do
-       visit cash_cash_controls_path(@c)
-      click_link "icon_modifier_cash_control_#{@cc.id.to_s}"
-      current_url.should match(edit_cash_cash_control_path(@c,@cc))
+    it 'on peut le choisir dans la vue index pour le modifier', :wip=>true do
+      @c.should have(1).cash_controls
+      visit cash_cash_controls_path(@c)
+        click_link "icon_modifier_cash_control_#{@cc.id.to_s}"
+      current_url.should match(edit_cash_cash_control_path(@c,@cc)) 
     end
 
   end
 
-  describe 'edit' do
+  describe 'edit' do 
 
     before(:each) do
      @c.cash_controls.create!(amount: 20, date: Date.today)
-     @cc = @c.cash_controls.first
+     @cc = @c.cash_controls.first 
    end
 
     it 'On peut changer les deux autres champs et revenir à la vue index' do

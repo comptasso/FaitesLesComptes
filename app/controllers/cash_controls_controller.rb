@@ -7,19 +7,19 @@ class CashControlsController < ApplicationController
  
 
   def index
-    params[:mois] ||= @period.guess_month
-    @cash_controls=@cash.cash_controls.mois(@period, params[:mois])
+    my = MonthYear.new(month:params[:mois], year:params[:an]) 
+    @cash_controls=@cash.cash_controls.monthyear(my)
   end
 
   
   def new
-    @cash_control = @cash.cash_controls.new(:date=>Date.today)
+    @cash_control = @cash.cash_controls.new(:date=>Date.today) 
   end
 
   def create
     @cash_control = @cash.cash_controls.new(params[:cash_control])
     if @cash_control.save
-      redirect_to cash_cash_controls_url(@cash, :mois=>@period.guess_month(@cash_control.date))
+      redirect_to cash_cash_controls_url(@cash, @period.guess_month(@cash_control.date).to_french_h)
     else
       @cash_control.date ||= [Date.today, @period.close_date].min
       render :new
@@ -29,7 +29,7 @@ class CashControlsController < ApplicationController
   def update
     @cash_control=@cash.cash_controls.find(params[:id])
      if @cash_control.update_attributes(params[:cash_control])
-      redirect_to cash_cash_controls_url(@cash, :mois=>@period.guess_month(@cash_control.date))
+      redirect_to cash_cash_controls_url(@cash, @period.guess_month(@cash_control.date).to_french_h)
     else
       @cash_control.date ||= @cash_control.max_date
       render :edit
@@ -51,7 +51,8 @@ class CashControlsController < ApplicationController
     else
       flash[:alert] = "Une erreur s'est produite et n'a pas permis de verrouiller le contrôle de caisse"
     end
-    redirect_to cash_cash_controls_url(@cash, :mois=>@period.guess_month(@cash_control.date))
+    monthyear= @period.guess_month(@cash_control.date)
+    redirect_to cash_cash_controls_url(@cash, mois:monthyear.month, an:monthyear.year)
   end
 
 
@@ -63,14 +64,17 @@ class CashControlsController < ApplicationController
     current_period
   end
 
-  def fill_mois
-     if params[:mois]
+   def fill_mois
+    if params[:mois] && params[:an]
       @mois = params[:mois]
+      @an = params[:an]
     else
-     @mois= @period.guess_month
-     redirect_to cash_cash_controls_url(@cash, mois: @mois) 
+      monthyear= @period.guess_month
+      redirect_to cash_cash_controls_url(@cash, mois:monthyear.month, an:monthyear.year, :format=>params[:format]) if (params[:action]=='index')
     end
   end
+
+  
 
 
 end

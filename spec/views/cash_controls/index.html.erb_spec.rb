@@ -31,7 +31,7 @@ describe "cash_controls/index" do
     assign(:period, p)
     assign(:cash, c)
     assign(:cash_controls, [cc1,cc2])
-    p.stub(:list_months).and_return %w(jan fév mar avr mai jui jui aou sept oct nov déc)
+    p.stub(:list_months).and_return ListMonths.new(p.start_date, p.close_date)
 #    c.stub(:sold).with(Date.today).and_return(102)
 #    c.stub(:sold).with(1.week.ago.to_date).and_return(10.52)
     view.stub("current_page?").and_return false

@@ -23,7 +23,7 @@ describe "cash_lines/index" do
     assign(:period, p)
     assign(:cash, c)
     assign(:monthly_extract, mce)
-    p.stub(:list_months).and_return %w(jan fév mar avr mai jui jui aou sept oct nov déc) 
+    p.stub(:list_months).and_return ListMonths.new(p.start_date, p.close_date)
     mce.stub(:lines).and_return([cl1,cl2])
     [cl1, cl2].each {|l| l.stub(:nature).and_return(n) }
     [cl1, cl2].each {|l| l.stub(:destination).and_return(nil) }
@@ -31,13 +31,14 @@ describe "cash_lines/index" do
     [cl1, cl2].each {|l| l.stub(:book_id).and_return(1) }
     [cl1, cl2].each {|l| l.stub(:book).and_return(mock_model(Book)) } 
     [cl1, cl2].each {|l| l.stub(:owner_type).and_return(nil) }
+    view.stub('current_page?').and_return false
   end
 
  
   describe "controle du corps" do  
 
     before(:each) do 
-      render 
+      render
     end
 
     it "affiche la légende du fieldset" do

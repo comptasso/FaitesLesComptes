@@ -15,11 +15,11 @@ describe "Cashes" do
   describe "GET /cash_cash_lines" do
     it "without a month params do a redirect" do
       get cash_cash_lines_path(@c)
-      response.status.should == 302
+      response.status.should == 302 
     end
 
     it 'get with a month params give success' do
-      get cash_cash_lines_path(@c, :mois=>'3')
+      get cash_cash_lines_path(@c, :mois=>'3' , :an=>'2012')
       response.status.should == 200 
     end
   end

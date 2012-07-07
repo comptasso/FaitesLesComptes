@@ -9,7 +9,7 @@ class MonthYear
   attr_reader :year, :month
 
   def initialize(h)
-    @date = Date.civil(h[:year], h[:month])  # pour généréer InvalidDate si les arguments sont non valables
+    @date = Date.civil(h[:year].to_i, h[:month].to_i)  # pour généréer InvalidDate si les arguments sont non valables
     @month = '%02d' % h[:month]
     @year = '%04d' % h[:year]
   end
@@ -44,6 +44,10 @@ class MonthYear
 
   def end_of_month
     @date.end_of_month
+  end
+
+  def to_french_h
+    {an:@year, mois:@month}
   end
 
  

@@ -118,7 +118,9 @@ describe LinesController do
  end
 
    describe 'Get new' do
-    
+     it 'without mois et an params' do
+       pending 'à faire car capté par request mais pas par ce fichier'
+     end
 
      it "fill the default values" do
        get :new, income_book_id: @ib.id, :mois=>'04', :an=>'2012'
