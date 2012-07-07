@@ -5,19 +5,7 @@ module LinesHelper
     require 'csv'
 
   
- # consstruit une série de liens à partir des mois de l'exercice pour naviguer d'un mois
- # à l'autre
-  def submenu_helper(book, mois, period )
-    html = []
-    content_tag :ul, class: "nav nav-pills mois offset3" do
-        period.list_months.each do |m|
-        html << content_tag(:li , :class=> "#{'active' if current_page?(:mois => m.month) }" ) { link_to_unless_current(mois, book_lines_path(book, "mois"=>m.month, an:m.year)) }
-      end
-     html << content_tag(:li) {icon_to('nouveau.png', new_book_line_path(book, mois:m.month , an:m.year) ,id: 'new_line_link') }
-    html.join('').html_safe
-    end
-     
-  end
+ 
 
   # page est un tableau de lignes
   #  Cette méthode prend les différents éléments d'une page de listing, en l'occurence

@@ -6,9 +6,13 @@ class Utilities::MonthlyBookExtract
 
   attr_reader :book
 
-  def initialize(book, date)
+  def initialize(book, h)
     @book=book
-    @date=date
+    if h[:date]
+      @date=h[:date]
+    else
+      @date = Date.civil(h[:year].to_i, h[:month].to_i)
+    end
   end
 
   def lines

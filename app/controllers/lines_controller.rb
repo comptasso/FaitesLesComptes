@@ -3,7 +3,7 @@
 class LinesController < ApplicationController
 
   # TODO verifier 'utilité de ce choose layout
-  layout :choose_layout # inutile maintenant car lié à l'utilisation de modalbox
+  layout :choose_layout # inutile maintenant car lié à l'utilisation de modalbox 
 
   prepend_before_filter :find_book # remplit @book mais aussi @organism et @period
 
@@ -20,9 +20,8 @@ class LinesController < ApplicationController
   # GET /lines
   # GET /lines.json 
   def index  
-    @date = Date.civil(@an.to_i, @mois.to_i)
-    @monthly_extract = Utilities::MonthlyBookExtract.new(@book, @date)
-
+    
+    @monthly_extract = Utilities::MonthlyBookExtract.new(@book, {year:params[:an], month:params[:mois]})
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @lines }
@@ -110,10 +109,11 @@ class LinesController < ApplicationController
   # DELETE /lines/1.json
   def destroy
     @line = @book.lines.find(params[:id])
+    my = MonthYear.from_date(@line.line_date)
     @line.destroy
   
     respond_to do |format|
-      format.html { redirect_to book_lines_url(@book, :mois=>@period.guess_month(@line.line_date)) }
+      format.html { redirect_to book_lines_url(@book, :mois=>my.month, :year=>my.year) }
       format.json { head :ok }
     end
   end
@@ -133,8 +133,8 @@ class LinesController < ApplicationController
       @mois = params[:mois]
       @an = params[:an]
     else
-      @month= @period.guess_month
-      redirect_to book_lines_url(@book, mois:@month[:month], an:@month[:year], :format=>params[:format]) if (params[:action]=='index')
+      @monthyear= @period.guess_month
+      redirect_to book_lines_url(@book, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')
       redirect_to new_book_line_url(@book,mois: @mois) if params[:action]=='new'
     end
   end

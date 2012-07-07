@@ -31,18 +31,18 @@ describe LinesController do
   describe 'GET index' do
     it "should find the right book" do
      # controller.should_receive(:find_book)
-      get :index, :outcome_book_id=>@ob.id, :mois=>4
+      get :index, :outcome_book_id=>@ob.id, mois:'04', an:'2012'
       assigns[:book].should == @ob
     end
 
     it 'should assign organism' do
-       get :index, :outcome_book_id=>@ob.id, :mois=>4
+       get :index, :outcome_book_id=>@ob.id,mois:'04', an:'2012'
       assigns[:organism].should == @o
     end
 
     it "should create a monthly_book_extract" do
-      Utilities::MonthlyBookExtract.should_receive(:new).with(@ob, @p.start_date.months_since(4))
-      get :index, :outcome_book_id=>@ob.id, :mois=>4
+      Utilities::MonthlyBookExtract.should_receive(:new).with(@ob, {:year=>"2012", :month=>"04"})
+      get :index, :outcome_book_id=>@ob.id, mois:'04', an:'2012'
     end
 
     it "should call the filter" do
@@ -51,20 +51,16 @@ describe LinesController do
       get :index, :outcome_book_id=>@ob.id, :mois=>4
     end
 
-    it "date doit être rempli" do
-      get :index, :outcome_book_id=>@ob.id, :mois=>4
-      assigns[:date].should == Date.civil(2012,5,1)
-    end
-
+    
     it "should render index view" do
-      get :index, :outcome_book_id=>@ob.id, :mois=>4
+      get :index, :outcome_book_id=>@ob.id, :mois=>'04', :an=>'2012'
       response.should render_template(:index)
     end
 
     it 'traiter le cas ou mois n est pas rempli' do
-      m = (Date.today.month)-1
+      my = MonthYear.from_date(Date.today)
       get :index, :outcome_book_id=>@ob.id
-      response.should redirect_to(book_lines_path(@ob, :mois=>m))
+      response.should redirect_to(book_lines_path(@ob, :mois=>my.month, :an=>my.year))
     end
   end
 
@@ -99,7 +95,7 @@ describe LinesController do
 
     it 'doit revoyer sur la table des écritures du mois' do
       get :destroy, :outcome_book_id=>@ob.id, :id=>@l.id,  :method=>:delete
-      response.should redirect_to(book_lines_path(:book_id=>@ob.id, :mois=>1))
+      response.should redirect_to(book_lines_path(:book_id=>@ob.id, :mois=>'02', :year=>'2012'))
     end
   end
 
@@ -125,7 +121,7 @@ describe LinesController do
     
 
      it "fill the default values" do
-       get :new, income_book_id: @ib.id, mois: 4
+       get :new, income_book_id: @ib.id, :mois=>'04', :an=>'2012'
        assigns[:line].should be_an_instance_of(Line)
        assigns[:line].line_date.should == Date.civil(2012,5,1)
        assigns[:line].bank_account_id.should == @ba.id 
@@ -139,18 +135,18 @@ describe LinesController do
       end
 
       it 'new line date est préremplie' do
-        get :new, income_book_id: @ib.id, mois: 4
+        get :new, income_book_id: @ib.id, :mois=>'04', :an=>'2012'
         assigns[:line].line_date.should == Date.civil(2012,5,1)
       end
 
       it 'affiche la vue new' do
-        get :new, income_book_id: @ib.id, mois: 4
+        get :new, income_book_id: @ib.id,  :mois=>'04', :an=>'2012'
         response.should render_template(:new)
       end
 
       it 'previous line existe' do
         flash[:previous_line_id].should_not be_nil
-        get :new, income_book_id: @ib.id, mois: 4
+        get :new, income_book_id: @ib.id,  :mois=>'04', :an=>'2012'
         assigns[:previous_line].should == Line.find(flash[:previous_line_id])
       end
     end

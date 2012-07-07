@@ -193,7 +193,7 @@ class Period < ActiveRecord::Base
   def guess_month(date=Date.today)
     date = start_date if date < start_date
     date = close_date if date > close_date
-    {:month=>date.month, :year=>date.year}
+    MonthYear.new :month=>date.month, :year=>date.year
   end
 
   # contrepartie de guess_month, renvoie une date d'un mois défini par

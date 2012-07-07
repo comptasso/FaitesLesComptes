@@ -9,11 +9,11 @@ describe Utilities::MonthlyBookExtract do
   end
 
   it "is created with a book and a date" do
-    @book_extract = Utilities::MonthlyBookExtract.new(@ob, Date.today)
+    @book_extract = Utilities::MonthlyBookExtract.new(@ob, date:Date.today)
   end
 
   it 'respond to book' do
-    @book_extract = Utilities::MonthlyBookExtract.new(@ob, Date.today)
+    @book_extract = Utilities::MonthlyBookExtract.new(@ob, date:Date.today)
     @book_extract.book.should == @ob
   end
 
@@ -31,9 +31,11 @@ describe Utilities::MonthlyBookExtract do
       end
 
       # création du MonthlyBookExtract
-      @monthly_book_extract = Utilities::MonthlyBookExtract.new(@ob, @p.start_date.months_since(1))
+      @monthly_book_extract = Utilities::MonthlyBookExtract.new(@ob, date:@p.start_date.months_since(1))
 
     end
+
+    it 'vérifier que MonthlyBookExtract est bien également initialisé avec un hash month et year'
 
     it "has a collection of lines" do
       @monthly_book_extract.lines.should == @ob.lines.where('line_date >= ? AND line_date <= ?', @p.start_date.months_since(1), @p.start_date.months_since(1).end_of_month).all
