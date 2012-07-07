@@ -10,7 +10,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Book do 
 
   def datas2010
-    (1..12).map {|t| 2010 } #(t%3 == 0) ? 100+t*10 : 100-t*5 }
+    (1..12).map {|t| 2010 } #(t%3 == 0) ? 100+t*10 : 100-t*5 } 
   end
 
   def datas2011
@@ -221,10 +221,7 @@ describe Book do
 
     end
 
-    it 'checks list months' do
-      period.list_months('%m-%Y').should == (1..12).map {|i| "#{format('%02d',i)}-2012"}
-    end
-
+   
     it "monthly_datas returns a hash" do
       pending 'ne semble pas fonctionner avec les stub'
       z = @book.monthly_datas(period)

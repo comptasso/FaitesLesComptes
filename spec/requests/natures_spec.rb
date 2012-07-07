@@ -18,7 +18,7 @@ describe 'Cash Control Requests' do
 
   describe 'stats' do
     before(:each) do
-      visit stats_organism_period_natures_path(@o, @p)
+      visit stats_organism_period_natures_path(@o, @p) 
     end
 
     it 'should be a succes' do

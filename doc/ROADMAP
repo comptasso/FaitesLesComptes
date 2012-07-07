@@ -615,6 +615,8 @@ NON - Dans Line.rb, il y a un include validations (qui est dans lib/validators) 
 OK - Dans transferts : changer virement en transfert dans le flash et dans le titre h3 de index
 OK - Classer les transferts par date
 Transferts  : mettre un affichage par mois pour les virements  ?
+Dans les graphiques, la caisse est affichée jusqu'à la fin de l'année
+Largeur des colonnes dans la vue cashlines index
 
 OK - Mettre les natures par ordre alpha dans la saisie d'écritures
 

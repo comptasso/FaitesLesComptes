@@ -23,7 +23,7 @@
     <thead>
       <tr>
         <th class="span2">Nature</th>
-        <% @period.list_months('%b %y').each do |my| %>
+        <% @period.list_months.to_abbr_with_year.each do |my| %>
           <%=  content_tag :th, my  %>
         <% end %>
         <th>Cumul</th>

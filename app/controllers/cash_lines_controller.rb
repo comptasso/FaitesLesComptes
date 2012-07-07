@@ -14,8 +14,8 @@ class CashLinesController < LinesController
 
 # la méthode index est héritée de LinesController
   def index
-    @date = @period.guess_date(@mois)
-    @monthly_extract = Utilities::MonthlyCashExtract.new(@cash, @date)
+    @monthly_extract = Utilities::MonthlyBookExtract.new(@cash, {year:params[:an], month:params[:mois]})
+    
   # TODO voir pour rajouter les mêmes sorties que pour lines controller
   # à savoir pdf, csv 
   end
@@ -29,12 +29,16 @@ class CashLinesController < LinesController
   end
 
   def fill_mois
-     if params[:mois]
+    if params[:mois] && params[:an]
       @mois = params[:mois]
+      @an = params[:an]
     else
-     @mois= @period.guess_month
-     redirect_to cash_cash_lines_url(@cash, mois: @mois) if (params[:action]=='index')
+      @monthyear= @period.guess_month
+      redirect_to cash_cash_lines_url(@book, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')
+
     end
   end
+
+ 
 
 end

@@ -78,6 +78,10 @@ class Line < ActiveRecord::Base
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1),
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1).end_of_month    )}
 
+  scope :monthyear, lambda {|my| where('line_date >= ? AND line_date <= ?',
+     my.beginning_of_month, my.end_of_month  )}
+
+
   scope :unlocked, where('locked = ?', false)
   scope :before_including_day, lambda {|d| where('lines.line_date <= ?',d)}
 

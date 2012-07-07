@@ -51,16 +51,16 @@ class Nature < ActiveRecord::Base
   # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
   # pour toutes les destinations confondues
   def stat
-    period.list_months('%m%Y').map do |m|
-      lines.month(m).sum('credit-debit').to_f
+    period.list_months.map do |m|
+      lines.monthyear(m).sum('credit-debit').to_f
     end
   end
 
   # Stat_filtered crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
   # pour une destination donnée
   def stat_filtered(destination_id)
-    period.list_months('%m%Y').map do |m|
-      lines.month(m).where('destination_id=?', destination_id).sum('credit-debit').to_f
+    period.list_months.map do |m|
+      lines.monthyear(m).where('destination_id=?', destination_id).sum('credit-debit').to_f
     end
   end
 

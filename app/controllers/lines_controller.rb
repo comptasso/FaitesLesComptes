@@ -21,7 +21,7 @@ class LinesController < ApplicationController
   # GET /lines.json 
   def index  
     
-    @monthly_extract = Utilities::MonthlyBookExtract.new(@book, {year:params[:an], month:params[:mois]})
+    @monthly_extract = Utilities::MonthlyBookExtract.new(@book, year:params[:an], month:params[:mois])
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @lines }
