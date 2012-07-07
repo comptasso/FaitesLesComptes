@@ -29,7 +29,7 @@ module Utilities::JcGraphic
 
   # construit un tableau pour l'axe des abscisse : du genre jan,fév, mar,...
   def ticks(period)
-    period.list_months('%b')
+    period.list_months.to_abbr
   end
 
 

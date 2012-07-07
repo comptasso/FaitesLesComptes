@@ -20,7 +20,7 @@ class LinesController < ApplicationController
   # GET /lines
   # GET /lines.json 
   def index  
-    @date = @period.guess_date(@mois)
+    @date = Date.civil(@an.to_i, @mois.to_i)
     @monthly_extract = Utilities::MonthlyBookExtract.new(@book, @date)
 
     respond_to do |format|
@@ -129,11 +129,12 @@ class LinesController < ApplicationController
   end
 
   def fill_mois
-    if params[:mois]
+    if params[:mois] && params[:an]
       @mois = params[:mois]
+      @an = params[:an]
     else
-      @mois= @period.guess_month
-      redirect_to book_lines_url(@book, mois: @mois, :format=>params[:format]) if (params[:action]=='index')
+      @month= @period.guess_month
+      redirect_to book_lines_url(@book, mois:@month[:month], an:@month[:year], :format=>params[:format]) if (params[:action]=='index')
       redirect_to new_book_line_url(@book,mois: @mois) if params[:action]=='new'
     end
   end

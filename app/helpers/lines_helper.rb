@@ -10,10 +10,10 @@ module LinesHelper
   def submenu_helper(book, mois, period )
     html = []
     content_tag :ul, class: "nav nav-pills mois offset3" do
-        period.list_months('%b').each_with_index do |mois, i|
-        html << content_tag(:li , :class=> "#{'active' if current_page?(:mois => i) }" ) { link_to_unless_current(mois, book_lines_path(book, "mois"=> i)) }
+        period.list_months.each do |m|
+        html << content_tag(:li , :class=> "#{'active' if current_page?(:mois => m.month) }" ) { link_to_unless_current(mois, book_lines_path(book, "mois"=>m.month, an:m.year)) }
       end
-     html << content_tag(:li) {icon_to('nouveau.png', new_book_line_path(book, mois: mois) ,id: 'new_line_link') }
+     html << content_tag(:li) {icon_to('nouveau.png', new_book_line_path(book, mois:m.month , an:m.year) ,id: 'new_line_link') }
     html.join('').html_safe
     end
      

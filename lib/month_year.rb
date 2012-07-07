@@ -22,6 +22,10 @@ class MonthYear
     I18n.l( @date, :format=>format)
   end
 
+  def to_short
+    to_format('%b')
+  end
+
   def self.from_date(date)
     MonthYear.new(year:date.year, month:date.month)
   end

@@ -478,7 +478,7 @@ Dans les income outcome changer debit credit par montant (et une seule colonne).
 utiliser des partials pour les menus (A finir pour zone admin et zone compta)
 Voir pour l'affichage du livre OD (plutôt dans la compta ?)
 Dans la vue admin#organisme, avoir une info sur la dernière activité
-Dans caisse# nouveau remplacer comment par commentaire
+OK - Dans caisse# nouveau remplacer comment par commentaire
 
 REVOIR LES BEFORE FILTER DE ORGANISM DANS LA ZONE ADMIN ET COMPTA
 OK - La vue index des retraits d'argent n'est pas classée
@@ -490,7 +490,7 @@ OK - Pour pouvoir supprimer tous les recours à picker_date
 Vérifier que les controllers controlent bien la bonne classe
 
 Généraliser la gestion des erreurs dans les picker_date sur la base de ce qui a été fait pour cash_control
-revoir bank_extract_controller_spec
+OK - revoir bank_extract_controller_spec
 
 ----------------------CashControls----------------------------------------
 OK - remplacer les modif de params[:pick_date] par des virtual attributes
@@ -584,7 +584,7 @@ OK - dans book.rb monthly_datas renvoie un hash et crée un array ?!
 refaire une partie des models#book_spec avec des modèles réels et non des stub
 NON - regarder l'utilisation de group by month pour obtenir directement les soldes mensuels (celà est faisable mais entraîne une dépendance à la base de données pour un avantage faible)
 OK - Faire les spec de natures controller
-Faire du nettoyage dans le modèle Period
+OK - Faire du nettoyage dans le modèle Period
 Dans utilitie::Graphic @chart_value_method n'est en fait jamais utilisé
 OK - pb du tri sur la date dans transfer géré par aoColumDefs dans le datatable avec la classe date-euro pour le th de tete de colonne.
 OK - revoir natures pour utiliser le filtre fourni par datatable (NON) et pouvoir trier sur la première colonne
@@ -621,7 +621,7 @@ OK - Mettre les natures par ordre alpha dans la saisie d'écritures
 Dans la sauvegarde, j'avais un cash control sans date, du coup, cela générait une erreur dans la restauration.
 --------------------------Partie comptable ----------------------------
 Ca commence par l'affichage du plan comptable dans la partie admin
-
+Solde_credit_avant et apres du modèle line.rb devraient être des scope
 
 
 

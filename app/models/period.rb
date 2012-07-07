@@ -138,7 +138,7 @@ class Period < ActiveRecord::Base
   end
 
   def depenses_accounts
-    accounts.classe_6.all
+    accounts.classe_6.all 
   end
  
   # TODO à revoir avec les fonctions de type distance in ...
@@ -155,8 +155,8 @@ class Period < ActiveRecord::Base
   
   #TODO refactoriser les deux méthodes ci-dessus, grâce à celle ci qui est également
   # utilisée par Book#monthly_datas 
-  def list_months(format)
-    ListMonths.new(start_date, close_date).to_list(format)
+  def list_months
+    ListMonths.new(start_date, close_date)
   end
 
   # retourne la date du dernier jour du mois
@@ -191,17 +191,17 @@ class Period < ActiveRecord::Base
   # si elle est après, renvoie le dernier mois
   #
   def guess_month(date=Date.today)
-    return 0 if date < self.start_date
-    return self.nb_months - 1 if date > self.close_date
-    return current_month(date)
+    date = start_date if date < start_date
+    date = close_date if date > close_date
+    {:month=>date.month, :year=>date.year}
   end
 
   # contrepartie de guess_month, renvoie une date d'un mois défini par
   # la variable month. En pratique, renvoie le premier jour du mois
   # La valeur par défaut renvoie le premier jour de l'exercice
-  def guess_date(month=0)
-    start_date.months_since(month.to_i)
-  end
+#  def guess_date(month=0)
+#    start_date.months_since(month.to_i)
+#  end
 
   # surcharge de restore qui est définie dans models/restore/restore_records.rb
   def self.restore(new_attributes)
@@ -364,16 +364,16 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
 
     protected
   # renvoie le mois de l'exercice correspondant à une date qui est dans les limites de l'exercice
-  def current_month(date = Date.today)
-    raise 'date is not inside the period limits' if date < self.start_date || date > self.close_date
-    d=self.start_date
-    mois = 0
-    while date >= d
-      d=d.months_since(1)
-      mois += 1
-    end
-    return mois-1
-  end
+#  def current_month(date = Date.today)
+#    raise 'date is not inside the period limits' if date < self.start_date || date > self.close_date
+#    d=self.start_date
+#    mois = 0
+#    while date >= d
+#      d=d.months_since(1)
+#      mois += 1
+#    end
+#    return mois-1
+#  end
 
 
 
