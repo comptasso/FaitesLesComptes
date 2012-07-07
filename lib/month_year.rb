@@ -18,8 +18,8 @@ class MonthYear
     [@month.to_s, @year.to_s].join('-')
   end
 
-  def to_short_month
-    I18n.l( @date, :format=>'%b')
+  def to_format(format)
+    I18n.l( @date, :format=>format)
   end
 
   def self.from_date(date)
@@ -33,4 +33,7 @@ class MonthYear
   def comparable_string
     (@year+@month).to_i 
   end
+
+ 
+
 end

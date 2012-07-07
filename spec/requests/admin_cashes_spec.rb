@@ -14,7 +14,7 @@ describe 'admin cash' do
   
   
   before(:each) do
-    clean_test_database
+    # clean_test_database
     Cash.count.should == 0
     create_minimal_organism 
   end

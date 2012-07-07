@@ -14,7 +14,7 @@ module CashControlsHelper
   def admin_cash_control_submenu_helper(cash, period)
     content_tag :span do
       s=''
-      period.list_months.each_with_index do |mois, i|
+      period.list_months('%b').each_with_index do |mois, i|
         u =  content_tag :span do
           link_to_unless_current(mois, admin_organism_cash_cash_controls_path(@organism, cash, "mois"=> i.to_s))
         end

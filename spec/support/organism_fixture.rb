@@ -36,11 +36,11 @@ module OrganismFixture
     end
   end
 
-  def clean_test_database
-    os = Organism.all
-    os.each {|oss| oss.destroy }
-    Organism.count.should == 0
-    
-  end
+#  def clean_test_database
+#    os = Organism.all
+#    os.each {|oss| oss.destroy }
+#    Organism.count.should == 0
+#
+#  end
 
 end

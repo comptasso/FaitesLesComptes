@@ -18,7 +18,7 @@ describe 'vue books index' do
     
 
   before(:each) do
-    clean_test_database
+    
     Book.count.should == 0
     create_minimal_organism  
   end
@@ -77,8 +77,8 @@ describe 'vue books index' do
       end
       
       alert = page.driver.browser.switch_to.alert
-      alert.accept
-      sleep 0.5
+      alert.accept 
+      sleep 1
       page.all('tbody tr').should have(3).books 
      end
 #    end

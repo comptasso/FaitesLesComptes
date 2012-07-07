@@ -12,11 +12,10 @@ describe 'MonthYear' do
 
   it 'month est rendu sur deux chiffres' do
     m = MonthYear.new(:year=>2011, :month=>1)
-    m.month.should == '01'
+    m.month.should == '01' 
   end
 
   it 'bad date raise error' do
-    
     expect {MonthYear.new(year:2012, month:13)}.to raise_error ArgumentError
   end
 
@@ -25,7 +24,7 @@ describe 'MonthYear' do
   end
 
   it 'to_short_month renvoie jan.' do
-    MonthYear.new(year:2012, month:01).to_short_month.should == 'jan.'
+    MonthYear.new(year:2012, month:01).to_format('%b').should == 'jan.'
   end
 
   it '12-2011 est avant 01-2012' do

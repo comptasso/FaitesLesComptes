@@ -14,7 +14,7 @@ describe 'vue transfer index' do
 
 
   before(:each) do
-    clean_test_database
+    
     Transfer.count.should == 0
     create_minimal_organism
     @bb = @o.bank_accounts.create!(:name=>'DebiX', :number=>'123Y')

@@ -583,7 +583,7 @@ OK - ne pas afficher index#controles dans le menu si il n'y en a aucun pour une 
 OK - dans book.rb monthly_datas renvoie un hash et crée un array ?!
 refaire une partie des models#book_spec avec des modèles réels et non des stub
 NON - regarder l'utilisation de group by month pour obtenir directement les soldes mensuels (celà est faisable mais entraîne une dépendance à la base de données pour un avantage faible)
-Faire les spec de natures controller
+OK - Faire les spec de natures controller
 Faire du nettoyage dans le modèle Period
 Dans utilitie::Graphic @chart_value_method n'est en fait jamais utilisé
 OK - pb du tri sur la date dans transfer géré par aoColumDefs dans le datatable avec la classe date-euro pour le th de tete de colonne.

@@ -41,7 +41,7 @@
 # TODO mettre ceci dans une transaction
 
 
-
+require 'list_months'
 
 class Period < ActiveRecord::Base
 
@@ -156,7 +156,7 @@ class Period < ActiveRecord::Base
   #TODO refactoriser les deux méthodes ci-dessus, grâce à celle ci qui est également
   # utilisée par Book#monthly_datas 
   def list_months(format)
-    self.nb_months.times.map {|m| I18n::l self.start_date.months_since(m), :format=>format}
+    ListMonths.new(start_date, close_date).to_list(format)
   end
 
   # retourne la date du dernier jour du mois
