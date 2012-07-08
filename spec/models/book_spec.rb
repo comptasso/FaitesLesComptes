@@ -2,7 +2,10 @@
 
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
-
+RSpec.configure do |c|
+  #  c.filter = {:wip => true }
+  #  c.exclusion_filter = {:js=> true }
+end
 
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
@@ -19,6 +22,7 @@ describe Book do
 
   context "un exercice de 12 mois commencant le 1er janvier" do
     let(:p2010) {stub_model(Period, :start_date=>Date.civil(2010,01,01), :close_date=>Date.civil(2010,12,31))}
+    let(:p2011) {stub_model(Period, :start_date=>Date.civil(2011,01,01), :close_date=>Date.civil(2011,12,31))}
 
     before(:each) do
       @book = Book.new
@@ -44,7 +48,7 @@ describe Book do
 
 
    
-    # deux exercices de 12 mois commençant en janvier chacun
+    # deux exercices de 12 mois commençant en janvier chacun 
     context "testing monthly_graphic with two periods of the same length" do
 
       let(:p2011) {stub_model(Period, :start_date=>Date.civil(2011,01,01), :close_date=>Date.civil(2011,12,31))}
@@ -52,16 +56,17 @@ describe Book do
  
       before(:each) do
         p2011.stub(:previous_period).and_return(p2010)
-        @book.stub(:monthly_datas_for_chart).with(p2011.list_end_months).and_return(datas2011)
-        @book.stub(:previous_year_monthly_datas_for_chart).with(p2011.list_end_months).and_return(datas2010)
+        p2011.stub(:list_months).and_return ListMonths.new(p2011.start_date, p2011.close_date)
+        @book.stub(:monthly_datas_for_chart).with(p2011.list_months).and_return(datas2011)
+        @book.stub(:previous_year_monthly_datas_for_chart).with(p2011.list_months).and_return(datas2010)
       end
 
-      it "should have a two_years_monthly_graphic method" do
+      it "should have a two_years_monthly_graphic method" , :wip=>true do
         @book.two_years_monthly_graphic(p2011)
       end
 
-      it "check previous_year_monthly..." do
-        @book.previous_year_monthly_datas_for_chart(p2011.list_end_months).should == datas2010
+      it "check previous_year_monthly..." , :wip=>true do
+        @book.previous_year_monthly_datas_for_chart(p2011.list_months).should == datas2010
       end
 
       context "check the two_years_monthly_graphic method" do
@@ -101,9 +106,10 @@ describe Book do
     let(:p2) {stub_model(Period, :start_date=>Date.civil(2011,04,01), :close_date=>Date.civil(2012,03,31))}
 
     before(:each) do
+      p2.stub(:list_months).and_return ListMonths.new(p2.start_date, p2.close_date)
       @book = Book.new
-      @book.stub(:monthly_datas_for_chart).with(p2.list_end_months).and_return(period_datas)
-      @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_end_months).and_return(period_datas)
+      @book.stub(:monthly_datas_for_chart).with(p2.list_months).and_return(period_datas)
+      @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_months).and_return(period_datas)
       @graphic=@book.two_years_monthly_graphic(p2)
     end
 
@@ -124,9 +130,10 @@ describe Book do
     let(:p1) {stub_model(Period, :start_date=>Date.civil(2009,9,01), :close_date=>Date.civil(2010,12,31))} # exercice de 15 mois,
     let(:p2) {stub_model(Period, :start_date=>Date.civil(2011,01,01), :close_date=>Date.civil(2011,12,31))} # exercice de 12 mois
     before(:each) do
+      p2.stub(:list_months).and_return ListMonths.new(p2.start_date, p2.close_date)
       @book = Book.new
-      @book.stub(:monthly_datas_for_chart).with(p2.list_end_months).and_return(range_period_datas(1..12))
-      @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_end_months).and_return(range_period_datas(1..12))
+      @book.stub(:monthly_datas_for_chart).with(p2.list_months).and_return(range_period_datas(1..12))
+      @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_months).and_return(range_period_datas(1..12))
 
 
     end
@@ -162,25 +169,35 @@ describe Book do
       before(:each) do
         p3.stub(:previous_period).and_return(p2)
         p2.stub(:previous_period).and_return(p1)
+        p3.stub(:list_months).and_return ListMonths.new(p3.start_date, p3.close_date)
+        p2.stub(:list_months).and_return ListMonths.new(p2.start_date, p2.close_date)
+        p1.stub(:list_months).and_return ListMonths.new(p1.start_date, p1.close_date)
         @book.stub_chain(:organism, :periods).and_return([p1,p2,p3])
-        @book.stub(:previous_year_monthly_datas_for_chart).with(p3.list_end_months).and_return(range_period_datas(1..12))
-        @book.stub(:monthly_datas_for_chart).with(p3.list_end_months).and_return(range_period_datas(13..24))
-        @book.stub(:monthly_datas_for_chart).with(p1.list_end_months).and_return(range_period_datas(1..16))
+        @book.stub(:previous_year_monthly_datas_for_chart).with(p3.list_months).and_return(range_period_datas(1..12))
+        
+        
+        @book.stub(:monthly_datas_for_chart).with(p1.list_months).and_return(range_period_datas(1..16))
       end
 
       it "should return a graphic" do
+        @book.stub(:monthly_datas_for_chart).with(p2.list_months).and_return(range_period_datas(13..24))
+        @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_months).and_return(range_period_datas(1..12))
         @book.graphic(p2).should be_an_instance_of(Utilities::Graphic)
       end
 
       it "graphic(p3) returns correct legend" do
+        @book.stub(:monthly_datas_for_chart).with(p3.list_months).and_return(range_period_datas(13..24))
         @book.graphic(p3).legend.should == ['Exercice 2011', 'Exercice 2012']
       end
 
       it "graphic(p2) return correct legend " do
-        @book.graphic(p2).legend.should == ['sept. 2009 à déc. 2010', 'Exercice 2011']
+        @book.stub(:monthly_datas_for_chart).with(p2.list_months).and_return(range_period_datas(13..24))
+        @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_months).and_return(range_period_datas(1..12))
+           @book.graphic(p2).legend.should == ['sept. 2009 à déc. 2010', 'Exercice 2011']
       end
 
       it "graphic(p1) is a one year graphic" do
+        @book.stub(:monthly_datas_for_chart).with(p1.list_months).and_return(range_period_datas(1..16))
         @book.graphic(p1).should have(1).serie
          @book.graphic(p1).legend.should == ['sept. 2009 à déc. 2010']
       end
