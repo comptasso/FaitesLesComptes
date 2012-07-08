@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
  
 describe Utilities::MonthlyBookExtract do
   include OrganismFixture
@@ -9,11 +9,11 @@ describe Utilities::MonthlyBookExtract do
   end
 
   it "is created with a book and a date" do
-    @book_extract = Utilities::MonthlyBookExtract.new(@ob, date:Date.today)
+    @book_extract = Utilities::MonthlyBookExtract.new(@ob, year:Date.today.year, month:Date.today.month)
   end
 
   it 'respond to book' do
-    @book_extract = Utilities::MonthlyBookExtract.new(@ob, date:Date.today)
+    @book_extract = Utilities::MonthlyBookExtract.new(@ob, year:Date.today.year, month:Date.today.month)
     @book_extract.book.should == @ob
   end
 
@@ -31,7 +31,7 @@ describe Utilities::MonthlyBookExtract do
       end
 
       # création du MonthlyBookExtract
-      @monthly_book_extract = Utilities::MonthlyBookExtract.new(@ob, date:@p.start_date.months_since(1))
+      @monthly_book_extract = Utilities::MonthlyBookExtract.new(@ob, year:2012, month:2)
 
     end
 
