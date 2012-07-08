@@ -146,25 +146,14 @@ class Period < ActiveRecord::Base
     (close_date.year * 12 + close_date.month) - (start_date.year * 12 + start_date.month) + 1
   end
 
-  # renvoie le nombre de jour d'un mois donné de l'exercice
-  # mois period est un entier démarrant à 0
-  def nb_jour_mois(mois_period)
-    self.start_date.months_since(mois_period).end_of_month.day
-  end
-
-  
-  #TODO refactoriser les deux méthodes ci-dessus, grâce à celle ci qui est également
-  # utilisée par Book#monthly_datas 
+    
+  # list_months renvoye un tableau d'instance de mois (MonthYear)
+  # utilisée notamment par Book#monthly_datas
   def list_months
     ListMonths.new(start_date, close_date)
   end
 
-  # retourne la date du dernier jour du mois
-  # utilie pour les collecte de données en fin de mois
-  def list_end_months
-    self.nb_months.times.map {|m| start_date.months_since(m).end_of_month }
-  end
-
+ 
 
 
   # permet d'indiquer l'exercice sous la forme d'une chaine de caractère

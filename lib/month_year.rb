@@ -54,6 +54,11 @@ class MonthYear
     MonthYear.from_date(self.date.years_ago(1))
   end
 
+  #
+  def nb_jour_mois
+    @date.end_of_month.day
+  end
+
  
 
 end

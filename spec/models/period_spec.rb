@@ -67,13 +67,14 @@ describe Period do
 
         @p_2011.stub_chain(:books, :all).and_return([b1,b2])
         @p_2010.stub_chain(:books, :all).and_return([b1,b2])
-        @p_2011.list_end_months.each do |m|
-          b1.stub(:monthly_value).with(m).and_return(100 + 10*(m.month))
-          b2.stub(:monthly_value).with(m).and_return(-120 + 5*(m.month) )
+        @p_2011.list_months.each do |m|
+          
+          b1.stub(:monthly_value).with(m.end_of_month).and_return(100 + 10*(m.month.to_i))
+          b2.stub(:monthly_value).with(m.end_of_month).and_return(-120 + 5*(m.month.to_i))
         end
-        @p_2010.list_end_months.each do |m|
-          b1.stub(:monthly_value).with(m).and_return(1000 + 100*(m.month) )
-          b2.stub(:monthly_value).with(m).and_return(-1200 + 50*(m.month) )
+        @p_2010.list_months.each do |m|
+          b1.stub(:monthly_value).with(m.end_of_month).and_return(1000 + 100*(m.month.to_i))
+          b2.stub(:monthly_value).with(m.end_of_month).and_return(-1200 + 50*(m.month.to_i))
         end
         (1..3).each do |i|
           my=Date.civil(2010,i,1).end_of_month
@@ -122,19 +123,14 @@ describe Period do
 
       end
       
-      context "check the default graphic with two periods" do 
+      context "check the default graphic with one periods" do
         before(:each) do
           @p_2011.stub(:previous_period?).and_return(false)
           @graphic= @p_2011.default_graphic(@p_2011)
-#          @p_2011.list_months('%m-%Y').each_with_index do |m,i|
-#            @p_2011.stub(:monthly_value).with(m).and_return(P2011_RESULTS[i])
-#          end
         end
 
       it "shoudl have only one serie" do
         @graphic.should have(1).serie
-
-
       end
 
         it "checks_list_months" do
@@ -143,7 +139,7 @@ describe Period do
 
 
         it "checks the monthly_values" do
-          @p_2011.monthly_datas_for_chart(@p_2011.list_end_months).should == P2011_RESULTS
+          @p_2011.monthly_datas_for_chart(@p_2011.list_months).should == P2011_RESULTS
         end
 
         it "check the legend"  do
