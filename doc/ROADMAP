@@ -625,7 +625,9 @@ OK - Mettre les natures par ordre alpha dans la saisie d'écritures
 
 Dans la sauvegarde, j'avais un cash control sans date, du coup, cela générait une erreur dans la restauration.
 ------------------- refonte des month_year -----------------------------
-Revoir tous les appels à MonthlyBookExtracts qui acceptent maintenant un hash
+OK - Revoir tous les appels à MonthlyBookExtracts qui acceptent maintenant un hash
+OK - modifier les appels à pdf et csv de lines
+voir new line (la date par défaut semble décalée d'un mois)
 
 
 

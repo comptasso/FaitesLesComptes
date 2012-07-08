@@ -2,9 +2,6 @@
 
 class LinesController < ApplicationController
 
-  # TODO verifier 'utilité de ce choose layout
-  layout :choose_layout # inutile maintenant car lié à l'utilisation de modalbox 
-
   prepend_before_filter :find_book # remplit @book mais aussi @organism et @period
 
   skip_before_filter [:find_organism, :current_period]
@@ -23,10 +20,11 @@ class LinesController < ApplicationController
     
     @monthly_extract = Utilities::MonthlyBookExtract.new(@book, year:params[:an], month:params[:mois])
     respond_to do |format|
-      format.html # index.html.erb
+      format.html  # index.html.erb
       format.json { render json: @lines }
       format.pdf 
-      format.csv
+      format.csv { render :text=> @monthly_extract.to_csv(col_sep:"\t")}  # pour éviter le problème des virgules
+      format.xls { render :text=> @monthly_extract.to_csv(col_sep:"\t")}  # nécessaire pour excel
     end
   end
 
@@ -152,11 +150,7 @@ class LinesController < ApplicationController
     end
   end
 
-  
-  def choose_layout
-    (request.xhr?) ? nil : 'application'
-  end
-  
+   
   # change period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice
   # à partir du graphe d'accueil. 
   # TODO Il serait peut être plus judicieux de se déconnecter complètement de la notion d'exercice 

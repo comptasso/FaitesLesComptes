@@ -175,32 +175,25 @@ class Line < ActiveRecord::Base
     self.bank_extract_id
   end
 
-  def self.csv_titles
-    ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement']
-  end
-
-  def to_csv
-    [I18n::l(self.line_date), self.ref, self.narration, "#{self.destination_name}",
-      "#{self.nature_name}",
-      self.debit.to_f, self.credit.to_f, "#{self.payment_mode}"]
-  end
-
+ 
 
   # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
   def check_for_select
   "#{I18n.l line_date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',credit)}"
   end
 
-  protected
+ 
 
   
   def destination_name
-    self.destination ? self.destination.name : 'non indiqué'
+    destination ? destination.name : 'non indiqué'
   end
 
   def nature_name
     self.nature ? self.nature.name : 'non indiqué'
   end
+
+   protected
 
   # Si le paiement est Especes, mettre à nil le bank_account_id
   # Autrement mettre à nil le cash_id

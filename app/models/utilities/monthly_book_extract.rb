@@ -1,5 +1,8 @@
 # coding: utf-8
 
+
+
+
 # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes
 # se créé en appelant new avec un book et une date quelconque du mois souhaité
 class Utilities::MonthlyBookExtract
@@ -67,11 +70,14 @@ class Utilities::MonthlyBookExtract
   end
 
 
-  def to_csv
-    CSV.generate do |csv|
-      csv << Line.csv_titles
+  def to_csv(options)
+    CSV.generate(options) do |csv|
+      csv << ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement']
       lines.each do |line|
-        csv << line.to_csv
+        csv << [I18n::l(line.line_date), line.ref, line.narration, "#{line.destination_name}",
+      "#{line.nature_name}",
+      line.debit.to_s.gsub('.', ','), line.credit.to_s.gsub('.', ','), # gsub pour avoir des ,
+      "#{line.payment_mode}"]
       end
     end
   end
