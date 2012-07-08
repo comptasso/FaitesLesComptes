@@ -2,9 +2,11 @@
 <div class="datas_for_graph"  style="display: none;">
   <span class="legend"><%= line_graphic.legend.join(';') %>  </span>
   <span class="ticks">  <%= line_graphic.ticks.join(';') %></span>
-  <span class="period_ids"><%= line_graphic.period_ids.join(';') %></span>
+   <% line_graphic.month_years.each_with_index do |my,i| %>
+  <span class="month_years_<%= i %>"><%= my.join(';')  %></span>
+ <% end %>
   <% line_graphic.series.each_with_index do |s,i| %>
-  <span class="series_<%= i %>">  <%= line_graphic.series[i].join(';')  %></span>
+  <span class="series_<%= i %>">  <%= s.join(';')  %></span>
  <% end %>
 </div>
 <div class="line_graph"  id="chart_<%= id %>"></div>

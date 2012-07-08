@@ -47,9 +47,9 @@ function s_to_f(element) {
 }
 
 // cette fonction récupère les informations cachées qui sont inclus dans un DOM
-// à partir de l'id et des classes legend, ticks, period_ids et series'
+// à partir de l'id et des classes legend, ticks, month_years et series'
 function recup_graph_datas(element) {
-    var complete_id, type, id, legend, ticks, period_ids, s = [], label = [], link = [], i = 0;
+    var complete_id, type, id, legend, ticks,  s = [], label = [], link = [], i = 0;
     $(element).each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
         // on construit les variables qui seront utilisées par jqplot
         complete_id = this.id;
@@ -57,7 +57,7 @@ function recup_graph_datas(element) {
         id = this.id.match(/\d+$/)[0]; // on récupère l'id et comme match retourne un array on prend le premier'
         legend = $(this).find('.legend').text().split(';'); // la légende
         ticks = $(this).find('.ticks').text().split(';'); // les mois
-        period_ids = $(this).find('.period_ids').text().split(';'); // les exercices
+       
         // et on les remplit par une boucle qui prend la dimension de légende pour construire
         for (i = 0; i <= legend.length; i += 1) {
             label[i] = {
@@ -73,7 +73,7 @@ function recup_graph_datas(element) {
         did: id,
         dlegend: legend,
         dticks: ticks,
-        dperiod_ids: period_ids,
+  
         dseries: s,
         dlinks: link,
         dlabel: label,
