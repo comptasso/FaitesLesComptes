@@ -19,7 +19,7 @@ prawn_document(:filename=>"#{@organism.title}-#{@book.title}-#{l Time.now}.pdf",
 
 
 # la table des pages
-    @listing.total_pages.times do |t|
+    @monthly_extract.total_pages.times do |t|
 
         pdf.pad(05) do # rappel pad crée un petit espace
             y_position = pdf.cursor
@@ -28,7 +28,7 @@ prawn_document(:filename=>"#{@organism.title}-#{@book.title}-#{l Time.now}.pdf",
                 pdf.font_size(12) do
                     pdf.text @organism.title
                     pdf.text @period.exercice
-                    pdf.text "Mois : #{l(@period.start_date.months_since(@mois.to_i),:format=> :month).capitalize}"
+                    pdf.text "Mois : #{@monthly_extract.month}"
                 end
             end
             # la boite du centre
@@ -39,7 +39,7 @@ prawn_document(:filename=>"#{@organism.title}-#{@book.title}-#{l Time.now}.pdf",
             pdf.bounding_box [width-100, y_position], :width => 100, :height => 40 do
                 pdf.font_size(12) do
                     pdf.text "#{time}", :align=>:right
-                    pdf.text "Page #{t+1}/#{@listing.total_pages}",:align=>:right
+                    pdf.text "Page #{t+1}/#{@monthly_extract.total_pages}",:align=>:right
                 end
             end
 
@@ -50,9 +50,9 @@ prawn_document(:filename=>"#{@organism.title}-#{@book.title}-#{l Time.now}.pdf",
         pdf.pad(5) do
             pdf.font_size(10)
             pdf.indent(width- 270) do
-                pdf.table [ ["Soldes antérieurs :", "#{two_decimals @listing.debit_before}", "#{two_decimals @listing.credit_before}"],
-                            ["Mouvements du mois :", " #{two_decimals @listing.total_debit}", "#{two_decimals @listing.total_credit}"],
-                            ["Totaux : ","#{two_decimals(@listing.debit_before+ @listing.total_debit)}", "#{two_decimals(@listing.credit_before + @listing.total_credit)}"] ],
+                pdf.table [ ["Soldes antérieurs :", "#{two_decimals @monthly_extract.debit_before}", "#{two_decimals @monthly_extract.credit_before}"],
+                            ["Mouvements du mois :", " #{two_decimals @monthly_extract.total_debit}", "#{two_decimals @monthly_extract.total_credit}"],
+                            ["Totaux : ","#{two_decimals(@monthly_extract.debit_before+ @monthly_extract.total_debit)}", "#{two_decimals(@monthly_extract.credit_before + @monthly_extract.total_credit)}"] ],
                             :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold }   do
                 column(0).width=130
                 column(1..2).width=70
@@ -62,7 +62,7 @@ prawn_document(:filename=>"#{@organism.title}-#{@book.title}-#{l Time.now}.pdf",
     end
 
         # les lignes de la page - prawn_prepare_page est défini dans le helper
-    pdf.table prawn_prepare_page(@listing.page(t+1)), :row_colors => ["FFFFFF", "DDDDDD"],  :header=> true , :cell_style=>{:padding=> [1,5,1,5] }   do
+    pdf.table prawn_prepare_page(@monthly_extract.page(t+1)), :row_colors => ["FFFFFF", "DDDDDD"],  :header=> true , :cell_style=>{:padding=> [1,5,1,5] }   do
         column(0).width = 60
         column(1).width = 60
         column(2).width = width - 260 - 2*70 - 60 - 60
@@ -74,8 +74,8 @@ prawn_document(:filename=>"#{@organism.title}-#{@book.title}-#{l Time.now}.pdf",
         row(0).style {|c| c.font_style=:bold; c.align=:center }
     end
 
-          pdf.stamp "brouillard" if @listing.brouillard?
-          pdf.start_new_page unless ((t+1) == @listing.total_pages)
+          pdf.stamp "brouillard" if @monthly_extract.brouillard?
+          pdf.start_new_page unless ((t+1) == @monthly_extract.total_pages)
        end
 
 end

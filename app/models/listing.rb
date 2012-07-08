@@ -4,26 +4,25 @@
 # à partir d'un exercice, d'un mois au sein de cet exercice et d'un livre
 #
 # TODO ceci ressemble très fort à MonthlyBookExtract, factorisation ?
+require 'month_year'
+
 class Listing
   NB_PER_PAGE=30
 
   attr_reader :lines
 
-  def initialize(period, month, book)
-    @organism=period.organism
-    @period=period
-    @month=month.to_i
-    @book=book
-    # TODO on peut revoir avec le scope mois de lines
-    # ou carrement se passer de period
-    @lines = @book.lines.period_month(@period, @month).order(:line_date).all
+  def initialize(book,  month, year)
+    @book = book
+    @organism = @book.organism
+    my = MonthYear.new(month:month, year:year)
+    @lines = @book.lines.monthyear(my).order(:line_date).all
   end
 
   # calcule le nombre de page du listing en divisant le nombre de lignes
   # par un float qui est le nombre de lignes par pages,
   # puis arrondi au nombre supérieur
   def total_pages
-    (@lines.size/NB_PER_PAGE.to_f).ceil
+    (@lines.count/NB_PER_PAGE.to_f).ceil
   end
 
   # renvoie les lignes correspondant à la page demandée

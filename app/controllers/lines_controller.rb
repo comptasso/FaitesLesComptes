@@ -25,7 +25,7 @@ class LinesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @lines }
-      format.pdf { @listing = Listing.new(@period, @mois, @book)}
+      format.pdf 
       format.csv
     end
   end

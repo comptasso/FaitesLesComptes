@@ -4,19 +4,46 @@
 # se créé en appelant new avec un book et une date quelconque du mois souhaité
 class Utilities::MonthlyBookExtract
 
+  NB_PER_PAGE=30
+
   attr_reader :book
 
   def initialize(book, h)
     @book=book
-    if h[:date]
-      @date=h[:date]
-    else
-      @date = Date.civil(h[:year].to_i, h[:month].to_i)
-    end
+    @my = MonthYear.new(h)
+    @date = @my.beginning_of_month
   end
 
   def lines
-    @book.lines.mois(@date)
+    @lines ||= @book.lines.mois(@date)
+  end
+
+  # calcule le nombre de page du listing en divisant le nombre de lignes
+  # par un float qui est le nombre de lignes par pages,
+  # puis arrondi au nombre supérieur
+  def total_pages
+    (lines.size/NB_PER_PAGE.to_f).ceil
+  end
+
+  def month
+    @my.to_format('%B %Y')
+  end
+
+  # renvoie les lignes correspondant à la page demandée
+  def page(n)
+    n = n-1 # pour partir d'une numérotation à zero
+    return nil if n > self.total_pages
+    @lines[(NB_PER_PAGE*n)..(NB_PER_PAGE*(n+1)-1)].map do |item|
+      [
+        item.line_date,
+        item.ref,
+        item.narration.truncate(40),
+        item.nature ? item.nature.name.truncate(22) : '-' ,
+        item.destination ? item.destination.name.truncate(22) : '-',
+        item.debit,
+        item.credit
+      ]
+    end
   end
 
   def total_debit
@@ -49,21 +76,21 @@ class Utilities::MonthlyBookExtract
     end
   end
 
+   # indique si le listing doit être considéré comme un brouillard
+   # ou une édition définitive.
+   #
+   # Cela se fait en regardant si toutes les lignes sont locked?
+   #
+   # TODO attention avec les livres virtuels tels que CashBook
+   # il faut peut être que transfer ait un champ locked?
+   def brouillard?
+     if @lines.any? {|l| !l.locked? }
+       return true
+     else
+       return false
+     end
+   end
 
-  
-
-    #  def cumulated_debit_before(date)
-    #    self.lines.where('line_date < ?', date).sum(:debit)
-    #  end
-    #  def cumulated_credit_before(date)
-    #    self.lines.where('line_date < ?', date).sum(:credit)
-    #  end
-    #   def cumulated_debit_at(date)
-    #    self.lines.where('line_date <= ?', date).sum(:debit)
-    #  end
-    #  def cumulated_credit_at(date)
-    #    self.lines.where('line_date <= ?', date).sum(:credit)
-    #  end
 
 
   end
