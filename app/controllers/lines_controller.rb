@@ -48,11 +48,11 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.json
   def new
-    @line =@book.lines.new(line_date: flash[:date] || @period.start_date.months_since(@mois.to_i), :cash_id=>@organism.main_cash_id, :bank_account_id=>@organism.main_bank_id)
+    @line =@book.lines.new(line_date: flash[:date] || @monthyear.beginning_of_month, :cash_id=>@organism.main_cash_id, :bank_account_id=>@organism.main_bank_id)
     @previous_line = Line.find_by_id(flash[:previous_line_id]) if flash[:previous_line_id]
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @line }
+      format.json { render json: @line } 
      end
   end
 
@@ -128,8 +128,10 @@ class LinesController < ApplicationController
 
   def fill_mois
     if params[:mois] && params[:an]
+
       @mois = params[:mois]
       @an = params[:an]
+      @monthyear=MonthYear.new(month:@mois, year:@an)
     else
       @monthyear= @period.guess_month
       redirect_to book_lines_url(@book, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')

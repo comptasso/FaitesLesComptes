@@ -14,7 +14,7 @@ describe LinesController do
     # permettant d'avoir les variables d'instances @organism, @period,  
     # income et outcome book ainsi qu'une nature
     create_minimal_organism
-    session[:period] = @p.id
+    session[:period] = @p.id 
   end 
 
   describe 'POST update' do
@@ -125,7 +125,7 @@ describe LinesController do
      it "fill the default values" do
        get :new, income_book_id: @ib.id, :mois=>'04', :an=>'2012'
        assigns[:line].should be_an_instance_of(Line)
-       assigns[:line].line_date.should == Date.civil(2012,5,1)
+       assigns[:line].line_date.should == Date.civil(2012,4,1)
        assigns[:line].bank_account_id.should == @ba.id 
      end
 
