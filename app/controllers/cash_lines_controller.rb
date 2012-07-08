@@ -15,6 +15,10 @@ class CashLinesController < LinesController
 # la méthode index est héritée de LinesController
   def index
     @monthly_extract = Utilities::MonthlyBookExtract.new(@cash, {year:params[:an], month:params[:mois]})
+    respond_to do |format|
+      format.html
+      format.csv { send_data @monthly_extract.to_csv(col_sep:"\t") }
+    end
     
   # TODO voir pour rajouter les mêmes sorties que pour lines controller
   # à savoir pdf, csv 

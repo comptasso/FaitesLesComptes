@@ -23,8 +23,8 @@ class LinesController < ApplicationController
       format.html  # index.html.erb
       format.json { render json: @lines }
       format.pdf 
-      format.csv { render :text=> @monthly_extract.to_csv(col_sep:"\t")}  # pour éviter le problème des virgules
-      format.xls { render :text=> @monthly_extract.to_csv(col_sep:"\t")}  # nécessaire pour excel
+      format.csv { send_data @monthly_extract.to_csv(col_sep:"\t") }  # pour éviter le problème des virgules
+      format.xls { render :text=> @monthly_extract.to_csv(col_sep:"\t") }  # nécessaire pour excel
     end
   end
 
