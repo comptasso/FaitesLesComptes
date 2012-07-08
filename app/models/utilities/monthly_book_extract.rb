@@ -76,11 +76,16 @@ class Utilities::MonthlyBookExtract
       lines.each do |line|
         csv << [I18n::l(line.line_date), line.ref, line.narration, "#{line.destination_name}",
       "#{line.nature_name}",
-      line.debit.to_s.gsub('.', ','), line.credit.to_s.gsub('.', ','), # gsub pour avoir des ,
+      reformat(line.debit), reformat(line.credit), # gsub pour avoir des ,
       "#{line.payment_mode}"]
       end
     end
   end
+
+  def reformat(number)
+    sprintf('%0.02f',number.to_s).gsub('.', ',')
+  end
+
 
    # indique si le listing doit être considéré comme un brouillard
    # ou une édition définitive.
