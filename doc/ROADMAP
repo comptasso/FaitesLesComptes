@@ -591,7 +591,7 @@ OK - revoir natures pour utiliser le filtre fourni par datatable (NON) et pouvoi
 NON La vue index dans Organism (zone public) ne semble pas utile (à Supprimer ?) . En fait elle sert lorsqu'on arrive sur root sans avoir choisi encore d'organisme
 ??  mais on pourrait aussi faire un redirect sur la zone admin.
 OK - Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié
-Traiter le cas spécifique d'un exercice partiel
+OK - Traiter le cas spécifique d'un exercice partiel => les données mois_year sont faites à partir du denier exercice
 OK - retirer dans les graphiques les periods id qui ne sont plus utilisés
 Voir si on fait le lien également sur les graphiques de type lines (bank et cash)
 Dans modallines le form réaffiché est remis à blanc sauf la réf du chèque

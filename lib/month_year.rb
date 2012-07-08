@@ -50,6 +50,10 @@ class MonthYear
     {an:@year, mois:@month}
   end
 
+  def previous_year
+    MonthYear.from_date(self.date.years_ago(1))
+  end
+
  
 
 end

@@ -40,13 +40,15 @@ module Utilities::JcGraphic
     mg
   end
 
-  # construction d'un graphique sur deux ans
+  # construction d'un graphique sur deux ans; Les mois du dernier exercice servent de
+  # référence car il est plus fréquent que le premier exercice soit plus court que les autres
+  # mais la chose est rare en sens inverse.
   def two_years_monthly_graphic(period)
     mg= Utilities::Graphic.new(self.ticks(period))
-    months= period.list_end_months # les mois du dernier exercice servent de référence
+    months= period.list_months # les mois du dernier exercice servent de référence
     pp=period.previous_period
-    mg.add_serie(:legend=>pp.exercice, :datas=>previous_year_monthly_datas_for_chart(months), :period_id=>pp.id, :month_years=>period.list_months.to_list('%m-%Y' ))
-    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(months), :period_id=>period.id, :month_years=>period.list_months.to_list('%m-%Y' ))
+    mg.add_serie(:legend=>pp.exercice, :datas=>previous_year_monthly_datas_for_chart(months), :period_id=>pp.id, :month_years=>month_year_values(months, true))
+    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(months), :period_id=>period.id, :month_years=>month_year_values(months))
     mg
   end
 
@@ -56,16 +58,23 @@ module Utilities::JcGraphic
   # pour avoir des séries de même longueur même lorsque les éxercices sont de longueur différentes.
   # month doit être au format mm-yyyy (ou mmyyyy ou mm/yyyy)
   #
-  def monthly_datas_for_chart(months)
+  def monthly_datas_for_chart(end_months)
     meth = @chart_value_method ? @chart_value_method : :monthly_value
-    months.map {|m| self.send(meth, m) }
+    end_months.map {|m| self.send(meth, m.end_of_month) }
   end
 
   # construit la liste des mois de l'année précédente
   # puis appelle monthly_datas_for_chart
-  def previous_year_monthly_datas_for_chart(months)
-    previous_year_months = months.map   { |m| m.years_ago(1) }
+  def previous_year_monthly_datas_for_chart(end_months)
+    previous_year_months = end_months.map   { |m| MonthYear.from_date(m.end_of_month.years_ago(1)) }
     monthly_datas_for_chart(previous_year_months)
+  end
+
+
+  # utilise une collection de date pour renvoyer un array sous la forme mm-yyyy
+  # le booleen previous permet de se mettre un an plus tôt
+  def month_year_values(end_months, previous_period = false)
+    end_months.map {|m| MonthYear.from_date(previous_period ? m.end_of_month.years_ago(1) : m.end_of_month).to_s}
   end
 
   
