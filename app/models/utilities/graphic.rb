@@ -13,7 +13,7 @@
 #
   class  Utilities::Graphic
 
-    attr_reader :ticks, :series, :legend, :period_ids
+    attr_reader :ticks, :series, :legend, :period_ids, :month_years
 
     # initialisation avec l'axe des x sous forme d'array.
     # le contenu de l'array sera les étiquettes de l'axe des abscisses
@@ -23,6 +23,7 @@
        @series=[]  
        @legend=[]
        @period_ids=[]
+       @month_years=[]
     end
 
 
@@ -31,6 +32,7 @@
       @series << serie[:datas]
       @legend << serie[:legend]
       @period_ids << serie[:period_id]
+      @month_years << serie[:month_years]
       true
     end
 

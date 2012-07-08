@@ -49,7 +49,7 @@ function s_to_f(element) {
 // cette fonction récupère les informations cachées qui sont inclus dans un DOM
 // à partir de l'id et des classes legend, ticks, period_ids et series'
 function recup_graph_datas(element) {
-    var complete_id, type, id, legend, ticks, period_ids, s = [], label = [], i = 0;
+    var complete_id, type, id, legend, ticks, period_ids, s = [], label = [], link = [], i = 0;
     $(element).each(function () { // pour chacun des graphiques mensuels (chacun des livres plus result)
         // on construit les variables qui seront utilisées par jqplot
         complete_id = this.id;
@@ -57,13 +57,14 @@ function recup_graph_datas(element) {
         id = this.id.match(/\d+$/)[0]; // on récupère l'id et comme match retourne un array on prend le premier'
         legend = $(this).find('.legend').text().split(';'); // la légende
         ticks = $(this).find('.ticks').text().split(';'); // les mois
-        period_ids = $(this).find('.period_ids').text().split(';'); // les mois
+        period_ids = $(this).find('.period_ids').text().split(';'); // les exercices
         // et on les remplit par une boucle qui prend la dimension de légende pour construire
         for (i = 0; i <= legend.length; i += 1) {
             label[i] = {
                 label: legend[i] // la table des légendes
             };
-            s[i] = $(this).find('.series_' + i).text().split(';').map(s_to_f); // et chaque série de données
+            s[i] = $(this).find('.series_' + i).text().split(';').map(s_to_f); // et chaque série de données en float
+            link[i] = $(this).find('.month_years_' + i).text().split(';'); // et les mm-yyyy correspondant 
         }
     });
     // on retourne maintenant l'objet ainsi construit reprenant la totalité des infos
@@ -74,6 +75,7 @@ function recup_graph_datas(element) {
         dticks: ticks,
         dperiod_ids: period_ids,
         dseries: s,
+        dlinks: link,
         dlabel: label,
         dtype: type
     };
@@ -177,7 +179,13 @@ function options_for_graph(all_datas) {
 function bind_bars(all_datas) {
     $('#chart_' + all_datas.dcomplete_id).bind('jqplotDataClick',
         function (ev, seriesIndex, pointIndex, data) {
-            window.location = ("/books/" + all_datas.did + "/lines?mois=" + pointIndex + "&period_id=" + all_datas.dperiod_ids[seriesIndex]);
+          var mois = '', la = [], an ='', lien = '';
+          lien = all_datas.dlinks[seriesIndex][pointIndex]; // lien = mm-yyyy à ce stade
+          la = lien.split('-')
+          mois = la[0]; an = la[1];
+          
+          
+            window.location = ("/books/" + all_datas.did + "/lines?mois=" + mois + "&an=" + an);
         });
 }
 

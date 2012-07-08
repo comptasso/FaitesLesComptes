@@ -70,8 +70,8 @@ describe 'Cash Control Requests' do
 
     it 'on peut le choisir dans la vue index pour le modifier', :wip=>true do
       @c.should have(1).cash_controls
-      visit cash_cash_controls_path(@c)
-        click_link "icon_modifier_cash_control_#{@cc.id.to_s}"
+      visit cash_cash_controls_path(@c)  
+      click_link "icon_modifier_cash_control_#{@cc.id.to_s}"
       current_url.should match(edit_cash_cash_control_path(@c,@cc)) 
     end
 

@@ -591,6 +591,7 @@ OK - revoir natures pour utiliser le filtre fourni par datatable (NON) et pouvoi
 NON La vue index dans Organism (zone public) ne semble pas utile (à Supprimer ?) . En fait elle sert lorsqu'on arrive sur root sans avoir choisi encore d'organisme
 ??  mais on pourrait aussi faire un redirect sur la zone admin.
 Quand on affiche un livre à partir d'un graphe, le mois actif n'est pas identifié
+Traiter le cas spécifique d'un exercice partiel
 Dans modallines le form réaffiché est remis à blanc sauf la réf du chèque
 OK - Mettre sPaginationType: bootstrap dans tous les appels à dataTable
 OK - modifier la place de la pagination

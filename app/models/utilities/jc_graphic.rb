@@ -36,7 +36,7 @@ module Utilities::JcGraphic
   # la construction d'un graphique sur un an
   def one_year_monthly_graphic(period)
     mg= Utilities::Graphic.new(self.ticks(period))
-    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(period.list_end_months), :period_id=>period.id )
+    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(period.list_end_months), :period_id=>period.id, :month_years=>period.list_months.to_list('%m-%Y' ))
     mg
   end
 
@@ -45,8 +45,8 @@ module Utilities::JcGraphic
     mg= Utilities::Graphic.new(self.ticks(period))
     months= period.list_end_months # les mois du dernier exercice servent de référence
     pp=period.previous_period
-    mg.add_serie(:legend=>pp.exercice, :datas=>previous_year_monthly_datas_for_chart(months), :period_id=>pp.id )
-    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(months), :period_id=>period.id )
+    mg.add_serie(:legend=>pp.exercice, :datas=>previous_year_monthly_datas_for_chart(months), :period_id=>pp.id, :month_years=>period.list_months.to_list('%m-%Y' ))
+    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(months), :period_id=>period.id, :month_years=>period.list_months.to_list('%m-%Y' ))
     mg
   end
 
