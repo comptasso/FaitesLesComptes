@@ -602,8 +602,13 @@ OK - repositionner la liste des mois dans les vues (un peu haut dans la ligne ve
 OK - Les bank_extracts validés ne devraient pas pouvoir être édités ni effacés dans la vue
 OK - validation de bank_extracts dans le modèle avec blocage si locked
 OK - Saisie des lignes - EN cas de nature non remplie, la page se réaffiche avec erreur mais la liste des natures prend toutes les natures
+
 Manque les impressions et le csv pour la caisse et les extraits bancaires
 Mettre le focus dans new_line sur le champ date et faire passer le focus banque après le changement de mode de paiement
+Dans la saisie, le flash qui remet la date ne marche pas
+Le flash donnant les infos sur la saisie d'écritures n'apparaît pas
+Quand on modifie une ligne, on revient à l'index du mois actuel et non du mois de la ligne
+
 OK - Revoir l'affichage data_table pour les organismes si plus de 10
 OK - Le paiment par chèque doit afficher la banque et le champ référence
 OK - Il faudrait pouvoir saisir une référence lors d'un paiement par chèque (le n° du chèque par ex)
@@ -627,7 +632,8 @@ Dans la sauvegarde, j'avais un cash control sans date, du coup, cela générait 
 ------------------- refonte des month_year -----------------------------
 OK - Revoir tous les appels à MonthlyBookExtracts qui acceptent maintenant un hash
 OK - modifier les appels à pdf et csv de lines
-voir new line (la date par défaut semble décalée d'un mois)
+OK - voir new line (la date par défaut semble décalée d'un mois)
+Il semble que MonthlyCashExtract ne soit pas utilisé
 
 
 

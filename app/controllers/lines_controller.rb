@@ -66,8 +66,8 @@ class LinesController < ApplicationController
       if @line.save
         flash[:date]=@line.line_date # permet de transmettre la date à l'écriture suivante
         flash[:previous_line_id]=@line.id
-        mois = (@line.line_date.month)-1
-        format.html { redirect_to new_book_line_url(@book,mois: mois) }
+        mois = sprintf('%.02d',@line.line_date.month); an = @line.line_date.year
+        format.html { redirect_to new_book_line_url(@book, mois:mois, an:an) }
         format.json { render json: @line, status: :created, location: @line }
       else
         fill_natures
@@ -93,8 +93,8 @@ class LinesController < ApplicationController
   
     respond_to do |format|
       if @line.update_attributes(params[:line])
-        mois=(@line.line_date.month) -1
-        format.html { redirect_to book_lines_url(@book, mois: mois) }#], notice: 'Line was successfully updated.')}
+        mois = sprintf('%.02d',@line.line_date.month); an =  @line.line_date.year
+        format.html { redirect_to book_lines_url(@book, mois:mois, an:an) }#], notice: 'Line was successfully updated.')}
         format.json { head :ok }
       else
         format.html { render action: "edit" }
