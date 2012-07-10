@@ -1,6 +1,7 @@
 <%= content_for :menu do %>
-  <%=  icon_to 'printer.png', book_lines_path(@book, mois:@mois, an:@an, :format=>'pdf'), :target=>'_blank' %>
-  <%=  icon_to 'report-excel.png', book_lines_path(@book, mois:@mois, an:@an, :format=>'csv'), title: 'CSV' %>
+  <%=  icon_to 'pdf.png', book_lines_path(@book, mois:@mois, an:@an, :format=>'pdf'), title:'PDF', :target=>'_blank' %>
+  <%=  icon_to 'report-excel.png', book_lines_path(@book, mois:@mois, an:@an, :format=>'xls'), title: 'XLS' %>
+  <%=  icon_to 'table-export.png', book_lines_path(@book, mois:@mois, an:@an, :format=>'csv'), title: 'CSV' %>
 <% end -%>
 
 <div id="lines_pdf" title="pdf" style="display:none"></div>

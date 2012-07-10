@@ -81,6 +81,20 @@ class Utilities::MonthlyBookExtract
       end
     end
   end
+  
+  def to_xls(options)
+    CSV.generate(options) do |csv|
+      csv << ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement'].map {|data| data.encode("windows-1252")}
+      lines.each do |line|
+        csv << [I18n::l(line.line_date), line.ref, line.narration, "#{line.destination_name}",
+      "#{line.nature_name}",
+      reformat(line.debit), reformat(line.credit), # gsub pour avoir des ,
+      "#{line.payment_mode}"].map { |data| data.encode("windows-1252") unless data.nil?}
+      end
+    end
+  end
+
+
 
   def reformat(number)
     sprintf('%0.02f',number.to_s).gsub('.', ',')

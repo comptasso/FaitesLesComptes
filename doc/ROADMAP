@@ -605,9 +605,9 @@ OK - Saisie des lignes - EN cas de nature non remplie, la page se réaffiche ave
 
 Manque les impressions et le csv pour la caisse et les extraits bancaires
 Mettre le focus dans new_line sur le champ date et faire passer le focus banque après le changement de mode de paiement
-Dans la saisie, le flash qui remet la date ne marche pas
-Le flash donnant les infos sur la saisie d'écritures n'apparaît pas
-Quand on modifie une ligne, on revient à l'index du mois actuel et non du mois de la ligne
+OK - Dans la saisie, le flash qui remet la date ne marche pas
+OK - Le flash donnant les infos sur la saisie d'écritures n'apparaît pas
+OK -Quand on modifie une ligne, on revient à l'index du mois actuel et non du mois de la ligne
 
 OK - Revoir l'affichage data_table pour les organismes si plus de 10
 OK - Le paiment par chèque doit afficher la banque et le champ référence
