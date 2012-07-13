@@ -1,6 +1,8 @@
 <%= content_for :menu do %>
   <%= icon_to 'retour.png', :back, title: 'Retour' %>
-  <%=  icon_to 'report-excel.png', cash_cash_lines_path(@cash, mois:@mois,an:@an, :format=>'csv'), title: 'CSV' %>
+<%=  icon_to 'pdf.png', cash_cash_lines_path(@cash, mois:@mois, an:@an, :format=>'pdf'), title:'PDF', :target=>'_blank' %>
+ <%=  icon_to 'report-excel.png', cash_cash_lines_path(@cash, mois:@mois,an:@an, :format=>'xls'), title: 'XLS' %>
+  <%=  icon_to 'table-export.png', cash_cash_lines_path(@cash, mois:@mois,an:@an, :format=>'csv'), title: 'CSV' %>
 <% end -%>
 
 

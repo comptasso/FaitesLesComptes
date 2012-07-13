@@ -14,10 +14,13 @@ class CashLinesController < LinesController
 
 # la méthode index est héritée de LinesController
   def index
-    @monthly_extract = Utilities::MonthlyBookExtract.new(@cash, {year:params[:an], month:params[:mois]})
+    @monthly_extract = Utilities::MonthlyCashExtract.new(@cash, {year:params[:an], month:params[:mois]})
     respond_to do |format|
       format.html
-      format.csv { send_data @monthly_extract.to_csv(col_sep:"\t") }
+      format.pdf
+      format.csv { send_data @monthly_extract.to_csv(col_sep:"\t")  }  # pour éviter le problème des virgules
+      format.xls { send_data @monthly_extract.to_xls(col_sep:"\t")  }
+     
     end
     
   # TODO voir pour rajouter les mêmes sorties que pour lines controller

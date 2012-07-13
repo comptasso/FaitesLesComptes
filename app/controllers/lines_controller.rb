@@ -22,9 +22,14 @@ class LinesController < ApplicationController
     respond_to do |format|
       format.html  # index.html.erb
       format.json { render json: @lines }
-      format.pdf 
-      format.csv { send_data @monthly_extract.to_csv(col_sep:"\t"), :disposition => "inline", :type => "application/pdf"  }  # pour éviter le problème des virgules
-      format.xls { render :text=> @monthly_extract.to_xls(col_sep:"\t") }  # nécessaire pour excel
+      format.pdf
+      # do
+       # headers["Content-Disposition"] ="inline; filename=genome.pdf;"
+       #  headers["Content-Disposition"] = "attachment; filename=\"#{'bonjour'}\""
+       # render 'index.pdf.prawn', :diposition=>'inline', :type => :pdf
+      # end
+      format.csv { send_data @monthly_extract.to_csv(col_sep:"\t")  }  # pour éviter le problème des virgules
+      format.xls { send_data @monthly_extract.to_xls(col_sep:"\t")  } #{ render :text=> @monthly_extract.to_xls(col_sep:"\t") }  # nécessaire pour excel
     end
   end
 

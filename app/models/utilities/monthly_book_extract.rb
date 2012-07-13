@@ -1,17 +1,18 @@
 # coding: utf-8
 
-
+module Utilities
 
 
 # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes
 # se créé en appelant new avec un book et une date quelconque du mois souhaité
-class Utilities::MonthlyBookExtract
+class MonthlyBookExtract
 
   NB_PER_PAGE=30
 
-  attr_reader :book
+  attr_reader :book, :titles
 
   def initialize(book, h)
+    @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement']
     @book=book
     @my = MonthYear.new(h)
     @date = @my.beginning_of_month
@@ -37,15 +38,7 @@ class Utilities::MonthlyBookExtract
     n = n-1 # pour partir d'une numérotation à zero
     return nil if n > self.total_pages
     @lines[(NB_PER_PAGE*n)..(NB_PER_PAGE*(n+1)-1)].map do |item|
-      [
-        item.line_date,
-        item.ref,
-        item.narration.truncate(40),
-        item.nature ? item.nature.name.truncate(22) : '-' ,
-        item.destination ? item.destination.name.truncate(22) : '-',
-        item.debit,
-        item.credit
-      ]
+      prepare_line(item)
     end
   end
 
@@ -72,34 +65,22 @@ class Utilities::MonthlyBookExtract
 
   def to_csv(options)
     CSV.generate(options) do |csv|
-      csv << ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement']
+      csv << @titles
       lines.each do |line|
-        csv << [I18n::l(line.line_date), line.ref, line.narration, "#{line.destination_name}",
-      "#{line.nature_name}",
-      reformat(line.debit), reformat(line.credit), # gsub pour avoir des ,
-      "#{line.payment_mode}"]
+        csv << prepare_line(line)
       end
     end
   end
-  
+
+  # to_xls est comme to_csv sauf qu'il y a un encodage en windows-1252
   def to_xls(options)
     CSV.generate(options) do |csv|
-      csv << ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement'].map {|data| data.encode("windows-1252")}
+      csv << @titles.map {|data| data.encode("windows-1252")}
       lines.each do |line|
-        csv << [I18n::l(line.line_date), line.ref, line.narration, "#{line.destination_name}",
-      "#{line.nature_name}",
-      reformat(line.debit), reformat(line.credit), # gsub pour avoir des ,
-      "#{line.payment_mode}"].map { |data| data.encode("windows-1252") unless data.nil?}
+        csv << prepare_line(line).map { |data| data.encode("windows-1252") unless data.nil?}
       end
     end
   end
-
-
-
-  def reformat(number)
-    sprintf('%0.02f',number.to_s).gsub('.', ',')
-  end
-
 
    # indique si le listing doit être considéré comme un brouillard
    # ou une édition définitive.
@@ -116,6 +97,35 @@ class Utilities::MonthlyBookExtract
      end
    end
 
+
+
+  protected
+
+  # prend une ligne comme argument et renvoie un array avec les différentes valeurs
+  # préparées : date est gérée par I18n::l, les montants monétaires sont reformatés poru
+  # avoir 2 décimales et une virgule,...
+  def prepare_line(line)
+     [I18n::l(line.line_date),
+       line.ref, line.narration.truncate(40),
+       line.destination ? line.destination.name.truncate(22) : '-',
+       line.nature ? line.nature.name.truncate(22) : '-' ,
+      reformat(line.debit),
+      reformat(line.credit), 
+      "#{line.payment_mode}"]
+  end
+
+ 
+
+ # remplace les points décimaux par des virgules pour s'adapter au paramétrage
+  # des tableurs français
+  def reformat(number)
+    sprintf('%0.02f',number.to_s).gsub('.', ',')
+  end
+
+
+  
+
+end
 
 
   end

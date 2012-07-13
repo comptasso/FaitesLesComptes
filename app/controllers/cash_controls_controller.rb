@@ -7,8 +7,7 @@ class CashControlsController < ApplicationController
  
 
   def index
-    my = MonthYear.new(month:params[:mois], year:params[:an]) 
-    @cash_controls=@cash.cash_controls.monthyear(my)
+    @cash_controls=@cash.cash_controls.monthyear(MonthYear.new(month:params[:mois], year:params[:an]) )
   end
 
   

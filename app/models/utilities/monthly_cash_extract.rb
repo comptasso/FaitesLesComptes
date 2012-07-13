@@ -1,67 +1,39 @@
 # coding: utf-8
-
+module Utilities
 #
 # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes
 # se créé en appelant new avec un book et une date quelconque du mois souhaité
 #
-class Utilities::MonthlyCashExtract
+#
+class MonthlyCashExtract < MonthlyBookExtract
 
-  attr_reader :cash
-
-  def initialize(cash, date)
-    @cash = cash
-    @date = date
+  def initialize(cash, h)
+    @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit']
+    @book = cash
+    @my = MonthYear.new(h)
+    @date = @my.beginning_of_month
   end
 
-  def lines
-    @cash.lines.mois(@date)
-  end
-
-  def total_debit
-    lines.sum(:debit)
+  # pour pouvoir utiliser indifféremment cash ou book
+  def cash
+    @book
   end
   
-  def total_credit
-    lines.sum(:credit)
-  end
+  protected
 
-  def debit_before
-    @cash.cumulated_debit_before(@date)
-  end
-
-  def credit_before
-    @cash.cumulated_credit_before(@date)
-  end
-
-  def sold
-    credit_before + total_credit - debit_before - total_debit
+  def prepare_line(line)
+    [I18n::l(line.line_date),
+       line.ref, line.narration.truncate(40),
+       line.destination ? line.destination.name.truncate(22) : '-',
+       line.nature ? line.nature.name.truncate(22) : '-' ,
+      reformat(line.debit),
+      reformat(line.credit)]
   end
 
 
-  def to_csv
-    CSV.generate do |csv|
-      csv << ['Date', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement']
-      lines.each do |line|
-        csv << line.to_csv
-      end
-    end
-  end
 
 
+end
   
 
-    #  def cumulated_debit_before(date)
-    #    self.lines.where('line_date < ?', date).sum(:debit)
-    #  end
-    #  def cumulated_credit_before(date)
-    #    self.lines.where('line_date < ?', date).sum(:credit)
-    #  end
-    #   def cumulated_debit_at(date)
-    #    self.lines.where('line_date <= ?', date).sum(:debit)
-    #  end
-    #  def cumulated_credit_at(date)
-    #    self.lines.where('line_date <= ?', date).sum(:credit)
-    #  end
-
-
-  end
+end
