@@ -2,7 +2,7 @@
 
 
 module LinesHelper
-    require 'csv'
+  
  
 
   # helper pour afficher les actions d'une cash line,

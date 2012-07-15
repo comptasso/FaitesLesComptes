@@ -603,7 +603,8 @@ OK - Les bank_extracts validés ne devraient pas pouvoir être édités ni effac
 OK - validation de bank_extracts dans le modèle avec blocage si locked
 OK - Saisie des lignes - EN cas de nature non remplie, la page se réaffiche avec erreur mais la liste des natures prend toutes les natures
 
-Manque les impressions et le csv pour la caisse et les extraits bancaires
+OK - Manque les impressions et le csv pour la caisse
+??? Manque les impressions et le csv pour les extraits bancaires
 Mettre le focus dans new_line sur le champ date et faire passer le focus banque après le changement de mode de paiement
 OK - Dans la saisie, le flash qui remet la date ne marche pas
 OK - Le flash donnant les infos sur la saisie d'écritures n'apparaît pas
@@ -629,11 +630,12 @@ Largeur des colonnes dans la vue cashlines index
 OK - Mettre les natures par ordre alpha dans la saisie d'écritures
 
 Dans la sauvegarde, j'avais un cash control sans date, du coup, cela générait une erreur dans la restauration.
+Les mois dans la zone h3 sont draggable
 ------------------- refonte des month_year -----------------------------
 OK - Revoir tous les appels à MonthlyBookExtracts qui acceptent maintenant un hash
 OK - modifier les appels à pdf et csv de lines
 OK - voir new line (la date par défaut semble décalée d'un mois)
-Il semble que MonthlyCashExtract ne soit pas utilisé
+OK - revu pour utiliser MonthlyCashExtract qui ne semblait pas utilisé
 
 
 

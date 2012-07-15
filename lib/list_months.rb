@@ -9,7 +9,7 @@ class ListMonths
     @lm = []
     while begin_date < end_date
     @lm << MonthYear.from_date(begin_date)
-    begin_date =  begin_date >> 1
+    begin_date =  begin_date >> 1 # passe au mois suivant
     end
   end
 
@@ -31,6 +31,10 @@ class ListMonths
 
   def each
     @lm.sort.each {|i| yield i}
+  end
+
+  def size
+    @lm.size
   end
 
 end

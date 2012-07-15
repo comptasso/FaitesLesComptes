@@ -14,7 +14,8 @@ class MonthlyCashExtract < MonthlyBookExtract
     @date = @my.beginning_of_month
   end
 
-  # pour pouvoir utiliser indifféremment cash ou book
+  # pour pouvoir utiliser indifféremment cash ou book car il n'est pas forcément
+  # facile de penser à écrire book quand on traite d'un MonthlyCashExtract
   def cash
     @book
   end
