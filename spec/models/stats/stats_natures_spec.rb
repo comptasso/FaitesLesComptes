@@ -14,6 +14,7 @@ describe Stats::StatsNatures do
     @stats_natures.should be_an_instance_of(Stats::StatsNatures)
   end
 
+
   it "connait l exercice" do
     @stats_natures.period.should == p
   end
@@ -77,5 +78,34 @@ describe Stats::StatsNatures do
       @stats_natures.totals.should == ['Totaux'] + 1.upto(12).collect {|i| 4*i} + [1.upto(12).sum {|i| 4*i}]
     end
   end
+
+
 end
-end
+
+  describe 'avec un filtre' do
+
+    let(:d) {mock_model(Destination)}
+
+    it 'créationd de stats_natures accepte un filtre'  do
+      @sn = Stats::StatsNatures.new(p, d.id)
+      @sn.should be_an_instance_of(Stats::StatsNatures)
+    end
+
+    context 'un stats_natures avec filtre' do
+
+    let(:n1) {mock_model(Nature, income_outcome:true, name:'Recette1')}
+
+    before(:each) do
+      @sn = Stats::StatsNatures.new(p, d.id)
+       p.stub_chain(:natures, :order).and_return [n1] 
+    end 
+    it 'appelle stat_with_cumul avec d.id comme argument' do
+      n1.should_receive(:stat_with_cumul).with(d.id).and_return 1.upto(13).collect {|i| i }
+      @sn.lines 
+    end
+
+    end
+
+
+  end
+end 

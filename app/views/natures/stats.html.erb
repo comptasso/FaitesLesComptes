@@ -22,23 +22,20 @@
   <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed data_table" >
     <thead>
       <tr>
-        <th class="span2">Nature</th>
-        <% @period.list_months.to_abbr_with_year.each do |my| %>
-          <%=  content_tag :th, my  %>
+        
+        <% @sn.title.each do |t| %>
+          <%=  content_tag :th, t  %>
         <% end %>
-        <th>Cumul</th>
+        
 
       </tr>
     </thead>
 
     <tfoot>
       <tr class="total" id="totaux">
-        <th>Total Recettes <br />Total Dépenses<br />Total Différence </th>
-        <% @total_recettes.size.times do |index| %>
-          <th class="numeric">
-            <%=  debit_credit @total_recettes[index] %><br />
-            <%=  debit_credit  @total_depenses[index] %><br />
-            <%=  debit_credit(@total_recettes[index]+@total_depenses[index])  %></th>
+        <% @sn.totals.each do |t| %>
+        
+         <%=  content_tag :th , debit_credit(t) , class:'numeric'  %>
         <% end %>
       </tr>
 
@@ -46,23 +43,15 @@
 
     <tbody>
 
-      <% @recettes.each do |r| %>
+      <% @sn.lines.each do |line| %>
         <tr>
-          <td><%= r.name %></td>
-          <% r.stat_with_cumul(@filter).each do |val| %>
+          <% line.each do |val| %>
             <%=  content_tag :td, debit_credit(val), :class=>'numeric'  %>
           <% end %>
         </tr>
       <% end %>
         
-      <% @depenses.each do |r| %>
-        <tr>
-          <td><%= r.name %></td>
-          <% r.stat_with_cumul(@filter).each do |val| %>
-            <%=  content_tag :td, debit_credit(val), :class=>'numeric'   %>
-          <% end %>
-        </tr>
-      <% end %>
+  
 
 
     </tbody>

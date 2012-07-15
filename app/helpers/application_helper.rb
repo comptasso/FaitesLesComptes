@@ -65,6 +65,7 @@ module ApplicationHelper
  end
 
  def debit_credit(montant)
+   return montant if montant.is_a? String
     if montant > -0.01 && montant < 0.01
       '-'
     else

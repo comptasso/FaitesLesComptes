@@ -5,7 +5,9 @@ module Stats
   # la classe construit un tableau de statistiques sur les débits et crédits
   # de chaque nature d'un exercice et par mois.
   # La classe se construit donc à partir d'un exercice et est capable de
-  # restituer tous les éléments nécessaires à l'affichage des statistiques
+  # restituer tous les éléments nécessaires à l'affichage des statistiques.
+  # Un deuxième argument optionnel est l'id d'une destination pour filter les résultats
+  # sur une destination
   # La ligne de titre, généralement de 14 colonnes (Natures, suivi des mois,
   # puis de Total)
   # puis un array de 14 valeurs également pour chaque colonne
@@ -15,14 +17,15 @@ module Stats
     
     attr_reader :period
 
-    def initialize(period)
+    def initialize(period, dest_id = 0)
       @period = period
+      @dest_id = dest_id
     end
 
     # retourne la ligne de titre 
     def title 
       t = ['Natures']
-      t += @period.list_months.to_abbr_with_year  
+      t += @period.list_months.to_abbr_with_year 
       t << 'Total' 
     end
 
@@ -45,7 +48,7 @@ module Stats
     def stats
       stats = []
       @period.natures.order('income_outcome DESC', 'name ASC').each do |n|
-        stats << [n.name] + n.stat_with_cumul
+        stats << [n.name] + n.stat_with_cumul(@dest_id)
       end
       @stats = stats
     end
