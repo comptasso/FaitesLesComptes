@@ -34,6 +34,8 @@ module Stats
       @stats ||= stats
     end
 
+    # fait les totaux de toutes les lignes et renvoie un array 
+    # Totaux float, float, ..., float, total des floats
     def totals
       t=['Totaux']
       # bottoms est un arrau de totaux des différents mois de l'exercice
@@ -43,8 +45,31 @@ module Stats
       t + bottoms + [bottoms.sum {|i| i}]
     end
 
+    def to_csv(options)
+    CSV.generate(options) do |csv|
+      csv << title
+      lines.each do |line|
+        csv << prepare_line(line)
+      end
+      csv << prepare_line(totals)
+    end
+  end
+
+    # to_xls est comme to_csv sauf qu'il y a un encodage en windows-1252
+  def to_xls(options)
+    CSV.generate(options) do |csv|
+      csv << title.map {|data| data.encode("windows-1252")}
+      lines.each do |line|
+        csv << prepare_line(line).map { |data| data.encode("windows-1252") unless data.nil?}
+      end
+      csv <<  prepare_line(totals).map { |data| data.encode("windows-1252") unless data.nil?}
+    end
+  end
+
     protected
 
+    #  récupère toutes les natures par ordre recette suivis de dépenses et
+    # par ordre alphabétique puis construit la ligne de statistique
     def stats
       stats = []
       @period.natures.order('income_outcome DESC', 'name ASC').each do |n|
@@ -52,6 +77,19 @@ module Stats
       end
       @stats = stats
     end
+
+    # le nom de la nature suivi des autres valeurs reformatées
+   def prepare_line(line)
+     [line[0]] + 1.upto(line.size).collect {|i| reformat(line[i])}
+  end
+
+  # remplace les points décimaux par des virgules pour s'adapter au paramétrage
+  # des tableurs français
+  def reformat(number)
+   return number if number.is_a? String
+   sprintf('%0.02f',number).gsub('.', ',') if number
+  end
+
     
   end
 end

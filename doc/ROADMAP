@@ -602,8 +602,9 @@ OK - repositionner la liste des mois dans les vues (un peu haut dans la ligne ve
 OK - Les bank_extracts validés ne devraient pas pouvoir être édités ni effacés dans la vue
 OK - validation de bank_extracts dans le modèle avec blocage si locked
 OK - Saisie des lignes - EN cas de nature non remplie, la page se réaffiche avec erreur mais la liste des natures prend toutes les natures
-
 OK - Manque les impressions et le csv pour la caisse
+Manque les impressions et le CSV pour les statistiques
+On pourrait faire des stats par destinations filtrées par natures (le pendant des stats par natures filtrées par dest)
 ??? Manque les impressions et le csv pour les extraits bancaires
 Mettre le focus dans new_line sur le champ date et faire passer le focus banque après le changement de mode de paiement
 OK - Dans la saisie, le flash qui remet la date ne marche pas
