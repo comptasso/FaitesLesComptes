@@ -1,10 +1,25 @@
- time = l Time.now
-prawn_document(:filename=>"#{@organism.title}-#{@period.exercice}-Stats-#{time}.pdf", :page_size => 'A4', :page_layout => :landscape) do |pdf|
+prawn_document(:filename=>"#{@organism.title}-#{@book.title}-#{l Time.now}.pdf", :page_size => 'A4', :page_layout => :landscape) do |pdf|
 
     width = pdf.bounds.right
-# TODO Faire un module listing page avec les reports dans stats
+    time = l Time.now
+
+    # le tampon "brouillard"
+    pdf.create_stamp("brouillard") do
+        pdf.rotate(45) do
+            pdf.fill_color "bbbbbbb"
+
+            pdf.font_size(120) do
+                pdf.text_rendering_mode(:stroke) do
+                    pdf.draw_text("Brouillard", :at=>[250, -150])
+                end
+            end
+            pdf.fill_color "000000"
+        end
+    end
+
+
 # la table des pages
-    @sn.total_pages.times do |t|
+    @monthly_extract.total_pages.times do |t|
 
         pdf.pad(05) do # rappel pad crée un petit espace
             y_position = pdf.cursor
