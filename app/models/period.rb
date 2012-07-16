@@ -141,10 +141,12 @@ class Period < ActiveRecord::Base
     accounts.classe_6.all 
   end
  
-  # TODO à revoir avec les fonctions de type distance in ...
+  
   def nb_months
     (close_date.year * 12 + close_date.month) - (start_date.year * 12 + start_date.month) + 1
   end
+
+  alias :length  :nb_months
 
     
   # list_months renvoye un tableau d'instance de mois (MonthYear)

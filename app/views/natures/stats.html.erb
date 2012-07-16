@@ -1,5 +1,8 @@
 <%= content_for :menu do %>
-  <%=  icon_to 'pdf.png', stats_organism_period_natures_path(@organism, @period, destination:@filter, :format=>'pdf'), title:'PDF', :target=>'_blank' %>
+  <%=  icon_to 'pdf.png', 
+    stats_organism_period_natures_path(@organism, @period, destination:@filter, :format=>'pdf'),
+    title:'PDF',
+    :target=>'_blank' if @period.length <= 12 %>
   <%=  icon_to 'report-excel.png',stats_organism_period_natures_path(@organism, @period, destination:@filter, :format=>'xls'), title:'XLS', :target=>'_blank' %>
   <%=  icon_to 'table-export.png', stats_organism_period_natures_path(@organism, @period, destination:@filter, :format=>'csv'), title:'CSV', :target=>'_blank' %>
 <% end -%>

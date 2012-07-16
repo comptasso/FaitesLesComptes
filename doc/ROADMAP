@@ -603,10 +603,10 @@ OK - Les bank_extracts validés ne devraient pas pouvoir être édités ni effac
 OK - validation de bank_extracts dans le modèle avec blocage si locked
 OK - Saisie des lignes - EN cas de nature non remplie, la page se réaffiche avec erreur mais la liste des natures prend toutes les natures
 OK - Manque les impressions et le csv pour la caisse
-Manque les impressions et le CSV pour les statistiques
-Le pdf des statistiques ne doit être possible que pour les exercices de moins de 12 mois
-
-
+OK - Manque les impressions et le CSV pour les statistiques
+OK - Le pdf des statistiques ne doit être possible que pour les exercices de moins de 12 mois
+Tester le pdf stat avec des natures en nombre suffisant pour être sur plusieurs pages
+tester le pdf stat avec un organisme de moins de 12 mois et avec un de plus
 
 
 On pourrait faire des stats par destinations filtrées par natures (le pendant des stats par natures filtrées par dest)
