@@ -13,7 +13,7 @@ module Stats
   class Page
     include Comparable
 
-    attr_reader :number, :lines, :title
+    attr_reader :number, :title, :nb_cols
     attr_writer :report_values
     
     def initialize(number, title_line, stat_lines)
@@ -26,18 +26,24 @@ module Stats
      # fait les totaux de toutes les lignes et renvoie un array
     # Totaux float, float, ..., float, total des floats
     def total_page_line
-      ['Total page'] + total_page_values
+      ['Total page'] + total_page_values.collect {|v| reformat v}
     end
 
     def report_line
       return nil if @number == 1 || @report_values == nil
-      ['Reports'] + @report_values
+      ['Reports'] + @report_values.collect {|v| reformat v}
     end
 
     # fait la somme de total_page et de to_report
     def to_report_line
       t = (is_last? ? (['Total général']) : (['A reporter']))
-      t + to_report_values
+      t + to_report_values.collect {|v| reformat v}
+    end
+
+    def formatted_lines
+      @lines.collect do |l|
+        l.collect {|v| reformat v}
+      end
     end
 
 
@@ -75,6 +81,11 @@ module Stats
     def <=>(other)
       number <=> other.number
     end
+
+     def reformat(val)
+   return val if val.is_a? String
+   sprintf('%0.02f',val).gsub('.', ',') if val
+  end
 
   end
 end

@@ -4,6 +4,7 @@ class NaturesController < ApplicationController
 
   def stats
     @filter=params[:destination].to_i || 0
+    @filter_name = Destination.find(@filter).name if @filter != 0
     @sn = Stats::StatsNatures.new(@period, @filter)
     respond_to do |format|
       format.html

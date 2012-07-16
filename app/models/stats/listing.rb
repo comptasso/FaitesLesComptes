@@ -42,7 +42,15 @@ class Listing
   end
 
   def page_number(i)
-    @pages[i-1]
+    pages[i-1]
+  end
+
+  def nb_pages
+    pages.size
+  end
+
+  def each_page(&block)
+    pages.each {|p| yield p}
   end
   
 end

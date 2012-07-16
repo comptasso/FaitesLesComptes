@@ -604,6 +604,11 @@ OK - validation de bank_extracts dans le modèle avec blocage si locked
 OK - Saisie des lignes - EN cas de nature non remplie, la page se réaffiche avec erreur mais la liste des natures prend toutes les natures
 OK - Manque les impressions et le csv pour la caisse
 Manque les impressions et le CSV pour les statistiques
+Le pdf des statistiques ne doit être possible que pour les exercices de moins de 12 mois
+
+
+
+
 On pourrait faire des stats par destinations filtrées par natures (le pendant des stats par natures filtrées par dest)
 ??? Manque les impressions et le csv pour les extraits bancaires
 Mettre le focus dans new_line sur le champ date et faire passer le focus banque après le changement de mode de paiement

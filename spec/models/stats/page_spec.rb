@@ -30,7 +30,7 @@ describe Stats::Page do
 
 
   it 'should have lines' do
-    @page.should have(20).lines
+    @page.should have(20).formatted_lines
   end
 
   it 'should have title line' do
@@ -38,7 +38,7 @@ describe Stats::Page do
   end
   
   it 'should have total_page' do
-    @page.total_page_line.should == ['Total page', 20, 40 , 60 , 120]
+    @page.total_page_line.should == ['Total page', '20,00', '40,00' , '60,00' , '120,00']
   end
 
   it 'la première page n a pas de report' do
@@ -54,7 +54,7 @@ describe Stats::Page do
 
   it 'should have report=' do
     @page.report_values = [1, 2 ,3,4]
-    @page.report_line.should == ['Reports', 1, 2 ,3,4]
+    @page.report_line.should == ['Reports', '1,00', '2,00' ,'3,00','4,00']
   end
 
   it 'report non initialisé renvoie nil' do
@@ -63,13 +63,20 @@ describe Stats::Page do
 
   it 'should have to_report_line' do
     @page.report_values = [1, 2 ,3,4]
-    @page.to_report_line.should == ['A reporter', 21, 42, 63, 124]
+    @page.to_report_line.should == ['A reporter', '21,00', '42,00', '63,00', '124,00']
+  end
+
+  it 'should have also a total_page_line' do
+    @page.report_values = [1, 2 ,3,4]
+    @page.report_line.should == ['Reports', '1,00', '2,00' ,'3,00','4,00']
+    @page.total_page_line.should == ['Total page', '20,00', '40,00' , '60,00' , '120,00']
+    @page.to_report_line.should == ['A reporter', '21,00', '42,00', '63,00', '124,00']
   end
 
   it 'la dernière page renvoie total_général et non à reporter' do
     @page.is_last
     @page.report_values = [1, 2 ,3,4]
-    @page.to_report_line.should == ['Total général', 21,42,63,124]
+    @page.to_report_line.should == ['Total général', '21,00', '42,00', '63,00', '124,00']
   end
 
   end
