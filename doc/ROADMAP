@@ -612,7 +612,7 @@ Faire le choix de la police et choisir la truncate adhoc
 
 OK - après la suppression d'une écriture, on est redirigé vers le mois an cours et non vers le mois affiché
 OK - Dans l'index lignes on ne voit pas quel compte bancaire ou caisse est concerné
-Si on change le nombre d'écritures, il faudrait avoir cette valeur enregistrée dans un cookie pour les affichages futures
+OK - Si on change le nombre d'écritures, il faudrait avoir cette valeur enregistrée dans un cookie pour les affichages futures
 Rajouter un champ memonic pour BankAccount
 En fait cash_id et bank_account_id devraient être polymorphiques
 

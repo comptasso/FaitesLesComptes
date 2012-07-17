@@ -25,7 +25,18 @@ jQuery(function () {
                 null,
                 {"bSortable": false}
             ],
-
+            "iDisplayLength": 15,
+            "aLengthMenu": [[15, 25, 50, -1], [15, 25, 50, "Tous"]],
+            "bStateSave": true,
+            "fnStateSave": function (oSettings, oData) {
+            localStorage.setItem( 'DataTables_'+window.location.pathname, JSON.stringify(oData) );
+            },
+            "fnStateLoad": function (oSettings) {
+                return JSON.parse( localStorage.getItem('DataTables_'+window.location.pathname) );
+            },
+//            "fnStateSaveParams": function (oSettings, oData) {
+//              oData.oSearch.sSearch = "";
+//            },
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var i = 0,
                     iTotalDebit = 0,

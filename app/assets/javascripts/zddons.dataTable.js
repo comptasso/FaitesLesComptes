@@ -17,6 +17,12 @@ $.extend($.fn.dataTableExt.oStdClasses, {
 //    "sSortable": "header"
 //} );
 
+// partie ajoutée pour mémoriser la préférence du nombre de lignes affichées
+// utilise les fonctions setCookie et getCookie qui sont dans le fichier flc_cookies.
+// le principe est que le changement de ce champ doit être mémorisé par un cookie
+// qui est lié à l'organisme.
+// data table doit donc lire ce cookie et adopter la valeur s'il le faut
+
 
 /* API method to get paging information */
 $.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings) {

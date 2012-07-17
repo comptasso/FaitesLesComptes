@@ -1,5 +1,5 @@
 "use strict";
-var jQuery, $, stringToFloat;
+var jQuery, $, stringToFloat, window;
 
 // mise en forme des tables de lignes
 jQuery(function () {
@@ -23,7 +23,16 @@ jQuery(function () {
                             "bSortable": false
                         }
                     ],
-
+                    "iDisplayLength": 15, // affichage par défaut
+                    "aLengthMenu": [[15, 25, 50, -1], [15, 25, 50, "Tous"]], // le menu affichage
+                    "bStateSave": true, // pour pouvoir sauvegarder l'état de la table
+                    "fnStateSave": function (oSettings, oData) { //localStorage avec un chemin pour que les
+                      // paramètres spécifiques  aux cash_lines soient mémorisés.
+                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                    },
+                    "fnStateLoad": function (oSettings) {
+                        return JSON.parse(localStorage.getItem('DataTables_' + window.location.pathname));
+                    },
                     "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                         /*
                      * Calculate the total market share for all browsers in this table (ie inc. outside
