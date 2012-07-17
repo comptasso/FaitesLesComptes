@@ -12,7 +12,7 @@ class MonthlyBookExtract
   attr_reader :book, :titles
 
   def initialize(book, h)
-    @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement']
+    @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
     @book=book
     @my = MonthYear.new(h)
     @date = @my.beginning_of_month
@@ -106,12 +106,14 @@ class MonthlyBookExtract
   # avoir 2 décimales et une virgule,...
   def prepare_line(line)
      [I18n::l(line.line_date),
-       line.ref, line.narration.truncate(40),
+       line.ref, line.narration.truncate(25),
        line.destination ? line.destination.name.truncate(22) : '-',
        line.nature ? line.nature.name.truncate(22) : '-' ,
       reformat(line.debit),
       reformat(line.credit), 
-      "#{line.payment_mode}"]
+      "#{line.payment_mode}",
+      line.support.truncate(10)
+      ]
   end
 
  

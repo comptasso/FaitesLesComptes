@@ -607,7 +607,14 @@ OK - Manque les impressions et le CSV pour les statistiques
 OK - Le pdf des statistiques ne doit être possible que pour les exercices de moins de 12 mois
 Tester le pdf stat avec des natures en nombre suffisant pour être sur plusieurs pages
 tester le pdf stat avec un organisme de moins de 12 mois et avec un de plus
+Faire le choix de la police et choisir la truncate adhoc
 
+
+OK - après la suppression d'une écriture, on est redirigé vers le mois an cours et non vers le mois affiché
+Dans l'index lignes on ne voit pas quel compte bancaire ou caisse est concerné
+Si on change le nombre d'écritures, il faudrait avoir cette valeur enregistrée dans un cookie pour les affichages futures
+Rajouter un champ memonic pour BankAccount
+En fait cash_id et bank_account_id devraient être polymorphiques
 
 On pourrait faire des stats par destinations filtrées par natures (le pendant des stats par natures filtrées par dest)
 ??? Manque les impressions et le csv pour les extraits bancaires

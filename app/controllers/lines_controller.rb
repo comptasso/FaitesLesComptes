@@ -116,7 +116,7 @@ class LinesController < ApplicationController
     @line.destroy
   
     respond_to do |format|
-      format.html { redirect_to book_lines_url(@book, :mois=>my.month, :year=>my.year) }
+      format.html { redirect_to book_lines_url(@book, :mois=>my.month, :an=>my.year) }
       format.json { head :ok }
     end
   end

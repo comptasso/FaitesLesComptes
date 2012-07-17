@@ -95,6 +95,13 @@ class Line < ActiveRecord::Base
     Line.where('line_date < ?', date).sum(:credit)
   end
 
+  def support
+    return bank_account.acronym if bank_account_id
+    return cash.name if cash_id
+  end
+
+
+
   # # monthly sold donne le solde d'un mois fourni au format mm-yyyy
   # FIXME va poser des problèmes avec plusieurs organismes
 #  def self.monthly_sold(month)
