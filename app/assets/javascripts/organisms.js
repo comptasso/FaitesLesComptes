@@ -185,7 +185,7 @@ function bind_bars(all_datas) {
           mois = la[0]; an = la[1];
           
           
-            window.location = ("/books/" + all_datas.did + "/lines?mois=" + mois + "&an=" + an);
+            window.location = ("/books/" + all_datas.did + "/lines?an=" + an + "&mois=" + mois);
         });
 }
 
