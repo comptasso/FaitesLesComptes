@@ -95,10 +95,10 @@ describe LinesController do
 
     it 'doit revoyer sur la table des écritures du mois' do
       get :destroy, :outcome_book_id=>@ob.id, :id=>@l.id,  :method=>:delete
-      response.should redirect_to(book_lines_path(:book_id=>@ob.id, :mois=>'02', :year=>'2012'))
+      response.should redirect_to(book_lines_path(:book_id=>@ob.id, :mois=>'02', :an=>'2012'))
     end
   end
-
+ 
  describe 'POST create' do
    context "post successful" do
      it "creates a line" do

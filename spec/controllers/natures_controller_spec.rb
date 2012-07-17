@@ -65,29 +65,20 @@ describe NaturesController do
         assigns(:filter).should == 0
       end
 
-      it 'assigns @total_recettes et @total_depenses' do
-        p.should_receive(:stat_income_year).with(0).and_return ['1', '2']
-        p.should_receive(:stat_outcome_year).with(0).and_return ['a', 'b']
+      it 'assigns sn (StatsNatures)' do
+        Stats::StatsNatures.should_receive(:new).with(p, 0).and_return('sn')
         get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
-        assigns(:total_recettes).should == ['1', '2']
-        assigns(:total_depenses).should == ['a', 'b']
-      end
-
-      it 'assigns depenes et recettes' do
-        p.stub(:stat_income_year)
-        p.stub(:stat_outcome_year)
-        get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
-        assigns(:recettes).should == [nr1, nr2]
-        assigns(:depenses).should == [nd1, nd2, nd3]
+        assigns(:sn).should == 'sn'
       end
 
       it 'with filter' do
         filt = 1
-        p.should_receive(:stat_income_year).with(filt).and_return ['1', '2']
-        p.should_receive(:stat_outcome_year).with(filt).and_return ['a', 'b']
+        Destination.should_receive(:find).with(filt).and_return(double(Object, :name=>'mock'))
+        Stats::StatsNatures.should_receive(:new).with(p, 1).and_return('sn')
+        
         get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s, :destination=>filt.to_s
         assigns(:filter).should == filt
-      end
+      end 
     
     end
 

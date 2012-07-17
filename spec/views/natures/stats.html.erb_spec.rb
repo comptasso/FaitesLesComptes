@@ -10,17 +10,22 @@ describe "natures/stats" do
   let(:p) {mock_model(Period, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)}
   let(:ds) {[mock_model(Destination, name:'dest1'), mock_model(Destination, name:'Dest2')]}
   values =  [1,1,1,1,1,1,1,1,1,1,1,1,12]
+  let(:sn) {double(Stats::StatsNatures,
+      :title=>(%w{Nature jan fev mar avr mai jui jui aou sep oct nov dec total}),
+      :totals=>(['Totaux'] + 1.upto(12).collect {|i| '20,00'} + ['4800,00']),
+      :lines=>(1.upto(4).collect {|i| ["Ligne #{i}"] + 1.upto(12).collect {|j| j}  + ['240,00']})
+ 
+
+    ) }
   
   
   before(:each) do
-    o.stub(:destinations).and_return ds
+    o.stub(:destinations).and_return ds 
     p.stub(:list_months).and_return(ListMonths.new(p.start_date, p.close_date))
+    p.stub(:length).and_return 12  
     assign(:organism, o)
-    assign(:period, p)
-    assign(:total_recettes, [1,2,3,4,5,6,7,8,9,10,11,12])
-    assign(:total_depenses, [11,12,13,14,15,16,17,18,19, 20, 21, 22])
-    assign(:recettes, [ mock(Object, name:'recette 1', :stat_with_cumul=>values),mock(Object, name:'recette 2', :stat_with_cumul=>values) ])
-    assign(:depenses,  [ mock(Object, name:'depense 1', :stat_with_cumul=>values),mock(Object, name:'depense 2', :stat_with_cumul=>values) ])
+    assign(:period, p) 
+    assign(:sn, sn)
     render
   end
 
@@ -41,14 +46,14 @@ describe "natures/stats" do
       page.all('tbody tr').should have(4).rows
     end
 
-    it "affiche dans la première colonne les natures dans l'ordre alphabétique recettes puis dépenses" do
-      page.find('tbody tr:first td:first').should have_content('recette 1')
-      page.find('tbody tr:last td:first').should have_content('depense 2')
+    it "affiche dans la première colonne les natures" do
+      page.find('tbody tr:first td:first').should have_content('Ligne 1') 
+      page.find('tbody tr:last td:first').should have_content('Ligne 4')
     end
 
     it 'affiche les totaux dans la dernière colonne' do
-      page.find('tbody tr:first td:last').should have_content('12')
-      page.find('tbody tr:last td:last').should have_content('12')
+      page.find('tbody tr:first td:last').should have_content('240,00')
+      page.find('tbody tr:last td:last').should have_content('240,00')
     end
 
   end

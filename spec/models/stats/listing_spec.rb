@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Stats::Listing do
    def stat_lines
-    1.upto(200).collect {|i| ['ligne', 1, 2, 3, 6]}
+    1.upto(200).collect {|i| ['ligne', 1, 2, 3, 6]}  
   end
 
    def title
@@ -37,16 +37,16 @@ describe Stats::Listing do
    end
 
    it 'les totaux de la première page valent 22,...' do
-     @listing.pages[0].total_page_line.should == ['Total page', 22, 44, 66, 132]
-     @listing.pages[0].to_report_line == ['A reporter', 22, 44, 66, 132]
+     @listing.pages[0].total_page_line.should == ['Total page', '22,00', '44,00', '66,00', '132,00']
+     @listing.pages[0].to_report_line == ['A reporter',  '22,00', '44,00', '66,00', '132,00']
    end
 
    it 'les reports de la page 2' do
-     @listing.pages[1].report_line.should == ['Reports', 22,44,66,132]
+     @listing.pages[1].report_line.should == ['Reports',  '22,00', '44,00', '66,00', '132,00']
    end
 
    it 'le total général de la denière page' do
-     @listing.pages.last.to_report_line.should == ['Total général', 200 ,400,600,1200]
+     @listing.pages.last.to_report_line.should == ['Total général', '200,00' ,'400,00', '600,00', '1200,00']
    end
 
 end
