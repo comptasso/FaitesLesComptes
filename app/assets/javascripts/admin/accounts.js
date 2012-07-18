@@ -81,41 +81,14 @@ $(function() {
     $( "#accordion" ).accordion({
         autoHeight: false,
         collapsible: true
-//        change: function(event, ui) {
-//            alert(ui.oldHeader.classList);
-//            if (ui.newHeader.id == "acc_comptes_6"){
-//                alert('comptes 6');
-//            }
-//           if (ui.newHeader.id === 'comptes_7'){
-//                alert('comptes 7');
-//            }
-//        }
     });
 
-    $( "#accordion" ).bind( "accordionchange", function(event, ui) {
-    
-    jQuery('<div>' + ui.oldHeader.attr('id') + ' hidden, ' + ui.newHeader.attr('id') + ' shown</div>').appendTo('#log');
-     // s'il y a un oldHeader on ferme le Header correspondant
-    if (ui.oldHeader !== undefined)  {
-        classe = ui.oldHeader.attr('id').match(/\d*$/);
-    }
-     // s'il y a un oldHeader on ferme le Header correspondant
-    if (ui.newHeader !== undefinded) {
-        classe = ui.newHeader.attr('id').match(/\d*$/);
-        $('.orphan_natures').accordion('activate', "nat_comptes_" + classe);
-    }
 
-
-    // s'il y a un newHeader, on ouvre le header correspondant
-});
-    $('.orphan_natures').accordion({
-        autoHeight: false,
-        collapsible: true
-    });
+ 
 });
 
 $(function() {
-    $('.orphan_natures_depenses .nature, .orphan_natures_recettes .nature').draggable({
+    $('.orphan_natures_depenses .nature_depenses, .orphan_natures_recettes .nature_recettes').draggable({
         revert: "invalid",
         cursor: "move",
         helper: "clone"
@@ -134,11 +107,12 @@ $(function() {
             $(this).removeClass('over').addClass('out');
         },
         drop: function(event, ui) {
+          
             // $(this).find(".")
             $(this).removeClass('over').addClass('out');
             // faire la requete ajax
-
             ui.draggable.appendTo($(this).find('ul'));
+          //  $('#log').text($(this).find('ul').text)
             var naturid = ui.draggable.attr('id').match(/\d*$/);
             var accountid = $(this).attr('id').match(/\d*$/);
             //   alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid);
@@ -157,6 +131,8 @@ $(function() {
             $(this).removeClass('over').addClass('out');
         },
         drop: function(event, ui) {
+
+            $('#log').text('drop d un account 7')
             // $(this).find(".")
             $(this).removeClass('over').addClass('out');
             // faire la requete ajax

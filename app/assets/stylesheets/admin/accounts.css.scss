@@ -18,15 +18,7 @@ Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
     .out {
         background-color: none;
     }
-    .mapping_accounts {
-        display: inline-block;
-        width: 48%;
-        vertical-align: top;
-    }
-    .orphan_natures {
-        display: inline-block;
-        width: 48%;
-        vertical-align: top;
+  #depenses, #recettes {
         .nature {
             cursor: move;
                 }
@@ -35,4 +27,3 @@ Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
              }
         }
     }
-
