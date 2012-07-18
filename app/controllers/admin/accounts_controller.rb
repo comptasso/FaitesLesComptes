@@ -94,16 +94,8 @@ class Admin::AccountsController < Admin::ApplicationController
   
 
   def mapping
-     if params[:type]== 'incomes'
-    @accounts=@period.accounts.classe_7
-    @unlinked_natures=@period.natures.recettes.without_account
-    elsif params[:type]== 'outcomes'
-    @accounts=@period.accounts.classe_6
-    @unlinked_natures=@period.natures.depenses.without_account
-     else
     @accounts=@period.accounts
     @unlinked_natures=@period.natures.without_account
-     end
   end
 
   

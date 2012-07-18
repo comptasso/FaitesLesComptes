@@ -1,6 +1,6 @@
 
-watch("(spec/.*/*_spec.rb)") do |match|
-  run_spec match[1]
+watch("spec/.*/*_spec.rb") do |match|
+  run_spec match[0]
 end
 
 watch("app/(.*/.*).rb") do |match|

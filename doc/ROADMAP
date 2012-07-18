@@ -656,6 +656,9 @@ OK - revu pour utiliser MonthlyCashExtract qui ne semblait pas utilisé
 
 --------------------------Partie comptable ----------------------------
 Ca commence par l'affichage du plan comptable dans la partie admin
+Le menu compte de admin ne doit plus proposer d'importer le plan comptable s'il y a des comptes
+Revoir le menu mapping (relier nature - recettes - dépenses, pourquoi 3 actions ?)
+
 Solde_credit_avant et apres du modèle line.rb devraient être des scope
 
 
