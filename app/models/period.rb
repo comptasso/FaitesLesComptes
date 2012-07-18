@@ -76,7 +76,7 @@ class Period < ActiveRecord::Base
   has_many :natures,  :dependent=>:destroy
   has_many :lines, :through=>:natures
 
-  
+ 
   validates :organism_id, :presence=>true
 
 # TODO revoir les validations
