@@ -24,7 +24,7 @@ class Compta::BalancesController < Compta::ApplicationController
 
   def create
     @balance = Compta::Balance.new({:period_id=>@period.id}.merge(params[:balance]))
-     render 'show'
+    render 'show'
   end
   
 

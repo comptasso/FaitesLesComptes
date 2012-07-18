@@ -50,11 +50,9 @@ class Compta::Balance < ActiveRecord::Base
     self
   end
 
-
   def balance_lines
-    @balance_lines ||= accounts.collect {|a| balance_line(a,@begin_date, @end_date)}
+    @balance_lines ||= accounts.collect {|a| balance_line(a,begin_date, end_date)}
   end
- 
  
   def total_balance
     [self.total(:cumul_debit_before), self.total(:cumul_credit_before),self.total(:movement_debit),
