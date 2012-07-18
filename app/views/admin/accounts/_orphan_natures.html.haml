@@ -1,0 +1,15 @@
+.orphan_natures
+  %h3#nat_comptes_6
+    %a(href='#') Natures non rattachées de type Dépenses
+  %div
+    %ul.orphan_natures_depenses#depenses
+      - @unlinked_natures.depenses.each do |nature|
+        = render partial: 'li_nature', object: nature, locals: {r: 'depenses'}
+  %h3#nat_comptes_7
+    %a(href='#')
+      Natures non rattachées de type Recettes
+  %div
+    %ul.orphan_natures_recettes#recettes
+      - @unlinked_natures.recettes.each do |nature|
+        = render partial: 'li_nature', object: nature, locals: {r: 'recettes'}
+

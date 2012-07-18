@@ -69,10 +69,8 @@
       <li class="dropdown <%= 'active' if controller.controller_name =='admin_accounts'  %>">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">COMPTES<b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <%=  content_tag(:li, link_to('Plan Comptable', admin_organism_period_accounts_path(@organism,@period)))  %>
+          <%=  content_tag(:li, link_to('Afficher', admin_organism_period_accounts_path(@organism,@period)))  %>
           <%= content_tag(:li,
-            link_to('Gérer les comptes',  admin_organism_period_accounts_path(@organism,@period))) %>
-           <%= content_tag(:li,
             link_to('Importer', select_plan_admin_organism_period_path(@organism, @period))) unless @period.accounts.any? %>
          
           <%=  content_tag(:li, :class=>"divider"){} %>

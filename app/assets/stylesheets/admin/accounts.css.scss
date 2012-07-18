@@ -27,6 +27,9 @@ Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
         display: inline-block;
         width: 48%;
         vertical-align: top;
+        .nature {
+            cursor: move;
+                }
         a.unchain {
             display: none;
              }

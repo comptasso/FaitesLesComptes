@@ -1,5 +1,6 @@
 
 "use strict";
+/*jslint browser: true */
 var jQuery, $, stringToFloat;
 
 // mise en forme des tables de lignes
@@ -29,10 +30,10 @@ jQuery(function () {
             "aLengthMenu": [[15, 25, 50, -1], [15, 25, 50, "Tous"]],
             "bStateSave": true,
             "fnStateSave": function (oSettings, oData) {
-            localStorage.setItem( 'DataTables_'+window.location.pathname, JSON.stringify(oData) );
+                localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
             },
             "fnStateLoad": function (oSettings) {
-                return JSON.parse( localStorage.getItem('DataTables_'+window.location.pathname) );
+                return JSON.parse(localStorage.getItem('DataTables_' + window.location.pathname));
             },
 //            "fnStateSaveParams": function (oSettings, oData) {
 //              oData.oSearch.sSearch = "";

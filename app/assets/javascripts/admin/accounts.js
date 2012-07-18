@@ -1,66 +1,31 @@
-// mise en forme des tables de lignes
-jQuery(function() {
-    if ($('.accounts .data_table').length != 0) {
-        var oTable= $('.accounts .data_table').dataTable(
+"use strict";
+/*jslint browser: true */
+var jQuery, $;
+
+jQuery(function () {
+    $('.admin_accounts .data_table').dataTable(
         {
+            "sDom": "lfrtip",
+            "sPaginationType": "bootstrap",
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
             },
             "aoColumns": [
-            {
-                "sType": "string"
-            },
-            null,
-            null,
-            {
-                "bSortable": false
-            }
-            ]
-
-        });
-        
-        var nCells=$('tbody tr:nth-child(1) td').length;
-        $('td', oTable.fnGetNodes()).hover( function() {
-
-            var iCol = $('td', this.parentNode).index(this) % nCells;
-            var nTrs = oTable.fnGetNodes();
-            $('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
-        }, function() {
-            $('td.highlighted', oTable.fnGetNodes()).removeClass('highlighted');
-        } );
-    }
+                {
+                    "sType": "string"
+                },
+                null,
+                null,
+                null,
+                {
+                    "bSortable": false
+                }
+            ],
+            "iDisplayLength": 15,
+            "aLengthMenu": [[15, 25, 50, -1], [15, 25, 50, "Tous"]]
+        }
+    );
 });
-
-// fonction permettant de selectionner les classes 6 ou 7 selon le type de nature choisi
-//
-//
-// fonction qui permet de déselctionner les classe 6
-//function toggle_classe(classe, aff){
-//    // on trouve les id des options du select account
-//    var myregexp = new RegExp('\^'+classe);
-//    jQuery.each($('#account_nature_ids option'), function(index, val){
-//         if ($(val).text().match(myregexp)) {
-//             if (aff==false) {
-//                 $(val).attr('disabled', 'disabled');
-//             }
-//              if (aff==true) {
-//                  $(val).attr('disabled', false);
-//              }
-//         }
-//    });
-//}
-//
-//function change_classe(){
-// //   _test2.attr("checked") != "undefined" && _test2.attr("checked") == "checked");
-// var rec_dep= $('#account_number').val();
-//  
-// var dep = $('#nature_income_outcome_false');
-//    if (rec_dep.match(myregexp)) {toggle_classe('7',false); toggle_classe('6', true);}
-//    if (!rec_dep.match(myregexp)) {toggle_classe('7',true); toggle_classe('6', false);}
-//
-//
-//}
-
 
 
 function desac_recettes() {
@@ -112,10 +77,37 @@ function toggle_recettes_depenses(acc) {
 //});
 
 $(function() {
+    var classe;
     $( "#accordion" ).accordion({
         autoHeight: false,
-        collapsible: true       
+        collapsible: true
+//        change: function(event, ui) {
+//            alert(ui.oldHeader.classList);
+//            if (ui.newHeader.id == "acc_comptes_6"){
+//                alert('comptes 6');
+//            }
+//           if (ui.newHeader.id === 'comptes_7'){
+//                alert('comptes 7');
+//            }
+//        }
     });
+
+    $( "#accordion" ).bind( "accordionchange", function(event, ui) {
+    
+    jQuery('<div>' + ui.oldHeader.attr('id') + ' hidden, ' + ui.newHeader.attr('id') + ' shown</div>').appendTo('#log');
+     // s'il y a un oldHeader on ferme le Header correspondant
+    if (ui.oldHeader !== undefined)  {
+        classe = ui.oldHeader.attr('id').match(/\d*$/);
+    }
+     // s'il y a un oldHeader on ferme le Header correspondant
+    if (ui.newHeader !== undefinded) {
+        classe = ui.newHeader.attr('id').match(/\d*$/);
+        $('.orphan_natures').accordion('activate', "nat_comptes_" + classe);
+    }
+
+
+    // s'il y a un newHeader, on ouvre le header correspondant
+});
     $('.orphan_natures').accordion({
         autoHeight: false,
         collapsible: true
@@ -123,11 +115,15 @@ $(function() {
 });
 
 $(function() {
-    $('.nature').draggable({
+    $('.orphan_natures_depenses .nature, .orphan_natures_recettes .nature').draggable({
         revert: "invalid",
         cursor: "move",
         helper: "clone"
     });
+
+// les zones de comptes acceptents les natures orphelines correspondantes
+// Lors du drop, le style est changé et révèle le lien caché avec l'icone
+// qui permet de faire le unlink.
 
     $('.account_list_6').droppable({
         accept: ".nature_depenses",
@@ -143,11 +139,11 @@ $(function() {
             // faire la requete ajax
 
             ui.draggable.appendTo($(this).find('ul'));
-            var naturid=ui.draggable.attr('id').match(/\d*$/);
-            var accountid=$(this).attr('id').match(/\d*$/);
+            var naturid = ui.draggable.attr('id').match(/\d*$/);
+            var accountid = $(this).attr('id').match(/\d*$/);
             //   alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid);
-      //      $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid) ;
-       $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature", "account_id="+ accountid) ;
+            //      $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid) ;
+            $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature", "account_id="+ accountid) ;
         // return false;
         }
     });
@@ -166,8 +162,8 @@ $(function() {
             // faire la requete ajax
 
             ui.draggable.appendTo($(this).find('ul'));
-            var naturid=ui.draggable.attr('id').match(/\d*$/);
-            var accountid=$(this).attr('id').match(/\d*$/);
+            var naturid = ui.draggable.attr('id').match(/\d*$/);
+            var accountid = $(this).attr('id').match(/\d*$/);
             //   alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid);
             $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature", "account_id="+ accountid) ;
         // return false;
@@ -175,25 +171,47 @@ $(function() {
     });
 
 
-
-
-    $('.orphan_natures').droppable({
-        over: function() {
-            $(this).removeClass('out').addClass('over');
-        },
-        out: function() {
-            $(this).removeClass('over').addClass('out');
-        },
-        drop: function(event, ui) {
-            // $(this).find(".")
-            $(this).removeClass('over').addClass('out');
-            // faire la requete ajax l' élément à la liste '
-            ui.draggable.appendTo($(this).find('ul'));
-            var naturid=ui.draggable.attr('id').match(/\d*$/);
-            //       alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
-            $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature") ;
-        }
-    });
+//
+//
+//    $('.orphan_natures_recettes').droppable({
+//        accept: ".nature_recettes",
+//        over: function() {
+//            $(this).removeClass('out').addClass('over');
+//        },
+//        out: function() {
+//            $(this).removeClass('over').addClass('out');
+//        },
+//        drop: function(event, ui) {
+//            // $(this).find(".")
+//            $(this).removeClass('over').addClass('out');
+//            // faire la requete ajax l' élément à la liste '
+//            ui.draggable.appendTo($(this).find('ul'));
+//            var naturid=ui.draggable.attr('id').match(/\d*$/);
+//            //       alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
+//            $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
+//        }
+//    });
+//
+//
+//
+//    $('.orphan_natures_depenses').droppable({
+//        accept: ".nature_depenses",
+//        over: function() {
+//            $(this).removeClass('out').addClass('over');
+//        },
+//        out: function() {
+//            $(this).removeClass('over').addClass('out');
+//        },
+//        drop: function(event, ui) {
+//            // $(this).find(".")
+//            $(this).removeClass('over').addClass('out');
+//            // faire la requete ajax l' élément à la liste '
+//            ui.draggable.appendTo($(this).find('ul'));
+//            var naturid=ui.draggable.attr('id').match(/\d*$/);
+//            //       alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
+//            $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
+//        }
+//    });
 });
 
 //jQuery(function(){

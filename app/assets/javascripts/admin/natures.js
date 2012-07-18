@@ -2,6 +2,10 @@
 /*jslint browser: true */
 var $, jQuery;
 
+
+
+// function utilisée pour disable ou able les différentes parties
+// du select 
 function change_radio() {
     var rec = $('#nature_income_outcome_recettes'),
         dep = $('#nature_income_outcome_depenses');
@@ -15,7 +19,9 @@ function change_radio() {
     }
 }
 //
-//
+// Le but est ici de garder dynamiquement la cohérence dans le formulaire
+// de création de nature entre le type de nature (recette ou dépenses)
+// et le compte auquel elle peut être rattachée.
 //
 jQuery(function () {
     $('.admin_natures optgroup[label=Dépenses] option').attr('disabled', true);
