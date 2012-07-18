@@ -1,18 +1,38 @@
-<%= form_tag compta_period_balance_path(@period),:style=>"display: inline;"  do %>
-   <label for="begin_date">Du : </label>
-   <%= picker_date :begin_date, @period.start_date, @period.close_date, @begin_date %>
-    <label for="end_date">Au : </label>
-   <%= picker_date :end_date, @period.start_date, @period.close_date, @end_date %>
+<div class="inputs row-fluid">
 
-    <br />
+<%= simple_form_for :balance, :url=>'/balance',  :html=> {class: 'form-inline'} do |balance_f| %>
+ 
+    
+     <%= balance_f.error_notification %>
+    <div class="row-fluid">
+      <div class="span12">
+    <%= balance_f.input :begin_date_picker, :label=> 'Date début', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+    <%= balance_f.input :end_date_picker, :label=> 'Date fin', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+      </div>
+      </div>
 
-<label>Du compte : </label>
-<%= select_tag :begin_account, options_from_collection_for_select(@period.accounts.order('number ASC').all,:number, :long_name,
-  :selected=>@begin_account.number) %>
+  <div class="row-fluid">
+        <div class="span12">
+          <%= balance_f.input :begin_account, :collection=>@period.accounts.order('number ASC'),
+              wrapper_html:{class:'span3'},
+              label:'Du compte', label_html: {class: 'span4'},
+              input_html: {class: 'span8'} ,:required => true %>
 
-<label>Au compte : </label>
-<%= select_tag :end_account, options_from_collection_for_select(@period.accounts.order('number ASC').all, :number, :long_name,
-  :selected=>@end_account.number) %>
-<br />
-<%= submit_tag 'Rafraichir', :class=>'button' %>
+          <%= balance_f.input :end_account, :collection=>@period.accounts.order('number ASC'),
+              wrapper_html:{class:'span3'},
+              label:'Au compte',  label_html: {class: 'span4'},
+              input_html: {class: 'span8'} ,:required => true %>
+            
+
+
+  </div>
+      </div>
+ <div class="row-fluid">
+         <div class="span12">
+          <div class="form-actions offset1">
+            <%=  balance_f.button :submit, 'Afficher la balance', id: 'new_line_button', class: "btn-primary span2" %>
+            </div>
+         </div>
+       </div>
 <% end %>
+</div>

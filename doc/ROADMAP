@@ -662,7 +662,15 @@ OK - refait les vues de mapping
 OK - Revoir le form de account dans admin suite à bootstrap
 OK - Vue Un compte ne devrait pas pouvoir être supprimé s'il a des écritures via les natures
  Modèle : Un compte ne devrait pas pouvoir être supprimé s'il a des écritures via les natures
-Modifier le point de chute de compta : on arrive directement sur balance
+OK - Modifier le point de chute de compta : on arrive directement sur balance
+OK - Création d'une action balance_new
+Refonte du formulaire avec usage de pick_date et de simple_form
+Afficher les comptes de façon plus lisible
+Dans le modèle balance, il faut filtrer les comptes selon les données du formulaire
+Intégration au menu de new et révision de la balance show
+Retirer dans le menu organisme la liste des org et le caret
+Exercices n'a pas de sens s'il n'y en a qu'un
+Compta ne devrait pas être accessible si on n'a pas créé de compte
 Spec ???
 
 Solde_credit_avant et apres du modèle line.rb devraient être des scope

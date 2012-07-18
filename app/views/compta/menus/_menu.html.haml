@@ -15,6 +15,7 @@
         %b.caret
       %ul.dropdown-menu
         %li= link_to('Balance', compta_period_balance_path(@period))
+        %li= link_to('Balance', new_compta_period_balance_path(@period))
   - unless @organism.nil?
     %li.dropdown(class="#{controller.controller_name == "periods" ? "active" : nil}")
       %a{:href=>'#', :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }

@@ -4,22 +4,40 @@
 
 # une classe correspondant à l'objet balance
 class Compta::Balance
+
+  attr_accessor :begin_date, :end_date, :begin_account, :end_account
+
+  def valid? # car PickDateExtension utilise valid?
+    true
+  end
+
+  include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
+
+  pick_date_for :begin_date, :end_date # donne les méthodes begin_date_picker et end_date_picker
+  # utilisées par le input as:date_picker
+ 
+
+
   NB_PER_PAGE=24
 
-  attr_reader :period, :balance_lines
-  
+  attr_reader :period
+
   def initialize(period, accounts=nil, from=nil, to = nil)
     @period=period
-      accounts ||= self.period.accounts.all
-      from ||= @period.start_date
-      to ||= @period.close_date
-    @balance_lines= accounts.collect {|a| self.balance_line(a,from,to)}
+    @begin_date ||= @period.start_date
+    @end_date ||= @period.close_date
+    @begin_account ||= period.accounts.order('number ASC').first
+    @end_account ||= period.accounts.order('number ASC').last
   end
   
   def accounts
-    @period.accounts    
+    @period.accounts
   end
 
+  def balance_lines
+    @balance_lines ||= accounts.collect {|a| balance_line(a,@begin_date, @end_date)}
+  end
+ 
  
   def total_balance
     [self.total(:cumul_debit_before), self.total(:cumul_credit_before),self.total(:movement_debit),

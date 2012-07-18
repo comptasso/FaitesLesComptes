@@ -18,6 +18,10 @@ class Compta::BalancesController < Compta::ApplicationController
     end
   end
 
+  def new
+    @balance = Compta::Balance.new(@period)
+  end
+
   def create
     
     render 'show'
