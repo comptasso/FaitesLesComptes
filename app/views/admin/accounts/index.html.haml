@@ -21,7 +21,7 @@
           %td= render partial: 'nature', collection: compta_account.natures.all if compta_account.natures.count > 0
           %td= t_used compta_account
           %td
-            = icon_to 'afficher.png', [:admin,@organism,@period,compta_account]
+           
             = icon_to 'modifier.png', edit_admin_organism_period_account_path(@organism, @period, compta_account)
             = icon_to 'supprimer.png', [:admin,@organism,@period,compta_account], :confirm => 'Etes vous sur ?', :method => :delete
   

@@ -5,7 +5,7 @@
 
 %div#accordion
   %h3
-    %a(href='#') Correspondance des natures et de comptes de type Dépenses
+    %a(href='#') Correspondance des natures et des comptes de type Dépenses
   %div
     .span6
       %h4 Comptes et natures associées
@@ -22,7 +22,7 @@
         - @unlinked_natures.depenses.each do |nature|
           = render partial: 'li_nature', object: nature, locals: {r: 'depenses'}
   %h3
-    %a(href='#') Correspondance des natures et de comptes de type Recettes
+    %a(href='#') Correspondance des natures et des comptes de type Recettes
   %div
     .span6
       %h4 Comptes et natures associées

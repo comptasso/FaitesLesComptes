@@ -140,6 +140,14 @@ class Period < ActiveRecord::Base
   def depenses_accounts
     accounts.classe_6.all 
   end
+
+  def recettes_natures
+    natures.recettes.all
+  end
+
+  def depenses_natures
+    natures.depenses.all
+  end
  
   
   def nb_months

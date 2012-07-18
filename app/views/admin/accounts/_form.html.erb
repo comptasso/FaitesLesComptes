@@ -1,21 +1,21 @@
-<%  SimpleForm.wrapper_tag = :div %>
+ <div class="inputs">
 
-<%= simple_form_for([:admin, @organism, @period, @account]) do |f| %>
+<%= simple_form_for([:admin, @organism, @period, @account],  :html=> {class: 'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
 
-  <div class="inputs">
+ 
     <%= f.input :number ,:input_html=>{:placeholder=>'2 à 8 chiffres', :size=>'20'},:disabled=>!@account.new_record? %>
     <%= f.input :title %>
     <%= f.input :used %>
 
-    <div class="input">
-      <%= f.label 'Natures' %>
-    <%= select_tag  'account[nature_ids][]',  grouped_options_for_select([ ['Recettes', options_for_select(@period.natures.recettes.collect {|n| [n.name, n.id]})],
-        ['Dépenses', options_for_select(@period.natures.depenses.collect {|n| [n.name, n.id]})]]), {:multiple=>true , :size=>10} %>
-    </div>
-  </div>
+    <%= f.association :natures, :label=> 'Natures associées', input_html: {size: 10, multiple:true},
+                :collection => options_for_accounts(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :title,
+                :label_method=> :name, :value_method=> :id %>
+  
+   
 
-  <div class="actions">
-    <%= f.button :submit %>
+  <div class="form-actions">
+    <%= f.button :submit, class: "btn-primary" %>
   </div>
 <% end %>
+ </div>

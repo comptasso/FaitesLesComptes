@@ -11,26 +11,10 @@ class Admin::AccountsController < Admin::ApplicationController
     end
   end
 
-  # GET /compta/accounts/1
-  # GET /compta/accounts/1.json
-  def show
-    @account = Account.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @account }
-    end
-  end
-
   # GET /compta/accounts/new
   # GET /compta/accounts/new.json
   def new
     @account = @period.accounts.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @compta_account }
-    end
   end
 
   # GET /compta/accounts/1/edit
