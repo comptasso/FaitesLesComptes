@@ -38,6 +38,3 @@
       %ul.orphan_natures_recettes#recettes
         - @unlinked_natures.recettes.each do |nature|
           = render partial: 'li_nature', object: nature, locals: {r: 'recettes'}
-
-
-%div#log

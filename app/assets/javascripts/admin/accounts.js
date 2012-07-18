@@ -43,51 +43,41 @@ function active_depenses() {
     $('optgroup[label=Dépenses] option').attr('disabled', false);
 }
 
-
-
-jQuery(function() {
-    if ($('.accounts input#account_number').length != 0) {
-        var acc= $('input#account_number').val();
-        toggle_recettes_depenses(acc);
-        $('input#account_number').change(function(){
-            toggle_recettes_depenses($('input#account_number').val());
-        });
-    }
-});
-
 function toggle_recettes_depenses(acc) {
     active_depenses();
     active_recettes();
-    if (acc.match(new RegExp('\^'+ '6'))) {
+    if (acc.match(new RegExp('^' + '6'))) {
         desac_recettes();
-  
     }
-
-    if (acc.match(new RegExp('\^'+ '7'))) {
-  
+    if (acc.match(new RegExp('^' + '7'))) {
         desac_depenses();
     }
 
 }
 
 
-//$(document).ajaxSend(function(e, xhr, options) {
-//  var token = $("meta[name='csrf-token']").attr("content");
-//  xhr.setRequestHeader("X-CSRF-Token", token);
-//});
+jQuery(function () {
+    var acc;
+    if ($('.accounts input#account_number').length !== 0) {
+        acc = $('input#account_number').val();
+        toggle_recettes_depenses(acc);
+        $('input#account_number').change(function () {
+            toggle_recettes_depenses($('input#account_number').val());
+        });
+    }
+});
 
-$(function() {
+
+
+$(function () {
     var classe;
-    $( "#accordion" ).accordion({
+    $("#accordion").accordion({
         autoHeight: false,
         collapsible: true
     });
-
-
- 
 });
 
-$(function() {
+$(function () {
     $('.orphan_natures_depenses .nature_depenses, .orphan_natures_recettes .nature_recettes').draggable({
         revert: "invalid",
         cursor: "move",
@@ -100,48 +90,45 @@ $(function() {
 
     $('.account_list_6').droppable({
         accept: ".nature_depenses",
-        over: function() {
+        over: function () {
             $(this).removeClass('out').addClass('over');
         },
-        out: function() {
+        out: function () {
             $(this).removeClass('over').addClass('out');
         },
-        drop: function(event, ui) {
-          
-            // $(this).find(".")
+        drop: function (event, ui) {
+            var naturid, accountid;
             $(this).removeClass('over').addClass('out');
             // faire la requete ajax
             ui.draggable.appendTo($(this).find('ul'));
           //  $('#log').text($(this).find('ul').text)
-            var naturid = ui.draggable.attr('id').match(/\d*$/);
-            var accountid = $(this).attr('id').match(/\d*$/);
+            naturid = ui.draggable.attr('id').match(/\d*$/);
+            accountid = $(this).attr('id').match(/\d*$/);
             //   alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid);
             //      $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid) ;
-            $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature", "account_id="+ accountid) ;
+            $.post("/admin/periods/" + $('#period').text() + "/natures/" + naturid + "/link_nature", "account_id=" + accountid);
         // return false;
         }
     });
 
     $('.account_list_7').droppable({
         accept: ".nature_recettes",
-        over: function() {
+        over: function () {
             $(this).removeClass('out').addClass('over');
         },
-        out: function() {
+        out: function () {
             $(this).removeClass('over').addClass('out');
         },
-        drop: function(event, ui) {
-
-            $('#log').text('drop d un account 7')
-            // $(this).find(".")
+        drop: function (event, ui) {
+            var naturid, accountid;
             $(this).removeClass('over').addClass('out');
-            // faire la requete ajax
-
+            // on rajoute la nature à la liste sur laquelle elle a été lachée
             ui.draggable.appendTo($(this).find('ul'));
-            var naturid = ui.draggable.attr('id').match(/\d*$/);
-            var accountid = $(this).attr('id').match(/\d*$/);
+            // faire la requete ajax
+            naturid = ui.draggable.attr('id').match(/\d*$/);
+            accountid = $(this).attr('id').match(/\d*$/);
             //   alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature?account_id="+accountid);
-            $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/link_nature", "account_id="+ accountid) ;
+            $.post("/admin/periods/" + $('#period').text() + "/natures/" + naturid + "/link_nature", "account_id=" + accountid);
         // return false;
         }
     });

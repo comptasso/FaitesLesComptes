@@ -660,10 +660,13 @@ OK - Le menu compte de admin ne doit plus proposer d'importer le plan comptable 
 OK - Revoir le menu mapping (relier nature - recettes - dépenses, pourquoi 3 actions ?)
 OK - refait les vues de mapping
 OK - Revoir le form de account dans admin suite à bootstrap
+OK - Vue Un compte ne devrait pas pouvoir être supprimé s'il a des écritures via les natures
+ Modèle : Un compte ne devrait pas pouvoir être supprimé s'il a des écritures via les natures
 Modifier le point de chute de compta : on arrive directement sur balance
+Spec ???
 
 Solde_credit_avant et apres du modèle line.rb devraient être des scope
-
+Réorganiser les menus dans admin et compta comme pour public
 
 
 ----------------------Suppression d'un exercice-----------------

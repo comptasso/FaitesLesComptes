@@ -23,5 +23,5 @@
           %td
            
             = icon_to 'modifier.png', edit_admin_organism_period_account_path(@organism, @period, compta_account)
-            = icon_to 'supprimer.png', [:admin,@organism,@period,compta_account], :confirm => 'Etes vous sur ?', :method => :delete
+            = icon_to 'supprimer.png', [:admin,@organism,@period,compta_account], :confirm => 'Etes vous sur ?', :method => :delete unless compta_account.lines.any?
   
