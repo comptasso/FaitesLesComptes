@@ -34,13 +34,14 @@ class Line < ActiveRecord::Base
     self.debit ||= 0.0
     self.credit ||= 0.0
     if self.credit > self.debit
-      self.credit= self.credit-self.debit; self.debit =0
+      self.credit= self.credit-self.debit; self.debit =0 
     else
       self.debit= self.debit-self.credit; self.credit = 0
     end
   end
 
   validates :debit, :credit, numericality: true, two_decimals:true      #, format: {with: /^-?\d*(.\d{0,2})?$/}
+  validates :book_id, presence:true
   validates :line_date, presence: true
   validates :line_date, must_belong_to_period: true
   validates :nature_id, presence: true, :unless=> lambda {self.owner_type == 'Transfer'}
@@ -102,12 +103,7 @@ class Line < ActiveRecord::Base
     return cash.name if cash_id
   end
 
-  # retourne l'exercice auquel appartient la ligne
-  def period
-    o = book.organism
-    o.find_period(:line_date)
-  end
-
+  
 
 
   # # monthly sold donne le solde d'un mois fourni au format mm-yyyy

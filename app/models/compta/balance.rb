@@ -7,6 +7,7 @@
 #
 #
 class Compta::Balance < ActiveRecord::Base
+  
 
   include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
 
