@@ -1,59 +1,39 @@
 # coding: utf-8
 
-# une classe correspondant à l'objet balance. Cette classe n'a pas de table
-# car l'objet n'est pas persistant.
-# On utilise la recette 193 de railscasts pour lui permettre d'avoir les relations
-# belongs et has_many
+# une classe correspondant à l'objet balance. Cette classe a une table
+# mais le controller ne sauve pas l'objet.
+# La table est préférable pour pouvoir bénéficier des scope et callbacks de
+# ActiveRecord.
 #
-# Par contre le callback after_initialize n'est pas appelé et nous
-# avons mis à la place la méthode with_default_values qui renvoie self.
-#
-# Cela permet d'écrirer @balance = Compta::Balance.new(period_id=>x).with_default_values
 #
 class Compta::Balance < ActiveRecord::Base
 
-
-  def self.columns() @columns ||= []; end
-
-  def self.column(name, sql_type = nil, default = nil, null = true)
-    columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
-  end
-
-  column :begin_date, :date
-  column :end_date, :date
-  column :begin_account_id, :integer
-  column :end_account_id, :integer
-  column :period_id, :integer
-
-
   include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
 
-  pick_date_for :begin_date, :end_date # donne les méthodes begin_date_picker et end_date_picker
+  pick_date_for :from_date, :to_date # donne les méthodes begin_date_picker et end_date_picker
   # utilisées par le input as:date_picker
- 
-  NB_PER_PAGE=24
+
+  validates :from_date, :to_date, :from_account_id, :to_account_id, :period_id, :presence=>true
+  validates :from_date, :to_date, must_belong_to_period: true
 
   belongs_to :period
   # des has_one seraient plus intuitifs mais cela nécessiterait que le champ _id
   # soit dans la table accounts. Et comme balance n'est pas un vrai ActiveRecord...
-  belongs_to :begin_account, :class_name=>"Account"
-  belongs_to :end_account, :class_name=>"Account"
+  belongs_to :from_account, :class_name=>"Account"
+  belongs_to :to_account, :class_name=>"Account"
   has_many :accounts, :through=>:period
 
-  def with_default_values
-    if period
-      self.begin_date ||= period.start_date
-      self.end_date ||= period.close_date
-      self.begin_account ||= period.accounts.order('number ASC').first
-      self.end_account ||= period.accounts.order('number ASC').last
-    end
-    self
+  after_initialize :with_default_values
+
+  def range_accounts
+    self.from_account, self.to_account = to_account, from_account if to_account.number  < from_account.number
+    accounts.where('number >= ? AND number <= ?', from_account.number, to_account.number)
   end
 
-  def balance_lines
-    @balance_lines ||= accounts.collect {|a| balance_line(a,begin_date, end_date)}
+    def balance_lines
+    @balance_lines ||= range_accounts.collect {|acc| balance_line(acc, from_date, to_date)}
   end
- 
+
   def total_balance
     [self.total(:cumul_debit_before), self.total(:cumul_credit_before),self.total(:movement_debit),
       self.total(:movement_credit),self.total(:cumul_debit_at),self.total(:cumul_credit_at)
@@ -63,8 +43,8 @@ class Compta::Balance < ActiveRecord::Base
   # renvoie les lignes correspondant à la page demandée
   def page(n)
     return nil if n > self.total_pages
-    @balance_lines[(NB_PER_PAGE*(n-1))..(NB_PER_PAGE*n-1)]
-    
+    balance_lines[(NB_PER_PAGE*(n-1))..(NB_PER_PAGE*n-1)]
+
   end
 
   def sum_page(n)
@@ -78,13 +58,13 @@ class Compta::Balance < ActiveRecord::Base
   # ou une édition définitive.
   # Cela se fait en regardant si toutes les lignes sont locked?
   def provisoire?
-    @balance_lines.any? {|bl| bl[:provisoire]==true } ? true : false
+    balance_lines.any? {|bl| bl[:provisoire]==true } ? true : false
   end
   # calcule le nombre de page du listing en divisant le nombre de lignes
   # par un float qui est le nombre de lignes par pages,
   # puis arrondi au nombre supérieur
   def total_pages
-    (@balance_lines.size/NB_PER_PAGE.to_f).ceil
+    (balance_lines.size/NB_PER_PAGE.to_f).ceil
   end
 
 
@@ -105,14 +85,14 @@ class Compta::Balance < ActiveRecord::Base
   protected
 
   def total(value)
-    @balance_lines.sum {|l| l[value]}
+    balance_lines.sum {|l| l[value]}
   end
 
   def total_page(value, n=1)
     self.page(n).sum {|l| l[value]}
   end
 
- 
+
 
   def balance_line(account, from=self.period.start_date, to=self.period.close_date)
     {:account_id=>account.id,
@@ -131,6 +111,15 @@ class Compta::Balance < ActiveRecord::Base
 
   end
 
-
+  # valeurs par défaut
+  def with_default_values
+    if period
+      self.from_date ||= period.start_date
+      self.to_date ||= period.close_date
+      self.from_account ||= period.accounts.order('number ASC').first
+      self.to_account ||= period.accounts.order('number ASC').last
+    end
+    self
+  end
 
 end

@@ -16,7 +16,7 @@ class MustBelongToPeriodValidator < ActiveModel::EachValidator
     if value.is_a?(Date)
     unless o.find_period(value)
       Rails.logger.warn "Record Line invalide - line_date n'appartient à aucun exercice"
-      record.errors[attribute] << "Impossible d'enregistrer la ligne car la date n'appartient à aucun exercice"
+      record.errors[attribute] << "La date n'appartient à aucun exercice"
      end
     end
   end

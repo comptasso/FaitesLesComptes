@@ -19,14 +19,17 @@ class Compta::BalancesController < Compta::ApplicationController
 #  end
 
   def new
-     @balance = Compta::Balance.new(:period_id=>@period.id).with_default_values
+     @balance = @period.build_balance
   end
 
   def create
-    @balance = Compta::Balance.new({:period_id=>@period.id}.merge(params[:balance]))
-    render 'show'
+    @balance = @period.build_balance(params[:balance])
+    if @balance.valid?
+      render action: 'show'
+    else
+      render action: "new"
   end
-  
+  end
 
   
  

@@ -95,9 +95,17 @@ class Line < ActiveRecord::Base
     Line.where('line_date < ?', date).sum(:credit)
   end
 
+
+  # donne le support de la ligne (ou sa contrepartie) : la banque ou la caisse
   def support
     return bank_account.acronym if bank_account_id
     return cash.name if cash_id
+  end
+
+  # retourne l'exercice auquel appartient la ligne
+  def period
+    o = book.organism
+    o.find_period(:line_date)
   end
 
 
