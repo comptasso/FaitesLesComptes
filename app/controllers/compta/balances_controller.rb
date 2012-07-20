@@ -29,11 +29,10 @@ class Compta::BalancesController < Compta::ApplicationController
         format.html { render action: 'show'}
         format.js
       end
-      
     else
       respond_to do |format|
-        format.html render 'new'
-        format.js
+        format.html { render 'new'}
+        format.js {render 'new'}
       end
       
   end

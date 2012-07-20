@@ -4,32 +4,8 @@
         <button class="close" type="button" data-dismiss="modal">×</button></h3>
       </div>
       <div class="modal-body">
-    
-
-<%= simple_form_for @balance, :url=>compta_period_balance_path(@period, @balance), :method=>:post, :remote=>true,  :html=> {class: 'form-horizontal'} do |balance_f| %>
- 
-    
-     <%= balance_f.error_notification %>
-  
-    <%= balance_f.input :from_date_picker, :label=> 'Date début', input_html: {class: 'span4', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
-    <%= balance_f.input :to_date_picker, :label=> 'Date fin',  input_html: {class: 'span4', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
- 
-          <%= balance_f.input :from_account_id, :collection=>@balance.accounts.order('number ASC'),
-              :prompt=>false,
-              label:'Du compte',  :label_method=>:long_name,
-              input_html: {class: 'span10'} ,:required => true %>
-
-          <%= balance_f.input :to_account_id, :collection=>@balance.accounts.order('number ASC'),
-               :prompt=>false,
-              label:'Au compte', :label_method=>:long_name,
-              input_html: {class: 'span10'} ,:required => true %>
- 
- 
-          <div class="form-actions">
-            <%=  balance_f.button :submit, 'Afficher la balance', id: 'new_balance_button', class: "btn-primary span4" %>
-            </div>
+<%=   render partial:'modal_body_form' %>
          </div>
-       
-<% end %>
+
 </div>
  
