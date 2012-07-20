@@ -14,17 +14,29 @@ class Compta::Balance < ActiveRecord::Base
   pick_date_for :from_date, :to_date # donne les méthodes begin_date_picker et end_date_picker
   # utilisées par le input as:date_picker
 
-  validates :from_date, :to_date, :from_account_id, :to_account_id, :period_id, :presence=>true
-  validates :from_date, :to_date, must_belong_to_period: true
+  
 
   belongs_to :period
   # des has_one seraient plus intuitifs mais cela nécessiterait que le champ _id
   # soit dans la table accounts. Et comme balance n'est pas un vrai ActiveRecord...
   belongs_to :from_account, :class_name=>"Account"
-  belongs_to :to_account, :class_name=>"Account"
+  belongs_to :to_account, :class_name=>"Account" 
   has_many :accounts, :through=>:period
 
-  after_initialize :with_default_values
+  
+  validates :from_date, :to_date, :from_account_id, :to_account_id, :period_id, :presence=>true
+  validates :from_date, :to_date, date_within_period:true
+
+   # valeurs par défaut
+  def with_default_values
+    if period
+      self.from_date ||= period.start_date
+      self.to_date ||= period.close_date
+      self.from_account ||= period.accounts.order('number ASC').first
+      self.to_account ||= period.accounts.order('number ASC').last
+    end
+    self
+  end
 
   def range_accounts
     self.from_account, self.to_account = to_account, from_account if to_account.number  < from_account.number
@@ -112,15 +124,6 @@ class Compta::Balance < ActiveRecord::Base
 
   end
 
-  # valeurs par défaut
-  def with_default_values
-    if period
-      self.from_date ||= period.start_date
-      self.to_date ||= period.close_date
-      self.from_account ||= period.accounts.order('number ASC').first
-      self.to_account ||= period.accounts.order('number ASC').last
-    end
-    self
-  end
+ 
 
 end

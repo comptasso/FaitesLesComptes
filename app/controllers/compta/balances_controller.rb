@@ -19,7 +19,7 @@ class Compta::BalancesController < Compta::ApplicationController
 #  end
 
   def new
-     @balance = @period.build_balance
+     @balance = @period.build_balance.with_default_values
   end
 
   def create
@@ -27,7 +27,7 @@ class Compta::BalancesController < Compta::ApplicationController
     if @balance.valid?
       render action: 'show'
     else
-      render action: "new"
+      render "new"
   end
   end
 
