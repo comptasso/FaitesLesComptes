@@ -18,7 +18,7 @@ class Compta::Balance < ActiveRecord::Base
 
   belongs_to :period
   # des has_one seraient plus intuitifs mais cela nécessiterait que le champ _id
-  # soit dans la table accounts. Et comme balance n'est pas un vrai ActiveRecord...
+  # soit dans la table accounts. 
   belongs_to :from_account, :class_name=>"Account"
   belongs_to :to_account, :class_name=>"Account" 
   has_many :accounts, :through=>:period

@@ -1,10 +1,14 @@
 <%= content_for :menu do %>
+<a data-toggle="modal" class="icon_menu" href="#modal_form_balance">
+  <%= image_tag('icones/nouveau.png') %>
+</a>
 <%=  icon_to 'printer.png', compta_period_balance_path(@period, :format=>'pdf') %>
+
 <% end %>
 <div class="champ">
-  <h3>Balance <%= @period.exercice %> </h3><div class="inner-champ">
-  <%= render partial: 'form' %>
-</div></div>
+  <h3>Balance <%= @period.exercice %> </h3>
+  <%= render partial: 'modal_form' %>
+</div>
 <table class="balance">
   <thead>
     <tr>

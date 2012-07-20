@@ -666,18 +666,18 @@ OK - Modifier le point de chute de compta : on arrive directement sur balance
 OK - Création d'une action balance_new
 OK - Refonte du formulaire avec usage de pick_date et de simple_form
 OK - Afficher les comptes de façon plus lisible
-revoir le belongs_to_period_validator (incorporer dans line.rb un belongs_to period through book
+OK - revoir le belongs_to_period_validator (incorporer dans line.rb un belongs_to period through book - non ne marche pas è fait un date_within_period_validator à la place
 modifier validations.rb pour harmoniser avec les autres
-Dans le modèle balance, il faut filtrer les comptes selon les données du formulaire
+OK - Dans le modèle balance, il faut filtrer les comptes selon les données du formulaire
 Intégration au menu de new et révision de la balance show
 Retirer dans le menu organisme la liste des org et le caret
 Exercices n'a pas de sens s'il n'y en a qu'un
 Compta ne devrait pas être accessible si on n'a pas créé de compte
-Mettre des validations dans le modèle balance
+OK - Mettre des validations dans le modèle balance
 Spec ???
 
 Solde_credit_avant et apres du modèle line.rb devraient être des scope
-Réorganiser les menus dans admin et compta comme pour public
+OK - Réorganiser les menus dans admin et compta comme pour public
 
 Line : voir les méthodes non utilisées
 Dans Book, has_many pending_checks relève du IncomBook
