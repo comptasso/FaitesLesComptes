@@ -1,0 +1,42 @@
+<table class="balance">
+  <thead>
+    <tr>
+      <th colspan="2"></th><th colspan="2">Soldes au <%=l @balance.from_date %> </th><th colspan="2">Mouvement de la période</th>
+      <th colspan="2">Soldes au <%= l @balance.to_date %> </th>
+    </tr>
+    <tr>
+
+      <th>Numéro</th><th>Libellé</th><th>Debit</th><th>Crédit</th><th>Débit</th><th>Crédit</th><th>Débit</th><th>Crédit</th>
+    </tr>
+
+  </thead>
+  <tbody>
+
+    <% @balance.balance_lines.each do |bl| %>
+    <tr>
+      <td><%= bl[:number] %></td>
+      <td>
+        <%= bl[:title] %>
+        <%= icon_to 'afficher.png', compta_account_lines_path(bl[:account_id]) unless bl[:empty]  %>
+      </td>
+       <td class="nombre"><%= debit_credit(bl[:cumul_debit_before]) %></td>
+         <td class="nombre"><%= debit_credit(bl[:cumul_credit_before]) %></td>
+         <td class="nombre"><%= debit_credit(bl[:movement_debit]) %></td>
+         <td class="nombre"><%= debit_credit(bl[:movement_credit]) %></td>
+      <td class="nombre"><%= debit_credit(bl[:cumul_debit_at]) %></td>
+      <td class="nombre"><%= debit_credit(bl[:cumul_credit_at]) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+
+    <tfoot>
+      <tr class="total" id="totaux">
+  <th colspan="2" rowspan="1" >
+    Totaux
+  </th>
+  <% @balance.total_balance.each do |value|  %>
+  <%= content_tag :th, debit_credit(value), class: 'nombre' %>
+  <% end %>
+</tr>
+    </tfoot>
+</table>

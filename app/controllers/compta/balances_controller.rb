@@ -25,9 +25,17 @@ class Compta::BalancesController < Compta::ApplicationController
   def create
     @balance = @period.build_balance(params[:compta_balance])
     if @balance.valid?
-      render action: 'show'
+      respond_to do |format|
+        format.html { render action: 'show'}
+        format.js
+      end
+      
     else
-      render "new"
+      respond_to do |format|
+        format.html render 'new'
+        format.js
+      end
+      
   end
   end
 
