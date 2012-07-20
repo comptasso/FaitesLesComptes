@@ -23,7 +23,7 @@ class Compta::BalancesController < Compta::ApplicationController
   end
 
   def create
-    @balance = @period.build_balance(params[:balance])
+    @balance = @period.build_balance(params[:compta_balance])
     if @balance.valid?
       render action: 'show'
     else

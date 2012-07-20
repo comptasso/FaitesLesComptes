@@ -6,8 +6,7 @@
 #
 class DateWithinPeriodValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    record.errors[attribute] << "Date manquante" if value == nil
-    record.errors[attribute] << "Doit être une date" unless value.is_a?(Date)
+    record.errors[attribute] << "Date invalide" unless value.is_a?(Date)
     p = record.period
     record.errors[:period] << "Exercice manquant" unless p
     if value.is_a?(Date) && p
