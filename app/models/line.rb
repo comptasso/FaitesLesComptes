@@ -81,6 +81,7 @@ class Line < ActiveRecord::Base
 
   scope :monthyear, lambda {|my| where('line_date >= ? AND line_date <= ?',
      my.beginning_of_month, my.end_of_month  )}
+  scope :range_date, lambda { |fd,td| where('line_date >= ? AND line_date <= ?', fd, td) }
 
 
   scope :unlocked, where('locked = ?', false)

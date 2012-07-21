@@ -6,16 +6,8 @@
   <h3>
     Ecritures du compte <%= @account.long_name %>
   </h3><div class="inner-champ">
-
-
-
-   <div id="submenu">
-    <span><%=  link_to_if @period.previous_period?, '<<', previous_organism_period_path(@organism,@period) %></span>
- <%= sub_helper(@account, @period) %>
-<span><%= link_to_if @period.next_period? ,'>>', next_organism_period_path(@organism,@period) %></span>
-
-  </div>
-
+ </div>
+</div>
   <table class="data_table display">
     <thead>
       <tr>
@@ -48,6 +40,6 @@
 </tr>
     </tfoot>
   </table>
-</div></div>
+
 
 

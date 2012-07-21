@@ -2,7 +2,7 @@
   %td= balance_line[:number]
   %td
     = balance_line[:title]
-    = icon_to 'afficher.png', compta_account_lines_path(balance_line[:account_id]) unless balance_line[:empty]
+    = icon_to 'afficher.png', compta_account_lines_path(balance_line[:account_id], from_date:@balance.from_date, to_date:@balance.to_date) unless balance_line[:empty]
   %td.numeric= debit_credit(balance_line[:cumul_debit_before])
   %td.numeric= debit_credit(balance_line[:cumul_credit_before])
   %td.numeric= debit_credit(balance_line[:movement_debit])

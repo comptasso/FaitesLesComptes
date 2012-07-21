@@ -678,8 +678,11 @@ OK - Mettre des validations dans le modèle balance
 Spec ???
 NON - Dans admin, compta ne devrait proposer afficher que s'il y a des comptes (par contre fait pour relier aux natures)
 OK - Dans compta, seuls les organismes avec les natures reliées devraient apparaître
-Refaire la table balance
+OK - Refaire la table balance
 Revoir la partie affichages des comptes
+Vérifier le pdf de balance et créer le csv
+Compta lines : utiliser data table,
+Compta lines :  modif des paramètres par modal form
 
 Solde_credit_avant et apres du modèle line.rb devraient être des scope
 OK - Réorganiser les menus dans admin et compta comme pour public
