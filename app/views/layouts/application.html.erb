@@ -17,11 +17,7 @@
     <div class="navbar navbar-inner">
       <div class="container">
     <a class="brand"><%= header_title %></a>
-    <ul class="nav nav-pills pull-right">
-    <li class="active"><a href="#">Saisie/Consult</a></li>
-    <li><%=  link_to 'Administration', ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path )%></li>
-    <li><%= link_to 'Compta', ((@organism && !@organism.new_record?) ? compta_organism_path(@organism) : compta_organisms_path ) %></li>
-    </ul>
+  <%= render 'layouts/upper_menu' %>
   </div>
   </div>
    </div>
@@ -38,5 +34,5 @@
     </div>
 
     </div>
-</body>
+  </body>
 </html>

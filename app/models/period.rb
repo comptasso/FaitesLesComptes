@@ -279,12 +279,18 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
 
   # informe si toutes les natures sont bien reliées à un compte
   def all_natures_linked_to_account?
-    self.array_natures_not_linked.any? ? false : true
+    natures.without_account.empty? 
   end
 
+  # boolean : indique si l'on peut faire de la comptabilité
+  alias accountable? all_natures_linked_to_account?
+
   def array_natures_not_linked
-    self.natures.without_account.all
+    natures.without_account.all
   end
+
+  
+  
 
 
  
