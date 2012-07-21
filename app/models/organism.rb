@@ -57,6 +57,11 @@ class Organism < ActiveRecord::Base
       false
     end
   end
+
+  # vérifie qu'il y a au moins un exercice pour lequel on peut faire les comptes
+  def accountable?
+    periods.select {|p| p.accountable? }.any?
+  end
   
   # Renvoie la caisse principale (utilisée en priorité)
   # en l'occurence actuellement la première trouvée ou nil s'il n'y en a pas

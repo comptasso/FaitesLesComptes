@@ -19,10 +19,10 @@ class Compta::OrganismsController < Compta::ApplicationController
     begin
       @period = @organism.periods.find(session[:period])
     rescue
-      @period = @organism.periods.last
+      @period = @organism.periods.select {|p| p.accountable? }.last
       session[:period]=@period.id
     end
-    redirect_to compta_period_balance_path(@period)
+    redirect_to new_compta_period_balance_path(@period)
    
   end
 

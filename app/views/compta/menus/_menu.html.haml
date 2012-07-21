@@ -5,10 +5,10 @@
       ORGANISMES
       %b.caret
     %ul.dropdown-menu
-      
-      
-      - Organism.all.reject {|r| r.new_record? }.each do |r|
+      - Organism.all.select {|o| o.accountable? }.each do |r|
         %li= link_to(r.title, compta_organism_path(r))
+
+
   - unless @period.nil? && @pariod.accounts.nil?
     %li.dropdown(class="#{controller.controller_name == "accounts" ? "active" : nil}")
       %a{:href=>'#', :class=>'dropdown-toggle', :data=>{:toggle=>'dropdown'} }
@@ -23,8 +23,8 @@
         EXERCICES
         %b.caret
       %ul.dropdown-menu
-        - @organism.periods.each do |c|
-          %li= link_to(c.exercice, compta_organism_period_path(@organism, c))
+        - @organism.periods.each do |p|
+          %li= link_to(p.exercice, compta_organism_period_path(@organism, p))
 
   %li= yield :menu
 
