@@ -1,0 +1,27 @@
+%table(cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed balance")
+  %thead
+    %tr
+
+      %th(colspan="2")
+      %th.center(colspan="2")
+        Soldes au
+        =l @balance.from_date
+      %th.center(colspan="2") Mouvement de la période
+      %th.center(colspan="2")
+        Soldes au
+        = l @balance.to_date
+    %tr
+      %th.pc10 Numéro
+      %th Libellé
+      - 3.times do |i|
+        = content_tag :th, 'Débit', class:'pc10 numeric' 
+        = content_tag :th, 'Crédit', class:'pc10 numeric'
+          
+  %tbody
+    = render partial:'balance_line', collection:@balance.balance_lines
+
+  %tfoot#table_foot
+    %tr.total#totaux
+      %th.numeric(colspan="2" rowspan="1") Totaux
+      - @balance.total_balance.each do |value|
+        = content_tag :th, debit_credit(value), class: 'numeric'

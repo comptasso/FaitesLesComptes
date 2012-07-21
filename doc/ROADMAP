@@ -671,13 +671,15 @@ modifier validations.rb pour harmoniser avec les autres
 OK - Dans le modèle balance, il faut filtrer les comptes selon les données du formulaire
 OK - Intégration au menu de new et révision de la balance show
 OK - Retirer dans le menu organisme la liste des org et le caret
-Exercices n'a pas de sens s'il n'y en a qu'un
-Dans le menu exercices, il faudrait que les periods non accountables soient désactivés
-Compta ne devrait pas être accessible si on n'a pas créé de compte
+NON - Exercices n'a pas de sens s'il n'y en a qu'un; on laisse pour ne pas dérouter trop l'utilisateur
+OK - Dans le menu exercices, il faudrait que les periods non accountables soient désactivés : en fait j'ai choisi de gérer le sujet dans le controller
+OK - Compta ne devrait pas être accessible si on n'a pas créé de compte
 OK - Mettre des validations dans le modèle balance
 Spec ???
 NON - Dans admin, compta ne devrait proposer afficher que s'il y a des comptes (par contre fait pour relier aux natures)
 OK - Dans compta, seuls les organismes avec les natures reliées devraient apparaître
+Refaire la table balance
+Revoir la partie affichages des comptes
 
 Solde_credit_avant et apres du modèle line.rb devraient être des scope
 OK - Réorganiser les menus dans admin et compta comme pour public
