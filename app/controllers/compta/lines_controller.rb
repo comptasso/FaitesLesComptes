@@ -1,10 +1,11 @@
 # coding: utf-8
 
 
+# controller destiné à afficher les lignes d'un compte
 class Compta::LinesController < Compta::ApplicationController
 
-  # GET /compta/accounts
-  # GET /compta/accounts.json
+  # GET /compta/accounts/id/lines
+ 
   def index
     @account=Account.find(params[:account_id])
     @from_date = params[:from_date]
@@ -16,14 +17,18 @@ class Compta::LinesController < Compta::ApplicationController
       format.json { render json: @compta_accounts }
     end
   end
+
+  def new 
+    @account=Account.find(params[:account_id])
+  end
  
   private
 
   def fill_soldes
     @solde_debit_avant=@account.lines.solde_debit_avant(@from_date)
     @solde_credit_avant=@account.lines.solde_credit_avant(@from_date)
-    @total_debit=@lines.sum(&:debit)
-    @total_credit=@lines.sum(&:credit)
+    @total_debit=@lines.sum(:debit)
+    @total_credit=@lines.sum(:credit)
     @solde= @solde_credit_avant+@total_credit-@solde_debit_avant-@total_debit
   end
 
