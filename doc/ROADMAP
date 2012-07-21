@@ -683,8 +683,9 @@ Revoir la partie affichages des comptes
 Vérifier le pdf de balance et créer le csv
 Compta lines : utiliser data table,
 Compta lines :  modif des paramètres par modal form
+Ajouter un menu Compte dans les éditions
 
-Solde_credit_avant et apres du modèle line.rb devraient être des scope
+Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
 OK - Réorganiser les menus dans admin et compta comme pour public
 
 Line : voir les méthodes non utilisées

@@ -10,26 +10,12 @@ jQuery(function (){
 });
 
 
-// fonction permettant de cliquer sur l'id new_line_link avec la combinaison
-// de touches Ctrl+N
-//var isCtrl=false;
-//$(document).keyup(function (e) { if (e.which == 17) isCtrl=false;});
-//$(document).keydown(function(e) {
-//    if (e.which == 17) isCtrl=true;
-//    if (e.which == 78 && isCtrl == true) {
-//        e.stopPropagation();
-//
-//        $('#new_line_link').click();
-//        return false;
-//    }
-//});
-
-
 // mise en forme des tables de lignes
 jQuery(function() {
-    if ($('.compta_lines .data_table').length != 0) {
-        var oTable= $('.compta_lines .data_table').dataTable( {
-            "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
+    
+         $('.account_lines_table').dataTable( {
+            "sDom": "lfrtip",
+            "bAutoWidth": false,
             "sPaginationType": "bootstrap",
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
@@ -39,10 +25,19 @@ jQuery(function() {
             null,
             null,
             null,
+            null,
+            null,
             null
-
             ],
-
+            "iDisplayLength": 15,
+            "aLengthMenu": [[10, 15, 25, 50, -1], [10, 15, 25, 50, "Tous"]],
+            "bStateSave": true,
+"fnStateSave": function (oSettings, oData) {
+                localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+            },
+            "fnStateLoad": function (oSettings) {
+                return JSON.parse(localStorage.getItem('DataTables_' + window.location.pathname));
+            },
             "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
                 /*
              * Calculate the total market share for all browsers in this table (ie inc. outside
@@ -51,27 +46,27 @@ jQuery(function() {
                 var iTotalDebit = 0;
                 for ( var i=0 ; i<aaData.length ; i++ )
                 {
-                    iTotalDebit += stringToFloat(aaData[i][3]);
+                    iTotalDebit += stringToFloat(aaData[i][5]);
                 }
 
                 /* Calculate the market share for browsers on this page */
                 var iPageDebit = 0.0
                 for ( var i=iStart ; i<iEnd ; i++ )
                 {
-                    iPageDebit += stringToFloat(aaData[aiDisplay[i] ][3]);
+                    iPageDebit += stringToFloat(aaData[aiDisplay[i] ][5]);
                 }
 
                 var iTotalCredit = 0.0
                 for ( var i=0 ; i<aaData.length ; i++ )
                 {
-                    iTotalCredit += stringToFloat(aaData[i][4]);
+                    iTotalCredit += stringToFloat(aaData[i][6]);
                 }
 
                 /* Calculate the market share for browsers on this page */
                 var iPageCredit = 0.0;
                 for ( var i=iStart ; i<iEnd ; i++ )
                 {
-                    iPageCredit += stringToFloat(aaData[ aiDisplay[i] ][4]);
+                    iPageCredit += stringToFloat(aaData[ aiDisplay[i] ][6]);
                 }
 
                 /* Modify the footer row to match what we want */
@@ -84,13 +79,13 @@ jQuery(function() {
         });
 
 
-        $('td', oTable.fnGetNodes()).hover( function() {
-            var iCol = $('td', this.parentNode).index(this) % 5;
-            var nTrs = oTable.fnGetNodes();
-            $('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
-        }, function() {
-            $('td.highlighted', oTable.fnGetNodes()).removeClass('highlighted');
-        } );
-    }
+//        $('td', oTable.fnGetNodes()).hover( function() {
+//            var iCol = $('td', this.parentNode).index(this) % 5;
+//            var nTrs = oTable.fnGetNodes();
+//            $('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
+//        }, function() {
+//            $('td.highlighted', oTable.fnGetNodes()).removeClass('highlighted');
+//        } );
+ 
 });
  
