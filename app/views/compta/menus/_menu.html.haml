@@ -15,8 +15,9 @@
         EDITIONS
         %b.caret
       %ul.dropdown-menu
-        
         %li= link_to('Balance', new_compta_period_balance_path(@period))
+        %li= link_to('Compte', new_compta_period_listing_path(@period))
+
   - unless @organism.nil? && @organism.periods.count <= 1
     %li.dropdown(class="#{controller.controller_name == "periods" ? "active" : nil}")
       %a{:href=>'#', :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }

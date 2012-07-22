@@ -1,9 +1,9 @@
 .champ
-  %h3= "Ecritures du compte #{@account.long_name}"
+  %h3= "Ecritures du compte #{@listing.account.long_name}"
 %table(cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed account_lines_table")
   %thead
     %tr
-      %th.pc5 Date
+      %th.pc5.date-euro Date
       %th.pc10 Réf
       %th.pc25 Libellé
       %th.pc20 Nature
@@ -11,7 +11,7 @@
       %th.pc10 Débit
       %th.pc10 Crédit
   %tbody>
-    = render  partial:'compta/lines/line', collection:@lines
+    = render  partial:'compta/lines/line', collection:@listing.lines
   %tfoot
     %tr.total#totaux
       %th(colspan="5" style="text-align:right" rowspan="1")
@@ -19,10 +19,10 @@
         %br
         Totaux globaux:
       %th#tdebit(rowspan="1" colspan="1" class="numeric nombre")
-        =  debit_credit(@total_debit)
+        =  debit_credit(@listing.total_debit)
         %br
-        =  debit_credit(@total_debit+ @solde_debit_avant)
+        =  debit_credit(@listing.total_debit+ @listing.solde_debit_avant)
       %th#tdcredit(rowspan="1" colspan="1" class="numeric nombre")
-        =  debit_credit(@total_credit)
+        =  debit_credit(@listing.total_credit)
         %br
-        =  debit_credit(@total_credit+ @solde_credit_avant)
+        =  debit_credit(@listing.total_credit+ @listing.solde_credit_avant)

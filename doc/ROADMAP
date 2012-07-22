@@ -675,17 +675,19 @@ NON - Exercices n'a pas de sens s'il n'y en a qu'un; on laisse pour ne pas déro
 OK - Dans le menu exercices, il faudrait que les periods non accountables soient désactivés : en fait j'ai choisi de gérer le sujet dans le controller
 OK - Compta ne devrait pas être accessible si on n'a pas créé de compte
 OK - Mettre des validations dans le modèle balance
-Spec ???
+Spec balance - reste à faire le spec d'intégration
+Spec listing
 NON - Dans admin, compta ne devrait proposer afficher que s'il y a des comptes (par contre fait pour relier aux natures)
 OK - Dans compta, seuls les organismes avec les natures reliées devraient apparaître
 OK - Refaire la table balance
 Revoir la partie affichages des comptes
-Faire un modèle listing (pour les comptes)
-Vérifier le pdf de balance et créer le csv
-Compta lines : utiliser data table,
-Compta lines :  modif des paramètres par modal form
-Ajouter un menu Compte dans les éditions
-
+OK - Faire un modèle listing (pour les comptes)
+Vérifier le pdf de balance et créer le csv -changer l'icone printer en icone pdf
+OK - Compta lines : utiliser data table,
+Compta listing :  modif des paramètres par modal form
+OK - Ajouter un menu Compte dans les éditions
+Ajouter une édition du plan comptable (ce qui permet de faire un index des comtpes et un affichage)
+Ajouter un menu grand livre _ uniquement pdf ?
 Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
 OK - Réorganiser les menus dans admin et compta comme pour public
 

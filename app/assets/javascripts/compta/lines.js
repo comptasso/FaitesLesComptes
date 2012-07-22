@@ -20,15 +20,13 @@ jQuery(function() {
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
             },
-            "aoColumns": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-            ],
+              "aoColumnDefs": [
+       {
+      "sType": "date-euro",
+      "asSortable": ['asc', 'desc'],
+      "aTargets": ['date-euro'] // les colonnes date au format français ont la classe date-euro
+    }],
+           
             "iDisplayLength": 15,
             "aLengthMenu": [[10, 15, 25, 50, -1], [10, 15, 25, 50, "Tous"]],
             "bStateSave": true,

@@ -76,6 +76,7 @@ class Period < ActiveRecord::Base
   has_many :natures,  :dependent=>:destroy
   has_many :lines, :through=>:natures
   has_one :balance, :class_name=>'Compta::Balance'
+  has_one :listing, :class_name=>'Compta::Listing'
 
  
   validates :organism_id, :presence=>true

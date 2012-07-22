@@ -12,9 +12,11 @@ Faitesvoscomptes::Application.routes.draw do
     resources :periods do
       resource :balance
       resources :accounts
+      resource :listing
+      
     end
-    resources :accounts do
-      resources :lines
+    resources :accounts  do
+      
     end
   end
   # fin du namespace COMPTA

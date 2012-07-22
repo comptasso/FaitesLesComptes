@@ -16,4 +16,5 @@ class Compta::PeriodsController < Compta::ApplicationController
     end
   end
 
+ 
 end
