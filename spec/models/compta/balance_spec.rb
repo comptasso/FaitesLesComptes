@@ -10,7 +10,7 @@ describe Compta::Balance do
     @a2 = @p.accounts.create!(number:'70',title:'compte 2')
   end
 
-  it 'a virtual attributes from_date_picker et to_date_picker' do
+  it 'has a virtual attributes from_date_picker et to_date_picker' do
     b = Compta::Balance.new
     b.from_date_picker =  '01/01/2012'
     b.from_date.should be_a(Date)

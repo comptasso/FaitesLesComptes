@@ -687,12 +687,13 @@ OK - Compta lines : utiliser data table,
 Compta listing :  modif des paramètres par modal form
 OK - Ajouter un menu Compte dans les éditions
 Ajouter une édition du plan comptable (ce qui permet de faire un index des comtpes et un affichage)
-Ajouter un menu grand livre _ uniquement pdf ?
+Ajouter un menu grand livre - uniquement pdf ?
+Ajouter un menu compte de résultat - uniquement pdf ?
 Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
 OK - Réorganiser les menus dans admin et compta comme pour public
-
 Line : voir les méthodes non utilisées
 Dans Book, has_many pending_checks relève du IncomBook
+
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?
