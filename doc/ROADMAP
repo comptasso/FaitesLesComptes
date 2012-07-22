@@ -680,7 +680,7 @@ NON - Dans admin, compta ne devrait proposer afficher que s'il y a des comptes (
 OK - Dans compta, seuls les organismes avec les natures reliées devraient apparaître
 OK - Refaire la table balance
 Revoir la partie affichages des comptes
-
+Faire un modèle listing (pour les comptes)
 Vérifier le pdf de balance et créer le csv
 Compta lines : utiliser data table,
 Compta lines :  modif des paramètres par modal form

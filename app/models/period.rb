@@ -414,7 +414,7 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
   end
 
   def should_not_have_more_than_two_open_periods
-    if self.organism.nb_open_periods >= 2
+    if organism.nb_open_periods >= 2
       self.errors.add(:base, "Impossible d'avoir plus de deux exercices ouverts")
       return false
     end

@@ -13,6 +13,9 @@
 # Chacune de ces méthodes servent alors d'attribut virtuel pour transformer les dates
 # au format ruby en string au format jj/mm/aaaa
 #
+# Dans les vues, l'utilisation de ces facilités suppose simple_form_for et
+# son extension app/inputs/date_picker_input
+#
 module Utilities::PickDateExtension
 
   def self.included(base)
@@ -36,7 +39,7 @@ module Utilities::PickDateExtension
 
         # definition de arg_picker=
         send :define_method, "#{arg.to_s}_picker=" do |value|
-          s  = value.split('/')
+          s  = value.split('/') if value
           date = Date.civil(*s.reverse.map{|e| e.to_i}) rescue nil
           if date && date > Date.civil(1900,1,1)
             self.send("#{arg.to_s}=", date)

@@ -8,3 +8,6 @@
   MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book od_book transfer)
   ORGMODELS = ORGANISM + MODELS
 
+  NB_PER_PAGE_PORTRAIT = 40
+  NB_PER_PAGE_LANDSCAPE = 22
+

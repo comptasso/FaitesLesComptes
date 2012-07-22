@@ -32,7 +32,7 @@ end
 
 
 # la table des pages
-1.upto(@balance.total_pages) do |t|
+1.upto(@balance.nb_pages) do |t|
     
     pdf.pad(05) do
 
@@ -50,7 +50,7 @@ end
 
         pdf.bounding_box [width-100, y_position], :width => 100, :height => 40 do
             pdf.text "#{time}", :align=>:right
-            pdf.text "Page #{t}/#{@balance.total_pages}",:align=>:right
+            pdf.text "Page #{t}/#{@balance.nb_pages}",:align=>:right
         end
 
     end
@@ -83,7 +83,7 @@ column(7).width=77 # solde cumulé après crédit
      end
 
 # on affiche les sous totaux
-if @balance.total_pages > 1 # mais seulement si plus d'un page
+if @balance.nb_pages > 1 # mais seulement si plus d'un page
   pdf.table [ ["Totaux page"] + prepare_total_balance(@balance.sum_page(t)) ],   :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold }   do
 
         column(0).width=width- 6*77
@@ -106,7 +106,7 @@ if @balance.total_pages > 1 # mais seulement si plus d'un page
 
 pdf.stamp "fond" if @balance.provisoire?
 
-    pdf.start_new_page unless (t == @balance.total_pages)
+    pdf.start_new_page unless (t == @balance.nb_pages)
 end
 
 end

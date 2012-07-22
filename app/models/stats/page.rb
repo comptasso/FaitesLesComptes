@@ -7,6 +7,9 @@ module Stats
   #
   # La première colonne est un String (libellé), les autres colonnes sont des valeurs
   # qui peuvent être sommées
+  # Ce modèle page est utilisé pour les statistiques par nature qui sont généra-
+  # lement sur 12 mois (libellé de la nature puis 12 valeurs puis le total de
+  # ces 12 valeurs
   #
   # La page calcule sa ligne de total de la page et son à reporter
   #

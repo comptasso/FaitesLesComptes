@@ -7,7 +7,21 @@
 #
 #
 class Compta::Balance < ActiveRecord::Base
+
+  def self.columns() @columns ||= []; end
+
+  def self.column(name, sql_type = nil, default = nil, null = true)
+    columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
+  end
+
+  column :from_date, :string
+  column :to_date, :string
+  column :from_account_id, :integer
+  column :to_account_id, :integer
+  column :period_id, :integer
   
+
+  attr_accessor :nb_per_page
 
   include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
 
@@ -27,6 +41,8 @@ class Compta::Balance < ActiveRecord::Base
  # que obligatoire (sachant que le form n'affiche que la première erreur).
   validates :from_date, :to_date, date_within_period:true
   validates :from_date, :to_date, :from_account_id, :to_account_id, :period_id, :presence=>true
+
+  
   
 
    # valeurs par défaut
@@ -45,7 +61,7 @@ class Compta::Balance < ActiveRecord::Base
     accounts.where('number >= ? AND number <= ?', from_account.number, to_account.number)
   end
 
-    def balance_lines
+  def balance_lines
     @balance_lines ||= range_accounts.collect {|acc| balance_line(acc, from_date, to_date)}
   end
 
@@ -57,8 +73,8 @@ class Compta::Balance < ActiveRecord::Base
 
   # renvoie les lignes correspondant à la page demandée
   def page(n)
-    return nil if n > self.total_pages
-    balance_lines[(NB_PER_PAGE*(n-1))..(NB_PER_PAGE*n-1)]
+    return nil if n > self.nb_pages
+    balance_lines[(@nb_per_page*(n-1))..(@nb_per_page*n-1)]
 
   end
 
@@ -78,8 +94,9 @@ class Compta::Balance < ActiveRecord::Base
   # calcule le nombre de page du listing en divisant le nombre de lignes
   # par un float qui est le nombre de lignes par pages,
   # puis arrondi au nombre supérieur
-  def total_pages
-    (balance_lines.size/NB_PER_PAGE.to_f).ceil
+  def nb_pages
+    @nb_per_page ||= NB_PER_PAGE_LANDSCAPE 
+    (balance_lines.size/@nb_per_page.to_f).ceil
   end
 
 

@@ -8,22 +8,14 @@
 #
 class Compta::BalancesController < Compta::ApplicationController
 
-  
-#  def show
-#    @balance = Compta::Balance.new({:period_id=>@period.id}.merge(params[:balance]))
-#     respond_to do |format|
-#      format.html
-#      format.json { render json: @lines }
-#      format.pdf
-#    end
-#  end
-
+ 
   def new
-     @balance = @period.build_balance.with_default_values
+     @balance = Compta::Balance.new(period_id:@period.id).with_default_values
   end
 
   def create
-    @balance = @period.build_balance(params[:compta_balance])
+
+    @balance = Compta::Balance.new( {period_id:@period.id}.merge(params[:compta_balance]) )
     if @balance.valid?
       respond_to do |format|
         format.html { render action: 'show'}
