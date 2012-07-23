@@ -8,6 +8,17 @@
 #
 class Compta::ListingsController < Compta::ApplicationController
 
+  # show est appelé directement par exemple par les lignes de la balance
+  # icon listing qui apparaît à côté des comptes non vides
+  def show
+     @listing = Compta::Listing.new({period_id:@period.id}.merge(params[:compta_listing]) )
+     if @listing.valid?
+      render 'show'
+     else
+      render 'new' # le form new affichera Des erreurs ont été trouvées 
+     end
+  end
+
  
   def new
      @listing = Compta::Listing.new(period_id:@period.id, from_date:@period.start_date, to_date:@period.close_date)
@@ -15,19 +26,15 @@ class Compta::ListingsController < Compta::ApplicationController
   end
 
   def create
-
     @listing = Compta::Listing.new({period_id:@period.id}.merge(params[:compta_listing]) )
-
     if @listing.valid?
-      @listing.fill_lines
-
       render 'show'
     else
       respond_to do |format|
         format.html { render 'new'}
         format.js {render 'new'}
       end
-      
+
   end
   end
 

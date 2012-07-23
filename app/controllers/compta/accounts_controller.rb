@@ -26,10 +26,7 @@ class Compta::AccountsController < Compta::ApplicationController
       format.json { render json: @account }
     end
   end
-
-  
-
-  protected
+ 
 
 
 end

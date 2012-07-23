@@ -6,25 +6,20 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Line do
   include OrganismFixture 
   
-  
   before(:each) do 
     create_minimal_organism 
   end
 
+  describe "creation de ligne" do
 
-
-   describe "creation de ligne" do
     before(:each) do
       @l=Line.new(:book_id=>@ib.id, :credit=>200 ,:narration=>'ligne de test',
         :line_date=>Date.civil(2012,01,02), :nature_id=>@n.id, :payment_mode=> 'Espèces')
-     
     end
 
     it "should be valid" do
-        @l.valid?
-        @l.errors.messages.should == {}
-      #@l.errors.should == []
-    end 
+      @l.should be_valid
+    end
 
     it "should not be valid without payement_mode" do
       @l.payment_mode=nil
@@ -46,11 +41,11 @@ describe Line do
       @l.line_date=nil
       @l.should_not be_valid
     end
+
     it 'debit credit doivent être des nombres avec deux décimales maximum' do
       @l.should_not be_valid if @l.credit = 2.321
-    @l.should be_valid if @l.credit=2.32
+      @l.should be_valid if @l.credit=2.32
       @l.should be_valid if @l.credit=-502.32 
- 
     end
 
     it 'si les données rentrées ne sont pas des chiffres tronque les infos' do
@@ -60,19 +55,18 @@ describe Line do
     end
 
     it 'debit ou credit ne peuvent être tous les deux à zero' do
-     @l.credit=@l.debit=0
-     @l.should_not be_valid
-   end
+      @l.credit=@l.debit=0
+      @l.should_not be_valid
+    end
 
     it 'doit avoir une nature_id' do
       @l.nature_id=nil
       @l.should_not be_valid
     end
-    it 'fait le solde lorsque débit et crédit sont simultanément remplis' do
-      @l.debit=20
-      @l.valid?
-      @l.credit.should == 180
-      @l.should be_valid
+
+    it 'débit et crédit ne doivent pas être simultanément remplis' do
+      @l.debit=20; @l.credit = 180
+      @l.should_not be_valid 
     end
 
     it 'line_date doit correspondre à un exercice' do 
@@ -103,12 +97,11 @@ describe Line do
         it "doesn't raise error but add error to model" do
           @l.line_date_picker = '31/04/2012'
           @l.valid?
-             @l.should have(4).errors
-  #  {:line_date=>["obligatoire", "Date manquante", "Doit être une date"],
-  #   :line_date_picker=>["obligatoire"]
+          @l.should have(1).errors_on(:line_date)
+          @l.should have(1).errors_on(:line_date_picker)
         end
       end
-  end
+    end
 
     it 'line and book should be coherent' # un livre de recettes avec des crédits et un livre de dépenses avec des débits
   end
@@ -117,10 +110,10 @@ describe Line do
 
     before(:each) do
       @m = Line.new(line_date: "2012-02-22", narration: "retrait", nature_id: nil,
-       destination_id: nil, debit: 50,  credit: 0,
-       book_id: @od.id, locked: false, bank_extract_id: nil, payment_mode: nil,
-       check_deposit_id: nil, cash_id: nil, bank_account_id: 5,
-       owner_id: 12, owner_type: "Transfer")
+        destination_id: nil, debit: 50,  credit: 0,
+        book_id: @od.id, locked: false, bank_extract_id: nil, payment_mode: nil,
+        check_deposit_id: nil, cash_id: nil, bank_account_id: 5,
+        owner_id: 12, owner_type: "Transfer")
     end
 
     it 'should be valid even without a nature' do
@@ -132,35 +125,35 @@ describe Line do
 
   context "vérification des lignes et des soldes sur quelques mois" do
 
-  before(:each) do
-    # la somme de 0 à 9 est égale à 45
-#    @l= Line.create(:book_id=>@ib.id, :line_date=>Date.civil(2012,01,2), :credit=>234, :nature_id=>@n.id)
-#    @l.valid?
-#    @l.errors.messages.should == {}
-#   
-    10.times {|t| Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', :payment_mode=> 'Espèces',  :line_date=>Date.civil(2012,01,t+2), :credit=>2*t+1 , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'premier mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,01,t+2), :debit=>t+1 , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'deuxième mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :credit=>3*t+1 , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'deuxième mois credit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :debit=>2*t+1 , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'troisième mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,03,t+2), :credit=>4*t+1 , :nature_id=>@n.id) }
-    10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'troisième mois credit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,04,t+2), :debit=>5*t+1 , :nature_id=>@n.id) }
+    before(:each) do
+      # la somme de 0 à 9 est égale à 45
+      #    @l= Line.create(:book_id=>@ib.id, :line_date=>Date.civil(2012,01,2), :credit=>234, :nature_id=>@n.id)
+      #    @l.valid?
+      #    @l.errors.messages.should == {}
+      #
+      10.times {|t| Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', :payment_mode=> 'Espèces',  :line_date=>Date.civil(2012,01,t+2), :credit=>2*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'premier mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,01,t+2), :debit=>t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'deuxième mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :credit=>3*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'deuxième mois credit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :debit=>2*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'troisième mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,03,t+2), :credit=>4*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'troisième mois credit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,04,t+2), :debit=>5*t+1 , :nature_id=>@n.id) }
 
-  end
-  context 'verification que les lignes sont bien là' do
+    end
+    context 'verification que les lignes sont bien là' do
 
-    it "vérif qu on a bien les lignes" do
-      Line.count.should == 60
+      it "vérif qu on a bien les lignes" do
+        Line.count.should == 60
       end
 
       it 'income and outcomme should each have 30 lines' do
-          @ib.lines.should have(30).elements
+        @ib.lines.should have(30).elements
         @ob.lines.should have(30).elements
       end
 
-    it "scope month return the right number of lines" do
-      Line.month('01-2012').should have(20).elements
+      it "scope month return the right number of lines" do
+        Line.month('01-2012').should have(20).elements
+      end
     end
-  end
 
  
   end
@@ -168,10 +161,10 @@ describe Line do
   context 'une ligne est sauvée' do
 
     before(:each) do
-     @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
-       :payment_mode=> 'Espèces',  :line_date=>Date.today,
-       :credit=>2.50 , :nature_id=>@n.id)
-      end
+      @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
+        :payment_mode=> 'Espèces',  :line_date=>Date.today,
+        :credit=>2.50 , :nature_id=>@n.id)
+    end
 
 
     it 'a line locked cant be destroyed' do

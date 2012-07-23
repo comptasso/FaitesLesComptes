@@ -11,8 +11,9 @@ class MustBelongToPeriodValidator < ActiveModel::EachValidator
       return
     end
     o = record.book.organism
-    record.errors[attribute] << "Date manquante" if value == nil
-    record.errors[attribute] << "Doit être une date" unless value.is_a?(Date)
+    # retiré car déjà testé par le validates :line_date, :presence=>true
+    # record.errors[attribute] << "Date manquante" if value == nil
+    # record.errors[attribute] << "Doit être une date" unless value.is_a?(Date)
     if value.is_a?(Date)
     unless o.find_period(value)
       Rails.logger.warn "Record Line invalide - line_date n'appartient à aucun exercice"

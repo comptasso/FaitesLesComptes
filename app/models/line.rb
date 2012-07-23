@@ -2,10 +2,7 @@
 
 class Line < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
-  # apporte la validation
-  # TODO à retirer
-  include Validations
-
+  
   PAYMENT_MODES ||= %w(CB Chèque Espèces Prélèvement Virement)
   BANK_PAYMENT_MODES ||= %w(CB Chèque Prélèvement Virement)
 
@@ -19,27 +16,11 @@ class Line < ActiveRecord::Base
   belongs_to :bank_account
   belongs_to :cash
   belongs_to :owner, :polymorphic=>true  # pour les transferts uniquement (à ce stade)
-  has_and_belongs_to_many :bank_extract_lines, :uniq=>true
+  has_and_belongs_to_many :bank_extract_lines, :uniq=>true 
 
-  pick_date_for :line_date
+  pick_date_for :line_date 
   
-  before_validation :sold_debit_credit # une ligne ne peut avoir debit et credit simultanément
-  # TODO voir pour remplacer les champ par amount et boolean et faire des virtual attributes
-
-  # pour interdire qu'une ligne ait un debit et un credit rempli.
-  # FIXME : faire plutôt un validator qui crée une erreur sur ce cas de figure de toute façon anormal
-  # et un autre pour éviter les doubles zeros
-  def sold_debit_credit
-    # ici il faudrait plutôt mettre à zero tout ce qui n'est pas un nombre
-    self.debit ||= 0.0
-    self.credit ||= 0.0
-    if self.credit > self.debit
-      self.credit= self.credit-self.debit; self.debit =0 
-    else
-      self.debit= self.debit-self.credit; self.credit = 0
-    end
-  end
-
+ 
   validates :debit, :credit, numericality: true, two_decimals:true      #, format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :book_id, presence:true
   validates :line_date, presence: true
@@ -51,7 +32,7 @@ class Line < ActiveRecord::Base
 
   # C'est fait par un validates_with car cela concerne deux attributes (debit et crédit)
   # pourra être changé si on passe un seul attribut montant plus un booléen pour le débit/crédit
-  validates_with NotNullAmount
+  validates :debit, :credit, :not_null_amounts=>true, :not_both_amounts=>true
   validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
   validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire
  
@@ -87,16 +68,14 @@ class Line < ActiveRecord::Base
   scope :unlocked, where('locked = ?', false)
   scope :before_including_day, lambda {|d| where('lines.line_date <= ?',d)}
 
-  # FIXME Ces fonctions de classe semblent marcher avec un arel.
-  # néanmoins, elles pourraient être perturbantes si on ne filtre pas assez bien en amont les lignes que l'on veut.
-  def self.solde_debit_avant(date)
-    Line.where('line_date < ?', date).sum(:debit)
+  
+  def self.sum_debit_before(date)
+    where('line_date < ?', date).sum(:debit)
   end
 
-  def self.solde_credit_avant(date)
-    Line.where('line_date < ?', date).sum(:credit)
+  def self.sum_credit_before(date)
+    where('line_date < ?', date).sum(:credit)
   end
-
 
   # donne le support de la ligne (ou sa contrepartie) : la banque ou la caisse
   def support

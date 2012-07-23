@@ -9,8 +9,8 @@ module Compta
     columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
   end
 
-  column :from_date, :string
-  column :to_date, :string
+  column :from_date, :date
+  column :to_date, :date
   column :account_id, :integer
   column :period_id, :integer
 
@@ -46,11 +46,11 @@ module Compta
   end
 
   def solde_debit_avant
-    account.lines.solde_debit_avant(from_date)
+    lines.sum_debit_before(from_date)
   end
 
   def solde_credit_avant
-    account.lines.solde_credit_avant(from_date)
+    lines.sum_debit_before(from_date)
   end
 
 
@@ -60,9 +60,5 @@ module Compta
     @lines = account.lines.range_date(from_date, to_date)
   end
 
-  
-
-
-
-end
+ end
 end
