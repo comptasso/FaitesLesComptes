@@ -1,0 +1,27 @@
+/*
+    Document   : namespace
+    Created on : 23 juil. 2012, 17:59:35
+    Author     : jcl
+    Description:
+        Instruction css communes au namespace compta.
+*/
+
+/*
+   TODO customize this sample style
+   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+*/
+
+.modal {
+  .form-actions {
+    background-color: #FFF;
+    }
+   .close {
+     color: #FFF;
+     opacity: 0.9;
+     padding-right: 6px;
+     }
+     .close:hover {
+       opacity: 0.5;
+       }
+  }
+
