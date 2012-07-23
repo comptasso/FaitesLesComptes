@@ -1,5 +1,10 @@
+= content_for :menu do
+  %a(data-toggle="modal" class="icon_menu" href="#modal_form_listing")
+    = image_tag('icones/nouveau.png')
+  =  icon_to 'printer.png', compta_period_balance_path(@period, :format=>'pdf')
 .champ
   %h3= "Ecritures du compte #{@listing.account.long_name}"
+= render partial: 'modal_form'
 %table(cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed account_lines_table")
   %thead
     %tr

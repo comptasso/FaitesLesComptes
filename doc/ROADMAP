@@ -667,7 +667,7 @@ OK - Création d'une action balance_new
 OK - Refonte du formulaire avec usage de pick_date et de simple_form
 OK - Afficher les comptes de façon plus lisible
 OK - revoir le belongs_to_period_validator (incorporer dans line.rb un belongs_to period through book - non ne marche pas è fait un date_within_period_validator à la place
-modifier validations.rb pour harmoniser avec les autres
+OK - modifier validations.rb pour harmoniser avec les autres
 OK - Dans le modèle balance, il faut filtrer les comptes selon les données du formulaire
 OK - Intégration au menu de new et révision de la balance show
 OK - Retirer dans le menu organisme la liste des org et le caret
@@ -693,6 +693,8 @@ Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
 OK - Réorganiser les menus dans admin et compta comme pour public
 Line : voir les méthodes non utilisées
 Dans Book, has_many pending_checks relève du IncomBook
+Voir si les validators cant_change, cant_edit et cant_edit_field sont utilisés
+Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
 
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos

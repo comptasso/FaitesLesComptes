@@ -16,6 +16,7 @@ module Compta
 
    belongs_to :period
    belongs_to :account
+   has_many :accounts, :through=>:period
 
     include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
 

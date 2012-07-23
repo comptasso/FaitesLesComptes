@@ -1,7 +1,9 @@
 # coding: utf-8
 
-# La classe OptionsForNatureSelect et son pendant OptionsForAccountSelect
-# sert à fournir au select des natures les différentes données nécessaires
+# La classe OptionsForAssociationSelect
+# sert à fournir au select les différentes données nécessaires
+# pour faire des groupes.
+# 
 # Le but est d'avoir un Select avec par exemple
 # Dépenses (en tête du Groupe)
 #   - courses
