@@ -22,6 +22,8 @@ class Compta::ListingsController < Compta::ApplicationController
  
   def new
      @listing = Compta::Listing.new(period_id:@period.id, from_date:@period.start_date, to_date:@period.close_date)
+     @listing.account_id = params[:account_id] # permet de préremplir le formulaire avec le compte si
+     # on vient de l'affichage du plan comptable (accounts#index)
      @accounts = @period.accounts.order('number ASC')
   end
 

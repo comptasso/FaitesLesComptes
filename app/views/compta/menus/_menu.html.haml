@@ -15,6 +15,7 @@
         EDITIONS
         %b.caret
       %ul.dropdown-menu
+        %li= link_to('Plan comptable', compta_period_accounts_path(@period))
         %li= link_to('Balance', new_compta_period_balance_path(@period))
         %li= link_to('Compte', new_compta_period_listing_path(@period))
 
