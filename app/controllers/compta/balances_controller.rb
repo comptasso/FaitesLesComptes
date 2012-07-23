@@ -13,6 +13,24 @@ class Compta::BalancesController < Compta::ApplicationController
      @balance = Compta::Balance.new(period_id:@period.id).with_default_values
   end
 
+  # utile pour afficher la balance en pdf
+  def show
+    @balance = Compta::Balance.new( {period_id:@period.id}.merge(params[:compta_balance]) )
+    if @balance.valid?
+      respond_to do |format|
+        format.html { render action: 'show'}
+        format.js
+        format.pdf
+      end
+    else
+      respond_to do |format|
+        format.html { render 'new'}
+        format.js {render 'new'}
+        format.pdf {render :text=>'Erreur dans la génération du listing'}
+      end
+    end
+  end
+
   def create
 
     @balance = Compta::Balance.new( {period_id:@period.id}.merge(params[:compta_balance]) )

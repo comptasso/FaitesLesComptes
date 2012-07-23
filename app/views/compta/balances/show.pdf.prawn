@@ -1,13 +1,4 @@
 prawn_document(:page_size => 'A4', :page_layout => :landscape) do |pdf|
-#         :info => {
-#:Title => "Edition de la balance ,:Author => "John Doe",:Subject => "Comptabilité",
-# :Keywords => "comptabilité, balance ,#{@organism.title}",:Creator => "#{@organism.title}",
-# :Producer => "FaitesLesComptes with Prawn",
-# :CreationDate => Time.now} } do |pdf|
-#        :background=>'/assets/images/argent_liquide.jpg' }
-
-
-
 
 width=pdf.bounds.right
 time=l Time.now
@@ -45,7 +36,7 @@ end
 
         pdf.bounding_box [100, y_position], :width => width-200, :height => 40 do
             pdf.font_size(20) { pdf.text "Balance des comptes", :align=>:center }
-            pdf.text "Du #{l @begin_date} Au #{l @end_date}", :align=>:center
+            pdf.text "Du #{l @balance.from_date} Au #{l @balance.to_date}", :align=>:center
         end
 
         pdf.bounding_box [width-100, y_position], :width => 100, :height => 40 do
@@ -57,7 +48,7 @@ end
 
     pdf.stroke_horizontal_rule
 
- pdf.table [ [" ", "Soldes au #{l @begin_date}","Mouvements \n de la période","Soldes au #{l @end_date}" ] ],
+ pdf.table [ [" ", "Soldes au #{l @balance.from_date}","Mouvements \n de la période","Soldes au #{l @balance.to_date}" ] ],
   :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do
 
         column(0).width=width- 6*77

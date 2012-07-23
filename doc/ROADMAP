@@ -680,14 +680,16 @@ Spec listing
 NON - Dans admin, compta ne devrait proposer afficher que s'il y a des comptes (par contre fait pour relier aux natures)
 OK - Dans compta, seuls les organismes avec les natures reliées devraient apparaître
 OK - Refaire la table balance
-Revoir la partie affichages des comptes
+OK - Revoir la partie affichages des comptes
 OK - Faire un modèle listing (pour les comptes)
-Vérifier le pdf de balance et créer le csv -changer l'icone printer en icone pdf
+
 OK - Compta lines : utiliser data table,
 OK - Compta listing :  modif des paramètres par modal form
 OK - doit réinitier le datatable après mise à jour modale
 OK - Ajouter un menu Compte dans les éditions
-Ajouter une édition du plan comptable (ce qui permet de faire un index des comtpes et un affichage)
+OK - Ajouter une édition du plan comptable (ce qui permet de faire un index des comtpes et un affichage)
+pdf pour les différentes impressions : plan comptable, listing, balance
+Vérifier le pdf de balance et créer le csv -changer l'icone printer en icone pdf
 Ajouter un menu grand livre - uniquement pdf ?
 Ajouter un menu compte de résultat - uniquement pdf ?
 Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
