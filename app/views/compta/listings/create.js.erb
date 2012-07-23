@@ -17,4 +17,5 @@ $('.champ > h3').text("Ecritures du compte <%= @listing.account.long_name %>")
 // on rend le listing
 $('#listing_table').html(" <%= j render 'listing_table' %>");
 
-// TODO il faut réassocier la data_table
+// et on réinitialiser la data_table
+DrawDataTable();
