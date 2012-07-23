@@ -28,11 +28,15 @@ class Compta::ListingsController < Compta::ApplicationController
   def create
     @listing = Compta::Listing.new({period_id:@period.id}.merge(params[:compta_listing]) )
     if @listing.valid?
-      render 'show'
+       respond_to do |format|
+        format.html {render 'show'}
+        format.js # vers fichier create.js.erb
+      end
+
     else
       respond_to do |format|
         format.html { render 'new'}
-        format.js {render 'new'}
+        format.js {render 'new'} # vers fichier new.js.erb
       end
 
   end

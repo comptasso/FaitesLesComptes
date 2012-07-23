@@ -1,0 +1,20 @@
+// on ferme la fenêtre
+$('button.close').click();
+// on récrit le formulaire - ceci pour le cas où l'on viendrait d'un new
+// avec des erreurs afin d'effacer les messages d'erreurs
+$('div.modal-body').html('<%= j render partial:'modal_body_form' %>');
+// on réassocie les date picker
+$('.input_date_picker').datepicker(
+    {
+        dateFormat: 'dd/mm/yy',
+        minDate: $(this).attr('data-jcmin'),
+        maxDate: $(this).attr('data-jcmax')
+    }
+);
+// on réécrit le titre
+$('.champ > h3').text("Ecritures du compte <%= @listing.account.long_name %>")
+
+// on rend le listing
+$('#listing_table').html(" <%= j render 'listing_table' %>");
+
+// TODO il faut réassocier la data_table

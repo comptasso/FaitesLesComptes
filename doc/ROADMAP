@@ -684,7 +684,8 @@ Revoir la partie affichages des comptes
 OK - Faire un modèle listing (pour les comptes)
 Vérifier le pdf de balance et créer le csv -changer l'icone printer en icone pdf
 OK - Compta lines : utiliser data table,
-Compta listing :  modif des paramètres par modal form
+OK - Compta listing :  modif des paramètres par modal form
+doit réinitier le datatable après mise à jour modale
 OK - Ajouter un menu Compte dans les éditions
 Ajouter une édition du plan comptable (ce qui permet de faire un index des comtpes et un affichage)
 Ajouter un menu grand livre - uniquement pdf ?
