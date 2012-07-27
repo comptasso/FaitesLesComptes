@@ -7,6 +7,13 @@ watch("app/(.*/.*).rb") do |match|
   run_spec %{spec/#{match[1]}_spec.rb}
 end
 
+# je commence par un caret car sinon intercepte /lib/pdf_document/base
+# mais aussi spec/lib/pdf_document/base_spec, ce qui du coup tente 
+# d'exécuter spec/lib/pdf_document/base_spec_spec  bang!
+watch("^lib/(.*/.*).rb") do |match|
+  run_spec %{spec/lib/#{match[1]}_spec.rb}
+end
+
 watch("app/(.*).erb") do |match|
   run_spec %{spec/#{match[1]}.erb_spec.rb}
 end

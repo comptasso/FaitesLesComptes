@@ -1,6 +1,11 @@
 # coding: utf-8
 
 module Compta
+
+  # la classe Listing sert à éditer un compte. Elle n'est pas persistente mais
+  # s'appuie sur ActiveRecord::Base pour avoir les associations
+  # Ceci suppose d'avoir une définition des colonnes virtuelles
+  # d'om les premières lignes de cette classe
   class Listing < ActiveRecord::Base
 
     def self.columns() @columns ||= []; end

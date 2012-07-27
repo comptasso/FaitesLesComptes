@@ -38,6 +38,7 @@ end
 
   Spork.each_run do
     ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+   
   end
 
 #  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
