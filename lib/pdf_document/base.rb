@@ -1,5 +1,7 @@
 # coding: utf-8
 
+# TODO on pourrait remplacer le tableau de string columns par des objets columns
+
 module PdfDocument
   # La classe PdfDocument::Base est destinée à servir de base pour les
   # différents besoins de fichier pdf.
@@ -24,7 +26,7 @@ module PdfDocument
   #
   class Base
     include ActiveModel::Validations
-     attr_accessor :title, :subtitle, :columns_title, :total_columns_widths
+     attr_accessor :title, :subtitle, :columns_title, :total_columns_widths, :columns_alignements, :columns_formats
      attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize, :stamp
      attr_writer  :select_method
 
@@ -118,6 +120,8 @@ module PdfDocument
       def set_columns(array_columns = nil)
        @columns = array_columns || @source.lines.first.class.column_names
        set_columns_widths
+       set_columns_alignements
+      
        @columns
      end
 
@@ -196,6 +200,20 @@ module PdfDocument
        end
        @total_columns_widths
      end
+
+     # définit un aligment des colonnes par défaut, les colonnes qui sont
+     # numériques sont alignées à droite, les autres à gauche
+     def set_columns_alignements
+       # on prend les colonnes sélectionnées et on construit un tableau
+       # left, right selon le type de la colonne
+       lch = Line.columns_hash
+       @columns_alignements = @columns.map do |c|
+         (lch[c].number? && lch[c].name !~ /_id$/) ? :right : :left
+       end
+       @columns_alignements
+     end
+
+    
 
 
 

@@ -68,7 +68,7 @@ end
         column(5).width=77 # movement credit
 column(6).width=77 # solde cumulé après débit
 column(7).width=77 # solde cumulé après crédit
-         column(2..7).style {|c| c.align=:right}
+        column(2..7).style {|c| c.align=:right}
         row(0).style {|c| c.font_style=:bold; c.align=:center }
          
      end

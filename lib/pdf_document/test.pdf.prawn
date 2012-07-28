@@ -47,24 +47,31 @@ column_widths = doc.columns_widths.collect { |w| width*w/100 }
 
 # une table de une ligne pour les titres
 table [page.table_title],
-  :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do
+  :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do 
          column_widths.each_with_index {|w,i| column(i).width = w}
       end
 
 # une table de une ligne pour le report
 if page.table_report_line
-table [page.table_report_line] do
-         page.total_columns_widths.each_with_index {|w,i| column(i).width = w}
+table [page.table_report_line],  :cell_style=>{:font_style=>:bold, :align=>:right } do 
+         page.total_columns_widths.each_with_index {|w,i| column(i).width = width*w/100 }
       end
 end
 
 # la table des lignes proprement dites
 table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5]} do
     column_widths.each_with_index {|w,i| column(i).width = w}
+    doc.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
+
 end
 
-# la table des à reporter
-
+# la table total et la table a reporter
+table [page.table_total_line, page.table_to_report_line],  :cell_style=>{:font_style=>:bold, :align=>:right } do
+  page.total_columns_widths.each_with_index do |w,i|
+      column(i).width = width*w/100
+      
+  end
+end
 
 
 

@@ -24,7 +24,7 @@ describe PdfDocument::Table do
 
 
   before(:each) do
-    @l = mock_model(Line, line_date:Date.today, ref:nil, debit:10, credit:0)
+    @l = mock_model(Line, line_date:Date.today, ref:nil, debit:BigDecimal.new('10'), credit:BigDecimal.new('0'))
     arel.stub_chain(:select, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
     doc.set_columns_titles( %w(Date Réf Débit Crédit) )
     doc.set_columns(%w(line_date ref debit credit)) 
@@ -42,24 +42,24 @@ describe PdfDocument::Table do
   end
 
   it 'la table ne doit reprendre que les colonnes demandées' do  
-    @page.table_lines.first.should == [(Date.today -1),nil, 10.0, 0]
+    @page.table_lines.first.should == [I18n.l(Date.today -1), '', '10.00', '']
   end
 
 
   describe 'gestion des totaux' do
     it 'la table doit pouvoir écrire le total sur les lignes qui conviennent' do
       doc.set_columns_to_totalize([2,3])
-      @page.table_total_line.should == ['Totaux', 22*10, 0]
+      @page.table_total_line.should == ['Totaux', "220.00", '']
     end
   
     it 'la table doit pouvoir écrire le total sur les lignes qui conviennent' do
       doc.set_columns_to_totalize([2])
-      @page.table_total_line.should == ['Totaux', 22*10]
+      @page.table_total_line.should == ['Totaux', "220.00"]
     end
 
     it 'la table doit avoir sa ligne de report' do
       doc.set_columns_to_totalize([2])
-      @page.table_report_line.should == ['Reports', 220]
+      @page.table_report_line.should == ['Reports', "220.00"]
     end
   end
 

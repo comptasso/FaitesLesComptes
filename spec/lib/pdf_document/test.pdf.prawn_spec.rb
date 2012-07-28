@@ -9,7 +9,7 @@ require 'pdf_document/table'
 
 
 
-describe 'test pdf prawn' do 
+describe 'test pdf prawn' do  
   include OrganismFixture
    before(:each) do
      create_minimal_organism
@@ -40,23 +40,23 @@ describe 'test pdf prawn' do
   end
 
   it 'should be able to create a pdf document' do
-    @pdf = PdfDocument::Base.new(@p, @account, title:@o.title, subtitle:'Essai') 
+    @pdf = PdfDocument::Base.new(@p, @account, title:@o.title, subtitle:'Essai')
     @pdf.should be_an_instance_of(PdfDocument::Base)
   end
 
   context 'le document est créé' do
     before(:each) do
-      @pdf = PdfDocument::Base.new(@p, @account, title:@o.title, subtitle:'Essai')  
+      @pdf = PdfDocument::Base.new(@p, @account, title:@o.title, subtitle:'Essai')    
       @pdf.set_columns %w(line_date nature_id debit credit)
       @pdf.set_columns_titles %w(Date Nature Débit Crédit)
       
-      @pdf.set_columns_methods [nil, 'nature.name', nil, nil]
+      @pdf.set_columns_methods [nil, 'nature.name', nil, nil]  
       @pdf.set_columns_widths [10,60,15,15]
-      @pdf.set_columns_to_totalize [2] 
+      @pdf.set_columns_to_totalize [2,3]
     end 
 
     it 'should have 3 pages' do 
-      @pdf.nb_pages.should == 3 
+      @pdf.nb_pages.should == 3  
     end
 
     it 'pdf page table' do
@@ -64,7 +64,7 @@ describe 'test pdf prawn' do
     end
 
     it 'largeur des titres' do
-      @pdf.page(1).total_columns_widths.should == [70,15]
+      @pdf.page(1).total_columns_widths.should == [70,15,15]
     end
 
     it 'peut rendre le fichier test.pdf.prawn' do

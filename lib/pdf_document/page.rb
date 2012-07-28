@@ -70,12 +70,12 @@ module PdfDocument
       else
         r =[]
         table_report_line.each_with_index do |v,i|
-          r << v + table_total_line[i]
+          r << '%0.2f' % (v.to_f + table_total_line[i].to_f)
         end
       end
         r[0] =  @number == @doc.nb_pages ? 'Total général' : 'A reporter'
     
-      r
+      r 
     end
 
 
@@ -86,11 +86,11 @@ module PdfDocument
       @table ||= Table.new(self, @doc)
     end
 
-    def _total(i)
-      s = table_total_line[i]
-      s += table_report_line[i] if table_report_line
-      s 
-    end
+#    def _total(i)
+#      s = table_total_line[i]
+#      s =  if table_report_line
+#      s
+#    end
 
     
 

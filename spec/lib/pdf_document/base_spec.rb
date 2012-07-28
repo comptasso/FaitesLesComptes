@@ -148,10 +148,16 @@ describe PdfDocument::Base do
     end
 
     it 'on peut sélectionner les colonnes' do
-      @base.set_columns   %w(date ref nature destination debit credit)
-      @base.columns.should == %w(date ref nature destination debit credit)
+      @base.set_columns   %w(line_date ref nature_id destination_id debit credit)
+      @base.columns.should == %w(line_date ref nature_id destination_id debit credit)
     end
 
+    it 'choisir des colonnes crée un tableau des alignements' do
+      @base.set_columns   %w(line_date ref nature_id destination_id debit credit)
+      @base.columns_alignements.should == [:left, :left,:left,:left,:right, :right]
+    end
+
+   
     describe 'les méthodes sur les colonnes' do
       it 'par défaut les colonnes utilisent le nom de la colonne' do 
         @base.columns_methods.should == @base.columns
@@ -169,19 +175,20 @@ describe PdfDocument::Base do
 
     describe 'les largeurs de colonnes' do
 
+      before(:each) do
+        @base.set_columns   %w(line_date ref nature_id destination_id debit credit)
+      end
+
       it 'on a une largeur de colonnes par défaut' do
-        @base.set_columns   %w(date ref nature destination debit credit)
         @base.columns_widths.should == 6.times.collect {|t| 100.0/6 }
       end
 
       it 'on peut imposer les 6 colonnes' do
-        @base.set_columns  %w(date ref nature destination debit credit)
         @base.set_columns_widths([10,20,30,10,15,15])
         @base.columns_widths.should == [10,20,30,10,15,15]
       end
 
       it 'on peut n imposer que les 4 premières' do
-        @base.set_columns  %w(date ref nature destination debit credit)
         @base.set_columns_widths([10,20,30,10])
         @base.columns_widths.should == [10,20,30,10,15,15]
       end
@@ -193,7 +200,7 @@ describe PdfDocument::Base do
     describe 'gestion des totaux' do
 
       before(:each) do
-        @base.set_columns  %w(date ref nature_id destination debit credit)
+        @base.set_columns  %w(line_date ref nature_id destination_id debit credit)
         @base.set_columns_widths([10,20,30,10])
       end
 

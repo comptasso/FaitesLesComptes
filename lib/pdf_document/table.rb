@@ -53,19 +53,26 @@ module PdfDocument
           r << lines.sum {|l| l.instance_eval(c)}
         end
       end
-      r.insert(0, 'Totaux')
+      tl = r.collect {|v| format_value(v)}
+      tl.insert(0, 'Totaux')
    
     end
 
-     # appelles les méthodes adéquate pour chacun des éléments de la lignes
-    def prepare_line(line)
-      @document.columns_methods.collect do |c|
-        line.instance_eval(c)
-      end
-    end
+     # appelle les méthodes adéquate pour chacun des éléments de la lignes
+     def prepare_line(line)
+       @document.columns_methods.collect { |m| format_value(line.instance_eval(m)) }
+     end
 
      
     protected
+
+     def format_value(r)
+        r = '' if r.nil?
+        r = I18n::l(r) if r.is_a? Date
+        r = '%0.2f' % r if r.is_a? BigDecimal
+        r = '' if r == '0.00'
+        r
+     end
 
     def fetch_lines
       select =@document.columns
