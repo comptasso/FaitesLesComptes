@@ -12,6 +12,10 @@ module PdfDocument
       @doc = doc
     end
 
+    def stamp
+      @doc.stamp
+    end
+
     def top_left
       "#{@doc.organism_name}\n#{@doc.exercice}"
     end
@@ -32,6 +36,14 @@ module PdfDocument
       pdf_table.title 
     end
 
+    def table_columns_widths
+      @doc.columns_widths
+    end
+
+    def total_columns_widths
+      @doc.total_columns_widths
+    end
+
     def table_lines
       pdf_table.prepared_lines
     end
@@ -48,25 +60,30 @@ module PdfDocument
       r
     end
 
+    
+    # additionne la ligne de report (si elle existe) et la ligne de total
     def table_to_report_line
-      r = ['A reporter']
-      @doc.columns[1..@doc.columns.size-1].each_with_index do |c,i|
-        if @doc.columns_to_totalize.include?(i+1)
-         r << _total(i+1)
-        else 
-          r < ''
+      # cas où la ligne de report n'existe pas
+      # on prend la ligne total et on change juste le titre
+      unless  table_report_line
+        r = table_total_line
+      else
+        r =[]
+        table_report_line.each_with_index do |v,i|
+          r << v + table_total_line[i]
         end
       end
-      r[0] = 'Total général' if @number == @doc.nb_pages
+        r[0] =  @number == @doc.nb_pages ? 'Total général' : 'A reporter'
+    
       r
     end
 
 
-protected
+    protected
     # construit une table en donnant comme argument la page et le document
     # 
     def pdf_table
-       @table ||= Table.new(self, @doc)
+      @table ||= Table.new(self, @doc)
     end
 
     def _total(i)

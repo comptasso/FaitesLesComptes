@@ -54,33 +54,47 @@ describe PdfDocument::Page do
        @page.table_title.should == %w(Date Débit Crédit)
     end
 
+    it 'repond à stamp' do
+      @page.stamp.should == doc.stamp
+    end
+
   describe 'lines total et reports'  do
 
     before(:each) do
-      @l = mock_model(Line, line_date:Date.today, debit:10, credit:0)
+      @l = mock_model(Line, line_date:Date.today, ref:nil, debit:10, credit:0)
       arel.stub_chain(:select, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
-      doc.set_columns %w(line_date debit credit)
-      doc.set_columns_to_totalize [1,2]
-      @page = doc.page 3
+      doc.set_columns %w(line_date ref debit credit)
+      doc.set_columns_to_totalize [2]
+      
     end
-    it 'faut pouvoir indiquer les colonnes à totaliser' do
-      @page.table_total_line.should == ['Totaux', 220,0]
+    it 'total_line' do
+      doc.page(1).table_total_line.should == ['Totaux', 220]
     end
+
+      it 'to_report' do
+        doc.page(1).table_to_report_line.should == ['A reporter', 220]
+      end
+
+      it 'to_report_line' do
+        doc.page(2).table_report_line.should == ['Reports', 220]
+      end
 
       it 'la page 1 n a pas de ligne report' do
         doc.page(1).table_report_line.should be_nil
       end
+
+
       
       it 'la page 3 doit avoir un report de 440' do
-        @page.table_report_line.should == ['Reports', 440, 0]
+        doc.page(3).table_report_line.should == ['Reports', 440]
       end
 
       it 'la page a une ligne à reporter' do
-        @page.table_to_report_line.should == ['A reporter', 660,0]
+        doc.page(3).table_to_report_line.should == ['A reporter', 660]
       end
 
       it 'la ligne à reporter est intitulée total general pour la dernière page' do
-        doc.page(5).table_to_report_line.should == ['Total général', 1100, 0]
+        doc.page(5).table_to_report_line.should == ['Total général', 1100]
       end
   end
 

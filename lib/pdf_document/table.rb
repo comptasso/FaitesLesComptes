@@ -49,14 +49,11 @@ module PdfDocument
     def total_line
       r = []
       @document.columns.each_with_index do |c,i|
-        
         if @document.columns_to_totalize.include? i
           r << lines.sum {|l| l.instance_eval(c)}
-        else
-          r << (i == 0 ? 'Totaux' : '')
         end
-       end
-      r
+      end
+      r.insert(0, 'Totaux')
    
     end
 

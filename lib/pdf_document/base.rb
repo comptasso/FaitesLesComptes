@@ -24,8 +24,8 @@ module PdfDocument
   #
   class Base
     include ActiveModel::Validations
-     attr_accessor :title, :subtitle, :columns_title
-     attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize
+     attr_accessor :title, :subtitle, :columns_title, :total_columns_widths
+     attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize, :stamp
      attr_writer  :select_method
 
     validates :title, :presence=>true
@@ -39,6 +39,7 @@ module PdfDocument
        @to_date = options[:to_date] || @period.close_date
        @nb_lines_per_page = options[:nb_lines_per_page] || 22
        @source = source
+       @stamp = options[:stamp]
      end
 
      
@@ -71,6 +72,8 @@ module PdfDocument
      def columns_widths
        @columns_widths ||= set_columns_widths
      end
+
+    
 
      def columns
        @columns ||= set_columns
@@ -106,8 +109,16 @@ module PdfDocument
         @columns_widths = array_widths[0..5]
      end
 
-     def set_columns(array_columns = nil)
+
+      # permet de choisir les colonnes que l'on veut sélectionner pour le document
+      # set_columns appelle set_columns_widths pour calculer la largeur des colonnes
+      # sur la base de largeurs égales.
+      # Si on veut fixer les largeurs, il faut alors appeler set_columns_widths
+      #
+      def set_columns(array_columns = nil)
        @columns = array_columns || @source.lines.first.class.column_names
+       set_columns_widths
+       @columns
      end
 
      def set_columns_methods(array_methods = nil)
@@ -135,11 +146,55 @@ module PdfDocument
      # par exemple si on demande Date Réf Debit Credit
      # on sélectionne [2,3] pour indices
      def set_columns_to_totalize(indices)
+       raise ArgumentError , 'Le tableau des colonnes ne peut être vide' if indices.empty?
        @columns_to_totalize = indices
+       set_total_columns_widths
      end
+
+
 
      def select_method
        @select_method ||= :lines
+     end 
+
+     # Crée le fichier pdf associé 
+     def render(file) 
+       text  =  ''
+       File.open("lib/pdf_document/#{file}", 'r') do |f| 
+          text = f.read
+       end
+#       puts text
+       require 'prawn'
+       doc = self
+       pdf_file = Prawn::Document.generate('hello.pdf', :page_size => 'A4', :page_layout => :landscape) do |pdf|
+            pdf.instance_eval(text)
+          end
+       pdf_file
+       
+     end
+
+     private
+
+      # méthode permettant de donner la largeur des colonnes pour une ligne de
+     # total
+     def set_total_columns_widths
+       raise 'Impossible de calculer les largeurs des lignes de total car les largeurs de la table ne sont pas fixées' unless @columns_widths
+       @total_columns_widths = []
+       # si la colonne est à totaliser on retourne la valeur
+       # sinon on la garde et on examine la colonne suivant
+       l = 0 # variable pour accumuler les largeurs des colonnes qui ne sont pas à totaliser
+       @columns_widths.each_with_index do |w,i|
+         if @columns_to_totalize.include? i
+           if l != 0
+           @total_columns_widths << l
+           l = 0
+           end
+           @total_columns_widths << w
+         else
+           l += w
+         end
+       end
+       @total_columns_widths
      end
 
 
