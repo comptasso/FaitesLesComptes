@@ -6,7 +6,7 @@ module PdfDocument
   class Page
 
     attr_reader :number, :table
-
+    
     def initialize(number, doc)
       @number =  number
       @doc = doc
@@ -54,7 +54,7 @@ module PdfDocument
 
     # forunit le report
     def table_report_line
-      return nil if @number == 1 # première page
+      return @doc.first_report_line if @number == 1 # première page
       r =  @doc.page(@number -1).table_to_report_line
       r[0] = 'Reports'
       r
@@ -69,6 +69,7 @@ module PdfDocument
         r = table_total_line
       else
         r =[]
+        # TODO utiliser each_index
         table_report_line.each_with_index do |v,i|
           r << '%0.2f' % (v.to_f + table_total_line[i].to_f)
         end

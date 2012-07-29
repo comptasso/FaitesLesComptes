@@ -60,6 +60,13 @@ class Account < ActiveRecord::Base
     self.lines.where('line_date <= ?',date).sum(dc)
   end
 
+  
+  def formatted_sold(date)
+     ['%0.2f' % cumulated_before(date, :debit), '%0.2f' % cumulated_before(date, :credit) ]
+  end
+
+
+  # TODO on pourrait utiliser le scope range_date de lines
   # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
   def movement(from, to, dc)
     self.lines.where('line_date >= ? AND line_date <= ?', from, to ).sum(dc)
@@ -69,13 +76,13 @@ class Account < ActiveRecord::Base
     self.lines.where('line_date >= ? AND line_date <= ?', from, to ).empty?
   end
   
-  def all_lines_locked?(from=self.period.start_date, to=self.period.close_date)
+  def all_lines_locked?(from = self.period.start_date, to = self.period.close_date)
     self.lines.where('line_date >= ? AND line_date <= ?', from, to ).any? {|l| !l.locked? } ? true : false
   end
 
   #produit un document pdf en s'appuyant sur la classe PdfDocument::Base
   # et ses classe associées page et table
-  def to_pdf(from_date = period.start_date, to_date= period.close_date)
+  def to_pdf(from_date = period.start_date, to_date = period.close_date)
     stamp = "brouillard" unless all_lines_locked?(from_date, to_date)
     pdf = PdfDocument::Base.new(period, self,
       title:"Liste des écritures du compte #{number}",
@@ -87,6 +94,8 @@ class Account < ActiveRecord::Base
     pdf.set_columns_widths [10, 10, 40, 20, 10, 10]
     pdf.set_columns_titles %w(Date Réf Libellé Destination Débit Crédit)
     pdf.set_columns_to_totalize [4,5]
+    pdf.first_report_line = ["Soldes au #{I18n::l from_date}"] + formatted_sold(from_date)
+      
     pdf
   end
 

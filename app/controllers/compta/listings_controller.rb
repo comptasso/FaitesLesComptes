@@ -11,12 +11,14 @@ class Compta::ListingsController < Compta::ApplicationController
   # show est appelé directement par exemple par les lignes de la balance
   # icon listing qui apparaît à côté des comptes non vides
   def show
+    load 'lib/pdf_document/base.rb'
+    load 'lib/pdf_document/page.rb'
      @listing = Compta::Listing.new({period_id:@period.id}.merge(params[:compta_listing]) )
      if @listing.valid?
        respond_to do |format|
         format.html {render 'show'}
-        format.js # vers fichier create.js.erb
-        format.pdf {  send_data @listing.account.to_pdf.render }
+        format.pdf { send_data @listing.to_pdf.render ,
+          filename:"Listing compte #{@listing.account.long_name}.pdf"}
       end
       
      else

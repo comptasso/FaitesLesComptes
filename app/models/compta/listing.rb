@@ -59,6 +59,11 @@ module Compta
     lines.sum_debit_before(from_date)
   end
 
+  # to_pdf produce delegates to account to produce pdf data
+  def to_pdf
+    account.to_pdf(from_date, to_date)
+  end
+
 
   protected
 

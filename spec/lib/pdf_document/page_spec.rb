@@ -83,6 +83,22 @@ describe PdfDocument::Page do
         doc.page(1).table_report_line.should be_nil 
       end
 
+      describe 'report de la première page' do
+        it 'sauf s il est fixé par le doc' do
+        doc.first_report_line = ["Soldes", 99]
+        doc.page(1).table_report_line.should ==  ["Soldes", 99]
+      end
+
+        it 'le total à reporter prend en compte le report' do
+          doc.first_report_line = ["Soldes", 99]
+          doc.page(1).table_to_report_line.should == ['A reporter', "319.00"]
+        end
+
+
+      end
+
+
+
 
       
       it 'la page 3 doit avoir un report de 440' do
@@ -96,6 +112,10 @@ describe PdfDocument::Page do
       it 'la ligne à reporter est intitulée total general pour la dernière page' do
         doc.page(5).table_to_report_line.should == ['Total général', '1100.00']
       end
+
+
+
+      
   end
 
 

@@ -678,9 +678,10 @@ OK - Mettre des validations dans le modèle balance
 Spec balance - reste à faire le spec d'intégration
 Spec listing
 
-la balance PDF pourrait bien être systématiquement sur l'ensemble de l'année
-Voir pour le compte....
-
+OK - la balance PDF pourrait bien être systématiquement sur l'ensemble de l'année
+OK - Voir pour le compte....
+Dans le listing du compte, ce qu'on veut c'est avoir en première page comme report  le solde du compte
+Attention à mettre à jour le line pdf après modif par la boîte modale
 NON - Dans admin, compta ne devrait proposer afficher que s'il y a des comptes (par contre fait pour relier aux natures)
 OK - Dans compta, seuls les organismes avec les natures reliées devraient apparaître
 OK - Refaire la table balance

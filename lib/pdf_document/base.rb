@@ -29,7 +29,7 @@ module PdfDocument
   #
   class Base
     include ActiveModel::Validations
-     attr_accessor :title, :subtitle, :columns_title, :total_columns_widths, :columns_alignements, :columns_formats
+     attr_accessor :title, :subtitle, :columns_title, :total_columns_widths, :columns_alignements, :columns_formats, :first_report_line
      attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize, :stamp
      attr_writer  :select_method
 
