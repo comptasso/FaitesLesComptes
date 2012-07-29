@@ -2,6 +2,9 @@
 
 # TODO on pourrait remplacer le tableau de string columns par des objets columns
 
+require 'pdf_document/page'
+require 'pdf_document/table'
+
 module PdfDocument
   # La classe PdfDocument::Base est destinée à servir de base pour les
   # différents besoins de fichier pdf.
@@ -162,19 +165,18 @@ module PdfDocument
      end 
 
      # Crée le fichier pdf associé 
-     def render(file) 
+     def render
        text  =  ''
-       File.open("lib/pdf_document/#{file}", 'r') do |f| 
+       File.open("lib/pdf_document/test.pdf.prawn", 'r') do |f|
           text = f.read
        end
 #       puts text
        require 'prawn'
        doc = self
-       pdf_file = Prawn::Document.generate('hello.pdf', :page_size => 'A4', :page_layout => :landscape) do |pdf|
+       pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|
             pdf.instance_eval(text)
           end
-       pdf_file
-       
+       pdf_file.render
      end
 
      private

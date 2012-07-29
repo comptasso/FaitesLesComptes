@@ -18,6 +18,16 @@ module OrganismFixture
     
   end
 
+  # crée le nombre de lignes demandées pour le minimal organism avec
+  # des valeurs par défaut
+  def create_lines(number)
+    number.times do |i|
+     Line.create!(line_date: Date.today, credit:0, debit:(i+1),
+        book_id: @ob.id, cash_id:@c.id, narration: "Ligne test #{i+1}",
+       nature_id: @n.id, payment_mode: 'Espèces' )
+    end
+  end
+
 #  def create_next_period(organism, period)
 #    p = organism.periods.new(start_date: (period.close_date+1), close_date: (period.close_date + 1).end_of_year)
 #    puts p.inspect

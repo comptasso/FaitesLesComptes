@@ -13,7 +13,12 @@ class Compta::ListingsController < Compta::ApplicationController
   def show
      @listing = Compta::Listing.new({period_id:@period.id}.merge(params[:compta_listing]) )
      if @listing.valid?
-      render 'show'
+       respond_to do |format|
+        format.html {render 'show'}
+        format.js # vers fichier create.js.erb
+        format.pdf {  send_data @listing.account.to_pdf.render }
+      end
+      
      else
       render 'new' # le form new affichera Des erreurs ont été trouvées 
      end
@@ -28,11 +33,13 @@ class Compta::ListingsController < Compta::ApplicationController
   end
 
   def create
+    
     @listing = Compta::Listing.new({period_id:@period.id}.merge(params[:compta_listing]) )
     if @listing.valid?
        respond_to do |format|
         format.html {render 'show'}
         format.js # vers fichier create.js.erb
+        
       end
 
     else

@@ -1,7 +1,10 @@
 = content_for :menu do
   %a(data-toggle="modal" class="icon_menu" href="#modal_form_listing")
     = image_tag('icones/nouveau.png')
-  =  icon_to 'printer.png', compta_period_balance_path(@period, :format=>'pdf')
+  = icon_to 'pdf.png', compta_period_listing_path(@period,                                                |
+    :compta_listing=>{:account_id=>@listing.account_id,                                                   |
+    :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker },             |
+    :format=>'pdf')                                                                                       |
 .champ
   %h3= "Ecritures du compte #{@listing.account.long_name}"
   = render partial: 'modal_form'
