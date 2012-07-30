@@ -4,7 +4,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'pdf_document/base'
 require 'pdf_document/page'
-require 'pdf_document/table'
+require 'pdf_document/table' 
 
 
 
@@ -59,16 +59,13 @@ describe 'test pdf prawn' do
       @pdf.nb_pages.should == 3  
     end
 
-    it 'pdf page table' do
-     puts  @pdf.page(1).table_title 
-    end
-
     it 'largeur des titres' do
       @pdf.page(1).total_columns_widths.should == [70,15,15]
     end
 
     it 'peut rendre le fichier test.pdf.prawn' do
-      @pdf.render('test.pdf.prawn').should be_an_instance_of(File)  
+     # pending 'ce n est plus un file mais un flux'
+      @pdf.render.should be_an_instance_of(String)
     end
 
   end
