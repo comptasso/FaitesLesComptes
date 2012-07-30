@@ -206,15 +206,15 @@ module PdfDocument
      end 
 
      # Crée le fichier pdf associé 
-     def render(template)
-       file_name = template || "lib/pdf_document/default.pdf.prawn"
+     def render(template = "lib/pdf_document/default.pdf.prawn")
+       
        text  =  ''
-       File.open(file_name, 'r') do |f|
+       File.open(template, 'r') do |f|
           text = f.read
        end
 #       puts text
        require 'prawn'
-       doc = self
+       doc = self # doc est utilisé dans le template
        pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|
             pdf.instance_eval(text)
           end
