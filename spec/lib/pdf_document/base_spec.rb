@@ -207,7 +207,7 @@ describe PdfDocument::Base do
       end
 
       it 'set avec un array vide génère une erreur' do
-       expect { @base.set_columns_to_totalize []}.to raise_error 'Le tableau des colonnes ne peut être vide'
+        expect { @base.set_columns_to_totalize []}.to raise_error 'Le tableau des colonnes ne peut être vide'
       end
 
       it 'définir les colonnes permet de définir les largeurs' do
@@ -224,12 +224,10 @@ describe PdfDocument::Base do
         @base.total_columns_widths.should == [100 - bcw4 - bcw5, bcw4 ]
       end
 
-    it 'peut fixer la première ligne de report' do
-      @base.first_report_line = ['Soldes', 100, 20]
-      @base.first_report_line.should ==  ['Soldes', 100, 20]
-    end
-
-
+      it 'peut fixer la première ligne de report' do
+        @base.first_report_line = ['Soldes', 100, 20]
+        @base.first_report_line.should ==  ['Soldes', 100, 20]
+      end
 
     end
 

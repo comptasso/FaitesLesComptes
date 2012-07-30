@@ -20,12 +20,53 @@ module PdfDocument
   # une source pour les lignes
   #
   # La classe est initialisée avec un exercice, une source et des options
-  # la source est un objet capable de répondre aux méthodes lines (et donc count) 
+  # la source est un objet capable de répondre à une méthode (par défaut lines)
   # qui sont appelées par l'objet Pdf::Page
   #
-  # La classe a des méthodes pour définir les colonnes souhaitées de la source
-  # set_colu
+  # Ce qu'on souhaite obtenir peut être défini soit par des options soit par des méthodes
   # 
+  # Les arguments obligatoires sont 
+  #   period : l'exercice concerné par la demande
+  #   source : la classe qui sert de source (par exemple un compte)
+  # 
+  # Les options disponibles sont : 
+  # :title => pour définir le titre du document - l'option title est obligatoire
+  # :subtitle => pour définir le sous titre
+  # :from_date => date de début (par défaut la date de début de l'exercice)
+  # :to_date => date de fin (par défaut la date de fin de l'exercice)
+  # :stamp => le texte qui apparaît en fond de document (par exemple brouillard ou provisoire)
+  # 
+  # La classe a des méthodes pour définir les colonnes souhaitées de la source et différents paramétrages
+  #
+  # set_columns(array_of_string) permet d'indiquer les colonnes souhaitées (par ex : set_columns %w(line_date, nature_id, debit)
+  #   par défaut set_columns prend l'ensemble des champs de la table Lines
+  #
+  # set_columns_methods(array_of_strings) pour indiquer la méthode à appliquer
+  #   il doit y avoir autant de valeurs que de colonnes : nil si on veut la méthode par défaut.
+  #   par exemple : set_columns_methods [nil, 'nature.name', nil]
+  #
+  # set_columns_widths(array_of_integer) : les valeurs du tableau expriment en % la largeur demandée,
+  #   le total doit être inférieur à 100, il peut n'y avoir un nombre de valeurs inférieur au nombre de colonnes
+  #   la largeur des colonnes restantes sera alors fixé en divisant la place restante par le nombre de colonnes.
+  #   exemple : set_columns_widths [10, 70, 20]
+  #
+  # set_columns_to_totalize(array_of_indices) : l'indice des colonnes pour lesquels on demande un total
+  #   a priori, la première colonne ne devrait pas être totlaisable pour permette d'écrire Total, Report
+  #   par exemple set_columns_to_totalize [2] pour totaliser le champ debit.
+  #   Les lignes de report et de totaux seront alors de la forme [Total, valeur]
+  #
+  # set_columns_titles(array_of_string) permet d'indiquer les titres de colonnes
+  #   par exemple set_columns_titles %w(Date Nature Débit)
+  #
+  # first_report_line(array) permet d'insérer dans la première page une ligne de report
+  #   par exemple first_report_lines['soldes au 01/03/2012', '212.00']
+  #   La valeur (ici 212) sera alors reprise pour faire les totaux de la page et le calcul des reports
+  #
+  # La méthode page(number) permet d'appeler une page spécifique du pdf
+  # La méthode render permet de rendre le pdf construit sous forme de string en utilisant le fichier
+  # lib/pdf_document/test.pdf.prawn.
+  #
+  # TODO faire un argument par défaut pour pouvoir choisir un autre template
   #
   class Base
     include ActiveModel::Validations
@@ -165,9 +206,10 @@ module PdfDocument
      end 
 
      # Crée le fichier pdf associé 
-     def render
+     def render(template)
+       file_name = template || "lib/pdf_document/default.pdf.prawn"
        text  =  ''
-       File.open("lib/pdf_document/test.pdf.prawn", 'r') do |f|
+       File.open(file_name, 'r') do |f|
           text = f.read
        end
 #       puts text
