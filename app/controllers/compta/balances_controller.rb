@@ -20,7 +20,7 @@ class Compta::BalancesController < Compta::ApplicationController
       respond_to do |format|
         format.html { render action: 'show'}
         format.js
-        format.pdf
+        format.pdf 
       end
     else
       respond_to do |format|

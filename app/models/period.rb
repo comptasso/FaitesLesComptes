@@ -284,7 +284,11 @@ self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_
   end
 
   # boolean : indique si l'on peut faire de la comptabilité
-  alias accountable? all_natures_linked_to_account?
+  # Il faut des natures et que toutes ces natures soient reliées à des comptes
+  def accountable?
+    return false if natures.empty?
+    all_natures_linked_to_account?
+  end
 
   def array_natures_not_linked
     natures.without_account.all

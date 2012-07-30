@@ -5,5 +5,5 @@
           <%= icon_to 'detail.png', book_lines_path(book_pave) %>
     </h3>
 
-    <%= render partial: 'bar_graphic', object: book_pave.graphic(@period) , :locals=>{id: "book_#{book_pave.id}"} %>
+    <%= render partial: 'organisms/bar_graphic', object: book_pave.graphic(@period) , :locals=>{id: "book_#{book_pave.id}"} %>
   <% end %>

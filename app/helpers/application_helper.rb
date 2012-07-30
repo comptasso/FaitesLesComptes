@@ -94,11 +94,11 @@ protected
   # Utilisation current_namespace?('admin')
   def current_namespace?(name)
     unless request
-      raise "You cannot use helpers that need to determine the current "                  "page unless your view context provides a Request object "                  "in a #request method"
+      raise "You cannot use helpers that need to determine the current
+page unless your view context provides a Request object in a #request method"
     end
-    #     return false unless request.get?
     # request_path est par exemple /admin/organisms/9
-    request_uri = request.path.slice!(1..-1) # on enlève le leading /
+    request_uri = request.path.slice(1..-1) # on enlève le leading /
     name == request_uri.split('/').first
   end
 

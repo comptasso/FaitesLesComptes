@@ -13,3 +13,10 @@ $('.input_date_picker').datepicker(
 );
 // on rend la balance
 $('#balance_table').html(" <%= j render 'balance' %>");
+
+// il faut également mettre à jour le lien pour le pdf
+$('#icon_pdf').attr('href', '<%= j compta_period_balance_path(@period,
+    :compta_balance=>{:from_account_id=>@balance.from_account_id, :to_account_id=>@balance.to_account_id,
+        :from_date_picker=>@balance.from_date_picker, :to_date_picker=>@balance.to_date_picker },
+    :format=>'pdf') %>');
+

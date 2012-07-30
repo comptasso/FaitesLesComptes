@@ -661,7 +661,7 @@ OK - Revoir le menu mapping (relier nature - recettes - dépenses, pourquoi 3 ac
 OK - refait les vues de mapping
 OK - Revoir le form de account dans admin suite à bootstrap
 OK - Vue Un compte ne devrait pas pouvoir être supprimé s'il a des écritures via les natures
- Modèle : Un compte ne devrait pas pouvoir être supprimé s'il a des écritures via les natures
+Modèle : Un compte ne devrait pas pouvoir être supprimé s'il a des écritures via les natures
 OK - Modifier le point de chute de compta : on arrive directement sur balance
 OK - Création d'une action balance_new
 OK - Refonte du formulaire avec usage de pick_date et de simple_form
@@ -680,8 +680,8 @@ Spec listing
 
 OK - la balance PDF pourrait bien être systématiquement sur l'ensemble de l'année
 OK - Voir pour le compte....
-Dans le listing du compte, ce qu'on veut c'est avoir en première page comme report  le solde du compte
-Attention à mettre à jour le line pdf après modif par la boîte modale
+OK - Dans le listing du compte, ce qu'on veut c'est avoir en première page comme report  le solde du compte
+OK - Attention à mettre à jour le lien pdf après modif par la boîte modale
 NON - Dans admin, compta ne devrait proposer afficher que s'il y a des comptes (par contre fait pour relier aux natures)
 OK - Dans compta, seuls les organismes avec les natures reliées devraient apparaître
 OK - Refaire la table balance
@@ -694,12 +694,14 @@ OK - doit réinitier le datatable après mise à jour modale
 OK - Ajouter un menu Compte dans les éditions
 OK - Ajouter une édition du plan comptable (ce qui permet de faire un index des comtpes et un affichage)
 pdf pour les différentes impressions : plan comptable, listing, balance
-Vérifier le pdf de balance et créer le csv -changer l'icone printer en icone pdf
+Vérifier le pdf de balance et créer le csv
+Voir la question des truncate pour éviter qu'il y ait des pb de mise en page
+OK - changer l'icone printer en icone pdf
 Ajouter un menu grand livre - uniquement pdf ?
 Ajouter un menu compte de résultat - uniquement pdf ?
 Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
 OK - Réorganiser les menus dans admin et compta comme pour public
-Line : voir les méthodes non utilisées
+Modèle Line : voir les méthodes non utilisées
 Dans Book, has_many pending_checks relève du IncomBook
 Voir si les validators cant_change, cant_edit et cant_edit_field sont utilisés
 Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)

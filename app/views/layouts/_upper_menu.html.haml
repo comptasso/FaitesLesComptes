@@ -3,5 +3,5 @@
   %li{:class=> active_inactive('admin')}
     = link_to "Administration", ((@organism && !@organism.new_record?) ? admin_organism_path(@organism) : admin_organisms_path)
   %li{:class=>active_inactive('compta') }
-    = link_to  "Compta", new_compta_period_balance_path(@period) if (@period && @period.accountable?)
+    = link_to("Compta", new_compta_period_balance_path(@period)) if (@period && @period.accountable?)
   

@@ -11,8 +11,6 @@ class Compta::ListingsController < Compta::ApplicationController
   # show est appelé directement par exemple par les lignes de la balance
   # icon listing qui apparaît à côté des comptes non vides
   def show
-    load 'lib/pdf_document/base.rb'
-    load 'lib/pdf_document/page.rb'
      @listing = Compta::Listing.new({period_id:@period.id}.merge(params[:compta_listing]) )
      if @listing.valid?
        respond_to do |format|

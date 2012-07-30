@@ -19,9 +19,6 @@ end
 end
 
 
-
-
-
 # la table des pages
 1.upto(@balance.nb_pages) do |t|
     

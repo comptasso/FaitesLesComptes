@@ -59,7 +59,7 @@ module OrganismsHelper
     when 'BankAccount' then ['bank_pave','bank_account']
     when 'Cash' then ['cash_pave', 'cash']
     end
-    render partial: partial_and_class[0], object: p,  locals: {:position => "#{partial_and_class[1]} #{html_class}" }
+    render partial: "organisms/#{partial_and_class[0]}", object: p,  locals: {:position => "#{partial_and_class[1]} #{html_class}" }
   end
 
 
