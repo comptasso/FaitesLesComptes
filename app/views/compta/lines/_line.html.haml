@@ -1,8 +1,0 @@
-%tr
-  %td.clickable= l line.line_date
-  %td.clickable= line.ref
-  %td.clickable= line.narration
-  %td.clickable= line.nature.name if line.nature
-  %td.clickable= line.destination.name if line.destination
-  %td.numeric= debit_credit(line.debit)
-  %td.numeric= debit_credit(line.credit)
