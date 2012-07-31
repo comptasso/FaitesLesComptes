@@ -15,14 +15,13 @@ class Compta::BalancesController < Compta::ApplicationController
 
   # utile pour afficher la balance en pdf
   def show
-    load 'pdf_document/pdf_balance.rb'
     @balance = Compta::Balance.new( {period_id:@period.id}.merge(params[:compta_balance]) )
     if @balance.valid?
       respond_to do |format|
         format.html { render action: 'show'}
         format.js
         format.pdf  {send_data @balance.to_pdf.render ,
-          filename:"Balance #{@organism.title}.pdf"}
+          filename:"Balance #{@organism.title}.pdf", disposition:'inline'}
       end
     else
       respond_to do |format|

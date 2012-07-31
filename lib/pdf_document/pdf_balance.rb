@@ -30,7 +30,7 @@ module PdfDocument
      def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      accounts.select(columns).order('number').where('number >= ? AND :number <= ?', @from_number, @to_number).offset(offset).limit(limit)
+      source.accounts.select(columns).order('number').where('number >= ? AND number <= ?', @from_number, @to_number).offset(offset).limit(limit)
      end
 
    
