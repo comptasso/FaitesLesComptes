@@ -89,12 +89,7 @@ module PdfDocument
       @table ||= Table.new(self, @doc)
     end
 
-    #    def _total(i)
-    #      s = table_total_line[i]
-    #      s =  if table_report_line
-    #      s
-    #    end
-
+   
     
 
   end

@@ -41,7 +41,7 @@ module PdfDocument
 
     # lines renvoie un array
     def prepared_lines
-      lines.collect {|l| prepare_line(l)}
+      @prepared_lines ||= lines.collect {|l| prepare_line(l)}
     end
 
    

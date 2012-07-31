@@ -20,20 +20,24 @@ module PdfDocument
     def set_columns_widths(array_widths)
       @columns_widths = array_widths
     end
+
+
       
     
     # appelle les méthodes adéquate pour chacun des éléments de la lignes
     def prepare_line(line)
       [ line.number,
         line.title,
-        line.cumulated_before(Date.today, :debit),
-        line.cumulated_before(Date.today, :credit),
-        line.movement(Date.today.beginning_of_year, Date.today.end_of_year, :debit),
-        line.movement(Date.today.beginning_of_year, Date.today.end_of_year, :credit),
-        line.cumulated_at(Date.today.end_of_year,:debit),
-        line.cumulated_at(Date.today.end_of_year,:credit)
+        line.cumulated_before(from_date, :credit),
+        line.cumulated_before(from_date, :credit),
+        line.movement(from_date, to_date, :debit),
+        line.movement(from_date, to_date, :credit),
+        line.cumulated_at(to_date,:debit),
+        line.cumulated_at(to_date,:credit)
       ]
     end
+
+
 
 
   end
