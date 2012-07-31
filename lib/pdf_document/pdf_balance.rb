@@ -21,19 +21,18 @@ module PdfDocument
       @columns_widths = array_widths
     end
 
-
-      
-    
-    # appelle les méthodes adéquate pour chacun des éléments de la lignes
-    def prepare_line(line)
-      [ line.number,
-        line.title,
-        line.cumulated_before(from_date, :credit),
-        line.cumulated_before(from_date, :credit),
-        line.movement(from_date, to_date, :debit),
-        line.movement(from_date, to_date, :credit),
-        line.cumulated_at(to_date,:debit),
-        line.cumulated_at(to_date,:credit)
+   
+    # appelle les méthodes adéquate pour chacun des éléments de la ligne
+    # qui représente un account 
+    def prepare_line(account)
+      [ account.number,
+        account.title.truncate(40),
+        account.cumulated_before(from_date, :debit),
+        account.cumulated_before(from_date, :credit),
+        account.movement(from_date, to_date, :debit),
+        account.movement(from_date, to_date, :credit),
+        account.cumulated_at(to_date,:debit),
+        account.cumulated_at(to_date,:credit)
       ]
     end
 
