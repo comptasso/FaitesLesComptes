@@ -68,15 +68,15 @@ describe PdfDocument::Page do
       
     end
     it 'total_line' do
-      doc.page(1).table_total_line.should == ['Totaux', 220]
+      doc.page(1).table_total_line.should == ['Totaux', "220.00"]
     end
 
       it 'to_report' do
-        doc.page(1).table_to_report_line.should == ['A reporter', 220]
+        doc.page(1).table_to_report_line.should == ['A reporter', "220.00"]
       end
 
       it 'to_report_line' do
-        doc.page(2).table_report_line.should == ['Reports', 220]
+        doc.page(2).table_report_line.should == ['Reports', "220.00"]
       end
 
       it 'la page 1 n a pas de ligne report' do

@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require 'pdf_document/pdf_balance'
+
 # une classe correspondant à l'objet balance. Cette classe a une table
 # mais le controller ne sauve pas l'objet.
 # La table est préférable pour pouvoir bénéficier des scope et callbacks de
