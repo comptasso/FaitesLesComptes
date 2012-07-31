@@ -7,7 +7,7 @@
 #
 #
 class Compta::Balance < ActiveRecord::Base
-
+  
   def self.columns() @columns ||= []; end
 
   def self.column(name, sql_type = nil, default = nil, null = true)
@@ -42,8 +42,26 @@ class Compta::Balance < ActiveRecord::Base
   validates :from_date, :to_date, date_within_period:true
   validates :from_date, :to_date, :from_account_id, :to_account_id, :period_id, :presence=>true
 
-  
-  
+  #produit un document pdf en s'appuyant sur la classe PdfDocument::Base
+  # et ses classe associées page et table
+  def to_pdf
+    stamp = "brouillard" 
+    pdf = PdfDocument::PdfBalance.new(period, self,
+      title:"Balance générale",
+      from_date:from_date, to_date:to_date,
+      subtitle:"Du #{I18n::l from_date} au #{I18n.l to_date}",
+      stamp:stamp)
+    pdf.select_method= 'accounts'
+    pdf.set_columns %w(number title)
+    pdf.set_columns_alignements %w(left left right right right right right right)
+    pdf.set_columns_widths [10, 30, 10, 10, 10, 10, 10, 10]
+    pdf.set_columns_titles %w(Numéro Intitulé Débit Crédit Débit Crédit Débit Crédit)
+    pdf.set_columns_to_totalize [2,3,4,5,6,7]
+    
+
+    pdf
+  end
+
 
    # valeurs par défaut
   def with_default_values

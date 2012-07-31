@@ -5,7 +5,7 @@ module PdfDocument
   # la classe Table du module PdfDocument est une classe qui doit alimenter le
   # template de prawn avec les méthodes nécessaires pour fournir
   # la ligne de titre de la table,
-  # la ligne de report si elle existe,
+  # la ligne de report si elle existe, 
   # les lignes de la table
   # la ligne de total de la table
   # la ligne A reporter si nécessaire
@@ -34,10 +34,12 @@ module PdfDocument
     # retourne le tableau de lignes à partir du numéro de la page fourni par
     # @page, du nombre de lignes par pages, de la source et de la méthode
     # fournis par PdfDocument::Base
+    # lines renvoie donc un Arel
     def lines
-      @lines ||= fetch_lines
+      @lines ||= @document.fetch_lines(@page.number)
     end
 
+    # lines renvoie un array
     def prepared_lines
       lines.collect {|l| prepare_line(l)}
     end
@@ -47,20 +49,16 @@ module PdfDocument
     # intitulée Total, puis des nils ou des totaux si la colonne a été indiquée
     # par document comme devant être totalisée
     def total_line
-      r = []
-      @document.columns.each_with_index do |c,i|
-        if @document.columns_to_totalize.include? i
-          r << lines.sum {|l| l.instance_eval(c)}
-        end
-      end
+      # lines est un tableau de lignes dont on veut connaître le total
+      # pour chaque colonne qui est dans columns_to_totalize
+      r = @document.columns_to_totalize.collect {|index| totalize_column(index)}
       tl = r.collect {|v| format_value(v)}
       tl.insert(0, 'Totaux')
-   
     end
 
      # appelle les méthodes adéquate pour chacun des éléments de la lignes
      def prepare_line(line)
-       @document.columns_methods.collect { |m| format_value(line.instance_eval(m)) }
+       @document.prepare_line(line).collect {|v| format_value(v)}
      end
 
      
@@ -70,17 +68,22 @@ module PdfDocument
         r = '' if r.nil?
         r = I18n::l(r) if r.is_a? Date
         r = '%0.2f' % r if r.is_a? BigDecimal
+        r = '%0.2f' % r if r.is_a? Float
         r = '' if r == '0.00'
         r
      end
 
-    def fetch_lines
-      select =@document.columns
-      limit = @document.nb_lines_per_page
-      offset = (@page.number - 1)*limit
-      @document.source.lines.select(select).offset(offset).limit(limit)
-    end
+     # fait le total des valeurs de la colonne d'indice i
+     # n'additionne que s'il en est capable en testant la transformation en Float
+     # cela permet d'avoir des valeurs vides dans les colonnes par exemple
+     def totalize_column(i)
+       prepared_lines.each.sum do |l|
+         l[i].to_f if l[i].to_f.is_a?(Float)
+       end
+     end
 
+
+    
    
 
   end

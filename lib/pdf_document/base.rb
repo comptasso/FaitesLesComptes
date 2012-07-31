@@ -63,10 +63,11 @@ module PdfDocument
   #   La valeur (ici 212) sera alors reprise pour faire les totaux de la page et le calcul des reports
   #
   # La méthode page(number) permet d'appeler une page spécifique du pdf
-  # La méthode render permet de rendre le pdf construit sous forme de string en utilisant le fichier
-  # lib/pdf_document/test.pdf.prawn.
+  # La méthode render(filename) permet de rendre le pdf construit sous forme de string en utilisant le fichier
+  # de template filename; par défaut lib/pdf_document/default.pdf.prawn.
   #
-  # TODO faire un argument par défaut pour pouvoir choisir un autre template
+  # Il est possible de fonctionner avec un modèle virtuel pour autant que la classe de lines
+  # puisse répondre à column_names
   #
   class Base
     include ActiveModel::Validations
@@ -89,7 +90,7 @@ module PdfDocument
      end
 
      
-
+     # méthodes pour disposer des infos par self dans le template
      def organism_name
        @period.organism.title
      end
@@ -99,30 +100,35 @@ module PdfDocument
      end
 
      def nb_pages
-       (@source.lines.count/@nb_lines_per_page.to_f).ceil
+       (@source.instance_eval(select_method).count/@nb_lines_per_page.to_f).ceil
      end
 
+     # permet d'appeler la page number
+     # retourne une instance de PdfDocument::Page
      def page(number)
        raise ArgumentError unless (1..nb_pages).include? number
        Page.new(number, self)
      end
 
-     # table_columns renvoie un hash permettant à la table de connaître
-     # les colonnes à afficher, la largeur des colonnes, et un
-     # booleen indiquant si on doit la totaliser.
-     # le Boolean est par défaut true si la colonne est un nombre
-     def table_columns
-
+     # renvoie les lignes de la page demandées
+     def fetch_lines(page_number)
+      limit = nb_lines_per_page
+      offset = (page_number - 1)*nb_lines_per_page
+      source.instance_eval(select_method).select(columns).offset(offset).limit(limit)
      end
 
-     def columns_widths
-       @columns_widths ||= set_columns_widths
+     # appelle les méthodes adéquate pour chacun des éléments de la lignes
+     def prepare_line(line)
+       columns_methods.collect { |m| line.instance_eval(m) }
      end
 
-    
-
+     # récupère les variables d'instance ou les calcule si besoi
      def columns
        @columns ||= set_columns
+     end
+    
+     def columns_widths
+       @columns_widths ||= set_columns_widths 
      end
 
      def columns_methods
@@ -133,8 +139,8 @@ module PdfDocument
        @columns_titles ||= set_columns_titles
      end
 
-     # columns_size doit exprimer en % la largeur des colonnes
-     # set_columns_size permet d'indiquer les largeurs de colonnes souhaitées
+     # array_wirths doit exprimer en % la largeur des colonnes
+     # set_columns_widths permet d'indiquer les largeurs de colonnes souhaitées
      # Si pas d'argument, toutes les colonnes sont égales,
      #
      # Si toutes les colonnes sont définies, le total doit faire 100,
@@ -151,8 +157,8 @@ module PdfDocument
            complement = diff.times.collect {|i| place/diff}
            array_widths += complement
          end
-        # puis on retourne les 6 premiers
-        @columns_widths = array_widths[0..5]
+        # puis on retourne le nombre nécessaire
+        @columns_widths = array_widths[0..columns.size]
      end
 
 
@@ -162,22 +168,22 @@ module PdfDocument
       # Si on veut fixer les largeurs, il faut alors appeler set_columns_widths
       #
       def set_columns(array_columns = nil)
-       @columns = array_columns || @source.lines.first.class.column_names
+       @columns = array_columns || @source.instance_eval(select_method).first.class.column_names
        set_columns_widths
        set_columns_alignements
       
        @columns
      end
 
-     def set_columns_methods(array_methods = nil)
+
+      # pour définir les méthodes à applique aux champs sélectionnés
+      def set_columns_methods(array_methods = nil)
        @columns_methods = []
 
        if array_methods
          array_methods.each_with_index do |m,i|
            @columns_methods[i] = m || @columns[i]
          end
-        
-# TODO faire une erreur en cas de différence de taille
        else 
          @columns_methods = columns
        end
@@ -200,14 +206,13 @@ module PdfDocument
      end
 
 
-
+     # définit la méthode à appliquer à la source pour extraire les lignes
      def select_method
-       @select_method ||= :lines
+       @select_method ||= 'lines'
      end 
 
      # Crée le fichier pdf associé 
      def render(template = "lib/pdf_document/default.pdf.prawn")
-       
        text  =  ''
        File.open(template, 'r') do |f|
           text = f.read
@@ -256,14 +261,6 @@ module PdfDocument
        end
        @columns_alignements
      end
-
-    
-
-
-
-
-
-
 
   end
 end

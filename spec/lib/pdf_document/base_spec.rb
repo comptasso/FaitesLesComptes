@@ -132,7 +132,7 @@ describe PdfDocument::Base do
     it 'un doc doit pouvoir énumérer ses pages'
 
     it 'default select_method' do
-      @base.select_method.should == :lines
+      @base.select_method.should == 'lines'
     end
 
     it 'raise error si source ne repond pas à select method'
