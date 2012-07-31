@@ -53,7 +53,8 @@ class Compta::Balance < ActiveRecord::Base
       from_date:from_date, to_date:to_date,
       subtitle:"Du #{I18n::l from_date} au #{I18n.l to_date}",
       stamp:stamp)
-    pdf.select_method = 'accounts'
+    pdf.from_number = from_account.number
+    pdf.to_number = to_account.number
     pdf.set_columns %w(accounts.id number title)
     pdf.set_columns_alignements [:left, :left, :right, :right, :right, :right, :right, :right]
     pdf.set_columns_widths [10, 30, 10, 10, 10, 10, 10, 10]
@@ -90,18 +91,18 @@ class Compta::Balance < ActiveRecord::Base
   end
 
   # renvoie les lignes correspondant à la page demandée
-  def page(n)
-    return nil if n > self.nb_pages
-    balance_lines[(@nb_per_page*(n-1))..(@nb_per_page*n-1)]
+#  def page(n)
+#    return nil if n > self.nb_pages
+#    balance_lines[(@nb_per_page*(n-1))..(@nb_per_page*n-1)]
+#
+#  end
 
-  end
-
-  def sum_page(n)
-    [self.total_page(:cumul_debit_before, n), self.total_page(:cumul_credit_before, n),self.total_page(:movement_debit,n ),
-      self.total_page(:movement_credit,n ),self.total_page(:cumul_debit_at,n),self.total_page(:cumul_credit_at,n)
-    ]
-
-  end
+#  def sum_page(n)
+#    [self.total_page(:cumul_debit_before, n), self.total_page(:cumul_credit_before, n),self.total_page(:movement_debit,n ),
+#      self.total_page(:movement_credit,n ),self.total_page(:cumul_debit_at,n),self.total_page(:cumul_credit_at,n)
+#    ]
+#
+#  end
 
   # indique si le listing doit être considéré comme un brouillard
   # ou une édition définitive.
@@ -118,18 +119,18 @@ class Compta::Balance < ActiveRecord::Base
   end
 
 
-  def bl_to_array
-    self.balance_lines.collect do |l|
-      [ l[:account_number],
-        l[:account_title],
-        l[:cumul_debit_before],
-        l[ :cumul_credit_before],
-        l[:movement_debit],
-        l[ :movement_credit],
-        l[:cumul_debit_at],
-        l[:cumul_credit_at]]
-    end
-  end
+#  def bl_to_array
+#    self.balance_lines.collect do |l|
+#      [ l[:account_number],
+#        l[:account_title],
+#        l[:cumul_debit_before],
+#        l[ :cumul_credit_before],
+#        l[:movement_debit],
+#        l[ :movement_credit],
+#        l[:cumul_debit_at],
+#        l[:cumul_credit_at]]
+#    end
+#  end
 
 
   protected
