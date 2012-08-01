@@ -42,9 +42,14 @@ module Compta
       # et on veut le total
       final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape)
       range_accounts.each do |a|
-        a.to_pdf(from_date, to_date).render_pdf_text(final_pdf)
+        a.to_pdf(from_date, to_date, {title:'Grand livre', 
+            subtitle:"Compte #{a.number} - Du #{I18n::l from_date} au #{I18n.l to_date}"}).
+            render_pdf_text(final_pdf)
         final_pdf.start_new_page unless a == range_accounts.last
       end
+      final_pdf.number_pages("page <page>/<total>",
+        { :at => [final_pdf.bounds.right - 150, 0],:width => 150,
+               :align => :right, :start_count_at => 1 })
       final_pdf
     end
 

@@ -710,7 +710,7 @@ OK - Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pen
 ---------------------PdfDocument ------------------------------
 retirer la référence à Line dans base
 Refaire l'arborescence pour faire descendre base de simple (changer les noms ?)
-
+Revoir les truncate dans balance.pdf
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?

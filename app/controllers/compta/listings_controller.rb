@@ -16,7 +16,7 @@ class Compta::ListingsController < Compta::ApplicationController
        respond_to do |format|
         format.html {render 'show'}
         format.pdf { send_data @listing.to_pdf.render ,
-          filename:"Listing compte #{@listing.account.long_name}.pdf"} #, disposition:'inline'}
+          filename:"Listing compte #{@listing.account.long_name}.pdf", disposition:'inline'}
       end
       
      else

@@ -100,21 +100,18 @@ class Account < ActiveRecord::Base
     options[:subtitle] ||= "Du #{I18n::l from_date} au #{I18n.l to_date}"
     options[:stamp] = "brouillard" unless all_lines_locked?(from_date, to_date)
     pdf = PdfDocument::Base.new(period, self, options)
-#      title:title,
-#      from_date:from_date, to_date:to_date,
-#      subtitle:subtitle,
-#      first_page_number:first_page_number,
-#      total_page_number:total_page_number,
-#      stamp:stamp)
-    pdf.set_columns %w(line_date ref narration destination_id debit credit)
-    pdf.set_columns_methods [nil, nil, nil, 'destination.name', nil, nil]
-    pdf.set_columns_widths [10, 10, 40, 20, 10, 10]
-    pdf.set_columns_titles %w(Date Réf Libellé Destination Débit Crédit)
-    pdf.set_columns_to_totalize [4,5]
+
+    pdf.set_columns %w(line_date ref narration nature_id destination_id debit credit)
+    pdf.set_columns_methods [nil, nil, nil, 'nature_name', 'destination.name', nil, nil]
+    pdf.set_columns_widths [10, 8, 32, 15, 15, 10, 10]
+    pdf.set_columns_titles %w(Date Réf Libellé Nature Destination Débit Crédit)
+    pdf.set_columns_to_totalize [5,6]
     pdf.first_report_line = ["Soldes au #{I18n::l from_date}"] + formatted_sold(from_date)
     @pdf = pdf
   end
 
+  # méthode utilisée pour insérer le listing d'un compte dans un autre pdf 
+  # notamment pour le grand livre
   def render_pdf_text(other_pdf)
     @pdf.render_pdf_text(other_pdf)
   end
