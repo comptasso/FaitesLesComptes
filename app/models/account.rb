@@ -102,7 +102,7 @@ class Account < ActiveRecord::Base
     pdf = PdfDocument::Base.new(period, self, options)
 
     pdf.set_columns %w(line_date ref narration nature_id destination_id debit credit)
-    pdf.set_columns_methods [nil, nil, nil, 'nature_name', 'destination.name', nil, nil]
+    pdf.set_columns_methods [nil, nil, nil, 'nature_name', 'destination_name', nil, nil]
     pdf.set_columns_widths [10, 8, 32, 15, 15, 10, 10]
     pdf.set_columns_titles %w(Date Réf Libellé Nature Destination Débit Crédit)
     pdf.set_columns_to_totalize [5,6]
