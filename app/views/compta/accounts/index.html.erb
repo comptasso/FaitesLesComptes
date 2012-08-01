@@ -1,5 +1,5 @@
 <%= content_for :menu do %>
-    <%= icon_to 'pdf.png', compta_period_accounts_path(@period,:format=>'pdf'), :id=>'icon_pdf' %>
+    <%= icon_to('pdf.png', compta_period_accounts_path(@period,:format=>:pdf), :id=>'icon_pdf') %>
 <% end -%>
 
 <div class="champ">
@@ -20,7 +20,7 @@
   <tr>
     <td><%= compta_account.number.to_s %></td>
     <td><%= compta_account.title %></td>
-    <td><%=t_used compta_account %></td>
+    <td><%=  t_used compta_account %></td>
     <td>
     <%= icon_to 'afficher.png', new_compta_period_listing_path(@period, :account_id=>compta_account.id) unless compta_account.lines_empty? %>
   
