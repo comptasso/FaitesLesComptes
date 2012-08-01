@@ -114,7 +114,7 @@ module PdfDocument
      def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      source.instance_eval(select_method).select(columns).offset(offset).limit(limit)
+      source.instance_eval(select_method).select(columns).order('line_date').offset(offset).limit(limit)
      end
 
      # appelle les méthodes adéquate pour chacun des éléments de la lignes

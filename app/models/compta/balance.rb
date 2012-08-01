@@ -41,7 +41,7 @@ class Compta::Balance < ActiveRecord::Base
 
  # je mets date_within_period en premier car je préfère les affichages Dates invalide ou hors limite
  # que obligatoire (sachant que le form n'affiche que la première erreur).
-  validates :from_date, :to_date, date_within_period:true
+  validates :from_date, :to_date, :date_within_period=>true
   validates :from_date, :to_date, :from_account_id, :to_account_id, :period_id, :presence=>true
 
   #produit un document pdf en s'appuyant sur la classe PdfDocument::Base
@@ -78,7 +78,7 @@ class Compta::Balance < ActiveRecord::Base
 
   def range_accounts
     self.from_account, self.to_account = to_account, from_account if to_account.number  < from_account.number
-    accounts.where('number >= ? AND number <= ?', from_account.number, to_account.number)
+    accounts.order('number').where('number >= ? AND number <= ?', from_account.number, to_account.number)
   end
 
   def balance_lines
@@ -91,26 +91,13 @@ class Compta::Balance < ActiveRecord::Base
     ]
   end
 
-  # renvoie les lignes correspondant à la page demandée
-#  def page(n)
-#    return nil if n > self.nb_pages
-#    balance_lines[(@nb_per_page*(n-1))..(@nb_per_page*n-1)]
-#
-#  end
-
-#  def sum_page(n)
-#    [self.total_page(:cumul_debit_before, n), self.total_page(:cumul_credit_before, n),self.total_page(:movement_debit,n ),
-#      self.total_page(:movement_credit,n ),self.total_page(:cumul_debit_at,n),self.total_page(:cumul_credit_at,n)
-#    ]
-#
-#  end
-
   # indique si le listing doit être considéré comme un brouillard
   # ou une édition définitive.
   # Cela se fait en regardant si toutes les lignes sont locked?
   def provisoire?
-    balance_lines.any? {|bl| bl[:provisoire]==true } ? true : false
+    balance_lines.any? {|bl| bl[:provisoire]==true } 
   end
+
   # calcule le nombre de page du listing en divisant le nombre de lignes
   # par un float qui est le nombre de lignes par pages,
   # puis arrondi au nombre supérieur
@@ -120,38 +107,21 @@ class Compta::Balance < ActiveRecord::Base
   end
 
 
-#  def bl_to_array
-#    self.balance_lines.collect do |l|
-#      [ l[:account_number],
-#        l[:account_title],
-#        l[:cumul_debit_before],
-#        l[ :cumul_credit_before],
-#        l[:movement_debit],
-#        l[ :movement_credit],
-#        l[:cumul_debit_at],
-#        l[:cumul_credit_at]]
-#    end
-#  end
-
-
   protected
 
   def total(value)
     balance_lines.sum {|l| l[value]}
   end
 
-  def total_page(value, n=1)
+  def total_page(value, n = 1)
     self.page(n).sum {|l| l[value]}
   end
 
-
-
-  def balance_line(account, from=self.period.start_date, to=self.period.close_date)
-    {:account_id=>account.id,
-      :account_title=>account.title,
-      :account_number=>account.number,
-      :empty=> account.lines_empty?(from, to),
+ 
+  def balance_line(account, from = self.period.start_date, to = self.period.close_date)
+    { :account_id=>account.id,
       :provisoire=> !account.all_lines_locked?,
+      :empty=> account.lines_empty?(from, to),
       :number=>account.number, :title=>account.title,
       :cumul_debit_before=>account.cumulated_before(from, :debit),
       :cumul_credit_before=>account.cumulated_before(from, :credit),

@@ -20,8 +20,8 @@ class Compta::BalancesController < Compta::ApplicationController
       respond_to do |format|
         format.html { render action: 'show'}
         format.js
-        format.pdf  {send_data @balance.to_pdf.render ,
-          filename:"Balance #{@organism.title}.pdf", disposition:'inline'}
+        format.pdf  {send_data @balance.to_pdf.render('lib/pdf_document/balance.pdf.prawn') ,
+          filename:"Balance #{@organism.title}.pdf"} #, disposition:'inline'}
       end
     else
       respond_to do |format|

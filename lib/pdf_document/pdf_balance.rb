@@ -26,6 +26,10 @@ module PdfDocument
       @columns_widths = array_widths
     end
 
+    def before_title
+      ['', "Soldes au #{I18n::l from_date}", 'Mouvements de la période',  "Soldes au #{I18n::l to_date}"]
+    end
+
     # renvoie les lignes de la page demandées
      def fetch_lines(page_number)
       limit = nb_lines_per_page
