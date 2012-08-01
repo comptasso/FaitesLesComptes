@@ -252,6 +252,7 @@ module PdfDocument
 
      # définit un aligment des colonnes par défaut, les colonnes qui sont
      # numériques sont alignées à droite, les autres à gauche
+     # TODO retirer cette référence à Line
      def set_columns_alignements
        # on prend les colonnes sélectionnées et on construit un tableau
        # left, right selon le type de la colonne

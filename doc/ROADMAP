@@ -687,7 +687,7 @@ OK - Dans compta, seuls les organismes avec les natures reliées devraient appar
 OK - Refaire la table balance
 OK - Revoir la partie affichages des comptes
 OK - Faire un modèle listing (pour les comptes)
-Dans Base : faire order(line_date)
+OK - Dans Base : faire order(line_date)
 OK - Compta lines : utiliser data table,
 OK - Compta listing :  modif des paramètres par modal form
 OK - doit réinitier le datatable après mise à jour modale
@@ -705,6 +705,10 @@ Modèle Line : voir les méthodes non utilisées
 Dans Book, has_many pending_checks relève du IncomBook
 Voir si les validators cant_change, cant_edit et cant_edit_field sont utilisés
 Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
+
+---------------------PdfDocument ------------------------------
+retirer la référence à Line dans base
+Refaire l'arborescence pour faire descendre base de simple (changer les noms ?)
 
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos

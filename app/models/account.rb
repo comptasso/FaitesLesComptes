@@ -80,6 +80,19 @@ class Account < ActiveRecord::Base
     self.lines.where('line_date >= ? AND line_date <= ?', from, to ).any? {|l| !l.locked? } ? true : false
   end
 
+
+  def self.to_pdf(period)
+    load 'lib/pdf_document/simple.rb'
+    pdf = PdfDocument::Simple.new(period, period,
+      title:"Plan comptable")
+    pdf.select_method= 'accounts.order(:number)'
+    pdf.set_columns %w(number title)
+    pdf.set_columns_widths [20, 80]
+    pdf.set_columns_titles %w(Numéro Libellé)
+    pdf.set_columns_alignements [:left, :left]
+    pdf
+  end
+
   #produit un document pdf en s'appuyant sur la classe PdfDocument::Base
   # et ses classe associées page et table
   def to_pdf(from_date = period.start_date, to_date = period.close_date)
