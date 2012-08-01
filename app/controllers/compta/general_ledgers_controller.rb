@@ -16,29 +16,26 @@ class Compta::GeneralLedgersController < Compta::ApplicationController
 
   # utile pour afficher la general_ledger en pdf
   def show
-    @general_ledger = Compta::GeneralLedger.new( {period_id:@period.id}.merge(params[:general_ledger]) )
+    parameters = {period_id:@period.id}.merge(params[:general_ledger])
+    @general_ledger = Compta::GeneralLedger.new(parameters )
     if @general_ledger.valid?
       respond_to do |format|
-        format.html { render action: 'show'}
-        format.js
-        format.pdf  {send_data @general_ledger.to_pdf.render('lib/pdf_document/general_ledger.pdf.prawn') ,
-          filename:"GeneralLedger #{@organism.title}.pdf"} #, disposition:'inline'}
+        format.pdf  {send_data @general_ledger.render_pdf,
+          filename:"Grand_livre_#{@organism.title}.pdf"} #, disposition:'inline'}
       end
     else
       respond_to do |format|
-        format.html { render 'new'}
-        format.js {render 'new'}
-        format.pdf {render :text=>'Erreur dans la génération du grand livre'}
+        format.pdf {redirect_to new_compta_period_general_ledger_url(@period)}
       end
     end
   end
 
   def create
-
-    @general_ledger = Compta::GeneralLedger.new( {period_id:@period.id}.merge(params[:general_ledger]) )
+    parameters = {period_id:@period.id}.merge(params[:compta_general_ledger])
+    @general_ledger = Compta::GeneralLedger.new(parameters)
     if @general_ledger.valid?
       respond_to do |format|
-        format.html { render action: 'show'}
+        format.html { redirect_to  compta_period_general_ledger_url(@period, :general_ledger=>params[:compta_general_ledger], :format=>'pdf')}
         format.js
       end
     else
