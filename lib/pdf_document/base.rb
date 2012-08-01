@@ -72,7 +72,8 @@ module PdfDocument
   class Base
     include ActiveModel::Validations
      attr_accessor :title, :subtitle, :columns_title, :total_columns_widths, :columns_alignements, :columns_formats, :first_report_line
-     attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize, :stamp
+    attr_accessor :first_page_number, :total_page_number
+    attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize, :stamp
      attr_writer  :select_method
 
     validates :title, :presence=>true
@@ -87,6 +88,8 @@ module PdfDocument
        @nb_lines_per_page = options[:nb_lines_per_page] || 22
        @source = source
        @stamp = options[:stamp]
+       @first_page_number = options[:first_page_number] || 1
+       @total_page_number = options[:total_page_number]
      end
 
      
@@ -97,6 +100,12 @@ module PdfDocument
 
      def exercice
        @period.exercice
+     end
+
+     # si on a demandé un nombre de page total dans les options, alors on le fournit
+     # sinon on applique la valeur par défaut qui est calculée par nb_pages.
+     def total_page_number
+       @total_page_number ||= nb_pages
      end
 
      def nb_pages
@@ -203,6 +212,16 @@ module PdfDocument
        raise ArgumentError , 'Le tableau des colonnes ne peut être vide' if indices.empty?
        @columns_to_totalize = indices
        set_total_columns_widths
+     end
+
+
+     def render_pdf_text(pdf)
+       text  =  ''
+       File.open("lib/pdf_document/default.pdf.prawn", 'r') do |f|
+          text = f.read
+       end
+       doc = self
+       pdf.instance_eval(text)
      end
 
 

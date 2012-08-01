@@ -1,18 +1,17 @@
 
 width = bounds.right
 
-
-# la méthode du tampon brouillard
-create_stamp("fond") do
-rotate(40) do
-fill_color "bbbbbbb"
-
-font_size(120) do
- text_rendering_mode(:stroke) do
-  draw_text("Provisoire", :at=>[250, -150])
- end
-end
-fill_color "000000"
+if stamp_dictionary_registry['fond'].nil?
+create_stamp('fond') do
+  rotate(40) do
+    fill_color "bbbbbbb"
+    font_size(120) do
+      text_rendering_mode(:stroke) do
+        draw_text("Provisoire", :at=>[250, -150])
+      end
+    end
+    fill_color "000000"
+  end
 end
 end
 
@@ -34,7 +33,6 @@ end
 
         bounding_box [width-100, y_position], :width => 100, :height => 40 do
             text page.top_right, :align=>:right
-            
         end
 
     end
@@ -74,8 +72,8 @@ table [page.table_total_line, page.table_to_report_line],  :cell_style=>{:font_s
 end
 
 
-  stamp "fond"
+  stamp 'fond'
 
-   pdf.start_new_page unless (n == doc.nb_pages)
+   start_new_page unless (n == doc.nb_pages)
 
 end

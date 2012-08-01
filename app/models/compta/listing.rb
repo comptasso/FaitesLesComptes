@@ -61,8 +61,8 @@ module Compta
 
   # to_pdf delegates to account to produce pdf data
   # use lib/pdf_document
-  def to_pdf
-    account.to_pdf(from_date, to_date)
+  def to_pdf(options = {})
+    account.to_pdf(from_date, to_date, options)
   end
 
 

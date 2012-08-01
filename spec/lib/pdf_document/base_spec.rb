@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require 'pdf_document/base'
+load 'pdf_document/base.rb'
 require 'pdf_document/page'
 
 describe PdfDocument::Base do
@@ -46,7 +46,7 @@ describe PdfDocument::Base do
     end
 
     it 'give the time of creation au format 25 juillet 2012 07:54:14' do
-      @base.created_at.should match(/^\d{1,2}\s\w*\s\d{4}\s\d{2}:\d{2}:\d{2}$/)
+      @base.created_at.should match(/^\d{1,2}\s(\w|é|û)*\s\d{4}\s\d{2}:\d{2}:\d{2}$/)
     end
 
     it 'default from_date and to_date are from period' do
@@ -90,6 +90,35 @@ describe PdfDocument::Base do
       @base = PdfDocument::Base.new(p,nil, h)
       @base.nb_lines_per_page.should == 30
     end
+
+    it 'est possible de fixer la page de début' do
+      h = valid_options.merge({:first_page_number=>3}) 
+      @base = PdfDocument::Base.new(p,nil, h)
+      @base.first_page_number.should == 3
+    end
+
+    it 'est possible de fixer le nombre total de pages' do
+      h = valid_options.merge({:total_page_number=>12})
+      @base = PdfDocument::Base.new(p,nil, h)
+      @base.total_page_number.should == 12
+    end
+  end
+
+  context 'création d un doc pour être intégré dans un document plus large' do
+    let(:arel) {double(Arel, count:100, first:mock_model(Line))}
+    let(:source) {mock_model(Account, title:'Achats', number:'60',
+        lines:arel )}
+
+    before(:each) do
+      @base = PdfDocument::Base.new(p, source, valid_options.merge({:first_page_number=>3, :total_page_number=>12}))
+    end
+
+    it 'la première page du listing affiche p3/12' do
+      @base.page(1).top_right.should match /Page 3\/12/
+    end
+
+
+
   end
 
   context 'création des pages' do
@@ -127,6 +156,8 @@ describe PdfDocument::Base do
         pdf.stamp.should == 'Provisoire'
       end
     end
+
+
 
 
     it 'un doc doit pouvoir énumérer ses pages'

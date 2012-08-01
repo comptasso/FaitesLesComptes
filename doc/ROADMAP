@@ -693,7 +693,8 @@ OK - Compta listing :  modif des paramètres par modal form
 OK - doit réinitier le datatable après mise à jour modale
 OK - Ajouter un menu Compte dans les éditions
 OK - Ajouter une édition du plan comptable (ce qui permet de faire un index des comtpes et un affichage)
-pdf pour les différentes impressions : plan comptable, listing, balance
+OK - pdf pour les différentes impressions : plan comptable, listing, balance
+
 Vérifier le pdf de balance et créer le csv
 Voir la question des truncate pour éviter qu'il y ait des pb de mise en page
 OK - changer l'icone printer en icone pdf
@@ -704,7 +705,7 @@ OK - Réorganiser les menus dans admin et compta comme pour public
 Modèle Line : voir les méthodes non utilisées
 Dans Book, has_many pending_checks relève du IncomBook
 Voir si les validators cant_change, cant_edit et cant_edit_field sont utilisés
-Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
+OK - Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
 
 ---------------------PdfDocument ------------------------------
 retirer la référence à Line dans base

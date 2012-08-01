@@ -62,7 +62,7 @@ describe PdfDocument::Page do
 
     before(:each) do
       @l = mock_model(Line, line_date:Date.today, ref:nil, debit:10, credit:0)
-      arel.stub_chain(:select, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
+      arel.stub_chain(:select, :order, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
       doc.set_columns %w(line_date ref debit credit)
       doc.set_columns_to_totalize [2]
       

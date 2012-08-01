@@ -29,7 +29,9 @@ module PdfDocument
     end
 
     def top_right
-      "#{@doc.created_at}\nPage #{@number}/#{@doc.nb_pages}"
+      # gestion des pages
+      n = @doc.first_page_number + @number - 1
+      "#{@doc.created_at}\nPage #{n}/#{@doc.total_page_number}"
     end
 
     def table_title

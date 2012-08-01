@@ -95,21 +95,28 @@ class Account < ActiveRecord::Base
 
   #produit un document pdf en s'appuyant sur la classe PdfDocument::Base
   # et ses classe associées page et table
-  def to_pdf(from_date = period.start_date, to_date = period.close_date)
-    stamp = "brouillard" unless all_lines_locked?(from_date, to_date)
-    pdf = PdfDocument::Base.new(period, self,
-      title:"Liste des écritures du compte #{number}",
-      from_date:from_date, to_date:to_date,
-      subtitle:"Du #{I18n::l from_date} au #{I18n.l to_date}",
-      stamp:stamp)
+  def to_pdf(from_date = period.start_date, to_date = period.close_date, options = {})
+    options[:title] ||=  "Liste des écritures du compte #{number}"
+    options[:subtitle] ||= "Du #{I18n::l from_date} au #{I18n.l to_date}"
+    options[:stamp] = "brouillard" unless all_lines_locked?(from_date, to_date)
+    pdf = PdfDocument::Base.new(period, self, options)
+#      title:title,
+#      from_date:from_date, to_date:to_date,
+#      subtitle:subtitle,
+#      first_page_number:first_page_number,
+#      total_page_number:total_page_number,
+#      stamp:stamp)
     pdf.set_columns %w(line_date ref narration destination_id debit credit)
     pdf.set_columns_methods [nil, nil, nil, 'destination.name', nil, nil]
     pdf.set_columns_widths [10, 10, 40, 20, 10, 10]
     pdf.set_columns_titles %w(Date Réf Libellé Destination Débit Crédit)
     pdf.set_columns_to_totalize [4,5]
     pdf.first_report_line = ["Soldes au #{I18n::l from_date}"] + formatted_sold(from_date)
-      
-    pdf
+    @pdf = pdf
+  end
+
+  def render_pdf_text(other_pdf)
+    @pdf.render_pdf_text(other_pdf)
   end
 
 

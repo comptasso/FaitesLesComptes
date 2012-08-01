@@ -13,6 +13,7 @@ Faitesvoscomptes::Application.routes.draw do
       resource :balance
       resources :accounts
       resource :listing
+      resource :general_ledger
       
     end
     resources :accounts  do
