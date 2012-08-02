@@ -72,7 +72,6 @@ module PdfDocument
   class Base
     include ActiveModel::Validations
      attr_accessor :title, :subtitle, :columns_title, :total_columns_widths, :columns_alignements, :columns_formats, :first_report_line
-    attr_accessor :first_page_number, :total_page_number
     attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize, :stamp
      attr_writer  :select_method
 
@@ -88,8 +87,7 @@ module PdfDocument
        @nb_lines_per_page = options[:nb_lines_per_page] || 22
        @source = source
        @stamp = options[:stamp]
-       @first_page_number = options[:first_page_number] || 1
-       @total_page_number = options[:total_page_number]
+     
      end
 
      
@@ -102,12 +100,7 @@ module PdfDocument
        @period.exercice
      end
 
-     # si on a demandé un nombre de page total dans les options, alors on le fournit
-     # sinon on applique la valeur par défaut qui est calculée par nb_pages.
-     def total_page_number
-       @total_page_number ||= nb_pages
-     end
-
+    
      def nb_pages
        (@source.instance_eval(select_method).count/@nb_lines_per_page.to_f).ceil
      end

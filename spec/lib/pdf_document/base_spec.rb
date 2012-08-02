@@ -91,17 +91,7 @@ describe PdfDocument::Base do
       @base.nb_lines_per_page.should == 30
     end
 
-    it 'est possible de fixer la page de début' do
-      h = valid_options.merge({:first_page_number=>3}) 
-      @base = PdfDocument::Base.new(p,nil, h)
-      @base.first_page_number.should == 3
-    end
-
-    it 'est possible de fixer le nombre total de pages' do
-      h = valid_options.merge({:total_page_number=>12})
-      @base = PdfDocument::Base.new(p,nil, h)
-      @base.total_page_number.should == 12
-    end
+    
   end
 
   context 'création d un doc pour être intégré dans un document plus large' do
@@ -116,9 +106,6 @@ describe PdfDocument::Base do
     it 'la première page du listing affiche p3/12' do
       @base.page(1).top_right.should match /Page 3\/12/
     end
-
-
-
   end
 
   context 'création des pages' do
