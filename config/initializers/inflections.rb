@@ -8,3 +8,18 @@
 #   inflect.irregular 'person', 'people'
 #   inflect.uncountable %w( fish sheep )
 # end
+
+
+# surcharge de ordinalize pour avoir 1er (par exemple 1er janvier)
+module ActiveSupport
+  module Inflector
+    def ordinalize(number)
+      if number.to_i == 1
+        '1er'
+      else
+        "#{number}"
+      end
+    end
+
+  end
+end

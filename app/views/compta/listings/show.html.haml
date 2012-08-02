@@ -6,7 +6,9 @@
     :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker },             |
     :format=>'pdf'), :id=>'icon_pdf'                                                                      |
 .champ
-  %h3= "Ecritures du compte #{@listing.account.long_name}"
+  %h3
+    = "Ecritures du compte #{@listing.account.long_name}"
+    = " - Du #{ordinalize_date(@listing.from_date)} au #{ordinalize_date(@listing.to_date)}"
   = render partial: 'modal_form'
 %div#listing_table
   = render partial:"listing_table"

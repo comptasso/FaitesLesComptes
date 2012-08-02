@@ -88,6 +88,13 @@ module ApplicationHelper
     end
 
 
+    # ordinalize date s'appuie sur ordinalize qui est redéfini dans
+    # config/initializers/inflections.rb
+    def ordinalize_date(d)
+      "#{d.day.ordinalize} #{I18n.l(d, :format=>:month_year)}"
+    end
+
+
 protected
 
      #détermine si on est dans un namespace (admin ou compta) spécifique
