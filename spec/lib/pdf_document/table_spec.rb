@@ -6,7 +6,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'pdf_document/base'
 require 'pdf_document/page'
 require 'pdf_document/table'
-
+ 
 describe PdfDocument::Table do
 
   let(:arel) {double(Arel, count:100, 
@@ -25,7 +25,10 @@ describe PdfDocument::Table do
 
   before(:each) do
     @l = mock_model(Line, line_date:Date.today, ref:nil, debit:BigDecimal.new('10'), credit:BigDecimal.new('0'))
-    arel.stub_chain(:select, :order, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
+    arel.stub_chain(:select, :range_date, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
+    arel.stub_chain(:range_date).and_return 1.upto(50).collect {|i| @l}
+    doc.stub(:nb_pages).and_return 2
+
     doc.set_columns_titles( %w(Date Réf Débit Crédit) )
     doc.set_columns(%w(line_date ref debit credit)) 
     @page = doc.page(2)

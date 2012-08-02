@@ -81,11 +81,12 @@ module PdfDocument
        @title = options[:title]
        @subtitle = options[:subtitle]
        @period = period
-       @from_date = options[:from_date] || @period.start_date
+       @from_date = options[:from_date] || @period.start_date 
        @to_date = options[:to_date] || @period.close_date
        @nb_lines_per_page = options[:nb_lines_per_page] || 22
        @source = source
        @stamp = options[:stamp]
+       @created_at = I18n.l(Time.now, :format=>:pdf)
      end
 
      
@@ -98,10 +99,7 @@ module PdfDocument
        @period.exercice
      end
 
-     def created_at
-       t = Time.now
-       I18n::l(t.to_date)  + "\n #{t.strftime('%H:%M:%S')}"
-     end
+    
 
     
      # calcule de nombre de pages; il y a toujours au moins une page

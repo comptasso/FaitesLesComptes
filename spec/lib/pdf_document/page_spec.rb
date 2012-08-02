@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require 'pdf_document/page'
+
 require 'pdf_document/base'
 
 describe PdfDocument::Page do
@@ -15,12 +15,14 @@ describe PdfDocument::Page do
       lines:arel )}
 
 
-  let(:doc) {PdfDocument::Base.new(p, source, {title:'Le titre de la page'}) }
+  let(:doc) { PdfDocument::Base.new(p, source, {title:'Le titre de la page'}) } 
+  let(:now) {Time.now}
 
 
 
   before(:each) do
     doc.set_columns_titles  %w(Date Débit Crédit)
+    doc.stub(:nb_pages).and_return 5
     @page = PdfDocument::Page.new(2, doc)
   end
 
@@ -44,10 +46,10 @@ describe PdfDocument::Page do
     it 'avec un sous titre s il existe' do
       doc.stub(:subtitle).and_return'Le sous titre'
       @page.subtitle.should == "Le sous titre"
-    end
+    end 
 
     it "répond à top_right" do
-      @page.top_right.should == "#{I18n::l Time.now}\nPage 2/#{doc.nb_pages}"
+      @page.top_right.should == "#{I18n::l(Date.today, :format=>:long)}\n#{now.strftime('%H:%M:%S')}"
     end
 
     it "repond à table_title" do
@@ -62,13 +64,13 @@ describe PdfDocument::Page do
 
     before(:each) do
       @l = mock_model(Line, line_date:Date.today, ref:nil, debit:10, credit:0)
-      arel.stub_chain(:select, :order, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
+      arel.stub_chain(:select, :range_date, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
       doc.set_columns %w(line_date ref debit credit)
       doc.set_columns_to_totalize [2]
       
     end
     it 'total_line' do
-      doc.page(1).table_total_line.should == ['Totaux', "220.00"]
+      doc.page(1).table_total_line.should == ['Totaux', "220.00"] 
     end
 
       it 'to_report' do
