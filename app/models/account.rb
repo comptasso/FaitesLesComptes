@@ -99,6 +99,8 @@ class Account < ActiveRecord::Base
     options[:title] ||=  "Liste des écritures du compte #{number}"
     options[:subtitle] ||= "Du #{I18n::l from_date} au #{I18n.l to_date}"
     options[:stamp] = "brouillard" unless all_lines_locked?(from_date, to_date)
+    options[:from_date] = from_date
+    options[:to_date] = to_date
     pdf = PdfDocument::Base.new(period, self, options)
 
     pdf.set_columns %w(line_date ref narration nature_id destination_id debit credit)

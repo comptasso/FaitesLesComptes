@@ -41,7 +41,9 @@ module PdfDocument
 
     # lines renvoie un array
     def prepared_lines
-      @prepared_lines ||= lines.collect {|l| prepare_line(l)}
+      if lines
+        @prepared_lines ||= lines.collect {|l| prepare_line(l)}
+      end
     end
 
    
@@ -52,35 +54,42 @@ module PdfDocument
       # lines est un tableau de lignes dont on veut connaître le total
       # pour chaque colonne qui est dans columns_to_totalize
       r = @document.columns_to_totalize.collect {|index| totalize_column(index)}
-      tl = r.collect {|v| format_value(v)}
+      tl = r.collect {|v| format_total(v)}
       tl.insert(0, 'Totaux')
     end
 
-     # appelle les méthodes adéquate pour chacun des éléments de la lignes
-     def prepare_line(line)
-       @document.prepare_line(line).collect {|v| format_value(v)}
-     end
+    # appelle les méthodes adéquate pour chacun des éléments de la lignes
+    def prepare_line(line)
+      @document.prepare_line(line).collect {|v| format_value(v)}
+    end
 
      
     protected
 
-     def format_value(r)
-        r = '' if r.nil?
-        r = I18n::l(r) if r.is_a? Date
-        r = '%0.2f' % r if r.is_a? BigDecimal
-        r = '%0.2f' % r if r.is_a? Float
-        r = '' if r == '0.00'
-        r
-     end
+    def format_total(r)
+      return '0.00' if r == nil
+      return '%0.2f' % r if r.is_a?(Float) || r.is_a?(BigDecimal)
+    end
 
-     # fait le total des valeurs de la colonne d'indice i
-     # n'additionne que s'il en est capable en testant la transformation en Float
-     # cela permet d'avoir des valeurs vides dans les colonnes par exemple
-     def totalize_column(i)
-       prepared_lines.each.sum do |l|
-         l[i].to_f if l[i].to_f.is_a?(Float)
-       end
-     end
+    def format_value(r)
+      r = '' if r.nil?
+      r = I18n::l(r) if r.is_a? Date
+      r = '%0.2f' % r if r.is_a? BigDecimal
+      r = '%0.2f' % r if r.is_a? Float
+      r = '' if r == '0.00'
+      r
+    end
+
+    # fait le total des valeurs de la colonne d'indice i
+    # n'additionne que s'il en est capable en testant la transformation en Float
+    # cela permet d'avoir des valeurs vides dans les colonnes par exemple
+    def totalize_column(i)
+      if prepared_lines
+        prepared_lines.each.sum do |l|
+          l[i].to_f if l[i].to_f.is_a?(Float)
+        end
+      end
+    end
 
 
     

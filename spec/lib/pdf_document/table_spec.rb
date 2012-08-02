@@ -25,7 +25,7 @@ describe PdfDocument::Table do
 
   before(:each) do
     @l = mock_model(Line, line_date:Date.today, ref:nil, debit:BigDecimal.new('10'), credit:BigDecimal.new('0'))
-    arel.stub_chain(:select, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
+    arel.stub_chain(:select, :order, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
     doc.set_columns_titles( %w(Date Réf Débit Crédit) )
     doc.set_columns(%w(line_date ref debit credit)) 
     @page = doc.page(2)
@@ -49,7 +49,7 @@ describe PdfDocument::Table do
   describe 'gestion des totaux' do
     it 'la table doit pouvoir écrire le total sur les lignes qui conviennent' do
       doc.set_columns_to_totalize([2,3])
-      @page.table_total_line.should == ['Totaux', "220.00", '']
+      @page.table_total_line.should == ['Totaux', "220.00", '0.00']
     end
   
     it 'la table doit pouvoir écrire le total sur les lignes qui conviennent' do

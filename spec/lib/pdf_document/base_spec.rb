@@ -91,30 +91,53 @@ describe PdfDocument::Base do
       @base.nb_lines_per_page.should == 30
     end
 
-    
+     describe 'stamp' do
+      it 'has a nil default stamp' do
+        @base = PdfDocument::Base.new(p,nil, {})
+        @base.stamp.should == nil
+      end
+
+      it 'une option peut permettre de préciser le stamp' do
+        pdf = PdfDocument::Base.new(p, nil, valid_options.merge(stamp:'Provisoire'))
+        pdf.stamp.should == 'Provisoire' 
+      end
+    end
   end
 
-  context 'création d un doc pour être intégré dans un document plus large' do
-    let(:arel) {double(Arel, count:100, first:mock_model(Line))}
+  context 'un listing sans ligne' do
+    load 'lib/pdf_document/table.rb'
+    let(:arel) {double(Arel, first:nil)}
     let(:source) {mock_model(Account, title:'Achats', number:'60',
         lines:arel )}
 
     before(:each) do
-      @base = PdfDocument::Base.new(p, source, valid_options.merge({:first_page_number=>3, :total_page_number=>12}))
+      @base = PdfDocument::Base.new(p, source, valid_options)
+      @base.set_columns  %w(line_date ref nature_id destination_id debit credit)
+      @base.set_columns_to_totalize [4,5]
     end
 
-    it 'la première page du listing affiche p3/12' do
-      @base.page(1).top_right.should match /Page 3\/12/
+    it 'a quand même une page' do
+      arel.stub_chain(:range_date, :count).and_return 0
+      @base.nb_pages.should == 1
+    end
+
+    it 'avec un total de 0' do
+      arel.stub_chain(:select, :range_date, :offset, :limit).and_return nil
+      @base.stub(:nb_pages).and_return 1
+      @base.page(1).table_total_line.should == ['Totaux', '0.00', '0.00']
+      @base.page(1).table_to_report_line.should == ['Total général', '0.00', '0.00']
     end
   end
 
+ 
   context 'création des pages' do
 
-    let(:arel) {double(Arel, count:100, first:mock_model(Line))}
+    let(:arel) {double(Arel,  first:mock_model(Line))}
     let(:source) {mock_model(Account, title:'Achats', number:'60',
         lines:arel )}
 
     before(:each) do
+      arel.stub_chain(:range_date, :count).and_return 100
       @base = PdfDocument::Base.new(p, source, valid_options) 
     end
 
@@ -133,17 +156,7 @@ describe PdfDocument::Base do
       expect {@base.page(0)}.to raise_error ArgumentError
     end
 
-    describe 'stamp' do
-      it 'has a nil default stamp' do
-        @base.stamp.should == nil
-      end
-
-      it 'une option peut permettre de préciser le stamp' do
-        pdf = PdfDocument::Base.new(p, source, valid_options.merge(stamp:'Provisoire'))
-        pdf.stamp.should == 'Provisoire'
-      end
-    end
-
+   
 
 
 
@@ -245,6 +258,10 @@ describe PdfDocument::Base do
       it 'peut fixer la première ligne de report' do
         @base.first_report_line = ['Soldes', 100, 20]
         @base.first_report_line.should ==  ['Soldes', 100, 20]
+      end
+
+      it 'gestion des totaux de la page' do
+        pending 'voir si fait dans la classe page'
       end
 
     end

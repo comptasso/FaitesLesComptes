@@ -75,7 +75,7 @@ module PdfDocument
     attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize, :stamp
      attr_writer  :select_method
 
-    validates :title, :presence=>true
+    validates :title, :presence=>true 
 
      def initialize(period, source, options)
        @title = options[:title]
@@ -101,22 +101,28 @@ module PdfDocument
      end
 
     
+     # calcule de nombre de pages; il y a toujours au moins une page
+     # même s'il n'y a pas de lignes dans le comptes
+     # ne serait-ce que pour afficher les soldes en début et en fin de période
      def nb_pages
-       (@source.instance_eval(select_method).count/@nb_lines_per_page.to_f).ceil
+       nb_lines = @source.lines.range_date(from_date, to_date).count
+       return 1 if nb_lines == 0
+      (nb_lines/@nb_lines_per_page.to_f).ceil
      end
 
      # permet d'appeler la page number
      # retourne une instance de PdfDocument::Page
      def page(number)
-       raise ArgumentError unless (1..nb_pages).include? number
+       raise ArgumentError, "La page demandée n'existe pas"  unless (1..nb_pages).include? number
        Page.new(number, self)
      end
+
 
      # renvoie les lignes de la page demandées
      def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      source.instance_eval(select_method).select(columns).order('line_date').offset(offset).limit(limit)
+      @source.lines.select(columns).range_date(from_date, to_date).offset(offset).limit(limit)
      end
 
      # appelle les méthodes adéquate pour chacun des éléments de la lignes
