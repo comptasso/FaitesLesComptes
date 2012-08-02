@@ -21,17 +21,17 @@ end
     pad(05) do
 
         y_position = cursor
-        bounding_box [0, y_position], :width => 100, :height => 40 do
+        bounding_box [0, y_position], :width => 150, :height => 40 do
             text page.top_left
 
         end
 
-        bounding_box [100, y_position], :width => width-200, :height => 40 do
+        bounding_box [150, y_position], :width => width-300, :height => 40 do
             font_size(20) { text page.title, :align=>:center }
             text page.subtitle, :align=>:center
         end
 
-        bounding_box [width-100, y_position], :width => 100, :height => 40 do
+        bounding_box [width-150, y_position], :width => 150, :height => 40 do
             text page.top_right, :align=>:right
         end
 

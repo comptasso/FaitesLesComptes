@@ -80,14 +80,12 @@ module PdfDocument
      def initialize(period, source, options)
        @title = options[:title]
        @subtitle = options[:subtitle]
-       @created_at = I18n.l Time.now
        @period = period
        @from_date = options[:from_date] || @period.start_date
        @to_date = options[:to_date] || @period.close_date
        @nb_lines_per_page = options[:nb_lines_per_page] || 22
        @source = source
        @stamp = options[:stamp]
-     
      end
 
      
@@ -98,6 +96,11 @@ module PdfDocument
 
      def exercice
        @period.exercice
+     end
+
+     def created_at
+       t = Time.now
+       I18n::l(t.to_date)  + "\n #{t.strftime('%H:%M:%S')}"
      end
 
     

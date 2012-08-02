@@ -677,7 +677,6 @@ OK - Compta ne devrait pas être accessible si on n'a pas créé de compte
 OK - Mettre des validations dans le modèle balance
 Spec balance - reste à faire le spec d'intégration
 Spec listing
-
 OK - la balance PDF pourrait bien être systématiquement sur l'ensemble de l'année
 OK - Voir pour le compte....
 OK - Dans le listing du compte, ce qu'on veut c'est avoir en première page comme report  le solde du compte
@@ -694,11 +693,10 @@ OK - doit réinitier le datatable après mise à jour modale
 OK - Ajouter un menu Compte dans les éditions
 OK - Ajouter une édition du plan comptable (ce qui permet de faire un index des comtpes et un affichage)
 OK - pdf pour les différentes impressions : plan comptable, listing, balance
-
 Vérifier le pdf de balance et créer le csv
 Voir la question des truncate pour éviter qu'il y ait des pb de mise en page
 OK - changer l'icone printer en icone pdf
-Ajouter un menu grand livre - uniquement pdf ?
+OK Ajouter un menu grand livre - uniquement pdf
 Ajouter un menu compte de résultat - uniquement pdf ?
 Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
 OK - Réorganiser les menus dans admin et compta comme pour public
@@ -708,9 +706,10 @@ Voir si les validators cant_change, cant_edit et cant_edit_field sont utilisés
 OK - Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
 
 ---------------------PdfDocument ------------------------------
+Modifier Base pour en faire un Listing dédié à Account car il est devenu très spécialisé
 retirer la référence à Line dans base
 Refaire l'arborescence pour faire descendre base de simple (changer les noms ?)
-Revoir les truncate dans balance.pdf
+Revoir les truncate dans balance.pdf en utilisant :overflow=>truncate de Prawn
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?
