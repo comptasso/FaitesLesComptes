@@ -28,8 +28,8 @@ class MonthYear
 
   def initialize(h)
     @date = Date.civil(h[:year].to_i, h[:month].to_i)  # pour généréer InvalidDate si les arguments sont non valables
-    @month = '%02d' % h[:month]
-    @year = '%04d' % h[:year]
+    @month = '%02d' % h[:month].to_i
+    @year = '%04d' % h[:year].to_i
   end
 
   # format par défaut mm-yyyy

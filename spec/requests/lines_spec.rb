@@ -5,11 +5,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 describe 'vue lines' do
-  include OrganismFixture
+  include OrganismFixture 
   
   before(:each) do
     create_minimal_organism
-    #visit organism_path(@o) 
   end
 
   describe 'new line' do 

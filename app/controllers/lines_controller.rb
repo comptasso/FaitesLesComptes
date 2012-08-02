@@ -128,7 +128,7 @@ class LinesController < ApplicationController
   def find_book
     @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
     @organism=@book.organism
-   @period= @organism.periods.find(session[:period])
+    @period= @organism.periods.find(session[:period])
   end
 
   def fill_mois
