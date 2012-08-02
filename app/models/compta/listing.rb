@@ -17,11 +17,10 @@ module Compta
   column :from_date, :date
   column :to_date, :date
   column :account_id, :integer
-  column :period_id, :integer
-
-   belongs_to :period
+  
+   
    belongs_to :account
-   has_many :accounts, :through=>:period
+   
 
     include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
 
@@ -32,10 +31,20 @@ module Compta
    # je mets date_within_period en premier car je préfère les affichages Dates invalide ou hors limite
  # que obligatoire (sachant que le form n'affiche que la première erreur).
   validates :from_date, :to_date, date_within_period:true
-  validates :from_date, :to_date, :account_id, :period_id, :presence=>true
+  validates :from_date, :to_date, :account_id, :presence=>true
 
   def lines
-    @lines ||= fill_lines
+    account.lines.range_date(from_date, to_date)
+  end
+
+  # permet notamment de contrôler les limites de date
+  def period
+    account.period if account
+  end
+
+  # utile pour le formulaire de saisie pour changer de compte
+  def accounts
+    period.accounts
   end
 
   
@@ -47,30 +56,26 @@ module Compta
     lines.sum(:credit)
   end
 
-  def solde
-    solde_credit_avant + total_credit - solde_debit_avant- total_debit
-  end
-
-  def solde_debit_avant
-    lines.sum_debit_before(from_date)
-  end
-
-  def solde_credit_avant
-    lines.sum_debit_before(from_date)
-  end
-
-  # to_pdf delegates to account to produce pdf data
-  # use lib/pdf_document
   def to_pdf(options = {})
     account.to_pdf(from_date, to_date, options)
   end
 
+#  def solde
+#    solde_credit_avant + total_credit - solde_debit_avant- total_debit
+#  end
+#
+#  def solde_debit_avant
+#    lines.sum_debit_before(from_date)
+#  end
+#
+#  def solde_credit_avant
+#    lines.sum_debit_before(from_date)
+#  end
 
-  protected
+  # to_pdf delegates to account to produce pdf data
+  # use lib/pdf_document
+ 
 
-  def fill_lines
-    @lines = account.lines.range_date(from_date, to_date)
-  end
 
  end
 end

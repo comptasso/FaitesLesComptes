@@ -52,9 +52,11 @@ function drawDataTable() {
             }
 
             /* Modify the footer row to match what we want */
-            nCells = nRow.getElementsByTagName('th');
-            nCells[1].innerHTML =  iPageDebit.toFixed(2) + '<br/>' + iTotalDebit.toFixed(2);
-            nCells[2].innerHTML =  iPageCredit.toFixed(2) + '<br/>' + iTotalCredit.toFixed(2);
+//            nCells = nRow.getElementsByTagName('th');
+            $('#tdebit').text(iPageDebit.toFixed(2));
+            $('#tcredit').text(iPageCredit.toFixed(2));
+//            nCells[1].innerHTML =  iPageDebit.toFixed(2) + '<br/>' + iTotalDebit.toFixed(2);
+//            nCells[2].innerHTML =  iPageCredit.toFixed(2) + '<br/>' + iTotalCredit.toFixed(2);
 
         }
     });

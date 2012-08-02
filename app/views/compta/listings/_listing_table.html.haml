@@ -16,11 +16,11 @@
         Totaux:
         %br
         Totaux globaux:
-      %th#tdebit(rowspan="1" colspan="1" class="numeric nombre")
+      %th#tgdebit(rowspan="1" colspan="1" class="numeric nombre")
+        %span#tdebit=  debit_credit(@listing.total_debit)
+        %br
         =  debit_credit(@listing.total_debit)
+      %th#tgcredit(rowspan="1" colspan="1" class="numeric nombre")
+        %span#tcredit=  debit_credit(@listing.total_credit)
         %br
-        =  debit_credit(@listing.total_debit+ @listing.solde_debit_avant)
-      %th#tdcredit(rowspan="1" colspan="1" class="numeric nombre")
         =  debit_credit(@listing.total_credit)
-        %br
-        =  debit_credit(@listing.total_credit+ @listing.solde_credit_avant)

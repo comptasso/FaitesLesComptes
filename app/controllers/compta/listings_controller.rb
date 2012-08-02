@@ -12,7 +12,7 @@ class Compta::ListingsController < Compta::ApplicationController
   # icon listing qui apparaît à côté des comptes non vides
   def show
     load 'lib/pdf_document/base.rb'
-     @listing = Compta::Listing.new({period_id:@period.id}.merge(params[:compta_listing]) )
+     @listing = Compta::Listing.new(params[:compta_listing])
      if @listing.valid?
        respond_to do |format|
         format.html {render 'show'}
@@ -27,7 +27,7 @@ class Compta::ListingsController < Compta::ApplicationController
 
  
   def new
-     @listing = Compta::Listing.new(period_id:@period.id, from_date:@period.start_date, to_date:@period.close_date)
+     @listing = Compta::Listing.new(from_date:@period.start_date, to_date:@period.close_date)
      @listing.account_id = params[:account_id] # permet de préremplir le formulaire avec le compte si
      # on vient de l'affichage du plan comptable (accounts#index)
      @accounts = @period.accounts.order('number ASC')
@@ -35,7 +35,7 @@ class Compta::ListingsController < Compta::ApplicationController
 
   def create
     
-    @listing = Compta::Listing.new({period_id:@period.id}.merge(params[:compta_listing]) )
+    @listing = Compta::Listing.new(params[:compta_listing])
     if @listing.valid?
        respond_to do |format|
         format.html {render 'show'}
