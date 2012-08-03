@@ -64,5 +64,13 @@ function drawDataTable() {
 
 // mise en forme des tables de lignes
 jQuery(function () {
+    $('#div-movements').hide();
     drawDataTable();
+    $('#show-soldes').toggle(function(){
+      $('#div-movements').show();
+    },
+    function() {
+      $('#div-movements').hide();
+    });
 });
+

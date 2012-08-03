@@ -6,11 +6,34 @@
         Purpose of the stylesheet follows.
 */
 
-/*
-   TODO customize this sample style
-   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
-*/
+// la table des mouvements
 
-root {
-    display: block;
-}
+.champ a {
+    color: white;
+    font-size: x-small;
+    float: right;
+    margin-right: 10px;
+  }
+
+#movements {
+  float: right;
+  margin-right: 0;
+  text-align: right;
+  
+    td {
+      padding-right: 5px;
+      }
+    tr#titles {
+      text-align: center;
+      }
+    tr#begin-solds td, tr#end-solds td{
+          background: #dbffdb;
+          font-weight: bold;
+      }
+  
+  
+  }
+
+#listing_table {
+  clear: both;
+  }

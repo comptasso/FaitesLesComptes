@@ -9,7 +9,8 @@
   %h3
     = "Ecritures du compte #{@listing.account.long_name}"
     = " - Du #{ordinalize_date(@listing.from_date)} au #{ordinalize_date(@listing.to_date)}"
-  = render partial: 'movements'
+    %a#show-soldes(href= '#' title='Affiche/masque les soldes du comtpe') soldes
   = render partial: 'modal_form'
+#div-movements= render partial: 'movements'
 %div#listing_table
   = render partial:"listing_table"
