@@ -1,6 +1,6 @@
 "use strict";
 /*jslint browser: true */
-var jQuery, $, stringToFloat;
+var jQuery, $, stringToFloat, numberWithPrecision;
 
 
 
@@ -66,11 +66,13 @@ function drawDataTable() {
 jQuery(function () {
     $('#div-movements').hide();
     drawDataTable();
-    $('#show-soldes').toggle(function(){
-      $('#div-movements').show();
+    $('#show-soldes').toggle(function () {
+        $('#div-movements').show();
+        $('a#show-soldes').text('masquer les soldes');
     },
-    function() {
-      $('#div-movements').hide();
-    });
+        function () {
+            $('#div-movements').hide();
+            $('a#show-soldes').text('afficher les soldes');
+        });
 });
 

@@ -7,9 +7,10 @@
     :format=>'pdf'), :id=>'icon_pdf'                                                                      |
 .champ
   %h3
-    = "Ecritures du compte #{@listing.account.long_name}"
-    = " - Du #{ordinalize_date(@listing.from_date)} au #{ordinalize_date(@listing.to_date)}"
-    %a#show-soldes(href= '#' title='Affiche/masque les soldes du comtpe') soldes
+    %span#intitule
+      = "Ecritures du compte #{@listing.account.long_name}"
+      = " - Du #{ordinalize_date(@listing.from_date)} au #{ordinalize_date(@listing.to_date)}"
+    %a#show-soldes(href= '#' title='Affiche/masque les soldes du comtpe') afficher les soldes
   = render partial: 'modal_form'
 #div-movements= render partial: 'movements'
 %div#listing_table
