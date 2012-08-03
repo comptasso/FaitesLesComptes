@@ -678,7 +678,7 @@ OK - Mettre des validations dans le modèle balance
 Spec balance - reste à faire le spec d'intégration
 Spec listing
 OK - Un listing ne devrait avoir qu'un seul compte - pas besoin de périod
-déplace le javascript de lines.js dans listing.js
+OK - déplace le javascript de lines.js dans listing.js
 déplacer le to_pdf de Account vers celui de Listing (rebaptiser Listing en ListingAccount ?)
 OK - la balance PDF pourrait bien être systématiquement sur l'ensemble de l'année
 OK - Voir pour le compte....
@@ -713,6 +713,7 @@ Modifier Base pour en faire un Listing dédié à Account car il est devenu trè
 retirer la référence à Line dans base
 Refaire l'arborescence pour faire descendre base de simple (changer les noms ?)
 Revoir les truncate dans balance.pdf en utilisant :overflow=>truncate de Prawn
+Dans balance, le stamp est automatiquement brouillard
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?

@@ -5,7 +5,7 @@ var jQuery, $, stringToFloat, numberWithPrecision;
 
 
 function drawDataTable() {
-    $('.listing_data_table').dataTable({
+    $('.compta_listings .listing_data_table').dataTable({
         "sDom": "lfrtip",
         "bAutoWidth": false,
         "sPaginationType": "bootstrap",
@@ -64,9 +64,9 @@ function drawDataTable() {
 
 // mise en forme des tables de lignes
 jQuery(function () {
-    $('#div-movements').hide();
+    $('.compta_listings #div-movements').hide();
     drawDataTable();
-    $('#show-soldes').toggle(function () {
+    $('.compta_listings #show-soldes').toggle(function () {
         $('#div-movements').show();
         $('a#show-soldes').text('masquer les soldes');
     },

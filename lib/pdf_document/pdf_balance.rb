@@ -20,6 +20,18 @@ module PdfDocument
       @columns_alignements = array_alignements
     end
 
+    # calcule de nombre de pages; il y a toujours au moins une page
+     # même s'il n'y a pas de lignes dans le comptes
+     # ne serait-ce que pour afficher les soldes en début et en fin de période.
+
+    # Je surcharge car on utilise ici balance_lines et non lines. 
+     def nb_pages
+       nb_lines = @source.balance_lines.count
+       return 1 if nb_lines == 0
+      (nb_lines/@nb_lines_per_page.to_f).ceil
+     end
+
+
 
 
     def set_columns_widths(array_widths)
