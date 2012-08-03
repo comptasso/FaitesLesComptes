@@ -139,7 +139,8 @@ fr:
         delimiter: ""
     precision:
       format:
-        delimiter: ""
+        delimiter: " "
+        precision: 2
     human:
       format:
         delimiter: ""

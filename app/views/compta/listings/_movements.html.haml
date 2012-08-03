@@ -1,0 +1,27 @@
+%table#movements
+  %thead
+    %tr
+      %th 
+      %th Débit
+      %th Crédit
+      %th Solde
+  %tbody
+    %tr
+      %td
+        Soldes au
+        = " #{ordinalize_date(@listing.from_date)}"
+      %td= number_with_precision @listing.solde_debit_avant
+      %td= number_with_precision @listing.solde_credit_avant
+      %td= number_with_precision(@listing.solde_credit_avant - @listing.solde_debit_avant)
+    %tr
+      %td Mouvements de la période
+      %td= number_with_precision @listing.total_debit
+      %td= number_with_precision @listing.total_credit
+      %td
+    %tr
+      %td
+        Soldes au
+        = " #{ordinalize_date(@listing.to_date)}"
+      %td= number_with_precision(@listing.solde_debit_avant + @listing.total_debit)
+      %td= number_with_precision(@listing.solde_credit_avant + @listing.total_credit)
+      %td= number_with_precision @listing.solde_final

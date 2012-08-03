@@ -87,6 +87,7 @@ module ApplicationHelper
       ''
     end
 
+    
 
     # ordinalize date s'appuie sur ordinalize qui est redéfini dans
     # config/initializers/inflections.rb

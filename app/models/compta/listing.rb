@@ -33,6 +33,12 @@ module Compta
   validates :from_date, :to_date, date_within_period:true
   validates :from_date, :to_date, :account_id, :presence=>true
 
+  def with_default_values
+    self.from_date ||= period.start_date
+    self.to_date ||= period.close_date
+    self
+  end
+
   def lines
     account.lines.range_date(from_date, to_date)
   end
@@ -60,17 +66,17 @@ module Compta
     account.to_pdf(from_date, to_date, options)
   end
 
-#  def solde
-#    solde_credit_avant + total_credit - solde_debit_avant- total_debit
-#  end
-#
-#  def solde_debit_avant
-#    lines.sum_debit_before(from_date)
-#  end
-#
-#  def solde_credit_avant
-#    lines.sum_debit_before(from_date)
-#  end
+  def solde_final
+    solde_credit_avant + total_credit - solde_debit_avant- total_debit
+  end
+
+  def solde_debit_avant
+    account.lines.sum_debit_before(from_date)
+  end
+
+  def solde_credit_avant
+    account.lines.sum_credit_before(from_date)
+  end
 
   # to_pdf delegates to account to produce pdf data
   # use lib/pdf_document
