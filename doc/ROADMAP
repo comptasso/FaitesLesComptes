@@ -697,7 +697,7 @@ OK - Ajouter un menu Compte dans les éditions
 OK - Ajouter une édition du plan comptable (ce qui permet de faire un index des comtpes et un affichage)
 OK - pdf pour les différentes impressions : plan comptable, listing, balance
 OK - Vérifier le pdf de balance
-créer le csv de balance
+OK - créer le csv de balance
 Voir la question des truncate pour éviter qu'il y ait des pb de mise en page
 OK - changer l'icone printer en icone pdf
 OK Ajouter un menu grand livre - uniquement pdf

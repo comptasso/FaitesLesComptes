@@ -66,7 +66,7 @@ table [page.table_report_line],  :cell_style=>{:font_style=>:bold, :align=>:righ
 end
 
 # la table des lignes proprement dites
-table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5]} do
+table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5], :height => 16, :overflow=>:truncate} do
     column_widths.each_with_index {|w,i| column(i).width = w}
     doc.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
 

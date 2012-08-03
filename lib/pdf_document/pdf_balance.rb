@@ -54,7 +54,7 @@ module PdfDocument
     # qui représente un account 
     def prepare_line(account)
       [ account.number,
-        account.title.truncate(40),
+        account.title,
         account.cumulated_before(from_date, :debit),
         account.cumulated_before(from_date, :credit),
         account.movement(from_date, to_date, :debit),
