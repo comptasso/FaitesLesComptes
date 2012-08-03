@@ -80,10 +80,32 @@ function stringToFloat(jcdata) {
         return 0.0;
     }
     var d = String(jcdata).replace(/,/, '.');
+    d = d.replace(/\s/, '');
     if (isNaN(d)) {
         return 0.0;
     } else {
         return Number(d);
     }
 }
+
+function numberWithPrecision(number) {
+  var part1, part2, parts;
+  if (number === undefined) {
+        return '-';
+    }
+    number =  number.toFixed(2); // on garde deux décimales
+    if (isNaN(number)) {
+      return '-'
+    } else {
+  parts = String(number).split('.');
+  part1 = parts[0];
+	part2 = parts.length > 1 ? ',' + parts[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(part1)) {
+		part1 = part1.replace(rgx, '$1' + ' ' + '$2');
+	}
+	return part1 + part2;
+    }
+}
+
 

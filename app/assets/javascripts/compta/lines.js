@@ -32,19 +32,19 @@ function drawDataTable() {
              * Calculate the total market share for all browsers in this table (ie inc. outside
              * the pagination)
              */
-            var iTotalDebit = 0, i = 0, iPageDebit = 0.0, iTotalCredit = 0.0, iPageCredit = 0.0, nCells;
-            for (i = 0; i < aaData.length; i += 1) {
-                iTotalDebit += stringToFloat(aaData[i][5]);
-            }
+            var i = 0, iPageDebit = 0.0, iPageCredit = 0.0;
+//            for (i = 0; i < aaData.length; i += 1) {
+//                iTotalDebit += stringToFloat(aaData[i][5]);
+//            }
 
             /* Calculate the market share for browsers on this page */
             for (i = iStart; i < iEnd; i += 1) {
                 iPageDebit += stringToFloat(aaData[aiDisplay[i]][5]);
             }
 
-            for (i = 0; i < aaData.length; i += 1) {
-                iTotalCredit += stringToFloat(aaData[i][6]);
-            }
+//            for (i = 0; i < aaData.length; i += 1) {
+//                iTotalCredit += stringToFloat(aaData[i][6]);
+//            }
 
             /* Calculate the market share for browsers on this page */
             for (i = iStart; i < iEnd; i += 1) {
@@ -53,8 +53,8 @@ function drawDataTable() {
 
             /* Modify the footer row to match what we want */
 //            nCells = nRow.getElementsByTagName('th');
-            $('#tdebit').text(iPageDebit.toFixed(2));
-            $('#tcredit').text(iPageCredit.toFixed(2));
+            $('#tdebit').text(numberWithPrecision(iPageDebit));
+            $('#tcredit').text(numberWithPrecision(iPageCredit));
 //            nCells[1].innerHTML =  iPageDebit.toFixed(2) + '<br/>' + iTotalDebit.toFixed(2);
 //            nCells[2].innerHTML =  iPageCredit.toFixed(2) + '<br/>' + iTotalCredit.toFixed(2);
 
