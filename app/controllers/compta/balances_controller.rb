@@ -22,12 +22,16 @@ class Compta::BalancesController < Compta::ApplicationController
         format.js
         format.pdf  {send_data @balance.to_pdf.render('lib/pdf_document/balance.pdf.prawn') ,
           filename:"Balance #{@organism.title}.pdf"} #, disposition:'inline'}
+        format.csv { send_data @balance.to_csv(col_sep:"\t")  }  # pour éviter le problème des virgules
+        format.xls { send_data @balance.to_xls(col_sep:"\t")  }
       end
     else
       respond_to do |format|
         format.html { render 'new'}
-        format.js {render 'new'}
-        format.pdf {render :text=>'Erreur dans la génération du listing'}
+        format.js { render 'new'}
+        format.pdf { redirect_to new_compta_period_balance_url(@period) }
+        format.csv { redirect_to new_compta_period_balance_url(@period) }
+        format.xls { redirect_to new_compta_period_balance_url(@period) }
       end
     end
   end

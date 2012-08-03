@@ -46,25 +46,25 @@ module Stats
     end
 
     def to_csv(options)
-    CSV.generate(options) do |csv|
-      csv << title
-      lines.each do |line|
-        csv << prepare_line(line)
+      CSV.generate(options) do |csv|
+        csv << title
+        lines.each do |line|
+          csv << prepare_line(line)
+        end
+        csv << prepare_line(totals)
       end
-      csv << prepare_line(totals)
     end
-  end
 
     # to_xls est comme to_csv sauf qu'il y a un encodage en windows-1252
-  def to_xls(options)
-    CSV.generate(options) do |csv|
-      csv << title.map {|data| data.encode("windows-1252")}
-      lines.each do |line|
-        csv << prepare_line(line).map { |data| data.encode("windows-1252") unless data.nil?}
+    def to_xls(options)
+      CSV.generate(options) do |csv|
+        csv << title.map {|data| data.encode("windows-1252")}
+        lines.each do |line|
+          csv << prepare_line(line).map { |data| data.encode("windows-1252") unless data.nil?}
+        end
+        csv <<  prepare_line(totals).map { |data| data.encode("windows-1252") unless data.nil?}
       end
-      csv <<  prepare_line(totals).map { |data| data.encode("windows-1252") unless data.nil?}
     end
-  end
 
     protected
 
@@ -79,16 +79,16 @@ module Stats
     end
 
     # le nom de la nature suivi des autres valeurs reformatées
-   def prepare_line(line)
-     [line[0]] + 1.upto(line.size).collect {|i| reformat(line[i])}
-  end
+    def prepare_line(line)
+      [line[0]] + 1.upto(line.size).collect {|i| reformat(line[i])}
+    end
 
-  # remplace les points décimaux par des virgules pour s'adapter au paramétrage
-  # des tableurs français
-  def reformat(number)
-   return number if number.is_a? String
-   sprintf('%0.02f',number).gsub('.', ',') if number
-  end
+    # remplace les points décimaux par des virgules pour s'adapter au paramétrage
+    # des tableurs français
+    def reformat(number)
+      return number if number.is_a? String
+      sprintf('%0.02f',number).gsub('.', ',') if number
+    end
 
     
   end

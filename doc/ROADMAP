@@ -679,7 +679,7 @@ Spec balance - reste à faire le spec d'intégration
 Spec listing
 OK - Un listing ne devrait avoir qu'un seul compte - pas besoin de périod
 OK - déplace le javascript de lines.js dans listing.js
-déplacer le to_pdf de Account vers celui de Listing (rebaptiser Listing en ListingAccount ?)
+Ok - déplacer le to_pdf de Account vers celui de Listing (rebaptiser Listing en ListingAccount ?)
 OK - la balance PDF pourrait bien être systématiquement sur l'ensemble de l'année
 OK - Voir pour le compte....
 OK - Dans le listing du compte, ce qu'on veut c'est avoir en première page comme report  le solde du compte
@@ -696,7 +696,8 @@ OK - doit réinitier le datatable après mise à jour modale
 OK - Ajouter un menu Compte dans les éditions
 OK - Ajouter une édition du plan comptable (ce qui permet de faire un index des comtpes et un affichage)
 OK - pdf pour les différentes impressions : plan comptable, listing, balance
-Vérifier le pdf de balance et créer le csv
+OK - Vérifier le pdf de balance
+créer le csv de balance
 Voir la question des truncate pour éviter qu'il y ait des pb de mise en page
 OK - changer l'icone printer en icone pdf
 OK Ajouter un menu grand livre - uniquement pdf

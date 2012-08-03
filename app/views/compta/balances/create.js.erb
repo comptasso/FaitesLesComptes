@@ -19,4 +19,12 @@ $('#icon_pdf').attr('href', '<%= j compta_period_balance_path(@period,
     :compta_balance=>{:from_account_id=>@balance.from_account_id, :to_account_id=>@balance.to_account_id,
         :from_date_picker=>@balance.from_date_picker, :to_date_picker=>@balance.to_date_picker },
     :format=>'pdf') %>');
+    $('#icon_xls').attr('href', '<%= j compta_period_balance_path(@period,
+    :compta_balance=>{:from_account_id=>@balance.from_account_id, :to_account_id=>@balance.to_account_id,
+        :from_date_picker=>@balance.from_date_picker, :to_date_picker=>@balance.to_date_picker },
+    :format=>'xls') %>');
+$('#icon_csv').attr('href', '<%= j compta_period_balance_path(@period,
+    :compta_balance=>{:from_account_id=>@balance.from_account_id, :to_account_id=>@balance.to_account_id,
+        :from_date_picker=>@balance.from_date_picker, :to_date_picker=>@balance.to_date_picker },
+    :format=>'csv') %>');
 

@@ -30,7 +30,14 @@ module Compta
     column :to_account_id, :integer
     column :period_id, :integer
 
-    # fait une édition du grand livre
+   
+    def render_pdf
+      to_pdf.render
+    end
+
+    protected
+    
+     # fait une édition du grand livre
     def to_pdf
       # pour chacun des comptes, faire un listing donc on aura fixé les informations
       # de page : page de début et page total.
@@ -42,8 +49,9 @@ module Compta
       # et on veut le total
       final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape)
       range_accounts.each do |a|
-        a.to_pdf(from_date, to_date, {title:'Grand livre', 
-            subtitle:"Compte #{a.number} - Du #{I18n::l from_date} au #{I18n.l to_date}"}).
+        Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date).
+          to_pdf({title:'Grand livre',
+            subtitle:"Compte #{a.number} - Du #{I18n::l from_date} au #{I18n.l to_date}"} ).
             render_pdf_text(final_pdf)
         final_pdf.start_new_page unless a == range_accounts.last
       end
@@ -53,9 +61,6 @@ module Compta
       final_pdf
     end
 
-    def render_pdf
-      to_pdf.render
-    end
 
   
   end

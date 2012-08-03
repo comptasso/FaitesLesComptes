@@ -104,11 +104,7 @@ module Compta
     pdf
   end
 
-  # méthode utilisée pour insérer le listing d'un compte dans un autre pdf
-  # notamment pour le grand livre
-  def render_pdf_text(other_pdf)
-    to_pdf.render_pdf_text(other_pdf)
-  end
+
 
 
  end

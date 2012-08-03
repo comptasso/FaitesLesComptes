@@ -64,7 +64,6 @@ class Compta::Balance < ActiveRecord::Base
     pdf
   end
 
-
    # valeurs par défaut
   def with_default_values
     if period
@@ -101,9 +100,35 @@ class Compta::Balance < ActiveRecord::Base
   # calcule le nombre de page du listing en divisant le nombre de lignes
   # par un float qui est le nombre de lignes par pages,
   # puis arrondi au nombre supérieur
+  # TODO probablement inutilisé
   def nb_pages
     @nb_per_page ||= NB_PER_PAGE_LANDSCAPE 
     (balance_lines.size/@nb_per_page.to_f).ceil
+  end
+
+  def to_csv(options)
+      CSV.generate(options) do |csv|
+        csv << ['', '', 'Soldes au', I18n.l(from_date),'Mouvements', 'de la période', 'Soldes au', I18n.l(to_date)]
+        csv << %w(Numéro Intitulé Débit Crédit Débit Crédit Débit Crédit)
+        balance_lines.each do |bl|
+        csv << [bl[:number], bl[:title], bl[:cumul_debit_before], bl[:cumul_credit_before],
+            bl[:movement_debit], bl[:movement_credit], bl[:cumul_debit_at], bl[:cumul_credit_at]].collect {|val| reformat(val)}
+        end
+        csv << ['Totaux', ''] + total_balance.collect {|val| reformat(val)}
+      end
+    end
+
+  def to_xls(options)
+    CSV.generate(options) do |csv|
+        csv << ['', '', 'Soldes au', I18n.l(from_date),'Mouvements', 'de la période', 'Soldes au', I18n.l(to_date)]
+        csv << %w(Numéro Intitulé Débit Crédit Débit Crédit Débit Crédit)
+        balance_lines.each do |bl|
+        csv << [bl[:number], bl[:title], bl[:cumul_debit_before], bl[:cumul_credit_before],
+            bl[:movement_debit], bl[:movement_credit], bl[:cumul_debit_at], bl[:cumul_credit_at]].collect {|val| reformat(val).encode("windows-1252")}
+
+        end
+        csv << ['Totaux', ''] + total_balance.collect {|val| reformat(val).encode("windows-1252")}
+      end
   end
 
 
@@ -113,6 +138,7 @@ class Compta::Balance < ActiveRecord::Base
     balance_lines.sum {|l| l[value]}
   end
 
+  # TODO voir si utilisé??
   def total_page(value, n = 1)
     self.page(n).sum {|l| l[value]}
   end
@@ -132,6 +158,14 @@ class Compta::Balance < ActiveRecord::Base
     }
 
   end
+
+  # remplace les points décimaux par des virgules pour s'adapter au paramétrage
+    # des tableurs français
+    def reformat(number)
+      return number if number.is_a? String
+      sprintf('%0.02f',number).gsub('.', ',') if number
+    end
+
 
  
 
