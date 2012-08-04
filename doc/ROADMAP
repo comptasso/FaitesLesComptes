@@ -708,7 +708,7 @@ NON - Dans Book, has_many pending_checks relève du IncomBook (en fait le has_ma
 OK - Voir si les validators cant_change (oui), cant_edit (non) et cant_edit_field(non) sont utilisés
 OK - Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
 --------------------première utilisation et ergonomie------------------------
-Faire un wizard (step)
+NON - Faire un wizard (step) Trop compliqué
 Faire une base staging vierge pour tester l'ergonomie
 
 ---------------------PdfDocument ------------------------------
