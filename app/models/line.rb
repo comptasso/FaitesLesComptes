@@ -1,11 +1,54 @@
 # -*- encoding : utf-8 -*-
 
+# La classe Line est la classe qui enregistre les lignes d'écritures dans les 
+# livres de recettes et de dépenses. 
+# Ses attributs sont donc nombreux 
+# 
+#   t.date     "line_date" => date de l'écriture
+#    t.string   "narration" => libellé
+#    t.integer  "nature_id" => nature de rattachement
+#    t.integer  "destination_id" => destination de rattachement
+#    TODO remplacer debit credit par amount et un champ booléen pour
+#    éviter des validations compliquées (et rajouter les attributs virtuels 
+#    qui vont bien
+#   
+#    t.decimal  "debit",            :default => 0.0 => montant au débit
+#    t.decimal  "credit",           :default => 0.0 => montant au crédit
+#    t.integer  "book_id" => livre de rattachement 
+#    t.boolean  "locked",           :default => false => verrouillage
+#    une écriture locked ne peut être détruite (grâce à cant_change_if_locked
+#    appelé par before destroy, 
+#    Certains champs de l'écriture ne peuvent être édités si locked grâce 
+#    au validator cant_edit_if_locked 
+#    
+#    t.datetime "created_at"
+#    t.datetime "updated_at"
+#    
+#    Les deux champs suivants sont prévus pour pouvoir gérer la création de lignes
+#    à partir d'une ligne existante 
+#    TODO mettre en place cette fonctionnalité ou supprimer ces 2 champs
+#    t.string   "copied_id"  => actuellement non utilisé
+#    t.boolean  "multiple",         :default => false => actuellement non utilisé
+#    
+#    t.integer  "bank_extract_id" => rattachement à un extrait de compte
+#    t.string   "payment_mode" => mode de payement (voir les constantes dans config=
+#    t.integer  "check_deposit_id" => rattachement à une remise de chèque
+#    t.integer  "cash_id" => rattachement à une caisse
+#    t.integer  "bank_account_id" => rattachement à un compte bancaire
+#    
+#    Owner est le propriétaire (polymorphique)
+#    Actuellement uniquement utilisé pour les virements (cela permet de 
+#    rattacher l'écriture à un virement.
+#    A terme, ce  champ polymorphique pourrait peut-être servir pour d'autres motifs de création
+#    de lignes (par exemple des abonnements ? )
+#    t.integer  "owner_id" => rattache
+#    t.string   "owner_type"
+#    
+#    t.string   "ref" => un champ de référence pur l'écriture
+#    t.string   "check_number" => un champ pour enregistrer le numéro du chèque si c'est un chèque
+#
 class Line < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
-  
-  
-
-  
 
   belongs_to :book 
   belongs_to :destination
@@ -15,7 +58,7 @@ class Line < ActiveRecord::Base
   belongs_to :bank_account
   belongs_to :cash
   belongs_to :owner, :polymorphic=>true  # pour les transferts uniquement (à ce stade)
-  has_and_belongs_to_many :bank_extract_lines, :uniq=>true 
+  has_and_belongs_to_many :bank_extract_lines, :uniq=>true # pour les rapprochements bancaires
 
   pick_date_for :line_date 
   
@@ -44,10 +87,9 @@ class Line < ActiveRecord::Base
   scope :multiple, lambda {|copied_id| where('copied_id = ?', copied_id)}
  
   scope :not_checks_received, where('payment_mode != ? OR credit <= 0', 'Chèque')
-
   scope :checks_received, where('payment_mode = ? AND credit > 0', 'Chèque')
-  
   scope :non_depose, checks_received.where('check_deposit_id IS NULL')
+
   scope :period, lambda {|p| where('line_date >= ? AND line_date <= ?', p.start_date, p.close_date)}
   scope :period_month, lambda {|p,m| where('line_date >= ? AND line_date <= ?', p.start_date.months_since(m), p.start_date.months_since(m).end_of_month) }
   scope :cumul_period_month, lambda {|p,m| where('line_date >= ? AND line_date <=?', p.start_date, p.start_date.months_since(m).end_of_month)}
@@ -59,11 +101,12 @@ class Line < ActiveRecord::Base
 
   scope :monthyear, lambda {|my| where('line_date >= ? AND line_date <= ?',
      my.beginning_of_month, my.end_of_month  )}
-  scope :range_date, lambda { |fd,td| where('line_date >= ? AND line_date <= ?', fd, td).order('line_date') }
+  scope :range_date, lambda { |fd,td| where('line_date >= ? AND line_date <= ?', fd, td) }
 
 
   scope :unlocked, where('locked = ?', false)
   scope :before_including_day, lambda {|d| where('lines.line_date <= ?',d)}
+  
   scope :sum_debit_before, lambda {|d| where('line_date < ?', d).sum(:debit)}
   scope :sum_credit_before, lambda {|d| where('line_date < ?', d).sum(:credit)}
   
@@ -73,27 +116,7 @@ class Line < ActiveRecord::Base
     return cash.name if cash_id
   end
 
-  
 
-
-  # # monthly sold donne le solde d'un mois fourni au format mm-yyyy
-  # FIXME va poser des problèmes avec plusieurs organismes
-#  def self.monthly_sold(month)
-#    lines = Line.month(month)
-#    lines.sum(:credit) - lines.sum(:debit)
-#  end
-  
-#  def pick_date
-#    line_date ? (I18n::l line_date) : nil
-#  end
-#
-#  def pick_date=(string)
-#    s = string.split('/')
-#    self.line_date = Date.civil(*s.reverse.map{|e| e.to_i})
-#  rescue ArgumentError
-#    self.errors[:line_date] << 'Date invalide'
-#    nil
-#  end
   
 # surcharge de restore qui est définie dans models/restore/restore_records.rb
   def self.restore(new_attributes)

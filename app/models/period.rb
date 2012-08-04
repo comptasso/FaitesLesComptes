@@ -221,57 +221,6 @@ class Period < ActiveRecord::Base
     books.all.sum {|b| b.monthly_value(date) }
   end
 
-  
-  # fournit un tableau donnant les recettes mensuelles avec cumul
-  def stat_income_year(destination_id=0)
-    s=[]
-    if destination_id==0
-   self.nb_months.times.collect {|m| s << self.stat_income(m)}
-    else
-self.nb_months.times.collect {|m| s << self.stat_income_filtered(m, destination_id)}
-    end
-   s << s.sum
-  end
-
-
-  # TODO voir si ces fonctions sont utilisées et sont bien justifiées
-
-  # fournit un tableau donnant les dépenses mensuelles avec cumul mais avec filtre sur la destination
-  def stat_outcome_year(destination_id=0)
-    s=[]
-     if destination_id==0
-     self.nb_months.times.collect {|m| s << self.stat_outcome(m)}
-    else
-     self.nb_months.times.collect {|m| s << self.stat_outcome_filtered(m,destination_id)}
-    end
-    s << s.sum
-  end
-
-  
-
-  # donne le montant des recettes pour un mois donné de l'exercice
-  def stat_income(mois)
-    arr=self.organism.lines.period_month(self, mois).all :joins=>:nature, :conditions=>{'natures'=>{'income_outcome'=>true}}
-    arr.sum(&:credit)-arr.sum(&:debit)
-  end
-
-# donne le montant des dépenses pour un mois donné de l'exercice
-  def stat_outcome(mois)
-    arr=self.organism.lines.period_month(self, mois).all :joins=>:nature, :conditions=>{'natures'=>{'income_outcome'=>false}}
-    arr.sum(&:credit)-arr.sum(&:debit)
-  end
-
-  def stat_income_filtered(mois, filter)
-    arr=self.organism.lines.period_month(self, mois).all :joins=>[:nature,:destination],
-      :conditions=>{'natures'=>{'income_outcome'=>true}, 'destinations'=>{'id'=>filter}}
-    arr.sum(&:credit)-arr.sum(&:debit)
-  end
-
-  def stat_outcome_filtered(mois, filter)
-    arr=self.organism.lines.period_month(self, mois).all :joins=>[:nature,:destination],
-      :conditions=>{'natures'=>{'income_outcome'=>false}, 'destinations'=>{'id'=>filter}}
-    arr.sum(&:credit)-arr.sum(&:debit)
-  end
 
   def create_account_from_file(source)
     pc= Utilities::PlanComptable.new

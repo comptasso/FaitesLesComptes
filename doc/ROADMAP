@@ -700,8 +700,8 @@ OK - Vérifier le pdf de balance
 OK - créer le csv de balance
 OK - déplacé la gestion des truncate pdf via overflow de Prawn
 OK - changer l'icone printer en icone pdf
-OK Ajouter un menu grand livre - uniquement pdf
-Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
+OK - Ajouter un menu grand livre - uniquement pdf
+OK - Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
 OK - Réorganiser les menus dans admin et compta comme pour public
 Modèle Line : voir les méthodes non utilisées
 Dans Book, has_many pending_checks relève du IncomBook

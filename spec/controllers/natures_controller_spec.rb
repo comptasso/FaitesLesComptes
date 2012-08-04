@@ -44,8 +44,7 @@ describe NaturesController do
 
 
       it 'assigns @organism and @period' do
-        p.stub(:stat_income_year)
-        p.stub(:stat_outcome_year)
+      
         get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
         assigns(:organism).should == o
         assigns(:period).should == p
@@ -59,8 +58,7 @@ describe NaturesController do
       end
 
       it 'assigns @filter with 0 if no params[:filter]' do
-        p.stub(:stat_income_year)
-        p.stub(:stat_outcome_year)
+    
         get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
         assigns(:filter).should == 0
       end
