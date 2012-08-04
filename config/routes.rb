@@ -32,6 +32,7 @@ Faitesvoscomptes::Application.routes.draw do
     resource :step do
       member do
         post :create_period
+        post :create_organism
       end
     end
  

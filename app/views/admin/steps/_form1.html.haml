@@ -1,0 +1,3 @@
+-# le formulaire de l'étape 1
+= simple_form_for([:admin, @organism], url:create_organism_admin_step_path, :remote=>true, :html=> {class: 'form-horizontal'}) do |f|
+  = render partial:'admin/organisms/inputs', :locals=>{f:f}

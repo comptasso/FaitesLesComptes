@@ -1,22 +1,64 @@
 .champ
-  %h3 Bienvenue sur Faites les comptes
-  .inner-champ Pour démarrer rapidement en quelques étapes, suivez les quelques étapes ci-dessous
+  %h3 
+    Bienvenue sur Faites les comptes
+    %span#title0= "title0"
+  .inner-champ 
+    Pour démarrer rapidement en quelques étapes, suivez les quelques étapes ci-dessous
+    Vous n'êtes pas obligé de suivre ces étapes. Après création d'un organisme, vous pourrez accéder
+    aux différentes actions par l'intermédiaire des menus de la partie Administration du site.
   %h3#step1 
     Etape 1 : Création de l'organisme
-    = " #{@organism.title if @organism.title}"
+    %span#title1 'nom de l organisme'
   .inner-champ
     %p
       Organisme est un nom générique. Ce peut être aussi bien une association, |
-      un commerce, un particulier, voire une partie seulement de l'activité.  |
+      un commerce, un particulier, voire une partie seulement de l'activité.   |
     %p
       Les Comités d'entreprise par exemple peuvent créer deux organismes, l'un |
       pour le suivi des activités sociales et culturelles, l'autre pour le budget de fonctionnement |
-  - if @step == 1
-    .div.inputs#form1
-      -# le formulaire de l'étape 1
-      = simple_form_for([:admin, @organism], url:create_organism_admin_step_path, method:post, :html=> {class: 'form-horizontal'}) do |f|
-        = render partial:'admin/organisms/inputs', :locals=>{f:f}
+    %p
+      Les champs obligatoires sont indiqués par un astérisque. Le champ description |
+      ci-dessous n'est donc pas obligatoire. Vous pourrez ultérieurement modifier ces informations |
+    .inputs#form1
+      
   %h3#step2
     Etape 2 : Création d'un exercice
-  %h3#step
+  .inner-champ
+    %p
+      Vous devez créer un exercice pour l'organisme, généralement l'année civile.
+      Faites les comptes gère les exercices par mois entiers. Il n'est donc
+      pas possible de faire démarrer un exercice le 15 février.
+      Si la création de votre organisme est en cours de mois alors choissisez le début du mois
+      correspondant.
+    %p
+      Choisissez bien les dates car il n'est pas possible de modifier le début de l'exercice.
+      Vous pourrez néanmoins modifier la fin tant que vous n'aurez pas commencé à enregistrer
+      des écritures.
+    .inputs#form2
+     
+  %h3#step3
     Etape 3 : Création des livres
+  .inner-champ
+    %p
+      Cette étape a été faite automatiquement suite à l'étape précédent, vous disposez donc
+      maintenant d'un livre de recettes et d'un livre de dépenses. Il vous sera ultérieurement possible
+      de modfier les noms de ces livres par le menu LIVRES.
+  %h3#step4
+    Etape 4 (facultative) : Enregistrement d'une banque
+  .inner-champ
+    %p
+      Enregistrez les coordonnées de votre banque. Passez à l'étape suivante si vous n'avez qu'une caisse.
+      Il vous faudra au moins une banque ou une caisse pour pouvoir enregistrer des écritures
+      Comme pour les autres étapes, vous pourrez toujours revenir à ces étapes par le menu BANQUES
+  %h3#step5
+    Etape 5 (facultative) : Enregistrement d'une caisse
+  .inner-champ
+    %p
+      Enregistrez le nom que vous donnez à la caisse (par exemple Magasin, ou Porte monnaie).
+      Vous pourrez accéder aux différentes options par le menu CAISSE.
+  %h3#step6
+    Etape 5 : Enregistrement des natures
+  .inner-champ
+    %p
+      Les natures de dépenses et de recettes
+      

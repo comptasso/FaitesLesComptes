@@ -54,7 +54,7 @@
       </ul>
     </li>
 
-    <% if  @period.persisted? %>
+    <% if  @period && @period.persisted? %>
 
 
       <li class="dropdown <%= 'active' if controller.controller_name =='natures'  %>">

@@ -1,0 +1,15 @@
+<%= f.error_notification %>
+
+
+    <%= f.input(:start_date, input_html: {class: "span2"}, :discard_day => true,
+      :hint=>'Premier jour du mois de ...' , :disabled=>@disable_start_date) %>
+
+
+    <%= f.input :close_date , input_html: {class: "span2"},:discard_day => true, :start_year => @begin_year,:end_year=>@end_year,
+      :hint=>'Dernier jour du mois de...' %>
+
+
+
+    <div class="form-actions">
+      <%= f.button :submit , :class=>"btn-primary span2" %>
+    </div>

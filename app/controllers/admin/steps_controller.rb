@@ -6,7 +6,7 @@ class Admin::StepsController < Admin::ApplicationController
     else
       @organism = Organism.new
     end
-    
+    render layout:'admin/layouts/wizzard'
   end
 
   def create_organism
@@ -14,7 +14,7 @@ class Admin::StepsController < Admin::ApplicationController
     if @organism.valid?
       @organism.save
       session[:step] = 2
-      session[:step_organism] = @organism.id
+      session[:step_organism_id] = @organism.id
       redirect_to admin_step_url
     else
       render 'show'
