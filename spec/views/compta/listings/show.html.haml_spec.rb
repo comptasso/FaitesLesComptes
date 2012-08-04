@@ -2,19 +2,26 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-
+ 
 describe 'compta/listings/show' do
   include JcCapybara
 
   let(:ar) {double(Arel)}
   let(:a) {mock_model(Account, long_name:'605 compte de test', lines:ar)}
   let(:p) {mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)}
-  let(:l) {Compta::Listing.new( account_id:a.id, period_id:p.id,
-            from_date:Date.today.beginning_of_year, to_date:Date.today.end_of_year)}
+  let(:l) {Compta::Listing.new( account_id:a.id, from_date:Date.today.beginning_of_year, to_date:Date.today.end_of_year)}
   let(:line) {mock_model(Line, line_date:Date.today, narration:'ligne test', debit:0, nature_id:1, destination_id:1)}
+  let(:as) {double(Arel,
+      order:(1.upto(10).collect {|i| mock_model(Account,
+            number:"#{i}", title:"Compte test #{i}",
+          long_name:"#{i} - Compte test #{i}")}) )}
 
   before(:each) do
+    
     l.stub(:account).and_return a
+    a.stub(:period).and_return p
+
+    p.stub(:accounts).and_return as
     ar.stub(:range_date).and_return ar
     ar.stub(:sum).with(:debit).and_return 110
     ar.stub(:sum).with(:credit).and_return 0

@@ -57,8 +57,6 @@ describe CashControlsController do
     end
 
     it 'without month redirect to url with params month' do
-      @m.should == '07'
-      @y.should == '2012'
       get :index, :cash_id=>ca.id
       response.should redirect_to cash_cash_controls_path(ca,:mois=>@m, :an=>@y )
     end

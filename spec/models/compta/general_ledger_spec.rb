@@ -22,7 +22,7 @@ describe Compta::GeneralLedger do
   end
 
   it 'and render pdf' do
-    @general_ledger.to_pdf.should be_an_instance_of Prawn::Document
+    @general_ledger.render_pdf.should be_an_instance_of String
   end
 end
 

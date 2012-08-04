@@ -119,8 +119,6 @@ describe Compta::Balance do
         @b.balance_lines.should have(2).elements
         @b.balance_lines.first.should ==
        { :account_id=>@a1.id,
-         :account_title=>'compte 1',
-         :account_number=>"60",
          :empty=>true,
          :provisoire=>true,
          :number=>"60",

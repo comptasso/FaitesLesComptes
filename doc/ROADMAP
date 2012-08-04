@@ -698,7 +698,7 @@ OK - Ajouter une édition du plan comptable (ce qui permet de faire un index des
 OK - pdf pour les différentes impressions : plan comptable, listing, balance
 OK - Vérifier le pdf de balance
 OK - créer le csv de balance
-Voir la question des truncate pour éviter qu'il y ait des pb de mise en page
+OK - déplacé la gestion des truncate pdf via overflow de Prawn
 OK - changer l'icone printer en icone pdf
 OK Ajouter un menu grand livre - uniquement pdf
 Ajouter un menu compte de résultat - uniquement pdf ?
@@ -710,10 +710,11 @@ Voir si les validators cant_change, cant_edit et cant_edit_field sont utilisés
 OK - Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
 
 ---------------------PdfDocument ------------------------------
+Faire un helper pour les export
 Modifier Base pour en faire un Listing dédié à Account car il est devenu très spécialisé
-retirer la référence à Line dans base
+NON - retirer la référence à Line dans base (puisque base est spécialisé account).
 Refaire l'arborescence pour faire descendre base de simple (changer les noms ?)
-Revoir les truncate dans balance.pdf en utilisant :overflow=>truncate de Prawn
+OK - Revoir les truncate dans balance.pdf en utilisant :overflow=>truncate de Prawn
 Dans balance, le stamp est automatiquement brouillard
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos

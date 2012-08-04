@@ -45,8 +45,9 @@ describe PdfDocument::Base do
       @base.exercice.should == 'Exercice 2012'
     end
 
-    it 'give the time of creation au format 25 juillet 2012 07:54:14' do
-      @base.created_at.should match(/^\d{1,2}\s(\w|é|û)*\s\d{4}\s\d{2}:\d{2}:\d{2}$/)
+    # le _ ci dessous symbolise un espace
+    it 'give the time of creation au format 25 juillet 2012 07:54:14 ou _3 août..' do
+      @base.created_at.should match(/^(\s\d|\d{2})\s(\w|é|û)*\s\d{4}\s\d{2}:\d{2}:\d{2}$/)
     end
 
     it 'default from_date and to_date are from period' do

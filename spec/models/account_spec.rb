@@ -68,23 +68,6 @@ describe Account do
     end
   end
 
-  describe 'fonctionnalité pdf' do
-    before(:each) do
-      @account = Account.create!(valid_attributes)
-      @n.account_id = @account.id
-      @n.save!
-      create_lines(50)
-    end
-
-    it 'un compte peut produire un pdf' do
-      @account.to_pdf.should be_an_instance_of(PdfDocument::Base)
-    end
-
-    it 'le pdf comprend 3 pages' do
-      @account.to_pdf.nb_pages.should == 3
-    end
-
-  end
-
+  
 end 
 
