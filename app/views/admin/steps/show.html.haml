@@ -1,0 +1,22 @@
+.champ
+  %h3 Bienvenue sur Faites les comptes
+  .inner-champ Pour démarrer rapidement en quelques étapes, suivez les quelques étapes ci-dessous
+  %h3#step1 
+    Etape 1 : Création de l'organisme
+    = " #{@organism.title if @organism.title}"
+  .inner-champ
+    %p
+      Organisme est un nom générique. Ce peut être aussi bien une association, |
+      un commerce, un particulier, voire une partie seulement de l'activité.  |
+    %p
+      Les Comités d'entreprise par exemple peuvent créer deux organismes, l'un |
+      pour le suivi des activités sociales et culturelles, l'autre pour le budget de fonctionnement |
+  - if @step == 1
+    .div.inputs#form1
+      -# le formulaire de l'étape 1
+      = simple_form_for([:admin, @organism], url:create_organism_admin_step_path, method:post, :html=> {class: 'form-horizontal'}) do |f|
+        = render partial:'admin/organisms/inputs', :locals=>{f:f}
+  %h3#step2
+    Etape 2 : Création d'un exercice
+  %h3#step
+    Etape 3 : Création des livres
