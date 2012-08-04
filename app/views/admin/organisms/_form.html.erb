@@ -1,13 +1,5 @@
  <div class="inputs">
 <%= simple_form_for([:admin,@organism], :html=> {class: 'form-horizontal'}) do |f| %>
-  <%= f.error_notification %>
-   
- 
-    <%= f.input :title,  input_html: {class: "span3"} %>
-    <%= f.input :description,  input_html: {class: "span3", rows: 4} %>
-   
-   <div class="form-actions">
-    <%= f.button :submit, class: "btn-primary span2" %>
-   </div>
-<% end %>
+<%= render partial:'inputs', :locals=>{f:f} %>
+<% end %> 
   </div>

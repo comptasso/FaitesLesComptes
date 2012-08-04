@@ -1,5 +1,9 @@
 Faitesvoscomptes::Application.routes.draw do
 
+  get "step/show"
+
+  get "step/new"
+
   get "modallines/create"
 
   resources :transfers
@@ -24,6 +28,12 @@ Faitesvoscomptes::Application.routes.draw do
 
   # namespace ADMIN
   namespace 'admin' do
+
+    resource :step do
+      member do
+        post :create_period
+      end
+    end
  
     resource :restore do
       member do

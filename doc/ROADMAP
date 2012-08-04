@@ -704,9 +704,12 @@ OK - Ajouter un menu grand livre - uniquement pdf
 OK - Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
 OK - Réorganiser les menus dans admin et compta comme pour public
 OK - Modèle Line : voir les méthodes non utilisées
-Dans Book, has_many pending_checks relève du IncomBook
-Voir si les validators cant_change, cant_edit et cant_edit_field sont utilisés
+NON - Dans Book, has_many pending_checks relève du IncomBook (en fait le has_many ne semble plus marcher)
+OK - Voir si les validators cant_change (oui), cant_edit (non) et cant_edit_field(non) sont utilisés
 OK - Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
+--------------------première utilisation et ergonomie------------------------
+Faire un wizard (step)
+Faire une base staging vierge pour tester l'ergonomie
 
 ---------------------PdfDocument ------------------------------
 Faire un helper pour les export
