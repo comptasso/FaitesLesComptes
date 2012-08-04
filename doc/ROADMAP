@@ -718,7 +718,7 @@ Dans balance, le stamp est automatiquement brouillard
 Refaire les pdf des livres pour afficher correctement les soldes en utilisant la classe pdf_document
 -------------------------Divers -----------------------------------------
 Dans lines#index, les totaux n'ont pas de séparteur de milliers (ni les totaux globaux)
-
+Dans l'écriture d'une recette de chèque, le champ banque ne devrait pas apparaître
 
 
 ----------------------Suppression d'un exercice-----------------
