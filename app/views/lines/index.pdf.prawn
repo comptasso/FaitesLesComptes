@@ -64,8 +64,8 @@ prawn_document(:filename=>"#{@organism.title}-#{@book.title}-#{l Time.now}.pdf",
     prawn_page =  @monthly_extract.page(t+1)
     prawn_page.insert(0, @monthly_extract.titles)
 
-        # les lignes de la page - prawn_prepare_page est défini dans le helper
-    pdf.table prawn_page, :row_colors => ["FFFFFF", "DDDDDD"],  :header=> true , :cell_style=>{:padding=> [1,5,1,5] }   do
+        
+    pdf.table prawn_page, :row_colors => ["FFFFFF", "DDDDDD"],  :header=> true , :cell_style=>{:padding=> [1,5,1,5], :overflow=>:truncate }   do
         column(0).width = 60
         column(1).width = 60
         column(2).width = width - 600

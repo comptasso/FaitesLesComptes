@@ -703,7 +703,7 @@ OK - changer l'icone printer en icone pdf
 OK - Ajouter un menu grand livre - uniquement pdf
 OK - Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
 OK - Réorganiser les menus dans admin et compta comme pour public
-Modèle Line : voir les méthodes non utilisées
+OK - Modèle Line : voir les méthodes non utilisées
 Dans Book, has_many pending_checks relève du IncomBook
 Voir si les validators cant_change, cant_edit et cant_edit_field sont utilisés
 OK - Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
@@ -715,6 +715,12 @@ NON - retirer la référence à Line dans base (puisque base est spécialisé ac
 Refaire l'arborescence pour faire descendre base de simple (changer les noms ?)
 OK - Revoir les truncate dans balance.pdf en utilisant :overflow=>truncate de Prawn
 Dans balance, le stamp est automatiquement brouillard
+Refaire les pdf des livres pour afficher correctement les soldes en utilisant la classe pdf_document
+-------------------------Divers -----------------------------------------
+Dans lines#index, les totaux n'ont pas de séparteur de milliers (ni les totaux globaux)
+
+
+
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
 mais le pb est que les books sont des enfants de organism et non de period. A faire évoluer ?

@@ -11,10 +11,7 @@ class Book < ActiveRecord::Base
   belongs_to :organism
   has_many :lines, dependent: :destroy 
 
-  # les chèques en attente de remise en banque 
-  has_many :pending_checks,
-    :class_name=>'Line',
-    :conditions=>'payment_mode = "Chèque" and credit > 0 and check_deposit_id IS NULL'
+ 
    
   # TODO introduce uniqueness and scope
   validates :title, presence: true

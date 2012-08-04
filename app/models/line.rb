@@ -107,8 +107,14 @@ class Line < ActiveRecord::Base
   scope :unlocked, where('locked = ?', false)
   scope :before_including_day, lambda {|d| where('lines.line_date <= ?',d)}
   
-  scope :sum_debit_before, lambda {|d| where('line_date < ?', d).sum(:debit)}
-  scope :sum_credit_before, lambda {|d| where('line_date < ?', d).sum(:credit)}
+  # ne peuvent être transformées en scope car ne retournent pas un arel
+  def self.sum_debit_before(date)
+    where('line_date < ?', date).sum(:debit)
+  end
+
+  def self.sum_credit_before(date)
+    where('line_date < ?', date).sum(:credit)
+  end
   
   # donne le support de la ligne (ou sa contrepartie) : la banque ou la caisse
   def support
