@@ -3,12 +3,11 @@
 class Line < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
   
-  PAYMENT_MODES ||= %w(CB Chèque Espèces Prélèvement Virement)
-  BANK_PAYMENT_MODES ||= %w(CB Chèque Prélèvement Virement)
+  
 
-  before_destroy :cant_change_if_locked
+  
 
-  belongs_to :book
+  belongs_to :book 
   belongs_to :destination
   belongs_to :nature
   belongs_to :bank_extract
@@ -20,8 +19,11 @@ class Line < ActiveRecord::Base
 
   pick_date_for :line_date 
   
- 
-  validates :debit, :credit, numericality: true, two_decimals:true      #, format: {with: /^-?\d*(.\d{0,2})?$/}
+  before_save :check_bank_and_cash_ids
+  before_destroy :cant_change_if_locked
+
+  # voir au besoin les validators qui sont dans lib/validators
+  validates :debit, :credit, numericality: true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :book_id, presence:true
   validates :line_date, presence: true
   validates :line_date, must_belong_to_period: true
@@ -29,18 +31,13 @@ class Line < ActiveRecord::Base
   validates :narration, presence: true
   validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
     :message => "valeur inconnue" }, :unless=>lambda { self.owner_type == 'Transfer'}
-
-  # C'est fait par un validates_with car cela concerne deux attributes (debit et crédit)
-  # pourra être changé si on passe un seul attribut montant plus un booléen pour le débit/crédit
   validates :debit, :credit, :not_null_amounts=>true, :not_both_amounts=>true
   validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
   validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire
- 
   # TODO faire les tests
   validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit_if_locked=>true
 
-  before_save :check_bank_and_cash_ids
-
+  # LES SCOPES
   default_scope order: 'line_date ASC'
 
   scope :mois, lambda { |date| where('line_date >= ? AND line_date <= ?', date.beginning_of_month, date.end_of_month) }
@@ -67,16 +64,9 @@ class Line < ActiveRecord::Base
 
   scope :unlocked, where('locked = ?', false)
   scope :before_including_day, lambda {|d| where('lines.line_date <= ?',d)}
-
+  scope :sum_debit_before, lambda {|d| where('line_date < ?', d).sum(:debit)}
+  scope :sum_credit_before, lambda {|d| where('line_date < ?', d).sum(:credit)}
   
-  def self.sum_debit_before(date)
-    where('line_date < ?', date).sum(:debit)
-  end
-
-  def self.sum_credit_before(date)
-    where('line_date < ?', date).sum(:credit)
-  end
-
   # donne le support de la ligne (ou sa contrepartie) : la banque ou la caisse
   def support
     return bank_account.acronym if bank_account_id
@@ -166,16 +156,11 @@ class Line < ActiveRecord::Base
     self.bank_extract_id
   end
 
- 
-
   # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
   def check_for_select
   "#{I18n.l line_date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',credit)}"
   end
 
- 
-
-  
   def destination_name
     destination ? destination.name : 'non indiqué'
   end
@@ -184,7 +169,7 @@ class Line < ActiveRecord::Base
     self.nature ? self.nature.name : 'non indiqué'
   end
 
-   protected
+  protected
 
   # Si le paiement est Especes, mettre à nil le bank_account_id
   # Autrement mettre à nil le cash_id
