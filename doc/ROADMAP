@@ -701,7 +701,6 @@ OK - créer le csv de balance
 OK - déplacé la gestion des truncate pdf via overflow de Prawn
 OK - changer l'icone printer en icone pdf
 OK Ajouter un menu grand livre - uniquement pdf
-Ajouter un menu compte de résultat - uniquement pdf ?
 Solde_credit_avant et apres du modèle line.rb devraient être des scope ?
 OK - Réorganiser les menus dans admin et compta comme pour public
 Modèle Line : voir les méthodes non utilisées
@@ -733,7 +732,13 @@ OK - restaurer doit lire le répertoire et vérifier qu'il trouve tous les fichi
 OK - Si elles existent, la vue indique quelles données seront créées.
 OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
+Passer à apartment pour gérer les sauvegardes des organismes
 Revoir restore controller que j'ai du commenter entièrement pour éviter d'avoir des erreurs dans la suite de tests
+-------------------------- Autres éditions --------------------------
+Compte de résultat
+Rapprochement bancaire
+
+
 ------------------Configuration ------------------------------
 OK - watchr
 OK - spork
