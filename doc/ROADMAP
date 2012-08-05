@@ -722,7 +722,7 @@ Refaire les pdf des livres pour afficher correctement les soldes en utilisant la
 -------------------------Divers -----------------------------------------
 Dans lines#index, les totaux n'ont pas de séparteur de milliers (ni les totaux globaux)
 Dans l'écriture d'une recette de chèque, le champ banque ne devrait pas apparaître
-
+Revoir l'affichage des totaux des lines par mois (on peut simplifier le javascript car le grand total est toujours le même)
 
 ----------------------Suppression d'un exercice-----------------
 ? Faire l'espace consult et l'espace saisie... Du coup saisie devient inactif pour un exercice clos
