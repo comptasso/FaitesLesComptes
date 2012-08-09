@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+  before_filter :current_user
+
   before_filter :find_organism, :current_period
 
   helper_method :two_decimals, :picker_to_date
@@ -56,6 +58,14 @@ class ApplicationController < ActionController::Base
     Date.civil(*s.reverse.map{|e| e.to_i})
   rescue
     @period.guess_date
+  end
+
+  def current_user
+    if session[:user]
+      @current_user = User.find(session[:user])
+    else
+      redirect_to login_session_url
+    end
   end
 
   

@@ -1,0 +1,14 @@
+%h1 Entrée
+
+%= form_for @user do |f|
+  - if @user.errors.any?
+    .error_messages
+      %h2 Form is invalid
+      %ul
+        % for message in @user.errors.full_messages
+          %li= message
+
+  .field= f.label :name
+  .actions= f.submit
+
+

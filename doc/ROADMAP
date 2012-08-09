@@ -743,9 +743,20 @@ OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
 ---------------------- Passage à une logique apartment mais en restant sous sqlite----------------------
 Revoir les erreurs dans les migrations (décimal et suppression d'un champ qui n'existe pas)
+NON ? Ajouter le champ user_id à organisme, migrer et faire les relations dans les modèles
+Ajouter une table des organismes à User (que l'on appelera rooms)
+La table doit avoir comme info le nom d'un fichier qui sera la base de données et le nom de l'organism
+Les actions de création d'un organisme sont remplacées par celle d'un room
+Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichier
+Ajouter une vue login pour se logger ou s'enregistrer
+Mettre en place le partial pour afficher les liens logout login et qui est connecté
+Ajouter la logique de création d'un organisme dans le modèle :
+  - on crée un room , on crée un fichier qui sert de base pour la connection
+  - on modifie la connexion à database et on crée l'organisme dans cette base
+Revoir la logique de changement d'un organisme
 
 
-Passer à apartment pour gérer les sauvegardes des organismes
+
 Revoir restore controller que j'ai du commenter entièrement pour éviter d'avoir des erreurs dans la suite de tests
 -------------------------- Autres éditions --------------------------
 Compte de résultat
