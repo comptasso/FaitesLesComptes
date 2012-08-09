@@ -741,6 +741,10 @@ OK - restaurer doit lire le répertoire et vérifier qu'il trouve tous les fichi
 OK - Si elles existent, la vue indique quelles données seront créées.
 OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
+---------------------- Passage à une logique apartment mais en restant sous sqlite----------------------
+Revoir les erreurs dans les migrations (décimal et suppression d'un champ qui n'existe pas)
+
+
 Passer à apartment pour gérer les sauvegardes des organismes
 Revoir restore controller que j'ai du commenter entièrement pour éviter d'avoir des erreurs dans la suite de tests
 -------------------------- Autres éditions --------------------------
