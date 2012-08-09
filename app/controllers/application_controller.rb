@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
@@ -61,11 +63,7 @@ class ApplicationController < ActionController::Base
   end
 
   def log_in?
-    if session[:user]
-      true
-    else
-      redirect_to new_session_url
-    end
+     redirect_to new_session_url unless session[:user]
   end
 
   def current_user

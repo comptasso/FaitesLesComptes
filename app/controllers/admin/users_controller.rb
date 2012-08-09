@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 class Admin::UsersController < Admin::ApplicationController
 
   skip_before_filter :log_in?
@@ -43,15 +45,11 @@ class Admin::UsersController < Admin::ApplicationController
   # POST /users.json
   def create
     @user = User.new(params[:user])
-
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render json: @user, status: :created, location: @user }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.save
+      session[:user] = @user.id
+      redirect_to new_admin_organism_url, notice: " L'utilisateur a été crée. Il peut maitenant créer un organisme"
+    else
+      render action: "new"
     end
   end
 

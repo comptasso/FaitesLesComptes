@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
       session[:user] = @user.id
       # réorientation automatique selon le nombre de rooms
       case @user.rooms.count
-      when 0 then redirect_to new_admin_user_room_url(@user) and return
+      when 0 then redirect_to new_admin_organism_url and return
       when 1
           @user.enter_first_room
           redirect_to organism_url(@user.active_organism) and return
@@ -27,14 +27,10 @@ class SessionsController < ApplicationController
       flash[:alert] = "Cet utilisateur est inconnu. Pour le créer, cliquez sur #{link}".html_safe
       render 'new'
     end
-
-
-
-
   end
 
   def destroy
-
+    session[:user] = nil
   end
 
 
