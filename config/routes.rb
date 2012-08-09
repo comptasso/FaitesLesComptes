@@ -1,8 +1,9 @@
 Faitesvoscomptes::Application.routes.draw do
 
  
-
   get "modallines/create"
+
+  resource :session
 
   resources :transfers
 
@@ -27,6 +28,9 @@ Faitesvoscomptes::Application.routes.draw do
   # namespace ADMIN
   namespace 'admin' do
 
+    resources :users do
+      resources :rooms
+    end
     
     resource :restore do
       member do

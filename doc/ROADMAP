@@ -744,8 +744,10 @@ OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
 ---------------------- Passage à une logique apartment mais en restant sous sqlite----------------------
 Revoir les erreurs dans les migrations (décimal et suppression d'un champ qui n'existe pas)
 NON ? Ajouter le champ user_id à organisme, migrer et faire les relations dans les modèles
-Ajouter une table des organismes à User (que l'on appelera rooms)
+OK - Ajouter une table des organismes à User (que l'on appelera rooms)
 La table doit avoir comme info le nom d'un fichier qui sera la base de données et le nom de l'organism
+Franciser la vue Entrée pour avoir non pas create user mais Entrez ! et supprimer le titre
+Le flash doit disparaître quand on arrive sur la vue nouvel utilisateur
 Les actions de création d'un organisme sont remplacées par celle d'un room
 Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichier
 Ajouter une vue login pour se logger ou s'enregistrer

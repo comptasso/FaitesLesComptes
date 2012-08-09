@@ -1,4 +1,6 @@
-class UsersController < ApplicationController
+class Admin::UsersController < Admin::ApplicationController
+
+  skip_before_filter :log_in?
   # GET /users
   # GET /users.json
   def index
@@ -24,7 +26,7 @@ class UsersController < ApplicationController
   # GET /users/new
   # GET /users/new.json
   def new
-    @user = User.new
+    @user = User.new(name:params[:name])
 
     respond_to do |format|
       format.html # new.html.erb

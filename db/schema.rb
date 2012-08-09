@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120601045538) do
+ActiveRecord::Schema.define(:version => 20120809120539) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -157,6 +157,13 @@ ActiveRecord::Schema.define(:version => 20120601045538) do
     t.boolean  "open",        :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "rooms", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "database_name"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "transfers", :force => true do |t|

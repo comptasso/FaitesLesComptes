@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  before_filter :current_user
+  before_filter :log_in?
 
-  before_filter :find_organism, :current_period
+ #  before_filter :find_organism, :current_period
 
-  helper_method :two_decimals, :picker_to_date
+  helper_method :two_decimals, :picker_to_date, :current_user, :current_user?
 
   private
 
@@ -60,14 +60,21 @@ class ApplicationController < ActionController::Base
     @period.guess_date
   end
 
-  def current_user
+  def log_in?
     if session[:user]
-      @current_user = User.find(session[:user])
+      true
     else
-      redirect_to login_session_url
+      redirect_to new_session_url
     end
   end
 
+  def current_user
+    User.find(session[:user]) if session[:user]
+  end
+
+  def current_user?
+    session[:user]
+  end
   
 
   
