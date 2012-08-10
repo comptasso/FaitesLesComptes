@@ -2,7 +2,9 @@
 
 class Admin::UsersController < Admin::ApplicationController
 
+  skip_before_filter :find_organism, :current_period
   skip_before_filter :log_in?
+  before_filter :use_main_connection
   # GET /users
   # GET /users.json
   def index

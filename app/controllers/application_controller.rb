@@ -21,6 +21,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_period
+    @period = Period.find(session[:period]) if session[:period]
+  end
+
   # trouve l'exercice à partir de l'organisme et éventuellement de la session
 #  def current_period
 #    # puts "Dans application_controller, appel de current period avec session[:period] =  #{session[:period].inspect}"

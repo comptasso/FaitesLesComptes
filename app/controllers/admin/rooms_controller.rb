@@ -1,6 +1,6 @@
 class Admin::RoomsController < Admin::ApplicationController
 
-  skip_before_filter :find_organism
+  skip_before_filter :find_organism, :current_period
   before_filter :use_main_connection
 
   def index
