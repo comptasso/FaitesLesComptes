@@ -3,7 +3,7 @@
 
 class Admin::PeriodsController < Admin::ApplicationController
 
-  
+  # skip_before_filter :current_period
 
   # GET /periods
   # GET /periods.json

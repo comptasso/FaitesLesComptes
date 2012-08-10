@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :log_in?
 
-  before_filter :find_organism
+  before_filter :find_organism, :current_period
   #, :current_period
 
   helper_method :two_decimals, :picker_to_date, :current_user, :current_user?

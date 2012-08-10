@@ -3,3 +3,5 @@
   = link_to 'Logout', session_path(current_user), :method=>:delete
 - else
   = link_to 'Login', new_session_path
+
+= ActiveRecord::Base.connection_config[:database]
