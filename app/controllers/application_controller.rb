@@ -67,7 +67,14 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    User.find(session[:user]) if session[:user]
+   cc = ActiveRecord::Base.connection_config
+   # FIXME utiliser une fonction de Rails plutôt que le database construit
+    ActiveRecord::Base.establish_connection(
+      :adapter => "sqlite3",
+      :database  => "db/development.sqlite3")
+    user = User.find(session[:user]) if session[:user]
+    ActiveRecord::Base.establish_connection(cc)
+    user
   end
 
   def current_user?

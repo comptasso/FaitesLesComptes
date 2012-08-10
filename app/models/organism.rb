@@ -21,10 +21,30 @@ class Organism < ActiveRecord::Base
   has_many :transfers
 
 
-
+  
   after_create :create_default
 
   validates :title, :presence=>true
+  validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/^[a-z]*$/, message:'format incorrect'}
+
+  def base_name
+    "db/#{database_name}.sqlite3"
+  end
+
+
+  # TODO à mettre en private après mise au point
+  def build_room
+    
+    File.open(base_name, "w") {} # créarion d'un fichier avec le nom database.sqlite3 et fermeture
+    # on établit la connection
+    ActiveRecord::Base.establish_connection(
+      :adapter => "sqlite3",
+      :database  => base_name)
+    # et on load le schéma actuel
+    ActiveRecord::Base.connection.load('db/schema.rb')
+    # on devrait alors pouvoir créer l'organisme
+
+  end
 
   def public_books
     books.where('title != ?', 'OD')
@@ -106,6 +126,7 @@ class Organism < ActiveRecord::Base
     self.outcome_books.create(title: 'Dépenses', description: 'Livre des dépenses')
     logger.debug 'creation livre dépenses'
     self.od_books.create(:title=>'OD', description: 'Opérations Diverses')
+
   end
   
 end

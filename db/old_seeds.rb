@@ -1,5 +1,11 @@
 # coding: utf-8
 
+
+
+# Fichier qui n'est plus à jour par suite de l'évolution des données.
+
+# A reprendre peut être ul
+
 # Création d'une base de données test complète pour le développement
 #
 #

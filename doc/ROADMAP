@@ -751,13 +751,29 @@ Le flash doit disparaître quand on arrive sur la vue nouvel utilisateur
 Les actions de création d'un organisme doivent gérer la question du room
 Dans les login logout, le layout doit être différent pour ne pas faire apparaître les menus
 Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichier
-Ajouter une vue login pour se logger ou s'enregistrer
-Mettre en place le partial pour afficher les liens logout login et qui est connecté
-Ajouter la logique de création d'un organisme dans le modèle :
-  - on crée un room , on crée un fichier qui sert de base pour la connection
-  - on modifie la connexion à database et on crée l'organisme dans cette base
-Revoir la logique de changement d'un organisme
+OK - Ajouter une vue login pour se logger ou s'enregistrer
+OK - Mettre en place le partial pour afficher les liens logout login et qui est connecté
 
+
+
+Ajouter la logique de création d'un organisme dans le modèle :
+  - ajouter un champ database_name au formulaire new organism
+  - le create organism doit créer un room pour l'user, un fichier du nom de database
+  - se connecter à la base : puis faire la création.
+  - on reste sur cette base tant qu'on ne change pas d'user.
+  Peut être modifier current_user pour être sûr qu'on a la bonne base
+  Autre sujet : logout doit revenir à la base principale donc ajouter dans le session_controller les before qui reviennent à la base principale
+  - on crée un organisme avec un database_name que l'on va reporter dans la room.
+
+
+
+ on crée un fichier qui sert de base pour la connection
+  - on modifie la connexion à database et on crée l'organisme dans cette base
+
+
+
+Revoir la logique de changement d'un organisme
+Dans les menus, la liste des organismes doit être filtrée par le current_user
 
 
 Revoir restore controller que j'ai du commenter entièrement pour éviter d'avoir des erreurs dans la suite de tests
@@ -794,7 +810,7 @@ OK - quand on crée une écriture, le bouton créer remet new (ce qui est une bo
 Voir si les deux fonctions two_decimals et debit_credit ne sont pas redondantes.
 OK - Problématique des deux cartes (Amex et CB) en fait c'est un autre compte et le pb est un pb de virement entre les deux.
 OK - Problématique des retraits espèces ... (qui est un transfert)
-
+Revoir ou supprimer old_seeds
 
 Quand on saisit plusieurs fois le même montant, on pourrait avoir un bouton qui affiche
 la même trame de ligne (soit un bouton spécifique, soit un mode de saisie).

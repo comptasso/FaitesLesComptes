@@ -61,17 +61,21 @@ class Admin::OrganismsController < Admin::ApplicationController
   # POST /organisms.json
   def create
     @organism = Organism.new(params[:organism])
-
-    respond_to do |format|
-      if @organism.save
-        format.html { redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
-          Il vous faut maintenant créer un exercice pour cet organisme" }
-        format.json { render json: @organism, status: :created, location: @organism }
+       if @organism.valid?
+        # on crée une room pour le user qui a créé cette base
+       current_user.rooms.create!(:database_name => params[:organism][:database_name])
+        @organism.build_room
+       ActiveRecord::Base.establish_connection(
+      :adapter => "sqlite3",
+      :database  => @organism.base_name)
+       @organism.save
+       session[:database] = @organism.base_name
+       redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
+          Il vous faut maintenant créer un exercice pour cet organisme" 
       else
-        format.html { render action: "new" }
-        format.json { render json: @organism.errors, status: :unprocessable_entity }
+         render action: "new" 
       end
-    end
+   
   end
 
   # PUT /organisms/1
