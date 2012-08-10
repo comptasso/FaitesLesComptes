@@ -748,10 +748,11 @@ OK - Ajouter une table des organismes à User (que l'on appelera rooms)
 OK - La table doit avoir comme info le nom d'un fichier qui sera la base de données
 Franciser la vue Entrée pour avoir non pas create user mais Entrez ! et supprimer le titre
 Le flash doit disparaître quand on arrive sur la vue nouvel utilisateur
+Dans les login logout, le layout doit être différent pour ne pas faire apparaître les menus
 
 ------------------------Passage à une logique apartment mais en restant sous sqlite-------------------
 OK - Les actions de création d'un organisme doivent gérer la question du room
-Dans les login logout, le layout doit être différent pour ne pas faire apparaître les menus
+
 OK - Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichier
 OK - Ajouter une vue login pour se logger ou s'enregistrer
 OK - Mettre en place le partial pour afficher les liens logout login et qui est connecté
@@ -766,7 +767,7 @@ OK - Autre sujet : logout doit revenir à la base principale donc ajouter dans l
 OK -Revoir current_user dans application controller
 
 Réfléchir aux différentes actions de user/rooms/organism pour gérer les changements d'organisme
-Faire une tâche rake pour faire les migrations sur toutes les bases
+OK - Faire une tâche rake pour faire les migrations sur toutes les bases
 Traiter la problématique des tests
 Revoir restore controller que j'ai du commenter entièrement pour éviter d'avoir des erreurs dans la suite de tests
 gérer la destruction d'un organisme qui devient différente
