@@ -3,24 +3,20 @@
 class Admin::OrganismsController < Admin::ApplicationController
   # GET /organisms
   # GET /organisms.json
- 
+
+  before_filter :use_main_connection, only:[:index, :new, :destroy]
+  
 
   def index
-    @organisms = Organism.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @organisms }
+    @organisms = current_user.rooms.collect do |r|
+      {organism:r.organism, room:r}
     end
   end
 
   # GET /organisms/1
   # GET /organisms/1.json
   def show
-    reset_session if (params[:id] != session[:organism])
     @organism = Organism.find(params[:id])
-    session[:organism] = @organism.id if @organism
-    
     if @organism.periods.empty?
       flash[:alert]= 'Vous devez créer un exercice pour cet organisme'
       redirect_to new_admin_organism_period_url(@organism)
@@ -64,12 +60,13 @@ class Admin::OrganismsController < Admin::ApplicationController
        if @organism.valid?
         # on crée une room pour le user qui a créé cette base
        current_user.rooms.create!(:database_name => params[:organism][:database_name])
-        @organism.build_room
+       @organism.build_room
        ActiveRecord::Base.establish_connection(
       :adapter => "sqlite3",
       :database  => @organism.base_name)
        @organism.save
-       session[:database] = @organism.base_name
+       session[:connection_config] = ActiveRecord::Base.connection_config
+      
        redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
           Il vous faut maintenant créer un exercice pour cet organisme" 
       else

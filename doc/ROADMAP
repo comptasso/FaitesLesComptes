@@ -754,8 +754,6 @@ Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichi
 OK - Ajouter une vue login pour se logger ou s'enregistrer
 OK - Mettre en place le partial pour afficher les liens logout login et qui est connecté
 
-
-
 Ajouter la logique de création d'un organisme dans le modèle :
   - ajouter un champ database_name au formulaire new organism
   - le create organism doit créer un room pour l'user, un fichier du nom de database
@@ -770,7 +768,7 @@ Ajouter la logique de création d'un organisme dans le modèle :
  on crée un fichier qui sert de base pour la connection
   - on modifie la connexion à database et on crée l'organisme dans cette base
 
-
+Revoir current_user dans application controller
 
 Revoir la logique de changement d'un organisme
 Dans les menus, la liste des organismes doit être filtrée par le current_user

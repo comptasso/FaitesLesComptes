@@ -26,16 +26,16 @@
   </tr>
   </thead>
   <tbody>
-<% @organisms.each do |organism| %>
+<% @organisms.each do |o| %>
   <tr>
-    <td><%= organism.title %></td>
-    <td><%= organism.description %></td>
-    <td><%=l organism.archives.last.created_at  unless organism.archives.empty? %></td>
-    <td><%= icon_to 'sauvegarde.png', new_admin_organism_archive_path(organism),
+    <td><%= o[:organism].title %></td>
+    <td><%= o[:organism].description %></td>
+    <td><%=l o[:organism].archives.last.created_at  unless o[:organism].archives.empty? %></td>
+    <td><%= icon_to 'sauvegarde.png', new_admin_organism_archive_path(o[:room].id),
               :title=>"Fait une sauvegarde de toutes les données de l'organisme" %>
-      <%= icon_to 'detail.png', [:admin, organism] %>
-      <%= icon_to 'modifier.png', edit_admin_organism_path(organism) %>
-        <%= icon_to 'afficher.png', [organism], title: 'affichage dans la partie saisie' %>
+      <%= icon_to 'detail.png', [:admin, o[:room]] %>
+      <%= icon_to 'modifier.png', edit_admin_room_path(o[:room]) %>
+      <%= icon_to 'afficher.png',[:admin, o[:room]], title: 'affichage dans la partie saisie' %>
     </td>
   </tr>
 <% end %>
