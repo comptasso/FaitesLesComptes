@@ -741,40 +741,44 @@ OK - restaurer doit lire le répertoire et vérifier qu'il trouve tous les fichi
 OK - Si elles existent, la vue indique quelles données seront créées.
 OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
----------------------- Passage à une logique apartment mais en restant sous sqlite----------------------
+---------------------- Mise en place de login/logout ----------------------
 Revoir les erreurs dans les migrations (décimal et suppression d'un champ qui n'existe pas)
 NON ? Ajouter le champ user_id à organisme, migrer et faire les relations dans les modèles
 OK - Ajouter une table des organismes à User (que l'on appelera rooms)
-La table doit avoir comme info le nom d'un fichier qui sera la base de données et le nom de l'organism
+OK - La table doit avoir comme info le nom d'un fichier qui sera la base de données
 Franciser la vue Entrée pour avoir non pas create user mais Entrez ! et supprimer le titre
 Le flash doit disparaître quand on arrive sur la vue nouvel utilisateur
-Les actions de création d'un organisme doivent gérer la question du room
+
+------------------------Passage à une logique apartment mais en restant sous sqlite-------------------
+OK - Les actions de création d'un organisme doivent gérer la question du room
 Dans les login logout, le layout doit être différent pour ne pas faire apparaître les menus
-Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichier
+OK - Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichier
 OK - Ajouter une vue login pour se logger ou s'enregistrer
 OK - Mettre en place le partial pour afficher les liens logout login et qui est connecté
+Refaire l'affichage de la liste des organismes avec un helper
+OK - Ajouter la logique de création d'un organisme dans le modèle :
+OK - ajouter un champ database_name au formulaire new organism
+OK - le create organism doit créer un room pour l'user, un fichier du nom de database
+OK - se connecter à la base : puis faire la création.
+OK - on reste sur cette base tant qu'on ne change pas d'user (ce sont des before_filter qui se charge de ce travail).
+OK - Peut être modifier current_user pour être sûr qu'on a la bonne base
+OK - Autre sujet : logout doit revenir à la base principale donc ajouter dans le session_controller les before qui reviennent à la base principale
+OK -Revoir current_user dans application controller
 
-Ajouter la logique de création d'un organisme dans le modèle :
-  - ajouter un champ database_name au formulaire new organism
-  - le create organism doit créer un room pour l'user, un fichier du nom de database
-  - se connecter à la base : puis faire la création.
-  - on reste sur cette base tant qu'on ne change pas d'user.
-  Peut être modifier current_user pour être sûr qu'on a la bonne base
-  Autre sujet : logout doit revenir à la base principale donc ajouter dans le session_controller les before qui reviennent à la base principale
-  - on crée un organisme avec un database_name que l'on va reporter dans la room.
-
-
-
- on crée un fichier qui sert de base pour la connection
-  - on modifie la connexion à database et on crée l'organisme dans cette base
-
-Revoir current_user dans application controller
-
-Revoir la logique de changement d'un organisme
-Dans les menus, la liste des organismes doit être filtrée par le current_user
-
-
+Réfléchir aux différentes actions de user/rooms/organism pour gérer les changements d'organisme
+Faire une tâche rake pour faire les migrations sur toutes les bases
+Traiter la problématique des tests
 Revoir restore controller que j'ai du commenter entièrement pour éviter d'avoir des erreurs dans la suite de tests
+gérer la destruction d'un organisme qui devient différente
+
+-----------------------Détail de mise en forme ----------------------------
+OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme ...
+
+
+
+
+
+
 -------------------------- Autres éditions --------------------------
 Compte de résultat
 Rapprochement bancaire

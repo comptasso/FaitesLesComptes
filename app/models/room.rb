@@ -28,7 +28,7 @@ class Room < ActiveRecord::Base
   def use_org_connection(db_name)
     ActiveRecord::Base.establish_connection(
       :adapter => "sqlite3",
-      :database  => "db/#{db_name}.sqlite3")
+      :database  => "db/organisms/#{db_name}.sqlite3")
   end
 
 end

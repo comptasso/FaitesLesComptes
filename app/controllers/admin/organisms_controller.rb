@@ -4,12 +4,12 @@ class Admin::OrganismsController < Admin::ApplicationController
   # GET /organisms
   # GET /organisms.json
 
-  skip_before_filter :current_period
+  
   before_filter :use_main_connection, only:[:index, :new, :destroy]
   
 
   def index
-    @organisms = current_user.rooms.collect do |r|
+    @room_organisms = current_user.rooms.collect do |r|
       {organism:r.organism, room:r}
     end
   end

@@ -12,18 +12,23 @@
 */
 
 .admin_organisms {
-    table a {
+    table{
+          a {
         padding-left: 4px;
         padding-right: 4px;
         text-align: left;
         
         }
 
-    table a:hover {
+    a:hover {
     background-color: #DBFFDB;
     text-decoration: none;
+
+
 }
-
-
+tr.current td {
+  font-weight: bold;
+  }
+}
 
     }

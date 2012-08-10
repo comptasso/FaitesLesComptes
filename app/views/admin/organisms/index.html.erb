@@ -8,7 +8,6 @@
        <%= icon_to 'restauration.png', new_admin_restore_path ,
          :confirm=>"Créer un nouvel organisme à partir d'un fichier ?",
                 :title=>"Permet de créer un organisme à partir d'un fichier de sauvegarde" %>
-       
 <% end %>
 
 
@@ -23,20 +22,22 @@
     <th>Description</th>
     <th>Dernière sauvegarde</th>
     <th>Actions</th>
+  
   </tr>
   </thead>
   <tbody>
-<% @organisms.each do |o| %>
-  <tr>
-    <td><%= o[:organism].title %></td>
-    <td><%= o[:organism].description %></td>
-    <td><%=l o[:organism].archives.last.created_at  unless o[:organism].archives.empty? %></td>
-    <td><%= icon_to 'sauvegarde.png', new_admin_organism_archive_path(o[:room].id),
+<% @room_organisms.each do |ro| %>
+    <tr class="<%= (ro[:organism].database_name ==  @organism.database_name) ? 'current' : 'other' if @organism %>">
+    <td><%= ro[:organism].title %></td>
+    <td><%= ro[:organism].description %></td>
+    <td><%=l ro[:organism].archives.last.created_at  unless ro[:organism].archives.empty? %></td>
+    <td><%= icon_to 'sauvegarde.png', new_admin_organism_archive_path(ro[:room].id),
               :title=>"Fait une sauvegarde de toutes les données de l'organisme" %>
-      <%= icon_to 'detail.png', [:admin, o[:room]] %>
-      <%= icon_to 'modifier.png', edit_admin_room_path(o[:room]) %>
-      <%= icon_to 'afficher.png',[:admin, o[:room]], title: 'affichage dans la partie saisie' %>
+      <%= icon_to 'detail.png', [:admin, ro[:room]] %>
+      <%= icon_to 'modifier.png', edit_admin_room_path(ro[:room]) %>
+      <%= icon_to 'afficher.png',[:admin, ro[:room]], title: 'affichage dans la partie saisie' %>
     </td>
+  
   </tr>
 <% end %>
   </tbody>

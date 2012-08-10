@@ -22,20 +22,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_period
-    @period = Period.find(session[:period]) if session[:period]
+    @period = Period.find_by_id(session[:period]) if session[:period]
   end
-
-  # trouve l'exercice à partir de l'organisme et éventuellement de la session
-#  def current_period
-#    # puts "Dans application_controller, appel de current period avec session[:period] =  #{session[:period].inspect}"
-#    if (@organism && session[:period])
-#      @period= @organism.periods.find(session[:period])
-#    elsif @organism && @organism.periods.any?
-#      @period = @organism.periods.order(:start_date).last
-#      session[:period] = @period.id
-#    end
-#    Rails.logger.info "#current_period : selection de la period #{session[:period]}"
-#  end
 
   # HELPER_METHODS
  
@@ -76,6 +64,10 @@ class ApplicationController < ActionController::Base
     user
   end
 
+  def current_user?
+    session[:user]
+  end
+
   def use_main_connection
     # FIXME utiliser une fonction de Rails plutôt que le database construit
     ActiveRecord::Base.establish_connection(
@@ -86,13 +78,11 @@ class ApplicationController < ActionController::Base
   def use_org_connection(db_name)
      ActiveRecord::Base.establish_connection(
       :adapter => "sqlite3",
-      :database  => "db/#{db_name}.sqlite3")
+      :database  => "db/organisms/#{db_name}.sqlite3")
   end
 
   
-  def current_user?
-    session[:user]
-  end
+  
   
 
   

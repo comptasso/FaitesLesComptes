@@ -28,7 +28,7 @@ class Organism < ActiveRecord::Base
   validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/^[a-z]*$/, message:'format incorrect'}
 
   def base_name
-    "db/#{database_name}.sqlite3"
+    "db/organisms/#{database_name}.sqlite3"
   end
 
 
@@ -42,7 +42,7 @@ class Organism < ActiveRecord::Base
       :database  => base_name)
     # et on load le schéma actuel
     ActiveRecord::Base.connection.load('db/schema.rb')
-    # on devrait alors pouvoir créer l'organisme
+    # on est maintenant en mesure de créer l'organisme
 
   end
 

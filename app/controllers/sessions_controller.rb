@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
           @user.enter_first_room
           redirect_to organism_url(@user.active_organism) and return
       else
-          redirect_to admin_user_rooms_url(@user) and return
+          redirect_to admin_organisms_url and return
       end
 
     else
