@@ -752,7 +752,6 @@ Dans les login logout, le layout doit être différent pour ne pas faire appara�
 
 ------------------------Passage à une logique apartment mais en restant sous sqlite-------------------
 OK - Les actions de création d'un organisme doivent gérer la question du room
-
 OK - Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichier
 OK - Ajouter une vue login pour se logger ou s'enregistrer
 OK - Mettre en place le partial pour afficher les liens logout login et qui est connecté
@@ -774,7 +773,8 @@ gérer la destruction d'un organisme qui devient différente
 
 -----------------------Détail de mise en forme ----------------------------
 OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme ...
-
+Dans admin#organism#books, la flèche navigation 90 envoie vers la zone saise
+Archives index - problème de mise en page de la table
 
 
 

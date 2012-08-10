@@ -3,7 +3,11 @@
 
     <%= f.input :title,  input_html: {class: "span3"} %>
     <%= f.input :description,  input_html: {class: "span3", rows: 4} %>
-    <%= f.input :database_name, label:'Nom de la base', input_html: {class: "span3"}, hint:'lettres minuscules uniquement, sans espace' %>
+    <%= f.input :database_name,
+           label:'Nom de la base',
+           input_html: {class: "span3"},
+           hint:'lettres minuscules uniquement, sans espace',
+           disabled:@organism.persisted? %>
 
    <div class="form-actions">
     <%= f.button :submit, class: "btn-primary span2" %>

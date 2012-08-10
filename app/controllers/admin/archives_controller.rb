@@ -28,13 +28,11 @@ class Admin::ArchivesController < Admin::ApplicationController
 
   def create
      @archive=@organism.archives.new(params[:archive])
-     
-     if @archive.save
-      @tmp_file_name="#{Rails.root}/tmp/#{@archive.title}.yml"
-      @archive.collect_datas
-      File.open(@tmp_file_name, 'w') {|f| f.write @archive.collect.to_yaml}
-      send_file @tmp_file_name, type: 'text/yml'
-      File.delete(@tmp_file_name)
+    if @archive.save
+      nam = "#{Rails.root}/#{@organism.base_name}"
+      send_file nam, 
+        :filename=>[File.basename(nam, '.sqlite3'), Time.now].join(' ')+'.sqlite3',
+        :disposition=>'attachment'
     else
       render new
     end
