@@ -709,7 +709,7 @@ OK - Voir si les validators cant_change (oui), cant_edit (non) et cant_edit_fiel
 OK - Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
 --------------------première utilisation et ergonomie------------------------
 NON - Faire un wizard (step) Trop compliqué
-Faire une base staging vierge pour tester l'ergonomie
+NON - Faire une base staging vierge pour tester l'ergonomie -> inutile maintenant que les organismes dépendent de user
 
 ---------------------PdfDocument ------------------------------
 Faire un helper pour les export
@@ -766,7 +766,12 @@ OK - Autre sujet : logout doit revenir à la base principale donc ajouter dans l
 OK -Revoir current_user dans application controller
 
 Réfléchir aux différentes actions de user/rooms/organism pour gérer les changements d'organisme
-La liste des exercices ne s'affiche pas dans le menu admin
+OK - La liste des exercices ne s'affiche pas dans le menu admin
+OK - ajustement de upper_menu pour accéder aux autres parties
+OK - refonte du controller organism de saisie/consult et
+OK - reprendre le controller organism de compta
+OK - revoir l'affichage des organismes dans le menu pour les zones compta et saisie/consult
+revoir les path des helpers des messages (organism_helper.rb:11) pour les adapter à room
 
 OK - Faire une tâche rake pour faire les migrations sur toutes les bases
 
@@ -791,7 +796,7 @@ OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme 
 Dans admin#organism#books, la flèche navigation 90 envoie vers la zone saise
 Archives index - problème de mise en page de la table
 DAns le formulaire Archive, un bouton Retour vers la liste serait plus agréable après l'enregistrement du fichier de sauvegarde
-
+Quand le nom est trop long, la balance crée des pages en trop (faire un :overflow=>:truncate sur le pavé haut gauche
 
 
 

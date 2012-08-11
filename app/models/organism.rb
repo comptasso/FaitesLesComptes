@@ -20,7 +20,7 @@ class Organism < ActiveRecord::Base
   has_many :pending_checks, through: :books
   has_many :transfers
 
-
+  # jc_establish_connection lambda { database_name }
   
   after_create :create_default
 

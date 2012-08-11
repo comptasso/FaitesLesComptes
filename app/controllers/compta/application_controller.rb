@@ -3,7 +3,7 @@
 class Compta::ApplicationController < ApplicationController
   layout 'compta/layouts/application'
 
-  before_filter :current_period_and_organism, :check_natures
+  before_filter :check_natures
 
   protect_from_forgery
 

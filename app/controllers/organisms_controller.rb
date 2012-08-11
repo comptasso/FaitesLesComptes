@@ -8,24 +8,15 @@ class OrganismsController < ApplicationController
   # et vers show s'il n'y a qu'un seul organisme
   # si plus d'un affiche la vue par défaut
   def index 
-    reset_session
-    case Organism.count
-    when 0 then redirect_to new_admin_organism_path
-    when 1
-      @organisms=Organism.all
-      redirect_to organism_path(Organism.first)
-    else
-      @organisms = Organism.all
+    @room_organisms = current_user.rooms.collect do |r|
+      {organism:r.organism, room:r, archive:(r.look_for {Archive.last}) }
     end
   end
  
   # GET /organisms/1 test watcher
   # GET /organisms/1.json
   def show
-    # TODO introduire ce même mécanisme sur les parties compta et admin
-    reset_session if (params[:id] != session[:organism].to_s)
     @organism = Organism.find(params[:id])
-    session[:organism] = @organism.id if @organism
     if @organism.periods.empty?
       flash[:alert]= 'Vous devez créer au moins un exercice pour cet organisme'
       redirect_to new_admin_organism_period_url(@organism)

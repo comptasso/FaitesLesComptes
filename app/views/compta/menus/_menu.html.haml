@@ -5,8 +5,9 @@
       ORGANISMES
       %b.caret
     %ul.dropdown-menu
-      - Organism.all.select {|o| o.accountable? }.each do |r|
-        %li= link_to(r.title, compta_organism_path(r))
+      -current_user.organisms_with_room.each do |groom|
+        -if groom[:organism].accountable?
+          %li= link_to groom[:organism].title, compta_room_path(groom[:room])
 
 
   - unless @period.nil? && @pariod.accounts.nil?

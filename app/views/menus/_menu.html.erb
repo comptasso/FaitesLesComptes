@@ -6,9 +6,12 @@
         <b class="caret"></b>
       </a>
       <ul class="dropdown-menu">
-        <% Organism.all.each do |r| %> <!-- reject {|r| r.new_record? }.each do |r| %> -->
-          <li><%= link_to r.title, organism_path(r)  %></li>
-        <% end %>
+         <% current_user.organisms_with_room.each do |groom| %>
+        <li>
+          <%= link_to groom[:organism].title, room_path(groom[:room])  %>
+        </li>
+      <% end %>
+
       </ul>
     </li>
 

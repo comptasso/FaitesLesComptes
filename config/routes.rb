@@ -5,10 +5,19 @@ Faitesvoscomptes::Application.routes.draw do
 
   resource :session
 
-  resources :transfers
+  
 
   # namespace COMPTA
+
+
+
   namespace :compta do
+    resources :users do
+      resources :rooms
+    end
+
+    # TODO simplifier car on n'utilise que l'action show
+    resources :rooms
     resources :organisms do
       resources :periods
     end
@@ -101,6 +110,13 @@ Faitesvoscomptes::Application.routes.draw do
 
   # DEBUTde la zone public
 
+  resources :users do
+    resources :rooms
+  end
+
+  # TODO simplifier car on n'utilise que l'action show
+  resources :rooms
+
   resources :organisms , :only=> [:index, :show] do
     resources :periods, :only=> [:index, :show] do
       member do
@@ -114,8 +130,8 @@ Faitesvoscomptes::Application.routes.draw do
     end
 
     resources :check_deposits, :only=>:new # pour faire des remises de chèques
-#    resources :income_books
-#    resources :outcome_books
+    #    resources :income_books
+    #    resources :outcome_books
     resources :destinations, only: :index
     resources :transfers
     resources :bank_accounts do
@@ -132,7 +148,7 @@ Faitesvoscomptes::Application.routes.draw do
     end
   end
 
- # match ':controller/:action/:id/with_user/:user_id'
+  # match ':controller/:action/:id/with_user/:user_id'
   resources :bank_extracts do
     resources :modallines     
     resources :bank_extract_lines do
@@ -155,7 +171,7 @@ Faitesvoscomptes::Application.routes.draw do
   end
 
 
-# TODO voir pour supprimer ça
+  # TODO voir pour supprimer ça
   resources :books do
 
    
@@ -181,7 +197,9 @@ Faitesvoscomptes::Application.routes.draw do
     resources :cash_lines
   end
 
-  resources :users
+  resources :transfers
+
+ 
 
   root to: 'organisms#index'
   

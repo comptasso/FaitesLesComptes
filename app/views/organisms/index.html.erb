@@ -6,24 +6,34 @@
 <div class="champ">
   <h3>Liste des organismes</h3>
   
-<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed pc75">
+
+  <table  cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed" id="admin_organism_table">
   <thead>
   <tr>
     <th>Titre</th>
-    <th>Description </th>
+    <th>Description</th>
+
+    <th>Dernière sauvegarde</th>
     <th>Action</th>
- </tr>
+
+  </tr>
   </thead>
   <tbody>
-<% @organisms.each do |organism| %>
-  <tr>
-    <td><%= organism.title %></td>
-    <td><%= organism.description %></td>
-    <td><%= icon_to 'afficher.png', organism %></td>
+<% @room_organisms.each do |ro| %>
+    <tr class="<%= (ro[:organism].database_name ==  @organism.database_name) ? 'current' : 'other' if @organism %>">
+    <td><%= ro[:organism].title %></td>
+    <td><%= ro[:organism].description %></td>
+
+    <td><%=l ro[:archive].created_at  if ro[:archive] %></td>
+    <td>
+      <%= icon_to 'afficher.png',ro[:room], title: 'Sélectionner cet organisme' %>
+    </td>
+
   </tr>
 <% end %>
   </tbody>
 </table>
+
   </div>
 
 
