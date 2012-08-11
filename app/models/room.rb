@@ -1,4 +1,6 @@
 class Room < ActiveRecord::Base
+  establish_connection Rails.env
+
   belongs_to :user
 
   def organism
@@ -21,9 +23,10 @@ class Room < ActiveRecord::Base
   # ou look_for {Archive.last}
   #
   def look_for(&block)
+    cc = ActiveRecord::Base.connection_config
     ActiveRecord::Base.use_org_connection(database_name)
     r = yield
-    ActiveRecord::Base.use_main_connection
+    ActiveRecord::Base.establish_connection(cc)
     return r
   end
 

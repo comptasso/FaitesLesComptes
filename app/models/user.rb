@@ -1,14 +1,9 @@
 class User < ActiveRecord::Base
 
+  establish_connection Rails.env
+
   has_many :rooms
 
-
-  def rooms
-    ActiveRecord::Base.use_main_connection
-    Room.where('user_id = ?', id)
-  end 
-
-  # TODO avoir ici un active_organism qui a du sens
   def enter_first_room
     rooms.first
   end
@@ -17,6 +12,8 @@ class User < ActiveRecord::Base
   def organisms_with_room
     rooms.collect { |r| {organism:r.organism, room:r} }
   end
+
+ 
 
   
 end

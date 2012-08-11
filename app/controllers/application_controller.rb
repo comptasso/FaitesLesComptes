@@ -65,11 +65,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    cc = ActiveRecord::Base.connection_config
-    use_main_connection
-    user = User.find(session[:user]) if session[:user]
-    ActiveRecord::Base.establish_connection(cc)
-    user
+    User.find_by_id(session[:user]) if session[:user]
   end
 
   def current_user?
