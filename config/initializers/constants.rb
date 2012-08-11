@@ -19,3 +19,4 @@ NB_PER_PAGE_LANDSCAPE = 22
 PAYMENT_MODES = %w(CB Chèque Espèces Prélèvement Virement)
 BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
 
+PATH_TO_ORGANISMS = 'db/organisms'

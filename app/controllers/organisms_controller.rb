@@ -15,7 +15,7 @@ class OrganismsController < ApplicationController
       @organisms=Organism.all
       redirect_to organism_path(Organism.first)
     else
-      @organisms=Organism.all
+      @organisms = Organism.all
     end
   end
  

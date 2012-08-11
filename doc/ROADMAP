@@ -775,6 +775,9 @@ gérer la destruction d'un organisme qui devient différente
 archive enregistre-t-il le nom du fichier sauvé ?
 revoir le css des forms restore (et peut être archive)
 
+use_org_connection devrait gérer l'erreur lorsqu'il n'y a plus le fichier (d'une manière
+générale, on pourrait envisager que les utilisateurs aient effacé le fichier)
+
 
 -----------------------Détail de mise en forme ----------------------------
 OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme ...

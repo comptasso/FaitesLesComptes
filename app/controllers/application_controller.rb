@@ -15,14 +15,19 @@ class ApplicationController < ActionController::Base
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
+    # utile pour remettre le système cohérent
+    use_main_connection if session[:org_db] == nil
     if session[:org_db]
       ActiveRecord::Base.use_org_connection(session[:org_db])
       @organism = Organism.first # il n'y a qu'un organisme par base
     end
   end
 
+  # TODO rajouter si pas de session, on prend le premier exercice non clos
   def current_period
-    @period = Period.find_by_id(session[:period]) if session[:period]
+    if @organism
+      @period = Period.find_by_id(session[:period]) if session[:period]
+    end
   end
 
   # HELPER_METHODS

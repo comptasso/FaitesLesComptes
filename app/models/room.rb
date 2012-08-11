@@ -9,6 +9,10 @@ class Room < ActiveRecord::Base
     [database_name, Rails.application.config.database_configuration[Rails.env]['adapter']].join('.')
   end
 
+  def absolute_db_name
+    File.join(Rails.root, PATH_TO_ORGANISMS, complete_db_name)
+  end
+
 
   # look_for permet de chercher quelque chose dans la pièce
   # Le block indique ce qu'on cherche

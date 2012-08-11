@@ -34,17 +34,15 @@ class Organism < ActiveRecord::Base
 
   # TODO à mettre en private après mise au point
   def build_room
-    
     File.open(base_name, "w") {} # créarion d'un fichier avec le nom database.sqlite3 et fermeture
-    # on établit la connection
-    ActiveRecord::Base.establish_connection(
-      :adapter => "sqlite3",
-      :database  => base_name)
+    # on établit la connection (méthode ajoutée par jcl_monkey_patch)
+    ActiveRecord::Base.use_org_connection(database_name)
     # et on load le schéma actuel
     ActiveRecord::Base.connection.load('db/schema.rb')
     # on est maintenant en mesure de créer l'organisme
-
   end
+
+
 
   def public_books
     books.where('title != ?', 'OD')
@@ -113,6 +111,7 @@ class Organism < ActiveRecord::Base
    look_for {Room.find_by_database_name(database_name)}
   end
 
+  
   # #look_for permet de chercher quelque chose dans la base principale
   # et de revenir dans la base de l'organisme.
   # Voir la méthode #room pour un exemple
