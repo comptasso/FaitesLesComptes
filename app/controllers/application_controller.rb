@@ -68,17 +68,18 @@ class ApplicationController < ActionController::Base
     session[:user]
   end
 
+  # se connecte à la base principale
   def use_main_connection
-    # FIXME utiliser une fonction de Rails plutôt que le database construit
-    ActiveRecord::Base.establish_connection(
-      :adapter => "sqlite3",
-      :database  => "db/development.sqlite3")
+    # ces méthodes ont été ajoutées par jcl et sont définies dans jcl_monkey_patch.rb
+    ActiveRecord::Base.use_main_connection
   end
 
+  # se connect à la base spécifiée par db_name.
+  # Ex db_name = 'perso', se connect à la base correspondant au fichier
+  # db/organisms/perso.sqlite3
   def use_org_connection(db_name)
-     ActiveRecord::Base.establish_connection(
-      :adapter => "sqlite3",
-      :database  => "db/organisms/#{db_name}.sqlite3")
+    # ces méthodes ont été ajoutées par jcl et sont définies dans jcl_monkey_patch.rb
+     ActiveRecord::Base.use_org_connection(db_name)
   end
 
   
