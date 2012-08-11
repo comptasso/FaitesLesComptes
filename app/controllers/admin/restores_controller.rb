@@ -55,7 +55,8 @@ class Admin::RestoresController < Admin::ApplicationController
       # on change le database_name de l'organisme au cas où ce ne serait pas le même qu'à l'origine
       use_org_connection(params[:database_name])
       # on définit cette base comme la base actuelle
-      session[:connection_config] = ActiveRecord::Base.connection_config
+      session[:org_db]  = params[:database_name]
+      
       # TODO il faudrait ici cpaturer les exceptions et effacer les traces. 
       Organism.first.update_attribute(:database_name, params[:database_name])
       # tout s'est bien passé on sauve la nouvelle pièce

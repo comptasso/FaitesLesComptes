@@ -32,6 +32,6 @@ class Admin::RoomsController < Admin::ApplicationController
   def set_database
     room = current_user.rooms.find(params[:id])
     use_org_connection(room.database_name)
-    session[:connection_config] = ActiveRecord::Base.connection_config
+    session[:org_db]  = room.database_name
   end
 end

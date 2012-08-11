@@ -66,7 +66,7 @@ class Admin::OrganismsController < Admin::ApplicationController
       :adapter => "sqlite3",
       :database  => @organism.base_name)
        @organism.save
-       session[:connection_config] = ActiveRecord::Base.connection_config
+      session[:org_db]  = room.database_name
       
        redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
           Il vous faut maintenant créer un exercice pour cet organisme" 

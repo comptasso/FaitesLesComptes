@@ -15,8 +15,8 @@ class ApplicationController < ActionController::Base
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
-    if session[:connection_config]
-      ActiveRecord::Base.establish_connection(session[:connection_config])
+    if session[:org_db]
+      ActiveRecord::Base.use_org_connection(session[:org_db])
       @organism = Organism.first # il n'y a qu'un organisme par base
     end
   end
@@ -53,7 +53,10 @@ class ApplicationController < ActionController::Base
   end
 
   def log_in?
-    redirect_to new_session_url unless session[:user]
+    unless session[:user]
+      use_main_connection
+      redirect_to new_session_url
+    end
   end
 
   def current_user

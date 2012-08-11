@@ -107,6 +107,12 @@ class Organism < ActiveRecord::Base
     period_array.first
   end
 
+  # recherche la pièce où est logé Organism sur la base de la similitude des
+  # champs database_name de ces deux tables
+  def room
+    Room.find_by_database_name(database_name)
+  end
+
  
   
   private
