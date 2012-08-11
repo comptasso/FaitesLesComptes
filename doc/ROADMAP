@@ -768,14 +768,16 @@ OK -Revoir current_user dans application controller
 Réfléchir aux différentes actions de user/rooms/organism pour gérer les changements d'organisme
 OK - Faire une tâche rake pour faire les migrations sur toutes les bases
 Traiter la problématique des tests
-Revoir restore controller que j'ai du commenter entièrement pour éviter d'avoir des erreurs dans la suite de tests
+Revoir restore controller 
+Modifier vue new pour demander l'écrasement ou non et indiquer le nom de la chambre
+Ajouter une notice dans la vue new
 gérer la destruction d'un organisme qui devient différente
 
 -----------------------Détail de mise en forme ----------------------------
 OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme ...
 Dans admin#organism#books, la flèche navigation 90 envoie vers la zone saise
 Archives index - problème de mise en page de la table
-
+DAns le formulaire Archive, un bouton Retour vers la liste serait plus agréable après l'enregistrement du fichier de sauvegarde
 
 
 

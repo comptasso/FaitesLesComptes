@@ -34,7 +34,7 @@ class Admin::ArchivesController < Admin::ApplicationController
         :filename=>[File.basename(nam, '.sqlite3'), Time.now].join(' ')+'.sqlite3',
         :disposition=>'attachment'
     else
-      render new
+      render 'new'
     end
   end
 
