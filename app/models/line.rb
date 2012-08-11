@@ -124,13 +124,6 @@ class Line < ActiveRecord::Base
 
 
   
-# surcharge de restore qui est définie dans models/restore/restore_records.rb
-  def self.restore(new_attributes)
-    Line.skip_callback(:save, :before, :check_bank_and_cash_ids)
-    super
-  ensure
-    Line.set_callback(:save, :before, :check_bank_and_cash_ids)
-  end
 
 
 

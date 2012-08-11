@@ -147,11 +147,7 @@ class Admin::PeriodsController < Admin::ApplicationController
      
   end
 
- # TODO - probablement à effacer - non utilisé
-  def restore
-    
-  end
-
+ 
   # action de cloture d'un exercice
   # problématique de confirmation
   def close

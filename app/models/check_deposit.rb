@@ -118,17 +118,7 @@ class CheckDeposit < ActiveRecord::Base
     nil
   end
 
-  # surcharge de restore qui est définie dans models/restore/restore_records.rb
-  def self.restore(new_attributes)
-    CheckDeposit.skip_callback(:create, :after, :update_checks)
-    CheckDeposit.skip_callback(:create, :after, :update_checks_with_bank_account_id)
-    super
-  ensure
-    CheckDeposit.set_callback(:create, :after, :update_checks)
-    CheckDeposit.set_callback(:create, :after, :update_checks_with_bank_account_id)
-  end
-
-
+  
   private
 
   # appelé par before_save pour éviter les remises chèques vides

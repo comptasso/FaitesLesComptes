@@ -107,15 +107,7 @@ class Organism < ActiveRecord::Base
     period_array.first
   end
 
-  # ActiveRecord::Base.restore est définie dans restore_record.rb
-  def self.restore(new_attributes)
-    Organism.skip_callback(:create, :after ,:create_default)
-    new_attributes[:description] = "Restauration du #{I18n.l(Time.now)} - #{new_attributes[:description]}"
-     super
-  ensure
-    Organism.set_callback(:create, :after, :create_default)
-  end
-
+ 
   
   private
 

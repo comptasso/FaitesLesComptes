@@ -2,12 +2,7 @@
 
 # La classe restore fait les différentes opérations de restauration d'un fichier
 # new permet d'afficher la vue qui demande quel fichier importer
-# puis create parse les données et affiche la vue confirm
-# laquelle contient un bouton de confirmation qui renvoie sur l'action rebuild.
-#
-# En cas de changement d'architecture, ne pas oublier de modifier la liste
-# des modèles dans initializers/constants.rb
-# et de redémarrer le serveur après cette modification
+# puis create charge le fichier et crée la base correspondante
 
 class Admin::RestoresController < Admin::ApplicationController
   

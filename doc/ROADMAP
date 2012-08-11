@@ -772,6 +772,7 @@ Revoir restore controller
 Modifier vue new pour demander l'écrasement ou non et indiquer le nom de la chambre
 Ajouter une notice dans la vue new
 gérer la destruction d'un organisme qui devient différente
+archive enregistre-t-il le nom du fichier sauvé ?
 
 -----------------------Détail de mise en forme ----------------------------
 OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme ...

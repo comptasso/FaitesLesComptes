@@ -1,8 +1,5 @@
 # coding: utf-8
 
-# Voir la classe restore pour les différentes opérations de restauration d'un fichier
-#
-#
 
 class Admin::ArchivesController < Admin::ApplicationController
   def index

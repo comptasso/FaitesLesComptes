@@ -81,24 +81,7 @@ class StandardBankExtractLine < BankExtractLine
 
   end
 
-   # ActiveRecord::Base.restore est définie dans restore_record.rb
-   #
-   # On désactive les callbacks de StandardBankExtractLine et de acts_as_list
-   #
-   # On utilise également validate:false car not_empty doit être désactivée
-   # le temps de recréer l'association
-  def self.restore(new_attributes)
-    
-    StandardBankExtractLine.skip_callback(:initialize, :after, :prepare_datas)
-    restored = self.new(new_attributes)
-       Rails.logger.info "création de #{restored.class.name} with #{restored.attributes}"
-       restored.save!(:validate=>false) 
-       restored
-  ensure
-    StandardBankExtractLine.set_callback(:initialize, :after, :prepare_datas)
-    
-  end
-
+  
   private
 
   def not_empty

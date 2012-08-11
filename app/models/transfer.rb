@@ -92,13 +92,7 @@ class Transfer < ActiveRecord::Base
     credit_locked? || debit_locked?
   end
 
-  # surcharge de restore qui est définie dans models/restore/restore_records.rb
-  def self.restore(new_attributes)
-    Transfer.skip_callback(:create, :after, :create_lines)
-    super
-  ensure
-    Transfer.set_callback(:create, :after, :create_lines)
-  end
+ 
 
  private
  
