@@ -20,6 +20,7 @@
   <tr>
     <th>Titre</th>
     <th>Description</th>
+    <th>Base de données</th>
     <th>Dernière sauvegarde</th>
     <th>Actions</th>
   
@@ -30,7 +31,8 @@
     <tr class="<%= (ro[:organism].database_name ==  @organism.database_name) ? 'current' : 'other' if @organism %>">
     <td><%= ro[:organism].title %></td>
     <td><%= ro[:organism].description %></td>
-    <td><%=l ro[:organism].archives.last.created_at  unless ro[:organism].archives.empty? %></td>
+    <td><%= ro[:room].complete_db_name %></td>
+    <td><%=l ro[:archive].created_at  if ro[:archive] %></td>
     <td><%= icon_to 'sauvegarde.png', new_admin_organism_archive_path(ro[:room].id),
               :title=>"Fait une sauvegarde de toutes les données de l'organisme" %>
       <%= icon_to 'detail.png', [:admin, ro[:room]] %>

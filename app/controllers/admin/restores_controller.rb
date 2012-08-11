@@ -59,11 +59,14 @@ class Admin::RestoresController < Admin::ApplicationController
       
       # on change le database_name de l'organisme au cas où ce ne serait pas le même qu'à l'origine
       use_org_connection(params[:database_name])
+      # on définit cette base comme la base actuelle
+      session[:connection_config] = ActiveRecord::Base.connection_config
       # TODO il faudrait ici cpaturer les exceptions et effacer les traces. 
       Organism.first.update_attribute(:database_name, params[:database_name])
-      use_main_connection
       # tout s'est bien passé on sauve la nouvelle pièce
+      use_main_connection
       @new_room.save!
+      
          
       flash[:notice] = "Le fichier a été chargé et peut servir de base de données"
       redirect_to admin_organisms_url

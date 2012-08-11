@@ -10,7 +10,7 @@ class Admin::OrganismsController < Admin::ApplicationController
 
   def index
     @room_organisms = current_user.rooms.collect do |r|
-      {organism:r.organism, room:r}
+      {organism:r.organism, room:r, archive:(r.look_for {Archive.last}) }
     end
   end
 
