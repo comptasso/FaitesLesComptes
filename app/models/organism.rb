@@ -110,7 +110,17 @@ class Organism < ActiveRecord::Base
   # recherche la pièce où est logé Organism sur la base de la similitude des
   # champs database_name de ces deux tables
   def room
-    Room.find_by_database_name(database_name)
+   look_for {Room.find_by_database_name(database_name)}
+  end
+
+  # #look_for permet de chercher quelque chose dans la base principale
+  # et de revenir dans la base de l'organisme.
+  # Voir la méthode #room pour un exemple
+  def look_for(&block)
+    ActiveRecord::Base.use_main_connection
+    r = yield
+    ActiveRecord::Base.use_org_connection(database_name)
+    r
   end
 
  
