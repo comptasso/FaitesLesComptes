@@ -32,7 +32,11 @@ Faitesvoscomptes::Application.routes.draw do
       resources :rooms
     end
 
-    resources :rooms
+    resources :rooms do
+      member do
+        get 'new_archive'
+      end
+    end
     
     resource :restore do
       member do

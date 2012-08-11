@@ -755,7 +755,7 @@ OK - Les actions de création d'un organisme doivent gérer la question du room
 OK - Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichier
 OK - Ajouter une vue login pour se logger ou s'enregistrer
 OK - Mettre en place le partial pour afficher les liens logout login et qui est connecté
-Refaire l'affichage de la liste des organismes avec un helper
+OK - Refaire l'affichage de la liste des organismes avec un helper
 OK - Ajouter la logique de création d'un organisme dans le modèle :
 OK - ajouter un champ database_name au formulaire new organism
 OK - le create organism doit créer un room pour l'user, un fichier du nom de database
@@ -766,18 +766,25 @@ OK - Autre sujet : logout doit revenir à la base principale donc ajouter dans l
 OK -Revoir current_user dans application controller
 
 Réfléchir aux différentes actions de user/rooms/organism pour gérer les changements d'organisme
+La liste des exercices ne s'affiche pas dans le menu admin
+
 OK - Faire une tâche rake pour faire les migrations sur toutes les bases
+
 Traiter la problématique des tests
-Revoir restore controller 
+
+OK - Revoir restore controller
+
 Modifier vue new pour demander l'écrasement ou non et indiquer le nom de la chambre
-Ajouter une notice dans la vue new
-gérer la destruction d'un organisme qui devient différente
-archive enregistre-t-il le nom du fichier sauvé ?
+
+OK - Ajouter une notice dans la vue new
+OK - gérer la destruction d'un organisme qui devient différente
+NON archive enregistre-t-il le nom du fichier sauvé ? => de toute façon l'utilisateur peut l'avoir modifié
+
 revoir le css des forms restore (et peut être archive)
 
 use_org_connection devrait gérer l'erreur lorsqu'il n'y a plus le fichier (d'une manière
-générale, on pourrait envisager que les utilisateurs aient effacé le fichier)
-
+    générale, on pourrait envisager que les utilisateurs aient effacé le fichier)
+Dans la vue création archive, après clic, effacer le form et remplacer le bouton par un bouton retour
 
 -----------------------Détail de mise en forme ----------------------------
 OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme ...

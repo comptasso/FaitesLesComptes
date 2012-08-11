@@ -7,9 +7,9 @@
     <ul class="dropdown-menu">
       <li><%= link_to 'Listes des organismes', admin_organisms_path %></li>
       <%= content_tag(:li, :class=>"divider"){} %>
-      <% Organism.all.reject {|r| r.new_record? }.each do |r| %>
+      <% current_user.organisms_with_room.each do |groom| %>
         <li>
-          <%= link_to r.title, admin_organism_path(r)  %>
+          <%= link_to groom[:organism].title, admin_room_path(groom[:room])  %>
         </li>
       <% end %>
     </ul>

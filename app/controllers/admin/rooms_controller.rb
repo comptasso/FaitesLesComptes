@@ -16,15 +16,19 @@ class Admin::RoomsController < Admin::ApplicationController
   # trouve l'organisme de cette base
   # et redirige vers le controller organism
   def show
-    redirect_to admin_organism_path(Organism.first.id)
+    redirect_to admin_organism_path(@organism)
   end
 
   
   def edit
-    redirect_to edit_admin_organism_path(Organism.first.id)
+    redirect_to edit_admin_organism_path(@organism)
   end
 
-  # détruit la pièce mais aussi la base associée
+  def new_archive
+    redirect_to new_admin_organism_archive_path(@organism)
+  end
+
+  # détruit la pièce ainsi que la base associée
   # cette méthode n'appelle pas set_database car tout se passe dans la base principale
   def destroy
     Rails.logger.info "Destruction de la base #{@room.database_name}  - méthode rooms_controller#destroy}"
@@ -51,5 +55,6 @@ class Admin::RoomsController < Admin::ApplicationController
   def set_database
     use_org_connection(@room.database_name)
     session[:org_db]  = @room.database_name
+    @organism = Organism.first
   end
 end

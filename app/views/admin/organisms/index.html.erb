@@ -33,7 +33,7 @@
     <td><%= ro[:organism].description %></td>
     <td><%= ro[:room].complete_db_name %></td>
     <td><%=l ro[:archive].created_at  if ro[:archive] %></td>
-    <td><%= icon_to 'sauvegarde.png', new_admin_organism_archive_path(ro[:room].id),
+    <td><%= icon_to 'sauvegarde.png', new_archive_admin_room_path(ro[:room]),
               :title=>"Fait une sauvegarde de toutes les données de l'organisme" %>
       <%= icon_to 'detail.png', [:admin, ro[:room]] %>
       <%= icon_to 'modifier.png', edit_admin_room_path(ro[:room]) %>
