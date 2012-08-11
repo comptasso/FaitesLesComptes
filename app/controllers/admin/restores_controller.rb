@@ -27,15 +27,17 @@ class Admin::RestoresController < Admin::ApplicationController
   # Dans tous les cas, on demande une confirmation
   def create
 
+    uploaded_io = params[:file_upload]
+
     begin
       # vérifier que le nom du fichier est correct /pas de signes spéciaux .sqlite3
-      unless params[:database_name] =~ /^[a'z']*$/
+      unless params[:database_name] =~ /^[a-z]*$/
         raise RestoreError, 'Le nom pour la base de données ne doit comporter que des minsucules sans espace'
       end
       # vérification que l'extension est bien la bonne
-      extension = File.extname(params[:database_name])
+      extension = File.extname(uploaded_io.original_filename)
       if  ".#{@db_format}" != extension
-        raise RestireError, "L'extension du fichier ne correspond pas aux bases gérées par l'application"
+        raise RestoreError, "L'extension #{extension} du fichier ne correspond pas aux bases gérées par l'application : .#{@db_format}"
       end
 
       # la base ne doit pas déjà appartenir à un autre
@@ -47,12 +49,12 @@ class Admin::RestoresController < Admin::ApplicationController
       # si la base n'existe pas on doit la créer
       if r == nil
         @new_room = current_user.rooms.new(database_name:params[:database_name])
-        raise RestoreError, 'Impossible de créer la base pour cet utilisateur' unless new_room.valid?
+        raise RestoreError, 'Impossible de créer la base pour cet utilisateur' unless @new_room.valid?
       end
       
       # enregistrament du fichier dans son espace 
-      File.open(Rails.root.join('db', 'organisms', params[:database_name]), 'w') do |file|
-        file.write(uploaded.read)
+      File.open(Rails.root.join('db', 'organisms', "#{params[:database_name]}.sqlite3"), 'wb') do |file|
+        file.write(uploaded_io.read)
       end
       
       # on change le database_name de l'organisme au cas où ce ne serait pas le même qu'à l'origine

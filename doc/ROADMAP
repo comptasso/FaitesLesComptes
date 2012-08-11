@@ -834,11 +834,13 @@ A refaire ou revoir - Faire que la touche plus puisse être actionnée par le cl
 ---------------------pick date et autres goodies
 
 Faire que la modif se fasse dans une modalbox
-Faire un nettoyage du fichier temporaire pour le cas des importations qui se passent mal ?
+
 
 
 -------------------------- Autres sujets à moyen terme
 Mettre en place une validation globale de la page
+
+Mettre en place un contrôle md5 sur les sauvegardes et les restaurations.
 
 OK - Créer des natures de recettes et des natures de dépenses
 
@@ -847,7 +849,7 @@ Ne pas pouvoir supprimer une remise chèque qui a été pointée
 OK - gérer le problème du edit des check_deposit : si on modifie les chèques remis et qu'on abandonne, en fait c'est quand même enregistré.
 Mettre dans le modèle une validation qui empêche la modification si verrouillé
 
-Donc peut être faire des modèles achats/ventes/banques/caisse
+Saisie par templates : peut être faire des modèles achats/ventes/banques/caisse
 et des modèles de lignes (repetées, multiple).
 
 Il faudrait afficher l'icone imprimer dès lors qu'il y a un chèque dans la table des remises
