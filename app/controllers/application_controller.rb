@@ -25,10 +25,10 @@ class ApplicationController < ActionController::Base
 
   # TODO rajouter si pas de session, on prend le premier exercice non clos
   def current_period
-    if @organism && @organism.periods.any?
-      @period = Period.find_by_id(session[:period]) if session[:period]
+    if session[:period]
+      @period = Period.find_by_id(session[:period]) 
     else
-      @period = @organism.periods.last
+      @period = @organism.periods.last if @organism.periods.any?
       session[:period] = @period_id
     end
     @period

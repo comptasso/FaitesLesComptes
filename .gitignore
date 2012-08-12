@@ -1,6 +1,7 @@
 .bundle
 db/*.sqlite3*
-db/organisms/
+db/development
+db/test
 log/*.log
 tmp/
 .sass-cache/

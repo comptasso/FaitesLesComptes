@@ -1,8 +1,10 @@
 class User < ActiveRecord::Base
 
   establish_connection Rails.env
-
+  
   has_many :rooms
+
+  validates :name, presence:true
 
   def enter_first_room
     rooms.first

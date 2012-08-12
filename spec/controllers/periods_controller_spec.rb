@@ -6,10 +6,10 @@ describe PeriodsController do
 
   context 'testing with 3 periods how to change form one to another period' do
 
-  before(:each) do 
+  before(:each) do  
     
     Period.count.should == 0
-    @organism= Organism.create(title: 'nouveTest Asso')
+    @organism= Organism.create!(title: 'nouveTest Asso') 
     @p_2010= @organism.periods.create(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
     Period.count.should == 1
       @p_2010.close   
@@ -21,7 +21,10 @@ describe PeriodsController do
    
   end
 
-    describe 'GET next' do
+  describe 'GET next' do
+
+  # HTTP_REFERER sert à résourdre la question du lien vers back
+
 
   it "should select 2011 if 2010"  do
     request.env["HTTP_REFERER"]=organisms_url
@@ -29,8 +32,8 @@ describe PeriodsController do
     session[:period].should == @p_2011.id
   end
 
-      it "should select 2012 if 2011"  do
-         request.env["HTTP_REFERER"]=organisms_url
+   it "should select 2012 if 2011"  do
+    request.env["HTTP_REFERER"]=organisms_url
     get :change, :organism_id=>@organism.id, :id=>@p_2012.id
     session[:period].should == @p_2012.id
       end
