@@ -25,7 +25,7 @@ class Organism < ActiveRecord::Base
   after_create :create_default
 
   validates :title, :presence=>true
-  validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/^[a-z]*$/, message:'format incorrect'}
+  validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/^[a-z][0-9a-z]*$/, message:'format incorrect'}
 
   def base_name
     "db/organisms/#{database_name}.sqlite3"

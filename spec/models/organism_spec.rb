@@ -4,13 +4,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
-  #  c.filter = {:wip=> true }
+  # c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
 describe Organism do
   def valid_attributes
-    {:title =>'Test ASSO'}
+    {:title =>'Test ASSO',
+      database_name:'testasso1'
+    }
   end
 
 
@@ -19,7 +21,7 @@ describe Organism do
       @organism= Organism.new valid_attributes
     end
 
-    it 'should be valid with a title' do
+    it 'should be valid with a title and a database_name' do
       @organism.should be_valid
     end
 
@@ -33,22 +35,53 @@ describe Organism do
     end
 
   end
+#
+#
+#describe 'change of database', :wip=>true do
+#
+#    it 'la connection active' do
+#      ActiveRecord::Base.should be_connected
+#      puts "Connection_config #{ActiveRecord::Base.connection_config}"
+#      puts "Connection : #{ActiveRecord::Base.connection}"
+#    end
+#
+#    it 'peut changer de base' do
+#      ActiveRecord::Base.establish_connection(adapter:'sqlite3', database:File.join(Rails.root, 'db','test','organisms','assotest1.sqlite3') )
+#       puts "Connection_config #{ActiveRecord::Base.connection_config}"
+#      puts "Connection : #{ActiveRecord::Base.connection}"
+#      ActiveRecord::Base.should be_connected
+#    end
+#
+#    it 'changer et revenir' do
+#       ActiveRecord::Base.establish_connection 'assotest1'
+#       puts "Connection_config #{ActiveRecord::Base.connection_config}"
+#       puts "Connection : #{ActiveRecord::Base.connection}"
+#       ActiveRecord::Base.establish_connection(adapter:'sqlite3', database:File.join(Rails.root, 'db','test.sqlite3') )
+#       puts "Connection_config #{ActiveRecord::Base.connection_config}"
+#      puts "Connection : #{ActiveRecord::Base.connection}"
+#      ActiveRecord::Base.should be_connected
+#    end
+#
+#end
 
-  describe 'restore' do
-    it 'restore add time to description' do
-      o = Organism.restore :title=>'ESSAI', :description=> 'Une description'
-      o.description.should == "Restauration du #{I18n.l Time.now} - Une description"
-    end
-  end
 
-  context 'when there is one period' do
+ context 'when there is one period' , :wip=>true do 
+
+#    before(:all) do
+#      ActiveRecord::Base.use_org_connection('assotest1')
+#    end
 
     before(:each) do
-      @organism= Organism.create!(title: 'test asso')
+      
+      @organism= Organism.create!(title: 'test asso', database_name:'assotest1')
       @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
       @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
       @organism.periods.count.should == 2
     end
+
+#    after(:all) do
+#      ActiveRecord::Base.establish_connection 'test'
+#    end
 
     describe 'find_period' do
 

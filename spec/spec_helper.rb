@@ -1,6 +1,10 @@
 # -*- encoding : utf-8 -*-
 
 
+# fichier helper utilisable pour tous les spec qui n'ont pas besoin spécifiquement de
+# travailler avec plusieurs connections.
+# notamment tous les modèles.
+
 require 'spork'
 
 #
@@ -36,14 +40,16 @@ end
 
 end
 
-  Spork.each_run do
+Spork.each_run do
+  # on ne peut pas partager les connections car précisément on utilise des connexions différentes
+  # pour user et test
+  # # v
     ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
-   
-  end
+end
 
-#  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+
 #DatabaseCleaner.strategy = :truncation
-#
+##
 #RSpec.configure do |config|
 #  config.use_transactional_fixtures = false
 #  config.before :each do
@@ -52,9 +58,7 @@ end
 #  config.after :each do
 #    DatabaseCleaner.clean
 #  end
-#
-#
-#  end
+#end
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
