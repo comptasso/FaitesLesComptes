@@ -31,6 +31,19 @@ class Room < ActiveRecord::Base
   end
 
 
+  # look_forg permet d'éviter d'écrire à chaque fois Organism.first
+  # le bloc soit être alors un string
+  # Usage : room.look_forg {"accountable?"} ou room.look_forg {"books.first"}
+  def look_forg(&block)
+    cc = ActiveRecord::Base.connection_config
+    ActiveRecord::Base.use_org_connection(database_name)
+    org = Organism.first
+    r = org.send yield
+    ActiveRecord::Base.establish_connection(cc)
+    return r
+  end
+
+
  
 
 end

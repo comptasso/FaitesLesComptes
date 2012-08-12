@@ -764,19 +764,19 @@ OK - on reste sur cette base tant qu'on ne change pas d'user (ce sont des before
 OK - Peut être modifier current_user pour être sûr qu'on a la bonne base
 OK - Autre sujet : logout doit revenir à la base principale donc ajouter dans le session_controller les before qui reviennent à la base principale
 OK -Revoir current_user dans application controller
-
-Réfléchir aux différentes actions de user/rooms/organism pour gérer les changements d'organisme
+OK - Réfléchir aux différentes actions de user/rooms/organism pour gérer les changements d'organisme
 OK - La liste des exercices ne s'affiche pas dans le menu admin
 OK - ajustement de upper_menu pour accéder aux autres parties
 OK - refonte du controller organism de saisie/consult et
 OK - reprendre le controller organism de compta
 OK - revoir l'affichage des organismes dans le menu pour les zones compta et saisie/consult
-revoir les path des helpers des messages (organism_helper.rb:11) pour les adapter à room
-
+OK - revoir les path des helpers des messages (organism_helper.rb:11) pour les adapter à room
 OK - Faire une tâche rake pour faire les migrations sur toutes les bases
+OK - probablement un bug dans l'affichage des organismes de la zone compta (le filtre accountable n'est peut être pas fiable)
+
 
 Traiter la problématique des tests
-
+Il faudra faire les autres tâches rake db:migrate db:rollback,...
 OK - Revoir restore controller
 
 Modifier vue new pour demander l'écrasement ou non et indiquer le nom de la chambre
@@ -786,7 +786,7 @@ OK - gérer la destruction d'un organisme qui devient différente
 NON archive enregistre-t-il le nom du fichier sauvé ? => de toute façon l'utilisateur peut l'avoir modifié
 
 revoir le css des forms restore (et peut être archive)
-probablement un bug dans l'affichage des organismes de la zone compta (le filtre accountable n'est peut être pas fiable)
+
 use_org_connection devrait gérer l'erreur lorsqu'il n'y a plus le fichier (d'une manière
     générale, on pourrait envisager que les utilisateurs aient effacé le fichier)
 Dans la vue création archive, après clic, effacer le form et remplacer le bouton par un bouton retour
@@ -797,7 +797,7 @@ Dans admin#organism#books, la flèche navigation 90 envoie vers la zone saise
 Archives index - problème de mise en page de la table
 DAns le formulaire Archive, un bouton Retour vers la liste serait plus agréable après l'enregistrement du fichier de sauvegarde
 Quand le nom est trop long, la balance crée des pages en trop (faire un :overflow=>:truncate sur le pavé haut gauche
-
+Dans la création de nature, lorsqu'il y a des comptes, il n'y a plus la possibilité de sélectionner le compte associé
 
 
 -------------------------- Autres éditions --------------------------

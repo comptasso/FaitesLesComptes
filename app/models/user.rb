@@ -8,9 +8,14 @@ class User < ActiveRecord::Base
     rooms.first
   end
 
-  # retourne une liste de tous les organisms appartenat à cet user
+  # retourne un hash des organismes et des chambres appartenat à cet user
   def organisms_with_room
-    rooms.collect { |r| {organism:r.organism, room:r} }
+    rooms.collect { |groom| {organism:groom.organism, room:groom} }
+  end
+
+  def accountable_organisms_with_room
+   rs =  rooms.select {|groom| groom.look_forg { "accountable?"} }
+   rs.collect { |groom| {organism:groom.organism, room:groom} }
   end
 
  
