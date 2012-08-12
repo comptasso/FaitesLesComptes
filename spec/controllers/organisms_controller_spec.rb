@@ -15,7 +15,7 @@ describe OrganismsController do
     it 'should reset session' do
       session[:period] = 3
       get :index
-      session[:period].should == nil
+      session[:period].should == nil 
     end
     
     context 'whithout Organism' do

@@ -185,24 +185,6 @@ describe StandardBankExtractLine do
 
   end
 
-  describe 'restore' , :wip=>true do
-
-    def new_attributes(n)
-    { position: n,
-    bank_extract_id: 6,
-    
-    date: Date.civil(2012,03,01)
-    }
-    end
-    
-
-
-    it 'restore a sbel' do
-      expect {StandardBankExtractLine.restore(new_attributes 1)}.to change {StandardBankExtractLine.count }
-      expect {StandardBankExtractLine.restore(new_attributes 5)}.to change {StandardBankExtractLine.count }
-      expect {StandardBankExtractLine.restore(new_attributes 2)}.to change {StandardBankExtractLine.count }
-    end
-
-  end
+ 
 
 end

@@ -8,9 +8,9 @@ describe Transfer , :wip=>true do
   
  
   before(:each) do
-    create_minimal_organism
+    create_minimal_organism 
     @bb=@o.bank_accounts.create!(name: 'DebiX', number: '123Y')
-  end
+  end 
 
   def valid_attributes
     {date: Date.today, debitable: @ba, creditable: @bb, amount: 1.5, organism_id: @o.id}

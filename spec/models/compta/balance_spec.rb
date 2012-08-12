@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Compta::Balance do
   before(:each) do
-    @o=Organism.create!(title:'test balance sans table')
+    @o=Organism.create!(title:'test balance sans table', database_name:'assotest1')
     @p= Period.create!(organism_id:@o.id, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     @a1 = @p.accounts.create!(number:'60', title:'compte 1')
     @a2 = @p.accounts.create!(number:'70',title:'compte 2')

@@ -9,7 +9,7 @@ describe IncomeBook do
 
   describe 'test de pending checks' do
     before(:each) do
-    @o=Organism.create!(title: 'test check_deposit')
+    @o=Organism.create!(title: 'test check_deposit', database_name:'assotest1')
     @p=@o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
     @ba=@o.bank_accounts.create!(name: 'IBAN', number: '123456Z')
 

@@ -6,8 +6,8 @@ module OrganismFixture
 
   # crée un organisme, un income_book, un outcome_book, un exercice (period),
   # une nature. 
-  def create_minimal_organism
-    @o = Organism.create!(title: 'ASSO TEST')
+  def create_minimal_organism 
+    @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1')
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
     @od = @o.od_books.first

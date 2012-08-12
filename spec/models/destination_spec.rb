@@ -49,7 +49,7 @@ describe Destination do
 
         it 'can also have the same name with different organism' do
           Destination.count.should == 1
-          @o2 = Organism.create!(title: 'deuxième organisme test')
+          @o2 = Organism.create!(title: 'deuxième organisme test', database_name:'assotest2')
           expect {@o2.destinations.create(name: 'Essai')}.to change{Destination.count}
 
         end

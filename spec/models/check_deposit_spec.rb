@@ -12,7 +12,7 @@ describe CheckDeposit do
 
   before(:each) do
 
-    @o=Organism.create!(title: 'test check_deposit')
+    @o=Organism.create!(title: 'test check_deposit', database_name:'assotest1')
     @p=@o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year) 
     @ba=@o.bank_accounts.create!(name: 'La Banque', number: '123456Z')
     @b=@o.income_books.create!(title: 'Recettes')
@@ -280,7 +280,7 @@ describe CheckDeposit do
 
   context "avec deux organismes" do
     before(:each) do
-      @o2=Organism.create!(title: 'autre société')
+      @o2=Organism.create!(title: 'autre société', database_name:'assotest2')
       @p2=@o2.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
       @ba2=@o2.bank_accounts.create!(name: 'BBIC', number: '987654321Z')
       @b2=@o2.income_books.create!(title: 'Recettes')
@@ -299,7 +299,7 @@ describe CheckDeposit do
 
   describe "Ne pas mélanger les chèques de deux organismes" do
     before(:each) do
-      @o2=Organism.create!(title: 'Autre société')
+      @o2=Organism.create!(title: 'Autre société', database_name:'assotest2')
       @p2=@o2.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
       @ba2=@o2.bank_accounts.create!(name: 'IBAN', number: '123456Z')
       @b2=@o2.income_books.create!(title: 'Recettes')

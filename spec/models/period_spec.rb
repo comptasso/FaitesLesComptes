@@ -5,7 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Period do
  
   before(:each) do
-      @organism= Organism.create(title: 'test asso') 
+      @organism= Organism.create(title: 'test asso', database_name:'assotest1')
       @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
       @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
       @organism.periods.count.should == 2
