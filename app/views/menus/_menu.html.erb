@@ -6,12 +6,7 @@
         <b class="caret"></b>
       </a>
       <ul class="dropdown-menu">
-         <% current_user.organisms_with_room.each do |groom| %>
-        <li>
-          <%= link_to groom[:organism].title, room_path(groom[:room])  %>
-        </li>
-      <% end %>
-
+        <%= saisie_consult_organism_list if current_user? %>
       </ul>
     </li>
 

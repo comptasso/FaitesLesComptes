@@ -786,7 +786,7 @@ OK - gérer la destruction d'un organisme qui devient différente
 NON archive enregistre-t-il le nom du fichier sauvé ? => de toute façon l'utilisateur peut l'avoir modifié
 
 revoir le css des forms restore (et peut être archive)
-
+probablement un bug dans l'affichage des organismes de la zone compta (le filtre accountable n'est peut être pas fiable)
 use_org_connection devrait gérer l'erreur lorsqu'il n'y a plus le fichier (d'une manière
     générale, on pourrait envisager que les utilisateurs aient effacé le fichier)
 Dans la vue création archive, après clic, effacer le form et remplacer le bouton par un bouton retour

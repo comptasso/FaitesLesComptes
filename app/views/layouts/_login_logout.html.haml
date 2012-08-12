@@ -5,3 +5,5 @@
   = link_to 'Login', new_session_path
 
 = ActiveRecord::Base.connection_config[:database]
+= " org_db : #{session[:org_db]}"
+= " period_id : #{session[:period]}"

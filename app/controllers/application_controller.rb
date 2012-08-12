@@ -25,9 +25,13 @@ class ApplicationController < ActionController::Base
 
   # TODO rajouter si pas de session, on prend le premier exercice non clos
   def current_period
-    if @organism
+    if @organism && @organism.periods.any?
       @period = Period.find_by_id(session[:period]) if session[:period]
+    else
+      @period = @organism.periods.last
+      session[:period] = @period_id
     end
+    @period
   end
 
   # HELPER_METHODS
@@ -83,7 +87,47 @@ class ApplicationController < ActionController::Base
   # db/organisms/perso.sqlite3
   def use_org_connection(db_name)
     # ces méthodes ont été ajoutées par jcl et sont définies dans jcl_monkey_patch.rb
-     ActiveRecord::Base.use_org_connection(db_name)
+    ActiveRecord::Base.use_org_connection(db_name)
+  end
+
+
+  # Méthode à appeler dans les controller rooms pour
+  # mettre à jour la session lorsqu'il y a un changement d'organisme
+  # Récupère également les variables d'instance @organism et @period si cela a du sens.
+  #
+  def organism_has_changed?(groom = nil)
+    change = false
+    # premier cas : il y a une chambre et on vient de changer
+    if groom && session[:org_db] != groom.database_name
+      logger.info "Passage à l'organisation #{groom.database_name}"
+      session[:period] = nil
+      session[:org_db]  = groom.database_name
+      use_org_connection(groom.database_name)
+      @organism  = Organism.first
+      if @organism.periods.any?
+        @period = @organism.periods.last
+        session[:period] = @period.id
+      end
+      change =true
+    end
+    
+    # deuxième cas : il n'y a pas ou plus de chambre
+    if groom == nil #: on vient d'arriver ou de supprimer un organisme
+      logger.info "Aucune chambre sélectionné"
+      use_main_connection
+      session[:period] = nil
+      session[:org_db] = nil
+      change = true
+    end
+
+    # troisème cas : on reste dans la même pièce
+    if groom && session[:org_db] == groom.database_name
+      logger.info "On reste à l'organisation #{groom.database_name}"
+      @organism = Organism.first
+      current_period
+      change = false
+    end
+    change
   end
 
   
