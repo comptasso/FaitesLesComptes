@@ -3,65 +3,72 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
-  # c.filter = {:wip=>true}
+   c.filter = {:wip=>true}
 end
 
 describe LinesController do
-   include OrganismFixture
   
-  before(:each) do 
-    # méthode définie dans OrganismFixture et 
-    # permettant d'avoir les variables d'instances @organism, @period,  
-    # income et outcome book ainsi qu'une nature
-    create_minimal_organism
-    session[:period] = @p.id 
-  end 
+  
+  before(:each) do
+    ActiveRecord::Base.stub(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
 
+    @cu =  mock_model(User) # cu pour current_user
+    @o = mock_model(Organism, title:'le titre', database_name:'assotest')
+    @p = mock_model (Period)
+    @b = mock_model(Book)
+    
+    Organism.stub(:first).and_return(@o)
+    User.stub(:find_by_id).with(@cu.id).and_return @cu
+    Book.stub(:find).with(@b.id.to_s).and_return @b
+    Period.stub(:find_by_id).with(@p.id).and_return @p
+
+    @o.stub_chain(:periods, :find).and_return @p
+
+    
+  end
+  
+  describe 'GET index', :wip=>true do 
+
+  it 'should assign o' do
+   get :index , {:outcome_book_id=>@b.id, mois:'04', an:'2012'}, {user:@cu.id, period:@p.id, org_db:'test'} 
+   assigns(:organism).should == @o
+   assigns(:period).should == @p
+   assigns(:book). should == @b
+  end
+
+     it "should render index view" do
+      get :index,{:outcome_book_id=>@b.id, mois:'04', an:'2012'}, {user:@cu.id, period:@p.id, org_db:'test'}
+      response.should render_template(:index)
+    end
+
+     it 'traiter le cas ou mois n est pas rempli' do
+      my = MonthYear.from_date(Date.today)
+      @p.stub(:guess_month).and_return my
+      get :index,{ :outcome_book_id=>@b.id}, {user:@cu.id, period:@p.id, org_db:'test'}
+      response.should redirect_to(book_lines_path(@b, :mois=>my.month, :an=>my.year))
+    end
+  
+  end
+
+  
   describe 'POST update' do
     before(:each) do
       @l=@ib.lines.create!(:line_date=>Date.today,narration: 'libellé test', credit: 25,:nature_id=>@n.id, payment_mode: 'Chèque', bank_account_id: @ba.id)
     end
 
     it ' à faire' do
-      put :update,book_id: @ib.id,  id: @l.id, line: {narration: 'libellé corrigé'}
+      put :update, book_id: @ib.id,  id: @l.id, line: {narration: 'libellé corrigé'}
       Line.find(@l.id).narration.should == 'libellé corrigé'
     end
   end
 
   describe 'GET index' do
-    it "should find the right book" do
-     # controller.should_receive(:find_book)
-      get :index, :outcome_book_id=>@ob.id, mois:'04', an:'2012'
-      assigns[:book].should == @ob
-    end
-
-    it 'should assign organism' do
-       get :index, :outcome_book_id=>@ob.id,mois:'04', an:'2012'
-      assigns[:organism].should == @o
-    end
-
-    it "should create a monthly_book_extract" do
-      Utilities::MonthlyBookExtract.should_receive(:new).with(@ob, {:year=>"2012", :month=>"04"})
-      get :index, :outcome_book_id=>@ob.id, mois:'04', an:'2012'
-    end
-
-    it "should call the filter" do
-      @controller.should_not_receive(:fill_natures)
-      @controller.should_receive(:change_period)
-      get :index, :outcome_book_id=>@ob.id, :mois=>4
-    end
-
+  
     
-    it "should render index view" do
-      get :index, :outcome_book_id=>@ob.id, :mois=>'04', :an=>'2012'
-      response.should render_template(:index)
-    end
+   
 
-    it 'traiter le cas ou mois n est pas rempli' do
-      my = MonthYear.from_date(Date.today)
-      get :index, :outcome_book_id=>@ob.id
-      response.should redirect_to(book_lines_path(@ob, :mois=>my.month, :an=>my.year))
-    end
+   
   end
 
   describe 'GET edit' do

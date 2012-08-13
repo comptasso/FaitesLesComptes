@@ -790,6 +790,11 @@ revoir le css des forms restore (et peut être archive)
 use_org_connection devrait gérer l'erreur lorsqu'il n'y a plus le fichier (d'une manière
     générale, on pourrait envisager que les utilisateurs aient effacé le fichier)
 Dans la vue création archive, après clic, effacer le form et remplacer le bouton par un bouton retour
+------------------------ Bugs ----------------------------------------------
+ChangePeriod est à revoir dans LinesController car n'est plus adapté au format
+    ? Faire un controller grapph qui servirait de relais vers lines ??
+
+
 
 -----------------------Détail de mise en forme ----------------------------
 OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme ...

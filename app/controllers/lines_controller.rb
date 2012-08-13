@@ -2,13 +2,8 @@
 
 class LinesController < ApplicationController
 
-  prepend_before_filter :find_book # remplit @book mais aussi @organism et @period
-
-  skip_before_filter [:find_organism, :current_period]
-  # skip_before_filter :current_period # l'organisme et la période sont identifiée par find_book
-  # TODO le puts qui est dans current_period laisse penser que current_period est appelé . Comprendre pourquoi
-
-    
+  before_filter :find_book # remplit @book mais aussi @organism et @period
+     
   before_filter :change_period, only: [:index] # pour permettre de changer de period quand on clique sur une
   # des barres du graphe.qui est affiché par organism#show
   before_filter :fill_mois, only: [:index, :new]
@@ -127,8 +122,6 @@ class LinesController < ApplicationController
  
   def find_book
     @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
-    @organism=@book.organism
-    @period= @organism.periods.find(session[:period])
   end
 
   def fill_mois
@@ -152,7 +145,7 @@ class LinesController < ApplicationController
   def fill_natures
     if @book.class.to_s == 'IncomeBook'
       @natures=@period.natures.recettes
-    else
+    elsif @book.class.to_s == 'OutcomeBook'
       @natures=@period.natures.depenses
     end
   end

@@ -13,7 +13,7 @@ end
 describe OrganismsController do
 
   let(:cu) {mock_model(User)} # cu pour current_user
-   let(:o) {mock_model(Organism, title:'le titre', database_name:'assotest')}
+  let(:o) {mock_model(Organism, title:'le titre', database_name:'assotest')}
 
   before(:each) do
     Organism.stub(:find).with(o.id.to_s).and_return(o)
