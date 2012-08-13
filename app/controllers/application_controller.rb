@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # TODO rajouter si pas de session, on prend le premier exercice non clos
+  # si pas de session, on prend le premier exercice non clos
   def current_period
     if session[:period]
       @period = Period.find_by_id(session[:period]) 
@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    User.find_by_id(session[:user]) if session[:user]
+     User.find_by_id(session[:user]) if session[:user]
   end
 
   def current_user?

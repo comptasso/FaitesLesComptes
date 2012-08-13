@@ -9,13 +9,14 @@ class OrganismsController < ApplicationController
   # si plus d'un affiche la vue par défaut
   def index 
     @room_organisms = current_user.rooms.collect do |r|
-      {organism:r.organism, room:r, archive:(r.look_for {Archive.last}) }
+      {:organism=>r.organism, :room=>r, :archive=>(r.look_for {Archive.last}) }
     end
   end
  
   # GET /organisms/1 test watcher
   # GET /organisms/1.json
   def show
+    @current_user = current_user
     @organism = Organism.find(params[:id])
     if @organism.periods.empty?
       flash[:alert]= 'Vous devez créer au moins un exercice pour cet organisme'
