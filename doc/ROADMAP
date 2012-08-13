@@ -794,6 +794,9 @@ Dans la vue création archive, après clic, effacer le form et remplacer le bout
 ChangePeriod est à revoir dans LinesController car n'est plus adapté au format
     ? Faire un controller grapph qui servirait de relais vers lines ?? Non, ça passe par le redirect vers Period change et son back
 
+-------------------------Corrections--------------------------------------
+stats du controller natures demande un org_id et un period_id qui ne sont plus vraiment utiles
+
 
 
 -----------------------Détail de mise en forme ----------------------------

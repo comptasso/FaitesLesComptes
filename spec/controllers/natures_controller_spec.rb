@@ -19,9 +19,11 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe NaturesController do
-
+  def session_attributes
+    {user:cu.id, period:p.id, org_db:'test'}
+  end
   
-  describe "GET index" do
+  describe "GET stats" do
 
     let(:o) {mock_model(Organism)}
     let(:p) {mock_model(Period, organism_id:o.id)}
@@ -30,11 +32,17 @@ describe NaturesController do
     let(:nd1) {mock_model(Nature, period_id:p.id, income_outcome:false)}
     let(:nd2) {mock_model(Nature, period_id:p.id, income_outcome:false)}
     let(:nd3) {mock_model(Nature, period_id:p.id, income_outcome:false)}
+    let(:cu) {mock_model(User)}
 
-    describe 'Check assigns' do
+   
 
       before(:each) do
-        Organism.stub(:find).with(o.id.to_s).and_return o
+
+        ActiveRecord::Base.stub(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
+        Organism.stub(:first).and_return(o)
+        Period.stub(:find_by_id).with(p.id).and_return p
+
         o.stub_chain(:periods, :order).and_return([p])
         o.stub_chain(:periods, :any?).and_return(true)
         p.stub_chain(:natures, :recettes).and_return [nr1, nr2]
@@ -43,9 +51,8 @@ describe NaturesController do
       end
 
 
-      it 'assigns @organism and @period' do
-      
-        get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
+      it 'assigns @organism and @period' do 
+        get :stats , {:organism_id=>o.id.to_s, :period_id=>p.id.to_s}, session_attributes
         assigns(:organism).should == o
         assigns(:period).should == p
         response.should be_success
@@ -53,19 +60,18 @@ describe NaturesController do
       
       end
 
-      it 'redirect without @organism or period' do
+      it 'raise error without @organism or period' do
         expect { get :stats}.to raise_error ActionController::RoutingError
       end
 
       it 'assigns @filter with 0 if no params[:filter]' do
-    
-        get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
+        get :stats, {:organism_id=>o.id.to_s, :period_id=>p.id.to_s}, session_attributes
         assigns(:filter).should == 0
       end
 
       it 'assigns sn (StatsNatures)' do
         Stats::StatsNatures.should_receive(:new).with(p, 0).and_return('sn')
-        get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s
+        get :stats,{ :organism_id=>o.id.to_s, :period_id=>p.id.to_s}, session_attributes
         assigns(:sn).should == 'sn'
       end
 
@@ -74,11 +80,11 @@ describe NaturesController do
         Destination.should_receive(:find).with(filt).and_return(double(Object, :name=>'mock'))
         Stats::StatsNatures.should_receive(:new).with(p, 1).and_return('sn')
         
-        get :stats, :organism_id=>o.id.to_s, :period_id=>p.id.to_s, :destination=>filt.to_s
+        get :stats, {:organism_id=>o.id.to_s, :period_id=>p.id.to_s, :destination=>filt.to_s},  session_attributes
         assigns(:filter).should == filt
       end 
     
-    end
+  
 
 
 
