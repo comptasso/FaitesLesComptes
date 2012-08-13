@@ -3,10 +3,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
-   c.filter = {:wip=>true}
+  # c.filter = {:wip=>true}
 end
 
 describe LinesController do
+
+  def session_attributes
+    {user:@cu.id, period:@p.id, org_db:'test'}
+  end
   
   
   before(:each) do
@@ -27,22 +31,27 @@ describe LinesController do
 
     
   end
-  
-  describe 'GET index', :wip=>true do 
 
-  it 'should assign o' do
-   get :index , {:outcome_book_id=>@b.id, mois:'04', an:'2012'}, {user:@cu.id, period:@p.id, org_db:'test'} 
-   assigns(:organism).should == @o
-   assigns(:period).should == @p
-   assigns(:book). should == @b
+  describe 'before_filters' do
+
+    it 'A faire '
   end
+  
+  describe 'GET index' do 
 
-     it "should render index view" do
+    it 'should assign o' do
+      get :index , {:outcome_book_id=>@b.id, mois:'04', an:'2012'}, {user:@cu.id, period:@p.id, org_db:'test'}
+      assigns(:organism).should == @o
+      assigns(:period).should == @p
+      assigns(:book). should == @b
+    end
+
+    it "should render index view" do
       get :index,{:outcome_book_id=>@b.id, mois:'04', an:'2012'}, {user:@cu.id, period:@p.id, org_db:'test'}
       response.should render_template(:index)
     end
 
-     it 'traiter le cas ou mois n est pas rempli' do
+    it 'traiter le cas ou mois n est pas rempli' do
       my = MonthYear.from_date(Date.today)
       @p.stub(:guess_month).and_return my
       get :index,{ :outcome_book_id=>@b.id}, {user:@cu.id, period:@p.id, org_db:'test'}
@@ -51,116 +60,182 @@ describe LinesController do
   
   end
 
-  
-  describe 'POST update' do
+  describe 'GET edit'  do
     before(:each) do
-      @l=@ib.lines.create!(:line_date=>Date.today,narration: 'libellé test', credit: 25,:nature_id=>@n.id, payment_mode: 'Chèque', bank_account_id: @ba.id)
+      @l = mock_model(Line)
+      
     end
 
-    it ' à faire' do
-      put :update, book_id: @ib.id,  id: @l.id, line: {narration: 'libellé corrigé'}
-      Line.find(@l.id).narration.should == 'libellé corrigé'
-    end
-  end
+    it 'should look_for the line' do
+      @b.should_receive(:lines).and_return a = double(Arel)
+      a.should_receive(:find).with(@l.id.to_s).and_return @l
+      get :edit, {:income_book_id=>@b.id, :id=>@l.id}, {user:@cu.id, period:@p.id, org_db:'test'}
 
-  describe 'GET index' do
-  
-    
-   
-
-   
-  end
-
-  describe 'GET edit' do
-    before(:each) do
-      @l=@ib.lines.create!(:line_date=>Date.today,narration: 'libellé test', credit: 25,:nature_id=>@n.id, payment_mode: 'Chèque', bank_account_id: @ba.id)
     end
 
     it "should assign the line" do
-      get :edit, {:income_book_id=>@ib.id, :id=>@l.id}, {:period=>@p.id} 
-      assigns[:book].should == @ib
+      @b.stub_chain(:lines, :find).and_return(@l)
+      get :edit, {:income_book_id=>@b.id, :id=>@l.id}, {user:@cu.id, period:@p.id, org_db:'test'}
+      assigns[:book].should == @b
       assigns[:line].should == @l
     end
 
     it "should render edit" do
-      get :edit, {:income_book_id=>@ib.id, :id=>@l.id}, {:period=>@p.id}
+      @b.stub_chain(:lines, :find).and_return(@l)
+      get :edit, {:income_book_id=>@b.id, :id=>@l.id}, {user:@cu.id, period:@p.id, org_db:'test'}
       response.should render_template(:edit)
     end
-
-
   end
 
-  describe 'POST delete' do 
+  
+  describe 'POST update'do
     before(:each) do
-      @l= @ob.lines.create!(:line_date=>Date.civil(2012,02,25), :debit=>12.54, :narration=>'dépense erronnée à annuler', :nature_id=>@n.id,
-        :payment_mode=>'Chèque', :bank_account_id=>@ba.id)
+      @l = mock_model(Line, line_date:Date.today)
+      @b.stub_chain(:lines, :find).and_return(@l)
     end
 
-    it 'delete doit retirer la ligne' do
-      expect {get :destroy, :outcome_book_id=>@ob.id, :id=>@l.id,  :method=>:delete}.to change {Line.count}.by(-1)
+    it 'redirige en cas de succès de la sauvegarde' do
+      
+      @l.should_receive(:update_attributes).with( {"narration"=>'libellé corrigé'}).and_return(true)
+      put :update,  {:income_book_id=>@b.id, :id=>@l.id, line: {narration: 'libellé corrigé'} }, {user:@cu.id, period:@p.id, org_db:'test'}
+      my = MonthYear.from_date(Date.today)
+      response.should redirect_to book_lines_path(@b, my.to_french_h)
     end
 
-    it 'doit revoyer sur la table des écritures du mois' do
-      get :destroy, :outcome_book_id=>@ob.id, :id=>@l.id,  :method=>:delete
-      response.should redirect_to(book_lines_path(:book_id=>@ob.id, :mois=>'02', :an=>'2012'))
+    it 'render edit en cas d échec de la sauvegarde' do
+      
+      @l.should_receive(:update_attributes).with( {"narration"=>'libellé corrigé'}).and_return(false)
+      put :update,  {:income_book_id=>@b.id, :id=>@l.id, line: {narration: 'libellé corrigé'} }, {user:@cu.id, period:@p.id, org_db:'test'}
+      response.should render_template 'edit'
     end
+  end
+
+  
+  
+
+  describe 'POST delete'  do
+    before(:each) do
+      @l = mock_model(Line, line_date:Date.today)
+      @b.stub_chain(:lines, :find).and_return(@l)
+      @my = MonthYear.from_date(Date.today)
+    end
+
+    it 'appelle la méthode destroy sur la ligne' do
+      @l.should_receive(:destroy).and_return true
+      get :destroy,{:outcome_book_id=>@b.id, :id=>@l.id,  :method=>:delete}, {user:@cu.id, period:@p.id, org_db:'test'}
+    end
+
+    it 'renvoye sur la table des écritures du mois' do
+      @l.should_receive(:destroy).and_return true
+      get :destroy,{:outcome_book_id=>@b.id, :id=>@l.id,  :method=>:delete}, {user:@cu.id, period:@p.id, org_db:'test'}
+      response.should redirect_to(book_lines_path(:book_id=>@b.id, :mois=>@my.month, :an=>@my.year) )
+    end
+
+    it 'cas où la suppression échoue'
   end
  
- describe 'POST create' do
-   context "post successful" do
-     it "creates a line" do
-       post :create, :income_book_id=>@ib.id,
-         :line=>{ :nature_id=>@n.id,  :line_date_picker=>'01/04/2012',  :narration=>'ligne valide', :credit=>25.00, :payment_mode=>'Chèque',
-       :bank_account_id=>@ba.id}, commit: 'Créer'
-       assigns[:line].should be_valid
-     end
+  describe 'POST create'  do
 
-     it 'fill a previous_line_id flash whenline is saved' do
-       post :create, :income_book_id=>@ib.id,
-         :line=>{ :line_date_picker=>'01/04/2012',:nature_id=>@n.id,    :narration=>'ligne valide', :credit=>25.00, :payment_mode=>'Chèque',
-       :bank_account_id=>@ba.id}, commit: 'Créer'
-       flash[:previous_line_id].should ==  Line.order('id ASC').last.id
-     end   
-   end  
- end
+    def parameters
+      { "nature_id"=>'1',  "line_date_picker"=>'18/04/2012',  "narration"=>'ligne valide', "credit"=>'25.00', "payment_mode"=>'Chèque',
+        "bank_account_id"=>'1'}
+    end
 
-   describe 'Get new' do
-     it 'without mois et an params' do
-       pending 'à faire car capté par request mais pas par ce fichier'
-     end
+    before (:each) do
+      @nl = mock_model(Line, line_date:Date.civil(2012,4,18)).as_new_record # pour new line
+      @my = MonthYear.from_date(Date.civil(2012,4,18))
+    end
 
-     it "fill the default values" do
-       get :new, income_book_id: @ib.id, :mois=>'04', :an=>'2012'
-       assigns[:line].should be_an_instance_of(Line)
-       assigns[:line].line_date.should == Date.civil(2012,4,1)
-       assigns[:line].bank_account_id.should == @ba.id 
-     end
+    context "post successful" do
+      it "creates a line" do
+        @b.stub(:lines).and_return a =double(Arel)
+        a.should_receive(:new).with(parameters).and_return(@nl)
+        @nl.should_receive(:save).and_return true
+        post :create, { :income_book_id=>@b.id,
+          :line=>parameters, commit: 'Créer' }, session_attributes
+        assigns(:line).should == @nl
+      end
+
+      it "reçoit save" do
+        @b.stub_chain(:lines, :new).and_return @nl
+        @nl.should_receive(:save).and_return true
+        post :create, { :income_book_id=>@b.id,
+          :line=>parameters, commit: 'Créer' }, session_attributes
+      end
+
+      context 'after_save' do
+        before(:each) do
+          @b.stub_chain(:lines, :new).and_return @nl
+        end
+
+        it 'succès -> remplit les flashs' do
+          @nl.stub(:save).and_return(true)
+          post :create, { :income_book_id=>@b.id,
+            :line=>parameters, commit: 'Créer' }, session_attributes
+          assigns(:line).should == @nl
+          flash[:previous_line_id].should ==  @nl.id
+          flash[:date].should == @nl.line_date
+        end
+
+        it 'succès -> redirige pour une nouvelle saise' do
+          @nl.stub(:save).and_return(true)
+          post :create, { :income_book_id=>@b.id,
+            :line=>parameters, commit: 'Créer' }, session_attributes
+          response.should redirect_to (new_book_line_path(:book_id=>@b.id, :mois=>@my.month, :an=>@my.year) )
+        end
+
+        it 'echec -> rend new' do
+          @nl.stub(:save).and_return(false)
+          post :create, { :income_book_id=>@b.id,
+            :line=>parameters, commit: 'Créer' }, session_attributes
+          response.should render_template 'new'
+        end
+
+      end
+
+     
+    end
+  end
+
+  describe 'Get new'   , :wip=>true do
+
+    before(:each) do
+      @o.stub(:main_cash_id).and_return(11)
+      @o.stub(:main_bank_id).and_return(12)
+      @b.stub(:lines).and_return @a = double(Arel)
+      @nl = mock_model(Line).as_new_record
+    end
+    
+    it "fill the default values"  do
+      @a.should_receive(:new).with(line_date:Date.civil(2012,4,1), cash_id:11, bank_account_id:12)
+      get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes
+    end
+
+    it 'assigns line' do
+      @b.stub_chain(:lines, :new).and_return(@nl)
+      get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes
+      assigns(:line).should == @nl
+    end
 
     context 'Avec une ligne créée précédemment' do
-      before(:each) do
-        post :create, :income_book_id=>@ib.id,
-         :line=>{ :nature_id=>@n.id,   :line_date_picker=>'01/05/2012',  :narration=>'ligne valide pour tester le flash de previous line', :credit=>25.00, :payment_mode=>'Chèque',
-       :bank_account_id=>@ba.id}, commit: 'Créer'
+
+      it 'assigns previous line if one' do 
+        @b.stub_chain(:lines, :new).and_return(@nl)
+        Line.should_receive(:find_by_id).with(20).and_return(@l)
+        get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes, :previous_line_id=>20
+        assigns(:previous_line).should == @l
       end
+    
 
       it 'new line date est préremplie' do
-        get :new, income_book_id: @ib.id, :mois=>'04', :an=>'2012'
-        assigns[:line].line_date.should == Date.civil(2012,5,1)
+        @a.should_receive(:new).with(:line_date=>Date.today, cash_id:11, bank_account_id:12)
+        get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes, :date=>Date.today
       end
 
-      it 'affiche la vue new' do
-        get :new, income_book_id: @ib.id,  :mois=>'04', :an=>'2012'
-        response.should render_template(:new)
-      end
-
-      it 'previous line existe' do
-        flash[:previous_line_id].should_not be_nil
-        get :new, income_book_id: @ib.id,  :mois=>'04', :an=>'2012'
-        assigns[:previous_line].should == Line.find(flash[:previous_line_id])
-      end
+     
     end
 
 
-   end
+  end
 end
 

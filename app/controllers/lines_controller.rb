@@ -50,7 +50,7 @@ class LinesController < ApplicationController
   def new
     @line =@book.lines.new(line_date: flash[:date] || @monthyear.beginning_of_month, :cash_id=>@organism.main_cash_id, :bank_account_id=>@organism.main_bank_id)
     @previous_line = Line.find_by_id(flash[:previous_line_id]) if flash[:previous_line_id]
-    respond_to do |format|
+     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @line } 
      end
@@ -79,7 +79,6 @@ class LinesController < ApplicationController
   end
 
   def edit
-    logger.debug LinesController._process_action_callbacks.map(&:filter).join("\n")
     @line = @book.lines.find(params[:id])
   end
   

@@ -803,7 +803,7 @@ Archives index - problème de mise en page de la table
 DAns le formulaire Archive, un bouton Retour vers la liste serait plus agréable après l'enregistrement du fichier de sauvegarde
 Quand le nom est trop long, la balance crée des pages en trop (faire un :overflow=>:truncate sur le pavé haut gauche
 Dans la création de nature, lorsqu'il y a des comptes, il n'y a plus la possibilité de sélectionner le compte associé
-
+La suppression de ligne devrait entraîner un flash (et surtout l'échec de la suppression)
 
 -------------------------- Autres éditions --------------------------
 Compte de résultat
