@@ -2,10 +2,7 @@
 
 class LinesController < ApplicationController
 
-  before_filter :find_book # remplit @book mais aussi @organism et @period
-     
-  before_filter :change_period, only: [:index] # pour permettre de changer de period quand on clique sur une
-  # des barres du graphe.qui est affiché par organism#show
+  before_filter :find_book # remplit @book      
   before_filter :fill_mois, only: [:index, :new]
   before_filter :fill_natures, :only=>[:new,:edit] # pour faire la saisie des natures en fonction du livre concerné
 
@@ -125,10 +122,11 @@ class LinesController < ApplicationController
 
   def fill_mois
     if params[:mois] && params[:an]
-
       @mois = params[:mois]
       @an = params[:an]
       @monthyear=MonthYear.new(month:@mois, year:@an)
+      check_if_has_changed_period # car on peut changer de period quand on clique sur une
+  # des barres du graphe.qui est affiché par organism#show
     else
       @monthyear= @period.guess_month
       redirect_to book_lines_url(@book, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')
@@ -139,8 +137,6 @@ class LinesController < ApplicationController
 
   # TODO ici il faut remplacer cette méthode par une méthode period.natures_for_book(@book) qui choisira les natures qui
   # conviennent à la classe du livre.
-  # FIXME render new ne repassant pas par les filtres les @natures du formulaire sont toutes les natures
-  # et non pas seulement celles relatives au book
   def fill_natures
     if @book.class.to_s == 'IncomeBook'
       @natures=@period.natures.recettes
@@ -151,18 +147,22 @@ class LinesController < ApplicationController
 
    
   # change period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice
-  # à partir du graphe d'accueil. 
-  # TODO Il serait peut être plus judicieux de se déconnecter complètement de la notion d'exercice 
-  # pour avoir alors un appel avec month et year, ce qui oterait toute ambiguité. 
-  def change_period
-    if params[:period_id] &&  (params[:period_id].to_i != session[:period])
-      @period = @organism.periods.find(params[:period_id])
-      session[:period]=@period.id
-      flash[:alert]= "Attention, vous avez changé d'exercice !"
-      redirect_to book_lines_url(params[:book_id], :mois=>params[:mois])
-    else
-      @period=@organism.periods.find(session[:period])
+  # à partir du graphe d'accueil et donc via l'action index.
+  def check_if_has_changed_period
+    # si le month_year demandé ne fait pas partie de l'exercice,
+    if !@period.list_months.include?(@monthyear)
+      # voit si on peut trouver l'exercice ad hoc
+      @new_period = @organism.find_period(@monthyear.beginning_of_month)
+      if @new_period
+        flash[:alert]= "Attention, vous avez changé d'exercice !"
+        session[:period] = @new_period.id
+        redirect_to book_lines_url(@book, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')
+      else
+        flash[:alert] = "Le mois et l'année demandés ne correspondent à aucun exercice"
+        redirect_to :back
+      end
     end
+    
   end
 
 

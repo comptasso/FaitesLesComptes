@@ -197,6 +197,31 @@ class Period < ActiveRecord::Base
     MonthYear.new :month=>date.month, :year=>date.year
   end
 
+
+  # permet de renvoyer la liste des mois de l'exercice
+  # généralement un seul mais il peut y en avoir deux en cas d'exercice de plus d'un an
+  #
+  # l'argument month est de type string et avec deux chiffres par exemple '04'
+  def find_month(month)
+    list_months.select {|my| my.month == month}
+  end
+
+  # indique s'il y a un mois correspondant.
+  #
+  # L'argument month est de type string et avec deux chiffres par exemple '04'
+  def include_month?(month)
+    !find_month(month).empty?
+  end
+
+  # find_first_month permet de renvoyer le premier mois correspondant au mois demandé
+  # Il peut en effet y avoir deux mois correspondant si l'exercice est de plus de 12 mois.
+  #
+  # L'argument month est de type string et avec deux chiffres par exemple '04'
+  def find_first_month(month)
+    ms = find_month(month)
+    ms.first unless ms.empty?
+  end
+
  
   # donne les soldes de chaque mois, est appelé par le module JcGraphic pour constuire les graphes
   def monthly_value(date)
