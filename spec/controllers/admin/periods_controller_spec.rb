@@ -11,6 +11,8 @@ describe Admin::PeriodsController do
     let(:o) {stub_model(Organism)}
 
     before(:each) do
+      ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
       Organism.should_receive(:find).with(o.id.to_s).and_return(o)
     end
 

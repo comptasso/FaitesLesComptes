@@ -11,10 +11,10 @@ describe LinesController do
   def session_attributes
     {user:@cu.id, period:@p.id, org_db:'test'}
   end
-  
-  
+
+    
   before(:each) do
-    ActiveRecord::Base.stub(:use_org_connection).and_return(true)  # pour éviter
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
     # l'appel d'establish_connection dans le before_filter find_organism
 
     @cu =  mock_model(User) # cu pour current_user
@@ -32,7 +32,7 @@ describe LinesController do
     
   end
 
-  describe 'before_filters' do
+  describe 'before_filters' do 
 
     it 'A faire '
   end

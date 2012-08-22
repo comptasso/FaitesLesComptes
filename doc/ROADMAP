@@ -776,6 +776,11 @@ OK - probablement un bug dans l'affichage des organismes de la zone compta (le f
 
 
 Traiter la problématique des tests
+---------------Revue des tests
+Fait dans les controllers lines et natures (et peut être organisme)
+
+
+
 Il faudra faire les autres tâches rake db:migrate db:rollback,...
 OK - Revoir restore controller
 
@@ -807,6 +812,7 @@ DAns le formulaire Archive, un bouton Retour vers la liste serait plus agréable
 Quand le nom est trop long, la balance crée des pages en trop (faire un :overflow=>:truncate sur le pavé haut gauche
 Dans la création de nature, lorsqu'il y a des comptes, il n'y a plus la possibilité de sélectionner le compte associé
 La suppression de ligne devrait entraîner un flash (et surtout l'échec de la suppression)
+Dans index organism, il n'y a plus la logique de renvoyer
 
 -------------------------- Autres éditions --------------------------
 Compte de résultat

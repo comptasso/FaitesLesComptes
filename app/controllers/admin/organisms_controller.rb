@@ -4,8 +4,9 @@ class Admin::OrganismsController < Admin::ApplicationController
   # GET /organisms
   # GET /organisms.json
 
-  
+  skip_before_filter :find_organism, :current_period, only:[:index, :new] 
   before_filter :use_main_connection, only:[:index, :new, :destroy]
+
   
 
   def index

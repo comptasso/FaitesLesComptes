@@ -3,6 +3,8 @@
 class SessionsController < ApplicationController
 
   skip_before_filter :log_in?, :only => [:new, :create]
+  skip_before_filter :find_organism, :current_period
+
 
   def new
     @user = User.new

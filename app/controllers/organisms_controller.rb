@@ -2,11 +2,8 @@
 
 class OrganismsController < ApplicationController
 
-  skip_before_filter :find_organism, :current_period
+  
 
-  # renvoie vers new s'il n'y pas d'organisme
-  # et vers show s'il n'y a qu'un seul organisme
-  # si plus d'un affiche la vue par défaut
   def index 
     @room_organisms = current_user.rooms.collect do |r|
       {:organism=>r.organism, :room=>r, :archive=>(r.look_for {Archive.last}) }

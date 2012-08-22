@@ -6,8 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :log_in?
 
   before_filter :find_organism, :current_period
-  #, :current_period
-
+  
   helper_method :two_decimals, :picker_to_date, :current_user, :current_user?
 
   private
@@ -25,11 +24,15 @@ class ApplicationController < ActionController::Base
 
   # si pas de session, on prend le premier exercice non clos
   def current_period
+    unless @organism
+      logger.warn 'Appel de current_period sans @organism'
+      return nil
+    end
     if session[:period]
       @period = Period.find_by_id(session[:period]) 
     else
       @period = @organism.periods.last if @organism.periods.any?
-      session[:period] = @period_id
+      session[:period] = @period.id
     end
     @period
   end
@@ -69,7 +72,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-     User.find_by_id(session[:user]) if session[:user]
+    User.find_by_id(session[:user]) if session[:user]
   end
 
   def current_user?
