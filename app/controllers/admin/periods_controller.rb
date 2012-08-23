@@ -25,15 +25,7 @@ class Admin::PeriodsController < Admin::ApplicationController
     end
   end
 
-  def show
-    @period=Period.find(params[:id])
-    session[:period]=@period.id
-    flash[:notice] = 'Vous avez changé d\'exercice'
-    redirect_to admin_organism_periods_path(@organism) 
-  end
-
   
-
   # GET /periods/new
   # GET /periods/new.json
   def new
