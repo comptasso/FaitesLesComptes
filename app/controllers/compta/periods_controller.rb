@@ -1,20 +1,21 @@
 # coding: utf-8
 
+require 'change_period'
+
 class Compta::PeriodsController < Compta::ApplicationController
 
 
-  # GET /periods/1
-  def show
-    @period=Period.find(params[:id])
-    if @period.accountable?
-        session[:period]=@period.id
-    redirect_to new_compta_period_balance_path(@period)
-    else
-      flash[:alert] = "Impossible de passer à cet exercice : soit il n'a pas de comptes, soit les natures ne sont pas toutes reliées aux comptes \n
-      Aller dans la zone Administration pour créer le plan de compte et le relier aux natures"
-      redirect_to :back
-    end
-  end
+  logger.debug 'dans Admin::PeriodsController'
+  # ChangePeriod ajoute la méthode change, méthode partagée par les différents PeriodsController
+  # Voir le fichier lib/change_period.rb.
+  #
+  # Change a pour effet de changer d'exercice et de revenir à l'action initiale.
+  # Dans le cas où cette action a des paramètres mois et an, change recalcule des
+  # nouveaux paramètres adaptés à l'exercice sélectionné.
+  #
+  include ChangePeriod
+
+
 
  
 end

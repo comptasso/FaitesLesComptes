@@ -19,7 +19,11 @@ Faitesvoscomptes::Application.routes.draw do
     # TODO simplifier car on n'utilise que l'action show
     resources :rooms
     resources :organisms do
-      resources :periods
+      resources :periods do
+        member do
+          get 'change' # pour changer d'exercice
+        end
+      end
     end
     resources :periods do
       resource :balance
@@ -73,6 +77,7 @@ Faitesvoscomptes::Application.routes.draw do
       end
       resources :periods do
         member do
+          get 'change'
           get 'select_plan'
           get 'close'
           post 'create_plan'

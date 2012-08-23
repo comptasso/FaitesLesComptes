@@ -27,7 +27,8 @@
         %b.caret
       %ul.dropdown-menu
         - @organism.periods.each do |p|
-          %li= link_to(p.exercice, compta_organism_period_path(@organism, p))
+          %li= link_to_unless(current_period?(p), p.exercice, change_admin_organism_period_path(@organism, p)) {|name| content_tag(:span, :class=>'disable') {name} }
+
 
   %li= yield :menu
 

@@ -40,6 +40,6 @@ config.active_record.auto_explain_threshold_in_seconds = 0.5
 #  l'environnement développement
 %w[income_book outcome_book].each { |c| require_dependency File.join("app","models","#{c}.rb") }
 
-
+config.autoload_paths +=  Dir["#{config.root}/lib/**/"]
 
 end

@@ -61,7 +61,7 @@
       </a>
       <ul class="dropdown-menu">
           <%  @organism.periods.each do |p| %>
-            <%=   content_tag :li,  (link_to p.exercice, change_organism_period_path(@organism, p.id)) %>
+             <li><%= link_to_unless(current_period?(p), p.exercice, change_organism_period_path(@organism, p)) {|name| content_tag(:span, :class=>'disable') {name} } %></li>
           <% end %>
         </ul>
       </li>

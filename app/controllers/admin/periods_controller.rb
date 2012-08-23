@@ -1,15 +1,24 @@
 # -*- encoding : utf-8 -*-
 
+require 'change_period'
+
 
 class Admin::PeriodsController < Admin::ApplicationController
 
-  # skip_before_filter :current_period
+  logger.debug 'dans Admin::PeriodsController'
+  # ChangePeriod ajoute la méthode change, méthode partagée par les différents PeriodsController
+  # Voir le fichier lib/change_period.rb.
+  #
+  # Change a pour effet de changer d'exercice et de revenir à l'action initiale.
+  # Dans le cas où cette action a des paramètres mois et an, change recalcule des
+  # nouveaux paramètres adaptés à l'exercice sélectionné.
+  #
+  include ChangePeriod
 
   # GET /periods
   # GET /periods.json
   def index
     @periods = @organism.periods.all
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @periods }
@@ -19,6 +28,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   def show
     @period=Period.find(params[:id])
     session[:period]=@period.id
+    flash[:notice] = 'Vous avez changé d\'exercice'
     redirect_to admin_organism_periods_path(@organism) 
   end
 

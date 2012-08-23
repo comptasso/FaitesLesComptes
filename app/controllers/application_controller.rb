@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :find_organism, :current_period
   
-  helper_method :two_decimals, :picker_to_date, :current_user, :current_user?
+  helper_method :two_decimals, :picker_to_date, :current_user, :current_user?, :current_period?
 
   private
 
@@ -35,6 +35,10 @@ class ApplicationController < ActionController::Base
       session[:period] = @period.id
     end
     @period
+  end
+
+  def current_period?(p)
+    p == current_period
   end
 
   # HELPER_METHODS
