@@ -11,12 +11,17 @@ end
 describe 'restoration de fichier' do 
   include OrganismFixture
 
+  before(:each) do
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
+  end
+
 
 
   it 'accès par la vue admin#organism#show' , :js=>true do
+    pending
     visit admin_organisms_path
     page.find('a', :href=>new_admin_restore_path)
-    
     click_link("Permet de créer un organisme à partir d'un fichier de sauvegarde")
     alert = page.driver.browser.switch_to.alert
     sleep 0.1 

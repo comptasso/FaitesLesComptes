@@ -4,6 +4,18 @@
 # A utiliser en mettant include OrganismFixture dans la fichier spec ou on utilisera la méthode
 module OrganismFixture
 
+  def create_user
+    @cu =  User.create!(name:'quidam')
+    r = @cu.rooms.new(user_id:@cu.id, database_name:'assotest1')
+    r.save!
+  end
+
+  def login_as(name)
+    visit '/'
+    fill_in 'name', :with=>name
+    click_button 'Entrée'
+  end
+
   # crée un organisme, un income_book, un outcome_book, un exercice (period),
   # une nature. 
   def create_minimal_organism 

@@ -26,7 +26,8 @@ class SessionsController < ApplicationController
 
     else
       link = %Q[<a href="#{new_admin_user_url(:name=>params[:name])}">Nouvel utilisateur</a>]
-      flash[:alert] = "Cet utilisateur est inconnu. Pour le créer, cliquez sur #{link}".html_safe
+      flash[:alert] = "Cet utilisateur est inconnu. Si vous voulez vraiment créer un nouvel utilisateur, cliquez sur #{link}. \n
+      Sinon, saisissez le bon nom dans la zone ci-dessous".html_safe
       render 'new'
     end
   end

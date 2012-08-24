@@ -1,41 +1,49 @@
 # coding: utf-8
 
 require 'spec_helper'
-include JcCapybara
-include OrganismFixture
+
+ActiveRecord::Base.shared_connection = nil
+
+###
+RSpec.configure do |config|
+  config.use_transactional_fixtures = false
+  config.before :each do
+    DatabaseCleaner.start
+  end
+  config.after :each do
+    DatabaseCleaner.clean
+  end
+end
+
 
 describe "Periods" do
+  include OrganismFixture
 
   before(:each) do
+    create_user
     create_minimal_organism
     sd=@p.close_date + 1
     cd = ((@p.close_date) +1).end_of_year
     @next_period = @o.periods.create!(:start_date=>sd, :close_date=>cd)
-    
     @o.should have(2).periods
+ 
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true) 
+    ActiveRecord::Base.stub!(:use_main_connection).and_return(true)
+    login_as('quidam') 
   end
 
-
-  describe "Change periods" do
-
-    it 'check periods' do
-      @p.exercice.should == 'Exercice 2012'
-      @next_period.exercice.should == 'Exercice 2013'
-    end
-
-    it "par défaut va sur le dernier exercice" do
-      # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      get organism_path(@o)
-      response.status.should be(200)
-      assigns(:period).should == @next_period 
-      
-    end
+     it "par défaut va sur le dernier exercice" do
+      visit organism_path(@o)
+      current_path.should == organism_path(@o)
+     end
 
     it 'change period' do
+   
       visit organism_path(@o)
-      page.find('.container').should have_content 'Exercice 2013'
+      save_and_open_page
+      page.find('a.brand').should have_content 'Exercice 2013'
       visit change_organism_period_path(@o, @p)
-      page.find('.container').should have_content 'Exercice 2012'  
+      page.find('a.brand').should have_content 'Exercice 2012'
     end
-  end 
+  
 end

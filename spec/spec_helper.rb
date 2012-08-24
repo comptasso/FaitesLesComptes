@@ -41,15 +41,15 @@ end
 end
 
 Spork.each_run do
-  # on ne peut pas partager les connections car précisément on utilise des connexions différentes
-  # pour user et test
-  # # v
-    ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+   ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
 end
 
+DatabaseCleaner.strategy = :truncation
 
+#ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
 #DatabaseCleaner.strategy = :truncation
-##
+#
+####
 #RSpec.configure do |config|
 #  config.use_transactional_fixtures = false
 #  config.before :each do

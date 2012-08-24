@@ -34,6 +34,13 @@ namespace :db do
       ActiveRecord::Base.establish_connection('assotest2')
       ActiveRecord::Schema.verbose = true
       load("#{Rails.root}/db/schema.rb")
+
+      puts 'migration de la table principale'
+      Rails.logger.debug 'migration de la table principale'
+      File.open('db/test/organisms/assotest2.sqlite3', 'wb') {}
+      ActiveRecord::Base.establish_connection('test')
+      ActiveRecord::Schema.verbose = true
+      load("#{Rails.root}/db/schema.rb")
     end
   end
 end

@@ -31,7 +31,7 @@ class Admin::UsersController < Admin::ApplicationController
   # GET /users/new.json
   def new
     @user = User.new(name:params[:name])
-
+    flash[:alert] = nil
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @user }
@@ -49,7 +49,7 @@ class Admin::UsersController < Admin::ApplicationController
     @user = User.new(params[:user])
     if @user.save
       session[:user] = @user.id
-      redirect_to new_admin_organism_url, notice: " L'utilisateur a été crée. Il peut maitenant créer un organisme"
+      redirect_to new_admin_organism_url, notice: " L'utilisateur a été crée. Il est possible maitenant de créer un organisme"
     else
       render action: "new"
     end

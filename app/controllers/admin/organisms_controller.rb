@@ -63,9 +63,9 @@ class Admin::OrganismsController < Admin::ApplicationController
         # on crée une room pour le user qui a créé cette base
        current_user.rooms.create!(:database_name => params[:organism][:database_name])
        @organism.build_room
-       use_org_database(@organism.database_name) # normalement inutile car build_room reste sur la toute nouvelle base
+       use_org_connection(@organism.database_name) # normalement inutile car build_room reste sur la toute nouvelle base
        @organism.save
-       session[:org_db]  = room.database_name
+       session[:org_db]  = @organism.database_name
        redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
           Il vous faut maintenant créer un exercice pour cet organisme" 
       else

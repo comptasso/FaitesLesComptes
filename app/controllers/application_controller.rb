@@ -70,7 +70,9 @@ class ApplicationController < ActionController::Base
   end
 
   def log_in?
+
     unless session[:user]
+      logger.debug "pas de session[user]"
       use_main_connection
       redirect_to new_session_url
     end
@@ -87,15 +89,19 @@ class ApplicationController < ActionController::Base
   # se connecte à la base principale
   def use_main_connection
     # ces méthodes ont été ajoutées par jcl et sont définies dans jcl_monkey_patch.rb
+    logger.debug 'Appel de use_main_connection dans application_controller'
     ActiveRecord::Base.use_main_connection
+    logger.debug "Fin de use_main_connection : Connection_config #{ActiveRecord::Base.connection_config}"
   end
 
   # se connect à la base spécifiée par db_name.
   # Ex db_name = 'perso', se connect à la base correspondant au fichier
   # db/organisms/perso.sqlite3
   def use_org_connection(db_name)
+    logger.debug "Appel de use_org_connection dans application_controller avec #{db_name}"
     # ces méthodes ont été ajoutées par jcl et sont définies dans jcl_monkey_patch.rb
     ActiveRecord::Base.use_org_connection(db_name)
+    logger.debug "Fin de use_org_connection Connection_config #{ActiveRecord::Base.connection_config}"
   end
 
 

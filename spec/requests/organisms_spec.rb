@@ -2,37 +2,59 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+
+ActiveRecord::Base.shared_connection = nil
+
+###
+RSpec.configure do |config|
+  config.use_transactional_fixtures = false
+  config.before :each do
+    DatabaseCleaner.start
+  end
+  config.after :each do
+    DatabaseCleaner.clean
+  end
+end
+
 describe "vue organisme"  do
-  context "quand il n'y a aucun organisme" do 
-    it 'root aboutit vers new_organism' do
-      visit root_path
-      page.should have_content('Nouvel organisme') 
-    end
+  include OrganismFixture
 
-    it 'création du nouvel organisme' do
-      visit root_path
-      fill_in 'Titre', :with=>'Association TRI'
-      click_button 'Créer' 
-      page.should have_content('créer un exercice')
-    end
+  context 'avec un organisme' do
 
-context 'un organisme est créé' do
   before(:each) do
-    visit root_path
-    fill_in 'Titre', :with=>'Association TRI'
-    click_button 'Créer'
+   #  ActiveRecord::Base.establish_connection(adapter:'sqlite3', database:File.join(Rails.root, 'db','test', 'organisms', 'assotest1.sqlite3') )
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)
+    ActiveRecord::Base.stub!(:use_main_connection).and_return(true) # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
+   
+    create_user
+    create_minimal_organism
+    visit '/'
+    fill_in 'name', :with=>'quidam'
+    click_button 'Entrée' 
   end
 
-    it 'création de l exercice' do
-      select 'janvier', :from=>'period_start_date_2i'
-      select '2011', :form=>'period_start_date_1i'
-      select 'décembre', :from=>'period_close_date_2i'
-      select '2011', :form=>'period_close_date_1i'
-      click_button "Créer l'exercice"
+  it 'should show organism' do
+     page.find('h3').should have_content 'Description de l\'organisme'
+     current_path.should == admin_organism_path(@o)
+
+  end
+
+  end
+
+  context 'sans organisme' do
+
+    before(:each) do
+      @cu = User.create!(name:'untel')
     end
 
-      it 'créer quelques autres cas'
-  end
+    it 'est dirigé vers la création d un organisme' do
+      visit '/'
+      fill_in 'name', :with=>'untel'
+      click_button 'Entrée'
+      current_path.should == new_admin_organism_path
+    end
+
   end
 end
 
