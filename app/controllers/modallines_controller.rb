@@ -1,3 +1,7 @@
+
+# Ce controller est utilisé pour gérer les écritures générées par la vue modale
+# que l'on trouve dans le pointage des comptes bancaires
+
 class ModallinesController < ApplicationController
 
   def create
