@@ -24,10 +24,6 @@ describe Admin::BankAccountsController do
   let(:ba2) {mock_model(BankAccount)}
   let(:o) {mock_model(Organism)}
   let(:per) {mock_model(Period)}
-
-  # This should return the minimal set of attributes required to create a valid
-  # bank_account. As you add validations to bank_account, be sure to
-  # update the return value of this method accordingly.
   let(:cu) {mock_model(User)}
 
    # This should return the minimal set of values that should be in the session
