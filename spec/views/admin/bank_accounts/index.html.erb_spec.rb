@@ -6,6 +6,8 @@ describe 'admin/bank_accounts/index' do
   include JcCapybara
   
   before(:each) do
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
     assign(:organism, stub_model(Organism))
     @bank_accounts=[]
     @bank_accounts << stub_model(BankAccount, name: 'JC Bank', number: 'BA1', comment: 'un commentaire', address: '22, rue de Lille')

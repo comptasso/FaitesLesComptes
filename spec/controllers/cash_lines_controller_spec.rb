@@ -13,7 +13,7 @@ describe CashLinesController do
   let(:cu) {mock_model(User)}
   
   def current_month
-   '%02d' % Date.today.month
+   '%02d' % Date.today.month 
   end
 
   def current_year
@@ -39,6 +39,12 @@ describe CashLinesController do
 
   
   describe 'GET index' do
+
+     before(:each) do
+       p.stub_chain(:list_months, :include?).and_return true
+     end
+
+
     it "should find the right cash" do
       get :index, {:cash_id=>ca.id, :mois=>current_month, :an=>current_year}, valid_session
       assigns[:cash].should == ca

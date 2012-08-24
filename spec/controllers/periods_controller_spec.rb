@@ -26,7 +26,8 @@ describe PeriodsController do
       User.stub(:find_by_id).with(@cu.id).and_return @cu
       Period.stub(:find_by_id).with(@p1.id).and_return @p1
       Period.stub(:find).with(@p2.id.to_s).and_return @p2
-      @o.stub_chain(:periods, :find).and_return @p1
+      @o.stub_chain(:periods, :order, :last).and_return(@p)
+      @o.stub_chain(:periods, :any?).and_return true
     end
 
     describe 'GET change' do

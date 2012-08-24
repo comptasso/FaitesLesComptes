@@ -19,6 +19,8 @@ describe "check_deposits/index" do
  
 
   before(:each) do
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
     [cd1, cd2].each do |cd|
       cd.stub(:bank_account).and_return(ba)
     end

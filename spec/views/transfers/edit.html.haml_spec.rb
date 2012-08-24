@@ -6,6 +6,8 @@ describe "transfers/edit" do
     include JcCapybara
 
   before(:each) do
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
     @o = assign(:organism, stub_model(Organism))
     @bas= assign(:bank_accounts,
     [stub_model(BankAccount, name: 'DebiX', number: '1234Z'),

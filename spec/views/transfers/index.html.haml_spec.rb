@@ -6,6 +6,8 @@ describe "transfers/index" do
   include JcCapybara
 
   before(:each) do
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
     assign(:organism, mock_model(Organism, title: 'spec cd'))
     @debitable =     assign(:debitable, mock_model(BankAccount, name: 'Debix', number: '1254'))
     @creditable =     assign(:creditable, mock_model(BankAccount, name: 'Debix', number: '6789'))

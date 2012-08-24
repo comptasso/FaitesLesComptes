@@ -14,6 +14,8 @@ let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: 
 let(:p2011) {stub_model(Period, start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31)) }
 
 before(:each) do
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
     assign(:organism, o)
     o.stub(:periods).and_return([p2011,p2012])
     p2012.stub(:previous_period?).and_return(true)
