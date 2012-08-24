@@ -1,7 +1,7 @@
 %ul.nav.nav-pills.pull-right
-  %li{:class=> active_inactive('root')}= link_to "Saisie/Consult",  ((@organism && !@organism.new_record?) ? room_path(@organism.room) : organisms_path )
+  %li{:class=> active_inactive('root')}= link_to "Saisie/Consult",  organism_path(@organism)
   %li{:class=> active_inactive('admin')}
-    = link_to "Administration", ((@organism && !@organism.new_record?) ? admin_room_path(@organism.room) : admin_organisms_path)
+    = link_to "Administration", admin_organism_path(@organism)
   %li{:class=>active_inactive('compta') }
     = link_to("Compta", new_compta_period_balance_path(@period)) if (@period && @period.accountable?)
   

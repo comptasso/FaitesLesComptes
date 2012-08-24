@@ -20,6 +20,7 @@ class SessionsController < ApplicationController
       when 1
           redirect_to admin_room_url(@user.enter_first_room) and return
       else
+          logger.debug 'passage par sessions_controller et plusieurs organismes'
           redirect_to admin_organisms_url and return
       end
 

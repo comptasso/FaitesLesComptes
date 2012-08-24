@@ -17,7 +17,7 @@
     <div class="navbar navbar-inner">
       <div class="container">
     <a class="brand"><%= header_title %></a>
-  <%= render 'layouts/upper_menu' %>
+  <%= render 'layouts/upper_menu' if @organism && @organism.persisted? %>
   </div>
   </div>
    </div>
@@ -27,7 +27,7 @@
  <div class="row-fluid">
 
   <div>
-    <%= render 'menus/menu' %>
+    <%= render 'menus/menu' if @user %>
   </div>
  
  <%= render 'layouts/flash_partial' %>

@@ -115,6 +115,10 @@ page unless your view context provides a Request object in a #request method"
     !(current_namespace?('admin') || current_namespace?('compta'))
   end
 
+  def current_user?
+    session[:user]
+  end
+
 
  
   end
