@@ -19,8 +19,8 @@ class RoomsController < ApplicationController
   # trouve l'organisme de cette base
   # et redirige vers le controller organism
   def show
-    @room = current_user.rooms.find(params[:id])
-    organism_has_changed?(@room)
+    room = current_user.rooms.find(params[:id])
+    organism_has_changed?(room)
     redirect_to organism_path(Organism.first)
   end
 
