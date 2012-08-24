@@ -7,15 +7,14 @@ RSpec.configure do |c|
   #  c.exclusion_filter = {:js=> true }
 end
 
-
-
-
 describe OrganismsController do
 
   let(:cu) {mock_model(User)} # cu pour current_user
   let(:o) {mock_model(Organism, title:'le titre', database_name:'assotest')}
 
   before(:each) do
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)
+    Organism.stub(:first).and_return(o)
     Organism.stub(:find).with(o.id.to_s).and_return(o)
     User.stub(:find_by_id).with(cu.id).and_return cu
   end

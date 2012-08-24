@@ -6,7 +6,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe LinesController do
+describe LinesController do 
 
   def session_attributes
     {user:@cu.id, period:@p.id, org_db:'test'}
@@ -27,7 +27,9 @@ describe LinesController do
     Book.stub(:find).with(@b.id.to_s).and_return @b
     Period.stub(:find_by_id).with(@p.id).and_return @p
 
-    @o.stub_chain(:periods, :find).and_return @p
+
+    @o.stub_chain(:periods, :order, :last).and_return(@p)
+    @o.stub_chain(:periods, :any?).and_return true
 
     
   end
@@ -37,7 +39,11 @@ describe LinesController do
     it 'A faire '
   end
   
-  describe 'GET index' do 
+  describe 'GET index' do
+
+    before(:each) do
+      @p.stub_chain(:list_months, :include?).and_return true
+    end
 
     it 'should assign o' do
       get :index , {:outcome_book_id=>@b.id, mois:'04', an:'2012'}, {user:@cu.id, period:@p.id, org_db:'test'}
@@ -57,6 +63,8 @@ describe LinesController do
       get :index,{ :outcome_book_id=>@b.id}, {user:@cu.id, period:@p.id, org_db:'test'}
       response.should redirect_to(book_lines_path(@b, :mois=>my.month, :an=>my.year))
     end
+
+    it 'traiter le cas ou on change de period suite à un clic sur une ligne du graphe'
   
   end
 

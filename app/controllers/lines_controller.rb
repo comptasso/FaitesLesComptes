@@ -4,6 +4,8 @@ class LinesController < ApplicationController
 
   before_filter :find_book # remplit @book      
   before_filter :fill_mois, only: [:index, :new]
+  before_filter :check_if_has_changed_period, only: :index # car on peut changer de period quand on clique sur une
+  # des barres du graphe.qui est affiché par organism#show
   before_filter :fill_natures, :only=>[:new,:edit] # pour faire la saisie des natures en fonction du livre concerné
 
   # GET /lines
@@ -125,8 +127,7 @@ class LinesController < ApplicationController
       @mois = params[:mois]
       @an = params[:an]
       @monthyear=MonthYear.new(month:@mois, year:@an)
-      check_if_has_changed_period # car on peut changer de period quand on clique sur une
-  # des barres du graphe.qui est affiché par organism#show
+  
     else
       @monthyear= @period.guess_month
       redirect_to book_lines_url(@book, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')

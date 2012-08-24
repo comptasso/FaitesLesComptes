@@ -20,7 +20,7 @@ require 'spec_helper'
 
 describe Admin::CashesController do
 
-  let(:o) {Organism.create!(title: 'TEST', database_name:'assotest')}
+  let(:o) {Organism.create!(title: 'TEST', database_name:'assotest')} 
 
   let(:per) {mock_model(Period)}
   let(:cu) {mock_model(User)}
