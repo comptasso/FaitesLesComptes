@@ -22,17 +22,14 @@ class CashLinesController < LinesController
       format.xls { send_data @monthly_extract.to_xls(col_sep:"\t")  }
      
     end
-    
-  # TODO voir pour rajouter les mêmes sorties que pour lines controller
-  # à savoir pdf, csv 
+ 
   end
 
   private
 
+  # find_book qui est défini dans LinesController est surchargée pour chercher un Cash
   def find_book
     @cash=Cash.find(params[:cash_id])
-    @organism=@cash.organism
-    @period= @organism.periods.find(session[:period])
   end
 
   def fill_mois
@@ -41,6 +38,8 @@ class CashLinesController < LinesController
       @an = params[:an]
     else
       @monthyear= @period.guess_month
+      puts "monthyear demandé : #{@monthyear}"
+      logger.debug "monthyear demandé : #{@monthyear}"
       redirect_to cash_cash_lines_url(@book, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')
 
     end
