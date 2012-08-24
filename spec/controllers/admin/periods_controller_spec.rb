@@ -22,8 +22,6 @@ describe Admin::PeriodsController do
 
   describe 'GET new' do
 
-    
-
     context "check the rendering" do
 
 

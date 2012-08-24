@@ -28,20 +28,10 @@ describe Admin::UsersController do
   # User. As you add validations to User, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {name:'jean-claude'}
+    {name:'jean-claude'} 
   end
 
-  before(:all) do
-    ActiveRecord::Base.connected?.should be_true
-  end
-
-##
-
-
-  before(:each) do
-    ActiveRecord::Base.connected?.should be_true 
-  end
-
+ 
   describe "GET index" do
     it "assigns all users as @users" do
   
