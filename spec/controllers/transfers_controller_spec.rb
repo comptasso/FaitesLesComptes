@@ -20,54 +20,59 @@ require 'spec_helper'
 
 describe TransfersController do 
 
-  include OrganismFixture
-
-
   before(:each) do
-    # méthode définie dans OrganismFixture et
-    # permettant d'avoir les variables d'instances @organism, @period,
-    # income et outcome book ainsi qu'une nature et un compte bancaire
-    create_minimal_organism
-    @bb=@o.bank_accounts.create!(name: 'Debix', number: '784AZ')
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
+    @cu =  mock_model(User) # cu pour current_user
+    @o = mock_model(Organism, title:'le titre', database_name:'assotest')
+    @p = mock_model(Period, start_date:Date.today.beginning_of_year,
+      close_date:Date.today.end_of_year, exercice:'exercice 2012' )
+    @ba = mock_model(BankAccount, name:'Debix', number:'123Z')
+    @bb = mock_model(BankAccount, name:'Debix', number:'784AZ')
+    Organism.stub(:first).and_return(@o)
+    User.stub(:find_by_id).with(@cu.id).and_return @cu
+    Period.stub(:find_by_id).with(@p.id).and_return @p
+    @o.stub_chain(:periods, :any?).and_return true
   end
 
+
+  
   # This should return the minimal set of attributes required to create a valid
   # Transfer. As you add validations to Transfer, be sure to
   # update the return value of this method accordingly. 
   def valid_attributes
-    {:amount=>1245.to_s, :debitable_id=>@ba.id, :debitable_type=>'BankAccount',
-      :creditable_id=>@bb.id,:creditable_type=>'BankAccount',
-      :narration=>'Premier virement', :date=>Date.today,
-      :organism_id=>@o.id
-      }
+    { "amount"=>1245.to_s, "debitable_id"=>@ba.id.to_s, "debitable_type"=>'BankAccount',
+      "creditable_id"=>@bb.id.to_s,"creditable_type"=>'BankAccount',
+      "narration"=>'Premier virement', "date"=>Date.today.to_formatted_s('%d-%m-%Y'),
+      "organism_id"=>@o.id.to_s
+    }
   end
   
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # TransfersController. Be sure to keep this updated too.
   def valid_session
-    {}
-  end
-
-  describe 'init' do
-    it 'organism a deux comptes bancaires' do
-      @o.should have(2).bank_accounts
-    end
+    {user:@cu.id, period:@p.id, org_db:'assotest'}
   end
 
   describe "GET index" do
     it "assigns all transfers as @transfers" do
-      transfer = @o.transfers.create! valid_attributes
+      @o.should_receive(:transfers).and_return a = double(Arel)
+      a.should_receive(:order).with('date ASC').and_return [1,2]
       get :index, {:organism_id=>@o.id}, valid_session
-      assigns(:transfers).should eq([transfer])
+      assigns(:transfers).should ==  [1,2]
     end
   end
 
   describe "GET show" do
-    it "assigns the requested transfer as @transfer" do
-      transfer = @o.transfers.create! valid_attributes
-      get :show, {:organism_id=>@o.id, :id => transfer.to_param}, valid_session
-      assigns(:transfer).should eq(transfer)
+    before(:each) do
+      @t = mock_model(Transfer)
+    end
+
+    it "look for and assigns the requested transfer as @transfer" do
+      Transfer.should_receive(:find).with(@t.id.to_s).and_return @t
+      get :show, {:organism_id=>@o.id, :id => @t.id}, valid_session
+      assigns(:transfer).should == @t
     end
   end
 
@@ -79,25 +84,42 @@ describe TransfersController do
   end
 
   describe "GET edit" do
+    before(:each) do
+      @t = mock_model(Transfer)
+    end
+
     it "assigns the requested transfer as @transfer" do
-      transfer = Transfer.create! valid_attributes
-      get :edit, {:organism_id=>@o.id,:id => transfer.to_param}, valid_session
-      assigns(:transfer).should eq(transfer)
+      Transfer.should_receive(:find).with(@t.id.to_s).and_return @t
+      get :edit, {:organism_id=>@o.id,:id =>@t.id}, valid_session
+      assigns(:transfer).should == @t
     end
   end
 
   describe "POST create" do
+    
+    before(:each) do
+      @o.stub(:transfers).and_return @a = double(Arel)
+      
+    end
+
+
+    it "receives new with params" do
+      @a.should_receive(:new).with(valid_attributes).and_return(@t = double(Transfer))
+      @t.should_receive(:save).and_return(true)
+      post :create, {:organism_id=>@o.to_param,:transfer => valid_attributes}, valid_session
+    end
+
     describe "with valid params" do
-      it "creates a new Transfer" do
-        expect {
-          post :create, {:organism_id=>@o.id,:transfer => valid_attributes}, valid_session
-        }.to change(Transfer, :count).by(1)
+
+      before(:each) do
+        @a.stub(:new).with(valid_attributes).and_return @t= mock_model(Transfer).as_new_record
+        @t.stub(:save).and_return true
       end
+      
 
       it "assigns a newly created transfer as @transfer" do
         post :create, {:organism_id=>@o.to_param,:transfer => valid_attributes}, valid_session
-        assigns(:transfer).should be_a(Transfer)
-        assigns(:transfer).should be_persisted
+        assigns(:transfer).should == @t
       end
 
       it "redirects to the created transfer" do
@@ -107,77 +129,79 @@ describe TransfersController do
     end
 
     describe "with invalid params" do
+      before(:each) do
+        @a.stub(:new).with(valid_attributes).and_return @t= mock_model(Transfer).as_new_record
+        @t.stub(:save).and_return false
+      end
+
       it "assigns a newly created but unsaved transfer as @transfer" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Transfer.any_instance.stub(:save).and_return(false)
-        post :create, {:organism_id=>@o.to_param,:transfer => {}}, valid_session
+        post :create, {:organism_id=>@o.to_param,:transfer => valid_attributes}, valid_session
         assigns(:transfer).should be_a_new(Transfer)
       end
 
       it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Transfer.any_instance.stub(:save).and_return(false)
-        post :create, {:organism_id=>@o.to_param,:transfer => {}}, valid_session
+        post :create, {:organism_id=>@o.to_param,:transfer => valid_attributes}, valid_session
         response.should render_template("new")
       end
     end
   end
 
   describe "PUT update" do
+
+    before(:each) do
+      @t = mock_model(Transfer)
+      Transfer.stub(:find).with(@t.id.to_s).and_return(@t)
+    end
+
+    it 'should receive update_attributes' do
+      @t.should_receive(:update_attributes).with({'these' => 'params'}).and_return true
+      put :update, {:organism_id=>@o.to_param,:id => @t.to_param, :transfer => {'these' => 'params'}}, valid_session
+    end
+
+    it "assigns the requested transfer as @transfer" do
+      @t.stub(:update_attributes)
+      put :update, {:organism_id=>@o.to_param, :id => @t.to_param, :transfer => valid_attributes}, valid_session
+      assigns(:transfer).should == @t
+    end
+
     describe "with valid params" do
-      it "updates the requested transfer" do
-        transfer = Transfer.create! valid_attributes
-        # Assuming there are no other transfers in the database, this
-        # specifies that the Transfer created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        Transfer.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:organism_id=>@o.to_param,:id => transfer.to_param, :transfer => {'these' => 'params'}}, valid_session
+      before(:each) do
+        @t.stub(:update_attributes).and_return true
       end
+ 
 
-      it "assigns the requested transfer as @transfer" do
-        transfer = Transfer.create! valid_attributes
-        put :update, {:organism_id=>@o.to_param, :id => transfer.to_param, :transfer => valid_attributes}, valid_session
-        assigns(:transfer).should eq(transfer)
-      end
-
-      it "redirects to the transfer" do
-        transfer = Transfer.create! valid_attributes
-        put :update, {:organism_id=>@o.to_param, :id => transfer.to_param, :transfer => valid_attributes}, valid_session
+      it "redirects to the transfer index" do
+        put :update, {:organism_id=>@o.to_param, :id => @t.to_param, :transfer => valid_attributes}, valid_session
         response.should redirect_to(organism_transfers_url(@o))
       end
     end
 
     describe "with invalid params" do
-      it "assigns the transfer as @transfer" do
-        transfer = Transfer.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Transfer.any_instance.stub(:save).and_return(false)
-        put :update, {:organism_id=>@o.to_param, :id => transfer.to_param, :transfer => {}}, valid_session
-        assigns(:transfer).should eq(transfer)
+      before(:each) do
+        @t.stub(:update_attributes).and_return false
       end
 
       it "re-renders the 'edit' template" do
-        transfer = Transfer.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Transfer.any_instance.stub(:save).and_return(false)
-        put :update, {:organism_id=>@o.to_param, :id => transfer.to_param, :transfer => {}}, valid_session
+        put :update, {:organism_id=>@o.to_param, :id => @t.to_param, :transfer => valid_attributes}, valid_session
         response.should render_template("edit")
       end
     end
   end
 
   describe "DELETE destroy" do
-    it "destroys the requested transfer" do
-      transfer = Transfer.create! valid_attributes
-      expect {
-        delete :destroy, {:organism_id=>@o.to_param, :id => transfer.to_param}, valid_session
-      }.to change(Transfer, :count).by(-1)
+    before(:each) do
+      @t = mock_model(Transfer)
+      Transfer.stub(:find).with(@t.id.to_s).and_return(@t)
+    end
+
+    it "receive the destroy message" do
+      @t.should_receive(:destroy)
+      delete :destroy, {:organism_id=>@o.to_param, :id => @t.to_param}, valid_session
     end
 
     it "redirects to the transfers list" do
-      transfer = Transfer.create! valid_attributes
-      delete :destroy, {:organism_id=>@o.to_param, :id => transfer.to_param}, valid_session
+      @t.stub(:destroy)
+      delete :destroy, {:organism_id=>@o.to_param, :id => @t.to_param}, valid_session
       response.should redirect_to(organism_transfers_url(@o))
     end
   end

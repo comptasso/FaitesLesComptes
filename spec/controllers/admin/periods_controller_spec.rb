@@ -16,6 +16,10 @@ describe Admin::PeriodsController do
       Period.stub(:find_by_id).with(@p.id).and_return @p
   end
 
+  def valid_session
+     {user:@cu.id, period:@p.id, org_db:'assotest'}
+  end
+
   describe 'GET new' do
 
     
@@ -30,12 +34,12 @@ describe Admin::PeriodsController do
       end
 
     it "controller name should be period" do
-      get :new , {:organism_id=>@o.id} ,  {user:@cu.id, period:@p.id, org_db:'assotest'}
+      get :new , {:organism_id=>@o.id} , valid_session 
       controller.controller_name.should == 'periods'
     end
   
     it "render new template" do
-      get :new , {:organism_id=>@o.id} ,  {user:@cu.id, period:@p.id, org_db:'assotest'} 
+      get :new , {:organism_id=>@o.id} , valid_session
       response.should render_template(:new) 
     end
 
@@ -79,19 +83,19 @@ describe Admin::PeriodsController do
   
       it 'disable_start_date should be true' do
         @a.should_receive(:new).with(arguments).and_return mock_model(Period)
-        get :new , {:organism_id=>@o.id} ,  {user:@cu.id, period:@p.id, org_db:'assotest'}
+        get :new , {:organism_id=>@o.id} , valid_session
         assigns[:disable_start_date].should == true
       end
 
       it "begin_year is this year" do
         @a.should_receive(:new).with(arguments).and_return mock_model(Period)
-        get :new , {:organism_id=>@o.id} ,  {user:@cu.id, period:@p.id, org_db:'assotest'}
+        get :new , {:organism_id=>@o.id} ,  valid_session
         assigns[:begin_year].should == (Date.today.year + 1)
       end
 
       it "end_year is limited to 2 years" do
         @a.should_receive(:new).with(arguments).and_return mock_model(Period)
-        get :new , {:organism_id=>@o.id} ,  {user:@cu.id, period:@p.id, org_db:'assotest'}
+        get :new , {:organism_id=>@o.id} , valid_session
         assigns[:end_year].should == (Date.today.year + 3)
       end
     end
