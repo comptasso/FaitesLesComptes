@@ -6,7 +6,7 @@ describe BankExtractsController do
 
   
   let(:o)  {mock_model(Organism, title: 'The Small Firm')} 
-  let(:per) {mock_model(Period, :organism=>o, :star_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year, :guess_month=>Date.today.month - 1)}
+  let(:per) {mock_model(Period, :organism=>o, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year, :guess_month=>Date.today.month - 1)}
   let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id: o.id)}
   let(:be) {mock_model(BankExtract, bank_account_id: ba.id, begin_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month,
       begin_sold: 120, debit: 450, credit: 1000, end_sold: 120+1000-450)}

@@ -38,7 +38,6 @@ class CashLinesController < LinesController
       @an = params[:an]
     else
       @monthyear= @period.guess_month
-      puts "monthyear demandé : #{@monthyear}"
       logger.debug "monthyear demandé : #{@monthyear}"
       redirect_to cash_cash_lines_url(@book, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')
 

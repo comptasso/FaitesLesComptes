@@ -5,7 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe CashLinesController do
 
   let(:o) {mock_model(Organism)}
-  let(:p) {mock_model(Period, :organism=>o, :star_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)}
+  let(:p) {mock_model(Period, :organism=>o, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)}
 
   let(:ca) {mock_model(Cash, :organism=>o, :name=>'Magasin')}
   let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3, :locked=>false),

@@ -24,11 +24,13 @@ class CheckDeposit < ActiveRecord::Base
     after_remove: :nil_bank_account_id,
     before_add: :cant_if_pointed 
   
+  scope :within_period, lambda {|from_date, to_date| where(['deposit_date >= ? and deposit_date <= ?', from_date, to_date])}
   scope :not_pointed, where('bank_extract_line_id IS NULL')
+
 
   # c'est la présence de bank_extract_line qui indique que le check_deposit à été pointé et ne peut plus être modifié
   
-
+  # renvoie une liste des id des livres relevant de l'organisme
   def bids
     raise "Modèle CheckDeposit - Impossible de trouver les livres sans avoir l'organisme" if self.bank_account_id == nil
     bank_account.organism.income_books.all.collect {|b| b.id}.join(',')

@@ -4,25 +4,30 @@ require 'spec_helper'
 
 describe CheckDepositsController do
 
+  let(:o)  {mock_model(Organism, title: 'The Small Firm')}
+  let(:per) {mock_model(Period, :organism=>o, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year, :guess_month=>Date.today.month - 1)}
+  let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id: o.id)}
+  let(:ba2) {mock_model(BankAccount, name: 'IBAN', number: '124578B', organism_id: o.id)}
+  let(:be) {mock_model(BankExtract, bank_account_id: ba.id, begin_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month,
+      begin_sold: 120, debit: 450, credit: 1000, end_sold: 120+1000-450)}
+  let(:arr) {double(Arel)}
+  let(:brr) {double(Arel)}
+  let(:cu) {mock_model(User)}
+  let(:cd) {mock_model(CheckDeposit)}
+
+  def valid_session
+    {user:cu.id, period:per.id, org_db:'assotest'}
+  end
+
+
   before(:each) do
-    @o=Organism.create!(title: 'test check_deposit')
-    @p_2012=@o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year) # année 2012
-    @p_2011=@o.periods.create!(start_date: (@p_2012.start_date - 365) , close_date: (@p_2012.start_date - 1)) # année 2011
-    @ba=@o.bank_accounts.create!(name: 'AiD', number: '123456Z', organism_id: @o.id)
-    @b=@o.income_books.create!(title: 'Recettes')
-    @n=@p_2012.natures.create!(name: 'ventes')
-    @n_2011=@p_2011.natures.create!(name: 'ventes')
-    @l1=@b.lines.create!(line_date: (Date.today-1),:narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
-    @l2=@b.lines.create!(line_date: (Date.today-2),:narration=>'ligne de test', credit: 101, payment_mode:'Chèque', nature: @n)
-    @l3=@b.lines.create!(line_date: (Date.today-3),:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
-    @l4=@b.lines.create!(line_date: (Date.today - 365) ,:narration=>'ligne de test', credit: 150, payment_mode:'Chèque', nature: @n_2011) # une écriture de 2011
-    @cd1= @ba.check_deposits.new(deposit_date: Date.today)
-    @cd1.checks << @l1
-    @cd1.save!
-    @ba2=@o.bank_accounts.create!(name: 'BA2', number: 'un autre compte')
-    @cd2=@ba2.check_deposits.new(deposit_date: Date.today)
-    @cd2.checks << @l2
-    @cd2.save!
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
+    Organism.stub(:first).and_return(o)
+    Period.stub(:find_by_id).with(per.id).and_return per
+    o.stub_chain(:periods, :order, :last).and_return(per)
+    o.stub_chain(:periods, :any?).and_return true
+    o.stub_chain(:bank_accounts, :find).with(ba.id.to_s).and_return ba
   end
 
   describe "GET index" do
@@ -30,110 +35,250 @@ describe CheckDepositsController do
     context "no pending_checks" do
 
       before(:each) do
+        CheckDeposit.stub!(:pending_checks).and_return nil # juste pour satisfaire le filtre find_non_deposited_checks
+        CheckDeposit.stub!(:total_to_pick).and_return 0
+        CheckDeposit.stub!(:nb_to_pick).and_return 0
+        ba.stub(:check_deposits).and_return @a = double(Arel)
+      end
+
+      it "vérification de l'initialisation" do
+        ba.stub_chain(:check_deposits, :within_period).and_return [1,2]
+        get :index, {:bank_account_id=>ba.id, :organism_id=>o.id.to_s}, valid_session
+        assigns[:period].should == per
+        assigns[:organism].should == o
+        assigns[:bank_account].should == ba
+        assigns(:check_deposits).should == [1,2] 
+      end
+
+      it "bank_account doit recevoir la requête check_deposits et wihtin_period" do
+        ba.should_receive(:check_deposits).and_return bac = double(Arel)
+        bac.should_receive(:within_period).with(per.start_date, per.close_date).and_return []
+        get :index, {:bank_account_id=>ba.id,  :organism_id=>o.id.to_s}, valid_session
+      end
+
+      it "sans chèques en attente, ne génère pas de flash" do
+        ba.stub_chain(:check_deposits, :within_period).and_return [1,2]
+        get :index,{ :bank_account_id=>ba.id, :organism_id=>o.id.to_s}, valid_session
+        flash[:notice].should == nil
+      end
+
+      it "avec chèque en attente, génère un flash" do
+        @a.stub(:within_period).and_return nil
+        CheckDeposit.stub!(:pending_checks).and_return [1,2]
+        CheckDeposit.stub!(:total_to_pick).and_return 401
+        CheckDeposit.stub!(:nb_to_pick).and_return 2
+        get :index,{ :bank_account_id=>ba.id, :organism_id=>o.id.to_s}, valid_session
+        flash[:notice].should == "Il y a 2 chèques à remettre à l'encaissement pour un montant de 401.00 €"
+
+      end
+     
+      it "rend le template index" do
+        ba.stub_chain(:check_deposits, :within_period).and_return [1,2]
+        get :index, {:bank_account_id=>ba.id,  :organism_id=>o.id.to_s}, valid_session
+        response.should render_template("index")
+      end
+    end
+
+    
+  end # fin de index
+
+  describe 'GET show' do
+
+    before(:each) do
+      o.stub(:pending_checks).and_return [double(Line)]
+    end
+  
+    it 'should retrieve the value' do
+      CheckDeposit.should_receive(:find).with(cd.id.to_s)
+      get :show, {:bank_account_id=>ba.id,  :organism_id=>o.id.to_s, id:cd.id}, valid_session
+    end
+
+    it 'should assign the founded value' do
+      CheckDeposit.stub(:find).with(cd.id.to_s).and_return 'voilà'
+      get :show, {:bank_account_id=>ba.id,  :organism_id=>o.id.to_s, id:cd.id}, valid_session
+      assigns(:check_deposit).should == 'voilà'
+    end
+
+    it 'should render template show' do
+      CheckDeposit.stub(:find).with(cd.id.to_s).and_return 'voilà'
+      get :show, {:bank_account_id=>ba.id,  :organism_id=>o.id.to_s, id:cd.id}, valid_session
+      response.should render_template('show')
+    end
+    
+  end
+
+  describe 'GET edit' do
+
+    before(:each) do
+      o.stub(:pending_checks).and_return [double(Line)]
+    end
+
+    it 'should retrieve the value' do
+      CheckDeposit.should_receive(:find).with(cd.id.to_s)
+      get :edit, {:bank_account_id=>ba.id,  :organism_id=>o.id.to_s, id:cd.id}, valid_session
+    end
+
+    it 'should assign the founded value' do
+      CheckDeposit.stub(:find).with(cd.id.to_s).and_return 'voilà'
+      get :edit, {:bank_account_id=>ba.id,  :organism_id=>o.id.to_s, id:cd.id}, valid_session
+      assigns(:check_deposit).should == 'voilà'
+    end
+
+    it 'should render template show' do
+      CheckDeposit.stub(:find).with(cd.id.to_s).and_return 'voilà'
+      get :edit, {:bank_account_id=>ba.id,  :organism_id=>o.id.to_s, id:cd.id}, valid_session
+      response.should render_template('edit')
+    end
+
+  end
+
+
+
+  describe 'GET new' do
+
+    context 'sans chèques à remettre' do
+
+      before(:each) do
         CheckDeposit.stub!(:pending_checks).and_return nil
         CheckDeposit.stub!(:total_to_pick).and_return 0
         CheckDeposit.stub!(:nb_to_pick).and_return 0
       end
 
-      it "verif du before filter" do
-        get :index, :bank_account_id=>@ba.id, :organism_id=>@o.id
+      it 'redirige vers bask et établit le flash d alerte' do
+        controller.should_receive(:redirect_to).with(:back, alert:"Il n'y a pas de chèques à remettre")
+        get :new, {:bank_account_id=>ba.id,  :organism_id=>o.id.to_s}, valid_session
       end
 
-      it "vérification de l'initialisation" do
-        get :index, :bank_account_id=>@ba.id, :organism_id=>@o.id.to_s
-        assigns[:period].should == @p_2012
-        assigns[:organism].should == @o
-        assigns[:bank_account].should == @ba
+    end
+
+    context 'avec des chèques à remettre' do
+      before(:each) do
+        CheckDeposit.stub!(:pending_checks).and_return [double(Line)]
+        CheckDeposit.stub!(:total_to_pick).and_return 100
+        CheckDeposit.stub!(:nb_to_pick).and_return 1
       end
 
-      it "assigne la bank_account" do
-        get :index, :bank_account_id=>@ba.id,  :organism_id=>@o.id.to_s
-        assigns[:bank_account].should ==(@ba)
+
+      it 'should receive new with default date and have a default bank_account_id assigned' do
+        CheckDeposit.should_receive(:new).with(deposit_date:Date.today).and_return @cd = mock_model(CheckDeposit).as_new_record
+        o.stub_chain(:bank_accounts, :first).and_return ba
+        @cd.should_receive(:bank_account_id=).with(ba.id)
+        @cd.should_receive(:pick_all_checks)
+        get :new, {:organism_id=>o.id.to_s}, valid_session
       end
 
-      it "assigns all check_deposit as @check_deposits" do
-        # création d' une autre remise de chèques
-        @cd3= @ba.check_deposits.new(deposit_date: Date.today)
-    @cd3.checks << @l3
-    @cd3.save!
-        get :index, :bank_account_id=>@ba.id.to_s,  :organism_id=>@o.id.to_s
-        assigns(:check_deposits).should eq([@cd1, @cd3])
+
+      it 'si le params de bank_account_id est fixé, c est celui-ci qui est pris' do
+        CheckDeposit.stub(:new).and_return @cd = mock_model(CheckDeposit).as_new_record
+        o.stub_chain(:bank_accounts, :find).and_return ba2
+        @cd.should_receive(:bank_account_id=).with(ba2.id)
+        @cd.should_receive(:pick_all_checks)
+        get :new, {:bank_account_id=>ba2.id,  :organism_id=>o.id.to_s }, valid_session
       end
 
-       it "sans chèques en attente, ne génère pas de flash" do
-        
-        get :index, :bank_account_id=>@ba2.id, :organism_id=>@o.id.to_s
-        flash[:notice].should == nil
-      end
+      context 'new est bien reçu' do
 
-      context "avec deux banques" do
-
-        it "avec deux banques sélectionne uniquement les remises correspondantes" do
-        
-          get :index, :bank_account_id=>@ba2.id,  :organism_id=>@o.id.to_s
-          assigns(:check_deposits).should eq([@cd2])
-          get :index, :bank_account_id=>@ba.id,  :organism_id=>@o.id.to_s
-          assigns(:check_deposits).should eq([@cd1])
+        before(:each) do
+          CheckDeposit.stub(:new).and_return @cd = mock_model(CheckDeposit).as_new_record
+          @cd.stub(:bank_account_id=)
+          o.stub_chain(:bank_accounts, :first).and_return ba
+          @cd.should_receive(:pick_all_checks)
         end
 
 
-      end
 
-     
-      it "ne prend que les remises de chèques qui sont dans l'exercice demandé" do
-        c= CheckDeposit.count
-        @cd4=@ba.check_deposits.new(deposit_date: (Date.today)-365)
-        @cd4.checks << @l4
-        @cd4.save
-        CheckDeposit.count.should == c+1
-        @cd4.deposit_date.should == (Date.today)-365
-        get :index, :bank_account_id=>@ba2.id,  :organism_id=>@o.id.to_s
-        assigns[:check_deposits].should == [@cd2]
-        pending 'assign[:period] does not change @period'
-        session[:period]= @p_2011.id
-        # get :controller=>:period, :method=>:change, :id=>@p_2011.id
-        get :index, :bank_account_id=>@ba.id,  :organism_id=>@o.id.to_s
-        assigns[:period].should == @p_2011
-        assigns[:period].start_date.should == (Date.today - 365).beginning_of_year
-        assigns(:check_deposits).should == [@cd4]
-      end
+        it 'rend la vue new' do
+        
+          get :new, {:organism_id=>o.id.to_s}, valid_session
+          response.should render_template('new')
 
-      it "rend le template index" do
-        get :index, :bank_account_id=>@ba.id,  :organism_id=>@o.id.to_s
-        response.should render_template("index")
+        end
+
+        it 'assigns check_deposit' do
+        
+          get :new, {:organism_id=>o.id.to_s}, valid_session
+          assigns(:check_deposit).should == @cd
+        end
       end
     end
 
-    context "teste le remplissage du flash lorsqu'il y a des pending_checks" do
-      before(:each) do
-        CheckDeposit.stub!(:pending_checks).and_return [@l2, @l3]
-        CheckDeposit.stub!(:total_to_pick).and_return 401
-        CheckDeposit.stub!(:nb_to_pick).and_return 2
+  end
 
-      end
-      it "assigne le nombre de chèque à remettre à l'encaissement" do
-        get :index, :bank_account_id=>@ba.id.to_s,  :organism_id=>@o.id.to_s
-        assigns[:nb_to_pick].should == 2
-      end
 
-      it "construit le flash notice indiquant qu il reste des chèques à remettre à l'encaissement" do
-        get :index, :bank_account_id=>@ba2.id, :organism_id=>@o.id.to_s
-        flash[:notice].should == "Il y a 2 chèques à remettre à l'encaissement pour un montant de 401.00 €"
-      end
+
+
+  describe 'GET create' do
+
+
+    it 'bank_account create a check_deposit and try to save it' do
+      ba.should_receive(:check_deposits).and_return @a = double(Arel)
+      @a.should_receive(:new).with({"param"=>'value'}).and_return(@cd=mock_model(CheckDeposit))
+      @cd.should_receive(:save).and_return true
+      post :create, {:bank_account_id=>ba.id, :organism_id=>o.id.to_s,
+          :check_deposit=>{param:'value'} }, valid_session
     end
 
-  end # fin de index
+    it  "when check_deposit is valid" do
+      ba.stub_chain(:check_deposits, :new).and_return @cd=mock_model(CheckDeposit)
+      @cd.stub(:save).and_return true
+      post :create, {:bank_account_id=>ba.id, :organism_id=>o.id.to_s,
+          :check_deposit=>{param:'value'} }, valid_session
+      response.should redirect_to organism_bank_account_check_deposits_url(o, ba)
+    end
 
-
-describe 'GET create' do
-  context "when check_deposit is valid" do
-    it 'should save the check deposit' 
+    it 'when invalid' do
+      ba.stub_chain(:check_deposits, :new).and_return @cd=mock_model(CheckDeposit)
+      @cd.stub(:save).and_return false
+      post :create, {:bank_account_id=>ba.id, :organism_id=>o.id.to_s,
+          :check_deposit=>{param:'value'} }, valid_session
+      response.should render_template('new')
+    end
     
-    it 'should have the right date' do
-      post :create, :bank_account_id=>@ba2.id, :organism_id=>@o.id.to_s,
-        :check_deposit=>{:pick_date=>'02/04/2012', :check_ids=>[@l1.id, @l2.id]}
-    end
   end
-end
+
+  describe 'GET update' do
+
+    it 'bank_account create a check_deposit and try to save it' do
+      CheckDeposit.should_receive(:find).with(cd.id.to_s).and_return cd
+      cd.should_receive(:update_attributes).and_return true
+      post :update, {:bank_account_id=>ba.id, :organism_id=>o.id.to_s, id:cd.id,
+          :check_deposit=>{param:'value'} }, valid_session
+    end
+
+    it  "when check_deposit is valid" do
+      CheckDeposit.stub(:find).with(cd.id.to_s).and_return cd
+      cd.stub(:update_attributes).and_return true
+      post :update, {:bank_account_id=>ba.id, :organism_id=>o.id.to_s, id:cd.id,
+          :check_deposit=>{param:'value'} }, valid_session
+      response.should redirect_to organism_bank_account_check_deposits_url(o, ba)
+    end
+
+    it 'when invalid' do
+      CheckDeposit.stub(:find).with(cd.id.to_s).and_return cd
+      cd.stub(:update_attributes).and_return false
+      post :update, {:bank_account_id=>ba.id, :organism_id=>o.id.to_s, id:cd.id,
+          :check_deposit=>{param:'value'} }, valid_session
+      response.should render_template('edit')
+    end
 
   end
+
+  describe "DELETE destroy" do
+
+     it "should look_for the check_deposit" do
+      CheckDeposit.should_receive(:find).with(cd.id.to_s).and_return cd
+      cd.should_receive(:destroy)
+      delete :destroy, { organism_id:o.id, bank_account_id: ba.id, :id => cd.id}, valid_session
+
+    end
+
+    it "redirects to the index" do
+      CheckDeposit.stub(:find).with(cd.id.to_s).and_return cd
+      cd.stub(:destroy)
+      delete :destroy, { organism_id:o.id, bank_account_id: ba.id, :id => cd.id}, valid_session
+       response.should redirect_to organism_bank_account_check_deposits_url
+    end
+  end
+
+
+end
