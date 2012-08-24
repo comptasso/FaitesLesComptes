@@ -132,7 +132,6 @@ class Admin::PeriodsController < Admin::ApplicationController
      flash[:alert]= alert
      render :index
     end
-
   end
 
 

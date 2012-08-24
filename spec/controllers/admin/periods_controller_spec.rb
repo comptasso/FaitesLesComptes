@@ -4,68 +4,97 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Admin::PeriodsController do
 
+  before(:each) do
+      ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
+      # l'appel d'establish_connection dans le before_filter find_organism
+      @cu =  mock_model(User) # cu pour current_user
+      @o = mock_model(Organism, title:'le titre', database_name:'assotest')
+      @p = mock_model(Period, start_date:Date.today.beginning_of_year,
+        close_date:Date.today.end_of_year, exercice:'exercice 2012' )
+      Organism.stub(:first).and_return(@o)
+      User.stub(:find_by_id).with(@cu.id).and_return @cu
+      Period.stub(:find_by_id).with(@p.id).and_return @p
+  end
+
   describe 'GET new' do
 
-    context "with a stub organism" do
+    
 
-    let(:o) {stub_model(Organism)}
+    context "check the rendering" do
 
-    before(:each) do
-      ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
-      Organism.should_receive(:find).with(o.id.to_s).and_return(o)
-    end
+
+     before(:each) do
+       @o.stub_chain(:periods, :any?).and_return true
+       @o.stub_chain(:periods, :last, :close_date).and_return @p.close_date
+       @o.stub_chain(:periods, :new).and_return mock_model(Period)
+      end
 
     it "controller name should be period" do
-      get :new , :organism_id=>o.id
+      get :new , {:organism_id=>@o.id} ,  {user:@cu.id, period:@p.id, org_db:'assotest'}
       controller.controller_name.should == 'periods'
     end
   
     it "render new template" do
-      get :new , :organism_id=>o.id
-      response.should render_template(:new)
+      get :new , {:organism_id=>@o.id} ,  {user:@cu.id, period:@p.id, org_db:'assotest'} 
+      response.should render_template(:new) 
     end
 
+      end
+
     context "when no period, build the new period" do
+      before(:each) do
+       @o.stub(:periods).and_return @a = double(Arel)
+       @a.stub(:any?).and_return false
+      end
+
       it "with start_date equal to beginning_of_year" do
-        get :new , :organism_id=>o.id
+        @a.should_receive(:new).with(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year).and_return @p
+        get :new , {:organism_id=>@o.id} ,  {user:@cu.id, org_db:'assotest'}
         assigns[:period].start_date.should == Date.today.beginning_of_year
       end
 
       it 'with close_date equal to end_of_year' do
-        get :new , :organism_id=>o.id
+        @a.should_receive(:new).with(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year).and_return @p
+         get :new , {:organism_id=>@o.id} ,  {user:@cu.id, org_db:'assotest'}
         assigns[:period].close_date.should == Date.today.end_of_year
       end
 
     end
 
-    end
+    
 
-    context "with a databased organism and a previous period" do
-  
+    context "with a previous period" do
 
-      before(:each) do
-        @o = Organism.create!(:title=>'Essai')
-        @p = @o.periods.create!(:start_date=>Date.today.years_ago(1).beginning_of_year, :close_date=>Date.today.years_ago(1).end_of_year)
+      def arguments
+        b = Date.today.beginning_of_year.years_since(1)
+        e = b.end_of_year
+        {start_date:b, close_date:e}
       end
 
+      before(:each) do
+        @o.stub(:periods).and_return @a = double(Arel)
+        @a.stub(:any?).and_return true
+        @a.stub_chain(:last, :close_date).and_return @p.close_date
+      end
+  
       it 'disable_start_date should be true' do
-        get :new , :organism_id=>@o.id
+        @a.should_receive(:new).with(arguments).and_return mock_model(Period)
+        get :new , {:organism_id=>@o.id} ,  {user:@cu.id, period:@p.id, org_db:'assotest'}
         assigns[:disable_start_date].should == true
       end
 
       it "begin_year is this year" do
-        get :new , :organism_id=>@o.id
-        assigns[:begin_year].should == Date.today.year
+        @a.should_receive(:new).with(arguments).and_return mock_model(Period)
+        get :new , {:organism_id=>@o.id} ,  {user:@cu.id, period:@p.id, org_db:'assotest'}
+        assigns[:begin_year].should == (Date.today.year + 1)
       end
 
       it "end_year is limited to 2 years" do
-        get :new , :organism_id=>@o.id
-        assigns[:end_year].should == Date.today.year + 2 
+        @a.should_receive(:new).with(arguments).and_return mock_model(Period)
+        get :new , {:organism_id=>@o.id} ,  {user:@cu.id, period:@p.id, org_db:'assotest'}
+        assigns[:end_year].should == (Date.today.year + 3)
       end
     end
-
-
 
   end
 end

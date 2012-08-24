@@ -28,10 +28,11 @@ class ApplicationController < ActionController::Base
       logger.warn 'Appel de current_period sans @organism'
       return nil
     end
+    return nil unless @organism.periods.any?
     if session[:period]
       @period = Period.find_by_id(session[:period]) 
     else
-      @period = @organism.periods.last if @organism.periods.any?
+      @period = @organism.periods.last
       session[:period] = @period.id
     end
     @period
