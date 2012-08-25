@@ -36,6 +36,7 @@ class CashLinesController < LinesController
     if params[:mois] && params[:an]
       @mois = params[:mois]
       @an = params[:an]
+      @monthyear=MonthYear.new(month:@mois, year:@an)
     else
       @monthyear= @period.guess_month
       logger.debug "monthyear demandé : #{@monthyear}"

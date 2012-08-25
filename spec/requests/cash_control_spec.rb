@@ -11,8 +11,9 @@ describe 'Cash Control Requests' do
   include OrganismFixture 
 
   before(:each) do
-    create_minimal_organism 
-    visit organism_path(@o) 
+    create_user
+    create_minimal_organism
+    login_as('quidam')
   end
   
   describe 'new cash_control' do  

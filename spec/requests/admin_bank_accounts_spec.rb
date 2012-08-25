@@ -7,7 +7,7 @@ RSpec.configure do |c|
 #  c.exclusion_filter = {:js=> true }
 end
 
-# spec request for testing admin bank_accounts
+# spec request for testing admin bank_accounts 
 
 describe 'vue bank_accounts index' do
   include OrganismFixture

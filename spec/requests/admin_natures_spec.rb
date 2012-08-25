@@ -13,9 +13,11 @@ describe 'vue natures index' do
   include OrganismFixture 
 
   before(:each) do
-    Nature.count.should == 0
-    create_minimal_organism 
+    create_user
+    create_minimal_organism
+    login_as('quidam')
   end
+
 
   it 'check minimal organism' do
     Organism.count.should == 1

@@ -8,7 +8,9 @@ describe 'vue lines' do
   include OrganismFixture 
   
   before(:each) do
+    create_user
     create_minimal_organism
+    login_as('quidam')
   end
 
   describe 'new line' do 

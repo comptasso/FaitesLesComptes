@@ -14,14 +14,18 @@ describe 'admin cash_control' do
   
   
   before(:each) do
-    Cash.count.should == 0
-    create_minimal_organism 
+    create_user
+    create_minimal_organism
+    login_as('quidam')
   end
+
 
   it 'check minimal organism' do
     Organism.count.should == 1
     Cash.count.should == 1
   end
+
+  it 'les requests de cash control sont à faire'
 
 
 

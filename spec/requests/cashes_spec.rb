@@ -6,21 +6,19 @@ include OrganismFixture
 
 describe "Cashes" do
 
-  before(:each) do
+ before(:each) do
+    create_user
     create_minimal_organism
-    get organism_path(@o)
-  end
+    login_as('quidam')
+  end 
 
 
   describe "GET /cash_cash_lines" do
     it "without a month params do a redirect" do
-      get cash_cash_lines_path(@c)
-      response.status.should == 302 
-    end
-
-    it 'get with a month params give success' do
-      get cash_cash_lines_path(@c, :mois=>'3' , :an=>'2012')
-      response.status.should == 200 
+      visit cash_cash_lines_path(@c)
+      
+      page.should have_content 'Exercice 2012'
+      page.find('h3 li.active').should have_content(I18n.l(Date.today,format:'%b'))
     end
   end
 end

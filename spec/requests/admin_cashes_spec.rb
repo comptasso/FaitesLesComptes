@@ -14,10 +14,11 @@ describe 'admin cash' do
   
   
   before(:each) do
-    # clean_test_database
-    Cash.count.should == 0
-    create_minimal_organism 
+    create_user
+    create_minimal_organism
+    login_as('quidam')
   end
+
 
   it 'check minimal organism' do
     Organism.count.should == 1

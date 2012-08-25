@@ -24,7 +24,7 @@
      <%=  f.input :debit ,   input_html: {class: "span3 number", value: two_decimals(@line.debit) }  %>
             <%=  f.input :credit, input_html: {class: "span3 number", value: two_decimals(@line.credit) } %>
             <%= f.input :bank_account,  input_html: {class: "span4"}, :disabled=>true %>
-            <%= f.input :payment_mode , collection: Line::PAYMENT_MODES, :prompt=>'Mode de réglement',
+            <%= f.input :payment_mode , collection: PAYMENT_MODES, :prompt=>'Mode de réglement',
                           disabled: 'Espèces',
                           :required=>true,  input_html: {class: "span6"} %>
         

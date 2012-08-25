@@ -23,8 +23,9 @@ end
 
 
   before(:each) do
+    create_user
     create_minimal_organism
-    visit organism_path(@o)
+    login_as('quidam')
   end
 
   describe "GET /new_bank_extract" do  
@@ -104,7 +105,7 @@ end
 
       it 'cliquer sur l icone afficher mène à la page affichage' do
         click_link('Afficher')
-        page.find('.champ h3').should have_content("liste des écritures")
+        page.find('thead th').should have_content("Liste des écritures")
       end
 
       it 'cliquer sur l icone afficher mène à la page affichage' do
