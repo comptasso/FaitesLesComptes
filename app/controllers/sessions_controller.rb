@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
 
     else
       link = %Q[<a href="#{new_admin_user_url(params[:user])}">Nouvel utilisateur</a>]
-      flash[:alert] = "Cet utilisateur est inconnu. Si vous voulez vraiment créer un nouvel utilisateur, cliquez sur #{link}. \n
+      flash[:alert] = "Cet utilisateur est inconnu. Si vous voulez vraiment créer un nouvel utilisateur, cliquez ici : #{link}. \n
       Sinon, saisissez le bon nom dans la zone ci-dessous".html_safe
       @user = User.new(params[:user])
       render 'new'
@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user] = nil
+    session[:user] = session[:org_db] = session[:period]= nil
   end
 
 

@@ -742,14 +742,14 @@ OK - Si elles existent, la vue indique quelles données seront créées.
 OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
 OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
 ---------------------- Mise en place de login/logout ----------------------
-Revoir les erreurs dans les migrations (décimal et suppression d'un champ qui n'existe pas)
+
 NON ? Ajouter le champ user_id à organisme, migrer et faire les relations dans les modèles
 OK - Ajouter une table des organismes à User (que l'on appelera rooms)
 OK - La table doit avoir comme info le nom d'un fichier qui sera la base de données
-Franciser la vue Entrée pour avoir non pas create user mais Entrez ! et supprimer le titre
-Le flash doit disparaître quand on arrive sur la vue nouvel utilisateur
+OK - Franciser la vue Entrée pour avoir non pas create user mais Entrez ! et supprimer le titre
+OK - Le flash doit disparaître quand on arrive sur la vue nouvel utilisateur
 OK - Dans les login logout, le layout doit être différent pour ne pas faire apparaître les menus
-Introduire dans find_organism une vérification que la base org appartient bien au current_user
+BOF - Introduire dans find_organism une vérification que la base org appartient bien au current_user
 ------------------------Passage à une logique apartment mais en restant sous sqlite-------------------
 OK - Les actions de création d'un organisme doivent gérer la question du room
 OK - Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichier
@@ -800,7 +800,7 @@ Le logout n'efface pas les éléments de session (base et period_id)
 
 -------------------------Corrections--------------------------------------
 stats du controller natures demande un org_id et un period_id qui ne sont plus vraiment utiles
-
+Revoir les erreurs dans les migrations (décimal et suppression d'un champ qui n'existe pas)
 
 
 -----------------------Détail de mise en forme ----------------------------
