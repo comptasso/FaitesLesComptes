@@ -13,17 +13,14 @@ describe 'resquest admin archive' do
   include OrganismFixture
 
   before(:each) do
+
+    create_user
     create_minimal_organism
+    login_as('quidam')
   end
 
 
   describe 'create archive' do
-
-  
-    it 'test create_minimal organism' do
-      @o.should be_an_instance_of(Organism)
-      @o.id.should == 1
-    end
 
     it 'afficher la vue de organisme puis cliquer sur l icone sauvegarder renvoie sur la vue archive new' do
       visit admin_organism_path(@o)
@@ -35,9 +32,10 @@ describe 'resquest admin archive' do
     it 'remplir la vue et cliquer sur le bouton propose de charger un fichier', :wip=>true do
       visit new_admin_organism_archive_path(@o)
       fill_in 'archive[comment]', :with=>'test archive'
-      filename = 'ASSO_TEST_'+ Date.today.to_s
+      filename = "assotest1 #{Time.now}.sqlite3"
       click_button 'new_archive_button'
-      page.response_headers['Content-Disposition'].should match(%r(filename=\"#{filename}))
+      page.response_headers['Content-Disposition'].should have_content filename
+      page.response_headers['Content-Disposition'].should have_content 'attachment;'
     end
 
 

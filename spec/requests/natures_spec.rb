@@ -12,8 +12,9 @@ describe 'Cash Control Requests' do
   
 
   before(:each) do
+    create_user
     create_minimal_organism
-    visit organism_path(@o)
+    login_as('quidam')
   end
 
   describe 'stats' do

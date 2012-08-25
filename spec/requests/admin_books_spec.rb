@@ -5,17 +5,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
  # ActiveRecord::Base.shared_connection = nil
 
-RSpec.configure do |config|
-  config.use_transactional_fixtures = false
-  config.before :each do
-    DatabaseCleaner.start
-  end
-  config.after :each do
-    DatabaseCleaner.clean
-  end
-end
-
-
 RSpec.configure do |c|
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true }

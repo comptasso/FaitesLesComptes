@@ -10,7 +10,7 @@ namespace :landlord do
   task :migrate_each => :environment do
     ActiveRecord::Migration.verbose = true
     # identification de tous les fichiers de type sqlite3
-    Dir[Rails.root.join("db/organisms/*.sqlite3")].each do |f|
+    Dir[Rails.root.join("db/#{Rails.env}/organisms/*.sqlite3")].each do |f|
       puts "migrating #{f}"  #File.basename(f)
       # on se connecte successivement à chacun d'eux
       ActiveRecord::Base.establish_connection(adapter:'sqlite3', database:f)

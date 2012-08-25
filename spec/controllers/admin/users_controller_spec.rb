@@ -40,7 +40,7 @@ describe Admin::UsersController do
      user.should be_valid
      user.save!
       get :index
-      assigns(:users).should eq([user])
+      assigns(:users).should eq([user]) 
     end
   end
 

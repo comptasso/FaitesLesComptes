@@ -14,13 +14,13 @@ describe 'vue transfer index' do
 
 
   before(:each) do
-    
-    Transfer.count.should == 0
+    create_user 
     create_minimal_organism
     @bb = @o.bank_accounts.create!(:name=>'DebiX', :number=>'123Y')
+    login_as('quidam')
   end
 
-  it 'check minimal organism' do
+  it 'check minimal organism' do  
     Organism.count.should == 1
     BankAccount.count.should == 2
   end

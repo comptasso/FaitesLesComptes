@@ -10,11 +10,6 @@ end
  
 describe 'Session' do
 
-before(:each) do
-    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-    ActiveRecord::Base.use_main_connection
-    # l'appel d'establish_connection dans le before_filter find_organism
-  end
 
   it 'permet de se logguer' do
     visit '/'
