@@ -10,24 +10,14 @@
   </head>
   <body class="<%= 'public_'+controller.controller_name %>">
     <div class="container-fluid">
-   <%# content_tag(:div, :id=>"grid") %>
-        
    
-  <div class="navbar">
-    <div class="navbar navbar-inner">
-      <div class="container">
-    <a class="brand"><%= header_title %></a>
-  <%= render 'layouts/upper_menu' if @organism && @organism.persisted? %>
-  </div>
-  </div>
-   </div>
+   <%= render 'layouts/navbar' %>
 
-      <%= render 'layouts/login_logout' %>
-
+ 
  <div class="row-fluid">
 
   <div>
-    <%= render 'menus/menu' if @user %>
+    <%= render 'menus/menu' if current_user? %>
   </div>
  
  <%= render 'layouts/flash_partial' %>

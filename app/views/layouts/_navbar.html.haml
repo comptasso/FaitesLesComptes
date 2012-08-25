@@ -1,0 +1,7 @@
+.navabr
+  .navbar.navbar-inner
+    .container
+      .brand
+        = header_title
+        = render 'layouts/login_logout'
+      = render 'layouts/upper_menu' if @organism && @organism.persisted?

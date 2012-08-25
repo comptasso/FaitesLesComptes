@@ -22,5 +22,7 @@ namespace :landlord do
     puts "retour à la connection de base pour #{Rails.env}"
     default = Rails.application.config.database_configuration[Rails.env]
     ActiveRecord::Base.establish_connection(default)
+    puts 'migration de la base principale'
+    ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
   end
 end

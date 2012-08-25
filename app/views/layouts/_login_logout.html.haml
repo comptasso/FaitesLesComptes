@@ -1,9 +1,9 @@
-- if current_user?
-  = current_user.name
-  = link_to 'Logout', session_path(current_user), :method=>:delete
-- else
-  = link_to 'Login', new_session_path
-
-= ActiveRecord::Base.connection_config[:database]
-= " org_db : #{session[:org_db]}"
-= " period_id : #{session[:period]}"
+#login_logout
+  - if current_user?
+    Connecté en tant que
+    %span= " #{current_user.name}"
+    &nbsp;-&nbsp;
+    = icon_to 'door-open.png', session_path(current_user), :method=>:delete, title:'Déconnexion'
+  - else
+    Non connecté
+    = icon_to 'door.png', new_session_path, title:'Connexion'

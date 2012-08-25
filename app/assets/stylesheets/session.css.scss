@@ -1,0 +1,30 @@
+/*
+    Document   : layout.css
+    Created on : 25 août 2012, 11:30:49
+    Author     : jcl
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/*
+   TODO customize this sample style
+   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+*/
+
+    .navbar .brand {
+      padding-top:4px;
+      padding-bottom: 4px;
+      }
+    
+    #login_logout {
+      margin-top: 4px;
+      font-size: 50%;
+      span {
+        font-weight: bold;
+        }
+       a {
+           color: #fff; 
+           }
+      }
+
+    

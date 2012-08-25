@@ -246,6 +246,8 @@ fr:
         title: Intitulé
         number: Numéro
         used: Utilisé
+      user:
+        name: Nom
 
     errors:
       messages:
@@ -311,6 +313,8 @@ fr:
       transfer:
         create: Enregistrer
         update: Modifier ce virement
+      user:
+        create: Entrée
     
         
 

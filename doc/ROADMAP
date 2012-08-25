@@ -748,7 +748,7 @@ OK - Ajouter une table des organismes à User (que l'on appelera rooms)
 OK - La table doit avoir comme info le nom d'un fichier qui sera la base de données
 Franciser la vue Entrée pour avoir non pas create user mais Entrez ! et supprimer le titre
 Le flash doit disparaître quand on arrive sur la vue nouvel utilisateur
-Dans les login logout, le layout doit être différent pour ne pas faire apparaître les menus
+OK - Dans les login logout, le layout doit être différent pour ne pas faire apparaître les menus
 Introduire dans find_organism une vérification que la base org appartient bien au current_user
 ------------------------Passage à une logique apartment mais en restant sous sqlite-------------------
 OK - Les actions de création d'un organisme doivent gérer la question du room
@@ -773,9 +773,7 @@ OK - revoir l'affichage des organismes dans le menu pour les zones compta et sai
 OK - revoir les path des helpers des messages (organism_helper.rb:11) pour les adapter à room
 OK - Faire une tâche rake pour faire les migrations sur toutes les bases
 OK - probablement un bug dans l'affichage des organismes de la zone compta (le filtre accountable n'est peut être pas fiable)
-
-
-Traiter la problématique des tests
+OK - Traiter la problématique des tests
 ---------------Revue des tests
 OK - Fait dans les controllers lines et natures (et peut être organisme)
 

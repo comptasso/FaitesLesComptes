@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    @user = User.find_by_name(params[:name])
+    @user = User.find_by_name(params[:user][:name])
     if @user  # l'utilisateur est connu
       session[:user] = @user.id
       # réorientation automatique selon le nombre de rooms
@@ -25,9 +25,10 @@ class SessionsController < ApplicationController
       end
 
     else
-      link = %Q[<a href="#{new_admin_user_url(:name=>params[:name])}">Nouvel utilisateur</a>]
+      link = %Q[<a href="#{new_admin_user_url(params[:user])}">Nouvel utilisateur</a>]
       flash[:alert] = "Cet utilisateur est inconnu. Si vous voulez vraiment créer un nouvel utilisateur, cliquez sur #{link}. \n
       Sinon, saisissez le bon nom dans la zone ci-dessous".html_safe
+      @user = User.new(params[:user])
       render 'new'
     end
   end

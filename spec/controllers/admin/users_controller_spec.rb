@@ -23,12 +23,17 @@ RSpec.configure do |c|
 end
 
 describe Admin::UsersController do
+  include OrganismFixture
  
   # This should return the minimal set of attributes required to create a valid
   # User. As you add validations to User, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
     {name:'jean-claude'} 
+  end
+
+  before(:each) do
+    create_user
   end
 
  
@@ -40,7 +45,7 @@ describe Admin::UsersController do
      user.should be_valid
      user.save!
       get :index
-      assigns(:users).should eq([user]) 
+      assigns(:users).should eq([@cu, user])
     end
   end
 

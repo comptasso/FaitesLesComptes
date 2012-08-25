@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   # c.filter = {:wip=> true }
-  #  c.exclusion_filter = {:js=> true }
+  #  c.exclusion_filter = {:js=> true } 
 end
 
 describe OrganismsController do
