@@ -1,0 +1,8 @@
+
+.inner-champ
+  .inputs
+    = simple_form_for([:admin, @user], :html=> {class: 'form-horizontal'}) do |f|
+      = f.error_notification
+      = f.input :name , input_html: {class:'span4'}
+      .form-actions= f.button :submit, 'Créer', class: "btn-primary"
+ 
