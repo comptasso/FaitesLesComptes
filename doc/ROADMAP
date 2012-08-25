@@ -778,31 +778,35 @@ OK - Traiter la problématique des tests
 OK - Fait dans les controllers lines et natures (et peut être organisme)
 
 
-
-Il faudra faire les autres tâches rake db:migrate db:rollback,...
 OK - Revoir restore controller
 
-Modifier vue new pour demander l'écrasement ou non et indiquer le nom de la chambre
+Dans restauration, modifier le formulaire pour demander l'écrasement ou non et indiquer le nom de la chambre
 
 OK - Ajouter une notice dans la vue new
 OK - gérer la destruction d'un organisme qui devient différente
+
 NON archive enregistre-t-il le nom du fichier sauvé ? => de toute façon l'utilisateur peut l'avoir modifié
 
 revoir le css des forms restore (et peut être archive)
 
 use_org_connection devrait gérer l'erreur lorsqu'il n'y a plus le fichier (d'une manière
     générale, on pourrait envisager que les utilisateurs aient effacé le fichier)
-Dans la vue création archive, après clic, effacer le form et remplacer le bouton par un bouton retour
+une manière de vérifier la qualité du fichier
+
+Par du javascrip, dans la vue création archive, après clic, effacer le form et remplacer le bouton par un bouton retour
+
 ------------------------ Bugs ----------------------------------------------
 OK - ChangePeriod est à revoir dans LinesController car n'est plus adapté au format
     ? Faire un controller grapph qui servirait de relais vers lines ?? Non, ça passe par le redirect vers Period change et son back
-Le logout n'efface pas les éléments de session (base et period_id)
+OK - Le logout n'efface pas tous les éléments de session (base et period_id)
 
 -------------------------Corrections--------------------------------------
 stats du controller natures demande un org_id et un period_id qui ne sont plus vraiment utiles
 Revoir les erreurs dans les migrations (décimal et suppression d'un champ qui n'existe pas)
 
-
+--------------------------------- TODO ---------------------------------------------------------
+Il faudra faire les autres tâches rake db:migrate db:rollback,... correspondant au namespace landlord pour que
+  les migrations fonctionnent correctement pour les bases déja installées.
 -----------------------Détail de mise en forme ----------------------------
 OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme ...
 Dans admin#organism#books, la flèche navigation 90 envoie vers la zone saise
@@ -828,16 +832,16 @@ Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 
 --------------------Divers---------------------------------------------------------------------------
 OK - Revoir la page index de organism (title et mise en page) : en fait je l'ai supprimée dans la partie consult
-supprimer la session de period 
+OK - supprimer la session de period
      Factoriser les jQuery datatable
 Le datatable de compta#lines ne marche pas
 ? - Datatable  pour la balance
 faire des tests pour pick_date_for et le transformer en gem
-Revoir la vue index de nature dans public qui propose des actions qui relèvent de admin
-Peut être idem pour destination
+OK - Revoir la vue index de nature dans public qui propose des actions qui relèvent de admin
+OK - Peut être idem pour destination : suppression controller et vue de saisie/consult
 Il serait plus judicieux de faire un stat controller car le controller nature n'a plus qu'une méthode stats
 et stats traite de natures et de destinations
-Faire une classe month pour Period ?
+OK - Faire une classe month pour Period ? : en fait c'est la classe MonthYear
 -----------------------------------------------------------------
 
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents

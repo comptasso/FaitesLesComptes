@@ -137,7 +137,7 @@ Faitesvoscomptes::Application.routes.draw do
     resources :check_deposits, :only=>:new # pour faire des remises de chèques
     #    resources :income_books
     #    resources :outcome_books
-    resources :destinations, only: :index
+    
     resources :transfers
     resources :bank_accounts do
       resources :check_deposits
