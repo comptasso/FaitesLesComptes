@@ -5,6 +5,12 @@
 module OrganismFixture
 
   def create_user
+    ActiveRecord::Base.use_main_connection
+    
+    if User.count > 0
+    Rails.logger.debug "Effacement de #{User.count} utilisateurs avant de recréer quidam"
+      User.find(:all).each {|u| u.destroy}
+    end
     @cu =  User.create!(name:'quidam')
     r = @cu.rooms.new(user_id:@cu.id, database_name:'assotest1')
     r.save!
@@ -18,7 +24,13 @@ module OrganismFixture
 
   # crée un organisme, un income_book, un outcome_book, un exercice (period),
   # une nature. 
-  def create_minimal_organism 
+  def create_minimal_organism
+    # DatabaseCleaner ne semble pas toujours appelé correctement.
+    ActiveRecord::Base.use_org_connection('assotest1')
+    if Organism.count > 0
+      Rails.logger.debug "Effacement de #{Organism.count} organismes avant de recréer organism_minimal"
+      Organism.find(:all).each {|o| o.destroy}
+    end
     @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1')
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first

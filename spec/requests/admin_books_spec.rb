@@ -3,6 +3,19 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
+ # ActiveRecord::Base.shared_connection = nil
+
+RSpec.configure do |config|
+  config.use_transactional_fixtures = false
+  config.before :each do
+    DatabaseCleaner.start
+  end
+  config.after :each do
+    DatabaseCleaner.clean
+  end
+end
+
+
 RSpec.configure do |c|
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true }
@@ -10,20 +23,22 @@ end
 
 # spec request for testing admin books 
 
-describe 'vue books index' do
+describe 'vue books index' do 
 
  
-  include OrganismFixture 
+  include OrganismFixture  
 
-    
+   before(:each) do
+    create_user
+    create_minimal_organism
 
-  before(:each) do
-    
-    Book.count.should == 0
-    create_minimal_organism  
+#    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)
+#    ActiveRecord::Base.stub!(:use_main_connection).and_return(true)
+    login_as('quidam')
   end
+    
 
-  it 'check minimal organism' do
+  it 'check minimal organism' do 
     Organism.count.should == 1
     Book.count.should == 3
   end

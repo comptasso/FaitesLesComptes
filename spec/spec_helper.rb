@@ -41,7 +41,7 @@ end
 end
 
 Spork.each_run do
-   ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+ #  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
 end
 
 DatabaseCleaner.strategy = :truncation
@@ -50,15 +50,15 @@ DatabaseCleaner.strategy = :truncation
 #DatabaseCleaner.strategy = :truncation
 #
 ####
-#RSpec.configure do |config|
-#  config.use_transactional_fixtures = false
-#  config.before :each do
-#    DatabaseCleaner.start
-#  end
-#  config.after :each do
-#    DatabaseCleaner.clean
-#  end
-#end
+RSpec.configure do |config|
+  config.use_transactional_fixtures = false
+  config.before :each do
+    DatabaseCleaner.start
+  end
+  config.after :each do
+    DatabaseCleaner.clean
+  end
+end
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
