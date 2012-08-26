@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
@@ -18,18 +18,18 @@ describe 'Session' do
 
   it 'remplissage du formulaire' do
     visit '/'
-    fill_in 'name', :with=>'inconnu'
+    fill_in 'user_name', :with=>'inconnu'
     click_button('Entrée')
     page.should have_content 'Cet utilisateur est inconnu'
   end
 
   it 'création d un nouvel utilisateur' do
     visit '/'
-    fill_in 'name', :with=>'Paul'
+    fill_in 'user_name', :with=>'Paul'
     click_button('Entrée')
     click_link 'Nouvel utilisateur' 
     fill_in 'user_name', :with=>'Paul'
-    click_button 'Create User'
+    click_button 'Créer'
     page.should have_content 'Nouvel organisme' 
   end
 

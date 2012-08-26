@@ -9,12 +9,12 @@
   
   <div class ="inner-champ">
     <p>La restauration d'une comptabilité se fait en chargeant un fichier avec 
-      l'extension <%= @db_format  %> qui aura été préalablement construit avec FaitesLesComptes.</p>
+      l'extension <%= @db_format  %>, fichier qui aura bien sur été préalablement exporté à partir du logiciel FaitesLesComptes.</p>
     <p>Si la comptabilité de cet organisme existe déja, vous pouvez choisir soit d'écraser
       celle existante, soit de créer une nouvelle base de données avec ce fichier.</p>
-    <p>Le choix se fait en changeant le nom de la base de données dans le formulaire ci-dessous.</p>
+    <p>Le choix se fait en donnant un nouveau nom à la base de données dans le formulaire ci-dessous.</p>
     <p>Le logiciel ne vérifie pas l'intégrité du fichier transmis.</p>
-  </div>
+  
    <div class="inputs">
      <%= form_tag admin_restore_path, :multipart => true, :class=>'simple_form form-horizontal' do  %>
      <div class="control-group string required">
@@ -39,13 +39,13 @@
 
  
   </div>
-     <div class="form-actions">
+     <div class="form-horizontal form-actions">
         <%= submit_tag 'Charger le fichier et créer la base' ,  class: "btn-primary span3" %>
      </div>
 
 
 <% end %>
- 
+ </div>
    </div>
   
 </div>

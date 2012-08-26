@@ -776,8 +776,6 @@ OK - probablement un bug dans l'affichage des organismes de la zone compta (le f
 OK - Traiter la problématique des tests
 ---------------Revue des tests
 OK - Fait dans les controllers lines et natures (et peut être organisme)
-
-
 OK - Revoir restore controller
 
 Dans restauration, modifier le formulaire pour demander l'écrasement ou non et indiquer le nom de la chambre
@@ -807,6 +805,10 @@ Revoir les erreurs dans les migrations (décimal et suppression d'un champ qui n
 --------------------------------- TODO ---------------------------------------------------------
 Il faudra faire les autres tâches rake db:migrate db:rollback,... correspondant au namespace landlord pour que
   les migrations fonctionnent correctement pour les bases déja installées.
+
+-----------------------------------Gestion des user ---------------------------
+La suppression d'un user doit être gérée (suppression des rooms, effacement des bases?)
+
 -----------------------Détail de mise en forme ----------------------------
 OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme ...
 Dans admin#organism#books, la flèche navigation 90 envoie vers la zone saise

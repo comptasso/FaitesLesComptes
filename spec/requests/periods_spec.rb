@@ -4,9 +4,9 @@ require 'spec_helper'
 
 
 describe "Periods" do
-  include OrganismFixture
+  include OrganismFixture 
 
-  before(:each) do
+  before(:each) do 
     create_user
     create_minimal_organism
     sd=@p.close_date + 1
@@ -24,9 +24,9 @@ describe "Periods" do
     it 'change period' do
    
       visit organism_path(@o)
-      page.find('a.brand').should have_content 'Exercice 2013'
+      page.find('.brand').should have_content 'Exercice 2013'
       visit change_organism_period_path(@o, @p)
-      page.find('a.brand').should have_content 'Exercice 2012'
+      page.find('.brand').should have_content 'Exercice 2012'
     end
   
 end

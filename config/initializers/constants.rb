@@ -19,4 +19,7 @@ NB_PER_PAGE_LANDSCAPE = 22
 PAYMENT_MODES = %w(CB Chèque Espèces Prélèvement Virement)
 BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
 
-PATH_TO_ORGANISMS = 'db/organisms'
+# constante utilisée dans le modèle Room pour trouver le chemin des bases organismes
+# TODO à faire évoluer ultérieurement pour être au choix de l'utilisateur
+# Attention également à modifier le fichier jcl_monkey_patch
+PATH_TO_ORGANISMS = 'organisms'

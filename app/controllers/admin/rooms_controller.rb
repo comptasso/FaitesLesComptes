@@ -25,6 +25,8 @@ class Admin::RoomsController < Admin::ApplicationController
     redirect_to edit_admin_organism_path(@organism)
   end
 
+  # action qui permet de créer une nouvelle archive lorsque l'on affiche la liste des
+  # organismes
   def new_archive
     @room = current_user.rooms.find(params[:id])
     organism_has_changed?(@room)

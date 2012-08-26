@@ -2,6 +2,10 @@
 
 require 'spec_helper'
 
+#RSpec.configure do |c|
+#  c.filter = {:wip=>true}
+#end
+
 describe "menus/_menu.html.erb" do
   include JcCapybara
 
@@ -13,14 +17,17 @@ describe "menus/_menu.html.erb" do
   let(:cu) {mock_model(User, name:'jcl')}
 
   before(:each) do
-    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter 
-    # l'appel d'establish_connection dans le before_filter find_organism 
+    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)
+    # pour éviter
+    # l'appel d'establish_connection dans le before_filter find_organism
+    assign(:user, cu)
   end
 
   context 'sans organisme car on se loggue' do
 
     it 'upper_menu ne doit pas s afficher' do
       @request.path = '/'
+      
       render :template=>'sessions/new', :layout=>'layouts/application'
       page.all('#upper_menu').count.should == 0 
     end
@@ -48,21 +55,25 @@ describe "menus/_menu.html.erb" do
       assign(:period, p2012 )
       o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))
       assign(:paves, [ibook, obook, p2012])
+     
+      
       view.stub(:current_period?).and_return(p)
+      view.stub(:current_user?).and_return true
+      view.stub(:current_user).and_return cu
+      view.stub(:saisie_consult_organism_list).and_return 'liste des organismes avec lien'
       
       
     end
 
-    
     describe 'Partie Virements du menu' do
+
       before(:each) do
-        
-        @request.path = '/'
-        render :template=>'organisms/show', :layout=>'layouts/application'
+         @request.path = '/'
+         render :template=>'organisms/show', :layout=>'layouts/application'
       end
 
       it 'affiche le menu Virement' do
-        page.find('ul#menu_general').should have_content('TRANSFERT')
+        assert_select('ul#menu_general').should have_content ('TRANSFERTS')
       end
 
       it 'affiche le sous menu Afficher' do

@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
   establish_connection Rails.env
   
-  has_many :rooms
+  has_many :rooms, :dependent=>:destroy
 
   validates :name, presence:true
 
@@ -11,8 +11,10 @@ class User < ActiveRecord::Base
   end
 
   # retourne un hash des organismes et des chambres appartenat à cet user
+  # le hash ne comprend que les organimes qui ont pu être effectivement trouvés
   def organisms_with_room
-    rooms.collect { |groom| {organism:groom.organism, room:groom} }
+    owrs = rooms.collect { |r| {organism:r.organism, room:r} }
+    owrs.select {|o| o[:organism] != nil}
   end
 
   def accountable_organisms_with_room

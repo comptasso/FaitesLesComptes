@@ -3,14 +3,14 @@
 require 'spec_helper'
 
 describe "sessions/new" do
-  
+  let(:cu) {mock_model(User, :name=>'quidam')}
 
   before(:each) do
+    assign(:user, cu)
     render
   end
 
   it 'indique Connexion' do
-   
     assert_select 'h3', 'Connexion'
   end
 
@@ -21,9 +21,8 @@ describe "sessions/new" do
   end
 
   it 'avec un bouton Entrée' do
-    assert_select "input[value='Entrée']", 1
+    assert_select('form') do
+      assert_select "input[type='submit']", 1
+    end
   end
-
-
-
 end

@@ -18,7 +18,7 @@ module OrganismFixture
 
   def login_as(name)
     visit '/'
-    fill_in 'name', :with=>name
+    fill_in 'user_name', :with=>name
     click_button 'Entrée'
   end
 

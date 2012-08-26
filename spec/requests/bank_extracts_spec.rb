@@ -83,6 +83,7 @@ end
         @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
           reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)
         visit bank_account_bank_extracts_path(@ba)
+        
       end
 
       it 'affiche une table avec un extrait' do
@@ -103,8 +104,11 @@ end
         page.should have_content("Modification d'un extrait de compte")
       end
 
-      it 'cliquer sur l icone afficher mène à la page affichage' do
-        click_link('Afficher')
+      it 'cliquer sur l icone afficher mène à la page affichage' , wip:true do
+        within('table') do
+         click_link('Afficher')
+        end
+        current_path.should == bank_extract_bank_extract_lines_path(@be)
         page.find('thead th').should have_content("Liste des écritures")
       end
 
@@ -166,7 +170,7 @@ end
     
   end 
 
-  describe 'EDIT bank extract', :wip=> true do
+  describe 'EDIT bank extract' do
     before(:each) do
       @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
         reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)

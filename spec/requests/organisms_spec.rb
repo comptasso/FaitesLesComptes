@@ -7,7 +7,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe "vue organisme"  do
   include OrganismFixture
 
-  context 'avec un organisme' do
+  context 'avec un organisme' do 
 
   before(:each) do
       
@@ -32,7 +32,7 @@ describe "vue organisme"  do
 
     it 'est dirigé vers la création d un organisme' do
       visit '/'
-      fill_in 'name', :with=>'untel'
+      fill_in 'user_name', :with=>'untel'
       click_button 'Entrée'
       current_path.should == new_admin_organism_path
     end

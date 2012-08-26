@@ -1,5 +1,102 @@
-require 'spec_helper'
+# -*- encoding : utf-8 -*-
+require 'spec_helper' 
 
 describe Room do
-  pending "add some examples to (or delete) #{__FILE__}"
+  def valid_attributes
+    {user_id:1, database_name:'foo'}
+  end
+
+  it 'has a user' do 
+    Room.new.should_not be_valid
+  end
+
+  it 'has a database_name' do
+    Room.new(user_id:1).should_not be_valid
+  end
+
+  it 'database_name is composed of min letters without space - les chiffres sont autorisés mais pas en début' do
+    val= ['nom base', 'Nombase', '1nom1base', 'nombase%']
+    val.each do
+      Room.new(user_id:1, database_name:val).should_not be_valid
+    end
+    Room.new(user_id:1, database_name:'unnomdebasecorrect').should be_valid
+    Room.new(user_id:1, database_name:'unnom2basecorrect').should be_valid
+  end
+
+  it 'le nom de base doit être unique' do
+     Room.find_or_create_by_user_id_and_database_name(1, 'foo')
+    Room.new(valid_attributes).should_not be_valid 
+  end
+
+  describe 'methods' do
+
+    before(:each) do
+      @r = Room.find_or_create_by_user_id_and_database_name(1, 'foo')
+    end
+
+    it 'complete_db_name calls the database_configuration' do
+      Rails.application.config.should_receive(:database_configuration).and_return({'test'=>{'adapter'=>'monadapteur'} })
+      @r.complete_db_name.should == 'foo.monadapteur'
+    end
+
+    it 'absolute db_name' do
+      @r.absolute_db_name.should == File.join(Rails.root,'db', Rails.env, 'organisms', @r.complete_db_name)
+    end
+
+  end
+
+  describe 'tools' do
+    before(:each) do
+      @r = Room.find_or_create_by_user_id_and_database_name(1, 'assotest1')
+    end
+
+    describe 'look_forg' do
+
+      it 'should comme back using the main connection' do
+        cc = ActiveRecord::Base.connection_config
+        Organism.stub(:first).and_return(double(Organism, accountable?:true))
+        @r.look_forg {"accountable?"}
+        ActiveRecord::Base.connection_config.should == cc 
+      end
+
+      it 'should connect to la base assotest1' do
+        Organism.stub(:first).and_return(double(Organism, accountable?:true))
+        @r.should_receive(:connect_to_organism).and_return true
+        @r.look_forg {"accountable?"}
+      end
+
+      it 'retourne la valeur trouvée' do
+        Organism.stub(:first).and_return(double(Organism, accountable?:true))
+        Organism.should_receive(:first).and_return(double(Organism, accountable?:25))
+        @r.look_forg {"accountable?"}.should == 25
+      end
+
+
+    end
+
+    describe 'connnect_to_organism' do
+      it 'connect_to_organism retourne false ou true'
+
+      it 'check_db'
+    end
+
+    describe 'look_for' do
+
+      it 'retourne la valeur demandée par le bloc' do
+        Organism.should_receive(:first).and_return('Voilà')
+        @r.look_for {Organism.first}.should == 'Voilà'
+      end
+
+
+    end
+
+    describe 'organism' do
+      it 'retourne l organisme correspondant à cette base' do
+        @r.should_receive(:connect_to_organism).and_return true
+        Organism.should_receive(:first).and_return(@o = double(Organism))
+        @r.organism.should == @o
+      end
+    end
+  end
+
 end
