@@ -25,42 +25,42 @@ class Admin::RestoresController < Admin::ApplicationController
     uploaded_io = params[:file_upload]
 
     begin
-      # vérifier que le nom du fichier est correct /pas de signes spéciaux .sqlite3
-      unless params[:database_name] =~ /^[a-z][a-z0-9]*$/
-        raise RestoreError, 'Le nom pour la base de données ne doit comporter que des minsucules sans espace'
-      end
+      
       # vérification que l'extension est bien la bonne
       extension = File.extname(uploaded_io.original_filename)
-      if  ".#{@db_format}" != extension
-        raise RestoreError, "L'extension #{extension} du fichier ne correspond pas aux bases gérées par l'application : .#{@db_format}"
+      if  ".#{@db_extension}" != extension
+        raise RestoreError, "L'extension #{extension} du fichier ne correspond pas aux bases gérées par l'application : .#{@db_extension}"
       end
 
-      # la base ne doit pas déjà appartenir à un autre
-      r = Room.find_by_database_name(params[:database_name]) # le nom de la base existe
-      if r != nil && r.user != current_user
+      # la pièce ne doit pas déjà appartenir à un autre
+      @room = Room.find_by_database_name(params[:database_name]) # le nom de la base existe
+      if @room != nil && @room.user != current_user
         raise RestoreError, 'Ce nom de base est déjà pris et ne vous appartient pas'
       end
       
-      # si la base n'existe pas on doit la créer
-      if r == nil
-        @new_room = current_user.rooms.new(database_name:params[:database_name])
-        raise RestoreError, 'Impossible de créer la base pour cet utilisateur' unless @new_room.valid?
+      # si la pièce n'existe pas on doit la créer
+      if @room == nil
+        @room = current_user.rooms.new(database_name:params[:database_name])
+        raise RestoreError, 'Nom de base non valide : impossible de créer la base' unless @room.valid?
       end
+
+      # tout va bien, on peut maintenant travailler
       
       # enregistrament du fichier dans son espace 
       File.open(Rails.root.join('db', Rails.env, 'organisms', "#{params[:database_name]}.sqlite3"), 'wb') do |file|
         file.write(uploaded_io.read)
       end
-      
-      # on change le database_name de l'organisme au cas où ce ne serait pas le même qu'à l'origine
-      use_org_connection(params[:database_name])
-           
-      # TODO il faudrait ici cpaturer les exceptions et effacer les traces.
+      # on vérifie la base
+      unless @room.check_db
+        raise RestoreError, 'Le contrôle du fichier par SQlite renvoie une erreur'
+      end
+      # on se connecte à la base
+      @room.connect_to_organism
       # On indique à l'organisme quelle base il utilise (puisqu'on peut faire des copies)
       Organism.first.update_attribute(:database_name, params[:database_name])
       # tout s'est bien passé on sauve la nouvelle pièce
       use_main_connection
-      @new_room.save!
+      @room.save!
       
          
       flash[:notice] = "Le fichier a été chargé et peut servir de base de données"
@@ -77,7 +77,7 @@ class Admin::RestoresController < Admin::ApplicationController
 
   # retourne le nom de l'adapter de l'application, par exemple sqlite3.
   def db_format
-    @db_format = Rails.application.config.database_configuration[Rails.env]['adapter']
+    @db_extension = Rails.application.config.database_configuration[Rails.env]['adapter']
   end
  
 

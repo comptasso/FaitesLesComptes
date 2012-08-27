@@ -13,6 +13,7 @@ class Admin::OrganismsController < Admin::ApplicationController
   # si certains organismes n'ont pas de base de données permettant de lire l'organisme
   # affiche une alerte indiquant les bases non trouvées
   def index
+    session[:org_db]=nil
     rooms = current_user.rooms.map {|r| r.organism_description}
     @room_organisms = rooms.select {|o| o != nil}
     unless rooms.select {|o| o == nil}.empty?
