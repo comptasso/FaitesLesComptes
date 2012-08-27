@@ -42,15 +42,21 @@
 </p>
 
 <p>
-  <b>Mis à jour le :</b>
-  <%=l @organism.updated_at %>
+  <b>Nombre de lignes :</b>
+  <%= @organism.lines.count %>
+</p>
+
+<p>
+  <b>Dernière saisie le :</b>
+  <%=l @organism.lines.order(:updated_at).last.updated_at if @organism.lines.any? %>
 </p>
 
 <% if @organism.archives.any? %>
 <p>
  <b>Dernière sauvegarde le :</b>
  <%= l @organism.archives.order(:created_at).last.created_at %>
+ <b>&nbsp;Commentaire :&nbsp;</b><%= @organism.archives.order(:created_at).last.comment %>
 </p>
 <% end %>
- 
-   </div>
+
+  </div>

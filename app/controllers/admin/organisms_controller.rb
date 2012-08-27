@@ -70,7 +70,7 @@ class Admin::OrganismsController < Admin::ApplicationController
        if @organism.valid?
         # on crée une room pour le user qui a créé cette base
        current_user.rooms.create!(:database_name => params[:organism][:database_name])
-       @organism.build_room
+       @organism.create_db
        use_org_connection(@organism.database_name) # normalement inutile car build_room reste sur la toute nouvelle base
        @organism.save
        session[:org_db]  = @organism.database_name

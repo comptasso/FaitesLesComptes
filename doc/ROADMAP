@@ -778,20 +778,22 @@ OK - Traiter la problématique des tests
 OK - Fait dans les controllers lines et natures (et peut être organisme)
 OK - Revoir restore controller
 
-Dans restauration, modifier le formulaire pour demander l'écrasement ou non et indiquer le nom de la chambre
-
+-----------------Dans restauration, modifier le formulaire pour demander l'écrasement ou non
+Ajouter dans la vue la liste des database utilisée par ce current user
+Avec jQuery afficher une fenêtre de confirmation si le nom est déjà pris
+------------------------------------------------------------------------------
+OK - La vue description de l'organisme (zone admin) devrait indiquer le commentaire de l'archive
+OK - etindiquer la dernière ligne d'écriture (plus stats ?)
 OK - Ajouter une notice dans la vue new
 OK - gérer la destruction d'un organisme qui devient différente
-
 NON archive enregistre-t-il le nom du fichier sauvé ? => de toute façon l'utilisateur peut l'avoir modifié
-
-revoir le css des forms restore (et peut être archive)
-
-use_org_connection devrait gérer l'erreur lorsqu'il n'y a plus le fichier (d'une manière
+OK - revoir le css des forms restore (et peut être archive)
+OK - Le commentaire de la sauvegarde est semble-t-il inutilisé : maintenant si
+supprimer tous les use_org_connection pour utiliser le modèle room
+OK - par l'étape ci-dessus - use_org_connection devrait gérer l'erreur lorsqu'il n'y a plus le fichier (d'une manière
     générale, on pourrait envisager que les utilisateurs aient effacé le fichier)
-une manière de vérifier la qualité du fichier
-
-Par du javascrip, dans la vue création archive, après clic, effacer le form et remplacer le bouton par un bouton retour
+OK - une manière de vérifier la qualité du fichier : le controlleur appelle maintenant check_db
+Par du javascript, dans la vue création archive, après clic, effacer le form et remplacer le bouton par un bouton retour
 
 ------------------------ Bugs ----------------------------------------------
 OK - ChangePeriod est à revoir dans LinesController car n'est plus adapté au format

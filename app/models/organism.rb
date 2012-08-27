@@ -33,7 +33,7 @@ class Organism < ActiveRecord::Base
 
 
   # TODO à mettre en private après mise au point
-  def build_room
+  def create_db
     File.open(base_name, "w") {} # créarion d'un fichier avec le nom database.sqlite3 et fermeture
     # on établit la connection (méthode ajoutée par jcl_monkey_patch)
     ActiveRecord::Base.use_org_connection(database_name)
