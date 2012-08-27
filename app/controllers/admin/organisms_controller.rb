@@ -9,6 +9,9 @@ class Admin::OrganismsController < Admin::ApplicationController
 
   
 
+  # liste les organismes appartenant au current user
+  # si certains organismes n'ont pas de base de données permettant de lire l'organisme
+  # affiche une alerte indiquant les bases non trouvées
   def index
     rooms = current_user.rooms.map {|r| r.organism_description}
     @room_organisms = rooms.select {|o| o != nil}

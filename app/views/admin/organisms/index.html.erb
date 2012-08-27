@@ -35,9 +35,10 @@
     <td><%=l ro[:archive].created_at  if ro[:archive] %></td>
     <td><%= icon_to 'sauvegarde.png', new_archive_admin_room_path(ro[:room]),
               :title=>"Fait une sauvegarde de toutes les données de l'organisme" %>
+      <%= icon_to 'afficher.png',ro[:room], title: 'affichage dans la partie saisie' %>
       <%= icon_to 'detail.png', [:admin, ro[:room]] %>
       <%= icon_to 'modifier.png', edit_admin_room_path(ro[:room]) %>
-      <%= icon_to 'afficher.png',[:admin, ro[:room]], title: 'affichage dans la partie saisie' %>
+      
     </td>
   
   </tr>

@@ -138,6 +138,7 @@ class ApplicationController < ActionController::Base
     if groom && session[:org_db] == groom.database_name
       logger.info "On reste à l'organisation #{groom.database_name}"
       @organism = Organism.first
+      logger.warn 'pas d\'organisme trouvé par has_changed_organism?' unless @organism
       current_period
       change = false
     end

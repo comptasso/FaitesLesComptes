@@ -26,7 +26,7 @@ class Admin::RestoresController < Admin::ApplicationController
 
     begin
       # vérifier que le nom du fichier est correct /pas de signes spéciaux .sqlite3
-      unless params[:database_name] =~ /^[a-z]*$/
+      unless params[:database_name] =~ /^[a-z][a-z0-9]*$/
         raise RestoreError, 'Le nom pour la base de données ne doit comporter que des minsucules sans espace'
       end
       # vérification que l'extension est bien la bonne
@@ -48,16 +48,15 @@ class Admin::RestoresController < Admin::ApplicationController
       end
       
       # enregistrament du fichier dans son espace 
-      File.open(Rails.root.join('db', 'organisms', "#{params[:database_name]}.sqlite3"), 'wb') do |file|
+      File.open(Rails.root.join('db', Rails.env, 'organisms', "#{params[:database_name]}.sqlite3"), 'wb') do |file|
         file.write(uploaded_io.read)
       end
       
       # on change le database_name de l'organisme au cas où ce ne serait pas le même qu'à l'origine
       use_org_connection(params[:database_name])
-      # on définit cette base comme la base actuelle
-      session[:org_db]  = params[:database_name]
-      
-      # TODO il faudrait ici cpaturer les exceptions et effacer les traces. 
+           
+      # TODO il faudrait ici cpaturer les exceptions et effacer les traces.
+      # On indique à l'organisme quelle base il utilise (puisqu'on peut faire des copies)
       Organism.first.update_attribute(:database_name, params[:database_name])
       # tout s'est bien passé on sauve la nouvelle pièce
       use_main_connection

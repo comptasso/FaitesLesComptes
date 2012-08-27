@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
       case @user.rooms.count
       when 0 then redirect_to new_admin_organism_url and return
       when 1
-          redirect_to admin_room_url(@user.enter_first_room) and return
+          redirect_to room_url(@user.enter_first_room) and return
       else
           logger.debug 'passage par sessions_controller et plusieurs organismes'
           redirect_to admin_organisms_url and return
