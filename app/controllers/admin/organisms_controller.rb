@@ -32,7 +32,8 @@ class Admin::OrganismsController < Admin::ApplicationController
       return
     end
     # on trouve l'exercice à partir de la session mais si on a changé d'organisme
-    # il faut changer la session et on charge le dernier exercice par défaut
+    # session[:period] aura été mis à nil
+    # il faut alors charger le dernier exercice par défaut et l'affecter à la session
     begin
       @period = @organism.periods.find(session[:period])
     rescue

@@ -39,7 +39,11 @@ module OrganismFixture
     @n = Nature.create!(name: 'Essai', period_id: @p.id, :income_outcome=>false)
     @ba = @o.bank_accounts.create!(name: 'DebiX', number: '123Z')
     @c=@o.cashes.create!(:name=>'Magasin')
-    
+  end
+
+  def create_second_organism
+    @cu.rooms.create!(database_name:'assotest2')
+    @o2 = Organism.create!(title: 'ASSO TEST2', database_name:'assotest2')
   end
 
   # crée le nombre de lignes demandées pour le minimal organism avec
