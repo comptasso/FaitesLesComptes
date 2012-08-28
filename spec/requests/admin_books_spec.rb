@@ -20,9 +20,6 @@ describe 'vue books index' do
    before(:each) do
     create_user
     create_minimal_organism
-
-#    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)
-#    ActiveRecord::Base.stub!(:use_main_connection).and_return(true)
     login_as('quidam')
   end
     

@@ -11,13 +11,7 @@ end
 describe 'restoration de fichier' do 
   include OrganismFixture
 
-  before(:each) do
-    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
-  end
-
-
-
+  
   it 'accès par la vue admin#organism#show' , :js=>true do
     pending
     visit admin_organisms_path
