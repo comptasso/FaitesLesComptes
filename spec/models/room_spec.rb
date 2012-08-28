@@ -34,13 +34,14 @@ describe Room do
       @r = Room.find_or_create_by_user_id_and_database_name(1, 'foo')
     end
 
-    it 'complete_db_name calls the database_configuration' do
+    it 'db_filename calls the database_configuration' do
       Rails.application.config.should_receive(:database_configuration).and_return({'test'=>{'adapter'=>'monadapteur'} })
-      @r.complete_db_name.should == 'foo.monadapteur'
+      @r.db_filename.should == 'foo.monadapteur'
     end
 
     it 'absolute db_name' do
-      @r.absolute_db_name.should == File.join(Rails.root,'db', Rails.env, 'organisms', @r.complete_db_name)
+      Room.stub(:path_to_db).and_return('mon_chemin')
+      @r.absolute_db_name.should == File.join('mon_chemin', 'organisms', @r.db_filename)
     end
 
   end

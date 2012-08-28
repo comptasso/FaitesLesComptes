@@ -26,9 +26,18 @@ class Room < ActiveRecord::Base
     [database_name, Rails.application.config.database_configuration[Rails.env]['adapter']].join('.')
   end
 
+  # pour sortir les bases de données du répertoire de l'application 
+  def self.path_to_db
+    if Rails.env == 'test'
+      "#{Rails.root}/db/#{Rails.env}/organisms"
+    else
+      "#{Rails.root}/../db/#{Rails.env}/organisms"
+    end
+  end
+
   # renvoie par exemple 'app/db/test/organisms/asso.sqlite3'
   def absolute_db_name
-    File.join(Rails.root, 'db', Rails.env, PATH_TO_ORGANISMS, db_filename)
+    File.join(Room.path_to_db, db_filename)
   end
 
   # se connecte à l'organisme correspondant à la base de données

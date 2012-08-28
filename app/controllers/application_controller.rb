@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-  
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism

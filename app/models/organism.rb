@@ -27,8 +27,10 @@ class Organism < ActiveRecord::Base
   validates :title, :presence=>true
   validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/^[a-z][0-9a-z]*$/, message:'format incorrect'}
 
+
+
   def base_name
-    "db/#{Rails.env}/organisms/#{database_name}.sqlite3"
+    "#{Room.path_to_db}/#{database_name}.sqlite3"
   end
 
 
