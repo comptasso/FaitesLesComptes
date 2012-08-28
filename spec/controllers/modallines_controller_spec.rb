@@ -1,19 +1,11 @@
 require 'spec_helper'
 
 describe ModallinesController do
-
-  let(:o)  {mock_model(Organism, title: 'The Small Firm')}
-  let(:p) {mock_model(Period, :organism=>o, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year, :guess_month=>Date.today.month - 1)}
-  let(:cu) {mock_model(User)}
-
-
-  def valid_session
-    {user:cu.id, period:p.id, org_db:'assotest'}
-  end
-
+  include SpecControllerHelper
+  
   before(:each) do
-    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
+    minimal_instances
+    @p.stub(:guess_month).and_return(Date.today.month - 1)
   end
 
   describe "POST 'create" do
@@ -35,7 +27,7 @@ describe ModallinesController do
     before(:each) do
       @ba = mock_model(BankAccount)
       @be = mock_model(BankExtract)
-      @o = mock_model(Organism)
+      
       BankExtract.stub(:find).with(@be.id.to_s).and_return @be
       @be.stub(:bank_account).and_return @ba
       @ba.stub(:organism).and_return @o

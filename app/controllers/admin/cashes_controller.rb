@@ -17,7 +17,7 @@ class Admin::CashesController < Admin::ApplicationController
   # GET /cashes/1
   # GET /cashes/1.json
   def show
-    @cash = Cash.find(params[:id])
+    @cash = @organism.cashes.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -38,7 +38,7 @@ class Admin::CashesController < Admin::ApplicationController
 
   # GET /cashes/1/edit
   def edit
-    @cash = Cash.find(params[:id])
+    @cash = @organism.cashes.find(params[:id])
   end
 
   # POST /cashes
@@ -60,7 +60,7 @@ class Admin::CashesController < Admin::ApplicationController
   # PUT /cashes/1
   # PUT /cashes/1.json
   def update
-    @cash = Cash.find(params[:id])
+    @cash = @organism.cashes.find(params[:id])
 
     respond_to do |format|
       if @cash.update_attributes(params[:cash])
@@ -76,7 +76,7 @@ class Admin::CashesController < Admin::ApplicationController
   # DELETE /cashes/1
   # DELETE /cashes/1.json
   def destroy
-    @cash = Cash.find(params[:id])
+    @cash = @organism.cashes.find(params[:id])
     @cash.destroy
 
     respond_to do |format|

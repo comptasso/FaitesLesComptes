@@ -17,9 +17,6 @@ describe "menus/_menu.html.erb" do
   let(:cu) {mock_model(User, name:'jcl')}
 
   before(:each) do
-    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)
-    # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
     assign(:user, cu)
   end
 

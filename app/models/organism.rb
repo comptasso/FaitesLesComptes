@@ -33,22 +33,29 @@ class Organism < ActiveRecord::Base
 
 
   # TODO à mettre en private après mise au point
+  # TODO sera à revoir si on gère une autre base que sqlite3
   def create_db
+    # création du fichier de base de données
     File.open(base_name, "w") {} # créarion d'un fichier avec le nom database.sqlite3 et fermeture
     # on établit la connection (méthode ajoutée par jcl_monkey_patch)
-    ActiveRecord::Base.use_org_connection(database_name)
+    if File.exist? base_name
+      Rails.logger.info "Connection à la base #{database_name}"
+      ActiveRecord::Base.establish_connection(
+        :adapter => "sqlite3",
+        :database  => base_name)
+    else
+      Rails.logger.warn "Tentative de connection à la base #{base_name}, fichier non trouvé"
+    end
     # et on load le schéma actuel
     ActiveRecord::Base.connection.load('db/schema.rb')
     # on est maintenant en mesure de créer l'organisme
   end
 
-
-
   def public_books
     books.where('title != ?', 'OD')
   end
 
-   # retourne le nombre d'exercices ouverts de l'organisme
+  # retourne le nombre d'exercices ouverts de l'organisme
   def nb_open_periods
     periods.where('open = ?', true).count
   end
@@ -86,7 +93,7 @@ class Organism < ActiveRecord::Base
   # Utilisé dans le controller line pour préremplir les select.
   # utilisé également dans le form pour afficher ou non le select cash
   def main_cash_id
-   self.cashes.any?  ? self.cashes.first.id  :  nil
+    self.cashes.any?  ? self.cashes.first.id  :  nil
   end
   
   def main_bank_id
@@ -100,7 +107,7 @@ class Organism < ActiveRecord::Base
     period_array = self.periods.all.select {|p| p.start_date <= date && p.close_date >= date}
     if period_array.empty?
       Rails.logger.warn 'organism#find_period a été appelée avec une date pour laquelle il n y a pas d exercice'
-       return nil if period_array.empty?
+      return nil if period_array.empty?
     end
     period_array.first
   end
@@ -108,7 +115,7 @@ class Organism < ActiveRecord::Base
   # recherche la pièce où est logé Organism sur la base de la similitude des
   # champs database_name de ces deux tables
   def room
-   look_for {Room.find_by_database_name(database_name)}
+    look_for {Room.find_by_database_name(database_name)}
   end
 
   
@@ -116,10 +123,12 @@ class Organism < ActiveRecord::Base
   # et de revenir dans la base de l'organisme.
   # Voir la méthode #room pour un exemple
   def look_for(&block)
+    cc = ActiveRecord::Base.connection_config
     ActiveRecord::Base.use_main_connection
-    r = yield
-    ActiveRecord::Base.use_org_connection(database_name)
-    r
+    yield
+  ensure
+    ActiveRecord::Base.establish_connection(cc)
+
   end
 
  

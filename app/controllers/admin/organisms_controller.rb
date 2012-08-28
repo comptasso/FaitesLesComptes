@@ -7,8 +7,6 @@ class Admin::OrganismsController < Admin::ApplicationController
   skip_before_filter :find_organism, :current_period, only:[:index, :new] 
   before_filter :use_main_connection, only:[:index, :new, :destroy]
 
-  
-
   # liste les organismes appartenant au current user
   # si certains organismes n'ont pas de base de données permettant de lire l'organisme
   # affiche une alerte indiquant les bases non trouvées
@@ -25,8 +23,8 @@ class Admin::OrganismsController < Admin::ApplicationController
   # GET /organisms/1
   # GET /organisms/1.json
   def show
-    @organism = Organism.find(params[:id])
-    if @organism.periods.empty?
+    # @organism et @period sont définis par les before_filter
+    unless @period
       flash[:alert]= 'Vous devez créer un exercice pour cet organisme'
       redirect_to new_admin_organism_period_url(@organism)
       return
@@ -34,13 +32,13 @@ class Admin::OrganismsController < Admin::ApplicationController
     # on trouve l'exercice à partir de la session mais si on a changé d'organisme
     # session[:period] aura été mis à nil
     # il faut alors charger le dernier exercice par défaut et l'affecter à la session
-    begin
-      @period = @organism.periods.find(session[:period])
-    rescue
-      @period = @organism.periods.last
-      session[:period]=@period.id
-    end
-  
+#    begin
+#      @period = @organism.periods.find(session[:period])
+#    rescue
+#      @period = @organism.periods.last
+#      session[:period]=@period.id
+#    end
+#
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @organism }
@@ -69,9 +67,11 @@ class Admin::OrganismsController < Admin::ApplicationController
     @organism = Organism.new(params[:organism])
        if @organism.valid?
         # on crée une room pour le user qui a créé cette base
-       current_user.rooms.create!(:database_name => params[:organism][:database_name])
+       @room = current_user.rooms.new(:database_name => params[:organism][:database_name])
+       # TODO faire des if save pour gérer les pb éventuels
+       @room.save
        @organism.create_db
-       use_org_connection(@organism.database_name) # normalement inutile car build_room reste sur la toute nouvelle base
+       @room.connect_to_organism # normalement inutile car create_db reste sur la toute nouvelle base
        @organism.save
        session[:org_db]  = @organism.database_name
        redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n

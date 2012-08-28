@@ -17,20 +17,21 @@ class ApplicationController < ActionController::Base
     # utile pour remettre le système cohérent
     use_main_connection if session[:org_db] == nil
     if session[:org_db]
-      ActiveRecord::Base.use_org_connection(session[:org_db])
+      r = current_user.rooms.find_by_database_name(session[:org_db])
+      r.connect_to_organism
       @organism = Organism.first # il n'y a qu'un organisme par base
     end
   end
 
   # si pas de session, on prend le premier exercice non clos
-  def current_period
+  def current_period 
     unless @organism
       logger.warn 'Appel de current_period sans @organism'
       return nil
     end
-    return nil unless @organism.periods.any?
+    return nil if @organism.periods.empty?
     if session[:period]
-      @period = Period.find_by_id(session[:period]) 
+      @period = @organism.periods.find_by_id(session[:period])
     else
       @period = @organism.periods.last
       session[:period] = @period.id
@@ -118,7 +119,7 @@ class ApplicationController < ActionController::Base
       session[:org_db]  = groom.database_name
       use_org_connection(groom.database_name)
       @organism  = Organism.first
-      if @organism.periods.any?
+      unless @organism.periods.empty?
         @period = @organism.periods.last
         session[:period] = @period.id
       end

@@ -6,32 +6,14 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe LinesController do 
+describe LinesController do
+  include SpecControllerHelper 
 
-  def session_attributes
-    {user:@cu.id, period:@p.id, org_db:'test'}
-  end
-
-    
-  before(:each) do
-    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
-
-    @cu =  mock_model(User) # cu pour current_user
-    @o = mock_model(Organism, title:'le titre', database_name:'assotest')
-    @p = mock_model (Period)
+ before(:each) do
+    minimal_instances
     @b = mock_model(Book)
-    
-    Organism.stub(:first).and_return(@o)
-    User.stub(:find_by_id).with(@cu.id).and_return @cu
-    Book.stub(:find).with(@b.id.to_s).and_return @b
-    Period.stub(:find_by_id).with(@p.id).and_return @p
+    Book.stub(:find).with(@b.id.to_s).and_return @b 
 
-
-    @o.stub_chain(:periods, :order, :last).and_return(@p)
-    @o.stub_chain(:periods, :any?).and_return true
-
-    
   end
 
   describe 'before_filters' do 

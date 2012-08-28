@@ -3,24 +3,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe BankExtractsController do
+  include SpecControllerHelper
 
-  
-  let(:o)  {mock_model(Organism, title: 'The Small Firm')} 
-  let(:per) {mock_model(Period, :organism=>o, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year, :guess_month=>Date.today.month - 1)}
-  let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id: o.id)}
+
+  let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id: @o.id)}
   let(:be) {mock_model(BankExtract, bank_account_id: ba.id, begin_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month,
       begin_sold: 120, debit: 450, credit: 1000, end_sold: 120+1000-450)}
-  let(:arr) {double(Arel)}
-  let(:brr) {double(Arel)}
-  let(:cu) {mock_model(User)}
-
-   # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # TransfersController. Be sure to keep this updated too.
-  def valid_session
-    {user:cu.id, period:per.id, org_db:'assotest'}
-  end
-
+ 
+  
    def valid_params
       {"bank_account_id"=>ba.id.to_s,  "begin_sold"=>be.end_sold.to_s,
         "total_debit"=> 11.to_s, "total_credit"=> 37.to_s , "begin_date_picker"=> '01/05/2012',
@@ -29,22 +19,16 @@ describe BankExtractsController do
 
 
   before(:each) do
-    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
+   minimal_instances
     BankAccount.stub!(:find).and_return(ba)
-     Organism.stub(:first).and_return(o)
-     Period.stub(:find_by_id).with(per.id).and_return per
    
-    
-    o.stub_chain(:periods, :order, :last).and_return(per)
-    o.stub_chain(:periods, :any?).and_return true
   end
 
   describe "GET index" do
     it "sélectionne les extraits correspondant à l'exercice et les assigns à @bank_extracts" do
       ba.stub_chain(:bank_extracts, :period, :all).and_return([be])
-      get :index,{:organism_id=>o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
-      assigns[:period].should == per
+      get :index,{:organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
+      assigns[:period].should == @p
       assigns[:bank_extracts].should == [be]
     end
   end
@@ -58,12 +42,12 @@ describe BankExtractsController do
 
 
     it "assigns bank_extract" do
-      get :new, {:organism_id=>o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
+      get :new, {:organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
       assigns(:bank_extract).should == @new_bank_extract
     end
 
     it "renders new template" do
-      get :new,{ :organism_id=>o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
+      get :new,{ :organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
       response.should render_template 'new'
     end
   end
@@ -72,7 +56,7 @@ describe BankExtractsController do
    
     it "assigns the requested bank_extract as @bank_extract" do
       BankExtract.should_receive(:find).with(be.id.to_s).and_return be
-      get :edit, {:organism_id=>o.id.to_s, bank_account_id: ba.id.to_s, :id=>be.id}, valid_session
+      get :edit, {:organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s, :id=>be.id}, valid_session
       assigns(:bank_extract).should == be
     end
   end
@@ -87,7 +71,7 @@ describe BankExtractsController do
 
     it "creates a new BankExtract" do
         @be.should_receive(:save).and_return true
-        post :create, {:organism_id=>o.id, :bank_account_id=> ba.id,
+        post :create, {:organism_id=>@o.id, :bank_account_id=> ba.id,
           :bank_extract => valid_params}, valid_session
         assigns(:bank_extract).should == @be
     end
@@ -95,7 +79,7 @@ describe BankExtractsController do
 
     it "redirects to pointage when valid" do
         @be.stub(:save).and_return true
-        post :create,{ :organism_id=>o.id, :bank_account_id=> ba.id,
+        post :create,{ :organism_id=>@o.id, :bank_account_id=> ba.id,
           :bank_extract => valid_params}, valid_session
         response.should redirect_to bank_account_bank_extracts_url(ba)
       end
@@ -103,7 +87,7 @@ describe BankExtractsController do
 
      it "re-renders the 'new' template" do
         @be.stub(:save).and_return false
-        post :create,{ :organism_id=>o.id, :bank_account_id=> ba.id,
+        post :create,{ :organism_id=>@o.id, :bank_account_id=> ba.id,
           :bank_extract => valid_params}, valid_session
         response.should render_template("new")
       end
@@ -120,7 +104,7 @@ describe BankExtractsController do
     it "should look for bank_extract and assigns it" do
       BankExtract.should_receive(:find).with(be.id.to_s).and_return be
       be.stub(:update_attributes).and_return(true)
-      put :update, {organism_id: o.id, bank_account_id: ba.id, :id => be.id,
+      put :update, {organism_id: @o.id, bank_account_id: ba.id, :id => be.id,
           :bank_extract => valid_params}, valid_session
       assigns(:bank_extract).should == be
     end
@@ -128,14 +112,14 @@ describe BankExtractsController do
      it "updates the requested bank_extract" do
        BankExtract.stub(:find).and_return be
        be.should_receive(:update_attributes).with(valid_params)
-       put :update, {organism_id: o.id, bank_account_id: ba.id, :id => be.id,
+       put :update, {organism_id: @o.id, bank_account_id: ba.id, :id => be.id,
           :bank_extract => valid_params}, valid_session
       end
 
       it "with valid attributes, redirects to index" do
         BankExtract.stub(:find).and_return be
         be.stub(:update_attributes).and_return true
-        put :update, {organism_id: o.id, bank_account_id: ba.id, :id => be.id, :bank_extract => valid_params}, valid_session
+        put :update, {organism_id: @o.id, bank_account_id: ba.id, :id => be.id, :bank_extract => valid_params}, valid_session
         response.should redirect_to bank_account_bank_extracts_url(ba)
       end
     

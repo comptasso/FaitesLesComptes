@@ -26,7 +26,7 @@ module OrganismFixture
   # une nature. 
   def create_minimal_organism
     # DatabaseCleaner ne semble pas toujours appelé correctement.
-    ActiveRecord::Base.use_org_connection('assotest1')
+    ActiveRecord::Base.establish_connection('assotest1')
     if Organism.count > 0
       Rails.logger.debug "Effacement de #{Organism.count} organismes avant de recréer organism_minimal"
       Organism.find(:all).each {|o| o.destroy}

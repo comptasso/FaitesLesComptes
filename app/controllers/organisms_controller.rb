@@ -14,14 +14,13 @@ class OrganismsController < ApplicationController
   # GET /organisms/1.json
   def show
     @current_user = current_user
-    @organism = Organism.find(params[:id])
+    
     if @organism.periods.empty?
       flash[:alert]= 'Vous devez créer au moins un exercice pour cet organisme'
       redirect_to new_admin_organism_period_url(@organism)
       return
     end
-  
-    current_period
+    
     # Ce min est nécessaire car il y a un problème avec les soldes si la date du jour est postérieure à la date de clôture
     # du dernier exercice - probablement il faut trouver plus élégant
     @date=[@organism.periods.last.close_date, Date.today].min

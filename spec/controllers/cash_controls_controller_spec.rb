@@ -8,31 +8,25 @@ RSpec.configure do |c|
 end
 
 describe CashControlsController do
-  
+   include SpecControllerHelper
 
-  let(:o) {mock_model(Organism)}
-  let(:p) {mock_model(Period, :organism=>o, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)}
-
-  let(:ca) {mock_model(Cash, :organism=>o, :name=>'Magasin')}
+  let(:ca) {mock_model(Cash, :organism=>@o, :name=>'Magasin')}
   let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3, :locked=>false),
       mock_model(CashControl, :date=>Date.today - 1.day, amount: 1, :locked=>false) ] }
-  let(:cu) {mock_model(User)}
+  
   
   before(:each) do
-      ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
-    Period.stub(:find_by_id).with(p.id).and_return p
+    minimal_instances
+    
 
     @m = '%02d' % Date.today.month.to_s
     @y = '%04d' % Date.today.year.to_s
-    o.stub(:periods).and_return { mock(Arel, :find=>p, :order=>[p], 'any?' =>true) }
-    p.stub(:guess_month).and_return(MonthYear.from_date(Date.today))
+    
+    @p.stub(:guess_month).and_return(MonthYear.from_date(Date.today))
     
   end
 
-  def valid_session
-    {user:cu.id, period:p.id, org_db:'assotest'}
-  end
+ 
 
   
   describe 'GET index'  do
@@ -50,7 +44,7 @@ describe CashControlsController do
 
     it 'should assign organism'  do
       get :index, {:cash_id=>ca.id, :mois=>@m, :an=>@y}, valid_session
-      assigns[:organism].should == o
+      assigns[:organism].should == @o
     end
 
     it 'should assign cash_controls' do

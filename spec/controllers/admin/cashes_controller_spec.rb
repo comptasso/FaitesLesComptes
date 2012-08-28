@@ -19,96 +19,92 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe Admin::CashesController do
-
-  let(:o) {Organism.create!(title: 'TEST', database_name:'assotest')} 
-
-  let(:per) {mock_model(Period)}
-  let(:cu) {mock_model(User)}
-  # This should return the minimal set of attributes required to create a valid
-  # cash. As you add validations to cash, be sure to
-  # update the return value of this method accordingly.
-  def valid_attributes
-    {name: 'Magasin', organism_id: o.id} 
-  end
-
-   def valid_session
-    {user:cu.id, period:per.id, org_db:'assotest'}
-  end
-
+  include SpecControllerHelper
 
   before(:each) do
-     ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
-    Organism.stub(:first).and_return(o)
-    Period.stub(:find_by_id).with(per.id).and_return per
-    o.stub_chain(:periods, :order, :last).and_return(per)
-    o.stub_chain(:periods, :any?).and_return true
+    minimal_instances
+    @ca = mock_model(Cash)
+    @o.stub(:cashes).and_return @a = double(Arel)
+  end
+
+  # This should return the minimal set of attributes required to create a valid
+  # @ca. As you add validations to @ca, be sure to
+  # update the return value of this method accordingly.
+  def valid_attributes
+    {"name"=>'Magasin', "organism_id"=>@o.id.to_s}
   end
 
   describe "GET index" do
+
     it "assigns all cashes as @cashes" do
-      ca = o.cashes.create! valid_attributes
-      get :index, {:organism_id=>o.id.to_s}, valid_session
-      assigns(:cashes).should eq([ca])
+      @a.stub(:all).and_return [@ca]
+      get :index, {:organism_id=>@o.id.to_s}, valid_session
+      assigns(:cashes).should == [@ca]
     end
+
   end
 
   describe "GET show" do
-    it "assigns the requested cash as @cash" do
-      cash = o.cashes.create! valid_attributes
-      get :show, {:organism_id=>o.id.to_s, :id => cash.id.to_s}, valid_session
-      assigns(:cash).should eq(cash)
+    it "assigns the requested ca as @ca" do
+      @a.stub(:find).with(@ca.id.to_s).and_return @ca
+      get :show, {:organism_id=>@o.id.to_s, :id => @ca.id}, valid_session
+      assigns(:cash).should == @ca
     end
   end
 
   describe "GET new" do
-    it "assigns a new cash as @cash" do
-      get :new,  {:organism_id=>o.id.to_s}, valid_session
-      assigns(:cash).should be_a_new(Cash)
-      assigns(:cash).organism.should == o
+    it "assigns a new ca as @ca" do
+      @a.should_receive(:new).and_return mock_model(Cash).as_new_record
+      get :new,  {:organism_id=>@o.id.to_s}, valid_session
+      assigns(:cash).should be_a_new(Cash)      
     end
   end
 
   describe "GET edit" do 
-    it "assigns the requested cash as @cash" do
-      cash = o.cashes.create! valid_attributes
-      get :edit, {organism_id:o.id.to_s, :id => cash.id.to_s}, valid_session
-      assigns(:cash).should eq(cash)
+    it "assigns the requested ca as @ca" do
+      @a.stub(:find).with(@ca.id.to_s).and_return @ca
+      get :edit, {organism_id:@o.id, :id => @ca.id}, valid_session
+      assigns(:cash).should == @ca
     end
   end
 
   describe "POST create" do
     describe "with valid params" do
-      it "creates a new cash" do
-        expect {
-          post :create,{ :organism_id=>o.id.to_s, :cash => valid_attributes}, valid_session
-        }.to change(Cash, :count).by(1)
+      it "creates a new @ca" do
+        @a.should_receive(:new).with(valid_attributes).and_return(@c = mock_model(Cash).as_new_record)
+        @c.should_receive(:save)
+        post :create,{ :organism_id=>@o.id.to_s, :cash => valid_attributes}, valid_session
+       
       end
 
-      it "assigns a newly created cash as @cash" do
-        post :create, {:organism_id=>o.id.to_s, :cash => valid_attributes}, valid_session
-        assigns(:cash).should be_a(Cash)
-        assigns(:cash).should be_persisted
+      it "assigns a newly created @ca as @@ca" do
+        @a.stub(:new).and_return(@c = mock_model(Cash).as_new_record)
+        @c.stub(:save).and_return true
+        post :create, {:organism_id=>@o.id.to_s, :cash => valid_attributes}, valid_session
+        assigns(:cash).should == @c
+        
       end
 
-      it "redirects to the created cash" do
-        post :create, {:organism_id=>o.id.to_s,  :cash => valid_attributes}, valid_session
-        response.should redirect_to(admin_organism_cashes_url(o))
+      it "redirects to index @ca" do
+        @a.stub(:new).and_return(@c = mock_model(Cash))
+        @c.stub(:save).and_return true
+        post :create, {:organism_id=>@o.id.to_s,  :cash => valid_attributes}, valid_session
+        response.should redirect_to(admin_organism_cashes_url(@o))
       end 
     end
 
     describe "with invalid params" do
-      it "assigns a newly created but unsaved cash as @cash" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Cash.any_instance.stub(:save).and_return(false)
-        post :create, {:organism_id=>o.id.to_s,  :cash => {}}, valid_session
+      it "assigns a newly created but unsaved @ca as @@ca" do
+        @a.stub(:new).and_return(@c = mock_model(Cash).as_new_record)
+        @c.stub(:save).and_return false
+        post :create, {:organism_id=>@o.id.to_s,  :cash => {}}, valid_session
         assigns(:cash).should be_a_new(Cash)
       end
 
       it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Cash.any_instance.stub(:save).and_return(false)
-        post :create,{:organism_id=>o.id.to_s,  :cash => {}}, valid_session
+        @a.stub(:new).and_return(@c = mock_model(Cash).as_new_record)
+        @c.stub(:save).and_return false
+        post :create,{:organism_id=>@o.id.to_s,  :cash => {}}, valid_session
         response.should render_template("new")
       end
     end
@@ -116,60 +112,58 @@ describe Admin::CashesController do
 
   describe "PUT update" do
     describe "with valid params" do
-      it "updates the requested cash" do
-        cash = o.cashes.create! valid_attributes
-        # Assuming there are no other cashes in the database, this
-        # specifies that the cash created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        Cash.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update,{:organism_id=>o.id.to_s,  :id => cash.id, :cash => {'these' => 'params'}}, valid_session
+      it "updates the requested @ca" do
+        @a.stub(:find).with(@ca.id.to_s).and_return @ca
+        @ca.should_receive(:update_attributes).with({'these' => 'params'})
+        put :update,{:organism_id=>@o.id.to_s,  :id => @ca.id, :cash => {'these' => 'params'}}, valid_session
       end
 
-      it "assigns the requested cash as @cash" do
-        cash = o.cashes.create! valid_attributes
-        put :update,{:organism_id=>o.id.to_s,  :id => cash.id, :cash => valid_attributes}, valid_session
-        assigns(:cash).should eq(cash)
+      it "assigns the requested @ca as @@ca" do
+        @a.stub(:find).with(@ca.id.to_s).and_return @ca
+        @ca.stub(:update_attributes).and_return true
+        put :update,{:organism_id=>@o.id.to_s,  :id => @ca.id, :cash => valid_attributes}, valid_session
+        assigns(:cash).should eq(@ca)
       end
 
-      it "redirects to the cash" do
-        cash = o.cashes.create! valid_attributes
-        put :update, {:organism_id=>o.id.to_s, :id => cash.id, :cash => valid_attributes}, valid_session
-        response.should redirect_to(admin_organism_cashes_url(o))
+      it "redirects to index" do
+        @a.stub(:find).with(@ca.id.to_s).and_return @ca
+        @ca.stub(:update_attributes).and_return true
+        put :update, {:organism_id=>@o.id.to_s, :id => @ca.id, :cash => valid_attributes}, valid_session
+        response.should redirect_to(admin_organism_cashes_url(@o))
       end
     end
 
     describe "with invalid params" do
-      it "assigns the cash as @cash" do
-        cash = o.cashes.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Cash.any_instance.stub(:save).and_return(false)
-        put :update, {:organism_id=>o.id.to_s, :id => cash.id.to_s, :cash => {}}, valid_session
-        assigns(:cash).should eq(cash)
+      it "assigns the @ca as @@ca" do
+        @a.stub(:find).with(@ca.id.to_s).and_return @ca
+        @ca.stub(:update_attributes).and_return false
+        put :update, {:organism_id=>@o.id.to_s, :id => @ca.id.to_s, :cash => {}}, valid_session
+        assigns(:cash).should eq(@ca)
       end
 
       it "re-renders the 'edit' template" do
-        cash = o.cashes.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
+        @a.stub(:find).with(@ca.id.to_s).and_return @ca
+        @ca.stub(:update_attributes).and_return false
         Cash.any_instance.stub(:save).and_return(false)
-        put :update,{:organism_id=>o.id.to_s,  :id => cash.id.to_s, :cash => {}}, valid_session
+        put :update,{:organism_id=>@o.id.to_s,  :id => @ca.id.to_s, :cash => {}}, valid_session
         response.should render_template("edit")
       end
     end
   end
 
   describe "DELETE destroy" do
-    it "destroys the requested cash" do
-      cash = o.cashes.create! valid_attributes
-      expect {
-        delete :destroy,{:organism_id=>o.id.to_s,  :id => cash.id.to_s}, valid_session
-      }.to change(o.cashes, :count).by(-1)
+    it "destroys the requested @ca" do
+      @a.stub(:find).with(@ca.id.to_s).and_return @ca
+      @ca.should_receive(:destroy)
+      delete :destroy,{:organism_id=>@o.id.to_s,  :id => @ca.id}, valid_session
+      
     end 
 
     it "redirects to the cashes list" do
-      cash = o.cashes.create! valid_attributes
-      delete :destroy,{:organism_id=>o.id.to_s,  :id => cash.id.to_s}, valid_session
-      response.should redirect_to(admin_organism_cashes_url(o))
+      @a.stub(:find).with(@ca.id.to_s).and_return @ca
+      @ca.should_receive(:destroy)
+      delete :destroy,{:organism_id=>@o.id.to_s,  :id => @ca.id}, valid_session
+      response.should redirect_to(admin_organism_cashes_url(@o))
     end
   end 
 

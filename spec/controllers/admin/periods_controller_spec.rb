@@ -3,33 +3,19 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Admin::PeriodsController do
+   include SpecControllerHelper 
 
-  before(:each) do
-      ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-      # l'appel d'establish_connection dans le before_filter find_organism
-      @cu =  mock_model(User) # cu pour current_user
-      @o = mock_model(Organism, title:'le titre', database_name:'assotest')
-      @p = mock_model(Period, start_date:Date.today.beginning_of_year,
-        close_date:Date.today.end_of_year, exercice:'exercice 2012' )
-      Organism.stub(:first).and_return(@o)
-      User.stub(:find_by_id).with(@cu.id).and_return @cu
-      Period.stub(:find_by_id).with(@p.id).and_return @p
-  end
-
-  def valid_session
-     {user:@cu.id, period:@p.id, org_db:'assotest'}
-  end
+   before(:each) do
+     minimal_instances
+   end
 
   describe 'GET new' do
 
     context "check the rendering" do
 
-
      before(:each) do
-       @o.stub_chain(:periods, :any?).and_return true
-       @o.stub_chain(:periods, :last, :close_date).and_return @p.close_date
        @o.stub_chain(:periods, :new).and_return mock_model(Period)
-      end
+     end
 
     it "controller name should be period" do
       get :new , {:organism_id=>@o.id} , valid_session 
@@ -47,6 +33,7 @@ describe Admin::PeriodsController do
       before(:each) do
        @o.stub(:periods).and_return @a = double(Arel)
        @a.stub(:any?).and_return false
+       @a.stub(:empty?).and_return(!(@a.any?))
       end
 
       it "with start_date equal to beginning_of_year" do
@@ -76,7 +63,9 @@ describe Admin::PeriodsController do
       before(:each) do
         @o.stub(:periods).and_return @a = double(Arel)
         @a.stub(:any?).and_return true
+        @a.stub(:empty?).and_return(!(@a.any?))
         @a.stub_chain(:last, :close_date).and_return @p.close_date
+        @a.stub(:find_by_id).and_return(@p)
       end
   
       it 'disable_start_date should be true' do

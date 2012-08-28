@@ -74,10 +74,9 @@ class Room < ActiveRecord::Base
   #
   def look_for(&block)
     cc = ActiveRecord::Base.connection_config
-    r = yield if connect_to_organism
+    yield if connect_to_organism
   ensure
     ActiveRecord::Base.establish_connection(cc)
-    
   end
 
 

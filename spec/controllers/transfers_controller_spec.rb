@@ -18,21 +18,15 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe TransfersController do 
+describe TransfersController do
+  include SpecControllerHelper
 
   before(:each) do
-    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
-    @cu =  mock_model(User) # cu pour current_user
-    @o = mock_model(Organism, title:'le titre', database_name:'assotest')
-    @p = mock_model(Period, start_date:Date.today.beginning_of_year,
-      close_date:Date.today.end_of_year, exercice:'exercice 2012' )
+    minimal_instances
+
     @ba = mock_model(BankAccount, name:'Debix', number:'123Z')
     @bb = mock_model(BankAccount, name:'Debix', number:'784AZ')
-    Organism.stub(:first).and_return(@o)
-    User.stub(:find_by_id).with(@cu.id).and_return @cu
-    Period.stub(:find_by_id).with(@p.id).and_return @p
-    @o.stub_chain(:periods, :any?).and_return true
+    
   end
 
 
@@ -48,12 +42,7 @@ describe TransfersController do
     }
   end
   
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # TransfersController. Be sure to keep this updated too.
-  def valid_session
-    {user:@cu.id, period:@p.id, org_db:'assotest'}
-  end
+ 
 
   describe "GET index" do
     it "assigns all transfers as @transfers" do

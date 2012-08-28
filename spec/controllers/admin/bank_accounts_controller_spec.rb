@@ -18,35 +18,20 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe Admin::BankAccountsController do 
+describe Admin::BankAccountsController do
+  include SpecControllerHelper
 
   let(:ba1) {mock_model(BankAccount)}
   let(:ba2) {mock_model(BankAccount)}
-  let(:o) {mock_model(Organism)}
-  let(:per) {mock_model(Period)}
-  let(:cu) {mock_model(User)}
-
-   # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # TransfersController. Be sure to keep this updated too.
-  def valid_session
-    {user:cu.id, period:per.id, org_db:'assotest'}
-  end
-
+   
 
   def valid_attributes
-    {"name"=>'CrediX', "number"=>'5555', "organism_id"=>o.id.to_s}
+    {"name"=>'CrediX', "number"=>'5555', "organism_id"=>@o.id.to_s}
   end
 
   before(:each) do
-    ActiveRecord::Base.stub!(:use_org_connection).and_return(true)  # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
-    Organism.stub(:first).and_return(o)
-    Period.stub(:find_by_id).with(per.id).and_return per
-    o.stub_chain(:periods, :order, :last).and_return(per)
-    o.stub_chain(:periods, :any?).and_return true
-
-    o.stub(:bank_accounts).and_return @a = double(Arel)
+    minimal_instances
+    @o.stub(:bank_accounts).and_return @a = double(Arel)
 
   end
 
@@ -54,8 +39,8 @@ describe Admin::BankAccountsController do
 
 
     it "assigns all bank_accounts as @bank_accounts" do
-      @a.stub(:all).and_return [1,2]
-      get :index, {:organism_id=>o.id.to_s}, valid_session
+      @a.stub(:all).and_return [1,2] 
+      get :index, {:organism_id=>@o.id.to_s}, valid_session
       assigns(:bank_accounts).should == [1,2]
     end
   end
@@ -63,7 +48,7 @@ describe Admin::BankAccountsController do
   describe "GET show" do
     it "assigns the requested bank_account as @bank_account" do
       BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
-      get :show,{ :organism_id=>o.id.to_s, :id => ba1.id.to_s}, valid_session
+      get :show,{ :organism_id=>@o.id.to_s, :id => ba1.id.to_s}, valid_session
       assigns(:bank_account).should eq(ba1)
     end
   end
@@ -71,7 +56,7 @@ describe Admin::BankAccountsController do
   describe "GET new" do
     it "assigns a new bank_account as @bank_account" do
       @a.should_receive(:new).and_return mock_model(BankAccount).as_new_record
-      get :new,  {:organism_id=>o.id.to_s}, valid_session
+      get :new,  {:organism_id=>@o.id.to_s}, valid_session
       assigns(:bank_account).should be_a_new(BankAccount) 
     end
   end
@@ -79,7 +64,7 @@ describe Admin::BankAccountsController do
   describe "GET edit" do 
     it "assigns the requested bank_account as @bank_account" do
       BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
-      get :edit,{ organism_id:o.id.to_s, :id => ba1.id.to_s}, valid_session
+      get :edit,{ organism_id:@o.id.to_s, :id => ba1.id.to_s}, valid_session
       assigns(:bank_account).should eq(ba1)
     end
   end
@@ -89,13 +74,13 @@ describe Admin::BankAccountsController do
       it "creates a new bank_account" do
           @a.should_receive(:new).with(valid_attributes).and_return(@b = mock_model(BankAccount).as_new_record)
           @b.stub(:save)
-          post :create, {:organism_id=>o.id.to_s, :bank_account => valid_attributes}, valid_session
+          post :create, {:organism_id=>@o.id.to_s, :bank_account => valid_attributes}, valid_session
       end
 
       it "assigns a newly created bank_account as @bank_account" do
         @a.stub(:new).and_return(ba1)
         ba1.stub(:save).and_return(true)
-        post :create, {:organism_id=>o.id.to_s, :bank_account => valid_attributes}, valid_session
+        post :create, {:organism_id=>@o.id.to_s, :bank_account => valid_attributes}, valid_session
         assigns(:bank_account).should == ba1
         
       end
@@ -103,8 +88,8 @@ describe Admin::BankAccountsController do
       it "redirects to the created bank_account" do
         @a.stub(:new).and_return(ba1)
         ba1.stub(:save).and_return(true)
-        post :create, {:organism_id=>o.id.to_s,  :bank_account => valid_attributes}, valid_session
-        response.should redirect_to(admin_organism_bank_accounts_url(o))
+        post :create, {:organism_id=>@o.id.to_s,  :bank_account => valid_attributes}, valid_session
+        response.should redirect_to(admin_organism_bank_accounts_url(@o))
       end 
     end
 
@@ -113,7 +98,7 @@ describe Admin::BankAccountsController do
       it "re-renders the 'new' template" do
         @a.stub(:new).and_return(ba1)
         ba1.stub(:save).and_return(false)
-        post :create,  {:organism_id=>o.id.to_s,  :bank_account => {}}, valid_session
+        post :create,  {:organism_id=>@o.id.to_s,  :bank_account => {}}, valid_session
         response.should render_template("new")
       end
     end
@@ -124,21 +109,21 @@ describe Admin::BankAccountsController do
       it "updates the requested bank_account" do
         BankAccount.should_receive(:find).with(ba1.id.to_s).and_return(ba1)
         ba1.should_receive(:update_attributes).with({'these' => 'params'}).and_return(true)
-        put :update,{:organism_id=>o.id.to_s,  :id => ba1.id, :bank_account => {'these' => 'params'}}, valid_session
+        put :update,{:organism_id=>@o.id.to_s,  :id => ba1.id, :bank_account => {'these' => 'params'}}, valid_session
       end
 
       it "assigns the requested bank_account as @bank_account" do
         BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
         ba1.stub(:update_attributes).and_return(true)
-        put :update, {:organism_id=>o.id.to_s,  :id => ba1.id, :bank_account => valid_attributes}, valid_session
+        put :update, {:organism_id=>@o.id.to_s,  :id => ba1.id, :bank_account => valid_attributes}, valid_session
         assigns(:bank_account).should eq(ba1)
       end
 
       it "redirects to the bank_account" do
         BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
         ba1.stub(:update_attributes).and_return(true)
-        put :update, {:organism_id=>o.id.to_s, :id => ba1.id, :bank_account => valid_attributes}, valid_session
-        response.should redirect_to(admin_organism_bank_accounts_url(o))
+        put :update, {:organism_id=>@o.id.to_s, :id => ba1.id, :bank_account => valid_attributes}, valid_session
+        response.should redirect_to(admin_organism_bank_accounts_url(@o))
       end
     end
 
@@ -146,14 +131,14 @@ describe Admin::BankAccountsController do
       it "assigns the bank_account as @bank_account" do
         BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
         ba1.stub(:update_attributes).and_return(false)
-        put :update, {:organism_id=>o.id.to_s, :id => ba1.id.to_s, :bank_account => {}}, valid_session
+        put :update, {:organism_id=>@o.id.to_s, :id => ba1.id.to_s, :bank_account => {}}, valid_session
         assigns(:bank_account).should eq(ba1)
       end
 
       it "re-renders the 'edit' template" do
          BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
         ba1.stub(:update_attributes).and_return(false)
-        put :update, {:organism_id=>o.id.to_s,  :id => ba1.id.to_s, :bank_account => {}}, valid_session
+        put :update, {:organism_id=>@o.id.to_s,  :id => ba1.id.to_s, :bank_account => {}}, valid_session
         response.should render_template("edit")
       end
     end
@@ -162,14 +147,14 @@ describe Admin::BankAccountsController do
   describe "DELETE destroy" do
     it "destroys the requested bank_account" do
        BankAccount.should_receive(:find).with(ba1.id.to_s).and_return(ba1)
-        delete :destroy, {:organism_id=>o.id.to_s,  :id => ba1.id.to_s}, valid_session
+        delete :destroy, {:organism_id=>@o.id.to_s,  :id => ba1.id.to_s}, valid_session
      
     end 
 
     it "redirects to the bank_accounts list" do
       BankAccount.should_receive(:find).with(ba1.id.to_s).and_return(ba1)
-      delete :destroy, {:organism_id=>o.id.to_s,  :id => ba1.id.to_s}, valid_session
-      response.should redirect_to(admin_organism_bank_accounts_url(o))
+      delete :destroy, {:organism_id=>@o.id.to_s,  :id => ba1.id.to_s}, valid_session
+      response.should redirect_to(admin_organism_bank_accounts_url(@o))
     end
   end
 

@@ -19,42 +19,32 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe NaturesController do
-  def session_attributes
-    {user:cu.id, period:p.id, org_db:'test'}
-  end
-  
+  include SpecControllerHelper
+    
   describe "GET stats" do
 
-    let(:o) {mock_model(Organism)}
-    let(:p) {mock_model(Period, organism_id:o.id)}
-    let(:nr1) {mock_model(Nature, period_id:p.id, income_outcome:true)}
-    let(:nr2) {mock_model(Nature, period_id:p.id, income_outcome:true)}
-    let(:nd1) {mock_model(Nature, period_id:p.id, income_outcome:false)}
-    let(:nd2) {mock_model(Nature, period_id:p.id, income_outcome:false)}
-    let(:nd3) {mock_model(Nature, period_id:p.id, income_outcome:false)}
-    let(:cu) {mock_model(User)}
+    
+    let(:nr1) {mock_model(Nature, period_id:@p.id, income_outcome:true)}
+    let(:nr2) {mock_model(Nature, period_id:@p.id, income_outcome:true)}
+    let(:nd1) {mock_model(Nature, period_id:@p.id, income_outcome:false)}
+    let(:nd2) {mock_model(Nature, period_id:@p.id, income_outcome:false)}
+    let(:nd3) {mock_model(Nature, period_id:@p.id, income_outcome:false)}
+    
 
    
 
       before(:each) do
-
-        ActiveRecord::Base.stub(:use_org_connection).and_return(true)  # pour éviter
-    # l'appel d'establish_connection dans le before_filter find_organism
-        Organism.stub(:first).and_return(o)
-        Period.stub(:find_by_id).with(p.id).and_return p
-
-        o.stub_chain(:periods, :order).and_return([p])
-        o.stub_chain(:periods, :any?).and_return(true)
-        p.stub_chain(:natures, :recettes).and_return [nr1, nr2]
-        p.stub_chain(:natures, :depenses).and_return [nd1, nd2, nd3]
+        minimal_instances
+        @p.stub_chain(:natures, :recettes).and_return [nr1, nr2]
+        @p.stub_chain(:natures, :depenses).and_return [nd1, nd2, nd3]
   
       end
 
 
       it 'assigns @organism and @period' do 
-        get :stats , {:organism_id=>o.id.to_s, :period_id=>p.id.to_s}, session_attributes
-        assigns(:organism).should == o
-        assigns(:period).should == p
+        get :stats , {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
+        assigns(:organism).should == @o
+        assigns(:period).should == @p
         response.should be_success
       
       
@@ -65,22 +55,22 @@ describe NaturesController do
       end
 
       it 'assigns @filter with 0 if no params[:filter]' do
-        get :stats, {:organism_id=>o.id.to_s, :period_id=>p.id.to_s}, session_attributes
+        get :stats, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
         assigns(:filter).should == 0
       end
 
       it 'assigns sn (StatsNatures)' do
-        Stats::StatsNatures.should_receive(:new).with(p, 0).and_return('sn')
-        get :stats,{ :organism_id=>o.id.to_s, :period_id=>p.id.to_s}, session_attributes
+        Stats::StatsNatures.should_receive(:new).with(@p, 0).and_return('sn')
+        get :stats,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
         assigns(:sn).should == 'sn'
       end
 
       it 'with filter' do
         filt = 1
         Destination.should_receive(:find).with(filt).and_return(double(Object, :name=>'mock'))
-        Stats::StatsNatures.should_receive(:new).with(p, 1).and_return('sn')
+        Stats::StatsNatures.should_receive(:new).with(@p, 1).and_return('sn')
         
-        get :stats, {:organism_id=>o.id.to_s, :period_id=>p.id.to_s, :destination=>filt.to_s},  session_attributes
+        get :stats, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :destination=>filt.to_s},  session_attributes
         assigns(:filter).should == filt
       end 
     
