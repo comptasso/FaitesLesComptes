@@ -20,8 +20,11 @@ A vérifier.
 L'arborescence est donc la suivante :
 flc => répertoire principal
   Rails.root : pour l'application elle même
-  db => pour les bases de données
-    organisms => pour chacun des organismes
+  db =>  pour les bases de données
+    development
+      organisms => pour chacun des organismes
+    production
+      organisms => pour chacun des organismes
   manuels => pour les guides
   tools => pour un accès console facile ?
 
