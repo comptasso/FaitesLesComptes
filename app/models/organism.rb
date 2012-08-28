@@ -124,7 +124,7 @@ class Organism < ActiveRecord::Base
   # Voir la méthode #room pour un exemple
   def look_for(&block)
     cc = ActiveRecord::Base.connection_config
-    ActiveRecord::Base.use_main_connection
+    ActiveRecord::Base.establish_connection Rails.env
     yield
   ensure
     ActiveRecord::Base.establish_connection(cc)

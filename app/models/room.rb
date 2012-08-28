@@ -22,13 +22,13 @@ class Room < ActiveRecord::Base
   end
 
   # renvoie par exemple asso.sqlite3
-  def complete_db_name
+  def db_filename
     [database_name, Rails.application.config.database_configuration[Rails.env]['adapter']].join('.')
   end
 
   # renvoie par exemple 'app/db/test/organisms/asso.sqlite3'
   def absolute_db_name
-    File.join(Rails.root, 'db', Rails.env, PATH_TO_ORGANISMS, complete_db_name) 
+    File.join(Rails.root, 'db', Rails.env, PATH_TO_ORGANISMS, db_filename)
   end
 
   # se connecte à l'organisme correspondant à la base de données

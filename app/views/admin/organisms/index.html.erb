@@ -31,7 +31,7 @@
     <tr class="<%= (ro[:organism].database_name ==  @organism.database_name) ? 'current' : 'other' if @organism %>">
     <td><%= ro[:organism].title %></td>
     <td><%= ro[:organism].description %></td>
-    <td><%= ro[:room].complete_db_name %></td>
+    <td><%= ro[:room].db_filename %></td>
     <td><%=l ro[:archive].created_at  if ro[:archive] %></td>
     <td><%= icon_to 'sauvegarde.png', new_archive_admin_room_path(ro[:room]),
               :title=>"Fait une sauvegarde de toutes les données de l'organisme" %>

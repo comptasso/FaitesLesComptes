@@ -5,8 +5,6 @@
 module OrganismFixture
 
   def create_user
-    ActiveRecord::Base.use_main_connection
-    
     if User.count > 0
     Rails.logger.debug "Effacement de #{User.count} utilisateurs avant de recréer quidam"
       User.find(:all).each {|u| u.destroy}

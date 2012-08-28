@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
 
   private
 
+  
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
@@ -89,12 +90,10 @@ class ApplicationController < ActionController::Base
 
   # se connecte à la base principale
   def use_main_connection
-    # ces méthodes ont été ajoutées par jcl et sont définies dans jcl_monkey_patch.rb
-    logger.debug 'Appel de use_main_connection dans application_controller'
-    ActiveRecord::Base.use_main_connection
-    logger.debug "Fin de use_main_connection : Connection_config #{ActiveRecord::Base.connection_config}"
+    Rails.logger.info "début de use_main_connection : connecté à à #{ActiveRecord::Base.connection_config}"
+    ActiveRecord::Base.establish_connection Rails.env.to_sym
+    Rails.logger.info "appel de use_main connection : connexion à #{ActiveRecord::Base.connection_config}"
   end
-
   
   # Méthode à appeler dans les controller rooms pour
   # mettre à jour la session lorsqu'il y a un changement d'organisme
@@ -107,7 +106,7 @@ class ApplicationController < ActionController::Base
       logger.info "Passage à l'organisation #{groom.database_name}"
       session[:period] = nil
       session[:org_db]  = groom.database_name
-      use_org_connection(groom.database_name)
+      groom.connect_to_organism
       @organism  = Organism.first
       unless @organism.periods.empty?
         @period = @organism.periods.last

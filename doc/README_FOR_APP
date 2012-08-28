@@ -1,5 +1,32 @@
 Logiciel de comptabilité simplifiée.
 
+Organisation des répertoires :
+Par rapport à une application Rails normale, le logiciel gère les bases de données par appartement
+de façon à pouvoir exporter ou importer facilement une comptabilité indépendamment de celle des autres.
+
+Cela suppose de se connecter à plusieurs bases de données et de pouvoir en créer dynamiquement.
+
+Les modèles User et Room sont dans la base principale.
+Les modèles Organism et toutes les dépendances sont dans des fichiers sqlite3 distincts.
+Actuellement, cela fonctionne uniquement avec sqlite3.
+
+Une deuxième modification de fond est l'emplacement des bases de données qui sont dans un répertoire
+inhabituel. L'objectif est de pouvoir faire un logiciel complet sur une clé USB y compris sous windows
+avec le gem OCRA. Du coup, les bases doivent être en dehors de Rails.root sinon on perd les modifs
+faites à chaque lancement du logiciel.
+
+A vérifier.
+
+L'arborescence est donc la suivante :
+flc => répertoire principal
+  Rails.root : pour l'application elle même
+  db => pour les bases de données
+    organisms => pour chacun des organismes
+  manuels => pour les guides
+  tools => pour un accès console facile ?
+
+
+
 Ce programme est destiné à tenir une comptabilité de trésorerie de façon simple pour les non
 professionnels tout en ayant les qualités et contraintes d'un logiciel professionnel
 
@@ -46,7 +73,7 @@ de banque à proprement parler. En fait il est construit à partir des informati
 dans la table ligne. Toute ligne rattachée au bank_account_id forme le livre de banque
 - Cash : les caisses. De même toutes lignes rattachée à un cash_id forme le livre de caisse.
 
-Pour faire le pointage des comptes (absolument indispensable dans une comtpabilité de trésorerie),
+Pour faire le pointage des comptes,
 nous disposons de
 - BankExtract qui enregistre les relevés de comptes, chacun étant constitué de
 - BankExtractLine qui corresponde à une ligne du relevé. Il y a nottament un champ line_id
