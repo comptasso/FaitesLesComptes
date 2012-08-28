@@ -14,20 +14,7 @@ module ActiveRecord
       Rails.logger.info "appel de use_main connection : connexion à #{connection_config}"
     end
 
-    def self.use_org_connection(db_name)
-      f_name  = "db/#{Rails.env}/organisms/#{db_name}.sqlite3"
-      if File.exist? f_name
-      Rails.logger.info "Connection à la base #{db_name}"
-      establish_connection(
-        :adapter => "sqlite3",
-        :database  => f_name)
-      return true
-      else
-        Rails.logger.warn "Tentative de connection à la base #{db_name}, fichier non trouvé"
-        return false
-      end
-    end
-
+    
 
   end
 end

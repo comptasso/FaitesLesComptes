@@ -67,10 +67,6 @@ describe Organism do
 
  context 'when there is one period' , :wip=>true do 
 
-#    before(:all) do
-#      ActiveRecord::Base.use_org_connection('assotest1')
-#    end
-
     before(:each) do
       
       @organism= Organism.create!(title: 'test asso', database_name:'assotest1')

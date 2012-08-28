@@ -95,17 +95,7 @@ class ApplicationController < ActionController::Base
     logger.debug "Fin de use_main_connection : Connection_config #{ActiveRecord::Base.connection_config}"
   end
 
-  # se connect à la base spécifiée par db_name.
-  # Ex db_name = 'perso', se connect à la base correspondant au fichier
-  # db/organisms/perso.sqlite3
-  def use_org_connection(db_name)
-    logger.debug "Appel de use_org_connection dans application_controller avec #{db_name}"
-    # ces méthodes ont été ajoutées par jcl et sont définies dans jcl_monkey_patch.rb
-    ActiveRecord::Base.use_org_connection(db_name)
-    logger.debug "Fin de use_org_connection Connection_config #{ActiveRecord::Base.connection_config}"
-  end
-
-
+  
   # Méthode à appeler dans les controller rooms pour
   # mettre à jour la session lorsqu'il y a un changement d'organisme
   # Récupère également les variables d'instance @organism et @period si cela a du sens.
