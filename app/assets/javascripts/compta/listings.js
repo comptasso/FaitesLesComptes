@@ -18,8 +18,8 @@ function drawDataTable() {
                 "asSortable": ['asc', 'desc'],
                 "aTargets": ['date-euro'] // les colonnes date au format français ont la classe date-euro
             }],
-        "iDisplayLength": 15,
-        "aLengthMenu": [[10, 15, 25, 50, -1], [10, 15, 25, 50, "Tous"]],
+        "iDisplayLength": 10,
+        "aLengthMenu": [[10, 10, 25, 50, -1], [10, 10, 25, 50, "Tous"]],
         "bStateSave": true,
         "fnStateSave": function (oSettings, oData) {
             localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));

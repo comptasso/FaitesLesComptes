@@ -21,8 +21,8 @@ jQuery(function () {
                     "bSortable": false
                 }
             ],
-            "iDisplayLength": 15,
-            "aLengthMenu": [[15, 25, 50, -1], [15, 25, 50, "Tous"]]
+            "iDisplayLength": 10,
+            "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tous"]]
         }
     );
 });

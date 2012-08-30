@@ -24,8 +24,8 @@ jQuery(function () {
                             "bSortable": false
                         }
                     ],
-                    "iDisplayLength": 15, // affichage par défaut
-                    "aLengthMenu": [[15, 25, 50, -1], [15, 25, 50, "Tous"]], // le menu affichage
+                    "iDisplayLength": 10, // affichage par défaut
+                    "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tous"]], // le menu affichage
                     "bStateSave": true, // pour pouvoir sauvegarder l'état de la table
                     "fnStateSave": function (oSettings, oData) { //localStorage avec un chemin pour que les
                       // paramètres spécifiques  aux cash_lines soient mémorisés.

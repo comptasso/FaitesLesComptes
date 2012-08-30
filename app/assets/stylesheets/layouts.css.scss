@@ -16,9 +16,11 @@ html, body {
 
   .container-fluid {
     min-height: 100%;
+    
     }
 
 #bottom_page {
+  clear: both;
   color: #1b431b;
   height: 30px;
   margin-top: -30px;

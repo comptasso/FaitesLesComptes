@@ -3636,7 +3636,7 @@ input[type="submit"].btn.btn-mini {
 }
 .pagination {
   height: 40px;
-  margin: 20px 0;
+/*  margin: 20px 0;  modifié par jcl */
 }
 .pagination ul {
   display: inline-block;
