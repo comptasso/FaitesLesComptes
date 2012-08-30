@@ -4,4 +4,7 @@ class BottomController < ApplicationController
 
   def apropos
   end
+
+  def contact
+  end
 end

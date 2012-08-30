@@ -2,6 +2,7 @@ Faitesvoscomptes::Application.routes.draw do
 
  
   get "bottom/credit"
+  get "bottom/contact"
 
   get "bottom/apropos"
 

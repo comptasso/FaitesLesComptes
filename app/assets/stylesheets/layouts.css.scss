@@ -1,39 +1,47 @@
 /*
-    Document   : layouts
-    Created on : 30 août 2012, 09:25:47
-    Author     : jcl
-    Description:
-        Purpose of the stylesheet follows.
+Document   : layouts
+Created on : 30 août 2012, 09:25:47
+Author     : jcl
+Description:
+Purpose of the stylesheet follows.
 */
 
 /*
-   TODO customize this sample style
-   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+TODO customize this sample style
+Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
 */
+html, body {
+  height: 100%;
+  }
+
+  .container-fluid {
+    min-height: 100%;
+    }
 
 #bottom_page {
-  vertical-align: bottom;
-  color: #184b18;
-  float: right;
-  position: absolute;
-  bottom: 0%;
-  left: 35%;
-  text-align: left;
+  color: #1b431b;
+  height: 30px;
+  margin-top: -30px;
+  width: 100%;
+  text-align: center;
+  
+  
 
-  #infos {
-    position: relative;
-    left: 50%;
+    ul {
+      list-style: none;
+      display: inline;
+    
+    }
 
-  ul {
-    list-style: none;
-    display: inline;
-     }
+    li {  display: inline;
+      list-style: none;
+      font-size: 80%;
 
-  li {  display: inline;
-        list-style: none;
-        font-size: 80%;
-        
-  }
-  }
+      a:visited {  color: #1b431b;  }
+      a:hover {color: #fff;}
+      
 
- }
+    }
+  
+
+}
