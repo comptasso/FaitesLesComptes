@@ -1,6 +1,10 @@
 Faitesvoscomptes::Application.routes.draw do
 
  
+  get "bottom/credit"
+
+  get "bottom/apropos"
+
   get "modallines/create"
 
   resource :session

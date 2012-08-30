@@ -1,0 +1,39 @@
+/*
+    Document   : layouts
+    Created on : 30 août 2012, 09:25:47
+    Author     : jcl
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/*
+   TODO customize this sample style
+   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+*/
+
+#bottom_page {
+  vertical-align: bottom;
+  color: #184b18;
+  float: right;
+  position: absolute;
+  bottom: 0%;
+  left: 35%;
+  text-align: left;
+
+  #infos {
+    position: relative;
+    left: 50%;
+
+  ul {
+    list-style: none;
+    display: inline;
+     }
+
+  li {  display: inline;
+        list-style: none;
+        font-size: 80%;
+        
+  }
+  }
+
+ }

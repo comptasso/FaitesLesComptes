@@ -1,6 +1,8 @@
-#bottom_page
-  %ul
-    %li= Version <%= VERSION %>
-    %li A propos
-    %li Crédit
+%div#bottom_page
+  %div#infos
+    %ul
+      %li= "Version : #{VERSION} - "
+      %li A propos -&nbsp;
+      %li= link_to 'Crédits', bottom_credit_path
+          
     
