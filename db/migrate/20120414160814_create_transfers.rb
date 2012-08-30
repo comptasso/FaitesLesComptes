@@ -6,7 +6,7 @@ class CreateTransfers < ActiveRecord::Migration
       t.references :debitable, :polymorphic=>true
       t.references :creditable, :polymorphic=>true
       t.integer :organism_id
-      t.decimal :amount, scale: 10, precision: 2
+      t.decimal :amount, precision: 10, scale: 2
 
       t.timestamps
     end

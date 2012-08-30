@@ -5,10 +5,10 @@ class CreateBankExtracts < ActiveRecord::Migration
       t.string :reference
       t.date :begin_date
       t.date :end_date
-      t.decimal :begin_sold,scale: 10, precision: 2,  default: 0
+      t.decimal :begin_sold, precision: 10, scale: 2,  default: 0
       
-      t.decimal :total_debit,scale: 10, :precision=>2, default: 0
-      t.decimal :total_credit, scale: 10,:precision=>2, default: 0
+      t.decimal :total_debit,precision: 10, scale:2, default: 0
+      t.decimal :total_credit, precision: 10, scale:2, default: 0
       t.boolean :locked, :default=> false
       t.timestamps
     end
