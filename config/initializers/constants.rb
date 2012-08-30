@@ -23,3 +23,5 @@ BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
 # TODO à faire évoluer ultérieurement pour être au choix de l'utilisateur
 # Attention également à modifier le fichier jcl_monkey_patch
 PATH_TO_ORGANISMS = 'organisms'
+
+VERSION = 0.1
