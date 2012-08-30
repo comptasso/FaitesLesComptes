@@ -1,42 +1,41 @@
 == Bienvenue sur FaitesLesComptes
 
-FaitesLesComptes est un logicile destiné à tenir une comptabilité simplifiée
+FaitesLesComptes est un logiciel destiné à tenir une comptabilité simplifiée
 (au sens des règles comptables et fiscales) de la comptabilité française.
 
 Cela peut intéresser des petites associations ou des petits comités d'entreprise.
 
-Sa simplicité permettant à chacun d'utiliser ce logiciel
-sans apprentissage particulier. Il part de ce que chacun peut remplir un livre
+Sa simplicité permettant à chacun d'utiliser ce logiciel sans apprentissage particulier. Il part de ce que chacun peut remplir un livre
 de recettes et un livre de dépenses.
 
 == Installation
 
-Il s'agit d'un programme basé sur Ruby on rails. Il faut donc installer
-Ruby et Rails pour pouvoir faire fonctionner ce programme, soit sur un ordinateur
+Il s'agit d'un programme basé sur Ruby on rails. Il faut donc installer Ruby et Rails pour pouvoir faire fonctionner ce programme, soit sur un ordinateur
 individuel, soit sur un serveur.
 
-La base de données utilisée est sqlite3 et sqlite3 doit donc être également installé.
+La base de données utilisée est sqlite3 qui doit donc être également installé.
 
 == Guide de démarrage rapide
 
-Après installation et lancement, vous devrez créer un utilisateur, puis un organisme
+Après installation et lancement, le logiciel vous proposera de créer un utilisateur, puis un organisme
 puis un exercice pour votre comptabilité. Ces opérations créeront également un livre
 de recettes et de dépenses.
 
 Sont également à renter dans le menu Administration, les paramètres correspondant
 à votre banque (ou vos banques si vous en avez plusieurs)et à votre caisse pour les
-espèces si vous en avez une.
+espèces si vous en avez une (ou plusieurs).
 
 Il faut enfin rentrer des
 
-1) Natures de recettes et de dépenses (selon la nomenclature que vous désirez suivre) : par exemple
-cotisations des adhérents, ventes de billets, pour les recettes, location de salle,
+1) Natures de recettes et de dépenses (selon la nomenclature que vous désirez suivre) :
+par exemple cotisations des adhérents, ventes de billets, pour les recettes, location de salle,
 téléphone, petit matériel pour les dépenses.
 
 2) Destinations : les destinations vous permettent de connaître vos recettes et dépenses
-selon leur usage : par exemple Fonctionnement général (pour les dépenses non affectées),
-fête annuelle (pour les recettes et dépenses correspondant à cet évènement), ou encore
-Cours (si vous avez une activité de formation).
+selon leur usage, par exemple :
+-  Fonctionnement général (pour les dépenses non affectées),
+- fête annuelle (pour les recettes et dépenses correspondant à cet évènement),
+- ou encore Cours (si vous avez une activité de formation).
 
 Il est préférable de réfléchir avec soin sur les natures et destinations envisagées.
 
@@ -53,8 +52,8 @@ Le menu Analyse permet d'afficher les recettes et dépenses par mois et de les
 filtrer par Destinations.
 
 3) Compta : la partie comptabilité est accessible après création d'un plan de comptes
-(un plan comptable par défaut vous est proposé) et mises en place des correspondances entre les Natures
-et les comptes (Ces deux actions sont à faire dans la partie Administration).
+(un plan comptable par défaut vous est proposé) et mises en place des correspondances entre
+les Natures et les comptes (Ces deux actions sont à faire dans la partie Administration).
 
 La partie Compta, vous permet alors d'éditer les comptes, d'imprimer une balance, un grand livre,...
 
@@ -69,16 +68,17 @@ lorsque les lignes d'écritures ne sont pas toutes validées
 
 2) Les opérations de clôture d'un exerice
 
-== Autres évolutions à terme
+== Modules complémentaires envisagés à terme (dans le désordre)
 
 1) Gestion de la TVA (actuellement non gérée)
 2) Gestion de mots de passe utilisateurs et de droit d'accès
 3) Gestion de préférences utilisateurs
+4) Masques de saisie
 
 == Licence
 
 Ce logiciel est open-source et peut être utilitsé, distribué et modifié librement,
 y compris à des fins commerciales.
 
-Il est fourni tel quel et aucune garantie n'est donnée quand à son utilisation et à son
+Il est fourni tel quel et aucune garantie n'est donnée quand à son utilisation ni à son
 fonctionnement.
