@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
-  #  c.filter = {:wip => true }
+  # c.filter = {:wip => true }
   #  c.exclusion_filter = {:js=> true }
 end
 
@@ -70,6 +70,17 @@ describe CashControl do
         @c.cash_controls.mois(@p, 2).each do |ccc|
           ccc.date.should <= fin
           ccc.date.should >= debut
+        end
+      end
+
+      it 'cash_controls order date' , wip:true do
+        @c.cash_controls.create(date:Date.today, amount:0)
+        @c.cash_controls.create(date:(Date.today - 1), amount:0)
+        @c.cash_controls.create(date:(Date.today + 1), amount:0)
+        my = MonthYear.from_date(Date.today)
+        ccs = @c.cash_controls.monthyear(my).all
+        ccs.each_with_index do |cc, i|
+          cc.date.should <= ccs[i+1].date if ccs[i+1]
         end
       end
 

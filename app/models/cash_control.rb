@@ -30,7 +30,7 @@ class CashControl < ActiveRecord::Base
       p.start_date.months_since(mois.to_i).beginning_of_month, p.start_date.months_since(mois.to_i).end_of_month).order('date ASC')}
 
   scope :monthyear, lambda {|my| where('date >= ? AND date <= ?',
-     my.beginning_of_month, my.end_of_month  )}
+     my.beginning_of_month, my.end_of_month).order('date ASC')}
 
 
   before_update :lock_lines, :if => lambda { self.changed_attributes.include?("locked") && self.locked == true }

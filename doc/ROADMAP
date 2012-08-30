@@ -796,13 +796,20 @@ NON    ? Faire un controller grapph qui servirait de relais vers lines ?? Non, �
 OK - Le logout n'efface pas tous les éléments de session (base et period_id)
 
 -------------------------Corrections--------------------------------------
+les contrôles de caisse ne sont pas affichés par ordre de date
 stats du controller natures demande un org_id et un period_id qui ne sont plus vraiment utiles
 Revoir les erreurs dans les migrations (décimal et suppression d'un champ qui n'existe pas)
 Par du javascript, dans la vue création archive, après clic, effacer le form et remplacer le bouton par un bouton retour
+
 -----------------Dans restauration, modifier le formulaire pour demander l'écrasement ou non
 Ajouter dans la vue la liste des database utilisée par ce current user
 Avec jQuery afficher une fenêtre de confirmation si le nom est déjà pris
+
 --------------------------------- TODO ---------------------------------------------------------
+Faire le readme
+Faire un menu bas
+
+Ajouter les environnements winusb et wininstall (cf. fichier Word sur mes essais pour les modifs à faire)
 Il faudra faire les autres tâches rake db:migrate db:rollback,... correspondant au namespace landlord pour que
   les migrations fonctionnent correctement pour les bases déja installées.
 

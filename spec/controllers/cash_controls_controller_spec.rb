@@ -33,7 +33,7 @@ describe CashControlsController do
 
     before(:each) do
       Cash.should_receive(:find).with(ca.id.to_s).and_return(ca)
-       ca.stub_chain(:cash_controls, :monthyear).and_return(ccs)
+       ca.stub_chain(:cash_controls, :monthyear).and_return([ccs.last, ccs.first])
     end
 
     it "should find the right cash" do
@@ -49,10 +49,15 @@ describe CashControlsController do
 
     it 'should assign cash_controls' do
       get :index, {:cash_id=>ca.id, :mois=>@m, :an=>@y}, valid_session
-      assigns[:cash_controls].should == ccs
+      assigns[:cash_controls].should == [ccs.last, ccs.first]
+    end
+
+    it 'should order cash_controls by date' do
+      get :index, {:cash_id=>ca.id, :mois=>@m, :an=>@y}, valid_session
+      assigns[:cash_controls].first.date.should <= assigns[:cash_controls].last.date
     end
     
-    it 'should assign cash_controls' do
+    it 'should render index' do
       get :index,{ :cash_id=>ca.id, :mois=>@m, :an=>@y}, valid_session
       response.should render_template 'index'
     end
