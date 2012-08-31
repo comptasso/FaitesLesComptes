@@ -7,28 +7,24 @@
     <%= csrf_meta_tags %>
   </head>
   <body class='<%=  "compta_#{controller.controller_name}" %> compta'>
-      <div class="container-fluid">
+    <div class="container-fluid">
 
+      <%= render 'layouts/navbar' %>
 
-  <%= render 'layouts/navbar' %>
+      <div class="row-fluid">
 
- 
+        <div>
+          <%= render 'compta/menus/menu' %>
+        </div>
 
- <div class="row-fluid">
+        <%= render 'layouts/flash_partial' %>
 
-  <div>
-    <%= render 'compta/menus/menu' %>
-  </div>
-
- <%= render 'layouts/flash_partial' %>
-
-
-  
-
-  <%= yield %>
-  </div>
+        <%= yield %>
+      </div>
 
     </div>
-    <%= render 'layouts/bottom_page' %>
-</body>
+
+  <%= render 'layouts/bottom_page' %>
+
+  </body>
 </html>

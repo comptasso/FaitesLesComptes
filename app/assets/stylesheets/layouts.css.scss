@@ -12,24 +12,35 @@ Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
 */
 html, body {
   height: 100%;
+  
   }
 
   .container-fluid {
     min-height: 100%;
-    
+    padding-bottom: 4px;
     }
 
 #bottom_page {
+ 
+  
   clear: both;
   color: #1b431b;
-  height: 30px;
-  margin-top: -30px;
+  height: 25px;
+  margin-top: -29px;
   width: 100%;
   text-align: center;
   
-  
+    .small_spacer {
+      height: 4px;
+      border-bottom: 1px solid #bbdebb;
+      }
+
+    .total_width {
+          width: 100%;
+      background-color: #CBEECB;
 
     ul {
+      margin: 0;
       list-style: none;
       display: inline;
     
@@ -44,6 +55,6 @@ html, body {
       
 
     }
-  
+  }
 
 }
