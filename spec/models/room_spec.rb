@@ -7,7 +7,7 @@ describe Room do
   end
 
   it 'has a user' do 
-    Room.new.should_not be_valid
+    Room.new.should_not be_valid 
   end
 
   it 'has a database_name' do
@@ -41,7 +41,7 @@ describe Room do
 
     it 'absolute db_name' do
       Room.stub(:path_to_db).and_return('mon_chemin')
-      @r.absolute_db_name.should == File.join('mon_chemin', 'organisms', @r.db_filename)
+      @r.absolute_db_name.should == File.join('mon_chemin', @r.db_filename)
     end
 
   end
