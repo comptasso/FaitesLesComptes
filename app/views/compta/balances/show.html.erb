@@ -23,7 +23,7 @@
 
 <% end %>
 <div class="champ">
-  <h3>Balance <%= @balance.brouillard? ? 'provisoire' : '' %> </h3>
+  <h3>Balance <%= @balance.provisoire? ? 'provisoire' : '' %> </h3>
   <%= render partial: 'modal_form' %>
 </div>
 <div id="balance_table">
