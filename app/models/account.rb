@@ -77,7 +77,7 @@ class Account < ActiveRecord::Base
   end
   
   def all_lines_locked?(from = self.period.start_date, to = self.period.close_date)
-    self.lines.where('line_date >= ? AND line_date <= ?', from, to ).any? {|l| !l.locked? } ? true : false
+    self.lines.where('line_date >= ? AND line_date <= ? AND locked == ?', from, to, false ).any? ? false : true
   end
 
   # affiche le plan comptable

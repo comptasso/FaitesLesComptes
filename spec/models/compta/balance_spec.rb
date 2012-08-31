@@ -2,6 +2,10 @@
 
 require 'spec_helper'
 
+RSpec.configure do |c|
+  # c.filter = {:wip=>true}
+end
+
 describe Compta::Balance do
   before(:each) do
     @o=Organism.create!(title:'test balance sans table', database_name:'assotest1')
@@ -112,6 +116,26 @@ describe Compta::Balance do
 
     end
 
+    describe 'provisoire?' do
+
+      before(:each) do
+        @b=Compta::Balance.new(valid_arguments)
+        @b.stub(:accounts).and_return([@a1, @a2])
+      end
+      it 'should call all_lines_locked? on each account' do
+        @a1.should_receive(:all_lines_locked?).with(@b.from_date, @b.to_date).and_return(false)
+        @a2.should_receive(:all_lines_locked?).with(@b.from_date, @b.to_date).and_return(true)
+        @b.should be_provisoire
+      end
+
+      it 'should return false if all accounts locked' do
+        @a1.stub(:all_lines_locked?).and_return true
+        @a2.stub(:all_lines_locked?).and_return true
+        @b.should_not be_provisoire
+      end
+
+    end
+
     describe 'balance lines' do
 
       it 'should be an array' do
@@ -120,7 +144,7 @@ describe Compta::Balance do
         @b.balance_lines.first.should ==
        { :account_id=>@a1.id,
          :empty=>true,
-         :provisoire=>true,
+         :provisoire=>false, # car il n'y a pas de ligne
          :number=>"60",
          :title=>"compte 1",
          :cumul_debit_before=>0,

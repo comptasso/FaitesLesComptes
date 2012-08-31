@@ -27,10 +27,8 @@ class Compta::Balance < ActiveRecord::Base
 
   include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
 
-  pick_date_for :from_date, :to_date # donne les méthodes begin_date_picker et end_date_picker
+  pick_date_for :from_date, :to_date # donne les méthodes from_date_picker et to_date_picker
   # utilisées par le input as:date_picker
-
-  
 
   belongs_to :period
   # des has_one seraient plus intuitifs mais cela nécessiterait que le champ _id
@@ -44,10 +42,17 @@ class Compta::Balance < ActiveRecord::Base
   validates :from_date, :to_date, :date_within_period=>true
   validates :from_date, :to_date, :from_account_id, :to_account_id, :period_id, :presence=>true
 
+  # indique si le listing doit être considéré comme un brouillard
+  # ou une édition définitive.
+  # Cela se fait en s'appuyant sur account#all_lines_locked?
+  def provisoire?
+    accounts.collect {|account| account.all_lines_locked?(from_date, to_date)}.include? false
+  end
+
   #produit un document pdf en s'appuyant sur la classe PdfDocument::Base
   # et ses classe associées page et table
   def to_pdf
-    stamp = "brouillard" 
+    stamp = provisoire? ? 'provisoire' : ''
     pdf = PdfDocument::PdfBalance.new(period, self,
       title:"Balance générale",
       from_date:from_date, to_date:to_date,
@@ -90,12 +95,7 @@ class Compta::Balance < ActiveRecord::Base
     ]
   end
 
-  # indique si le listing doit être considéré comme un brouillard
-  # ou une édition définitive.
-  # Cela se fait en regardant si toutes les lignes sont locked?
-  def provisoire?
-    balance_lines.any? {|bl| bl[:provisoire]==true } 
-  end
+  
 
   # calcule le nombre de page du listing en divisant le nombre de lignes
   # par un float qui est le nombre de lignes par pages,

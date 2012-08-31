@@ -4,14 +4,14 @@ require 'pdf_document/base'
 
 module PdfDocument
   class PdfBalance < PdfDocument::Base
+    
+
+    attr_accessor :from_number, :to_number
+
     # permet de choisir les colonnes que l'on veut sélectionner pour le document
     # set_columns appelle set_columns_widths pour calculer la largeur des colonnes
     # sur la base de largeurs égales.
     # Si on veut fixer les largeurs, il faut alors appeler set_columns_widths
-    #
-
-    attr_accessor :from_number, :to_number
-
     def set_columns(array_columns)
       @columns = array_columns
     end

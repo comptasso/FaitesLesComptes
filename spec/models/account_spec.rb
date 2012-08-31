@@ -2,6 +2,10 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+RSpec.configure do |config|
+ # config.filter =  {wip:true}
+end
+
 
 describe Account do 
   include OrganismFixture
@@ -49,6 +53,42 @@ describe Account do
         @account.should_not be_valid
       end
     end
+  end
+
+  describe 'all_lines_locked?', wip:true do
+
+    it 'vrai si pas de lignes' do
+      Account.new(valid_attributes).should be_all_lines_locked
+    end
+
+    context 'avec des lignes' do 
+      
+    
+    before(:each) do
+      @account = Account.create!(valid_attributes)
+      @n.account_id = @account.id
+      @n.save!
+      @l1 = Line.create(line_date:Date.today, nature_id:@n.id, debit:0, credit:1, narration:'ligne1', book_id:@ib.id, payment_mode:'Espèces', locked:false)
+      @l2 = Line.create!(line_date:Date.today, nature_id:@n.id, debit:0, credit:1, narration:'ligne2',book_id:@ib.id, payment_mode:'Espèces', locked:false)
+    end
+
+    it 'faux si des lignes dont au moins une n est pas locked' do
+      @account.should_not be_all_lines_locked
+    end
+    
+      it 'false si une ligne est unlocked' do
+        @l1.update_attribute(:locked, true)
+        
+        @account.should_not be_all_lines_locked
+      end
+
+      it 'true si toutes les lignes sont locked' do
+        @l1.update_attribute(:locked, true)
+        @l2.update_attribute(:locked, true)
+        @account.should be_all_lines_locked
+      end
+end
+
   end
 
   describe 'fonctionnalités natures' do
