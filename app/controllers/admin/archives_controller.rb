@@ -26,7 +26,7 @@ class Admin::ArchivesController < Admin::ApplicationController
   def create
      @archive=@organism.archives.new(params[:archive])
     if @archive.save
-      nam = "#{Rails.root}/#{@organism.base_name}"
+      nam = @organism.full_name
       send_file nam, 
         :filename=>[File.basename(nam, '.sqlite3'), Time.now].join(' ')+'.sqlite3',
         :disposition=>'attachment'

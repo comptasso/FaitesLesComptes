@@ -29,7 +29,7 @@ class Organism < ActiveRecord::Base
 
 
 
-  def base_name
+  def full_name
     "#{Room.path_to_db}/#{database_name}.sqlite3"
   end
 
@@ -38,15 +38,15 @@ class Organism < ActiveRecord::Base
   # TODO sera à revoir si on gère une autre base que sqlite3
   def create_db
     # création du fichier de base de données
-    File.open(base_name, "w") {} # créarion d'un fichier avec le nom database.sqlite3 et fermeture
+    File.open(full_name, "w") {} # créarion d'un fichier avec le nom database.sqlite3 et fermeture
     # on établit la connection (méthode ajoutée par jcl_monkey_patch)
-    if File.exist? base_name
+    if File.exist? full_name
       Rails.logger.info "Connection à la base #{database_name}"
       ActiveRecord::Base.establish_connection(
         :adapter => "sqlite3",
-        :database  => base_name)
+        :database  => full_name)
     else
-      Rails.logger.warn "Tentative de connection à la base #{base_name}, fichier non trouvé"
+      Rails.logger.warn "Tentative de connection à la base #{full_name}, fichier non trouvé"
     end
     # et on load le schéma actuel
     ActiveRecord::Base.connection.load('db/schema.rb')

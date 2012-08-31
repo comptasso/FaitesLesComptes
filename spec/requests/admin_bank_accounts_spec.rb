@@ -3,13 +3,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-# c.filter = {:wip=> true }
+ # c.filter = {:wip=> true }
 #  c.exclusion_filter = {:js=> true }
 end
 
 # spec request for testing admin bank_accounts 
 
-describe 'vue bank_accounts index' do
+describe 'vue bank_accounts index' do 
   include OrganismFixture
   
   
@@ -18,12 +18,6 @@ describe 'vue bank_accounts index' do
     create_user
     create_minimal_organism
     login_as('quidam')
-  end
-
-  it 'check minimal organism' do
-    Organism.count.should == 1
-    BankAccount.count.should == 1
-    @ba.should be_an_instance_of(BankAccount)
   end
 
   describe 'new bank_account' do
@@ -71,7 +65,7 @@ describe 'vue bank_accounts index' do
 
   end
  
-  describe 'index' , :wip=>true do
+  describe 'index'  do
 
     it 'dans la vue index,un compte peut être détruit' , :js=>true do
       @o.bank_accounts.create!(:name=>'CrediX', :number=>'987ty')

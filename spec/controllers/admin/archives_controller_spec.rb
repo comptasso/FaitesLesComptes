@@ -10,7 +10,7 @@ describe Admin::ArchivesController do
   before(:each) do
     minimal_instances
     @o.stub_chain(:archives, :new).and_return(arch)
-    @o.stub(:base_name).and_return('spec/support/assotest.sqlite3')
+    @o.stub(:full_name).and_return('spec/support/assotest.sqlite3')
   end
 
   describe 'GET index' do

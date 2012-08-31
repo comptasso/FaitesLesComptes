@@ -9,18 +9,18 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 #end
 
 
-describe 'resquest admin archive' do
+describe 'resquest admin archive' do 
   include OrganismFixture
 
   before(:each) do
 
     create_user
-    create_minimal_organism
+    create_minimal_organism 
     login_as('quidam')
   end
 
 
-  describe 'create archive' do
+  describe 'create archive' do 
 
     it 'afficher la vue de organisme puis cliquer sur l icone sauvegarder renvoie sur la vue archive new' do
       visit admin_organism_path(@o)
@@ -29,7 +29,7 @@ describe 'resquest admin archive' do
       # current_url.should match new_admin_organism_archive_path(@o)
     end
 
-    it 'remplir la vue et cliquer sur le bouton propose de charger un fichier', :wip=>true do
+    it 'remplir la vue et cliquer sur le bouton propose de charger un fichier' do
       visit new_admin_organism_archive_path(@o)
       fill_in 'archive[comment]', :with=>'test archive'
       filename = "assotest1 #{Time.now}.sqlite3"
