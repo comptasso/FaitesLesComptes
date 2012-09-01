@@ -10,7 +10,7 @@ end
 # spec request for testing admin cashes
 
 describe 'admin cash' do
-  include OrganismFixture
+  include OrganismFixture 
   
   
   before(:each) do

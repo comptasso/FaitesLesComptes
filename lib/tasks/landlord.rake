@@ -9,17 +9,17 @@ namespace :landlord do
   desc "Migration de toutes les bases de données de type sqlite3 dans organisms"
   task :migrate_each => :environment do
     ActiveRecord::Migration.verbose = true
-    # identification de tous les fichiers de type sqlite3
-    Dir[Rails.root.join("db/#{Rails.env}/organisms/*.sqlite3")].each do |f|
-      puts "migrating #{f}"  #File.basename(f)
+
+    Room.all.each do |r|
       # on se connecte successivement à chacun d'eux
-      ActiveRecord::Base.establish_connection(adapter:'sqlite3', database:f)
+      r.connect_to_organism
+      puts "migrating #{r.absolute_db_name}"  #File.basename(f)
       # et appel pour chacun de la fonction voulue
       ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
 
     end
     # Retour à la configuration de base
-    puts "retour à la connection de base pour #{Rails.env}"
+    puts "retour à la connection prinicpale"
     default = Rails.application.config.database_configuration[Rails.env]
     ActiveRecord::Base.establish_connection(default)
     puts 'migration de la base principale'
