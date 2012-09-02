@@ -825,8 +825,8 @@ solde au début de l'année et un en fin d'année.
 
 
 Modif pour line :
-Ajouter un champ account_id, puis belongs_to account, et account has_many lines
-Faire un after_save qui remplit account_id en fonction de nature
+OK - Ajouter un champ account_id, puis belongs_to account, et account has_many lines
+Faire un before_save qui remplit account_id en fonction de nature
 Faire un observer nature qui remplit Line si le rattachement de nature est fait après coup.
 On ne doit pas pouvoir changer le rattachement de nature à un compte si locked et account_id rempli.
 

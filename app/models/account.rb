@@ -22,7 +22,7 @@ class Account < ActiveRecord::Base
 
   belongs_to :period
   has_many :natures
-  has_many :lines, :through=>:natures 
+  has_many :lines
 
   # la validator cant_change est dans le répertoire lib/validators
   validates :period_id, :title, :presence=>true
@@ -89,7 +89,7 @@ class Account < ActiveRecord::Base
   # Méthode de classe qui affiche le plan comptable
   def self.to_pdf(period)
     load 'lib/pdf_document/simple.rb'
-    pdf = PdfDocument::Simple.new(period, period,
+    pdf = PdfDocument::Simple.new(period, period, 
       title:"Plan comptable")
     pdf.select_method= 'accounts.order(:number)'
     pdf.set_columns %w(number title)

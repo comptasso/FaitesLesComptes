@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120901051023) do
+ActiveRecord::Schema.define(:version => 20120902160453) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -131,8 +131,10 @@ ActiveRecord::Schema.define(:version => 20120901051023) do
     t.string   "owner_type"
     t.string   "ref"
     t.string   "check_number"
+    t.integer  "account_id"
   end
 
+  add_index "lines", ["account_id"], :name => "index_lines_on_account_id"
   add_index "lines", ["line_date"], :name => "index_lines_on_line_date"
 
   create_table "natures", :force => true do |t|

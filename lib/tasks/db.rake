@@ -18,6 +18,8 @@ namespace :db do
   #    end
   #  end
 
+  # task rajoutée pour avoir des tables test sur 3 bases de données
+  # est appelée notamment par db:test:prepare
   namespace :test do
     desc 'Pour purger et charger les schema des bases de test assotest1 et assotest2'
     task :load_schema do

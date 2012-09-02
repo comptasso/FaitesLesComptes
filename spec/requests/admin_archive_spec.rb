@@ -9,7 +9,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 #end
 
 
-describe 'resquest admin archive' do 
+describe 'resquest admin archive' do  
   include OrganismFixture
 
   before(:each) do

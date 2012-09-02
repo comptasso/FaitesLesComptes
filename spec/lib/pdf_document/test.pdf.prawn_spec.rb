@@ -20,7 +20,7 @@ describe 'test pdf prawn' do
      # on crée 50 lignes de dépenses
      1.upto(50) do |i|
      l =   Line.new(line_date:Date.today, book_id:@ob.id, narration:'Essai',
-     nature_id:@n.id, debit:(i/2.0), cash_id:@c.id, payment_mode:'Espèces')
+     nature_id:@n.id, debit:(i/2.0), cash_id:@c.id, payment_mode:'Espèces', :account_id=>@account.id)
    if l.valid?
      l.save!
    else

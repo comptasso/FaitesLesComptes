@@ -56,6 +56,7 @@ class Line < ActiveRecord::Base
   belongs_to :book 
   belongs_to :destination
   belongs_to :nature
+  belongs_to :account
   belongs_to :bank_extract
   belongs_to :check_deposit
   belongs_to :bank_account
@@ -65,7 +66,8 @@ class Line < ActiveRecord::Base
 
   pick_date_for :line_date 
   
-  before_save :check_bank_and_cash_ids
+  before_save :check_bank_and_cash_ids, :fill_account
+
   before_destroy :cant_change_if_locked
 
   # Spécific owner_types
@@ -208,6 +210,7 @@ class Line < ActiveRecord::Base
  
   # TODO probablement des classes lines héritées faciliteraient la chose.
     Rails.logger.debug 'modfication des bank et cash ids'
+   # DANGER va probablement devenir inadapté avec d'autres lignes d'écriture
     if self.nature  # ceci permet de ne pas faire ce contrôle pour les virements qui n'ont pas de nature
         self.bank_account_id = nil if self.payment_mode == 'Espèces'
         self.cash_id = nil unless self.payment_mode =='Espèces'
@@ -217,6 +220,13 @@ class Line < ActiveRecord::Base
 
   def cant_change_if_locked
     !locked
+  end
+
+  # remplit le champ account_id avec celui associé à nature si nature est effectivement associée à nature
+  def fill_account
+    if nature && nature.account
+      self.account_id = nature.account.id
+    end
   end
 
 

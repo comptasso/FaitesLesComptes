@@ -2,6 +2,10 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+RSpec.configure do |config|
+  config.filter = {wip:true}
+end
+
 
 describe Line do
   include OrganismFixture 
@@ -157,8 +161,31 @@ describe Line do
 
  
   end
+  
+  describe 'before_save', wip:true do
+    
+    before(:each) do
+      @a = Account.create(:period_id=>@p.id, number:'60', title:'compte test')
+      @n.update_attribute(:account_id, @a.id )
+    end
+    
+    
+    it 'si nature est rattachée à un compte alors le compte est associé' do
+      @l = Line.new(:book_id=>@ib.id, :narration=>'premier mois credit',
+        :payment_mode=> 'Espèces',  :line_date=>Date.today,
+        :credit=>2.50 , :nature_id=>@n.id)
+      @l.save
+      @l.account.should == @a
+      
+    end
+    
+    
+    
+  end
 
-  context 'une ligne est sauvée' do
+
+
+  describe 'une ligne verrouillée ne peut être détruite' do
 
     before(:each) do
       @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
