@@ -78,7 +78,7 @@ describe Period do
         @p_2010.should_receive(:next_period?).and_return(false)
         @p_2010.stub_chain(:lines, :unlocked, :any?).and_return(false)
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@nat_error, @next_error, @compte_12_error]
+        @p_2010.errors[:close].should == [@nat_error, @next_error, @compte_12_error] 
       end
 
       it 'doit avoir un livre d OD' do
@@ -114,11 +114,13 @@ describe Period do
     context 'l exerice est closable' do
       
       before(:each) do
-        @p_2010.should_receive(:closable?).at_least(1).times.and_return true
-        @acc6 = @p_2010.accounts.create!(number:'601', title:'test')
-        @acc7 = @p_2010.accounts.create!(number:'701', title:'test')
-        @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc6.id)
-        @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc7.id)
+        
+        @acc60 = @p_2010.accounts.create!(number:'601', title:'test')
+        @acc70 = @p_2010.accounts.create!(number:'701', title:'test')
+        @acc61 = @p_2011.accounts.create!(number:'601', title:'test')
+        @acc71 = @p_2011.accounts.create!(number:'701', title:'test')
+        @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc60.id)
+        @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id)
         @ob= @organism.books.find_by_type('OutcomeBook')
         @l6= Line.create!(book_id:@ob.id, debit:54, narration:'une ligne de dépense',
           nature_id:@n_dep.id, payment_mode:'Espèces', cash_id:1,
@@ -129,23 +131,15 @@ describe Period do
         
       end
 
-      it 'doit compenser chacun des comptes de classe 6 par une écriture au premier jour de l exercice suivant' do
-        @p_2010.close
-        @acc6.sold_at(@p_2011.start_date).should == 0
-      end
-
-      it 'si le solde est à zero, ne créé pas de ligne'
-
-      it 'doit compenser chacun des comptes de classe 6 par une écriture au premier jour de l exercice suivant' do
-        @p_2010.close
-        @acc7.sold_at(@p_2011.start_date).should == 0
-      end
+      it "génère les écritures d'ouverture de l'exercice"
 
       it '3 lignes ont été créées' do
-        expect {@p_2010.close}.to change {Line.count}.by(3)
+        pending
+        expect {@p_2010.close}.to change {Line.count}.by(3) 
       end
 
-      it 'doit générer une écriture sur le compte 12 correspondant au solde' do
+      it 'doit générer une écriture sur le compte 120 ou 129 correspondant au solde' do
+        pending
         @p_2010.next_period.should == @p_2011
         @p_2011.report_account.sold_at(@p_2011).start_date.should == 45
       end

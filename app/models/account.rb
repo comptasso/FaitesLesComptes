@@ -22,7 +22,7 @@ class Account < ActiveRecord::Base
 
   belongs_to :period
   has_many :natures
-  has_many :lines, :through=>:natures
+  has_many :lines, :through=>:natures 
 
   # la validator cant_change est dans le répertoire lib/validators
   validates :period_id, :title, :presence=>true
@@ -32,7 +32,9 @@ class Account < ActiveRecord::Base
   # TODO être sur que period est valide (par exemple on ne doit pas
   # pouvoir ouvrir ou modifier un compte d'un exercice clos
 
-  
+#  def lines
+#    Line.
+#  end
 
   scope :classe, lambda {|i| where('number LIKE ?', "#{i}%")}
   scope :classe_6, where('number LIKE ?', '6%')

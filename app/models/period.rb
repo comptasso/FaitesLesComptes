@@ -121,7 +121,8 @@ class Period < ActiveRecord::Base
     next_period == self ? false : true
   end
   
-  # renvoie le compte (12) qui sert pour enregistrer le résultat de l'exercice
+  # renvoie le compte (120) qui sert pour enregistrer le résultat positif de l'exercice
+  # ou 129 pour enregistrer le résultat négatif
   def report_account
     accounts.where('number = ?', 12).first
   end
@@ -166,20 +167,30 @@ class Period < ActiveRecord::Base
     possible = closable? # closable? ne doit être appelé qu'une fois pour ne pas dupliquer les erreurs (et les requêtes)
     if possible 
       od_book = organism.books.find_by_type('OdBook')
-      date = next_period.start_date
+      date = close_date
       Period.transaction do
         # on commence par créer l'écriture de compensation des classes 6 et 7
         accounts.classe_6.each do |acc|
           sold = acc.sold_at(close_date)
-          # si le solde est à zero, il doit sauter
-          puts "solde du compte #{acc.number}: #{sold}"
-          l = Line.create!(credit:-sold, debit:0, line_date:date,
+          # si le solde est à zero, il ne doit rien écrire (car pas de ligne à 0)
+          Line.create!(credit:-sold, debit:0, line_date:date,
             book_id:od_book.id,
-            narration:'clôture de l\'exercice', owner_type:'Program')
-          
-          puts l.inspect
-          puts puts "nouveau solde du compte #{acc.number}: #{acc.sold_at(date)}"
-        end
+            narration:'clôture de l\'exercice', owner_type:'Program') if sold != 0
+         end
+         
+        # les écritures de compensation des classes 6 et 7
+        accounts.classe_7.each do |acc|
+          sold = acc.sold_at(close_date)
+          # si le solde est à zero, il ne doit rien écrire (car pas de ligne à 0)
+          Line.create!(debit:-sold, credit:0, line_date:date,
+            book_id:od_book.id,
+            narration:'clôture de l\'exercice', owner_type:'Program') if sold != 0
+         end
+
+#        Line.create!(credit:-sold, debit:0, line_date:close_date,
+#            book_id:od_book.id,
+#            narration:'clôture de l\'exercice', owner_type:'Program') if sold != 0
+
         # Il s'agit donc de générer des lignes avec comme intitulé
         self.update_attribute(:open, false) if self.closable?
       end
@@ -250,7 +261,7 @@ class Period < ActiveRecord::Base
   end
 
 
-  # permet de renvoyer la liste des mois de l'exercice
+  # permet de renvoyer la liste des mois de l'exercice correspondant à un mois spécifique
   # généralement un seul mais il peut y en avoir deux en cas d'exercice de plus d'un an
   #
   # l'argument month est de type string et avec deux chiffres par exemple '04'
@@ -258,7 +269,7 @@ class Period < ActiveRecord::Base
     list_months.select {|my| my.month == month}
   end
 
-  # indique s'il y a un mois correspondant.
+  # indique s'il y a un mois correspondant au mois demandé.
   #
   # L'argument month est de type string et avec deux chiffres par exemple '04'
   def include_month?(month)
@@ -302,64 +313,6 @@ class Period < ActiveRecord::Base
     natures.without_account.all
   end
 
-  
-  
-
-
- 
-
-#  # report_entries écrit dans l'exercice suivant l'écriture d'ouverture de
-#  # l'exercice - report de tous les comptes de bilan et solde dans le compte de
-#  # report à nouveau.
-#  #
-#  def report_entries
-#    # on prend tous les comptes commençant par 1 à 5
-#    begin
-#      as=[]
-#      5.times do |i|  # TODO il doit y avoir plus élégant
-#        search=i.to_s+'%'
-#        as << self.accounts.order(:acc_number).where('acc_number LIKE ?', search).all
-#        as.flatten!
-#      end
-#      # préparation des éléments pour créer l'écriture
-#
-#      np=self.next_period
-#
-#
-#      odj=np.journals.where('abbreviation=? AND jmonth= ?', 'OD', 0).first
-#      date=np.start_date
-#      e=Entry.new(:entry_date=>date, :journal_id=>odj.id,
-#        :narration=>"Ouverture de l'exercice")
-#      # l'entry existe, on créé les lignes
-#      as.each do |a| #a pour account
-#        if a.solde.abs  > 0 # pour chaque compte dont le solde est à zero
-#          # il faut que le compte existe
-#          npa=np.accounts.find_by_acc_number(a.acc_number)
-#          if npa.nil? # ou le créer
-#            npa=np.accounts.create!(:acc_number=>a.acc_number,:name=>a.name, :comment=>a.comment, :regroupement=>a.regroupement)
-#          end
-#          e.lines.build(:account_id=>npa.id, :amount=>a.solde.abs , :dc=> a.solde > 0 ? true : false )
-#        end
-#      end # on a fait tous les reports
-#
-#      # il reste à faire l'écriture du report proprement dit (autrement dit d'équilibrer l'écriture
-#      report= e.total_debit - e.total_credit # on calcule le solde
-#      if report != 0
-#        report_account = np.accounts.where('acc_number=?', '12').first
-#        e.lines.build(:account_id=>report_account.id, :amount=>report , :dc=> true )
-#      end
-#      e.save
-#      return e.lines.size
-#    rescue
-#      return 0
-#    end
-#
-#  end
-
-
-  
-
- 
 
     protected
 

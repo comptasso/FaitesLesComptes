@@ -811,6 +811,42 @@ Close doit générer l'écriture de report du résultat (on solde les comptes 6 
 Il s'agit donc de prendre les comptes 6 et 7 avec leur solde à la clôture de l'exercice et pour chaque compte créer une ligne
 OK - Puis update de l'attribut closed à true
 OK - Tout ceci dans une transaction
+La notion de cloture comptable et d'écritures d'inventaire n'a de sens que si on passe une écriture partie écriture comptable
+Tout ce qui est bilan suppose que la banque et la caisse aient un compte bancaire.
+Dès lors, les opérations de fin d'exercice pourront se faire :
+Impossible de faire une balance complète si trop d'écritures sans compte comptable.
+Il faut que banque et caisse aient un compte bancaire : il faudra que account soit polymorphique as: accountable
+Les lignes ont un compte bancaire.
+Un after_create permet de remplir le compte si la nature est déjà reliée au compte.
+Un observer natures met à jour les lignes si nature est reliée à un compte
+Le pointage de compte fait locked mais il faut pouvoir encore le rattacher à un compte
+On ne peut rentrer un relevé et des écritures bancaires que dans l'exerice. Donc on a un
+solde au début de l'année et un en fin d'année.
+
+
+Modif pour line :
+Ajouter un champ account_id, puis belongs_to account, et account has_many lines
+Faire un after_save qui remplit account_id en fonction de nature
+Faire un observer nature qui remplit Line si le rattachement de nature est fait après coup.
+On ne doit pas pouvoir changer le rattachement de nature à un compte si locked et account_id rempli.
+
+Modif pourBankAccount :
+Ajouter que BankAccount has_many accounts, as:account (il y a un compte par exercice)
+La création d'un compte bancaire doit créer un compte comptable
+Les relevés de compte donnent lieu à passation d'écriture : on extourne le solde d'origine et on
+on met le solde final.
+Attention à ne pas saisir deux fois le montant à l'ouverture de l'exercice (par le report d'une part et ensuite par saisie du
+relevé de compte).
+
+Idem pour Caisse et les contrôles de caisse
+
+Lorsque toutes les lignes sont pointées. Il devrait y avoir une balance équilibrée.
+
+On peut alors revenir à la clôture : Fait les écritures d'ouverture (report des écritures de bilan et résultat de l'exercice)
+
+On pourra alors faire des écritures d'inventaire : extraction de remboursement.
+
+
 --------------------------------- TODO ---------------------------------------------------------
 OK - Faire le readme
 OK - Faire un menu bas
