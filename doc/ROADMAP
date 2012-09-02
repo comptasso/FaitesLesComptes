@@ -805,13 +805,18 @@ Par du javascript, dans la vue création archive, après clic, effacer le form e
 Ajouter dans la vue la liste des database utilisée par ce current user
 Avec jQuery afficher une fenêtre de confirmation si le nom est déjà pris
 
-
+------------------------ cloture exercice -----------------------------------------------
+OK - Ajouter un test closable? en début de méthode close
+Close doit générer l'écriture de report du résultat (on solde les comptes 6 et 7 et on passe la contrepartie en compte de report à nouveau ou d'excédent...
+Il s'agit donc de prendre les comptes 6 et 7 avec leur solde à la clôture de l'exercice et pour chaque compte créer une ligne
+OK - Puis update de l'attribut closed à true
+OK - Tout ceci dans une transaction
 --------------------------------- TODO ---------------------------------------------------------
 OK - Faire le readme
 OK - Faire un menu bas
 OK - Finaliser les éditions de balances avec Brouillard ou sans.
 Traiter la clôture d'un exercice.
-Ajouter des index dans les migrations
+OK - Ajouter des index dans les migrations
 Les graphes de caisse ne devraient pas afficher toute l'année
 Ajouter les environnements winusb et wininstall (cf. fichier Word sur mes essais pour les modifs à faire)
 Il faudra faire les autres tâches rake db:migrate db:rollback,... correspondant au namespace landlord pour que

@@ -1,9 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 
-# fichier helper utilisable pour tous les spec qui n'ont pas besoin spécifiquement de
-# travailler avec plusieurs connections.
-# notamment tous les modèles.
+
 
 require 'spork'
 
@@ -41,6 +39,8 @@ end
 end
 
 Spork.each_run do
+ load "#{Rails.root}/app/models/period.rb"
+ load "#{Rails.root}/app/models/line.rb"
  #  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
 end
 
@@ -59,6 +59,9 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 end
+
+
+
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.

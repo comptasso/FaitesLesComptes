@@ -34,11 +34,6 @@
 # OK la date de cloture doit forcément être postérieure à la date d'ouverture
 #
 #
-# le champ first_active_month sert à identifier le premier mois ouvert
-# lorsqu'on ferme un mois, tous les journaux correspondants à ce mois sont
-# fermés (ce qui valide autmatiquement les écritures qui appartiennent à ces journaux.
-# Puis first_active_month est incrémenté.
-# TODO mettre ceci dans une transaction
 
 
 require 'list_months'
@@ -117,7 +112,7 @@ class Period < ActiveRecord::Base
   # trouve l'exercice suivant en recherchant l'exercice qui à la première date qui soit au dela de close_date de l'exercice actuel
   # renvoie lui même s'il n'y en a pas
   def next_period
-    Period.first(:conditions=>['organism_id = ? AND start_date > ?', self.organism_id, self.close_date],
+    Period.first(:conditions=>['organism_id = ? AND start_date > ?', organism_id, close_date],
       :order=>'start_date ASC') || self
   end
 
@@ -125,14 +120,71 @@ class Period < ActiveRecord::Base
   def next_period?
     next_period == self ? false : true
   end
+  
+  # renvoie le compte (12) qui sert pour enregistrer le résultat de l'exercice
+  def report_account
+    accounts.where('number = ?', 12).first
+  end
+
+   # Les conditions pour qu'un exercice puisse être fermé sont :
+  # qu'il soit ouvert
+  # que tous ses journaux soit fermés
+  # que l'exercice précédent soit fermé
+  def closable?
+    
+    self.errors.add(:close, 'Exercice déja fermé') unless open
+    # tous les journaux doivent être fermés
+    self.errors.add(:close, "L'exercice précédent n'est pas fermé") if previous_period? && previous_period.open
+    # l'exercice doit être accountable (ce qui veut dire avoir des natures et que celles ci soient toutes reliées à des comptes
+    self.errors.add(:close, "Des natures ne sont pas reliées à des comptes") unless accountable?
+    # toutes les lignes doivent être verrouillées
+    self.errors.add(:close, "Toutes les lignes d'écritures ne sont pas verrouillées") if lines.unlocked.any?
+    # il faut un exercice suivant
+    self.errors.add(:close, "Pas d'exercice suivant") unless next_period? 
+    # il faut un livre d'OD
+    self.errors.add(:close, "Il manque un livre d'OD pour passer l'écriture de report") unless organism.books.find_by_type('OdBook')
+    # il faut un compte pour le report du résultat
+    self.errors.add(:close, "Pas de compte 12 pour le résultat de l'exercice") unless report_account
+
+    self.errors[:close].any? ? false : true
+
+  end
+
 
   # indique si l'exercice est clos
   def is_closed?
-    self.open ? false : true
+    open ? false : true
   end
 
+  # Effectue la clôture de l'exercice.
+  #
+  #  La clôture de l'exercice doit effectuer une écriture de report dans le livre
+  #  d'OD à partir du résultat => il faut un compte report à nouveau pour mouvementer
+  #  le résultat de l'exercice vers le report.
+  # 
   def close
-    self.update_attribute(:open, false) if self.closable?
+    possible = closable? # closable? ne doit être appelé qu'une fois pour ne pas dupliquer les erreurs (et les requêtes)
+    if possible 
+      od_book = organism.books.find_by_type('OdBook')
+      date = next_period.start_date
+      Period.transaction do
+        # on commence par créer l'écriture de compensation des classes 6 et 7
+        accounts.classe_6.each do |acc|
+          sold = acc.sold_at(close_date)
+          # si le solde est à zero, il doit sauter
+          puts "solde du compte #{acc.number}: #{sold}"
+          l = Line.create!(credit:-sold, debit:0, line_date:date,
+            book_id:od_book.id,
+            narration:'clôture de l\'exercice', owner_type:'Program')
+          
+          puts l.inspect
+          puts puts "nouveau solde du compte #{acc.number}: #{acc.sold_at(date)}"
+        end
+        # Il s'agit donc de générer des lignes avec comme intitulé
+        self.update_attribute(:open, false) if self.closable?
+      end
+    end
+    return possible
   end
 
   def recettes_accounts
@@ -307,43 +359,9 @@ class Period < ActiveRecord::Base
 
   
 
-
-  # Les conditions pour qu'un exercice puisse être fermé sont :
-  # qu'il soit ouvert
-  # que tous ses journaux soit fermés
-  # que l'exercice précédent soit fermé
-  def closable?
-    self.errors.add(:close, 'Exercice déja fermé') unless self.open
-    # tous les journaux doivent être fermés
-    self.errors.add(:close, "L'exercice précédent n'est pas fermé; ") if self.previous_period? && self.previous_period.open
-    # toutes les lignes doivent être verrouillées
-    self.errors.add(:close, "Toutes les lignes d'écritures ne sont pas verrouillées") if self.lines.where('locked IS ? ',false).count > 0
- # il faut un exercice suivant
-#    np=self.next_period
-#    self.errors.add(:lock, "Pas d'exercice suivant; ") if np.nil?
-#    return false if self.errors[:lock].any?
-    # il faut un compte pour le report du résultat
-    self.errors[:close].any? ? false : true
-
-  end
-
  
 
     protected
-  # renvoie le mois de l'exercice correspondant à une date qui est dans les limites de l'exercice
-#  def current_month(date = Date.today)
-#    raise 'date is not inside the period limits' if date < self.start_date || date > self.close_date
-#    d=self.start_date
-#    mois = 0
-#    while date >= d
-#      d=d.months_since(1)
-#      mois += 1
-#    end
-#    return mois-1
-#  end
-
-
-
 
   # on ne peut jamais changer la date de début d'un exercice créé.
   # soit c'est le premier et la date de début a été fixée lors de la création

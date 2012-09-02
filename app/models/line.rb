@@ -48,6 +48,9 @@
 #    t.string   "check_number" => un champ pour enregistrer le numéro du chèque si c'est un chèque
 #
 class Line < ActiveRecord::Base
+
+
+
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
   belongs_to :book 
@@ -58,22 +61,27 @@ class Line < ActiveRecord::Base
   belongs_to :bank_account
   belongs_to :cash
   belongs_to :owner, :polymorphic=>true  # pour les transferts uniquement (à ce stade)
-  has_and_belongs_to_many :bank_extract_lines, :uniq=>true # pour les rapprochements bancaires
+  has_and_belongs_to_many :bank_extract_lines, :uniq=>true # pour les rapprochements bancaires 
 
   pick_date_for :line_date 
   
   before_save :check_bank_and_cash_ids
   before_destroy :cant_change_if_locked
 
+  # Spécific owner_types
+  # Ces owner_types permettent à Line de ne pas avoir de nature_id, ni de mode de payment.
+  # Pour les transferts, la raison en 
+  NON_NATURAL = ['Transfer', 'Program']
+
   # voir au besoin les validators qui sont dans lib/validators
   validates :debit, :credit, numericality: true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :book_id, presence:true
   validates :line_date, presence: true
   validates :line_date, must_belong_to_period: true
-  validates :nature_id, presence: true, :unless=> lambda {self.owner_type == 'Transfer'}
+  validates :nature_id, presence: true, :unless=> lambda { NON_NATURAL.include? self.owner_type }
   validates :narration, presence: true
   validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
-    :message => "valeur inconnue" }, :unless=>lambda { self.owner_type == 'Transfer'}
+    :message => "mode de paiement inconnu" }, :unless=>lambda { NON_NATURAL.include? self.owner_type }
   validates :debit, :credit, :not_null_amounts=>true, :not_both_amounts=>true
   validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
   validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire
@@ -95,7 +103,7 @@ class Line < ActiveRecord::Base
   scope :cumul_period_month, lambda {|p,m| where('line_date >= ? AND line_date <=?', p.start_date, p.start_date.months_since(m).end_of_month)}
 
   # TODO voir si ce scope est encore utilisé
-  scope :month, lambda {|month_year| where('line_date >= ? AND line_date <= ?',
+  scope :month, lambda {|month_year| where('line_date >= ? AND line_date <= ?', 
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1),
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1).end_of_month    )}
 
@@ -104,7 +112,7 @@ class Line < ActiveRecord::Base
   scope :range_date, lambda { |fd,td| where('line_date >= ? AND line_date <= ?', fd, td) }
 
 
-  scope :unlocked, where('locked = ?', false)
+  scope :unlocked, where('locked IS ?', false)
   scope :before_including_day, lambda {|d| where('lines.line_date <= ?',d)}
   
   # ne peuvent être transformées en scope car ne retournent pas un arel

@@ -29,18 +29,18 @@ class Admin::PeriodsController < Admin::ApplicationController
   # GET /periods/new
   # GET /periods/new.json
   def new
-    @disable_start_date = true
-    @begin_year = @end_year = nil
-    if @organism.periods.any?
-      start_date=(@organism.periods.last.close_date) +1
+     if @organism.periods.any?
+      @disable_start_date = true
+      start_date = (@organism.periods.last.close_date) +1
       # begin_year and end_year limit the select in the the view
       @begin_year = start_date.year
       @end_year = @begin_year + 2 #
     else
       @disable_start_date = false
-      start_date=Date.today.beginning_of_year
+      @begin_year = @end_year = nil
+      start_date = Date.today.beginning_of_year # on propose une date d'ouverture par défaut
     end
-    close_date=start_date.years_since(1)-1 
+    close_date = start_date.years_since(1)-1 # et une date de clôture probable
     @period = @organism.periods.new(:start_date=>start_date, :close_date=>close_date)
     
   end
@@ -53,6 +53,8 @@ class Admin::PeriodsController < Admin::ApplicationController
   # POST /periods
   # POST /periods.json
   def create
+    # on check la start_date dans le controller.
+    # TODO on pourrait se contenter de la validation du modèle
     params[:period][:start_date] = (@organism.periods.last.close_date + 1.day) unless @organism.periods.count == 0
     @period = @organism.periods.new(params[:period])
     
@@ -100,18 +102,16 @@ class Admin::PeriodsController < Admin::ApplicationController
   # action destinée à afficher un formulaire permettant de choisir un plan comptable
   # pour l'instant il n'y a qu'un seul plan comptable, stocké dans la partie assets/plan
   # A terme, il faudrait pouvoir importer un plan par un fichier du type csv.
-  # TODO ceci pourrait être dans un controller plan
+  # TODO ceci devrait être dans un controller plan
   def select_plan
     @period = @organism.periods.find(params[:id])
   end
 
-
   # POST création du plan comptable après le select_plan
   def create_plan
     @period = @organism.periods.find(params[:id])
-    nb_accounts=Utilities::PlanComptable.new.create_accounts(@period.id, params[:fichier])
+    nb_accounts = Utilities::PlanComptable.new.create_accounts(@period.id, params[:fichier])
     flash[:notice] = "#{nb_accounts} comptes ont été créés"
-    
   rescue
     flash[:alert] = "Erreur dans la création des comptes"
   ensure
@@ -120,16 +120,16 @@ class Admin::PeriodsController < Admin::ApplicationController
 
    
   # action de cloture d'un exercice
-  # problématique de confirmation
   def close
-    if @period.closable?
-      @period.close
-      redirect_to admin_organism_period_path(@period, @period)
+    if @period.close
+       redirect_to admin_organism_period_path(@period, @period) 
     else
-     @periods=@organism.periods
-     alert= "#{@period.exercice} ne peut être clos : \n"
-     @period.errors[:close].each {|e| alert += '- ' + e + "\n"}
+     # construction du message d'alerte
+     alert = "#{@period.exercice} ne peut être clos : \n"
+     @period.errors[:close].each {|message| alert += '- ' + message + "\n"}
      flash[:alert]= alert
+     # et retour à la vue index
+     @periods=@organism.periods
      render :index
     end
   end
