@@ -12,7 +12,8 @@ describe 'admin/bank_accounts/index' do
     @bank_accounts << stub_model(BankAccount, number: 'BA2')
     @bank_accounts.each do |b|
       b.stub(:created_at).and_return(Time.now)
-      b.stub(:updated_at).and_return(Time.now) 
+      b.stub(:updated_at).and_return(Time.now)
+      b.stub(:accounts).and_return [mock_model(Account, number:'5101')]
     end
   end
 
@@ -50,10 +51,11 @@ describe 'admin/bank_accounts/index' do
         page.find('thead th:first').text.should == 'Banque'
         page.find(:css,'thead th:nth-child(2)').text.should == 'Numéro'
         page.find(:css,'thead th:nth-child(3)').text.should == 'Commentaire'
-        page.find(:css,'thead th:nth-child(4)').text.should == 'Adresse' 
-        page.find(:css,'thead th:nth-child(5)').text.should == 'Créé le'
-        page.find(:css,'thead th:nth-child(6)').text.should == 'Modifié le'
-        page.find(:css,'thead th:nth-child(7)').text.should == 'Actions'
+        page.find(:css,'thead th:nth-child(4)').text.should == 'Adresse'
+        page.find(:css,'thead th:nth-child(5)').text.should == 'Compte de rattach.'
+        page.find(:css,'thead th:nth-child(6)').text.should == 'Créé le'
+        page.find(:css,'thead th:nth-child(7)').text.should == 'Modifié le'
+        page.find(:css,'thead th:nth-child(8)').text.should == 'Actions'
 
       end
     end
@@ -65,8 +67,9 @@ describe 'admin/bank_accounts/index' do
         page.find('tbody tr td:nth-child(2)').text.should == @ba.number
         page.find('tbody tr td:nth-child(3)').text.should == @ba.comment
         page.find('tbody tr td:nth-child(4)').text.should == @ba.address
-        page.find('tbody tr td:nth-child(5)').text.should == l(@ba.created_at)
-        page.find('tbody tr td:nth-child(6)').text.should == l(@ba.updated_at)
+        page.find('tbody tr td:nth-child(5)').text.should == '5101'
+        page.find('tbody tr td:nth-child(6)').text.should == l(@ba.created_at)
+        page.find('tbody tr td:nth-child(7)').text.should == l(@ba.updated_at)
       end
     end
 

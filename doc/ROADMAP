@@ -842,12 +842,12 @@ Le solde d'un compte bancaire ou d'une caisse se calcule en :
   - et en ajoutant les lignes qui ont des écritures avec ce compte (normalement des écritures d'inventaire uniquement)
 NON - Les relevés de compte donnent lieu à passation d'écriture : on extourne le solde d'origine et on met le solde final.
 
-Mise à jour des comptas existantes :
-- les champs accounts_id de line doivent être remplis avec le account_id correspondant à l'exercice
-
-- il doit y avoir création de compte pour la banque et la caisse pour les deux exercices.
+OK - Mise à jour des comptas existantes :
+OK - les champs accounts_id de line doivent être remplis avec le account_id correspondant à l'exercice
+OK - il doit y avoir création de compte pour la banque et la caisse pour les deux exercices.
 
 Modifier l'affichage de caisses et banques pour montrer le numéro de compte
+Supprimer un compte bancaire ou une caisse devrait supprimer le compte comptable correspondant (ce qui veut dire qu'il y a aucune écriture)
 
 
 OK - Idem pour Caisse et les contrôles de caisse

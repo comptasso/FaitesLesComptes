@@ -8,11 +8,12 @@ describe 'admin/cashes/index' do
   before(:each) do
     assign(:organism, stub_model(Organism))
     @cashes=[]
-    @cashes << stub_model(Cash, name: 'Magasin', comment: 'la caisse du magasin')
+    @cashes << stub_model(Cash, name: 'Magasin', comment: 'la caisse du magasin') 
     @cashes << stub_model(Cash, name: 'Entrepot')
     @cashes.each do |b|
       b.stub(:created_at).and_return(Time.now)
       b.stub(:updated_at).and_return(Time.now)
+      b.stub(:accounts).and_return [mock_model(Account, number:'5301')]
     end
   end
 
@@ -49,8 +50,9 @@ describe 'admin/cashes/index' do
       it "shows Caisse" do
         page.find('thead th:first').text.should == 'Nom'
          page.find('thead th:nth-child(2)').text.should == 'Commentaire'
-        page.find('thead th:nth-child(3)').text.should == 'Créée le'
-        page.find('thead th:nth-child(4)').text.should == 'Mis à jour le'
+           page.find('thead th:nth-child(3)').text.should == 'Compte de rattach.'
+        page.find('thead th:nth-child(4)').text.should == 'Créée le'
+        page.find('thead th:nth-child(5)').text.should == 'Mis à jour le'
       end
     end
 
@@ -59,8 +61,9 @@ describe 'admin/cashes/index' do
         @ca=@cashes.first
         page.find('tbody tr td:nth-child(1)').text.should == @ca.name
         page.find('tbody tr td:nth-child(2)').text.should == @ca.comment
-        page.find('tbody tr td:nth-child(3)').text.should == l(@ca.created_at)
-        page.find('tbody tr td:nth-child(4)').text.should == l(@ca.updated_at)
+        page.find('tbody tr td:nth-child(3)').text.should == '5301'
+        page.find('tbody tr td:nth-child(4)').text.should == l(@ca.created_at)
+        page.find('tbody tr td:nth-child(5)').text.should == l(@ca.updated_at)
       end
     end
 

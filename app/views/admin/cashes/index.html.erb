@@ -9,6 +9,7 @@
   <tr>
     <th>Nom</th>
     <th>Commentaire</th>
+    <th>Compte de rattach.</th>
     <th>Créée le</th>
     <th>Mis à jour le</th> 
     <th>Actions</th>
@@ -19,6 +20,7 @@
   <tr>
     <td><%= cash.name %></td>
     <td><%= cash.comment %></td>
+    <td><%= cash.accounts.first.number %></td>
   <td><%= l cash.created_at %></td>
     <td><%= l cash.updated_at %></td>
     <td><%= icon_to 'modifier.png', edit_admin_organism_cash_path(@organism,cash), :id=>"icon_modifier_cash_#{cash.id}" %>

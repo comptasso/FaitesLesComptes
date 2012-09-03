@@ -12,6 +12,7 @@
     
     <th>Commentaire</th>
     <th>Adresse</th>
+    <th>Compte de rattach.</th>
     <th>Créé le</th>
     <th>Modifié le</th>
     
@@ -26,6 +27,7 @@
     
     <td><%= bank_account.comment %></td>
     <td><%= simple_format bank_account.address %></td>
+    <td><%= bank_account.accounts.first.number %></td>
     <td><%= l bank_account.created_at %></td>
     <td><%= l bank_account.updated_at %></td>
     <td>
