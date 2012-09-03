@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
- # config.filter =  {wip:true}
+  config.filter =  {wip:true}
 end
 
 
@@ -55,9 +55,9 @@ describe Account do
     end
   end
 
-  describe 'polymorphic' do
+  describe 'polymorphic', wip:true do
     it 'la création d\'une caisse entraîne celle d\'un compte' do
-       @c.should have(1).accounts
+       @ba.should have(1).accounts
     end
 
     it 'la création d\'une caisse entraîne celle d\'un compte' do
@@ -67,7 +67,7 @@ describe Account do
 
 
 
-  describe 'all_lines_locked?', wip:true do
+  describe 'all_lines_locked?' do
 
     it 'vrai si pas de lignes' do
       Account.new(valid_attributes).should be_all_lines_locked

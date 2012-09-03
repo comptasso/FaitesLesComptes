@@ -12,6 +12,8 @@ class Cash < ActiveRecord::Base
   belongs_to :organism
   has_many :lines
   has_many :cash_controls
+  # un caisse a un compte comptable par exercice
+  has_many :accounts, :as=> :accountable
 
   # Un transfert est un virement fait d'une caisse ou d'un compte bancaire
   # vers une caisse ou un compte bancaire.

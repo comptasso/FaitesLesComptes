@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-#  c.filter = {:wip=> true }
+  c.filter = {:wip=> true }
 end
 
 describe BankAccount do
@@ -39,6 +39,13 @@ describe BankAccount do
       @bb.should_not be_valid
     end
 
+  end
+
+  describe 'création du compte comptable', wip:true do
+
+    it 'la création d un compte bancaire doit entraîner celle d un compte comptable' do
+      @ba.should have(1).accounts
+    end
   end
 
   context 'transferts' do

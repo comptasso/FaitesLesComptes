@@ -47,7 +47,21 @@ class Account < ActiveRecord::Base
    [number, title].join(' ')
   end
 
- 
+  # renvoie le compte disponible commençant par number et en incrémentant une liste 
+  # avec le nombre de chiffres donnés par précision
+  def self.available(number)
+    as = Account.where('number LIKE ?', "#{number}%").order('number ASC')
+    if as.empty?
+      return number + '01'
+    else
+      # il faut prendre le nombre trouvé, vérifier qu'il ne se termine
+      # pas par 99, le transformer en chiffre, y ajouter 1 et le transformer en string
+      n = as.last.number
+      raise 'Déja 99 comptes de ce type, limite atteinte' if n =~ /99$/
+      m = n.to_i; m = m + 1;
+      return m.to_s
+    end
+  end 
 
   # retourne le premier caractère du numéro de compte
   # attention classe avec un E final, il s'agit d'une logique de comptable, pas de programmeur

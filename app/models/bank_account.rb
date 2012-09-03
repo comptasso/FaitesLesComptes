@@ -6,13 +6,15 @@ class BankAccount < ActiveRecord::Base
   has_many :bank_extracts
   has_many :d_transfers, :as=>:debitable, :class_name=>'Transfer'
   has_many :c_transfers, :as=>:creditable, :class_name=>'Transfer'
- 
-  
+  # un compte bancaire a un compte comptable par exercice
+  has_many :accounts, :as=> :accountable
   
   validates :number, :uniqueness=>{:scope=>[:organism_id, :name]}
   validates :name, :number,  presence: true
-  
- # retourne le dernier extrait de compte bancaire
+
+  after_create :create_accounts
+
+  # retourne le dernier extrait de compte bancaire
  # sur la base de la date de fin
  def last_bank_extract
    bank_extracts.order(:end_date).last
@@ -131,6 +133,9 @@ class BankAccount < ActiveRecord::Base
     "#{self.class.name}_#{id}"
   end
 
+
+
+
  protected
 
 #  totalise débit et crédit de toutes les lignes non pointées
@@ -141,6 +146,18 @@ class BankAccount < ActiveRecord::Base
   #  totalise débit et crédit de toutes les lignes non pointées
  def total_credit_np_lines
    np_lines.sum(&:credit)
+ end
+
+
+ # appelé par le callback after_create, crée un compte comptable de rattachement
+ # pour chaque exercice ouvert.
+ def create_accounts
+   logger.info 'création des comptes liés au compte bancaire'
+   # demande un compte de libre sur l'ensemble des exercices commençant par 51
+   n = Account.available('51') # un compte 51 avec un précision de deux chiffres par défaut
+   organism.periods.where('open = ?', true).each do |p|
+     self.accounts.create!(number:n, period_id:p.id, title:self.name)
+   end
  end
 
 

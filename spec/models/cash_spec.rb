@@ -21,11 +21,18 @@ describe Cash do
   end
 
   
-  it "should have a unique number in the scope of bank and organism" do
+  it "should have a unique name in the scope of organism" do
     @cc = @o.cashes.new(name: 'Magasin')
     @cc.should_not be_valid
   end
 
+  end
+
+   describe 'création du compte comptable' do
+
+    it 'la création d une caisse doit entraîner celle d un compte comptable' do
+      @c.should have(1).accounts 
+    end
   end
 
   context 'annex methods' do
