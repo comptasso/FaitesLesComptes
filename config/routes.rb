@@ -37,9 +37,12 @@ Faitesvoscomptes::Application.routes.draw do
       resource :general_ledger
       
     end
-    resources :accounts  do
-      
+    
+    resources :books do
+      resources :lines
     end
+
+    resources :accounts  
   end
   # fin du namespace COMPTA
 

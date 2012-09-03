@@ -1,0 +1,18 @@
+= content_for :menu do
+  = icon_to 'retour.png', book_lines_path(@book)
+
+- if @previous_line
+  .alert.notice
+    %a.close(data-dismiss="alert") x
+      %strong
+        %table
+          %tbody
+            %tr
+              %td= "Ligne n°#{@previous_line.id} créée : "
+              = render 'line', line: @previous_line
+.champ
+  %h3
+    =  @book.title.capitalize
+    : nouvelle ligne
+  .inner-champ
+    = render 'form'

@@ -11,8 +11,6 @@
 # ne doivent a priori pas être actifs. Dans la vue index, ils sont en gris et en gras.
 
 
-# TODO dans tous les modèles qui utilisent décimal rajouter précision
-# et scale puisque le guide Rails(p.392) le recommande très fortement
 
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development
 
@@ -65,16 +63,29 @@ class Account < ActiveRecord::Base
     self.number[0]
   end
 
+  # fournit le cumul des débit (dc = 'debit') ou des crédits(dc = 'credit')
+  # pour le jour qui précède la date (ou au début du jour indiqué par date)
   def cumulated_before(date, dc)
     lines.where('line_date < ?',date).sum(dc)
   end
 
+  # fournit le cumul des débit (dc = 'debit') ou des crédits(dc = 'credit')
+  # à la fin du jourindiqué par date
    def cumulated_at(date, dc)
     lines.where('line_date <= ?',date).sum(dc)
   end
 
+   # calcule le solde au soir du jour indiqué par date
    def sold_at(date)
      cumulated_at(date, :credit) - cumulated_at(date, :debit)
+   end
+
+   # cette méthode est utile pour les comptes de classe 5 (banque et caisse)
+   # leur solde correspond en fait à toutes les opérations qui ont été passées par
+   # eux au titre des dépenses et recettes, plus les opérations qui sont
+   # directement traitées en OD, et donc par le compte
+   def sold_accountable_at(date)
+
    end
 
    # le solde a une date donnée pour un compte bancaire

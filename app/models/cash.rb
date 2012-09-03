@@ -7,8 +7,6 @@ class Cash < ActiveRecord::Base
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
   include Utilities::JcGraphic
-
- 
   
   belongs_to :organism
   has_many :lines
@@ -37,7 +35,7 @@ class Cash < ActiveRecord::Base
     "#{self.class.name}_#{id}"
   end
 
-   # appelé par le callback after_create, crée un compte comptable de rattachement
+ # appelé par le callback after_create, crée un compte comptable de rattachement
  # pour chaque exercice ouvert.
  def create_accounts
    logger.info 'création des comptes liés à la caisse'
