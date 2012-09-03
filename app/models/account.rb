@@ -21,6 +21,7 @@ class Account < ActiveRecord::Base
   require 'pdf_document/base'
 
   belongs_to :period
+  belongs_to :accountable, polymorphic:true
   has_many :natures
   has_many :lines
 

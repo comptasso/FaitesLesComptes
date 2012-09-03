@@ -44,5 +44,7 @@ namespace :db do
       ActiveRecord::Schema.verbose = true
       load("#{Rails.root}/db/schema.rb")
     end
+
+
   end
 end

@@ -55,6 +55,18 @@ describe Account do
     end
   end
 
+  describe 'polymorphic' do
+    it 'la création d\'une caisse entraîne celle d\'un compte' do
+       @c.should have(1).accounts
+    end
+
+    it 'la création d\'une caisse entraîne celle d\'un compte' do
+      @c.accounts.length.should == 1
+    end
+  end
+
+
+
   describe 'all_lines_locked?', wip:true do
 
     it 'vrai si pas de lignes' do

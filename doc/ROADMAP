@@ -827,17 +827,19 @@ solde au début de l'année et un en fin d'année.
 Modif pour line :
 OK - Ajouter un champ account_id, puis belongs_to account, et account has_many lines
 OK - Faire un before_save qui remplit account_id en fonction de nature
-Faire un observer nature qui remplit Line si le rattachement de nature est fait après coup.
+OK - Faire un observer nature qui remplit Line si le rattachement de nature est fait après coup.
 On ne doit pas pouvoir changer le rattachement de nature à un compte si locked et account_id rempli
-Si on modifie la nautre d'une ligne, il faut que le account_id soit géré.
+OK - Si on modifie la nature d'une ligne, il faut que le account_id soit géré (fait par le before_save fill_account)
+
+Account doit être polymorphique pour pouvoir être détenu soit par un compte bancaire soit par une caisse
 
 Modif pourBankAccount :
 Ajouter que BankAccount has_many accounts, as:account (il y a un compte par exercice)
-La création d'un compte bancaire doit créer un compte comptable
-Les relevés de compte donnent lieu à passation d'écriture : on extourne le solde d'origine et on
-on met le solde final.
-Attention à ne pas saisir deux fois le montant à l'ouverture de l'exercice (par le report d'une part et ensuite par saisie du
-relevé de compte).
+La création d'un compte bancaire doit créer un compte comptable (un par exercice),
+Le solde d'un compte bancaire ou d'une caisse se calcule en :
+  - prenant en compte les lignes 6 et 7 qui ont ce bank_account_id (cash_id)
+  - et en ajoutant les lignes qui ont des écritures avec ce compte (normalement des écritures d'inventaire uniquement)
+NON - Les relevés de compte donnent lieu à passation d'écriture : on extourne le solde d'origine et on met le solde final.
 
 Idem pour Caisse et les contrôles de caisse
 
