@@ -151,7 +151,7 @@ class BankAccount < ActiveRecord::Base
 
  # appelé par le callback after_create, crée un compte comptable de rattachement
  # pour chaque exercice ouvert.
- def create_accounts
+ def create_accounts 
    logger.info 'création des comptes liés au compte bancaire'
    # demande un compte de libre sur l'ensemble des exercices commençant par 51
    n = Account.available('51') # un compte 51 avec un précision de deux chiffres par défaut

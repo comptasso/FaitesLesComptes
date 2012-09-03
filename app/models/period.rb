@@ -372,7 +372,7 @@ class Period < ActiveRecord::Base
 return unless self.previous_period?
     pp=self.previous_period
     pp.accounts.all.each do |a|
-      self.accounts.create! :number=>a.number, title: a.title, used: a.used
+      self.accounts.create! :number=>a.number, title: a.title, used: a.used, accountable_id:a.accountable_id, accountable_type:a.accountable_type
     end
   end
 

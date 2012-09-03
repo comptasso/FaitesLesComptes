@@ -43,8 +43,32 @@ describe BankAccount do
 
   describe 'création du compte comptable', wip:true do
 
+    before(:each) do
+      @bb=@o.bank_accounts.new(:name=>'Crédit Universel', :number=>'1254L')
+    end
+
     it 'la création d un compte bancaire doit entraîner celle d un compte comptable' do
-      @ba.should have(1).accounts
+      @bb.save
+      @bb.should have(1).accounts
+      
+    end
+
+    it 'incrémente les numéros de compte' do
+      @ba.accounts.first.number.should == '5101'
+      @bb.save
+      @bb.accounts.first.number.should == '5102'
+    end
+
+    it 'crée le compte pour tous les exercices ouverts' do
+      @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+      @bb.save
+      @bb.accounts.count.should == 2
+    end
+
+    it 'créer un nouvel exercice recopie le compte correspondant au compte bancaire' do
+      @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+      @ba.accounts.count.should == 2
+      @ba.accounts.last.number.should == '5101'
     end
   end
 
