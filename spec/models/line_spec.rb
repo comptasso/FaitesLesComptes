@@ -2,9 +2,9 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |config|
-  config.filter = {wip:true}
-end
+#RSpec.configure do |config|
+#  config.filter = {wip:true}
+#end
 
 
 describe Line do
@@ -162,24 +162,31 @@ describe Line do
  
   end
   
-  describe 'before_save', wip:true do
+  describe 'before_save'do
     
     before(:each) do
-      @a = Account.create(:period_id=>@p.id, number:'60', title:'compte test')
-      @n.update_attribute(:account_id, @a.id )
+      @a = Account.create(:period_id=>@p.id, number:'60', title:'compte test') 
     end
-    
     
     it 'si nature est rattachée à un compte alors le compte est associé' do
+      @n.update_attribute(:account_id, @a.id )
       @l = Line.new(:book_id=>@ib.id, :narration=>'premier mois credit',
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id)
+        :credit=>2.50 , :nature_id=>@n.id) 
       @l.save
-      @l.account.should == @a
-      
+      @l.account.should == @a 
     end
-    
-    
+
+    it 'si nature est rattaché après'  do 
+      @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', 
+        :payment_mode=> 'Espèces',  :line_date=>Date.today,
+        :credit=>2.50 , :nature_id=>@n.id)
+      @n.account_id = @a.id
+      @n.save! 
+     # il faut recharger l'instance pour tester le changement de nature
+      l = Line.find_by_credit(2.50)
+      l.account.should == @a
+    end
     
   end
 
