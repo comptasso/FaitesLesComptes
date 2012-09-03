@@ -10,7 +10,7 @@
 module Utilities::JcGraphic
 
   # permet de retourner ou de créer la variable d'instance
-  # ce qui fait une sorte de cache puisque graphic est ensuite appelé à plusieurs
+  # ce qui fait un cache puisque graphic est ensuite appelé à plusieurs
   # reprises pour founir ses différentes éléments
   def graphic(period)
     @graphic ||= default_graphic(period)

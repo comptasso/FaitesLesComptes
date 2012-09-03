@@ -33,13 +33,9 @@ class Account < ActiveRecord::Base
   # TODO être sur que period est valide (par exemple on ne doit pas
   # pouvoir ouvrir ou modifier un compte d'un exercice clos
 
-#  def lines
-#    Line.
-#  end
-
   scope :classe, lambda {|i| where('number LIKE ?', "#{i}%")}
-  scope :classe_6, where('number LIKE ?', '6%')
-  scope :classe_7, where('number LIKE ?', '7%')
+  scope :classe_6, classe(6)
+  scope :classe_7, classe(7)
   scope :classe_6_and_7, where('number LIKE ? OR number LIKE ?', '6%', '7%')
 
    # le numero de compte plus le title pour les input select
@@ -81,6 +77,8 @@ class Account < ActiveRecord::Base
      cumulated_at(date, :credit) - cumulated_at(date, :debit)
    end
 
+   # le solde a une date donnée pour un compte bancaire
+
   
   def formatted_sold(date)
      ['%0.2f' % cumulated_before(date, :debit), '%0.2f' % cumulated_before(date, :credit) ]
@@ -89,15 +87,16 @@ class Account < ActiveRecord::Base
 
   # TODO on pourrait utiliser le scope range_date de lines
   # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
+  # Exemple movement(Date.today.beginning_of_year, Date.today, true) pour un credit
   def movement(from, to, dc)
     self.lines.where('line_date >= ? AND line_date <= ?', from, to ).sum(dc)
   end
 
-  def lines_empty?(from=self.period.start_date, to=self.period.close_date)
+  def lines_empty?(from =  period.start_date, to = period.close_date)
     self.lines.where('line_date >= ? AND line_date <= ?', from, to ).empty?
   end
   
-  def all_lines_locked?(from = self.period.start_date, to = self.period.close_date)
+  def all_lines_locked?(from = period.start_date, to = period.close_date)
     self.lines.where('line_date >= ? AND line_date <= ? AND locked == ?', from, to, false ).any? ? false : true
   end
 

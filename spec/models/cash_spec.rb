@@ -30,10 +30,37 @@ describe Cash do
 
    describe 'création du compte comptable' do
 
-    it 'la création d une caisse doit entraîner celle d un compte comptable' do
-      @c.should have(1).accounts 
+    before(:each) do
+      @c2=@o.cashes.new(:name=>'Dépôt')
+    end
+
+    it 'la création d un compte bancaire doit entraîner celle d un compte comptable' do
+      @c2.save
+      @c2.should have(1).accounts
+
+    end
+
+    it 'incrémente les numéros de compte' do
+      @c.accounts.first.number.should == '5301'
+      @c2.save
+      @c2.accounts.first.number.should == '5302'
+    end
+
+    it 'crée le compte pour tous les exercices ouverts' do
+      @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+      @c2.save
+      @c2.accounts.count.should == 2
+    end
+
+    it 'créer un nouvel exercice recopie le compte correspondant au compte bancaire' do
+      @c.accounts.count.should == 1
+      @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+      @c.accounts.count.should == 2
+      @c.accounts.last.number.should == @c.accounts.first.number
     end
   end
+
+  
 
   context 'annex methods' do
     
@@ -47,9 +74,12 @@ describe Cash do
     end
   end
 
+  # monthly_value est défini dans le module Utilities::Sold
   describe 'monthly_values' do
-    it 'returns value at a date'
 
+    it 'returns value at a date' do
+      pending 'A revoir avec nouvelle logique des cash et en traitant la problématique de plusieurs exercices'
+    end
 
   end
   

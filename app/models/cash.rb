@@ -1,3 +1,4 @@
+# coding: utf-8
 
 # La class Cash correspond à une caisse
 #
@@ -25,6 +26,7 @@ class Cash < ActiveRecord::Base
 
   validates :name, :presence=>true, :uniqueness=>{:scope=>:organism_id}
 
+  after_create :create_accounts
 
   def to_s
     name
@@ -35,6 +37,16 @@ class Cash < ActiveRecord::Base
     "#{self.class.name}_#{id}"
   end
 
+   # appelé par le callback after_create, crée un compte comptable de rattachement
+ # pour chaque exercice ouvert.
+ def create_accounts
+   logger.info 'création des comptes liés à la caisse'
+   # demande un compte de libre sur l'ensemble des exercices commençant par 51
+   n = Account.available('53') # un compte 53 avec un précision de deux chiffres par défaut
+   organism.periods.where('open = ?', true).each do |p|
+     self.accounts.create!(number:n, period_id:p.id, title:self.name)
+   end
+ end
   
 
 

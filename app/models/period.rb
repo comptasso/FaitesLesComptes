@@ -287,6 +287,7 @@ class Period < ActiveRecord::Base
 
  
   # donne les soldes de chaque mois, est appelé par le module JcGraphic pour constuire les graphes
+  # TODO voir s'il faut vraiment books.all (donc avec l'OD) ou sans l'OD
   def monthly_value(date)
     books.all.sum {|b| b.monthly_value(date) }
   end
@@ -367,12 +368,15 @@ class Period < ActiveRecord::Base
 
   private
 
-  # recopie les comptes de l'exercice précédent (s'il y en a un)
+  # recopie les comptes de l'exercice précédent (s'il y en a un) en modifiant period_id
   def copy_accounts
 return unless self.previous_period?
-    pp=self.previous_period
-    pp.accounts.all.each do |a|
-      self.accounts.create! :number=>a.number, title: a.title, used: a.used, accountable_id:a.accountable_id, accountable_type:a.accountable_type
+    previous_period.accounts.all.each do |a|
+      logger.debug  "Recopie du compte #{a.inspect}"
+      b = a.dup
+      b.period_id = self.id
+      b.save!
+      logger.debug  "Nouveau compte #{b.inspect}"
     end
   end
 

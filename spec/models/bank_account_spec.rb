@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-  c.filter = {:wip=> true }
+#  c.filter = {:wip=> true }
 end
 
 describe BankAccount do
@@ -41,7 +41,7 @@ describe BankAccount do
 
   end
 
-  describe 'création du compte comptable', wip:true do
+  describe 'création du compte comptable' do
 
     before(:each) do
       @bb=@o.bank_accounts.new(:name=>'Crédit Universel', :number=>'1254L')
@@ -54,12 +54,12 @@ describe BankAccount do
     end
 
     it 'incrémente les numéros de compte' do
-      @ba.accounts.first.number.should == '5101'
+      @ba.accounts.first.number.should == '5101' 
       @bb.save
       @bb.accounts.first.number.should == '5102'
     end
 
-    it 'crée le compte pour tous les exercices ouverts' do
+    it 'crée le compte pour tous les exercices ouverts' do 
       @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
       @bb.save
       @bb.accounts.count.should == 2
