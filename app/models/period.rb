@@ -198,9 +198,19 @@ class Period < ActiveRecord::Base
     return possible
   end
 
+  def bank_accounts
+    accounts.where('number LIKE ?', '51%')
+  end
+  
+  def cash_accounts
+    accounts.where('number LIKE ?', '53%')
+  end
+
   def recettes_accounts
     accounts.classe_7.all
   end
+
+
 
   def depenses_accounts
     accounts.classe_6.all 

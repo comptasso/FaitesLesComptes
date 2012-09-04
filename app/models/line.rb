@@ -67,7 +67,7 @@ class Line < ActiveRecord::Base
 
   pick_date_for :line_date 
   
-  before_save :check_bank_and_cash_ids, :fill_account
+  before_save  :fill_account
 
   before_destroy :cant_change_if_locked
 
@@ -204,22 +204,7 @@ class Line < ActiveRecord::Base
 
   protected
 
-  # Si le paiement est Especes, mettre à nil le bank_account_id
-  # Autrement mettre à nil le cash_id
-  # si le paiement est en chèque et que bank_extract n'est pas rempli alors mettre à nil le bank_account_id
-  # TODO passer à un champ polymorphique ou plus simple n'enregistrer que le counter_account
-  def check_bank_and_cash_ids
- 
-  # TODO probablement des classes lines héritées faciliteraient la chose.
-    Rails.logger.debug 'modfication des bank et cash ids'
-   # DANGER va probablement devenir inadapté avec d'autres types de lignes d'écriture
-    if self.nature  # ceci permet de ne pas faire ce contrôle pour les virements qui n'ont pas de nature
-        self.bank_account_id = nil if self.payment_mode == 'Espèces'
-        self.cash_id = nil unless self.payment_mode =='Espèces'
-    end
- 
-  end
-
+  
   
   def cant_change_if_locked
     !locked

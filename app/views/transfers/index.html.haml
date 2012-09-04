@@ -23,8 +23,8 @@
           %td= l transfer.date
           %td= transfer.narration
           %td.numeric= two_decimals transfer.amount
-          %td= show_transferable transfer.debitable
-          %td= show_transferable transfer.creditable
+          %td= transfer.debitable.long_name
+          %td= transfer.creditable.long_name
 
           %td
             = icon_to 'modifier.png', edit_organism_transfer_path(@organism, transfer)

@@ -8,17 +8,19 @@ class Transfer < ActiveRecord::Base
   before_destroy :should_be_destroyable
 
   belongs_to :organism
-  belongs_to :debitable, :polymorphic=>true
-  belongs_to :creditable, :polymorphic=>true
+  # ceci est un compte
+  belongs_to :debitable, class_name:'Account'
+  belongs_to :creditable, class_name:'Account'
+
   # ce qui veut dire que Line a un champ owner_id qui permet de faire le lien avec le transfer
   # Line de son côté a belongs_to owner, polymorphic:true
   has_many   :lines, :as=>:owner, :dependent=>:destroy
 
   validates :date, :amount, :presence=>true
-  validates :debitable_id, :debitable_type, :presence=>true
-  validates :creditable_id, :creditable_type, :presence=>true
+  validates :debitable_id, :presence=>true
+  validates :creditable_id, :presence=>true
   validates :amount, numericality: true
-  validate :amount_cant_be_null, :required_fill_debitable, :required_fill_creditable
+  validate :amount_cant_be_null
   validate :different_debit_and_credit
 
   after_create :create_lines
@@ -30,28 +32,7 @@ class Transfer < ActiveRecord::Base
 
   # remplit les champs debitable_type et _id avec les parties 
   # model et id de l'argument.
-  def fill_debitable=(model_id)
-    elements = model_id.split('_')
-    self.debitable_type = elements.first
-    self.debitable_id = elements.last
-  end
-
-
-  def fill_debitable
-    [debitable_type, debitable_id].join('_')
-  end
-
-  # remplit les champs creditable_type et _id avec les parties 
-  # model et id de l'argument.
-  def fill_creditable=(model_id)
-    elements = model_id.split('_')
-    self.creditable_type = elements.first
-    self.creditable_id = elements.last
-  end
-
-  def fill_creditable
-    [creditable_type, creditable_id].join('_')
-  end
+  
 
   def line_debit
     lines.where('debit <> ?', 0).first
@@ -118,26 +99,11 @@ class Transfer < ActiveRecord::Base
 
   # applé par after create
   def create_lines
-    build_line_debit.save!
-    build_line_credit.save!
-  end
-
-
- # build_debit_line construit la ligne d'écriture débitrice correspondant au 
- # virement
-  def build_line_debit
-    cash_id, bank_account_id = line_debit_infos
-    lines.build(:line_date=> date, :narration=>narration, :credit=> 0,
-      :debit=>amount, :cash_id=> cash_id, :bank_account_id=> bank_account_id , 
+    lines.create!(:line_date=> date, :narration=>narration, :credit=> 0,
+      :debit=>amount, :counter_account_id=> debitable_id,
      :book_id=>od_id)
-  end
-
-  # build_credit_line construit la ligne d'écriture créditrice à partir d'un
-  # virement
-  def build_line_credit
-    cash_id, bank_account_id = line_credit_infos
-    lines.build(:line_date=> date, :narration=>narration, :credit=>amount,
-      :debit=>0, :cash_id=> cash_id, :bank_account_id=> bank_account_id,
+    lines.create!(:line_date=> date, :narration=>narration, :credit=>amount,
+      :debit=>0, :counter_account_id=> creditable_id,
     :book_id=>od_id)
   end
 
@@ -186,16 +152,9 @@ class Transfer < ActiveRecord::Base
     errors.add :amount, 'nul !' if amount == 0
   end
 
-  def required_fill_debitable
-    errors.add :fill_debitable, 'champ obligatoire' if (debitable_id == nil || debitable_type == nil)
-  end
-
-  def required_fill_creditable
-    errors.add :fill_creditable, 'champ obligatoire' if (creditable_id == nil || creditable_type == nil)
-  end
 
   def different_debit_and_credit
-    if fill_debitable == fill_creditable
+    if debitable_id == creditable_id
       errors.add :fill_debitable, 'identiques !'
       errors.add :fill_creditable, 'identiques !'
     end

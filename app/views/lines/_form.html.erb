@@ -33,15 +33,11 @@
                           disabled: "#{'Espèces' unless @organism.cashes.any?}",
                           :wrapper_html=> {class: "span3"},
                           :required=>true,  input_html: {class: "span8"}, :label_html=>{class:'span4'} %>
-            <%= f.association :bank_account,  :wrapper_html=>{class: "span3", id:'td_bank'}, input_html: {class: "span8"},:label_html=>{class:'span4'}, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>
-         
+            <%= f.association :counter_account, :label=> 'Contrepartie',  :wrapper_html=>{class: "span3", id:'td_cca'}, input_html: {class: "span8"}, :label_html=>{class:'span4'},
+                :collection => options_for_cca(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :title,
+                :label_method=> :long_name, :value_method=> :id  %>
                <%= f.input :check_number, label:'N° ch.', :wrapper_html=>{:class=>'span3', id:'td_check_number'},:label_html=>{class:'span4'}, input_html: {class: "span8" }  %>
-        
-
-           
-                <%= f.association :cash, :wrapper_html=>{class: "span3", id:'td_cash'},:label_html=>{class:'span4'}, input_html: {class: "span8"}, :collection => @organism.cashes.all, :include_blank=> false %>
-        
-          </div>
+           </div>
        </div>
 
        <div class="row-fluid">

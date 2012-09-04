@@ -28,6 +28,16 @@ module LinesHelper
 
   end
 
+
+
+# Helper permettant de construire les options de counter_account pour le form
+# La classe OptionsForAssociationSelect est dans lib
+def options_for_cca(period)
+  [OptionsForAssociationSelect.new('Banques', :bank_accounts, period), OptionsForAssociationSelect.new('Caisses',:cash_accounts, period)]
+end
+
+
+
  
 
 
