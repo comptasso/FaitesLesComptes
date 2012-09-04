@@ -868,7 +868,11 @@ OK - le callback check_bank_and_cash_id devient inutile, le formulaire donnant d
 Les jQuery doivent être revus pour gérer le fait qu'il n'y plus qu'un champ - pas forcément
 Tous les appel à cash et à bank_account doivent être en fait transformés en appel au counter_account
 Dans lines#index, le support doit être revu
-Dans Transfer revoir le after_create
+OK - Dans Transfer revoir le after_create
+
+
+------------- fin de cette muutation --------------------------------------------
+on peut supprimer les champs debitable_type et crreditable_type de Transfer
 
 --------------------------------- TODO ---------------------------------------------------------
 Quand on a des comptes et qu'on crée une nature, le lien au compte est disable dans le form

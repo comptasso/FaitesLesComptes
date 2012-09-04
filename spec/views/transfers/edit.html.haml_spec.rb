@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe "transfers/edit" do
+describe "transfers/edit" do 
     include JcCapybara
 
   before(:each) do
@@ -48,15 +48,15 @@ describe "transfers/edit" do
   it 'part debit is disable if line_debit locked' do
      @transfer.should_receive(:debit_locked?).and_return(true)
      render
-     page.find('select#transfer_fill_debitable')[:disabled].should == 'disabled'
-     page.find('select#transfer_fill_creditable')[:disabled].should be_nil
+     page.find('select#transfer_debitable_id')[:disabled].should == 'disabled'
+     page.find('select#transfer_creditable_id')[:disabled].should be_nil
   end
 
     it 'part credit is disable if line_credit locked' do
     @transfer.should_receive(:credit_locked?).and_return(true)
      render
-     page.find('select#transfer_fill_creditable')[:disabled].should == 'disabled'
-     page.find('select#transfer_fill_debitable')[:disabled].should be_nil
+     page.find('select#transfer_creditable_id')[:disabled].should == 'disabled'
+     page.find('select#transfer_debitable_id')[:disabled].should be_nil
   end
 
   end

@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-  #  c.filter = {:js=> true }
+  #  c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
@@ -16,13 +16,16 @@ describe 'vue transfer index' do
   before(:each) do
     create_user 
     create_minimal_organism
-    @bb = @o.bank_accounts.create!(:name=>'DebiX', :number=>'123Y')
+    @bb = @o.bank_accounts.create!(:name=>'Deuxième banque', :number=>'123Y')
     login_as('quidam')
+
+
   end
 
-  it 'check minimal organism' do  
+  it 'check minimal organism', wip:true do
     Organism.count.should == 1
     BankAccount.count.should == 2
+    @o.transfers.count.should == 0
   end
 
 
@@ -35,24 +38,27 @@ describe 'vue transfer index' do
       page.should have_css('form')
     end
 
-    it 'remplir correctement le formulaire crée une nouvelle ligne' do 
+    it 'remplir correctement le formulaire crée une nouvelle ligne' do
       visit new_organism_transfer_path(@o)
       fill_in 'transfer[date_picker]', :with=>'14/04/2012'
       fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
-      within('#transfer_fill_debitable') do
-        select('DX 123Z')
+      within("#transfer_debitable_id optgroup[label='Banques']") do
+        select(@ba.accounts.first.long_name)
       end
-      within('#transfer_fill_creditable') do
-        select('DX 123Y')
+      
+      
+      within("#transfer_creditable_id optgroup[label='Banques']") do
+        select(@bb.accounts.first.long_name)
       end
       click_button 'Enregistrer'
       @o.transfers.count.should == 1
       # vérification de o
       t= @o.transfers.last
+puts t.inspect
       t.should be_an_instance_of(Transfer)
-      t.debitable.should == @ba
-      t.creditable.should == @bb
+      t.debitable.should == @ba.accounts.first
+      t.creditable.should == @bb.accounts.first
     end
 
     context 'le remplir incorrectement' do
@@ -62,11 +68,11 @@ describe 'vue transfer index' do
       fill_in 'transfer[date_picker]', :with=>'14/04/2012'
       fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
-      within('#transfer_fill_debitable') do
-        select('DX 123Z')
+      within('#transfer_debitable_id') do
+        select(@ba.accounts.first.id.to_s)
       end
-      within('#transfer_fill_creditable') do
-        select('DX 123Y')
+      within('#transfer_creditable_id') do
+        select(@bb.accounts.first.id.to_s)
       end
 
       end
@@ -91,8 +97,8 @@ describe 'vue transfer index' do
 
     before(:each) do
       # création de deux transfers
-      @t1 = @o.transfers.create!(date: Date.today, debitable: @ba, creditable: @bb, amount: 100000, narration: 'création')
-      @t2 = @o.transfers.create!(date: Date.today, debitable: @bb, creditable: @ba, amount: 999990, narration: 'inversion')
+      @t1 = @o.transfers.create!(date: Date.today, debitable: @ba.accounts.first, creditable: @bb.accounts.first, amount: 100000, narration: 'création')
+      @t2 = @o.transfers.create!(date: Date.today, debitable: @bb.accounts.first, creditable: @ba.accounts.first, amount: 999990, narration: 'inversion')
       visit organism_transfers_path(@o)
     end
 
@@ -125,7 +131,7 @@ describe 'vue transfer index' do
 
     before(:each) do
       @bb = @o.bank_accounts.create!(:name=>'DebiX', :number=>'987654')
-      @t=@o.transfers.create!(:date=>Date.today, :debitable=>@ba, :creditable=>@bb, :amount=>124.12, :narration=>'premier virement')
+      @t=@o.transfers.create!(:date=>Date.today, :debitable=>@ba.accounts.first, :creditable=>@bb.accounts.first, :amount=>124.12, :narration=>'premier virement')
     end
 
     it 'On peut changer les deux autres champs' do

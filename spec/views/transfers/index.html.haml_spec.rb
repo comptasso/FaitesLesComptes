@@ -7,14 +7,14 @@ describe "transfers/index" do
 
   before(:each) do
     assign(:organism, mock_model(Organism, title: 'spec cd'))
-    @debitable =     assign(:debitable, mock_model(BankAccount, name: 'Debix', number: '1254'))
-    @creditable =     assign(:creditable, mock_model(BankAccount, name: 'Debix', number: '6789'))
+    @debitable =     assign(:debitable, mock_model(Account, number:'5101', long_name:'5101 banque'))
+    @creditable =     assign(:creditable, mock_model(Account, number:'5301', long_name:'5301 caisse'))
    
 
     assign(:transfers, [
         stub_model(Transfer,
           :narration => "Premier transfert",
-          :debitable => @debitable,
+          :debitable =>  @debitable,
           :creditable => @creditable,
           :amount => 1.5,
           :date=> Date.today
@@ -27,10 +27,7 @@ describe "transfers/index" do
           :date=> (Date.today-5)
         )
       ])
-    [@debitable, @creditable].each do |dc|
-      dc.stub(:model_name).and_return('BankAccount')
-      dc.stub(:to_s).and_return('DebiX Cte n° 1254')
-    end
+   
     render
   end
 
@@ -65,8 +62,8 @@ describe "transfers/index" do
     first_row.find('td:nth-child(1)').should have_content(I18n::l Date.today)
     first_row.find('td:nth-child(2)').should have_content 'Premier transfert'
     first_row.find('td:nth-child(3)').should have_content '1.50'
-    first_row.find('td:nth-child(4)').should have_content 'DebiX Cte n° 1254'
-    first_row.find('td:nth-child(5)').should have_content 'DebiX Cte n° 1254'
+    first_row.find('td:nth-child(4)').should have_content '5101 banque'
+    first_row.find('td:nth-child(5)').should have_content '5301 caisse'
   end
 
   it 'test des icones pour les liens' do

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-class OdLinesController < Compta::ApplicationController
+class OdLinesController < ApplicationController
 
 def new
   @book=Book.find_by_type('OdBook')
