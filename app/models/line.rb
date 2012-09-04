@@ -130,11 +130,11 @@ class Line < ActiveRecord::Base
     return counter_account.long_name if book.class == OdBook
     aa = counter_account.accountable
     if aa.is_a? BankAccount
-      puts 'je suis dans le premier'
+      
       return aa.acronym
     end
     if aa.is_a? Cash
-      puts 'je suis dans le seconf'
+      
       return aa.name
     end
     return 'Pas de support ?!'

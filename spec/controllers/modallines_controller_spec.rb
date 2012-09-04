@@ -20,7 +20,7 @@ describe ModallinesController do
   describe "POST 'create' return success" do
 
     def valid_arguments
-    {:book_id=>1, :credit=>200 ,:narration=>'ligne de test',
+    {:book_id=>1, :credit=>200 ,:narration=>'ligne de test', counter_account_id:7,
         :line_date=>Date.civil(2012,01,02), :nature_id=>2, :payment_mode=> 'Virement'}
     end
 

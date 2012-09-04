@@ -36,6 +36,7 @@ describe 'vue lines' do
     select 'Essai', :for=>'line_nature_id'
     fill_in 'line_debit', with: 50.21
     select 'Chèque'
+    select '5101 DebiX'
     click_button 'Créer'
     Line.count.should == 1  
   end 

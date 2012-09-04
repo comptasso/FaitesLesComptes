@@ -34,8 +34,9 @@ before(:each) do
 
   it 'give the info in a notice if previous line' do
     view.stub(:icon_to).and_return('stub icone')
-    assign(:previous_line, stub_model(Line, id:1, narration:'test',
+    assign(:previous_line, @pl = stub_model(Line, id:1, narration:'test',
         book_id:book.id, debit:0, credit:12, line_date:Date.today, nature:n, destination:d))
+    @pl.stub(:support).and_return('DX')
     render
     rendered.should have_content 'Ligne n°1 créée'
   end
