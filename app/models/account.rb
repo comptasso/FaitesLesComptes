@@ -31,10 +31,11 @@ class Account < ActiveRecord::Base
   # TODO être sur que period est valide (par exemple on ne doit pas
   # pouvoir ouvrir ou modifier un compte d'un exercice clos
 
-  scope :classe, lambda {|i| where('number LIKE ?', "#{i}%")}
+  scope :classe, lambda {|i| where('number LIKE ?', "#{i}%").order('number ASC')}
   scope :classe_6, classe(6)
   scope :classe_7, classe(7)
   scope :classe_6_and_7, where('number LIKE ? OR number LIKE ?', '6%', '7%')
+  scope :classe_1_to_5, where('number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ?', '1%', '2%', '3%', '4%', '5%').order('number ASC')
 
    # le numero de compte plus le title pour les input select
   def long_name

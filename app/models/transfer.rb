@@ -10,6 +10,8 @@ class Transfer < ActiveRecord::Base
   belongs_to :organism
   belongs_to :debitable, :polymorphic=>true
   belongs_to :creditable, :polymorphic=>true
+  # ce qui veut dire que Line a un champ owner_id qui permet de faire le lien avec le transfer
+  # Line de son côté a belongs_to owner, polymorphic:true
   has_many   :lines, :as=>:owner, :dependent=>:destroy
 
   validates :date, :amount, :presence=>true

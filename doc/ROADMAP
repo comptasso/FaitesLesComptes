@@ -862,6 +862,7 @@ On pourra alors faire des écritures d'inventaire : extraction de remboursement.
 
 Modifier le module Utilities::Sold pour avoir une sélection des lignes correspondant à l'exercice.
 --------------------------------- TODO ---------------------------------------------------------
+Quand on a des comptes et qu'on crée une nature, le lien au compte est disable dans le form
 Nettoyer les natures parasites de la compta perso
 OK - Faire le readme
 OK - Faire un menu bas

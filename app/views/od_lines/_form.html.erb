@@ -8,7 +8,7 @@
     <div class="row-fluid">
       <div class="span12">
 
-        <%= f.input :line_date_picker, :label=> 'Date', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+        <%= f.input :line_date_picker, :label=> 'Date', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@min_date, date_max:@max_date} ,:required => true, :as=>:date_picker %>
         <%= f.input :narration,  :label=>'Libellé ', :wrapper_html=>{:class=>'span6'}, label_html:{class:'span2'}, input_html: {class:"span9" } %>
         </div>
       </div>
@@ -29,17 +29,8 @@
                   input_html:{class: "numeric decimal span8", value:two_decimals(@line.debit) }, :as=>:french_decimal) if (@book.type=='OutcomeBook')  %>
             <%=  f.input(:credit, :wrapper_html=> {class: "span3"},  :label_html=>{class:'span4'} ,
                   input_html: {class: "numeric decimal span8", value: two_decimals(@line.credit) }, :as=>:french_decimal) if (@book.type=='IncomeBook') %>
-            <%= f.input :payment_mode , collection: PAYMENT_MODES, :prompt=>'Mode de réglement',
-                          disabled: "#{'Espèces' unless @organism.cashes.any?}",
-                          :wrapper_html=> {class: "span3"},
-                          :required=>true,  input_html: {class: "span8"}, :label_html=>{class:'span4'} %>
-            <%= f.association :bank_account,  :wrapper_html=>{class: "span3", id:'td_bank'}, input_html: {class: "span8"},:label_html=>{class:'span4'}, :collection => @organism.bank_accounts.all, label_method: :number, :include_blank=> false %>
-         
-               <%= f.input :check_number, label:'N° ch.', :wrapper_html=>{:class=>'span3', id:'td_check_number'},:label_html=>{class:'span4'}, input_html: {class: "span8" }  %>
-        
-
-           
-                <%= f.association :cash, :wrapper_html=>{class: "span3", id:'td_cash'},:label_html=>{class:'span4'}, input_html: {class: "span8"}, :collection => @organism.cashes.all, :include_blank=> false %>
+            <%= f.association :counter_account, label:'Compte', :wrapper_html=>{class: "span3", id:'td_cca'}, input_html: {class: "span8"},
+              :label_html=>{class:'span4'}, :collection => @period.accounts.classe_1_to_5, label_method: :long_name, :include_blank=> false %>
         
           </div>
        </div>

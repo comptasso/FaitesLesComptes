@@ -57,6 +57,7 @@ class Line < ActiveRecord::Base
   belongs_to :destination
   belongs_to :nature
   belongs_to :account
+  belongs_to :counter_account, :class_name=>'Account'
   belongs_to :bank_extract
   belongs_to :check_deposit
   belongs_to :bank_account
@@ -206,6 +207,7 @@ class Line < ActiveRecord::Base
   # Si le paiement est Especes, mettre à nil le bank_account_id
   # Autrement mettre à nil le cash_id
   # si le paiement est en chèque et que bank_extract n'est pas rempli alors mettre à nil le bank_account_id
+  # TODO passer à un champ polymorphique ou plus simple n'enregistrer que le counter_account
   def check_bank_and_cash_ids
  
   # TODO probablement des classes lines héritées faciliteraient la chose.
