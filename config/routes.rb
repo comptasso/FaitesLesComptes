@@ -38,9 +38,7 @@ Faitesvoscomptes::Application.routes.draw do
       
     end
     
-    resources :books do
-      resources :lines
-    end
+    
 
     resources :accounts  
   end
@@ -183,11 +181,9 @@ Faitesvoscomptes::Application.routes.draw do
     end
   end
 
-
-  # TODO voir pour supprimer ça
+  resources :od_lines
+  
   resources :books do
-
-   
     resources :lines do
       member do
         post 'lock' # pour la requete ajax
