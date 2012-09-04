@@ -80,9 +80,9 @@ describe Account do
       @account = Account.create!(valid_attributes)
       @n.account_id = @account.id
       @n.save!
-      @l1 = @account.lines.create(line_date:Date.today, nature_id:@n.id, debit:0, credit:1, narration:'ligne1', book_id:@ib.id, payment_mode:'Espèces', locked:false)
-      @l2 = @account.lines.create!(line_date:Date.today, nature_id:@n.id, debit:0, credit:1, narration:'ligne2',book_id:@ib.id, payment_mode:'Espèces', locked:false)
-    end
+      create_first_line
+      create_second_line
+     end
 
     it 'faux si des lignes dont au moins une n est pas locked' do
       @account.should_not be_all_lines_locked

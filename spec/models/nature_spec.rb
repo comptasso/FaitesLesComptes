@@ -70,7 +70,7 @@ describe Nature do
         end
 
         it 'cant be destroyed when not empty' do
-          @ob.lines.create!(narration: 'test', line_date: Date.today, nature_id: @nature.id, debit: 152, payment_mode: 'Chèque')
+          @ob.lines.create!(narration: 'test', counter_account:@baca, line_date: Date.today, nature_id: @nature.id, debit: 152, payment_mode: 'Chèque')
           @nature.lines.count.should == 1
           expect {@nature.destroy}.not_to change {Nature.count}
         end

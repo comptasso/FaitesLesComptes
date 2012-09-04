@@ -12,6 +12,7 @@ describe Period do
     @organism= Organism.create(title: 'test asso', database_name:'assotest1')
     @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
     @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
+    @ba = @organism.bank_accounts.create!(name:'DebiX', number:'123Z')
   end
    
   describe 'period_next' do
@@ -122,10 +123,10 @@ describe Period do
         @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc60.id)
         @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id)
         @ob= @organism.books.find_by_type('OutcomeBook')
-        @l6= Line.create!(book_id:@ob.id, debit:54, narration:'une ligne de dépense',
+        @l6= Line.create!(book_id:@ob.id, debit:54, narration:'une ligne de dépense', counter_account:@ba.current_account(@p_2010),
           nature_id:@n_dep.id, payment_mode:'Espèces', cash_id:1,
           line_date:@p_2010.start_date)
-        @l7= Line.create!(book_id:@ob.id, debit:99, narration:'une ligne de dépense', 
+        @l7= Line.create!(book_id:@ob.id, debit:99, narration:'une ligne de dépense', counter_account:@ba.current_account(@p_2010),
           nature_id:@n_rec.id, payment_mode:'Espèces', cash_id:1,
           line_date:@p_2010.start_date)
         

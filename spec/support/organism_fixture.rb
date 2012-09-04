@@ -37,9 +37,18 @@ module OrganismFixture
     @n = Nature.create!(name: 'Essai', period_id: @p.id, :income_outcome=>false)
     @ba = @o.bank_accounts.create!(name: 'DebiX', number: '123Z')
     @c=@o.cashes.create!(:name=>'Magasin')
+    @baca = @ba.current_account(@p) # pour baca pour BankAccount Current Account
   end
 
-  def create_second_organism
+  def create_first_line
+    @l1 = Line.create!(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+  end
+
+  def create_second_line
+    @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:3, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+  end
+
+  def create_second_organism 
     @cu.rooms.create!(database_name:'assotest2')
     @o2 = Organism.create!(title: 'ASSO TEST2', database_name:'assotest2')
   end

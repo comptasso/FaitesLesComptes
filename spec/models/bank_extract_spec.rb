@@ -171,7 +171,7 @@ describe BankExtract do
   describe 'contrôle des bank_extract_lines' do
 
     before(:each) do
-      @l1 = Line.new(narration:'bel', line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+      @l1 = Line.new(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
       @l1.valid?
       @l1.should be_valid
       @l1.save!
@@ -181,7 +181,7 @@ describe BankExtract do
       @cd.checks << @l1
       @cd.save!
 
-      @l2 = Line.create!(narration:'bel', line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
+      @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id, line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
 
       @bel1 = CheckDepositBankExtractLine.new( bank_extract_id:@be2.id)
       @bel1.check_deposit = @cd

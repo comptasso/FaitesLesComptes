@@ -70,19 +70,22 @@ describe BankAccount do
       @ba.accounts.count.should == 2
       @ba.accounts.last.number.should == '5101'
     end
+
+    context 'avec deux exercices' do
+
+      before(:each) do
+         @p2 = @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+      end
+
+      it 'répond à current_account' do
+        @ba.current_account(@p2).period.should == @p2
+        @ba.current_account(@p).period.should == @p
+      end
+
+    end
   end
 
-  context 'transferts' do
-
-    it 'has a method debit_transfers' do
-      @ba.d_transfers.should  == []
-    end
-
-    it 'has a method credit_transfers' do
-      @ba.c_transfers.should  == []
-    end
-  end
-
+ 
   context 'annex methods' do
 
 

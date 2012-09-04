@@ -83,22 +83,5 @@ describe Cash do
 
   end
   
-  
-
-  
-  context 'transferts' do
-
-    
-
-    it 'has a method debit_transfers' do
-      @c.d_transfers.should  == []
-    end
-
-    it 'has a method credit_transfers' do
-      @c.c_transfers.should  == []
-    end
-  end
-
-
 end
 

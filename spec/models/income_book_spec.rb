@@ -12,13 +12,13 @@ describe IncomeBook do
     @o=Organism.create!(title: 'test check_deposit', database_name:'assotest1')
     @p=@o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
     @ba=@o.bank_accounts.create!(name: 'IBAN', number: '123456Z')
-
+    @baca=@ba.current_account(@p)
     @b=@o.income_books.create!(title: 'Recettes')
     @n=@p.natures.create!(name: 'ventes')
-    @l1=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
-    @l2=@b.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 101, payment_mode:'Chèque', nature: @n)
-    @l3=@b.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
-    @l5=@b.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 50000, payment_mode:'Virement', nature: @n)
+    @l1=@b.lines.create!(line_date: Date.today,counter_account_id:@baca.id,:narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
+    @l2=@b.lines.create!(line_date: Date.today,counter_account_id:@baca.id, :narration=>'ligne de test',credit: 101, payment_mode:'Chèque', nature: @n)
+    @l3=@b.lines.create!(line_date: Date.today,counter_account_id:@baca.id,:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
+    @l5=@b.lines.create!(line_date: Date.today, counter_account_id:@baca.id,:narration=>'ligne de test',credit: 50000, payment_mode:'Virement', nature: @n)
     end
   
 

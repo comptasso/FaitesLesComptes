@@ -17,8 +17,9 @@ describe StandardBankExtractLine do
       total_debit:2,
       total_credit:5,
       locked:false)
-    @l = Line.create!(narration:'ligne', line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
-    @l2 = Line.create!(narration:'ligne 2', line_date:Date.today, debit:11, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
+    @cca  = @ba.current_account(@p)
+    @l = Line.create!(narration:'ligne', counter_account_id:@cca.id, line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
+    @l2 = Line.create!(narration:'ligne 2',counter_account_id:@cca.id, line_date:Date.today, debit:11, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
   end
 
   def valid_attributes
@@ -74,8 +75,8 @@ describe StandardBankExtractLine do
   describe 'degroup and regroup' do
 
     before(:each) do
-      @l2 = Line.create!(narration:'première ligne', line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
-      @l3 = Line.create!(narration:'deuxième ligne', line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
+      @l2 = Line.create!(narration:'première ligne',counter_account_id:@cca.id, line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
+      @l3 = Line.create!(narration:'deuxième ligne',counter_account_id:@cca.id, line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ob.id, nature_id:@n.id)
       @bel2 = @be.standard_bank_extract_lines.create!(lines:[@l2])
       @bel3 = @be.standard_bank_extract_lines.create!(lines:[@l3])
       

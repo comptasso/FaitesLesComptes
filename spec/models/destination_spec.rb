@@ -66,7 +66,7 @@ describe Destination do
         end
 
         it 'cant be destroyed when not empty' do
-          @ob.lines.create!(narration: 'test', line_date: Date.today, nature_id: @n.id, destination_id: @destination.id,  debit: 152, payment_mode: 'Chèque')
+          @ob.lines.create!(narration: 'test',counter_account_id:@baca.id, line_date: Date.today, nature_id: @n.id, destination_id: @destination.id,  debit: 152, payment_mode: 'Chèque')
           @destination.lines.count.should == 1
           expect {@destination.destroy}.not_to change {Destination.count}
         end

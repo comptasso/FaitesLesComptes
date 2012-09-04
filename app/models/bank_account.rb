@@ -4,8 +4,7 @@ class BankAccount < ActiveRecord::Base
   belongs_to :organism
   has_many :check_deposits
   has_many :bank_extracts
-#  has_many :d_transfers, :as=>:debitable, :class_name=>'Transfer'
-#  has_many :c_transfers, :as=>:creditable, :class_name=>'Transfer'
+
   # un compte bancaire a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
   
@@ -18,6 +17,10 @@ class BankAccount < ActiveRecord::Base
  # sur la base de la date de fin
  def last_bank_extract
    bank_extracts.order(:end_date).last
+ end
+
+ def current_account(period)
+   accounts.where('period_id = ?', period.id).first
  end
 
   # Méthode qui donne le montant du dernier solde bancaire

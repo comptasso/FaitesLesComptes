@@ -23,7 +23,7 @@ describe Utilities::MonthlyBookExtract do
       # on créé 10 lignes sur le mois de janvier, de montant = à 1 €
       # 10 sur février de montant = à 2 €
       # 10 sur mars avec 3 euros
-      params = {book_id: @ob.id, nature_id: @n.id, narration: 'test', payment_mode: 'Chèque', bank_account_id: @ba.id}
+      params = {book_id: @ob.id, counter_account_id:@baca.id, nature_id: @n.id, narration: 'test', payment_mode: 'Chèque', bank_account_id: @ba.id}
       2.times do  |i|
         params[:line_date]=@p.start_date.months_since(i)
         params[:debit] = i+1
