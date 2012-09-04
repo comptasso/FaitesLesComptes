@@ -7,7 +7,7 @@ def new
   @min_date = @period.start_date
   @max_date = @period.close_date
   @natures = @period.natures
-  @line =  @book.lines.new
+  @od_line =  @book.lines.new
 end
 
 end

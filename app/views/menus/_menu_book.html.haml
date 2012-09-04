@@ -1,3 +1,4 @@
 %li.nav-header.no-link= link_to menu_book.title, '#'
 %li= link_to 'Ecrire', new_book_line_path(menu_book)  if (menu_book.type != 'OdBook' && @organism.can_write_line?)
+%li= link_to 'Ecrire', new_od_line_path if (menu_book.type == 'OdBook' && @organism.can_write_line?)
 %li= link_to 'Afficher', book_lines_path(menu_book)

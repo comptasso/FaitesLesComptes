@@ -3,7 +3,8 @@
 
 - if @previous_line
   .alert.notice
-    %a.close(data-dismiss="alert") x
+    %a.close(data-dismiss="alert")
+      x
       %strong
         %table
           %tbody
@@ -13,6 +14,6 @@
 .champ
   %h3
     =  @book.title.capitalize
-    : nouvelle ligne
+    = " : nouvelle ligne"
   .inner-champ
-    = render 'form'
+    = render 'form'   
