@@ -18,7 +18,7 @@ describe Line do
 
     before(:each) do
       @l=Line.new(:book_id=>@ib.id, :credit=>200 ,:narration=>'ligne de test',
-        :line_date=>Date.civil(2012,01,02), :nature_id=>@n.id, :payment_mode=> 'Espèces')
+        :line_date=>Date.civil(2012,01,02), :nature_id=>@n.id, :payment_mode=> 'Espèces', :counter_account_id=>987)
     end
 
     it "should be valid" do
@@ -63,9 +63,16 @@ describe Line do
       @l.should_not be_valid
     end
 
-    it 'doit avoir une nature_id' do
-      @l.nature_id=nil
+   # TODO, ceci n'est plus vrai pour tous les types de lignes
+    it 'doit avoir une nature_id sauf si le book est un od_book' do
+      # une ligne de recettes mais sans nature
+      @l.nature_id = nil
       @l.should_not be_valid
+      # une ligne d'OD
+      
+       @l=Line.new(:book_id=>@od.id, :credit=>200 ,:narration=>'ligne de test',
+        :line_date=>Date.civil(2012,01,02), :payment_mode=> 'Espèces', counter_account_id:7)
+       @l.should be_valid
     end
 
     it 'débit et crédit ne doivent pas être simultanément remplis' do
@@ -85,6 +92,11 @@ describe Line do
 
     it "should belongs to a book" do
       @l.book_id=nil; @l.should_not be_valid
+    end
+
+    it 'doit avoir un counter_account' do
+      @l.counter_account_id = nil
+      @l.should_not be_valid
     end
 
     describe 'attribut virtuel line_date_picker' do
@@ -117,7 +129,7 @@ describe Line do
         destination_id: nil, debit: 50,  credit: 0,
         book_id: @od.id, locked: false, bank_extract_id: nil, payment_mode: nil,
         check_deposit_id: nil, cash_id: nil, bank_account_id: 5,
-        owner_id: 12, owner_type: "Transfer")
+        owner_id: 12, owner_type: "Transfer", counter_account_id:7)
     end
 
     it 'should be valid even without a nature' do
@@ -135,12 +147,12 @@ describe Line do
       #    @l.valid?
       #    @l.errors.messages.should == {}
       #
-      10.times {|t| Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', :payment_mode=> 'Espèces',  :line_date=>Date.civil(2012,01,t+2), :credit=>2*t+1 , :nature_id=>@n.id) }
-      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'premier mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,01,t+2), :debit=>t+1 , :nature_id=>@n.id) }
-      10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'deuxième mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :credit=>3*t+1 , :nature_id=>@n.id) }
-      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'deuxième mois credit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :debit=>2*t+1 , :nature_id=>@n.id) }
-      10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'troisième mois debit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,03,t+2), :credit=>4*t+1 , :nature_id=>@n.id) }
-      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'troisième mois credit',:payment_mode=> 'Espèces', :line_date=>Date.civil(2012,04,t+2), :debit=>5*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', counter_account_id:7, :payment_mode=> 'Espèces',  :line_date=>Date.civil(2012,01,t+2), :credit=>2*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'premier mois debit', counter_account_id:7, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,01,t+2), :debit=>t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'deuxième mois debit', counter_account_id:7, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :credit=>3*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'deuxième mois credit', counter_account_id:7, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :debit=>2*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'troisième mois debit', counter_account_id:7, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,03,t+2), :credit=>4*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'troisième mois credit', counter_account_id:7, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,04,t+2), :debit=>5*t+1 , :nature_id=>@n.id) }
 
     end
     context 'verification que les lignes sont bien là' do
@@ -172,7 +184,7 @@ describe Line do
       @n.update_attribute(:account_id, @a.id )
       @l = Line.new(:book_id=>@ib.id, :narration=>'premier mois credit',
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id) 
+        :credit=>2.50 , :nature_id=>@n.id, counter_account_id:7)
       @l.save
       @l.account.should == @a 
     end
@@ -180,7 +192,7 @@ describe Line do
     it 'si nature est rattaché après'  do 
       @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', 
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id)
+        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>7)
       @n.account_id = @a.id
       @n.save! 
      # il faut recharger l'instance pour tester le changement de nature
@@ -197,7 +209,7 @@ describe Line do
     before(:each) do
       @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id)
+        :credit=>2.50 , :nature_id=>@n.id,  :counter_account_id=>7)
     end
 
 

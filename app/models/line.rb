@@ -71,20 +71,18 @@ class Line < ActiveRecord::Base
 
   before_destroy :cant_change_if_locked
 
-  # Spécific owner_types
-  # Ces owner_types permettent à Line de ne pas avoir de nature_id, ni de mode de payment.
-  # Pour les transferts, la raison en 
-  NON_NATURAL = ['Transfer', 'Program']
+ 
 
   # voir au besoin les validators qui sont dans lib/validators
   validates :debit, :credit, numericality: true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :book_id, presence:true
+  validates :counter_account_id, presence:true
   validates :line_date, presence: true
   validates :line_date, must_belong_to_period: true
-  validates :nature_id, presence: true, :unless=> lambda { NON_NATURAL.include? self.owner_type }
+  validates :nature_id, presence: true, :unless=> lambda { self.book.class == OdBook }
   validates :narration, presence: true
   validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
-    :message => "mode de paiement inconnu" }, :unless=>lambda { NON_NATURAL.include? self.owner_type }
+    :message => "mode de paiement inconnu" }, :unless=>lambda { self.book.class == OdBook }
   validates :debit, :credit, :not_null_amounts=>true, :not_both_amounts=>true
   validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
   validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire
@@ -129,8 +127,17 @@ class Line < ActiveRecord::Base
   
   # donne le support de la ligne (ou sa contrepartie) : la banque ou la caisse
   def support
-    return bank_account.acronym if bank_account_id
-    return cash.name if cash_id
+    return counter_account.long_name if book.class == OdBook
+    aa = counter_account.accountable
+    if aa.is_a? BankAccount
+      puts 'je suis dans le premier'
+      return aa.acronym
+    end
+    if aa.is_a? Cash
+      puts 'je suis dans le seconf'
+      return aa.name
+    end
+    return 'Pas de support ?!'
   end
 
 

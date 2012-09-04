@@ -866,19 +866,21 @@ Changer la date d'une ligne (en changeant d'exercice) va devoir gérer les natur
 ------------ Suppression de bank_account_id et cash_id pour ne garde que counter_account_id (branche odbranch)-----------
 OK - le callback check_bank_and_cash_id devient inutile, le formulaire donnant directement le compte de la caisse ou de la banque
 Les jQuery doivent être revus pour gérer le fait qu'il n'y plus qu'un champ - pas forcément
- actuellemnt couterpart apparaît
-Voir le after_create de Line qui ne remplit par counter_account
+OK - Dans le form lines, couterpart apparaît mais n'est pas obligatoire
+NON - Voir le after_create de Line qui ne remplit par counter_account
 Tous les appel à cash et à bank_account doivent être en fait transformés en appel au counter_account
-Dans lines#index, le support doit être revu
+OK - Dans lines#index, le support doit être revu
+revoir index.xls.erb pdf.prawn xslx.erb si incidence de support
 OK - Dans Transfer revoir le after_create
 Modifier cash#sold_at
+Revoir tout ce qui est balance ou grand livre (écran ou pdf) qui utilisent intensément les soldes
 
 
 
 ------------- fin de cette muutation --------------------------------------------
 on peut supprimer les champs debitable_type et crreditable_type de Transfer
 toujours dans Transfer, on pourrait revoir les validators
-
+Dans les exports de Lines#index vers des fichiers, on ne devrait pas faire un truncate des champs (vu le pb pour le champ support)
 --------------------------------- TODO ---------------------------------------------------------
 Quand on a des comptes et qu'on crée une nature, le lien au compte est disable dans le form
 Nettoyer les natures parasites de la compta perso
