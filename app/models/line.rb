@@ -212,7 +212,7 @@ class Line < ActiveRecord::Base
  
   # TODO probablement des classes lines héritées faciliteraient la chose.
     Rails.logger.debug 'modfication des bank et cash ids'
-   # DANGER va probablement devenir inadapté avec d'autres lignes d'écriture
+   # DANGER va probablement devenir inadapté avec d'autres types de lignes d'écriture
     if self.nature  # ceci permet de ne pas faire ce contrôle pour les virements qui n'ont pas de nature
         self.bank_account_id = nil if self.payment_mode == 'Espèces'
         self.cash_id = nil unless self.payment_mode =='Espèces'
@@ -220,6 +220,7 @@ class Line < ActiveRecord::Base
  
   end
 
+  
   def cant_change_if_locked
     !locked
   end
