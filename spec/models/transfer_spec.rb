@@ -10,10 +10,12 @@ describe Transfer , :wip=>true do
   before(:each) do
     create_minimal_organism 
     @bb=@o.bank_accounts.create!(name: 'DebiX', number: '123Y')
+    @aa = @ba.accounts.first
+    @ba = @bb.accounts.first
   end 
 
   def valid_attributes
-    {date: Date.today, debitable: @ba, creditable: @bb, amount: 1.5, organism_id: @o.id}
+    {date: Date.today, debitable: @aa, creditable: @ba, amount: 1.5, organism_id: @o.id}
   end
 
   describe 'virtual attribute pick date' do
@@ -34,44 +36,7 @@ describe Transfer , :wip=>true do
  
   end
 
-  describe 'virtual attribute fill_debitable' do
-
-    before(:each) do
-      @transfer=Transfer.new(:debitable_type=>'Model', :debitable_id=>'9')
-    end
-    
-
-    it 'fill_debitable = ' do
-      @transfer.fill_debitable=('Model_6')
-      @transfer.debitable_id.should == 6
-      @transfer.debitable_type.should == 'Model'
-    end
-
-    it 'debitable concat type and id' do
-      @transfer.fill_debitable.should == 'Model_9'
-    end
-
-  end
-
-  describe 'virtual attribute creditable' do
-
-    before(:each) do
-      @transfer=Transfer.new(:creditable_type=>'Model', :creditable_id=>'9')
-    end
-
-
-    it 'fill_creditable = ' do
-      @transfer.fill_creditable= 'Model_6'
-      @transfer.creditable_id.should == 6
-      @transfer.creditable_type.should == 'Model'
-    end
-
-    it 'fill_creditable concat type and id' do
-      @transfer.fill_creditable.should == 'Model_9'
-    end
-
-  end
-
+  
   describe 'validations' do
 
     before(:each) do
@@ -138,13 +103,13 @@ describe Transfer , :wip=>true do
     it 'champ obligatoire pour debitable' do
       @tr.debitable=nil
       @tr.valid?
-      @tr.errors[:fill_debitable].should == ['champ obligatoire']
+      @tr.errors[:debitable_id].should == ['obligatoire']
     end
 
     it 'champ obligatoire pour creditable' do
       @tr.creditable=nil
       @tr.valid?
-      @tr.errors[:fill_creditable].should == ['champ obligatoire']
+      @tr.errors[:creditable_id].should == ['obligatoire']
     end
 
 
@@ -166,48 +131,15 @@ describe Transfer , :wip=>true do
       @t.send(:od_id).should == @o.od_books.first.id
     end
 
-    it 'transfer create a credit line' do
-      l = @t.send(:build_line_credit)
-      l.should be_an_instance_of Line
-      l[:line_date].should == Date.today
-      l[:narration].should == 'test'
-      l[:credit].should == 123.50
-      l[:debit].should == 0.0
-      l[:cash_id].should == 1
-      l[:bank_account_id].should == nil
-      
-    end
-
-    it 'can build a debit line for a bank_account' do
-      @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
-        :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
-        :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
-        :organism_id=>@o.id)
-      l = @t.send(:build_line_debit)
-      l[:cash_id].should == nil
-      l[:bank_account_id].should == @bb.id
-    end
-
-    it 'create debit line as well' do
-      @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
-        :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
-        :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
-        :organism_id=>@o.id)
-      l = @t.send(:build_line_debit)
-      l[:credit].should == 0
-      l[:debit].should == @t.amount  
-      l[:cash_id].should == nil
-      l[:bank_account_id].should == @bb.id
-      
-    end
+    
 
 
     context 'check save and after_create' do
 
       before(:each) do
         @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
-          :creditable_id=>@ba.id, :creditable_type=>'BankAccount',
-          :debitable_id=>@bb.id, :debitable_type =>'BankAccount',
+          :creditable_id=>@aa.id, :creditable_type=>'BankAccount',
+          :debitable_id=>@ba.id, :debitable_type =>'BankAccount',
           :organism_id=>@o.id)
       end
 
@@ -267,21 +199,21 @@ describe Transfer , :wip=>true do
         describe 'update' do
 
           before(:each) do
-            @t.line_debit.bank_account_id.should == @bb.id
+            @t.line_debit.counter_account_id.should == @ba.id
             @bc=@o.bank_accounts.create!(name: 'DebiX', number: '456X')
-            @model_id = "BankAccount_#{@bc.id}"
+            @ac = @bc.accounts.first
           end
 
           it 'modify transfer change lines adequatly' do
-            @t.fill_debitable = @model_id
+            @t.debitable = @ac
             @t.save!
-            @t.line_debit.bank_account_id.should == @bc.id
+            @t.line_debit.counter_account_id.should == @ac.id
           end
 
           it 'modify transfer change lines adequatly' do
-            @t.fill_creditable = @model_id
+            @t.creditable = @ac
             @t.save!
-            @t.line_credit.bank_account_id.should == @bc.id
+            @t.line_credit.counter_account_id.should == @ac.id
           end
 
           context 'line_debit locked' do
@@ -293,9 +225,9 @@ describe Transfer , :wip=>true do
             end
           
             it 'modify transfer debit is not possibile if locked' do
-              @t.fill_debitable = @model_id
+              @t.creditable = @ac
               @t.save!
-              @t.line_debit.bank_account_id.should == @bb.id
+              @t.line_debit.counter_account_id.should == @ba.id
             end
 
             it 'says debit_locked' do
@@ -317,9 +249,9 @@ describe Transfer , :wip=>true do
 
             it 'modify transfer debit or credit is not possibile if locked' do
 
-              @t.fill_creditable = @model_id
+              @t.creditable = @ac
               @t.save!
-              @t.line_credit.bank_account_id.should == @ba.id
+              @t.line_credit.counter_account_id.should == @aa.id
             end
 
             it 'transfer is credit_locked' do

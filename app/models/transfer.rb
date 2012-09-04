@@ -83,7 +83,7 @@ class Transfer < ActiveRecord::Base
   
  # retourne l'id du journal d'OD correspondant à l'organisme dont dépent transfer
  # 
- # utilisée par build_debit_line et build_credit_line pour construire les lignes
+ # utilisée par create_lines pour construire les lignes
   def od_id
    self.organism.od_books.first.id
   end
@@ -107,45 +107,17 @@ class Transfer < ActiveRecord::Base
     :book_id=>od_id)
   end
 
-     # appelé par after_update
+     # appelé par after_update pour mettre à jour counter_account
   def update_line_credit
-    cash_id, bank_account_id = line_credit_infos
-    l=line_credit
-    l.cash_id = cash_id
-    l.bank_account_id = bank_account_id
-    l.save!
-  end
+    line_credit.update_attribute(:counter_account_id, creditable_id)
 
+  end
 
   # appelé par after_update
   def update_line_debit
-   cash_id, bank_account_id = line_debit_infos
-    l=line_debit
-    l.cash_id = cash_id
-    l.bank_account_id = bank_account_id
-    l.save!
-
+   line_debit.update_attribute(:counter_account_id, debitable_id)
   end
 
-
-  def line_credit_infos
-    cash_id = bank_account_id = nil
-    case creditable_type
-    when 'Cash' then cash_id = creditable_id
-    when 'BankAccount' then bank_account_id = creditable_id
-    end
-    return [cash_id, bank_account_id]
-  end
-
-  def line_debit_infos
-    cash_id = bank_account_id = nil
-    case debitable_type
-    when 'Cash' then cash_id = debitable_id
-    when 'BankAccount' then bank_account_id = debitable_id
-    end
-    return [cash_id, bank_account_id]
-  end
-  
 
   # validations
   def amount_cant_be_null
