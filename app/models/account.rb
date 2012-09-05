@@ -21,7 +21,13 @@ class Account < ActiveRecord::Base
   belongs_to :period
   belongs_to :accountable, polymorphic:true
   has_many :natures
+
+  # les lignes sont trouvées par account_id
   has_many :lines
+
+  # les lignes sont trouvées par counter_account_id
+  has_many :counterlines, :foreign_key=>'counter_account_id', :class_name=>'Line'
+
 
 
   # un compte a plusieurs transferts (en fait c'est limité aux comptes bancaires et caisses)
