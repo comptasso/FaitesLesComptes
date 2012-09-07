@@ -120,11 +120,19 @@ class Account < ActiveRecord::Base
   end
 
   def lines_empty?(from =  period.start_date, to = period.close_date)
-    self.lines.where('line_date >= ? AND line_date <= ?', from, to ).empty?
+    if number =~ /^[6-7].*/
+    lines.where('line_date >= ? AND line_date <= ?', from, to ).empty?
+    else
+      counterlines.where('line_date >= ? AND line_date <= ?', from, to ).empty?
+    end
   end
   
   def all_lines_locked?(from = period.start_date, to = period.close_date)
-    self.lines.where('line_date >= ? AND line_date <= ? AND locked == ?', from, to, false ).any? ? false : true
+    if number =~ /^[6-7].*/
+       lines.where('line_date >= ? AND line_date <= ? AND locked == ?', from, to, false ).any? ? false : true
+    else
+      counterlines.where('line_date >= ? AND line_date <= ? AND locked == ?', from, to, false ).any? ? false : true
+    end
   end
 
   # Méthode de classe qui affiche le plan comptable

@@ -868,20 +868,24 @@ OK - le callback check_bank_and_cash_id devient inutile, le formulaire donnant d
 Les jQuery doivent être revus pour gérer le fait qu'il n'y plus qu'un champ - pas forcément
 OK - Dans le form lines, couterpart apparaît mais n'est pas obligatoire
 NON - Voir le after_create de Line qui ne remplit par counter_account
-Tous les appel à cash et à bank_account doivent être en fait transformés en appel au counter_account
+OK - Tous les appel à cash  doivent être en fait transformés en appel au counter_account
+Tous les appel  à bank_account doivent être en fait transformés en appel au counter_account
 OK - Dans lines#index, le support doit être revu
 revoir index.xls.erb pdf.prawn xslx.erb si incidence de support
+revoir l'édition d'un compte
 OK - Dans Transfer revoir le after_create
 Modifier cash#sold_at
 Revoir tout ce qui est balance ou grand livre (écran ou pdf) qui utilisent intensément les soldes
-Modifier lines empty? and all_lines_locked dans le modèle Account
+OK - Modifier lines empty? and all_lines_locked dans le modèle Account
+Dans la balance, les comptes 5 mouvementés devraient orienter vers l'affichage des écritures
 
-
-------------- fin de cette muutation --------------------------------------------
+------------- fin de cette mutation --------------------------------------------
 on peut supprimer les champs debitable_type et crreditable_type de Transfer
 toujours dans Transfer, on pourrait revoir les validators
 Dans les exports de Lines#index vers des fichiers, on ne devrait pas faire un truncate des champs (vu le pb pour le champ support)
-supprimer to_option dans la calsse bank_account
+OK - supprimer to_option dans la caisse
+idem pour bank_account
+modalbox de account listing ne change pas le titre h3
 --------------------------------- TODO ---------------------------------------------------------
 Quand on a des comptes et qu'on crée une nature, le lien au compte est disable dans le form
 Nettoyer les natures parasites de la compta perso
