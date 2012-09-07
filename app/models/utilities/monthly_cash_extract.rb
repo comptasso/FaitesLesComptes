@@ -22,7 +22,7 @@ class MonthlyCashExtract < MonthlyBookExtract
 
 
   def lines
-    @lines ||= cash.counterlines.mois(@date)
+    @lines ||= cash.lines.mois(@date)
   end
 
   

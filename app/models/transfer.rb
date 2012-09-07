@@ -99,11 +99,11 @@ class Transfer < ActiveRecord::Base
 
   # applé par after create
   def create_lines
-    lines.create!(:line_date=> date, :narration=>narration, :credit=> 0,
-      :debit=>amount, :account_id=> debitable_id,
+    lines.create!(:line_date=> date, :narration=>narration, :credit=> amount,
+      :debit=>0, :account_id=> debitable_id,
      :book_id=>od_id)
-    lines.create!(:line_date=> date, :narration=>narration, :credit=>amount,
-      :debit=>0, :account_id=> creditable_id, 
+    lines.create!(:line_date=> date, :narration=>narration, :credit=>0,
+      :debit=>amount, :account_id=> creditable_id,
     :book_id=>od_id)
   end
 

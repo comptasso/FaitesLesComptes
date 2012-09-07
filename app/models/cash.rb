@@ -10,7 +10,7 @@ class Cash < ActiveRecord::Base
   
   belongs_to :organism
   # ne plus utiliser, cash_id va disparaître
-  has_many :counterlines, :through=>:accounts
+  has_many :lines, :through=>:accounts
   has_many :cash_controls
   # un caisse a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
@@ -40,13 +40,13 @@ class Cash < ActiveRecord::Base
   # debit cumulé avant une date (la veille). Renvoie 0 si la date n'est incluse
   # dans aucun exercice
   def cumulated_debit_before(date)
-    cumulates_debit_at(date - 1)
+    cumulated_debit_at(date - 1)
   end
 
   # crédit cumulé avant une date (la veille). Renvoie 0 si la date n'est incluse
   # dans aucun exercice
   def cumulated_credit_before(date)
-    cumulates_credit_at(date - 1)
+    cumulated_credit_at(date - 1)
   end
 
   # solde d'une caisse avant ce jour (ou en pratique au début de la journée)
@@ -58,14 +58,14 @@ class Cash < ActiveRecord::Base
   # pas de périod et donc pas de compte associé à cette caisse pour cette date
   def cumulated_debit_at(date)
     p = organism.find_period(date)
-    p ? counterlines.period(p).where('line_date <= ?', date).sum(:debit) : 0
+    p ? lines.period(p).where('line_date <= ?', date).sum(:debit) : 0
   end
 
   # crédit cumulé à une date (y compris cette date). Renvoie 0 s'il n'y a 
   # pas de périod et donc pas de comptes associé à cette caisse pour cette date
   def cumulated_credit_at(date)
     p = organism.find_period(date)
-    p ? counterlines.period(p).where('line_date <= ?', date).sum(:credit) : 0
+    p ? lines.period(p).where('line_date <= ?', date).sum(:credit) : 0
   end
 
   # solde à une date (y compris cette date). Renvoie nil s'il n'y a 
@@ -82,7 +82,7 @@ class Cash < ActiveRecord::Base
     if selector.is_a?(String)
       selector = Date.civil(selector[/\d{4}$/].to_i, selector[/^\d{2}/].to_i,1)
     end
-    r = counterlines.select([:debit, :credit, :line_date]).mois(selector).sum('credit - debit') if selector.is_a? Date
+    r = lines.select([:debit, :credit, :line_date]).mois(selector).sum('credit - debit') if selector.is_a? Date
     return r.to_f  # nécessaire car quand il n'y a pas de lignes, le retour est '0' et non 0
   end
 

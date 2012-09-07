@@ -86,13 +86,7 @@ class Account < ActiveRecord::Base
   # fournit le cumul des débit (dc = 'debit') ou des crédits(dc = 'credit')
   # à la fin du jourindiqué par date
   def cumulated_at(date, dc)
-    if number =~ /^[6-7].*/
       lines.where('line_date < ?',date).sum(dc)
-    else
-      cdc = :credit if dc == :debit
-      cdc = :debit if dc == :credit
-      counterlines.where('line_date <= ?',date).sum(cdc)
-    end
   end
 
   # calcule le solde au soir du jour indiqué par date
@@ -110,29 +104,21 @@ class Account < ActiveRecord::Base
   # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
   # Exemple movement(Date.today.beginning_of_year, Date.today, true) pour un credit
   def movement(from, to, dc)
-    if number =~ /^[6-7].*/
+    
       lines.where('line_date >= ? AND line_date <= ?', from, to ).sum(dc)
-    else
-      cdc = :credit if dc == :debit
-      cdc = :debit if dc == :credit
-      counterlines.where('line_date >= ? AND line_date <= ?', from, to ).sum(cdc)
-    end
+  
   end
 
   def lines_empty?(from =  period.start_date, to = period.close_date)
-    if number =~ /^[6-7].*/
+   
     lines.where('line_date >= ? AND line_date <= ?', from, to ).empty?
-    else
-      counterlines.where('line_date >= ? AND line_date <= ?', from, to ).empty?
-    end
+   
   end
   
   def all_lines_locked?(from = period.start_date, to = period.close_date)
-    if number =~ /^[6-7].*/
+   
        lines.where('line_date >= ? AND line_date <= ? AND locked == ?', from, to, false ).any? ? false : true
-    else
-      counterlines.where('line_date >= ? AND line_date <= ? AND locked == ?', from, to, false ).any? ? false : true
-    end
+  
   end
 
   # Méthode de classe qui affiche le plan comptable

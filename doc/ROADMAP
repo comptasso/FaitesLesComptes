@@ -917,6 +917,7 @@ Ajouter les environnements winusb et wininstall (cf. fichier Word sur mes essais
 Il faudra faire les autres tâches rake db:migrate db:rollback,... correspondant au namespace landlord pour que
   les migrations fonctionnent correctement pour les bases déja installées.
 Ajouter un formulaire de saisie des lignes d'OD
+La confirmation de suppression de transfert est Are you sure?
 -----------------------------------Gestion des user ---------------------------
 La suppression d'un user doit être gérée (suppression des rooms, effacement des bases?)
 
