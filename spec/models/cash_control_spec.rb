@@ -180,8 +180,9 @@ describe CashControl do
         date = @p.start_date
         # on créé une ligne d'écriture par mois relevant de la caisse
         @p.nb_months.times do |i|
-         Line.create!(narration: "test #{i}", counter_account:@baca,  debit: i+1, payment_mode: 'Espèces',
-            nature_id: @n.id, book_id: @ob.id, line_date: date.months_since(i),
+          d = date.months_since(i)
+         Line.create!(narration: "test #{i}", counter_account:@c.current_account(@p),  debit: i+1, payment_mode: 'Espèces',
+            nature_id: @n.id, book_id: @ob.id, line_date:d ,
           cash_id: @c.id)
         end
         # création de lignes

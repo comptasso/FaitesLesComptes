@@ -69,9 +69,7 @@ describe Cash do
       @c.to_s.should == @c.name
     end
 
-    it 'to_option return cash_id' do
-      @c.to_option.should == "Cash_#{@c.id}"
-    end
+  
   end
 
   # monthly_value est défini dans le module Utilities::Sold
