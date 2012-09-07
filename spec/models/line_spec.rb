@@ -2,9 +2,9 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-#RSpec.configure do |config|
+RSpec.configure do |config|
 #  config.filter = {wip:true}
-#end
+end
 
 
 describe Line do
@@ -64,13 +64,13 @@ describe Line do
     end
 
    # TODO, ceci n'est plus vrai pour tous les types de lignes
-    it 'doit avoir une nature_id sauf si le book est un od_book' do
+    it 'doit avoir une nature_id sauf si account_id est rempli' do
       # une ligne de recettes mais sans nature
       @l.nature_id = nil
       @l.should_not be_valid
       # une ligne d'OD
       
-       @l=Line.new(:book_id=>@od.id, :credit=>200 ,:narration=>'ligne de test',
+       @l=Line.new(:account_id=>1, :book_id=>@od.id, :credit=>200 ,:narration=>'ligne de test',
         :line_date=>Date.civil(2012,01,02), :payment_mode=> 'Espèces', counter_account_id:7)
        @l.should be_valid
     end
@@ -94,10 +94,7 @@ describe Line do
       @l.book_id=nil; @l.should_not be_valid
     end
 
-    it 'doit avoir un counter_account' do
-      @l.counter_account_id = nil
-      @l.should_not be_valid
-    end
+    
 
     describe 'attribut virtuel line_date_picker' do
       it 'should answer to line_date_picker' do
@@ -129,7 +126,7 @@ describe Line do
         destination_id: nil, debit: 50,  credit: 0,
         book_id: @od.id, locked: false, bank_extract_id: nil, payment_mode: nil,
         check_deposit_id: nil, cash_id: nil, bank_account_id: 5,
-        owner_id: 12, owner_type: "Transfer", counter_account_id:7)
+        owner_id: 12, owner_type: "Transfer", account_id:7)
     end
 
     it 'should be valid even without a nature' do
@@ -138,41 +135,40 @@ describe Line do
     end
   end
 
+ 
 
-  context "vérification des lignes et des soldes sur quelques mois" do
+
+  context "vérification des lignes et des soldes sur quelques mois" do  
 
     before(:each) do
-      # la somme de 0 à 9 est égale à 45
-      #    @l= Line.create(:book_id=>@ib.id, :line_date=>Date.civil(2012,01,2), :credit=>234, :nature_id=>@n.id)
-      #    @l.valid?
-      #    @l.errors.messages.should == {}
-      #
-      10.times {|t| Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', counter_account_id:7, :payment_mode=> 'Espèces',  :line_date=>Date.civil(2012,01,t+2), :credit=>2*t+1 , :nature_id=>@n.id) }
-      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'premier mois debit', counter_account_id:7, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,01,t+2), :debit=>t+1 , :nature_id=>@n.id) }
-      10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'deuxième mois debit', counter_account_id:7, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :credit=>3*t+1 , :nature_id=>@n.id) }
-      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'deuxième mois credit', counter_account_id:7, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :debit=>2*t+1 , :nature_id=>@n.id) }
-      10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'troisième mois debit', counter_account_id:7, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,03,t+2), :credit=>4*t+1 , :nature_id=>@n.id) }
-      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'troisième mois credit', counter_account_id:7, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,04,t+2), :debit=>5*t+1 , :nature_id=>@n.id) }
+      
+      10.times {|t| Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',counter_account_id:@c.id, :payment_mode=> 'Espèces',  :line_date=>Date.civil(2012,01,t+2), :credit=>2*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'premier mois debit', counter_account_id:@c.id, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,01,t+2), :debit=>t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'deuxième mois debit', counter_account_id:@c.id, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :credit=>3*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'deuxième mois credit', counter_account_id:@c.id, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,02,t+2), :debit=>2*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ib.id, :narration=>'troisième mois debit', counter_account_id:@c.id, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,03,t+2), :credit=>4*t+1 , :nature_id=>@n.id) }
+      10.times {|t| Line.create(:book_id=>@ob.id, :narration=>'troisième mois credit', counter_account_id:@c.id, :payment_mode=> 'Espèces', :line_date=>Date.civil(2012,04,t+2), :debit=>5*t+1 , :nature_id=>@n.id) }
 
     end
     context 'verification que les lignes sont bien là' do
 
-      it "vérif qu on a bien les lignes" do
-        Line.count.should == 60
+     
+      it "vérif qu on a bien 2 lignes par écritures donc 120 pour les 60 instructions" do
+        Line.count.should == 120
       end
 
       it 'income and outcomme should each have 30 lines' do
-        @ib.lines.should have(30).elements
-        @ob.lines.should have(30).elements
+        @ib.lines.should have(60).elements
+        @ob.lines.should have(60).elements
       end
 
       it "scope month return the right number of lines" do
-        Line.month('01-2012').should have(20).elements
+        Line.month('01-2012').should have(40).elements
       end
     end
-
- 
   end
+
+  it 'faire les spec sur la création de la deuxième ligne'
   
   describe 'before_save'do
     
@@ -192,7 +188,7 @@ describe Line do
     it 'si nature est rattaché après'  do 
       @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', 
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>7)
+        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)
       @n.account_id = @a.id
       @n.save! 
      # il faut recharger l'instance pour tester le changement de nature
@@ -209,7 +205,7 @@ describe Line do
     before(:each) do
       @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id,  :counter_account_id=>7)
+        :credit=>2.50 , :nature_id=>@n.id,  :counter_account_id=>@c.id)
     end
 
 

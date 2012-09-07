@@ -49,8 +49,6 @@
 #
 class Line < ActiveRecord::Base
 
-
-
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
   belongs_to :book 
@@ -68,6 +66,8 @@ class Line < ActiveRecord::Base
   pick_date_for :line_date 
   
   before_save  :fill_account
+  after_create :create_counterpart
+  after_update :update_counterpart
 
   before_destroy :cant_change_if_locked
 
@@ -76,10 +76,9 @@ class Line < ActiveRecord::Base
   # voir au besoin les validators qui sont dans lib/validators
   validates :debit, :credit, numericality: true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :book_id, presence:true
-  validates :counter_account_id, presence:true
   validates :line_date, presence: true
   validates :line_date, must_belong_to_period: true
-  validates :nature_id, presence: true, :unless=> lambda { self.book.class == OdBook }
+  validates :nature_id, presence: true, :unless => lambda { self.account_id || self.account }
   validates :narration, presence: true
   validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
     :message => "mode de paiement inconnu" }, :unless=>lambda { self.book.class == OdBook }
@@ -206,7 +205,7 @@ class Line < ActiveRecord::Base
   end
 
   def nature_name
-    self.nature ? self.nature.name : 'non indiqué'
+    self.nature ? self.nature.name : 'non indiqué' 
   end
 
   protected
@@ -220,8 +219,23 @@ class Line < ActiveRecord::Base
   # remplit le champ account_id avec celui associé à nature si nature est effectivement associée à nature
   def fill_account
     if nature && nature.account
-      self.account_id = nature.account.id
+      self.account_id = nature.account.id 
     end
+  end
+
+  # crée la ligne de contrepartie pour les écritures enregistrées dans les livres de recettes et de dépenses
+  def create_counterpart
+    # si le livre est un IncomeBook ou un OutcomeBook
+    if book.class == IncomeBook || book.class == OutcomeBook
+      ComptaLine.create!(line_date:self.line_date, narration:self.narration, book_id:self.book_id,
+        account_id:self.counter_account_id, debit:self.credit, credit:self.debit, payment_mode:self.payment_mode)
+    end
+
+  end
+
+  # met à jour la ligne de contrepartie pour les écritures enregistrées par la saisie
+  def update_counterpart
+
   end
 
 

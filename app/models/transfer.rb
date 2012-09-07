@@ -100,22 +100,22 @@ class Transfer < ActiveRecord::Base
   # applé par after create
   def create_lines
     lines.create!(:line_date=> date, :narration=>narration, :credit=> 0,
-      :debit=>amount, :counter_account_id=> debitable_id,
+      :debit=>amount, :account_id=> debitable_id,
      :book_id=>od_id)
     lines.create!(:line_date=> date, :narration=>narration, :credit=>amount,
-      :debit=>0, :counter_account_id=> creditable_id,
+      :debit=>0, :account_id=> creditable_id,
     :book_id=>od_id)
   end
 
      # appelé par after_update pour mettre à jour counter_account
   def update_line_credit
-    line_credit.update_attribute(:counter_account_id, creditable_id)
+    line_credit.update_attribute(:account_id, creditable_id)
 
   end
 
   # appelé par after_update
   def update_line_debit
-   line_debit.update_attribute(:counter_account_id, debitable_id)
+   line_debit.update_attribute(:account_id, debitable_id)
   end
 
 

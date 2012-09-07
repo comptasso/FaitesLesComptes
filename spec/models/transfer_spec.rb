@@ -254,7 +254,7 @@ describe Transfer , :wip=>true do
               @t.line_credit.counter_account_id.should == @aa.id
             end
 
-            it 'transfer is credit_locked' do
+            it 'transfer is credit_locked' do 
               @t.should be_credit_locked
               @t.should be_partial_locked
               @t.should_not be_debit_locked

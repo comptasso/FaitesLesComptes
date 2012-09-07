@@ -39,10 +39,8 @@ end
 end
 
 Spork.each_run do
- load "#{Rails.root}/app/models/cash.rb"
- load "#{Rails.root}/app/models/bank_account.rb"
- load "#{Rails.root}/app/models/account.rb"
- #  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+ load "#{Rails.root}/app/models/line.rb"
+ load "#{Rails.root}/app/models/compta_line.rb"
 end
 
 DatabaseCleaner.strategy = :truncation
