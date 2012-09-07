@@ -884,11 +884,11 @@ Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne
 Pour line, on peut garder le champ counter_account pour la saisie dans le formulaire mais on ne s'en sert plus ensuite
 Line after_create crée la contrepartie si on est dans une écriture de compta simplifiée (en fait si on est dans un livre IncomeBook ou OutcomeBook)
 Il faut que line after_update gère le changement
-Revoir Transfer qui doit écrire des lignes normales maintenant
+OK - Revoir Transfer qui doit écrire des lignes normales maintenant
 revoir support (qui n'est plus lisible directement)
 La logique cash ne doit plus utiliser les counter_account
 On revoit account qui redevient simple.
-On supprime les toutes les références à  counter_account
+On supprime  toutes les références à  counter_account
 
 Puis on reprend la mutation précédente pour bank_account sur cette nouvelle base.
 

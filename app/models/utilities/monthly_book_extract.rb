@@ -11,15 +11,15 @@ class MonthlyBookExtract
 
   attr_reader :book, :titles
 
-  def initialize(book, h)
+  def initialize(book, day)
     @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
     @book=book
-    @my = MonthYear.new(h)
+    @my = MonthYear.new(day)
     @date = @my.beginning_of_month
   end
 
   def lines
-    @lines ||= @book.lines.mois(@date)
+    @lines ||= @book.lines.parentlines.mois(@date)
   end
 
   # calcule le nombre de page du listing en divisant le nombre de lignes

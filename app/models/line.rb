@@ -61,7 +61,10 @@ class Line < ActiveRecord::Base
   belongs_to :bank_account
 #  belongs_to :cash
   belongs_to :owner, :polymorphic=>true  # pour les transferts uniquement (à ce stade)
-  has_and_belongs_to_many :bank_extract_lines, :uniq=>true # pour les rapprochements bancaires 
+  has_and_belongs_to_many :bank_extract_lines, :uniq=>true # pour les rapprochements bancaires
+
+  has_many   :lines, :as=>:owner, :dependent=>:destroy
+
 
   pick_date_for :line_date 
   
@@ -110,7 +113,7 @@ class Line < ActiveRecord::Base
   scope :monthyear, lambda {|my| where('line_date >= ? AND line_date <= ?',
      my.beginning_of_month, my.end_of_month  )}
   scope :range_date, lambda { |fd,td| where('line_date >= ? AND line_date <= ?', fd, td) }
-
+  scope :parentlines, where('owner_id IS NULL')
 
   scope :unlocked, where('locked IS ?', false)
   scope :before_including_day, lambda {|d| where('lines.line_date <= ?',d)}
@@ -126,17 +129,17 @@ class Line < ActiveRecord::Base
   
   # donne le support de la ligne (ou sa contrepartie) : la banque ou la caisse
   def support
-    return counter_account.long_name if book.class == OdBook
-    aa = counter_account.accountable
-    if aa.is_a? BankAccount
-      
-      return aa.acronym
-    end
-    if aa.is_a? Cash
-      
-      return aa.name
-    end
-    return 'Pas de support ?!'
+   # TODO il sera probablement judicieux d'utiliser une recherche d'un compte 51 ou 53 dans tous les enfants
+   # QUESTION, peut on appeler cette méthode pour toutes les lignes...
+   aa =  children.first.account.accountable
+   return 'Pas de support' unless aa
+   return aa.acronym if aa.is_a? BankAccount
+   return aa.name if aa.is_a? Cash
+   return 'Pas de support'
+  end
+
+  def children
+    lines
   end
 
 
@@ -227,8 +230,11 @@ class Line < ActiveRecord::Base
   def create_counterpart
     # si le livre est un IncomeBook ou un OutcomeBook
     if book.class == IncomeBook || book.class == OutcomeBook
-      ComptaLine.create!(line_date:self.line_date, narration:self.narration, book_id:self.book_id,
-        account_id:self.counter_account_id, debit:self.credit, credit:self.debit, payment_mode:self.payment_mode)
+      ComptaLine.create!(line_date:line_date, narration:narration, book_id:book_id,
+        account_id:counter_account_id,
+        debit:credit, credit:debit,
+        payment_mode:payment_mode,
+      owner_id:id, owner_type:'Line')
     end
 
   end

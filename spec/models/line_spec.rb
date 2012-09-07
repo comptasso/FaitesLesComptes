@@ -168,7 +168,40 @@ describe Line do
     end
   end
 
-  it 'faire les spec sur la création de la deuxième ligne'
+  describe 'ligne de contrepartie' do
+
+    it 'la création d une ligne en crée une deuxième de contrpartie' do
+      expect { Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
+        :payment_mode=> 'Espèces',  :line_date=>Date.today,
+        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)}.to change {Line.count}.by(2)
+    end
+
+    it 'La ligne créée connait son enfant' do
+    l =  Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
+        :payment_mode=> 'Espèces',  :line_date=>Date.today,
+        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)
+      l.children.count.should == 1
+      l.children.first.should be_an_instance_of(Line)
+    end
+
+    it 'la ligne enfant connaît son parent' do
+     l =  Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
+        :payment_mode=> 'Espèces',  :line_date=>Date.today,
+        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)
+      c = l.children.first
+      c.owner.should == l
+    end
+
+    it 'is able to retrieve support' do
+      l =  Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
+        :payment_mode=> 'Espèces',  :line_date=>Date.today,
+        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)
+      l.support.should == 'Magasin'
+    end
+
+  end
+
+  
   
   describe 'before_save'do
     
@@ -176,7 +209,7 @@ describe Line do
       @a = Account.create(:period_id=>@p.id, number:'60', title:'compte test') 
     end
     
-    it 'si nature est rattachée à un compte alors le compte est associé' do
+    it 'si nature est rattachée à un compte alors le compte est associé' do 
       @n.update_attribute(:account_id, @a.id )
       @l = Line.new(:book_id=>@ib.id, :narration=>'premier mois credit',
         :payment_mode=> 'Espèces',  :line_date=>Date.today,

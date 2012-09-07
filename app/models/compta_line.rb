@@ -2,7 +2,7 @@
 
 class ComptaLine < ActiveRecord::Base
 
-  set_table_name 'Lines'
+  self.table_name = 'Lines'
 
   belongs_to :book
   belongs_to :destination

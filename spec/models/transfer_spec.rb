@@ -199,7 +199,7 @@ describe Transfer , :wip=>true do
         describe 'update' do
 
           before(:each) do
-            @t.line_debit.counter_account_id.should == @ba.id
+            @t.line_debit.account_id.should == @ba.id
             @bc=@o.bank_accounts.create!(name: 'DebiX', number: '456X')
             @ac = @bc.accounts.first
           end
@@ -207,13 +207,13 @@ describe Transfer , :wip=>true do
           it 'modify transfer change lines adequatly' do
             @t.debitable = @ac
             @t.save!
-            @t.line_debit.counter_account_id.should == @ac.id
+            @t.line_debit.account_id.should == @ac.id
           end
 
           it 'modify transfer change lines adequatly' do
             @t.creditable = @ac
             @t.save!
-            @t.line_credit.counter_account_id.should == @ac.id
+            @t.line_credit.account_id.should == @ac.id
           end
 
           context 'line_debit locked' do
@@ -227,7 +227,7 @@ describe Transfer , :wip=>true do
             it 'modify transfer debit is not possibile if locked' do
               @t.creditable = @ac
               @t.save!
-              @t.line_debit.counter_account_id.should == @ba.id
+              @t.line_debit.account_id.should == @ba.id
             end
 
             it 'says debit_locked' do
@@ -251,7 +251,7 @@ describe Transfer , :wip=>true do
 
               @t.creditable = @ac
               @t.save!
-              @t.line_credit.counter_account_id.should == @aa.id
+              @t.line_credit.account_id.should == @aa.id
             end
 
             it 'transfer is credit_locked' do 
