@@ -874,7 +874,7 @@ revoir index.xls.erb pdf.prawn xslx.erb si incidence de support
 OK - Dans Transfer revoir le after_create
 Modifier cash#sold_at
 Revoir tout ce qui est balance ou grand livre (écran ou pdf) qui utilisent intensément les soldes
-
+Modifier lines empty? and all_lines_locked dans le modèle Account
 
 
 ------------- fin de cette muutation --------------------------------------------

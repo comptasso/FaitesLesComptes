@@ -49,9 +49,9 @@ class Account < ActiveRecord::Base
   scope :classe_6_and_7, where('number LIKE ? OR number LIKE ?', '6%', '7%')
   scope :classe_1_to_5, where('number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ?', '1%', '2%', '3%', '4%', '5%').order('number ASC')
 
-   # le numero de compte plus le title pour les input select
+  # le numero de compte plus le title pour les input select
   def long_name
-   [number, title].join(' ')
+    [number, title].join(' ')
   end
 
   # renvoie le compte disponible commençant par number et en incrémentant une liste 
@@ -79,33 +79,30 @@ class Account < ActiveRecord::Base
   # fournit le cumul des débit (dc = 'debit') ou des crédits(dc = 'credit')
   # pour le jour qui précède la date (ou au début du jour indiqué par date)
   def cumulated_before(date, dc)
-    lines.where('line_date < ?',date).sum(dc)
+    date =  date - 1
+    cumulated_at(date, dc)
   end
 
   # fournit le cumul des débit (dc = 'debit') ou des crédits(dc = 'credit')
   # à la fin du jourindiqué par date
-   def cumulated_at(date, dc)
-    lines.where('line_date <= ?',date).sum(dc)
+  def cumulated_at(date, dc)
+    if number =~ /^[6-7].*/
+      lines.where('line_date < ?',date).sum(dc)
+    else
+      cdc = :credit if dc == :debit
+      cdc = :debit if dc == :credit
+      counterlines.where('line_date <= ?',date).sum(cdc)
+    end
   end
 
-   # calcule le solde au soir du jour indiqué par date
-   def sold_at(date)
-     cumulated_at(date, :credit) - cumulated_at(date, :debit)
-   end
-
-   # cette méthode est utile pour les comptes de classe 5 (banque et caisse)
-   # leur solde correspond en fait à toutes les opérations qui ont été passées par
-   # eux au titre des dépenses et recettes, plus les opérations qui sont
-   # directement traitées en OD, et donc par le compte
-   def sold_accountable_at(date)
-
-   end
-
-   # le solde a une date donnée pour un compte bancaire
+  # calcule le solde au soir du jour indiqué par date
+  def sold_at(date)
+    cumulated_at(date, :credit) - cumulated_at(date, :debit)
+  end
 
   
   def formatted_sold(date)
-     ['%0.2f' % cumulated_before(date, :debit), '%0.2f' % cumulated_before(date, :credit) ]
+    ['%0.2f' % cumulated_before(date, :debit), '%0.2f' % cumulated_before(date, :credit) ]
   end
 
 
@@ -113,7 +110,13 @@ class Account < ActiveRecord::Base
   # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
   # Exemple movement(Date.today.beginning_of_year, Date.today, true) pour un credit
   def movement(from, to, dc)
-    self.lines.where('line_date >= ? AND line_date <= ?', from, to ).sum(dc)
+    if number =~ /^[6-7].*/
+      lines.where('line_date >= ? AND line_date <= ?', from, to ).sum(dc)
+    else
+      cdc = :credit if dc == :debit
+      cdc = :debit if dc == :credit
+      counterlines.where('line_date >= ? AND line_date <= ?', from, to ).sum(cdc)
+    end
   end
 
   def lines_empty?(from =  period.start_date, to = period.close_date)
@@ -127,7 +130,7 @@ class Account < ActiveRecord::Base
   # Méthode de classe qui affiche le plan comptable
   def self.to_pdf(period)
     load 'lib/pdf_document/simple.rb'
-    pdf = PdfDocument::Simple.new(period, period, 
+    pdf = PdfDocument::Simple.new(period, period,
       title:"Plan comptable")
     pdf.select_method= 'accounts.order(:number)'
     pdf.set_columns %w(number title)
