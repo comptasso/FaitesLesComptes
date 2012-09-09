@@ -75,7 +75,6 @@ class Line < ActiveRecord::Base
   before_destroy :cant_change_if_locked
 
  
-
   # voir au besoin les validators qui sont dans lib/validators
   validates :debit, :credit, numericality: true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :book_id, presence:true
@@ -84,7 +83,7 @@ class Line < ActiveRecord::Base
   validates :nature_id, presence: true, :unless => lambda { self.account_id || self.account }
   validates :narration, presence: true
   validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
-    :message => "mode de paiement inconnu" }, :unless=>lambda { self.book.class == OdBook }
+    :message => "mode de paiement inconnu" }, :if=>lambda { self.book.class == IncomeBook || self.book.class == OutcomeBook }
   validates :debit, :credit, :not_null_amounts=>true, :not_both_amounts=>true
   validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
   validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire

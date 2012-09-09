@@ -3,7 +3,7 @@
 class Transfer < ActiveRecord::Base
   include Utilities::PickDateExtension
 
-  # TODO ? il faudrait modifier debitable et creditable en from et towards
+ 
 
   before_destroy :should_be_destroyable
 
@@ -77,18 +77,13 @@ class Transfer < ActiveRecord::Base
 
  
 
- private
+  private
  
   # helper
   
- # retourne l'id du journal d'OD correspondant à l'organisme dont dépent transfer
- # 
- # utilisée par create_lines pour construire les lignes
-  def od_id
-   self.organism.od_books.first.id
-  end
+ 
 
-   # callbacks
+  # callbacks
 
   # callback appelé par before_destroy pour empêcher la destruction des lignes
   # et du transfer si une ligne est verrouillée
@@ -97,17 +92,31 @@ class Transfer < ActiveRecord::Base
   end
 
 
-  # applé par after create
+  # applé par after create, crée une ligne dans chacun des livres
+  # de caisse et/ou de banque qui font l'objet du virement.
   def create_lines
-    lines.create!(:line_date=> date, :narration=>narration, :credit=> amount,
+    b_id = Account.find_by_id(debitable_id).accountable.book.id
+    l = lines.new(:line_date=> date, :narration=>narration, :credit=> amount,
       :debit=>0, :account_id=> debitable_id,
-     :book_id=>od_id)
-    lines.create!(:line_date=> date, :narration=>narration, :credit=>0,
+      :book_id=>b_id)
+    unless l.valid?
+      logger.warn l.inspect
+      logger.warn l.errors.messages
+    end
+    l.save
+    b_id = Account.find_by_id(creditable_id).accountable.book.id
+    l =  lines.create!(:line_date=> date, :narration=>narration, :credit=>0,
       :debit=>amount, :account_id=> creditable_id,
-    :book_id=>od_id)
+      :book_id=>b_id)
+    unless l.valid?
+      logger.warn l.inspect
+      logger.warn l.errors.messages
+    end
+    l.save
   end
 
-     # appelé par after_update pour mettre à jour counter_account
+  # appelé par after_update pour mettre à jour counter_account
+  # TODO faire le update
   def update_line_credit
     line_credit.update_attribute(:account_id, creditable_id)
 
@@ -115,7 +124,7 @@ class Transfer < ActiveRecord::Base
 
   # appelé par after_update
   def update_line_debit
-   line_debit.update_attribute(:account_id, debitable_id)
+    line_debit.update_attribute(:account_id, debitable_id)
   end
 
 

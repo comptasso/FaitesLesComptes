@@ -5,9 +5,13 @@
 class Cash < ActiveRecord::Base
   # utilities::sold définit les méthodes cumulated_debit_before(date) et
   # cumulated_debit_at(date) et les contreparties correspondantes.
+  #
+ 
 #  include Utilities::Sold
   include Utilities::JcGraphic
+
   
+
   belongs_to :organism
   # ne plus utiliser, cash_id va disparaître
   has_many :lines, :through=>:accounts
@@ -29,6 +33,7 @@ class Cash < ActiveRecord::Base
   validates :name, :presence=>true, :uniqueness=>{:scope=>:organism_id}
   validates :organism_id, :presence=> true
 
+  
   after_create :create_accounts
 
   # retourne le numéro de compte de la caisse correspondant à l'exercice (period) passé en argument
@@ -77,18 +82,7 @@ class Cash < ActiveRecord::Base
     cumulated_credit_at(date) - cumulated_debit_at(date)
   end
 
-  # donne un solde en prenant toutes les lignes du mois correspondant
-  # à cette date; Le selector peut être une date ou une string
-  # sous le format mm-yyyy
-  # S'appuie sur le scope mois de Line
-  def monthly_value(selector)
-    if selector.is_a?(String)
-      selector = Date.civil(selector[/\d{4}$/].to_i, selector[/^\d{2}/].to_i,1)
-    end
-    r = lines.select([:debit, :credit, :line_date]).mois(selector).sum('credit - debit') if selector.is_a? Date
-    return r.to_f  # nécessaire car quand il n'y a pas de lignes, le retour est '0' et non 0
-  end
-
+   
  
 
   protected
