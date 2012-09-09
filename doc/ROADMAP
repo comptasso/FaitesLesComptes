@@ -866,41 +866,40 @@ Changer la date d'une ligne (en changeant d'exercice) va devoir gérer les natur
 ------------ Suppression de bank_account_id et cash_id pour ne garde que counter_account_id (branche odbranch)-----------
 OK - le callback check_bank_and_cash_id devient inutile, le formulaire donnant directement le compte de la caisse ou de la banque
 Les jQuery doivent être revus pour gérer le fait qu'il n'y plus qu'un champ - pas forcément
+revoir jQuery dans transfert pour les aspects de lignes verrouillées
 OK - Dans le form lines, couterpart apparaît mais n'est pas obligatoire
 NON - Voir le after_create de Line qui ne remplit par counter_account
 OK - Tous les appel à cash  doivent être en fait transformés en appel au counter_account
-Tous les appel  à bank_account doivent être en fait transformés en appel au counter_account
+NON - Tous les appel  à bank_account doivent être en fait transformés en appel au counter_account
 OK - Dans lines#index, le support doit être revu
 revoir index.xls.erb pdf.prawn xslx.erb si incidence de support
-revoir l'édition d'un compte
+OK - revoir l'édition d'un compte
 OK - Dans Transfer revoir le after_create
-Modifier cash#sold_at
+OK - Modifier cash#sold_at
 Revoir tout ce qui est balance ou grand livre (écran ou pdf) qui utilisent intensément les soldes
 OK - Modifier lines empty? and all_lines_locked dans le modèle Account
-Dans la balance, les comptes 5 mouvementés devraient orienter vers l'affichage des écritures
+OK - Dans la balance, les comptes 5 mouvementés devraient orienter vers l'affichage des écritures
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
-Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ???
+NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner
 Pour line, on peut garder le champ counter_account pour la saisie dans le formulaire mais on ne s'en sert plus ensuite
-Line after_create crée la contrepartie si on est dans une écriture de compta simplifiée (en fait si on est dans un livre IncomeBook ou OutcomeBook)
+OK - Line after_create crée la contrepartie si on est dans une écriture de compta simplifiée (en fait si on est dans un livre IncomeBook ou OutcomeBook)
 Il faut que line after_update gère le changement
 OK - Revoir Transfer qui doit écrire des lignes normales maintenant
-revoir support (qui n'est plus lisible directement)
-La logique cash ne doit plus utiliser les counter_account
-On revoit account qui redevient simple.
+OK - revoir support (qui n'est plus lisible directement)
+OK - La logique cash ne doit plus utiliser les counter_account
+OK - On revoit account qui redevient simple.
 On supprime  toutes les références à  counter_account
 
 --------------------- on crée un livre de banque pour chaque banque et un livre de caisse pour chaque caisse --------------
 OK - pour caisse et bank_account, la création entraîne celle d'un livre correspondant
 gérer la suppression des caisses et des comptes
-modifier update transfer
+OK - modifier update transfer
 OK - modification des fonctions sold_at et monthly_value dans cash_book et income_book
-OK - les contre écritures sont inscrites sur le livre correspondant
-du coup, book et monthly_book_extract n'ont plus besoin de filtrer difficilement
+OK - les contre écritures sont inscrites sur le livre correspondant du coup, book et monthly_book_extract n'ont plus besoin de filtrer difficilement
 NON - Traiter le cas d'absence d'exercice précédent pour les graphes
 Puis on reprend la mutation précédente pour bank_account sur cette nouvelle base.
-Transfer peut voir sa structure changer avec par exemple daccount_id et caccount_id plutôt que des polymorphiques
-Transfer suite modifier debitable et creditable en from et towards
+Transfer peut voir sa structure changer avec par exemple from_account_id et to_account_id plutôt que des polymorphiques
 
 ------------- fin de cette mutation --------------------------------------------
 on peut supprimer les champs debitable_type et crreditable_type de Transfer
@@ -910,8 +909,8 @@ OK - supprimer to_option dans la caisse
 idem pour bank_account
 modalbox de account listing ne change pas le titre h3
 On pourrait voir comment se passer du champ counter_account
-Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait utilisé pour les saisies des transferts et en zone compta,
-    ceci pour éviter les risques de after_update malheureux.
+OK - Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait utilisé en zone compta,
+    
 
 --------------------------------- TODO ---------------------------------------------------------
 rajouter db:schema:dump à landlord:migrate_each

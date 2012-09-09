@@ -16,7 +16,7 @@ describe OrganismsController do
   end
 
   
-  describe 'GET index', wip:true do
+  describe 'GET index', wip:true do 
    
    
     it 'find current user then calls rooms and collect' do
@@ -41,12 +41,13 @@ describe OrganismsController do
     let(:ba1) {mock_model(BankAccount)} 
     let(:ib) {mock_model(IncomeBook) }
     let(:ob) {mock_model(OutcomeBook) }
+    let(:bab) {mock_model(BankAccountBook) }
 
     before(:each) do
       
       @o.stub_chain(:bank_accounts, :all).and_return([ba1])
       @o.stub_chain(:cashes, :all).and_return([c])
-      @o.stub_chain(:books, :all).and_return([ib,ob])
+      @o.stub_chain(:books, :all).and_return([ib,ob, bab])
       ba1.stub(:bank_extracts).and_return([])
       
     end
@@ -79,18 +80,13 @@ describe OrganismsController do
       assigns[:paves].should be_an_instance_of(Array)
     end
 
-    it 'paves doit avoir 4 éléments' do
-      # income et outcomme books, résultat, cash, mais pas bank_account car il n(y a pas de bak_extract
+    it 'paves doit avoir 5 éléments' do
+      # tous les livres sauf OD_Book plus résultat
       get :show, {:id=>@o.id},  {:org_db=>'assotest', :period=>@p.id, :user=>@cu.id}
-      assigns[:paves].size.should == 4
+      assigns[:paves].size.should == [ib,ob, bab].size + 1
     end
 
-    it 'lorsque bank_account a un bank_extract il y a 5 pavés' do
-      ba1.stub_chain(:bank_extracts, :any?).and_return(true)
-      get :show, {:id=>@o.id},  {:org_db=>'assotest', :period=>@p.id, :user=>@cu.id}
-      assigns[:paves].size.should == 5
-    end
-
+  
 
   end
 

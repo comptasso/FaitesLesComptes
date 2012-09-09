@@ -80,29 +80,22 @@ class Transfer < ActiveRecord::Base
 
   private
  
-  # helper
-  
- 
-
-  # callbacks
-
   # callback appelé par before_destroy pour empêcher la destruction des lignes
   # et du transfer si une ligne est verrouillée
   def should_be_destroyable
     return self.destroyable?
   end
 
-
   # applé par after create, crée une ligne dans chacun des livres
   # de caisse et/ou de banque qui font l'objet du virement.
   def create_lines
     b_id = Account.find_by_id(debitable_id).accountable.book.id
     l = lines.new(:line_date=> date, :narration=>narration, :debit=> amount,
-      :credit=>0, :account_id=> debitable_id,
+      :credit=>0, :account_id=> debitable_id, 
       :book_id=>b_id)
     unless l.valid?
-      logger.warn l.inspect
-      logger.warn l.errors.messages
+      puts l.inspect
+      puts l.errors.messages
     end
     l.save
     b_id = Account.find_by_id(creditable_id).accountable.book.id
@@ -110,17 +103,16 @@ class Transfer < ActiveRecord::Base
       :debit=>0, :account_id=> creditable_id,
       :book_id=>b_id)
     unless l.valid?
-      logger.warn l.inspect
-      logger.warn l.errors.messages
+      puts l.inspect
+      puts l.errors.messages
     end
     l.save
   end
 
-  # appelé par after_update pour mettre à jour 
+  # appelé par after_update pour mettre à jour le compte bancaire et le livre associé
   def update_line_from
     from_book_id = creditable.accountable.book.id
     line_from.update_attributes(:account_id=> creditable_id, :book_id=>from_book_id)
-
   end
 
   # appelé par after_update
@@ -129,12 +121,10 @@ class Transfer < ActiveRecord::Base
     line_to.update_attributes(:account_id=> debitable_id, book_id:to_book_id)
   end
 
-
   # validations
   def amount_cant_be_null
     errors.add :amount, 'nul !' if amount == 0
   end
-
 
   def different_debit_and_credit
     if debitable_id == creditable_id
@@ -142,9 +132,5 @@ class Transfer < ActiveRecord::Base
       errors.add :fill_creditable, 'identiques !'
     end
   end
-
-
-
-
 
 end

@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe "transfers/edit" do 
-    include JcCapybara
+    include JcCapybara 
 
   before(:each) do
     @o = assign(:organism, stub_model(Organism))
@@ -22,8 +22,8 @@ describe "transfers/edit" do
     @transfer = assign(:transfer, stub_model(Transfer, :pick_date=>'12/04/2012', :fill_creditable=>"BankAccount_1",
         :fill_debitable=>'Cash_2', :amount=>50.23, narration: 'virement'))
 
-    @transfer.stub(:debit_locked?).and_return(false)
-    @transfer.stub(:credit_locked?).and_return(false)
+    @transfer.stub(:to_locked?).and_return(false)
+    @transfer.stub(:from_locked?).and_return(false)
     @transfer.stub(:partial_locked?).and_return(false)
   end
 
@@ -46,14 +46,14 @@ describe "transfers/edit" do
   end
 
   it 'part debit is disable if line_debit locked' do
-     @transfer.should_receive(:debit_locked?).and_return(true)
+     @transfer.should_receive(:to_locked?).and_return(true)
      render
      page.find('select#transfer_debitable_id')[:disabled].should == 'disabled'
      page.find('select#transfer_creditable_id')[:disabled].should be_nil
   end
 
     it 'part credit is disable if line_credit locked' do
-    @transfer.should_receive(:credit_locked?).and_return(true)
+    @transfer.should_receive(:from_locked?).and_return(true)
      render
      page.find('select#transfer_creditable_id')[:disabled].should == 'disabled'
      page.find('select#transfer_debitable_id')[:disabled].should be_nil

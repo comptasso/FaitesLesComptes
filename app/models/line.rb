@@ -86,7 +86,7 @@ class Line < ActiveRecord::Base
     :message => "mode de paiement inconnu" }, :if=>lambda { self.book.class == IncomeBook || self.book.class == OutcomeBook }
   validates :debit, :credit, :not_null_amounts=>true, :not_both_amounts=>true
   validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
-  validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire
+  validates :debit, presence: true # mais ces validates ont pour objectif de mettre un * dans le formulaire
   # TODO faire les tests
   validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit_if_locked=>true
 
@@ -225,13 +225,14 @@ class Line < ActiveRecord::Base
   def create_counterpart
     # si le livre est un IncomeBook ou un OutcomeBook
     if book.class == IncomeBook || book.class == OutcomeBook
-      l = ComptaLine.create!(line_date:line_date, narration:narration,
+      l = ComptaLine.new(line_date:line_date, narration:narration,
         book_id:counter_account.accountable.book.id,
         account_id:counter_account_id,
         debit:credit, credit:debit,
         payment_mode:payment_mode,
         owner_id:id, owner_type:'Line')
-      logger.debug l.inspect
+      logger.debug "Dans create counterpart, ligne : #{l.inspect}" unless l.valid?
+      l.save
     end
 
   end

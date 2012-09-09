@@ -23,8 +23,6 @@ class ComptaLine < ActiveRecord::Base
   validates :line_date, must_belong_to_period: true
   validates :nature_id, presence: true, :unless => lambda { self.account_id || self.account }
   validates :narration, presence: true
-  validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
-    :message => "mode de paiement inconnu" }, :unless=>lambda { self.book.class == OdBook }
   validates :debit, :credit, :not_null_amounts=>true, :not_both_amounts=>true
   validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
   validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire

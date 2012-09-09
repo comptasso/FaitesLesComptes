@@ -13,7 +13,7 @@ describe "transfers/index" do
 
     assign(:transfers, [
         stub_model(Transfer,
-          :narration => "Premier transfert",
+          :narration => "Premier transfert", 
           :debitable =>  @debitable,
           :creditable => @creditable,
           :amount => 1.5,
@@ -38,8 +38,7 @@ describe "transfers/index" do
   end
 
   it 'have a h3 title' do
-   
-    page.find('.champ h3').should have_content ('Liste des transferts')
+     page.find('.champ h3').should have_content ('Liste des transferts')
   end
 
   it 'with a thead and titles' do 
@@ -62,8 +61,8 @@ describe "transfers/index" do
     first_row.find('td:nth-child(1)').should have_content(I18n::l Date.today)
     first_row.find('td:nth-child(2)').should have_content 'Premier transfert'
     first_row.find('td:nth-child(3)').should have_content '1.50'
-    first_row.find('td:nth-child(4)').should have_content '5101 banque'
-    first_row.find('td:nth-child(5)').should have_content '5301 caisse'
+    first_row.find('td:nth-child(4)').should have_content @creditable.long_name
+    first_row.find('td:nth-child(5)').should have_content @debitable.long_name
   end
 
   it 'test des icones pour les liens' do

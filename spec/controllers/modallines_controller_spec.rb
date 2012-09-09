@@ -20,29 +20,31 @@ describe ModallinesController do
   describe "POST 'create' return success" do
 
     def valid_arguments
-    {:book_id=>1, :credit=>200 ,:narration=>'ligne de test', counter_account_id:7,
-        :line_date=>Date.civil(2012,01,02), :nature_id=>2, :payment_mode=> 'Virement'}
+    {:book_id=>1, :credit=>200 ,:narration=>'ligne de test', counter_account_id:@acc.id,
+        :line_date=>Date.today, :nature_id=>2, :payment_mode=> 'Virement'} 
     end
 
     before(:each) do
       @ba = mock_model(BankAccount)
       @be = mock_model(BankExtract)
+      @acc = mock_model(Account)
+      @ib = mock_model(IncomeBook)
+      @ba_book = mock_model(BankAccountBook, organism:@o)
       
       BankExtract.stub(:find).with(@be.id.to_s).and_return @be
       @be.stub(:bank_account).and_return @ba
       @ba.stub(:organism).and_return @o
-      Line.any_instance.stub(:book).and_return(@ib = mock_model(IncomeBook))
+      @ba.stub(:current_account).with(@p).and_return(@acc)
+      @acc.stub(:accountable).and_return(@ba)
+      @ba.stub(:book).and_return(@ba_book)
       @ib.stub(:organism).and_return(@o)
-      @o.stub(:find_period).and_return(mock_model(Period))
+      @o.stub(:find_period).and_return(mock_model(Period)) 
+      Line.any_instance.stub(:book).and_return(@ib)
+      Line.any_instance.stub(:counter_account).and_return(@acc, period_id:@p.id) 
+      
 
     end
 
-    it 'test line save' do
-      l = Line.new(valid_arguments)
-      l.bank_account_id = @ba.id
-      l.should be_valid
-      expect {l.save}.to change {Line.count}
-    end
 
     it "returns http success with valid arguments" do
       Utilities::NotPointedLines.stub(:new).and_return []
