@@ -138,7 +138,7 @@ describe Line do
  
 
 
-  context "vérification des lignes et des soldes sur quelques mois" do  
+  context "vérification des lignes et des soldes sur quelques mois" do
 
     before(:each) do
       
@@ -158,9 +158,11 @@ describe Line do
       end
 
       it 'income and outcomme should each have 30 lines' do
-        @ib.lines.should have(60).elements
-        @ob.lines.should have(60).elements
+        @ib.lines.should have(30).elements
+        @ob.lines.should have(30).elements
       end
+
+
 
       it "scope month return the right number of lines" do
         Line.month('01-2012').should have(40).elements
@@ -168,37 +170,44 @@ describe Line do
     end
   end
 
-  describe 'ligne de contrepartie' do
+  describe 'ligne de contrepartie' , wip:true do
 
     it 'la création d une ligne en crée une deuxième de contrpartie' do
-      expect { Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
+      expect { Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', 
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
         :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)}.to change {Line.count}.by(2)
     end
 
-    it 'La ligne créée connait son enfant' do
-    l =  Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
+    context 'avec une lignes créée' do
+
+    before(:each) do
+      @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)
-      l.children.count.should == 1
-      l.children.first.should be_an_instance_of(Line)
+        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.current_account(@p).id)
+    end
+
+    it 'La ligne créée connait son enfant' do
+   
+      @l.children.count.should == 1
+      @l.children.first.should be_an_instance_of(Line) 
     end
 
     it 'la ligne enfant connaît son parent' do
-     l =  Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
-        :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)
-      c = l.children.first
-      c.owner.should == l
+    
+      c = @l.children.first
+      c.owner.should == @l
     end
 
     it 'is able to retrieve support' do
-      l =  Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
-        :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)
-      l.support.should == 'Magasin'
+     
+      @l.support.should == 'Magasin'
     end
 
+    it 'la contreligne est dans un livre de caisse'  do
+      c = @l.children.first
+      c.book.should be_an_instance_of(CashBook)
+    end
+    end
   end
 
   
@@ -213,7 +222,7 @@ describe Line do
       @n.update_attribute(:account_id, @a.id )
       @l = Line.new(:book_id=>@ib.id, :narration=>'premier mois credit',
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id, counter_account_id:7)
+        :credit=>2.50 , :nature_id=>@n.id, counter_account_id:@c.current_account(@p).id)
       @l.save
       @l.account.should == @a 
     end
@@ -221,7 +230,7 @@ describe Line do
     it 'si nature est rattaché après'  do 
       @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', 
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)
+        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.current_account(@p).id)
       @n.account_id = @a.id
       @n.save! 
      # il faut recharger l'instance pour tester le changement de nature

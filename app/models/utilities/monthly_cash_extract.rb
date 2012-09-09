@@ -21,9 +21,6 @@ class MonthlyCashExtract < MonthlyBookExtract
   end
 
 
-  def lines
-    @lines ||= cash.lines.mois(@date)
-  end
 
   
   protected

@@ -86,7 +86,7 @@ describe StandardBankExtractLine do
     describe 'regroup' do
 
       it 'Table Line has 4 lines'  do
-        Line.should have(4).lines
+        Line.should have(8).lines
         @l2.should have(1).bank_extract_lines
         @l3.should have(1).bank_extract_lines
         @l2.bank_extract_lines.first.should == @l3.bank_extract_lines.first
@@ -132,7 +132,7 @@ describe StandardBankExtractLine do
       end
 
       it 'les lignes ne sont pas touchées par regroup et degroup' do
-        Line.should have(4).lines
+        Line.should have(8).lines
       end
 
       it 'check array_bels' do

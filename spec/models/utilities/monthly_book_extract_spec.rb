@@ -1,6 +1,11 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+
+RSpec.configure do |config|
+#  config.filter = {wip:true}
+
+end
  
 describe Utilities::MonthlyBookExtract do
   include OrganismFixture
@@ -17,7 +22,7 @@ describe Utilities::MonthlyBookExtract do
     @book_extract.book.should == @ob
   end
 
-  context "when a MonthlyBookExtract exists" do
+  context "when a MonthlyBookExtract exists" , wip:true do
 
     before(:each) do
       # on créé 10 lignes sur le mois de janvier, de montant = à 1 €
@@ -38,10 +43,16 @@ describe Utilities::MonthlyBookExtract do
     it 'vérifier que MonthlyBookExtract est bien également initialisé avec un hash month et year'
 
     it "has a collection of lines" do
-      @monthly_book_extract.lines.should == @ob.lines.where('line_date >= ? AND line_date <= ?', @p.start_date.months_since(1), @p.start_date.months_since(1).end_of_month).all
+      @monthly_book_extract.lines.should == @ob.lines.where('line_date >= ? AND line_date <= ? AND owner_id IS NULL',
+        @p.start_date.months_since(1), @p.start_date.months_since(1).end_of_month).all
+    end
+
+    it 'il y a 10 lignes' do
+      @monthly_book_extract.should have(10).lines
     end
 
     it "knows the total debit" do
+       @monthly_book_extract.lines.each {|l| puts l.inspect}
       @monthly_book_extract.total_debit.should == 20
     end
 

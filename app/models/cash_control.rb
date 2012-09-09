@@ -97,8 +97,9 @@ class CashControl < ActiveRecord::Base
    
     # Trouver les lignes de cette caisse de l'exercice, antérieures à la date du contrôle et non verrouillées
     if self.locked == true 
-       self.cash.counterlines.period(period).before_including_day(self.date).unlocked.each    do |l|
+       cash.lines.before_including_day(self.date).unlocked.each    do |l|
         l.update_attribute(:locked, true)
+        l.owner.update_attribute(:locked, true)
       end
     end
   end

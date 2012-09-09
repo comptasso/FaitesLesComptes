@@ -39,8 +39,8 @@ end
 end
 
 Spork.each_run do
- load "#{Rails.root}/app/models/line.rb"
- load "#{Rails.root}/app/models/compta_line.rb"
+ load "#{Rails.root}/app/models/bank_account.rb"
+ 
 end
 
 DatabaseCleaner.strategy = :truncation

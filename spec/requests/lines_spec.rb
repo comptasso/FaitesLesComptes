@@ -38,7 +38,7 @@ describe 'vue lines' do
     select 'Chèque'
     select '5101 DebiX'
     click_button 'Créer'
-    Line.count.should == 1  
+    Line.count.should == 2 # avec sa contrepartie
   end 
 
     it 'remplir avec une mauvaise date doit réafficher le formulaire sans enregistrer la ligne' do

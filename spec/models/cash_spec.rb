@@ -2,6 +2,10 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+RSpec.configure do |c|
+ #  c.filter = {wip:true}
+end
+
 describe Cash do
   include OrganismFixture
 
@@ -28,7 +32,7 @@ describe Cash do
 
   end
 
-   describe 'création du compte comptable' do
+   describe 'création du compte comptable', wip:true do
 
     before(:each) do
       @c2=@o.cashes.new(:name=>'Dépôt')
@@ -37,7 +41,6 @@ describe Cash do
     it 'la création d un compte bancaire doit entraîner celle d un compte comptable' do
       @c2.save
       @c2.should have(1).accounts
-
     end
 
     it 'incrémente les numéros de compte' do
@@ -52,11 +55,22 @@ describe Cash do
       @c2.accounts.count.should == 2
     end
 
-    it 'créer un nouvel exercice recopie le compte correspondant au compte bancaire' do
+    it 'créer un nouvel exercice recopie le compte correspondant au compte bancaire' do 
       @c.accounts.count.should == 1
       @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
       @c.accounts.count.should == 2
       @c.accounts.last.number.should == @c.accounts.first.number
+    end
+
+    it 'créé un livre de caisse' do
+      expect {@c2.save}.to change {CashBook.count}.by 1
+    end
+
+    it 'vérification des liens' do
+      @c2.save
+      cb = @c2.cash_book
+      cb.should be_an_instance_of(CashBook)
+      cb.cash.should == @c2
     end
   end
 

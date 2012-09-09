@@ -14,6 +14,8 @@ class Cash < ActiveRecord::Base
   has_many :cash_controls
   # un caisse a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
+  belongs_to :cash_book , :foreign_key=>'book_id'
+  belongs_to :book
 
 
   # Un transfert est un virement fait d'une caisse ou d'un compte bancaire
@@ -25,6 +27,7 @@ class Cash < ActiveRecord::Base
 #  has_many :c_transfers, :as=>:creditable, :class_name=>'Transfer'
 
   validates :name, :presence=>true, :uniqueness=>{:scope=>:organism_id}
+  validates :organism_id, :presence=> true
 
   after_create :create_accounts
 
@@ -89,9 +92,12 @@ class Cash < ActiveRecord::Base
  
 
   protected
- # appelé par le callback after_create, crée un compte comptable de rattachement
+ # appelé par le callback after_create, crée un cash_book puis un compte comptable de rattachement
  # pour chaque exercice ouvert.
  def create_accounts
+   logger.info 'création du livre de caisse'
+   create_cash_book(title:"Livre de caisse #{name}", organism_id:organism.id)
+   save # car create_cash_book, sauve le cash_book mais ne sauve pas la modification que cela entraine sur save
    logger.info 'création des comptes liés à la caisse'
    # demande un compte de libre sur l'ensemble des exercices commençant par 51
    n = Account.available('53') # un compte 53 avec un précision de deux chiffres par défaut

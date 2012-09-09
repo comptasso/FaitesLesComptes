@@ -1,9 +1,9 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
-#  c.filter = {:wip=> true }
+ # c.filter = {:wip=> true }
 end
 
 describe BankAccount do
@@ -41,7 +41,7 @@ describe BankAccount do
 
   end
 
-  describe 'création du compte comptable' do
+  describe 'création du compte comptable' , wip:true do
 
     before(:each) do
       @bb=@o.bank_accounts.new(:name=>'Crédit Universel', :number=>'1254L')
@@ -69,6 +69,17 @@ describe BankAccount do
       @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
       @ba.accounts.count.should == 2
       @ba.accounts.last.number.should == '5101'
+    end
+
+    it 'créé un livre de banque' do
+      expect {@bb.save}.to change {BankAccountBook.count}.by 1
+    end
+
+    it 'vérification des liens' do
+      @bb.save
+      cb = @bb.bank_account_book
+      cb.should be_an_instance_of(BankAccountBook)
+      cb.bank_account.should == @bb
     end
 
     context 'avec deux exercices' do

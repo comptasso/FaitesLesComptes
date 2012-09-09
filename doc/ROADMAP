@@ -890,6 +890,13 @@ La logique cash ne doit plus utiliser les counter_account
 On revoit account qui redevient simple.
 On supprime  toutes les références à  counter_account
 
+--------------------- on crée un livre de banque pour chaque banque et un livre de caisse pour chaque caisse --------------
+OK - pour caisse et bank_account, la création entraîne celle d'un livre correspondant
+gérer la suppression des caisses et des comptes
+en train de réécrire les fonctions de sold dans book
+les contre écritures sont inscrites sur le livre correspondant
+du coup, book et monthly_book_extract n'ont plus besoin de filtrer difficilement
+
 Puis on reprend la mutation précédente pour bank_account sur cette nouvelle base.
 
 ------------- fin de cette mutation --------------------------------------------
@@ -904,6 +911,7 @@ Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait util
     ceci pour éviter les risques de after_update malheureux.
 
 --------------------------------- TODO ---------------------------------------------------------
+rajouter db:schema:dump à landlord:migrate_each
 Quand on a des comptes et qu'on crée une nature, le lien au compte est disable dans le form
 Nettoyer les natures parasites de la compta perso
 OK - Faire le readme

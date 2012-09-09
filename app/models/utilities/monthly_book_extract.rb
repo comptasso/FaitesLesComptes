@@ -19,7 +19,7 @@ class MonthlyBookExtract
   end
 
   def lines
-    @lines ||= @book.lines.parentlines.mois(@date)
+    @lines ||= @book.lines.mois(@date)
   end
 
   # calcule le nombre de page du listing en divisant le nombre de lignes

@@ -131,11 +131,16 @@ class Line < ActiveRecord::Base
   def support
    # TODO il sera probablement judicieux d'utiliser une recherche d'un compte 51 ou 53 dans tous les enfants
    # QUESTION, peut on appeler cette méthode pour toutes les lignes...
-   aa =  children.first.account.accountable
+   
+
+
+    return 'A faire'
+
+    aa =  children.first.account.accountable
    return 'Pas de support' unless aa
-   return aa.acronym if aa.is_a? BankAccount
-   return aa.name if aa.is_a? Cash
-   return 'Pas de support'
+   aa.send(:to_s)
+
+   
   end
 
   def children
@@ -230,11 +235,13 @@ class Line < ActiveRecord::Base
   def create_counterpart
     # si le livre est un IncomeBook ou un OutcomeBook
     if book.class == IncomeBook || book.class == OutcomeBook
-      ComptaLine.create!(line_date:line_date, narration:narration, book_id:book_id,
+      l = ComptaLine.create!(line_date:line_date, narration:narration,
+        book_id:counter_account.accountable.book.id,
         account_id:counter_account_id,
         debit:credit, credit:debit,
         payment_mode:payment_mode,
-      owner_id:id, owner_type:'Line')
+        owner_id:id, owner_type:'Line')
+      logger.debug l.inspect
     end
 
   end
