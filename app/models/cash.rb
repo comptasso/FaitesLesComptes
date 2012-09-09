@@ -18,7 +18,7 @@ class Cash < ActiveRecord::Base
   has_many :cash_controls
   # un caisse a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
-  belongs_to :cash_book , :foreign_key=>'book_id'
+  belongs_to :cash_book , :foreign_key=>'book_id', :dependent=>:destroy
   belongs_to :book
 
 

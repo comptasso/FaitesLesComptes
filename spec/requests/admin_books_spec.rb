@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 
  # ActiveRecord::Base.shared_connection = nil
@@ -54,25 +54,12 @@ describe 'vue books index' do
  
   describe 'index' do
 
-#    def retry_on_timeout(n = 3, &block)
-#      block.call
-#    rescue Capybara::TimeoutError, Capybara::ElementNotFound => e
-#      if n > 0
-#        puts "Catched error: #{e.message}. #{n-1} more attempts."
-#        retry_on_timeout(n - 1, &block)
-#      else
-#        raise
-#      end
-#    end
-
-
-#   retry_on_timeout do
      it 'dans la vue index,un livre peut être détruit', :js=>true do
       @o.income_books.create!(:title=>'livre de test') 
       @o.should have(6).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_books_path(@o)
-      within 'tbody tr:nth-child(4)' do
+      within 'tbody tr:nth-child(6)' do
         page.should have_content('livre de test') 
         page.click_link 'Supprimer'
       end
@@ -82,7 +69,7 @@ describe 'vue books index' do
       sleep 1
       page.all('tbody tr').should have(3).books 
      end
-#    end
+
 
     it 'on peut le choisir dans la vue index pour le modifier' do
       visit admin_organism_books_path(@o)

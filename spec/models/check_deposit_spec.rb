@@ -8,7 +8,7 @@ RSpec.configure do |c|
 end
 
 
-describe CheckDeposit do
+describe CheckDeposit do 
 
   before(:each) do
 

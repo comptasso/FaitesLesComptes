@@ -157,9 +157,13 @@ class CheckDeposit < ActiveRecord::Base
      
   end
 
-  # met à jour les lignes avec le champ bank_account_id
+  # met à jour les lignes avec le champ bank_account_id, donc les
+  # lignes correspondant au chèque et leur contrepartie
   def update_checks_with_bank_account_id
-    checks.each {|l| l.update_attribute(:bank_account_id, bank_account.id)}
+    checks.each do |l|
+      l.update_attribute(:bank_account_id, bank_account.id)
+      l.children.each {|child| child.update_attribute(:bank_account_id, bank_account.id)}
+    end
   end
 
 
