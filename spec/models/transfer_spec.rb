@@ -118,33 +118,16 @@ describe Transfer , :wip=>true do
   describe 'instance method credit and debit lines' do
     before(:each) do
       @t= Transfer.new(:date=>Date.today, :narration=>'test',
-        :organism_id=> @o.id, :amount=>123.50, :creditable_id=>1, :creditable_type=>'Cash' )
+        :organism_id=> @o.id, :amount=>123.50, :creditable_id=>@aa.id, :debitable_id=>@ba.id )
     end
 
     it 'a new record answers false to partial, debit and credit_locked?' do
       @t.should_not be_partial_locked
-      @t.should_not be_debit_locked
-      @t.should_not be_credit_locked
+      @t.should_not be_to_locked
+      @t.should_not be_from_locked
     end
-
-    it 'has a method for returning od_id' do
-      @t.send(:od_id).should == @o.od_books.first.id
-    end
-
-    
-
 
     context 'check save and after_create' do
-
-      before(:each) do
-        @t= Transfer.new(:date=>Date.today, :narration=>'test', :amount=>123.50,
-          :creditable_id=>@aa.id, :creditable_type=>'BankAccount',
-          :debitable_id=>@ba.id, :debitable_type =>'BankAccount',
-          :organism_id=>@o.id)
-      end
-
-
-
 
       it 'save transfer create the two lines' do
         @t.should be_valid
@@ -156,7 +139,7 @@ describe Transfer , :wip=>true do
         @t.should have(2).lines
       end
 
-
+     
 
       context 'with a saved tranfer' do
 
@@ -165,41 +148,41 @@ describe Transfer , :wip=>true do
         end
 
         it 'can return the debited line or the credited line' do
-          @t.line_debit.should == @t.lines.select { |l| l.debit != 0 }.first
-          @t.line_credit.should == @t.lines.select { |l| l.credit != 0 }.first
+          @t.line_to.should == @t.lines.select { |l| l.debit != 0 }.first
+          @t.line_from.should == @t.lines.select { |l| l.credit != 0 }.first
         end
 
         it 'destroy the transfer should delete the two lines' do
           expect {@t.destroy}.to change {Line.count}.by(-2)
         end
         it 'destroy the transfer is impossible if debit_line locked' do
-          @t.line_debit.update_attribute(:locked, true)
+          @t.line_to.update_attribute(:locked, true)
           @t.should_not be_destroyable
           expect {@t.destroy}.not_to change {Line.count}
         end
 
-        it 'destroy the transfer is impossible if any line locked' do
+        it 'destroy the transfer is impossible if any line locked' do 
           
-          l = @t.line_credit
+          l = @t.line_from
           l.locked.should be_false 
           l.locked = true
           l.save!
           
-          @t.line_credit.locked.should be_true
+          @t.line_from.locked.should be_true
           @t.should_not be_destroyable
           expect {@t.destroy}.not_to change {Transfer.count}
         end
 
         it 'can say what it can edit' do
-          @t.line_debit.update_attribute(:locked, true)
-          @t.debit_editable?.should be_false
-          @t.credit_editable?.should be_true
+          @t.line_to.update_attribute(:locked, true)
+          @t.to_editable?.should be_false
+          @t.from_editable?.should be_true
         end
 
         describe 'update' do
 
           before(:each) do
-            @t.line_debit.account_id.should == @ba.id
+            @t.line_to.account_id.should == @ba.id
             @bc=@o.bank_accounts.create!(name: 'DebiX', number: '456X')
             @ac = @bc.accounts.first
           end
@@ -207,19 +190,21 @@ describe Transfer , :wip=>true do
           it 'modify transfer change lines adequatly' do
             @t.debitable = @ac
             @t.save!
-            @t.line_debit.account_id.should == @ac.id
+            @t.line_to.account_id.should == @ac.id
+            @t.line_to.book_id.should == @t.line_to.account.accountable.book.id
           end
 
           it 'modify transfer change lines adequatly' do
             @t.creditable = @ac
             @t.save!
-            @t.line_credit.account_id.should == @ac.id
+            @t.line_from.account_id.should == @ac.id
+            @t.line_from.book_id.should == @t.line_from.account.accountable.book.id
           end
 
-          context 'line_debit locked' do
+          context 'line_to locked' do
 
             before(:each) do
-              l= @t.line_debit
+              l= @t.line_to
               l.locked = true
               l.save!(:validate=>false)
             end
@@ -227,22 +212,22 @@ describe Transfer , :wip=>true do
             it 'modify transfer debit is not possibile if locked' do
               @t.creditable = @ac
               @t.save!
-              @t.line_debit.account_id.should == @ba.id
+              @t.line_to.account_id.should == @ba.id
             end
 
             it 'says debit_locked' do
-              @t.should be_debit_locked
+              @t.should be_to_locked
               @t.should be_partial_locked
-              @t.should_not be_credit_locked
+              @t.should_not be_from_locked
             end
 
 
           end
 
-          context 'line_credit locked' do
+          context 'line_from locked' do
 
             before(:each) do
-              l= @t.line_credit
+              l= @t.line_from
               l.locked = true
               l.save!(:validate=>false)
             end
@@ -251,13 +236,13 @@ describe Transfer , :wip=>true do
 
               @t.creditable = @ac
               @t.save!
-              @t.line_credit.account_id.should == @aa.id
+              @t.line_from.account_id.should == @aa.id
             end
 
             it 'transfer is credit_locked' do 
-              @t.should be_credit_locked
+              @t.should be_from_locked
               @t.should be_partial_locked
-              @t.should_not be_debit_locked
+              @t.should_not be_to_locked
             end
 
           end

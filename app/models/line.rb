@@ -128,18 +128,9 @@ class Line < ActiveRecord::Base
   
   # donne le support de la ligne (ou sa contrepartie) : la banque ou la caisse
   def support
-   # TODO il sera probablement judicieux d'utiliser une recherche d'un compte 51 ou 53 dans tous les enfants
-   # QUESTION, peut on appeler cette méthode pour toutes les lignes...
-   
-
-
-    return 'A faire'
-
     aa =  children.first.account.accountable
-   return 'Pas de support' unless aa
-   aa.send(:to_s)
-
-   
+    return 'Pas de support' unless aa
+    aa.to_s
   end
 
   def children

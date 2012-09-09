@@ -148,12 +148,9 @@ describe CheckDeposit do
         @l2.bank_account_id.should == nil
       end
 
-
     end
 
   end
-
-  
 
   describe "après sauvegarde" do
  
@@ -172,8 +169,8 @@ describe CheckDeposit do
     it 'sauver devrait avoir mis à jour les champs bank_account_id' do
       @check_deposit.bank_account_id.should == @ba.id
       @check_deposit.total_checks.should == 445
-      ls= Line.find_all_by_payment_mode('Chèque')
-      ls.size.should == 3
+      ls = Line.find_all_by_payment_mode('Chèque')
+      ls.size.should == 6 # les 3 chèques mais chacun correspond à deux lignes
       ls.each {|l|  l.bank_account_id.should == @check_deposit.bank_account_id }
     end
 

@@ -26,7 +26,7 @@ describe 'vue books index' do
 
   it 'check minimal organism' do 
     Organism.count.should == 1
-    Book.count.should == 3
+    Book.count.should == 5
   end
 
 
@@ -46,7 +46,7 @@ describe 'vue books index' do
       fill_in 'book[description]', :with=>'Un deuxième livre de recettes'
       choose 'Recettes'
       click_button 'Créer le livre'
-      @o.books.count.should == 4
+      @o.books.count.should == 6
       @o.books.last.book_type.should == 'IncomeBook'
     end
 
@@ -69,7 +69,7 @@ describe 'vue books index' do
 #   retry_on_timeout do
      it 'dans la vue index,un livre peut être détruit', :js=>true do
       @o.income_books.create!(:title=>'livre de test') 
-      @o.should have(4).books
+      @o.should have(6).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_books_path(@o)
       within 'tbody tr:nth-child(4)' do

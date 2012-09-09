@@ -4,8 +4,6 @@ require 'spec_helper'
 
 describe "lines/new" do 
   include JcCapybara
-
-
  
   let(:o) {stub_model(Organism) }
   let(:book) {stub_model(Book) }
@@ -35,8 +33,9 @@ describe "lines/new" do
 
   it 'give the info in a notice if previous line' do
     view.stub(:icon_to).and_return('stub icone')
-    assign(:previous_line, stub_model(Line, id:1, narration:'test',
+    pl = assign(:previous_line, stub_model(Line, id:1, narration:'test',
         book_id:book.id, debit:0, credit:12, line_date:Date.today, nature:n, destination:d, counter_account:acc))
+    pl.stub(:support).and_return '5311 Banque'
     render
     rendered.should have_content 'Ligne n°1 créée'
   end

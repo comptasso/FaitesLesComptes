@@ -8,14 +8,14 @@
         = f.input :amount , :wrapper_html=> {class: "span3"},label_html:{class:'span4'}, input_html: {class: "span8", value: two_decimals(@transfer.amount) },  :disabled=>@transfer.partial_locked?, label: 'Montant'
     .row-fluid
       .span12
-        = f.association :debitable, :wrapper_html=>{class: "span3"}, :label=> 'De',label_html: {class: 'span4'}, input_html: {class: "span8", size: 8},
+        = f.association :creditable, :wrapper_html=>{class: "span3"}, :label=> 'De',label_html: {class: 'span4'}, input_html: {class: "span8", size: 8},
                 :collection => [['Banques', @period.bank_accounts.all],['Caisse',@period.cash_accounts.all]],
                 :as => :grouped_select, :group_label_method=> :first, :group_method => :last, 
-                :label_method=> :long_name, :value_method=> :id, :required=>true,  :include_blank=>false, :disabled=>@transfer.debit_locked?
-        = f.association :creditable, :wrapper_html=>{class: "span3"}, :label=> 'Vers',label_html: {class: 'span4'}, input_html: {class: "span8", size: 8},
+                :label_method=> :long_name, :value_method=> :id, :required=>true,  :include_blank=>false, :disabled=>@transfer.from_locked?
+        = f.association :debitable, :wrapper_html=>{class: "span3"}, :label=> 'Vers',label_html: {class: 'span4'}, input_html: {class: "span8", size: 8},
                 :collection => [['Banques', @period.bank_accounts.all],['Caisse',@period.cash_accounts.all]],
                 :as => :grouped_select, :group_label_method=> :first, :group_method => :last,
-                :label_method=> :long_name, :value_method=> :id,  :required=>true,  :include_blank=>false, :disabled=>@transfer.credit_locked?
+                :label_method=> :long_name, :value_method=> :id,  :required=>true,  :include_blank=>false, :disabled=>@transfer.to_locked?
         
 
     .row-fluid
