@@ -7,7 +7,7 @@
 .champ
   %h3 Liste des transferts
 
-  %table.table.table-striped.table-bordered.table-condensed.data_table#transfer-table(cellpadding="0" cellspacing="0" border="0")
+  %table.table.table-striped.table-bordered.table-condensed.data_table#transfer-table(cellpadding="0" cellspacing="0" border="0") 
     %thead
       %tr
         %th.date-euro Date
@@ -23,8 +23,8 @@
           %td= l transfer.date
           %td= transfer.narration
           %td.numeric= two_decimals transfer.amount
-          %td= transfer.creditable.long_name
-          %td= transfer.debitable.long_name
+          %td= transfer.from_account.long_name
+          %td= transfer.to_account.long_name
 
           %td
             = icon_to 'modifier.png', edit_organism_transfer_path(@organism, transfer)

@@ -38,6 +38,7 @@ module OrganismFixture
     @ba = @o.bank_accounts.create!(name: 'DebiX', number: '123Z')
     @c=@o.cashes.create!(:name=>'Magasin')
     @baca = @ba.current_account(@p) # pour baca pour BankAccount Current Account
+    @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
   end
 
   def create_first_line

@@ -32,8 +32,8 @@ class Account < ActiveRecord::Base
 
   # un compte a plusieurs transferts (en fait c'est limité aux comptes bancaires et caisses)
   # TODO peut être rajouter un :conditions
-  has_many :d_transfers, :as=>:debitable, :class_name=>'Transfer'
-  has_many :c_transfers, :as=>:creditable, :class_name=>'Transfer'
+  has_many :d_transfers, :as=>:to_account, :class_name=>'Transfer'
+  has_many :c_transfers, :as=>:from_account, :class_name=>'Transfer'
 
   # la validator cant_change est dans le répertoire lib/validators
   validates :period_id, :title, :presence=>true

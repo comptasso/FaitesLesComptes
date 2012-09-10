@@ -10,8 +10,6 @@ class Cash < ActiveRecord::Base
 #  include Utilities::Sold
   include Utilities::JcGraphic
 
-  
-
   belongs_to :organism
   # ne plus utiliser, cash_id va disparaître
   has_many :lines, :through=>:accounts
@@ -20,15 +18,6 @@ class Cash < ActiveRecord::Base
   has_many :accounts, :as=> :accountable
   belongs_to :cash_book , :foreign_key=>'book_id', :dependent=>:destroy
   belongs_to :book
-
-
-  # Un transfert est un virement fait d'une caisse ou d'un compte bancaire
-  # vers une caisse ou un compte bancaire.
-  # La caisse peut être débitée d'un montant ou créditée.
-  # Transfer est donc polymorphique pour le débit et pour le crédit.
-  # D'où les deux has_many.   .
-#  has_many :d_transfers, :as=>:debitable, :class_name=>'Transfer'
-#  has_many :c_transfers, :as=>:creditable, :class_name=>'Transfer'
 
   validates :name, :presence=>true, :uniqueness=>{:scope=>:organism_id}
   validates :organism_id, :presence=> true

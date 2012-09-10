@@ -3,22 +3,20 @@
 class Transfer < ActiveRecord::Base
   include Utilities::PickDateExtension
 
- 
-
   before_destroy :should_be_destroyable
 
   belongs_to :organism
   # ceci est un compte
-  belongs_to :debitable, class_name:'Account'
-  belongs_to :creditable, class_name:'Account'
+  belongs_to :to_account, class_name:'Account'
+  belongs_to :from_account, class_name:'Account'
 
   # ce qui veut dire que Line a un champ owner_id qui permet de faire le lien avec le transfer
   # Line de son côté a belongs_to owner, polymorphic:true
   has_many   :lines, :as=>:owner, :dependent=>:destroy
 
   validates :date, :amount, :presence=>true
-  validates :debitable_id, :presence=>true
-  validates :creditable_id, :presence=>true
+  validates :to_account_id, :presence=>true
+  validates :from_account_id, :presence=>true
   validates :amount, numericality: true
   validate :amount_cant_be_null
   validate :different_debit_and_credit
@@ -30,11 +28,7 @@ class Transfer < ActiveRecord::Base
   # cf pick_date_extension
   pick_date_for :date
 
-  # remplit les champs debitable_type et _id avec les parties 
-  # model et id de l'argument.
   
-
-
   def line_to
     lines.where('debit <> ?', 0).first
   end
@@ -89,18 +83,18 @@ class Transfer < ActiveRecord::Base
   # applé par after create, crée une ligne dans chacun des livres
   # de caisse et/ou de banque qui font l'objet du virement.
   def create_lines
-    b_id = Account.find_by_id(debitable_id).accountable.book.id
+    b_id = Account.find_by_id(to_account_id).accountable.book.id
     l = lines.new(:line_date=> date, :narration=>narration, :debit=> amount,
-      :credit=>0, :account_id=> debitable_id, 
+      :credit=>0, :account_id=> to_account_id,
       :book_id=>b_id)
     unless l.valid?
       puts l.inspect
       puts l.errors.messages
     end
     l.save
-    b_id = Account.find_by_id(creditable_id).accountable.book.id
+    b_id = Account.find_by_id(from_account_id).accountable.book.id
     l =  lines.create!(:line_date=> date, :narration=>narration, :credit=>amount,
-      :debit=>0, :account_id=> creditable_id,
+      :debit=>0, :account_id=> from_account_id,
       :book_id=>b_id)
     unless l.valid?
       puts l.inspect
@@ -111,14 +105,14 @@ class Transfer < ActiveRecord::Base
 
   # appelé par after_update pour mettre à jour le compte bancaire et le livre associé
   def update_line_from
-    from_book_id = creditable.accountable.book.id
-    line_from.update_attributes(:account_id=> creditable_id, :book_id=>from_book_id)
+    from_book_id = from_account.accountable.book.id
+    line_from.update_attributes(:account_id=> from_account_id, :book_id=>from_book_id)
   end
 
   # appelé par after_update
   def update_line_to
-    to_book_id = debitable.accountable.book.id
-    line_to.update_attributes(:account_id=> debitable_id, book_id:to_book_id)
+    to_book_id = to_account.accountable.book.id
+    line_to.update_attributes(:account_id=> to_account_id, book_id:to_book_id)
   end
 
   # validations
@@ -127,9 +121,9 @@ class Transfer < ActiveRecord::Base
   end
 
   def different_debit_and_credit
-    if debitable_id == creditable_id
-      errors.add :fill_debitable, 'identiques !'
-      errors.add :fill_creditable, 'identiques !'
+    if to_account_id == from_account_id
+      errors.add :fill_to_account, 'identiques !'
+      errors.add :fill_from_account, 'identiques !'
     end
   end
 

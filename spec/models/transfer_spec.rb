@@ -15,7 +15,7 @@ describe Transfer , :wip=>true do
   end 
 
   def valid_attributes
-    {date: Date.today, debitable: @aa, creditable: @ba, amount: 1.5, organism_id: @o.id}
+    {date: Date.today, to_account: @aa, from_account: @ba, amount: 1.5, organism_id: @o.id}
   end
 
   describe 'virtual attribute pick date' do
@@ -57,15 +57,15 @@ describe Transfer , :wip=>true do
       @transfer.should_not be_valid
     end
 
-    it 'nor without debitable' do
+    it 'nor without to_account' do
 
-      @transfer.debitable = nil
+      @transfer.to_account = nil
       @transfer.should_not be_valid
 
     end
 
-    it 'nor without creditable' do
-      @transfer.debitable = nil
+    it 'nor without from_account' do
+      @transfer.to_account = nil
       @transfer.should_not be_valid
     end
 
@@ -74,8 +74,8 @@ describe Transfer , :wip=>true do
       @transfer.should_not be_valid
     end
 
-    it 'debitable and creditable should be different' do
-      @transfer.debitable = @transfer.creditable
+    it 'to_account and from_account should be different' do
+      @transfer.to_account = @transfer.from_account
       @transfer.should_not be_valid
     end
 
@@ -100,16 +100,16 @@ describe Transfer , :wip=>true do
       @tr.errors[:amount].should == ['nul !']
     end
 
-    it 'champ obligatoire pour debitable' do
-      @tr.debitable=nil
+    it 'champ obligatoire pour to_account' do
+      @tr.to_account=nil
       @tr.valid?
-      @tr.errors[:debitable_id].should == ['obligatoire']
+      @tr.errors[:to_account_id].should == ['obligatoire']
     end
 
-    it 'champ obligatoire pour creditable' do
-      @tr.creditable=nil
+    it 'champ obligatoire pour from_account' do
+      @tr.from_account=nil
       @tr.valid?
-      @tr.errors[:creditable_id].should == ['obligatoire']
+      @tr.errors[:from_account_id].should == ['obligatoire']
     end
 
 
@@ -118,7 +118,7 @@ describe Transfer , :wip=>true do
   describe 'instance method credit and debit lines' do
     before(:each) do
       @t= Transfer.new(:date=>Date.today, :narration=>'test',
-        :organism_id=> @o.id, :amount=>123.50, :creditable_id=>@aa.id, :debitable_id=>@ba.id )
+        :organism_id=> @o.id, :amount=>123.50, :from_account_id=>@aa.id, :to_account_id=>@ba.id )
     end
 
     it 'a new record answers false to partial, debit and credit_locked?' do
@@ -168,7 +168,7 @@ describe Transfer , :wip=>true do
           l.locked = true
           l.save!
           
-          @t.line_from.locked.should be_true
+          @t.line_from.locked.should be_true 
           @t.should_not be_destroyable
           expect {@t.destroy}.not_to change {Transfer.count}
         end
@@ -188,14 +188,14 @@ describe Transfer , :wip=>true do
           end
 
           it 'modify transfer change lines adequatly' do
-            @t.debitable = @ac
+            @t.to_account = @ac
             @t.save!
             @t.line_to.account_id.should == @ac.id
             @t.line_to.book_id.should == @t.line_to.account.accountable.book.id
           end
 
           it 'modify transfer change lines adequatly' do
-            @t.creditable = @ac
+            @t.from_account = @ac
             @t.save!
             @t.line_from.account_id.should == @ac.id
             @t.line_from.book_id.should == @t.line_from.account.accountable.book.id
@@ -210,7 +210,7 @@ describe Transfer , :wip=>true do
             end
           
             it 'modify transfer debit is not possibile if locked' do
-              @t.creditable = @ac
+              @t.from_account = @ac
               @t.save!
               @t.line_to.account_id.should == @ba.id
             end
@@ -234,7 +234,7 @@ describe Transfer , :wip=>true do
 
             it 'modify transfer debit or credit is not possibile if locked' do
 
-              @t.creditable = @ac
+              @t.from_account = @ac
               @t.save!
               @t.line_from.account_id.should == @aa.id
             end

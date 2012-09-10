@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120908052943) do
+ActiveRecord::Schema.define(:version => 20120910044118) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -179,10 +179,8 @@ ActiveRecord::Schema.define(:version => 20120908052943) do
   create_table "transfers", :force => true do |t|
     t.date     "date"
     t.string   "narration"
-    t.integer  "debitable_id"
-    t.string   "debitable_type"
-    t.integer  "creditable_id"
-    t.string   "creditable_type"
+    t.integer  "to_account_id"
+    t.integer  "from_account_id"
     t.integer  "organism_id"
     t.decimal  "amount",          :precision => 2, :scale => 10
     t.datetime "created_at",                                     :null => false

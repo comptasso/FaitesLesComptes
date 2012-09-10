@@ -67,7 +67,7 @@ describe 'vue books index' do
       alert = page.driver.browser.switch_to.alert
       alert.accept 
       sleep 1
-      page.all('tbody tr').should have(3).books 
+      page.all('tbody tr').should have(5).books
      end
 
 

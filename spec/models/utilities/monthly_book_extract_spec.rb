@@ -52,7 +52,7 @@ describe Utilities::MonthlyBookExtract do
     end
 
     it "knows the total debit" do
-       @monthly_book_extract.lines.each {|l| puts l.inspect}
+    
       @monthly_book_extract.total_debit.should == 20
     end
 

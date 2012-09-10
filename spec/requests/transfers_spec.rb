@@ -17,9 +17,9 @@ describe 'vue transfer index' do
     create_user 
     create_minimal_organism
     @bb = @o.bank_accounts.create!(:name=>'Deuxième banque', :number=>'123Y')
+    @bbca = @bb.current_account(@p) # ca pour Current Account
+
     login_as('quidam')
-
-
   end
 
   it 'check minimal organism', wip:true do
@@ -43,22 +43,21 @@ describe 'vue transfer index' do
       fill_in 'transfer[date_picker]', :with=>'14/04/2012'
       fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
-      within("#transfer_debitable_id optgroup[label='Banques']") do
+      within("#transfer_to_account_id optgroup[label='Banques']") do
         select(@ba.accounts.first.long_name)
       end
       
       
-      within("#transfer_creditable_id optgroup[label='Banques']") do
+      within("#transfer_from_account_id optgroup[label='Banques']") do
         select(@bb.accounts.first.long_name)
       end
       click_button 'Enregistrer'
       @o.transfers.count.should == 1
       # vérification de o
       t= @o.transfers.last
-puts t.inspect
       t.should be_an_instance_of(Transfer)
-      t.debitable.should == @ba.accounts.first
-      t.creditable.should == @bb.accounts.first
+      t.to_account.should == @baca
+      t.from_account.should == @bbca
     end
 
     context 'le remplir incorrectement' do
@@ -68,10 +67,10 @@ puts t.inspect
       fill_in 'transfer[date_picker]', :with=>'14/04/2012'
       fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
-      within('#transfer_debitable_id') do
+      within('#transfer_to_account_id') do
         select(@ba.accounts.first.id.to_s)
       end
-      within('#transfer_creditable_id') do
+      within('#transfer_from_account_id') do
         select(@bb.accounts.first.id.to_s)
       end
 
@@ -97,8 +96,8 @@ puts t.inspect
 
     before(:each) do
       # création de deux transfers
-      @t1 = @o.transfers.create!(date: Date.today, debitable: @ba.accounts.first, creditable: @bb.accounts.first, amount: 100000, narration: 'création')
-      @t2 = @o.transfers.create!(date: Date.today, debitable: @bb.accounts.first, creditable: @ba.accounts.first, amount: 999990, narration: 'inversion')
+      @t1 = @o.transfers.create!(date: Date.today, to_account: @baca, from_account: @bbca, amount: 100000, narration: 'création')
+      @t2 = @o.transfers.create!(date: Date.today, to_account: @bbca, from_account: @baca, amount: 999990, narration: 'inversion')
       visit organism_transfers_path(@o)
     end
 
@@ -131,7 +130,7 @@ puts t.inspect
 
     before(:each) do
       @bb = @o.bank_accounts.create!(:name=>'DebiX', :number=>'987654')
-      @t=@o.transfers.create!(:date=>Date.today, :debitable=>@ba.accounts.first, :creditable=>@bb.accounts.first, :amount=>124.12, :narration=>'premier virement')
+      @t=@o.transfers.create!(:date=>Date.today, :to_account=>@ba.accounts.first, :from_account=>@bb.accounts.first, :amount=>124.12, :narration=>'premier virement')
     end
 
     it 'On peut changer les deux autres champs' do
