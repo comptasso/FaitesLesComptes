@@ -61,28 +61,13 @@ describe Cash do
       @c.accounts.count.should == 2
       @c.accounts.last.number.should == @c.accounts.first.number
     end
-
-    it 'créé un livre de caisse' do
-      expect {@c2.save}.to change {CashBook.count}.by 1
-    end
-
-    it 'vérification des liens' do
-      @c2.save
-      cb = @c2.cash_book
-      cb.should be_an_instance_of(CashBook)
-      cb.cash.should == @c2
-    end
   end
 
-  
-
   context 'annex methods' do
-    
-
+ 
     it 'to_s return name' do
       @c.to_s.should == @c.name
     end
-
   
   end
 
@@ -96,4 +81,3 @@ describe Cash do
   end
   
 end
-

@@ -157,9 +157,9 @@ describe Line do
         Line.count.should == 120
       end
 
-      it 'income and outcomme should each have 30 lines' do
-        @ib.lines.should have(30).elements
-        @ob.lines.should have(30).elements
+      it 'income and outcomme should each have 60 lines' do
+        @ib.lines.should have(60).elements
+        @ob.lines.should have(60).elements
       end
 
 
@@ -203,9 +203,9 @@ describe Line do
         @l.support.should == 'Magasin'
       end
 
-      it 'la contreligne est dans un livre de caisse'  do
+      it 'la contreligne est dans le même livre'  do
         c = @l.children.first
-        c.book.should be_an_instance_of(CashBook)
+        c.book.should be_an_instance_of(@ib.class)
       end
     end
   end
@@ -238,7 +238,7 @@ describe Line do
       l.account.should == @a
     end
     
-    describe 'Remise de chèques' , wip:true do
+    describe 'Remise de chèques'  do
       
       before(:each) do
         @n = @p.natures.create!(name:'Vente', income_outcome:true)
@@ -249,7 +249,7 @@ describe Line do
 
       it 'La ligne n est pas valide sans compte de remise de chèque' do
          @l.save
-         @l.errors[:counter_account].should == ['Pas de compte chèque à encaisser']
+         @l.errors[:payment_mode].should == ['Pas de compte chèque à encaisser']
       end
 
       it 'la ligne n est pas sauvée' do

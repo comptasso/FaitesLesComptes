@@ -4,9 +4,7 @@ class BankAccount < ActiveRecord::Base
   belongs_to :organism
   has_many :check_deposits
   has_many :bank_extracts
-  belongs_to :bank_account_book , :foreign_key=>'book_id'
-  belongs_to :book
-
+  
   # un compte bancaire a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
   
@@ -157,9 +155,6 @@ class BankAccount < ActiveRecord::Base
  # appelé par le callback after_create, crée un compte comptable de rattachement
  # pour chaque exercice ouvert.
  def create_accounts
-   logger.info 'création du livre de caisse'
-   create_bank_account_book(title:"Livre de banque #{to_s}", organism_id:organism.id)
-   save # car create_cash_book, sauve le cash_book mais ne sauve pas la modification que cela entraine sur save
    logger.info 'création des comptes liés au compte bancaire'
    # demande un compte de libre sur l'ensemble des exercices commençant par 51
    n = Account.available('51') # un compte 51 avec un précision de deux chiffres par défaut

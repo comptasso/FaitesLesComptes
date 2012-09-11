@@ -3,7 +3,7 @@
 require 'book.rb'
 
 class CashBook < Book
-  has_one :cash, :foreign_key=>:book_id
+  
 
   def monthly_value(selector)
     -  super

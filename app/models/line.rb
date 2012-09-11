@@ -228,7 +228,7 @@ class Line < ActiveRecord::Base
     p = book.organism.find_period(line_date)
     cas = p.accounts.where('number LIKE ?', '52%')
     if cas.empty?
-      self.errors[:counter_account] << 'Pas de compte chèque à encaisser' if cas.empty?
+      self.errors[:payment_mode] << 'Pas de compte chèque à encaisser' if cas.empty?
       return false
     else
       self.counter_account_id = cas.first.id
@@ -240,7 +240,7 @@ class Line < ActiveRecord::Base
     # si le livre est un IncomeBook ou un OutcomeBook
     if book.class == IncomeBook || book.class == OutcomeBook
       l = ComptaLine.new(line_date:line_date, narration:narration,
-        book_id:counter_account.accountable.book.id,
+        book_id:book.id,
         account_id:counter_account_id,
         debit:credit, credit:debit,
         payment_mode:payment_mode,

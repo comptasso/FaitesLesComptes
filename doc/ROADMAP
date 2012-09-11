@@ -887,7 +887,7 @@ OK - Line after_create crée la contrepartie si on est dans une écriture de com
 Il faut que line after_update gère le changement
 OK - Revoir Transfer qui doit écrire des lignes normales maintenant
 OK - revoir support (qui n'est plus lisible directement)
-OK - La logique cash ne doit plus utiliser les counter_account
+OK - La logique cash ne doit plus utiliser les counter_account mais les comptes de caisse
 OK - On revoit account qui redevient simple.
 On supprime  toutes les références à  counter_account
 
@@ -898,11 +898,23 @@ OK - modifier update transfer
 OK - modification des fonctions sold_at et monthly_value dans cash_book et income_book
 OK - les contre écritures sont inscrites sur le livre correspondant du coup, book et monthly_book_extract n'ont plus besoin de filtrer difficilement
 NON - Traiter le cas d'absence d'exercice précédent pour les graphes
+NON - La création de compte 52 doit être accountable puisqu'on a besoin d'un livre....
+-------------- suppresssion de la logique accountable ---------------------------------
+Ne plus faire un livre par caisse ou banque
+OK - Supprimer les champs et les liaisons, ainsi que le after_create
+OK - Supprimer les champs book_id de cash
+OK - supprimer les champs book_id de bankaccount
+Revoir l'affichage d'un monthlyBookExtract
+Suppression des champs accountable_type et id pour cash et bank_account
+
+
 Puis on reprend la mutation précédente pour bank_account sur cette nouvelle base.
-Transfer peut voir sa structure changer avec par exemple from_account_id et to_account_id plutôt que des polymorphiques
+OK - Transfer peut voir sa structure changer avec par exemple from_account_id et to_account_id plutôt que des polymorphiques
 
 ------------- fin de cette mutation --------------------------------------------
 La création d un exercice crée une caisse et un compte bancaire plus un compte de rem chèque (ne pas oublier accountable_type et id)
+Dans la saisie des comptes, les natures associées devraient être disabled si on n'est pas dans un compte de classe 6 ou 7
+
 
 on peut supprimer les champs debitable_type et crreditable_type de Transfer
 toujours dans Transfer, on pourrait revoir les validators

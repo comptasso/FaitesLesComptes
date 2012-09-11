@@ -37,5 +37,17 @@ describe 'Remise chèques' do
    Line.count.should == 2 # avec sa contrepartie 
  end
 
+  it 'la deuxième ligne doit avoir le compte 520' do
+   rem_acc =  @p.accounts.create!(number:'520', title:'Remise chèque', :accountable_type=>'BankAccount', accountable_id:@ba.id)
+   click_button 'Créer'
+   Line.last.account_id.should == rem_acc.id
+  end
+
+  it 'si on choisit un compte contradictoire renvoie le form' do
+   select '5101 DebiX'
+   click_button 'Créer'
+   page.should have_content 'Pas de compte chèque à encaisser'
+  end
+
 
 end
