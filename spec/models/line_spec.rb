@@ -249,7 +249,11 @@ describe Line do
 
       it 'La ligne n est pas valide sans compte de remise de chèque' do
          @l.save
-         @l.errors[:base].should == ['Impossible de trouver un compte de Chèques à l\'encaissement']
+         @l.errors[:counter_account].should == ['Pas de compte chèque à encaisser']
+      end
+
+      it 'la ligne n est pas sauvée' do
+        expect {@l.save}.not_to change {Line.count}
       end
 
       it 'ecrit la contreligne' do

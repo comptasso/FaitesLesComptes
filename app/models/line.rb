@@ -69,7 +69,7 @@ class Line < ActiveRecord::Base
   pick_date_for :line_date
   
   before_save  :fill_account, :if=> lambda {nature && nature.account}
-  before_save :fill_rem_check_account
+  before_save :fill_rem_check_account, :if => lambda {self.book.class == IncomeBook && self.payment_mode == 'Chèque'}
   after_create :create_counterpart
   after_update :update_counterpart
 
@@ -222,17 +222,16 @@ class Line < ActiveRecord::Base
     self.account_id = nature.account.id
   end
 
+  # cas particulier d'une remise de chèque, la contrepartie n'est pas une caisse ou une banque 
+  # mais le compte remise à l'encaissement
   def fill_rem_check_account
-    # cas particulier d'une remise de chèque
-    if book.class == IncomeBook && payment_mode == 'Chèque'
-      p = book.organism.find_period(line_date)
-      cas = p.accounts.where('number LIKE ?', '52%')
-      if cas.empty?
-        self.errors[:base] << 'Impossible de trouver un compte de Chèques à l\'encaissement' if cas.empty?
-        return false
-      else
-        self.counter_account_id = cas.first.id
-      end
+    p = book.organism.find_period(line_date)
+    cas = p.accounts.where('number LIKE ?', '52%')
+    if cas.empty?
+      self.errors[:counter_account] << 'Pas de compte chèque à encaisser' if cas.empty?
+      return false
+    else
+      self.counter_account_id = cas.first.id
     end
   end
 
