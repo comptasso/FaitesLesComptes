@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
-#  config.filter = {wip:true}
+ #   config.filter = {wip:true}
 end
 
 
@@ -63,16 +63,16 @@ describe Line do
       @l.should_not be_valid
     end
 
-   # TODO, ceci n'est plus vrai pour tous les types de lignes
+    # TODO, ceci n'est plus vrai pour tous les types de lignes
     it 'doit avoir une nature_id sauf si account_id est rempli' do
       # une ligne de recettes mais sans nature
       @l.nature_id = nil
       @l.should_not be_valid
       # une ligne d'OD
       
-       @l=Line.new(:account_id=>1, :book_id=>@od.id, :credit=>200 ,:narration=>'ligne de test',
+      @l=Line.new(:account_id=>1, :book_id=>@od.id, :credit=>200 ,:narration=>'ligne de test',
         :line_date=>Date.civil(2012,01,02), :payment_mode=> 'Espèces', counter_account_id:7)
-       @l.should be_valid
+      @l.should be_valid
     end
 
     it 'débit et crédit ne doivent pas être simultanément remplis' do
@@ -170,43 +170,43 @@ describe Line do
     end
   end
 
-  describe 'ligne de contrepartie' , wip:true do
+  describe 'ligne de contrepartie' do
 
     it 'la création d une ligne en crée une deuxième de contrpartie' do
       expect { Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', 
-        :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)}.to change {Line.count}.by(2)
+          :payment_mode=> 'Espèces',  :line_date=>Date.today,
+          :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)}.to change {Line.count}.by(2)
     end
 
     context 'avec une lignes créée' do
 
-    before(:each) do
-      @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
-        :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.current_account(@p).id)
-    end
+      before(:each) do
+        @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
+          :payment_mode=> 'Espèces',  :line_date=>Date.today,
+          :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.current_account(@p).id)
+      end
 
-    it 'La ligne créée connait son enfant' do
+      it 'La ligne créée connait son enfant' do
    
-      @l.children.count.should == 1
-      @l.children.first.should be_an_instance_of(Line) 
-    end
+        @l.children.count.should == 1
+        @l.children.first.should be_an_instance_of(Line)
+      end
 
-    it 'la ligne enfant connaît son parent' do
+      it 'la ligne enfant connaît son parent' do
     
-      c = @l.children.first
-      c.owner.should == @l
-    end
+        c = @l.children.first
+        c.owner.should == @l
+      end
 
-    it 'is able to retrieve support' do
+      it 'is able to retrieve support' do
      
-      @l.support.should == 'Magasin'
-    end
+        @l.support.should == 'Magasin'
+      end
 
-    it 'la contreligne est dans un livre de caisse'  do
-      c = @l.children.first
-      c.book.should be_an_instance_of(CashBook)
-    end
+      it 'la contreligne est dans un livre de caisse'  do
+        c = @l.children.first
+        c.book.should be_an_instance_of(CashBook)
+      end
     end
   end
 
@@ -233,11 +233,31 @@ describe Line do
         :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.current_account(@p).id)
       @n.account_id = @a.id
       @n.save! 
-     # il faut recharger l'instance pour tester le changement de nature
+      # il faut recharger l'instance pour tester le changement de nature
       l = Line.find_by_credit(2.50)
       l.account.should == @a
     end
     
+    describe 'Remise de chèques' , wip:true do
+      
+      before(:each) do
+        @n = @p.natures.create!(name:'Vente', income_outcome:true)
+        @l = Line.new(:book_id=>@ib.id, :narration=>'premier mois credit',
+          :payment_mode=> 'Chèque',  :line_date=>Date.today,
+          :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.current_account(@p).id)
+      end
+
+      it 'La ligne n est pas valide sans compte de remise de chèque' do
+         @l.save
+         @l.errors[:base].should == ['Impossible de trouver un compte de Chèques à l\'encaissement']
+      end
+
+      it 'ecrit la contreligne' do
+        @rem_acc = @p.accounts.create!(number:'520', title:'Remise chèque', :accountable_type=>'BankAccount', accountable_id:@ba.id)
+        expect {@l.save}.to change {Line.count}.by(2)
+
+      end
+    end
   end
 
 

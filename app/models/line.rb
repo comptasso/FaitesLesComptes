@@ -59,16 +59,17 @@ class Line < ActiveRecord::Base
   belongs_to :bank_extract
   belongs_to :check_deposit
   belongs_to :bank_account
-#  belongs_to :cash
+  #  belongs_to :cash
   belongs_to :owner, :polymorphic=>true  # pour les transferts uniquement (à ce stade)
   has_and_belongs_to_many :bank_extract_lines, :uniq=>true # pour les rapprochements bancaires
 
   has_many   :lines, :as=>:owner, :dependent=>:destroy
 
 
-  pick_date_for :line_date 
+  pick_date_for :line_date
   
-  before_save  :fill_account
+  before_save  :fill_account, :if=> lambda {nature && nature.account}
+  before_save :fill_rem_check_account
   after_create :create_counterpart
   after_update :update_counterpart
 
@@ -110,7 +111,7 @@ class Line < ActiveRecord::Base
       Date.civil(month_year[/\d{4}$/].to_i, month_year[/^\d{2}/].to_i,1).end_of_month    )}
 
   scope :monthyear, lambda {|my| where('line_date >= ? AND line_date <= ?',
-     my.beginning_of_month, my.end_of_month  )}
+      my.beginning_of_month, my.end_of_month  )}
   scope :range_date, lambda { |fd,td| where('line_date >= ? AND line_date <= ?', fd, td) }
   scope :parentlines, where('owner_id IS NULL')
 
@@ -142,43 +143,43 @@ class Line < ActiveRecord::Base
 
 
 
-#  def multiple_info
-#    if self.multiple
-#      # on veut avoir le nombre
-#      t= Line.multiple(self.copied_id)
-#      { nombre: t.size, first_date: t.first.line_date,
-#        last_date: t.last.line_date,
-#        narration: self.narration,
-#        destination: self.destination_name,
-#        nature: self.nature_name,
-#        debit: self.debit,
-#        credit: self.credit,
-#        total: t.sum(:debit)+ t.sum(:credit),
-#        copied_id: self.copied_id
-#      }
-#    end
-#  end
-#
-#
-#
-#  def repete(number, period)
-#    d=self.line_date
-#    self.multiple=true
-#    self.copied_id=self.id
-#    t=[self]
-#    number.times do |i|
-#      case period
-#      when 'Semaines' then new_date = d+(i+1)*7
-#      when 'Mois' then new_date= d.months_since(i+1)
-#      when 'Trimestres' then new_date=d.months_since(3*(i+1))
-#      end
-#      t << self.copy(new_date)
-#    end
-#    t.each { |l| l.save}
-#    return t.size
-#  rescue
-#    self.multiple=false
-#  end
+  #  def multiple_info
+  #    if self.multiple
+  #      # on veut avoir le nombre
+  #      t= Line.multiple(self.copied_id)
+  #      { nombre: t.size, first_date: t.first.line_date,
+  #        last_date: t.last.line_date,
+  #        narration: self.narration,
+  #        destination: self.destination_name,
+  #        nature: self.nature_name,
+  #        debit: self.debit,
+  #        credit: self.credit,
+  #        total: t.sum(:debit)+ t.sum(:credit),
+  #        copied_id: self.copied_id
+  #      }
+  #    end
+  #  end
+  #
+  #
+  #
+  #  def repete(number, period)
+  #    d=self.line_date
+  #    self.multiple=true
+  #    self.copied_id=self.id
+  #    t=[self]
+  #    number.times do |i|
+  #      case period
+  #      when 'Semaines' then new_date = d+(i+1)*7
+  #      when 'Mois' then new_date= d.months_since(i+1)
+  #      when 'Trimestres' then new_date=d.months_since(3*(i+1))
+  #      end
+  #      t << self.copy(new_date)
+  #    end
+  #    t.each { |l| l.save}
+  #    return t.size
+  #  rescue
+  #    self.multiple=false
+  #  end
 
   
   # crée une ligne à partir d'une ligne existante en changeant la date
@@ -195,7 +196,7 @@ class Line < ActiveRecord::Base
 
   # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
   def check_for_select
-  "#{I18n.l line_date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',credit)}"
+    "#{I18n.l line_date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',credit)}"
   end
 
   def destination_name
@@ -215,9 +216,23 @@ class Line < ActiveRecord::Base
   end
 
   # remplit le champ account_id avec celui associé à nature si nature est effectivement associée à nature
+  # traite également le cas particulier d'une recette par chèque pour remplir le counter_account
+  # avec le compte Chèques à l'encaissement
   def fill_account
-    if nature && nature.account
-      self.account_id = nature.account.id 
+    self.account_id = nature.account.id
+  end
+
+  def fill_rem_check_account
+    # cas particulier d'une remise de chèque
+    if book.class == IncomeBook && payment_mode == 'Chèque'
+      p = book.organism.find_period(line_date)
+      cas = p.accounts.where('number LIKE ?', '52%')
+      if cas.empty?
+        self.errors[:base] << 'Impossible de trouver un compte de Chèques à l\'encaissement' if cas.empty?
+        return false
+      else
+        self.counter_account_id = cas.first.id
+      end
     end
   end
 

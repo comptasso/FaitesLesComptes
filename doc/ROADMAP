@@ -902,6 +902,8 @@ Puis on reprend la mutation précédente pour bank_account sur cette nouvelle ba
 Transfer peut voir sa structure changer avec par exemple from_account_id et to_account_id plutôt que des polymorphiques
 
 ------------- fin de cette mutation --------------------------------------------
+La création d un exercice crée une caisse et un compte bancaire plus un compte de rem chèque (ne pas oublier accountable_type et id)
+
 on peut supprimer les champs debitable_type et crreditable_type de Transfer
 toujours dans Transfer, on pourrait revoir les validators
 Dans les exports de Lines#index vers des fichiers, on ne devrait pas faire un truncate des champs (vu le pb pour le champ support)

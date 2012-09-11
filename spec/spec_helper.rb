@@ -39,7 +39,7 @@ end
 end
 
 Spork.each_run do
- load "#{Rails.root}/app/models/bank_account.rb"
+ load "#{Rails.root}/app/models/line.rb"
  
 end
 

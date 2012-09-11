@@ -23,7 +23,7 @@ describe 'vue lines' do
   end 
 
   it "affiche la page new" do
-    visit organism_path(@p)
+    
     visit new_book_line_path(@ob)
     page.should have_content('nouvelle ligne') 
     Line.count.should == 0
