@@ -13,6 +13,7 @@ describe CheckDepositBankExtractLine do
 
   before(:each) do
     create_minimal_organism
+    @p.accounts.create!(number:'520', title:'Remise chèque')
     @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month,
       end_date:Date.today.end_of_month,
       begin_sold:1,

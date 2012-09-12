@@ -16,7 +16,7 @@ describe "transfers/new" do
     @p  = assign(:period, stub_model(Period, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year))
     assign(:transfer, stub_model(Transfer).as_new_record)
 
-    @p.stub_chain(:bank_accounts, :all).and_return @bas
+    @p.stub_chain(:bank_accounts, :all).and_return @bas 
     @p.stub_chain(:cash_accounts, :all).and_return @cas
   end
 
@@ -43,8 +43,8 @@ describe "transfers/new" do
   it 'check the select ' do
     render
     
-    page.find('#transfer_debitable_id').all('option').should have(4).elements
-    page.find('#transfer_creditable_id').all('option').should have(4).elements
+    page.find('#transfer_to_account_id').all('option').should have(4).elements
+    page.find('#transfer_from_account_id').all('option').should have(4).elements
   end
   
   

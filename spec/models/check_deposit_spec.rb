@@ -4,24 +4,20 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
-   # c.filter = {:wip=> true }
+#    c.filter = {:wip=> true }
 end
 
 
-describe CheckDeposit do 
+describe CheckDeposit do
+  include OrganismFixture  
 
   before(:each) do
-
-    @o=Organism.create!(title: 'test check_deposit', database_name:'assotest1')
-    @p=@o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year) 
-    @ba=@o.bank_accounts.create!(name: 'La Banque', number: '123456Z')
-    @baca = @ba.current_account(@p)
-    @b=@o.income_books.create!(title: 'Recettes')
-    @n=@p.natures.create!(name: 'ventes')
-    @l1=@b.lines.create!(line_date: Date.today, counter_account:@baca, :narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
-    @l2=@b.lines.create!(line_date: Date.today, counter_account:@baca,:narration=>'ligne de test',credit: 101, payment_mode:'Chèque', nature: @n)
-    @l3=@b.lines.create!(line_date: Date.today,counter_account:@baca,:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
-    @l5=@b.lines.create!(line_date: Date.today,counter_account:@baca, :narration=>'ligne de test',credit: 50000, payment_mode:'Virement', nature: @n)
+    create_minimal_organism
+    @p.accounts.create!(number:'520', title:'Remise chèque')
+    @l1=@ib.lines.create!(line_date: Date.today, counter_account:@baca, :narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
+    @l2=@ib.lines.create!(line_date: Date.today, counter_account:@baca,:narration=>'ligne de test',credit: 101, payment_mode:'Chèque', nature: @n)
+    @l3=@ib.lines.create!(line_date: Date.today,counter_account:@baca,:narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
+    @l5=@ib.lines.create!(line_date: Date.today,counter_account:@baca, :narration=>'ligne de test',credit: 50000, payment_mode:'Virement', nature: @n)
   end
 
  
@@ -217,7 +213,7 @@ describe CheckDeposit do
       CheckDeposit.not_pointed.should have(1).item
     end
 
-    describe "le rattachement à un extrait de compte" , :wip=>true do
+    describe "le rattachement à un extrait de compte"  do
       before(:each) do
         @ba.np_check_deposits.should == [@check_deposit]
         @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
@@ -263,7 +259,7 @@ describe CheckDeposit do
         end
 
         it "ne peut plus ajouter de chèque" do
-          @l4=@b.lines.create!(line_date: Date.today,counter_account:@baca, :narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
+          @l4=@ib.lines.create!(line_date: Date.today,counter_account:@baca, :narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
        
           expect {@check_deposit.checks << @l4}.to raise_error
         
@@ -276,16 +272,18 @@ describe CheckDeposit do
     end # fin du rattachement à un extrait de compte
   end 
 
-  context "avec deux organismes" do
+  context "avec deux organismes"  do
     before(:each) do
       @o2=Organism.create!(title: 'autre société', database_name:'assotest2')
       @p2=@o2.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
+      @p2.accounts.create!(number:'520', title:'Remise chèque')
       @ba2=@o2.bank_accounts.create!(name: 'BBIC', number: '987654321Z')
       @b2=@o2.income_books.create!(title: 'Recettes')
       @n2=@p2.natures.create!(name: 'ventes')
-      @l21=@b2.lines.create!(line_date: Date.today,counter_account:@baca,  :narration=>'ligne de test',credit: 244, payment_mode:'Chèque', nature: @n)
-      @l22=@b2.lines.create!(line_date: Date.today, counter_account:@baca, :narration=>'ligne de test',credit: 2101, payment_mode:'Chèque', nature: @n)
-      @l23=@b2.lines.create!(line_date: Date.today, counter_account:@baca, :narration=>'ligne de test',credit: 2300, payment_mode:'Chèque', nature: @n)
+      
+      @l21=@b2.lines.create!(line_date: Date.today,counter_account:@baca,  :narration=>'ligne de test',credit: 244, payment_mode:'Chèque', nature: @rec)
+      @l22=@b2.lines.create!(line_date: Date.today, counter_account:@baca, :narration=>'ligne de test',credit: 2101, payment_mode:'Chèque', nature: @rec)
+      @l23=@b2.lines.create!(line_date: Date.today, counter_account:@baca, :narration=>'ligne de test',credit: 2300, payment_mode:'Chèque', nature: @rec)
       @cd2=@ba2.check_deposits.new
     end
 
@@ -299,6 +297,7 @@ describe CheckDeposit do
     before(:each) do
       @o2=Organism.create!(title: 'Autre société', database_name:'assotest2')
       @p2=@o2.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
+      @p2.accounts.create!(number:'520', title:'Remise chèque')
       @ba2=@o2.bank_accounts.create!(name: 'IBAN', number: '123456Z')
       @b2=@o2.income_books.create!(title: 'Recettes')
       @n2=@p2.natures.create!(name: 'ventes')

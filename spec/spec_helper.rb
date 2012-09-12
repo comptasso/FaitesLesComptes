@@ -39,7 +39,7 @@ end
 end
 
 Spork.each_run do
- load "#{Rails.root}/app/models/transfer.rb"
+ # load "#{Rails.root}/app/models/transfer.rb"
  
 end
 

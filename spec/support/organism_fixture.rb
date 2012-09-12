@@ -43,11 +43,13 @@ module OrganismFixture
   end
 
   def create_first_line
-    @l1 = Line.create!(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+    @l1 = Line.create!(narration:'bel',counter_account_id:@baca.id,
+      line_date:Date.today, debit:0, credit:97, payment_mode:'Virement', book_id:@ob.id, nature_id:@n.id)
   end
 
   def create_second_line
-    @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:3, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+    @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id, 
+      line_date:Date.today, debit:0, credit:3, payment_mode:'Virement', book_id:@ob.id, nature_id:@n.id)
   end
 
   def create_second_organism 

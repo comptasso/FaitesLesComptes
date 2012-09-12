@@ -8,7 +8,7 @@ end
 
 
 describe Account do 
-  include OrganismFixture
+  include OrganismFixture 
 
    before(:each) do
       create_minimal_organism
@@ -85,12 +85,11 @@ describe Account do
      end
 
     it 'faux si des lignes dont au moins une n est pas locked' do
-      @account.should_not be_all_lines_locked
+      @account.should_not be_all_lines_locked 
     end
     
       it 'false si une ligne est unlocked' do
         @l1.update_attribute(:locked, true)
-        
         @account.should_not be_all_lines_locked
       end
 

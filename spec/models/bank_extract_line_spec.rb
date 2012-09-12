@@ -7,11 +7,12 @@ RSpec.configure do |c|
 end
 
 
-describe StandardBankExtractLine do
+describe StandardBankExtractLine do 
   include OrganismFixture
 
   before(:each) do 
     create_minimal_organism
+    @rem_acc = @p.accounts.create!(title:'Remise chèque', number:'520')
     @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month,
       end_date:Date.today.end_of_month,
       begin_sold:1,

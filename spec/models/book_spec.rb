@@ -21,11 +21,13 @@ describe Book do
   end
 
   context "un exercice de 12 mois commencant le 1er janvier" do
+    let(:o) {stub_model(Organism)}
     let(:p2010) {stub_model(Period, :start_date=>Date.civil(2010,01,01), :close_date=>Date.civil(2010,12,31))}
     let(:p2011) {stub_model(Period, :start_date=>Date.civil(2011,01,01), :close_date=>Date.civil(2011,12,31))}
 
     before(:each) do
-      @book = Book.new
+      @book = o.books.new
+      @book.stub(:organism).and_return(o)
     end
 
     it "should have a ticks method with argument period" do 
@@ -240,7 +242,7 @@ describe Book do
 
    
     it "monthly_datas returns a hash" do
-      pending 'ne semble pas fonctionner avec les stub'
+      pending 'ne semble pas fonctionner avec les stub' 
       z = @book.monthly_datas(period)
       z.should be_an_instance_of(Hash) 
       @book.monthly_datas(period).should == hash_datas_arrays(period)

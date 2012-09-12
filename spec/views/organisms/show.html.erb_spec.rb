@@ -7,7 +7,7 @@ describe "organisms/show" do
   
 
 
-let(:o) {stub_model(Organism) }
+let(:o) {stub_model(Organism) } 
 let(:ibook) {stub_model(IncomeBook, :title=>'Recettes') }
 let(:obook) { stub_model(OutcomeBook, title: 'Dépenses')}
 let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))}
@@ -16,6 +16,7 @@ let(:p2011) {stub_model(Period, start_date: Date.civil(2011,01,01), close_date: 
 before(:each) do
     assign(:organism, o)
     o.stub(:periods).and_return([p2011,p2012])
+     o.stub(:find_period).and_return(p2012)
     p2012.stub(:previous_period?).and_return(true)
     p2012.stub(:previous_period).and_return(p2011)
     ibook.stub(:organism).and_return(o)

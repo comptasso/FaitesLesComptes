@@ -59,13 +59,13 @@ class Cash < ActiveRecord::Base
   # débit cumulé à une date (y compris cette date). Renvoie zero s'il n'y a
   # pas de périod et donc pas de compte associé à cette caisse pour cette date
   def cumulated_debit_at(date)
-    cumlated_at(date, :debit)
+    cumulated_at(date, :debit)
   end
 
   # crédit cumulé à une date (y compris cette date). Renvoie 0 s'il n'y a 
   # pas de périod et donc pas de comptes associé à cette caisse pour cette date
   def cumulated_credit_at(date)
-    cumlated_at(date, :credit)
+    cumulated_at(date, :credit)
   end
 
   # solde à une date (y compris cette date). Renvoie nil s'il n'y a 

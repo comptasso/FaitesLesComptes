@@ -14,7 +14,7 @@ describe BankAccount do
   end
 
   before(:each) do
-    @bb=@o.bank_accounts.new(:name=>'Crédit Universel', :number=>'1254L')
+    @bb=@o.bank_accounts.new(:name=>'Crédit Universel', :number=>'1254L') 
   end
 
   context 'controle des validités' do
@@ -71,16 +71,7 @@ describe BankAccount do
       @ba.accounts.last.number.should == '5101'
     end
 
-    it 'créé un livre de banque' do
-      expect {@bb.save}.to change {BankAccountBook.count}.by 1
-    end
-
-    it 'vérification des liens' do
-      @bb.save
-      cb = @bb.bank_account_book
-      cb.should be_an_instance_of(BankAccountBook)
-      cb.bank_account.should == @bb
-    end
+    
 
     context 'avec deux exercices' do
 

@@ -6,7 +6,7 @@ describe "transfers/edit" do
     include JcCapybara 
 
   before(:each) do
-    @o = assign(:organism, stub_model(Organism))
+    @o = assign(:organism, stub_model(Organism)) 
     @bas= assign(:bank_accounts,
     [stub_model(BankAccount, name: 'DebiX', number: '1234Z'),
     stub_model(BankAccount, name: 'DebiX', number: '5678Z') ])
@@ -48,15 +48,15 @@ describe "transfers/edit" do
   it 'part debit is disable if line_debit locked' do
      @transfer.should_receive(:to_locked?).and_return(true)
      render
-     page.find('select#transfer_debitable_id')[:disabled].should == 'disabled'
-     page.find('select#transfer_creditable_id')[:disabled].should be_nil
+     page.find('select#transfer_to_account_id')[:disabled].should == 'disabled'
+     page.find('select#transfer_from_account_id')[:disabled].should be_nil
   end
 
     it 'part credit is disable if line_credit locked' do
     @transfer.should_receive(:from_locked?).and_return(true)
      render
-     page.find('select#transfer_creditable_id')[:disabled].should == 'disabled'
-     page.find('select#transfer_debitable_id')[:disabled].should be_nil
+     page.find('select#transfer_from_account_id')[:disabled].should == 'disabled'
+     page.find('select#transfer_to_account_id')[:disabled].should be_nil
   end
 
   end

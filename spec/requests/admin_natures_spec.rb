@@ -9,7 +9,7 @@ end
 
 # spec request for testing admin books 
 
-describe 'vue natures index' do
+describe 'vue natures index' do 
   include OrganismFixture 
 
   before(:each) do
@@ -21,7 +21,7 @@ describe 'vue natures index' do
 
   it 'check minimal organism' do
     Organism.count.should == 1
-    Nature.count.should == 1
+    Nature.count.should == 2
     Nature.first.income_outcome.should be_false
   end
 
@@ -41,7 +41,7 @@ describe 'vue natures index' do
       fill_in 'nature[comment]', :with=>'Une nature pour essayer'
       choose 'Dépenses'
       click_button 'Créer la nature'
-      @p.natures.count.should == 2
+      @p.natures.count.should == 3
       @p.natures.last.income_outcome.should be_false
       current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
     end
@@ -55,34 +55,33 @@ describe 'vue natures index' do
     end
 
     it 'affiche deux tables' do
-      
-      @p.should have(2).natures
       visit admin_organism_period_natures_path(@o, @p)
-      page.should have_selector('tbody', :count=>2)
+      page.should have_selector("tbody", :count=>2)
     end
 
     it 'dans la vue index,une nature peut être détruite', :js=>true do
-      @p.should have(2).natures
+      
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_period_natures_path(@o, @p)
+      page.all('tbody tr').size.should == 3
+      
       within 'tbody:last tr:nth-child(2)' do
         page.should have_content('deuxième nature')
         page.click_link 'Supprimer'
       end
       alert = page.driver.browser.switch_to.alert
       alert.accept
-      current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/ 
-      page.should have_selector 'tbody:last tr', :count=>1
+      current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
+      page.all("tbody tr").size.should == 2
+    
     end
 
     
 
-    it 'on peut le choisir dans la vue index pour le modifier' do
+    it 'on peut le choisir dans la vue index pour le modifier'  do
       visit admin_organism_period_natures_path(@o, @p)
-      within('tbody:last tr') do
-        page.should have_selector 'img', :title=>'Modifier'
-        click_link("icon_modifier_#{@n.id}")
-      end
+      page.should have_selector "img", :title=>'Modifier'
+      click_link("icon_modifier_#{@n.id}")
       current_url.should match /.*natures\/#{@n.id.to_s}\/edit$/ # retour à la vue index
     end
 

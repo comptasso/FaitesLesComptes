@@ -6,7 +6,7 @@ require 'spec_helper'
 #  c.filter = {:wip=>true}
 #end
 
-describe "menus/_menu.html.erb" do
+describe "menus/_menu.html.erb" do   
   include JcCapybara
 
   let(:o) {stub_model(Organism) }
@@ -44,6 +44,7 @@ describe "menus/_menu.html.erb" do
       assign(:organism, o)
       assign(:user, cu)
       o.stub(:periods).and_return([p2011,p2012])
+      o.stub(:find_period).and_return(p2012)
       p2012.stub(:previous_period?).and_return(true)
       p2012.stub(:previous_period).and_return(p2011)
       ibook.stub(:organism).and_return(o)
