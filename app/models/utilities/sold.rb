@@ -2,33 +2,56 @@
 
 
 # Permet de rajouter des méthodes donnant le débit et le crédit à
-# une date donnée (ou à la veille), ainsi que le solde.
-# TODO il faudra voir comment on gère ça à l'usage avec beaucoup de lignes
-# et plusieurs exercices.
+# une date donnée (ou à la veille), ainsi que le solde et les
+# monthly_values
 #
 module Utilities::Sold
 
+
+  # méthode principale et mère des autres méthodes cumulated_credit
+  # surcharger cette méthode dans les classes utilisant ce module
+  # pour modifier le fonctionnement.
+  def cumulated_at(date, dc)
+    p = organism.find_period(date)
+    p ? lines.period(p).where('line_date <= ?', date).sum(dc) : 0
+  end
+
+
+  # debit cumulé avant une date (la veille). Renvoie 0 si la date n'est incluse
+  # dans aucun exercice
   def cumulated_debit_before(date)
-    self.lines.where('line_date < ?', date).sum(:debit)
+    cumulated_debit_at(date - 1)
   end
 
+  # crédit cumulé avant une date (la veille). Renvoie 0 si la date n'est incluse
+  # dans aucun exercice
   def cumulated_credit_before(date)
-    self.lines.where('line_date < ?', date).sum(:credit)
+    cumulated_credit_at(date - 1)
   end
-  
+
+  # solde d'une caisse avant ce jour (ou en pratique au début de la journée)
   def sold_before(date = Date.today)
-    cumulated_credit_before(date) - cumulated_debit_before(date)
+    sold_at(date - 1)
   end
 
+
+
+
+  # débit cumulé à une date (y compris cette date). Renvoie zero s'il n'y a
+  # pas de périod et donc pas de compte associé à cette caisse pour cette date
   def cumulated_debit_at(date)
-    self.lines.where('line_date <= ?', date).sum(:debit)
+    cumulated_at(date, :debit)
   end
 
+  # crédit cumulé à une date (y compris cette date). Renvoie 0 s'il n'y a
+  # pas de périod et donc pas de comptes associé à cette caisse pour cette date
   def cumulated_credit_at(date)
-    self.lines.where('line_date <= ?', date).sum(:credit)
+    cumulated_at(date, :credit)
   end
 
-  def sold_at(date = Date.today)
+  # solde à une date (y compris cette date). Renvoie nil s'il n'y a
+  # pas de périod et donc pas de comptes pour cette date
+  def sold_at(date)
     cumulated_credit_at(date) - cumulated_debit_at(date)
   end
 
@@ -40,7 +63,8 @@ module Utilities::Sold
     if selector.is_a?(String)
       selector = Date.civil(selector[/\d{4}$/].to_i, selector[/^\d{2}/].to_i,1)
     end
-    r = lines.select([:debit, :credit, :line_date]).mois(selector).sum('credit - debit') if selector.is_a? Date
+    r = sold_at(selector.end_of_month) - sold_before(selector.beginning_of_month)
+    # r = lines.select([:debit, :credit, :line_date]).mois(selector).sum('credit - debit') if selector.is_a? Date
     return r.to_f  # nécessaire car quand il n'y a pas de lignes, le retour est '0' et non 0
   end
 

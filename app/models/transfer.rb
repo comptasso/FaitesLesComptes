@@ -3,7 +3,7 @@
 class Transfer < ActiveRecord::Base
   include Utilities::PickDateExtension
 
-  before_destroy :should_be_destroyable
+  before_destroy :should_be_destroyable 
 
   belongs_to :organism
   # ceci est un compte
@@ -12,9 +12,10 @@ class Transfer < ActiveRecord::Base
 
   # ce qui veut dire que Line a un champ owner_id qui permet de faire le lien avec le transfer
   # Line de son côté a belongs_to owner, polymorphic:true
-  has_many   :lines, :as=>:owner, :dependent=>:destroy
+  has_many  :lines, :as=>:owner, :dependent=>:destroy
+  
 
-  validates :date, :amount, :presence=>true
+  validates :date, :amount, :presence=>true 
   validates :to_account_id, :presence=>true
   validates :from_account_id, :presence=>true
   validates :amount, numericality: true
@@ -30,11 +31,11 @@ class Transfer < ActiveRecord::Base
 
   
   def line_to
-    lines.where('debit <> ?', 0).first
+    ComptaLine.where('owner_id = ? AND owner_type = ? AND debit <> ? ',id, 'Transfer', 0).first
   end
 
   def line_from
-    lines.where('credit <> ?', 0).first
+    ComptaLine.where('owner_id = ? AND owner_type = ? AND credit <> ? ',id,'Transfer', 0).first
   end
 
 
@@ -83,19 +84,19 @@ class Transfer < ActiveRecord::Base
   # applé par after create, crée une ligne dans chacun des livres
   # de caisse et/ou de banque qui font l'objet du virement.
   def create_lines
-    b_id = Account.find_by_id(to_account_id).accountable.book.id
-    l = lines.new(:line_date=> date, :narration=>narration, :debit=> amount,
+    b_id = OdBook.find(:first)
+    l = ComptaLine.new(:line_date=> date, :narration=>narration, :debit=> amount,
       :credit=>0, :account_id=> to_account_id,
-      :book_id=>b_id)
+      :book_id=>b_id,  owner_id:self.id, owner_type:'Transfer')
     unless l.valid?
       puts l.inspect
       puts l.errors.messages
     end
     l.save
-    b_id = Account.find_by_id(from_account_id).accountable.book.id
-    l =  lines.create!(:line_date=> date, :narration=>narration, :credit=>amount,
+    
+    l =  ComptaLine.new(:line_date=> date, :narration=>narration, :credit=>amount,
       :debit=>0, :account_id=> from_account_id,
-      :book_id=>b_id)
+      :book_id=>b_id, owner_id:self.id, owner_type:'Transfer')
     unless l.valid?
       puts l.inspect
       puts l.errors.messages
@@ -105,14 +106,12 @@ class Transfer < ActiveRecord::Base
 
   # appelé par after_update pour mettre à jour le compte bancaire et le livre associé
   def update_line_from
-    from_book_id = from_account.accountable.book.id
-    line_from.update_attributes(:account_id=> from_account_id, :book_id=>from_book_id)
+    line_from.update_attributes(:account_id=> from_account_id)
   end
 
   # appelé par after_update
   def update_line_to
-    to_book_id = to_account.accountable.book.id
-    line_to.update_attributes(:account_id=> to_account_id, book_id:to_book_id)
+    line_to.update_attributes(:account_id=> to_account_id)
   end
 
   # validations

@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:wip=> true }
-  #  c.exclusion_filter = {:js=> true }
+  #  c.exclusion_filter = {:js=> true } 
 end
 
 # spec request for testing admin books 
@@ -13,7 +13,7 @@ describe 'vue transfer index' do
   include OrganismFixture 
 
 
-  before(:each) do
+  before(:each) do 
     create_user 
     create_minimal_organism
     @bb = @o.bank_accounts.create!(:name=>'Deuxième banque', :number=>'123Y')
@@ -30,7 +30,7 @@ describe 'vue transfer index' do
 
 
 
-  describe 'new transfer' do
+  describe 'new transfer' , wip:true do
     
     it "affiche la page new" do
       visit new_organism_transfer_path(@o)
@@ -38,7 +38,7 @@ describe 'vue transfer index' do
       page.should have_css('form')
     end
 
-    it 'remplir correctement le formulaire crée une nouvelle ligne' do
+    it 'remplir correctement le formulaire crée un nouveau transfert' do
       visit new_organism_transfer_path(@o)
       fill_in 'transfer[date_picker]', :with=>'14/04/2012'
       fill_in 'transfer[narration]', :with=>'Premier virement'
@@ -46,8 +46,6 @@ describe 'vue transfer index' do
       within("#transfer_to_account_id optgroup[label='Banques']") do
         select(@ba.accounts.first.long_name)
       end
-      
-      
       within("#transfer_from_account_id optgroup[label='Banques']") do
         select(@bb.accounts.first.long_name)
       end
@@ -56,8 +54,8 @@ describe 'vue transfer index' do
       # vérification de o
       t= @o.transfers.last
       t.should be_an_instance_of(Transfer)
-      t.to_account.should == @baca
-      t.from_account.should == @bbca
+      t.to_account.id.should == @baca.id
+      t.from_account.id.should == @bbca.id
     end
 
     context 'le remplir incorrectement' do
@@ -96,8 +94,8 @@ describe 'vue transfer index' do
 
     before(:each) do
       # création de deux transfers
-      @t1 = @o.transfers.create!(date: Date.today, to_account: @baca, from_account: @bbca, amount: 100000, narration: 'création')
-      @t2 = @o.transfers.create!(date: Date.today, to_account: @bbca, from_account: @baca, amount: 999990, narration: 'inversion')
+      @t1 = @o.transfers.create!(date: Date.today, to_account_id:@baca.id, from_account_id: @bbca.id, amount: 100000, narration: 'création')
+      @t2 = @o.transfers.create!(date: Date.today, to_account_id:@bbca.id, from_account_id: @baca.id, amount: 999990, narration: 'inversion')
       visit organism_transfers_path(@o)
     end
 
@@ -130,7 +128,7 @@ describe 'vue transfer index' do
 
     before(:each) do
       @bb = @o.bank_accounts.create!(:name=>'DebiX', :number=>'987654')
-      @t=@o.transfers.create!(:date=>Date.today, :to_account=>@ba.accounts.first, :from_account=>@bb.accounts.first, :amount=>124.12, :narration=>'premier virement')
+      @t=@o.transfers.create!(:date=>Date.today, :to_account_id=>@baca.id, :from_account_id=>@bb.accounts.first.id, :amount=>124.12, :narration=>'premier virement')
     end
 
     it 'On peut changer les deux autres champs' do

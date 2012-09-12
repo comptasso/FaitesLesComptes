@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
-   #  c.filter = {:wip=> true } 
+   #  c.filter = {:wip=> true }  
 end
 
 describe BankExtract do 
@@ -11,7 +11,8 @@ describe BankExtract do
   
   
   before(:each) do
-    create_minimal_organism 
+    create_minimal_organism
+    @rem_acc = Account.create!(title:'Remise chèque', period_id:@p.id, number:'520')
     @p2012 = @p
     # @be1 est entièrement en 2011
     @be1= @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2011,10,01), end_date: Date.civil(2011,10,31), begin_sold: 2011, total_credit: 11, total_debit: 10)

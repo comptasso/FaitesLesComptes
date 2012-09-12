@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
  # ActiveRecord::Base.shared_connection = nil
@@ -26,7 +26,7 @@ describe 'vue books index' do
 
   it 'check minimal organism' do 
     Organism.count.should == 1
-    Book.count.should == 5
+    Book.count.should == 3
   end
 
 
@@ -40,13 +40,13 @@ describe 'vue books index' do
     
     end
 
-    it 'remplir correctement le formulaire crée une nouvelle ligne' do 
+    it 'remplir correctement le formulaire crée un nouveau livre' do
       visit new_admin_organism_book_path(@o)
       fill_in 'book[title]', :with=>'Recettes test'
       fill_in 'book[description]', :with=>'Un deuxième livre de recettes'
       choose 'Recettes'
       click_button 'Créer le livre'
-      @o.books.count.should == 6
+      @o.books.count.should == 4
       @o.books.last.book_type.should == 'IncomeBook'
     end
 
@@ -56,10 +56,10 @@ describe 'vue books index' do
 
      it 'dans la vue index,un livre peut être détruit', :js=>true do
       @o.income_books.create!(:title=>'livre de test') 
-      @o.should have(6).books
+      @o.should have(4).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_books_path(@o)
-      within 'tbody tr:nth-child(6)' do
+      within 'tbody tr:nth-child(4)' do
         page.should have_content('livre de test') 
         page.click_link 'Supprimer'
       end
@@ -67,7 +67,7 @@ describe 'vue books index' do
       alert = page.driver.browser.switch_to.alert
       alert.accept 
       sleep 1
-      page.all('tbody tr').should have(5).books
+      page.all('tbody tr').should have(3).books
      end
 
 

@@ -51,18 +51,21 @@ class Cash < ActiveRecord::Base
     sold_at(date - 1)
   end
 
+  def cumulated_at(date, dc)
+    p = organism.find_period(date)
+    p ? lines.period(p).where('line_date <= ?', date).sum(dc) : 0
+  end
+
   # débit cumulé à une date (y compris cette date). Renvoie zero s'il n'y a
   # pas de périod et donc pas de compte associé à cette caisse pour cette date
   def cumulated_debit_at(date)
-    p = organism.find_period(date)
-    p ? lines.period(p).where('line_date <= ?', date).sum(:debit) : 0
+    cumlated_at(date, :debit)
   end
 
   # crédit cumulé à une date (y compris cette date). Renvoie 0 s'il n'y a 
   # pas de périod et donc pas de comptes associé à cette caisse pour cette date
   def cumulated_credit_at(date)
-    p = organism.find_period(date)
-    p ? lines.period(p).where('line_date <= ?', date).sum(:credit) : 0
+    cumlated_at(date, :credit)
   end
 
   # solde à une date (y compris cette date). Renvoie nil s'il n'y a 

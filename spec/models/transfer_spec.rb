@@ -131,7 +131,7 @@ describe Transfer , :wip=>true do
 
       it 'save transfer create the two lines' do
         @t.should be_valid
-        expect {@t.save}.to change {Line.count}.by(2)
+        expect {@t.save}.to change {Line.count}.by(2) 
       end
 
       it 'save transfer create the two lines' do
@@ -148,8 +148,8 @@ describe Transfer , :wip=>true do
         end
 
         it 'can return the debited line or the credited line' do
-          @t.line_to.should == @t.lines.select { |l| l.debit != 0 }.first
-          @t.line_from.should == @t.lines.select { |l| l.credit != 0 }.first
+          @t.line_to.to_line.should == @t.lines.select { |l| l.debit != 0 }.first
+          @t.line_from.to_line.should == @t.lines.select { |l| l.credit != 0 }.first
         end
 
         it 'destroy the transfer should delete the two lines' do
@@ -162,10 +162,11 @@ describe Transfer , :wip=>true do
         end
 
         it 'destroy the transfer is impossible if any line locked' do 
-          
           l = @t.line_from
           l.locked.should be_false 
           l.locked = true
+          l.valid?
+          puts l.errors.messages unless l.valid?
           l.save!
           
           @t.line_from.locked.should be_true 
@@ -191,14 +192,14 @@ describe Transfer , :wip=>true do
             @t.to_account = @ac
             @t.save!
             @t.line_to.account_id.should == @ac.id
-            @t.line_to.book_id.should == @t.line_to.account.accountable.book.id
+            
           end
 
           it 'modify transfer change lines adequatly' do
             @t.from_account = @ac
             @t.save!
             @t.line_from.account_id.should == @ac.id
-            @t.line_from.book_id.should == @t.line_from.account.accountable.book.id
+            
           end
 
           context 'line_to locked' do

@@ -58,6 +58,8 @@ class Room < ActiveRecord::Base
     end
   end
 
+  alias enter connect_to_organism
+
   # contrôle d'intégrité de la base
   # TODO sera à adapter pour d'autres adapters si nécessaire
   #

@@ -9,11 +9,11 @@ class MonthlyBookExtract
 
   NB_PER_PAGE=30
 
-  attr_reader :book, :titles
+  attr_reader :book, :titles 
 
   def initialize(book, day)
     @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
-    @book=book
+    @book = book
     @my = MonthYear.new(day)
     @date = @my.beginning_of_month
   end

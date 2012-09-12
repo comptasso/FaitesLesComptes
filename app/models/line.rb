@@ -228,7 +228,8 @@ class Line < ActiveRecord::Base
     p = book.organism.find_period(line_date)
     cas = p.accounts.where('number LIKE ?', '52%')
     if cas.empty?
-      self.errors[:payment_mode] << 'Pas de compte chèque à encaisser' if cas.empty?
+      self.errors[:payment_mode] << 'Pas de compte chèque à encaisser'
+      puts 'Pas de compte de remise de chèque'
       return false
     else
       self.counter_account_id = cas.first.id

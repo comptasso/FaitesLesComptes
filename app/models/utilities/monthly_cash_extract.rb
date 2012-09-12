@@ -20,7 +20,11 @@ class MonthlyCashExtract < MonthlyBookExtract
     @book
   end
 
-
+  # pour une caisse, les lignes sont obtenues par une relation has_many :lines,
+  # :through=>:accounts
+  def lines
+    @lines ||= cash.lines.mois(@date)
+  end
 
   
   protected
