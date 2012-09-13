@@ -3,6 +3,6 @@
           <td class="clickable"><%= line.narration %></td>
           <td class="clickable"><%= line.nature.name if line.nature %></td>
           <td class="clickable"><%= line.destination.name if line.destination %></td>
-          <td class="numeric clickable"><%= debit_credit(line.debit) %></td>
           <td class="numeric clickable"><%= debit_credit(line.credit) %></td>
+          <td class="numeric clickable"><%= debit_credit(line.debit) %></td>
        <%= line_actions(line) %>

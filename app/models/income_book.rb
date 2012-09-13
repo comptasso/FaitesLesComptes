@@ -2,6 +2,6 @@
 
 require 'book.rb'
 
-class IncomeBook < Book
+class IncomeBook < IncomeOutcomeBook
   
 end

@@ -831,8 +831,7 @@ OK - Faire un observer nature qui remplit Line si le rattachement de nature est 
 On ne doit pas pouvoir changer le rattachement de nature à un compte si locked et account_id rempli
 Ceci dans les vues comme dans le modèle
 OK - Si on modifie la nature d'une ligne, il faut que le account_id soit géré (fait par le before_save fill_account)
-
-OK - Account doit être polymorphique pour pouvoir être détenu soit par un compte bancaire soit par une caisse
+NON - Account doit être polymorphique pour pouvoir être détenu soit par un compte bancaire soit par une caisse
 
 Modif pourBankAccount :
 OK - Ajouter que BankAccount has_many accounts, as:account (il y a un compte par exercice)
@@ -842,7 +841,7 @@ Le solde d'un compte bancaire ou d'une caisse se calcule en :
   - et en ajoutant les lignes qui ont des écritures avec ce compte (normalement des écritures d'inventaire uniquement)
 NON - Les relevés de compte donnent lieu à passation d'écriture : on extourne le solde d'origine et on met le solde final.
 
-Les transferts peuvent être revus car maintenant on peut écrire deux lignes avec mention des comptes comptables
+OK - Les transferts peuvent être revus car maintenant on peut écrire deux lignes avec mention des comptes comptables
 Revoir le mode de calcul du solde d'un compte bancaire ou d'une caisse (vu qu'il y avait les transferts).
 
 OK - Mise à jour des comptas existantes :
@@ -854,7 +853,7 @@ Supprimer un compte bancaire ou une caisse devrait supprimer le compte comptable
 
 OK - Idem pour Caisse et les contrôles de caisse
 
-Lorsque toutes les lignes sont pointées. Il devrait y avoir une balance équilibrée.
+On doit avoir une balance équilibrée.
 
 On peut alors revenir à la clôture : Fait les écritures d'ouverture (report des écritures de bilan et résultat de l'exercice)
 
@@ -882,14 +881,14 @@ OK - Dans la balance, les comptes 5 mouvementés devraient orienter vers l'affic
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
 NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner
-Pour line, on peut garder le champ counter_account pour la saisie dans le formulaire mais on ne s'en sert plus ensuite
+OK - Pour line, on peut garder le champ counter_account pour la saisie dans le formulaire mais on ne s'en sert plus ensuite
 OK - Line after_create crée la contrepartie si on est dans une écriture de compta simplifiée (en fait si on est dans un livre IncomeBook ou OutcomeBook)
-Il faut que line after_update gère le changement
+gestion de line after_update (pour les contre lignes)
 OK - Revoir Transfer qui doit écrire des lignes normales maintenant
 OK - revoir support (qui n'est plus lisible directement)
 OK - La logique cash ne doit plus utiliser les counter_account mais les comptes de caisse
 OK - On revoit account qui redevient simple.
-On supprime  toutes les références à  counter_account
+On supprime  toutes les références à  counter_account dans les bank_account ou les cash
 
 --------------------- on crée un livre de banque pour chaque banque et un livre de caisse pour chaque caisse --------------
 OK - pour caisse et bank_account, la création entraîne celle d'un livre correspondant
@@ -900,14 +899,13 @@ OK - les contre écritures sont inscrites sur le livre correspondant du coup, bo
 NON - Traiter le cas d'absence d'exercice précédent pour les graphes
 NON - La création de compte 52 doit être accountable puisqu'on a besoin d'un livre....
 -------------- suppresssion de la logique accountable ---------------------------------
-Ne plus faire un livre par caisse ou banque
+OK - Ne plus faire un livre par caisse ou banque
 OK - Supprimer les champs et les liaisons, ainsi que le after_create
 OK - Supprimer les champs book_id de cash
 OK - supprimer les champs book_id de bankaccount
-Revoir l'affichage d'un monthlyBookExtract
+OK - Revoir l'affichage d'un monthlyBookExtract
 Suppression des champs accountable_type et id pour cash et bank_account
-
-
+Dans l'édition de cash_book(pdf) ou xls/csv il faut modifier credit debit en entrée sortie
 Puis on reprend la mutation précédente pour bank_account sur cette nouvelle base.
 OK - Transfer peut voir sa structure changer avec par exemple from_account_id et to_account_id plutôt que des polymorphiques
 
@@ -927,6 +925,7 @@ OK - Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait
     
 
 --------------------------------- TODO ---------------------------------------------------------
+dans les vue book lines faire un recettes/dépenses plutôt que débit/crédit
 rajouter db:schema:dump à landlord:migrate_each
 Quand on a des comptes et qu'on crée une nature, le lien au compte est disable dans le form
 Nettoyer les natures parasites de la compta perso

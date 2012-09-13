@@ -3,7 +3,8 @@
 require 'book.rb'
 
 class CashBook < Book
-  
+
+
 
   def monthly_value(selector)
     -  super
