@@ -9,7 +9,7 @@ end
 
 # spec request for testing admin books 
 
-describe 'vue natures index' do 
+describe 'vue natures index' do  
   include OrganismFixture 
 
   before(:each) do

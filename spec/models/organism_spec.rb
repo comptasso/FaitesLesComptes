@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
-   c.filter = {:wip=> true }
+#   c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
@@ -78,15 +78,7 @@ describe Organism do
       end
     end
 
-    describe 'pending_checks', wip:true do
-
-      it 'récupère les infos du compte chèque à l\'encaissement' do
-        Account.should_receive(:pending_checks).and_return(mock_model(Line))
-        @o.pending_checks
-      end
-
-    end
-
+    
     describe 'main_bank_id' do
       context 'with no account' do
         it "main_bank_id returns nil" do

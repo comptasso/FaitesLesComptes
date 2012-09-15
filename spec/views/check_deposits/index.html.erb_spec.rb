@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'lines_helper'
 
-describe "check_deposits/index" do 
+describe "check_deposits/index" do  
   include JcCapybara
 
   let(:o) {mock_model(Organism, title: 'spec cd')}
@@ -26,10 +26,10 @@ describe "check_deposits/index" do
     cd1.stub(:bank_extract_line).and_return(1) # la remise de chèque n° 1 est pointée
     cd2.stub(:bank_extract_line).and_return(nil)
 
-    cd1.stub_chain(:checks, :sum).and_return(10)
+    cd1.stub_chain(:total_checks).and_return(10)
     cd1.stub_chain(:checks, :size).and_return(5)
     cd2.stub_chain(:checks,:size).and_return(5)
-    cd2.stub_chain(:checks, :sum).and_return(35)
+    cd2.stub_chain(:total_checks).and_return(35)
 
     assign(:check_deposits, [cd1,cd2])
     assign(:organism, o)

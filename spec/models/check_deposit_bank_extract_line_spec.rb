@@ -20,10 +20,11 @@ describe CheckDepositBankExtractLine do
       total_debit:2,
       total_credit:5,
       locked:false)
-   create_first_line
-   create_second_line
-    @cd = CheckDeposit.create!(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
-    @cd.checks << @l1 << @l2
+    @l1 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+    @l2 = Line.create!(narration:'bel', line_date:Date.today, debit:0, credit:79, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+  
+    @cd = CheckDeposit.new(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
+    @cd.checks << @l1.children.first << @l2.children.first
     @cd.save!
   end
 

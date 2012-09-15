@@ -24,8 +24,8 @@ describe StandardBankExtractLine do
      @ch97 = Line.create!(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
      @ch5 = Line.create!(narration:'bel', counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:5, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
      @cr = Line.create!(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:27, payment_mode:'Virement', book_id:@ib.id, nature_id:@n.id)
-    @cd = CheckDeposit.create!(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
-    @cd.checks << @ch97 << @ch5
+    @cd = CheckDeposit.new(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
+    @cd.checks << @ch97.children.first << @ch5.children.first
     @cd.save!
 
 

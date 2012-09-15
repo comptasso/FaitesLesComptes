@@ -178,8 +178,8 @@ describe BankExtract do
       @l1.save!
       
 
-      @cd = CheckDeposit.create!(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day)) 
-      @cd.checks << @l1
+      @cd = CheckDeposit.new(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
+      @cd.checks << @l1.children.first
       @cd.save!
 
       @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id, line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)

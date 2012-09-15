@@ -6,7 +6,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe 'vue lines' do
   include OrganismFixture 
-  
+   
   before(:each) do
     create_user
     create_minimal_organism
@@ -36,7 +36,7 @@ describe 'vue lines' do
     select 'Essai', :for=>'line_nature_id'
     fill_in 'line_debit', with: 50.21
     select 'Chèque'
-    select '5101 DebiX'
+    select '51201 DebiX'
     click_button 'Créer'
     Line.count.should == 2 # avec sa contrepartie
   end 
