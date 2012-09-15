@@ -23,8 +23,6 @@
 # 
 class CheckDeposit < ActiveRecord::Base
 
-  
-
   # La condition est mise ici pour que check_deposit.new soit associée d'emblée
   # à toutes les lignes qui correspondant aux chèques en attente d'encaissement
   # de l'organisme correspondant.
@@ -32,25 +30,20 @@ class CheckDeposit < ActiveRecord::Base
   belongs_to :bank_extract_line
   
   has_many :checks, class_name: 'Line',
-    conditions: proc { ['account_id = ?', rem_check_account.id] },
+    conditions: proc { ['account_id = ? AND debit > 0', rem_check_account.id] },
     dependent: :nullify,
     before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
     before_add: :cant_if_pointed
  
   has_many :lines # utile pour les méthode credit_line et debit_line
 
-
   scope :within_period, lambda {|from_date, to_date| where(['deposit_date >= ? and deposit_date <= ?', from_date, to_date])}
-
   scope :not_pointed, where('bank_extract_line_id IS NULL')
-
 
   validates :bank_account_id, :deposit_date, :presence=>true
   validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :has_bank_extract_line? 
  
- 
   before_validation :not_empty # une remise chèque vide n'a pas de sens
-  
 
   after_create :create_lines
   after_update :update_lines
@@ -74,15 +67,6 @@ class CheckDeposit < ActiveRecord::Base
     pending_checks.size
   end
 
-
-  def target_checks
-    if new_record?
-      association(:checks).target
-    else
-      checks.all
-    end
-  end
-
   # lorsque la remise de chèque est sauvegardée, il y a création d'une ligne au crédit du compte 511
   # avec le total des chèques déposé. Credit_line, retourne cette ligne
   def credit_line
@@ -94,18 +78,6 @@ class CheckDeposit < ActiveRecord::Base
     credit_line.children.first
   end
 
-  # TODO vérifier que cette idée est valable aussi pour edit
-  # tank est le réservoir des chèques à remettre
-  # il est calculé par checks dont on retire target_checks
-  def tank_checks
-    linked=target_checks
-    if new_record?
-      list = checks.all # requete de tous les chèques avec ID nul, credit, mode de paiement chèque et organism
-    else
-      list = bank_account.organism.pending_checks.all # check_deposit a une id donc il faut lire directement les pending_checks
-    end
-    list.reject {|check| linked.include? check }
-  end
 
   # retourne le nombre de chèque dans cette remise
   def nb_checks
@@ -176,7 +148,8 @@ class CheckDeposit < ActiveRecord::Base
 
   # crée l'écriture de remise de chèque
   def create_lines
-    rca =  Organism.first!.find_period(deposit_date).rem_check_account
+    p = Organism.first!.find_period(deposit_date)
+    rca = p.rem_check_account
    # on crédit le compte de remise chèque
     l = Line.create!(line_date:deposit_date, check_deposit_id:id,
       narration:'Remise chèque',
@@ -184,10 +157,11 @@ class CheckDeposit < ActiveRecord::Base
       credit:total_checks,
       book_id:OdBook.first!.id)
     # et on débite la banque
+    ba = bank_account.current_account(p)
     Line.create!(line_date:deposit_date, check_deposit_id:id,
       narration:'Remise chèque',
       debit:total_checks,
-      account_id:bank_account_id,
+      account_id:ba.id,
       book_id:OdBook.first!.id,
     owner_id:l.id,
     owner_type:'Line')

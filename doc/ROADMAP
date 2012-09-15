@@ -880,13 +880,16 @@ OK - Modifier lines empty? and all_lines_locked dans le modèle Account
 OK - Dans la balance, les comptes 5 mouvementés devraient orienter vers l'affichage des écritures
 modifier check_deposit qui utilise abondamment bank_account_id
 ----------------------- révision des remises de chèques ---------------------------------------
-La remise d'un chèque donne lieu à passation d'une écriture dans le journal d'OD
-Revoir comment pending_checks connaît les chèques disponibles à l'encaissement : prendre le compte 511 plutôt que lire les lignes de recettes
-Avec contrepartie le compte bancaire
-Le champ bank_account_id de check_deposit reste indispensable
+OK - La remise d'un chèque donne lieu à passation d'une écriture dans le journal d'OD
+OK - Revoir comment pending_checks connaît les chèques disponibles à l'encaissement : prendre le compte 511 plutôt que lire les lignes de recettes
+OK - Avec contrepartie le compte bancaire
+OK - Le champ bank_account_id de check_deposit reste indispensable
 OK - Le compte rem cheèques est 511 donc il faut modifier banques pour utiliser 512xx
 OK - Period doit pouvoir retourner ou créer un compte remise chèque
 OK - Faire une constante rem_check_account, pour aider à cette création
+Revoir la mise en forme de la table de détail des remises chèques
+tank_checks et target_checks ne semblent plus utile
+Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
 
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
@@ -936,6 +939,8 @@ OK - Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait
 Nettoyer od_lines_controller ? et routes associées (fait-on de l'OD en zone saisie)
 
 --------------------------------- TODO ---------------------------------------------------------
+L'affichage des comptes 1 à 5 n'a pas forcément besoin de nature et destination
+On manque d'un affichage des écritures
 dans les vue book lines faire un recettes/dépenses plutôt que débit/crédit
 rajouter db:schema:dump à landlord:migrate_each
 Quand on a des comptes et qu'on crée une nature, le lien au compte est disable dans le form

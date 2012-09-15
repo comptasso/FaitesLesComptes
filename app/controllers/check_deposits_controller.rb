@@ -7,8 +7,8 @@ class CheckDepositsController < ApplicationController
 
   # GET /check_deposits
   def index
-    @total_lines_credit=CheckDeposit.total_to_pick(@organism)
-    @nb_to_pick=CheckDeposit.nb_to_pick(@organism)
+    @total_lines_credit=CheckDeposit.total_to_pick
+    @nb_to_pick=CheckDeposit.nb_to_pick
     flash[:notice]="Il y a #{@nb_to_pick} chèques à remettre à l'encaissement \
 pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick > 0
     @check_deposits = @bank_account.check_deposits.within_period(@period.start_date, @period.close_date)
@@ -17,7 +17,8 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
   # GET /check_deposits/1
   # GET /check_deposits/1.json
   def show
-    @check_deposit = CheckDeposit.find(params[:id]) 
+    @check_deposit = CheckDeposit.find(params[:id])
+    @nb_to_pick=CheckDeposit.nb_to_pick
   end
 
   # GET /check_deposits/new
@@ -35,6 +36,7 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
   # GET /check_deposits/1/edit
   def edit
     @check_deposit = CheckDeposit.find(params[:id])
+    @nb_to_pick=CheckDeposit.nb_to_pick
   end
 
   # POST /check_deposits

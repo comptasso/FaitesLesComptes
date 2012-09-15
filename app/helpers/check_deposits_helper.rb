@@ -20,16 +20,16 @@ class OptionsForChecksSelect
   attr_reader:name
 
   def initialize(titre, type, check_deposit)
-    @name=titre
-    @check_deposit=check_deposit
-    @type=type
+    @name = titre
+    @check_deposit = check_deposit
+    @type = type
   end
 
   def checks
     if @type == :target
-      @check_deposit.target_checks
+      @check_deposit.checks
     elsif @type == :tank
-      @check_deposit.tank_checks
+      CheckDeposit.pending_checks
     else
       raise 'Type inconnu'
     end

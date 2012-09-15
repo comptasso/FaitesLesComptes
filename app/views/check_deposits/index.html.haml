@@ -20,7 +20,7 @@
             %td= check_deposit.bank_account.number
             %td= l check_deposit.deposit_date
             %td.numeric= check_deposit.checks.size
-            %td.numeric= debit_credit check_deposit.checks.sum(:credit)
+            %td.numeric= debit_credit check_deposit.total_checks
             %td
               %span= icon_to 'afficher.png', organism_bank_account_check_deposit_path(@organism, @bank_account, check_deposit)
               %span= icon_to 'modifier.png', edit_organism_bank_account_check_deposit_path(@organism, @bank_account, check_deposit) unless check_deposit.bank_extract_line

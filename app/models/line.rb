@@ -201,7 +201,7 @@ class Line < ActiveRecord::Base
 
   # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
   def check_for_select
-    "#{I18n.l line_date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',credit)}"
+    "#{I18n.l line_date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',debit)}"
   end
 
   def destination_name
