@@ -17,7 +17,7 @@
 <li class="dropdown <%= 'active' if controller.controller_name =='lines'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
   <%= content_tag(:ul, :class => "dropdown-menu") do %>
-    <%= render :partial=>'menus/menu_book', :collection=>@organism.books, :spacer_template=>'menus/divider' %>
+    <%= render :partial=>'menus/menu_book', :collection=>@organism.books.select {|b| b.class != OdBook }, :spacer_template=>'menus/divider' %>
   <% end %>
 </li>
 

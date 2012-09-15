@@ -247,20 +247,15 @@ describe Line do
           :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.current_account(@p).id)
       end
 
-      it 'La ligne n est pas valide sans compte de remise de chèque' do
-         @l.save
-         @l.errors[:payment_mode].should == ['Pas de compte chèque à encaisser']
-      end
-
-      it 'la ligne n est pas sauvée' do
-        expect {@l.save}.not_to change {Line.count}
-      end
-
       it 'ecrit la contreligne' do
-        @rem_acc = @p.accounts.create!(number:'520', title:'Remise chèque', :accountable_type=>'BankAccount', accountable_id:@ba.id)
         expect {@l.save}.to change {Line.count}.by(2)
-
       end
+
+      it 'la contreligne a pour numéro de compte rem_check_account' do
+        @l.save
+        @l.children.first.account.should == @p.rem_check_account
+      end
+
     end
   end
 

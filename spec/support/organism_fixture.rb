@@ -14,6 +14,8 @@ module OrganismFixture
     r.save!
   end
 
+ # utile pour les requests qui nécessitent d'être identifié
+ # il faut appeler avant create_user (pour pouvoir utiliser login_as('quidam')
   def login_as(name)
     visit '/'
     fill_in 'user_name', :with=>name
@@ -42,6 +44,7 @@ module OrganismFixture
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
   end
 
+ 
   def create_first_line
     @l1 = Line.create!(narration:'bel',counter_account_id:@baca.id,
       line_date:Date.today, debit:0, credit:97, payment_mode:'Virement', book_id:@ob.id, nature_id:@n.id)

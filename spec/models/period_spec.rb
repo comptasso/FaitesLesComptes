@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
- # c.filter = {wip:true}
+  # c.filter = {wip:true}
 end
 
 describe Period do
@@ -13,6 +13,20 @@ describe Period do
     @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
     @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
     @ba = @organism.bank_accounts.create!(name:'DebiX', number:'123Z')
+  end
+
+  describe 'compte de remise de chèque' do
+    it 'sans compte doit le créer et le retourner' do
+      @p_2010.rem_check_account.number.should == REM_CHECK_ACCOUNT[:number]
+    end
+
+    it 'avec un compte le retourne' do
+      # on crée d'abord le compte
+      @p_2010.accounts.create!(REM_CHECK_ACCOUNT)
+      @p_2010.rem_check_account.number.should == REM_CHECK_ACCOUNT[:number]
+      # il ne doit y avoir qu'un seul compte
+      @p_2010.accounts.where('number = ?', REM_CHECK_ACCOUNT[:number]).should have(1).account
+    end
   end
    
   describe 'period_next' do
@@ -105,7 +119,7 @@ describe Period do
 
   end
 
-  describe 'closable' , wip:true do
+  describe 'closable' do
 
     it 'vérifie closable avant tout' do
       @p_2010.should_receive(:closable?).and_return false

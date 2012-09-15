@@ -54,9 +54,9 @@ describe BankAccount do
     end
 
     it 'incrémente les numéros de compte' do
-      @ba.accounts.first.number.should == '5101' 
+      @ba.accounts.first.number.should == '51201'
       @bb.save
-      @bb.accounts.first.number.should == '5102'
+      @bb.accounts.first.number.should == '51202'
     end
 
     it 'crée le compte pour tous les exercices ouverts' do 
@@ -68,7 +68,7 @@ describe BankAccount do
     it 'créer un nouvel exercice recopie le compte correspondant au compte bancaire' do
       @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
       @ba.accounts.count.should == 2
-      @ba.accounts.last.number.should == '5101'
+      @ba.accounts.last.number.should == '51201'
     end
 
     

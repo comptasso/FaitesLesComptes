@@ -17,7 +17,7 @@ class Organism < ActiveRecord::Base
   has_many :od_books, dependent: :destroy
   has_many :accounts, through: :periods
   has_many :archives,  dependent: :destroy
-  has_many :pending_checks, through: :books
+  has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
   has_many :transfers
 
   # jc_establish_connection lambda { database_name }

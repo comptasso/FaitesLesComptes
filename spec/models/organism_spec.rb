@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
-  # c.filter = {:wip=> true }
+   c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
@@ -35,37 +35,9 @@ describe Organism do
     end
 
   end
-#
-#
-#describe 'change of database', :wip=>true do
-#
-#    it 'la connection active' do
-#      ActiveRecord::Base.should be_connected
-#      puts "Connection_config #{ActiveRecord::Base.connection_config}"
-#      puts "Connection : #{ActiveRecord::Base.connection}"
-#    end
-#
-#    it 'peut changer de base' do
-#      ActiveRecord::Base.establish_connection(adapter:'sqlite3', database:File.join(Rails.root, 'db','test','organisms','assotest1.sqlite3') )
-#       puts "Connection_config #{ActiveRecord::Base.connection_config}"
-#      puts "Connection : #{ActiveRecord::Base.connection}"
-#      ActiveRecord::Base.should be_connected
-#    end
-#
-#    it 'changer et revenir' do
-#       ActiveRecord::Base.establish_connection 'assotest1'
-#       puts "Connection_config #{ActiveRecord::Base.connection_config}"
-#       puts "Connection : #{ActiveRecord::Base.connection}"
-#       ActiveRecord::Base.establish_connection(adapter:'sqlite3', database:File.join(Rails.root, 'db','test.sqlite3') )
-#       puts "Connection_config #{ActiveRecord::Base.connection_config}"
-#      puts "Connection : #{ActiveRecord::Base.connection}"
-#      ActiveRecord::Base.should be_connected
-#    end
-#
-#end
 
 
- context 'when there is one period' , :wip=>true do 
+ context 'when there is one period'  do 
 
     before(:each) do
       
@@ -89,7 +61,8 @@ describe Organism do
 
     end
 
-    
+    # TODO ce serait mieux que ce soit le modèle Period qui sache s'il peut
+    # ouvrir un nouvel exercice
     describe 'max_open_periods?' do
       it 'nb_open_periods.should == 2' do
         @organism.nb_open_periods.should == 2
@@ -103,6 +76,15 @@ describe Organism do
         @organism.stub(:nb_open_periods).and_return(1)
         @organism.max_open_periods?.should be_false
       end
+    end
+
+    describe 'pending_checks', wip:true do
+
+      it 'récupère les infos du compte chèque à l\'encaissement' do
+        Account.should_receive(:pending_checks).and_return(mock_model(Line))
+        @o.pending_checks
+      end
+
     end
 
     describe 'main_bank_id' do

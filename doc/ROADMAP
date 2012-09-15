@@ -878,6 +878,16 @@ OK - Modifier cash#sold_at
 Revoir tout ce qui est balance ou grand livre (écran ou pdf) qui utilisent intensément les soldes
 OK - Modifier lines empty? and all_lines_locked dans le modèle Account
 OK - Dans la balance, les comptes 5 mouvementés devraient orienter vers l'affichage des écritures
+modifier check_deposit qui utilise abondamment bank_account_id
+----------------------- révision des remises de chèques ---------------------------------------
+La remise d'un chèque donne lieu à passation d'une écriture dans le journal d'OD
+Revoir comment pending_checks connaît les chèques disponibles à l'encaissement : prendre le compte 511 plutôt que lire les lignes de recettes
+Avec contrepartie le compte bancaire
+Le champ bank_account_id de check_deposit reste indispensable
+OK - Le compte rem cheèques est 511 donc il faut modifier banques pour utiliser 512xx
+OK - Period doit pouvoir retourner ou créer un compte remise chèque
+OK - Faire une constante rem_check_account, pour aider à cette création
+
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
 NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner
@@ -910,6 +920,7 @@ Puis on reprend la mutation précédente pour bank_account sur cette nouvelle ba
 OK - Transfer peut voir sa structure changer avec par exemple from_account_id et to_account_id plutôt que des polymorphiques
 
 ------------- fin de cette mutation --------------------------------------------
+Remettre en place les pavés cash et bank_account
 La création d un exercice crée une caisse et un compte bancaire plus un compte de rem chèque (ne pas oublier accountable_type et id)
 Dans la saisie des comptes, les natures associées devraient être disabled si on n'est pas dans un compte de classe 6 ou 7
 Inclure Utilities::Sold dans cash.rb
@@ -922,7 +933,7 @@ idem pour bank_account
 modalbox de account listing ne change pas le titre h3
 On pourrait voir comment se passer du champ counter_account
 OK - Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait utilisé en zone compta,
-    
+Nettoyer od_lines_controller ? et routes associées (fait-on de l'OD en zone saisie)
 
 --------------------------------- TODO ---------------------------------------------------------
 dans les vue book lines faire un recettes/dépenses plutôt que débit/crédit
@@ -941,6 +952,8 @@ Il faudra faire les autres tâches rake db:migrate db:rollback,... correspondant
   les migrations fonctionnent correctement pour les bases déja installées.
 Ajouter un formulaire de saisie des lignes d'OD
 La confirmation de suppression de transfert est Are you sure?
+
+Dans la partie compta, on devrait avoir les journaux
 -----------------------------------Gestion des user ---------------------------
 La suppression d'un user doit être gérée (suppression des rooms, effacement des bases?)
 

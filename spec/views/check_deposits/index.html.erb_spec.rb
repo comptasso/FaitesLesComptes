@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'lines_helper'
 
-describe "check_deposits/index" do
+describe "check_deposits/index" do 
   include JcCapybara
 
   let(:o) {mock_model(Organism, title: 'spec cd')}

@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.configure do |c|
  #  c.filter = {:wip=> true }
-end
+end 
 
 
 describe StandardBankExtractLine do 
@@ -12,7 +12,7 @@ describe StandardBankExtractLine do
 
   before(:each) do 
     create_minimal_organism
-    @rem_acc = @p.accounts.create!(title:'Remise chèque', number:'520')
+
     @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month,
       end_date:Date.today.end_of_month,
       begin_sold:1,

@@ -9,7 +9,7 @@ end
 
 # spec request for testing admin bank_accounts 
 
-describe 'vue bank_accounts index' do 
+describe 'vue bank_accounts index' do  
   include OrganismFixture
   
   

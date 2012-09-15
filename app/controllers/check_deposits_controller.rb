@@ -2,10 +2,6 @@
 
 class CheckDepositsController < ApplicationController
 
-  # ligne ajoutée pour les tests car sinon ces before_filter qui sont dans application_controller ne sont pas exécutés
-  # et du coup des variables comme @organism et @period restent à nil.
-  # before_filter :find_organism, :current_period
-
   before_filter :find_bank_account 
   
 
@@ -27,13 +23,12 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
   # GET /check_deposits/new
   # GET /check_deposits/new.json
   def new
-    if CheckDeposit.nb_to_pick(@organism) < 1
+    if CheckDeposit.nb_to_pick < 1
       redirect_to  :back, alert: "Il n'y a pas de chèques à remettre"
       return
     end
-    @check_deposit = CheckDeposit.new(deposit_date: Date.today)
-    @check_deposit.bank_account_id = @bank_account.id
-    @check_deposit.pick_all_checks(@organism) # par défaut on remet tous les chèques disponibles pour cet organisme
+    @check_deposit = @bank_account.check_deposits.new(deposit_date: Date.today)
+    @check_deposit.pick_all_checks # par défaut on remet tous les chèques disponibles pour cet organisme
   end
 
 

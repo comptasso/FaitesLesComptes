@@ -198,6 +198,8 @@ class Period < ActiveRecord::Base
     return possible
   end
 
+
+
   def bank_accounts
     accounts.where('number LIKE ?', '51%')
   end
@@ -208,6 +210,15 @@ class Period < ActiveRecord::Base
 
   def recettes_accounts
     accounts.classe_7.all
+  end
+
+  # rem_check_account retourne le compte de Chèques à l'encaissement
+  # ou le créé s'il n'existe pas.
+  # Pour le créer, il s'appuie sur la constante REM_CHECK_ACCOUNT qui est dans
+  # le fichier constants.rb
+  def rem_check_account
+    as =  accounts.find_by_number(REM_CHECK_ACCOUNT[:number])
+    as ? as : accounts.create!(REM_CHECK_ACCOUNT)
   end
 
 

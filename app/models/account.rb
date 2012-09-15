@@ -48,7 +48,8 @@ class Account < ActiveRecord::Base
   scope :classe_7, classe(7)
   scope :classe_6_and_7, where('number LIKE ? OR number LIKE ?', '6%', '7%')
   scope :classe_1_to_5, where('number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ?', '1%', '2%', '3%', '4%', '5%').order('number ASC')
-
+  scope :rem_check_accounts, where('number = ?', '511')
+  
   # le numero de compte plus le title pour les input select
   def long_name
     [number, title].join(' ')

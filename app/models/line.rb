@@ -117,6 +117,11 @@ class Line < ActiveRecord::Base
 
   scope :unlocked, where('locked IS ?', false)
   scope :before_including_day, lambda {|d| where('lines.line_date <= ?',d)}
+
+  # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
+  # et du champ check_deposit_id
+  scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil) }
+
   
   # ne peuvent être transformées en scope car ne retournent pas un arel
   def self.sum_debit_before(date)
@@ -226,14 +231,7 @@ class Line < ActiveRecord::Base
   # mais le compte remise à l'encaissement
   def fill_rem_check_account
     p = book.organism.find_period(line_date)
-    cas = p.accounts.where('number LIKE ?', '52%')
-    if cas.empty?
-      self.errors[:payment_mode] << 'Pas de compte chèque à encaisser'
-      puts 'Pas de compte de remise de chèque'
-      return false
-    else
-      self.counter_account_id = cas.first.id
-    end
+    self.counter_account_id = p.rem_check_account.id
   end
 
   # crée la ligne de contrepartie pour les écritures enregistrées dans les livres de recettes et de dépenses

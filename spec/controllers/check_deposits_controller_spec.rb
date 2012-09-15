@@ -2,10 +2,14 @@
 
 require 'spec_helper'
 
+RSpec.configure do |c|
+ # c.filter = {wip:true}
+end
+
 describe CheckDepositsController do
   include SpecControllerHelper
 
-   let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id:@o.id)}
+  let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id:@o.id)}
   let(:ba2) {mock_model(BankAccount, name: 'IBAN', number: '124578B', organism_id:@o.id)}
   let(:be) {mock_model(BankExtract, bank_account_id: ba.id, begin_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month,
       begin_sold: 120, debit: 450, credit: 1000, end_sold: 120+1000-450)}
@@ -140,7 +144,7 @@ before(:each) do
 
     end
 
-    context 'avec des chèques à remettre' do
+    context 'avec des chèques à remettre'  do
       before(:each) do
         CheckDeposit.stub!(:pending_checks).and_return [double(Line)]
         CheckDeposit.stub!(:total_to_pick).and_return 100
@@ -148,19 +152,11 @@ before(:each) do
       end
 
 
-      it 'should receive new with default date and have a default bank_account_id assigned' do
-        CheckDeposit.should_receive(:new).with(deposit_date:Date.today).and_return @cd = mock_model(CheckDeposit).as_new_record
-        @o.stub_chain(:bank_accounts, :first).and_return ba
-        @cd.should_receive(:bank_account_id=).with(ba.id)
-        @cd.should_receive(:pick_all_checks)
-        get :new, {:organism_id=>@o.id.to_s}, valid_session
-      end
-
-
-      it 'si le params de bank_account_id est fixé, c est celui-ci qui est pris' do
+     it 'le params de bank_account_id est fixé et utilisé pour check_deposit' do
         CheckDeposit.stub(:new).and_return @cd = mock_model(CheckDeposit).as_new_record
         @o.stub_chain(:bank_accounts, :find).and_return ba2
-        @cd.should_receive(:bank_account_id=).with(ba2.id)
+        ba2.should_receive(:check_deposits).and_return(@a = double(Arel))
+        @a.should_receive(:new).and_return(@cd = mock_model( CheckDeposit, :bank_account_id=>ba2.id).as_new_record)
         @cd.should_receive(:pick_all_checks)
         get :new, {:bank_account_id=>ba2.id,  :organism_id=>@o.id.to_s }, valid_session
       end
@@ -169,23 +165,23 @@ before(:each) do
 
         before(:each) do
           CheckDeposit.stub(:new).and_return @cd = mock_model(CheckDeposit).as_new_record
-          @cd.stub(:bank_account_id=)
           @o.stub_chain(:bank_accounts, :first).and_return ba
-          @cd.should_receive(:pick_all_checks)
         end
 
 
 
         it 'rend la vue new' do
-        
-          get :new, {:organism_id=>@o.id.to_s}, valid_session
-          response.should render_template('new')
+          ba.stub_chain(:check_deposits, :new).and_return(@cd = mock_model( CheckDeposit, :bank_account_id=>ba.id).as_new_record)
+          @cd.stub(:pick_all_checks)
+          get :new, {:organism_id=>@o.id.to_s, :bank_account_id=>ba.id}, valid_session
+          response.should render_template('new') 
 
         end
 
         it 'assigns check_deposit' do
-        
-          get :new, {:organism_id=>@o.id.to_s}, valid_session
+          ba.stub_chain(:check_deposits, :new).and_return(@cd = mock_model( CheckDeposit, :bank_account_id=>ba.id).as_new_record)
+          @cd.stub(:pick_all_checks)
+          get :new, {:organism_id=>@o.id.to_s, :bank_account_id=>ba.id}, valid_session
           assigns(:check_deposit).should == @cd
         end
       end

@@ -9,7 +9,7 @@ describe IncomeBook do
   describe 'test de pending checks' do
     before(:each) do
       create_minimal_organism
-      @rem_acc = Account.create!(title:'Remise chèque', period_id:@p.id, number:'520')
+     
       @l1 = @ib.lines.create!(line_date: Date.today,:narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature_id:@rec.id)
 #      @l1.valid?
 #      puts @l1.errors.messages
