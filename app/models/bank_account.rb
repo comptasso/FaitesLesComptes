@@ -83,7 +83,7 @@ class BankAccount < ActiveRecord::Base
 
  # fait le total crédit des lignes non pointées et des remises chèqures déposées
  def total_credit_np
-   self.total_credit_np_lines +  self.total_credit_np_check_deposits
+   self.total_credit_np_lines 
  end
 
  # solde des lignes non pointées
@@ -99,25 +99,9 @@ class BankAccount < ActiveRecord::Base
    self.bank_extracts.where('locked = ?', false).order('begin_date ASC').first
  end
 
- # Trouve toutes les remises de chèques qui ne sont pas encore pointées
- def np_check_deposits
-   self.check_deposits.not_pointed
- end
-
- def total_credit_np_check_deposits
-   self.np_check_deposits.all.sum(&:total_checks)
- end
-
-
- # crée des bank_extract_lines à partir des lignes non pointées
- # méthode utilisée pour le pointage des comptes par bank_extract_controller
- def not_pointed_check_deposits
-    self.np_check_deposits.map {|cd| c = CheckDepositBankExtractLine.new(check_deposit_id:cd.id); c}
- end
-
 
  def nb_lines_to_point
-   np_lines.size + np_check_deposits.count
+   np_lines.size 
  end
 
  
