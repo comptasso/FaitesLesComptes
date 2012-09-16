@@ -892,6 +892,13 @@ Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
 -------------------------pointage de relevé --------------------------------
 OK - Le relevé doit avoir une date de début et de fin dans l'exercice
 OK - Le scope period va devenir inutile (ou en tout cas grandement se simplifier)
+Voir quelle sont les lignes verrouillées dans le cas d'un lock bank_extract : les lignes et les contrelignes ?
+Il n'y a plus à faire de distinction entre bel (Standard et CheckDeposit)...
+Nettoyage fait dans le controller
+Faire le nettoyage des classes et vues (StandardBankExtractLine et CheckDepositBankExtractLine , plus aussi retirer les champs relevant de STI)
+Remplacer tous les standard et check_deposit par des standard_bank_extract_line
+NON - on garde car pas un grand enjeu et pourrait reservir - Le modèle Utilities.not_pointed_lines n'est plus vraiment utile (on pourrait le remplacer par un helper)
+Revoir les questions de chaînage de lignes et de scission
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
 NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner

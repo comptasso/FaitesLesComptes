@@ -66,17 +66,9 @@ class BankExtractLinesController < ApplicationController
   # et line_id (l'id de la ligne)
   #
   def ajoute
-    id = params[:line_id]
-    case params[:nature]
-    when 'check_deposit'
-       @bel =  @bank_extract.check_deposit_bank_extract_lines.new
-      # il faut utiliser add_check_deposit pour que @bel ait les infos
-      # associées ramplies - voir le modèle
-      @bel.add_check_deposit(CheckDeposit.find(id))
-    when 'standard_line'
-      l=Line.find(id)
+      l = Line.find(params[:line_id])
       @bel = @bank_extract.standard_bank_extract_lines.new(lines:[l])
-    end
+    
 
      raise "Methode ajoute : @bel non valide @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
 
@@ -109,18 +101,9 @@ class BankExtractLinesController < ApplicationController
     html_id = params[:html_id]
     html = html_id.split(/_\d+$/).first
     id = html_id[/\d+$/].to_s
-    @bel = nil
-    case html
-    when 'check_deposit'
-      @bel =  @bank_extract.check_deposit_bank_extract_lines.new
-      # il faut utiliser add_check_deposit pour que @bel ait les infos
-      # associées ramplies - voir le modèle
-      @bel.add_check_deposit(CheckDeposit.find(id))
-    when 'standard_line'
-      l=Line.find(id)
-      @bel = @bank_extract.standard_bank_extract_lines.new(lines:[l])
-    end
-
+    l=Line.find(id)
+    @bel = @bank_extract.standard_bank_extract_lines.new(lines:[l])
+    
 
     raise "@bel non valide #{html} @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
     @bel.insert_at(params[:at].to_i)

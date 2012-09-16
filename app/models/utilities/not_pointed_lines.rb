@@ -21,42 +21,27 @@ module Utilities
     def initialize(bank_account)
       @list = []
       @bank_account = bank_account
-      fill_np_check_deposits
       fill_np_lines
-      order_list
     end
 
     private
 
-    def fill_np_check_deposits
-      # Trouve toutes les remises de chèques qui ne sont pas encore pointées
-      @bank_account.np_check_deposits.each do |cd|
-        @list << {
-          :nature=> 'check_deposit',
-          id:cd.id,
-          date:cd.deposit_date,
-          narration:'Remise de chèque',
-          debit:0,
-          credit:cd.total_checks
-        }
-      end
-    end
+   
 
     def fill_np_lines
       @bank_account.np_lines.each do |l|
         @list <<   {
-          :nature=> 'standard_line',
           id:l.id,
           date:l.line_date,
           narration:l.narration,
-          debit:l.debit,
+          debit:l.debit, # c'est inversé car on est dans la logique de la banque
           credit:l.credit
         }
-
       end
     end
 
     # ordonne la liste selon date asc
+    # inutile car BankAccount#np_lines fait déja appel à order ASC
     def order_list
       @list.sort! {|a,b| a[:date] <=> b[:date] }
     end

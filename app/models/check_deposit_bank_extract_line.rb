@@ -19,6 +19,7 @@ class CheckDepositBankExtractLine < BankExtractLine
     'Chèque'
   end
 
+  # checck_deposit_bank_extract_line_date
   def cdbel_date
     self.date || self.check_deposit.deposit_date
   end

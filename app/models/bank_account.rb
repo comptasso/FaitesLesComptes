@@ -7,6 +7,7 @@ class BankAccount < ActiveRecord::Base
   
   # un compte bancaire a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
+  has_many :lines, :through=>:accounts
   
   validates :number, :uniqueness=>{:scope=>[:organism_id, :name]}
   validates :name, :number,  presence: true
@@ -60,15 +61,17 @@ class BankAccount < ActiveRecord::Base
   end
 
  # trouve toutes les lignes non pointées -np pour not pointed
- # les lignes à sélectionner sont celles qui correspondent soit au compte bancaire
- # pour cet exercice
- #
+ # les lignes à sélectionner sont celles qui correspondent aux comptes comptables
+ # appartenant à ce compte bancaire
+ # 
 # Appelé par la classe NotPointedLines 
  #
   def np_lines
+   
+    Line.find_by_sql("SELECT lines.* FROM lines INNER JOIN accounts ON
+ lines.account_id = accounts.id WHERE accounts.accountable_id = #{id} AND accounts.accountable_type = 'BankAccount'
+  AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES_LINES WHERE LINE_ID = LINES.ID) ORDER BY line_date ASC")
 
-   Line.find_by_sql("SELECT id, narration, debit, credit, payment_mode, line_date
-    FROM LINES WHERE (BANK_ACCOUNT_ID = #{self.id} AND ((PAYMENT_MODE != 'Chèque') or (credit < 0.001))) AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES_LINES WHERE LINE_ID = LINES.ID)")
  end
 
  # fait le total débit des lignes non pointées et des remises chèqures déposées

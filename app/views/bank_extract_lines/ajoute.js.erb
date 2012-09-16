@@ -1,5 +1,5 @@
-$('table #bels_total_debit').text(" <%= debit_credit @bank_extract.total_lines_debit  %>");
-$('table #bels_total_credit').text(" <%=  debit_credit @bank_extract.total_lines_credit %>");
+$('table #bels_total_debit').text(" <%= debit_credit @bank_extract.total_lines_credit  %>");
+$('table #bels_total_credit').text(" <%=  debit_credit @bank_extract.total_lines_debit %>");
 $('tbody#ltps').html(" <%= j render 'ltpsbody' %>");
 $('tbody#bels').html(" <%= j render 'belsbody' %>");
 

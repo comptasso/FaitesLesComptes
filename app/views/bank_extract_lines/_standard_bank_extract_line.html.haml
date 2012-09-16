@@ -2,8 +2,8 @@
   %td= standard_bank_extract_line.position
   %td= l standard_bank_extract_line.date
   %td= standard_bank_extract_line.narration
-  %td.numeric= debit_credit standard_bank_extract_line.debit
   %td.numeric= debit_credit standard_bank_extract_line.credit
+  %td.numeric= debit_credit standard_bank_extract_line.debit
 
   %td
     = icon_to 'retirer.png', remove_bank_extract_bank_extract_line_path(@bank_extract, standard_bank_extract_line),  |
