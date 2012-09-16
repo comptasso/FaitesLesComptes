@@ -67,7 +67,7 @@ class BankExtractLinesController < ApplicationController
   #
   def ajoute
       l = Line.find(params[:line_id])
-      @bel = @bank_extract.standard_bank_extract_lines.new(lines:[l])
+      @bel = @bank_extract.bank_extract_lines.new(lines:[l])
     
 
      raise "Methode ajoute : @bel non valide @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
@@ -102,7 +102,7 @@ class BankExtractLinesController < ApplicationController
     html = html_id.split(/_\d+$/).first
     id = html_id[/\d+$/].to_s
     l=Line.find(id)
-    @bel = @bank_extract.standard_bank_extract_lines.new(lines:[l])
+    @bel = @bank_extract.bank_extract_lines.new(lines:[l])
     
 
     raise "@bel non valide #{html} @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?

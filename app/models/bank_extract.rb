@@ -5,7 +5,7 @@ class BankExtract < ActiveRecord::Base
   
   belongs_to :bank_account 
   has_many :bank_extract_lines, dependent: :destroy 
-  has_many :standard_bank_extract_lines, dependent: :destroy
+  
   
   validates :begin_sold, :total_debit, :total_credit,:presence=>true, :numericality=>true, :two_decimals => true
     # :format=>{with:/(^\d+(\.\d{0,2})?$|^\.\d{0,2}$)/}
