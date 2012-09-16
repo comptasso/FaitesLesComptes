@@ -4,6 +4,8 @@
 # Il faut trouver les exercice à partir de la chaine book -> organism
 # Donc on commence par tester la capacité à trouver l'organism puis on peut faire les tests
 #
+# TODO réécrire en se passant de Book puisqu'il y a maintenant un seul organisme par base de données
+#
 class MustBelongToPeriodValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     unless record.book

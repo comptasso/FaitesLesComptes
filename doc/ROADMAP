@@ -836,11 +836,10 @@ NON - Account doit être polymorphique pour pouvoir être détenu soit par un co
 Modif pourBankAccount :
 OK - Ajouter que BankAccount has_many accounts, as:account (il y a un compte par exercice)
 OK - La création d'un compte bancaire doit créer un compte comptable (un par exercice),
-Le solde d'un compte bancaire ou d'une caisse se calcule en :
-  - prenant en compte les lignes 6 et 7 qui ont ce bank_account_id (cash_id)
-  - et en ajoutant les lignes qui ont des écritures avec ce compte (normalement des écritures d'inventaire uniquement)
+NON : Le solde d'un compte bancaire ou d'une caisse se calcule en :
+NON  - prenant en compte les lignes 6 et 7 qui ont ce bank_account_id (cash_id)
+NON et en ajoutant les lignes qui ont des écritures avec ce compte (normalement des écritures d'inventaire uniquement)
 NON - Les relevés de compte donnent lieu à passation d'écriture : on extourne le solde d'origine et on met le solde final.
-
 OK - Les transferts peuvent être revus car maintenant on peut écrire deux lignes avec mention des comptes comptables
 Revoir le mode de calcul du solde d'un compte bancaire ou d'une caisse (vu qu'il y avait les transferts).
 
@@ -888,9 +887,11 @@ OK - Le compte rem cheèques est 511 donc il faut modifier banques pour utiliser
 OK - Period doit pouvoir retourner ou créer un compte remise chèque
 OK - Faire une constante rem_check_account, pour aider à cette création
 Revoir la mise en forme de la table de détail des remises chèques
-tank_checks et target_checks ne semblent plus utile
+OK - tank_checks et target_checks ne semblent plus utile - supprimer
 Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
-
+-------------------------pointage de relevé --------------------------------
+OK - Le relevé doit avoir une date de début et de fin dans l'exercice
+OK - Le scope period va devenir inutile (ou en tout cas grandement se simplifier)
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
 NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner

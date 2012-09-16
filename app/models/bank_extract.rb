@@ -13,7 +13,7 @@ class BankExtract < ActiveRecord::Base
   validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date, :cant_edit_if_locked=>true
 
   validates :begin_date, :end_date, :presence=>true  
-
+  validates :begin_date, :end_date, :same_period=>true
 
  # TODO voir si on remet ce after_create
  # after_create :fill_bank_extract_lines
@@ -22,8 +22,8 @@ class BankExtract < ActiveRecord::Base
  
   # TODO add a chrono validator
   
-  scope :period, lambda {|p| where('(begin_date <= ? AND end_date >= ?)  OR (begin_date <= ? AND end_date >= ? ) OR (begin_date  >= ? AND end_date  <= ?)',
-      p.start_date, p.start_date, p.close_date, p.close_date, p.start_date, p.close_date).order(:begin_date) }
+  scope :period, lambda {|p| where('begin_date >= ? AND end_date <= ?' ,
+      p.start_date, p.close_date).order(:begin_date) }
 
   # utilise le module Utilities::PickDateExtension pour créer des virtual attributes 
   # begin_date_picker et end_date_picker
@@ -32,8 +32,8 @@ class BankExtract < ActiveRecord::Base
 
   # on cherche le relevé de compte qui soit dans le mois de date, mais le plus proche de la
   # fin du mois
-  def self.find_nearest(date)
-    debut=date.beginning_of_month
+  def self.find_nearest(date) 
+    debut=date.beginning_of_month 
     fin=debut.end_of_month
     BankExtract.order('end_date ASC').where(['end_date >= ? and end_date <= ?', debut, fin]).last
   end

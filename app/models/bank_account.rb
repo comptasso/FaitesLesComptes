@@ -60,12 +60,13 @@ class BankAccount < ActiveRecord::Base
   end
 
  # trouve toutes les lignes non pointées -np pour not pointed
- # les lignes à sélectionner sont celles qui correspondent soit à des lignes rattachées
- # directement au bank_account_id
- # les remises de chèques sont traitées par la méthode np_check_deposit.
+ # les lignes à sélectionner sont celles qui correspondent soit au compte bancaire
+ # pour cet exercice
  #
 # Appelé par la classe NotPointedLines 
- def np_lines
+ #
+  def np_lines
+
    Line.find_by_sql("SELECT id, narration, debit, credit, payment_mode, line_date
     FROM LINES WHERE (BANK_ACCOUNT_ID = #{self.id} AND ((PAYMENT_MODE != 'Chèque') or (credit < 0.001))) AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES_LINES WHERE LINE_ID = LINES.ID)")
  end
