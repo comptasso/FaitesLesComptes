@@ -899,6 +899,7 @@ Faire le nettoyage des classes et vues (StandardBankExtractLine et CheckDepositB
 Remplacer tous les standard et check_deposit par des standard_bank_extract_line
 NON - on garde car pas un grand enjeu et pourrait reservir - Le modèle Utilities.not_pointed_lines n'est plus vraiment utile (on pourrait le remplacer par un helper)
 Revoir les questions de chaînage de lignes et de scission
+Verifie que Les fonctions insert et remove numarotent correctement les lignes  de la table des bels
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
 NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner

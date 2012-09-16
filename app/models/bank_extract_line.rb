@@ -11,15 +11,7 @@
 # Par exemple un prélèvement ou un virement
 # Mais ce peut être aussi une remise de chèque.qui elle même renvoie à plusieurs lignes.
 #
-# Le modèle a des sous classes :
-# - StandardBankExtractLine
-# - CheckDepositBankExtractLine
-# et est représenté par une table avec les champs date, position, type, bank_extract_id
-# et check_deposit_id (ce dernier champ ne servant que pour la sous classe
-# CheckDepositBankExtractLine
-#
-# La méthode de classe has_many est surchargée dans CheckDepositBankExtractLine
-# pour pouvoir renvoyer les lines de la remise de chèque associées
+
 #
 # Une relation HABTM est définie avec lines, permettant d'avoir une ligne de relevé
 # bancaire qui correspond à plusieurs lignes d'écriture (ex péages regroupés
@@ -54,14 +46,14 @@ class BankExtractLine < ActiveRecord::Base
   # Ce n'est possible que si
   #  - ce n'est pas une remise de chèque
   #  - ce n'est pas le dernier
-  #  - ils ne sont pas du même sens.
+  #  - ils ne sont du même sens.
   #  - le suivant n'est pas une remise de chèque
   #
   def chainable?
-    return false if is_a?(CheckDepositBankExtractLine)
+    # return false si c'est une remise de chèque
     return false unless lower_item
     return false if (lower_item.debit == 0 && self.debit != 0) || (self.credit != 0 && lower_item.credit == 0)
-    return false if  lower_item.is_a?(CheckDepositBankExtractLine)
+    # return false si le suivant est une remise de chèque
     true
   end
 

@@ -42,8 +42,8 @@
 
         %tbody.connectedSortable#bels
           - @bank_extract_lines.all.each do |bel|
-            = render(partial:'index_standard_bel', :object=>bel) if bel.is_a? StandardBankExtractLine
-            = render(partial:'index_check_deposit_bel', object:bel) if bel.is_a? CheckDepositBankExtractLine
+            = render(partial:'index_standard_bel', :object=>bel) 
+            
 
         %tfoot
           %tr
