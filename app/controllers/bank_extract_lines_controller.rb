@@ -68,8 +68,6 @@ class BankExtractLinesController < ApplicationController
   def ajoute
       l = Line.find(params[:line_id])
       @bel = @bank_extract.bank_extract_lines.new(lines:[l])
-    
-
      raise "Methode ajoute : @bel non valide @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
 
     # on redessine les tables
@@ -98,15 +96,11 @@ class BankExtractLinesController < ApplicationController
   # params[:at] indique à quelle position insérer la ligne dans la liste
   #
   def insert
-    html_id = params[:html_id]
-    html = html_id.split(/_\d+$/).first
-    id = html_id[/\d+$/].to_s
+    id = params[:html_id][/\d+$/].to_s
     l=Line.find(id)
     @bel = @bank_extract.bank_extract_lines.new(lines:[l])
-    
-
     raise "@bel non valide #{html} @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
-    @bel.insert_at(params[:at].to_i)
+    @bel.position = params[:at].to_i
    
     respond_to do |format|
       if @bel.save

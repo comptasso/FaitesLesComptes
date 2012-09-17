@@ -1,5 +1,5 @@
 - @lines_to_point.list.each do |ltp|
-  %tr{'class'=>'ltp', 'id'=>"#{ltp[:nature]}_#{ltp[:id]}" }
+  %tr{'class'=>'ltp', 'id'=>"line_to_point_#{ltp[:id]}" }
     %td -
     %td= l ltp[:date]
     %td= ltp[:narration]
