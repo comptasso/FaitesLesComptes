@@ -67,7 +67,7 @@ class BankAccount < ActiveRecord::Base
 # Appelé par la classe NotPointedLines 
  #
   def np_lines
-   
+  # TODO relève du modèle Line
     Line.find_by_sql("SELECT lines.* FROM lines INNER JOIN accounts ON
  lines.account_id = accounts.id WHERE accounts.accountable_id = #{id} AND accounts.accountable_type = 'BankAccount'
   AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES_LINES WHERE LINE_ID = LINES.ID) ORDER BY line_date ASC")

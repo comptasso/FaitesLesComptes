@@ -68,7 +68,7 @@ class BankExtractLinesController < ApplicationController
   def ajoute
       l = Line.find(params[:line_id])
       @bel = @bank_extract.bank_extract_lines.new(lines:[l])
-     raise "Methode ajoute : @bel non valide @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
+      raise "Methode ajoute : @bel non valide @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
 
     # on redessine les tables
 
@@ -91,7 +91,7 @@ class BankExtractLinesController < ApplicationController
   # non pointed line est transférée dans les bank_extract_line
   #
   # L'id de la ligne non pointée doit être de la forme
-  # type_id (ex standard_line_766 ou check_deposit_545
+  # type_id (ex ine_545)
   #
   # params[:at] indique à quelle position insérer la ligne dans la liste
   #

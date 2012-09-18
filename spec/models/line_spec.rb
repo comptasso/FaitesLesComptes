@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
- #   config.filter = {wip:true}
+  config.filter = {wip:true}
 end
 
 
@@ -182,32 +182,99 @@ describe Line do
 
       before(:each) do
         @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
-          :payment_mode=> 'Espèces',  :line_date=>Date.today,
-          :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.current_account(@p).id)
+          :payment_mode=> 'Virement',  :line_date=>Date.today,
+          :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@ba.current_account(@p).id)
       end
 
-      it 'La ligne créée connait son enfant' do
+      it 'La ligne créée connait sa contrepartie' do
    
         @l.children.count.should == 1
         @l.children.first.should be_an_instance_of(Line)
+        @l.supportline.should == @l.children.first
+      end
+
+      it 'supportline renvoie self si c est déja une supportline' do
+        sl = @l.supportline
+        sl.supportline.should == sl
       end
 
       it 'la ligne enfant connaît son parent' do
     
-        c = @l.children.first
+        c = @l.supportline
         c.owner.should == @l
       end
 
       it 'is able to retrieve support' do
-     
-        @l.support.should == 'Magasin'
+         @l.support.should == 'DX 123Z'
       end
 
       it 'la contreligne est dans le même livre'  do
-        c = @l.children.first
-        c.book.should be_an_instance_of(@ib.class)
+        @l.supportline.book.should be_an_instance_of(@ib.class)
       end
+
+      describe 'editable', wip:true do
+
+        it 'ligne editable si pas pointée et pas locked' do
+          @l.should be_editable
+        end
+
+        it 'la ligne n est pas editable si pointed' do
+          be = @ba.bank_extracts.create!(begin_sold:0, total_debit:10, total_credit:20,
+          begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month)
+        bel = be.bank_extract_lines.new
+        bel.lines <<  @l.supportline
+        bel.save!
+        @l.should_not be_editable
+        end
+
+        it 'la ligne n est pas editable si locked' do
+          @l.stub(:pointed?).and_return(true)
+          @l.should_not be_editable
+        end
+
+
+      end
+   
+
+    describe 'pointed?'  do
+      it ' vrai lorsque la supportline est reliée à une bank_extract_line' do
+        be = @ba.bank_extracts.create!(begin_sold:0, total_debit:10, total_credit:20,
+          begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month)
+        bel = be.bank_extract_lines.new
+        bel.lines <<  @l.supportline
+        bel.save!
+        @l.should be_pointed
+      end
+
+      it 'faux lorsque la supportline n est pas reliée à une bel' do
+        @l.stub_chain(:support_line, :bank_extract_lines, :empty?).and_return(false)
+        @l.should_not be_pointed
+      end
+
+      describe 'cas particulier ou la ligne est une recette par chèque'  do
+
+          before(:each) do
+            @l2 = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
+          :payment_mode=> 'Chèque',  :line_date=>Date.today,
+          :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@ba.current_account(@p).id)
+          end
+
+        it ' vrai lorsque le chèque est dans une remise de chèque' do
+        cd  =  @ba.check_deposits.new(deposit_date:Date.today, checks:[@l2.supportline])
+        cd.save
+        @l2.should be_pointed
+      end
+
+      it 'faux si le chèque na pas été remis' do
+
+
+        @l2.should_not be_pointed
+      end
+
+      end
+
     end
+     end
   end
 
   
@@ -253,7 +320,7 @@ describe Line do
 
       it 'la contreligne a pour numéro de compte rem_check_account' do
         @l.save
-        @l.children.first.account.should == @p.rem_check_account
+        @l.supportline.account.should == @p.rem_check_account
       end
 
     end

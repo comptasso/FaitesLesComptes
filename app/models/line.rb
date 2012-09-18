@@ -61,8 +61,7 @@ class Line < ActiveRecord::Base
   belongs_to :bank_account
   #  belongs_to :cash
   belongs_to :owner, :polymorphic=>true  # pour les transferts uniquement (à ce stade)
-  has_and_belongs_to_many :bank_extract_lines, :uniq=>true # pour les rapprochements bancaires
-
+  has_and_belongs_to_many :bank_extract_lines, :uniq=>true  # pour les rapprochements bancaires
   has_many   :lines, :as=>:owner, :dependent=>:destroy
 
 
@@ -134,14 +133,38 @@ class Line < ActiveRecord::Base
   
   # donne le support de la ligne (ou sa contrepartie) : la banque ou la caisse
   def support
-    aa =  children.first.account.accountable
+    aa =  supportline.account.accountable
     return 'Pas de support' unless aa
     aa.to_s
   end
 
+  # children renvoie les lignes enfant (très généralement une seule) sous forme
+  # d'un Arel. 
+  # Le joins(:account) permet d'avoir accès au numeror de compte dans la méthode supportline
   def children
-    lines
+    lines.select('lines.*').joins(:account)
   end
+
+  def editable?
+    !(pointed? || locked?)
+  end
+
+  
+  # supportline renvoie la ligne de contrepartie bancaire ou de caisse si elle
+  # existe.
+  # Cette ligne existe pour les écritures dans les livres de recettes et de dépenses.
+  # Ce peut être une ligne de banque ou de caisse ou de chèque à l'encaissement.
+  #
+  # La sélection se fait donc sur un enfant de la ligne avec un compte 5
+  # 
+  # Il ne doit y avoir qu'une supportline
+  #
+  def supportline
+    return self if account && account.number =~ /^5.*/
+    children.where('accounts.number LIKE ?', '5%').first
+  end
+
+
 
 
   
@@ -196,7 +219,7 @@ class Line < ActiveRecord::Base
 
   # répond à la question si une ligne est affectée à un extrait bancaire ou non.
   def pointed?
-    self.bank_extract_id
+    supportline.check_deposit_id || supportline.bank_extract_lines.any?
   end
 
   # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)

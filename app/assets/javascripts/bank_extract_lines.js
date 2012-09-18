@@ -152,7 +152,7 @@ jQuery(function() {
     
 
 
-  // LA TABLE DES LTPS 5LINES TO POINT)
+  // LA TABLE DES LTPS LINES TO POINT)
   $('#ltps').sortable({
     connectWith: ".connectedSortable",
     items: "tr"
