@@ -71,7 +71,7 @@ class Cash < ActiveRecord::Base
   # solde à une date (y compris cette date). Renvoie nil s'il n'y a 
   # pas de périod et donc pas de comptes pour cette date
   def sold_at(date)
-    cumulated_credit_at(date) - cumulated_debit_at(date)
+    cumulated_debit_at(date) - cumulated_credit_at(date)
   end
 
    

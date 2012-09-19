@@ -890,6 +890,7 @@ Revoir la mise en forme de la table de détail des remises chèques
 OK - tank_checks et target_checks ne semblent plus utile - supprimer
 Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
 Le message sur les remises de chèques n'est plus valable (dans la vue organism#show
+La création d'un check_deposit crée des lignes avec le check_deposit comme owner
 
 -------------------------pointage de relevé --------------------------------
 OK - Le relevé doit avoir une date de début et de fin dans l'exercice
@@ -904,11 +905,11 @@ OK - Revoir les questions de chaînage de lignes et de scission
 OK - Verifie que Les fonctions insert et remove numarotent correctement les lignes  de la table des bels
 Revoir l'affichage du détail de lignes chainées.
 OK - suppression de check_deposit_bank_extract_line_spec
-suppression de standard_bank_extract_line_spec
-Modifier pointed? dans Line qui doit se passer du champ bank_extract_id (et dans caisse ?)
+OK - suppression de standard_bank_extract_line_spec
+OK - Modifier pointed? dans Line qui doit se passer du champ bank_extract_id
 Verifier l'action de verrouillage d'un relevé bancaire
 Vérifier aussi l'action de contrôle de caisse
-Quand une ligne est pointée, on ne peut plus la supprimer mais on peut l'éditer
+OK - Quand une ligne est pointée, on ne peut plus la supprimer ni l'éditer
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
 NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner

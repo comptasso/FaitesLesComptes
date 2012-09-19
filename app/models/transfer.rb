@@ -13,6 +13,8 @@ class Transfer < ActiveRecord::Base
   # ce qui veut dire que Line a un champ owner_id qui permet de faire le lien avec le transfer
   # Line de son côté a belongs_to owner, polymorphic:true
   has_many  :lines, :as=>:owner, :dependent=>:destroy
+
+  alias children lines
   
 
   validates :date, :amount, :presence=>true 

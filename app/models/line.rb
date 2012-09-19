@@ -156,12 +156,33 @@ class Line < ActiveRecord::Base
   # Ce peut être une ligne de banque ou de caisse ou de chèque à l'encaissement.
   #
   # La sélection se fait donc sur un enfant de la ligne avec un compte 5
+  #
+  # TODO revoir cette méthode pour une remise de chèque
   # 
   # Il ne doit y avoir qu'une supportline
   #
   def supportline
     return self if account && account.number =~ /^5.*/
     children.where('accounts.number LIKE ?', '5%').first
+  end
+
+
+  # renvoie toutes les lignes d'une écriture.
+  #
+  # Plusieurs cas possibles :
+  # - une ligne de dépenses ou de recettes - on veut elle et son enfant
+  # - une ligne enfant : on veut donc elle et sa mère
+  # - une ligne de transfert : on veut elle et l'autre ligne du transfert
+  # - une ligne de remise de chèque : on veut elle et toutes les chèques à l'encaissement
+  #
+  #
+  def siblings
+    l =  owner_id ? owner : self # s'il y a un owner on renvoie l'owner, sinon self
+    if l.is_a? Line
+      [l] + l.children.all
+    else
+      l.children.all
+    end
   end
 
 

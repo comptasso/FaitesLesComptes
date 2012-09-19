@@ -35,7 +35,8 @@ class CheckDeposit < ActiveRecord::Base
     before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
     before_add: :cant_if_pointed
  
-  has_many :lines # utile pour les méthode credit_line et debit_line
+  # has_many :lines # utile pour les méthode credit_line et debit_line
+  has_many  :lines, :as=>:owner, :dependent=>:destroy
 
   scope :within_period, lambda {|from_date, to_date| where(['deposit_date >= ? and deposit_date <= ?', from_date, to_date])}
  
@@ -48,7 +49,7 @@ class CheckDeposit < ActiveRecord::Base
   after_create :create_lines
   after_update :update_lines
 
-  before_destroy :cant_destroy_when_pointed, :destroy_lines
+  before_destroy :cant_destroy_when_pointed
 
   
   # permet de trouver les cheques à encaisser pour  tout l'organisme
@@ -69,19 +70,23 @@ class CheckDeposit < ActiveRecord::Base
 
   # lorsque la remise de chèque est sauvegardée, il y a création d'une ligne au crédit du compte 511
   # avec le total des chèques déposé. Credit_line, retourne cette ligne
+  # persisted? est là pour éviter qu'on recherche une credit_line ou une debit_line alors qu'elles ne
+  # sont pas encore créées.
   def credit_line
-    lines.where('credit > 0').first
+     persisted? ? lines.where('credit > 0').first : nil
   end
 
-  # la ligne débit est la ligne enfant de credit_line
+
+  # persisted? est là pour éviter qu'on recherche une credit_line ou une debit_line alors qu'elles ne
+  # sont pas encore créées.
   def debit_line
-    credit_line.children.first
+    persisted? ? lines.where('debit > 0').first : nil
   end
 
   # la remise chèque est pointée si la ligne débit est connectée à
   # un bank_extract_line
   def pointed?
-    debit_line.bank_extract_lines.any?
+    debit_line && debit_line.bank_extract_lines.any?
   end
 
 
@@ -157,20 +162,18 @@ class CheckDeposit < ActiveRecord::Base
     p = Organism.first!.find_period(deposit_date)
     rca = p.rem_check_account
    # on crédit le compte de remise chèque
-    l = Line.create!(line_date:deposit_date, check_deposit_id:id,
+    l = lines.create!(line_date:deposit_date, check_deposit_id:id,
       narration:'Remise chèque',
       account_id:rca.id,
       credit:total_checks,
       book_id:OdBook.first!.id)
     # et on débite la banque
     ba = bank_account.current_account(p)
-    Line.create!(line_date:deposit_date, check_deposit_id:id,
+    lines.create!(line_date:deposit_date, check_deposit_id:id,
       narration:'Remise chèque',
       debit:total_checks,
       account_id:ba.id,
-      book_id:OdBook.first!.id,
-    owner_id:l.id,
-    owner_type:'Line')
+      book_id:OdBook.first!.id)
     
   end
 
@@ -179,11 +182,7 @@ class CheckDeposit < ActiveRecord::Base
     debit_line.update_attribute(:debit, total_checks)
   end
 
- # before_destroy callback
-  def destroy_lines
-    debit_line.destroy
-    credit_line.destroy # dans cet ordre car débit_line est obtenu via credit_line
-  end
+ 
   
 
   
