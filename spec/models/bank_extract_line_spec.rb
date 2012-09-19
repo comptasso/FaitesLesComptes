@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end 
 
 
-describe StandardBankExtractLine do 
+describe BankExtractLine do 
   include OrganismFixture
 
   before(:each) do 
@@ -35,23 +35,21 @@ describe StandardBankExtractLine do
   describe 'un extrait bancaire avec les différents éléments' do
 
     before(:each) do
-      @be.bank_extract_lines << StandardBankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d7])
-      @be.bank_extract_lines << StandardBankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d29])
-      cdbel = CheckDepositBankExtractLine.new()
-      cdbel.check_deposit = @cd
-      @be.bank_extract_lines << cdbel 
+      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d7.supportline])
+      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d29.supportline])
+      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :lines=>[@cd.debit_line])
       @be.save!
     end
 
 
     it 'checks values' do
-      @be.total_lines_credit.to_f.should == 102
-      @be.total_lines_debit.to_f.should == 36
+      @be.total_lines_credit.to_f.should == 36
+      @be.total_lines_debit.to_f.should == 102
     end
 
     it 'checks positions' do
-      @be.bank_extract_lines.all.map {|bel| bel.credit}.should == [0,0,102]
-      @be.bank_extract_lines.all.map {|bel| bel.debit}.should == [7,29,0]
+      @be.bank_extract_lines.all.map {|bel| bel.debit}.should == [0,0,102]
+      @be.bank_extract_lines.all.map {|bel| bel.credit}.should == [7,29,0]
       @be.bank_extract_lines.all.map {|bel| bel.position}.should == [1,2,3]
     end
 
@@ -92,7 +90,6 @@ describe StandardBankExtractLine do
       end
 
       it 'a check_deposit_bank_extract_line is not chainable' do
-        @bel102.should be_a(CheckDepositBankExtractLine)
         @bel102.should_not be_chainable
       end
 
@@ -106,7 +103,7 @@ describe StandardBankExtractLine do
       end
 
       it 'a bel is chainable only if both debit or both credit' , :wip=>true do
-        bel_cr = @be.standard_bank_extract_lines.create!(lines:[@cr])
+        bel_cr = @be.bank_extract_lines.create!(lines:[@cr.supportline])
         bel_cr.move_to_top
         bel_cr.should_not be_chainable
 

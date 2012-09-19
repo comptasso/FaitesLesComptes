@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
-   #  c.filter = {:wip=> true }  
+#   c.filter = {:wip=> true }
 end
 
 describe BankExtract do 
@@ -13,10 +13,13 @@ describe BankExtract do
   before(:each) do
     create_minimal_organism
    
-    @p2012 = @p
-    # @be1 est entièrement en 2011
-    # @be2 est entièrement en 2012
-    @be2= @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2012,10,01), end_date: Date.civil(2012,10,31), begin_sold: 2012, total_credit: 11, total_debit: 10)
+    @p2012 = @p 
+    @be2= @ba.bank_extracts.create!(bank_account_id: @ba.id,
+      begin_date: Date.civil(2012,10,01),
+      end_date: Date.civil(2012,10,31),
+      begin_sold: 2012,
+      total_credit: 11,
+      total_debit: 10)
 
 
   end
@@ -176,7 +179,7 @@ describe BankExtract do
     end
   end
 
-  describe 'contrôle des bank_extract_lines' do
+  describe 'contrôle des bank_extract_lines', wip:true do
 
     before(:each) do
       @l1 = Line.new(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
@@ -191,10 +194,10 @@ describe BankExtract do
 
       @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id, line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
 
-      @bel1 = CheckDepositBankExtractLine.new( bank_extract_id:@be2.id)
-      @bel1.check_deposit = @cd
+      @bel1 = BankExtractLine.new(bank_extract_id:@be2.id)
+      @bel1.lines <<  @cd.debit_line
       @bel1.save!
-      @bel2 = StandardBankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2])
+      @bel2 = BankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2.supportline])
 
 
     end
@@ -203,22 +206,18 @@ describe BankExtract do
       @be2.bank_extract_lines.count.should == 2
     end
 
-    it 'each with the right class' do
-      @be2.bank_extract_lines.last.should be_a BankExtractLine
-      @be2.bank_extract_lines.first.should be_a CheckDepositBankExtractLine
-    end
-
+    
     it 'total lines debit' do
-      @be2.total_lines_debit.should == 13
+      @be2.total_lines_debit.should == 97
     end
 
 
      it 'total lines credit' do
-      @be2.total_lines_credit.should == 97
+      @be2.total_lines_credit.should == 13
     end
 
     it 'lines belongs to max one bank_extract_line' do
-      expect {StandardBankExtractLine.new(bank_extract_id:@be2.id, lines:[@l2])}.to raise_error(ArgumentError)
+      expect {BankExtractLine.new(bank_extract_id:@be2.id, lines:[@l2.supportline])}.to raise_error(ArgumentError)
     end
 
     context 'suppression du bank_extract' do
@@ -230,7 +229,7 @@ describe BankExtract do
     it 'et les lines deviennent non rattachées à un bank_extract' do
       @be2.destroy
       @be3= @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2012,10,01), end_date: Date.civil(2012,10,31), begin_sold: 2012, total_credit: 11, total_debit: 10)
-      @bel3 = StandardBankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2])
+      @bel3 = BankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2])
       @l2.should have(1).bank_extract_lines
     end
 
