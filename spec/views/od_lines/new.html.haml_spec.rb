@@ -11,7 +11,7 @@ describe "lines/new" do
   let(:d) {stub_model(Destination, name:'destination')}
   let(:acc) {stub_model(Account, accountable:mock_model(BankAccount, acronym:'DX 125'))}
 
-  before(:each) do
+  before(:each) do 
 
     assign(:line, stub_model(Line,
         :line_date => Date.today, ref:nil
@@ -36,6 +36,7 @@ describe "lines/new" do
     pl = assign(:previous_line, stub_model(Line, id:1, narration:'test',
         book_id:book.id, debit:0, credit:12, line_date:Date.today, nature:n, destination:d, counter_account:acc))
     pl.stub(:support).and_return '5311 Banque'
+    pl.stub(:editable?).and_return(true)
     render
     rendered.should have_content 'Ligne n°1 créée'
   end

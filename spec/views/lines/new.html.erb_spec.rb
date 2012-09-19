@@ -37,6 +37,7 @@ before(:each) do
     assign(:previous_line, @pl = stub_model(Line, id:1, narration:'test',
         book_id:book.id, debit:0, credit:12, line_date:Date.today, nature:n, destination:d))
     @pl.stub(:support).and_return('DX')
+    @pl.stub(:editable?).and_return(true)
     render
     rendered.should have_content 'Ligne n°1 créée'
   end

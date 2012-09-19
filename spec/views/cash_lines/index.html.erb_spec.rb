@@ -2,10 +2,14 @@
 
 require 'spec_helper'
 
+RSpec.configure do |c|
+ # c.filter = {wip:true}
+end
+
 describe "cash_lines/index" do 
   include JcCapybara
 
-  let(:o) {mock_model(Organism, title: 'spec cd')}
+  let(:o) {mock_model(Organism, title: 'spec cd')} 
   let(:t) {mock_model(Transfer, :creditable_type=>'BankAccount', :creditable_id=>1,
       :debitable_type=>'BankAccount', :debitable_id=>1,
       :amount=>250.12, :narration=> 'Retrait')}
@@ -27,7 +31,7 @@ describe "cash_lines/index" do
     mce.stub(:lines).and_return([cl1,cl2])
     [cl1, cl2].each {|l| l.stub(:nature).and_return(n) }
     [cl1, cl2].each {|l| l.stub(:destination).and_return(nil) }
-    [cl1, cl2].each {|l| l.stub(:locked?).and_return(false) }
+    [cl1, cl2].each {|l| l.stub(:editable?).and_return(true) }
     [cl1, cl2].each {|l| l.stub(:book_id).and_return(1) }
     [cl1, cl2].each {|l| l.stub(:book).and_return(mock_model(Book)) } 
     [cl1, cl2].each {|l| l.stub(:owner_type).and_return(nil) }
@@ -42,7 +46,7 @@ describe "cash_lines/index" do
     end
 
     it "affiche la légende du fieldset" do
-      page.find('h3').should have_content "Caisse Magasin"
+      assert_select 'h3', /Caisse Magasin.*/
     end
 
     it "affiche la table desw remises de chèques" do
@@ -53,21 +57,30 @@ describe "cash_lines/index" do
       assert_select "tbody tr", count: 2
     end
 
-    it 'une cash_line non verrouillée peut être éditée et supprimée' do
-      page.find("tbody tr:first td:nth-child(8)").all('img').first[:src].should == '/assets/icones/modifier.png'
-      page.find("tbody tr:first td:nth-child(8)").all('img').last[:src].should == '/assets/icones/supprimer.png'
+    it 'une cash_line non verrouillée peut être éditée et supprimée' , wip:true do
+      assert_select 'img', count:4 # deux par lignes
+      assert_select("tbody tr:first-child") do
+        assert_select 'a:first-child img[src=?]', '/assets/icones/modifier.png'
+        assert_select 'a:last-child img[src=?]', '/assets/icones/supprimer.png'
+     
+      end
+   
     end
   end
 
-  context 'avec des lines locked' do
+  context 'avec des lines non editable' do
     before(:each) do
-       [cl1, cl2].each {|l| l.stub(:locked?).and_return(true) }
+       [cl1, cl2].each {|l| l.stub(:editable?).and_return(false) }
         render
     end
 
     it 'une cash line locked n a pas de line pour suppression ou effacement' do
-      page.should_not have_selector("tbody tr:first td:nth-child(8) a")
+      page.all("tbody a").should have(0).elements
     end
+  end
+
+  context 'avec des lignes locked?' do
+    it 'ne doit pas avoir de lien edition ou suppression'
   end
 
   context 'avec une lignes venant de transfer' do

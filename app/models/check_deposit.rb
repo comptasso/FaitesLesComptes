@@ -78,8 +78,10 @@ class CheckDeposit < ActiveRecord::Base
     credit_line.children.first
   end
 
+  # la remise chèque est pointée si la ligne débit est connectée à
+  # un bank_extract_line
   def pointed?
-    debit_line.pointed?
+    debit_line.bank_extract_lines.any?
   end
 
 
@@ -135,7 +137,7 @@ class CheckDeposit < ActiveRecord::Base
   # ou le retrait de chèque sur une remise pointée
   def cant_if_pointed(line)
     if pointed?
-      logger.warn "Tentative d'ajouter ou de retirer une ligne à la remise de chèques #{id}, alors qu'elle est pointée sur la ligne de comte #{bank_extract_line.id}"
+      logger.warn "Tentative d'ajouter ou de retirer une ligne à la remise de chèques #{id}, alors qu'elle est pointée."
       raise 'Impossible de retirer un chèque d une remise pointée'
     end
   
@@ -145,7 +147,7 @@ class CheckDeposit < ActiveRecord::Base
   # appelé par before_destroy pour interdire la destruction d'une remise de chèque pointée
   def cant_destroy_when_pointed
     if pointed?
-      logger.warn "Tentative de détruire la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
+      logger.warn "Tentative de détruire la remise de chèques #{id}, alors qu'elle est pointée"
       return false
     end
   end

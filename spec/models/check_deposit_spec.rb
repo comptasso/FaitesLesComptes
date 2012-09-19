@@ -191,10 +191,10 @@ describe CheckDeposit do
 
       it 'add_check'  do
         @check_deposit.total_checks.should == 445
-        @check_deposit.checks.delete(@l1.children.first)
-        @check_deposit.checks.delete(@l3.children.first)
+        @check_deposit.checks.delete(@l1.supportline)
+        @check_deposit.checks.delete(@l3.supportline)
         @check_deposit.total_checks.should == 101
-        @check_deposit.checks << @l3.children.first
+        @check_deposit.checks << @l3.supportline
         @check_deposit.total_checks.should == 401
         @check_deposit.save!
         @check_deposit.credit_line.credit.should == 401

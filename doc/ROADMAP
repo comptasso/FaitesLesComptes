@@ -943,6 +943,8 @@ OK - Transfer peut voir sa structure changer avec par exemple from_account_id et
 ------------- fin de cette mutation --------------------------------------------
 Revoir dans cash le calcul des soldes pour les controles de caisse (vue new et index)
 Remettre en place les pavés cash et bank_account
+On n'utilise plus bank_extract_id dans le modèle check_deposit qui peut donc être supprimé
+Supportline ne semble pas répondre correctement pour les check_deposit (à revoir?)
 La création d un exercice crée une caisse et un compte bancaire plus un compte de rem chèque (ne pas oublier accountable_type et id)
 Dans la saisie des comptes, les natures associées devraient être disabled si on n'est pas dans un compte de classe 6 ou 7
 Inclure Utilities::Sold dans cash.rb
