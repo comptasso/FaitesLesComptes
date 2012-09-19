@@ -63,6 +63,7 @@ class BankExtractLine < ActiveRecord::Base
     end
   end
 
+  
  
 
   validate :not_empty

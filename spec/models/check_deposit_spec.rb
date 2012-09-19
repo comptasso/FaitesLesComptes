@@ -10,7 +10,7 @@ end
 
 describe CheckDeposit do 
   include OrganismFixture  
-
+ 
   before(:each) do
     create_minimal_organism 
  
@@ -225,26 +225,21 @@ describe CheckDeposit do
 
     it "on peut changer le compte bancaire" do  
       @check_deposit.bank_account_id = 9999 
-      @check_deposit.should be_valid
+      @check_deposit.should be_valid 
     end
 
-    it 'la remise est identifiée par le scope not_pointed'  do 
-      CheckDeposit.not_pointed.should have(1).item
-    end
+    
 
-    describe "le rattachement à un extrait de compte"   do
+    describe "le rattachement à un extrait de compte"  do
       before(:each) do
         @check_deposit.should have(3).checks
-        @ba.np_check_deposits.should == [@check_deposit]
         @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
-        @bel = @be.bank_extract_lines.create!
-        @check_deposit.update_attribute(:bank_extract_line, @bel)
+        @bel = @be.bank_extract_lines.new
+        @bel.lines << @check_deposit.debit_line
+        @bel.save!
       end
 
-      it 'la remise n est plus selectionnée par le scope not_pointed'  do
-        CheckDeposit.not_pointed.should have(0).item
-      end
-
+     
       it "la date ne peut plus être modifiée" do
         @check_deposit.deposit_date= Date.today+6
         @check_deposit.should_not be_valid
@@ -261,12 +256,12 @@ describe CheckDeposit do
       end
 
       it "ne peut plus retirer de chèque" do
-        expect {@check_deposit.checks.delete(@l2)}.to raise_error
+        expect {@check_deposit.checks.delete(@l2.supportline)}.to raise_error
       end
 
       it "ne peut plus ajouter de chèque" do
         @l4=@ib.lines.create!(line_date: Date.today,counter_account:@baca, :narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
-        expect {@check_deposit.checks << @l4.children.first}.to raise_error
+        expect {@check_deposit.checks << @l4.supportline}.to raise_error
         
       end
    

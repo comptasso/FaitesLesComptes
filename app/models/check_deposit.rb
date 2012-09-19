@@ -38,10 +38,10 @@ class CheckDeposit < ActiveRecord::Base
   has_many :lines # utile pour les méthode credit_line et debit_line
 
   scope :within_period, lambda {|from_date, to_date| where(['deposit_date >= ? and deposit_date <= ?', from_date, to_date])}
-  scope :not_pointed, where('bank_extract_line_id IS NULL')
+ 
 
   validates :bank_account_id, :deposit_date, :presence=>true
-  validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :has_bank_extract_line? 
+  validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :pointed?
  
   before_validation :not_empty # une remise chèque vide n'a pas de sens
 
@@ -50,7 +50,7 @@ class CheckDeposit < ActiveRecord::Base
 
   before_destroy :cant_destroy_when_pointed, :destroy_lines
 
-
+  
   # permet de trouver les cheques à encaisser pour  tout l'organisme
   def self.pending_checks
      Line.pending_checks.all
@@ -76,6 +76,10 @@ class CheckDeposit < ActiveRecord::Base
   # la ligne débit est la ligne enfant de credit_line
   def debit_line
     credit_line.children.first
+  end
+
+  def pointed?
+    debit_line.pointed?
   end
 
 
@@ -130,7 +134,7 @@ class CheckDeposit < ActiveRecord::Base
   # appelé par before_add et before_remove pour interdire l'ajout
   # ou le retrait de chèque sur une remise pointée
   def cant_if_pointed(line)
-    if bank_extract_line
+    if pointed?
       logger.warn "Tentative d'ajouter ou de retirer une ligne à la remise de chèques #{id}, alors qu'elle est pointée sur la ligne de comte #{bank_extract_line.id}"
       raise 'Impossible de retirer un chèque d une remise pointée'
     end
@@ -140,7 +144,7 @@ class CheckDeposit < ActiveRecord::Base
   
   # appelé par before_destroy pour interdire la destruction d'une remise de chèque pointée
   def cant_destroy_when_pointed
-    if bank_extract_line
+    if pointed?
       logger.warn "Tentative de détruire la remise de chèques #{id}, alors qu'elle est pointée sur une ligne de comte #{bank_extract_line.id}"
       return false
     end
