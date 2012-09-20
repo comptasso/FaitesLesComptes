@@ -891,8 +891,7 @@ OK - tank_checks et target_checks ne semblent plus utile - supprimer
 Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
 Le message sur les remises de chèques n'est plus valable (dans la vue organism#show
 OK - La création d'un check_deposit crée des lignes avec le check_deposit comme owner
-Dans organism#show, le messages sur les chèques à déposer n'est plus bon
-Une remise chèque pointée ne doit pas afficher l'icone modifier, ni supprimer
+OK - Une remise chèque pointée ne doit pas afficher l'icone modifier, ni supprimer
 
 -------------------------pointage de relevé --------------------------------
 OK - Le relevé doit avoir une date de début et de fin dans l'exercice

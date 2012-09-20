@@ -96,9 +96,7 @@ class Line < ActiveRecord::Base
   scope :mois, lambda { |date| where('line_date >= ? AND line_date <= ?', date.beginning_of_month, date.end_of_month) }
   scope :multiple, lambda {|copied_id| where('copied_id = ?', copied_id)}
  
-  scope :not_checks_received, where('payment_mode != ? OR credit <= 0', 'Chèque')
-  scope :checks_received, where('payment_mode = ? AND credit > 0', 'Chèque')
-  scope :non_depose, checks_received.where('check_deposit_id IS NULL')
+  
 
   scope :period, lambda {|p| where('line_date >= ? AND line_date <= ?', p.start_date, p.close_date)}
   scope :period_month, lambda {|p,m| where('line_date >= ? AND line_date <= ?', p.start_date.months_since(m), p.start_date.months_since(m).end_of_month) }

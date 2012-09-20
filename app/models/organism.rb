@@ -66,13 +66,7 @@ class Organism < ActiveRecord::Base
     nb_open_periods >=2 ? true :false
   end
 
-  def number_of_non_deposited_checks
-    self.lines.non_depose.count
-  end
-
-  def value_of_non_deposited_checks
-    self.lines.non_depose.sum(:credit)
-  end
+  
 
   # indique si organisme peut écrire des lignes de comptes, ce qui exige qu'il y ait des livres
   # et aussi un compte bancaire ou une caisse

@@ -12,10 +12,10 @@ module OrganismsHelper
       m << info
     end
 
-    if org.number_of_non_deposited_checks > 0
+    if (cdnb = CheckDeposit.nb_to_pick) > 0
       info= {}
-      info[:text] = "<b>#{org.number_of_non_deposited_checks} chèques à déposer</b> pour \
-            un montant total de #{number_to_currency org.value_of_non_deposited_checks}".html_safe
+      info[:text] = "<b>#{cdnb} chèques à déposer</b> pour \
+            un montant total de #{number_to_currency CheckDeposit.total_to_pick}".html_safe
       info[:icon] = icon_to('nouveau.png', new_organism_check_deposit_path(org))
       m << info
     end
