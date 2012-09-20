@@ -877,7 +877,7 @@ OK - Modifier cash#sold_at
 Revoir tout ce qui est balance ou grand livre (écran ou pdf) qui utilisent intensément les soldes
 OK - Modifier lines empty? and all_lines_locked dans le modèle Account
 OK - Dans la balance, les comptes 5 mouvementés devraient orienter vers l'affichage des écritures
-modifier check_deposit qui utilise abondamment bank_account_id
+OK - modifier check_deposit qui utilise abondamment bank_account_id pour marquer les lignes
 ----------------------- révision des remises de chèques ---------------------------------------
 OK - La remise d'un chèque donne lieu à passation d'une écriture dans le journal d'OD
 OK - Revoir comment pending_checks connaît les chèques disponibles à l'encaissement : prendre le compte 511 plutôt que lire les lignes de recettes
@@ -890,12 +890,13 @@ Revoir la mise en forme de la table de détail des remises chèques
 OK - tank_checks et target_checks ne semblent plus utile - supprimer
 Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
 Le message sur les remises de chèques n'est plus valable (dans la vue organism#show
-La création d'un check_deposit crée des lignes avec le check_deposit comme owner
+OK - La création d'un check_deposit crée des lignes avec le check_deposit comme owner
+Dans organism#show, le messages sur les chèques à déposer n'est plus bon
+Une remise chèque pointée ne doit pas afficher l'icone modifier, ni supprimer
 
 -------------------------pointage de relevé --------------------------------
 OK - Le relevé doit avoir une date de début et de fin dans l'exercice
 OK - Le scope period va devenir inutile (ou en tout cas grandement se simplifier)
-Voir quelle sont les lignes verrouillées dans le cas d'un lock bank_extract : les lignes et les contrelignes ?
 OK - Il n'y a plus à faire de distinction entre bel (Standard et CheckDeposit)...
 OK - Nettoyage fait dans le controller
 OK - Faire le nettoyage des classes et vues (StandardBankExtractLine et CheckDepositBankExtractLine , plus aussi retirer les champs relevant de STI)
@@ -908,7 +909,7 @@ OK - suppression de check_deposit_bank_extract_line_spec
 OK - suppression de standard_bank_extract_line_spec
 OK - Modifier pointed? dans Line qui doit se passer du champ bank_extract_id
 Verifier l'action de verrouillage d'un relevé bancaire
-Vérifier aussi l'action de contrôle de caisse
+OK - Vérifier aussi l'action de contrôle de caisse
 OK - Quand une ligne est pointée, on ne peut plus la supprimer ni l'éditer
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------

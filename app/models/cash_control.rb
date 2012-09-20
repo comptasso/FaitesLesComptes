@@ -94,13 +94,11 @@ class CashControl < ActiveRecord::Base
   # verrouille les lignes correspondantes à un contrôle de caisse
   def lock_lines
     Rails.logger.info "Verrouillage des lignes de caisse suite au verrouillage du controle de caisse #{id}"
-   
     # Trouver les lignes de cette caisse de l'exercice, antérieures à la date du contrôle et non verrouillées
     if self.locked == true 
        cash.lines.before_including_day(self.date).unlocked.each    do |l|
-        l.update_attribute(:locked, true)
-        l.owner.update_attribute(:locked, true)
-      end
+        l.siblings.each { |li| li.update_attribute(:locked, true) }
+       end
     end
   end
 

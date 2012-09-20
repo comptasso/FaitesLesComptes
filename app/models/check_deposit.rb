@@ -38,6 +38,8 @@ class CheckDeposit < ActiveRecord::Base
   # has_many :lines # utile pour les méthode credit_line et debit_line
   has_many  :lines, :as=>:owner, :dependent=>:destroy
 
+  alias children lines
+
   scope :within_period, lambda {|from_date, to_date| where(['deposit_date >= ? and deposit_date <= ?', from_date, to_date])}
  
 

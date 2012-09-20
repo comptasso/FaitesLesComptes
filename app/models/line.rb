@@ -296,7 +296,18 @@ class Line < ActiveRecord::Base
 
   # met à jour la ligne de contrepartie pour les écritures enregistrées par la saisie
   def update_counterpart
-
+ 
+    if owner_id == nil
+     
+      sl = supportline
+      sl.update_attributes(line_date:line_date, narration:narration,
+        book_id:book.id,
+        account_id:counter_account_id,
+        debit:credit, credit:debit,
+        payment_mode:payment_mode)
+ 
+      sl.save!
+    end
   end
 
 

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 require 'lines_helper'
-
+ 
 describe "check_deposits/index" do  
   include JcCapybara
 
@@ -23,8 +23,8 @@ describe "check_deposits/index" do
       cd.stub(:bank_account).and_return(ba)
     end
     ba.stub!(:to_s).and_return('124578AZ')
-    cd1.stub(:bank_extract_line).and_return(1) # la remise de chèque n° 1 est pointée
-    cd2.stub(:bank_extract_line).and_return(nil)
+    cd1.stub(:pointed?).and_return(true) # la remise de chèque n° 1 est pointée
+    cd2.stub(:pointed?).and_return(false)
 
     cd1.stub_chain(:total_checks).and_return(10)
     cd1.stub_chain(:checks, :size).and_return(5)
@@ -97,6 +97,10 @@ describe "check_deposits/index" do
     end
 
     context "quand la remise de chèque est pointée, ie elle est reliée à une bank_extract_line" do
+
+      it 'une seul icone' do
+        assert_select('tr:nth-child(1) img', count:1)
+      end
 
       it "le lien affichage est toujours disponible" do
         assert_select('tr:nth-child(1) td:nth-child(5) img[src= ?]' , '/assets/icones/afficher.png')
