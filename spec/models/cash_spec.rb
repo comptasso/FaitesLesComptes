@@ -63,6 +63,17 @@ describe Cash do
     end
   end
 
+  describe 'destroy' do
+
+    before(:each) do
+      @cc=@o.cashes.create!(:name=>'Entrepôt')
+    end
+
+    it 'on ne peut détruire une caisse' do
+      expect {@cc.destroy}.not_to change {Cash.count}
+    end
+  end
+
   context 'annex methods' do
  
     it 'to_s return name' do

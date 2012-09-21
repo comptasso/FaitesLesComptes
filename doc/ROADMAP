@@ -841,13 +841,13 @@ NON  - prenant en compte les lignes 6 et 7 qui ont ce bank_account_id (cash_id)
 NON et en ajoutant les lignes qui ont des écritures avec ce compte (normalement des écritures d'inventaire uniquement)
 NON - Les relevés de compte donnent lieu à passation d'écriture : on extourne le solde d'origine et on met le solde final.
 OK - Les transferts peuvent être revus car maintenant on peut écrire deux lignes avec mention des comptes comptables
-Revoir le mode de calcul du solde d'un compte bancaire ou d'une caisse (vu qu'il y avait les transferts).
+OK - Revoir le mode de calcul du solde d'un compte bancaire ou d'une caisse (vu qu'il y avait les transferts).
 
 OK - Mise à jour des comptas existantes :
 OK - les champs accounts_id de line doivent être remplis avec le account_id correspondant à l'exercice
 OK - il doit y avoir création de compte pour la banque et la caisse pour les deux exercices.
 Ok - Modifier l'affichage de caisses et banques pour montrer le numéro de compte
-Supprimer un compte bancaire ou une caisse devrait supprimer le compte comptable correspondant (ce qui veut dire qu'il y a aucune écriture)
+Supprimer un compte bancaire ou une caisse devrait supprimer le compte comptable correspondant s'il n'y a aucune écriture
 
 
 OK - Idem pour Caisse et les contrôles de caisse
@@ -886,13 +886,10 @@ OK - Le champ bank_account_id de check_deposit reste indispensable
 OK - Le compte rem cheèques est 511 donc il faut modifier banques pour utiliser 512xx
 OK - Period doit pouvoir retourner ou créer un compte remise chèque
 OK - Faire une constante rem_check_account, pour aider à cette création
-Revoir la mise en forme de la table de détail des remises chèques
 OK - tank_checks et target_checks ne semblent plus utile - supprimer
-Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
 OK - Le message sur les remises de chèques n'est plus valable (dans la vue organism#show
 OK - La création d'un check_deposit crée des lignes avec le check_deposit comme owner
 OK - Une remise chèque pointée ne doit pas afficher l'icone modifier, ni supprimer
-
 -------------------------pointage de relevé --------------------------------
 OK - Le relevé doit avoir une date de début et de fin dans l'exercice
 OK - Le scope period va devenir inutile (ou en tout cas grandement se simplifier)
@@ -903,7 +900,7 @@ OK - Remplacer tous les standard et check_deposit par des standard_bank_extract_
 NON - on garde car pas un grand enjeu et pourrait reservir - Le modèle Utilities.not_pointed_lines n'est plus vraiment utile (on pourrait le remplacer par un helper)
 OK - Revoir les questions de chaînage de lignes et de scission
 OK - Verifie que Les fonctions insert et remove numarotent correctement les lignes  de la table des bels
-Revoir l'affichage du détail de lignes chainées.
+
 OK - suppression de check_deposit_bank_extract_line_spec
 OK - suppression de standard_bank_extract_line_spec
 OK - Modifier pointed? dans Line qui doit se passer du champ bank_extract_id
@@ -920,7 +917,7 @@ OK - Revoir Transfer qui doit écrire des lignes normales maintenant
 OK - revoir support (qui n'est plus lisible directement)
 OK - La logique cash ne doit plus utiliser les counter_account mais les comptes de caisse
 OK - On revoit account qui redevient simple.
-On supprime  toutes les références à  counter_account dans les bank_account ou les cash
+OK - On supprime  toutes les références à  counter_account dans les bank_account ou les cash
 
 --------------------- on crée un livre de banque pour chaque banque et un livre de caisse pour chaque caisse --------------
 OK - pour caisse et bank_account, la création entraîne celle d'un livre correspondant
@@ -942,6 +939,9 @@ Puis on reprend la mutation précédente pour bank_account sur cette nouvelle ba
 OK - Transfer peut voir sa structure changer avec par exemple from_account_id et to_account_id plutôt que des polymorphiques
 
 ------------- fin de cette mutation --------------------------------------------
+Revoir l'affichage du détail de lignes chainées.
+Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
+Revoir la mise en forme de la table de détail des remises chèques
 Revoir dans cash le calcul des soldes pour les controles de caisse (vue new et index)
 Remettre en place les pavés cash et bank_account
 On n'utilise plus bank_extract_id dans le modèle check_deposit qui peut donc être supprimé

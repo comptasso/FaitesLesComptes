@@ -13,6 +13,7 @@ class BankAccount < ActiveRecord::Base
   validates :name, :number,  presence: true
 
   after_create :create_accounts
+  before_destroy {return false}
 
   # retourne le dernier extrait de compte bancaire
  # sur la base de la date de fin

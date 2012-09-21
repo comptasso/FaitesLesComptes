@@ -58,7 +58,7 @@ class Line < ActiveRecord::Base
   belongs_to :counter_account, :class_name=>'Account'
   belongs_to :bank_extract
   belongs_to :check_deposit
-  belongs_to :bank_account
+  # belongs_to :bank_account
   #  belongs_to :cash
   belongs_to :owner, :polymorphic=>true  # pour les transferts uniquement (à ce stade)
   has_and_belongs_to_many :bank_extract_lines, :uniq=>true  # pour les rapprochements bancaires
