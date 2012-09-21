@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
- #  c.filter = {:wip=> true }
+   c.filter = {:wip=> true }
 end 
 
 
@@ -58,7 +58,33 @@ describe BankExtractLine do
     # se fait par la méthode belongs_to 
     # TODO en fait actuellement c'est un has_one (mais une modif est prévue)
 
+    describe 'lock_line' , wip:true do
+      before(:each) do
+        @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :lines=>[@cr.supportline])
+        @be.bank_extract_lines.each {|bel| bel.lock_line }
+      end
 
+      it 'verif ' do
+        @g = @be.bank_extract_lines.first
+        @g.lines(true).each {|l| l.should be_locked}
+      end
+
+
+      it 'lock_line doit verrouiller les lignes et les siblings' do
+        Line.where('payment_mode = ?', 'Virement').all.each do |l|
+          l.should be_locked
+          l.supportline.should be_locked
+        end
+      end
+
+      it 'pour une remise de chèque, il faut aussi verrouiller les lignes d origine' do
+        Line.where('payment_mode = ?', 'Chèque').all.each do |l|
+          l.should be_locked
+          l.supportline.should be_locked
+        end
+      end
+    end
+    
 
    
     describe 'testing move_higher and move_lower' do

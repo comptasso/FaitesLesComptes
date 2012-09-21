@@ -44,9 +44,9 @@
           - @bank_extract_lines.all.each do |bel|
             = render(partial:'index_standard_bel', :object=>bel) 
             
-
+        -# non affiché mais utile pour l'affichage éventuel des icones danger lorsqu'il y a un écart de valeur
         %tfoot
           %tr
             %th.droite{colspan:3, rowspan:1} Totaux
-            %td.numeric#bels_total_debit=  debit_credit @bank_extract.total_lines_debit
-            %td.numeric#bels_total_credit=  debit_credit @bank_extract.total_lines_credit
+            %td.numeric#bels_total_debit=  debit_credit @bank_extract.total_lines_credit
+            %td.numeric#bels_total_credit=  debit_credit @bank_extract.total_lines_debit

@@ -889,7 +889,7 @@ OK - Faire une constante rem_check_account, pour aider à cette création
 Revoir la mise en forme de la table de détail des remises chèques
 OK - tank_checks et target_checks ne semblent plus utile - supprimer
 Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
-Le message sur les remises de chèques n'est plus valable (dans la vue organism#show
+OK - Le message sur les remises de chèques n'est plus valable (dans la vue organism#show
 OK - La création d'un check_deposit crée des lignes avec le check_deposit comme owner
 OK - Une remise chèque pointée ne doit pas afficher l'icone modifier, ni supprimer
 
@@ -907,7 +907,7 @@ Revoir l'affichage du détail de lignes chainées.
 OK - suppression de check_deposit_bank_extract_line_spec
 OK - suppression de standard_bank_extract_line_spec
 OK - Modifier pointed? dans Line qui doit se passer du champ bank_extract_id
-Verifier l'action de verrouillage d'un relevé bancaire
+OK - Verifier l'action de verrouillage d'un relevé bancaire
 OK - Vérifier aussi l'action de contrôle de caisse
 OK - Quand une ligne est pointée, on ne peut plus la supprimer ni l'éditer
 
@@ -915,7 +915,7 @@ OK - Quand une ligne est pointée, on ne peut plus la supprimer ni l'éditer
 NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner
 OK - Pour line, on peut garder le champ counter_account pour la saisie dans le formulaire mais on ne s'en sert plus ensuite
 OK - Line after_create crée la contrepartie si on est dans une écriture de compta simplifiée (en fait si on est dans un livre IncomeBook ou OutcomeBook)
-gestion de line after_update (pour les contre lignes)
+OK - gestion de line after_update (pour les contre lignes)
 OK - Revoir Transfer qui doit écrire des lignes normales maintenant
 OK - revoir support (qui n'est plus lisible directement)
 OK - La logique cash ne doit plus utiliser les counter_account mais les comptes de caisse

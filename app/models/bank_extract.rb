@@ -60,19 +60,19 @@ class BankExtract < ActiveRecord::Base
   end
 
   def diff_debit?
-    self.total_debit != self.total_lines_debit
+    self.total_debit != self.total_lines_credit
   end
 
   def diff_debit
-    self.total_debit - self.total_lines_debit
+    self.total_debit - self.total_lines_credit
   end
 
   def diff_credit?
-    self.total_credit != self.total_lines_credit
+    self.total_credit != self.total_lines_debit
   end
 
   def diff_credit
-    self.total_credit - self.total_lines_credit
+    self.total_credit - self.total_lines_debit
   end
 
   def equality?

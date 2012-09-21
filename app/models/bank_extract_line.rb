@@ -70,13 +70,21 @@ class BankExtractLine < ActiveRecord::Base
 
   after_initialize :prepare_datas
 
-  # lock_line verrouille la ligne d'écriture. Ceci est appelé par bank_extract (after_save)
+  # lock_line verrouille les lignes d'écriture associées à une bank_extract_line,
+  # ce qui entraîne également le verrouillage de tous les siblings.
+  # Ceci est appelé par bank_extract (after_save)
   # lorsque l'on verrouille le relevé
   #
   def lock_line
-    self.lines.each {|l| l.update_attribute(:locked,true) unless l.locked? }
-    # si c'est une remise de chèque on verrouille les lignes correspondantes
-   # self.check_deposit.checks.each {|l| l.update_attribute(:locked, true)} if self.check_deposit_id
+    lines.each do |l|
+      # verrouillage des siblings 
+      l.lock_line
+      # si l est une remise de chèque il faut aussi verrouiller les écritures correspondantes
+      if l.check_deposit_id
+        cd = l.check_deposit
+        cd.checks.each {|l| l.lock_line}
+      end
+    end
   end
 
   # Retourne le total débit des lignes associées.
@@ -128,13 +136,13 @@ class BankExtractLine < ActiveRecord::Base
 
   # TODO à mettre dans private
   def prepare_datas
-   #raise 'StandardBankExtractLine sans ligne'
+    #raise 'StandardBankExtractLine sans ligne'
     unless lines.empty?
-       self.date ||= lines.first.line_date # par défaut on construit les infos de base
-       @payment= lines.first.payment_mode # avec la première ligne associée
-       @narration = lines.first.narration
-    # TODO blid est-il utile ?
-       @blid= "line_#{lines.first.id}" if lines.count == 1 # blid pour bank_line_id
+      self.date ||= lines.first.line_date # par défaut on construit les infos de base
+      @payment= lines.first.payment_mode # avec la première ligne associée
+      @narration = lines.first.narration
+      # TODO blid est-il utile ?
+      @blid= "line_#{lines.first.id}" if lines.count == 1 # blid pour bank_line_id
     end
 
   end

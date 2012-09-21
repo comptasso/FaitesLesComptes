@@ -183,6 +183,11 @@ class Line < ActiveRecord::Base
     end
   end
 
+  # lock_line verrouille l et ses siblings
+  def lock_line
+    siblings.each {|l| l.update_attribute(:locked, true) unless l.locked}
+  end
+
 
 
 

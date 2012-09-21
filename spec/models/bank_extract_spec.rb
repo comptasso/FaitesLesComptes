@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
-#   c.filter = {:wip=> true }
+  c.filter = {:wip=> true }
 end
 
 describe BankExtract do 
@@ -50,8 +50,8 @@ describe BankExtract do
   describe "vérification du scope period" do
 
     before(:each) do
-    @p2011 = @o.periods.create!(start_date:Date.today.years_ago(1).beginning_of_year, close_date:Date.today.years_ago(1).end_of_year)
-    @be1 = @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2011,10,01), end_date: Date.civil(2011,10,31), begin_sold: 2011, total_credit: 11, total_debit: 10)
+      @p2011 = @o.periods.create!(start_date:Date.today.years_ago(1).beginning_of_year, close_date:Date.today.years_ago(1).end_of_year)
+      @be1 = @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2011,10,01), end_date: Date.civil(2011,10,31), begin_sold: 2011, total_credit: 11, total_debit: 10)
 
     end
     it "le spec de period renvoie @be1 pour 2011 et @be2 pour 2012" do
@@ -67,7 +67,7 @@ describe BankExtract do
 
     def valid_attributes
       {:bank_account_id=>@ba.id, begin_sold:0, total_debit:1,
-      total_credit:2, begin_date:Date.today, end_date:Date.today}
+        total_credit:2, begin_date:Date.today, end_date:Date.today}
     end
 
     before(:each) do
@@ -83,7 +83,7 @@ describe BankExtract do
       @be.should_not be_valid
     end
 
-     it 'la date de fin doit être dans l\'exercice' do
+    it 'la date de fin doit être dans l\'exercice' do
       @be.begin_date = @p2012.close_date + 1
       @be.should_not be_valid
     end
@@ -128,32 +128,32 @@ describe BankExtract do
     end
 
   
-     it 'les valeurs sont arrondies par valid' do 
+    it 'les valeurs sont arrondies par valid' do
       @be.begin_sold = 1.124
       @be.valid?
       @be.should_not be_valid
     end
 
     it 'testing two decimals validators with valid values' do
-     vals = [+1, -1, +1.1, -1.1, +1.12, -1.12, 1.1, 1.12, 256, 256.1, '-.01']
+      vals = [+1, -1, +1.1, -1.1, +1.12, -1.12, 1.1, 1.12, 256, 256.1, '-.01']
       vals.each do |v|
         @be.begin_sold = v
         @be.valid?
       
 
-      @be.errors[:begin_sold].should have(0).messages
+        @be.errors[:begin_sold].should have(0).messages
       end
       
 
     end
 
     it 'testing two decimals validators with invalid values' do
-     vals = ['b1', -1.254 , '+1.1b', 1.254]
+      vals = ['b1', -1.254 , '+1.1b', 1.254]
       vals.each do |v|
         @be.begin_sold = v
         @be.valid?
       
-      @be.errors[:begin_sold].should have_at_least(1).messages
+        @be.errors[:begin_sold].should have_at_least(1).messages
       end
 
 
@@ -163,11 +163,13 @@ describe BankExtract do
     
   end
 
-  describe 'when locked' do 
+  describe 'when locked' , wip:true do
 
     before(:each) do
       @be = @ba.bank_extracts.create!(:begin_date=>Date.today, end_date:Date.today, begin_sold:1,
         total_debit:1, total_credit:2)
+      @l1 = Line.create!(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
+      @bel = BankExtractLine.create!(bank_extract_id:@be.id, lines:[@l1.supportline])
       @be.locked = true
       @be.save!
     end
@@ -177,9 +179,27 @@ describe BankExtract do
       @be.should_not be_valid
       @be.errors.should have(1).error_on(:begin_sold)
     end
+    
+    it 'toutes les lignes de l extrait sont verrouillées' do 
+      @be.bank_extract_lines.each do |bels|
+
+          bels.lines.each {|l| l.should be_locked}
+        
+      end
+    end
+    
+    it 'toutes les siblings sont verrouillés' do
+      @be.bank_extract_lines.each do |bels|
+        bels.lines.each do |ls|
+          ls.siblings.each {|l| l.should be_locked}
+        end
+      end
+    end
+
+
   end
 
-  describe 'contrôle des bank_extract_lines', wip:true do
+  describe 'contrôle des bank_extract_lines' do
 
     before(:each) do
       @l1 = Line.new(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
@@ -212,7 +232,7 @@ describe BankExtract do
     end
 
 
-     it 'total lines credit' do
+    it 'total lines credit' do
       @be2.total_lines_credit.should == 13
     end
 
@@ -222,16 +242,16 @@ describe BankExtract do
 
     context 'suppression du bank_extract' do
       
-    it 'la destruction du bank_extract supprime les bank_extract_lines'  do
-      expect {@be2.destroy}.to change {BankExtractLine.count}.by(-2)
-    end
+      it 'la destruction du bank_extract supprime les bank_extract_lines'  do
+        expect {@be2.destroy}.to change {BankExtractLine.count}.by(-2)
+      end
  
-    it 'et les lines deviennent non rattachées à un bank_extract' do
-      @be2.destroy
-      @be3= @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2012,10,01), end_date: Date.civil(2012,10,31), begin_sold: 2012, total_credit: 11, total_debit: 10)
-      @bel3 = BankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2])
-      @l2.should have(1).bank_extract_lines
-    end
+      it 'et les lines deviennent non rattachées à un bank_extract' do
+        @be2.destroy
+        @be3= @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2012,10,01), end_date: Date.civil(2012,10,31), begin_sold: 2012, total_credit: 11, total_debit: 10)
+        @bel3 = BankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2])
+        @l2.should have(1).bank_extract_lines
+      end
 
 
     end

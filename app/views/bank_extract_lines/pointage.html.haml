@@ -1,6 +1,6 @@
 = content_for :menu do
   = icon_to 'navigation90.png', bank_account_bank_extracts_path(@bank_account)
-  = icon_to 'verrouller.png', lock_bank_account_bank_extract_path(@bank_account, @bank_extract), |
+  = icon_to 'verrouiller.png', lock_bank_account_bank_extract_path(@bank_account, @bank_extract), |
     title: 'Verrouiller ce relevé ainsi que toutes les lignes associées', |
     id:'lock_bank_extract', method:'post', |
     style: ('display: none;' unless @bank_extract.lockable?), |
@@ -14,13 +14,13 @@
       %ul
         %li.offset2.span2
           Solde initial :
-          = debit_credit @bank_extract.begin_sold
+          %span#begin_sold= debit_credit @bank_extract.begin_sold
         %li.span2.spread
           Total débit :
-          = debit_credit @bank_extract.total_debit
+          %span#total_debit= debit_credit @bank_extract.total_debit
         %li.span2
           Total crédit :
-          = debit_credit @bank_extract.total_credit
+          %span#total_credit= debit_credit @bank_extract.total_credit
         %li.span2
           Solde Final :
           = debit_credit @bank_extract.end_sold
