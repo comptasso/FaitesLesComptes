@@ -18,9 +18,9 @@ class LinesController < ApplicationController
       format.json { render json: @lines }
       format.pdf
       # do
-       # headers["Content-Disposition"] ="inline; filename=genome.pdf;"
-       #  headers["Content-Disposition"] = "attachment; filename=\"#{'bonjour'}\""
-       # render 'index.pdf.prawn', :diposition=>'inline', :type => :pdf
+      # headers["Content-Disposition"] ="inline; filename=genome.pdf;"
+      #  headers["Content-Disposition"] = "attachment; filename=\"#{'bonjour'}\""
+      # render 'index.pdf.prawn', :diposition=>'inline', :type => :pdf
       # end
       format.csv { send_data @monthly_extract.to_csv(col_sep:"\t")  }  # pour éviter le problème des virgules
       format.xls { send_data @monthly_extract.to_xls(col_sep:"\t")  } #{ render :text=> @monthly_extract.to_xls(col_sep:"\t") }  # nécessaire pour excel
@@ -47,12 +47,16 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.json
   def new
-    @line =@book.lines.new(line_date: flash[:date] || @monthyear.beginning_of_month, :cash_id=>@organism.main_cash_id, :bank_account_id=>@organism.main_bank_id)
-    @previous_line = Line.find_by_id(flash[:previous_line_id]) if flash[:previous_line_id]
-     respond_to do |format|
+    @line =@book.lines.new(line_date: flash[:date] || @monthyear.beginning_of_month)
+    if flash[:previous_line_id]
+      @previous_line = Line.find_by_id(flash[:previous_line_id])
+      @line.counter_account_id = @previous_line.counter_account_id
+      @line.payment_mode = @previous_line.payment_mode
+    end
+    respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @line } 
-     end
+    end
   end
 
 

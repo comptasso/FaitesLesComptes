@@ -819,12 +819,13 @@ Il faut que banque et caisse aient un compte bancaire : il faudra que account so
 Les lignes ont un compte bancaire.
 Un after_create permet de remplir le compte si la nature est déjà reliée au compte.
 Un observer natures met à jour les lignes si nature est reliée à un compte
+
 Le pointage de compte fait locked mais il faut pouvoir encore le rattacher à un compte
+
 On ne peut rentrer un relevé et des écritures bancaires que dans l'exerice. Donc on a un
 solde au début de l'année et un en fin d'année.
 
 
-Modif pour line :
 OK - Ajouter un champ account_id, puis belongs_to account, et account has_many lines
 OK - Faire un before_save qui remplit account_id en fonction de nature
 OK - Faire un observer nature qui remplit Line si le rattachement de nature est fait après coup.
@@ -832,8 +833,6 @@ On ne doit pas pouvoir changer le rattachement de nature à un compte si locked 
 Ceci dans les vues comme dans le modèle
 OK - Si on modifie la nature d'une ligne, il faut que le account_id soit géré (fait par le before_save fill_account)
 NON - Account doit être polymorphique pour pouvoir être détenu soit par un compte bancaire soit par une caisse
-
-Modif pourBankAccount :
 OK - Ajouter que BankAccount has_many accounts, as:account (il y a un compte par exercice)
 OK - La création d'un compte bancaire doit créer un compte comptable (un par exercice),
 NON : Le solde d'un compte bancaire ou d'une caisse se calcule en :
@@ -842,14 +841,11 @@ NON et en ajoutant les lignes qui ont des écritures avec ce compte (normalement
 NON - Les relevés de compte donnent lieu à passation d'écriture : on extourne le solde d'origine et on met le solde final.
 OK - Les transferts peuvent être revus car maintenant on peut écrire deux lignes avec mention des comptes comptables
 OK - Revoir le mode de calcul du solde d'un compte bancaire ou d'une caisse (vu qu'il y avait les transferts).
-
 OK - Mise à jour des comptas existantes :
 OK - les champs accounts_id de line doivent être remplis avec le account_id correspondant à l'exercice
 OK - il doit y avoir création de compte pour la banque et la caisse pour les deux exercices.
 Ok - Modifier l'affichage de caisses et banques pour montrer le numéro de compte
-Supprimer un compte bancaire ou une caisse devrait supprimer le compte comptable correspondant s'il n'y a aucune écriture
-
-
+NON - Supprimer un compte bancaire ou une caisse devrait supprimer le compte comptable correspondant s'il n'y a aucune écriture : on ne supprime pas
 OK - Idem pour Caisse et les contrôles de caisse
 
 On doit avoir une balance équilibrée.
@@ -864,6 +860,8 @@ Changer la date d'une ligne (en changeant d'exercice) va devoir gérer les natur
 ------------ Suppression de bank_account_id et cash_id pour ne garde que counter_account_id (branche odbranch)-----------
 OK - le callback check_bank_and_cash_id devient inutile, le formulaire donnant directement le compte de la caisse ou de la banque
 Les jQuery doivent être revus pour gérer le fait qu'il n'y plus qu'un champ - pas forcément
+Dans une dépense par chèque, il y a seulement la banque
+Dans une recette par chèque, ce ne peut être que chèque à l'encaissement
 revoir jQuery dans transfert pour les aspects de lignes verrouillées
 OK - Dans le form lines, couterpart apparaît mais n'est pas obligatoire
 NON - Voir le after_create de Line qui ne remplit par counter_account
@@ -921,7 +919,7 @@ OK - On supprime  toutes les références à  counter_account dans les bank_acco
 
 --------------------- on crée un livre de banque pour chaque banque et un livre de caisse pour chaque caisse --------------
 OK - pour caisse et bank_account, la création entraîne celle d'un livre correspondant
-gérer la suppression des caisses et des comptes
+OK - gérer la suppression des caisses et des comptes
 OK - modifier update transfer
 OK - modification des fonctions sold_at et monthly_value dans cash_book et income_book
 OK - les contre écritures sont inscrites sur le livre correspondant du coup, book et monthly_book_extract n'ont plus besoin de filtrer difficilement
@@ -933,12 +931,12 @@ OK - Supprimer les champs et les liaisons, ainsi que le after_create
 OK - Supprimer les champs book_id de cash
 OK - supprimer les champs book_id de bankaccount
 OK - Revoir l'affichage d'un monthlyBookExtract
-Suppression des champs accountable_type et id pour cash et bank_account
-Dans l'édition de cash_book(pdf) ou xls/csv il faut modifier credit debit en entrée sortie
-Puis on reprend la mutation précédente pour bank_account sur cette nouvelle base.
+OK - Suppression des champs accountable_type et id pour cash et bank_account
+OK - Dans l'édition de cash_book(pdf) ou xls/csv il faut modifier credit debit en entrée sortie
 OK - Transfer peut voir sa structure changer avec par exemple from_account_id et to_account_id plutôt que des polymorphiques
 
 ------------- fin de cette mutation --------------------------------------------
+Modifier PAs de support pour les lignes qui sont des chèques
 Revoir l'affichage du détail de lignes chainées.
 Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
 Revoir la mise en forme de la table de détail des remises chèques

@@ -8,7 +8,7 @@ module Utilities
 class MonthlyCashExtract < MonthlyBookExtract
 
   def initialize(cash, h)
-    @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit']
+    @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Sorties', 'Entrées']
     @book = cash
     @my = MonthYear.new(h)
     @date = @my.beginning_of_month

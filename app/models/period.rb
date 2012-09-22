@@ -201,11 +201,15 @@ class Period < ActiveRecord::Base
 
 
   def bank_accounts
-    accounts.where('number LIKE ?', '51%')
+    accounts.where('number LIKE ? AND number != ?', '51%', REM_CHECK_ACCOUNT[:number])
   end
   
   def cash_accounts
     accounts.where('number LIKE ?', '53%')
+  end
+
+  def rem_check_accounts
+     accounts.where('number = ?', REM_CHECK_ACCOUNT[:number])
   end
 
   def recettes_accounts

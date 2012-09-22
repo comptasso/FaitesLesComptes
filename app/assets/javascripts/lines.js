@@ -94,37 +94,73 @@ jQuery(function () {
 
 // gère l'affichage des champs banque et caisse
 function $f_td_bank_cash() {
-    var payment_mode = $('#entry_lines #line_payment_mode').val();
-
-    // s'il y a plus d'un élément dans td_bank et si le mode de payemnt est autre que Espèces alors afficher td_bank et masquer td_cash
-    if (payment_mode  !== 'Espèces') {
-        $('#td_cash').hide();
-
-        //cas d'une dépense payée par chèque'
-        if ((payment_mode === 'Chèque') && ($('.outcome_book').length > 0)) {
-            // on affiche le champ de saisie du numéro de chèque
-            $('#td_check_number').show();
-        } else {
-            $('#td_check_number').hide();
-        }
-        // si plusieurs banques on affiche le select
-        if ((payment_mode !== "") && $('#line_bank_account_id option').size() > 1) {
-            $('#td_bank').show();
-        } else {
-            $('#td_bank').hide();
-        }
+    var income_outcome, payment_mode, caisses, banques, encaissement;
+    if ($('.income_book#entry_lines').length > 0) {
+        income_outcome = true;
+        encaissement = $('optgroup[label="Chèques à l\'encaissement"] option');
     } else {
-    // si le mode de paiement est espèces et qu'il y a plus d'une caisse alors afficher les caisses'
-        $('#td_bank').hide();
+        income_outcome = false;
+    }
+
+    payment_mode = $('#entry_lines #line_payment_mode').val();
+    caisses = $('optgroup[label="Caisses"] option');
+    banques =  $('optgroup[label="Banques"] option');
+    // s'il y a plus d'un élément dans td_bank et si le mode de payemnt est autre que Espèces alors afficher td_bank et masquer td_cash
+
+    switch (payment_mode) {
+    case 'Espèces':
+        banques.attr('disabled', 'disabled');
         $('#td_check_number').hide();
-        if ($('#line_cash_id option').size() > 1) {
-            $('#td_cash').show();
+        caisses.attr('disabled', false);
+        banques.attr('selected', false);
+        if (income_outcome) {
+            encaissement.attr('selected', false);
+            encaissement.attr('disabled', 'disabled');
+        }
+        if (caisses.size() >= 1) {
+            caisses.first().attr('selected', 'selected');
+        }
+        break;
+    case 'Chèque':
+        caisses.attr('disabled', 'disabled');
+        caisses.attr('selected', false);
+        if (income_outcome) {
+          // on affiche le champ de saisie du numéro de chèque
+            $('#td_check_number').hide(); // masquage du champ pour  saisir le n° de chèque de la dépenses
+            banques.attr('disabled', 'disabled');
+            banques.attr('selected', false);
+            encaissement.first().attr('selected', 'selected');
+        } else {
+            $('#td_check_number').show(); // affichage du champ pour  saisir le n° de chèque de la dépenses
+            banques.attr('disabled', false);
+            if (banques.size() >= 1) {
+                banques.first().attr('selected', 'selected');
+            }
+        }
+        break;
+        // autres cas : une recette en banque qui n'est pas un chèque
+    default:
+        $('#td_check_number').hide(); // masquage du champ pour  saisir le n° de chèque de la dépenses
+        caisses.attr('disabled', 'disabled'); // désactivation des caisses
+        caisses.attr('selected', false);
+        banques.attr('disabled', false);
+        if (banques.size() >= 1) {
+            banques.first().attr('selected', 'selected');
+        }
+        if (income_outcome) {
+            encaissement.attr('selected', false);
+            encaissement.attr('disabled', 'disabled');
         }
     }
 }
 
 // gère l'affichage des champs de saisie de banque et de caisse
 // à l'affichage de la page
+// on doit avoir pour les recettes :
+// lorsque c'est espèces les caisses et rien d'autres
+// chèques : le compte chèque à l'encaissement
+// banques : les banques
+// POur les dépenses, la partie chèque à l'encaissement n'est pas utile'
 jQuery(function () {
     if ($('#entry_lines').length !== null) {
         $f_td_bank_cash();
@@ -133,8 +169,6 @@ jQuery(function () {
 });
 
 
-//$.facebox.settings.closeImage = '/assets/closelabel.png';
-//$.facebox.settings.loadingImage = '/assets/loading.gif';
 
 
 
