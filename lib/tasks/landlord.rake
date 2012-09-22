@@ -24,6 +24,9 @@ namespace :landlord do
     ActiveRecord::Base.establish_connection(default)
     puts 'migration de la base principale'
     ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
+
+    Rake::Task["db:schema:dump"].invoke
+    Rake::Task["db:test:prepare"].invoke
   end
 
 

@@ -943,10 +943,10 @@ OK - Modifier PAs de support pour les lignes qui sont des chèques
 Revoir l'affichage du détail de lignes chainées.
 Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
 OK - Revoir la mise en forme de la table de détail des remises chèques
-Revoir dans cash le calcul des soldes pour les controles de caisse (vue new et index)
+OK - Revoir dans cash le calcul des soldes pour les controles de caisse (vue new et index)
 Remettre en place les pavés cash et bank_account
 On n'utilise plus bank_extract_id dans le modèle check_deposit qui peut donc être supprimé
-Supportline ne semble pas répondre correctement pour les check_deposit (à revoir?)
+OK - Supportline ne semble pas répondre correctement pour les check_deposit (à revoir?)
 La création d un exercice crée une caisse et un compte bancaire plus un compte de rem chèque (ne pas oublier accountable_type et id)
 Dans la saisie des comptes, les natures associées devraient être disabled si on n'est pas dans un compte de classe 6 ou 7
 Inclure Utilities::Sold dans cash.rb
@@ -960,7 +960,7 @@ modalbox de account listing ne change pas le titre h3
 On pourrait voir comment se passer du champ counter_account
 OK - Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait utilisé en zone compta,
 Nettoyer od_lines_controller ? et routes associées (fait-on de l'OD en zone saisie)
-
+La suppression d'une compta ne semble pas supprimer la table sqlite associée
 --------------------------------- TODO ---------------------------------------------------------
 L'affichage des comptes 1 à 5 n'a pas forcément besoin de nature et destination
 On manque d'un affichage des écritures
