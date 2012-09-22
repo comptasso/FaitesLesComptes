@@ -939,10 +939,10 @@ OK - Transfer peut voir sa structure changer avec par exemple from_account_id et
 ------------- fin de cette mutation --------------------------------------------
 ?? Revoir les conditions d'édition d'un tansfert : doit on verrouiller les deux lignes du transfert alors qu'on ne pointe que la caisse ou que le compte bancaire
 OK - La confirmation de suppression d'un transfert est encore en anglais
-Modifier PAs de support pour les lignes qui sont des chèques
+OK - Modifier PAs de support pour les lignes qui sont des chèques
 Revoir l'affichage du détail de lignes chainées.
 Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
-Revoir la mise en forme de la table de détail des remises chèques
+OK - Revoir la mise en forme de la table de détail des remises chèques
 Revoir dans cash le calcul des soldes pour les controles de caisse (vue new et index)
 Remettre en place les pavés cash et bank_account
 On n'utilise plus bank_extract_id dans le modèle check_deposit qui peut donc être supprimé
