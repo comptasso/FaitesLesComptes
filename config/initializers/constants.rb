@@ -12,7 +12,15 @@ ORGANISM = ['organism']
 MODELS = %w(period bank_account destination line bank_extract check_deposit cash cash_control book account nature bank_extract_line income_book outcome_book od_book transfer)
 ORGMODELS = ORGANISM + MODELS
 
-REM_CHECK_ACCOUNT = {number:'511', title:'Chèques à l\'encaissement'}
+# REM_CHECK_ACCOUNT sert à créer et retrouver le compte remise chèque
+# period.rem_check_account retourne ce compte ou le crée;
+# Il est accountable car cela permet de le traiter à peu près comme un bank_account ou un cash.
+# Notamment pour la fonction support.
+# Il a donc has_many :accounts, :as=>accountable pour que accountable fonctionne
+# et to_s qui retourne 'Chèque à l'encaissement'
+# Par ailleurs accountable a été surchargé dans Account pour retourner une instance de RemCheckAccount 
+# si le type est RemCheckAccount.
+REM_CHECK_ACCOUNT = {number:'511', title:'Chèques à l\'encaissement', accountable_type:'RemCheckAccount', accountable_id:1}
 
 
 # constante utilisée pour les éditions de pdf

@@ -130,10 +130,18 @@ class Line < ActiveRecord::Base
   end
   
   # donne le support de la ligne (ou sa contrepartie) : la banque ou la caisse
+  # si c'est une recette par chèque donne 'remise chèque'
   def support
-    aa =  supportline.account.accountable
-    return 'Pas de support' unless aa
-    aa.to_s
+    sla = supportline.account
+    if sla.accountable_type == 'RemCheckAccount'
+      # il faut savoir s'il le chèque a été remise à l'encaissement ou pas
+      # et si oui ce qu'on cherche la ligne correspondant au débit de la banque
+      sla = supportline.check_deposit.debit_line.account if supportline.check_deposit_id
+    else
+      return 'A encaisser'
+    end
+    return 'Pas de support' unless sla
+    sla.accountable.to_s
   end
 
   # children renvoie les lignes enfant (très généralement une seule) sous forme

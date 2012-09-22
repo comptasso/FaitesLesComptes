@@ -55,6 +55,15 @@ class Account < ActiveRecord::Base
     [number, title].join(' ')
   end
 
+
+  # surcharge de accountable pour gérer le cas des remises chèques
+  # il n'y a pas de table RemCheckAccount et donc on traite ce cas en premier
+  # avant d'appeler super.
+  def accountable
+    return RemCheckAccount.new if accountable_type == 'RemCheckAccount'
+    super
+  end
+
   # renvoie le compte disponible commençant par number et en incrémentant une liste 
   # avec le nombre de chiffres donnés par précision
   def self.available(number)

@@ -1,0 +1,5 @@
+-  @monthly_extract.lines.each do |line|
+  %tr#line{id:line.id}
+    = render :partial=>'lines/line', :object=>line
+
+
