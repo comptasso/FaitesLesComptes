@@ -862,7 +862,7 @@ OK - le callback check_bank_and_cash_id devient inutile, le formulaire donnant d
 OK - Les jQuery doivent être revus pour gérer le fait qu'il n'y plus qu'un champ - pas forcément
 OK - Dans une dépense par chèque, il y a seulement la banque
 OK - Dans une recette par chèque, ce ne peut être que chèque à l'encaissement
-NON - revoir jQuery dans transfert pour les aspects de lignes verrouillées
+Ok - revoir jQuery dans transfert : sélectionner un item déselectionne le même dans l'autre liste
 OK - Dans le form lines, couterpart apparaît mais n'est pas obligatoire
 NON - Voir le after_create de Line qui ne remplit par counter_account
 OK - Tous les appel à cash  doivent être en fait transformés en appel au counter_account
@@ -905,6 +905,7 @@ OK - Modifier pointed? dans Line qui doit se passer du champ bank_extract_id
 OK - Verifier l'action de verrouillage d'un relevé bancaire
 OK - Vérifier aussi l'action de contrôle de caisse
 OK - Quand une ligne est pointée, on ne peut plus la supprimer ni l'éditer
+on a le curseur main même pour les extraits pointés
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
 NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner
