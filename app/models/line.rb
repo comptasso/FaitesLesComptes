@@ -137,8 +137,6 @@ class Line < ActiveRecord::Base
       # il faut savoir s'il le chèque a été remise à l'encaissement ou pas
       # et si oui ce qu'on cherche la ligne correspondant au débit de la banque
       sla = supportline.check_deposit.debit_line.account if supportline.check_deposit_id
-    else
-      return 'A encaisser'
     end
     return 'Pas de support' unless sla
     sla.accountable.to_s
