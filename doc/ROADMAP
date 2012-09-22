@@ -937,6 +937,8 @@ OK - Dans l'édition de cash_book(pdf) ou xls/csv il faut modifier credit debit 
 OK - Transfer peut voir sa structure changer avec par exemple from_account_id et to_account_id plutôt que des polymorphiques
 
 ------------- fin de cette mutation --------------------------------------------
+Revoir les conditions d'édition d'un tansfert
+La confirmation de suppression d'un transfert est encore en anglais
 Modifier PAs de support pour les lignes qui sont des chèques
 Revoir l'affichage du détail de lignes chainées.
 Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending

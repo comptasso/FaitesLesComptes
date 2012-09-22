@@ -27,8 +27,8 @@
           %td= transfer.to_account.long_name
 
           %td
-            = icon_to 'modifier.png', edit_organism_transfer_path(@organism, transfer)
-            = icon_to 'supprimer.png', [@organism, transfer], :confirm => 'Are you sure?', :method => :delete
+            = icon_to 'modifier.png', edit_organism_transfer_path(@organism, transfer) if transfer.editable?
+            = icon_to 'supprimer.png', [@organism, transfer], :confirm => 'Etes vous sur ?', :method => :delete if transfer.destroyable?
 
 
 

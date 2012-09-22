@@ -41,18 +41,21 @@ class Transfer < ActiveRecord::Base
   end
 
 
-  # TODO ici mettre un alias avec debit_locked?
+  
   def to_editable?
     !line_to.locked?
   end
 
-  # TODO ici mettre un alias avec debit_locked?
+  
   def from_editable?
     !line_from.locked?
   end
+  
+  def editable?
+    to_editable? || from_editable?
+  end
 
-
-  # inidque si le transfer peut être détruit en vérifiant qu'aucune ligne n'a été verrouillée
+   # inidque si le transfer peut être détruit en vérifiant qu'aucune ligne n'a été verrouillée
   def destroyable?
     self.lines.select {|l| l.locked? }.empty?
   end
