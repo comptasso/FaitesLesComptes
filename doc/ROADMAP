@@ -859,10 +859,10 @@ Changer la date d'une ligne (en changeant d'exercice) va devoir gérer les natur
 
 ------------ Suppression de bank_account_id et cash_id pour ne garde que counter_account_id (branche odbranch)-----------
 OK - le callback check_bank_and_cash_id devient inutile, le formulaire donnant directement le compte de la caisse ou de la banque
-Les jQuery doivent être revus pour gérer le fait qu'il n'y plus qu'un champ - pas forcément
-Dans une dépense par chèque, il y a seulement la banque
-Dans une recette par chèque, ce ne peut être que chèque à l'encaissement
-revoir jQuery dans transfert pour les aspects de lignes verrouillées
+OK - Les jQuery doivent être revus pour gérer le fait qu'il n'y plus qu'un champ - pas forcément
+OK - Dans une dépense par chèque, il y a seulement la banque
+OK - Dans une recette par chèque, ce ne peut être que chèque à l'encaissement
+NON - revoir jQuery dans transfert pour les aspects de lignes verrouillées
 OK - Dans le form lines, couterpart apparaît mais n'est pas obligatoire
 NON - Voir le after_create de Line qui ne remplit par counter_account
 OK - Tous les appel à cash  doivent être en fait transformés en appel au counter_account
