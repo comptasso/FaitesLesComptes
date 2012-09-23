@@ -51,15 +51,9 @@ module OrganismsHelper
 
   # appelé par la vue organism#show pour dessiner chacun des pavés qui figurent 
   # dans le dash board.
-  def draw_pave(p, html_class)
-    partial_and_class =   case p.class.name
-    when 'IncomeBook' then  ['book_pave','income_book']
-    when 'OutcomeBook' then  ['book_pave', 'outcome_book']
-    when 'Period' then ['result_pave', 'result']
-#   when 'BankAccountBook' then ['bank_pave','bank_account_book']
-    when 'CashBook' then ['cash_pave', 'cash_book']
-    end
-    render partial: "organisms/#{partial_and_class[0]}", object: p,  locals: {:local_classes => "#{partial_and_class[1]} #{html_class}" }
+  def draw_pave(pave, html_class)
+    partial_and_class  =   pave.pave_char
+    render partial: "organisms/#{partial_and_class[0]}", object: pave,  locals: {:local_classes => "#{partial_and_class[1]} #{html_class}" }
   end
 
 

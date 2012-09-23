@@ -127,6 +127,10 @@ class Period < ActiveRecord::Base
     accounts.where('number = ?', 12).first
   end
 
+  def pave_char
+    ['result_pave', 'result']
+  end
+
    # Les conditions pour qu'un exercice puisse être fermé sont :
   # qu'il soit ouvert
   # que tous ses journaux soit fermés

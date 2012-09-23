@@ -17,6 +17,12 @@ module Utilities::JcGraphic
   end
 
 
+  # renvoie le type de graphique et le nom de la class
+  def pave_char
+    ['book_pave', self.class.name.underscore]
+  end
+
+
   # construit un graphique des données mensuelles du livre par défaut avec deux exercices
   def default_graphic(period)
     if period.previous_period?

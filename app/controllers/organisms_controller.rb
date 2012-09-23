@@ -29,7 +29,8 @@ class OrganismsController < ApplicationController
     @paves=[]
     @paves += @organism.books.all.reject {|b| b.class.name == 'OdBook'}
     @paves << @period
-    @paves += cash_books 
+    @paves += cash_books
+    @paves += bank_books
 
 
 
@@ -42,10 +43,18 @@ class OrganismsController < ApplicationController
 
 
   def cash_books
-    @cash_books = @organism.cashes.map do |c|
-      cb = @organism.cash_books.new
-      cb.cash = c
+     @organism.cashes.map do |c|
+      cb = @organism.virtual_books.new
+      cb.virtual = c
       cb
+    end
+  end
+
+  def bank_books
+    @organism.bank_accounts.map do |ba|
+      vb = @organism.virtual_books.new
+      vb.virtual = ba
+      vb
     end
   end
 
