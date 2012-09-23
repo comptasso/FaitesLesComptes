@@ -24,7 +24,7 @@ class Cash < ActiveRecord::Base
 
   
   after_create :create_accounts
-  before_destroy {return false}
+  
 
   # retourne le numéro de compte de la caisse correspondant à l'exercice (period) passé en argument
   def current_account(period)

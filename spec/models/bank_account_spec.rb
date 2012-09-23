@@ -87,17 +87,7 @@ describe BankAccount do
     end
   end
 
-  describe 'destroy' do
-
-    before(:each) do
-      @bb=@o.bank_accounts.create!(:name=>'Crédit Universel', :number=>'1254L')
-    end
-
-    it 'on ne peut détruire un compte bancaire' do
-      expect {@bb.destroy}.not_to change {BankAccount.count}
-    end
-  end
- 
+  
   context 'annex methods' do
 
 

@@ -140,6 +140,7 @@ class Organism < ActiveRecord::Base
     self.outcome_books.create(title: 'Dépenses', description: 'Livre des dépenses')
     logger.debug 'creation livre dépenses'
     self.od_books.create(:title=>'OD', description: 'Opérations Diverses')
+    logger.debug 'creation livre OD'
 
   end
   
