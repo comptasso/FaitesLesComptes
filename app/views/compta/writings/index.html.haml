@@ -1,0 +1,17 @@
+%h1 Listing writings
+
+%table
+  %tr
+    %th
+    %th
+    %th
+
+  - @writings.each do |writing|
+    %tr
+      %td= link_to 'Show', writing
+      %td= link_to 'Edit', edit_writing_path(writing)
+      %td= link_to 'Destroy', writing, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Writing', new_writing_path

@@ -1,6 +1,8 @@
 Faitesvoscomptes::Application.routes.draw do
 
  
+  
+
   get "bottom/credit"
   get "bottom/contact"
 
@@ -21,6 +23,7 @@ Faitesvoscomptes::Application.routes.draw do
       resources :rooms
     end
 
+
     # TODO simplifier car on n'utilise que l'action show
     resources :rooms
     resources :organisms do
@@ -35,6 +38,7 @@ Faitesvoscomptes::Application.routes.draw do
       resources :accounts
       resource :listing
       resource :general_ledger
+      resources :writings
       
     end
     
