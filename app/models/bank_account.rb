@@ -13,6 +13,7 @@ class BankAccount < ActiveRecord::Base
   validates :name, :number,  presence: true
 
   after_create :create_accounts
+  after_update :change_account_title, :if=> lambda {name_changed? }
   
 
   # retourne le dernier extrait de compte bancaire
@@ -150,6 +151,10 @@ class BankAccount < ActiveRecord::Base
    organism.periods.where('open = ?', true).each do |p|
      self.accounts.create!(number:n, period_id:p.id, title:self.name)
    end
+ end
+
+ def change_account_title
+   accounts.each {|acc| acc.update_attribute(:title, name)}
  end
 
 

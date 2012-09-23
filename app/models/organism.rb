@@ -133,15 +133,22 @@ class Organism < ActiveRecord::Base
   
   private
 
+ # crée les livres Recettes, Dépenses et OD
+ # Crée également une banque et une caisse par défaut
   def create_default
+    # les 3 livres
     logger.debug 'Création des livres par défaut'
-    self.income_books.create(:title=>'Recettes', :description=>'Livre des recettes')
+    income_books.create(:title=>'Recettes', :description=>'Livre des recettes')
     logger.debug  'création livre recettes'
-    self.outcome_books.create(title: 'Dépenses', description: 'Livre des dépenses')
+    outcome_books.create(title: 'Dépenses', description: 'Livre des dépenses')
     logger.debug 'creation livre dépenses'
-    self.od_books.create(:title=>'OD', description: 'Opérations Diverses')
+    od_books.create(:title=>'OD', description: 'Opérations Diverses')
     logger.debug 'creation livre OD'
 
+    cashes.create(name:'La Caisse')
+    logger.debug 'creation de la caisse par défaut'
+    bank_accounts.create(name:'La Banque', number:'Le Numéro de Compte')
+    logger.debug 'creation la banque par défaut'
   end
   
 end

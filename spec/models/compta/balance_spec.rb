@@ -63,7 +63,7 @@ describe Compta::Balance do
         b = Compta::Balance.new(period_id:@p.id).with_default_values
         b.from_date.should == @p.start_date
         b.to_date.should == @p.close_date
-        b.from_account.should == @a1
+        b.from_account.should == BankAccount.first.accounts.first
         b.to_account.should == @a2
       end
 

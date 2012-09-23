@@ -35,12 +35,16 @@ class Compta::Balance < ActiveRecord::Base
   # soit dans la table accounts. 
   belongs_to :from_account, :class_name=>"Account"
   belongs_to :to_account, :class_name=>"Account" 
-  has_many :accounts, :through=>:period
+  # has_many :accounts, :through=>:period, :conditions=> lambda { }
 
  # je mets date_within_period en premier car je préfère les affichages Dates invalide ou hors limite
  # que obligatoire (sachant que le form n'affiche que la première erreur).
   validates :from_date, :to_date, :date_within_period=>true
   validates :from_date, :to_date, :from_account_id, :to_account_id, :period_id, :presence=>true
+
+  def accounts
+    period.accounts.where('number >= ? AND number <= ?', from_account.number, to_account.number )
+  end
 
   # indique si le listing doit être considéré comme un brouillard
   # ou une édition définitive.

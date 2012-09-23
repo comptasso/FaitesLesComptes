@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe BankExtractsController do
-  include SpecControllerHelper
+  include SpecControllerHelper 
 
 
   let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id: @o.id)}

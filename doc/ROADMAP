@@ -947,7 +947,7 @@ OK - Revoir dans cash le calcul des soldes pour les controles de caisse (vue new
 OK - Remettre en place les pavés cash et bank_account
 OK - On n'utilise plus bank_extract_id dans le modèle check_deposit qui peut donc être supprimé
 OK - Supportline ne semble pas répondre correctement pour les check_deposit (à revoir?)
-La création d un organisme crée une caisse et un compte bancaire plus un compte de rem chèque (ne pas oublier accountable_type et id)
+OK - La création d un organisme crée une caisse et un compte bancaire
 Dans la saisie des comptes, les natures associées devraient être disabled si on n'est pas dans un compte de classe 6 ou 7
 Inclure Utilities::Sold dans cash.rb
 On devrait avoir un champ active pour les comptes (qui se répercute sur bank_account et cash)

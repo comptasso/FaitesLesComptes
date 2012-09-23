@@ -38,8 +38,10 @@ module OrganismFixture
     @p = Period.create!(:organism_id=>@o.id, start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
     @n = Nature.create!(name: 'Essai', period_id: @p.id, :income_outcome=>false)
     @rec = Nature.create!(name:'Recettes', period_id:@p.id, income_outcome:true)
-    @ba = @o.bank_accounts.create!(name: 'DebiX', number: '123Z')
-    @c=@o.cashes.create!(:name=>'Magasin')
+    @ba = @o.bank_accounts.first
+    @ba.update_attributes(name:'DebiX', number:'123Z')
+    @c=@o.cashes.first
+    @c.update_attribute(:name, 'Magasin'); @c.save;
     @baca = @ba.current_account(@p) # pour baca pour BankAccount Current Account
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
   end

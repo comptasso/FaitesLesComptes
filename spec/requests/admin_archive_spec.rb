@@ -9,7 +9,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 #end
 
 
-describe 'resquest admin archive' do  
+describe 'resquest admin archive' do   
   include OrganismFixture
 
   before(:each) do
@@ -32,8 +32,9 @@ describe 'resquest admin archive' do
     it 'remplir la vue et cliquer sur le bouton propose de charger un fichier' do
       visit new_admin_organism_archive_path(@o)
       fill_in 'archive[comment]', :with=>'test archive'
-      filename = "assotest1 #{Time.now}.sqlite3"
+      
       click_button 'new_archive_button'
+      filename = "assotest1 #{Time.now}.sqlite3"
       page.response_headers['Content-Disposition'].should have_content filename
       page.response_headers['Content-Disposition'].should have_content 'attachment;'
     end

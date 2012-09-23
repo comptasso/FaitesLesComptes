@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
-#   c.filter = {:wip=> true }
+  #  c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
@@ -34,6 +34,22 @@ describe Organism do
       expect {@organism.save}.to change {Book.count}.by(3)
     end
 
+  end
+
+  describe 'after create', wip:true do
+    before(:each) do
+      @organism= Organism.create! valid_attributes
+    end
+
+    it 'on a trois livres' do
+      @organism.should have(3).books
+    end
+
+
+    it 'on a une caisse et une banque' do
+      @organism.should have(1).cashes
+      @organism.should have(1).bank_accounts
+    end
   end
 
 
@@ -80,42 +96,33 @@ describe Organism do
 
     
     describe 'main_bank_id' do
-      context 'with no account' do
-        it "main_bank_id returns nil" do
-          @organism.main_bank_id.should == nil
-        end
-      end
-      context 'with one bank account' do
+      
+      context 'with default bank account' do
        
         before(:each) do
-          @ba = @organism.bank_accounts.create!(name: 'CrédiX', number: '124578ZA')
+          @ba = BankAccount.first
         end
 
         it "should give the main bank id" do
-
           @organism.main_bank_id.should == @ba.id
         end
 
         context 'with another bank account' do
           it 'main_bank_id should returns the first one' do
             @organism.bank_accounts.create!(name: 'CrédiX', number: '124577ZA')
-            @organism.bank_accounts.create!(name: 'CrédiX', number: '124576ZA')
-            @organism.main_bank_id.should == @organism.bank_accounts.first.id
+            
+            @organism.main_bank_id.should == @ba.id
           end
         end
       end
     end
 
     describe 'main_cash_id' do
-      context 'with no account' do
-        it "main_cahs_id returns nil" do
-          @organism.main_cash_id.should == nil
-        end
-      end
-      context 'with one cash' do
+     
+      context 'with default cash' do
 
         before(:each) do
-          @ca = @organism.cashes.create!(name: 'Poche')
+          @ca = @organism.cashes.first
         end
 
         it "should give the main cash id" do
@@ -126,8 +133,8 @@ describe Organism do
         context 'with another cash' do
           it 'main_cash_id should returns the first one' do
             @organism.cashes.create!(name: 'porte monnaie')
-            @organism.cashes.create!(name: 'portefeuille')
-            @organism.main_cash_id.should == @organism.cashes.first.id
+           
+            @organism.main_cash_id.should == @ca.id
           end
         end
       end

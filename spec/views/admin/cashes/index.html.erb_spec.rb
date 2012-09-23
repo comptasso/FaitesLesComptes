@@ -13,7 +13,7 @@ describe 'admin/cashes/index' do
     @cashes.each do |b|
       b.stub(:created_at).and_return(Time.now)
       b.stub(:updated_at).and_return(Time.now)
-      b.stub(:accounts).and_return [mock_model(Account, number:'5301')]
+      b.stub(:accounts).and_return [mock_model(Account, number:'5301')] 
     end
   end
 
@@ -30,12 +30,12 @@ describe 'admin/cashes/index' do
       page.should have_css('table', :count=>1)
     end
 
-    it 'mise au point de la chaine de test' do
-      page.find('table tbody').should have_css('tr', :count=>1)
+    it 'avec deux ligness' do
+      page.find('table tbody').should have_css('tr', :count=>2)
     end
 
     it "each row should show 2 icons (edit and delete)" do
-      page.find('tbody tr').should have_css('img',:count=>2)
+      page.find('tbody tr').should have_css('img',:count=>1)
     end
 
     it "each row should show edit icon" do

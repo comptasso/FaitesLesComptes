@@ -205,7 +205,7 @@ class Period < ActiveRecord::Base
 
 
   def bank_accounts
-    accounts.where('number LIKE ? AND number != ?', '51%', REM_CHECK_ACCOUNT[:number])
+    accounts.where('number LIKE ?', '512%')
   end
   
   def cash_accounts
@@ -397,15 +397,22 @@ class Period < ActiveRecord::Base
 
   private
 
-  # recopie les comptes de l'exercice précédent (s'il y en a un) en modifiant period_id
+  # recopie les comptes de l'exercice précédent (s'il y en a un) en modifiant period_id.
+  # s'il n'y en a pas, crée un compte pour chaque caisse et bank_account
   def copy_accounts
-return unless self.previous_period?
+   if self.previous_period?
     previous_period.accounts.all.each do |a|
       logger.debug  "Recopie du compte #{a.inspect}"
       b = a.dup
       b.period_id = self.id
       b.save!
       logger.debug  "Nouveau compte #{b.inspect}"
+    end
+      else
+        # organisme a créé une banque et une caisse par défaut et il faut leur créer des comptes
+        # utilisation de send car create_accounts est une méthode protected
+      organism.bank_accounts.each {|ba| ba.send(:create_accounts)}
+      organism.cashes.each {|c| c.send(:create_accounts)}
     end
   end
 

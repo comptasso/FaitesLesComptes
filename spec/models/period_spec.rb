@@ -3,10 +3,27 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-  # c.filter = {wip:true}
+ #  c.filter = {wip:true}
 end
 
 describe Period do
+
+  describe 'validations' do
+    it 'faire les tests de validation'
+  end
+  
+  describe 'after_create' , wip:true do 
+    before(:each) do
+      @organism= Organism.create(title: 'test asso', database_name:'assotest1')
+      @p = @organism.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
+    end
+    
+    it 'a un compte bancaire et un compte de caisse' do
+      @p.should have(2).accounts
+    end
+  end
+
+  context 'avec deux exercices' do
  
   before(:each) do
     @organism= Organism.create(title: 'test asso', database_name:'assotest1')
@@ -268,5 +285,5 @@ describe Period do
       end
     end
   end
- 
+  end
 end
