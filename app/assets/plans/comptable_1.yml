@@ -117,10 +117,8 @@
   title: Provisions pour dépréciation des comptes de débiteurs divers
 - number: '50'
   title: Valeurs mobiliéres de placement
-- number: '51'
-  title: Banques, établissements financiers et assimilés
-- number: '53'
-  title: Caisse
+- number: '511'
+  title: Chèque à encaisser
 - number: '54'
   title: Régies d'avance et accréditifs
 - number: '58'

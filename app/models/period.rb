@@ -88,7 +88,11 @@ class Period < ActiveRecord::Base
   before_create :should_not_have_more_than_two_open_periods, :fix_days
   before_save :should_not_exceed_24_months, 
     :cant_change_close_date_if_next_period
-  after_create :copy_accounts, :copy_natures
+  #
+  # 
+  #
+  after_create :create_plan, :create_bank_and_cash_accounts, :unless=> :previous_period?
+  after_create :copy_accounts, :copy_natures, :if=> :previous_period?
  
 
   # TODO voir la gestion des effacer dans les vues et dans le modèle. 
@@ -397,6 +401,17 @@ class Period < ActiveRecord::Base
 
   private
 
+  def create_plan
+     Utilities::PlanComptable.new.create_accounts(id, 'comptable_1.yml')
+  end
+
+  def create_bank_and_cash_accounts
+        # organisme a créé une banque et une caisse par défaut et il faut leur créer des comptes
+        # utilisation de send car create_accounts est une méthode protected
+     organism.bank_accounts.each {|ba| ba.send(:create_accounts)}
+      organism.cashes.each {|c| c.send(:create_accounts)}
+  end
+
   # recopie les comptes de l'exercice précédent (s'il y en a un) en modifiant period_id.
   # s'il n'y en a pas, crée un compte pour chaque caisse et bank_account
   def copy_accounts
@@ -408,11 +423,6 @@ class Period < ActiveRecord::Base
       b.save!
       logger.debug  "Nouveau compte #{b.inspect}"
     end
-      else
-        # organisme a créé une banque et une caisse par défaut et il faut leur créer des comptes
-        # utilisation de send car create_accounts est une méthode protected
-      organism.bank_accounts.each {|ba| ba.send(:create_accounts)}
-      organism.cashes.each {|c| c.send(:create_accounts)}
     end
   end
 

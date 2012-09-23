@@ -18,12 +18,12 @@ describe Period do
       @p = @organism.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     end
     
-    it 'a un compte bancaire et un compte de caisse' do
-      @p.should have(2).accounts
+    it 'les comptes du fichier comptable.yml plus le compte bancaire et le compte de caisse' do
+      @p.should have(106).accounts
     end
   end
 
-  context 'avec deux exercices' do
+  context 'avec deux exercices' do 
  
   before(:each) do
     @organism= Organism.create(title: 'test asso', database_name:'assotest1')
@@ -33,13 +33,8 @@ describe Period do
   end
 
   describe 'compte de remise de chèque' do
-    it 'sans compte doit le créer et le retourner' do
-      @p_2010.rem_check_account.number.should == REM_CHECK_ACCOUNT[:number]
-    end
-
+  
     it 'avec un compte le retourne' do
-      # on crée d'abord le compte
-      @p_2010.accounts.create!(REM_CHECK_ACCOUNT)
       @p_2010.rem_check_account.number.should == REM_CHECK_ACCOUNT[:number]
       # il ne doit y avoir qu'un seul compte
       @p_2010.accounts.where('number = ?', REM_CHECK_ACCOUNT[:number]).should have(1).account
@@ -64,7 +59,7 @@ describe Period do
 
     def error_messages
       @nat_error = "Des natures ne sont pas reliées à des comptes"
-      @compte_12_error = "Pas de compte 12 pour le résultat de l'exercice"
+     
       @open_error = 'Exercice déja fermé'
       @previous_error = "L'exercice précédent n'est pas fermé"
       @line_error = "Toutes les lignes d'écritures ne sont pas verrouillées"
@@ -78,7 +73,7 @@ describe Period do
 
     it 'p2010 should not be_closable' do
       @p_2010.closable?
-      @p_2010.errors[:close].should == [@nat_error,@compte_12_error]
+      @p_2010.errors[:close].should == [@nat_error]
     end
 
     context 'test des autres messages d erreur' do
@@ -86,7 +81,7 @@ describe Period do
       it 'un exercice déja fermé ne peut être fermé' do
         @p_2010.should_receive(:open).and_return(false)
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@open_error, @nat_error,@compte_12_error]
+        @p_2010.errors[:close].should == [@open_error, @nat_error]
       end
         
       it 'non fermeture de l exercice précédent' do
@@ -94,7 +89,7 @@ describe Period do
         @p_2010.should_receive(:previous_period).and_return(@a=double(Period))
         @a.should_receive(:open).and_return true
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@previous_error, @nat_error,@compte_12_error]
+        @p_2010.errors[:close].should == [@previous_error, @nat_error]
       end
 
       it 'des lignes non verrouillées' do
@@ -103,14 +98,14 @@ describe Period do
         @b.should_receive(:any?).at_least(1).times.and_return true
         @p_2010.lines.unlocked.any?.should be_true
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@nat_error,@line_error, @compte_12_error]
+        @p_2010.errors[:close].should == [@nat_error,@line_error]
       end
 
       it 'doit avoir un exercice suivant' do
         @p_2010.should_receive(:next_period?).and_return(false)
         @p_2010.stub_chain(:lines, :unlocked, :any?).and_return(false)
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@nat_error, @next_error, @compte_12_error] 
+        @p_2010.errors[:close].should == [@nat_error, @next_error]
       end
 
       it 'doit avoir un livre d OD' do
@@ -119,7 +114,7 @@ describe Period do
         @a.should_receive(:find_by_type).with('OdBook').and_return nil
         @p_2010.stub_chain(:lines, :unlocked, :any?).and_return(false)
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@nat_error, @od_error, @compte_12_error]
+        @p_2010.errors[:close].should == [@nat_error, @od_error]
       end
 
 
@@ -147,10 +142,10 @@ describe Period do
       
       before(:each) do
         
-        @acc60 = @p_2010.accounts.create!(number:'601', title:'test')
-        @acc70 = @p_2010.accounts.create!(number:'701', title:'test')
-        @acc61 = @p_2011.accounts.create!(number:'601', title:'test')
-        @acc71 = @p_2011.accounts.create!(number:'701', title:'test')
+        @acc60 = @p_2010.accounts.find_by_number '60'
+        @acc70 = @p_2010.accounts.find_by_number '701'
+        @acc61 = @p_2011.accounts.find_by_number '60'
+        @acc71 = @p_2011.accounts.find_by_number '701'
         @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc60.id)
         @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id)
         @ob= @organism.books.find_by_type('OutcomeBook')
