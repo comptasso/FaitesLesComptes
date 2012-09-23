@@ -9,7 +9,7 @@ RSpec.configure do |c|
 end
 
 describe CashControl do 
-  include OrganismFixture
+  include OrganismFixture 
 
   before(:each) do
     create_minimal_organism
@@ -182,8 +182,7 @@ describe CashControl do
         @p.nb_months.times do |i|
           d = date.months_since(i)
          Line.create!(narration: "test #{i}", counter_account:@c.current_account(@p),  debit: i+1, payment_mode: 'Espèces',
-            nature_id: @n.id, book_id: @ob.id, line_date:d ,
-          cash_id: @c.id)
+            nature_id: @n.id, book_id: @ob.id, line_date:d )
         end
         # création de lignes
       end

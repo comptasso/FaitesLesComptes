@@ -138,11 +138,9 @@ describe Period do
         @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id)
         @ob= @organism.books.find_by_type('OutcomeBook')
         @l6= Line.create!(book_id:@ob.id, debit:54, narration:'une ligne de dépense', counter_account:@ba.current_account(@p_2010),
-          nature_id:@n_dep.id, payment_mode:'Espèces', cash_id:1,
-          line_date:@p_2010.start_date)
+          nature_id:@n_dep.id, payment_mode:'Espèces', line_date:@p_2010.start_date)
         @l7= Line.create!(book_id:@ob.id, debit:99, narration:'une ligne de dépense', counter_account:@ba.current_account(@p_2010),
-          nature_id:@n_rec.id, payment_mode:'Espèces', cash_id:1,
-          line_date:@p_2010.start_date)
+          nature_id:@n_rec.id, payment_mode:'Espèces', line_date:@p_2010.start_date)
         
       end
 

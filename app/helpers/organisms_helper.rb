@@ -57,7 +57,7 @@ module OrganismsHelper
     when 'OutcomeBook' then  ['book_pave', 'outcome_book']
     when 'Period' then ['result_pave', 'result']
 #   when 'BankAccountBook' then ['bank_pave','bank_account_book']
-#   when 'CashBook' then ['cash_pave', 'cash_book']
+    when 'CashBook' then ['cash_pave', 'cash_book']
     end
     render partial: "organisms/#{partial_and_class[0]}", object: p,  locals: {:local_classes => "#{partial_and_class[1]} #{html_class}" }
   end

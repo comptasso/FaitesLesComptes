@@ -27,8 +27,9 @@ describe "cash_lines/index" do
     assign(:period, p)
     assign(:cash, c)
     assign(:monthly_extract, mce)
-    p.stub(:list_months).and_return ListMonths.new(p.start_date, p.close_date)
+    p.stub(:list_months).and_return ListMonths.new(p.start_date, p.close_date) 
     mce.stub(:lines).and_return([cl1,cl2])
+    mce.stub(:titles).and_return ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Sorties', 'Entrées']
     [cl1, cl2].each {|l| l.stub(:nature).and_return(n) }
     [cl1, cl2].each {|l| l.stub(:destination).and_return(nil) }
     [cl1, cl2].each {|l| l.stub(:editable?).and_return(true) }

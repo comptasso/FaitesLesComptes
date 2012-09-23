@@ -14,7 +14,7 @@ describe BankExtract do
     create_minimal_organism
    
     @p2012 = @p 
-    @be2= @ba.bank_extracts.create!(bank_account_id: @ba.id,
+    @be2= @ba.bank_extracts.create!(bank_account_id: @ba.id, 
       begin_date: Date.civil(2012,10,01),
       end_date: Date.civil(2012,10,31),
       begin_sold: 2012,
@@ -212,7 +212,7 @@ describe BankExtract do
       @cd.checks << @l1.children.first
       @cd.save!
 
-      @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id, line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', bank_account_id:@ba.id, book_id:@ib.id, nature_id:@n.id)
+      @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id, line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', book_id:@ib.id, nature_id:@n.id)
 
       @bel1 = BankExtractLine.new(bank_extract_id:@be2.id)
       @bel1.lines <<  @cd.debit_line

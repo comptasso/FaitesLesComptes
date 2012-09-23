@@ -33,8 +33,7 @@
     <td>
       <%= icon_to 'modifier.png', edit_admin_organism_bank_account_path(@organism, bank_account),
       :id=>"icon_modifier_bank_account_#{bank_account.id}" %>
-      <%= icon_to 'supprimer.png', [:admin,@organism,bank_account], :confirm => 'Etes vous sur ?',
-        :method => :delete if bank_account.bank_extracts.empty? %>
+     
     </td>
   
     

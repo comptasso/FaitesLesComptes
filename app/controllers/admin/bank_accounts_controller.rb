@@ -79,13 +79,13 @@ class Admin::BankAccountsController < Admin::ApplicationController
 
   # DELETE /bank_accounts/1
   # DELETE /bank_accounts/1.json
-  def destroy
-    @bank_account = BankAccount.find(params[:id])
-    @bank_account.destroy
-
-    respond_to do |format|
-      format.html { redirect_to admin_organism_bank_accounts_url(@organism) }
-      format.json { head :ok }
-    end
-  end
+#  def destroy
+#    @bank_account = BankAccount.find(params[:id])
+#    @bank_account.destroy
+#
+#    respond_to do |format|
+#      format.html { redirect_to admin_organism_bank_accounts_url(@organism) }
+#      format.json { head :ok }
+#    end
+#  end
 end

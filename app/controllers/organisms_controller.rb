@@ -29,9 +29,24 @@ class OrganismsController < ApplicationController
     @paves=[]
     @paves += @organism.books.all.reject {|b| b.class.name == 'OdBook'}
     @paves << @period
-#    @paves += @organism.bank_accounts.all.select {|ba| ba.bank_extracts.any? }
-#    @paves += @organism.cashes.all
+    @paves += cash_books 
+
+
+
     
+    
+  end
+
+
+  protected
+
+
+  def cash_books
+    @cash_books = @organism.cashes.map do |c|
+      cb = @organism.cash_books.new
+      cb.cash = c
+      cb
+    end
   end
 
 end

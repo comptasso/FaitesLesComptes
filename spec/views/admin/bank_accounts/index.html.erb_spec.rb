@@ -34,17 +34,15 @@ describe 'admin/bank_accounts/index' do
       page.find('table tbody').should have_css('tr', :count=>2)
     end
 
-    it "each row should show 2 icons (edit and delete)" do
-      page.find('tbody tr').should have_css('img',:count=>2)
+    it "each row should show 1 icon (edit)" do
+      page.find('tbody tr').should have_css('img',:count=>1)
     end
 
     it "each row should show delete icon" do
       page.all('tbody tr img').first[:src].should match /\/assets\/icones\/modifier.png/
     end
 
-    it "each row should show delete icon" do
-      page.all('tbody tr img').last[:src].should == '/assets/icones/supprimer.png'
-    end
+    
 
     context 'title row' do
       it "shows Banque" do

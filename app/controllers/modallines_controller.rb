@@ -10,7 +10,7 @@ class ModallinesController < ApplicationController
     @organism = @bank_account.organism
 
 
-    params[:line][:bank_account_id] = @bank_account.id
+    params[:line][:counter_account_id] = @bank_account.current_account(@period).id
     @line = Line.new(params[:line])
     if @line.save
       

@@ -9,7 +9,7 @@ end
 
 # spec request for testing admin cashes
 
-describe 'admin cash_control' do
+describe 'admin cash_control' do 
   include OrganismFixture
   
   

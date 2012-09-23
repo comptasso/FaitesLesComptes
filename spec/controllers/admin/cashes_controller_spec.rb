@@ -151,20 +151,20 @@ describe Admin::CashesController do
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested @ca" do
-      @a.stub(:find).with(@ca.id.to_s).and_return @ca
-      @ca.should_receive(:destroy)
-      delete :destroy,{:organism_id=>@o.id.to_s,  :id => @ca.id}, valid_session
-      
-    end 
-
-    it "redirects to the cashes list" do
-      @a.stub(:find).with(@ca.id.to_s).and_return @ca
-      @ca.should_receive(:destroy)
-      delete :destroy,{:organism_id=>@o.id.to_s,  :id => @ca.id}, valid_session
-      response.should redirect_to(admin_organism_cashes_url(@o))
-    end
-  end 
+#  describe "DELETE destroy" do
+#    it "destroys the requested @ca" do
+#      @a.stub(:find).with(@ca.id.to_s).and_return @ca
+#      @ca.should_receive(:destroy)
+#      delete :destroy,{:organism_id=>@o.id.to_s,  :id => @ca.id}, valid_session
+#
+#    end
+#
+#    it "redirects to the cashes list" do
+#      @a.stub(:find).with(@ca.id.to_s).and_return @ca
+#      @ca.should_receive(:destroy)
+#      delete :destroy,{:organism_id=>@o.id.to_s,  :id => @ca.id}, valid_session
+#      response.should redirect_to(admin_organism_cashes_url(@o))
+#    end
+#  end 
 
 end

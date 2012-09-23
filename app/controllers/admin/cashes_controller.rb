@@ -75,13 +75,13 @@ class Admin::CashesController < Admin::ApplicationController
 
   # DELETE /cashes/1
   # DELETE /cashes/1.json
-  def destroy
-    @cash = @organism.cashes.find(params[:id])
-    @cash.destroy
-
-    respond_to do |format|
-      format.html { redirect_to admin_organism_cashes_url(@organism) }
-      format.json { head :ok }
-    end
-  end
+#  def destroy
+#    @cash = @organism.cashes.find(params[:id])
+#    @cash.destroy
+#
+#    respond_to do |format|
+#      format.html { redirect_to admin_organism_cashes_url(@organism) }
+#      format.json { head :ok }
+#    end
+#  end
 end

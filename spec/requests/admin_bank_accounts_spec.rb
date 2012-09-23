@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
  # c.filter = {:wip=> true }
 #  c.exclusion_filter = {:js=> true }
 end
@@ -67,23 +67,7 @@ describe 'vue bank_accounts index' do
  
   describe 'index'  do
 
-    it 'dans la vue index,un compte peut être détruit' , :js=>true do
-      @o.bank_accounts.create!(:name=>'CrediX', :number=>'987ty')
-      @o.should have(2).bank_accounts
-      # à ce stade chacun des livres est vierge et peut donc être détruit.
-      visit admin_organism_bank_accounts_path(@o)
-      
-      all('tbody tr').should have(2).rows
-      within 'tbody tr:nth-child(2)' do
-        page.should have_content('CrediX')
-        page.click_link 'Supprimer'
-      end
-      alert = page.driver.browser.switch_to.alert
-      alert.accept
-      sleep 1     
-      all('tbody tr').should have(1).row
- 
-    end
+   
 
     it 'on peut le choisir dans la vue index pour le modifier' do
       visit admin_organism_bank_accounts_path(@o)

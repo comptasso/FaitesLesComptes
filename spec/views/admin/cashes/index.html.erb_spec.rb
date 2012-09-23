@@ -31,7 +31,7 @@ describe 'admin/cashes/index' do
     end
 
     it 'mise au point de la chaine de test' do
-      page.find('table tbody').should have_css('tr', :count=>2)
+      page.find('table tbody').should have_css('tr', :count=>1)
     end
 
     it "each row should show 2 icons (edit and delete)" do
@@ -42,9 +42,7 @@ describe 'admin/cashes/index' do
       page.all('tbody tr img').first[:src].should match /\/assets\/icones\/modifier.png/
     end
 
-    it "each row should show delete icon" do
-      page.all('tbody tr img').last[:src].should == '/assets/icones/supprimer.png'
-    end
+  
 
     context 'title row' do
       it "shows Caisse" do

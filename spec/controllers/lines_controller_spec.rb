@@ -12,7 +12,7 @@ describe LinesController do
  before(:each) do
     minimal_instances
     @b = mock_model(Book)
-    Book.stub(:find).with(@b.id.to_s).and_return @b 
+    Book.stub(:find).with(@b.id.to_s).and_return @b
 
   end
 
@@ -128,7 +128,7 @@ describe LinesController do
 
     def parameters
       { "nature_id"=>'1',  "line_date_picker"=>'18/04/2012',  "narration"=>'ligne valide', "credit"=>'25.00', "payment_mode"=>'Chèque',
-        "bank_account_id"=>'1'}
+        "counter_account_id"=>'1'} 
     end
 
     before (:each) do
@@ -197,7 +197,7 @@ describe LinesController do
     end
     
     it "fill the default values"  do
-      @a.should_receive(:new).with(line_date:Date.civil(2012,4,1), cash_id:11, bank_account_id:12)
+      @a.should_receive(:new).with(line_date:Date.civil(2012,4,1))
       get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes
     end
 
@@ -211,14 +211,17 @@ describe LinesController do
 
       it 'assigns previous line if one' do 
         @b.stub_chain(:lines, :new).and_return(@nl)
+        assigns(:line).should == @nl
         Line.should_receive(:find_by_id).with(20).and_return(@l)
+        @l.stub(:counter_account_id).and_return 1
+        @l.stub(:payment_mode).and_return 'Virement'
         get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes, :previous_line_id=>20
         assigns(:previous_line).should == @l
       end
     
 
       it 'new line date est préremplie' do
-        @a.should_receive(:new).with(:line_date=>Date.today, cash_id:11, bank_account_id:12)
+        @a.should_receive(:new).with(:line_date=>Date.today)
         get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes, :date=>Date.today
       end
 

@@ -9,24 +9,23 @@ describe "transfers/index" do
     assign(:organism, mock_model(Organism, title: 'spec cd'))
     @to_account =     assign(:to_account, mock_model(Account, number:'5101', long_name:'5101 banque'))
     @from_account =     assign(:from_account, mock_model(Account, number:'5301', long_name:'5301 caisse'))
-   
-
-    assign(:transfers, [
-        stub_model(Transfer,
-          :narration => "Premier transfert", 
+    @t1 = stub_model(Transfer,
+          :narration => "Premier transfert",
           :to_account =>  @to_account,
           :from_account => @from_account,
           :amount => 1.5,
           :date=> Date.today
-        ),
-        stub_model(Transfer,
+        )
+        @t2 = stub_model(Transfer,
           :narration => "Deuxieme Transfert",
           :to_account =>  @to_account,
           :from_account => @from_account,
           :amount => 150,
           :date=> (Date.today-5)
         )
-      ])
+
+    assign(:transfers, [@t1,@t2])
+    [@t1, @t2].each {|t| t.stub_chain(:line_to, :locked?).and_return false}
    
     render
   end

@@ -144,18 +144,18 @@ describe Admin::BankAccountsController do
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested bank_account" do
-       BankAccount.should_receive(:find).with(ba1.id.to_s).and_return(ba1)
-        delete :destroy, {:organism_id=>@o.id.to_s,  :id => ba1.id.to_s}, valid_session
-     
-    end 
-
-    it "redirects to the bank_accounts list" do
-      BankAccount.should_receive(:find).with(ba1.id.to_s).and_return(ba1)
-      delete :destroy, {:organism_id=>@o.id.to_s,  :id => ba1.id.to_s}, valid_session
-      response.should redirect_to(admin_organism_bank_accounts_url(@o))
-    end
-  end
+#  describe "DELETE destroy" do
+#    it "destroys the requested bank_account" do
+#       BankAccount.should_receive(:find).with(ba1.id.to_s).and_return(ba1)
+#        delete :destroy, {:organism_id=>@o.id.to_s,  :id => ba1.id.to_s}, valid_session
+#
+#    end
+#
+#    it "redirects to the bank_accounts list" do
+#      BankAccount.should_receive(:find).with(ba1.id.to_s).and_return(ba1)
+#      delete :destroy, {:organism_id=>@o.id.to_s,  :id => ba1.id.to_s}, valid_session
+#      response.should redirect_to(admin_organism_bank_accounts_url(@o))
+#    end
+#  end
 
 end

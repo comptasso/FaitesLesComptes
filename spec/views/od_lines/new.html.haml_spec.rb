@@ -9,7 +9,7 @@ describe "lines/new" do
   let(:book) {stub_model(Book) }
   let(:n) {stub_model(Nature, name:'nature')}
   let(:d) {stub_model(Destination, name:'destination')}
-  let(:acc) {stub_model(Account, accountable:mock_model(BankAccount, acronym:'DX 125'))}
+  let(:acc) {stub_model(Account, accountable:mock_model(BankAccount, acronym:'DX 125'))} 
 
   before(:each) do 
 
@@ -32,7 +32,7 @@ describe "lines/new" do
   end
 
   it 'give the info in a notice if previous line' do
-    view.stub(:icon_to).and_return('stub icone')
+    view.stub(:icon_to).and_return('stub icone') 
     pl = assign(:previous_line, stub_model(Line, id:1, narration:'test',
         book_id:book.id, debit:0, credit:12, line_date:Date.today, nature:n, destination:d, counter_account:acc))
     pl.stub(:support).and_return '5311 Banque'

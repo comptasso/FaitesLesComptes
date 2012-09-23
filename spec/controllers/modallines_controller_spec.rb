@@ -5,7 +5,7 @@ describe ModallinesController do
   
   before(:each) do
     minimal_instances
-    @p.stub(:guess_month).and_return(Date.today.month - 1)
+    @p.stub(:guess_month).and_return(Date.today.month - 1) 
   end
 
   describe "POST 'create" do
@@ -13,6 +13,7 @@ describe ModallinesController do
       BankExtract.should_receive(:find).with("1").and_return(@be = mock_model(BankExtract))
       @be.should_receive(:bank_account).and_return(@ba = mock_model(BankAccount))
       @ba.should_receive(:organism).and_return(mock_model(Organism))
+      @ba.should_receive(:current_account).with(@p).and_return(mock_model(Account))
       post 'create', {:bank_extract_id=>1, :line=>{}}, valid_session
     end
   end

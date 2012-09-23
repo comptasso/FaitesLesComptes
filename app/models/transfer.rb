@@ -25,7 +25,7 @@ class Transfer < ActiveRecord::Base
   validate :different_debit_and_credit
 
   after_create :create_lines
-  after_update :update_line_from, :unless=>lambda { self.line_from.locked }
+  after_update :update_line_from, :unless=>lambda { self.line_from.locked } 
   after_update :update_line_to, :unless=>lambda { self.line_to.locked }
 
   # cf pick_date_extension
