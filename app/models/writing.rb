@@ -12,12 +12,18 @@ class Writing < ActiveRecord::Base
 
   belongs_to :book
   
+  
   has_many :compta_lines, :as=>:owner, :dependent=>:destroy
+  
+  before_validation :complete_lines
+
 
   validates :book_id, :narration, :date, presence:true
   validates :date, :must_belong_to_period=>true
   validates :compta_lines, :two_compta_lines_minimum=>true
   validate :balanced?
+
+
 
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
 
@@ -37,6 +43,14 @@ class Writing < ActiveRecord::Base
     b =  (total_credit == total_debit)
     errors.add(:base, 'Ecriture déséquilibrée') unless b
     b
+  end
+
+  def complete_lines
+    compta_lines.each do |cl|
+      cl.line_date = date
+      cl.narration = narration
+      cl.book_id = book.id
+    end
   end
   
 end

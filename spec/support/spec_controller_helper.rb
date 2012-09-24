@@ -33,5 +33,7 @@ module SpecControllerHelper
     {user:@cu.id, period:@p.id, org_db:'test'}
   end
 
+  # cet alias permet d'utiliser les spec créés par scaffold sans avoir à rebaptiser 
+  # valid_session
   alias  valid_session session_attributes
 end

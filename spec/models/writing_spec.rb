@@ -2,13 +2,21 @@
 
 require 'spec_helper'
 
+RSpec.configure do |config|
+  # config.filter = {wip:true}
+end
+
 describe Writing do
+  include OrganismFixture
+
+  describe 'with stub models' do
 
   before(:each) do
     @o = mock_model(Organism)
     @b = mock_model(Book, :organism=>@o)
     @o.stub(:find_period).and_return true
-    Writing.any_instance.stub_chain(:compta_lines, :count).and_return 2
+    Writing.any_instance.stub_chain(:compta_lines, :size).and_return 2
+    Writing.any_instance.stub(:complete_lines).and_return true
    
 
   end
@@ -67,7 +75,7 @@ describe Writing do
 
 
     it 'ne doit pas être vide' do
-      @w.stub_chain(:compta_lines, :count).and_return 1
+      @w.stub_chain(:compta_lines, :size).and_return 1
       @w.should_not be_valid
     end
 
@@ -111,6 +119,40 @@ describe Writing do
 
   end
 
+  end
 
+context 'with real models' do
+
+  describe 'save' do
+
+  before(:each) do
+    create_minimal_organism
+    @l1 = ComptaLine.new(account_id:Account.first.id, debit:0, credit:10)
+    @l2 = ComptaLine.new(account_id:Account.last.id, debit:10, credit:0)
+    @r = @od.writings.new(date:Date.today, narration:'Une écriture')
+    @r.compta_lines<< @l1
+    @r.compta_lines<< @l2
+  end
+
+    it 'find period' do
+      @r.book.organism.should == @o
+      @r.should have(2).compta_lines
+      @r.compta_lines.size.should == 2
+
+    end
+
+    it 'should save' do
+      @r.valid?
+      @r.should be_valid
+      expect {@r.save}.to change {Writing.count}.by(1)
+    end
+
+    it 'should save the lines' do
+      expect {@r.save}.to change {Line.count}.by(2)
+    end
+
+
+  end
+end
 
 end

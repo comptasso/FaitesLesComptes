@@ -1,8 +1,11 @@
 class Compta::WritingsController < Compta::ApplicationController
+
+  before_filter :find_book, :only=> [:index, :new]
+
   # GET /writings
   # GET /writings.json
   def index
-    @writings = Writing.all
+    @writings = @book.writings.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,7 +17,6 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings/1.json
   def show
     @writing = Writing.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @writing }
@@ -24,7 +26,7 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings/new
   # GET /writings/new.json
   def new
-    @book = Book.find(params[:book_id])
+    
     @writing = @book.writings.new
     2.times {@writing.compta_lines.build}
     respond_to do |format|
@@ -80,5 +82,11 @@ class Compta::WritingsController < Compta::ApplicationController
       format.html { redirect_to writings_url }
       format.json { head :no_content }
     end
+  end
+
+  protected
+
+  def find_book
+    @book = Book.find(params[:book_id])
   end
 end
