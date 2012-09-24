@@ -1,0 +1,3 @@
+%li.nav-header.no-link= link_to menu_book.title, '#'
+%li= link_to('Afficher', compta_book_writings_path(menu_book))
+%li= link_to('Ecrire', new_compta_book_writing_path(menu_book)) if menu_book.type == 'OdBook'

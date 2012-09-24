@@ -24,8 +24,9 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings/new
   # GET /writings/new.json
   def new
-    @writing = Writing.new
-
+    @book = Book.find(params[:book_id])
+    @writing = @book.writings.new
+    2.times {@writing.compta_lines.build}
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @writing }

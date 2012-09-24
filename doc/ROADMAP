@@ -965,7 +965,8 @@ OK - Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait
 Nettoyer od_lines_controller ? et routes associées (fait-on de l'OD en zone saisie)
 La suppression d'une compta ne semble pas supprimer la table sqlite associée
 -------------------------------- Writing-------------------------------------------------------
-Créer un scaffold writing pour la partie compta
+OK - Créer un scaffold writing pour la partie compta
+OK - writing_id sera être l'owner de la ligne
 Faire un form avec nested_arguments pour saisir une new écriture (avec nombre de lignes pouvant être augmenté ou annuler)
 --------------------------------- TODO ---------------------------------------------------------
 L'affichage des comptes 1 à 5 n'a pas forcément besoin de nature et destination

@@ -33,12 +33,15 @@ Faitesvoscomptes::Application.routes.draw do
         end
       end
     end
+    resources :books do
+      resources :writings
+    end
     resources :periods do
       resource :balance
       resources :accounts
       resource :listing
       resource :general_ledger
-      resources :writings
+      
       
     end
     

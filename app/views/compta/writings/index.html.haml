@@ -8,10 +8,10 @@
 
   - @writings.each do |writing|
     %tr
-      %td= link_to 'Show', writing
-      %td= link_to 'Edit', edit_writing_path(writing)
-      %td= link_to 'Destroy', writing, :confirm => 'Are you sure?', :method => :delete
+      %td= link_to 'Show', ['compta', @book,writing]
+      %td= link_to 'Edit', edit_compta_book_writing_path(@book, writing)
+      %td= link_to 'Destroy', ['compta',@book, writing], :confirm => 'Are you sure?', :method => :delete
 
 %br
 
-= link_to 'New Writing', new_writing_path
+= link_to 'New Writing', new_compta_book_writing_path(@book)

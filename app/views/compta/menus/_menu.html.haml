@@ -28,14 +28,18 @@
       %ul.dropdown-menu
         - @organism.periods.each do |p|
           %li= link_to_unless(current_period?(p), p.exercice, change_admin_organism_period_path(@organism, p)) {|name| content_tag(:span, :class=>'disable') {name} }
+
+
   - unless @organism.nil? && @organism.periods.count <= 1
     %li.dropdown(class="#{controller.controller_name == "writings" ? "active" : nil}")
       %a{:href=>'#', :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }
         ECRITURES
         %b.caret
-      %ul.dropdown-menu
-        %li= link_to('Afficher', compta_period_writings_path(@period))
-        %li= link_to('Ecrire', new_compta_period_writings_path(@period))
+      = content_tag(:ul, :class => "dropdown-menu") do
+        = render :partial=>'compta/menus/menu_book', :collection=>@organism.books, :spacer_template=>'menus/divider'
+
+
+
 
   %li= yield :menu
 

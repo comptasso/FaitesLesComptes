@@ -9,6 +9,7 @@ class Book < ActiveRecord::Base
   include Utilities::Sold
   
   belongs_to :organism
+  has_many :writings, :dependent=>:destroy
   has_many :lines, dependent: :destroy 
   # les chèques en attente de remise en banque
   #  has_many :pending_checks,
