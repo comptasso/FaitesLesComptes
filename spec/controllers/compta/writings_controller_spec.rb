@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |config|
-  config.filter = {wip:true}
+ # config.filter = {wip:true}
 end
 
 describe Compta::WritingsController do
@@ -11,7 +11,7 @@ describe Compta::WritingsController do
 
   before(:each) do
     minimal_instances
-    @p.stub(:all_natures_linked_to_account?).and_return true 
+    @p.stub(:all_natures_linked_to_account?).and_return true  
     @b = mock_model(Book)
     Book.stub(:find).and_return(@b)
   end
@@ -19,7 +19,8 @@ describe Compta::WritingsController do
   # Writing. As you add validations to Writing, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {book_id:1, date:Date.today, narration:'Ecriture'}
+    {book_id:@b.id, date:Date.today, narration:'Ecriture', :compta_lines_attributes=>{'0'=>{account_id:1, debit:100, credit:0},
+        '1'=>{account_id:2, debit:0, credit:100}}}
   end
   
   
@@ -60,44 +61,46 @@ describe Compta::WritingsController do
     end
   end
 
-  describe "POST create" , wip:true do
+  describe "POST create"  do
 
     before(:each) do
-#      @w = Writing.new(valid_attributes)
-#      @w.stub_chain(:compta_lines, :count).and_return 2
-#      @w.stub(:balanced?).and_return true
+      #      @w = Writing.new(valid_attributes)
+      #      @w.stub_chain(:compta_lines, :count).and_return 2
+      #      @w.stub(:balanced?).and_return true
     end
 
-    describe "with valid params" do
-      it "creates a new Writing" do
-        expect {
-          post :create, {book_id:@b.id, :writing => valid_attributes}, valid_session
-        }.to change(Writing, :count).by(1)
+    describe "with valid params"  do
+
+      before(:each) do
+        @r = mock_model(Writing)
+        Writing.stub(:new).with(@r.to_param).and_return @r
+        
       end
 
       it "assigns a newly created writing as @writing" do
-        post :create, {:writing => valid_attributes}, valid_session
+        @r.stub(:save).and_return(true)
+        post :create, {book_id:@b.to_param, :writing => @r.to_param}, valid_session
         assigns(:writing).should be_a(Writing)
-        assigns(:writing).should be_persisted
       end
 
       it "redirects to the created writing" do
-        post :create, {:writing => valid_attributes}, valid_session
-        response.should redirect_to(Writing.last)
+        @r.stub(:save).and_return(@r)
+        post :create, {book_id:@b.to_param, :writing => @r.to_param }, valid_session
+        response.should redirect_to compta_book_writing_url(@b, assigns(:writing))
       end
     end
 
     describe "with invalid params"   do
       it "assigns a newly created but unsaved writing as @writing" do
         # Trigger the behavior that occurs when invalid params are submitted
-        Writing.any_instance.stub(:save).and_return(false)
+        @r.stub(:save).and_return(false)
         post :create, {book_id:@b.id, :writing => {}}, valid_session
         assigns(:writing).should be_a_new(Writing)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
-        Writing.any_instance.stub(:save).and_return(false)
+       @r.stub(:save).and_return(false)
         post :create, {book_id:@b.id, :writing => {}}, valid_session
         response.should render_template("new")
       end
@@ -105,61 +108,74 @@ describe Compta::WritingsController do
   end
 
   describe "PUT update" do
+
+    before(:each) do
+      @w = mock_model(Writing).as_null_object
+      @va = {id:@w.id, book_id:@b.id, date:Date.today, narration:'Ecriture', :compta_lines_attributes=>{'0'=>{account_id:1, debit:100, credit:0},
+          '1'=>{account_id:2, debit:0, credit:100}} }
+      Writing.stub(:find).with(@w.to_param).and_return @w
+    end
+
     describe "with valid params" do
       it "updates the requested writing" do
-        writing = Writing.create! valid_attributes
+     
         # Assuming there are no other writings in the database, this
         # specifies that the Writing created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Writing.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => writing.to_param, :writing => {'these' => 'params'}}, valid_session
+        @w.should_receive(:update_attributes).with({'these' => 'params'}).and_return @w
+        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {'these' => 'params'}}, valid_session
       end
 
       it "assigns the requested writing as @writing" do
-        writing = Writing.create! valid_attributes
-        put :update, {:id => writing.to_param, :writing => valid_attributes}, valid_session
-        assigns(:writing).should eq(writing)
+        
+        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {'these' => 'params'}}, valid_session
+        assigns(:writing).should eq(@w)
       end
 
       it "redirects to the writing" do
-        writing = Writing.create! valid_attributes
-        put :update, { :id => writing.to_param, :writing => valid_attributes}, valid_session
-        response.should redirect_to(writing)
+        @w.stub(:update_attributes).and_return true
+        put :update, {book_id:@b.id,  :id => @w.to_param, :writing => @va}, valid_session
+        response.should redirect_to compta_book_writing_url(@b, @w)
       end
     end
 
     describe "with invalid params"  do
       it "assigns the writing as @writing" do
-        writing = Writing.create! valid_attributes
+        
         # Trigger the behavior that occurs when invalid params are submitted
         Writing.any_instance.stub(:save).and_return(false)
-        put :update, {book_id:@b.id, :id => writing.to_param, :writing => {}}, valid_session
-        assigns(:writing).should eq(writing)
+        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {}}, valid_session
+        assigns(:writing).should eq(@w)
       end
 
       it "re-renders the 'edit' template" do
-        writing = Writing.create! valid_attributes
+        
         # Trigger the behavior that occurs when invalid params are submitted
         Writing.any_instance.stub(:save).and_return(false)
-        put :update, {book_id:@b.id, :id => writing.to_param, :writing => {}}, valid_session
+        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {}}, valid_session
         response.should render_template("edit")
       end
     end
   end
 
   describe "DELETE destroy" do
+    
+    before(:each) do
+      @w = mock_model(Writing)
+      Writing.stub(:find).and_return(@w)
+    end
+
+
     it "destroys the requested writing" do
-      writing = Writing.create! valid_attributes
-      expect {
-        delete :destroy, {:id => writing.to_param}, valid_session
-      }.to change(Writing, :count).by(-1)
+      @w.should_receive(:destroy).and_return true
+      delete :destroy, {book_id:@b.to_param, :id => @w.to_param}, valid_session
     end
 
     it "redirects to the writings list" do
-      writing = Writing.create! valid_attributes
-      delete :destroy, {:id => writing.to_param}, valid_session
-      response.should redirect_to(writings_url)
+      @w.stub(:destroy).and_return true
+      delete :destroy, {book_id:@b.to_param, :id => @w.to_param}, valid_session
+      response.should redirect_to(compta_book_writings_url(@b))
     end
   end
 
