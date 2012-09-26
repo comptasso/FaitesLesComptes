@@ -968,6 +968,7 @@ La suppression d'une compta ne semble pas supprimer la table sqlite associée
 OK - Créer un scaffold writing pour la partie compta
 OK - writing_id sera être l'owner de la ligne
 Faire un form avec nested_arguments pour saisir une new écriture (avec nombre de lignes pouvant être augmenté ou annuler)
+S'inspirer de line pour afficher les flash notice avec previous_line et envoyer sur new
 --------------------------------- TODO ---------------------------------------------------------
 L'affichage des comptes 1 à 5 n'a pas forcément besoin de nature et destination
 On manque d'un affichage des écritures

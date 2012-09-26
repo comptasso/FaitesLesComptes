@@ -46,11 +46,15 @@ class Writing < ActiveRecord::Base
   end
 
   def complete_lines
+   puts "nombre de lignes de comptes #{compta_lines.size}"
     compta_lines.each do |cl|
+      puts cl.inspect
       cl.line_date = date
       cl.narration = narration
       cl.book_id = book.id
+      logger.debug cl.inspect
     end
+    true
   end
   
 end

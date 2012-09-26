@@ -43,12 +43,13 @@ class Compta::WritingsController < Compta::ApplicationController
   # POST /writings
   # POST /writings.json
   def create
-    @writing = Writing.new(params[:writing])
+    @writing = @book.writings.new(params[:writing])
 
     respond_to do |format|
       if @writing.save
         format.html { redirect_to compta_book_writing_url(@book, @writing), notice: 'Writing was successfully created.' }
       else
+        flash[:alert]= @writing.errors.messages
         format.html { render action: "new" }
       end
     end
