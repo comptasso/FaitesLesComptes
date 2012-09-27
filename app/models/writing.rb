@@ -45,6 +45,10 @@ class Writing < ActiveRecord::Base
     b
   end
 
+  def locked?
+    compta_lines.all.select {|cl| cl.locked?}.any?
+  end
+
   def complete_lines
    puts "nombre de lignes de comptes #{compta_lines.size}"
     compta_lines.each do |cl|

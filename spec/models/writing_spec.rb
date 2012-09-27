@@ -17,8 +17,6 @@ describe Writing do
     @o.stub(:find_period).and_return true
     Writing.any_instance.stub_chain(:compta_lines, :size).and_return 2
     Writing.any_instance.stub(:complete_lines).and_return true
-   
-
   end
 
   def valid_parameters
@@ -109,6 +107,10 @@ describe Writing do
       @w.should_not be_balanced
 
     end
+
+    it 'locked? est vrai si une ligne est verrouillée'
+    
+    it 'lock doit verrouiller toutes les lignes'
 
     it 'et true s ils sont égaux' do
       @w.stub(:total_credit).and_return 541
