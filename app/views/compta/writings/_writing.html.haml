@@ -1,0 +1,23 @@
+.row-fluid.writing
+  .span12.title
+    .span2
+      Date :
+      =l writing.date
+    .span6
+      Libellé :
+      =writing.narration
+    .span2
+      Réf :
+      =writing.ref
+    .span2
+      Actions :
+      = icon_to 'modifier.png', edit_compta_book_writing_path(@book, writing) unless writing.locked?
+      = icon_to('supprimer.png', ['compta', @book, writing], :method=>:delete, :confirm=>'Etes vous sur ?') unless writing.locked?
+
+  - writing.compta_lines.each do |cl|
+    .row-fluid
+      .span12.compta_lines
+        .span6{:class=>class_style(cl) }
+          =cl.account.long_name
+        .span3.numeric=debit_credit cl.debit
+        .span3.numeric=debit_credit cl.credit

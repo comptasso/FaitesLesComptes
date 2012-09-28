@@ -1,17 +1,11 @@
 %h1 Listing writings
 
-%table
-  %tr
-    %th
-    %th
-    %th
+%p
+  A faire après avoir introduit un modèle writing pour l'écriture des income et Outcome
+%p
+  A défaut, il faudrait avoir une fonction index capable de chercher les lignes
+  Outcome avec nature comme filtre et construire une writing à la volée
+  Et pour OD, il faudrait prendre les transfert, check_deposits et writings
+  avec des méthodes pour transfert et check_deposit qui transforment en writings
 
-  - @writings.each do |writing|
-    %tr
-      %td= link_to 'Show', ['compta', @book,writing]
-      %td= link_to 'Edit', edit_compta_book_writing_path(@book, writing)
-      %td= link_to 'Destroy', ['compta',@book, writing], :confirm => 'Are you sure?', :method => :delete
-
-%br
-
-= link_to 'New Writing', new_compta_book_writing_path(@book)
+= render @writings

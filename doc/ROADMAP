@@ -964,10 +964,13 @@ NON - On pourrait voir comment se passer du champ counter_account
 OK - Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait utilisé en zone compta,
 Nettoyer od_lines_controller ? et routes associées (fait-on de l'OD en zone saisie)
 La suppression d'une compta ne semble pas supprimer la table sqlite associée
+------------------------------------Bugs ----------------------------------------------------
+Le modal form de balance ne redonne pas l'ensemble des comptes possibles mais seulement la partie de liste affichée
 -------------------------------- Writing-------------------------------------------------------
 OK - Créer un scaffold writing pour la partie compta
 OK - writing_id sera être l'owner de la ligne
 Faire un form avec nested_arguments pour saisir une new écriture (avec nombre de lignes pouvant être augmenté ou annuler)
+Faire un partial pour writing
 S'inspirer de line pour afficher les flash notice avec previous_line et envoyer sur new
 Quand on verrouille une écriture, c'est l'ensemble des compta_lines qui doit l'être
 Quand on verrouille une compta_line, c'est l'ensemble qui doit l'être

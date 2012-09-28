@@ -14,7 +14,10 @@ class ComptaLine < ActiveRecord::Base
   belongs_to :bank_account
 #  belongs_to :cash
   belongs_to :owner, :polymorphic=>true  # pour les transferts uniquement (à ce stade)
-  has_and_belongs_to_many :bank_extract_lines, :uniq=>true # pour les rapprochements bancaires
+  has_and_belongs_to_many :bank_extract_lines,
+    :join_table=>:bank_extract_lines_lines,
+    :foreign_key=>'line_id',
+    :uniq=>true # pour les rapprochements bancaires
 
   # voir au besoin les validators qui sont dans lib/validators
   validates :debit, :credit, numericality: true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
@@ -30,13 +33,13 @@ class ComptaLine < ActiveRecord::Base
   validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit_if_locked=>true
 
   # transforme ComptaLine en un Line, utile pour les tests
-  def to_line
-    if persisted?
-      Line.find(id)
-    else
-      Line.new(attributes)
-    end
-    
-  end
+#  def to_line
+#    if persisted?
+#      Line.find(id)
+#    else
+#      Line.new(attributes)
+#    end
+#
+#  end
 
 end

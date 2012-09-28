@@ -9,14 +9,11 @@
 class Writing < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
-
   belongs_to :book
-  
-  
+ 
   has_many :compta_lines, :as=>:owner, :dependent=>:destroy
   
   before_validation :complete_lines
-
 
   validates :book_id, :narration, :date, presence:true
   validates :date, :must_belong_to_period=>true
