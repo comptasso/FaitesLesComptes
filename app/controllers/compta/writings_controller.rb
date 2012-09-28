@@ -23,6 +23,7 @@ class Compta::WritingsController < Compta::ApplicationController
     end
   end
 
+  
   # GET /writings/new
   # GET /writings/new.json
   def new

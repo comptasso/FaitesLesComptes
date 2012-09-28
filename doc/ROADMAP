@@ -969,9 +969,12 @@ Le modal form de balance ne redonne pas l'ensemble des comptes possibles mais se
 -------------------------------- Writing-------------------------------------------------------
 OK - Créer un scaffold writing pour la partie compta
 OK - writing_id sera être l'owner de la ligne
-Faire un form avec nested_arguments pour saisir une new écriture (avec nombre de lignes pouvant être augmenté ou annuler)
-Faire un partial pour writing
+OK - Faire un form avec nested_arguments pour saisir une new écriture (avec nombre de lignes pouvant être augmenté ou annuler)
+OK - Faire un partial pour writing
 S'inspirer de line pour afficher les flash notice avec previous_line et envoyer sur new
+Modifier l'icone plus pour en faire un bouton ?
+Le bouton créer ligne ne doit pas s'afficher si debit != credit
+L'écart devrait se mettre à jour et être affiché sur la page (ou inséré d'emblée dans le champ suplémentaire)
 Quand on verrouille une écriture, c'est l'ensemble des compta_lines qui doit l'être
 Quand on verrouille une compta_line, c'est l'ensemble qui doit l'être
 On doit avoir une action qui permet de verrouiller l'écriture

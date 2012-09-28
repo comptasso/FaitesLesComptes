@@ -315,6 +315,9 @@ fr:
         update: Modifier ce virement
       user:
         create: Entrée
+      writing:
+        create: Créer l'écriture
+        update: Enregistrer
     
         
 

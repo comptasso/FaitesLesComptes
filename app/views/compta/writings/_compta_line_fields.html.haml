@@ -1,0 +1,14 @@
+.span12.writing_line_form
+  =builder.association :account, :label=> 'Compte',  :wrapper_html=>{class: "span3", id:'td_cca'}, input_html: {class: "span8"}, :label_html=>{class:'span4'}, |
+          :collection => @period.accounts, :label_method=> :long_name, :value_method=> :id, :required=>true
+
+  =builder.input :debit, :wrapper_html=> {class: "span3"}, :label_html=>{class:'span4'},                         |
+            input_html:{class: "numeric decimal span8", value:two_decimals(builder.object.debit) }, :as=>:french_decimal
+
+  =builder.input :credit, :wrapper_html=> {class: "span3"}, :label_html=>{class:'span4'},                         |
+            input_html:{class: "numeric decimal span8", value:two_decimals(builder.object.credit) }, :as=>:french_decimal
+
+  %a.add_form_line= image_tag('icones/nouveau.png')
+  =builder.hidden_field :_destroy
+  =link_to_function image_tag('icones/supprimer.png'), "remove_writing_line_form(this)"
+ 

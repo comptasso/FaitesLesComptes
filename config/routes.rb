@@ -34,7 +34,7 @@ Faitesvoscomptes::Application.routes.draw do
       end
     end
     resources :books do
-      resources :writings
+      resources :writings 
     end
     resources :periods do
       resource :balance
