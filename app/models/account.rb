@@ -28,8 +28,6 @@ class Account < ActiveRecord::Base
   # les lignes sont trouvées par counter_account_id
   has_many :counterlines, :foreign_key=>'counter_account_id', :class_name=>'Line'
 
-
-
   # un compte a plusieurs transferts (en fait c'est limité aux comptes bancaires et caisses)
   # TODO peut être rajouter un :conditions
   has_many :d_transfers, :as=>:to_account, :class_name=>'Transfer'
