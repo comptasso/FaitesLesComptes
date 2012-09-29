@@ -3,10 +3,10 @@
           :collection => @period.accounts, :label_method=> :long_name, :value_method=> :id, :required=>true
 
   =builder.input :debit, :wrapper_html=> {class: "span3"}, :label_html=>{class:'span4'},                         |
-            input_html:{class: "numeric decimal span8", value:two_decimals(builder.object.debit) }, :as=>:french_decimal
+            input_html:{class: "numeric debit decimal span8", value:two_decimals(builder.object.debit) }, :as=>:french_decimal
 
   =builder.input :credit, :wrapper_html=> {class: "span3"}, :label_html=>{class:'span4'},                         |
-            input_html:{class: "numeric decimal span8", value:two_decimals(builder.object.credit) }, :as=>:french_decimal
+            input_html:{class: "numeric credit decimal span8", value:two_decimals(builder.object.credit) }, :as=>:french_decimal
 
   %a.add_form_line= image_tag('icones/nouveau.png')
   =builder.hidden_field :_destroy

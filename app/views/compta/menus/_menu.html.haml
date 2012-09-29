@@ -33,7 +33,7 @@
   - unless @organism.nil? && @organism.periods.count <= 1
     %li.dropdown(class="#{controller.controller_name == "writings" ? "active" : nil}")
       %a{:href=>'#', :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }
-        ECRITURES
+        JOURNAUX
         %b.caret
       = content_tag(:ul, :class => "dropdown-menu") do
         = render :partial=>'compta/menus/menu_book', :collection=>@organism.books, :spacer_template=>'menus/divider'
