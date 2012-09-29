@@ -9,6 +9,8 @@
 class Writing < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
+  pick_date_for :date
+
   belongs_to :book
  
   has_many :compta_lines, :as=>:owner, :dependent=>:destroy
@@ -20,11 +22,9 @@ class Writing < ActiveRecord::Base
   validates :compta_lines, :two_compta_lines_minimum=>true
   validate :balanced?
 
-
-
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
 
-  pick_date_for :date
+  default_scope order('date ASC')
 
   def total_debit
     compta_lines.sum(:debit)
@@ -40,6 +40,18 @@ class Writing < ActiveRecord::Base
     b =  (total_credit == total_debit)
     errors.add(:base, 'Ecriture déséquilibrée') unless b
     b
+  end
+
+  # lock verrouille toutes les lignes de l'écriture
+  def lock
+    Writing.transaction do
+      compta_lines.all.each do |cl|
+        unless cl.locked?
+        cl.locked = true
+        cl.save
+      end
+      end
+    end
   end
 
   def locked?

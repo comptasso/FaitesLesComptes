@@ -87,6 +87,8 @@ function stringToFloat(jcdata) {
     }
 }
 
+// prend un nombre et en fait une chaîne avec deux décimales et 
+// une virgule comme séparateur décimal
 function numberWithPrecision(number) {
   var part1, part2, parts;
   if (number === undefined) {
@@ -107,6 +109,15 @@ function numberWithPrecision(number) {
     }
 }
 
+function $f_two_decimals() {
+    var number = stringToFloat(this.value);
+    if (isNaN(number)) {
+        this.value = '0.00';
+    } else {
+        this.value = number.toFixed(2);
+    }
+}
+
 // série de fonction qui prépare les champs débit et crédit pour la saisie
 // quand on entre dans un champ qui est à 0, on le vide
 function $f_empty() {
@@ -114,17 +125,12 @@ function $f_empty() {
         this.value = '';
     }
 }
-// quand on le quitte et qu'il est vide, on le met à zero'
-function $f_zero() {
-    if (this.value === '') {
-        this.value = '0.00';
-    }
-// return false; jQuery dit qu'il faut retourner false mais alors on perd l'affichage du curseur
-}
+
 
 jQuery(function () {
     $('.decimal').live('focus', $f_empty); //vide le champ s'il est à zero (pour faciliter la saisie)
-    $('.decimal').live('blur', $f_zero); // met zero dans le champ s'il est vide
+    $('.decimal').live('blur', $f_two_decimals);
+   
 });
 
 

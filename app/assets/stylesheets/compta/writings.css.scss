@@ -1,12 +1,23 @@
 // Place all the styles related to the writings controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.compta_writings {
+  .champ h3 span#sold {
+    color: white;
+    font-size: x-small;
+    float: right;
+    margin-right: 10px;
+  }
+
+  }
+
+
+
 .writing {
 
-  border: solid 1px;
-
-
   
+   
   .title, .compta_lines {
     padding-left: 2%;
     padding-right: 2%;
@@ -15,6 +26,7 @@
 
     .title {
         font-weight: bold;
+        background-color: #dbffdb;
         }
 
   .compta_lines .credit {

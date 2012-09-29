@@ -1,4 +1,22 @@
+= content_for :menu do
+  = icon_to 'navigation90.png', compta_book_writings_path(@book)
+
+
+- if @previous_writing
+  .alert.notice
+    %a.close(data-dismiss="alert")
+      x
+    %strong
+      = "Ligne n°#{@previous_writing.id} créée : #{@previous_writing.narration}"
+      = icon_to 'modifier.png', edit_compta_book_writing_path(@book, @previous_writing)
+      = icon_to 'supprimer.png', ['compta', @book,@previous_writing], :method=>:delete, :confirm=>'Etes vous sur ?'
+
+
 .champ
-  %h3 Nouvelle écriture
+  %h3 
+    Nouvelle écriture
+    %span#sold
+      Solde :
+      %span#sold_value
   .inner-champ
     =render 'form'

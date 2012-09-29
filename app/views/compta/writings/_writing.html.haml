@@ -13,6 +13,7 @@
       Actions :
       = icon_to 'modifier.png', edit_compta_book_writing_path(@book, writing) unless writing.locked?
       = icon_to('supprimer.png', ['compta', @book, writing], :method=>:delete, :confirm=>'Etes vous sur ?') unless writing.locked?
+      = icon_to('verrouiller.png', lock_compta_book_writing_path(@book, writing), :method=>:post) unless writing.locked?
 
   - writing.compta_lines.each do |cl|
     .row-fluid

@@ -2,6 +2,12 @@
 
 var $, jQuery;
 
+// la mise en forme des champs de saise des montants (debit et credit) est assurée
+// par la classe .decimal et les fonctions qui sont définies dans application.js
+// $f_empty pour vider un champ quand on entre et qu'il est à zero
+// $f_two_decimals pour mettre deux décimales quand on sort du champ et le
+// remettre à zero si on a rien rentré.
+
 // On cache tous les sigles plus sauf celui de la dernière ligne
 // puis on relie le click de cette image au lien qui ajoute la ligne
 //
@@ -53,13 +59,17 @@ function $nb_lines() {
     return i;
 }
 
+// vérifie si la ligne peut être enregistrée et affiche le bouton si oui
+// deux conditions sont testées : au moins une ligne remplie et une écriture équilibrée
+// Affiche le solde dans la zone h3
 function $check_submit() {
-    var bal = $balanced(), nb_lines = $nb_lines();
-    if ((bal === true) && (nb_lines > 1)) {
+    var bal = $balance(), nb_lines = $nb_lines();
+    if ((bal === 0) && (nb_lines > 1)) {
         $('input.btn').show();
     } else {
         $('input.btn').hide();
     }
+    $('h3 #sold_value').text(numberWithPrecision(bal));
 }
 
 // retire une compta_line du formulaire ou plutôt la cache
@@ -97,7 +107,9 @@ jQuery(function () {
     $('.compta_writings #add_line_link').hide();
     if ($('.compta_writings').size() > 0) {
         $deal_icon_plus();
+        $check_submit();
     }
+    
     // $check_submit masque le bouton submit si les conditions ne sont pas remplies
     // conditions 1: au moins une ligne remplie
     // condition 2 : écriture équilibrée

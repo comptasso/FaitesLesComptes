@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 class Compta::WritingsController < Compta::ApplicationController
 
   before_filter :find_book
@@ -27,8 +29,10 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings/new
   # GET /writings/new.json
   def new
-    
-    @writing = @book.writings.new
+    @writing = @book.writings.new(date: flash[:date])
+    if flash[:previous_writing_id]
+      @previous_writing = Writing.find_by_id(flash[:previous_writing_id])
+    end
     2.times {@writing.compta_lines.build}
     respond_to do |format|
       format.html # new.html.erb
@@ -41,6 +45,14 @@ class Compta::WritingsController < Compta::ApplicationController
     @writing = Writing.find(params[:id])
   end
 
+  # POST lock
+  # action qui verrouille l'écriture
+  def lock
+    @writing = Writing.find(params[:id])
+    @writing.lock
+    redirect_to compta_book_writings_url(@book)
+  end
+
   # POST /writings
   # POST /writings.json
   def create
@@ -48,7 +60,9 @@ class Compta::WritingsController < Compta::ApplicationController
 
     respond_to do |format|
       if @writing.save
-        format.html { redirect_to compta_book_writing_url(@book, @writing), notice: 'Writing was successfully created.' }
+        flash[:date]=@writing.date # permet de transmettre la date à l'écriture suivante
+        flash[:previous_writing_id]=@writing.id
+        format.html { redirect_to new_compta_book_writing_url(@book) }
       else
         flash[:alert]= @writing.errors.messages
         format.html { render action: "new" }
@@ -63,7 +77,7 @@ class Compta::WritingsController < Compta::ApplicationController
 
     respond_to do |format|
       if @writing.update_attributes(params[:writing])
-        format.html { redirect_to compta_book_writing_url(@book, @writing), notice: 'Writing was successfully updated.' }
+        format.html { redirect_to compta_book_writing_url(@book, @writing), notice: 'Ecritue mise à jour.' }
       
       else
         format.html { render action: "edit" }

@@ -75,7 +75,7 @@ jQuery(function () {
 // PARTIE POUR LE FORMULAIRE
 //
 //
-//  des fonctions $f_empty et $f_zero sont définies dans application.js
+//  des fonctions $f_empty et $f_two_decimals sont définies dans application.js
 //
 // .decimal (toujours dans application js) permet de gérer l'entrée et la sortie des
 // champs de classe décimal
