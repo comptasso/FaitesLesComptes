@@ -4,7 +4,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'pdf_document/base'
 require 'pdf_document/page'
-require 'pdf_document/table' 
+require 'pdf_document/table'  
 
 
 
@@ -13,7 +13,7 @@ describe 'test pdf prawn' do
   include OrganismFixture
    before(:each) do
      create_minimal_organism
-     @account =  @p.accounts.create!(number:'60', title:'Achats')
+     @account =  @p.accounts.find_by_number('60') 
     # on relie la nature @n au compte
      @n.account_id = @account.id
      @n.save!

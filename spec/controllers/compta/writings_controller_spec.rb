@@ -6,7 +6,7 @@ RSpec.configure do |config|
  # config.filter = {wip:true}
 end
 
-describe Compta::WritingsController do
+describe Compta::WritingsController do 
   include SpecControllerHelper
 
   before(:each) do
@@ -73,7 +73,8 @@ describe Compta::WritingsController do
 
       before(:each) do
         @r = mock_model(Writing)
-        Writing.stub(:new).with(@r.to_param).and_return @r
+        @b.stub(:writings).and_return @a = double(Arel)
+        @a.stub(:new).with(@r.to_param).and_return @r
         
       end
 
@@ -86,16 +87,22 @@ describe Compta::WritingsController do
       it "redirects to the created writing" do
         @r.stub(:save).and_return(@r)
         post :create, {book_id:@b.to_param, :writing => @r.to_param }, valid_session
-        response.should redirect_to compta_book_writing_url(@b, assigns(:writing))
+        response.should redirect_to new_compta_book_writing_url(@b)
       end
     end
 
     describe "with invalid params"   do
+      before(:each) do
+        @r = mock_model(Writing)
+        @b.stub(:writings).and_return @a = double(Arel)
+        @a.stub(:new).and_return @r
+      end
+
       it "assigns a newly created but unsaved writing as @writing" do
         # Trigger the behavior that occurs when invalid params are submitted
         @r.stub(:save).and_return(false)
         post :create, {book_id:@b.id, :writing => {}}, valid_session
-        assigns(:writing).should be_a_new(Writing)
+        assigns(:writing).should == @r
       end
 
       it "re-renders the 'new' template" do

@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
-#  config.filter = {wip:true}
+ # config.filter = {wip:true}
 end
 
 
@@ -278,10 +278,10 @@ describe Line do
 
   
   
-  describe 'before_save'do
+  describe 'before_save' do
     
     before(:each) do
-      @a = Account.create(:period_id=>@p.id, number:'60', title:'compte test') 
+      @a = @p.accounts.find_by_number('60')
     end
     
     it 'si nature est rattachée à un compte alors le compte est associé' do 
@@ -332,14 +332,13 @@ describe Line do
     before(:each) do
       @l = Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit',
         :payment_mode=> 'Espèces',  :line_date=>Date.today,
-        :credit=>2.50 , :nature_id=>@n.id,  :counter_account_id=>@c.id)
+        :credit=>2.50 , :nature_id=>@n.id,  :counter_account_id=>@c.accounts.first.id)
     end
 
 
     it 'a line locked cant be destroyed' do
       @l.update_attribute(:locked, true)
       expect {@l.destroy }.not_to change {Line.count}
-      
     end
 
   end

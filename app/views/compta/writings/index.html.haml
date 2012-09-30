@@ -14,4 +14,4 @@
     Et pour OD, il faudrait prendre les transfert, check_deposits et writings
     avec des méthodes pour transfert et check_deposit qui transforment en writings
 
-= render @writings
+= render :partial=>'compta/writings/writing', :collection=>@writings

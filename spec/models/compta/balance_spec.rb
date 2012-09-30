@@ -10,8 +10,8 @@ describe Compta::Balance do
   before(:each) do
     @o=Organism.create!(title:'test balance sans table', database_name:'assotest1')
     @p= Period.create!(organism_id:@o.id, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
-    @a1 = @p.accounts.create!(number:'60', title:'compte 1')
-    @a2 = @p.accounts.create!(number:'70',title:'compte 2')
+    @a1 = @p.accounts.find_by_number('60')
+    @a2 = @p.accounts.find_by_number('603')
   end
 
   it 'has a virtual attributes from_date_picker et to_date_picker' do
@@ -63,8 +63,8 @@ describe Compta::Balance do
         b = Compta::Balance.new(period_id:@p.id).with_default_values
         b.from_date.should == @p.start_date
         b.to_date.should == @p.close_date
-        b.from_account.should == BankAccount.first.accounts.first
-        b.to_account.should == @a2
+        b.from_account.should == @p.accounts.find_by_number('101')
+        b.to_account.should == @p.accounts.find_by_number('89')
       end
 
       it 'range_accounts returns an extract of accounts' do
@@ -146,7 +146,7 @@ describe Compta::Balance do
          :empty=>true,
          :provisoire=>false, # car il n'y a pas de ligne
          :number=>"60",
-         :title=>"compte 1",
+         :title=>"Achats (sauf 603)",
          :cumul_debit_before=>0,
          :cumul_credit_before=>0,
          :movement_debit=>0,

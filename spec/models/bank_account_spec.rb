@@ -95,9 +95,7 @@ describe BankAccount do
       @ba.to_s.should == 'DX 123Z'
     end
 
-    it 'to_option return cash_id' do
-      @ba.to_option.should == "BankAccount_#{@ba.id}"
-    end
+    
 
     describe 'new_bank_extract' do
 

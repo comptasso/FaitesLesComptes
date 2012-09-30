@@ -1,34 +1,34 @@
 require "spec_helper"
 
-describe WritingsController do
+describe Compta::WritingsController do
   describe "routing" do
 
     it "routes to #index" do
-      get("/writings").should route_to("writings#index")
+      get("/compta/books/1/writings").should route_to("compta/writings#index" ,:book_id=>"1" )
     end
 
     it "routes to #new" do
-      get("/writings/new").should route_to("writings#new")
+      get("compta/books/1/writings/new").should route_to("compta/writings#new",  :book_id=>"1")
     end
 
     it "routes to #show" do
-      get("/writings/1").should route_to("writings#show", :id => "1")
+      get("compta/books/1/writings/1").should route_to("compta/writings#show", :book_id=>"1", :id => "1")
     end
 
     it "routes to #edit" do
-      get("/writings/1/edit").should route_to("writings#edit", :id => "1")
+      get("compta/books/1/writings/1/edit").should route_to("compta/writings#edit",:book_id=>"1", :id => "1")
     end
 
     it "routes to #create" do
-      post("/writings").should route_to("writings#create")
+      post("compta/books/1/writings").should route_to("compta/writings#create", :book_id=>"1")
     end
 
     it "routes to #update" do
-      put("/writings/1").should route_to("writings#update", :id => "1")
+      put("compta/books/1/writings/1").should route_to("compta/writings#update", :book_id=>"1",:id => "1")
     end
 
     it "routes to #destroy" do
-      delete("/writings/1").should route_to("writings#destroy", :id => "1")
+      delete("compta/books/1/writings/1").should route_to("compta/writings#destroy",:book_id=>"1", :id => "1")
     end
 
   end

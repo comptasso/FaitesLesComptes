@@ -211,11 +211,12 @@ describe LinesController do
 
       it 'assigns previous line if one' do 
         @b.stub_chain(:lines, :new).and_return(@nl)
-        assigns(:line).should == @nl
-        Line.should_receive(:find_by_id).with(20).and_return(@l)
-        @l.stub(:counter_account_id).and_return 1
-        @l.stub(:payment_mode).and_return 'Virement'
+        
+        Line.should_receive(:find_by_id).with(20).and_return(@l = mock_model(Line, counter_account_id:1, payment_mode:'Virement'))
+        @nl.stub(:payment_mode=)
+        @nl.stub(:counter_account_id=)
         get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes, :previous_line_id=>20
+        assigns(:line).should == @nl
         assigns(:previous_line).should == @l
       end
     

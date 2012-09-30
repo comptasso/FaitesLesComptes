@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
   #  c.filter = {:wip=> true }
@@ -22,7 +22,7 @@ describe 'vue transfer index' do
     login_as('quidam')
   end
 
-  it 'check minimal organism', wip:true do
+  it 'check minimal organism' do
     Organism.count.should == 1
     BankAccount.count.should == 2
     @o.transfers.count.should == 0
@@ -30,7 +30,7 @@ describe 'vue transfer index' do
 
 
 
-  describe 'new transfer' , wip:true do
+  describe 'new transfer' do
     
     it "affiche la page new" do
       visit new_organism_transfer_path(@o)
@@ -58,18 +58,19 @@ describe 'vue transfer index' do
       t.from_account.id.should == @bbca.id
     end
 
-    context 'le remplir incorrectement' do
+    context 'le remplir incorrectement' , wip:true  do
 
       before(:each) do
       visit new_organism_transfer_path(@o)
       fill_in 'transfer[date_picker]', :with=>'14/04/2012'
       fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
+      save_and_open_page
       within('#transfer_to_account_id') do
-        select(@ba.accounts.first.id.to_s)
+        select(@ba.accounts.first.long_name)
       end
       within('#transfer_from_account_id') do
-        select(@bb.accounts.first.id.to_s)
+        select(@bb.accounts.first.long_name)
       end
 
       end

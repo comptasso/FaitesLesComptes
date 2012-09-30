@@ -122,12 +122,6 @@ class BankAccount < ActiveRecord::Base
    "#{acronym} #{number}"
  end
 
-  def to_option
-    "#{self.class.name}_#{id}"
-  end
-
-
-
 
  protected
 

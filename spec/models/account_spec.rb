@@ -7,7 +7,7 @@ RSpec.configure do |config|
 end
 
 
-describe Account do 
+describe Account do  
   include OrganismFixture 
 
    before(:each) do
@@ -19,7 +19,7 @@ describe Account do
   end
 
   def valid_attributes
-    {number:'60',
+    {number:'601',
      title:'Titre du compte',
      period_id:@p.id
     }

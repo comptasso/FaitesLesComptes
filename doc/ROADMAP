@@ -951,14 +951,14 @@ OK - La création d un organisme crée une caisse et un compte bancaire
 Dans la saisie des comptes, les natures associées devraient être disabled si on n'est pas dans un compte de classe 6 ou 7
 Inclure Utilities::Sold dans cash.rb
 On devrait avoir un champ active pour les comptes (qui se répercute sur bank_account et cash)
-Création des comptes du plan comptable dès la création d'un period
+OK - Création des comptes du plan comptable dès la création d'un period
 Nettoyer le controleur, les routes et les vues de Period pour le plan comptable
-on peut supprimer les champs debitable_type et crreditable_type de Transfer
+OK - on peut supprimer les champs debitable_type et creditable_type de Transfer
 
 toujours dans Transfer, on pourrait revoir les validators
 Dans les exports de Lines#index vers des fichiers, on ne devrait pas faire un truncate des champs (vu le pb pour le champ support)
 OK - supprimer to_option dans la caisse
-idem pour bank_account
+OK - idem pour bank_account
 modalbox de account listing ne change pas le titre h3
 NON - On pourrait voir comment se passer du champ counter_account
 OK - Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait utilisé en zone compta,
