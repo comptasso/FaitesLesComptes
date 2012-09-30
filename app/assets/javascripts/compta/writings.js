@@ -33,7 +33,7 @@ function $total_sel(selector) {
 }
 
 function $balance() {
-    return $total_sel('.credit') - $total_sel('.debit');
+    return ($total_sel('.credit') - $total_sel('.debit')).toFixed(2);
 }
 
 
@@ -64,12 +64,12 @@ function $nb_lines() {
 // Affiche le solde dans la zone h3
 function $check_submit() {
     var bal = $balance(), nb_lines = $nb_lines();
-    if ((bal === 0) && (nb_lines > 1)) {
+    if ((bal == 0) && (nb_lines > 1)) {
         $('input.btn').show();
     } else {
         $('input.btn').hide();
     }
-    $('h3 #sold_value').text(numberWithPrecision(bal));
+    $('h3 #sold_value').text(bal);
 }
 
 // retire une compta_line du formulaire ou plutôt la cache

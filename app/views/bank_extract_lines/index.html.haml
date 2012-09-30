@@ -1,5 +1,6 @@
 = content_for :menu do
   = icon_to 'navigation90.png', bank_account_bank_extracts_path(@bank_account)
+  = icon_to 'nouveau.png', new_bank_account_bank_extract_path(@bank_account)
   = icon_to('pointer.png', pointage_bank_extract_bank_extract_lines_path(@bank_extract)) if @bank_extract.first_to_point?
   = icon_to 'verrouiller.png', lock_bank_account_bank_extract_path(@bank_account, @bank_extract), |
     title: 'Verrouiller ce relevé ainsi que toutes les lignes associées', method: 'post',                           |

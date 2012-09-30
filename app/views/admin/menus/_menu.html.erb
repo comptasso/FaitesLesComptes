@@ -74,6 +74,7 @@
           <%=  content_tag(:li, link_to('Afficher', admin_organism_period_accounts_path(@organism,@period)))  %>
           <%= content_tag(:li,
             link_to('Importer', select_plan_admin_organism_period_path(@organism, @period))) unless @period.accounts.any? %>
+          <%= content_tag(:li, link_to('Nouveau', new_admin_organism_period_account_path(@organism, @period))) %>
          <% unless @period.accounts.empty? %>
           <%=  content_tag(:li, :class=>"divider"){} %>
           <li><%= link_to 'Relier aux natures', mapping_admin_organism_period_accounts_path(@organism, @period) %>  </li>

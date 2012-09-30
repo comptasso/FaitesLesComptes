@@ -1006,14 +1006,34 @@ OK - Dans la partie compta, on devrait avoir les journaux
 La suppression d'un user doit être gérée (suppression des rooms, effacement des bases?)
 -------------------------- Introduction du modèle écriture comme parent de Lines ------------
 
+-------------------------- Soldes au 01/01/2011 n'apparaissent pas ----------------------
+En fait en enregistrant une écriture d'à nouveau, les soldes au 01/01 n'apparaissent pas car l'écriture est considérée comme une écriture de l'exercice
+
 -------------------------- Finalisation de compta et de writings ----------------------
 Revoir le menu
 Gérer l'affichage des journaux pour les recettes et les dépenses
 Pouvoir sélectionner des extraits (faire un formulaire ???) Controller LedgerExtract ???
 le journal d'OD devrait afficher toutes les écritures relevant de OD
+Voir gestion des tab dans le formulaire
+Il faudrait éventuellement ajouter la ligne automatiquement
+Changer Ligne créee... pour Ecriture créée dans le flash
 
 
 -----------------------Détail de mise en forme ----------------------------
+Pour le compte bancaire, le compte ne reprend que CMNE donc on ne les distingue pas
+OK - Le solde des balances ne semble pas prendre en compte le dernier jour
+Voir pour mettre les méthodes du module Sold dans account
+Dans un new_bank_extract, les champs date ne sont pas dans l'exercice
+Mise en page des tables dans le pointage de comptes
+Mise en page de la fenêtre modale (dans pointage) : contrpartie est bizarrement placé
+L'ajout d'une ligne modale doit afficher le numéro de ligne
+Remise de chèques ne devrait pas apparaître dans le menu banques si on n'a pas de remise de chèque à faire
+Ordre du menu : nouvel extrait, puis extrait puis remise chèque
+L'affichage du relevé bancaire pointé devrait proposer l'icone plus
+OK - Il n'y a plus d'endroit pour ajouter un compte
+Dans la création d'un compte, le lien avec les natures ne devrait apparaître que si un compte 6 ou 7
+Quand on a fini de relier les natures aux comptes, il faudrait que Compta apparaisse sans recharger la page
+Quand un exercice est créé, on a dans les actions écritures non verrouillées
 OK - Mettre en gras , l'organisme en cours dans la vue index de admin/organisme ...
 Dans admin#organism#books, la flèche navigation 90 envoie vers la zone saise
 Archives index - problème de mise en page de la table
@@ -1023,7 +1043,9 @@ Dans la création de nature, lorsqu'il y a des comptes, il n'y a plus la possibi
 La suppression de ligne devrait entraîner un flash (et surtout l'échec de la suppression)
 Dans index organism, il n'y a plus la logique de renvoyer
 
--------------------------- Autres éditions --------------------------
+-------------------------- éditions --------------------------
+Dans le grand livre, les natures de devraient pas être indiquées (ni peut être les destinations) - on doit rester comptable
+Dans le grand livre, mettre le libellé du compte en clair et pas seulement le numéro
 Compte de résultat
 Rapprochement bancaire
 

@@ -96,7 +96,7 @@ class Account < ActiveRecord::Base
   # fournit le cumul des débit (dc = 'debit') ou des crédits(dc = 'credit')
   # à la fin du jourindiqué par date
   def cumulated_at(date, dc)
-      lines.where('line_date < ?',date).sum(dc)
+      lines.where('line_date <= ?',date).sum(dc)
   end
 
   # calcule le solde au soir du jour indiqué par date
