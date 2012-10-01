@@ -57,14 +57,7 @@ module OrganismsHelper
   end
 
 
-  # menu prend une chaine de caractère représentant un modèle et 
-  # et crée les entrées Afficher et Nouveau
-  def menu(model)
-    content_tag(:ul, :class=>"dropdown-menu") do
-      content_tag(:li) { link_to 'Afficher', eval("organism_#{model.pluralize}_path(@organism)") } +
-      content_tag(:li) {link_to 'Nouveau', eval("new_organism_#{model}_path(@organism)") }
-    end
-  end
+  
 
 
 

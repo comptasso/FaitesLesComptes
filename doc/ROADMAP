@@ -981,6 +981,7 @@ Quand on verrouille une compta_line, c'est l'ensemble qui doit l'être : ça doi
 OK - On doit avoir une action qui permet de verrouiller l'écriture
 ??? Une écriture qui n'est pas pointée et qui mouvement une caisse ou un compte bancaire ne devrait pas pouvoir être verrouillée...??
 OK - Mettre les comptes par ordres de numéro
+Faire un before_destroyable dans le modèle (et du coup retirer l'équivalent dans Transfer)
 
 
 --------------------------------- TODO ---------------------------------------------------------
@@ -1005,6 +1006,17 @@ OK - Dans la partie compta, on devrait avoir les journaux
 -----------------------------------Gestion des user ---------------------------
 La suppression d'un user doit être gérée (suppression des rooms, effacement des bases?)
 -------------------------- Introduction du modèle écriture comme parent de Lines ------------
+-- D'abord avec les transferts
+OK - Modifier la table Writing pour en faire une table STI : ajout d'un champ type
+OK - Le modèle Transfert devient alors un enfant de Writing
+OK - modifier les routes car la hiérarchie est book/transfer et non organism/transfer
+modifier le menu general
+modifier le controller pour avoir book
+Modifier le formulaire avec des nested attributes/réutiliser le form de writing ?
+Adapter l'enregistrement existant
+Supprimer la table des transferts
+
+-- Remise de chèques
 
 -------------------------- Soldes au 01/01/2011 n'apparaissent pas ----------------------
 En fait en enregistrant une écriture d'à nouveau, les soldes au 01/01 n'apparaissent pas car l'écriture est considérée comme une écriture de l'exercice

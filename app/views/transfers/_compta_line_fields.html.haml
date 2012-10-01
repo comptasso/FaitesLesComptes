@@ -1,0 +1,7 @@
+.writing_line_form
+  = builder.association :account, :wrapper_html=>{class: "span3"}, :label=> transfer_label(builder.object), label_html: {class: 'span4'}, input_html: {class: "span8", size: 8},
+          :collection => [['Banques', @period.bank_accounts.all],['Caisse',@period.cash_accounts.all]],
+          :as => :grouped_select, :group_label_method=> :first, :group_method => :last,
+          :label_method=> :long_name, :value_method=> :id, :required=>true,  :include_blank=>false, :disabled=>builder.object.locked?
+
+ 

@@ -139,6 +139,9 @@ Faitesvoscomptes::Application.routes.draw do
   # TODO simplifier car on n'utilise que l'action show
   resources :rooms
 
+  resources :transfers # on se passe maintenant de organism
+  # et aussi de book car automatiquement en book OD
+
   resources :organisms , :only=> [:index, :show] do
     resources :periods, :only=> [:index, :show] do
       member do
@@ -155,7 +158,7 @@ Faitesvoscomptes::Application.routes.draw do
     #    resources :income_books
     #    resources :outcome_books
     
-    resources :transfers
+    
     resources :bank_accounts do
       resources :check_deposits
     end
