@@ -58,6 +58,8 @@ class Writing < ActiveRecord::Base
     compta_lines.all.select {|cl| cl.locked?}.any?
   end
 
+  # recopie dans les lignes les informations de date, de narration et de livre
+  # TODO ceci deviendra inutile lorsque toutes les écritures seront dépendantes de writing
   def complete_lines
    puts "nombre de lignes de comptes #{compta_lines.size}"
     compta_lines.each do |cl|

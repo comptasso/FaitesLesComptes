@@ -34,7 +34,8 @@ class TransfersController < ApplicationController
   # GET /transfers/new.json
   def new
     @transfer = @book.transfers.new
-    2.times {@transfer.compta_lines.build}
+ @cl1 = @transfer.compta_lines.build
+ @cl2 = @transfer.compta_lines.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -45,11 +46,15 @@ class TransfersController < ApplicationController
   # GET /transfers/1/edit
   def edit
     @transfer = Transfer.find(params[:id])
+    @cl1 = @transfer.compta_lines.first
+    @cl2 = @transfer.compta_lines.last
   end
 
   # POST /transfers
   # POST /transfers.json
   def create
+    params[:transfer][:compta_lines_attributes]['0'][:credit] = params[:transfer][:amount]
+    params[:transfer][:compta_lines_attributes]['1'][:debit] = params[:transfer][:amount]
     @transfer = @book.transfers.new(params[:transfer])
 
     respond_to do |format|

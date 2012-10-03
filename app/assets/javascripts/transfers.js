@@ -30,20 +30,20 @@ $(document).ready(function () {
 // et la disable pour sa propre liste d'option'
 function $f_transfer_from_account() {
 
-    var s = $('#transfer_to_account_id').val();
-    $('#transfer_from_account_id option[value=' + s + ']').attr('selected', false);
+    var s = $('#transfer_compta_lines_attributes_0_account_id').val();
+    $('#transfer_compta_lines_attributes_1_account_id option[value=' + s + ']').attr('selected', false);
 }
 
 function $f_transfer_to_account() {
-    var s = $('#transfer_from_account_id').val();
-    $('#transfer_to_account_id option[value=' + s + ']').attr('selected', false);
+    var s = $('#transfer_compta_lines_attributes_1_account_id').val();
+    $('#transfer_compta_lines_attributes_0_account_id option[value=' + s + ']').attr('selected', false);
 }
 
 // gestion des champs select dans le form Transfert
 jQuery(function () {
     if ($('#transfer form').length !== null) {
-        $('#transfer_to_account_id').live('change', $f_transfer_from_account);
-        $('#transfer_from_account_id').live('change', $f_transfer_to_account);
+        $('#transfer_compta_lines_attributes_0_account_id').live('change', $f_transfer_from_account);
+        $('#transfer_compta_lines_attributes_1_account_id').live('change', $f_transfer_to_account);
     }
 
 

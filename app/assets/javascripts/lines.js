@@ -154,7 +154,7 @@ function $f_td_bank_cash() {
 // banques : les banques
 // POur les dépenses, la partie chèque à l'encaissement n'est pas utile'
 jQuery(function () {
-    if ($('#entry_lines').length !== null) {
+    if ($('#entry_lines').length !== 0) {
         $f_td_bank_cash();
     }
     $('#entry_lines #line_payment_mode').live('change', $f_td_bank_cash);

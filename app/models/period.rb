@@ -208,11 +208,11 @@ class Period < ActiveRecord::Base
 
 
 
-  def bank_accounts
+  def list_bank_accounts
     accounts.where('number LIKE ?', '512%')
   end
   
-  def cash_accounts
+  def list_cash_accounts
     accounts.where('number LIKE ?', '53%')
   end
 
