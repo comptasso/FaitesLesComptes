@@ -29,7 +29,7 @@ describe "transfers/edit" do
   it "renders the edit transfer form" do
     render
     page.all('form').should have(1).element
-    assert_select "form", :action => organism_transfers_path(@o), :method => "post" 
+    assert_select "form", :action => transfers_path, :method => "post"
   end
 
   describe 'a transfer partially locked has fields disabled' do

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe "lines/new" do
+describe "lines/new" do  
   include JcCapybara
 
 

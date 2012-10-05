@@ -15,7 +15,7 @@ module LinesHelper
   def line_actions(line)
     html = ' '
       if line.owner_type == 'Transfer'
-        html <<  icon_to('modifier.png', edit_organism_transfer_path(@organism, line.owner_id)) if line.editable?
+        html <<  icon_to('modifier.png', edit_transfer_path(line.owner_id)) if line.editable?
       else
         html <<  icon_to('modifier.png', edit_book_line_path(line.book_id, line)) if line.editable?
         html <<  icon_to('supprimer.png', [line.book,line], confirm: 'Etes vous sûr?', method: :delete) if line.editable?
@@ -38,8 +38,8 @@ module LinesHelper
 # être mis que sur le compte chèque à l'encaissement
 #
 def options_for_cca(period, io = false)
- arr =  [OptionsForAssociationSelect.new('Banques', :bank_accounts, period),
-    OptionsForAssociationSelect.new('Caisses',:cash_accounts, period)]
+ arr =  [OptionsForAssociationSelect.new('Banques', :list_bank_accounts, period),
+    OptionsForAssociationSelect.new('Caisses',:list_cash_accounts, period)]
   if io == true
      arr << OptionsForAssociationSelect.new('Chèques à l\'encaissement', :rem_check_accounts, period)
   end

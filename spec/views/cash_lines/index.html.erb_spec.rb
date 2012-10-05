@@ -6,7 +6,7 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe "cash_lines/index" do 
+describe "cash_lines/index" do  
   include JcCapybara
 
   let(:o) {mock_model(Organism, title: 'spec cd')} 
@@ -97,7 +97,7 @@ describe "cash_lines/index" do
 
     it 'peut avoir un lien modifier pointant vers transfer' do
       page.find("tbody tr:first td:nth-child(8)").all('img').first[:src].should == '/assets/icones/modifier.png'
-      page.find("tbody tr:first a")[:href].should == "/organisms/#{o.id}/transfers/10/edit"
+      page.find("tbody tr:first a")[:href].should == "/transfers/10/edit"
     end 
   end
   

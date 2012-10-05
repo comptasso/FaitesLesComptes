@@ -16,8 +16,10 @@ describe "transfers/new" do
     @p  = assign(:period, stub_model(Period, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year))
     assign(:transfer, stub_model(Transfer).as_new_record)
 
-    @p.stub_chain(:bank_accounts, :all).and_return @bas 
-    @p.stub_chain(:cash_accounts, :all).and_return @cas
+    @p.stub_chain(:list_bank_accounts, :all).and_return @bas
+    @p.stub_chain(:list_cash_accounts, :all).and_return @cas
+    @t = assign(:transfer, stub_model(Transfer, partial_locked?:false).as_new_record )
+
   end
 
   it 'view has one form' do
@@ -26,9 +28,9 @@ describe "transfers/new" do
   end
 
   it 'forms points to' do
-   @t = assign(:transfer, stub_model(Transfer).as_new_record )
+   
     render
-    assert_select "form", :action => organism_transfers_path(@o), :method => "post"
+    assert_select "form", :action => transfers_path, :method => "post"
   end
 
   it 'check fields' do
@@ -43,8 +45,8 @@ describe "transfers/new" do
   it 'check the select ' do
     render
     
-    page.find('#transfer_to_account_id').all('option').should have(4).elements
-    page.find('#transfer_from_account_id').all('option').should have(4).elements
+    page.find('select#transfer_compta_lines_attributes_1_account_id').all('option').should have(4).elements
+    page.find('select#transfer_compta_lines_attributes_0_account_id').all('option').should have(4).elements
   end
   
   

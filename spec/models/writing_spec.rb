@@ -11,7 +11,7 @@ describe Writing do
 
   describe 'with stub models' do
 
-  before(:each) do
+  before(:each) do 
     @o = mock_model(Organism)
     @b = mock_model(Book, :organism=>@o)
     @o.stub(:find_period).and_return true
@@ -89,6 +89,7 @@ describe Writing do
     before(:each) do
       @w = Writing.new(valid_parameters)
       @w.stub(:compta_lines).and_return(@a = double(Arel))
+      @a.stub(:size).and_return 2
     end
 
     it 'total_debit, renvoie le total des debits des lignes' do
