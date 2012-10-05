@@ -9,7 +9,9 @@
 
     .row-fluid
       .span12
-        =f.fields_for :compta_lines do |build|
+        =f.fields_for :compta_lines, @line_from do |build|
+          = render :partial=>'compta_line_fields', :locals=>{:builder=>build}
+        =f.fields_for :compta_lines, @line_to do |build|
           = render :partial=>'compta_line_fields', :locals=>{:builder=>build}
 
          

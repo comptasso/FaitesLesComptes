@@ -1010,9 +1010,9 @@ La suppression d'un user doit être gérée (suppression des rooms, effacement d
 OK - Modifier la table Writing pour en faire une table STI : ajout d'un champ type
 OK - Le modèle Transfert devient alors un enfant de Writing
 OK - modifier les routes car la hiérarchie est book/transfer et non organism/transfer
-modifier le menu general
-modifier le controller pour avoir book
-Modifier le formulaire avec des nested attributes/réutiliser le form de writing ?
+OK - modifier le menu general
+OK - modifier le controller pour avoir book
+OK - Modifier le formulaire avec des nested attributes/réutiliser le form de writing
 Adapter l'enregistrement existant
 Supprimer la table des transferts
 

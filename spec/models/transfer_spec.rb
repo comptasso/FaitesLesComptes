@@ -2,26 +2,32 @@
 
 require 'spec_helper'
 
-describe Transfer , :wip=>true do
+RSpec.configure do |c|
+ # c.filter = {wip:true} 
+end
+
+describe Transfer  do
   include OrganismFixture
 
-  
+  def valid_new_transfer
+    t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id, amount:1.5
+    t.line_to.account_id = @cba.id
+    t.line_from.account_id = @cbb.id
+    t
+  end
  
   before(:each) do
     create_minimal_organism 
     @bb=@o.bank_accounts.create!(name: 'DebiX', number: '123Y')
-    @aa = @ba.accounts.first
-    @ba = @bb.accounts.first
+    @cba = @ba.current_account @p
+    @cbb = @bb.current_account @p
   end 
 
-  def valid_attributes
-    {date: Date.today, to_account: @aa, from_account: @ba, amount: 1.5, organism_id: @o.id}
-  end
-
+  
   describe 'virtual attribute pick date' do
   
     before(:each) do
-      @transfer=Transfer.new(valid_attributes)
+      @transfer=valid_new_transfer
     end
     
     it "should store date for a valid pick_date" do
@@ -36,14 +42,34 @@ describe Transfer , :wip=>true do
  
   end
 
-  
-  describe 'validations' do
+  describe 'line_to and line_from should respond even for not persisted model' do
 
-    before(:each) do
-      @transfer=Transfer.new(valid_attributes)
+    it 'return line_to for not persisted transfer' do
+      @transfer = valid_new_transfer
+      @transfer.line_to.should be_an_instance_of(ComptaLine)
     end
 
-    it 'should be valid with valid attributes' do
+    it 'return line_to for persisted transfer' do
+      @transfer = valid_new_transfer
+      @transfer.save!
+      t = Transfer.last
+      @transfer.line_to.should == t.line_to
+    end
+
+
+  end
+
+
+  
+  describe 'validations'  do
+
+    before(:each) do
+      @transfer=valid_new_transfer
+    end
+
+    it 'should be valid with valid attributes', wip:true do
+      @transfer.valid?
+ #     puts @transfer.errors.messages
       @transfer.should be_valid
     end
 
@@ -52,40 +78,35 @@ describe Transfer , :wip=>true do
       @transfer.should_not be_valid
     end
 
-    it 'nor without amount' do
-      @transfer.amount = nil
+    it 'nor with credit in line_from' do
+      @transfer.line_from.credit = 0
       @transfer.should_not be_valid
     end
 
-    it 'nor without to_account' do
-
-      @transfer.to_account = nil
-      @transfer.should_not be_valid
-
-    end
-
-    it 'nor without from_account' do
-      @transfer.to_account = nil
+    it 'nor with debit in line_to' do
+      @transfer.line_to.debit = 0
       @transfer.should_not be_valid
     end
 
-    it 'amount should be a number' do
-      @transfer.amount = 'bonjour'
-      @transfer.should_not be_valid
+    it 'nor without account' do
+      @transfer.compta_lines.each do |cl|
+        cl.account = nil
+        @transfer.should_not be_valid
+      end
     end
 
-    it 'to_account and from_account should be different' do
-      @transfer.to_account = @transfer.from_account
+   it 'to_account and from_account should be different' do
+      @transfer.line_from.account = @transfer.line_to.account
       @transfer.should_not be_valid
     end
 
   end
 
 
-  describe 'errors' do
+  describe 'errors'  do
 
     before(:each) do
-      @tr = Transfer.new(valid_attributes)
+      @tr = valid_new_transfer
     end
 
     it 'champ obligatoire when a required field is missing' do
@@ -100,25 +121,28 @@ describe Transfer , :wip=>true do
       @tr.errors[:amount].should == ['nul !']
     end
 
-    it 'champ obligatoire pour to_account' do
-      @tr.to_account=nil
-      @tr.valid?
-      @tr.errors[:to_account_id].should == ['obligatoire']
+    
+  end
+
+
+  describe 'change amount'  do
+    before(:each) do
+      @tr = valid_new_transfer
     end
 
-    it 'champ obligatoire pour from_account' do
-      @tr.from_account=nil
-      @tr.valid?
-      @tr.errors[:from_account_id].should == ['obligatoire']
+    it 'should change amount for lines' do
+      @tr.amount = 200
+      @tr.save
+      @tr.line_to.debit.should == 200
+      @tr.line_from.credit.should == 200
     end
-
 
   end
 
-  describe 'instance method credit and debit lines' do
+
+  describe 'instance method line_to and line_from' do
     before(:each) do
-      @t= Transfer.new(:date=>Date.today, :narration=>'test',
-        :organism_id=> @o.id, :amount=>123.50, :from_account_id=>@aa.id, :to_account_id=>@ba.id )
+      @t = valid_new_transfer
     end
 
     it 'a new record answers false to partial, debit and credit_locked?' do
@@ -136,7 +160,7 @@ describe Transfer , :wip=>true do
 
       it 'save transfer create the two lines' do
         @t.save!
-        @t.should have(2).lines
+        @t.should have(2).compta_lines
       end
 
      
@@ -144,12 +168,12 @@ describe Transfer , :wip=>true do
       context 'with a saved tranfer' do
 
         before(:each) do
-           @t.save!
+          @t.save!
         end
 
         it 'can return the debited line or the credited line' do
-          @t.line_to.to_line.should == @t.lines.select { |l| l.debit != 0 }.first
-          @t.line_from.to_line.should == @t.lines.select { |l| l.credit != 0 }.first
+          @t.line_to.should == @t.compta_lines.select { |l| l.debit != 0 }.first
+          @t.line_from.should == @t.compta_lines.select { |l| l.credit != 0 }.first
         end
 
         it 'destroy the transfer should delete the two lines' do
@@ -182,26 +206,7 @@ describe Transfer , :wip=>true do
 
         describe 'update' do
 
-          before(:each) do
-            @t.line_to.account_id.should == @ba.id
-            @bc=@o.bank_accounts.create!(name: 'DebiX', number: '456X')
-            @ac = @bc.accounts.first
-          end
-
-          it 'modify transfer change lines adequatly' do
-            @t.to_account = @ac
-            @t.save!
-            @t.line_to.account_id.should == @ac.id
-            
-          end
-
-          it 'modify transfer change lines adequatly' do
-            @t.from_account = @ac
-            @t.save!
-            @t.line_from.account_id.should == @ac.id
-            
-          end
-
+          
           context 'line_to locked' do
 
             before(:each) do
@@ -210,12 +215,6 @@ describe Transfer , :wip=>true do
               l.save!(:validate=>false)
             end
           
-            it 'modify transfer debit is not possibile if locked' do
-              @t.from_account = @ac
-              @t.save!
-              @t.line_to.account_id.should == @ba.id
-            end
-
             it 'says debit_locked' do
               @t.should be_to_locked
               @t.should be_partial_locked
@@ -233,13 +232,7 @@ describe Transfer , :wip=>true do
               l.save!(:validate=>false)
             end
 
-            it 'modify transfer debit or credit is not possibile if locked' do
-
-              @t.from_account = @ac
-              @t.save!
-              @t.line_from.account_id.should == @aa.id
-            end
-
+            
             it 'transfer is credit_locked' do 
               @t.should be_from_locked
               @t.should be_partial_locked

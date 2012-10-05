@@ -37,6 +37,8 @@ class Writing < ActiveRecord::Base
   # indique si une écritue est équilibrée ou non
   # ajoute une erreur si déséquilibrée
   def balanced?
+    return false if compta_lines.size == 0 # Même s'il y a un validator two_compta_lines,
+    # il ne s'exécute pas forcément avant celui ci d'où l'intérêt d'un test.
     b =  (total_credit == total_debit)
     errors.add(:base, 'Ecriture déséquilibrée') unless b
     b
@@ -61,9 +63,9 @@ class Writing < ActiveRecord::Base
   # recopie dans les lignes les informations de date, de narration et de livre
   # TODO ceci deviendra inutile lorsque toutes les écritures seront dépendantes de writing
   def complete_lines
-   puts "nombre de lignes de comptes #{compta_lines.size}"
+   # puts "nombre de lignes de comptes #{compta_lines.size}"
     compta_lines.each do |cl|
-      puts cl.inspect
+     # puts cl.inspect
       cl.line_date = date
       cl.narration = narration
       cl.book_id = book.id

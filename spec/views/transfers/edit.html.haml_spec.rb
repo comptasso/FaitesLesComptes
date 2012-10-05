@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe "transfers/edit" do 
+describe "transfers/edit" do  
     include JcCapybara 
 
   before(:each) do
@@ -19,12 +19,11 @@ describe "transfers/edit" do
     @o.stub_chain(:bank_accounts, :all).and_return @bas
     @o.stub_chain(:cashes, :all).and_return @cas
 
-    @transfer = assign(:transfer, stub_model(Transfer, :pick_date=>'12/04/2012', :fill_creditable=>"BankAccount_1",
-        :fill_debitable=>'Cash_2', :amount=>50.23, narration: 'virement'))
+    @transfer = assign(:transfer, stub_model(Transfer, :pick_date=>'12/04/2012', :amount=>50.23, narration: 'virement'))
+    @line_to =     assign(:line_to, mock_model(ComptaLine, locked?:false, account:mock_model(Account, number:'5101', long_name:'5101 banque')))
+    @line_from =     assign(:line_from, mock_model(ComptaLine, locked?:false, account:mock_model(Account, number:'5301', long_name:'5301 caisse')))
 
-    @transfer.stub(:to_locked?).and_return(false)
-    @transfer.stub(:from_locked?).and_return(false)
-    @transfer.stub(:partial_locked?).and_return(false)
+   
   end
 
   it "renders the edit transfer form" do
@@ -37,7 +36,7 @@ describe "transfers/edit" do
 
    
   it "debit is locked" do
-    @transfer.should_receive(:partial_locked?).and_return(true, true, true)
+    @transfer.should_receive(:partial_locked?).and_return(true, true, true) 
     render
     
     page.find('input#transfer_date_picker')[:disabled].should == 'disabled'
@@ -46,17 +45,17 @@ describe "transfers/edit" do
   end
 
   it 'part debit is disable if line_debit locked' do
-     @transfer.should_receive(:to_locked?).and_return(true)
+     @line_to.should_receive(:locked?).and_return(true)
      render
-     page.find('select#transfer_to_account_id')[:disabled].should == 'disabled'
-     page.find('select#transfer_from_account_id')[:disabled].should be_nil
+     page.find('select#transfer_compta_lines_attributes_1_account_id')[:disabled].should == 'disabled'
+     page.find('select#transfer_compta_lines_attributes_0_account_id')[:disabled].should be_nil
   end
 
     it 'part credit is disable if line_credit locked' do
-    @transfer.should_receive(:from_locked?).and_return(true)
+    @line_from.should_receive(:locked?).and_return(true)
      render
-     page.find('select#transfer_from_account_id')[:disabled].should == 'disabled'
-     page.find('select#transfer_to_account_id')[:disabled].should be_nil
+     page.find('select#transfer_compta_lines_attributes_0_account_id')[:disabled].should == 'disabled'
+     page.find('select#transfer_compta_lines_attributes_1_account_id')[:disabled].should be_nil
   end
 
   end

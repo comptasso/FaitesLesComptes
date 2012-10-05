@@ -12,30 +12,19 @@ class TransfersController < ApplicationController
   # GET /transfers.json
   def index
     @transfers = Transfer.order('date ASC')
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transfers }
     end
   end
 
-  # GET /transfers/1
-  # GET /transfers/1.json
-  def show
-    @transfer = Transfer.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @transfer }
-    end
-  end
-
+  
   # GET /transfers/new
   # GET /transfers/new.json
   def new
     @transfer = @book.transfers.new
- @cl1 = @transfer.compta_lines.build
- @cl2 = @transfer.compta_lines.build
+    @line_from = @transfer.line_from
+    @line_to = @transfer.line_to
 
     respond_to do |format|
       format.html # new.html.erb
@@ -46,8 +35,8 @@ class TransfersController < ApplicationController
   # GET /transfers/1/edit
   def edit
     @transfer = Transfer.find(params[:id])
-    @cl1 = @transfer.compta_lines.first
-    @cl2 = @transfer.compta_lines.last
+    @line_from = @transfer.line_from
+    @line_to = @transfer.line_to
   end
 
   # POST /transfers
@@ -55,6 +44,10 @@ class TransfersController < ApplicationController
   def create
     params[:transfer][:compta_lines_attributes]['0'][:credit] = params[:transfer][:amount]
     params[:transfer][:compta_lines_attributes]['1'][:debit] = params[:transfer][:amount]
+    # effacer le paramètre amoun est indispensable car sinon, sur un new, cela aboutit à
+    # créer 4 compta_lines : les deux engendrées par les paramètres compta_lines_attributes en plus des
+    # deux engendrées par le after_initialize
+    params[:transfer].delete(:amount)
     @transfer = @book.transfers.new(params[:transfer])
 
     respond_to do |format|
