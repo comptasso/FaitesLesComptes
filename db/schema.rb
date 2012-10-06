@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121006055302) do
+ActiveRecord::Schema.define(:version => 20121006104206) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(:version => 20121006055302) do
     t.string   "check_number"
     t.integer  "account_id"
     t.integer  "counter_account_id"
+    t.integer  "writing_id"
   end
 
   add_index "lines", ["account_id"], :name => "index_lines_on_account_id"

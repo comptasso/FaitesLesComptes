@@ -14,6 +14,7 @@ class Writing < ActiveRecord::Base
   belongs_to :book
  
   has_many :compta_lines, :as=>:owner, :dependent=>:destroy
+  alias children compta_lines
   
   before_validation :complete_lines
 

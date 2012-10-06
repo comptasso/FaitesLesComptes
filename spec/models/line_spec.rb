@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
- # config.filter = {wip:true}
+  config.filter = {wip:true}
 end
 
 
@@ -169,12 +169,28 @@ describe Line do
     end
   end
 
-  describe 'ligne de contrepartie' do
+  describe 'ligne de contrepartie' , wip:true do
+    
+    def valid_attributes
+      {:book_id=>@ib.id, :narration=>'premier mois credit', 
+          :payment_mode=> 'Espèces',  :line_date=>Date.today,
+          :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id}
+    end
+
+    it 'la création d une ligne crée une writing' do
+      expect { Line.create!(valid_attributes)}.to change {Writing.count}.by(1)
+    end
+
+    it 'writing porte la date, la réf et la narration' do
+      l = Line.create!(valid_attributes)
+      w = l.writing
+      w.ref.should == l.ref
+      w.narration.should == l.narration
+      w.date.should == l.line_date
+    end
 
     it 'la création d une ligne en crée une deuxième de contrpartie' do
-      expect { Line.create!(:book_id=>@ib.id, :narration=>'premier mois credit', 
-          :payment_mode=> 'Espèces',  :line_date=>Date.today,
-          :credit=>2.50 , :nature_id=>@n.id, :counter_account_id=>@c.id)}.to change {Line.count}.by(2)
+      expect { Line.create!(valid_attributes)}.to change {Line.count}.by(2)
     end
 
     context 'avec une lignes créée' do
@@ -211,7 +227,7 @@ describe Line do
         @l.supportline.book.should be_an_instance_of(@ib.class)
       end
 
-      describe 'editable', wip:true do
+      describe 'editable' do
 
         it 'ligne editable si pas pointée et pas locked' do
           @l.should be_editable

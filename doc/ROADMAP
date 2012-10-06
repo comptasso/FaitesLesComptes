@@ -1025,7 +1025,15 @@ OK - La remise de chèque doit créer une writing avec deux lignes
 OK en profiter pour utiliser le module date_picker
 
 -- line
-
+Ecrire une recette ou une dépense doit créer une writing avec une compta_line comme contrepartie
+Les controlleurs doivent utiliser writing et line
+Modifier le form pour utiliser writing et line
+Modifier les affichages des lignes pour utiliser date, narration ou réf de writing (voir delegate ?)
+Supprimer dans la table ligne le champ date, narration et ref (et les autres champs actuellement inutilisés)
+Revoir la méthode siblings et peut être children
+On pourrait aussi revoir belongs_to bank_extract puisqu'il y a le lien via bank_extract_line
+Mettre une transaction dans counterpart
+Line pourrait appartenir à un writing plutôt qu'à un owner polymorphique
 
 -------------------------- Soldes au 01/01/2011 n'apparaissent pas ----------------------
 En fait en enregistrant une écriture d'à nouveau, les soldes au 01/01 n'apparaissent pas car l'écriture est considérée comme une écriture de l'exercice
