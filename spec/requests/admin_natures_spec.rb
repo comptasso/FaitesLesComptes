@@ -59,7 +59,7 @@ describe 'vue natures index' do
       page.should have_selector("tbody", :count=>2)
     end
 
-    it 'dans la vue index,une nature peut être détruite', :js=>true do
+    it 'dans la vue index,une nature peut être détruite', :js=>true do 
       
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_period_natures_path(@o, @p)
