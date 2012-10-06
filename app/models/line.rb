@@ -37,10 +37,8 @@
 #    t.integer  "bank_account_id" => rattachement à un compte bancaire
 #    
 #    Owner est le propriétaire (polymorphique)
-#    Actuellement uniquement utilisé pour les virements (cela permet de 
-#    rattacher l'écriture à un virement.
-#    A terme, ce  champ polymorphique pourrait peut-être servir pour d'autres motifs de création
-#    de lignes (par exemple des abonnements ? )
+#    En cours d'évolution vers l'utilisation d'un Writing qui est un modèle avec des enfants
+#    un seule sous classe actuellement : Transfer, pour les virements
 #    t.integer  "owner_id" => rattache
 #    t.string   "owner_type"
 #    

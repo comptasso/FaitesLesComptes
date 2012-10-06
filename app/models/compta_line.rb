@@ -33,6 +33,8 @@ class ComptaLine < ActiveRecord::Base
   validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit_if_locked=>true
 
   # transforme ComptaLine en un Line, utile pour les tests
+  # églement utilisé dans le modèle CheckDeposit pour accéder indifférement aux compta_lines
+  # et aux lines (sans avoir une erreur TypeMislatch).
   def to_line
     if persisted?
       Line.find(id)

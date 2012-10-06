@@ -1015,9 +1015,17 @@ OK - modifier le controller pour avoir book
 OK - Modifier le formulaire avec des nested attributes/réutiliser le form de writing
 OK - Adapter l'enregistrement existant
 OK - refaire les spec
-Supprimer la table des transferts
+OK - Supprimer la table des transferts
+OK - Ajouter une zone ref à Transfert
 
 -- Remise de chèques
+OK -  une remise chèque belongs_to writings : création de la migration
+OK - et a des comtpa_lines à travers writings
+OK - La remise de chèque doit créer une writing avec deux lignes
+OK en profiter pour utiliser le module date_picker
+
+-- line
+
 
 -------------------------- Soldes au 01/01/2011 n'apparaissent pas ----------------------
 En fait en enregistrant une écriture d'à nouveau, les soldes au 01/01 n'apparaissent pas car l'écriture est considérée comme une écriture de l'exercice
@@ -1074,6 +1082,8 @@ Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 --------------------Divers---------------------------------------------------------------------------
 OK - Revoir la page index de organism (title et mise en page) : en fait je l'ai supprimée dans la partie consult
 OK - supprimer la session de period
+On devrait bloquer la création d'organisme à un
+De même pour OdBook : un seul livre d'OD
      Factoriser les jQuery datatable
 Le datatable de compta#lines ne marche pas
 ? - Datatable  pour la balance

@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
-#  c.filter = {:wip=> true }
+  # c.filter = {:wip=> true }
 end
 
 
@@ -48,10 +48,39 @@ describe CheckDeposit do
 
   describe "création d'une remise de chèque" do
     it "save the right date" do
-      cd = @ba.check_deposits.new pick_date: '01/04/2012'
+      cd = @ba.check_deposits.new deposit_date_picker: '01/04/2012'
       cd.pick_all_checks
       cd.save!
       cd.deposit_date.should == Date.civil(2012,4,1)
+    end
+
+    describe 'creation d une écriture'  do
+
+      before(:each) do
+        @cd = @ba.check_deposits.new deposit_date:Date.today 
+        @cd.pick_all_checks
+
+      end
+
+      it 'crée une writing' do
+        expect {@cd.save}.to change {Writing.count}.by(1)
+      end
+
+      it 'créed un check_deposit' do
+        expect {@cd.save}.to change {CheckDeposit.count}.by(1)
+      end
+
+      it 'une remise chèque appartient à writing' do
+        @cd.save!
+        CheckDeposit.last.writing.should == Writing.order(:id).last
+      end
+
+      it 'une remise chèque a des lignes qui sont lues par writing' do
+        @cd.save!
+        @cd.compta_lines.should == @cd.writing(true).compta_lines
+      end
+
+
     end
   end 
 
@@ -178,6 +207,8 @@ describe CheckDeposit do
       @p.rem_check_account.sold_at(@p.close_date).should == 0
     end
 
+
+
     describe 'edition'  do
 
       it 'remove a check'  do
@@ -230,7 +261,7 @@ describe CheckDeposit do
 
     
 
-    describe "le rattachement à un extrait de compte"  do
+    describe "le rattachement à un extrait de compte" , wip:true do
       before(:each) do
         @check_deposit.should have(3).checks
         @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
@@ -239,9 +270,13 @@ describe CheckDeposit do
         @bel.save!
       end
 
+      it 'doit être pointé' do
+        @check_deposit.should be_pointed
+      end
+
      
       it "la date ne peut plus être modifiée" do
-        @check_deposit.deposit_date= Date.today+6
+        @check_deposit.deposit_date = Date.today+6
         @check_deposit.should_not be_valid
       end
 

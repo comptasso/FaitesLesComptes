@@ -97,6 +97,7 @@ function $f_td_bank_cash() {
     payment_mode = $('#entry_lines #line_payment_mode').val();
     caisses = $('optgroup[label="Caisses"] option');
     banques =  $('optgroup[label="Banques"] option');
+
     // s'il y a plus d'un élément dans td_bank et si le mode de payemnt est autre que Espèces alors afficher td_bank et masquer td_cash
 
     switch (payment_mode) {
@@ -117,11 +118,12 @@ function $f_td_bank_cash() {
         caisses.attr('disabled', 'disabled');
         caisses.attr('selected', false);
         if (income_outcome) {
-          // on affiche le champ de saisie du numéro de chèque
             $('#td_check_number').hide(); // masquage du champ pour  saisir le n° de chèque de la dépenses
             banques.attr('disabled', 'disabled');
             banques.attr('selected', false);
+            encaissement.attr('disabled', false);
             encaissement.first().attr('selected', 'selected');
+            
         } else {
             $('#td_check_number').show(); // affichage du champ pour  saisir le n° de chèque de la dépenses
             banques.attr('disabled', false);
