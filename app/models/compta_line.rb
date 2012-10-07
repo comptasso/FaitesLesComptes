@@ -39,6 +39,9 @@ class ComptaLine < ActiveRecord::Base
   scope :in_out_lines, where('nature_id IS NOT ?', nil)
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
 
+
+  delegate :date, :narration, :ref, :to=>:owner
+
   # transforme ComptaLine en un Line, utile pour les tests
   # églement utilisé dans le modèle CheckDeposit pour accéder indifférement aux compta_lines
   # et aux lines (sans avoir une erreur TypeMislatch).

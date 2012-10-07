@@ -1039,8 +1039,8 @@ Franciser les boutons des forms
 Faire les spec
 Voir si on ne peut pas utiliser lines pour retrouver les validations qui existent
 Revoir le javascript pour les champs banques et num chèque
-Revoir le modal form
-Pb de l'affichage des mois qui n'apparaît pas
+Revoir le modal form pour utiliser les nested attributes
+OK - Pb de l'affichage des mois qui n'apparaît pas
 -------------------------- Soldes au 01/01/2011 n'apparaissent pas ----------------------
 En fait en enregistrant une écriture d'à nouveau, les soldes au 01/01 n'apparaissent pas car l'écriture est considérée comme une écriture de l'exercice
 

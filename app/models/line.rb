@@ -117,6 +117,8 @@ class Line < ActiveRecord::Base
   # et du champ check_deposit_id
   scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil) }
 
+
+  delegate :date, :narration, :ref, :to=>:owner
   
   # ne peuvent être transformées en scope car ne retournent pas un arel
   def self.sum_debit_before(date)

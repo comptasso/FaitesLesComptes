@@ -16,7 +16,7 @@ class Writing < ActiveRecord::Base
   has_many :compta_lines, :as=>:owner, :dependent=>:destroy
   alias children compta_lines
   
-  before_validation :complete_lines
+  
 
   validates :book_id, :narration, :date, presence:true
   validates :date, :must_belong_to_period=>true
@@ -72,18 +72,6 @@ class Writing < ActiveRecord::Base
     compta_lines.all.select {|cl| cl.locked?}.any?
   end
 
-  # recopie dans les lignes les informations de date, de narration et de livre
-  # TODO ceci deviendra inutile lorsque toutes les écritures seront dépendantes de writing
-  def complete_lines
-   # puts "nombre de lignes de comptes #{compta_lines.size}"
-    compta_lines.each do |cl|
-     # puts cl.inspect
-      cl.line_date = date
-      cl.narration = narration
-      cl.book_id = book.id
-      logger.debug cl.inspect
-    end
-    true
-  end
+ 
   
 end
