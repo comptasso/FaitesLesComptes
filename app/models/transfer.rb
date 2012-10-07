@@ -19,7 +19,7 @@ class Transfer < Writing
   
   
   alias original_compta_lines compta_lines
-  alias children compta_lines
+  
 
 
   # Pour toujours avoir les 2 compta_lines, compta_lines est redéfini
@@ -142,7 +142,10 @@ class Transfer < Writing
   end
 
   def not_same_accounts
-    errors[:base] << 'Comptes idendique' if @compta_line_from.account_id == @compta_line_to.account_id
+    if @compta_line_from.account_id == @compta_line_to.account_id
+      errors[:base] << 'Comptes idendique'
+      return false
+    end
   end
 
   # callback appelé par before_destroy pour empêcher la destruction des lignes

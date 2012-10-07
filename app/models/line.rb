@@ -165,7 +165,7 @@ class Line < ActiveRecord::Base
   #
   def supportline
     return self if account && account.number =~ /^5.*/
-    children.where('accounts.number LIKE ?', '5%').first
+    siblings.select {|l| l.account && l.account.number =~ /^5.*/ }.first
   end
 
 

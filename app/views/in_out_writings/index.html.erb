@@ -1,0 +1,30 @@
+<%= content_for :menu do %>
+  <%=  icon_to 'pdf.png', book_lines_path(@book, mois:@mois, an:@an, :format=>'pdf'), title:'PDF', :target=>'_blank' %>
+  <%=  icon_to 'report-excel.png', book_lines_path(@book, mois:@mois, an:@an, :format=>'xls'), title: 'XLS' %>
+  <%=  icon_to 'table-export.png', book_lines_path(@book, mois:@mois, an:@an, :format=>'csv'), title: 'CSV' %>
+<% end -%>
+
+<div id="lines_pdf" title="pdf" style="display:none"></div>
+
+<div class="champ">
+
+  <h3><%= @book.title %> : liste des écritures
+  <%= render 'submenu_mois'  %>
+</h3>
+ 
+  </div>
+
+
+  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed lines_table" >
+    <thead>
+      <tr>
+        <%= render 'table_header' %>
+      </tr>
+    </thead>
+   <tbody id="table_lines">
+      <%= render 'table_lines'  %>
+   </tbody>
+   <tfoot id="table_foot">
+     <%= render 'table_foot' %>
+   </tfoot>
+  </table>

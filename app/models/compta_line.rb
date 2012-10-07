@@ -4,6 +4,7 @@ class ComptaLine < ActiveRecord::Base
 
   self.table_name = 'Lines'
 
+  
   belongs_to :book
   belongs_to :destination
   belongs_to :nature
@@ -12,8 +13,9 @@ class ComptaLine < ActiveRecord::Base
   belongs_to :bank_extract
   belongs_to :check_deposit
   belongs_to :bank_account
-#  belongs_to :cash
-  belongs_to :owner, :polymorphic=>true  # pour les transferts uniquement (à ce stade)
+
+  # les lignes appartiennent à un owner qui peut être un transfer ou un writing
+  belongs_to :owner, :polymorphic=>true  
   has_and_belongs_to_many :bank_extract_lines,
     :join_table=>:bank_extract_lines_lines,
     :foreign_key=>'line_id',
@@ -32,6 +34,11 @@ class ComptaLine < ActiveRecord::Base
   # TODO faire les tests
   validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit_if_locked=>true
 
+  before_save  :fill_account, :if=> lambda {nature && nature.account}
+
+  scope :in_out_lines, where('nature_id IS NOT ?', nil)
+  scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
+
   # transforme ComptaLine en un Line, utile pour les tests
   # églement utilisé dans le modèle CheckDeposit pour accéder indifférement aux compta_lines
   # et aux lines (sans avoir une erreur TypeMislatch).
@@ -41,7 +48,26 @@ class ComptaLine < ActiveRecord::Base
     else
       Line.new(attributes)
     end
-
   end
+
+  # répond à la question si une ligne est affectée à un extrait bancaire ou non.
+  def pointed?
+    supportline = owner.counter_line
+    supportline.check_deposit_id || supportline.bank_extract_lines.any?
+  end
+
+
+  def editable?
+    !(pointed? || locked?)
+  end
+
+  protected
+
+  # remplit le champ account_id avec celui associé à nature si nature est effectivement associée à un compte.
+  def fill_account
+    self.account_id = nature.account.id
+  end
+
+ 
 
 end

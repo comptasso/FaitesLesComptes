@@ -1,0 +1,21 @@
+.row-fluid
+  .span12
+    =  builder.association :nature , :wrapper_html=>{:class=>'span3'}, input_html: {class: "span8" } , :label_html=>{class:'span4'},
+              :collection => @natures, :prompt => "Quoi ?", :required=>true
+
+    =  builder.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
+              :prompt => "Pour qui ?" ,  :wrapper_html=>{class: "span3"}, input_html: {class: "span8" } , :label_html=>{class:'span4'}
+    = builder.input(:debit , :wrapper_html=> {class: "span3"}, :label_html=>{class:'span4'},
+                  input_html:{class: "numeric decimal span8", value:two_decimals(@line.debit) }, :as=>:french_decimal) if (@book.type=='OutcomeBook')
+    = builder.input(:credit, :wrapper_html=> {class: "span3"},  :label_html=>{class:'span4'} ,
+                  input_html: {class: "numeric decimal span8", value: two_decimals(@line.credit) }, :as=>:french_decimal) if (@book.type=='IncomeBook')
+
+.row-fluid
+  .span12
+    
+    = builder.input :payment_mode , collection: PAYMENT_MODES, :prompt=>'Mode de réglement',
+                          disabled: "#{'Espèces' unless @organism.cashes.any?}",
+                          :wrapper_html=> {class: "span3"},
+                          :required=>true,  input_html: {class: "span8"}, :label_html=>{class:'span4'}
+    =f.fields_for :compta_lines, @counter_line do |build|
+      = render :partial=>'counter_line_form', :locals=>{:builder=>build}

@@ -198,6 +198,8 @@ Faitesvoscomptes::Application.routes.draw do
   resources :od_lines
   
   resources :books do
+    resources :writings
+    resources :in_out_writings
     resources :lines do
       member do
         post 'lock' # pour la requete ajax
@@ -205,11 +207,14 @@ Faitesvoscomptes::Application.routes.draw do
     end
     
   end
+
   resources :income_books do
     resources :lines
+    resources :in_out_writings
   end
   resources :outcome_books do
     resources :lines
+    resources :in_out_writings
   end
   resources :cashes, :only=> [:show] do
     resources :cash_controls do

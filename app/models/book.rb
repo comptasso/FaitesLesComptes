@@ -10,6 +10,7 @@ class Book < ActiveRecord::Base
   
   belongs_to :organism
   has_many :writings, :dependent=>:destroy
+  has_many :compta_lines, :through=>:writings
 
   has_many :lines, dependent: :destroy 
   # les chèques en attente de remise en banque

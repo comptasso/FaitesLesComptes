@@ -1025,16 +1025,22 @@ OK - La remise de chèque doit créer une writing avec deux lignes
 OK en profiter pour utiliser le module date_picker
 
 -- line
-Ecrire une recette ou une dépense doit créer une writing avec une compta_line comme contrepartie
-Les controlleurs doivent utiliser writing et line
-Modifier le form pour utiliser writing et line
-Modifier les affichages des lignes pour utiliser date, narration ou réf de writing (voir delegate ?)
+OK - Ecrire une recette ou une dépense doit créer une writing avec une compta_line comme contrepartie
+OK - Les controlleurs doivent utiliser writing et compta_line
+OK - Modifier le form pour utiliser writing et compta_line
+OK - Modifier les affichages des lignes pour utiliser date, narration ou réf de writing (voir delegate ?)
 Supprimer dans la table ligne le champ date, narration et ref (et les autres champs actuellement inutilisés)
 Revoir la méthode siblings et peut être children
 On pourrait aussi revoir belongs_to bank_extract puisqu'il y a le lien via bank_extract_line
-Mettre une transaction dans counterpart
-Line pourrait appartenir à un writing plutôt qu'à un owner polymorphique
-
+NON - Mettre une transaction dans counterpart, la counterpart est crée dans le controller via des params et non par le modèle
+NON - Line pourrait appartenir à un writing plutôt qu'à un owner polymorphique
+OK Revoir previous_line_id dans le controller (create)
+Franciser les boutons des forms
+Faire les spec
+Voir si on ne peut pas utiliser lines pour retrouver les validations qui existent
+Revoir le javascript pour les champs banques et num chèque
+Revoir le modal form
+Pb de l'affichage des mois qui n'apparaît pas
 -------------------------- Soldes au 01/01/2011 n'apparaissent pas ----------------------
 En fait en enregistrant une écriture d'à nouveau, les soldes au 01/01 n'apparaissent pas car l'écriture est considérée comme une écriture de l'exercice
 
@@ -1092,7 +1098,8 @@ OK - Revoir la page index de organism (title et mise en page) : en fait je l'ai 
 OK - supprimer la session de period
 On devrait bloquer la création d'organisme à un
 De même pour OdBook : un seul livre d'OD
-     Factoriser les jQuery datatable
+Factoriser les Utilities Extract
+Factoriser les jQuery datatable
 Le datatable de compta#lines ne marche pas
 ? - Datatable  pour la balance
 faire des tests pour pick_date_for et le transformer en gem

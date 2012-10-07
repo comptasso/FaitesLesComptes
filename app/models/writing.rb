@@ -26,6 +26,7 @@ class Writing < ActiveRecord::Base
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
 
   default_scope order('date ASC')
+  scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
 
   def total_debit
     compta_lines.sum(:debit)
@@ -35,14 +36,24 @@ class Writing < ActiveRecord::Base
     compta_lines.sum(:credit)
   end
 
+   # support renvoie la première ligne avec un compte de classe 5 de l'écriture
+  def support
+    s = compta_lines.select {|cl| cl.account && cl.account.number =~ /^5.*/}
+    s.first if s
+  end
+
   # indique si une écritue est équilibrée ou non
   # ajoute une erreur si déséquilibrée
   def balanced?
     return false if compta_lines.size == 0 # Même s'il y a un validator two_compta_lines,
     # il ne s'exécute pas forcément avant celui ci d'où l'intérêt d'un test.
-    b =  (total_credit == total_debit)
-    errors.add(:base, 'Ecriture déséquilibrée') unless b
-    b
+    if total_credit != total_debit
+      logger.debug "Total débit : #{total_debit} - Total credit : #{total_credit}"
+      errors.add(:base, 'Ecriture déséquilibrée')
+      false
+    else
+      true
+    end
   end
 
   # lock verrouille toutes les lignes de l'écriture
