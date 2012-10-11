@@ -1043,6 +1043,7 @@ OK - Revoir le javascript pour les champs banques et num chèque
 Revoir le modal form pour utiliser les nested attributes
 OK - Pb de l'affichage des mois qui n'apparaît pas
 InOutWriting doit avoir une in_out_line avec une nature
+Déplacer le + de création d'écritures vers la ligne des icones
 -------------------------- Soldes au 01/01/2011 n'apparaissent pas ----------------------
 En fait en enregistrant une écriture d'à nouveau, les soldes au 01/01 n'apparaissent pas car l'écriture est considérée comme une écriture de l'exercice
 
