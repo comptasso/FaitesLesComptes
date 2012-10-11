@@ -29,17 +29,17 @@ class Writing < ActiveRecord::Base
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
 
   def total_debit
-    compta_lines.sum(:debit)
+    compta_lines.inject(0) {|tot, cl| tot += cl.debit if cl.debit}
   end
 
   def total_credit
-    compta_lines.sum(:credit)
+    compta_lines.inject(0) {|tot, cl| tot += cl.credit if cl.credit}
   end
 
-   # support renvoie la première ligne avec un compte de classe 5 de l'écriture
+   # support renvoie le long_name de la première ligne avec un compte de classe 5 de l'écriture
   def support
     s = compta_lines.select {|cl| cl.account && cl.account.number =~ /^5.*/}
-    s.first if s
+    s.first.long_name if s
   end
 
   # indique si une écritue est équilibrée ou non

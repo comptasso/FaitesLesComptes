@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |config|
-  # config.filter = {wip:true}
+ #  config.filter = {wip:true}
 end
 
 describe Writing do
@@ -84,43 +84,7 @@ describe Writing do
 
   end
 
-  describe 'methods' do
 
-    before(:each) do
-      @w = Writing.new(valid_parameters)
-      @w.stub(:compta_lines).and_return(@a = double(Arel))
-      @a.stub(:size).and_return 2
-    end
-
-    it 'total_debit, renvoie le total des debits des lignes' do
-      @a.should_receive(:sum).with(:debit).and_return 145
-      @w.total_debit.should == 145
-    end
-
-    it 'total_credit, renvoie le total des debits des lignes' do
-      @a.should_receive(:sum).with(:credit).and_return 541
-      @w.total_credit.should == 541
-    end
-
-    it 'balanced? répond false si les deux totaux sont inégaux' do
-      @w.stub(:total_credit).and_return 541
-      @w.stub(:total_debit).and_return 145
-      @w.should_not be_balanced
-
-    end
-
-    it 'locked? est vrai si une ligne est verrouillée'
-    
-    it 'lock doit verrouiller toutes les lignes'
-
-    it 'et true s ils sont égaux' do
-      @w.stub(:total_credit).and_return 541
-      @w.stub(:total_debit).and_return 541
-      @w.should be_balanced
-    end
-
-
-  end
 
   end
 
@@ -153,6 +117,47 @@ context 'with real models' do
     it 'should save the lines' do
       expect {@r.save}.to change {Line.count}.by(2)
     end
+
+
+  end
+
+
+    describe 'methods',  wip:true  do
+
+    before(:each) do
+      @w = Writing.new(date:Date.today, narration:'spec',
+        :compta_lines_attributes=>{'0'=>{account_id:1, debit:12, payment_mode:'Virement'},
+        '1'=>{account_id:1, credit:12, payment_mode:'Virement'} })
+     end
+     it 'check compta_lines' do
+       @w.compta_lines.should be_an(Array)
+       @w.compta_lines.first.should be_an_instance_of(ComptaLine)
+     end
+
+
+    it 'total_debit, renvoie le total des debits des lignes' do
+       @w.total_debit.should == 12
+    end
+
+    it 'total_credit, renvoie le total des debits des lignes' do
+      @w.total_credit.should == 12
+    end
+
+    it 'balanced? répond false si les deux totaux sont inégaux' do
+      @w.stub(:total_debit).and_return 145
+      @w.should_not be_balanced
+
+    end
+
+     it 'et true s ils sont égaux' do
+      @w.should be_balanced
+    end
+
+    it 'locked? est vrai si une ligne est verrouillée'
+
+    it 'lock doit verrouiller toutes les lignes'
+
+
 
 
   end

@@ -94,7 +94,7 @@ function $f_td_bank_cash() {
         income_outcome = false;
     }
 
-    payment_mode = $('#entry_lines #line_payment_mode').val();
+    payment_mode = $('#entry_lines #in_out_writing_compta_lines_attributes_0_payment_mode').val();
     caisses = $('optgroup[label="Caisses"] option');
     banques =  $('optgroup[label="Banques"] option');
 
@@ -159,7 +159,7 @@ jQuery(function () {
     if ($('#entry_lines').length !== 0) {
         $f_td_bank_cash();
     }
-    $('#entry_lines #line_payment_mode').live('change', $f_td_bank_cash);
+    $('#entry_lines #in_out_writing_compta_lines_attributes_0_payment_mode').live('change', $f_td_bank_cash);
 });
 
 

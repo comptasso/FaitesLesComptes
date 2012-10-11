@@ -249,6 +249,8 @@ fr:
       user:
         name: Nom
 
+
+
     errors:
       messages:
         blank: 'obligatoire'
@@ -318,6 +320,9 @@ fr:
       writing:
         create: Créer l'écriture
         update: Enregistrer
+      in_out_writing:
+        create: Créer l'écriture
+        update: Energistrer
     
         
 

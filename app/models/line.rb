@@ -75,26 +75,23 @@ class Line < ActiveRecord::Base
  
   # voir au besoin les validators qui sont dans lib/validators
   validates :debit, :credit, numericality: true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
-  validates :book_id, presence:true
-  validates :line_date, presence: true
-  validates :line_date, must_belong_to_period: true
+#  validates :book_id, presence:true
+#  validates :line_date, presence: true
+#  validates :line_date, must_belong_to_period: true
   validates :nature_id, presence: true, :unless => lambda { self.account_id || self.account }
-  validates :narration, presence: true
+#  validates :narration, presence: true
   validates :payment_mode, presence: true,  :inclusion => { :in =>PAYMENT_MODES ,
     :message => "mode de paiement inconnu" }, :if=>lambda { self.book.class == IncomeBook || self.book.class == OutcomeBook }
   validates :debit, :credit, :not_null_amounts=>true, :not_both_amounts=>true
   validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
   validates :debit, presence: true # mais ces validates ont pour objectif de mettre un * dans le formulaire
   # TODO faire les tests
-  validates :narration, :line_date, :nature_id, :destination_id, :debit, :credit, :book_id, :created_at, :payment_mode, :cant_edit_if_locked=>true
+  validates :nature_id, :destination_id, :debit, :credit, :created_at, :payment_mode, :cant_edit_if_locked=>true
 
   # LES SCOPES
   default_scope order: 'line_date ASC'
 
   scope :mois, lambda { |date| where('line_date >= ? AND line_date <= ?', date.beginning_of_month, date.end_of_month) }
-  scope :multiple, lambda {|copied_id| where('copied_id = ?', copied_id)}
- 
-  
 
   scope :period, lambda {|p| where('line_date >= ? AND line_date <= ?', p.start_date, p.close_date)}
   scope :period_month, lambda {|p,m| where('line_date >= ? AND line_date <= ?', p.start_date.months_since(m), p.start_date.months_since(m).end_of_month) }
@@ -118,7 +115,7 @@ class Line < ActiveRecord::Base
   scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil) }
 
 
-  delegate :date, :narration, :ref, :to=>:owner
+  delegate :date, :narration, :ref, :book, :support, :to=>:owner
   
   # ne peuvent être transformées en scope car ne retournent pas un arel
   def self.sum_debit_before(date)

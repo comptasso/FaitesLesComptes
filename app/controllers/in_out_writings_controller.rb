@@ -8,8 +8,7 @@ class InOutWritingsController < ApplicationController
   # des barres du graphe.qui est affiché par organism#show
   before_filter :fill_natures, :only=>[:new,:edit] # pour faire la saisie des natures en fonction du livre concerné
 
-  # GET /lines
-  # GET /lines.json
+  # GET /in_out_writings
   def index
     @monthly_extract = Utilities::MonthlyInOutExtract.new(@book, year:params[:an], month:params[:mois])
     respond_to do |format|
@@ -27,8 +26,7 @@ class InOutWritingsController < ApplicationController
     @line = @in_out_writing.compta_lines.build
     @counter_line = @in_out_writing.compta_lines.build
     if flash[:previous_line_id]
-      @previous_line = Line.find_by_id(flash[:previous_line_id])
-      @line.counter_account_id = @previous_line.counter_account_id
+      @previous_line = ComptaLine.find_by_id(flash[:previous_line_id])
       @line.payment_mode = @previous_line.payment_mode
     end
     respond_to do |format|
@@ -43,8 +41,6 @@ class InOutWritingsController < ApplicationController
   def create
     fill_counter_line
     @in_out_writing = @book.in_out_writings.build(params[:in_out_writing])
-    logger.debug "ecriture #{@in_out_writing.inspect}"
-    logger.debug "ligne #{@in_out_writing.compta_lines.first.inspect}"
     @line = @in_out_writing.in_out_line
     @counter_line=@in_out_writing.counter_line
     respond_to do |format|
