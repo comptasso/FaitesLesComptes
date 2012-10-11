@@ -23,42 +23,42 @@ describe 'vue lines' do
 #    @p.bank_accounts.first.long_name.should == 'bonjour'
 #  end
 
-  describe 'new line' do 
+  describe 'new in_out_writing' do
   
   before(:each) do
-    @line = @ob.lines.new
-     visit organism_path(@p)
+    visit organism_path(@p)
   end 
 
   it "affiche la page new" do
     
-    visit new_book_line_path(@ob)
+    visit new_book_in_out_writing_path(@ob)
     page.should have_content('nouvelle ligne') 
-    Line.count.should == 0
+    Writing.count.should == 0
   end
 
   it 'remplir correctement le formulaire crée une nouvelle ligne' do
-    visit new_book_line_path(@ob)
-    save_and_open_page
-    fill_in 'line_line_date_picker', :with=>'01/04/2012'
-    fill_in 'line_narration', :with=>'Ecriture test'
-    select 'Essai', :for=>'line_nature_id'
-    fill_in 'line_debit', with: 50.21
+    visit new_book_in_out_writing_path(@ob)
+    fill_in 'in_out_writing_date_picker', :with=>'01/04/2012'
+    fill_in 'in_out_writing_narration', :with=>'Ecriture test'
+    select 'Essai', :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
+    fill_in 'in_out_writing_compta_lines_attributes_0_debit', with: 50.21
     select 'Chèque'
     select '51201 DebiX'
     click_button 'Créer'
-    Line.count.should == 2 # avec sa contrepartie
+    Writing.count.should == 1
+    ComptaLine.count.should == 2 # avec sa contrepartie
   end 
 
     it 'remplir avec une mauvaise date doit réafficher le formulaire sans enregistrer la ligne' do
-      visit new_book_line_path(@ob)
-    fill_in 'line_line_date_picker', :with=>'31/04/2012'
-    fill_in 'line_narration', :with=>'Ecriture test'
-    select 'Essai', :for=>'line_nature_id'
-    fill_in 'line_debit', with: 50.21
+      visit new_book_in_out_writing_path(@ob)
+    fill_in 'in_out_writing_date_picker', :with=>'31/04/2012'
+    fill_in 'in_out_writing_date_picker', :with=>'01/04/2012'
+    fill_in 'in_out_writing_narration', :with=>'Ecriture test'
+    select 'Essai', :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
+    fill_in 'in_out_writing_compta_lines_attributes_0_debit', with: 50.21
     select 'Chèque'
     click_button 'Créer'
-    Line.count.should == 0
+    ComptaLine.count.should == 0
     page.should have_content('nouvelle ligne')
     end
 
