@@ -3,11 +3,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
-  # c.filter = {:wip=> true }
+   c.filter = {:wip=> true }
 end
 
 describe BankExtract do 
-  include OrganismFixture
+  include OrganismFixture 
   
   
   before(:each) do
@@ -139,12 +139,8 @@ describe BankExtract do
       vals.each do |v|
         @be.begin_sold = v
         @be.valid?
-      
-
         @be.errors[:begin_sold].should have(0).messages
       end
-      
-
     end
 
     it 'testing two decimals validators with invalid values' do
@@ -155,21 +151,16 @@ describe BankExtract do
       
         @be.errors[:begin_sold].should have_at_least(1).messages
       end
-
-
     end
-
-
-    
   end
 
-  describe 'when locked' , wip:true do
+  describe 'when locked' , wip:true do  
 
     before(:each) do
       @be = @ba.bank_extracts.create!(:begin_date=>Date.today, end_date:Date.today, begin_sold:1,
         total_debit:1, total_credit:2)
-      @l1 = Line.create!(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
-      @bel = BankExtractLine.create!(bank_extract_id:@be.id, lines:[@l1.supportline])
+      @w1 = create_in_out_writing(97 , 'Chèque')
+      @bel = BankExtractLine.create!(bank_extract_id:@be.id, compta_lines:[@w1.supportline])
       @be.locked = true
       @be.save!
     end
@@ -202,18 +193,14 @@ describe BankExtract do
   describe 'contrôle des bank_extract_lines' do
 
     before(:each) do
-      @l1 = Line.new(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
-      @l1.valid?
-      @l1.should be_valid
-      @l1.save!
-      
+      @l1 = create_in_out_writing(97, 'Chèque')
+    
 
       @cd = CheckDeposit.new(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
       @cd.checks << @l1.children.first
       @cd.save!
 
-      @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id, line_date:Date.today, debit:13, credit:0, payment_mode:'Virement', book_id:@ib.id, nature_id:@n.id)
-
+      @l2 = create_in_out_writing(13, 'Virement') 
       @bel1 = BankExtractLine.new(bank_extract_id:@be2.id)
       @bel1.lines <<  @cd.debit_line
       @bel1.save!

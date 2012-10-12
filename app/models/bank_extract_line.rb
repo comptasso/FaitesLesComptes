@@ -13,7 +13,7 @@
 #
 
 #
-# Une relation HABTM est définie avec lines, permettant d'avoir une ligne de relevé
+# Une relation HABTM est définie avec compta_lines, permettant d'avoir une ligne de relevé
 # bancaire qui correspond à plusieurs lignes d'écriture (ex péages regroupés
 # par semaine par les sociétés d'autoroute mais dont les dépenses sont enregistrées
 # ticket par ticket.
@@ -27,8 +27,11 @@ class BankExtractLine < ActiveRecord::Base
 
   belongs_to :bank_extract
 
-  has_and_belongs_to_many :lines, :before_add=>:not_already_included
-
+  has_and_belongs_to_many :compta_lines, 
+    :join_table=>:bank_extract_lines_lines,
+    :association_foreign_key=>'line_id',
+    :before_add=>:not_already_included,
+    :uniq=>true # pour les rapprochements bancaires
 
   acts_as_list :scope => :bank_extract
 
@@ -77,25 +80,25 @@ class BankExtractLine < ActiveRecord::Base
   # lorsque l'on verrouille le relevé
   #
   def lock_line
-    lines.each do |l|
+    compta_lines.each do |l|
       # verrouillage des siblings 
-      l.lock_line
+      l.lock_writing
       # si l est une remise de chèque il faut aussi verrouiller les écritures correspondantes
       if l.check_deposit_id
         cd = l.check_deposit
-        cd.checks.each {|l| l.lock_line}
+        cd.checks.each {|l| l.lock_writing}
       end
     end
   end
 
   # Retourne le total débit des lignes associées.
   def debit
-    lines.sum(:debit)
+    compta_lines.sum(:debit)
   end
 
   # Retourne le total crédit des lignes associées
   def credit
-    lines.sum(:credit)
+    compta_lines.sum(:credit)
   end
 
   # regorup prend une standard_bank_extract_line comme argument
@@ -105,9 +108,9 @@ class BankExtractLine < ActiveRecord::Base
   # puis que l'on supprime l'enregistrement correspondant à l'argument.
   #
   def regroup(bel)
-    bel.lines.each do |l|
-      bel.lines.delete(l)
-      lines << l
+    bel.compta_lines.each do |l|
+      bel.compta_lines.delete(l)
+      compta_lines << l
     end
     save
     bel.destroy
@@ -122,11 +125,11 @@ class BankExtractLine < ActiveRecord::Base
   # (la première étant self mais dépouillée de toutes ses lignes sauf une
   #
   def degroup
-    return self if self.lines.size < 2
+    return self if self.compta_lines.size < 2
     pos = position
-    grp = lines.offset(1).all.map do |l|
-      lines.delete(l)
-      new_bel = bank_extract.bank_extract_lines.create!(lines:[l])
+    grp = compta_lines.offset(1).all.map do |l|
+      compta_lines.delete(l)
+      new_bel = bank_extract.bank_extract_lines.create!(compta_lines:[l])
       new_bel.insert_at(pos + 1)
       new_bel
     end
@@ -138,12 +141,12 @@ class BankExtractLine < ActiveRecord::Base
   # TODO à mettre dans private
   def prepare_datas
     #raise 'StandardBankExtractLine sans ligne'
-    unless lines.empty?
-      self.date ||= lines.first.line_date # par défaut on construit les infos de base
-      @payment= lines.first.payment_mode # avec la première ligne associée
-      @narration = lines.first.narration
+    unless compta_lines.empty?
+      self.date ||= compta_lines.first.line_date # par défaut on construit les infos de base
+      @payment= compta_lines.first.payment_mode # avec la première ligne associée
+      @narration = compta_lines.first.narration
       # TODO blid est-il utile ?
-      @blid= "line_#{lines.first.id}" if lines.count == 1 # blid pour bank_line_id
+      @blid= "line_#{compta_lines.first.id}" if compta_lines.count == 1 # blid pour bank_line_id
     end
 
   end
@@ -152,8 +155,8 @@ class BankExtractLine < ActiveRecord::Base
   private
 
   def not_empty
-    if lines.empty?
-      errors.add(:lines, 'cant exist without lines')
+    if compta_lines.empty?
+      errors.add(:compta_lines, 'cant exist without compta_lines')
       false
     else
       true

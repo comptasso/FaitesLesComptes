@@ -36,7 +36,7 @@ class Writing < ActiveRecord::Base
     compta_lines.inject(0) {|tot, cl| tot += cl.credit if cl.credit}
   end
 
-   # support renvoie le long_name du compte de la première ligne avec un compte de classe 5 de l'écriture
+  # support renvoie le long_name du compte de la première ligne avec un compte de classe 5 de l'écriture
   def support
     s = support_line
     s.long_name if s
@@ -66,9 +66,8 @@ class Writing < ActiveRecord::Base
     Writing.transaction do
       compta_lines.all.each do |cl|
         unless cl.locked?
-        cl.locked = true
-        cl.save
-      end
+          cl.update_attribute(:locked, true)
+        end
       end
     end
   end

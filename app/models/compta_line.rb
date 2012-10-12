@@ -41,7 +41,7 @@ class ComptaLine < ActiveRecord::Base
   # et du champ check_deposit_id
   scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil) }
 
-  delegate :date, :narration, :ref, :book, :support, :to=>:owner
+  delegate :date, :narration, :ref, :book, :support, :lock, :to=>:owner
 
   # transforme ComptaLine en un Line, utile pour les tests
   # églement utilisé dans le modèle CheckDeposit pour accéder indifférement aux compta_lines

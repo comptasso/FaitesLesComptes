@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |config|
- #  config.filter = {wip:true}
+   config.filter = {wip:true}
 end
 
 describe Writing do
@@ -122,12 +122,11 @@ context 'with real models' do
   end
 
 
-    describe 'methods',  wip:true  do
+    describe 'methods'  do
 
     before(:each) do
-      @w = Writing.new(date:Date.today, narration:'spec',
-        :compta_lines_attributes=>{'0'=>{account_id:1, debit:12, payment_mode:'Virement'},
-        '1'=>{account_id:1, credit:12, payment_mode:'Virement'} })
+      create_minimal_organism
+      @w = create_in_out_writing
      end
      it 'check compta_lines' do
        @w.compta_lines.should be_an(Array)
@@ -136,11 +135,11 @@ context 'with real models' do
 
 
     it 'total_debit, renvoie le total des debits des lignes' do
-       @w.total_debit.should == 12
+       @w.total_debit.should == 99
     end
 
     it 'total_credit, renvoie le total des debits des lignes' do
-      @w.total_credit.should == 12
+      @w.total_credit.should == 99
     end
 
     it 'balanced? répond false si les deux totaux sont inégaux' do
@@ -151,6 +150,13 @@ context 'with real models' do
 
      it 'et true s ils sont égaux' do
       @w.should be_balanced
+    end
+
+    it 'lock' , wip:true do
+      @w.save!
+      @w.lock
+      @w.compta_lines.all.each {|l| l.should be_locked}
+      @w.should be_locked
     end
 
     it 'locked? est vrai si une ligne est verrouillée'
