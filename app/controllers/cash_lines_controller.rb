@@ -9,10 +9,10 @@
 
 
 
-class CashLinesController < LinesController
+class CashLinesController < InOutWritingsController
   
 
-# la méthode index est héritée de LinesController
+# la méthode index est héritée de InOutWritingsController
   def index
     @monthly_extract = Utilities::MonthlyCashExtract.new(@cash, {year:params[:an], month:params[:mois]})
     respond_to do |format|

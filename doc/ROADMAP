@@ -1037,13 +1037,18 @@ NON - Mettre une transaction dans counterpart, la counterpart est crée dans le 
 NON - Line pourrait appartenir à un writing plutôt qu'à un owner polymorphique
 OK - Revoir previous_line_id dans le controller (create)
 OK - Franciser les boutons des forms
-Faire les spec
+OK - Faire les spec
 Voir si on ne peut pas utiliser lines pour retrouver les validations qui existent
 OK - Revoir le javascript pour les champs banques et num chèque
 Revoir le modal form pour utiliser les nested attributes
 OK - Pb de l'affichage des mois qui n'apparaît pas
 InOutWriting doit avoir une in_out_line avec une nature
 Déplacer le + de création d'écritures vers la ligne des icones
+
+
+Dans Account, la logique has_many Transfer n'a plus vraiment lieu d'être
+Account parle encore de counter_account_id
+monthlyCashExtract devrait utiliser les ComptaLine
 -------------------------- Soldes au 01/01/2011 n'apparaissent pas ----------------------
 En fait en enregistrant une écriture d'à nouveau, les soldes au 01/01 n'apparaissent pas car l'écriture est considérée comme une écriture de l'exercice
 

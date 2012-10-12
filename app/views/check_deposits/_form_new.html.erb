@@ -2,7 +2,7 @@
 
 <%= simple_form_for([@organism, @bank_account, @check_deposit], html:{class:'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
-  <%= f.input :pick_date, :label=> 'Date', input_html: {class: 'span2', date_min:Date.today.years_ago(5), date_max:Date.today.years_since(5)} ,:required => true, :as=>:date_picker %>
+  <%= f.input :deposit_date_picker, :label=> 'Date', input_html: {class: 'span2', date_min:Date.today.years_ago(5), date_max:Date.today.years_since(5)} ,:required => true, :as=>:date_picker %>
 
   <%= f.association :bank_account, 
               input_html: {:class=> "span2"},

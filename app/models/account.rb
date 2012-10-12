@@ -83,7 +83,7 @@ class Account < ActiveRecord::Base
   # retourne le premier caractère du numéro de compte
   # attention classe avec un E final, il s'agit d'une logique de comptable, pas de programmeur
   def classe
-    self.number[0]
+    number[0]
   end
 
   # fournit le cumul des débit (dc = 'debit') ou des crédits(dc = 'credit')

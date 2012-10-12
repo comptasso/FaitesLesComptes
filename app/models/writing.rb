@@ -36,10 +36,15 @@ class Writing < ActiveRecord::Base
     compta_lines.inject(0) {|tot, cl| tot += cl.credit if cl.credit}
   end
 
-   # support renvoie le long_name de la première ligne avec un compte de classe 5 de l'écriture
+   # support renvoie le long_name du compte de la première ligne avec un compte de classe 5 de l'écriture
   def support
+    s = support_line
+    s.long_name if s
+  end
+
+  def supportline
     s = compta_lines.select {|cl| cl.account && cl.account.number =~ /^5.*/}
-    s.first.long_name if s
+    s.first if s
   end
 
   # indique si une écritue est équilibrée ou non

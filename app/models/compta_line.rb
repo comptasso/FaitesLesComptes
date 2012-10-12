@@ -37,6 +37,9 @@ class ComptaLine < ActiveRecord::Base
 
   scope :in_out_lines, where('nature_id IS NOT ?', nil)
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
+  # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
+  # et du champ check_deposit_id
+  scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil) }
 
   delegate :date, :narration, :ref, :book, :support, :to=>:owner
 

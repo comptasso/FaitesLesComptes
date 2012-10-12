@@ -44,6 +44,21 @@ module OrganismFixture
     @c.update_attribute(:name, 'Magasin'); @c.save;
     @baca = @ba.current_account(@p) # pour baca pour BankAccount Current Account
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
+    @income_account = @o.accounts.classe_7.first
+    @outcome_account = @o.accounts.classe_6.first
+  end
+
+  def create_in_out_writing(montant=99, payment='Virement')
+    if payment == 'Chèque'
+      acc_id = @p.rem_check_account.id
+    else
+      acc_id = @baca.id
+    end
+    @w = @ib.in_out_writings.create!({date:Date.today, narration:'ligne créée par la méthode create_in_out_writing',
+      :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, credit:montant, payment_mode:payment},
+        '1'=>{account_id:acc_id, debit:montant, payment_mode:payment}
+      }
+    })
   end
 
  

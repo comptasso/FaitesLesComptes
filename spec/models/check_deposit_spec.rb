@@ -4,20 +4,19 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
-  # c.filter = {:wip=> true }
+ #   c.filter = {:wip=> true }
 end
 
 
-describe CheckDeposit do 
+describe CheckDeposit do  
   include OrganismFixture  
  
-  before(:each) do
-    create_minimal_organism 
- 
-    @l1=@ib.lines.create!(line_date: Date.today,  :narration=>'ligne de test', credit: 44, payment_mode:'Chèque', nature: @n)
-    @l2=@ib.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 101, payment_mode:'Chèque', nature: @n)
-    @l3=@ib.lines.create!(line_date: Date.today, :narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
-    @l5=@ib.lines.create!(line_date: Date.today, :narration=>'ligne de test',credit: 50000, payment_mode:'Virement', nature: @n)
+  before(:each) do 
+    create_minimal_organism
+    @w1 = create_in_out_writing(44, 'Chèque')
+    @w2 = create_in_out_writing(101, 'Chèque')
+    @w3 = create_in_out_writing(300, 'Chèque')
+    @w4 = create_in_out_writing(50000, 'Virement')
     @ch= CheckDeposit.new
   end
 
@@ -34,7 +33,7 @@ describe CheckDeposit do
 
     it "3 chèques à déposer" do
       CheckDeposit.pending_checks.should have(3).elements
-      CheckDeposit.pending_checks.should == [@l1.children.first,@l2.children.first,@l3.children.first]
+      CheckDeposit.pending_checks.should == [@w1.children.last,@w2.children.last,@w3.children.last]
     end
 
     
@@ -46,7 +45,7 @@ describe CheckDeposit do
    
   end
 
-  describe "création d'une remise de chèque" do
+  describe "création d'une remise de chèque"  do
     it "save the right date" do
       cd = @ba.check_deposits.new deposit_date_picker: '01/04/2012'
       cd.pick_all_checks
@@ -129,7 +128,7 @@ describe CheckDeposit do
 
     it 'pick_all_checks récupère tous les chèques' do
       @check_deposit.pick_all_checks
-      @check_deposit.checks.should == [@l1.children.first,@l2.children.first,@l3.children.first]
+      @check_deposit.checks.should == [@w1.children.last,@w2.children.last,@w3.children.last]
     end
 
     it "un nouvel enregistrement a son total à zero" do
@@ -147,16 +146,16 @@ describe CheckDeposit do
       end
 
       it 'quand on retire un chèque, total est mis à jour' do
-        @check_deposit.checks.delete(@l2.children.first)
+        @check_deposit.checks.delete(@w2.children.last)
         @check_deposit.total_checks.should == 344
       end
 
       it 'idem après ajout de chèque' do
         @check_deposit.total_checks.should == 445
-        @check_deposit.checks.delete(@l1.children.first)
-        @check_deposit.checks.delete(@l3.children.first)
+        @check_deposit.checks.delete(@w1.children.last)
+        @check_deposit.checks.delete(@w3.children.last)
         @check_deposit.total_checks.should == 101
-        @check_deposit.checks << @l3.children.first
+        @check_deposit.checks << @w3.children.last
         @check_deposit.total_checks.should == 401
       end
 
@@ -166,7 +165,7 @@ describe CheckDeposit do
 
   end
 
-  describe "après sauvegarde" do
+  describe "après sauvegarde"  do
  
     before(:each) do
       date = Date.today + 2
@@ -176,11 +175,11 @@ describe CheckDeposit do
     end
 
     
-    describe 'sauver doit avoir créé une écriture' do
+    describe 'sauver doit avoir créé une écriture'  do
 
       it 'ligne au credit du 511'  do
         cl = @check_deposit.credit_line
-        cl.line_date.should == @check_deposit.deposit_date
+        cl.date.should == @check_deposit.deposit_date
         cl.account.number.should == REM_CHECK_ACCOUNT[:number]
         cl.credit.should == @check_deposit.total_checks
 
@@ -188,7 +187,7 @@ describe CheckDeposit do
 
       it 'ligne au débit du 511' do
         dl = @check_deposit.debit_line
-        dl.line_date.should == @check_deposit.deposit_date
+        dl.date.should == @check_deposit.deposit_date
         dl.account.should == @check_deposit.bank_account.current_account(@p)
         dl.debit.should == @check_deposit.total_checks
       end
@@ -209,10 +208,10 @@ describe CheckDeposit do
 
 
 
-    describe 'edition'  do
+    describe 'edition' do
 
       it 'remove a check'  do
-        l2 = @l2.children.first
+        l2 = @w2.children.last
         @check_deposit.checks.delete(l2)
         @check_deposit.total_checks.should == 344
         @check_deposit.save!
@@ -222,10 +221,10 @@ describe CheckDeposit do
 
       it 'add_check'  do
         @check_deposit.total_checks.should == 445
-        @check_deposit.checks.delete(@l1.supportline)
-        @check_deposit.checks.delete(@l3.supportline)
+        @check_deposit.checks.delete(@w1.supportline)
+        @check_deposit.checks.delete(@w3.supportline)
         @check_deposit.total_checks.should == 101
-        @check_deposit.checks << @l3.supportline
+        @check_deposit.checks << @w3.supportline
         @check_deposit.total_checks.should == 401
         @check_deposit.save!
         @check_deposit.credit_line.credit.should == 401
@@ -261,7 +260,7 @@ describe CheckDeposit do
 
     
 
-    describe "le rattachement à un extrait de compte" , wip:true do
+    describe "le rattachement à un extrait de compte" do
       before(:each) do
         @check_deposit.should have(3).checks
         @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
@@ -291,12 +290,12 @@ describe CheckDeposit do
       end
 
       it "ne peut plus retirer de chèque" do
-        expect {@check_deposit.checks.delete(@l2.supportline)}.to raise_error
+        expect {@check_deposit.checks.delete(@w2.supportline)}.to raise_error
       end
 
       it "ne peut plus ajouter de chèque" do
-        @l4=@ib.lines.create!(line_date: Date.today,counter_account:@baca, :narration=>'ligne de test', credit: 300, payment_mode:'Chèque', nature: @n)
-        expect {@check_deposit.checks << @l4.supportline}.to raise_error
+        @w5 = create_in_out_writing(44, 'Chèque')
+        expect {@check_deposit.checks << @w5.supportline}.to raise_error
         
       end
    

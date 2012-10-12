@@ -36,7 +36,7 @@ class CheckDeposit < ActiveRecord::Base
   # La condition est mise ici pour que check_deposit.new soit associée d'emblée
   # à toutes les lignes qui correspondant aux chèques en attente d'encaissement
   # de l'organisme correspondant.
-  has_many :checks, class_name: 'Line',
+  has_many :checks, class_name: 'ComptaLine',
     conditions: proc { ['account_id = ? AND debit > 0', rem_check_account.id] },
     dependent: :nullify,
     before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
@@ -64,7 +64,7 @@ class CheckDeposit < ActiveRecord::Base
   
   # permet de trouver les cheques à encaisser pour  tout l'organisme
   def self.pending_checks
-     Line.pending_checks.all
+     ComptaLine.pending_checks.all
   end
 
 
