@@ -87,7 +87,7 @@ class CheckDeposit < ActiveRecord::Base
   end
   
   def credit_line
-    credit_compta_line.to_line if credit_compta_line
+    credit_compta_line if credit_compta_line
   end
 
 
@@ -100,7 +100,7 @@ class CheckDeposit < ActiveRecord::Base
   end
 
   def debit_line
-    debit_compta_line.to_line if debit_compta_line
+    debit_compta_line if debit_compta_line
   end
 
   # la remise chèque est pointée si la ligne débit est connectée à

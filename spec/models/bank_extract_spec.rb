@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
-   c.filter = {:wip=> true }
+ #  c.filter = {:wip=> true }
 end
 
 describe BankExtract do 
@@ -154,7 +154,7 @@ describe BankExtract do
     end
   end
 
-  describe 'when locked' , wip:true do  
+  describe 'when locked' do  
 
     before(:each) do
       @be = @ba.bank_extracts.create!(:begin_date=>Date.today, end_date:Date.today, begin_sold:1,
@@ -174,14 +174,14 @@ describe BankExtract do
     it 'toutes les lignes de l extrait sont verrouillées' do 
       @be.bank_extract_lines.each do |bels|
 
-          bels.lines.each {|l| l.should be_locked}
+          bels.compta_lines.each {|l| l.should be_locked} 
         
       end
     end
     
     it 'toutes les siblings sont verrouillés' do
       @be.bank_extract_lines.each do |bels|
-        bels.lines.each do |ls|
+        bels.compta_lines.each do |ls|
           ls.siblings.each {|l| l.should be_locked}
         end
       end
@@ -190,24 +190,25 @@ describe BankExtract do
 
   end
 
-  describe 'contrôle des bank_extract_lines' do
+  describe 'contrôle des bank_extract_lines'  do
 
-    before(:each) do
-      @l1 = create_in_out_writing(97, 'Chèque')
-    
-
+   before(:each) do
+      @l1 = create_in_out_writing(97, 'Chèque') 
       @cd = CheckDeposit.new(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
-      @cd.checks << @l1.children.first
+      @cd.checks << @l1.children.last
       @cd.save!
-
-      @l2 = create_in_out_writing(13, 'Virement') 
+      
       @bel1 = BankExtractLine.new(bank_extract_id:@be2.id)
-      @bel1.lines <<  @cd.debit_line
+      @bel1.compta_lines <<  @cd.debit_line
       @bel1.save!
-      @bel2 = BankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2.supportline])
+
+      @l2 = create_outcome_writing(13)
+      @bel2 = BankExtractLine.create!(bank_extract_id:@be2.id, compta_lines:[@l2.supportline])
 
 
     end
+
+     
 
     it "should have two bank_extract_lines" do
       @be2.bank_extract_lines.count.should == 2
@@ -220,11 +221,11 @@ describe BankExtract do
 
 
     it 'total lines credit' do
-      @be2.total_lines_credit.should == 13
+      @be2.total_lines_credit.should == 13 
     end
 
     it 'lines belongs to max one bank_extract_line' do
-      expect {BankExtractLine.new(bank_extract_id:@be2.id, lines:[@l2.supportline])}.to raise_error(ArgumentError)
+      expect {BankExtractLine.new(bank_extract_id:@be2.id, compta_lines:[@l2.supportline])}.to raise_error(ArgumentError)
     end
 
     context 'suppression du bank_extract' do
@@ -236,8 +237,8 @@ describe BankExtract do
       it 'et les lines deviennent non rattachées à un bank_extract' do
         @be2.destroy
         @be3= @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2012,10,01), end_date: Date.civil(2012,10,31), begin_sold: 2012, total_credit: 11, total_debit: 10)
-        @bel3 = BankExtractLine.create!(bank_extract_id:@be2.id, lines:[@l2])
-        @l2.should have(1).bank_extract_lines
+        @bel3 = BankExtractLine.create!(bank_extract_id:@be2.id, compta_lines:[@l2.supportline])
+        @l2.supportline.should have(1).bank_extract_lines
       end
 
 

@@ -54,6 +54,10 @@ class ComptaLine < ActiveRecord::Base
     end
   end
 
+  def siblings
+    owner.compta_lines
+  end
+
   # répond à la question si une ligne est affectée à un extrait bancaire ou non.
   def pointed?
     supportline = owner.counter_line

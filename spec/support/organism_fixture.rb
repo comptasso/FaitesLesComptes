@@ -54,11 +54,21 @@ module OrganismFixture
     else
       acc_id = @baca.id
     end
-    @w = @ib.in_out_writings.create!({date:Date.today, narration:'ligne créée par la méthode create_in_out_writing',
+    ecriture = @ib.in_out_writings.create!({date:Date.today, narration:'ligne créée par la méthode create_in_out_writing',
       :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, credit:montant, payment_mode:payment},
         '1'=>{account_id:acc_id, debit:montant, payment_mode:payment}
       }
     })
+    ecriture
+  end
+
+  def create_outcome_writing(montant=99, payment='Virement')
+    ecriture = @ob.in_out_writings.create!({date:Date.today, narration:'ligne créée par la méthode create_outcome_writing',
+      :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, debit:montant, payment_mode:payment},
+        '1'=>{account_id:@baca.id, credit:montant, payment_mode:payment}
+      }
+    })
+     ecriture
   end
 
  

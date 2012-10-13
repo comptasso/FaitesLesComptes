@@ -82,7 +82,7 @@ class BankExtractLine < ActiveRecord::Base
   def lock_line
     compta_lines.each do |l|
       # verrouillage des siblings 
-      l.lock_writing
+      l.lock
       # si l est une remise de chèque il faut aussi verrouiller les écritures correspondantes
       if l.check_deposit_id
         cd = l.check_deposit
