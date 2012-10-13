@@ -12,7 +12,7 @@ class Book < ActiveRecord::Base
   has_many :writings, :dependent=>:destroy
   has_many :compta_lines, :through=>:writings
 
-  has_many :lines, dependent: :destroy 
+  # has_many :lines, dependent: :destroy
   # les chèques en attente de remise en banque
   #  has_many :pending_checks,
   #    :class_name=>'Line',
@@ -20,6 +20,7 @@ class Book < ActiveRecord::Base
 
   # les lignes qui relèvent d'une recette ou d'une dépense (sans leur contrepartie)
   # sélectionnées donc sur la présence de nature
+
   has_many :inouts,
     :class_name=>'Line',
     :conditions=> 'nature_id IS NOT NULL'
