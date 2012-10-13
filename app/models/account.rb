@@ -28,7 +28,8 @@ class Account < ActiveRecord::Base
   has_many :natures
 
   # les lignes sont trouvées par account_id
-  has_many :compta_lines, :foreign_key=>'line_id'
+  has_many :compta_lines
+  
 
   # les lignes sont trouvées par counter_account_id
   has_many :counterlines, :foreign_key=>'counter_account_id', :class_name=>'Line'
@@ -54,7 +55,7 @@ class Account < ActiveRecord::Base
   scope :classe_6_and_7, where('number LIKE ? OR number LIKE ?', '6%', '7%')
   scope :classe_1_to_5, where('number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ?', '1%', '2%', '3%', '4%', '5%').order('number ASC')
   scope :rem_check_accounts, where('number = ?', '511')
-  
+
   # le numero de compte plus le title pour les input select
   def long_name
     [number, title].join(' ')
@@ -98,34 +99,24 @@ class Account < ActiveRecord::Base
   def classe
     number[0]
   end
-
- 
-
   
   def formatted_sold(date)
     ['%0.2f' % cumulated_before(date, :debit), '%0.2f' % cumulated_before(date, :credit) ]
   end
 
-
   # TODO on pourrait utiliser le scope range_date de lines
   # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
   # Exemple movement(Date.today.beginning_of_year, Date.today, true) pour un credit
   def movement(from, to, dc)
-    
-      lines.where('line_date >= ? AND line_date <= ?', from, to ).sum(dc)
-  
+    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date <= ? AND date >= ? AND account_id = ?', from, to, id], :joins=>:compta_lines).to_f
   end
 
   def lines_empty?(from =  period.start_date, to = period.close_date)
-   
-    lines.where('line_date >= ? AND line_date <= ?', from, to ).empty?
-   
+    compta_lines.range_date(from, to).empty?
   end
   
   def all_lines_locked?(from = period.start_date, to = period.close_date)
-   
-       lines.where('line_date >= ? AND line_date <= ? AND locked == ?', from, to, false ).any? ? false : true
-  
+    compta_lines.range_date(from, to).where('locked == ?', false ).any? ? false : true
   end
 
   # Méthode de classe qui affiche le plan comptable

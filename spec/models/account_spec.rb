@@ -7,7 +7,7 @@ RSpec.configure do |config|
 end
 
 
-describe Account do  
+describe Account do   
   include OrganismFixture 
 
    before(:each) do
@@ -61,7 +61,7 @@ describe Account do
     end
 
     it 'la création d\'une caisse entraîne celle d\'un compte' do
-      @c.accounts.length.should == 1
+      @c.accounts.length.should == 1 
     end
   end
 
@@ -80,8 +80,9 @@ describe Account do
       @account = Account.create!(valid_attributes)
       @n.account_id = @account.id
       @n.save!
-      create_first_line
-      create_second_line
+      @l1 = create_outcome_writing(97)
+      @l2 = create_outcome_writing(3)
+
      end
 
     it 'faux si des lignes dont au moins une n est pas locked' do
@@ -89,13 +90,13 @@ describe Account do
     end
     
       it 'false si une ligne est unlocked' do
-        @l1.update_attribute(:locked, true)
+        @l1.lock
         @account.should_not be_all_lines_locked
       end
 
       it 'true si toutes les lignes sont locked' do
-        @l1.update_attribute(:locked, true)
-        @l2.update_attribute(:locked, true)
+        @l1.lock
+        @l2.lock
         @account.should be_all_lines_locked
       end
 end

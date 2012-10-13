@@ -1032,8 +1032,9 @@ OK - Modifier les affichages des lignes pour utiliser date, narration ou réf de
 OK - idem pour book
 revoir Account qui utilise encore line et counter_line
 traite Utilities::Sold qui utilise line_date
-modifier les cash et bank_accounts pour qu'ils se passent de lines
-faire la méthode cumulated_at pour OdBook
+OK - modifier les cash pour qu'il se passent de lines
+modifier  bank_accounts pour qu'ils se passent de lines
+OK - faire la méthode cumulated_at pour OdBook
 
 Supprimer dans la table ligne le champ date, narration et ref (et les autres champs actuellement inutilisés)
 Revoir la méthode siblings et peut être children

@@ -36,8 +36,10 @@ class ComptaLine < ActiveRecord::Base
   before_save  :fill_account, :if=> lambda {nature && nature.account}
 
   scope :in_out_lines, where('nature_id IS NOT ?', nil)
-  scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
-  
+  scope :with_writings, joins("INNER JOIN writings ON writings.id = owner_id")
+  scope :mois, lambda { |date| with_writings.where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
+  scope :range_date, lambda {|from, to| with_writings.where('date >= ? AND date <= ?', from, to )}
+
 
   # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
   # et du champ check_deposit_id

@@ -62,16 +62,16 @@ describe Nature do
 
       describe 'destroy nature' do
         before(:each) do
-          @nature = @p.natures.create!(name: 'Nature test', income_outcome: false)
+          create_minimal_organism
         end
 
         it 'can be destroy when empty' do
-          expect {@nature.destroy}.to change {Nature.count}.by(-1)
+          expect {@n.destroy}.to change {Nature.count}.by(-1)
         end
 
         it 'cant be destroyed when not empty' do
-          @ob.lines.create!(narration: 'test', counter_account:@baca, line_date: Date.today, nature_id: @nature.id, debit: 152, payment_mode: 'Chèque')
-          @nature.lines.count.should == 1
+          create_outcome_writing(152, 'Chèque')
+          @n.lines.count.should == 1
           expect {@nature.destroy}.not_to change {Nature.count}
         end
 
