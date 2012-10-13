@@ -1,5 +1,13 @@
 # coding: utf-8
 
+# La tables books représente les livres. 
+# Une sous classe IncomeOutcomeBook représente les livres de recettes et de dépénses
+# chacun au travers de leur classe dérivée (IncomeBook et OutcomeBook)
+# 
+# Les journaux sont aussi représentés par la classe Book
+# ?? Faire une classe dérivée Ledger ?
+# Actuellement il y a un journal d'OD systématiquement créé pour chaque organisme
+#
 class Book < ActiveRecord::Base
 
   include Utilities::JcGraphic
@@ -30,7 +38,8 @@ class Book < ActiveRecord::Base
   validates :title, presence: true
   
   # renvoie les soldes mensuels du livre pour l'ensemble des mois de l'exercice
-  # sous la forme d'un hash avec comme clé 'mm-yyyy' pour identifier les mois
+  # sous la forme d'un hash avec comme clé 'mm-yyyy' pour identifier les mois.
+  # monthly_value est définie dans Utilities::Sold
   def monthly_datas(period)
     Hash[period.list_months('%m-%Y').map {|m| [m, monthly_value(m)]}]
   end
