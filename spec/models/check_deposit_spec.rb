@@ -265,7 +265,7 @@ describe CheckDeposit do
         @check_deposit.should have(3).checks
         @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
         @bel = @be.bank_extract_lines.new
-        @bel.lines << @check_deposit.debit_line
+        @bel.compta_lines << @check_deposit.debit_line
         @bel.save!
       end
 
