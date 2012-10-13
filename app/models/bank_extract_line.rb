@@ -86,7 +86,7 @@ class BankExtractLine < ActiveRecord::Base
       # si l est une remise de chèque il faut aussi verrouiller les écritures correspondantes
       if l.check_deposit_id
         cd = l.check_deposit
-        cd.checks.each {|l| l.lock_writing}
+        cd.checks.each {|l| l.lock}
       end
     end
   end

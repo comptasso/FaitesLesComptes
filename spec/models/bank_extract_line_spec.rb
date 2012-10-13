@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  # c.filter = {:wip=> true }
+#   c.filter = {:wip=> true }
 end 
 
 
@@ -19,13 +19,13 @@ describe BankExtractLine do
       total_debit:2,
       total_credit:5,
       locked:false)
-    @d7 = Line.create!(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:7, credit:0, payment_mode:'Virement', book_id:@ib.id, nature_id:@n.id)
-    @d29 = Line.create!(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:29, credit:0, payment_mode:'Virement',  book_id:@ib.id, nature_id:@n.id)
-     @ch97 = Line.create!(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:97, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
-     @ch5 = Line.create!(narration:'bel', counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:5, payment_mode:'Chèque', book_id:@ib.id, nature_id:@n.id)
-     @cr = Line.create!(narration:'bel',counter_account_id:@baca.id, line_date:Date.today, debit:0, credit:27, payment_mode:'Virement', book_id:@ib.id, nature_id:@n.id)
+    @d7 = create_outcome_writing(7)
+    @d29 = create_outcome_writing(29)
+    @ch97 = create_in_out_writing(97, 'Chèque')
+    @ch5 = create_in_out_writing(5, 'Chèque')
+    @cr = create_in_out_writing(27)
     @cd = CheckDeposit.new(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
-    @cd.checks << @ch97.children.first << @ch5.children.first
+    @cd.checks << @ch97.supportline << @ch5.supportline
     @cd.save!
 
   end
@@ -34,9 +34,9 @@ describe BankExtractLine do
   describe 'un extrait bancaire avec les différents éléments' do
 
     before(:each) do
-      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d7.supportline])
-      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :lines=>[@d29.supportline])
-      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :lines=>[@cd.debit_line])
+      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@d7.supportline])
+      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@d29.supportline])
+      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@cd.debit_line])
       @be.save!
     end
 
@@ -59,13 +59,13 @@ describe BankExtractLine do
 
     describe 'lock_line' , wip:true do
       before(:each) do
-        @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :lines=>[@cr.supportline])
+        @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@cr.supportline])
         @be.bank_extract_lines.each {|bel| bel.lock_line }
       end
 
       it 'verif ' do
         @g = @be.bank_extract_lines.first
-        @g.lines(true).each {|l| l.should be_locked}
+        @g.compta_lines(true).each {|l| l.should be_locked}
       end
 
 
@@ -128,7 +128,7 @@ describe BankExtractLine do
       end
 
       it 'a bel is chainable only if both debit or both credit' , :wip=>true do
-        bel_cr = @be.bank_extract_lines.create!(lines:[@cr.supportline])
+        bel_cr = @be.bank_extract_lines.create!(compta_lines:[@cr.supportline])
         bel_cr.move_to_top
         bel_cr.should_not be_chainable
 
