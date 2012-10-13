@@ -5,7 +5,7 @@ module Utilities
 # se créé en appelant new avec un book et une date quelconque du mois souhaité
 #
 #
-class MonthlyCashExtract < MonthlyBookExtract
+class MonthlyCashExtract < MonthlyInOutExtract
 
   def initialize(cash, h)
     @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Sorties', 'Entrées']
@@ -23,7 +23,7 @@ class MonthlyCashExtract < MonthlyBookExtract
   # pour une caisse, les lignes sont obtenues par une relation has_many :lines,
   # :through=>:accounts
   def lines
-    @lines ||= cash.lines.mois(@date)
+    @lines ||= cash.compta_lines.mois(@date)
   end
 
   
