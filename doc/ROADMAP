@@ -1030,6 +1030,9 @@ OK - Les controlleurs doivent utiliser writing et compta_line
 OK - Modifier le form pour utiliser writing et compta_line
 OK - Modifier les affichages des lignes pour utiliser date, narration ou réf de writing (voir delegate ?)
 OK - idem pour book
+traite Utilities::Sold qui utilise line_date
+modifier les cash et bank_accounts pour qu'ils se passent de lines
+
 Supprimer dans la table ligne le champ date, narration et ref (et les autres champs actuellement inutilisés)
 Revoir la méthode siblings et peut être children
 On pourrait aussi revoir belongs_to bank_extract puisqu'il y a le lien via bank_extract_line
@@ -1042,7 +1045,7 @@ Voir si on ne peut pas utiliser lines pour retrouver les validations qui existen
 OK - Revoir le javascript pour les champs banques et num chèque
 Revoir le modal form pour utiliser les nested attributes
 OK - Pb de l'affichage des mois qui n'apparaît pas
-InOutWriting doit avoir une in_out_line avec une nature
+Mettre une validation : InOutWriting doit avoir une in_out_line avec une nature
 Déplacer le + de création d'écritures vers la ligne des icones
 
 

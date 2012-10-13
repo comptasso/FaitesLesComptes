@@ -51,6 +51,12 @@ module OrganismsHelper
 
   # appelé par la vue organism#show pour dessiner chacun des pavés qui figurent 
   # dans le dash board.
+  # chacun des pavés correspond à un livre (mais pas le livre d'OdBook)
+  # un des pavé est généré par period
+  # les derniers pavés sont générés par les caisses et les banques (au travers des cash_book et
+  # des bank_books).
+  # html_class, permet d'associer des classes à chacun des pavés, sachant qu'actuellement
+  # l'appel dans la vue show est systématiquement fait avec la classe span4
   def draw_pave(pave, html_class)
     partial_and_class  =   pave.pave_char
     render partial: "organisms/#{partial_and_class[0]}", object: pave,  locals: {:local_classes => "#{partial_and_class[1]} #{html_class}" }
