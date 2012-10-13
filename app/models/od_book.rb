@@ -10,4 +10,11 @@ class OdBook < Book
   def income_outcome
     true
   end
+
+  # est utilisé pour faire l'affichage des recettes dépenses
+  # dans le graphe d'accueil.
+  # TODO à redéfinir
+  def cumulated_at(date, dc)
+    0
+  end
 end

@@ -15,7 +15,12 @@
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development
 
 
-class Account < ActiveRecord::Base 
+class Account < ActiveRecord::Base
+   # utilities::sold définit les méthodes cumulated_debit_before(date) et
+  # cumulated_debit_at(date) et les contreparties correspondantes.
+  include Utilities::Sold
+
+
   require 'pdf_document/base'
 
   belongs_to :period
@@ -23,7 +28,7 @@ class Account < ActiveRecord::Base
   has_many :natures
 
   # les lignes sont trouvées par account_id
-  has_many :lines
+  has_many :compta_lines, :foreign_key=>'line_id'
 
   # les lignes sont trouvées par counter_account_id
   has_many :counterlines, :foreign_key=>'counter_account_id', :class_name=>'Line'
@@ -53,6 +58,14 @@ class Account < ActiveRecord::Base
   # le numero de compte plus le title pour les input select
   def long_name
     [number, title].join(' ')
+  end
+
+  # méthode principale et mère des autres méthodes cumulated_credit
+  # surcharger cette méthode dans les classes utilisant ce module
+  # pour modifier le fonctionnement.
+  def cumulated_at(date, dc)
+    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines).to_f
+    # nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
   end
 
 
@@ -86,23 +99,7 @@ class Account < ActiveRecord::Base
     number[0]
   end
 
-  # fournit le cumul des débit (dc = 'debit') ou des crédits(dc = 'credit')
-  # pour le jour qui précède la date (ou au début du jour indiqué par date)
-  def cumulated_before(date, dc)
-    date =  date - 1
-    cumulated_at(date, dc)
-  end
-
-  # fournit le cumul des débit (dc = 'debit') ou des crédits(dc = 'credit')
-  # à la fin du jourindiqué par date
-  def cumulated_at(date, dc)
-      lines.where('line_date <= ?',date).sum(dc)
-  end
-
-  # calcule le solde au soir du jour indiqué par date
-  def sold_at(date)
-    cumulated_at(date, :credit) - cumulated_at(date, :debit)
-  end
+ 
 
   
   def formatted_sold(date)

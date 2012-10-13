@@ -5,16 +5,10 @@
 # une date donnée (ou à la veille), ainsi que le solde et les
 # monthly_values
 #
+# cumulated_at doit être défini dans les classes dans lesquelle on inclut ce module
+# puisque toutes les méthodes définies ici le sont par cumulated_at
+#
 module Utilities::Sold
-
-
-  # méthode principale et mère des autres méthodes cumulated_credit
-  # surcharger cette méthode dans les classes utilisant ce module
-  # pour modifier le fonctionnement.
-  def cumulated_at(date, dc)
-    p = organism.find_period(date)
-    p ? lines.period(p).where('line_date <= ?', date).sum(dc) : 0
-  end
 
 
   # debit cumulé avant une date (la veille). Renvoie 0 si la date n'est incluse

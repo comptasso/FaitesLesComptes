@@ -26,6 +26,14 @@ class BankAccount < ActiveRecord::Base
    accounts.where('period_id = ?', period.id).first
  end
 
+ def cumulated_at(date, dc)
+    p = organism.find_period(date)
+    acc = current_account(p)
+    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date <= ? AND account_id = ?', date, acc.id], :joins=>:compta_lines).to_f
+    # nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
+    # problèmes de calcul
+  end
+
   # Méthode qui donne le montant du dernier solde bancaire
   # par ordre de date
   def last_bank_extract_sold
