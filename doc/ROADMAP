@@ -1030,8 +1030,8 @@ OK - Les controlleurs doivent utiliser writing et compta_line
 OK - Modifier le form pour utiliser writing et compta_line
 OK - Modifier les affichages des lignes pour utiliser date, narration ou réf de writing (voir delegate ?)
 OK - idem pour book
-revoir Account qui utilise encore line et counter_line
-traite Utilities::Sold qui utilise line_date
+OK - revoir Account qui utilise encore line et counter_line
+OK - traite Utilities::Sold qui utilise line_date
 OK - modifier les cash pour qu'il se passent de lines
 modifier  bank_accounts pour qu'ils se passent de lines
 OK - faire la méthode cumulated_at pour OdBook
