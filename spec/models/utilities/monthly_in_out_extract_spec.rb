@@ -52,7 +52,7 @@ describe Utilities::MonthlyInOutExtract do
         
     end
 
-    it 'il y a 10 lignes' , wip:true  do
+    it 'il y a 10 lignes' do 
       @extract.lines.count.should == 10
     end
 

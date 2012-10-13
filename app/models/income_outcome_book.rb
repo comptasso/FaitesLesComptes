@@ -8,6 +8,6 @@ class IncomeOutcomeBook < Book
   # plutôt que lines pour cumulated_at
   def cumulated_at(date, dc)
     p = organism.find_period(date)
-    p ? inouts.period(p).where('line_date <= ?', date).sum(dc) : 0
+    p ? writings.joins(:compta_lines).period(p).where('date <= ? AND nature_id IS NOT NULL', date).sum(dc) : 0
   end
 end

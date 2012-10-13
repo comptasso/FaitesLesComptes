@@ -21,9 +21,9 @@ class Book < ActiveRecord::Base
   # les lignes qui relèvent d'une recette ou d'une dépense (sans leur contrepartie)
   # sélectionnées donc sur la présence de nature
 
-  has_many :inouts,
-    :class_name=>'Line',
-    :conditions=> 'nature_id IS NOT NULL'
+#  has_many :inouts,
+#    :class_name=>'Line',
+#    :conditions=> 'nature_id IS NOT NULL'
 
   
   # TODO introduce uniqueness and scope
