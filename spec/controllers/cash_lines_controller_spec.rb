@@ -8,7 +8,7 @@ describe CashLinesController do
 
   let(:ca) {mock_model(Cash, :organism=>@o, :name=>'Magasin')}
   let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3, :locked=>false),
-      mock_model(CashControl, :date=>Date.today - 1.day, amount: 1, :locked=>false) ] }
+      mock_model(CashControl, :date=>Date.today - 1.day, amount: 1, :locked=>false) ] } 
   
   
   def current_month
@@ -30,7 +30,7 @@ describe CashLinesController do
   describe 'GET index' do
 
      before(:each) do
-       @p.stub_chain(:list_months, :include?).and_return true
+       @p.stub_chain(:list_months, :include?).and_return true 
      end
 
 

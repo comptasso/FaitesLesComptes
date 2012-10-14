@@ -5,7 +5,7 @@ module Utilities
 # se créé en appelant new avec un book et une date quelconque du mois souhaité
 #
 #
-class MonthlyCashExtract < MonthlyInOutBookExtract
+class MonthlyCashExtract < MonthlyInOutExtract
 
 
   def initialize(cash, h)

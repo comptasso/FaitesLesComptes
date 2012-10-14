@@ -4,7 +4,7 @@
 
 
 
-class TransfersController < ApplicationController
+class TransfersController < ApplicationController 
 
   before_filter :find_book # find_book renvoie le OdBook
 

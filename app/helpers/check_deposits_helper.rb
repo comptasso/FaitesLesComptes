@@ -45,6 +45,11 @@ def options_for_checks(check_deposit)
   [OptionsForChecksSelect.new('Déja inclus', :target, check_deposit), OptionsForChecksSelect.new('Non inclus',:tank, check_deposit)]
 end
 
+ # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
+  def check_for_select(check)
+    "#{I18n.l check.date, :format=>'%d-%m'} - #{check.narration} - #{format('%.2f',check.debit)}"
+  end
+
 
 
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.configure do |c| 
+RSpec.configure do |c|
   # c.filter = {wip:true}
 end
 
@@ -74,8 +74,8 @@ describe TransfersController do
     it "assigns a new transfer as @transfer" do
       @od.should_receive(:transfers).and_return a = double(Arel)
       a.should_receive(:new).and_return(@t = mock_model(Transfer).as_new_record)
-      @t.should_receive(:line_from).and_return(@cl1 = mock_model(Line))
-      @t.should_receive(:line_to).and_return(@cl2 = mock_model(Line))
+      @t.should_receive(:line_from).and_return(@cl1 = mock_model(ComptaLine))
+      @t.should_receive(:line_to).and_return(@cl2 = mock_model(ComptaLine))
       get :new, {}, valid_session
       assigns(:transfer).should be_a_new(Transfer)
       assigns(:line_from).should == @cl1
@@ -86,8 +86,8 @@ describe TransfersController do
   describe "GET edit" do
     before(:each) do
       @t = mock_model(Transfer)
-      @t.stub(:line_from).and_return(@cl1 = mock_model(Line))
-      @t.stub(:line_to).and_return(@cl2 = mock_model(Line))
+      @t.stub(:line_from).and_return(@cl1 = mock_model(ComptaLine))
+      @t.stub(:line_to).and_return(@cl2 = mock_model(ComptaLine))
     end
 
     it "assigns the requested transfer as @transfer" do

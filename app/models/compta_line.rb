@@ -53,13 +53,13 @@ class ComptaLine < ActiveRecord::Base
   # transforme ComptaLine en un Line, utile pour les tests
   # églement utilisé dans le modèle CheckDeposit pour accéder indifférement aux compta_lines
   # et aux lines (sans avoir une erreur TypeMislatch).
-  def to_line
-    if persisted?
-      Line.find(id)
-    else
-      Line.new(attributes)
-    end
-  end
+#  def to_line
+#    if persisted?
+#      Line.find(id)
+#    else
+#      Line.new(attributes)
+#    end
+#  end
 
   def siblings
     writing.compta_lines
