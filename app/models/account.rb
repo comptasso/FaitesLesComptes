@@ -101,7 +101,7 @@ class Account < ActiveRecord::Base
   end
   
   def formatted_sold(date)
-    ['%0.2f' % cumulated_before(date, :debit), '%0.2f' % cumulated_before(date, :credit) ]
+    ['%0.2f' % cumulated_debit_before(date), '%0.2f' % cumulated_credit_before(date) ]
   end
 
   # TODO on pourrait utiliser le scope range_date de lines

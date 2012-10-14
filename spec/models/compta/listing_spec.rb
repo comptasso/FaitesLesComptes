@@ -7,7 +7,7 @@ describe Compta::Listing do
      before(:each) do
     @o=Organism.create!(title:'test balance sans table', database_name:'assotest1')
     @p= Period.create!(organism_id:@o.id, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
-    @a1 = @p.accounts.find_by_number('60')
+    @a1 = @p.accounts.find_by_number('60') 
 
 
     @listing = Compta::Listing.new 

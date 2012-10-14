@@ -3,9 +3,9 @@
 
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
 
-describe Compta::GeneralLedger do
+describe Compta::GeneralLedger do  
 
 
 
@@ -18,7 +18,7 @@ describe Compta::GeneralLedger do
   end
 
   it "should exist" do
-   @general_ledger.should be_an_instance_of(Compta::GeneralLedger)
+   @general_ledger.should be_an_instance_of(Compta::GeneralLedger) 
   end
 
   it 'and render pdf' do

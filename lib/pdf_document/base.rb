@@ -106,7 +106,7 @@ module PdfDocument
      # même s'il n'y a pas de lignes dans le comptes
      # ne serait-ce que pour afficher les soldes en début et en fin de période
      def nb_pages
-       nb_lines = @source.lines.range_date(from_date, to_date).count
+       nb_lines = @source.compta_lines.range_date(from_date, to_date).count
        return 1 if nb_lines == 0
       (nb_lines/@nb_lines_per_page.to_f).ceil
      end
@@ -123,7 +123,7 @@ module PdfDocument
      def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      @source.lines.select(columns).range_date(from_date, to_date).offset(offset).limit(limit)
+      @source.compta_lines.select(columns).range_date(from_date, to_date).offset(offset).limit(limit)
      end
 
      # appelle les méthodes adéquate pour chacun des éléments de la lignes
@@ -227,7 +227,7 @@ module PdfDocument
 
      # définit la méthode à appliquer à la source pour extraire les lignes
      def select_method
-       @select_method ||= 'lines'
+       @select_method ||= 'compta_lines'
      end 
 
      # Crée le fichier pdf associé 
@@ -278,9 +278,9 @@ module PdfDocument
      def set_columns_alignements
        # on prend les colonnes sélectionnées et on construit un tableau
        # left, right selon le type de la colonne
-       lch = Line.columns_hash
+       lch = ComptaLine.columns_hash
        @columns_alignements = @columns.map do |c|
-         (lch[c].number? && lch[c].name !~ /_id$/) ? :right : :left
+         (lch[c] && lch[c].number? && lch[c].name !~ /_id$/) ? :right : :left
        end
        @columns_alignements
      end

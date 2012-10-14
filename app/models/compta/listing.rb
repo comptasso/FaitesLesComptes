@@ -5,7 +5,7 @@ module Compta
   # la classe Listing sert à éditer un compte. Elle n'est pas persistente mais
   # s'appuie sur ActiveRecord::Base pour avoir les associations
   # Ceci suppose d'avoir une définition des colonnes virtuelles
-  # d'om les premières lignes de cette classe
+  # d'où les premières lignes de cette classe
   class Listing < ActiveRecord::Base
 
     def self.columns() @columns ||= []; end
@@ -40,7 +40,7 @@ module Compta
   end
 
   def lines
-    account.lines.range_date(from_date, to_date)
+    @lines ||= account.compta_lines.range_date(from_date, to_date)
   end
 
   # permet notamment de contrôler les limites de date
@@ -95,7 +95,7 @@ module Compta
     options[:to_date] = to_date
     pdf = PdfDocument::Base.new(period, account, options)
 
-    pdf.set_columns %w(line_date ref narration nature_id destination_id debit credit)
+    pdf.set_columns %w(date writings.ref writings.narration nature_id destination_id debit credit)
     pdf.set_columns_methods [nil, nil, nil, 'nature_name', 'destination_name', nil, nil]
     pdf.set_columns_widths [10, 8, 32, 15, 15, 10, 10]
     pdf.set_columns_titles %w(Date Réf Libellé Nature Destination Débit Crédit)
