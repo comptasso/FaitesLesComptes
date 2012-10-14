@@ -69,7 +69,7 @@ class Period < ActiveRecord::Base
 
   has_many :accounts, :dependent=>:destroy
   has_many :natures,  :dependent=>:destroy
-  has_many :lines, :through=>:natures
+  has_many :compta_lines, :through=>:accounts
   has_one :balance, :class_name=>'Compta::Balance'
   has_one :listing, :class_name=>'Compta::Listing'
 
@@ -147,7 +147,7 @@ class Period < ActiveRecord::Base
     # l'exercice doit être accountable (ce qui veut dire avoir des natures et que celles ci soient toutes reliées à des comptes
     self.errors.add(:close, "Des natures ne sont pas reliées à des comptes") unless accountable?
     # toutes les lignes doivent être verrouillées
-    self.errors.add(:close, "Toutes les lignes d'écritures ne sont pas verrouillées") if lines.unlocked.any?
+    self.errors.add(:close, "Toutes les lignes d'écritures ne sont pas verrouillées") if compta_lines.unlocked.any?
     # il faut un exercice suivant
     self.errors.add(:close, "Pas d'exercice suivant") unless next_period? 
     # il faut un livre d'OD

@@ -71,7 +71,7 @@ describe Nature do
 
         it 'cant be destroyed when not empty' do
           create_outcome_writing(152, 'Chèque')
-          @n.lines.count.should == 1
+          @n.compta_lines.count.should == 1
           expect {@nature.destroy}.not_to change {Nature.count}
         end
 

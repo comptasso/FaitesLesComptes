@@ -10,7 +10,7 @@ describe Period do
 
 
   describe 'validations' do
-    it 'faire les tests de validation'
+    it 'faire les tests de validation' 
   end
   
   describe 'after_create' , wip:true do 
@@ -94,17 +94,17 @@ describe Period do
       end
 
       it 'des lignes non verrouillées' do
-        @p_2010.should_receive(:lines).at_least(1).times.and_return( @a = double(Arel) )
+        @p_2010.should_receive(:compta_lines).at_least(1).times.and_return( @a = double(Arel) )
         @a.should_receive(:unlocked).at_least(1).times.and_return(@b = double(Arel))
         @b.should_receive(:any?).at_least(1).times.and_return true
-        @p_2010.lines.unlocked.any?.should be_true
+        @p_2010.compta_lines.unlocked.any?.should be_true
         @p_2010.closable?
         @p_2010.errors[:close].should == [@nat_error,@line_error]
       end
 
       it 'doit avoir un exercice suivant' do
         @p_2010.should_receive(:next_period?).and_return(false)
-        @p_2010.stub_chain(:lines, :unlocked, :any?).and_return(false)
+        @p_2010.stub_chain(:compta_lines, :unlocked, :any?).and_return(false)
         @p_2010.closable?
         @p_2010.errors[:close].should == [@nat_error, @next_error]
       end
@@ -113,7 +113,7 @@ describe Period do
         @p_2010.should_receive(:organism).and_return   @organism
         @organism.should_receive(:books).and_return(@a=double(Arel))
         @a.should_receive(:find_by_type).with('OdBook').and_return nil
-        @p_2010.stub_chain(:lines, :unlocked, :any?).and_return(false)
+        @p_2010.stub_chain(:compta_lines, :unlocked, :any?).and_return(false)
         @p_2010.closable?
         @p_2010.errors[:close].should == [@nat_error, @od_error]
       end

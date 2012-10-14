@@ -11,8 +11,8 @@ describe Utilities::NotPointedLines do
         mock_model(CheckDeposit, id:2, total_checks:5, date: 1.day.ago)
       ])
     @ba.stub(:np_lines).and_return(
-    [mock_model(Line, id:6, narration:'ligne 6', line_date:2.days.ago),
-    mock_model(Line, id:7, narration:'ligne 7', line_date:3.days.ago)])
+    [mock_model(ComptaLine, id:6, narration:'ligne 6', line_date:2.days.ago),
+    mock_model(ComptaLine, id:7, narration:'ligne 7', line_date:3.days.ago)])
 
     
   end

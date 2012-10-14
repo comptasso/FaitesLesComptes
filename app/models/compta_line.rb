@@ -2,8 +2,6 @@
 
 class ComptaLine < ActiveRecord::Base
 
-  self.table_name = 'Lines'
-  
   belongs_to :book
   belongs_to :destination
   belongs_to :nature

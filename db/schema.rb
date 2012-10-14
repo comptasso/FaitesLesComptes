@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121006104206) do
+ActiveRecord::Schema.define(:version => 20121014115021) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -105,6 +105,24 @@ ActiveRecord::Schema.define(:version => 20121006104206) do
     t.integer  "writing_id"
   end
 
+  create_table "compta_lines", :force => true do |t|
+    t.integer  "nature_id"
+    t.integer  "destination_id"
+    t.decimal  "debit",            :default => 0.0
+    t.decimal  "credit",           :default => 0.0
+    t.boolean  "locked",           :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "bank_extract_id"
+    t.string   "payment_mode"
+    t.integer  "check_deposit_id"
+    t.string   "check_number"
+    t.integer  "account_id"
+    t.integer  "writing_id"
+  end
+
+  add_index "compta_lines", ["account_id"], :name => "index_lines_on_account_id"
+
   create_table "destinations", :force => true do |t|
     t.string   "name"
     t.integer  "organism_id"
@@ -113,32 +131,6 @@ ActiveRecord::Schema.define(:version => 20121006104206) do
     t.datetime "updated_at"
     t.boolean  "income_outcome", :default => false
   end
-
-  create_table "lines", :force => true do |t|
-    t.date     "line_date"
-    t.string   "narration"
-    t.integer  "nature_id"
-    t.integer  "destination_id"
-    t.decimal  "debit",              :default => 0.0
-    t.decimal  "credit",             :default => 0.0
-    t.integer  "book_id"
-    t.boolean  "locked",             :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "bank_extract_id"
-    t.string   "payment_mode"
-    t.integer  "check_deposit_id"
-    t.integer  "owner_id"
-    t.string   "owner_type"
-    t.string   "ref"
-    t.string   "check_number"
-    t.integer  "account_id"
-    t.integer  "counter_account_id"
-    t.integer  "writing_id"
-  end
-
-  add_index "lines", ["account_id"], :name => "index_lines_on_account_id"
-  add_index "lines", ["line_date"], :name => "index_lines_on_line_date"
 
   create_table "natures", :force => true do |t|
     t.string   "name"

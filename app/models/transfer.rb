@@ -25,8 +25,8 @@ class Transfer < Writing
   # Pour toujours avoir les 2 compta_lines, compta_lines est redéfini
   def compta_lines
     if original_compta_lines.size == 0
-      original_compta_lines.build(debit:0, credit:0, line_date:date, narration:narration)
-      original_compta_lines.build(debit:0, credit:0, line_date:date, narration:narration)
+      original_compta_lines.build(debit:0, credit:0)
+      original_compta_lines.build(debit:0, credit:0)
     end
     original_compta_lines
   end

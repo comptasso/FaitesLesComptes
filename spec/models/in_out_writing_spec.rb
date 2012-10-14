@@ -60,7 +60,7 @@ describe InOutWriting do
       end
 
       it 'et deux lignes' do
-        expect {@w.save}.to change {Line.count}.by 2
+        expect {@w.save}.to change {ComptaLine.count}.by 2
       end
 
 

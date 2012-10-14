@@ -115,7 +115,7 @@ context 'with real models' do
     end
 
     it 'should save the lines' do
-      expect {@r.save}.to change {Line.count}.by(2)
+      expect {@r.save}.to change {ComptaLine.count}.by(2)
     end
 
 

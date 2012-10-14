@@ -133,7 +133,7 @@ class BankExtractLine < ActiveRecord::Base
       new_bel.insert_at(pos + 1)
       new_bel
     end
-    grp.insert(0,self)
+    grp.insert(0,self) 
     grp
   end
 
@@ -142,7 +142,7 @@ class BankExtractLine < ActiveRecord::Base
   def prepare_datas
     #raise 'StandardBankExtractLine sans ligne'
     unless compta_lines.empty?
-      self.date ||= compta_lines.first.line_date # par défaut on construit les infos de base
+      self.date ||= compta_lines.first.date # par défaut on construit les infos de base
       @payment= compta_lines.first.payment_mode # avec la première ligne associée
       @narration = compta_lines.first.narration
       # TODO blid est-il utile ?

@@ -8,7 +8,7 @@ RSpec.configure do |c|
 end
 
 
-describe CheckDeposit do  
+describe CheckDeposit do   
   include OrganismFixture  
  
   before(:each) do 
@@ -28,7 +28,7 @@ describe CheckDeposit do
     end
 
     it 'vérif des contre lignes' do
-      Line.pending_checks.count.should == 3
+      ComptaLine.pending_checks.count.should == 3
     end
 
     it "3 chèques à déposer" do
@@ -196,7 +196,7 @@ describe CheckDeposit do
 
     it 'sauver devrait avoir mis à jour le champ check_deposit_id des lignes ayant 511 comme compte'  do
       @check_deposit.total_checks.should == 445
-      ls = Line.where('account_id = ?', @p.rem_check_account.id)
+      ls = ComptaLine.where('account_id = ?', @p.rem_check_account.id)
       ls.size.should == 4 # les 3 chèques plus la contrepartie
       ls.each {|l|  l.check_deposit_id.should == @check_deposit.id }
 
@@ -245,7 +245,7 @@ describe CheckDeposit do
     end
 
     it 'l ecriture est détruite'   do
-      expect {@check_deposit.destroy}.to change {Line.count}.by(-2)
+      expect {@check_deposit.destroy}.to change {ComptaLine.count}.by(-2)
     end
 
     it "on peut changer la date" do

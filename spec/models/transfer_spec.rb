@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
  # c.filter = {wip:true} 
 end
 
@@ -155,7 +155,7 @@ describe Transfer  do
 
       it 'save transfer create the two lines' do
         @t.should be_valid
-        expect {@t.save}.to change {Line.count}.by(2) 
+        expect {@t.save}.to change {ComptaLine.count}.by(2)
       end
 
       it 'save transfer create the two lines' do
@@ -177,12 +177,12 @@ describe Transfer  do
         end
 
         it 'destroy the transfer should delete the two lines' do
-          expect {@t.destroy}.to change {Line.count}.by(-2)
+          expect {@t.destroy}.to change {ComptaLine.count}.by(-2)
         end
         it 'destroy the transfer is impossible if debit_line locked' do
           @t.line_to.update_attribute(:locked, true)
           @t.should_not be_destroyable
-          expect {@t.destroy}.not_to change {Line.count}
+          expect {@t.destroy}.not_to change {ComptaLine.count}
         end
 
         it 'destroy the transfer is impossible if any line locked' do 

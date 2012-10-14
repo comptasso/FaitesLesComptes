@@ -21,7 +21,7 @@ class Nature < ActiveRecord::Base
   # TODO rajouter avec un if pour coller avec le type de compte
   # validates :account_ids, :fit_type=>true retiré car on ne crée plus l'assoc avec le compte dans le form nature
   
-  has_many :lines
+  has_many :compta_lines
 
 
   scope :recettes, where('income_outcome = ?', true).order('name ASC')
@@ -52,7 +52,7 @@ class Nature < ActiveRecord::Base
   # pour toutes les destinations confondues
   def stat
     period.list_months.map do |m|
-      lines.monthyear(m).sum('credit-debit').to_f.round(2)
+      compta_lines.monthyear(m).sum('credit-debit').to_f.round(2)
     end
   end
 
@@ -60,14 +60,14 @@ class Nature < ActiveRecord::Base
   # pour une destination donnée
   def stat_filtered(destination_id)
     period.list_months.map do |m|
-      lines.monthyear(m).where('destination_id=?', destination_id).sum('credit-debit').to_f.round(2)
+      compta_lines.monthyear(m).where('destination_id=?', destination_id).sum('credit-debit').to_f.round(2)
     end
   end
 
   private
 
   def ensure_no_lines
-    if lines.empty?
+    if compta_lines.empty?
       return true
     else
       errors.add(:base, 'Des écritures font référence à cette nature')
