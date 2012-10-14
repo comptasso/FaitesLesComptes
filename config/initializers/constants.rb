@@ -35,4 +35,4 @@ BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
 # TODO à faire évoluer ultérieurement pour être au choix de l'utilisateur
 PATH_TO_ORGANISMS = 'organisms'
 
-VERSION = 0.1
+VERSION = 0.2

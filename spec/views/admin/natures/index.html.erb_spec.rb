@@ -6,7 +6,7 @@ describe 'admin/natures/index'  do
 include JcCapybara
 
   before(:each) do
-    assign(:organism, stub_model(Organism))
+    assign(:organism, stub_model(Organism)) 
     assign(:period, stub_model(Period)) 
     @depenses = []
     @depenses << mock_model(Nature, :period_id=>1, name: 'dep1', comment: 'dep1 comment')
@@ -16,8 +16,8 @@ include JcCapybara
     @recettes << mock_model(Nature, :period_id=>1, name: 'rec2', comment: 'rec2 comment')
     @recettes.each {|r| r.stub(:account).and_return(nil)}
     @depenses.each {|r| r.stub(:account).and_return(nil)}
-    @recettes.each {|r| r.stub_chain(:lines, :empty?).and_return true }
-    @depenses.each {|r| r.stub_chain(:lines, :empty?).and_return true }
+    @recettes.each {|r| r.stub_chain(:compta_lines, :empty?).and_return true }
+    @depenses.each {|r| r.stub_chain(:compta_lines, :empty?).and_return true }
 
 
   end
@@ -51,8 +51,8 @@ include JcCapybara
   end
 
   it "with a line, row should not propose supprimer" do
-    @recettes.first.stub_chain(:lines, :empty?).and_return(false)
-    @depenses.first.stub_chain(:lines, :empty?).and_return(false)
+    @recettes.first.stub_chain(:compta_lines, :empty?).and_return(false)
+    @depenses.first.stub_chain(:compta_lines, :empty?).and_return(false)
     render
     page.should_not have_css('tbody tr:first img[src="/assets/icones/supprimer.png"]')
   end 

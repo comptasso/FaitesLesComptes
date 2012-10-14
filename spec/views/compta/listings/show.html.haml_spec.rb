@@ -3,11 +3,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
  
-describe 'compta/listings/show' do
+describe 'compta/listings/show' do 
   include JcCapybara
 
   let(:ar) {double(Arel)}
-  let(:a) {mock_model(Account, long_name:'605 compte de test', lines:ar)}
+  let(:a) {mock_model(Account, long_name:'605 compte de test', compta_lines:ar)}
   let(:p) {mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)}
   let(:l) {Compta::Listing.new( account_id:a.id, from_date:Date.today.beginning_of_year, to_date:Date.today.end_of_year)}
   let(:line) {mock_model(Line, line_date:Date.today, narration:'ligne test', debit:0, nature_id:1, destination_id:1)}
@@ -25,8 +25,8 @@ describe 'compta/listings/show' do
     ar.stub(:range_date).and_return ar
     ar.stub(:sum).with(:debit).and_return 110
     ar.stub(:sum).with(:credit).and_return 0
-    ar.stub(:sum_debit_before).and_return 5
-    ar.stub(:sum_credit_before).and_return 0
+    a.stub(:cumulated_debit_before).and_return 5
+    a.stub(:cumulated_credit_before).and_return 0
     assign(:listing, l)
     assign(:period, p) 
   end
