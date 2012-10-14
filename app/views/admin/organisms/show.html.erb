@@ -42,13 +42,13 @@
 </p>
 
 <p>
-  <b>Nombre de lignes :</b>
-  <%= @organism.lines.count %>
+  <b>Nombre d'écritures :</b>
+  <%= @organism.writings.count %>
 </p>
 
 <p>
   <b>Dernière saisie le :</b>
-  <%=l @organism.lines.order(:updated_at).last.updated_at if @organism.lines.any? %>
+  <%=l @organism.writings.order(:updated_at).last.updated_at if @organism.writings.any? %>
 </p>
 
 <% if @organism.archives.any? %>

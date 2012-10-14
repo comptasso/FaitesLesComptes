@@ -954,6 +954,7 @@ On devrait avoir un champ active pour les comptes (qui se répercute sur bank_ac
 OK - Création des comptes du plan comptable dès la création d'un period
 Nettoyer le controleur, les routes et les vues de Period pour le plan comptable
 OK - on peut supprimer les champs debitable_type et creditable_type de Transfer
+Les graphes ne permettent plus d'afficher le mois en question
 
 toujours dans Transfer, on pourrait revoir les validators
 Dans les exports de Lines#index vers des fichiers, on ne devrait pas faire un truncate des champs (vu le pb pour le champ support)

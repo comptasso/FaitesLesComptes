@@ -6,7 +6,7 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe CheckDepositsController do
+describe CheckDepositsController do 
   include SpecControllerHelper
 
   let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id:@o.id)}
@@ -78,7 +78,7 @@ before(:each) do
   describe 'GET show' do
 
     before(:each) do
-      @o.stub(:pending_checks).and_return [double(Line)]
+      @o.stub(:pending_checks).and_return [double(ComptaLine)]
     end
   
     it 'should retrieve the value' do
@@ -103,7 +103,7 @@ before(:each) do
   describe 'GET edit' do
 
     before(:each) do
-      @o.stub(:pending_checks).and_return [double(Line)]
+      @o.stub(:pending_checks).and_return [double(ComptaLine)]
     end
 
     it 'should retrieve the value' do
@@ -146,7 +146,7 @@ before(:each) do
 
     context 'avec des chèques à remettre'  do
       before(:each) do
-        CheckDeposit.stub!(:pending_checks).and_return [double(Line)]
+        CheckDeposit.stub!(:pending_checks).and_return [double(ComptaLine)]
         CheckDeposit.stub!(:total_to_pick).and_return 100
         CheckDeposit.stub!(:nb_to_pick).and_return 1
       end
