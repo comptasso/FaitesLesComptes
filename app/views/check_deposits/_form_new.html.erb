@@ -11,7 +11,7 @@
 
           <%= f.association :checks,
               input_html: {:class=> "span4"},
-              :collection => CheckDeposit.pending_checks.map {|c| [check_for_select(c), c.id]},
+              :collection => CheckDeposit.pending_checks.map {|c| [c.check_for_select, c.id]},
               :prompt => 'Chèques à remettre', :label=> 'Chèques' %>
     
    

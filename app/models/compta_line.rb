@@ -39,6 +39,8 @@ class ComptaLine < ActiveRecord::Base
   # ailleurs, c'est notamment le cas lorsqu'on passe par book car book has_many :compta_lines, :through=>:writings
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
   # inclut with_writings et donc doit être utilisé pour un query qui ne l'inclut pas déja.
+  scope :mois_with_writings, lambda {|date| with_writings.where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month)}
+
   scope :range_date, lambda {|from, to| with_writings.where('date >= ? AND date <= ?', from, to )}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)
@@ -75,6 +77,12 @@ class ComptaLine < ActiveRecord::Base
   def editable?
     !(pointed? || locked?)
   end
+
+   # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
+  def check_for_select
+    "#{I18n.l date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',debit)}"
+  end
+
 
   protected
 

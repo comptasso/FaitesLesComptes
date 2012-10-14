@@ -6,7 +6,7 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe "cash_lines/index" do  
+describe "cash_lines/index" do
   include JcCapybara
 
   let(:o) {mock_model(Organism, title: 'spec cd')} 
@@ -18,12 +18,12 @@ describe "cash_lines/index" do
   let(:n) {mock_model(Nature, :name=>'achat de marchandises')} 
   let(:mce) { mock( Utilities::MonthlyCashExtract, :total_credit=>100, :total_debit=>51,
     :debit_before=>20, :credit_before=>10)}
-  let(:cl1) { mock_model(Line, :line_date=>Date.today, :narration=>'test', :debit=>'45', :nature_id=>n.id)}
-  let(:cl2) {mock_model(Line, :line_date=>Date.today, :narration=>'autre ligne', :debit=>'54', :nature_id=>n.id)}
+  let(:cl1) { mock_model(ComptaLine, :debit=>'45', :nature_id=>n.id)}
+  let(:cl2) {mock_model(ComptaLine, :debit=>'54', :nature_id=>n.id)}
 
 
   before(:each) do
-    assign(:organism, o) 
+    assign(:organism, o)  
     assign(:period, p)
     assign(:cash, c)
     assign(:monthly_extract, mce)
@@ -34,8 +34,14 @@ describe "cash_lines/index" do
     [cl1, cl2].each {|l| l.stub(:destination).and_return(nil) }
     [cl1, cl2].each {|l| l.stub(:editable?).and_return(true) }
     [cl1, cl2].each {|l| l.stub(:book_id).and_return(1) }
-    [cl1, cl2].each {|l| l.stub(:book).and_return(mock_model(Book)) } 
-    [cl1, cl2].each {|l| l.stub(:owner_type).and_return(nil) }
+    [cl1, cl2].each {|l| l.stub(:date).and_return(Date.today) }
+    [cl1, cl2].each {|l| l.stub(:ref).and_return('rien') }
+    [cl1, cl2].each {|l| l.stub(:narration).and_return('libellé de l écriture') }
+    [cl1, cl2].each {|l| l.stub(:book).and_return(@b = mock_model(Book)) }
+    [cl1, cl2].each {|l| l.stub(:writing).and_return(@w = mock_model(Writing,
+          type:'Writing', date:Date.today, narration:'libellé', ref:nil, book_id:@b.id, :book=>@b)) }
+    
+
     view.stub('current_page?').and_return false
   end
 
@@ -87,6 +93,9 @@ describe "cash_lines/index" do
   context 'avec une lignes venant de transfer' do
     before(:each) do
        [cl1, cl2].each {|l| l.stub(:writing).and_return(@t = mock_model(Transfer)) }
+       [cl1, cl2].each {|l| l.stub_chain(:writing, :type).and_return('Transfer') }
+       [cl1, cl2].each {|l| l.stub(:writing_id).and_return(@t.id) }
+
         render
     end
 
