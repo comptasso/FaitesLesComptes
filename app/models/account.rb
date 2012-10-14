@@ -108,7 +108,7 @@ class Account < ActiveRecord::Base
   # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
   # Exemple movement(Date.today.beginning_of_year, Date.today, true) pour un credit
   def movement(from, to, dc)
-    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date <= ? AND date >= ? AND account_id = ?', from, to, id], :joins=>:compta_lines).to_f
+    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date >= ? AND date <= ? AND account_id = ?', from, to, id], :joins=>:compta_lines).to_f
   end
 
   def lines_empty?(from =  period.start_date, to = period.close_date)
