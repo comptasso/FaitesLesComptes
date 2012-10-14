@@ -195,8 +195,7 @@ Faitesvoscomptes::Application.routes.draw do
     end
   end
 
-  resources :od_lines
-  
+    
   resources :books do
     resources :writings
     resources :in_out_writings

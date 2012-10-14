@@ -47,12 +47,7 @@ describe Destination do
             expect {@o.destinations.create(name: 'Essai')}.not_to change{Destination.count}
         end
 
-        it 'can also have the same name with different organism' do
-          Destination.count.should == 1
-          @o2 = Organism.create!(title: 'deuxième organisme test', database_name:'assotest2')
-          expect {@o2.destinations.create(name: 'Essai')}.to change{Destination.count}
-
-        end
+       
 
       end
 
@@ -66,8 +61,10 @@ describe Destination do
         end
 
         it 'cant be destroyed when not empty' do
-          @ob.lines.create!(narration: 'test',counter_account_id:@baca.id, line_date: Date.today, nature_id: @n.id, destination_id: @destination.id,  debit: 152, payment_mode: 'Chèque')
-          @destination.lines.count.should == 1
+          @w = create_outcome_writing
+          @w.in_out_line.destination = @destination
+          @w.save
+          @destination.compta_lines.count.should == 1
           expect {@destination.destroy}.not_to change {Destination.count}
         end
  

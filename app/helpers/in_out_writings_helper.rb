@@ -14,7 +14,7 @@ module InOutWritingsHelper
   # avec bank_lines..
   def in_out_line_actions(line)
     html = ' '
-      if line.owner_type == 'Transfer'
+      if line.owner.type == 'Transfer'
         html <<  icon_to('modifier.png', edit_transfer_path(line.owner_id)) if line.editable?
       else
         html <<  icon_to('modifier.png', edit_book_in_out_writing_path(line.owner.book_id, line.owner)) if line.editable?

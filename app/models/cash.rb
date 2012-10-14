@@ -7,12 +7,12 @@ class Cash < ActiveRecord::Base
   # cumulated_debit_at(date) et les contreparties correspondantes.
   #
  
-#  include Utilities::Sold
+  include Utilities::Sold
   include Utilities::JcGraphic
 
   belongs_to :organism
   # ne plus utiliser, cash_id va disparaître
-  has_many :lines, :through=>:accounts
+  has_many :compta_lines, :through=>:accounts
   has_many :cash_controls
   # un caisse a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
@@ -35,47 +35,16 @@ class Cash < ActiveRecord::Base
     name
   end
 
-  # debit cumulé avant une date (la veille). Renvoie 0 si la date n'est incluse
-  # dans aucun exercice
-  def cumulated_debit_before(date)
-    cumulated_debit_at(date - 1)
-  end
-
-  # crédit cumulé avant une date (la veille). Renvoie 0 si la date n'est incluse
-  # dans aucun exercice
-  def cumulated_credit_before(date)
-    cumulated_credit_at(date - 1)
-  end
-
-  # solde d'une caisse avant ce jour (ou en pratique au début de la journée)
-  def sold_before(date = Date.today)
-    sold_at(date - 1)
-  end
-
-  def cumulated_at(date, dc)
+ 
+  def cumulated_at(date, dc) 
     p = organism.find_period(date)
-    p ? lines.period(p).where('line_date <= ?', date).sum(dc) : 0
+    acc = current_account(p)
+    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date <= ? AND account_id = ?', date, acc.id], :joins=>:compta_lines).to_f
+    # nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
+    # problèmes de calcul
   end
 
-  # débit cumulé à une date (y compris cette date). Renvoie zero s'il n'y a
-  # pas de périod et donc pas de compte associé à cette caisse pour cette date
-  def cumulated_debit_at(date)
-    cumulated_at(date, :debit)
-  end
-
-  # crédit cumulé à une date (y compris cette date). Renvoie 0 s'il n'y a 
-  # pas de périod et donc pas de comptes associé à cette caisse pour cette date
-  def cumulated_credit_at(date)
-    cumulated_at(date, :credit)
-  end
-
-  # solde à une date (y compris cette date). Renvoie nil s'il n'y a 
-  # pas de périod et donc pas de comptes pour cette date
-  def sold_at(date)
-    cumulated_debit_at(date) - cumulated_credit_at(date)
-  end
-
-   
+     
  
 
   protected

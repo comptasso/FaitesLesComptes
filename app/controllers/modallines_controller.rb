@@ -7,12 +7,13 @@ class ModallinesController < ApplicationController
   def create
     @bank_extract=BankExtract.find(params[:bank_extract_id])
     @bank_account = @bank_extract.bank_account
-    @organism = @bank_account.organism
+    
+
+    complete_params
 
 
-    params[:line][:counter_account_id] = @bank_account.current_account(@period).id
-    @line = Line.new(params[:line])
-    if @line.save
+    @writing = Writing.new(params[:writing])
+    if @writing.save
       
       @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
       respond_to do |format|
@@ -30,6 +31,16 @@ class ModallinesController < ApplicationController
 
 
 
+  end
+
+  protected
+
+  def complete_params
+    param =  params[:writing][:compta_lines_attributes]
+    param['1'][:account_id] = @bank_account.current_account(@period).id
+    param['1'][:credit] = param['0'][:debit] || 0
+    param['1'][:debit]= param['0'][:credit] || 0
+    param['1'][:payment_mode] = param['0'][:payment_mode]
   end
 
 end

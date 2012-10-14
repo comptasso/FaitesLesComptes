@@ -12,7 +12,7 @@
 # et ne peut être faite par un after_create
 #
 class CashControl < ActiveRecord::Base
-   include Utilities::PickDateExtension
+  include Utilities::PickDateExtension
    
   belongs_to :cash
 
@@ -35,8 +35,10 @@ class CashControl < ActiveRecord::Base
 
   before_update :lock_lines, :if => lambda { self.changed_attributes.include?("locked") && self.locked == true }
 
+  # cash_cole inverse le montant du compte comptable de caisse
+  # une caisse débitrice de 40 € veut dire qu'il y a 40 € en caisse
   def cash_sold
-    @cash_sold ||= cash.sold_at(date)
+    @cash_sold ||= -cash.sold_at(date)
   end
 
 
@@ -91,15 +93,12 @@ class CashControl < ActiveRecord::Base
   end
 
 
-  # verrouille les lignes correspondantes à un contrôle de caisse
+  # verrouille les lignes correspondantes à un contrôle de caisse que l'on est en train
+  # de verrouiller (appelé par before_update)
   def lock_lines
     Rails.logger.info "Verrouillage des lignes de caisse suite au verrouillage du controle de caisse #{id}"
     # Trouver les lignes de cette caisse de l'exercice, antérieures à la date du contrôle et non verrouillées
-    if self.locked == true 
-       cash.lines.before_including_day(self.date).unlocked.each    do |l|
-        l.siblings.each { |li| li.update_attribute(:locked, true) }
-       end
-    end
+    cash.compta_lines.before_including_day(self.date).unlocked.each {|l| l.lock } if locked
   end
 
     # trouve l'exercice auquel appartient ce cash_control

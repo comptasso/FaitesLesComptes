@@ -16,7 +16,7 @@ describe 'admin/books/index' do
     end
   end
 
-  context 'mise en page générale' do
+  context 'mise en page générale' do 
     
 
     it "should have title h3" do
@@ -67,8 +67,8 @@ describe 'admin/books/index' do
   # on ne peut le traiter comme les autres car le render ne doit pas arriver
   # avant le stub_chain
   context 'test de l affichage de l icone destroy' do
-    it "with a line, row should not propose supprimer" do
-      @books.first.stub_chain(:lines, :empty?).and_return(false)
+    it "with a compta_line, row should not propose supprimer" do
+      @books.first.stub_chain(:compta_lines, :empty?).and_return(false)
       render
       page.should_not have_css('tbody tr:first img[src="/assets/icones/supprimer.png"]')
     end

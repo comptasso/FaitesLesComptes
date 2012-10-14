@@ -8,6 +8,7 @@ end
 
 describe Period do
 
+
   describe 'validations' do
     it 'faire les tests de validation'
   end
@@ -131,7 +132,7 @@ describe Period do
 
   end
 
-  describe 'closable' do
+  describe 'closable' , wip:true do
 
     it 'vérifie closable avant tout' do
       @p_2010.should_receive(:closable?).and_return false
@@ -141,7 +142,7 @@ describe Period do
     context 'l exerice est closable' do
       
       before(:each) do
-        
+        @baca = @ba.current_account(@p_2010)
         @acc60 = @p_2010.accounts.find_by_number '60'
         @acc70 = @p_2010.accounts.find_by_number '701'
         @acc61 = @p_2011.accounts.find_by_number '60'
@@ -149,12 +150,19 @@ describe Period do
         @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc60.id)
         @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id)
         @ob= @organism.books.find_by_type('OutcomeBook')
-        @l6= Line.create!(book_id:@ob.id, debit:54, narration:'une ligne de dépense', counter_account:@ba.current_account(@p_2010),
-          nature_id:@n_dep.id, payment_mode:'Espèces', line_date:@p_2010.start_date)
-        @l7= Line.create!(book_id:@ob.id, debit:99, narration:'une ligne de dépense', counter_account:@ba.current_account(@p_2010),
-          nature_id:@n_rec.id, payment_mode:'Espèces', line_date:@p_2010.start_date)
+
+        @l6= @ob.in_out_writings.create!({date:Date.civil(2010,8,15), narration:'ligne créée par la méthode create_outcome_writing',
+      :compta_lines_attributes=>{'0'=>{account_id:@acc60.id, nature:@n_dep, debit:54, payment_mode:'Espèces'},
+        '1'=>{account_id:@baca.id, credit:54, payment_mode:'Espèces'}
+      }
+    })
+        @l7= @ob.in_out_writings.create!({date:Date.civil(2010,8,15), narration:'ligne créée par la méthode create_outcome_writing',
+      :compta_lines_attributes=>{'0'=>{account_id:@acc60.id, nature:@n_dep, debit:99, payment_mode:'Espèces'},
+        '1'=>{account_id:@baca.id, credit:99, payment_mode:'Espèces'}
+      }
+    })
         
-      end
+     end
 
       it "génère les écritures d'ouverture de l'exercice"
 

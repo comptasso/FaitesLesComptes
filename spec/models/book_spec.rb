@@ -2,7 +2,7 @@
 
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
-RSpec.configure do |c|
+RSpec.configure do |c| 
   #  c.filter = {:wip => true }
   #  c.exclusion_filter = {:js=> true }
 end
@@ -28,6 +28,7 @@ describe Book do
     before(:each) do
       @book = o.books.new
       @book.stub(:organism).and_return(o)
+      @book.stub(:cumulated_at).and_return 1452
     end
 
     it "should have a ticks method with argument period" do 

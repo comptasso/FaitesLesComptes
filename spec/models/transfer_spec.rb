@@ -12,7 +12,7 @@ describe Transfer  do
   def valid_new_transfer
     t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id, amount:1.5
     t.line_to.account_id = @cba.id
-    t.line_from.account_id = @cbb.id
+    t.line_from.account_id = @cbb.id 
     t
   end
  
@@ -109,10 +109,10 @@ describe Transfer  do
       @tr = valid_new_transfer
     end
 
-    it 'champ obligatoire when a required field is missing' do
-      @tr.amount = nil
+    it 'champ obligatoire when a required field is missing' do 
+      @tr.amount = nil 
       @tr.valid?
-      @tr.errors[:amount].should == ['obligatoire', 'doit être un nombre']
+      @tr.errors[:amount].should == ['obligatoire', 'doit être un nombre'] 
     end
 
     it 'montant ne peut être nul' do

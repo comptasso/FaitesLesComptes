@@ -22,7 +22,7 @@ class VirtualBook < Book
   belongs_to :organism
 
   def lines
-    virtual.lines
+    virtual.compta_lines
   end
 
   # renvoie les charactéristique du pavé, en l'occurence la racine du partial et 
@@ -36,8 +36,8 @@ class VirtualBook < Book
     virtual.class
   end
 
-  def sold_at(date = Date.today)
-    - super
+  def cumulated_at(date = Date.today, dc)
+    -virtual.cumulated_at(date, dc)
   end
 
 
