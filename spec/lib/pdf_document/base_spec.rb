@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 load 'pdf_document/base.rb'
-require 'pdf_document/page'
+require 'pdf_document/page' 
 
 describe PdfDocument::Base do
 
@@ -109,7 +109,7 @@ describe PdfDocument::Base do
     load 'lib/pdf_document/table.rb'
     let(:arel) {double(Arel, first:nil)}
     let(:source) {mock_model(Account, title:'Achats', number:'60',
-        lines:arel )}
+        compta_lines:arel )}
 
     before(:each) do
       @base = PdfDocument::Base.new(p, source, valid_options)
@@ -135,7 +135,7 @@ describe PdfDocument::Base do
 
     let(:arel) {double(Arel,  first:mock_model(Line))}
     let(:source) {mock_model(Account, title:'Achats', number:'60',
-        lines:arel )}
+        compta_lines:arel )}
 
     before(:each) do
       arel.stub_chain(:range_date, :count).and_return 100
@@ -164,7 +164,7 @@ describe PdfDocument::Base do
     it 'un doc doit pouvoir énumérer ses pages'
 
     it 'default select_method' do
-      @base.select_method.should == 'lines'
+      @base.select_method.should == 'compta_lines'
     end
 
     it 'raise error si source ne repond pas à select method'
