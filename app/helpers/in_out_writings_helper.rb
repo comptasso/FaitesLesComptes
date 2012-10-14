@@ -14,11 +14,11 @@ module InOutWritingsHelper
   # avec bank_lines..
   def in_out_line_actions(line)
     html = ' '
-      if line.owner.type == 'Transfer'
-        html <<  icon_to('modifier.png', edit_transfer_path(line.owner_id)) if line.editable?
+      if line.writing.type == 'Transfer'
+        html <<  icon_to('modifier.png', edit_transfer_path(line.writing_id)) if line.editable?
       else
-        html <<  icon_to('modifier.png', edit_book_in_out_writing_path(line.owner.book_id, line.owner)) if line.editable?
-        html <<  icon_to('supprimer.png', [line.owner.book, line.owner], confirm: 'Etes vous sûr?', method: :delete) if line.editable?
+        html <<  icon_to('modifier.png', edit_book_in_out_writing_path(line.writing.book_id, line.writing)) if line.editable?
+        html <<  icon_to('supprimer.png', [line.writing.book, line.writing], confirm: 'Etes vous sûr?', method: :delete) if line.editable?
       end
 
 

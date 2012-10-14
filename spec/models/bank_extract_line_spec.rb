@@ -3,17 +3,17 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-#   c.filter = {:wip=> true }
+   c.filter = {:wip=> true }
 end 
 
 
-describe BankExtractLine do 
+describe BankExtractLine do  
   include OrganismFixture
 
   before(:each) do 
-    create_minimal_organism
+    create_minimal_organism 
 
-    @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month,
+    @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month, 
       end_date:Date.today.end_of_month,
       begin_sold:1,
       total_debit:2,
@@ -70,16 +70,14 @@ describe BankExtractLine do
 
 
       it 'lock_line doit verrouiller les lignes et les siblings' do
-        Line.where('payment_mode = ?', 'Virement').all.each do |l|
-          l.should be_locked
-          l.supportline.should be_locked
-        end
+        ComptaLine.where('payment_mode = ?', 'Virement').all.each do |l|
+           l.should be_locked
+         end
       end
 
       it 'pour une remise de chèque, il faut aussi verrouiller les lignes d origine' do
-        Line.where('payment_mode = ?', 'Chèque').all.each do |l|
+       ComptaLine.where('payment_mode = ?', 'Chèque').all.each do |l|
           l.should be_locked
-          l.supportline.should be_locked
         end
       end
     end

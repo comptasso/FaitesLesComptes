@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require "#{Rails.root}/app/models/income_outcome_book"
 require "#{Rails.root}/app/models/outcome_book"
 
-RSpec.configure do |config| 
+RSpec.configure do |config|  
  # config.filter = {wip:true}
 
 end
@@ -24,7 +24,7 @@ describe Utilities::MonthlyInOutExtract do
     @book_extract.book.should == @ob
   end
 
-  context "when a MonthlyInOutExtract exists" do
+  context "when a MonthlyInOutExtract exists" do 
 
     before(:each) do
       # on créé 10 lignes sur le mois de janvier, de montant = à 1 €
@@ -46,8 +46,7 @@ describe Utilities::MonthlyInOutExtract do
     it 'vérifier que MonthlyInOutExtract est bien également initialisé avec un hash month et year'
 
     it "has a collection of lines" do
-      obw =
-      @extract.lines.should == @ob.writings.where('date >= ? AND date <= ?',
+     @extract.lines.should == @ob.writings.where('date >= ? AND date <= ?',
         @p.start_date.months_since(1), @p.start_date.months_since(1).end_of_month).all.map {|w| w.in_out_line}
         
     end

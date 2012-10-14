@@ -12,7 +12,7 @@
 
 
 
-# TODO gestion des Foreign keys cf. p 400 de Agile Web Development
+# TODO gestion des Foreign keys cf. p 400 de Agile Web Development 
 
 
 class Account < ActiveRecord::Base

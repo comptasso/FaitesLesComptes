@@ -135,6 +135,7 @@ describe Period do
   describe 'closable' , wip:true do
 
     it 'vérifie closable avant tout' do
+      pending 'not yet implemented'
       @p_2010.should_receive(:closable?).and_return false
       @p_2010.close.should be_false
     end

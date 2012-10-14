@@ -36,7 +36,7 @@ before(:each) do
     view.stub(:icon_to).and_return('stub icone')
     assign(:previous_line, @pl = stub_model(ComptaLine, id:1, narration:'test',
         book_id:book.id, debit:0, credit:12, line_date:Date.today, nature:n, destination:d))
-    @pl.stub(:owner).and_return @w
+    @pl.stub(:writing).and_return @w
     @w.stub(:support).and_return('DX')
     @pl.stub(:editable?).and_return(true)
     render

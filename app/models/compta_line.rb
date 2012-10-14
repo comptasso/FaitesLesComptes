@@ -13,8 +13,8 @@ class ComptaLine < ActiveRecord::Base
   belongs_to :check_deposit
   belongs_to :bank_account
 
-  # les lignes appartiennent à un owner qui peut être un transfer ou un writing
-  belongs_to :owner, :polymorphic=>true  
+  # les lignes appartiennent à un writing
+  belongs_to :writing
   has_and_belongs_to_many :bank_extract_lines,
     :join_table=>:bank_extract_lines_lines,
     :foreign_key=>'line_id',
@@ -36,8 +36,11 @@ class ComptaLine < ActiveRecord::Base
   before_save  :fill_account, :if=> lambda {nature && nature.account}
 
   scope :in_out_lines, where('nature_id IS NOT ?', nil)
-  scope :with_writings, joins("INNER JOIN writings ON writings.id = owner_id")
-  scope :mois, lambda { |date| with_writings.where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
+  scope :with_writings, joins(:writing)
+  # ce scope n'inclut pas with_writings, ce qui veut dire qu'il faut que cela soit fait par
+  # ailleurs, c'est notamment le cas lorsqu'on passe par book car book has_many :compta_lines, :through=>:writings
+  scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
+  # inclut with_writings et donc doit être utilisé pour un query qui ne l'inclut pas déja.
   scope :range_date, lambda {|from, to| with_writings.where('date >= ? AND date <= ?', from, to )}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)
@@ -47,7 +50,7 @@ class ComptaLine < ActiveRecord::Base
   # et du champ check_deposit_id
   scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil) }
 
-  delegate :date, :narration, :ref, :book, :support, :lock, :to=>:owner
+  delegate :date, :narration, :ref, :book, :support, :lock, :to=>:writing
 
   # transforme ComptaLine en un Line, utile pour les tests
   # églement utilisé dans le modèle CheckDeposit pour accéder indifférement aux compta_lines
@@ -61,12 +64,12 @@ class ComptaLine < ActiveRecord::Base
   end
 
   def siblings
-    owner.compta_lines
+    writing.compta_lines
   end
 
   # répond à la question si une ligne est affectée à un extrait bancaire ou non.
   def pointed?
-    supportline = owner.supportline
+    supportline = writing.supportline
     supportline.check_deposit_id || supportline.bank_extract_lines.any?
   end
 

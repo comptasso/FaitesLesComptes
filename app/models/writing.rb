@@ -13,7 +13,7 @@ class Writing < ActiveRecord::Base
 
   belongs_to :book
  
-  has_many :compta_lines, :as=>:owner, :dependent=>:destroy
+  has_many :compta_lines, :dependent=>:destroy
   alias children compta_lines
   
   

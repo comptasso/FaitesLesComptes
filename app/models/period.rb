@@ -172,6 +172,7 @@ class Period < ActiveRecord::Base
   #  le résultat de l'exercice vers le report.
   # 
   def close
+    raise 'period#close not yet implemented'
     possible = closable? # closable? ne doit être appelé qu'une fois pour ne pas dupliquer les erreurs (et les requêtes)
     if possible 
       od_book = organism.books.find_by_type('OdBook')

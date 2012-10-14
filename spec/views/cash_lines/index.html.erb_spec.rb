@@ -86,8 +86,7 @@ describe "cash_lines/index" do
 
   context 'avec une lignes venant de transfer' do
     before(:each) do
-       [cl1, cl2].each {|l| l.stub(:owner_type).and_return("Transfer") }
-        [cl1, cl2].each {|l| l.stub(:owner_id).and_return(10) }
+       [cl1, cl2].each {|l| l.stub(:writing).and_return(@t = mock_model(Transfer)) }
         render
     end
 
@@ -97,7 +96,7 @@ describe "cash_lines/index" do
 
     it 'peut avoir un lien modifier pointant vers transfer' do
       page.find("tbody tr:first td:nth-child(8)").all('img').first[:src].should == '/assets/icones/modifier.png'
-      page.find("tbody tr:first a")[:href].should == "/transfers/10/edit"
+      page.find("tbody tr:first a")[:href].should == "/transfers/#{@t.id}/edit"
     end 
   end
   

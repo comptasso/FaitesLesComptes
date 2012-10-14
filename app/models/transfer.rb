@@ -10,7 +10,7 @@ class Transfer < Writing
 
   attr_reader :compta_line_to, :compta_line_from
 
-  has_many :compta_lines,  :as=>:owner, :dependent=>:destroy
+  has_many :compta_lines, :dependent=>:destroy, foreign_key:'writing_id'
     
 
   before_destroy :should_be_destroyable

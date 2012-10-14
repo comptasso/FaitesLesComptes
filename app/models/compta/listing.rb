@@ -68,11 +68,11 @@ module Compta
   end
 
   def solde_debit_avant
-    account.lines.sum_debit_before(from_date)
+    account.cumulated_debit_before(from_date)
   end
 
   def solde_credit_avant
-    account.lines.sum_credit_before(from_date)
+    account.cumulated_credit_before(from_date)
   end
   
 
