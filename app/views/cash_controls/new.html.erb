@@ -11,7 +11,7 @@
   <% if @cash_control.previous %>
   <p>Dernier contrôle de caisse effectué le <%=l @cash_control.previous.date %> - Montant relevé : <%= two_decimals(@cash_control.previous.amount) %></p>
 <% end %>
-  <p>Solde théorique de la caisse au <%= l @cash_control.date %> : <%= debit_credit @cash.sold_at(@cash_control.date) %></p>
+  <p>Solde théorique de la caisse au <%= l @cash_control.date %> : <%= debit_credit -@cash.sold_at(@cash_control.date) %></p>
 <%= render 'form' %>
 </div>
 </div>

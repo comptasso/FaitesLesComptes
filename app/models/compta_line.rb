@@ -39,6 +39,8 @@ class ComptaLine < ActiveRecord::Base
   scope :with_writings, joins("INNER JOIN writings ON writings.id = owner_id")
   scope :mois, lambda { |date| with_writings.where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
   scope :range_date, lambda {|from, to| with_writings.where('date >= ? AND date <= ?', from, to )}
+  scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
+  scope :unlocked, where('locked = ?', false)
 
 
   # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
@@ -64,7 +66,7 @@ class ComptaLine < ActiveRecord::Base
 
   # répond à la question si une ligne est affectée à un extrait bancaire ou non.
   def pointed?
-    supportline = owner.counter_line
+    supportline = owner.supportline
     supportline.check_deposit_id || supportline.bank_extract_lines.any?
   end
 

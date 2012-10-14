@@ -21,7 +21,7 @@
         <td class="nombre"><%= debit_credit cc.cash_sold %></td>
         <td class="nombre"><%= debit_credit cc.difference %></td>
         <td>
-          <%= icon_to 'modifier.png', edit_cash_cash_control_path(@cash,cc), :id=>"icon_modifier_cash_control_#{cc.id}" %>
+          <%= icon_to 'modifier.png', edit_cash_cash_control_path(@cash,cc), :id=>"icon_modifier_cash_control_#{cc.id}" unless cc.locked? %>
           <%= icon_to 'verrouiller.png', lock_cash_cash_control_path(@cash,cc),
             :confirm=>"Cette action verrouille ce pointage de caisse ainsi que les écritures de caisse correspondantes \n#{cash_difference(cc)}\nConfirmez vous ?" ,
             :method=>:put unless cc.locked? %>

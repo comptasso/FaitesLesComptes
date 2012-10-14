@@ -4,11 +4,11 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
-  # c.filter = {:wip => true }
+  #  c.filter = {:wip => true }
   #  c.exclusion_filter = {:js=> true }
 end
 
-describe CashControl do 
+describe CashControl do   
   include OrganismFixture 
 
   before(:each) do
@@ -178,20 +178,30 @@ describe CashControl do
 
       before(:each) do
         date = @p.start_date
+
         # on créé une ligne d'écriture par mois relevant de la caisse
         @p.nb_months.times do |i|
           d = date.months_since(i)
-         Line.create!(narration: "test #{i}", counter_account:@c.current_account(@p),  debit: i+1, payment_mode: 'Espèces',
-            nature_id: @n.id, book_id: @ob.id, line_date:d )
+          @ib.in_out_writings.create!({date:d, narration:"test #{i}",
+      :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, debit:i+1, payment_mode:'Espèces'},
+        '1'=>{account_id:@caca.id, credit:i+1, payment_mode:'Espèces'}
+      }
+    })
+       
         end
-        # création de lignes
+        # création de lignes 
       end
 
-      it 'lock cash_control locked lines anterior to cash_control' do
-        Line.where('locked IS ?', false).should have(24).elements
+      it 'vérification de la recherche des lignes à verrouiller' do
+        @cash_control.cash.compta_lines.count.should == 12
+        @cash_control.cash.compta_lines.before_including_day(Date.today).should have(10).elements
+      end
+
+      it 'lock cash_control locked lines anterior to cash_control'  do 
+        ComptaLine.where('locked = ?', false).should have(24).elements
         @cash_control.locked = true
         @cash_control.save
-        Line.where('locked IS ?', false).should have(24 - 2*@cash_control.date.month).elements
+        ComptaLine.where('locked = ?', false).should have(24 - 2*@cash_control.date.month).elements
       end
 
       
