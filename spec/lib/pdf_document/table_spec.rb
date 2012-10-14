@@ -2,17 +2,21 @@
 
 
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')  
 require 'pdf_document/base'
 require 'pdf_document/page'
 require 'pdf_document/table'
+
+RSpec.configure do |c|
+  # c.filter = {wip:true}
+end
  
 describe PdfDocument::Table do
 
   let(:arel) {double(Arel, count:100, 
-      first:mock_model(Line))}
+      first:mock_model(ComptaLine))}
   let(:source) {mock_model(Account, title:'Achats', number:'60',
-      lines:arel )}
+      compta_lines:arel )}
   let(:o) {mock_model(Organism, title:'Organisme test')}
   let(:p) {mock_model(Period, organism:o,
       from_date:Date.today.beginning_of_year,
@@ -24,13 +28,15 @@ describe PdfDocument::Table do
 
 
   before(:each) do
-    @l = mock_model(Line, line_date:Date.today, ref:nil, debit:BigDecimal.new('10'), credit:BigDecimal.new('0'))
+    @w = mock_model(Writing, date:(Date.today - 1), narration:'bonjour', ref:nil )
+    @l = mock_model(ComptaLine, debit:BigDecimal.new('10'), credit:BigDecimal.new('0'), writing_id:@w.id, writings:@w)
+    @w.stub(:date).and_return(Date.today - 1)
     arel.stub_chain(:select, :range_date, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
     arel.stub_chain(:range_date).and_return 1.upto(50).collect {|i| @l}
     doc.stub(:nb_pages).and_return 2
 
     doc.set_columns_titles( %w(Date Réf Débit Crédit) )
-    doc.set_columns(%w(line_date ref debit credit)) 
+    doc.set_columns(%w(writings.date writings.ref debit credit))
     @page = doc.page(2)
     
   end
@@ -44,8 +50,8 @@ describe PdfDocument::Table do
     @page.table_lines.should have(22).lines # 22 est la valeur par défaut 
   end
 
-  it 'la table ne doit reprendre que les colonnes demandées' do  
-    @page.table_lines.first.should == [I18n.l(Date.today -1), '', '10.00', '']
+  it 'la table ne doit reprendre que les colonnes demandées' , wip:true do
+    @page.table_lines.first.should == [I18n.l(Date.today-1), '', '10.00', '']
   end
 
 

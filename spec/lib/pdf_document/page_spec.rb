@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
 
 require 'pdf_document/base'
 
@@ -10,9 +10,9 @@ describe PdfDocument::Page do
       from_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year,
       exercice:'Exercice 2012')}
-  let(:arel) {double(Arel, count:100, first:mock_model(Line, line_date:Date.today, debit:12, credit:0))}
+  let(:arel) {double(Arel, count:100, first:mock_model(ComptaLine,  debit:12, credit:0))}
   let(:source) {mock_model(Account, title:'Achats', number:'60',
-      lines:arel )}
+      compta_lines:arel )}
 
 
   let(:doc) { PdfDocument::Base.new(p, source, {title:'Le titre de la page'}) } 
@@ -63,9 +63,11 @@ describe PdfDocument::Page do
   describe 'lines total et reports'  do
 
     before(:each) do
-      @l = mock_model(Line, line_date:Date.today, ref:nil, debit:10, credit:0)
+      @l = mock_model(ComptaLine,  debit:10, credit:0)
+      @w = mock_model(Writing, date:Date.today, ref:'référence')
+      @l.stub(:writings).and_return @w
       arel.stub_chain(:select, :range_date, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
-      doc.set_columns %w(line_date ref debit credit)
+      doc.set_columns %w(writings.date writings.ref debit credit)
       doc.set_columns_to_totalize [2]
       
     end

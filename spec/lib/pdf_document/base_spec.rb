@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-load 'pdf_document/base.rb'
+load 'pdf_document/base.rb' 
 require 'pdf_document/page' 
 
 describe PdfDocument::Base do
@@ -113,7 +113,7 @@ describe PdfDocument::Base do
 
     before(:each) do
       @base = PdfDocument::Base.new(p, source, valid_options)
-      @base.set_columns  %w(line_date ref nature_id destination_id debit credit)
+      @base.set_columns  %w(writings.date writings.ref nature_id destination_id debit credit)
       @base.set_columns_to_totalize [4,5]
     end
 
@@ -133,7 +133,7 @@ describe PdfDocument::Base do
  
   context 'création des pages' do
 
-    let(:arel) {double(Arel,  first:mock_model(Line))}
+    let(:arel) {double(Arel,  first:mock_model(ComptaLine))}
     let(:source) {mock_model(Account, title:'Achats', number:'60',
         compta_lines:arel )}
 
@@ -176,7 +176,7 @@ describe PdfDocument::Base do
 
     # TODO ici on fait lines mais on devrait s'appuyer sur select_method
     it 'Par défaut les colonnes demandées sont celle de la classe retournée par select_method' do
-      @base.columns.should == Line.column_names
+      @base.columns.should == ComptaLine.column_names
     end
 
     it 'on peut sélectionner les colonnes' do

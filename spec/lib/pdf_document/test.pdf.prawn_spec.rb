@@ -19,14 +19,9 @@ describe 'test pdf prawn' do
      @n.save!
      # on crée 50 lignes de dépenses
      1.upto(50) do |i|
-     l =   Line.new(line_date:Date.today, book_id:@ob.id, narration:'Essai', counter_account:@baca,
-     nature_id:@n.id, debit:(i/2.0),  payment_mode:'Espèces', :account_id=>@account.id)
-   if l.valid?
-     l.save!
-   else
-     puts l.errors.messages
-   end
+        create_outcome_writing(i)
      end
+ 
    end
 
 #  it 'l valid' do
@@ -36,7 +31,7 @@ describe 'test pdf prawn' do
 #  end
 
   it 'account should have 1 line' do
-    @account.should have(50).lines
+    @account.should have(50).compta_lines
   end
 
   it 'should be able to create a pdf document' do
@@ -47,7 +42,7 @@ describe 'test pdf prawn' do
   context 'le document est créé' do
     before(:each) do
       @pdf = PdfDocument::Base.new(@p, @account, title:@o.title, subtitle:'Essai')    
-      @pdf.set_columns %w(line_date nature_id debit credit)
+      @pdf.set_columns %w(writings.date nature_id debit credit)
       @pdf.set_columns_titles %w(Date Nature Débit Crédit)
       
       @pdf.set_columns_methods [nil, 'nature.name', nil, nil]  
