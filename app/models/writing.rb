@@ -30,12 +30,17 @@ class Writing < ActiveRecord::Base
   scope :period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
 
+  # Fait le total des debit des compta_lines
+  # la méthode utilisée permet de neutraliser les nil éventuels
+  # utile notamment pour les tests de validité
   def total_debit
-    compta_lines.inject(0) {|tot, cl| tot += cl.debit if cl.debit}
+    compta_lines.inject(0) {|tot, cl| cl.debit ? tot + cl.debit  : tot}
   end
 
+  # Fait le total des debit des compta_lines
+  # la méthode utilisée permet de neutraliser les nil éventuels
   def total_credit
-    compta_lines.inject(0) {|tot, cl| tot += cl.credit if cl.credit}
+    compta_lines.inject(0) {|tot, cl| cl.credit ? tot + cl.credit  : tot}
   end
 
   # support renvoie le long_name du compte de la première ligne avec un compte de classe 5 de l'écriture
