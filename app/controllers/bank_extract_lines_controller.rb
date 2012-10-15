@@ -14,9 +14,12 @@ class BankExtractLinesController < ApplicationController
   # récupère l'extrait, les lignes qui lui sont déjà associées et les lignes de ce compte bancaire
   # qui ne sont pas encore associées à un extrait.
   #
-  #  @line sert à la modalbox qui permet d'ajouter une écriture
+  #  @in_out_writing, line et counter_line servent à la modalbox qui dispose
+  #  ainsi de tout ce qu'il faut pour ajouter une écriture
   def pointage
-    @line = Line.new(line_date:@bank_extract.begin_date)
+    @in_out_writing =@book.in_out_writings.new(date:@bank_extract.begin_date)
+    @line = @in_out_writing.compta_lines.build
+    @counter_line = @in_out_writing.compta_lines.build
     redirect_to bank_extract_bank_extract_lines_url(@bank_extract) if @bank_extract.locked
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
     @lines_to_point = Utilities::NotPointedLines.new(@bank_account)

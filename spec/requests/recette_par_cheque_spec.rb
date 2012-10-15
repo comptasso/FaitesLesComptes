@@ -34,7 +34,6 @@ describe 'Recette par chèque' do
 
  it 'on crée une recette par chèque' , wip:true do
    # création du compte remise chèque
-   save_and_open_page
    click_button 'Créer'
    Writing.count.should == 1
    ComptaLine.count.should == 2 # avec sa contrepartie

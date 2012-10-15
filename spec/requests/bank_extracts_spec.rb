@@ -24,7 +24,7 @@ end
 
   before(:each) do
     create_user
-    create_minimal_organism
+    create_minimal_organism 
     login_as('quidam')
   end
 
@@ -190,7 +190,7 @@ end
       fill_in('bank_extract_total_credit', with:'3.15')
       click_button('Enregistrer')
       page.should have_content("L'extrait a été modifié")
-      page.find('.champ h3').should have_content "Liste des extraits de compte"
+      page.find('.champ h3').should have_content "Liste des extraits de compte" 
     end
 
     it 'avec une valeur sauve la valeur' do
