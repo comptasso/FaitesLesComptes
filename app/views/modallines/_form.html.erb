@@ -2,7 +2,7 @@
 
 <div class="inputs" id="form_bank_extract_line" >
 
-  <%=  simple_form_for(@line, :url=>bank_extract_modallines_path(@bank_extract), :method=>:post, :remote=>true,  :html=> {class: 'form-horizontal'}) do |f| %>
+  <%=  simple_form_for(@in_out_writing, :url=>bank_extract_modallines_path(@bank_extract), :method=>:post, :remote=>true,  :html=> {class: 'form-horizontal'}) do |f| %>
 
     <%= f.error_notification %>
    
@@ -12,27 +12,32 @@
         label_method: lambda {|b| "#{b.class.name == 'IncomeBook' ? 'R' : 'D'} - #{b.title}" },
         include_blank:false, input_html: {class: "span4" } %>
 
-    <%= f.input :line_date_picker, :label=> 'Date', input_html: { class: "span4", date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+    <%= f.input :date_picker, :label=> 'Date', input_html: { class: "span4", date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
     <%= f.input :narration,  :label=>'Libellé ', input_html: {class: "span10" } %>
     <%= f.input :ref, label:'Référence',  input_html: {class: "span4" }  %>
-    <%=  f.association :nature , 
+  <%= f.fields_for :compta_lines, @line do |build| %>
+    <%= build.association :nature ,
               :collection => [Utilities::NaturesCollection.new(@organism, :recettes), Utilities::NaturesCollection.new(@organism, :depenses)],
               :as => :grouped_select, :group_method=>:natures,
               :required=>true, input_html: {class: "span6 " } %>
-     <%=  f.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
+     <%=  build.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
               :prompt => "Pour qui ?" ,   input_html: {class: "span6"} %>
-     <%=  f.input :debit ,   input_html: {class: "span3 number", value: two_decimals(@line.debit) }  %>
-     <%=  f.input :credit, input_html: {class: "span3 number", value: two_decimals(@line.credit) } %>
+     <%=  build.input :debit ,   input_html: {class: "span3 number", value: two_decimals(@line.debit) }  %>
+     <%=  build.input :credit, input_html: {class: "span3 number", value: two_decimals(@line.credit) } %>
      
-     <%= f.input :payment_mode , collection: PAYMENT_MODES, :prompt=>'Mode de réglement',
+     <%= build.input :payment_mode , collection: PAYMENT_MODES, :prompt=>'Mode de réglement',
                           disabled: 'Espèces',
                           :required=>true,  input_html: {class: "span6"} %>
-     <%= f.association :counter_account, :label=> 'Contrepartie',  :wrapper_html=>{class: "span3", id:'td_cca'}, input_html: {class: "span8"}, :label_html=>{class:'span4'},
+  <% end %>
+  <%= f.fields_for :compta_lines, @counter_line do |build| %>
+
+     <%= build.association :account, :label=> 'Contrepartie',  :wrapper_html=>{class: "span3", id:'td_cca'}, input_html: {class: "span8"}, :label_html=>{class:'span4'},
                 :collection => options_for_cca(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :title,
                 :label_method=> :long_name, :value_method=> :id, :disabled=>true  %>
 
         
-     <%= f.input :check_number, wrapper_html:{id:'td_check_number'}, label:'N° ch.', input_html: {class: "span4" }  %>
+     <%= build.input :check_number, wrapper_html:{id:'td_check_number'}, label:'N° ch.', input_html: {class: "span4" }  %>
+  <% end %>
            
 
 <div class="form-actions">

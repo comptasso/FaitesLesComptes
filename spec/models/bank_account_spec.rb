@@ -87,6 +87,8 @@ describe BankAccount do
     end
   end
 
+
+
   
   context 'annex methods' do
 
@@ -95,7 +97,9 @@ describe BankAccount do
       @ba.to_s.should == 'DX 123Z'
     end
 
-    
+    it 'np_lines' do
+      pending 'pas implémenté'
+    end
 
     describe 'new_bank_extract' do
 

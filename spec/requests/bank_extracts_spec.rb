@@ -2,19 +2,19 @@
 
 require 'spec_helper'
 
-#RSpec.configure do |c|
-#  c.filter = {:wip=>true}
-#end
+RSpec.configure do |c|
+ # c.filter = {:wip=>true}
+end
 
-include OrganismFixture
+include OrganismFixture  
  
 describe "BankExtracts" do 
 
   def retry_on_timeout(n = 3, &block)
   block.call
-rescue Capybara::TimeoutError, Capybara::ElementNotFound => e 
+rescue Capybara::TimeoutError, Capybara::ElementNotFound => e  
   if n > 0
-    puts "Catched error: #{e.message}. #{n-1} more attempts." 
+    puts "Catched error: #{e.message}. #{n-1} more attempts."  
     retry_on_timeout(n - 1, &block) 
   else 
     raise
@@ -112,7 +112,7 @@ end
         page.find('thead th').should have_content("Liste des écritures")
       end
 
-      it 'cliquer sur l icone afficher mène à la page affichage' do
+      it 'cliquer sur l icone afficher mène à la page affichage', wip:true do
         click_link('Pointer')
         page.find('.champ h3').should have_content("Relevé bancaire")
       end

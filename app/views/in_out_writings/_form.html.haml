@@ -6,21 +6,11 @@
     .row-fluid
       .span12
         = f.input :date_picker,:label=> 'Du', wrapper_html:{class:'span2'}, label_html:{class: 'span4'}, input_html:{class:'span8', date_min:@period.start_date, date_max:@period.close_date},  :required => true, :as=>:date_picker
-
-
-
         = f.input :ref, label:'Réf.', :wrapper_html=>{:class=>'span2'}, input_html: {class: "span8"}, :label_html=>{class:'span4'}
-
-
-
         = f.input :narration,  :label=>'Libellé ', :wrapper_html=>{:class=>'span6'}, label_html:{class:'span2'}, input_html: {class: "span10" }
- 
-
-    =f.fields_for :compta_lines, @line do |build|
-      = render :partial=>'in_out_line_form', :locals=>{:builder=>build, :f=>f}
-    
-
-    .row-fluid
+     =f.fields_for :compta_lines, @line do |build|
+       = render :partial=>'in_out_line_form', :locals=>{:builder=>build, :f=>f}
+     .row-fluid
       .span12
         .form-actions.offset1
           = f.button :submit, id: 'new_line_button', class: "btn-primary span3"

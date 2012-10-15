@@ -17,7 +17,7 @@ class BankExtractLinesController < ApplicationController
   #  @in_out_writing, line et counter_line servent à la modalbox qui dispose
   #  ainsi de tout ce qu'il faut pour ajouter une écriture
   def pointage
-    @in_out_writing =@book.in_out_writings.new(date:@bank_extract.begin_date)
+    @in_out_writing =InOutWriting.new(date:@bank_extract.begin_date)
     @line = @in_out_writing.compta_lines.build
     @counter_line = @in_out_writing.compta_lines.build
     redirect_to bank_extract_bank_extract_lines_url(@bank_extract) if @bank_extract.locked

@@ -40,13 +40,7 @@ module Utilities
       end
     end
 
-    # ordonne la liste selon date asc
-    # inutile car BankAccount#np_lines fait déja appel à order ASC
-    def order_list
-      @list.sort! {|a,b| a[:date] <=> b[:date] }
-    end
-
-
+   
 
     
 
