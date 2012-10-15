@@ -69,6 +69,10 @@ class CashControl < ActiveRecord::Base
   # cette sélection se fait sur la base de la date.
   # Il se pourrait qu'un problème existe en cas de plusieurs controles de caisse
   # le même jour, ce qui est peu probable vu la taille des organismes ciblés
+  #
+  # Le if persisted? est là car l'instance actuelle peut être dans la table ou non
+  # et dans le premier cas, on cherche l'avant dernière
+  #
   def previous
     if persisted?
    previous_cash = cash.cash_controls.for_period(period).order('date ASC').where('date <= ?', date).limit(2).all rescue nil

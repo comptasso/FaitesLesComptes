@@ -7,7 +7,7 @@ RSpec.configure do |c|
   #  c.exclusion_filter = {:js=> true }
 end
 
-describe 'Cash Control Requests' do 
+describe 'Cash Control Requests' do  
   include OrganismFixture 
 
   before(:each) do
@@ -35,12 +35,12 @@ describe 'Cash Control Requests' do
       fill_in 'cash_control[date_picker]', :with=> '05/05/2012'
       fill_in 'cash_control[amount]', :with=>20.52
       click_button "Enregistrer"
-      current_url.should match cash_cash_controls_path(@c)
+      current_url.should match cash_cash_controls_path(@c)  
       all('tbody tr').should have(1).rows
 
     end
 
-    context 'remplir incorrectement le formulaire' do
+    context 'remplir incorrectement le formulaire' , wip:true do
 
       it 'test amount' do
         fill_in 'cash_control[date_picker]', :with=> '01/01/2012'

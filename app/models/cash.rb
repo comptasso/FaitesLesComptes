@@ -28,7 +28,7 @@ class Cash < ActiveRecord::Base
 
   # retourne le numéro de compte de la caisse correspondant à l'exercice (period) passé en argument
   def current_account(period)
-    accounts.where('period_id = ?', period.id).first
+    accounts.where('period_id = ?', period.id).first rescue nil
   end
 
   def to_s
@@ -38,7 +38,7 @@ class Cash < ActiveRecord::Base
  
   def cumulated_at(date, dc) 
     p = organism.find_period(date)
-    acc = current_account(p)
+    return 0 unless acc = current_account(p)
     Writing.sum(dc, :select=>'debit, credit', :conditions=>['date <= ? AND account_id = ?', date, acc.id], :joins=>:compta_lines).to_f
     # nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
     # problèmes de calcul
