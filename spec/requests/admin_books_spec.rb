@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 
  # ActiveRecord::Base.shared_connection = nil
@@ -35,7 +35,7 @@ describe 'vue books index' do
     
     it "affiche la page new" do
       visit new_admin_organism_book_path(@o)
-      page.should have_content("Création d'un livre")
+      page.should have_content("Création d'un livre") 
       page.should have_content('Type')
     
     end
@@ -58,7 +58,7 @@ describe 'vue books index' do
       @o.income_books.create!(:title=>'livre de test') 
       @o.should have(4).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
-      visit admin_organism_books_path(@o)
+      visit admin_organism_books_path(@o) 
       within 'tbody tr:nth-child(4)' do
         page.should have_content('livre de test') 
         page.click_link 'Supprimer'
