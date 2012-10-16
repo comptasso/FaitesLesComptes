@@ -45,8 +45,8 @@ class Writing < ActiveRecord::Base
 
   # support renvoie le long_name du compte de la première ligne avec un compte de classe 5 de l'écriture
   def support
-    s = support_line
-    s.long_name if s
+    s = supportline
+    s.account.long_name if s && s.account
   end
 
   def supportline

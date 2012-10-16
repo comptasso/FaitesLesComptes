@@ -19,7 +19,7 @@ class BankExtractLinesController < ApplicationController
   def pointage
     @in_out_writing =InOutWriting.new(date:@bank_extract.begin_date)
     @line = @in_out_writing.compta_lines.build
-    @counter_line = @in_out_writing.compta_lines.build
+    @counter_line = @in_out_writing.compta_lines.build(account:@bank_account.current_account(@period))
     redirect_to bank_extract_bank_extract_lines_url(@bank_extract) if @bank_extract.locked
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
     @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
@@ -71,8 +71,8 @@ class BankExtractLinesController < ApplicationController
   # et line_id (l'id de la ligne)
   #
   def ajoute
-      l = Line.find(params[:line_id])
-      @bel = @bank_extract.bank_extract_lines.new(lines:[l])
+      l = ComptaLine.find(params[:line_id])
+      @bel = @bank_extract.bank_extract_lines.new(compta_lines:[l])
       raise "Methode ajoute : @bel non valide @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
 
     # on redessine les tables
@@ -96,14 +96,14 @@ class BankExtractLinesController < ApplicationController
   # non pointed line est transférée dans les bank_extract_line
   #
   # L'id de la ligne non pointée doit être de la forme
-  # type_id (ex ine_545)
+  # type_id (ex line_545)
   #
   # params[:at] indique à quelle position insérer la ligne dans la liste
   #
   def insert
     id = params[:html_id][/\d+$/].to_s
-    l=Line.find(id)
-    @bel = @bank_extract.bank_extract_lines.new(lines:[l])
+    l = ComptaLine.find(id)
+    @bel = @bank_extract.bank_extract_lines.new(compta_lines:[l])
     raise "@bel non valide #{html} @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
     @bel.position = params[:at].to_i
    

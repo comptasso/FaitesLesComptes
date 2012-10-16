@@ -31,12 +31,12 @@
   <% end %>
   <%= f.fields_for :compta_lines, @counter_line do |build| %>
 
-     <%= build.association :account, :label=> 'Contrepartie',  :wrapper_html=>{class: "span3", id:'td_cca'}, input_html: {class: "span8"}, :label_html=>{class:'span4'},
-                :collection => options_for_cca(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :title,
-                :label_method=> :long_name, :value_method=> :id, :disabled=>true  %>
+     <%= build.association :account, :label=> 'Contrepartie', input_html: {class: "span6"}, :collection=>[@counter_line.account], :label_method=>:long_name,
+               :disabled=>false, :include_blank=>false  %>
+  <%= build.input :check_number, label:'N° ch.', input_html: {class: "span6" } %>
 
-        
-     <%= build.input :check_number, wrapper_html:{id:'td_check_number'}, label:'N° ch.', input_html: {class: "span4" }  %>
+  
+    
   <% end %>
            
 

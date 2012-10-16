@@ -32,7 +32,7 @@ module Utilities
       @bank_account.np_lines.each do |l|
         @list <<   {
           id:l.id,
-          date:l.line_date,
+          date:l.date,
           narration:l.narration,
           debit:l.debit, # c'est inversé car on est dans la logique de la banque
           credit:l.credit
