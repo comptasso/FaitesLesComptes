@@ -3,9 +3,9 @@
 module BankExtractLinesHelper
   def details_for_popover(bel)
     html =  []
-    bel.lines.each do |l|
+    bel.compta_lines.each do |l|
       html << content_tag(:li) do
-      "#{l l.line_date} - #{sanitize l.narration} - #{two_decimals l.debit} - #{two_decimals l.credit}</td>".html_safe
+      "#{l l.date} - #{sanitize l.narration} - #{two_decimals l.debit} - #{two_decimals l.credit}</td>".html_safe
     end
     end
     html
