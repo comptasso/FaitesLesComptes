@@ -12,24 +12,24 @@
 
  function $f_modal_book_change() {
     // lire la valeur du champ et déterminer si c'est une recette ou une dépense
-    var income_outcome = $('#line_book_id option:selected').text();
-    $('#form_bank_extract_line #line_credit').val('0.00');
-    $('#form_bank_extract_line #line_debit').val('0.00');
-    if ($('#form_bank_extract_line #line_payment_mode') === 'Chèque') {
-      $('#td_check_number').show();
+    var income_outcome = $('#in_out_writing_book_id option:selected').text();
+    $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_credit').val('0.00');
+    $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_debit').val('0.00');
+    if ($('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_payment_mode') === 'Chèque') {
+      $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().show();
     }
 
 
     if (income_outcome.match(/^R/) !== null) {
-      $('label[for="line_debit"]').parent().hide();
-      $('label[for="line_credit"]').parent().show();
+      $('label[for="in_out_writing_compta_lines_attributes_0_debit"]').parent().hide();
+      $('label[for="in_out_writing_compta_lines_attributes_0_credit"]').parent().show();
       $('optgroup[label="Depenses"]').attr('disabled', true)
       $('optgroup[label="Recettes"]').attr('disabled', false)
 
     }
     if (income_outcome.match(/^D/) !== null) {
-      $('label[for="line_debit"]').parent().show();
-      $('label[for="line_credit"]').parent().hide();
+      $('label[for="in_out_writing_compta_lines_attributes_0_debit"]').parent().show();
+      $('label[for="in_out_writing_compta_lines_attributes_0_credit"]').parent().hide();
       $('optgroup[label="Depenses"]').attr('disabled', false)
       $('optgroup[label="Recettes"]').attr('disabled', true)
     }
@@ -40,25 +40,26 @@ jQuery(function() {
   
  
   function $f_modal_raz() {
-    $('#line_narration').val('');
-    $('#line_ref').val('');
-    $('#line_nature_id').val('');
-    $('#line_destination_id').val('');
-    $('#line_credit').val('0.00');
-    $('#line_debit').val('0.00');
-    $('#line_payment_mode').val('');
+    $('#in_out_writing_narration').val('');
+    $('#in_out_writing_ref').val('');
+    $('#in_out_writing_compta_lines_attributes_0_nature_id').val('');
+    $('#in_out_writing_compta_lines_attributes_0_destination_id').val('');
+    $('#in_out_writing_compta_lines_attributes_0_credit').val('0.00');
+    $('#in_out_writing_compta_lines_attributes_0_debit').val('0.00');
+    $('#in_out_writing_compta_lines_attributes_0_payment_mode').val('');
+    $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().hide();
   }
 
 
   $f_modal_book_change();
   // selon la nature du livre, on veut disable les natures qui sont inadaptées
   // Attacher un évènement onChange au champ book
-  $('#form_bank_extract_line #line_book_id').live('change', $f_modal_book_change);
-  $('#form_bank_extract_line #line_payment_mode').live('change', function() {
+  $('#form_bank_extract_line #in_out_writing_book_id').live('change', $f_modal_book_change);
+  $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_payment_mode').live('change', function() {
     if ($(this).val() === 'Chèque') {
-      $('#form_bank_extract_line #td_check_number').show();
+      $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().show();
     } else {
-      $('#form_bank_extract_line #td_check_number').hide();
+      $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().hide();
     }
   });
 

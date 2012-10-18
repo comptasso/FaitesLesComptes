@@ -8,7 +8,7 @@ class ModallinesController < ApplicationController
     @bank_extract=BankExtract.find(params[:bank_extract_id])
     @bank_account = @bank_extract.bank_account
     complete_params
-    @writing = Writing.new(params[:in_out_writing])
+    @writing = InOutWriting.new(params[:in_out_writing])
     if @writing.save
      
       @lines_to_point = Utilities::NotPointedLines.new(@bank_account)

@@ -18,7 +18,7 @@ module InOutWritingsHelper
         html <<  icon_to('modifier.png', edit_transfer_path(line.writing_id)) if line.editable?
       else
         html <<  icon_to('modifier.png', edit_book_in_out_writing_path(line.writing.book_id, line.writing)) if line.editable?
-        html <<  icon_to('supprimer.png', [line.writing.book, line.writing], confirm: 'Etes vous sûr?', method: :delete) if line.editable?
+        html <<  icon_to('supprimer.png', book_in_out_writing_path(line.writing.book, line.writing), confirm: 'Etes vous sûr?', method: :delete) if line.editable?
       end
 
 
