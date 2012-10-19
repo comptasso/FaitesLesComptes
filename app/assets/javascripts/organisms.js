@@ -176,6 +176,7 @@ function options_for_graph(all_datas) {
     return options;
 }
 
+// fonction qui associe les éléments du graphe à l'affichage du book_extract correspondant'
 function bind_bars(all_datas) {
     $('#chart_' + all_datas.dcomplete_id).bind('jqplotDataClick',
         function (ev, seriesIndex, pointIndex, data) {
@@ -185,7 +186,7 @@ function bind_bars(all_datas) {
           mois = la[0]; an = la[1];
           
           
-            window.location = ("/books/" + all_datas.did + "/lines?an=" + an + "&mois=" + mois);
+            window.location = ("/books/" + all_datas.did + "/in_out_writings?an=" + an + "&mois=" + mois);
         });
 }
 

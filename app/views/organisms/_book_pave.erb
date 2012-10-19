@@ -1,8 +1,8 @@
 <%= content_tag(:div, class: "pave #{local_classes}") do %>
     <h3 class='<%= book_pave.type %>' >
           Livre des <%=  book_pave.title %>
-          <%= icon_to 'modifier.png', new_book_line_path(book_pave) %>
-          <%= icon_to 'detail.png', book_lines_path(book_pave) %>
+          <%= icon_to 'nouveau.png', new_book_in_out_writing_path(book_pave) %>
+          <%= icon_to 'detail.png', book_in_out_writings_path(book_pave) %>
     </h3>
 
     <%= render partial: 'organisms/bar_graphic', object: book_pave.graphic(@period) , :locals=>{id: "book_#{book_pave.id}"} %>
