@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
- #  c.filter = {:wip=> true }
+ # c.filter = {:wip=> true }
 end 
 
 
@@ -57,7 +57,7 @@ describe BankExtractLine do
     # se fait par la méthode belongs_to 
     # TODO en fait actuellement c'est un has_one (mais une modif est prévue)
 
-    describe 'lock_line' , wip:true do
+    describe 'lock_line'  do
       before(:each) do
         @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@cr.supportline])
         @be.bank_extract_lines.each {|bel| bel.lock_line }
@@ -106,6 +106,36 @@ describe BankExtractLine do
 
     end
 
+    describe 'regroup'  do
+
+      before(:each) do
+        @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')
+      end
+
+      it 'regroup diminue le nombre de lignes' do
+        @bel7.regroup @bel29
+        @be.should have(2).bank_extract_lines
+        @be.bank_extract_lines.first.should have(2).compta_lines
+        @be.bank_extract_lines.last.should have(1).compta_lines
+      end
+
+      it 'regroup met à jour le follower' do
+        @bel7.lower_item.should == @bel29
+        @bel29.lower_item.should == @bel102
+        @bel7.regroup @bel29
+        @bel7.lower_item.should == @bel102
+      end
+
+      it 'regroup en partant de la fin',  wip:true do
+        @bel29.regroup @bel102
+        @bel29.should have(2).compta_lines
+        @bel7.regroup @bel29
+        @bel7.lower_item.should be_nil
+        @bel7.should have(3).compta_lines
+      end
+
+    end
+
     describe 'chainable'  do
 
       before(:each) do
@@ -125,7 +155,7 @@ describe BankExtractLine do
         @bel29.should_not be_chainable
       end
 
-      it 'a bel is chainable only if both debit or both credit' , :wip=>true do
+      it 'a bel is chainable only if both debit or both credit'  do
         bel_cr = @be.bank_extract_lines.create!(compta_lines:[@cr.supportline])
         bel_cr.move_to_top
         bel_cr.should_not be_chainable

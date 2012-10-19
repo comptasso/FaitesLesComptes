@@ -108,8 +108,9 @@ class BankExtractLine < ActiveRecord::Base
   # puis que l'on supprime l'enregistrement correspondant à l'argument.
   #
   def regroup(bel)
-    bel.compta_lines.each do |l|
-      bel.compta_lines.delete(l)
+    bel.compta_lines.all.each do |l|
+      bel.compta_lines.delete(l) # car le validator impose que la ligne ne soit pas déjà attaché à
+      # un bank_extract_lines
       compta_lines << l
     end
     save

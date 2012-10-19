@@ -906,6 +906,7 @@ OK - Verifier l'action de verrouillage d'un relevé bancaire
 OK - Vérifier aussi l'action de contrôle de caisse
 OK - Quand une ligne est pointée, on ne peut plus la supprimer ni l'éditer
 on a le curseur main même pour les extraits pointés
+le chainage quand on part de la fin masque des lignes
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
 NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner
