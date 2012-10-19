@@ -57,7 +57,6 @@ function recup_graph_datas(element) {
         id = this.id.match(/\d+$/)[0]; // on récupère l'id et comme match retourne un array on prend le premier'
         legend = $(this).find('.legend').text().split(';'); // la légende
         ticks = $(this).find('.ticks').text().split(';'); // les mois
-       
         // et on les remplit par une boucle qui prend la dimension de légende pour construire
         for (i = 0; i <= legend.length; i += 1) {
             label[i] = {
@@ -73,7 +72,6 @@ function recup_graph_datas(element) {
         did: id,
         dlegend: legend,
         dticks: ticks,
-  
         dseries: s,
         dlinks: link,
         dlabel: label,
@@ -180,12 +178,10 @@ function options_for_graph(all_datas) {
 function bind_bars(all_datas) {
     $('#chart_' + all_datas.dcomplete_id).bind('jqplotDataClick',
         function (ev, seriesIndex, pointIndex, data) {
-          var mois = '', la = [], an ='', lien = '';
-          lien = all_datas.dlinks[seriesIndex][pointIndex]; // lien = mm-yyyy à ce stade
-          la = lien.split('-')
-          mois = la[0]; an = la[1];
-          
-          
+            var mois = '', la = [], an = '', lien = '';
+            lien = all_datas.dlinks[seriesIndex][pointIndex]; // lien = mm-yyyy à ce stade
+            la = lien.split('-');
+            mois = la[0]; an = la[1];
             window.location = ("/books/" + all_datas.did + "/in_out_writings?an=" + an + "&mois=" + mois);
         });
 }
