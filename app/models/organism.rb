@@ -15,6 +15,7 @@ class Organism < ActiveRecord::Base
   has_many :cash_controls, through: :cashes
   has_many :income_books, dependent: :destroy
   has_many :outcome_books, dependent: :destroy
+  has_one :an_book, dependent: :destroy
   has_many :od_books, dependent: :destroy
   has_many :virtual_books # les virutal_books ne sont pas persisted? donc inutile d'avoir un callback
   
@@ -145,6 +146,7 @@ class Organism < ActiveRecord::Base
     logger.debug 'creation livre dépenses'
     od_books.create(:title=>'OD', description: 'Opérations Diverses')
     logger.debug 'creation livre OD'
+    create_an_book(:title=>'AN', description:'A nouveau')
 
     cashes.create(name:'La Caisse')
     logger.debug 'creation de la caisse par défaut'

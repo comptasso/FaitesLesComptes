@@ -898,7 +898,6 @@ OK - Remplacer tous les standard et check_deposit par des standard_bank_extract_
 NON - on garde car pas un grand enjeu et pourrait reservir - Le modèle Utilities.not_pointed_lines n'est plus vraiment utile (on pourrait le remplacer par un helper)
 OK - Revoir les questions de chaînage de lignes et de scission
 OK - Verifie que Les fonctions insert et remove numarotent correctement les lignes  de la table des bels
-
 OK - suppression de check_deposit_bank_extract_line_spec
 OK - suppression de standard_bank_extract_line_spec
 OK - Modifier pointed? dans Line qui doit se passer du champ bank_extract_id
@@ -909,6 +908,7 @@ on a le curseur main même pour les extraits pointés
 OK - bug :le chainage quand on part de la fin masque des lignes
 Recettes en chèque ne devrait pas être disponible dans la modal box
 Le curseur pour le détail de lignes chainées n'est pas correct
+Revoir l'affichage du détail de lignes chainées.
 
 -------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
 NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner
@@ -943,7 +943,6 @@ OK - Transfer peut voir sa structure changer avec par exemple from_account_id et
 ?? Revoir les conditions d'édition d'un tansfert : doit on verrouiller les deux lignes du transfert alors qu'on ne pointe que la caisse ou que le compte bancaire
 OK - La confirmation de suppression d'un transfert est encore en anglais
 OK - Modifier PAs de support pour les lignes qui sont des chèques
-Revoir l'affichage du détail de lignes chainées.
 Dans l'affichage du compte 511, on pourrait voir quels chèques sont pending
 OK - Revoir la mise en forme de la table de détail des remises chèques
 OK - Revoir dans cash le calcul des soldes pour les controles de caisse (vue new et index)
@@ -957,13 +956,13 @@ On devrait avoir un champ active pour les comptes (qui se répercute sur bank_ac
 OK - Création des comptes du plan comptable dès la création d'un period
 Nettoyer le controleur, les routes et les vues de Period pour le plan comptable
 OK - on peut supprimer les champs debitable_type et creditable_type de Transfer
-Les graphes ne permettent plus d'afficher le mois en question
+OK - Les graphes ne permettent plus d'afficher le mois en question
 
 toujours dans Transfer, on pourrait revoir les validators
 Dans les exports de Lines#index vers des fichiers, on ne devrait pas faire un truncate des champs (vu le pb pour le champ support)
 OK - supprimer to_option dans la caisse
 OK - idem pour bank_account
-modalbox de account listing ne change pas le titre h3
+0K - modalbox de account listing ne change pas le titre h3
 NON - On pourrait voir comment se passer du champ counter_account
 OK - Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait utilisé en zone compta,
 Nettoyer od_lines_controller ? et routes associées (fait-on de l'OD en zone saisie)

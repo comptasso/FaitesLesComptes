@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
-  #  c.filter = {:wip=> true }
+    c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
@@ -41,8 +41,24 @@ describe Organism do
       @organism= Organism.create! valid_attributes
     end
 
-    it 'on a trois livres' do
-      @organism.should have(3).books
+    it 'on a quatre livres' do
+      @organism.should have(4).books
+    end
+
+    it 'on a un livre de recette' do
+      @organism.should have(1).income_book 
+    end
+
+    it 'on a un livre de dépenses' do
+      @organism.should have(1).outcome_book
+    end
+
+    it 'on a un livre d OD' do
+      @organism.should have(1).od_book
+    end
+
+    it 'on a un livre d AN' do
+      @organism.an_book.should be_an_instance_of(AnBook)
     end
 
 
@@ -93,6 +109,8 @@ describe Organism do
         @organism.max_open_periods?.should be_false
       end
     end
+
+
 
     
     describe 'main_bank_id' do
