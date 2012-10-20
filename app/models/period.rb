@@ -112,6 +112,10 @@ class Period < ActiveRecord::Base
     (previous_period.id == self.id) ? false : true
   end
 
+  def previous_period_open?
+    previous_period? && !previous_period.closed?
+  end
+
 
   # trouve l'exercice suivant en recherchant l'exercice qui à la première date qui soit au dela de close_date de l'exercice actuel
   # renvoie lui même s'il n'y en a pas
@@ -161,7 +165,7 @@ class Period < ActiveRecord::Base
 
 
   # indique si l'exercice est clos
-  def is_closed?
+  def closed?
     open ? false : true
   end
 

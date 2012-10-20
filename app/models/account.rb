@@ -66,7 +66,7 @@ class Account < ActiveRecord::Base
   # pour modifier le fonctionnement.
   def cumulated_at(date, dc)
     Writing.sum(dc, :select=>'debit, credit', :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines).to_f
-    # nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
+    # to_f est nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
   end
 
 
@@ -99,7 +99,33 @@ class Account < ActiveRecord::Base
   def classe
     number[0]
   end
-  
+
+  # donne le montant débit d'ouverture du compte
+  # s'il n'y a pas d'exercice précédent et pas de report à nouveau, c'est zero
+  # s'il y a un exercice précédent clos, c'est le report à nouveau
+  # s'il y a un exercice précédent non clos, c'est le solde du même compte
+  def init_sold_debit
+     anb = period.organism.an_book
+     val =  Writing.sum('debit', :select=>'debit', :conditions=>['book_id = ? AND account_id = ?', anb.id, id], :joins=>:compta_lines).to_f
+    if period.previous_period_open? 
+     pp = period.previous_period # pp pour previous_period
+      pacc = pp.accounts.find_by_number(number) #pacc pour previous_account
+      val += pacc.cumulated_debit_at(pp.close_date) if pacc
+    end
+    val
+  end
+
+  def init_sold_credit
+      anb = period.organism.an_book
+      val = Writing.sum('credit', :select=>'credit', :conditions=>['book_id = ? AND account_id = ?', anb.id, id], :joins=>:compta_lines).to_f
+    if period.previous_period_open? 
+      pp = period.previous_period # pp pour previous_period
+      pacc = pp.accounts.find_by_number(number) #pacc pour previous_account
+      val += pacc.cumulated_credit_at(pp.close_date) if pacc
+    end
+    val
+  end
+
   def formatted_sold(date)
     ['%0.2f' % cumulated_debit_before(date), '%0.2f' % cumulated_credit_before(date) ]
   end
@@ -110,6 +136,8 @@ class Account < ActiveRecord::Base
   def movement(from, to, dc)
     Writing.sum(dc, :select=>'debit, credit', :conditions=>['date >= ? AND date <= ? AND account_id = ?', from, to, id], :joins=>:compta_lines).to_f
   end
+
+
 
   def lines_empty?(from =  period.start_date, to = period.close_date)
     compta_lines.range_date(from, to).empty?

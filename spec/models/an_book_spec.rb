@@ -6,17 +6,12 @@ describe AnBook do
 
   let(:p2012) {stub_model(Period, :start_date=>Date.civil(2012,01,01), :close_date=>Date.civil(2012,12,31))}
   let(:o) {stub_model(Organism, :find_period=>p2012)}
-   
-
-
-
 
     before(:each) do
       @book = AnBook.new(organism_id:o.id, title:'AN', description:'A nouveau')
       @book.save!
       @book.stub(:organism).and_return(o)
       Writing.any_instance.stub(:book).and_return @book
-
     end
 
   def valid_attributes
@@ -27,6 +22,7 @@ describe AnBook do
 
   describe 'writing date is start_date' do
     it 'new writing' do
+      p2012.stub(:previous_period).and_return nil
       Writing.new(valid_attributes).should be_valid 
     end
 
@@ -36,6 +32,12 @@ describe AnBook do
        Writing.new(va).should_not be_valid
     end
 
+  end
+
+  it 'on ne peut écrire si l exercice précédent ouvert' do
+    p2012.stub_chain(:previous_period, :closed?).and_return false
+    Writing.new(valid_attributes).should_not be_valid
+    
   end
 
 end

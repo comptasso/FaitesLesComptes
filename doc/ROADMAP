@@ -988,6 +988,7 @@ OK - Mettre les comptes par ordres de numéro
 Faire un before_destroyable dans le modèle (et du coup retirer l'équivalent dans Transfer)
 -------------------------------------- A nouveau ----------------------------------------------
 OK - Une écriture d'à nouveau est forcément au premier jour de l'exercice
+solde de compte : Le solde d'ouverture est le montant donné par l'écriture d'à nouveau ou par le solde de l'année précédente
 
 
 

@@ -23,6 +23,7 @@ class Writing < ActiveRecord::Base
   validates :compta_lines, :two_compta_lines_minimum=>true
   validate :balanced?
   validate :period_start_date, :if=> lambda {book.type == 'AnBook'}
+  validate :previous_period_closed, :if=> lambda {book.type == 'AnBook'}
 
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
 
@@ -90,6 +91,16 @@ class Writing < ActiveRecord::Base
     p = book.organism.find_period(date)
     if date != p.start_date
       errors.add(:date, 'Doit être le premier jour')
+      false
+    else
+      true
+    end
+  end
+
+  def previous_period_closed
+    p = book.organism.find_period(date)
+    if p.previous_period? && !p.previous_period.closed?
+      errors.add(:narration, 'Exercice précédent non clos')
       false
     else
       true
