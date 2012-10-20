@@ -128,7 +128,7 @@ module PdfDocument
      def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      @source.compta_lines.joins(:writing).select(columns).range_date(from_date, to_date).offset(offset).limit(limit)
+      @source.compta_lines.joins(:writing=>:book).select(columns).range_date(from_date, to_date).offset(offset).limit(limit)
      end
 
      # appelle les méthodes adéquate pour chacun des éléments de la lignes
@@ -136,7 +136,14 @@ module PdfDocument
      # pas présent.
      # Par exemple nature.name lorsque nature est nil
      def prepare_line(line)
-       columns_methods.collect { |m| line.instance_eval(m) rescue nil }
+       columns_methods.collect do |m|
+          r =  line.instance_eval(m) rescue nil
+          begin
+            I18n::l(Date.parse(r)) # pour avoir l'affichage de tous champs date sur le format français
+          rescue
+            r
+          end
+       end
      end
 
      # récupère les variables d'instance ou les calcule si besoi
