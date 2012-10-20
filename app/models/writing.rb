@@ -22,6 +22,7 @@ class Writing < ActiveRecord::Base
   validates :date, :must_belong_to_period=>true
   validates :compta_lines, :two_compta_lines_minimum=>true
   validate :balanced?
+  validate :period_start_date, :if=> lambda {book.type == 'AnBook'}
 
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
 
@@ -81,6 +82,18 @@ class Writing < ActiveRecord::Base
 
   def locked?
     compta_lines.all.select {|cl| cl.locked?}.any?
+  end
+
+  protected
+
+  def period_start_date
+    p = book.organism.find_period(date)
+    if date != p.start_date
+      errors.add(:date, 'Doit être le premier jour')
+      false
+    else
+      true
+    end
   end
 
  

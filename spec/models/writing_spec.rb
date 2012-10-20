@@ -13,7 +13,7 @@ describe Writing do
 
   before(:each) do 
     @o = mock_model(Organism)
-    @b = mock_model(Book, :organism=>@o)
+    @b = mock_model(Book, :organism=>@o, :type=>'IncomeBook')
     @o.stub(:find_period).and_return true
     Writing.any_instance.stub_chain(:compta_lines, :size).and_return 2
     Writing.any_instance.stub(:complete_lines).and_return true
@@ -30,6 +30,8 @@ describe Writing do
     before(:each) do
        Writing.any_instance.stub(:total_credit).and_return 10
        Writing.any_instance.stub(:total_debit).and_return 10
+       Writing.any_instance.stub(:book).and_return @b
+       
     end
 
     it 'champs obligatoires' do

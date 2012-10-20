@@ -986,6 +986,9 @@ OK - On doit avoir une action qui permet de verrouiller l'écriture
 ??? Une écriture qui n'est pas pointée et qui mouvement une caisse ou un compte bancaire ne devrait pas pouvoir être verrouillée...??
 OK - Mettre les comptes par ordres de numéro
 Faire un before_destroyable dans le modèle (et du coup retirer l'équivalent dans Transfer)
+-------------------------------------- A nouveau ----------------------------------------------
+OK - Une écriture d'à nouveau est forcément au premier jour de l'exercice
+
 
 
 --------------------------------- TODO ---------------------------------------------------------

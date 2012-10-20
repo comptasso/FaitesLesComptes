@@ -3,6 +3,7 @@
 class Compta::WritingsController < Compta::ApplicationController
 
   before_filter :find_book
+  before_filter :fix_date, :only=>:new
 
   # GET /writings
   # GET /writings.json
@@ -29,7 +30,7 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings/new
   # GET /writings/new.json
   def new
-    @writing = @book.writings.new(date: flash[:date])
+    @writing = @book.writings.new(date: @d)
     if flash[:previous_writing_id]
       @previous_writing = Writing.find_by_id(flash[:previous_writing_id])
     end
@@ -102,5 +103,10 @@ class Compta::WritingsController < Compta::ApplicationController
 
   def find_book
     @book = Book.find(params[:book_id])
+  end
+
+  def fix_date
+    @d = flash[:date]
+    @d = @period.start_date if @book.type == 'AnBook'
   end
 end

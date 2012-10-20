@@ -3,7 +3,9 @@
     = f.error_notification
     .row-fluid
       .span12
-        =f.input :date_picker, :label=> 'Date', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker
+        =f.input :date_picker, :label=> 'Date', wrapper_html:{class:'span3'},
+           label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,
+           :required => true, :disabled=>(@book.type=='AnBook'), :as=>:date_picker
         =f.input :narration,  :label=>'Libellé ', :wrapper_html=>{:class=>'span6'}, label_html:{class:'span2'}, input_html: {class:"span9" }
         =f.input :ref, label:'Référence', :wrapper_html=>{:class=>'span3'}, input_html: {class: "span8" } , :label_html=>{class:'span4'}
 
