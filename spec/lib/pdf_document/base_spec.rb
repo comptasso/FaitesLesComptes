@@ -2,7 +2,11 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 load 'pdf_document/base.rb' 
-require 'pdf_document/page' 
+require 'pdf_document/page'
+
+RSpec.configure do |c|
+ # c.filter = {wip:true}
+end
 
 describe PdfDocument::Base do
 
@@ -105,7 +109,7 @@ describe PdfDocument::Base do
     end
   end
 
-  context 'un listing sans ligne' do
+  context 'un listing sans ligne', wip:true do
     load 'lib/pdf_document/table.rb'
     let(:arel) {double(Arel, first:nil)}
     let(:source) {mock_model(Account, title:'Achats', number:'60',
@@ -123,7 +127,8 @@ describe PdfDocument::Base do
     end
 
     it 'avec un total de 0' do
-      arel.stub_chain(:select, :range_date, :offset, :limit).and_return nil
+     arel.stub_chain(:joins).and_return arel
+     arel.stub_chain(:select, :range_date, :offset, :limit).and_return nil
       @base.stub(:nb_pages).and_return 1
       @base.page(1).table_total_line.should == ['Totaux', '0.00', '0.00']
       @base.page(1).table_to_report_line.should == ['Total général', '0.00', '0.00']
