@@ -80,10 +80,7 @@ module Compta
     account.to_pdf(from_date, to_date, options)
   end
 
-#
-#  def to_pdf(options = {})
-#    account.to_pdf(from_date, to_date, options)
-#  end
+
 
   #produit un document pdf en s'appuyant sur la classe PdfDocument::Base
   # et ses classe associées page et table
@@ -95,8 +92,8 @@ module Compta
     options[:to_date] = to_date
     pdf = PdfDocument::Base.new(period, account, options)
 
-    pdf.set_columns %w(date writings.ref writings.narration nature_id destination_id debit credit)
-    pdf.set_columns_methods [nil, nil, nil, 'nature_name', 'destination_name', nil, nil]
+    pdf.set_columns ['writings.date AS w_date', 'writings.ref AS w_ref', 'writings.narration AS w_narration', 'nature_id', 'destination_id', 'debit',  'credit']
+    pdf.set_columns_methods ['w_date', 'w_ref', 'w_narration', 'nature.name', 'destination.name', nil, nil]
     pdf.set_columns_widths [10, 8, 32, 15, 15, 10, 10]
     pdf.set_columns_titles %w(Date Réf Libellé Nature Destination Débit Crédit)
     pdf.set_columns_to_totalize [5,6]

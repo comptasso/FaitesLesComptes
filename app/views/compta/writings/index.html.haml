@@ -4,14 +4,6 @@
 
 .champ
   %h3 Liste d'écritures
-.inner-champ
 
-  %p
-    A faire après avoir introduit un modèle writing pour l'écriture des income et Outcome
-  %p
-    A défaut, il faudrait avoir une fonction index capable de chercher les lignes
-    Outcome avec nature comme filtre et construire une writing à la volée
-    Et pour OD, il faudrait prendre les transfert, check_deposits et writings
-    avec des méthodes pour transfert et check_deposit qui transforment en writings
 
 = render :partial=>'compta/writings/writing', :collection=>@writings

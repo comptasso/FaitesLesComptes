@@ -9,7 +9,7 @@ require 'pdf_document/table'
 
 
 
-describe 'test pdf prawn' do  
+describe 'test pdf prawn' do   
   include OrganismFixture
    before(:each) do
      create_minimal_organism
@@ -42,10 +42,10 @@ describe 'test pdf prawn' do
   context 'le document est créé' do
     before(:each) do
       @pdf = PdfDocument::Base.new(@p, @account, title:@o.title, subtitle:'Essai')    
-      @pdf.set_columns %w(writings.date nature_id debit credit)
+      @pdf.set_columns ['writings.date AS w_date', 'nature_id', 'debit', 'credit']
       @pdf.set_columns_titles %w(Date Nature Débit Crédit)
       
-      @pdf.set_columns_methods [nil, 'nature.name', nil, nil]  
+      @pdf.set_columns_methods ['w_date', 'nature.name', nil, nil]
       @pdf.set_columns_widths [10,60,15,15]
       @pdf.set_columns_to_totalize [2,3]
     end 

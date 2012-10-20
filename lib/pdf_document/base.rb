@@ -20,8 +20,10 @@ module PdfDocument
   # une source pour les lignes
   #
   # La classe est initialisée avec un exercice, une source et des options
-  # la source est un objet capable de répondre à une méthode (par défaut lines)
+  # la source est un objet capable de répondre à une méthode (par défaut compta_lines)
   # qui sont appelées par l'objet Pdf::Page
+  # La récupération des lignes (des compta_lines) est faite par la méthode fetch qui
+  # par défaut utilise joins(:writing).
   #
   # Ce qu'on souhaite obtenir peut être défini soit par des options soit par des méthodes
   # 
@@ -38,8 +40,11 @@ module PdfDocument
   # 
   # La classe a des méthodes pour définir les colonnes souhaitées de la source et différents paramétrages
   #
-  # set_columns(array_of_string) permet d'indiquer les colonnes souhaitées (par ex : set_columns %w(line_date, nature_id, debit)
-  #   par défaut set_columns prend l'ensemble des champs de la table Lines
+  # set_columns(array_of_string) permet d'indiquer les colonnes souhaitées (par ex : set_columns %w(nature_id, debit)
+  #   par défaut set_columns prend l'ensemble des champs de la table Lines.
+  #   Si on veut des champs qui viennent de la table writings, il faut leur donner un alias
+  #   pour pouvoir les utiliser ensuite par ex : set_columns('writings.date AS w_date', 'debit').
+  #   Dans set_columns_methods, décrit juste après, on utilisera alors ['w_date', nil]
   #
   # set_columns_methods(array_of_strings) pour indiquer la méthode à appliquer
   #   il doit y avoir autant de valeurs que de colonnes : nil si on veut la méthode par défaut.
@@ -123,12 +128,15 @@ module PdfDocument
      def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      @source.compta_lines.select(columns).range_date(from_date, to_date).offset(offset).limit(limit)
+      @source.compta_lines.joins(:writing).select(columns).range_date(from_date, to_date).offset(offset).limit(limit)
      end
 
      # appelle les méthodes adéquate pour chacun des éléments de la lignes
+     # le rescue nil permet de ne pas générer une erreur si un champ composé n'est
+     # pas présent.
+     # Par exemple nature.name lorsque nature est nil
      def prepare_line(line)
-       columns_methods.collect { |m| line.instance_eval(m) }
+       columns_methods.collect { |m| line.instance_eval(m) rescue nil }
      end
 
      # récupère les variables d'instance ou les calcule si besoi
