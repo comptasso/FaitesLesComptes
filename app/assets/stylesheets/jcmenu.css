@@ -34,3 +34,9 @@ li.dropdown > a:hover {
   color: #333 !important;
 }
 
+li.dropdown span.no-link {
+  padding: 3px 20px;
+  color: #888;
+}
+
+
