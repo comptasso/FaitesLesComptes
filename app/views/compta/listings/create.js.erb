@@ -14,7 +14,7 @@ $('.input_date_picker').datepicker(
 // on réécrit le titre
 var h3text = "Ecritures du compte <%= @listing.account.long_name %>";
 h3text += "<%= " - Du #{ordinalize_date(@listing.from_date)} au #{ordinalize_date(@listing.to_date)}" %>";
-$('.champ > h3#intitule').text(h3text);
+$('.champ > h3 > span#intitule').text(h3text);
 
 //on met à jour les soldes
 $('#movements').html("<%= j render 'movements' %>")
