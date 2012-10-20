@@ -136,15 +136,8 @@ module PdfDocument
      # pas présent.
      # Par exemple nature.name lorsque nature est nil
      def prepare_line(line)
-       columns_methods.collect do |m|
-          r =  line.instance_eval(m) rescue nil
-          begin
-            I18n::l(Date.parse(r)) # pour avoir l'affichage de tous champs date sur le format français
-          rescue
-            r
-          end
-       end
-     end
+       columns_methods.collect { |m| line.instance_eval(m) rescue nil }
+    end
 
      # récupère les variables d'instance ou les calcule si besoi
      def columns

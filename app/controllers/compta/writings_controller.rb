@@ -57,13 +57,20 @@ class Compta::WritingsController < Compta::ApplicationController
   # POST /writings
   # POST /writings.json
   def create
+    params[:writing][:date_picker] ||=  l(@period.start_date)
     @writing = @book.writings.new(params[:writing])
 
     respond_to do |format|
       if @writing.save
         flash[:date]=@writing.date # permet de transmettre la date à l'écriture suivante
         flash[:previous_writing_id]=@writing.id
-        format.html { redirect_to new_compta_book_writing_url(@book) }
+        format.html {
+          if @book.type == 'AnBook'
+            redirect_to compta_book_writings_url(@book)
+          else
+            redirect_to new_compta_book_writing_url(@book)
+          end
+           }
       else
         flash[:alert]= @writing.errors.messages
         format.html { render action: "new" }

@@ -63,7 +63,8 @@ module PdfDocument
       @document.prepare_line(line).collect {|v| format_value(v)}
     end
 
-     
+    
+ 
     protected
 
     def format_total(r)
@@ -72,14 +73,16 @@ module PdfDocument
     end
 
     def format_value(r)
-      r = '' if r.nil?
-      r = I18n::l(r) if r.is_a? Date
-      r = '%0.2f' % r if r.is_a? BigDecimal
-      r = '%0.2f' % r if r.is_a? Float
-      r = '' if r == '0.00'
-      r
+      return '' if r.nil?
+      return '%0.2f' % r if r.is_a? BigDecimal
+      return '%0.2f' % r if r.is_a? Float
+      return '' if r == '0.00'
+       # pour avoir l'affichage de tous champs date sur le format français
+      I18n::l(Date.parse(r)) rescue r
+      
     end
 
+    
     # fait le total des valeurs de la colonne d'indice i
     # n'additionne que s'il en est capable en testant la transformation en Float
     # cela permet d'avoir des valeurs vides dans les colonnes par exemple
