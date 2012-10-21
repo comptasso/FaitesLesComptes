@@ -8,7 +8,7 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings
   # GET /writings.json
   def index
-    @writings = @book.writings.all
+    @writings = @book.writings.period(@period).all
 
     respond_to do |format|
       format.html # index.html.erb
