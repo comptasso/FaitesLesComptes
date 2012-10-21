@@ -14,7 +14,7 @@ describe Account do
     create_minimal_organism
   end
   
-   describe 'solde initial'  do
+   describe 'solde initial' , wip:true do
 
     before(:each) do
       @acc1 = Account.create!({number:'100', title:'Capital', period_id:@p.id})
@@ -43,6 +43,11 @@ describe Account do
         @acc1.init_sold_credit.should == 66
       end
 
+      it 'donne un an_sold' do
+        @acc1.an_sold('debit').should == 0
+        @acc1.an_sold('credit').should == 66
+      end
+
 
     
 
@@ -51,7 +56,7 @@ describe Account do
       before(:each) do
         eve = @p.start_date - 1
         @p.stub(:previous_period?).and_return true
-        Period.any_instance.stub(:previous_period).and_return @pp = mock_model(Period, close_date:eve)
+        Period.any_instance.stub(:previous_period).and_return @pp = mock_model(Period, close_date:eve, closed?:true)
         Period.any_instance.stub(:previous_period_open?).and_return false
         @pp.stub(:accounts).and_return @arel = double(Arel)
 
@@ -60,7 +65,11 @@ describe Account do
        it 'avec exercice précédent clos, prend le report à nouveau' do
            @acc1.init_sold_debit.should == 0
             @acc1.init_sold_credit.should == 66
-          end
+       end
+
+
+
+
     end
 
     end
@@ -70,7 +79,7 @@ describe Account do
       before(:each) do
         eve = @p.start_date - 1
         @p.stub(:previous_period?).and_return true
-        Period.any_instance.stub(:previous_period).and_return @pp = mock_model(Period, close_date:eve)
+        Period.any_instance.stub(:previous_period).and_return @pp = mock_model(Period, close_date:eve, closed?:false)
         Period.any_instance.stub(:previous_period_open?).and_return true
         @pp.stub(:accounts).and_return @arel = double(Arel)
         
@@ -85,15 +94,24 @@ describe Account do
 
       it 'avec exercice précédent non clos, prend le solde debit du compte' do
         @arel.should_receive(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
-        @acc3.should_receive(:cumulated_debit_at).with(@pp.close_date).and_return 0
+        @acc3.should_receive(:cumulated_at).with(@pp.close_date, 'debit').and_return 0
         @acc1.init_sold_debit.should == 0
       end
 
       it 'avec exercice précédent non clos, prend le solde credit du compte'  do
-        @arel.should_receive(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
-        @acc3.stub(:cumulated_credit_at).with(@pp.close_date).and_return 152
-        @acc1.init_sold_credit.should == 152
+        @arel.stub(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
+        @acc3.stub(:cumulated_at).with(@pp.close_date, 'credit').and_return 152
+        @acc1.previous_period_sold('credit').should == 152
+  #      @acc1.init_sold_credit.should == 152
       end
+
+      it 'previous_period_sold renvoie 0 si compte 6 ou 7' do
+        @arel.stub(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
+        @acc3.stub(:cumulated_at).with(@pp.close_date, 'credit').and_return 152
+        @acc1.stub(:classe).and_return 6
+        @acc1.previous_period_sold('credit').should == 0
+       end
+
     
       it 'cas où il n y a pas de compte correspondant' do
          @arel.should_receive(:find_by_number).with(@acc1.number).and_return nil

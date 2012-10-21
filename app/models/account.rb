@@ -64,9 +64,19 @@ class Account < ActiveRecord::Base
   # méthode principale et mère des autres méthodes cumulated_credit
   # surcharger cette méthode dans les classes utilisant ce module
   # pour modifier le fonctionnement.
+  # Ici nous avons une somme simple sauf dans le cas où la date la veille de celle d'ouverture
+  # ce qui se produit quand on démarre le listing d'une balance au premier jour de l'exercice
+  # donc très souvent.
+  # Dans ce cas, le solde est un solde d'ouverture qui doit prendre en compte la ligne d'à nouveau
+
   def cumulated_at(date, dc)
-    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines).to_f
+    if date == (period.start_date - 1)
+      init_sold(dc)
+    else
+    Writing.sum(dc, :select=>'debit, credit',
+      :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines).to_f + previous_period_sold(dc)
     # to_f est nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
+    end
   end
 
 
@@ -104,27 +114,18 @@ class Account < ActiveRecord::Base
   # s'il n'y a pas d'exercice précédent et pas de report à nouveau, c'est zero
   # s'il y a un exercice précédent clos, c'est le report à nouveau
   # s'il y a un exercice précédent non clos, c'est le solde du même compte
+  def init_sold(dc)
+    an_sold(dc) + previous_period_sold(dc)
+  end
+
+
   def init_sold_debit
-     anb = period.organism.an_book
-     val =  Writing.sum('debit', :select=>'debit', :conditions=>['book_id = ? AND account_id = ?', anb.id, id], :joins=>:compta_lines).to_f
-    if period.previous_period_open? 
-     pp = period.previous_period # pp pour previous_period
-      pacc = pp.accounts.find_by_number(number) #pacc pour previous_account
-      val += pacc.cumulated_debit_at(pp.close_date) if pacc
-    end
-    val
+    init_sold('debit')
   end
 
   def init_sold_credit
-      anb = period.organism.an_book
-      val = Writing.sum('credit', :select=>'credit', :conditions=>['book_id = ? AND account_id = ?', anb.id, id], :joins=>:compta_lines).to_f
-    if period.previous_period_open? 
-      pp = period.previous_period # pp pour previous_period
-      pacc = pp.accounts.find_by_number(number) #pacc pour previous_account
-      val += pacc.cumulated_credit_at(pp.close_date) if pacc
-    end
-    val
-  end
+     init_sold('credit')
+   end
 
   def formatted_sold(date)
     ['%0.2f' % cumulated_debit_before(date), '%0.2f' % cumulated_credit_before(date) ]
@@ -160,6 +161,19 @@ class Account < ActiveRecord::Base
     pdf
   end
 
+  def an_sold(dc)
+    anb = period.organism.an_book
+    Writing.sum(dc, :select=>dc, :conditions=>['book_id = ? AND account_id = ?', anb.id, id], :joins=>:compta_lines).to_f
+  end
+
+  def previous_period_sold(dc)
+    return 0 unless (period.previous_period? && !period.previous_period.closed?)
+    return 0 if classe == 6 || classe == 7
+    pp = period.previous_period # pp pour previous_period
+    pacc = pp.accounts.find_by_number(number) #pacc pour previous_account
+    return 0 unless pacc
+    pacc.cumulated_at(pp.close_date, dc) if pacc
+  end
 
 
 
