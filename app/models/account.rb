@@ -74,7 +74,7 @@ class Account < ActiveRecord::Base
       init_sold(dc)
     else
     Writing.sum(dc, :select=>'debit, credit',
-      :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines).to_f + previous_period_sold(dc)
+      :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines).to_f
     # to_f est nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
     end
   end

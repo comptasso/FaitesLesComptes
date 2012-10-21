@@ -988,9 +988,11 @@ OK - Mettre les comptes par ordres de numéro
 Faire un before_destroyable dans le modèle (et du coup retirer l'équivalent dans Transfer)
 -------------------------------------- A nouveau ----------------------------------------------
 OK - Une écriture d'à nouveau est forcément au premier jour de l'exercice
-OK - solde de compte : Le solde d'ouverture est le montant donné par l'écriture d'à nouveau ou par le solde de l'année précédente
+OK - solde de compte : Le solde d'ouverture est le montant donné par l'écriture d'à nouveau
+NON ou par le solde de l'année précédente
+NON du coup ceci uniquement pour les comptes de classe 1 à 5 - car alors on déséquilibre la balance
 
-
+Le menu A nouveau doit prendre en compte les exercices
 
 --------------------------------- TODO ---------------------------------------------------------
 L'affichage des comptes 1 à 5 n'a pas forcément besoin de nature et destination
