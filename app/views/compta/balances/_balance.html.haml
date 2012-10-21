@@ -3,9 +3,8 @@
     %tr
 
       %th(colspan="2")
-      %th.center(colspan="2")
-        Soldes au
-        =l @balance.from_date
+      %th.center(colspan="2")=begin_column_title(@balance.from_date)
+        
       %th.center(colspan="2") Mouvement de la période
       %th.center(colspan="2")
         Soldes au

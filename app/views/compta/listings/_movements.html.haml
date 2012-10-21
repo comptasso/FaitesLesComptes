@@ -7,9 +7,7 @@
       %th Solde
   %tbody
     %tr#begin-solds
-      %td
-        Soldes au
-        = " #{ordinalize_date(@listing.from_date)}"
+      %td= open_sold_ordinalized(@listing.from_date)
       %td= number_with_precision @listing.solde_debit_avant
       %td= number_with_precision @listing.solde_credit_avant
       %td= number_with_precision(@listing.solde_credit_avant - @listing.solde_debit_avant)

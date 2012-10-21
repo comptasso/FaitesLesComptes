@@ -79,6 +79,15 @@ class Account < ActiveRecord::Base
     end
   end
 
+   # TODO on pourrait utiliser le scope range_date de lines
+  # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
+  # Exemple movement(Date.today.beginning_of_year, Date.today, true) pour un credit
+#  def movement(from, to, dc)
+#    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date >= ? AND date <= ? AND account_id = ?', from, to, id], :joins=>:compta_lines).to_f
+#  end
+#
+
+
 
   # surcharge de accountable pour gérer le cas des remises chèques
   # il n'y a pas de table RemCheckAccount et donc on traite ce cas en premier
@@ -131,14 +140,7 @@ class Account < ActiveRecord::Base
     ['%0.2f' % cumulated_debit_before(date), '%0.2f' % cumulated_credit_before(date) ]
   end
 
-  # TODO on pourrait utiliser le scope range_date de lines
-  # calcule le total des lignes de from date à to (date) inclus dans le sens indiqué par dc (debit ou credit)
-  # Exemple movement(Date.today.beginning_of_year, Date.today, true) pour un credit
-  def movement(from, to, dc)
-    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date >= ? AND date <= ? AND account_id = ?', from, to, id], :joins=>:compta_lines).to_f
-  end
-
-
+ 
 
   def lines_empty?(from =  period.start_date, to = period.close_date)
     compta_lines.range_date(from, to).empty?

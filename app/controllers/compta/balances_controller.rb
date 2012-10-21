@@ -15,8 +15,12 @@ class Compta::BalancesController < Compta::ApplicationController
 
   # utile pour afficher la balance en pdf
   def show
-    @balance = Compta::Balance.new( {period_id:@period.id}.merge(params[:compta_balance]) )
-    if @balance.valid?
+   # ce unless est nécessaire pour les cas où l'on change d'exercice
+    unless params[:compta_balance]
+     redirect_to new_compta_period_balance_url(@period) and return
+   end
+   @balance = Compta::Balance.new( {period_id:@period.id}.merge(params[:compta_balance])) 
+   if @balance.valid?
       respond_to do |format|
         format.html { render action: 'show'}
         format.js

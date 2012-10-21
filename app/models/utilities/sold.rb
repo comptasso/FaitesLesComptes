@@ -28,9 +28,6 @@ module Utilities::Sold
     sold_at(date - 1)
   end
 
-
-
-
   # débit cumulé à une date (y compris cette date). Renvoie zero s'il n'y a
   # pas de périod et donc pas de compte associé à cette caisse pour cette date
   def cumulated_debit_at(date)
@@ -48,6 +45,12 @@ module Utilities::Sold
   def sold_at(date)
     cumulated_credit_at(date) - cumulated_debit_at(date)
   end
+
+  def movement(from, to, dc)
+    cumulated_at(to, dc) - cumulated_at(from - 1 , dc)
+  end
+
+
 
   # donne un solde en prenant toutes les lignes du mois correspondant
   # à cette date; Le selector peut être une date ou une string
