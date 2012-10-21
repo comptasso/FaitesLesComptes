@@ -995,9 +995,9 @@ NON du coup ceci uniquement pour les comptes de classe 1 à 5 - car alors on dé
 Le menu A nouveau doit prendre en compte les exercices
 
 --------------------------------- TODO ---------------------------------------------------------
-L'affichage des comptes 1 à 5 n'a pas forcément besoin de nature et destination
+BOF _ L'affichage des comptes 1 à 5 n'a pas forcément besoin de nature et destination
 On manque d'un affichage des écritures
-dans les vue book lines faire un recettes/dépenses plutôt que débit/crédit
+OK - dans les vue book lines faire un recettes/dépenses plutôt que débit/crédit
 OK - rajouter db:schema:dump à landlord:migrate_each
 Quand on a des comptes et qu'on crée une nature, le lien au compte est disable dans le form
 OK - Faire le readme
@@ -1011,7 +1011,7 @@ Ajouter les environnements winusb et wininstall (cf. fichier Word sur mes essais
 Il faudra faire les autres tâches rake db:migrate db:rollback,... correspondant au namespace landlord pour que
   les migrations fonctionnent correctement pour les bases déja installées.
 OK - Ajouter un formulaire de saisie des lignes d'OD
-La confirmation de suppression de transfert est Are you sure?
+OK - La confirmation de suppression de transfert est Are you sure?
 OK - Dans la partie compta, on devrait avoir les journaux
 -----------------------------------Gestion des user ---------------------------
 La suppression d'un user doit être gérée (suppression des rooms, effacement des bases?)
@@ -1043,23 +1043,22 @@ OK - idem pour book
 OK - revoir Account qui utilise encore line et counter_line
 OK - traite Utilities::Sold qui utilise line_date
 OK - modifier les cash pour qu'il se passent de lines
-modifier  bank_accounts pour qu'ils se passent de lines
+OK - modifier  bank_accounts pour qu'ils se passent de lines
 OK - faire la méthode cumulated_at pour OdBook
 
-Supprimer dans la table ligne le champ date, narration et ref (et les autres champs actuellement inutilisés)
-Revoir la méthode siblings et peut être children
+OK - Supprimer dans la table ligne le champ date, narration et ref (et les autres champs actuellement inutilisés)
+OK - Revoir la méthode siblings et peut être children
 On pourrait aussi revoir belongs_to bank_extract puisqu'il y a le lien via bank_extract_line
 NON - Mettre une transaction dans counterpart, la counterpart est crée dans le controller via des params et non par le modèle
 NON - Line pourrait appartenir à un writing plutôt qu'à un owner polymorphique
 OK - Revoir previous_line_id dans le controller (create)
 OK - Franciser les boutons des forms
 OK - Faire les spec
-Voir si on ne peut pas utiliser lines pour retrouver les validations qui existent
 OK - Revoir le javascript pour les champs banques et num chèque
-Revoir le modal form pour utiliser les nested attributes
+OK - Revoir le modal form pour utiliser les nested attributes
 OK - Pb de l'affichage des mois qui n'apparaît pas
 Mettre une validation : InOutWriting doit avoir une in_out_line avec une nature
-Déplacer le + de création d'écritures vers la ligne des icones
+OK - Déplacer le + de création d'écritures vers la ligne des icones
 
 
 Dans Account, la logique has_many Transfer n'a plus vraiment lieu d'être

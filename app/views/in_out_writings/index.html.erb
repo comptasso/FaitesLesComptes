@@ -1,4 +1,5 @@
 <%= content_for :menu do %>
+  <%= icon_to('nouveau.png', new_book_in_out_writing_path(@book, mois:@mois, an:@an), id: 'new_line_link') %>
   <%=  icon_to 'pdf.png', book_in_out_writings_path(@book, mois:@mois, an:@an, :format=>'pdf'), title:'PDF', :target=>'_blank' %>
   <%=  icon_to 'report-excel.png', book_in_out_writings_path(@book, mois:@mois, an:@an, :format=>'xls'), title: 'XLS' %>
   <%=  icon_to 'table-export.png', book_in_out_writings_path(@book, mois:@mois, an:@an, :format=>'csv'), title: 'CSV' %>

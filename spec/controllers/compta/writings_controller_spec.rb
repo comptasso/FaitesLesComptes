@@ -27,6 +27,7 @@ describe Compta::WritingsController do
   describe "GET index"  do
     it "assigns all writings as @writings" do
       @b.should_receive(:writings).and_return @a = double(Arel)
+      @a.should_receive(:period).with(@p).and_return(@a)
       @a.should_receive(:all).and_return [1,2]
       
       get :index, {book_id:@b.id}, valid_session
@@ -74,19 +75,19 @@ describe Compta::WritingsController do
       before(:each) do
         @r = mock_model(Writing)
         @b.stub(:writings).and_return @a = double(Arel)
-        @a.stub(:new).with(@r.to_param).and_return @r
+        @a.stub(:new).with({'date_picker'=>(I18n::l Date.today.beginning_of_year)}).and_return @r
         
       end
 
       it "assigns a newly created writing as @writing" do
         @r.stub(:save).and_return(true)
-        post :create, {book_id:@b.to_param, :writing => @r.to_param}, valid_session
+        post :create, {book_id:@b.to_param, :writing => {} }, valid_session
         assigns(:writing).should be_a(Writing)
       end
 
       it "redirects to the created writing" do
         @r.stub(:save).and_return(@r)
-        post :create, {book_id:@b.to_param, :writing => @r.to_param }, valid_session
+        post :create, {book_id:@b.to_param, :writing => {} }, valid_session
         response.should redirect_to new_compta_book_writing_url(@b)
       end
     end
