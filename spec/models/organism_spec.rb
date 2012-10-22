@@ -4,8 +4,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
-    c.filter = {:wip=> true }
-  #  c.exclusion_filter = {:js=> true }
+  # c.filter = {:wip=> true }
+    c.exclusion_filter = {:js=> true }
 end
 
 describe Organism do
@@ -30,8 +30,8 @@ describe Organism do
       @organism.should_not be_valid
     end
 
-    it 'should create 3 books' do
-      expect {@organism.save}.to change {Book.count}.by(3)
+    it 'should create 4 books (un recettes, un dépenses, un OD, un AN)' do
+      expect {@organism.save}.to change {Book.count}.by(4)
     end
 
   end

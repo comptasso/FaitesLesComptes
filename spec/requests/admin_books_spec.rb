@@ -12,7 +12,7 @@ end
 
 # spec request for testing admin books 
 
-describe 'vue books index' do 
+describe 'vue books index' do
 
  
   include OrganismFixture  
@@ -26,7 +26,7 @@ describe 'vue books index' do
 
   it 'check minimal organism' do 
     Organism.count.should == 1
-    Book.count.should == 3
+    Book.count.should == 4
   end
 
 
@@ -46,7 +46,7 @@ describe 'vue books index' do
       fill_in 'book[description]', :with=>'Un deuxième livre de recettes'
       choose 'Recettes'
       click_button 'Créer le livre'
-      @o.books.count.should == 4
+      @o.books.count.should == 5
       @o.books.last.book_type.should == 'IncomeBook'
     end
 
@@ -56,7 +56,7 @@ describe 'vue books index' do
 
      it 'dans la vue index,un livre peut être détruit', :js=>true do
       @o.income_books.create!(:title=>'livre de test') 
-      @o.should have(4).books
+      @o.should have(5).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_books_path(@o) 
       within 'tbody tr:nth-child(4)' do
@@ -67,7 +67,7 @@ describe 'vue books index' do
       alert = page.driver.browser.switch_to.alert
       alert.accept 
       sleep 1
-      page.all('tbody tr').should have(3).books
+      page.all('tbody tr').should have(4).books
      end
 
 

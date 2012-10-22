@@ -2,16 +2,21 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+RSpec.configure do |c|
+  # c.filter = {wip:true}
+end
+
 describe AnBook do
 
   let(:p2012) {stub_model(Period, :start_date=>Date.civil(2012,01,01), :close_date=>Date.civil(2012,12,31))}
-  let(:o) {stub_model(Organism, :find_period=>p2012)}
+  let(:o) {stub_model(Organism, :find_period=>p2012)} 
 
     before(:each) do
       @book = AnBook.new(organism_id:o.id, title:'AN', description:'A nouveau')
       @book.save!
       @book.stub(:organism).and_return(o)
       Writing.any_instance.stub(:book).and_return @book
+
     end
 
   def valid_attributes
@@ -22,11 +27,12 @@ describe AnBook do
 
   describe 'writing date is start_date' do
     it 'new writing' do
-      p2012.stub(:previous_period).and_return nil
+      Writing.any_instance.stub(:previous_period_closed).and_return true
       Writing.new(valid_attributes).should be_valid 
     end
 
     it 'une autre date que start_date n est pas valide' do
+      Writing.any_instance.stub(:previous_period_closed).and_return true
       va = valid_attributes
       va[:date] = Date.today
        Writing.new(va).should_not be_valid
@@ -35,7 +41,8 @@ describe AnBook do
   end
 
   it 'on ne peut écrire si l exercice précédent ouvert' do
-    p2012.stub_chain(:previous_period, :closed?).and_return false
+    p2012.stub(:previous_period?).and_return true
+    p2012.stub(:previous_period).and_return mock_model(Period, closed?:false)
     Writing.new(valid_attributes).should_not be_valid
     
   end

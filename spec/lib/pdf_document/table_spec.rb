@@ -2,7 +2,7 @@
 
 
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')  
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')   
 require 'pdf_document/base'
 require 'pdf_document/page'
 require 'pdf_document/table'
@@ -31,6 +31,7 @@ describe PdfDocument::Table do
     @w = mock_model(Writing, date:(Date.today - 1), narration:'bonjour', ref:nil )
     @l = mock_model(ComptaLine, debit:BigDecimal.new('10'), credit:BigDecimal.new('0'), writing_id:@w.id, writings:@w)
     @w.stub(:date).and_return(Date.today - 1)
+    arel.stub(:joins).and_return arel
     arel.stub_chain(:select, :range_date, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
     arel.stub_chain(:range_date).and_return 1.upto(50).collect {|i| @l}
     doc.stub(:nb_pages).and_return 2
@@ -51,7 +52,7 @@ describe PdfDocument::Table do
   end
 
   it 'la table ne doit reprendre que les colonnes demandées' , wip:true do
-    @page.table_lines.first.should == [I18n.l(Date.today-1), '', '10.00', '']
+    @page.table_lines.first.should == [(Date.today-1), '', '10.00', '0.00']
   end
 
 

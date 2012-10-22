@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 require 'pdf_document/base'
 
-describe PdfDocument::Page do
+describe PdfDocument::Page do 
   let(:o) {mock_model(Organism, title:'Organisme test')}
   let(:p) {mock_model(Period, organism:o,
       from_date:Date.today.beginning_of_year,
@@ -66,6 +66,7 @@ describe PdfDocument::Page do
       @l = mock_model(ComptaLine,  debit:10, credit:0)
       @w = mock_model(Writing, date:Date.today, ref:'référence')
       @l.stub(:writings).and_return @w
+      arel.stub(:joins).and_return arel
       arel.stub_chain(:select, :range_date, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
       doc.set_columns %w(writings.date writings.ref debit credit)
       doc.set_columns_to_totalize [2]

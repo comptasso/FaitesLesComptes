@@ -7,11 +7,15 @@ end
 describe ModallinesController do
   include SpecControllerHelper
 
+  
+
   def valid_arguments
     {:book_id=>1, date:Date.today, :narration=>'ligne de test',
       compta_lines_attributes:{'0' =>{account_id:1, nature_id:2, payment_mode:'Virement', debit:50},
         '1'=>{account_id:2}}}
   end
+
+
 
   def invalid_arguments
     {:book_id=>1, :narration=>'ligne de test',
@@ -21,11 +25,15 @@ describe ModallinesController do
   
   before(:each) do 
     minimal_instances
+    InOutWriting.any_instance.stub_chain(:book, :type).and_return('IncomeBook')
+    InOutWriting.any_instance.stub_chain(:book, :organism).and_return(@o)
+    @o.stub(:find_period).and_return @p
     @p.stub(:guess_month).and_return(Date.today.month - 1) 
   end
 
   describe "POST 'create" do
-    it 'should ask for bank_extract, bank_account and organism' do
+    it 'should ask for bank_extract, bank_account and current_account' do
+      Utilities::NotPointedLines.stub(:new).and_return []
       BankExtract.should_receive(:find).with("1").and_return(@be = mock_model(BankExtract))
       @be.should_receive(:bank_account).and_return(@ba = mock_model(BankAccount))
       @ba.should_receive(:current_account).with(@p).and_return(mock_model(Account))
