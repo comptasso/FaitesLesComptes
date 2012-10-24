@@ -5,7 +5,7 @@ require 'change_period'
 class Compta::PeriodsController < Compta::ApplicationController
 
 
-  logger.debug 'dans Admin::PeriodsController'
+  logger.debug 'dans Compta::PeriodsController'
   # ChangePeriod ajoute la méthode change, méthode partagée par les différents PeriodsController
   # Voir le fichier lib/change_period.rb.
   #

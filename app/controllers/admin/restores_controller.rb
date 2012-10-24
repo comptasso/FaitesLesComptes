@@ -47,7 +47,7 @@ class Admin::RestoresController < Admin::ApplicationController
       # tout va bien, on peut maintenant travailler
       
       # enregistrament du fichier dans son espace 
-      File.open(Rails.root.join('db', Rails.env, 'organisms', "#{params[:database_name]}.sqlite3"), 'wb') do |file|
+      File.open(Rails.root.join('..', 'db', Rails.env, 'organisms', "#{params[:database_name]}.sqlite3"), 'wb') do |file|
         file.write(uploaded_io.read)
       end
       # on vérifie la base

@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
- #  c.filter = {wip:true}
+   c.filter = {wip:true}
 end
 
 describe Period do
@@ -13,7 +13,7 @@ describe Period do
     it 'faire les tests de validation' 
   end
   
-  describe 'after_create' , wip:true do 
+  describe 'after_create'  do 
     before(:each) do
       @organism= Organism.create(title: 'test asso', database_name:'assotest1')
       @p = @organism.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
@@ -132,10 +132,9 @@ describe Period do
 
   end
 
-  describe 'closable' , wip:true do
+  describe 'close' , wip:true do
 
     it 'vérifie closable avant tout' do
-      pending 'not yet implemented'
       @p_2010.should_receive(:closable?).and_return false
       @p_2010.close.should be_false
     end
@@ -151,31 +150,40 @@ describe Period do
         @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc60.id)
         @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id)
         @ob= @organism.books.find_by_type('OutcomeBook')
+        @ib= @organism.books.find_by_type('IncomeBook')
 
-        @l6= @ob.in_out_writings.create!({date:Date.civil(2010,8,15), narration:'ligne créée par la méthode create_outcome_writing',
-      :compta_lines_attributes=>{'0'=>{account_id:@acc60.id, nature:@n_dep, debit:54, payment_mode:'Espèces'},
-        '1'=>{account_id:@baca.id, credit:54, payment_mode:'Espèces'}
+        @l6= @ib.in_out_writings.create!({date:Date.civil(2010,8,15), narration:'ligne créée par la méthode create_outcome_writing',
+      :compta_lines_attributes=>{'0'=>{account_id:@acc60.id, nature:@n_dep, credit:54, payment_mode:'Espèces'},
+        '1'=>{account_id:@baca.id, debit:54, payment_mode:'Espèces'}
       }
+
     })
         @l7= @ob.in_out_writings.create!({date:Date.civil(2010,8,15), narration:'ligne créée par la méthode create_outcome_writing',
       :compta_lines_attributes=>{'0'=>{account_id:@acc60.id, nature:@n_dep, debit:99, payment_mode:'Espèces'},
         '1'=>{account_id:@baca.id, credit:99, payment_mode:'Espèces'}
       }
     })
+
+        [@l6, @l7].each {|l| l.lock}
         
      end
 
-      it "génère les écritures d'ouverture de l'exercice"
-
-      it '3 lignes ont été créées' do
-        pending
-        expect {@p_2010.close}.to change {Line.count}.by(3) 
+      it "génère les écritures d'ouverture de l'exercice" do
+        @p_2010.close
+        @p_2010.should be_closed
       end
 
-      it 'doit générer une écriture sur le compte 120 ou 129 correspondant au solde' do
-        pending
-        @p_2010.next_period.should == @p_2011
-        @p_2011.report_account.sold_at(@p_2011).start_date.should == 45
+      it 'exercice precedent est clos' do
+        @p_2010.previous_period_open?.should be_false
+      end
+      
+      it '1 lignes ont été créées' do
+        expect {@p_2010.close}.to change {Writing.count}.by(1)
+      end
+
+      it 'doit générer une écriture sur le compte 120 correspondant au solde' do
+        @p_2010.close
+        @p_2011.report_account.init_sold('credit').should == -45
       end
 
     end

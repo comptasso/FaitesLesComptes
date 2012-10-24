@@ -157,7 +157,7 @@ class Period < ActiveRecord::Base
     # il faut un livre d'OD
     self.errors.add(:close, "Il manque un livre d'OD pour passer l'écriture de report") unless organism.books.find_by_type('OdBook')
     # il faut un compte pour le report du résultat
-    self.errors.add(:close, "Pas de compte 12 pour le résultat de l'exercice") unless report_account
+    self.errors.add(:close, "Pas de compte 12 pour le résultat de l'exercice") unless next_period.report_account
 
     self.errors[:close].any? ? false : true
 
@@ -182,17 +182,22 @@ class Period < ActiveRecord::Base
       date = next_p.start_date
 
       Period.transaction do
+        self.update_attribute(:open, false)
         w = an_book.writings.new(date:date, narration:'A nouveau')
         # on fait d'abord les compta_liens du compte de bilan
         report_comptes_bilan.each {|cl| w.compta_lines << cl}
         # puis on intègre la compta_line de report à nouveau
         w.compta_lines << report_a_nouveau
-        w.valid?
-        logger.info w.errors.messages unless w.valid?
+        val = w.valid?
+        unless val
+          puts w.errors.messages
+          puts w.inspect
+          w.compta_lines.each { |cl| puts cl.inspect}
+        end
         w.save
         logger.info w.inspect
         # finir la transaction en verrouillant l'exercice
-        self.update_attribute(:open, false)
+        
       end
     end
     # retourne true ou false correspondant à la situation de l'exercice
@@ -201,9 +206,8 @@ class Period < ActiveRecord::Base
 
   # report_compta_line crée la ligne de report de l'exercice
   def report_a_nouveau
-    r = resultat
-    res_acc  = report_account
-    ComptaLine.new(account_id:res_acc, credit:resultat, debit:0)
+    res_acc  = next_period.report_account
+    ComptaLine.new(account_id:res_acc.id, credit:resultat, debit:0)
   end
 
   # Pour les comptes de classe 1 à 5

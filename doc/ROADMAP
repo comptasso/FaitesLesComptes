@@ -1004,7 +1004,7 @@ OK - Faire le readme
 OK - Faire un menu bas
 OK - Finaliser les éditions de balances avec Brouillard ou sans.
 Vérifier les graphes et soldes avec deux exercices et des valeurs contrôlées.
-Traiter la clôture d'un exercice.
+OK - Traiter la clôture d'un exercice.
 OK - Ajouter des index dans les migrations
 OK - Les graphes de caisse ne devraient pas afficher toute l'année
 Ajouter les environnements winusb et wininstall (cf. fichier Word sur mes essais pour les modifs à faire)
@@ -1117,6 +1117,7 @@ Jasmine -commencé l'installation mais pas fini car je n'ai pas actuellement de 
 Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 
 --------------------Divers---------------------------------------------------------------------------
+Nettoyer old_bootstrap.css en modifiant bootstrap.css
 Dans period, copy_accounts devrait être dans une transaction
 Dans Period, closable? devrait vérifier que tous les comptes 1 à 5 sont là
 OK - Revoir la page index de organism (title et mise en page) : en fait je l'ai supprimée dans la partie consult

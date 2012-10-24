@@ -14,10 +14,10 @@
     <!--TODO normalement dans ce menu (de la zone Public), il ne peut pas y avoir de new_record? -->
 <% if (@organism  && !@organism.new_record?) %>
 
-<li class="dropdown <%= 'active' if controller.controller_name =='lines'  %>">
+<li class="dropdown <%= 'active' if controller.controller_name =='in_out_writings'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
   <%= content_tag(:ul, :class => "dropdown-menu") do %>
-    <%= render :partial=>'menus/menu_book', :collection=>@organism.books.select {|b| b.class != OdBook }, :spacer_template=>'menus/divider' %>
+    <%= render :partial=>'menus/menu_book', :collection=>@organism.books.select {|b| b.class.in? [IncomeBook, OutcomeBook] }, :spacer_template=>'menus/divider' %>
   <% end %>
 </li>
 
