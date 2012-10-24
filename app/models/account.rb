@@ -83,7 +83,7 @@ class Account < ActiveRecord::Base
 #    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date >= ? AND date <= ? AND account_id = ?', from, to, id], :joins=>:compta_lines).to_f
 #  end
 #
-
+  
 
 
   # surcharge de accountable pour gérer le cas des remises chèques
@@ -116,12 +116,19 @@ class Account < ActiveRecord::Base
     number[0]
   end
 
-  # donne le montant débit d'ouverture du compte
-  # s'il n'y a pas d'exercice précédent et pas de report à nouveau, c'est zero
-  # s'il y a un exercice précédent clos, c'est le report à nouveau
-  # s'il y a un exercice précédent non clos, c'est le solde du même compte
+  # donne les informations nécessaires à l'écriture d'à nouveau
+  # retourne nil si solde nul, ou un hash debit, credit avec une seule valeur
+  def report_info
+    sa = sold_at(period.close_date)
+    if sa != 0
+      sa > 0 ? {debit:0, credit:sa} : {credit:0, debit:-sa}
+    end
+  end
+
+  # donne le montant d'ouverture du compte à partir du livre d'A nouveau
   def init_sold(dc)
-    an_sold(dc) + previous_period_sold(dc)
+    anb = period.organism.an_book
+    Writing.sum(dc, :select=>dc, :conditions=>['book_id = ? AND account_id = ?', anb.id, id], :joins=>:compta_lines).to_f
   end
 
 
@@ -160,20 +167,17 @@ class Account < ActiveRecord::Base
     pdf
   end
 
-  def an_sold(dc)
-    anb = period.organism.an_book
-    Writing.sum(dc, :select=>dc, :conditions=>['book_id = ? AND account_id = ?', anb.id, id], :joins=>:compta_lines).to_f
-  end
-
-  def previous_period_sold(dc)
-    return 0 unless (period.previous_period? && !period.previous_period.closed?)
-    return 0 if classe == 6 || classe == 7
-    pp = period.previous_period # pp pour previous_period
-    pacc = pp.accounts.find_by_number(number) #pacc pour previous_account
-    return 0 unless pacc
-    pacc.cumulated_at(pp.close_date, dc) if pacc
-  end
-
+#  
+#
+#  def previous_period_sold(dc)
+#    return 0 unless (period.previous_period? && !period.previous_period.closed?)
+#    return 0 if classe == 6 || classe == 7
+#    pp = period.previous_period # pp pour previous_period
+#    pacc = pp.accounts.find_by_number(number) #pacc pour previous_account
+#    return 0 unless pacc
+#    pacc.cumulated_at(pp.close_date, dc) if pacc
+#  end
+#
 
 
 

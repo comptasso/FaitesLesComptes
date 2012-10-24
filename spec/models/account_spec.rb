@@ -44,8 +44,8 @@ describe Account do
       end
 
       it 'donne un an_sold' do
-        @acc1.an_sold('debit').should == 0
-        @acc1.an_sold('credit').should == 66
+        @acc1.init_sold('debit').should == 0
+        @acc1.init_sold('credit').should == 66
       end
 
 
@@ -74,52 +74,53 @@ describe Account do
 
     end
     
-    context 'avec exercice précédent ouvert'    do
-
-      before(:each) do
-        eve = @p.start_date - 1
-        @p.stub(:previous_period?).and_return true
-        Period.any_instance.stub(:previous_period).and_return @pp = mock_model(Period, close_date:eve, closed?:false)
-        Period.any_instance.stub(:previous_period_open?).and_return true
-        @pp.stub(:accounts).and_return @arel = double(Arel)
-        
-      end
-
-      it 'doit être vrai' do
-        @p.previous_period.should == @pp
-        @acc1.period.previous_period.should == @pp
-      end
-
-         
-
-      it 'avec exercice précédent non clos, prend le solde debit du compte' do
-        @arel.should_receive(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
-        @acc3.should_receive(:cumulated_at).with(@pp.close_date, 'debit').and_return 0
-        @acc1.init_sold_debit.should == 0
-      end
-
-      it 'avec exercice précédent non clos, prend le solde credit du compte'  do
-        @arel.stub(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
-        @acc3.stub(:cumulated_at).with(@pp.close_date, 'credit').and_return 152
-        @acc1.previous_period_sold('credit').should == 152
-  #      @acc1.init_sold_credit.should == 152
-      end
-
-      it 'previous_period_sold renvoie 0 si compte 6 ou 7' do
-        @arel.stub(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
-        @acc3.stub(:cumulated_at).with(@pp.close_date, 'credit').and_return 152
-        @acc1.stub(:classe).and_return 6
-        @acc1.previous_period_sold('credit').should == 0
-       end
-
-    
-      it 'cas où il n y a pas de compte correspondant' do
-         @arel.should_receive(:find_by_number).with(@acc1.number).and_return nil
-        
-        @acc1.init_sold_credit.should == 0
-      end
-
-    end
+# COMMENTE CAR ON N'UTILISE PLUS PREVIOUS_PERIOD_SOLD
+#        context 'avec exercice précédent ouvert'    do
+#
+#      before(:each) do
+#        eve = @p.start_date - 1
+#        @p.stub(:previous_period?).and_return true
+#        Period.any_instance.stub(:previous_period).and_return @pp = mock_model(Period, close_date:eve, closed?:false)
+#        Period.any_instance.stub(:previous_period_open?).and_return true
+#        @pp.stub(:accounts).and_return @arel = double(Arel)
+#
+#      end
+#
+#      it 'doit être vrai' do
+#        @p.previous_period.should == @pp
+#        @acc1.period.previous_period.should == @pp
+#      end
+#
+#
+#
+#      it 'avec exercice précédent non clos, prend le solde debit du compte' do
+#        @arel.should_receive(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
+#        @acc3.should_receive(:cumulated_at).with(@pp.close_date, 'debit').and_return 0
+#        @acc1.init_sold_debit.should == 0
+#      end
+#
+#      it 'avec exercice précédent non clos, prend le solde credit du compte'  do
+#        @arel.stub(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
+#        @acc3.stub(:cumulated_at).with(@pp.close_date, 'credit').and_return 152
+#        @acc1.previous_period_sold('credit').should == 152
+#  #      @acc1.init_sold_credit.should == 152
+#      end
+#
+#      it 'previous_period_sold renvoie 0 si compte 6 ou 7' do
+#        @arel.stub(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
+#        @acc3.stub(:cumulated_at).with(@pp.close_date, 'credit').and_return 152
+#        @acc1.stub(:classe).and_return 6
+#        @acc1.previous_period_sold('credit').should == 0
+#       end
+#
+#
+#      it 'cas où il n y a pas de compte correspondant' do
+#         @arel.should_receive(:find_by_number).with(@acc1.number).and_return nil
+#
+#        @acc1.init_sold_credit.should == 0
+#      end
+#
+#    end
 
   
   end

@@ -1062,8 +1062,8 @@ OK - Déplacer le + de création d'écritures vers la ligne des icones
 
 
 Dans Account, la logique has_many Transfer n'a plus vraiment lieu d'être
-Account parle encore de counter_account_id
-monthlyCashExtract devrait utiliser les ComptaLine
+OK - Account parle encore de counter_account_id
+OK - monthlyCashExtract devrait utiliser les ComptaLine
 -------------------------- Soldes au 01/01/2011 n'apparaissent pas ----------------------
 En fait en enregistrant une écriture d'à nouveau, les soldes au 01/01 n'apparaissent pas car l'écriture est considérée comme une écriture de l'exercice
 
@@ -1117,6 +1117,8 @@ Jasmine -commencé l'installation mais pas fini car je n'ai pas actuellement de 
 Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 
 --------------------Divers---------------------------------------------------------------------------
+Dans period, copy_accounts devrait être dans une transaction
+Dans Period, closable? devrait vérifier que tous les comptes 1 à 5 sont là
 OK - Revoir la page index de organism (title et mise en page) : en fait je l'ai supprimée dans la partie consult
 OK - supprimer la session de period
 On devrait bloquer la création d'organisme à un

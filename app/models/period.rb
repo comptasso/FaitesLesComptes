@@ -50,9 +50,9 @@ class Period < ActiveRecord::Base
   # Valide que le start_date est le lendemain du close date de l'exercice précédent
   class ContiguousValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)
-     if record.previous_period? && record.previous_period.close_date != (value - 1.day)
-      record.errors[attribute] << "ne peut avoir un trou dans les dates #{record.previous_period.close_date}"
-     end
+      if record.previous_period? && record.previous_period.close_date != (value - 1.day)
+        record.errors[attribute] << "ne peut avoir un trou dans les dates #{record.previous_period.close_date}"
+      end
     end
   end
 
@@ -76,7 +76,7 @@ class Period < ActiveRecord::Base
  
   validates :organism_id, :presence=>true
 
-# TODO revoir les validations
+  # TODO revoir les validations
   validates :close_date, :presence=>true,:chrono=>true
   validates :start_date, :presence=>true,:contiguous => true
 
@@ -84,7 +84,7 @@ class Period < ActiveRecord::Base
 
   # TODO revoir ces call_backs en utilisant des conditions de type :if
   # TODO changer le update should not reopen en utilisant un des validate
-  before_update :fix_days, :cant_change_start_date, :should_not_reopen
+  before_update :fix_days, :cant_change_start_date , :should_not_reopen
   before_create :should_not_have_more_than_two_open_periods, :fix_days
   before_save :should_not_exceed_24_months, 
     :cant_change_close_date_if_next_period
@@ -99,8 +99,8 @@ class Period < ActiveRecord::Base
 
   # TODO mettre dans la migration que start_date et close_date sont obligatoires
  
- # trouve l'exercice précédent en recherchant le premier exercice
- # avec la date de cloture < au start_date de l'exercice actuel
+  # trouve l'exercice précédent en recherchant le premier exercice
+  # avec la date de cloture < au start_date de l'exercice actuel
   # renvoie lui même s'il n'y en a pas
   def previous_period
     Period.first(:conditions=>['organism_id = ? AND close_date < ?', self.organism_id, self.start_date],
@@ -139,7 +139,7 @@ class Period < ActiveRecord::Base
     ['result_pave', 'result']
   end
 
-   # Les conditions pour qu'un exercice puisse être fermé sont :
+  # Les conditions pour qu'un exercice puisse être fermé sont :
   # qu'il soit ouvert
   # que tous ses journaux soit fermés
   # que l'exercice précédent soit fermé
@@ -176,39 +176,68 @@ class Period < ActiveRecord::Base
   #  le résultat de l'exercice vers le report.
   # 
   def close
-    raise 'period#close not yet implemented'
-    possible = closable? # closable? ne doit être appelé qu'une fois pour ne pas dupliquer les erreurs (et les requêtes)
-    if possible 
-      od_book = organism.books.find_by_type('OdBook')
-      date = close_date
+    if closable?
+      next_p = next_period
+      an_book = organism.books.find_by_type('AnBook')
+      date = next_p.start_date
+
       Period.transaction do
-        # on commence par créer l'écriture de compensation des classes 6 et 7
-        accounts.classe_6.each do |acc|
-          sold = acc.sold_at(close_date)
-          # si le solde est à zero, il ne doit rien écrire (car pas de ligne à 0)
-          Line.create!(credit:-sold, debit:0, line_date:date,
-            book_id:od_book.id,
-            narration:'clôture de l\'exercice', owner_type:'Program') if sold != 0
-         end
-         
-        # les écritures de compensation des classes 6 et 7
-        accounts.classe_7.each do |acc|
-          sold = acc.sold_at(close_date)
-          # si le solde est à zero, il ne doit rien écrire (car pas de ligne à 0)
-          Line.create!(debit:-sold, credit:0, line_date:date,
-            book_id:od_book.id,
-            narration:'clôture de l\'exercice', owner_type:'Program') if sold != 0
-         end
-
-#        Line.create!(credit:-sold, debit:0, line_date:close_date,
-#            book_id:od_book.id,
-#            narration:'clôture de l\'exercice', owner_type:'Program') if sold != 0
-
-        # Il s'agit donc de générer des lignes avec comme intitulé
-        self.update_attribute(:open, false) if self.closable?
+        w = an_book.writings.new(date:date, narration:'A nouveau')
+        # on fait d'abord les compta_liens du compte de bilan
+        report_comptes_bilan.each {|cl| w.compta_lines << cl}
+        # puis on intègre la compta_line de report à nouveau
+        w.compta_lines << report_a_nouveau
+        w.valid?
+        logger.info w.errors.messages unless w.valid?
+        w.save
+        logger.info w.inspect
+        # finir la transaction en verrouillant l'exercice
+        self.update_attribute(:open, false)
       end
     end
-    return possible
+    # retourne true ou false correspondant à la situation de l'exercice
+    return closed?
+  end
+
+  # report_compta_line crée la ligne de report de l'exercice
+  def report_a_nouveau
+    r = resultat
+    res_acc  = report_account
+    ComptaLine.new(account_id:res_acc, credit:resultat, debit:0)
+  end
+
+  # Pour les comptes de classe 1 à 5
+  # crée un tableau de compta_lines reprenant le solde du compte
+  def report_comptes_bilan
+    rcb = []
+    # POur le comptes de classe 1 à 5
+    np = next_period
+    accounts.find_each(conditions:['number < ?', '5Z']) do |acc|
+      # on trouve le compte correspondant
+      next_acc = np.accounts.find_by_number(acc.number)
+      # et on créé une compta_line respectant les principes
+      h = acc.report_info # récupération des infos du compte
+      # pas de compta_line s'il n'y a pas de mouvement
+      if h
+        rcb << ComptaLine.new(account_id:next_acc.id,
+        debit:h[:debit],
+        credit:h[:credit])
+      end
+    end
+    return rcb
+  end
+
+  # renvoie le total des comptes commenaçnt par n
+  def total_classe(n, dc)
+    compta_lines.classe(n).sum(dc)
+  end
+  
+  def sold_classe(n)
+    total_classe(n, 'credit') - total_classe(n, 'debit')
+  end
+
+  def resultat
+    sold_classe(7) + sold_classe(6)
   end
 
 
@@ -222,7 +251,7 @@ class Period < ActiveRecord::Base
   end
 
   def rem_check_accounts
-     accounts.where('number = ?', REM_CHECK_ACCOUNT[:number])
+    accounts.where('number = ?', REM_CHECK_ACCOUNT[:number])
   end
 
   def recettes_accounts
@@ -287,7 +316,7 @@ class Period < ActiveRecord::Base
     r
   end
   
-   # renvoie le mois le plus adapté pour un exercice
+  # renvoie le mois le plus adapté pour un exercice
   # si la date du jour est au sein de l'exercice, renvoie le mois correspondant
   # si la date du jour est avant l'exercice, renvoie le premier mois
   # si elle est après, renvoie le dernier mois
@@ -353,7 +382,7 @@ class Period < ActiveRecord::Base
   end
 
 
-    protected
+  protected
 
   # on ne peut jamais changer la date de début d'un exercice créé.
   # soit c'est le premier et la date de début a été fixée lors de la création
@@ -407,27 +436,27 @@ class Period < ActiveRecord::Base
   private
 
   def create_plan
-     Utilities::PlanComptable.new.create_accounts(id, 'comptable_1.yml')
+    Utilities::PlanComptable.new.create_accounts(id, 'comptable_1.yml')
   end
 
   def create_bank_and_cash_accounts
-        # organisme a créé une banque et une caisse par défaut et il faut leur créer des comptes
-        # utilisation de send car create_accounts est une méthode protected
-     organism.bank_accounts.each {|ba| ba.send(:create_accounts)}
-      organism.cashes.each {|c| c.send(:create_accounts)}
+    # organisme a créé une banque et une caisse par défaut et il faut leur créer des comptes
+    # utilisation de send car create_accounts est une méthode protected
+    organism.bank_accounts.each {|ba| ba.send(:create_accounts)}
+    organism.cashes.each {|c| c.send(:create_accounts)}
   end
 
   # recopie les comptes de l'exercice précédent (s'il y en a un) en modifiant period_id.
   # s'il n'y en a pas, crée un compte pour chaque caisse et bank_account
   def copy_accounts
-   if self.previous_period?
-    previous_period.accounts.all.each do |a|
-      logger.debug  "Recopie du compte #{a.inspect}"
-      b = a.dup
-      b.period_id = self.id
-      b.save!
-      logger.debug  "Nouveau compte #{b.inspect}"
-    end
+    if self.previous_period?
+      previous_period.accounts.all.each do |a|
+        logger.debug  "Recopie du compte #{a.inspect}"
+        b = a.dup
+        b.period_id = self.id
+        b.save!
+        logger.debug  "Nouveau compte #{b.inspect}"
+      end
     end
   end
 

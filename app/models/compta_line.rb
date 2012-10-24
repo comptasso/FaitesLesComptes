@@ -44,7 +44,7 @@ class ComptaLine < ActiveRecord::Base
   scope :range_date, lambda {|from, to| with_writings.where('date >= ? AND date <= ?', from, to )}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)
-
+  scope :classe, lambda {|n| where('number LIKE ?', "#{n}%").order('number ASC')}
 
   # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
   # et du champ check_deposit_id
