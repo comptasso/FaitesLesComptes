@@ -20,21 +20,16 @@ class OrganismsController < ApplicationController
       redirect_to new_admin_organism_period_url(@organism)
       return
     end
-    
    
     @date=guess_date
 
     # Construction des éléments des paves
     @paves=[]
-    @paves += @organism.books.all.select {|b| b.class.name == 'OdBook'}
+    @paves += @organism.books.in_outs.all
     @paves << @period
     @paves += cash_books
     @paves += bank_books
-
-
-
-    
-    
+ 
   end
 
 
