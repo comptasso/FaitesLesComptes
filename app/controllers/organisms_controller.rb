@@ -26,7 +26,7 @@ class OrganismsController < ApplicationController
 
     # Construction des éléments des paves
     @paves=[]
-    @paves += @organism.books.all.reject {|b| b.class.name == 'OdBook'}
+    @paves += @organism.books.all.select {|b| b.class.name == 'OdBook'}
     @paves << @period
     @paves += cash_books
     @paves += bank_books

@@ -20,6 +20,8 @@ class Book < ActiveRecord::Base
   has_many :writings, :dependent=>:destroy
   has_many :compta_lines, :through=>:writings
 
+  scope :in_outs, where(:type=> ['IncomeBook', 'OutcomeBook'])
+
   # has_many :lines, dependent: :destroy
   # les chèques en attente de remise en banque
   #  has_many :pending_checks,
