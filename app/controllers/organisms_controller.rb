@@ -39,12 +39,10 @@ class OrganismsController < ApplicationController
   # soit le date du jour s'il y a un exercice correspondant (via la méthode find_period)
   # soit la date la plus proche à partir des exercices passés ou futurs
   def guess_date
-    return Date.today if @organism.find_period
+    d = @period.guess_month.beginning_of_month
     # l'exercice est-il futur
-    direction  =  @organism.periods.first.close_date.past?
-    direction ? @organism.periods.last.close_date : @organism.periods.first.start_date
+    d.past? ? d.end_of_month : d
   end
-
 
   def cash_books
      @organism.cashes.map do |c|
