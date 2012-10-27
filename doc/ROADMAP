@@ -1078,7 +1078,8 @@ Changer Ligne créee... pour Ecriture créée dans le flash
 
 
 ------------------------- Journal Général----------------------------------
-Faire un modèle general_ledger en s'inspirant de grand livre
+OK - Faire un modèle general_ledger en s'inspirant de grand livre
+MonthlyLedger peut ne pas construire une ligne si elle est vide
 Controller
 Vue
 Formulaire
