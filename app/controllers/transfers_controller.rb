@@ -11,7 +11,7 @@ class TransfersController < ApplicationController
   # GET /transfers
   # GET /transfers.json
   def index
-    @transfers = Transfer.order('date ASC')
+    @transfers = Transfer.within_period(@period).order('date ASC')
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transfers }

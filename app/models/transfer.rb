@@ -17,7 +17,9 @@ class Transfer < Writing
 
   validate :correct_amount, :two_lines, :not_same_accounts
   
-  
+
+  scope :within_period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
+
   alias original_compta_lines compta_lines
   
 

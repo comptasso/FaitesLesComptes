@@ -8,9 +8,9 @@
   %tbody
     %tr#begin-solds
       %td= open_sold_ordinalized(@listing.from_date)
-      %td= number_with_precision @listing.solde_debit_avant
-      %td= number_with_precision @listing.solde_credit_avant
-      %td= number_with_precision(@listing.solde_credit_avant - @listing.solde_debit_avant)
+      %td= number_with_precision @listing.cumulated_debit_before(@listing.from_date)
+      %td= number_with_precision @listing.cumulated_credit_before(@listing.from_date)
+      %td= number_with_precision(@listing.sold_before(@listing.from_date))
     %tr#moves
       %td Mouvements de la période
       %td= number_with_precision @listing.total_debit
@@ -20,6 +20,6 @@
       %td
         Soldes au
         = " #{ordinalize_date(@listing.to_date)}"
-      %td= number_with_precision(@listing.solde_debit_avant + @listing.total_debit)
-      %td= number_with_precision(@listing.solde_credit_avant + @listing.total_credit)
+      %td= number_with_precision(@listing.cumulated_debit_at(@listing.to_date))
+      %td= number_with_precision(@listing.cumulated_credit_at(@listing.to_date))
       %td= number_with_precision @listing.sold_at(@listing.to_date)
