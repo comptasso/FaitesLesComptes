@@ -1077,10 +1077,19 @@ Il faudrait éventuellement ajouter la ligne automatiquement
 Changer Ligne créee... pour Ecriture créée dans le flash
 
 
+------------------------- Journal Général----------------------------------
+Faire un modèle general_ledger en s'inspirant de grand livre
+Controller
+Vue
+Formulaire
+Route
+méthode to_pdf
+
 -----------------------Détail de mise en forme ----------------------------
-Transfer ne filtre pas sur les exercices
+OK è Transfer ne filtre pas sur les exercices
 Quand un exercice est fermé, on ne doit pas avoir la possibilité de rentrer dans livres/écrire
-Dans compta/account le mouvement de la période inclut à tort le solde initial
+Le grand livre devrait donner l'intitulé du compte et non seulement le numéro
+OK - Dans compta/account le mouvement de la période inclut à tort le solde initial
 Revoir la question du pointage des comptes sur les écritures à cheval
 Pour le compte bancaire, le compte ne reprend que CMNE donc on ne les distingue pas
 OK - Le solde des balances ne semble pas prendre en compte le dernier jour
