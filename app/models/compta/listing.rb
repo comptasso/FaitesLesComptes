@@ -7,6 +7,7 @@ module Compta
   # Ceci suppose d'avoir une définition des colonnes virtuelles
   # d'où les premières lignes de cette classe
   class Listing < ActiveRecord::Base
+    include Utilities::Sold
 
     def self.columns() @columns ||= []; end
 
@@ -33,11 +34,34 @@ module Compta
   validates :from_date, :to_date, date_within_period:true
   validates :from_date, :to_date, :account_id, :presence=>true
 
+  delegate :cumulated_at, :to=>:account
+
+
   def with_default_values
     self.from_date ||= period.start_date
     self.to_date ||= period.close_date
     self
   end
+
+  def solde_debit_avant
+    cumulated_debit_before(from_date)
+  end
+
+  def solde_credit_avant
+    cumulated_credit_before(from_date)
+  end
+
+  def total_debit
+    movement(from_date, to_date, 'debit')
+  end
+
+  def total_credit
+    movement(from_date, to_date, 'credit')
+  end
+
+  
+
+  
 
   def lines
     @lines ||= account.compta_lines.range_date(from_date, to_date)
@@ -54,26 +78,7 @@ module Compta
   end
 
   
-  def total_debit
-    lines.sum(:debit)
-  end
-
-  def total_credit
-    lines.sum(:credit)
-  end
-
-
-  def solde_final
-    solde_credit_avant + total_credit - solde_debit_avant- total_debit
-  end
-
-  def solde_debit_avant
-    account.cumulated_debit_before(from_date)
-  end
-
-  def solde_credit_avant
-    account.cumulated_credit_before(from_date)
-  end
+ 
   
 
   def to_pdf(options = {})

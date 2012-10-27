@@ -22,4 +22,4 @@
         = " #{ordinalize_date(@listing.to_date)}"
       %td= number_with_precision(@listing.solde_debit_avant + @listing.total_debit)
       %td= number_with_precision(@listing.solde_credit_avant + @listing.total_credit)
-      %td= number_with_precision @listing.solde_final
+      %td= number_with_precision @listing.sold_at(@listing.to_date)

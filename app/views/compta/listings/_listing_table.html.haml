@@ -20,8 +20,8 @@
       %th#tgdebit(rowspan="1" colspan="1" class="numeric nombre")
         %span#tdebit=  debit_credit(@listing.total_debit)
         %br
-        =  debit_credit(@listing.total_debit)
+        =  debit_credit(@listing.cumulated_debit_at(@listing.to_date))
       %th#tgcredit(rowspan="1" colspan="1" class="numeric nombre")
         %span#tcredit=  debit_credit(@listing.total_credit)
         %br
-        =  debit_credit(@listing.total_credit)
+        =  debit_credit(@listing.cumulated_credit_at(@listing.to_date))
