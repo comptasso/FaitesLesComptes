@@ -3,6 +3,8 @@ Faitesvoscomptes::Application.routes.draw do
  
   
 
+  
+
   get "bottom/credit"
   get "bottom/contact"
 
@@ -22,7 +24,6 @@ Faitesvoscomptes::Application.routes.draw do
     resources :users do
       resources :rooms
     end
-
 
     # TODO simplifier car on n'utilise que l'action show
     resources :rooms
@@ -49,7 +50,11 @@ Faitesvoscomptes::Application.routes.draw do
       
     end
     
-    
+    resources :selections do
+      member do
+          post :lock
+        end
+    end
 
     resources :accounts  
   end

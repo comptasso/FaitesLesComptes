@@ -21,10 +21,10 @@ class OrganismsController < ApplicationController
       return
     end
    
-    @date=guess_date
+    @date = @period.guess_date
 
     # Construction des éléments des paves
-    @paves=[]
+    @paves = []
     @paves += @organism.books.in_outs.all
     @paves << @period
     @paves += cash_books
@@ -35,14 +35,7 @@ class OrganismsController < ApplicationController
 
   protected
 
-  # trouve la meilleure date pour l'affichage du dashboard
-  # soit le date du jour s'il y a un exercice correspondant (via la méthode find_period)
-  # soit la date la plus proche à partir des exercices passés ou futurs
-  def guess_date
-    d = @period.guess_month.beginning_of_month
-    # l'exercice est-il futur
-    d.past? ? d.end_of_month : d
-  end
+  
 
   def cash_books
      @organism.cashes.map do |c|

@@ -15,6 +15,7 @@ class Compta::WritingsController < Compta::ApplicationController
     end
   end
 
+
   # GET /writings/1
   # GET /writings/1.json
   def show

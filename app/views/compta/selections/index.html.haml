@@ -1,0 +1,9 @@
+=content_for :menu do
+  =icon_to 'retour.png', :back
+
+
+
+.champ
+  %h3= liste(@scope_condition)
+
+= render :partial=>'writing', :collection=>@writings

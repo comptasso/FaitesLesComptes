@@ -77,7 +77,7 @@ class BankAccount < ActiveRecord::Base
 # Appelé par la classe NotPointedLines 
  #
   def np_lines
-    compta_lines.joins(:writing).where("NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES_LINES WHERE LINE_ID = COMPTA_LINES.ID)").order(:date)
+    compta_lines.joins(:writing=>:book).where('books.type != ?', 'AnBook').where("NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES_LINES WHERE LINE_ID = COMPTA_LINES.ID)").order(:date)
   end
 
  # fait le total débit des lignes non pointées et des remises chèqures déposées

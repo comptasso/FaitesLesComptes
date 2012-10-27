@@ -1,0 +1,32 @@
+.row-fluid.writing{:id=>dom_id(writing) }
+  .span12.title
+    .span2
+      Jnl :
+      = writing.book.title
+    .span1
+      Id :
+      = writing.id
+    .span2
+      Date :
+      =l writing.date
+    .span4
+      Libellé :
+      =writing.narration
+    .span1
+      Réf :
+      =writing.ref
+    .span2
+      Actions :
+      - if writing.book.type.in?(['AnBook', 'OdBook'])
+        = icon_to 'verrouiller.png', lock_compta_selection_path(writing), :method=>:post, remote:true unless writing.locked?
+      - else
+        %img{:src=>"/assets/icones/nb_verrouiller.png",:alt=>'verrou', :title=>"Les écritures de ce journal doivent être verrouillées par un contrôle de caisse ou un pointage bancaire"}
+
+
+  - writing.compta_lines.each do |cl|
+    .row-fluid
+      .span12.compta_lines
+        .span6{:class=>class_style(cl) }
+          =cl.account.long_name
+        .span3.numeric=debit_credit cl.debit
+        .span3.numeric=debit_credit cl.credit

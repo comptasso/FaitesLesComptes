@@ -22,8 +22,11 @@
 
             %td=l period.start_date
             %td=l period.close_date
-            %td= period.open? ? 'Ouvert' : 'Fermé'
             %td
-              %span= link_to 'Clôre', close_admin_organism_period_path(@organism, period) if period.closable?
+              = period.open? ? 'Ouvert' : 'Fermé'
+            %td
+              %span= icon_to 'afficher.png', compta_selections_path(:scope_condition=>'unlocked'), title:'Afficher la liste des écritures non verrouillées' if period.open && period.compta_lines.unlocked.any?
+              %span= icon_to 'nb_verrouiller.png', close_admin_organism_period_path(@organism, period), :title=>period.errors[:close].first if period.open && !period.closable?
+              %span= icon_to 'verrouiller.png', close_admin_organism_period_path(@organism, period) if period.closable?
               %span= icon_to 'supprimer.png', [:admin, @organism, period], confirm: 'Etes vous sur ?', method: :delete
 

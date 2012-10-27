@@ -1078,6 +1078,10 @@ Changer Ligne créee... pour Ecriture créée dans le flash
 
 
 -----------------------Détail de mise en forme ----------------------------
+Transfer ne filtre pas sur les exercices
+Quand un exercice est fermé, on ne doit pas avoir la possibilité de rentrer dans livres/écrire
+Dans compta/account le mouvement de la période inclut à tort le solde initial
+Revoir la question du pointage des comptes sur les écritures à cheval
 Pour le compte bancaire, le compte ne reprend que CMNE donc on ne les distingue pas
 OK - Le solde des balances ne semble pas prendre en compte le dernier jour
 Voir pour mettre les méthodes du module Sold dans account

@@ -331,6 +331,17 @@ class Period < ActiveRecord::Base
     MonthYear.new :month=>date.month, :year=>date.year
   end
 
+  # renvoie la date la plus adaptée pour un exercices
+  # si la date du jour est au sein de l'exercice, renvoie cette date
+  # si la date du jour est avant l'exercice, renvoie le premier jour de l'exeercice
+  # si elle est après, renvoie le dernier jour de l'exercice
+  def guess_date
+    d = Date.today
+    d = start_date if d < start_date
+    d = close_date if d > close_date
+    d
+  end
+
 
   # permet de renvoyer la liste des mois de l'exercice correspondant à un mois spécifique
   # généralement un seul mais il peut y en avoir deux en cas d'exercice de plus d'un an

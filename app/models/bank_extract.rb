@@ -9,7 +9,7 @@ class BankExtract < ActiveRecord::Base
   
   validates :begin_sold, :total_debit, :total_credit,:presence=>true, :numericality=>true, :two_decimals => true
     # :format=>{with:/(^\d+(\.\d{0,2})?$|^\.\d{0,2}$)/}
-  validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date, :cant_edit_if_locked=>true
+  # validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date , :cant_edit_if_locked=>true
 
   validates :begin_date, :end_date, :presence=>true  
   validates :begin_date, :end_date, :same_period=>true
