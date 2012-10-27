@@ -7,7 +7,7 @@ module Utilities
 
   # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes
   # se créé en appelant new avec un book et une date quelconque du mois souhaité
-  # day est un hash :year=>xxxx, :month=>yy
+  # my_hash est un hash :year=>xxxx, :month=>yy
   class MonthlyInOutExtract
 
     NB_PER_PAGE=30

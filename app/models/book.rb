@@ -35,10 +35,15 @@ class Book < ActiveRecord::Base
 #    :class_name=>'Line',
 #    :conditions=> 'nature_id IS NOT NULL'
 
+
+
   
   # TODO introduce uniqueness and scope
   validates :title, presence: true
   
+
+  
+
   # renvoie les soldes mensuels du livre pour l'ensemble des mois de l'exercice
   # sous la forme d'un hash avec comme clé 'mm-yyyy' pour identifier les mois.
   # monthly_value est définie dans Utilities::Sold

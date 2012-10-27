@@ -1086,6 +1086,9 @@ Route
 méthode to_pdf
 
 -----------------------Détail de mise en forme ----------------------------
+Revoir les rôles de title et description des books : title est OD, VE, et description Recettes, Achats,...
+
+Il faudrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base
 OK è Transfer ne filtre pas sur les exercices
 Quand un exercice est fermé, on ne doit pas avoir la possibilité de rentrer dans livres/écrire
 Le grand livre devrait donner l'intitulé du compte et non seulement le numéro
