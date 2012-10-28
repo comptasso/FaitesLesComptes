@@ -19,6 +19,7 @@
         %li= link_to('Balance', new_compta_period_balance_path(@period))
         %li= link_to('Compte', new_compta_period_listing_path(@period))
         %li= link_to('Grand Livre', new_compta_period_general_book_path(@period))
+        %li= link_to('Journal Général', new_compta_period_general_ledger_path(@period))
 
   - unless @organism.nil? && @organism.periods.count <= 1
     %li.dropdown(class="#{controller.controller_name == "periods" ? "active" : nil}")

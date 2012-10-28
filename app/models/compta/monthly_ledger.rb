@@ -24,11 +24,12 @@ module Compta
 
      # prend les livres dans l'ordre alphabétique et fait un tableau
      # avec le titre du journal(VE ou OD), la description, le total_debit et le total_credit
+     # les lignes qui ont débit et credit à zero ne sont pas retenues
      def lines
        @lines ||= @period.books.map do |b|
         efb =  Extract::FromBook.new(b, @month_year)
          {title:b.title, description:b.description, debit:efb.total_debit, credit:efb.total_credit }
-       end
+       end.reject {|l| l[:debit] == 0 && l[:credit] == 0}
      end
 
      def total_debit
@@ -41,6 +42,11 @@ module Compta
 
      def total_line
        {title:'', description:"Sous total #{@month_year.to_format('%B %Y')}", debit:total_debit, credit:total_credit}
+     end
+
+     # la taille d'un MonthlyLedger est son nombre de lignes plus une ligne de titre et une ligne de total
+     def size
+       lines.size + 2
      end
    end
 end

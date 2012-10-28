@@ -1,3 +1,20 @@
+# ce modèle par défaut permet d'imprimer un document de plusieurs pages avec des
+# pavés de présentation, ligne de titre, sous-titre, report des valeurs,...
+#
+# Il faut pour cela que le document réponde à certaines méthodes
+# nb_pages : nombre de pages total du document
+# page(n) : retourne la page
+# page.top_left : renvoie le texte du pavé gauche
+# page.title and page.subtitle pour les titres et sous titres du milieu
+# page.top_right : renvoie le texte de droite
+# columns_widths : renvoie la largeur des colonnes en % de la largeur de page
+# page.table_title pour la première ligne de la table
+# page.table_report_line : lignes pour le report
+# page.table_lines : la table des lignes proprement dite
+# page.table_total_line
+# page.table_to_report_line
+
+
 
 width = bounds.right
 

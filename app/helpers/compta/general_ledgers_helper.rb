@@ -1,0 +1,2 @@
+module Compta::GeneralLedgersHelper
+end

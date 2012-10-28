@@ -7,7 +7,7 @@ require 'pdf_document/table'
 
 module PdfDocument
   # La classe PdfDocument::Base est destinée à servir de base pour les
-  # différents besoins de fichier pdf.
+  # différents besoins de fichiers pdf.
   # Les besoins génériques assurés par cette classe sont d'avoir la capacité
   # de remplir de façon répétitive des pages pdf avec notamment
   # un numéro de page sur un nombre total de page
@@ -156,7 +156,7 @@ module PdfDocument
        @columns_titles ||= set_columns_titles
      end
 
-     # array_wirths doit exprimer en % la largeur des colonnes
+     # array_widths doit exprimer en % la largeur des colonnes
      # set_columns_widths permet d'indiquer les largeurs de colonnes souhaitées
      # Si pas d'argument, toutes les colonnes sont égales,
      #

@@ -81,12 +81,7 @@ module Compta
  
   
 
-  def to_pdf(options = {})
-    account.to_pdf(from_date, to_date, options)
-  end
-
-
-
+ 
   #produit un document pdf en s'appuyant sur la classe PdfDocument::Base
   # et ses classe associées page et table
   def to_pdf(options = {})

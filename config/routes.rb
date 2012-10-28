@@ -5,6 +5,10 @@ Faitesvoscomptes::Application.routes.draw do
 
   
 
+  
+
+  
+
   get "bottom/credit"
   get "bottom/contact"
 
@@ -46,6 +50,7 @@ Faitesvoscomptes::Application.routes.draw do
       resources :accounts
       resource :listing
       resource :general_book
+      resource :general_ledger
       
       
     end
