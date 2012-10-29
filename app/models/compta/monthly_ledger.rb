@@ -18,7 +18,7 @@ module Compta
 
      # renvoie la ligne de titre, par exemple : Mois de janvier 2013
      def title_line
-       {title:'', description:"Mois de #{@month_year.to_format('%B %Y')}", debit:'', credit:''}
+       {mois:"Mois de #{@month_year.to_format('%B %Y')}", title:'', description:'', debit:'', credit:''}
        
      end
 
@@ -28,7 +28,7 @@ module Compta
      def lines
        @lines ||= @period.books.map do |b|
         efb =  Extract::FromBook.new(b, @month_year)
-         {title:b.title, description:b.description, debit:efb.total_debit, credit:efb.total_credit }
+         {mois:'', title:b.title, description:b.description, debit:efb.total_debit, credit:efb.total_credit }
        end.reject {|l| l[:debit] == 0 && l[:credit] == 0}
      end
 
@@ -41,7 +41,7 @@ module Compta
      end
 
      def total_line
-       {title:'', description:"Sous total #{@month_year.to_format('%B %Y')}", debit:total_debit, credit:total_credit}
+       {mois:"Sous total #{@month_year.to_format('%B %Y')}", title:'', description:'', debit:('%0.2f' % total_debit), credit:('%0.2f' %total_credit)}
      end
 
      # la taille d'un MonthlyLedger est son nombre de lignes plus une ligne de titre et une ligne de total

@@ -79,7 +79,6 @@ module PdfDocument
       return '' if r == '0.00'
        # pour avoir l'affichage de tous champs date sur le format français
       I18n::l(Date.parse(r)) rescue r
-      
     end
 
     
