@@ -82,7 +82,7 @@
         tableau
      end
 
-     protected
+    
 
      def total_page_values
        [total_debit, total_credit]
@@ -94,8 +94,7 @@
      end
 
      def to_report_values
-       total_page_values if @number == 1
-       total_page_values.cumul report_values
+        [total_page_values[0] + report_values[0], total_page_values[1] + report_values[1]]
      end
 
      def formatted_values(arr)

@@ -11,13 +11,14 @@ module Compta
      include Compta::GeneralInfo
      attr_reader :pages
 
-      def initialize(period)
+      def initialize(period) 
         @period = period
         @title  = 'Journal Général'
         @subtitle = @period.open ? 'Provisoire' : 'Définitif'
         @columns_widths =  [15.0, 15.0, 40.0, 15.0, 15.0]  # cinq colonnes
         @total_columns_widths = [70.0, 15.0, 15.0]
         @columns_alignements = [:left, :left, :left, :right, :right]
+        @stamp = @period.open ? 'Provisoire' : ''
         set_pages
       end
 
@@ -40,7 +41,7 @@ module Compta
         @period.list_months.each_with_index do |my, j| 
           raise 'Trop grand nombre de journaux' if monthly_ledgers[j].size > NB_PER_PAGE_LANDSCAPE
           nbl += monthly_ledgers[j].size
-          if nbl > NB_PER_PAGE_LANDSCAPE
+          if nbl >  NB_PER_PAGE_LANDSCAPE
             @pages[i] = from..last # on fixe les paramètres de la page
             nbl = 0
             i +=  1 # on passe à la page suivante
