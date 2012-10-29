@@ -19,6 +19,7 @@ module Compta
         @total_columns_widths = [70.0, 15.0, 15.0]
         @columns_alignements = [:left, :left, :left, :right, :right]
         @stamp = @period.open ? 'Provisoire' : ''
+        @created_at = I18n.l(Time.now, :format=>:pdf)
         set_pages
       end
 

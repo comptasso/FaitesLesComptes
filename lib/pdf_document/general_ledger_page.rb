@@ -20,11 +20,7 @@
         @number == @doc.nb_pages
       end
 
-      # le modèle n'étant pas persistant, il ne connaît pas sa date de création
-      def top_right
-        "#{Time.now}"
-      end
-
+     
       def table_title
         %w(Mois Journal Libellé Debit Credit)
       end

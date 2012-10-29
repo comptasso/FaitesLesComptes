@@ -29,7 +29,7 @@ module PdfDocument
   # 
   # Les arguments obligatoires sont 
   #   period : l'exercice concerné par la demande
-  #   source : la classe qui sert de source (par exemple un compte)
+  #   source : la classe qui sert de source (par exemple Account pour un compte)
   # 
   # Les options disponibles sont : 
   # :title => pour définir le titre du document - l'option title est obligatoire
@@ -76,8 +76,11 @@ module PdfDocument
   #
   class Base
     include ActiveModel::Validations
-    
-    attr_accessor :title, :subtitle, :columns_title, :total_columns_widths, :columns_alignements, :columns_formats, :first_report_line
+
+
+    # TODO columns_title sans s (faute de frappe...)
+
+    attr_accessor :title, :subtitle, :total_columns_widths, :columns_alignements, :columns_formats, :first_report_line
     attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize, :stamp
     attr_writer  :select_method
 
@@ -157,6 +160,12 @@ module PdfDocument
       @columns_titles ||= set_columns_titles
     end
 
+    def columns_formats
+      @columns_formats ||= set_columns_formats
+    end
+
+
+
     # array_widths doit exprimer en % la largeur des colonnes
     # set_columns_widths permet d'indiquer les largeurs de colonnes souhaitées
     # Si pas d'argument, toutes les colonnes sont égales,
@@ -206,6 +215,14 @@ module PdfDocument
         @columns_methods = columns
       end
       @columns_methods
+    end
+
+
+    # définit des formats pour chacune des colonnes
+    # si on ne forunit pas de tableau, détermine les méthodes en fonction
+    # du type de données de la source
+    def set_columns_formats(array_methods = nil)
+
     end
 
      

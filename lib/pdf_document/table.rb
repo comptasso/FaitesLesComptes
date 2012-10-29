@@ -60,7 +60,7 @@ module PdfDocument
 
     # appelle les méthodes adéquate pour chacun des éléments de la lignes
     def prepare_line(line)
-      @document.prepare_line(line).collect {|v| format_value(v)}
+      @document.prepare_line(line)
     end
 
     

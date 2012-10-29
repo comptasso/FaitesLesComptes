@@ -6,7 +6,7 @@ module PdfDocument
   # Il n'y a pas de possibilité de faire des totaux ni donc d'afficher des reports
   class Simple
     include ActiveModel::Validations
-     attr_accessor :title, :subtitle, :columns_title, :total_columns_widths, :columns_alignements, :columns_formats
+     attr_accessor :title, :subtitle, :total_columns_widths, :columns_alignements, :columns_formats
      attr_reader :created_at, :nb_lines_per_page, :source
      attr_writer  :select_method
 

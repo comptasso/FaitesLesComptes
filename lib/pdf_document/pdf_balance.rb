@@ -2,11 +2,16 @@
 
 require 'pdf_document/base'
 
+
 module PdfDocument
+
+
   class PdfBalance < PdfDocument::Base
     
 
     attr_accessor :from_number, :to_number
+
+
 
     # permet de choisir les colonnes que l'on veut sélectionner pour le document
     # set_columns appelle set_columns_widths pour calculer la largeur des colonnes
@@ -53,14 +58,15 @@ module PdfDocument
     # appelle les méthodes adéquate pour chacun des éléments de la ligne
     # qui représente un account 
     def prepare_line(account)
+      Rails.logger.debug "Dans prepare_line de pdf_balance #{account.inspect}"
       [ account.number,
         account.title,
-        account.cumulated_before(from_date, :debit),
-        account.cumulated_before(from_date, :credit),
-        account.movement(from_date, to_date, :debit),
-        account.movement(from_date, to_date, :credit),
-        account.cumulated_at(to_date,:debit),
-        account.cumulated_at(to_date,:credit)
+        '%0.2f' % account.cumulated_debit_before(from_date),
+        '%0.2f' % account.cumulated_credit_before(from_date),
+        '%0.2f' % account.movement(from_date, to_date, :debit),
+        '%0.2f' % account.movement(from_date, to_date, :credit),
+        '%0.2f' % account.cumulated_at(to_date,:debit),
+        '%0.2f' % account.cumulated_at(to_date,:credit)
       ]
     end
 

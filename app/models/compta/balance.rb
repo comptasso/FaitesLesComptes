@@ -65,7 +65,7 @@ class Compta::Balance < ActiveRecord::Base
     pdf.from_number = from_account.number
     pdf.to_number = to_account.number
     pdf.select_method = 'accounts'
-    pdf.set_columns %w(accounts.id number title)
+    pdf.set_columns %w(accounts.id number title period_id)
     pdf.set_columns_alignements [:left, :left, :right, :right, :right, :right, :right, :right]
     pdf.set_columns_widths [10, 30, 10, 10, 10, 10, 10, 10]
     pdf.set_columns_titles %w(Numéro Intitulé Débit Crédit Débit Crédit Débit Crédit)
