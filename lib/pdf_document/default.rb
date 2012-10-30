@@ -4,6 +4,7 @@
 
 require 'pdf_document/page'
 require 'pdf_document/table'
+require 'pdf_document/simple'
 
 module PdfDocument
   # La classe PdfDocument::Default est destinée à servir de base pour les

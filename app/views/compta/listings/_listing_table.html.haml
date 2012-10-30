@@ -15,8 +15,8 @@
     %tr.total#totaux
       %th(colspan="6" style="text-align:right" rowspan="1")
         Totaux:
-        %br
-        Totaux globaux:
+        %br Valeurs au #{I18n.l @listing.to_date}
+        
       %th#tgdebit(rowspan="1" colspan="1" class="numeric nombre")
         %span#tdebit=  debit_credit(@listing.total_debit)
         %br

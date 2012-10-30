@@ -1,5 +1,8 @@
 # coding: utf-8
 
+
+load 'pdf_document/account.rb'
+
 module Compta
 
   # la classe Listing sert à éditer un compte. Elle n'est pas persistente mais
@@ -7,8 +10,9 @@ module Compta
   # Ceci suppose d'avoir une définition des colonnes virtuelles
   # d'où les premières lignes de cette classe
   class Listing < ActiveRecord::Base
-    include Utilities::Sold
 
+    include Utilities::Sold
+   
     def self.columns() @columns ||= []; end
 
   def self.column(name, sql_type = nil, default = nil, null = true)
@@ -43,28 +47,29 @@ module Compta
     self
   end
 
+  def cumulated_at(d, sens)
+    account.cumulated_at(d, sens)
+  end
+
   def solde_debit_avant
-    cumulated_debit_before(from_date)
+    account.cumulated_debit_before(from_date)
   end
 
   def solde_credit_avant
-    cumulated_credit_before(from_date)
+    account.cumulated_credit_before(from_date)
   end
 
   def total_debit
-    movement(from_date, to_date, 'debit')
+    account.movement(from_date, to_date, 'debit')
   end
 
   def total_credit
-    movement(from_date, to_date, 'credit')
+    account.movement(from_date, to_date, 'credit')
   end
 
-  
-
-  
 
   def lines
-    @lines ||= account.compta_lines.range_date(from_date, to_date)
+    @lines ||= account.compta_lines.listing(from_date, to_date)
   end
 
   # permet notamment de contrôler les limites de date
@@ -77,10 +82,6 @@ module Compta
     period.accounts
   end
 
-  
- 
-  
-
  
   #produit un document pdf en s'appuyant sur la classe PdfDocument::Default
   # et ses classe associées page et table
@@ -90,7 +91,7 @@ module Compta
     options[:stamp] = "brouillard" unless account.all_lines_locked?(from_date, to_date)
     options[:from_date] = from_date
     options[:to_date] = to_date
-    pdf = PdfDocument::Default.new(period, account, options)
+    pdf = PdfDocument::Account.new(period, account, options)
 
     pdf.set_columns ['writings.date AS w_date', 'books.title AS b_title', 'writings.ref AS w_ref', 'writings.narration AS w_narration', 'nature_id', 'destination_id', 'debit',  'credit']
     pdf.set_columns_methods ['w_date', 'b_title', 'w_ref', 'w_narration', 'nature.name', 'destination.name', nil, nil]

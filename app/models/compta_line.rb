@@ -35,13 +35,16 @@ class ComptaLine < ActiveRecord::Base
 
   scope :in_out_lines, where('nature_id IS NOT ?', nil)
   scope :with_writings, joins(:writing)
+  scope :with_writing_and_book, joins(:writing=>:book)
+  scope :without_AN , where('books.title != ?', 'AN')
   # ce scope n'inclut pas with_writings, ce qui veut dire qu'il faut que cela soit fait par
   # ailleurs, c'est notamment le cas lorsqu'on passe par book car book has_many :compta_lines, :through=>:writings
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
   # inclut with_writings et donc doit être utilisé pour un query qui ne l'inclut pas déja.
   scope :mois_with_writings, lambda {|date| with_writings.where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month)}
 
-  scope :range_date, lambda {|from, to| with_writings.where('date >= ? AND date <= ?', from, to )}
+  scope :range_date, lambda {|from, to| with_writings.where('date >= ? AND date <= ?', from, to ).order('date')}
+  scope :listing, lambda {|from, to| with_writing_and_book.where('books.title != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)
   scope :classe, lambda {|n| where('number LIKE ?', "#{n}%").order('number ASC')}
