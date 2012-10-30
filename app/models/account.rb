@@ -149,8 +149,7 @@ class Account < ActiveRecord::Base
   def self.to_pdf(period)
     load 'lib/pdf_document/simple.rb'
     pdf = PdfDocument::Simple.new(period, period,
-      title:"Plan comptable")
-    pdf.select_method= 'accounts.order(:number)'
+      title:"Plan comptable", select_method:'accounts.order(:number)')
     pdf.set_columns %w(number title)
     pdf.set_columns_widths [20, 80]
     pdf.set_columns_titles %w(Numéro Libellé)

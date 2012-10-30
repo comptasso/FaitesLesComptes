@@ -8,9 +8,10 @@ module PdfDocument
     include ActiveModel::Validations
      attr_accessor :title, :subtitle, :total_columns_widths, :columns_alignements, :columns_formats
      attr_reader :created_at, :nb_lines_per_page, :source
-     attr_writer  :select_method
+     
 
     validates :title, :presence=>true
+    validates :select_method, :presence=>true
 
      def initialize(period, source, options)
        @title = options[:title]
@@ -18,6 +19,7 @@ module PdfDocument
        @period = period
        @nb_lines_per_page = options[:nb_lines_per_page] || 22
        @source = source
+       @select_method = options[:select_method]
      end
 
 
@@ -30,8 +32,9 @@ module PdfDocument
        @period.exercice
      end
 
+     # nombre de pages avec au minimum 1 page
      def nb_pages
-       (@source.instance_eval(select_method).count/@nb_lines_per_page.to_f).ceil
+       [(@source.instance_eval(@select_method).count/@nb_lines_per_page.to_f).ceil, 1].max
      end
 
      # permet d'appeler la page number
@@ -45,12 +48,12 @@ module PdfDocument
      def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      source.instance_eval(select_method).select(columns).offset(offset).limit(limit)
+      source.instance_eval(@select_method).select(columns).offset(offset).limit(limit)
      end
 
      # appelle les méthodes adéquate pour chacun des éléments de la lignes
-     # dans la classe simple, cela ne fait que renvoyer la ligne
-     # à surcharger lorsqu'on veut faire un traitement de la ligne
+     # dans la classe simple, cela ne fait que renvoyer la ligne.
+     # A surcharger lorsqu'on veut faire un traitement de la ligne
      def prepare_line(line)
        columns.collect { |m| line.instance_eval(m) }
      end
@@ -97,7 +100,7 @@ module PdfDocument
       # Si on veut fixer les largeurs, il faut alors appeler set_columns_widths
       #
       def set_columns(array_columns = nil)
-       @columns = array_columns || @source.instance_eval(select_method).first.class.column_names
+       @columns = array_columns || @source.instance_eval(@select_method).first.class.column_names
        set_columns_widths
        @columns
      end
@@ -111,11 +114,7 @@ module PdfDocument
        @columns_titles = array_titles || @columns
      end
 
-     # définit la méthode à appliquer à la source pour extraire les lignes
-     def select_method
-       @select_method ||= 'lines'
-     end
-
+    
      # Crée le fichier pdf associé
      def render(template = "lib/pdf_document/simple.pdf.prawn")
        text  =  ''

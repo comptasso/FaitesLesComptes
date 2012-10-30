@@ -78,24 +78,28 @@ module PdfDocument
     include ActiveModel::Validations
 
 
-    # TODO columns_title sans s (faute de frappe...)
-
+  
     attr_accessor :title, :subtitle, :total_columns_widths, :columns_alignements, :columns_formats, :first_report_line
     attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize, :stamp
     attr_writer  :select_method
 
     validates :title, :presence=>true 
 
+    
+    # period est un exercice,
+    # source est un record, par exemple Account
+    # collection est une méthode pour donner la collection, par defaut comptpa_lines
     def initialize(period, source, options)
       @title = options[:title]
       @subtitle = options[:subtitle]
       @period = period
       @from_date = options[:from_date] || @period.start_date
       @to_date = options[:to_date] || @period.close_date
-      @nb_lines_per_page = options[:nb_lines_per_page] || 22
+      @nb_lines_per_page = options[:nb_lines_per_page] || NB_PER_PAGE_LANDSCAPE
       @source = source
       @stamp = options[:stamp]
       @created_at = I18n.l(Time.now, :format=>:pdf)
+      @select_method = options[:select_method] || 'compta_lines'
     end
 
      
@@ -115,7 +119,7 @@ module PdfDocument
     # même s'il n'y a pas de lignes dans le comptes
     # ne serait-ce que pour afficher les soldes en début et en fin de période
     def nb_pages
-      nb_lines = @source.compta_lines.range_date(from_date, to_date).count
+      nb_lines = @source.send(@collection).range_date(from_date, to_date).count
       return 1 if nb_lines == 0
       (nb_lines/@nb_lines_per_page.to_f).ceil
     end
@@ -251,12 +255,6 @@ module PdfDocument
       end
       doc = self
       pdf.instance_eval(text)
-    end
-
-
-    # définit la méthode à appliquer à la source pour extraire les lignes
-    def select_method
-      @select_method ||= 'compta_lines'
     end
 
     # Crée le fichier pdf associé

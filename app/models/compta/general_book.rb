@@ -50,7 +50,7 @@ module Compta
       final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape)
       range_accounts.each do |a|
         Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date).
-          to_pdf({title:'Grand livre',
+          to_pdf({title:'Grand livre', :select_method=>'compta_lines',
             subtitle:"Compte #{a.number} - Du #{I18n::l from_date} au #{I18n.l to_date}"} ).
             render_pdf_text(final_pdf)
         final_pdf.start_new_page unless a == range_accounts.last

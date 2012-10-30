@@ -18,6 +18,7 @@
 
 width = bounds.right
 
+# création du tampon de fond
 if stamp_dictionary_registry['fond'].nil?
 create_stamp('fond') do
   rotate(40) do
