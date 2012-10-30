@@ -61,12 +61,12 @@ class Compta::Balance < ActiveRecord::Base
       title:"Balance générale",
       from_date:from_date, to_date:to_date,
       subtitle:"Du #{I18n::l from_date} au #{I18n.l to_date}",
+      select_method:'accounts',
       stamp:stamp)
     pdf.from_number = from_account.number
     pdf.to_number = to_account.number
-    pdf.select_method = 'accounts'
     pdf.set_columns %w(accounts.id number title period_id)
-    pdf.set_columns_alignements [:left, :left, :right, :right, :right, :right, :right, :right]
+    pdf.columns_alignements = [:left, :left, :right, :right, :right, :right, :right, :right]
     pdf.set_columns_widths [10, 30, 10, 10, 10, 10, 10, 10]
     pdf.set_columns_titles %w(Numéro Intitulé Débit Crédit Débit Crédit Débit Crédit)
     pdf.set_columns_to_totalize [2,3,4,5,6,7]

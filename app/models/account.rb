@@ -13,6 +13,8 @@
 
 
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development 
+require 'pdf_document/simple'
+require 'pdf_document/default'
 
 
 class Account < ActiveRecord::Base
@@ -21,7 +23,7 @@ class Account < ActiveRecord::Base
   include Utilities::Sold
 
 
-  require 'pdf_document/default'
+  
 
   belongs_to :period
   belongs_to :accountable, polymorphic:true
@@ -153,7 +155,7 @@ class Account < ActiveRecord::Base
     pdf.set_columns %w(number title)
     pdf.set_columns_widths [20, 80]
     pdf.set_columns_titles %w(Numéro Libellé)
-    pdf.set_columns_alignements [:left, :left]
+    pdf.columns_alignements = [:left, :left]
     pdf
   end
 

@@ -1,5 +1,8 @@
 # coding: utf-8
 
+require 'pdf_document/simple.rb'
+require 'pdf_document/default.rb'
+
 # Classe destinée à afficher une balance des comptes entre deux dates et pour une série de comptes
 # La méthode fill_date permet de remplir les dates recherchées et les comptes par défaut
 # ou sur la base des paramètres.

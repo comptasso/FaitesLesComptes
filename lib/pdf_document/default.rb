@@ -74,18 +74,14 @@ module PdfDocument
   # Il est possible de fonctionner avec un modèle virtuel pour autant que la classe de lines
   # puisse répondre à column_names
   #
-  class Base
-    include ActiveModel::Validations
+  class Default < PdfDocument::Simple
 
-
-  
-    attr_accessor :title, :subtitle, :total_columns_widths, :columns_alignements, :columns_formats, :first_report_line
-    attr_reader :created_at, :from_date, :to_date, :nb_lines_per_page, :source, :columns_to_totalize, :stamp
-    attr_writer  :select_method
-
-    validates :title, :presence=>true 
-
+    attr_reader :created_at, :nb_lines_per_page, :source
+      
+    attr_accessor :first_report_line
+    attr_reader  :from_date, :to_date, :columns_to_totalize, :stamp
     
+       
     # period est un exercice,
     # source est un record, par exemple Account
     # select_method est une méthode pour donner la collection, par defaut comptpa_lines
@@ -101,18 +97,6 @@ module PdfDocument
       @created_at = I18n.l(Time.now, :format=>:pdf)
       @select_method = options[:select_method] || 'compta_lines'
     end
-
-     
-    # méthodes pour disposer des infos par self dans le template
-    def organism_name
-      @period.organism.title
-    end
-
-    def exercice
-      @period.exercice
-    end
-
-    
 
     
     # calcule de nombre de pages; il y a toujours au moins une page
@@ -147,66 +131,18 @@ module PdfDocument
       columns_methods.collect { |m| line.instance_eval(m) rescue nil }
     end
 
-    # récupère les variables d'instance ou les calcule si besoi
-    def columns
-      @columns ||= set_columns
-    end
-    
-    def columns_widths
-      @columns_widths ||= set_columns_widths
+    def set_columns(array_columns = nil)
+      @columns = array_columns || @source.instance_eval(@select_method).first.class.column_names
+      set_columns_widths
+      set_columns_alignements
+      @columns
     end
 
     def columns_methods
       @columns_methods ||= set_columns_methods
     end
 
-    def columns_titles
-      @columns_titles ||= set_columns_titles
-    end
-
-    def columns_formats
-      @columns_formats ||= set_columns_formats
-    end
-
-
-
-    # array_widths doit exprimer en % la largeur des colonnes
-    # set_columns_widths permet d'indiquer les largeurs de colonnes souhaitées
-    # Si pas d'argument, toutes les colonnes sont égales,
-    #
-    # Si toutes les colonnes sont définies, le total doit faire 100,
-    # sinon, les colonnes restantes se partagent la place non utilisée.
-    def set_columns_widths(array_widths = nil)
-      if array_widths == nil
-        val = 100.0/columns.size
-        return  @columns_widths = columns.collect {|c| val}
-      end
-      # si args a moins d'argument que le nombre de colonnes, on ajoute
-      diff = columns.size - array_widths.length
-      if diff > 0
-        place = 100 - array_widths.sum
-        complement = diff.times.collect {|i| place/diff}
-        array_widths += complement
-      end
-      # puis on retourne le nombre nécessaire
-      @columns_widths = array_widths[0..columns.size]
-    end
-
-
-    # permet de choisir les colonnes que l'on veut sélectionner pour le document
-    # set_columns appelle set_columns_widths pour calculer la largeur des colonnes
-    # sur la base de largeurs égales.
-    # Si on veut fixer les largeurs, il faut alors appeler set_columns_widths
-    #
-    def set_columns(array_columns = nil)
-      @columns = array_columns || @source.instance_eval(select_method).first.class.column_names
-      set_columns_widths
-      set_columns_alignements
-      
-      @columns
-    end
-
-
+       
     # pour définir les méthodes à applique aux champs sélectionnés
     def set_columns_methods(array_methods = nil)
       @columns_methods = []
@@ -222,19 +158,7 @@ module PdfDocument
     end
 
 
-    # définit des formats pour chacune des colonnes
-    # si on ne forunit pas de tableau, détermine les méthodes en fonction
-    # du type de données de la source
-    def set_columns_formats(array_methods = nil)
-
-    end
-
-     
-    def set_columns_titles(array_titles = nil)
-      @columns_titles = array_titles || @columns
-    end
-
-
+    
     # les colonnes à totaliser sont indiquées par un indice
     # par exemple si on demande Date Réf Debit Credit
     # on sélectionne [2,3] pour indices
@@ -275,6 +199,22 @@ module PdfDocument
       pdf_file.render
     end
 
+    # définit un aligment des colonnes par défaut, les colonnes qui sont
+    # numériques sont alignées à droite, les autres à gauche
+    def set_columns_alignements(array = nil)
+      if array
+        @columns_alignements = array
+      else
+        # on prend les colonnes sélectionnées et on construit un tableau
+        # left, right selon le type de la colonne
+        lch = @select_method.classify.constantize.columns_hash
+        @columns_alignements = @columns.map do |c|
+          (lch[c] && lch[c].number? && lch[c].name !~ /_id$/) ? :right : :left
+        end
+      end
+      @columns_alignements
+    end
+
     private
 
 
@@ -302,18 +242,7 @@ module PdfDocument
       @total_columns_widths
     end
 
-    # définit un aligment des colonnes par défaut, les colonnes qui sont
-    # numériques sont alignées à droite, les autres à gauche
-    # TODO retirer cette référence à ComptaLine
-    def set_columns_alignements
-      # on prend les colonnes sélectionnées et on construit un tableau
-      # left, right selon le type de la colonne
-      lch = ComptaLine.columns_hash
-      @columns_alignements = @columns.map do |c|
-        (lch[c] && lch[c].number? && lch[c].name !~ /_id$/) ? :right : :left
-      end
-      @columns_alignements
-    end
+    
 
   end
 end
