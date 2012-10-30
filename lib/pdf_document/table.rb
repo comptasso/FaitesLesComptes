@@ -41,9 +41,7 @@ module PdfDocument
 
     # lines renvoie un array
     def prepared_lines
-      if lines
         @prepared_lines ||= lines.collect {|l| prepare_line(l)}
-      end
     end
 
    
@@ -86,11 +84,10 @@ module PdfDocument
     # n'additionne que s'il en est capable en testant la transformation en Float
     # cela permet d'avoir des valeurs vides dans les colonnes par exemple
     def totalize_column(i)
-      if prepared_lines
-        prepared_lines.each.sum do |l|
+       prepared_lines.each.sum do |l|
           l[i].to_f if l[i].to_f.is_a?(Float)
         end
-      end
+      
     end
 
 

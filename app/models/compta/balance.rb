@@ -50,7 +50,7 @@ class Compta::Balance < ActiveRecord::Base
   # ou une édition définitive.
   # Cela se fait en s'appuyant sur account#all_lines_locked?
   def provisoire?
-    accounts.collect {|account| account.all_lines_locked?(from_date, to_date)}.include? false
+    period.accounts.joins(:compta_lines).where('number >= ? AND number <= ?', from_account.number, to_account.number ).where('locked = ?', false).any?
   end
 
   #produit un document pdf en s'appuyant sur la classe PdfBalance issue de PdfDocument::Default

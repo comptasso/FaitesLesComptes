@@ -109,13 +109,16 @@ module PdfDocument
       (nb_lines/@nb_lines_per_page.to_f).ceil
     end
 
+    def pages
+      @pages ||= (1..nb_pages).collect {|i| Page.new(i, self)}
+    end
+
     # permet d'appeler la page number
     # retourne une instance de PdfDocument::Page
     def page(number)
-      raise ArgumentError, "La page demandée n'existe pas"  unless (1..nb_pages).include? number
-      Page.new(number, self)
+      raise ArgumentError, "La page demandée n'existe pas"  unless (number > 0 &&  number <= nb_pages)
+      @pages[number-1]
     end
-
 
     # renvoie les lignes de la page demandées
     def fetch_lines(page_number)
@@ -188,6 +191,8 @@ module PdfDocument
       File.open(template, 'r') do |f|
         text = f.read
       end
+      #
+      pages # on prépare les différentes pages
       #       puts text
       require 'prawn'
       doc = self # doc est utilisé dans le template

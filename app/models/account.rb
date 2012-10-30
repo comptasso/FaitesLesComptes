@@ -131,7 +131,9 @@ class Account < ActiveRecord::Base
 
   def init_sold_credit
      init_sold('credit')
-   end
+  end
+
+
 
   def formatted_sold(date)
     ['%0.2f' % cumulated_debit_before(date), '%0.2f' % cumulated_credit_before(date) ]

@@ -36,8 +36,7 @@ module PdfDocument
       (nb_lines/@nb_lines_per_page.to_f).ceil
      end
 
-
-
+   
 
     def set_columns_widths(array_widths)
       @columns_widths = array_widths
@@ -53,6 +52,8 @@ module PdfDocument
       offset = (page_number - 1)*nb_lines_per_page
       source.accounts.select(columns).order('number').where('number >= ? AND number <= ?', @from_number, @to_number).offset(offset).limit(limit)
      end
+
+
 
    
     # appelle les méthodes adéquate pour chacun des éléments de la ligne
