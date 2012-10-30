@@ -1,12 +1,12 @@
 # coding: utf-8
-require 'pdf_document/base.rb' 
+require 'pdf_document/default.rb'
 load 'pdf_document/general_ledger_page.rb'  
 
 module Compta 
   # la classe GeneralLedger (journal général) permet d'imprimer le journal centralisateur
   # reprenant mois par mois les soldes des différentes journaux
   # le GeneralLedger se construit avec un period et s'appuie sur la classe MonthlyLedger
-   class PdfGeneralLedger < PdfDocument::Base
+   class PdfGeneralLedger < PdfDocument::Default
 
      include Compta::GeneralInfo
      attr_reader :pages

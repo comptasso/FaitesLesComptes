@@ -82,7 +82,7 @@ module Compta
   
 
  
-  #produit un document pdf en s'appuyant sur la classe PdfDocument::Base
+  #produit un document pdf en s'appuyant sur la classe PdfDocument::Default
   # et ses classe associées page et table
   def to_pdf(options = {})
     options[:title] ||=  "Liste des écritures du compte #{account.number}"
@@ -90,7 +90,7 @@ module Compta
     options[:stamp] = "brouillard" unless account.all_lines_locked?(from_date, to_date)
     options[:from_date] = from_date
     options[:to_date] = to_date
-    pdf = PdfDocument::Base.new(period, account, options)
+    pdf = PdfDocument::Default.new(period, account, options)
 
     pdf.set_columns ['writings.date AS w_date', 'books.title AS b_title', 'writings.ref AS w_ref', 'writings.narration AS w_narration', 'nature_id', 'destination_id', 'debit',  'credit']
     pdf.set_columns_methods ['w_date', 'b_title', 'w_ref', 'w_narration', 'nature.name', 'destination.name', nil, nil]

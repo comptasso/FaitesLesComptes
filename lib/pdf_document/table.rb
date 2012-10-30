@@ -26,14 +26,14 @@ module PdfDocument
       @document = document
     end
 
-    # retourne la ligne de titre à partir des informations de PdfDocument::Base
+    # retourne la ligne de titre à partir des informations de PdfDocument::Default
     def title
       @document.columns_titles
     end
 
     # retourne le tableau de lignes à partir du numéro de la page fourni par
     # @page, du nombre de lignes par pages, de la source et de la méthode
-    # fournis par PdfDocument::Base
+    # fournis par PdfDocument::Default
     # lines renvoie donc un Arel
     def lines
       @lines ||= @document.fetch_lines(@page.number)

@@ -21,7 +21,7 @@ class Account < ActiveRecord::Base
   include Utilities::Sold
 
 
-  require 'pdf_document/base'
+  require 'pdf_document/default'
 
   belongs_to :period
   belongs_to :accountable, polymorphic:true

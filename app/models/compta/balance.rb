@@ -53,7 +53,7 @@ class Compta::Balance < ActiveRecord::Base
     accounts.collect {|account| account.all_lines_locked?(from_date, to_date)}.include? false
   end
 
-  #produit un document pdf en s'appuyant sur la classe PdfBalance issue de PdfDocument::Base
+  #produit un document pdf en s'appuyant sur la classe PdfBalance issue de PdfDocument::Default
   # et ses classe associées page et table
   def to_pdf
     stamp = provisoire? ? 'provisoire' : ''

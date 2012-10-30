@@ -124,12 +124,21 @@ module PdfDocument
 #       puts text
        require 'prawn'
        doc = self # doc est utilisé dans le template
-       pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|
+       @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|
             pdf.instance_eval(text)
           end
-       pdf_file.render
+       numerote
+       @pdf_file.render
      end
 
+     protected
+
+     # réalise la pagination de @pdf_file
+     def numerote
+       @pdf_file.number_pages("page <page>/<total>",
+        { :at => [pdf_file.bounds.right - 150, 0],:width => 150,
+          :align => :right, :start_count_at => 1 })
+     end
 
   end
 end

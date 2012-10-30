@@ -6,7 +6,7 @@ require 'pdf_document/page'
 require 'pdf_document/table'
 
 module PdfDocument
-  # La classe PdfDocument::Base est destinée à servir de base pour les
+  # La classe PdfDocument::Default est destinée à servir de base pour les
   # différents besoins de fichiers pdf.
   # Les besoins génériques assurés par cette classe sont d'avoir la capacité
   # de remplir de façon répétitive des pages pdf avec notamment
@@ -88,7 +88,7 @@ module PdfDocument
     
     # period est un exercice,
     # source est un record, par exemple Account
-    # collection est une méthode pour donner la collection, par defaut comptpa_lines
+    # select_method est une méthode pour donner la collection, par defaut comptpa_lines
     def initialize(period, source, options)
       @title = options[:title]
       @subtitle = options[:subtitle]
@@ -119,7 +119,7 @@ module PdfDocument
     # même s'il n'y a pas de lignes dans le comptes
     # ne serait-ce que pour afficher les soldes en début et en fin de période
     def nb_pages
-      nb_lines = @source.send(@collection).range_date(from_date, to_date).count
+      nb_lines = @source.send(@select_method).range_date(from_date, to_date).count
       return 1 if nb_lines == 0
       (nb_lines/@nb_lines_per_page.to_f).ceil
     end
@@ -276,6 +276,9 @@ module PdfDocument
     end
 
     private
+
+
+
 
     # méthode permettant de donner la largeur des colonnes pour une ligne de
     # total

@@ -1,12 +1,12 @@
 # coding: utf-8
 
-require 'pdf_document/base'
+require 'pdf_document/default'
 
 
 module PdfDocument
 
 
-  class PdfBalance < PdfDocument::Base
+  class PdfBalance < PdfDocument::Default
     
 
     attr_accessor :from_number, :to_number
