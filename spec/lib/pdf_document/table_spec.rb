@@ -3,7 +3,7 @@
 
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')   
-require 'pdf_document/base'
+require 'pdf_document/default'
 require 'pdf_document/page'
 require 'pdf_document/table'
 
@@ -24,7 +24,7 @@ describe PdfDocument::Table do
       exercice:'Exercice 2012')}
 
 
-  let(:doc) {PdfDocument::Base.new(p, source, title:'Le document de base')}
+  let(:doc) {PdfDocument::Default.new(p, source, title:'Le document de base')}
 
 
   before(:each) do

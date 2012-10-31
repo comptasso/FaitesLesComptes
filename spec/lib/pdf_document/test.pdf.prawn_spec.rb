@@ -2,12 +2,9 @@
 
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require 'pdf_document/base'
+require 'pdf_document/default'
 require 'pdf_document/page'
 require 'pdf_document/table'  
-
-
-
 
 describe 'test pdf prawn' do   
   include OrganismFixture
@@ -35,13 +32,13 @@ describe 'test pdf prawn' do
   end
 
   it 'should be able to create a pdf document' do
-    @pdf = PdfDocument::Base.new(@p, @account, title:@o.title, subtitle:'Essai')
-    @pdf.should be_an_instance_of(PdfDocument::Base)
+    @pdf = PdfDocument::Default.new(@p, @account, title:@o.title, subtitle:'Essai')
+    @pdf.should be_an_instance_of(PdfDocument::Default)
   end
 
   context 'le document est créé' do
     before(:each) do
-      @pdf = PdfDocument::Base.new(@p, @account, title:@o.title, subtitle:'Essai')    
+      @pdf = PdfDocument::Default.new(@p, @account, title:@o.title, subtitle:'Essai')
       @pdf.set_columns ['writings.date AS w_date', 'nature_id', 'debit', 'credit']
       @pdf.set_columns_titles %w(Date Nature Débit Crédit)
       

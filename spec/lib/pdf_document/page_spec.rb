@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
 
-require 'pdf_document/base'
+require 'pdf_document/default'
 
 describe PdfDocument::Page do 
   let(:o) {mock_model(Organism, title:'Organisme test')}
@@ -15,7 +15,7 @@ describe PdfDocument::Page do
       compta_lines:arel )}
 
 
-  let(:doc) { PdfDocument::Base.new(p, source, {title:'Le titre de la page'}) } 
+  let(:doc) { PdfDocument::Default.new(p, source, {title:'Le titre de la page'}) }
   let(:now) {Time.now}
 
 

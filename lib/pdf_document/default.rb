@@ -182,6 +182,7 @@ module PdfDocument
         text = f.read
       end
       doc = self
+      puts "render_pdf_text rend #{self.inspect}"
       pdf.instance_eval(text)
     end
 
@@ -191,9 +192,11 @@ module PdfDocument
       File.open(template, 'r') do |f|
         text = f.read
       end
-      #
+      
       pages # on prépare les différentes pages
-      #       puts text
+      # ceci a été rajouté pour éviter que chaque page reconstruise à chaque fois
+      # la série de page précédente pour avoir les reports
+      
       require 'prawn'
       doc = self # doc est utilisé dans le template
       pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|

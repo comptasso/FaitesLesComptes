@@ -8,8 +8,8 @@ end
 
 describe Compta::Balance do
   before(:each) do
-    @o=Organism.create!(title:'test balance sans table', database_name:'assotest1')
-    @p= Period.create!(organism_id:@o.id, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
+    @o = Organism.create!(title:'test balance sans table', database_name:'assotest1')
+    @p = Period.create!(organism_id:@o.id, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     @a1 = @p.accounts.find_by_number('60')
     @a2 = @p.accounts.find_by_number('603')
   end
@@ -24,16 +24,9 @@ describe Compta::Balance do
     b.to_date.should == Date.civil(2012,1,1)
   end
 
-  it 'should have a period_id' do
-    b = Compta::Balance.new
-    b.valid?
-    b.should have(1).errors_on(:period_id)
-  end
-
+ 
 
   context 'testing methods and validations' do
-
-
  
     def valid_arguments
       { period_id:@p.id,
@@ -120,18 +113,19 @@ describe Compta::Balance do
 
       before(:each) do
         @b=Compta::Balance.new(valid_arguments)
-        @b.stub(:accounts).and_return([@a1, @a2])
+        @b.stub(:accounts).and_return(@ar = double(Arel))
+
       end
       it 'should call all_lines_locked? on each account' do
-        @a1.should_receive(:all_lines_locked?).with(@b.from_date, @b.to_date).and_return(false)
-        @a2.should_receive(:all_lines_locked?).with(@b.from_date, @b.to_date).and_return(true)
+        @ar.should_receive(:joins).with(:compta_lines).and_return(@ar)
+        @ar.should_receive(:where).with('locked = ?', false).and_return @ar
+        @ar.should_receive(:any?).and_return true
         @b.should be_provisoire
       end
 
       it 'should return false if all accounts locked' do
-        @a1.stub(:all_lines_locked?).and_return true
-        @a2.stub(:all_lines_locked?).and_return true
-        @b.should_not be_provisoire
+        @ar.stub_chain(:joins, :where, :any?).and_return false
+        @b.should_not be_provisoire 
       end
 
     end
@@ -186,8 +180,8 @@ describe Compta::Balance do
        @b.nb_pages.should == 5
      end
 
-     it 'should respond to report_line' do
-       pending 'en attente d un éventuel module Listing ou Page (inspiré de ce qui est fait dans Stats'
+     it 'should be able to_pdf' do
+       @b.to_pdf.should be_an_instance_of(PdfDocument::PdfBalance)
      end
     end
 
