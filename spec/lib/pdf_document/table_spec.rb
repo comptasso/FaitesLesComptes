@@ -52,7 +52,7 @@ describe PdfDocument::Table do
   end
 
   it 'la table ne doit reprendre que les colonnes demandées' , wip:true do
-    @page.table_lines.first.should == [(Date.today-1), '', '10.00', '0.00']
+    @page.table_lines.first.should == [(Date.today-1), nil, BigDecimal.new('10'), BigDecimal.new('0')]
   end
 
 

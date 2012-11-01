@@ -3,7 +3,9 @@
   = link_to_if(menu_book.writings.period(@period).any?, 'Afficher', compta_book_writings_path(menu_book)) do |name|
     %span.no-link= name
 - if menu_book.type == 'OdBook'
-  %li= link_to('Ecrire', new_compta_book_writing_path(menu_book))
+  %li= link_to('Ecrire', new_compta_book_writing_path(menu_book)) if @period.open?
 - if menu_book.type == 'AnBook'
   %li= link_to 'Ecrire', new_compta_book_writing_path(menu_book) unless menu_book.writings.period(@period).any?
-  %li= link_to 'Modifier', edit_compta_book_writing_path(menu_book, menu_book.writings.period(@period).first) if menu_book.writings.period(@period).any?
+  %li= link_to 'Modifier',        |
+    edit_compta_book_writing_path(menu_book, |
+    menu_book.writings.period(@period).first) if @period.open? && menu_book.writings.period(@period).any?

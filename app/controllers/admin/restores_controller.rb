@@ -46,8 +46,10 @@ class Admin::RestoresController < Admin::ApplicationController
 
       # tout va bien, on peut maintenant travailler
       
-      # enregistrament du fichier dans son espace 
-      File.open(Rails.root.join('..', 'db', Rails.env, 'organisms', "#{params[:database_name]}.sqlite3"), 'wb') do |file|
+      # enregistrament du fichier dans son espace
+
+
+      File.open(file_path, 'wb') do |file|
         file.write(uploaded_io.read)
       end
       # on vérifie la base
@@ -78,6 +80,14 @@ class Admin::RestoresController < Admin::ApplicationController
   # retourne le nom de l'adapter de l'application, par exemple sqlite3.
   def db_format
     @db_extension = Rails.application.config.database_configuration[Rails.env]['adapter']
+  end
+
+  def file_path
+    if Rails.env == 'test'
+      return Rails.root.join('db', 'test', 'organisms', "#{params[:database_name]}.sqlite3")
+    else
+      return Rails.root.join('..', 'db', Rails.env, 'organisms', "#{params[:database_name]}.sqlite3")
+    end
   end
  
 

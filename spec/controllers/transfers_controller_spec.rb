@@ -60,8 +60,8 @@ describe TransfersController do
 
   describe "GET index"  do
     it "assigns all transfers as @transfers" do
-      
-      Transfer.should_receive(:order).with('date ASC').and_return [1,2]
+      Transfer.should_receive(:within_period).and_return(@ar = double(Arel))
+      @ar.should_receive(:order).with('date ASC').and_return [1,2]
       get :index, {}, valid_session
       assigns(:transfers).should ==  [1,2]
     end

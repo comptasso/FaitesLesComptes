@@ -8,7 +8,7 @@ module PdfDocument
 
     include ActiveModel::Validations
 
-    attr_accessor :title, :subtitle, :total_columns_widths, :columns_alignements, :columns_formats
+    attr_accessor :title, :subtitle, :total_columns_widths, :columns_alignements, :columns_formats, :select_method
     attr_reader :created_at, :nb_lines_per_page, :source
      
     validates :title, :presence=>true

@@ -25,6 +25,8 @@ module SpecControllerHelper
     @o.stub_chain(:periods, :empty?).and_return false
     @o.stub_chain(:periods, :any?).and_return !(@o.periods.empty?)
     @o.stub_chain(:periods, :last).and_return(@p)
+    @o.stub_chain(:books, :in_outs, :all).and_return [1,2]
+    @p.stub(:guess_date).and_return Date.today
   end
 
 

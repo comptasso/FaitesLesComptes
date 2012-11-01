@@ -19,11 +19,12 @@ describe PdfDocument::Default do
   def valid_options
     {
       title:'PDF Document' ,
-      subtitle:'Le sous titre'
+      subtitle:'Le sous titre',
+      :select_method=>'compta_lines'
     }
   end
 
-  context 'minimal_options et pas encore de source' do
+  context 'minimal_options et pas encore de source' do 
 
     before(:each) do
       @Default = PdfDocument::Default.new(p, nil, valid_options)
@@ -72,6 +73,11 @@ describe PdfDocument::Default do
         @Default.title =  nil
         @Default.should_not be_valid
       end
+
+      it 'should have a select_method' do
+        @Default.select_method =  nil
+        @Default.should_not be_valid
+      end
     end
 
 
@@ -109,7 +115,7 @@ describe PdfDocument::Default do
     end
   end
 
-  context 'un listing sans ligne', wip:true do
+  context 'un listing sans ligne' do
     load 'lib/pdf_document/table.rb'
     let(:arel) {double(Arel, first:nil)}
     let(:source) {mock_model(Account, title:'Achats', number:'60',
@@ -126,11 +132,11 @@ describe PdfDocument::Default do
       @Default.nb_pages.should == 1
     end
 
-    it 'avec un total de 0' do
+    it 'avec un total de 0', wip:true do
      arel.stub_chain(:joins).and_return arel
      arel.stub_chain(:select, :range_date, :offset, :limit).and_return nil
       @Default.stub(:nb_pages).and_return 1
-      @Default.page(1).table_total_line.should == ['Totaux', '0.00', '0.00']
+      @Default.page(1).table_total_line.should == ['Totaux', '0.00', '0.00'] 
       @Default.page(1).table_to_report_line.should == ['Total général', '0.00', '0.00']
     end
   end

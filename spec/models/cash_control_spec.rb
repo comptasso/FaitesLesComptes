@@ -194,7 +194,7 @@ describe CashControl do
 
       it 'vérification de la recherche des lignes à verrouiller' do
         @cash_control.cash.compta_lines.count.should == 12
-        @cash_control.cash.compta_lines.before_including_day(Date.today).should have(10).elements
+        @cash_control.cash.compta_lines.before_including_day(Date.today).should have(Date.today.month).elements
       end
 
       it 'lock cash_control locked lines anterior to cash_control'  do 

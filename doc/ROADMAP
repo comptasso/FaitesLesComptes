@@ -992,7 +992,8 @@ OK - solde de compte : Le solde d'ouverture est le montant donné par l'écritur
 NON ou par le solde de l'année précédente
 NON du coup ceci uniquement pour les comptes de classe 1 à 5 - car alors on déséquilibre la balance
 
-Le menu A nouveau doit prendre en compte les exercices
+OK - Le menu A nouveau doit prendre en compte les exercices
+
 
 --------------------------------- TODO ---------------------------------------------------------
 BOF _ L'affichage des comptes 1 à 5 n'a pas forcément besoin de nature et destination
@@ -1118,10 +1119,10 @@ Quand le nom est trop long, la balance crée des pages en trop (faire un :overfl
 Dans la création de nature, lorsqu'il y a des comptes, il n'y a plus la possibilité de sélectionner le compte associé
 La suppression de ligne devrait entraîner un flash (et surtout l'échec de la suppression)
 Dans index organism, il n'y a plus la logique de renvoyer
-
+dans le controller un before_filter devrait checker les actions possibles si period est fermé
 -------------------------- éditions --------------------------
-Dans le grand livre, les natures de devraient pas être indiquées (ni peut être les destinations) - on doit rester comptable
-Dans le grand livre, mettre le libellé du compte en clair et pas seulement le numéro
+BOF - Dans le grand livre, les natures de devraient pas être indiquées (ni peut être les destinations) - on doit rester comptable
+OK - Dans le grand livre, mettre le libellé du compte en clair et pas seulement le numéro
 Compte de résultat
 Rapprochement bancaire
 

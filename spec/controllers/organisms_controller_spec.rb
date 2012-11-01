@@ -9,10 +9,10 @@ end
 
 describe OrganismsController do 
 
-  include SpecControllerHelper
+  include SpecControllerHelper 
 
   before(:each) do
-    minimal_instances
+    minimal_instances 
   end
 
   
