@@ -6,7 +6,7 @@ RSpec.configure do |c|
  #  c.filter = {:wip=> true }
 end
 
-describe BankExtract do 
+describe BankExtract do  
   include OrganismFixture 
   
   

@@ -18,15 +18,17 @@ describe 'compta/listings/show' do
 
   before(:each) do
     
-    l.stub(:account).and_return a
+    l.stub(:account).and_return a 
     a.stub(:period).and_return p
 
     p.stub(:accounts).and_return as
-    ar.stub(:range_date).and_return ar
-    ar.stub(:sum).with(:debit).and_return 110
-    ar.stub(:sum).with(:credit).and_return 0
-    a.stub(:cumulated_debit_before).and_return 5
-    a.stub(:cumulated_credit_before).and_return 0
+    ar.stub(:listing).and_return ar
+    a.stub(:cumulated_at).with((p.start_date) - 1, :debit).and_return 5
+    a.stub(:cumulated_at).with((p.start_date) - 1, :credit).and_return 0
+    a.stub(:movement).with(p.start_date, p.close_date, 'debit').and_return 100
+    a.stub(:movement).with(p.start_date, p.close_date, 'credit').and_return 0
+    a.stub(:cumulated_at).with(p.close_date, :debit).and_return 105
+    a.stub(:cumulated_at).with(p.close_date, :credit).and_return 0
     assign(:listing, l)
     assign(:period, p) 
   end

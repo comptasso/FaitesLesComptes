@@ -6,7 +6,7 @@ RSpec.configure do |c|
   # c.filter = {wip:true}
 end
 
-describe Period do
+describe Period do 
 
 
   describe 'validations' do
@@ -121,10 +121,11 @@ describe Period do
 
     end
 
-    it 'quand tout est bon' do
+    it 'quand tout est bon'  do
       @p_2010.should_receive(:accountable?).and_return(true)
-      @p_2010.should_receive(:report_account).and_return(mock_model(Account, number:'12'))
-   
+      @p_2010.should_receive(:next_period).at_least(1).and_return(@p_2011)
+      @p_2011.should_receive(:report_account).and_return(mock_model(Account, number:'12'))
+   #   puts @p_2010.errors[:close].messages unless @p_2010.closable?
       @p_2010.should be_closable
     end
 
@@ -132,7 +133,7 @@ describe Period do
 
   end
 
-  describe 'close' , wip:true do
+  describe 'close' do
 
     it 'vérifie closable avant tout' do
       @p_2010.should_receive(:closable?).and_return false

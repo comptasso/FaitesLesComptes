@@ -51,15 +51,15 @@ Faitesvoscomptes::Application.routes.draw do
       resource :listing
       resource :general_book
       resource :general_ledger
-      
-      
-    end
-    
-    resources :selections do
+      resources :selections do
       member do
           post :lock
         end
     end
+      
+    end
+    
+    
 
     resources :accounts  
   end

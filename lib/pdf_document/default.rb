@@ -116,6 +116,7 @@ module PdfDocument
     # permet d'appeler la page number
     # retourne une instance de PdfDocument::Page
     def page(number)
+      pages unless @pages # construit la table des pages si elle n'existe pas encore
       raise ArgumentError, "La page demandée n'existe pas"  unless (number > 0 &&  number <= nb_pages)
       @pages[number-1]
     end
@@ -181,8 +182,8 @@ module PdfDocument
       File.open(template, 'r') do |f|
         text = f.read
       end
-      doc = self
-      puts "render_pdf_text rend #{self.inspect}"
+      doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
+      Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
       pdf.instance_eval(text)
     end
 

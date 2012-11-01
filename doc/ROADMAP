@@ -997,6 +997,7 @@ Le menu A nouveau doit prendre en compte les exercices
 --------------------------------- TODO ---------------------------------------------------------
 BOF _ L'affichage des comptes 1 à 5 n'a pas forcément besoin de nature et destination
 On manque d'un affichage des écritures
+Dans la vue index de periods (dans Admin), si on clique sur un autre exercice doit d'abord changer d'exercice (ou peut être désactiver ces possibilités)
 OK - dans les vue book lines faire un recettes/dépenses plutôt que débit/crédit
 OK - rajouter db:schema:dump à landlord:migrate_each
 Quand on a des comptes et qu'on crée une nature, le lien au compte est disable dans le form
