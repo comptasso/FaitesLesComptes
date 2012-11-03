@@ -35,7 +35,12 @@ class BankExtractsController < ApplicationController
   # GET /bank_extracts/new
   # GET /bank_extracts/new.json
   def new
-    @bank_extract = @bank_account.new_bank_extract
+    @bank_extract = @bank_account.new_bank_extract(@period)
+    if @bank_extract.end_date > @period.close_date
+      flash[:alert] = 'Impossible de créer un nouveau relevé de compte pour cet exercice'
+      redirect_to bank_account_bank_extracts_url 
+    end
+
   end
 
   # GET /bank_extracts/1/edit

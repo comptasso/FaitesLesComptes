@@ -1089,18 +1089,26 @@ OK - Route
 OK - méthode to_pdf
 
 -----------------------Détail de mise en forme ----------------------------
-Revoir les rôles de title et description des books : title est OD, VE, et description Recettes, Achats,...
-Revoir le modal form de la balance car la liste des comptes est tronquée
-Il faudrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base
+OK - Revoir les rôles de title et description des books : title est OD, VE, et description Recettes, Achats,...
+OK - Revoir le modal form de la balance car la liste des comptes est tronquée
 OK Transfer doit filtrer sur sur les exercices
-Quand un exercice est fermé, on ne doit pas avoir la possibilité de rentrer dans livres/écrire
-Le grand livre devrait donner l'intitulé du compte et non seulement le numéro
+OK - Quand un exercice est fermé, on ne doit pas avoir la possibilité de rentrer dans livres/écrire
+OK - Le grand livre devrait donner l'intitulé du compte et non seulement le numéro
 OK - Dans compta/account le mouvement de la période inclut à tort le solde initial
 Revoir la question du pointage des comptes sur les écritures à cheval
 Pour le compte bancaire, le compte ne reprend que CMNE donc on ne les distingue pas
 OK - Le solde des balances ne semble pas prendre en compte le dernier jour
-Voir pour mettre les méthodes du module Sold dans account
-Dans un new_bank_extract, les champs date ne sont pas dans l'exercice
+OK - Voir pour mettre les méthodes du module Sold dans account
+OK - Dans un new_bank_extract, les champs date ne sont pas dans l'exercice
+Dans le modal_form de bank_pointage, ne doit pas proposer le livre AN
+Dans une balance, avoir une action qui permette de masquer toutes les lignes à zéro
+Dans les saisies d'écriture, quand on patauge sur les nombres on peut avoir un solde NAN
+Il faudrait un message lorsque le solde d'ouverture du compte en banque n'est pas le montant figurant au report à nouveau
+Le flash de mise à jour d'écriture d'un AN est ecritue mise à jour (manque le r)
+Mettre dans le menu livre et dans le h3, le descriptif et non plus le title du livre (achat/recettes)
+Saisie d'une dépense avec erreur (enlever l'info de debug en bas de page)
+Faire pour les livres un affichage sur 12 mois (en plus des mois individuels)
+Dans un new_bank_extract, le solde initial devrait être désactivé si ce n'est pas le premier
 Mise en page des tables dans le pointage de comptes
 Mise en page de la fenêtre modale (dans pointage) : contrpartie est bizarrement placé
 L'ajout d'une ligne modale doit afficher le numéro de ligne
@@ -1136,6 +1144,7 @@ Jasmine -commencé l'installation mais pas fini car je n'ai pas actuellement de 
 Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 
 --------------------Divers---------------------------------------------------------------------------
+Il faudrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base
 Nettoyer old_bootstrap.css en modifiant bootstrap.css
 Dans period, copy_accounts devrait être dans une transaction
 Dans Period, closable? devrait vérifier que tous les comptes 1 à 5 sont là

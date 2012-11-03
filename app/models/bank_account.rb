@@ -18,8 +18,9 @@ class BankAccount < ActiveRecord::Base
 
   # retourne le dernier extrait de compte bancaire
  # sur la base de la date de fin
- def last_bank_extract
-   bank_extracts.order(:end_date).last
+ # filtre selon l'exercice
+ def last_bank_extract(period)
+   bank_extracts.where('end_date <= ?', period.close_date).order(:end_date).last
  end
 
  def current_account(period)
@@ -56,16 +57,16 @@ class BankAccount < ActiveRecord::Base
 
  
  # créé un nouvel extrait bancaire rempli à partir des informations du précédent
- # le mois courant et zéro si c'est le premier
-  def new_bank_extract
-    previous_be = last_bank_extract
+ # le mois courant et solde zéro si c'est le premier
+  def new_bank_extract(period)
+    previous_be = last_bank_extract(period)
     if previous_be
       bank_extracts.new(begin_date: previous_be.end_date + 1.day,
                         end_date: (previous_be.end_date + 1.day).end_of_month,
                         begin_sold: previous_be.end_sold)
     else
-      bank_extracts.new(begin_date: Date.today.beginning_of_month,
-                        end_date: Date.today.end_of_month,
+      bank_extracts.new(begin_date: period.start_date,
+                        end_date: period.start_date.end_of_month,
                         begin_sold: 0)
     end
   end

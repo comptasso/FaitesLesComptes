@@ -5,8 +5,8 @@
     .row-fluid
       .span12
         = f.input :reference, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8'}
-        = f.input :begin_date_picker,:label=> 'Du', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:Date.today.years_ago(5), date_max:Date.today.years_since(5)} ,:required => true, :as=>:date_picker
-        = f.input :end_date_picker,  :label=> 'Au', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:Date.today.years_ago(5), date_max:Date.today.years_since(5)} ,:required => true, :as=>:date_picker
+        = f.input :begin_date_picker,:label=> 'Du', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker
+        = f.input :end_date_picker,  :label=> 'Au', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker
     .row-fluid
       .span12
         = f.input :begin_sold, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8', value: two_decimals(@bank_extract.begin_sold)}
