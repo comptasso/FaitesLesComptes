@@ -1,16 +1,15 @@
 ---
 - :title: Frais d'établissement
   :numeros:
-  - 20%
-  - '-280'
-- :title: Terrains
+  - '20%'
+  - '-280%'
+- :title: Immobilisations corporelles
   :numeros:
-  - '211'
-  - '212'
-  - '-2811'
-  - '-2812'
-- :title: Constructions
-  - '213'
-  - '214'
-  - '-2813'
-  - '-2814'
+  - '21%'
+  - '23%'
+  - '-281%'
+  - '-291%'
+- :title: Immobilisations financières
+  :numeros:
+  - '27%'
+  - '-297%'
