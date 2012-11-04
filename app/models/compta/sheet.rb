@@ -21,47 +21,7 @@ module Compta
   #
   class Sheet
 
-    def initialize(period, template, total_name)
-      @period = period
-      @rubriks = YAML::load_file(File.join Rails.root, 'lib', 'templates', 'sheets', template)
-      @total_name = total_name
-      @tableau = []
-      @t1 = 0
-      @t2 = 0
-    end
-
-    # retourne le tableau des lignes, avec les titres des trubriques et
-    # les sous totaux de ces rubriques.
-    # met à jour le total
-    def render
-      return @tableau unless @tableau.empty?
-      @t1 = @t2 = 0 # pour éviter qu'un double appel à render ne vienne cumuler les totaux
-      @rubriks.each do |rubrik|
-         r = Compta::Rubrik.new(@period, rubrik[:title], rubrik[:numeros])
-         @tableau << [rubrik[:title]]
-         @tableau += r.values
-         totals = r.totals
-         cumul(totals) # mise à jour des totaux
-         @tableau << totals
-       end
-       @tableau
-    end
-
-    # renvoie la ligne de total des différentes valeurs
-    def total
-      render if @tableau.empty?
-      s = @t1 - @t2 #  rescue 0
-      [@total_name, @t1, @t2, s]
-    end
-
-    protected
-
-    # fait la mise à jour des totaux
-    def cumul(totals)
-      @t1 += totals[1]
-      @t2 += totals[2]
-    end
-
+    
   end
 
 end

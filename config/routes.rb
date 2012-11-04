@@ -46,11 +46,17 @@ Faitesvoscomptes::Application.routes.draw do
       end
     end
     resources :periods do
+      
       resource :balance
       resources :accounts
       resource :listing
       resource :general_book
       resource :general_ledger
+      resource :sheets do
+        member do
+          get :bilan
+        end
+      end
       resources :selections do
       member do
           post :lock

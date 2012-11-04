@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |c|
- # c.filter = {:wip=>true}
+#  c.filter = {:wip=>true}
 end
 
 
@@ -50,6 +50,25 @@ describe Compta::Listing do
     ]
   end
 
+  it 'detailed_list'do
+    @r = Compta::Rubrik.new(@p, 'Immobilisations incorporelles', :actif,  ['20', '201','205', '206', '207', '208', '-280'])
+    @r.detailed_list.should == [
+       ['20', 'Immobilisations incorporelles', 100.0],
+      ['201', 'Frais d\'établissement', 10.0],
+      ['206', 'Droit au bail', 0.0],
+      ['207', 'Fonds commercial', 0.0],
+      ['208', 'Autres immobilisations incorporelles', 0.0],
+      ['280', 'Amortissements des immobilisations incorporelles', -5.0]
+
+    ]
+  end
+
+  it 'complete_list' , wip:true do
+    @r = Compta::Rubrik.new(@p, 'Immobilisations incorporelles', :actif,  ['20', '201','205', '206', '207', '208', '-280'])
+    @r.complete_list.should == ['Immobilisations incorporelles'] +
+        @r.detailed_list + ['Total Immobilisations incorporelles', 105.0]
+  end
+
   it 'intègre automatiquement les sous comptes', wip:true do
     @r = Compta::Rubrik.new(@p, 'Immobilisations incorporelles', :actif, ['20%'])
     @r.lines.should == [
@@ -91,7 +110,7 @@ describe Compta::Listing do
       @r.previous_net.should == 0.0
     end
 
-    it 'previous net revoie la valeur demandée pour l exercice précedent', wip:true do
+    it 'previous net revoie la valeur demandée pour l exercice précedent' do
       @p.should_receive(:previous_period?).and_return true
       @p.should_receive(:previous_period).and_return @p2 = mock_model(Period)
       Compta::Rubrik.should_receive(:new).with(@p2,'Immobilisations incorporelles',  :actif, ['20', '201','205', '206', '207', '208', '-280'] ).and_return cr = double(Compta::Rubrik)

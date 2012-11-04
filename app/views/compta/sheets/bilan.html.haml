@@ -1,0 +1,11 @@
+.champ
+  %h3 Bilan
+
+.test
+  %table
+    %tbody
+      = render :partial=>'line', :collection=>@total1.lines
+      = render :partial=>'total_line', :object=>@total1.totals
+      = render :partial=>'line', :collection=>@total2.lines
+      = render :partial=>'total_line', :object=>@total2.totals
+      = render :partial=>'total_line', :object=>@total_general.totals

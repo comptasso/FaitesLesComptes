@@ -53,6 +53,16 @@ module Compta
       [@title, brut, amortissement, net]
     end
 
+    def detailed_list
+      lines.collect {|l| [l[0], l[1], l[2] -  l[3]]}
+    end
+
+    def complete_list
+      [ @title] + detailed_list + ["Total #{@title}", brut - amortissement]
+    end
+
+
+
     def brut
       @brut ||= lines.sum {|v| v[2]}
     end
