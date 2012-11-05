@@ -8,7 +8,8 @@ gem 'simple_form', "~> 2.0.1"
 
 gem 'sqlite3'
 gem 'acts_as_list'
-gem 'prawn_rails'
+gem 'prawn'
+# gem 'prawn_rails'
 gem 'haml-rails'
 
 

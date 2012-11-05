@@ -23,10 +23,10 @@ class Compta::SheetsController < Compta::ApplicationController
     @total2 = Compta::Rubriks.new(@period, 'Total II',  [a['mp'], a['marchandises'], a['avances'], a['clients'], a['autres'], a['valeurs'], a['dispo'], a['cca']])
     @total_general = Compta::Rubriks.new(@period, 'Total général (I + II)', [@total1, @total2])
 
-#    respond_to do |format|
-#        format.pdf  {send_data @sheet.render("lib/pdf_document/prawn_files/balance_sheet.pdf.prawn"),
-#          filename:"Bilan_#{@organism.title}.pdf"}
-#    end
+    respond_to do |format|
+        format.html
+        format.pdf  {}
+    end
   end
 
 end

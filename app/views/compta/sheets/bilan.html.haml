@@ -1,5 +1,8 @@
+=content_for :menu do
+  = icon_to 'pdf.png', bilan_compta_period_sheets_path(@period, :format=>:pdf)
+
 .champ
-  %h3 Bilan
+  %h3 Bilan simplifié
 
 .test
   %table
