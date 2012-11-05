@@ -25,7 +25,10 @@ class Compta::SheetsController < Compta::ApplicationController
 
     respond_to do |format|
         format.html
-        format.pdf  {}
+        format.pdf  {
+          
+
+        }
     end
   end
 
