@@ -1,0 +1,17 @@
+=content_for :menu do
+  = icon_to 'pdf.png', detail_compta_period_sheets_path(@period, :format=>:pdf)
+
+.champ
+  %h3 Liste des comptes et des soldes
+
+.row-fluid
+  .span12
+    %table
+      %thead
+        %tr
+          %th.span2 Numéro
+          %th.span6 Libellé
+          %th.span2= @period.exercice
+          %th.span2 Ex.précédent
+      %tbody
+        = render :partial=>'detail_line', :collection=>@detail_lines

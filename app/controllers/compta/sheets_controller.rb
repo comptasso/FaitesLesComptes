@@ -32,5 +32,16 @@ class Compta::SheetsController < Compta::ApplicationController
     end
   end
 
+  def detail
+    @detail_lines = @period.accounts.map  {|a| Compta::RubrikLine.new(@period, :actif, a.number)}
+
+#    if @period.previous_period?
+#      @p_accounts = @period.previous_period.accounts
+#    end
+
+
+
+  end
+
 end
 

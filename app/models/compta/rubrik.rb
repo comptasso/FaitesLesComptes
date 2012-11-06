@@ -25,7 +25,7 @@ module Compta
   #  de numéros de comptes ['20','201','206', '207', '208']
   #
   #  ON utilise quelques symboles pour identifier les comptes que l'on souhaite avoir
-  #  '20%' veut dire le compte 20 et tous ceux qui commencent par 20
+  #  '20%' veut dire le compte 20 et tous ceux qui commencent par 20. Ceci est par défaut
   #  '-280' signifie que le solde sera à prendre dans la seconde colonne (amortissements ou provisions)
   #  
   #

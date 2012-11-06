@@ -20,7 +20,16 @@
         %li= link_to('Compte', new_compta_period_listing_path(@period))
         %li= link_to('Grand Livre', new_compta_period_general_book_path(@period))
         %li= link_to('Journal Général', new_compta_period_general_ledger_path(@period, :format=>'pdf'))
+        
+
+  - unless @period.nil? && @pariod.accounts.nil?
+    %li.dropdown(class="#{controller.controller_name == "accounts" ? "active" : nil}")
+      %a{:href=>'#', :class=>'dropdown-toggle', :data=>{:toggle=>'dropdown'} }
+        DOCUMENTS
+        %b.caret
+      %ul.dropdown-menu
         %li= link_to('Bilan', bilan_compta_period_sheets_path(@period))
+        %li= link_to('Détail des comptes', detail_compta_period_sheets_path(@period))
 
   - unless @organism.nil? && @organism.periods.count <= 1
     %li.dropdown(class="#{controller.controller_name == "periods" ? "active" : nil}")

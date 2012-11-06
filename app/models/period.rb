@@ -103,7 +103,7 @@ class Period < ActiveRecord::Base
   # avec la date de cloture < au start_date de l'exercice actuel
   # renvoie lui même s'il n'y en a pas
   def previous_period
-    Period.first(:conditions=>['organism_id = ? AND close_date < ?', self.organism_id, self.start_date],
+    ::Period.first(:conditions=>['organism_id = ? AND close_date < ?', self.organism_id, self.start_date],
       :order=>'close_date DESC') || self
   end
 

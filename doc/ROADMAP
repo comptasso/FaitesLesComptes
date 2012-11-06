@@ -969,6 +969,7 @@ Nettoyer od_lines_controller ? et routes associées (fait-on de l'OD en zone sai
 La suppression d'une compta ne semble pas supprimer la table sqlite associée
 ------------------------------------Bugs ----------------------------------------------------
 Le modal form de balance ne redonne pas l'ensemble des comptes possibles mais seulement la partie de liste affichée
+Lors de l'installation sur un nouveau pc on a deux erreurs liées au fait que le répertoire ../db/development et ../db/organisms ne sont pas là. : faire un rake ou une création par défaut
 -------------------------------- Writing-------------------------------------------------------
 OK - Créer un scaffold writing pour la partie compta
 OK - writing_id sera être l'owner de la ligne
@@ -1097,6 +1098,7 @@ OK - Le grand livre devrait donner l'intitulé du compte et non seulement le num
 OK - Dans compta/account le mouvement de la période inclut à tort le solde initial
 Revoir la question du pointage des comptes sur les écritures à cheval
 Pour le compte bancaire, le compte ne reprend que CMNE donc on ne les distingue pas
+Il faudrait que 6 natures au moins soient créées lors de la création d'un organisme
 OK - Le solde des balances ne semble pas prendre en compte le dernier jour
 OK - Voir pour mettre les méthodes du module Sold dans account
 OK - Dans un new_bank_extract, les champs date ne sont pas dans l'exercice
@@ -1144,6 +1146,7 @@ Jasmine -commencé l'installation mais pas fini car je n'ai pas actuellement de 
 Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 
 --------------------Divers---------------------------------------------------------------------------
+Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
 Il faudrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base
 Nettoyer old_bootstrap.css en modifiant bootstrap.css
 Dans period, copy_accounts devrait être dans une transaction

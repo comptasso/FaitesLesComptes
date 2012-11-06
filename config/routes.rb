@@ -55,6 +55,7 @@ Faitesvoscomptes::Application.routes.draw do
       resource :sheets do
         member do
           get :bilan
+          get :detail
         end
       end
       resources :selections do
