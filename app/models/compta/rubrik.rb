@@ -33,7 +33,7 @@ module Compta
 
     attr_accessor :title
 
-    def initialize(period, title, sens, numeros)
+    def initialize(period, title, sens, *numeros)
       @period = period
       @title = title
       @numeros = numeros
@@ -45,30 +45,26 @@ module Compta
     # ou l'inverse du solde si le sens est contraire
     def lines
       # compact supprime les valeurs nil
-      @lines ||= @numeros.collect{|n| account_values(n) }.compact
+      @lines ||= Compta::RubrikParser.new(@period, @sens, *@numeros).rubrik_lines
     end
 
     # retourne la ligne de total de la rubrique
     def totals
-      [@title, brut, amortissement, net]
+      ["Total #{@title}", brut, amortissement, net, previous_net]
     end
 
-    def detailed_list
-      lines.collect {|l| [l[0], l[1], l[2] -  l[3]]}
-    end
-
+    
     def complete_list
-      [ @title] + detailed_list + ["Total #{@title}", brut - amortissement]
+      [@title] + lines + totals
     end
-
 
 
     def brut
-      @brut ||= lines.sum {|v| v[2]}
+      @brut ||= lines.sum(&:brut)
     end
 
     def amortissement
-      @amortissement ||= lines.sum {|v| v[3]}
+      @amortissement ||= lines.sum(&:amortissement)
     end
 
     alias depreciation amortissement
@@ -78,45 +74,14 @@ module Compta
     end
 
     def previous_net
-      return 0 unless @period.previous_period?
-      Compta::Rubrik.new(@period.previous_period, @title, @sens, @numeros).net
+      @previous_net ||= lines.sum(&:previous_net)
     end
 
-    protected
+    
 
-    # Construit une ligne du tableau des valeurs  
-    # reprenant le numero de compte, son titre, son solde dans la première ou la seconde
-    # colonne selon son sens.
-    # retourne nil si parse_number ne trouve pas de compte
-    #
-    # Dans le cas où il y a plusieurs comptes regroupés, prend en compte le premier numéro et son libéllé
-    def account_values(num)
-      unless (pn = parse_numbers(num)).empty?
-        s = pn.inject(0) {|t , acc| t + acc.sold_at(@period.close_date) }
-        r = (num =~ /^-.*/) ? [0, -s] : [s, 0]
+    
 
-        # prise en compte du sens
-        if @sens == :actif
-          r.collect! {|v| -v }
-        end
-        [pn.first.number, pn.first.title] + r
-      end
-    end
-
-    # parse_numbers retourne l'ensemble des comptes que l'on prend en compte
-    # quand on en cumule plusieurs
-    # si num est un simple numéro, renvoie le compte correspondant
-    # si num se termine par % fait une recherche de type like
-    # si num commence par - enlève le signe pour faire sa recherche
-    def parse_numbers(num)
-      case  num
-      when  /\d*%$/ then @period.accounts.where('number LIKE ?', num)
-      when  /^-(\d*)%$/ then @period.accounts.where('number LIKE ?', $1)
-      when /^-(\d*)/ then @period.accounts.find_all_by_number($1)
-      else
-         @period.accounts.find_all_by_number(num)
-      end
-    end
+    
   end
 
   

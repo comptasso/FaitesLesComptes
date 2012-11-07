@@ -12,22 +12,28 @@ module Compta
   #  sens permet d'indiquer débit ou credit, ou actif et passif de façon
   #  à gérer les signes.
   #
+  #  TODO transformer colon_1 en options qui peuvent être colon_2, debit, credit
+  #  correspondant au fait que le montant s'inscrit dans la colonne des amortissements
+  #  et provisions,
+  #  que la valeur n'est retenue que s'il est débiteur
+  #  que la valeur n'est retenue que s'il est créditeur
+  #
   class RubrikLine
 
     attr_reader :brut, :amortissement, :select_num, :account
 
-    def initialize(period, sens,  select_num, colon_1 = true )
+    def initialize(period, sens,  select_num, option= nil )
       @period = period
       @sens = sens
       @select_num = select_num
-      @colon_1 = colon_1
+      @option = option
       @account = period.accounts.find_by_number(@select_num)
-      set_value(@brut)
-   end
+      set_value
+    end
 
     
-   # renvoie le libellé du compte. Si le compte n'existe pas pour cet exercice
-   # essaye de trouver ce compte dans l'exercice précédent
+    # renvoie le libellé du compte. Si le compte n'existe pas pour cet exercice
+    # essaye de trouver ce compte dans l'exercice précédent
     def title
       return @account.title if @account
       @period.previous_period.accounts.find_by_number(@select_num).title rescue nil
@@ -35,16 +41,19 @@ module Compta
 
     # calcule les valeurs brut et amortissements pour le compte
     # retourne [0,0] s'il n'y a pas de compte
-    def set_value(brut = true)
+    def set_value
       if @account
-      s = @account.sold_at(@period.close_date)
-      # prise en compte de la colonne brut ou amortissement
-       r =  @colon_1 ? [s, 0] : [0, s]
-
-      # prise en compte du sens
-      if @sens == :actif || @sens == :debit
-        r.collect! {|v| -v }
-      end
+        s = @account.sold_at(@period.close_date)
+        # prise en compte de la colonne provision ou amortissement
+        r =  @option == :col2 ? [0, -s] : [s, 0]
+        # l'option debit ne prend la valeur que si le solde est négatid
+        r = [0,0] if @option == :debit && s > 0
+        # l'otpion crédit ne prend la valeur que si le solde est positif
+        r = [0,0] if @option == :credit && s < 0
+        # prise en compte du sens
+        if @sens == :actif || @sens == :debit
+          r.collect! {|v| -v }
+        end
 
       else
         r = [0,0]
