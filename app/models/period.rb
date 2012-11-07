@@ -128,6 +128,21 @@ class Period < ActiveRecord::Base
   def next_period?
     next_period == self ? false : true
   end
+
+  def two_period_account_numbers
+    if previous_period?
+      pp = previous_period
+      acc_list = pp.account_numbers
+      (acc_list + account_numbers).uniq!.sort
+    else
+      account_numbers
+    end
+  end
+
+  # renvoie la liste des numéros de comptes de l'exercice
+  def account_numbers
+    accounts.map {|acc| acc.number}
+  end
   
   # renvoie le compte (120) qui sert pour enregistrer le résultat positif de l'exercice
   # ou 129 pour enregistrer le résultat négatif
