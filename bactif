@@ -7,9 +7,37 @@
       :Frais de recherche et développement: 203 -2803
       :Concessions, brevets, licences: 205 -2805 -2806 -2905
       :Fonds commercial': 206 207 -2807 -2906 -2907
-      :Autres: 208 n-2808 -2809
+      :Autres: 208 -2808 -2809
       :Immobilisations incorporelles en cours: 232 -2932
-      :Avances et acomptes:
+      :Avances et acomptes: 237 238
     :Immobilisations corporelles:
       :Terrains: '31 32 33 34 35 -391 -392 -393 -394 -395'
-      :Marchandises: '37 -397'
+      :Constructions: 213 214 -2813 -2814
+      :Installations techniques, matériel et outillage: 215 -2815
+      :Immobilisations grevées de droit: '228'
+      :Autres: 202 218 -282 -292 -2818
+      :Immobilisations corporelles en cours: 231 232 -2931
+      :Avances et acomptes: 237 238
+    :Immobilisations financières:
+      :Participations: 251 257 261 266 -2961 -2966
+      :Créances rattachées à des participations: 267 268 269 -2967 -2968
+      :Autres immobilisations financières: 27 -297
+    :Stocks et encours:
+      :Matières premières et autres approvisionnements: 31 32 -391 -392
+      :En cours de production (biens et services): 33 34 -393 -394
+      :Produits intermédiaires et finis: 35 -395
+      :Marchandises: 37 -397
+      :Avances et acomptes versés sur commandes: '4091'
+    :Créances:
+      :Créances clients et comptes rattachés: 41 -491 -492
+      :Autres: 409 !4091 425 42 43 441 443D 444D 445D 448D 451D 455D 456D 458D 462 463 465 467D 4684 4687 478D -495 -496
+    :Valeurs mobilières de placement:
+      :Actions propres: 502 -59
+      :Autres titres: 50 !502 !509 -59
+      :Instruments de trésorerie: 52D
+      :Disponibilités: 51D !5181 !519 53 54
+      :Charges constatées d'avance: '486'
+    :Autres actifs:
+      :Charges à répartir sur plusiseurs exercices: '481'
+      :Primes de remboursement des emprûnts: '169'
+      :Ecart de conversion: '476'
