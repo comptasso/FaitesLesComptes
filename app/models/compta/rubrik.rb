@@ -33,7 +33,7 @@ module Compta
 
     attr_accessor :title
 
-    def initialize(period, title, sens, *numeros)
+    def initialize(period, title, sens, numeros)
       @period = period
       @title = title
       @numeros = numeros
@@ -45,7 +45,7 @@ module Compta
     # ou l'inverse du solde si le sens est contraire
     def lines
       # compact supprime les valeurs nil
-      @lines ||= Compta::RubrikParser.new(@period, @sens, *@numeros).rubrik_lines
+      @lines ||= Compta::RubrikParser.new(@period, @sens, @numeros).rubrik_lines
     end
 
     # retourne la ligne de total de la rubrique
