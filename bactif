@@ -1,0 +1,15 @@
+---
+  :title: Bilan Actif
+  :sens: :actif
+  :rubriks:
+    :Immobilisations incorporelles:
+      :Frais d'établissement: '201 -2801'
+      :Frais de recherche et développement: 203 -2803
+      :Concessions, brevets, licences: 205 -2805 -2806 -2905
+      :Fonds commercial': 206 207 -2807 -2906 -2907
+      :Autres: 208 n-2808 -2809
+      :Immobilisations incorporelles en cours: 232 -2932
+      :Avances et acomptes:
+    :Immobilisations corporelles:
+      :Terrains: '31 32 33 34 35 -391 -392 -393 -394 -395'
+      :Marchandises: '37 -397'
