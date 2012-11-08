@@ -7,8 +7,8 @@
 .test
   %table
     %tbody
-      = render :partial=>'line', :collection=>@total1.lines
-      = render :partial=>'total_line', :object=>@total1.totals
-      = render :partial=>'line', :collection=>@total2.lines
-      = render :partial=>'total_line', :object=>@total2.totals
+      - @total_general.collection.each do |tgl|
+        = render :partial=>'line', :collection=>tgl.lines
+        = render :partial=>'total_line', :object=>tgl.totals
       = render :partial=>'total_line', :object=>@total_general.totals
+

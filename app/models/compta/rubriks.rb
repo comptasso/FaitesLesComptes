@@ -9,6 +9,8 @@ module Compta
   # la méthode lines permet d'afficher les différentes lignes de la collection
   #
   class Rubriks
+    attr_reader :collection, :title
+
     def initialize(period, title, collection)
       @period = period
       @collection = collection
@@ -17,7 +19,7 @@ module Compta
 
     # la ligne de total avec son titre et ses 3 valeurs
     def totals
-      [@title, brut, amortissement, net]
+      [@title, brut, amortissement, net, previous_net]
     end
 
     # le montant brut total de la collection
@@ -37,14 +39,16 @@ module Compta
       @collection.sum(&:net)
     end
 
+    def previous_net
+      @collection.sum(&:previous_net)
+    end
+
     # retourne un array des différents éléments de la collection avec leurs totaux
     def lines
       @collection.collect {|r| r.totals}
     end
 
-#    def detailed_list
-#      @collection.map {|c| c.detailed_list}
-#    end
+
 
   end
 end

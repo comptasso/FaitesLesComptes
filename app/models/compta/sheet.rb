@@ -27,14 +27,30 @@ module Compta
   # d'imprimer les éléments en liste avec les détails des lignes (c'est donc une autre vue)
   #
   class Sheet
-# def initialize(period, template, total_name)
-#-      @period = period
-#-      @rubriks = YAML::load_file(File.join Rails.root, 'lib', 'templates', 'sheets', template)
-#-      @total_name = total_name
-#-      @tableau = []
-#-      @t1 = 0
-#-      @t2 = 0
-#-    end
+    
+attr_accessor :total_general
+
+ def initialize(period, template)
+      @period = period
+      @coll = YAML::load_file(File.join Rails.root, template)
+      parse_file
+      
+    end
+
+ def parse_file
+   sens = @coll[:sens]
+   sous_totaux = @coll[:rubriks].map do  |k,v|
+     puts "Inspection de v #{v.inspect}"
+     list = v.map do |l, num|
+       puts "clé : #{l}"
+       puts "numeros : #{num}"
+       Compta::Rubrik.new(@period, l, sens, num)
+     end
+     Compta::Rubriks.new(@period, k, list)
+   end
+
+   @total_general = Compta::Rubriks.new(@period, 'Total General', sous_totaux)
+ end
 #-
 #-    # retourne le tableau des lignes, avec les titres des trubriques et
 #-    # les sous totaux de ces rubriques.

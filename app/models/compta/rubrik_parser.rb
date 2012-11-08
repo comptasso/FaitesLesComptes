@@ -33,10 +33,10 @@ module Compta
     # deuxième étape, il crée les RubrikLine correspondantes
     # il fait ça pour les deux exercices (celui demandé et précédent s'il existe)
     
-    def initialize(period, sens, *args)
+    def initialize(period, sens, args)
       @period = period
       # TODO Les rejets doivent être à la fin
-      @numeros = args
+      @numeros = args.split
       @sens = sens
       @select_nums = []
       @col2_nums = []
