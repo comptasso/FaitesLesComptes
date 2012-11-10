@@ -7,8 +7,8 @@ var $, jQuery;
 // function utilisée pour disable ou able les différentes parties
 // du select 
 function change_radio() {
-    var rec = $('#nature_income_outcome_recettes'),
-        dep = $('#nature_income_outcome_depenses');
+    var rec = $('#nature_income_outcome_true'),
+        dep = $('#nature_income_outcome_false');
     if (dep.attr("checked") === 'checked') {
         $('optgroup[label=Dépenses] option').attr('disabled', false);
         $('optgroup[label=Recettes] option').attr('disabled', true);

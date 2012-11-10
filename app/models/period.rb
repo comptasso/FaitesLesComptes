@@ -466,7 +466,7 @@ class Period < ActiveRecord::Base
   private
 
   def create_plan
-    Utilities::PlanComptable.new.create_accounts(id, 'comptable_1.yml')
+    Utilities::PlanComptable.new.create_accounts(id, 'asso.yml')
   end
 
   def create_bank_and_cash_accounts
