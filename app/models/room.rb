@@ -60,6 +60,16 @@ class Room < ActiveRecord::Base
 
   alias enter connect_to_organism
 
+  # La méthode de classe enter est un raccouci pour find(id).enter
+  def self.enter(id)
+    r = Room.find_by_id(id)
+    if r
+      r.enter
+    else
+      raise ArgumentError, "Pas de Room avec #{id} pour id"
+    end
+  end
+
   # contrôle d'intégrité de la base
   # TODO sera à adapter pour d'autres adapters si nécessaire
   #
