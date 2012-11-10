@@ -19,9 +19,14 @@ describe Period do
       @p = @organism.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     end
     
-    it 'les comptes du fichier comptable.yml plus le compte bancaire et le compte de caisse' do
-      @p.should have(106).accounts
+    it 'les comptes du fichier asso.yml plus le compte bancaire et le compte de caisse' do
+      @p.should have(85).accounts
     end
+
+    it '10 natures de dépenses et 6 de recettes ont été créées' , wip:true do
+      @p.should have(16).natures 
+    end
+
   end
 
   context 'avec deux exercices' do 
@@ -60,7 +65,6 @@ describe Period do
 
     def error_messages
       @nat_error = "Des natures ne sont pas reliées à des comptes"
-     
       @open_error = 'Exercice déja fermé'
       @previous_error = "L'exercice précédent n'est pas fermé"
       @line_error = "Toutes les lignes d'écritures ne sont pas verrouillées"
@@ -69,10 +73,12 @@ describe Period do
     end
 
     before(:each) do
+
       error_messages
     end
 
     it 'p2010 should not be_closable' do
+      @p_2010.natures.create!(name:'nouvelle', income_outcome:false)
       @p_2010.closable?
       @p_2010.errors[:close].should == [@nat_error]
     end
@@ -82,7 +88,7 @@ describe Period do
       it 'un exercice déja fermé ne peut être fermé' do
         @p_2010.should_receive(:open).and_return(false)
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@open_error, @nat_error]
+        @p_2010.errors[:close].should == [@open_error]
       end
         
       it 'non fermeture de l exercice précédent' do
@@ -90,7 +96,7 @@ describe Period do
         @p_2010.should_receive(:previous_period).and_return(@a=double(Period))
         @a.should_receive(:open).and_return true
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@previous_error, @nat_error]
+        @p_2010.errors[:close].should == [@previous_error]
       end
 
       it 'des lignes non verrouillées' do
@@ -99,14 +105,14 @@ describe Period do
         @b.should_receive(:any?).at_least(1).times.and_return true
         @p_2010.compta_lines.unlocked.any?.should be_true
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@nat_error,@line_error]
+        @p_2010.errors[:close].should == [@line_error]
       end
 
       it 'doit avoir un exercice suivant' do
         @p_2010.should_receive(:next_period?).and_return(false)
         @p_2010.stub_chain(:compta_lines, :unlocked, :any?).and_return(false)
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@nat_error, @next_error]
+        @p_2010.errors[:close].should == [@next_error]
       end
 
       it 'doit avoir un livre d OD' do
@@ -115,7 +121,7 @@ describe Period do
         @a.should_receive(:find_by_type).with('OdBook').and_return nil
         @p_2010.stub_chain(:compta_lines, :unlocked, :any?).and_return(false)
         @p_2010.closable?
-        @p_2010.errors[:close].should == [@nat_error, @od_error]
+        @p_2010.errors[:close].should == [@od_error]
       end
 
 

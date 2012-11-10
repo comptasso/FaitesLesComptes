@@ -91,7 +91,7 @@ class Period < ActiveRecord::Base
   #
   # 
   #
-  after_create :create_plan, :create_bank_and_cash_accounts, :unless=> :previous_period?
+  after_create :create_plan, :create_bank_and_cash_accounts, :load_natures ,:unless=> :previous_period?
   after_create :copy_accounts, :copy_natures, :if=> :previous_period?
  
 
@@ -239,8 +239,8 @@ class Period < ActiveRecord::Base
       # pas de compta_line s'il n'y a pas de mouvement
       if h
         rcb << ComptaLine.new(account_id:next_acc.id,
-        debit:h[:debit],
-        credit:h[:credit])
+          debit:h[:debit],
+          credit:h[:credit])
       end
     end
     return rcb
@@ -492,18 +492,37 @@ class Period < ActiveRecord::Base
 
   # recopie les natures de l'exercice précédent 's'il y en a un)
   def copy_natures
-    return unless self.previous_period?
-    pp=self.previous_period
-    pp.natures.all.each do |n|
-      nn = {name: n.name, comment: n.comment, income_outcome: n.income_outcome} # on commence à construire le hash
-      if n.account_id # cas où il y avait un rattachement à un compte
-        previous_account=pp.accounts.find(n.account_id) # on identifie le compte de rattachement
-        nn[:account_id] = self.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
+       pp = self.previous_period
+      pp.natures.all.each do |n|
+        nn = {name: n.name, comment: n.comment, income_outcome: n.income_outcome} # on commence à construire le hash
+        if n.account_id # cas où il y avait un rattachement à un compte
+          previous_account=pp.accounts.find(n.account_id) # on identifie le compte de rattachement
+          nn[:account_id] = self.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
+        end
+        self.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
       end
-      self.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
+   end
+
+  # load natures est appelé lors de la création d'un premier exercice
+  # load_natures lit le fichier natures_asso.yml et crée les natures correspondantes
+  # retourne le nombre de natures
+  def load_natures
+    Rails.logger.info 'Création des natures'
+    t = load_file_natures("#{Rails.root}/app/assets/natures/natures_asso.yml")
+    t.each do |n|
+      a = accounts.find_by_number(n[:acc])
+      natures.create(name:n[:name], comment:n[:comment], account:a, income_outcome:n[:income_outcome])
     end
+    natures.count
   end
 
+  protected
+
+  def load_file_natures(source)
+    YAML::load_file(source)
+  rescue
+    "Erreur lors du chargement du fichier #{source}"
+  end
 
  
 end
