@@ -1135,6 +1135,10 @@ BOF - Dans le grand livre, les natures de devraient pas être indiquées (ni peu
 OK - Dans le grand livre, mettre le libellé du compte en clair et pas seulement le numéro
 Compte de résultat
 Rapprochement bancaire
+------------------------------- rédaction du tutorial -------------------------
+Revoir les champs des livres et ajouter abbréviation
+Revoir l'affichage des comptes bancaires (ajouter un champ ?)
+Le back dans l'affichage d'un contrôle de caisse que l'on vient de créer génère une erreur.
 
 
 ------------------Configuration ------------------------------

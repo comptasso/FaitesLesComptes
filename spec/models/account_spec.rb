@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
- # config.filter =  {wip:true}
+  config.filter =  {wip:true}
 end
 
 
@@ -13,8 +13,15 @@ describe Account do
   before(:each) do
     create_minimal_organism
   end
+
+  context  'méthode de classe' do
+
+    describe 'available', wip:true do 
+      Account.available('53').should == '5 301'
+    end
+  end
   
-   describe 'solde initial' , wip:true do
+   describe 'solde initial'  do
 
     before(:each) do
       @acc1 = Account.create!({number:'100', title:'Capital', period_id:@p.id})
