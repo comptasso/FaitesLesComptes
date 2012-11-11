@@ -2,6 +2,7 @@
 <%= simple_form_for([:admin,@organism,@book],  :html=> {class: 'form-horizontal'} ) do |f| %>
  
   <%= f.error_notification %>
+   <%= f.input :abbreviation %>
    <%= f.input :title %>
    <%= f.input :description, input_html: {rows: 4} %>
     <%= f.input :book_type, :label=>'Type',

@@ -140,13 +140,13 @@ class Organism < ActiveRecord::Base
   def create_default
     # les 3 livres
     logger.debug 'Création des livres par défaut'
-    income_books.create(:title=>'VE', :description=>'Recettes')
+    income_books.create(abbreviation:'VE', title:'Recettes', description:'Recettes')
     logger.debug  'création livre recettes'
-    outcome_books.create(title: 'AC', description: 'Dépenses')
+    outcome_books.create(abbreviation:'AC', title:'Dépenses', description:'Dépenses')
     logger.debug 'creation livre dépenses'
-    od_books.create(:title=>'OD', description: 'Op° Diverses')
+    od_books.create(abbreviation:'OD', :title=>'Opérations diverses', description:'Op° Diverses')
     logger.debug 'creation livre OD'
-    create_an_book(:title=>'AN', description:'A nouveau')
+    create_an_book(abbreviation:'AN', :title=>'A nouveau', description:'A nouveau')
 
     cashes.create(name:'La Caisse')
     logger.debug 'creation de la caisse par défaut'

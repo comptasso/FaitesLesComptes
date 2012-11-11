@@ -25,12 +25,8 @@ module OrganismFixture
   # crée un organisme, un income_book, un outcome_book, un exercice (period),
   # une nature. 
   def create_minimal_organism
-    # DatabaseCleaner ne semble pas toujours appelé correctement.
-    ActiveRecord::Base.establish_connection('assotest1')
-    if Organism.count > 0
-      Rails.logger.debug "Effacement de #{Organism.count} organismes avant de recréer organism_minimal"
-      Organism.find(:all).each {|o| o.destroy}
-    end
+    clean_test_base
+   
     @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1')
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
@@ -46,6 +42,15 @@ module OrganismFixture
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
     @income_account = @o.accounts.classe_7.first
     @outcome_account = @o.accounts.classe_6.first
+  end
+
+  # DatabaseCleaner ne semble pas toujours appelé correctement.
+  def clean_test_base
+     ActiveRecord::Base.establish_connection('assotest1')
+    if Organism.count > 0
+      Rails.logger.debug "Effacement de #{Organism.count} organismes avant de recréer organism_minimal"
+      Organism.find(:all).each {|o| o.destroy}
+    end
   end
 
   def create_in_out_writing(montant=99, payment='Virement')

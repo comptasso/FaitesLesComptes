@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121110091156) do
+ActiveRecord::Schema.define(:version => 20121111085713) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(:version => 20121110091156) do
     t.datetime "updated_at"
     t.integer  "organism_id"
     t.string   "type"
+    t.string   "abbreviation"
   end
 
   create_table "cash_controls", :force => true do |t|

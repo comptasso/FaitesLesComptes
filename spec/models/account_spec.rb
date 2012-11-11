@@ -3,12 +3,32 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
-  config.filter =  {wip:true}
+   config.filter =  {wip:true}
 end
 
 
 describe Account do   
-  include OrganismFixture 
+  include OrganismFixture
+  
+  
+  context  'méthode de classe' do
+
+    describe 'available', wip:true do
+
+      it 'retourne 5301 si pas encore de compte' do
+        Account.available('53').should == '5301'
+      end
+ 
+    it 'retourne 5301 si organisme est créé' do
+      @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1')
+      @o.accounts.count.should == 85
+      Account.available('53').should == '5301'
+    end
+
+    end
+  end
+
+  context 'avec un organisme' do
 
   before(:each) do
     create_minimal_organism
@@ -16,8 +36,18 @@ describe Account do
 
   context  'méthode de classe' do
 
-    describe 'available', wip:true do 
-      Account.available('53').should == '5 301'
+    describe 'available' do
+
+      it 'retourne 5301 si c est la première caisse' do
+        Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
+        @ar.stub(:empty?).and_return false
+        @ar.stub_chain(:last, :number).and_return '53'
+        Account.available('53').should == '5301'
+      end
+
+      it 'retourne 5302 avec minimal_organism' do
+        Account.available('53').should == '5302'
+      end
     end
   end
   
@@ -239,7 +269,7 @@ describe Account do
    
   end
 
- 
+  end
 
   
 end 

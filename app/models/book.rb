@@ -39,7 +39,7 @@ class Book < ActiveRecord::Base
 
   
   # TODO introduce uniqueness and scope
-  validates :title, presence: true
+  validates :title, :abbreviation, presence: true
   
 
   

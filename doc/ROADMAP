@@ -1136,10 +1136,11 @@ OK - Dans le grand livre, mettre le libellé du compte en clair et pas seulement
 Compte de résultat
 Rapprochement bancaire
 ------------------------------- rédaction du tutorial -------------------------
-Revoir les champs des livres et ajouter abbréviation
+OK - Revoir les champs des livres et ajouter abbréviation
 Revoir l'affichage des comptes bancaires (ajouter un champ ?)
 Le back dans l'affichage d'un contrôle de caisse que l'on vient de créer génère une erreur.
-
+Modifier le libellé de la caisse devrait aussi modifier celui du numéro de compte
+Problème avec le fait qu'il y a deux caisses du coup dans la liste déroulante
 
 ------------------Configuration ------------------------------
 OK - watchr

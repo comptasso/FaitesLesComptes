@@ -5,7 +5,8 @@ class ChangeColumnTypeCommentToCashes < ActiveRecord::Migration
   end
 
   def down
-    add_column :cashes, :comment, :string
     remove_column :cashes, :comment, :text 
+    add_column :cashes, :comment, :string
+    
   end
 end

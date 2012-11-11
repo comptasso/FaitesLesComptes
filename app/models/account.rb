@@ -91,7 +91,7 @@ class Account < ActiveRecord::Base
   # avec le nombre de chiffres donnés par précision
   def self.available(number)
     as = Account.where('number LIKE ?', "#{number}%").order('number ASC')
-    if as.empty?
+    if as.empty? || as.last.number == '53'
       return number + '01'
     else
       # il faut prendre le nombre trouvé, vérifier qu'il ne se termine

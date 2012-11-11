@@ -198,10 +198,10 @@ fr:
 
   activerecord:
     attributes:
-      
       archive:
         comment: Commentaire
       book:
+        abbreviation: Abbréviation
         title: Titre
       organism:
         title: Titre
@@ -236,7 +236,7 @@ fr:
       cash:
         name: 'Nom'
         comment: Commentaire
-      line:
+      compta_line:
         payment_mode: 'Paiement'
         bank_account: 'Compte'
         cash: 'Caisse'
