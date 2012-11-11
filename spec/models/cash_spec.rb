@@ -66,6 +66,11 @@ describe Cash do
   
 
   context 'annex methods' do
+
+    it 'modifier le name modifie le libellé du compte associé' , wip:true do
+      @c.update_attribute(:name, 'Secrétariat')
+      @c.current_account(@p).title.should == 'Caisse Secrétariat'
+    end
  
     it 'to_s return name' do
       @c.to_s.should == @c.name

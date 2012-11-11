@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
- # c.filter = {:wip=> true }
+  # c.filter = {:wip=> true }
 end
 
 describe BankAccount do
@@ -92,6 +92,8 @@ describe BankAccount do
   
   context 'annex methods' do
 
+    
+
 
     it 'to_s return name' do
       @ba.to_s.should == 'DX 123Z'
@@ -106,13 +108,13 @@ describe BankAccount do
       context 'without any bank extract' do
        
         it 'new_bank_extract returns a bank_extract'  do
-          @ba.new_bank_extract.should be_an_instance_of(BankExtract)
+          @ba.new_bank_extract(@p).should be_an_instance_of(BankExtract)
         end
       
         it 'a new bank_extract is prefilled with date and a zero sold' do
-          @be = @ba.new_bank_extract
+          @be = @ba.new_bank_extract(@p)
           @be.begin_sold.should == 0
-          @be.begin_date.should == Date.today.beginning_of_month
+          @be.begin_date.should == @p.start_date
           @be.end_date.should == @be.begin_date.end_of_month
         end
 
@@ -127,7 +129,7 @@ describe BankAccount do
         
         it 'a new bank_extract is prefilled with infos coming from last bank_extract'  do
           @ba.stub(:last_bank_extract).and_return @last_bank_extract
-          @be = @ba.new_bank_extract
+          @be = @ba.new_bank_extract(@p)
           @be.begin_sold.should == @last_bank_extract.end_sold
           @be.begin_date.should == (@last_bank_extract.end_date + 1.day)
           @be.end_date.should == @be.begin_date.end_of_month

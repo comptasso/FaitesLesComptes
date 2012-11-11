@@ -1140,7 +1140,7 @@ OK - Revoir les champs des livres et ajouter abbréviation
 Revoir l'affichage des comptes bancaires (ajouter un champ ?)
 Le back dans l'affichage d'un contrôle de caisse que l'on vient de créer génère une erreur.
 Modifier le libellé de la caisse devrait aussi modifier celui du numéro de compte
-Problème avec le fait qu'il y a deux caisses du coup dans la liste déroulante
+OK - Problème avec le fait qu'il y a deux caisses dans la liste déroulante : solution par suppression du compte 53 dans asso.yml
 
 ------------------Configuration ------------------------------
 OK - watchr
