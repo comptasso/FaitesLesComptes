@@ -26,6 +26,25 @@ module InOutWritingsHelper
       html.html_safe
     end
 
+
+    # Helper permettant de construire les options de counter_account pour le form
+# La classe OptionsForAssociationSelect est dans lib
+#
+# Le deuxième argument indique si on veut une liste de compte pour une recette ou pour
+# une dépense, la différence venant du traitement des chèques de recettes qui ne peuvent
+# être mis que sur le compte chèque à l'encaissement
+#
+def options_for_cca(period, io = false)
+ arr =  [OptionsForAssociationSelect.new('Banques', :list_bank_accounts, period),
+    OptionsForAssociationSelect.new('Caisses',:list_cash_accounts, period)]
+  if io == true
+     arr << OptionsForAssociationSelect.new('Chèques à l\'encaissement', :rem_check_accounts, period)
+  end
+  arr
+end
+
+
+
   end
 
 

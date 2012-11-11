@@ -95,8 +95,6 @@
   title: Chèque à encaisser
 - number: '51'
   title: Banque
-- number: '53'
-  title: Caisse
 - number: '58'
   title: Virements internes
 - number: '590'
