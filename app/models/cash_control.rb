@@ -89,8 +89,8 @@ class CashControl < ActiveRecord::Base
 
    def date_within_limit 
     if period
-    errors[:date] <<  'Pas dans l\'exercice' if self.date < min_date
-    errors[:date] << 'Pas dans l\'exercice' if self.date > max_date
+    errors[:date] <<  'Date interdite' if self.date < min_date
+    errors[:date] << 'Date impossible' if self.date > max_date
     else
       errors[:date] << 'Pas d\'exercice'
     end
