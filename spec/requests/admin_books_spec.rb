@@ -42,6 +42,7 @@ describe 'vue books index' do
 
     it 'remplir correctement le formulaire crée un nouveau livre' do
       visit new_admin_organism_book_path(@o)
+      fill_in 'book[abbreviation]', with:'RE'
       fill_in 'book[title]', :with=>'Recettes test'
       fill_in 'book[description]', :with=>'Un deuxième livre de recettes'
       choose 'Recettes'
@@ -55,7 +56,7 @@ describe 'vue books index' do
   describe 'index' do
 
      it 'dans la vue index,un livre peut être détruit', :js=>true do
-      @o.income_books.create!(:title=>'livre de test') 
+      @o.income_books.create!(:title=>'livre de test', :abbreviation=>'TE')
       @o.should have(5).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
       visit admin_organism_books_path(@o) 
