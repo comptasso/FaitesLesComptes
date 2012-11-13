@@ -466,7 +466,7 @@ class Period < ActiveRecord::Base
   private
 
   def create_plan
-    Utilities::PlanComptable.new.create_accounts(id, 'asso.yml')
+    Utilities::PlanComptable.new.create_accounts(id, 'asso/plan_comptable.yml')
   end
 
   def create_bank_and_cash_accounts
@@ -508,7 +508,7 @@ class Period < ActiveRecord::Base
   # retourne le nombre de natures
   def load_natures
     Rails.logger.info 'Création des natures'
-    t = load_file_natures("#{Rails.root}/app/assets/natures/natures_asso.yml")
+    t = load_file_natures("#{Rails.root}/app/assets/parametres/asso/natures.yml")
     t.each do |n|
       a = accounts.find_by_number(n[:acc])
       natures.create(name:n[:name], comment:n[:comment], account:a, income_outcome:n[:income_outcome])
