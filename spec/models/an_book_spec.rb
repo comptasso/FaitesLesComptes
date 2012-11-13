@@ -12,7 +12,7 @@ describe AnBook do
   let(:o) {stub_model(Organism, :find_period=>p2012)} 
 
     before(:each) do
-      @book = AnBook.new(organism_id:o.id, title:'AN', description:'A nouveau')
+      @book = AnBook.new(organism_id:o.id, abbreviation:'AN', title:'A nouveau', description:'Uniquement pour les écritures d\'à nouveau')
       @book.save!
       @book.stub(:organism).and_return(o)
       Writing.any_instance.stub(:book).and_return @book

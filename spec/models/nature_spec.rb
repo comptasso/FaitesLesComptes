@@ -53,9 +53,9 @@ describe Nature do
         end
 
         it 'can also have the same name with different periods' do
-          Nature.count.should == 2 # les deux de minimal organisme
+          Nature.count.should == 18 # les deux de minimal organisme
           @o.periods.create!(start_date: @p.start_date.years_since(1), close_date: @p.close_date.years_since(1))
-          Nature.count.should == 4 # avec la recopie automatique des natures par Period
+          Nature.count.should == 36 # avec la recopie automatique des natures par Period
         end
 
       end

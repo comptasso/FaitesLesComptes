@@ -53,13 +53,14 @@ describe 'admin/books/index' do
     context 'les titres des colonnes' do
       it "title row should show Titre" do
         render
-        page.find('th:first').text.should == 'Titre'
-        page.find('th:nth-child(2)').text.should == 'Description'
-         page.find('th:nth-child(3)').text.should =='Type de livre'
-        page.find('th:nth-child(4)').text.should == 'Créé le'
-        page.find('th:nth-child(5)').text.should == 'Mis à jour le'
+        page.find('th:first').text.should == 'Abbreviation'
+        page.find('th:nth-child(2)').text.should == 'Titre'
+        page.find('th:nth-child(3)').text.should == 'Description'
+         page.find('th:nth-child(4)').text.should =='Type de livre'
+        page.find('th:nth-child(5)').text.should == 'Créé le'
+        page.find('th:nth-child(6)').text.should == 'Mis à jour le'
        
-        page.find('th:nth-child(6)').text.should =='Actions'
+        page.find('th:nth-child(7)').text.should =='Actions'
       end
 
     end

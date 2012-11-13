@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 
-describe Compta::Sheet do
+describe Compta::Sheet do 
 include OrganismFixture
 
   before(:each) do
@@ -20,7 +20,7 @@ include OrganismFixture
       }
     })
   @od.writings.create!({date:Date.today, narration:'ligne de terrain',
-      :compta_lines_attributes=>{'0'=>{account_id:Account.find_by_number('21').id, credit:1200 },
+      :compta_lines_attributes=>{'0'=>{account_id:Account.find_by_number('201').id, credit:1200 },
         '1'=>{account_id:Account.find_by_number('47').id, debit:1200}
       }
     })

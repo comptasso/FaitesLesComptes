@@ -9,7 +9,7 @@ describe 'admin/destinations/index' do
     @destinations = []
     @destinations << mock_model(Destination, :organism_id=>1, name: 'dest1', comment: 'dest1 comment')
     @destinations << mock_model(Destination, :organism_id=>1, name: 'dest2', comment: 'dest2 comment')
-    @destinations.each {|d| d.stub_chain(:lines, :empty?).and_return(true) }
+    @destinations.each {|d| d.stub_chain(:compta_lines, :empty?).and_return(true) }
   end
 
   context 'mise en page générale' do 
@@ -45,7 +45,7 @@ describe 'admin/destinations/index' do
   # avant le stub_chain
   context 'test de l affichage de l icone destroy' do
     it "with a line, row should not propose supprimer" do
-      @destinations.first.stub_chain(:lines, :empty?).and_return(false)
+      @destinations.first.stub_chain(:compta_lines, :empty?).and_return(false)
       render
       page.should_not have_css('tbody tr:first img[src="/assets/icones/supprimer.png"]')
     end

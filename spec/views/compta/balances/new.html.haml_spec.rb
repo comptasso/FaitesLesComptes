@@ -16,7 +16,7 @@ describe 'compta/balances/new' do
 
   before(:each) do
     c = Compta::Balance.new(period_id:p.id, from_date:Date.today.beginning_of_year, to_date:Date.today.end_of_year)
-    c.stub(:accounts).and_return list_accounts
+    p.stub(:accounts).and_return list_accounts
     @accounts.stub(:order).and_return(@accounts)
     assign(:balance, c )
     assign(:period, p)

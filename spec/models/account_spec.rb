@@ -21,7 +21,6 @@ describe Account do
  
     it 'retourne 5301 si organisme est créé' do
       @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1')
-      @o.accounts.count.should == 85
       Account.available('53').should == '5301'
     end
 

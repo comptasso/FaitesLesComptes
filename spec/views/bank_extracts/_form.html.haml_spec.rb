@@ -1,12 +1,13 @@
 # coding: utf-8
 
-require 'spec_helper'
+require 'spec_helper' 
 
 describe "bank_extracts/new" do 
   include JcCapybara 
 
   before(:each) do
     @o = assign(:organism, stub_model(Organism))
+    @p = assign(:period, stub_model(Organism, start_date:Date.today.beginning_of_month, close_date:Date.today.end_of_year))
     @ba = assign(:bank_account, stub_model(BankAccount))
     @be = assign(:bank_extract, stub_model(BankExtract, :begin_date_picker=>'01/05/2012').as_new_record )
   end

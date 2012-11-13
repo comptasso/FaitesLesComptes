@@ -13,10 +13,9 @@ describe Compta::Sheet do
   before(:each) do
     create_minimal_organism
     @od.writings.create!({date:Date.today, narration:'ligne pour controller rubrik',
-        :compta_lines_attributes=>{'0'=>{account_id:Account.find_by_number('20').id, debit:100 },
-          '1'=>{account_id:Account.find_by_number('201').id, debit:10},
+        :compta_lines_attributes=>{'0'=>{account_id:Account.find_by_number('201').id, debit:100 },
           '2'=>{account_id:Account.find_by_number('280').id, credit:5},
-          '3'=>{account_id:Account.find_by_number('47').id, credit:105}
+          '3'=>{account_id:Account.find_by_number('47').id, credit:95}
         }
       })
     @od.writings.create!({date:Date.today, narration:'ligne de terrain',
@@ -26,13 +25,13 @@ describe Compta::Sheet do
       })
 
     # création de deux rubriques
-    @r1 = Compta::Rubrik.new(@p, 'Fonds commercial', :actif, ['206','207','-290'])
-    @r2 = Compta::Rubrik.new(@p, 'Autres', :actif, ['20', '201', '208', '-280'])
+    @r1 = Compta::Rubrik.new(@p, 'Fonds commercial', :actif, '206 207 -290')
+    @r2 = Compta::Rubrik.new(@p, 'Autres', :actif, '201 208 -280')
   end
 
   it 'vérif de @r1 et @r2' do
-    @r1.totals.should == ['Fonds commercial', 1200.0, 0, 1200.0]
-    @r2.totals.should == ['Autres', 110.0, 5.0, 105.0]
+    @r1.totals.should == ['Total Fonds commercial', 1200.0, 0, 1200.0, 0.0]
+    @r2.totals.should == ['Total Autres', 100.0, 5.0, 95.0, 0]
   end
   
   describe 'premier niveau' do
@@ -41,7 +40,7 @@ describe Compta::Sheet do
     end
     
     it 'brut' do
-      @level1.brut.should == 1310.0
+      @level1.brut.should == 1300.0
     end
     
     it 'amortissement' do
@@ -49,11 +48,11 @@ describe Compta::Sheet do
     end
     
     it 'net' do
-      @level1.net.should == 1305.0
+      @level1.net.should == 1295.0
     end
 
     it 'totals' do
-      @level1.totals.should == ['Total 1', 1310.0, 5.0, 1305.0]
+      @level1.totals.should == ['Total 1', 1300.0, 5.0, 1295.0, 0]
     end
 
     describe 'second niveau' do
@@ -64,7 +63,7 @@ describe Compta::Sheet do
       end
 
       it 'brut' do
-        @level2.brut.should == 2510
+        @level2.brut.should == 2500
       end
 
       it 'amortissement' do
@@ -72,16 +71,16 @@ describe Compta::Sheet do
       end
 
       it 'net' do
-        @level2.net.should == 2505.0
+        @level2.net.should == 2495.0
       end
 
       it 'totals' do
-        @level2.totals.should == ['Niveau 2', 2510.0, 5.0, 2505.0]
+        @level2.totals.should == ['Niveau 2', 2500.0, 5.0, 2495.0, 0.0]
       end
 
       it 'lines' do
-        @level2.lines.should == [['Total 1', 1310.0, 5.0, 1305.0],
-          ['Total 1bis', 1200.0, 0.0, 1200.0]]
+        @level2.lines.should == [['Total 1', 1300.0, 5.0, 1295.0, 0.0],
+          ['Total 1bis', 1200.0, 0.0, 1200.0, 0]]
       end
 
     end
