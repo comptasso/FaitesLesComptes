@@ -16,7 +16,7 @@ class Admin::OrganismsController < Admin::ApplicationController
     @room_organisms = rooms.select {|o| o != nil}
     unless rooms.select {|o| o == nil}.empty?
       list = current_user.rooms.select {|r| r.organism == nil}.collect {|r| r.database_name}.join(', ')
-      flash[:alert] = "Base de données non trouvées : #{list}"
+      flash[:alert] = "Base de données non trouvée ou organisme inexistant: #{list}"
     end
   end
 
@@ -72,6 +72,7 @@ class Admin::OrganismsController < Admin::ApplicationController
       if @room.save
         @organism.create_db
         @room.connect_to_organism # normalement inutile car create_db reste sur la toute nouvelle base
+        @organism.save
         session[:org_db]  = @organism.database_name
         redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
           Il vous faut maintenant créer un exercice pour cet organisme"
