@@ -28,7 +28,8 @@
         DOCUMENTS
         %b.caret
       %ul.dropdown-menu
-        %li= link_to('Bilan', bilan_compta_period_sheets_path(@period))
+        %li= link_to('Bilan', bilan_compta_period_sheets_path(@period,option:'compact'))
+        %li= link_to('Bilan détaillé', bilan_compta_period_sheets_path(@period, option:'detail'))
         %li= link_to('Détail des comptes', detail_compta_period_sheets_path(@period))
 
   - unless @organism.nil? && @organism.periods.count <= 1

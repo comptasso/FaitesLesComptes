@@ -37,8 +37,10 @@
   title: Autres immobilisations financières
 - number: '280'
   title: Amortissements des immobilisations incorporelles
-- number: '281'
-  title: Amortissements des immobilisations corporelles
+- number: '2812'
+  title: Amortissements des agencements et installations
+- number: '2815'
+  title: Amortissement des installations techniques, mat...
 - number: '290'
   title: Dépréciations des immobilisations incorporelles
 - number: '291'

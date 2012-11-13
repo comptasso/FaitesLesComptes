@@ -30,9 +30,11 @@ module Compta
     
 attr_accessor :total_general
 
- def initialize(period, template)
+ def initialize(period, template, page)
       @period = period
-      @coll = YAML::load_file(File.join Rails.root, 'app', 'assets', 'parametres', 'asso', template+'.yml')
+      
+      nomenclature = YAML::load_file(File.join Rails.root, 'app', 'assets', 'parametres', 'asso', template+'.yml')
+      @coll = nomenclature[page]
       parse_file
       
     end

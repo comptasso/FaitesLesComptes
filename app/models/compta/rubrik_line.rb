@@ -83,6 +83,10 @@ module Compta
       end
     end
 
+    def to_a
+      ["#{@select_num} - #{title}", @brut, @amortissement, net, previous_net]
+    end
+
     # affiche la RibrikLine
     def to_s
       "#{@select_num}; #{title}; #{@brut}; #{@amortissement}; #{net}; #{previous_net}"

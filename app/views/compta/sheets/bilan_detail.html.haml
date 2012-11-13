@@ -16,7 +16,7 @@
       %th.span2 Exercice précédent
     %tbody
       - @actif.collection.each do |tgl|
-        = render :partial=>'actif_line', :collection=>tgl.lines
+        = render :partial=>'detailed_actif_line', :collection=>tgl.collection
         = render :partial=>'actif_total_line', :object=>tgl.totals
       = render :partial=>'actif_total_line', :object=>@actif.totals
 
