@@ -50,7 +50,7 @@ module Compta
 
     # retourne la ligne de total de la rubrique
     def totals
-      ["Total #{@title}", brut, amortissement, net, previous_net]
+      [@title, brut, amortissement, net, previous_net]
     end
 
     

@@ -49,7 +49,7 @@ attr_accessor :total_general
      Compta::Rubriks.new(@period, k, list)
    end
 
-   @total_general = Compta::Rubriks.new(@period, 'Total General', sous_totaux)
+   @total_general = Compta::Rubriks.new(@period, @coll[:title] , sous_totaux)
  end
 #-
 #-    # retourne le tableau des lignes, avec les titres des trubriques et

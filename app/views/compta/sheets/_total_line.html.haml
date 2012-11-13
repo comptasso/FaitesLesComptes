@@ -1,6 +1,6 @@
-%tr
-  %td= total_line[0]
-  %td= debit_credit total_line[1]
-  %td= debit_credit total_line[2]
-  %td= debit_credit total_line[3]
-  %td= debit_credit total_line[4]
+%tr.total
+  %td Total #{total_line[0]}
+  %td.numeric= debit_credit total_line[1]
+  %td.numeric= debit_credit total_line[2]
+  %td.numeric= debit_credit total_line[3]
+  %td.numeric= debit_credit total_line[4]

@@ -2,10 +2,18 @@
   = icon_to 'pdf.png', bilan_compta_period_sheets_path(@period, :format=>:pdf)
 
 .champ
-  %h3 Bilan simplifié
+  %h3= @total_general.title
 
 .test
   %table
+    %thead
+      %th.span4 Rubrique
+      %th.span2 Brut
+      %th.span2
+        Amortissement
+        %br Provision
+      %th.span2 Net
+      %th.span2 Exercice précédent
     %tbody
       - @total_general.collection.each do |tgl|
         = render :partial=>'line', :collection=>tgl.lines

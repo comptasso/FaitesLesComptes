@@ -137,7 +137,7 @@ module Compta
     # mais avant les retire de la liste générale au cas où ils y seraient
     def add_debit_numbers(num)
       @select_nums.reject! {|n| n =~ /^#{num}\d*/}
-      @credit_nums += @numbers.select {|n| n =~ /^#{num}\d*/}
+      @debit_nums += @numbers.select {|n| n =~ /^#{num}\d*/}
     end
   end
 end
