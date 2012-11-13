@@ -17,6 +17,7 @@ class Compta::SelectionsController < Compta::ApplicationController
     end
   end
 
+  
 
   protected
 

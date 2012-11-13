@@ -32,7 +32,7 @@ attr_accessor :total_general
 
  def initialize(period, template)
       @period = period
-      @coll = YAML::load_file(File.join Rails.root, template)
+      @coll = YAML::load_file(File.join Rails.root, 'app', 'assets', 'parametres', 'asso', template+'.yml')
       parse_file
       
     end

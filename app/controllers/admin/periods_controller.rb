@@ -93,7 +93,7 @@ class Admin::PeriodsController < Admin::ApplicationController
     @period.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_organism_periods_url }
+      format.html { redirect_to admin_organism_periods_url(@organism) }
       format.json { head :ok }
     end
   end
@@ -121,7 +121,8 @@ class Admin::PeriodsController < Admin::ApplicationController
   # action de cloture d'un exercice
   def close
     if @period.close
-       redirect_to admin_organism_period_path(@period, @period) 
+       flash[:notice] = 'L\'exercice est maintenant clos'
+       redirect_to admin_organism_periods_url(@organism)
     else
      # construction du message d'alerte
      alert = "#{@period.exercice} ne peut être clos : \n"

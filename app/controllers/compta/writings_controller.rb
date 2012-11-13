@@ -54,6 +54,12 @@ class Compta::WritingsController < Compta::ApplicationController
     redirect_to compta_book_writings_url(@book)
   end
 
+  def all_lock
+
+    @book.writings.period(@period).unlocked.each {|w| w.lock}
+    redirect_to compta_book_writings_url(@book)
+  end
+
   # POST /writings
   # POST /writings.json
   def create

@@ -27,6 +27,6 @@
             %td
               %span= icon_to 'afficher.png', compta_period_selections_path(@period, :scope_condition=>'unlocked'), title:'Afficher la liste des écritures non verrouillées' if period.open && period.compta_lines.unlocked.any?
               %span= icon_to 'nb_verrouiller.png', close_admin_organism_period_path(@organism, period), :title=>period.errors[:close].first if period.open && !period.closable?
-              %span= icon_to 'verrouiller.png', close_admin_organism_period_path(@organism, period) if period.closable?
+              %span= icon_to 'verrouiller.png', close_admin_organism_period_path(@organism, period), confirm:"Cette opération est irreversible.\nAvez vous fait une sauvegarde ?" if period.closable?
               %span= icon_to 'supprimer.png', [:admin, @organism, period], confirm: 'Etes vous sur ?', method: :delete
 

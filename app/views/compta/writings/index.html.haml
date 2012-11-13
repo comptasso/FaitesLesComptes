@@ -1,5 +1,6 @@
 =content_for :menu do
   =icon_to 'nouveau.png', new_compta_book_writing_path(@book)
+  =icon_to 'verrouiller.png', all_lock_compta_book_writings_path(@book), :method=>:post, title:'Verrouiller toutes les écritures de ce livre' unless @book.writings.unlocked.empty?
 
 
 .champ

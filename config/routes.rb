@@ -43,6 +43,9 @@ Faitesvoscomptes::Application.routes.draw do
         member do
           post :lock
         end
+        collection do
+          post :all_lock
+        end
       end
     end
     resources :periods do
