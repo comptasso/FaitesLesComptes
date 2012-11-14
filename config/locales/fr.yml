@@ -323,6 +323,14 @@ fr:
       in_out_writing:
         create: Créer l'écriture
         update: Energistrer
-    
-        
+
+  activemodel:
+    errors:
+      messages:
+          blank: 'obligatoire'
+      models:
+        compta/nomenclature:
+          attributes:
+            resultat:
+              blank: Pas de document résultat
 

@@ -1147,6 +1147,16 @@ OK - Rajouter un cadenas dans compta->Journaux OD pour faire un verrouillage glo
  Il faudra revoir si la création et la cloôture d'un exercice fonctionnent bien.
 Le champ adress de bank_account n'est plus utilisé
 Vérifier qu'une restauration ne peut écraser une base existante (d'un autre User, du même User)
+----------------------------Nomenclature -----------------------------
+Une nomenclature doit vérifier que les comptes ne sont pris qu'une fois,
+doit vérifier qu'il y a au moins 3 documents
+qu'un compte D correspond un compte C
+que tous les comptes sont pris pour un actif et un passif
+que tous les comptes 6 et 7 sont pris pour un résultats
+Voir comment gérer les comptes 8 : un quatrième document ?
+doit être appelée pour contrôle avant chaque utilisation
+Message nécessaire lorsqu'on ajoute un compte
+
 
 ------------------Configuration ------------------------------
 OK - watchr
