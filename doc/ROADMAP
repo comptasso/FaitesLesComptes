@@ -1149,7 +1149,7 @@ Le champ adress de bank_account n'est plus utilisé
 Vérifier qu'une restauration ne peut écraser une base existante (d'un autre User, du même User)
 ----------------------------Nomenclature -----------------------------
 Une nomenclature doit vérifier que les comptes ne sont pris qu'une fois,
-doit vérifier qu'il y a au moins 3 documents
+doit vérifier qu'il y a au moins 5 documents, actif, passif et exploitation, financier et exceptionnel
 qu'un compte D correspond un compte C
 que tous les comptes sont pris pour un actif et un passif
 que tous les comptes 6 et 7 sont pris pour un résultats

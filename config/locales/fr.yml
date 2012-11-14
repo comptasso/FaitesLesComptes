@@ -331,6 +331,14 @@ fr:
       models:
         compta/nomenclature:
           attributes:
-            resultat:
-              blank: Pas de document résultat
+            exploitation:
+              blank: Pas de document Exploitation
+            financier:
+              blank: Pas de document Financier
+            exceptionnel:
+              blank: Pas de document Exceptionnel
+            actif:
+              blank: Pas de document Actif
+            passif:
+              blank: Pas de document Passif
 

@@ -53,23 +53,6 @@ attr_accessor :total_general
 
    @total_general = Compta::Rubriks.new(@period, @coll[:title] , sous_totaux)
  end
-#-
-#-    # retourne le tableau des lignes, avec les titres des trubriques et
-#-    # les sous totaux de ces rubriques.
-#-    # met à jour le total
-#-    def render
-#-      return @tableau unless @tableau.empty?
-#-      @t1 = @t2 = 0 # pour éviter qu'un double appel à render ne vienne cumuler les totaux
-#-      @rubriks.each do |rubrik|
-#-         r = Compta::Rubrik.new(@period, rubrik[:title], rubrik[:numeros])
-#-         @tableau << [rubrik[:title]]
-#-         @tableau += r.values
-#-         totals = r.totals
-#-         cumul(totals) # mise à jour des totaux
-#-         @tableau << totals
-#-       end
-#-       @tableau
-#-    end
 
     
   end

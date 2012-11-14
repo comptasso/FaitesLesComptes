@@ -27,8 +27,8 @@ module Compta
     class ListError < StandardError; end
 
    
-    # le RubrikParser s'initialise avec un exercice et un tableau de numéros
-    # par exemple '20', '-280'
+    # le RubrikParser s'initialise avec un exercice et une chaine de caractères
+    #  représentant une liste de numéros par exemple '20 -280'
     # première étape, il identifie les numéros de comptes dont il aura besoin
     # deuxième étape, il crée les RubrikLine correspondantes
     # il fait ça pour les deux exercices (celui demandé et précédent s'il existe)
@@ -55,6 +55,14 @@ module Compta
     def rubrik_lines
       @list.map {|l| Compta::RubrikLine.new(@period, @sens, l[:num], l[:option])}
     end
+    
+    # renvoie la liste des numéros de compte qui ont été retenus
+    # cela est utilisé dans nomenclature pour vérifier que tous les comptes sont repris
+    def list_numbers
+      @list.map {|l| l[:num]}
+    end
+
+
 
     protected
 
@@ -79,7 +87,7 @@ module Compta
       reorder_list!
       @list
     end
-# TODO gérer mettre protected aux méthodes concernées
+
 
     # check_list vérifie qu'aucun compte n'est inclut deux fois
     def check_list
