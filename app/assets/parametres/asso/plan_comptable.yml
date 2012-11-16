@@ -35,16 +35,20 @@
   title: Immobilisations en cours
 - number: '27'
   title: Autres immobilisations financières
-- number: '280'
-  title: Amortissements des immobilisations incorporelles
+- number: '2801'
+  title: Amortissements des frais d'établissements
+- number: '2803'
+  title: Amortissements des frais de recherche et développements
 - number: '2812'
   title: Amortissements des agencements et installations
 - number: '2815'
   title: Amortissement des installations techniques, mat...
-- number: '290'
+- number: '2906'
   title: Dépréciations des immobilisations incorporelles
-- number: '291'
-  title: Dépréciations des immobilisations corporelles
+- number: '2912'
+  title: Dépréciations des agencements et installations
+- number: '2915'
+  title: Dépréciation des installations techniques, mat...
 - number: '297'
   title: Provisions pour dépréciation des autres immobilisations financières
 - number: '37'
@@ -89,16 +93,16 @@
   title: Charges constatées d'avance
 - number: '487'
   title: Produits constatés d'avance
-- number: '49'
-  title: Provisions pour dépréciation des comptes de tiers
+- number: '491'
+  title: Provisions pour dépréciation des créances Usagers
+- number: '495'
+  title: Provision pour dépréciation des autres créances
 - number: '50'
   title: Valeurs mobiliéres de placement
 - number: '511'
   title: Chèque à encaisser
 - number: '51'
   title: Banque
-- number: '58'
-  title: Virements internes
 - number: '590'
   title: Provisions pour dépréciation des valeurs mobiliéres de placement
 - number: '60'

@@ -22,7 +22,7 @@
         :Créances usagers et comptes rattachés: 41 !419 -491 -492
         :Autres: 409 !4091 43D 44D 45D 46D 47D -495 -496
       :Disponibilités:
-        :Autres titres: 50 -590
+        :Autres titres: '50'
         :Banques: '51D'
         :Disponibilités: '53'
       :Autres actifs:
@@ -37,7 +37,7 @@
         :Fonds associatifs: '101'
         :Réserves: '106'
         :Report à nouveau: 110 119
-        :Résultat de l'exercice: 12 7 -6 
+        :Résultat de l'exercice: 12 7 -6 87 -86
         :Subventions d'investissement: '13'
         :Provisions réglementées: '14'
       :Provisions et fonds dédiés:

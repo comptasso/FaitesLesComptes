@@ -130,7 +130,7 @@ module Compta
     end
 
     def reject_numbers(num)
-      puts "le numéro rejeté est num"
+      Rails.logger.info "le numéro rejeté est #{num}"
       @select_nums.reject! {|n| n =~ /^#{num}\d*/}
     end
 

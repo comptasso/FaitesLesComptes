@@ -59,7 +59,7 @@
     :rubriks:
       :Produits d'exploitation:
         :Ventes de marchandises: '707'
-        :Production vendue (bien et services): '701 706'
+        :Production vendue (bien et services): '701 410'
         :Production immobilisée: '72'
         :Subvention d'exploitation: '74'
         :Reprises sur provisions, amortissements et transferts de charge: '781'
@@ -67,11 +67,11 @@
         :Autres produits: '75 !756'
       :Charges d'exploitation:
         :Achats de marchandises: '-60'
-        :Variation stocks de marchandises: '603'
-        :Autres achats et charges externes: '61'
-        :Impôts, taxes et versements assimilés: '63'
-        :Salaires et traitements: '641'
-        :Charges sociales: '645'
-        :Dotations aux amortissements et provisions: '681'
-        :Autres charges: '65'
+        :Variation stocks de marchandises: '-603'
+        :Autres achats et charges externes: '-61'
+        :Impôts, taxes et versements assimilés: '-63'
+        :Salaires et traitements: '-641'
+        :Charges sociales: '-645'
+        :Dotations aux amortissements et provisions: '-681'
+        :Autres charges: '-65'
     
