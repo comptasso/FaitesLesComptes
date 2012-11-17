@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |c|
-   # c.filter = {:wip=>true}
+ #   c.filter = {:wip=>true}
 end
 
 
@@ -22,7 +22,7 @@ describe Compta::Nomenclature do
 
   it 'sait renvoyer une page' do
     cn =  Compta::Nomenclature.new(@p, 'good.yml')
-    cn.document(:actif).should be_an_instance_of(Hash)
+    cn.actif.should be_an_instance_of(Hash)
   end
 
   context 'qui est  valide' do
@@ -39,18 +39,21 @@ describe Compta::Nomenclature do
     end
 
     it 'sait si tous les comptes C ont un compte D et vice vera' do
-      @cn.bilan_balanced.should be_true
+      @cn.should_receive(:bilan_balanced).and_return true
+      @cn.valid?
     end
 
     it 'le compte de resultats ne comprend que des comptes 6 et 7'  do 
-      @cn.resultats_67.should be_true
+      @cn.send(:resultats_67).should be_true
     end
 
     it 'la validation de resultats appelle 3 rubriques' do
+      @cn.stub(:rough_accounts_list, :actif).and_return(['20', '30'] )
+      @cn.stub(:rough_accounts_list, :passif).and_return(['10', '16'] )
       @cn.should_receive(:rough_accounts_list).with(:exploitation).and_return(['60', '70'] )
       @cn.should_receive(:rough_accounts_list).with(:financier).and_return(['66', '76'] )
       @cn.should_receive(:rough_accounts_list).with(:exceptionnel).and_return(['68', '78'] )
-      @cn.resultats_67
+      @cn.valid?
     end
 
     it 'non valide si un résultat comprend un compte autre que 6 ou 7' do
@@ -72,6 +75,11 @@ describe Compta::Nomenclature do
       @cn.valid?
       puts @cn.errors.messages 
     end
+
+    it 'une nomenclature sait créer un sheet', wip:true do
+      @cn.sheet(:exploitation).should be_an_instance_of(Compta::Sheet)
+  end
+
 
   end
 
@@ -136,13 +144,7 @@ describe Compta::Nomenclature do
     end
   end
 
-
-
-
-
-
-  it 'une nomenclature sait créer un sheet'
-
+  
 
 
 

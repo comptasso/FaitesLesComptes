@@ -3,10 +3,23 @@
 module Compta
   class Nomenclature
 
-    include ActiveModel::Validations 
+    include ActiveModel::Validations
 
+    attr_accessor :instructions
 
-    validates :exploitation, :actif, :passif, :presence=>true
+    # permet de définir l'ensemble des méthodes d'accès aux pages (:actif, :passif, ...
+    # voir juste dessous l'utilisation
+    def self.def_doc(*args)
+      args.each do |a|
+        define_method a do
+          instructions[a]
+      end
+    end
+    end
+    
+    def_doc :exploitation, :actif, :passif, :financier, :exceptionnel, :benevolat
+
+    validates :exploitation, :actif, :passif, :financier, :exceptionnel,:presence=>true
     validate :bilan_complete, :bilan_balanced, :resultats_67, :benevolat_8
 
 
@@ -17,29 +30,23 @@ module Compta
       else
         File.join Rails.root, 'app', 'assets', 'parametres', 'asso', yml_file 
       end
-      @documents = YAML::load_file(path)
-
+      @instructions = YAML::load_file(path)
+    #  def_document
     end
 
-    def document(page)
-      @documents[page]
-    end
 
-    def exploitation
-      @documents[:exploitation]
-    end
 
-    def actif
-      @documents[:actif]
-    end
-
-    def passif
-      @documents[:passif]
-    end
 
     def bilan_complete?
       bilan_complete.empty? ? true : false
     end
+
+    def sheet(doc)
+      Compta::Sheet.new(@period, @instructions[doc])
+    end
+
+
+    protected
 
     # vérifie que tous les comptes sont pris en compte pour l'établissement du bilan
     # à l'exception des comptes de classes 8 qui servent à valoriser le bénévolat
@@ -96,14 +103,14 @@ module Compta
 
     def benevolat_8
       unless  (r = rough_accounts_reject(rough_accounts_list(:benevolat), 8)).empty?
-          self.errors[:benevolat] << "La partie #{:benevolat.capitalize} comprend un compte étranger à la classe 8 : #{r.join(', ')}"
-          return false
+        self.errors[:benevolat] << "La partie #{:benevolat.capitalize} comprend un compte étranger à la classe 8 : #{r.join(', ')}"
+        return false
       end
       true
     end
 
 
-    protected
+    
 
     # vérifie que les numéros de comptes ne comprennent que les comptes qui commencent pas *args
     # par exemple include_only(%w(701, 603, 407), 6, 7)
@@ -129,25 +136,38 @@ module Compta
     # rough_accounts_list(:benevolat) renvoie par exemple %w(87 !870 870 86 !864 864)
     def rough_accounts_list(doc)
       list = ''
-      if @documents[doc]
-        @documents[doc][:rubriks].each {|k,v| v.each { |t, accs| list += ' ' + accs } }
-      end
+      @instructions[doc][:rubriks].each {|k,v| v.each { |t, accs| list += ' ' + accs } } if @instructions[doc]
       list.split
     end
 
     # doc est un symbol comme :actif, :passif, :exploitation, :financier, :exceptionnel et :benevolat
     def numbers_from_document(doc)
       numbers = []
-      if @documents[doc]
-        @documents[doc][:rubriks].each {|k,v| v.each { |t, accs| numbers += Compta::RubrikParser.new(@period, :actif, accs).list_numbers } }
+      if @instructions[doc]
+        @instructions[doc][:rubriks].each {|k,v| v.each { |t, accs| numbers += Compta::RubrikParser.new(@period, :actif, accs).list_numbers } }
       end
       numbers
     end
 
-    
+    def self.def_doc(*args)
+      args.each do |a|
+        instructions[a]
+      end
+    end
 
 
 
     
+    # Définit automatiquement l'ensemble des méthodes correspondant à chacun des documents
+    # figurant dans le fichier yml, par exemple def actif; @instructions[:actif]; end
+#    def def_document
+#      @instructions.each do |k,v|
+#      self.class.send(:define_method, k) do
+#           v
+#         end
+#      end
+#    end
+
   end
+
 end

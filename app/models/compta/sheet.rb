@@ -28,25 +28,23 @@ module Compta
   #
   class Sheet
     
-attr_accessor :total_general
+attr_accessor :total_general, :sens
 
- def initialize(period, template, page)
+ def initialize(period, page)
       @period = period
-      
-      nomenclature = YAML::load_file(File.join Rails.root, 'app', 'assets', 'parametres', 'asso', template+'.yml')
-      @coll = nomenclature[page]
+      @coll = page
       parse_file
       
     end
 
  def parse_file
-   sens = @coll[:sens]
+   @sens = @coll[:sens]
    sous_totaux = @coll[:rubriks].map do  |k,v|
      puts "Inspection de v #{v.inspect}"
      list = v.map do |l, num|
        puts "clé : #{l}"
        puts "numeros : #{num}"
-       Compta::Rubrik.new(@period, l, sens, num)
+       Compta::Rubrik.new(@period, l, @sens, num)
      end
      Compta::Rubriks.new(@period, k, list)
    end
