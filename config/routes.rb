@@ -51,6 +51,7 @@ Faitesvoscomptes::Application.routes.draw do
     resources :periods do
       
       resource :balance
+      resource :nomenclature
       resources :accounts
       resource :listing
       resource :general_book

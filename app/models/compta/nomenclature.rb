@@ -42,7 +42,12 @@ module Compta
     end
 
     def sheet(doc)
-      Compta::Sheet.new(@period, @instructions[doc], doc)
+      Compta::Sheet.new(@period, @instructions[doc], doc) if @instructions[doc]
+    end
+
+    # renvoie la liste des pages existant dans cette nomenclature
+    def pages
+      @instructions.map {|k, v| k}
     end
 
 
@@ -149,25 +154,7 @@ module Compta
       numbers
     end
 
-    def self.def_doc(*args)
-      args.each do |a|
-        instructions[a]
-      end
-    end
-
-
-
     
-    # Définit automatiquement l'ensemble des méthodes correspondant à chacun des documents
-    # figurant dans le fichier yml, par exemple def actif; @instructions[:actif]; end
-#    def def_document
-#      @instructions.each do |k,v|
-#      self.class.send(:define_method, k) do
-#           v
-#         end
-#      end
-#    end
-
   end
 
 end

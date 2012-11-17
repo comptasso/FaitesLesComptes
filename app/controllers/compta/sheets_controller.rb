@@ -25,7 +25,7 @@ class Compta::SheetsController < Compta::ApplicationController
       end
     else
       flash[:alert] = "Le document demandé #{params[:id]} n'a pas été trouvé "
-      redirect_to :back
+      redirect_to compta_period_nomenclature_url(@period)
     end
   end
 
