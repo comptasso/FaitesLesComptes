@@ -7,7 +7,7 @@ module Compta
 
 
     validates :exploitation, :actif, :passif, :presence=>true
-    validate :bilan_complete, :bilan_balanced, :resultats_67
+    validate :bilan_complete, :bilan_balanced, :resultats_67, :benevolat_8
 
 
     def initialize(period, yml_file)
@@ -60,9 +60,9 @@ module Compta
     # Ajoute une erreur à :bilan si c'est le cas avec comme message la liste des comptes
     # qui n'ont pas de correspondant
     def bilan_balanced
-      numbers = ''
-      numbers += rough_accounts_list(:actif) + rough_accounts_list(:passif) 
-      array_numbers = numbers.split
+      
+      array_numbers = rough_accounts_list(:actif) + rough_accounts_list(:passif)
+      
       # maintenant on crée une liste des comptes D et une liste des comptes C
       numbers_d = array_numbers.map {|n| $1 if n =~ /^(\d*)D$/}.compact.sort
       numbers_c = array_numbers.map {|n| $1 if n =~ /^(\d*)C$/}.compact.sort
@@ -82,15 +82,26 @@ module Compta
 
     # sert à contrôler que les différentes rubriques de resultats n'utilisent que des comptes 6 et 7
     def resultats_67
-      nf = numbers_from_document(:exploitation)
-      r = include_only(nf, 6, 7)
-      unless r.empty?
-        self.errors[:exploitation] << "La partie Exploitation comprend un compte étranger aux classes 6 et 7 : #{r.join(', ')}"
-        return false
-      else
-        return true
+      retour = true
+      [:exploitation, :financier, :exceptionnel].each do |partie|
+        r = rough_accounts_reject(rough_accounts_list(partie), 6, 7)
+        unless r.empty?
+          self.errors[partie] << "La partie #{partie.capitalize} comprend un compte étranger aux classes 6 et 7 : #{r.join(', ')}"
+          retour = false
+        end
       end
+      retour
     end
+
+
+    def benevolat_8
+      unless  (r = rough_accounts_reject(rough_accounts_list(:benevolat), 8)).empty?
+          self.errors[:benevolat] << "La partie #{:benevolat.capitalize} comprend un compte étranger à la classe 8 : #{r.join(', ')}"
+          return false
+      end
+      true
+    end
+
 
     protected
 
@@ -103,20 +114,33 @@ module Compta
       list_numbers
     end
 
-
-
-    
-
-    def rough_accounts_list(doc)
-      list = ''
-      @documents[doc][:rubriks].each {|k,v| v.each { |t, accs| list += ' ' + accs } }
-      list
+    # A partir d'un array numbers ne garde que les nombres commencent par
+    # les chiffres donnés par args.
+    # Utilisé par resultat_67 et benevolat_8
+    # Exemple : rough_include_select
+    def rough_accounts_reject(array_numbers, *args)
+      args.each do |a|
+        array_numbers.select! {|n| n !~ /^[-!]?#{a}\d*/}
+      end
+      array_numbers
     end
 
-    # doc est un symbol comme :actif ou :passif
+    # rencoie la liste brute des informations de comptes repris dans la partie doc
+    # rough_accounts_list(:benevolat) renvoie par exemple %w(87 !870 870 86 !864 864)
+    def rough_accounts_list(doc)
+      list = ''
+      if @documents[doc]
+        @documents[doc][:rubriks].each {|k,v| v.each { |t, accs| list += ' ' + accs } }
+      end
+      list.split
+    end
+
+    # doc est un symbol comme :actif, :passif, :exploitation, :financier, :exceptionnel et :benevolat
     def numbers_from_document(doc)
       numbers = []
-      @documents[doc][:rubriks].each {|k,v| v.each { |t, accs| numbers += Compta::RubrikParser.new(@period, :actif, accs).list_numbers } }
+      if @documents[doc]
+        @documents[doc][:rubriks].each {|k,v| v.each { |t, accs| numbers += Compta::RubrikParser.new(@period, :actif, accs).list_numbers } }
+      end
       numbers
     end
 

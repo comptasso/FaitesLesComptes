@@ -54,7 +54,7 @@
         :Autres: 43C 44C 45C 46C 47C
 
   :exploitation:
-    :title: Compte de Résultats
+    :title: Résultat dexploitation
     :sens: :passif
     :rubriks:
       :Produits d'exploitation:
@@ -75,3 +75,37 @@
         :Dotations aux amortissements et provisions: '681'
         :Autres charges: '65'
     
+  :financier:
+    :title: Résultat financier
+    :sens: :passif
+    :rubriks:
+      :Produits financiers:
+        :Produits financiers: '76'
+        :Reprises sur provisions financières: '786'
+      :Charges financières:
+        :Charges financières: '-66'
+        :Dotations aux provisions financières: '686'
+
+  :exceptionnel:
+    :title: Résultat exceptionnel
+    :sens: passif
+    :rubriks:
+      :Produits exceptionnels:
+        :Produits exceptionnels: '77'
+        :Reprises sur provisions exceptionnelles: '787'
+        :Report des ressources non utilisées: '789'
+      :Charges exceptionnelles:
+        :Charges exceptionnels: '-67'
+        :Dotations aux provisions exceptionnelles: '-687'
+        :Engagements à réaliser: '-689'
+
+  :benevolat:
+    :title: Evaluation des contributions volontaires en nature
+    :sens: passif
+    :rubriks:
+       :Produits:
+         :Bénévolat: '870'
+         :Autres contributions en nature: '87 !870'
+       :Charges:
+         :Bénévolat: '864'
+         :Autres charges en nature: '86 !864'

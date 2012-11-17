@@ -129,6 +129,8 @@
   title: Dotations aux amortissements et aux provisions - Charges financiéres
 - number: '687'
   title: Dotations aux amortissements et aux provisions - Charges exceptionnelles
+- number: '689'
+  title: Engagements à réaliser sur ressources affectées
 - number: '695'
   title: Impôts sur les bénéfices
 - number: '701'
@@ -163,9 +165,15 @@
   title: Reprises sur provisions pour risques (financiers)
 - number: '787'
   title: Reprises sur provisions (exceptionnel)
+- number: '789'
+  title: Report des ressources non utilisées des exercices antérieurs
 - number: '79'
   title: Transferts de charges
+- number: '864'
+  title: Personnel bénévole
 - number: '86'
-  title: Emploi des contributions volontaires en nature
+  title: Autres emplois en nature
+- number: '870'
+  title: 'Bénévolat'
 - number: '87'
-  title: Contribution volontaire en nature
+  title: Prestations et dons en nature

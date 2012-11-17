@@ -46,6 +46,28 @@ describe Compta::Nomenclature do
       @cn.resultats_67.should be_true
     end
 
+    it 'la validation de resultats appelle 3 rubriques' do
+      @cn.should_receive(:rough_accounts_list).with(:exploitation).and_return(['60', '70'] )
+      @cn.should_receive(:rough_accounts_list).with(:financier).and_return(['66', '76'] )
+      @cn.should_receive(:rough_accounts_list).with(:exceptionnel).and_return(['68', '78'] )
+      @cn.resultats_67
+    end
+
+    it 'non valide si un résultat comprend un compte autre que 6 ou 7' do
+      @cn.stub(:rough_accounts_list, :exploitation).and_return(['60', '70', '401'] )
+      @cn.should_not be_valid
+    end
+
+    it 'la partie benevolat ne comporte que des comptes 8' do
+      @cn.should_receive(:benevolat_8).and_return true
+      @cn.valid?
+    end
+
+    it 'un compte autre que 8 dans benevolat rend invalide' do
+      @cn.stub(:rough_accounts_list, :benevolat).and_return(%w(80 !807 86 !860 45))
+      @cn.should_not be_valid
+    end
+
     it 'visualisation des messages' do  
       @cn.valid?
       puts @cn.errors.messages 
@@ -72,16 +94,9 @@ describe Compta::Nomenclature do
       @cn.errors.messages[:passif].should == ['Pas de document Passif']
     end
 
-    it 'tous les comptes sont pris en compte pour actif et passif' do
-      pending
-    end
-
-
-
-
   end
 
-  context 'tous les comptes ne sont pas repris (43D sans 43C)' do
+  context 'tous les comptes ne sont pas repris' do
     
     it 'cn bilan_complete return false' do
       @cn = Compta::Nomenclature.new(@p, 'one_account_missing.yml')
@@ -108,16 +123,17 @@ describe Compta::Nomenclature do
 
   end
 
-  context 'un compte de resultat a un compte 4' , wip:true do
+  context 'un compte de resultat avec un compte 4'  do
     before(:each) {@cnf = Compta::Nomenclature.new(@p, 'resultats_with_4.yml')}
+
+    it 'n est pas valide' do
+      @cnf.should_not be_valid
+    end
 
     it 'identifie le numero de compte' do
       @cnf.valid?
-      puts @cnf.errors.messages
       @cnf.errors.messages[:exploitation].should ==  ['La partie Exploitation comprend un compte étranger aux classes 6 et 7 : 410']
     end
-
-
   end
 
 
