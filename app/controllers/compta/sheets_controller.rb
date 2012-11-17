@@ -9,8 +9,8 @@ class Compta::SheetsController < Compta::ApplicationController
     n = Compta::Nomenclature.new(@period, 'nomenclature.yml')
     @docs = params[:collection].map {|c| n.sheet(c.to_sym)}
     respond_to do |format|
-        format.html 
-        format.pdf
+      format.html
+      format.pdf
     end
   end
 
@@ -18,24 +18,32 @@ class Compta::SheetsController < Compta::ApplicationController
   def show
     @nomenclature = Compta::Nomenclature.new(@period, 'nomenclature.yml')
     @doc = @nomenclature.sheet(params[:id].to_sym)
-    @option = params[:option]
     if @doc
-    respond_to do |format|
+      respond_to do |format|
         format.html 
         format.pdf
-    end
+      end
     else
-      flash[:error] = "Le document demandé #{params[:id]} n'a pas été trouvé "
+      flash[:alert] = "Le document demandé #{params[:id]} n'a pas été trouvé "
       redirect_to :back
     end
   end
 
-  def bilan
-     redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:actif, :passif])
+  def bilans
+    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:actif, :passif])
   end
 
   def resultats
-     redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:exploitation, :financier, :exceptionnel])
+    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:exploitation, :financier, :exceptionnel])
+  end
+
+
+  # pluriel volontaire pour le distinguer de show/benvolat qui montre le détail de la page benevolat
+  # tandis qu'ici on veut l'action index, mais avec une collection d'un seul élément
+  # ce qui perturbe le routage
+  # Ici avec sheets/benevolats, on est bien différent de sheets/benevolat qui est routée sur show
+  def benevolats
+    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:benevolat])
   end
 
 

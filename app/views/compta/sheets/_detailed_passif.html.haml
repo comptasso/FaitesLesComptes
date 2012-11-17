@@ -1,0 +1,11 @@
+.passif
+  %table.pc100
+    %thead
+      %th.pc80 Rubrique
+      %th.pc10 Montant
+      %th.pc10 Exercice précédent
+    %tbody
+      - detailed_passif.collection.each do |tgl|
+        = render :partial=>'detailed_passif_line', :collection=>tgl.collection
+        = render :partial=>'passif_total_line', :object=>tgl.totals
+      = render :partial=>'passif_total_line', :object=>detailed_passif.totals

@@ -1,0 +1,12 @@
+=content_for :menu do
+  = icon_to 'pdf.png', compta_period_sheets_path(params, :format=>:pdf)
+
+
+- @docs.each do |doc|
+  - if doc.sens  == :actif
+    =render :partial=>'actif', :object=>doc
+  -else
+    =render :partial=>'passif', :object=>doc
+
+
+

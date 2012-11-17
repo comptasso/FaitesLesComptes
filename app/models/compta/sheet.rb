@@ -28,11 +28,12 @@ module Compta
   #
   class Sheet
     
-attr_accessor :total_general, :sens
+attr_accessor :total_general, :sens, :doc
 
- def initialize(period, page)
+ def initialize(period, page, doc)
       @period = period
       @coll = page
+      @doc = doc
       parse_file
       
     end

@@ -1144,7 +1144,7 @@ OK - Problème avec le fait qu'il y a deux caisses dans la liste déroulante : s
 Mise en page des tables dans pointage de compte
 Mettre un solde dans la balance
 OK - Rajouter un cadenas dans compta->Journaux OD pour faire un verrouillage global
- Il faudra revoir si la création et la cloôture d'un exercice fonctionnent bien.
+ Il faudra revoir si la création et la clôture d'un exercice fonctionnent bien.
 Le champ adress de bank_account n'est plus utilisé
 Vérifier qu'une restauration ne peut écraser une base existante (d'un autre User, du même User)
 ----------------------------Nomenclature -----------------------------

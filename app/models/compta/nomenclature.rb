@@ -42,7 +42,7 @@ module Compta
     end
 
     def sheet(doc)
-      Compta::Sheet.new(@period, @instructions[doc])
+      Compta::Sheet.new(@period, @instructions[doc], doc)
     end
 
 

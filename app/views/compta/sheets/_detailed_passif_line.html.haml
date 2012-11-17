@@ -1,0 +1,4 @@
+- if detailed_passif_line.resultat?
+  = render :partial=>'passif_line', :object=>totals_result_with_account(detailed_passif_line)
+- else
+  = render :partial=>'passif_line', :collection=>detailed_passif_line.lines.map {|l| l.to_a }

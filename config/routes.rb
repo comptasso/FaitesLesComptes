@@ -57,8 +57,9 @@ Faitesvoscomptes::Application.routes.draw do
       resource :general_ledger
       resources :sheets do
         collection do
-          get :bilan
+          get :bilans
           get :resultats
+          get :benevolats
           get :detail
         end
       end

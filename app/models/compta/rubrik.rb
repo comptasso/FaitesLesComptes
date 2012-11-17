@@ -40,6 +40,13 @@ module Compta
       @sens = sens
     end
 
+    # indique si la rubrique est le résultat de l'exercice (le compte 12).
+    # ceci pour ne pas afficher le détail de tous les comptes 6 et 7
+    # lorsque l'on affiche le détail du passif
+    def resultat?
+      '12'.in?(@numeros)
+    end
+
     # pour chacun des comptes construit un tableau
     # avec le numéro de compte, l'intitulé, le solde dans le sens demandé
     # ou l'inverse du solde si le sens est contraire
@@ -53,7 +60,7 @@ module Compta
       [@title, brut, amortissement, net, previous_net]
     end
 
-    
+
     def complete_list
       [@title] + lines + totals
     end

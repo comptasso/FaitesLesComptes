@@ -1,0 +1,11 @@
+=content_for :menu do
+  = icon_to 'retour.png', :back
+
+.champ
+  %h3= @doc.total_general.title
+
+.row-fluid
+  -if @doc.sens == :actif
+    =render :partial=>'detailed_actif', :object=>@doc.total_general
+  -else
+    =render :partial=>'detailed_passif', :object=>@doc.total_general
