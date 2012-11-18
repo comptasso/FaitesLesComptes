@@ -26,7 +26,8 @@ module Compta
 
     class ListError < StandardError; end
 
-   
+    attr_reader :list
+
     # le RubrikParser s'initialise avec un exercice et une chaine de caractères
     #  représentant une liste de numéros par exemple '20 -280'
     # première étape, il identifie les numéros de comptes dont il aura besoin
@@ -64,6 +65,8 @@ module Compta
 
 
 
+
+
     protected
 
     def set_numbers
@@ -89,7 +92,9 @@ module Compta
     end
 
 
-    # check_list vérifie qu'aucun compte n'est inclut deux fois
+    # check_list vérifie qu'aucun compte n'est inclut deux fois.
+    # pour déja éviter une erreur détectable à ce stade : genre 641 641
+    # mais normalement les précautions prises dans les add_numbers devraient suffire
     def check_list
       list_num = @list.map {|l| l[:num]}
       raise ListError, 'un numéro apparait en double' if list_num != list_num.uniq
@@ -129,9 +134,11 @@ module Compta
       @col2_nums += @numbers.select {|n| n =~ /^#{num}\d*/}
     end
 
+    # reject doit rejeter que ce soit de la première colonne ou de la seconde
     def reject_numbers(num)
       Rails.logger.info "le numéro rejeté est #{num}"
       @select_nums.reject! {|n| n =~ /^#{num}\d*/}
+      @col2_nums.reject! {|n| n =~ /^#{num}\d*/}
     end
 
     # ajoute les numéros à la liste des numéros à logique de crédit

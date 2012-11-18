@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |c|
- #   c.filter = {:wip=>true}
+  # c.filter = {:wip=>true}
 end
 
 
@@ -30,7 +30,10 @@ describe Compta::Nomenclature do
       @cn =  Compta::Nomenclature.new(@p, 'good.yml')
     end
 
-    it 'valid? renvoie true' do
+    it 'répond true à valid?' do
+      @cn.valid?
+      puts @cn.errors.messages
+
       @cn.should be_valid
     end
 
@@ -42,6 +45,8 @@ describe Compta::Nomenclature do
       @cn.should_receive(:bilan_balanced).and_return true
       @cn.valid?
     end
+
+
 
     it 'le compte de resultats ne comprend que des comptes 6 et 7'  do 
       @cn.send(:resultats_67).should be_true
@@ -76,7 +81,7 @@ describe Compta::Nomenclature do
       puts @cn.errors.messages 
     end
 
-    it 'une nomenclature sait créer un sheet', wip:true do
+    it 'une nomenclature sait créer un sheet' do
       @cn.sheet(:exploitation).should be_an_instance_of(Compta::Sheet)
   end
 
@@ -89,7 +94,7 @@ describe Compta::Nomenclature do
       @cn =  Compta::Nomenclature.new(@p, 'bad.yml')
     end
 
-    it 'indique ses erreurs par des messages' do
+    it 'indique ses erreurs par des messages' do 
       @cn.valid?
       @cn.errors.messages[:exploitation].should == ['Pas de document Exploitation']
     end
@@ -142,6 +147,36 @@ describe Compta::Nomenclature do
       @cnf.valid?
       @cnf.errors.messages[:exploitation].should ==  ['La partie Exploitation comprend un compte étranger aux classes 6 et 7 : 410']
     end
+  end
+
+  context 'vérification des doublons' , wip:true do 
+    before(:each) {@cnf = Compta::Nomenclature.new(@p, 'doublons.yml')}
+
+    it 'n est pas valide' do
+      @cnf.should_not be_valid
+    end
+
+    it 'identifie le numéro en double' do 
+      @cnf.valid?
+      @cnf.errors.messages[:actif].should ==  ['La partie Actif comprend un compte en double : 27, 45, 455']
+    end
+
+    it 'passe les autres pages en revue' do
+      @cnf.valid?
+      @cnf.errors.messages[:financier].should ==  ['La partie Financier comprend un compte en double : 786']
+    end
+
+    it 'identifie les doublons au sein de l ensemble resultats' do 
+      @cnf.valid?
+      @cnf.errors.messages[:resultats].should ==  ['La partie Resultats comprend des doublons : 641, 645, 786']
+    end
+
+    it 'et ceux du bilan' do
+      @cnf.valid?
+      @cnf.errors.messages[:bilan].should ==  ['La partie Bilan comprend des doublons : 27, 419, 45, 455']
+    end
+
+
   end
 
   

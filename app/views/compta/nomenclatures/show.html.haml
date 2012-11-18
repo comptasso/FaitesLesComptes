@@ -1,0 +1,6 @@
+.champ
+  %h3 Liste des documents individuels disponibles
+
+.row-fluid
+  - @pages.each do |p|
+    %p= link_to p.capitalize, compta_period_sheet_path(@period, p.to_s)

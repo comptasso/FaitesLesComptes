@@ -20,7 +20,7 @@ module Compta
     def_doc :exploitation, :actif, :passif, :financier, :exceptionnel, :benevolat
 
     validates :exploitation, :actif, :passif, :financier, :exceptionnel,:presence=>true
-    validate :bilan_complete, :bilan_balanced, :resultats_67, :benevolat_8
+    validate :bilan_complete, :bilan_balanced, :resultats_67, :benevolat_8, :no_doublon?
 
 
     def initialize(period, yml_file)
@@ -36,6 +36,61 @@ module Compta
 
 
 
+    # no_doublon vérifie que la nomenclature ne prend pas deux fois le même compte
+    # dans le cadre d'une page seule
+    def no_doublon?
+      pages.each {|p| doc_no_doublon?(p) }
+      collection_no_doublon?(:resultats, :exploitation, :financier, :exceptionnel)
+      collection_with_option_no_doublon?(:bilan, :actif, :passif)
+    end
+
+    # vérifie qu'il n'y a pas de doublon dans les comptes pris dans les différentes documents
+    # utilisé par no_doublon? pour faire l'ensemble de ses tests,
+    # exemple [:exploitation, :financier, :exceptionnel]
+    def collection_no_doublon?(name, *docs)
+      numbers = []
+      docs.each {|doc| numbers += numbers_from_document(doc) }
+      dil = doublon_in_list(numbers)
+      unless  dil.empty?
+        Rails.logger.info "La partie #{name.capitalize} comprend des doublons : #{dil.join(', ')}"
+        self.errors[name] << "La partie #{name.capitalize} comprend des doublons : #{dil.join(', ')}"
+        return false
+      end
+      true
+    end
+
+    def collection_with_option_no_doublon?(name, *docs)
+      numbers = collection_numbers_with_option(*docs)
+      dup = []
+      # puts numbers.inspect
+      # on doit vérifier que les nil et les col2 n'ont aucun doublon
+      list = numbers.select {|o| o[:option] == nil || o[:option] == :col2}.map {|n| n[:num]}
+      dup += doublon_in_list(list)
+      
+      # on n'accepte pas non plus des doublons entre les nil col2 et les credit d'un côté, les débit de l'autre
+      # les comptes de crédit ne peuvent être dans list
+      n_credit = numbers.select {|n| n[:option] == :credit}.map {|n| n[:num]}
+      dup +=  (n_credit & list) # intersection avec list
+      dup += doublon_in_list(n_credit)
+      # les comptes de débit ne peuvent être dans list
+      n_debit = numbers.select {|n| n[:option] == :credit}.map {|n| n[:num]}
+      dup += (n_debit & list) # intersection avec list
+      dup += doublon_in_list(n_debit)
+      self.errors[name] << "La partie #{name.capitalize} comprend des doublons : #{dup.uniq.join(', ')}" unless dup.empty?
+     
+
+
+    end
+
+    def doc_no_doublon?(doc)
+      dil = doublon_in_list(numbers_from_document(doc))
+      unless dil.empty?
+        Rails.logger.info "La partie #{doc.capitalize} comprend un compte en double : #{dil.join(', ')}"
+        self.errors[doc] << "La partie #{doc.capitalize} comprend un compte en double : #{dil.join(', ')}"
+        return false
+      end
+      true
+    end
 
     def bilan_complete?
       bilan_complete.empty? ? true : false
@@ -152,6 +207,30 @@ module Compta
         @instructions[doc][:rubriks].each {|k,v| v.each { |t, accs| numbers += Compta::RubrikParser.new(@period, :actif, accs).list_numbers } }
       end
       numbers
+    end
+
+    def numbers_with_options_from_document(doc)
+      numbers_with_options = []
+      if @instructions[doc]
+        @instructions[doc][:rubriks].each {|k,v| v.each { |t, accs| numbers_with_options += Compta::RubrikParser.new(@period, :actif, accs).list } }
+      end
+      numbers_with_options
+    end
+
+    def collection_numbers_with_option(*docs)
+      r = []
+      docs.each {|doc| r+= numbers_with_options_from_document(doc)}
+      r
+    end
+
+    # à partir d'une liste de numéros, retourne la liste des doublons
+    def doublon_in_list(array_numbers)
+      uniq_numbers = array_numbers.uniq
+      if uniq_numbers.size != array_numbers.size
+        # pour trouver les dupliqués, on fait un hash avec comme clé le numéro et comme nombre le count de fois ce numéro
+        return array_numbers.inject({}) {|h,v| h[v]=h[v].to_i+1; h}.reject{|k,v| v==1}.keys
+      end
+      []
     end
 
     

@@ -12,19 +12,19 @@
         :Agencements: 212 -2812 -2912
         :Installations techniques, matériel et outillage: 215 -2815 -2915
         :Autres: 218 -2818
-        :Immobilisations corporelles en cours: 23 -293
+        :Immobilisations corporelles en cours: 23 27 -293
       :Immobilisations financières:
         :Immobilisations financières: 27 -297
       :Stocks et encours:
         :Marchandises: 37 -397
       :Créances:
-        :Avances et acomptes versés sur commandes: '4091'
+        :Avances et acomptes versés sur commandes: '4091 419'
         :Créances usagers et comptes rattachés: 41 !419 -491 -492
         :Autres: 409 !4091 43D 44D 45D 46D 47D -495 -496
       :Disponibilités:
         :Autres titres: 50 -590
         :Banques: '51D'
-        :Disponibilités: '53'
+        :Disponibilités: '53 45C'
       :Autres actifs:
         :Charges constatées d'avance: '486'
         :Charges à répartir sur plusiseurs exercices: '481'
@@ -83,8 +83,8 @@
         :Produits financiers: '76'
         :Reprises sur provisions financières: '786'
       :Charges financières:
-        :Charges financières: '-66'
-        :Dotations aux provisions financières: '686'
+        :Charges financières: '-66 64'
+        :Dotations aux provisions financières: '686 786'
 
   :exceptionnel:
     :title: Résultat exceptionnel

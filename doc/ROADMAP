@@ -2,251 +2,6 @@ Use this README file to introduce your application and point to useful places in
 Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
 
 
-Etape actuelle :
-OK - Il faut faire une mise en page de la saisie des lignes pour avoir le formulaire de saisie en une seule ligne
-OK - Franciser le bouton créer ligne
-
-OK - Voir comment on revient au menu des journaux
-
-OK - Faire les validations avec les presences obligatoires
-
-OK - Ordonner les listes de lignes par date.
-
-OK - Changer l'épaisseur de border top dans les sous totaux
-OK - Formater les valeurs dans la saisie des lignes
-
-OK - Mettre en place la validation des écritures dans lines#index
-OK - Revoir la place du plus dans lines#index
-OK - Faire un sous menu mois pour les listings
-
-OK - Après create il faudrait être dans le mois que l'on vient de saisir
-OK - Mettre un ordre par défaut dans les selections destinations et natures
-OK - Quand on fait +, mettre le bon mois dans le date select
-
-A REPRENDRE COMPLETEMENT
-OK Mettre en place des écritures avec répétition
-  La logique est de faire une écriture mais avec des champs complémentaires dans le
-formulaire : répéter pendant X mois/trimestres.
-OK - A modifier : en fait c'est un champ copied_id qui doit être rempli de l'id de l'écriture mère
-OK - plus un champ multiple booleen pour avoir un test facile
-OK - Donc ajout d'une zone répétition avec un champ référence  plus
-OK - les infos du nombre de périodes et la nature de celle ci.
-OK - Ajout d'un champ reference dans le modèle
-OK - Dans le controlleur, gestion des lignes d'écritures (ou faire un controller spécifique)
-
-OK - Faire la mise en page de show multiple
-OK - Faire le index
-OK - Il faudra pour la modification : que l'on puisse supprimer une seule instance.
-
-      Que l'on puisse supprimer toutes les instances futures.
-
-OK - Problématique du edit/update
-OK - Problématique du destroy
--------------------------------------------------------------------
-OK - Mise en place des relevés de comptes
-OK Traduction des éléments du formulaire relevé
-
-POINTAGE DE COMPTES : Je crée une branche pointage car je ne suis pas trop sur de moi
-OK  il faut passer en mode pointage => création d'un controlleur
-OK  le controlleur doit avoir une action d'affichage des lignes du relevé et de celles qui sont non pointées
-OK avec des comportements différents
-OK action pour les pointages et dépointages sans javascript
-
-
-
-- Partie javascript
-
-OK -Supprimer les boutons et visualiser le mode pointage par un changement de forme du curseur
-
-OK - Un clic associé la ligne
-OK - un autre clic désassocie la ligne
-OK - les soldes et les écarts sont recalculés
----------------------------------------------------------------------
-OK - Faire une vue show de bank extract avec les lignes associées. Et les écarts de soldes. Très similaire donc à celle de pointage
-
-OK - Lorsqu'on est bon, il devient possible de valider et verrouiller les associations. c'est dans le partiel _sold.js.erb
-OK-  Visualiser le fait qu'on est bon par un changement de couleur du solde
-OK -  Afficher un lien (bouton, icone) pour verrouiller le relevé bancaire
-OK -  on ne peut pas accéder au pointage si le compte est validé
-OK -  L'action verouiller doit modifier le champ validated de l'extrait et également celui des lignes associées
-OK -  L'action renvoie ensuite à la vue show de bank_extract
-
---------------------------------------------------------------------
-
-
-OK - Ajouter icone plus pour ajouter une écriture facilement avec une fenêtre superposée
-OK -Mettre en place les bonnes icones pour le pointage
-OK - Transformer listing en book
-        changer le nom de la table par une migration et tous les liens listing id en book id
-        changer le nom des fichiers vue/controller/modèles
-        changer l'entête du modèle
-        changer les routes
-        changer les différentes apparitions de listing dans tous les autres fichier (listing, Listing, listings...).
-OK Mettre en place une rubrique moyen de paiement dans les lignes
-
-
-
-
-OK - Quand on est dans un livre, le menu devrait proposer les autres livres (déja fait)
-OK - On devrait supprimer les icones dans l'affichage des lignes (ainsi que les fonctions lock et ce qui va avec)
-OK - retrouver les images dans data_table
-OK - internationalisation de data_table
-OK - remettre les totaux de page (header et footer) - pour l'instant je n'ai fait que le pied de page. Il faut voir le besoin réel
-
-OK - pick_date pour la saisie des lignes
-
-OK - Aligner les soldes dans lines#index
-Ok - Styler les lignes de soldes
-
-
------------------------Affichage des données par type de dépenses ou de nature
-OK - Faire un controlleur spécialisé.
-OK - Doit afficher une table
-OK - Recherche de lignes
-
---------------------------------------------------
-OK- Revoir la navigation pour plus de confort
-OK - Ajouter la possibilité de choisir une plage de date
-
---------------------- Faire une remise de chèques à la banque
-OK    Création d'un modèle compte bancaire et intégration au logiciel
-OK   Création d'un modèle remise chèque (migration/vue)
-OK     On affiche les chèques qui ne sont toujours pas remis à l'encaissement
-OK     On sélectionne ces chèques par boutons ce qui affiche le chèque dans la table supérieure
-OK    Prévoir un bouton pour faire une sélection globale
-OK  On valide, ce qui mène à la vue show
-OK  La vue index affiche les remises faites.
-OK    Le delete d'une remise doit enlever le ckeck_deposit_id des lignes
-OK    Faire une redirection avec un flash si pas de chèque à remettre
-
---------------------Affichage journal de banque (BankLines) ------------------------
-OK - Faire un controlleur avec vues index (peut être une sous classe de Lines
-OK - Dépend de bank_account qui est un before filter
-OK - Mettre un lien pour y accéder
-OK - Avoir un scope des lignes qui trouve les lignes relevant d'un compte et de type bancaire
-OK - Vue index
-OK - Il faut impérativement faire un bank_account_id pour les lignes
-
-----------------Modification du sous menu lines pour avoir l'année - ce qui renvoie à la logique des exercices
-OK - j'introduis le modèle Period qui vient de comptasso et je l'adapte
-OK - faire la migration
-OK - faire les vues et adapter le controller
-OK - on crée un helper qui fait l'affichage
-OK - on met l'année dans une session lorsqu'on change d'année
-
------------------------------------------------------------------------
-OK Création du modèle cash pour faire des livres de caisse
-OK - création du controller cash_lines pour afficher les mouvements en espèces
-OK - Il existe déja un bank_account_id et il faudrait créer un cash_id
-
------------ aménagement formulaire de saisie des lignes --------------
-OK - s'il n'y a qu'une caisse et qu'un compte bancaire pas besoin de sélectionner
-OK - Saisie des écritures : mettre du java script pour faire la sélection avec du hidden et du show sur les champs cash et banques
-
------------------révision du modèle de bank_line-------------
-OK - Création d'une table bank_extract_line qui appartient à un bank_extract, 
-OK - avec un champ rang, un champ line_id, un champ check_deposit_id
-OK - hook after initialize pour remplir les infos selon que la ligne renvoie à une ligne ou à une remise chèque
-OK - Une bank_extract_line affiche des infos simplifiées telles que line_date, narration, montant (on n'a plus la nature ni la destination)
-OK - J'en suis au moment ou on peut afficher les infos dans le bank_extract#show.
-OK - Il faut afficher d'un côté les écritures du relevé, de l'autres les écritures à pointer
-
-OK - Quand on crée un relevé, l'action after create tente d'affecter les lignes qui ne sont pas déja sur un relevé
-OK - Gestion ensuite de l'ajustement d'un relevé - améliorer les fonctionnalités
-OK - Validation du relevé et verrouillage des lignes correspondantes
-OK - Extract#show n'affiche alors plus que la tableau des bank_extract_lines
-
-------------------------- Création de la zone admin ------------------------
-OK - Mise en place de la zone
-OK - mise en place du menu
-OK - transfert des différentes actions dans la zone admin
-OK - organism
-OK -     book
-OK - bank_accounts
-OK - cash
-OK - natures
-OK - destination
-OK - periods
-
-----------------------------------------------------------------
-OK - Mettre en place l'intitulé pour l'exercice dans le menu admin
-OK - Ajouter exercices dans le menu public
-OK - changer les actions previous_period et next_period en previous et next
-OK - retrouver l'affichage des lignes des livres de recettes et dépenses
-OK - Le passage de la zone admin à la zone public devrait conserver l'organisme
-OK - La création d'un organisme devrait créer un exercice et deux livres par défaut
-OK - Régler le bug de l'affichage de l'exercice (il n'est pas connecté à l'organisme)
-OK - Voir pourquoi il refuse de supprimer un organism
-OK - Supprimer la sélection de l'asset image pour les livres
-OK - Mettre la description en title du lien book
-OK - Faire en sorte que le mois soit correctement pris en compte par link_to_unless_current lorsqu'on arrive directt sur les lignes des livres
-OK - Mise en forme du mois lorsqu'il est current
-OK - Pointage ne doit apparaître dans le menu que s'il y a des comptes à pointer
-
-OK - Traiter les cas de plusieurs comptes (Quand on enregistre une recette par virement il faudrait pouvoir enregistrer le compte concerné)
-OK - : affichage du nom du compte bancaire dans le formulaire de saisie des lignes
-OK - Il faut traiter l'affichage des différentes années
-
-
-OK -Création de la sous classe Recettes (IncomeBook < Book)
-OK - Création de la sous classe Dépenses
-OK - Modification du form Book
-OK - Modification de views/lines/_form pour n'afficher crédit
-OK - Si on supprime une remise de chèques, il faut traiter les chèques
-OK - Ajouter un lien pour avoir l'accès à la liste des remises chèques
-
-OK - Retirer les liens entre books et bank_extracts (un bank_extract appartient à un organisme et à une banque mais pas à un livre)
-OK - on ne peut pas éditer un compte bancaire (il n'y a pas d'accès)
-
-OK - pick date mis en place d'une manière générale
-OK - formulaire modifié pour bank_extract
-OK - Indiquer le solde des comptes
-OK - on pourrait supprimer le tri (et autres indicateurs visuels) pour la liste des comptes
-OK - Quand on démarre l'affichage d'organisme est /organisms (car il n'y en n'a pas encore)
-OK - Régler la problématique des images (dans l'affichage des livres) peut être avoir une dizaine d'images type
-OK - Revoir navigation
-
-OK - Faire les initiales pour le compte bancaire
-
-OK - la rubrique écrire n'apparait que s'il y a au moins un compte ou une caisse
-OK - Line new exige (à tort) qu'il y ait une caisse et un compte bancaire. Ne devrait pas être obligatoire. Modifier le form en conséquence.
-OK - la rubrique espèces est disabled s'il n'y a pas de caisse
-OK - Depenses écrire envoie sur afficher et non sur newline
-OK - Pouvoir modifier les lignes non pointées
-OK - Enlever le 1 qui s'affiche dans le formulaire new_line
-
-OK - Le flash notice, la ligne a été créee pourrait être plus explicite (cas où on est interrompu et on ne sait plus très bien ou on en est).
-OK - Revoir la date par défaut (qui devrait être liée au mois qu'on consulte et non à Date.today et prendre en compte les limites de l'exercices
-OK - Dans le form new_line, il faudrait limiter les dates avec les limites de l'exercice.
-OK - Il y a un bug dans l'affichage des exercices (qui semble ne pas prendre en compte un changement d'organisme) - en fait le line _new envoie sur l'index
-     mais avec le mois de déc 2011 ! Et j'ai un lien avec mois =-1
-OK - Le pointage ne marche pas bien quand il y a plusieurs relevés à pointer
-OK - L'exercice n'est pas affiché dans la zone admin
-OK Traiter la question du pointage des comptes dans la zone admin - que mettre ? Edition et suppression des comptes yc ceux pointés
-OK - Enlever les icones modifier/supprimé pour un extrait verrouillé
-OK - Mettre des icones à la place de verrouillé/déverrouillé.
-
-
-JE LAISSE - L'affichage de l'exercice n'a pas forcément de sens pour des opérations non spécifiquement comptables comme une remise de chèque
-
-
-
----------------- Avoir accès au journal de caisse et pouvoir y faire des pointages (ou en tout cas un contrôle)
-OK - remise en route de cash_lines#index
-OK - Modifier le menu pour un accès à cash_lines
-OK - Faire une fonction Controle pour la caisse et l'insérer dans le menu
-OK - Créer une table cash_control et les accessoires (controller, vue, formulaire)
-OK - Le pointage de caisse doit verrouiller les lignes
-
-OK - Date min du dernier date_picker devrait être le dernier cash control ou le premier jour de l'exercice
-OK - Date max le jour actuel ou le dernier jour de l'exercice
-OK - Voir mise en forme du formulaire de saisie.
-OK -  Mettre dans la zone admin l'accès à la liste des pointages de caisses
-OK - Actuellement, il n'y a pas de destruction - fait dans la zone Admin
-OK - Il faudrait faire une présentation avec les mois comme pour les cash_lines
-OK - Rajouter une info sur le dashboard de organism
-OK - Mettre en place un datatable pour cash_lines index
-OK - Mettre en place une validation qui impose que le montant soit positif ou nul
 
 -----------------------Edition papier livres, natures et destinations------------------------------------------------------------------------
 OK - Faire le fond Brouillard - trouver comment avoir les images dans prawn
@@ -337,8 +92,8 @@ OK - Recettes et dépenses du mois au format CSV
 ?? - Faire un export CSV des recettes ou dépenses de l'année
 
 ------------------------- Cloture d'exercice -----------------
-Refaire une fonction lockable pour l'exercice
-Revoir le menu car c'est une action rare
+OK - Refaire une fonction lockable pour l'exercice
+OK - Revoir le menu car c'est une action rare
 les règles sont
 OK - que le pointage d'un compte bancaire doit verrouiller les lignes associées
 NON  - que le pointage de caisse doit verrouiller automatiquement les lignes associées (voir commentaire sur les différentes situations dans le
@@ -377,7 +132,7 @@ OK - Le dashboard devrait proposer une icone pour faire une remise de chèque da
 OK - revoir ou on atterrit quand on clique sur compte bancaire
 OK - Rendre les titres cliquables et/ou mettre les icones comme pour books.
 OK - Faire une collections de paves pour pouvoir utiliser une fonction in_group_of
-Mettre en place des formats adaptés pour les pavés de gauche, milieu et droite
+OK Mettre en place des formats adaptés pour les pavés de gauche, milieu et droite
 
 --------------------- refonte de check_deposit--------------------
 OK - revoir le modèle pour avoir les méthodes dans le modèle plutôt que dans le controller
@@ -386,52 +141,12 @@ le menu banque - nouvelle remise de chèque devrait est indisponible si pas de c
 ??? Il faudrait interdire pick_all_checks si bank_account n'est pas dispo ?
 OK - après up ou down dans un check deposit, il doit afficher l'action pointage
 
-----------------------mise en place de bootstrap --------------------
-OK - installation de twitter bootstrap
-OK - refonte du layout public
-OK - refont de layout admin
-OK - refonte du layout compta
-OK - modif des fieldset et legend sur toutes les vues
-
-
--------------------- FIXME ------------------------------------
-OK - hover rend illisible le style des menus
-OK - changer public en saisie/consult dans le menu admin et compta
-OK - dans line#new voir comment on gère les erreurs avec nature blank?
-OK - quand on rentre une date erronée, cela crée une erreur
-OK - Le changement d'organisme devrait supprimer la session[:period]
-OK -adapter lines csv à monthly_extract
-OK - mettre un titre d'onglet plus adapaté pour les pdf
-OK - Quand on enregistre un chèque, le champ banque ne devrait pas apparaître (ce devrait être lors de la remise)
-OK - Affichage du message caisse <b>porte_monnaie<b> alors que je veux du gras
-OK - Les icones des pavés sont passées à gauche
-OK - Le menu admin n'identifie pas l'onglet sur lequel on est
-OK - ajouter remises chèques dans le menu banques
-OK - il faudrait une étoile pour les champs crédit et débit
-OK - on ne peut plus modifier check_deposit - voir la question du validator cant change
-OK - périod - suppression ne devrait pas eêtre dans le menu
-OK - il faudrait un trait avant nouveau
-OK - mettre suppression de period dans la table index des periods et revoir la mise en page
-OK - on ne doit pas voir la proposition nouveau si on ne peut pas créer l'exercice
-OK - reprendre le formulaire nature en utilisant l'astuce pour book pour les boutons radio
-OK - réduire le menu admin livres à liste et nouveau puisque les actions sont dispo dans la liste
-OK - Idem pour le menu banque et caisse qui sont maintenant cohérents
-
----------------------REVOIR TOUTES LES SPEC DES VIEWS SUITE AU PASSAGE A CAPYBARA
-OK - admin bank_accounts index
-OK - admin books index
-OK - admin books new
-OK - admin books edit
-OK - admin destinations
-OK - admin natures index
-OK - admin periods new
-OK - check_deposits lines organism users
--------------------------------------------------------------
+---------------------------------------------------------
 Period#index ne devrait pas présenter clore comme action lorsqu'on vient de le créer et qu'il n'y a pas d'écritures.
 Problème pour le changement d'exercice avec tentative (on arrive toujours au plus récent)
 Quand il n'y a pas de chèque à remettre on peut cliquer sur nlle remise et il ne se passe rien
-Modifier le style des liens vus dans les menus
-il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date
+OK - Modifier le style des liens vus dans les menus
+OK - il faudrait que l'erreur sur la date s'affiche au bon endroit si mauvaise date
 admin_organism_index : l'icone restauration devrait avoir une flèche
 ----------------------------- admin natures ---------------------------------------
 OK - dans admin#naturenew (form), le rattachement à un compte devrait être disable si pas de compte
@@ -559,19 +274,6 @@ OUI - Dans un relevé pointé peut on encore déplacer les lignes
 OK - revoir natures.js (j'ai du commenter deux lignes pour éviter un problème dans la boîte modal)
 OK - Tri par date ne marche pas correctement
 OK - faire les spec de modallines controller
------------------------Refonte mise en page suite à évolution bootstrap et firefox --------------
-OK - Refonte des formulaires de la zone admin
-OK - Reste restore à faire
-OK - Faire également zone public
-et zone compta (un seul formulaire dans balance)
-OK - Fait un input spécifique pour radio buttons inline
-OK - Revoir la mise en forme de toutes les tables
-OK - refait le fichier railswatchr
-OK - Effacer le fichier rails.watch.rb
-OK - Fait un date_picker_input
-OK - Affichage des erreurs dans les formulaires qui ont des dates (il faut faire errors.add(:pick_date ou similaire)
-
-OK - utiliser pick_date_for dans le modèle line
 
 --------------------- Remarques lors des essais ---------------------------
 OK - caisse affichage des controles (revoir la mise en page)
@@ -645,14 +347,6 @@ OK - Mettre les natures par ordre alpha dans la saisie d'écritures
 
 Dans la sauvegarde, j'avais un cash control sans date, du coup, cela générait une erreur dans la restauration.
 Les mois dans la zone h3 sont draggable
-------------------- refonte des month_year -----------------------------
-OK - Revoir tous les appels à MonthlyBookExtracts qui acceptent maintenant un hash
-OK - modifier les appels à pdf et csv de lines
-OK - voir new line (la date par défaut semble décalée d'un mois)
-OK - revu pour utiliser MonthlyCashExtract qui ne semblait pas utilisé
-
-
-
 
 --------------------------Partie comptable ----------------------------
 OK - Ca commence par l'affichage du plan comptable dans la partie admin
@@ -707,9 +401,6 @@ OK - Modèle Line : voir les méthodes non utilisées
 NON - Dans Book, has_many pending_checks relève du IncomBook (en fait le has_many ne semble plus marcher)
 OK - Voir si les validators cant_change (oui), cant_edit (non) et cant_edit_field(non) sont utilisés
 OK - Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
---------------------première utilisation et ergonomie------------------------
-NON - Faire un wizard (step) Trop compliqué
-NON - Faire une base staging vierge pour tester l'ergonomie -> inutile maintenant que les organismes dépendent de user
 
 ---------------------PdfDocument ------------------------------
 Faire un helper pour les export
@@ -732,71 +423,7 @@ Question : que fait on des lignes qui ne sont pas validées par un relevé banca
 
 Est-il raisonnable de supprimer un exercice (à ce stade de développement)
 
-
--------------------- Sauvegarde/Restauration--------------------
-OK - on doit être capable de sauvegarder les informations d'une entreprise sur un fichier et de pouvoir les restaurer - on commence par ça
-OK - action dans la zone admin - modifier le menu sauvegarder - importer
-OK - sauvegarder doit écrire un répertoire avec les fichiers avec les différentes infos des tables de l'organimes (ou plusieurs fichiers .yml -sql ?)
-OK - restaurer doit lire le répertoire et vérifier qu'il trouve tous les fichiers puis créer les données si elle n'existent pas
-OK - Si elles existent, la vue indique quelles données seront créées.
-OK - Modifier le nom du fichier et voir le nettoyage du fichier temporaire
-OK - Le logiciel doit indiquer de quand date la dernière sauvegarde
----------------------- Mise en place de login/logout ----------------------
-
-NON ? Ajouter le champ user_id à organisme, migrer et faire les relations dans les modèles
-OK - Ajouter une table des organismes à User (que l'on appelera rooms)
-OK - La table doit avoir comme info le nom d'un fichier qui sera la base de données
-OK - Franciser la vue Entrée pour avoir non pas create user mais Entrez ! et supprimer le titre
-OK - Le flash doit disparaître quand on arrive sur la vue nouvel utilisateur
-OK - Dans les login logout, le layout doit être différent pour ne pas faire apparaître les menus
-BOF - Introduire dans find_organism une vérification que la base org appartient bien au current_user
-------------------------Passage à une logique apartment mais en restant sous sqlite-------------------
-OK - Les actions de création d'un organisme doivent gérer la question du room
-OK - Ne garder qu'un seul organisme dans la base actuelle et modifier le nom du fichier
-OK - Ajouter une vue login pour se logger ou s'enregistrer
-OK - Mettre en place le partial pour afficher les liens logout login et qui est connecté
-OK - Refaire l'affichage de la liste des organismes avec un helper
-OK - Ajouter la logique de création d'un organisme dans le modèle :
-OK - ajouter un champ database_name au formulaire new organism
-OK - le create organism doit créer un room pour l'user, un fichier du nom de database
-OK - se connecter à la base : puis faire la création.
-OK - on reste sur cette base tant qu'on ne change pas d'user (ce sont des before_filter qui se charge de ce travail).
-OK - Peut être modifier current_user pour être sûr qu'on a la bonne base
-OK - Autre sujet : logout doit revenir à la base principale donc ajouter dans le session_controller les before qui reviennent à la base principale
-OK -Revoir current_user dans application controller
-OK - Réfléchir aux différentes actions de user/rooms/organism pour gérer les changements d'organisme
-OK - La liste des exercices ne s'affiche pas dans le menu admin
-OK - ajustement de upper_menu pour accéder aux autres parties
-OK - refonte du controller organism de saisie/consult et
-OK - reprendre le controller organism de compta
-OK - revoir l'affichage des organismes dans le menu pour les zones compta et saisie/consult
-OK - revoir les path des helpers des messages (organism_helper.rb:11) pour les adapter à room
-OK - Faire une tâche rake pour faire les migrations sur toutes les bases
-OK - probablement un bug dans l'affichage des organismes de la zone compta (le filtre accountable n'est peut être pas fiable)
-OK - Traiter la problématique des tests
----------------Revue des tests
-OK - Fait dans les controllers lines et natures (et peut être organisme)
-OK - Revoir restore controller
-
-
-------------------------------------------------------------------------------
-OK - La vue description de l'organisme (zone admin) devrait indiquer le commentaire de l'archive
-OK - etindiquer la dernière ligne d'écriture (plus stats ?)
-OK - Ajouter une notice dans la vue new
-OK - gérer la destruction d'un organisme qui devient différente
-NON archive enregistre-t-il le nom du fichier sauvé ? => de toute façon l'utilisateur peut l'avoir modifié
-OK - revoir le css des forms restore (et peut être archive)
-OK - Le commentaire de la sauvegarde est semble-t-il inutilisé : maintenant si
-OK - supprimer tous les use_org_connection pour utiliser le modèle room
-OK - gérer l'erreur lorsqu'il n'y a plus le fichier (d'une manière générale, on pourrait envisager que les utilisateurs aient effacé le fichier)
-OK - une manière de vérifier la qualité du fichier : le controlleur appelle maintenant check_db
------------------------- Bugs ----------------------------------------------
-OK - ChangePeriod est à revoir dans LinesController car n'est plus adapté au format
-NON    ? Faire un controller grapph qui servirait de relais vers lines ?? Non, ça passe par le redirect vers Period change et son back
-OK - Le logout n'efface pas tous les éléments de session (base et period_id)
-OK - les contrôles de caisse ne sont pas affichés par ordre de date
-
--------------------------Corrections--------------------------------------
+-------------------Corrections--------------------------------------
 stats du controller natures demande un org_id et un period_id qui ne sont plus vraiment utiles
 OK - Revoir les erreurs dans les migrations (décimal et suppression d'un champ qui n'existe pas)
 Par du javascript, dans la vue création archive, après clic, effacer le form et remplacer le bouton par un bouton retour
@@ -876,18 +503,7 @@ Revoir tout ce qui est balance ou grand livre (écran ou pdf) qui utilisent inte
 OK - Modifier lines empty? and all_lines_locked dans le modèle Account
 OK - Dans la balance, les comptes 5 mouvementés devraient orienter vers l'affichage des écritures
 OK - modifier check_deposit qui utilise abondamment bank_account_id pour marquer les lignes
------------------------ révision des remises de chèques ---------------------------------------
-OK - La remise d'un chèque donne lieu à passation d'une écriture dans le journal d'OD
-OK - Revoir comment pending_checks connaît les chèques disponibles à l'encaissement : prendre le compte 511 plutôt que lire les lignes de recettes
-OK - Avec contrepartie le compte bancaire
-OK - Le champ bank_account_id de check_deposit reste indispensable
-OK - Le compte rem cheèques est 511 donc il faut modifier banques pour utiliser 512xx
-OK - Period doit pouvoir retourner ou créer un compte remise chèque
-OK - Faire une constante rem_check_account, pour aider à cette création
-OK - tank_checks et target_checks ne semblent plus utile - supprimer
-OK - Le message sur les remises de chèques n'est plus valable (dans la vue organism#show
-OK - La création d'un check_deposit crée des lignes avec le check_deposit comme owner
-OK - Une remise chèque pointée ne doit pas afficher l'icone modifier, ni supprimer
+
 -------------------------pointage de relevé --------------------------------
 OK - Le relevé doit avoir une date de début et de fin dans l'exercice
 OK - Le scope period va devenir inutile (ou en tout cas grandement se simplifier)
@@ -910,34 +526,6 @@ Recettes en chèque ne devrait pas être disponible dans la modal box
 Le curseur pour le détail de lignes chainées n'est pas correct
 Revoir l'affichage du détail de lignes chainées.
 
--------------------- on abandonne le counter_account pour passer à une logique d'écriture et de multilignes -----------------------
-NON - Il faudrait des numéros d'écritures - qui peuvent être le numéro de la ligne mère ??? - on utilise owner
-OK - Pour line, on peut garder le champ counter_account pour la saisie dans le formulaire mais on ne s'en sert plus ensuite
-OK - Line after_create crée la contrepartie si on est dans une écriture de compta simplifiée (en fait si on est dans un livre IncomeBook ou OutcomeBook)
-OK - gestion de line after_update (pour les contre lignes)
-OK - Revoir Transfer qui doit écrire des lignes normales maintenant
-OK - revoir support (qui n'est plus lisible directement)
-OK - La logique cash ne doit plus utiliser les counter_account mais les comptes de caisse
-OK - On revoit account qui redevient simple.
-OK - On supprime  toutes les références à  counter_account dans les bank_account ou les cash
-
---------------------- on crée un livre de banque pour chaque banque et un livre de caisse pour chaque caisse --------------
-OK - pour caisse et bank_account, la création entraîne celle d'un livre correspondant
-OK - gérer la suppression des caisses et des comptes
-OK - modifier update transfer
-OK - modification des fonctions sold_at et monthly_value dans cash_book et income_book
-OK - les contre écritures sont inscrites sur le livre correspondant du coup, book et monthly_book_extract n'ont plus besoin de filtrer difficilement
-NON - Traiter le cas d'absence d'exercice précédent pour les graphes
-NON - La création de compte 52 doit être accountable puisqu'on a besoin d'un livre....
--------------- suppresssion de la logique accountable ---------------------------------
-OK - Ne plus faire un livre par caisse ou banque
-OK - Supprimer les champs et les liaisons, ainsi que le after_create
-OK - Supprimer les champs book_id de cash
-OK - supprimer les champs book_id de bankaccount
-OK - Revoir l'affichage d'un monthlyBookExtract
-OK - Suppression des champs accountable_type et id pour cash et bank_account
-OK - Dans l'édition de cash_book(pdf) ou xls/csv il faut modifier credit debit en entrée sortie
-OK - Transfer peut voir sa structure changer avec par exemple from_account_id et to_account_id plutôt que des polymorphiques
 
 ------------- fin de cette mutation --------------------------------------------
 ?? Revoir les conditions d'édition d'un tansfert : doit on verrouiller les deux lignes du transfert alors qu'on ne pointe que la caisse ou que le compte bancaire
@@ -968,7 +556,7 @@ OK - Avoir un modèle comptaline qui s'appuie sur la table ligne mais qui serait
 Nettoyer od_lines_controller ? et routes associées (fait-on de l'OD en zone saisie)
 La suppression d'une compta ne semble pas supprimer la table sqlite associée
 ------------------------------------Bugs ----------------------------------------------------
-Le modal form de balance ne redonne pas l'ensemble des comptes possibles mais seulement la partie de liste affichée
+OK  - Le modal form de balance ne redonne pas l'ensemble des comptes possibles mais seulement la partie de liste affichée
 Lors de l'installation sur un nouveau pc on a deux erreurs liées au fait que le répertoire ../db/development et ../db/organisms ne sont pas là. : faire un rake ou une création par défaut
 -------------------------------- Writing-------------------------------------------------------
 OK - Créer un scaffold writing pour la partie compta
@@ -987,14 +575,6 @@ OK - On doit avoir une action qui permet de verrouiller l'écriture
 ??? Une écriture qui n'est pas pointée et qui mouvement une caisse ou un compte bancaire ne devrait pas pouvoir être verrouillée...??
 OK - Mettre les comptes par ordres de numéro
 Faire un before_destroyable dans le modèle (et du coup retirer l'équivalent dans Transfer)
--------------------------------------- A nouveau ----------------------------------------------
-OK - Une écriture d'à nouveau est forcément au premier jour de l'exercice
-OK - solde de compte : Le solde d'ouverture est le montant donné par l'écriture d'à nouveau
-NON ou par le solde de l'année précédente
-NON du coup ceci uniquement pour les comptes de classe 1 à 5 - car alors on déséquilibre la balance
-
-OK - Le menu A nouveau doit prendre en compte les exercices
-
 
 --------------------------------- TODO ---------------------------------------------------------
 BOF _ L'affichage des comptes 1 à 5 n'a pas forcément besoin de nature et destination
@@ -1019,23 +599,7 @@ OK - Dans la partie compta, on devrait avoir les journaux
 -----------------------------------Gestion des user ---------------------------
 La suppression d'un user doit être gérée (suppression des rooms, effacement des bases?)
 -------------------------- Introduction du modèle écriture comme parent de Lines ------------
--- D'abord avec les transferts
-OK - Modifier la table Writing pour en faire une table STI : ajout d'un champ type
-OK - Le modèle Transfert devient alors un enfant de Writing
-OK - modifier les routes car la hiérarchie est book/transfer et non organism/transfer
-OK - modifier le menu general
-OK - modifier le controller pour avoir book
-OK - Modifier le formulaire avec des nested attributes/réutiliser le form de writing
-OK - Adapter l'enregistrement existant
-OK - refaire les spec
-OK - Supprimer la table des transferts
-OK - Ajouter une zone ref à Transfert
 
--- Remise de chèques
-OK -  une remise chèque belongs_to writings : création de la migration
-OK - et a des comtpa_lines à travers writings
-OK - La remise de chèque doit créer une writing avec deux lignes
-OK en profiter pour utiliser le module date_picker
 
 -- line
 OK - Ecrire une recette ou une dépense doit créer une writing avec une compta_line comme contrepartie
@@ -1062,8 +626,6 @@ OK - Revoir le modal form pour utiliser les nested attributes
 OK - Pb de l'affichage des mois qui n'apparaît pas
 Mettre une validation : InOutWriting doit avoir une in_out_line avec une nature
 OK - Déplacer le + de création d'écritures vers la ligne des icones
-
-
 Dans Account, la logique has_many Transfer n'a plus vraiment lieu d'être
 OK - Account parle encore de counter_account_id
 OK - monthlyCashExtract devrait utiliser les ComptaLine
@@ -1072,22 +634,13 @@ En fait en enregistrant une écriture d'à nouveau, les soldes au 01/01 n'appara
 
 -------------------------- Finalisation de compta et de writings ----------------------
 Revoir le menu
-Gérer l'affichage des journaux pour les recettes et les dépenses
+OK - Gérer l'affichage des journaux pour les recettes et les dépenses
 Pouvoir sélectionner des extraits (faire un formulaire ???) Controller LedgerExtract ???
-le journal d'OD devrait afficher toutes les écritures relevant de OD
+OK - le journal d'OD devrait afficher toutes les écritures relevant de OD
 Voir gestion des tab dans le formulaire
 Il faudrait éventuellement ajouter la ligne automatiquement
 Changer Ligne créee... pour Ecriture créée dans le flash
 
-
-------------------------- Journal Général----------------------------------
-OK - Faire un modèle general_ledger en s'inspirant de grand livre
-OK - MonthlyLedger peut ne pas construire une ligne si elle est vide
-OK - Controller
-Non car pdf Vue
-NON - Formulaire - on se simplifie : c'est pour l'année
-OK - Route
-OK - méthode to_pdf
 
 -----------------------Détail de mise en forme ----------------------------
 OK - Revoir les rôles de title et description des books : title est OD, VE, et description Recettes, Achats,...
@@ -1098,7 +651,7 @@ OK - Le grand livre devrait donner l'intitulé du compte et non seulement le num
 OK - Dans compta/account le mouvement de la période inclut à tort le solde initial
 Revoir la question du pointage des comptes sur les écritures à cheval
 Pour le compte bancaire, le compte ne reprend que CMNE donc on ne les distingue pas
-Il faudrait que 6 natures au moins soient créées lors de la création d'un organisme
+OK - Il faudrait que 6 natures au moins soient créées lors de la création d'un organisme
 OK - Le solde des balances ne semble pas prendre en compte le dernier jour
 OK - Voir pour mettre les méthodes du module Sold dans account
 OK - Dans un new_bank_extract, les champs date ne sont pas dans l'exercice
@@ -1133,7 +686,10 @@ dans le controller un before_filter devrait checker les actions possibles si per
 -------------------------- éditions --------------------------
 BOF - Dans le grand livre, les natures de devraient pas être indiquées (ni peut être les destinations) - on doit rester comptable
 OK - Dans le grand livre, mettre le libellé du compte en clair et pas seulement le numéro
-Compte de résultat
+OK - Compte de résultat
+OK - bilan
+Trasnformations en CSV des éditions : bilan, résultats, bénévolat et détail
+Ajouter aussi pour les vue individuelles
 Rapprochement bancaire
 ------------------------------- rédaction du tutorial -------------------------
 OK - Revoir les champs des livres et ajouter abbréviation
@@ -1149,11 +705,11 @@ Le champ adress de bank_account n'est plus utilisé
 Vérifier qu'une restauration ne peut écraser une base existante (d'un autre User, du même User)
 ----------------------------Nomenclature -----------------------------
 Une nomenclature doit vérifier que les comptes ne sont pris qu'une fois,
-doit vérifier qu'il y a au moins 5 documents, actif, passif et exploitation, financier et exceptionnel
-qu'un compte D correspond un compte C
-que tous les comptes sont pris pour un actif et un passif
-que tous les comptes 6 et 7 sont pris pour un résultats
-Voir comment gérer les comptes 8 : un quatrième document ?
+OK - doit vérifier qu'il y a au moins 5 documents, actif, passif et exploitation, financier et exceptionnel
+OK - qu'un compte D correspond un compte C
+OK - que tous les comptes sont pris pour un actif et un passif
+OK - que tous les comptes 6 et 7 sont pris pour un résultats
+OK _ Voir comment gérer les comptes 8 : un quatrième document ?
 doit être appelée pour contrôle avant chaque utilisation
 Message nécessaire lorsqu'on ajoute un compte
 
@@ -1168,13 +724,13 @@ Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
-Il faudrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base
+On pourrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base
 Nettoyer old_bootstrap.css en modifiant bootstrap.css
 Dans period, copy_accounts devrait être dans une transaction
 Dans Period, closable? devrait vérifier que tous les comptes 1 à 5 sont là
 OK - Revoir la page index de organism (title et mise en page) : en fait je l'ai supprimée dans la partie consult
 OK - supprimer la session de period
-On devrait bloquer la création d'organisme à un
+On devrait bloquer la création d'organisme à une unité seulement (changement de route pour passer en ressource  et non ressources ?)
 De même pour OdBook : un seul livre d'OD
 Factoriser les Utilities Extract
 Factoriser les jQuery datatable
@@ -1183,8 +739,7 @@ Le datatable de compta#lines ne marche pas
 faire des tests pour pick_date_for et le transformer en gem
 OK - Revoir la vue index de nature dans public qui propose des actions qui relèvent de admin
 OK - Peut être idem pour destination : suppression controller et vue de saisie/consult
-Il serait plus judicieux de faire un stat controller car le controller nature n'a plus qu'une méthode stats
-et stats traite de natures et de destinations
+Il serait plus judicieux de faire un stat controller car le controller nature n'a plus qu'une méthode stats et stats traite de natures et de destinations
 OK - Faire une classe month pour Period ? : en fait c'est la classe MonthYear
 -----------------------------------------------------------------
 
