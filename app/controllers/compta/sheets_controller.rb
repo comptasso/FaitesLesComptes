@@ -13,8 +13,16 @@ class Compta::SheetsController < Compta::ApplicationController
     @docs = params[:collection].map {|c| @nomenclature.sheet(c.to_sym)}
     respond_to do |format|
       format.html
-      format.csv { send_data @sn.to_csv(col_sep:"\t")  }  # \t pour éviter le problème des virgules
-      format.xls { send_data @sn.to_xls(col_sep:"\t")  }
+      format.csv { 
+        datas = ''
+        @docs.each {|doc| datas += doc.to_index_csv }
+        send_data datas
+        }
+      format.xls { 
+        datas = ''
+        @docs.each {|doc| datas += doc.to_index.xls}
+        send_data datas
+      }
     end
   end
 
@@ -25,8 +33,8 @@ class Compta::SheetsController < Compta::ApplicationController
     if @doc
       respond_to do |format|
         format.html 
-        format.csv { send_data @doc.to_csv(col_sep:"\t")  }  # \t pour éviter le problème des virgules
-        format.xls { send_data @doc.to_xls(col_sep:"\t")  }
+        format.csv { send_data @doc.to_csv  }  # \t pour éviter le problème des virgules
+        format.xls { send_data @doc.to_xls  }
       end
     else
       flash[:alert] = "Le document demandé : #{params[:id]}, n'a pas été trouvé "

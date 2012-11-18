@@ -1,5 +1,7 @@
 =content_for :menu do
   = icon_to 'retour.png', :back
+  = icon_to 'table-export.png', compta_period_sheet_path(params.merge :format=>'csv'), title:'CSV', :target=>'_blank' 
+
 
 .champ
   %h3= @doc.total_general.title

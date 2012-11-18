@@ -22,6 +22,20 @@ module Compta
       [@title, brut, amortissement, net, previous_net]
     end
 
+    def total_actif
+      [@title, brut, amortissement, net, previous_net]
+    end
+
+    def total_passif
+      [@title, net, previous_net]
+    end
+
+    def totals_prefix
+      v = totals
+      v[0] = 'Total ' + v[0].to_s
+      v
+    end
+
     # le montant brut total de la collection
     def brut
       @collection.sum(&:brut)
@@ -47,6 +61,8 @@ module Compta
     def lines
       @collection.collect {|r| r.totals}
     end
+
+
 
 
 

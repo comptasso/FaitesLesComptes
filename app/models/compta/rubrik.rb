@@ -60,6 +60,13 @@ module Compta
       [@title, brut, amortissement, net, previous_net]
     end
 
+    def total_actif
+      [@title, brut, amortissement, net, previous_net]
+    end
+
+    def total_passif
+      [@title, net, previous_net]
+    end
 
     def complete_list
       [@title] + lines + totals
