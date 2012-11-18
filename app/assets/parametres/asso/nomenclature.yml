@@ -66,7 +66,7 @@
         :Cotisations: '756'
         :Autres produits: '75 !756'
       :Charges d'exploitation:
-        :Achats de marchandises: '-60'
+        :Achats de marchandises: '-60 !603'
         :Variation stocks de marchandises: '603'
         :Autres achats et charges externes: '61'
         :Impôts, taxes et versements assimilés: '63'

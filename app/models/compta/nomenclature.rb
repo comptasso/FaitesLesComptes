@@ -53,7 +53,7 @@ module Compta
       dil = doublon_in_list(numbers)
       unless  dil.empty?
         Rails.logger.info "La partie #{name.capitalize} comprend des doublons : #{dil.join(', ')}"
-        self.errors[name] << "La partie #{name.capitalize} comprend des doublons : #{dil.join(', ')}"
+        self.errors[name] << "comprend des doublons (#{dil.join(', ')})"
         return false
       end
       true
@@ -76,7 +76,7 @@ module Compta
       n_debit = numbers.select {|n| n[:option] == :credit}.map {|n| n[:num]}
       dup += (n_debit & list) # intersection avec list
       dup += doublon_in_list(n_debit)
-      self.errors[name] << "La partie #{name.capitalize} comprend des doublons : #{dup.uniq.join(', ')}" unless dup.empty?
+      self.errors[name] << "comprend des doublons (#{dup.uniq.join(', ')})" unless dup.empty?
      
 
 
@@ -85,8 +85,8 @@ module Compta
     def doc_no_doublon?(doc)
       dil = doublon_in_list(numbers_from_document(doc))
       unless dil.empty?
-        Rails.logger.info "La partie #{doc.capitalize} comprend un compte en double : #{dil.join(', ')}"
-        self.errors[doc] << "La partie #{doc.capitalize} comprend un compte en double : #{dil.join(', ')}"
+        Rails.logger.info "#{doc} comprend un compte en double (#{dil.join(', ')})"
+        self.errors[doc] << "comprend un compte en double (#{dil.join(', ')})"
         return false
       end
       true
@@ -116,7 +116,7 @@ module Compta
       rubrik_accs += numbers_from_document(:actif) + numbers_from_document(:passif)
       not_selected =  list_accs.select {|a| !a.in?(rubrik_accs) && !(a=~/^8\d*$/) }
       unless not_selected.empty?
-        self.errors[:bilan] << "Tous les comptes ne sons pas repris pour l\'édition du bilan. Comptes non trouvés : #{not_selected.join(', ')}"
+        self.errors[:bilan] << "ne reprend pas tous les comptes. Manque #{not_selected.join(', ')}"
       end
       return not_selected
     end
@@ -140,8 +140,8 @@ module Compta
         d_no_c = numbers_d.reject {|n| n.in? numbers_c}
         c_no_d = numbers_c.reject {|n| n.in? numbers_d}
         
-        self.errors[:bilan] << "Comptes D sans comptes C correspondant: #{d_no_c.join(', ')}" unless d_no_c.empty?
-        self.errors[:bilan] << "Comptes C sans comptes D correspondant: #{c_no_d.join(', ')}" unless c_no_d.empty?
+        self.errors[:bilan] << " : comptes D sans comptes C correspondant (#{d_no_c.join(', ')})" unless d_no_c.empty?
+        self.errors[:bilan] << " : comptes C sans comptes D correspondant (#{c_no_d.join(', ')})" unless c_no_d.empty?
         
         return false
       end
@@ -153,7 +153,7 @@ module Compta
       [:exploitation, :financier, :exceptionnel].each do |partie|
         r = rough_accounts_reject(rough_accounts_list(partie), 6, 7)
         unless r.empty?
-          self.errors[partie] << "La partie #{partie.capitalize} comprend un compte étranger aux classes 6 et 7 : #{r.join(', ')}"
+          self.errors[partie] << "comprend un compte étranger aux classes 6 et 7 (#{r.join(', ')})"
           retour = false
         end
       end
@@ -163,7 +163,7 @@ module Compta
 
     def benevolat_8
       unless  (r = rough_accounts_reject(rough_accounts_list(:benevolat), 8)).empty?
-        self.errors[:benevolat] << "La partie #{:benevolat.capitalize} comprend un compte étranger à la classe 8 : #{r.join(', ')}"
+        self.errors[:benevolat] << "comprend un compte étranger à la classe 8 (#{r.join(', ')})"
         return false
       end
       true

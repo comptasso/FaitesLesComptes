@@ -131,7 +131,7 @@ describe Compta::Nomenclature do
 
     it 'qui identifie le numéro de compte' do
       @cn.valid?
-      @cn.errors.messages[:bilan].should ==  ['Comptes D sans comptes C correspondant: 43']
+      @cn.errors.messages[:bilan].should ==  [' : comptes D sans comptes C correspondant (43)']
     end
 
   end
@@ -145,7 +145,7 @@ describe Compta::Nomenclature do
 
     it 'identifie le numero de compte' do
       @cnf.valid?
-      @cnf.errors.messages[:exploitation].should ==  ['La partie Exploitation comprend un compte étranger aux classes 6 et 7 : 410']
+      @cnf.errors.messages[:exploitation].should ==  ['comprend un compte étranger aux classes 6 et 7 (410)']
     end
   end
 
@@ -158,22 +158,22 @@ describe Compta::Nomenclature do
 
     it 'identifie le numéro en double' do 
       @cnf.valid?
-      @cnf.errors.messages[:actif].should ==  ['La partie Actif comprend un compte en double : 27, 45, 455']
+      @cnf.errors.messages[:actif].should ==  ['comprend un compte en double (27, 45, 455)']
     end
 
     it 'passe les autres pages en revue' do
       @cnf.valid?
-      @cnf.errors.messages[:financier].should ==  ['La partie Financier comprend un compte en double : 786']
+      @cnf.errors.messages[:financier].should ==  ['comprend un compte en double (786)']
     end
 
     it 'identifie les doublons au sein de l ensemble resultats' do 
       @cnf.valid?
-      @cnf.errors.messages[:resultats].should ==  ['La partie Resultats comprend des doublons : 641, 645, 786']
+      @cnf.errors.messages[:resultats].should ==  ['comprend des doublons (641, 645, 786)']
     end
 
     it 'et ceux du bilan' do
       @cnf.valid?
-      @cnf.errors.messages[:bilan].should ==  ['La partie Bilan comprend des doublons : 27, 419, 45, 455']
+      @cnf.errors.messages[:bilan].should ==  ['comprend des doublons (27, 419, 45, 455)']
     end
 
 

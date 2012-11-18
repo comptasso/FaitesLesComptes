@@ -4,24 +4,29 @@
 # actif, passif, ...
 
 class Compta::SheetsController < Compta::ApplicationController
+  
+  before_filter :check_nomenclature, :only=>[:index, :show]
+
 
   def index
-    n = Compta::Nomenclature.new(@period, 'nomenclature.yml')
-    @docs = params[:collection].map {|c| n.sheet(c.to_sym)}
+    
+    @docs = params[:collection].map {|c| @nomenclature.sheet(c.to_sym)}
     respond_to do |format|
       format.html
-      format.pdf
+      format.csv { send_data @sn.to_csv(col_sep:"\t")  }  # \t pour éviter le problème des virgules
+      format.xls { send_data @sn.to_xls(col_sep:"\t")  }
     end
   end
 
 
   def show
-    @nomenclature = Compta::Nomenclature.new(@period, 'nomenclature.yml')
+    
     @doc = @nomenclature.sheet(params[:id].to_sym)
     if @doc
       respond_to do |format|
         format.html 
-        format.pdf
+        format.csv { send_data @doc.to_csv(col_sep:"\t")  }  # \t pour éviter le problème des virgules
+        format.xls { send_data @doc.to_xls(col_sep:"\t")  }
       end
     else
       flash[:alert] = "Le document demandé : #{params[:id]}, n'a pas été trouvé "
@@ -49,6 +54,21 @@ class Compta::SheetsController < Compta::ApplicationController
 
   def detail
     @detail_lines = @period.two_period_account_numbers.map  {|num| Compta::RubrikLine.new(@period, :actif, num)}
+  end
+
+  protected
+
+  def check_nomenclature
+    @nomenclature = Compta::Nomenclature.new(@period, 'nomenclature.yml')
+    unless @nomenclature.valid?
+      al = 'La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d\'être faux.</br> '
+      al += 'Liste des erreurs relevées : <ul>'
+      @nomenclature.errors.full_messages.each do |m|
+        al += "<li>#{m}</li>"
+      end
+      al += '</ul>'
+      flash[:alert] = al.html_safe
+    end
   end
 
 end

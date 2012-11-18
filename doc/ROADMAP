@@ -704,13 +704,13 @@ OK - Rajouter un cadenas dans compta->Journaux OD pour faire un verrouillage glo
 Le champ adress de bank_account n'est plus utilisé
 Vérifier qu'une restauration ne peut écraser une base existante (d'un autre User, du même User)
 ----------------------------Nomenclature -----------------------------
-Une nomenclature doit vérifier que les comptes ne sont pris qu'une fois,
+OK - Une nomenclature doit vérifier que les comptes ne sont pris qu'une fois,
 OK - doit vérifier qu'il y a au moins 5 documents, actif, passif et exploitation, financier et exceptionnel
 OK - qu'un compte D correspond un compte C
 OK - que tous les comptes sont pris pour un actif et un passif
 OK - que tous les comptes 6 et 7 sont pris pour un résultats
 OK _ Voir comment gérer les comptes 8 : un quatrième document ?
-doit être appelée pour contrôle avant chaque utilisation
+doit être appelée pour contrôle avant chaque utilisation de nomenclature ou de sheets
 Message nécessaire lorsqu'on ajoute un compte
 
 
