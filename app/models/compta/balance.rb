@@ -9,6 +9,8 @@ require 'pdf_document/pdf_balance'
 #
 #
 class Compta::Balance < ActiveRecord::Base
+
+  include Utilities::ToCsv
   
   def self.columns() @columns ||= []; end
 
@@ -110,7 +112,7 @@ class Compta::Balance < ActiveRecord::Base
     (balance_lines.size/@nb_per_page.to_f).ceil
   end
 
-  def to_csv(options)
+  def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
         csv << ['', '', 'Soldes au', I18n.l(from_date),'Mouvements', 'de la période', 'Soldes au', I18n.l(to_date)]
         csv << %w(Numéro Intitulé Débit Crédit Débit Crédit Débit Crédit)
@@ -122,18 +124,7 @@ class Compta::Balance < ActiveRecord::Base
       end
     end
 
-  def to_xls(options)
-    CSV.generate(options) do |csv|
-        csv << ['', '', 'Soldes au', I18n.l(from_date),'Mouvements', 'de la période', 'Soldes au', I18n.l(to_date)]
-        csv << %w(Numéro Intitulé Débit Crédit Débit Crédit Débit Crédit)
-        balance_lines.each do |bl|
-        csv << [bl[:number], bl[:title], bl[:cumul_debit_before], bl[:cumul_credit_before],
-            bl[:movement_debit], bl[:movement_credit], bl[:cumul_debit_at], bl[:cumul_credit_at]].collect {|val| reformat(val).encode("windows-1252")}
-
-        end
-        csv << ['Totaux', ''] + total_balance.collect {|val| reformat(val).encode("windows-1252")}
-      end
-  end
+  
 
 
   protected

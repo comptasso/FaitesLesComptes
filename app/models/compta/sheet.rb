@@ -1,73 +1,65 @@
 # coding: utf-8
 
-# Sheet permet de faire une édition de rubriks  avec un sous total
+# Sheet est destinées à éditer une liste de rubriks
 # Le but est de construire des sous parties de bilan ou de comtpe de résultats
-# Les arguments sont period,
-# le template qui est un fichier yml indiquant comment se font les
-# regroupements des différents comptes le nom de ces rubriques.
+# Les arguments sont period, une page qui est une partie d'un fichier yml.
+# Concrètement la classe Nomenclature lit un fichier nomenclature.yml.
 #
+# Le fichier a différentes parties : actif, passif, exploitation, ...
+# Nomenclature a une méthode sheet qui crée un objet Sheet en transmettant
+# period,  les informations nécessaires et le nom du document
+#
+# Exemple, extrait de nomenclature.yml
+# :actif:                      -> le document
+#    :title: Bilan Actif        -> son titre
+#    :sens: :actif              -> son sens
+#    :rubriks:                  -> la liste des rubriques   
+#      :Immobilisations incorporelles:            -> première sous rubrique (ce sera une rubriks)
+#        :Frais d'établissement: '201 -2801'       -> une rubrik
+#        :Frais de recherche et développement: 203 -2803
+#        :Fonds commercial#': 206 207 -2807 -2906 -2907
+#        :Autres: 208 -2808 -2809
+#      :Immobilisations corporelles:              -> deuxième sous rubrique
+#
+# Le document est donc composé de rubriks, eux même composé de rubrik
+# Voir les classes correspondantes
 # Voir la classe Compta::Rubrik
-# Enfin le total_name permet de donner le nom du total de cette partie
+# 
+# Dans initialize, les arguments sont recopiés, puis on appelle parse_page
+# qui va parser les instructions du document demandé.
 #
-# Par exemple Compta::Sheet.new(period, 'actif_immobilise.yml', 'TOTAL ACTIF IMMOBILISE - TOTAL 1'
+#
+# #total_general est une méthode qui renvoie la rubriks principale de sheet
+#
+# sens permet de savoir si on est un document avec une logique d'actif ou de passif
+# Cette logique permet en fait de choisir si les nombres credit ou débit sont positifs
+# doc est le nom du document.
 #  
 #
 require 'yaml'
 
 module Compta
 
-
-  # Sheet pour bilan devrait être capable de lire un fichier yaml décrivant son organisation
-  # avec les différentes rubriques.
-  # De construire le tableau des lignes correspondantes
-  # De vérifier que tous les comptes du bilan sont pris
-  # De vérifier que le total de l actif et du passif sont égaux
-  # De fournir les éléments à sheets controller
-  # D'éditer un csv correspondant à ce bilan
-  # d'imprimer les éléments en liste avec les détails des lignes (c'est donc une autre vue)
-  #
-  # Sheet se construit avec un exercice, un hash reprenant les informations et un doc (le nom du document)
-  # Par exemple Compta::Sheet.new(p, @instructions[:actif], :actif)
-  #
   class Sheet
     
-attr_accessor :total_general, :sens, :doc
+    include Utilities::ToCsv
+    
+    attr_accessor :total_general, :sens, :name
 
 
-    def initialize(period, page, doc)
+    def initialize(period, page, name)
       @period = period
-      @coll = page
-      @doc = doc
-      parse_file
-      
-    end
-
- def parse_file
-   @sens = @coll[:sens]
-   sous_totaux = @coll[:rubriks].map do  |k,v|
-     puts "Inspection de v #{v.inspect}"
-     list = v.map do |l, num|
-       puts "clé : #{l}"
-       puts "numeros : #{num}"
-       Compta::Rubrik.new(@period, l, @sens, num)
+      @list_rubriks = page
+      @name = name
+      parse_page
      end
-     Compta::Rubriks.new(@period, k, list)
-   end
 
-   @total_general = Compta::Rubriks.new(@period, @coll[:title] , sous_totaux)
- end
- 
- def title
-   @sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : %w(Rubrique Montant Précédent)
- end
 
- # options est là pour permettre de préciser col_sep:"\t", cette option permet
- # d'éviter que les tableurs utilisent la virgule ce qui les perturbe en version
- # francisée.
+ # utilisé pour le csv de l'option show
  def to_csv(options = {col_sep:"\t"})
    CSV.generate(options) do |csv|
-     csv << [@doc.capitalize] # par ex Actif
-     csv << title  # la ligne des titres
+     csv << [@name.capitalize] # par ex Actif
+     csv << entetes  # la ligne des titres
      @total_general.collection.each do |rubs|
        rubs.collection.each do |r|
          if (r.resultat?)
@@ -86,30 +78,62 @@ attr_accessor :total_general, :sens, :doc
    # pour avoir la décimale dans le tableur
  end
 
+
+
+ # utilisé pour le csv de l'action index
  def to_index_csv(options = {col_sep:"\t"})
    CSV.generate(options) do |csv|
-     csv << [@doc.capitalize] # par ex Actif
+     csv << [@name.capitalize] # par ex Actif
      csv << (@sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']) # la ligne des titres
      @total_general.collection.each do |rubs|
-       rubs.lines.each do |l|
-
-          csv << prepare_line(l)
-
-        end
-
+       rubs.lines.each {|l| csv << prepare_line(l) }
        csv << prepare_line(rubs.totals_prefix)
+
      end
      csv << prepare_line(@total_general.totals_prefix)
 
    end.gsub('.', ',') # remplacement de tous les points par des virgules
    # pour avoir la décimale dans le tableur
  end
+ 
+ def to_index_xls(options = {col_sep:"\t"})
+   to_index_csv(options).encode("windows-1252")
+ end
 
+ protected
+
+ # appelé par initialize, construit l'ensemble des rubriks qui seront utilisées pour
+ # les différentes parties du document (avec à chaque fois le sous total affiché)
+ # puis, utilise ces rubriques, pour faire le total_general
+ def parse_page
+   @sens = @list_rubriks[:sens]
+   sous_totaux = @list_rubriks[:rubriks].map do  |k,v|
+     puts "Inspection de v #{v.inspect}"
+     list = v.map do |l, num|
+       puts "clé : #{l}"
+       puts "numeros : #{num}"
+       Compta::Rubrik.new(@period, l, @sens, num)
+     end
+     Compta::Rubriks.new(@period, k, list)
+   end
+
+   @total_general = Compta::Rubriks.new(@period, @list_rubriks[:title] , sous_totaux)
+ end
+
+ # prepare line sert à effacer les montant brut et amortissement pour ne garder 
+ # que le net.
+ # Utile pour le passif d'un bilan et pour les comptes de résultats qui n'ont pas 
+ # la même logique qu'une page actif
  def prepare_line(line)
    if @sens != :actif
    line[1] = line[2]=''
    end
    line
+ end
+
+ # prépare les entêtes utilisés pour le fichier csv
+ def entetes
+   @sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : %w(Rubrique Montant Précédent)
  end
 
 

@@ -1,13 +1,14 @@
 =content_for :menu do
   = icon_to 'retour.png', :back
+  = icon_to 'report-excel.png', compta_period_sheet_path(params.merge :format=>'xls'), title:'XLS', :target=>'_blank'
   = icon_to 'table-export.png', compta_period_sheet_path(params.merge :format=>'csv'), title:'CSV', :target=>'_blank' 
 
 
 .champ
-  %h3= @doc.total_general.title
+  %h3= @sheet.total_general.title
 
 .row-fluid
-  -if @doc.sens == :actif
-    =render :partial=>'detailed_actif', :object=>@doc.total_general
+  -if @sheet.sens == :actif
+    =render :partial=>'detailed_actif', :object=>@sheet.total_general
   -else
-    =render :partial=>'detailed_passif', :object=>@doc.total_general
+    =render :partial=>'detailed_passif', :object=>@sheet.total_general

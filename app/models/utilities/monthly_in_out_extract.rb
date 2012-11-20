@@ -10,6 +10,8 @@ module Utilities
   # my_hash est un hash :year=>xxxx, :month=>yy
   class MonthlyInOutExtract
 
+    include Utilities::ToCsv
+
     NB_PER_PAGE=30
 
     attr_reader :book, :titles
@@ -67,7 +69,7 @@ module Utilities
     end
 
 
-    def to_csv(options)
+    def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
         csv << @titles
         lines.each do |line|
@@ -76,15 +78,7 @@ module Utilities
       end
     end
 
-    # to_xls est comme to_csv sauf qu'il y a un encodage en windows-1252
-    def to_xls(options)
-      CSV.generate(options) do |csv|
-        csv << @titles.map {|data| data.encode("windows-1252")}
-        lines.each do |line|
-          csv << prepare_line(line).map { |data| data.encode("windows-1252") unless data.nil?}
-        end
-      end
-    end
+    
 
     # indique si le listing doit être considéré comme un brouillard
     # ou une édition définitive.

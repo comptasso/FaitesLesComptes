@@ -13,7 +13,9 @@ module Stats
   # puis un array de 14 valeurs également pour chaque colonne
   # le nom de la nature, les totaux par mois et le total de l'exercice 
   # puis la ligne de total
-  class StatsNatures 
+  class StatsNatures
+
+    include Utilities::ToCsv
     
     attr_reader :period
 
@@ -45,7 +47,7 @@ module Stats
       t + bottoms + [bottoms.sum {|i| i}]
     end
 
-    def to_csv(options)
+    def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
         csv << title          # ligne de titre
         lines.each do |line|
@@ -55,17 +57,7 @@ module Stats
       end
     end
 
-    # to_xls est comme to_csv sauf qu'il y a un encodage en windows-1252
-    # TODO simplifier en repartant de to_csv et en encodant chaque lignes
-    def to_xls(options)
-      CSV.generate(options) do |csv|
-        csv << title.map {|data| data.encode("windows-1252")}
-        lines.each do |line|
-          csv << prepare_line(line).map { |data| data.encode("windows-1252") unless data.nil?}
-        end
-        csv <<  prepare_line(totals).map { |data| data.encode("windows-1252") unless data.nil?}
-      end
-    end
+    
 
     protected
 

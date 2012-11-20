@@ -29,12 +29,12 @@ class Compta::SheetsController < Compta::ApplicationController
 
   def show
     
-    @doc = @nomenclature.sheet(params[:id].to_sym)
-    if @doc
+    @sheet = @nomenclature.sheet(params[:id].to_sym)
+    if @sheet
       respond_to do |format|
         format.html 
-        format.csv { send_data @doc.to_csv  }  # \t pour éviter le problème des virgules
-        format.xls { send_data @doc.to_xls  }
+        format.csv { send_data @sheet.to_csv  }  # \t pour éviter le problème des virgules
+        format.xls { send_data @sheet.to_xls  }
       end
     else
       flash[:alert] = "Le document demandé : #{params[:id]}, n'a pas été trouvé "
