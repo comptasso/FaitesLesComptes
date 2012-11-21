@@ -199,3 +199,62 @@ function _fnAlert(message, type) {
   }
 
 
+// Cette fonction permet de rendre une table sortable en indiquant une action
+// à appeler par la fonction ajax
+// Exemple fnTableSortable($('.admin_natures #recettes'), '/reorder');
+// rend la table #recettes sortable sur elle-même en appelant l'action
+// reorder du controller qui a affiché la vue (ici natures_controller#index)
+// donc l'url sera par exemple periods/2/natures
+// et l'url appelée par la fonction ajax sera periods/2/natures/reorder'
+function fnTableSortable(table, action) {
+  $(table).sortable({
+    connectWith: table.val('id'),
+    items: "tr",
+    //callback utilisée pour le changement d'emplacement à l'intérieur de la table
+    // des natures.
+    update: function(event, ui) {
+
+      var tbody = table;
+      var id = ui.item.context.id;
+      // les id des lignes sont constituées uniquement de l'id de la Nature
+
+        // la logique est la suivante : data-position donne la position initiale de la ligne
+        // après un déplacement data-position est du coup le numéro de ligne d'origine
+        var from = $("#" + id).attr('data-position');
+        // il faut donc trouver à quelle place se trouve le drop
+        // chercher quel est le rang en balayant les lignes
+        var to = -1;
+        table.find('tr').each(function(index){
+          if ($(this).attr('id') == parseInt(id)) {
+            to = index;
+          }
+
+        });
+
+        $.ajax({
+          // l'action actuelle avec en plus l'action transmise en paramètre
+          // celà permet pour une vue index de l'appeler avec /reorder
+          // en supposant que l'action dans le controller est reorder
+          // Si on est dans une action précise par exemple pointage,
+          // cela permet de transmettre _reorder comme paramètre action
+          // ce qui appelera l'action pointage_reorder dans le controller'
+          url: window.location.pathname + action,
+          type: 'post',
+          data: {
+            id: id,
+            fromPosition: from,
+            toPosition: to
+          },
+          // puis on fait la mise à jour des données de la table
+          success: function () {
+            fnMoveRows(tbody, from, to);
+          },
+          // ou inversement on annule si erreur
+          error: function (jqXHR) {
+            fnCancelSorting(tbody, jqXHR.statusText);
+          }
+        });
+
+    }
+})
+}
