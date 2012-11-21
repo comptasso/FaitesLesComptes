@@ -133,4 +133,69 @@ jQuery(function () {
    
 });
 
+// série de 3 fonctions utilisées pour le tri des tables
+// _fnAlert affiche un message si l'opération échoue'
+function _fnAlert(message, type) {
+    alert(message);
+  }
+
+
+// fnChangeValue met data-position et le premier champ de la ligne de la table
+// à la valeur donnéé par new_value
+  function fnChangeValue(element, new_value) {
+    element.attr('data-position', new_value);
+    element.find('td:first-child').text(new_value);
+  }
+
+  // appelée par ajax en cas d'erreur
+  function fnCancelSorting(tbody, sMessage) {
+    tbody.sortable('cancel');
+    if(sMessage!= undefined){
+      _fnAlert(sMessage, "");
+    }else{
+      _fnAlert("La ligne n'a pas pu être déplacée", "");
+    }
+  }
+
+  // fnMoveRows est la fonction appelée après la réponse ok de
+  // reorder du controller pour renuméroter l'information de position des lignes
+  // en effet, la mise à jour de l'affichage est faite par javascript et non par un
+  // render du controller
+  function fnMoveRows(tbody, from, to) {
+    var iFrom = parseInt(from);
+    var iTo = parseInt(to);
+    var pos;
+    // par exemple, je passe la ligne 2 à la ligne 6,
+    if (iTo > iFrom) {
+        tbody.find('tr').each(function(index){
+        pos = parseInt($(this).attr('data-position'));
+        // et la ligne 2 devient la ligne 6
+        if (pos == iFrom) {
+          fnChangeValue($(this), iTo.toString());
+        }
+        // les lignes 3 à 6 perdent 1 cran
+        if (pos > iFrom && pos <= iTo) {
+          fnChangeValue($(this), (pos-1).toString());
+        }
+      });
+    }
+    //dans l'autre sens, je passe de la ligne 6 à la ligne 2'
+    // donc iFrom = 6 et iTo = 2
+    if (iTo < iFrom) {
+      tbody.find('tr').each(function(index){
+        pos = parseInt($(this).attr('data-position'));
+        // et la ligne 6 devient la ligne 2
+        if (pos == iFrom) {
+          fnChangeValue($(this), iTo.toString());
+        }
+
+        // les lignes 2 à 5 gagnent 1 cran
+        if (pos >= iTo && pos < iFrom) {
+          fnChangeValue($(this), (parseInt(pos)+1).toString());
+        }
+      });
+    }
+
+  }
+
 

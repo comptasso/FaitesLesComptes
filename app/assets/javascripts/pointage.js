@@ -3,15 +3,7 @@ jQuery(function() {
 
   if ($('#zone_ltps').length === 1) {
 
-  function _fnAlert(message, type) {
-    alert(message);
-  }
-
-  function fnChangeValue(element, new_value) {
-    element.attr('data-position', new_value);
-    element.find('td:first-child').text(new_value);
-  }
-
+ 
   function fnMoveRows(from, to) {
     var iFrom = parseInt(from);
     var iTo = parseInt(to);
@@ -71,15 +63,7 @@ jQuery(function() {
     });
   }
 
-  // appelée par ajax en cas d'erreur
-  function fnCancelSorting(tbody, sMessage) {
-    tbody.sortable('cancel');
-    if(sMessage!= undefined){
-      _fnAlert(sMessage, "");
-    }else{
-      _fnAlert("La ligne n'a pas pu être déplacée", "");
-    }
-  }
+ 
 
   function fnCheckTotalDebit(){
     if ($('#bels_total_debit').text() === $('#total_debit').text()) {

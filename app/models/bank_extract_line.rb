@@ -130,7 +130,7 @@ class BankExtractLine < ActiveRecord::Base
     pos = position
     grp = compta_lines.offset(1).all.map do |l|
       compta_lines.delete(l)
-      new_bel = bank_extract.bank_extract_lines.create!(compta_lines:[l])
+      new_bel = bank_extract.bank_extract_lines.create!(:compta_lines=>[l])
       new_bel.insert_at(pos + 1)
       new_bel
     end

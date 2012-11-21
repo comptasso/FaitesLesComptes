@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121111085713) do
+ActiveRecord::Schema.define(:version => 20121121053317) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(:version => 20121111085713) do
     t.boolean  "income_outcome", :default => false
     t.integer  "period_id"
     t.integer  "account_id"
+    t.integer  "position"
   end
 
   create_table "organisms", :force => true do |t|

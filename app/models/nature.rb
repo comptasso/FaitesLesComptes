@@ -13,6 +13,9 @@ class Nature < ActiveRecord::Base
   belongs_to :period
   belongs_to :account
 
+  acts_as_list :scope=>[:period_id, :income_outcome]
+  before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
+
   validates :period_id, :presence=>true
   validates :name, :presence=>true
   validates :name, :uniqueness=>{ :scope=>[:income_outcome, :period_id] }
@@ -21,11 +24,13 @@ class Nature < ActiveRecord::Base
   # TODO rajouter avec un if pour coller avec le type de compte
   # validates :account_ids, :fit_type=>true retiré car on ne crée plus l'assoc avec le compte dans le form nature
   
+
+
   has_many :compta_lines
 
 
-  scope :recettes, where('income_outcome = ?', true).order('name ASC')
-  scope :depenses, where('income_outcome = ?', false).order('name ASC')
+  scope :recettes, where('income_outcome = ?', true).order(:position)
+  scope :depenses, where('income_outcome = ?', false).order(:position)
   scope :without_account, where('account_id IS NULL')
 
   before_destroy :ensure_no_lines
