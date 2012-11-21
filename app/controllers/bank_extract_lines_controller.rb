@@ -2,7 +2,7 @@ class BankExtractLinesController < ApplicationController
   
   # TODO on pourrait modifier les routes pour avoir juste bank_extract_bank_extract_line et récupérer les variables d'instances nécessaires
  
-  before_filter :find_params, :except=>:reorder
+  before_filter :find_params
 
   def index
     @bank_extract_lines = @bank_extract.bank_extract_lines.order('position')
@@ -72,7 +72,7 @@ class BankExtractLinesController < ApplicationController
   #
   def ajoute
       l = ComptaLine.find(params[:line_id])
-      @bel = @bank_extract.bank_extract_lines.new(compta_lines:[l])
+      @bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[l])
       raise "Methode ajoute : @bel non valide @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
 
     # on redessine les tables
@@ -85,7 +85,7 @@ class BankExtractLinesController < ApplicationController
         @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
         format.js 
       else
-        format.json { render json: @bel.errors, status: :unprocessable_entity }
+        format.json { render :json=>@bel.errors, :status=>:unprocessable_entity }
       end
     end
 
@@ -103,7 +103,7 @@ class BankExtractLinesController < ApplicationController
   def insert
     id = params[:html_id][/\d+$/].to_s
     l = ComptaLine.find(id)
-    @bel = @bank_extract.bank_extract_lines.new(compta_lines:[l])
+    @bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[l])
     raise "@bel non valide #{html} @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
     @bel.position = params[:at].to_i
    
@@ -112,7 +112,7 @@ class BankExtractLinesController < ApplicationController
         @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
         format.js 
       else
-        format.json { render json: @bel.errors, status: :unprocessable_entity }
+        format.json { render :json=>@bel.errors, :status=>:unprocessable_entity }
       end
     end
   end
@@ -135,7 +135,8 @@ class BankExtractLinesController < ApplicationController
     else
       (to_position - from_position).times { @bank_extract_line.move_lower }
     end
-    head :ok
+    @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
+    render :format=>:js
   rescue
     head :bad_request
   end
