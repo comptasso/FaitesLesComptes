@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 
-require 'change_period'
+require 'change_period' #lib/change_period
 
 
 class Admin::PeriodsController < Admin::ApplicationController
