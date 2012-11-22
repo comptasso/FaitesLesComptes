@@ -49,7 +49,8 @@ class Admin::UsersController < Admin::ApplicationController
     @user = User.new(params[:user])
     if @user.save
       session[:user] = @user.id
-      redirect_to new_admin_organism_url, notice: " L'utilisateur a été crée. Il est possible maitenant de créer un organisme"
+      redirect_to new_admin_organism_url, notice: "L'utilisateur a été crée. Il est possible maitenant de créer un organisme (formulaire ci-dessous)\n
+      ou d'en importer (icône disquette ci-dessus)"
     else
       render action: "new"
     end
