@@ -127,7 +127,11 @@ Faitesvoscomptes::Application.routes.draw do
             post 'lock'
           end
         end
-        resources :natures
+        resources :natures do
+          collection do
+              post 'reorder' # pour permettre le tri par javascript
+          end
+        end
         resources :accounts do
           collection do
             get :mapping

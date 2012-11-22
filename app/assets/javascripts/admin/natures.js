@@ -2,8 +2,6 @@
 /*jslint browser: true */
 var $, jQuery;
 
-
-
 // function utilisée pour disable ou able les différentes parties
 // du select 
 function change_radio() {
@@ -31,3 +29,10 @@ jQuery(function () {
         change_radio();
     });
 });
+
+jQuery(function() {
+  if ($('.admin_natures #index').length === 1) {
+    fnTableSortable($('.admin_natures #recettes'), '/reorder');
+    fnTableSortable($('.admin_natures #depenses'), '/reorder');
+  }
+})

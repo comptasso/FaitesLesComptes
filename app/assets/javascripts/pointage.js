@@ -3,52 +3,8 @@ jQuery(function() {
 
   if ($('#zone_ltps').length === 1) {
 
-  function _fnAlert(message, type) {
-    alert(message);
-  }
-
-  function fnChangeValue(element, new_value) {
-    element.attr('data-position', new_value);
-    element.find('td:first-child').text(new_value);
-  }
-
-  function fnMoveRows(from, to) {
-    var iFrom = parseInt(from);
-    var iTo = parseInt(to);
-    var pos;
-    // par exemple, je passe la ligne 2 à la ligne 6,
-    if (iTo > iFrom) {
-      $('#bels tr').each(function(index){
-        pos = parseInt($(this).attr('data-position'));
-        // et la ligne 2 devient la ligne 6
-        if (pos == iFrom) {
-          fnChangeValue($(this), iTo.toString());
-        }
-        // les lignes 3 à 6 perdent 1 cran
-        if (pos > iFrom && pos <= iTo) {
-          fnChangeValue($(this), (pos-1).toString());
-        }
-      });
-    }
-    //dans l'autre sens, je passe de la ligne 6 à la ligne 2'
-    // donc iFrom = 6 et iTo = 2
-    if (iTo < iFrom) {
-      $('#bels tr').each(function(index){
-        pos = parseInt($(this).attr('data-position'));
-        // et la ligne 6 devient la ligne 2
-        if (pos == iFrom) {
-          fnChangeValue($(this), iTo.toString());
-        }
-
-        // les lignes 2 à 5 gagnent 1 cran
-        if (pos >= iTo && pos < iFrom) {
-          fnChangeValue($(this), (parseInt(pos)+1).toString());
-        }
-      });
-    }
-
-  }
-
+ 
+ 
   //appelée après avoir enlevé une ligne
   // on retire donc 1 pour chacun des lignes qui se trouvait après celle qu'on a retiré
   function fnDecRows(from) {
@@ -71,15 +27,7 @@ jQuery(function() {
     });
   }
 
-  // appelée par ajax en cas d'erreur
-  function fnCancelSorting(tbody, sMessage) {
-    tbody.sortable('cancel');
-    if(sMessage!= undefined){
-      _fnAlert(sMessage, "");
-    }else{
-      _fnAlert("La ligne n'a pas pu être déplacée", "");
-    }
-  }
+ 
 
   function fnCheckTotalDebit(){
     if ($('#bels_total_debit').text() === $('#total_debit').text()) {
@@ -159,6 +107,7 @@ jQuery(function() {
   });
 
   // LA TABLE DES BELS
+  
   $( "#bels" ).sortable({
     connectWith: ".connectedSortable",
     items: "tr",
@@ -267,7 +216,7 @@ jQuery(function() {
           },
           // puis on fait la mise à jour des données de la table
           success: function () {
-            fnMoveRows(from, to);
+            
           },
           // ou inversement on annule si erreur
           error: function (jqXHR) {

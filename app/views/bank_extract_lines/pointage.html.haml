@@ -9,6 +9,7 @@
  
 .champ
   %h3= "Relevé bancaire #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
+    
   .inner-champ
     .row-fluid
       %ul
@@ -33,23 +34,23 @@
             %th.centered(colspan="6")
               Liste des écritures associées au relevé
           %tr
-            %th N°
-            %th.date-euro Date
-            %th Libellé
-            %th
+            %th.pc5 N°
+            %th.pc15.date-euro Date
+            %th.40 Libellé
+            %th.pc15
               %ul
                 %li Débit
                 %li.numeric
                   = image_tag('icones/exclamation.png', rel:'tooltip', title:"Ecart de pointage de #{debit_credit @bank_extract.diff_debit}", id:"img_danger_total_debit")
                   %span#bels_total_debit= debit_credit @bank_extract.total_lines_credit
 
-            %th
+            %th.pc15
               %ul
                 %li Crédit
                 %li.numeric
                   = image_tag('icones/exclamation.png', rel:'tooltip', title:"Ecart de pointage de #{debit_credit @bank_extract.diff_credit}", id:"img_danger_total_credit")
                   %span#bels_total_credit= debit_credit @bank_extract.total_lines_debit
-            %th.actions Actions
+            %th.pc10.actions Actions
 
         %tbody.connectedSortable#bels
           = render :partial=>'belsbody'
@@ -66,12 +67,12 @@
               %a(data-toggle="modal" href="#modal_form_line")
                 =image_tag('icones/nouveau.png')
           %tr
-            %th N°
-            %th.date-euro Date
-            %th Libellé
-            %th Dépenses
-            %th Recettes
-            %th.actions Actions
+            %th.pc5 N°
+            %th.pc15.date-euro Date
+            %th.pc40 Libellé
+            %th.pc15 Dépenses
+            %th.pc15 Recettes
+            %th.pc10 actions Actions
             
           %tbody.connectedSortable#ltps
             = render :partial=>'ltpsbody'
