@@ -2,7 +2,7 @@
 
 module Compta
 
-  # Une rubrique comprend une position, un titre et une série de numéros de comptes
+  # Une rubrique comprend un titre et une série de numéros de comptes
   # Chaque numéro de compte doit être affecté d'un sens 'debit' ou 'credit'
   #
   # Lorsque Rubrik donne les soldes, elle cumule les soldes des sous comptes
@@ -21,12 +21,14 @@ module Compta
   #
   #  La classe doit afficher les différentes lignes de comptes mais sans faire de doublon
   #
-  #  On créé la classe avec comme argument period, title, sens (:actif ou :passif), et un array
-  #  de numéros de comptes ['20','201','206', '207', '208']
+  #  On créé la classe avec comme argument period, title, sens (:actif ou :passif), et un string
+  #  de numéros de comptes '20 201 206 207 208'
   #
   #  ON utilise quelques symboles pour identifier les comptes que l'on souhaite avoir
-  #  '20%' veut dire le compte 20 et tous ceux qui commencent par 20. Ceci est par défaut
-  #  '-280' signifie que le solde sera à prendre dans la seconde colonne (amortissements ou provisions)
+  #  
+  #  -280 signifie que le solde sera à prendre dans la seconde colonne (amortissements ou provisions)
+  #  !201 signifie que ce compte ne doit pas être repris
+  #  47C ou 47D signifie que le compte n'est pris que s'il est créditeur ou débiteur
   #  
   #
   class Rubrik
@@ -60,14 +62,13 @@ module Compta
       [@title, brut, amortissement, net, previous_net]
     end
 
-    def total_actif
-      [@title, brut, amortissement, net, previous_net]
-    end
+    alias total_actif total
 
     def total_passif
       [@title, net, previous_net]
     end
 
+    # crée un array avec le titre suivi de l'ensemble des lignes suivi de la ligne de total
     def complete_list
       [@title] + lines + totals
     end

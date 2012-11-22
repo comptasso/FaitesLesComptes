@@ -5,8 +5,14 @@ module Compta
   # Rubriks est une classe comportant un titre et une collection répondant aux
   # méthodes brut, amortissement, net et previous net
   # ainsi que totals qui fournit alors une ligne avec les différentes valeurs voulues
+  # total_actif, total_passif permet de choisir la présentation (avec brut et amortissement)
+  # totals_prefix rajoute Total au titre pour pouvoir l'identifier lors des export en csv.
   #
-  # la méthode lines permet d'afficher les différentes lignes de la collection
+  # Rubriks est concçue pour pouvoir être récursif, même si en pratique on n'utilise
+  # que deux niveaux dans les éditions.
+  #
+  # la méthode lines permet en effet d'afficher les différentes lignes de la collection
+  # en appelant leur fonction totals
   #
   class Rubriks
     attr_reader :collection, :title
