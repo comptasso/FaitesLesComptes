@@ -91,7 +91,7 @@ class Compta::WritingsController < Compta::ApplicationController
 
     respond_to do |format|
       if @writing.update_attributes(params[:writing])
-        format.html { redirect_to compta_book_writing_url(@book, @writing), notice: 'Ecritue mise à jour.' }
+        format.html { redirect_to compta_book_writing_url(@book, @writing), notice: 'Ecriture mise à jour.' }
       
       else
         format.html { render action: "edit" }
