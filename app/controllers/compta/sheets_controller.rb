@@ -20,9 +20,9 @@ class Compta::SheetsController < Compta::ApplicationController
         }
       format.xls { 
         datas = ''
-        @docs.each {|doc| datas += doc.to_index.xls}
-        send_data datas
-      }
+        @docs.each {|doc| datas += doc.to_index_xls}
+        send_data datas, :filename=>"#{params[:title] || params[:collection]}.csv"
+        }
     end
   end
 
@@ -43,11 +43,12 @@ class Compta::SheetsController < Compta::ApplicationController
   end
 
   def bilans
-    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:actif, :passif])
+    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:actif, :passif], :title=>'Bilan')
   end
 
   def resultats
-    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:exploitation, :financier, :exceptionnel])
+    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:exploitation, :financier, :exceptionnel],
+    :title=>'Résultats')
   end
 
 
@@ -56,12 +57,17 @@ class Compta::SheetsController < Compta::ApplicationController
   # ce qui perturbe le routage
   # Ici avec sheets/benevolats, on est bien différent de sheets/benevolat qui est routée sur show
   def benevolats
-    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:benevolat])
+    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:benevolat], :title=>'Bénévolat')
   end
 
 
   def detail
     @detail_lines = @period.two_period_account_numbers.map  {|num| Compta::RubrikLine.new(@period, :actif, num)}
+    respond_to do |format|
+        format.html
+        format.csv { send_data @detail_lines.inject('') {|i, line|  i += line.to_csv  } } # \t pour éviter le problème des virgules
+        format.xls { send_data(@detail_lines.inject('') {|i, line|  i += line.to_xls  }, :filename=>'detail.csv')   }
+      end
   end
 
   protected

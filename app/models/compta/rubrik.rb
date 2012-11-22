@@ -62,7 +62,7 @@ module Compta
       [@title, brut, amortissement, net, previous_net]
     end
 
-    alias total_actif total
+    alias total_actif totals
 
     def total_passif
       [@title, net, previous_net]

@@ -20,6 +20,8 @@ module Compta
   #
   class RubrikLine
 
+    include Utilities::ToCsv
+
     attr_reader :brut, :amortissement, :select_num, :account
 
     def initialize(period, sens,  select_num, option= nil )
@@ -98,6 +100,12 @@ module Compta
     # affiche la RibrikLine
     def to_s
       "#{@select_num}; #{title}; #{@brut}; #{@amortissement}; #{net}; #{previous_net}"
+    end
+
+    def to_csv(options = {:col_sep=>"\t"})
+      CSV.generate(options) do |csv|
+        csv << [@select_num, title, @brut, @amortissement, net, previous_net]
+      end.gsub('.', ',')
     end
 
 
