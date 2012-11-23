@@ -84,7 +84,7 @@ class Period < ActiveRecord::Base
 
   # TODO revoir ces call_backs en utilisant des conditions de type :if
   # TODO changer le update should not reopen en utilisant un des validate
-  before_update :fix_days, :cant_change_start_date , :should_not_reopen
+  before_update :fix_days, :cant_change_start_date, :should_not_reopen
   before_create :should_not_have_more_than_two_open_periods, :fix_days
   before_save :should_not_exceed_24_months, 
     :cant_change_close_date_if_next_period
@@ -174,7 +174,7 @@ class Period < ActiveRecord::Base
     # il faut un compte pour le report du résultat
     self.errors.add(:close, "Pas de compte 12 pour le résultat de l'exercice") unless next_period.report_account
 
-    self.errors[:close].any? ? false : true
+    errors.any? ? false : true
 
   end
 
@@ -197,10 +197,16 @@ class Period < ActiveRecord::Base
       date = next_p.start_date
 
       Period.transaction do
-        self.update_attribute(:open, false)
+        
         w = an_book.writings.new(date:date, narration:'A nouveau')
         # on fait d'abord les compta_liens du compte de bilan
-        report_comptes_bilan.each {|cl| w.compta_lines << cl}
+        report_comptes_bilan.each do |cl|
+        
+          logger.warn "Enregistrement invalide #{cl.inspect}" unless cl.valid?
+          puts "#{cl.inspect}" unless cl.valid?
+          w.compta_lines << cl
+
+        end
         # puis on intègre la compta_line de report à nouveau
         w.compta_lines << report_a_nouveau
         val = w.valid?
@@ -209,9 +215,15 @@ class Period < ActiveRecord::Base
           puts w.inspect
           w.compta_lines.each { |cl| puts cl.inspect}
         end
-        w.save
-        logger.info w.inspect
-        # finir la transaction en verrouillant l'exercice
+        if w.save
+          self.open = false
+          save
+          # finir la transaction en verrouillant l'exercice
+        else
+          logger.info w.inspect
+        end
+        puts w.compta_lines.size
+        
         
       end
     end
@@ -222,7 +234,9 @@ class Period < ActiveRecord::Base
   # report_compta_line crée la ligne de report de l'exercice
   def report_a_nouveau
     res_acc  = next_period.report_account
-    ComptaLine.new(account_id:res_acc.id, credit:resultat, debit:0)
+    ran = ComptaLine.new(account_id:res_acc.id, credit:resultat, debit:0)
+    Rails.logger.warn 'report à nouveau invalide' unless ran.valid?
+    ran
   end
 
   # Pour les comptes de classe 1 à 5
@@ -243,6 +257,7 @@ class Period < ActiveRecord::Base
           credit:h[:credit])
       end
     end
+    
     return rcb
   end
 
@@ -492,16 +507,16 @@ class Period < ActiveRecord::Base
 
   # recopie les natures de l'exercice précédent 's'il y en a un)
   def copy_natures
-       pp = self.previous_period
-      pp.natures.all.each do |n|
-        nn = {name: n.name, comment: n.comment, income_outcome: n.income_outcome} # on commence à construire le hash
-        if n.account_id # cas où il y avait un rattachement à un compte
-          previous_account=pp.accounts.find(n.account_id) # on identifie le compte de rattachement
-          nn[:account_id] = self.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
-        end
-        self.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
+    pp = self.previous_period
+    pp.natures.all.each do |n|
+      nn = {name: n.name, comment: n.comment, income_outcome: n.income_outcome} # on commence à construire le hash
+      if n.account_id # cas où il y avait un rattachement à un compte
+        previous_account=pp.accounts.find(n.account_id) # on identifie le compte de rattachement
+        nn[:account_id] = self.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
       end
-   end
+      self.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
+    end
+  end
 
   # load natures est appelé lors de la création d'un premier exercice
   # load_natures lit le fichier natures_asso.yml et crée les natures correspondantes

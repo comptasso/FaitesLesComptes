@@ -41,7 +41,9 @@ class Admin::RoomsController < Admin::ApplicationController
     # on vérifie que le fichier correspondant existe
     if @room.destroy
       # on détruit le fichier correspondant
-      File.delete(@room.absolute_db_name) if File.exist?(@room.absolute_db_name)
+      # TODO sur windows au moins, semble poser un problème de droit d'accès
+      # donc on n'efface pas le fichier
+      # File.delete(@room.absolute_db_name) if File.exist?(@room.absolute_db_name)
       flash[:notice] =  "La base #{@room.database_name} a été supprimée"
       organism_has_changed?
       redirect_to admin_organisms_url
