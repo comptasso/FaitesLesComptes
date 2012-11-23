@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121121053317) do
+ActiveRecord::Schema.define(:version => 20121123051610) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -61,12 +61,12 @@ ActiveRecord::Schema.define(:version => 20121121053317) do
     t.string   "reference"
     t.date     "begin_date"
     t.date     "end_date"
-    t.decimal  "begin_sold",      :default => 0.0
-    t.decimal  "total_debit",     :default => 0.0
-    t.decimal  "total_credit",    :default => 0.0
-    t.boolean  "locked",          :default => false
+    t.boolean  "locked",                                         :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "begin_sold",      :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "total_debit",     :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "total_credit",    :precision => 10, :scale => 2, :default => 0.0
   end
 
   create_table "books", :force => true do |t|
@@ -81,11 +81,11 @@ ActiveRecord::Schema.define(:version => 20121121053317) do
 
   create_table "cash_controls", :force => true do |t|
     t.integer  "cash_id"
-    t.decimal  "amount"
     t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "locked",     :default => false
+    t.boolean  "locked",                                    :default => false
+    t.decimal  "amount",     :precision => 10, :scale => 2, :default => 0.0
   end
 
   create_table "cashes", :force => true do |t|
@@ -109,9 +109,7 @@ ActiveRecord::Schema.define(:version => 20121121053317) do
   create_table "compta_lines", :force => true do |t|
     t.integer  "nature_id"
     t.integer  "destination_id"
-    t.decimal  "debit",            :default => 0.0
-    t.decimal  "credit",           :default => 0.0
-    t.boolean  "locked",           :default => false
+    t.boolean  "locked",                                          :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "bank_extract_id"
@@ -120,6 +118,8 @@ ActiveRecord::Schema.define(:version => 20121121053317) do
     t.string   "check_number"
     t.integer  "account_id"
     t.integer  "writing_id"
+    t.decimal  "debit",            :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "credit",           :precision => 10, :scale => 2, :default => 0.0
   end
 
   add_index "compta_lines", ["account_id"], :name => "index_lines_on_account_id"

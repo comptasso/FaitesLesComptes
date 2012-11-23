@@ -37,17 +37,17 @@ module Utilities::Sold
   # crédit cumulé à une date (y compris cette date). Renvoie 0 s'il n'y a
   # pas de périod et donc pas de comptes associé à cette caisse pour cette date
   def cumulated_credit_at(date)
-    cumulated_at(date, :credit)
+    cumulated_at(date, :credit).round 2
   end
 
   # solde à une date (y compris cette date). Renvoie nil s'il n'y a
   # pas de périod et donc pas de comptes pour cette date
   def sold_at(date)
-    cumulated_credit_at(date) - cumulated_debit_at(date)
+    (cumulated_credit_at(date) - cumulated_debit_at(date)).round 2
   end
 
   def movement(from, to, dc)
-    cumulated_at(to, dc) - cumulated_at(from - 1 , dc)
+    (cumulated_at(to, dc) - cumulated_at(from - 1 , dc)).round 2
   end
 
 
@@ -60,9 +60,9 @@ module Utilities::Sold
     if selector.is_a?(String)
       selector = Date.civil(selector[/\d{4}$/].to_i, selector[/^\d{2}/].to_i,1)
     end
-    r = sold_at(selector.end_of_month) - sold_before(selector.beginning_of_month)
+    r = (sold_at(selector.end_of_month) - sold_before(selector.beginning_of_month))
     # r = lines.select([:debit, :credit, :line_date]).mois(selector).sum('credit - debit') if selector.is_a? Date
-    return r.to_f  # nécessaire car quand il n'y a pas de lignes, le retour est '0' et non 0
+    return r.to_f.round 2  # nécessaire car quand il n'y a pas de lignes, le retour est '0' et non 0
   end
 
  

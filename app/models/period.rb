@@ -203,24 +203,30 @@ class Period < ActiveRecord::Base
         report_comptes_bilan.each do |cl|
         
           logger.warn "Enregistrement invalide #{cl.inspect}" unless cl.valid?
-          puts "#{cl.inspect}" unless cl.valid?
+          puts "ATTENTION ligne invalide #{cl.inspect}" unless cl.valid?
           w.compta_lines << cl
 
         end
+        self.open = false # on verrouille l'exercice maitenant
         # puis on intègre la compta_line de report à nouveau
         w.compta_lines << report_a_nouveau
         val = w.valid?
         unless val
+          puts 'DANS VAL AVEC DES ERREURS SUR W'
           puts w.errors.messages
           puts w.inspect
-          w.compta_lines.each { |cl| puts cl.inspect}
+          puts "AFFICHAGE DES LIGNES INVALIDES"
+          w.compta_lines.each { |cl| puts cl.inspect unless cl.valid?}
+          return false
         end
+        
         if w.save
-          self.open = false
-          save
+          logger.info 'Clôture de l\'exercice effectuée'
           # finir la transaction en verrouillant l'exercice
+          self.save
         else
-          logger.info w.inspect
+          logger.info "Une erreur s'est produite lors de la clôture #{w.inspect}"
+          return false
         end
         puts w.compta_lines.size
         

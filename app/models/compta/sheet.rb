@@ -78,6 +78,19 @@ module Compta
    # pour avoir la décimale dans le tableur
  end
 
+ def detail_to_csv(options = {col_sep:"\t"})
+   CSV.generate(options) do |csv|
+   csv <<  %w(Numéro Libellé Brut Amort Net Précédent)
+
+   @period.two_period_account_numbers.each {|num| csv << Compta::RubrikLine.new(@period, :actif, num).to_csv}
+   end
+   csv
+ end
+
+ def detail_to_xls
+   detail_to_csv.encode("windows-1252")
+ end
+
 
 
  # utilisé pour le csv de l'action index
