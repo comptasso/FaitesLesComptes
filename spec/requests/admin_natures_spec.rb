@@ -22,7 +22,8 @@ describe 'vue natures index' do
   it 'check minimal organism' do
     Organism.count.should == 1
     Nature.count.should == 18 # les natures par défaut pour nautres_asso.yml
-    Nature.first.income_outcome.should be_false
+    # on commence par les natures de recettes
+    Nature.first.income_outcome.should be_true
   end
 
 

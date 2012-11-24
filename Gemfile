@@ -11,6 +11,7 @@ gem 'acts_as_list'
 gem 'prawn'
 # gem 'prawn_rails'
 gem 'haml-rails'
+gem 'serenity-odt'
 
 
 

@@ -15,7 +15,7 @@ include OrganismFixture
     @od.writings.create!({date:Date.today, narration:'ligne pour controller rubrik',
       :compta_lines_attributes=>{'0'=>{account_id:Account.find_by_number('206').id, credit:100 },
         '1'=>{account_id:Account.find_by_number('201').id, credit:10},
-        '2'=>{account_id:Account.find_by_number('280').id, debit:5},
+        '2'=>{account_id:Account.find_by_number('2801').id, debit:5},
         '3'=>{account_id:Account.find_by_number('47').id, debit:105}
       }
     })
@@ -31,7 +31,7 @@ include OrganismFixture
     Compta::Sheet.new(@p, 'test.yml', 'ACTIF IMMOBILISE - TOTAL 1').render.should == [
       ['Frais d\'établissement'],
       ['20', 'Immobilisations incorporelles', 110.0, 0],
-      ['280', 'Amortissements des immobilisations incorporelles', 0, 5.0],
+      ['2801', 'Amortissements des immobilisations incorporelles', 0, 5.0],
       ['Total Frais d\'établissement', 110.0, 5.0, 105.0],
       ['Immobilisations corporelles'],
       ['21', 'Immobilisations corporelles', 1200.0, 0],

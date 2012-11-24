@@ -82,7 +82,7 @@ module Compta
    CSV.generate(options) do |csv|
    csv <<  %w(Numéro Libellé Brut Amort Net Précédent)
 
-   @period.two_period_account_numbers.each {|num| csv << Compta::RubrikLine.new(@period, :actif, num).to_csv}
+   @period.two_period_account_numbers.each {|num| csv << Compta::RubrikLine.new(@period, :actif, num).to_csv} 
    end
    csv
  end

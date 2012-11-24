@@ -40,11 +40,6 @@ describe AnBook do
 
   end
 
-  it 'on ne peut écrire si l exercice précédent ouvert' do
-    p2012.stub(:previous_period?).and_return true
-    p2012.stub(:previous_period).and_return mock_model(Period, closed?:false)
-    Writing.new(valid_attributes).should_not be_valid
-    
-  end
+ 
 
 end
