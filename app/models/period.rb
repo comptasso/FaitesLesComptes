@@ -200,37 +200,28 @@ class Period < ActiveRecord::Base
         
         w = an_book.writings.new(date:date, narration:'A nouveau')
         # on fait d'abord les compta_liens du compte de bilan
-        report_comptes_bilan.each do |cl|
+        report_comptes_bilan.each { |cl| w.compta_lines << cl }
         
-          logger.warn "Enregistrement invalide #{cl.inspect}" unless cl.valid?
-          puts "ATTENTION ligne invalide #{cl.inspect}" unless cl.valid?
-          w.compta_lines << cl
-
-        end
-        self.open = false # on verrouille l'exercice maitenant
+        
         # puis on intègre la compta_line de report à nouveau
         w.compta_lines << report_a_nouveau if resultat != 0.0
-        val = w.valid?
-        unless val
-          puts 'DANS VAL AVEC DES ERREURS SUR W'
-          puts w.errors.messages
-          puts w.inspect
-          puts "AFFICHAGE DES LIGNES INVALIDES"
-          w.compta_lines.each { |cl| puts cl.inspect unless cl.valid?}
+         
+        unless w.valid?
+          logger.warn  'Dans period#close avec des erreurs sur w'
+          logger.warn  w.errors.messages
+          w.compta_lines.each { |cl| logger.warn(cl.inspect) unless cl.valid?}
           return false
         end
         
         if w.save
           logger.info 'Clôture de l\'exercice effectuée'
           # finir la transaction en verrouillant l'exercice
-          self.save
+          update_attribute(:open, false)
+          
         else
           logger.info "Une erreur s'est produite lors de la clôture #{w.inspect}"
           return false
         end
-        puts w.compta_lines.size
-        
-        
       end
     end
     # retourne true ou false correspondant à la situation de l'exercice
@@ -435,6 +426,38 @@ class Period < ActiveRecord::Base
 
 
   protected
+
+
+   # report_compta_line crée la ligne de report de l'exercice
+  # TODO traiter le cas où le résultat serait zéro
+  def report_a_nouveau
+    res_acc  = next_period.report_account
+    ran = ComptaLine.new(account_id:res_acc.id, credit:resultat, debit:0)
+    Rails.logger.warn 'report à nouveau invalide' unless ran.valid?
+    ran
+  end
+
+  # Pour les comptes de classe 1 à 5
+  # crée un tableau de compta_lines reprenant le solde du compte
+  def report_comptes_bilan
+    rcb = []
+    # POur le comptes de classe 1 à 5
+    np = next_period
+    accounts.find_each(conditions:['number < ?', '5Z']) do |acc|
+      # on trouve le compte correspondant
+      next_acc = np.accounts.find_by_number(acc.number)
+      # et on créé une compta_line respectant les principes
+      h = acc.report_info # récupération des infos du compte
+      # pas de compta_line s'il n'y a pas de mouvement
+      if h
+        rcb << ComptaLine.new(account_id:next_acc.id,
+          debit:h[:debit],
+          credit:h[:credit])
+      end
+    end
+
+    return rcb
+  end
 
   # on ne peut jamais changer la date de début d'un exercice créé.
   # soit c'est le premier et la date de début a été fixée lors de la création
