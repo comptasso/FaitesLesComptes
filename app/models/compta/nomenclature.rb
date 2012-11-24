@@ -28,7 +28,7 @@ module Compta
       path = case Rails.env
       when 'test' then File.join Rails.root, 'spec', 'fixtures', 'nomenclatures', yml_file
       else
-        File.join Rails.root, 'app', 'assets', 'parametres', 'asso', yml_file 
+        File.join Rails.root, 'app', 'assets', 'parametres', 'association', yml_file
       end
       @instructions = YAML::load_file(path)
     #  def_document

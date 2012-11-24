@@ -700,9 +700,9 @@ OK - Problème avec le fait qu'il y a deux caisses dans la liste déroulante : s
 Mise en page des tables dans pointage de compte
 Mettre un solde dans la balance
 OK - Rajouter un cadenas dans compta->Journaux OD pour faire un verrouillage global
- Il faudra revoir si la création et la clôture d'un exercice fonctionnent bien.
+OK -  Il faudra revoir si la création et la clôture d'un exercice fonctionnent bien.
 Le champ adress de bank_account n'est plus utilisé
-Vérifier qu'une restauration ne peut écraser une base existante (d'un autre User, du même User)
+OK - Vérifier qu'une restauration ne peut écraser une base existante (d'un autre User, du même User)
 ----------------------------Nomenclature -----------------------------
 OK - Une nomenclature doit vérifier que les comptes ne sont pris qu'une fois,
 OK - doit vérifier qu'il y a au moins 5 documents, actif, passif et exploitation, financier et exceptionnel
@@ -743,6 +743,7 @@ Il serait plus judicieux de faire un stat controller car le controller nature n'
 OK - Faire une classe month pour Period ? : en fait c'est la classe MonthYear
 -----------------------------------------------------------------
 
+Peut on supprimer le fichier sqlite3 d'un organisme quand on efface l'organisme (actuellement le système dit que c'est interdit)
 Gérer les income et outcome book avec un controller dédié et des formulaires pour créate et update différents
 (avoir un form qui demande le type pour la création, mais pas pour l'édition)
 OK - quand on crée une écriture, le bouton créer remet new (ce qui est une bonne idée, mais il faudrait qu'il conserve la date
