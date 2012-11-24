@@ -209,7 +209,7 @@ class Period < ActiveRecord::Base
         end
         self.open = false # on verrouille l'exercice maitenant
         # puis on intègre la compta_line de report à nouveau
-        w.compta_lines << report_a_nouveau
+        w.compta_lines << report_a_nouveau if resultat != 0.0
         val = w.valid?
         unless val
           puts 'DANS VAL AVEC DES ERREURS SUR W'
@@ -238,6 +238,7 @@ class Period < ActiveRecord::Base
   end
 
   # report_compta_line crée la ligne de report de l'exercice
+  # TODO traiter le cas où le résultat serait zéro
   def report_a_nouveau
     res_acc  = next_period.report_account
     ran = ComptaLine.new(account_id:res_acc.id, credit:resultat, debit:0)
