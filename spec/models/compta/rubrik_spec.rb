@@ -97,6 +97,10 @@ describe Compta::Listing do
       @r.previous_net.should == 28 # 4 fois 7 car il y a 4 comptes (201 206 208 et le -2801)
     end
 
+    it 'la profondeur est 0' do
+      @r.depth.should == 0
+    end
+
   end
 
 end

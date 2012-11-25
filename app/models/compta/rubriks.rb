@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require 'pdf_document/pdf_rubriks'
+
 module Compta
 
   # Rubriks est une classe comportant un titre et une collection répondant aux
@@ -20,7 +22,7 @@ module Compta
     def initialize(period, title, collection)
       @period = period
       @collection = collection
-      @title = title
+      @title = title.to_s
     end
 
     # la ligne de total avec son titre et ses 3 valeurs
@@ -36,9 +38,9 @@ module Compta
       [@title, net, previous_net]
     end
 
-    def totals_prefix
+    def totals_prefix(prefix = 'Total ')
       v = totals
-      v[0] = 'Total ' + v[0].to_s
+      v[0] = prefix + v[0].to_s
       v
     end
 
@@ -67,6 +69,26 @@ module Compta
     def lines
       @collection.collect {|r| r.totals}
     end
+
+    # détermine sa profondeur (utile) pour sélectionner les styles dans
+    # les vues ou les pdf, en fonction de celle de sa collection
+    def depth
+      @collection.first.depth + 1
+    end
+
+    
+      #produit un document pdf en s'appuyant sur la classe PdfDocument::Simple
+  # et ses classe associées page et table
+  def to_pdf(options = {})
+    options[:title] =  "Détail de la rubrique #{@title}"
+    pdf = PdfDocument::PdfRubriks.new(@period, self, options)
+    pdf.set_columns(['title', 'brut', 'amortissement', 'net', 'previous_net'])
+    pdf.set_columns_titles(['', 'Montant brut', "Amortissement\nProvision", 'Montant net', 'Précédent'])
+    pdf.set_columns_widths([40, 15, 15, 15, 15])
+    pdf.set_columns_alignements([:left, :right, :right, :right, :right] )
+    pdf
+  end
+   
 
 
 

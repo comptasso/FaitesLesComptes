@@ -37,7 +37,7 @@ module Compta
 
     def initialize(period, title, sens, numeros)
       @period = period
-      @title = title
+      @title = title.to_s
       @numeros = numeros
       @sens = sens
     end
@@ -60,6 +60,12 @@ module Compta
     # retourne la ligne de total de la rubrique
     def totals
       [@title, brut, amortissement, net, previous_net]
+    end
+
+    def totals_prefix(prefix = 'Total ')
+      v = totals
+      v[0] = prefix + v[0].to_s
+      v
     end
 
     alias total_actif totals
@@ -90,6 +96,13 @@ module Compta
 
     def previous_net
       @previous_net ||= lines.sum(&:previous_net)
+    end
+
+    # la profondeur (depth) d'une rubrique est 0
+    # cette méthode existe pour pouvoir définir la profondeur
+    # des Compta::Rubriks
+    def depth
+      0
     end
 
     

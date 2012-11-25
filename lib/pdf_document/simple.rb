@@ -40,7 +40,7 @@ module PdfDocument
 
     # permet d'appeler la page number
     # retourne une instance de PdfDocument::Page
-    def page(number)
+    def page(number = 1)
       raise ArgumentError, "La page demandée n'existe pas"  unless (1..nb_pages).include? number
       Page.new(number, self)
     end
@@ -112,6 +112,18 @@ module PdfDocument
       @columns_titles = array_titles || @columns
     end
 
+    # définit un aligment des colonnes, à gauche par défaut
+    # TODO mettre ici, et dans toutes les méthodes similaires un
+    # raise error si la taille de l'array n'est pas correcte
+    def set_columns_alignements(array = nil)
+      if array
+        @columns_alignements = array
+      else
+        @columns_alignements = @columns.map{|c| :left}
+      end
+      @columns_alignements
+    end
+
     
     # Crée le fichier pdf associé
     def render(template = "lib/pdf_document/simple.pdf.prawn")
@@ -127,6 +139,20 @@ module PdfDocument
       end
       numerote
       @pdf_file.render
+    end
+
+    # Permet d'insérer un bout de pdf dans un fichier pdf
+    # prend un fichier pdf en argument et évalue le contenu du template pdf.prawn
+    # fourni en deuxième argument.
+    # retourne le fichier pdf après avoir interprété le contenu du template
+    def render_pdf_text(pdf, template = "lib/pdf_document/simple.pdf.prawn")
+      text  =  ''
+      File.open(template, 'r') do |f|
+        text = f.read
+      end
+      doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
+      Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
+      pdf.instance_eval(text)
     end
 
     protected

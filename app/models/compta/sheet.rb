@@ -37,6 +37,7 @@
 #  
 #
 require 'yaml'
+require 'pdf_document/pdf_sheet'
 
 module Compta
 
@@ -52,102 +53,116 @@ module Compta
       @list_rubriks = page
       @name = name
       parse_page
-     end
+    end
 
 
- # utilisé pour le csv de l'option show
- def to_csv(options = {col_sep:"\t"})
-   CSV.generate(options) do |csv|
-     csv << [@name.capitalize] # par ex Actif
-     csv << entetes  # la ligne des titres
-     @total_general.collection.each do |rubs|
-       rubs.collection.each do |r|
-         if (r.resultat?)
-           retour = r.total_passif
-           retour[0] = '12 - ' + retour[0].to_s
-           csv << retour
-         else
-           r.lines.each {|l| csv << (@sens == :actif ? l.to_actif : l.to_passif)}
-         end
-       end
-       csv << (@sens == :actif ? rubs.total_actif : rubs.total_passif)
-     end
-     csv << (@sens == :actif ? @total_general.total_actif : @total_general.total_passif)
+    # utilisé pour le csv de l'option show
+    def to_csv(options = {col_sep:"\t"})
+      CSV.generate(options) do |csv|
+        csv << [@name.capitalize] # par ex Actif
+        csv << entetes  # la ligne des titres
+        @total_general.collection.each do |rubs|
+          rubs.collection.each do |r|
+            if (r.resultat?)
+              retour = r.total_passif
+              retour[0] = '12 - ' + retour[0].to_s
+              csv << retour
+            else
+              r.lines.each {|l| csv << (@sens == :actif ? l.to_actif : l.to_passif)}
+            end
+          end
+          csv << (@sens == :actif ? rubs.total_actif : rubs.total_passif)
+        end
+        csv << (@sens == :actif ? @total_general.total_actif : @total_general.total_passif)
 
-   end.gsub('.', ',') # remplacement de tous les points par des virgules
-   # pour avoir la décimale dans le tableur
- end
+      end.gsub('.', ',') # remplacement de tous les points par des virgules
+      # pour avoir la décimale dans le tableur
+    end
 
- def detail_to_csv(options = {col_sep:"\t"})
-   CSV.generate(options) do |csv|
-   csv <<  %w(Numéro Libellé Brut Amort Net Précédent)
+    def detail_to_csv(options = {col_sep:"\t"})
+      CSV.generate(options) do |csv|
+        csv <<  %w(Numéro Libellé Brut Amort Net Précédent)
 
-   @period.two_period_account_numbers.each {|num| csv << Compta::RubrikLine.new(@period, :actif, num).to_csv} 
-   end
-   csv
- end
+        @period.two_period_account_numbers.each {|num| csv << Compta::RubrikLine.new(@period, :actif, num).to_csv}
+      end
+      csv
+    end
 
- def detail_to_xls
-   detail_to_csv.encode("windows-1252")
- end
+    def detail_to_xls
+      detail_to_csv.encode("windows-1252")
+    end
 
 
 
- # utilisé pour le csv de l'action index
- def to_index_csv(options = {col_sep:"\t"})
-   CSV.generate(options) do |csv|
-     csv << [@name.capitalize] # par ex Actif
-     csv << (@sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']) # la ligne des titres
-     @total_general.collection.each do |rubs|
-       rubs.lines.each {|l| csv << prepare_line(l) }
-       csv << prepare_line(rubs.totals_prefix)
+    # utilisé pour le csv de l'action index
+    def to_index_csv(options = {col_sep:"\t"})
+      CSV.generate(options) do |csv|
+        csv << [@name.capitalize] # par ex Actif
+        csv << (@sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']) # la ligne des titres
+        @total_general.collection.each do |rubs|
+          rubs.lines.each {|l| csv << prepare_line(l) }
+          csv << prepare_line(rubs.totals_prefix)
 
-     end
-     csv << prepare_line(@total_general.totals_prefix)
+        end
+        csv << prepare_line(@total_general.totals_prefix)
 
-   end.gsub('.', ',') # remplacement de tous les points par des virgules
-   # pour avoir la décimale dans le tableur
- end
+      end.gsub('.', ',') # remplacement de tous les points par des virgules
+      # pour avoir la décimale dans le tableur
+    end
  
- def to_index_xls(options = {col_sep:"\t"})
-   to_index_csv(options).encode("windows-1252")
- end
+    def to_index_xls(options = {col_sep:"\t"})
+      to_index_csv(options).encode("windows-1252")
+    end
 
- protected
+    # fait une édition de sheet ce qui reprend des titres puis insère les éléments
+    #
+    def to_pdf(options = {})
+      options[:title] =  name.to_s
+      pdf = PdfDocument::PdfSheet.new(@period, self, options).to_pdf
+      @total_general.to_pdf.render_pdf_text(pdf, "lib/pdf_document/prawn_files/rubriks.pdf.prawn" )
+      pdf
+    end
 
- # appelé par initialize, construit l'ensemble des rubriks qui seront utilisées pour
- # les différentes parties du document (avec à chaque fois le sous total affiché)
- # puis, utilise ces rubriques, pour faire le total_general
- def parse_page
-   @sens = @list_rubriks[:sens]
-   sous_totaux = @list_rubriks[:rubriks].map do  |k,v|
-     puts "Inspection de v #{v.inspect}"
-     list = v.map do |l, num|
-       puts "clé : #{l}"
-       puts "numeros : #{num}"
-       Compta::Rubrik.new(@period, l, @sens, num)
-     end
-     Compta::Rubriks.new(@period, k, list)
-   end
+    def render_pdf
+      to_pdf.render
+    end
 
-   @total_general = Compta::Rubriks.new(@period, @list_rubriks[:title] , sous_totaux)
- end
 
- # prepare line sert à effacer les montant brut et amortissement pour ne garder 
- # que le net.
- # Utile pour le passif d'un bilan et pour les comptes de résultats qui n'ont pas 
- # la même logique qu'une page actif
- def prepare_line(line)
-   if @sens != :actif
-   line[1] = line[2]=''
-   end
-   line
- end
+    protected
 
- # prépare les entêtes utilisés pour le fichier csv
- def entetes
-   @sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : %w(Rubrique Montant Précédent)
- end
+    # appelé par initialize, construit l'ensemble des rubriks qui seront utilisées pour
+    # les différentes parties du document (avec à chaque fois le sous total affiché)
+    # puis, utilise ces rubriques, pour faire le total_general
+    def parse_page
+      @sens = @list_rubriks[:sens]
+      sous_totaux = @list_rubriks[:rubriks].map do  |k,v|
+        puts "Inspection de v #{v.inspect}"
+        list = v.map do |l, num|
+          puts "clé : #{l}"
+          puts "numeros : #{num}"
+          Compta::Rubrik.new(@period, l, @sens, num)
+        end
+        Compta::Rubriks.new(@period, k, list)
+      end
+
+      @total_general = Compta::Rubriks.new(@period, @list_rubriks[:title] , sous_totaux)
+    end
+
+    # prepare line sert à effacer les montant brut et amortissement pour ne garder
+    # que le net.
+    # Utile pour le passif d'un bilan et pour les comptes de résultats qui n'ont pas
+    # la même logique qu'une page actif
+    def prepare_line(line)
+      if @sens != :actif
+        line[1] = line[2]=''
+      end
+      line
+    end
+
+    # prépare les entêtes utilisés pour le fichier csv
+    def entetes
+      @sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : %w(Rubrique Montant Précédent)
+    end
 
 
   end

@@ -3,6 +3,8 @@
 # Controller permettant d'afficher les différentes pages de restitution des comptes
 # actif, passif, ...
 
+load "#{Rails.root}/lib/pdf_document/pdf_rubriks.rb"
+
 class Compta::SheetsController < Compta::ApplicationController
   
   before_filter :check_nomenclature, :only=>[:index, :show]
@@ -35,6 +37,7 @@ class Compta::SheetsController < Compta::ApplicationController
         format.html 
         format.csv { send_data @sheet.to_csv  }  # \t pour éviter le problème des virgules
         format.xls { send_data @sheet.to_xls  }
+        format.pdf { send_data @sheet.to_pdf.render}
       end
     else
       flash[:alert] = "Le document demandé : #{params[:id]}, n'a pas été trouvé "
@@ -50,6 +53,8 @@ class Compta::SheetsController < Compta::ApplicationController
     redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:exploitation, :financier, :exceptionnel],
     :title=>'Résultats')
   end
+
+
 
 
   # pluriel volontaire pour le distinguer de show/benvolat qui montre le détail de la page benevolat

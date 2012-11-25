@@ -48,6 +48,10 @@ module PdfDocument
       pdf_table.prepared_lines
     end
 
+    def table_lines_depth
+      pdf_table.depths
+    end
+
     def table_total_line
       pdf_table.total_line
     end

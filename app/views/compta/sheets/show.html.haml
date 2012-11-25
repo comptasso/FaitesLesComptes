@@ -1,7 +1,8 @@
 =content_for :menu do
   = icon_to 'retour.png', :back
   = icon_to 'report-excel.png', compta_period_sheet_path(params.merge :format=>'xls'), title:'XLS', :target=>'_blank'
-  = icon_to 'table-export.png', compta_period_sheet_path(params.merge :format=>'csv'), title:'CSV', :target=>'_blank' 
+  = icon_to 'table-export.png', compta_period_sheet_path(params.merge :format=>'csv'), title:'CSV', :target=>'_blank'
+  = icon_to 'pdf.png', compta_period_sheet_path(params.merge :format=>'pdf'), title:'PDF', :target=>'_blank'
 
 
 .champ

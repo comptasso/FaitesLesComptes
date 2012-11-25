@@ -14,7 +14,7 @@ describe Compta::Sheet do
     create_minimal_organism
     @od.writings.create!({date:Date.today, narration:'ligne pour controller rubrik',
         :compta_lines_attributes=>{'0'=>{account_id:Account.find_by_number('201').id, debit:100 },
-          '2'=>{account_id:Account.find_by_number('280').id, credit:5},
+          '2'=>{account_id:Account.find_by_number('2801').id, credit:5},
           '3'=>{account_id:Account.find_by_number('47').id, credit:95}
         }
       })
@@ -26,14 +26,14 @@ describe Compta::Sheet do
 
     # création de deux rubriques
     @r1 = Compta::Rubrik.new(@p, 'Fonds commercial', :actif, '206 207 -290')
-    @r2 = Compta::Rubrik.new(@p, 'Autres', :actif, '201 208 -280')
+    @r2 = Compta::Rubrik.new(@p, 'Autres', :actif, '201 208 -2801')
   end
 
-  it 'vérif de @r1 et @r2' do
-    @r1.totals.should == ['Total Fonds commercial', 1200.0, 0, 1200.0, 0.0]
-    @r2.totals.should == ['Total Autres', 100.0, 5.0, 95.0, 0]
-  end
-  
+#  it 'vérif de @r1 et @r2' do
+#    @r1.totals_prefix.should == ['Total Fonds commercial', 1200.0, 0, 1200.0, 0.0]
+#    @r2.totals_prefix.should == ['Total Autres', 100.0, 5.0, 95.0, 0]
+#  end
+#  
   describe 'premier niveau' do
     before(:each) do
       @level1 = Compta::Rubriks.new(@p, 'Total 1', [@r1, @r2])
@@ -53,6 +53,10 @@ describe Compta::Sheet do
 
     it 'totals' do
       @level1.totals.should == ['Total 1', 1300.0, 5.0, 1295.0, 0]
+    end
+
+    it 'sa prfondeur est de  1' do
+      @level1.depth.should == 1
     end
 
     describe 'second niveau' do
@@ -81,6 +85,10 @@ describe Compta::Sheet do
       it 'lines' do
         @level2.lines.should == [['Total 1', 1300.0, 5.0, 1295.0, 0.0],
           ['Total 1bis', 1200.0, 0.0, 1200.0, 0]]
+      end
+
+      it 'sa prfondeur est de 2' do
+        @level2.depth.should == 2
       end
 
     end

@@ -44,6 +44,20 @@ module PdfDocument
         @prepared_lines ||= lines.collect {|l| prepare_line(l)} if lines
     end
 
+    # renvoie un array des profondeur de lignes. Utilisé par rubriks.pdf.prawn pour
+    # préciser les styles des lignes
+    # La profondeur 0 est en maigre, la 1 en gras, la 2 en plus gras encore,...
+    #
+    def depths
+      @depths ||= lines.map do |l|
+        if l.respond_to? 'depth'
+          l.depth
+        else
+          nil
+        end
+      end
+    end
+
    
     # total_lines renvoie un array correspondant à une première colonne
     # intitulée Total, puis des nils ou des totaux si la colonne a été indiquée
