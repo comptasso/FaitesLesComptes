@@ -37,7 +37,7 @@
 #  
 #
 require 'yaml'
-require 'pdf_document/pdf_sheet'
+load 'pdf_document/pdf_sheet.rb'
 
 module Compta
 
@@ -81,7 +81,7 @@ module Compta
 
     def detail_to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
-        csv <<  %w(Numéro Libellé Brut Amort Net Précédent)
+        csv <<  %w(Numéro Libellé Brut Amort Net Précédent) 
 
         @period.two_period_account_numbers.each {|num| csv << Compta::RubrikLine.new(@period, :actif, num).to_csv}
       end
@@ -111,15 +111,19 @@ module Compta
     end
  
     def to_index_xls(options = {col_sep:"\t"})
-      to_index_csv(options).encode("windows-1252")
+      to_index_csv(options).encode("windows-1252") 
     end
 
     # fait une édition de sheet ce qui reprend des titres puis insère les éléments
     #
     def to_pdf(options = {})
-      options[:title] =  name.to_s
-      pdf = PdfDocument::PdfSheet.new(@period, self, options).to_pdf
-      @total_general.to_pdf.render_pdf_text(pdf, "lib/pdf_document/prawn_files/rubriks.pdf.prawn" )
+      options[:title] =  name.to_s 
+      options[:documents] = @page
+      pdf = PdfDocument::PdfSheet.new(@period, self, options)
+      pdf.set_columns(['title', 'brut', 'amortissement', 'net', 'previous_net'])
+      pdf.set_columns_titles(['', 'Montant brut', "Amortisst\nProvision", 'Montant net', 'Montant net'])
+      pdf.set_columns_widths([40, 15, 15, 15, 15])
+      pdf.set_columns_alignements([:left, :right, :right, :right, :right] )
       pdf
     end
 
@@ -135,12 +139,12 @@ module Compta
     # puis, utilise ces rubriques, pour faire le total_general
     def parse_page
       @sens = @list_rubriks[:sens]
-      sous_totaux = @list_rubriks[:rubriks].map do  |k,v|
+      sous_totaux = @list_rubriks[:rubriks].map do  |k,v| 
         puts "Inspection de v #{v.inspect}"
         list = v.map do |l, num|
           puts "clé : #{l}"
           puts "numeros : #{num}"
-          Compta::Rubrik.new(@period, l, @sens, num)
+          Compta::Rubrik.new(@period, l, @sens, num) 
         end
         Compta::Rubriks.new(@period, k, list)
       end

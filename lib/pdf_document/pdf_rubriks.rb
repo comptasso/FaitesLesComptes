@@ -24,24 +24,25 @@ module PdfDocument
         fl += c.to_pdf.fetch_lines if c.class == Compta::Rubriks
         fl << c
       end
-    fl
-  end
+      fl << @source
+      fl
+    end
 
-  # Crée le fichier pdf associé
-  def render(template = "lib/pdf_document/prawn_files/rubriks.pdf.prawn")
-    text  =  ''
-    File.open(template, 'r') do |f|
-      text = f.read
+    # Crée le fichier pdf associé
+    def render(template = "lib/pdf_document/prawn_files/rubriks.pdf.prawn")
+      text  =  ''
+      File.open(template, 'r') do |f|
+        text = f.read
+      end
+      #       puts text
+      require 'prawn'
+      doc = self # doc est utilisé dans le template
+      @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait) do |pdf|
+        pdf.instance_eval(text)
+      end
+      numerote
+      @pdf_file.render
     end
-    #       puts text
-    require 'prawn'
-    doc = self # doc est utilisé dans le template
-    @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait) do |pdf|
-      pdf.instance_eval(text)
-    end
-    numerote
-    @pdf_file.render
   end
-end
 
 end

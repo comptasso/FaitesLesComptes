@@ -132,8 +132,8 @@ class Organism < ActiveRecord::Base
   end
 
   # méthode permettant de donner le compte d'exploitation d'un organisme
-  def exploitation(period = Period.first)
-    Compta::Nomenclature.new(period, 'nomenclature.yml').sheet(:exploitation)
+  def document(page, period = Period.first)
+    Compta::Nomenclature.new(period, 'nomenclature.yml').sheet(page)
   end
 
  

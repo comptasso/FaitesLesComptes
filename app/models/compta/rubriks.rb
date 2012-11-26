@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'pdf_document/pdf_rubriks'
+load 'pdf_document/pdf_rubriks.rb'
 
 module Compta
 
@@ -73,7 +73,7 @@ module Compta
     # détermine sa profondeur (utile) pour sélectionner les styles dans
     # les vues ou les pdf, en fonction de celle de sa collection
     def depth
-      @collection.first.depth + 1
+      @collection.first.depth + 1 
     end
 
     

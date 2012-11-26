@@ -14,12 +14,20 @@ module PdfDocument
       1
     end
 
-    def render
-      to_pdf.render
+    def fetch_lines(page_number = 1)
+      fl = []
+      @source.total_general.collection.each do |c|
+        fl += c.to_pdf.fetch_lines if c.class == Compta::Rubriks
+        
+      end
+      fl << @source.total_general
+      fl
     end
 
+    
+
   # Crée le fichier pdf associé
-  def to_pdf(template = "lib/pdf_document/prawn_files/sheet.pdf.prawn")
+  def render(template = "lib/pdf_document/prawn_files/actif.pdf.prawn")
     text  =  ''
     File.open(template, 'r') do |f|
       text = f.read
@@ -31,8 +39,15 @@ module PdfDocument
       pdf.instance_eval(text)
     end
     numerote
-    @pdf_file
+    @pdf_file.render
   end
+
+  
+
+
+
+
+
 end
 
 end
