@@ -13,8 +13,8 @@ module Compta
       args.each do |a|
         define_method a do
           instructions[a]
+        end
       end
-    end
     end
     
     def_doc :exploitation, :actif, :passif, :financier, :exceptionnel, :benevolat
@@ -31,7 +31,7 @@ module Compta
         File.join Rails.root, 'app', 'assets', 'parametres', 'association', yml_file
       end
       @instructions = YAML::load_file(path)
-    #  def_document
+      #  def_document
     end
 
 
@@ -103,6 +103,18 @@ module Compta
     # renvoie la liste des pages existant dans cette nomenclature
     def pages
       @instructions.map {|k, v| k}
+    end
+
+
+    # permet d'extraire toutes les instructions de liste de comptes de la nomenclature
+    # la logique récursive permet de faire des nomenclatures à plusieurs niveaux
+    # sans imposer un nombre de niveaux précis
+    def accumulated_values(hash_rubriks)
+      values = []
+      hash_rubriks.each do |k,v|
+        values << (v.is_a?(Hash) ? accumulated_values(v) : v)
+      end
+      values.flatten
     end
 
 
@@ -195,26 +207,31 @@ module Compta
     # rencoie la liste brute des informations de comptes repris dans la partie doc
     # rough_accounts_list(:benevolat) renvoie par exemple %w(87 !870 870 86 !864 864)
     def rough_accounts_list(doc)
-      list = ''
-      @instructions[doc][:rubriks].each {|k,v| v.each { |t, accs| list += ' ' + accs } } if @instructions[doc]
-      list.split
+      if @instructions[doc]
+        accumulated_values(@instructions[doc][:rubriks]).join(' ').split
+      else
+        []
+      end
     end
+
+
+
 
     # doc est un symbol comme :actif, :passif, :exploitation, :financier, :exceptionnel et :benevolat
     def numbers_from_document(doc)
-      numbers = []
       if @instructions[doc]
-        @instructions[doc][:rubriks].each {|k,v| v.each { |t, accs| numbers += Compta::RubrikParser.new(@period, :actif, accs).list_numbers } }
+        accumulated_values(@instructions[doc][:rubriks]).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list_numbers}.flatten
+      else
+        []
       end
-      numbers
     end
 
     def numbers_with_options_from_document(doc)
-      numbers_with_options = []
       if @instructions[doc]
-        @instructions[doc][:rubriks].each {|k,v| v.each { |t, accs| numbers_with_options += Compta::RubrikParser.new(@period, :actif, accs).list } }
+        accumulated_values(@instructions[doc][:rubriks]).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list}.flatten
+      else
+        []
       end
-      numbers_with_options
     end
 
     def collection_numbers_with_option(*docs)

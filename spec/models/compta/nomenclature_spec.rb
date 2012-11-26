@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 
-describe Compta::Nomenclature do  
+describe Compta::Nomenclature do   
   include OrganismFixture
 
   before(:each) do
@@ -17,7 +17,7 @@ describe Compta::Nomenclature do
 
   it 'se crée à partir d un fichier' do
     cn =  Compta::Nomenclature.new(@p, 'good.yml')
-    cn.should be_an_instance_of(Compta::Nomenclature)
+    cn.should be_an_instance_of(Compta::Nomenclature) 
   end
 
   it 'sait renvoyer une page' do
@@ -31,8 +31,8 @@ describe Compta::Nomenclature do
     end
 
     it 'répond true à valid?' do
-      @cn.valid?
-      puts @cn.errors.messages
+     # @cn.valid?
+     # puts @cn.errors.messages
 
       @cn.should be_valid
     end
@@ -76,10 +76,10 @@ describe Compta::Nomenclature do
       @cn.should_not be_valid
     end
 
-    it 'visualisation des messages' do  
-      @cn.valid?
-      puts @cn.errors.messages 
-    end
+#    it 'visualisation des messages' do
+#      @cn.valid?
+#      puts @cn.errors.messages
+#    end
 
     it 'une nomenclature sait créer un sheet' do
       @cn.sheet(:exploitation).should be_an_instance_of(Compta::Sheet)

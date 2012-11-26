@@ -77,6 +77,7 @@ module Compta
     end
 
     
+    
       #produit un document pdf en s'appuyant sur la classe PdfDocument::Simple
   # et ses classe associées page et table
   def to_pdf(options = {})
