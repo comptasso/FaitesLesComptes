@@ -5,10 +5,32 @@
 
 
 - @docs.each do |doc|
+  .champ
+    %h3
+      = doc.total_general.title
+      = icon_to 'detail.png', compta_period_sheet_path(@period, doc.name)
   - if doc.sens  == :actif
-    =render :partial=>'actif', :object=>doc
+    .actif
+      %table.pc100
+        %thead
+          %th.pc60 Rubrique
+          %th.pc10 Brut
+          %th.pc10
+            Amortissement
+            %br Provision
+          %th.pc10 Net
+          %th.pc10 Exercice précédent
+        %tbody
+          =render :partial=>'actif', :object=>doc.total_general
   -else
-    =render :partial=>'passif', :object=>doc
+    .passif
+      %table.pc100
+        %thead
+          %th.pc80 Rubrique
+          %th.pc10 Montant
+          %th.pc10 Exercice précédent
+        %tbody
+          =render :partial=>'passif', :object=>doc.total_general
 
 
 

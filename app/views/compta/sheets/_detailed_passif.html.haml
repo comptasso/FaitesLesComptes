@@ -1,4 +1,10 @@
 -# affichage récursif des lignes de type passif (soit passif, soit compte de résultats)
 - if detailed_passif.depth >=1
   =render :partial=>'detailed_passif', :collection=>detailed_passif.collection
+-else
+  -# bloc if pour éviter de détailler le compte 12 qui sortirait comme le total des comptes 6 et 7
+  - if detailed_passif.resultat?
+    = render :partial=>'account_passif', :object=>totals_result_with_account(detailed_passif)
+  - else
+    = render :partial=>'account_passif', :collection=>detailed_passif.lines.map {|l| l.to_a }
 = render :partial=>'passif_rubriks_line', :object=>detailed_passif

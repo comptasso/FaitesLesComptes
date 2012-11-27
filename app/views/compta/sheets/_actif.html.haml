@@ -1,21 +1,3 @@
-.champ
-  %h3
-    = actif.total_general.title
-    = icon_to 'detail.png', compta_period_sheet_path(@period, actif.name)
-
-.actif
-  %table.pc100
-    %thead
-      %th.pc60 Rubrique
-      %th.pc10 Brut
-      %th.pc10
-        Amortissement
-        %br Provision
-      %th.pc10 Net
-      %th.pc10 Exercice précédent
-    %tbody
-      - actif.total_general.collection.each do |tgl|
-        
-        = render :partial=>"actif_line", :collection=>tgl.lines
-        = render :partial=>"actif_total_line", :object=>tgl.totals
-      = render :partial=>"actif_total_line", :object=>actif.total_general.totals
+- if actif.depth >=1
+  =render :partial=>'actif', :collection=>actif.collection
+= render :partial=>'actif_rubriks_line', :object=>actif

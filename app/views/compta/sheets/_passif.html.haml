@@ -1,17 +1,4 @@
-.champ
-  %h3
-    = passif.total_general.title
-    = icon_to 'detail.png', compta_period_sheet_path(@period, passif.name)
-
-
-.passif
-  %table.pc100
-    %thead
-      %th.pc80 Rubrique
-      %th.pc10 Montant
-      %th.pc10 Exercice précédent
-    %tbody
-      - passif.total_general.collection.each do |tgl|
-        = render :partial=>'passif_line', :collection=>tgl.lines
-        = render :partial=>'passif_total_line', :object=>tgl.totals
-      = render :partial=>'passif_total_line', :object=>passif.total_general.totals
+-# affichage récursif des lignes de type passif (soit passif, soit compte de résultats)
+- if passif.depth >=1
+  =render :partial=>'passif', :collection=>passif.collection
+= render :partial=>'passif_rubriks_line', :object=>passif
