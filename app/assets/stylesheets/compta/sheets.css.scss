@@ -1,6 +1,11 @@
 .compta_sheets {
 
-  tr.total td {
+  tr.depth_1 td {
       font-weight: bold;
       }
+
+  tr.depth_2 td, tr.depth_3 td {
+     font-weight: bold;
+     font-size: larger;
+    }
   }

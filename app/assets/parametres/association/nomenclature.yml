@@ -1,9 +1,9 @@
 ---
   :actif:
-    :title: Bilan Actif
+    :title: BILAN ACTIF
     :sens: :actif
     :rubriks:
-      :TOTAL IMMOBILISATIONS:
+      :IMMOBILISATIONS:
         :Immobilisations incorporelles:
           :Frais d'établissement: '201 -2801'
           :Frais de recherche et développement: 203 -2803
@@ -16,19 +16,18 @@
           :Immobilisations corporelles en cours: 23 -293
         :Immobilisations financières:
           :Immobilisations financières: 27 -297
-      :TOTAL ACTIF CIRCULANT:
+      :ACTIF CIRCULANT:
         :Stocks et encours:
           :Marchandises: 37 -397
         :Créances:
           :Avances et acomptes versés sur commandes: '4091'
           :Créances usagers et comptes rattachés: 41 !419 -491 -492
           :Autres: 409 !4091 43D 44D 45D 46D 47D -495 -496
-      :TOTAL DISPONIBILITES:
+      :DISPONIBILITES ET AUTRES:
         :Disponibilités:
           :Autres titres: 50 -590
           :Banques: '51D'
           :Disponibilités: '53'
-      :TOTAL AUTRES:
         :Autres actifs:
           :Charges constatées d'avance: '486'
           :Charges à répartir sur plusiseurs exercices: '481'

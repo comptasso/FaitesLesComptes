@@ -136,21 +136,24 @@ module Compta
 
     # appelé par initialize, construit l'ensemble des rubriks qui seront utilisées pour
     # les différentes parties du document (avec à chaque fois le sous total affiché)
-    # puis, utilise ces rubriques, pour faire le total_general
+    # puis, utilise ces rubriques, pour faire le total_general.
+    #
+    # S'appuie sur collect_rubriks pour faire la récursivité nécessaire
     def parse_page
       @sens = @list_rubriks[:sens]
       sous_totaux = @list_rubriks[:rubriks].map do  |k,v| 
-        puts "Inspection de v #{v.inspect}"
-        list = v.map do |l, num|
-          puts "clé : #{l}"
-          puts "numeros : #{num}"
-          Compta::Rubrik.new(@period, l, @sens, num) 
-        end
-        Compta::Rubriks.new(@period, k, list)
+        collect_rubriks(k,v,@sens)
       end
-
-      @total_general = Compta::Rubriks.new(@period, @list_rubriks[:title] , sous_totaux)
+      @total_general = Compta::Rubriks.new(@period, @list_rubriks[:title] , sous_totaux) 
     end
+
+    def collect_rubriks(cle, instruction, sens)
+      list = instruction.map do |k,v|
+         v.is_a?(Hash) ? collect_rubriks(k,v,sens) : Compta::Rubrik.new(@period, k, @sens, v)
+      end
+      Compta::Rubriks.new(@period, cle, list)
+    end
+
 
     # prepare line sert à effacer les montant brut et amortissement pour ne garder
     # que le net.

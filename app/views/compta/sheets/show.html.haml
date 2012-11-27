@@ -10,6 +10,24 @@
 
 .row-fluid
   -if @sheet.sens == :actif
-    =render :partial=>'detailed_actif', :object=>@sheet.total_general
+    .actif
+      %table.pc100
+        %thead
+          %th.pc60 Rubrique
+          %th.pc10 Brut
+          %th.pc10
+            Amortissement
+            %br Provision
+          %th.pc10 Net
+          %th.pc10 Exercice précédent
+        %tbody
+          =render :partial=>'detailed_actif', :object=>@sheet.total_general
   -else
-    =render :partial=>'detailed_passif', :object=>@sheet.total_general
+    .passif
+      %table.pc100
+        %thead
+          %th.pc80 Rubrique
+          %th.pc10 Montant
+          %th.pc10 Exercice précédent
+        %tbody
+          =render :partial=>'detailed_passif', :object=>@sheet.total_general
