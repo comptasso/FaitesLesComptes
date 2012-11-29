@@ -1,4 +1,4 @@
--# affichage récursif des lignes de type passif (soit passif, soit compte de résultats)
+-# affichage récursif des lignes de type passif (soit passif, soit compte de résultats), appelé par la vue index
 - if passif.depth >=1
   =render :partial=>'passif', :collection=>passif.collection
 = render :partial=>'passif_rubriks_line', :object=>passif

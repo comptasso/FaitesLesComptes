@@ -2,6 +2,9 @@
 
 # Controller permettant d'afficher les différentes pages de restitution des comptes
 # actif, passif, ...
+# la vue index prende une collection en paramètres et peut ainsi afficher un
+# bilan (actif et passif), un compte de résultats (exploitation, financier, exceptionnel)
+# mais aussi sert de vue (show) en n'appelant qu'un seul élémnent (actif par exemple)
 
 load "#{Rails.root}/lib/pdf_document/pdf_rubriks.rb"
 
@@ -28,7 +31,9 @@ class Compta::SheetsController < Compta::ApplicationController
     end
   end
 
-
+  # l'action show montre la construction de la sheet en détaillant pour chaque rubrique
+  # les comptes qui ont contribué au calcul
+  #
   def show
     
     @sheet = @nomenclature.sheet(params[:id].to_sym)
@@ -45,17 +50,17 @@ class Compta::SheetsController < Compta::ApplicationController
     end
   end
 
+  # bilans est une action accessoire qui renvoie vers index avec actif et passif comme 
+  # paramètres de collection
   def bilans
     redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:actif, :passif], :title=>'Bilan')
   end
 
+  # resultats renvoie vers index avec exploitation, financier et exceptionnel
   def resultats
     redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:exploitation, :financier, :exceptionnel],
     :title=>'Résultats')
   end
-
-
-
 
   # pluriel volontaire pour le distinguer de show/benvolat qui montre le détail de la page benevolat
   # tandis qu'ici on veut l'action index, mais avec une collection d'un seul élément
@@ -66,11 +71,15 @@ class Compta::SheetsController < Compta::ApplicationController
   end
 
 
+  # dernière action de ce controller, detail donne les valeurs des comptes pour l'ensemble des 
+  # comptes avec leur rattachement aux riburik adéquates.
+  # c'est une sorte de balance mais en fin d'exercice et avec les comptes de l'exercice mais 
+  # aussi de l'exercice précédent
   def detail
     @detail_lines = @period.two_period_account_numbers.map  {|num| Compta::RubrikLine.new(@period, :actif, num)}
     respond_to do |format|
         format.html
-        format.csv { send_data @detail_lines.inject('') {|i, line|  i += line.to_csv  } } # \t pour éviter le problème des virgules
+        format.csv { send_data @detail_lines.inject('') {|i, line|  i += line.to_csv  } } 
         format.xls { send_data(@detail_lines.inject('') {|i, line|  i += line.to_xls  }, :filename=>'detail.csv')   }
       end
   end
