@@ -7,6 +7,7 @@
 # mais aussi sert de vue (show) en n'appelant qu'un seul élémnent (actif par exemple)
 
 load "#{Rails.root}/lib/pdf_document/pdf_rubriks.rb"
+load "#{Rails.root}/lib/pdf_document/base.rb"
 
 class Compta::SheetsController < Compta::ApplicationController
   
@@ -75,17 +76,28 @@ class Compta::SheetsController < Compta::ApplicationController
   # comptes avec leur rattachement aux riburik adéquates.
   # c'est une sorte de balance mais en fin d'exercice et avec les comptes de l'exercice mais 
   # aussi de l'exercice précédent
-  def detail
+  def detail 
     @detail_lines = @period.two_period_account_numbers.map  {|num| Compta::RubrikLine.new(@period, :actif, num)}
-    respond_to do |format|
+    respond_to do |format|  
         format.html
         format.csv { send_data @detail_lines.inject('') {|i, line|  i += line.to_csv  } } 
         format.xls { send_data(@detail_lines.inject('') {|i, line|  i += line.to_xls  }, :filename=>'detail.csv')   }
+        format.pdf {
+            pdf = PdfDocument::Base.new(@detail_lines, {:title=>'Détail des comptes', :columns=>[:select_num, :title, :net, :previous_net],
+              :columns_titles=>['Numéro', 'Libellé', 'Montant', 'Ex Précédent']}) do |p|
+                 p.columns_widths = [15,45,20,20]
+                 p.columns_alignements = [:left, :left, :right, :right]
+                 p.top_left = "#{@organism.title}\n#{@period.exercice}" 
+                 p.stamp = @period.closed? ? '' : 'Provisoire' 
+              end
+            send_data pdf.render
+        }
       end
   end
 
   protected
 
+  # appelé par before_filter pour s'assurer que la nomenclature est valide
   def check_nomenclature
     @nomenclature = Compta::Nomenclature.new(@period, 'nomenclature.yml')
     unless @nomenclature.valid?

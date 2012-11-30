@@ -4,6 +4,25 @@ module PdfDocument
   # la classe Simple est une classe qui imprimer juste une liste d'informations
   # avec les titres et sous titres.
   # Il n'y a pas de possibilité de faire des totaux ni donc d'afficher des reports
+  # L'utilisation de Simple se fait en indiquant un exercice, une source et des options
+  #
+  #
+  # Les options obligatoires sont title et select_method
+  # Select_method sera alors utilisée pour récupérer les informations nécessaires
+  #
+  # Différentes méthodes permettent de définir les données que l'on veut utiliser
+  # Notamment :
+  # - set_columns qui permet de choisir les méthodes à appliquer à une ligne pour obtenir la valeur pour cette colonne.
+  # - set_columns_widths qui définit la largeur des colonnes
+  # - set columns_titles : définit les titres
+  # - set_columns_alignements : définit les alignements
+  #
+  # Exemple pour une balance
+  # PdfDocument::Simple.new(period, balance, {:select_method=>'accounts', :title=>'Liste des comptes'}
+  #
+  # D'autres options sont possibles comme nb_lines_per_page pour définir le nombre de lignes dans la page.
+  # Simple fonctionne sur un mode paysage.
+  #
   class Simple
 
     include ActiveModel::Validations
@@ -18,7 +37,7 @@ module PdfDocument
       @title = options[:title]
       @created_at = I18n.l Time.now
       @period = period
-      @nb_lines_per_page = options[:nb_lines_per_page] || 22
+      @nb_lines_per_page = options[:nb_lines_per_page] || NB_PER_PAGE_LANDSCAPE
       @source = source
       @select_method = options[:select_method]
     end
@@ -28,6 +47,7 @@ module PdfDocument
     def organism_name
       @period.organism.title
     end
+
 
     def exercice
       @period.exercice
