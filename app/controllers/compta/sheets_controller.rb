@@ -6,7 +6,8 @@
 # bilan (actif et passif), un compte de résultats (exploitation, financier, exceptionnel)
 # mais aussi sert de vue (show) en n'appelant qu'un seul élémnent (actif par exemple)
 
-load "#{Rails.root}/lib/pdf_document/pdf_rubriks.rb"
+load "#{Rails.root}/lib/pdf_document/pdf_rubriks.rb" 
+load "#{Rails.root}/lib/pdf_document/pdf_sheet.rb"
 load "#{Rails.root}/lib/pdf_document/base.rb"
 
 class Compta::SheetsController < Compta::ApplicationController

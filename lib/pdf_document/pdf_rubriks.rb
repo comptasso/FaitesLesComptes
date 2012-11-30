@@ -22,7 +22,7 @@ module PdfDocument
       fl = []
       @source.collection.each do |c|
         fl += c.to_pdf.fetch_lines if c.class == Compta::Rubriks
-        fl << c
+        fl << c if c.class == Compta::Rubrik
       end
       fl << @source
       fl
