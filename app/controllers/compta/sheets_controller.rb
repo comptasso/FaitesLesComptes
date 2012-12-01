@@ -15,10 +15,10 @@ class Compta::SheetsController < Compta::ApplicationController
   
   before_filter :check_nomenclature, :only=>[:index, :show]
 
-
+  # TODO ? faire un check de la validité de chaque document ?
+  # ou le vérifier dans nomenclature.rb
   def index
-    
-    @docs = params[:collection].map {|c| @nomenclature.sheet(c.to_sym)} 
+    @docs = params[:collection].map {|c| @nomenclature.sheet(c.to_sym)}
     respond_to do |format|
       format.html
       format.csv { 
@@ -36,7 +36,7 @@ class Compta::SheetsController < Compta::ApplicationController
         final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait)
         @docs.each do |doc|
            doc.to_pdf.render_pdf_text(final_pdf)
-           final_pdf.start_new_page unless doc == @docs.last
+           final_pdf.start_new_page unless doc == @docs.last 
         end
         final_pdf.number_pages("page <page>/<total>",
         { :at => [final_pdf.bounds.right - 150, 0],:width => 150,
@@ -52,15 +52,18 @@ class Compta::SheetsController < Compta::ApplicationController
   def show
     
     @sheet = @nomenclature.sheet(params[:id].to_sym)
-    if @sheet
+
+    if @sheet && @sheet.valid?
+
       respond_to do |format|
         format.html 
-        format.csv { send_data @sheet.to_csv  }  # \t pour éviter le problème des virgules
+        format.csv { send_data @sheet.to_csv  } 
         format.xls { send_data @sheet.to_xls  }
         format.pdf { send_data @sheet.to_pdf.render}
       end
-    else
-      flash[:alert] = "Le document demandé : #{params[:id]}, n'a pas été trouvé "
+      else
+      flash[:alert] = "Le document demandé (#{params[:id].capitalize}) n'a pas été trouvé " unless @sheet
+      flash[:alert] = "Le document demandé (#{params[:id].capitalize}) comporte des erreurs : #{@sheet.errors.full_messages.join('; ')}"
       redirect_to compta_period_nomenclature_url(@period)
     end
   end

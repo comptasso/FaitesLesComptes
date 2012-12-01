@@ -44,8 +44,11 @@ module Compta
   class Sheet
     
     include Utilities::ToCsv
+    include ActiveModel::Validations
     
     attr_accessor :total_general, :sens, :name
+
+    validates :sens, :inclusion=>{:in=>[:actif, :passif]}
 
 
     def initialize(period, page, name)
@@ -121,8 +124,7 @@ module Compta
     def to_pdf(options = {})
       options[:title] =  name.to_s 
       options[:documents] = @page
-      pdf = PdfDocument::PdfSheet.new(@period, self, options)
-      pdf
+      PdfDocument::PdfSheet.new(@period, self, options)
     end
 
     def render_pdf

@@ -91,7 +91,7 @@
 
   :exceptionnel:
     :title: Résultat exceptionnel
-    :sens: passif
+    :sens: :passif
     :rubriks:
       :Produits exceptionnels:
         :Produits exceptionnels: '77'
@@ -104,7 +104,7 @@
 
   :benevolat:
     :title: Evaluation des contributions volontaires en nature
-    :sens: passif
+    :sens: :passif
     :rubriks:
        :Produits:
          :Bénévolat: '870'

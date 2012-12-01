@@ -341,4 +341,8 @@ fr:
               blank: Pas de document Actif
             passif:
               blank: Pas de document Passif
+        compta/sheet:
+          attributes:
+            sens:
+              inclusion: ne peut être que :actif ou :passif
 
