@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require 'yaml'
+
 # Sheet est destinées à éditer une liste de rubriks
 # Le but est de construire des sous parties de bilan ou de comtpe de résultats
 # Les arguments sont period, une page qui est une partie d'un fichier yml.
@@ -36,9 +38,6 @@
 # doc est le nom du document.
 #  
 #
-require 'yaml'
-load 'pdf_document/pdf_sheet.rb'
-
 module Compta
 
   class Sheet

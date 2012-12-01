@@ -17,9 +17,9 @@ module Compta
       end
     end
     
-    def_doc :exploitation, :actif, :passif, :financier, :exceptionnel, :benevolat
+    def_doc :courant, :actif, :passif, :exceptionnel, :benevolat
 
-    validates :exploitation, :actif, :passif, :financier, :exceptionnel,:presence=>true
+    validates :actif, :passif, :courant, :exceptionnel,:presence=>true
     validate :bilan_complete, :bilan_balanced, :resultats_67, :benevolat_8, :no_doublon?
 
 

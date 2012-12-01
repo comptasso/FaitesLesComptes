@@ -76,7 +76,7 @@ class Compta::SheetsController < Compta::ApplicationController
 
   # resultats renvoie vers index avec exploitation, financier et exceptionnel
   def resultats
-    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:exploitation, :financier, :exceptionnel],
+    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:courant, :exceptionnel],
     :title=>'Résultats')
   end
 

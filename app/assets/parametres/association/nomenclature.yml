@@ -56,41 +56,38 @@
         :Produits constatés d'avance: '487'
         :Autres: 43C 44C 45C 46C 47C
 
-  :exploitation:
-    :title: Résultat d'exploitation
+  :courant:
+    :title: RESULTAT COURANT
     :sens: :passif
     :rubriks:
-      :Produits d'exploitation:
-        :Ventes de marchandises: '707'
-        :Production vendue (bien et services): '701 706'
-        :Production immobilisée: '72'
-        :Subvention d'exploitation: '74'
-        :Reprises sur provisions, amortissements et transferts de charge: '781'
-        :Cotisations: '756'
-        :Autres produits: '75 !756'
-      :Charges d'exploitation:
-        :Achats de marchandises: '-60 !603'
-        :Variation stocks de marchandises: '603'
-        :Autres achats et charges externes: '61'
-        :Impôts, taxes et versements assimilés: '63'
-        :Salaires et traitements: '641'
-        :Charges sociales: '645'
-        :Dotations aux amortissements et provisions: '681'
-        :Autres charges: '65'
-    
-  :financier:
-    :title: Résultat financier
-    :sens: :passif
-    :rubriks:
-      :Produits financiers:
-        :Produits financiers: '76'
-        :Reprises sur provisions financières: '786'
-      :Charges financières:
-        :Charges financières: '-66'
-        :Dotations aux provisions financières: '686'
+      :RESULTAT D'EXPLOITATION:
+        :Produits d'exploitation:
+          :Ventes de marchandises: '707'
+          :Production vendue (bien et services): '701 706'
+          :Production immobilisée: '72'
+          :Subvention d'exploitation: '74'
+          :Reprises sur provisions, amortissements et transferts de charge: '781'
+          :Cotisations: '756'
+          :Autres produits: '75 !756'
+        :Charges d'exploitation:
+          :Achats de marchandises: '-60 !603'
+          :Variation stocks de marchandises: '603'
+          :Autres achats et charges externes: '61'
+          :Impôts, taxes et versements assimilés: '63'
+          :Salaires et traitements: '641'
+          :Charges sociales: '645'
+          :Dotations aux amortissements et provisions: '681'
+          :Autres charges: '65'
+      :RESULTAT FINANCIER:
+        :Produits financiers:
+          :Produits financiers: '76'
+          :Reprises sur provisions financières: '786'
+        :Charges financières:
+          :Charges financières: '-66'
+          :Dotations aux provisions financières: '686'
 
   :exceptionnel:
-    :title: Résultat exceptionnel
+    :title: RESULTAT EXCEPTIONNEL
     :sens: :passif
     :rubriks:
       :Produits exceptionnels:
