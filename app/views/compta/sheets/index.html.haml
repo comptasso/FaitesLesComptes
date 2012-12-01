@@ -22,7 +22,7 @@
           %th.pc10 Net
           %th.pc10 Exercice précédent
         %tbody
-          =render :partial=>'actif', :object=>doc.total_general
+          =render :partial=>'actif', :object=>doc.datas
   -else
     .passif
       %table.pc100
@@ -31,7 +31,7 @@
           %th.pc10 Montant
           %th.pc10 Exercice précédent
         %tbody
-          =render :partial=>'passif', :object=>doc.total_general
+          =render :partial=>'passif', :object=>doc.datas
 
 
 

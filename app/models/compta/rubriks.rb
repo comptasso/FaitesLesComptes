@@ -1,6 +1,8 @@
 # coding: utf-8
 
 load 'pdf_document/pdf_rubriks.rb'
+require 'compta/rubriks'
+require 'compta/rubrik'
 
 module Compta
 
@@ -74,6 +76,17 @@ module Compta
     # les vues ou les pdf, en fonction de celle de sa collection
     def depth
       @collection.first.depth + 1 
+    end
+
+    def fetch_lines
+      fl = []
+      @collection.each do |c|
+        puts c
+        fl += c.fetch_lines if c.class == Compta::Rubriks
+        fl += c.lines  if c.class == Compta::Rubrik && !c.lines.empty?
+      end
+      fl << self
+      fl
     end
 
     

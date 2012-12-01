@@ -1,6 +1,7 @@
 # coding: utf-8
 
 require 'yaml'
+require 'pdf_document/pdf_detailed_sheet'
 
 # Sheet est destinées à éditer une liste de rubriks
 # Le but est de construire des sous parties de bilan ou de comtpe de résultats
@@ -55,6 +56,11 @@ module Compta
       @list_rubriks = page
       @name = name
       parse_page
+    end
+
+
+    def datas
+      @total_general.collection.first
     end
 
 
@@ -124,6 +130,12 @@ module Compta
       options[:title] =  name.to_s 
       options[:documents] = @page
       PdfDocument::PdfSheet.new(@period, self, options)
+    end
+
+    def to_detailed_pdf(options = {})
+      options[:title] =  name.to_s
+      options[:documents] = @page
+      PdfDocument::PdfDetailedSheet.new(@period, self, options)
     end
 
     def render_pdf

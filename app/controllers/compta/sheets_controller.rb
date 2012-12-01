@@ -9,7 +9,7 @@
 load "#{Rails.root}/lib/pdf_document/pdf_rubriks.rb" 
 load "#{Rails.root}/lib/pdf_document/pdf_sheet.rb"
 load "#{Rails.root}/lib/pdf_document/simple.rb"
-load "#{Rails.root}/lib/pdf_document/base.rb"
+load "#{Rails.root}/lib/pdf_document/base.rb" 
 
 class Compta::SheetsController < Compta::ApplicationController
   
@@ -59,7 +59,7 @@ class Compta::SheetsController < Compta::ApplicationController
         format.html 
         format.csv { send_data @sheet.to_csv  } 
         format.xls { send_data @sheet.to_xls  }
-        format.pdf { send_data @sheet.to_pdf.render}
+        format.pdf { send_data @sheet.to_detailed_pdf.render}
       end
       else
       flash[:alert] = "Le document demandé (#{params[:id].capitalize}) n'a pas été trouvé " unless @sheet
@@ -76,8 +76,8 @@ class Compta::SheetsController < Compta::ApplicationController
 
   # resultats renvoie vers index avec exploitation, financier et exceptionnel
   def resultats
-    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:courant, :exceptionnel],
-    :title=>'Résultats')
+    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:resultat],
+    :title=>'Compte de Résultats')
   end
 
   # pluriel volontaire pour le distinguer de show/benvolat qui montre le détail de la page benevolat

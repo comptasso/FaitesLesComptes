@@ -20,7 +20,6 @@ module PdfDocument
       @source.total_general.collection.each do |c|
         fl += c.to_pdf.fetch_lines if c.class == Compta::Rubriks
       end
-      fl << @source.total_general
       fl
     end
 

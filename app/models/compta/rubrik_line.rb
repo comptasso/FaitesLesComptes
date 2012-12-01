@@ -37,8 +37,8 @@ module Compta
     # renvoie le libellé du compte. Si le compte n'existe pas pour cet exercice
     # essaye de trouver ce compte dans l'exercice précédent
     def title
-      return @account.title if @account
-      @period.previous_period.accounts.find_by_number(@select_num).title rescue nil
+      acc = @account || @period.previous_period.accounts.find_by_number(@select_num)
+      "#{acc.number} - #{acc.title}" rescue "Erreur, compte #{@select_num} non trouve"
     end
 
     # calcule les valeurs brut et amortissements pour le compte
@@ -86,21 +86,27 @@ module Compta
     end
 
     def to_a
-      ["#{@select_num} - #{title}", @brut, @amortissement, net, previous_net]
+      [title, @brut, @amortissement, net, previous_net]
     end
 
     def to_actif
-      ["#{@select_num} - #{title}", @brut, @amortissement, net, previous_net]
+      [title, @brut, @amortissement, net, previous_net]
     end
 
     def to_passif
-      ["#{@select_num} - #{title}", net, previous_net]
+      [title, net, previous_net]
     end
 
-    # affiche la RibrikLine
-    def to_s
-      "#{@select_num}; #{title}; #{@brut}; #{@amortissement}; #{net}; #{previous_net}"
+    # indique la profondeur pour les fonctions récursives d'affichage
+    # rubrik_line est en bas de l'échelle, donc profondeur 0
+    def depth
+      0
     end
+
+#    # affiche la RubrikLine
+#    def to_s
+#      "#{@select_num}; #{title}; #{@brut}; #{@amortissement}; #{net}; #{previous_net}"
+#    end
 
     def to_csv(options = {:col_sep=>"\t"})
       CSV.generate(options) do |csv|
