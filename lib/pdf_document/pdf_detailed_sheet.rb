@@ -18,6 +18,12 @@ module PdfDocument
       @source.total_general.fetch_lines
     end
 
+    protected
+
+    def read_template
+      File.open("lib/pdf_document/prawn_files/detailed_actif.pdf.prawn", 'r') { |f| f.read}
+    end
+
   end
 
 end

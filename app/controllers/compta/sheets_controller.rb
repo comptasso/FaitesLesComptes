@@ -9,7 +9,7 @@
 load "#{Rails.root}/lib/pdf_document/pdf_rubriks.rb" 
 load "#{Rails.root}/lib/pdf_document/pdf_sheet.rb"
 load "#{Rails.root}/lib/pdf_document/simple.rb"
-load "#{Rails.root}/lib/pdf_document/base.rb" 
+load "#{Rails.root}/lib/pdf_document/base.rb"
 
 class Compta::SheetsController < Compta::ApplicationController
   

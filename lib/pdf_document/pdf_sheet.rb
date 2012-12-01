@@ -35,13 +35,8 @@ module PdfDocument
     
 
     # Crée le fichier pdf associé
-    def render(template = "lib/pdf_document/prawn_files/actif.pdf.prawn")
-      text  =  ''
-      File.open(template, 'r') do |f|
-        text = f.read
-      end
-      #       puts text
-      require 'prawn'
+    def render
+      text =   read_template
       doc = self # doc est utilisé dans le template
       @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait) do |pdf|
         pdf.instance_eval(text)
@@ -53,18 +48,22 @@ module PdfDocument
     # surcharge de Simple::render_pdf_text pour prendre en compte
     # les deux template possibles actif.pdf.prawn et passif.pdf.prawn
     def render_pdf_text(pdf)
+      text =   read_template
+      doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
+      Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
+      pdf.instance_eval(text)
+    end
 
-      text  =  ''
+    protected
+
+    def read_template
       template = case @source.sens
       when :actif then "lib/pdf_document/prawn_files/actif.pdf.prawn"
       when :passif then "lib/pdf_document/prawn_files/passif.pdf.prawn"
       else
         raise ArgumentError, 'Le sens d\'un document ne peut être que :actif ou :passif'
       end
-      text =   File.open(template, 'r') { |f| f.read}
-      doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
-      Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
-      pdf.instance_eval(text)
+      File.open(template, 'r') { |f| f.read}
     end
 
   
