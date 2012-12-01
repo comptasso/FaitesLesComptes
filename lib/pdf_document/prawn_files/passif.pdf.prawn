@@ -28,27 +28,19 @@ move_down 50
 
 # on démarre la table proprement dite
 # en calculant la largeur des colonnes
-column_widths = [40, 15, 15, 15, 15].collect { |w| width*w/100 }
+column_widths = [70, 15, 15].collect { |w| width*w/100 }
 
 
- table [['', doc.exercice, 'Précédent']],
+ table [['', doc.exercice, 'Précédent'], ['', 'Montant net', 'Montant net']],
     :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center } do
-    column(0).width = column_widths[0]
-    column(1).width = column_widths[1] + column_widths[2] + column_widths[3]
-    column(2).width = column_widths[4]
+    column_widths.each_with_index {|w,i| column(i).width = w}
  end
-
-
- table [['', 'Montant brut', "Amortisst\nProvision", 'Montant net', 'Montant net']],
-  :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do
-         column_widths.each_with_index {|w,i| column(i).width = w}
-      end
 
 
 # la table des lignes proprement dites
  table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5], :height => 16, :overflow=>:truncate} do
     column_widths.each_with_index {|w,i| column(i).width = w}
-    [:left, :right, :right, :right, :right].each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
+    [:left, :right, :right].each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
     # ici, on modifie le style des colonnes en fonction de la profondeur de l'objet
     # si c'est une rubrique de profondeur 0 alors normal,
     # si c'est supérieur à 0 alors en gras

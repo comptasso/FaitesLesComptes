@@ -113,6 +113,20 @@ module PdfDocument
       @pdf_file.render
     end
 
+     # Permet d'insérer un bout de pdf dans un fichier pdf
+    # prend un fichier pdf en argument et évalue le contenu du template pdf.prawn
+    # fourni en deuxième argument.
+    # retourne le fichier pdf après avoir interprété le contenu du template
+    def render_pdf_text(pdf, template = "lib/pdf_document/base.pdf.prawn")
+      text  =  ''
+      File.open(template, 'r') do |f|
+        text = f.read
+      end
+      doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
+      Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
+      pdf.instance_eval(text)
+    end
+
     # réalise la pagination de @pdf_file
     def numerote
       @pdf_file.number_pages("page <page>/<total>",

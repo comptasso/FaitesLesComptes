@@ -114,16 +114,14 @@ module Compta
       to_index_csv(options).encode("windows-1252") 
     end
 
+
+
     # fait une édition de sheet ce qui reprend des titres puis insère les éléments
     #
     def to_pdf(options = {})
       options[:title] =  name.to_s 
       options[:documents] = @page
       pdf = PdfDocument::PdfSheet.new(@period, self, options)
-      pdf.set_columns(['title', 'brut', 'amortissement', 'net', 'previous_net'])
-      pdf.set_columns_titles(['', 'Montant brut', "Amortisst\nProvision", 'Montant net', 'Montant net'])
-      pdf.set_columns_widths([40, 15, 15, 15, 15])
-      pdf.set_columns_alignements([:left, :right, :right, :right, :right] )
       pdf
     end
 

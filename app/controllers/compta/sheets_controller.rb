@@ -8,6 +8,7 @@
 
 load "#{Rails.root}/lib/pdf_document/pdf_rubriks.rb" 
 load "#{Rails.root}/lib/pdf_document/pdf_sheet.rb"
+load "#{Rails.root}/lib/pdf_document/simple.rb"
 load "#{Rails.root}/lib/pdf_document/base.rb"
 
 class Compta::SheetsController < Compta::ApplicationController
@@ -17,19 +18,31 @@ class Compta::SheetsController < Compta::ApplicationController
 
   def index
     
-    @docs = params[:collection].map {|c| @nomenclature.sheet(c.to_sym)}
+    @docs = params[:collection].map {|c| @nomenclature.sheet(c.to_sym)} 
     respond_to do |format|
       format.html
       format.csv { 
         datas = ''
-        @docs.each {|doc| datas += doc.to_index_csv }
+        @docs.each {|doc| datas += doc.to_index_csv } 
         send_data datas
         }
-      format.xls { 
+      format.xls {  
         datas = ''
-        @docs.each {|doc| datas += doc.to_index_xls}
-        send_data datas, :filename=>"#{params[:title] || params[:collection]}.csv"
+        @docs.each {|doc| datas += doc.to_index_xls} 
+        send_data datas, :filename=>"#{params[:title] || params[:collection]}.csv" 
         }
+
+      format.pdf {
+        final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait)
+        @docs.each do |doc|
+           doc.to_pdf.render_pdf_text(final_pdf)
+           final_pdf.start_new_page unless doc == @docs.last
+        end
+        final_pdf.number_pages("page <page>/<total>",
+        { :at => [final_pdf.bounds.right - 150, 0],:width => 150,
+               :align => :right, :start_count_at => 1 })
+        send_data final_pdf.render
+      }
     end
   end
 

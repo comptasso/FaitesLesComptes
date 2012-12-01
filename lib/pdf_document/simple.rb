@@ -77,9 +77,13 @@ module PdfDocument
     # dans la classe simple, cela ne fait que renvoyer la ligne.
     # A surcharger lorsqu'on veut faire un traitement de la ligne
     def prepare_line(line)
-      columns.collect { |m| line.instance_eval(m) }
+      columns.collect do |m|
+        val = line.instance_eval(m)
+        val = ActionController::Base.helpers.number_with_precision(val, :precision=>2) if val.is_a?(Numeric)
+        val
+      end
     end
-
+    
     # récupère les variables d'instance ou les calcule si besoi
     def columns
       @columns ||= set_columns
