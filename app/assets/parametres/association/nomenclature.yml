@@ -104,9 +104,10 @@
     :title: Evaluation des contributions volontaires en nature
     :sens: :passif
     :rubriks:
-       :Produits:
-         :Bénévolat: '870'
-         :Autres contributions en nature: 87 !870
-       :Charges:
-         :Bénévolat: '-864'
-         :Autres charges en nature: -86 !864
+      :BENEVOLAT:
+        :Produits:
+          :Bénévolat: '870'
+          :Autres contributions en nature: 87 !870
+        :Charges:
+          :Bénévolat: '-864'
+          :Autres charges en nature: -86 !864

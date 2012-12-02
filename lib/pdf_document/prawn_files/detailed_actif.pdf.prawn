@@ -8,17 +8,17 @@ y_position = cursor
 page = doc.page(1)
 
 
-        bounding_box [0, y_position], :width => 100, :height => 40 do
+        bounding_box [0, y_position], :width => 150, :height => 40 do
             text page.top_left
 
         end
 
-        bounding_box [100, y_position], :width => width-200, :height => 40 do
+        bounding_box [150, y_position], :width => width-200, :height => 40 do
             font_size(20) { text page.title.capitalize, :align=>:center }
 #            text page.subtitle, :align=>:center
         end
 
-        bounding_box [width-100, y_position], :width => 100, :height => 40 do
+        bounding_box [width-150, y_position], :width => 150, :height => 40 do
             text page.top_right, :align=>:right
         end
 
@@ -41,7 +41,9 @@ titles = [['', '', '', doc.exercice, 'Précédent'], ['', 'Montant brut', "Amort
     # si c'est une rubrique de profondeur 0 alors normal,
     # si c'est supérieur à 0 alors en gras
      page.table_lines_depth.each_with_index do |d,i|
-        row(i).font_style = :bold if d > 0
+        row(i+2).font_style = :bold if d > 0
+        row(i+2).font_style = :italic if d == -1
+
      end
 
  end

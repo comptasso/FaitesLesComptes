@@ -91,6 +91,15 @@ describe Compta::Sheet do
         @level2.depth.should == 2
       end
 
+      it 'peut lister ses rubriks' do
+        @level2.fetch_rubriks.collect {|rs| rs.title }.should == [ 'Total 1', 'Total 1bis', 'Niveau 2']
+      end
+
+      it 'peut lister ses rubriks et sous rubriques' do
+        @level2.fetch_rubriks_with_rubrik.collect {|rs| rs.title }.should == ['Fonds commercial',
+          'Autres', 'Total 1', 'Fonds commercial', 'Total 1bis', 'Niveau 2']
+      end
+
     end
   end
 

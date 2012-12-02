@@ -35,7 +35,7 @@ module PdfDocument
 
     def initialize(period, source, options)
       @title = options[:title]
-      @created_at = I18n.l Time.now
+      @created_at = Time.now
       @period = period
       @nb_lines_per_page = options[:nb_lines_per_page] || NB_PER_PAGE_LANDSCAPE
       @source = source

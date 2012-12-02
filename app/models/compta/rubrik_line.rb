@@ -93,14 +93,18 @@ module Compta
       [title, @brut, @amortissement, net, previous_net]
     end
 
+    alias total_actif to_actif
+
     def to_passif
       [title, net, previous_net]
     end
 
+    alias total_passif to_passif
+
     # indique la profondeur pour les fonctions récursives d'affichage
-    # rubrik_line est en bas de l'échelle, donc profondeur 0
+    # rubrik étant 0, rubrik_line est mis à  -1
     def depth
-      0
+      -1
     end
 
 #    # affiche la RubrikLine

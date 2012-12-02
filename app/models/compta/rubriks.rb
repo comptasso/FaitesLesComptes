@@ -78,30 +78,59 @@ module Compta
       @collection.first.depth + 1 
     end
 
+
+    # utilisé pour les vues de détail de Sheet,
+    # permet de récupérer les Rubriks, les Rubrik et les RubrikLine
     def fetch_lines
       fl = []
       @collection.each do |c|
         puts c
         fl += c.fetch_lines if c.class == Compta::Rubriks
         fl += c.lines  if c.class == Compta::Rubrik && !c.lines.empty?
+        fl << c if c.class == Compta::Rubrik
       end
       fl << self
       fl
     end
 
+    def fetch_rubriks
+      result = []
+      collection.each do |c|
+        puts c
+        if c.class == Compta::Rubriks
+          result += c.fetch_rubriks
+          # result << c
+        end
+      end
+      result << self
+    end
+
+    def fetch_rubriks_with_rubrik
+      result = []
+      collection.each do |c|
+        puts c
+        if c.class == Compta::Rubriks
+          result += c.fetch_rubriks_with_rubrik
+        elsif c.class == Compta::Rubrik
+          result << c
+        end
+      end
+      result << self
+    end
+
     
     
-      #produit un document pdf en s'appuyant sur la classe PdfDocument::Simple
-  # et ses classe associées page et table
-  def to_pdf(options = {})
-    options[:title] =  "Détail de la rubrique #{@title}"
-    pdf = PdfDocument::PdfRubriks.new(@period, self, options)
-    pdf.set_columns(['title', 'brut', 'amortissement', 'net', 'previous_net'])
-    pdf.set_columns_titles(['', 'Montant brut', "Amortissement\nProvision", 'Montant net', 'Précédent'])
-    pdf.set_columns_widths([40, 15, 15, 15, 15])
-    pdf.set_columns_alignements([:left, :right, :right, :right, :right] )
-    pdf
-  end
+    #produit un document pdf en s'appuyant sur la classe PdfDocument::Simple
+    # et ses classe associées page et table
+    def to_pdf(options = {})
+      options[:title] =  "Détail de la rubrique #{@title}"
+      pdf = PdfDocument::PdfRubriks.new(@period, self, options)
+      pdf.set_columns(['title', 'brut', 'amortissement', 'net', 'previous_net'])
+      pdf.set_columns_titles(['', 'Montant brut', "Amortissement\nProvision", 'Montant net', 'Précédent'])
+      pdf.set_columns_widths([40, 15, 15, 15, 15])
+      pdf.set_columns_alignements([:left, :right, :right, :right, :right] )
+      pdf
+    end
    
 
 

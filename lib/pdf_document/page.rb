@@ -29,7 +29,7 @@ module PdfDocument
     end
 
     def top_right
-      "#{@doc.created_at}"
+      I18n::l(@doc.created_at, :format=>"%d %B %Y\n%H:%M:%S")
     end
 
     def table_title

@@ -3,6 +3,7 @@
 require 'yaml'
 require 'pdf_document/pdf_detailed_sheet'
 
+
 # Sheet est destinées à éditer une liste de rubriks
 # Le but est de construire des sous parties de bilan ou de comtpe de résultats
 # Les arguments sont period, une page qui est une partie d'un fichier yml.
@@ -69,20 +70,15 @@ module Compta
       CSV.generate(options) do |csv|
         csv << [@name.capitalize] # par ex Actif
         csv << entetes  # la ligne des titres
-        @total_general.collection.each do |rubs|
-          rubs.collection.each do |r|
-            if (r.resultat?)
-              retour = r.total_passif
+        datas.fetch_lines.each do |rubs|
+            if (rubs.respond_to?('resultat?') && rubs.resultat?)
+              retour = rubs.total_passif
               retour[0] = '12 - ' + retour[0].to_s
               csv << retour
             else
-              r.lines.each {|l| csv << (@sens == :actif ? l.to_actif : l.to_passif)}
+               csv << (@sens == :actif ? rubs.total_actif : rubs.total_passif)
             end
           end
-          csv << (@sens == :actif ? rubs.total_actif : rubs.total_passif)
-        end
-        csv << (@sens == :actif ? @total_general.total_actif : @total_general.total_passif)
-
       end.gsub('.', ',') # remplacement de tous les points par des virgules
       # pour avoir la décimale dans le tableur
     end
@@ -90,7 +86,6 @@ module Compta
     def detail_to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
         csv <<  %w(Numéro Libellé Brut Amort Net Précédent) 
-
         @period.two_period_account_numbers.each {|num| csv << Compta::RubrikLine.new(@period, :actif, num).to_csv}
       end
       csv
@@ -107,15 +102,10 @@ module Compta
       CSV.generate(options) do |csv|
         csv << [@name.capitalize] # par ex Actif
         csv << (@sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']) # la ligne des titres
-        @total_general.collection.each do |rubs|
-          rubs.lines.each {|l| csv << prepare_line(l) }
-          csv << prepare_line(rubs.totals_prefix)
-
+        datas.fetch_rubriks_with_rubrik.each do |rubs|
+          csv << prepare_line(rubs.total_actif)
         end
-        csv << prepare_line(@total_general.totals_prefix)
-
-      end.gsub('.', ',') # remplacement de tous les points par des virgules
-      # pour avoir la décimale dans le tableur
+      end
     end
  
     def to_index_xls(options = {col_sep:"\t"})
@@ -169,17 +159,32 @@ module Compta
     # prepare line sert à effacer les montant brut et amortissement pour ne garder
     # que le net.
     # Utile pour le passif d'un bilan et pour les comptes de résultats qui n'ont pas
-    # la même logique qu'une page actif
+    # la même logique qu'une page actif.
+    # prepare_line assure également la mise en forme des lignes au format français
+    # pour les exportations vers le tableur.
     def prepare_line(line)
       if @sens != :actif
-        line[1] = line[2]=''
+        line[1] = line[2]= ''
       end
-      line
+      line.collect do |element|
+        if element.is_a? Numeric
+          ActionController::Base.helpers.number_with_precision(element, :precision=>2)
+        else
+          element
+        end
+      end
+      
     end
 
     # prépare les entêtes utilisés pour le fichier csv
     def entetes
       @sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : %w(Rubrique Montant Précédent)
+    end
+
+    # renvoie la liste des rubriques
+    # inutilisé mais utile en protected pour les tests
+    def list_rubriks
+      @list_rubriks
     end
 
 
