@@ -49,18 +49,23 @@ module Compta
       '12'.in?(@numeros)
     end
 
-    # pour chacun des comptes construit un tableau
-    # avec le numéro de compte, l'intitulé, le solde dans le sens demandé
-    # ou l'inverse du solde si le sens est contraire
-    # Une particularité est le compte 12 (résultat) qui dans la nomencalture
-    # est indiqué comme '12, 7, -6' et pour lequel lines, ne doit renvoyer
-    # qu'un compte 12
+    # lines renvoie les rubrik_lines qui construisent la rubrique
+    # lines est en fait identique à la méthode protected all_lines
+    # sauf pour la Rubrik résultat (le compte 12).
+    #
+    # Le but est d'avoir une seule ligne pour cette Rubrik résultat alors
+    # que ses valeurs sont calculées à partir du compte 12 mais aussi de tout
+    # les comptes 6 et 7.
     #
     def lines
-
-        @lines ||= Compta::RubrikParser.new(@period, @sens, @numeros).rubrik_lines
-      
+      if resultat?
+        [RubrikResult.new(@period, :passif, '12')]
+      else
+        all_lines
+      end
     end
+
+    
 
     # retourne la ligne de total de la rubrique
     def totals
@@ -81,16 +86,16 @@ module Compta
 
     # crée un array avec le titre suivi de l'ensemble des lignes suivi de la ligne de total
     def complete_list
-      [@title] + lines + totals
+      [@title] + all_lines + totals
     end
 
 
     def brut
-      @brut ||= lines.sum(&:brut)
+      @brut ||= all_lines.sum(&:brut)
     end
 
     def amortissement
-      @amortissement ||= lines.sum(&:amortissement)
+      @amortissement ||= all_lines.sum(&:amortissement)
     end
 
     alias depreciation amortissement
@@ -100,7 +105,7 @@ module Compta
     end
 
     def previous_net
-      @previous_net ||= lines.sum(&:previous_net)
+      @previous_net ||= all_lines.sum(&:previous_net)
     end
 
     # la profondeur (depth) d'une rubrique est 0
@@ -111,7 +116,18 @@ module Compta
     end
 
     
+protected
 
+    # pour chacun des comptes construit un tableau
+    # avec le numéro de compte, l'intitulé, le solde dans le sens demandé
+    # ou l'inverse du solde si le sens est contraire
+    # Une particularité est le compte 12 (résultat) qui dans la nomencalture
+    # est indiqué comme '12, 7, -6' et pour lequel lines, ne doit renvoyer
+    # qu'un compte 12
+    #
+    def all_lines
+        @all_lines ||= Compta::RubrikParser.new(@period, @sens, @numeros).rubrik_lines
+    end
     
 
     

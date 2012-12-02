@@ -7,7 +7,9 @@
 # mais aussi sert de vue (show) en n'appelant qu'un seul élémnent (actif par exemple)
 
 load "#{Rails.root}/lib/pdf_document/pdf_rubriks.rb"
+
 load "#{Rails.root}/lib/pdf_document/pdf_sheet.rb"
+load "#{Rails.root}/lib/pdf_document/pdf_detailed_sheet.rb"
 load "#{Rails.root}/lib/pdf_document/simple.rb"
 load "#{Rails.root}/lib/pdf_document/base.rb"
 
@@ -78,6 +80,11 @@ class Compta::SheetsController < Compta::ApplicationController
   def resultats
     redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:resultat],
     :title=>'Compte de Résultats')
+  end
+
+  def liasse
+    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:actif, :passif, :resultat, :benevolat],
+    :title=>'Liasse complète')
   end
 
   # pluriel volontaire pour le distinguer de show/benvolat qui montre le détail de la page benevolat

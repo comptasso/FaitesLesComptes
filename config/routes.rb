@@ -62,6 +62,7 @@ Faitesvoscomptes::Application.routes.draw do
           get :resultats
           get :benevolats
           get :detail
+          get :liasse
         end
       end
       resources :selections do

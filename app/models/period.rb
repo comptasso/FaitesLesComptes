@@ -144,8 +144,7 @@ class Period < ActiveRecord::Base
     accounts.map {|acc| acc.number}
   end
   
-  # renvoie le compte (120) qui sert pour enregistrer le résultat positif de l'exercice
-  # ou 129 pour enregistrer le résultat négatif
+  # renvoie le compte (12) qui sert pour enregistrer le résultat de l'exercice
   def report_account
     accounts.where('number = ?', 12).first
   end

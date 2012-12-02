@@ -21,7 +21,13 @@ module PdfDocument
     protected
 
     def read_template
-      File.open("lib/pdf_document/prawn_files/detailed_actif.pdf.prawn", 'r') { |f| f.read}
+      template = case @source.sens
+      when :actif then "lib/pdf_document/prawn_files/detailed_actif.pdf.prawn"
+      when :passif then "lib/pdf_document/prawn_files/detailed_passif.pdf.prawn"
+      else
+        raise ArgumentError, 'Le sens d\'un document ne peut être que :actif ou :passif'
+      end
+      File.open(template, 'r') { |f| f.read}
     end
 
   end

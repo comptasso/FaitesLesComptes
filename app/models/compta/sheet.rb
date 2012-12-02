@@ -71,14 +71,8 @@ module Compta
         csv << [@name.capitalize] # par ex Actif
         csv << entetes  # la ligne des titres
         datas.fetch_lines.each do |rubs|
-            if (rubs.respond_to?('resultat?') && rubs.resultat?)
-              retour = rubs.total_passif
-              retour[0] = '12 - ' + retour[0].to_s
-              csv << format_line(retour)
-            else
-               csv << (@sens==:actif ? prepare_line(rubs.total_actif) : format_line(rubs.total_passif))
-            end
-          end
+          csv << (@sens==:actif ? prepare_line(rubs.total_actif) : format_line(rubs.total_passif))
+        end
       end
     end
 
@@ -149,7 +143,7 @@ module Compta
 
     def collect_rubriks(cle, instruction, sens)
       list = instruction.map do |k,v|
-         v.is_a?(Hash) ? collect_rubriks(k,v,sens) : Compta::Rubrik.new(@period, k, @sens, v)
+        v.is_a?(Hash) ? collect_rubriks(k,v,sens) : Compta::Rubrik.new(@period, k, @sens, v)
       end
       Compta::Rubriks.new(@period, cle, list)
     end
