@@ -74,13 +74,12 @@ module Compta
             if (rubs.respond_to?('resultat?') && rubs.resultat?)
               retour = rubs.total_passif
               retour[0] = '12 - ' + retour[0].to_s
-              csv << retour
+              csv << format_line(retour)
             else
-               csv << (@sens == :actif ? rubs.total_actif : rubs.total_passif)
+               csv << (@sens==:actif ? prepare_line(rubs.total_actif) : format_line(rubs.total_passif))
             end
           end
-      end.gsub('.', ',') # remplacement de tous les points par des virgules
-      # pour avoir la décimale dans le tableur
+      end
     end
 
     def detail_to_csv(options = {col_sep:"\t"})
@@ -166,6 +165,12 @@ module Compta
       if @sens != :actif
         line[1] = line[2]= ''
       end
+      format_line(line)
+    end
+
+    # utilise le helper numeric_with_precision pour gérer la transmission
+    # des données vers les pdf et les csv.
+    def format_line(line)
       line.collect do |element|
         if element.is_a? Numeric
           ActionController::Base.helpers.number_with_precision(element, :precision=>2)
@@ -173,7 +178,6 @@ module Compta
           element
         end
       end
-      
     end
 
     # prépare les entêtes utilisés pour le fichier csv

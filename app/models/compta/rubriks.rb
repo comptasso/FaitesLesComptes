@@ -86,7 +86,7 @@ module Compta
       @collection.each do |c|
         puts c
         fl += c.fetch_lines if c.class == Compta::Rubriks
-        fl += c.lines  if c.class == Compta::Rubrik && !c.lines.empty?
+        fl += c.lines  if c.class == Compta::Rubrik && !c.lines.empty? 
         fl << c if c.class == Compta::Rubrik
       end
       fl << self

@@ -52,9 +52,14 @@ module Compta
     # pour chacun des comptes construit un tableau
     # avec le numéro de compte, l'intitulé, le solde dans le sens demandé
     # ou l'inverse du solde si le sens est contraire
+    # Une particularité est le compte 12 (résultat) qui dans la nomencalture
+    # est indiqué comme '12, 7, -6' et pour lequel lines, ne doit renvoyer
+    # qu'un compte 12
+    #
     def lines
-      # compact supprime les valeurs nil
-      @lines ||= Compta::RubrikParser.new(@period, @sens, @numeros).rubrik_lines
+
+        @lines ||= Compta::RubrikParser.new(@period, @sens, @numeros).rubrik_lines
+      
     end
 
     # retourne la ligne de total de la rubrique
