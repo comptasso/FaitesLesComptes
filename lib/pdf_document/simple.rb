@@ -1,5 +1,9 @@
 # coding: utf-8
 
+
+
+      require 'prawn'
+
 module PdfDocument
   # la classe Simple est une classe qui imprimer juste une liste d'informations
   # avec les titres et sous titres.
@@ -132,6 +136,8 @@ module PdfDocument
       @columns
     end
 
+
+    # permet de définir les titres qui seront donnés aux colonnes
     def set_columns_titles(array_titles = nil)
       @columns_titles = array_titles || @columns
     end
@@ -151,12 +157,7 @@ module PdfDocument
     
     # Crée le fichier pdf associé
     def render(template = "lib/pdf_document/simple.pdf.prawn")
-      text  =  ''
-      File.open(template, 'r') do |f|
-        text = f.read
-      end
-      #       puts text
-      require 'prawn'
+      text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est utilisé dans le template
       @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|
         pdf.instance_eval(text)
@@ -170,13 +171,10 @@ module PdfDocument
     # fourni en deuxième argument.
     # retourne le fichier pdf après avoir interprété le contenu du template
     def render_pdf_text(pdf, template = "lib/pdf_document/simple.pdf.prawn")
-      text  =  ''
-      File.open(template, 'r') do |f|
-        text = f.read
-      end
+      text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
       Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
-      pdf.instance_eval(text)
+      pdf.instance_eval(text) 
     end
 
     protected
@@ -187,6 +185,8 @@ module PdfDocument
         { :at => [@pdf_file.bounds.right - 150, 0],:width => 150,
           :align => :right, :start_count_at => 1 })
     end
+
+
 
   end
 end

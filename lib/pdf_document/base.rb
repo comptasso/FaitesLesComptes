@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require 'prawn'
+
 module PdfDocument
 
   class PdfDocumentError < StandardError; end;
@@ -20,7 +22,8 @@ module PdfDocument
   # - top_left pour préciser le texte qui s'affichera en haut à gauche de chaque page
   # - stamp pour précisier un fond
   #
-
+  # Chaque page affiche une table de données qui est appelée par la méthode table
+  #
   class Base
 
     include ActiveModel::Validations
@@ -43,24 +46,19 @@ module PdfDocument
       yield self if block_given?
     end
 
-
-    
-
     # nombre de pages avec au minimum 1 page
     def nb_pages
       [(@collection.length/@nb_lines_per_page.to_f).ceil, 1].max
     end
 
-
+    # renvoie la table des lignes à afficher pour la page demandée
     def table(page)
       raise PdfDocumentError, 'La page demandée est hors limite' if !page.in?(1..nb_pages)
       lines = fetch_lines(page)
       lines.map {|l| prepare_line(l)}
     end
 
-   
-
-     # renvoie les lignes de la page demandées
+    # renvoie les lignes de la page demandées
     def fetch_lines(page_number)
       raise PdfDocumentError, 'La page demandée est hors limite' if !page_number.in?(1..nb_pages)
       limit = @nb_lines_per_page
@@ -70,13 +68,12 @@ module PdfDocument
     end
 
     # appelle les méthodes adéquate pour chacun des éléments de la lignes
-    # Dans la classe Base, les lignes sont des hash, ce qui nécessite l'utilisation de
-    #  :[] puis du symbole
     # A surcharger lorsqu'on veut faire un traitement de la ligne
+    # Par défaut applique number_with_precision à toutes les valeurs numériques
     def prepare_line(line)
       @columns.collect do |m|
         val = line.send(m)
-        val = ActionController::Base.helpers.number_with_precision(val, :delimiter=>' ', :separator=>',') if val.is_a?(Numeric)
+        val = ActionController::Base.helpers.number_with_precision(val, :precision=>2) if val.is_a?(Numeric)
         val
       end
     end
@@ -99,12 +96,8 @@ module PdfDocument
 
     # Crée le fichier pdf associé
     def render(template = "lib/pdf_document/prawn_files/base.pdf.prawn")
-      text  =  ''
-      File.open(template, 'r') do |f|
-        text = f.read
-      end
-      #       puts text
-      require 'prawn'
+      text = File.open(template, 'r') {|f| f.read  }
+      
       doc = self # doc est utilisé dans le template
       @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => @orientation) do |pdf|
         pdf.instance_eval(text)

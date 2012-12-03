@@ -403,13 +403,14 @@ OK - Voir si les validators cant_change (oui), cant_edit (non) et cant_edit_fiel
 OK - Faire le ménage dans les vues de compta (lines, n'est pas utilisé, je pense)
 
 ---------------------PdfDocument ------------------------------
-Faire un helper pour les export
+OK - Faire un helper pour les export
 Modifier Base pour en faire un Listing dédié à Account car il est devenu très spécialisé
 NON - retirer la référence à Line dans base (puisque base est spécialisé account).
-Refaire l'arborescence pour faire descendre base de simple (changer les noms ?)
+OK Refaire l'arborescence pour faire descendre simple de base (changer les noms ?)
 OK - Revoir les truncate dans balance.pdf en utilisant :overflow=>truncate de Prawn
-Dans balance, le stamp est automatiquement brouillard
+OK - Dans balance, le stamp est automatiquement brouillard
 Refaire les pdf des livres pour afficher correctement les soldes en utilisant la classe pdf_document
+Utiliser ActionController::Base.helpers.number_with_precision au lieu des %0.2f %
 -------------------------Divers -----------------------------------------
 Dans lines#index, les totaux n'ont pas de séparteur de milliers (ni les totaux globaux)
 Dans l'écriture d'une recette de chèque, le champ banque ne devrait pas apparaître
