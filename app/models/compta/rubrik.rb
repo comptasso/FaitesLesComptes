@@ -46,7 +46,7 @@ module Compta
     # ceci pour ne pas afficher le détail de tous les comptes 6 et 7
     # lorsque l'on affiche le détail du passif
     def resultat?
-      '12'.in?(@numeros)
+      '12'.in?(@numeros.split) # split est essentiel sinon il répond true pour des numéros comme 212
     end
 
     # lines renvoie les rubrik_lines qui construisent la rubrique
@@ -69,7 +69,7 @@ module Compta
 
     # retourne la ligne de total de la rubrique
     def totals
-      [@title, brut, amortissement, net, previous_net]
+      [@title, brut, amortissement, net, previous_net] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
     end
 
     def totals_prefix(prefix = 'Total ')

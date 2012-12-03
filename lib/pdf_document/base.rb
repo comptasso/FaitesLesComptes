@@ -17,8 +17,8 @@ module PdfDocument
   # - :columns_titles donne le titre des colonnes du document
   #
   # Des méthodes complémentaires permettent d'affiner l'affichage :
-  # - set_columns_widths pour définir les largeurs
-  # - set_columns_alignements pour définir l'alignement des valeurs (:right, :center, :left)
+  # - columns_widths pour définir les largeurs
+  # - columns_alignements pour définir l'alignement des valeurs (:right, :center, :left)
   # - top_left pour préciser le texte qui s'affichera en haut à gauche de chaque page
   # - stamp pour précisier un fond
   #
@@ -33,7 +33,9 @@ module PdfDocument
 
     validates :title, :columns, :presence=>true
 
-
+# l'instance se crée avec une collection d'objets et de multiples options
+# Si on fournit un bloc, il devient possible de préciser les autres valeurs
+# telles que stamp, columns_widths, columns_alignements et top_left
     def initialize(collection, options)
       @collection = collection
       @orientation = options[:orientation] || :landscape
@@ -78,17 +80,17 @@ module PdfDocument
       end
     end
 
-   
-    
-
+    # permet de définie la largeur des colonnes. Les largeurs sont spécifiées 
+    # en % de la largeur de ligne.
+    # Le total des valeurs doit être égale à 100
+    # le total doit
     def columns_widths=(array_widths)
       raise PdfDocumentError, "Le nombre de valeurs doit être égal au nombre de colonnes, en l'occurence #{@columns.size}" if array_widths.length != @columns.size
+      raise PdfdocumentError, "Le total des largeurs de colonnes doit être égale à 100, valeur calculée :  #{array_widths.sum}" if array_widths.sum != 100
       @columns_widths = array_widths
     end
 
     # définit un aligment des colonnes, à gauche par défaut
-    # TODO mettre ici, et dans toutes les méthodes similaires un
-    # raise error si la taille de l'array n'est pas correcte
     def columns_alignements=(alignements)
       raise PdfDocumentError, "Le nombre de valeurs doit être égal au nombre de colonnes, en l'occurence #{@columns.size}" if alignements.length != @columns.size
       @columns_alignements =  alignements

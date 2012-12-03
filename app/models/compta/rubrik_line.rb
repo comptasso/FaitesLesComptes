@@ -80,6 +80,7 @@ module Compta
         acc = pp.accounts.find_by_number(@select_num)
         s = acc ? acc.sold_at(pp.close_date) : 0
         s = -s if (@sens == :actif || @sens== :debit)
+        return s
       else
         return 0.0
       end
