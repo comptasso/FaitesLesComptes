@@ -178,10 +178,7 @@ module PdfDocument
     # fourni en deuxième argument.
     # retourne le fichier pdf après avoir interprété le contenu du template
     def render_pdf_text(pdf, template = "lib/pdf_document/default.pdf.prawn")
-      text  =  ''
-      File.open(template, 'r') do |f|
-        text = f.read
-      end
+      text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
       Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
       pdf.instance_eval(text)
@@ -189,10 +186,7 @@ module PdfDocument
 
     # Crée le fichier pdf associé
     def render(template = "lib/pdf_document/default.pdf.prawn")
-      text  =  ''
-      File.open(template, 'r') do |f|
-        text = f.read
-      end
+      text = File.open(template, 'r') {|f| f.read  }
       
       pages # on prépare les différentes pages
       # ceci a été rajouté pour éviter que chaque page reconstruise à chaque fois
@@ -226,8 +220,6 @@ module PdfDocument
     end
 
     private
-
-
 
 
     # méthode permettant de donner la largeur des colonnes pour une ligne de

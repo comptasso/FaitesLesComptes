@@ -13,8 +13,7 @@ class InOutWritingsController < ApplicationController
     @monthly_extract = Utilities::MonthlyInOutExtract.new(@book, year:params[:an], month:params[:mois])
     respond_to do |format|
       format.html  # index.html.erb
-      format.json { render json: @lines }
-      format.pdf
+      format.pdf { PdfDocument::Default.new(@period, @book, )}
       format.csv { send_data @monthly_extract.to_csv  }  # pour éviter le problème des virgules
       format.xls { send_data @monthly_extract.to_xls  } #{ render :text=> @monthly_extract.to_xls(col_sep:"\t") }  # nécessaire pour excel
     end
@@ -29,10 +28,7 @@ class InOutWritingsController < ApplicationController
       @previous_line = ComptaLine.find_by_id(flash[:previous_line_id])
       @line.payment_mode = @previous_line.payment_mode
     end
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @line }
-    end
+    
   end
 
 

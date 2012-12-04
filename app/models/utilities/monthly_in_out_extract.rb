@@ -1,6 +1,7 @@
 # coding: utf-8
 
-require 'month_year' 
+require 'month_year'
+require 'pdf_document/book'
 
 module Utilities
 
@@ -69,13 +70,35 @@ module Utilities
     end
 
 
-    def to_csv(options = {col_sep:"\t"})
+    def to_csv(options = {:col_sep=>"\t"})
       CSV.generate(options) do |csv|
         csv << @titles
         lines.each do |line|
           csv << prepare_line(line)
         end
       end
+    end
+    
+    alias compta_lines lines
+
+    def to_pdf(period)
+      options = {
+        :title=>book.title,
+        :from_date=>@date,
+        :to_date=>@date.end_of_month}
+       pdf = PdfDocument::Book.new(period, book, options)
+       pdf.set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
+          'writings.narration AS w_narration', 'destination_id',
+          'nature_id', 'debit', 'credit', 'payment_mode']
+       pdf.set_columns_methods ['w_date', 'w_ref', 'w_narration',
+          'destination_id.name', 'nature_id.name', 'debit', 'credit',
+          'payment_mode']
+       pdf.set_columns_titles ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
+       pdf.set_columns_to_totalize [5,6]
+       pdf.set_columns_widths([11, 11, 22,  11, 11,11,11,12])
+       pdf
+      
+      
     end
 
     
