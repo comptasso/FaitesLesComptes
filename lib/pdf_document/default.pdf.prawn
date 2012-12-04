@@ -46,7 +46,7 @@ end
 
         bounding_box [150, y_position], :width => width-300, :height => 50 do
             font_size(20) { text page.title, :align=>:center }
-            text page.subtitle, :align=>:center
+            text page.subtitle, :align=>:center if page.subtitle
         end
 
         bounding_box [width-150, y_position], :width => 150, :height => 50 do

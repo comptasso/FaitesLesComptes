@@ -1,7 +1,9 @@
 # -*- encoding : utf-8 -*-
 
-class InOutWritingsController < ApplicationController
+load 'lib/pdf_document/book.rb'
 
+class InOutWritingsController < ApplicationController
+ 
   before_filter :find_book # remplit @book
   before_filter :fill_mois, only: [:index, :new]
   before_filter :check_if_has_changed_period, only: :index # car on peut changer de period quand on clique sur une
@@ -13,7 +15,7 @@ class InOutWritingsController < ApplicationController
     @monthly_extract = Utilities::MonthlyInOutExtract.new(@book, year:params[:an], month:params[:mois])
     respond_to do |format|
       format.html  # index.html.erb
-      format.pdf { PdfDocument::Default.new(@period, @book, )}
+      format.pdf {send_data @monthly_extract.to_pdf(@period).render}
       format.csv { send_data @monthly_extract.to_csv  }  # pour éviter le problème des virgules
       format.xls { send_data @monthly_extract.to_xls  } #{ render :text=> @monthly_extract.to_xls(col_sep:"\t") }  # nécessaire pour excel
     end
@@ -133,7 +135,7 @@ class InOutWritingsController < ApplicationController
   end
 
 
-  # change period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice
+  # check_if_has_changed_period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice
   # à partir du graphe d'accueil et donc via l'action index.
   def check_if_has_changed_period
     # si le month_year demandé ne fait pas partie de l'exercice,

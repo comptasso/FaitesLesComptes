@@ -95,7 +95,7 @@ module PdfDocument
       @nb_lines_per_page = options[:nb_lines_per_page] || NB_PER_PAGE_LANDSCAPE
       @source = source
       @stamp = options[:stamp]
-      @created_at = I18n.l(Time.now, :format=>:pdf)
+      @created_at = Time.now
       @select_method = options[:select_method] || 'compta_lines'
     end
 

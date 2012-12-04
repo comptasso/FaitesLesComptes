@@ -85,21 +85,21 @@ module Utilities
       options = {
         :title=>book.title,
         :from_date=>@date,
-        :to_date=>@date.end_of_month}
+        :to_date=>@date.end_of_month,
+        :stamp=>'essai'
+        }
        pdf = PdfDocument::Book.new(period, book, options)
        pdf.set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
           'writings.narration AS w_narration', 'destination_id',
-          'nature_id', 'debit', 'credit', 'payment_mode']
+          'nature_id', 'debit', 'credit', 'payment_mode', 'writing_id']
        pdf.set_columns_methods ['w_date', 'w_ref', 'w_narration',
           'destination_id.name', 'nature_id.name', 'debit', 'credit',
-          'payment_mode']
+          'payment_mode', 'writing_id']
        pdf.set_columns_titles ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
        pdf.set_columns_to_totalize [5,6]
-       pdf.set_columns_widths([11, 11, 22,  11, 11,11,11,12])
+       pdf.set_columns_widths([11, 11, 11,11 ,  11, 11,11,11,12])
        pdf
-      
-      
-    end
+     end
 
     
 
@@ -126,7 +126,7 @@ module Utilities
     # préparées : date est gérée par I18n::l, les montants monétaires sont reformatés poru
     # avoir 2 décimales et une virgule,...
     def prepare_line(line)
-      [I18n::l(line.line_date),
+      [I18n::l(line.date),
         line.ref, line.narration.truncate(25),
         line.destination ? line.destination.name.truncate(22) : '-',
         line.nature ? line.nature.name.truncate(22) : '-' ,
@@ -142,7 +142,7 @@ module Utilities
     # remplace les points décimaux par des virgules pour s'adapter au paramétrage
     # des tableurs français
     def reformat(number)
-      sprintf('%0.02f',number.to_s).gsub('.', ',')
+      ActionController::Base.helpers.number_with_precision(number, :precision=>2)
     end
 
 

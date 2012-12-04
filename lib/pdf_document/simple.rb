@@ -5,6 +5,10 @@
       require 'prawn'
 
 module PdfDocument
+
+  class PdfDocumentError < StandardError; end;
+
+  
   # la classe Simple est une classe qui imprimer juste une liste d'informations
   # avec les titres et sous titres.
   # Il n'y a pas de possibilité de faire des totaux ni donc d'afficher des reports
@@ -139,6 +143,7 @@ module PdfDocument
 
     # permet de définir les titres qui seront donnés aux colonnes
     def set_columns_titles(array_titles = nil)
+      raise PdfDocumentError, "Le nombre de valeurs doit être égal au nombre de colonnes, en l'occurence #{@columns.size}" if array_titles.length != @columns.size
       @columns_titles = array_titles || @columns
     end
 
