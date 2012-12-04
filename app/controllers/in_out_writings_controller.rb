@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 load 'lib/pdf_document/book.rb'
+load 'lib/pdf_document/table.rb' 
 
 class InOutWritingsController < ApplicationController
  

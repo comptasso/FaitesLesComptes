@@ -95,15 +95,17 @@ module PdfDocument
 
     
     # fait le total des valeurs de la colonne d'indice i
-    # n'additionne que s'il en est capable en testant la transformation en Float
+    # modifie d'abord les valeurs en supprimant les espaces et en remplaçant la
+    # virgule par le point décimal puis en transformant en Float.
+    # n'additionne que s'il y a une valeur
     # cela permet d'avoir des valeurs vides dans les colonnes par exemple
     def totalize_column(i)
-      if prepared_lines
-       prepared_lines.each.sum do |l|
-          l[i].to_f if l[i].to_f.is_a?(Float)
+      prepared_lines.each.sum do |l|
+           l[i].gsub(' ', '').gsub(',','.').to_f if l[i]
         end
-      end
-    end
+     end
+
+
 
 
     
