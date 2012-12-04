@@ -61,10 +61,10 @@ module PdfDocument
    
     # total_lines renvoie un array correspondant à une première colonne
     # intitulée Total, puis des nils ou des totaux si la colonne a été indiquée
-    # par document comme devant être totalisée
+    # par document comme devant être totalisée.
+    # total_line fait ensuite un formatage des valeurs avant de rajouter le mot Totaux
+    # dans une première colonne.
     def total_line
-      # lines est un tableau de lignes dont on veut connaître le total
-      # pour chaque colonne qui est dans columns_to_totalize
       r = @document.columns_to_totalize.collect {|index| totalize_column(index)}
       tl = r.collect {|v| format_total(v)}
       tl.insert(0, 'Totaux')
@@ -81,7 +81,7 @@ module PdfDocument
 
     def format_total(r)
       return '0.00' if r == nil
-      return '%0.2f' % r if r.is_a?(Float) || r.is_a?(BigDecimal)
+      return ActionController::Base.helpers.number_with_precision(r, :precision=>2)
     end
 
     def format_value(r)

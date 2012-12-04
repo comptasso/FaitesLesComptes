@@ -1,8 +1,5 @@
 # -*- encoding : utf-8 -*-
 
-load 'lib/pdf_document/book.rb'
-load 'lib/pdf_document/table.rb' 
-
 class InOutWritingsController < ApplicationController
  
   before_filter :find_book # remplit @book
@@ -16,7 +13,7 @@ class InOutWritingsController < ApplicationController
     @monthly_extract = Utilities::MonthlyInOutExtract.new(@book, year:params[:an], month:params[:mois])
     respond_to do |format|
       format.html  # index.html.erb
-      format.pdf {send_data @monthly_extract.to_pdf(@period).render}
+      format.pdf {send_data @monthly_extract.to_pdf.render, :filename=>"#{@organism.title}_#{@book.title}_#{@monthly_extract.month}.pdf" }
       format.csv { send_data @monthly_extract.to_csv  }  # pour éviter le problème des virgules
       format.xls { send_data @monthly_extract.to_xls  } #{ render :text=> @monthly_extract.to_xls(col_sep:"\t") }  # nécessaire pour excel
     end

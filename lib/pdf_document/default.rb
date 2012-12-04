@@ -241,6 +241,10 @@ module PdfDocument
           l += w
         end
       end
+      # au cas où il y ait des colonnes sans total en fin de tableau
+      # on en rajoute une pour arriver à 100
+      s = @total_columns_widths.sum
+      @total_columns_widths << (100 -s) if s < 100
       @total_columns_widths
     end
 

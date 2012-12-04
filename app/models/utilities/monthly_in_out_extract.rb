@@ -29,46 +29,17 @@ module Utilities
       @lines ||= @book.compta_lines.mois(@date).in_out_lines
     end
 
-    # calcule le nombre de page du listing en divisant le nombre de lignes
-    # par un float qui est le nombre de lignes par pages,
-    # puis arrondi au nombre supérieur
-    def total_pages
-      (lines.size/NB_PER_PAGE.to_f).ceil
+    # l'extrait est provisoire si il y a des lignes qui ne sont pas verrouillées
+    def provisoire?
+      lines.reject {|l| l.locked?}.any?
     end
 
+   
     def month
       @my.to_format('%B %Y')
     end
 
-    # renvoie les lignes correspondant à la page demandée
-    def page(n)
-      n = n-1 # pour partir d'une numérotation à zero
-      return nil if n > self.total_pages
-      @lines[(NB_PER_PAGE*n)..(NB_PER_PAGE*(n+1)-1)].map do |item|
-        prepare_line(item)
-      end
-    end
-
-    def total_debit
-      lines.sum(:debit)
-    end
-  
-    def total_credit
-      lines.sum(:credit)
-    end
-
-    def debit_before
-      @book.cumulated_debit_before(@date)
-    end
-
-    def credit_before
-      @book.cumulated_credit_before(@date)
-    end
-
-    def sold
-      credit_before + total_credit - debit_before - total_debit
-    end
-
+    
 
     def to_csv(options = {:col_sep=>"\t"})
       CSV.generate(options) do |csv|
@@ -81,13 +52,15 @@ module Utilities
     
     alias compta_lines lines
 
-    def to_pdf(period)
+    def to_pdf
       options = {
         :title=>book.title,
+        :subtitle=>"Mois de #{@my.to_format('%B %Y')}",
         :from_date=>@date,
         :to_date=>@date.end_of_month,
-        :stamp=>'essai'
+        :stamp=> provisoire? ? 'Provisoire' : ''
         }
+       period = book.organism.find_period(@date)
        pdf = PdfDocument::Book.new(period, book, options)
        pdf.set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
           'writings.narration AS w_narration', 'destination_id',
