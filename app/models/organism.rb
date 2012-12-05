@@ -106,7 +106,7 @@ class Organism < ActiveRecord::Base
   def find_period(date=Date.today)
     period_array = periods.all.select {|p| p.start_date <= date && p.close_date >= date}
     if period_array.empty?
-      Rails.logger.warn 'organism#find_period a été appelée avec une date pour laquelle il n y a pas d exercice'
+      Rails.logger.warn "organism#find_period a été appelée avec une date pour laquelle il n y a pas d'exercice : #{date} - Organism : #{self.inspect}"
       return nil if period_array.empty?
     end
     period_array.first

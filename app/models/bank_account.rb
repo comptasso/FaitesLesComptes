@@ -27,8 +27,14 @@ class BankAccount < ActiveRecord::Base
    accounts.where('period_id = ?', period.id).first
  end
 
+ # renvoie le solde du compte bancaire à une date donnée et pour :debit ou :credit
+ # arguments à fournir : la date et le sens (:debit ou :credit)
+ # renvoie 0 s'il n'y a pas d'écriture ou si un exercice n'existe pas
+ # Ce peut être le cas avec un premier exercice commencé en cours d'année
+ # quand on est dans l'exerice suivant qui lui est en année pleine.
  def cumulated_at(date, dc)
     p = organism.find_period(date)
+    return 0 unless p
     acc = current_account(p)
     Writing.sum(dc, :select=>'debit, credit', :conditions=>['date <= ? AND account_id = ?', date, acc.id], :joins=>:compta_lines).to_f
     # nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des

@@ -45,7 +45,7 @@ module PdfDocument
     end
 
     def table_lines
-      pdf_table.prepared_lines
+      pdf_table.prepared_lines.collect {|l| format_line(l)}
     end
 
     def table_lines_depth
@@ -53,7 +53,7 @@ module PdfDocument
     end
 
     def table_total_line
-      pdf_table.total_line
+      format_line pdf_table.total_line
     end
 
     # forunit le report
@@ -75,7 +75,7 @@ module PdfDocument
         r =[]
         table_report_line.each_with_index do |v,i|
           if (v.to_f.is_a?(Float) && table_total_line[i].to_f.is_a?(Float))
-            r << '%0.2f' % (v.to_f + table_total_line[i].to_f)
+            r << french_format(v.to_f + table_total_line[i].to_f)
           else
             r << ''
           end
@@ -91,6 +91,19 @@ module PdfDocument
     # 
     def pdf_table
       @table ||= Table.new(self, @doc)
+    end
+
+    # appelle la méthode french_format pour chaque élément de ligne
+    def format_line(l)
+      l.collect {|v| french_format(v)}
+    end
+
+    def french_format(r)
+      return '' if r.nil?
+      return ActionController::Base.helpers.number_with_precision(r, :precision=>2)  if r.is_a? Numeric
+      return '' if r == '0.00'
+       # pour avoir l'affichage de tous champs date sur le format français
+      I18n::l(Date.parse(r)) rescue r
     end
 
    

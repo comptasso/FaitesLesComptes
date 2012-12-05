@@ -66,8 +66,7 @@ module PdfDocument
     # dans une première colonne.
     def total_line
       r = @document.columns_to_totalize.collect {|index| totalize_column(index)}
-      tl = r.collect {|v| format_total(v)}
-      tl.insert(0, 'Totaux')
+      r.insert(0, 'Totaux')
     end
 
     # appelle les méthodes adéquate pour chacun des éléments de la lignes
@@ -79,29 +78,14 @@ module PdfDocument
  
     protected
 
-    def format_total(r)
-      return '0.00' if r == nil
-      return ActionController::Base.helpers.number_with_precision(r, :precision=>2)
-    end
-
-    def format_value(r)
-      return '' if r.nil?
-      return '%0.2f' % r if r.is_a? BigDecimal
-      return '%0.2f' % r if r.is_a? Float
-      return '' if r == '0.00'
-       # pour avoir l'affichage de tous champs date sur le format français
-      I18n::l(Date.parse(r)) rescue r
-    end
-
-    
+        
     # fait le total des valeurs de la colonne d'indice i
-    # modifie d'abord les valeurs en supprimant les espaces et en remplaçant la
-    # virgule par le point décimal puis en transformant en Float.
+    # modifie d'abord les valeurs en transformant en Float.
     # n'additionne que s'il y a une valeur
-    # cela permet d'avoir des valeurs vides dans les colonnes par exemple
+    # cela permet d'avoir des valeurs vides dans les colonnes 
     def totalize_column(i)
       prepared_lines.each.sum do |l|
-           l[i].gsub(' ', '').gsub(',','.').to_f if l[i]
+           l[i].to_f if l[i]
         end
      end
 

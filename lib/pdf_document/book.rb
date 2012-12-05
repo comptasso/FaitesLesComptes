@@ -23,13 +23,14 @@ module PdfDocument
     end
 
 
+    # la méthode support n'est pas directement accessible par les tables
+    # donc on utilise l'id récupéré pour appelé la fonction support.
+    # Une autre option possible serait d'enregistrer cette info dans la table
+    # pour en faciliter la restitution. 
+    # TODO : traiter ce sujet en fonction des performances 
     def prepare_line(line)
       pl = columns_methods.collect { |m| line.instance_eval(m) rescue nil }
-      pl[0] = I18n::l(Date.parse(pl[0])) rescue pl[0] # mise en dorme de la date
       pl[-1] = Writing.find_by_id(pl.last).support # récupération du support
-      pl[5] = ActionController::Base.helpers.number_with_precision(pl[5], :precision=>2)
-      pl[6] = ActionController::Base.helpers.number_with_precision(pl[6], :precision=>2)
-      puts pl
       pl
     end
 
