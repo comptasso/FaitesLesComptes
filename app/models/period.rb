@@ -326,6 +326,13 @@ class Period < ActiveRecord::Base
     ListMonths.new(start_date, close_date)
   end
 
+  # méthode permettant de savoir si une date est un début d'exercice
+  #
+  # Cette méthode est utilisée par monthly_value dans Utilities::Sold
+  def self.beginning_of_period?(date)
+    date.in? Period.all.collect(&:start_date)
+  end
+
  
 
 

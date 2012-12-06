@@ -48,7 +48,7 @@ class Book < ActiveRecord::Base
   # sous la forme d'un hash avec comme clé 'mm-yyyy' pour identifier les mois.
   # monthly_value est définie dans Utilities::Sold
   def monthly_datas(period)
-    Hash[period.list_months('%m-%Y').map {|m| [m, monthly_value(m)]}]
+    Hash[period.list_months.map {|m| [m, monthly_value(m)]}]
   end
 
   def book_type
