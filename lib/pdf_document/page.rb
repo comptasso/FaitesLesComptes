@@ -101,9 +101,7 @@ module PdfDocument
     def french_format(r)
       return '' if r.nil?
       return ActionController::Base.helpers.number_with_precision(r, :precision=>2)  if r.is_a? Numeric
-      return '' if r == '0.00'
-       # pour avoir l'affichage de tous champs date sur le format français
-      I18n::l(Date.parse(r)) rescue r
+      r
     end
 
    
