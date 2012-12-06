@@ -56,6 +56,9 @@ module PdfDocument
   #   la largeur des colonnes restantes sera alors fixé en divisant la place restante par le nombre de colonnes.
   #   exemple : set_columns_widths [10, 70, 20]
   #
+  #   L'ordre est important ici car set_columns_to_totalize utilise les columns_widths pour faire le
+  #   calcul des largeurs de colonnes.
+  #
   # set_columns_to_totalize(array_of_indices) : l'indice des colonnes pour lesquels on demande un total
   #   a priori, la première colonne ne devrait pas être totlaisable pour permette d'écrire Total, Report
   #   par exemple set_columns_to_totalize [2] pour totaliser le champ debit.
@@ -230,6 +233,7 @@ module PdfDocument
       # si la colonne est à totaliser on retourne la valeur
       # sinon on la garde et on examine la colonne suivant
       l = 0 # variable pour accumuler les largeurs des colonnes qui ne sont pas à totaliser
+      Rails.logger.debug "DEBUG : Largeur des colonnes #{@columns_widths.inspect}"
       @columns_widths.each_with_index do |w,i|
         if @columns_to_totalize.include? i
           if l != 0
@@ -246,6 +250,7 @@ module PdfDocument
       s = @total_columns_widths.sum
       @total_columns_widths << (100 -s) if s < 100
       @total_columns_widths
+      Rails.logger.debug "DEBUG : Largeur des colonnes de total #{@total_columns_widths.inspect}"
     end
 
     

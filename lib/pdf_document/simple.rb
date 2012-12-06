@@ -124,7 +124,9 @@ module PdfDocument
         array_widths += complement
       end
       # puis on retourne le nombre nécessaire
+
       @columns_widths = array_widths[0..columns.size]
+      Rails.logger.debug "DEBUG : largeur des colonnes : "
     end
 
 
