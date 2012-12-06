@@ -25,8 +25,7 @@ module Utilities
     end
 
     def lines
-      return @lines unless @lines == nil
-      @lines ||= @book.compta_lines.mois(@date).in_out_lines
+       @lines ||= @book.compta_lines.mois(@date).in_out_lines
     end
 
     # l'extrait est provisoire si il y a des lignes qui ne sont pas verrouillées
@@ -37,6 +36,22 @@ module Utilities
    
     def month
       @my.to_format('%B %Y')
+    end
+
+    def total_credit
+      lines.sum(:credit)
+    end
+
+    def total_debit
+      lines.sum(:credit)
+    end
+
+    def debit_before
+      @book.cumulated_debit_before(@date)
+    end
+
+    def credit_before
+      @book.cumulated_credit_before(@date)
     end
 
     

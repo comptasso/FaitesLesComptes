@@ -112,6 +112,16 @@ class Organism < ActiveRecord::Base
     period_array.first
   end
 
+  # trouve l'exercice le plus adapté à la date demandée
+  # ne renvoie nil que s'il n'y a aucun exercice.
+  def guess_period(date = Date.today)
+    ps = periods.order(:start_date)
+    return nil if ps.empty?
+    date = ps.first.start_date if date < ps.first.start_date
+    date = ps.last.close_date if date > ps.last.close_date
+    find_period(date)
+  end
+
   # recherche la pièce où est logé Organism sur la base de la similitude des
   # champs database_name de ces deux tables
   def room

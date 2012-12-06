@@ -139,11 +139,13 @@ class InOutWritingsController < ApplicationController
     # si le month_year demandé ne fait pas partie de l'exercice,
     if !@period.list_months.include?(@monthyear)
       # voit si on peut trouver l'exercice ad hoc
-      @new_period = @organism.find_period(@monthyear.beginning_of_month)
+      @new_period = @organism.guess_period(@monthyear.beginning_of_month)
       if @new_period
         flash[:alert]= "Attention, vous avez changé d'exercice !"
+        my = @new_period.guess_month(@monthyear.beginning_of_month) # car si les exercices ne sont pas de même durée,
+        # on pourrait tomber dans un exercice qui n'existe pas
         session[:period] = @new_period.id
-        redirect_to book_in_out_writings_url(@book, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')
+        redirect_to book_in_out_writings_url(@book, mois:my.month, an:my.year, :format=>params[:format]) if (params[:action]=='index')
       else
         flash[:alert] = "Le mois et l'année demandés ne correspondent à aucun exercice"
         redirect_to :back
