@@ -63,8 +63,8 @@ jQuery(function () {
 
                 /* Modify the footer row to match what we want */
                 nCells = nRow.getElementsByTagName('th');
-                nCells[1].innerHTML =  iPageDebit.toFixed(2) + '<br/>' + iTotalDebit.toFixed(2);
-                nCells[2].innerHTML =  iPageCredit.toFixed(2) + '<br/>' + iTotalCredit.toFixed(2);
+                nCells[1].innerHTML =  $f_numberWithPrecision(iPageDebit) + '<br/>' + $f_numberWithPrecision(iTotalDebit);
+                nCells[2].innerHTML =  $f_numberWithPrecision(iPageCredit) + '<br/>' + $f_numberWithPrecision(iTotalCredit);
             }
         });
     }

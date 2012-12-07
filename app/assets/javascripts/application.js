@@ -89,7 +89,7 @@ function stringToFloat(jcdata) {
 
 // prend un nombre et en fait une chaîne avec deux décimales et 
 // une virgule comme séparateur décimal
-function numberWithPrecision(number) {
+function $f_numberWithPrecision(number) {
   var part1, part2, parts;
   if (number === undefined) {
         return '-';

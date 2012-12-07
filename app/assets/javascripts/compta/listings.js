@@ -1,6 +1,6 @@
 "use strict";
 /*jslint browser: true */
-var jQuery, $, stringToFloat, numberWithPrecision;
+var jQuery, $, stringToFloat, $f_numberWithPrecision;
 
 
 
@@ -48,8 +48,8 @@ function drawDataTable() {
 
             /* Modify the footer row to match what we want */
 //            nCells = nRow.getElementsByTagName('th');
-            $('#tdebit').text(numberWithPrecision(iPageDebit));
-            $('#tcredit').text(numberWithPrecision(iPageCredit));
+            $('#tdebit').text($f_numberWithPrecision(iPageDebit));
+            $('#tcredit').text($f_numberWithPrecision(iPageCredit));
 //            nCells[1].innerHTML =  iPageDebit.toFixed(2) + '<br/>' + iTotalDebit.toFixed(2);
 //            nCells[2].innerHTML =  iPageCredit.toFixed(2) + '<br/>' + iTotalCredit.toFixed(2);
 
