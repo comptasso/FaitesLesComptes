@@ -702,7 +702,7 @@ OK - Mise en page des tables dans pointage de compte
 OK - Mettre un solde dans la balance
 OK - Rajouter un cadenas dans compta->Journaux OD pour faire un verrouillage global
 OK -  Il faudra revoir si la création et la clôture d'un exercice fonctionnent bien.
-Le champ adress de bank_account n'est plus utilisé
+OK - Le champ adress de bank_account n'est plus utilisé
 OK - Vérifier qu'une restauration ne peut écraser une base existante (d'un autre User, du même User)
 ----------------------------Nomenclature -----------------------------
 OK - Une nomenclature doit vérifier que les comptes ne sont pris qu'une fois,
