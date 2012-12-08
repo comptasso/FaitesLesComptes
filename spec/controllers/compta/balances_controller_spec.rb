@@ -40,6 +40,28 @@ describe Compta::BalancesController do
         response.should render_template("show")
       end
 
+#      it 'rend le pdf' do
+#        Compta::Balance.any_instance.stub(:valid?).and_return(true)
+#        post :create, {:period_id=>@p.id.to_s, :compta_balance=>valid_attributes, :format=>'pdf'}, valid_session
+#        response.status.should == 200
+#      end
+
+      it 'rend le csv' do
+        pending
+        Compta::Balance.any_instance.stub(:valid?).and_return(true)
+        Compta::Balance.any_instance.stub(:to_csv).and_return('ceci est une chaine csv\tune autre\tencoe\tenfin\n')
+        post :create, {:period_id=>@p.id.to_s, :compta_balance=>valid_attributes, :format=>'csv'}, valid_session
+        response.should be_success
+      end
+
+       it 'rend le xls' do
+         pending 'renvoie le statut 406, mais pourtant fonctionne donc revoir la spec'
+        Compta::Balance.any_instance.stub(:valid?).and_return(true)
+        Compta::Balance.any_instance.stub(:to_xls).and_return('ceci est une chaine csv\tune autre\tencoe\tenfin\n')
+        post :create, {:period_id=>@p.id.to_s, :compta_balance=>valid_attributes, :format=>'xls'}, valid_session
+        response.should be_success
+      end
+
       it "render new when invalid" do
         Compta::Balance.any_instance.stub(:valid?).and_return(false)
         post :create, {:period_id=>@p.id.to_s, :compta_balance=>valid_attributes}, valid_session

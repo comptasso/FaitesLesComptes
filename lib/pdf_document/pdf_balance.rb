@@ -66,8 +66,7 @@ module PdfDocument
         '%0.2f' % account.cumulated_credit_before(from_date),
         '%0.2f' % account.movement(from_date, to_date, :debit),
         '%0.2f' % account.movement(from_date, to_date, :credit),
-        '%0.2f' % account.cumulated_at(to_date,:debit),
-        '%0.2f' % account.cumulated_at(to_date,:credit)
+        '%0.2f' % account.sold_at(to_date,:debit)
       ]
     end
 

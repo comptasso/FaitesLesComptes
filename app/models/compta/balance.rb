@@ -2,8 +2,9 @@
 
 require 'pdf_document/pdf_balance'
 
-# une classe correspondant à l'objet balance. Cette classe a une table
+# une classe correspondant à l'objet balance. Cette classe a une table virtuelle
 # mais le controller ne sauve pas l'objet.
+#
 # La table est préférable pour pouvoir bénéficier des scope et callbacks de
 # ActiveRecord.
 #
@@ -68,10 +69,10 @@ class Compta::Balance < ActiveRecord::Base
     pdf.from_number = from_account.number
     pdf.to_number = to_account.number
     pdf.set_columns %w(accounts.id number title period_id)
-    pdf.columns_alignements = [:left, :left, :right, :right, :right, :right, :right, :right]
-    pdf.set_columns_widths [10, 30, 10, 10, 10, 10, 10, 10]
-    pdf.set_columns_titles %w(Numéro Intitulé Débit Crédit Débit Crédit Débit Crédit)
-    pdf.set_columns_to_totalize [2,3,4,5,6,7]
+    pdf.columns_alignements = [:left, :left, :right, :right, :right, :right, :right]
+    pdf.set_columns_widths [10, 40, 10, 10, 10, 10, 10]
+    pdf.set_columns_titles %w(Numéro Intitulé Débit Crédit Débit Crédit Solde)
+    pdf.set_columns_to_totalize [2,3,4,5,6]
     pdf
   end
 
@@ -86,6 +87,9 @@ class Compta::Balance < ActiveRecord::Base
     self
   end
 
+  # retourne la liste des comptes demandés.
+  #
+  # Swap les comptes si le to_account est avant le form_account
   def range_accounts
     self.from_account, self.to_account = to_account, from_account if to_account.number  < from_account.number
     accounts.order('number').where('number >= ? AND number <= ?', from_account.number, to_account.number)
@@ -97,7 +101,7 @@ class Compta::Balance < ActiveRecord::Base
 
   def total_balance
     [self.total(:cumul_debit_before), self.total(:cumul_credit_before),self.total(:movement_debit),
-      self.total(:movement_credit),self.total(:cumul_debit_at),self.total(:cumul_credit_at)
+      self.total(:movement_credit), self.total(:sold_at)
     ]
   end
 
@@ -114,11 +118,11 @@ class Compta::Balance < ActiveRecord::Base
 
   def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
-        csv << ['', '', 'Soldes au', I18n.l(from_date),'Mouvements', 'de la période', 'Soldes au', I18n.l(to_date)]
-        csv << %w(Numéro Intitulé Débit Crédit Débit Crédit Débit Crédit)
+        csv << ['', '', 'Soldes au', I18n.l(from_date),'Mouvements', 'de la période', "Soldes au #{I18n.l(to_date)}"]
+        csv << %w(Numéro Intitulé Débit Crédit Débit Crédit Solde)
         balance_lines.each do |bl|
         csv << [bl[:number], bl[:title], bl[:cumul_debit_before], bl[:cumul_credit_before],
-            bl[:movement_debit], bl[:movement_credit], bl[:cumul_debit_at], bl[:cumul_credit_at]].collect {|val| reformat(val)}
+            bl[:movement_debit], bl[:movement_credit], bl[:sold_at]].collect {|val| reformat(val)}
         end
         csv << ['Totaux', ''] + total_balance.collect {|val| reformat(val)}
       end
@@ -148,8 +152,7 @@ class Compta::Balance < ActiveRecord::Base
       :cumul_credit_before=>account.cumulated_credit_before(from),
       :movement_debit=>account.movement(from,to, :debit),
       :movement_credit=>account.movement(from,to, :credit),
-      :cumul_debit_at=>account.cumulated_at(to,:debit),
-      :cumul_credit_at=>account.cumulated_at(to,:credit)
+      :sold_at=>account.sold_at(to)
     }
 
   end

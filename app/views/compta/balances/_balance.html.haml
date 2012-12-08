@@ -6,15 +6,16 @@
       %th.center(colspan="2")=begin_column_title(@balance.from_date)
         
       %th.center(colspan="2") Mouvement de la période
-      %th.center(colspan="2")
+      %th.center
         Soldes au
         = l @balance.to_date
     %tr
       %th.pc10 Numéro
       %th Libellé
-      - 3.times do |i|
+      - 2.times do |i|
         = content_tag :th, 'Débit', class:'pc10 numeric' 
         = content_tag :th, 'Crédit', class:'pc10 numeric'
+      %th.pc10.numeric Montant
           
   %tbody
     = render partial:'balance_line', collection:@balance.balance_lines

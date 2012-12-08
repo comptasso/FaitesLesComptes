@@ -4,7 +4,7 @@ require 'spec_helper'
 
 
 RSpec.configure do |c| 
-  # c.filter = {:wip=>true}
+   c.filter = {:wip=>true}
 end
 
 describe Compta::Balance do
@@ -146,8 +146,7 @@ describe Compta::Balance do
          :cumul_credit_before=>0,
          :movement_debit=>0,
          :movement_credit=>0,
-         :cumul_debit_at=>0,
-         :cumul_credit_at=> 0 }
+         :sold_at=>0 }
 
       end
 
@@ -168,14 +167,17 @@ describe Compta::Balance do
          :cumul_credit_before=>1,
          :movement_debit=>value,
          :movement_credit=>value*2,
-         :cumul_debit_at=>10+value,
-         :cumul_credit_at=> 1+value*2 }
+         :sold_at=>1+value*2 - 10 - value}
      end
 
      
 
      before(:each) do 
-       @b.stub(:balance_lines).and_return(1.upto(100).collect {|i| bal_line(i) })
+       @b.stub(:balance_lines).and_return(1.upto(100).collect {|i| bal_line(2) })
+     end
+
+     it 'total_balance renvoie le total' , wip:true do
+       @b.total_balance.should == [1000, 100, 200, 400, -700]
      end
 
      it 'nb page' do

@@ -51,7 +51,7 @@ table [doc.before_title], :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold
     column(0).width = width*page.total_columns_widths[0]/100
     column(1).width = width*(page.total_columns_widths[1] +  page.total_columns_widths[2])/100
     column(2).width = width*(page.total_columns_widths[3] +  page.total_columns_widths[4])/100
-    column(3).width = width*(page.total_columns_widths[5] +  page.total_columns_widths[6])/100
+    column(3).width = width*(page.total_columns_widths[5])/100
 end
 table [page.table_title],
   :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do 
