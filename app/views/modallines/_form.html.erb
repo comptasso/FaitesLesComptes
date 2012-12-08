@@ -31,7 +31,7 @@
   <% end %>
   <%= f.fields_for :compta_lines, @counter_line do |build| %>
 
-     <%= build.association :account, :label=> 'Contrepartie', input_html: {class: "span6"}, :collection=>[@counter_line.account], :label_method=>:long_name,
+     <%= build.association :account, :label=> 'Contrepartie', input_html: {class: "span6"}, :collection=>[@counter_line.account], :label_method=>:title,
                :disabled=>true, :include_blank=>false  %>
   <%= build.input :check_number, label:'N° ch.', input_html: {class: "span6" } %>
 

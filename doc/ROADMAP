@@ -694,7 +694,7 @@ Ajouter aussi pour les vue individuelles
 Rapprochement bancaire
 ------------------------------- rédaction du tutorial -------------------------
 OK - Revoir les champs des livres et ajouter abbréviation
-Revoir l'affichage des comptes bancaires (ajouter un champ ?)
+OK - Revoir l'affichage des comptes bancaires (ajouter un champ ?)
 Le back dans l'affichage d'un contrôle de caisse que l'on vient de créer génère une erreur.
 OK - Modifier le libellé de la caisse devrait aussi modifier celui du numéro de compte
 OK - Problème avec le fait qu'il y a deux caisses dans la liste déroulante : solution par suppression du compte 53 dans asso.yml
