@@ -8,12 +8,12 @@ describe 'admin/bank_accounts/index' do
   before(:each) do
     assign(:organism, stub_model(Organism))
     @bank_accounts=[]
-    @bank_accounts << stub_model(BankAccount, name: 'JC Bank', number: 'BA1', comment: 'un commentaire', address: '22, rue de Lille')
+    @bank_accounts << stub_model(BankAccount, name: 'JC Bank', number: 'BA1', nickname:'Compte courant', comment: 'un commentaire')
     @bank_accounts << stub_model(BankAccount, number: 'BA2')
     @bank_accounts.each do |b|
       b.stub(:created_at).and_return(Time.now)
       b.stub(:updated_at).and_return(Time.now)
-      b.stub(:accounts).and_return [mock_model(Account, number:'5101')]
+      b.stub(:accounts).and_return [mock_model(Account, number:'5101')] 
     end
   end
 
@@ -48,8 +48,9 @@ describe 'admin/bank_accounts/index' do
       it "shows Banque" do
         page.find('thead th:first').text.should == 'Banque'
         page.find(:css,'thead th:nth-child(2)').text.should == 'Numéro'
-        page.find(:css,'thead th:nth-child(3)').text.should == 'Commentaire'
-        page.find(:css,'thead th:nth-child(4)').text.should == 'Adresse'
+        page.find(:css,'thead th:nth-child(3)').text.should == 'Surnom'
+        page.find(:css,'thead th:nth-child(4)').text.should == 'Commentaire'
+        
         page.find(:css,'thead th:nth-child(5)').text.should == 'Compte de rattach.'
         page.find(:css,'thead th:nth-child(6)').text.should == 'Créé le'
         page.find(:css,'thead th:nth-child(7)').text.should == 'Modifié le'
@@ -63,8 +64,8 @@ describe 'admin/bank_accounts/index' do
         @ba=@bank_accounts.first
         page.find('tbody tr td:nth-child(1)').text.should == @ba.name
         page.find('tbody tr td:nth-child(2)').text.should == @ba.number
-        page.find('tbody tr td:nth-child(3)').text.should == @ba.comment
-        page.find('tbody tr td:nth-child(4)').text.should == @ba.address
+        page.find('tbody tr td:nth-child(3)').text.should == @ba.nickname
+        page.find('tbody tr td:nth-child(4)').text.should == @ba.comment
         page.find('tbody tr td:nth-child(5)').text.should == '5101'
         page.find('tbody tr td:nth-child(6)').text.should == l(@ba.created_at)
         page.find('tbody tr td:nth-child(7)').text.should == l(@ba.updated_at)

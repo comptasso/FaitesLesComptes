@@ -127,7 +127,7 @@ describe Organism do
 
         context 'with another bank account' do
           it 'main_bank_id should returns the first one' do
-            @organism.bank_accounts.create!(name: 'CrédiX', number: '124577ZA')
+            @organism.bank_accounts.create!(name: 'CrédiX', number: '124577ZA', nickname:'Compte courant')
             
             @organism.main_bank_id.should == @ba.id
           end

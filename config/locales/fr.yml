@@ -225,7 +225,8 @@ fr:
         name: Nom de la Banque
         comment: Commentaire
         number: "N° de compte"
-        address: Adresse
+        nickname: Surnom
+        
        
       check_deposit:
         bank_account: 'Numéro de compte'

@@ -6,15 +6,19 @@ RSpec.configure do |c|
   # c.filter = {:wip=> true }
 end
 
-describe BankAccount do
-  include OrganismFixture 
+describe BankAccount do 
+  include OrganismFixture
+
+  def create_bank_account
+    @o.bank_accounts.new(:name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
+  end
 
   before(:each) do
     create_minimal_organism
   end
 
   before(:each) do
-    @bb=@o.bank_accounts.new(:name=>'Crédit Universel', :number=>'1254L') 
+    @bb=create_bank_account
   end
 
   context 'controle des validités' do
@@ -33,6 +37,11 @@ describe BankAccount do
       @bb.should_not be_valid
     end
 
+    it 'should not be_valid without name' do
+      @bb.nickname = nil
+      @bb.should_not be_valid
+    end
+
     it "should have a unique number in the scope of bank and organism" do
       @bb.name = @ba.name
       @bb.number= @ba.number
@@ -44,7 +53,7 @@ describe BankAccount do
   describe 'création du compte comptable'  do
 
     before(:each) do
-      @bb=@o.bank_accounts.new(:name=>'Crédit Universel', :number=>'1254L')
+      @bb=create_bank_account
     end
 
     it 'la création d un compte bancaire doit entraîner celle d un compte comptable' do

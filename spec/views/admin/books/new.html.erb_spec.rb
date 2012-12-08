@@ -27,15 +27,15 @@ describe 'admin/books/new' do
       page.should have_css('form input[name="book[title]"]')
     end
 
-    it "form should have field title" do
+    it "form should have field description" do
       page.should have_css('form textarea[name="book[description]"]')
     end
 
-    it "form should have field title" do
+    it "form should have field book_type" do
       page.all('form input[name="book[book_type]"]').should have(2).elements
     end
 
-    it "form should have field title" do
+    it "form should have button named" do
       page.find('form input[type="submit"]').value.should == 'Créer le livre'
     end
 

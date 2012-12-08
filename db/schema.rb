@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121123051610) do
+ActiveRecord::Schema.define(:version => 20121208110940) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -35,11 +35,11 @@ ActiveRecord::Schema.define(:version => 20121123051610) do
     t.string   "number"
     t.string   "name"
     t.text     "comment"
-    t.text     "address"
     t.integer  "organism_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "book_id"
+    t.string   "nickname"
   end
 
   create_table "bank_extract_lines", :force => true do |t|

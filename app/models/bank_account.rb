@@ -10,8 +10,9 @@ class BankAccount < ActiveRecord::Base
   has_many :compta_lines, :through=>:accounts
   
   validates :number, :uniqueness=>{:scope=>[:organism_id, :name]}
-  validates :name, :number,  presence: true
+  validates :name, :number, :nickname,  presence: true
 
+  
   after_create :create_accounts
   after_update :change_account_title, :if=> lambda {name_changed? }
   
