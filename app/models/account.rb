@@ -60,6 +60,8 @@ class Account < ActiveRecord::Base
     [number, title].join(' ')
   end
 
+
+
   # méthode principale et mère des autres méthodes cumulated_credit
   # surcharger cette méthode dans les classes utilisant ce module
   # pour modifier le fonctionnement.

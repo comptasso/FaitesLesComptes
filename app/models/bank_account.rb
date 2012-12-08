@@ -155,7 +155,7 @@ class BankAccount < ActiveRecord::Base
    # demande un compte de libre sur l'ensemble des exercices commençant par 51
    n = Account.available('512') # un compte 512 avec un précision de deux chiffres par défaut
    organism.periods.where('open = ?', true).each do |p|
-     self.accounts.create!(number:n, period_id:p.id, title:self.name)
+     self.accounts.create!(number:n, period_id:p.id, title:nickname)
    end
  end
 

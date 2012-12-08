@@ -704,6 +704,7 @@ OK - Rajouter un cadenas dans compta->Journaux OD pour faire un verrouillage glo
 OK -  Il faudra revoir si la création et la clôture d'un exercice fonctionnent bien.
 OK - Le champ adress de bank_account n'est plus utilisé
 OK - Vérifier qu'une restauration ne peut écraser une base existante (d'un autre User, du même User)
+Dans les modif de Account, nature associée ne devrait apparaître que si le compte est en 6 ou 7
 ----------------------------Nomenclature -----------------------------
 OK - Une nomenclature doit vérifier que les comptes ne sont pris qu'une fois,
 OK - doit vérifier qu'il y a au moins 5 documents, actif, passif et exploitation, financier et exceptionnel
