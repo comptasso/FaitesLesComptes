@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 
+
 RSpec.configure do |c| 
   # c.filter = {:wip=>true}
 end
@@ -171,12 +172,14 @@ describe Compta::Balance do
          :cumul_credit_at=> 1+value*2 }
      end
 
-     before(:each) do
+     
+
+     before(:each) do 
        @b.stub(:balance_lines).and_return(1.upto(100).collect {|i| bal_line(i) })
      end
 
      it 'nb page' do
-       @b.balance_lines.should have(100).elements
+       @b.balance_lines.should have(100).elements 
        @b.nb_pages.should == 5
      end
 

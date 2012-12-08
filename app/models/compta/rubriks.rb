@@ -84,7 +84,7 @@ module Compta
     def fetch_lines
       fl = []
       @collection.each do |c|
-        puts c
+        
         fl += c.fetch_lines if c.class == Compta::Rubriks
         fl += c.lines  if c.class == Compta::Rubrik && !c.lines.empty? 
         fl << c if c.class == Compta::Rubrik
@@ -96,7 +96,7 @@ module Compta
     def fetch_rubriks
       result = []
       collection.each do |c|
-        puts c
+        
         if c.class == Compta::Rubriks
           result += c.fetch_rubriks
           # result << c
@@ -108,7 +108,7 @@ module Compta
     def fetch_rubriks_with_rubrik
       result = []
       collection.each do |c|
-        puts c
+        
         if c.class == Compta::Rubriks
           result += c.fetch_rubriks_with_rubrik
         elsif c.class == Compta::Rubrik

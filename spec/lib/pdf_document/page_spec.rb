@@ -21,6 +21,7 @@ describe PdfDocument::Page do
 
 
   before(:each) do
+    doc.set_columns %w(date debit credit)
     doc.set_columns_titles  %w(Date Débit Crédit)
     doc.stub(:nb_pages).and_return 5
     @page = PdfDocument::Page.new(2, doc)
@@ -73,15 +74,15 @@ describe PdfDocument::Page do
       
     end
     it 'total_line' do
-      doc.page(1).table_total_line.should == ['Totaux', "220.00"] 
+      doc.page(1).table_total_line.should == ['Totaux', "220,00"]
     end
 
       it 'to_report' do
-        doc.page(1).table_to_report_line.should == ['A reporter', "220.00"]
+        doc.page(1).table_to_report_line.should == ['A reporter', "220,00"]
       end
 
       it 'to_report_line' do
-        doc.page(2).table_report_line.should == ['Reports', "220.00"]
+        doc.page(2).table_report_line.should == ['Reports', "220,00"]
       end
 
       it 'la page 1 n a pas de ligne report' do
@@ -96,7 +97,7 @@ describe PdfDocument::Page do
 
         it 'le total à reporter prend en compte le report' do
           doc.first_report_line = ["Soldes", 99]
-          doc.page(1).table_to_report_line.should == ['A reporter', "319.00"]
+          doc.page(1).table_to_report_line.should == ['A reporter', "319,00"]
         end
 
 
@@ -107,15 +108,15 @@ describe PdfDocument::Page do
 
       
       it 'la page 3 doit avoir un report de 440' do
-        doc.page(3).table_report_line.should == ['Reports', '440.00']
+        doc.page(3).table_report_line.should == ['Reports', '440,00']
       end
 
       it 'la page a une ligne à reporter' do
-        doc.page(3).table_to_report_line.should == ['A reporter', '660.00']
+        doc.page(3).table_to_report_line.should == ['A reporter', '660,00']
       end
 
       it 'la ligne à reporter est intitulée total general pour la dernière page' do
-        doc.page(5).table_to_report_line.should == ['Total général', '1100.00']
+        doc.page(5).table_to_report_line.should == ['Total général', '1 100,00']
       end
 
 

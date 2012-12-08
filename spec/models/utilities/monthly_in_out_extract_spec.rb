@@ -55,7 +55,10 @@ describe Utilities::MonthlyInOutExtract do
       @extract.lines.count.should == 10
     end
 
-    it "knows the total debit" do
+
+
+    it "knows the total debit", wip:true do
+       
        @extract.total_debit.should == 20
     end
 
@@ -71,10 +74,7 @@ describe Utilities::MonthlyInOutExtract do
       @extract.credit_before.should == 0
     end
 
-    it "gives the sold" do
-      @extract.sold.should == -30 # les 10 de débit de janvier et les 20 de février
-    end
-
+   
   end
 end
 

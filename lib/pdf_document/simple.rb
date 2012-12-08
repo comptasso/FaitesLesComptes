@@ -145,7 +145,7 @@ module PdfDocument
 
     # permet de définir les titres qui seront donnés aux colonnes
     def set_columns_titles(array_titles = nil)
-      raise PdfDocumentError, "Le nombre de valeurs doit être égal au nombre de colonnes, en l'occurence #{@columns.size}" if array_titles.length != @columns.size
+      Rails.logger.debug "Le nombre de valeurs doit être égal au nombre de colonnes, en l'occurence #{@columns.size}" if array_titles.length != @columns.size
       @columns_titles = array_titles || @columns
     end
 

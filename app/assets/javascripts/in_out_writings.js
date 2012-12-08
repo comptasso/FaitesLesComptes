@@ -1,7 +1,7 @@
 
 "use strict";
 /*jslint browser: true */
-var jQuery, $, stringToFloat;
+var jQuery, $, stringToFloat, $f_numberWithPrecision;
 
 // mise en forme des tables de lignes
 jQuery(function () {
@@ -123,7 +123,6 @@ function $f_td_bank_cash() {
             banques.attr('selected', false);
             encaissement.attr('disabled', false);
             encaissement.first().attr('selected', 'selected');
-            
         } else {
             $('#td_check_number').show(); // affichage du champ pour  saisir le n° de chèque de la dépenses
             banques.attr('disabled', false);

@@ -3,7 +3,8 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
- # c.filter = {:wip=>true}
+# c.filter = {:wip=>true}
+ c.exclusion_filter = {:js=>true}
 end
 
 include OrganismFixture  
@@ -136,10 +137,10 @@ end
       end
     end
 
-    context 'avec deux bank_extracts' do
+    context 'avec deux bank_extracts' , :wip=>true do
 
       before(:each) do
-        @be1 = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
+        @be1 = @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month,
           reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)
         @be1.update_attribute(:locked, true)
         @be2 = @ba.bank_extracts.new(reference:'Folio 2',
@@ -147,12 +148,14 @@ end
           end_date:(@be1.end_date.months_since(1)),
           begin_sold:@be1.end_sold,
           total_debit:3.01, total_credit:1.99)
+        @be2.valid?
+        
         @be2.save!
 
       end
 
 
-      it 'la page index affiche une table avec deux lignes' do
+      it 'la page index affiche une table avec deux lignes' do 
          visit bank_account_bank_extracts_path(@ba)
         page.all('table tbody tr').should have(2).rows
       end

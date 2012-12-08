@@ -30,13 +30,7 @@ describe Compta::Nomenclature do
       @cn =  Compta::Nomenclature.new(@p, 'good.yml')
     end
 
-    it 'répond true à valid?' do
-     # @cn.valid?
-     # puts @cn.errors.messages
-
-      @cn.should be_valid
-    end
-
+   
     it 'sait si tous les comptes sont pris pour actif et passif' do
       @cn.should be_bilan_complete
     end
@@ -96,7 +90,7 @@ describe Compta::Nomenclature do
 
     it 'indique ses erreurs par des messages' do 
       @cn.valid?
-      @cn.errors.messages[:exploitation].should == ['Pas de document Exploitation']
+      @cn.errors.messages[:resultat].should == ['Pas de document Résultat']
     end
 
     it 'doit avoir un actif, un passif' do
@@ -158,17 +152,12 @@ describe Compta::Nomenclature do
 
     it 'identifie le numéro en double' do 
       @cnf.valid?
-      @cnf.errors.messages[:actif].should ==  ['comprend un compte en double (27, 45, 455)']
-    end
-
-    it 'passe les autres pages en revue' do
-      @cnf.valid?
-      @cnf.errors.messages[:financier].should ==  ['comprend un compte en double (786)']
+      @cnf.errors.messages[:actif].should ==  ['comprend des doublons (27, 45, 455)']
     end
 
     it 'identifie les doublons au sein de l ensemble resultats' do 
       @cnf.valid?
-      @cnf.errors.messages[:resultats].should ==  ['comprend des doublons (641, 645, 786)']
+      @cnf.errors.messages[:resultat].should ==  ['comprend des doublons (641, 645, 786)']
     end
 
     it 'et ceux du bilan' do

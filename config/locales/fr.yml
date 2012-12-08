@@ -331,8 +331,8 @@ fr:
       models:
         compta/nomenclature:
           attributes:
-            exploitation:
-              blank: Pas de document Exploitation
+            resultat:
+              blank: Pas de document Résultat
             financier:
               blank: Pas de document Financier
             exceptionnel:

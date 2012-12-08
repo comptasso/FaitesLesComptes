@@ -53,39 +53,15 @@ include OrganismFixture
 
   it 'sheet doit rendre un tableau' do
     
-    Compta::Sheet.new(@p, list_rubriks, 'ACTIF').to_csv.should ==
-      %Q(Actif
-Rubrique\tBrut\tAmort\tNet\tPrécédent
-Frais d'établissement\t-1210,0\t-5,0\t-1205,0\t0,0
-Frais de recherche et développement\t0\t0,0\t0,0\t0,0
-Fonds commercial'\t-100,0\t0,0\t-100,0\t0,0
-Autres\t-0,0\t0\t-0,0\t0,0
-Immobilisations incorporelles\t-1310,0\t-5,0\t-1305,0\t0,0
-Agencements\t0,0\t0,0\t0,0\t0,0
-Installations techniques, matériel et outillage\t0,0\t0,0\t0,0\t0,0
-Autres\t-0,0\t0\t-0,0\t0,0
-Immobilisations corporelles en cours\t-0,0\t0\t-0,0\t0,0
-Immobilisations corporelles\t0,0\t0,0\t0,0\t0,0
-Immobilisations financières\t0,0\t0,0\t0,0\t0,0
-Immobilisations financières\t0,0\t0,0\t0,0\t0,0
-IMMOBILISATIONS\t-1310,0\t-5,0\t-1305,0\t0,0
-Marchandises\t0,0\t0,0\t0,0\t0,0
-Stocks et encours\t0,0\t0,0\t0,0\t0,0
-Avances et acomptes versés sur commandes\t0\t0\t0\t0
-Créances usagers et comptes rattachés\t0,0\t0,0\t0,0\t0,0
-Autres\t1305,0\t0,0\t1305,0\t0,0
-Créances\t1305,0\t0,0\t1305,0\t0,0
-ACTIF CIRCULANT\t1305,0\t0,0\t1305,0\t0,0
-Autres titres\t0,0\t0,0\t0,0\t0,0
-Banques\t-0,0\t0\t-0,0\t0,0
-Disponibilités\t-0,0\t0\t-0,0\t0,0
-Disponibilités\t0,0\t0,0\t0,0\t0,0
-Charges constatées d'avance\t-0,0\t0\t-0,0\t0,0
-Charges à répartir sur plusiseurs exercices\t-0,0\t0\t-0,0\t0,0
-Autres actifs\t-0,0\t0\t-0,0\t0,0
-DISPONIBILITES ET AUTRES\t0,0\t0,0\t0,0\t0,0
-TOTAL ACTIF\t-5,0\t-5,0\t0,0\t0,0
-BILAN ACTIF\t-5,0\t-5,0\t0,0\t0,0\n)
+    cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF').to_csv
+
+    cs.should match "Actif\nRubrique\tBrut\tAmort\tNet\tPrécédent\n"
+    cs.should match "201 - Frais d'établissement\t-1 210,00\t0,00\t-1 210,00\t0,00\n"
+    cs.should match "2801 - Amortissements des frais d'établissements\t0,00\t-5,00\t5,00\t0,00\n"
+    cs.should match "Frais d'établissement\t-1 210,00\t-5,00\t-1 205,00\t0,00"
+    cs.should match "TOTAL ACTIF\t-5,00\t-5,00\t0,00\t0,00\n"
+
+
   end
 
   it 'sheet doit donner le total de ses lignes' do

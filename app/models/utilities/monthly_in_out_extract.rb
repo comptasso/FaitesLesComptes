@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require 'month_year'
-require 'pdf_document/book'
+require 'pdf_document/book' 
 
 module Utilities
 
@@ -43,7 +43,7 @@ module Utilities
     end
 
     def total_debit
-      lines.sum(:credit)
+      lines.sum(:debit)
     end
 
     def debit_before

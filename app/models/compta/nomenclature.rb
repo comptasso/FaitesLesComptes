@@ -19,7 +19,7 @@ module Compta
     
     def_doc :resultat, :actif, :passif, :benevolat
 
-    validates :actif, :passif, :resultat,:presence=>true
+    validates :actif, :passif, :resultat, :presence=>true
     validate :bilan_complete, :bilan_balanced, :resultats_67, :benevolat_8, :no_doublon?
 
 
@@ -40,7 +40,7 @@ module Compta
     # dans le cadre d'une page seule
     def no_doublon?
       pages.each {|p| doc_no_doublon?(p) }
-      collection_no_doublon?(:resultats, :exploitation, :financier, :exceptionnel)
+      collection_no_doublon?(:resultat)
       collection_with_option_no_doublon?(:bilan, :actif, :passif)
     end
 
@@ -86,7 +86,7 @@ module Compta
       dil = doublon_in_list(numbers_from_document(doc))
       unless dil.empty?
         Rails.logger.info "#{doc} comprend un compte en double (#{dil.join(', ')})"
-        self.errors[doc] << "comprend un compte en double (#{dil.join(', ')})"
+        self.errors[doc] << "comprend des doublons (#{dil.join(', ')})"
         return false
       end
       true
