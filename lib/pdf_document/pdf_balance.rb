@@ -12,6 +12,19 @@ module PdfDocument
     attr_accessor :from_number, :to_number
 
 
+# permet de choisir les colonnes que l'on veut sélectionner pour le document
+    # set_columns appelle set_columns_widths pour calculer la largeur des colonnes
+    # sur la base de largeurs égales.
+    # Set_columns_widths et set_columns_alignements permettent de fixer les largeur et
+    # l'alignement (:right ou :left)
+    #
+    def set_columns(array_columns = nil)
+      @columns = array_columns
+    end
+
+     def set_columns_widths(array_widths)
+      @columns_widths = array_widths
+    end
 
    
 
@@ -50,10 +63,10 @@ module PdfDocument
       [ account.number,
         account.title,
         ActionController::Base.helpers.number_with_precision(account.cumulated_debit_before(from_date),precision:2),
-        ActionController::Base.helpers.number_with_precision(account.cumulated_credit_before(from_date)),
-        ActionController::Base.helpers.number_with_precision(account.movement(from_date, to_date, :debit)),
-        ActionController::Base.helpers.number_with_precision(account.movement(from_date, to_date, :credit)),
-        ActionController::Base.helpers.number_with_precision(account.sold_at(to_date))
+        ActionController::Base.helpers.number_with_precision(account.cumulated_credit_before(from_date),precision:2),
+        ActionController::Base.helpers.number_with_precision(account.movement(from_date, to_date, :debit),precision:2),
+        ActionController::Base.helpers.number_with_precision(account.movement(from_date, to_date, :credit),precision:2),
+        ActionController::Base.helpers.number_with_precision(account.sold_at(to_date),precision:2)
       ]
     end
 
