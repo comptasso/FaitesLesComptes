@@ -13,17 +13,7 @@ module PdfDocument
 
 
 
-    # permet de choisir les colonnes que l'on veut sélectionner pour le document
-    # set_columns appelle set_columns_widths pour calculer la largeur des colonnes
-    # sur la base de largeurs égales.
-    # Si on veut fixer les largeurs, il faut alors appeler set_columns_widths
-    def set_columns(array_columns)
-      @columns = array_columns
-    end
-
-    def set_columns_alignements(array_alignements)
-      @columns_alignements = array_alignements
-    end
+   
 
     # calcule de nombre de pages; il y a toujours au moins une page
      # même s'il n'y a pas de lignes dans le comptes
@@ -38,10 +28,7 @@ module PdfDocument
 
    
 
-    def set_columns_widths(array_widths)
-      @columns_widths = array_widths
-    end
-
+    
     def before_title
       ['', "Soldes au #{I18n::l from_date}", 'Mouvements de la période',  "Soldes au #{I18n::l to_date}"]
     end
@@ -62,11 +49,11 @@ module PdfDocument
       Rails.logger.debug "Dans prepare_line de pdf_balance #{account.inspect}"
       [ account.number,
         account.title,
-        '%0.2f' % account.cumulated_debit_before(from_date),
-        '%0.2f' % account.cumulated_credit_before(from_date),
-        '%0.2f' % account.movement(from_date, to_date, :debit),
-        '%0.2f' % account.movement(from_date, to_date, :credit),
-        '%0.2f' % account.sold_at(to_date,:debit)
+        ActionController::Base.helpers.number_with_precision(account.cumulated_debit_before(from_date),precision:2),
+        ActionController::Base.helpers.number_with_precision(account.cumulated_credit_before(from_date)),
+        ActionController::Base.helpers.number_with_precision(account.movement(from_date, to_date, :debit)),
+        ActionController::Base.helpers.number_with_precision(account.movement(from_date, to_date, :credit)),
+        ActionController::Base.helpers.number_with_precision(account.sold_at(to_date))
       ]
     end
 
