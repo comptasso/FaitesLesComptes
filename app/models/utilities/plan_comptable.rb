@@ -12,7 +12,7 @@ class Utilities::PlanComptable
     p=Period.find(period_id)
     nba=p.accounts.count # nb de comptes existants pour cet exercice
     t=self.load_accounts("#{Rails.root}/app/assets/parametres/#{source}")
-    raise 'Erreur lors du chargement du fichier' if t.is_a?(String)
+    raise "Erreur lors du chargement du fichier #{source}" if t.is_a?(String)
     t.each {|a| p.accounts.create(a)}
     p.accounts.count-nba # renvoie le nombre de comptes créés
   end

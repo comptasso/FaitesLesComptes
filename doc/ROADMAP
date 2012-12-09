@@ -689,9 +689,9 @@ BOF - Dans le grand livre, les natures de devraient pas être indiquées (ni peu
 OK - Dans le grand livre, mettre le libellé du compte en clair et pas seulement le numéro
 OK - Compte de résultat
 OK - bilan
-Trasnformations en CSV des éditions : bilan, résultats, bénévolat et détail
-Ajouter aussi pour les vue individuelles
-Rapprochement bancaire
+OK - Trasnformations en CSV des éditions : bilan, résultats, bénévolat et détail
+OK - Ajouter aussi pour les vue individuelles
+
 ------------------------------- rédaction du tutorial -------------------------
 OK - Revoir les champs des livres et ajouter abbréviation
 OK - Revoir l'affichage des comptes bancaires (ajouter un champ ?)
@@ -728,7 +728,7 @@ Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
 On pourrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base
 Nettoyer old_bootstrap.css en modifiant bootstrap.css
-Dans period, copy_accounts devrait être dans une transaction
+NON - Dans period, copy_accounts devrait être dans une transaction : inutile car déja dans un after_create donc transaction
 Dans Period, closable? devrait vérifier que tous les comptes 1 à 5 sont là
 OK - Revoir la page index de organism (title et mise en page) : en fait je l'ai supprimée dans la partie consult
 OK - supprimer la session de period
@@ -743,6 +743,7 @@ OK - Revoir la vue index de nature dans public qui propose des actions qui relè
 OK - Peut être idem pour destination : suppression controller et vue de saisie/consult
 Il serait plus judicieux de faire un stat controller car le controller nature n'a plus qu'une méthode stats et stats traite de natures et de destinations
 OK - Faire une classe month pour Period ? : en fait c'est la classe MonthYear
+Rapprochement bancaire
 -----------------------------------------------------------------
 
 Peut on supprimer le fichier sqlite3 d'un organisme quand on efface l'organisme (actuellement le système dit que c'est interdit)

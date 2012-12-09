@@ -269,6 +269,10 @@ fr:
           attributes:
             number:
               invalid: "Numéro invalide"
+        organism:
+          attributes:
+            status:
+              inclusion: Statut '%{value}' non accepté
  
   helpers:
     select:

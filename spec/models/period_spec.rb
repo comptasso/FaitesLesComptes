@@ -6,8 +6,14 @@ RSpec.configure do |c|
   # c.filter = {wip:true}
 end
 
-describe Period do 
+describe Period do
+  include OrganismFixture
+  context 'un organisme' do
 
+    before(:each) do
+      create_organism
+    end
+  
 
   describe 'validations' do
     it 'faire les tests de validation' 
@@ -15,8 +21,8 @@ describe Period do
   
   describe 'after_create'  do 
     before(:each) do
-      @organism= Organism.create(title: 'test asso', database_name:'assotest1')
-      @p = @organism.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
+      
+      @p = @o.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     end
     
     it 'les comptes du fichier asso.yml plus le compte bancaire et le compte de caisse' do
@@ -27,15 +33,16 @@ describe Period do
       @p.should have(16).natures 
     end
 
+
   end
 
   context 'avec deux exercices' do 
  
   before(:each) do
-    @organism= Organism.create(title: 'test asso', database_name:'assotest1')
-    @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
-    @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
-    @ba = @organism.bank_accounts.create!(name:'DebiX', number:'123Z', nickname:'Compte épargne')
+    
+    @p_2010 = @o.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
+    @p_2011= @o.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
+    @ba = @o.bank_accounts.create!(name:'DebiX', number:'123Z', nickname:'Compte épargne')
   end
 
   describe 'compte de remise de chèque' do
@@ -116,8 +123,8 @@ describe Period do
       end
 
       it 'doit avoir un livre d OD' do
-        @p_2010.should_receive(:organism).and_return   @organism
-        @organism.should_receive(:books).and_return(@a=double(Arel))
+        @p_2010.should_receive(:organism).and_return   @o
+        @o.should_receive(:books).and_return(@a=double(Arel))
         @a.should_receive(:find_by_type).with('OdBook').and_return nil
         @p_2010.stub_chain(:compta_lines, :unlocked, :any?).and_return(false)
         @p_2010.closable?
@@ -156,8 +163,8 @@ describe Period do
         @acc71 = @p_2011.accounts.find_by_number '701'
         @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc60.id)
         @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id)
-        @ob= @organism.books.find_by_type('OutcomeBook')
-        @ib= @organism.books.find_by_type('IncomeBook')
+        @ob= @o.books.find_by_type('OutcomeBook')
+        @ib= @o.books.find_by_type('IncomeBook')
 
         @l6= @ib.in_out_writings.create!({date:Date.civil(2010,8,15), narration:'ligne créée par la méthode create_outcome_writing',
       :compta_lines_attributes=>{'0'=>{account_id:@acc60.id, nature:@n_dep, credit:54, payment_mode:'Espèces'},
@@ -303,6 +310,7 @@ describe Period do
         end
       end
     end
+  end
   end
   end
 end

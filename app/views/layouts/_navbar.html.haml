@@ -2,7 +2,7 @@
   .navbar.navbar-inner
     .container
       .brand
-        - if @organism
+        - if @organism && @organism.persisted?
           = link_to header_title, organism_path(@organism)
         -else
           = header_title

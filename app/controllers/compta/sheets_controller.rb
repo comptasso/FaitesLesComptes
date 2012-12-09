@@ -122,7 +122,7 @@ class Compta::SheetsController < Compta::ApplicationController
 
   # appelé par before_filter pour s'assurer que la nomenclature est valide
   def check_nomenclature
-    @nomenclature = Compta::Nomenclature.new(@period, 'nomenclature.yml')
+    @nomenclature = Compta::Nomenclature.new(@period)
     unless @nomenclature.valid?
       al = 'La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d\'être faux.</br> '
       al += 'Liste des erreurs relevées : <ul>'

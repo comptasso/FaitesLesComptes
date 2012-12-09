@@ -11,7 +11,8 @@ end
 describe Organism do
   def valid_attributes
     {:title =>'Test ASSO',
-      database_name:'testasso1'
+      database_name:'testasso1',
+      :status=>'Association'
     }
   end
 
@@ -30,6 +31,11 @@ describe Organism do
       @organism.should_not be_valid
     end
 
+    it 'should not be valid without status' do
+      @organism.status= nil
+      @organism.should_not be_valid
+    end
+
     it 'should create 4 books (un recettes, un dépenses, un OD, un AN)' do
       expect {@organism.save}.to change {Book.count}.by(4)
     end
@@ -38,7 +44,7 @@ describe Organism do
 
   describe 'after create', wip:true do
     before(:each) do
-      @organism= Organism.create! valid_attributes
+      @organism = Organism.create! valid_attributes
     end
 
     it 'on a quatre livres' do
@@ -62,10 +68,12 @@ describe Organism do
     end
 
 
-    it 'on a une caisse et une banque' do
+    it 'on a une caisse et une banque' do 
       @organism.should have(1).cashes
       @organism.should have(1).bank_accounts
     end
+
+    
   end
 
 
@@ -73,7 +81,7 @@ describe Organism do
 
     before(:each) do
       
-      @organism= Organism.create!(title: 'test asso', database_name:'assotest1')
+      @organism= Organism.create! valid_attributes
       @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
       @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
       @organism.periods.count.should == 2

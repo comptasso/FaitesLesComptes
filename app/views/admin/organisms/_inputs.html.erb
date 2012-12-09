@@ -8,6 +8,8 @@
            input_html: {class: "span3"},
            hint:'lettres minuscules uniquement, sans espace',
            disabled:@organism.persisted? %>
+ <%= f.input :status, :label=>'Statut',
+         :collection=>%w(Association Entreprise), :as=>:inline_radio_buttons %>
 
    <div class="form-actions">
     <%= f.button :submit, class: "btn-primary span2" %>

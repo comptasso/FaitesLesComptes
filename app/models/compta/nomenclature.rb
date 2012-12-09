@@ -23,12 +23,13 @@ module Compta
     validate :bilan_complete, :bilan_balanced, :resultats_67, :benevolat_8, :no_doublon?
 
 
-    def initialize(period, yml_file)
+    def initialize(period, file='nomenclature.yml') 
       @period = period
+      status = @period.organism.status.downcase
       path = case Rails.env
-      when 'test' then File.join Rails.root, 'spec', 'fixtures', 'nomenclatures', yml_file
+      when 'test' then File.join Rails.root, 'spec', 'fixtures', status, file 
       else
-        File.join Rails.root, 'app', 'assets', 'parametres', 'association', yml_file
+        File.join Rails.root, 'app', 'assets', 'parametres', status, file
       end
       @instructions = YAML::load_file(path)
       #  def_document

@@ -22,12 +22,16 @@ module OrganismFixture
     click_button 'Entrée'
   end
 
+  def create_organism
+    @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
+  end
+
   # crée un organisme, un income_book, un outcome_book, un exercice (period),
   # une nature. 
   def create_minimal_organism
     clean_test_base
    
-    @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1')
+    @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
     @od = @o.od_books.first
@@ -89,7 +93,7 @@ module OrganismFixture
 
   def create_second_organism 
     @cu.rooms.create!(database_name:'assotest2')
-    @o2 = Organism.create!(title: 'ASSO TEST2', database_name:'assotest2')
+    @o2 = Organism.create!(title: 'ASSO TEST2', database_name:'assotest2', status:'Entreprise')
   end
 
   # crée le nombre de lignes demandées pour le minimal organism avec

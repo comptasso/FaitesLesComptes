@@ -30,6 +30,7 @@ class Organism < ActiveRecord::Base
 
   validates :title, :presence=>true
   validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/^[a-z][0-9a-z]*$/, message:'format incorrect'}
+  validates :status, presence:true, :inclusion=>{:in=>%w(Association Entreprise)}
 
 
 
@@ -141,9 +142,12 @@ class Organism < ActiveRecord::Base
 
   end
 
-  # méthode permettant de donner le compte d'exploitation d'un organisme
-  def document(page, period = Period.first)
-    Compta::Nomenclature.new(period, 'nomenclature.yml').sheet(page)
+  # méthode produisant le document demandé par l'argument page, avec
+  # comme argument optionnel l'exercie.
+  #
+  # Si period est absent, renvoie le dernier exercice
+  def document(page, period = Period.last)
+    Compta::Nomenclature.new(period).sheet(page)
   end
 
  
