@@ -19,25 +19,18 @@ La base de données utilisée est sqlite3 qui doit donc être également install
 
 Après installation et lancement, le logiciel vous proposera de créer un utilisateur, puis un organisme
 puis un exercice pour votre comptabilité. Ces opérations créeront également un livre
-de recettes et de dépenses.
+de recettes et de dépenses, ainsi qu'un plan de compte adapté au statut de l'organisme (Entreprise ou Association)
 
-Sont également à renter dans le menu Administration, les paramètres correspondant
-à votre banque (ou vos banques si vous en avez plusieurs)et à votre caisse pour les
-espèces si vous en avez une (ou plusieurs).
+Dans le menu Admin, vous pouvez ensuite modifier les paramètres du compte bancaire et de la caisse,
+créer de nouvelles natures de dépenses ou de recettes, ainsi que des destinations.
 
-Il faut enfin rentrer des
-
-1) Natures de recettes et de dépenses (selon la nomenclature que vous désirez suivre) :
-par exemple cotisations des adhérents, ventes de billets, pour les recettes, location de salle,
-téléphone, petit matériel pour les dépenses.
-
-2) Destinations : les destinations vous permettent de connaître vos recettes et dépenses
+Les destinations vous permettent de connaître vos recettes et dépenses
 selon leur usage, par exemple :
 -  Fonctionnement général (pour les dépenses non affectées),
 - fête annuelle (pour les recettes et dépenses correspondant à cet évènement),
 - ou encore Cours (si vous avez une activité de formation).
 
-Il est préférable de réfléchir avec soin sur les natures et destinations envisagées.
+Il est préférable de réfléchir avec soin sur les destinations envisagées.
 
 La zone Saisie/Consult permet alors de commencer à saisir les écritures.
 
@@ -59,21 +52,12 @@ La partie Compta, vous permet alors d'éditer les comptes, d'imprimer une balanc
 
 == Etat actuel du projet
 
-Ce projet est en cours de développement et certaines parties ne sont pas totalement achevées.
+Ce projet est en cours de développement et de test approfondi.
+Il est normalement opérationnel avec cependant encore quelques bugs que nous
+nous attachons à détecter et modifier aussi rapidement que possible.
 
-Sont notamment à traiter :
-
-1) Dans les éditions en pdf, l'affichage ou non d'un fond Brouillard
-lorsque les lignes d'écritures ne sont pas toutes validées
-
-2) Les opérations de clôture d'un exerice
-
-== Modules complémentaires envisagés à terme (dans le désordre)
-
-1) Gestion de la TVA (actuellement non gérée)
-2) Gestion de mots de passe utilisateurs et de droit d'accès
-3) Gestion de préférences utilisateurs
-4) Masques de saisie
+Prochainement des sites dédiés seront mis en place avec manuel d'utilisation et
+possibilité de téléchargement.
 
 == Licence
 
