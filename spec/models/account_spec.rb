@@ -20,7 +20,7 @@ describe Account do
       end
  
     it 'retourne 5301 si organisme est créé' do
-      @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1')
+      create_organism
       Account.available('53').should == '5301'
     end
 

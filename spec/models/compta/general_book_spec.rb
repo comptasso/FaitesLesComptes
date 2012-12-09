@@ -6,9 +6,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
 
 describe Compta::GeneralBook do
-
+include OrganismFixture
   before(:each) do
-    @o=Organism.create!(title:'test balance sans table', database_name:'assotest1')
+    create_organism
     @p= Period.create!(organism_id:@o.id, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     @a1 = @p.accounts.find_by_number('60')
     @a2 = @p.accounts.find_by_number('701')

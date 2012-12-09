@@ -23,13 +23,13 @@ describe 'Session' do
     page.should have_content 'Cet utilisateur est inconnu'
   end
 
-  it 'création d un nouvel utilisateur' do
+  it 'création d un nouvel utilisateur' do 
     visit '/'
     fill_in 'user_name', :with=>'Paul'
     click_button('Entrée')
     click_link 'Nouvel utilisateur' 
     fill_in 'user_name', :with=>'Paul'
-    click_button 'Créer'
+    click_button 'Confirmer'
     page.should have_content 'Nouvel organisme' 
   end
 
