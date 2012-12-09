@@ -8,7 +8,7 @@
 
 
 
-class BankLinesController < ComptaLinesController
+class BankLinesController < Compta::LinesController
 
   before_filter :find_book, :current_period, :fill_mois
  
