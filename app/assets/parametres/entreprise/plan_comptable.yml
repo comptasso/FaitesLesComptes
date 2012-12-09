@@ -55,8 +55,6 @@
   title: Provisions pour dépréciation des autres immobilisations financières
 - number: '31'
   title: Matières premières et fournitures
-- number: '32'
-  title: Autres approvisionnements
 - number: '33'
   title: En-cours de production de biens
 - number: '34'
@@ -67,8 +65,6 @@
   title: Stocks de marchandises
 - number: '391'
   title: Provisions pour dépréciation des matières premières et fournitures
-- number: '392'
-  title: Provisions pour dépréciation des autres approvisionnements
 - number: '393'
   title: Provisions pour dépréciation des en-cours de production de biens
 - number: '394'
@@ -109,8 +105,6 @@
   title: Valeurs mobiliéres de placement
 - number: '511'
   title: Chèque à encaisser
-- number: '58'
-  title: Virements internes
 - number: '590'
   title: Provisions pour dépréciation des valeurs mobiliéres de placement
 - number: '60'

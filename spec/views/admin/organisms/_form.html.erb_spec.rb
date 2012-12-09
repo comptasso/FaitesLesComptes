@@ -11,7 +11,7 @@ describe'admin/organisms/_form' do
   end
 
   it 'should render form with two inputs ' do
-    render :template=>'admin/organisms/new' 
+    render :template=>'admin/organisms/new'  
   end
 
   it 'has des radio button avec association et entreprise' do

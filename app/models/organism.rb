@@ -30,7 +30,7 @@ class Organism < ActiveRecord::Base
 
   validates :title, :presence=>true
   validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/^[a-z][0-9a-z]*$/, message:'format incorrect'}
-  validates :status, presence:true, :inclusion=>{:in=>%w(Association Entreprise)}
+  validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
 
 
 

@@ -19,6 +19,10 @@
             :Immobilisations financières: 27 -297
         :ACTIF CIRCULANT:
           :Stocks et encours:
+            :Matières premières et fournitures: 31 -391
+            :En cours de production de biens: 33 -393
+            :En cours de production de services: 34 -394
+            :Produits: 35 -395
             :Marchandises: 37 -397
           :Créances:
             :Avances et acomptes versés sur commandes: '4091'
@@ -42,6 +46,7 @@
           :Fonds propres:
             :Fonds associatifs: '101'
             :Réserves: '106'
+            :Compte de l'exploitant: '108'
             :Report à nouveau: 110 119
             :Résultat de l'exercice: 12 7 -6
             :Subventions d'investissement: '13'
