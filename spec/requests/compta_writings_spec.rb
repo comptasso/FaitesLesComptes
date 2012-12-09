@@ -16,7 +16,7 @@ describe "Writings" do
     it "works! (now write some real specs)" do
       pending 'faire une méthode préparant les datas pour accéder à la zone compte'
       get compta_book_writings_path(@od) 
-      save_and_open_page
+
       response.status.should == 200
     end
   end

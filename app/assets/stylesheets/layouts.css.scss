@@ -15,9 +15,19 @@ html, body {
   
   }
 
+  .brand {
+    background-image: url(sigma.png);
+    background-repeat: no-repeat;
+    background-position: 3px 3px;
+    a:hover { text-decoration: none;}
+    a:visited {
+     color: #bbbbbb;
+      }
+    }
+
   .container-fluid {
     min-height: 100%;
-    padding-bottom: 25px;
+    padding-bottom: 25px;   
     }
 
 #bottom_page {

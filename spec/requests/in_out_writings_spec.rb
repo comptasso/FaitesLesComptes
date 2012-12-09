@@ -36,14 +36,15 @@ describe 'vue lines' do
     Writing.count.should == 0
   end
 
-  it 'remplir correctement le formulaire crée une nouvelle ligne' do
+  it 'remplir correctement le formulaire crée une nouvelle ligne' do 
     visit new_book_in_out_writing_path(@ob)
+   
     fill_in 'in_out_writing_date_picker', :with=>'01/04/2012'
     fill_in 'in_out_writing_narration', :with=>'Ecriture test'
     select 'Essai', :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
     fill_in 'in_out_writing_compta_lines_attributes_0_debit', with: 50.21
-    select 'Chèque'
-    select '51201 DebiX'
+    select 'Virement'
+    select 'DebiX'
     click_button 'Créer'
     Writing.count.should == 1
     ComptaLine.count.should == 2 # avec sa contrepartie

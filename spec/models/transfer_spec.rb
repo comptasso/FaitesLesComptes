@@ -18,7 +18,7 @@ describe Transfer  do
  
   before(:each) do 
     create_minimal_organism 
-    @bb=@o.bank_accounts.create!(name: 'DebiX', number: '123Y')
+    @bb=@o.bank_accounts.create!(name: 'DebiX', number: '123Y', nickname:'Compte courant')
     @cba = @ba.current_account @p
     @cbb = @bb.current_account @p
   end 

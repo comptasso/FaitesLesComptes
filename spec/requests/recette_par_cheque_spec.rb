@@ -27,12 +27,12 @@ describe 'Recette par chèque' do
     select 'Vte Nourriture', :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
     fill_in 'in_out_writing_compta_lines_attributes_0_credit', with: 50.21
     select 'Chèque'
-    select '511 Chèque à encaisser', :for=>'in_out_writing_compta_lines_attributes_1_nature_id'
+    select 'Chèque à encaisser', :for=>'in_out_writing_compta_lines_attributes_1_nature_id'
   end
 
  
 
- it 'on crée une recette par chèque' , wip:true do
+ it 'on crée une recette par chèque' do
    # création du compte remise chèque
    click_button 'Créer'
    Writing.count.should == 1

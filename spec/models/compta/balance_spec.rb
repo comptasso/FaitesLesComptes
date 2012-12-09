@@ -4,7 +4,7 @@ require 'spec_helper'
 
 
 RSpec.configure do |c| 
-   c.filter = {:wip=>true}
+   # c.filter = {:wip=>true}
 end
 
 describe Compta::Balance do

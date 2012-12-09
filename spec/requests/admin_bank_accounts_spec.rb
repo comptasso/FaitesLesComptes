@@ -29,7 +29,7 @@ describe 'vue bank_accounts index' do
     it "affiche la page new" do
       current_url.should match new_admin_organism_bank_account_path(@o)
       page.should have_content("Nouveau compte bancaire")
-      all('form div.control-group').should have(3).elements # name, number et comment
+      all('form div.control-group').should have(4).elements # name, number, nickname et comment
       
     end
 
@@ -37,6 +37,7 @@ describe 'vue bank_accounts index' do
       
       fill_in 'bank_account[name]', :with=>'Crédit Bancaire'
       fill_in 'bank_account[number]', :with=>'12456321AZ'
+      fill_in 'bank_account[nickname]', :with=>'Compte courant'
       click_button "Créer le compte" # le compte'
       current_url.should match admin_organism_bank_accounts_path(@o)
       all('tbody tr').should have(2).rows
@@ -48,6 +49,7 @@ describe 'vue bank_accounts index' do
       
       fill_in 'bank_account[name]', :with=>@ba.name
       fill_in 'bank_account[number]', :with=>@ba.number
+      fill_in 'bank_account[nickname]', :with=>'Compte courant'
       click_button "Créer le compte" # le compte'
       page.should have_content('déjà utilisé')
       @o.should have(1).bank_accounts
@@ -56,6 +58,7 @@ describe 'vue bank_accounts index' do
     it  'test presence name' do
       visit new_admin_organism_bank_account_path(@o)
       fill_in 'bank_account[name]', :with=>@ba.name
+      
       click_button "Créer le compte" # le compte'
       page.should have_content('obligatoire')
     end

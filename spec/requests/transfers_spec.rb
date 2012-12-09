@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:wip=> true }
-  #  c.exclusion_filter = {:js=> true } 
+  c.exclusion_filter = {:js=> true } 
 end
 
 # spec request for testing admin books 
@@ -16,9 +16,8 @@ describe 'vue transfer index'do
   before(:each) do 
     create_user 
     create_minimal_organism
-    @bb = @o.bank_accounts.create!(:name=>'Deuxième banque', :number=>'123Y')
+    @bb = @o.bank_accounts.create!(:name=>'Deuxième banque', :number=>'123Y', nickname:'Compte épargne')
     @bbca = @bb.current_account(@p) # ca pour Current Account
-
     login_as('quidam')
   end
 
@@ -132,7 +131,7 @@ describe 'vue transfer index'do
   describe 'edit'  do
 
     before(:each) do
-      @bb = @o.bank_accounts.create!(:name=>'DebiX', :number=>'987654')
+      @bb = @o.bank_accounts.create!(:name=>'DebiX', :number=>'987654', nickname:'Compte épargne')
      @t1 = Transfer.create!(book_id:@od.id, date: Date.today, narration: 'création',
         :compta_lines_attributes=> {'0'=>{account_id:@baca.id, credit:100000},
         '1'=>{account_id:@bbca.id, debit:100000}})    end

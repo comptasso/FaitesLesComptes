@@ -35,7 +35,7 @@ describe Period do
     @organism= Organism.create(title: 'test asso', database_name:'assotest1')
     @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
     @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
-    @ba = @organism.bank_accounts.create!(name:'DebiX', number:'123Z')
+    @ba = @organism.bank_accounts.create!(name:'DebiX', number:'123Z', nickname:'Compte épargne')
   end
 
   describe 'compte de remise de chèque' do
