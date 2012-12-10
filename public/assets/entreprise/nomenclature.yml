@@ -1,0 +1,118 @@
+---
+  :actif:
+    :title: BILAN ACTIF
+    :sens: :actif
+    :rubriks:
+      :TOTAL ACTIF:
+        :IMMOBILISATIONS:
+          :Immobilisations incorporelles:
+            :Frais d'établissement: '201 -2801'
+            :Frais de recherche et développement: 203 -2803
+            :Fonds commercial': 206 207 -2807 -2906 -2907
+            :Autres: 208 -2808 -2809
+          :Immobilisations corporelles:
+            :Agencements: 212 -2812 -2912
+            :Installations techniques, matériel et outillage: 215 -2815 -2915
+            :Autres: 218 -2818
+            :Immobilisations corporelles en cours: 23 -293
+          :Immobilisations financières:
+            :Immobilisations financières: 27 -297
+        :ACTIF CIRCULANT:
+          :Stocks et encours:
+            :Matières premières et fournitures: 31 -391
+            :En cours de production de biens: 33 -393
+            :En cours de production de services: 34 -394
+            :Produits: 35 -395
+            :Marchandises: 37 -397
+          :Créances:
+            :Avances et acomptes versés sur commandes: '4091'
+            :Créances usagers et comptes rattachés: 41 !419 -491 -492
+            :Autres: 409 !4091 43D 44D 45D 46D 47D -495 -496
+        :DISPONIBILITES ET AUTRES:
+          :Disponibilités:
+            :Autres titres: 50 -590
+            :Banques: '51D'
+            :Disponibilités: '53'
+          :Autres actifs:
+            :Charges constatées d'avance: '486'
+            :Charges à répartir sur plusiseurs exercices: '481'
+
+  :passif:
+    :title: BILAN PASSIF
+    :sens: :passif
+    :rubriks:
+      :TOTAL PASSIF:
+        :FONDS PERMANENTS:
+          :Fonds propres:
+            :Fonds associatifs: '101'
+            :Réserves: '106'
+            :Compte de l'exploitant: '108'
+            :Report à nouveau: 110 119
+            :Résultat de l'exercice: 12 7 -6
+            :Subventions d'investissement: '13'
+            :Provisions réglementées: '14'
+          :Provisions et fonds dédiés:
+            :Provisions pour risques et charges: '15'
+            :Fonds dédiés: '19'
+        :DETTES ENVERS LES TIERS:
+          :Dettes bancaires:
+            :Emprunts et dettes assimilées: '16'
+            :Emprunts et dettes auprès des établissements de crédit: 51C
+          :Dettes courantes:
+            :Fournisseurs et comptes rattachés: '400'
+            :Usagers créditeurs: '419'
+            :Personnel et charges sociales: 421 428
+            :Produits constatés d'avance: '487'
+            :Autres: 43C 44C 45C 46C 47C
+
+  :resultat:
+    :title: Compte de résultats
+    :sens: :passif
+    :rubriks:
+      :RESULTAT NET:
+        :RESULTAT D'EXPLOITATION:
+          :Produits d'exploitation:
+            :Ventes de marchandises: '707'
+            :Production vendue (bien et services): '701 706'
+            :Production immobilisée: '72'
+            :Subvention d'exploitation: '74'
+            :Reprises sur provisions, amortissements et transferts de charge: '781'
+            :Cotisations: '756'
+            :Autres produits: '75 !756'
+          :Charges d'exploitation:
+            :Achats de marchandises: '-60 !603'
+            :Variation stocks de marchandises: '603'
+            :Autres achats et charges externes: '61'
+            :Impôts, taxes et versements assimilés: '63'
+            :Salaires et traitements: '641'
+            :Charges sociales: '645'
+            :Dotations aux amortissements et provisions: '681'
+            :Autres charges: '65'
+        :RESULTAT FINANCIER:
+          :Produits financiers:
+            :Produits financiers: '76'
+            :Reprises sur provisions financières: '786'
+          :Charges financières:
+            :Charges financières: '-66'
+            :Dotations aux provisions financières: '686'
+        :RESULTAT EXCEPTIONNEL:
+          :Produits exceptionnels:
+            :Produits exceptionnels: '77'
+            :Reprises sur provisions exceptionnelles: '787'
+            :Report des ressources non utilisées: '789'
+          :Charges exceptionnelles:
+            :Charges exceptionnels: '-67'
+            :Dotations aux provisions exceptionnelles: '-687'
+            :Engagements à réaliser: '-689'
+
+  :benevolat:
+    :title: Evaluation des contributions volontaires en nature
+    :sens: :passif
+    :rubriks:
+      :BENEVOLAT:
+        :Produits:
+          :Bénévolat: '870'
+          :Autres contributions en nature: 87 !870
+        :Charges:
+          :Bénévolat: '-864'
+          :Autres charges en nature: -86 !864
