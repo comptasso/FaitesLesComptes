@@ -16,7 +16,7 @@ html, body {
   }
 
   .brand {
-    background-image: url(/assets/sigma.png);
+    background-image: image-url("sigma.png");
     background-repeat: no-repeat;
     background-position: 3px 3px;
     a:hover { text-decoration: none;}
