@@ -327,7 +327,7 @@ fr:
         update: Enregistrer
       in_out_writing:
         create: Créer l'écriture
-        update: Energistrer
+        update: Enregistrer
 
   activemodel:
     errors:

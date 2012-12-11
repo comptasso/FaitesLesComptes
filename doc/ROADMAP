@@ -723,6 +723,13 @@ OK - rspec
 OK - création d'un script de lancement des différentes commandes
 Jasmine -commencé l'installation mais pas fini car je n'ai pas actuellement de test à faire.
 Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
+--------------------- rédaction du tutorial---------------------------
+Revoir le support dans l'affichage des lignes
+Dans le modal form, on ne devrait avoir que les livres recettes et dépenses et non pas tous les livres
+Changer la date d'une remise chèque ne change pas la date de l'écriture associée
+Supprimer Bonjour JeanClaude
+Comprendre pourquoi l'erreur dans le controller CashLines n'a pas été détecté par les spec
+Mettre des actions Tous là où il y a le helper mois
 
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action

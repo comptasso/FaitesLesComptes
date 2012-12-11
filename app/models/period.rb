@@ -1,5 +1,8 @@
 # -*- encoding : utf-8 -*-
 
+require 'list_months'
+
+
 # == Schema Information
 # Schema version: 20110515121214
 #
@@ -34,10 +37,6 @@
 # OK la date de cloture doit forcément être postérieure à la date d'ouverture
 #
 #
-
-
-require 'list_months'
-
 class Period < ActiveRecord::Base
 
   include Utilities::JcGraphic
@@ -185,9 +184,9 @@ class Period < ActiveRecord::Base
 
   # Effectue la clôture de l'exercice.
   #
-  #  La clôture de l'exercice doit effectuer une écriture de report dans le livre
-  #  d'OD à partir du résultat => il faut un compte report à nouveau pour mouvementer
-  #  le résultat de l'exercice vers le report.
+  # La clôture de l'exercice doit effectuer une écriture de report dans le livre
+  # d'OD à partir du résultat => il faut un compte report à nouveau pour mouvementer
+  # le résultat de l'exercice vers le report.
   # 
   def close
     if closable?
@@ -236,35 +235,18 @@ class Period < ActiveRecord::Base
     ran
   end
 
-  # Pour les comptes de classe 1 à 5
-  # crée un tableau de compta_lines reprenant le solde du compte
-  def report_comptes_bilan
-    rcb = []
-    # POur le comptes de classe 1 à 5
-    np = next_period
-    accounts.find_each(conditions:['number < ?', '5Z']) do |acc|
-      # on trouve le compte correspondant
-      next_acc = np.accounts.find_by_number(acc.number)
-      # et on créé une compta_line respectant les principes
-      h = acc.report_info # récupération des infos du compte
-      # pas de compta_line s'il n'y a pas de mouvement
-      if h
-        rcb << ComptaLine.new(account_id:next_acc.id,
-          debit:h[:debit],
-          credit:h[:credit])
-      end
-    end
-    
-    return rcb
-  end
+  
 
   # renvoie le total des comptes commenaçnt par n
   def total_classe(n, dc)
     compta_lines.classe(n).sum(dc)
   end
-  
+
+  # renvoie le solde des comptes de la classe transmis en argument.
+  #
+  # Applique round(2) au résultat du calcul pour éviter les nombres approchés
   def sold_classe(n)
-    total_classe(n, 'credit') - total_classe(n, 'debit')
+    (total_classe(n, 'credit')- total_classe(n, 'debit')).round(2)
   end
 
   def resultat
@@ -443,6 +425,7 @@ class Period < ActiveRecord::Base
     ran
   end
 
+ 
   # Pour les comptes de classe 1 à 5
   # crée un tableau de compta_lines reprenant le solde du compte
   def report_comptes_bilan

@@ -37,7 +37,7 @@ describe CashLinesController do
     it "should find the right cash" do
       get :index, {:cash_id=>ca.id, :mois=>current_month, :an=>current_year}, valid_session
       assigns[:cash].should == ca
-      assigns[:period].should == @p
+      assigns[:period].should == @p  
     end
 
     it "should create a monthly_book_extract" do
@@ -61,8 +61,8 @@ describe CashLinesController do
 
     it 'traiter le cas ou mois n est pas rempli' do
       @p.should_receive(:guess_month).and_return(MonthYear.from_date(Date.today))
-      get :index,{:cash_id=>ca.id}, valid_session
-      response.should redirect_to(cash_cash_lines_url(ca, :mois=>current_month, :an=>current_year))
+      get :index,{ :cash_id=>ca.id }, valid_session
+      response.should redirect_to(cash_cash_lines_url(ca.id, :mois=>current_month, :an=>current_year))
     end
   end
  
