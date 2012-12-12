@@ -31,7 +31,7 @@ move_down 50
 column_widths = [40, 15, 15, 15, 15].collect { |w| width*w/100 }
 
 
- table [['', doc.exercice, 'Précédent']],
+ table [page.table_title],
     :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center } do
     column(0).width = column_widths[0]
     column(1).width = column_widths[1] + column_widths[2] + column_widths[3]

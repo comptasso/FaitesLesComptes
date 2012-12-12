@@ -335,6 +335,14 @@ class Period < ActiveRecord::Base
     end
     r
   end
+
+  # retourne une chaîne de caractère adaptée en fonction des différents cas de figure
+  # Utilisé notamment dans la production des pdf.
+  #
+  # Renvoie une chaîne vide s'il n'y a pas d'exercice précédent
+  def previous_exercice
+    previous_period? ? previous_period.exercice : ''
+  end
   
   # renvoie le mois le plus adapté pour un exercice
   # si la date du jour est au sein de l'exercice, renvoie le mois correspondant

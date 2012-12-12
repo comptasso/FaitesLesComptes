@@ -32,6 +32,20 @@ module PdfDocument
       end
     end
 
+
+    # si on est dans un document de type résultat, alors, on doit avoir
+    # comme entête de colonne la période, par exemple Exercice 2011
+    #
+    # Sinon, dans un document de type bilan, alors les entêtes de colonnes doivent
+    # être des dates
+    def columns_titles
+      if @source.name == :actif || @source.name == :passif
+       ['', I18n::l(@period.close_date), I18n::l(@period.start_date - 1)]
+     else # on est dans une logique de résultat sur une période
+        ['', exercice, previous_exercice]
+      end
+    end
+
     
 
     # Crée le fichier pdf associé

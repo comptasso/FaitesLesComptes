@@ -31,7 +31,7 @@ move_down 50
 column_widths = [70, 15, 15].collect { |w| width*w/100 }
 
 
- table [['', 'Montant net', 'Montant net']],
+ table [page.table_title],
     :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center } do
     column_widths.each_with_index {|w,i| column(i).width = w}
  end

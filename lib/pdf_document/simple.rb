@@ -61,6 +61,10 @@ module PdfDocument
       @period.exercice
     end
 
+    def previous_exercice
+      @period.previous_exercice
+    end
+
     # nombre de pages avec au minimum 1 page
     def nb_pages
       [(@source.instance_eval(@select_method).count/@nb_lines_per_page.to_f).ceil, 1].max

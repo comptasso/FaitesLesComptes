@@ -725,7 +725,7 @@ Jasmine -commencé l'installation mais pas fini car je n'ai pas actuellement de 
 Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 --------------------- rédaction du tutorial---------------------------
 Revoir le support dans l'affichage des lignes
-Dans le modal form, on ne devrait avoir que les livres recettes et dépenses et non pas tous les livres
+OK - Dans le modal form, on ne devrait avoir que les livres recettes et dépenses et non pas tous les livres
 Changer la date d'une remise chèque ne change pas la date de l'écriture associée
 OK - Supprimer Bonjour JeanClaude
 Comprendre pourquoi l'erreur dans le controller CashLines n'a pas été détecté par les spec
