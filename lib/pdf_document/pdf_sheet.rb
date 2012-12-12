@@ -14,6 +14,10 @@ module PdfDocument
       1
     end
 
+    def stamp
+      @period.closed? ? '' : 'Provisoire'
+    end
+
     def fetch_lines(page_number = 1)
       set_columns
       fl = []

@@ -44,6 +44,7 @@ module Compta
     # calcule les valeurs brut et amortissements pour le compte
     # retourne [0,0] s'il n'y a pas de compte
     def set_value
+
        @brut, @amortissement =  brut_amort(@period, @select_num)
     end
     
@@ -56,8 +57,8 @@ module Compta
     # previous_net renvoie la valeur nette pour l'exercice précédent
     # 
     def previous_net
-      if pp = @period.previous_period?
-        net_value(pp, @select_num)
+      if @period.previous_period?
+        net_value(@period.previous_period, @select_num)
       else
         0.0
       end
@@ -118,11 +119,11 @@ module Compta
         r =  @option == :col2 ? [0, -s] : [s, 0]
         # l'option debit ne prend la valeur que si le solde est négatid
         r = [0,0] if @option == :debit && s > 0
-        # l'otpion crédit ne prend la valeur que si le solde est positif
+        # l'option crédit ne prend la valeur que si le solde est positif
         r = [0,0] if @option == :credit && s < 0
         # prise en compte du sens
         if @sens == :actif || @sens == :debit
-          r.collect! {|v| -v }
+          r.collect! {|v| v != 0.0 ? -v  : 0 } # ceci pour éviter des -0.0
         end
 
       else
@@ -130,5 +131,7 @@ module Compta
       end
         r
     end
+
+
   end
 end

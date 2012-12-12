@@ -1,8 +1,29 @@
-# fichier Sheet.
-# Ce fichier prawn ne fait qu'afficher le layout,
-# les tables sont insérées Prawn pour des éditions simples sans total ni report
-# ni tampon
+# fichier Sheet pour les documents de type passif,
+# c'est à dire ayant seulement deux colonnes de montant.
+# 
+
+
+
 width = bounds.right
+
+# la méthode du tampon
+if stamp_dictionary_registry['fond'].nil?
+create_stamp("fond") do
+  rotate(15) do
+    fill_color "bbbbbbb"
+
+    font_size(120) do
+      text_rendering_mode(:stroke) do
+        draw_text(doc.stamp, :at=>[150, -150])
+      end
+    end
+    fill_color "000000"
+  end
+end
+end
+
+
+
 
 y_position = cursor
 page = doc.page(1)
@@ -49,3 +70,5 @@ column_widths = [70, 15, 15].collect { |w| width*w/100 }
      end
 
  end
+
+stamp "fond"
