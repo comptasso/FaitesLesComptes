@@ -57,7 +57,7 @@ class Nature < ActiveRecord::Base
   # pour toutes les destinations confondues
   def stat
     period.list_months.map do |m|
-      compta_lines.range_date(m.beginning_of_month, m.end_of_month).sum('credit-debit').to_f.round(2)
+      compta_lines.mois_with_writings(m.beginning_of_month).sum('credit-debit').to_f.round(2)
     end
   end
 
@@ -65,7 +65,7 @@ class Nature < ActiveRecord::Base
   # pour une destination donnée
   def stat_filtered(destination_id)
     period.list_months.map do |m|
-      compta_lines.monthyear(m).where('destination_id=?', destination_id).sum('credit-debit').to_f.round(2)
+      compta_lines.mois_with_writings(m.beginning_of_month).where('destination_id=?', destination_id).sum('credit-debit').to_f.round(2)
     end
   end
 

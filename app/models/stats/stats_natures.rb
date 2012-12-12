@@ -65,7 +65,7 @@ module Stats
     # par ordre alphabétique puis construit la ligne de statistique
     def stats
       stats = []
-      @period.natures.order('income_outcome DESC', 'name ASC').each do |n|
+      @period.natures.order('income_outcome DESC', 'position ASC').each do |n|
         stats << [n.name] + n.stat_with_cumul(@dest_id)
       end
       @stats = stats

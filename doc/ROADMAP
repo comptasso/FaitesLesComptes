@@ -733,7 +733,8 @@ Mettre des actions Tous là où il y a le helper mois
 OK - Modifier les entêtes de colones pour les pages actif et passif
 OK - Problème de bilan 2013 - 2012
 OK - Voir également comment enlever les signes -0.00 dans le document
-Mettre Provisoire en sous titre ou en stamp si les exercices ne sont pas clos.
+OK - Mettre Provisoire en sous titre ou en stamp si les exercices ne sont pas clos.
+Gérer l'ordre des natures dans l'affichage des statistiques
 
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
