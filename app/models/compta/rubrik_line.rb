@@ -9,10 +9,10 @@ module Compta
   # Elle donne un numéro de compte(qui est le premier compte qui l'a constitué,
   # un intitulé (idem), une valeur brute, un amortissement et un net
   #
-  #  sens permet d'indiquer débit ou credit, ou actif et passif de façon
-  #  à gérer les signes.
+  # Sens permet d'indiquer débit ou credit, ou actif et passif de façon
+  # à gérer les signes.
   #
-  #  TODO transformer colon_1 en options qui peuvent être colon_2, debit, credit
+  #  Options peut être qui peuvent être colon_2, debit, credit
   #  correspondant au fait que le montant s'inscrit dans la colonne des amortissements
   #  et provisions,
   #  que la valeur n'est retenue que s'il est débiteur
@@ -44,45 +44,22 @@ module Compta
     # calcule les valeurs brut et amortissements pour le compte
     # retourne [0,0] s'il n'y a pas de compte
     def set_value
-      if @account
-        s = @account.sold_at(@period.close_date)
-        # prise en compte de la colonne provision ou amortissement
-        r =  @option == :col2 ? [0, -s] : [s, 0]
-        # l'option debit ne prend la valeur que si le solde est négatid
-        r = [0,0] if @option == :debit && s > 0
-        # l'otpion crédit ne prend la valeur que si le solde est positif
-        r = [0,0] if @option == :credit && s < 0
-        # prise en compte du sens
-        if @sens == :actif || @sens == :debit
-          r.collect! {|v| -v }
-        end
-
-      else
-        r = [0,0]
-      end
-      @brut, @amortissement =  r
+       @brut, @amortissement =  brut_amort(@period, @select_num)
     end
-
+    
+    
     # retourne la valeur nette par calcul de la différence entre brut et amortissement
     def net
       @brut - @amortissement
     end
 
-    # previous_net renvoie la valeur pour l'exercice précédent
-    # il gère plusieurs cas puisque le compte peut exister pour un exercice et pas
-    # pour l'autre.
-    # Si le compte n'existe pas, revoie directement zero
-    # s'il existe mais pas pour l'exercice précédent, renvoie 0
-    # s'existe pour l'exercice précédent renvoie la valeur
+    # previous_net renvoie la valeur nette pour l'exercice précédent
+    # 
     def previous_net
-      if @period.previous_period?
-        pp = @period.previous_period
-        acc = pp.accounts.find_by_number(@select_num)
-        s = acc ? acc.sold_at(pp.close_date) : 0
-        s = -s if (@sens == :actif || @sens== :debit)
-        return s
+      if pp = @period.previous_period?
+        net_value(pp, @select_num)
       else
-        return 0.0
+        0.0
       end
     end
 
@@ -120,5 +97,38 @@ module Compta
     end
 
 
+  protected
+
+    # méthode générique permettant de renvoyer la valeur nette suite à l'appel
+    # de brut_amort, pour une périod donnée et pour un numéro de compte. Utilise l'option
+    # de RubrikLine (colon_2, debit ou credit) pour calculer le montant à afficher dans le
+    # document concerné.
+    def net_value(period, select_num)
+     r =  brut_amort(period, select_num)
+     r[0] - r[1]
+    end
+
+    # renvoie la valeur du montant brut et de l'amortissement pour le compte
+    # identifié par selet_num et pour l'exercice identifié par period
+    def brut_amort(period, select_num)
+      account = period.accounts.find_by_number(select_num)
+      if account
+        s = account.sold_at(period.close_date)
+        # prise en compte de la colonne provision ou amortissement
+        r =  @option == :col2 ? [0, -s] : [s, 0]
+        # l'option debit ne prend la valeur que si le solde est négatid
+        r = [0,0] if @option == :debit && s > 0
+        # l'otpion crédit ne prend la valeur que si le solde est positif
+        r = [0,0] if @option == :credit && s < 0
+        # prise en compte du sens
+        if @sens == :actif || @sens == :debit
+          r.collect! {|v| -v }
+        end
+
+      else
+        r = [0,0]
+      end
+        r
+    end
   end
 end

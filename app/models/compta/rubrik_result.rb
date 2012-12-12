@@ -2,6 +2,11 @@
 
 module Compta
 
+
+  # la classe RubrikResult permet de calculer le montant du résultat
+  # donc prend le montant du compte 12, mais y ajoute le montant du résultat, lui
+  # même fourni paor la méthode resultat de la classe Period par calcul du solde
+  # des comptes de classe 7 et 6.
   class RubrikResult < Compta::RubrikLine
 
 

@@ -730,7 +730,9 @@ Changer la date d'une remise chèque ne change pas la date de l'écriture associ
 OK - Supprimer Bonjour JeanClaude
 Comprendre pourquoi l'erreur dans le controller CashLines n'a pas été détecté par les spec
 Mettre des actions Tous là où il y a le helper mois
-Modifier les entêtes de colones pour les pages actif et passif
+OK - Modifier les entêtes de colones pour les pages actif et passif
+OK - Problème de bilan 2013 - 2012
+Voir également comment enlever les signes -0.00 dans le document
 
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
