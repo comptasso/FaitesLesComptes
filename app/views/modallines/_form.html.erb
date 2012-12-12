@@ -7,7 +7,7 @@
     <%= f.error_notification %>
    
       <%= f.association :book, label:'Livre',
-        :collection=>@organism.public_books,
+        :collection=>@organism.in_out_books,
         required:true, 
         label_method: lambda {|b| "#{b.class.name == 'IncomeBook' ? 'R' : 'D'} - #{b.title}" },
         include_blank:false, input_html: {class: "span4" } %>

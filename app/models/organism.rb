@@ -58,7 +58,9 @@ class Organism < ActiveRecord::Base
     # on est maintenant en mesure de créer l'organisme
   end
 
-  def public_books
+  # retourne la collection de livres de Recettes et de Dépenses
+  # ceux qui sont accessibles dans la partie saisie
+  def in_out_books
     books.in_outs
   end
 
