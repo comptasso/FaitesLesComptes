@@ -32,7 +32,7 @@ class Organism < ActiveRecord::Base
   validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/^[a-z][0-9a-z]*$/, message:'format incorrect'}
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
 
-
+  
 
   def full_name
     "#{Room.path_to_db}/#{database_name}.sqlite3"
@@ -59,7 +59,7 @@ class Organism < ActiveRecord::Base
   end
 
   def public_books
-    books.where('title != ?', 'OD')
+    books.in_outs
   end
 
   # retourne le nombre d'exercices ouverts de l'organisme

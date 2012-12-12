@@ -727,9 +727,10 @@ Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 Revoir le support dans l'affichage des lignes
 Dans le modal form, on ne devrait avoir que les livres recettes et dépenses et non pas tous les livres
 Changer la date d'une remise chèque ne change pas la date de l'écriture associée
-Supprimer Bonjour JeanClaude
+OK - Supprimer Bonjour JeanClaude
 Comprendre pourquoi l'erreur dans le controller CashLines n'a pas été détecté par les spec
 Mettre des actions Tous là où il y a le helper mois
+Modifier les entêtes de colones pour les pages actif et passif
 
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action

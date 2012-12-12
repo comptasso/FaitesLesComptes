@@ -73,6 +73,12 @@ describe Organism do
       @organism.should have(1).bank_accounts
     end
 
+    it 'income_otucome_books renvoie les livres recettes et dépenses' do
+      @organism.public_books.should have(2).books
+      @organism.public_books.first.title.should == 'Recettes'
+      @organism.public_books.last.title.should == 'Dépenses'
+    end
+
     
   end
 

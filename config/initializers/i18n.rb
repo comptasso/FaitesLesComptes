@@ -1,3 +1,3 @@
 # coding: utf-8
 
-puts "Bonjour Jean-Claude"
+puts 'Bienvenue sur Faites Les Comptes, le logiciel de compta simplifiée'
