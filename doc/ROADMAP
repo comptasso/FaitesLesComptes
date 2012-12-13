@@ -729,16 +729,16 @@ OK - Dans le modal form, on ne devrait avoir que les livres recettes et dépense
 Changer la date d'une remise chèque ne change pas la date de l'écriture associée
 OK - Supprimer Bonjour JeanClaude
 Comprendre pourquoi l'erreur dans le controller CashLines n'a pas été détecté par les spec
-Mettre des actions Tous là où il y a le helper mois
+Ok - Mettre des actions Tous là où il y a le helper mois
 OK - Modifier les entêtes de colones pour les pages actif et passif
 OK - Problème de bilan 2013 - 2012
 OK - Voir également comment enlever les signes -0.00 dans le document
 OK - Mettre Provisoire en sous titre ou en stamp si les exercices ne sont pas clos.
 OK - Gérer l'ordre des natures dans l'affichage des statistiques
 OK - Le javascript de frenchdatatable n'est pas disponible
-Revoir application_controller ligne 21 dans le cas où on se déconnecte sans sortir
+NON - Revoir application_controller ligne 21 dans le cas où on se déconnecte sans sortir - car problématique très particulière due au fait que je change d'environnement
 Correspondance entre les graphes et le montant affiché
-Problème du classement par date dans les livres
+OK - Problème du classement par date dans les livres
 
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action

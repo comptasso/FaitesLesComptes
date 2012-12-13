@@ -1,10 +1,10 @@
-%td.clickable= l line.date
-%td.clickable= line.ref
-%td.clickable= line.narration
-%td.clickable= line.nature.name if line.nature
-%td.clickable= line.destination.name if line.destination
+%td= l line.date
+%td= line.ref
+%td= line.narration
+%td= line.nature.name if line.nature
+%td= line.destination.name if line.destination
 %td.numeric= debit_credit(line.debit)
 %td.numeric= debit_credit(line.credit)
-%td.clickable= line.payment_mode
-%td.clickable= line.writing.support
+%td= line.payment_mode
+%td= line.writing.support
 = in_out_line_actions(line)
