@@ -46,13 +46,18 @@ class Writing < ActiveRecord::Base
     compta_lines.inject(0) {|tot, cl| cl.credit ? tot + cl.credit  : tot}
   end
 
-  # support renvoie le long_name du compte de la première ligne avec un compte de classe 5 de l'écriture
+  # support renvoie le long_name du compte de la première ligne
+  # avec un compte de classe 5 de l'écriture.
+  # Nil si pas de support_line pour cette ériture
   def support
-    s = supportline
+    s = support_line
     s.account.long_name if s && s.account
   end
 
-  def supportline
+  # support_line renvoie la première ligne de classe 5 de l'écriture.
+  # Certaines écritures n'ont pas de support_line (notamment les écritures d'OD).
+  # Dans ce cas renvoie nil
+  def support_line
     s = compta_lines.select {|cl| cl.account && cl.account.number =~ /^5.*/}
     s.first if s
   end
