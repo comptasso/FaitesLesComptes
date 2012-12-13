@@ -115,6 +115,10 @@ class InOutWritingsController < ApplicationController
   # fill_mois construit le MonthYear qui sera utilisé pour bâtir l'extrait mensuel du livre
   # si le paramètre mois est tous, c'est que l'utilisateur veut effectivement la 
   # totalité des lignes, ce fait poursuive normalement vers la fonction index
+  #
+  # Même si on demande tous les mois, il faut quand même définir un @monthyear car cette variable
+  # est utilisée par check_if_has_changed_period pour vérifier qu'on n'a pas changé d'exercice.
+  #
   def fill_mois
     if params[:mois] && params[:an]
       @mois = params[:mois]

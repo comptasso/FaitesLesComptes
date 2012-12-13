@@ -14,7 +14,12 @@ class CashLinesController < InOutWritingsController
 
 # la méthode index est héritée de InOutWritingsController
   def index
-    @monthly_extract = Utilities::MonthlyCashExtract.new(@cash, {year:params[:an], month:params[:mois]})
+    if params[:mois] == 'tous'
+      @monthly_extract = Utilities::CashExtract.new(@cash, @period)
+    else
+      @monthly_extract = Utilities::MonthlyCashExtract.new(@cash, {year:params[:an], month:params[:mois]})
+    end
+    
     respond_to do |format|
       format.html
       format.pdf
@@ -38,8 +43,9 @@ class CashLinesController < InOutWritingsController
     else
       @monthyear = @period.guess_month
       logger.debug "monthyear demandé : #{@monthyear}"
-      redirect_to cash_cash_lines_url(@cash, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')
-
+      unless params[:mois] == 'tous'
+        redirect_to cash_cash_lines_url(@cash, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format])
+      end
     end
   end
 

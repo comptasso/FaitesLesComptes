@@ -738,6 +738,7 @@ OK - Gérer l'ordre des natures dans l'affichage des statistiques
 OK - Le javascript de frenchdatatable n'est pas disponible
 Revoir application_controller ligne 21 dans le cas où on se déconnecte sans sortir
 Correspondance entre les graphes et le montant affiché
+Problème du classement par date dans les livres
 
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
