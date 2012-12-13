@@ -31,11 +31,14 @@ class Cash < ActiveRecord::Base
     accounts.where('period_id = ?', period.id).first rescue nil
   end
 
+  
+
   def to_s
     name
   end
 
-
+  alias nickname to_s
+  
   # méthode surchargeant celle de Utilities::Sold, laquelle sert de base au calcul des soldes
   def cumulated_at(date, dc) 
     p = organism.find_period(date)

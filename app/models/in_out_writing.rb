@@ -17,13 +17,16 @@ class  InOutWriting < Writing
     compta_lines.select { |l| l.nature_id != nil }.first 
   end
 
- # retourne la ligne de contrepartie
-  def counter_line
-    compta_lines.select { |l| l.nature_id == nil }.first
-  end
+  alias counter_line support_line
 
   # retourne le long_name du compte de contrepartie
   def support
-    counter_line.account.long_name if counter_line && counter_line.account
+    acc = counter_line.account if counter_line && counter_line.account
+    puts acc.number
+    return acc.title if acc.number == '511'
+    return acc.accountable.nickname if (acc.number =~ /^5[13]\d*/ )
+    
+    Rails.logger.warn "InOutWriting#support appelée avec un compte qui n'est pas de classe 5 : account.number : #{acc.number}"
+    acc.long_name # pour les autres cas
   end
 end
