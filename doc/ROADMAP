@@ -740,9 +740,14 @@ NON - Revoir application_controller ligne 21 dans le cas où on se déconnecte s
 OK - Correspondance entre les graphes et le montant affiché : lié au fait que j'ai enregistré des données dans le futur
 OK - Problème du classement par date dans les livres
 
+Gérer le flux de tab dans la saisie des lignes.
+
+Garde-t-on la possibilité de créer de nouveaux livres ????
+
+
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
-On pourrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base
+On pourrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base et factoriser les utilities::extract
 Nettoyer old_bootstrap.css en modifiant bootstrap.css
 NON - Dans period, copy_accounts devrait être dans une transaction : inutile car déja dans un after_create donc transaction
 Dans Period, closable? devrait vérifier que tous les comptes 1 à 5 sont là
@@ -750,9 +755,8 @@ OK - Revoir la page index de organism (title et mise en page) : en fait je l'ai 
 OK - supprimer la session de period
 On devrait bloquer la création d'organisme à une unité seulement (changement de route pour passer en ressource  et non ressources ?)
 De même pour OdBook : un seul livre d'OD
-Factoriser les Utilities Extract
 Factoriser les jQuery datatable
-Le datatable de compta#lines ne marche pas
+OK - Le datatable de compta#lines ne marche pas
 ? - Datatable  pour la balance
 faire des tests pour pick_date_for et le transformer en gem
 OK - Revoir la vue index de nature dans public qui propose des actions qui relèvent de admin
