@@ -53,20 +53,30 @@ namespace :landlord do
     ActiveRecord::Migrator.rollback(ActiveRecord::Migrator.migrations_paths)
   end
 
-# N'a pas de sens car rake db:test:prepare charge les schémas et ça suffit
-  #  namespace :test do
-#    desc 'Rollback des bases de test assotest1 et assotest2'
-#    task :rollback_each => :environment do
-#      ActiveRecord::Schema.verbose = true
-#      default = Rails.application.config.database_configuration('test')
-#      ['assotest1', 'assotest2'].each do |base|
-#        puts "rollback de #{base}"
-#        ActiveRecord::Base.establish_connection(base)
-#        ActiveRecord::Migrator.rollback(ActiveRecord::Migrator.migrations_paths)
-#      end
-#      puts "rollback de la base test"
-#      ActiveRecord::Base.establish_connection(default)
-#      ActiveRecord::Migrator.rollback(ActiveRecord::Migrator.migrations_paths)
-#    end
-#  end
-end
+  desc "création des répertoires et des bases de données"
+  task :create_directories => :environment do
+    d = "../db/#{Rails.env}"
+    if File.directory?(d)
+      puts "#{d} existe déjà; passage à l'étape suivante"
+    else
+      puts "Création du répertoire #{d}"
+      Dir.mkdir(d)
+    end
+
+    puts "Setup de la base #{Rails.env}"
+    default = Rails.application.config.database_configuration[Rails.env]
+    ActiveRecord::Base.establish_connection(default)
+    Rake::Task["db:schema:load"].invoke
+    
+
+    puts 'Création du sous répertoire /organisms, lequel recevra les bases individuelles des différents organismes'
+    d = "../db/#{Rails.env}/organisms"
+    if File.directory?(d)
+      puts  "#{d} existe déjà; passage à l'étape suivante"
+    else
+      puts "Création du répertoire #{d}"
+      Dir.mkdir(d)
+    end
+    
+  end
+ end

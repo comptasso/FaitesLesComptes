@@ -740,10 +740,10 @@ NON - Revoir application_controller ligne 21 dans le cas où on se déconnecte s
 OK - Correspondance entre les graphes et le montant affiché : lié au fait que j'ai enregistré des données dans le futur
 OK - Problème du classement par date dans les livres
 
-Gérer le flux de tab dans la saisie des lignes.
+Gérer la logique des tabulations dans la saisie des lignes (la croix +, le delete).
 
 Garde-t-on la possibilité de créer de nouveaux livres ????
-
+Le livre d'AN est destructible : bonne ou mauvaise idée ?
 
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action

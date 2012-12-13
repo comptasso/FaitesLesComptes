@@ -35,3 +35,9 @@ production:
   database: ../db/production/production.sqlite3
   pool: 5
   timeout: 5000
+
+staging:
+  adapter: sqlite3
+  database: ../db/staging/staging.sqlite3
+  pool: 5
+  timeout: 5000

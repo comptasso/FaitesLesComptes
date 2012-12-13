@@ -3,7 +3,9 @@
 FaitesLesComptes est un logiciel destiné à tenir une comptabilité simplifiée
 (au sens des règles comptables et fiscales) de la comptabilité française.
 
-Cela peut intéresser des petites associations ou des petits comités d'entreprise.
+Cela peut intéresser des petites associations ou des petites entreprises, mais aussi un artisant,
+un autoentrepreneur, ou encore des petits comités d'entreprise. En résumé,
+toute structure dont la taille l'autorise à tenir une comptabilité simplifiée et qui n'est pas soumis à la TVA.
 
 Sa simplicité permettant à chacun d'utiliser ce logiciel sans apprentissage particulier. Il part de ce que chacun peut remplir un livre
 de recettes et un livre de dépenses.
@@ -11,9 +13,24 @@ de recettes et un livre de dépenses.
 == Installation
 
 Il s'agit d'un programme basé sur Ruby on rails. Il faut donc installer Ruby et Rails pour pouvoir faire fonctionner ce programme, soit sur un ordinateur
-individuel, soit sur un serveur.
+individuel, soit sur un serveur. Voir le site pour les modalités d'installation plus détaillées.
 
-La base de données utilisée est sqlite3 qui doit donc être également installé.
+La base de données utilisée est sqlite3 qui doit donc être également installée.
+
+Une particularité du logiciel est sa gestion des bases de données. Il y a en effet une base de données par organisme suivi,
+ce qui simplifie considérablement la sauvegarde et la restauration de la comptabilité d'un organisme.
+Il suffit de sauver et de recharger un fichier sqlite3.
+
+Il y a donc une base qui gère les utilisateurs, et une base par organisme.
+La base pour les utilisateurs est située dans le répertoire ../db/production
+et elle se nomme production.sqlite3.
+
+Les bases des organismes sont situées dans le sous répertoire ../db/production/organisms
+Pour créer ces répertoires, une tâche a été créée.
+
+Il suffit donc de se mettre dans le répertoire d'installation du programme et de
+faire RAILS_ENV=production rake landlord:create_directories pour à la fois créer les
+directories nécessaires au programme et initialiser la base de données.
 
 == Guide de démarrage rapide
 
@@ -66,3 +83,7 @@ y compris à des fins commerciales.
 
 Il est fourni tel quel et aucune garantie n'est donnée quand à son utilisation ni à son
 fonctionnement.
+
+En aucun cas, nous ne pourrons être tenus responsable pour la perte de données, leurs
+mauvais enregistrements, les erreurs éventuelles sur les états édités, et plus généralement
+tous dommages survenus suite à l'utilisation de ce logiciel.
