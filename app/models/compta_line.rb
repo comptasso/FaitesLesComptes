@@ -37,13 +37,17 @@ class ComptaLine < ActiveRecord::Base
   scope :with_writings, joins(:writing)
   scope :with_writing_and_book, joins(:writing=>:book)
   scope :without_AN , where('books.title != ?', 'AN')
-  # ce scope n'inclut pas with_writings, ce qui veut dire qu'il faut que cela soit fait par
+  # ces scope n'inclut pas with_writings, ce qui veut dire qu'il faut que cela soit fait par
   # ailleurs, c'est notamment le cas lorsqu'on passe par book car book has_many :compta_lines, :through=>:writings
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
+  # extract est comme range_date mais n'inclut pas with_writings
+  scope :extract, lambda {|from, to| where('date >= ? AND date <= ?', from, to ).order('date')}
   # inclut with_writings et donc doit être utilisé pour un query qui ne l'inclut pas déja.
   scope :mois_with_writings, lambda {|date| with_writings.where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month)}
 
-  scope :range_date, lambda {|from, to| with_writings.where('date >= ? AND date <= ?', from, to ).order('date')}
+
+
+  scope :range_date, lambda {|from, to| with_writings.extract(from, to)}
   scope :listing, lambda {|from, to| with_writing_and_book.where('books.title != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)

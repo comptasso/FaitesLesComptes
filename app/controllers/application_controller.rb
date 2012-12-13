@@ -70,13 +70,18 @@ class ApplicationController < ActionController::Base
     @period.guess_date
   end
 
+  # vérifie que l'on est loggé sous un nom d'utilisateur,
+  # s'il n'y a pas de session[:user], et à nil session[:org_db]
   def log_in?
 
     unless session[:user]
       logger.debug "pas de session[user]"
+      session[:org_db] = nil
       use_main_connection
       redirect_to new_session_url
     end
+
+    
   end
 
   def current_user
