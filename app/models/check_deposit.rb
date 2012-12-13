@@ -40,7 +40,7 @@ class CheckDeposit < ActiveRecord::Base
     conditions: proc { ['account_id = ? AND debit > 0', rem_check_account.id] },
     dependent: :nullify,
     before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
-    before_add: :cant_if_pointed
+  before_add: :cant_if_pointed
  
   # has_many :lines # utile pour les méthode credit_compta_line et debit_compta_line
   has_many  :compta_lines, :through=>:writing
@@ -54,7 +54,7 @@ class CheckDeposit < ActiveRecord::Base
   validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :pointed?
   validate :not_empty
 
- #  before_validation :not_empty # une remise chèque vide n'a pas de sens
+  #  before_validation :not_empty # une remise chèque vide n'a pas de sens
 
   after_create :create_writing
   after_update :update_writing
@@ -64,7 +64,7 @@ class CheckDeposit < ActiveRecord::Base
   
   # permet de trouver les cheques à encaisser pour  tout l'organisme
   def self.pending_checks
-     ComptaLine.pending_checks.all
+    ComptaLine.pending_checks.all
   end
 
 
@@ -83,7 +83,7 @@ class CheckDeposit < ActiveRecord::Base
   # persisted? est là pour éviter qu'on recherche une credit_compta_line ou une debit_compta_line alors qu'elles ne
   # sont pas encore créées.
   def credit_compta_line
-     persisted? ? compta_lines.where('credit > 0').first : nil
+    persisted? ? compta_lines.where('credit > 0').first : nil
   end
   
   def credit_line
@@ -166,11 +166,13 @@ class CheckDeposit < ActiveRecord::Base
 
   def create_writing
     book = OdBook.first!
-    w = build_writing(date:deposit_date, narration:'Remise chèque', book_id:book.id)
-    w.compta_lines.build(check_deposit_id:id, account_id:rem_check_account.id, credit:total_checks)
-    w.compta_lines.build(check_deposit_id:id, debit:total_checks, account_id:bank_account_account.id)
-    w.save!
-    self.update_attribute(:writing_id, w.id)
+    CheckDeposit.transaction do
+      w = build_writing(date:deposit_date, narration:'Remise chèque', book_id:book.id)
+      w.compta_lines.build(check_deposit_id:id, account_id:rem_check_account.id, credit:total_checks)
+      w.compta_lines.build(check_deposit_id:id, debit:total_checks, account_id:bank_account_account.id)
+      w.save!
+      self.update_attribute(:writing_id, w.id)
+    end
   end
 
   
@@ -179,34 +181,37 @@ class CheckDeposit < ActiveRecord::Base
   end
 
   def update_writing
-    credit_compta_line.update_attribute(:credit, total_checks)
-    debit_compta_line.update_attribute(:debit, total_checks)
+    CheckDeposit.transaction do
+      writing.update_attribute(:date, deposit_date)
+      credit_compta_line.update_attribute(:credit, total_checks)
+      debit_compta_line.update_attribute(:debit, total_checks)
+    end
   end
 
   # crée l'écriture de remise de chèque
-#  def create_lines
-#    p = Organism.first!.find_period(deposit_date)
-#    rca = p.rem_check_account
-#   # on crédit le compte de remise chèque
-#    l = lines.create!(line_date:deposit_date, check_deposit_id:id,
-#      narration:'Remise chèque',
-#      account_id:rca.id,
-#      credit:total_checks,
-#      book_id:OdBook.first!.id)
-#    # et on débite la banque
-#    ba = bank_account.current_account(p)
-#    lines.create!(line_date:deposit_date, check_deposit_id:id,
-#      narration:'Remise chèque',
-#      debit:total_checks,
-#      account_id:ba.id,
-#      book_id:OdBook.first!.id)
-#
-#  end
+  #  def create_lines
+  #    p = Organism.first!.find_period(deposit_date)
+  #    rca = p.rem_check_account
+  #   # on crédit le compte de remise chèque
+  #    l = lines.create!(line_date:deposit_date, check_deposit_id:id,
+  #      narration:'Remise chèque',
+  #      account_id:rca.id,
+  #      credit:total_checks,
+  #      book_id:OdBook.first!.id)
+  #    # et on débite la banque
+  #    ba = bank_account.current_account(p)
+  #    lines.create!(line_date:deposit_date, check_deposit_id:id,
+  #      narration:'Remise chèque',
+  #      debit:total_checks,
+  #      account_id:ba.id,
+  #      book_id:OdBook.first!.id)
+  #
+  #  end
 
-#  def update_lines
-#    credit_compta_line.update_attribute(:credit, total_checks)
-#    debit_compta_line.update_attribute(:debit, total_checks)
-#  end
+  #  def update_lines
+  #    credit_compta_line.update_attribute(:credit, total_checks)
+  #    debit_compta_line.update_attribute(:debit, total_checks)
+  #  end
  
   def has_bank_extract_line?
     bank_extract_line ? true : false

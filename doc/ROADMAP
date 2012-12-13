@@ -726,7 +726,7 @@ Il faudra surement adapter flc_launcher pour avoir le lancement de jasmine
 --------------------- rédaction du tutorial---------------------------
 OK - Revoir le support dans l'affichage des lignes
 OK - Dans le modal form, on ne devrait avoir que les livres recettes et dépenses et non pas tous les livres
-Changer la date d'une remise chèque ne change pas la date de l'écriture associée
+OK - Changer la date d'une remise chèque ne change pas la date de l'écriture associée
 OK - Supprimer Bonjour JeanClaude
 Comprendre pourquoi l'erreur dans le controller CashLines n'a pas été détecté par les spec
 Ok - Mettre des actions Tous là où il y a le helper mois
@@ -737,7 +737,7 @@ OK - Mettre Provisoire en sous titre ou en stamp si les exercices ne sont pas cl
 OK - Gérer l'ordre des natures dans l'affichage des statistiques
 OK - Le javascript de frenchdatatable n'est pas disponible
 NON - Revoir application_controller ligne 21 dans le cas où on se déconnecte sans sortir - car problématique très particulière due au fait que je change d'environnement
-Correspondance entre les graphes et le montant affiché
+OK - Correspondance entre les graphes et le montant affiché : lié au fait que j'ai enregistré des données dans le futur
 OK - Problème du classement par date dans les livres
 
 --------------------Divers---------------------------------------------------------------------------
