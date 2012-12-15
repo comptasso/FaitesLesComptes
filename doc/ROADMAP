@@ -741,6 +741,8 @@ OK - Correspondance entre les graphes et le montant affiché : lié au fait que 
 OK - Problème du classement par date dans les livres
 
 Gérer la logique des tabulations dans la saisie des lignes (la croix +, le delete).
+Dans windows, les largeurs pour les milliers sont insuffisantes
+Modifier le message d'accueil pour faire un message spécifique OCRA
 
 Garde-t-on la possibilité de créer de nouveaux livres ????
 Le livre d'AN est destructible : bonne ou mauvaise idée ?
