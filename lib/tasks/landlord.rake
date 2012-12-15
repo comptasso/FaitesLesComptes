@@ -53,7 +53,11 @@ namespace :landlord do
     ActiveRecord::Migrator.rollback(ActiveRecord::Migrator.migrations_paths)
   end
 
-  desc "création des répertoires et des bases de données"
+
+  
+
+  
+  desc "Création des répertoires et des bases de données"
   task :create_directories => :environment do
     d = "../db/#{Rails.env}"
     if File.directory?(d)
@@ -67,7 +71,7 @@ namespace :landlord do
     default = Rails.application.config.database_configuration[Rails.env]
     ActiveRecord::Base.establish_connection(default)
     Rake::Task["db:schema:load"].invoke
-    
+
 
     puts 'Création du sous répertoire /organisms, lequel recevra les bases individuelles des différents organismes'
     d = "../db/#{Rails.env}/organisms"
@@ -77,6 +81,6 @@ namespace :landlord do
       puts "Création du répertoire #{d}"
       Dir.mkdir(d)
     end
-    
+
   end
- end
+end

@@ -30,6 +30,8 @@ class Room < ActiveRecord::Base
   def self.path_to_db
     if Rails.env == 'test'
       "#{Rails.root}/db/#{Rails.env}/organisms"
+    elsif ENV['OCRA_EXECUTABLE']
+      File.expand_path("../db/#{Rails.env}/organisms", ENV['OCRA_EXECUTABLE'])
     else
       "#{Rails.root}/../db/#{Rails.env}/organisms"
     end

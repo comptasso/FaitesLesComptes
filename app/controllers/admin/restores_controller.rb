@@ -85,6 +85,8 @@ class Admin::RestoresController < Admin::ApplicationController
   def file_path
     if Rails.env == 'test'
       return Rails.root.join('db', 'test', 'organisms', "#{params[:database_name]}.sqlite3")
+    elsif ENV['OCRA_EXECUTABLE']
+      return File.expand_path("../db/#{Rails.env}/organisms/#{params[:database_name]}.sqlite3", ENV['OCRA_EXECUTABLE'])
     else
       return Rails.root.join('..', 'db', Rails.env, 'organisms', "#{params[:database_name]}.sqlite3")
     end
