@@ -741,8 +741,12 @@ OK - Correspondance entre les graphes et le montant affiché : lié au fait que 
 OK - Problème du classement par date dans les livres
 
 Gérer la logique des tabulations dans la saisie des lignes (la croix +, le delete).
-Dans windows, les largeurs pour les milliers sont insuffisantes
-Modifier le message d'accueil pour faire un message spécifique OCRA
+OK - Dans windows, les largeurs pour les milliers sont insuffisantes
+OK - Modifier le message d'accueil pour faire un message spécifique OCRA
+
+Voir Vers et De dans le menu Transfert
+Solde de la caisse dans les CashControls
+La liste des Transferts ne devrait plus afficher les numéros de comptes de caisse et de banque
 
 Garde-t-on la possibilité de créer de nouveaux livres ????
 Le livre d'AN est destructible : bonne ou mauvaise idée ?

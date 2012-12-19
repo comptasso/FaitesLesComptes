@@ -34,11 +34,14 @@ class Transfer < Writing
   end
 
 
-  # 3 cas de figure
+  # set_compta_lines permet de définir les variables d'instance @compta_line_to et 
+  # @compta_lin_from
+  # Il y a trois cas de figure
   # 1 : il y a une ligne débit, on sait qui est debit et donc l'autre est crédit
-  # 2 : il y a une ligne credit, id
-  # 3 : on prend la première pour l'un et la seconde pour l'autres
-  def set_compta_lines
+  # 2 : il y a une ligne credit, idem
+  # 3 : on prend par convention la première comme compta_line_to (donc ligne débitée)
+  # et la seconde comme compta_line_from (ligne créditée)
+   def set_compta_lines
     # on est sur qu'il y a deux compta_lines
     cltos = compta_lines.select {|cl| cl.debit && cl.debit != 0}
     clfroms  = compta_lines.select {|cl| cl.credit && cl.credit != 0}

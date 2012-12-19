@@ -80,16 +80,25 @@ module OrganismFixture
      ecriture
   end
 
- 
-  def create_first_line
-    @l1 = Line.create!(narration:'bel',counter_account_id:@baca.id,
-      line_date:Date.today, debit:0, credit:97, payment_mode:'Virement', book_id:@ob.id, nature_id:@n.id)
+  def create_cash_income(montant = 59)
+    ecriture = @ob.in_out_writings.create!({date:Date.today, narration:'ligne créée par la méthode create_cash_income',
+      :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, credit:montant, payment_mode:'Espèces'},
+        '1'=>{account_id:@caca.id, debit:montant, payment_mode:'Espèces'}
+      }
+    })
+     ecriture
   end
 
-  def create_second_line
-    @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id, 
-      line_date:Date.today, debit:0, credit:3, payment_mode:'Virement', book_id:@ob.id, nature_id:@n.id)
-  end
+ 
+#  def create_first_line
+#    @l1 = Line.create!(narration:'bel',counter_account_id:@baca.id,
+#      line_date:Date.today, debit:0, credit:97, payment_mode:'Virement', book_id:@ob.id, nature_id:@n.id)
+#  end
+#
+#  def create_second_line
+#    @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id,
+#      line_date:Date.today, debit:0, credit:3, payment_mode:'Virement', book_id:@ob.id, nature_id:@n.id)
+#  end
 
   def create_second_organism 
     @cu.rooms.create!(database_name:'assotest2')
@@ -98,13 +107,14 @@ module OrganismFixture
 
   # crée le nombre de lignes demandées pour le minimal organism avec
   # des valeurs par défaut
-  def create_lines(number)
-    number.times do |i|
-     Line.create!(line_date: Date.today, credit:0, debit:(i+1),
-        book_id: @ob.id, cash_id:@c.id, narration: "Ligne test #{i+1}",
-       nature_id: @n.id, payment_mode: 'Espèces' )
-    end
-  end
+  # UTILISE ENCORE LINE ET NON COMPTA LINE
+#  def create_lines(number)
+#    number.times do |i|
+#     Line.create!(line_date: Date.today, credit:0, debit:(i+1),
+#        book_id: @ob.id, cash_id:@c.id, narration: "Ligne test #{i+1}",
+#       nature_id: @n.id, payment_mode: 'Espèces' )
+#    end
+#  end
 
 #  def create_next_period(organism, period)
 #    p = organism.periods.new(start_date: (period.close_date+1), close_date: (period.close_date + 1).end_of_year)
@@ -118,7 +128,7 @@ module OrganismFixture
     book = period.organism.income_books.first
     number.times do |n|
       alea = period.start_date + rand(period_length)
-     Line.create!(line_date: alea, credit: credit,
+     ComptaLine.create!(line_date: alea, credit: credit,
         cash_id: cash.id, book_id: book.id, narration: "Ligne test #{n}",
        nature_id: @n.id, payment_mode: 'Espèces' )
     end

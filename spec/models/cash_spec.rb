@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
- #  c.filter = {wip:true}
+   # c.filter = {wip:true}
 end
 
 describe Cash do
@@ -32,7 +32,7 @@ describe Cash do
 
   end
 
-   describe 'création du compte comptable', wip:true do
+   describe 'création du compte comptable' do
 
     before(:each) do
       @c2=@o.cashes.new(:name=>'Dépôt')
@@ -67,7 +67,7 @@ describe Cash do
 
   context 'annex methods' do
 
-    it 'modifier le name modifie le libellé du compte associé' , wip:true do
+    it 'modifier le name modifie le libellé du compte associé' do
       @c.update_attribute(:name, 'Secrétariat')
       @c.current_account(@p).title.should == 'Caisse Secrétariat'
     end
@@ -85,6 +85,17 @@ describe Cash do
       pending 'A revoir avec nouvelle logique des cash et en traitant la problématique de plusieurs exercices'
     end
 
+  end
+
+  describe 'level' , wip:true do
+    before(:each) do
+      create_cash_income # méthode forunie par OrganismFixture
+    end
+
+    it 'le compte Caisse doit être débiteur de 59' do
+      @c.sold_at(@p.close_date).should == -59
+    end
+    
   end
   
 end
