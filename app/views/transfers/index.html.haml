@@ -23,8 +23,8 @@
           %td= l transfer.date
           %td= transfer.narration
           %td.numeric= two_decimals transfer.amount
-          %td= transfer.line_from.account.long_name
-          %td= transfer.line_to.account.long_name
+          %td= transfer.line_from.account.accountable.nickname
+          %td= transfer.line_to.account.accountable.nickname
 
           %td
             = icon_to 'modifier.png', edit_transfer_path(transfer) if transfer.editable?
