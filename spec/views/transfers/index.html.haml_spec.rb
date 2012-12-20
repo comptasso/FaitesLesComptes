@@ -5,21 +5,25 @@ require 'spec_helper'
 describe "transfers/index" do 
   include JcCapybara
 
+  let(:caisse) {mock_model(Cash, nickname:'La caisse')}
+  let(:banque) {mock_model(BankAccount, nickname:'La banque')}
+
   before(:each) do 
     assign(:organism, mock_model(Organism, title: 'spec cd'))
-    @line_to =     assign(:line_to, mock_model(ComptaLine, locked?:false, account:mock_model(Account, number:'5101', long_name:'5101 banque')))
-    @line_from =     assign(:line_from, mock_model(ComptaLine,locked?:false, account:mock_model(Account, number:'5301', long_name:'5301 caisse')))
 
-    @t1 = stub_model(Transfer,
-          :narration => "Premier transfert",
-          :amount => 1.5,
+    @line_to =     assign(:line_to, mock_model(ComptaLine, locked?:false, account:mock_model(Account, number:'5101', accountable:banque)))
+    @line_from =     assign(:line_from, mock_model(ComptaLine,locked?:false, account:mock_model(Account, number:'5301', accountable:caisse)))
+
+        @t1 = stub_model(Transfer,
+          :narration => "Premier transfert", 
           :date=> Date.today
         )
+        @t1.stub(:amount).and_return(1.50)
         @t2 = stub_model(Transfer,
           :narration => "Deuxieme Transfert",
-          :amount => 150,
           :date=> (Date.today-5)
         )
+        @t2.stub(:amount).and_return(150)
 
     assign(:transfers, [@t1,@t2])
     [@t1, @t2].each {|t| t.stub(:line_to).and_return @line_to }
@@ -58,8 +62,8 @@ describe "transfers/index" do
     first_row.find('td:nth-child(1)').should have_content(I18n::l Date.today)
     first_row.find('td:nth-child(2)').should have_content 'Premier transfert'
     first_row.find('td:nth-child(3)').should have_content '1.50'
-    first_row.find('td:nth-child(4)').should have_content '5301 caisse'
-    first_row.find('td:nth-child(5)').should have_content '5101 banque'
+    first_row.find('td:nth-child(4)').should have_content 'La caisse'
+    first_row.find('td:nth-child(5)').should have_content 'La banque'
   end
 
   it 'test des icones pour les liens' do

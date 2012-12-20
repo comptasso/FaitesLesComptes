@@ -23,7 +23,7 @@ class TransfersController < ApplicationController
   # GET /transfers/new.json
   def new
     @transfer = @book.transfers.new
-    @transfer.add_lines
+    @transfer.add_lines # crée les deux lignes dont on a besoin pour le formulaire
 
     respond_to do |format|
       format.html # new.html.erb

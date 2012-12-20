@@ -74,12 +74,10 @@ describe TransfersController do
     it "assigns a new transfer as @transfer" do
       @od.should_receive(:transfers).and_return a = double(Arel)
       a.should_receive(:new).and_return(@t = mock_model(Transfer).as_new_record)
-      @t.should_receive(:line_from).and_return(@cl1 = mock_model(ComptaLine))
-      @t.should_receive(:line_to).and_return(@cl2 = mock_model(ComptaLine))
+      @t.should_receive(:add_lines)
       get :new, {}, valid_session
       assigns(:transfer).should be_a_new(Transfer)
-      assigns(:line_from).should == @cl1
-      assigns(:line_to).should == @cl2
+      
     end
   end
 
