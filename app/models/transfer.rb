@@ -6,88 +6,92 @@
 # Par convention, la première ligne est celle qui donne
 # et la dernière est celle qui reçoit.
 #
+# Un transfert ne peut être détruit si une de ses lignes est verrouillée.
+# Un before_destroy dans compta_line gère cette vérification.
+# 
+#
 class Transfer < Writing
 
-  attr_reader :compta_line_to, :compta_line_from
-
   has_many :compta_lines, :dependent=>:destroy, foreign_key:'writing_id'
-    
+
+  # validate :correct_amount, :two_lines, :not_same_accounts
+  validates :compta_lines, :exactly_two_compta_lines=>true, :not_same_accounts=>true
+  validates :amount, :numericality=>{:greater_than=>0, :message=>'doit être un nombre positif'}
 
   before_destroy :should_be_destroyable
 
-  validate :correct_amount, :two_lines, :not_same_accounts
-  
-
   scope :within_period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
 
-  alias original_compta_lines compta_lines
   
 
-
-  # Pour toujours avoir les 2 compta_lines, compta_lines est redéfini
-  def compta_lines
-    if original_compta_lines.size == 0
-      original_compta_lines.build(debit:0, credit:0)
-      original_compta_lines.build(debit:0, credit:0)
+  # ajoute les deux lignes de l'écriture à l'instance du transfert.
+  # La valeur par défaut du montant est zero.
+  def add_lines(amount = 0)
+   compta_lines.new(debit:0, credit:amount) 
+   compta_lines.new(debit:amount, credit:0)
+  end
+  
+  # retourne la ligne correspondant au compte qui reçoit le montant
+  # donc la ligne débitée
+  def compta_line_to
+    unless compta_lines.empty?
+      compta_lines.select{|l| l.debit != 0}.first || compta_lines.last
     end
-    original_compta_lines
   end
 
+  alias line_to compta_line_to
 
-  # set_compta_lines permet de définir les variables d'instance @compta_line_to et 
-  # @compta_lin_from
-  # Il y a trois cas de figure
-  # 1 : il y a une ligne débit, on sait qui est debit et donc l'autre est crédit
-  # 2 : il y a une ligne credit, idem
-  # 3 : on prend par convention la première comme compta_line_to (donc ligne débitée)
-  # et la seconde comme compta_line_from (ligne créditée)
-   def set_compta_lines
-    # on est sur qu'il y a deux compta_lines
-    cltos = compta_lines.select {|cl| cl.debit && cl.debit != 0}
-    clfroms  = compta_lines.select {|cl| cl.credit && cl.credit != 0}
-    if !cltos.empty? && !clfroms.empty?
-      @compta_line_to = cltos.first
-      @compta_line_from = clfroms.first
-    end
-    if cltos.empty? && clfroms.empty?
-      @compta_line_to = compta_lines.first
-      @compta_line_from = compta_lines.last
+  # retourne la ligne correspondant au compte qui donne le montant
+  # donc la ligne créditée
+  def compta_line_from
+    unless compta_lines.empty?
+      compta_lines.select{|l| l.credit != 0}.first || compta_lines.first
     end
   end
+
+  alias line_from compta_line_from
 
   # amount est stocké dans les compta_lines
   def amount
-    set_compta_lines unless @compta_line_to
-    @compta_line_to.debit
+   compta_line_to ? compta_line_to.debit : 0
   end
 
-
+  # amount est stocké dans les compta_lines
   def amount=(montant)
-    set_compta_lines unless @compta_line_to
-    @compta_line_to.debit = montant
-    @compta_line_from.credit = montant
+    if compta_line_to && compta_line_from
+      compta_line_to.debit = montant
+      compta_line_from.credit = montant
+    else
+      raise 'Impossible d\'affecter un montant car les lignes n\'existent pas'
+    end
   end
 
-  # Line_to est la ligne débitée
-  def line_to
-    set_compta_lines unless @compta_line_to
-    @compta_line_to
+  
+   # pour indiquer que l'on ne peut modifier le compte du receveur
+  def to_locked?
+    compta_line_to && compta_line_to.locked?
   end
 
-  # par convention la dernière ligne est celle qui est débitée
-  def line_from
-    set_compta_lines unless @compta_line_from
-    @compta_line_from
+  # pour indiquer que l'on ne peut modifier le compte du donneur
+  def from_locked?
+    compta_line_from && compta_line_from.locked?
   end
+
+  # utile pour savoir que l'on ne peut toucher aux rubriques montant, narration
+  # et date
+  def partial_locked?
+    from_locked? || to_locked? 
+  end
+
   
   # line_to est editable si elle n'est pas verrouillées
   def to_editable?
-    !@compta_line_to.locked?
+    !to_locked?
   end
   
   # line_from est editable si elle n'est pas verrouillées
   def from_editable?
-    !@compta_line_from.locked?
+    !from_locked?
   end
   
   # le transfert est editable si l'une des deux lignes au moins l'est
@@ -97,40 +101,19 @@ class Transfer < Writing
 
   # inidque si le transfer peut être détruit en vérifiant qu'aucune ligne n'a été verrouillée
   def destroyable?
-    set_compta_lines unless @compta_line_to
-    !@compta_line_to.locked? && !@compta_line_from.locked?
+    to_editable? && from_editable?
   end
 
-  # pour indiquer que l'on ne peut modifier le compte de donneur
-  def to_locked?
-    @compta_line_to.locked?
-  end
-
-  # pour indiquer que l'on ne peut modifier le compte receveur
-  def from_locked?
-    @compta_line_from.locked?
-  end
+ 
   
-  # utile pour savoir que l'on ne peut toucher aux rubriques montant, narration
-  # et date
-  def partial_locked?
-    from_locked? || to_locked?
-  end
-
+  
  
 
   private
 
-  #  def fill_debit_credit(cl)
-  #
-  #    case compta_lines.size
-  #    when 1 then cl.credit = @amount
-  #    when 2 then cl.debit = @amount
-  #    else raise 'Deja deux lignes'
-  #    end
-  #
-  #
-  #  end
+  def should_be_destroyable
+    compta_lines.locked.empty?
+  end
 
   def correct_amount
     errors[:amount] << 'obligatoire' unless amount
@@ -140,23 +123,19 @@ class Transfer < Writing
   end
 
   def two_lines
-    unless @compta_line_to && @compta_line_from
+    if compta_line_to || compta_line_from
       errors[:base] << 'Nombre de ligne incorrect ou une des lignes n a pas de valeur'
       return false
     end
   end
 
   def not_same_accounts
-    if @compta_line_from.account_id == @compta_line_to.account_id
-      errors[:base] << 'Comptes idendique'
+    if compta_line_from.account_id == compta_line_to.account_id
+      errors[:base] << 'Comptes idendiques'
       return false
     end
   end
 
-  # callback appelé par before_destroy pour empêcher la destruction des lignes
-  # et du transfer si une ligne est verrouillée
-  def should_be_destroyable
-    return destroyable?
-  end
+  
 
 end

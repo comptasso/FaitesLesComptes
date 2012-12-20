@@ -32,6 +32,7 @@ class ComptaLine < ActiveRecord::Base
   validates :nature_id, :destination_id, :debit, :credit, :created_at, :payment_mode, :cant_edit_if_locked=>true
 
   before_save  :fill_account, :if=> lambda {nature && nature.account}
+  before_destroy :not_locked
 
   scope :in_out_lines, where('nature_id IS NOT ?', nil)
   scope :with_writings, joins(:writing)
@@ -51,6 +52,7 @@ class ComptaLine < ActiveRecord::Base
   scope :listing, lambda {|from, to| with_writing_and_book.where('books.title != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)
+  scope :locked, where('locked = ?', true)
   scope :classe, lambda {|n| where('number LIKE ?', "#{n}%").order('number ASC')}
 
   # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
@@ -96,6 +98,10 @@ class ComptaLine < ActiveRecord::Base
   # remplit le champ account_id avec celui associé à nature si nature est effectivement associée à un compte.
   def fill_account
     self.account_id = nature.account.id
+  end
+
+  def not_locked
+    !locked
   end
 
  

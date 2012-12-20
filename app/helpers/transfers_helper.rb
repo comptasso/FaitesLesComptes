@@ -5,9 +5,9 @@ module TransfersHelper
   # Voir l'ordre choisi par convention dans le modèle Transfer
   def transfer_label(cl)
     if cl == @transfer.compta_lines.first
-      'Vers'
-    else
       'De'
+    else
+      'Vers'
     end
   end
  

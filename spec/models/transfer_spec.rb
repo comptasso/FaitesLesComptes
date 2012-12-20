@@ -3,16 +3,17 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
- # c.filter = {wip:true} 
+  # c.filter = {wip:true}
 end
 
 describe Transfer  do
   include OrganismFixture
 
   def valid_new_transfer
-    t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id, amount:1.5
-    t.line_to.account_id = @cba.id
-    t.line_from.account_id = @cbb.id 
+    t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id
+    t.add_lines(112)
+    t.compta_lines.first.account_id = @cba.id
+    t.compta_lines.last.account_id = @cbb.id
     t
   end
  
@@ -67,9 +68,9 @@ describe Transfer  do
       @transfer=valid_new_transfer
     end
 
-    it 'should be valid with valid attributes', wip:true do
+    it 'should be valid with valid attributes' do
       @transfer.valid?
- #     puts @transfer.errors.messages
+#      puts @transfer.errors.messages
       @transfer.should be_valid
     end
 
@@ -112,13 +113,13 @@ describe Transfer  do
     it 'champ obligatoire when a required field is missing' do 
       @tr.amount = nil 
       @tr.valid?
-      @tr.errors[:amount].should == ['obligatoire', 'doit être un nombre'] 
+      @tr.errors[:amount].should == ['doit être un nombre positif']
     end
 
     it 'montant ne peut être nul' do
       @tr.amount = 0
       @tr.valid?
-      @tr.errors[:amount].should == ['nul !']
+      @tr.errors[:amount].should == ['doit être un nombre positif']
     end
 
     
@@ -137,6 +138,38 @@ describe Transfer  do
       @tr.line_from.credit.should == 200
     end
 
+  end
+ 
+  
+ let(:invalid_attributes){ {"date_picker"=>"18/11/2011", 
+ "ref"=>"",
+ "narration"=>"test",
+ "compta_lines_attributes"=>{"0"=>{"account_id"=>"89",
+ "credit"=>"112.00"},
+ "1"=>{"account_id"=>"90",
+ "debit"=>"112.00"} }}  }
+
+  describe 'avec des attributs invalides' do
+    # ce test est fait car lorsque le Transfer n'est pas valide, il est réaffiché avec 4 lignes
+      before(:each) do
+        @t = @od.transfers.new(invalid_attributes)
+      end
+
+    it 'le montant est connu' do
+      @t.amount.should == 112
+    end
+
+      it 'le transfert est invalide' do
+        @t.should_not be_valid
+        
+      end
+
+    it 'le transfert a deux lignes' do
+      @t.should have(2).compta_lines
+      @t.save
+     
+      @t.should have(2).compta_lines
+    end
   end
 
 
@@ -179,23 +212,24 @@ describe Transfer  do
         it 'destroy the transfer should delete the two lines' do
           expect {@t.destroy}.to change {ComptaLine.count}.by(-2)
         end
-        it 'destroy the transfer is impossible if debit_line locked' do
-          @t.line_to.update_attribute(:locked, true)
+        it 'destroy the transfer is impossible if debit_line locked'  do
+          lt = @t.line_to
+          lt.update_attribute(:locked, true)
+          lt.should be_locked
           @t.should_not be_destroyable
           expect {@t.destroy}.not_to change {ComptaLine.count}
         end
 
-        it 'destroy the transfer is impossible if any line locked' do 
+        it 'destroy the transfer is impossible if any line locked' , wip:true do  
           l = @t.line_from
           l.locked.should be_false 
           l.locked = true
           l.valid?
-          puts l.errors.messages unless l.valid?
+  #        puts l.errors.messages unless l.valid?
           l.save!
-          
-          @t.line_from.locked.should be_true 
+          @t.line_from.should be_locked
           @t.should_not be_destroyable
-          expect {@t.destroy}.not_to change {Transfer.count}
+          expect {@t.first.destroy}.not_to change {Transfer.count}
         end
 
         it 'can say what it can edit' do

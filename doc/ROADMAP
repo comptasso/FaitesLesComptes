@@ -744,9 +744,10 @@ Gérer la logique des tabulations dans la saisie des lignes (la croix +, le dele
 OK - Dans windows, les largeurs pour les milliers sont insuffisantes
 OK - Modifier le message d'accueil pour faire un message spécifique OCRA
 
-Voir Vers et De dans le menu Transfert
-Solde de la caisse dans les CashControls
-La liste des Transferts ne devrait plus afficher les numéros de comptes de caisse et de banque
+OK - Voir Vers et De dans le menu Transfert
+OK - Solde de la caisse dans les CashControls
+OK - La liste des Transferts ne devrait plus afficher les numéros de comptes de caisse et de banque
+Dans les transferts, mettre une validation sur le fait que le montant doit être positif
 
 Garde-t-on la possibilité de créer de nouveaux livres ????
 Le livre d'AN est destructible : bonne ou mauvaise idée ?
