@@ -8,7 +8,7 @@ end
 
 
 describe BankExtractLine do  
-  include OrganismFixture
+  include OrganismFixture 
 
   before(:each) do 
     create_minimal_organism 
@@ -25,7 +25,7 @@ describe BankExtractLine do
     @ch5 = create_in_out_writing(5, 'Chèque')
     @cr = create_in_out_writing(27)
     @cd = CheckDeposit.new(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
-    @cd.checks << @ch97.supportline << @ch5.supportline
+    @cd.checks << @ch97.support_line << @ch5.support_line
     @cd.save!
 
   end
@@ -34,8 +34,8 @@ describe BankExtractLine do
   describe 'un extrait bancaire avec les différents éléments' do
 
     before(:each) do
-      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@d7.supportline])
-      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@d29.supportline])
+      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@d7.support_line])
+      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@d29.support_line])
       @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@cd.debit_line])
       @be.save!
     end
@@ -59,7 +59,7 @@ describe BankExtractLine do
 
     describe 'lock_line'  do
       before(:each) do
-        @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@cr.supportline])
+        @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@cr.support_line])
         @be.bank_extract_lines.each {|bel| bel.lock_line }
       end
 
@@ -156,7 +156,7 @@ describe BankExtractLine do
       end
 
       it 'a bel is chainable only if both debit or both credit'  do
-        bel_cr = @be.bank_extract_lines.create!(compta_lines:[@cr.supportline])
+        bel_cr = @be.bank_extract_lines.create!(compta_lines:[@cr.support_line])
         bel_cr.move_to_top
         bel_cr.should_not be_chainable
 

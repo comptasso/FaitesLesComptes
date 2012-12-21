@@ -229,7 +229,7 @@ describe Transfer  do
           l.save!
           @t.line_from.should be_locked
           @t.should_not be_destroyable
-          expect {@t.first.destroy}.not_to change {Transfer.count}
+          expect {@t.destroy}.not_to change {Transfer.count}
         end
 
         it 'can say what it can edit' do

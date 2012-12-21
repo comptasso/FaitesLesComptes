@@ -160,7 +160,7 @@ describe BankExtract do
       @be = @ba.bank_extracts.create!(:begin_date=>Date.today, end_date:Date.today, begin_sold:1,
         total_debit:1, total_credit:2)
       @w1 = create_in_out_writing(97 , 'Chèque')
-      @bel = BankExtractLine.create!(bank_extract_id:@be.id, compta_lines:[@w1.supportline])
+      @bel = BankExtractLine.create!(bank_extract_id:@be.id, compta_lines:[@w1.support_line])
       @be.locked = true
       @be.save!
     end
@@ -203,7 +203,7 @@ describe BankExtract do
       @bel1.save!
 
       @l2 = create_outcome_writing(13)
-      @bel2 = BankExtractLine.create!(bank_extract_id:@be2.id, compta_lines:[@l2.supportline])
+      @bel2 = BankExtractLine.create!(bank_extract_id:@be2.id, compta_lines:[@l2.support_line])
 
 
     end
@@ -225,7 +225,7 @@ describe BankExtract do
     end
 
     it 'lines belongs to max one bank_extract_line' do
-      expect {BankExtractLine.new(bank_extract_id:@be2.id, compta_lines:[@l2.supportline])}.to raise_error(ArgumentError)
+      expect {BankExtractLine.new(bank_extract_id:@be2.id, compta_lines:[@l2.support_line])}.to raise_error(ArgumentError)
     end
 
     context 'suppression du bank_extract' do
@@ -237,8 +237,8 @@ describe BankExtract do
       it 'et les lines deviennent non rattachées à un bank_extract' do
         @be2.destroy
         @be3= @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: Date.civil(2012,10,01), end_date: Date.civil(2012,10,31), begin_sold: 2012, total_credit: 11, total_debit: 10)
-        @bel3 = BankExtractLine.create!(bank_extract_id:@be2.id, compta_lines:[@l2.supportline])
-        @l2.supportline.should have(1).bank_extract_lines
+        @bel3 = BankExtractLine.create!(bank_extract_id:@be2.id, compta_lines:[@l2.support_line])
+        @l2.support_line.should have(1).bank_extract_lines
       end
 
 

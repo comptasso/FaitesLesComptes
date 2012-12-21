@@ -89,6 +89,14 @@ class Account < ActiveRecord::Base
     super
   end
 
+  # Les caisse et les banques ont un nickname pour en faciliter la sélection
+  # Dans les formulaires de transferts, le label_method devrait donc être accountable.nickname
+  # mais visiblement, ce n'est pas prévu donc je crée le nickname avec un rescue
+  # au cas où le compte ne répondrait pas correctement.
+  def nickname
+    accountable.nickname rescue long_name
+  end
+
   # renvoie le compte disponible commençant par number et en incrémentant une liste 
   # avec le nombre de chiffres donnés par précision
   def self.available(number)

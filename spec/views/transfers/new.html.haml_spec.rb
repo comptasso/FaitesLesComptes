@@ -43,10 +43,22 @@ describe "transfers/new" do
     page.should have_css('.btn')
   end
 
+  it 'check selects' do
+    @t.should_receive(:compta_lines).at_least(1).times.and_return([mock_model(ComptaLine, 'locked?'=>true), mock_model(ComptaLine, 'locked?'=>false)])
+    render
+  #  page.all('select').should have(2).elements
+  end
+
+  it 'ceck_select' do
+     @t.stub(:compta_lines).and_return([mock_model(ComptaLine, 'locked?'=>true), mock_model(ComptaLine, 'locked?'=>false)])
+    render
+    page.all('select').should have(2).elements
+  end
+
 
   it 'check the select ' do
+    @t.stub(:compta_lines).and_return([mock_model(ComptaLine, 'locked?'=>true), mock_model(ComptaLine, 'locked?'=>false)])
     render
-    page.find('select').should have_content('bonjour')
     page.find('select#transfer_compta_lines_attributes_1_account_id').all('option').should have(4).elements
     page.find('select#transfer_compta_lines_attributes_0_account_id').all('option').should have(4).elements
   end

@@ -20,8 +20,8 @@ describe InOutWriting do
 
 
   it 'appeler lock_writing appelle lock_writing sur l écriture' do
-     l = @w1.supportline
+     l = @w1.support_line
      l.lock
-     @w1.should be_locked
+     @w1.should be_locked 
   end
 end

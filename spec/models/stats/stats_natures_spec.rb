@@ -45,8 +45,8 @@ describe Stats::StatsNatures do
 
     end
   
-  it 'les natures doivent être classées par ordre recettes puis dépenses et par ordre alpha' do
-    a.should_receive(:order).with('income_outcome DESC', 'name ASC').and_return([n1, n3, n4, n2])
+  it 'les natures doivent être classées par ordre recettes puis dépenses et par position' do
+    a.should_receive(:order).with('income_outcome DESC', 'position ASC').and_return([n1, n3, n4, n2])
     @stats_natures.lines.collect {|l| l[0] }.should == %w(Recette1 Recette2 ARecette2 Depense1)
   end
   

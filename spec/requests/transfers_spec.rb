@@ -10,7 +10,7 @@ end
 # spec request for testing admin books 
 
 describe 'vue transfer index'do
-  include OrganismFixture 
+  include OrganismFixture  
 
 
   before(:each) do 
@@ -43,10 +43,10 @@ describe 'vue transfer index'do
       fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
       within('#transfer_compta_lines_attributes_0_account_id') do
-        select(@ba.accounts.first.long_name)
+        select(@ba.nickname)
       end
       within('#transfer_compta_lines_attributes_0_account_id') do
-        select(@bb.accounts.first.long_name)
+        select(@bb.nickname)
       end
       click_button 'Enregistrer'
       @od.transfers.count.should == 1
@@ -66,10 +66,10 @@ describe 'vue transfer index'do
       fill_in 'transfer[amount]', :with=>'123.50'
       
       within('#transfer_compta_lines_attributes_0_account_id') do
-        select(@ba.accounts.first.long_name)
+        select(@ba.nickname)
       end
       within('#transfer_compta_lines_attributes_0_account_id') do
-        select(@bb.accounts.first.long_name)
+        select(@bb.nickname)
       end
 
       end
@@ -83,7 +83,7 @@ describe 'vue transfer index'do
       it 'affiche des message d erreurs' do
         fill_in 'transfer[amount]', :with=>''
         click_button 'Enregistrer'
-        page.should have_content 'nul !'
+        page.should have_content 'doit être un nombre positif'
       end
     end
 

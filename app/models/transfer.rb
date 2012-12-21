@@ -56,13 +56,18 @@ class Transfer < Writing
    compta_line_to ? compta_line_to.debit : 0
   end
 
-  # amount est stocké dans les compta_lines
+  # amount est stocké dans les compta_lines, mais celles ci ne sont créées que si
+  # nécessaire, d'où la nécessité de ce else.
+  #
+  # Une autre approche serait d'ajouter les lignes lors de la création de l'instance
+  # mais cela génère des difficultés avec le formulaire de création en cas de
+  # réaffichage de la vue (du fait probablement des nested_attributes.
   def amount=(montant)
     if compta_line_to && compta_line_from
       compta_line_to.debit = montant
       compta_line_from.credit = montant
     else
-      raise 'Impossible d\'affecter un montant car les lignes n\'existent pas'
+      add_lines(montant) 
     end
   end
 
