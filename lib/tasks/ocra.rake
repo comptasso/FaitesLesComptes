@@ -20,11 +20,11 @@ def jc_create_dir(path)
   end
 
   desc "OCRA : création des répertoires et de la base de données"
-  task :setup  => :environment do
-    jc_create_dir("../db/#{Rails.env}/organisms")
+  task :setup  do
+    jc_create_dir("../db/ocra/organisms")
     jc_create_dir("../logs")
-    puts "Setup de la base #{Rails.env}"
-    default = Rails.application.config.database_configuration[Rails.env]
+    puts "Setup de la base ocra"
+    default = Rails.application.config.database_configuration[:ocra]
     ActiveRecord::Base.establish_connection(default)
     Rake::Task["db:schema:load"].invoke
   end
