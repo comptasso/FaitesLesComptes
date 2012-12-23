@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
 
 
   def new
+    session[:user] = session[:org_db] = session[:period]= nil
     @user = User.new
   end
 
