@@ -1,8 +1,6 @@
 Use this README file to introduce your application and point to useful places in the API for learning more.
 Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
 
-
-
 -----------------------Edition papier livres, natures et destinations------------------------------------------------------------------------
 OK - Faire le fond Brouillard - trouver comment avoir les images dans prawn
 OK - Mettre en place les catégories dépenses et recettes pour natures - un boolean en fait
@@ -755,8 +753,16 @@ Le livre d'AN est destructible : bonne ou mauvaise idée ?
 Création du nouvel organisme un peu longue : gif animé...
 Form Nouvel exercice : il faut limiter les années disponibles
 OK - Pb Nomenclature : le 708 ne semble pas pris en comptes dans les produits
-Mettre nomenclature hors arborescence (ou pouvoir lire une autre nomenclature)
+Mettre nomenclature hors arborescence (ou pouvoir lire une autre nomenclature) =>ajouter un champ à Organism pour qu'il puisse stocker une nomenclature.
+    ajout du champ nomenclature qui doit être un text
+    mise en place de l'action pour changer de nomenclature pour le modèle Organisme
+    la nomenclature utilisée doit être par défaut celle du statut ou celle que l'on a stockée dans le champ nomenclature
+    on peut donc encore simplifier nomenclature avec un hash qui est nil pour l'init (si nil, va chercher)
+
 NON - normal :Pb Etat : Le bilan fait le solde D et C.
+Supprimer les champs book_id dans les modèles Cash et BankAccount
+On gagnerait à changer le name de BankAccount en bank (car c'est bien ce que c'est)
+
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
 On pourrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base et factoriser les utilities::extract
