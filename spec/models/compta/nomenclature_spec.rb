@@ -10,6 +10,8 @@ end
 describe Compta::Nomenclature do   
   include OrganismFixture
 
+  let(:h) { path = File.join Rails.root, 'spec', 'fixtures', 'association', 'good.yml'; YAML::load_file(path) }
+
   before(:each) do
     create_organism
     @p = Period.create!(organism_id:@o.id, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
@@ -18,6 +20,11 @@ describe Compta::Nomenclature do
   it 'se crée à partir d un fichier' do
     cn =  Compta::Nomenclature.new(@p, 'good.yml')
     cn.should be_an_instance_of(Compta::Nomenclature) 
+  end
+
+  it 'mais peut aussi se créer à partir d un hash' do
+    cn =  Compta::Nomenclature.new(@p, h)
+    cn.should be_an_instance_of(Compta::Nomenclature)
   end
 
   it 'sait renvoyer une page' do
@@ -40,8 +47,12 @@ describe Compta::Nomenclature do
       @cn.valid?
     end
 
-
-
+    it 'non valide si le compte de résultats ne prend pas tous les comptes', wip:true do
+      @cn.stub(:number_from_document).and_return(['708'])
+      @cn.valid?
+      @cn.errors.messages[:resultat].should == ['Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 708']
+    end
+    
     it 'le compte de resultats ne comprend que des comptes 6 et 7'  do 
       @cn.send(:resultats_67).should be_true
     end
@@ -60,10 +71,14 @@ describe Compta::Nomenclature do
       @cn.should_not be_valid
     end
 
+
+
     it 'la partie benevolat ne comporte que des comptes 8' do
       @cn.should_receive(:benevolat_8).and_return true
       @cn.valid?
     end
+
+
 
     it 'un compte autre que 8 dans benevolat rend invalide' do
       @cn.stub(:rough_accounts_list, :benevolat).and_return(%w(80 !807 86 !860 45))
@@ -76,7 +91,7 @@ describe Compta::Nomenclature do
 #    end
 
     it 'une nomenclature sait créer un sheet' do
-      @cn.sheet(:exploitation).should be_an_instance_of(Compta::Sheet)
+      @cn.sheet(:resultat).should be_an_instance_of(Compta::Sheet)
   end
 
 
@@ -90,7 +105,7 @@ describe Compta::Nomenclature do
 
     it 'indique ses erreurs par des messages' do 
       @cn.valid?
-      @cn.errors.messages[:resultat].should == ['Pas de document Résultat']
+      @cn.errors.messages[:resultat].first.should == 'Pas de document Résultat'
     end
 
     it 'doit avoir un actif, un passif' do
@@ -144,7 +159,7 @@ describe Compta::Nomenclature do
   end
 
   context 'vérification des doublons' , wip:true do 
-    before(:each) {@cnf = Compta::Nomenclature.new(@p, 'doublons.yml')}
+    before(:each) {@cnf = Compta::Nomenclature.new(@p, 'doublons.yml')} 
 
     it 'n est pas valide' do
       @cnf.should_not be_valid
