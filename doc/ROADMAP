@@ -751,7 +751,12 @@ Dans les transferts, mettre une validation sur le fait que le montant doit être
 
 Garde-t-on la possibilité de créer de nouveaux livres ????
 Le livre d'AN est destructible : bonne ou mauvaise idée ?
-
+------------------------- Manuel----------------------------------------------------------
+Création du nouvel organisme un peu longue : gif animé...
+Form Nouvel exercice : il faut limiter les années disponibles
+Pb Nomenclature : le 708 ne semble pas pris en comptes dans les produits
+Mettre nomenclature hors arborescence (ou pouvoir lire une autre nomenclature)
+Pb Etat : Le bilan fait le solde D et C.
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
 On pourrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base et factoriser les utilities::extract
