@@ -26,7 +26,7 @@ describe Period do
     end
     
     it 'les comptes du fichier asso.yml plus le compte bancaire et le compte de caisse' do
-      @p.should have(90).accounts
+      @p.should have(89).accounts
     end
 
     it '10 natures de dépenses et 6 de recettes ont été créées' , wip:true do

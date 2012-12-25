@@ -9,7 +9,7 @@
            hint:'lettres minuscules uniquement, sans espace',
            disabled:@organism.persisted? %>
  <%= f.input :status, :label=>'Statut',
-         :collection=>LIST_STATUS, :as=>:inline_radio_buttons %>
+         :collection=>LIST_STATUS, :as=>:inline_radio_buttons, disabled:@organism.persisted? %>
 
    <div class="form-actions">
     <%= f.button :submit, class: "btn-primary span2" %>

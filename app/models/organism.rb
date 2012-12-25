@@ -1,6 +1,40 @@
 # -*- encoding : utf-8 -*-
 
+# La classe Organisme est quasiment la tête de toutes les classes du programme.
+# Un organisme a des livres de recettes et de dépenses, mais aussi un livre d'OD et
+# un d'A Nouveau. De même un organisme a un ou des comptes bancaires et une ou 
+# des caisses.
+# 
+# Un organisme a également des archives pour faire les suavegardes et les restaurations.
+# 
+# Un organisme a également des exercices (Period), lesquels ont à leur tour des 
+# comptes.
+# 
+# Les champs obligatoires sont le titre de l'organisme, la base de donnée associée, et 
+# le statut (association ou entreprise).
+# 
+#  Précision sur la base de données : Pour faciliter les sauvegardes, chaque organisme
+#  dispose de sa propre base de données (dont le nom doit bien sur être unique).
+#  
+#  Concrètement, ce sujet est traité par la classe Room, qui est celle qui effectue
+#  la création de la base (et qui en vérifie l'unicité). La mention uniqueness => true
+#  pour database_name est donc ici peu utile puisqu'il ne peut y avoir qu'un seul 
+#  organisme par base.
+#  
+#  Le formulaire de création demande si on choisit le statut, lequel ne peut plus être
+#  modifié ensuite : actuellement deux possibilités, association ou entreprise.
+#  
+#  La nomenclature, un Hash décrivant la construction des documents (Bilan, Compte
+#  de Résultats) est également stockée à la création. Mais contrairement au statut, on 
+#  peut modifier une nomenclature pour importer un autre type de fichier. Le but est 
+#  de pouvoir adapter les éditions au cas où on ajouterait des comptes non prévus dans
+#  la nomenclature fournie par défaut. 
+#
+#
 class Organism < ActiveRecord::Base
+
+  serialize :nomenclature, Hash
+
   has_many :books, dependent: :destroy
   has_many :destinations, dependent: :destroy
   has_many :natures, through: :periods
@@ -24,8 +58,9 @@ class Organism < ActiveRecord::Base
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
   has_many :transfers
 
-  # jc_establish_connection lambda { database_name }
-  
+   
+
+  before_create :read_nomenclature
   after_create :create_default
 
   validates :title, :presence=>true
@@ -59,7 +94,9 @@ class Organism < ActiveRecord::Base
   end
 
   # retourne la collection de livres de Recettes et de Dépenses
-  # ceux qui sont accessibles dans la partie saisie
+  # ceux qui sont accessibles dans la partie saisie.
+  #
+  # S'appuie sur le scope in_outs de books
   def in_out_books
     books.in_outs
   end
@@ -156,8 +193,19 @@ class Organism < ActiveRecord::Base
   
   private
 
- # crée les livres Recettes, Dépenses et OD
- # Crée également une banque et une caisse par défaut
+  def read_nomenclature
+    if status
+      path = case Rails.env
+      when 'test' then File.join Rails.root, 'spec', 'fixtures', status.downcase, 'good.yml'
+      else
+        File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
+      end
+      self.nomenclature = YAML::load_file(path)
+    end
+  end
+
+  # crée les livres Recettes, Dépenses et OD
+  # Crée également une banque et une caisse par défaut
   def create_default
     # les 3 livres
     logger.debug 'Création des livres par défaut'

@@ -40,6 +40,11 @@ describe Organism do
       expect {@organism.save}.to change {Book.count}.by(4)
     end
 
+    it 'should have nomenclature' do
+      @organism.save
+      @organism.nomenclature[:actif].should be_a_instance_of(Hash)
+    end
+
   end
 
   describe 'after create', wip:true do

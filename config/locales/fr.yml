@@ -222,7 +222,7 @@ fr:
         bank_account: 'Compte bancaire'
         book: Livre
       bank_account:
-        name: Nom de la Banque
+        bank_name: Nom de la Banque
         comment: Commentaire
         number: "N° de compte"
         nickname: Surnom

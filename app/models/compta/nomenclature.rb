@@ -50,14 +50,13 @@ module Compta
 
 
 
-    # initialize peut se faire à partir d'un fichier ou d'un hash
-    def initialize(period, file='nomenclature.yml')
+    # initialize peut se faire à partir d'un exercice et d'un hash.
+    #
+    # En pratique, une nomenclature se crée par l'exercice qui demande la nomenclature
+    # de l'organisme
+    def initialize(period)
       @period = period
-      if file.is_a? String
-        @instructions = load_instructions_from(file)
-      else
-        @instructions = file
-      end
+      @instructions = period.organism.nomenclature
     end
 
      # renvoie la liste des pages existant dans cette nomenclature
@@ -138,20 +137,7 @@ module Compta
 
       protected
 
-      # lit les instruction d'un fichier au format yml.
-      # N'est utile que si on utilise les fichiers par défaut
-      #
-      # Le chemin est différent si on est en environnement essai.
-      #
-      def load_instructions_from(file)
-        status = @period.organism.status.downcase
-        path = case Rails.env
-        when 'test' then File.join Rails.root, 'spec', 'fixtures', status, file
-        else
-          File.join Rails.root, 'app', 'assets', 'parametres', status, file
-        end
-        YAML::load_file(path)
-      end
+      
 
       # vérifie que tous les comptes sont pris en compte pour l'établissement du bilan
       # à l'exception des comptes de classes 8 qui servent à valoriser le bénévolat

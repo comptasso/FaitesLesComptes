@@ -83,4 +83,19 @@ namespace :landlord do
     end
 
   end
+
+  # tâche provisoire pour la modification du modèle Organisme 
+  # avec un champ nomenclature.
+  desc "Remplissage du champ nomenclature"
+  task :fill_nomenclature => :environment do
+    Room.all.each do |r|
+      # on se connecte successivement à chacun d'eux
+      puts "fill nomenclature pour #{r.absolute_db_name}"
+      r.look_for do
+        o = Organism.first
+        o.send(:read_nomenclature)
+        o.save
+      end
+    end
+  end
 end

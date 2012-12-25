@@ -420,6 +420,11 @@ class Period < ActiveRecord::Base
     natures.without_account.all
   end
 
+  # retourne une instance de Compta::Nomenclature
+  def nomenclature
+    Compta::Nomenclature.new(self)
+  end
+
 
   protected
 

@@ -1,5 +1,9 @@
 # -*- encoding : utf-8 -*-
 
+# Room est un modèle qui se situe dans la base principale et qui sert à
+# enregistrer les noms des bases de données puisque chaque organisme dispose de
+# sa propre base de donnée.
+#
 class Room < ActiveRecord::Base
   # Room est dans la base principale
   establish_connection Rails.env
