@@ -8,7 +8,7 @@ describe 'admin/bank_accounts/index' do
   before(:each) do
     assign(:organism, stub_model(Organism))
     @bank_accounts=[]
-    @bank_accounts << stub_model(BankAccount, name: 'JC Bank', number: 'BA1', nickname:'Compte courant', comment: 'un commentaire')
+    @bank_accounts << stub_model(BankAccount, bank_name: 'JC Bank', number: 'BA1', nickname:'Compte courant', comment: 'un commentaire')
     @bank_accounts << stub_model(BankAccount, number: 'BA2')
     @bank_accounts.each do |b|
       b.stub(:created_at).and_return(Time.now)
@@ -62,7 +62,7 @@ describe 'admin/bank_accounts/index' do
     context 'check content of a row' do
       it "shows the relevant informations" do
         @ba=@bank_accounts.first
-        page.find('tbody tr td:nth-child(1)').text.should == @ba.name
+        page.find('tbody tr td:nth-child(1)').text.should == @ba.bank_name
         page.find('tbody tr td:nth-child(2)').text.should == @ba.number
         page.find('tbody tr td:nth-child(3)').text.should == @ba.nickname
         page.find('tbody tr td:nth-child(4)').text.should == @ba.comment

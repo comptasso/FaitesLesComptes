@@ -171,7 +171,7 @@ class Organism < ActiveRecord::Base
 
     cashes.create(name:'La Caisse')
     logger.debug 'creation de la caisse par défaut'
-    bank_accounts.create(name:'La Banque', number:'Le Numéro de Compte', nickname:'Compte courant')
+    bank_accounts.create(bank_name:'La Banque', number:'Le Numéro de Compte', nickname:'Compte courant')
     logger.debug 'creation la banque par défaut'
   end
   

@@ -44,7 +44,7 @@ describe 'vue lines' do
     select 'Essai', :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
     fill_in 'in_out_writing_compta_lines_attributes_0_debit', with: 50.21
     select 'Virement'
-    select 'DebiX'
+    select 'Compte courant'
     click_button 'Créer'
     Writing.count.should == 1
     ComptaLine.count.should == 2 # avec sa contrepartie

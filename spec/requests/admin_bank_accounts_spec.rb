@@ -35,7 +35,7 @@ describe 'vue bank_accounts index' do
 
     it 'remplir correctement le formulaire cree une nouvelle ligne' do
       
-      fill_in 'bank_account[name]', :with=>'Crédit Bancaire'
+      fill_in 'bank_account[bank_name]', :with=>'Crédit Bancaire'
       fill_in 'bank_account[number]', :with=>'12456321AZ'
       fill_in 'bank_account[nickname]', :with=>'Compte courant'
       click_button "Créer le compte" # le compte'
@@ -47,7 +47,7 @@ describe 'vue bank_accounts index' do
     context 'remplir incorrectement le formulaire' do
     it 'test uniqueness organism, name, number' do
       
-      fill_in 'bank_account[name]', :with=>@ba.name
+      fill_in 'bank_account[bank_name]', :with=>@ba.bank_name
       fill_in 'bank_account[number]', :with=>@ba.number
       fill_in 'bank_account[nickname]', :with=>'Compte courant'
       click_button "Créer le compte" # le compte'
@@ -55,9 +55,9 @@ describe 'vue bank_accounts index' do
       @o.should have(1).bank_accounts
     end 
 
-    it  'test presence name' do
+    it  'test presence bank name' do
       visit new_admin_organism_bank_account_path(@o)
-      fill_in 'bank_account[name]', :with=>@ba.name
+      fill_in 'bank_account[bank_name]', :with=>@ba.bank_name
       
       click_button "Créer le compte" # le compte'
       page.should have_content('obligatoire')
@@ -84,7 +84,7 @@ describe 'vue bank_accounts index' do
 
     it 'On peut changer les deux autres champs et revenir à la vue index' do
       visit edit_admin_organism_bank_account_path(@o, @ba)
-      fill_in 'bank_account[name]', :with=>'DebiX'
+      fill_in 'bank_account[bank_name]', :with=>'DebiX'
       click_button 'Enregistrer'
       current_url.should match admin_organism_bank_accounts_path(@o)
       find('tbody tr td').text.should == 'DebiX'

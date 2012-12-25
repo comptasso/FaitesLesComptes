@@ -10,7 +10,7 @@ describe BankAccount do
   include OrganismFixture
 
   def create_bank_account
-    @o.bank_accounts.new(:name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
+    @o.bank_accounts.new(:bank_name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
   end
 
   before(:each) do
@@ -28,7 +28,7 @@ describe BankAccount do
     end
 
     it 'should not be_valid without name' do
-      @bb.name = nil
+      @bb.bank_name = nil
       @bb.should_not be_valid
     end
 
@@ -43,7 +43,7 @@ describe BankAccount do
     end
 
     it "should have a unique number in the scope of bank and organism" do
-      @bb.name = @ba.name
+      @bb.bank_name = @ba.bank_name
       @bb.number= @ba.number
       @bb.should_not be_valid
     end
@@ -100,9 +100,6 @@ describe BankAccount do
 
   
   context 'annex methods' do
-
-    
-
 
     it 'to_s return name' do
       @ba.to_s.should == 'DX 123Z'

@@ -750,7 +750,7 @@ Dans les transferts, mettre une validation sur le fait que le montant doit être
 Garde-t-on la possibilité de créer de nouveaux livres ????
 Le livre d'AN est destructible : bonne ou mauvaise idée ?
 ------------------------- Manuel----------------------------------------------------------
-Création du nouvel organisme un peu longue : gif animé...
+OK - Création du nouvel organisme un peu longue : gif animé...
 Form Nouvel exercice : il faut limiter les années disponibles
 OK - Pb Nomenclature : le 708 ne semble pas pris en comptes dans les produits
 Mettre nomenclature hors arborescence (ou pouvoir lire une autre nomenclature) =>ajouter un champ à Organism pour qu'il puisse stocker une nomenclature.
@@ -760,8 +760,8 @@ Mettre nomenclature hors arborescence (ou pouvoir lire une autre nomenclature) =
     on peut donc encore simplifier nomenclature avec un hash qui est nil pour l'init (si nil, va chercher)
 
 NON - normal :Pb Etat : Le bilan fait le solde D et C.
-Supprimer les champs book_id dans les modèles Cash et BankAccount
-On gagnerait à changer le name de BankAccount en bank (car c'est bien ce que c'est)
+OK - Supprimer les champs book_id dans les modèles Cash et BankAccount
+OK - On gagnerait à changer le name de BankAccount en bank_name (car c'est bien ce que c'est)
 
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action

@@ -24,7 +24,7 @@ describe 'admin/bank_accounts/new' do
     end
 
     it "form should have field title" do
-      page.should have_css('form input[name="bank_account[name]"]')
+      page.should have_css('form input[name="bank_account[bank_name]"]')
     end
 
     it "form should have field numero de compte" do

@@ -9,12 +9,12 @@ class BankAccount < ActiveRecord::Base
   has_many :accounts, :as=> :accountable
   has_many :compta_lines, :through=>:accounts
   
-  validates :number, :uniqueness=>{:scope=>[:organism_id, :name]}
-  validates :name, :number, :nickname,  presence: true
+  validates :number, :uniqueness=>{:scope=>[:organism_id, :bank_name]}
+  validates :bank_name, :number, :nickname,  presence: true
 
   
   after_create :create_accounts
-  after_update :change_account_title, :if=> lambda {name_changed? }
+  after_update :change_account_title, :if=> lambda {nickname_changed? }
   
 
   # retourne le dernier extrait de compte bancaire
@@ -126,7 +126,7 @@ class BankAccount < ActiveRecord::Base
 
 
  def acronym
-   name.gsub(/[a-z\séèùôîûâ]/, '')
+   bank_name.gsub(/[a-z\séèùôîûâ]/, '')
  end
 
  # utilisée dans les select pour avoir un champ plus sympathique que le seul numéro
@@ -160,7 +160,7 @@ class BankAccount < ActiveRecord::Base
  end
 
  def change_account_title
-   accounts.each {|acc| acc.update_attribute(:title, name)}
+   accounts.each {|acc| acc.update_attribute(:title, nickname)}
  end
 
 

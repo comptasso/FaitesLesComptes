@@ -42,7 +42,7 @@ describe Period do
     
     @p_2010 = @o.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
     @p_2011= @o.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
-    @ba = @o.bank_accounts.create!(name:'DebiX', number:'123Z', nickname:'Compte épargne')
+    @ba = @o.bank_accounts.create!(bank_name:'DebiX', number:'123Z', nickname:'Compte épargne')
   end
 
   describe 'compte de remise de chèque' do
