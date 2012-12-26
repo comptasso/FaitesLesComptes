@@ -328,6 +328,8 @@ fr:
       in_out_writing:
         create: Créer l'écriture
         update: Enregistrer
+      nomenclature:
+        update: Charger le fichier
 
   activemodel:
     errors:

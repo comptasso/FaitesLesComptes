@@ -42,6 +42,16 @@ class Nomenclature < ActiveRecord::Base
     self.benevolat=yml[:benevolat]
   end
 
+  def load_io(io_string)
+    yml = YAML::load(io_string)
+    self.actif=yml[:actif]
+    self.passif=yml[:passif]
+    self.resultat=yml[:resultat]
+    self.benevolat=yml[:benevolat]
+  end
+
+  
+
   # crée une instance de Compta::Nomenclature pour l'exercice demandé
   def compta_nomenclature(period)
     Compta::Nomenclature.new(period, instructions)

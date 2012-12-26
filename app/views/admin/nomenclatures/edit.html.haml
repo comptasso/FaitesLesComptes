@@ -1,32 +1,15 @@
-TODODODOD D
+= content_for :menu do
+  = icon_to 'retour.png', :back 
 
-<div class="inputs">
-<%= simple_form_for([:admin,@organism],  :html=> {class: 'form-horizontal', enctype:"multipart/form-data"}) do |f| %>
-<%= f.error_notification %>
+.champ
+  %h3 Chargement d'une nouvelle nomenclature
 
+  .inner-champ
+    .inputs
+      = simple_form_for([:admin,@organism, @nomenclature],  :html=> {class: 'form-horizontal', enctype:"multipart/form-data"}) do |f|
+        = f.error_notification
 
-    <%= f.input :title,  input_html: {class: "span3"} %>
-    <%= f.input :description,  input_html: {class: "span3", rows: 4} %>
-    <%= f.input :database_name,
-           label:'Nom de la base',
-           input_html: {class: "span3"},
-           hint:'lettres minuscules uniquement, sans espace',
-           disabled:true %>
-     <%= f.input :status, :label=>'Statut',
-         :collection=>LIST_STATUS, :as=>:inline_radio_buttons, disabled:true %>
+        %label{:for=>"file_upload", :class=>"string required control-label"} Nomenclature
+        .controls= file_field_tag 'file_upload', class: 'input-file'
 
-     <label  for="file_upload" class="string required control-label">
-       Nomenclature
-    </label>
-
-    <div class="controls">
-       <%= file_field_tag 'file_upload', class: 'input-file' %>
-    </div>
-
-
-   <div class="form-actions">
-    <%= f.button :submit, class: "btn-primary span2" %>
-   </div>
-<% end %>
-  </div>
-</div></div>
+        .form-actions= f.button :submit, class: "btn-primary span2"

@@ -1,14 +1,5 @@
 Faitesvoscomptes::Application.routes.draw do
 
- 
-  
-
-  
-
-  
-
-  
-
   get "bottom/credit"
   get "bottom/contact"
 
@@ -98,7 +89,9 @@ Faitesvoscomptes::Application.routes.draw do
       end
     end
     resources :organisms do
-      
+
+      resource :nomenclature
+
       resources :archives
       resources :books
       resources :income_books
@@ -149,14 +142,7 @@ Faitesvoscomptes::Application.routes.draw do
     end
   end  # FIN DE ADMIN
 
-  # get 'bank_lines/index'
-
-  # match 'cash/:cash_id/cash_lines/index' => 'cash_lines#index', :as=>:cash_lines
-
-  # match 'bank_account/:bank_account_id/bank_lines/index' => 'bank_lines#index', :as=>:bank_account_bank_lines
-  # match 'bank_extract/:bank_extract_id/pointage/index' => 'pointage#index',  :as => :pointage
-  # match "bank_extract/:bank_extract_id/pointage/:id/pointe" => 'pointage#pointe', :as=> :pointe, :method=>:post
-  # match "bank_extract/:bank_extract_id/pointage/:id/depointe" => 'pointage#depointe', :as=> :depointe,:method=>:post
+  
 
   # DEBUTde la zone public
 
