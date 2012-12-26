@@ -94,9 +94,6 @@ class Admin::OrganismsController < Admin::ApplicationController
   def update
     @organism = Organism.find(params[:id])
 
-    read_nomenclature if params[:file_upload]
-
-
     respond_to do |format|
       if @organism.update_attributes(params[:organism])
         format.html { redirect_to [:admin, @organism], notice: "Modification de l'organisme effectuée" }

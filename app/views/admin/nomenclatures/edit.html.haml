@@ -1,20 +1,7 @@
-
-
-
-<%= content_for :menu do %>
-
-<%= icon_to 'nouveau.png', new_admin_organism_path %>
-<%= icon_to 'afficher.png', [:admin,@organism] %>
-<%= icon_to 'retour.png', admin_organisms_path %>
-<% end -%>
-
-<div class="champ">
-  <h3>
-    Modification organisme
-  </h3><div class="inner-champ">
+TODODODOD D
 
 <div class="inputs">
-<%= simple_form_for([:admin,@organism],  :html=> {class: 'form-horizontal') do |f| %>
+<%= simple_form_for([:admin,@organism],  :html=> {class: 'form-horizontal', enctype:"multipart/form-data"}) do |f| %>
 <%= f.error_notification %>
 
 
@@ -28,12 +15,18 @@
      <%= f.input :status, :label=>'Statut',
          :collection=>LIST_STATUS, :as=>:inline_radio_buttons, disabled:true %>
 
+     <label  for="file_upload" class="string required control-label">
+       Nomenclature
+    </label>
+
+    <div class="controls">
+       <%= file_field_tag 'file_upload', class: 'input-file' %>
+    </div>
+
+
    <div class="form-actions">
     <%= f.button :submit, class: "btn-primary span2" %>
    </div>
 <% end %>
   </div>
 </div></div>
-
-
-

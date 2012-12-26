@@ -422,7 +422,7 @@ class Period < ActiveRecord::Base
 
   # retourne une instance de Compta::Nomenclature
   def nomenclature
-    Compta::Nomenclature.new(self)
+    oragnism.nomenclature.compta_nomneclature(self)
   end
 
 
