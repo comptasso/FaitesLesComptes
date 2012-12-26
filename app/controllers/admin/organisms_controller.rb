@@ -1,8 +1,8 @@
 # -*- encoding : utf-8 -*-
 
 class Admin::OrganismsController < Admin::ApplicationController
-  # GET /organisms
-  # GET /organisms.json
+
+  class NomenclatureError < StandardError; end
 
   skip_before_filter :find_organism, :current_period, only:[:index, :new] 
   before_filter :use_main_connection, only:[:index, :new, :destroy]
@@ -94,6 +94,9 @@ class Admin::OrganismsController < Admin::ApplicationController
   def update
     @organism = Organism.find(params[:id])
 
+    read_nomenclature if params[:file_upload]
+
+
     respond_to do |format|
       if @organism.update_attributes(params[:organism])
         format.html { redirect_to [:admin, @organism], notice: "Modification de l'organisme effectuée" }
@@ -104,6 +107,8 @@ class Admin::OrganismsController < Admin::ApplicationController
       end
     end
   end
+
+
 
   # DELETE /organisms/1
   # DELETE /organisms/1.json
@@ -116,6 +121,19 @@ class Admin::OrganismsController < Admin::ApplicationController
       render
     end
     
+  end
+
+  protected
+
+   def read_nomenclature
+    uploaded_io = params[:file_upload]
+    extension = File.extname(uploaded_io.original_filename)
+      if  ".yml" != extension
+        raise NomenclatureError, "L'extension #{extension} du fichier ne correspond pas aux bases gérées par l'application : .#{@db_extension}"
+      end
+    @organism.nomenclature =   YAML::load_file(uploaded_io)
+    # ici vérification de la nomenclature : si erreur ...
+    # on devrait faire la validation de la nomenclature dans orgnaisme
   end
 
  

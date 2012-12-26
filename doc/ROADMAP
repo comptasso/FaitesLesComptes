@@ -765,6 +765,9 @@ NON - normal :Pb Etat : Le bilan fait le solde D et C.
 OK - Supprimer les champs book_id dans les modèles Cash et BankAccount
 OK - On gagnerait à changer le name de BankAccount en bank_name (car c'est bien ce que c'est)
 
+revoir check_db (du modèle Room)
+revoir la gestion des erreurs dans restore et organism_controller
+
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
 On pourrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base et factoriser les utilities::extract

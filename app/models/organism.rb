@@ -33,8 +33,10 @@
 #
 class Organism < ActiveRecord::Base
 
-  serialize :nomenclature, Hash
 
+
+  has_one :nomenclature
+  
   has_many :books, dependent: :destroy
   has_many :destinations, dependent: :destroy
   has_many :natures, through: :periods
@@ -60,7 +62,7 @@ class Organism < ActiveRecord::Base
 
    
 
-  before_create :read_nomenclature
+  
   after_create :create_default
 
   validates :title, :presence=>true
@@ -193,19 +195,21 @@ class Organism < ActiveRecord::Base
   
   private
 
-  def read_nomenclature
+  def fill_nomenclature 
     if status
       path = case Rails.env
       when 'test' then File.join Rails.root, 'spec', 'fixtures', status.downcase, 'good.yml'
       else
         File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
       end
-      self.nomenclature = YAML::load_file(path)
+      yml = YAML::load_file(path)
+      create_nomenclature(:actif=>yml[:actif], passif:yml[:passif], resultat:yml[:resultat], benevolat:yml[:benevolat])
     end
   end
 
   # crée les livres Recettes, Dépenses et OD
   # Crée également une banque et une caisse par défaut
+  # et crée également la nomenclature
   def create_default
     # les 3 livres
     logger.debug 'Création des livres par défaut'
@@ -221,6 +225,8 @@ class Organism < ActiveRecord::Base
     logger.debug 'creation de la caisse par défaut'
     bank_accounts.create(bank_name:'La Banque', number:'Le Numéro de Compte', nickname:'Compte courant')
     logger.debug 'creation la banque par défaut'
+
+    fill_nomenclature
   end
   
 end

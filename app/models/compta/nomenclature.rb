@@ -41,7 +41,7 @@ module Compta
 
     # Déclaration des documents disponibles.
     #
-    # On accède aux documents par un array : instructions[:document]
+    # On accède aux documents par un array : instructions[:document] 
     def_doc :resultat, :actif, :passif, :benevolat
 
     validates :actif, :passif, :resultat, :presence=>true
@@ -54,9 +54,9 @@ module Compta
     #
     # En pratique, une nomenclature se crée par l'exercice qui demande la nomenclature
     # de l'organisme
-    def initialize(period)
+    def initialize(period, instructions)
       @period = period
-      @instructions = period.organism.nomenclature
+      @instructions = instructions
     end
 
      # renvoie la liste des pages existant dans cette nomenclature
@@ -245,7 +245,7 @@ module Compta
 
 
 
-      # doc est un symbol comme :actif, :passif, :exploitation, :financier, :exceptionnel et :benevolat
+      # doc est un symbol comme :actif, :passif, :resultat
       def numbers_from_document(doc)
         if @instructions[doc]
           accumulated_values(@instructions[doc][:rubriks]).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list_numbers}.flatten

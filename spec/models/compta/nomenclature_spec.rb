@@ -10,31 +10,31 @@ end
 describe Compta::Nomenclature do   
   include OrganismFixture
 
-  let(:h) { path = File.join Rails.root, 'spec', 'fixtures', 'association', 'good.yml'; YAML::load_file(path) }
+
+  def instructions(file)
+    path = File.join Rails.root, 'spec', 'fixtures', 'association', file
+    YAML::load_file(path)
+  end
 
   before(:each) do
     create_organism
     @p = Period.create!(organism_id:@o.id, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
   end
 
-  it 'se crée à partir d un fichier' do
-    cn =  Compta::Nomenclature.new(@p, 'good.yml')
+  it 'se crée à partir d un hash d instructions' do
+    cn =  Compta::Nomenclature.new(@p, instructions('good.yml'))
     cn.should be_an_instance_of(Compta::Nomenclature) 
   end
 
-  it 'mais peut aussi se créer à partir d un hash' do
-    cn =  Compta::Nomenclature.new(@p, h)
-    cn.should be_an_instance_of(Compta::Nomenclature)
-  end
-
+  
   it 'sait renvoyer une page' do
-    cn =  Compta::Nomenclature.new(@p, 'good.yml')
+    cn =  Compta::Nomenclature.new(@p, instructions('good.yml'))
     cn.actif.should be_an_instance_of(Hash)
   end
 
   context 'qui est  valide' do
     before(:each) do
-      @cn =  Compta::Nomenclature.new(@p, 'good.yml')
+      @cn =  Compta::Nomenclature.new(@p, instructions('good.yml'))
     end
 
    
@@ -48,9 +48,9 @@ describe Compta::Nomenclature do
     end
 
     it 'non valide si le compte de résultats ne prend pas tous les comptes', wip:true do
-      @cn.stub(:number_from_document).and_return(['708'])
+      @cn.stub(:rough_accounts_reject).and_return(['709'])
       @cn.valid?
-      @cn.errors.messages[:resultat].should == ['Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 708']
+      @cn.errors.messages[:resultat].should == ['Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 709']
     end
     
     it 'le compte de resultats ne comprend que des comptes 6 et 7'  do 
@@ -91,7 +91,7 @@ describe Compta::Nomenclature do
 #    end
 
     it 'une nomenclature sait créer un sheet' do
-      @cn.sheet(:resultat).should be_an_instance_of(Compta::Sheet)
+      @cn.sheet(:resultat).should be_an_instance_of(Compta::Sheet) 
   end
 
 
@@ -100,7 +100,7 @@ describe Compta::Nomenclature do
   context 'qui est non valide' do
 
     before(:each) do
-      @cn =  Compta::Nomenclature.new(@p, 'bad.yml')
+      @cn =  Compta::Nomenclature.new(@p, instructions('bad.yml'))
     end
 
     it 'indique ses erreurs par des messages' do 
@@ -121,14 +121,14 @@ describe Compta::Nomenclature do
   context 'tous les comptes ne sont pas repris' do
     
     it 'cn bilan_complete return false' do
-      @cn = Compta::Nomenclature.new(@p, 'one_account_missing.yml')
+      @cn = Compta::Nomenclature.new(@p, instructions('one_account_missing.yml'))
       @cn.bilan_complete?.should be_false
       @cn.should_not be_valid
     end
   end
 
   context 'un compte de bilan C qui n a pas son D' do
-    before(:each) {@cn = Compta::Nomenclature.new(@p, 'one_C_missing.yml')}
+    before(:each) {@cn = Compta::Nomenclature.new(@p, instructions('one_C_missing.yml'))}
     
     it 'fait que la nomenclature n est pas valide' do
       @cn.should_not be_valid
@@ -146,7 +146,7 @@ describe Compta::Nomenclature do
   end
 
   context 'un compte de resultat avec un compte 4'  do
-    before(:each) {@cnf = Compta::Nomenclature.new(@p, 'resultats_with_4.yml')}
+    before(:each) {@cnf = Compta::Nomenclature.new(@p, instructions('resultats_with_4.yml'))}
 
     it 'n est pas valide' do
       @cnf.should_not be_valid
@@ -159,7 +159,7 @@ describe Compta::Nomenclature do
   end
 
   context 'vérification des doublons' , wip:true do 
-    before(:each) {@cnf = Compta::Nomenclature.new(@p, 'doublons.yml')} 
+    before(:each) {@cnf = Compta::Nomenclature.new(@p, instructions('doublons.yml'))}
 
     it 'n est pas valide' do
       @cnf.should_not be_valid

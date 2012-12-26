@@ -142,6 +142,16 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
     t.integer  "position"
   end
 
+  create_table "nomenclatures", :force => true do |t|
+    t.integer  "organism_id"
+    t.text     "actif"
+    t.text     "passif"
+    t.text     "resultat"
+    t.text     "benevolat"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "organisms", :force => true do |t|
     t.string   "title"
     t.text     "description"
@@ -149,7 +159,6 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
     t.datetime "updated_at"
     t.string   "database_name"
     t.string   "status"
-    t.text     "nomenclature"
   end
 
   create_table "periods", :force => true do |t|
