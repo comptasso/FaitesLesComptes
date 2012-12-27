@@ -3,11 +3,11 @@ class Admin::AccountsController < Admin::ApplicationController
   # GET /compta/accounts
   # GET /compta/accounts.json
   def index
-    @compta_accounts = @period.accounts.all
+    @accounts = @period.accounts.all
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @compta_accounts }
+      format.json { render json: @accounts }
     end
   end
 
@@ -29,7 +29,12 @@ class Admin::AccountsController < Admin::ApplicationController
 
     respond_to do |format|
       if @account.save
-        format.html { redirect_to admin_organism_period_accounts_path(@organism,@period), notice: 'Le compte a été créé.' }
+        # on vérifie la nomenclature et on affiche un message
+        nomen = @period.organism.nomenclature
+        unless nomen.valid?
+          flash[:alert] = nomen.collect_errors
+        end
+        format.html { redirect_to admin_period_accounts_path(@period), notice: 'Le compte a été créé.' }
         format.json { render json: @account, status: :created, location: @account }
       else
         format.html { render action: "new" }
@@ -41,17 +46,17 @@ class Admin::AccountsController < Admin::ApplicationController
   # PUT /compta/accounts/1
   # PUT /compta/accounts/1.json
   def update
-    @account = @period.accounts.find(params[:id])
+    @account = Account.find(params[:id])
 
     respond_to do |format|
       if @account.update_attributes(params[:account])
         format.html {
           if @period.all_natures_linked_to_account?
-          redirect_to admin_organism_period_accounts_path(@organism,@period), notice: 'Le compte a été mis à jour'
+          redirect_to admin_period_accounts_path(@period), notice: 'Le compte a été mis à jour'
           else
             flash[:alert]= 'Toutes les natures ne sont pas reliées à des comptes'
             way = @period.array_natures_not_linked.first.income_outcome ? 'incomes' : 'outcomes'
-            redirect_to mapping_admin_organism_period_accounts_path(@organism,@period,type: way)
+            redirect_to mapping_admin_period_accounts_path(@period,type: way)
             end
 
             }
@@ -70,7 +75,7 @@ class Admin::AccountsController < Admin::ApplicationController
     @compta_account.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_organism_period_accounts_url(@organism,@period) }
+      format.html { redirect_to admin_period_accounts_url(@period) }
       format.json { head :ok }
     end
   end

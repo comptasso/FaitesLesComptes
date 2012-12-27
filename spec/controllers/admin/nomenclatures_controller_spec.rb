@@ -85,7 +85,7 @@ describe Admin::NomenclaturesController do
         @nomenclature.stub(:load_io)
         @nomenclature.stub(:save).and_return false
         @nomenclature.stub(:valid?).and_return false
-        @nomenclature.stub_chain(:errors, :full_messages).and_return ['voici la liste des erreurs']
+        @nomenclature.stub_chain(:collect_errors).and_return ['voici la liste des erreurs']
         
         put :update,{:organism_id=>@o.id.to_s,  "file_upload" =>@bad_file}, valid_session
         flash[:alert].should have_content('voici la liste des erreurs')

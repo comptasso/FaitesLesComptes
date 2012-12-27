@@ -1,5 +1,5 @@
 = content_for :menu do 
-  = icon_to 'nouveau.png', new_admin_organism_period_account_path(@organism, @period)
+  = icon_to 'nouveau.png', new_admin_period_account_path(@period)
 
 .champ
   %h3 Liste des comptes
@@ -14,14 +14,14 @@
         %th Actions
  
     %tbody
-      - @compta_accounts.each do |compta_account|
+      - @accounts.each do |account|
         %tr
-          %td= compta_account.number.to_s
-          %td= compta_account.title
-          %td= render partial: 'nature', collection: compta_account.natures.all if compta_account.natures.count > 0
-          %td= t_used compta_account
+          %td= account.number.to_s
+          %td= account.title
+          %td= render partial: 'nature', collection: account.natures.all if account.natures.count > 0
+          %td= t_used account
           %td
            
-            = icon_to 'modifier.png', edit_admin_organism_period_account_path(@organism, @period, compta_account)
-            = icon_to 'supprimer.png', [:admin,@organism,@period,compta_account], :confirm => 'Etes vous sur ?', :method => :delete unless compta_account.compta_lines.any?
+            = icon_to 'modifier.png', edit_admin_period_account_path(@period, account)
+            = icon_to 'supprimer.png', [:admin,@period,account], :confirm => 'Etes vous sur ?', :method => :delete unless account.compta_lines.any?
   

@@ -57,6 +57,25 @@ class Nomenclature < ActiveRecord::Base
     Compta::Nomenclature.new(period, instructions)
   end
 
+ # méthode de présentation des erreurs
+ #
+ # utilisée pour former le flash dans le controller AdminNomenclatures
+ # mais également le messages qui est crée par le
+ # AccountObserver lorsque la création d'un compte engendre une anomalie avec la nomenclature .
+  def collect_errors
+
+    unless valid?
+      al = 'La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d\'être faux.</br> '
+      al += 'Liste des erreurs relevées : <ul>'
+      errors.full_messages.each do |m|
+        al += "<li>#{m}</li>"
+      end
+      al += '</ul>'
+
+    end
+    al.html_safe
+  end
+
   protected
 
 

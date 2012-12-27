@@ -57,10 +57,10 @@ Faitesvoscomptes::Application.routes.draw do
         end
       end
       resources :selections do
-      member do
+        member do
           post :lock
         end
-    end
+      end
       
     end
     
@@ -123,20 +123,21 @@ Faitesvoscomptes::Application.routes.draw do
         end
         resources :natures do
           collection do
-              post 'reorder' # pour permettre le tri par javascript
+            post 'reorder' # pour permettre le tri par javascript
           end
         end
-        resources :accounts do
-          collection do
-            get :mapping
-          end
-        end
+        
       end
     end
     resources :periods do
       resources :natures do
         member do
           post :link_nature, :unlink_nature
+        end
+      end
+      resources :accounts do
+        collection do
+          get :mapping
         end
       end
     end
@@ -242,7 +243,7 @@ Faitesvoscomptes::Application.routes.draw do
 
  
 
-  root to: 'organisms#index'
+  root to: 'session#new'
   
 
   # The priority is based upon order of creation:

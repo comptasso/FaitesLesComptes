@@ -1,6 +1,6 @@
 # coding: utf-8
 
-#NatureObserver sert à mettre à jour les lignes de la comptabilité lorsque
+# NatureObserver sert à mettre à jour les lignes de la comptabilité lorsque
 # la nature est rattachée à un compte.
 # Il est en effet plus que probable que dans la majeure partie des cas, ce rattachement
 # sera souvent fait à postériori.

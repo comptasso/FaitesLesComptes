@@ -40,4 +40,4 @@ LIST_STATUS = %w(Association Entreprise)
 # 0.3 insertion du champ nickname dans BankAccount
 # VERSION = '0.4' # insertion d'un champ status dans Organism
 # refonte du modèle Transfer et travail sur la présentation du formulaire de Transfert
-VERSION = '0.4.1'
+VERSION = '0.5.0'

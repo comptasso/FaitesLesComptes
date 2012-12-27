@@ -752,11 +752,12 @@ Le livre d'AN est destructible : bonne ou mauvaise idée ?
 ------------------------- Manuel----------------------------------------------------------
 OK - Création du nouvel organisme un peu longue : gif animé...
 Form Nouvel exercice : il faut limiter les années disponibles
+Form account, les natures devraient être disable pour les comptes 1 à 6
 OK - Pb Nomenclature : le 708 ne semble pas pris en comptes dans les produits
-Mettre nomenclature hors arborescence (ou pouvoir lire une autre nomenclature) =>ajouter un champ à Organism pour qu'il puisse stocker une nomenclature.
+OK - Mettre nomenclature hors arborescence (ou pouvoir lire une autre nomenclature) =>ajouté un modèle Nomenclature.
 OK -   ajout du champ nomenclature qui doit être un text dans organism
 OK -     à la création la nomenclature est chargée.
-    mise en place de l'action pour changer de nomenclature pour le modèle Organisme
+OK -    mise en place de l'action pour changer de nomenclature pour le modèle Organisme
 OK -     la nomenclature utilisée est celle que l'on a stockée dans le champ nomenclature
 OK - on peut donc encore simplifier nomenclature avec period seulement
     Quand on change un compte, un observer vérifie la nomenclature et laisse un message si besoin
@@ -765,8 +766,8 @@ NON - normal :Pb Etat : Le bilan fait le solde D et C.
 OK - Supprimer les champs book_id dans les modèles Cash et BankAccount
 OK - On gagnerait à changer le name de BankAccount en bank_name (car c'est bien ce que c'est)
 
-revoir check_db (du modèle Room)
-revoir la gestion des erreurs dans restore et organism_controller
+OK - revoir check_db (du modèle Room), était bien fait : utilise effectivement le pragma integrity_check de sqlite
+NON - revoir la gestion des erreurs dans restore (fait correctement) et organism_controller (devenu inutile)
 
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
