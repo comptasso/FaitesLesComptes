@@ -12,7 +12,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "routes for application root" do
   it "routes application to organisms controller" do
-    { :get => "/" }.should route_to(:controller => "organisms", :action => "index") 
+    { :get => "/" }.should route_to(:controller => "sessions", :action => "new") 
   end
 end
 

@@ -8,7 +8,7 @@ RSpec.configure do |c|
   #  c.exclusion_filter = {:js=> true }
 end
  
-describe 'Session' do
+describe 'Session' do 
 
 
   it 'permet de se logguer' do
