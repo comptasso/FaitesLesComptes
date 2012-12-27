@@ -76,16 +76,16 @@
             :Production vendue (bien et services): '701 706'
             :Production immobilisée: '72'
             :Subvention d'exploitation: '74'
-            :Reprises sur provisions, amortissements et transferts de charge: '781 79'
-            :Autres produits: '75 756'
+            :Reprises sur provisions, amortissements et transferts de charge: '781'
+            :Cotisations: '756'
+            :Autres produits: '75 !756'
           :Charges d'exploitation:
             :Achats de marchandises: '-60 !603'
             :Variation stocks de marchandises: '603'
             :Autres achats et charges externes: '61'
             :Impôts, taxes et versements assimilés: '63'
             :Salaires et traitements: '641'
-            :Rémunération de l'exploitant: '644'
-            :Charges sociales: '645 646'
+            :Charges sociales: '645'
             :Dotations aux amortissements et provisions: '681'
             :Autres charges: '65'
         :RESULTAT FINANCIER:
@@ -104,5 +104,15 @@
             :Charges exceptionnels: '-67'
             :Dotations aux provisions exceptionnelles: '-687'
             :Engagements à réaliser: '-689'
-        :IMPOTS:
-          :Impots sur les bénéfices: '695'
+
+  :benevolat:
+    :title: Evaluation des contributions volontaires en nature
+    :sens: :passif
+    :rubriks:
+      :BENEVOLAT:
+        :Produits:
+          :Bénévolat: '870'
+          :Autres contributions en nature: 87 !870
+        :Charges:
+          :Bénévolat: '-864'
+          :Autres charges en nature: -86 !864
