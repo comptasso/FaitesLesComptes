@@ -107,18 +107,20 @@ class Admin::OrganismsController < Admin::ApplicationController
 
 
 
-  # DELETE /organisms/1
-  # DELETE /organisms/1.json
-  def destroy
-    @organism = Organism.find(params[:id])
-    if @organism.destroy
-      session[:period] = nil
-      redirect_to admin_organisms_url
-    else
-      render
-    end
-    
-  end
+#  # DELETE /organisms/1
+#  # DELETE /organisms/1.json
+#  def destroy
+#    @organism = Organism.find(params[:id])
+#    if @organism.destroy
+#      session[:period] = session[:org_db] = nil
+#
+#
+#      redirect_to admin_organisms_url
+#    else
+#      render
+#    end
+#
+#  end
 
   protected
 
