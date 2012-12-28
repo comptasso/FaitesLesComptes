@@ -25,7 +25,7 @@ describe 'admin cash' do
     Cash.count.should == 1
  end
 
-  describe 'new bank_account' do
+  describe 'new cash' do
     before(:each) do
       visit new_admin_organism_cash_path(@o)
     end

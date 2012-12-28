@@ -760,7 +760,7 @@ OK -     à la création la nomenclature est chargée.
 OK -    mise en place de l'action pour changer de nomenclature pour le modèle Organisme
 OK -     la nomenclature utilisée est celle que l'on a stockée dans le champ nomenclature
 OK - on peut donc encore simplifier nomenclature avec period seulement
-    Quand on change un compte, un observer vérifie la nomenclature et laisse un message si besoin
+NON - Quand on change un compte, un observer vérifie la nomenclature et laisse un message si besoin; mais un flash[:alert] donne l'info
 
 NON - normal :Pb Etat : Le bilan fait le solde D et C.
 OK - Supprimer les champs book_id dans les modèles Cash et BankAccount
