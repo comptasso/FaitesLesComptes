@@ -29,12 +29,12 @@ describe CashControl do
     end
 
     it 'not valid if date before min_date' do
-      @cash_control.date = @cash_control.min_date - 1
+      @cash_control.date = @cash_control.min_date(@p) - 1
       @cash_control.should_not be_valid
     end
 
      it 'not valid if date after max_date' do
-      @cash_control.date = @cash_control.max_date + 1.day
+      @cash_control.date = @cash_control.max_date(@p) + 1.day
       @cash_control.should_not be_valid
     end
 
@@ -140,15 +140,17 @@ describe CashControl do
     describe 'min_ and max_date' do 
 
       it 'la date est le début de l exercice' do
-        @cash_control.min_date.should == @p.start_date
+        @cash_control.min_date(@p).should == @p.start_date
       end
 
       it '@max_date doit être la fin de l exercice ou la date du jour' do
-        @cash_control.max_date.should == Date.today
+        @cash_control.max_date(@p).should == Date.today
       end
 
-      it '@max_date doit être la fin de l exercice ou la date du jour' do
-        @cash_control.max_date.should == Date.today
+      it '@max_date doit être la fin de l exercice si la date du jour est postérieure à l exercice' do
+        eve = Date.civil(1999,12,31)
+        p = mock_model(Period, :close_date=>eve)
+        @cash_control.max_date(p).should == eve
       end
 
     end

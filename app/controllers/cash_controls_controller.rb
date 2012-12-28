@@ -12,7 +12,7 @@ class CashControlsController < ApplicationController
 
   
   def new
-    @cash_control = @cash.cash_controls.new(:date=>Date.today) 
+    @cash_control = @cash.cash_controls.new(:date=>@period.guess_date)
   end
 
   def create

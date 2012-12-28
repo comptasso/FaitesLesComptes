@@ -51,17 +51,19 @@ class CashControl < ActiveRecord::Base
   end
 
   # renvoie la date minimum que peut prendre un new cash_control
-  # soit à partir d'un exercice, ou s'il n'est pas précisé, à partir
-  # de la date du cash_control, et enfin au besoin prend le début de
-  # l'année en cours
-  def min_date(exercice = nil)
-    return exercice.start_date if exercice
-    return period.start_date if period
-    return Date.today.beginning_of_year
+  # en fonction de l'exercice en cours d'utilisation
+  # 
+  def min_date(period)
+      period.start_date
   end
 
-  def max_date
-    [period.close_date, Date.today].min rescue Date.today
+  # renvoie la date maximum  que peut prendre un new cash_control
+  # en fonction de l'exercice en cours d'utilisation.
+  #
+  # On ne peut rentrer un cash_control pour une date postérieure au jour même
+  #
+  def max_date(period)
+     [period.close_date, Date.today].min
   end
 
 
@@ -89,8 +91,8 @@ class CashControl < ActiveRecord::Base
 
    def date_within_limit 
     if period
-    errors[:date] <<  'Date interdite' if self.date < min_date
-    errors[:date] << 'Date impossible' if self.date > max_date
+      errors[:date] <<  'Date interdite' if self.date < min_date(period)
+      errors[:date] << 'Date impossible' if self.date > max_date(period)
     else
       errors[:date] << 'Pas d\'exercice'
     end
@@ -107,7 +109,7 @@ class CashControl < ActiveRecord::Base
 
     # trouve l'exercice auquel appartient ce cash_control
   def period
-    cash.organism.find_period(date) rescue nil
+    @period ||= cash.organism.find_period(date) rescue nil
   end
 
 
