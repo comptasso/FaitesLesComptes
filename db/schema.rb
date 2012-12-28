@@ -18,8 +18,8 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
     t.string   "title"
     t.boolean  "used",             :default => true
     t.integer  "period_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
     t.string   "accountable_type"
     t.integer  "accountable_id"
   end
@@ -27,8 +27,8 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
   create_table "archives", :force => true do |t|
     t.integer  "organism_id", :null => false
     t.string   "comment"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "bank_accounts", :force => true do |t|
@@ -36,16 +36,16 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
     t.string   "bank_name"
     t.text     "comment"
     t.integer  "organism_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.string   "nickname"
   end
 
   create_table "bank_extract_lines", :force => true do |t|
     t.integer  "position"
     t.integer  "bank_extract_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.string   "type"
     t.date     "date"
   end
@@ -61,8 +61,8 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
     t.date     "begin_date"
     t.date     "end_date"
     t.boolean  "locked",                                         :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                        :null => false
+    t.datetime "updated_at",                                                        :null => false
     t.decimal  "begin_sold",      :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total_debit",     :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total_credit",    :precision => 10, :scale => 2, :default => 0.0
@@ -71,8 +71,8 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
   create_table "books", :force => true do |t|
     t.string   "title"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.integer  "organism_id"
     t.string   "type"
     t.string   "abbreviation"
@@ -81,8 +81,8 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
   create_table "cash_controls", :force => true do |t|
     t.integer  "cash_id"
     t.date     "date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
     t.boolean  "locked",                                    :default => false
     t.decimal  "amount",     :precision => 10, :scale => 2, :default => 0.0
   end
@@ -90,16 +90,16 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
   create_table "cashes", :force => true do |t|
     t.integer  "organism_id"
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.text     "comment"
   end
 
   create_table "check_deposits", :force => true do |t|
     t.integer  "bank_account_id"
     t.date     "deposit_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
     t.integer  "bank_extract_line_id"
     t.integer  "writing_id"
   end
@@ -108,8 +108,8 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
     t.integer  "nature_id"
     t.integer  "destination_id"
     t.boolean  "locked",                                          :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                         :null => false
+    t.datetime "updated_at",                                                         :null => false
     t.integer  "bank_extract_id"
     t.string   "payment_mode"
     t.integer  "check_deposit_id"
@@ -126,16 +126,16 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
     t.string   "name"
     t.integer  "organism_id"
     t.text     "comment"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
     t.boolean  "income_outcome", :default => false
   end
 
   create_table "natures", :force => true do |t|
     t.string   "name"
     t.text     "comment"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
     t.boolean  "income_outcome", :default => false
     t.integer  "period_id"
     t.integer  "account_id"
@@ -155,8 +155,8 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
   create_table "organisms", :force => true do |t|
     t.string   "title"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.string   "database_name"
     t.string   "status"
   end
@@ -166,8 +166,8 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
     t.date     "close_date"
     t.integer  "organism_id"
     t.boolean  "open",        :default => true
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   create_table "rooms", :force => true do |t|
@@ -179,8 +179,8 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
 
   create_table "users", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "writings", :force => true do |t|
