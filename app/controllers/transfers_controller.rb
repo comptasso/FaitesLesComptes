@@ -52,7 +52,7 @@ class TransfersController < ApplicationController
 
     respond_to do |format|
       if @transfer.save
-        format.html { redirect_to transfers_url, notice: 'Le transfert a été enregistré' }
+        format.html { redirect_to transfers_url, notice: "Le transfert a été enregistré sous le numéro d'écriture #{@transfer.id}" }
       else
      #   Rails.logger.debug "ERREUR dans save : nb de lignes : #{@transfer.compta_lines.inspect}"
         format.html { render action: "new" }

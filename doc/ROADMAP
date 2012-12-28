@@ -769,6 +769,11 @@ OK - On gagnerait à changer le name de BankAccount en bank_name (car c'est bien
 OK - revoir check_db (du modèle Room), était bien fait : utilise effectivement le pragma integrity_check de sqlite
 NON - revoir la gestion des erreurs dans restore (fait correctement) et organism_controller (devenu inutile)
 
+OK - Un transfert sauvé affiche son numéro d'écriture
+Dans les titres du dashboard, utiliser nickname pour les noms des comptes bancaires
+
+Le champ bank_extract_id de compta_lines ne sert plus et peut être supprimé (le lien avec les bank_extract se fait via la table bank_extract_lines_lines).
+
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
 On pourrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base et factoriser les utilities::extract

@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 require 'spec_helper'
 
 RSpec.configure do |c|
@@ -101,12 +103,14 @@ describe TransfersController do
     
     before(:each) do
       @od.stub(:transfers).and_return @a = double(Arel)
+      
     end
 
 
     it "receives new with modified_params" do
       @a.should_receive(:new).with(modified_attributes).and_return(@t = double(Transfer))
       @t.should_receive(:save).and_return(true)
+      @t.stub(:id).and_return 999
       post :create, {:transfer => valid_attributes}, valid_session
     end
 
@@ -126,6 +130,12 @@ describe TransfersController do
       it "redirects to the created transfer" do
         post :create, {:transfer => valid_attributes}, valid_session
         response.should redirect_to(transfers_url)
+      end
+
+      it 'sends a flash with writing id' do
+        @t.stub(:id).and_return 9999
+        post :create, {:transfer => valid_attributes}, valid_session
+        flash[:notice].should == "Le transfert a été enregistré sous le numéro d'écriture #{9999}"
       end
     end
 
