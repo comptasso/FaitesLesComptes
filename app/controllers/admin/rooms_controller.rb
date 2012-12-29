@@ -46,11 +46,12 @@ class Admin::RoomsController < Admin::ApplicationController
       # FIXME sur windows au moins, semble poser un problème de droit d'accès
       # donc on n'efface pas le fichier
       #  File.delete(abs_db) if File.exist?(abs_db)
-      flash[:notice] =  "La base #{db_name} a été supprimée"
+      flash[:notice] =  "L'organisme suivi par la base #{db_name} a été supprimé;\n le fichier #{abs_db} existe encore.\n
+         Pour le supprimer faites le manuellement à partir de l'explorateur de fichiers"
       organism_has_changed?
       redirect_to admin_organisms_url
     else
-      flash[:alert] = "Une erreur s'est produite; la base  #{db_name} a été supprimée"
+      flash[:alert] = "Une erreur s'est produite; la base  #{db_name} n'a pas été supprimée"
       render 'show'
     end
   end
