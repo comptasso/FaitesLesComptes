@@ -43,9 +43,9 @@ class Admin::RoomsController < Admin::ApplicationController
   
     if @room.destroy
       # on détruit le fichier correspondant
-      # TODO sur windows au moins, semble poser un problème de droit d'accès
+      # FIXME sur windows au moins, semble poser un problème de droit d'accès
       # donc on n'efface pas le fichier
-      File.delete(abs_db) if File.exist?(abs_db)
+      #  File.delete(abs_db) if File.exist?(abs_db)
       flash[:notice] =  "La base #{db_name} a été supprimée"
       organism_has_changed?
       redirect_to admin_organisms_url
