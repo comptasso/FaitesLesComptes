@@ -10,7 +10,8 @@
 
   <td>
     <%= icon_to 'modifier.png', edit_admin_organism_book_path(@organism, book), :id=>"icon_modifier_book_#{book.id}" %>
-    <%= icon_to 'supprimer.png', admin_organism_book_path(@organism, book), confirm: 'Etes vous sur ?', method: :delete if book.compta_lines.empty? %>
+    <%= icon_to 'supprimer.png', admin_organism_book_path(@organism, book),
+      confirm: 'Etes vous sur ?', method: :delete if (book.type.in?(['IncomeBook', 'OutcomeBook']) && book.compta_lines.empty?) %>
    
   </td>
 </tr>
