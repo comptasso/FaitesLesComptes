@@ -70,8 +70,10 @@ Faitesvoscomptes::Application.routes.draw do
   end
   # fin du namespace COMPTA
 
-  # namespace ADMIN
-  namespace 'admin' do
+
+  
+  ##################### namespace ADMIN ##############################"
+   namespace 'admin' do
 
     resources :users do
       resources :rooms

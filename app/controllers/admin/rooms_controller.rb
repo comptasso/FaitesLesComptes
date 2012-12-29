@@ -30,25 +30,27 @@ class Admin::RoomsController < Admin::ApplicationController
   def new_archive
     @room = current_user.rooms.find(params[:id])
     organism_has_changed?(@room)
-    redirect_to new_admin_organism_archive_path(@organism)
+    redirect_to new_admin_organism_archive_path(@organism) 
   end
 
   # détruit la pièce ainsi que la base associée
   # cette méthode n'appelle pas set_database car tout se passe dans la base principale
   def destroy
     @room = current_user.rooms.find(params[:id])
-    Rails.logger.info "Destruction de la base #{@room.database_name}  - méthode rooms_controller#destroy}"
-    # on vérifie que le fichier correspondant existe
+    abs_db = @room.absolute_db_name
+    db_name= @room.db_filename
+    Rails.logger.info "Destruction de la base #{db_name}  - méthode rooms_controller#destroy}"
+  
     if @room.destroy
       # on détruit le fichier correspondant
       # TODO sur windows au moins, semble poser un problème de droit d'accès
       # donc on n'efface pas le fichier
-      # File.delete(@room.absolute_db_name) if File.exist?(@room.absolute_db_name)
-      flash[:notice] =  "La base #{@room.database_name} a été supprimée"
+      File.delete(abs_db) if File.exist?(abs_db)
+      flash[:notice] =  "La base #{db_name} a été supprimée"
       organism_has_changed?
       redirect_to admin_organisms_url
     else
-      flash[:alert] = "Une erreur s'est produite; la base  #{@room.database_name} a été supprimée"
+      flash[:alert] = "Une erreur s'est produite; la base  #{db_name} a été supprimée"
       render 'show'
     end
   end

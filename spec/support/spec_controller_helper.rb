@@ -36,6 +36,6 @@ module SpecControllerHelper
   end
 
   # cet alias permet d'utiliser les spec créés par scaffold sans avoir à rebaptiser 
-  # valid_session
+  # session_attributes
   alias  valid_session session_attributes
 end

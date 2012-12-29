@@ -67,7 +67,7 @@ describe Room do
       end
 
       it 'retourne la valeur trouvée' do
-        Organism.stub(:first).and_return(double(Organism, accountable?:true))
+        
         Organism.should_receive(:first).and_return(double(Organism, accountable?:25))
         @r.look_forg {"accountable?"}.should == 25
       end

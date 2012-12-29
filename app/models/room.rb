@@ -31,13 +31,13 @@ class Room < ActiveRecord::Base
   end
 
   # pour sortir les bases de données du répertoire de l'application 
-  def self.path_to_db
+  def self.path_to_db 
     if Rails.env == 'test'
-      "#{Rails.root}/db/#{Rails.env}/organisms"
+      File.join(Rails.root, 'db', Rails.env, 'organisms')
     elsif ENV['OCRA_EXECUTABLE']
-      File.expand_path("../db/#{Rails.env}/organisms", ENV['OCRA_EXECUTABLE'])
+      File.join(ENV['OCRA_EXECUTABLE'], '..', 'db', 'Rails.env', 'organisms')
     else
-      "#{Rails.root}/../db/#{Rails.env}/organisms"
+      File.join(Rails.root, '..', 'db', Rails.env, 'organisms')
     end
   end
 
