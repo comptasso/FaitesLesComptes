@@ -20,10 +20,8 @@ class Nature < ActiveRecord::Base
   validates :name, :presence=>true
   validates :name, :uniqueness=>{ :scope=>[:income_outcome, :period_id] }
   validates :income_outcome, :inclusion => { :in => [true, false] }
-
-  # TODO rajouter avec un if pour coller avec le type de compte
-  # validates :account_ids, :fit_type=>true retiré car on ne crée plus l'assoc avec le compte dans le form nature
-  
+ 
+  validates :account_id, :fit_type=>true 
 
 
   has_many :compta_lines

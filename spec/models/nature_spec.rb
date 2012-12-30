@@ -1,5 +1,9 @@
 # coding: utf-8
 
+RSpec.configure do |c|
+  c.filter = {wip:true}
+end
+
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 describe Nature do
@@ -56,6 +60,18 @@ describe Nature do
           Nature.count.should == 18 # les deux de minimal organisme
           @o.periods.create!(start_date: @p.start_date.years_since(1), close_date: @p.close_date.years_since(1))
           Nature.count.should == 36 # avec la recopie automatique des natures par Period
+        end
+
+        it 'une nature ne peut être rattachée qu à des comptes de classe 6 ou 7' , wip:true do
+          @a = Account.where('number LIKE ?', '1%').first
+          puts @a.inspect
+          @n.account_id = @a.id
+          @n.should_not be_valid
+        end
+
+        it 'une nature est valide si rattachée à un compte de classe 6 ou 7', wip:true do
+          @n.account_id = Account.where('number LIKE ?', '6%').first.id
+          @n.should be_valid
         end
 
       end

@@ -8,11 +8,7 @@
     <%= f.input :title %>
     <%= f.input :used %>
 
-    <%= f.association :natures, :label=> 'Natures associées', input_html: {size: 10, multiple:true},
-                :collection => options_for_accounts(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :title,
-                :label_method=> :name, :value_method=> :id %>
-  
-   
+ 
 
   <div class="form-actions">
     <%= f.button :submit, class: "btn-primary" %>

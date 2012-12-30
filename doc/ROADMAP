@@ -776,10 +776,12 @@ Le champ bank_extract_id de compta_lines ne sert plus et peut être supprimé (l
 Voir les icones qui apparaissent dans la liste des organismes de la partie administration, il me semnble qu'elles sont moins riches que dans la partie saisie
 Suppression d'un exercice : voir les implications et les problèmes posés en terme de compte bancaire ou de rapporchement banacaire
 Un nouveau compte ne doit pas être relié à des natures s'il n'est pas un 6 ou un 7
+OK -   supprimer la possibilité dans le formulaire
+  faire une restriction dans les modèles de nature et de account
 D'autant que si on déconne on se retrouve dans l'impossibilité de modifier les natures, ni de supprimer le compte
 Les drags and drop de rattachement aux natures ne marchent plus.
 Dans listing, on n'a pas d'export csv ni excel.
-Le journal général fait bugger.
+OK - Le journal général fait bugger (réglé, était du à un formatage de date.)
 --------------------Divers---------------------------------------------------------------------------
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
 On pourrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base et factoriser les utilities::extract
