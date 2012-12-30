@@ -15,7 +15,7 @@
             = account.long_name
             %ul
               - account.natures.each do |nature|
-                = render partial: 'li_nature', object: nature, locals: {r: 'recettes'}
+                = render partial: 'li_nature', object: nature, locals: {r: 'depenses'}
     .span6
       %h4 Natures orphelines
       %ul.orphan_natures_depenses#depenses

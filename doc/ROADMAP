@@ -777,7 +777,7 @@ Voir les icones qui apparaissent dans la liste des organismes de la partie admin
 Suppression d'un exercice : voir les implications et les problèmes posés en terme de compte bancaire ou de rapporchement banacaire
 Un nouveau compte ne doit pas être relié à des natures s'il n'est pas un 6 ou un 7
 OK -   supprimer la possibilité dans le formulaire
-  faire une restriction dans les modèles de nature et de account
+OK -  faire une restriction dans les modèles de nature OK et de account (semble impraticable)
 D'autant que si on déconne on se retrouve dans l'impossibilité de modifier les natures, ni de supprimer le compte
 Les drags and drop de rattachement aux natures ne marchent plus.
 Dans listing, on n'a pas d'export csv ni excel.
