@@ -3,7 +3,7 @@
     .container
       .brand
         - if @organism && @organism.persisted?
-          = link_to header_title, organism_path(@organism)
+          = link_to header_title, organism_path(@organism), :tabindex=>-1
         -else
           = header_title
         = render 'layouts/login_logout'

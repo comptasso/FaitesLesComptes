@@ -1,7 +1,7 @@
 %ul.nav.nav-tabs
   
   %li.dropdown(class="#{controller.controller_name == "organisms" ? "active" : nil}")
-    %a{:href=>'#', :class=>'dropdown-toggle',:data=>{:toggle=>'dropdown'} }
+    %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle',:data=>{:toggle=>'dropdown'} }
       ORGANISMES
       %b.caret
     %ul.dropdown-menu
@@ -11,7 +11,7 @@
 
   - unless @period.nil? && @pariod.accounts.nil?
     %li.dropdown(class="#{controller.controller_name == "accounts" ? "active" : nil}")
-      %a{:href=>'#', :class=>'dropdown-toggle', :data=>{:toggle=>'dropdown'} }
+      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle', :data=>{:toggle=>'dropdown'} }
         EDITIONS
         %b.caret
       %ul.dropdown-menu
@@ -24,7 +24,7 @@
 
   - unless @period.nil? && @pariod.accounts.nil?
     %li.dropdown(class="#{controller.controller_name == "accounts" ? "active" : nil}")
-      %a{:href=>'#', :class=>'dropdown-toggle', :data=>{:toggle=>'dropdown'} }
+      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle', :data=>{:toggle=>'dropdown'} }
         DOCUMENTS
         %b.caret
       %ul.dropdown-menu
@@ -38,7 +38,7 @@
 
   - unless @organism.nil? && @organism.periods.count <= 1
     %li.dropdown(class="#{controller.controller_name == "periods" ? "active" : nil}")
-      %a{:href=>'#', :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }
+      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }
         EXERCICES
         %b.caret
       %ul.dropdown-menu
@@ -48,7 +48,7 @@
 
   - unless @organism.nil? && @organism.periods.count <= 1
     %li.dropdown(class="#{controller.controller_name == "writings" ? "active" : nil}")
-      %a{:href=>'#', :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }
+      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }
         JOURNAUX
         %b.caret
       = content_tag(:ul, :class => "dropdown-menu") do

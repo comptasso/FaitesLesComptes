@@ -105,6 +105,11 @@ function add_fields(link, association, content) {
 jQuery(function () {
     // on s'assure que le lien ajout est masqué'
     $('.compta_writings #add_line_link').hide();
+    // mettre le focus sur le champ date
+    $('.compta_writings input#writing_date_picker').change(function(){
+      document.getElementById("writing_narration").focus(true);
+    });
+    
     if ($('.compta_writings').size() > 0) {
         $deal_icon_plus();
         $check_submit();
