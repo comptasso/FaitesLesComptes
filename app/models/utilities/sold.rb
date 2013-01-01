@@ -10,6 +10,10 @@
 #
 module Utilities::Sold
 
+  def cumulated_at(date, sens)
+    raise 'Has to be implemented in child class'
+  end
+
 
   # debit cumulé avant une date (la veille). Renvoie 0 si la date n'est incluse
   # dans aucun exercice

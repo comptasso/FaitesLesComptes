@@ -5,6 +5,8 @@ load 'pdf_document/account.rb'
 
 module Compta
 
+
+
   # la classe Listing sert à éditer un compte. Elle n'est pas persistente mais
   # s'appuie sur ActiveRecord::Base pour avoir les associations
   # Ceci suppose d'avoir une définition des colonnes virtuelles
@@ -12,7 +14,8 @@ module Compta
   class Listing < ActiveRecord::Base
 
     include Utilities::Sold
-   
+    include Utilities::ToCsv
+
     def self.columns() @columns ||= []; end
 
   def self.column(name, sql_type = nil, default = nil, null = true)
@@ -47,24 +50,27 @@ module Compta
     self
   end
 
-  def cumulated_at(d, sens)
-    account.cumulated_at(d, sens)
+  # donne le cumul du débit ou du crédit (sens) à une date donnée
+  #
+  # nécessaire pour obtenir toutes les méthodes définies par le module Utilities::Sold
+  def cumulated_at(date, sens)
+    account.cumulated_at(date, sens)
   end
 
   def solde_debit_avant
-    account.cumulated_debit_before(from_date)
+    cumulated_debit_before(from_date)
   end
 
   def solde_credit_avant
-    account.cumulated_credit_before(from_date)
+    cumulated_credit_before(from_date)
   end
 
   def total_debit
-    account.movement(from_date, to_date, 'debit')
+    movement(from_date, to_date, 'debit')
   end
 
   def total_credit
-    account.movement(from_date, to_date, 'credit')
+    movement(from_date, to_date, 'credit')
   end
 
 
@@ -80,6 +86,19 @@ module Compta
   # utile pour le formulaire de saisie pour changer de compte
   def accounts
     period.accounts
+  end
+
+  def to_csv(options = {col_sep:"\t"})
+    CSV.generate(options) do |csv|
+        csv << ["Liste des écritures du compte #{account.number}",'', '',  '', '', '','', '']
+        csv << %w(Date Journal Référence Libellé Nature Destination Débit Crédit)
+        csv << ["Soldes au #{I18n::l from_date}",'', '', '', '','', reformat(solde_debit_avant), reformat(solde_credit_avant) ]
+        lines.each do |l|
+          csv << [I18n::l(l.date), l.book.title, l.ref, l.narration, l.nature_name, l.destination_name, reformat(l.debit), reformat(l.credit)]
+        end
+        csv << ['Totaux', '', '', '', '','', reformat(total_debit), reformat(total_credit)]
+        csv << ["Soldes au #{I18n::l to_date}", '', '', '', '','', reformat(solde_debit_avant + total_debit), reformat(solde_credit_avant + total_credit)]
+      end
   end
 
  
@@ -101,6 +120,14 @@ module Compta
     pdf.first_report_line = ["Soldes au #{I18n::l from_date}"] + account.formatted_sold(from_date)
     pdf
   end
+
+  protected
+
+  # remplace les points décimaux par des virgules pour s'adapter au paramétrage
+    # des tableurs français
+    def reformat(number)
+      sprintf('%0.02f',number).gsub('.', ',') if number
+    end
 
 
 

@@ -61,16 +61,13 @@ class ComptaLine < ActiveRecord::Base
 
   delegate :date, :narration, :ref, :book, :support, :lock, :to=>:writing
 
-  # transforme ComptaLine en un Line, utile pour les tests
-  # églement utilisé dans le modèle CheckDeposit pour accéder indifférement aux compta_lines
-  # et aux lines (sans avoir une erreur TypeMislatch).
-#  def to_line
-#    if persisted?
-#      Line.find(id)
-#    else
-#      Line.new(attributes)
-#    end
-#  end
+  def nature_name
+    nature ? nature.name : ''
+  end
+
+  def destination_name
+    destination ? destination.name : ''
+  end
 
   def siblings
     writing.compta_lines
