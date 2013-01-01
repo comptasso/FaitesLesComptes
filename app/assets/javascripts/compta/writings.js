@@ -22,6 +22,8 @@ function $deal_icon_plus() {
 
 // renvoie le total correspondant au selector mais seulement pour les lignes
 // visibles.
+// Cette fonction est utilisée par $balance qui fait appel à $total_sel('.credit')
+// et à $total_sel('.debit')
 function $total_sel(selector) {
     var t = 0;
     $(selector).each(function (index) {
@@ -47,7 +49,7 @@ function $balanced() {
     }
 }
 
-// retourne le nombre de lignes qui au soit débit soit credit de rempli
+// retourne le nombre de lignes qui ait soit débit soit credit de rempli
 function $nb_lines() {
     var i = 0;
     $('.compta_writings .writing_line_form').each(function (index) {
@@ -87,10 +89,13 @@ function remove_writing_line_form(link) {
     $check_submit();
 }
 
-// ajoute les champs pour une compta_line supplémentaire dans le formulaire
+// Les champs ayant été rajouté par la fonction helper link_to_add_fields,
+// la méthode add_fields remplace l'id du champ par un id unique basé sur le temps
 // voir railscasts#197
-// new_id est calculé sur le temps pour avoir un chiffre unique
-// perso, j'aurai plutôt compté les lignes mais je laisse comme ça
+// new_id est donc calculé sur le temps pour avoir un chiffre unique
+// perso, j'aurai plutôt compté les lignes mais je laisse comme ça.
+// Donc on calcule la valeur, l'expression régulièe et on remplace le nom de l'id
+// Puis on appelle $deal_icon_plus() qui gère l'icone plus de la ligne'
 function add_fields(link, association, content) {
     var new_id = new Date().getTime(), regexp = new RegExp("new_" + association, "g");
     $(link).parent().before(content.replace(regexp, new_id));

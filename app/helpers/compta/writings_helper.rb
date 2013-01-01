@@ -7,12 +7,16 @@ module Compta::WritingsHelper
 
 
 
-def link_to_add_fields(name, f)
-  fields = f.fields_for(:compta_lines, ComptaLine.new, :child_index => "new_compta_lines") do |builder|
-    render('compta_line_fields', :builder => builder)
+  # Cette méthode helper ajoute une ligne de saisie d'une ComptaLine. 
+  # l'index utilisé new_compta_lines sera remplacé par javascript en un autre identifiant lié au 
+  # temps.
+  # Voir le railscasts#197.
+  def link_to_add_fields(name, f)
+    fields = f.fields_for(:compta_lines, ComptaLine.new, :child_index => "new_compta_lines") do |builder|
+      render('compta_line_fields', :builder => builder)
+    end
+    link_to_function(name, "add_fields(this, 'compta_lines', \"#{escape_javascript(fields)}\")")
   end
-  link_to_function(name, "add_fields(this, 'compta_lines', \"#{escape_javascript(fields)}\")")
-end
 
 
 
