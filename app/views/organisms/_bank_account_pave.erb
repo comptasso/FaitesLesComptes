@@ -1,6 +1,6 @@
 
 <%= content_tag :div, :class=>"pave bank #{local_classes}"  do %>
-<h3>Compte <%= bank_account_pave.virtual.number %> = <%= number_to_currency bank_account_pave.sold_at(@date)  %>
+<h3><%= bank_account_pave.virtual.nickname %> = <%= number_to_currency bank_account_pave.sold_at(@date)  %>
  <%= icon_to 'detail.png', bank_account_bank_extracts_path( bank_account_pave.virtual) %>
 </h3>
 
