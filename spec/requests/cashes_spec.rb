@@ -17,7 +17,7 @@ describe "Cashes" do
     it "without a month params do a redirect" do
       visit cash_cash_lines_path(@c)
       
-      page.should have_content 'Exercice 2012'
+      page.should have_content "Exercice #{Date.today.year}"
       page.find('h3 li.active').should have_content(I18n.l(Date.today,format:'%b'))
     end
   end

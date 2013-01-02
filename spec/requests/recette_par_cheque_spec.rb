@@ -22,7 +22,7 @@ describe 'Recette par chèque' do
     @l2 = @w.compta_lines.new
 
     visit new_book_in_out_writing_path(@ib)
-    fill_in 'in_out_writing_date_picker', :with=>'01/04/2012'
+    fill_in 'in_out_writing_date_picker', :with=>I18n::l(Date.today, :foramt=>:date_picker)
     fill_in 'in_out_writing_narration', :with=>'Vente par chèque'
     select 'Vte Nourriture', :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
     fill_in 'in_out_writing_compta_lines_attributes_0_credit', with: 50.21

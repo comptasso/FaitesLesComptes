@@ -162,7 +162,9 @@ describe Period do
         @acc61 = @p_2011.accounts.find_by_number '60'
         @acc71 = @p_2011.accounts.find_by_number '701'
         @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc60.id)
-        @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id)
+        @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id, income_outcome:true)
+        
+        
         @ob= @o.books.find_by_type('OutcomeBook')
         @ib= @o.books.find_by_type('IncomeBook')
 
@@ -178,7 +180,7 @@ describe Period do
       }
     })
 
-        [@l6, @l7].each {|l| l.lock}
+        [@l6, @l7].each {|l| l.lock} 
         
      end
 

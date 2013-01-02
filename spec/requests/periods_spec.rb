@@ -9,7 +9,7 @@ describe "Periods" do
   before(:each) do 
     create_user
     create_minimal_organism
-    sd=@p.close_date + 1
+    sd = @p.close_date + 1
     cd = ((@p.close_date) +1).end_of_year
     @next_period = @o.periods.create!(:start_date=>sd, :close_date=>cd)
     @o.should have(2).periods
@@ -24,9 +24,9 @@ describe "Periods" do
     it 'change period' do
    
       visit organism_path(@o)
-      page.find('.brand').should have_content 'Exercice 2013'
+      page.find('.brand').should have_content "Exercice #{(Date.today.year) + 1}"
       visit change_organism_period_path(@o, @p)
-      page.find('.brand').should have_content 'Exercice 2012'
+      page.find('.brand').should have_content "Exercice #{Date.today.year}"
     end
   
 end

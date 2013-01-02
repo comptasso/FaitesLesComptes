@@ -12,6 +12,7 @@ fr:
       month: "%B"
       picker: "%d %m %Y"
       short_month_year: "%b %Y"
+      date_picker: "%d/%m/%Y"
 
     day_names:
       - dimanche

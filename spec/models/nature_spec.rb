@@ -1,7 +1,7 @@
 # coding: utf-8
 
 RSpec.configure do |c|
-  c.filter = {wip:true}
+  # c.filter = {wip:true}
 end
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
@@ -64,7 +64,7 @@ describe Nature do
 
         it 'une nature ne peut être rattachée qu à des comptes de classe 6 ou 7' , wip:true do
           @a = Account.where('number LIKE ?', '1%').first
-          puts @a.inspect
+         #  puts @a.inspect
           @n.account_id = @a.id
           @n.should_not be_valid
         end

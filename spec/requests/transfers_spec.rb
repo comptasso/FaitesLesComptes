@@ -39,7 +39,7 @@ describe 'vue transfer index'do
 
     it 'remplir correctement le formulaire crée un nouveau transfert' do
       visit new_transfer_path
-      fill_in 'transfer[date_picker]', :with=>'14/04/2012'
+      fill_in 'transfer[date_picker]', :with=>I18n::l(Date.today, :format=>:date_picker)
       fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
       within('#transfer_compta_lines_attributes_0_account_id') do
@@ -61,7 +61,7 @@ describe 'vue transfer index'do
 
       before(:each) do
       visit new_transfer_path
-      fill_in 'transfer[date_picker]', :with=>'14/04/2012'
+      fill_in 'transfer[date_picker]', :with=>I18n::l(Date.today, :format=>:date_picker)
       fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
       

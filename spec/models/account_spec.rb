@@ -180,7 +180,7 @@ describe Account do
 
     before(:each) do
       @account = Account.new(valid_attributes)
-      puts @account.errors.messages unless @account.valid?
+      # puts @account.errors.messages unless @account.valid?
     end
   
     it "should be valid"  do

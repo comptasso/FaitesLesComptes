@@ -78,8 +78,8 @@ describe Nomenclature do
     it 'check_validity renvoie les erreurs trouvées par Compta::Nomenclature' do
       @nome = @o.nomenclature(true)
       @nome.send(:check_validity)
-      @nome.errors[:resultat].should ==["Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 709 pour Exercice 2012"]
- #{Date.today.year}"]
+      @nome.errors[:resultat].should ==["Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 709 pour Exercice #{Date.today.year}"]
+ 
     end
 
 

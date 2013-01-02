@@ -47,10 +47,11 @@ describe CheckDeposit do
 
   describe "création d'une remise de chèque"  do
     it "save the right date" do
-      cd = @ba.check_deposits.new deposit_date_picker: '01/04/2012'
+      d = @p.start_date.months_since(4)
+      cd = @ba.check_deposits.new deposit_date_picker:I18n::l(d, :format=>:date_picker)
       cd.pick_all_checks
       cd.save!
-      cd.deposit_date.should == Date.civil(2012,4,1)
+      cd.deposit_date.should == d
     end
 
     describe 'creation d une écriture'  do

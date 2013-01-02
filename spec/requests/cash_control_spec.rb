@@ -32,7 +32,7 @@ describe 'Cash Control Requests' do
 
     it 'remplir correctement le formulaire cree une nouvelle ligne' do
 
-      fill_in 'cash_control[date_picker]', :with=> '05/05/2012'
+      fill_in 'cash_control[date_picker]', :with=> I18n::l(Date.today, :format=>:date_picker)
       fill_in 'cash_control[amount]', :with=>20.52
       click_button "Enregistrer"
       current_url.should match cash_cash_controls_path(@c)  
@@ -43,7 +43,7 @@ describe 'Cash Control Requests' do
     context 'remplir incorrectement le formulaire' , wip:true do
 
       it 'test amount' do
-        fill_in 'cash_control[date_picker]', :with=> '01/01/2012'
+        fill_in 'cash_control[date_picker]', :with=> I18n::l(Date.today, :format=>:date_picker)
         fill_in 'cash_control[amount]', :with=>-20.52
         click_button "Enregistrer"
         page.should have_content('doit être positif ou nul')
@@ -69,7 +69,7 @@ describe 'Cash Control Requests' do
      @cc = @c.cash_controls.first
    end
 
-    it 'on peut le choisir dans la vue index pour le modifier', :wip=>true do
+    it 'on peut le choisir dans la vue index pour le modifier' do
       @c.should have(1).cash_controls
       visit cash_cash_controls_path(@c)  
       click_link "icon_modifier_cash_control_#{@cc.id.to_s}"

@@ -9,7 +9,7 @@ RSpec.configure do |config|
 
 end
  
-describe Utilities::MonthlyInOutExtract do
+describe Utilities::MonthlyInOutExtract do 
   include OrganismFixture
   before(:each) do
     create_minimal_organism
@@ -39,7 +39,7 @@ describe Utilities::MonthlyInOutExtract do
       end
 
       # création du MonthlyInOutExtract puor le mois de février
-      @extract = Utilities::MonthlyInOutExtract.new(@ob, year:2012, month:2)
+      @extract = Utilities::MonthlyInOutExtract.new(@ob, year:Date.today.year, month:2)
 
     end
 
@@ -55,10 +55,7 @@ describe Utilities::MonthlyInOutExtract do
       @extract.lines.count.should == 10
     end
 
-
-
-    it "knows the total debit", wip:true do
-       
+    it "knows the total debit" do
        @extract.total_debit.should == 20
     end
 

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
 #  c.filter = {wip:true}
@@ -39,7 +39,7 @@ describe 'vue lines' do
   it 'remplir correctement le formulaire crée une nouvelle ligne' do 
     visit new_book_in_out_writing_path(@ob)
    
-    fill_in 'in_out_writing_date_picker', :with=>'01/04/2012'
+    fill_in 'in_out_writing_date_picker', :with=>I18n::l(Date.today, :format=>:date_picker)
     fill_in 'in_out_writing_narration', :with=>'Ecriture test'
     select 'Essai', :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
     fill_in 'in_out_writing_compta_lines_attributes_0_debit', with: 50.21
@@ -52,7 +52,7 @@ describe 'vue lines' do
 
     it 'remplir avec une mauvaise date doit réafficher le formulaire sans enregistrer la ligne' do
       visit new_book_in_out_writing_path(@ob)
-    fill_in 'in_out_writing_date_picker', :with=>'31/04/2012'
+    
     fill_in 'in_out_writing_date_picker', :with=>'01/04/2012'
     fill_in 'in_out_writing_narration', :with=>'Ecriture test'
     select 'Essai', :for=>'in_out_writing_compta_lines_attributes_0_nature_id'

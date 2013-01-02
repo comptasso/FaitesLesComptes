@@ -12,7 +12,7 @@ describe CashControl do
   include OrganismFixture 
 
   before(:each) do
-    create_minimal_organism
+    create_minimal_organism 
     @cash_control = @c.cash_controls.new(date: Date.today, amount: 123.45)
   end
 
@@ -167,8 +167,8 @@ describe CashControl do
       end
 
       it 'a new cash_control also knows the previous one' do
-        previous_cash_control = @c.cash_controls.create!(date: Date.today - 2.day, amount: 1)
-        @c.cash_controls.new(date: Date.today - 1.day).previous.should == previous_cash_control
+        @c.cash_controls.new(date:Date.today).previous.should == @cash_control
+        
       end
 
       it 'if it has a date, nil otherwise' do
