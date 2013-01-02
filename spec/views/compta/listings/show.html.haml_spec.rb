@@ -23,14 +23,15 @@ describe 'compta/listings/show' do
 
     p.stub(:accounts).and_return as
     ar.stub(:listing).and_return ar
-    a.stub(:cumulated_at).with((p.start_date) - 1, :debit).and_return 5
-    a.stub(:cumulated_at).with((p.start_date) - 1, :credit).and_return 0
-    a.stub(:movement).with(p.start_date, p.close_date, 'debit').and_return 100
-    a.stub(:movement).with(p.start_date, p.close_date, 'credit').and_return 0
-    a.stub(:cumulated_at).with(p.close_date, :debit).and_return 105
-    a.stub(:cumulated_at).with(p.close_date, :credit).and_return 0
+    l.stub(:cumulated_debit_before).with(p.start_date).and_return 5
+    l.stub(:cumulated_credit_before).with(p.start_date).and_return 0
+    l.stub(:sold_before).with(p.start_date).and_return -5
+    l.stub(:total_debit).and_return 105
+    l.stub(:total_credit).and_return 0
+    l.stub(:cumulated_debit_at).with(p.close_date).and_return 105
+    l.stub(:cumulated_credit_at).with(p.close_date).and_return 0
     assign(:listing, l)
-    assign(:period, p) 
+    assign(:period, p)
   end
  
   it 'should render' do
@@ -48,7 +49,7 @@ describe 'compta/listings/show' do
     end
 
     it 'avec les dates demandées' do
-      page.find('.champ > h3').should have_content('Du 1er janvier 2012 au 31 décembre 2012')
+      page.find('.champ > h3').should have_content("Du 1er janvier #{Date.today.year} au 31 décembre #{Date.today.year}")
     end
   end
 end

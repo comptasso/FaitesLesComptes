@@ -41,6 +41,7 @@ module Compta
   validates :from_date, :to_date, date_within_period:true
   validates :from_date, :to_date, :account_id, :presence=>true
 
+  # donne le cumul du débit ou du crédit (sens) à une date donnée
   delegate :cumulated_at, :to=>:account
 
 
@@ -48,13 +49,6 @@ module Compta
     self.from_date ||= period.start_date
     self.to_date ||= period.close_date
     self
-  end
-
-  # donne le cumul du débit ou du crédit (sens) à une date donnée
-  #
-  # nécessaire pour obtenir toutes les méthodes définies par le module Utilities::Sold
-  def cumulated_at(date, sens)
-    account.cumulated_at(date, sens)
   end
 
   def solde_debit_avant
