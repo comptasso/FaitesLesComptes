@@ -37,6 +37,16 @@ require 'list_months'
 # OK la date de cloture doit forcément être postérieure à la date d'ouverture
 #
 #
+# Period est l'élément central de la comptabilité. Il appartient à Organisme
+# et par ce biais a accès aux livres, aux caisses et aux banques.
+#
+# Par ailleurs Period possède les comptes comptable et les natures qui servent à
+# classer les écritures pour les productions des documents comptables.
+#
+# La méthode has_many :used_accounts est utilisée uniquement pour limiter
+# la liste des comptes qui sont affichés dans la partie Compta->Journaux->Ecrire.
+# .
+#
 class Period < ActiveRecord::Base
 
   include Utilities::JcGraphic
@@ -67,8 +77,9 @@ class Period < ActiveRecord::Base
   has_many :books, :through=>:organism
 
   has_many :accounts, :dependent=>:destroy
+  has_many :used_accounts, class_name:'Account', :conditions=>{:used=>true}
   has_many :natures,  :dependent=>:destroy
-  has_many :compta_lines, :through=>:accounts
+  has_many :compta_lines, :through=>:accounts 
   has_one :balance, :class_name=>'Compta::Balance'
   has_one :listing, :class_name=>'Compta::Listing'
 

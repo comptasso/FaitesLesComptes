@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-  # c.filter = {wip:true}
+   c.filter = {wip:true}
 end
 
 describe Period do
@@ -204,6 +204,19 @@ describe Period do
 
     end
   end
+
+  describe 'used_accounts', wip:true do
+
+    it 'used_accounts ne prend que les comptes actifs' do
+      n = @p_2011.accounts.count
+      n.should == @p_2011.used_accounts.size
+      expect {@p_2011.accounts.first.update_attribute(:used, false)}.to change {@p_2011.used_accounts.count}.by(-1)
+    end
+
+
+  end
+
+
   # result est un module qui est destiné à produire les résultats mensuels d'un exercice
   # c'est aussi ce module qui permet de produire les graphiques résultats
   describe "resultat" do
