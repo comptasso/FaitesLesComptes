@@ -31,7 +31,7 @@ class Nomenclature < ActiveRecord::Base
   validate :check_validity
 
   def instructions
-    {:actif=>actif, :passif=>passif, :resultat=>resultat} 
+    {:actif=>actif, :passif=>passif, :resultat=>resultat, :benevolat=>benevolat}
   end
 
   def load_file(file)
