@@ -35,7 +35,7 @@ class Room < ActiveRecord::Base
     if Rails.env == 'test'
       File.join(Rails.root, 'db', Rails.env, 'organisms')
     elsif ENV['OCRA_EXECUTABLE']
-      File.join(ENV['OCRA_EXECUTABLE'], '..', 'db', 'Rails.env', 'organisms')
+      File.join(ENV['OCRA_EXECUTABLE'], '..', 'db', Rails.env, 'organisms')
     else
       File.join(Rails.root, '..', 'db', Rails.env, 'organisms')
     end
