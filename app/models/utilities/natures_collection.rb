@@ -7,8 +7,8 @@
 # et le sens sous forme de symbole :recettes ou depenses
 #
 class Utilities::NaturesCollection
-  def initialize(org, sens)
-    @org = org
+  def initialize(period, sens)
+    @period = period
     @sens = sens
   end
 
@@ -18,8 +18,8 @@ class Utilities::NaturesCollection
 
   def natures
     case @sens
-    when :recettes then @org.natures.recettes
-    when :depenses then @org.natures.depenses
+    when :recettes then @period.natures.recettes
+    when :depenses then @period.natures.depenses
     end
     
   end

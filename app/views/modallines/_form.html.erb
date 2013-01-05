@@ -17,7 +17,7 @@
     <%= f.input :ref, label:'Référence',  input_html: {class: "span4" }  %>
   <%= f.fields_for :compta_lines, @line do |build| %>
     <%= build.association :nature ,
-              :collection => [Utilities::NaturesCollection.new(@organism, :recettes), Utilities::NaturesCollection.new(@organism, :depenses)],
+              :collection => [Utilities::NaturesCollection.new(@period, :recettes), Utilities::NaturesCollection.new(@period, :depenses)],
               :as => :grouped_select, :group_method=>:natures,
               :required=>true, input_html: {class: "span6 " } %>
      <%=  build.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
