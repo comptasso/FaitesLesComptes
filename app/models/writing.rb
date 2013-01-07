@@ -20,7 +20,7 @@ class Writing < ActiveRecord::Base
 
   validates :book_id, :narration, :date, presence:true
   validates :date, :must_belong_to_period=>true
-  validates :compta_lines, :nature_coherent_with_date=>true
+  validates :compta_lines, :nature_coherent_with_date=>true, :account_coherent_with_date=>true
   validates :compta_lines, :two_compta_lines_minimum=>true
   validate :balanced?
   validate :period_start_date, :if=> lambda {book.type == 'AnBook'}

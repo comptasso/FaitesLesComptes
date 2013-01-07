@@ -2,7 +2,7 @@
 
 class ComptaLine < ActiveRecord::Base
 
-  belongs_to :book
+ # belongs_to :book
   belongs_to :destination
   belongs_to :nature
   belongs_to :account

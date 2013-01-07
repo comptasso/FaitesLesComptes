@@ -53,11 +53,18 @@ describe InOutWriting do
     end
 
     it 'une compta line ne peut avoir qu un compte appartenant à l exercice' do
-      pending
-      c2 = @p2.recettes_accounts.first
-      va = valid_attributes
-      va[:compta_lines_attributes]['0'][:account_id] = c2.id
-      Writing.new(va).should_not be_valid
+      invalid = valid_attributes
+      invalid[:compta_lines_attributes]['0'][:account_id] = @p2.recettes_accounts.first.id
+      w = Writing.new(invalid)
+      w.valid?
+      errors = 0
+      w.compta_lines.each do |cl|
+         if cl.errors.any?
+           puts cl.errors.messages
+           errors += 1
+         end
+      end
+      errors.should == 1
     end
 
     end
