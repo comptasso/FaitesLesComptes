@@ -18,7 +18,7 @@ class AccountCoherentWithDateValidator < ActiveModel::EachValidator
         
 
         record.compta_lines.each do |cl|
-          record.errors[:date] << "Le compte n'est pas de cet exercice" if (cl.account && (cl.account.period != p))
+          record.errors[:date] << "Un compte n'est pas de cet exercice" if (cl.account && (cl.account.period != p))
         end
 
       end

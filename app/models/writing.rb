@@ -1,10 +1,25 @@
 # coding: utf-8
 
 # Writing représente des écritures dans la comptabilité
-# Writing a des compta_lines :un modèle basé sur la même table que Line
-# mais avec des validations différentes.
 #
-# 
+# Writing enregistre les informations communes à une écriture telle que la date
+# le book, la référence, le libellé.
+#
+# Writing a des compta_lines qui enregistre les informations spécifiques aux lignes
+# comptables, à savoir, le numéro de compte, le montant débit ou crédit.
+#
+# Comme une écriture est indissociable de ses compta_lines, on utilise accept_nested_attributes.
+#
+# Une écriture doit bien sur être équilibrée (balanced?).
+#
+# Trois scope viennent faciliter l'usage du modèle :
+# - period pour filter sur l'exercice
+# - mois pour filtrer sur un mois donné (on utilise une date quelconque comme paramètre)
+# - unlocked pour identifier toutes les écritures qui ne sont pas verrouillées
+#   sachant que le verrou (locked) est placé sur chaque compta_lines
+#
+# Chaque écriture de recettes ou de dépenses a pour contrepartie une compta_line
+# de classe 5 (soit un compte bancaire, soit une caisse). Cette ligne est appelée support_line.
 #
 class Writing < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
@@ -14,15 +29,17 @@ class Writing < ActiveRecord::Base
   belongs_to :book
  
   has_many :compta_lines, :dependent=>:destroy
-  alias children compta_lines
+  alias children compta_lines 
   
   
 
   validates :book_id, :narration, :date, presence:true
   validates :date, :must_belong_to_period=>true
-  validates :compta_lines, :nature_coherent_with_date=>true, :account_coherent_with_date=>true
-  validates :compta_lines, :two_compta_lines_minimum=>true
+  validates :compta_lines, :nature_coherent_with_date=>true, :account_coherent_with_date=>true, :two_compta_lines_minimum=>true
+  
   validate :balanced?
+  # les écritures dans le livre de report à nouveau doivent avoir le premier jour
+  # de l'exercice comme date
   validate :period_start_date, :if=> lambda {book.type == 'AnBook'}
   
 
@@ -80,7 +97,7 @@ class Writing < ActiveRecord::Base
   # lock verrouille toutes les lignes de l'écriture
   def lock
     Writing.transaction do
-      compta_lines.all.each do |cl|
+      compta_lines.each do |cl|
         unless cl.locked?
           cl.update_attribute(:locked, true)
         end
@@ -88,12 +105,15 @@ class Writing < ActiveRecord::Base
     end
   end
 
+  # Une écriture est verrouillée dès lors qu'une seule de ses lignes l'est
   def locked?
-    compta_lines.all.select {|cl| cl.locked?}.any?
+    compta_lines.where('locked = ?', true).any?
   end
 
   protected
 
+  # méthode de validation utilisée pour vérifier que les écritures sur le 
+  # journal d'A Nouveau sont passées au premier jour de l'exercice
   def period_start_date
     p = book.organism.find_period(date)
     if date != p.start_date
