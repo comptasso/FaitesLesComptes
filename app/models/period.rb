@@ -278,6 +278,7 @@ class Period < ActiveRecord::Base
     accounts.where('number = ?', REM_CHECK_ACCOUNT[:number])
   end
 
+  # renvoie un array de tous les comptes de classe 7
   def recettes_accounts
     accounts.classe_7.all
   end
@@ -292,15 +293,17 @@ class Period < ActiveRecord::Base
   end
 
 
-
+  # renvoie un array de tous les comptes de classe 6
   def depenses_accounts
     accounts.classe_6.all 
   end
 
+  # renvoie un array de toutes les natures de type recettes
   def recettes_natures
     natures.recettes.all
   end
 
+  # renvoie un array de toutes les natures de types dépenses
   def depenses_natures
     natures.depenses.all
   end
