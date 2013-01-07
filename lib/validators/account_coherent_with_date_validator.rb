@@ -18,9 +18,7 @@ class AccountCoherentWithDateValidator < ActiveModel::EachValidator
         
 
         record.compta_lines.each do |cl|
-#          puts "Nature #{cl.nature.id} de la périod #{cl.nature.period.id} alors que l'on veut #{p.id}" if cl.nature
-#          puts 'je détecte une erreur' if (cl.nature && (cl.nature.period != p))
-          cl.errors[:account] << "Compte n'est pas de cet exercice" if (cl.account && (cl.account.period != p))
+          record.errors[:date] << "Le compte n'est pas de cet exercice" if (cl.account && (cl.account.period != p))
         end
 
       end

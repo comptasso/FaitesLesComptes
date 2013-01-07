@@ -6,11 +6,9 @@ class ComptaLine < ActiveRecord::Base
   belongs_to :destination
   belongs_to :nature
   belongs_to :account
-  belongs_to :counter_account, :class_name=>'Account'
-  belongs_to :bank_extract
+  # belongs_to :bank_extract
   belongs_to :check_deposit
-  belongs_to :bank_account
-
+  
   # les lignes appartiennent à un writing
   belongs_to :writing
   has_and_belongs_to_many :bank_extract_lines,
@@ -19,17 +17,18 @@ class ComptaLine < ActiveRecord::Base
     :uniq=>true # pour les rapprochements bancaires
 
   # voir au besoin les validators qui sont dans lib/validators
-  validates :debit, :credit, numericality: true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
-#  validates :book_id, presence:true
-#  validates :line_date, presence: true
-#  validates :line_date, must_belong_to_period: true
+  # du fait du before_validate, les champs debit et credit sont toujours remplis
+  # mais on laisse presence:true, ne serait-ce que parce que cela permet d'avoir l'*
+  # dans le formulaire
+  validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
+
   validates :nature_id, presence: true, :unless => lambda { self.account_id || self.account }
-#  validates :narration, presence: true
-  validates :debit, :credit, :not_null_amounts=>true, :not_both_amounts=>true
-  validates :credit, presence: true # du fait du before validate, ces deux champs sont toujours remplis
-  validates :debit, presence: true # ces validates n'ont pour objet que de mettre un * dans le formulaire
+  validates :nature_id, :account_id, :belongs_to_period=>true
+  
+ 
   # TODO faire les tests
   validates :nature_id, :destination_id, :debit, :credit, :created_at, :payment_mode, :cant_edit_if_locked=>true
+  
 
   before_save  :fill_account, :if=> lambda {nature && nature.account}
   before_destroy :not_locked
