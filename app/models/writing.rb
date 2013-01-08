@@ -66,7 +66,7 @@ class Writing < ActiveRecord::Base
 
   # trouve l'exercice correspondant à la date de l'écriture
   def period
-    book.organism.find_period(date) rescue nil
+    book.organism.find_period(date) rescue nil 
   end
 
   # support renvoie le long_name du compte de la première ligne

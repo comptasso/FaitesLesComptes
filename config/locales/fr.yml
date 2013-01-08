@@ -195,6 +195,8 @@ fr:
     back: 'Retour'
     number: Numéro
     test: testing
+    nature: Nature
+    account: Compte
 
 
   activerecord:
@@ -277,7 +279,7 @@ fr:
         writing:
           attributes:
             date:
-              incoherent: Incohérent
+              incoherent: Incohérent avec %{field}
  
   helpers:
     select:
