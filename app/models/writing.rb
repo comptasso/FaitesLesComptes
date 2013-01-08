@@ -34,8 +34,8 @@ class Writing < ActiveRecord::Base
   
 
   validates :book_id, :narration, :date, presence:true
-  validates :date, :must_belong_to_period=>true
-  validates :compta_lines, :nature_coherent_with_date=>true, :account_coherent_with_date=>true, :two_compta_lines_minimum=>true
+  validates :date, :must_belong_to_period=>true, :period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]}
+  validates :compta_lines, :two_compta_lines_minimum=>true
   
   validate :balanced?
   # les écritures dans le livre de report à nouveau doivent avoir le premier jour
@@ -62,6 +62,11 @@ class Writing < ActiveRecord::Base
   # la méthode utilisée permet de neutraliser les nil éventuels
   def total_credit
     compta_lines.inject(0) {|tot, cl| cl.credit ? tot + cl.credit  : tot}
+  end
+
+  # trouve l'exercice correspondant à la date de l'écriture
+  def period
+    book.organism.find_period(date) rescue nil
   end
 
   # support renvoie le long_name du compte de la première ligne

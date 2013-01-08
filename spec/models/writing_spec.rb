@@ -7,15 +7,15 @@ RSpec.configure do |config|
 end
 
 describe Writing do
-  include OrganismFixture
+  include OrganismFixture 
 
   describe 'with stub models' do
 
   before(:each) do 
-    @o = mock_model(Organism)
+    @o = mock_model(Organism) 
     @p = mock_model(Period)
     @b = mock_model(Book, :organism=>@o, :type=>'IncomeBook')
-    @o.stub(:find_period).with(Date.today).and_return @p
+    @o.stub(:find_period).and_return @p
     Writing.any_instance.stub_chain(:compta_lines, :size).and_return 2
     Writing.any_instance.stub(:complete_lines).and_return true
   end

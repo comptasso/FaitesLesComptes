@@ -274,6 +274,10 @@ fr:
           attributes:
             status:
               inclusion: Statut '%{value}' non accepté
+        writing:
+          attributes:
+            date:
+              incoherent: Incohérent
  
   helpers:
     select:
