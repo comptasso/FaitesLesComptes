@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe 'PeriodCoherentValidator' do 
 
-  let(:p) {stub_model(Period)}
+  let(:p) {stub_model(Period)} 
   let(:n) {mock_model(Nature, period:p)}
   let(:a1) {stub_model(Account, period:p)}
   let(:a2) {stub_model(Account, period:p)}

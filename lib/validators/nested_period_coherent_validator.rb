@@ -18,11 +18,12 @@
 # Le modèle doit répondre à Period avec value comme argument; en l'occurence, sur l'exemple
 # donné, writing doit répondre à period.
 #
-class PeriodCoherentValidator < ActiveModel::EachValidator
+class NestedPeriodCoherentValidator < ActiveModel::EachValidator
 
   # pour lire l'option
   def initialize(options)
-    @fields = options[:with]
+    @nested = options[:nested]
+    @fields = options[:fields]
     super
   end
 
@@ -31,26 +32,31 @@ class PeriodCoherentValidator < ActiveModel::EachValidator
   # la méthode check_field
   #
   def validate_each(record, attribute, value)
-      period = find_period(record, value) 
+      period = find_period(record)
       # flatten pour pouvoir accepter dans l'option :fields un seul élément ou un Array
-     [@fields].flatten.each do |field|
-       other_value = record.send(field)
-       other_period = find_period(record, other_value)
-       record.errors.add(attribute, :incoherent, :field=>I18n.t('general.'+ field.to_s)) unless same_period(period, other_period)
-     end
-    
+     [@fields].flatten.each {|field| check_field(period, record, attribute, field)} if value
+     # le test ne s'effectue que s'il y a une valeur; utiliser presence:true pour contraindre à la
+     # présence de cette valeur
   end
 
+  # check_field vérifie et ajoute une erreur pour chacun des nested_attributes.
+  #
+  # Par exemple pour compta_lines si le validator a été appelé avec :nested=>:compta_lines
+  #
+  def check_field(period, record, attribute, field)
+    
+    raise "#{record} ne répond pas à #{@nested}" unless record.respond_to?(@nested)
+    record.send(@nested).each do |cl|
+      cl_field = cl.send(field)
+      record.errors.add(attribute, :incoherent, :field=>I18n.t('general.'+ field.to_s)) if (cl_field && (cl_field.period.id != period.id))
+    end
+  end
 
   protected
 
-  def same_period(p1, p2)
-    p1.id == p2.id rescue false
-  end
-
-  def find_period(record, value)
+  def find_period(record)
     raise 'Le modèle doit répondre à la méthode period' unless record.respond_to?(:period)
-    record.period(value)
+    record.period 
   end
 
 

@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
- #  c.filter = {:wip=> true }
+  # c.filter = {:wip=> true }
 end
 
 describe BankExtract do  
@@ -25,8 +25,8 @@ describe BankExtract do
   end
 
   describe 'date_pickers' do
-    it 'begin_date_picker' do
-      @be2.begin_date_picker.should == I18n.l(@be2.begin_date)
+    it 'begin_date_picker'  do
+      @be2.begin_date_picker.should == I18n.l(@be2.begin_date) 
     end
 
     it 'end_date_picker' do
@@ -41,8 +41,10 @@ describe BankExtract do
     it 'invalid model if date not acceptable' do
       @be2.begin_date_picker = 'bonjour'
       @be2.valid?
-      @be2.should have(1).errors_on(:begin_date_picker)
-      @be2.errors[:begin_date_picker].should ==  ['obligatoire']
+      puts @be2.errors.messages
+      @be2.should have(2).errors_on(:begin_date_picker)
+      
+      @be2.errors[:begin_date_picker].should ==  ['obligatoire', 'Incohérent avec date de fin']
     end
   end
 
@@ -93,7 +95,7 @@ describe BankExtract do
       @precedent_period = @o.periods.create!(start_date:Date.today.years_ago(1).beginning_of_year, close_date:Date.today.years_ago(1).end_of_year)
       @be.begin_date = @precedent_period.close_date
       @be.should_not be_valid
-      @be.should have(4).errors  # 2 erreurs pour begin_date et end_date plus autant pour les date_picker
+      @be.should have(2).errors  # 1 erreurs pour begin_date  et autant pour les date_picker
     end
 
     it 'end_sold doit être présent' do

@@ -197,6 +197,8 @@ fr:
     test: testing
     nature: Nature
     account: Compte
+    end_date: date de fin
+    begin_date: date de début
 
 
   activerecord:
@@ -263,6 +265,7 @@ fr:
         not_a_number: 'doit être un nombre'
         not_a_date: 'doit être une date'
         two_decimals: 'Deux décimales'
+        incoherent: Incohérent avec %{field}
       models:
         cash_control:
           attributes:

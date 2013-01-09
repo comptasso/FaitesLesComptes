@@ -24,7 +24,7 @@
 class Writing < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
-  pick_date_for :date
+  pick_date_for :date 
 
   belongs_to :book
  
@@ -34,7 +34,7 @@ class Writing < ActiveRecord::Base
   
 
   validates :book_id, :narration, :date, presence:true
-  validates :date, :must_belong_to_period=>true, :period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]}
+  validates :date, :must_belong_to_period=>true, :nested_period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]}
   validates :compta_lines, :two_compta_lines_minimum=>true
   
   validate :balanced?
