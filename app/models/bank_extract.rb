@@ -9,11 +9,11 @@ class BankExtract < ActiveRecord::Base
   
   validates :begin_sold, :total_debit, :total_credit,:presence=>true, :numericality=>true, :two_decimals => true
     # :format=>{with:/(^\d+(\.\d{0,2})?$|^\.\d{0,2}$)/}
-  validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date , :cant_edit_if_locked=>true
+  validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date , :cant_edit=>true, :if=>Proc.new {|r| r.locked?}
 
   validates :begin_date, :end_date, :presence=>true  
   validates :begin_date, :end_date, :within_period=>true
- # validates :begin_date, :end_date, :same_period=>true
+ 
 
  # TODO voir si on remet ce after_create
  # after_create :fill_bank_extract_lines
@@ -81,11 +81,11 @@ class BankExtract < ActiveRecord::Base
   end
 
   def lines_sold
-    self.total_lines_credit - self.total_lines_debit
+    total_lines_credit - total_lines_debit
   end
 
   def diff_sold
-    self.begin_sold + self.lines_sold - self.end_sold
+    begin_sold + lines_sold - end_sold
   end
 
   def status

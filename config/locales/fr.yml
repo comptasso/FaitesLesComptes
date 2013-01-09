@@ -269,6 +269,8 @@ fr:
         invalid_date: Date invalide
         out_limits: '%{attribute} hors limite'
         no_period: Pas d'exercice
+        no_modif: '%{attribute} non modifiable'
+        locked: Record verrouillé
       models:
         cash_control:
           attributes:

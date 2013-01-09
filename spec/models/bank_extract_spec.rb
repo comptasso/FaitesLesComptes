@@ -41,7 +41,7 @@ describe BankExtract do
     it 'invalid model if date not acceptable' do
       @be2.begin_date_picker = 'bonjour'
       @be2.valid?
-      puts @be2.errors.messages
+     #  puts @be2.errors.messages
       @be2.should have(2).errors_on(:begin_date_picker) 
       
       @be2.errors[:begin_date_picker].should ==  ['obligatoire', 'Date invalide']

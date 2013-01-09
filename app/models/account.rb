@@ -40,7 +40,7 @@ class Account < ActiveRecord::Base
 
   # la validator cant_change est dans le répertoire lib/validators
   validates :period_id, :title, :presence=>true
-  validates :number, :presence=>true, :format=>{:with=>/\A[1-9]{1}[0-9]{1}[A-Z0-9]{0,8}\Z/}, :cant_change=>true
+  validates :number, :presence=>true, :format=>{:with=>/\A[1-9]{1}[0-9]{1}[A-Z0-9]{0,8}\Z/}, :cant_change=>true 
   validates_uniqueness_of :number, :scope=>:period_id
 
   # TODO être sur que period est valide (par exemple on ne doit pas

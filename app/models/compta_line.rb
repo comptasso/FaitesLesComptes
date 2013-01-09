@@ -16,8 +16,6 @@ class ComptaLine < ActiveRecord::Base
     :foreign_key=>'line_id',
     :uniq=>true # pour les rapprochements bancaires
 
-  # voir au besoin les validators qui sont dans lib/validators
-  # du fait du before_validate, les champs debit et credit sont toujours remplis
   # mais on laisse presence:true, ne serait-ce que parce que cela permet d'avoir l'*
   # dans le formulaire
   validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
@@ -27,7 +25,7 @@ class ComptaLine < ActiveRecord::Base
   
  
   # TODO faire les tests
-  validates :nature_id, :destination_id, :debit, :credit, :created_at, :payment_mode, :cant_edit_if_locked=>true
+  validates :nature_id, :destination_id, :debit, :credit, :created_at, :payment_mode, :cant_edit=>true, :if=>Proc.new {|r| r.locked? }
   
 
   before_save  :fill_account, :if=> lambda {nature && nature.account}
