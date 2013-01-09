@@ -97,7 +97,7 @@ describe 'test des compta_lines' do
       @w.stub(:compta_lines).and_return([mock_model(ComptaLine, nature:mock_model(Nature, period:mock_model(Period)), account:mock_model(Account, period:@p)),
           mock_model(ComptaLine, nature:nil, account:mock_model(Account, period:@p))])
       @w.should_not be_valid
-      @w.errors[:date].should == ['Nature n\'est pas de cet exercice']
+      @w.errors[:date].should == ['Incohérent avec Nature']
     end
 
 
@@ -105,7 +105,7 @@ describe 'test des compta_lines' do
         @w.stub(:compta_lines).and_return([mock_model(ComptaLine, nature:mock_model(Nature, period:@p), account:mock_model(Account, period:mock_model(Period))),
           mock_model(ComptaLine, nature:nil, account:mock_model(Account, period:@p))])
       @w.should_not be_valid
-      @w.errors[:date].should == ['Un compte n\'est pas de cet exercice']
+      @w.errors[:date].should == ['Incohérent avec Compte']
       end
 
   end

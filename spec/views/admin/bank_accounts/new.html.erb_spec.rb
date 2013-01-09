@@ -23,8 +23,12 @@ describe 'admin/bank_accounts/new' do
       page.all('form').should have(1).element
     end
 
-    it "form should have field title" do
+    it "form should have field bank_name" do
       page.should have_css('form input[name="bank_account[bank_name]"]')
+    end
+
+    it 'with label * Banque' do
+      page.find('label:first').text().should == '* Banque' 
     end
 
     it "form should have field numero de compte" do
