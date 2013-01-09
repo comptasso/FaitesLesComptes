@@ -7,7 +7,7 @@ RSpec.configure do |c|
    # c.filter = {:wip=>true}
 end
 
-describe Compta::Balance do
+describe Compta::Balance do 
   include OrganismFixture
 
 

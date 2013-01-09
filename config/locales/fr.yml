@@ -266,6 +266,9 @@ fr:
         not_a_date: 'doit être une date'
         two_decimals: 'Deux décimales'
         incoherent: Incohérent avec %{field}
+        invalid_date: Date invalide
+        out_limits: '%{attribute} hors limite'
+        no_period: Pas d'exercice
       models:
         cash_control:
           attributes:

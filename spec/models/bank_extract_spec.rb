@@ -42,9 +42,9 @@ describe BankExtract do
       @be2.begin_date_picker = 'bonjour'
       @be2.valid?
       puts @be2.errors.messages
-      @be2.should have(2).errors_on(:begin_date_picker)
+      @be2.should have(2).errors_on(:begin_date_picker) 
       
-      @be2.errors[:begin_date_picker].should ==  ['obligatoire', 'Incohérent avec date de fin']
+      @be2.errors[:begin_date_picker].should ==  ['obligatoire', 'Date invalide']
     end
   end
 
@@ -82,7 +82,7 @@ describe BankExtract do
     end
 
     it 'la date de début doit être dans l\'exercice' do
-      @be.begin_date = @p.start_date - 1
+      @be.begin_date = @p.start_date - 1 
       @be.should_not be_valid
     end
 

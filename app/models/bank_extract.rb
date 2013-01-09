@@ -12,12 +12,12 @@ class BankExtract < ActiveRecord::Base
   validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date , :cant_edit_if_locked=>true
 
   validates :begin_date, :end_date, :presence=>true  
-  validates :begin_date, :period_coherent=>{:with=>:end_date}
+  validates :begin_date, :end_date, :within_period=>true
  # validates :begin_date, :end_date, :same_period=>true
 
  # TODO voir si on remet ce after_create
  # after_create :fill_bank_extract_lines
-  after_save :lock_lines_if_locked
+  after_save :lock_lines_if_locked 
 
  
   # TODO add a chrono validator
@@ -93,8 +93,8 @@ class BankExtract < ActiveRecord::Base
   end
 
   # retourne l'exercice correspondant à la date demandée, nil si pas trouvé
-  def period(date)
-    bank_account.organism.find_period(date) rescue nil
+  def period
+    bank_account.organism.find_period(begin_date) rescue nil
   end
 
   private

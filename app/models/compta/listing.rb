@@ -8,7 +8,8 @@ module Compta
 
 
   # la classe Listing sert à éditer un compte. Elle n'est pas persistente mais
-  # s'appuie sur ActiveRecord::Base pour avoir les associations
+  # s'appuie sur ActiveRecord::Base pour avoir les associations.
+  #
   # Ceci suppose d'avoir une définition des colonnes virtuelles
   # d'où les premières lignes de cette classe
   class Listing < ActiveRecord::Base
@@ -36,9 +37,9 @@ module Compta
   # utilisées par le input as:date_picker
    
 
-   # je mets date_within_period en premier car je préfère les affichages Dates invalide ou hors limite
+   # je mets within_period en premier car je préfère les affichages Dates invalide ou hors limite
  # que obligatoire (sachant que le form n'affiche que la première erreur).
-  validates :from_date, :to_date, date_within_period:true
+  validates :from_date, :to_date, within_period:true
   validates :from_date, :to_date, :account_id, :presence=>true
 
   # donne le cumul du débit ou du crédit (sens) à une date donnée
@@ -74,7 +75,7 @@ module Compta
 
   # permet notamment de contrôler les limites de date
   def period
-    account.period if account
+    account.period rescue nil
   end
 
   # utile pour le formulaire de saisie pour changer de compte
