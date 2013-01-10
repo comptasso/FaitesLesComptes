@@ -45,6 +45,10 @@ describe Organism do
       @organism.nomenclature[:actif].should be_a_instance_of(Hash)
     end
 
+    it 'should have version' do
+      @organism.version.should == VERSION
+    end
+
   end
 
   describe 'after create', wip:true do

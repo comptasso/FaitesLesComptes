@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121225203452) do
+ActiveRecord::Schema.define(:version => 20130110065905) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -110,7 +110,6 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
     t.boolean  "locked",                                          :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "bank_extract_id"
     t.string   "payment_mode"
     t.integer  "check_deposit_id"
     t.string   "check_number"
@@ -159,6 +158,7 @@ ActiveRecord::Schema.define(:version => 20121225203452) do
     t.datetime "updated_at"
     t.string   "database_name"
     t.string   "status"
+    t.string   "version"
   end
 
   create_table "periods", :force => true do |t|
