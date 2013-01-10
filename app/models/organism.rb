@@ -28,7 +28,14 @@
 #  de Résultats) est également stockée à la création. Mais contrairement au statut, on 
 #  peut modifier une nomenclature pour importer un autre type de fichier. Le but est 
 #  de pouvoir adapter les éditions au cas où on ajouterait des comptes non prévus dans
-#  la nomenclature fournie par défaut. 
+#  la nomenclature fournie par défaut.
+#
+#  Le champ version enregistre la version qui a été utilisée pour la création de
+#  l'organisme sur la base de la constante VERSION qui est dans le fichier
+#  config/initializers/constant.rb
+#
+#  A terme cela permettra d'introduire un controller pour faire les migrations des bases qui
+#  ne seraient pas à jour en terme de version.
 #
 #
 class Organism < ActiveRecord::Base
@@ -60,12 +67,10 @@ class Organism < ActiveRecord::Base
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
   has_many :transfers
 
-   
-
-  
+  before_validation :fill_version
   after_create :create_default
 
-  validates :title, :presence=>true
+  validates :title, :version, :presence=>true
   validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/^[a-z][0-9a-z]*$/, message:'format incorrect'}
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
 
@@ -194,6 +199,10 @@ class Organism < ActiveRecord::Base
  
   
   private
+
+  def fill_version
+    self.version = VERSION
+  end
 
   def fill_nomenclature 
     if status

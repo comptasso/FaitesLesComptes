@@ -45,7 +45,8 @@ describe Organism do
       @organism.nomenclature[:actif].should be_a_instance_of(Hash)
     end
 
-    it 'should have version' do
+    it 'before_validation remplit la version avec la constante VERSION' do
+      @organism.valid?
       @organism.version.should == VERSION
     end
 
