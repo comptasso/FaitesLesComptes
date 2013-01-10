@@ -34,7 +34,7 @@ class Writing < ActiveRecord::Base
   
 
   validates :book_id, :narration, :date, presence:true
-  validates :date, :within_period=>true, :nested_period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]}
+  validates :date, :within_period=>true, :nested_period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]} , :unless => 'date.nil?'
   validates :compta_lines, :two_compta_lines_minimum=>true
   
   validate :balanced?

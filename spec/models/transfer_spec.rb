@@ -7,13 +7,13 @@ RSpec.configure do |c|
 end
 
 describe Transfer  do
-  include OrganismFixture
+  include OrganismFixture  
 
   def valid_new_transfer
     t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id
     t.add_lines(112)
     t.compta_lines.first.account_id = @cba.id
-    t.compta_lines.last.account_id = @cbb.id
+    t.compta_lines.last.account_id = @cbb.id 
     t
   end
  

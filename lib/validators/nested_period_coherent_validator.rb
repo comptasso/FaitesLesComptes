@@ -46,9 +46,13 @@ class NestedPeriodCoherentValidator < ActiveModel::EachValidator
   def check_field(period, record, attribute, field)
     
     raise "#{record} ne répond pas à #{@nested}" unless record.respond_to?(@nested)
+    if period
     record.send(@nested).each do |cl|
       cl_field = cl.send(field)
       record.errors.add(attribute, :incoherent, :field=>I18n.t('general.'+ field.to_s)) if (cl_field && (cl_field.period.id != period.id))
+    end
+    else
+      record.errors.add(attribute, :no_period)
     end
   end
 

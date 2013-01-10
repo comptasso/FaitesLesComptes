@@ -4,12 +4,12 @@ require 'spec_helper'
 
 describe 'PeriodCoherentValidator' do 
 
-  let(:p) {stub_model(Period)} 
+  let(:p) {stub_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)}
   let(:n) {mock_model(Nature, period:p)}
   let(:a1) {stub_model(Account, period:p)}
   let(:a2) {stub_model(Account, period:p)}
   let(:b) {mock_model(Book, :type=>'IncomeBook')}
-
+ 
   before(:each) do
      @w = Writing.new(date:Date.today, narration:'test du validator', book:b)
      @w.compta_lines.new(nature:n, account:a1, debit:5)
@@ -22,10 +22,13 @@ describe 'PeriodCoherentValidator' do
   end
 
   it 'est invalide si la date correspond à un autre exercice que nature' do
-    @p2 = mock_model(Period)
+    next_year = p.close_date + 1
+    @p2 = mock_model(Period, start_date:next_year, close_date:next_year.end_of_year)
     @w.stub(:period).and_return(@p2)
     @w.should_not be_valid
-    @w.should have(3).errors_on(:date) # deux incohérences par lignes et 2 lignes
+    # puts @w.errors.messages
+    @w.should have(4).errors_on(:date) # une incohérence pour la date, une pour la
+    # nature et une pour chacun des comptes
   end
 
   it 'on ne change pas la date mais la nature ' do

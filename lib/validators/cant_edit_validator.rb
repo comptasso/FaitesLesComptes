@@ -5,6 +5,10 @@
 # 
 # cela permet par exemple d'écrire validates :line_date, :debit, :credit,... , :cant_edit_if_locked=>true
 # un warn est envoyé sur le log ce qui pourra permettre d'identifier des actions illogiques
+# 
+# Voir aussi CantChangeValidator pour les attributs qui sont destinés à ne jamais changer,
+# comme un numéro de compte.
+#
 class CantEditValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
      if record.changed_attributes[attribute.to_s] 

@@ -13,7 +13,7 @@ describe Writing do
 
   before(:each) do 
     @o = mock_model(Organism) 
-    @p = mock_model(Period)
+    @p = mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     @b = mock_model(Book, :organism=>@o, :type=>'IncomeBook')
     @o.stub(:find_period).and_return @p
     Writing.any_instance.stub_chain(:compta_lines, :size).and_return 2
@@ -33,11 +33,12 @@ describe Writing do
        Writing.any_instance.stub(:total_debit).and_return 10
        Writing.any_instance.stub(:book).and_return @b
        Writing.any_instance.stub_chain(:compta_lines, :each).and_return nil
+       Writing.any_instance.stub(:period).and_return @p
        
     end
 
     it 'champs obligatoires' do
-      @w = Writing.new(valid_parameters)
+      @w = Writing.new(valid_parameters) 
       @w.should be_valid
       [:narration, :date, :book_id].each do |field|
         f_eq = (field.to_s + '=').to_sym

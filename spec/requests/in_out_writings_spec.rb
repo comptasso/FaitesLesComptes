@@ -11,7 +11,7 @@ describe 'vue lines' do
    
   before(:each) do
     create_user 
-    create_minimal_organism
+    create_minimal_organism 
     login_as('quidam')
 
   end
