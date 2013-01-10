@@ -8,3 +8,4 @@ tmp/
 webrat.log
 doc/app/
 hello.pdf
+coverage

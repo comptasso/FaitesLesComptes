@@ -35,7 +35,7 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-
+gem 'simplecov', :require => false, :group => :test
 
 group :development, :test do
   # Pretty printed test output
@@ -47,6 +47,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'selenium-webdriver', '>= 2.22.0'
   gem 'capybara'
+
 #  gem 'jasmine'
   
   # gem 'database_cleaner'
