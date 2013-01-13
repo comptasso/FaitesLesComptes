@@ -25,43 +25,51 @@ Spork.prefork do
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
   RSpec.configure do |config|
-    # == Mock Framework
-    #
-    # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-    #
-    # config.mock_with :mocha
-    # config.mock_with :flexmock
-    # config.mock_with :rr
-    config.mock_with :rspec
-    config.use_transactional_fixtures = true
-end
-   
+config.mock_with :rspec
+config.use_transactional_fixtures = false
 
-end
+  config.before(:suite) do
+    DatabaseCleaner.clean_with :truncation
+  end
 
-Spork.each_run do
- # load "#{Rails.root}/app/models/transfer.rb"
- 
-end
+  config.before(:each) do
+    if example.metadata[:js]
+      DatabaseCleaner.strategy = :truncation
+    else
+      DatabaseCleaner.strategy = :transaction
+    end
+    DatabaseCleaner.start
+  end
 
-DatabaseCleaner.strategy = :truncation
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
 
 #ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
 #DatabaseCleaner.strategy = :truncation
 #
 ####
-RSpec.configure do |config|
-  config.use_transactional_fixtures = false
-  config.before :each do
-    DatabaseCleaner.start
-  end
-  config.after :each do
-    DatabaseCleaner.clean
-  end
+
 end
 
+#  RSpec.configure do |config|
+#    # == Mock Framework
+#    #
+#    # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
+#    #
+#    # config.mock_with :mocha
+#    # config.mock_with :flexmock
+#    # config.mock_with :rr
+#
+#    #  config.use_transactional_fixtures = true
+#end
+#
 
+end
 
+Spork.each_run do
+
+end
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.

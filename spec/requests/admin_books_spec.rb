@@ -19,7 +19,7 @@ describe 'vue books index' do
 
    before(:each) do
     create_user
-    create_minimal_organism
+    create_minimal_organism 
     login_as('quidam')
   end
     
@@ -59,12 +59,12 @@ describe 'vue books index' do
       @o.income_books.create!(:title=>'livre de test', :abbreviation=>'TE')
       @o.should have(5).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
-      visit admin_organism_books_path(@o) 
-      within 'tbody tr:nth-child(4)' do
+      visit admin_organism_books_path(@o)
+      # save_and_open_page
+      within 'tbody tr:nth-child(5)' do
         page.should have_content('livre de test') 
         page.click_link 'Supprimer'
       end
-      
       alert = page.driver.browser.switch_to.alert
       alert.accept 
       sleep 1

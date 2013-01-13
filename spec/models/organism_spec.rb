@@ -2,13 +2,16 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
   #  c.filter = {:js=> true }
-  # c.filter = {:wip=> true }
-    c.exclusion_filter = {:js=> true }
+  #  c.filter = {:wip=> true }
+  #  c.exclusion_filter = {:js=> true } 
 end
 
 describe Organism do
+  include OrganismFixture
+
+
   def valid_attributes
     {:title =>'Test ASSO',
       database_name:'testasso1',
@@ -96,7 +99,7 @@ describe Organism do
  context 'when there is one period'  do 
 
     before(:each) do
-      
+      clean_test_base 
       @organism= Organism.create! valid_attributes
       @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
       @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
@@ -137,12 +140,16 @@ describe Organism do
 
 
     
-    describe 'main_bank_id' do
+    describe 'main_bank_id', wip:true do
       
       context 'with default bank account' do
        
         before(:each) do
           @ba = BankAccount.first
+        end
+
+        it 'pour voir l etat des bases' do
+          puts "Nombre de comptes bancaires : #{BankAccount.count}"
         end
 
         it "should give the main bank id" do
@@ -152,7 +159,6 @@ describe Organism do
         context 'with another bank account' do
           it 'main_bank_id should returns the first one' do
             @organism.bank_accounts.create!(bank_name: 'CrédiX', number: '124577ZA', nickname:'Compte courant')
-            
             @organism.main_bank_id.should == @ba.id
           end
         end

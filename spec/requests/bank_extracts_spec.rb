@@ -3,8 +3,8 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-# c.filter = {:wip=>true}
- c.exclusion_filter = {:js=>true}
+  # c.filter = {:wip=>true}
+  # c.exclusion_filter = {:js=>true}
 end
 
 include OrganismFixture  
@@ -12,20 +12,20 @@ include OrganismFixture
 describe "BankExtracts" do 
 
   def retry_on_timeout(n = 3, &block)
-  block.call
-rescue Capybara::TimeoutError, Capybara::ElementNotFound => e  
-  if n > 0
-    puts "Catched error: #{e.message}. #{n-1} more attempts."  
-    retry_on_timeout(n - 1, &block) 
-  else 
-    raise
+    block.call
+  rescue Capybara::TimeoutError, Capybara::ElementNotFound => e
+    if n > 0
+      puts "Catched error: #{e.message}. #{n-1} more attempts."
+      retry_on_timeout(n - 1, &block)
+    else
+      raise
+    end
   end
-end
 
 
   before(:each) do
     create_user
-    create_minimal_organism 
+    create_minimal_organism  
     login_as('quidam')
   end
 
@@ -71,7 +71,7 @@ end
    
   end
 
-  describe 'GET INDEX bank_extracts' do
+  describe 'GET INDEX bank_extracts' , wip:true do
 
     it 'sans extrait la page renvoie sur new' do
       visit bank_account_bank_extracts_path(@ba)
@@ -105,23 +105,27 @@ end
         page.should have_content("Modification d'un extrait de compte")
       end
 
-      it 'cliquer sur l icone afficher mène à la page affichage' , wip:true do
+      it 'cliquer sur l icone afficher mène à la page affichage' do
         within('table') do
-         click_link('Afficher')
+          click_link('Afficher')
         end
         current_path.should == bank_extract_bank_extract_lines_path(@be)
         page.find('thead th').should have_content("Liste des écritures")
       end
 
-      it 'cliquer sur l icone afficher mène à la page affichage', wip:true do
+      it 'cliquer sur l icone afficher mène à la page affichage' do
         click_link('Pointer')
         page.find('.champ h3').should have_content("Relevé bancaire")
       end
 
-      it 'cliquer sur l icone afficher mène à la page affichage' do
-        BankExtract.count.should == 1
+      it 'cliquer sur l icone supprimer efface un extrait de compte', :js=>true do
+        @nb = @ba.bank_extracts.count
+        # save_and_open_page
         click_link('Supprimer')
-        BankExtract.count.should == 0
+        alert = page.driver.browser.switch_to.alert
+        alert.accept
+        sleep 1
+        @ba.bank_extracts.count.should == (@nb-1)
       end
 
     end
@@ -137,7 +141,7 @@ end
       end
     end
 
-    context 'avec deux bank_extracts' , :wip=>true do
+    context 'avec deux bank_extracts' do
 
       before(:each) do
         @be1 = @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month,
@@ -156,12 +160,12 @@ end
 
 
       it 'la page index affiche une table avec deux lignes' do 
-         visit bank_account_bank_extracts_path(@ba)
+        visit bank_account_bank_extracts_path(@ba)
         page.all('table tbody tr').should have(2).rows
       end
 
       it 'détruire le premier bank_extract laisse une ligne', :js=>true do
-         visit bank_account_bank_extracts_path(@ba)
+        visit bank_account_bank_extracts_path(@ba)
         click_link('Supprimer')
         alert = page.driver.browser.switch_to.alert
         alert.accept
@@ -177,7 +181,7 @@ end
     before(:each) do
       @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
         reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)
-        visit edit_bank_account_bank_extract_path(@ba, @be)
+      visit edit_bank_account_bank_extract_path(@ba, @be)
     end
 
     it 'affiche le formulaire' do

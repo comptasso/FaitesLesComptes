@@ -23,6 +23,7 @@ module OrganismFixture
   end
 
   def create_organism
+    clean_test_base
     @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
   end
 

@@ -6,7 +6,7 @@ end
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
-describe Nature do
+describe Nature do 
   include OrganismFixture
 
   let(:p) {mock_model(Period)}
@@ -57,9 +57,9 @@ describe Nature do
         end
 
         it 'can also have the same name with different periods' do
-          Nature.count.should == 18 # les deux de minimal organisme
+          @o.natures.count.should == 18
           @o.periods.create!(start_date: @p.start_date.years_since(1), close_date: @p.close_date.years_since(1))
-          Nature.count.should == 36 # avec la recopie automatique des natures par Period
+          @o.natures.count.should == 36 # avec la recopie automatique des natures par Period
         end
 
         it 'une nature ne peut être rattachée qu à des comptes de classe 6 ou 7' , wip:true do

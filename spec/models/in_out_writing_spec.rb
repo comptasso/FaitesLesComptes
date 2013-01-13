@@ -48,7 +48,7 @@ describe InOutWriting do
     end
 
     it 'two lines' , wip:true do
-     v = Writing.new date:Date.today, narration:'test', book_id:1
+     v = Writing.new date:Date.today, narration:'test', book_id:@ob.id
      v.should have(1).errors_on(:base)
      v.errors.messages[:base].should == ['Une écriture doit avoir au moins deux lignes']
     end

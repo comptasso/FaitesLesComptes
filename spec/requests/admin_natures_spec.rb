@@ -53,6 +53,8 @@ describe 'vue natures index' do
 
     before(:each) do
       @p.natures.create!(:name=>'deuxième nature', :income_outcome=>false)
+      @nb_natures = @p.natures.count
+      @nb_depenses = @p.depenses_natures.count
     end
 
     it 'affiche deux tables' do
@@ -62,18 +64,17 @@ describe 'vue natures index' do
 
     it 'dans la vue index,une nature peut être détruite', :js=>true do 
       
-      # à ce stade chacun des livres est vierge et peut donc être détruit.
-      visit admin_organism_period_natures_path(@o, @p)
-      page.all('tbody tr').size.should == 3
       
-      within 'tbody:last tr:nth-child(2)' do
+      visit admin_organism_period_natures_path(@o, @p)
+      page.all('tbody tr').size.should == @nb_natures
+      within "tbody:last tr:nth-child(#{@nb_depenses})" do
         page.should have_content('deuxième nature')
         page.click_link 'Supprimer'
       end
       alert = page.driver.browser.switch_to.alert
       alert.accept
       current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
-      page.all("tbody tr").size.should == 2
+      page.all("tbody tr").size.should == (@nb_natures - 1)
     
     end
 

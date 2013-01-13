@@ -8,11 +8,11 @@ end
 
 describe Period do
   include OrganismFixture
-  context 'un organisme' do
+  context 'un organisme' do 
 
     before(:each) do
       create_organism
-    end
+    end 
   
 
   describe 'validations' do

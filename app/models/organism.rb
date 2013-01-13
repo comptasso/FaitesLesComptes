@@ -140,11 +140,12 @@ class Organism < ActiveRecord::Base
   # Utilisé dans le controller line pour préremplir les select.
   # utilisé également dans le form pour afficher ou non le select cash
   def main_cash_id
-    self.cashes.any?  ? self.cashes.first.id  :  nil
+    cashes.any?  ? cashes.first.id  :  nil
   end
   
+  # renvoie le compte bancaire principal, en l'occurence, le premier
   def main_bank_id
-    self.bank_accounts.any?  ? self.bank_accounts.first.id  :  nil
+    bank_accounts.any?  ? bank_accounts.first.id  :  nil
   end
 
   # find_period trouve l'exercice relatif à une date donnée
