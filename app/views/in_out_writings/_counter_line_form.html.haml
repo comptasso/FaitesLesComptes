@@ -1,5 +1,5 @@
-= builder.association :account, :label=> 'Contrepartie',  :wrapper_html=>{class: "span3", id:'td_cca'}, input_html: {class: "span8"}, :label_html=>{class:'span4'},
+= builder.association :account, :label=> 'Contrepartie',  :wrapper_html=>{class: "span4", id:'td_cca'}, input_html: {class: "span8"}, :label_html=>{class:'span4'},
             :collection => options_for_cca(@period, @book.income_outcome), :as => :grouped_select, :group_method => :options, :group_label_method=> :title,
             :label_method=> :title, :value_method=> :id, :required=>true
 
-= builder.input :check_number, label:'N° ch.', :wrapper_html=>{:class=>'span3', id:'td_check_number'},:label_html=>{class:'span4'}, input_html: {class: "span8" }
+= builder.input :check_number, label:'N° ch.', :wrapper_html=>{:class=>'span4', id:'td_check_number'},:label_html=>{class:'span4'}, input_html: {class: "span8" }
