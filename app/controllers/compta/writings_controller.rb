@@ -9,7 +9,7 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings.json
   def index
     @writings = @book.writings.period(@period)
-    @unlocked_any = @writings.unlocked.any?
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @writings }
@@ -56,8 +56,7 @@ class Compta::WritingsController < Compta::ApplicationController
   end
 
   def all_lock
-
-    @book.writings.period(@period).unlocked.each {|w| w.lock}
+    @book.writings.period(@period).not_transfer.unlocked.each {|w| w.lock}
     redirect_to compta_book_writings_url(@book)
   end
 

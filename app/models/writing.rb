@@ -49,6 +49,7 @@ class Writing < ActiveRecord::Base
   
   scope :period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
+  scope :not_transfer, where('type != ?', 'Transfer')
   scope :unlocked, joins(:compta_lines).where('locked = ?', false).uniq
 
   # Fait le total des debit des compta_lines

@@ -8,12 +8,16 @@ describe "compta/writings/index" do
   before(:each) do
     assign(:book, @b=stub_model(Book))
     assign(:period, stub_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year))
-    assign(:writings, [
+    assign(:writings, @a = [
       stub_model(Writing, date:Date.today),
       stub_model(Writing, date:Date.today, locked?:true),
       stub_model(Transfer, date:Date.today),
       stub_model(Transfer, date:Date.today, locked?:true)
     ])
+    @a.stub(:unlocked).and_return(@a)
+    @a.stub(:not_transfer).and_return(@a)
+    @a.stub(:any?).and_return false 
+
   render
   end
 
@@ -45,6 +49,8 @@ describe "compta/writings/index" do
     fra.should have(0).icons
     
   end
+
+  it 'faire les tests du cadenas si pas de unlocked et du cadenas noir et blanc'
 
 
 end

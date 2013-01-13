@@ -782,7 +782,7 @@ OK- Les drags and drop de rattachement aux natures ne marchent plus.
 OK - Dans listing, on n'a pas d'export csv ni excel.
 OK - Le journal général fait bugger (réglé, était du à un formatage de date.)
 OK - Dans la liste des documents, il ne faudrait pas que visited modifie le style.
-Le cadenas de verrouillage ne devrait pas s'afficher sur le livre d'OD s'il n'y a rien à verrouiller.
+OK - Le cadenas de verrouillage ne devrait pas s'afficher sur le livre d'OD s'il n'y a rien à verrouiller.
 Il faudrait mettre des mois dans l'affichage des journaux (comme pour la partie saisie), surtout pour recettes et dépenses
 OK - Retirer les actions pour les transferts dans l'affichage du journal d'OD
 --------------------Divers---------------------------------------------------------------------------
