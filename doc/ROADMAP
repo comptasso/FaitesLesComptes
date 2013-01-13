@@ -772,7 +772,7 @@ NON - revoir la gestion des erreurs dans restore (fait correctement) et organism
 OK - Un transfert sauvé affiche son numéro d'écriture
 OK - Dans les titres du dashboard, utiliser nickname pour les noms des comptes bancaires
 
-Le champ bank_extract_id de compta_lines ne sert plus et peut être supprimé (le lien avec les bank_extract se fait via la table bank_extract_lines_lines).
+OK - Le champ bank_extract_id de compta_lines ne sert plus et peut être supprimé (le lien avec les bank_extract se fait via la table bank_extract_lines_lines).
 OK - vu modification du lien qui était vers Organism#index de la zone Public Voir les icones qui apparaissent dans la liste des organismes de la partie administration, il me semnble qu'elles sont moins riches que dans la partie saisie
 Suppression d'un exercice : voir les implications et les problèmes posés en terme de compte bancaire ou de rapporchement bancaire
 OK - Un nouveau compte ne doit pas être relié à des natures s'il n'est pas un 6 ou un 7
@@ -781,7 +781,7 @@ OK -  faire une restriction dans les modèles de nature OK et de account (semble
 OK- Les drags and drop de rattachement aux natures ne marchent plus.
 OK - Dans listing, on n'a pas d'export csv ni excel.
 OK - Le journal général fait bugger (réglé, était du à un formatage de date.)
-Dans la liste des documents, il ne faudrait pas que visited modifie le style.
+OK - Dans la liste des documents, il ne faudrait pas que visited modifie le style.
 Le cadenas de verrouillage ne devrait pas s'afficher sur le livre d'OD s'il n'y a rien à verrouiller.
 Il faudrait mettre des mois dans l'affichage des journaux (comme pour la partie saisie), surtout pour recettes et dépenses
 OK - Retirer les actions pour les transferts dans l'affichage du journal d'OD

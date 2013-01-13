@@ -8,7 +8,8 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings
   # GET /writings.json
   def index
-    @writings = @book.writings.period(@period).all
+    @writings = @book.writings.period(@period)
+    @unlocked_any = @writings.unlocked.any?
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @writings }
