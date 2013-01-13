@@ -65,7 +65,7 @@ describe 'vue books index' do
         page.should have_content('livre de test') 
         page.click_link 'Supprimer'
       end
-      alert = page.driver.browser.switch_to.alert
+      alert = page.driver.browser.switch_to.alert 
       alert.accept 
       sleep 1
       page.all('tbody tr').should have(4).books

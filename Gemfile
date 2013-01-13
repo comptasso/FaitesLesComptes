@@ -1,7 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.9'
- # gem 'therubyracer' execjs sous windows
+gem 'rails', '3.2.10'
+gem 'rack', '1.4.1'
+# gem 'therubyracer' execjs sous windows
 gem 'simple_form', "~> 2.0.1"
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -46,7 +47,7 @@ group :development, :test do
   gem 'launchy'
   gem 'database_cleaner'
   gem 'selenium-webdriver', '>= 2.27.2'
-  gem 'capybara'
+  gem 'capybara', '1.1.2'
 
 #  gem 'jasmine'
   

@@ -7,11 +7,12 @@
 class FitTypeValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
-    if value
-      r = record.income_outcome
-      a = Account.find_by_id(value).number[0] # premier chiffre de la chaîne
-      if ((r == true && a != '7') || (r == false && a != '6'))
-        record.errors[attribute] << "La nature doit être associée à un compte de même type (recettes ou dépenses)"
+    r = record.income_outcome
+    a = Account.find_by_id(value)
+    if a
+      account_classe = a.number[0] # premier chiffre de la chaîne
+      if ((r == true && account_classe != '7') || (r == false && account_classe != '6'))
+        record.errors.add(attribute, :misfit, :income_outcome=>record.in_out_to_s, :account_classe=>account_classe)
       end
     end
   end

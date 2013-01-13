@@ -221,7 +221,7 @@ class Organism < ActiveRecord::Base
   # Crée également une banque et une caisse par défaut
   # et crée également la nomenclature
   def create_default
-    # les 3 livres
+    # les 4 livres
     logger.debug 'Création des livres par défaut'
     income_books.create(abbreviation:'VE', title:'Recettes', description:'Recettes')
     logger.debug  'création livre recettes'

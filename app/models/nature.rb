@@ -21,7 +21,7 @@ class Nature < ActiveRecord::Base
   validates :name, :uniqueness=>{ :scope=>[:income_outcome, :period_id] }
   validates :income_outcome, :inclusion => { :in => [true, false] }
  
-  validates :account_id, :fit_type=>true 
+  validates :account_id, :fit_type=>true
 
 
   has_many :compta_lines
@@ -38,7 +38,7 @@ class Nature < ActiveRecord::Base
   # pour chaque mois plus un cumul de ce montant en dernière position
   # fait appel selon le cas à deux méthodes protected stat ou stat_filtered.
   def stat_with_cumul(destination_id = 0)
-    s = (destination_id == 0) ? self.stat : self.stat_filtered(destination_id)
+    s = (destination_id == 0) ? self.stat : self.stat_filtered(destination_id) 
     s << s.sum.round(2)
 
   end

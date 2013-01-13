@@ -54,7 +54,7 @@ module OrganismFixture
      ActiveRecord::Base.establish_connection('assotest1')
     if Organism.count > 0
       Rails.logger.debug "Effacement de #{Organism.count} organismes avant de recréer organism_minimal"
-      Organism.find(:all).each {|o| o.destroy}
+      Organism.all.each {|o| o.destroy}
     end
   end
 

@@ -288,6 +288,10 @@ fr:
           attributes:
             date:
               incoherent: Incohérent avec %{field}
+        nature:
+          attributes:
+            account_id:
+              misfit: Nature %{income_outcome} associée à un compte %{account_classe}
  
   helpers:
     select:
