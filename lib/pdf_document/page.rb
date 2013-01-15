@@ -75,7 +75,7 @@ module PdfDocument
         r =[]
         table_report_line.each_with_index do |v,i|
           if (v.to_f.is_a?(Float) && table_total_line[i].to_f.is_a?(Float))
-            r << french_format(v.to_f + table_total_line[i].to_f)
+            r << french_format(french_to_f(v) + french_to_f(table_total_line[i]))
           else
             r << ''
           end
@@ -102,6 +102,15 @@ module PdfDocument
       return '' if r.nil?
       return ActionController::Base.helpers.number_with_precision(r, :precision=>2)  if r.is_a? Numeric
       r
+    end
+
+    # transforme un string représentant un nombre en format français, par exemple
+    # '1 300,25' en un float que le programme saura additionner.
+    # TODO faire une sous classe de Float qui sache additionner nativement le
+    # format français.
+    def french_to_f(number)
+      return 0 unless number
+      number.gsub(',', '.').gsub(' ', '').to_f
     end
 
    

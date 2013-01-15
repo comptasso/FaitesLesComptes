@@ -82,13 +82,17 @@ module PdfDocument
     # fait le total des valeurs de la colonne d'indice i
     # modifie d'abord les valeurs en transformant en Float.
     #
+    # Pour que les totaux fonctionnent sur les chiffres français,
+    # il faut enlever les espaces et remplacer les virgules par des
+    # points.
+    #
     # N'additionne que s'il y a une valeur
     # ce qui permet d'avoir des valeurs vides dans les colonnes
     # 
-    # Retourne 0 n'y a aucune ligne
+    # Retourne 0 s'il n'y a aucune ligne
     def totalize_column(i)
       prepared_lines.each.sum do |l|
-           l[i].to_f if l[i]
+           l[i].gsub(',','.').gsub(' ','').to_f if l[i]
         end rescue 0
      end
 

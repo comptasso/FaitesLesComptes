@@ -52,10 +52,7 @@ module PdfDocument
       offset = (page_number - 1)*nb_lines_per_page
       source.accounts.select(columns).order('number').where('number >= ? AND number <= ?', @from_number, @to_number).offset(offset).limit(limit)
      end
-
-
-
-   
+  
     # appelle les méthodes adéquate pour chacun des éléments de la ligne
     # qui représente un account 
     def prepare_line(account)
