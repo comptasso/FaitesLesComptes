@@ -98,6 +98,8 @@ module PdfDocument
       l.collect {|v| french_format(v)}
     end
 
+    # est un proxy de ActionController::Base.helpers.number_with_precicision
+    # TODO faire un module qui gère ce sujet car utile également pour table.rb
     def french_format(r)
       return '' if r.nil?
       return ActionController::Base.helpers.number_with_precision(r, :precision=>2)  if r.is_a? Numeric
@@ -106,11 +108,13 @@ module PdfDocument
 
     # transforme un string représentant un nombre en format français, par exemple
     # '1 300,25' en un float que le programme saura additionner.
+    #
+    # On prévoit le cas ou number serait malgré tout Numeric en retournant la valeur
+    #
     # TODO faire une sous classe de Float qui sache additionner nativement le
     # format français.
-    def french_to_f(number)
-      return 0 unless number
-      number.gsub(',', '.').gsub(' ', '').to_f
+    def french_to_f(number = 0)
+      number.is_a?(Numeric) ? number : number.gsub(',', '.').gsub(' ', '').to_f rescue 0
     end
 
    

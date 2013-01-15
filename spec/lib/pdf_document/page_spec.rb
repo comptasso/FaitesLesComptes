@@ -4,6 +4,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 require 'pdf_document/default'
 
+RSpec.configure do |config|
+ # config.filter = {wip:true}
+end
+
 describe PdfDocument::Page do 
   let(:o) {mock_model(Organism, title:'Organisme test')}
   let(:p) {mock_model(Period, organism:o,
@@ -54,28 +58,29 @@ describe PdfDocument::Page do
     end
 
     it "repond à table_title" do
-       @page.table_title.should == %w(Date Débit Crédit)
+      @page.table_title.should == %w(Date Débit Crédit)
     end
 
     it 'repond à stamp' do
       @page.stamp.should == doc.stamp
     end
 
-  describe 'lines total et reports'  do
+    describe 'lines total et reports'  do
 
-    before(:each) do
-      @l = mock_model(ComptaLine,  debit:10, credit:0)
-      @w = mock_model(Writing, date:Date.today, ref:'référence')
-      @l.stub(:writings).and_return @w
-      arel.stub(:joins).and_return arel
-      arel.stub_chain(:select, :range_date, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
-      doc.set_columns %w(writings.date writings.ref debit credit)
-      doc.set_columns_to_totalize [2]
+      before(:each) do
+        @l = mock_model(ComptaLine,  debit:10, credit:0)
+        @w = mock_model(Writing, date:Date.today, ref:'référence')
+        @l.stub(:writings).and_return @w
+        arel.stub(:joins).and_return arel
+        arel.stub_chain(:select, :range_date, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
+        doc.set_columns %w(writings.date writings.ref debit credit)
+        doc.set_columns_to_totalize [2]
       
-    end
-    it 'total_line' do
-      doc.page(1).table_total_line.should == ['Totaux', "220,00"]
-    end
+      end
+
+      it 'total_line' , wip:true do
+        doc.page(1).table_total_line.should == ['Totaux', "220,00"] 
+      end
 
       it 'to_report' do
         doc.page(1).table_to_report_line.should == ['A reporter', "220,00"]
@@ -91,9 +96,9 @@ describe PdfDocument::Page do
 
       describe 'report de la première page' do
         it 'sauf s il est fixé par le doc' do
-        doc.first_report_line = ["Soldes", 99]
-        doc.page(1).table_report_line.should ==  ["Soldes", 99]
-      end
+          doc.first_report_line = ["Soldes", 99]
+          doc.page(1).table_report_line.should ==  ["Soldes", 99]
+        end
 
         it 'le total à reporter prend en compte le report' do
           doc.first_report_line = ["Soldes", 99]
@@ -122,7 +127,7 @@ describe PdfDocument::Page do
 
 
       
-  end
+    end
 
 
   end

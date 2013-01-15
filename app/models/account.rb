@@ -147,7 +147,8 @@ class Account < ActiveRecord::Base
 
 
   def formatted_sold(date)
-    ['%0.2f' % cumulated_debit_before(date), '%0.2f' % cumulated_credit_before(date) ]
+    [ActionController::Base.helpers.number_with_precision(cumulated_debit_before(date), precision:2),
+      ActionController::Base.helpers.number_with_precision(cumulated_credit_before(date), precision:2)]
   end
 
  

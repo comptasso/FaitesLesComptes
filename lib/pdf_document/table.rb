@@ -92,12 +92,21 @@ module PdfDocument
     # Retourne 0 s'il n'y a aucune ligne
     def totalize_column(i)
       prepared_lines.each.sum do |l|
-           l[i].gsub(',','.').gsub(' ','').to_f if l[i]
+           french_to_f(l[i])
         end rescue 0
      end
 
 
-
+# transforme un string représentant un nombre en format français, par exemple
+    # '1 300,25' en un float que le programme saura additionner.
+    #
+    # On prévoit le cas ou number serait malgré tout Numeric en retournant la valeur
+    #
+    # TODO faire une sous classe de Float qui sache additionner nativement le
+    # format français.
+    def french_to_f(number = 0)
+      number.is_a?(Numeric) ? number : number.gsub(',', '.').gsub(' ', '').to_f rescue 0
+    end
 
     
    
