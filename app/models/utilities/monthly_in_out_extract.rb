@@ -9,132 +9,40 @@ module Utilities
   # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes
   # se créé en appelant new avec un book et une date quelconque du mois souhaité
   # my_hash est un hash :year=>xxxx, :month=>yy
-  class MonthlyInOutExtract
-
-    include Utilities::ToCsv
-
-    NB_PER_PAGE=30
-
-    attr_reader :book, :titles
+  class MonthlyInOutExtract < Utilities::InOutExtract
 
     def initialize(book, my_hash)
       @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
       @book = book
       @my = MonthYear.new(my_hash)
-      @date = @my.beginning_of_month
+      @begin_date = @my.beginning_of_month
+      @end_date = @begin_date.end_of_month
+      @period = @book.organism.find_period(@begin_date)
     end
 
-    def lines
-       @lines ||= @book.compta_lines.mois(@date).in_out_lines
-    end
-
-    # l'extrait est provisoire si il y a des lignes qui ne sont pas verrouillées
-    def provisoire?
-      lines.reject {|l| l.locked?}.any?
-    end
-
-   
+      
     def month
       @my.to_format('%B %Y')
     end
 
-    def total_credit
-      lines.sum(:credit)
-    end
-
-    def total_debit
-      lines.sum(:debit)
-    end
-
-    def debit_before
-      @book.cumulated_debit_before(@date)
-    end
-
-    def credit_before
-      @book.cumulated_credit_before(@date)
-    end
-
-    
-
-    def to_csv(options = {:col_sep=>"\t"})
-      CSV.generate(options) do |csv|
-        csv << @titles
-        lines.each do |line|
-          csv << prepare_line(line)
-        end
-      end
-    end
-    
-    alias compta_lines lines
-
-    def to_pdf
-      options = {
+    protected
+    # détermine les options pour la publication du pdf
+    #
+    # La méthode est identique à celle de InOutExtract à l'excption de
+    # subtitle qui précise le mois
+    def options_for_pdf
+      {
         :title=>book.title,
-        :subtitle=>"Mois de #{@my.to_format('%B %Y')}",
-        :from_date=>@date,
-        :to_date=>@date.end_of_month,
+        :subtitle=>"Mois de #{month}",
+        :from_date=>@begin_date,
+        :to_date=>@begin_date.end_of_month,
         :stamp=> provisoire? ? 'Provisoire' : ''
         }
-       period = book.organism.find_period(@date)
-       pdf = PdfDocument::Book.new(period, book, options)
-       pdf.set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
-          'writings.narration AS w_narration', 'destination_id',
-          'nature_id', 'debit', 'credit', 'payment_mode', 'writing_id']
-       pdf.set_columns_methods ['w_date', 'w_ref', 'w_narration',
-          'destination_id.name', 'nature_id.name', 'debit', 'credit',
-          'payment_mode', 'writing_id']
-       pdf.set_columns_titles ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
-       pdf.set_columns_widths([10, 8, 20,10 ,  10, 8, 8,13,13])
-       pdf.set_columns_to_totalize [5,6]
-       
-       pdf
-     end
+    end
+
+
 
     
-
-    # indique si le listing doit être considéré comme un brouillard
-    # ou une édition définitive.
-    #
-    # Cela se fait en regardant si toutes les lignes sont locked?
-    #
-    # TODO attention avec les livres virtuels tels que CashBook
-    # il faut peut être que transfer ait un champ locked?
-    def brouillard?
-      if @lines.any? {|l| !l.locked? }
-        return true
-      else
-        return false
-      end
-    end
-
-
-
-    protected
-
-    # prend une ligne comme argument et renvoie un array avec les différentes valeurs
-    # préparées : date est gérée par I18n::l, les montants monétaires sont reformatés poru
-    # avoir 2 décimales et une virgule,...
-    def prepare_line(line)
-      [I18n::l(line.date),
-        line.ref, line.narration.truncate(25),
-        line.destination ? line.destination.name.truncate(22) : '-',
-        line.nature ? line.nature.name.truncate(22) : '-' ,
-        reformat(line.debit),
-        reformat(line.credit),
-        "#{line.payment_mode}",
-        line.support.truncate(10)
-      ]
-    end
-
- 
-
-    # remplace les points décimaux par des virgules pour s'adapter au paramétrage
-    # des tableurs français
-    def reformat(number)
-      ActionController::Base.helpers.number_with_precision(number, :precision=>2)
-    end
-
-
   
 
   end

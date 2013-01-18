@@ -20,19 +20,18 @@ module Utilities
 
     include Utilities::ToCsv
 
-
-    NB_PER_PAGE=30
-
     attr_reader :book, :titles
 
-    def initialize(book, period)
+    def initialize(book, period, begin_date=nil, end_date=nil)
       @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
       @book = book
       @period = period
+      @begin_date = begin_date || period.start_date
+      @end_date = end_date || period.close_date
     end
 
     def lines
-      @lines ||= @book.compta_lines.extract(@period.start_date, @period.close_date).in_out_lines
+      @lines ||= @book.compta_lines.extract(@begin_date, @end_date).in_out_lines
     end
 
     # l'extrait est provisoire si il y a des lignes qui ne sont pas verrouillées
@@ -41,24 +40,23 @@ module Utilities
     end
 
     def cumulated_at(date, dc)
-      @book.cumulated_at(@period.close_date, dc)
+      @book.cumulated_at(@end_date, dc)
     end
 
     def total_credit
-      movement(@period.start_date, @period.close_date, :credit)
+      lines.sum(:credit)
     end
 
     def total_debit
-      movement(@period.start_date, @period.close_date, :debit)
+      lines.sum(:debit)
     end
 
-
     def debit_before
-      @book.cumulated_debit_before(@period.start_date)
+      @book.cumulated_debit_before(@begin_date)
     end
 
     def credit_before
-      @book.cumulated_credit_before(@period.start_date)
+      @book.cumulated_credit_before(@begin_date)
     end
 
     
@@ -74,16 +72,13 @@ module Utilities
     
     alias compta_lines lines
 
+
+
+
+
     def to_pdf
-      options = {
-        :title=>book.title,
-        :subtitle=>"Mois de #{@my.to_format('%B %Y')}",
-        :from_date=>@date,
-        :to_date=>@date.end_of_month,
-        :stamp=> provisoire? ? 'Provisoire' : ''
-      }
-      period = book.organism.find_period(@date)
-      pdf = PdfDocument::Book.new(period, book, options)
+      
+      pdf = PdfDocument::Book.new(@period, book, options_for_pdf)
       pdf.set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
         'writings.narration AS w_narration', 'destination_id',
         'nature_id', 'debit', 'credit', 'payment_mode', 'writing_id']
@@ -97,27 +92,26 @@ module Utilities
       pdf
     end
 
-    
-
-    # indique si le listing doit être considéré comme un brouillard
-    # ou une édition définitive.
-    #
-    # Cela se fait en regardant si toutes les lignes sont locked?
-    #
-    # TODO attention avec les livres virtuels tels que CashBook
-    # il faut peut être que transfer ait un champ locked?
-    def brouillard?
-      if @lines.any? {|l| !l.locked? }
-        return true
-      else
-        return false
-      end
-    end
-
+   
 
 
     protected
 
+     # détermine les options pour la publication du pdf
+    #
+    # La méthode est identique à celle de InOutExtract à l'excption de
+    # subtitle qui précise le mois
+    def options_for_pdf
+      {
+        :title=>book.title,
+        :subtitle=>"Du #{I18n::l @begin_date} au #{I18n::l @end_date}",
+        :from_date=>@begin_date,
+        :to_date=>@end_date,
+        :stamp=> provisoire? ? 'Provisoire' : ''
+        }
+    end
+
+    
     # prend une ligne comme argument et renvoie un array avec les différentes valeurs
     # préparées : date est gérée par I18n::l, les montants monétaires sont reformatés poru
     # avoir 2 décimales et une virgule,...

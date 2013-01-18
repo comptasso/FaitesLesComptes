@@ -3,9 +3,12 @@
 
 module InOutWritingsHelper
   
- 
 
-  # permet d'afficher les actions possible
+  def in_out_index_icons
+   icon_to('pdf.png', book_in_out_writings_path(@book,params.merge({:format=>'pdf'})), title:'PDF', :target=>'_blank')
+  end
+
+  # permet d'afficher les actions possible dans une ligne d'écriture
   def in_out_line_actions(line)
     html = ' '
       if line.writing.type == 'Transfer'
@@ -21,7 +24,7 @@ module InOutWritingsHelper
     end
   end
 
-    # Helper permettant de construire les options de counter_account pour le form
+# Helper permettant de construire les options de counter_account pour le form
 # La classe OptionsForAssociationSelect est dans lib
 #
 # Le deuxième argument indique si on veut une liste de compte pour une recette ou pour
