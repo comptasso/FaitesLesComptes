@@ -81,12 +81,21 @@ module PdfDocument
           end
         end
       end
-      r[0] =  @number == @doc.nb_pages ? 'Total général' : 'A reporter'
+      r[0] =  last_page? ? 'Total général' : 'A reporter'
       r 
     end
 
 
     protected
+
+    # indique si on est sur la dernière page
+      def last_page?
+        @number == @doc.nb_pages
+      end
+
+
+
+
     # construit une table en donnant comme argument la page et le document
     # 
     def pdf_table

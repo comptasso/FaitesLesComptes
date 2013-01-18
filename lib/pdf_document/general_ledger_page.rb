@@ -3,9 +3,16 @@
   require 'pdf_document/page.rb'
 
   # la classe GeneralLedgerPage construit une page du journal général
-  # Elle répond donc aux méthodes exigées par default.pdf.prawn
-  # Elle est appelée par general_ledger
-
+  # Elle répond donc aux méthodes exigées par default.pdf.prawn.
+  #
+  # Elle est appelée par Compta::PdfGeneralLedger avec comme argument :
+  #  self qui devient le document,
+  #  une liste de monthly_ledgers
+  #  et n : le numéro de page
+  #
+  # La particularité du general_ledger est d'avoir des sous totaux au sein de 
+  # la page et qu'ils ne faut donc pas compter deux fois les mêmes choses. 
+  #
   # PdfDocument::Page apporte toutes les méthodes nécessaires, il suffit donc de
   # surcharger les méthodes spécifiques
    class PdfDocument::GeneralLedgerPage < PdfDocument::Page
@@ -16,28 +23,51 @@
         @list_monthly_ledgers = list_monthly_ledgers
       end
 
-      def last_page?
-        @number == @doc.nb_pages
-      end
-
-     
+          
       def table_title
         %w(Mois Journal Libellé Debit Credit)
       end
 
-    # FIXME mettre les valeurs réelles
+      # forunit la ligne de total de la page
       def table_total_line
-        ['Totaux'] + formatted_values(total_page_values)
+        format_line ['Totaux', total_debit, total_credit]
       end
 
+      # surcharge de la méthode qui fournit la ligne à reporter report (ou de total général
+      # si c'est la dernière page
       def table_to_report_line
-        [last_page? ? 'Totaux généraux' : 'A reporter'] + formatted_values(to_report_values)
+        format_line([last_page? ? 'Totaux généraux' : 'A reporter'] + to_report_values)
       end
 
+      # surcharge de la ligne de report (la première ligne du tableau)
       def table_report_line
         return nil if @number == 1
-        ['Reports'] + formatted_values(report_values)
+        format_line(['Reports'] + report_values)
       end
+
+      
+
+      # forunit le report
+#     def table_report_line
+#      return nil if @number == 1 # première page
+#      r =  @doc.page(@number -1).table_to_report_line
+#      r[0] = 'Reports'
+#      r
+#    end
+
+     # Renvoie le tableau des lignes préparées pour l'impression.
+     #
+     # french_format, qui est définie dans PdfDocument::Page permet d'avoir
+     # une impression avec la virgule comme séparateur décimal et un espace pour
+     # les milliers.
+     #
+     def table_lines
+       fetch_lines.map do |l|
+         [l[:mois], l[:title], l[:description],french_format(l[:debit]), french_format(l[:credit])]
+       end
+     end
+
+     protected
 
       # totalise les débit des livres de cette page
       def total_debit
@@ -49,21 +79,6 @@
         @list_monthly_ledgers.inject(0.0) {|t, ml| t += ml.total_credit}
       end
 
-
-      # forunit le report
-#     def table_report_line
-#      return nil if @number == 1 # première page
-#      r =  @doc.page(@number -1).table_to_report_line
-#      r[0] = 'Reports'
-#      r
-#    end
-
-     # renvoie le tableau des lignes préparées
-     def table_lines
-       fetch_lines.map do |l|
-         [l[:mois], l[:title], l[:description],format_value(l[:debit]), format_value(l[:credit])]
-       end
-     end
 
      # récupère les différentes lignes de chaque monthly ledger de la page
      # TODO voir comment on différencie le résultat en terme de style des lignes
@@ -78,8 +93,8 @@
         tableau
      end
 
-    
-
+     # Calcule le total de la page (débit et crédit)
+     #
      def total_page_values
        [total_debit, total_credit]
      end
@@ -93,15 +108,18 @@
         [total_page_values[0] + report_values[0], total_page_values[1] + report_values[1]]
      end
 
-     def formatted_values(arr)
-       arr.map {|v| format_value(v)}
-     end
+#     def formatted_values(arr)
+#       arr.map {|v| format_value(v)}
+#     end
+#
+#     def format_value(r)
+#       return '%0.2f' % r if r.is_a? BigDecimal
+#       return '%0.2f' % r if r.is_a? Float
+#       r
+#     end
 
-     def format_value(r)
-       return '%0.2f' % r if r.is_a? BigDecimal
-       return '%0.2f' % r if r.is_a? Float
-       r
-     end
+
+
 
 
 

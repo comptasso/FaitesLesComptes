@@ -16,11 +16,7 @@ module Compta
        @month_year = my
      end
 
-     # renvoie la ligne de titre, par exemple : Mois de janvier 2013
-     def title_line
-       {mois:"Mois de #{@month_year.to_format('%B %Y')}", title:'', description:'', debit:'', credit:''}
-       
-     end
+     
 
      # prend les livres dans l'ordre alphabétique et fait un tableau
      # avec le titre du journal(VE ou OD), la description, le total_debit et le total_credit
@@ -40,8 +36,14 @@ module Compta
        @lines.inject(0) {|t, l| t+= l[:credit] }
      end
 
+     # renvoie la ligne de titre, par exemple : Mois de janvier 2013
+     def title_line
+       {mois:"Mois de #{@month_year.to_format('%B %Y')}", title:'', description:'', debit:'', credit:''}
+     end
+
+     # total_line donne le total d'un MonthlyLedger
      def total_line
-       {mois:"Sous total #{@month_year.to_format('%B %Y')}", title:'', description:'', debit:('%0.2f' % total_debit), credit:('%0.2f' %total_credit)}
+       {mois:"Sous total #{@month_year.to_format('%B %Y')}", title:'', description:'', debit:total_debit, credit:total_credit}
      end
 
      # la taille d'un MonthlyLedger est son nombre de lignes plus une ligne de titre et une ligne de total
