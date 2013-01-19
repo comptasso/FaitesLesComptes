@@ -7,11 +7,10 @@ module Utilities
 #
 class CashExtract < InOutExtract
 
-  def initialize(cash, period)
-      @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Sorties', 'Entrées']
-      @book = cash
-      @period = period
-    end
+  # définit les titres des colonnes
+  def titles
+    ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Sorties', 'Entrées']
+  end
 
 
   # pour pouvoir utiliser indifféremment cash ou book car il n'est pas forcément
@@ -23,7 +22,7 @@ class CashExtract < InOutExtract
   # pour une caisse, les lignes sont obtenues par une relation has_many :lines,
   # :through=>:accounts
   def lines
-    @lines ||= cash.compta_lines.range_date(@period.start_date, @period.close_date)
+    @lines ||= cash.compta_lines.range_date(@begin_date, @end_date)
   end
 
   

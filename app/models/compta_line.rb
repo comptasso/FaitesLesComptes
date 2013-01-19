@@ -45,7 +45,7 @@ class ComptaLine < ActiveRecord::Base
 
 
 
-  scope :range_date, lambda {|from, to| with_writings.extract(from, to)}
+  scope :range_date, lambda {|from, to| with_writings.extract(from, to).order('date')}
   scope :listing, lambda {|from, to| with_writing_and_book.where('books.title != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)

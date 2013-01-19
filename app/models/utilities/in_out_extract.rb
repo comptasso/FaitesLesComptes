@@ -23,11 +23,14 @@ module Utilities
     attr_reader :book, :titles
 
     def initialize(book, period, begin_date=nil, end_date=nil)
-      @titles = ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
       @book = book
       @period = period
       @begin_date = begin_date || period.start_date
       @end_date = end_date || period.close_date
+    end
+
+    def titles
+     ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
     end
 
     def lines
@@ -39,8 +42,10 @@ module Utilities
       lines.reject {|l| l.locked?}.any?
     end
 
+
+    # TODO voir si ces méthodes sont utilisées
     def cumulated_at(date, dc)
-      @book.cumulated_at(@end_date, dc)
+      @book.cumulated_at(date, dc)
     end
 
     def total_credit
@@ -63,7 +68,7 @@ module Utilities
 
     def to_csv(options = {:col_sep=>"\t"})
       CSV.generate(options) do |csv|
-        csv << @titles
+        csv << titles
         lines.each do |line|
           csv << prepare_line(line)
         end
@@ -72,10 +77,7 @@ module Utilities
     
     alias compta_lines lines
 
-
-
-
-
+    # produit le document pdf en s'appuyant sur la classe PdfDocument::Book
     def to_pdf
       
       pdf = PdfDocument::Book.new(@period, book, options_for_pdf)
@@ -85,7 +87,7 @@ module Utilities
       pdf.set_columns_methods ['w_date', 'w_ref', 'w_narration',
         'destination_id.name', 'nature_id.name', 'debit', 'credit',
         'payment_mode', 'writing_id']
-      pdf.set_columns_titles ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
+      pdf.set_columns_titles(titles)
       pdf.set_columns_widths([10, 8, 20,10 ,  10, 8, 8,13,13])
       pdf.set_columns_to_totalize [5,6]
        
@@ -120,20 +122,28 @@ module Utilities
         line.ref, line.narration.truncate(25),
         line.destination ? line.destination.name.truncate(22) : '-',
         line.nature ? line.nature.name.truncate(22) : '-' ,
-        reformat(line.debit),
-        reformat(line.credit),
+        french_format(line.debit),
+        french_format(line.credit),
         "#{line.payment_mode}",
         line.support.truncate(10)
       ]
     end
 
- 
-
     # remplace les points décimaux par des virgules pour s'adapter au paramétrage
     # des tableurs français
+    # TODO supprimer et remplacer par french_format
     def reformat(number)
       ActionController::Base.helpers.number_with_precision(number, :precision=>2)
     end
+
+    # est un proxy de ActionController::Base.helpers.number_with_precicision
+    # TODO faire un module qui gère ce sujet car utile également pour table.rb
+    def french_format(r)
+      return '' if r.nil?
+      return ActionController::Base.helpers.number_with_precision(r, :precision=>2)  if r.is_a? Numeric
+      r
+    end
+
 
 
   
