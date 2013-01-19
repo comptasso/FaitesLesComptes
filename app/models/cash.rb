@@ -12,7 +12,7 @@ class Cash < ActiveRecord::Base
 
   belongs_to :organism
   # ne plus utiliser, cash_id va disparaître
-  has_many :compta_lines, :through=>:accounts
+  has_many :compta_lines, :through=>:accounts, :include=>:writing
   has_many :cash_controls
   # un caisse a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
@@ -38,6 +38,7 @@ class Cash < ActiveRecord::Base
   end
 
   alias nickname to_s
+  alias title to_s
   
   # méthode surchargeant celle de Utilities::Sold, laquelle sert de base au calcul des soldes
   def cumulated_at(date, dc) 

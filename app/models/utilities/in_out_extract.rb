@@ -80,7 +80,7 @@ module Utilities
     # produit le document pdf en s'appuyant sur la classe PdfDocument::Book
     def to_pdf
       
-      pdf = PdfDocument::Book.new(@period, book, options_for_pdf)
+      pdf = PdfDocument::Book.new(@period, @book, options_for_pdf)
       pdf.set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
         'writings.narration AS w_narration', 'destination_id',
         'nature_id', 'debit', 'credit', 'payment_mode', 'writing_id']

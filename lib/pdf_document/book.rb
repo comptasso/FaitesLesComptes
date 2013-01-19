@@ -19,7 +19,7 @@ module PdfDocument
     # même s'il n'y a pas de lignes dans le comptes
     # ne serait-ce que pour afficher les soldes en début et en fin de période
     def nb_pages
-      nb_lines = @source.compta_lines.extract(from_date, to_date).count
+      nb_lines = @source.compta_lines.extract(from_date, to_date).in_out_lines.count
       return 1 if nb_lines == 0
       (nb_lines/@nb_lines_per_page.to_f).ceil
     end

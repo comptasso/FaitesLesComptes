@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 
+
 # CashLines est un controller spécialisé pour afficher les lignes qui relèvent
 # d'une écriture attachée à une caisse.
 #
@@ -22,7 +23,7 @@ class CashLinesController < InOutWritingsController
     
     respond_to do |format|
       format.html
-      format.pdf
+      format.pdf {send_data @monthly_extract.to_pdf.render, :filename=>"#{@organism.title}_Caisse_#{@cash.title}.pdf" }
       format.csv { send_data @monthly_extract.to_csv(col_sep:"\t")  }  # pour éviter le problème des virgules
       format.xls { send_data @monthly_extract.to_xls(col_sep:"\t")  }
     end
