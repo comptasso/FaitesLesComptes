@@ -34,11 +34,13 @@ class BankExtractLine < ActiveRecord::Base
     :uniq=>true # pour les rapprochements bancaires
 
   acts_as_list :scope => :bank_extract
-
-  validate :not_empty 
+ 
+  after_initialize :prepare_datas
 
   attr_reader :payment, :narration, :debit,  :credit
 
+  # FIXME - voir note sur la méthode not_empty
+  # before_save :not_empty
   before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
 
  
@@ -66,13 +68,6 @@ class BankExtractLine < ActiveRecord::Base
       raise ArgumentError
     end
   end
-
-  
- 
-
-  validate :not_empty
-
-  after_initialize :prepare_datas
 
   # lock_line verrouille les lignes d'écriture associées à une bank_extract_line,
   # ce qui entraîne également le verrouillage de tous les siblings.
@@ -105,7 +100,7 @@ class BankExtractLine < ActiveRecord::Base
   # et la fusionne avec l'instance.
   #
   # Cela signifie que l'on tranfère les lignes de l'argument à self.
-  # puis que l'on supprime l'enregistrement correspondant à l'argument.
+  # puis que l'on supprime l'enregistrement correspondant à l'argument par la ligne bel.destroy.
   #
   def regroup(bel)
     bel.compta_lines.all.each do |l|
@@ -113,8 +108,14 @@ class BankExtractLine < ActiveRecord::Base
       # un bank_extract_lines
       compta_lines << l
     end
+    if Rails.env == 'test'
+      puts errors.messages unless valid?
+      compta_lines.each {|cl| puts "ComptaLine #{cl.debit} #{cl.credit} #{cl.errors.messages}" unless cl.valid?}
+    end
     save
+    puts "Nombre de lignes #{bel.compta_lines.count}" unless valid? 
     bel.destroy
+    
   end
 
   # degroup décompose l'instance ayant plusieurs lignes en autant
@@ -155,14 +156,23 @@ class BankExtractLine < ActiveRecord::Base
 
   private
 
-  def not_empty
-    if compta_lines.empty?
-      errors.add(:compta_lines, 'cant exist without compta_lines')
-      false
-    else
-      true
-    end
-  end
+  # vérifie que la BankExtractLine n'est pas vide.
+  #
+  # Cette condition ne s'applique pas si on veut effacer l'enregistrement.
+  #
+  # FIXME - Problème avec la version de acts_as_list 0.1.9
+  # car ce plugin appelle self.reload dans son before_destroy.
+  # (il semble que cette évolution ait été faite pour permettre l'utilisation
+  # de accepts_nested_attributes_for mais du coup le before_save :not_empty devient
+  # problématique
+  #
+  # .
+#  def not_empty
+#    if compta_lines.empty?
+#      Rails.logger.warn 'Tentative d enregistrer une bank_extract_line sans compta_lines'
+#      return false
+#    end
+#  end
 
 
 

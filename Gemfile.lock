@@ -188,7 +188,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  acts_as_list
+  acts_as_list (= 0.1.9)
   capybara (= 1.1.2)
   coffee-rails (~> 3.2.0)
   database_cleaner

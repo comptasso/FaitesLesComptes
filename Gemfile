@@ -8,7 +8,7 @@ gem 'simple_form', "~> 2.0.1"
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
-gem 'acts_as_list'
+gem 'acts_as_list', '0.1.9'
 gem 'prawn'
 gem 'prawn_rails'
 gem 'haml-rails'

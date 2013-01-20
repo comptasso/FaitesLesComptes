@@ -19,7 +19,7 @@ describe BankExtractLine do
       total_debit:2,
       total_credit:5,
       locked:false)
-    @d7 = create_outcome_writing(7)
+    @d7 = create_outcome_writing(7) 
     @d29 = create_outcome_writing(29)
     @ch97 = create_in_out_writing(97, 'Chèque')
     @ch5 = create_in_out_writing(5, 'Chèque')
@@ -28,6 +28,13 @@ describe BankExtractLine do
     @cd.checks << @ch97.support_line << @ch5.support_line
     @cd.save!
 
+  end
+
+  it 'les écritures doivent être valides' do
+    @d7.should be_valid
+    @d29.should be_valid
+    @ch97.should be_valid
+    @ch5.should be_valid
   end
 
 
@@ -106,7 +113,7 @@ describe BankExtractLine do
 
     end
 
-    describe 'regroup'  do
+    describe 'regroup' , wip:true do
 
       before(:each) do
         @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')

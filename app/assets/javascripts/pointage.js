@@ -186,7 +186,6 @@ jQuery(function () {
                 // les id des bels sont constituées uniquement de l'id de la BankExtractLine'
 
                 if (ui.sender === null) {
-
                     // la logique est la suivante : data-position donne la position initiale de la ligne
                     // après un déplacement data-position est du coup le numéro de ligne d'origine
                     from = $("#" + id).attr('data-position');
@@ -194,7 +193,7 @@ jQuery(function () {
                     // chercher quel est le rang en balayant les lignes
                     to = -1;
                     $('#bels tr').each(function (index) {
-                        if ($(this).attr('id') === parseInt(id, 10)) {
+                        if ($(this).attr('id') === id) {
                             to = index + 1;
                         }
 
