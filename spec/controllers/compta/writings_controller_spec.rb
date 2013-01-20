@@ -7,7 +7,7 @@ RSpec.configure do |config|
 end
 
 describe Compta::WritingsController do 
-  include SpecControllerHelper
+  include SpecControllerHelper 
 
   before(:each) do
     minimal_instances
@@ -28,10 +28,9 @@ describe Compta::WritingsController do
     it "assigns all writings as @writings" do
       @b.should_receive(:writings).and_return @a = double(Arel)
       @a.should_receive(:period).with(@p).and_return(@a)
-      @a.should_receive(:all).and_return [1,2]
-      
+            
       get :index, {book_id:@b.id}, valid_session
-      assigns(:writings).should eq([1,2])
+      assigns(:writings).should == @a
     end
   end
 

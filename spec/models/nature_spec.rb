@@ -1,7 +1,7 @@
 # coding: utf-8
 
 RSpec.configure do |c|
-  # c.filter = {wip:true}
+  # c.filter = {wip:true} 
 end
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
@@ -88,7 +88,7 @@ describe Nature do
         it 'cant be destroyed when not empty' do
           create_outcome_writing(152, 'Chèque')
           @n.compta_lines.count.should == 1
-          expect {@nature.destroy}.not_to change {Nature.count}
+          expect {@n.destroy}.not_to change {Nature.count}
         end
 
       end

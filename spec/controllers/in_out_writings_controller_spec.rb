@@ -13,6 +13,7 @@ describe InOutWritingsController do
     minimal_instances
     @b = mock_model(Book)
     Book.stub(:find).with(@b.id.to_s).and_return @b
+    @b.stub_chain(:organism, :find_period).and_return @p
 
   end
 
