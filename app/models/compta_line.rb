@@ -6,7 +6,6 @@ class ComptaLine < ActiveRecord::Base
   belongs_to :destination
   belongs_to :nature
   belongs_to :account
-  # belongs_to :bank_extract
   belongs_to :check_deposit
   
   # les lignes appartiennent à un writing
@@ -16,6 +15,7 @@ class ComptaLine < ActiveRecord::Base
     :foreign_key=>'line_id',
     :uniq=>true # pour les rapprochements bancaires
 
+  # La présence est assurée par la valeur par défaut
   # mais on laisse presence:true, ne serait-ce que parce que cela permet d'avoir l'*
   # dans le formulaire
   validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}

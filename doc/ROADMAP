@@ -786,6 +786,7 @@ OK - Le cadenas de verrouillage ne devrait pas s'afficher sur le livre d'OD s'il
 Il faudrait mettre des mois dans l'affichage des journaux (comme pour la partie saisie), surtout pour recettes et dépenses
 OK - Retirer les actions pour les transferts dans l'affichage du journal d'OD
 --------------------Divers---------------------------------------------------------------------------
+Retirer le champ type de bank_extract_line car l'héritage STI n'est pas utilisé
 Lors de la mise en place sur un nouvel ordi, il manque les répertoires ../db/development et organisms : modifier le rake pour créer le répertoire ou le créer par l'action
 On pourrait changer les InOutExtract et CashExtract pour les faire descendre de Extract::Base et factoriser les utilities::extract
 Nettoyer old_bootstrap.css en modifiant bootstrap.css
