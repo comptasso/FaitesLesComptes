@@ -14,7 +14,7 @@
       :method=>:post, :title=>'Dégroupe les lignes' if (standard_bank_extract_line.compta_lines.size > 1)
     -if (standard_bank_extract_line.compta_lines.size > 1)
       %a.icon_menu{:href=>'#'}
-        = image_tag 'icones/detail.png', rel:"popover", 'data-original-title'=> details_title, 'data-content'=>details_for_popover(standard_bank_extract_line)
+        = image_tag 'icones/detail.png', rel:"popover", 'data-original-title'=> 'Détail des lignes', 'data-content'=>details_for_popover(standard_bank_extract_line)
     
     
     

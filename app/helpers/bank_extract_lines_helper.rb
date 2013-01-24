@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 
 module BankExtractLinesHelper
+
+  # Affiche le détail des lignes d'un extrait de compte lorsque celles-ci sont regroupées
   def details_for_popover(bel)
     html =  []
     bel.compta_lines.each do |l|
@@ -13,9 +15,7 @@ module BankExtractLinesHelper
     html
   end
 
-  def details_title
-    "Détail des lignes"
-  end
+  
 end
 
 
