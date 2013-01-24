@@ -2,13 +2,36 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .public_bank_extract_lines {
-  .popover-inner {
-    background-color: #271;
-    width: 400px;
+  .popover-content {
+    background-color: #dbffdb;
+
+    p {
+      margin-left: 0px;
+
+      li {
+        font-size: 11px;
+        }
+      }
+    
   }
   .popover {
-    // width: 400px;
+    width: 400px;
+    background: #227711;
+    padding: 8px;
+    
   }
+
+  .popover.right .arrow {
+    border-right-color: #DBFFDB
+   }
+   
+  h3.popover-title {
+    padding-left: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: white;
+    font-size: 12px;
+    }
 
   .centered {
     text-align: center;

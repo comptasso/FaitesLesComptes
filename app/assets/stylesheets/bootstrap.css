@@ -4163,7 +4163,7 @@ a.thumbnail:hover {
 .popover.left {
   margin-right: 10px;
 }
-.popover-title {
+.popover {
   margin: 0;
   padding: 8px 14px;
   font-size: 13px;
