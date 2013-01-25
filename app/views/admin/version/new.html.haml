@@ -1,0 +1,17 @@
+= content_for :menu do
+  = icon_to 'retour.png', admin_organisms_path
+
+.champ
+  %h3#sous-titre
+    Migration de toutes les bases de données vers la version #{VERSION} ?
+
+
+.inner-champ
+  %p
+    Le logiciel a détecté qu'une base de données au moins est dans une version antérieure à la version du logiciel.
+    %br
+    Vous pouvez mettre à jour les bases de données en cliquant sur le bouton ci-dessous.
+  .inputs
+    =form_tag('/admin/version/migrate_each') do 
+      .form-actions
+        = submit_tag 'Confirmer les migrations', class: "btn-primary"

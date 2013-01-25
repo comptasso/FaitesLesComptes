@@ -98,6 +98,25 @@ describe Room do
         @r.organism.should == @o
       end
     end
+
+
+    describe 'migrate_each' do
+      it 'met à jour la version' do
+      @r1 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest1')
+      @r2 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest2')
+      @r1.connect_to_organism
+      Organism.first.update_attribute(:version, 'test')
+      @r1.organism.version.should == 'test'
+      @r2.connect_to_organism.should be_true
+      Organism.create!(title:'mon asso', database_name:'assotest2', status:'Association' )
+      Organism.first.update_attribute(:version, 'test')
+      @r2.organism.version.should == 'test'
+
+      Room.migrate_each
+      @r1.organism.version.should == VERSION
+      @r2.organism.version.should == VERSION
+    end
+    end
   end
 
 end

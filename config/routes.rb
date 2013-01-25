@@ -1,5 +1,7 @@
 Faitesvoscomptes::Application.routes.draw do
 
+  
+
   get "bottom/credit"
   get "bottom/contact"
 
@@ -74,6 +76,10 @@ Faitesvoscomptes::Application.routes.draw do
   
   ##################### namespace ADMIN ##############################"
    namespace 'admin' do
+
+
+    get "version/new"
+    post "version/migrate_each"
 
     resources :users do
       resources :rooms
