@@ -1,6 +1,3 @@
-= content_for :menu do
-  = icon_to 'retour.png', admin_organisms_path
-
 .champ
   %h3#sous-titre
     Migration de toutes les bases de données vers la version #{VERSION} ?
@@ -12,6 +9,6 @@
     %br
     Vous pouvez mettre à jour les bases de données en cliquant sur le bouton ci-dessous.
   .inputs
-    =form_tag('/admin/version/migrate_each') do 
+    =form_tag('/admin/versions/migrate_each', {:class=>'simple_form form-horizontal'}) do
       .form-actions
-        = submit_tag 'Confirmer les migrations', class: "btn-primary"
+        = submit_tag 'Confirmer les migrations', class: "btn btn-primary"

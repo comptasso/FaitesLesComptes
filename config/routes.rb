@@ -78,8 +78,8 @@ Faitesvoscomptes::Application.routes.draw do
    namespace 'admin' do
 
 
-    get "version/new"
-    post "version/migrate_each"
+    get "versions/new"
+    post "versions/migrate_each"
 
     resources :users do
       resources :rooms

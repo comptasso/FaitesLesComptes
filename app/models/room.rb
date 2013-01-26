@@ -25,30 +25,41 @@ class Room < ActiveRecord::Base
     end
   end
 
-
+  # vérifie que les bases de données sont bien toutes de la bonne version
+  def self.version_update?
+    Room.find_each do |r|
+      if r.connect_to_organism
+         arm = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths)
+         if arm.pending_migrations.any?
+           puts "Base #{r.database_name} nécessite une migration"
+           return false
+         end
+      end
+    end
+    true
+  end
 
   # Migre la table prinicpale dont dépend Room puis migre chacune des
   # bases de données qui sont référencées par Room
   #
   # Met à jour la version
   def self.migrate_each
-    ActiveRecord::Migration.verbose = true
+    # ActiveRecord::Migration.verbose = true
     ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
-
+    cc = ActiveRecord::Base.connection_config
     Room.all.each do |r|
       # on se connecte successivement à chacun d'eux
       if r.connect_to_organism
         puts "migrating #{r.absolute_db_name}"
         # et appel pour chacun de la fonction voulue
         ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
-        Organism.first.update_attribute(:version, version)
+        Organism.first.update_attribute(:version, VERSION)
       end
     end
+     ActiveRecord::Base.establish_connection(cc)
   end
 
-  def self.version
-    VERSION
-  end
+  
 
   # renvoie par exemple asso.sqlite3
   def db_filename

@@ -11,7 +11,12 @@
 # Le second cas est lorsqu'on importe une base de données qui est dans une version
 # antérieure. Ce cas est détecté par le restore_controller
 #
-class Admin::VersionController < ApplicationController
+class Admin::VersionsController < ApplicationController
+
+  skip_before_filter :control_version
+  skip_before_filter :log_in?
+
+
   # GET new pour demander si on veut effectivement faire migrer les bases de données
   def new
 
@@ -21,7 +26,8 @@ class Admin::VersionController < ApplicationController
   def migrate_each
     # il faut migrer la base Room et ensuite migrer toutes les bases 
     # contenues dans Room
-    Rooms.migrate_each
+    Room.migrate_each
     redirect_to admin_organisms_url
   end
+
 end

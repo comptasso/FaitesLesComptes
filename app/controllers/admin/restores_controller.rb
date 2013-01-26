@@ -60,6 +60,9 @@ class Admin::RestoresController < Admin::ApplicationController
       @room.connect_to_organism
       # On indique à l'organisme quelle base il utilise (puisqu'on peut faire des copies)
       Organism.first.update_attribute(:database_name, params[:database_name])
+
+      
+
       # tout s'est bien passé on sauve la nouvelle pièce
       use_main_connection
       @room.save!

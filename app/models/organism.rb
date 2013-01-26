@@ -100,6 +100,12 @@ class Organism < ActiveRecord::Base
     # on est maintenant en mesure de créer l'organisme
   end
 
+  # indique si la base de données représentant l'organisme est à jour de
+  # ses migrations
+  #  def version_update?
+  #    ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).pending_migrations.empty?
+  #  end
+
   # retourne la collection de livres de Recettes et de Dépenses
   # ceux qui sont accessibles dans la partie saisie.
   #
