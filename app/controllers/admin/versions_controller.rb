@@ -24,9 +24,8 @@ class Admin::VersionsController < ApplicationController
 
   # POST migrate_each pour migrer l'ensemble des bases de données
   def migrate_each
-    # il faut migrer la base Room et ensuite migrer toutes les bases 
-    # contenues dans Room
-    Room.migrate_each
+    Room.migrate_each # migre Room et les différentes bases
+    Rails.cache.clear('version_update')
     redirect_to admin_organisms_url
   end
 

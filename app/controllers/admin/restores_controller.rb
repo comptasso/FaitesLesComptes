@@ -20,9 +20,13 @@ class Admin::RestoresController < Admin::ApplicationController
   # soit elle existe et n'appartient pas au user
   # soit elle n'existe pas.
   # Dans tous les cas, on demande une confirmation
+  #
+  # TODO affiner cette question en traitant le cas où on importe une
+  # base antérieure et une base postérieure à la version actuelle.
   def create
 
     uploaded_io = params[:file_upload]
+    Rails.cache.clear('version_update')
 
     begin
       

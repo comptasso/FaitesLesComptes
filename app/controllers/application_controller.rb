@@ -16,11 +16,11 @@ class ApplicationController < ActionController::Base
   # A chaque démarrage de l'application, on vérifie que les bases de données
   # sont cohérentes avec la version du logiciel.
   #
-  # control_version sert alors de cache pour la valeur de retour 
   #
   def control_version
+    Rails.logger.info 'appel de controle version'
     @control_version ||= Rails.cache.fetch('version_update') do
-      Rails.logger.debug 'appel du cache version_update?'
+      Rails.logger.info 'appel du cache version_update?'
       Room.version_update?
     end
     redirect_to admin_versions_new_path unless @control_version

@@ -7,6 +7,8 @@ class Admin::OrganismsController < Admin::ApplicationController
   skip_before_filter :find_organism, :current_period, only:[:index, :new] 
   before_filter :use_main_connection, only:[:index, :new, :destroy]
 
+  after_filter :clear_org_cache, only:[:create, :update]
+
   # liste les organismes appartenant au current user
   # si certains organismes n'ont pas de base de données permettant de lire l'organisme
   # affiche une alerte indiquant les bases non trouvées
@@ -96,6 +98,7 @@ class Admin::OrganismsController < Admin::ApplicationController
 
     respond_to do |format|
       if @organism.update_attributes(params[:organism])
+
         format.html { redirect_to [:admin, @organism], notice: "Modification de l'organisme effectuée" }
         format.json { head :ok }
       else
@@ -134,6 +137,14 @@ class Admin::OrganismsController < Admin::ApplicationController
     # ici vérification de la nomenclature : si erreur ...
     # on devrait faire la validation de la nomenclature dans orgnaisme
   end
+
+   # appelé par after_filter pour effacer les caches utilisés pour l'affichage
+   # des menus
+   def clear_org_cache
+     Rails.cache.clear("saisie_#{current_user.name}")
+     Rails.cache.clear("admin_#{current_user.name}")
+     Rails.cache.clear("compta_#{current_user.name}")
+   end
 
  
 end

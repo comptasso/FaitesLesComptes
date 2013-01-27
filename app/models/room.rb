@@ -44,18 +44,21 @@ class Room < ActiveRecord::Base
   #
   # Met à jour la version
   def self.migrate_each
-    # ActiveRecord::Migration.verbose = true
-    ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
+    # migration de Room si nécessaire
+    if ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).pending_migrations.any?
+      ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
+    end
     cc = ActiveRecord::Base.connection_config
     Room.all.each do |r|
       # on se connecte successivement à chacun d'eux
-      if r.connect_to_organism
+      if r.connect_to_organism && ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).pending_migrations.any?
         puts "migrating #{r.absolute_db_name}"
         # et appel pour chacun de la fonction voulue
         ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
         Organism.first.update_attribute(:version, VERSION)
       end
     end
+    # retour à la base Room
      ActiveRecord::Base.establish_connection(cc)
   end
 

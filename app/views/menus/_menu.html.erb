@@ -1,12 +1,16 @@
 
   <ul class="nav nav-tabs" id="menu_general">
+   
     <li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> ">
+
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         ORGANISMES
         <b class="caret"></b>
       </a>
       <ul class="dropdown-menu">
-        <%= saisie_consult_organism_list if current_user? %>
+        <% cache("saisie_#{current_user.name}")  do %>
+          <%= saisie_consult_organism_list if current_user? %>
+        <% end %>
       </ul>
     </li>
 
