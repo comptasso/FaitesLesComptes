@@ -16,21 +16,17 @@ class ApplicationController < ActionController::Base
   # A chaque démarrage de l'application, on vérifie que les bases de données
   # sont cohérentes avec la version du logiciel.
   #
-  # control_version sert alors de cache pour la valeur de retour qui est fournie par check_version
+  # control_version sert alors de cache pour la valeur de retour 
   #
   def control_version
-    @control_version ||= check_version
+    @control_version ||= Rails.cache.fetch('version_update') do
+      Rails.logger.debug 'appel du cache version_update?'
+      Room.version_update?
+    end
+    redirect_to admin_versions_new_path unless @control_version
   end
 
-  # vérifie que toutes les bases de données sont cohérentes avec la version
-  def check_version
-    if Room.version_update? == true
-      @control_version = true
-    else
-      @control_version = false
-      redirect_to admin_versions_new_path
-    end
-  end
+ 
 
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
