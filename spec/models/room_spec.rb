@@ -2,7 +2,7 @@
 require 'spec_helper' 
 
 describe Room do
-  include OrganismFixture 
+  include OrganismFixture  
 
   def valid_attributes
     {user_id:1, database_name:'foo'}

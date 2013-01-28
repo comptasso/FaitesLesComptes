@@ -31,8 +31,8 @@ describe Admin::UsersController do
   def valid_attributes
     {name:'jean-claude'} 
   end
-
-  before(:each) do
+ 
+  before(:each) do 
     create_user
   end
 

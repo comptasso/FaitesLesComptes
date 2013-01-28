@@ -39,6 +39,29 @@ class Room < ActiveRecord::Base
     true
   end
 
+  # relative_version compare la version de l'organisme
+  # et indique si cet organisme est en avance ou en retard par rapport
+  # aux migrations qui sont enregistrées dans Room
+  #
+  # La valeur retournée est un hash avec l'id de la Room et un symbole indiquant
+  # l'état de la migration par rapport à la base principale (Room).
+  #
+  # nil si la base n'est pas trouvée.
+  def relative_version
+    room_last_migration  = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
+    organism_last_migration = look_for {Organism.migration_version}
+    if organism_last_migration
+    v =:same_migration if room_last_migration == organism_last_migration
+    v = :late_migration if room_last_migration > organism_last_migration
+    v = :advance_migration if room_last_migration < organism_last_migration
+    else
+      v = nil
+    end
+    {id=>v}
+  end
+
+
+
   # Migre la table prinicpale dont dépend Room puis migre chacune des
   # bases de données qui sont référencées par Room
   #
