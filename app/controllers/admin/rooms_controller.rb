@@ -8,17 +8,35 @@
 class Admin::RoomsController < Admin::ApplicationController
 
   skip_before_filter :find_organism, :current_period
+
+  # affiche la liste des bases appartenant au current_user
+  def index
+    @rooms = current_user.rooms
+    status = @rooms.map {|r| r.relative_version}.uniq
+    unless status == [:same_migration]
+      alert = []
+      alert += ["Une base au moins est en retard par rapport à la version de votre programme, migrer la base correspondante"] if status.include? (:late_migration)
+      alert += ["Une base au moins est en avance par rapport à la version de votre programme, passer à la version adaptée"] if status.include? (:advance_migration)
+      alert += ['Un fichier correspondant à une base n\'a pu être trouvée ; vous devriez effacer l\'enregistrement correspondant'] if status.include? (:no_base)
+      flash[:alert] = alert.join("\n")
+    end
+    
+  end
     
   # trouve la pièce demandée, connecte la base
   # trouve l'organisme de cette base
   # et redirige vers le controller organism
+  # TODO voir si show est utilisé
   def show
     @room = current_user.rooms.find(params[:id])
     organism_has_changed?(@room)
     redirect_to admin_organism_path(@organism)
   end
 
+
+
   
+  # TODO voir si edit est utilisé
   def edit
     @room = current_user.rooms.find(params[:id])
     organism_has_changed?(@room)

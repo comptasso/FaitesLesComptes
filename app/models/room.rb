@@ -55,11 +55,24 @@ class Room < ActiveRecord::Base
     v = :late_migration if room_last_migration > organism_last_migration
     v = :advance_migration if room_last_migration < organism_last_migration
     else
-      v = nil
+      v = :no_base
     end
-    {id=>v}
+    v
   end
 
+  def late?
+    relative_version == :late_migration ? true : false
+  end
+
+  def no_base?
+    relative_version == :no_base ? true : false
+  end
+
+  def advanced?
+    relative_version == :advance_migration ? true : false
+  end
+
+  
 
 
   # Migre la table prinicpale dont dépend Room puis migre chacune des

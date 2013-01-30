@@ -1,2 +1,12 @@
-%h1 Rooms#index
-%p Find me in app/views/rooms/index.html.haml
+.champ#index
+  %h3 Liste des bases
+  %table.table.table-striped.table-bordered.table-condensed#bases(cellpadding="0" cellspacing="0" border="0"  )
+    %thead
+      %tr
+        %th Nom de la base
+        %th Titre de l'organisme
+        %th Statut
+        %th Actions
+
+    %tbody
+      = render  :partial=>'room', :collection=>@rooms

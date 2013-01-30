@@ -88,6 +88,7 @@ Faitesvoscomptes::Application.routes.draw do
     resources :rooms do
       member do
         get 'new_archive'
+        post 'migrate'
       end
     end
     

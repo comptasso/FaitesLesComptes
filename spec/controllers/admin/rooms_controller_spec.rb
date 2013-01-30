@@ -44,9 +44,40 @@ describe Admin::RoomsController do
   describe "GET index" do
     
     it "assigns all rooms as @rs" do
-      pending 'l action index n existe pas encore'
+      @cu.should_receive(:rooms).and_return(@a = double(Arel, :map=>[]))
+
       get :index,{}, user_session
-      assigns(:rooms).should eq([@r])
+      assigns(:rooms).should eq(@a) 
+    end
+
+    it 'renders template index' do
+      @cu.stub(:rooms).and_return(@a = double(Arel, :map=>[]))
+      get :index,{}, user_session
+      response.should render_template('index')
+    end
+
+    it 'si toutes les roome sont en phase n affiche pas de flash' do
+      @cu.should_receive(:rooms).and_return([mock_model(Room, :relative_version=>:same_migration)])
+      get :index,{}, user_session
+      flash[:alert].should == nil
+    end
+
+    it 'si une room est en retard affiche un flash' do
+      @cu.should_receive(:rooms).and_return([mock_model(Room, :relative_version=>:late_migration)])
+      get :index,{}, user_session
+      flash[:alert].should == 'Une base au moins est en retard par rapport à la version de votre programme, migrer la base correspondante'
+    end
+
+    it 'si une room est en avance, affiche un flash' do
+      @cu.should_receive(:rooms).and_return([mock_model(Room, :relative_version=>:advance_migration)])
+      get :index,{}, user_session
+      flash[:alert].should == 'Une base au moins est en avance par rapport à la version de votre programme, passer à la version adaptée'
+    end
+
+    it 'si une base n existe pas ' do
+      @cu.should_receive(:rooms).and_return([mock_model(Room,:relative_version=>:no_base)])
+      get :index,{}, user_session
+      flash[:alert].should == 'Un fichier correspondant à une base n\'a pu être trouvée ; vous devriez effacer l\'enregistrement correspondant' 
     end
   end
 
