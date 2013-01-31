@@ -5,8 +5,8 @@
 # sa propre base de donnée.
 #
 class Room < ActiveRecord::Base
-  # Room est dans la base principale
-  establish_connection Rails.env
+  
+  establish_connection Rails.env # très certainement inutile puisque comportement par défaut
 
   belongs_to :user
 
@@ -15,7 +15,7 @@ class Room < ActiveRecord::Base
   
   # renvoie l'organisme associé à la base
   def organism
-     look_for { Organism.first }
+    look_for { Organism.first }
   end
 
   # renvoie un hash utilisé pour l'affichage de la table des organismes
@@ -25,18 +25,15 @@ class Room < ActiveRecord::Base
     end
   end
 
-  # vérifie que les bases de données sont bien toutes de la bonne version
+  # Vérifie que les bases de données sont bien toutes de la bonne version
+  #
+  # Il y a le cas où la base principale (celle qui enregistre User et Room) n'est
+  # elle même pas à jour. Par exemple, si on démarre le serveur avec une nouvelle
+  # version.
+  #
   def self.version_update?
-    Room.find_each do |r|
-      if r.connect_to_organism
-         arm = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths)
-         if arm.pending_migrations.any?
-           puts "Base #{r.database_name} nécessite une migration"
-           return false
-         end
-      end
-    end
-    true
+    arm = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths)
+    arm.pending_migrations.any? ? false : true 
   end
 
   # relative_version compare la version de l'organisme
@@ -51,9 +48,9 @@ class Room < ActiveRecord::Base
     room_last_migration  = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
     organism_last_migration = look_for {Organism.migration_version}
     if organism_last_migration
-    v =:same_migration if room_last_migration == organism_last_migration
-    v = :late_migration if room_last_migration > organism_last_migration
-    v = :advance_migration if room_last_migration < organism_last_migration
+      v =:same_migration if room_last_migration == organism_last_migration
+      v = :late_migration if room_last_migration > organism_last_migration
+      v = :advance_migration if room_last_migration < organism_last_migration
     else
       v = :no_base
     end
@@ -88,14 +85,14 @@ class Room < ActiveRecord::Base
     Room.all.each do |r|
       # on se connecte successivement à chacun d'eux
       if r.connect_to_organism && ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).pending_migrations.any?
-        puts "migrating #{r.absolute_db_name}"
-        # et appel pour chacun de la fonction voulue
+        Rails.logger.info "migrating #{r.absolute_db_name}"
+        # et appel pour chacun de la migration
         ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
-        Organism.first.update_attribute(:version, VERSION)
+        Organism.first.update_attribute(:version, VERSION) # mise à jour de la version
       end
     end
     # retour à la base Room
-     ActiveRecord::Base.establish_connection(cc)
+    ActiveRecord::Base.establish_connection(cc)
   end
 
   
@@ -105,8 +102,13 @@ class Room < ActiveRecord::Base
     [database_name, Rails.application.config.database_configuration[Rails.env]['adapter']].join('.')
   end
 
-  # pour sortir les bases de données du répertoire de l'application 
-  def self.path_to_db 
+  # pour sortir les bases de données du répertoire de l'application;
+  # 
+  # Les bases de test restent dans la hiérarchie conventionnelle de Rails
+  #
+  # ENV['OCRA_EXECUTABLE'] est l'environnement pour la version .exe sous Windows
+  #
+  def self.path_to_db
     if Rails.env == 'test'
       File.join(Rails.root, 'db', Rails.env, 'organisms')
     elsif ENV['OCRA_EXECUTABLE']

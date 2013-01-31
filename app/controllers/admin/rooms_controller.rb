@@ -12,8 +12,9 @@ class Admin::RoomsController < Admin::ApplicationController
   # affiche la liste des bases appartenant au current_user
   def index
     @rooms = current_user.rooms
-    status = @rooms.map {|r| r.relative_version}.uniq
-    unless status == [:same_migration]
+    
+    unless current_user.up_to_date?
+      status = current_user.status
       alert = []
       alert += ["Une base au moins est en retard par rapport à la version de votre programme, migrer la base correspondante"] if status.include? (:late_migration)
       alert += ["Une base au moins est en avance par rapport à la version de votre programme, passer à la version adaptée"] if status.include? (:advance_migration)
@@ -52,7 +53,7 @@ class Admin::RoomsController < Admin::ApplicationController
   end
 
   # détruit la pièce ainsi que la base associée
-  # cette méthode n'appelle pas set_database car tout se passe dans la base principale
+  #
   def destroy
     @room = current_user.rooms.find(params[:id])
     abs_db = @room.absolute_db_name
@@ -64,10 +65,16 @@ class Admin::RoomsController < Admin::ApplicationController
       # FIXME sur windows au moins, semble poser un problème de droit d'accès
       # donc on n'efface pas le fichier
       #  File.delete(abs_db) if File.exist?(abs_db)
-      flash[:notice] =  "L'organisme suivi par la base #{db_name} a été supprimé;<br/> Le fichier #{abs_db} existe encore.<br/>
-         Pour le supprimer faites le manuellement à partir de l'explorateur de fichiers".html_safe
+      notice = "L'organisme suivi par la base #{db_name} a été supprimé;"
+      notice += "<br/> Le fichier #{abs_db} existe encore.<br/>
+         Pour le supprimer faites le manuellement à partir de l'explorateur de fichiers" if File.exist?(abs_db)
+      flash[:notice] =  notice.html_safe
       organism_has_changed?
-      redirect_to admin_organisms_url
+      if current_user.up_to_date?
+        redirect_to admin_organisms_url
+      else
+        redirect_to admin_rooms_url
+      end
     else
       flash[:alert] = "Une erreur s'est produite; la base  #{db_name} n'a pas été supprimée"
       render 'show'

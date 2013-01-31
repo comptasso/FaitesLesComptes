@@ -21,7 +21,12 @@ class RoomsController < ApplicationController
   def show
     room = current_user.rooms.find(params[:id])
     organism_has_changed?(room)
-    redirect_to organism_path(Organism.first)
+    o =  Organism.first
+    if o
+      redirect_to organism_path(o)
+    else
+      redirect_to new_admin_organism_path
+    end
   end
 
 end

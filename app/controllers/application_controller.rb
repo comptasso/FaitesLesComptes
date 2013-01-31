@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
   # A chaque démarrage de l'application, on vérifie que les bases de données
   # sont cohérentes avec la version du logiciel.
   #
-  #
   def control_version
     Rails.logger.info 'appel de controle version'
     @control_version ||= Rails.cache.fetch('version_update') do
@@ -129,7 +128,7 @@ class ApplicationController < ActionController::Base
       session[:org_db]  = groom.database_name
       groom.connect_to_organism
       @organism  = Organism.first
-      unless @organism.periods.empty?
+      if @organism && @organism.periods.any?
         @period = @organism.periods.last
         session[:period] = @period.id
       end

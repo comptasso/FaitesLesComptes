@@ -18,7 +18,9 @@ class Admin::OrganismsController < Admin::ApplicationController
     @room_organisms = rooms.select {|o| o != nil}
     unless rooms.select {|o| o == nil}.empty?
       list = current_user.rooms.select {|r| r.organism == nil}.collect {|r| r.database_name}.join(', ')
-      flash[:alert] = "Base de données non trouvée ou organisme inexistant: #{list}"
+      link = %Q[<a href="#{admin_rooms_url}">gestion des bases</a>]
+      flash[:alert] = "Base de données non trouvée ou organisme inexistant: #{list} ;
+      Cliquez ici pour accéder à la #{link} ".html_safe
     end
   end
 

@@ -1,8 +1,8 @@
 %tr
   %td= room.database_name
-  %td= room.organism.title
+  %td= room.organism.title if room.organism
   %td= room.relative_version
   %td
     = icon_to('migrer.png', migrate_admin_room_path(room), :method=>:post, title:'migrer la base')  if room.late?
-    = icon_to('supprimer.png', migrate_admin_room_path(room), :method=>:delete) if room.no_base?
+    = icon_to('supprimer.png', admin_room_path(room), :method=>:delete) if room.no_base?
     = image_tag('icones/traffic-light-red.png', title:'Base en avance sur la version du programme; Impossible à utiliser') if room.advanced?

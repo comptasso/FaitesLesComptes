@@ -102,7 +102,7 @@ describe Room do
     end
 
 
-    describe 'migrate_each' do
+    describe 'version_update and migrate_each' do
 
       before(:each) do
         Room.find_each {|r| r.destroy}
@@ -110,28 +110,16 @@ describe Room do
         @r2 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest2')
         @r1.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest1',  :status=>'Association') if Organism.all.empty?}
         @r2.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest2',  :status=>'Association') if Organism.all.empty?}
+        ActiveRecord::Migrator.any_instance.stub(:pending_migrations).and_return [1]
       end
 
-      
-
       it 'met à jour la version' do
-        
-        @r1.connect_to_organism
-        Organism.first.update_attribute(:version, 'test')
-        @r1.organism.version.should == 'test'
-        @r2.connect_to_organism.should be_true
-        Organism.create!(title:'mon asso', database_name:'assotest2', status:'Association' ) if Organism.all.empty?
-        Organism.first.update_attribute(:version, 'test')
-        @r2.organism.version.should == 'test'
-
+        # 3 fois car une fois pour la base principale et une fois pour chaque organisme
+        ActiveRecord::Migrator.should_receive(:migrate).with(ActiveRecord::Migrator.migrations_paths).exactly(3).times
         Room.migrate_each
-        @r1.organism.version.should == VERSION
-        @r2.organism.version.should == VERSION
       end
 
       it 'version_update? est capable de vérifier la similitude des versions' do
-        Room.should be_version_update
-        @r2.organism.update_attribute(:version, 'test')
         Room.should_not be_version_update
       end
 
