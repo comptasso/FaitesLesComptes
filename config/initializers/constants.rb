@@ -42,4 +42,5 @@ LIST_STATUS = %w(Association Entreprise)
 # Version 0.5.0 insertion d'un champ status dans Organism
 # refonte du modèle Transfer et travail sur la présentation du formulaire de Transfert
 # Version 0.5.1 - correction des dates du formulaire contrôle de caisse
-VERSION = '0.6.1'
+# version 0.6 : suppression du champ bank_extract_id des compta_lines ainsi que du champ type pour les bank_extract_lines.
+VERSION = '0.6.2'
