@@ -65,15 +65,16 @@ class Admin::RestoresController < Admin::ApplicationController
       # On indique à l'organisme quelle base il utilise (puisqu'on peut faire des copies)
       Organism.first.update_attribute(:database_name, params[:database_name])
 
-      
-
       # tout s'est bien passé on sauve la nouvelle pièce
       use_main_connection
       @room.save!
       
-         
-      flash[:notice] = "Le fichier a été chargé et peut servir de base de données"
-      redirect_to admin_organisms_url
+      if @room.relative_version == :same_migration
+        flash[:notice] = "Le fichier a été chargé et peut servir de base de données"
+        redirect_to admin_organisms_url
+      else
+        redirect_to admin_rooms_url
+      end
 
     rescue RestoreError => e
       flash[:alert] = e.message

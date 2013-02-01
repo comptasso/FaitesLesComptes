@@ -19,7 +19,6 @@ class ApplicationController < ActionController::Base
   def control_version
     Rails.logger.info 'appel de controle version'
     @control_version ||= Rails.cache.fetch('version_update') do
-      Rails.logger.info 'appel du cache version_update?'
       Room.version_update?
     end
     redirect_to admin_versions_new_path unless @control_version

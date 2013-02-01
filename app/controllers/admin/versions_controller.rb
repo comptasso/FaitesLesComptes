@@ -2,14 +2,32 @@
 # lorsque l'on change de version de logiciel ou lorsqu'on importe une base
 # qui a été créée dans une version antérieure.
 #
-# Il y a donc deux cas de figure, le premier, correspondant à l'action migrate
-# est destiné à traiter le cas où on démarre le logiciel avec une version
-# plus récente.
+# Il y a plusieurs cas de figure qui sont traités, soit par version_controller, soit
+# par rooms_controller.
 #
-# Il faut donc migrer toutes les bases de données : rooms et les autres
+# Nous expliquons ici les deux cas:
 #
-# Le second cas est lorsqu'on importe une base de données qui est dans une version
-# antérieure. Ce cas est détecté par le restore_controller
+# == Premier cas de figure
+# Il s'agit du cas le plus fréquent et que je cherche à gérer; cas où l'utilisateur
+# est allé chercher une version mise à jour
+# du fichier .exe et a substitué dans son PC, cette version à  la précédente.
+#
+#  Il faut donc mettre à jour l'ensemble des bases. C'est ce que fait version_controller
+#  qui est appelé par le before_filter control_version de ApplicationController.
+#
+#  On considère que cette manipulation doit concerner l'ensemble des bases
+#
+# == Deuxième cas de figure
+# On importe un fichier par le restore_controller : ce fichier peut être d'une
+# version postérieure ou antérieure à la version actuelle du programme.
+# Dans ce cas, le controller restore renvoie sur la page Rooms#index avec une information
+# de ce qu'il faut faire au travers du flash.
+#
+# == Troisième cas de figure
+# A priori à éviter; on a substitué directement des fichiers sqlite3 dans le répertoire
+# des bases de données. On pourrait donc avoir des bases postérieures à la base présente
+#
+# 
 #
 class Admin::VersionsController < ApplicationController
 

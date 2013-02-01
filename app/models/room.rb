@@ -4,6 +4,9 @@
 # enregistrer les noms des bases de données puisque chaque organisme dispose de
 # sa propre base de donnée.
 #
+# Voir les commentaires sur versions_controller pour la gestion des migrations et
+# des versions
+#
 class Room < ActiveRecord::Base
   
   establish_connection Rails.env # très certainement inutile puisque comportement par défaut

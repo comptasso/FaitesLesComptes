@@ -33,6 +33,7 @@ describe Admin::RestoresController do
     before(:each) do
       @file = fixture_file_upload('spec/fixtures/files/test.sqlite3', 'application/octet-stream')
       User.stub(:find_by_id).with(cu.id).and_return cu
+      Organism.stub_chain(:first, :update_attribute)
     end
 
 
@@ -42,11 +43,11 @@ describe Admin::RestoresController do
         cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, 'save!'=>true))
         @r.stub(:check_db).and_return(true)
         @r.stub(:connect_to_organism).and_return(true)
+        @r.stub(:relative_version).and_return(:same_migration)
 
       end
 
       it 'redirige vers la liste des fichiers' do
-        Organism.stub_chain(:first, :update_attribute)
         post :create, {:file_upload=>@file, database_name:'test2'}, valid_session
         flash[:notice].should == "Le fichier a été chargé et peut servir de base de données"
         response.should redirect_to admin_organisms_url
@@ -96,6 +97,31 @@ describe Admin::RestoresController do
         flash[:alert].should == 'Le contrôle du fichier par SQlite renvoie une erreur'
       end
 
+      context 'vérification de la version' do
+
+        before(:each) do
+          cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, 'save!'=>true))
+          @r.stub(:check_db).and_return true
+          @r.stub(:connect_to_organism).and_return true
+          
+        end
+      
+        it 'si la version est same_migration' do
+          
+          @r.stub(:relative_version).and_return(:same_migration)
+          post :create, {:file_upload=>@file, database_name:'test'}, valid_session
+          response.should redirect_to admin_organisms_path
+        end
+      
+        it 'si la version est différente' do
+          @r.stub(:relative_version).and_return('something_else')
+
+          post :create, {:file_upload=>@file, database_name:'test'}, valid_session
+          response.should redirect_to admin_rooms_path
+        end
+
+
+      end
     end
 
   end
