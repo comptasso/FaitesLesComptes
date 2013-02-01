@@ -34,6 +34,15 @@ class Admin::RoomsController < Admin::ApplicationController
     redirect_to admin_organism_path(@organism)
   end
 
+  # Action permettant de mettre à jour la base de données
+  def migrate
+    @room = current_user.rooms.find(params[:id])
+    @room.migrate
+    organism_has_changed?(@room)
+    flash[:notice] = 'la base a été migrée et mise à jour'
+    redirect_to admin_organism_path
+  end
+
 
 
   

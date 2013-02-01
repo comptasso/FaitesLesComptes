@@ -188,6 +188,9 @@ fr:
     
    
   Line: ligne
+  same_migration: En phase
+  late_migration: En retard
+  advance_migration: En avance
 
   general:
     Title: Titre
@@ -199,6 +202,8 @@ fr:
     account: Compte
     end_date: date de fin
     begin_date: date de début
+    
+
 
 
   activerecord:
@@ -342,10 +347,10 @@ fr:
       user:
         create: Entrée
       writing:
-        create: Créer l'écriture
+        create: "Créer l'écriture"
         update: Enregistrer
       in_out_writing:
-        create: Créer l'écriture
+        create: "Créer l'écriture"
         update: Enregistrer
       nomenclature:
         update: Charger le fichier

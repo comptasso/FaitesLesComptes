@@ -35,8 +35,10 @@ class Room < ActiveRecord::Base
   # version.
   #
   def self.version_update?
-    arm = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths)
-    arm.pending_migrations.any? ? false : true 
+    keep_context do
+      arm = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths)
+      arm.pending_migrations.any? ? false : true
+    end
   end
 
   # relative_version compare la version de l'organisme
@@ -48,7 +50,7 @@ class Room < ActiveRecord::Base
   #
   # nil si la base n'est pas trouvée.
   def relative_version
-    room_last_migration  = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
+    room_last_migration  = Room.jcl_last_migration
     organism_last_migration = look_for {Organism.migration_version}
     if organism_last_migration
       v =:same_migration if room_last_migration == organism_last_migration
@@ -72,6 +74,22 @@ class Room < ActiveRecord::Base
     relative_version == :advance_migration ? true : false
   end
 
+  # renvoie la dernière migration de la base principale (Room et User)
+  def self.jcl_last_migration
+    keep_context do
+      ActiveRecord::Base.establish_connection Rails.env.to_sym
+      ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
+    end
+  end
+
+  # keep_context est utilisé pour conserver l'environnement 
+  def self.keep_context
+    cc = ActiveRecord::Base.connection_config
+    result = yield
+    ActiveRecord::Base.establish_connection(cc)
+    result
+  end
+
   
 
 
@@ -85,17 +103,19 @@ class Room < ActiveRecord::Base
       ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
     end
     cc = ActiveRecord::Base.connection_config
-    Room.all.each do |r|
-      # on se connecte successivement à chacun d'eux
-      if r.connect_to_organism && ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).pending_migrations.any?
-        Rails.logger.info "migrating #{r.absolute_db_name}"
+    Room.all.each {|r| r.migrate }
+    # retour à la base Room
+    ActiveRecord::Base.establish_connection(cc)
+  end
+
+  # effectue la migration de la base associée à la Room
+  def migrate
+    if connect_to_organism && ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).pending_migrations.any?
+        Rails.logger.info "migrating #{absolute_db_name}"
         # et appel pour chacun de la migration
         ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
         Organism.first.update_attribute(:version, VERSION) # mise à jour de la version
-      end
     end
-    # retour à la base Room
-    ActiveRecord::Base.establish_connection(cc)
   end
 
   
