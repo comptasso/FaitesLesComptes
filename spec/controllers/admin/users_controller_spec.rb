@@ -8,7 +8,7 @@ require 'spec_helper'
 # generator.  If you are using any extension libraries to generate different
 # controller code, this generated spec may or may not pass. 
 #
-# It only uses APIs available in rails and/or rspec-rails.  There are a number
+# It only uses APIs available in rails and/or rspec-rails.  There are a number 
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 #
@@ -33,7 +33,7 @@ describe Admin::UsersController do
   end
  
   before(:each) do 
-    create_user
+    create_user if User.count == 0
   end
 
  

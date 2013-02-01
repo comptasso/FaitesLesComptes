@@ -50,7 +50,7 @@ include JcCapybara
       r2.stub('no_base?').and_return(true)
       render
       page.find('img:last')[:src].should have_content('supprimer.png')
-      page.find('tbody tr:last a')[:href].should == migrate_admin_room_path(r2)
+      page.find('tbody tr:last a')[:href].should == admin_room_path(r2)
       page.find('tbody tr:last a')['data-method'].should == 'delete'
     end
   end
