@@ -27,7 +27,10 @@ jQuery(function () {
     );
 });
 
-
+// série de fonction utilisée pour associer un compte aux natures
+// un compte de classe 7 ne peut être associé qu'à une nature de type recettes
+// de même un compte de classe 6 avev une nature de type dépenses
+//
 function desac_recettes() {
     $('optgroup[label=Recettes] option').attr('disabled', 'disabled');
 }
@@ -68,7 +71,7 @@ jQuery(function () {
 });
 
 
-
+// série de fonction pour associer par drag and drop les natures et les comptes
 $(function () {
     var classe;
     $("#accordion").accordion({
@@ -132,51 +135,5 @@ $(function () {
         // return false;
         }
     });
+  });
 
-
-//
-//
-//    $('.orphan_natures_recettes').droppable({
-//        accept: ".nature_recettes",
-//        over: function() {
-//            $(this).removeClass('out').addClass('over');
-//        },
-//        out: function() {
-//            $(this).removeClass('over').addClass('out');
-//        },
-//        drop: function(event, ui) {
-//            // $(this).find(".")
-//            $(this).removeClass('over').addClass('out');
-//            // faire la requete ajax l' élément à la liste '
-//            ui.draggable.appendTo($(this).find('ul'));
-//            var naturid=ui.draggable.attr('id').match(/\d*$/);
-//            //       alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
-//            $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
-//        }
-//    });
-//
-//
-//
-//    $('.orphan_natures_depenses').droppable({
-//        accept: ".nature_depenses",
-//        over: function() {
-//            $(this).removeClass('out').addClass('over');
-//        },
-//        out: function() {
-//            $(this).removeClass('over').addClass('out');
-//        },
-//        drop: function(event, ui) {
-//            // $(this).find(".")
-//            $(this).removeClass('over').addClass('out');
-//            // faire la requete ajax l' élément à la liste '
-//            ui.draggable.appendTo($(this).find('ul'));
-//            var naturid=ui.draggable.attr('id').match(/\d*$/);
-//            //       alert("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
-//            $.post("/admin/periods/"+$('#period').text()+"/natures/"+naturid+"/unlink_nature");
-//        }
-//    });
-});
-
-//jQuery(function(){
-//    $('.list_accounts .unchain').
-//})
