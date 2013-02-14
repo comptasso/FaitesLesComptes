@@ -23,7 +23,7 @@ class Account < ActiveRecord::Base
   include Utilities::Sold
 
 
-  
+  attr_accessible :number, :title, :used
 
   belongs_to :period
   belongs_to :accountable, polymorphic:true
