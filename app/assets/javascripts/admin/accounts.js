@@ -72,6 +72,8 @@ jQuery(function () {
 
 
 // série de fonction pour associer par drag and drop les natures et les comptes
+//
+// Création des accordéon
 $(function () {
     var classe;
     $("#accordion").accordion({
@@ -80,6 +82,7 @@ $(function () {
     });
 });
 
+// Marquage des différentes classes comme étant draggable
 $(function () {
     $('.orphan_natures_depenses .nature_depenses, .orphan_natures_recettes .nature_recettes').draggable({
         revert: "invalid",
@@ -90,6 +93,8 @@ $(function () {
 // les zones de comptes acceptents les natures orphelines correspondantes
 // Lors du drop, le style est changé et révèle le lien caché avec l'icone
 // qui permet de faire le unlink.
+//
+// Il y a deux zones de drop : account_list_6 et account_list_7
 
     $('.account_list_6').droppable({
         accept: ".nature_depenses",

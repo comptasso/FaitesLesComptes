@@ -108,7 +108,7 @@ class Admin::NaturesController < Admin::ApplicationController
     @nature=@period.natures.find(params[:id])
     @nature.update_attribute(:account_id, @account.id)
     respond_to do |format|
-      format.html { redirect_to admin_organism_period_accounts_url(@period.organism,@period) }
+      # format.html { redirect_to admin_organism_period_accounts_url(@period.organism,@period) }
       format.js { render nothing: true }
     end
   end
