@@ -1,6 +1,9 @@
 # -*- encoding : utf-8 -*-
 
 class BankAccount < ActiveRecord::Base
+
+  attr_accessible :number, :bank_name, :comment, :nickname
+
   belongs_to :organism
   has_many :check_deposits
   has_many :bank_extracts
