@@ -11,6 +11,8 @@ class Archive < ActiveRecord::Base
   belongs_to :organism
   
   attr_reader :collect
+
+  attr_accessible :comment
  
   # affiche le titre de l'archive à partir de l'organisme et de la date de création
   def title
