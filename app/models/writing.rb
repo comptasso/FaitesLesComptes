@@ -24,7 +24,9 @@
 class Writing < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
-  pick_date_for :date 
+  pick_date_for :date
+
+  attr_accessible :date, :narration, :ref
 
   belongs_to :book
  
