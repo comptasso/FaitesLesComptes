@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  c.filter = {:wip=> true }
+  # c.filter = {:wip=> true }
 end 
 
 
@@ -66,12 +66,12 @@ describe BankExtractLine do
 
       it 'verif ' do
         @g = @be.bank_extract_lines.first
-        @g.compta_lines(true).each {|l| l.should be_locked}
+        @g.compta_lines(true).each {|l| l.should be_locked} 
       end
 
 
       it 'lock_line doit verrouiller les lignes et les siblings', :wip=>true do
-        @cr.compta_lines.each {|l| puts l.inspect}
+        
 
         ComptaLine.where('payment_mode = ?', 'Virement').all.each do |l|
           puts l.inspect unless l.locked

@@ -31,7 +31,7 @@ class Account < ActiveRecord::Base
   has_many :natures
 
   # les lignes sont trouvées par account_id
-  has_many :compta_lines
+  has_many :compta_lines, :dependent=>:destroy
   
 
   # un compte a plusieurs transferts (en fait c'est limité aux comptes bancaires et caisses)
