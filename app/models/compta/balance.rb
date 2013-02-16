@@ -25,7 +25,7 @@ class Compta::Balance < ActiveRecord::Base
   column :to_account_id, :integer
   column :period_id, :integer
 
-  attr_accessible :from_date, :to_date, :from_accoun_id, :to_account_id
+  attr_accessible :from_date, :to_date, :from_account_id, :to_account_id, :period_id
 
   attr_accessor :nb_per_page
 
