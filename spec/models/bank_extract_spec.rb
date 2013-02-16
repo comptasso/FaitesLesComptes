@@ -6,7 +6,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=> true }
 end
 
-describe BankExtract do  
+describe BankExtract do   
   include OrganismFixture 
   
   
@@ -14,7 +14,7 @@ describe BankExtract do
     create_minimal_organism
    
     
-    @be2= @ba.bank_extracts.create!(bank_account_id: @ba.id, 
+    @be2= @ba.bank_extracts.create!( 
       begin_date: Date.today.beginning_of_month,
       end_date: Date.today.end_of_month,
       begin_sold: 2012,
@@ -54,7 +54,7 @@ describe BankExtract do
     before(:each) do
       @precedent_period = @o.periods.create!(start_date:Date.today.years_ago(1).beginning_of_year, close_date:Date.today.years_ago(1).end_of_year)
       debut_mois = @precedent_period.start_date.months_since(10)
-      @be1 = @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: debut_mois, end_date: debut_mois.end_of_month, begin_sold: 2011, total_credit: 11, total_debit: 10)
+      @be1 = @ba.bank_extracts.create!(begin_date: debut_mois, end_date: debut_mois.end_of_month, begin_sold: 2011, total_credit: 11, total_debit: 10)
 
     end
     it "le spec de period renvoie @be1 pour 2011 et @be2 pour 2012" do
@@ -69,12 +69,12 @@ describe BankExtract do
   describe 'vérification des attributs' do
 
     def valid_attributes
-      {:bank_account_id=>@ba.id, begin_sold:0, total_debit:1,
+      { begin_sold:0, total_debit:1,
         total_credit:2, begin_date:Date.today, end_date:Date.today}
     end
 
     before(:each) do
-      @be=BankExtract.new(valid_attributes) 
+      @be=@ba.bank_extracts.new(valid_attributes)
     end
 
     it 'valid begin sold' do
@@ -163,7 +163,7 @@ describe BankExtract do
       @be = @ba.bank_extracts.create!(:begin_date=>Date.today, end_date:Date.today, begin_sold:1,
         total_debit:1, total_credit:2)
       @w1 = create_in_out_writing(97 , 'Chèque')
-      @bel = BankExtractLine.create!(bank_extract_id:@be.id, compta_lines:[@w1.support_line])
+      @bel = @be.bank_extract_lines.create!(compta_lines:[@w1.support_line])
       @be.locked = true
       @be.save!
     end
@@ -177,7 +177,7 @@ describe BankExtract do
     it 'toutes les lignes de l extrait sont verrouillées' do 
       @be.bank_extract_lines.each do |bels|
 
-          bels.compta_lines.each {|l| l.should be_locked} 
+          bels.compta_lines(true).each {|l| l.should be_locked}
         
       end
     end
@@ -197,16 +197,16 @@ describe BankExtract do
 
    before(:each) do
       @l1 = create_in_out_writing(97, 'Chèque') 
-      @cd = CheckDeposit.new(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
+      @cd = @ba.check_deposits.new(deposit_date:(Date.today + 1.day))
       @cd.checks << @l1.children.last
       @cd.save!
       
-      @bel1 = BankExtractLine.new(bank_extract_id:@be2.id)
+      @bel1 = @be2.bank_extract_lines.new()
       @bel1.compta_lines <<  @cd.debit_line
       @bel1.save!
 
       @l2 = create_outcome_writing(13)
-      @bel2 = BankExtractLine.create!(bank_extract_id:@be2.id, compta_lines:[@l2.support_line])
+      @bel2 = @be2.bank_extract_lines.create!(compta_lines:[@l2.support_line])
 
 
     end
@@ -228,7 +228,7 @@ describe BankExtract do
     end
 
     it 'lines belongs to max one bank_extract_line' do
-      expect {BankExtractLine.new(bank_extract_id:@be2.id, compta_lines:[@l2.support_line])}.to raise_error(ArgumentError)
+      expect {@be2.bank_extract_lines.new(compta_lines:[@l2.support_line])}.to raise_error(ArgumentError)
     end
 
     context 'suppression du bank_extract' do
@@ -237,11 +237,11 @@ describe BankExtract do
         expect {@be2.destroy}.to change {BankExtractLine.count}.by(-2)
       end
  
-      it 'et les lines deviennent non rattachées à un bank_extract' do
+      it 'et les lines peuvent être de nouveau rattachées' do
         @be2.destroy
         debut_mois = @p.start_date.months_since(10) 
-        @be3= @ba.bank_extracts.create!(bank_account_id: @ba.id, begin_date: debut_mois, end_date: debut_mois.end_of_month, begin_sold: 2012, total_credit: 11, total_debit: 10)
-        @bel3 = BankExtractLine.create!(bank_extract_id:@be2.id, compta_lines:[@l2.support_line])
+        @be3= @ba.bank_extracts.create!( begin_date: debut_mois, end_date: debut_mois.end_of_month, begin_sold: 2012, total_credit: 11, total_debit: 10)
+        @bel3 = @be3.bank_extract_lines.create!(compta_lines:[@l2.support_line])
         @l2.support_line.should have(1).bank_extract_lines
       end
 
