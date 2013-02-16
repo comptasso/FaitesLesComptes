@@ -12,7 +12,7 @@ module Compta
   #
   # Ceci suppose d'avoir une définition des colonnes virtuelles
   # d'où les premières lignes de cette classe
-  class Listing < ActiveRecord::Base
+  class Listing < ActiveRecord::Base 
 
     include Utilities::Sold
     include Utilities::ToCsv
