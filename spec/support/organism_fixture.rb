@@ -36,7 +36,7 @@ module OrganismFixture
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
     @od = @o.od_books.first
-    @p = Period.create!(:organism_id=>@o.id, start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
+    @p = @o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
     @n = Nature.create!(name: 'Essai', period_id: @p.id, :income_outcome=>false)
     @rec = Nature.create!(name:'Recettes', period_id:@p.id, income_outcome:true)
     @ba = @o.bank_accounts.first

@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |config|
-   # config.filter = {wip:true}
+  #  config.filter = {wip:true}
 end
 
 describe Writing do
@@ -12,16 +12,16 @@ describe Writing do
   describe 'with stub models' do
 
   before(:each) do 
-    @o = mock_model(Organism) 
-    @p = mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
-    @b = mock_model(Book, :organism=>@o, :type=>'IncomeBook')
+    @o = stub_model(Organism)
+    @p = stub_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
+    @b = stub_model(Book, :organism=>@o, :type=>'IncomeBook')
     @o.stub(:find_period).and_return @p
     Writing.any_instance.stub_chain(:compta_lines, :size).and_return 2
     Writing.any_instance.stub(:complete_lines).and_return true
   end
 
   def valid_parameters
-    {book_id:@b.id, narration:'Première écriture', date:Date.today, book:@b}
+    {narration:'Première écriture', date:Date.today}
   end
 
   
@@ -38,7 +38,7 @@ describe Writing do
     end
 
     it 'champs obligatoires' do
-      @w = Writing.new(valid_parameters) 
+      @w = @b.writings.new(valid_parameters)
       @w.should be_valid
       [:narration, :date, :book_id].each do |field|
         f_eq = (field.to_s + '=').to_sym
@@ -53,13 +53,17 @@ describe Writing do
   describe 'other validators' do
 
     before(:each) do
-      @w = Writing.new(valid_parameters)
+      @w = @b.writings.new(valid_parameters)
+      Writing.any_instance.stub(:book).and_return @b
        Writing.any_instance.stub(:total_credit).and_return 10
        Writing.any_instance.stub(:total_debit).and_return 10
        Writing.any_instance.stub_chain(:compta_lines, :each).and_return nil
     end
 
-    it 'doit être valide' do
+    it 'doit être valide', :wip=>true do
+#      puts "Book : #{@b.inspect}"
+#      puts "le livre venant de w : #{@w.book}"
+#      puts @w.inspect
       @w.valid?
       @w.should be_valid
     end

@@ -28,6 +28,8 @@
 #
 class BankExtractLine < ActiveRecord::Base
 
+  attr_accessible nil
+
   belongs_to :bank_extract
 
   has_and_belongs_to_many :compta_lines, 

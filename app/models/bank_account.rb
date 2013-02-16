@@ -2,7 +2,7 @@
 
 class BankAccount < ActiveRecord::Base
 
-  
+  attr_accessible :number, :bank_name, :comment, :nickname
 
   belongs_to :organism
   has_many :check_deposits
@@ -12,7 +12,7 @@ class BankAccount < ActiveRecord::Base
   has_many :accounts, :as=> :accountable
   has_many :compta_lines, :through=>:accounts
 
-  attr_accessible :number, :bank_name, :comment, :nickname
+  
 
   validates :number, :uniqueness=>{:scope=>[:organism_id, :bank_name]}
   validates :bank_name, :number, :nickname,  presence: true

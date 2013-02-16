@@ -22,8 +22,9 @@ class Account < ActiveRecord::Base
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
 
-
-  attr_accessible :number, :title, :used
+  # period_id est nécessaire car lors de la création d'un compte bancaire ou d'une caisse,
+  # il faut créer des comptes en fournissant le champ period_id
+  attr_accessible :number, :title, :used, :period_id
 
   belongs_to :period
   belongs_to :accountable, polymorphic:true

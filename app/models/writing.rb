@@ -26,7 +26,7 @@ class Writing < ActiveRecord::Base
 
   pick_date_for :date
 
-  attr_accessible :date, :narration, :ref
+  attr_accessible :date, :narration, :ref, :compta_lines_attributes
 
   belongs_to :book
  
