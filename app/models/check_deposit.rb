@@ -26,7 +26,11 @@ class CheckDeposit < ActiveRecord::Base
 
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
-  pick_date_for :deposit_date 
+  
+
+  pick_date_for :deposit_date
+
+  attr_accessible :deposit_date
   
   belongs_to :bank_account 
   belongs_to :bank_extract_line
