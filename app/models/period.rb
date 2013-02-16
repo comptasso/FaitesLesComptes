@@ -51,6 +51,8 @@ class Period < ActiveRecord::Base
 
   include Utilities::JcGraphic
 
+  attr_accessible :start_date, :close_date
+
  
   # Les classes ...validator sont des classes spécifiques de validator pour les exercices
 

@@ -40,7 +40,7 @@
 #
 class Organism < ActiveRecord::Base
 
-
+  attr_accessible :title, :description, :database_name, :status
 
   has_one :nomenclature
   
