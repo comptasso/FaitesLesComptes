@@ -14,6 +14,8 @@ class Transfer < Writing
 
   has_many :compta_lines, :dependent=>:destroy, foreign_key:'writing_id'
 
+  attr_accessible :amount
+
   # validate :correct_amount, :two_lines, :not_same_accounts
   validates :compta_lines, :exactly_two_compta_lines=>true, :not_same_accounts=>true
   validates :amount, :numericality=>{:greater_than=>0, :message=>'doit être un nombre positif'}

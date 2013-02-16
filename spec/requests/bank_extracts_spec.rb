@@ -4,14 +4,14 @@ require 'spec_helper'
 
 RSpec.configure do |c|
   # c.filter = {:wip=>true}
-  # c.exclusion_filter = {:js=>true}
+  # c.exclusion_filter = {:js=>true} 
 end
 
 include OrganismFixture  
  
 describe "BankExtracts" do 
 
-  def retry_on_timeout(n = 3, &block) 
+  def retry_on_timeout(n = 3, &block)  
     block.call
   rescue Capybara::TimeoutError, Capybara::ElementNotFound => e
     if n > 0
@@ -125,7 +125,7 @@ describe "BankExtracts" do
         alert = page.driver.browser.switch_to.alert
         alert.accept
         sleep 1
-        @ba.bank_extracts.count.should == (@nb-1)
+        page.all('table tbody tr').should have(0).row
       end
 
     end

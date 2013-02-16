@@ -17,6 +17,11 @@ class CashControlsController < ApplicationController
 
   def create
     @cash_control = @cash.cash_controls.new(params[:cash_control])
+#    if Rails.env=='test'
+#      @cash_control.valid?
+#      puts "inspection #{@cash_control.inspect}"
+#      puts "message : #{@cash_control.errors.messages}"
+#    end
     if @cash_control.save
       redirect_to cash_cash_controls_url(@cash, @period.guess_month(@cash_control.date).to_french_h)
     else

@@ -3,14 +3,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
- #   c.filter = {:wip => true }
+  # c.filter = {:wip => true }
   #  c.exclusion_filter = {:js=> true }
 end
 
-describe CashControlsController do
+describe CashControlsController do 
    include SpecControllerHelper
 
-  let(:ca) {mock_model(Cash, :organism=>@o, :name=>'Magasin')}
+  let(:ca) {stub_model(Cash, :organism=>@o, :name=>'Magasin')}
   let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3, :locked=>false),
       mock_model(CashControl, :date=>Date.today - 1.day, amount: 1, :locked=>false) ] }
   
@@ -26,9 +26,7 @@ describe CashControlsController do
     
   end
 
- 
-
-  
+   
   describe 'GET index'  do
 
     before(:each) do
@@ -91,24 +89,27 @@ describe CashControlsController do
 
   end
 
-  describe 'POST create' do
+  describe 'POST create' , :wip=>true do
 
     before(:each) do
-      Cash.stub(:find).with(ca.id.to_s).and_return(ca)
-      ca.stub(:cash_controls).and_return(CashControl)
-      CashControl.any_instance.stub(:date_within_limit).and_return(nil)
+       Cash.stub(:find).with(ca.to_param).and_return(ca)
     end
 
     it 'shoudl render new when not valid' do
-      post :create, {:cash_id=>ca.id, :cash_control=> {date: Date.today}}, valid_session
+      CashControl.any_instance.stub(:save).and_return(false)
+      post :create, {:cash_id=>ca.to_param, :cash_control=> {date:Date.today}}, valid_session
       response.should render_template 'new' 
     end
 
-    it 'should redirect to index' do
-      # ici on triche un peu en mettant cash_id comme paramètre, encore que, pas sur
-      post :create,{ :cash_id=>ca.id, :cash_control=> {:date=>Date.today, :amount=>5 }}, valid_session
-      response.should redirect_to cash_cash_controls_path(ca, :mois=>@m, :an=>@y)
+    it 'assign cash' do
+      post :create,{ :cash_id=>ca.to_param, :cash_control=> {:date=>Date.today, :amount=>5 }}, valid_session
+      assigns[:cash].should == ca
+    end
 
+    it 'should redirect to index' do
+      CashControl.any_instance.stub(:save).and_return(true)
+      post :create,{ :cash_id=>ca.to_param, :cash_control=> {:date=>Date.today, :amount=>5 }}, valid_session
+      response.should redirect_to cash_cash_controls_path(ca, :mois=>@m, :an=>@y)
     end
 
   end

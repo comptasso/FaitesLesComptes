@@ -8,13 +8,14 @@ describe 'PeriodCoherentValidator' do
   let(:n) {mock_model(Nature, period:p)}
   let(:a1) {stub_model(Account, period:p)}
   let(:a2) {stub_model(Account, period:p)}
-  let(:b) {mock_model(Book, :type=>'IncomeBook')}
+  let(:b) {stub_model(Book, :type=>'IncomeBook')}
  
   before(:each) do
-     @w = Writing.new(date:Date.today, narration:'test du validator', book:b)
+     @w = b.writings.new(date:Date.today, narration:'test du validator')
      @w.compta_lines.new(nature:n, account:a1, debit:5)
      @w.compta_lines.new(account:a2, credit:5)
      @w.stub(:period).and_return(p)
+     @w.stub(:book).and_return b
   end
 
   it 'l ecriture doit être valide' do
