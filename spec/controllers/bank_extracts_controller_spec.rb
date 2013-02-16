@@ -6,7 +6,7 @@ describe BankExtractsController do
   include SpecControllerHelper 
 
 
-  let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id: @o.id)}
+  let(:ba) {stub_model(BankAccount, name: 'IBAN', number: '124578A', organism_id: @o.id)}
   let(:be) {mock_model(BankExtract, bank_account_id: ba.id, begin_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month,
       begin_sold: 120, debit: 450, credit: 1000, end_sold: 120+1000-450)}
  
@@ -36,7 +36,7 @@ describe BankExtractsController do
 
   describe "GET new" do
     before(:each) do
-      @new_bank_extract = BankExtract.new(bank_account_id: ba.id)
+      @new_bank_extract = ba.bank_extracts.new
       ba.stub(:new_bank_extract).and_return(@new_bank_extract)
     end
 

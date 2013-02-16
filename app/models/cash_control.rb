@@ -14,7 +14,7 @@
 class CashControl < ActiveRecord::Base
   include Utilities::PickDateExtension
 
-  attr_accessible :date, :amount
+  attr_accessible :date, :amount, :date_picker
    
   belongs_to :cash
 

@@ -101,12 +101,12 @@ describe CashControlsController do
 
     it 'shoudl render new when not valid' do
       post :create, {:cash_id=>ca.id, :cash_control=> {date: Date.today}}, valid_session
-      response.should render_template 'new'
+      response.should render_template 'new' 
     end
 
     it 'should redirect to index' do
       # ici on triche un peu en mettant cash_id comme paramètre, encore que, pas sur
-      post :create,{ :cash_id=>ca.id, :cash_control=> {:date=>Date.today, :amount=>5, :cash_id=>ca.id }}, valid_session
+      post :create,{ :cash_id=>ca.id, :cash_control=> {:date=>Date.today, :amount=>5 }}, valid_session
       response.should redirect_to cash_cash_controls_path(ca, :mois=>@m, :an=>@y)
 
     end
