@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
- # c.filter = {:wip=> true }
+  c.filter = {:wip=> true }
 end 
 
 
@@ -11,20 +11,19 @@ describe BankExtractLine do
   include OrganismFixture 
 
   before(:each) do 
-    create_minimal_organism 
+    create_minimal_organism  
 
     @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month, 
       end_date:Date.today.end_of_month,
       begin_sold:1,
       total_debit:2,
-      total_credit:5,
-      locked:false)
+      total_credit:5)
     @d7 = create_outcome_writing(7) 
     @d29 = create_outcome_writing(29)
     @ch97 = create_in_out_writing(97, 'Chèque')
     @ch5 = create_in_out_writing(5, 'Chèque')
-    @cr = create_in_out_writing(27)
-    @cd = CheckDeposit.new(bank_account_id:@ba.id, deposit_date:(Date.today + 1.day))
+    @cr = create_in_out_writing(27) # une recette
+    @cd = @ba.check_deposits.new(deposit_date:(Date.today + 1.day)) 
     @cd.checks << @ch97.support_line << @ch5.support_line
     @cd.save!
 
@@ -41,9 +40,9 @@ describe BankExtractLine do
   describe 'un extrait bancaire avec les différents éléments' do
 
     before(:each) do
-      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@d7.support_line])
-      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@d29.support_line])
-      @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@cd.debit_line])
+      @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@d7.support_line])
+      @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@d29.support_line])
+      @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@cd.debit_line])
       @be.save!
     end
 
@@ -59,14 +58,9 @@ describe BankExtractLine do
       @be.bank_extract_lines.all.map {|bel| bel.position}.should == [1,2,3]
     end
 
-   
-    # c'est par construction puisque le rattachement d'une remise de chèque
-    # se fait par la méthode belongs_to 
-    # TODO en fait actuellement c'est un has_one (mais une modif est prévue)
-
     describe 'lock_line'  do
       before(:each) do
-        @be.bank_extract_lines << BankExtractLine.new(bank_extract_id:@be.id, :compta_lines=>[@cr.support_line])
+        @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@cr.support_line])
         @be.bank_extract_lines.each {|bel| bel.lock_line }
       end
 
@@ -76,8 +70,11 @@ describe BankExtractLine do
       end
 
 
-      it 'lock_line doit verrouiller les lignes et les siblings' do
+      it 'lock_line doit verrouiller les lignes et les siblings', :wip=>true do
+        @cr.compta_lines.each {|l| puts l.inspect}
+
         ComptaLine.where('payment_mode = ?', 'Virement').all.each do |l|
+          puts l.inspect unless l.locked
            l.should be_locked
          end
       end

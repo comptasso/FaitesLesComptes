@@ -56,7 +56,7 @@ describe Account do
       before(:each) do
         @acc1 = Account.create!({number:'100', title:'Capital', period_id:@p.id})
         @acc2 = Account.create!({number:'5201', title:'Banque', period_id:@p.id})
-        Writing.create!(book_id:@od.id, date:Date.today.beginning_of_year, narration:'ecriture d od',
+        @od.writings.create!(date:Date.today.beginning_of_year, narration:'ecriture d od',
           :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:1000},
             '1'=>{account_id:@acc2.id, debit:1000}})
       end
@@ -70,7 +70,7 @@ describe Account do
       
       
         before(:each) do
-          Writing.create!(book_id:@o.an_book.id, date:Date.today.beginning_of_year, narration:'ecriture d an',
+          @o.an_book.writings.create!(date:Date.today.beginning_of_year, narration:'ecriture d an',
             :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:66},
               '1'=>{account_id:@acc2.id, debit:66}})
         end

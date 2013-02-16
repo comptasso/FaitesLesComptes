@@ -28,7 +28,7 @@
 #
 class BankExtractLine < ActiveRecord::Base
 
-  attr_accessible nil
+  attr_accessible :compta_lines
 
   belongs_to :bank_extract
 

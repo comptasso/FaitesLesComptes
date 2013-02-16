@@ -51,13 +51,21 @@ module OrganismFixture
 
   # DatabaseCleaner ne semble pas toujours appelé correctement.
   def clean_test_base
-     ActiveRecord::Base.establish_connection('assotest1')
+    ActiveRecord::Base.establish_connection('assotest1')
     if Organism.count > 0
       Rails.logger.debug "Effacement de #{Organism.count} organismes avant de recréer organism_minimal"
       Organism.all.each {|o| o.destroy}
     end
   end
 
+  # Malgré son nom, cette méthode ne crée que des écritures de type recettes
+  #
+  # Utiliser create_outcome_writing pour les écritures de type dépenses
+  # 
+  # permet de créer des écritures standard avec des valeurs par défaut 
+  # pour le montant (99) et pour le mode de payment (Virement).
+  #
+  #
   def create_in_out_writing(montant=99, payment='Virement')
     if payment == 'Chèque'
       acc_id = @p.rem_check_account.id
@@ -72,10 +80,13 @@ module OrganismFixture
     ecriture
   end
 
+  # Permet de créer une écriture de type dépenses avec par défaut un montant de 99 et un
+  # mode de paiement de Virement
+  #
   def create_outcome_writing(montant=99, payment='Virement')
     ecriture = @ob.in_out_writings.create!({date:Date.today, narration:'ligne créée par la méthode create_outcome_writing',
       :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, debit:montant, payment_mode:payment},
-        '1'=>{account_id:@baca.id, credit:montant, payment_mode:payment}
+        '1'=>{account_id:@baca.id, credit:montant, payment_mode:payment} 
       }
     })
      ecriture

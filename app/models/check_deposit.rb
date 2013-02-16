@@ -30,7 +30,8 @@ class CheckDeposit < ActiveRecord::Base
 
   pick_date_for :deposit_date
 
-  attr_accessible :deposit_date
+  # book_id est nécessaire car on construit les écritures
+  attr_accessible :deposit_date, :deposit_date_picker
   
   belongs_to :bank_account 
   belongs_to :bank_extract_line

@@ -26,7 +26,9 @@ class Writing < ActiveRecord::Base
 
   pick_date_for :date
 
-  attr_accessible :date, :narration, :ref, :compta_lines_attributes
+  # book_id est nécessaire car des classes comme check_deposit ont besoin de
+  # créér une écriture en remplissant le champ book_id
+  attr_accessible :date, :narration, :ref, :compta_lines_attributes, :book_id
 
   belongs_to :book
  

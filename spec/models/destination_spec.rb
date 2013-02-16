@@ -5,14 +5,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Destination do
   include OrganismFixture
 
-  let(:o) {mock_model(Organism)}
+  let(:o) {stub_model(Organism)}
   
   before(:each) do
-    @destination = Destination.new(organism_id: o.id, name: 'Destination test')
+    @destination = o.destinations.new(name: 'Destination test')
   end
 
   it "should be valid" do
-    @destination.should be_valid
+    @destination.should be_valid 
   end
 
   it 'should not be valid without organism' do
