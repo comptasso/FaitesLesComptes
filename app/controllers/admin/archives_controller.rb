@@ -2,6 +2,8 @@
 
 
 class Admin::ArchivesController < Admin::ApplicationController
+
+  
   def index
     @archives=@organism.archives.all 
   end

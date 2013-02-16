@@ -12,7 +12,9 @@ load 'pdf_document/pdf_balance.rb'
 # affiche show
 #
 class Compta::BalancesController < Compta::ApplicationController
+   include ActiveModel::MassAssignmentSecurity
 
+   attr_accessible :from_date, :to_date, :from_account_id, :to_account_id
  
   def new
      @balance = Compta::Balance.new(period_id:@period.id).with_default_values
