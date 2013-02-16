@@ -56,6 +56,8 @@ module OrganismFixture
       Rails.logger.debug "Effacement de #{Organism.count} organismes avant de recréer organism_minimal"
       Organism.all.each {|o| o.destroy}
     end
+    Transfer.delete_all # on utilise delete_all car certains tests verrouillent
+    # les écritures, lesquelles dès lors, ne peuvent plus être effacées
   end
 
   # Malgré son nom, cette méthode ne crée que des écritures de type recettes
