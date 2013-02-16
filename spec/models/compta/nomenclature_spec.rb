@@ -18,7 +18,7 @@ describe Compta::Nomenclature do
 
   before(:each) do
     create_organism
-    @p = Period.create!(organism_id:@o.id, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
+    @p = @o.periods.create!(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
   end
 
   it 'se crée à partir d un hash d instructions' do
