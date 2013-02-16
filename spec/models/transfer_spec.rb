@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 describe Transfer  do
-  include OrganismFixture  
+  include OrganismFixture 
 
   def valid_new_transfer
     t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id
@@ -18,7 +18,7 @@ describe Transfer  do
   end
  
   before(:each) do 
-    create_minimal_organism 
+    create_minimal_organism  
     @bb=@o.bank_accounts.create!(bank_name: 'DebiX', number: '123Y', nickname:'Compte courant')
     @cba = @ba.current_account @p
     @cbb = @bb.current_account @p
@@ -28,6 +28,7 @@ describe Transfer  do
   describe 'virtual attribute pick date' do
   
     before(:each) do
+      
       @transfer=valid_new_transfer
     end
     
@@ -48,6 +49,7 @@ describe Transfer  do
     it 'return line_to for not persisted transfer' do
       @transfer = valid_new_transfer
       @transfer.line_to.should be_an_instance_of(ComptaLine)
+      @transfer.line_from.should be_an_instance_of(ComptaLine)
     end
 
     it 'return line_to for persisted transfer' do
