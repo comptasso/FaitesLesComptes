@@ -13,6 +13,8 @@
 #
 class CashControl < ActiveRecord::Base
   include Utilities::PickDateExtension
+
+  attr_accessible :date, :amount
    
   belongs_to :cash
 
