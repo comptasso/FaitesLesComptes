@@ -10,6 +10,8 @@ class Cash < ActiveRecord::Base
   include Utilities::Sold
   include Utilities::JcGraphic
 
+  attr_accessible :name, :comment
+
   belongs_to :organism
   # ne plus utiliser, cash_id va disparaître
   has_many :compta_lines, :through=>:accounts, :include=>:writing

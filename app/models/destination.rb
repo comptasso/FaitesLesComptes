@@ -1,10 +1,15 @@
 # -*- encoding : utf-8 -*-
 
-class Destination < ActiveRecord::Base 
+class Destination < ActiveRecord::Base
+
+  attr_accessible :name, :comment, :income_outcome
+
   belongs_to :organism
   has_many :compta_lines
+
   validates :organism_id, :presence=>true
   validates :name, :presence=>true, uniqueness:true
+
   default_scope order: 'name ASC'
 
   before_destroy :ensure_no_lines
