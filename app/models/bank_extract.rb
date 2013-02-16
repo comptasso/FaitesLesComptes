@@ -2,6 +2,8 @@
 
 class BankExtract < ActiveRecord::Base
   include Utilities::PickDateExtension
+
+  attr_accessible :reference, :begin_date, :end_date, :begin_sold, :total_debit, :total_credit
   
   belongs_to :bank_account 
   has_many :bank_extract_lines, dependent: :destroy 
