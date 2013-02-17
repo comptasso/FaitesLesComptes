@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# Classe qui n'a pour seule utilité de permettre de traiter l'affichage du support de
+# Classe dont la seule utilité est de permettre de traiter l'affichage du support de
 # la même manière pour les bank_account, les cash et les remises de chèques
 #
 # La méthode support fait appel à accountable.
