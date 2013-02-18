@@ -12,6 +12,7 @@ require 'pdf_document/pdf_balance'
 class Compta::Balance < ActiveRecord::Base
 
   include Utilities::ToCsv
+  include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
   
   def self.columns() @columns ||= []; end
 
@@ -25,11 +26,12 @@ class Compta::Balance < ActiveRecord::Base
   column :to_account_id, :integer
   column :period_id, :integer
 
-  attr_accessible :from_date, :to_date, :from_account_id, :to_account_id, :period_id
+  attr_accessible :from_date, :to_date, :from_account_id, :to_account_id, 
+    :period_id, :from_date_picker, :to_date_picker
 
   attr_accessor :nb_per_page
 
-  include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
+  
 
   pick_date_for :from_date, :to_date # donne les méthodes from_date_picker et to_date_picker
   # utilisées par le input as:date_picker

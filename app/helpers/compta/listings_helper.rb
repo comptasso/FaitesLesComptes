@@ -2,7 +2,7 @@
 
 module Compta::ListingsHelper
 
-def open_sold_ordinalized(date)
+  def open_sold_ordinalized(date)
     if date == @period.start_date
       "Soldes d'ouverture"
     else
