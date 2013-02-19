@@ -129,17 +129,7 @@ class Admin::OrganismsController < Admin::ApplicationController
 
   protected
 
-   def read_nomenclature
-    uploaded_io = params[:file_upload]
-    extension = File.extname(uploaded_io.original_filename)
-      if  ".yml" != extension
-        raise NomenclatureError, "L'extension #{extension} du fichier ne correspond pas aux bases gérées par l'application : .#{@db_extension}"
-      end
-    @organism.nomenclature =   YAML::load_file(uploaded_io)
-    # ici vérification de la nomenclature : si erreur ...
-    # on devrait faire la validation de la nomenclature dans orgnaisme
-  end
-
+  
    # appelé par after_filter pour effacer les caches utilisés pour l'affichage
    # des menus
    def clear_org_cache
