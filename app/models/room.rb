@@ -13,6 +13,8 @@ class Room < ActiveRecord::Base
 
   belongs_to :user
 
+  attr_accessible :database_name
+
   validates :user_id, presence:true
   validates :database_name, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*\z/}, uniqueness:true
   

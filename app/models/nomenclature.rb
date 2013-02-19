@@ -27,6 +27,8 @@ class Nomenclature < ActiveRecord::Base
 
   belongs_to :organism
 
+  attr_accessible :actif, :passif, :resultat, :benevolat
+
   validates :actif, :passif, :resultat, :organism_id, :presence=>true
   validate :check_validity
 

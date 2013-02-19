@@ -9,10 +9,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Nature do 
   include OrganismFixture
 
-  let(:p) {mock_model(Period)}
+  let(:p) {stub_model(Period)}
   
   before(:each) do
-    @nature = Nature.new(period_id: p.id, name: 'Nature test', income_outcome: false)
+    @nature = p.natures.new(name: 'Nature test', income_outcome: false)
   end
 
   it "should be valid" do

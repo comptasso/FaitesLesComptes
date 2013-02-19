@@ -37,8 +37,8 @@ module OrganismFixture
     @ob = @o.outcome_books.first
     @od = @o.od_books.first
     @p = @o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
-    @n = Nature.create!(name: 'Essai', period_id: @p.id, :income_outcome=>false)
-    @rec = Nature.create!(name:'Recettes', period_id:@p.id, income_outcome:true)
+    @n = @p.natures.create!(name: 'Essai', :income_outcome=>false)
+    @rec = @p.natures.create!(name:'Recettes', income_outcome:true)
     @ba = @o.bank_accounts.first
     @ba.update_attributes(bank_name:'DebiX', number:'123Z', nickname:'Compte courant')
     @c=@o.cashes.first

@@ -14,11 +14,14 @@ class Nature < ActiveRecord::Base
   belongs_to :account
 
   acts_as_list :scope=>[:period_id, :income_outcome]
+
+  attr_accessible :name, :comment, :income_outcome, :account, :account_id
+
   before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
 
   validates :period_id, :presence=>true
   validates :name, :presence=>true
-  validates :name, :uniqueness=>{ :scope=>[:income_outcome, :period_id] }
+  validates :name, :uniqueness=>{ :scope=>[:income_outcome, :period_id] } 
   validates :income_outcome, :inclusion => { :in => [true, false] }
  
   validates :account_id, :fit_type=>true

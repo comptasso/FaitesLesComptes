@@ -2,10 +2,12 @@
 require 'spec_helper' 
 
 describe Room do
-  include OrganismFixture  
+  include OrganismFixture
+
+  let(:u) {stub_model(User)}
 
   def valid_attributes
-    {user_id:1, database_name:'foo'}
+    {database_name:'foo'}
   end
 
   it 'has a user' do 
@@ -13,21 +15,23 @@ describe Room do
   end
 
   it 'has a database_name' do
-    Room.new(user_id:1).should_not be_valid
+    u.rooms.new.should_not be_valid
   end
 
   it 'database_name is composed of min letters without space - les chiffres sont autorisés mais pas en début' do
     val= ['nom base', 'Nombase', '1nom1base', 'nombase%']
     val.each do
-      Room.new(user_id:1, database_name:val).should_not be_valid
+      u.rooms.new(database_name:val).should_not be_valid
     end
-    Room.new(user_id:1, database_name:'unnomdebasecorrect').should be_valid
-    Room.new(user_id:1, database_name:'unnom2basecorrect').should be_valid
+    u.rooms.new(database_name:'unnomdebasecorrect').should be_valid
+    u.rooms.new(database_name:'unnom2basecorrect').should be_valid
   end
 
   it 'le nom de base doit être unique' do
-    Room.find_or_create_by_user_id_and_database_name(1, 'foo')
-    Room.new(valid_attributes).should_not be_valid 
+    u.rooms.find_or_create_by_database_name('foo')
+    r = u.rooms.new(valid_attributes)
+    r.should_not be_valid
+    r.errors.messages[:database_name].should == ['déjà utilisé']
   end
 
   describe 'methods' do
