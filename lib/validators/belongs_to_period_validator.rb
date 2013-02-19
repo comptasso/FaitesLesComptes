@@ -16,7 +16,7 @@ class BelongsToPeriodValidator < ActiveModel::EachValidator
     attr = attribute.to_s.split('_').first.to_sym # pour ne garder que nature ou account et non nature_id
     if record.writing && record.writing.date.is_a?(Date)
       d = record.writing.date
-      pid = record.writing.book.organism.find_period(d).id rescue nil
+      pid = record.writing.book.organism.find_period(d).id rescue nil 
 
       record.errors[attr] << "N'appartient pas à l'exercice comprenant #{I18n::l d}" if record.send(attr) && record.send(attr).period.id != pid
 
