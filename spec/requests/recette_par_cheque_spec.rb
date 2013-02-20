@@ -7,19 +7,19 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe 'Recette par chèque' do
+describe 'Recette par chèque' do 
 
-  include OrganismFixture
+  include OrganismFixture 
 
   before(:each) do
     create_user
     create_minimal_organism
-    Nature.create!(name: 'Vte Nourriture', period_id: @p.id, :income_outcome=>true)
+    @p.natures.create!(name: 'Vte Nourriture', :income_outcome=>true)
 
-    login_as('quidam')
-    @w = @ib.writings.new
-    @l1 = @w.compta_lines.new
-    @l2 = @w.compta_lines.new
+    login_as('quidam')  
+#    @w = @ib.writings.new
+#    @l1 = @w.compta_lines.new
+#    @l2 = @w.compta_lines.new
 
     visit new_book_in_out_writing_path(@ib)
     fill_in 'in_out_writing_date_picker', :with=>I18n::l(Date.today, :foramt=>:date_picker)
@@ -30,9 +30,15 @@ describe 'Recette par chèque' do
     select 'Chèque à encaisser', :for=>'in_out_writing_compta_lines_attributes_1_nature_id'
   end
 
- 
+ it 'verif de l état de la base' do
+   puts "Nombre de lignes recensé : #{Writing.count}"
+   if Writing.count != 0
+     Writing.find_each {|w| puts  w.inspect} 
+   end
+ end
 
  it 'on crée une recette par chèque' do
+   puts "Nombre de lignes : #{Writing.count}"
    # création du compte remise chèque
    click_button 'Créer'
    Writing.count.should == 1
@@ -40,7 +46,6 @@ describe 'Recette par chèque' do
  end
 
   it 'la deuxième ligne doit avoir le compte 511' do
- 
    click_button 'Créer'
    ComptaLine.last.account_id.should == @p.rem_check_account.id
   end

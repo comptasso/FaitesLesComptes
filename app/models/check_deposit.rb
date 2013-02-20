@@ -176,7 +176,7 @@ class CheckDeposit < ActiveRecord::Base
       w.compta_lines.build(check_deposit_id:id, account_id:rem_check_account.id, credit:total_checks)
       w.compta_lines.build(check_deposit_id:id, debit:total_checks, account_id:bank_account_account.id)
       w.save!
-      self.update_attribute(:writing_id, w.id)
+      self.update_attribute(:writing_id, w.id) 
     end
   end
 

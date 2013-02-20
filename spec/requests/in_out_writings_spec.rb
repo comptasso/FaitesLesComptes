@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 describe 'vue lines' do
-  include OrganismFixture 
+  include OrganismFixture
    
   before(:each) do
     create_user 

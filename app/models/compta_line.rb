@@ -15,7 +15,8 @@ class ComptaLine < ActiveRecord::Base
     :foreign_key=>'line_id',
     :uniq=>true # pour les rapprochements bancaires
 
-  attr_accessible :debit, :credit, :writing_id, :account_id, :nature, :payment_mode
+  attr_accessible :debit, :credit, :writing_id, :account_id, 
+    :nature, :nature_id, :destination_id, :check_number, :payment_mode, :check_deposit_id
 
   # La présence est assurée par la valeur par défaut
   # mais on laisse presence:true, ne serait-ce que parce que cela permet d'avoir l'*

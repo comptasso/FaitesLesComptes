@@ -10,7 +10,7 @@ module OrganismFixture
       User.find(:all).each {|u| u.destroy}
     end
     @cu =  User.create!(name:'quidam')
-    r = @cu.rooms.new(user_id:@cu.id, database_name:'assotest1')
+    r = @cu.rooms.new(database_name:'assotest1')
     r.save!
   end
 
@@ -58,6 +58,8 @@ module OrganismFixture
     end
     Transfer.delete_all # on utilise delete_all car certains tests verrouillent
     # les écritures, lesquelles dès lors, ne peuvent plus être effacées
+    InOutWriting.delete_all
+    ComptaLine.delete_all
   end
 
   # Malgré son nom, cette méthode ne crée que des écritures de type recettes

@@ -6,7 +6,7 @@ describe 'BelongsToPeriodValidator' do
   let(:o) {stub_model(Organism)}
   let(:p) {stub_model(Period, :organism_id=>o.id, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)}
   let(:n) {stub_model(Nature, :period=>p)}
-  let(:w) {stub_model(Writing,date:Date.today, :narration=>'essai')}
+  let(:w) {stub_model(Writing,date:Date.today, :narration=>'essai')} 
 
   before(:each) do
     w.stub_chain(:book, :type).and_return('IncomeBook')
