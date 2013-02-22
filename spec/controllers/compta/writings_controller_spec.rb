@@ -11,7 +11,8 @@ describe Compta::WritingsController do
 
   before(:each) do
     minimal_instances
-    @p.stub(:all_natures_linked_to_account?).and_return true  
+    @p.stub(:all_natures_linked_to_account?).and_return true
+    @p.stub(:guess_month).and_return(MonthYear.from_date(Date.today))
     @b = mock_model(Book)
     Book.stub(:find).and_return(@b)
   end
@@ -23,14 +24,13 @@ describe Compta::WritingsController do
     {book_id:@b.id, date:Date.today, narration:'Ecriture', :compta_lines_attributes=>{'0'=>{account_id:1, debit:100, credit:0},
         '1'=>{account_id:2, debit:0, credit:100}}}
   end
-  
-  
+
   describe "GET index"  do
     it "assigns all writings as @writings" do
       @b.should_receive(:writings).and_return @a = double(Arel)
       @a.should_receive(:period).with(@p).and_return(@a)
             
-      get :index, {book_id:@b.id}, valid_session
+      get :index, {book_id:@b.id, mois:'tous' }, valid_session
       assigns(:writings).should == @a
     end
   end

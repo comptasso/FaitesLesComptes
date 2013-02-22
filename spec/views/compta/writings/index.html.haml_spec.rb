@@ -15,11 +15,13 @@ describe "compta/writings/index" do
       stub_model(Transfer, :book=>@b, date:Date.today, locked?:true),
       stub_model(CheckDepositWriting, :book=>@b, date:Date.today)
     ]
-    @a.stub(:unlocked).and_return(@a)
-    @a.stub(:not_transfer).and_return(@a)  
+    @a.stub(:unlocked).and_return(@a) 
+    @a.stub(:not_transfer).and_return(@a)   
     @a.stub(:any?).and_return false   
     assign(:writings,@a)
     assign(:book, @b)
+
+    view.stub(:current_page?).and_return false
   
   end
 
@@ -100,7 +102,7 @@ describe "compta/writings/index" do
   describe 'test de la partie content_menu' do
     
     it 'une seule icone Nouveau si le livre a toutes ses écritures verrouillées' do
-      @b.stub_chain(:writings, :unlocked, :any?).and_return false
+      @b.stub_chain(:writings, :compta_editable, :any?).and_return false
       render
       list_icons = content(:menu).all('a.icon_menu img')
       list_icons.should have(1).icons
@@ -110,17 +112,17 @@ describe "compta/writings/index" do
 
 
     it 'affiche un cadenas noir et blanc dans la partie haute si le livre n est pas un livre dOD' do
-      @b.stub_chain(:writings, :unlocked, :any?).and_return true
+      @b.stub_chain(:writings, :compta_editable, :any?).and_return false
       @b.stub(:type).and_return('IncomeBook')
       render
-      # content(:menu).should == 'bonjour'
+      
       list_icons = content(:menu).all('img')
-      list_icons.should have(2).icons
-      list_icons[1][:src].should == '/assets/icones/nb_verrouiller.png'
+      list_icons.should have(1).icons
+      list_icons[0][:src].should == '/assets/icones/nouveau.png'
     end
 
     it 'affiche un cadenas de couleur si le livre est un livre OD et que les écritures furent écrite dans OD manuellement' do
-      @b.stub_chain(:writings, :unlocked, :any?).and_return true
+      @b.stub_chain(:writings, :compta_editable, :any?).and_return true
       @b.stub(:type).and_return('OdBook')
     
       render
