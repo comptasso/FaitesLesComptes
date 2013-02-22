@@ -13,13 +13,12 @@ class Compta::SelectionsController < Compta::ApplicationController
   # action qui verrouille l'écriture appelée en js
   # on vérifie d'abord qu'on est bien sur une écriture qui peut être
   # verrouillée de cette manière, c'est à dire que l'écriture 
-  # relève bien d'un an_book ou d'un od_book
+  # relève bien d'un an_book ou d'un od_book, qu'elle n'est pas verrouillée,...
   #
-  # TODO : il faudrait aussi éliminer les cas où les écritures
-  # relèvent des transferts. 
+  # Voir les commentaires de Writing#compta_editable?
   def lock
     @writing = Writing.find(params[:id])
-    if @writing && @writing.book.type.in?(%w(AnBook OdBook))
+    if @writing.compta_editable?
       @writing.lock
     end
   end
