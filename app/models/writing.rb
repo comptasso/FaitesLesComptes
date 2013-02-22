@@ -133,6 +133,22 @@ class Writing < ActiveRecord::Base
     !locked? && book.type == 'OdBook' && type == nil
   end
 
+  # Une ligne est an_editable si elle appartient au livre d'AN
+  # et qu'elle n'est pas verrouillée.
+  #
+  # On rajoute type == nil par analogie avec od_editable mais
+  # c'est une condition toujours remplie
+  #
+  def an_editable?
+    !locked? && book.type == 'AnBook' && type == nil
+  end
+
+  # seules les lignes qui sont od_editable ou an_editable sont compta_editable
+  # utilisée dans la vue et le controleur selection
+  def compta_editable?
+    od_editable? || an_editable?
+  end
+
   protected
 
   # méthode de validation utilisée pour vérifier que les écritures sur le 

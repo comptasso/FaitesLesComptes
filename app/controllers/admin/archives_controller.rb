@@ -30,7 +30,7 @@ class Admin::ArchivesController < Admin::ApplicationController
     if @archive.save
       nam = @organism.full_name
       send_file nam, 
-        :filename=>[File.basename(nam, '.sqlite3'), Time.now].join(' ')+'.sqlite3',
+        :filename=>[File.basename(nam, '.sqlite3'), I18n.l(Time.now)].join(' ')+'.sqlite3',
         :disposition=>'attachment'
     else
       render 'new'

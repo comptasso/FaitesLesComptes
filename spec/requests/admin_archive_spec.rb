@@ -34,9 +34,15 @@ describe 'resquest admin archive' do
       fill_in 'archive[comment]', :with=>'test archive'
       
       click_button 'new_archive_button'
-      filename = "assotest1 #{Time.now}.sqlite3"
-      page.response_headers['Content-Disposition'].should have_content filename
-      page.response_headers['Content-Disposition'].should have_content 'attachment;'
+      name = "assotest1 #{I18n.l Time.now}"
+      # pour éviter d'avoir des erreurs liées à un changement de seconde
+      # pendant le test, on isole le dernier chiffre et on crée une expression
+      # régulière
+      filename = name[0,name.length-1]+'[0-9]'+'.sqlite3'
+      cd = page.response_headers['Content-Disposition']
+      cd[/attachment; filename=(.*)/]
+      $1.should match filename # contrôle du titre du fichier
+      
     end
 
 
