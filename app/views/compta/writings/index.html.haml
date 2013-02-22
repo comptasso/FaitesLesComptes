@@ -1,13 +1,14 @@
 =content_for :menu do
   =icon_to 'nouveau.png', new_compta_book_writing_path(@book)
-  - if @book.writings.unlocked.any?
-    -if @book.type != 'OdBook'
-      =image_tag('icones/nb_verrouiller.png', title:'Des écritures ne sont pas verrouillées, mais ne peuvent l\'être que dans la partie Saisie/Consult')
-    -else
-      =icon_to 'verrouiller.png', all_lock_compta_book_writings_path(@book), :method=>:post, confirm:'Cette action est définitive. Confirmez-vous ?', title:'Verrouiller toutes les écritures de ce livre' 
+  - if @book.writings.compta_editable.any?
+    =icon_to 'verrouiller.png', all_lock_compta_book_writings_path(@book, :mois=>@mois, :an=>@an), :method=>:post, confirm:'Cette action est définitive. Confirmez-vous ?', title:'Verrouiller toutes les écritures de ce livre'
 
     
 .champ
-  %h3 Journal #{@book.title} : Liste d'écritures
+  %h3
+    Journal #{@book.title} : Liste d'écritures
+    = render 'submenu_mois' 
 
 = render :partial=>'compta/writings/writing', :collection=>@writings
+- if @writings.empty?
+  %p Aucune écriture dans cette sélection

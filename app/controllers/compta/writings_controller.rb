@@ -8,7 +8,14 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings
   # GET /writings.json
   def index
-    @writings = @book.writings.period(@period)
+
+    if params[:mois]
+      find_writings
+    else
+      my = MonthYear.from_date(@period.guess_month)
+      redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year) and return
+    end
+    
     
     respond_to do |format|
       format.html # index.html.erb
@@ -45,8 +52,11 @@ class Compta::WritingsController < Compta::ApplicationController
     redirect_to compta_book_writings_url(@book)
   end
 
+  # POST all_lock
+  # action qui verrouille la totalité des écritures qui peuvent être verrouillées
   def all_lock
-    @book.writings.period(@period).not_transfer.unlocked.each {|w| w.lock}
+    find_writings
+    @writings.unlocked.each {|w| w.lock if w.compta_editable?}
     redirect_to compta_book_writings_url(@book)
   end
 
@@ -108,8 +118,22 @@ class Compta::WritingsController < Compta::ApplicationController
     @book = Book.find(params[:book_id])
   end
 
+  def find_writings
+    if params[:mois] && params[:an]
+      @mois = params[:mois]
+      @an = params[:an]
+      date = Date.civil(@an.to_i, @mois.to_i, 1) rescue @period.guess_month
+      @writings = @book.writings.mois(date)
+    else
+      @mois = 'tous'
+      @writings = @book.writings.period(@period)
+    end
+  end
+
   def fix_date
     @d = flash[:date]
     @d = @period.start_date if @book.type == 'AnBook'
   end
+
+
 end
