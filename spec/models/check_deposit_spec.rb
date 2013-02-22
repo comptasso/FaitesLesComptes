@@ -72,12 +72,12 @@ describe CheckDeposit do
 
       it 'une remise chèque appartient à writing' do
         @cd.save!
-        CheckDeposit.last.writing.should == Writing.order(:id).last
+        CheckDeposit.last.check_deposit_writing.should == Writing.order(:id).last
       end
 
       it 'une remise chèque a des lignes qui sont lues par writing' do
         @cd.save!
-        @cd.compta_lines.should == @cd.writing(true).compta_lines
+        @cd.compta_lines.should == @cd.check_deposit_writing(true).compta_lines
       end
 
 
@@ -233,10 +233,10 @@ describe CheckDeposit do
       end
 
       it 'change date' do
-        @check_deposit.writing.date.should == (Date.today + 2)
+        @check_deposit.check_deposit_writing.date.should == (Date.today + 2)
         @check_deposit.deposit_date  =  Date.today
         @check_deposit.save
-        @check_deposit.writing.date.should == Date.today
+        @check_deposit.check_deposit_writing.date.should == Date.today
 
       end
 

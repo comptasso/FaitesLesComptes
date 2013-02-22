@@ -1,3 +1,5 @@
+# coding: utf-8
+
 module Compta::WritingsHelper
   # retourne 'debit' si c'est une ligne de débit
   # et 'credit' dans le cas contraire
@@ -16,6 +18,28 @@ module Compta::WritingsHelper
       render('compta_line_fields', :builder => builder)
     end
     link_to_function(name, "add_fields(this, 'compta_lines', \"#{escape_javascript(fields)}\")")
+  end
+
+  # Réfinit les actions disponibles pour l'affichage des writings dans compta
+  #
+  # Les règles sont les suivantes :
+  # - lorsque le livre est OD
+  # -- des cadenas de couler pour les lignes entrées directement dans le livre OD
+  # -- des cadenas noir et blance pour les lignes Transfert/ et Remises de Chèques
+  # - lorsque le livre n'est pas OD
+  # -- les icones cadenas ne peuvent être que noir et blanc
+  # -- et il ne peut y avoir que cette icone
+  #
+  def compta_line_actions(book, writing)
+    html =''
+    if book.type == 'OdBook' && writing.od_editable?
+      html += icon_to 'modifier.png', edit_compta_book_writing_path(book, writing)
+      html += icon_to('supprimer.png', compta_book_writing_path(book, writing), :method=>:delete, :confirm=>'Etes vous sur ?')
+      html += icon_to('verrouiller.png', lock_compta_book_writing_path(book, writing), :method=>:post)
+    else
+      html += image_tag('icones/nb_verrouiller.png', title:'Le verrouillage de cette écriture doit se faire dans la partie Saisie/Consult par pointage du compte bancaire et/ou de la caisse') unless writing.locked?
+    end
+    html.html_safe
   end
 
 

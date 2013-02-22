@@ -14,12 +14,7 @@
       =writing.ref
     .span2
       Actions :
-      - if writing.type =='Transfer'
-        = image_tag('icones/nb_verrouiller.png', title:'Le verrouillage de cette écriture doit se faire dans la partie Saisie/Consult par pointage du compte bancaire et/ou de la caisse') unless writing.locked?
-      - unless writing.locked? || writing.type == 'Transfer'
-        = icon_to 'modifier.png', edit_compta_book_writing_path(@book, writing)
-        = icon_to('supprimer.png', compta_book_writing_path(@book, writing), :method=>:delete, :confirm=>'Etes vous sur ?')
-        = icon_to('verrouiller.png', lock_compta_book_writing_path(@book, writing), :method=>:post) 
+      =compta_line_actions(@book, writing)
 
   - writing.compta_lines.each do |cl|
     .row-fluid

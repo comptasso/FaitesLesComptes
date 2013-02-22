@@ -54,11 +54,7 @@
         %b.caret
       = content_tag(:ul, :class => "dropdown-menu") do
         = render :partial=>'compta/menus/menu_book', :collection=>@organism.books, :spacer_template=>'menus/divider'
-        
-
-
-
-
-  %li= yield :menu
+  
+  %li.horizontal_icons= yield :menu
 
 

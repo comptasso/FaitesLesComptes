@@ -60,7 +60,7 @@ describe Writing do
        Writing.any_instance.stub_chain(:compta_lines, :each).and_return nil
     end
 
-    it 'doit être valide', :wip=>true do
+    it 'doit être valide' do
 #      puts "Book : #{@b.inspect}"
 #      puts "le livre venant de w : #{@w.book}"
 #      puts @w.inspect
@@ -205,7 +205,50 @@ context 'with real models' do
 
     end
 
-    it 'lock doit verrouiller toutes les lignes' , wip:true do
+    describe 'une ligne est od_editable' , wip:true do
+
+      
+      # od_editable est éditable lorsqu'une ligne appartient au livre OD
+      # est non verrouillée, n'est pas de type Transfer ni remise de chèques
+      before(:each) do
+          @w.stub(:locked?).and_return false
+          @w.stub(:book).and_return(mock_model(Book, :type=>'OdBook'))
+          @w.stub(:type).and_return(nil)
+      end
+
+      it 'od_editable' do
+        @w.should be_od_editable
+      end
+
+      it 'non od_editable si locked' do
+        @w.stub(:locked?).and_return(true)
+        @w.should_not be_od_editable
+      end
+
+      it 'si le livre est od_book' do
+        @w.stub(:book).and_return(mock_model(Book, :type=>'IncomeBook'))
+        @w.should_not be_od_editable
+      end
+
+      it 'si le type est transfer' do
+        @w.stub(:type).and_return('Transfer')
+        @w.should_not be_od_editable
+      end
+
+      it 'si le type est transfer' do
+        @w.stub(:type).and_return('InOutWriting')
+        @w.should_not be_od_editable
+      end
+
+      it 'si le type est remise chèque' do
+        @w.stub(:type).and_return('CheckDepositWriting')
+        @w.should_not be_od_editable
+      end
+
+
+    end
+
+    it 'lock doit verrouiller toutes les lignes' do
       cls = [1,2].map {|i| mock_model(ComptaLine, locked?:false) }
       @w.stub(:compta_lines).and_return(cls)
       cls.each {|cl| cl.should_receive(:update_attribute).with(:locked, true).and_return(true)}

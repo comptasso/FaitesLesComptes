@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.11'
-gem 'rack', '1.4.1'
+gem 'rails', '3.2.12'
+gem 'rack', '1.4.5'
 # gem 'therubyracer' execjs sous windows
 gem 'simple_form', "~> 2.0.1"
 # Bundle edge Rails instead:

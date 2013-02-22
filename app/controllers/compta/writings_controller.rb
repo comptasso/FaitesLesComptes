@@ -17,17 +17,7 @@ class Compta::WritingsController < Compta::ApplicationController
   end
 
 
-  # GET /writings/1
-  # GET /writings/1.json
-  def show
-    @writing = Writing.find(params[:id])
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @writing }
-    end
-  end
-
-  
+   
   # GET /writings/new
   # GET /writings/new.json
   def new

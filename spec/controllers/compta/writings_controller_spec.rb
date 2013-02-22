@@ -15,6 +15,7 @@ describe Compta::WritingsController do
     @b = mock_model(Book)
     Book.stub(:find).and_return(@b)
   end
+
   # This should return the minimal set of attributes required to create a valid
   # Writing. As you add validations to Writing, be sure to
   # update the return value of this method accordingly.
@@ -34,14 +35,7 @@ describe Compta::WritingsController do
     end
   end
 
-  describe "GET show" do
-    it "assigns the requested writing as @writing" do
-      writing = mock_model(Writing)
-      Writing.should_receive(:find).with(writing.to_param).and_return writing
-      get :show, {book_id:@b.id, :id => writing.to_param}, valid_session
-      assigns(:writing).should eq(writing)
-    end
-  end
+  
 
   describe "GET new"  do
     it "assigns a new writing as @writing" do

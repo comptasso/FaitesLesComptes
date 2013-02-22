@@ -35,7 +35,7 @@ class CheckDeposit < ActiveRecord::Base
   
   belongs_to :bank_account 
   belongs_to :bank_extract_line
-  belongs_to :writing, :dependent=>:destroy
+  belongs_to :check_deposit_writing, :dependent=>:destroy, :foreign_key=>'writing_id'
   
 
   # La condition est mise ici pour que check_deposit.new soit associée d'emblée
@@ -48,7 +48,7 @@ class CheckDeposit < ActiveRecord::Base
   before_add: :cant_if_pointed
  
   # has_many :lines # utile pour les méthode credit_compta_line et debit_compta_line
-  has_many  :compta_lines, :through=>:writing
+  has_many  :compta_lines, :through=>:check_deposit_writing
 
   alias children compta_lines
 
@@ -172,7 +172,7 @@ class CheckDeposit < ActiveRecord::Base
   def create_writing
     book = OdBook.first!
     CheckDeposit.transaction do
-      w = build_writing(date:deposit_date, narration:'Remise chèque', book_id:book.id)
+      w = build_check_deposit_writing(date:deposit_date, narration:'Remise chèque', book_id:book.id)
       w.compta_lines.build(check_deposit_id:id, account_id:rem_check_account.id, credit:total_checks)
       w.compta_lines.build(check_deposit_id:id, debit:total_checks, account_id:bank_account_account.id)
       w.save!
@@ -187,7 +187,7 @@ class CheckDeposit < ActiveRecord::Base
 
   def update_writing
     CheckDeposit.transaction do
-      writing.update_attribute(:date, deposit_date)
+      check_deposit_writing.update_attribute(:date, deposit_date)
       credit_compta_line.update_attribute(:credit, total_checks)
       debit_compta_line.update_attribute(:debit, total_checks)
     end

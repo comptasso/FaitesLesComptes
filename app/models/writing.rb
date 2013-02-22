@@ -120,6 +120,19 @@ class Writing < ActiveRecord::Base
     compta_lines.where('locked = ?', true).any?
   end
 
+  # Une ligne n'est od_editable que s'il est appartient à un livre d'OD,
+  # est non verrouillée, mais aussi n'est pas une écriture générée par
+  # la partie saise/consult.
+  #
+  #  En l'occurence, il peut y avoir deux cas, c'est un Transfer ou une
+  #  Remise de chèques.
+  #
+  # Ces écritures doivent en effet être modifiées dans les vues qui leur sont réservées.
+  #
+  def od_editable?
+    !locked? && book.type == 'OdBook' && type == nil
+  end
+
   protected
 
   # méthode de validation utilisée pour vérifier que les écritures sur le 

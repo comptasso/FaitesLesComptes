@@ -1,8 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 class BankAccount < ActiveRecord::Base
-
-  attr_accessible :number, :bank_name, :comment, :nickname
+  include Utilities::JcGraphic
 
   belongs_to :organism
   has_many :check_deposits
@@ -12,12 +11,11 @@ class BankAccount < ActiveRecord::Base
   has_many :accounts, :as=> :accountable
   has_many :compta_lines, :through=>:accounts
 
-  
+  attr_accessible :number, :bank_name, :comment, :nickname
 
   validates :number, :uniqueness=>{:scope=>[:organism_id, :bank_name]}
   validates :bank_name, :number, :nickname,  presence: true
 
-  
   after_create :create_accounts
   after_update :change_account_title, :if=> lambda {nickname_changed? }
   
@@ -171,19 +169,3 @@ class BankAccount < ActiveRecord::Base
 
 end
 
-# PARTIE CREATION DE GRAPHIQUE
-
-class BankAccount < ActiveRecord::Base
- include Utilities::JcGraphic
-
- 
- # monthly_value est la méthode par défaut utilisée par JcGraphic pour avoir la valeur d'un mois
-#  def monthly_value(date)
-#
-#    be=bank_extracts.find_nearest(date)
-#    be ?  be.end_sold : 'null' # s'il y a  un extrait correspondant, donne son solde, sinon null
-#    # jqplot traduira ce null en rien par la fonction parseFloat qui est appelée lors de la
-#    # construction des graphes
-#  end
-
-end

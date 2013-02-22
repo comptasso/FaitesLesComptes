@@ -6,6 +6,10 @@ module JcCapybara
     Capybara::Node::Simple.new(rendered)
  end
 
+ def content(part)
+   Capybara::Node::Simple.new(view.content_for(part))
+ end
+
 
 
 end
