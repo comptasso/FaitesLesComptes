@@ -1,6 +1,6 @@
 # coding: utf-8
 require 'pdf_document/default.rb'
-load 'pdf_document/general_ledger_page.rb'  
+require 'pdf_document/general_ledger_page.rb'
 
 module Compta 
   # la classe GeneralLedger (journal général) permet d'imprimer le journal centralisateur
@@ -57,8 +57,14 @@ module Compta
         @pages.size
       end
 
-      # la méthode page retourne les MonthlyLedger permettant de
-      # tenir sur une page en mode paysage
+      # la méthode page retourne les PdfDocument::GeneralLedgerPage
+      # correspondant à la page demandée.
+      #
+      # On crée un PdfDocument::GeneralLedgerPage avec le Compta::PdfGeneralLedger,
+      # la liste des monthly_ledger, et le numéro de la page
+      #
+      # TODO puisqu'on envoie self, alors le deuxième argument est redondant
+      #
       def page(n)
         PdfDocument::GeneralLedgerPage.new(self,  @pages[n].map {|i| monthly_ledgers[i]}, n)
       end

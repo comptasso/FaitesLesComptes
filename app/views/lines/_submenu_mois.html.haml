@@ -1,5 +1,0 @@
-%ul.mois
-  - @period.list_months.each do |m|
-    %li{:class=>"#{'active' if current_page?(mois:m.month, an:m.year)}" }
-      = link_to_unless_current(m.to_short, book_lines_path(@book, mois:m.month, an:m.year))
-  %li= icon_to('nouveau.png', new_book_line_path(@book, mois:@mois, an:@an), id: 'new_line_link')
