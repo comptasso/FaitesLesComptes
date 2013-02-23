@@ -5,7 +5,28 @@ require 'pdf_document/default'
 
 module PdfDocument
 
-
+  # PdfSheet permet de créer une page pdf à partir d'un objet Sheet.
+  # Voir la classe Compta::Sheet pour plus d'information
+  #
+  # PdfSheet hérite de PdfDocument::Simple mais ajoute ou surcharge quelques méthodes
+  #
+  #  PdfSheet est en effet destiné à imprimer une information sur une seule page, la
+  #  méthode nb_pages est donc surchargée pour renvoyer 1
+  #
+  #   Les documents sont des documents de type liasse fiscale (Bilan, Compte de Résultats)
+  #   d'où le nom de Sheet.
+  #
+  #   Le nombre et le contenu des colonnes sont donc déterminés selon que
+  #   l'on veuille imprimer un :actif ou un :passif (donné par le sympole :sens
+  #   de la source. :passif est utilisé pour le compte de résultats et le bilan passif.
+  #   set_columns répond à cet objectif
+  #
+  #   TODO faire un équivalent :passif et :resultat pour ne pas avoir à se rappeler ce détail
+  #
+  #   Et les titres des colones dépendent de ce qu'on imprime : un compte de résultat
+  #   traite de l'exercice, tandis qu'un bilan traite de date de clôture de l'exercice.
+  #   set_title_columns répond à cet objectif
+  #
   class PdfSheet < PdfDocument::Simple
 
     # on part de l'idée qu'une rubriks prend toujours moins d'une page à imprimer
@@ -15,7 +36,7 @@ module PdfDocument
     end
 
     def stamp
-      @period.closed? ? '' : 'Provisoire'
+      @period.closed? ? '' : 'Provisoire' 
     end
 
     def fetch_lines(page_number = 1)
@@ -40,7 +61,7 @@ module PdfDocument
     # si on est dans un document de type résultat, alors, on doit avoir
     # comme entête de colonne la période, par exemple Exercice 2011
     #
-    # Sinon, dans un document de type bilan, alors les entêtes de colonnes doivent
+    # Sinon, dans un document de type bilan, les entêtes de colonnes doivent alors
     # être des dates
     def columns_titles
       if @source.name == :actif || @source.name == :passif

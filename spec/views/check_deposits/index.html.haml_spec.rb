@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require 'spec_helper'
-require 'lines_helper'
+
  
 describe "check_deposits/index" do  
   include JcCapybara
