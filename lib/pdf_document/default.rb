@@ -184,7 +184,7 @@ module PdfDocument
       text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
       Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
-      pdf.instance_eval(text)
+      pdf.instance_eval(text, template)
     end
 
     # Crée le fichier pdf associé
@@ -198,7 +198,7 @@ module PdfDocument
       require 'prawn'
       doc = self # doc est utilisé dans le template
       pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|
-        pdf.instance_eval(text)
+        pdf.instance_eval(text, template)
       end
       pdf_file.number_pages("page <page>/<total>",
         { :at => [pdf_file.bounds.right - 150, 0],:width => 150,

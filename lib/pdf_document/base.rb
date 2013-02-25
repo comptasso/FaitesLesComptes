@@ -102,7 +102,7 @@ module PdfDocument
       
       doc = self # doc est utilisé dans le template
       @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => @orientation) do |pdf|
-        pdf.instance_eval(text)
+        pdf.instance_eval(text, template)
       end
       numerote
       @pdf_file.render
@@ -119,7 +119,7 @@ module PdfDocument
       end
       doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
       Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
-      pdf.instance_eval(text)
+      pdf.instance_eval(text, template)
     end
 
     # réalise la pagination de @pdf_file

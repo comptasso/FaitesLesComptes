@@ -78,7 +78,7 @@ module PdfDocument
       text =   read_template
       doc = self # doc est utilisé dans le template
       @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait) do |pdf|
-        pdf.instance_eval(text)
+        pdf.instance_eval(text, template)
       end
       numerote
       @pdf_file.render
@@ -90,18 +90,22 @@ module PdfDocument
       text =   read_template
       doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
       Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
-      pdf.instance_eval(text)
+      pdf.instance_eval(text, template)
     end
 
     protected
 
-    def read_template
-      template = case @source.sens
+
+    def template
+      case @source.sens
       when :actif then "lib/pdf_document/prawn_files/actif.pdf.prawn"
       when :passif then "lib/pdf_document/prawn_files/passif.pdf.prawn"
       else
-        raise ArgumentError, 'Le sens d\'un document ne peut être que :actif ou :passif'
+        raise ArgumentError, 'Le sens d\'un document ne peut être que :actif ou :passif, correspondant au fait qu\'on affiche 4 ou 2 colonnes'
       end
+    end
+
+    def read_template
       File.open(template, 'r') { |f| f.read}
     end
 

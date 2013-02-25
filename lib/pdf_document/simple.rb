@@ -171,21 +171,24 @@ module PdfDocument
       text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est utilisé dans le template
       @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|
-        pdf.instance_eval(text)
+        pdf.instance_eval(text, template)
       end
       numerote
       @pdf_file.render
     end
 
     # Permet d'insérer un bout de pdf dans un fichier pdf
-    # prend un fichier pdf en argument et évalue le contenu du template pdf.prawn
+    # prend un fichier pdf en argument et évalue le contenu du template de type pdf.prawn
     # fourni en deuxième argument.
-    # retourne le fichier pdf après avoir interprété le contenu du template
+    #
+    # Le but est de fonctionner comme un partial
+    #
+    # Retourne le fichier pdf après avoir interprété le contenu du template
     def render_pdf_text(pdf, template = "lib/pdf_document/simple.pdf.prawn")
       text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
       Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
-      pdf.instance_eval(text) 
+      pdf.instance_eval(text, template)
     end
 
     protected

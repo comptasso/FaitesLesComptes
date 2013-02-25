@@ -38,7 +38,7 @@ module PdfDocument
       require 'prawn'
       doc = self # doc est utilisé dans le template
       @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait) do |pdf|
-        pdf.instance_eval(text)
+        pdf.instance_eval(text, template)
       end
       numerote
       @pdf_file.render
