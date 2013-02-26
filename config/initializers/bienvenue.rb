@@ -6,11 +6,11 @@ if Rails.env == 'ocra'
   puts "=== demarrage du serveur"
   puts "Vous pouvez maintenant utiliser votre navigateur prefere (Firefox, Chrome, Internet Explorer,...) a l'adresse localhost:3000."
   puts ''
-  puts "Laisser cette fenêtre ouverte pendant toute la durée d'utilisation de FaitesLesComptes"
-  puts "Lorsque vous avez fini, déconnectez vous dans le navigateur"
-  puts "Puis Ctrl + C dans cette fenêtre et quitter le programme"
+  puts "Laisser cette fenetre ouverte pendant toute la duree d'utilisation de FaitesLesComptes"
+  puts "Lorsque vous avez fini, deconnectez vous dans le navigateur"
+  puts "Puis Ctrl + C dans cette fenetre et quitter le programme"
   puts ''
-  puts "Vos retours nous intéressent, contactez nous à expert@faiteslescomptes.fr"
+  puts "Vos retours nous interessent, contactez nous a expert@faiteslescomptes.fr"
 else
-  puts 'Bienvenue sur FaitesLesComptes, le logiciel open-source de comptabilité de trésorerie'
+  puts 'Bienvenue sur FaitesLesComptes, le logiciel open-source de comptabilite de tresorerie'
 end
