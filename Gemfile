@@ -28,7 +28,8 @@ end
 gem 'jquery-rails'
 
 # Use unicorn as the web server
-# gem 'unicorn'
+gem 'mongrel'
+
 
 # Deploy with Capistrano
 # gem 'capistrano'
