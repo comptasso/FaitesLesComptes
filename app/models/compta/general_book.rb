@@ -41,23 +41,32 @@ module Compta
 
     protected
     
-     # fait une édition du grand livre
-     # pour chacun des comptes, faire un listing donc on aura fixé les informations
+     # Fait une édition du grand livre avec une page de garde
+     #
+     # Pour chacun des comptes, fait un listing donc on aura fixé les informations
       # de page : page de début et page total.
+      #
       # La classe Listing a donc été enrichie de méthode pour gérer cette question
       # de pagination
-      # pour chacun des comptes, on affiche le listing correspondant
-      # mais on a d'abord besoin du nombre de pages nécessaires à chacun des comptes
-      # pour chacun des comptes on cherche le nombre de pages
-      # et on veut le total
+      #
+      #
     def to_pdf
       final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape)
+
+      final_pdf.text 'Grand Livre Général'
+
       range_accounts.each do |a|
+        if a.compta_lines.any?
+
+        final_pdf.start_new_page
+        # crée un Compta::Listing, en fait un pdf (to_pdf), puis rend ce pdf dans le final_pdf
         Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date).
           to_pdf({title:'Grand livre', :select_method=>'compta_lines',
             subtitle:"Compte #{a.number} - #{a.title} \n Du #{I18n::l from_date} au #{I18n.l to_date}"} ).
             render_pdf_text(final_pdf)
-        final_pdf.start_new_page unless a == range_accounts.last
+        
+        
+        end
       end
       final_pdf.number_pages("page <page>/<total>",
         { :at => [final_pdf.bounds.right - 150, 0],:width => 150,

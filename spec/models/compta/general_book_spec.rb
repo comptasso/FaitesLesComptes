@@ -22,6 +22,14 @@ include OrganismFixture
   it 'and render pdf' do
     @general_book.render_pdf.should be_an_instance_of String
   end
+
+  it 'test du nombre de page' do
+    create_minimal_organism
+    create_in_out_writing
+    @general_book = Compta::GeneralBook.new(period_id:@p.id).with_default_values
+    @general_book.send(:to_pdf).page_count.should == 3
+    # la page de garde et les deux pages correspondant aux comptes de l'écriture
+  end
   
 end
 
