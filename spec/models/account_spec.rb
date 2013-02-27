@@ -223,47 +223,7 @@ describe Account do
     end
 
 
-    # un compte inutilisé est un compte qui à un solde initial nul (debit et credit)
-    # et qui n'a aucune ligne
-    describe 'compte inutilisé sur un exercice' , :wip=>true do 
-
-      before(:each) do
-        @account = Account.create!(valid_attributes)
-        @account.stub('lines_empty?').and_return true
-        @account.stub(:init_sold_debit).and_return 0
-        @account.stub(:init_sold_credit).and_return 0
-      end
-
-      it 'les méthodes appelées' do
-        @account.should_receive(:init_sold_debit).and_return 0
-        @account.should_receive(:init_sold_credit).and_return 0
-        @account.should_receive('lines_empty?').with(@p.start_date, @p.close_date).and_return true
-        @account.unused?(@p).should be_true
-      end
-
-      it 'un compte réellement inutilisé' do
-
-        @account.should be_unused(@p)
-      end
-
-      it 'un compte avec solde initial débit' do
-        @account.stub(:init_sold_debit).and_return 1
-        @account.should be_used(@p)
-      end
-
-      it 'un compte avec solde initial credit' do
-        @account.stub(:init_sold_credit).and_return 1
-        @account.should be_used(@p)
-      end
-
-      it 'un compte avec solde initial credit' do
-        @account.stub(:lines_empty?, [@p.start_date, @p.close_date]).and_return false
-        @account.should be_used(@p)
-      end
-
-
-
-    end
+    
 
   end
 

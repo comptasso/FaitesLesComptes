@@ -64,8 +64,7 @@ module Compta
                :align => :right, :start_count_at => 1 })
       final_pdf
     end
-
-
-  
+ 
   end
+
 end

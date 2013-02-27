@@ -153,16 +153,7 @@ class Account < ActiveRecord::Base
      init_sold('credit')
   end
 
-  # Indique si un compte est utilisé lors d'un exercice, en vérifiant
-  # qu'il n'y a aucune écriture et que le débit et crédit initiaux sont égaux à zéro
-  def unused?(period)
-     init_sold_debit == 0 && init_sold_credit == 0 && lines_empty?(period.start_date, period.close_date)
-  end
-
-  def used?(period)
-    !unused?(period)
-  end
-
+  
 
 # Montant du sole à une date donnée sous forme d'un Array [debit, credit] mais
 # mis en forme avec les helpers de Rails
