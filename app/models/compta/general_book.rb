@@ -1,19 +1,23 @@
 # coding: utf-8
 
 module Compta
-  # GeneralLedger est proche de balance, l'instance se crée avec
+  # GeneralBook est proche de balance, l'instance se crée avec
   # un range de date, un range de comptes
-  # Les informations de type balance_line sont utiles à GeneralLedger pour
+  # Les informations de type balance_line sont utiles à GeneralBook pour
   # pouvoir donner les soldes au début de la période et à la fin de la période
   #
   # La différence essentielle est l'édition du pdf puisqu'on enchaîne en fait des listings
   # de compte.
   #
-  # GeneralLedger se crée comme Balance soit en fournissant tous les paramètres, soit
+  # GeneralBook se crée comme Balance soit en fournissant tous les paramètres, soit
   # en fournissant period_id et en appelant with_default_values
   #
-  # GeneralLedger n'est pas destiné à être affiché à l'écran, il n'a de raison
+  # GeneralBook n'est pas destiné à être affiché à l'écran, il n'a de raison
   # d'être que pour faire une édition papier sous forme de pdf.
+  #
+  # Pour éviter d'avoir de trop nombreuses pages inutiles, GeneralBook n'imprime pas
+  # les comptes inutilisés (ie avec un solde nul de départ, aucune opération et
+  # don un solde final nul)
   #
   class GeneralBook < Balance
     # permet de déclarer des colonnes

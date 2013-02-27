@@ -64,21 +64,21 @@ class Account < ActiveRecord::Base
 
 
 
-  # méthode principale et mère des autres méthodes cumulated_credit
-  # surcharger cette méthode dans les classes utilisant ce module
-  # pour modifier le fonctionnement.
+  # Surcharge de cumulated_at comme indiqué dans Utilities::Sold
+  #
   # Ici nous avons une somme simple sauf dans le cas où la date la veille de celle d'ouverture
   # ce qui se produit quand on démarre le listing d'une balance au premier jour de l'exercice
   # donc très souvent.
+  #
   # Dans ce cas, le solde est un solde d'ouverture qui doit prendre en compte la ligne d'à nouveau
-
   def cumulated_at(date, dc)
     if date == (period.start_date - 1)
       init_sold(dc)
     else
     Writing.sum(dc, :select=>'debit, credit',
       :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines).to_f
-    # to_f est nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
+    # to_f est nécessaire car quand il n'y a aucune compa_lines, le retour est '0'
+    # et non 0 ce qui pose des difficultés pour les additions
     end
   end
 
@@ -93,36 +93,43 @@ class Account < ActiveRecord::Base
 
   # Les caisse et les banques ont un nickname pour en faciliter la sélection
   # Dans les formulaires de transferts, le label_method devrait donc être accountable.nickname
-  # mais visiblement, ce n'est pas prévu donc je crée le nickname avec un rescue
+  #
+  # Mais visiblement, ce n'est pas prévu donc je crée le nickname avec un rescue
   # au cas où le compte ne répondrait pas correctement.
   def nickname
     accountable.nickname rescue long_name
   end
 
-  # renvoie le compte disponible commençant par number et en incrémentant une liste 
-  # avec le nombre de chiffres donnés par précision
+  # Méthode utilisée lors de la création des comptes de caisse ou de banque
+  #
+  # Renvoie le numéro de compte disponible commençant par number et en incrémentant une liste
   def self.available(number)
     as = Account.where('number LIKE ?', "#{number}%").order('number ASC')
+    # FIXME : voir à quoi sert as.last.number == '53'
+    # probablement inutile depuis qu'on crée une banque et une caisse par déafaut
     if as.empty? || as.last.number == '53'
       return number + '01'
     else
       # il faut prendre le nombre trouvé, vérifier qu'il ne se termine
       # pas par 99, le transformer en chiffre, y ajouter 1 et le transformer en string
       n = as.last.number
+      # FIXME : voir pour gérer cette anomalie plus élégamment
       raise 'Déja 99 comptes de ce type, limite atteinte' if n =~ /99$/
       m = n.to_i; m = m + 1;
       return m.to_s
     end
   end 
 
-  # retourne le premier caractère du numéro de compte
-  # attention classe avec un E final, il s'agit d'une logique de comptable, pas de programmeur
+  # Retourne le premier caractère du numéro de compte
+  #
+  # Attention classe avec un E final, il s'agit d'une logique de comptable, pas de programmeur
   def classe
     number[0]
   end
 
-  # donne les informations nécessaires à l'écriture d'à nouveau
-  # retourne nil si solde nul, ou un hash debit, credit avec une seule valeur
+  # Donne les informations nécessaires à l'écriture d'à nouveau
+  #
+  # Retourne nil si solde nul, ou un hash debit, credit avec une seule valeur
   def report_info
     sa = sold_at(period.close_date)
     if sa != 0
@@ -130,39 +137,52 @@ class Account < ActiveRecord::Base
     end
   end
 
-  # donne le montant d'ouverture du compte à partir du livre d'A nouveau
+  # Donne le montant d'ouverture du compte à partir du livre d'A nouveau
   def init_sold(dc)
     anb = period.organism.an_book
     Writing.sum(dc, :select=>dc, :conditions=>['book_id = ? AND account_id = ?', anb.id, id], :joins=>:compta_lines).to_f
   end
 
-
+# Montant du solde d'à nouveau débit
   def init_sold_debit
     init_sold('debit')
   end
 
+  # Montant du solde d'à nouveau crédit
   def init_sold_credit
      init_sold('credit')
   end
 
+  # Indique si un compte est utilisé lors d'un exercice, en vérifiant
+  # qu'il n'y a aucune écriture et que le débit et crédit initiaux sont égaux à zéro
+  def unused?(period)
+     init_sold_debit == 0 && init_sold_credit == 0 && lines_empty?(period.start_date, period.close_date)
+  end
+
+  def used?(period)
+    !unused?(period)
+  end
 
 
+# Montant du sole à une date donnée sous forme d'un Array [debit, credit] mais
+# mis en forme avec les helpers de Rails
   def formatted_sold(date)
     [ActionController::Base.helpers.number_with_precision(cumulated_debit_before(date), precision:2),
       ActionController::Base.helpers.number_with_precision(cumulated_credit_before(date), precision:2)]
   end
 
  
-
+  # Indique s'il n'y a aucune écriture sur la période concernée
   def lines_empty?(from =  period.start_date, to = period.close_date)
     compta_lines.range_date(from, to).empty?
   end
-  
+
+  # Indique si toutes les lignes sont locked
   def all_lines_locked?(from = period.start_date, to = period.close_date)
     compta_lines.range_date(from, to).where('locked == ?', false ).any? ? false : true
   end
 
-  # Méthode de classe qui affiche le plan comptable
+  # Méthode de classe qui crée un pdf pour afficher le plan comptable
   def self.to_pdf(period)
     load 'lib/pdf_document/simple.rb'
     pdf = PdfDocument::Simple.new(period, period,
@@ -173,19 +193,6 @@ class Account < ActiveRecord::Base
     pdf.columns_alignements = [:left, :left]
     pdf
   end
-
-#  
-#
-#  def previous_period_sold(dc)
-#    return 0 unless (period.previous_period? && !period.previous_period.closed?)
-#    return 0 if classe == 6 || classe == 7
-#    pp = period.previous_period # pp pour previous_period
-#    pacc = pp.accounts.find_by_number(number) #pacc pour previous_account
-#    return 0 unless pacc
-#    pacc.cumulated_at(pp.close_date, dc) if pacc
-#  end
-#
-
 
 
 end

@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
-  # config.filter =  {wip:true}
+   # config.filter =  {wip:true}
 end
 
 
@@ -13,7 +13,7 @@ describe Account do
   
   context  'méthode de classe' do
 
-    describe 'available', wip:true do
+    describe 'available' do
 
       it 'retourne 5301 si pas encore de compte' do
         clean_test_base
@@ -88,7 +88,7 @@ describe Account do
 
     
 
-        context 'avec exercice précédent clos' , wip:true do
+        context 'avec exercice précédent clos' do
 
           before(:each) do
             eve = @p.start_date - 1
@@ -111,54 +111,7 @@ describe Account do
 
       end
     
-      # COMMENTE CAR ON N'UTILISE PLUS PREVIOUS_PERIOD_SOLD
-      #        context 'avec exercice précédent ouvert'    do
-      #
-      #      before(:each) do
-      #        eve = @p.start_date - 1
-      #        @p.stub(:previous_period?).and_return true
-      #        Period.any_instance.stub(:previous_period).and_return @pp = mock_model(Period, close_date:eve, closed?:false)
-      #        Period.any_instance.stub(:previous_period_open?).and_return true
-      #        @pp.stub(:accounts).and_return @arel = double(Arel)
-      #
-      #      end
-      #
-      #      it 'doit être vrai' do
-      #        @p.previous_period.should == @pp
-      #        @acc1.period.previous_period.should == @pp
-      #      end
-      #
-      #
-      #
-      #      it 'avec exercice précédent non clos, prend le solde debit du compte' do
-      #        @arel.should_receive(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
-      #        @acc3.should_receive(:cumulated_at).with(@pp.close_date, 'debit').and_return 0
-      #        @acc1.init_sold_debit.should == 0
-      #      end
-      #
-      #      it 'avec exercice précédent non clos, prend le solde credit du compte'  do
-      #        @arel.stub(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
-      #        @acc3.stub(:cumulated_at).with(@pp.close_date, 'credit').and_return 152
-      #        @acc1.previous_period_sold('credit').should == 152
-      #  #      @acc1.init_sold_credit.should == 152
-      #      end
-      #
-      #      it 'previous_period_sold renvoie 0 si compte 6 ou 7' do
-      #        @arel.stub(:find_by_number).with(@acc1.number).and_return(@acc3  = mock_model(Account))
-      #        @acc3.stub(:cumulated_at).with(@pp.close_date, 'credit').and_return 152
-      #        @acc1.stub(:classe).and_return 6
-      #        @acc1.previous_period_sold('credit').should == 0
-      #       end
-      #
-      #
-      #      it 'cas où il n y a pas de compte correspondant' do
-      #         @arel.should_receive(:find_by_number).with(@acc1.number).and_return nil
-      #
-      #        @acc1.init_sold_credit.should == 0
-      #      end
-      #
-      #    end
-
+     
   
     end
 
@@ -267,6 +220,49 @@ describe Account do
       end
     
    
+    end
+
+
+    # un compte inutilisé est un compte qui à un solde initial nul (debit et credit)
+    # et qui n'a aucune ligne
+    describe 'compte inutilisé sur un exercice' , :wip=>true do 
+
+      before(:each) do
+        @account = Account.create!(valid_attributes)
+        @account.stub('lines_empty?').and_return true
+        @account.stub(:init_sold_debit).and_return 0
+        @account.stub(:init_sold_credit).and_return 0
+      end
+
+      it 'les méthodes appelées' do
+        @account.should_receive(:init_sold_debit).and_return 0
+        @account.should_receive(:init_sold_credit).and_return 0
+        @account.should_receive('lines_empty?').with(@p.start_date, @p.close_date).and_return true
+        @account.unused?(@p).should be_true
+      end
+
+      it 'un compte réellement inutilisé' do
+
+        @account.should be_unused(@p)
+      end
+
+      it 'un compte avec solde initial débit' do
+        @account.stub(:init_sold_debit).and_return 1
+        @account.should be_used(@p)
+      end
+
+      it 'un compte avec solde initial credit' do
+        @account.stub(:init_sold_credit).and_return 1
+        @account.should be_used(@p)
+      end
+
+      it 'un compte avec solde initial credit' do
+        @account.stub(:lines_empty?, [@p.start_date, @p.close_date]).and_return false
+        @account.should be_used(@p)
+      end
+
+
+
     end
 
   end
