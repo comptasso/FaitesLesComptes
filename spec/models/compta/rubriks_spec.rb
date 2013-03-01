@@ -29,18 +29,14 @@ describe Compta::Sheet do
     @r2 = Compta::Rubrik.new(@p, 'Autres', :actif, '201 208 -2801')
   end
 
-#  it 'vérif de @r1 et @r2' do
-#    @r1.totals_prefix.should == ['Total Fonds commercial', 1200.0, 0, 1200.0, 0.0]
-#    @r2.totals_prefix.should == ['Total Autres', 100.0, 5.0, 95.0, 0]
-#  end
-#  
+
   describe 'premier niveau' do
     before(:each) do
       @level1 = Compta::Rubriks.new(@p, 'Total 1', [@r1, @r2])
     end
     
     it 'brut' do
-      @level1.brut.should == 1300.0
+      @level1.brut.should == 1300.0 
     end
     
     it 'amortissement' do
@@ -55,9 +51,40 @@ describe Compta::Sheet do
       @level1.totals.should == ['Total 1', 1300.0, 5.0, 1295.0, 0]
     end
 
+    it 'total_actif' do
+      @level1.total_actif.should == ['Total 1', 1300.0, 5.0, 1295.0, 0]
+    end
+
+    it 'total_passif' do
+      @level1.total_passif.should == ['Total 1', 1295.0, 0]
+    end
+
+    it 'total_prefix renvoie totals mais la première colonne préfixée' do
+       @level1.totals_prefix('Prefix ').should ==  ['Prefix Total 1', 1300.0, 5.0, 1295.0, 0]
+    end
+
     it 'sa prfondeur est de  1' do
       @level1.depth.should == 1
     end
+
+    it 'fetch_lines renvoie le détail des lignes et des Rubrik'  do
+      fl = @level1.fetch_lines
+      fl.should have(8).elements
+      fl[0].to_actif.should == ['206 - Droit au bail', 1200.00, 0, 1200.0, 0]
+      fl[1].to_actif.should == ['2906 - Dépréciations des immobilisations incorporelles', 0, 0, 0, 0]
+      fl[2].totals.should == ['Fonds commercial', 1200, 0, 1200, 0]
+      fl[3].to_actif.should == ['201 - Frais d\'établissement', 100, 0, 100, 0]
+      fl[4].to_actif.should == ['208 - Autres immobilisations incorporelles', 0, 0, 0, 0]
+      fl[5].to_actif.should == ['2801 - Amortissements des frais d\'établissements', 0, 5, -5, 0]
+      fl[6].totals.should == ['Autres', 100, 5, 95, 0]
+      fl[7].totals.should == ['Total 1', 1300, 5, 1295, 0]
+    end
+    
+    
+    it 'to_pdf' , wip:true do
+      @level1.to_pdf.should be_an_instance_of(PdfDocument::PdfRubriks)
+    end
+
 
     describe 'second niveau' do
 
