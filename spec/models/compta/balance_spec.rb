@@ -182,13 +182,10 @@ describe Compta::Balance do
        @b.total_balance.should == [1000, 100, 200, 400, -700]
      end
 
-     it 'nb page' do
-       @b.balance_lines.should have(100).elements 
-       @b.nb_pages.should == 5
-     end
-
-     it 'should be able to_pdf' do
-       @b.to_pdf.should be_an_instance_of(PdfDocument::PdfBalance)
+     it 'should be able to_pdf with 5 pages' do
+       pdf = @b.to_pdf
+       pdf.should be_an_instance_of(PdfDocument::PdfBalance)
+       pdf.nb_pages.should == 5
      end
     end
 
