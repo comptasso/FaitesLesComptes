@@ -111,16 +111,7 @@ class Compta::Balance < ActiveRecord::Base
     ]
   end
 
-  
-
-  # calcule le nombre de page du listing en divisant le nombre de lignes
-  # par un float qui est le nombre de lignes par pages,
-  # puis arrondi au nombre supérieur
-  # TODO probablement inutilisé
-  def nb_pages
-    @nb_per_page ||= NB_PER_PAGE_LANDSCAPE 
-    (balance_lines.size/@nb_per_page.to_f).ceil
-  end
+   
 
   def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|

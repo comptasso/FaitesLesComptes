@@ -27,8 +27,8 @@ include OrganismFixture
     create_minimal_organism
     create_in_out_writing
     @general_book = Compta::GeneralBook.new(period_id:@p.id).with_default_values
-    @general_book.send(:to_pdf).page_count.should == 3
-    # la page de garde et les deux pages correspondant aux comptes de l'écriture
+    @general_book.send(:to_pdf).page_count.should == 2
+    # Les deux pages correspondant aux comptes de l'écriture
   end
   
 end

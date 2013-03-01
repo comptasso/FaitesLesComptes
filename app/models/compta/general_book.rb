@@ -20,14 +20,9 @@ module Compta
   # don un solde final nul)
   #
   class GeneralBook < Balance
-    # permet de déclarer des colonnes
-    def self.columns() @columns ||= []; end
 
-    def self.column(name, sql_type = nil, default = nil, null = true)
-      columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
-    end
-
-    # malgré l'héritage, il faut déclarer les colonnes
+    # malgré l'héritage, il faut déclarer les colonnes; voir la classe Balance
+    # pour la définition de la méthode de classe column.
     column :from_date, :string
     column :to_date, :string
     column :from_account_id, :integer
@@ -35,6 +30,7 @@ module Compta
     column :period_id, :integer
 
    
+    # ne fait qu'appeler la méthode render du Prawn::Document généré par to_pdf
     def render_pdf
       to_pdf.render
     end
@@ -53,20 +49,16 @@ module Compta
     def to_pdf
       final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape)
 
-      final_pdf.text 'Grand Livre Général'
+      ras = range_accounts.select {|ra| ra.compta_lines.any? }
+      ras.each do |a|
 
-      range_accounts.each do |a|
-        if a.compta_lines.any?
-
-        final_pdf.start_new_page
         # crée un Compta::Listing, en fait un pdf (to_pdf), puis rend ce pdf dans le final_pdf
         Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date).
           to_pdf({title:'Grand livre', :select_method=>'compta_lines',
             subtitle:"Compte #{a.number} - #{a.title} \n Du #{I18n::l from_date} au #{I18n.l to_date}"} ).
             render_pdf_text(final_pdf)
-        
-        
-        end
+
+          final_pdf.start_new_page unless a == ras.last # page suivante sauf si le dernier
       end
       final_pdf.number_pages("page <page>/<total>",
         { :at => [final_pdf.bounds.right - 150, 0],:width => 150,
