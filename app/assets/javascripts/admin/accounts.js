@@ -1,6 +1,8 @@
 "use strict";
 /*jslint browser: true */
-var jQuery, $;
+/*global $, jQuery */
+
+//var jQuery, $;
 
 jQuery(function () {
     $('.admin_accounts .data_table').dataTable(

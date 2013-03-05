@@ -1,6 +1,8 @@
 "use strict";
 /*jslint browser: true */
-var $, jQuery;
+/*global $, jQuery */
+
+//var $, jQuery;
 
 // function utilisée pour disable ou able les différentes parties
 // du select 

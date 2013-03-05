@@ -1,7 +1,9 @@
 
 "use strict";
 /*jslint browser: true */
-var jQuery, $, stringToFloat, $f_numberWithPrecision;
+/*global $, jQuery */
+
+//var jQuery, $, stringToFloat, $f_numberWithPrecision;
 
 // mise en forme des tables de lignes
 jQuery(function () {

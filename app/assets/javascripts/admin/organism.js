@@ -4,7 +4,9 @@
  */
 "use strict";
 /*jslint browser: true */
-var $, jQuery;
+/*global $, jQuery */
+
+//var $, jQuery;
 
 
 

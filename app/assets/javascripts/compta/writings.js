@@ -1,6 +1,7 @@
 "use strict";
+/*global $, jQuery */
 
-var $, jQuery;
+//var $, jQuery;
 
 // la mise en forme des champs de saise des montants (debit et credit) est assurée
 // par la classe .decimal et les fonctions qui sont définies dans application.js

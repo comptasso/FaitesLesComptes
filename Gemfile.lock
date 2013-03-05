@@ -91,6 +91,8 @@ GEM
     mongrel (1.2.0.pre2)
       daemons (~> 1.0.10)
       gem_plugin (~> 0.2.3)
+    mongrel (1.2.0.pre2-x86-mingw32)
+      gem_plugin (~> 0.2.3)
     multi_json (1.6.1)
     nokogiri (1.5.6)
     nokogiri (1.5.6-x86-mingw32)

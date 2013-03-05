@@ -18,7 +18,8 @@
 
 "use strict";
 /*jslint browser: true */
-var $, jQuery;
+/*global $, jQuery */
+
 // fonction permettant de modifier un attribut booléen
 // le script retourné par la fonction est alors utilisé pour remplacer le lien.
 // utilisé notamment dans le verrouillage des écritures

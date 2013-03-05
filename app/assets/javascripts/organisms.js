@@ -1,7 +1,8 @@
 "use strict";
 /*jslint browser: true */
+/*global $, jQuery */
 
-var $, jQuery, stringToFloat;
+//var $, jQuery, stringToFloat;
 
 // fonction qui masque le contenu de la zone message dans le dashboard
 // et associé le click sur l'enveloppe au toggle des messages

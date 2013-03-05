@@ -3,8 +3,9 @@
 //# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 "use strict";
+/*global $, jQuery */
 
-var $, jQuery;
+//var $, jQuery;
 
 function $compute() {
     var sold = 0.0,

@@ -1,6 +1,8 @@
 "use strict";
 /*jslint browser: true */
-var jQuery, $, stringToFloat;
+/*global $, jQuery */
+
+//var jQuery, $, stringToFloat;
 
 /* Table initialisation */
 

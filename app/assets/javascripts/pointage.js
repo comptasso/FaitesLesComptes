@@ -1,7 +1,9 @@
 /* mise en forme des tables de lignes */
 "use strict";
 /*jslint browser: true */
-var jQuery, $, fnChangeValue, fnCancelSorting;
+/*global $, jQuery */
+
+//var jQuery, $, fnChangeValue, fnCancelSorting;
 
 //appelée après avoir enlevé une ligne
 // on retire donc 1 pour chacun des lignes qui se trouvait après celle qu'on a retiré
