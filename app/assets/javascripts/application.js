@@ -8,8 +8,7 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require jquery.dataTables
-//= require jquery.jqplot.min
-//= require jqplot
+//= require jquery.jqplot
 //= require_tree .
 //
 //
