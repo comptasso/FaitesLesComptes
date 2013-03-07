@@ -1,7 +1,7 @@
 # coding: utf-8
 
-load 'pdf_document/pdf_rubriks.rb'
-require 'compta/rubriks'
+require 'pdf_document/pdf_rubriks.rb'
+
 require 'compta/rubrik'
 
 module Compta
@@ -23,23 +23,26 @@ module Compta
 
     def initialize(period, title, collection)
       @period = period
-      @collection = collection
       @title = title.to_s
+      @collection = collection
     end
 
-    # la ligne de total avec son titre et ses 3 valeurs
+    # la ligne de total avec son titre et ses 4 valeurs
     def totals
       [@title, brut, amortissement, net, previous_net]
     end
 
-    def total_actif
-      [@title, brut, amortissement, net, previous_net]
-    end
+    # total_actif est similaire à totals
+    alias total_actif totals
 
+    # total_passif prend les données du total 
+    # mais ne conserve que ce qui est nécessaire pour afficher une page de
+    # type passif (titre, veleur nette et valeur nette de l'exercice précédent.
     def total_passif
       [@title, net, previous_net]
     end
 
+    # Permet de préfixer la ligne en rajoutant une string (par défaut Total )
     def totals_prefix(prefix = 'Total ')
       v = totals
       v[0] = prefix + v[0].to_s
@@ -63,6 +66,7 @@ module Compta
       @collection.sum(&:net)
     end
 
+    # le montant net de l'exercice précédent
     def previous_net
       @collection.sum(&:previous_net)
     end
@@ -79,8 +83,11 @@ module Compta
     end
 
 
-    # utilisé pour les vues de détail de Sheet,
+    # Utilisé pour les vues de détail de Sheet,
     # permet de récupérer les Rubriks, les Rubrik et les RubrikLine
+    #
+    # Fetch_lines est récursif tant que la class est une Compta::ubriks
+    #
     def fetch_lines
       fl = []
       @collection.each do |c|
