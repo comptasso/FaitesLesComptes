@@ -1,10 +1,9 @@
 Faitesvoscomptes::Application.routes.draw do
 
   
-
+# les chemins pour les liens qui sont dans le bandeau en bas de chaque page
   get "bottom/credit"
   get "bottom/contact"
-
   get "bottom/apropos"
 
   get "modallines/create"
