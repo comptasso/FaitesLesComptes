@@ -2,8 +2,6 @@
 /*jslint browser: true */
 /*global $, jQuery */
 
-//var $, jQuery, stringToFloat;
-
 // fonction qui masque le contenu de la zone message dans le dashboard
 // et associé le click sur l'enveloppe au toggle des messages
 $(document).ready(function () {
@@ -13,7 +11,7 @@ $(document).ready(function () {
     });
 });
 
-/*jslint nomen: true*/
+
 
 // mise en forme de la table index des organismes
 jQuery(function () {
@@ -59,7 +57,7 @@ function recup_graph_datas(element) {
         legend = $(this).find('.legend').text().split(';'); // la légende
         ticks = $(this).find('.ticks').text().split(';'); // les mois
         // et on les remplit par une boucle qui prend la dimension de légende pour construire
-        for (i = 0; i <= legend.length; i += 1) {
+        for (i = 0; i < legend.length; i += 1) {
             label[i] = {
                 label: legend[i] // la table des légendes
             };

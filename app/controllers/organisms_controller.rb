@@ -36,7 +36,7 @@ class OrganismsController < ApplicationController
   protected
 
   
-
+# crée un virtual_book pour chacune des caisses
   def cash_books
      @organism.cashes.map do |c|
       cb = @organism.virtual_books.new
@@ -45,6 +45,7 @@ class OrganismsController < ApplicationController
     end
   end
 
+  # créé un virtual_book pour chacun des comptes bancaires
   def bank_books
     @organism.bank_accounts.map do |ba|
       vb = @organism.virtual_books.new

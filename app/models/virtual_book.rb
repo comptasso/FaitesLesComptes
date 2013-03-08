@@ -8,6 +8,8 @@ require 'book.rb'
 #
 # Un virtual_book hérite de Book et donc des méthodes Utilities::JcGraphic et
 # Utilities::Sold
+#
+# L'attribut virtual représente la classe sous jacente, donc une caisse ou un compte bancaire
 # 
 # sold_at est surchargé pour fonctionner le mode recettes dépenses
 # monthly_value, utilisé pour les graphes est surchargé pour avoir un graphe en ligne
@@ -32,6 +34,9 @@ class VirtualBook < Book
     [vcu + '_pave', vcu + '_book']
   end
 
+  # virtual peut être une instance de BankAccount ou de Cash
+  #
+  # virtual class renvoie donc cash ou bank_account
   def virtual_class
     virtual.class
   end
