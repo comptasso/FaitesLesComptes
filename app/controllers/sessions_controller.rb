@@ -2,6 +2,7 @@
 
 class SessionsController < ApplicationController
 
+  before_filter :check_browser
   skip_before_filter :log_in?, :only => [:new, :create]
   skip_before_filter :find_organism, :current_period
 
@@ -37,6 +38,20 @@ class SessionsController < ApplicationController
   def destroy
     session[:user] = session[:org_db] = session[:period]= nil
   end
+
+  protected
+
+  def check_browser
+   
+    if browser.ie6? || browser.ie7? || browser.ie8?
+       flash[:alert] =  "Navigateur : #{browser.name}"
+       render 'public/update_ie.html'
+    end
+
+
+  end
+
+  
 
 
 end

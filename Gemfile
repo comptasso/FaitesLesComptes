@@ -12,6 +12,7 @@ gem 'acts_as_list', '0.1.9'
 gem 'prawn'
 gem 'prawn_rails'
 gem 'haml-rails'
+gem 'browser' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
 
 
 

@@ -37,6 +37,7 @@ GEM
     better_errors (0.7.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
+    browser (0.1.6)
     builder (3.0.4)
     capybara (1.1.2)
       mime-types (>= 1.16)
@@ -201,6 +202,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_list (= 0.1.9)
   better_errors
+  browser
   capybara (= 1.1.2)
   coffee-rails (~> 3.2.0)
   database_cleaner
