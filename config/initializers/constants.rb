@@ -43,4 +43,5 @@ LIST_STATUS = %w(Association Entreprise)
 # refonte du modèle Transfer et travail sur la présentation du formulaire de Transfert
 # Version 0.5.1 - correction des dates du formulaire contrôle de caisse
 # version 0.6 : suppression du champ bank_extract_id des compta_lines ainsi que du champ type pour les bank_extract_lines.
-VERSION = '0.6.4'
+# version 0.6.5 : corrections de bugs, page avertissant sur la version de IE
+VERSION = '0.6.5'
