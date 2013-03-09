@@ -44,7 +44,7 @@ describe InOutWriting do
 
     it 'not balanced' do
       @w.compta_lines.first.debit = 1455
-      @w.should_not be_valid
+      @w.should_not be_valid 
     end
 
     it 'two lines' , wip:true do
@@ -53,7 +53,18 @@ describe InOutWriting do
      v.errors.messages[:base].should == ['Une écriture doit avoir au moins deux lignes']
     end
 
+    it 'la counter_line doit avoir un mode de payment' do
+      @w.counter_line.payment_mode = nil
+      @w.valid?
+      @w.errors.messages[:counter_line].should == ['erreur sur la counter_line']
+      @w.should_not be_valid
+      @w.counter_line.errors.messages[:payment_mode].should == ['obligatoire']
+    end
+
+
     describe 'création avec de mauvais paramètres' do
+
+
       context 'dans la vue new, on fait enter' do
 
         before(:each) do
@@ -66,7 +77,12 @@ describe InOutWriting do
         it 'in_out_line doit néanmoins exister' do
           @w.in_out_line.should be_an_instance_of(ComptaLine)
         end
+
       end
+
+
+
+
     end
 
     describe 'save' do

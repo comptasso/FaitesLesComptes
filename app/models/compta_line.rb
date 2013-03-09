@@ -23,10 +23,12 @@ class ComptaLine < ActiveRecord::Base
   # dans le formulaire
   validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
 
+  # impose d'avoir une nature s'il n'y a pas de compte
   validates :nature_id, presence: true, :unless => lambda { self.account_id || self.account }
+
+  # les natures et les comptes doivent être cohérents avec l'exercice
   validates :nature_id, :account_id, :belongs_to_period=>true
-  
- 
+   
   # TODO faire les tests
   validates :nature_id, :destination_id, :debit, :credit, :created_at, :payment_mode, :cant_edit=>true, :if=>Proc.new {|r| r.locked? }
   

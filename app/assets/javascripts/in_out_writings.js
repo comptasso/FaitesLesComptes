@@ -89,6 +89,7 @@ jQuery(function () {
 // gère l'affichage des champs banque et caisse
 function $f_td_bank_cash() {
     var income_outcome, payment_mode, caisses, banques, encaissement;
+    // pour n'afficher Chèque à l'encaissement que pour les livres de recettes
     if ($('.income_book#entry_lines').length > 0) {
         income_outcome = true;
         encaissement = $('optgroup[label="Chèques à l\'encaissement"] option');
@@ -96,7 +97,7 @@ function $f_td_bank_cash() {
         income_outcome = false;
     }
 
-    payment_mode = $('#entry_lines #in_out_writing_compta_lines_attributes_0_payment_mode').val();
+    payment_mode = $('#entry_lines #in_out_writing_compta_lines_attributes_1_payment_mode').val();
     caisses = $('optgroup[label="Caisses"] option');
     banques =  $('optgroup[label="Banques"] option');
 
@@ -160,7 +161,7 @@ jQuery(function () {
     if ($('#entry_lines').length !== 0) {
         $f_td_bank_cash();
     }
-    $('#entry_lines #in_out_writing_compta_lines_attributes_0_payment_mode').live('change', $f_td_bank_cash);
+    $('#entry_lines #in_out_writing_compta_lines_attributes_1_payment_mode').live('change', $f_td_bank_cash);
 });
 
 

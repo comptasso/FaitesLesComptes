@@ -79,9 +79,10 @@ class Writing < ActiveRecord::Base
     book.organism.find_period(date) rescue nil 
   end
 
-  # support renvoie le long_name du compte de la première ligne
+  # Support renvoie le long_name du compte de la première ligne
   # avec un compte de classe 5 de l'écriture.
-  # Nil si pas de support_line pour cette ériture
+  #
+  # nil si pas de support_line pour cette ériture
   def support
     s = support_line
     s.account.long_name if s && s.account

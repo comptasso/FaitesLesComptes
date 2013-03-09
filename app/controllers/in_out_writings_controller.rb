@@ -41,8 +41,10 @@ class InOutWritingsController < ApplicationController
   def create
     fill_counter_line
     @in_out_writing = @book.in_out_writings.build(params[:in_out_writing])
+
     @line = @in_out_writing.in_out_line
     @counter_line=@in_out_writing.counter_line
+    puts "Inspection #{@counter_line.inspect}"
     respond_to do |format|
       if @in_out_writing.save
         flash[:date]=@in_out_writing.date # permet de transmettre la date à l'écriture suivante
@@ -51,6 +53,9 @@ class InOutWritingsController < ApplicationController
         format.html { redirect_to new_book_in_out_writing_url(@book, mois:mois, an:an) }
 
       else
+        Rails.logger.warn("erreur dans create_line")
+        Rails.logger.warn(@in_out_writing.errors.messages)
+        Rails.logger.warn(@counter_line.inspect)
         fill_natures
         format.html { render action: "new" }
 
@@ -104,7 +109,7 @@ class InOutWritingsController < ApplicationController
       p  = params[:in_out_writing][:compta_lines_attributes]
       p['1'][:credit] = p['0'][:debit] || 0
       p['1'][:debit]= p['0'][:credit] || 0
-      p['1'][:payment_mode] = p['0'][:payment_mode]
+      
   end
 
 
