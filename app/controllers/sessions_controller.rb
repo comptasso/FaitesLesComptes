@@ -39,11 +39,11 @@ class SessionsController < ApplicationController
     session[:user] = session[:org_db] = session[:period]= nil
   end
 
-  protected
+  protected 
 
   def check_browser
    
-    if browser.ie6? || browser.ie7? || browser.ie8?
+    if browser.ie6? || browser.ie7? || browser.ie8? 
        flash[:alert] =  "Navigateur : #{browser.name}"
        render 'public/update_ie.html'
     end

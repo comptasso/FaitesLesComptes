@@ -8,13 +8,14 @@ end
 
 describe 'vue lines' do
   include OrganismFixture
+
+
    
   before(:each) do
     create_user 
     create_minimal_organism 
     login_as('quidam')
-
-  end
+  end 
 
 #  it 'test' , wip:true do
 #    puts @ba.inspect
@@ -61,6 +62,12 @@ describe 'vue lines' do
     click_button 'Créer'
     ComptaLine.count.should == 0
     page.should have_content('nouvelle ligne')
+    end
+
+    it 'cliquer sans remplir doit réafficher la page' do
+      visit new_book_in_out_writing_path(@ob)
+      click_button 'Créer'
+      page.should have_content('nouvelle ligne')
     end
 
 

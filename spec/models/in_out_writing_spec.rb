@@ -53,6 +53,22 @@ describe InOutWriting do
      v.errors.messages[:base].should == ['Une écriture doit avoir au moins deux lignes']
     end
 
+    describe 'création avec de mauvais paramètres' do
+      context 'dans la vue new, on fait enter' do
+
+        before(:each) do
+          @w = @ob.in_out_writings.new("date_picker"=>"01/03/2013", "ref"=>"",
+            "narration"=>"essa",
+            "compta_lines_attributes"=>{'0'=>{"nature_id"=>"", "destination_id"=>"", "credit"=>"0", "debit"=>"0", "payment_mode"=>"" },
+              '1'=>{"account_id"=>"144", "check_number"=>"", "credit"=>"0", "debit"=>"0", "payment_mode"=>"" }})
+        end
+
+        it 'in_out_line doit néanmoins exister' do
+          @w.in_out_line.should be_an_instance_of(ComptaLine)
+        end
+      end
+    end
+
     describe 'save' do
 
       it 'ajoute une écriture' do
