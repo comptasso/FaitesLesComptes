@@ -30,7 +30,7 @@ describe "in_out_writings/new" do
 
   it 'le champ paiement doit être précédé d une étoile' do
     render
-    page.find(:xpath, '//label[@for="in_out_writing_compta_lines_attributes_0_payment_mode"]').should have_content('*')
+    page.find(:xpath, '//label[@for="in_out_writing_compta_lines_attributes_1_payment_mode"]').should have_content('*')
   end
 
   it 'test en cas d erreur dans le remplissage' do

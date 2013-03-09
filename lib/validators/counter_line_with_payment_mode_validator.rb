@@ -2,8 +2,11 @@
 
 class CounterLineWithPaymentModeValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    cl = record.counter_line
-    puts cl.inspect
+    # s'il n'y a pas de counter_line on retourne car l'absence de 
+    # counter_line relève d'un autre validator
+    # 
+    # En outre cela simplifie les tests
+    return unless cl = record.counter_line
     if cl.payment_mode.blank?
       cl.errors.add(:payment_mode, :blank)
       record.errors.add(attribute, 'erreur sur la counter_line')

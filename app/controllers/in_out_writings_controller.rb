@@ -41,10 +41,9 @@ class InOutWritingsController < ApplicationController
   def create
     fill_counter_line
     @in_out_writing = @book.in_out_writings.build(params[:in_out_writing])
-
     @line = @in_out_writing.in_out_line
     @counter_line=@in_out_writing.counter_line
-    puts "Inspection #{@counter_line.inspect}"
+    
     respond_to do |format|
       if @in_out_writing.save
         flash[:date]=@in_out_writing.date # permet de transmettre la date à l'écriture suivante
@@ -105,6 +104,9 @@ class InOutWritingsController < ApplicationController
 
   protected
 
+
+  # complète les informations pour la counter_line en remplissant les
+  # champs débit et crédit à partir du champ de la compta_line
   def fill_counter_line
       p  = params[:in_out_writing][:compta_lines_attributes]
       p['1'][:credit] = p['0'][:debit] || 0
@@ -113,6 +115,7 @@ class InOutWritingsController < ApplicationController
   end
 
 
+  # Initie la variable d'instance book
   def find_book
     @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
   end

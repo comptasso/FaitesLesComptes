@@ -4,6 +4,7 @@ require 'spec_helper'
 
 describe 'CounterLineWithPaymentModeValidator' do
   let(:b) {stub_model(IncomeBook)}
+  let(:cl) {stub_model(ComptaLine)}
 
   def valid_attributes
     {"date_picker"=>"01/03/2013", "ref"=>"",
@@ -15,16 +16,32 @@ describe 'CounterLineWithPaymentModeValidator' do
 
   before(:each) do
 
-    
     @w = b.in_out_writings.build(valid_attributes)
 
     @w.stub(:book).and_return b
+    @w.stub(:counter_line).and_return(cl)
   end
 
-  it 'o recçoit la demande de trouver l exercice' do
-    @w.should be_valid
-    
+  it 'le validator interroge le champ payment mode de la counter line' do
+    cl.should_receive(:payment_mode).at_least(1).times.and_return('Espèces')
+    @w.valid?
   end
+
+  it 'non valide si pas de champ payment_mode' do 
+    cl.stub(:payment_mode).and_return(nil)
+    @w.should_not be_valid
+    @w.errors.messages[:counter_line].should == ['erreur sur la counter_line']
+    cl.errors.messages[:payment_mode].should == ['obligatoire']
+  end
+
+  it 'non valide si pas dans la liste des constantes autorisées' do
+    cl.stub(:payment_mode).and_return('bizarre')
+    @w.should_not be_valid
+    @w.errors.messages[:counter_line].should == ['erreur sur la counter_line']
+    cl.errors.messages[:payment_mode].should == ['valeur non acceptée']
+  end
+
+
 
   
 

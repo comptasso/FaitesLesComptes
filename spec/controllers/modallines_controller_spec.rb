@@ -11,22 +11,23 @@ describe ModallinesController do
 
   def valid_arguments
     {:book_id=>1, date:Date.today, :narration=>'ligne de test',
-      compta_lines_attributes:{'0' =>{account_id:1, nature_id:2, payment_mode:'Virement', debit:50},
-        '1'=>{account_id:2}}}
+      compta_lines_attributes:{'0' =>{account_id:1, nature_id:2, debit:50},
+        '1'=>{account_id:2, payment_mode:'Virement'}}}
   end
 
 
 
   def invalid_arguments
     {:book_id=>1, :narration=>'ligne de test',
-      compta_lines_attributes:{'0' =>{account_id:1, nature_id:2, payment_mode:'Virement', debit:50},
-        '1'=>{account_id:2}}}
+      compta_lines_attributes:{'0' =>{account_id:1, nature_id:2, debit:50},
+        '1'=>{account_id:2, payment_mode:'Virement'}}}
   end
   
   before(:each) do 
     minimal_instances
     InOutWriting.any_instance.stub_chain(:book, :type).and_return('IncomeBook')
     InOutWriting.any_instance.stub_chain(:book, :organism).and_return(@o)
+    InOutWriting.any_instance.stub(:counter_line).and_return(mock_model(ComptaLine, payment_mode:'Virement'))
     @o.stub(:find_period).and_return @p
     @p.stub(:guess_month).and_return(Date.today.month - 1) 
   end

@@ -293,10 +293,10 @@ fr:
           attributes:
             date:
               incoherent: Incohérent avec %{field}
-        compta_lines:
+        compta_line:
           attributes:
             payment_mode:
-              not_accepted: Valeur non acceptée
+              not_accepted: valeur non acceptée
         nature:
           attributes:
             account_id:

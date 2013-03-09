@@ -61,7 +61,7 @@ describe 'vue lines' do
     select 'Chèque'
     click_button 'Créer'
     ComptaLine.count.should == 0
-    page.should have_content('nouvelle ligne')
+    page.should have_content('nouvelle ligne') 
     end
 
     it 'cliquer sans remplir doit réafficher la page' do

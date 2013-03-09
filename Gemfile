@@ -48,7 +48,7 @@ group :development, :test do
   gem 'spork-rails'
   gem 'launchy'
   gem 'database_cleaner'
-  gem 'selenium-webdriver', '>= 2.27.2'
+  gem 'selenium-webdriver', '>= 2.31'
   gem 'capybara', '1.1.2'
   gem 'better_errors'
 
