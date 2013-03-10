@@ -8,7 +8,7 @@ module BankExtractLinesHelper
     bel.compta_lines.each do |l|
       html << content_tag(:ul) do
         content_tag(:li) do
-          "#{l l.date} - #{sanitize l.narration} - #{two_decimals l.debit} - #{two_decimals l.credit}</td>".html_safe
+          "#{l l.date} - #{sanitize l.narration} - #{two_decimals l.credit} - #{two_decimals l.debit}</td>".html_safe
         end
       end
     end
