@@ -4,7 +4,6 @@ class CheckDepositsController < ApplicationController
 
   before_filter :find_bank_account 
   
-
   # GET /check_deposits
   def index
     @total_lines_credit=CheckDeposit.total_to_pick
@@ -56,8 +55,9 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
   # PUT /check_deposits/1
   # PUT /check_deposits/1.json
   def update
+    # ici on n'utilise pas @bank_account.check_deposits car
+    # la modification peut avoir pour objet de changer de compte
     @check_deposit = CheckDeposit.find(params[:id])
-    
     if @check_deposit.update_attributes(params[:check_deposit])
       redirect_to  organism_bank_account_check_deposits_url, notice: 'La remise de chèque a été modifiée.'
     else
@@ -76,11 +76,12 @@ pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick
 
   private
 
+  # trouve le bank_account demandé ou choisit le bank_account par défaut
   def find_bank_account
     if params[:bank_account_id]
        @bank_account=@organism.bank_accounts.find(params[:bank_account_id])
     else
-      @bank_account = @organism.bank_accounts.first
+      @bank_account = @organism.main_bank_id
     end
   end
 

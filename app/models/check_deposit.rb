@@ -30,10 +30,7 @@ class CheckDeposit < ActiveRecord::Base
 
   pick_date_for :deposit_date
 
-  # book_id est nécessaire car on construit les écritures
-  attr_accessible :deposit_date, :deposit_date_picker
-  
-  belongs_to :bank_account 
+    belongs_to :bank_account 
   belongs_to :bank_extract_line
   belongs_to :check_deposit_writing, :dependent=>:destroy, :foreign_key=>'writing_id'
   
@@ -45,12 +42,15 @@ class CheckDeposit < ActiveRecord::Base
     conditions: proc { ['account_id = ? AND debit > 0', rem_check_account.id] },
     dependent: :nullify,
     before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
-  before_add: :cant_if_pointed
+    before_add: :cant_if_pointed
  
   # has_many :lines # utile pour les méthode credit_compta_line et debit_compta_line
   has_many  :compta_lines, :through=>:check_deposit_writing
-
+  
   alias children compta_lines
+
+  # book_id est nécessaire car on construit les écritures
+  attr_accessible :deposit_date, :deposit_date_picker, :check_ids, :bank_account_id
 
   scope :within_period, lambda {|from_date, to_date| where(['deposit_date >= ? and deposit_date <= ?', from_date, to_date])}
  

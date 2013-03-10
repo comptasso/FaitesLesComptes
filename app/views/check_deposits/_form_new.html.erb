@@ -4,10 +4,7 @@
   <%= f.error_notification %>
   <%= f.input :deposit_date_picker, :label=> 'Date', input_html: {class: 'span2', date_min:Date.today.years_ago(5), date_max:Date.today.years_since(5)} ,:required => true, :as=>:date_picker %>
 
-  <%= f.association :bank_account, 
-              input_html: {:class=> "span2"},
-              :collection => @organism.bank_accounts.map {|b| [b.number, b.id]},
-              :prompt => "Numero de compte ?", :label=>'Compte' %>
+  
 
           <%= f.association :checks,
               input_html: {:class=> "span4"},
