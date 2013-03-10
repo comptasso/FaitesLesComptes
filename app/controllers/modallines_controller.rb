@@ -27,12 +27,16 @@ class ModallinesController < ApplicationController
 
   protected
 
+  # recopie dans la counter_line les attributs nécessaires de la line
+  #
+  # En même temps, complète l'attribut account_id avec le numéro de compte correspondant
+  # à l'exercice.
   def complete_params
     param =  params[:in_out_writing][:compta_lines_attributes]
     param['1'][:account_id] = @bank_account.current_account(@period).id
     param['1'][:credit] = param['0'][:debit] || 0
     param['1'][:debit]= param['0'][:credit] || 0
-    param['1'][:payment_mode] = param['0'][:payment_mode]
+    
   end
 
 end

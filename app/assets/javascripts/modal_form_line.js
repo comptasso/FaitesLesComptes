@@ -19,19 +19,21 @@
       $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().show();
     }
 
-
+    // et agit en conséquence - on affiche les champs débit ou credit
+    // on désactive les natures qui ne sont pas adaptées au livre
     if (income_outcome.match(/^R/) !== null) {
       $('label[for="in_out_writing_compta_lines_attributes_0_debit"]').parent().hide();
       $('label[for="in_out_writing_compta_lines_attributes_0_credit"]').parent().show();
       $('optgroup[label="Depenses"]').attr('disabled', true)
       $('optgroup[label="Recettes"]').attr('disabled', false)
-
+      $("#in_out_writing_compta_lines_attributes_1_payment_mode option[value='Chèque']").attr('disabled', true)
     }
     if (income_outcome.match(/^D/) !== null) {
       $('label[for="in_out_writing_compta_lines_attributes_0_debit"]').parent().show();
       $('label[for="in_out_writing_compta_lines_attributes_0_credit"]').parent().hide();
       $('optgroup[label="Depenses"]').attr('disabled', false)
       $('optgroup[label="Recettes"]').attr('disabled', true)
+      $("#in_out_writing_compta_lines_attributes_1_payment_mode option[value='Chèque']").attr('disabled', false)
     }
   }
 
@@ -46,7 +48,7 @@ jQuery(function() {
     $('#in_out_writing_compta_lines_attributes_0_destination_id').val('');
     $('#in_out_writing_compta_lines_attributes_0_credit').val('0.00');
     $('#in_out_writing_compta_lines_attributes_0_debit').val('0.00');
-    $('#in_out_writing_compta_lines_attributes_0_payment_mode').val('');
+    $('#in_out_writing_compta_lines_attributes_1_payment_mode').val('');
     $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().hide();
   }
 
@@ -55,7 +57,7 @@ jQuery(function() {
   // selon la nature du livre, on veut disable les natures qui sont inadaptées
   // Attacher un évènement onChange au champ book
   $('#form_bank_extract_line #in_out_writing_book_id').live('change', $f_modal_book_change);
-  $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_payment_mode').live('change', function() {
+  $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_1_payment_mode').live('change', function() {
     if ($(this).val() === 'Chèque') {
       $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().show();
     } else {
@@ -64,5 +66,5 @@ jQuery(function() {
   });
 
   $('#modal_form_line').on('shown', $f_modal_raz);
-  // de même on veut masquer crédit ou débit
+  
 });

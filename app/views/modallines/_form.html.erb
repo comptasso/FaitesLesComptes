@@ -15,8 +15,8 @@
     <%= f.input :date_picker, :label=> 'Date', input_html: { class: "span4", date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
     <%= f.input :narration,  :label=>'Libellé ', input_html: {class: "span10" } %>
     <%= f.input :ref, label:'Référence',  input_html: {class: "span4" }  %>
-  <%= f.fields_for :compta_lines, @line do |build| %>
-    <%= build.association :nature ,
+    <%= f.fields_for :compta_lines, @line do |build| %>
+    <%= build.association :nature , :prompt => "Quoi ?",
               :collection => [Utilities::NaturesCollection.new(@period, :recettes), Utilities::NaturesCollection.new(@period, :depenses)],
               :as => :grouped_select, :group_method=>:natures,
               :required=>true, input_html: {class: "span6 " } %>
@@ -25,15 +25,17 @@
      <%=  build.input :debit ,   input_html: {class: "span3 number", value: two_decimals(@line.debit) }  %>
      <%=  build.input :credit, input_html: {class: "span3 number", value: two_decimals(@line.credit) } %>
      
-     <%= build.input :payment_mode , collection: PAYMENT_MODES, :prompt=>'Mode de réglement',
-                          disabled: 'Espèces',
-                          :required=>true,  input_html: {class: "span6"} %>
+     
   <% end %>
   <%= f.fields_for :compta_lines, @counter_line do |build| %>
 
+     <%= build.input :payment_mode , collection: PAYMENT_MODES, :prompt=>'Mode de réglement',
+                          disabled: 'Espèces',
+                          :required=>true,  input_html: {class: "span6"} %>
+
      <%= build.association :account, :label=> 'Contrepartie', input_html: {class: "span6"}, :collection=>[@counter_line.account], :label_method=>:title,
                :disabled=>true, :include_blank=>false  %>
-  <%= build.input :check_number, label:'N° ch.', input_html: {class: "span6" } %>
+     <%= build.input :check_number, label:'N° ch.', input_html: {class: "span6" } %>
 
   
     
