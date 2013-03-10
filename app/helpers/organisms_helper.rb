@@ -12,7 +12,7 @@ module OrganismsHelper
       info= {}
       info[:text] = "<b>#{cdnb} chèques à déposer</b> pour \
             un montant total de #{number_to_currency CheckDeposit.total_to_pick}".html_safe
-      info[:icon] = icon_to('nouveau.png', new_organism_check_deposit_path(org))
+      info[:icon] = icon_to('nouveau.png', new_organism_bank_account_check_deposit_path(org, org.main_bank_id))
       m << info
     end
 
