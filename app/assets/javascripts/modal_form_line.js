@@ -56,8 +56,8 @@ jQuery(function() {
   $f_modal_book_change();
   // selon la nature du livre, on veut disable les natures qui sont inadaptées
   // Attacher un évènement onChange au champ book
-  $('#form_bank_extract_line #in_out_writing_book_id').live('change', $f_modal_book_change);
-  $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_1_payment_mode').live('change', function() {
+  $('#form_bank_extract_line #in_out_writing_book_id').change($f_modal_book_change);
+  $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_1_payment_mode').change(function() {
     if ($(this).val() === 'Chèque') {
       $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().show();
     } else {
