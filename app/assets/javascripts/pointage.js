@@ -63,8 +63,6 @@ jQuery(function () {
         fnCheckTotalDebit();
         fnCheckTotalCredit();
 
-        // lorsque le total crédit change, appel de fnCheckTotalCredit
-        // $('#bels_total_credit').onChange()
         var bTable, lTable;
 
         bTable = $('#bels_table').dataTable({
@@ -84,9 +82,9 @@ jQuery(function () {
             'bInfo': false,
             "aaSorting": [[1, 'asc']],
             "aoColumnDefs": [
-                {
+                {   // la première colonne et la colonne action ne sont pas sortable
                     "bSortable": false,
-                    "aTargets": [ 0, 'actions' ]
+                    "aTargets": [ 0, 'actions' ] 
                 },
                 {
                     "sType": "date-euro",
