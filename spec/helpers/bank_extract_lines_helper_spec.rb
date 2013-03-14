@@ -9,8 +9,8 @@ describe BankExtractLinesHelper do
     before(:each) do
       @bel = mock_model(Writing)
       @bel.stub(:compta_lines).and_return(
-      [mock_model(ComptaLine, date:Date.today, narration:'ligne1', debit:10, credit:0),
-        mock_model(ComptaLine,date:Date.today, narration:'ligne2', debit:0, credit:205 )
+      [mock_model(ComptaLine, date:Date.today, narration:'ligne1', debit:0, credit:10),
+        mock_model(ComptaLine,date:Date.today, narration:'ligne2', debit:205, credit:0 )
       ]
       )
     end
