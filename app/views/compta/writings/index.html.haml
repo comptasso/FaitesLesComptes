@@ -6,7 +6,7 @@
 .champ
   %h3
     Journal #{@book.title} : Liste d'écritures 
-    = render 'submenu_mois' 
+    %ul.mois= submenu_mois(@period, {action:'index', controller:'compta/writings', :book_id=>@book.id}) 
 
 = render :partial=>'compta/writings/writing', :collection=>@writings
 - if @writings.empty?

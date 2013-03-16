@@ -8,7 +8,9 @@
 
 <div class="champ">
   <h3><%= "Caisse #{@cash.name}" %>
-     <%= render 'submenu_mois'  %>
+      <ul class="mois">
+      <%= submenu_mois(@period, {action:'index', controller:'cash_lines', :cash_id=>@cash.id}) %>
+    </ul>
    
   </h3>
   </div>
