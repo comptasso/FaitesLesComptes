@@ -1,6 +1,6 @@
 <%= content_tag(:div, class: "pave #{local_classes}") do %>
     <h3 class='<%= book_pave.type %>' >
-          Livre des <%=  book_pave.title %>
+          <%=  book_pave.title %>
           <%= icon_to 'nouveau.png', new_book_in_out_writing_path(book_pave) %>
           <%= icon_to 'detail.png', book_in_out_writings_path(book_pave) %>
     </h3>

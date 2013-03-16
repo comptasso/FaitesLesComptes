@@ -27,6 +27,7 @@ class Cash < ActiveRecord::Base
   
   after_create :create_accounts
   after_update :change_account_title, :if=> lambda {name_changed? }
+  
 
   # retourne le numéro de compte de la caisse correspondant à l'exercice (period) passé en argument
   def current_account(period)
@@ -66,10 +67,12 @@ class Cash < ActiveRecord::Base
    end
  end
 
+ # Permet d'avoir un libellé du compte plus clair en préfixant le libellé du compte
+ # par le mot Caisse 
  def change_account_title
    accounts.each {|acc| acc.update_attribute(:title, 'Caisse '+ name)}
  end
-
+ 
   
 
 

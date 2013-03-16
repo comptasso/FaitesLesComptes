@@ -15,7 +15,7 @@ require 'book.rb'
 # monthly_value, utilisé pour les graphes est surchargé pour avoir un graphe en ligne
 # et donc en cumul.
 #
-# pave_char permet d'indiquer le type de graphique que l'on souhaite pour l'affichage du DashBoard
+# pave_char (également surchargé) permet d'indiquer le type de graphique que l'on souhaite pour l'affichage du DashBoard
 #
 class VirtualBook < Book
 
