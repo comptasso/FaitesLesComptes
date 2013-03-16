@@ -1,4 +1,0 @@
-%ul.mois
-  - @period.list_months.each do |m|
-    %li{:class=>"#{'active' if current_page?(mois:m.month, an:m.year)}" }
-      = link_to_unless_current(m.to_short, cash_cash_controls_path(@cash,mois:m.month, an:m.year))

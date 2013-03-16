@@ -74,9 +74,9 @@ class CashControlsController < ApplicationController
       @an = params[:an]
     else
       monthyear= @period.guess_month
-      redirect_to cash_cash_controls_url(@cash, mois:monthyear.month, an:monthyear.year, :format=>params[:format]) if (params[:action]=='index')
+        redirect_to cash_cash_controls_url(@cash, mois:monthyear.month, an:monthyear.year, :format=>params[:format]) if (params[:action]=='index')
+      end
     end
-  end
 
   
 

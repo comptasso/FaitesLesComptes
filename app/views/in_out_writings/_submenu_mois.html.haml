@@ -1,6 +1,0 @@
-%ul.mois
-  - @period.list_months.each do |m|
-    %li{:class=>"#{'active' if current_page?(mois:m.month, an:m.year)}" }
-      = link_to_unless_current(m.to_short, book_in_out_writings_path(@book, mois:m.month, an:m.year))
-  %li{:class=>"#{'active' if current_page?(mois:'tous')}" }
-    = link_to_unless_current('tous', book_in_out_writings_path(@book, mois:'tous'))

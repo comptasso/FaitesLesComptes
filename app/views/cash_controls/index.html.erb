@@ -1,6 +1,8 @@
 <div class="champ">
   <h3>Liste des contrôles : <%= @cash.name %>
-   <%= render 'submenu_mois'  %>
+   <ul class="mois">
+      <%= submenu_mois(@period, {action:'index', controller:'cash_controls', :cash_id=>@cash.id}, false) %>
+    </ul>
   </h3>
   
  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed data_table pc50" >
