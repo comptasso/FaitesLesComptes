@@ -9,7 +9,9 @@
 <div class="champ">
 
   <h3><%= @book.title %> : liste des écritures
-  <%= render 'submenu_mois'  %>
+    <ul class="mois">
+      <%= submenu_mois(@period, {action:'index', controller:'in_out_writings', :book_id=>@book.id}) %>
+    </ul>
 </h3>
  
   </div>
