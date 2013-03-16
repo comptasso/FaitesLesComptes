@@ -1,7 +1,7 @@
 <%= content_for :menu do %>
   <%= icon_to('nouveau.png', new_book_in_out_writing_path(@book, mois:@mois, an:@an), id: 'new_line_link') %>
   <%= in_out_index_icons %>
- 
+ <%= icon_to 'retour.png', :back %>
 <% end -%>
 
 <div id="lines_pdf" title="pdf" style="display:none"></div>

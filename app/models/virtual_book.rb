@@ -10,6 +10,11 @@ require 'book.rb'
 # Utilities::Sold
 #
 # L'attribut virtual représente la classe sous jacente, donc une caisse ou un compte bancaire
+# Cet attribut doit être rempli par la partie appelante
+# 
+# TODO voir si on ne pourrait pas le faire pas un after_initialize
+# On pourrait aussi utiliser les possibilités de has_many virtual_books dans la modèle organisme
+# pour y rajouter un callback de création.
 # 
 # sold_at est surchargé pour fonctionner le mode recettes dépenses
 # monthly_value, utilisé pour les graphes est surchargé pour avoir un graphe en ligne
