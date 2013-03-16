@@ -11,15 +11,23 @@ module InOutWritingsHelper
   end
 
   # permet d'afficher les actions possible dans une ligne d'écriture
+  # 
+  # Si la ligne est éditable, alors on peut la modifier ou la supprimer
+  # 
+  # Si la ligne est un Transfer, la modification se fait via la rubrique Transfer
+  # La suppression n'est pas possible, car elle doit passer par le menu Transfer
+  #
   def in_out_line_actions(line)
     html = ' '
-      if line.writing.type == 'Transfer'
-        html <<  icon_to('modifier.png', edit_transfer_path(line.writing_id)) if line.editable?
+    if line.editable?
+      lw=line.writing
+      if lw.type == 'Transfer'
+        html <<  icon_to('modifier.png', edit_transfer_path(lw.id)) 
       else
-        html <<  icon_to('modifier.png', edit_book_in_out_writing_path(line.writing.book_id, line.writing)) if line.editable?
-        html <<  icon_to('supprimer.png', book_in_out_writing_path(line.writing.book, line.writing), confirm: 'Etes vous sûr?', method: :delete) if line.editable?
+        html <<  icon_to('modifier.png', edit_book_in_out_writing_path(lw.book_id, lw)) 
+        html <<  icon_to('supprimer.png', book_in_out_writing_path(lw.book, lw), confirm: 'Etes vous sûr?', method: :delete) 
       end
-
+    end
 
     content_tag :td, :class=>'icon' do
       html.html_safe

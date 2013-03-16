@@ -34,13 +34,13 @@ before(:each) do
   it 'give the info in a notice if previous line' do
     @w = mock_model(InOutWriting, book:book, book_id:1, date:Date.today)
     view.stub(:icon_to).and_return('stub icone')
-    assign(:previous_line, @pl = stub_model(ComptaLine, id:1, narration:'test',
+    assign(:previous_line, @pl = stub_model(ComptaLine, writing_id:1, narration:'test',
         book_id:book.id, debit:0, credit:12, line_date:Date.today, nature:n, destination:d))
     @pl.stub(:writing).and_return @w
     @w.stub(:support).and_return('DX')
     @pl.stub(:editable?).and_return(true)
     render
-    rendered.should have_content 'Ligne n°1 créée'
+    rendered.should have_content 'Ecriture n°1 créée'
   end
 
  
