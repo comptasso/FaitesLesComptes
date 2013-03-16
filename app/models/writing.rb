@@ -95,6 +95,11 @@ class Writing < ActiveRecord::Base
     s = compta_lines.select {|cl| cl.account && cl.account.number =~ /^5.*/}
     s.first if s
   end
+  
+  # retourne le mode de payment associé à cette écriture
+  def payment_mode
+    support_line.payment_mode if support_line
+  end
 
   # indique si une écritue est équilibrée ou non
   # ajoute une erreur si déséquilibrée

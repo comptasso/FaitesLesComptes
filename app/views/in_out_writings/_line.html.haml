@@ -5,6 +5,6 @@
 %td= line.destination.name if line.destination
 %td.numeric= debit_credit(line.debit)
 %td.numeric= debit_credit(line.credit)
-%td= line.payment_mode
+%td= line.writing.payment_mode
 %td= line.writing.support
 = in_out_line_actions(line)

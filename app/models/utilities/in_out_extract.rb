@@ -114,7 +114,9 @@ module Utilities
     end
 
     
-    # prend une ligne comme argument et renvoie un array avec les différentes valeurs
+    #  Utilisé pour l'export vers le csv et le xls
+    # 
+    #   prend une ligne comme argument et renvoie un array avec les différentes valeurs
     # préparées : date est gérée par I18n::l, les montants monétaires sont reformatés poru
     # avoir 2 décimales et une virgule,...
     def prepare_line(line)
