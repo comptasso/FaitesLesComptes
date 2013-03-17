@@ -85,7 +85,7 @@ module Utilities
         'writings.narration AS w_narration', 'destination_id',
         'nature_id', 'debit', 'credit', 'payment_mode', 'writing_id']
       pdf.set_columns_methods ['w_date', 'w_ref', 'w_narration',
-        'destination_id.name', 'nature_id.name', 'debit', 'credit',
+        'destination.name', 'nature.name', 'debit', 'credit',
         'payment_mode', 'writing_id']
       pdf.set_columns_titles(titles)
       pdf.set_columns_widths([10, 8, 20,10 ,  10, 8, 8,13,13])

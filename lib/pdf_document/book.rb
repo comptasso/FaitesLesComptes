@@ -33,8 +33,9 @@ module PdfDocument
     def prepare_line(line)
       pl = columns_methods.collect { |m| line.instance_eval(m) rescue nil }
       pl[0] = I18n::l(Date.parse(pl[0])) rescue pl[0]
-      pl[-1] = Writing.find_by_id(pl.last).support # récupération du support
-      pl
+      w=Writing.find_by_id(pl.last)
+      pl[-1] = w.support # récupération du support
+      pl[-2] = w.payment_mode
     end
 
     
