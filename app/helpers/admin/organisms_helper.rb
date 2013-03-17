@@ -7,8 +7,8 @@ module Admin::OrganismsHelper
 
   def admin_menu(model)
     content_tag(:ul, :class=>"dropdown-menu") do
-      content_tag(:li) { link_to 'Afficher', eval("admin_organism_#{model.pluralize}_path(@organism)") } +
-      content_tag(:li) {link_to 'Nouveau', eval("new_admin_organism_#{model}_path(@organism)") }
+      content_tag(:li) { link_to 'Afficher', url_for(controller:"admin/#{model.pluralize}", action:'index', organism_id:@organism.id) } +
+      content_tag(:li) {link_to 'Nouveau', url_for(controller:"admin/#{model.pluralize}", action:'new', organism_id:@organism.id) }
     end
   end
   

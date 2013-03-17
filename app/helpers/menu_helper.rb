@@ -10,25 +10,25 @@ module MenuHelper
     lis.join('').html_safe
   end
 
+  
+  
   # menu prend une chaine de caractère représentant un modèle et
-  # et crée les entrées Afficher et Nouveau en ayant des routes dépendant de @organism
-  # Voir direct_menu pour avoir des routes non dépendantes
-  def menu(model)
+  # et crée les entrées Afficher et Nouveau.
+  # 
+  # opt permet de passer des options complémentaires comme organism:@organism
+  # et ainsi d'avoir la possibilité de faire des routes composées.
+  #
+  def short_menu(model, opt = nil)
+    options = {:controller=>model.pluralize}
+    options = options.merge(opt) if opt
     content_tag(:ul, :class=>"dropdown-menu") do
-      content_tag(:li) { link_to 'Afficher', eval("organism_#{model.pluralize}_path(@organism)") } +
-      content_tag(:li) {link_to 'Nouveau', eval("new_organism_#{model}_path(@organism)") }
+      content_tag(:li) { link_to 'Afficher', url_for(options.merge({action:'index'})) } +
+      content_tag(:li) {link_to 'Nouveau', url_for(options.merge({action:'new'})) }
     end
   end
 
 
-  # menu prend une chaine de caractère représentant un modèle et
-  # et crée les entrées Afficher et Nouveau
-  def direct_menu(model)
-    content_tag(:ul, :class=>"dropdown-menu") do
-      content_tag(:li) { link_to 'Afficher', eval("#{model.pluralize}_path") } +
-      content_tag(:li) {link_to 'Nouveau', eval("new_#{model}_path") }
-    end
-  end
+  
 
 
 
