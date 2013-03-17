@@ -29,6 +29,10 @@ module PdfDocument
     # donc on utilise l'id récupéré pour appelé la fonction support.
     # Une autre option possible serait d'enregistrer cette info dans la table
     # pour en faciliter la restitution. 
+    # 
+    # Ne pas confondre ce prepare_line pour le pdf avec celui qui est dans 
+    # InOutExtract et qui est pour l'export vers excel ou csv
+    # 
     # TODO : traiter ce sujet en fonction des performances 
     def prepare_line(line)
       pl = columns_methods.collect { |m| line.instance_eval(m) rescue nil }
@@ -36,6 +40,7 @@ module PdfDocument
       w=Writing.find_by_id(pl.last)
       pl[-1] = w.support # récupération du support
       pl[-2] = w.payment_mode
+      pl
     end
 
     

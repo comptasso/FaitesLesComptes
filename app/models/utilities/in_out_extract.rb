@@ -88,7 +88,7 @@ module Utilities
         'destination.name', 'nature.name', 'debit', 'credit',
         'payment_mode', 'writing_id']
       pdf.set_columns_titles(titles)
-      pdf.set_columns_widths([10, 8, 20,10 ,  10, 8, 8,13,13])
+      pdf.set_columns_widths([8, 6, 20 ,10 ,  10, 10, 10,13,13])
       pdf.set_columns_to_totalize [5,6]
        
       pdf
