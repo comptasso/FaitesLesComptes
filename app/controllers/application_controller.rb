@@ -155,7 +155,35 @@ class ApplicationController < ActionController::Base
     change
   end
 
+  # fill_mois est utile pour tous les controller que l'on peut appeler avec une options qui peut être
+  #   rien et dans ce cas, fill_mois trouve le mois le plus adapté
+  #   mois:'tous' pour avoir tous les mois d'affichés
+  #   mois:2, an:2013 pour demander un mois spécifique
+  #
+  # local_params doit renvoyer un hash avec les paramètres complémentaires nécessaires
+  # essentiellement un id d'un objet, par exemple :cash_id=>@cash}
+  #
+  # Ceci permet alors d'avoir un routage vers cash_cash_lines_path(@cash) en supposant
+  # que l'on soit dans le controller cash_lines et avec l'action index 
+  #
+  def fill_mois
+    if params[:mois] && params[:an]
+      @mois = params[:mois]
+      @an = params[:an]
+      @monthyear=MonthYear.new(month:@mois, year:@an)
+    else
+      @monthyear= @period.guess_month
+      redirect_to url_for(local_params.merge(mois:@monthyear.month, an:@monthyear.year)) if params[:action]=='new'
+      unless params[:mois] == 'tous'
+        redirect_to url_for(local_params.merge(mois:@monthyear.month, an:@monthyear.year, :format=>params[:format])) if (params[:action]=='index')
+      end
+    end
+  end
+
   
+  def local_params
+    raise 'doit être implémentée dans les classes filles utilisant fill_mois - voir #fill_mois'
+  end
   
   
 

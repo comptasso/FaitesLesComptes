@@ -46,7 +46,7 @@
 
 <li id="menu_transfer" class="dropdown <%= 'active' if controller.controller_name =='transfers'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">TRANSFERTS<b class="caret"></b></a>
-  <%= short_menu('transfer')  %>
+  <%= short_menu('transfer', {:mois=>'tous'})  %>
 </li>
 
 <li class="dropdown <%= 'active' if controller.controller_name =='natures'  %>">

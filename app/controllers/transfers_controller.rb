@@ -7,6 +7,7 @@
 class TransfersController < ApplicationController 
 
   before_filter :find_book # find_book renvoie le OdBook
+  before_filter :fill_mois, only: [:index, :new]
 
   # GET /transfers
   # GET /transfers.json
@@ -93,6 +94,10 @@ class TransfersController < ApplicationController
 
   def find_book
     @book = OdBook.first
+  end
+
+  def local_params
+    {}
   end
 
 end
