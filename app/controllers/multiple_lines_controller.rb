@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 class MultipleLinesController < ApplicationController
 
+  # TODO vérifier qu'on peut supprimer ce fichier
+
   before_filter :find_book
   before_filter :fill_mois, only: [:index, :new]
 

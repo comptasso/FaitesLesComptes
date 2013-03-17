@@ -36,20 +36,11 @@ class CashLinesController < InOutWritingsController
     @cash = Cash.find(params[:cash_id])
   end
 
-  def fill_mois
-    if params[:mois] && params[:an]
-      @mois = params[:mois]
-      @an = params[:an]
-      @monthyear = MonthYear.new(month:@mois, year:@an)
-    else
-      @monthyear = @period.guess_month
-      logger.debug "monthyear demandé : #{@monthyear}"
-      unless params[:mois] == 'tous'
-        redirect_to cash_cash_lines_url(@cash, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format])
-      end
-    end
+  def local_params
+    {:cash_id=>@cash.id}
   end
-  
+
+
   # check_if_has_changed_period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice
   # à partir du graphe d'accueil et donc via l'action index.
   def check_if_has_changed_period

@@ -120,26 +120,9 @@ class InOutWritingsController < ApplicationController
     @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
   end
 
-  # fill_mois construit le MonthYear qui sera utilisé pour bâtir l'extrait mensuel du livre
-  # si le paramètre mois est tous, c'est que l'utilisateur veut effectivement la 
-  # totalité des lignes, ce fait poursuive normalement vers la fonction index
-  #
-  # Même si on demande tous les mois, il faut quand même définir un @monthyear car cette variable
-  # est utilisée par check_if_has_changed_period pour vérifier qu'on n'a pas changé d'exercice.
-  #
-  def fill_mois
-    if params[:mois] && params[:an]
-      @mois = params[:mois]
-      @an = params[:an]
-      @monthyear=MonthYear.new(month:@mois, year:@an)
-
-    else
-      @monthyear= @period.guess_month
-      redirect_to new_book_in_out_writing_url(@book, mois:@monthyear.month, an:@monthyear.year) if params[:action]=='new'
-      unless params[:mois] == 'tous'
-        redirect_to book_in_out_writings_url(@book, mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')
-      end
-    end
+  # voir fill_mois dans ApplicationController
+  def local_params
+    {:book_id=>@book.id}
   end
 
 
