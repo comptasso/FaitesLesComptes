@@ -62,7 +62,7 @@ class CashLinesController < InOutWritingsController
         my = @new_period.guess_month(@monthyear.beginning_of_month) # car si les exercices ne sont pas de même durée,
         # on pourrait tomber dans un exercice qui n'existe pas
         session[:period] = @new_period.id
-        redirect_to cash_cash_lines_url(@cash, mois:my.month, an:my.year, :format=>params[:format]) if (params[:action]=='index')
+        redirect_to cash_cash_lines_url(@cash, mois:my.month, an:my.year, :format=>params[:format])
       else
         flash[:alert] = "Le mois et l'année demandés ne correspondent à aucun exercice"
         redirect_to :back
