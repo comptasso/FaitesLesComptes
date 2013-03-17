@@ -1,10 +1,9 @@
 = content_for :menu do
-  = icon_to 'navigation90.png',:back
+  = icon_to 'retourn.png',:back
   = icon_to 'nouveau.png', new_organism_bank_account_check_deposit_path(@organism, @bank_account) if (@nb_to_pick && @nb_to_pick > 0)
 
 .champ
-  %h3
-    = "Banque compte n°#{@bank_account.number} : liste des remises de chèques" 
+  %h3="#{@bank_account.nickname} : liste des remises de chèques"
   .pc60
     %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0")
       %thead
