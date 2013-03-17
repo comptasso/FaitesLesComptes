@@ -185,6 +185,24 @@ function bind_bars(all_datas) {
         });
 }
 
+/* La fonction bind_cashes a pour effet de permettre de cliquer sur les points
+ * de la courbe de trésorerie des caisses pour afficher les mouvements du mois correspondants
+ * 
+ *  On n'a pas la même chose pour la banque car il n'y a pas de livre de banque à proprement parler
+ *  mais plutôt des extraits bancaires.  
+ *  */
+function bind_cashes(all_datas) {
+    $('#chart_' + all_datas.dcomplete_id).bind('jqplotDataClick',
+        function (ev, seriesIndex, pointIndex, data) {
+            var mois = '', la = [], an = '', lien = '';
+            lien = all_datas.dlinks[seriesIndex][pointIndex]; // lien = mm-yyyy à ce stade
+            la = lien.split('-');
+            mois = la[0]; an = la[1];
+            window.location = ("/cashes/" + all_datas.did + "/cash_lines?an=" + an + "&mois=" + mois);
+        });
+}
+
+
 // la fonctio monthly_graphic est appelée par des éléments du class
 // .bar_... ou .line... et fait le travail de tracé de graphique et
 // éventuellement de liens avec les évènements clics sur les barres pour
@@ -200,6 +218,10 @@ function monthly_graphic(element) {
     if (all_datas.dcomplete_id.match(/book/) && all_datas.did > 0) {
         bind_bars(all_datas); // fait le lien avec les barres
     }
+    if (all_datas.dcomplete_id.match(/cash/)) {
+        bind_cashes(all_datas); // fait le lien avec les barres
+    }
+    
 }
 
 // fonction pour tracer les graphes qui apparaissent dans la page organism#show
