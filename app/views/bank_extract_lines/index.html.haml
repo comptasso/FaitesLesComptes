@@ -7,7 +7,7 @@
     confirm:"Cette action verrouillera ce relevé de compte et toutes les lignes qui sont associées.\nConfirmez vous ?" if  @bank_extract.lockable? 
 
 .champ
-  %h3= "Relevé bancaire #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
+  %h3= "#{@bank_account.nickname} : relevé bancaire #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
   .inner-champ
     .row-fluid
       %ul
@@ -28,7 +28,7 @@
   .row-fluid
     .span8
       
-      %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0" id="bels_table")
+      %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0")
         %thead
           %tr
             %th.centered(colspan="6")
@@ -41,13 +41,7 @@
             %th.numeric Crédit
             
 
-        %tbody.connectedSortable#bels
+        %tbody
           - @bank_extract_lines.all.each do |bel|
             = render(partial:'index_standard_bel', :object=>bel) 
             
-        -# non affiché mais utile pour l'affichage éventuel des icones danger lorsqu'il y a un écart de valeur
-        %tfoot
-          %tr
-            %th.droite{colspan:3, rowspan:1} Totaux
-            %td.numeric#bels_total_debit=  debit_credit @bank_extract.total_lines_credit
-            %td.numeric#bels_total_credit=  debit_credit @bank_extract.total_lines_debit
