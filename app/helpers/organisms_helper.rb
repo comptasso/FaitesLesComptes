@@ -19,7 +19,7 @@ module OrganismsHelper
     org.bank_accounts.each  do |ba|
       if ba.bank_extracts.any? && !ba.bank_extracts.last.locked
         info={}
-        info[:text] = "Compte <b>#{sanitize ba.number}</b> : Le pointage du dernier relevé n'est pas encore effectué".html_safe
+        info[:text] = "<b>#{sanitize ba.nickname}</b> : Le pointage du dernier relevé n'est pas encore effectué".html_safe
         info[:icon] = icon_to 'pointer.png', pointage_bank_extract_bank_extract_lines_path(ba.first_bank_extract_to_point)
         m << info
       end
