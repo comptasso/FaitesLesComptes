@@ -1,8 +1,7 @@
 -# Vue pour l'action détail 
 =content_for :menu do
-  = icon_to 'report-excel.png', detail_compta_period_sheets_path(params.merge :format=>'xls'), title:'XLS', :target=>'_blank'
-  = icon_to 'table-export.png', detail_compta_period_sheets_path(params.merge :format=>'csv'), title:'CSV', :target=>'_blank'
-  = icon_to 'pdf.png', detail_compta_period_sheets_path(params.merge :format=>'pdf'), title:'PDF', :target=>'_blank'
+  = export_icons(params)
+  
 
 .champ
   %h3 Liste des comptes et des soldes

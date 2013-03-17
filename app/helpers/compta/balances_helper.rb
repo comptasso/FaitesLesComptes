@@ -10,4 +10,7 @@ module Compta::BalancesHelper
       "Soldes au #{l date}"
     end
   end
+
+  
 end
+
