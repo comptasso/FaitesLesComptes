@@ -1,12 +1,12 @@
 <%= content_for :menu do %>
 
-  <%= icon_to 'navigation90.png', bank_account_bank_extracts_path(@bank_account) if @bank_account.bank_extracts.count > 0 %>
-  <%= icon_to 'navigation90.png', bank_accounts_path unless @bank_account.bank_extracts.count > 0 %>
+  <%= icon_to 'retour.png', :back  %>
+ <%= icon_to 'navigation90.png', bank_account_bank_extracts_path(@bank_account) %>
 <% end -%>
 
 <div class="champ">
   <h3>
-    Création d'un extrait de compte
+    <%= @bank_account.nickname %> : création d'un extrait de compte
   </h3><div class="inner-champ">
 
     <%= render 'form' %>

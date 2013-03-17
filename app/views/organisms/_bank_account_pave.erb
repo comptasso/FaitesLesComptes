@@ -1,7 +1,7 @@
 
 <%= content_tag :div, :class=>"pave bank #{local_classes}"  do %>
 <h3><%= bank_account_pave.virtual.nickname %> = <%= number_to_currency bank_account_pave.sold_at(@date)  %>
- <%= icon_to 'detail.png', bank_account_bank_extracts_path( bank_account_pave.virtual) %>
+ <%= icon_to 'detail.png', bank_account_bank_extracts_path( bank_account_pave.virtual), title:'Liste des extraits de compte' %>
 </h3>
 
   <%= render partial: 'line_graphic', object: bank_account_pave.graphic(@period) , :locals=>{id: "bank_#{bank_account_pave.virtual.id}" } %>
