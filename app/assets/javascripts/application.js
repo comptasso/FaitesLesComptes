@@ -71,15 +71,17 @@ jQuery(function ($) {
     $.datepicker.setDefaults($.datepicker.regional.fr);
 });
 
-// FIXME traiter le cas ou data == nil
+
 // fonction pour transformer une chaine avec virgule en float
+// la fonction retire les espaces et remplace la virgule par le point décimal
+// avant d'appeler Number, la fonction native de js.
 function stringToFloat(jcdata) {
 
     if (jcdata === undefined) {
         return 0.0;
     }
     var d = String(jcdata).replace(/,/, '.');
-    d = d.replace(/\s/, '');
+    d = d.replace(/\s/g, '');
     if (isNaN(d)) {
         return 0.0;
     } else {
@@ -109,6 +111,9 @@ function $f_numberWithPrecision(number) {
     }
 }
 
+// fonction permettant de mettre deux décimales à une chiffre
+// appelé lorsque l'utilisateur sort d'un champ pour remettre en forme sa saisir
+// Par exemple 32 devient 32.00 ou 32.5 devient 32.50
 function $f_two_decimals() {
     var number = stringToFloat(this.value);
     if (isNaN(number)) {

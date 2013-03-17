@@ -49,7 +49,8 @@ jQuery(function () {
                     iTotalDebit += stringToFloat(aaData[i][5]);
                 }
 
-                /* Calculate the market share for browsers on this page */
+                /* stringToFloat est défini par JCL dans application.js pour 
+                 * pouvoir faire des calculs sur des nombres en format français */
                 for (i = iStart; i < iEnd; i += 1) {
                     iPageDebit += stringToFloat(aaData[aiDisplay[i]][5]);
                 }
@@ -60,7 +61,7 @@ jQuery(function () {
                 for (i = iStart; i < iEnd; i += 1) {
                     iPageCredit += stringToFloat(aaData[aiDisplay[i]][6]);
                 }
-
+                
                 /* Modify the footer row to match what we want */
                 nCells = nRow.getElementsByTagName('th');
                 nCells[1].innerHTML =  $f_numberWithPrecision(iPageDebit) + '<br/>' + $f_numberWithPrecision(iTotalDebit);
