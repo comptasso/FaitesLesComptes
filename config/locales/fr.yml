@@ -259,8 +259,11 @@ fr:
         used: Utilisé
       user:
         name: Nom
-
-
+      compta/balance:
+        from_date_picker: Date début
+        to_date_picker: Date fin
+        from_date: Date début
+        to_date: Date fin
 
     errors:
       messages:
@@ -380,4 +383,5 @@ fr:
           attributes:
             sens:
               inclusion: ne peut être que :actif ou :passif
+        
 

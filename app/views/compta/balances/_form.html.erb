@@ -6,8 +6,8 @@
      <%= balance_f.error_notification %>
     <div class="row-fluid">
       <div class="span12">
-    <%= balance_f.input :from_date_picker, :label=> 'Date début', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
-    <%= balance_f.input :to_date_picker, :label=> 'Date fin', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+    <%= balance_f.input :from_date_picker,  wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+    <%= balance_f.input :to_date_picker,  wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
       </div>
       </div>
 
