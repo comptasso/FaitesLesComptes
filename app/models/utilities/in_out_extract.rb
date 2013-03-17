@@ -116,18 +116,21 @@ module Utilities
     
     #  Utilisé pour l'export vers le csv et le xls
     # 
-    #   prend une ligne comme argument et renvoie un array avec les différentes valeurs
+    # Prend une ligne comme argument et renvoie un array avec les différentes valeurs
     # préparées : date est gérée par I18n::l, les montants monétaires sont reformatés poru
     # avoir 2 décimales et une virgule,...
+    # 
+    # On ne tronque pas les informations car celà est destiné à l'export vers un fichier csv ou xls
+    # 
     def prepare_line(line)
       [I18n::l(line.date),
-        line.ref, line.narration.truncate(25),
-        line.destination ? line.destination.name.truncate(22) : '-',
-        line.nature ? line.nature.name.truncate(22) : '-' ,
+        line.ref, line.narration,
+        line.destination ? line.destination.name : '',
+        line.nature ? line.nature.name : '',
         french_format(line.debit),
         french_format(line.credit),
-        "#{line.payment_mode}",
-        line.support.truncate(10)
+        line.writing.payment_mode,
+        line.support
       ]
     end
 
