@@ -8,6 +8,8 @@
 #
 class Compta::ListingsController < Compta::ApplicationController
 
+  before_filter :default_values
+
   # show est appelé directement par exemple par les lignes de la balance
   # icon listing qui apparaît à côté des comptes non vides
   def show
@@ -52,6 +54,13 @@ class Compta::ListingsController < Compta::ApplicationController
       end
 
   end
+  end
+
+  protected
+
+  def default_values
+    params[:start_date] ||= @period.start_date
+    params[:close_date] ||= @period.close_date
   end
 
   
