@@ -22,18 +22,18 @@ end
     pad(05) do
 
         y_position = cursor
-        bounding_box [0, y_position], :width => 100, :height => 40 do
-            text page.top_left
+        bounding_box [0, y_position], :width => 150, :height => 40 do
+            text_box page.top_left, :overflow=>:truncate
 
         end
 
-        bounding_box [100, y_position], :width => width-200, :height => 40 do
+        bounding_box [150, y_position], :width => width-300, :height => 40 do
             font_size(20) { text page.title, :align=>:center }
             text page.subtitle, :align=>:center
         end
 
-        bounding_box [width-100, y_position], :width => 100, :height => 40 do
-            text page.top_right, :align=>:right
+        bounding_box [width-150, y_position], :width => 150, :height => 40 do
+            text_box page.top_right, :align=>:right
             
         end
 
@@ -44,6 +44,8 @@ end
 # on démarre la table proprement dite
 # en calculant la largeur des colonnes
 column_widths = doc.columns_widths.collect { |w| width*w/100 }
+
+font_size(10) do # toute la table est en police 10
 
 # une table de une ligne pour les titres
 table [doc.before_title], :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }  do
@@ -57,6 +59,8 @@ table [page.table_title],
   :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do 
          column_widths.each_with_index {|w,i| column(i).width = w}
       end
+
+
 
 # une table de une ligne pour le report
 if page.table_report_line
@@ -80,7 +84,7 @@ table [page.table_total_line, page.table_to_report_line],  :cell_style=>{:font_s
   end
 end
 
-
+end # fin du font_size
   stamp "fond"
 
    pdf.start_new_page unless (n == doc.nb_pages)
