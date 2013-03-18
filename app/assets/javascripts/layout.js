@@ -6,9 +6,8 @@
 // jc_spinner_opts est défini globalement dans application.js
 // tandis que Spinner est défini dans spin.js (plugin de jQuery)
 jQuery(function () {
-    $('#new_organism input.btn').click(function () {
-        var target = document.getElementById('new_organism');
+    $('#home').click(function () {
+        var target = document.getElementById('main-zone');
         new Spinner(jc_spinner_opts).spin(target);
     });
 });
-

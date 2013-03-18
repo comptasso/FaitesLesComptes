@@ -16,15 +16,15 @@
         <div>
           <%= render 'compta/menus/menu' %>
         </div>
+        <div id="main-zone">
+          <%= render 'layouts/flash_partial' %>
 
-        <%= render 'layouts/flash_partial' %>
-
-        <%= yield %>
+          <%= yield %>
+        </div>
       </div>
-
     </div>
 
-  <%= render 'layouts/bottom_page' %>
+    <%= render 'layouts/bottom_page' %>
 
   </body>
 </html>
