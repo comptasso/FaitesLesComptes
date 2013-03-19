@@ -2,7 +2,7 @@
 
 require 'pdf_document/simple.rb'
 require 'pdf_document/default.rb'
-load 'pdf_document/pdf_balance.rb'
+require 'pdf_document/pdf_balance.rb'
 
 # Classe destinée à afficher une balance des comptes entre deux dates et pour une série de comptes
 # La méthode fill_date permet de remplir les dates recherchées et les comptes par défaut

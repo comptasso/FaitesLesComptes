@@ -2,7 +2,10 @@
 
 
 
-      require 'prawn'
+require 'prawn'
+
+
+
 
 module PdfDocument
 
@@ -49,8 +52,9 @@ module PdfDocument
       @source = source
       @select_method = options[:select_method]
     end
-
-
+    
+    
+    
     # méthodes pour disposer des infos par self dans le template
     def organism_name
       @period.organism.title
