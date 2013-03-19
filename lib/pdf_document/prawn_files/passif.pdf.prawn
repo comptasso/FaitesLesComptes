@@ -9,12 +9,12 @@ width = bounds.right
 # la méthode du tampon
 if stamp_dictionary_registry['fond'].nil?
 create_stamp("fond") do
-  rotate(15) do
+  rotate(65) do
     fill_color "bbbbbbb"
 
     font_size(120) do
       text_rendering_mode(:stroke) do
-        draw_text(doc.stamp, :at=>[150, -150])
+        draw_text(doc.stamp, :at=>[250, -150])
       end
     end
     fill_color "000000"
