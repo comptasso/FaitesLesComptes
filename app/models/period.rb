@@ -106,7 +106,7 @@ class Period < ActiveRecord::Base
   after_create :create_plan, :create_bank_and_cash_accounts, :load_natures ,:unless=> :previous_period?
   after_create :copy_accounts, :copy_natures, :if=> :previous_period?
  
- # before_destroy :destroy_bank_and_cash_extracts
+  before_destroy :destroy_bank_and_cash_extracts
   
   # TODO voir la gestion des effacer dans les vues et dans le modèle. 
 

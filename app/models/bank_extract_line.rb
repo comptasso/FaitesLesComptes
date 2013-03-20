@@ -44,7 +44,7 @@ class BankExtractLine < ActiveRecord::Base
 
   attr_reader :payment, :narration, :debit,  :credit
 
-  validate :not_empty
+  # validate :not_empty
 
   before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
 
