@@ -30,7 +30,7 @@ class CheckDeposit < ActiveRecord::Base
 
   pick_date_for :deposit_date
 
-    belongs_to :bank_account 
+  belongs_to :bank_account 
   belongs_to :bank_extract_line
   belongs_to :check_deposit_writing, :dependent=>:destroy, :foreign_key=>'writing_id'
   

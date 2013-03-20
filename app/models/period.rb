@@ -80,7 +80,7 @@ class Period < ActiveRecord::Base
 
   has_many :accounts, :dependent=>:destroy
   has_many :used_accounts, class_name:'Account', :conditions=>{:used=>true}
-  has_many :natures,  :dependent=>:destroy
+  has_many :natures
   has_many :compta_lines, :through=>:accounts 
   has_one :balance, :class_name=>'Compta::Balance'
   has_one :listing, :class_name=>'Compta::Listing'
@@ -106,8 +106,10 @@ class Period < ActiveRecord::Base
   after_create :create_plan, :create_bank_and_cash_accounts, :load_natures ,:unless=> :previous_period?
   after_create :copy_accounts, :copy_natures, :if=> :previous_period?
  
-  before_destroy :destroy_bank_and_cash_extracts
-  
+  before_destroy :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
+
+
+
   # TODO voir la gestion des effacer dans les vues et dans le modèle. 
 
   # TODO mettre dans la migration que start_date et close_date sont obligatoires
@@ -604,16 +606,40 @@ class Period < ActiveRecord::Base
     "Erreur lors du chargement du fichier #{source}"
   end
 
-  # supprime les extraits bancaires après la destruction d'un exercice
+  # supprime les extraits bancaires 
+  # avant la destruction d'un exercice
   #
-  # Comme on détruit
-  def destroy_bank_and_cash_extracts
+  # TODO voir si on peut se passer de la requête sql; actuellement cela bloque
+  # probablement par le verrouillage qu'il y a sur l'une ou l'autre des tables
+  #
+  def destroy_bank_extracts
     BankAccount.all.each do |ba|
-      ba.bank_extracts.period(self).each {|be| be.destroy }
+      ba.bank_extracts.period(self).each do |be|
+        be.bank_extract_lines.each {|bel| ActiveRecord::Base.connection.execute("DELETE FROM bank_extract_lines_lines WHERE bank_extract_line_id = #{bel.id}") }
+        be.destroy
+      end
     end
-#    list_cash_accounts.each do |ca|
-#      ca.cash_controls.each {|cc| cc.destroy}
-#    end
+  end
+
+  # supprime les extraits bancaires
+  # avant la destruction d'un exercice
+  #
+  def destroy_cash_controls
+    Cash.all.each do |ca|
+      ca.cash_controls.for_period(self).each {|cc| cc.destroy }
+    end
+  end
+
+  def destroy_writings
+    Writing.period(self).each do |w|
+      w.compta_lines.each {|cl| cl.delete }
+      w.check_deposit.delete if w.is_a? CheckDepositWriting
+      w.destroy
+    end
+  end
+
+  def destroy_natures
+    natures.each { |n| n.delete} 
   end
 
  

@@ -94,7 +94,8 @@ class Account < ActiveRecord::Base
   # Les caisse et les banques ont un nickname pour en faciliter la sélection
   # Dans les formulaires de transferts, le label_method devrait donc être accountable.nickname
   #
-  # Mais visiblement, ce n'est pas prévu donc je crée le nickname avec un rescue
+  # Mais visiblement, cette possibilité de délégation n'est pas prévue
+  # donc je crée le nickname avec un rescue
   # au cas où le compte ne répondrait pas correctement.
   def nickname
     accountable.nickname rescue long_name

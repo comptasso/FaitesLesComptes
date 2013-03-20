@@ -95,7 +95,13 @@ class Admin::PeriodsController < Admin::ApplicationController
       session[:period] = @organism.periods.any? ? @organism.periods.last : nil
     end
     respond_to do |format|
-      format.html { redirect_to admin_organism_periods_url(@organism) }
+      format.html do
+        if @organism.periods.any?
+          redirect_to admin_organism_periods_url(@organism)
+        else
+          redirect_to new_admin_organism_period_path(@organism)
+        end
+      end
       format.json { head :ok }
     end
   end

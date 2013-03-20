@@ -44,9 +44,17 @@ class BankExtractLine < ActiveRecord::Base
 
   attr_reader :payment, :narration, :debit,  :credit
 
-  # validate :not_empty
+  validate :not_empty
 
-  before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
+  #est défini dans le plugin acts_as_list
+  #
+  # unless 'empty?' est nécessaire car sinon on ne peut plus détruire un 
+  # bank_extract.
+  before_destroy :remove_from_list, :unless=>'empty?'
+
+  def empty?
+    compta_lines.empty?
+  end
 
  
   # Chainable? indique si le bank_extract_line peut être relié à son suivant

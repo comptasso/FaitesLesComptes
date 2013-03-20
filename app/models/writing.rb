@@ -35,8 +35,6 @@ class Writing < ActiveRecord::Base
   has_many :compta_lines, :dependent=>:destroy
   alias children compta_lines 
   
-  
-
   validates :book_id, :narration, :date, presence:true
   validates :date, :within_period=>true, :nested_period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]} , :unless => 'date.nil?'
   validates :compta_lines, :two_compta_lines_minimum=>true
