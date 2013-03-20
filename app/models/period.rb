@@ -106,7 +106,7 @@ class Period < ActiveRecord::Base
   after_create :create_plan, :create_bank_and_cash_accounts, :load_natures ,:unless=> :previous_period?
   after_create :copy_accounts, :copy_natures, :if=> :previous_period?
  
-  before_destroy :destroy_bank_and_cash_extracts
+ # before_destroy :destroy_bank_and_cash_extracts
   
   # TODO voir la gestion des effacer dans les vues et dans le modèle. 
 
@@ -605,13 +605,15 @@ class Period < ActiveRecord::Base
   end
 
   # supprime les extraits bancaires après la destruction d'un exercice
+  #
+  # Comme on détruit
   def destroy_bank_and_cash_extracts
-    list_bank_accounts.each do |ba|
-      ba.accountable.bank_extracts.each {|be| be.destroy }
+    BankAccount.all.each do |ba|
+      ba.bank_extracts.period(self).each {|be| be.destroy }
     end
-    list_cash_accounts.each do |ca|
-      ca.cash_controls.each {|cc| cc.destroy}
-    end
+#    list_cash_accounts.each do |ca|
+#      ca.cash_controls.each {|cc| cc.destroy}
+#    end
   end
 
  

@@ -182,7 +182,7 @@ class BankExtractLine < ActiveRecord::Base
   def not_already_included(line)
     if line.bank_extract_lines.count > 0
       logger.warn "tried to include line #{line.id} which was already included in a bank_extract_line"
-      raise ArgumentError
+      raise ArgumentError, 'La ligne est déja inclue'
     end
   end
 
