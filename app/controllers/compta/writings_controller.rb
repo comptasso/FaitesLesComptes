@@ -28,6 +28,7 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings/new
   # GET /writings/new.json
   def new
+    flash[:alert] = 'Peut-être devrierz vous plutôt écrire sur ce livre dans la partie saisie' if @book.type.in? ['IncomeBook', 'OutcomeBook']
     @writing = @book.writings.new(date: @d)
     if flash[:previous_writing_id]
       @previous_writing = Writing.find_by_id(flash[:previous_writing_id])
@@ -91,12 +92,11 @@ class Compta::WritingsController < Compta::ApplicationController
 
     respond_to do |format|
       if @writing.update_attributes(params[:writing])
-        format.html { redirect_to compta_book_writing_url(@book, @writing), notice: 'Ecriture mise à jour.' }
-      
-      else
+         my = MonthYear.from_date(@writing.date)
+         format.html { redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year), notice: 'Ecriture mise à jour.' }
+     else
         format.html { render action: "edit" }
-  
-      end
+     end
     end
   end
 
@@ -107,8 +107,8 @@ class Compta::WritingsController < Compta::ApplicationController
     @writing.destroy
 
     respond_to do |format|
-      format.html { redirect_to compta_book_writings_url @book}
-      
+      my = MonthYear.from_date(@writing.date)
+      format.html { redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year), notice: "Ecriture n° #{@writing.id} effacée" }
     end
   end
 
