@@ -106,7 +106,8 @@ class Period < ActiveRecord::Base
   after_create :create_plan, :create_bank_and_cash_accounts, :load_natures ,:unless=> :previous_period?
   after_create :copy_accounts, :copy_natures, :if=> :previous_period?
  
-
+  before_destroy :destroy_bank_and_cash_extracts
+  
   # TODO voir la gestion des effacer dans les vues et dans le modèle. 
 
   # TODO mettre dans la migration que start_date et close_date sont obligatoires
@@ -141,6 +142,9 @@ class Period < ActiveRecord::Base
     next_period == self ? false : true
   end
 
+  # renvoie la liste des comptes pour deux exercices successifs.
+  # 
+  # nécessaire pour éditer par exemple une balance sur deux ans
   def two_period_account_numbers
     if previous_period?
       pp = previous_period
@@ -161,6 +165,9 @@ class Period < ActiveRecord::Base
     accounts.where('number = ?', 12).first
   end
 
+  # permet de fournir au dashboard les informations nécessaires pour faire le graphe de 
+  # résultats
+  # TODO serait mieux dans la classe graphic
   def pave_char
     ['result_pave', 'result']
   end
@@ -240,7 +247,7 @@ class Period < ActiveRecord::Base
   end
 
   # report_compta_line crée la ligne de report de l'exercice
-  # TODO traiter le cas où le résultat serait zéro
+  # TODO traiter le cas où le résultat serait zéro et mettre en protected ?
   def report_a_nouveau
     res_acc  = next_period.report_account
     ran = ComptaLine.new(account_id:res_acc.id, credit:resultat, debit:0)
@@ -267,23 +274,24 @@ class Period < ActiveRecord::Base
   end
 
 
-
+  # revoie la liste des comptes commençant par 512
   def list_bank_accounts
     accounts.where('number LIKE ?', '512%')
   end
-  
+
+  # renvoie la liste des comptes commençant par 53
   def list_cash_accounts
     accounts.where('number LIKE ?', '53%')
   end
 
+  # renvoie la liste des comptes commençant par 511
+  #
+  # A priori, il ne doit y en avoir qu'un
   def rem_check_accounts
     accounts.where('number = ?', REM_CHECK_ACCOUNT[:number])
   end
 
-  # renvoie un array de tous les comptes de classe 7
-  def recettes_accounts
-    accounts.classe_7.all
-  end
+  
 
   # rem_check_account retourne le compte de Chèques à l'encaissement
   # ou le créé s'il n'existe pas.
@@ -292,6 +300,11 @@ class Period < ActiveRecord::Base
   def rem_check_account
     as =  accounts.find_by_number(REM_CHECK_ACCOUNT[:number])
     as ? as : accounts.create!(REM_CHECK_ACCOUNT)
+  end
+
+  # renvoie un array de tous les comptes de classe 7
+  def recettes_accounts
+    accounts.classe_7.all
   end
 
 
@@ -310,7 +323,9 @@ class Period < ActiveRecord::Base
     natures.depenses.all
   end
  
-  
+  # le nombre de mois de l'exercice
+  #
+  # également disponible sous #length
   def nb_months
     (close_date.year * 12 + close_date.month) - (start_date.year * 12 + start_date.month) + 1
   end
@@ -361,9 +376,9 @@ class Period < ActiveRecord::Base
   end
   
   # renvoie le mois le plus adapté pour un exercice
-  # si la date du jour est au sein de l'exercice, renvoie le mois correspondant
-  # si la date du jour est avant l'exercice, renvoie le premier mois
-  # si elle est après, renvoie le dernier mois
+  #   si la date du jour est au sein de l'exercice, renvoie le mois correspondant
+  #   si la date du jour est avant l'exercice, renvoie le premier mois
+  #   si elle est après, renvoie le dernier mois
   #
   def guess_month(date=Date.today)
     date = start_date if date < start_date
@@ -372,9 +387,9 @@ class Period < ActiveRecord::Base
   end
 
   # renvoie la date la plus adaptée pour un exercices
-  # si la date du jour est au sein de l'exercice, renvoie cette date
-  # si la date du jour est avant l'exercice, renvoie le premier jour de l'exeercice
-  # si elle est après, renvoie le dernier jour de l'exercice
+  #   si la date du jour est au sein de l'exercice, renvoie cette date
+  #   si la date du jour est avant l'exercice, renvoie le premier jour de l'exeercice
+  #   si elle est après, renvoie le dernier jour de l'exercice
   def guess_date
     d = Date.today
     d = start_date if d < start_date
@@ -409,12 +424,13 @@ class Period < ActiveRecord::Base
 
  
   # donne les soldes de chaque mois, est appelé par le module JcGraphic pour constuire les graphes
-  # TODO voir s'il faut vraiment books.all (donc avec l'OD) ou sans l'OD
   def monthly_value(date)
     books.all.sum {|b| b.monthly_value(date) }
   end
 
 
+  # TODO : il faudrait probablement podifier Utilities::PlanComptable pour avoir directement
+  # l'initialisation dans la classe PlanComptable
   def create_account_from_file(source)
     pc= Utilities::PlanComptable.new
     pc.create_accounts(self.id, source)
@@ -432,6 +448,7 @@ class Period < ActiveRecord::Base
     all_natures_linked_to_account?
   end
 
+  # retourne la liste des natures qui ne sont pas connectées à un compte
   def array_natures_not_linked
     natures.without_account.all
   end
@@ -585,6 +602,16 @@ class Period < ActiveRecord::Base
     YAML::load_file(source)
   rescue
     "Erreur lors du chargement du fichier #{source}"
+  end
+
+  # supprime les extraits bancaires après la destruction d'un exercice
+  def destroy_bank_and_cash_extracts
+    list_bank_accounts.each do |ba|
+      ba.accountable.bank_extracts.each {|be| be.destroy }
+    end
+    list_cash_accounts.each do |ca|
+      ca.cash_controls.each {|cc| cc.destroy}
+    end
   end
 
  

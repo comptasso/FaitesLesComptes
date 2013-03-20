@@ -60,6 +60,7 @@ class Admin::PeriodsController < Admin::ApplicationController
     
     respond_to do |format|
       if @period.save
+        session[:period]=@period.id
         format.html { redirect_to admin_organism_periods_path(@organism), notice: "L'exercice a été créé" }
         format.json { render json: @period, status: :created, location: @period }
       else
@@ -90,8 +91,9 @@ class Admin::PeriodsController < Admin::ApplicationController
   # DELETE /periods/1.json
   def destroy
     @period = Period.find(params[:id])
-    @period.destroy
-
+    if @period.destroy
+      session[:period] = @organism.periods.any? ? @organism.periods.last : nil
+    end
     respond_to do |format|
       format.html { redirect_to admin_organism_periods_url(@organism) }
       format.json { head :ok }
