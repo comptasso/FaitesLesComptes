@@ -2,8 +2,8 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c|
- # c.filter = {wip:true}
+RSpec.configure do |c| 
+#  c.filter = {wip:true}
 end
 
 describe Period do
@@ -363,9 +363,10 @@ describe Period do
       @p.compta_lines(true).count.should == 0
     end
 
-    describe 'gestion des relevés de banques'  do
+    describe 'gestion des relevés de banques', wip:true  do
 
       before(:each) do
+        ActiveRecord::Base.connection.execute('DELETE FROM bank_extract_lines_lines')
         BankExtractLine.delete_all
        @be =  @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month, begin_sold:0, total_debit:0, total_credit:99)
        @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@w.support_line])
@@ -373,8 +374,7 @@ describe Period do
       end
 
       it 'testing bel' do
-        nb_bel =  BankExtractLine.count
-        BankExtractLine.all.size.should == 1
+        BankExtractLine.count.should == 1
       end
 
       it 'détruit les relevés de banques et les lignes associées' do
@@ -385,11 +385,11 @@ describe Period do
 
       it 'count the number of items in join table' do
         nbl = ActiveRecord::Base.connection.execute('SELECT COUNT(*) FROM bank_extract_lines_lines').first['COUNT(*)']
-        nbl.should == 1
+        nbl.should >= 1
         @p.destroy 
         nbl = ActiveRecord::Base.connection.execute('SELECT COUNT(*) FROM bank_extract_lines_lines').first['COUNT(*)']
         nbl.should == 0
-#        ActiveRecord::Base.connection.execute('DELETE FROM bank_extract_lines_lines')
+#        
 #        nbl = ActiveRecord::Base.connection.execute('SELECT COUNT(*) FROM bank_extract_lines_lines').first['COUNT(*)']
 #        puts "Nombre de lignes dans la table jointe : #{nbl}"
       end

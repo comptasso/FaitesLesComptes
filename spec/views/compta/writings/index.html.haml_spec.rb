@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe "compta/writings/index" do
+describe "compta/writings/index" do 
   include JcCapybara
 
   before(:each) do
@@ -124,13 +124,23 @@ describe "compta/writings/index" do
     it 'affiche un cadenas de couleur si le livre est un livre OD et que les écritures furent écrite dans OD manuellement' do
       @b.stub_chain(:writings, :compta_editable, :any?).and_return true
       @b.stub(:type).and_return('OdBook')
-    
+      assign(:mois, 'tous')
       render
-      # content(:menu).should == 'bonjour'
+      
       list_icons = content(:menu).all('img')
       list_icons.should have(2).elements
       list_icons[1][:src].should == '/assets/icones/verrouiller.png'
     
+    end
+
+    it 'n affiche pas le cadenas si le mois n est pas tous' do
+      @b.stub_chain(:writings, :compta_editable, :any?).and_return true
+      @b.stub(:type).and_return('OdBook')
+      assign(:mois, '02')
+      render
+
+      list_icons = content(:menu).all('img')
+      list_icons.should have(1).elements
     end
 
   end

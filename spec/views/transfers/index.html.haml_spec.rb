@@ -10,6 +10,7 @@ describe "transfers/index" do
 
   before(:each) do 
     assign(:organism, mock_model(Organism, title: 'spec cd'))
+    assign(:period, mock_model(Period, :list_months=>[MonthYear.from_date(Date.today)])) # dans le test, on n'affiche qu'un seul mois
 
     @line_to =     assign(:line_to, mock_model(ComptaLine, locked?:false, account:mock_model(Account, number:'5101', accountable:banque)))
     @line_from =     assign(:line_from, mock_model(ComptaLine,locked?:false, account:mock_model(Account, number:'5301', accountable:caisse)))

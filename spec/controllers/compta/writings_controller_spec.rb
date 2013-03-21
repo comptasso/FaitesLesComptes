@@ -6,11 +6,12 @@ RSpec.configure do |config|
  # config.filter = {wip:true}
 end
 
-describe Compta::WritingsController do 
+describe Compta::WritingsController do  
   include SpecControllerHelper 
 
   before(:each) do
     minimal_instances
+    @my = MonthYear.from_date(Date.today)
     @p.stub(:all_natures_linked_to_account?).and_return true
     @p.stub(:guess_month).and_return(MonthYear.from_date(Date.today))
     @b = mock_model(Book)
@@ -111,7 +112,7 @@ describe Compta::WritingsController do
   describe "PUT update" do
 
     before(:each) do
-      @w = mock_model(Writing).as_null_object
+      @w = mock_model(Writing, :date=>Date.today).as_null_object
       @va = {id:@w.id, book_id:@b.id, date:Date.today, narration:'Ecriture', :compta_lines_attributes=>{'0'=>{account_id:1, debit:100, credit:0},
           '1'=>{account_id:2, debit:0, credit:100}} }
       Writing.stub(:find).with(@w.to_param).and_return @w
@@ -137,7 +138,7 @@ describe Compta::WritingsController do
       it "redirects to the writing" do
         @w.stub(:update_attributes).and_return true
         put :update, {book_id:@b.id,  :id => @w.to_param, :writing => @va}, valid_session
-        response.should redirect_to compta_book_writing_url(@b, @w)
+        response.should redirect_to compta_book_writings_url(@b, :an=>@my.year, :mois=>@my.month)
       end
     end
 
@@ -163,7 +164,8 @@ describe Compta::WritingsController do
   describe "DELETE destroy" do
     
     before(:each) do
-      @w = mock_model(Writing)
+     
+      @w = mock_model(Writing, :date=>Date.today)
       Writing.stub(:find).and_return(@w)
     end
 
@@ -176,7 +178,7 @@ describe Compta::WritingsController do
     it "redirects to the writings list" do
       @w.stub(:destroy).and_return true
       delete :destroy, {book_id:@b.to_param, :id => @w.to_param}, valid_session
-      response.should redirect_to(compta_book_writings_url(@b))
+      response.should redirect_to(compta_book_writings_url(@b, :an=>@my.year, :mois=>@my.month ))
     end
   end
 

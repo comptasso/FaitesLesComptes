@@ -7,7 +7,7 @@ describe "check_deposits/index" do
   include JcCapybara
 
   let(:o) {mock_model(Organism, title: 'spec cd')}
-  let(:ba)  {mock_model(BankAccount, number: '124578AZ', name: 'IBAN')}
+  let(:ba)  {mock_model(BankAccount, number: '124578AZ', name: 'IBAN', nickname:'Compte courant')}
   let(:cd1) {mock_model(CheckDeposit, bank_account_id: ba.id, deposit_date: Date.today - 5)}
   let(:cd2) {mock_model(CheckDeposit, bank_account_id: ba.id, deposit_date: Date.today - 20)}
 
@@ -49,7 +49,7 @@ describe "check_deposits/index" do
     end
 
     it "affiche la légende du fieldset" do
-      assert_select "h3", :text => "Banque compte n°124578AZ : liste des remises de chèques"
+      assert_select "h3", :text => "Compte courant : liste des remises de chèques"
     end
     
     it "affiche la table desw remises de chèques" do

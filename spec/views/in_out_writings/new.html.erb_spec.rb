@@ -6,7 +6,7 @@ describe "in_out_writings/new" do
   include JcCapybara
 
 
- 
+  
 let(:o) {stub_model(Organism) }
 let(:book) {stub_model(Book) }
 let(:n) {stub_model(Nature, name:'nature')}
@@ -37,6 +37,7 @@ before(:each) do
     assign(:previous_line, @pl = stub_model(ComptaLine, writing_id:1, narration:'test',
         book_id:book.id, debit:0, credit:12, line_date:Date.today, nature:n, destination:d))
     @pl.stub(:writing).and_return @w
+    @w.stub(:payment_mode).and_return('Virement')
     @w.stub(:support).and_return('DX')
     @pl.stub(:editable?).and_return(true)
     render

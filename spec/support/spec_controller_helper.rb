@@ -10,7 +10,11 @@ module SpecControllerHelper
   def minimal_instances
     @cu =  mock_model(User) # cu pour current_user
     @o = mock_model(Organism, title:'le titre', database_name:'assotest')
-    @p = mock_model(Period, :start_date=>Date.today.beginning_of_year, close_date:Date.today.end_of_year, organism:@o)
+    @p = mock_model(Period, :start_date=>Date.today.beginning_of_year,
+      close_date:Date.today.end_of_year,
+      organism:@o,
+      guess_date:Date.today,
+      guess_month:MonthYear.from_date(Date.today))
 
 
     Organism.stub(:first).and_return(@o)
@@ -26,7 +30,7 @@ module SpecControllerHelper
     @o.stub_chain(:periods, :any?).and_return !(@o.periods.empty?)
     @o.stub_chain(:periods, :last).and_return(@p)
     @o.stub_chain(:books, :in_outs, :all).and_return [1,2]
-    @p.stub(:guess_date).and_return Date.today
+    
   end
 
 

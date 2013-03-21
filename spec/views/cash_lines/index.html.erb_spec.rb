@@ -6,7 +6,7 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe "cash_lines/index" do
+describe "cash_lines/index" do 
   include JcCapybara
 
   let(:o) {mock_model(Organism, title: 'spec cd')} 
@@ -90,22 +90,25 @@ describe "cash_lines/index" do
     it 'ne doit pas avoir de lien edition ou suppression'
   end
 
-  context 'avec une lignes venant de transfer' do
+  context 'avec une ligne venant de transfer' , wip:true do
     before(:each) do
        [cl1, cl2].each {|l| l.stub(:writing).and_return(@t = mock_model(Transfer)) }
        [cl1, cl2].each {|l| l.stub_chain(:writing, :type).and_return('Transfer') }
-       [cl1, cl2].each {|l| l.stub(:writing_id).and_return(@t.id) }
+ 
 
-        render
+        
     end
 
    it 'ne doit y avoir qu un seul lien (modifier)' do
+     render
      page.find("tbody tr:first td:nth-child(8)").all('img').size.should == 1
    end
 
     it 'peut avoir un lien modifier pointant vers transfer' do
+      pending "Il faut refaire les spec de ce fichier"
+      render
       page.find("tbody tr:first td:nth-child(8)").all('img').first[:src].should == '/assets/icones/modifier.png'
-      page.find("tbody tr:first a")[:href].should == "/transfers/#{@t.id}/edit"
+      page.find("tbody tr:first td:nth-child(8) a")[:href].should == "/transfers/#{@t.id}/edit"
     end 
   end
   

@@ -6,7 +6,7 @@ require 'spec_helper'
 #  c.filter = {:wip=>true}
 #end
 
-describe "menus/_menu.html.erb" do   
+describe "menus/_menu.html.erb" do  
   include JcCapybara
 
   let(:o) {stub_model(Organism) }
@@ -70,7 +70,7 @@ describe "menus/_menu.html.erb" do
          render :template=>'organisms/show', :layout=>'layouts/application'
       end
 
-      it 'affiche le menu Virement' do
+      it 'affiche le menu Virement' do 
         assert_select('ul#menu_general').should have_content ('TRANSFERTS')
       end
 
