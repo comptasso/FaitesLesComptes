@@ -2,14 +2,14 @@
 
 require 'spec_helper'
 
-#RSpec.configure do |c|
-#  c.filter = {:wip=>true}
-#end
+RSpec.configure do |c|
+  # c.filter = {:wip=>true}
+end
 
 describe "menus/_menu.html.erb" do  
-  include JcCapybara
+  include JcCapybara 
 
-  let(:o) {stub_model(Organism) }
+  let(:o) {mock_model(Organism, main_bank_id:1) }
   let(:ibook) {stub_model(IncomeBook, :title=>'Recettes') } 
   let(:obook) { stub_model(OutcomeBook, title: 'Dépenses')}
   let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))}
@@ -44,6 +44,11 @@ describe "menus/_menu.html.erb" do
       assign(:organism, o)
       assign(:user, cu)
       o.stub(:periods).and_return([p2011,p2012])
+      o.stub(:bank_accounts).and_return([mock_model(BankAccount, bank_extracts:[], :check_deposits=>[], 'unpointed_bank_extract?'=>false)])
+      o.stub(:cashes).and_return([mock_model(Cash, cash_controls:[])])
+      o.stub(:in_out_books).and_return [ibook,obook]
+      o.stub('can_write_line?').and_return true
+
       o.stub(:find_period).and_return(p2012)
       p2012.stub(:previous_period?).and_return(true)
       p2012.stub(:previous_period).and_return(p2011)
@@ -70,7 +75,7 @@ describe "menus/_menu.html.erb" do
          render :template=>'organisms/show', :layout=>'layouts/application'
       end
 
-      it 'affiche le menu Virement' do 
+      it 'affiche le menu Virement', wip:true do
         assert_select('ul#menu_general').should have_content ('TRANSFERTS')
       end
 

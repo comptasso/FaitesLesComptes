@@ -3,11 +3,11 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  # c.filter = {:wip=>true}
+  #  c.filter = {:wip=>true}
   # c.exclusion_filter = {:js=>true} 
 end
 
-include OrganismFixture
+include OrganismFixture 
  
 describe "BankExtracts" do 
 
@@ -71,11 +71,11 @@ describe "BankExtracts" do
    
   end
 
-  describe 'GET INDEX bank_extracts' , wip:true do
+  describe 'GET INDEX bank_extracts'  do
 
     it 'sans extrait la page renvoie sur new' do
       visit bank_account_bank_extracts_path(@ba)
-      page.find('.champ h3').should have_content "Création d'un extrait de compte"
+      page.find('.champ h3').should have_content "Compte courant : création d'un extrait de compte"
     end
 
     context 'avec un extrait de compte' do
@@ -102,7 +102,7 @@ describe "BankExtracts" do
 
       it 'cliquer sur l icone edit mène à la page edit' do
         click_link('Modifier')
-        page.should have_content("Modification d'un extrait de compte")
+        page.find('h3').should have_content("Compte courant : modification d'un extrait de compte")
       end
 
       it 'cliquer sur l icone afficher mène à la page affichage' do
@@ -141,7 +141,7 @@ describe "BankExtracts" do
       end
     end
 
-    context 'avec deux bank_extracts' do
+    context 'avec deux bank_extracts' do 
 
       before(:each) do
         @be1 = @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month,
@@ -152,8 +152,6 @@ describe "BankExtracts" do
           end_date:(@be1.end_date.months_since(1)),
           begin_sold:@be1.end_sold,
           total_debit:3.01, total_credit:1.99)
-        @be2.valid?
-        
         @be2.save!
 
       end
@@ -204,7 +202,7 @@ describe "BankExtracts" do
       fill_in('bank_extract_total_credit', with:'3.152')
       click_button('Enregistrer')
       page.should have_content("Des erreurs ont été trouvées") 
-      page.find('.champ h3').should have_content "Modification d'un extrait de compte"
+      page.find('.champ h3').should have_content "Compte courant : modification d'un extrait de compte"
     end
 
   end

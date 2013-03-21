@@ -8,7 +8,7 @@ module SpecControllerHelper
   # définit les instances et les stub nécessaires pour passer les before filter (log_in?
   # find_organism, current_period, current_user
   def minimal_instances
-    @cu =  mock_model(User) # cu pour current_user
+    @cu = mock_model(User) # cu pour current_user
     @o = mock_model(Organism, title:'le titre', database_name:'assotest')
     @p = mock_model(Period, :start_date=>Date.today.beginning_of_year,
       close_date:Date.today.end_of_year,

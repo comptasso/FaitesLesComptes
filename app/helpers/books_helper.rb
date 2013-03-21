@@ -18,12 +18,12 @@ module BooksHelper
   #
   def submenu_mois(period, opt, all = true)
     plm = period.list_months.collect do |m|
-    content_tag :li , :class=>'active' do 
+    content_tag :li , :class=>"#{current_page?({:mois=>m.month, :an=>m.year}) ? 'active' : 'inactive'}" do
       link_to_unless_current(m.to_short, url_for(opt.merge({:mois=>m.month, :an=>m.year})))
     end
     end
     if all
-      tous = content_tag :li, :class=>'active' do
+      tous = content_tag :li, :class=>"#{current_page?(:mois=>'tous') ? 'active' : 'inactive'}" do
        link_to_unless_current('tous', url_for(opt.merge({:mois=>'tous'})))
       end
     plm.append tous
