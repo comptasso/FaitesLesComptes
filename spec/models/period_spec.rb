@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c| 
-#  c.filter = {wip:true}
+  # c.filter = {wip:true}
 end
 
 describe Period do
@@ -31,6 +31,23 @@ describe Period do
 
       it '10 natures de dépenses et 6 de recettes ont été créées'  do
         @p.should have(16).natures
+      end
+
+
+    end
+
+    describe 'destroyable?', wip:true do
+      it 'est destructible si le premier ou le dernier' do
+        d = Date.today.beginning_of_year
+        3.times do |i|
+         d = Date.today.beginning_of_year.years_since(i)
+         p = @o.periods.create(start_date:d, close_date:d.end_of_year)
+         p.update_attribute('open', false)
+        end
+        @o.periods.first.should be_destroyable
+        @o.periods.second.should_not be_destroyable
+        @o.periods.last.should be_destroyable
+        
       end
 
 
@@ -363,7 +380,7 @@ describe Period do
       @p.compta_lines(true).count.should == 0
     end
 
-    describe 'gestion des relevés de banques', wip:true  do
+    describe 'gestion des relevés de banques'  do
 
       before(:each) do
         ActiveRecord::Base.connection.execute('DELETE FROM bank_extract_lines_lines')

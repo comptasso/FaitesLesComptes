@@ -144,6 +144,19 @@ class Period < ActiveRecord::Base
     next_period == self ? false : true
   end
 
+  def first_period?
+    !previous_period?
+  end
+
+  def last_period?
+    !next_period?
+  end
+
+  # un exercice peut être détruit mais uniquement si c'est le premier ou le dernier
+  def destroyable?
+    first_period? || last_period?
+  end
+
   # renvoie la liste des comptes pour deux exercices successifs.
   # 
   # nécessaire pour éditer par exemple une balance sur deux ans
