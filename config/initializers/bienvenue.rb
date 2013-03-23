@@ -7,7 +7,7 @@
 
 # sans accent pour éviter les problèmes d'affichage sous windows
 if Rails.env == 'ocra'
-  puts "=== demarrage du serveur"
+  puts "=== demarrage du serveur version #{VERSION}"
   puts "Vous pouvez maintenant utiliser votre navigateur prefere (Firefox, Chrome, Internet Explorer,...) a l'adresse http://localhost:3000."
   puts ''
   puts "Laisser cette fenetre ouverte pendant toute la duree d'utilisation de FaitesLesComptes"
