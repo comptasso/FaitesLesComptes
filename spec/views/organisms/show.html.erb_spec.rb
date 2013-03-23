@@ -7,7 +7,7 @@ describe "organisms/show" do
   
 
 
-let(:o) {stub_model(Organism) } 
+let(:o) {stub_model(Organism) }
 let(:ibook) {stub_model(IncomeBook, :title=>'Recettes') }
 let(:obook) { stub_model(OutcomeBook, title: 'Dépenses')}
 let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))}

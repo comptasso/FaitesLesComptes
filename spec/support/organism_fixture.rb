@@ -60,6 +60,7 @@ module OrganismFixture
     # les écritures, lesquelles dès lors, ne peuvent plus être effacées
     InOutWriting.delete_all
     ComptaLine.delete_all
+    CheckDeposit.delete_all
   end
 
   # Malgré son nom, cette méthode ne crée que des écritures de type recettes
