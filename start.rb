@@ -3,7 +3,7 @@
 # fichier permettant le démarrage pour la version sous windows construite par
 # le gem ocra.
 
-require 'config/initializers/constants'
+require File.expand_path('config/initializers/constants.rb', ENV['OCRA_EXECUTABLE']) if ENV['OCRA_EXECUTABLE']
 
 puts "Demarrage de FaitesLesComptes version #{VERSION}, logiciel open-source de comptabilite simplifiee"
 puts ''
