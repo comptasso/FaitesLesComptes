@@ -5,6 +5,9 @@
 # ocra est l'environnement créé pour les applications autonome sous windows. Cela permet d'avoir
 # les informations sur l'utilisation du programme.
 
+# car besoin de la constante VERSION
+# require File.join(Rails.root, 'config/initializers/constants.rb')
+
 # sans accent pour éviter les problèmes d'affichage sous windows
 if Rails.env == 'ocra'
   puts "=== demarrage du serveur version #{VERSION}"
