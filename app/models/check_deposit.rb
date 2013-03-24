@@ -23,28 +23,21 @@
 # 
 class CheckDeposit < ActiveRecord::Base
 
-
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
-
-  
 
   pick_date_for :deposit_date
 
   belongs_to :bank_account 
   belongs_to :bank_extract_line
   belongs_to :check_deposit_writing, :dependent=>:destroy, :foreign_key=>'writing_id'
-  
 
-  # La condition est mise ici pour que check_deposit.new soit associée d'emblée
-  # à toutes les lignes qui correspondant aux chèques en attente d'encaissement
-  # de l'organisme correspondant.
   has_many :checks, class_name: 'ComptaLine',
     conditions: proc { ['account_id = ? AND debit > 0', rem_check_account.id] },
     dependent: :nullify,
     before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
     before_add: :cant_if_pointed
  
-  # has_many :lines # utile pour les méthode credit_compta_line et debit_compta_line
+  # utile pour les méthode credit_compta_line et debit_compta_line
   has_many  :compta_lines, :through=>:check_deposit_writing
   
   alias children compta_lines
@@ -54,24 +47,19 @@ class CheckDeposit < ActiveRecord::Base
 
   scope :within_period, lambda {|from_date, to_date| where(['deposit_date >= ? and deposit_date <= ?', from_date, to_date])}
  
-
   validates :bank_account_id, :deposit_date, :presence=>true
   validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :pointed?
-  validate :not_empty
-
-  #  before_validation :not_empty # une remise chèque vide n'a pas de sens
+  validate :not_empty # une remise chèque vide n'a pas de sens
 
   after_create :create_writing
   after_update :update_writing
 
   before_destroy :cant_destroy_when_pointed
 
-  
-  # permet de trouver les cheques à encaisser pour  tout l'organisme
+   # permet de trouver les cheques à encaisser pour  tout l'organisme
   def self.pending_checks
     ComptaLine.pending_checks.all
   end
-
 
   # donne le total des chèques à encaisser pour cet organisme
   def self.total_to_pick
@@ -94,9 +82,6 @@ class CheckDeposit < ActiveRecord::Base
   def credit_line
     credit_compta_line if credit_compta_line
   end
-
-
-
 
   # persisted? est là pour éviter qu'on recherche une credit_compta_line ou une debit_compta_line alors qu'elles ne
   # sont pas encore créées.
@@ -133,8 +118,6 @@ class CheckDeposit < ActiveRecord::Base
   def pick_all_checks
     CheckDeposit.pending_checks.each {|l| checks << l}
   end
-
-  
 
   def rem_check_account
     Organism.first!.find_period(deposit_date).rem_check_account
@@ -191,35 +174,6 @@ class CheckDeposit < ActiveRecord::Base
       credit_compta_line.update_attribute(:credit, total_checks)
       debit_compta_line.update_attribute(:debit, total_checks)
     end
-  end
-
-  # crée l'écriture de remise de chèque
-  #  def create_lines
-  #    p = Organism.first!.find_period(deposit_date)
-  #    rca = p.rem_check_account
-  #   # on crédit le compte de remise chèque
-  #    l = lines.create!(line_date:deposit_date, check_deposit_id:id,
-  #      narration:'Remise chèque',
-  #      account_id:rca.id,
-  #      credit:total_checks,
-  #      book_id:OdBook.first!.id)
-  #    # et on débite la banque
-  #    ba = bank_account.current_account(p)
-  #    lines.create!(line_date:deposit_date, check_deposit_id:id,
-  #      narration:'Remise chèque',
-  #      debit:total_checks,
-  #      account_id:ba.id,
-  #      book_id:OdBook.first!.id)
-  #
-  #  end
-
-  #  def update_lines
-  #    credit_compta_line.update_attribute(:credit, total_checks)
-  #    debit_compta_line.update_attribute(:debit, total_checks)
-  #  end
- 
-  def has_bank_extract_line?
-    bank_extract_line ? true : false
   end
   
 end

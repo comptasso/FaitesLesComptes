@@ -1,10 +1,5 @@
 # coding: utf-8
 
-module CheckDepositsHelper
-
-end
-
-
 # Petite classe pour construire la sélection des chèques d'une remise de chèques
 # Cette classe permet de construire un groupe d'options pour la remise
 # 
@@ -40,14 +35,15 @@ class OptionsForChecksSelect
   
 end
 
+module CheckDepositsHelper
 
-# Helper permettant de construire les options pour le form
-#
-def options_for_checks(check_deposit)
-  [OptionsForChecksSelect.new('Déja inclus', :target, check_deposit), OptionsForChecksSelect.new('Non inclus',:tank, check_deposit)]
+  # Helper permettant de construire les options pour le form
+  #
+  def options_for_checks(check_deposit)
+    [OptionsForChecksSelect.new('Déja inclus', :target, check_deposit), OptionsForChecksSelect.new('Non inclus',:tank, check_deposit)]
+  end
+
+
+
 end
-
-
-
-
 

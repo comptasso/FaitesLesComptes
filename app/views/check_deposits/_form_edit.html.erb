@@ -10,7 +10,7 @@
               :prompt => "Numero de compte ?", :label=>'Compte' %>
   <%= f.association :checks, :label=> 'Chèques', input_html: {class: "span4", multiple: true, size: 10},
               :collection => options_for_checks(@check_deposit), :as => :grouped_select, :group_method => :checks, :group_label_method=> :name,
-              :label_method=> :check_for_select, :value_method=> :id %>
+              :label_method=> :label, :value_method=> :id %>
 
 
        <div class="form-actions">

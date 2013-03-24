@@ -9,9 +9,9 @@ describe "check_deposits/edit" do
   let(:ba)  {mock_model(BankAccount, number: '124578AZ', name: 'IBAN', nickname:'Compte courant')}
   let(:o) {mock_model(Organism, bank_accounts:[ba])}
   let(:p) {mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)}
-  let(:cks) {(1..3).collect {|i| mock_model(ComptaLine, check_for_select:"un chèque n° #{i}")} }
+  let(:cks) {(1..3).collect {|i| mock_model(ComptaLine, label:"un chèque n° #{i}")} }
   
-  let(:cd1) {mock_model(CheckDeposit,
+  let(:cd1) {mock_model(CheckDeposit, 
       bank_account_id: ba.id,
       deposit_date_picker: Date.today - 5,
       pointed?:false,
@@ -22,7 +22,7 @@ describe "check_deposits/edit" do
 
   before(:each) do
 
-    CheckDeposit.stub(:pending_checks).and_return([mock_model(ComptaLine, check_for_select:"un chèque non remis")])
+    CheckDeposit.stub(:pending_checks).and_return([mock_model(ComptaLine, label:"un chèque non remis")])
     
     assign(:check_deposit, cd1)
     assign(:organism, o)

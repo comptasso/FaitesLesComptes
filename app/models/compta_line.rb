@@ -86,11 +86,10 @@ class ComptaLine < ActiveRecord::Base
     !(pointed? || locked?)
   end
 
-   # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
-  def check_for_select
-    "#{I18n.l date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',debit)}"
-  end
-
+      # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
+      def label
+        "#{I18n.l date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',debit)}"
+      end
 
   protected
 
