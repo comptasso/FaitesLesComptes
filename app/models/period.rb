@@ -55,8 +55,7 @@ class Period < ActiveRecord::Base
 
  
   # Les classes ...validator sont des classes spécifiques de validator pour les exercices
-
-  # TODO voir à mettre ces validators dans lib/validators
+  # on ne les met pas dans lib/validators car elles sont réellement dédiées
 
   # Valide que le start_date est le lendemain du close date de l'exercice précédent
   class ContiguousValidator < ActiveModel::EachValidator
@@ -70,7 +69,7 @@ class Period < ActiveRecord::Base
   # Valide que le close_date est bien postérieur au start_date
   class ChronoValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)
-      record.errors[attribute] << "la date de cloture doit être postérieure à l'ouverture" if value < record.start_date
+      record.errors[attribute] << "la date de cloture doit être postérieure à l'ouverture" if (value && value < record.start_date)
     end
   end
 
@@ -87,30 +86,18 @@ class Period < ActiveRecord::Base
 
  
   validates :organism_id, :presence=>true
-
-  # TODO revoir les validations
-  validates :close_date, :presence=>true,:chrono=>true
-  validates :start_date, :presence=>true,:contiguous => true
-
+  validates :open, :cant_become_true=>true
+  validates :close_date, :presence=>true,:chrono=>true, :cant_edit=>true
+  validates :start_date, :presence=>true, :contiguous => true, :cant_edit=>true
+  validate :should_not_exceed_24_months
   
-
-  # TODO revoir ces call_backs en utilisant des conditions de type :if
-  # TODO changer le update should not reopen en utilisant un des validate
-  before_update :fix_days, :cant_change_start_date, :should_not_reopen
-  before_create :should_not_have_more_than_two_open_periods, :fix_days
-  before_save :should_not_exceed_24_months, 
-    :cant_change_close_date_if_next_period
-  #
-  # 
-  #
+  before_save :fix_days
+  before_create :should_not_have_more_than_two_open_periods
+    
   after_create :create_plan, :create_bank_and_cash_accounts, :load_natures ,:unless=> :previous_period?
   after_create :copy_accounts, :copy_natures, :if=> :previous_period?
  
   before_destroy :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
-
-
-
-  # TODO voir la gestion des effacer dans les vues et dans le modèle. 
 
   # TODO mettre dans la migration que start_date et close_date sont obligatoires
  
@@ -413,11 +400,15 @@ class Period < ActiveRecord::Base
   end
 
 
+ 
+
   # permet de renvoyer la liste des mois de l'exercice correspondant à un mois spécifique
   # généralement un seul mais il peut y en avoir deux en cas d'exercice de plus d'un an
   #
   # l'argument month est de type string et avec deux chiffres par exemple '04'
   def find_month(month)
+    month = month.to_s if month.is_a?(Numeric)
+    month = '0' + month if month.length == 1
     list_months.select {|my| my.month == month}
   end
 
@@ -513,30 +504,22 @@ class Period < ActiveRecord::Base
   # soit c'est le premier et la date de début a été fixée lors de la création
   # de la organism
   # soit ce n'est pas le premier et il est lié à l'exercice précédent
-  # TODO revoir ces deux fonctions.
   def cant_change_start_date
     if self.changed_attributes['start_date'] 
-      self.errors.add(:start_date, "Impossible de changer la date d'ouvrture d'un exercice suivant")
+      self.errors.add(:start_date, 'Impossible de changer la date d\'ouvrture')
       return false 
     end
   end
 
   # on ne peut pas changer la date de clôture si l'exercice suivant a déja été créé
-  # TODO voir si on ne pourrait pas assouplir la règle
-  def cant_change_close_date_if_next_period
-    if self.changed_attributes['close_date'] && next_period
-      self.errors.add(:close_date, 'Impossible de changer la date de cloture avec un exercice suivant')
+  def cant_change_close_date
+    if self.changed_attributes['close_date'] 
+      self.errors.add(:close_date, 'Impossible de changer la date de cloture')
       return false 
     end
   end
 
-  # TODO à transformer en validate (comme pour les autres modèles)
-  def should_not_reopen
-    if self.changed_attributes["open"] == false
-      self.errors.add(:open, 'Impossible de réouvrir un exercice clos')
-      return false 
-    end
-  end
+  
 
   def should_not_have_more_than_two_open_periods
     if organism.nb_open_periods >= 2
@@ -547,12 +530,15 @@ class Period < ActiveRecord::Base
   end
 
   def should_not_exceed_24_months
-    if self.close_date - self.start_date > 731
+    duree = close_date - start_date rescue nil
+    if duree && duree > 731
       self.errors.add(:close_date, 'un exercice ne peut avoir plus de deux ans')
       return false
     end
   end
 
+  # permet de s'assurer que les dates d'ouverture et de clôture
+  # sont respectivement des dates de début et de fin de mois.
   def fix_days
     self.start_date=self.start_date.beginning_of_month
     self.close_date=self.close_date.end_of_month
@@ -601,6 +587,8 @@ class Period < ActiveRecord::Base
   # load natures est appelé lors de la création d'un premier exercice
   # load_natures lit le fichier natures_asso.yml et crée les natures correspondantes
   # retourne le nombre de natures
+  #
+  # TODO améliorer la gestion d'une éventuelle erreur
   def load_natures 
     Rails.logger.info 'Création des natures'
     t = load_file_natures("#{Rails.root}/app/assets/parametres/#{organism.status.downcase}/natures.yml")
@@ -616,7 +604,8 @@ class Period < ActiveRecord::Base
   def load_file_natures(source)
     YAML::load_file(source)
   rescue
-    "Erreur lors du chargement du fichier #{source}"
+    puts "Erreur dans le chargement du fichier #{source}"
+    []
   end
 
   # supprime les extraits bancaires 

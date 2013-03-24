@@ -12,11 +12,56 @@ describe Period do
 
     before(:each) do
       create_organism
-    end 
+    end
+
+    def valid_params
+      {start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year}
+    end
   
 
     describe 'validations' do
-      it 'faire les tests de validation'
+
+      it 'est valide' do
+        @p = @o.periods.new(valid_params)
+        @p.should be_valid
+      end
+
+      it 'non valide sans organism' do
+        @p = Period.new(valid_params)
+        @p.should_not be_valid
+      end
+
+      it 'non valide sans close_date' do
+        @p = @o.periods.new(valid_params)
+        @p.close_date = nil
+        @p.should_not be_valid
+      end
+
+      it 'non valide si close date est < start_date' do
+        @p = @o.periods.new(valid_params)
+        @p.close_date = @p.start_date - 60 
+        @p.should_not be_valid
+      end
+
+      it 'ne peut durer plus de 24 mois' do
+        @p = @o.periods.new(valid_params)
+        @p.close_date = @p.close_date + 400
+        @p.should_not be_valid
+      end
+
+      it 'les dates ne peuvent être modifiées' do
+        @p = @o.periods.create!(valid_params)
+        @p.close_date = @p.close_date.months_ago(1)
+        @p.should_not be_valid
+      end
+
+      it 'ne peut être ouvert' do
+        @p = @o.periods.create!(valid_params)
+        @p.update_attribute(:open, false)
+        @p.open = true
+        @p.should_not be_valid
+      end
+
     end
   
     describe 'after_create'  do
@@ -36,7 +81,7 @@ describe Period do
 
     end
 
-    describe 'destroyable?', wip:true do
+    describe 'destroyable?' do
       it 'est destructible si le premier ou le dernier' do
         d = Date.today.beginning_of_year
         3.times do |i|
@@ -50,6 +95,43 @@ describe Period do
         
       end
 
+
+    end
+
+    describe 'load_-file_natures - cas d une erreur'  do
+
+      it 'avec une erreur load_file_natures renvoie []' do
+        d = Date.today.beginning_of_year
+         p = @o.periods.new(start_date:d, close_date:d.end_of_year)
+         p.send(:load_file_natures, 'inconnu').should == []
+      end
+
+
+    end
+
+    describe 'les fonctionnalités pour trouver un mois' , wip:true do
+
+      before(:each )do
+        # un exercice de mars NN à avril NN+1
+        @p = @o.periods.new(start_date: Date.today.beginning_of_year.months_since(2), close_date:Date.today.end_of_year.months_since(4))
+      end
+
+      it 'find_month renvoie un mois si 11' , wip:true do
+        @p.find_month(11).should == [MonthYear.new(month:11, year:Date.today.year)]
+      end
+
+      it 'find_first_month trouve le premier des deux possibilités' do
+        @p.find_first_month(3).should == MonthYear.new(month:3, year:Date.today.year)
+      end
+
+      it 'include month' do
+        @p.should be_include_month(3)
+      end
+
+      it 'si le mois n est pas compris' do
+        @p.close_date = Date.today.beginning_of_year.months_since(6)
+        @p.should_not be_include_month(8)
+      end
 
     end
   
