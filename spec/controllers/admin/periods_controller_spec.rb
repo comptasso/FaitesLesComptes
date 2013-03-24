@@ -60,6 +60,33 @@ describe Admin::PeriodsController do
     end
   end
 
+  describe 'POST close' do
+
+    it 'affiche un flash de succes' do
+      @p.should_receive(:close).and_return true
+      post :close, {organism_id:@o.to_param, id:@p.to_param}, valid_session
+      flash[:notice].should == "L'exercice est maintenant clos"
+      response.should redirect_to admin_organism_periods_url(@o)
+    end
+
+    it 'affiche ou un flash d\'erreur et réaffiche index' do
+      @p.should_receive(:close).and_return false
+      @p.stub(:exercice).and_return('Exercice 2013')
+      post :close, {organism_id:@o.to_param, id:@p.to_param}, valid_session
+      flash[:alert].should == "Exercice 2013 ne peut être clos : \n"
+      response.should render_template(:index)
+    end
+
+    it 'le flash alert donne l explication' do
+      @p.stub(:close).and_return false
+      @p.stub(:exercice).and_return('Exercice 2013')
+      @p.errors.add(:close, 'message d erreur')
+      post :close, {organism_id:@o.to_param, id:@p.to_param}, valid_session
+      flash[:alert].should == "Exercice 2013 ne peut être clos : \n- message d erreur\n"
+    end
+
+  end
+
  
   describe 'GET new' do
 

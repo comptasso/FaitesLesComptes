@@ -80,25 +80,8 @@ class Admin::PeriodsController < Admin::ApplicationController
     end
   end
 
-  # action destinée à afficher un formulaire permettant de choisir un plan comptable
-  # pour l'instant il n'y a qu'un seul plan comptable, stocké dans la partie assets/plan
-  # A terme, il faudrait pouvoir importer un plan par un fichier du type csv.
-  # TODO ceci devrait être dans un controller plan
-  def select_plan
-    @period = @organism.periods.find(params[:id])
-  end
-
-  # POST création du plan comptable après le select_plan
-  def create_plan
-    @period = @organism.periods.find(params[:id])
-    nb_accounts = Utilities::PlanComptable.new.create_accounts(@period.id, params[:fichier])
-    flash[:notice] = "#{nb_accounts} comptes ont été créés"
-  rescue
-    flash[:alert] = "Erreur dans la création des comptes"
-  ensure
-    redirect_to admin_organism_period_accounts_path(@organism,@period)
-  end
-
+  # TODO - vérifier qu'il n'y a pas de problème lorsqu'on crée un exercice
+  # après les avoir supprimé tous. (est-ce que les comptes sont bien créés)
    
   # action de cloture d'un exercice
   def close
