@@ -18,7 +18,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   # GET /periods
   # GET /periods.json
   def index
-    @periods = @organism.periods.all
+    @periods = @organism.periods
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @periods }
@@ -45,19 +45,12 @@ class Admin::PeriodsController < Admin::ApplicationController
     
   end
 
-  # GET /periods/1/edit
-  def edit
-    @period = Period.find(params[:id])
-  end
+ 
 
   # POST /periods
   # POST /periods.json
   def create
-    # on check la start_date dans le controller.
-    # TODO on pourrait se contenter de la validation du modèle
-    params[:period][:start_date] = (@organism.periods.last.close_date + 1.day) unless @organism.periods.count == 0
     @period = @organism.periods.new(params[:period])
-    
     respond_to do |format|
       if @period.save
         session[:period]=@period.id
@@ -70,22 +63,7 @@ class Admin::PeriodsController < Admin::ApplicationController
     end
   end
 
-  # PUT /periods/1
-  # PUT /periods/1.json
-  def update
-    @period = Period.find(params[:id])
-
-    respond_to do |format|
-      if @period.update_attributes(params[:period])
-         session[:period]=@period.id
-        format.html { redirect_to admin_organism_periods_path(@organism), notice: "L'exercice a été modifié" }
-        format.json { head :ok }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @period.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  
 
   # DELETE /periods/1
   # DELETE /periods/1.json
@@ -96,11 +74,7 @@ class Admin::PeriodsController < Admin::ApplicationController
     end
     respond_to do |format|
       format.html do
-        if @organism.periods.any?
           redirect_to admin_organism_periods_url(@organism)
-        else
-          redirect_to new_admin_organism_period_path(@organism)
-        end
       end
       format.json { head :ok }
     end

@@ -3,12 +3,64 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Admin::PeriodsController do
-   include SpecControllerHelper 
+   include SpecControllerHelper
+
+  def valid_params
+    {'start_date'=>Date.today.beginning_of_year.to_formatted_s(:db), 'close_date'=>Date.today.end_of_year.to_formatted_s(:db)}
+  end
 
    before(:each) do
      minimal_instances
    end
 
+  describe 'GET index' do
+    before(:each) do
+       @o.stub(:periods).and_return [mock_model(Period), mock_model(Period)]
+
+    end
+
+    it 'renden index template' do
+      get :index, {organism_id:@o.id}, valid_session
+      response.should render_template(:index)
+    end
+  end
+
+  describe 'POST create' do
+
+    before(:each) do
+      @o.stub(:periods).and_return(@a = double(Arel, :find_by_id=>nil))
+    end
+
+    it 'rend vue index si tout est OK' do
+      @a.should_receive(:new).with(valid_params).and_return mock_model(Period, :save=>true).as_new_record
+      post :create, {organism_id:@o.id, :period=>valid_params}, valid_session
+      response.should redirect_to admin_organism_periods_url(@o)
+    end
+
+    it 'rend la vue edit si erreur dans la sauvegarde' do
+      @a.should_receive(:new).with(valid_params).and_return mock_model(Period, :save=>false).as_new_record
+      post :create, {organism_id:@o.id, :period=>valid_params}, valid_session
+      response.should render_template :new
+    end
+  end
+
+  describe 'DELETE destroy' do
+
+
+    it "destroys the requested period" do
+      Period.should_receive(:find).with(@p.to_param).and_return(@p)
+      delete :destroy, {organism_id:@o.to_param, :id=>@p.to_param}, valid_session
+
+    end
+
+    it "redirects to the period list" do
+      Period.should_receive(:find).with(@p.to_param).and_return(@p)
+      delete :destroy, {organism_id:@o.to_param, :id=>@p.to_param}, valid_session
+      response.should redirect_to(admin_organism_periods_url(@o))
+    end
+  end
+
+ 
   describe 'GET new' do
 
     context "check the rendering" do
