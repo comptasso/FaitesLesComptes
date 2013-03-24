@@ -14,9 +14,10 @@ let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: 
 let(:p2011) {stub_model(Period, start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31)) }
 
 before(:each) do
+  CheckDeposit.stub(:nb_to_pick).and_return 0
     assign(:organism, o)
     o.stub(:periods).and_return([p2011,p2012])
-     o.stub(:find_period).and_return(p2012)
+    o.stub(:find_period).and_return(p2012)
     p2012.stub(:previous_period?).and_return(true)
     p2012.stub(:previous_period).and_return(p2011)
     ibook.stub(:organism).and_return(o)
