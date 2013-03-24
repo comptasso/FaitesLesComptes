@@ -1,0 +1,9 @@
+= content_for :menu do
+  = icon_to 'nouveau.png', new_organism_bank_account_check_deposit_path(@organism, @bank_account) if (@nb_to_pick > 1)
+  = icon_to 'afficher.png', [@organism,@bank_account, @check_deposit]
+  = icon_to 'navigation90.png', organism_bank_account_check_deposits_path(@organism, @bank_account)
+
+.champ
+  %h3 Modification d'une remise chèque
+  .inner-champ
+    = render 'form_edit'

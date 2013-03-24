@@ -2,25 +2,27 @@
 
 module CheckDepositsHelper
 
-  def button_for_check(check)  
-    if check.bank_extract_id.nil?
-      button_to "Ajouter", add_check_bank_account_check_deposit_path(@bank_account, @check_deposit), remote: true, :line_id=>check.id
-    else
-      button_to "Retirer", remove_check_bank_account_check_deposit_path(@bank_account, @check_deposit), remote:true, :line_id=>check.id
-    end
-  end
 end
 
 
 # Petite classe pour construire la sélection des chèques d'une remise de chèques
 # Cette classe permet de construire un groupe d'options pour la remise
+# 
 # Usage : OptionsForCheckSelect('Chèques inclus', :target, check_deposit)
 # Le type peut être target (déja dans la remise de chèques) ou :tank (le réservoir)
+#
+# Cela permet ensuite d'être utilisé dans un formulaire avec liste de sélection et groupe
+# d'options. Il suffit de lister les différentes groupes (voir plus bas, la méthode options_for_checks
+# pour un exemple.
+#
+# Et dans le formulaire utiliser une collection avec comme group_label_méthod :name
+# et group_method :checks
+#
 class OptionsForChecksSelect
-  attr_reader:name
+  attr_reader :name
 
-  def initialize(titre, type, check_deposit)
-    @name = titre
+  def initialize(name, type, check_deposit)
+    @name = name
     @check_deposit = check_deposit
     @type = type
   end
