@@ -5,7 +5,7 @@ class BankExtractLinesController < ApplicationController
   before_filter :find_params
 
   def index
-    @bank_extract_lines = @bank_extract.bank_extract_lines.order('position')
+    @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
   end
 
   
@@ -38,7 +38,9 @@ class BankExtractLinesController < ApplicationController
     end
   end
 
-  # Regroup permet de regrouper deux lignes
+  # Degroupe permet de scinder une ligne
+  #
+  # Appelle le même template que rgroup car c'est une logique de traitement similaire
   #
   def degroup
     @bank_extract_line = BankExtractLine.find(params[:id])
@@ -73,19 +75,14 @@ class BankExtractLinesController < ApplicationController
   def ajoute
       l = ComptaLine.find(params[:line_id])
       @bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[l])
-      raise "Methode ajoute : @bel non valide @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
-
-    # on redessine les tables
-
-    @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
-
+      
     respond_to do |format|
       if @bel.save
         @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
         @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
         format.js 
       else
-        format.json { render :json=>@bel.errors, :status=>:unprocessable_entity }
+        format.js { render 'flash_error'}
       end
     end
 
@@ -104,15 +101,13 @@ class BankExtractLinesController < ApplicationController
     id = params[:html_id][/\d+$/].to_s
     l = ComptaLine.find(id)
     @bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[l])
-    raise "@bel non valide #{html} @bank_extract_id = #{@bank_extract.id}" unless @bel.valid?
     @bel.position = params[:at].to_i
-   
     respond_to do |format|
       if @bel.save
         @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
         format.js 
       else
-        format.json { render :json=>@bel.errors, :status=>:unprocessable_entity }
+        format.js { render 'flash_error'}
       end
     end
   end
