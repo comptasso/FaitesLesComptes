@@ -21,7 +21,7 @@ require 'spec_helper'
 # that an instance is receiving a specific message. 
 
 RSpec.configure do |c|
-  # c.filter = {:wip=> true }
+  #  c.filter = {:wip=> true }
 end
 
 describe Admin::RoomsController do
@@ -100,101 +100,29 @@ describe Admin::RoomsController do
     end
   end
 
-#  describe "GET new" do
-#    it "assigns a new user as @user" do
-#      get :new
-#      assigns(:user).should be_a_new(User)
-#    end
-#  end
+  describe 'POST migrate' do
+
+    it 'migre la base demandée' do
+    @cu.should_receive(:rooms).and_return(@a = double(Arel))
+      @a.should_receive(:find).with(@r.to_param).and_return(@r)
+      @r.should_receive(:migrate)
+      post :migrate, {:id => @r.to_param}, user_session 
+      flash[:notice].should == 'La base a été migrée et mise à jour'
+      response.should redirect_to admin_organism_url
+  end
+  end
+
+  describe 'GET new_archive' do
+    it 'trouve l organisme et redirige' do
+      @cu.should_receive(:rooms).and_return(@a = double(Arel))
+      @a.should_receive(:find).with(@r.to_param).and_return(@r)
+      get :new_archive, {:id => @r.to_param}, user_session
+      response.should redirect_to new_admin_organism_archive_url(@o)
+    end
+  end
+
 #
-#  describe "GET edit" do
-#    it "assigns the requested user as @user" do
-#      user = User.create! valid_attributes
-#      get :edit, :id => user.id.to_s
-#      assigns(:user).should eq(user)
-#    end
-#  end
-#
-#  describe "POST create" do
-#    describe "with valid params" do
-#      it "creates a new User" do
-#        expect {
-#          post :create, :user => valid_attributes
-#        }.to change(User, :count).by(1)
-#      end
-#
-#      it "assigns a newly created user as @user" do
-#        post :create, :user => valid_attributes
-#        assigns(:user).should be_a(User)
-#        assigns(:user).should be_persisted
-#      end
-#
-#      it "redirects to the created user" do
-#        post :create, :user => valid_attributes
-#        response.should redirect_to(new_admin_organism_path)
-#      end
-#    end
-#
-#    describe "with invalid params" do
-#      it "assigns a newly created but unsaved user as @user" do
-#        # Trigger the behavior that occurs when invalid params are submitted
-#        User.any_instance.stub(:save).and_return(false)
-#        post :create, :user => {}
-#        assigns(:user).should be_a_new(User)
-#      end
-#
-#      it "re-renders the 'new' template" do
-#        # Trigger the behavior that occurs when invalid params are submitted
-#        User.any_instance.stub(:save).and_return(false)
-#        post :create, :user => {}
-#        response.should render_template("new")
-#      end
-#    end
-#  end
-#
-#  describe "PUT update" do
-#    describe "with valid params" do
-#      it "updates the requested user" do
-#        user = User.create! valid_attributes
-#        # Assuming there are no other users in the database, this
-#        # specifies that the User created on the previous line
-#        # receives the :update_attributes message with whatever params are
-#        # submitted in the request.
-#        User.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-#        put :update, :id => user.id, :user => {'these' => 'params'}
-#      end
-#
-#      it "assigns the requested user as @user" do
-#        user = User.create! valid_attributes
-#        put :update, :id => user.id, :user => valid_attributes
-#        assigns(:user).should eq(user)
-#      end
-#
-#      it "redirects to the user" do
-#        user = User.create! valid_attributes
-#        put :update, :id => user.id, :user => valid_attributes
-#        response.should redirect_to(user)
-#      end
-#    end
-#
-#    describe "with invalid params" do
-#      it "assigns the user as @user" do
-#        user = User.create! valid_attributes
-#        # Trigger the behavior that occurs when invalid params are submitted
-#        User.any_instance.stub(:save).and_return(false)
-#        put :update, :id => user.id.to_s, :user => {}
-#        assigns(:user).should eq(user)
-#      end
-#
-#      it "re-renders the 'edit' template" do
-#        user = User.create! valid_attributes
-#        # Trigger the behavior that occurs when invalid params are submitted
-#        User.any_instance.stub(:save).and_return(false)
-#        put :update, :id => user.id.to_s, :user => {}
-#        response.should render_template("edit")
-#      end
-#    end
-#  end
+
 
   describe "DELETE destroy" do
     before(:each) do
@@ -204,12 +132,20 @@ describe Admin::RoomsController do
     end
 
     it "destroys the requested room" do
-      pending 'non opérationnel, pose un problème d accès dans la version .exe'
       @r.stub(:destroy).and_return true
       File.should_receive(:exist?).with(@r.absolute_db_name).and_return true
-      File.should_receive(:delete).with(@r.absolute_db_name)
-      delete :destroy,{:id => @r.to_param}, user_session 
-    end 
+      @cu.should_receive(:up_to_date?).and_return true
+      delete :destroy,{:id => @r.to_param}, user_session
+      response.should redirect_to admin_organisms_url
+    end
+
+    it 'renvoie vers rooms index si les bases ne sont pas à jour' do
+       @r.stub(:destroy).and_return true
+      @cu.should_receive(:up_to_date?).and_return false
+      delete :destroy,{:id => @r.to_param}, user_session
+
+       response.should redirect_to admin_rooms_url
+    end
 
     
   end

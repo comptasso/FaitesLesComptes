@@ -39,26 +39,17 @@ class Admin::RoomsController < Admin::ApplicationController
     @room = current_user.rooms.find(params[:id])
     @room.migrate
     organism_has_changed?(@room)
-    flash[:notice] = 'la base a été migrée et mise à jour'
-    redirect_to admin_organism_path
+    flash[:notice] = 'La base a été migrée et mise à jour'
+    redirect_to admin_organism_url
   end
 
-
-
-  
-  # TODO voir si edit est utilisé
-  def edit
-    @room = current_user.rooms.find(params[:id])
-    organism_has_changed?(@room)
-    redirect_to edit_admin_organism_path(@organism)
-  end
 
   # action qui permet de créer une nouvelle archive lorsque l'on affiche la liste des
   # organismes
   def new_archive
     @room = current_user.rooms.find(params[:id])
     organism_has_changed?(@room)
-    redirect_to new_admin_organism_archive_path(@organism) 
+    redirect_to new_admin_organism_archive_url(@organism)
   end
 
   # détruit la pièce ainsi que la base associée
