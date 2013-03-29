@@ -10,7 +10,7 @@ class NaturesController < ApplicationController
       format.html
       format.pdf {@listing  = Stats::Listing.new(@sn.title, @sn.lines)}
       format.csv { send_data @sn.to_csv  }  # \t pour éviter le problème des virgules
-      format.xls { send_data @sn.to_xls  } 
+      format.xlsx { send_data @sn.to_xlsx  }
     end
   end
 

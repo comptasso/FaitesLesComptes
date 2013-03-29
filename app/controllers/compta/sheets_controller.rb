@@ -27,9 +27,9 @@ class Compta::SheetsController < Compta::ApplicationController
         @docs.each {|doc| datas += doc.to_index_csv } 
         send_data datas
         }
-      format.xls {  
+      format.xlsx {
         datas = ''
-        @docs.each {|doc| datas += doc.to_index_xls} 
+        @docs.each {|doc| datas += doc.to_index_xlsx}
         send_data datas, :filename=>"#{params[:title] || params[:collection]}.csv" 
         }
 

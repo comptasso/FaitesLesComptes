@@ -21,7 +21,7 @@ class Compta::ListingsController < Compta::ApplicationController
         format.pdf { send_data @listing.to_pdf.render ,
           filename:"Listing compte #{@listing.account.long_name}.pdf"} #, disposition:'inline'}
         format.csv { send_data @listing.to_csv }  # pour éviter le problème des virgules
-        format.xls { send_data @listing.to_xls }
+        format.xlsx { send_data @listing.to_xlsx }
       end
       
      else

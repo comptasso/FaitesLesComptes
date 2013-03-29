@@ -19,7 +19,7 @@ class InOutWritingsController < ApplicationController
       format.html  # index.html.erb
       format.pdf {send_data @monthly_extract.to_pdf.render, :filename=>"#{@organism.title}_#{@book.title}.pdf" }
       format.csv { send_data @monthly_extract.to_csv  } 
-      format.xlsx { send_data @monthly_extract.to_xls  }
+      format.xlsx { send_data @monthly_extract.to_xlsx  }
     end
   end
 
