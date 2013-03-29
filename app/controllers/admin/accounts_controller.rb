@@ -72,7 +72,11 @@ class Admin::AccountsController < Admin::ApplicationController
   # DELETE /compta/accounts/1.json
   def destroy
     @compta_account = Account.find(params[:id])
-    @compta_account.destroy
+    if @compta_account.destroy
+      flash[:notice]= "Le compte #{@compta_account.number} - #{@compta_account.title} a été supprimé"
+    else
+      flash[:error]= "Une erreur s'est produite, le compte #{@compta_account.number} n'a pas pu être supprimé"
+    end
 
     respond_to do |format|
       format.html { redirect_to admin_period_accounts_url(@period) }

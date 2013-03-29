@@ -16,12 +16,14 @@ class Admin::OrganismsController < Admin::ApplicationController
     session[:org_db]=nil
     rooms = current_user.rooms.map {|r| r.organism_description}
     @room_organisms = rooms.select {|o| o != nil}
-    unless rooms.select {|o| o == nil}.empty?
+    
+    if rooms.select {|o| o == nil}.any?
       list = current_user.rooms.select {|r| r.organism == nil}.collect {|r| r.database_name}.join(', ')
-      link = %Q[<a href="#{admin_rooms_url}">gestion des bases</a>]
+      gestion_des_bases = %Q[<a href="#{admin_rooms_url}">gestion des bases</a>]
       flash[:alert] = "Base de données non trouvée ou organisme inexistant: #{list} ;
-      Cliquez ici pour accéder à la #{link} ".html_safe
+      Cliquez ici pour accéder à la #{gestion_des_bases} ".html_safe
     end
+
   end
 
   # GET /organisms/1

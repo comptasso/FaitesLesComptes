@@ -36,7 +36,7 @@ class Admin::BooksController < Admin::ApplicationController
     end
      respond_to do |format|
       if @book.save
-        format.html { redirect_to admin_organism_books_url(@organism), notice: 'Le livre a été crée.' }
+        format.html { redirect_to admin_organism_books_url(@organism), notice: 'Le livre a été créé.' }
         format.json { render json: @book, status: :created, location: @book }
       else
         format.html { render action: "new" }
