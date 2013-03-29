@@ -6,3 +6,4 @@
 
 # Mime::Type.register_alias "application/pdf", :pdf
 Mime::Type.register_alias "application/xls", :xls
+Mime::Type.register_alias "application/xlsx", :xlsx

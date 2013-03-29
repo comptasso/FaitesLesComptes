@@ -18,8 +18,8 @@ class InOutWritingsController < ApplicationController
     respond_to do |format|
       format.html  # index.html.erb
       format.pdf {send_data @monthly_extract.to_pdf.render, :filename=>"#{@organism.title}_#{@book.title}.pdf" }
-      format.csv { send_data @monthly_extract.to_csv  }  # pour éviter le problème des virgules
-      format.xls { send_data @monthly_extract.to_xls  } #{ render :text=> @monthly_extract.to_xls(col_sep:"\t") }  # nécessaire pour excel
+      format.csv { send_data @monthly_extract.to_csv  } 
+      format.xlsx { send_data @monthly_extract.to_xls  }
     end
   end
 
