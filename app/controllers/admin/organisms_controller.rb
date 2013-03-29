@@ -14,10 +14,10 @@ class Admin::OrganismsController < Admin::ApplicationController
   # affiche une alerte indiquant les bases non trouvées
   def index
     session[:org_db]=nil
-    rooms = current_user.rooms.map {|r| r.organism_description}
-    @room_organisms = rooms.select {|o| o != nil}
+    @rooms_description = current_user.rooms.map {|r| r.organism_description}
+    @room_organisms = @rooms_description.select {|rd| rd != nil}
     
-    if rooms.select {|o| o == nil}.any?
+    if !@rooms_description.select {|rd| rd == nil}.empty?
       list = current_user.rooms.select {|r| r.organism == nil}.collect {|r| r.database_name}.join(', ')
       gestion_des_bases = %Q[<a href="#{admin_rooms_url}">gestion des bases</a>]
       flash[:alert] = "Base de données non trouvée ou organisme inexistant: #{list} ;

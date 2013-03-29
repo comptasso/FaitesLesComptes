@@ -227,12 +227,13 @@ describe InOutWritingsController do
       @o.stub(:main_bank_id).and_return(12)
       @b.stub(:in_out_writings).and_return @a = double(Arel)
       @nw = mock_model(InOutWriting, date:Date.civil(2012,4,1)).as_new_record
+      @d = Date.today
     end
     
     it "fill the default values"  do
-      @a.should_receive(:new).with(date:Date.civil(2012,4,1)).and_return(@nw)
+      @a.should_receive(:new).with(date:@d).and_return(@nw)
       @nw.stub_chain(:compta_lines, :build) 
-      get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes
+      get :new, {income_book_id: @b.id, :mois=>@d.month.to_s, :an=>@d.year.to_s}, session_attributes
     end
 
     it "should build 2 compta_lines" do

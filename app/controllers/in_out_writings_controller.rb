@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 
-class InOutWritingsController < ApplicationController
+class InOutWritingsController < ApplicationController 
  
   before_filter :find_book # remplit @book
   before_filter :fill_mois, only: [:index, :new]

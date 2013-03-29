@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe CashLinesController do
 
-  include SpecControllerHelper 
+  include SpecControllerHelper  
 
   let(:ca) {mock_model(Cash, :organism=>@o, :name=>'Magasin')}
   let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3, :locked=>false),

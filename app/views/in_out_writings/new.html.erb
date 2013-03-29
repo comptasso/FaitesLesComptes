@@ -1,6 +1,6 @@
 <%= content_for :menu do %>
 
-<%= icon_to 'retour.png', book_in_out_writings_path(@book) %>
+<%= icon_to 'navigation90.png', book_in_out_writings_path(@book, mois:@mois, an:@an), title:'Affichage des écritures' %>
 <% end -%>
 
 <% if @previous_line %>

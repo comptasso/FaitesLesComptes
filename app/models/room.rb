@@ -26,7 +26,7 @@ class Room < ActiveRecord::Base
   # renvoie un hash utilisé pour l'affichage de la table des organismes
   def organism_description
     if o = organism
-      {organism:o, room:self, archive:(look_for {Archive.last}) }
+      {organism:o, room:self, :archive=>(look_for {Archive.last}) }
     end
   end
 

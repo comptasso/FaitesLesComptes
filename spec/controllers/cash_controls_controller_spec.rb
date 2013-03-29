@@ -7,7 +7,7 @@ RSpec.configure do |c|
   #  c.exclusion_filter = {:js=> true }
 end
 
-describe CashControlsController do 
+describe CashControlsController do  
    include SpecControllerHelper
 
   let(:ca) {stub_model(Cash, :organism=>@o, :name=>'Magasin')}

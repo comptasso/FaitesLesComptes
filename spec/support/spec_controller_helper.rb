@@ -14,7 +14,8 @@ module SpecControllerHelper
       close_date:Date.today.end_of_year,
       organism:@o,
       guess_date:Date.today,
-      guess_month:MonthYear.from_date(Date.today))
+      guess_month:MonthYear.from_date(Date.today),
+      guess_month_from_params:MonthYear.from_date(Date.today))
 
 
     Organism.stub(:first).and_return(@o)

@@ -7,7 +7,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=> true }
 end
 
-describe Admin::OrganismsController do
+describe Admin::OrganismsController do 
   include SpecControllerHelper
  
   def valid_attributes
@@ -130,50 +130,54 @@ describe Admin::OrganismsController do
 
  
   describe "GET index" do
+
+    before(:each) do
+      @cu.stub(:rooms).and_return([@r])
+      @r.stub(:organism_description).and_return({'organism'=>@o, 'room'=>@r, 'archive'=>nil})
+    end
+
+    it 'remet la session org_db à nil' do
+      session[:org_db]= 'bizarre'
+      get :index,{}, user_session
+      session[:org_db].should == nil
+    end
+
     
     it "assigns all organisms  @organisme" do
-      @cu.should_receive(:rooms).and_return(@a = double(Arel, :map=>[]))
-
+      
+      @cu.should_receive(:rooms).and_return([@r])
       get :index,{}, user_session
-      assigns(:organisms).should eq(@a)
+      assigns(:room_organisms).should == [{'organism'=>@o, 'room'=>@r, 'archive'=>nil}]
     end
 
     it 'renders template index' do
-      @cu.stub(:rooms).and_return(@a = double(Arel, :map=>[]))
+      
       get :index,{}, user_session
       response.should render_template('index')
     end
 
     it 'si toutes les roome sont en phase n affiche pas de flash' do
-      @cu.should_receive(:rooms).and_return([mock_model(Room, :relative_version=>:same_migration)])
+      @r.stub(:relative_version).and_return(:same_migration)
       get :index,{}, user_session
       flash[:alert].should == nil
     end
 
-    describe 'contrôle des flash' do
+    describe 'affiche un flash si base manquante' do
       
     before(:each) do
-      @cu.stub(:rooms).and_return([mock_model(Room)])
-      @cu.stub('up_to_date?').and_return false
+      @cu.stub(:rooms).and_return([mock_model(Room, :organism=>nil, :database_name=>'test',  :organism_description=>nil)])
+
+     
     end
 
     it 'si une room est en retard affiche un flash' do
-      @cu.stub(:status).and_return([:late_migration])
       get :index,{}, user_session
-      flash[:alert].should == 'Une base au moins est en retard par rapport à la version de votre programme, migrer la base correspondante'
+      assigns(:rooms_description).should ==[nil]
+      assigns(:room_organisms).should == []
+      flash[:alert].should match "Base de données non trouvée ou organisme inexistant: test"
     end
 
-    it 'si une room est en avance, affiche un flash' do
-      @cu.stub(:status).and_return([:advance_migration])
-      get :index,{}, user_session
-      flash[:alert].should == 'Une base au moins est en avance par rapport à la version de votre programme, passer à la version adaptée'
-    end
-
-    it 'si une base n existe pas ' do
-      @cu.stub(:status).and_return([:no_base])
-      get :index,{}, user_session
-      flash[:alert].should == 'Un fichier correspondant à une base n\'a pu être trouvée ; vous devriez effacer l\'enregistrement correspondant' 
-    end
+    
 
     end
   end
