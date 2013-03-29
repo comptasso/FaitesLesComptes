@@ -28,9 +28,20 @@ class MonthYear
 
   def initialize(h)
     @date = Date.civil(h[:year].to_i, h[:month].to_i)  # pour généréer InvalidDate si les arguments sont non valables
-    @month = '%02d' % h[:month].to_i
-    @year = '%04d' % h[:year].to_i
+    @month = '%02d' % @date.month
+    @year = '%04d' % @date.year
   end
+
+  # méthode de classe permettant de créer unn MonthYear à partir d'une date
+  def self.from_date(date)
+    MonthYear.new(year:date.year, month:date.month)
+  end
+
+  
+  def <=>(other)
+    comparable_string <=> other.comparable_string
+  end
+
 
   # format par défaut mm-yyyy
   def to_s
@@ -52,15 +63,7 @@ class MonthYear
     to_format('%b')
   end
 
-  # méthode de classe permettant de créer unn MonthYear à partir d'une date
-  def self.from_date(date)
-    MonthYear.new(year:date.year, month:date.month)
-  end
-
-  def <=>(other)
-    comparable_string <=> other.comparable_string
-  end
-
+  
   
   # donne la date du début du mois
   def beginning_of_month
@@ -84,7 +87,17 @@ class MonthYear
 
   # nombre de jous du mois représenté
   def nb_jour_mois
-    @date.end_of_month.day
+    end_of_month.day
+  end
+
+  # trouve la date la plus adaptée. Date du jour si Date.today est dans le mois,
+  # sinon début du mois si Date.today est ancien
+  # ou fin de mois si Date.today est futur
+  def guess_date
+    d = Date.today
+    return d if include? d
+    return end_of_month if younger_than? d
+    return beginning_of_month if older_than? d
   end
 
   protected
@@ -92,6 +105,21 @@ class MonthYear
   # construit la chaine yyyymm pour faire les comparaisons
   def comparable_string
     (@year+@month).to_i
+  end
+
+  # indique si une date est comprise dans le mois défini par MonthYear
+  def include?(date)
+    date.in?(beginning_of_month..end_of_month)
+  end
+
+  # indique si la month_year est antérieur à  la date donnée
+  def older_than?(date)
+    beginning_of_month > date
+  end
+
+  # indique si le month_year est future par rapport à la date donnée
+  def younger_than?(date)
+    end_of_month < date
   end
 
  

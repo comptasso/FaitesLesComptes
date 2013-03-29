@@ -412,6 +412,17 @@ class Period < ActiveRecord::Base
     list_months.select {|my| my.month == month}
   end
 
+  # destiné à renvoyer un month_year
+  def guess_month_from_params(h)
+    d = Date.civil(h[:year].to_i, h[:month].to_i)
+    d = start_date if d < start_date
+    d = close_date if d > close_date
+    MonthYear.from_date(d)
+  end
+
+
+
+
   # indique s'il y a un mois correspondant au mois demandé.
   #
   # L'argument month est de type string et avec deux chiffres par exemple '04'

@@ -11,7 +11,7 @@ describe 'MonthYear' do
   end
 
   it 'month est rendu sur deux chiffres' do
-    m = MonthYear.new(:year=>2011, :month=>1)
+    m = MonthYear.new(:year=>2011, :month=>1) 
     m.month.should == '01' 
   end
 
@@ -32,5 +32,17 @@ describe 'MonthYear' do
     n = MonthYear.new(year:2012, month:1)
     m.should < n 
 
+  end
+
+  it 'guess_date' do
+    d = Date.today
+    my = MonthYear.new(year:d.year, month:d.month)
+    my.guess_date.should == d
+
+    my = MonthYear.from_date(d.prev_year)
+    my.guess_date.should == my.end_of_month
+
+    my = MonthYear.from_date(d.next_year)
+    my.guess_date.should == my.beginning_of_month
   end
 end

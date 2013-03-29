@@ -163,6 +163,10 @@ class ApplicationController < ActionController::Base
   # local_params doit renvoyer un hash avec les paramètres complémentaires nécessaires
   # essentiellement un id d'un objet, par exemple :cash_id=>@cash}
   #
+  # L'utilisation de period_limited permet de s'assurer que l'on reste bien dans les
+  # limites d'un exercice. C'est plus particulièrement utile lorsque l'on change d'exercice
+  # et que le nouvel exercice est d'une durée différente.
+  #
   # Ceci permet alors d'avoir un routage vers cash_cash_lines_path(@cash) en supposant
   # que l'on soit dans le controller cash_lines et avec l'action index 
   #
@@ -170,7 +174,7 @@ class ApplicationController < ActionController::Base
     if params[:mois] && params[:an]
       @mois = params[:mois]
       @an = params[:an]
-      @monthyear=MonthYear.new(month:@mois, year:@an)
+      @monthyear = @period.guess_month_from_params(month:@mois, year:@an)
     else
       @monthyear= @period.guess_month
       redirect_to url_for(local_params.merge(mois:@monthyear.month, an:@monthyear.year)) if params[:action]=='new'
