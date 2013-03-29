@@ -4,12 +4,6 @@
 module InOutWritingsHelper
   
 
-  def in_out_index_icons
-    icon_to('pdf.png', book_in_out_writings_path(@book, params.merge({:format=>'pdf'})), title:'PDF', :target=>'_blank') +
-    icon_to('report-excel.png', book_in_out_writings_path(@book, params.merge({:format=>'xls'})), title: 'XLS') +
-    icon_to('table-export.png', book_in_out_writings_path(@book, params.merge({:format=>'csv'})), title: 'CSV')
-  end
-
   # permet d'afficher les actions possible dans une ligne d'écriture
   # 
   # Si la ligne est éditable, alors on peut la modifier ou la supprimer
