@@ -8,8 +8,8 @@ class CheckDepositsController < ApplicationController
   def index
     @total_lines_credit=CheckDeposit.total_to_pick
     @nb_to_pick=CheckDeposit.nb_to_pick
-    flash[:notice]="Il y a #{@nb_to_pick} chèques à remettre à l'encaissement \
-pour un montant de #{sprintf('%0.02f', @total_lines_credit)} €" if @nb_to_pick > 0
+    flash[:alert] = "Il reste #{ActionController::Base.helpers.pluralize @nb_to_pick, 'chèque'} à remettre à l'encaissement \
+pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
     @check_deposits = @bank_account.check_deposits.within_period(@period.start_date, @period.close_date)
   end
   

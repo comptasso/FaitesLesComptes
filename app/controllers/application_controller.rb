@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :find_organism, :current_period
   
-  helper_method :two_decimals, :picker_to_date, :current_user, :current_user?, :current_period?
+  helper_method :two_decimals, :virgule, :picker_to_date, :current_user, :current_user?, :current_period?
 
   private
 
@@ -65,6 +65,11 @@ class ApplicationController < ActionController::Base
     sprintf('%0.02f',montant)
   rescue
     '0.00'
+  end
+
+  # Pour transformer un montant selon le format numérique français avec deux décimales
+  def virgule(montant)
+    ActionController::Base.helpers.number_with_precision(montant, precision:2)
   end
 
   # picker_to_date est utilisée pour transformer le retour du widget
