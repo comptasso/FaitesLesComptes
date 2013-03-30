@@ -3,7 +3,7 @@
 class Compta::WritingsController < Compta::ApplicationController
 
   before_filter :find_book
-  before_filter :fix_date, :only=>:new
+  before_filter :prefill_date, :only=>:new
 
   # GET /writings
   # GET /writings.json
@@ -51,10 +51,14 @@ class Compta::WritingsController < Compta::ApplicationController
 
   # POST lock
   # action qui verrouille l'écriture
+  # TODO transformer cette action en remote pour éviter de reconstruire toute la vue
+  # l'utilisation des paramètres permet de revenir au mois affiché (ou à la vue tous)
   def lock
+    @mois = params[:mois]
+    @an = params[:an]
     @writing = Writing.find(params[:id])
     @writing.lock
-    redirect_to compta_book_writings_url(@book)
+    redirect_to compta_book_writings_url(@book, :mois=>@mois, an:@an)
   end
 
   # POST all_lock
@@ -134,9 +138,11 @@ class Compta::WritingsController < Compta::ApplicationController
     end
   end
 
-  def fix_date
-    @d = flash[:date]
-    @d = @period.start_date if @book.type == 'AnBook'
+  # préremplit la date
+  def prefill_date
+    @d = flash[:date] # en priorité la date venant de l'écriture précédente
+    @d = @period.start_date if @book.type == 'AnBook' # mais toujours le début de l'éxercice si livre d'A Nouveau
+    @d ||= @period.guess_date # sinon par défaut, on devine
   end
 
 
