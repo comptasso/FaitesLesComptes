@@ -555,8 +555,8 @@ class Period < ActiveRecord::Base
     if Period.find(:last) && !start_date
       self.start_date= Period.find(:last).close_date + 1
     end
-    self.start_date=self.start_date.beginning_of_month
-    self.close_date=self.close_date.end_of_month
+    self.start_date = self.start_date.beginning_of_month if start_date
+    self.close_date = self.close_date.end_of_month if close_date
   end
 
   private
@@ -619,7 +619,7 @@ class Period < ActiveRecord::Base
   def load_file_natures(source)
     YAML::load_file(source)
   rescue
-    puts "Erreur dans le chargement du fichier #{source}"
+    logger.warn "Erreur dans le chargement du fichier #{source}"
     []
   end
 
