@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
 #  c.filter = {wip:true}
 end
 
@@ -46,7 +46,7 @@ describe 'vue lines' do
     fill_in 'in_out_writing_compta_lines_attributes_0_debit', with: 50.21
     select 'Virement'
     select 'Compte courant'
-    click_button 'Créer'
+    click_button 'Enregistrer'
     Writing.count.should == 1
     ComptaLine.count.should == 2 # avec sa contrepartie
   end 
@@ -59,14 +59,14 @@ describe 'vue lines' do
     select 'Essai', :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
     fill_in 'in_out_writing_compta_lines_attributes_0_debit', with: 50.21
     select 'Chèque'
-    click_button 'Créer'
+    click_button 'Enregistrer'
     ComptaLine.count.should == 0
     page.should have_content('nouvelle ligne') 
     end
 
     it 'cliquer sans remplir doit réafficher la page' do
       visit new_book_in_out_writing_path(@ob)
-      click_button 'Créer'
+      click_button 'Enregistrer'
       page.should have_content('nouvelle ligne')
     end
 
