@@ -3,7 +3,7 @@
 module Compta::SelectionsHelper
 
   def liste(condition)
-    return 'Liste des écritures non verrouillées' if condition == 'unlocked'
+    'Liste des écritures non verrouillées' if @select_method == :unlocked
   end
   
 end

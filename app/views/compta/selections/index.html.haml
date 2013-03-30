@@ -4,6 +4,7 @@
 
 
 .champ
-  %h3= liste(@scope_condition)
+  %h3
+    = liste(@select_method)
 
 = render :partial=>'writing', :collection=>@writings

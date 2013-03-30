@@ -8,12 +8,16 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings
   # GET /writings.json
   def index
-
+    # pas de sélection par mois pour la AnBook
+    if @book.type == 'AnBook'
+       params[:mois] = 'tous'
+       params[:an] = nil
+    end
     if params[:mois]
       find_writings
     else
-      my = MonthYear.from_date(@period.guess_month)
-      redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year) and return
+       my = MonthYear.from_date(@period.guess_month)
+       redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year) and return
     end
     
     

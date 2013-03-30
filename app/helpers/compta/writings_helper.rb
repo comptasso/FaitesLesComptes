@@ -32,7 +32,7 @@ module Compta::WritingsHelper
   #
   def compta_line_actions(book, writing)
     html =''
-    if book.type == 'OdBook' && writing.od_editable?
+    if writing.od_editable? || writing.an_editable?
       html += icon_to 'modifier.png', edit_compta_book_writing_path(book, writing)
       html += icon_to('supprimer.png', compta_book_writing_path(book, writing), :method=>:delete, :confirm=>'Etes vous sur ?')
       html += icon_to('verrouiller.png', lock_compta_book_writing_path(book, writing), :method=>:post)

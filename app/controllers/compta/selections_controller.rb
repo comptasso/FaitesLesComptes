@@ -1,8 +1,8 @@
 class Compta::SelectionsController < Compta::ApplicationController
 
  def index
-    method = params[:scope_condition] == 'unlocked' ? :unlocked : nil
-    if method
+    @select_method = params[:scope_condition] == 'unlocked' ? :unlocked : nil
+    if @select_method
       @writings = Writing.period(@period).send(:unlocked)
     else
       redirect_to :back
