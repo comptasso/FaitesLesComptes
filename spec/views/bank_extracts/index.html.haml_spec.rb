@@ -6,7 +6,7 @@ require 'support/has_icon_matcher'
 describe "bank_extracts/index" do
   include JcCapybara
 
-  before(:each) do
+  before(:each) do 
     
     @be1 = stub_model(BankExtract,
       :reference => "Folio 1",
@@ -31,29 +31,41 @@ describe "bank_extracts/index" do
     )
 
     @be1.stub(:first_to_point?).and_return false
-
-
-    @be2.stub(:first_to_point?).and_return true 
+    @be2.stub(:first_to_point?).and_return true
     
+    @be2.stub_chain(:bank_extract_lines, :empty?).and_return false
+
     assign(:bank_account, @ba = mock_model(BankAccount))
     assign(:bank_extracts, [@be1, @be2])
         
+    view.stub(:virgule).and_return '25,00'
     
-    render
   end
 
   it "renders a list of bank_extracts" do
-
+    @be1.stub_chain(:bank_extract_lines, :empty?).and_return true
+    render
     page.all('table').should have(1).elements
     page.find('table tbody').all('tr').should have(2).rows
   end
 
 
-  it 'testing has_icon?' do 
+  it 'testing has_icon?' do
+    @be1.stub_chain(:bank_extract_lines, :empty?).and_return false
+    render
    page.find('table tbody tr:first td:last').should have_icon('afficher', href:bank_extract_bank_extract_lines_path(@be1))
   end
 
+  it 'un bank_extract sans ligne n affiche pas l icone afficher' do
+    @be1.stub_chain(:bank_extract_lines, :empty?).and_return true
+    render
+    @be1.bank_extract_lines.should be_empty
+    page.find('table tbody tr:first td:last').should_not have_icon('afficher', href:bank_extract_bank_extract_lines_path(@be1))
+  end
+
   it 'unpointed bank_extract has all icons' do
+    @be1.stub_chain(:bank_extract_lines, :empty?).and_return false
+    render
     @be2.should be_first_to_point
     actions = page.find('table tbody tr:last td:last')
     actions.should have_icon('afficher', href:bank_extract_bank_extract_lines_path(@be2))
@@ -63,6 +75,8 @@ describe "bank_extracts/index" do
   end
 
   it 'locked bank_extract has only show icon' do
+    @be1.stub_chain(:bank_extract_lines, :empty?).and_return false
+    render
     @be1.should be_locked
     actions = page.find('table tbody tr:first td:last')
     actions.should have_icon('afficher', href:bank_extract_bank_extract_lines_path(@be1))
