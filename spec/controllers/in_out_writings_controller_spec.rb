@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c| 
- #  c.filter = {:wip=>true}
+  # c.filter = {:wip=>true}
 end
 
 describe InOutWritingsController do
@@ -53,9 +53,14 @@ describe InOutWritingsController do
 
   describe 'GET edit'  do
     before(:each) do
+      Book.stub(:find).and_return(@b)
       @w = mock_model(InOutWriting)
-      request.env["HTTP_REFERER"]='http://period/1/in_out_writings'
+      request.env["HTTP_REFERER"] = 'http://period/1/in_out_writings'
    end
+
+   
+
+   
 
     it 'should look_for the line' do
       @b.should_receive(:in_out_writings).and_return a = double(Arel)
@@ -70,7 +75,7 @@ describe InOutWritingsController do
       @b.stub_chain(:in_out_writings, :find).and_return(@w)
       @w.stub(:in_out_line).and_return mock_model(ComptaLine)
       @w.stub(:counter_line).and_return mock_model(ComptaLine)
-      get :edit, {:income_book_id=>@b.id, :id=>@w.id}, session_attributes,
+      get :edit, {:income_book_id=>@b.id, :id=>@w.id}, session_attributes
       assigns[:book].should == @b
       assigns[:in_out_writing].should == @w
     end

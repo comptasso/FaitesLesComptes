@@ -129,7 +129,7 @@ class InOutWritingsController < ApplicationController
 
   # Initie la variable d'instance book
   def find_book
-    @book=Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
+    @book = Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
   end
 
   # voir fill_mois dans ApplicationController
