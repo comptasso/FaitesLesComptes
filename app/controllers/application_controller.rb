@@ -61,6 +61,8 @@ class ApplicationController < ActionController::Base
 
   # HELPER_METHODS
  
+  # pour afficher une virgule à la place du point décimal.
+  # TODO remplacer tous les recours à two_decimals par virgule chaque fois que possible.
   def two_decimals(montant)
     sprintf('%0.02f',montant)
   rescue
@@ -69,8 +71,10 @@ class ApplicationController < ActionController::Base
 
   # Pour transformer un montant selon le format numérique français avec deux décimales
   def virgule(montant)
-    ActionController::Base.helpers.number_with_precision(montant, precision:2)
+    ActionController::Base.helpers.number_with_precision(montant, precision:2) rescue '0,00'
   end
+
+  
 
   # picker_to_date est utilisée pour transformer le retour du widget
   # date picker qui est sous la forme "dd/mm/aaaa".Alors que Date.civil
