@@ -8,7 +8,7 @@ RSpec.configure do |c|
    # c.exclusion_filter = {:js=> true }
 end
 
-describe 'restoration de fichier' do 
+describe 'restoration de fichier' do  
   include OrganismFixture
 
   before(:each) do

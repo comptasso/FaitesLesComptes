@@ -46,7 +46,7 @@ describe Stats::Listing do
    end
 
    it 'le total général de la denière page' do
-     @listing.pages.last.to_report_line.should == ['Total général', '200,00' ,'400,00', '600,00', '1200,00']
+     @listing.pages.last.to_report_line.should == ['Total général', '200,00' ,'400,00', '600,00', '1 200,00']
    end
 
 end

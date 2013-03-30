@@ -45,4 +45,5 @@ LIST_STATUS = %w(Association Entreprise)
 # version 0.6 : suppression du champ bank_extract_id des compta_lines ainsi que du champ type pour les bank_extract_lines.
 # version 0.6.5 : corrections de bugs, page avertissant sur la version de IE
 # version 0.6.6 : rebalayage ds fonctionnalités, nombreux petits bugs, gestion de la suppression des exercices
-VERSION = '0.6.6'
+# version 0.6.7 : encore un grand coup de balayage des fonctionnalités et multiples corrections diverses.
+VERSION = '0.6.7'
