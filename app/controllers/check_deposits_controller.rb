@@ -24,7 +24,7 @@ pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
   # GET /check_deposits/new.json
   def new
     if CheckDeposit.nb_to_pick < 1
-      redirect_to  :back, alert: "Il n'y a pas de chèques à remettre"
+      redirect_to  :back, alert: "Il n'y a pas de chèque à remettre"
       return
     end
     @check_deposit = @bank_account.check_deposits.new(deposit_date: Date.today)
