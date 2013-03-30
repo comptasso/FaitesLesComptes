@@ -69,7 +69,7 @@ class Period < ActiveRecord::Base
   # Valide que le close_date est bien postérieur au start_date
   class ChronoValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)
-      record.errors[attribute] << "la date de cloture doit être postérieure à l'ouverture" if (value && value < record.start_date)
+      record.errors[attribute] << "la date de cloture doit être postérieure à l'ouverture" if (value && (value < record.start_date))
     end
   end
 
@@ -91,7 +91,8 @@ class Period < ActiveRecord::Base
   validates :start_date, :presence=>true, :contiguous => true, :cant_edit=>true
   validate :should_not_exceed_24_months
   
-  before_save :fix_days
+  
+  before_validation :fix_days
   before_create :should_not_have_more_than_two_open_periods
     
   after_create :create_plan, :create_bank_and_cash_accounts, :load_natures ,:unless=> :previous_period?
@@ -551,6 +552,9 @@ class Period < ActiveRecord::Base
   # permet de s'assurer que les dates d'ouverture et de clôture
   # sont respectivement des dates de début et de fin de mois.
   def fix_days
+    if Period.find(:last) && !start_date
+      self.start_date= Period.find(:last).close_date + 1
+    end
     self.start_date=self.start_date.beginning_of_month
     self.close_date=self.close_date.end_of_month
   end
