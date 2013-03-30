@@ -6,7 +6,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe "menus/_menu.html.erb" do  
+describe "menus/_menu.html.erb" do   
   include JcCapybara 
 
   let(:o) {mock_model(Organism, main_bank_id:1) }
@@ -44,7 +44,7 @@ describe "menus/_menu.html.erb" do
       assign(:organism, o)
       assign(:user, cu)
       o.stub(:periods).and_return([p2011,p2012])
-      o.stub(:bank_accounts).and_return([mock_model(BankAccount, bank_extracts:[], :check_deposits=>[], 'unpointed_bank_extract?'=>false)])
+      o.stub(:bank_accounts).and_return([@ba = mock_model(BankAccount, bank_extracts:[], :check_deposits=>[], 'unpointed_bank_extract?'=>false)])
       o.stub(:cashes).and_return([mock_model(Cash, cash_controls:[])])
       o.stub(:in_out_books).and_return [ibook,obook]
       o.stub('can_write_line?').and_return true
@@ -59,7 +59,9 @@ describe "menus/_menu.html.erb" do
       o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))
       assign(:paves, [ibook, obook, p2012])
      
-      
+      @ba.stub_chain(:bank_extracts, :period, :unlocked).and_return []
+
+
       view.stub(:current_period?).and_return(p)
       view.stub(:current_user?).and_return true
       view.stub(:current_user).and_return cu
