@@ -41,7 +41,7 @@ prawn_document(:filename=>"#{@organism.title}-Statistiques-#{l Time.now}.pdf", :
     prawn_page.insert(-1, page.to_report_line)
 
         # les lignes de la page
-    pdf.font_size(10)
+    pdf.font_size(8)
     nbc = page.nb_cols - 1
     pdf.table prawn_page, :row_colors => ["FFFFFF", "DDDDDD"],  :header=> true , :cell_style=>{:padding=> [1,5,1,5] }   do
         column(0).width = width - nbc*50

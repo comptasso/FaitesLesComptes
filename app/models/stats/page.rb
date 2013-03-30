@@ -87,7 +87,7 @@ module Stats
 
      def reformat(val)
    return val if val.is_a? String
-   sprintf('%0.02f',val).gsub('.', ',') if val
+   ActionController::Base.helpers.number_with_precision(val, :precision=>2) if val
   end
 
   end
