@@ -61,7 +61,7 @@ before(:each) do
         CheckDeposit.stub!(:total_to_pick).and_return 401
         CheckDeposit.stub!(:nb_to_pick).and_return 2
         get :index,{ :bank_account_id=>ba.id, :organism_id=>@o.id.to_s}, valid_session
-        flash[:notice].should == "Il y a 2 chèques à remettre à l'encaissement pour un montant de 401.00 €"
+        flash[:alert].should == "Il reste 2 chèques à remettre à l'encaissement pour un montant de 401,00 €"
 
       end
      
@@ -138,7 +138,7 @@ before(:each) do
       end
 
       it 'redirige vers bask et établit le flash d alerte' do
-        controller.should_receive(:redirect_to).with(:back, alert:"Il n'y a pas de chèques à remettre")
+        controller.should_receive(:redirect_to).with(:back, alert:"Il n'y a pas de chèque à remettre")
         get :new, {:bank_account_id=>ba.id,  :organism_id=>@o.id.to_s}, valid_session
       end
 

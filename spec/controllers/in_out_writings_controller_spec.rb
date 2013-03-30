@@ -54,6 +54,7 @@ describe InOutWritingsController do
   describe 'GET edit'  do
     before(:each) do
       @w = mock_model(InOutWriting)
+      request.env["HTTP_REFERER"]='http://period/1/in_out_writings'
    end
 
     it 'should look_for the line' do
@@ -69,7 +70,7 @@ describe InOutWritingsController do
       @b.stub_chain(:in_out_writings, :find).and_return(@w)
       @w.stub(:in_out_line).and_return mock_model(ComptaLine)
       @w.stub(:counter_line).and_return mock_model(ComptaLine)
-      get :edit, {:income_book_id=>@b.id, :id=>@w.id}, session_attributes
+      get :edit, {:income_book_id=>@b.id, :id=>@w.id}, session_attributes,
       assigns[:book].should == @b
       assigns[:in_out_writing].should == @w
     end
