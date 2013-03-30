@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 
-describe 'compta/balances/show' do
+describe 'compta/balances/show' do 
   include JcCapybara
 
   def one_balance_line(i)
@@ -34,6 +34,9 @@ describe 'compta/balances/show' do
     @accounts.stub(:order).and_return(@accounts)
     assign(:period, p)
     b.stub(:balance_lines).and_return((1..12).map {|i| one_balance_line(i)})
+
+    view.stub(:export_icons).and_return '' # export_icons est testé ailleurs
+    # TODO faire le spec de export_icons
     
   end
  
