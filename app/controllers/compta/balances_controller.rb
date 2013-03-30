@@ -37,7 +37,7 @@ class Compta::BalancesController < Compta::ApplicationController
         format.pdf  {send_data @balance.to_pdf.render('lib/pdf_document/balance.pdf.prawn') ,
           filename:"Balance #{@organism.title}.pdf"} #,  disposition:'inline'}
         format.csv { send_data @balance.to_csv }  # pour éviter le problème des virgules
-        format.xlsx { send_data @balance.to_xlsx }
+        format.xls { send_data @balance.to_xls }
       end
     else
       redirect_to new_compta_period_balance_url(@period)

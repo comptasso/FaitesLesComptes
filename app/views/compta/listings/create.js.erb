@@ -22,7 +22,7 @@ $('#movements').html("<%= j render 'movements' %>")
 // on rend le listing
 $('#listing_table').html(" <%= j render 'listing_table' %>");
 
-// il faut également mettre à jour le lien pour les icones pdf, csv et xlsx
+// il faut également mettre à jour le lien pour les icones pdf, csv et xls
 $('#icon_pdf').attr('href', '<%= j compta_period_listing_path(@period,
   :compta_listing=>{:account_id=>@listing.account_id,
   :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker },
@@ -31,10 +31,10 @@ $('#icon_csv').attr('href', '<%= j compta_period_listing_path(@period,
   :compta_listing=>{:account_id=>@listing.account_id,
   :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker },
   :format=>'csv') %>');
-$('#icon_xlsx').attr('href', '<%= j compta_period_listing_path(@period,
+$('#icon_xls').attr('href', '<%= j compta_period_listing_path(@period,
   :compta_listing=>{:account_id=>@listing.account_id,
   :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker },
-  :format=>'xlsx') %>');
+  :format=>'xls') %>');
 
 // et on réinitialiser la data_table
 drawDataTable();

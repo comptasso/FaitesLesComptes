@@ -95,7 +95,7 @@ module ApplicationHelper
   def export_icons(opt)
     html = icon_to('pdf.png', url_for(opt.merge(:format=>'pdf')), :id=>'icon_pdf')
     html += icon_to('table-export.png', url_for(opt.merge(:format=>'csv')), :id=>'icon_csv', title:'csv', target:'_blank')
-    html += icon_to('report-excel.png', url_for(opt.merge(:format=>'xlsx')), :id=>'icon_xlsx', title:'xlsx', target:'_blank')
+    html += icon_to('report-excel.png', url_for(opt.merge(:format=>'xls')), :id=>'icon_xls', title:'xls', target:'_blank')
     html.html_safe
   end
 

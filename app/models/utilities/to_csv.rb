@@ -8,8 +8,6 @@ module Utilities
       to_csv(options).encode("windows-1252")
     end
 
-    alias to_xlsx to_xls
-
     private
 
     def to_csv(options = {col_sep:"\t"})
