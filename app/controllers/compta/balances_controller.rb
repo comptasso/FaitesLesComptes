@@ -12,22 +12,24 @@ require 'pdf_document/pdf_balance.rb'
 # affiche show
 #
 class Compta::BalancesController < Compta::ApplicationController
-   include ActiveModel::MassAssignmentSecurity
+  include ActiveModel::MassAssignmentSecurity
 
-   attr_accessible :from_date, :to_date, :from_account_id, :to_account_id
+  attr_accessible :from_date, :to_date, :from_account_id, :to_account_id
  
   def new
-     @balance = Compta::Balance.new(period_id:@period.id).with_default_values
+    @balance = Compta::Balance.new(period_id:@period.id).with_default_values
   end
 
   # utile pour afficher la balance en pdf
   def show
-   # ce unless est nécessaire pour les cas où l'on change d'exercice
+
+    # ce unless est nécessaire pour les cas où l'on change d'exercice
     unless params[:compta_balance]
-     redirect_to new_compta_period_balance_url(@period) and return
-   end
-   @balance = Compta::Balance.new( {period_id:@period.id}.merge(params[:compta_balance])) 
-   if @balance.valid?
+      redirect_to new_compta_period_balance_url(@period) and return
+    end
+    @params_balance = params[:compta_balance]
+    @balance = Compta::Balance.new({period_id:@period.id}.merge @params_balance)
+    if @balance.valid?
       respond_to do |format|
         format.html { render action: 'show'}
         format.js
@@ -37,19 +39,14 @@ class Compta::BalancesController < Compta::ApplicationController
         format.xlsx { send_data @balance.to_xlsx }
       end
     else
-      respond_to do |format|
-        format.html { render 'new'}
-        format.js { render 'new'}
-        format.pdf { redirect_to new_compta_period_balance_url(@period) }
-        format.csv { redirect_to new_compta_period_balance_url(@period) }
-        format.xls { redirect_to new_compta_period_balance_url(@period) }
-      end
+      redirect_to new_compta_period_balance_url(@period)
+    
     end
   end
 
   def create
-
-    @balance = Compta::Balance.new( {period_id:@period.id}.merge(params[:compta_balance]) )
+    @params_balance = params[:compta_balance]
+    @balance = Compta::Balance.new({period_id:@period.id}.merge @params_balance)
     if @balance.valid?
       respond_to do |format|
         format.html { render action: 'show'}
@@ -61,7 +58,7 @@ class Compta::BalancesController < Compta::ApplicationController
         format.js {render 'new'}
       end
       
-  end
+    end
   end
 
   

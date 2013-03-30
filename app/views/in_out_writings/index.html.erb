@@ -1,6 +1,6 @@
 <%= content_for :menu do %>
   <%= icon_to('nouveau.png', new_book_in_out_writing_path(@book, mois:@mois, an:@an), id: 'new_line_link') %>
-<%= export_icons params %>
+<%= export_icons(book_id:@book.id, mois:@mois, an:@an) %>
 
  <%= icon_to 'retour.png', :back %>
 <% end -%>
