@@ -62,7 +62,11 @@ class InOutWritingsController < ApplicationController
     end
   end
 
+  # flash[:origin] et la méthode comes_from permet de déterminer la route à reprendre 
+  # lorsqu'on sera dans update. Soit on vient de index et y retourne. Soit on vient 
+  # de new mais on a fait une modif lors de la saisie et on retourne alors dans new
   def edit
+    flash[:origin] = comes_from
     @in_out_writing = @book.in_out_writings.find(params[:id])
     @line = @in_out_writing.in_out_line
     @counter_line = @in_out_writing.counter_line
@@ -73,6 +77,7 @@ class InOutWritingsController < ApplicationController
   # PUT /lines/1
   # PUT /lines/1.json
   def update
+    actio = flash[:origin] || 'index'
     @in_out_writing = @book.in_out_writings.find(params[:id])
     @line = @in_out_writing.in_out_line
     @counter_line = @in_out_writing.counter_line
@@ -80,7 +85,7 @@ class InOutWritingsController < ApplicationController
     respond_to do |format|
       if @in_out_writing.update_attributes(params[:in_out_writing])
         mois = sprintf('%.02d',@in_out_writing.date.month); an =  @in_out_writing.date.year
-        format.html { redirect_to book_in_out_writings_url(@book, mois:mois, an:an) }#], notice: 'Line was successfully updated.')}
+        format.html { redirect_to url_for(book_id:@book.id, action:actio, mois:mois, an:an) }#], notice: 'Line was successfully updated.')}
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -103,6 +108,13 @@ class InOutWritingsController < ApplicationController
   end
 
   protected
+
+  # permet de savoir si on vient d'une action new
+  # utilisé par edit pour remplir un flash qui sera à son tour utilisé par update.
+  def comes_from
+    request.env['HTTP_REFERER'][/(\w*)\?/]
+    @origin = ($1 == 'new') ? 'new' : 'index'
+  end
 
 
   # complète les informations pour la counter_line en remplissant les

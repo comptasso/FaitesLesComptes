@@ -1,0 +1,14 @@
+= content_for :menu do
+  = icon_to 'retour.png', book_lines_path(@book)
+
+.champ
+  %h3
+    =  @book.title.capitalize 
+    &nbsp;: modification de ligne
+    =request.env['HTTP_REFERER']
+
+.inner-champ
+  .inputs.row-fluid{:class=>@book.type.underscore, :id=>"entry_lines"}
+    = simple_form_for([@book, @in_out_writing], :html=>{class:'form-inline'})  do |f|
+      = render 'form', {:f=>f}
+

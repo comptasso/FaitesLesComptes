@@ -24,6 +24,7 @@ class Compta::BalancesController < Compta::ApplicationController
   def show
 
     # ce unless est nécessaire pour les cas où l'on change d'exercice
+    # TODO voir si change_period peut traiter le sujet
     unless params[:compta_balance]
       redirect_to new_compta_period_balance_url(@period) and return
     end
