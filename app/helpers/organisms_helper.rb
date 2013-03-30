@@ -17,10 +17,11 @@ module OrganismsHelper
     end
 
     org.bank_accounts.each  do |ba|
-      if ba.bank_extracts.any? && !ba.bank_extracts.last.locked
+      be_to_point = ba.bank_extracts.period(@period).unlocked
+      if be_to_point.any?
         info={}
         info[:text] = "<b>#{sanitize ba.nickname}</b> : Le pointage du dernier relevé n'est pas encore effectué".html_safe
-        info[:icon] = icon_to 'pointer.png', pointage_bank_extract_bank_extract_lines_path(ba.first_bank_extract_to_point)
+        info[:icon] = icon_to 'pointer.png', pointage_bank_extract_bank_extract_lines_path(be_to_point.first)
         m << info
       end
     end
@@ -72,6 +73,17 @@ module OrganismsHelper
     else
       ''
     end
+  end
+
+  # Gère mieux que pluralize le fait que num soit == à zero
+  def vous_avez_des_messages(num)
+    html = if (num == 0)
+       "Aucun message "
+    else
+      "Vous avez #{pluralize(num, 'message')} "
+    end
+    html += image_tag 'icones/mail-open.png', id: 'mail_img' unless num == 0
+    html.html_safe
   end
 
 

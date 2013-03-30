@@ -1,3 +1,5 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+# Affiche le spinner quand on clique sur le bouton du formulaire
+$ ->
+  $('#new_general_book_button').click ->
+    target = document.getElementById('new_compta_general_book');
+    new Spinner(jc_spinner_opts).spin(target);

@@ -1,7 +1,7 @@
 # Construit un nouveau Journal Général et l'affiche
 
 class Compta::GeneralLedgersController < Compta::ApplicationController
-
+  
   def new
     @general_ledger =  Compta::PdfGeneralLedger.new(@period)
     respond_to do |format|

@@ -5,8 +5,7 @@
 <div class="row-fluid">
 <div class="span12 row-pave pave message">
   <h3>
-    Vous avez <%= pluralize infos(@organism).size, 'message' %>
-    <%= image_tag 'icones/mail-open.png', id: 'mail_img' %>
+    <%= vous_avez_des_messages infos(@organism).size %>
   </h3>
   <div id="mail_ul">
   <ul>

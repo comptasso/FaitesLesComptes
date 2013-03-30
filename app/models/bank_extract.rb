@@ -31,6 +31,7 @@ class BankExtract < ActiveRecord::Base
   
   scope :period, lambda {|p| where('begin_date >= ? AND end_date <= ?' ,
       p.start_date, p.close_date).order(:begin_date) }
+  scope :unlocked, where('locked IS ?', false)
 
   
 

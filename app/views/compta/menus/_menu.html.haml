@@ -19,8 +19,8 @@
         %li= link_to('Plan comptable', compta_period_accounts_path(@period))
         %li= link_to('Balance', new_compta_period_balance_path(@period))
         %li= link_to('Compte', new_compta_period_listing_path(@period))
-        %li= link_to("#{image_tag('icones/pdf.png')} Grand Livre".html_safe, new_compta_period_general_book_path(@period))
-        %li= link_to("#{image_tag('icones/pdf.png')} Journal Général".html_safe, new_compta_period_general_ledger_path(@period, :format=>'pdf'))
+        %li= link_to("Grand Livre", new_compta_period_general_book_path(@period))
+        %li= link_to("#{image_tag('icones/pdf.png')} Journal Général".html_safe, new_compta_period_general_ledger_path(@period, :format=>'pdf'), :id=>'nav_general_ledger')
         
 
   - unless @period.nil? && @pariod.accounts.nil?

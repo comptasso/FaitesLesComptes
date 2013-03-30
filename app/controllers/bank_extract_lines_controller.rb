@@ -143,6 +143,7 @@ class BankExtractLinesController < ApplicationController
   def find_params
     
     @bank_extract=BankExtract.find(params[:bank_extract_id])
+    # ici il faut changer d'exercice si les dates du bank_extract ne sont pas dans l'exercice
     @bank_account = @bank_extract.bank_account
     @organism = @bank_account.organism
   end
