@@ -20,7 +20,7 @@
         result =  has_selector?(:xpath, locator, options)
           #puts self.inspect if result == false
         if options[:href] && result
-          result = has_selector?(:xpath, ".//a[@href='#{options[:href]}']") unless options[:href] == nil
+          result = has_selector?(:xpath, ".//a[@href='#{options[:href]}']") 
           #puts self.inspect if result == false
         end
         result
