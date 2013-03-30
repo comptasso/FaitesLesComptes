@@ -40,13 +40,13 @@ describe 'Recette par chèque' do
  it 'on crée une recette par chèque' do
    puts "Nombre de lignes : #{Writing.count}"
    # création du compte remise chèque
-   click_button 'Créer'
+   click_button 'Enregistrer'
    Writing.count.should == 1
    ComptaLine.count.should == 2 # avec sa contrepartie
  end
 
   it 'la deuxième ligne doit avoir le compte 511' do
-   click_button 'Créer'
+   click_button 'Enregistrer'
    ComptaLine.last.account_id.should == @p.rem_check_account.id
   end
 

@@ -83,11 +83,12 @@ describe "BankExtracts" do
       before(:each) do
         @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
           reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)
+        @be.stub_chain(:bank_extract_lines, :empty?).and_return false
         visit bank_account_bank_extracts_path(@ba)
         
       end
 
-      it 'affiche une table avec un extrait' do
+      it 'affiche une table avec un extrait' do 
         page.find('.champ h3').should have_content "Liste des extraits de compte"
         page.should have_css('table')
         page.all('table tbody tr').should have(1).row
