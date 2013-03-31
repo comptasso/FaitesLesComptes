@@ -17,9 +17,27 @@ describe InOutWritingsController do
 
   end
 
-  describe 'before_filters' do 
+  describe 'before_filters' , wip:true do
+    # ici on fait les spec du filter change_if_has_changed_period
 
-    it 'A faire '
+    before(:each) do
+      @p.stub(:list_months).and_return([])
+    end
+
+    it 'doit redirigé vers la bonne vue ' do
+      @o.stub(:guess_period).and_return(@p2 = mock_model(Period, :guess_month=>MonthYear.new(year:'2011', month:'04')))
+      get :index , {:book_id=>@b.id, mois:'04', an:'2011'}, session_attributes
+      flash[:alert].should == "Attention, vous avez changé d'exercice !"
+      response.should redirect_to book_in_out_writings_url(@b, mois:'04', an:'2011')
+    end
+
+    it 'cas ou le monthyear demandé n existe pas' do
+      request.env['HTTP_REFERER'] = 'localhost:3000/test'
+      @o.stub(:guess_period).and_return nil
+      get :index , {:book_id=>@b.id, mois:'04', an:'2011'}, session_attributes
+      flash[:alert] = "Le mois et l'année demandés ne correspondent à aucun exercice"
+      response.should redirect_to :back
+    end
   end
   
   describe 'GET index' do
@@ -40,14 +58,17 @@ describe InOutWritingsController do
       response.should render_template(:index)
     end
 
+    it 'shoul render index view with params tous' do
+      get :index,{:outcome_book_id=>@b.id, mois:'tous'}, session_attributes
+      response.should render_template(:index)
+    end
+
     it 'traiter le cas ou mois n est pas rempli' do
       my = MonthYear.from_date(Date.today)
       @p.stub(:guess_month).and_return my
       get :index,{ :outcome_book_id=>@b.id}, session_attributes
-      response.should redirect_to(book_in_out_writings_path(@b, :mois=>my.month, :an=>my.year))
+      response.should redirect_to(outcome_book_in_out_writings_path(@b, :mois=>my.month, :an=>my.year))
     end
-
-    it 'traiter le cas ou on change de period suite à un clic sur une ligne du graphe'
   
   end
 
@@ -148,9 +169,16 @@ describe InOutWritingsController do
       @w.should_receive(:destroy).and_return true
       get :destroy,{:outcome_book_id=>@b.id, :id=>@w.id,  :method=>:delete}, session_attributes
       response.should redirect_to(book_in_out_writings_path(:book_id=>@b.id, :mois=>@my.month, :an=>@my.year) )
+      flash[:notice].should == 'L\'écriture a été détruite'
     end
 
-    it 'cas où la suppression échoue'
+    it 'cas où la suppression échoue' do
+      @w.should_receive(:destroy).and_return false
+      get :destroy,{:outcome_book_id=>@b.id, :id=>@w.id,  :method=>:delete}, session_attributes
+      response.should redirect_to(book_in_out_writings_path(:book_id=>@b.id, :mois=>@my.month, :an=>@my.year) )
+      flash[:notice].should == nil
+      flash[:alert].should == 'Une anomalie est survenue, l\'écriture n\'a pu être détruite'
+    end
   end
  
   describe 'POST create'  do

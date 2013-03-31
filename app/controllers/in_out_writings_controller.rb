@@ -99,7 +99,11 @@ class InOutWritingsController < ApplicationController
   def destroy
     @w = @book.in_out_writings.find(params[:id])
     my = MonthYear.from_date(@w.date)
-    @w.destroy
+    if @w.destroy
+      flash[:notice] = 'L\'écriture a été détruite'
+    else
+      flash[:alert] = 'Une anomalie est survenue, l\'écriture n\'a pu être détruite'
+    end
 
     respond_to do |format|
       format.html { redirect_to book_in_out_writings_url(@book, :mois=>my.month, :an=>my.year) }
@@ -148,12 +152,29 @@ class InOutWritingsController < ApplicationController
     end
   end
 
+  # on surcharge fill_mois car on gère ici spécifiquement le changement
+  # potentiel de période avec le before_filter check_if_has_changed_period
+  def fill_mois
+    if params[:mois] != 'tous'
+      if params[:mois] && params[:an]
+       @monthyear = MonthYear.new(:month=>params[:mois], :year=>params[:an])
+      else
+       @monthyear = @period.guess_month
+       redirect_to url_for(mois:@monthyear.month, an:@monthyear.year)
+      end
+    end
+  end
+
 
   # check_if_has_changed_period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice
   # à partir du graphe d'accueil et donc via l'action index.
+  #
+  # @monthyear est défini dès lors que le params[:mois] est différent de 'tous'
+  # Mais si le paramètre est 'tous', alors il ne peut y avoir de changement d'exercice.
+  #
   def check_if_has_changed_period
     # si le month_year demandé ne fait pas partie de l'exercice,
-    if !@period.list_months.include?(@monthyear)
+    if @monthyear && !@period.list_months.include?(@monthyear)
       # voit si on peut trouver l'exercice ad hoc
       @new_period = @organism.guess_period(@monthyear.beginning_of_month)
       if @new_period
