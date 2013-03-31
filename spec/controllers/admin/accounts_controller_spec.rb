@@ -207,6 +207,13 @@ describe Admin::AccountsController do
       delete :destroy, {:period_id=>@p.to_param,  :id => a1.id.to_s}, valid_session
       response.should redirect_to(admin_period_accounts_url(@p))
     end
+
+    it 'en cas d echec crée un flash' do
+      Account.should_receive(:find).with(a1.id.to_s).and_return(a1)
+      a1.stub(:destroy).and_return false
+      delete :destroy, {:period_id=>@p.to_param,  :id => a1.id.to_s}, valid_session
+      flash[:error].should  match 'Une erreur s\'est produite'
+    end
   end
 
 end
