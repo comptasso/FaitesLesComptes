@@ -80,7 +80,7 @@ module Utilities::Sold
   # précédent
   def monthly_value(selector)
     Rails.logger.debug "monthly_value appelée avec #{selector} comme argument sur #{title}"
-    selector = string_to_date(selector) if selector.is_a?(String)
+    # selector = string_to_date(selector) if selector.is_a?(String)
     r = sold_at(selector.end_of_month)
     # on ne déduit le solde antérieur que si on n'est pas au début de l'exercice
     r -= sold_before(selector.beginning_of_month) unless Period.beginning_of_period?(selector.beginning_of_month)
@@ -94,11 +94,11 @@ module Utilities::Sold
 
   # monthly_value peut recevoir un string du type '2013-01' et a donc besoin de cette
   # méthode pour le transformer en date.
-  def string_to_date(selector)
-    Date.parse(selector + '-1')
-  rescue
-    raise ArgumentError, "#{selector} n' pas pu être converti en date"
-  end
+#  def string_to_date(selector)
+#    Date.parse(selector + '-1')
+#  rescue
+#    raise ArgumentError, "#{selector} n' pas pu être converti en date"
+#  end
 
  
 

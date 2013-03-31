@@ -20,7 +20,8 @@ describe CheckDepositsController do
   
 before(:each) do
    minimal_instances
-  @o.stub_chain(:bank_accounts, :find).with(ba.id.to_s).and_return ba
+   BankAccount.stub(:find).with(ba.to_param).and_return ba
+   BankAccount.stub(:find).with(ba2.to_param).and_return ba2
   end
 
   describe "GET index" do
@@ -156,7 +157,7 @@ before(:each) do
 
      it 'le params de bank_account_id est fixé et utilisé pour check_deposit' do
         CheckDeposit.stub(:new).and_return @cd = mock_model(CheckDeposit).as_new_record
-        @o.stub_chain(:bank_accounts, :find).and_return ba2
+        
         ba2.should_receive(:check_deposits).and_return(@a = double(Arel))
         @a.should_receive(:new).and_return(@cd = mock_model( CheckDeposit, :bank_account_id=>ba2.id).as_new_record)
         @cd.should_receive(:pick_all_checks)

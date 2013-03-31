@@ -2,7 +2,7 @@
 
 class CheckDepositsController < ApplicationController
 
-  before_filter :find_bank_account 
+  before_filter :find_bank_account  
   
   # GET /check_deposits
   def index
@@ -80,8 +80,5 @@ pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
   def find_bank_account
       @bank_account = BankAccount.find(params[:bank_account_id])
   end
-
-  
-
   
 end
