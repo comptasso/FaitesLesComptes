@@ -42,8 +42,7 @@ class Nature < ActiveRecord::Base
   # fait appel selon le cas à deux méthodes protected stat ou stat_filtered.
   def stat_with_cumul(destination_id = 0)
     s = (destination_id == 0) ? self.stat : self.stat_filtered(destination_id) 
-    s << s.sum.round(2)
-
+    s << s.sum.round(2) # rajoute le total en dernière colonne
   end
 
   
@@ -58,7 +57,7 @@ class Nature < ActiveRecord::Base
   # pour toutes les destinations confondues
   def stat
     period.list_months.map do |m|
-      compta_lines.mois_with_writings(m.beginning_of_month).sum('credit-debit').to_f.round(2)
+      compta_lines.mois_with_writings(m).sum('credit-debit').to_f.round(2)
     end
   end
 
@@ -66,7 +65,7 @@ class Nature < ActiveRecord::Base
   # pour une destination donnée
   def stat_filtered(destination_id)
     period.list_months.map do |m|
-      compta_lines.mois_with_writings(m.beginning_of_month).where('destination_id=?', destination_id).sum('credit-debit').to_f.round(2)
+      compta_lines.mois_with_writings(m).where('destination_id=?', destination_id).sum('credit-debit').to_f.round(2)
     end
   end
 
