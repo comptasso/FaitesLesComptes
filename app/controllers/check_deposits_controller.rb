@@ -76,13 +76,9 @@ pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
 
   private
 
-  # trouve le bank_account demandé ou choisit le bank_account par défaut
+  
   def find_bank_account
-    if params[:bank_account_id]
-       @bank_account=@organism.bank_accounts.find(params[:bank_account_id])
-    else
-      @bank_account = @organism.main_bank_id
-    end
+      @bank_account = BankAccount.find(params[:bank_account_id])
   end
 
   
