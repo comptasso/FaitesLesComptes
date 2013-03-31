@@ -43,6 +43,8 @@ before(:each) do
         assigns(:check_deposits).should == [1,2] 
       end
 
+      
+
       it "bank_account doit recevoir la requête check_deposits et wihtin_period" do
         ba.should_receive(:check_deposits).and_return bac = double(Arel)
         bac.should_receive(:within_period).with(@p.start_date, @p.close_date).and_return []
