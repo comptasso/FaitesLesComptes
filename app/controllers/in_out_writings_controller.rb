@@ -2,6 +2,9 @@
 
 class InOutWritingsController < ApplicationController 
  
+  # TODO voir pour utiliser ChangePeriod plutôt que check_if_has_changed_period
+  # ce qui permettrait probablement de ne pas surcharger fill_mois
+
   before_filter :find_book # remplit @book
   before_filter :fill_mois, only: [:index, :new]
   before_filter :check_if_has_changed_period, only: :index # car on peut changer de period quand on clique sur une
