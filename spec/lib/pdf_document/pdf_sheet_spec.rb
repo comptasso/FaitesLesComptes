@@ -5,10 +5,10 @@ require 'pdf_document/default'
 require 'pdf_document/pdf_sheet'
 
 describe PdfDocument::PdfSheet do
-
-  let(:p) {stub_model(Period, start_date:Date.today.beginning_of_year,
+  let(:o) {stub_model(Organism, :name=>'Ma petite Affaire')}
+  let(:p) {stub_model(Period, organism:o, start_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year)}
-  let(:bal) {double(Compta::Sheet, :period=>p)}
+  let(:bal) {double(Compta::Sheet, :period=>p, :sens=>:actif, :name=>:actif)} # pour un actif de bilan
 
   it 'création du PdfSheet' do
     pdfs = PdfDocument::PdfSheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
@@ -32,7 +32,8 @@ describe PdfDocument::PdfSheet do
 
      it 'les colonnes dépendent du sens de la source' do
         bal.stub(:sens).and_return(:passif)
-        @pdfs.columns.should == ['title',  'net', 'previous_net']
+        pdfs = PdfDocument::PdfSheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
+        pdfs.columns.should == ['title',  'net', 'previous_net']
       end
 
 
@@ -62,15 +63,29 @@ describe PdfDocument::PdfSheet do
       @pdfs.stamp.should == 'Provisoire'
     end
 
-    it 'fetch_lines'
+    it 'lit le template' do
+      @pdfs.send(:template).should == "lib/pdf_document/prawn_files/actif.pdf.prawn"
+    end
+
+    it 'fetch_lines' do
+      @cr = double(Compta::Rubriks, :class=>Compta::Rubriks)
+      @cr.stub_chain(:to_pdf, :fetch_lines).and_return([['Libellé', 200, 10, 190, 180,25]])
+      bal.stub_chain(:total_general, :collection).and_return(10.times.map {|i| @cr })
+      @pdfs.fetch_lines.size.should == 10
+    end
 
     it 'render' do
-      pending 'il faut d abord trouver comment mieux identifier les méthodes manquantes'
-      bal.stub(:sens).and_return :actif
+      ligne = stub(:title=>'Libelle', :brut=>'200,00', :amortissement=>'10,00', :net=>'190,00', :previous_net=>'180,25', :depth=>0)
+      @pdfs.stub(:fetch_lines).and_return(10.times.map {|i| ligne })
       @pdfs.render
     end
 
-    it 'render pdf_text'
+    it 'render pdf_text' do
+      ligne = stub(:title=>'Libelle', :brut=>'200,00', :amortissement=>'10,00', :net=>'190,00', :previous_net=>'180,25', :depth=>0)
+      @pdfs.stub(:fetch_lines).and_return(10.times.map {|i| ligne })
+      pdf = Prawn::Document.new
+      @pdfs.render_pdf_text(pdf)
+    end
 
 
   end

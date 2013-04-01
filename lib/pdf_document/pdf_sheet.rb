@@ -29,6 +29,13 @@ module PdfDocument
   #
   class PdfSheet < PdfDocument::Simple
 
+    def initialize(period, source, options)
+      super # pour initialiser les données
+      raise PdfDocumentError, 'source doit répondre à la méthode :sens' unless @source.respond_to? :sens
+      raise PdfDocumentError, 'le sens de la source ne peut être qu\'actif ou passif' unless @source.sens.in? [:actif, :passif]
+      set_columns # inutile d'attendre
+    end
+
     # on part de l'idée qu'une rubriks prend toujours moins d'une page à imprimer
     # mais surtout actuellement on surcharge pour éviter que source cherche à compter des lignes
     def nb_pages
@@ -40,7 +47,6 @@ module PdfDocument
     end
 
     def fetch_lines(page_number = 1)
-      set_columns
       fl = []
       @source.total_general.collection.each do |c|
         fl += c.to_pdf.fetch_lines if c.class == Compta::Rubriks
@@ -52,11 +58,8 @@ module PdfDocument
       @columns = case @source.sens
       when :actif then ['title', 'brut', 'amortissement', 'net', 'previous_net']
       when :passif then ['title', 'net', 'previous_net']
-      else
-        raise ArgumentError, 'Le sens d\'un document ne peut être que :actif ou :passif'
       end
     end
-
 
     # si on est dans un document de type résultat, alors, on doit avoir
     # comme entête de colonne la période, par exemple Exercice 2011
@@ -65,13 +68,11 @@ module PdfDocument
     # être des dates
     def columns_titles
       if @source.name == :actif || @source.name == :passif
-       ['', I18n::l(@period.close_date), I18n::l(@period.start_date - 1)]
-     else # on est dans une logique de résultat sur une période
+        ['', I18n::l(@period.close_date), I18n::l(@period.start_date - 1)]
+      else # on est dans une logique de résultat sur une période
         ['', exercice, previous_exercice]
       end
     end
-
-    
 
     # Crée le fichier pdf associé
     def render
@@ -100,8 +101,6 @@ module PdfDocument
       case @source.sens
       when :actif then "lib/pdf_document/prawn_files/actif.pdf.prawn"
       when :passif then "lib/pdf_document/prawn_files/passif.pdf.prawn"
-      else
-        raise ArgumentError, 'Le sens d\'un document ne peut être que :actif ou :passif, correspondant au fait qu\'on affiche 4 ou 2 colonnes'
       end
     end
 
