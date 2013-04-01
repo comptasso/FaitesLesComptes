@@ -166,23 +166,7 @@ describe Admin::AccountsController do
       end
     end
 
-    context 'toutes les natures ne sont pas reliées' do
-      before(:each) do
-        @p.stub(:all_natures_linked_to_account?).and_return false
-        @p.stub_chain(:array_natures_not_linked, :first, :income_outcome).and_return true
-         Account.stub(:find).with(a1.to_param).and_return(a1)
-          a1.stub(:update_attributes).and_return(true)
-          put :update,{:period_id=>@p.to_param,  :id => a1.to_param, :account => {'these' => 'params'}}, valid_session
-      end
-
-      it 'renvoie vers le mapping' do
-        response.should redirect_to(mapping_admin_period_accounts_url(@p, type:'incomes'))
-      end
-
-      it 'remplit un flash' do
-        flash[:alert].should == 'Toutes les natures ne sont pas reliées à des comptes'
-      end
-    end
+   
   end
 
   describe "GET mapping" do

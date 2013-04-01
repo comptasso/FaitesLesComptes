@@ -21,6 +21,7 @@ class Admin::NaturesController < Admin::ApplicationController
   #  - id :- id of the row that is moved. This information is set in the id attribute of the TR element.
   #  - fromPosition : initial position of the row that is moved. This was value in the indexing cell of the row that is moved.
   #  - toPosition : new position where row is dropped. This value will be placed in the indexing column of the row.
+  #  
   # Plutôt que de faire un render de la table, reorder renvoie ok ou bad_request
   # et laisse javascript mettre à jour la vue, en l'occurence juste réécrire les positions
   # puisque il n'y a que ça de changé.
@@ -103,6 +104,8 @@ class Admin::NaturesController < Admin::ApplicationController
     end
   end
 
+
+  # TODO mettre des save plutôt que update_attribute pour éviter de bypasser les validations
   def link_nature
     @account=@period.accounts.find(params[:account_id])
     @nature=@period.natures.find(params[:id])
@@ -115,7 +118,6 @@ class Admin::NaturesController < Admin::ApplicationController
 
    def unlink_nature
     @nature=@period.natures.find(params[:id])
-    @account_id=@nature.account_id
     @nature.update_attribute(:account_id, nil)
     respond_to do |format|
       format.html { redirect_to mapping_admin_organism_period_accounts_url(@period.organism,@period) }
