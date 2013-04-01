@@ -52,16 +52,40 @@ include OrganismFixture
   end
 
   it 'sheet doit rendre un tableau' do
-    
     cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF').to_csv
-
     cs.should match "Actif\nRubrique\tBrut\tAmort\tNet\tPrécédent\n"
     cs.should match "201 - Frais d'établissement\t-1 210,00\t0,00\t-1 210,00\t0,00\n"
     cs.should match "2801 - Amortissements des frais d'établissements\t0,00\t-5,00\t5,00\t0,00\n"
     cs.should match "Frais d'établissement\t-1 210,00\t-5,00\t-1 205,00\t0,00"
     cs.should match "TOTAL ACTIF\t-5,00\t-5,00\t0,00\t0,00\n"
+  end
 
+  it 'sheet peut créer le fichier csv pour l index' do
+ #   Compta::RubrikLine.stub_chain(:new, :to_csv).and_return [CSV.generate {|c| c << ['101', 'Capital', 100,0,100,80]}]
+    cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
+    cs.to_index_csv
+  end
 
+  it 'sheet peut créer le fichier xls pour l index' do
+ #   Compta::RubrikLine.stub_chain(:new, :to_csv).and_return [CSV.generate {|c| c << ['101', 'Capital', 100,0,100,80]}]
+    cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
+    cs.to_index_xls
+  end
+
+  it 'peut rendre un pdf' do
+    cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
+    cs.to_pdf.should be_an_instance_of PdfDocument::PdfSheet
+  end
+
+  it 'peut rendre un detailed_pdf' do
+    cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
+    cs.to_detailed_pdf.should be_an_instance_of PdfDocument::PdfDetailedSheet
+  end
+
+  it 'render pdf crée le pdf et le rend' do
+    cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
+    cs.should_receive(:to_pdf).and_return(double PdfDocument::PdfSheet, :render=>true)
+    cs.render_pdf.should be_true
   end
 
   it 'sheet doit donner le total de ses lignes' do

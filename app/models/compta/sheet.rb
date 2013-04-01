@@ -76,17 +76,19 @@ module Compta
       end
     end
 
-    def detail_to_csv(options = {col_sep:"\t"})
-      CSV.generate(options) do |csv|
-        csv <<  %w(Numéro Libellé Brut Amort Net Précédent) 
-        @period.two_period_account_numbers.each {|num| csv << Compta::RubrikLine.new(@period, :actif, num).to_csv}
-      end
-      csv
-    end
-
-    def detail_to_xls
-      detail_to_csv.encode("windows-1252")
-    end
+#    TODO à supprimer s'il se confirme que ce n'est pas utilisé
+#
+#    def detail_to_csv(options = {col_sep:"\t"})
+#      CSV.generate(options) do |csv|
+#        csv <<  %w(Numéro Libellé Brut Amort Net Précédent)
+#        @period.two_period_account_numbers.each {|num| csv << Compta::RubrikLine.new(@period, :actif, num).to_csv}
+#      end
+#      csv
+#    end
+#
+#    def detail_to_xls
+#      detail_to_csv.encode("windows-1252")
+#    end
 
 
 
@@ -179,12 +181,7 @@ module Compta
       @sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : %w(Rubrique Montant Précédent)
     end
 
-    # renvoie la liste des rubriques
-    # inutilisé mais utile en protected pour les tests
-    def list_rubriks
-      @list_rubriks
-    end
-
+  
 
   end
 
