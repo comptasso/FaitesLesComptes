@@ -139,12 +139,7 @@ class InOutWritingsController < ApplicationController
     @book = Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
   end
 
-  # voir fill_mois dans ApplicationController
-  def local_params
-    {:book_id=>@book.id}
-  end
-
-
+  
   # TODO ici il faut remplacer cette méthode par une méthode period.natures_for_book(@book) qui choisira les natures qui
   # conviennent à la classe du livre.
   def fill_natures
@@ -155,17 +150,9 @@ class InOutWritingsController < ApplicationController
     end
   end
 
-  # on surcharge fill_mois car on gère ici spécifiquement le changement
-  # potentiel de période avec le before_filter check_if_has_changed_period
+  # on surcharge fill_mois pour gérer le params[:mois] 'tous'
   def fill_mois
-    if params[:mois] != 'tous'
-      if params[:mois] && params[:an]
-       @monthyear = MonthYear.new(:month=>params[:mois], :year=>params[:an])
-      else
-       @monthyear = @period.guess_month
-       redirect_to url_for(mois:@monthyear.month, an:@monthyear.year)
-      end
-    end
+    super if params[:mois] != 'tous'
   end
 
 
@@ -185,7 +172,7 @@ class InOutWritingsController < ApplicationController
         my = @new_period.guess_month(@monthyear.beginning_of_month) # car si les exercices ne sont pas de même durée,
         # on pourrait tomber dans un exercice qui n'existe pas
         session[:period] = @new_period.id
-        redirect_to url_for(@book, mois:my.month, an:my.year, :format=>params[:format])
+        redirect_to url_for(mois:my.month, an:my.year, :format=>params[:format])
       else
         flash[:alert] = "Le mois et l'année demandés ne correspondent à aucun exercice"
         redirect_to :back

@@ -69,12 +69,5 @@ class CashControlsController < ApplicationController
   end
 
 
-  # voir fill_mois dans ApplicationController.
-  def local_params
-     {:cash_id=>@cash.id}
-   end
-
   
-
-
 end

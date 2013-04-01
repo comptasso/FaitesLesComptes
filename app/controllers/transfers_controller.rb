@@ -96,8 +96,5 @@ class TransfersController < ApplicationController
     @book = OdBook.first
   end
 
-  def local_params
-    {}
-  end
-
+  
 end

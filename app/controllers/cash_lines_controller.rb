@@ -36,8 +36,6 @@ class CashLinesController < InOutWritingsController
     @cash = Cash.find(params[:cash_id])
   end
 
-  def local_params
-    {:cash_id=>@cash.id}
-  end
+  
 
 end

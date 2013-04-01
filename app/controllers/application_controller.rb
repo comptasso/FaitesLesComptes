@@ -186,17 +186,15 @@ class ApplicationController < ActionController::Base
       @monthyear = @period.guess_month_from_params(month:@mois, year:@an)
     else
       @monthyear= @period.guess_month
-      redirect_to url_for(local_params.merge(mois:@monthyear.month, an:@monthyear.year)) if params[:action]=='new'
+      redirect_to url_for(mois:@monthyear.month, an:@monthyear.year) if params[:action]=='new'
       unless params[:mois] == 'tous'
-        redirect_to url_for(local_params.merge(mois:@monthyear.month, an:@monthyear.year, :format=>params[:format])) if (params[:action]=='index')
+        redirect_to url_for(mois:@monthyear.month, an:@monthyear.year, :format=>params[:format]) if (params[:action]=='index')
       end
     end
   end
 
   
-  def local_params
-    raise 'doit être implémentée dans les classes filles utilisant fill_mois - voir #fill_mois'
-  end
+  
   
   
 
