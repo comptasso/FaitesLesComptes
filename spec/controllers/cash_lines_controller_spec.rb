@@ -44,8 +44,6 @@ describe CashLinesController do
     it "should create a monthly_book_extract" do
       Utilities::MonthlyCashExtract.should_receive(:new).with(ca,  :year=>current_year, :month=>current_month )
       get :index, {:cash_id=>ca.to_param, :mois=>current_month, :an=>current_year}, valid_session
-      assigns[:mois].should == "#{current_month}"
-      assigns[:an].should == "#{current_year}"
     end
 
     it "should call the filter" do
