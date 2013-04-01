@@ -185,7 +185,7 @@ class InOutWritingsController < ApplicationController
         my = @new_period.guess_month(@monthyear.beginning_of_month) # car si les exercices ne sont pas de même durée,
         # on pourrait tomber dans un exercice qui n'existe pas
         session[:period] = @new_period.id
-        redirect_to book_in_out_writings_url(@book, mois:my.month, an:my.year, :format=>params[:format])
+        redirect_to url_for(@book, mois:my.month, an:my.year, :format=>params[:format])
       else
         flash[:alert] = "Le mois et l'année demandés ne correspondent à aucun exercice"
         redirect_to :back

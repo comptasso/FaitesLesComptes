@@ -29,12 +29,10 @@ describe 'sold' do
 
     it 'monthly_value doit retourner une string 0' do
       @ts.monthly_value(Date.today).should == 0.0
-      @ts.monthly_value('01-2013').should == 0.0
+      
     end
 
-    it 'renvoie un ArgumentError si la string ne peut être interprétée' do
-      expect {@ts.monthly_value('bonjour')}.to raise_error ArgumentError
-    end
+    
 
   end
 end
