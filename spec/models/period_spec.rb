@@ -307,12 +307,22 @@ describe Period do
         end
       end
 
-      describe 'used_accounts' do
+      describe 'methodes diverses' do
 
         it 'used_accounts ne prend que les comptes actifs' do
           n = @p_2011.accounts.count
           n.should == @p_2011.used_accounts.size
           expect {@p_2011.accounts.first.update_attribute(:used, false)}.to change {@p_2011.used_accounts.count}.by(-1)
+        end
+
+        it 'recettes_natures' do
+          @p_2011.should_recive(:natures).and_return(@a = double(Arel, :recettes=>%w(bonbons cailloux)))
+          @p_2011.recettes_natures.should == %w(bonbons cailloux)
+        end
+
+        it 'array_natures_not_linked renvoie les natures sans compte' do
+          @p_2011.should_recive(:natures).and_return(@a = double(Arel, :without_account=>%w(choux hiboux)))
+          @p_2011.array_natures_not_linked.should == %w(choux hiboux)
         end
       end
 

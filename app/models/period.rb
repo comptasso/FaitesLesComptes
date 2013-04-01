@@ -307,23 +307,23 @@ class Period < ActiveRecord::Base
 
   # renvoie un array de tous les comptes de classe 7
   def recettes_accounts
-    accounts.classe_7.all
+    accounts.classe_7
   end
 
 
   # renvoie un array de tous les comptes de classe 6
   def depenses_accounts
-    accounts.classe_6.all 
+    accounts.classe_6 
   end
 
   # renvoie un array de toutes les natures de type recettes
   def recettes_natures
-    natures.recettes.all
+    natures.recettes
   end
 
   # renvoie un array de toutes les natures de types dépenses
   def depenses_natures
-    natures.depenses.all
+    natures.depenses
   end
  
   # le nombre de mois de l'exercice
@@ -464,11 +464,6 @@ class Period < ActiveRecord::Base
   def accountable?
     return false if natures.empty?
     all_natures_linked_to_account?
-  end
-
-  # retourne la liste des natures qui ne sont pas connectées à un compte
-  def array_natures_not_linked
-    natures.without_account.all
   end
 
   # retourne une instance de Compta::Nomenclature

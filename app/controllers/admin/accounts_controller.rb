@@ -50,16 +50,7 @@ class Admin::AccountsController < Admin::ApplicationController
 
     respond_to do |format|
       if @account.update_attributes(params[:account])
-        format.html {
-          if @period.all_natures_linked_to_account?
-          redirect_to admin_period_accounts_path(@period), notice: 'Le compte a été mis à jour'
-          else
-            flash[:alert]= 'Toutes les natures ne sont pas reliées à des comptes'
-            way = @period.array_natures_not_linked.first.income_outcome ? 'incomes' : 'outcomes'
-            redirect_to mapping_admin_period_accounts_path(@period,type: way)
-            end
-
-            }
+        format.html { redirect_to admin_period_accounts_path(@period), notice: 'Le compte a été mis à jour' }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
