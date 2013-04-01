@@ -21,6 +21,7 @@ class Account < ActiveRecord::Base
    # utilities::sold définit les méthodes cumulated_debit_before(date) et
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
+  include Comparable
 
   # period_id est nécessaire car lors de la création d'un compte bancaire ou d'une caisse,
   # il faut créer des comptes en fournissant le champ period_id
@@ -56,6 +57,10 @@ class Account < ActiveRecord::Base
   scope :classe_1_to_5, where('number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ?', '1%', '2%', '3%', '4%', '5%').order('number ASC')
   scope :rem_check_accounts, where('number = ?', '511')
   
+ def <=>(other) 
+   number <=> other.number
+ end
+
 
   # le numero de compte plus le title pour les input select
   def long_name
