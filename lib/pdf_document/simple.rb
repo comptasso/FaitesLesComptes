@@ -100,7 +100,7 @@ module PdfDocument
       end
     end
     
-    # récupère les variables d'instance ou les calcule si besoi
+    # récupère les variables d'instance ou les calcule si besoin
     def columns
       @columns ||= set_columns
     end
@@ -153,7 +153,7 @@ module PdfDocument
 
     # permet de définir les titres qui seront donnés aux colonnes
     def set_columns_titles(array_titles = nil)
-      Rails.logger.debug "Le nombre de valeurs doit être égal au nombre de colonnes, en l'occurence #{@columns.size}" if array_titles.length != @columns.size
+      Rails.logger.debug "Le nombre de valeurs doit être égal au nombre de colonnes, en l'occurence #{@columns.size}" if array_titles && array_titles.length != @columns.size
       @columns_titles = array_titles || @columns
     end
 
@@ -172,6 +172,7 @@ module PdfDocument
     
     # Crée le fichier pdf associé
     def render(template = "lib/pdf_document/simple.pdf.prawn")
+      @columns_alignements ||= set_columns_alignements # pour être sur que les alignements soient initialisés
       text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est utilisé dans le template
       @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|
@@ -189,6 +190,7 @@ module PdfDocument
     #
     # Retourne le fichier pdf après avoir interprété le contenu du template
     def render_pdf_text(pdf, template = "lib/pdf_document/simple.pdf.prawn")
+      @columns_alignements ||= set_columns_alignements # pour être sur que les alignements soient initialisés
       text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
       Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
