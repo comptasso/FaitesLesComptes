@@ -150,9 +150,7 @@ class Period < ActiveRecord::Base
   # nécessaire pour éditer par exemple une balance sur deux ans
   def two_period_account_numbers
     if previous_period?
-      pp = previous_period
-      acc_list = pp.account_numbers
-      (acc_list + account_numbers).uniq!.sort
+      (previous_period.account_numbers + account_numbers).uniq!.sort
     else
       account_numbers
     end
@@ -447,13 +445,6 @@ class Period < ActiveRecord::Base
   end
 
 
-  # TODO : il faudrait probablement podifier Utilities::PlanComptable pour avoir directement
-  # l'initialisation dans la classe PlanComptable
-  def create_account_from_file(source)
-    pc= Utilities::PlanComptable.new
-    pc.create_accounts(self.id, source)
-  end
-
   # informe si toutes les natures sont bien reliées à un compte
   def all_natures_linked_to_account?
     natures.without_account.empty? 
@@ -475,8 +466,7 @@ class Period < ActiveRecord::Base
   protected
 
 
-   # report_compta_line crée la ligne de report de l'exercice
-  # TODO traiter le cas où le résultat serait zéro
+  # report_compta_line crée la ligne de report de l'exercice
   def report_a_nouveau
     res_acc  = next_period.report_account
     ran = ComptaLine.new(account_id:res_acc.id, credit:resultat, debit:0)

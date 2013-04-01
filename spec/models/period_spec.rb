@@ -49,6 +49,28 @@ describe Period do
         @p.should_not be_valid
       end
 
+      it 'appelle fix_days avant la validation' do
+        @p = @o.periods.new(valid_params)
+        @p.should_receive(:fix_days)
+        @p.valid?
+      end
+
+      it 'fix_days remplit start_date si un exercice précédent et pas de start_date'  do
+        @p = @o.periods.new(valid_params)
+        @p.start_date = nil
+        Period.stub(:find).with(:last).and_return(stub_model(Period, close_date:(Date.today.beginning_of_year - 1)))
+        @p.valid?
+        @p.start_date.should == Date.today.beginning_of_year
+      end
+
+      it 'ne peut avoir un trou dans les dates' do
+        @p = @o.periods.new(valid_params)
+        @p.stub(:previous_period?).and_return true
+        @p.stub(:previous_period).and_return(stub_model(Period, :close_date=>Date.today.end_of_year.years_ago(2)))
+        @p.should_not be_valid
+        @p.errors[:start_date].first.should match 'ne peut avoir un trou dans les dates'
+      end
+
       it 'les dates ne peuvent être modifiées' do
         @p = @o.periods.create!(valid_params)
         @p.close_date = @p.close_date.months_ago(1)
@@ -62,22 +84,33 @@ describe Period do
         @p.should_not be_valid
       end
 
+      
+
     end
   
-    describe 'after_create'  do
+    describe 'la création implique'  do
       before(:each) do
       
         @p = @o.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
       end
     
-      it 'les comptes du fichier asso.yml plus le compte bancaire et le compte de caisse' do
+      it 'la création des comptes' do
         @p.should have(89).accounts
       end
 
-      it '10 natures de dépenses et 6 de recettes ont été créées'  do
+      it 'la création des natures : 10 natures de dépenses et 6 de recettes '  do
         @p.should have(16).natures
       end
 
+      it 'start_date ne peut plus changer' do
+        @p.start_date = @p.start_date >> 1 # raccourci qui indique 1 mois plus tard
+        @p.should_not be_valid
+      end
+
+      it 'close_date ne peut plus changer' do
+        @p.close_date = @p.close_date << 1
+        @p.should_not be_valid
+      end
 
     end
 
@@ -109,14 +142,14 @@ describe Period do
 
     end
 
-    describe 'les fonctionnalités pour trouver un mois' , wip:true do
+    describe 'les fonctionnalités pour trouver un mois'  do
 
       before(:each )do
         # un exercice de mars NN à avril NN+1
         @p = @o.periods.new(start_date: Date.today.beginning_of_year.months_since(2), close_date:Date.today.end_of_year.months_since(4))
       end
 
-      it 'find_month renvoie un mois si 11' , wip:true do
+      it 'find_month renvoie un mois si 11'  do
         @p.find_month(11).should == [MonthYear.new(month:11, year:Date.today.year)]
       end
 
@@ -165,6 +198,20 @@ describe Period do
         it "2011, le dernier doit repondre lui meme" do
           @p_2011.next_period.should  == @p_2011
         end
+      end
+
+      describe 'two_period_accounts' do
+        it 'renvoie la liste des comptes si pas d ex précédent' do
+          @p_2010.two_period_account_numbers.should == @p_2010.account_numbers
+        end
+
+        it 'fait la fusion des listes de comptes si ex précédent'  do
+          @p_2011.should_receive(:previous_period?).and_return true
+          @p_2011.stub_chain(:previous_period, :account_numbers).and_return  ['bonsoir', 'salut']
+          @p_2011.stub(:account_numbers).and_return(['alpha', 'salut'])
+          @p_2011.two_period_account_numbers.should == ['alpha', 'bonsoir', 'salut']
+        end
+
       end
 
 
@@ -304,10 +351,28 @@ describe Period do
             @p_2011.report_account.init_sold('credit').should == -45
           end
 
+          context 'gestion des erreurs' do
+
+            it 'retourne false si writing est invalide' do
+              Writing.any_instance.stub(:valid?).and_return false
+              @p_2010.close.should be_false
+            end
+
+            it 'retourne false si writing ne peut être sauvée' do
+              Writing.any_instance.stub(:save).and_return false
+              @p_2010.close.should be_false
+            end
+
+            it 'renvoie true si tout va bien', wip:true do
+              @p_2010.close.should be_true
+            end
+
+          end
+
         end
       end
 
-      describe 'methodes diverses' do
+      describe 'methodes diverses'  do
 
         it 'used_accounts ne prend que les comptes actifs' do
           n = @p_2011.accounts.count
@@ -316,14 +381,18 @@ describe Period do
         end
 
         it 'recettes_natures' do
-          @p_2011.should_recive(:natures).and_return(@a = double(Arel, :recettes=>%w(bonbons cailloux)))
+          @p_2011.should_receive(:natures).and_return(@a = double(Arel, :recettes=>%w(bonbons cailloux)))
           @p_2011.recettes_natures.should == %w(bonbons cailloux)
         end
 
-        it 'array_natures_not_linked renvoie les natures sans compte' do
-          @p_2011.should_recive(:natures).and_return(@a = double(Arel, :without_account=>%w(choux hiboux)))
-          @p_2011.array_natures_not_linked.should == %w(choux hiboux)
+        it 'nomenclature renvoie une instance de nomenclature' do
+          @p_2011.nomenclature.should be_an_instance_of(Compta::Nomenclature)
         end
+
+         it 'report à nouveau renvoie une ComptaLine dont le montant est le résultat et le compte 12', wip:true  do
+          @p_2011.send(:report_a_nouveau).should be_an_instance_of(ComptaLine)
+        end
+
       end
 
   
@@ -336,6 +405,9 @@ describe Period do
         it "without datas, a period return 0" do
           @p_2010.monthly_value(Date.civil(2010,03,01)).should == 0
         end
+
+       
+
 
         context 'the result is calculated from books' do
 
