@@ -12,9 +12,11 @@
 
 
 
-# TODO gestion des Foreign keys cf. p 400 de Agile Web Development  
+# TODO gestion des Foreign keys cf. p 400 de Agile Web Development
+
+
 require 'pdf_document/simple'
-require 'pdf_document/default'
+require 'pdf_document/totalized'
 
 
 class Account < ActiveRecord::Base
@@ -181,13 +183,11 @@ class Account < ActiveRecord::Base
 
   # Méthode de classe qui crée un pdf pour afficher le plan comptable
   def self.to_pdf(period)
-    load 'lib/pdf_document/simple.rb'
     pdf = PdfDocument::Simple.new(period, period,
       title:"Plan comptable", select_method:'accounts.order(:number)')
     pdf.set_columns %w(number title)
     pdf.set_columns_widths [20, 80]
     pdf.set_columns_titles %w(Numéro Libellé)
-    pdf.columns_alignements = [:left, :left]
     pdf
   end
 

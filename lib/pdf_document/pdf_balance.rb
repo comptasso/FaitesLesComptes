@@ -6,7 +6,7 @@ require 'pdf_document/default'
 module PdfDocument
 
 
-  class PdfBalance < PdfDocument::Default
+  class PdfBalance < PdfDocument::Totalized
     
 
     attr_accessor :from_number, :to_number

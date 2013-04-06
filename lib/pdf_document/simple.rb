@@ -3,9 +3,7 @@
 
 
 require 'prawn'
-
-
-
+require 'pdf_document/page'
 
 module PdfDocument
 
@@ -31,7 +29,23 @@ module PdfDocument
   # Exemple pour une balance
   # PdfDocument::Simple.new(period, balance, {:select_method=>'accounts', :title=>'Liste des comptes'}
   #
+  # Par défaut, les méthodes sont les entêtes de colonnes mais set_columns_methods permet
+  # d'appliquer un traitement. Par exemple , en revenant sur la méthode set_columns :
+  #
+  #   Un exemple simple :set_columns %w(nature_id, debit)
+  #
+  #   Si on veut des champs qui viennent d'une table associée, par exemple
+  #   de la table writings avec des compta_lines, il faut leur donner un alias
+  #   pour pouvoir les utiliser ensuite par ex : set_columns('writings.date AS w_date', 'debit').
+  #   Dans set_columns_methods, décrit juste après, on utilisera alors ['w_date', nil]
+  #
+  #   set_columns_methods(array_of_strings) permet d'indiquer la méthode à appliquer dans prepare_line.
+  #
+  #   Il doit y avoir autant de valeurs que de colonnes : nil si on veut la méthode par défaut.
+  #   par exemple : set_columns_methods [nil, 'nature.name', nil]
+  #
   # D'autres options sont possibles comme nb_lines_per_page pour définir le nombre de lignes dans la page.
+  #
   # Simple fonctionne sur un mode paysage.
   #
   class Simple
@@ -51,7 +65,7 @@ module PdfDocument
       @nb_lines_per_page = options[:nb_lines_per_page] || NB_PER_PAGE_LANDSCAPE
       @source = source
       @select_method = options[:select_method]
-      @template = "lib/pdf_document/#{self.class.constantize.downcase}.pdf.prawn"
+      @template = "lib/pdf_document/#{self.class.name.split('::').last.downcase}.pdf.prawn"
     end
     
     
@@ -78,7 +92,7 @@ module PdfDocument
     # construit l'ensemble des pages et le met dans la variable d'instance
     # @pages qui agit comme un cache
     def pages
-      @pages ||= (1..nb_pages).collect {|i| Page.new(i, self)}
+      @pages ||= (1..nb_pages).collect {|i| PdfDocument::Page.new(i, self)}
     end
 
     # permet d'appeler la page number
@@ -120,6 +134,8 @@ module PdfDocument
 
     # TODO : à mettre en protected
     # pour définir les méthodes à applique aux champs sélectionnés
+    #
+    #
     def set_columns_methods(array_methods = nil)
       @columns_methods = []
 
