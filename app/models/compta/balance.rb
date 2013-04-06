@@ -82,7 +82,7 @@ class Compta::Balance < ActiveRecord::Base
     pdf
   end
 
-   # valeurs par défaut
+   # valeurs par défaut, retourne self permettant de chainer les méthodes
   def with_default_values
     if period
       self.from_date ||= period.start_date

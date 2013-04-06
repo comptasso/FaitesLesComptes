@@ -9,6 +9,7 @@ require 'pdf_document/simple'
 module PdfDocument
   # La classe PdfDocument::Default est destinée à servir de base pour les
   # différents besoins de fichiers pdf.
+  # 
   # Les besoins génériques assurés par cette classe sont d'avoir la capacité
   # de remplir de façon répétitive des pages pdf avec notamment
   # un numéro de page sur un nombre total de page
@@ -38,6 +39,7 @@ module PdfDocument
   # :from_date => date de début (par défaut la date de début de l'exercice)
   # :to_date => date de fin (par défaut la date de fin de l'exercice)
   # :stamp => le texte qui apparaît en fond de document (par exemple brouillard ou provisoire)
+  # :select_method => la méthod à appliquer à la source pour trouver les lignes (compta_lines par défaut)
   # 
   # La classe a des méthodes pour définir les colonnes souhaitées de la source et différents paramétrages
   #
@@ -78,9 +80,9 @@ module PdfDocument
   # Il est possible de fonctionner avec un modèle virtuel pour autant que la classe de lines
   # puisse répondre à column_names
   #
-  class Default < PdfDocument::Simple
+  class Default < PdfDocument::Totalized
 
-    attr_reader :created_at, :nb_lines_per_page, :source
+    attr_reader :created_at, :nb_lines_per_page, :source, :select_method
       
     attr_accessor :first_report_line
     attr_reader  :from_date, :to_date, :columns_to_totalize, :stamp
@@ -90,16 +92,18 @@ module PdfDocument
     # source est un record, par exemple Account
     # select_method est une méthode pour donner la collection, par defaut comptpa_lines
     def initialize(period, source, options)
+      @period = period
+      @source = source
+      @select_method = options[:select_method] || 'compta_lines'
+      yield self if block_given?
       @title = options[:title]
       @subtitle = options[:subtitle]
-      @period = period
       @from_date = options[:from_date] || @period.start_date
       @to_date = options[:to_date] || @period.close_date
       @nb_lines_per_page = options[:nb_lines_per_page] || NB_PER_PAGE_LANDSCAPE
-      @source = source
       @stamp = options[:stamp]
       @created_at = Time.now
-      @select_method = options[:select_method] || 'compta_lines'
+      
     end
 
     
@@ -112,18 +116,7 @@ module PdfDocument
       (nb_lines/@nb_lines_per_page.to_f).ceil
     end
 
-    def pages
-      @pages ||= (1..nb_pages).collect {|i| Page.new(i, self)}
-    end
-
-    # permet d'appeler la page number
-    # retourne une instance de PdfDocument::Page
-    def page(number)
-      pages unless @pages # construit la table des pages si elle n'existe pas encore
-      raise ArgumentError, "La page demandée n'existe pas"  unless (number > 0 &&  number <= nb_pages)
-      @pages[number-1]
-    end
-
+    
     # renvoie les lignes de la page demandées
     def fetch_lines(page_number)
       limit = nb_lines_per_page
@@ -137,74 +130,7 @@ module PdfDocument
     # Par exemple nature.name lorsque nature est nil
     def prepare_line(line)
       columns_methods.collect { |m| line.instance_eval(m) rescue nil }
-    end
-
-    def set_columns(array_columns = nil)
-      @columns = array_columns || @source.instance_eval(@select_method).first.class.column_names
-      set_columns_widths
-      set_columns_alignements
-      @columns
-    end
-
-    def columns_methods
-      @columns_methods ||= set_columns_methods
-    end
-
-       
-    # pour définir les méthodes à applique aux champs sélectionnés
-    def set_columns_methods(array_methods = nil)
-      @columns_methods = []
-
-      if array_methods
-        array_methods.each_with_index do |m,i|
-          @columns_methods[i] = m || @columns[i]
-        end
-      else
-        @columns_methods = columns
-      end
-      @columns_methods
-    end
-
-
-    
-    # les colonnes à totaliser sont indiquées par un indice
-    # par exemple si on demande Date Réf Debit Credit
-    # on sélectionne [2,3] pour indices
-    def set_columns_to_totalize(indices)
-      raise ArgumentError , 'Le tableau des colonnes ne peut être vide' if indices.empty?
-      @columns_to_totalize = indices
-      set_total_columns_widths
-    end
-
-    # Permet d'insérer un bout de pdf dans un fichier pdf
-    # prend un fichier pdf en argument et évalue le contenu du template pdf.prawn
-    # fourni en deuxième argument.
-    # retourne le fichier pdf après avoir interprété le contenu du template
-    def render_pdf_text(pdf, template = "lib/pdf_document/default.pdf.prawn")
-      text = File.open(template, 'r') {|f| f.read  }
-      doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
-      Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
-      pdf.instance_eval(text, template)
-    end
-
-    # Crée le fichier pdf associé
-    def render(template = "lib/pdf_document/default.pdf.prawn")
-      text = File.open(template, 'r') {|f| f.read  }
-      
-      pages # on prépare les différentes pages
-      # ceci a été rajouté pour éviter que chaque page reconstruise à chaque fois
-      # la série de page précédente pour avoir les reports
-      
-      require 'prawn'
-      doc = self # doc est utilisé dans le template
-      pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|
-        pdf.instance_eval(text, template)
-      end
-      pdf_file.number_pages("page <page>/<total>",
-        { :at => [pdf_file.bounds.right - 150, 0],:width => 150,
-          :align => :right, :start_count_at => 1 })
-      pdf_file.render
-    end
+    end 
 
     # définit un aligment des colonnes par défaut, les colonnes qui sont
     # numériques sont alignées à droite, les autres à gauche
@@ -222,36 +148,9 @@ module PdfDocument
       @columns_alignements
     end
 
-    private
+   
 
-
-    # méthode permettant de donner la largeur des colonnes pour une ligne de
-    # total
-    def set_total_columns_widths
-      raise 'Impossible de calculer les largeurs des lignes de total car les largeurs de la table ne sont pas fixées' unless @columns_widths
-      @total_columns_widths = []
-      # si la colonne est à totaliser on retourne la valeur
-      # sinon on la garde et on examine la colonne suivant
-      l = 0 # variable pour accumuler les largeurs des colonnes qui ne sont pas à totaliser
-      Rails.logger.debug "DEBUG : Largeur des colonnes #{@columns_widths.inspect}"
-      @columns_widths.each_with_index do |w,i|
-        if @columns_to_totalize.include? i
-          if l != 0
-            @total_columns_widths << l
-            l = 0
-          end
-          @total_columns_widths << w
-        else
-          l += w
-        end
-      end
-      # au cas où il y ait des colonnes sans total en fin de tableau
-      # on en rajoute une pour arriver à 100
-      s = @total_columns_widths.sum
-      @total_columns_widths << (100 -s) if s < 100
-      @total_columns_widths
-      Rails.logger.debug "DEBUG : Largeur des colonnes de total #{@total_columns_widths.inspect}"
-    end
+   
 
     
 

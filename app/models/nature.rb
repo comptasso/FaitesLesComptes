@@ -50,6 +50,10 @@ class Nature < ActiveRecord::Base
     self.income_outcome ? 'Recettes' : 'Dépenses'
   end
 
+#  def self.to_pdf(period, filter = 0)
+#    Editions::Natures.new(period, filter)
+#  end
+
  
   protected
 

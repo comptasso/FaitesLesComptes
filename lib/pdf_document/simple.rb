@@ -51,6 +51,7 @@ module PdfDocument
       @nb_lines_per_page = options[:nb_lines_per_page] || NB_PER_PAGE_LANDSCAPE
       @source = source
       @select_method = options[:select_method]
+      @template = "lib/pdf_document/#{self.class.constantize.downcase}.pdf.prawn"
     end
     
     
@@ -74,12 +75,21 @@ module PdfDocument
       [(@source.instance_eval(@select_method).count/@nb_lines_per_page.to_f).ceil, 1].max
     end
 
+    # construit l'ensemble des pages et le met dans la variable d'instance
+    # @pages qui agit comme un cache
+    def pages
+      @pages ||= (1..nb_pages).collect {|i| Page.new(i, self)}
+    end
+
     # permet d'appeler la page number
     # retourne une instance de PdfDocument::Page
-    def page(number = 1)
-      raise ArgumentError, "La page demandée n'existe pas"  unless (1..nb_pages).include? number
-      Page.new(number, self)
+    def page(number)
+      pages unless @pages # construit la table des pages si elle n'existe pas encore
+      raise ArgumentError, "La page demandée n'existe pas"  unless (number > 0 &&  number <= nb_pages)
+      @pages[number-1]
     end
+
+    
 
 
     # renvoie les lignes de la page demandées
@@ -91,13 +101,36 @@ module PdfDocument
 
     # appelle les méthodes adéquate pour chacun des éléments de la lignes
     # dans la classe simple, cela ne fait que renvoyer la ligne.
+    #
+    # Une mise en forme d'office est appliquée aux champs numériques
+    #
     # A surcharger lorsqu'on veut faire un traitement de la ligne
     def prepare_line(line)
-      columns.collect do |m|
+      columns_methods.collect do |m|
         val = line.instance_eval(m)
         val = ActionController::Base.helpers.number_with_precision(val, :precision=>2) if val.is_a?(Numeric)
         val
       end
+    end
+
+    # agit comme un cache.
+    def columns_methods
+      @columns_methods ||= set_columns_methods
+    end
+
+    # TODO : à mettre en protected
+    # pour définir les méthodes à applique aux champs sélectionnés
+    def set_columns_methods(array_methods = nil)
+      @columns_methods = []
+
+      if array_methods
+        array_methods.each_with_index do |m,i|
+          @columns_methods[i] = m || @columns[i]
+        end
+      else
+        @columns_methods = columns
+      end
+      @columns_methods
     end
     
     # récupère les variables d'instance ou les calcule si besoin
@@ -147,6 +180,7 @@ module PdfDocument
     def set_columns(array_columns = nil)
       @columns = array_columns || @source.instance_eval(@select_method).first.class.column_names
       set_columns_widths
+      set_columns_alignements
       @columns
     end
 
@@ -171,9 +205,10 @@ module PdfDocument
 
     
     # Crée le fichier pdf associé
-    def render(template = "lib/pdf_document/simple.pdf.prawn")
+    def render(template = @template)
       @columns_alignements ||= set_columns_alignements # pour être sur que les alignements soient initialisés
       text = File.open(template, 'r') {|f| f.read  }
+      pages
       doc = self # doc est utilisé dans le template
       @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape) do |pdf|
         pdf.instance_eval(text, template)
@@ -189,7 +224,7 @@ module PdfDocument
     # Le but est de fonctionner comme un partial
     #
     # Retourne le fichier pdf après avoir interprété le contenu du template
-    def render_pdf_text(pdf, template = "lib/pdf_document/simple.pdf.prawn")
+    def render_pdf_text(pdf, template = @template)
       @columns_alignements ||= set_columns_alignements # pour être sur que les alignements soient initialisés
       text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est nécessaire car utilisé dans default.pdf.prawn

@@ -57,12 +57,17 @@ module Stats
       end
     end
 
+    def to_pdf(filter = 0)
+      Editions::Natures.new(@period, filter)
+    end
+
+
     
 
     protected
 
     #  récupère toutes les natures par ordre recette suivis de dépenses et
-    # par ordre alphabétique puis construit la ligne de statistique
+    # par ordre de position puis construit la ligne de statistique
     def stats
       stats = []
       @period.natures.order('income_outcome DESC', 'position ASC').each do |n|
