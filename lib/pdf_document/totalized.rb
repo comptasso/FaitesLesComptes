@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require 'pdf_document/simple'
+
 module PdfDocument
 
   # la classe Totalized permet d'éditer un fichier pdf reprenant une liste d'information

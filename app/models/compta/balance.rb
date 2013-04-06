@@ -5,7 +5,7 @@ require 'pdf_document/pdf_balance'
 # une classe correspondant à l'objet balance. Cette classe a une table virtuelle
 # mais le controller ne sauve pas l'objet.
 #
-# La table est préférable pour pouvoir bénéficier des scope et callbacks de
+# La table virtuelle permet de bénéficier des scope et callbacks de
 # ActiveRecord.
 #
 # Balance se crée soit en fournissant tous les paramètres, soit
@@ -51,8 +51,13 @@ class Compta::Balance < ActiveRecord::Base
   validates :from_date, :to_date, :within_period=>true
   validates :from_date, :to_date, :from_account_id, :to_account_id, :period_id, :presence=>true
 
+
+  # retourne la liste ordonnées des comptes demandés.
+  #
+  # Swap les comptes si le to_account est avant le form_account
   def accounts
-    period.accounts.where('number >= ? AND number <= ?', from_account.number, to_account.number ) 
+    self.from_account, self.to_account = to_account, from_account if to_account.number  < from_account.number
+    period.accounts.order('number').where('number >= ? AND number <= ?', from_account.number, to_account.number)
   end
 
   # indique si le listing doit être considéré comme un brouillard
@@ -93,22 +98,19 @@ class Compta::Balance < ActiveRecord::Base
     self
   end
 
-  # retourne la liste des comptes demandés.
-  #
-  # Swap les comptes si le to_account est avant le form_account
-  def range_accounts
-    self.from_account, self.to_account = to_account, from_account if to_account.number  < from_account.number
-    accounts.order('number').where('number >= ? AND number <= ?', from_account.number, to_account.number)
-  end
+  
 
   def balance_lines
-    @balance_lines ||= range_accounts.collect {|acc| balance_line(acc, from_date, to_date)}
+    @balance_lines ||= accounts.collect {|acc| balance_line(acc, from_date, to_date)}
   end
 
+  # calcule les totaux généraux de la balance
   def total_balance
-    [self.total(:cumul_debit_before), self.total(:cumul_credit_before),self.total(:movement_debit),
-      self.total(:movement_credit), self.total(:sold_at)
-    ]
+    [total(:cumul_debit_before),
+     total(:cumul_credit_before),
+     total(:movement_debit),
+     total(:movement_credit),
+     total(:sold_at)]
   end
 
    
@@ -126,20 +128,14 @@ class Compta::Balance < ActiveRecord::Base
     end
 
   
-
-
   protected
 
-  def total(value)
-    balance_lines.sum {|l| l[value]}
+  # calcule les totaux pour l'index demandé (:cumul_debit_before,...)
+  def total(index)
+    balance_lines.sum {|l| l[index]}
   end
 
-  # TODO voir si utilisé??
-  def total_page(value, n = 1)
-    self.page(n).sum {|l| l[value]}
-  end
-
- 
+  # construit la ligne qui sera affichée pour chaque compte demandé, sous forme d'un hash
   def balance_line(account, from = self.period.start_date, to = self.period.close_date)
     { :account_id=>account.id,
       :provisoire=> !account.all_lines_locked?,
@@ -151,14 +147,13 @@ class Compta::Balance < ActiveRecord::Base
       :movement_credit=>account.movement(from,to, :credit),
       :sold_at=>account.sold_at(to)
     }
-
   end
 
   # remplace les points décimaux par des virgules pour s'adapter au paramétrage
     # des tableurs français
     def reformat(number)
-      return number if number.is_a? String
-      sprintf('%0.02f',number).gsub('.', ',') if number
+      return number unless number.is_a? Numeric
+      ('%0.02f' % number).gsub('.', ',')
     end
 
 

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'pdf_document/default'
+require 'pdf_document/totalized'
 
 
 module PdfDocument
@@ -12,23 +12,7 @@ module PdfDocument
     attr_accessor :from_number, :to_number
 
 
-# permet de choisir les colonnes que l'on veut sélectionner pour le document
-    # set_columns appelle set_columns_widths pour calculer la largeur des colonnes
-    # sur la base de largeurs égales.
-    # Set_columns_widths et set_columns_alignements permettent de fixer les largeur et
-    # l'alignement (:right ou :left)
-    #
-    def set_columns(array_columns = nil)
-      @columns = array_columns
-    end
-
-     def set_columns_widths(array_widths)
-      @columns_widths = array_widths
-    end
-
-   
-
-    # calcule de nombre de pages; il y a toujours au moins une page
+     # calcule de nombre de pages; il y a toujours au moins une page
      # même s'il n'y a pas de lignes dans le comptes
      # ne serait-ce que pour afficher les soldes en début et en fin de période.
 
