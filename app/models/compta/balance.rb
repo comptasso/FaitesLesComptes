@@ -37,7 +37,7 @@ class Compta::Balance < ActiveRecord::Base
   
 
   pick_date_for :from_date, :to_date # donne les méthodes from_date_picker et to_date_picker
-  # utilisées par le input as:date_picker
+  # utilisées par le input as:date_picker 
 
   belongs_to :period
   # des has_one seraient plus intuitifs mais cela nécessiterait que le champ _id
@@ -67,23 +67,13 @@ class Compta::Balance < ActiveRecord::Base
      accounts.joins(:compta_lines).where('locked = ?', false).any?
   end
 
-  #produit un document pdf en s'appuyant sur la classe PdfBalance issue de PdfDocument::Default
+  #produit un document pdf en s'appuyant sur la classe PdfBalance issue de PdfDocument::Totalized
   # et ses classe associées page et table
   def to_pdf
     stamp = provisoire? ? 'provisoire' : ''
-    pdf = PdfDocument::PdfBalance.new(period, self,
+    pdf = PdfDocument::PdfBalance.new(period, self, 
       title:"Balance générale",
-      from_date:from_date, to_date:to_date,
-      subtitle:"Du #{I18n::l from_date} au #{I18n.l to_date}",
-      select_method:'accounts',
       stamp:stamp)
-    pdf.from_number = from_account.number
-    pdf.to_number = to_account.number
-    pdf.set_columns %w(accounts.id number title period_id)
-    pdf.columns_alignements = [:left, :left, :right, :right, :right, :right, :right]
-    pdf.set_columns_widths [10, 40, 10, 10, 10, 10, 10]
-    pdf.set_columns_titles %w(Numéro Intitulé Débit Crédit Débit Crédit Solde)
-    pdf.set_columns_to_totalize [2,3,4,5,6]
     pdf
   end
 

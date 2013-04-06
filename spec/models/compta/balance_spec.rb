@@ -65,7 +65,7 @@ describe Compta::Balance do
 
       it 'range_accounts returns an extract of accounts' do
         @b.from_account = @a2
-        @b.range_accounts.should == [@a2]
+        @b.accounts.should == [@a2]
       end
 
     end
@@ -155,7 +155,7 @@ describe Compta::Balance do
 
     end
 
-    describe 'page' do
+    describe 'page' , wip:true do
 
      def bal_line(value)
        { :account_id=>value,
@@ -174,11 +174,14 @@ describe Compta::Balance do
 
      
 
-     before(:each) do 
-       @b.stub(:balance_lines).and_return(1.upto(100).collect {|i| bal_line(2) })
+     before(:each) do
+       @b.stub(:provisoire?).and_return true
+       @b.stub(:accounts).and_return(@ar = double(Arel))
+       @ar.stub(:collect).and_return (1..100).map {|i| bal_line(2)}
+       @ar.stub(:count).and_return 100
      end
 
-     it 'total_balance renvoie le total' , wip:true do
+     it 'total_balance renvoie le total'  do
        @b.total_balance.should == [1000, 100, 200, 400, -700]
      end
 

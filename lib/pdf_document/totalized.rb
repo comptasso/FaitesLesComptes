@@ -17,6 +17,10 @@ module PdfDocument
   #
   class Totalized < PdfDocument::Simple
 
+    attr_reader :columns_to_totalize
+    attr_accessor :first_report_line
+
+
     # par rapport à la méthode héritée, prepare_line ne fait pas de mise
     # en forme automatique des champs numériques, pour pouvoir permettre la
     # totalisation.
@@ -32,6 +36,7 @@ module PdfDocument
     # par exemple si on demande Date Réf Debit Credit
     # on sélectionne [2,3] pour indices
     def set_columns_to_totalize(indices)
+      
       raise ArgumentError , 'Le tableau des colonnes ne peut être vide' if indices.empty?
       @columns_to_totalize = indices
       set_total_columns_widths
@@ -59,13 +64,13 @@ module PdfDocument
         else
           l += w
         end
+       # puts "Après #{i} de largeur #{w}, le tableau est maintenant #{@total_columns_widths}"
       end
       # au cas où il y ait des colonnes sans total en fin de tableau
       # on en rajoute une pour arriver à 100
       s = @total_columns_widths.sum
       @total_columns_widths << (100 -s) if s < 100
       @total_columns_widths
-      Rails.logger.debug "DEBUG : Largeur des colonnes de total #{@total_columns_widths.inspect}"
     end
   end
 

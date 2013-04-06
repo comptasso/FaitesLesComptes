@@ -44,7 +44,10 @@ module PdfDocument
   #   Il doit y avoir autant de valeurs que de colonnes : nil si on veut la méthode par défaut.
   #   par exemple : set_columns_methods [nil, 'nature.name', nil]
   #
-  # D'autres options sont possibles comme nb_lines_per_page pour définir le nombre de lignes dans la page.
+  # D'autres options sont possibles
+  #  - nb_lines_per_page pour définir le nombre de lignes dans la page.
+  #  - stamp pour définir un timbre de fond (brouillard ou provisoire par exemple)
+  #  - subtitle pour un sous-titre
   #
   # Simple fonctionne sur un mode paysage.
   #
@@ -53,7 +56,7 @@ module PdfDocument
     include ActiveModel::Validations
 
     attr_accessor :title, :subtitle, :total_columns_widths, :columns_alignements, :columns_formats, :select_method
-    attr_reader :created_at, :nb_lines_per_page, :source
+    attr_reader :created_at, :nb_lines_per_page, :source, :stamp
      
     validates :title, :presence=>true
     validates :select_method, :presence=>true
@@ -66,6 +69,8 @@ module PdfDocument
       @source = source
       @select_method = options[:select_method]
       @template = "lib/pdf_document/#{self.class.name.split('::').last.downcase}.pdf.prawn"
+      @stamp = options[:stamp]
+      @subtitle = options[:subtitle]
     end
     
     
@@ -182,7 +187,7 @@ module PdfDocument
       end
       # puis on retourne le nombre nécessaire
 
-      @columns_widths = array_widths[0..columns.size]
+      @columns_widths = array_widths
       Rails.logger.debug "DEBUG : largeur des colonnes : "
     end
 

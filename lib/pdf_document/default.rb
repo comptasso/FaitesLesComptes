@@ -4,7 +4,7 @@
 
 require 'pdf_document/page'
 require 'pdf_document/table'
-require 'pdf_document/simple'
+require 'pdf_document/totalized'
 
 module PdfDocument
   # La classe PdfDocument::Default est destinée à servir de base pour les
@@ -82,10 +82,10 @@ module PdfDocument
   #
   class Default < PdfDocument::Totalized
 
-    attr_reader :created_at, :nb_lines_per_page, :source, :select_method
+    
       
-    attr_accessor :first_report_line
-    attr_reader  :from_date, :to_date, :columns_to_totalize, :stamp
+    
+    attr_reader  :from_date, :to_date
     
        
     # period est un exercice,

@@ -17,15 +17,29 @@ create_stamp("fond") do
 end
 
 
+
 # la table des pages
 1.upto(doc.nb_pages) do |n|
     current_page = doc.page(n)
     pad(05) do
 
-# TODO voir pour faire une méthode de ces deux lignes
-# afin de pouvoir utiliser des partials
-    jc_render = Proc.new {|temple, jcpdf| jc_text = File.open(temple, 'r') {|f| f.read  }; jcpdf.instance_eval(jc_text, temple) }
-    jc_render.call("lib/pdf_document/prawn_files/entetes.pdf.prawn", self)
+font_size(12) do
+y_position = cursor
+bounding_box [0, y_position], :width => 150, :height => 40 do
+    text_box current_page.top_left
+end
+
+bounding_box [150, y_position], :width => width-300, :height => 40 do
+    font_size(20) { text current_page.title, :align=>:center }
+    text current_page.subtitle, :align=>:center
+end
+
+bounding_box [width-150, y_position], :width => 150, :height => 40 do
+    text_box current_page.top_right, :align=>:right
+end
+
+end
+
 
    end
 
@@ -45,12 +59,11 @@ table [doc.before_title], :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold
     column(2).width = width*(current_page.total_columns_widths[3] +  current_page.total_columns_widths[4])/100
     column(3).width = width*(current_page.total_columns_widths[5])/100
 end
+
 table [current_page.table_title],
   :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do 
          column_widths.each_with_index {|w,i| column(i).width = w}
       end
-
-
 
 # une table de une ligne pour le report
 if current_page.table_report_line

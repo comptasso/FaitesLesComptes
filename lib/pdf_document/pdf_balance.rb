@@ -6,37 +6,38 @@ require 'pdf_document/totalized'
 module PdfDocument
 
 
+  # la classe Balance est spécifique en ce qu'elle utilise un titre de tableau 
+  # assez complexe.
+  # 
+  # Ce titre est donné par la méthode before_title
+  #
   class PdfBalance < PdfDocument::Totalized
     
 
     attr_accessor :from_number, :to_number
+    attr_reader :from_date, :to_date
 
+    def initialize(period, source, options)
+      super(period, source, options)
+      @from_date = source.from_date
+      @to_date = source.to_date
+      @from_number = source.from_account
+      @to_number = source.to_account
+      @subtitle = "Du #{I18n::l from_date} au #{I18n.l to_date}"
+      @select_method = 'accounts'
+      set_columns %w(accounts.id number title period_id)
+      set_columns_alignements  [:left, :left, :right, :right, :right, :right, :right]
+      set_columns_widths [10, 40, 10, 10, 10, 10, 10]
+      set_columns_titles %w(Numéro Intitulé Débit Crédit Débit Crédit Solde)
+      set_columns_to_totalize [2,3,4,5,6]
+    end
 
-     # calcule de nombre de pages; il y a toujours au moins une page
-     # même s'il n'y a pas de lignes dans le comptes
-     # ne serait-ce que pour afficher les soldes en début et en fin de période.
-
-    # Je surcharge car on utilise ici balance_lines et non lines. 
-     def nb_pages
-       nb_lines = @source.balance_lines.count
-       return 1 if nb_lines == 0
-      (nb_lines/@nb_lines_per_page.to_f).ceil
-     end
-
-   
-
-    
+     
     def before_title
       ['', "Soldes au #{I18n::l from_date}", 'Mouvements de la période',  "Soldes au #{I18n::l to_date}"]
     end
 
-    # renvoie les lignes de la page demandées
-     def fetch_lines(page_number)
-      limit = nb_lines_per_page
-      offset = (page_number - 1)*nb_lines_per_page
-      source.accounts.select(columns).order('number').where('number >= ? AND number <= ?', @from_number, @to_number).offset(offset).limit(limit)
-     end
-  
+      
     # appelle les méthodes adéquate pour chacun des éléments de la ligne
     # qui représente un account 
     def prepare_line(account)
