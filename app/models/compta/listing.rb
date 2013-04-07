@@ -1,8 +1,6 @@
 # coding: utf-8
 
 
-load 'pdf_document/account.rb'
-
 module Compta
 
 
@@ -96,23 +94,13 @@ module Compta
     end
 
  
-    #produit un document pdf en s'appuyant sur la classe PdfDocument::Default
+    # Produit un document pdf en s'appuyant sur la classe Editions::Account
+    # descendant de PdfDocument::Default
     # et ses classe associées page et table
     def to_pdf(options = {})
-      options[:title] ||=  "Liste des écritures du compte #{account.number}"
-      options[:subtitle] ||= "Du #{I18n::l from_date} au #{I18n.l to_date}"
-      options[:stamp] = "brouillard" unless account.all_lines_locked?(from_date, to_date)
       options[:from_date] = from_date
       options[:to_date] = to_date
-      pdf = PdfDocument::Account.new(period, account, options)
-
-      pdf.set_columns ['writings.date AS w_date', 'books.title AS b_title', 'writings.ref AS w_ref', 'writings.narration AS w_narration', 'nature_id', 'destination_id', 'debit',  'credit']
-      pdf.set_columns_methods ['w_date', 'b_title', 'w_ref', 'w_narration', 'nature.name', 'destination.name', nil, nil]
-      pdf.set_columns_widths [10, 8, 8, 24, 15, 15, 10, 10]
-      pdf.set_columns_titles %w(Date Jnl Réf Libellé Nature Destination Débit Crédit)
-      pdf.set_columns_to_totalize [6,7]
-      pdf.first_report_line = ["Soldes au #{I18n::l from_date}"] + account.formatted_sold(from_date)
-      pdf
+      Editions::Account.new(period, account, {from_date:from_date, to_date:to_date})
     end
 
     protected

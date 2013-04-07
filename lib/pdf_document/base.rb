@@ -122,6 +122,8 @@ module PdfDocument
       pdf.instance_eval(text, template)
     end
 
+    protected
+
     # réalise la pagination de @pdf_file
     def numerote
       @pdf_file.number_pages("page <page>/<total>",

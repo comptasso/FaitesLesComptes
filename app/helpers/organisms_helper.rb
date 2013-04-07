@@ -25,8 +25,8 @@ module OrganismsHelper
         m << info
       end
     end
+
     org.cashes.each do |ca|
-      
       unless ca.cash_controls.any?
         info={}
         info[:text] = "Caisse <b>#{sanitize ca.name}</b> : Pas encore de contrôle de caisse à ce jour".html_safe
@@ -38,7 +38,7 @@ module OrganismsHelper
         cash_control = ca.cash_controls.order('date ASC').last
         if cash_control.different?
           info[:text] = "Caisse <b>#{sanitize ca.name}</b> : Ecart de caisse de  #{cash_control.difference}".html_safe
-          info[:icon] = icon_to 'detail.png', cash_cash_control_path(ca, cash_control)
+          info[:icon] = icon_to 'detail.png', cash_cash_controls_path(ca)
           m << info
         end
       end

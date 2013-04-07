@@ -25,6 +25,9 @@ module Editions
       @to_date = period.close_date
       @title = 'Statistiques par nature'
       
+      # stats est la méthode qui renvoie les stats
+      # TODO voir si lines ne serait pas plus performant; mais probablement sans aucune
+      # utilité puisque fetch_lines fonctionne à partir de la source
       @select_method = 'stats'
    
       plm = period.list_months.collect {|my| my}
@@ -41,16 +44,19 @@ module Editions
 
    
     # comme les lignes sont déja calculées par Stats#stats,
-    # il n'est pas utile d'appeler la base
+    # il n'est pas utile d'appeler la base.
+    #
+    # Dans la méthode source renvoie à stats qui a servi à l'initialisation
+    #
     def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
       source.twelve_months_lines.slice(offset, limit)
     end
 
-      def prepare_line(line)
+    def prepare_line(line)
         line
-      end
+    end
 
   end
 end

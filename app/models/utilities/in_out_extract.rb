@@ -1,7 +1,6 @@
 # coding: utf-8
 
 require 'month_year'
-require 'pdf_document/book' 
 
 module Utilities
 
@@ -20,9 +19,9 @@ module Utilities
 
     include Utilities::ToCsv
 
-    attr_reader :book, :titles
+    attr_reader :book, :titles, :begin_date, :end_date
 
-    def initialize(book, period, begin_date=nil, end_date=nil)
+    def initialize(book, period, begin_date = nil, end_date = nil)
       @book = book
       @period = period
       @begin_date = begin_date || period.start_date
@@ -77,42 +76,14 @@ module Utilities
     
     alias compta_lines lines
 
-    # produit le document pdf en s'appuyant sur la classe PdfDocument::Book
-    def to_pdf
-      
-      pdf = PdfDocument::Book.new(@period, @book, options_for_pdf)
-      pdf.set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
-        'writings.narration AS w_narration', 'destination_id',
-        'nature_id', 'debit', 'credit', 'payment_mode', 'writing_id']
-      pdf.set_columns_methods ['w_date', 'w_ref', 'w_narration',
-        'destination.name', 'nature.name', 'debit', 'credit',
-        'payment_mode', 'writing_id']
-      pdf.set_columns_titles(titles)
-      pdf.set_columns_widths([8, 6, 20 ,10 ,  10, 10, 10,13,13])
-      pdf.set_columns_to_totalize [5,6]
-       
-      pdf
-    end
-
-   
-
+    # produit le document pdf en s'appuyant sur la classe Editions::Book
+    def to_pdf      
+       Editions::Book.new(@period, self)
+     end
 
     protected
 
-     # détermine les options pour la publication du pdf
-    #
-    # La méthode est identique à celle de InOutExtract à l'excption de
-    # subtitle qui précise le mois
-    def options_for_pdf
-      {
-        :title=>book.title,
-        :subtitle=>"Du #{I18n::l @begin_date} au #{I18n::l @end_date}",
-        :from_date=>@begin_date,
-        :to_date=>@end_date,
-        :stamp=> provisoire? ? 'Provisoire' : ''
-        }
-    end
-
+  
     
     #  Utilisé pour l'export vers le csv et le xls
     # 

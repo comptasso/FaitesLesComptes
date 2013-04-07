@@ -12,6 +12,7 @@ class InOutWritingsController < ApplicationController
   before_filter :fill_natures, :only=>[:new,:edit] # pour faire la saisie des natures en fonction du livre concerné
 
   # GET /in_out_writings
+  # TODO changer @monthly_extract en @extract
   def index
     if params[:mois] == 'tous'
       @monthly_extract = Utilities::InOutExtract.new(@book, @period)
@@ -20,7 +21,7 @@ class InOutWritingsController < ApplicationController
     end
     respond_to do |format|
       format.html  # index.html.erb
-      format.pdf {send_data @monthly_extract.to_pdf.render, :filename=>"#{@organism.title}_#{@book.title}.pdf" }
+      format.pdf { send_data @monthly_extract.to_pdf.render, :filename=>"#{@organism.title}_#{@book.title}.pdf" }
       format.csv { send_data @monthly_extract.to_csv  } 
       format.xls { send_data @monthly_extract.to_xls  }
     end
@@ -152,7 +153,11 @@ class InOutWritingsController < ApplicationController
 
   # on surcharge fill_mois pour gérer le params[:mois] 'tous'
   def fill_mois
-    super if params[:mois] != 'tous'
+    if params[:mois] == 'tous'
+      @mois = 'tous'
+    else
+      super
+    end
   end
 
 

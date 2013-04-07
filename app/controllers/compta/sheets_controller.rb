@@ -96,7 +96,7 @@ class Compta::SheetsController < Compta::ApplicationController
 
 
   # dernière action de ce controller, detail donne les valeurs des comptes pour l'ensemble des 
-  # comptes avec leur rattachement aux riburik adéquates.
+  # comptes avec leur rattachement aux rubrik adéquates.
   # c'est une sorte de balance mais en fin d'exercice et avec les comptes de l'exercice mais 
   # aussi de l'exercice précédent
   def detail 
