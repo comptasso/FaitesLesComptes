@@ -1,9 +1,5 @@
 # coding: utf-8
 
-require 'pdf_document/simple.rb'
-require 'pdf_document/default.rb'
-require 'pdf_document/pdf_balance.rb'
-
 # Classe destinée à afficher une balance des comptes entre deux dates et pour une série de comptes
 # La méthode fill_date permet de remplir les dates recherchées et les comptes par défaut
 # ou sur la base des paramètres.
@@ -34,7 +30,7 @@ class Compta::BalancesController < Compta::ApplicationController
       respond_to do |format|
         format.html { render action: 'show'}
         format.js
-        format.pdf  {send_data @balance.to_pdf.render('lib/pdf_document/balance.pdf.prawn') ,
+        format.pdf  {send_data @balance.to_pdf.render ,
           filename:"Balance #{@organism.title}.pdf"} #,  disposition:'inline'}
         format.csv { send_data @balance.to_csv }  # pour éviter le problème des virgules
         format.xls { send_data @balance.to_xls }

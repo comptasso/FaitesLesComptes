@@ -50,7 +50,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'selenium-webdriver', '>= 2.31'
   gem 'capybara', '1.1.2'
-  gem 'better_errors'
+  
 
 #  gem 'jasmine'
   

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'pdf_document/pdf_balance'
+# require 'pdf_document/pdf_balance'
 
 # une classe correspondant à l'objet balance. Cette classe a une table virtuelle
 # mais le controller ne sauve pas l'objet.

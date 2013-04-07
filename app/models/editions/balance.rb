@@ -26,7 +26,7 @@ module Editions
       @to_number = source.to_account
       @subtitle = "Du #{I18n::l from_date} au #{I18n.l to_date}"
       @select_method = 'accounts'
-      @template = "models/editions/prawn/#{self.class.name.split('::').last.downcase}.pdf.prawn"
+      @template = "#{Rails.root}/app/models/editions/prawn/#{self.class.name.split('::').last.downcase}.pdf.prawn.rb"
       set_columns %w(accounts.id number title period_id)
       set_columns_alignements  [:left, :left, :right, :right, :right, :right, :right]
       set_columns_widths [10, 40, 10, 10, 10, 10, 10]

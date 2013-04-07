@@ -58,7 +58,7 @@ module Stats
     end
 
     def to_pdf(filter = 0)
-      Editions::Natures.new(@period, filter)
+      Editions::Stats.new(@period, self, filter)
     end
 
 
