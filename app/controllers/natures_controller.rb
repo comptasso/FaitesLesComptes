@@ -8,7 +8,11 @@ class NaturesController < ApplicationController
     @sn = Stats::StatsNatures.new(@period, @filter)
     respond_to do |format|
       format.html
-      format.pdf {@listing  = Stats::Listing.new(@sn.title, @sn.lines)}
+      format.pdf {
+        filename = "#{@organism.title} - Statistiques - #{@period.exercice}"
+        filename += " filtrées par #{@filter_name}" if @filter !=0
+        filename += '.pdf'
+        send_data @sn.to_pdf.render, filename:filename }
       format.csv { send_data @sn.to_csv  }  # \t pour éviter le problème des virgules
       format.xls { send_data @sn.to_xls  }
     end

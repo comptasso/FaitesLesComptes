@@ -20,8 +20,9 @@ module Editions
       set_columns [:id, :name]
       set_columns_titles(['Natures'] + plm + ['Total'])
       set_columns_alignements([:left] + plm.collect{|c| :right} + [:right]) # à gauche pour les natures et à droite pour les mois et la colonne Total
-      set_columns_widths([100 - (1 + plm.length)*6] + plm.collect {|c|  6 } + [6])
-      set_columns_to_totalize(1.upto(plm.size).collect {|i| i})
+      larg_col_num = 6.5
+      set_columns_widths([100 - (1 + plm.length)*larg_col_num] + plm.collect {|c| larg_col_num } + [larg_col_num])
+      set_columns_to_totalize(1.upto(1 + plm.size).collect {|i| i})
     end
 
     # comme les lignes sont déja calculées par Stats#stats,
