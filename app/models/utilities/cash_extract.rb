@@ -1,8 +1,5 @@
 # coding: utf-8
 
-require 'pdf_document/cash'
-
-
 module Utilities
 #
 # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes
@@ -31,18 +28,7 @@ class CashExtract < InOutExtract
 
   # produit le document pdf en s'appuyant sur la classe PdfDocument::Book
   def to_pdf
-
-      pdf = PdfDocument::Cash.new(@period, @book, options_for_pdf)
-      pdf.set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
-        'writings.narration AS w_narration', 'destination_id',
-        'nature_id', 'credit', 'debit']
-      pdf.set_columns_methods ['writing.date', 'writing.ref', 'writing.narration',
-        'destination_id.name', 'nature_id.name', 'credit', 'debit']
-      pdf.set_columns_titles(titles)
-      pdf.set_columns_widths([12, 12, 28,12,12,12,12])
-      pdf.set_columns_to_totalize [5,6]
-
-      pdf
+     Editions::Cash.new(@period, self)
   end
 
   
