@@ -71,7 +71,7 @@ class Compta::Balance < ActiveRecord::Base
   # et ses classe associées page et table
   def to_pdf
     stamp = provisoire? ? 'provisoire' : ''
-    pdf = PdfDocument::PdfBalance.new(period, self, 
+    pdf = Editions::Balance.new(period, self,
       title:"Balance générale",
       stamp:stamp)
     pdf

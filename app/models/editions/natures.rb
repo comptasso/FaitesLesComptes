@@ -4,7 +4,7 @@ require 'pdf_document/default.rb'
 
 module Editions
 
-  class Natures < PdfDocument::Default
+  class Natures < PdfDocument::Totalized
 
 
     def initialize(period, filter = 0)

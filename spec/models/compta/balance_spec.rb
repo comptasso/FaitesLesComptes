@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
-   # c.filter = {:wip=>true}
+    c.filter = {:wip=>true}
 end
 
 describe Compta::Balance do 
@@ -105,9 +105,6 @@ describe Compta::Balance do
 
         end
 
-
-
-
       end
 
     end
@@ -187,7 +184,7 @@ describe Compta::Balance do
 
      it 'should be able to_pdf with 5 pages' do
        pdf = @b.to_pdf
-       pdf.should be_an_instance_of(PdfDocument::PdfBalance)
+       pdf.should be_an_instance_of(Editions::Balance)
        pdf.nb_pages.should == 5
      end
     end
