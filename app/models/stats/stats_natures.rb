@@ -36,6 +36,16 @@ module Stats
       @stats ||= stats
     end
 
+    # cette méthode est rendue nécessaire pour l'édition de pdf car la mise en
+    # page est prévue pour 12 mois.
+    #
+    # On tronque donc le tableau s'il y a plus de 12 mois.
+    def twelve_months_lines
+      return lines if @period.length <= 12
+      # on prend les colonnes 0 (le libellé) et les 13 dernières
+      lines.collect {|l| l.slice(0,1) + l.slice(-13,13)}
+    end
+
     # fait les totaux de toutes les lignes et renvoie un array 
     # Totaux float, float, ..., float, total des floats
     def totals
@@ -57,8 +67,8 @@ module Stats
       end
     end
 
-    def to_pdf(filter = 0)
-      Editions::Stats.new(@period, self, filter)
+    def to_pdf
+      Editions::Stats.new(@period, self)
     end
 
 

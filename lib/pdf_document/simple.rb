@@ -68,7 +68,7 @@ module PdfDocument
       @nb_lines_per_page = options[:nb_lines_per_page] || NB_PER_PAGE_LANDSCAPE
       @source = source
       @select_method = options[:select_method]
-      @template = "lib/pdf_document/#{self.class.name.split('::').last.downcase}.pdf.prawn"
+      @template = "lib/pdf_document/simple.pdf.prawn"
       @stamp = options[:stamp]
       @subtitle = options[:subtitle]
     end

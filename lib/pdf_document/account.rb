@@ -2,6 +2,7 @@
 
 require 'pdf_document/default.rb'
 require 'pdf_document/page.rb'
+
 module PdfDocument
 
   # Classe pour faire l'édition pdf des listings de comptes

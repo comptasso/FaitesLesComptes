@@ -103,6 +103,7 @@ module PdfDocument
       @nb_lines_per_page = options[:nb_lines_per_page] || NB_PER_PAGE_LANDSCAPE
       @stamp = options[:stamp]
       @created_at = Time.now
+      @template = "lib/pdf_document/default.pdf.prawn"
       
     end
 

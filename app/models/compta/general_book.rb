@@ -46,10 +46,10 @@ module Compta
       # de pagination
       #
       #
-    def to_pdf
+    def to_pdf 
       final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape)
 
-      ras = range_accounts.select {|ra| ra.compta_lines.any? }
+      ras = accounts.select {|ra| ra.compta_lines.any? }
       ras.each do |a|
 
         # crée un Compta::Listing, en fait un pdf (to_pdf), puis rend ce pdf dans le final_pdf

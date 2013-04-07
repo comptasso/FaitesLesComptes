@@ -20,6 +20,11 @@ module PdfDocument
     attr_reader :columns_to_totalize
     attr_accessor :first_report_line
 
+     def initialize(period, source, options)
+      super
+      @template = 'lib/pdf_document/totalized.pdf.prawn.rb'
+    end
+
 
     # par rapport à la méthode héritée, prepare_line ne fait pas de mise
     # en forme automatique des champs numériques, pour pouvoir permettre la
