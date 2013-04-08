@@ -10,10 +10,7 @@ end
 describe Admin::OrganismsController do 
   include SpecControllerHelper
  
-  def valid_attributes
-    {database_name:'assotest4', user_id:@cu.to_param}
-  end
-
+  
   def user_session
     {user:@cu.id}
   end
@@ -28,9 +25,9 @@ describe Admin::OrganismsController do
 
   describe 'GET edit'  do
     it 'rend le template edit' do
-    Organism.should_receive(:find).with('1').and_return(mock_model(Organism))
-    get :edit, {id:'1'}, user_session
-    response.should render_template 'edit'
+      Organism.should_receive(:find).with('1').and_return(mock_model(Organism))
+      get :edit, {id:'1'}, user_session
+      response.should render_template 'edit'
     end 
   end
 
@@ -52,13 +49,13 @@ describe Admin::OrganismsController do
 
     it 'renvoie le formulaire si non sauvé' do
       @o.stub(:update_attributes).and_return false
-       put :update, {id:'1', organism:{name:'Bizarre'}}, user_session
-       response.should render_template 'edit'
+      put :update, {id:'1', organism:{name:'Bizarre'}}, user_session
+      response.should render_template 'edit'
     end
 
     it 'redirige vers l action index si sauvé' do
       put :update, {id:'1', organism:{name:'Bizarre'}}, user_session
-       response.should redirect_to admin_organism_url(@o)
+      response.should redirect_to admin_organism_url(@o)
     end
 
 
@@ -93,23 +90,33 @@ describe Admin::OrganismsController do
         @cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, save:true, connect_to_organism:true).as_new_record)
       end
 
-     it 'crée l organisme avec les paramètres' do
-      Organism.should_receive(:new).with({'name'=>'Bizarre', 'database_name'=>'test1'}).and_return(stub_model(Organism))
-      post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, user_session
-    end
+      it 'crée l organisme avec les paramètres' do
+        Organism.should_receive(:new).with({'name'=>'Bizarre', 'database_name'=>'test1'}).and_return(stub_model(Organism))
+        post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, user_session
+      end
 
       it 'sauve l organisme et la pièce' do
-      @o.should_receive(:save).and_return true
-      @r.should_receive(:save).and_return true
-      post :create, {'organism'=>{'name'=>'Bizarre' , 'database_name'=>'test1'}}, user_session
-    end
+        @o.should_receive(:save).and_return true
+        @r.should_receive(:save).and_return true
+        post :create, {'organism'=>{'name'=>'Bizarre' , 'database_name'=>'test1'}}, user_session
+      end
 
       it 'redirige vers l action index si sauvé' do
-       post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, user_session
-       response.should redirect_to new_admin_organism_period_url(@o)
+        post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, user_session
+        response.should redirect_to new_admin_organism_period_url(@o)
+      end
+
+
     end
 
+    context 'quand organsim est invalide' do
 
+      it 'renvoie un flash alert et redirige vers new' do
+        @o.should_receive(:valid?).and_return false
+        post :create, {'organism'=>{'name'=>'Bizarre' , 'database_name'=>'test1'}}, user_session
+        response.should render_template :new
+        flash[:alert].should == 'Impossible de créer l\'organisme'
+      end
     end
 
     context 'quand room est incorrect' do
@@ -119,10 +126,10 @@ describe Admin::OrganismsController do
       end
    
 
-    it 'renvoie le formulaire ' do
-      post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, user_session
-      response.should render_template :new
-    end
+      it 'renvoie le formulaire ' do
+        post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, user_session
+        response.should render_template :new
+      end
 
     end
 
@@ -164,18 +171,18 @@ describe Admin::OrganismsController do
 
     describe 'affiche un flash si base manquante' do
       
-    before(:each) do
-      @cu.stub(:rooms).and_return([mock_model(Room, :organism=>nil, :database_name=>'test',  :organism_description=>nil)])
+      before(:each) do
+        @cu.stub(:rooms).and_return([mock_model(Room, :organism=>nil, :database_name=>'test',  :organism_description=>nil)])
 
      
-    end
+      end
 
-    it 'si une room est en retard affiche un flash' do
-      get :index,{}, user_session
-      assigns(:rooms_description).should ==[nil]
-      assigns(:room_organisms).should == []
-      flash[:alert].should match "Base de données non trouvée ou organisme inexistant: test"
-    end
+      it 'si une room est en retard affiche un flash' do
+        get :index,{}, user_session
+        assigns(:rooms_description).should ==[nil]
+        assigns(:room_organisms).should == []
+        flash[:alert].should match "Base de données non trouvée ou organisme inexistant: test"
+      end
 
     
 

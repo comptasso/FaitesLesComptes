@@ -10,8 +10,9 @@
 #
 #load "#{Rails.root}/lib/pdf_document/pdf_sheet.rb"
 #load "#{Rails.root}/lib/pdf_document/pdf_detailed_sheet.rb"
-#load "#{Rails.root}/lib/pdf_document/simple.rb"
-#load "#{Rails.root}/lib/pdf_document/base.rb"
+
+ require 'pdf_document/base'
+
 class Compta::SheetsController < Compta::ApplicationController
   
   before_filter :check_nomenclature, :only=>[:index, :show]

@@ -31,6 +31,8 @@ include OrganismFixture
 
   end
 
+
+
   before(:each) do
     create_minimal_organism
     @od.writings.create!({date:Date.today, narration:'ligne pour controller rubrik',
@@ -58,6 +60,14 @@ include OrganismFixture
     cs.should match "2801 - Amortissements des frais d'établissements\t0,00\t-5,00\t5,00\t0,00\n"
     cs.should match "Frais d'établissement\t-1 210,00\t-5,00\t-1 205,00\t0,00"
     cs.should match "TOTAL ACTIF\t-5,00\t-5,00\t0,00\t0,00\n"
+  end
+
+  it 'si le sens n est pas actif, met certains champs à vide et inverse le signe' do
+    lr = list_rubriks
+    lr[:sens] = :passif
+    cs = Compta::Sheet.new(@p, lr, 'PASSIF').to_csv
+    cs.should match "Passif\nRubrique\tMontant\tPrécédent\n"
+    cs.should match "201 - Frais d'établissement\t1 210,00\t0,00\n"
   end
 
   it 'sheet peut créer le fichier csv pour l index' do

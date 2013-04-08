@@ -184,6 +184,12 @@ describe Admin::NaturesController do
         id:nat1.to_param, :fromPosition=>'1', :toPosition=>'3', :format=>:js}, valid_session
      end
 
+    it 'renvoie bad_request si mauvais argument' , wip:true do
+      post :reorder, {organism_id:@o.to_param, :period_id=>@p.to_param,
+        id:nat1.to_param, :fromPosition=>'1', :format=>:js}, valid_session
+      response.code.to_s.should match /^4/ # renvoie une erreur de type 400
+    end
+
   end
 
   describe 'LINK_NATURE' do

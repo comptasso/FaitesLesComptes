@@ -27,10 +27,6 @@ end
 describe Admin::RoomsController do
   include SpecControllerHelper
  
-  def valid_attributes
-    {database_name:'assotest4', user_id:@cu.to_param}
-  end
-
   def user_session
     {user:@cu.id}
   end

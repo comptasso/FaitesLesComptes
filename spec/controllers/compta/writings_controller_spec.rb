@@ -18,14 +18,7 @@ describe Compta::WritingsController do
     Book.stub(:find).and_return(@b)
   end
 
-  # This should return the minimal set of attributes required to create a valid
-  # Writing. As you add validations to Writing, be sure to
-  # update the return value of this method accordingly.
-  def valid_attributes
-    {book_id:@b.id, date:Date.today, narration:'Ecriture', :compta_lines_attributes=>{'0'=>{account_id:1, debit:100, credit:0},
-        '1'=>{account_id:2, debit:0, credit:100}}}
-  end
-
+ 
   describe "GET index"  do
     it "assigns all writings as @writings" do
       @b.should_receive(:writings).and_return @a = double(Arel)
@@ -58,12 +51,7 @@ describe Compta::WritingsController do
 
   describe "POST create"  do
 
-    before(:each) do
-      #      @w = Writing.new(valid_attributes)
-      #      @w.stub_chain(:compta_lines, :count).and_return 2
-      #      @w.stub(:balanced?).and_return true
-    end
-
+   
     describe "with valid params"  do
 
       before(:each) do
