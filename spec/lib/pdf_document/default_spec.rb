@@ -1,11 +1,12 @@
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+load 'pdf_document/simple.rb'
 load 'pdf_document/default.rb'
 require 'pdf_document/page'
 
 RSpec.configure do |c|
- # c.filter = {wip:true}
+  # c.filter = {wip:true}
 end
 
 describe PdfDocument::Default do
@@ -14,7 +15,8 @@ describe PdfDocument::Default do
   let(:p) {mock_model(Period, organism:o,
       start_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year,
-      exercice:'Exercice 2012')}
+      exercice:'Exercice 2012',
+      compta_lines:[1,2])}
 
   def valid_options
     {
@@ -27,7 +29,7 @@ describe PdfDocument::Default do
   context 'minimal_options et pas encore de source' do 
 
     before(:each) do
-      @default = PdfDocument::Default.new(p, nil, valid_options)
+      @default = PdfDocument::Default.new(p, p, valid_options)
     end
 
     it "should exists" do
@@ -64,23 +66,6 @@ describe PdfDocument::Default do
       @default.nb_lines_per_page.should == 22
     end
 
-
-
-
-
-    describe 'validations' do
-      it 'should have a title' do
-        @default.title =  nil
-        @default.should_not be_valid
-      end
-
-      it 'should have a select_method' do
-        @default.select_method =  nil
-        @default.should_not be_valid
-      end
-    end
-
-
   end
 
   context 'options complémentaires' do
@@ -102,7 +87,7 @@ describe PdfDocument::Default do
       @default.nb_lines_per_page.should == 30
     end
 
-     describe 'stamp' do
+    describe 'stamp' do
       it 'has a nil default stamp' do
         @default = PdfDocument::Default.new(p,nil, {})
         @default.stamp.should == nil
@@ -112,6 +97,12 @@ describe PdfDocument::Default do
         pdf = PdfDocument::Default.new(p, nil, valid_options.merge(stamp:'Provisoire'))
         pdf.stamp.should == 'Provisoire' 
       end
+    end
+
+    it 'peut modifir l alignement des colonnes' do
+      pdf = PdfDocument::Default.new(p,nil, {})
+      pdf.set_columns_alignements([:left, :left])
+      pdf.columns_alignements  = [:left, :left]
     end
   end
 
@@ -125,6 +116,7 @@ describe PdfDocument::Default do
       @default = PdfDocument::Default.new(p, source, valid_options)
       @default.set_columns  %w(writings.date writings.ref nature_id destination_id debit credit)
       @default.set_columns_to_totalize [4,5]
+
     end
 
     it 'a quand même une page' do
@@ -133,8 +125,8 @@ describe PdfDocument::Default do
     end
 
     it 'avec un total de 0', wip:true do
-     arel.stub_chain(:joins).and_return arel
-     arel.stub_chain(:select, :range_date, :offset, :limit).and_return nil
+      arel.stub_chain(:joins).and_return arel
+      arel.stub_chain(:select, :range_date, :offset, :limit).and_return nil
       @default.stub(:nb_pages).and_return 1
       @default.page(1).table_total_line.should == ['Totaux', '0,00', '0,00']
       @default.page(1).table_to_report_line.should == ['Total général', '0,00', '0,00']
@@ -168,21 +160,24 @@ describe PdfDocument::Default do
       expect {@default.page(0)}.to raise_error ArgumentError
     end
 
-   
-
-
-
-    it 'un doc doit pouvoir énumérer ses pages'
+    it 'un doc doit pouvoir énumérer ses pages' do
+      list = []
+      @default.each_page {|p| list << p.number }
+      list.should == [1,2,3,4,5] 
+    end
 
     it 'default select_method' do
       @default.select_method.should == 'compta_lines'
     end
 
-    it 'raise error si source ne repond pas à select method'
+    it 'raise error si source ne repond pas à select method' do
+      
+    end
 
     it 'on peut modifier la select_method = ' do
-      @default.select_method = :autre
-      @default.select_method.should == :autre
+      # title ne répondrait pas aux attentes mais est suffisant pour le test
+      @default.select_method = :title
+      @default.select_method.should == :title
     end
 
     # TODO ici on fait lines mais on devrait s'appuyer sur select_method
@@ -212,7 +207,7 @@ describe PdfDocument::Default do
         @default.columns_methods.should == ['line_date','ref', 'nature.name','destination.name', 'debit.to_f', 'credit']
       end
 
-      it 'raise error si columns_methods n est pas de la bonne taille'
+   
 
     end
 
@@ -236,7 +231,9 @@ describe PdfDocument::Default do
         @default.columns_widths.should == [10,20,30,10,15,15]
       end
 
-      it 'gestion des erreurs des size'
+      it 'gestion des erreurs des size' do
+        expect {@default.set_columns_widths([10,20,30,50])}.to raise_error ArgumentError
+      end
 
     end
 

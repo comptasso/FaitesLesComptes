@@ -72,6 +72,11 @@ module PdfDocument
       @stamp = options[:stamp]
       @subtitle = options[:subtitle]
     end
+
+    def select_method=(meth)
+      raise ArgumentError, 'la source ne répond pas à la méthode sectionnée' unless @source.respond_to?(meth)
+      @select_method = meth
+    end
     
     
     
@@ -106,6 +111,13 @@ module PdfDocument
       pages unless @pages # construit la table des pages si elle n'existe pas encore
       raise ArgumentError, "La page demandée n'existe pas"  unless (number > 0 &&  number <= nb_pages)
       @pages[number-1]
+    end
+
+    # enumarator permettant de parcourir les pages
+    def each_page
+      pages.each do |p|
+        yield p
+      end
     end
 
     
@@ -178,6 +190,7 @@ module PdfDocument
         val = 100.0/columns.size
         return  @columns_widths = columns.collect {|c| val}
       end
+      raise ArgumentError, 'le total des largeurs de colonnes ne peut être supérieur à  100 % !' if array_widths.sum > 100
       # si args a moins d'argument que le nombre de colonnes, on ajoute
       diff = columns.size - array_widths.length
       if diff > 0

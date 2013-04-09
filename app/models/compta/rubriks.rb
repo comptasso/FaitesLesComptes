@@ -13,7 +13,7 @@ module Compta
   # totals_prefix rajoute Total au titre pour pouvoir l'identifier lors des export en csv.
   #
   # Rubriks est concçue pour pouvoir être récursif, même si en pratique on n'utilise
-  # que deux niveaux dans les éditions.
+  # que deux ou trois niveaux dans les éditions.
   #
   # la méthode lines permet en effet d'afficher les différentes lignes de la collection
   # en appelant leur fonction totals

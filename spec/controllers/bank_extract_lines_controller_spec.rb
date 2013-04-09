@@ -21,7 +21,7 @@ describe BankExtractLinesController do
 
   before(:each) do
    minimal_instances
-   BankExtract.stub(:find).and_return be
+   BankExtract.stub(:find).with(be.to_param).and_return be
    be.stub(:bank_extract_lines).and_return(@a = double(Arel))
    @a.stub(:order).with(:position).and_return ['bel1', 'bel2']
   end
@@ -94,6 +94,15 @@ describe BankExtractLinesController do
        response.should render_template 'insert'
      end
 
+     it 'insert avec erreur renvoie un flash_error' do
+       ComptaLine.stub(:find).with('545').and_return(@cl = double(ComptaLine))
+       @a.stub(:new).and_return @bel1
+       @bel1.should_receive(:position=).with(3)
+       @bel1.stub(:save).and_return false
+       post :insert, {:bank_extract_id=>be.to_param, :id=>@bel1.to_param, :html_id=>'line_545', :at=>'3', :format=>:js}, valid_session
+       response.should render_template 'flash_error'
+     end
+
      it 'reorder prend 3 paramètres et déplace la ligne' do
        @bel1.should_receive(:move_higher).exactly(3).times
        post :reorder, {:bank_extract_id=>be.to_param, :id=>@bel1.to_param, :fromPosition=>'5', :toPosition=>'2', :format=>:js}, valid_session
@@ -105,6 +114,14 @@ describe BankExtractLinesController do
        post :reorder, {:bank_extract_id=>be.to_param, :id=>@bel1.to_param, :fromPosition=>'2', :toPosition=>'6', :format=>:js}, valid_session
        response.should render_template 'reorder'
      end
+
+     it 'reorder avec une erreur renvoie une bad_request' do
+       BankExtractLine.stub(:find).and_raise(ActiveRecord::RecordNotFound)
+       @bel1.stub(:move_lower)
+       post :reorder, {:bank_extract_id=>be.to_param, :id=>@bel1.to_param, :toPosition=>'6', :format=>:js}, valid_session
+       response.code.should match /^4/
+     end
+
 
 
    end

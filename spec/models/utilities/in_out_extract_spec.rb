@@ -5,7 +5,7 @@ require "#{Rails.root}/app/models/income_outcome_book"
 require "#{Rails.root}/app/models/outcome_book"
 
 RSpec.configure do |config|  
- # config.filter = {wip:true}
+  config.filter = {wip:true}
 
 end
  
@@ -46,9 +46,9 @@ describe Utilities::InOutExtract do
       Writing.count.should == 30
     end
 
-    it "has a collection of lines" do
-      pending 'problème semble provenir d une question d ordre des lignes qui ne serait pas le même'
-      @extract.lines.all.should == @ob.compta_lines.order(:id).all
+    it "has a collection of lines qui sont filtrées par le scope in_out_lines", wip:true do
+      
+      @extract.lines.all.should == @ob.compta_lines.in_out_lines.order(:id).all
     end
 
     it 'il y a 30 lignes' do

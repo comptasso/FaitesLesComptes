@@ -66,7 +66,10 @@ module Compta
       parse_page
     end
 
-
+    # @total_general a comme valeurs period, le titre, et une rubriks
+    #
+    # #collection est une méthode de Rubriks
+    #
     def datas
       @total_general.collection.first
     end

@@ -54,6 +54,9 @@ module Compta
     #
     # En pratique, une nomenclature se crée par l'exercice qui demande la nomenclature
     # de l'organisme
+    #
+    # instructions est un fichier yml qui définit la construction de la nomenclature
+    #
     def initialize(period, instructions)
       @period = period
       @instructions = instructions

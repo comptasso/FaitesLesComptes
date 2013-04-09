@@ -111,9 +111,9 @@ describe PdfDocument::Simple do
         @simple.should_not be_valid
       end
 
-      it 'should have a select_method' do
-        @simple.select_method =  nil
-        @simple.should_not be_valid
+     it 'should have a select_method' do
+        vl =   {title:'PDF Document', subtitle:'Le sous titre'}
+        PdfDocument::Simple.new(p, p, vl).should_not be_valid
       end
     end
 
