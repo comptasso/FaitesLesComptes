@@ -127,13 +127,21 @@ describe CashControl do
     describe 'period' do
 
       it 'should knows its period' do
-      @cash_control.send(:period).should == @p
+        @cash_control.send(:period).should == @p
       end
     end
 
-    describe 'difference' do
+    describe 'difference'  do
       it 'difference revnoie l ecart entre le contrôle et la valeur de la caisse' do
-        @cash_control.difference.should == @cash_control.amount - @c.sold_at(@cash_control.date)
+        @cash_control.should_receive(:cash_sold).and_return 10
+        @cash_control.difference.should == (@cash_control.amount - 10)
+      end
+
+      it 'different? renvoie un boolean' do
+        @cash_control.should_receive(:difference).and_return 0
+        @cash_control.should_not be_different
+        @cash_control.should_receive(:difference).and_return 0.004
+        @cash_control.should be_different
       end
     end
 

@@ -15,10 +15,7 @@ describe Admin::OrganismsController do
   let(:r) {mock_model(Room)}
   let(:p) {mock_model(Period)}
 
-  def session_attributes
-    {user:cu.id, period:@p.id, org_db:'test'}
-  end
-
+  
   describe 'before_filters' do
 
     before(:each) do

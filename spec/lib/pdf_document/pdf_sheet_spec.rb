@@ -63,9 +63,13 @@ describe PdfDocument::PdfSheet do
       @pdfs.stamp.should == 'Provisoire'
     end
 
-    it 'lit le template' do
+    it 'utilise le template correspondant à son sens' do
       @pdfs.send(:template).should == "lib/pdf_document/prawn_files/actif.pdf.prawn"
+      bal.stub(:sens).and_return :passif
+      @pdfs.send(:template).should == "lib/pdf_document/prawn_files/passif.pdf.prawn"
     end
+
+
 
     it 'fetch_lines' do
       @cr = double(Compta::Rubriks, :class=>Compta::Rubriks)

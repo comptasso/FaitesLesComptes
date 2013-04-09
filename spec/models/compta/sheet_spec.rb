@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |c|
-  # c.filter = {:wip=>true}
+   c.filter = {:wip=>true}
 end
 
 
@@ -98,9 +98,9 @@ include OrganismFixture
     cs.render_pdf.should be_true
   end
 
-  it 'sheet doit donner le total de ses lignes' do
-    pending
-    Compta::Sheet.new(@p, 'test.yml', 'ACTIF IMMOBILISE - TOTAL 1').totals.should == [
+  it 'sheet doit donner le total de ses lignes', wip:true do
+    cs =  Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
+    cs.datas.should == [
       'ACTIF IMMOBILISE - TOTAL 1', 1310.0, 5.0, 1305.0
     ]
   end

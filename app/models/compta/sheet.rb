@@ -52,6 +52,13 @@ module Compta
     validates :sens, :inclusion=>{:in=>[:actif, :passif]}
 
 
+    # page est un des éléments du fichier yml décrivant le document.
+    # 
+    # Concrètement page est :actif, :passif, :resultat, :benevolat.
+    # name sera le nom du document (par exemple Compte de Résultats)
+    # 
+    # parse_page lit les instructions de la page et construit @total_general
+    #
     def initialize(period, page, name)
       @period = period
       @list_rubriks = page
@@ -75,21 +82,6 @@ module Compta
         end
       end
     end
-
-#    TODO à supprimer s'il se confirme que ce n'est pas utilisé
-#
-#    def detail_to_csv(options = {col_sep:"\t"})
-#      CSV.generate(options) do |csv|
-#        csv <<  %w(Numéro Libellé Brut Amort Net Précédent)
-#        @period.two_period_account_numbers.each {|num| csv << Compta::RubrikLine.new(@period, :actif, num).to_csv}
-#      end
-#      csv
-#    end
-#
-#    def detail_to_xls
-#      detail_to_csv.encode("windows-1252")
-#    end
-
 
 
     # utilisé pour le csv de l'action index
