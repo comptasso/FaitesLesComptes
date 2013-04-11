@@ -88,12 +88,12 @@ class ApplicationController < ActionController::Base
   # TODO à supprimer en intégrant ces fonctions dans le modèle
   # déja fait pour line, en cours pour cash_control
   # voir à les supprimer également dans les parties admin et compta
-  def picker_to_date(string)
-    s = string.split('/')
-    Date.civil(*s.reverse.map{|e| e.to_i})
-  rescue
-    @period.guess_date
-  end
+#  def picker_to_date(string)
+#    s = string.split('/')
+#    Date.civil(*s.reverse.map{|e| e.to_i})
+#  rescue
+#    @period.guess_date
+#  end
 
   # vérifie que l'on est loggé sous un nom d'utilisateur,
   # s'il n'y a pas de session[:user], et à nil session[:org_db]

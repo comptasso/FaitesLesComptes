@@ -222,6 +222,20 @@ describe Account do
    
     end
 
+    describe 'to_pdf' do
+      it 'on peut imprimer un listing' do
+        # Account.create!(valid_attributes)
+        Account.to_pdf(@p).should be_a_instance_of(PdfDocument::Simple)
+      end
+    end
+
+    describe 'classe' do
+      it 'un compte connait sa classe comptable' do
+        @account = Account.create!(valid_attributes)
+        @account.classe.should == '6'
+      end
+    end
+
 
     
 

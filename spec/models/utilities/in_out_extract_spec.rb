@@ -5,7 +5,7 @@ require "#{Rails.root}/app/models/income_outcome_book"
 require "#{Rails.root}/app/models/outcome_book"
 
 RSpec.configure do |config|  
-  config.filter = {wip:true}
+#  config.filter = {wip:true}
 
 end
  
