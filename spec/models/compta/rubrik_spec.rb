@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 
-describe Compta::Listing do
+describe Compta::Rubrik do
   include OrganismFixture
 
   # Dans le fichier asso.yml, les immos incorporelles ont

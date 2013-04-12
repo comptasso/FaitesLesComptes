@@ -3,6 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
+  # c.filter = {:js=>true}
   # c.filter = {:wip=>true}
   # c.exclusion_filter = {:js=>true} 
 end
@@ -78,13 +79,35 @@ describe "BankExtracts" do
       page.find('.champ h3').should have_content "Compte courant : création d'un extrait de compte"
     end
 
+    context 'avec un extrait de compte non vide' do
+      before(:each) do
+        @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
+          reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)
+        BankExtract.any_instance.stub_chain(:bank_extract_lines, :empty?).and_return false
+        visit bank_account_bank_extracts_path(@ba)
+
+      end
+
+      it 'affiche une icone modifier' , wip:true do
+         page.find('tbody tr:first td:last').should have_icon('afficher', href:"#{bank_account_bank_extract_path(@ba, @be)}")
+      end
+
+      it 'cliquer sur l icone afficher mène à la page affichage' do
+       pending 'il faudrait avoir un bank extract qui ait réellement des lignes'
+        within('table') do
+          click_link('Afficher')
+        end
+        current_path.should == bank_extract_bank_extract_lines_path(@be)
+        page.find('thead th').should have_content("Liste des écritures")
+      end
+
+    end
+
     context 'avec un extrait de compte' do
 
       before(:each) do
         @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
           reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)
-        #     @be.stub(:bank_extract_lines).and_return([mock_model(BankExtractLine)])
-        @be.stub_chain(:bank_extract_line, :empty?).and_return false
         visit bank_account_bank_extracts_path(@ba)
         
       end
@@ -97,11 +120,11 @@ describe "BankExtracts" do
         page.all('table tbody tr').should have(1).row
       end
 
-      it 'les actions proposent edit, pointage, afficher et suppression' do
+      it 'les actions proposent edit, pointage, afficher et suppression' , js:true do
         # TODO rétablie le test sur l icone modifier qui devrait fonctionner...
         page.find('tbody tr:first td:last').should have_icon('modifier', href:"#{edit_bank_account_bank_extract_path(@ba, @be)}")
         page.find('tbody tr:first td:last').should have_icon('pointer', href:"#{pointage_bank_extract_bank_extract_lines_path(@be)}")
-        #    page.find('tbody tr:first td:last').should have_icon('afficher', href:"#{bank_account_bank_extract_path(@ba, @be)}")
+       
         page.find('tbody tr:first td:last').should have_icon('supprimer', href:"#{bank_account_bank_extract_path(@ba, @be)}")
       end
 
@@ -110,14 +133,7 @@ describe "BankExtracts" do
         page.find('h3').should have_content("Compte courant : modification d'un extrait de compte")
       end
 
-      it 'cliquer sur l icone afficher mène à la page affichage' do
-        pending 'ne marche pas malgré le stub de bank_extract_lines'
-        within('table') do
-          click_link('Afficher')
-        end
-        current_path.should == bank_extract_bank_extract_lines_path(@be)
-        page.find('thead th').should have_content("Liste des écritures")
-      end
+      
 
       it 'cliquer sur l icone afficher mène à la page affichage' do
         click_link('Pointer')
@@ -153,6 +169,7 @@ describe "BankExtracts" do
         @be1 = @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month,
           reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)
         @be1.update_attribute(:locked, true)
+       
         @be2 = @ba.bank_extracts.new(reference:'Folio 2',
           begin_date:(@be1.end_date + 1),
           end_date:(@be1.end_date.months_since(1)),
@@ -168,13 +185,13 @@ describe "BankExtracts" do
         page.all('table tbody tr').should have(2).rows
       end
 
-      it 'détruire le premier bank_extract laisse une ligne', :js=>true do
+      it 'détruire le premier bank_extract laisse une ligne',  :js=>true do
         visit bank_account_bank_extracts_path(@ba)
         click_link('Supprimer')
         alert = page.driver.browser.switch_to.alert
         alert.accept
         sleep 1
-        page.all('table tbody tr').should have(1).row 
+        page.all('table tbody tr').should have(1).row  
       end
     
     end

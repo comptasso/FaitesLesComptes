@@ -22,7 +22,7 @@ module Compta
 
     include Utilities::ToCsv
 
-    attr_reader :brut, :amortissement, :select_num, :account
+    attr_reader :brut, :amortissement, :select_num, :account, :period
 
     def initialize(period, sens,  select_num, option= nil )
       @period = period
@@ -44,32 +44,27 @@ module Compta
     # calcule les valeurs brut et amortissements pour le compte
     # retourne [0,0] s'il n'y a pas de compte
     def set_value
-
-       @brut, @amortissement =  brut_amort(@period, @select_num)
+      @brut, @amortissement =  brut_amort(@period, @select_num)
     end
     
     
     # retourne la valeur nette par calcul de la différence entre brut et amortissement
     def net
-      @brut - @amortissement
+      brut - amortissement
     end
 
     # previous_net renvoie la valeur nette pour l'exercice précédent
     # 
     def previous_net
-      if @period.previous_period?
-        net_value(@period.previous_period, @select_num)
-      else
-        0.0
-      end
+      period.previous_period? ? net_value(period.previous_period) : 0
     end
 
     def to_a
-      [title, @brut, @amortissement, net, previous_net]
+      [title, brut, amortissement, net, previous_net]
     end
 
     def to_actif
-      [title, @brut, @amortissement, net, previous_net]
+      [title, brut, amortissement, net, previous_net]
     end
 
     alias total_actif to_actif
@@ -86,10 +81,10 @@ module Compta
       -1
     end
 
-#    # affiche la RubrikLine
-#    def to_s
-#      "#{@select_num}; #{title}; #{@brut}; #{@amortissement}; #{net}; #{previous_net}"
-#    end
+    #    # affiche la RubrikLine
+    #    def to_s
+    #      "#{@select_num}; #{title}; #{@brut}; #{@amortissement}; #{net}; #{previous_net}"
+    #    end
 
     def to_csv(options = {:col_sep=>"\t"})
       CSV.generate(options) do |csv|
@@ -98,38 +93,42 @@ module Compta
     end
 
 
-  protected
+    protected
 
     # méthode générique permettant de renvoyer la valeur nette suite à l'appel
-    # de brut_amort, pour une périod donnée et pour un numéro de compte. Utilise l'option
+    # de brut_amort, pour une périod donnée.
+    #
+    # Utile pour obtenir la  et pour un numéro de compte. Utilise l'option
     # de RubrikLine (colon_2, debit ou credit) pour calculer le montant à afficher dans le
     # document concerné.
-    def net_value(period, select_num)
-     r =  brut_amort(period, select_num)
-     r[0] - r[1]
+    def net_value(period)
+      r =  brut_amort(period, select_num)
+      r[0] - r[1]
     end
+
+    # TODO couplage trop important : le brut et l'amort doivent être calculés par l'exercice
+    # ou porbablement par une classe spécifique de presentation d'un exercice.
 
     # renvoie la valeur du montant brut et de l'amortissement pour le compte
     # identifié par selet_num et pour l'exercice identifié par period
+    #
+    # tient compte des options demandées pour préparer les valeurs brut et amort
+    #
     def brut_amort(period, select_num)
       account = period.accounts.find_by_number(select_num)
-      if account
-        s = account.sold_at(period.close_date)
-        # prise en compte de la colonne provision ou amortissement
-        r =  @option == :col2 ? [0, -s] : [s, 0]
-        # l'option debit ne prend la valeur que si le solde est négatid
-        r = [0,0] if @option == :debit && s > 0
-        # l'option crédit ne prend la valeur que si le solde est positif
-        r = [0,0] if @option == :credit && s < 0
-        # prise en compte du sens
-        if @sens == :actif || @sens == :debit
-          r.collect! {|v| v != 0.0 ? -v  : 0 } # ceci pour éviter des -0.0
-        end
-
-      else
-        r = [0,0]
+      return [0,0] unless account
+      s = account.sold_at(period.close_date)
+      # prise en compte de la colonne provision ou amortissement
+      result =  @option == :col2 ? [0, -s] : [s, 0]
+      # l'option debit ne prend la valeur que si le solde est négatif
+      result = [0,0] if @option == :debit && s > 0
+      # l'option crédit ne prend la valeur que si le solde est positif
+      result = [0,0] if @option == :credit && s < 0
+      # prise en compte du sens
+      if @sens == :actif || @sens == :debit
+        result.collect! {|v| v != 0.0 ? -v  : 0 } # ceci pour éviter des -0.0
       end
-        r
+      result
     end
 
 

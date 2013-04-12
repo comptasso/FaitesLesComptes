@@ -11,8 +11,7 @@ class BankExtractsController < ApplicationController
     @bank_extracts = @bank_account.bank_extracts.period(@period).all 
     if @bank_extracts.size == 0
       flash[:alert] = 'Pas encore d\'extrait de compte ; Peut-être vouliez vous en saisir un ?'
-      redirect_to new_bank_account_bank_extract_url(@bank_account)
-      return
+      redirect_to new_bank_account_bank_extract_url(@bank_account) and return
     end
   end
 
