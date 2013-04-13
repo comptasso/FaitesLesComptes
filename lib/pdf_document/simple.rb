@@ -107,7 +107,7 @@ module PdfDocument
 
     # permet d'appeler la page number
     # retourne une instance de PdfDocument::Page
-    def page(number)
+    def page(number = 1)
       pages unless @pages # construit la table des pages si elle n'existe pas encore
       raise ArgumentError, "La page demandée n'existe pas"  unless (number > 0 &&  number <= nb_pages)
       @pages[number-1]

@@ -1,5 +1,10 @@
-# fichier Prawn pour des éditions simples sans total ni report
-# ni tampon
+# fichier Prawn pour des éditions de rubriks
+# TODO supprimer ce fichier ; En pratique, ce fichier n'est pas utilisé
+#
+# Seule la partie de table des lignes se retrouve dans actif ou passif...
+# On pourrait donc le supprimer. Il sert cepandant à tester le to_pdf de rubriks
+#
+
 width = bounds.right
 
 page = doc.page
