@@ -106,13 +106,13 @@ class Period < ActiveRecord::Base
   # avec la date de cloture < au start_date de l'exercice actuel
   # renvoie lui même s'il n'y en a pas
   def previous_period
-    ::Period.first(:conditions=>['organism_id = ? AND close_date < ?', self.organism_id, self.start_date],
+    ::Period.first(:conditions=>['organism_id = ? AND close_date < ?', organism_id, start_date],
       :order=>'close_date DESC') || self
   end
 
   # indique s'il y a un exercice précédent en testant si previous period renvoie un exercice différent de self
   def previous_period?
-    (previous_period.id == self.id) ? false : true
+    (previous_period.id == id) ? false : true
   end
 
   def previous_period_open?
@@ -146,7 +146,7 @@ class Period < ActiveRecord::Base
   end
 
   # renvoie la liste des comptes pour deux exercices successifs.
-  # 
+  # TODO utiliser un Set qui garantira l'unicité
   # nécessaire pour éditer par exemple une balance sur deux ans
   def two_period_account_numbers
     if previous_period?
@@ -164,6 +164,12 @@ class Period < ActiveRecord::Base
   # renvoie le compte (12) qui sert pour enregistrer le résultat de l'exercice
   def report_account
     accounts.where('number = ?', 12).first
+  end
+
+  # Renvoie le compte de l'exercice précédent
+  def previous_account(account)
+    return nil unless previous_period?
+    previous_period.accounts.find_by_number(account.number)
   end
 
   # permet de fournir au dashboard les informations nécessaires pour faire le graphe de 
@@ -335,7 +341,8 @@ class Period < ActiveRecord::Base
 
     
   # list_months renvoye un tableau d'instance de mois (MonthYear)
-  # utilisée notamment par Book#monthly_datas
+  # permettant notamment de faire les entêtes de vues listant les
+  # mois de l'exercice
   def list_months
     ListMonths.new(start_date, close_date)
   end

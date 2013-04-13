@@ -73,7 +73,7 @@ class Account < ActiveRecord::Base
 
   # Surcharge de cumulated_at comme indiqué dans Utilities::Sold
   #
-  # Ici nous avons une somme simple sauf dans le cas où la date la veille de celle d'ouverture
+  # Ici nous avons une somme simple sauf dans le cas où la date est la veille de celle d'ouverture
   # ce qui se produit quand on démarre le listing d'une balance au premier jour de l'exercice
   # donc très souvent.
   #
@@ -139,7 +139,7 @@ class Account < ActiveRecord::Base
   #
   # Retourne nil si solde nul, ou un hash debit, credit avec une seule valeur
   def report_info
-    sa = sold_at(period.close_date)
+    sa = final_sold
     if sa != 0
       sa > 0 ? {debit:0, credit:sa} : {credit:0, debit:-sa}
     end
@@ -161,8 +161,24 @@ class Account < ActiveRecord::Base
      init_sold('credit')
   end
 
-  
+  def final_sold
+    sold_at(period.close_date)
+  end
 
+  def previous_sold
+    return 0 unless previous_account
+    previous_account.final_sold
+  end
+
+  def previous_account
+    period.previous_account(self)
+  end
+
+
+  
+# TODO cette méthode n'est utilisée qu'une fois pour edition de Account listing.
+# la mettre ailleurs d'autant qu'il s'agit d'un sujet de présentation
+#
 # Montant du sole à une date donnée sous forme d'un Array [debit, credit] mais
 # mis en forme avec les helpers de Rails
   def formatted_sold(date)

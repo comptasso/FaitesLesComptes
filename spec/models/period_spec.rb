@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c| 
-  # c.filter = {wip:true}
+ # c.filter = {wip:true}
 end
 
 describe Period do
@@ -210,6 +210,25 @@ describe Period do
           @p_2011.stub_chain(:previous_period, :account_numbers).and_return  ['bonsoir', 'salut']
           @p_2011.stub(:account_numbers).and_return(['alpha', 'salut'])
           @p_2011.two_period_account_numbers.should == ['alpha', 'bonsoir', 'salut']
+        end
+
+        it 'sait retourner le compte de même number', wip:true  do
+          @p_2011.stub(:previous_period?).and_return true
+          @p_2011.stub(:previous_period).and_return(@ar = double(Arel))
+          acc13 = mock_model(Account, number:'2801')
+          @ar.should_receive(:accounts).and_return @ar
+          @ar.should_receive(:find_by_number).with('2801').and_return(acc10 = mock_model(Account))
+          @p_2011.previous_account(acc13).should == acc10
+        end
+        
+        it 'sait retourner le compte de même number (test sans should_receive)' do
+          acc11 = @p_2011.accounts.find_by_number('201')
+          @p_2011.previous_account(acc11).number.should == '201'
+        end
+
+        it 'sans compte corresondant previous_account retourne nil' do
+          acc11 = mock_model(Account, number:'999')
+          @p_2011.previous_account(acc11).should == nil
         end
 
       end

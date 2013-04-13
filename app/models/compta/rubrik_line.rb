@@ -37,16 +37,11 @@ module Compta
     # renvoie le libellé du compte. Si le compte n'existe pas pour cet exercice
     # essaye de trouver ce compte dans l'exercice précédent
     def title
-      acc = @account || @period.previous_period.accounts.find_by_number(@select_num)
+      acc = account || period.previous_period.accounts.find_by_number(@select_num)
       "#{acc.number} - #{acc.title}" rescue "Erreur, compte #{@select_num} non trouve"
     end
 
-    # calcule les valeurs brut et amortissements pour le compte
-    # retourne [0,0] s'il n'y a pas de compte
-    def set_value
-      @brut, @amortissement =  brut_amort(@period, @select_num)
-    end
-    
+     
     
     # retourne la valeur nette par calcul de la différence entre brut et amortissement
     def net
@@ -59,15 +54,13 @@ module Compta
       period.previous_period? ? net_value(period.previous_period) : 0
     end
 
-    def to_a
-      [title, brut, amortissement, net, previous_net]
-    end
-
+    
     def to_actif
       [title, brut, amortissement, net, previous_net]
     end
 
     alias total_actif to_actif
+    alias to_a to_actif
 
     def to_passif
       [title, net, previous_net]
@@ -95,6 +88,12 @@ module Compta
 
     protected
 
+    # calcule les valeurs brut et amortissements pour le compte
+    # retourne [0,0] s'il n'y a pas de compte
+    def set_value
+      @brut, @amortissement =  brut_amort(@period, @select_num)
+    end
+
     # méthode générique permettant de renvoyer la valeur nette suite à l'appel
     # de brut_amort, pour une périod donnée.
     #
@@ -115,9 +114,9 @@ module Compta
     # tient compte des options demandées pour préparer les valeurs brut et amort
     #
     def brut_amort(period, select_num)
-      account = period.accounts.find_by_number(select_num)
+      
       return [0,0] unless account
-      s = account.sold_at(period.close_date)
+      s = account.final_sold
       # prise en compte de la colonne provision ou amortissement
       result =  @option == :col2 ? [0, -s] : [s, 0]
       # l'option debit ne prend la valeur que si le solde est négatif
@@ -130,6 +129,8 @@ module Compta
       end
       result
     end
+
+
 
 
   end

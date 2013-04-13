@@ -115,7 +115,21 @@ describe Account do
   
     end
 
+    describe 'solde final' do
+       before(:each) do
+        @acc1 = Account.create!({number:'100', title:'Capital', period_id:@p.id})
+        @acc2 = Account.create!({number:'5201', title:'Banque', period_id:@p.id})
+        @od.writings.create!(date:Date.today.beginning_of_year, narration:'ecriture d od',
+          :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:1000},
+            '1'=>{account_id:@acc2.id, debit:1000}})
+      end
 
+      it 'final_sold', wip:true do
+        @acc1.should_receive(:sold_at).with(@p.close_date).and_return(1000)
+        @acc1.final_sold
+      end
+
+    end
 
 
 
