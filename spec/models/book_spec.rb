@@ -210,46 +210,6 @@ describe Book do
   end
 
   
-  # TODO tester monthly_datas en situation réelle pour s'assurer que le stub répond bien à la réalité
-  
-  # je veux que monthly datas retourne
-  describe "monthly_datas" , wip:true do
-
-#    def data_arrays(period)
-#      year=period.start_date.year
-#      (1..12).map {|t| {"Month"=>"#{format('%02d',t)}-#{year}", 'total_month'=> 2*t}  }
-#    end
-
-    def hash_datas_arrays(period)
-      year=period.start_date.year
-      h={}
-      (1..12).map {|t| h["#{format('%02d',t)}-#{year}"]=70 }
-      h
-    end
-
-    let(:period) {stub_model(Period, :start_date=>Date.civil(2012,01,01), :close_date=>Date.civil(2012,12,31))}
-    let(:arl) {double(Arel)}
-
-    before(:each) do
-      @book = Book.new
-      (1..12).map {|t| "#{format('%02d',t)}-#{2012}"}.each do |m|
-        @book.stub_chain(:lines,:month).with(m).and_return(arl)
-
-      end
-      arl.stub(:sum).with(:credit).and_return(120)
-      arl.stub(:sum).with(:debit).and_return(50)
-
-    end
-
-   
-    it "monthly_datas returns a hash" do
-      z = @book.monthly_datas(period)
-      z.should be_an_instance_of(Hash) 
-      @book.monthly_datas(period).should == hash_datas_arrays(period)
-    end
-    
-  end
-  
   
 
 end

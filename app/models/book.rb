@@ -28,22 +28,11 @@ class Book < ActiveRecord::Base
   # TODO introduce uniqueness and scope
   validates :title, :abbreviation, presence: true
   
-
-  
-
-  # renvoie les soldes mensuels du livre pour l'ensemble des mois de l'exercice
-  # sous la forme d'un hash avec comme clé 'mm-yyyy' pour identifier les mois.
-  # monthly_value est définie dans Utilities::Sold
-  def monthly_datas(period)
-    Hash[period.list_months.map {|m| [m, monthly_value(m)]}]
-  end
-
   def book_type
     self.class.name
   end
 
  
-  
   # astuces trouvéexs dans le site suivant
   # http://code.alexreisner.com/articles/single-table-inheritance-in-rails.html
   # également ajouté un chargement des enfants dans l'initilizer development.rb
