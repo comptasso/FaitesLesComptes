@@ -2,6 +2,8 @@
 
 module PdfDocument
 
+  # TODO : on devrait se passer de document car page connait document
+
   # la classe Table du module PdfDocument est une classe qui doit alimenter le
   # template de prawn avec les méthodes nécessaires pour fournir
   # la ligne de titre de la table,
@@ -11,32 +13,35 @@ module PdfDocument
   # la ligne A reporter si nécessaire
   # la ligne Total Général pour la dernière page
   #
-  # La classe se constuit à partir d'un numéro de page, d'un nombre de lignes
-  # d'une source pour les lignes
+  # La classe se constuit à partir d'une page d'un document.
+  # La variable d'instance
   # et des indications de colonnes en terme de largeur,
   # ainsi que le fait de savoir si les colonnes doivent être totalisées ou non
   #
   # C'est le PdfDocument qui définit les colonnes que l'on retient,
   # leur largeur et quelles colonnes on veut totaliser.
-
-
+  #
+  #
   class Table
-    def initialize(page, document)
+    attr_reader :page, :document
+
+    def initialize(page)
       @page = page
-      @document = document
+      @document = page.document
     end
 
     # retourne la ligne de titre à partir des informations de PdfDocument::Default
     def title
-      @document.columns_titles
+      document.columns_titles
     end
 
     # retourne le tableau de lignes à partir du numéro de la page fourni par
-    # @page, du nombre de lignes par pages, de la source et de la méthode
+    # page, du nombre de lignes par pages, de la source et de la méthode
+    #
     # fournis par PdfDocument::Default
     # lines renvoie donc un Arel
     def lines
-      @lines ||= @document.fetch_lines(@page.number)
+      @lines ||= document.fetch_lines(page.number)
     end
 
     # lines renvoie un array
@@ -65,13 +70,13 @@ module PdfDocument
     # total_line fait ensuite un formatage des valeurs avant de rajouter le mot Totaux
     # dans une première colonne.
     def total_line
-      r = @document.columns_to_totalize.collect {|index| totalize_column(index)}
+      r = document.columns_to_totalize.collect {|index| totalize_column(index)}
       r.insert(0, 'Totaux')
     end
 
     # appelle les méthodes adéquate pour chacun des éléments de la lignes
     def prepare_line(line)
-      @document.prepare_line(line)
+      document.prepare_line(line)
     end
 
     
@@ -97,7 +102,7 @@ module PdfDocument
      end
 
 
-# transforme un string représentant un nombre en format français, par exemple
+    # Transforme un string représentant un nombre en format français, par exemple
     # '1 300,25' en un float que le programme saura additionner.
     #
     # On prévoit le cas ou number serait malgré tout Numeric en retournant la valeur

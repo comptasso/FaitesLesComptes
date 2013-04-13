@@ -5,31 +5,31 @@ require 'pdf_document/table'
 module PdfDocument
   class Page
 
-    attr_reader :number, :table
+    attr_reader :number, :table, :document
     
     def initialize(number, doc)
       @number =  number
-      @doc = doc
+      @document = doc
     end
 
     def stamp
-      @doc.stamp
+      document.stamp
     end
 
     def top_left
-      "#{@doc.organism_name}\n#{@doc.exercice}"
+      "#{document.organism_name}\n#{document.exercice}"
     end
 
     def title
-      @doc.title
+      document.title
     end
 
     def subtitle
-      @doc.subtitle
+      document.subtitle
     end
 
     def top_right
-      I18n::l(@doc.created_at, :format=>"%e %B %Y\n%H:%M:%S")
+      I18n::l(document.created_at, :format=>"%e %B %Y\n%H:%M:%S")
     end
 
     def table_title
@@ -37,11 +37,11 @@ module PdfDocument
     end
 
     def table_columns_widths
-      @doc.columns_widths
+      document.columns_widths
     end
 
     def total_columns_widths
-      @doc.total_columns_widths
+      document.total_columns_widths
     end
 
     def table_lines
@@ -58,8 +58,8 @@ module PdfDocument
 
     # forunit le report
     def table_report_line
-      return @doc.first_report_line if @number == 1 # première page
-      r =  @doc.page(@number -1).table_to_report_line
+      return document.first_report_line if @number == 1 # première page
+      r =  document.page(@number -1).table_to_report_line
       r[0] = 'Reports'
       r
     end
@@ -90,7 +90,7 @@ module PdfDocument
 
     # indique si on est sur la dernière page
       def last_page?
-        @number == @doc.nb_pages
+        @number == document.nb_pages
       end
 
 
@@ -99,7 +99,7 @@ module PdfDocument
     # construit une table en donnant comme argument la page et le document
     # 
     def pdf_table
-      @table ||= Table.new(self, @doc)
+      @table ||= Table.new(self)
     end
 
     # appelle la méthode french_format pour chaque élément de ligne

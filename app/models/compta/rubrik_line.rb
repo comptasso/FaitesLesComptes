@@ -22,7 +22,7 @@ module Compta
 
     include Utilities::ToCsv
 
-    attr_reader :brut, :amortissement, :select_num, :account, :period
+    attr_reader :brut, :amortissement, :select_num, :account, :period, :sens, :option
 
     def initialize(period, sens,  select_num, option= nil )
       @period = period
@@ -51,7 +51,7 @@ module Compta
     # previous_net renvoie la valeur nette pour l'exercice précédent
     # 
     def previous_net
-      period.previous_period? ? net_value(period.previous_period) : 0
+      net_value(mise_en_forme(period.previous_account(account).final_sold)) rescue 0
     end
 
     
@@ -74,11 +74,6 @@ module Compta
       -1
     end
 
-    #    # affiche la RubrikLine
-    #    def to_s
-    #      "#{@select_num}; #{title}; #{@brut}; #{@amortissement}; #{net}; #{previous_net}"
-    #    end
-
     def to_csv(options = {:col_sep=>"\t"})
       CSV.generate(options) do |csv|
         csv << [@select_num, title, @brut, @amortissement, net, previous_net]
@@ -88,43 +83,47 @@ module Compta
 
     protected
 
-    # calcule les valeurs brut et amortissements pour le compte
+    # Calcule les valeurs brut et amortissements pour le compte
     # retourne [0,0] s'il n'y a pas de compte
+    #
+    # Appelé lors de l'initialisation
     def set_value
-      @brut, @amortissement =  brut_amort(@period, @select_num)
+      @brut, @amortissement =  brut_amort
     end
 
-    # méthode générique permettant de renvoyer la valeur nette suite à l'appel
-    # de brut_amort, pour une périod donnée.
-    #
-    # Utile pour obtenir la  et pour un numéro de compte. Utilise l'option
-    # de RubrikLine (colon_2, debit ou credit) pour calculer le montant à afficher dans le
-    # document concerné.
-    def net_value(period)
-      r =  brut_amort(period, select_num)
-      r[0] - r[1]
-    end
+    
 
-    # TODO couplage trop important : le brut et l'amort doivent être calculés par l'exercice
-    # ou porbablement par une classe spécifique de presentation d'un exercice.
-
-    # renvoie la valeur du montant brut et de l'amortissement pour le compte
-    # identifié par selet_num et pour l'exercice identifié par period
+    # Renvoie un array comprenant en premier la valeur du montant brut et de l'amortissement pour le compte
+    # identifié par selet_num et pour l'exercice identifié par period.
     #
-    # tient compte des options demandées pour préparer les valeurs brut et amort
+    # Tient compte des options demandées pour préparer les valeurs brut et amort
     #
-    def brut_amort(period, select_num)
-      
+    def brut_amort
       return [0,0] unless account
-      s = account.final_sold
-      # prise en compte de la colonne provision ou amortissement
-      result =  @option == :col2 ? [0, -s] : [s, 0]
+      mise_en_forme(account.final_sold)
+    end
+
+    # Etant donné deux montants (brut et amortissements dans un tableau), calcule le net
+    def net_value(arr)
+      arr[0] - arr[1]
+    end
+
+    
+
+    # Calule le brut et l'amortissement selon que l'on affiche
+    # 4 colonnes (Actif) ou 2 colonnes (Passif et comptes de résultats)
+    # et selon que l'on veut filtrer le crédit (pour le passif) et le débit(pour l'actif).
+    # Car certains comptes sont présents à la fois dans un bilan actif et passif selon leur solde
+    #
+    #
+    def mise_en_forme(value)
+      result =  option == :col2 ? [0, -value] : [value, 0]
       # l'option debit ne prend la valeur que si le solde est négatif
-      result = [0,0] if @option == :debit && s > 0
+      result = [0,0] if option == :debit && value > 0
       # l'option crédit ne prend la valeur que si le solde est positif
-      result = [0,0] if @option == :credit && s < 0
+      result = [0,0] if option == :credit && value < 0
       # prise en compte du sens
-      if @sens == :actif || @sens == :debit
+      if sens == :actif || sens == :debit
         result.collect! {|v| v != 0.0 ? -v  : 0 } # ceci pour éviter des -0.0
       end
       result
