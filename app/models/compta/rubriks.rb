@@ -86,7 +86,7 @@ module Compta
     # Utilisé pour les vues de détail de Sheet,
     # permet de récupérer les Rubriks, les Rubrik et les RubrikLine
     #
-    # Fetch_lines est récursif tant que la class est une Compta::ubriks
+    # Fetch_lines est récursif tant que la class est une Compta::Rubriks
     #
     def fetch_lines
       fl = []
@@ -100,6 +100,7 @@ module Compta
       fl
     end
 
+    # Récupèere les différentes Ribriks
     def fetch_rubriks
       result = []
       collection.each do |c|
@@ -112,6 +113,9 @@ module Compta
       result << self
     end
 
+
+    # Récupère les différentes rubriks avec les sous rubriks
+    # mais ne prend pas le détail des lignes
     def fetch_rubriks_with_rubrik
       result = []
       collection.each do |c|

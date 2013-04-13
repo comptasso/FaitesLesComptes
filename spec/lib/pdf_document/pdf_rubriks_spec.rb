@@ -31,7 +31,7 @@ describe 'PdfDocument::PdfRubriks' do
     end
 
    
-  end
+  end 
 
 
 end
