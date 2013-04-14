@@ -85,8 +85,8 @@ class Organism < ActiveRecord::Base
   # TODO sera à revoir si on gère une autre base que sqlite3
   def create_db
     # création du fichier de base de données
-    File.open(full_name, "w") {} # créarion d'un fichier avec le nom database.sqlite3 et fermeture
-    # on établit la connection (méthode ajoutée par jcl_monkey_patch)
+    File.open(full_name, "w") {} # création d'un fichier avec le nom database.sqlite3 et fermeture
+   
     if File.exist? full_name
       Rails.logger.info "Connection à la base #{database_name}"
       ActiveRecord::Base.establish_connection(
@@ -168,9 +168,12 @@ class Organism < ActiveRecord::Base
 
   # trouve l'exercice le plus adapté à la date demandée
   # ne renvoie nil que s'il n'y a aucun exercice.
+  #
+  # Fonctionne en remettant la date dans les limites données par les exercices
+  # et en appelant find_period.
   def guess_period(date = Date.today)
+    return nil if periods.empty?
     ps = periods.order(:start_date)
-    return nil if ps.empty?
     date = ps.first.start_date if date < ps.first.start_date
     date = ps.last.close_date if date > ps.last.close_date
     find_period(date)
@@ -203,6 +206,7 @@ class Organism < ActiveRecord::Base
     Compta::Nomenclature.new(period).sheet(page)
   end
 
+  # TODO document et nomenclature semblent assez proche (voir si on peut simplifier)
  
   
   private

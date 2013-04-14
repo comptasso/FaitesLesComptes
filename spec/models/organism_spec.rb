@@ -53,9 +53,13 @@ describe Organism do
       @organism.version.should == VERSION
     end
 
+    it 'organism peut créer une base de données' do
+      @organism.create_db
+    end
+
   end
 
-  describe 'after create', wip:true do
+  describe 'after create' do
     before(:each) do
       @organism = Organism.create! valid_attributes
     end
@@ -92,6 +96,16 @@ describe Organism do
       @organism.in_out_books.last.title.should == 'Dépenses'
     end
 
+    it 'peut créer un document' , wip:true do
+      Compta::Nomenclature.should_receive(:new).with(@organism.periods.last).and_return(@cn = double(Compta::Nomenclature))
+      @cn.should_receive(:sheet).with(:actif)
+      @organism.document(:actif)
+    end
+
+    it 'n est pas accountable' , wip:true  do
+      @organism.should_not be_accountable
+    end
+
     
   end
 
@@ -110,6 +124,10 @@ describe Organism do
 #      ActiveRecord::Base.establish_connection 'test'
 #    end
 
+     it 'n est pas accountable' , wip:true  do
+      @organism.should be_accountable
+    end
+
     describe 'find_period' do
 
       it "doit trouver l'exercice avec une date" do
@@ -117,6 +135,31 @@ describe Organism do
         @organism.find_period(Date.civil(2011,6,15)).should == @p_2011
         @organism.find_period(Date.civil(1990,5,15)).should == nil
       end
+
+    end
+
+
+    describe 'guess period' , wip:true do
+
+      it 'renvoie nil si pas de periods' do
+        @organism.stub(:periods).and_return []
+        @organism.guess_period(Date.today).should be_nil
+      end
+
+      it 'si la date est future renvoie le plus récent'  do
+        @organism.guess_period(Date.today).should == @p_2011
+      end
+
+      it 'si la date est trop ancienne, renvoie le plus vieux' do
+        @organism.guess_period(Date.today.years_ago 10).should == @p_2010
+      end
+
+      it 'sinon prend l exercice' do
+        @organism.guess_period(Date.parse('12/08/2010')).should == @p_2010
+        @organism.guess_period(Date.parse('11/11/2011')).should == @p_2011
+      end
+
+
 
     end
 
@@ -140,7 +183,7 @@ describe Organism do
 
 
     
-    describe 'main_bank_id', wip:true do
+    describe 'main_bank_id' do
       
       context 'with default bank account' do
        
