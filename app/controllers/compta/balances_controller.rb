@@ -18,17 +18,11 @@ class Compta::BalancesController < Compta::ApplicationController
 
   # utile pour afficher la balance en pdf
   def show
-
-    # ce unless est nécessaire pour les cas où l'on change d'exercice
-    # TODO voir si change_period peut traiter le sujet
-    unless params[:compta_balance]
-      redirect_to new_compta_period_balance_url(@period) and return
-    end
-    @params_balance = params[:compta_balance]
+    @params_balance = params[:compta_balance] || {}
     @balance = Compta::Balance.new({period_id:@period.id}.merge @params_balance)
     if @balance.valid?
       respond_to do |format|
-        format.html { render action: 'show'}
+        format.html 
         format.js
         format.pdf  {send_data @balance.to_pdf.render ,
           filename:"Balance #{@organism.title}.pdf"} #,  disposition:'inline'}
