@@ -2,7 +2,7 @@
 
 
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
+require 'spec_helper'
 require 'pdf_document/default'
 require 'pdf_document/page'
 require 'pdf_document/table'
@@ -12,6 +12,8 @@ RSpec.configure do |c|
 end
  
 describe PdfDocument::Table do
+
+ 
 
   let(:page) {mock(PdfDocument::Page, :number=>3, :document=>doc)}
   let(:doc) {stub(:columns_titles=>%w(Date Réf Débit Crédit),
@@ -25,6 +27,7 @@ describe PdfDocument::Table do
   end
 
   it 'a une instance de table' do
+     puts 'JE SUIS DANS LE SPEC TABLE'
     @table.should be_an_instance_of(PdfDocument::Table)
   end
 

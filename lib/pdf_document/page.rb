@@ -74,11 +74,7 @@ module PdfDocument
       else
         r =[]
         table_report_line.each_with_index do |v,i|
-          if (v.to_f.is_a?(Float) && table_total_line[i].to_f.is_a?(Float))
-            r << french_format(french_to_f(v) + french_to_f(table_total_line[i]))
-          else
-            r << ''
-          end
+          r << french_format(french_to_f(v) + french_to_f(table_total_line[i]))
         end
       end
       r[0] =  last_page? ? 'Total général' : 'A reporter'
@@ -86,14 +82,14 @@ module PdfDocument
     end
 
 
-    protected
+   
 
     # indique si on est sur la dernière page
       def last_page?
         @number == document.nb_pages
       end
 
-
+     protected
 
 
     # construit une table en donnant comme argument la page et le document

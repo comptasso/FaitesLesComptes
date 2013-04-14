@@ -19,7 +19,7 @@
       
       def initialize(document, list_monthly_ledgers, number)
         @number = number
-        @doc = document
+        @document = document
         @list_monthly_ledgers = list_monthly_ledgers
       end
 

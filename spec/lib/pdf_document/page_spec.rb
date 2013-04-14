@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
+require 'spec_helper'
 
 require 'pdf_document/default'
 
@@ -46,6 +46,11 @@ describe PdfDocument::Page do
 
     it 'répond à top middle' do
       @page.title.should == 'Le titre de la page'
+    end
+
+    it 'délègue columns_widths' do
+      doc.stub(:columns_widths).and_return 'bonjour'
+      @page.table_columns_widths.should == 'bonjour'
     end
 
     it 'avec un sous titre s il existe' do

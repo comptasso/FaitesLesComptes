@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c| 
- # c.filter = {wip:true}
+  # c.filter = {wip:true}
 end
 
 describe Period do
@@ -77,11 +77,32 @@ describe Period do
         @p.should_not be_valid
       end
 
-      it 'ne peut être ouvert' do
+
+
+      it 'ne peut être réouvert' do
         @p = @o.periods.create!(valid_params)
         @p.update_attribute(:open, false)
         @p.open = true
         @p.should_not be_valid
+      end
+
+      it 'n est pas valide si plus de deux exercices ouverts', wip:true do
+        Organism.any_instance.stub(:nb_open_periods).and_return 2
+        expect { @o.periods.create(valid_params)}.not_to change {Period.count}
+        
+      end
+
+
+      it 'vérid des cant_change' do # même si le before_create :fix_days fait que cela ne doit jamais arriver
+        @p = @o.periods.create!(valid_params)
+        @p.start_date = @p.start_date >> 1
+        @p.send(:cant_change_start_date).should be_false
+      end
+
+       it 'vérid des cant_change' do # même si le before_create :fix_days fait que cela ne doit jamais arriver
+        @p = @o.periods.create!(valid_params)
+        @p.start_date = @p.close_date << 1
+        @p.send(:cant_change_close_date).should be_false
       end
 
       

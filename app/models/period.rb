@@ -253,14 +253,7 @@ class Period < ActiveRecord::Base
     return closed?
   end
 
-  # report_compta_line crée la ligne de report de l'exercice
-  # TODO traiter le cas où le résultat serait zéro et mettre en protected ?
-  def report_a_nouveau
-    res_acc  = next_period.report_account
-    ran = ComptaLine.new(account_id:res_acc.id, credit:resultat, debit:0)
-    Rails.logger.warn 'report à nouveau invalide' unless ran.valid?
-    ran
-  end
+ 
 
   
 
@@ -471,8 +464,7 @@ class Period < ActiveRecord::Base
 
 
   protected
-
-
+ 
   # report_compta_line crée la ligne de report de l'exercice
   def report_a_nouveau
     res_acc  = next_period.report_account

@@ -1,7 +1,7 @@
 # coding: utf-8
 
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 require 'pdf_document/default'
 require 'pdf_document/page'
 require 'pdf_document/table'  

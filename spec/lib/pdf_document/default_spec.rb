@@ -1,12 +1,13 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-load 'pdf_document/simple.rb'
-load 'pdf_document/default.rb'
+require 'spec_helper'
+# require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
+require 'pdf_document/simple.rb'
+require 'pdf_document/default.rb'
 require 'pdf_document/page'
 
 RSpec.configure do |c|
-  # c.filter = {wip:true}
+  # c.filter = {wip:true} 
 end
 
 describe PdfDocument::Default do
@@ -107,7 +108,7 @@ describe PdfDocument::Default do
   end
 
   context 'un listing sans ligne' do 
-    load 'lib/pdf_document/table.rb'
+    
     let(:arel) {double(Arel, first:nil)}
     let(:source) {mock_model(Account, title:'Achats', number:'60',
         compta_lines:arel )}
