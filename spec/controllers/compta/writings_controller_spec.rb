@@ -14,7 +14,7 @@ describe Compta::WritingsController do
     @my = MonthYear.from_date(Date.today)
     @p.stub(:all_natures_linked_to_account?).and_return true
     @p.stub(:guess_month).and_return(MonthYear.from_date(Date.today))
-    @b = mock_model(Book)
+    @b = mock_model(Book, type:'IncomeBook')
     Book.stub(:find).and_return(@b)
   end
 
@@ -27,6 +27,20 @@ describe Compta::WritingsController do
       get :index, {book_id:@b.id, mois:'tous' }, valid_session
       assigns(:writings).should == @a
     end
+
+    it 'quand le book-type est AnBook, c est tous par defaut' do
+      @b.stub(:type).and_return 'AnBook'
+      @b.stub_chain(:writings, :period).and_return 'bonjour'
+      get :index, {book_id:@b.id  }, valid_session
+      assigns(:mois).should == 'tous'
+      assigns[:an].should == nil
+    end
+
+    it 'sans params et pas d AnBook, redirige' do
+       get :index, {book_id:@b.id  }, valid_session
+       response.should redirect_to(compta_book_writings_url(@b, :mois=>@my.month, :an=>@my.year))
+    end
+
   end
 
   
@@ -37,6 +51,12 @@ describe Compta::WritingsController do
       get :new, {book_id:@b.to_param}, valid_session
       assigns(:book).should == @b
       assigns(:writing).should be_a_new(Writing)
+    end
+
+    it 'avec un flash cherche l ecriture' do
+      @b.stub_chain(:writings, :new).and_return(Writing.new)
+      Writing.should_receive(:find_by_id).with(10)
+      get :new, {book_id:@b.to_param}, valid_session, {:previous_writing_id=>10} # envoi du flash
     end
   end
 
@@ -167,6 +187,36 @@ describe Compta::WritingsController do
       @w.stub(:destroy).and_return true
       delete :destroy, {book_id:@b.to_param, :id => @w.to_param}, valid_session
       response.should redirect_to(compta_book_writings_url(@b, :an=>@my.year, :mois=>@my.month ))
+    end
+  end
+
+
+  describe 'POST lock' do
+
+    before(:each) do
+
+      @w = mock_model(Writing, :date=>Date.today)
+      Writing.stub(:find).and_return(@w)
+    end
+
+    it 'envoie lock à l ecriture' do
+    @w.should_receive(:lock)
+    post :lock, {book_id:@b.to_param, :id=>@w.to_param, :mois=>@my.month, :an=>@my.year}, valid_session
+    response.should redirect_to(compta_book_writings_url(@b, :an=>@my.year, :mois=>@my.month ))
+  end
+  end
+
+  describe 'POST all_lock' do
+    before(:each) do
+      @w = mock_model(Writing, :date=>Date.today)
+      Writing.stub(:find).and_return(@w)
+    end
+
+    it 'envoie lock à toutes les écritures non verrouillées' do
+      @b.stub_chain(:writings, :period).and_return(@ar = double(Arel))
+      @ar.should_receive(:unlocked).and_return([stub(:lock=>true, 'compta_editable?'=>true),stub(:lock=>true, 'compta_editable?'=>true) ])
+      post :all_lock, {book_id:@b.to_param}, valid_session
+      response.should redirect_to compta_book_writings_url(@b)
     end
   end
 

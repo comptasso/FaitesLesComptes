@@ -106,56 +106,11 @@ module OrganismFixture
      ecriture
   end
 
- 
-#  def create_first_line
-#    @l1 = Line.create!(narration:'bel',counter_account_id:@baca.id,
-#      line_date:Date.today, debit:0, credit:97, payment_mode:'Virement', book_id:@ob.id, nature_id:@n.id)
-#  end
-#
-#  def create_second_line
-#    @l2 = Line.create!(narration:'bel', counter_account_id:@baca.id,
-#      line_date:Date.today, debit:0, credit:3, payment_mode:'Virement', book_id:@ob.id, nature_id:@n.id)
-#  end
 
   def create_second_organism 
     @cu.rooms.create!(database_name:'assotest2')
     @o2 = Organism.create!(title: 'ASSO TEST2', database_name:'assotest2', status:'Entreprise') 
   end
 
-  # crée le nombre de lignes demandées pour le minimal organism avec
-  # des valeurs par défaut
-  # UTILISE ENCORE LINE ET NON COMPTA LINE
-#  def create_lines(number)
-#    number.times do |i|
-#     Line.create!(line_date: Date.today, credit:0, debit:(i+1),
-#        book_id: @ob.id, cash_id:@c.id, narration: "Ligne test #{i+1}",
-#       nature_id: @n.id, payment_mode: 'Espèces' )
-#    end
-#  end
-
-#  def create_next_period(organism, period)
-#    p = organism.periods.new(start_date: (period.close_date+1), close_date: (period.close_date + 1).end_of_year)
-#    puts p.inspect
-#    p.save!
-#  end
-
-  # crée n lignes de recettes de caisse
-  def create_cash_lines(number, period, cash, credit = 9 )
-    period_length = period.close_date - period.start_date
-    book = period.organism.income_books.first
-    number.times do |n|
-      alea = period.start_date + rand(period_length)
-     ComptaLine.create!(line_date: alea, credit: credit,
-        cash_id: cash.id, book_id: book.id, narration: "Ligne test #{n}",
-       nature_id: @n.id, payment_mode: 'Espèces' )
-    end
-  end
-
-#  def clean_test_database
-#    os = Organism.all
-#    os.each {|oss| oss.destroy }
-#    Organism.count.should == 0
-#
-#  end
 
 end

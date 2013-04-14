@@ -12,18 +12,7 @@ include OrganismFixture
  
 describe "BankExtracts" do 
 
-  def retry_on_timeout(n = 3, &block)  
-    block.call
-  rescue Capybara::TimeoutError, Capybara::ElementNotFound => e
-    if n > 0
-      puts "Catched error: #{e.message}. #{n-1} more attempts."
-      retry_on_timeout(n - 1, &block)
-    else
-      raise
-    end 
-  end
-
-
+  
   before(:each) do
     create_user
     create_minimal_organism  
@@ -52,7 +41,7 @@ describe "BankExtracts" do
 
     it 'filling numeric value met a jour le solde final', :js=>true do
       visit new_bank_account_bank_extract_path(@ba)
-      retry_on_timeout do
+      
 
         end_sold = page.find(:xpath, '//input[@disabled]')
         end_sold.value.should == '0.00'
@@ -65,8 +54,9 @@ describe "BankExtracts" do
         fill_in('bank_extract_total_credit', with:'3.15')
         end_sold.value.should == '1.30'
         fill_in('bank_extract_reference', :with=>'Folio 124')
+        sleep 0.5
         end_sold.value.should == '4.45'
-      end
+      
     end
 
    

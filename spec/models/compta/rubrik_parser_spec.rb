@@ -13,12 +13,7 @@ describe Compta::RubrikParser do
   let(:p) {mock_model(Period, 
       :two_period_account_numbers=>%w(20 201 206 207 208 2801))}
 
-  # Dans le fichier asso.yml, les immos incorporelles ont
-  # 4 comptes à 3 chiffres : 201, 206 et 208
-  #
-  def list_immo
-    '20 201 206 207 208 -2801'
-  end
+ 
 
   before(:each) do
     @rp = Compta::RubrikParser.new(p, :actif, '20 !201')
