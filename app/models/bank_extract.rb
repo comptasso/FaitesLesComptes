@@ -33,16 +33,6 @@ class BankExtract < ActiveRecord::Base
       p.start_date, p.close_date).order(:begin_date) }
   scope :unlocked, where('locked IS ?', false)
 
-  
-
-  # on cherche le relevé de compte qui soit dans le mois de date, mais le plus proche de la
-  # fin du mois
-  def self.find_nearest(date) 
-    debut=date.beginning_of_month 
-    fin=debut.end_of_month
-    BankExtract.order('end_date ASC').where(['end_date >= ? and end_date <= ?', debut, fin]).last
-  end
-
   # indique si l'extrait est le premier de ce compte bancaire qui doive être pointé
   def first_to_point?
     return false if locked?
@@ -58,27 +48,31 @@ class BankExtract < ActiveRecord::Base
   end
 
   def total_lines_debit
-    self.bank_extract_lines.all.sum(&:debit)
+    bank_extract_lines.all.sum(&:debit)
   end
 
   def total_lines_credit
-    self.bank_extract_lines.all.sum(&:credit)
+    bank_extract_lines.all.sum(&:credit)
   end
 
   def diff_debit?
-    self.total_debit != self.total_lines_credit
+    diff_debit != 0
   end
 
+  # Il est normal que l'on est débit d'un côté et crédit de l'autre
+  # car on est d'un côté avec le relevé de compte envoyé par la banque
+  # et donc du point de vue de la banque; et de l'autre côté du point de
+  # vue de la structure.
   def diff_debit
-    self.total_debit - self.total_lines_credit
+    total_debit - total_lines_credit
   end
 
   def diff_credit?
-    self.total_credit != self.total_lines_debit
+    diff_credit != 0
   end
 
   def diff_credit
-    self.total_credit - self.total_lines_debit
+    total_credit - total_lines_debit
   end
 
   def equality?
@@ -93,9 +87,7 @@ class BankExtract < ActiveRecord::Base
     begin_sold + lines_sold - end_sold
   end
 
-  def status
-    self.locked? ? 'Verrouillé' : 'Non Verrouillé'
-  end
+  
 
   # retourne l'exercice correspondant à la date demandée, nil si pas trouvé
   def period
@@ -110,19 +102,17 @@ class BankExtract < ActiveRecord::Base
   # crée des bank_extract_lines pour toutes les lignes dont les dates sont inférieures à la date de clôture
 
   # TODO mieux utiliser la requete sql
-  def fill_bank_extract_lines
-    npl=bank_account.np_lines
-    npl.reject! {|l| l.line_date > end_date}
-    npl.each {|l| BankExtractLine.create!(bank_extract_id: id, line_id: l.id)}
-    cdl=bank_account.np_check_deposits
-    cdl.reject! {|l| l.deposit_date > end_date}
-    cdl.each {|l| BankExtractLine.create!(bank_extract_id: id, check_deposit_id: l.id)}
-  end
+#  def fill_bank_extract_lines
+#    npl=bank_account.np_lines
+#    npl.reject! {|l| l.line_date > end_date}
+#    npl.each {|l| BankExtractLine.create!(bank_extract_id: id, line_id: l.id)}
+#    cdl=bank_account.np_check_deposits
+#    cdl.reject! {|l| l.deposit_date > end_date}
+#    cdl.each {|l| BankExtractLine.create!(bank_extract_id: id, check_deposit_id: l.id)}
+#  end
 
   def lock_lines_if_locked
-    if self.locked
-      self.bank_extract_lines.all.each {|bl| bl.lock_line}
-    end
+    bank_extract_lines.all.each {|bl| bl.lock_line} if locked
   end
 
 

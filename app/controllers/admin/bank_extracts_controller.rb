@@ -1,5 +1,8 @@
 # -*- encoding : utf-8 -*-
 
+# TODO faire réapparaître la possibilité d'accéder à cette action
+# mais probablement en supprimant unlock et accepter destroy? A réfléchir.
+
 # Les extraits bancaires ne sont pas du domaine de la zone admin,
 # cependant dans la zone de saisie, lorsqu'un extrait est pointé, il n'y a plus
 # d'accès pour le modifier, le supprimer, et le pointer.

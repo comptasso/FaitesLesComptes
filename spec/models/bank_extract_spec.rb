@@ -222,9 +222,31 @@ describe BankExtract do
       @be2.total_lines_debit.should == 97
     end
 
+    it 'diff debit? si ecart' do
+      @be2.should_receive(:total_debit).and_return 13
+      @be2.should_not be_diff_debit
+      @be2.should_receive(:total_debit).and_return 96.59
+      @be2.should be_diff_debit
+    end
+
 
     it 'total lines credit' do
       @be2.total_lines_credit.should == 13 
+    end
+
+    it 'diff credit? si ecart' do
+      @be2.should_receive(:total_credit).and_return 97
+      @be2.should_not be_diff_credit
+      @be2.should_receive(:total_credit).and_return 96.59
+      @be2.should be_diff_credit
+    end
+
+    it 'lines_sold fait la différence' do
+      @be2.lines_sold.should == @be2.total_lines_credit - @be2.total_lines_debit
+    end
+
+    it 'diff sold fait une différence' do
+      @be2.diff_sold.should == @be2.begin_sold - @be2.end_sold + @be2.lines_sold
     end
 
     it 'lines belongs to max one bank_extract_line' do
