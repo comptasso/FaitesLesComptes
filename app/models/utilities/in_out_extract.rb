@@ -36,6 +36,8 @@ module Utilities
       @lines ||= @book.compta_lines.extract(@begin_date, @end_date).in_out_lines
     end
 
+    alias compta_lines lines
+
     # l'extrait est provisoire si il y a des lignes qui ne sont pas verrouillées
     def provisoire?
       lines.reject {|l| l.locked?}.any?
@@ -74,7 +76,7 @@ module Utilities
       end
     end
     
-    alias compta_lines lines
+    
 
     # produit le document pdf en s'appuyant sur la classe Editions::Book
     def to_pdf      
@@ -103,13 +105,6 @@ module Utilities
         line.writing.payment_mode,
         line.support
       ]
-    end
-
-    # remplace les points décimaux par des virgules pour s'adapter au paramétrage
-    # des tableurs français
-    # TODO supprimer et remplacer par french_format
-    def reformat(number)
-      ActionController::Base.helpers.number_with_precision(number, :precision=>2)
     end
 
     # est un proxy de ActionController::Base.helpers.number_with_precicision

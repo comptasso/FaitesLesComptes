@@ -71,6 +71,14 @@ describe Utilities::InOutExtract do
       @extract.credit_before.should == 0
     end
 
+    it 'peut produire un csv' do
+      @extract.to_csv
+    end
+
+    it 'peut produire un pdf' do
+      @extract.to_pdf
+    end
+
    
   end
 end
