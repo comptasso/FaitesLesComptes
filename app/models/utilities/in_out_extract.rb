@@ -33,7 +33,7 @@ module Utilities
     end
 
     def lines
-      @lines ||= @book.compta_lines.extract(@begin_date, @end_date).in_out_lines
+      @lines ||= @book.compta_lines.extract(begin_date, end_date).in_out_lines
     end
 
     alias compta_lines lines
@@ -50,19 +50,19 @@ module Utilities
     end
 
     def total_credit
-      lines.sum(:credit)
+      lines.sum(&:credit)
     end
 
     def total_debit
-      lines.sum(:debit)
+      lines.sum(&:debit)
     end
 
     def debit_before
-      @book.cumulated_debit_before(@begin_date)
+      @book.cumulated_debit_before(begin_date)
     end
 
     def credit_before
-      @book.cumulated_credit_before(@begin_date)
+      @book.cumulated_credit_before(begin_date)
     end
 
     
@@ -80,8 +80,8 @@ module Utilities
 
     # produit le document pdf en s'appuyant sur la classe Editions::Book
     def to_pdf      
-       Editions::Book.new(@period, self)
-     end
+      Editions::Book.new(@period, self)
+    end
 
     protected
 

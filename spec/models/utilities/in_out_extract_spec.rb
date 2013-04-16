@@ -12,43 +12,58 @@ end
 describe Utilities::InOutExtract do 
   include OrganismFixture
   before(:each) do
-    create_minimal_organism
-  end
 
-  it "is created with a book and a date" do
-    @book_extract = Utilities::InOutExtract.new(@ob, @p)
+    @ob = mock_model(OutcomeBook)
+    @p = mock_model(Period, start_date:Date.today.beginning_of_year, end_date:Date.today.end_of_year)
+    @extract = Utilities::InOutExtract.new(@ob, @p)
   end
 
   it 'respond to book' do
-    @book_extract = Utilities::InOutExtract.new(@ob, @p)
-    @book_extract.book.should == @ob
+    @extract.book.should == @ob
   end
 
-  context "when a InOutExtract exists" do 
+  it 'remplit ses arguments par défaut' do
+    @ext = Utilities::InOutExtract.new(@ob, @p, Date.today, Date.today >> 1)
+    @ext.begin_date.should == Date.today
+    @ext.end_date.should == (Date.today >> 1)
+  end
 
-    before(:each) do
-      # on créé 10 lignes sur le mois de janvier, de montant = à 1 €
-      # 10 sur février de montant = à 2 €
-      # 10 sur mars avec 3 euros
-      start = @p.start_date
-      3.times do  |i|
-        10.times do |t|
-          w = create_outcome_writing(i+1)
-          w.update_attribute(:date, start >> i)
+  it 'lines interroge book et filtre ' do
+    @ob.should_receive(:compta_lines).and_return(@ar = double(Arel))
+    @ar.should_receive(:extract).with(@extract.begin_date, @extract.end_date).and_return @ar
+    @ar.should_receive(:in_out_lines).and_return 'voila'
+    @extract.lines.should == 'voila'
+  end
+
+  context "when a InOutExtract exists" do
+
+    def line(date, debit, credit)
+      double(ComptaLine, ref:'', narration:'Une compta line',
+        destination:stub(:name=>'La destination'),
+        nature:stub(:name=>'La nature'),
+        debit:debit,
+        credit:credit,
+        date:date,
+        writing:stub(payment_mode:'Chèque'),
+        support:'Ma banque')
+    end
+
+    def double_lines
+         ls = []
+      3.times do |i|
+        1.upto(10) do |j|
+          ls << line(@extract.begin_date >> i, j, 0)
         end
       end
-
-      @extract = Utilities::InOutExtract.new(@ob, @p)
+      ls
 
     end
 
-    it 'les écritures sont créées' do
-      Writing.count.should == 30
-    end
-
-    it "has a collection of lines qui sont filtrées par le scope in_out_lines", wip:true do
-      
-      @extract.lines.all.should == @ob.compta_lines.in_out_lines.order(:id).all
+    before(:each) do
+      @extract.stub(:lines).and_return(@ls = double_lines)
+      @ob.stub(:cumulated_debit_before).with(@extract.begin_date).and_return 5
+      @ob.stub(:cumulated_credit_before).with(@extract.begin_date).and_return 18
+  #    @ls.stub(:sum).with(:debit).and_return()
     end
 
     it 'il y a 30 lignes' do
@@ -56,7 +71,7 @@ describe Utilities::InOutExtract do
     end
 
     it "knows the total debit" do
-       @extract.total_debit.should == 60
+       @extract.total_debit.should == 165
     end
 
     it "knows the total credit" do
@@ -64,11 +79,11 @@ describe Utilities::InOutExtract do
     end
 
     it "respond to debit_before" do
-      @extract.debit_before.should == 0
+      @extract.debit_before.should == 5
     end
 
     it "respond to debit_before" do
-      @extract.credit_before.should == 0
+      @extract.credit_before.should == 18
     end
 
     it 'peut produire un csv' do
@@ -76,6 +91,7 @@ describe Utilities::InOutExtract do
     end
 
     it 'peut produire un pdf' do
+      Editions::Book.should_receive(:new).with(@p, @extract)
       @extract.to_pdf
     end
 
