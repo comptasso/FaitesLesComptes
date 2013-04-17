@@ -14,7 +14,6 @@ module Utilities::Sold
     raise 'Has to be implemented in child class'
   end
 
-
   # debit cumulé avant une date (la veille). Renvoie 0 si la date n'est incluse
   # dans aucun exercice
   def cumulated_debit_before(date)

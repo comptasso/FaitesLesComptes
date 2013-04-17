@@ -20,7 +20,7 @@ module Utilities
     end
 
       
-    def month
+    def subtitle
       @my.to_format('%B %Y')
     end
 

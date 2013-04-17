@@ -10,9 +10,8 @@ RSpec.configure do |config|
 end
  
 describe Utilities::InOutExtract do 
-  include OrganismFixture
+  
   before(:each) do
-
     @ob = mock_model(OutcomeBook)
     @p = mock_model(Period, start_date:Date.today.beginning_of_year, end_date:Date.today.end_of_year)
     @extract = Utilities::InOutExtract.new(@ob, @p)
@@ -25,13 +24,11 @@ describe Utilities::InOutExtract do
   it 'remplit ses arguments par défaut' do
     @ext = Utilities::InOutExtract.new(@ob, @p, Date.today, Date.today >> 1)
     @ext.begin_date.should == Date.today
-    @ext.end_date.should == (Date.today >> 1)
+    @ext.end_date.should == (Date.today >> 1) 
   end
 
   it 'lines interroge book et filtre ' do
-    @ob.should_receive(:compta_lines).and_return(@ar = double(Arel))
-    @ar.should_receive(:extract).with(@extract.begin_date, @extract.end_date).and_return @ar
-    @ar.should_receive(:in_out_lines).and_return 'voila'
+    @ob.should_receive(:extract_lines).with(@extract.begin_date, @extract.end_date).and_return('voila')
     @extract.lines.should == 'voila'
   end
 
@@ -45,7 +42,8 @@ describe Utilities::InOutExtract do
         credit:credit,
         date:date,
         writing:stub(payment_mode:'Chèque'),
-        support:'Ma banque')
+        support:'Ma banque',
+        locked?:true)
     end
 
     def double_lines
@@ -63,11 +61,15 @@ describe Utilities::InOutExtract do
       @extract.stub(:lines).and_return(@ls = double_lines)
       @ob.stub(:cumulated_debit_before).with(@extract.begin_date).and_return 5
       @ob.stub(:cumulated_credit_before).with(@extract.begin_date).and_return 18
-  #    @ls.stub(:sum).with(:debit).and_return()
     end
 
     it 'il y a 30 lignes' do
-      @extract.lines.count.should == 30
+      @extract.lines.count.should == 30 
+    end
+
+    it 'délègue le calcul des soldes cumumés à Book' do
+      @ob.should_receive(:cumulated_at).with(Date.today, 'debit')
+      @extract.cumulated_at(Date.today, 'debit')
     end
 
     it "knows the total debit" do
@@ -93,6 +95,15 @@ describe Utilities::InOutExtract do
     it 'peut produire un pdf' do
       Editions::Book.should_receive(:new).with(@p, @extract)
       @extract.to_pdf
+    end
+
+    it 'est définitif avec des lignes toutes verrouillées' do
+      @extract.should_not be_provisoire
+    end
+
+    it 'est provisoire si des lignes ne sont pas verrouillées' do
+      @ls[1].stub(:locked?).and_return false
+      @extract.should be_provisoire
     end
 
    

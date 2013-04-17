@@ -48,8 +48,6 @@ class ComptaLine < ActiveRecord::Base
   # inclut with_writings et donc doit être utilisé pour un query qui ne l'inclut pas déja.
   scope :mois_with_writings, lambda {|date| with_writings.where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month)}
 
-
-
   scope :range_date, lambda {|from, to| with_writings.extract(from, to).order('date')}
   scope :listing, lambda {|from, to| with_writing_and_book.where('books.title != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}

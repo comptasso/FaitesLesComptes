@@ -8,21 +8,13 @@ module Editions
   # Cette classe hérite de PdfDocument::Default et surcharge fetch_lines
   class Book < PdfDocument::Totalized
 
+    delegate :title, :subtitle, :to=>:source
 
-    def initialize(period, book_extract)
-      super(period, book_extract, {})
-      @title = book_extract.book.title
-
-      if book_extract.is_a? Utilities::MonthlyInOutExtract
-        @subtitle = "Mois : #{book_extract.month}"
-      else
-        @subtitle = "Du #{I18n::l book_extract.begin_date} au #{I18n::l book_extract.end_date}"
-      end
-
-      
-      @from_date = book_extract.begin_date
-      @to_date = book_extract.end_date
-      @stamp = book_extract.provisoire? ? 'Provisoire' : ''
+    def initialize(period, source)
+      super(period, source, {})
+      @from_date = source.begin_date
+      @to_date = source.end_date
+      @stamp = source.provisoire? ? 'Provisoire' : ''
       @select_method = 'lines'
       set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
         'writings.narration AS w_narration', 'destination_id',
@@ -30,20 +22,12 @@ module Editions
       set_columns_methods ['w_date', 'w_ref', 'w_narration',
         'destination.name', 'nature.name', 'debit', 'credit',
         'w_mode', 'writing_id']
-      set_columns_titles(book_extract.titles)
+      set_columns_titles(source.titles)
       set_columns_widths([8, 6, 20 ,10 ,  10, 10, 10,13,13])
       set_columns_to_totalize [5,6]
       set_columns_alignements [:left, :left, :left, :left, :left, :right, :right, :left, :left]
     end
 
-    # renvoie les lignes de la page demandées
-#    def fetch_lines(page_number)
-#      limit = nb_lines_per_page
-#      offset = (page_number - 1)*nb_lines_per_page
-#      source.lines.offset(offset).limit(limit)
-#    end
-
-    
     # la méthode support n'est pas directement accessible par les tables
     # donc on utilise l'id récupéré pour appelé la fonction support.
     # Une autre option possible serait d'enregistrer cette info dans la table

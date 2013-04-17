@@ -28,12 +28,23 @@ module Utilities
       @end_date = end_date || period.close_date
     end
 
+    # renvoie les titres des colonnes pour une édition ou un export
+    #
+    # utilisé par to_csv et to_xls et probablement aussi par to_pdf
     def titles
      ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
     end
 
+    def title
+      book.title
+    end
+
+    def subtitle
+      "Du #{I18n::l begin_date} au #{I18n::l end_date}"
+    end
+
     def lines
-      @lines ||= @book.compta_lines.extract(begin_date, end_date).in_out_lines
+      @lines ||= @book.extract_lines(begin_date, end_date)
     end
 
     alias compta_lines lines
@@ -115,11 +126,6 @@ module Utilities
       r
     end
 
-
-
-  
-
   end
-
 
 end

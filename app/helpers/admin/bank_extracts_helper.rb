@@ -1,7 +1,7 @@
 # coding: utf-8
 require 'options_for_association_select'
 
-module Admin::BankExtrcatsHelper
+module Admin::BankExtractsHelper
 
 def status(obj)
   return 'Inconnu' unless obj.respond_to?('locked?')
