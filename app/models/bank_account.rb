@@ -68,16 +68,21 @@ class BankAccount < ActiveRecord::Base
     not_pointed_lines.lines
   end
 
+  # nombre de lignes à pointer
+ def nb_lines_to_point
+   not_pointed_lines.size
+ end
+
  # fait le total débit des lignes non pointées et des remises chèqures déposées
  # donc en fait c'est le total débit des lignes.
  # cette méthode est là par souci de symétrie avec total_credit_np
  def total_debit_np
-   total_debit_np_lines
+   not_pointed_lines.total_debit
  end
 
  # fait le total crédit des lignes non pointées et des remises chèqures déposées
  def total_credit_np
-   self.total_credit_np_lines 
+   not_pointed_lines.total_credit
  end
 
  # solde des lignes non pointées
@@ -94,9 +99,6 @@ class BankAccount < ActiveRecord::Base
  end
 
 
- def nb_lines_to_point
-   np_lines.size 
- end
 
  
 
@@ -108,17 +110,6 @@ class BankAccount < ActiveRecord::Base
 
  def not_pointed_lines
    Utilities::NotPointedLines.new(self)
- end
-
-
- #  totalise débit et crédit de toutes les lignes non pointées
- def total_debit_np_lines
-   np_lines.sum(&:debit)
- end
-
-  #  totalise débit et crédit de toutes les lignes non pointées
- def total_credit_np_lines
-   np_lines.sum(&:credit)
  end
 
 

@@ -23,6 +23,18 @@ module Utilities
       fetch_lines
     end
 
+    def size
+      lines.count
+    end
+
+    def total_debit
+      lines.sum(&:debit)
+    end
+
+    def total_credit
+      lines.sum(&:credit)
+    end
+
     private
 
     def fetch_lines
