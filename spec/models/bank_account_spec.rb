@@ -7,21 +7,19 @@ RSpec.configure do |c|
 end
 
 describe BankAccount do 
-  include OrganismFixture
+  include OrganismFixture 
 
   def create_bank_account
-    @o.bank_accounts.new(:bank_name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
+    BankAccount.new(:bank_name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
   end
 
-  before(:each) do
-    create_minimal_organism
-  end
+  
 
-  before(:each) do
-    @bb=create_bank_account
-  end
+  describe 'controle des validités' do
 
-  context 'controle des validités' do
+    before(:each) do
+      @bb=create_bank_account
+    end
 
     it "should be valid" do 
       @bb.should be_valid
@@ -43,6 +41,7 @@ describe BankAccount do
     end
 
     it "should have a unique number in the scope of bank and organism" do
+      pending 'à revoir avec les stub'
       @bb.bank_name = @ba.bank_name
       @bb.number= @ba.number
       @bb.should_not be_valid
@@ -53,7 +52,8 @@ describe BankAccount do
   describe 'création du compte comptable'  do
 
     before(:each) do
-      @bb=create_bank_account
+      create_minimal_organism
+      @bb=@o.bank_accounts.new(:bank_name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
     end
 
     it 'la création d un compte bancaire doit entraîner celle d un compte comptable' do
@@ -85,7 +85,7 @@ describe BankAccount do
     context 'avec deux exercices' do
 
       before(:each) do
-         @p2 = @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+        @p2 = @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
       end
 
       it 'répond à current_account' do
@@ -99,17 +99,25 @@ describe BankAccount do
 
 
   
-  context 'annex methods' do
+  describe 'Les méthodes liées aux lignes non pointées' do
 
-    it 'to_s return name' do
-      @ba.to_s.should == 'DX 123Z'
+     before(:each) do
+      @ba=create_bank_account
     end
 
-    it 'np_lines' do
-      pending 'pas implémenté'
+    it 'np_lines demande à compta_lines ses lignes non pointées' do
+      @ba.should_receive(:compta_lines).and_return(@ar = double(Arel))
+      @ar.should_receive(:not_pointed)
+      @ba.np_lines
     end
+
+  end
 
     describe 'new_bank_extract' do
+
+      before(:each) do
+        create_minimal_organism
+      end
 
       context 'without any bank extract' do
        
@@ -146,7 +154,6 @@ describe BankAccount do
 
     end
 
-  end
-
+  
 end
 

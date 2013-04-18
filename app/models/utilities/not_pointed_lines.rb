@@ -16,33 +16,18 @@ module Utilities
 
   class NotPointedLines
 
-    attr_reader :list
+    attr_reader :lines, :bank_account
 
     def initialize(bank_account)
-      @list = []
       @bank_account = bank_account
-      fill_np_lines
+      fetch_lines
     end
 
     private
 
-   
-
-    def fill_np_lines
-      @bank_account.np_lines.each do |l|
-        @list <<   {
-          id:l.id,
-          date:l.date,
-          narration:l.narration,
-          debit:l.debit, # c'est inversé car on est dans la logique de la banque
-          credit:l.credit
-        }
-      end
+    def fetch_lines
+      @lines ||= bank_account.compta_lines.not_pointed
     end
-
-   
-
-    
 
   end
 

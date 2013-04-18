@@ -17,6 +17,11 @@ describe Utilities::NotPointedLines do
     
   end
 
+  it 'demande à bank_account de remplir les lignes à pointer' do
+    @ba.should_receive(:np_lines)
+    Utilities::NotPointedLines.new(@ba)
+  end
+
   it 'npl should have 4 lines' do
     pending 'order_list ne fonctionne pas avec des mock_models'
     npl = Utilities::NotPointedLines.new(@ba)

@@ -20,13 +20,6 @@ class BankAccount < ActiveRecord::Base
   after_update :change_account_title, :if=> lambda {nickname_changed? }
   
 
-  # retourne le dernier extrait de compte bancaire
- # sur la base de la date de fin
- # filtre selon l'exercice
- def last_bank_extract(period)
-   bank_extracts.where('end_date <= ?', period.close_date).order(:end_date).last
- end
-
  def current_account(period)
    accounts.where('period_id = ?', period.id).first
  end
@@ -45,26 +38,10 @@ class BankAccount < ActiveRecord::Base
     # problèmes de calcul
   end
 
-  # Méthode qui donne le montant du dernier solde bancaire
-  # par ordre de date
-  def last_bank_extract_sold
-    last_bank_extract.end_sold
-  rescue
-    0
+  # renvoie le dernier relevé de compte (par date de fin) faisant partie de l'exercice
+  def last_bank_extract(period)
+     bank_extracts.where('end_date <= ?', period.close_date).order(:end_date).last
   end
-
-  # renvoie un array avec débit et crédit du relevé bancaire
-  def last_bank_extract_debit_credit
-    return last_bank_extract.debit, last_bank_extract.credit
-  end
-
-  # renvoie la date de fin du dernier relevé bancaire
-  def last_bank_extract_day
-    self.bank_extracts.order(:end_date).last.end_date
-  rescue
-    Date.today.beginning_of_month - 1
-  end
-
  
  # créé un nouvel extrait bancaire rempli à partir des informations du précédent
  # le mois courant et solde zéro si c'est le premier
@@ -85,17 +62,17 @@ class BankAccount < ActiveRecord::Base
  # les lignes à sélectionner sont celles qui correspondent aux comptes comptables
  # appartenant à ce compte bancaire
  # 
-# Appelé par la classe NotPointedLines 
+# Appelé par la classe NotPointedLines  
  #
   def np_lines
-    compta_lines.joins(:writing=>:book).where('books.type != ?', 'AnBook').where("NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES_LINES WHERE LINE_ID = COMPTA_LINES.ID)").order(:date)
+    not_pointed_lines.lines
   end
 
  # fait le total débit des lignes non pointées et des remises chèqures déposées
  # donc en fait c'est le total débit des lignes.
  # cette méthode est là par souci de symétrie avec total_credit_np
  def total_debit_np
-   self.total_debit_np_lines
+   total_debit_np_lines
  end
 
  # fait le total crédit des lignes non pointées et des remises chèqures déposées
@@ -113,7 +90,7 @@ class BankAccount < ActiveRecord::Base
  end
 
  def first_bank_extract_to_point
-   self.bank_extracts.where('locked = ?', false).order('begin_date ASC').first
+   bank_extracts.where('locked = ?', false).order('begin_date ASC').first
  end
 
 
@@ -127,20 +104,14 @@ class BankAccount < ActiveRecord::Base
    self.bank_extracts.where('locked = ?', false).count > 0 ? true :false
  end
 
-
- def acronym
-   bank_name.gsub(/[a-z\séèùôîûâ]/, '')
- end
-
- # utilisée dans les select pour avoir un champ plus sympathique que le seul numéro
- def to_s
-   "#{acronym} #{number}"
- end
-
-
  protected
 
-#  totalise débit et crédit de toutes les lignes non pointées
+ def not_pointed_lines
+   Utilities::NotPointedLines.new(self)
+ end
+
+
+ #  totalise débit et crédit de toutes les lignes non pointées
  def total_debit_np_lines
    np_lines.sum(&:debit)
  end
@@ -162,6 +133,8 @@ class BankAccount < ActiveRecord::Base
    end
  end
 
+ # quand on change le nickname de la banque il est nécessaire de modifier l'intitulé
+ # du compte associé à cette banque.
  def change_account_title
    accounts.each {|acc| acc.update_attribute(:title, nickname)}
  end
