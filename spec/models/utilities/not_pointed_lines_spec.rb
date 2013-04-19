@@ -28,6 +28,15 @@ describe Utilities::NotPointedLines do
     npls.size.should == 2
   end
 
+  it 'total_credit renvoie le total de ses lignes ' do
+    @ar = double(Arel)
+    @npls = Utilities::NotPointedLines.new(@ba)
+    @npls.stub(:lines).and_return(@ar)
+    @ar.should_receive(:sum)
+    # TODO finir ce spec ... with(&:credit) et même chose pour débit
+    @npls.total_credit
+  end
+
   it 'npl should have 4 lines' do
     pending 'order_list ne fonctionne pas avec des mock_models'
     npl = Utilities::NotPointedLines.new(@ba)

@@ -58,37 +58,22 @@ class BankAccount < ActiveRecord::Base
     end
   end
 
- # trouve toutes les lignes non pointées -np pour not pointed
- # les lignes à sélectionner sont celles qui correspondent aux comptes comptables
- # appartenant à ce compte bancaire
- # 
-# Appelé par la classe NotPointedLines  
+ # trouve toutes les lignes non pointées et qui ont pour compte comptable le
+ # numéro correspondant à ce compte bancaire.
+ #
+ def not_pointed_lines
+   Utilities::NotPointedLines.new(self)
+ end
+
+
+ # lines est une méthode de la classe NotPointedLines
  #
   def np_lines
     not_pointed_lines.lines
   end
 
-  # nombre de lignes à pointer
- def nb_lines_to_point
-   not_pointed_lines.size
- end
+  delegate :nb_lines_to_point, :total_debit_np, :total_credit_np, :sold_np, :to=>:not_pointed_lines
 
- # fait le total débit des lignes non pointées et des remises chèqures déposées
- # donc en fait c'est le total débit des lignes.
- # cette méthode est là par souci de symétrie avec total_credit_np
- def total_debit_np
-   not_pointed_lines.total_debit
- end
-
- # fait le total crédit des lignes non pointées et des remises chèqures déposées
- def total_credit_np
-   not_pointed_lines.total_credit
- end
-
- # solde des lignes non pointées
- def sold_np
-   self.total_credit_np - self.total_debit_np
- end
 
  def sold
    last_bank_extract_sold + sold_np
@@ -98,20 +83,13 @@ class BankAccount < ActiveRecord::Base
    bank_extracts.where('locked = ?', false).order('begin_date ASC').first
  end
 
-
+ def unpointed_bank_extract?
+   bank_extracts.where('locked = ?', false).any?
+ end
 
  
 
- def unpointed_bank_extract?
-   self.bank_extracts.where('locked = ?', false).count > 0 ? true :false
- end
-
- protected
-
- def not_pointed_lines
-   Utilities::NotPointedLines.new(self)
- end
-
+protected
 
  # appelé par le callback after_create, crée un compte comptable de rattachement
  # pour chaque exercice ouvert.

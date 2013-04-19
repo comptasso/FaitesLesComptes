@@ -35,6 +35,10 @@ module Utilities
       lines.sum(&:credit)
     end
 
+    def sold
+      total_credit - total_debit
+    end
+
     private
 
     def fetch_lines

@@ -22,7 +22,7 @@ class BankExtractLinesController < ApplicationController
     @counter_line = @in_out_writing.compta_lines.build(account_id:@bank_account.current_account(@period).id)
     # les variables d'instances pour l'affichage de la vue pointage
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
-    @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
+    @lines_to_point = @bank_account.not_pointed_lines
   end
 
 
@@ -60,7 +60,7 @@ class BankExtractLinesController < ApplicationController
     @bank_extract_line = BankExtractLine.find(params[:id])
     @bank_extract_line.destroy
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
-    @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
+    @lines_to_point = @bank_account.not_pointed_lines
     respond_to do |format|
       format.js 
     end
@@ -79,7 +79,7 @@ class BankExtractLinesController < ApplicationController
     respond_to do |format|
       if @bel.save
         @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
-        @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
+        @lines_to_point = @bank_account.not_pointed_lines
         format.js 
       else
         format.js { render 'flash_error'}
@@ -143,7 +143,7 @@ class BankExtractLinesController < ApplicationController
   def find_params
     
     @bank_extract=BankExtract.find(params[:bank_extract_id])
-    # ici il faut changer d'exercice si les dates du bank_extract ne sont pas dans l'exercice
+    # TODO ? ici il faut changer d'exercice si les dates du bank_extract ne sont pas dans l'exercice
     @bank_account = @bank_extract.bank_account
     @organism = @bank_account.organism
   end
