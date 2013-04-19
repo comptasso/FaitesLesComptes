@@ -36,20 +36,24 @@ class Nomenclature < ActiveRecord::Base
     {:actif=>actif, :passif=>passif, :resultat=>resultat, :benevolat=>benevolat}
   end
 
+  # remplit ses instructions à partir d'un fichier et se renvoie
   def load_file(file)
     yml = YAML::load_file(file)
     self.actif=yml[:actif]
     self.passif=yml[:passif]
     self.resultat=yml[:resultat]
     self.benevolat=yml[:benevolat]
+    self
   end
 
+  # remplit ses instructions à partir d'une chaine et se renvoie
   def load_io(io_string)
     yml = YAML::load(io_string)
     self.actif=yml[:actif]
     self.passif=yml[:passif]
     self.resultat=yml[:resultat]
     self.benevolat=yml[:benevolat]
+    self
   end
 
   
@@ -61,11 +65,13 @@ class Nomenclature < ActiveRecord::Base
 
  # méthode de présentation des erreurs
  #
+ # TODO : on devrait mettre cette méthode dans un helper de présentation
+ #
  # utilisée pour former le flash dans le controller AdminNomenclatures
  # mais également le messages qui est crée par le
  # AccountObserver lorsque la création d'un compte engendre une anomalie avec la nomenclature .
   def collect_errors
-
+    al = ''
     unless valid?
       al = 'La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d\'être faux.</br> '
       al += 'Liste des erreurs relevées : <ul>'

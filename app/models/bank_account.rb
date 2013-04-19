@@ -38,11 +38,6 @@ class BankAccount < ActiveRecord::Base
     # problèmes de calcul
   end
 
-  # renvoie le dernier relevé de compte (par date de fin) faisant partie de l'exercice
-  def last_bank_extract(period)
-     bank_extracts.where('end_date <= ?', period.close_date).order(:end_date).last
-  end
- 
  # créé un nouvel extrait bancaire rempli à partir des informations du précédent
  # le mois courant et solde zéro si c'est le premier
   def new_bank_extract(period)
@@ -74,11 +69,6 @@ class BankAccount < ActiveRecord::Base
 
   delegate :nb_lines_to_point, :total_debit_np, :total_credit_np, :sold_np, :to=>:not_pointed_lines
 
-
- def sold
-   last_bank_extract_sold + sold_np
- end
-
  def first_bank_extract_to_point
    bank_extracts.where('locked = ?', false).order('begin_date ASC').first
  end
@@ -90,6 +80,12 @@ class BankAccount < ActiveRecord::Base
  
 
 protected
+
+ # renvoie le dernier relevé de compte (par date de fin) faisant partie de l'exercice
+  def last_bank_extract(period)
+     bank_extracts.where('end_date <= ?', period.close_date).order(:end_date).last
+  end
+
 
  # appelé par le callback after_create, crée un compte comptable de rattachement
  # pour chaque exercice ouvert.

@@ -19,6 +19,37 @@ describe Nomenclature do
     @n.load_file(File.join(Rails.root, 'spec/fixtures/association/good.yml')) 
     @n.should be_valid
   end
+  
+  it 'peut lire un string' do
+    @n =o.nomenclature
+    inst = File.open(File.join(Rails.root, 'spec/fixtures/association/good.yml'), 'r') {|f| f.read}
+    @n.load_io(inst).should be_valid
+  end
+
+  describe 'collect_error' do
+    before(:each) do
+      @n = o.nomenclature(true)
+    end
+
+    it 'renvoie chaine vide si valide' do
+      @n.stub(:valid?).and_return true
+      @n.collect_errors.should == ''
+    end
+
+    it 'renvoie une chaine formattée si invalide' do
+      @n.stub(:valid?).and_return false
+      @n.stub_chain(:errors, :full_messages).and_return(['une erreur', 'deux erreurs'])
+      message =  %q{
+La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d'être faux.</br>
+ Liste des erreurs relevées : <ul>
+<li>une erreur</li>
+<li>deux erreurs</li>
+</ul>}.gsub("\n",'')
+      @n.collect_errors.should == message
+    end
+  end
+
+
 
   describe 'with a valid nomenclature' do
 
@@ -63,6 +94,8 @@ describe Nomenclature do
     end
 
   end
+
+
 
   context 'with invalid nomenclature' do
 
