@@ -16,7 +16,8 @@
   # PdfDocument::Page apporte toutes les méthodes nécessaires, il suffit donc de
   # surcharger les méthodes spécifiques
    class PdfDocument::GeneralLedgerPage < PdfDocument::Page
-      
+
+          
       def initialize(document, list_monthly_ledgers, number)
         @number = number
         @document = document
@@ -41,19 +42,11 @@
 
       # surcharge de la ligne de report (la première ligne du tableau)
       def table_report_line
-        return nil if @number == 1
+        return nil if number == 1
         format_line(['Reports'] + report_values)
       end
 
-      
 
-      # forunit le report
-#     def table_report_line
-#      return nil if @number == 1 # première page
-#      r =  @doc.page(@number -1).table_to_report_line
-#      r[0] = 'Reports'
-#      r
-#    end
 
      # Renvoie le tableau des lignes préparées pour l'impression.
      #
@@ -99,29 +92,17 @@
        [total_debit, total_credit]
      end
 
+
+     # TODO une erreur dans cette méthode n a pas été détectée
+     # par les spec (@doc au lieu de document)
      def report_values
-       return [0, 0] if @number == 1
-       @doc.page(@number -1).to_report_values
+       return [0, 0] if number == 1
+       document.page(number()-1).to_report_values
      end
 
      def to_report_values
         [total_page_values[0] + report_values[0], total_page_values[1] + report_values[1]]
      end
-
-#     def formatted_values(arr)
-#       arr.map {|v| format_value(v)}
-#     end
-#
-#     def format_value(r)
-#       return '%0.2f' % r if r.is_a? BigDecimal
-#       return '%0.2f' % r if r.is_a? Float
-#       r
-#     end
-
-
-
-
-
 
 
    end
