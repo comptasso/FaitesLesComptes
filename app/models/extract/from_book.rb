@@ -19,7 +19,6 @@ class FromBook < Extract::Base
     end
 
     def lines
-      return @lines unless @lines == nil
       @lines ||= @book.compta_lines.mois(@date)
     end
 

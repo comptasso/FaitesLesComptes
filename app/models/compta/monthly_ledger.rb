@@ -4,10 +4,13 @@ module Compta
 
   # la classe MonthlyLedger permet d'imprimer le journal centralisateur
   # pour un mois donné.
+  #
   # Une ligne Mois de ...
   # suivie d'une ligne avec 4 colonnes
   # Abbréviation du jl, Intitulé, Débit, Crédit
+  #
   # Puis une ligne de sous total
+  #
   # le MonthlyLedger se construit avec un period et un MonthYear
    class MonthlyLedger 
 
@@ -15,8 +18,6 @@ module Compta
        @period = period
        @month_year = my
      end
-
-     
 
      # prend les livres dans l'ordre alphabétique et fait un tableau
      # avec le titre du journal(VE ou OD), la description, le total_debit et le total_credit
