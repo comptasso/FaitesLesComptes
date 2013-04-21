@@ -9,12 +9,12 @@ RSpec.configure do |config|
 
 end
  
-describe Utilities::InOutExtract do 
+describe Extract::InOut do
   
   before(:each) do
     @ob = mock_model(OutcomeBook)
     @p = mock_model(Period, start_date:Date.today.beginning_of_year, end_date:Date.today.end_of_year)
-    @extract = Utilities::InOutExtract.new(@ob, @p)
+    @extract = Extract::InOut.new(@ob, @p)
   end
 
   it 'respond to book' do
@@ -22,7 +22,7 @@ describe Utilities::InOutExtract do
   end
 
   it 'remplit ses arguments par défaut' do
-    @ext = Utilities::InOutExtract.new(@ob, @p, Date.today, Date.today >> 1)
+    @ext = Extract::InOut.new(@ob, @p, Date.today, Date.today >> 1)
     @ext.begin_date.should == Date.today
     @ext.end_date.should == (Date.today >> 1) 
   end
@@ -59,8 +59,8 @@ describe Utilities::InOutExtract do
 
     before(:each) do
       @extract.stub(:lines).and_return(@ls = double_lines)
-      @ob.stub(:cumulated_debit_before).with(@extract.begin_date).and_return 5
-      @ob.stub(:cumulated_credit_before).with(@extract.begin_date).and_return 18
+      @ob.stub(:cumulated_at).with(@extract.begin_date - 1, :debit).and_return 5
+      @ob.stub(:cumulated_at).with(@extract.begin_date - 1, :credit).and_return 18
     end
 
     it 'il y a 30 lignes' do
@@ -73,10 +73,12 @@ describe Utilities::InOutExtract do
     end
 
     it "knows the total debit" do
+      pending 'A tester dans la classe Extract::Base puis supprimer d ici'
        @extract.total_debit.should == 165
     end
 
     it "knows the total credit" do
+      pending 'A tester dans la classe Extract::Base puis supprimer d ici'
       @extract.total_credit.should == 0
     end
 

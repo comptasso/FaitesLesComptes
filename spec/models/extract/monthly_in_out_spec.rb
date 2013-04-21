@@ -9,18 +9,18 @@ RSpec.configure do |config|
 
 end
  
-describe Utilities::MonthlyInOutExtract do 
+describe Extract::MonthlyInOut do
   include OrganismFixture
   before(:each) do
     create_minimal_organism
   end
 
   it "is created with a book and a date" do
-    @book_extract = Utilities::MonthlyInOutExtract.new(@ob, year:Date.today.year, month:Date.today.month)
+    @book_extract = Extract::MonthlyInOut.new(@ob, year:Date.today.year, month:Date.today.month)
   end
 
   it 'respond to book' do
-    @book_extract = Utilities::MonthlyInOutExtract.new(@ob, year:Date.today.year, month:Date.today.month)
+    @book_extract = Extract::MonthlyInOut.new(@ob, year:Date.today.year, month:Date.today.month)
     @book_extract.book.should == @ob
   end
 
@@ -39,7 +39,7 @@ describe Utilities::MonthlyInOutExtract do
       end
 
       # création du MonthlyInOutExtract puor le mois de février
-      @extract = Utilities::MonthlyInOutExtract.new(@ob, year:Date.today.year, month:2)
+      @extract = Extract::MonthlyInOut.new(@ob, year:Date.today.year, month:2)
 
     end
 
