@@ -174,7 +174,7 @@ class Room < ActiveRecord::Base
     if r
       r.enter
     else
-      raise ArgumentError, "Pas de Room avec #{id} pour id"
+      return nil
     end
   end
 

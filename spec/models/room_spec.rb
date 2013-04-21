@@ -37,18 +37,57 @@ describe Room do
   describe 'methods' do
 
     before(:each) do
-      @r = Room.find_or_create_by_user_id_and_database_name(1, 'foo')
+      @r = Room.new(:database_name=>'foo')
     end
 
-    it 'db_filename calls the database_configuration' do
+    it 'db_filename construit le nom de la base de donnée' do
       Rails.application.config.should_receive(:database_configuration).and_return({'test'=>{'adapter'=>'monadapteur'} })
       @r.db_filename.should == 'foo.monadapteur'
     end
 
-    it 'absolute db_name' do
+    it 'absolute_db_name retourne le chemin complet de la base' do
       Room.stub(:path_to_db).and_return('mon_chemin')
       @r.absolute_db_name.should == File.join('mon_chemin', @r.db_filename)
     end
+
+    it 'la base est en retard si organism_migration est inférieure à room' do
+      omv = Organism.migration_version
+      @r.stub(:look_for).and_return omv
+      Room.should_receive(:jcl_last_migration).and_return(omv+1)
+      @r.relative_version.should == :late_migration
+    end
+    
+    it 'en phase si les deux migrations sont égales' do
+      omv = Organism.migration_version
+      @r.stub(:look_for).and_return omv
+      Room.stub(:jcl_last_migration).and_return(omv)
+      @r.relative_version.should == :same_migration
+    end
+    
+    it 'en avance si organism_migration est supérieure à celle de room' do
+      omv = Organism.migration_version
+      @r.stub(:look_for).and_return omv
+      Room.stub(:jcl_last_migration).and_return(omv-1)
+      @r.relative_version.should == :advance_migration
+    end
+
+    it 'et renvoie no_base si elle n est pas trouvée' do
+      @r.stub(:look_for).and_return nil
+      @r.relative_version.should == :no_base
+    end
+ 
+    it 'sait répondre aux questions late?, no_base? et advance_migration?' do
+      @r.stub(:relative_version).and_return :late_migration
+      @r.should be_late
+      @r.stub(:relative_version).and_return :advance_migration
+      @r.should be_advanced
+      @r.stub(:relative_version).and_return :no_base
+      @r.should be_no_base
+    end
+
+
+
+
 
   end
 
@@ -82,9 +121,42 @@ describe Room do
     end
 
     describe 'connnect_to_organism' do
-      it 'connect_to_organism retourne false ou true'
+      it 'connect_to_organism retourne true si la base existe' do
+        @r.connect_to_organism.should be_true
+      end
 
-      it 'check_db'
+      it 'renvoie false si le fichier n est pas trouvé' do
+        File.stub(:exist?).and_return false
+        @r.connect_to_organism.should be_false
+      end
+
+      it 'peut se faire avec enter et l id de la Room' do
+        Room.should_receive(:find_by_id).with(5).and_return(double(Room, :enter=>true))
+        Room.enter(5).should be_true
+      end
+
+      it 'renvoie nil si l id n existe pas' do
+        Room.should_receive(:find_by_id).with(5).and_return(nil)
+        Room.enter(5).should be_nil
+      end
+      
+      
+    end
+
+    describe 'check_db' do
+
+      it 'check_db contrôle l intégrité de la base' do
+        @r.stub(:connect_to_organism).and_return true
+        ActiveRecord::Base.connection.should_receive(:execute).with('pragma integrity_check').and_return(['integrity_check'=>'ok'])
+        @r.check_db.should be_true
+      end
+
+      it 'indique si pas de réponse' do
+        @r.stub(:connect_to_organism).and_return true
+        ActiveRecord::Base.connection.should_receive(:execute).with('pragma integrity_check').and_return('n importe quoi')
+        @r.check_db.should be_false
+      end
+
     end
 
     describe 'look_for' do
