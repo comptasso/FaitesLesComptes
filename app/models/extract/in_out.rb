@@ -54,10 +54,16 @@ module Extract
       lines.reject {|l| l.locked?}.any?
     end
 
-
-    # TODO voir si ces méthodes sont utilisées
     def cumulated_at(date, dc)
       @book.cumulated_at(date, dc)
+    end
+
+    def debit_before
+      super(begin_date)
+    end
+
+    def credit_before
+      super(begin_date)
     end
 
     def to_csv(options = {:col_sep=>"\t"})
