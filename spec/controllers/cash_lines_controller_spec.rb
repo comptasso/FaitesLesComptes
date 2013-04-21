@@ -42,7 +42,7 @@ describe CashLinesController do
     end
 
     it "should create a monthly_book_extract" do
-      Utilities::MonthlyCashExtract.should_receive(:new).with(ca,  :year=>current_year, :month=>current_month )
+      Extract::MonthlyCash.should_receive(:new).with(ca,  :year=>current_year, :month=>current_month )
       get :index, {:cash_id=>ca.to_param, :mois=>current_month, :an=>current_year}, valid_session
     end
 

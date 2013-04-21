@@ -16,7 +16,7 @@ describe "cash_lines/index" do
   let(:p) {mock_model(Period, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)}
   let(:c) {mock_model(Cash, name: 'Magasin')}
   let(:n) {mock_model(Nature, :name=>'achat de marchandises')} 
-  let(:mce) { mock( Utilities::MonthlyCashExtract, :total_credit=>100, :total_debit=>51,
+  let(:mce) { mock( Extract::MonthlyCash, :total_credit=>100, :total_debit=>51,
     :debit_before=>20, :credit_before=>10)}
   let(:cl1) { mock_model(ComptaLine, :debit=>'45', :nature_id=>n.id)}
   let(:cl2) {mock_model(ComptaLine, :debit=>'54', :nature_id=>n.id)}

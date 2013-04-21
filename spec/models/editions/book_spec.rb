@@ -19,7 +19,7 @@ describe Editions::Book do
   before(:each) do
      @book = mock_model(Book)
      @period = stub(Period, organism:stub(:title=>'L\'organisme'), :exercice=>'Exercice en cours')
-     @extract = stub(Utilities::InOutExtract, :book=>@book,
+     @extract = stub(Extract::InOut, :book=>@book,
        begin_date:Date.today.beginning_of_year,
        end_date:Date.today.end_of_year,
        'provisoire?'=>true,
