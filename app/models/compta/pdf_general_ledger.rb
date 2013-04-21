@@ -23,9 +23,9 @@ module Compta
         set_pages
       end
 
-      # retourne la collection de monthly_ledgers  
+      # retourne la collection de monthly_ledgers avec un cache
       def monthly_ledgers
-        @monthly_ledgers ||= @period.list_months.map {|my| Compta::MonthlyLedger.new(@period, my)}
+        @monthly_ledgers ||= @period.monthly_ledgers
       end
 
       # calcule et définit les pages du general ledger, l'ensemble des pages

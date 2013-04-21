@@ -5,8 +5,6 @@ require 'pdf_document/default.rb'
 
 describe Compta::PdfGeneralLedger do
 
-  include OrganismFixture
-
   let(:p) {stub_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)}
 
   it 'can create a PdfGeneralLedger' do
@@ -35,7 +33,6 @@ describe Compta::PdfGeneralLedger do
 
     it 'nb pages renvoie le nombre de pages'do
       @pgl.nb_pages.should == 3 # cas général
-
       # si on a plus de journaux (6) le nb_de pages est plus élevé
       Compta::MonthlyLedger.any_instance.stub(:size).and_return 6 # cas général
       Compta::PdfGeneralLedger.new(p).nb_pages.should == 4

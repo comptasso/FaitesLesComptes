@@ -340,6 +340,12 @@ class Period < ActiveRecord::Base
     ListMonths.new(start_date, close_date)
   end
 
+  # renvoie un array de Compta::MonthlyLedger correspondant aux mois de
+  # l'exercice
+  def monthly_ledgers
+    list_months.map {|my| Compta::MonthlyLedger.new(self, my)}
+  end
+
   # méthode permettant de savoir si une date est un début d'exercice
   #
   # Cette méthode est utilisée par monthly_value dans Utilities::Sold

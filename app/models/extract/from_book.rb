@@ -2,9 +2,11 @@
 module Extract
 #
 # un extrait mensuel d'un livre existant dans une base de données ou
-# d'un livre virtuel donné avec capacité à calculer les totaux et les soldes
-# se créé en appelant new avec un book et une date quelconque du mois souhaité
+# d'un livre virtuel donné.
 #
+# Avec capacité à calculer les totaux et les soldes
+#
+# Se créé en appelant new avec un book et une date quelconque du mois souhaité
 #
 class FromBook < Extract::Base
 
