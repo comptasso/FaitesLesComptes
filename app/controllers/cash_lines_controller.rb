@@ -16,9 +16,9 @@ class CashLinesController < InOutWritingsController
 # la méthode index est héritée de InOutWritingsController
   def index
     if params[:mois] == 'tous'
-      @monthly_extract = Utilities::CashExtract.new(@cash, @period)
+      @monthly_extract = Extract::Cash.new(@cash, @period)
     else
-      @monthly_extract = Utilities::MonthlyCashExtract.new(@cash, {year:params[:an], month:params[:mois]})
+      @monthly_extract = Extract::MonthlyCash.new(@cash, {year:params[:an], month:params[:mois]})
     end
     
     respond_to do |format|

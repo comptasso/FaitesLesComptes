@@ -3,13 +3,13 @@
 require 'month_year'
 
 
-module Utilities
+module Extract
 
 
   # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes
   # se créé en appelant new avec un book et un hash permettant de définir un MonthYear
   # my_hash est un hash :year=>xxxx, :month=>yy
-  class MonthlyInOutExtract < Utilities::InOutExtract
+  class MonthlyInOut < Extract::InOut
 
     def initialize(book, my_hash)
       @book = book

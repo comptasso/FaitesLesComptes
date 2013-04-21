@@ -2,7 +2,7 @@
 
 require 'month_year'
 
-module Utilities
+module Extract
 
 
   # un extrait d'un livre donné avec capacité à calculer les totaux et les soldes.
@@ -11,7 +11,7 @@ module Utilities
   # Un enfant de cette classe MonthlyInOutExtract permet d'avoir des extraits mensuels
   # se créé en appelant new avec un book et une date quelconque du mois souhaité
   # my_hash est un hash :year=>xxxx, :month=>yy
-  class InOutExtract
+  class InOut < Extract::Base
 
     # utilities::sold définit les méthodes cumulated_debit_before(date) et
     # cumulated_debit_at(date) et les contreparties correspondantes.
@@ -59,24 +59,6 @@ module Utilities
     def cumulated_at(date, dc)
       @book.cumulated_at(date, dc)
     end
-
-    def total_credit
-      lines.sum(&:credit)
-    end
-
-    def total_debit
-      lines.sum(&:debit)
-    end
-
-    def debit_before
-      @book.cumulated_debit_before(begin_date)
-    end
-
-    def credit_before
-      @book.cumulated_credit_before(begin_date)
-    end
-
-    
 
     def to_csv(options = {:col_sep=>"\t"})
       CSV.generate(options) do |csv|

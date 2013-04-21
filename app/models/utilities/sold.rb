@@ -87,20 +87,4 @@ module Utilities::Sold
   end
 
 
-  protected
-
-
-
-  # monthly_value peut recevoir un string du type '2013-01' et a donc besoin de cette
-  # méthode pour le transformer en date.
-#  def string_to_date(selector)
-#    Date.parse(selector + '-1')
-#  rescue
-#    raise ArgumentError, "#{selector} n' pas pu être converti en date"
-#  end
-
- 
-
-
-
 end

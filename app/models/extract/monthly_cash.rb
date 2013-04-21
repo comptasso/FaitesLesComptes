@@ -1,5 +1,5 @@
 # coding: utf-8
-module Utilities
+module Extract
 #
 # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes
 # se créé en appelant new avec un book et une date quelconque du mois souhaité
@@ -7,7 +7,7 @@ module Utilities
 # La seule différence avec CashExtract réside dans les arguments de new qui
 # sont la caisse et les paramètres d'un mois#
 #
-class MonthlyCashExtract < CashExtract
+class MonthlyCash < Extract::Cash
   
   def initialize(cash, h)
     @book = cash

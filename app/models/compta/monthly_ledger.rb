@@ -3,7 +3,7 @@
 module Compta
 
   # la classe MonthlyLedger permet d'imprimer le journal centralisateur
-  # pour un mois donné.
+  # pour un mois donné. De fait, c'est plutôt un Presenter
   #
   # Une ligne Mois de ...
   # suivie d'une ligne avec 4 colonnes
@@ -24,7 +24,7 @@ module Compta
      # les lignes qui ont débit et credit à zero ne sont pas retenues
      def lines
        @lines ||= @period.books.map do |b|
-        efb =  Extract::FromBook.new(b, @month_year)
+        efb =  Extract::Monthly.new(b, @month_year)
          {mois:'', title:b.title, description:b.description, debit:efb.total_debit, credit:efb.total_credit }
        end.reject {|l| l[:debit] == 0 && l[:credit] == 0}
      end

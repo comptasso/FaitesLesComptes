@@ -15,9 +15,9 @@ class InOutWritingsController < ApplicationController
   # TODO changer @monthly_extract en @extract
   def index
     if params[:mois] == 'tous'
-      @monthly_extract = Utilities::InOutExtract.new(@book, @period)
+      @monthly_extract = Extract::InOut.new(@book, @period)
     else
-      @monthly_extract = Utilities::MonthlyInOutExtract.new(@book, year:params[:an], month:params[:mois])
+      @monthly_extract = Extract::MonthlyInOut.new(@book, year:params[:an], month:params[:mois])
     end
     respond_to do |format|
       format.html  # index.html.erb
