@@ -1,5 +1,5 @@
 %ul.nav.nav-pills.pull-right
-  %li{:class=> active_inactive('root')}= link_to "Saisie/Consult",  organism_path(@organism), :tabindex=>-1
+  %li{:class=> active_inactive('main')}= link_to "Saisie/Consult",  organism_path(@organism), :tabindex=>-1
   %li{:class=> active_inactive('admin')}
     = link_to "Administration", admin_organism_path(@organism), :tabindex=>-1
   %li{:class=>active_inactive('compta') }

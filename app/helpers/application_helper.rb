@@ -21,73 +21,44 @@ module ApplicationHelper
     sprintf('%0.02f',montant)
   rescue
     '0.00'
-  end
+  end 
 
-  # picker_date affiche un widget pour sélectionner une date à partir d'une date
-  # correctement formatée, et de limites.
-  # appeler cette méthode avec comme dernier argument :disabled=>true permet
-  # d'avoir le champ disabled
-  def picker_date(field, date_min, date_max,value = Date.today.to_formatted_s(:date_picker), jc_options ={} )
-    # TODO traiter le cas d'une date non valable
-    html =  {'data-jcmin'=>"#{date_min.to_formatted_s(:date_picker)}",
-      'data-jcmax'=>"#{date_max.to_formatted_s(:date_picker)}",
-      :class=>'input_date_picker span8', :value=>value}
-    html.merge!({:disabled=>'disabled'}) if jc_options[:disabled] == true
   
-    content_tag(:span, :class=>"picker_date") do
-      text_field_tag(field,{},html)
-    end
-  end
-
- 
-
   # utilisé pour donner la classe active ou inactive aux éléments du menu 
-  # supérieur (Saisie/consult, Admin, Compta)
+  # supérieur (Saisie/consult, Admin, Compta).
+  #
+  # Le but est que l'espace actuel soit marqué comme actif tandis que les autres sont inactifs
+  #
+  # Il y a 3 espaces de noms : main (correspondant à saisie/consult), admin et compta
+  #
+  #
   def active_inactive(name)
-    if name == 'root'
-      res = saisie_consult_namespace?
-    else
-      res = current_namespace?(name)
-    end
-    res ? 'active' : 'inactive'
+    name == space ? 'active' : 'inactive'
   end
 
-
-  def header_organism
-    content_tag(:div, class: "span4", id: "organism") do
-        if (@organism && !@organism.new_record?)
-          html = []
-          html << content_tag(:p) {link_to(sanitize(@organism.title), @organism )}
-          html << content_tag(:p, :class=> "description") do
-            @period.exercice unless @period.nil?
-          end
-          html.join('').html_safe
-        end
-      end
+  # Affiche le titre en haut à gauche des vues
+  def header_title
+    if @organism && @organism.title
+      html = sanitize(@organism.title)
+      html += " : #{@period.exercice}" unless @period.nil?
+    else
+      html="Faites les comptes"
     end
+    html
+  end
 
-    def header_title
-      if @organism && @organism.title
-        html = sanitize(@organism.title)
-        html += " : #{@period.exercice}" unless @period.nil?
-      else
-        html="Faites les comptes"
-      end
-      html
+  def debit_credit(montant)
+    return montant if montant.is_a? String
+    if montant > -0.01 && montant < 0.01
+      '-'
+    else
+      number_with_precision(montant, :precision=> 2)
     end
+  rescue
+    ''
+  end
 
-    def debit_credit(montant)
-      return montant if montant.is_a? String
-      if montant > -0.01 && montant < 0.01
-        '-'
-      else
-        number_with_precision(montant, :precision=> 2)
-      end
-    rescue
-      ''
-    end
-
-    # export_icons permet d'afficher les différentes icones d'export.
+  # export_icons permet d'afficher les différentes icones d'export.
   #
   # Dans la vue, on utilise export_icons avec comme argument opt les paramètres dont on a besoin pour
   # permettre au serveur de répondre.
@@ -101,30 +72,29 @@ module ApplicationHelper
 
     
 
-    # ordinalize date s'appuie sur ordinalize qui est redéfini dans
-    # config/initializers/inflections.rb
-    def ordinalize_date(d)
-      "#{d.day.ordinalize} #{I18n.l(d, :format=>:month_year)}"
-    end
+  # ordinalize date s'appuie sur ordinalize qui est redéfini dans
+  # config/initializers/inflections.rb
+  def ordinalize_date(d)
+    "#{d.day.ordinalize} #{I18n.l(d, :format=>:month_year)}"
+  end
 
 
-protected
+  protected
 
-     #détermine si on est dans un namespace (admin ou compta) spécifique
-  # Utilisation current_namespace?('admin')
-  def current_namespace?(name)
+  # renvoie l'espace dans lequel on est : compta, admin ou main
+  def space
     unless request
       raise "You cannot use helpers that need to determine the current
 page unless your view context provides a Request object in a #request method"
     end
     # request_path est par exemple /admin/organisms/9
     request_uri = request.path.slice(1..-1) # on enlève le leading /
-    name == request_uri.split('/').first
-  end
-
-  # tout ce qui n'est pas admin ou compta est dans la zone saisie/consult
-  def saisie_consult_namespace?
-    !(current_namespace?('admin') || current_namespace?('compta'))
+    prefix = request_uri.split('/').first
+    case prefix
+    when 'admin' then 'admin'
+    when 'compta' then 'compta'
+    else 'main'
+    end
   end
 
   def current_user?
@@ -133,4 +103,4 @@ page unless your view context provides a Request object in a #request method"
 
 
  
-  end
+end

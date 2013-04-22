@@ -33,8 +33,9 @@ $('.dropdown-toggle').dropdown();
 
 
 // fonction utilisée pour afficher un date picker pour chaque champ de class
-// .input_date. Ces champs imput_date sont créés facilement par la fonction
-// picker_date qui est dans application_helper. Date min et
+// .input_date. Ces champs imput_date sont créés facilement par une extension de simple_form_form
+//
+// Date min et
 // date max sont transmis par cette fonction sous forme d'attributs  data-jcmin et data-jcmax
 jQuery(function () {
     jQuery.each($('.input_date_picker'), function (index, val) {
