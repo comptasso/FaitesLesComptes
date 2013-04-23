@@ -104,7 +104,7 @@ class BankExtractLine < ActiveRecord::Base
   end
 
   # Regroup prend une standard_bank_extract_line comme argument
-  # et la fusionne avec l'instance.
+  # et la fusionne avec l'instance. Renvoie l'instance
   #
   # Cela signifie que l'on tranfère les lignes de l'argument à self.
   # puis que l'on supprime l'enregistrement correspondant à l'argument par la ligne bel.destroy.
@@ -120,8 +120,7 @@ class BankExtractLine < ActiveRecord::Base
       end
       save
     end
-    
-    
+    self
   end
 
   # Degroup décompose l'instance ayant plusieurs lignes en autant
@@ -136,7 +135,8 @@ class BankExtractLine < ActiveRecord::Base
     return self if self.compta_lines.size < 2
     pos = position
     grp = compta_lines.offset(1).all.map do |l|
-      compta_lines.delete(l)
+      compta_lines.delete(l) # ici on n'efface pas la compta_line proprement dite mais
+      # la bank_extract_line_compta_line de la table jointe
       new_bel = bank_extract.bank_extract_lines.create!(:compta_lines=>[l])
       new_bel.insert_at(pos + 1)
       new_bel

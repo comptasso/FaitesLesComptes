@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  # c.filter = {:wip=> true } 
+  # c.filter = {:wip=> true }
 end 
 
 
@@ -34,6 +34,16 @@ describe BankExtractLine do
     @d29.should be_valid
     @ch97.should be_valid
     @ch5.should be_valid
+  end
+
+  describe 'validations' do
+    it 'un bank_ectract_line ne peut être vide' do
+      bel = @be.bank_extract_lines.new
+      bel.should_not be_valid
+      bel.errors.messages[:base].should == ['empty']
+    end
+
+
   end
 
 
@@ -70,7 +80,7 @@ describe BankExtractLine do
       end
 
 
-      it 'lock_line doit verrouiller les lignes et les siblings', :wip=>true do
+      it 'lock_line doit verrouiller les lignes et les siblings' do
         
 
         ComptaLine.where('payment_mode = ?', 'Virement').all.each do |l|
@@ -110,7 +120,7 @@ describe BankExtractLine do
 
     end
 
-    describe 'regroup' , wip:true do
+    describe 'regroup'  do
 
       before(:each) do
         @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')
@@ -130,7 +140,7 @@ describe BankExtractLine do
         @bel7.lower_item.should == @bel102
       end
 
-      it 'regroup en partant de la fin',  wip:true do
+      it 'regroup en partant de la fin' do
         @bel29.regroup @bel102
         @bel29.should have(2).compta_lines
         @bel7.regroup @bel29
@@ -138,6 +148,34 @@ describe BankExtractLine do
         @bel7.should have(3).compta_lines
       end
 
+    end
+
+    describe 'degroup'  do
+      before(:each) do
+        @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')
+      end
+
+      it 'renvoie lui même si moins de 2 lignes' do
+        @bel7.degroup.should == @bel7
+      end
+
+
+
+      it 'un groupe de deux lignes renvoie deux lignes' do
+        group = @bel29.regroup @bel102
+        group.degroup.should be_an_instance_of Array
+      end
+
+      it 'un groupe de 3 lignes renvoie 3 lignes'  do
+        group = @bel29.regroup(@bel102).regroup(@bel7)
+        degroup = group.degroup
+ # TODO check_deposit devrait pouvoir répondre à support_line car celà complique
+ # inutilement d'avoir des méthodes différentes.
+        degroup.first.should == @bel29
+        degroup.first.compta_lines.should == [@d7.support_line]
+        degroup.second.compta_lines.should ==[@d29.support_line]
+        degroup.third.compta_lines.should == [@cd.debit_line]
+      end
     end
 
     describe 'chainable'  do
