@@ -26,12 +26,9 @@ module Editions
       @title = 'Statistiques par nature'
       
       # stats est la méthode qui renvoie les stats
-      # TODO voir si lines ne serait pas plus performant; mais probablement sans aucune
-      # utilité puisque fetch_lines fonctionne à partir de la source
       @select_method = 'stats'
    
-      plm = period.list_months.collect {|my| my}
-      plm = plm.slice(-12,12) if plm.size > 12
+      plm = last_twelve_months
       @subtitle = "De #{plm.first.to_format('%B %Y')} à #{plm.last.to_format('%B %Y')}"
 
       set_columns [:id, :name]
@@ -48,15 +45,42 @@ module Editions
     #
     # Dans la méthode source renvoie à stats qui a servi à l'initialisation
     #
+    # twelve_months_lines est une méthode protégée destinée à limiter l'édition sur
+    # 12 mois pour des problèmes de mise en page.
+    #
+    # TODO voir à traiter ça plus élégamment qu'en tronquant les données.
+    #
     def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      source.twelve_months_lines.slice(offset, limit)
+      fls = source.lines.slice(offset, limit)
+      twelve_months_lines(fls)
     end
 
     def prepare_line(line)
         line
     end
+
+
+    protected
+
+    # on ne garde que 12 mois
+    def last_twelve_months
+      plm = @period.list_months.collect {|my| my}
+      plm = plm.slice(-12,12) if plm.size > 12
+      plm
+    end
+
+    # cette méthode est rendue nécessaire pour l'édition de pdf car la mise en
+    # page est prévue pour 12 mois.
+    #
+    # On tronque donc le tableau s'il y a plus de 12 mois.
+    def twelve_months_lines(collection)
+      return collection if collection.first.size <= 14
+      # on prend les colonnes 0 (le libellé) et les 13 dernières
+      collection.collect {|l| l.slice(0,1) + l.slice(-13,13)}
+    end
+
 
   end
 end
