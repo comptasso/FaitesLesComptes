@@ -1,6 +1,6 @@
 # coding: utf-8
 require 'pdf_document/default.rb'
-require 'pdf_document/general_ledger_page.rb'
+require 'editions/general_ledger_page.rb'
 
 module Compta 
   # la classe GeneralLedger (journal général) permet d'imprimer le journal centralisateur
@@ -66,7 +66,7 @@ module Compta
       # TODO puisqu'on envoie self, alors le deuxième argument est redondant
       #
       def page(n)
-        PdfDocument::GeneralLedgerPage.new(self,  @pages[n].map {|i| monthly_ledgers[i]}, n)
+        Editions::GeneralLedgerPage.new(self,  @pages[n].map {|i| monthly_ledgers[i]}, n)
       end
 
 

@@ -37,7 +37,7 @@ module Compta
        @lines.inject(0) {|t, l| t+= l[:credit] }
      end
 
-     # renvoie la ligne de titre, par exemple : Mois de janvier 2013
+     # renvoie la ligne de titre, (avec beaucoup de champs vides) par exemple : Mois de janvier 2013
      def title_line
        {mois:"Mois de #{@month_year.to_format('%B %Y')}", title:'', description:'', debit:'', credit:''}
      end

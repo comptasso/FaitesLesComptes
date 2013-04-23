@@ -2,20 +2,22 @@
 
   require 'pdf_document/page.rb'
 
+module Editions
+
   # la classe GeneralLedgerPage construit une page du journal général
   # Elle répond donc aux méthodes exigées par default.pdf.prawn.
   #
   # Elle est appelée par Compta::PdfGeneralLedger avec comme argument :
   #  self qui devient le document,
   #  une liste de monthly_ledgers
-  #  et n : le numéro de page
+  #  et n : le numéro de page 
   #
   # La particularité du general_ledger est d'avoir des sous totaux au sein de 
   # la page et qu'ils ne faut donc pas compter deux fois les mêmes choses. 
   #
   # PdfDocument::Page apporte toutes les méthodes nécessaires, il suffit donc de
   # surcharger les méthodes spécifiques
-   class PdfDocument::GeneralLedgerPage < PdfDocument::Page
+   class GeneralLedgerPage < PdfDocument::Page
 
           
       def initialize(document, list_monthly_ledgers, number)
@@ -64,12 +66,12 @@
 
       # totalise les débit des livres de cette page
       def total_debit
-        @list_monthly_ledgers.inject(0.0) {|t, ml| t += ml.total_debit}
+        list_monthly_ledgers.inject(0.0) {|t, ml| t += ml.total_debit}
       end
 
       # totalise les credits des livres de cette page
       def total_credit
-        @list_monthly_ledgers.inject(0.0) {|t, ml| t += ml.total_credit}
+        list_monthly_ledgers.inject(0.0) {|t, ml| t += ml.total_credit}
       end
 
 
@@ -78,7 +80,8 @@
      # Faire un to_pdf pour chaque MonthlyLedger
      def fetch_lines
        tableau = []
-        @list_monthly_ledgers.each do |ml|
+        list_monthly_ledgers.each do |ml|
+          # TODO mettre cette série d'instructions dans le monthly_ledger.(par exemple lines_with_totals)
           tableau << ml.title_line
           ml.lines.each {|l| tableau << l}
           tableau << ml.total_line
@@ -104,7 +107,11 @@
         [total_page_values[0] + report_values[0], total_page_values[1] + report_values[1]]
      end
 
+     def list_monthly_ledgers
+       @list_monthly_ledgers
+     end
+
 
    end
 
-
+end

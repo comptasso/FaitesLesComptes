@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require 'pdf_document/default.rb'
+require 'pdf_document/default.rb' 
 
 describe Compta::PdfGeneralLedger do
 
@@ -43,7 +43,7 @@ describe Compta::PdfGeneralLedger do
     end
 
     it 'page renvoie une instance de PdfDocument::GeneralLedgerPage' do
-      @pgl.page(1).should be_an_instance_of(PdfDocument::GeneralLedgerPage)
+      @pgl.page(1).should be_an_instance_of(Editions::GeneralLedgerPage)
     end
 
 
