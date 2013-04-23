@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
-  # c.filter = {wip:true}
+   c.filter = {wip:true}
 end
 
 describe Transfer  do
@@ -22,7 +22,49 @@ describe Transfer  do
     @bb=@o.bank_accounts.create!(bank_name: 'DebiX', number: '123Y', nickname:'Compte courant')
     @cba = @ba.current_account @p
     @cbb = @bb.current_account @p
-  end 
+  end
+
+  describe 'un transfert est invalide si'  do
+
+    before(:each) do
+      @t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id
+    end
+
+    it 'le montant est nul' do
+      
+    @t.add_lines(0)
+    @t.compta_lines.first.account_id = @cba.id
+    @t.compta_lines.last.account_id = @cbb.id
+    @t.should_not be_valid
+    @t.errors.messages[:amount].should == ['doit être un nombre positif']
+    end
+
+    it 'ou négatif' do
+    @t.add_lines(-10)
+    @t.compta_lines.first.account_id = @cba.id
+    @t.compta_lines.last.account_id = @cbb.id
+    @t.should_not be_valid
+    @t.errors.messages[:amount].should == ['doit être un nombre positif']
+    end
+
+    it 'ne peut avoir plus de 2 lignes' , wip:true do
+      @t.add_lines(5)
+      @t.compta_lines.new(debit:15, account_id:58)
+      @t.valid?
+      @t.errors.messages[:base].should include('Une écriture doit avoir exactement deux lignes')
+    end
+
+    
+    it 'si les deux comptes sont identiques' do
+    @t.add_lines(10)
+    @t.compta_lines.first.account_id = @cba.id
+    @t.compta_lines.last.account_id = @cba.id
+    @t.should_not be_valid
+    
+    @t.errors.messages[:base].should == ['Les comptes doivent être différents']
+    end
+
+  end
 
   
   describe 'virtual attribute pick date' do

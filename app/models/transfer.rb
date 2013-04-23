@@ -16,7 +16,6 @@ class Transfer < Writing
 
   attr_accessible :amount
 
-  # validate :correct_amount, :two_lines, :not_same_accounts
   validates :compta_lines, :exactly_two_compta_lines=>true, :not_same_accounts=>true
   validates :amount, :numericality=>{:greater_than=>0, :message=>'doit être un nombre positif'}
 
@@ -123,26 +122,6 @@ class Transfer < Writing
     compta_lines.locked.empty?
   end
 
-  def correct_amount
-    errors[:amount] << 'obligatoire' unless amount
-    errors[:amount] << 'doit être un nombre' unless amount.is_a? Numeric
-    errors[:amount] << 'nul !' if amount == 0
-    return false unless errors[:amount].empty?
-  end
-
-  def two_lines
-    if compta_line_to || compta_line_from
-      errors[:base] << 'Nombre de ligne incorrect ou une des lignes n a pas de valeur'
-      return false
-    end
-  end
-
-  def not_same_accounts
-    if compta_line_from.account_id == compta_line_to.account_id
-      errors[:base] << 'Comptes idendiques'
-      return false
-    end
-  end
 
   
 
