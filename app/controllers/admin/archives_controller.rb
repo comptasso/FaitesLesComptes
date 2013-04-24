@@ -5,11 +5,11 @@ class Admin::ArchivesController < Admin::ApplicationController
 
   
   def index
-    @archives=@organism.archives.all 
+    @archives=@organism.archives.all
   end
 
   def edit
-    @archive=@organism.archives.find(params[:id])
+    @archive = Archive.find(params[:id])
   end
 
   def update
@@ -38,7 +38,7 @@ class Admin::ArchivesController < Admin::ApplicationController
   end
 
   def destroy
-    @archive=@organism.archives.find(params[:id])
+    @archive=Archive.find(params[:id])
     if !@archive.destroy
       flash[:alert]= "Une erreur s'est produite empêchant la destruction de l'enregistrement"
     else

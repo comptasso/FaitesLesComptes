@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Admin::ArchivesController do
-   include SpecControllerHelper
+  include SpecControllerHelper
 
   let(:arch) {mock_model(Archive)}
 
@@ -34,6 +34,22 @@ describe Admin::ArchivesController do
     end
   end
 
+
+  describe 'GET edit' do
+
+    it 'cherche l archive' do
+      Archive.should_receive(:find).with(arch.to_param).and_return arch
+      get :edit, {organism_id: @o.id, :id=>arch.id}, valid_session
+    end
+
+
+    it 'et l assigne' do
+      Archive.should_receive(:find).with(arch.to_param).and_return arch
+      get :edit, {organism_id: @o.id, :id=>arch.id}, valid_session
+      assigns[:archive].should == arch
+    end
+  end
+
   describe 'GET new' do
 
     it 'render new' do
@@ -43,7 +59,7 @@ describe Admin::ArchivesController do
 
   end
 
-   describe 'POST create' do
+  describe 'POST create' do
 
     before(:each) do
       
@@ -74,5 +90,18 @@ describe Admin::ArchivesController do
     
 
   end
+
+  describe 'DELETE destroy' do
+
+    it 'identifie l archive' do
+      Archive.should_receive(:find).with(arch.to_param).and_return arch
+      delete :destroy, {organism_id: @o.id, :id=>arch.to_param}, valid_session
+    end
+
+
+
+  end
+
+
 end
 
