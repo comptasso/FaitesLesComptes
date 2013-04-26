@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
- #    c.filter = {:wip=>true}
+ #  c.filter = {:wip=>true}
 end
 
 describe Compta::Balance do 
@@ -136,57 +136,88 @@ describe Compta::Balance do
         @b.balance_lines.should be_an Array
         @b.balance_lines.should have(2).elements
         @b.balance_lines.first.should ==
-       { :account_id=>@a1.id,
-         :empty=>true,
-         :provisoire=>false, # car il n'y a pas de ligne
-         :number=>"60",
-         :title=>"Achats (sauf 603)",
-         :cumul_debit_before=>0,
-         :cumul_credit_before=>0,
-         :movement_debit=>0,
-         :movement_credit=>0,
-         :sold_at=>0 }
+          { :account_id=>@a1.id,
+          :empty=>true,
+          :provisoire=>false, # car il n'y a pas de ligne
+          :number=>"60",
+          :title=>"Achats (sauf 603)",
+          :cumul_debit_before=>0,
+          :cumul_credit_before=>0,
+          :movement_debit=>0,
+          :movement_credit=>0,
+          :sold_at=>0 }
 
       end
 
 
     end
 
-    describe 'page' , wip:true do
+    describe 'page' do
 
-     def bal_line(value)
-       { :account_id=>value,
-         :account_title=>"compte #{value}",
-         :account_number=>'60'+value.to_s,
-         :empty=>false,
-         :provisoire=>true,
-         :number=>'60'+value.to_s,
-         :title=>"compte #{value}",
-         :cumul_debit_before=>10,
-         :cumul_credit_before=>1,
-         :movement_debit=>value,
-         :movement_credit=>value*2,
-         :sold_at=>1+value*2 - 10 - value}
-     end
+      def bal_line(value)
+        { :account_id=>value,
+          :account_title=>"compte #{value}",
+          :account_number=>'60'+value.to_s,
+          :empty=>false,
+          :provisoire=>true,
+          :number=>'60'+value.to_s,
+          :title=>"compte #{value}",
+          :cumul_debit_before=>10,
+          :cumul_credit_before=>1,
+          :movement_debit=>value,
+          :movement_credit=>value*2,
+          :sold_at=>1+value*2 - 10 - value}
+      end
 
      
 
-     before(:each) do
-       @b.stub(:provisoire?).and_return true
-       @b.stub(:accounts).and_return(@ar = double(Arel))
-       @ar.stub(:collect).and_return (1..100).map {|i| bal_line(2)}
-       @ar.stub(:count).and_return 100
-     end
+      before(:each) do
+        @b.stub(:provisoire?).and_return true
+        @b.stub(:accounts).and_return(@ar = double(Arel))
+        @ar.stub(:collect).and_return (1..100).map {|i| bal_line(2)}
+        @ar.stub(:count).and_return 100
+      end
 
-     it 'total_balance renvoie le total'  do
-       @b.total_balance.should == [1000, 100, 200, 400, -700]
-     end
+      it 'total_balance renvoie le total'  do
+        @b.total_balance.should == [1000, 100, 200, 400, -700]
+      end
 
-     it 'should be able to_pdf with 5 pages' do
-       pdf = @b.to_pdf
-       pdf.should be_an_instance_of(Editions::Balance)
-       pdf.nb_pages.should == 5
-     end
+      it 'should be able to_pdf with 5 pages' do
+        pdf = @b.to_pdf
+        pdf.should be_an_instance_of(Editions::Balance)
+        pdf.nb_pages.should == 5
+      end
+
+      describe 'to_csv'  do
+       
+        before(:each) do
+          @ar.stub(:collect).and_return (1..2).map {|i| bal_line(2)}
+        end
+
+
+        it 'produit une chaine au format csv'do
+          @b.to_csv.should be_a String
+        end
+
+        it 'avec 102 lignes' do
+          @b.to_csv.split("\n").should have(5).lines
+        end
+        it 'la première affiche Soldes au...Mouvements Soldes au...' do
+          @b.to_csv.split("\n").first.should ==  "\"\"\t\"\"\tSoldes au\t01/04/2013\tMouvements\tde la période\tSoldes au 30/04/2013"
+        end
+        it 'la deuxième affiche les titres des colonnes' do
+          @b.to_csv.split("\n").second.should ==  %w(Numéro	Intitulé	Débit	Crédit	Débit	Crédit	Solde).join("\t")
+        end
+
+        it 'les autres sont des lignes de données' do
+          @b.to_csv.split("\n").third.should ==  ['602','compte 2', '10,00',	'1,00',	'2,00',	'4,00',	'-7,00'].join("\t")
+        end
+
+        it 'la dernière affiche les totaux' do
+           @b.to_csv.split("\n").last.should == ['Totaux', '""' ,	'20,00',	'2,00',	'4,00',	'8,00',	'-14,00'].join("\t")
+
+        end
+      end
     end
 
   end
