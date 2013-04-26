@@ -7,7 +7,12 @@ module Editions
   # La classe Stats fille de PdfDocument::Totalized permet l'édition pdf
   # des StatsNatures.
   #
+  # Le classe se crée avec un exercice et une source de données, en l'occurence des
+  # StatsNature
+  #
   # Cette classe utilise le template de Totalized pour l'affichage
+  #
+  # La source doit répondre à lines pour renvoyer les lignes
   #
   # fetch_lines est surchargé car les lignes sont déjà obtenues par StatsNatures
   # et prepare_line l'est également car les lignes sont également mise en forme.
@@ -19,8 +24,8 @@ module Editions
   #
   class Stats < PdfDocument::Totalized
 
-    def initialize(period, stats)
-      super(period, stats, {})
+    def initialize(period, source)
+      super(period, source, {})
       @from_date = period.start_date
       @to_date = period.close_date
       @title = 'Statistiques par nature'
@@ -43,7 +48,6 @@ module Editions
     # comme les lignes sont déja calculées par Stats#stats,
     # il n'est pas utile d'appeler la base.
     #
-    # Dans la méthode source renvoie à stats qui a servi à l'initialisation
     #
     # twelve_months_lines est une méthode protégée destinée à limiter l'édition sur
     # 12 mois pour des problèmes de mise en page.
