@@ -97,12 +97,13 @@ describe Organism do
     end
 
     it 'peut créer un document' , wip:true do
-      Compta::Nomenclature.should_receive(:new).with(@organism.periods.last).and_return(@cn = double(Compta::Nomenclature))
+      Period.stub(:last).and_return(double(Period))
+      Compta::Nomenclature.should_receive(:new).with(Period.last).and_return(@cn = double(Compta::Nomenclature))
       @cn.should_receive(:sheet).with(:actif)
       @organism.document(:actif)
     end
 
-    it 'n est pas accountable' , wip:true  do
+    it 'n est pas accountable'  do
       @organism.should_not be_accountable
     end
 
@@ -124,7 +125,7 @@ describe Organism do
 #      ActiveRecord::Base.establish_connection 'test'
 #    end
 
-     it 'n est pas accountable' , wip:true  do
+     it 'n est pas accountable'  do
       @organism.should be_accountable
     end
 
@@ -139,7 +140,7 @@ describe Organism do
     end
 
 
-    describe 'guess period' , wip:true do
+    describe 'guess period'  do
 
       it 'renvoie nil si pas de periods' do
         @organism.stub(:periods).and_return []
