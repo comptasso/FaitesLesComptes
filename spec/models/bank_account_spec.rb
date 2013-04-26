@@ -113,7 +113,7 @@ describe BankAccount do
 
   end
 
-    describe 'new_bank_extract' do
+    describe 'new_bank_extract' , wip:true do
 
       before(:each) do
         create_minimal_organism
@@ -149,7 +149,12 @@ describe BankAccount do
           @be.end_date.should == @be.begin_date.end_of_month
         end
         
-        
+      end
+
+      it 'new_bank_extract return nil si on est déja à la fin de l exercice' do
+        @last_bank_extract = mock_model(BankExtract, :end_date=>Date.today.end_of_year, :end_sold=>3.14)
+        @ba.stub(:last_bank_extract).and_return @last_bank_extract
+        @ba.new_bank_extract(@p).should be_nil
       end
 
     end

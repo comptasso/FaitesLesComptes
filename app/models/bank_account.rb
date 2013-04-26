@@ -43,14 +43,18 @@ class BankAccount < ActiveRecord::Base
   def new_bank_extract(period)
     previous_be = last_bank_extract(period)
     if previous_be
-      bank_extracts.new(begin_date: previous_be.end_date + 1.day,
-                        end_date: (previous_be.end_date + 1.day).end_of_month,
-                        begin_sold: previous_be.end_sold)
+      begin_date = previous_be.end_date + 1.day
+      end_date = begin_date.end_of_month
+      begin_sold = previous_be.end_sold
     else
-      bank_extracts.new(begin_date: period.start_date,
-                        end_date: period.start_date.end_of_month,
-                        begin_sold: 0)
+      begin_date = period.start_date
+      end_date = begin_date.end_of_month
+      begin_sold = 0
     end
+    return nil if end_date > period.close_date
+    bank_extracts.new(begin_date:begin_date,
+                        end_date:end_date,
+                        begin_sold:begin_sold)
   end
 
  # trouve toutes les lignes non pointées et qui ont pour compte comptable le

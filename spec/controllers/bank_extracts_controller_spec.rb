@@ -50,6 +50,12 @@ describe BankExtractsController do
       get :new,{ :organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
       response.should render_template 'new'
     end
+
+     it 'mais redirige vers index si on ne peut pas créer un nouvel extrait' do
+       ba.stub(:new_bank_extract).and_return nil
+       get :new,{ :organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
+       response.should redirect_to(bank_account_bank_extracts_url(ba))
+     end
   end
 
   describe "GET edit" do
