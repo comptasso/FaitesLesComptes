@@ -25,7 +25,7 @@ class BankExtractsController < ApplicationController
     # ici on change les attributs false
     @bank_extract.locked = true
     if @bank_extract.save
-      flash[:notice]= "Relévé validé et verrouillé"
+      flash[:notice]= "Relevé validé et verrouillé"
     else
       flash[:alert]= "Une erreur n'a pas permis de valider le relevé"
     end

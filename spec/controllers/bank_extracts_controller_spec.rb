@@ -2,6 +2,11 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+RSpec.configure do |c|
+  #  c.filter = {:wip=>true}
+end
+
+
 describe BankExtractsController do
   include SpecControllerHelper 
 
@@ -98,6 +103,36 @@ describe BankExtractsController do
         response.should render_template("new")
       end
    
+  end
+
+
+  describe "POST lock" , wip:true do
+    it 'cherche le bank_extract' do
+      BankExtract.should_receive(:find).with(be.to_param).and_return(@be = mock_model(BankExtract, 'locked='=>true, :save=>true))
+
+      post :lock,{ :bank_account_id=> ba.id,
+          :id => be.to_param}, valid_session
+    end
+
+     it 'met locked à true' do
+       BankExtract.stub(:find).and_return(@be = mock_model(BankExtract, :save=>true))
+       @be.should_receive('locked=').with(true).and_return true
+        post :lock,{ :bank_account_id=> ba.id, :id => be.to_param}, valid_session
+     end
+
+     it 'puis sauve' do
+       BankExtract.stub(:find).and_return(@be = mock_model(BankExtract, 'locked='=>true))
+       @be.should_receive(:save).and_return true
+        post :lock,{ :bank_account_id=> ba.id, :id => be.to_param}, valid_session
+        flash[:notice].should == 'Relevé validé et verrouillé'
+     end
+
+     it 'en cas d echec affiche un alert' do
+       BankExtract.stub(:find).and_return(@be = mock_model(BankExtract, 'locked='=>true))
+       @be.should_receive(:save).and_return false
+        post :lock,{ :bank_account_id=> ba.id, :id => be.to_param}, valid_session
+        flash[:alert].should == "Une erreur n'a pas permis de valider le relevé"
+     end
   end
   #
   describe "PUT update" do
