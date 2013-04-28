@@ -3,13 +3,13 @@
 require 'editions/sheet'
 
 
-module PdfDocument
+module Editions
 
 
-  # PdfDetailedSheet permet la production de fichier pdf avec le détail des
+  # DetailedSheet permet la production de fichier pdf avec le détail des
   # comptes permettant de comprendre la construction d'un Sheet,
   # que ce soit compte de résultats, actif, passif ou bénévolat
-  class PdfDetailedSheet < Editions::Sheet
+  class DetailedSheet < Editions::Sheet
 
     
 
@@ -22,8 +22,8 @@ module PdfDocument
 
     def read_template
       template = case @source.sens
-        when :actif then "lib/pdf_document/prawn_files/detailed_actif.pdf.prawn"
-        when :passif then "lib/pdf_document/prawn_files/detailed_passif.pdf.prawn"
+        when :actif then "#{Rails.root}/app/models/editions/prawn/detailed_actif.pdf.prawn"
+        when :passif then "#{Rails.root}/app/models/editions/prawn/detailed_passif.pdf.prawn"
       end
       File.open(template, 'r') { |f| f.read}
     end

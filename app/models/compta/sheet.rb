@@ -109,17 +109,17 @@ module Compta
     def to_pdf(options = {})
       options[:title] =  name.to_s 
       options[:documents] = @page
-      PdfDocument::PdfSheet.new(@period, self, options)
+      Editions::Sheet.new(@period, self, options)
     end
 
     def to_detailed_pdf(options = {})
       options[:title] =  name.to_s
       options[:documents] = @page
-      PdfDocument::PdfDetailedSheet.new(@period, self, options)
+      Editions::DetailedSheet.new(@period, self, options)
     end
 
     def render_pdf
-      to_pdf.render
+      to_pdf.render 
     end
 
 

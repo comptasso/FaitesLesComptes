@@ -84,17 +84,17 @@ include OrganismFixture
 
   it 'peut rendre un pdf' do
     cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
-    cs.to_pdf.should be_an_instance_of PdfDocument::PdfSheet
+    cs.to_pdf.should be_an_instance_of Editions::Sheet
   end
 
   it 'peut rendre un detailed_pdf' do
     cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
-    cs.to_detailed_pdf.should be_an_instance_of PdfDocument::PdfDetailedSheet
+    cs.to_detailed_pdf.should be_an_instance_of Editions::DetailedSheet
   end
 
   it 'render pdf crée le pdf et le rend' do
     cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
-    cs.should_receive(:to_pdf).and_return(double PdfDocument::PdfSheet, :render=>true)
+    cs.should_receive(:to_pdf).and_return(double Editions::Sheet, :render=>true)
     cs.render_pdf.should be_true
   end
 

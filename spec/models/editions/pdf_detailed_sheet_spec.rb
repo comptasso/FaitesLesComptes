@@ -2,10 +2,11 @@
 
 require 'spec_helper'
 require 'pdf_document/default'
-require 'pdf_document/pdf_sheet'
-require 'pdf_document/pdf_detailed_sheet'
 
-describe PdfDocument::PdfDetailedSheet do
+
+describe Editions::DetailedSheet do
+
+  pending 'Spec à faire'
 #  let(:o) {stub_model(Organism, :name=>'Ma petite Affaire')}
 #  let(:p) {stub_model(Period, organism:o, start_date:Date.today.beginning_of_year,
 #      close_date:Date.today.end_of_year)}

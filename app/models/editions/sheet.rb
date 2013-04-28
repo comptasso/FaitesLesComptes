@@ -5,12 +5,12 @@ require 'pdf_document/default'
 
 module Editions
 
-  # PdfSheet permet de créer une page pdf à partir d'un objet Sheet.
+  # Sheet permet de créer une page pdf à partir d'un objet Sheet.
   # Voir la classe Compta::Sheet pour plus d'information
   #
-  # PdfSheet hérite de PdfDocument::Simple mais ajoute ou surcharge quelques méthodes
+  # Sheet hérite de PdfDocument::Simple mais ajoute ou surcharge quelques méthodes
   #
-  #  PdfSheet est en effet destiné à imprimer une information sur une seule page, la
+  #  Sheet est en effet destiné à imprimer une information sur une seule page, la
   #  méthode nb_pages est donc surchargée pour renvoyer 1
   #
   #   Les documents sont des documents de type liasse fiscale (Bilan, Compte de Résultats)
