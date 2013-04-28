@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'pdf_document/pdf_sheet'
+require 'editions/sheet'
 
 
 module PdfDocument
@@ -9,7 +9,7 @@ module PdfDocument
   # PdfDetailedSheet permet la production de fichier pdf avec le détail des
   # comptes permettant de comprendre la construction d'un Sheet,
   # que ce soit compte de résultats, actif, passif ou bénévolat
-  class PdfDetailedSheet < PdfDocument::PdfSheet
+  class PdfDetailedSheet < Editions::Sheet
 
     
 
@@ -22,10 +22,8 @@ module PdfDocument
 
     def read_template
       template = case @source.sens
-      when :actif then "lib/pdf_document/prawn_files/detailed_actif.pdf.prawn"
-      when :passif then "lib/pdf_document/prawn_files/detailed_passif.pdf.prawn"
-      else
-        raise ArgumentError, 'Le sens d\'un document ne peut être que :actif ou :passif'
+        when :actif then "lib/pdf_document/prawn_files/detailed_actif.pdf.prawn"
+        when :passif then "lib/pdf_document/prawn_files/detailed_passif.pdf.prawn"
       end
       File.open(template, 'r') { |f| f.read}
     end

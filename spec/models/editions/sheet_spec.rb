@@ -2,23 +2,23 @@
 
 require 'spec_helper'
 require 'pdf_document/default'
-require 'pdf_document/pdf_sheet'
+require 'editions/sheet'
 
-describe PdfDocument::PdfSheet do
+describe Editions::Sheet do
   let(:o) {stub_model(Organism, :name=>'Ma petite Affaire')}
   let(:p) {stub_model(Period, organism:o, start_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year)}
   let(:bal) {double(Compta::Sheet, :period=>p, :sens=>:actif, :name=>:actif)} # pour un actif de bilan
 
   it 'création du PdfSheet' do
-    pdfs = PdfDocument::PdfSheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
-    pdfs.should be_an_instance_of(PdfDocument::PdfSheet)
+    pdfs = Editions::Sheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
+    pdfs.should be_an_instance_of(Editions::Sheet)
   end
   
   describe 'les méthodes de pdf sheet' do
 
     before(:each) do
-      @pdfs = PdfDocument::PdfSheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
+      @pdfs = Editions::Sheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
     end
     it 'page renvoie 1' do
       @pdfs.nb_pages.should == 1
@@ -32,7 +32,7 @@ describe PdfDocument::PdfSheet do
 
      it 'les colonnes dépendent du sens de la source' do
         bal.stub(:sens).and_return(:passif)
-        pdfs = PdfDocument::PdfSheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
+        pdfs = Editions::Sheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
         pdfs.columns.should == ['title',  'net', 'previous_net']
       end
 
@@ -64,9 +64,9 @@ describe PdfDocument::PdfSheet do
     end
 
     it 'utilise le template correspondant à son sens' do
-      @pdfs.send(:template).should == "lib/pdf_document/prawn_files/actif.pdf.prawn"
+      @pdfs.send(:template).should == "#{Rails.root}/app/models/editions/prawn/actif.pdf.prawn"
       bal.stub(:sens).and_return :passif
-      @pdfs.send(:template).should == "lib/pdf_document/prawn_files/passif.pdf.prawn"
+      @pdfs.send(:template).should == "#{Rails.root}/app/models/editions/prawn/passif.pdf.prawn"
     end
 
 

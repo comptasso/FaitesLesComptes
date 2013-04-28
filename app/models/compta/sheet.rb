@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require 'yaml'
-require 'pdf_document/pdf_detailed_sheet'
+
 
 
 # Sheet est destinées à éditer une liste de rubriks

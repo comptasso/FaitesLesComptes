@@ -10,7 +10,7 @@ end
 # spec request for testing admin books 
 
 describe 'vue transfer index'do
-  include OrganismFixture  
+  include OrganismFixture   
 
 
   before(:each) do 

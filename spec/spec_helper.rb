@@ -1,7 +1,9 @@
 # -*- encoding : utf-8 -*-
 
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter "/config/" # on ne teste pas la couverture des fichiers config.
+end
 
 
 require 'spork'

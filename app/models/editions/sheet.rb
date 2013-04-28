@@ -3,7 +3,7 @@
 require 'pdf_document/default'
 
 
-module PdfDocument
+module Editions
 
   # PdfSheet permet de créer une page pdf à partir d'un objet Sheet.
   # Voir la classe Compta::Sheet pour plus d'information
@@ -27,7 +27,7 @@ module PdfDocument
   #   traite de l'exercice, tandis qu'un bilan traite de date de clôture de l'exercice.
   #   set_title_columns répond à cet objectif
   #
-  class PdfSheet < PdfDocument::Simple
+  class Sheet < PdfDocument::Simple
 
     def initialize(period, source, options)
       super # pour initialiser les données
@@ -99,8 +99,8 @@ module PdfDocument
 
     def template
       case @source.sens
-      when :actif then "lib/pdf_document/prawn_files/actif.pdf.prawn"
-      when :passif then "lib/pdf_document/prawn_files/passif.pdf.prawn"
+      when :actif then "#{Rails.root}/app/models/editions/prawn/actif.pdf.prawn"
+      when :passif then "#{Rails.root}/app/models/editions/prawn/passif.pdf.prawn"
       end
     end
 
