@@ -8,7 +8,7 @@ module Extract
 #
 # Se créé en appelant new avec un book et une date quelconque du mois souhaité
 #
-class Montlhy < Extract::Base
+class Monthly < Extract::Base
 
     attr_reader :book
 

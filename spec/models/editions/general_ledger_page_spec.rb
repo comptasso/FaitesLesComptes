@@ -16,10 +16,18 @@ describe Editions::GeneralLedgerPage do
   let(:monthly_ledgers) {double(Compta::MonthlyLedger, total_debit:1200.50, total_credit:10000.02)}
 
   before(:each) do
-    monthly_ledgers.stub(:title_line).and_return({mois:"Mois de Fructose", title:'', description:'', debit:'', credit:''})
-    monthly_ledgers.stub(:lines).and_return([{mois:'', title:'ES', description:'Essai', :debit=>1200.50, :credit=>10000.02},
-     {mois:'', title:'VE', description:'Ventes', :debit=>0, :credit=>225000.25}])
-    monthly_ledgers.stub(:total_line).and_return({mois:"Total Fructose", title:'', description:'', debit:1200.50, credit:10000.02})
+    monthly_ledgers.stub(:lines_with_total).and_return([
+        {mois:"Mois de Fructose", title:'', description:'', debit:'', credit:''},
+        {mois:'', title:'ES', description:'Essai', :debit=>1200.50, :credit=>10000.02},
+        {mois:'', title:'VE', description:'Ventes', :debit=>0, :credit=>225000.25},
+        {mois:"Total Fructose", title:'', description:'', debit:1200.50, credit:10000.02}
+      ]
+    )
+
+    #    monthly_ledgers.stub(:title_line).and_return({mois:"Mois de Fructose", title:'', description:'', debit:'', credit:''})
+    #    monthly_ledgers.stub(:lines).and_return([{mois:'', title:'ES', description:'Essai', :debit=>1200.50, :credit=>10000.02},
+    #     {mois:'', title:'VE', description:'Ventes', :debit=>0, :credit=>225000.25}])
+    #    monthly_ledgers.stub(:total_line).and_return({mois:"Total Fructose", title:'', description:'', debit:1200.50, credit:10000.02})
   end
 
   describe 'french_format' do
@@ -35,7 +43,9 @@ describe Editions::GeneralLedgerPage do
 
     describe 'table_lines' do
       it 'renvoie les lignes de la table' do
+        @glp.table_lines.first.should == ["Mois de Fructose", "", "", "", ""]
         @glp.table_lines.second.should == ['', 'ES', 'Essai', '1 200,50', '10 000,02']
+        @glp.table_lines.last.should == ["Total Fructose", "", "", "1 200,50", "10 000,02"]
       end
     end
 

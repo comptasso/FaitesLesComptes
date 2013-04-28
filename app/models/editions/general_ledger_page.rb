@@ -79,14 +79,7 @@ module Editions
      # TODO voir comment on différencie le résultat en terme de style des lignes
      # Faire un to_pdf pour chaque MonthlyLedger
      def fetch_lines
-       tableau = []
-        list_monthly_ledgers.each do |ml|
-          # TODO mettre cette série d'instructions dans le monthly_ledger.(par exemple lines_with_totals)
-          tableau << ml.title_line
-          ml.lines.each {|l| tableau << l}
-          tableau << ml.total_line
-        end
-        tableau
+        list_monthly_ledgers.collect {|ml| ml.lines_with_total }.flatten
      end
 
      # Calcule le total de la page (débit et crédit)
