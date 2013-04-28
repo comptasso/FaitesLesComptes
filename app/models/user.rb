@@ -12,16 +12,19 @@ class User < ActiveRecord::Base
     rooms.first
   end
 
-  # retourne un hash des organismes et des chambres appartenat à cet user
+  # retourne un array de hash des organismes et des chambres appartenat à cet user
   # le hash ne comprend que les organimes qui ont pu être effectivement trouvés
   def organisms_with_room
     owrs = rooms.collect { |r| {organism:r.organism, room:r} }
     owrs.select {|o| o[:organism] != nil}
   end
 
+  # retourne un hash pour la zone Compta avec les seulement les organismes qui
+  # sont accountable.
+  #
+  # s'appuie sur organism_with_rooms et ne retien que les accountable?
   def accountable_organisms_with_room
-   rs =  rooms.select {|groom| groom.look_forg { "accountable?"} }
-   rs.collect { |groom| {organism:groom.organism, room:groom} }
+    organisms_with_room.select {|owr|  owr[:room].look_forg {"accountable?"} }
   end
 
   # up_to_date effectue un contrôle des bases de l'utilisateur
