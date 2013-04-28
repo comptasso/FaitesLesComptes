@@ -41,6 +41,12 @@ describe Compta::WritingsController do
        response.should redirect_to(compta_book_writings_url(@b, :mois=>@my.month, :an=>@my.year))
     end
 
+    it 'avec params mois et an, wherche les writings du mois' do
+      @b.should_receive(:writings).and_return(@ar = double(Arel))
+      @ar.should_receive(:mois).with(Date.today.beginning_of_month)
+      get :index, {book_id:@b.id,  an:Date.today.year, mois:Date.today.month}, valid_session
+    end
+
   end
 
   
@@ -87,10 +93,17 @@ describe Compta::WritingsController do
         assigns(:writing).should be_a(Writing)
       end
 
-      it "redirects to the created writing" do
+      it "redirects to the form new" do
         @r.stub(:save).and_return(@r)
         post :create, {book_id:@b.to_param, :writing => {} }, valid_session
         response.should redirect_to new_compta_book_writing_url(@b)
+      end
+
+      it 'mais redirige vers la vue index si book est A Nouveau' do
+        @b.stub(:type).and_return('AnBook')
+        @r.stub(:save).and_return(true)
+        post :create, {book_id:@b.to_param, :writing => {} }, valid_session
+        response.should redirect_to compta_book_writings_url(@b)
       end
     end
 
