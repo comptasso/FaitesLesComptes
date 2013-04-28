@@ -5,6 +5,8 @@ require 'pdf_document/default'
 
 module Editions
 
+  class EditionsError < StandardError; end;
+
   # Sheet permet de créer une page pdf à partir d'un objet Sheet.
   # Voir la classe Compta::Sheet pour plus d'information
   #
@@ -31,8 +33,8 @@ module Editions
 
     def initialize(period, source, options)
       super # pour initialiser les données
-      raise PdfDocumentError, 'source doit répondre à la méthode :sens' unless @source.respond_to? :sens
-      raise PdfDocumentError, 'le sens de la source ne peut être qu\'actif ou passif' unless @source.sens.in? [:actif, :passif]
+      raise EditionsError, 'source doit répondre à la méthode :sens' unless @source.respond_to? :sens
+      raise EditionsError, 'le sens de la source ne peut être qu\'actif ou passif' unless @source.sens.in? [:actif, :passif]
       set_columns # inutile d'attendre
     end
 

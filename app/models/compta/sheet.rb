@@ -118,6 +118,10 @@ module Compta
       Editions::DetailedSheet.new(@period, self, options)
     end
 
+    def detailed_lines(page_number=1)
+      total_general.fetch_lines(page_number)
+    end
+
     def render_pdf
       to_pdf.render 
     end

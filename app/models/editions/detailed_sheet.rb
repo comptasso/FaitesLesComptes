@@ -15,7 +15,7 @@ module Editions
 
     def fetch_lines(page_number = 1)
       set_columns
-      @source.total_general.fetch_lines
+      @source.detailed_lines(page_number)
     end
 
     protected
