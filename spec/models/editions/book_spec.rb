@@ -38,15 +38,12 @@ describe Editions::Book do
  end
 
  
-
 # FIXME prepare_line semble être rendu appelé 150 fois, ce qui laisse penser
 # que perpare_line est appelé à chaque page pour l'ensemble des 50 lignes
 # et non simplement pour les 22 lignes de la page
   it 'et peut alors rendre un pdf' do
- 
     @extract.stub(:instance_eval).and_return(@ar = double(Arel, :count=>50))
     @ar.stub_chain(:select, :offset, :limit).and_return(@extract.lines)
-
     @eb = Editions::Book.new(@period, @extract)
     @eb.should_receive(:prepare_line).at_least(50).times.and_return %w(un doux)
     @eb.render
