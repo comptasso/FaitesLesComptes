@@ -81,16 +81,7 @@ describe "BankExtracts" do
       it 'affiche une icone modifier' , wip:true do
          page.find('tbody tr:first td:last').should have_icon('afficher', href:"#{bank_account_bank_extract_path(@ba, @be)}")
       end
-
-      it 'cliquer sur l icone afficher mène à la page affichage' do
-       pending 'il faudrait avoir un bank extract qui ait réellement des lignes'
-        within('table') do
-          click_link('Afficher')
-        end
-        current_path.should == bank_extract_bank_extract_lines_path(@be)
-        page.find('thead th').should have_content("Liste des écritures")
-      end
-
+      
     end
 
     context 'avec un extrait de compte' do
@@ -111,7 +102,6 @@ describe "BankExtracts" do
       end
 
       it 'les actions proposent edit, pointage, afficher et suppression' , js:true do
-        # TODO rétablie le test sur l icone modifier qui devrait fonctionner...
         page.find('tbody tr:first td:last').should have_icon('modifier', href:"#{edit_bank_account_bank_extract_path(@ba, @be)}")
         page.find('tbody tr:first td:last').should have_icon('pointer', href:"#{pointage_bank_extract_bank_extract_lines_path(@be)}")
        

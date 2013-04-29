@@ -18,7 +18,7 @@ describe BankExtractLine do
       begin_sold:1,
       total_debit:2,
       total_credit:5)
-    @d7 = create_outcome_writing(7) 
+    @d7 = create_outcome_writing(7)  
     @d29 = create_outcome_writing(29)
     @ch97 = create_in_out_writing(97, 'Chèque')
     @ch5 = create_in_out_writing(5, 'Chèque')
