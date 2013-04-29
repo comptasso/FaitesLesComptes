@@ -1,4 +1,4 @@
-# coding: utf-8
+Cash # coding: utf-8
 module Extract
 #
 # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes

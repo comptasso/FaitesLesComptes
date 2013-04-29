@@ -38,10 +38,7 @@ jQuery(function () {
                         return JSON.parse(localStorage.getItem('DataTables_' + window.location.pathname));
                     },
                     "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-                        /*
-                     * Calculate the total market share for all browsers in this table (ie inc. outside
-                     * the pagination)
-                     */
+                     
                         var i = 0,
                             iTotalDebit = 0,
                             iTotalCredit = 0.0,
@@ -52,14 +49,14 @@ jQuery(function () {
                             iTotalDebit += stringToFloat(aaData[i][5]);
                         }
 
-                        /* Calculate the market share for browsers on this page */
+                        
                         for (i = iStart; i < iEnd; i += 1) {
                             iPageDebit += stringToFloat(aaData[aiDisplay[i]][5]);
                         }
                         for (i = 0; i < aaData.length; i += 1) {
                             iTotalCredit += stringToFloat(aaData[i][6]);
                         }
-                        /* Calculate the market share for browsers on this page */
+                       
                         for (i = iStart; i < iEnd; i += 1) {
                             iPageCredit += stringToFloat(aaData[aiDisplay[i]][6]);
                         }

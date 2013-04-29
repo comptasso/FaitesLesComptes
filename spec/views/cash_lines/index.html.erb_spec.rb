@@ -9,107 +9,70 @@ end
 describe "cash_lines/index" do 
   include JcCapybara
 
-  let(:o) {mock_model(Organism, title: 'spec cd')} 
-  let(:t) {mock_model(Transfer, :creditable_type=>'BankAccount', :creditable_id=>1,
-      :debitable_type=>'BankAccount', :debitable_id=>1,
-      :amount=>250.12, :narration=> 'Retrait')}
-  let(:p) {mock_model(Period, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)}
-  let(:c) {mock_model(Cash, name: 'Magasin')}
-  let(:n) {mock_model(Nature, :name=>'achat de marchandises')} 
-  let(:mce) { mock( Extract::MonthlyCash, :total_credit=>100, :total_debit=>51,
-    :debit_before=>20, :credit_before=>10)}
-  let(:cl1) { mock_model(ComptaLine, :debit=>'45', :nature_id=>n.id)}
-  let(:cl2) {mock_model(ComptaLine, :debit=>'54', :nature_id=>n.id)}
+  def mock_cash_line(montant)
+    mock_model(ComptaLine,
+      :debit=>montant,
+    :date=>Date.today,
+    :narration=>'le libellé',
+    :destination=>stub(:name=>'destinée'),
+    :nature=>stub(:name=>'une dépense'),
+    :credit=>0,
+    :ref=>'001',
+    'editable?'=>true
+  )
+  end
+
 
 
   before(:each) do
-    assign(:organism, o)  
-    assign(:period, p)
-    assign(:cash, c)
-    assign(:monthly_extract, mce)
-    p.stub(:list_months).and_return ListMonths.new(p.start_date, p.close_date) 
-    mce.stub(:lines).and_return([cl1,cl2])
-    mce.stub(:titles).and_return ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Sorties', 'Entrées']
-    [cl1, cl2].each {|l| l.stub(:nature).and_return(n) }
-    [cl1, cl2].each {|l| l.stub(:destination).and_return(nil) }
-    [cl1, cl2].each {|l| l.stub(:editable?).and_return(true) }
-    [cl1, cl2].each {|l| l.stub(:book_id).and_return(1) }
-    [cl1, cl2].each {|l| l.stub(:date).and_return(Date.today) }
-    [cl1, cl2].each {|l| l.stub(:ref).and_return('rien') }
-    [cl1, cl2].each {|l| l.stub(:narration).and_return('libellé de l écriture') }
-    [cl1, cl2].each {|l| l.stub(:book).and_return(@b = mock_model(Book)) }
-    [cl1, cl2].each {|l| l.stub(:writing).and_return(@w = mock_model(Writing,
-          type:'Writing', date:Date.today, narration:'libellé', ref:nil, book_id:@b.id, :book=>@b)) }
-    
+    @cl1 = mock_cash_line(10)
+    @cl2 = mock_cash_line(12.25)
+    @p = mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
+    @ca = mock_model(Cash, name:'Magasin')
+    @ec = Extract::Cash.new(@ca, @p)
+    @ec.stub(:lines).and_return([@cl1, @cl2])
+    @ec.stub(:total_debit).and_return 25
+    @ec.stub(:total_credit).and_return 25
 
-    view.stub('current_page?').and_return false
-  end
 
- 
-  describe "controle du corps" do  
 
-    before(:each) do 
-      render
-    end
 
-    it "affiche la légende du fieldset" do
-      assert_select 'h3', /Caisse Magasin.*/
-    end
-
-    it "affiche la table desw remises de chèques" do
-      assert_select "table tbody", count: 1
-    end
-
-    it "affiche les lignes (ici deux)" do
-      assert_select "tbody tr", count: 2
-    end
-
-    it 'une cash_line non verrouillée peut être éditée et supprimée' , wip:true do
-      assert_select 'img', count:4 # deux par lignes
-      assert_select("tbody tr:first-child") do
-        assert_select 'a:first-child img[src=?]', '/assets/icones/modifier.png'
-        assert_select 'a:last-child img[src=?]', '/assets/icones/supprimer.png'
-     
-      end
+    assign(:cash, @ca)
+    @view.stub(:submenu_mois).and_return(['jan', 'fev']) 
+    @view.stub(:in_out_line_actions).and_return('les actions')
    
-    end
+
+    assign(:mois, Date.today.month)
+    assign(:an, Date.today.year)
+    assign(:monthly_extract, @ec)
+    render
   end
 
-  context 'avec des lines non editable' do
-    before(:each) do
-       [cl1, cl2].each {|l| l.stub(:editable?).and_return(false) }
-        render
-    end
-
-    it 'une cash line locked n a pas de line pour suppression ou effacement' do
-      page.all("tbody a").should have(0).elements
-    end
+  it 'should render avec une table' do
+    page.all('table').should have(1).element
   end
 
-  context 'avec des lignes locked?' do
-    it 'ne doit pas avoir de lien edition ou suppression'
+  it 'avec une ligne de titre' do
+    titles = page.all('thead th').collect {|el| el.text}
+    titles.should == %w(Date Réf Libellé Destination Nature Sorties Entrées Actions)
+
+  end
+  it 'deux lignes' do
+    page.all('table tbody tr').should have(2).lines
   end
 
-  context 'avec une ligne venant de transfer' , wip:true do
-    before(:each) do
-       [cl1, cl2].each {|l| l.stub(:writing).and_return(@t = mock_model(Transfer)) }
-       [cl1, cl2].each {|l| l.stub_chain(:writing, :type).and_return('Transfer') }
- 
-
-        
-    end
-
-   it 'ne doit y avoir qu un seul lien (modifier)' do
-     render
-     page.find("tbody tr:first td:nth-child(8)").all('img').size.should == 1
-   end
-
-    it 'peut avoir un lien modifier pointant vers transfer' do
-      pending "Il faut refaire les spec de ce fichier"
-      render
-      page.find("tbody tr:first td:nth-child(8)").all('img').first[:src].should == '/assets/icones/modifier.png'
-      page.find("tbody tr:first td:nth-child(8) a")[:href].should == "/transfers/#{@t.id}/edit"
-    end 
+  it 'une ligne se compose de ...' do
+    ligne = page.all('table tbody tr:first td')
+    ligne.first.text.should == I18n.l(Date.today, :format=>'%d/%m/%Y')
+    ligne[1].text.should == '001'
+    ligne[2].text.should == 'le libellé'
+    ligne[3].text.should == 'destinée'
+    ligne[4].text.should == 'une dépense'
+    ligne[5].text.should == '-'
+    ligne[6].text.should == '10,00'
   end
+
   
+
+
 end

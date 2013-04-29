@@ -55,6 +55,15 @@ describe Admin::BankAccountsController do
     end
   end
 
+  describe "GET show" do
+    it "assigns the requested bank_account as @bank_account" do
+      BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
+      get :show,{ organism_id:@o.id.to_s, :id => ba1.id.to_s}, valid_session
+      assigns(:bank_account).should eq(ba1)
+    end
+  end
+
+
   describe "GET edit" do 
     it "assigns the requested bank_account as @bank_account" do
       BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)

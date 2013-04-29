@@ -3,8 +3,7 @@
 module Extract
 #
 # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes
-# se créé en appelant new avec un book et une date quelconque du mois souhaité
-#
+# 
 #
 class Cash < Extract::InOut
   

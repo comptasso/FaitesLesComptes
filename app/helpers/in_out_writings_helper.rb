@@ -3,6 +3,7 @@
 
 module InOutWritingsHelper
   
+# TODO vérifier que les actions sont bien testées
 
   # permet d'afficher les actions possible dans une ligne d'écriture
   # 

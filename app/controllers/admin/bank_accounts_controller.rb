@@ -15,17 +15,7 @@ class Admin::BankAccountsController < Admin::ApplicationController
     end
   end
 
-  # GET /bank_accounts/1
-  # GET /bank_accounts/1.json
-  def show
-    @bank_account = BankAccount.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @bank_account }
-    end
-  end
-
+  
   # GET /bank_accounts/new
   # GET /bank_accounts/new.json
   def new
