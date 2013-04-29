@@ -72,7 +72,20 @@ describe NaturesController do
         
         get :stats, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :destination=>filt.to_s},  session_attributes
         assigns(:filter).should == filt
-      end 
+      end
+
+      describe 'rendre le pdf' do
+
+       it 'renvoie des datas' do
+          Stats::StatsNatures.stub(:new).and_return(@sn = double(Stats::StatsNatures))
+          @sn.stub_chain(:to_pdf, :render).and_return('bonjour')
+          @p.stub(:exercice).and_return('Exercice 2013')
+          @controller.should_receive(:send_data).with('bonjour', :filename=>"#{@o.title} - Statistiques - #{@p.exercice}.pdf").and_return { @controller.render nothing: true }
+          get :stats,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}, session_attributes
+         
+       end
+
+      end
     
   
 
