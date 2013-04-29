@@ -91,11 +91,70 @@ describe Admin::ArchivesController do
 
   end
 
+  describe "PUT update" do
+    before(:each) do
+      @o.stub(:archives).and_return(@ar = double(Arel))
+      @ar.stub(:find).with(arch.to_param).and_return(arch)
+    end
+
+    describe "with valid params" do
+      it "updates the requested arch" do
+        @ar.should_receive(:find).with(arch.to_param).and_return arch
+        arch.should_receive(:update_attributes).with({'these' => 'params'})
+        put :update,{:organism_id=>@o.id.to_s,  :id => arch.id, :archive => {'these' => 'params'}}, valid_session
+      end
+
+      it "assigns the requested arch as @arch" do
+
+        arch.stub(:update_attributes).and_return true
+        put :update,{:organism_id=>@o.id.to_s,  :id => arch.id, :archive => {'these' => 'params'}}, valid_session
+        assigns(:archive).should eq(arch)
+      end
+
+      it "redirects to index" do
+        arch.stub(:update_attributes).and_return true
+        put :update, {:organism_id=>@o.id.to_s, :id => arch.id, :archive => {'these' => 'params'}}, valid_session
+        response.should redirect_to(admin_organism_archives_url(@o))
+      end
+    end
+
+    describe "with invalid params" do
+      it "assigns the arch as @arch" do
+        arch.stub(:update_attributes).and_return false
+        put :update, {:organism_id=>@o.id.to_s, :id => arch.id.to_s, :archive => {}}, valid_session
+        assigns(:archive).should eq(arch)
+      end
+
+      it "re-renders the 'edit' template" do
+        arch.stub(:update_attributes).and_return false
+        Cash.any_instance.stub(:save).and_return(false)
+        put :update,{:organism_id=>@o.id.to_s,  :id => arch.id.to_s, :archive => {}}, valid_session
+        response.should render_template("edit")
+      end
+    end
+  end
+
   describe 'DELETE destroy' do
+
+
 
     it 'identifie l archive' do
       Archive.should_receive(:find).with(arch.to_param).and_return arch
       delete :destroy, {organism_id: @o.id, :id=>arch.to_param}, valid_session
+    end
+
+    it 'avec un flash de succès' do
+      Archive.stub(:find).with(arch.to_param).and_return arch
+      arch.should_receive(:destroy).and_return true
+      delete :destroy, {organism_id: @o.id, :id=>arch.to_param}, valid_session
+      flash[:notice].should == 'Enregistrement effacé'
+    end
+
+    it 'ou un flash d alerte' do
+      Archive.stub(:find).with(arch.to_param).and_return arch
+      arch.should_receive(:destroy).and_return false
+      delete :destroy, {organism_id: @o.id, :id=>arch.to_param}, valid_session
+      flash[:alert].should == "Une erreur s'est produite empêchant la destruction de l'enregistrement"
     end
 
 
