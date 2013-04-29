@@ -2,13 +2,14 @@
 
 class Admin::BooksController < Admin::ApplicationController
 
-
+  # TODO : on pourrait se passer de organism puisqu'on utilise des bases séparées
+  # ou des schémas
 
 
   # GET /books
   # GET /books.json
   def index
-    @books = @organism.books.all
+    @books = @organism.books
   end
 
   
@@ -36,11 +37,9 @@ class Admin::BooksController < Admin::ApplicationController
     end
      respond_to do |format|
       if @book.save
-        format.html { redirect_to admin_organism_books_url(@organism), notice: 'Le livre a été créé.' }
-        format.json { render json: @book, status: :created, location: @book }
+        format.html { redirect_to admin_organism_books_url(@organism), notice: 'Le livre a été créé.'}
       else
-        format.html { render action: "new" }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
+        format.html {render action: "new" }
       end
     end
   end
@@ -48,7 +47,7 @@ class Admin::BooksController < Admin::ApplicationController
   # PUT /books/1
   # PUT /books/1.json
   def update
-    @book = @organism.books.find(params[:id])
+    @book = Book.find(params[:id])
     
     respond_to do |format|
       if @book.update_attributes(params[:book])
