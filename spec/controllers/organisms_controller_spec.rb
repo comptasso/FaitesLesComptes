@@ -33,7 +33,14 @@ describe OrganismsController do
       get :index, {}, {:user=>@cu.id}
       assigns(:room_organisms).should == 'bizarre'
     end
-   end
+
+    it 'le collect remplit un hash' do
+      @cu.stub(:rooms).and_return([@r = mock_model(Room, :organism=>@o, :look_for=>'bonsoir'),
+          mock_model(Room, :organism=>@a, :look_for=>nil)])
+      get :index, {}, {:user=>@cu.id}
+      assigns(:room_organisms).first.should == {'organism'=>@o, 'room'=>@r, 'archive'=>'bonsoir'}
+    end
+  end
 
   describe 'GET show' do
     
@@ -51,6 +58,26 @@ describe OrganismsController do
       ba1.stub(:bank_extracts).and_return([])
       
     end
+    context 'en l\'absence d\'exercice' do
+
+
+      before(:each) do
+        @o.stub(:periods).and_return([])
+      end
+
+      it 'remplit un flash d alerte' do
+        get :show, {:id=>@o.id}, {:org_db=>'assotest', :user=>@cu.id}
+        flash[:alert].should == 'Vous devez créer au moins un exercice pour cet organisme'
+      end
+
+      it 'et redirige vers la création d\'exercice' do
+        get :show, {:id=>@o.id}, {:org_db=>'assotest', :user=>@cu.id}
+        response.should redirect_to new_admin_organism_period_url(@o)
+      end
+    
+    
+
+    end
     
     it 'doit rendre la vue show' do
       get :show, {:id=>@o.id}, {:org_db=>'assotest', :period=>@p.id, :user=>@cu.id}
@@ -67,12 +94,12 @@ describe OrganismsController do
       assigns(:organism).should == @o
     end
 
-     it 'check_session' do
-        get :show, {:id=>@o.id},  {:org_db=>'assotest', :period=>@p.id, :user=>@cu.id}
-        session[:org_db].should == 'assotest'
-        session[:period].should == @p.id
-        session[:user].should == @cu.id
-     end
+    it 'check_session' do
+      get :show, {:id=>@o.id},  {:org_db=>'assotest', :period=>@p.id, :user=>@cu.id}
+      session[:org_db].should == 'assotest'
+      session[:period].should == @p.id
+      session[:user].should == @cu.id
+    end
 
       
     it 'assign l array pave' do
