@@ -8,7 +8,7 @@ RSpec.configure do |c|
   # c.exclusion_filter = {:js=>true} 
 end
 
-include OrganismFixture 
+include OrganismFixture  
  
 describe "BankExtracts" do 
 

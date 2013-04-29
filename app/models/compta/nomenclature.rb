@@ -215,15 +215,6 @@ module Compta
 
     
 
-      # vérifie que les numéros de comptes ne comprennent que les comptes qui commencent pas *args
-      # par exemple include_only(%w(701, 603, 407), 6, 7)
-      def include_only(list_numbers, *args)
-        args.each do |a|
-          list_numbers.select! {|n| n !~ /^#{a}\d*/}
-        end
-        list_numbers
-      end
-
       # A partir d'un array numbers ne garde que les nombres commencent par
       # les chiffres donnés par args.
       # Utilisé par resultat_67 et benevolat_8

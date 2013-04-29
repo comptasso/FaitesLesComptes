@@ -59,10 +59,6 @@ describe Compta::Sheet do
       @level1.total_passif.should == ['Total 1', 1295.0, 0]
     end
 
-    it 'total_prefix renvoie totals mais la première colonne préfixée' do
-       @level1.totals_prefix('Prefix ').should ==  ['Prefix Total 1', 1300.0, 5.0, 1295.0, 0]
-    end
-
     it 'sa prfondeur est de  1' do
       @level1.depth.should == 1
     end
