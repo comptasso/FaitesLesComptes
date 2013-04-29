@@ -31,23 +31,18 @@ describe Utilities::NotPointedLines do
   it 'total_credit renvoie le total de ses lignes ' do
     @ar = double(Arel)
     @npls = Utilities::NotPointedLines.new(@ba)
-    @npls.stub(:lines).and_return(@ar)
-    @ar.should_receive(:sum)
-    # TODO finir ce spec ... with(&:credit) et même chose pour débit
-    @npls.total_credit
+    @npls.stub(:lines).and_return([mock_model(ComptaLine, :credit=>5), mock_model(ComptaLine, :credit=>8)])
+    @npls.total_credit.should == 13
   end
 
-  it 'npl should have 4 lines' do
-    pending 'order_list ne fonctionne pas avec des mock_models'
-    npl = Utilities::NotPointedLines.new(@ba)
-    npl.list.should have(4).items
+  it 'total_credit renvoie le total de ses lignes ' do
+    @ar = double(Arel)
+    @npls = Utilities::NotPointedLines.new(@ba)
+    @npls.stub(:lines).and_return([mock_model(ComptaLine, :debit=>3), mock_model(ComptaLine, :debit=>3)])
+    @npls.total_debit.should == 6
   end
 
-  it 'list is ordered by date ASC' do
-    pending 'order_list ne fonctionne pas avec des mock_models'
-     npl = Utilities::NotPointedLines.new(@ba)
-     npl.list.map {|l| l[:id] }.should == [7,6,2,1] 
-  end
+ 
 
   
 
