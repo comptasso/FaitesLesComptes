@@ -72,11 +72,11 @@ module Compta
       [@title, brut, amortissement, net, previous_net] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
     end
 
-    def totals_prefix(prefix = 'Total ')
-      v = totals
-      v[0] = prefix + v[0].to_s
-      v
-    end
+#    def totals_prefix(prefix = 'Total ')
+#      v = totals
+#      v[0] = prefix + v[0].to_s
+#      v
+#    end
 
     alias total_actif totals
 

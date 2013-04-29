@@ -43,11 +43,11 @@ module Compta
     end
 
     # Permet de préfixer la ligne en rajoutant une string (par défaut Total )
-    def totals_prefix(prefix = 'Total ')
-      v = totals
-      v[0] = prefix + v[0].to_s
-      v
-    end
+#    def totals_prefix(prefix = 'Total ')
+#      v = totals
+#      v[0] = prefix + v[0].to_s
+#      v
+#    end
 
     # le montant brut total de la collection
     def brut

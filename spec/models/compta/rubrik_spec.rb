@@ -62,6 +62,23 @@ describe Compta::Rubrik do
     @r = Compta::Rubrik.new(@p, 'Immobilisations incorporelles', :actif, '20 -2801')
     @r.totals.should == ['Immobilisations incorporelles', 110.0, 5.0, 105.0, 0]
   end
+
+  describe 'lines' do
+    
+    it 'appelle all_lines' do
+      @r = Compta::Rubrik.new(@p, 'Immobilisations incorporelles', :actif, '212 -2801')
+      @r.should_receive(:all_lines).and_return('bonjour')
+      @r.lines.should == 'bonjour'
+    end
+
+    it 'sauf si c est la ligne de resultat' do
+      @r = Compta::Rubrik.new(@p, 'Immobilisations incorporelles', :passif, '12 101')
+      @r.lines.first.should be_an_instance_of(Compta::RubrikResult)
+    end
+
+  end
+
+  
   
  
   describe 'valeurs' do
