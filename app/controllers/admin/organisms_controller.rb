@@ -72,6 +72,14 @@ class Admin::OrganismsController < Admin::ApplicationController
   def create
     errors = nil
     @organism = Organism.new(params[:organism])
+
+    # vérifie que le fichier de base de données n'existe pas
+    if File.exist? @organism.full_name
+      errors= 'Le fichier existe déja; Si vous voulez travailler avec ce fichier, vous devez restaurer l\'organism par le menu Restauration'
+      @organism.errors.add(:base, 'fichier déja présent')
+    end
+    
+
     if @organism.valid?
       # on crée une room pour le user qui a créé cette base
       @room = current_user.rooms.new(:database_name => params[:organism][:database_name])

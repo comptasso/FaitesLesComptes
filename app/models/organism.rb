@@ -81,10 +81,14 @@ class Organism < ActiveRecord::Base
   end
 
 
-  # TODO à mettre en private après mise au point
+  
   # TODO sera à revoir si on gère une autre base que sqlite3
+  # mais surtout voir le TODO de rooms_controller pour déplacer cette logique vers Room
+  # qui doit traiter la totalité des questions de bases de données.
+  #
+  # création du fichier de base de données
   def create_db
-    # création du fichier de base de données
+    
     File.open(full_name, "w") {} # création d'un fichier avec le nom database.sqlite3 et fermeture
    
     if File.exist? full_name

@@ -88,11 +88,22 @@ describe Admin::RoomsController do
   end
 
   describe "GET show" do
+
+    before(:each) do
+      @cu.stub_chain(:rooms, :find).and_return @r
+    end
+
     it "assigns the requested room as @r" do
       @cu.should_receive(:rooms).and_return(@a = double(Arel))
       @a.should_receive(:find).with(@r.to_param).and_return(@r)
       get :show, {:id => @r.to_param}, user_session
       assigns(:room).should eq(@r)
+      
+    end
+
+    it 'redirige vers l organisme correspondant' do
+      get :show, {:id => @r.to_param}, user_session
+      response.should redirect_to(admin_organism_url(@o))
     end
   end
 

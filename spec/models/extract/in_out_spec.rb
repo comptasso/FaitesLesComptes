@@ -27,6 +27,16 @@ describe Extract::InOut do
     @ext.end_date.should == (Date.today >> 1) 
   end
 
+  it 'title est le titre du livre' do
+    @ext = Extract::InOut.new(@ob, @p, Date.today, Date.today >> 1)
+    @ext.title.should == @ob.title
+  end
+
+  it 'subtitle écrit les limites de date' do
+    @ext = Extract::InOut.new(@ob, @p, Date.today, Date.today >> 1)
+    @ext.subtitle.should == "Du #{I18n.l Date.today} au #{I18n.l(Date.today >> 1)}"
+  end
+
   it 'lines interroge book et filtre ' do
     @ob.should_receive(:extract_lines).with(@extract.begin_date, @extract.end_date).and_return('voila')
     @extract.lines.should == 'voila'

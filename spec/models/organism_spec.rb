@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c| 
   #  c.filter = {:js=> true }
-  #  c.filter = {:wip=> true }
+    c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true } 
 end
 
@@ -20,7 +20,7 @@ describe Organism do
   end
 
 
-  describe 'creation' do
+  describe 'validations' do
     before(:each) do
       @organism= Organism.new valid_attributes
     end
@@ -56,6 +56,48 @@ describe Organism do
     it 'organism peut créer une base de données' do
       @organism.create_db
     end
+
+
+
+  end
+
+
+  describe 'can_write_line' , wip:true do
+
+    before(:each) do
+      @organism= Organism.new valid_attributes
+    end
+
+    it 'pour pouvoir écrire une compta, il faut un compte bancaire ou une caisse et un income ou outcome book' do
+      @organism.stub(:income_books).and_return([1])
+      @organism.can_write_line?.should be_false
+      @organism.stub(:bank_accounts).and_return([1])
+      @organism.can_write_line?.should be_true
+     
+    end
+
+    it 'avec un outcome' do
+      @organism.stub(:outcome_books).and_return([1])
+      @organism.can_write_line?.should be_false
+      @organism.stub(:cashes).and_return([1])
+      @organism.can_write_line?.should be_true
+    end
+
+     it 'pour pouvoir écrire une compta, il faut un compte bancaire ou une caisse et un income ou outcome book' do
+      @organism.stub(:outcome_books).and_return([1])
+      @organism.can_write_line?.should be_false
+      @organism.stub(:bank_accounts).and_return([1])
+      @organism.can_write_line?.should be_true
+
+    end
+
+    it 'avec un outcome' do
+      @organism.stub(:income_books).and_return([1])
+      @organism.can_write_line?.should be_false
+      @organism.stub(:cashes).and_return([1])
+      @organism.can_write_line?.should be_true
+    end
+
 
   end
 
@@ -107,6 +149,12 @@ describe Organism do
       @organism.should_not be_accountable
     end
 
+    it 'mais peut écrire des lignes' do
+      @organism.should be_can_write_line
+    end
+
+    it 
+
     
   end
 
@@ -125,7 +173,7 @@ describe Organism do
 #      ActiveRecord::Base.establish_connection 'test'
 #    end
 
-     it 'n est pas accountable'  do
+     it 'est accountable'  do
       @organism.should be_accountable
     end
 
