@@ -32,7 +32,6 @@ class Admin::RoomsController < Admin::ApplicationController
   # trouve la pièce demandée, connecte la base
   # trouve l'organisme de cette base
   # et redirige vers le controller organism
-  # TODO voir si show est utilisé
   def show
     @room = current_user.rooms.find(params[:id])
     organism_has_changed?(@room)
