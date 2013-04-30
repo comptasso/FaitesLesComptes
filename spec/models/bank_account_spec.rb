@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c|
-  # c.filter = {:wip=> true }
+   # c.filter = {:wip=> true }
 end
 
 describe BankAccount do 
@@ -40,11 +40,15 @@ describe BankAccount do
       @bb.should_not be_valid
     end
 
-    it "should have a unique number in the scope of bank and organism" do
-      pending 'à revoir avec les stub'
-      @bb.bank_name = @ba.bank_name
-      @bb.number= @ba.number
-      @bb.should_not be_valid
+    it "should have a unique number in the scope of bank and organism", wip:true do
+      @bb.stub(:create_accounts).and_return true
+      @bb.save
+      ba = create_bank_account
+      ba.number = '1245X'
+     
+      ba.should be_valid
+      ba.number = @bb.number
+      ba.should_not be_valid
     end
 
   end
@@ -113,7 +117,7 @@ describe BankAccount do
 
   end
 
-    describe 'new_bank_extract' , wip:true do
+    describe 'new_bank_extract'  do
 
       before(:each) do
         create_minimal_organism
