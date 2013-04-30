@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |config|
-  #  config.filter = {wip:true}
+   # config.filter = {wip:true}
 end
 
 describe Writing do
@@ -205,7 +205,36 @@ context 'with real models' do
 
     end
 
-    describe 'une ligne est od_editable' , wip:true do
+    describe 'une ligne est an_editable' do
+
+      before(:each) do
+        @w.stub(:locked?).and_return false
+          @w.stub(:book).and_return(mock_model(Book, :type=>'AnBook'))
+          @w.stub(:type).and_return(nil)
+      end
+
+      it 'an_editable' do
+        @w.an_editable?.should be_true
+      end
+
+       it 'non od_editable si locked' do
+        @w.stub(:locked?).and_return(true)
+        @w.an_editable?.should be_false
+      end
+
+      it 'si le livre est od_book' do
+        @w.stub(:book).and_return(mock_model(Book, :type=>'IncomeBook'))
+        @w.an_editable?.should be_false
+      end
+
+      it 's il y a un type' do
+        @w.stub(:type).and_return 'bonjour'
+        @w.an_editable?.should be_false
+      end
+   
+    end
+
+    describe 'une ligne est od_editable'  do
 
       
       # od_editable est éditable lorsqu'une ligne appartient au livre OD
@@ -248,6 +277,29 @@ context 'with real models' do
 
     end
 
+    describe 'compta_editable'  do
+
+      before(:each) do
+        @w.stub(:an_editable?).and_return false
+        @w.stub(:od_editable?).and_return false
+      end
+
+      it 'n est pas compta_editable' do
+        @w.should_not be_compta_editable
+      end
+
+      it 'et l est si l une des conditions est remplie' do
+        @w.stub(:an_editable?).and_return true
+        @w.should be_compta_editable
+      end
+
+      it 'l autre condition' do
+        @w.stub(:od_editable?).and_return true
+        @w.should be_compta_editable
+      end
+
+    end
+
     it 'lock doit verrouiller toutes les lignes' do
       cls = [1,2].map {|i| mock_model(ComptaLine, locked?:false) }
       @w.stub(:compta_lines).and_return(cls)
@@ -256,7 +308,18 @@ context 'with real models' do
       
     end
 
+    describe 'support' do
 
+      it 'support_line renoie la ligne de compte 5 de contrepartie' do
+        @w.support_line.account.number.should match /^5/
+      end
+
+      it 'support renvoie le long name de account' do
+        @w.support.should == 'Compte courant'
+      end
+
+
+    end
 
 
   end
