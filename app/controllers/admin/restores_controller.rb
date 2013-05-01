@@ -8,6 +8,7 @@ class Admin::RestoresController < Admin::ApplicationController
   
   class RestoreError < StandardError; end
 
+  skip_before_filter :find_organism, :current_period
   before_filter :db_format
 
   def new
@@ -29,6 +30,8 @@ class Admin::RestoresController < Admin::ApplicationController
     Rails.cache.clear('version_update')
 
     begin
+
+      # TODO utiliser des validations
       
       # vérification que l'extension est bien la bonne
       extension = File.extname(uploaded_io.original_filename)
@@ -48,27 +51,21 @@ class Admin::RestoresController < Admin::ApplicationController
         raise RestoreError, 'Nom de base non valide : impossible de créer la base' unless @room.valid?
       end
 
-      # tout va bien, on peut maintenant travailler
-      
-      # enregistrament du fichier dans son espace
-
-
       File.open(file_path, 'wb') do |file|
         file.write(uploaded_io.read)
       end
+
+      @room.save!
       # on vérifie la base
       unless @room.check_db
         raise RestoreError, 'Le contrôle du fichier par SQlite renvoie une erreur'
       end
-      # on se connecte à la base
-      @room.connect_to_organism
+
       # On indique à l'organisme quelle base il utilise (puisqu'on peut faire des copies)
       Organism.first.update_attribute(:database_name, params[:database_name])
-
       # tout s'est bien passé on sauve la nouvelle pièce
       use_main_connection
-      @room.save!
-      
+     
       if @room.relative_version == :same_migration
         flash[:notice] = "Le fichier a été chargé et peut servir de base de données"
       end

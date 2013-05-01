@@ -8,12 +8,12 @@ RSpec.configure do |c|
    # c.exclusion_filter = {:js=> true } 
 end
 
-describe 'restoration de fichier' do  
+describe 'restoration de fichier' do   
   include OrganismFixture
 
   before(:each) do
     create_user
-    create_minimal_organism
+    create_minimal_organism 
     login_as('quidam')
   end
     
@@ -31,7 +31,8 @@ describe 'restoration de fichier' do
 
 
 
-  it 'remplir le formulaire et cliquer conduit à la vue organism#index' do
+  it 'remplir le formulaire et cliquer conduit à la vue rooms#index' do
+
     visit new_admin_restore_path
     page.find('input#file_upload')
     attach_file('file_upload', "#{File.dirname(__FILE__)}/../fixtures/files/testv064.sqlite3")

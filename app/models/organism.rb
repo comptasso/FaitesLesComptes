@@ -167,6 +167,9 @@ class Organism < ActiveRecord::Base
     look_for {Room.find_by_database_name(database_name)}
   end
 
+  def full_name
+    "#{Room.path_to_db}/#{database_name}.sqlite3"
+  end
   
   # #look_for permet de chercher quelque chose dans la base principale
   # et de revenir dans la base de l'organisme.

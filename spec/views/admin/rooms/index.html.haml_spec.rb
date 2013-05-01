@@ -8,7 +8,7 @@ include JcCapybara
   let(:o) {mock_model(Organism, :title=>'Organisme Test')}
   let(:r1) {mock_model(Room, :organism=>o, db_filename:'db1.sqlite3',
       :relative_version=>:same_migration, last_archive:nil,
-      'late?'=>false, 'advanced?'=>false,  'no_base?'=>false)}
+      'late?'=>false, 'advanced?'=>false,  'no_base?'=>false, 'up_to_date?'=>true)}
   let(:r2) {mock_model(Room, :organism=>o, 
       db_filename:'db2.sqlite3',
     last_archive:mock_model(Archive, :created_at=>Date.today))}
@@ -17,6 +17,7 @@ include JcCapybara
   before(:each) do
     @rooms = [r1, r2]
     r2.stub(:relative_version).and_return(:same_migration)
+    r2.stub('up_to_date?').and_return true
     r2.stub('late?').and_return false
      r2.stub('advanced?').and_return false  
     r2.stub('no_base?').and_return false
@@ -30,6 +31,19 @@ include JcCapybara
   it 'afficher la table des bases' do 
     render
     page.all('tbody tr' ).should have(2).rows
+  end
+
+  describe 'les actions' do
+    it 'rend 3 icones dans la dernière colonne' do
+      render
+      page.all('tr:last td:last img').should have(3).icons
+    end
+
+    it 'mais n en rend pas si la room  n est pas à jour' do
+      r2.stub('up_to_date?').and_return false
+      render
+      page.all('tr:last td:last img').should have(0).icons
+    end
   end
 
   context 'avec une base qui est late' do

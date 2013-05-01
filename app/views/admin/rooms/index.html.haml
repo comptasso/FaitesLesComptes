@@ -22,10 +22,11 @@
 
   %tbody
     - @rooms.each do |ro|
+      - organ = ro.organism
       %tr
-        %td= ro.organism.title
-        %td= ro.organism.description
-        %td= ro.organism.status
+        %td= organ.title rescue 'non renseigné' # pour gérér les cas où la base de données n est pas à jour et où le champ est manquant
+        %td= organ.description rescue 'non renseigné'
+        %td= organ.status rescue 'non renseigné'
         %td= ro.db_filename
         %td 
           
@@ -35,7 +36,8 @@
           = image_tag('icones/traffic-light-green.png', title:'Base OK') if ro.relative_version == :same_migration
         %td= jour(ro.last_archive)
         %td
-          = icon_to 'sauvegarde.png', new_archive_admin_room_path(ro),  :title=>"Fait une sauvegarde de toutes les données de l'organisme"
-          = icon_to 'afficher.png',ro, title: 'affichage dans la partie saisie'
-          = icon_to 'detail.png', [:admin, ro]
+          - if ro.up_to_date?
+            = icon_to 'sauvegarde.png', new_archive_admin_room_path(ro),  :title=>"Fait une sauvegarde de toutes les données de l'organisme"
+            = icon_to 'afficher.png',ro, title: 'affichage dans la partie saisie'
+            = icon_to 'detail.png', [:admin, ro]
           

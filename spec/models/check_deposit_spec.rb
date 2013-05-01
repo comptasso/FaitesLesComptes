@@ -247,7 +247,7 @@ describe CheckDeposit do
     end
 
     it 'lorsqu on détruit la remise les lignes sont mises à jour'do
-      CheckDeposit.pending_checks.each {|c| puts c.inspect}
+     # CheckDeposit.pending_checks.each {|c| puts c.inspect}
       CheckDeposit.nb_to_pick.should == 0
       @check_deposit.destroy
       CheckDeposit.nb_to_pick.should == 3

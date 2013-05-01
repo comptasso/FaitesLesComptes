@@ -36,17 +36,15 @@ class Room < ActiveRecord::Base
     end
   end
 
-  # Vérifie que les bases de données sont bien toutes de la bonne version
+  # Vérifie que la base de données enregistrant les Room est bien dans la bonne version
   #
   # Il y a le cas où la base principale (celle qui enregistre User et Room) n'est
   # elle même pas à jour. Par exemple, si on démarre le serveur avec une nouvelle
   # version.
   #
   def self.version_update?
-    keep_context do
       arm = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths)
       arm.pending_migrations.any? ? false : true
-    end
   end
 
   # relative_version compare la version de l'organisme
@@ -80,6 +78,10 @@ class Room < ActiveRecord::Base
 
   def advanced?
     relative_version == :advance_migration ? true : false
+  end
+
+  def up_to_date?
+    relative_version == :same_migration ? true : false
   end
 
   # renvoie la dernière migration de la base principale (Room et User)
@@ -240,21 +242,13 @@ class Room < ActiveRecord::Base
   #
   # création du fichier de base de données
   def create_db
-
-    File.open(full_name, "w") {} # création d'un fichier avec le nom database.sqlite3 et fermeture
-
-    if File.exist? full_name
-      Rails.logger.info "Connection à la base #{database_name}"
-      ActiveRecord::Base.establish_connection(
-        :adapter => "sqlite3",
-        :database  => full_name)
-    else
-      Rails.logger.warn "Tentative de connection à la base #{full_name}, fichier non trouvé"
+    unless File.exist? full_name
+      File.open(full_name, "w") {} # création d'un fichier avec le nom database.sqlite3 et fermeture
+      ActiveRecord::Base.connection.load('db/schema.rb')
     end
-    # et on load le schéma actuel
-    ActiveRecord::Base.connection.load('db/schema.rb')
-    # on est maintenant en mesure de créer l'organisme
   end
+
+
  
 
 end

@@ -236,10 +236,7 @@ describe Organism do
           @ba = BankAccount.first
         end
 
-        it 'pour voir l etat des bases' do
-          puts "Nombre de comptes bancaires : #{BankAccount.count}"
-        end
-
+        
         it "should give the main bank id" do
           @organism.main_bank_id.should == @ba.id
         end

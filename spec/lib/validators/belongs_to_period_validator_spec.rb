@@ -25,7 +25,7 @@ describe 'BelongsToPeriodValidator' do
   it 'checks if a date belongs_to a period' do
     o.stub(:find_period).and_return p
     @cl.valid?
-    puts @cl.errors.messages
+  
     @cl.should  have(0).errors_on(:nature)
   end
 
@@ -33,7 +33,7 @@ describe 'BelongsToPeriodValidator' do
     w.date = Date.today.years_ago(1)
     o.stub(:find_period).and_return nil
     @cl.valid?
-    puts @cl.errors.messages
+ 
     @cl.should  have(1).errors_on(:nature)
   end
 

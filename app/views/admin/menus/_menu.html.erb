@@ -11,7 +11,7 @@
       <% cache("admin_#{current_user.name}")  do %>
       <% current_user.organisms_with_room.each do |groom| %>
         <li>
-          <%= link_to groom[:organism].title, admin_room_path(groom[:room])  %>
+          <%= link_to_if(groom[:room].up_to_date?, groom[:organism].title, admin_room_path(groom[:room])) {|name| content_tag(:span, :class=>'disable') {name} }   %>
         </li>
         <%  end %>
       <% end %>

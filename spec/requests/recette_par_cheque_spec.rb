@@ -31,14 +31,14 @@ describe 'Recette par chèque' do
   end
 
  it 'verif de l état de la base' do
-   puts "Nombre de lignes recensé : #{Writing.count}"
+   
    if Writing.count != 0
      Writing.find_each {|w| puts  w.inspect} 
    end
  end
 
  it 'on crée une recette par chèque' do
-   puts "Nombre de lignes : #{Writing.count}"
+   
    # création du compte remise chèque
    click_button 'Enregistrer'
    Writing.count.should == 1

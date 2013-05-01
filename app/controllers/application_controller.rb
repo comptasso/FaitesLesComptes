@@ -19,9 +19,6 @@ class ApplicationController < ActionController::Base
   def control_version
     Rails.logger.info 'appel de controle version'
     @control_version = Room.version_update?
-#    ||= Rails.cache.fetch('version_update') do
-#      Room.version_update?
-#    end
     redirect_to admin_versions_new_path unless @control_version
   end
 
@@ -32,10 +29,16 @@ class ApplicationController < ActionController::Base
   def find_organism
     # utile pour remettre le système cohérent
     use_main_connection if session[:org_db] == nil
-    if session[:org_db]
-      r = current_user.rooms.find_by_database_name(session[:org_db])
+    r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
+    if r # on doit avoir tru=ouvé une room
       r.connect_to_organism
       @organism = Organism.first # il n'y a qu'un organisme par base
+    end
+    # si pas d organisme (cas d une base corrompue)
+    unless @organism
+      session[:org_db] = nil
+      use_main_connection
+      redirect_to admin_rooms_url and return
     end
   end
 

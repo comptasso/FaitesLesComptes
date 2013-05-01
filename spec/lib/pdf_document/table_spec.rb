@@ -27,7 +27,7 @@ describe PdfDocument::Table do
   end
 
   it 'a une instance de table' do
-     puts 'JE SUIS DANS LE SPEC TABLE'
+    
     @table.should be_an_instance_of(PdfDocument::Table)
   end
 
