@@ -3,12 +3,6 @@
 class OrganismsController < ApplicationController
 
   
-
-  def index 
-    @room_organisms = current_user.rooms.collect do |r|
-      {:organism=>r.organism, :room=>r, :archive=>(r.look_for {Archive.last}) }
-    end
-  end
  
   # GET /organisms/1 test watcher
   # GET /organisms/1.json

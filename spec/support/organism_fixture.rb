@@ -107,10 +107,6 @@ module OrganismFixture
   end
 
 
-  def create_second_organism 
-    @cu.rooms.create!(database_name:'assotest2')
-    @o2 = Organism.create!(title: 'ASSO TEST2', database_name:'assotest2', status:'Entreprise') 
-  end
-
+  
 
 end

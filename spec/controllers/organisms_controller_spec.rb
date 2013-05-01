@@ -16,32 +16,7 @@ describe OrganismsController do
   end
 
   
-  describe 'GET index', wip:true do 
-   
-   
-    it 'find current user then calls rooms and collect' do
-      User.should_receive(:find_by_id).with(@cu.id).and_return(@cu)
-      @cu.should_receive(:rooms).and_return a = []
-      a.should_receive(:collect).and_return([ {:organism=>@o, :room=>@r, :archive=>nil }])
-      get :index, {}, {:user=>@cu.id}
-       
-    end
-
-
-    it 'should assign @room_organisms' do
-      @cu.stub_chain(:rooms, :collect).and_return('bizarre')
-      get :index, {}, {:user=>@cu.id}
-      assigns(:room_organisms).should == 'bizarre'
-    end
-
-    it 'le collect remplit un hash' do
-      @cu.stub(:rooms).and_return([@r = mock_model(Room, :organism=>@o, :look_for=>'bonsoir'),
-          mock_model(Room, :organism=>@a, :look_for=>nil)])
-      get :index, {}, {:user=>@cu.id}
-      assigns(:room_organisms).first.should == {'organism'=>@o, 'room'=>@r, 'archive'=>'bonsoir'}
-    end
-  end
-
+  
   describe 'GET show' do
     
     let(:c) {mock_model(Cash)}

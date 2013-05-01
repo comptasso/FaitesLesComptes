@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "vue organisme"  do
+describe "vue organisme"  do 
   include OrganismFixture
 
   context 'avec un organisme' do  
@@ -25,7 +25,7 @@ describe "vue organisme"  do
     it 'est redirigé vers la vue index' do
       create_user
       create_minimal_organism
-      create_second_organism
+      @cu.rooms.create!(database_name:'assotest2')
       login_as('quidam')
       current_path.should == admin_rooms_path 
     end
