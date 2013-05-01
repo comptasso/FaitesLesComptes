@@ -13,9 +13,8 @@
   </h3><div class="inner-champ">
 
 <div class="inputs">
-<%= simple_form_for([:admin,@organism], :html=> {class: 'form-horizontal'}) do |f| %>
+<%= simple_form_for([:admin,@organism], :url =>admin_rooms_path, :method => :post, :html=> {class: 'form-horizontal'}) do |f| %>
 <%= f.error_notification %>
-
 
     <%= f.input :title,  input_html: {class: "span3"} %>
     <%= f.input :description,  input_html: {class: "span3", rows: 4} %>
@@ -24,7 +23,7 @@
            input_html: {class: "span3"},
            hint:'lettres minuscules uniquement, sans espace' %>
 
- <%= f.input :status, :label=>'Statut',
+    <%= f.input :status, :label=>'Statut',
          :collection=>LIST_STATUS, :as=>:inline_radio_buttons %>
 
    <div class="form-actions">

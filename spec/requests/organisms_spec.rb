@@ -9,7 +9,7 @@ describe "vue organisme"  do
 
     before(:each) do
       create_user
-      create_minimal_organism
+      create_minimal_organism 
       login_as('quidam')
     end
 
@@ -27,7 +27,7 @@ describe "vue organisme"  do
       create_minimal_organism
       create_second_organism
       login_as('quidam')
-      current_path.should == admin_organisms_path
+      current_path.should == admin_rooms_path 
     end
 
   end
@@ -43,7 +43,7 @@ describe "vue organisme"  do
       visit '/'
       fill_in 'user_name', :with=>'untel'
       click_button 'Entrée'
-      current_path.should == new_admin_organism_path
+      current_path.should == new_admin_room_path
     end
 
   end

@@ -203,7 +203,7 @@ describe Compta::Balance do
           @b.to_csv.split("\n").should have(5).lines
         end
         it 'la première affiche Soldes au...Mouvements Soldes au...' do
-          @b.to_csv.split("\n").first.should ==  "\"\"\t\"\"\tSoldes au\t01/04/2013\tMouvements\tde la période\tSoldes au 30/04/2013"
+          @b.to_csv.split("\n").first.should ==  "\"\"\t\"\"\tSoldes au\t#{I18n.l(Date.today.beginning_of_month, :format=>'%d/%m/%Y')}\tMouvements\tde la période\tSoldes au #{I18n.l(Date.today.end_of_month, :format=>'%d/%m/%Y')}"
         end
         it 'la deuxième affiche les titres des colonnes' do
           @b.to_csv.split("\n").second.should ==  %w(Numéro	Intitulé	Débit	Crédit	Débit	Crédit	Solde).join("\t")

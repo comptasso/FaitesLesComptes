@@ -5,7 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
   # c.filter = { :wip=>true}
-   # c.exclusion_filter = {:js=> true }
+   # c.exclusion_filter = {:js=> true } 
 end
 
 describe 'restoration de fichier' do  
@@ -20,8 +20,8 @@ describe 'restoration de fichier' do
 
   
   it 'accès par la vue admin#organism#show' , :js=>true do
-    visit admin_organisms_path
-    page.find('a', :href=>new_admin_restore_path)
+    visit admin_rooms_path
+    page.find('a', :href=>new_admin_room_path)
     click_link("Permet de créer un organisme à partir d'un fichier de sauvegarde")
     alert = page.driver.browser.switch_to.alert
     sleep 0.1 

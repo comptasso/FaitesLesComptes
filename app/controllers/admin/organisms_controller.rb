@@ -13,79 +13,21 @@ class Admin::OrganismsController < Admin::ApplicationController
   # GET /organisms/1
   # GET /organisms/1.json
   def show
-    # @organism et @period sont définis par les before_filter
+    # @organism et @period sont instanciés par les before_filter
     unless @period
       flash[:alert]= 'Vous devez créer un exercice pour cet organisme'
       redirect_to new_admin_organism_period_url(@organism)
       return
     end
-    # on trouve l'exercice à partir de la session mais si on a changé d'organisme
-    # session[:period] aura été mis à nil
-    # il faut alors charger le dernier exercice par défaut et l'affecter à la session
-    #    begin
-    #      @period = @organism.periods.find(session[:period])
-    #    rescue
-    #      @period = @organism.periods.last
-    #      session[:period]=@period.id
-    #    end
-    #
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @organism }
-    end
   end
 
-  # GET /organisms/new
-  # GET /organisms/new.json
-  def new
-    @organism = Organism.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @organism }
-    end
-  end
-
+  
   # GET /organisms/1/edit
   def edit
     @organism = Organism.find(params[:id])
   end
 
-  # POST /organisms
-  # POST /organisms.json
-  def create
-    errors = nil
-    @organism = Organism.new(params[:organism])
-
-    # vérifie que le fichier de base de données n'existe pas
-    if File.exist? @organism.full_name
-      errors= 'Le fichier existe déja; Si vous voulez travailler avec ce fichier, vous devez restaurer l\'organism par le menu Restauration'
-      @organism.errors.add(:base, 'fichier déja présent')
-    end
-    
-
-    if @organism.valid?
-      # on crée une room pour le user qui a créé cette base
-      @room = current_user.rooms.new(:database_name => params[:organism][:database_name])
-      if @room.save
-        @organism.create_db
-        @room.connect_to_organism # normalement inutile car create_db reste sur la toute nouvelle base
-        @organism.save
-        session[:org_db]  = @organism.database_name
-        redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
-          Il vous faut maintenant créer un exercice pour cet organisme"
-      else
-        errors = 'Impossible de créér cette base, le nom n\'est pas valable ou est déja utilisé'
-      end
-    else
-      errors = 'Impossible de créer l\'organisme'
-    end
-    if errors
-      flash[:alert]= errors
-      render :new
-    end
-   
-  end
+  
 
   # PUT /organisms/1
   # PUT /organisms/1.json

@@ -84,7 +84,7 @@ describe Admin::UsersController do
 
       it "redirects vers la creation d un organisme" do
         post :create, :user => valid_attributes
-        response.should redirect_to(new_admin_organism_path)
+        response.should redirect_to(new_admin_room_path)
       end
     end
 

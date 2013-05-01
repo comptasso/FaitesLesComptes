@@ -19,7 +19,7 @@ class Admin::RoomsController < Admin::ApplicationController
     @rooms = current_user.rooms
     
     unless current_user.up_to_date?
-      status = current_user.status
+      status = current_user.status 
       alert = []
       alert += ["Une base au moins est en retard par rapport à la version de votre programme, migrer la base correspondante"] if status.include? (:late_migration)
       alert += ["Une base au moins est en avance par rapport à la version de votre programme, passer à la version adaptée"] if status.include? (:advance_migration)
@@ -56,6 +56,49 @@ class Admin::RoomsController < Admin::ApplicationController
     redirect_to new_admin_organism_archive_url(@organism)
   end
 
+  # GET /rooms/new
+  def new
+    @organism = Organism.new
+  end
+
+  # POST /rooms
+  def create
+    errors = nil
+    @organism = Organism.new(params[:organism])
+
+    # vérifie que le fichier de base de données n'existe pas
+    if File.exist? @organism.full_name
+      errors= 'Le fichier existe déja; Si vous voulez travailler avec ce fichier, vous devez restaurer l\'organism par le menu Restauration'
+      @organism.errors.add(:base, 'fichier déja présent')
+    end
+
+
+    if @organism.valid?
+      # on crée une room pour le user qui a créé cette base
+      @room = current_user.rooms.new(:database_name => params[:organism][:database_name])
+      if @room.save
+        @organism.create_db
+        @room.connect_to_organism # normalement inutile car create_db reste sur la toute nouvelle base
+        @organism.save
+        session[:org_db]  = @organism.database_name
+       else
+        errors = 'Impossible de créér cette base, le nom n\'est pas valable ou est déja utilisé'
+      end
+    else
+      errors = 'Impossible de créer l\'organisme'
+    end
+    if errors
+      
+      flash[:alert]= errors
+      render :new
+    else
+      redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
+          Il vous faut maintenant créer un exercice pour cet organisme"
+    end
+
+  end
+
+
   # détruit la pièce ainsi que la base associée
   #
   def destroy
@@ -74,14 +117,10 @@ class Admin::RoomsController < Admin::ApplicationController
          Pour le supprimer faites le manuellement à partir de l'explorateur de fichiers" if File.exist?(abs_db)
       flash[:notice] =  notice.html_safe
       organism_has_changed?
-      if current_user.up_to_date?
-        redirect_to admin_organisms_url
-      else
-        redirect_to admin_rooms_url
-      end
+      redirect_to admin_rooms_url
     else
-      flash[:alert] = "Une erreur s'est produite; la base  #{db_name} n'a pas été supprimée"
-      render 'show'
+      flash[:alert] = "Une erreur s'est produite; la base #{db_name} n'a pas été supprimée"
+      redirect_to admin_organism_url(@room.organism)
     end
   end
 

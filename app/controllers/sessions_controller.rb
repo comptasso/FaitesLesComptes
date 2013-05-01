@@ -1,5 +1,8 @@
 # coding: utf-8
 
+
+# TODO faire le session_controller_spec
+
 class SessionsController < ApplicationController
 
   before_filter :check_browser
@@ -18,12 +21,12 @@ class SessionsController < ApplicationController
       session[:user] = @user.id
       # réorientation automatique selon le nombre de rooms
       case @user.rooms.count
-      when 0 then redirect_to new_admin_organism_url and return
+      when 0 then redirect_to new_admin_room_url and return
       when 1
           redirect_to room_url(@user.enter_first_room) and return
       else
           logger.debug 'passage par sessions_controller et plusieurs organismes'
-          redirect_to admin_organisms_url and return
+          redirect_to admin_rooms_url and return
       end
 
     else

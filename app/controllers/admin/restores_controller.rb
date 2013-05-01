@@ -71,13 +71,10 @@ class Admin::RestoresController < Admin::ApplicationController
       
       if @room.relative_version == :same_migration
         flash[:notice] = "Le fichier a été chargé et peut servir de base de données"
-        redirect_to admin_organisms_url
-      else
-        redirect_to admin_rooms_url
       end
-
+    redirect_to admin_rooms_url
     rescue RestoreError => e
-      flash[:alert] = e.message
+      flash[:alert] = e.message 
       render 'new'
     end
   end

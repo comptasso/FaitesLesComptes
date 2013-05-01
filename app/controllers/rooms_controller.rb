@@ -25,7 +25,7 @@ class RoomsController < ApplicationController
     if o
       redirect_to organism_path(o)
     else
-      redirect_to new_admin_organism_path
+      redirect_to new_admin_room_path
     end
   end
 

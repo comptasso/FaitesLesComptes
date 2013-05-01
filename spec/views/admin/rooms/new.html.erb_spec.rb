@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 
-describe '/admin/organisms/new' do
+describe '/admin/rooms/new' do
   include JcCapybara
 
   let(:o) { mock_model(Organism) }

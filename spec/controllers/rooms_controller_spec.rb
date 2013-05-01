@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require 'spec_helper'
 
 describe RoomsController do
@@ -29,5 +31,7 @@ describe RoomsController do
      end
 
   end
+
+ 
 
 end

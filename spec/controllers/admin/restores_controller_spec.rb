@@ -50,7 +50,7 @@ describe Admin::RestoresController do
       it 'redirige vers la liste des fichiers' do
         post :create, {:file_upload=>@file, database_name:'test2'}, valid_session
         flash[:notice].should == "Le fichier a été chargé et peut servir de base de données"
-        response.should redirect_to admin_organisms_url
+        response.should redirect_to admin_rooms_url
       end
 
       it 'met à jour le nom de database_name pour l organisme' do
@@ -110,7 +110,7 @@ describe Admin::RestoresController do
           
           @r.stub(:relative_version).and_return(:same_migration)
           post :create, {:file_upload=>@file, database_name:'test'}, valid_session
-          response.should redirect_to admin_organisms_path
+          response.should redirect_to admin_rooms_url
         end
       
         it 'si la version est différente' do
