@@ -53,11 +53,7 @@ describe Organism do
       @organism.version.should == VERSION
     end
 
-    it 'organism peut créer une base de données' do
-      @organism.create_db
-    end
-
-
+    
 
   end
 

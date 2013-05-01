@@ -143,6 +143,14 @@ describe Room do
       
     end
 
+    describe 'create_db' do
+      it 'room peut créer une base de données' do
+      @r.create_db
+    end
+
+
+    end
+
     describe 'check_db' do
 
       it 'check_db contrôle l intégrité de la base' do

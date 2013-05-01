@@ -76,33 +76,11 @@ class Organism < ActiveRecord::Base
 
   
 
-  def full_name
-    "#{Room.path_to_db}/#{database_name}.sqlite3"
-  end
+  
 
 
   
-  # TODO sera à revoir si on gère une autre base que sqlite3
-  # mais surtout voir le TODO de rooms_controller pour déplacer cette logique vers Room
-  # qui doit traiter la totalité des questions de bases de données.
-  #
-  # création du fichier de base de données
-  def create_db
-    
-    File.open(full_name, "w") {} # création d'un fichier avec le nom database.sqlite3 et fermeture
-   
-    if File.exist? full_name
-      Rails.logger.info "Connection à la base #{database_name}"
-      ActiveRecord::Base.establish_connection(
-        :adapter => "sqlite3",
-        :database  => full_name)
-    else
-      Rails.logger.warn "Tentative de connection à la base #{full_name}, fichier non trouvé"
-    end
-    # et on load le schéma actuel
-    ActiveRecord::Base.connection.load('db/schema.rb')
-    # on est maintenant en mesure de créer l'organisme
-  end
+ 
 
   # Retourne la dernière migration effectuée pour la base de données représentant cet organisme
   def self.migration_version

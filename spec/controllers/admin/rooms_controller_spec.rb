@@ -176,7 +176,7 @@ describe Admin::RoomsController do
     it 'si valid crée la pièce' do
       @cu.should_receive(:rooms).and_return(@a = double(Arel, :save=>true))
       @a.should_receive(:new).with(:database_name=>'test1').and_return @a
-      @a.should_receive(:connect_to_organism).and_return true
+      
       post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
     end
 

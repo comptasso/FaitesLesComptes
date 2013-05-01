@@ -17,6 +17,8 @@ class Room < ActiveRecord::Base
 
   validates :user_id, presence:true
   validates :database_name, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*\z/}, uniqueness:true
+
+  after_create :create_db, :connect_to_organism
   
   # renvoie l'organisme associé à la base
   def organism
@@ -96,7 +98,11 @@ class Room < ActiveRecord::Base
     result
   end
 
-  
+  def full_name
+    "#{Room.path_to_db}/#{database_name}.sqlite3"
+  end
+
+ 
 
 
   # Migre la table prinicpale dont dépend Room puis migre chacune des
@@ -226,7 +232,29 @@ class Room < ActiveRecord::Base
     ActiveRecord::Base.establish_connection(cc)
   end
 
+  protected
 
+  # TODO sera à revoir si on gère une autre base que sqlite3
+  # mais surtout voir le TODO de rooms_controller pour déplacer cette logique vers Room
+  # qui doit traiter la totalité des questions de bases de données.
+  #
+  # création du fichier de base de données
+  def create_db
+
+    File.open(full_name, "w") {} # création d'un fichier avec le nom database.sqlite3 et fermeture
+
+    if File.exist? full_name
+      Rails.logger.info "Connection à la base #{database_name}"
+      ActiveRecord::Base.establish_connection(
+        :adapter => "sqlite3",
+        :database  => full_name)
+    else
+      Rails.logger.warn "Tentative de connection à la base #{full_name}, fichier non trouvé"
+    end
+    # et on load le schéma actuel
+    ActiveRecord::Base.connection.load('db/schema.rb')
+    # on est maintenant en mesure de créer l'organisme
+  end
  
 
 end

@@ -76,9 +76,7 @@ class Admin::RoomsController < Admin::ApplicationController
     if @organism.valid?
       # on crée une room pour le user qui a créé cette base
       @room = current_user.rooms.new(:database_name => params[:organism][:database_name])
-      if @room.save
-        @organism.create_db
-        @room.connect_to_organism # normalement inutile car create_db reste sur la toute nouvelle base
+      if @room.save # un after_create du modèle créé la nouvelle base de données et s'y connecte
         @organism.save
         session[:org_db]  = @organism.database_name
        else
