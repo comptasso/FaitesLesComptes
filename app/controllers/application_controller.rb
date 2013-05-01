@@ -28,21 +28,23 @@ class ApplicationController < ActionController::Base
    # vérifie que l'on est loggé sous un nom d'utilisateur,
   # s'il n'y a pas de session[:user], et à nil session[:org_db]
   def log_in?
-
-    unless session[:user]
+    if session[:user]
+      @user = User.find_by_id(session[:user])
+    else
+      
       logger.debug "pas de session[user]"
       session[:org_db] = nil
       use_main_connection
       redirect_to new_session_url
     end
-
+   
 
   end
 
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
-        
+    
     # utile pour remettre le système cohérent
     use_main_connection if session[:org_db] == nil
     r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
@@ -94,43 +96,9 @@ class ApplicationController < ActionController::Base
     ActionController::Base.helpers.number_with_precision(montant, precision:2) rescue '0,00'
   end
 
-  
-
-  # picker_to_date est utilisée pour transformer le retour du widget
-  # date picker qui est sous la forme "dd/mm/aaaa".Alors que Date.civil
-  # demande aaaa,mm,dd.
-  # On utilise donc split puis reverse puis to_i (et l'opérateur splat : * ) pour
-  # transmettre ces arguments
-  # La fonctin retourne un objet Date ou nil si la string ne permet pas de former
-  # une date valide
-  #
-
-  # TODO à supprimer en intégrant ces fonctions dans le modèle
-  # déja fait pour line, en cours pour cash_control
-  # voir à les supprimer également dans les parties admin et compta
-#  def picker_to_date(string)
-#    s = string.split('/')
-#    Date.civil(*s.reverse.map{|e| e.to_i})
-#  rescue
-#    @period.guess_date
-#  end
-
-  # vérifie que l'on est loggé sous un nom d'utilisateur,
-  # s'il n'y a pas de session[:user], et à nil session[:org_db]
-  def log_in?
-
-    unless session[:user]
-      logger.debug "pas de session[user]"
-      session[:org_db] = nil
-      use_main_connection
-      redirect_to new_session_url
-    end
-
-    
-  end
 
   def current_user
-    @user = User.find_by_id(session[:user]) if session[:user]
+    @user
   end
 
   def current_user?
@@ -192,9 +160,6 @@ class ApplicationController < ActionController::Base
   # local_params doit renvoyer un hash avec les paramètres complémentaires nécessaires
   # essentiellement un id d'un objet, par exemple :cash_id=>@cash}
   #
-  # L'utilisation de period_limited permet de s'assurer que l'on reste bien dans les
-  # limites d'un exercice. C'est plus particulièrement utile lorsque l'on change d'exercice
-  # et que le nouvel exercice est d'une durée différente.
   #
   # Ceci permet alors d'avoir un routage vers cash_cash_lines_path(@cash) en supposant
   # que l'on soit dans le controller cash_lines et avec l'action index 
