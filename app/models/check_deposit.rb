@@ -48,15 +48,13 @@ class CheckDeposit < ActiveRecord::Base
   scope :within_period, lambda {|from_date, to_date| where(['deposit_date >= ? and deposit_date <= ?', from_date, to_date])}
  
   validates :bank_account_id, :deposit_date, :presence=>true
-  validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :pointed?
+  validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :pointed? # ce qui du coup interdit aussi la destruction
   validate :not_empty # une remise chèque vide n'a pas de sens
 
   after_create :create_writing
   after_update :update_writing
 
-  before_destroy :cant_destroy_when_pointed
-
-   # permet de trouver les cheques à encaisser pour  tout l'organisme
+  # permet de trouver les cheques à encaisser pour  tout l'organisme
   def self.pending_checks
     ComptaLine.pending_checks.all
   end
@@ -99,10 +97,10 @@ class CheckDeposit < ActiveRecord::Base
     debit_compta_line && debit_compta_line.bank_extract_lines.any?
   end
 
-  # retourne le nombre de chèque dans cette remise
-  def nb_checks
-    checks.count
-  end
+#  # retourne le nombre de chèque dans cette remise
+#  def nb_checks
+#    checks.count
+#  end
 
   # total checks fait la somme des chèques qui sont dans la cible de l'association.
   # cette approche est nécessaire car un module intégré donne un résultat vide
@@ -144,13 +142,6 @@ class CheckDeposit < ActiveRecord::Base
   end
 
   
-  # appelé par before_destroy pour interdire la destruction d'une remise de chèque pointée
-  def cant_destroy_when_pointed
-    if pointed?
-      logger.warn "Tentative de détruire la remise de chèques #{id}, alors qu'elle est pointée"
-      return false
-    end
-  end
 
   def create_writing
     book = OdBook.first!

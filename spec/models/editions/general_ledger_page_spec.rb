@@ -61,7 +61,16 @@ describe Editions::GeneralLedgerPage do
     end
 
 
+
   end
+
+  it 'une page supérieure à 1 sait collecter des report values' do
+      lsm = [monthly_ledgers]
+      doc.should_receive(:page).with(1).and_return(stub(:to_report_values=>['125,00', '56,00']))
+      @glp = Editions::GeneralLedgerPage.new(doc,lsm ,2)
+      @glp.table_report_line.should == ['Reports', '125,00', '56,00']
+
+    end
 
 
 

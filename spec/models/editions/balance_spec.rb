@@ -55,4 +55,23 @@ describe 'Editions::Balance' do
        pdf.nb_pages.should == 5
      end
 
+   it 'before_title renvoie une ligne de titre avec des cellules fusionnées' do
+     pdf = @b.to_pdf
+     pdf.before_title.should == ['', "Soldes au #{I18n.l(Date.today.beginning_of_month, :format=>'%d/%m/%Y')}",
+       'Mouvements de la période',
+       "Soldes au #{I18n.l(Date.today.end_of_month, :format=>'%d/%m/%Y')}"
+     ]
+   end
+
+   it 'prepare_line appelle les méthodes de account' do
+     @acc = mock_model(Account, :number=>'152', :title=>'Un compte comme un autre')
+     @acc.should_receive(:cumulated_debit_before).with(@b.from_date).and_return 1
+     @acc.should_receive(:cumulated_credit_before).with(@b.from_date).and_return 2
+     @acc.should_receive(:movement).with(@b.from_date, @b.to_date, :debit).and_return 2000
+     @acc.should_receive(:movement).with(@b.from_date, @b.to_date, :credit).and_return 1000225.20
+     @acc.should_receive(:sold_at).with(@b.to_date).and_return(5)
+     pdf = @b.to_pdf
+     pdf.prepare_line(@acc).should == ['152', 'Un compte comme un autre', '1,00', '2,00', '2 000,00', '1 000 225,20', '5,00' ]
+   end
+
 end

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require 'spec_helper'
 
 describe Compta::SelectionsController do
@@ -32,6 +34,17 @@ describe Compta::SelectionsController do
       response.should be_redirect
     end
 
+  end
+
+  describe 'POST lock' do
+
+    it 'envoie lock sur l écriture' do
+    Writing.should_receive(:find).with('2').and_return(@w = mock_model(Writing))
+
+    @w.should_receive('compta_editable?').and_return true
+    @w.should_receive(:lock)
+    post :lock, { :period_id=>@p.to_param, :id=>'2', :format=>:js}, valid_session
+  end
   end
 
 end
