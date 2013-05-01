@@ -31,8 +31,9 @@
 #
 class Admin::VersionsController < ApplicationController
 
-  skip_before_filter :control_version
+  skip_before_filter :control_version 
   skip_before_filter :log_in?
+  skip_before_filter :find_organism
 
 
   # GET new pour demander si on veut effectivement faire migrer les bases de données
@@ -44,7 +45,7 @@ class Admin::VersionsController < ApplicationController
   def migrate_each
     Room.migrate_each # migre Room et les différentes bases
     Rails.cache.clear('version_update')
-    redirect_to admin_organisms_url
+    redirect_to admin_rooms_url
   end
 
 end

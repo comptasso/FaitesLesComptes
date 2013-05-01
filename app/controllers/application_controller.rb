@@ -13,20 +13,36 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # A chaque démarrage de l'application, on vérifie que les bases de données
-  # sont cohérentes avec la version du logiciel.
+
+
+  # A chaque démarrage de l'application, on vérifie que la base principale
+  # (celle qui contient les Room)
+  # est cohérente avec la version du logiciel.
   #
   def control_version
     Rails.logger.info 'appel de controle version'
     @control_version = Room.version_update?
-    redirect_to admin_versions_new_path unless @control_version
+    redirect_to admin_version_new_path unless @control_version
   end
 
- 
+   # vérifie que l'on est loggé sous un nom d'utilisateur,
+  # s'il n'y a pas de session[:user], et à nil session[:org_db]
+  def log_in?
+
+    unless session[:user]
+      logger.debug "pas de session[user]"
+      session[:org_db] = nil
+      use_main_connection
+      redirect_to new_session_url
+    end
+
+
+  end
 
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
+        
     # utile pour remettre le système cohérent
     use_main_connection if session[:org_db] == nil
     r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
@@ -44,6 +60,7 @@ class ApplicationController < ActionController::Base
 
   # si pas de session, on prend le premier exercice non clos
   def current_period 
+    
     unless @organism
       logger.warn 'Appel de current_period sans @organism'
       return nil

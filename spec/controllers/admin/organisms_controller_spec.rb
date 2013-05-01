@@ -11,14 +11,13 @@ describe Admin::OrganismsController do
   include SpecControllerHelper
  
   
-  def user_session
-    {user:@cu.id}
-  end
+  
 
   before(:each) do
     minimal_instances
     # minimal instance donne @cu pour current_user et @r comme room
-    @cu.stub('up_to_date?').and_return true
+    Room.stub('version_update?').and_return true
+    
   end
 
 
@@ -26,7 +25,7 @@ describe Admin::OrganismsController do
   describe 'GET edit'  do
     it 'rend le template edit' do
       Organism.should_receive(:find).with('1').and_return(mock_model(Organism))
-      get :edit, {id:'1'}, user_session
+      get :edit, {id:'1'}, valid_session
       response.should render_template 'edit'
     end 
   end
@@ -39,22 +38,22 @@ describe Admin::OrganismsController do
 
     it 'cherche l organisme' do
       Organism.should_receive(:find).with('1').and_return(stub_model(Organism))
-      put :update, {id:'1'}, user_session
+      put :update, {id:'1'}, valid_session
     end
     
     it 'met à jour l organisme' do
       @o.should_receive(:update_attributes).with({'name'=>'Bizarre'}).and_return true
-      put :update, {id:'1', organism:{name:'Bizarre'}}, user_session
+      put :update, {id:'1', organism:{name:'Bizarre'}}, valid_session
     end
 
     it 'renvoie le formulaire si non sauvé' do
       @o.stub(:update_attributes).and_return false
-      put :update, {id:'1', organism:{name:'Bizarre'}}, user_session
+      put :update, {id:'1', organism:{name:'Bizarre'}}, valid_session
       response.should render_template 'edit'
     end
 
     it 'redirige vers l action index si sauvé' do
-      put :update, {id:'1', organism:{name:'Bizarre'}}, user_session
+      put :update, {id:'1', organism:{name:'Bizarre'}}, valid_session
       response.should redirect_to admin_organism_url(@o)
     end
 
