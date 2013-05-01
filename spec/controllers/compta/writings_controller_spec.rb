@@ -6,7 +6,7 @@ RSpec.configure do |config|
  # config.filter = {wip:true}
 end
 
-describe Compta::WritingsController do  
+describe Compta::WritingsController do 
   include SpecControllerHelper 
 
   before(:each) do

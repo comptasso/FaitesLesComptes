@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 class RestoreError < StandardError; end
 
-describe Admin::RestoresController do
+describe Admin::RestoresController do 
   include ActionDispatch::TestProcess
 
   let(:cu) {mock_model(User)}
@@ -21,11 +21,6 @@ describe Admin::RestoresController do
       response.should render_template('new')
     end
 
-    it 'assigns db_extension' do
-      get :new, {}, valid_session
-      assigns(:db_extension).should == 'sqlite3'
-    end
-
   end
 
   describe 'POST create' do
@@ -40,7 +35,7 @@ describe Admin::RestoresController do
     context 'tout va bien' do
 
       before(:each) do
-        cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, 'save!'=>true))
+        cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, 'save!'=>true, :full_name=>'path_du_fichier.sqlite3'))
         @r.stub(:check_db).and_return(true)
         @r.stub(:connect_to_organism).and_return(true)
         @r.stub(:relative_version).and_return(:same_migration)
@@ -64,7 +59,7 @@ describe Admin::RestoresController do
     describe 'gestion des anomalies et erreurs' do
 
       before(:each) do
-        @ro =  mock_model(Room, :user=>cu2)
+        @ro =  mock_model(Room, :user=>cu2, :full_name=>'path_du_fichier.sqlite3', 'save!'=>true)
       end
 
       it 'vérifie que le nom de base n est pas pris par un autre user' do
@@ -84,15 +79,15 @@ describe Admin::RestoresController do
       end
       
       it 'vérifie le format de database' do
-        cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, 'save!'=>true))
-        @r.should_receive(:valid?).and_return(false)
+        cu.stub_chain(:rooms, :new).and_return @ro
+        @ro.should_receive(:valid?).and_return(false)
         post :create, {:file_upload=>@file, database_name:'2test2'}, valid_session
         flash[:alert].should == 'Nom de base non valide : impossible de créer la base'
       end
 
       it 'vérifie la base' do
-        cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, 'save!'=>true))
-        @r.stub(:check_db).and_return false
+        cu.stub_chain(:rooms, :new).and_return @ro
+        @ro.stub(:check_db).and_return false
         post :create, {:file_upload=>@file, database_name:'test'}, valid_session
         flash[:alert].should == 'Le contrôle du fichier par SQlite renvoie une erreur'
       end
@@ -100,21 +95,21 @@ describe Admin::RestoresController do
       context 'vérification de la version' do
 
         before(:each) do
-          cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, 'save!'=>true))
-          @r.stub(:check_db).and_return true
-          @r.stub(:connect_to_organism).and_return true
+          cu.stub_chain(:rooms, :new).and_return @ro
+          @ro.stub(:check_db).and_return true
+          @ro.stub(:connect_to_organism).and_return true
           
         end
       
         it 'si la version est same_migration' do
           
-          @r.stub(:relative_version).and_return(:same_migration)
+          @ro.stub(:relative_version).and_return(:same_migration)
           post :create, {:file_upload=>@file, database_name:'test'}, valid_session
           response.should redirect_to admin_rooms_url
         end
       
         it 'si la version est différente' do
-          @r.stub(:relative_version).and_return('something_else')
+          @ro.stub(:relative_version).and_return('something_else')
 
           post :create, {:file_upload=>@file, database_name:'test'}, valid_session
           response.should redirect_to admin_rooms_path
