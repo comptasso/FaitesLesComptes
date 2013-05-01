@@ -9,7 +9,7 @@ class Admin::RestoresController < Admin::ApplicationController
   class RestoreError < StandardError; end
 
   skip_before_filter :find_organism, :current_period
-  before_filter :db_format
+ 
 
   def new
     
@@ -35,8 +35,8 @@ class Admin::RestoresController < Admin::ApplicationController
       
       # vérification que l'extension est bien la bonne
       extension = File.extname(uploaded_io.original_filename)
-      if  ".#{@db_extension}" != extension
-        raise RestoreError, "L'extension #{extension} du fichier ne correspond pas aux bases gérées par l'application : .#{@db_extension}"
+      if  ".sqlite3" != extension
+        raise RestoreError, "L'extension #{extension} du fichier ne correspond pas aux bases gérées par l'application : .sqlite3"
       end
 
       # la pièce ne doit pas déjà appartenir à un autre
@@ -51,7 +51,7 @@ class Admin::RestoresController < Admin::ApplicationController
         raise RestoreError, 'Nom de base non valide : impossible de créer la base' unless @room.valid?
       end
 
-      File.open(file_path, 'wb') do |file|
+      File.open(@room.full_name, 'wb') do |file|
         file.write(uploaded_io.read)
       end
 
@@ -60,7 +60,7 @@ class Admin::RestoresController < Admin::ApplicationController
       unless @room.check_db
         raise RestoreError, 'Le contrôle du fichier par SQlite renvoie une erreur'
       end
-
+      @room.connect_to_organism
       # On indique à l'organisme quelle base il utilise (puisqu'on peut faire des copies)
       Organism.first.update_attribute(:database_name, params[:database_name])
       # tout s'est bien passé on sauve la nouvelle pièce
@@ -77,22 +77,6 @@ class Admin::RestoresController < Admin::ApplicationController
   end
 
 
-  protected
-
-  # retourne le nom de l'adapter de l'application, par exemple sqlite3.
-  def db_format
-    @db_extension = Rails.application.config.database_configuration[Rails.env]['adapter']
-  end
-
-  def file_path
-    if Rails.env == 'test'
-      return Rails.root.join('db', 'test', 'organisms', "#{params[:database_name]}.sqlite3")
-    elsif ENV['OCRA_EXECUTABLE']
-      return File.expand_path("../db/#{Rails.env}/organisms/#{params[:database_name]}.sqlite3", ENV['OCRA_EXECUTABLE'])
-    else
-      return Rails.root.join('..', 'db', Rails.env, 'organisms', "#{params[:database_name]}.sqlite3")
-    end
-  end
  
 
 end

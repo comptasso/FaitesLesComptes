@@ -29,13 +29,6 @@ class Room < ActiveRecord::Base
     look_for {Archive.last}
   end
 
-  # renvoie un hash utilisé pour l'affichage de la table des organismes
-  def organism_description
-    if o = organism
-      {organism:o, room:self, :archive=>(look_for {Archive.last}) }
-    end
-  end
-
   # Vérifie que la base de données enregistrant les Room est bien dans la bonne version
   #
   # Il y a le cas où la base principale (celle qui enregistre User et Room) n'est
@@ -244,6 +237,7 @@ class Room < ActiveRecord::Base
   def create_db
     unless File.exist? full_name
       File.open(full_name, "w") {} # création d'un fichier avec le nom database.sqlite3 et fermeture
+      connect_to_organism
       ActiveRecord::Base.connection.load('db/schema.rb')
     end
   end
