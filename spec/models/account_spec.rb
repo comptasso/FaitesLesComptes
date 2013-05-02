@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
-   # config.filter =  {wip:true}
+  #  config.filter =  {wip:true}
 end
 
 
@@ -124,10 +124,25 @@ describe Account do
             '1'=>{account_id:@acc2.id, debit:1000}})
       end
 
-      it 'final_sold', wip:true do
+      it 'final_sold' do
         @acc1.should_receive(:sold_at).with(@p.close_date).and_return(1000)
         @acc1.final_sold
       end
+
+    end
+
+    describe 'solde précédent'  do
+      before(:each) do
+        @acc1 = Account.new(number:'100', title:'Capital', period_id:@p.id)
+        @acc1.stub(:period).and_return @p
+      end
+
+      it 'previous_sold demande à period le compte' do
+        @p.should_receive(:previous_account).with(@acc1).at_least(1).times.and_return(mock_model(Account, :final_sold=>105))
+        @acc1.previous_sold.should == 105
+      end
+
+   
 
     end
 
