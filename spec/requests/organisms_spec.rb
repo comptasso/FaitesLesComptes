@@ -20,6 +20,8 @@ describe "vue organisme"  do
 
   end
 
+  # TODO tester les fonctionnalités des graphiques
+
   context 'avec plusieurs organismes' do
 
     it 'est redirigé vers la vue index' do

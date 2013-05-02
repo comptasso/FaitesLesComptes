@@ -64,13 +64,7 @@ before(:each) do
     end
   end
 
-  it "la légende ne doit pas faire apparaître Series 2 avec un seul exercice" do
-    pending "Nécessite javascript contexte pour être testé"
-    render
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "td", 'Series 2', false
-    
-  end
+  
 
 
   end

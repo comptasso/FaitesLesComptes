@@ -13,11 +13,20 @@ describe "Writings" do
   end
 
   describe "GET compta/writings" do
-    it "works! (now write some real specs)" do
-      pending 'faire une méthode préparant les datas pour accéder à la zone compte'
-      get compta_book_writings_path(@od) 
 
-      response.status.should == 200
+    before(:each) do
+      visit compta_book_writings_path(@od)
     end
+
+    it "affiche le titre" do
+      page.find('h3').should have_content 'Journal Opérations diverses : Liste d\'écritures'
+    end
+    
+    it "le titre contient les liens vers les autres mois" do
+      page.find('h3').should have_content 'fév.'
+      page.find('h3').should have_content 'juil.'
+    end
+
+    # TODO compléter ces spec d'intégration
   end
 end
