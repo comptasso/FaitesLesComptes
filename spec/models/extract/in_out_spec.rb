@@ -82,16 +82,6 @@ describe Extract::InOut do
       @extract.cumulated_at(Date.today, 'debit')
     end
 
-    it "knows the total debit" do
-      pending 'A tester dans la classe Extract::Base puis supprimer d ici'
-       @extract.total_debit.should == 165
-    end
-
-    it "knows the total credit" do
-      pending 'A tester dans la classe Extract::Base puis supprimer d ici'
-      @extract.total_credit.should == 0
-    end
-
     it "respond to debit_before" do
       @extract.debit_before.should == 5
     end

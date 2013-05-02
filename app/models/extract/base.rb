@@ -1,7 +1,7 @@
 # coding: utf-8
 
 # Le module extract définit la classe de base pour les extraits de quelque chose
-# ayant une méthode lines renvoyant un objet capable de faire une somme sur
+# ayant une méthode lines renvoyant quelque chose (fondamentalement un Arel) capable de faire une somme sur
 # ses attributs débit et crédit
 #
 module Extract
