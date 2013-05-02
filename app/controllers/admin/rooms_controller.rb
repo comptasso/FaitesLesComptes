@@ -1,14 +1,15 @@
 # -*- encoding : utf-8 -*-
 
-# TODO Room devrait être la classe qui gère la création des bases de données
-# et non organism. 
-# Il faut déplacer l'action new et create de organism_controller vers rooms_controller
 
 
 # Cette classe agit comme un proxy pour accéder aux organismes qui sont dans
 # des bases séparées (Room étant par contre dans la base commune).
+#
+# Ce controller gère ce qui relève de la création des bases de données (ou des schémas).
+#
 # Ce controller est nécessaire car autrement dans les vues où il y a plusieurs organismes
 # ces organismes ont l'id  1 (puisqu'ils sont seuls dans leur base).
+# 
 # Pour des vues de type index et pour les actions, il faut donc passer par rooms
 class Admin::RoomsController < Admin::ApplicationController
 

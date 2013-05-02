@@ -1,5 +1,6 @@
 # coding: utf-8
 
+# TODO : je crains qu'il n'y ait plus d'accès à cette partie du programme
 
 class Admin::ArchivesController < Admin::ApplicationController
 

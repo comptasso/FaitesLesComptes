@@ -27,14 +27,12 @@ describe Room do
     u.rooms.new(database_name:'unnom2basecorrect').should be_valid
   end
 
-#  it 'peut être créée', wip:true  do
-#    r = u.rooms.new(database_name:'unnomdebasecorrect')
-#    File.stub('exist?').and_return false
-#    File.should_receive(:open).with(r.full_name, 'w')
-#    ActiveRecord::Base.connection.should_receive(':load').with('db/schema.rb')
-#    r.save
-#    File.stub('exist?').and_return true
-#  end
+  it 'save crée le fichier s il n existe pas', wip:true  do
+    r = u.rooms.new(database_name:'unnomdebasecorrect')
+    File.delete(r.full_name) if File.exist? r.full_name
+    r.save 
+    File.exist?(r.full_name).should be_true
+  end
 
   it 'le nom de base doit être unique' do
     u.rooms.find_or_create_by_database_name('foo')
