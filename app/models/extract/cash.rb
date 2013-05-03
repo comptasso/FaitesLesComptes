@@ -45,8 +45,8 @@ class Cash < Extract::InOut
        line.narration.truncate(40),
        line.destination ? line.destination.name.truncate(22) : '-',
        line.nature ? line.nature.name.truncate(22) : '-' ,
-      reformat(line.credit),
-      reformat(line.debit)]
+      french_format(line.credit),
+      french_format(line.debit)]
   end
 
 
