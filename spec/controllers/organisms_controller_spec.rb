@@ -23,7 +23,7 @@ describe OrganismsController do
     let(:ba1) {mock_model(BankAccount)} 
     let(:ib) {mock_model(IncomeBook) }
     let(:ob) {mock_model(OutcomeBook) }
-    let(:bab) {mock_model(BankAccountBook) } 
+    
 
     before(:each) do
       

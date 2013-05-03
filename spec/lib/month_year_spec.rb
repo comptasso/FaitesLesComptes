@@ -19,6 +19,15 @@ describe 'MonthYear' do
     expect {MonthYear.new(year:2012, month:13)}.to raise_error ArgumentError
   end
 
+  it 'sait renvoyer un month_year de l année précédente' do
+    m = MonthYear.new(:year=>2011, :month=>12)
+    pm = m.previous_year
+    pm.should be_an_instance_of MonthYear
+    pm.year.should == '2010'
+    pm.month.should == m.month
+  end
+
+
   it 'to_s retourne 01-2012' do
     MonthYear.new(year:2012, month:01).to_s.should == '01-2012'
   end

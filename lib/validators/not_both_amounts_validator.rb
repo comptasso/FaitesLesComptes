@@ -6,8 +6,8 @@ class NotBothAmountsValidator < ActiveModel::Validator
 
   def validate(record)
     if record.debit != 0 && record.credit != 0
-      record.errors[:credit] << 'debit et crédit sur une même ligne'
-      record.errors[:debit] << 'debit et crédit sur une même ligne'
+      record.errors[:credit] << 'débit et crédit sur une même ligne'
+      record.errors[:debit] << 'débit et crédit sur une même ligne'
     end
   end
 

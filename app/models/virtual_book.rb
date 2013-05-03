@@ -22,6 +22,8 @@ require 'book.rb'
 #
 # pave_char (également surchargé) permet d'indiquer le type de graphique que l'on souhaite pour l'affichage du DashBoard
 #
+# Les virtual_books se créent par la méthode Organism#virtual_books définie par un has_many dans la classe Organism
+#
 class VirtualBook < Book
 
   attr_accessor :virtual
