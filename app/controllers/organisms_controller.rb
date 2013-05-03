@@ -21,31 +21,12 @@ class OrganismsController < ApplicationController
     @paves = []
     @paves += @organism.books.in_outs.all
     @paves << @period
-    @paves += cash_books
-    @paves += bank_books
+    @paves += @organism.cash_books
+    @paves += @organism.bank_books
  
   end
 
 
-  protected
-
   
-# crée un virtual_book pour chacune des caisses
-  def cash_books
-     @organism.cashes.map do |c|
-      cb = @organism.virtual_books.new
-      cb.virtual = c
-      cb
-    end
-  end
-
-  # créé un virtual_book pour chacun des comptes bancaires
-  def bank_books
-    @organism.bank_accounts.map do |ba|
-      vb = @organism.virtual_books.new
-      vb.virtual = ba
-      vb
-    end
-  end
-
+  
 end

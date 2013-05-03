@@ -52,7 +52,7 @@ module OrganismsHelper
   # Chacun des pavés correspond à un livre (mais pas le livre d'OdBook)
   # un des pavé est généré par period
   # 
-  # Les derniers pavés sont générés par les caisses et les banques (au travers des cash_book et
+  # Les derniers pavés sont générés par les caisses et les banques (au travers des cash_books et
   # des bank_books).
   # 
   # html_class, permet d'associer des classes à chacun des pavés, sachant qu'actuellement

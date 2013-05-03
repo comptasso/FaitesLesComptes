@@ -64,7 +64,7 @@ module Utilities::Sold
   
 
   # TODO voir si on utilise réellement selector comme string du type 01-2013
-
+  # TODO je pense qu'on pourrait utiliser movement plutôt que les contorsions imposées par sold_at et les différences
   # donne un solde en prenant toutes les lignes du mois correspondant
   # à cette date;
   #

@@ -96,6 +96,27 @@ class Organism < ActiveRecord::Base
     books.in_outs
   end
 
+  # créé un cash_book pour chacune des caisses
+  def cash_books
+   cashes.map do |c|
+     vb = virtual_books.new
+     vb.virtual = c
+     vb
+   end
+  end
+
+  # créé un virtual_book pour chacun des comptes bancaires
+  def bank_books
+    bank_accounts.map do |ba|
+      vb = virtual_books.new
+      vb.virtual = ba
+      vb
+    end
+  end
+
+
+ 
+
   # retourne le nombre d'exercices ouverts de l'organisme
   def nb_open_periods
     periods.where('open = ?', true).count
@@ -136,6 +157,9 @@ class Organism < ActiveRecord::Base
     bank_accounts.any?  ? bank_accounts.first.id  :  nil
   end
 
+
+  # TODO on peut faire beaucoup plus simple pour guess_period et find_period
+
   # find_period trouve l'exercice relatif à une date donnée
   # utilisé par exemple pour calculer le solde d'une caisse à une date donnée
   # par défaut la date est celle du jour
@@ -167,6 +191,7 @@ class Organism < ActiveRecord::Base
     look_for {Room.find_by_database_name(database_name)}
   end
 
+  # TODO relève de la responsabilité de Room
   def full_name
     "#{Room.path_to_db}/#{database_name}.sqlite3"
   end
@@ -191,7 +216,7 @@ class Organism < ActiveRecord::Base
     Compta::Nomenclature.new(period).sheet(page)
   end
 
-  # TODO document et nomenclature semblent assez proche (voir si on peut simplifier)
+  
  
   
   private
