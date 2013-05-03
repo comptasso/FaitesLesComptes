@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
-#  config.filter = {wip:true}
+  # config.filter = {wip:true}
 end
 
 
@@ -17,12 +17,53 @@ describe InOutWriting do
   end
 
 
-  before(:each) do
-    create_minimal_organism
-    @acc = @p.accounts.classe_6.first
+
+
+  describe 'support' , wip:true do
+
+    before(:each) do
+      @w = InOutWriting.new
+      
+    end
+
+    it 'interroge counter_line et account' do
+      @w.should_receive(:counter_line).at_least(1).times.and_return(@cl = mock_model(ComptaLine))
+      @cl.should_receive(:account).at_least(1).times.and_return(mock_model(Account, :title=>'chèque', :number=>'511'))
+      @w.support
+    end
+
+    it 'renvoie le title pour le compte 511' do
+      @w.stub_chain(:counter_line, :account).and_return(mock_model(Account, :title=>'chèque', :number=>'511'))
+      @w.support.should == 'chèque'
+    end
+
+    it 'cherche le nick_name si compte 51 ' do
+      @w.stub_chain(:counter_line, :account).and_return(@acc = mock_model(Account, :title=>'chèque', :number=>'5101'))
+      @acc.stub_chain(:accountable, :nickname).and_return('Bonjour la banque')
+      @w.support.should == 'Bonjour la banque'
+    end
+
+    it 'également si compte 53 ' do
+      @w.stub_chain(:counter_line, :account).and_return(@acc = mock_model(Account, :title=>'chèque', :number=>'5301'))
+      @acc.stub_chain(:accountable, :nickname).and_return('Bonjour la caisse')
+      @w.support.should == 'Bonjour la caisse'
+    end
+
+    it 'demande le long_name autrement' do
+      @w.stub_chain(:counter_line, :account).and_return(@acc = mock_model(Account, :title=>'chèque', :number=>'55'))
+      @acc.stub_chain(:long_name).and_return('55 un compte')
+      @w.support.should == '55 un compte'
+    end
+
+
   end
 
   describe "creation de ligne" do
+
+    before(:each) do
+    create_minimal_organism
+    @acc = @p.accounts.classe_6.first
+  end
 
     before(:each) do
       @w = @ob.in_out_writings.new(valid_attributes)
@@ -97,6 +138,7 @@ describe InOutWriting do
 
 
     end
+
 
   end
 
