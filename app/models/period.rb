@@ -53,7 +53,7 @@ class Period < ActiveRecord::Base
 
   attr_accessible :start_date, :close_date
 
- 
+   # TODO mettre ces classes dans le répertoire des validators
   # Les classes ...validator sont des classes spécifiques de validator pour les exercices
   # on ne les met pas dans lib/validators car elles sont réellement dédiées
 
@@ -502,26 +502,7 @@ class Period < ActiveRecord::Base
     return rcb
   end
 
-  # on ne peut jamais changer la date de début d'un exercice créé.
-  # soit c'est le premier et la date de début a été fixée lors de la création
-  # de la organism
-  # soit ce n'est pas le premier et il est lié à l'exercice précédent
-  def cant_change_start_date
-    if self.changed_attributes['start_date'] 
-      self.errors.add(:start_date, 'Impossible de changer la date d\'ouvrture')
-      return false 
-    end
-  end
-
-  # on ne peut pas changer la date de clôture si l'exercice suivant a déja été créé
-  def cant_change_close_date
-    if self.changed_attributes['close_date'] 
-      self.errors.add(:close_date, 'Impossible de changer la date de cloture')
-      return false 
-    end
-  end
-
-  
+   
 
   def should_not_have_more_than_two_open_periods
     if organism.nb_open_periods >= 2

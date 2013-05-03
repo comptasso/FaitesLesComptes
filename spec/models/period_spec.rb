@@ -92,21 +92,6 @@ describe Period do
         
       end
 
-
-      it 'vérid des cant_change' do # même si le before_create :fix_days fait que cela ne doit jamais arriver
-        @p = @o.periods.create!(valid_params)
-        @p.start_date = @p.start_date >> 1
-        @p.send(:cant_change_start_date).should be_false
-      end
-
-       it 'vérid des cant_change' do # même si le before_create :fix_days fait que cela ne doit jamais arriver
-        @p = @o.periods.create!(valid_params)
-        @p.start_date = @p.close_date << 1
-        @p.send(:cant_change_close_date).should be_false
-      end
-
-      
-
     end
   
     describe 'la création implique'  do
