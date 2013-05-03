@@ -60,13 +60,18 @@ describe Compta::RubrikLine do
     
   end
 
-  it 'to_a rencoie les 4 valeurs' do
+  it 'to_a rencoie les 4 valeurs' do 
     @rl = Compta::RubrikLine.new(p, :actif, '201')
     @rl.to_a.should == ['201 - Un compte', 120,0,120,14]
   end
 
   it 'une rubrique line a une profondeur de -1' do
     Compta::RubrikLine.new(p, :actif, '201').depth.should == -1
+  end
+
+  it 'sait rendre un csv' do
+    @rl = Compta::RubrikLine.new(p, :actif, '201')
+    @rl.to_csv.should == "201\t201 - Un compte\t120\t0\t120\t14\n"
   end
 
 
