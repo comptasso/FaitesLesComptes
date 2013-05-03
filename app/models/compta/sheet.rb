@@ -74,7 +74,8 @@ module Compta
       @total_general.collection.first
     end
 
-
+# TODO voir si preprare_line et format_line ne devrait pas faire une seule méthode
+# 
     # utilisé pour le csv de l'option show
     def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|

@@ -76,6 +76,13 @@ include OrganismFixture
     cs.to_index_csv
   end
 
+  it 'peut rendre un csv avec un sens passif' do
+    lr = list_rubriks
+    lr[:sens]=:passif
+    cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
+    cs.to_index_csv
+  end
+
   it 'sheet peut créer le fichier xls pour l index' do
  #   Compta::RubrikLine.stub_chain(:new, :to_csv).and_return [CSV.generate {|c| c << ['101', 'Capital', 100,0,100,80]}]
     cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
@@ -85,6 +92,13 @@ include OrganismFixture
   it 'peut rendre un pdf' do
     cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
     cs.to_pdf.should be_an_instance_of Editions::Sheet
+  end
+
+  it 'detailed lines demande à total_general ses fetch_lines' do
+    cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
+    cs.should_receive(:total_general).and_return(@ru = double(Compta::Rubriks))
+    @ru.should_receive(:fetch_lines)
+    cs.detailed_lines
   end
 
   it 'peut rendre un detailed_pdf' do
