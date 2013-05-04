@@ -30,6 +30,8 @@ describe OrganismsController do
       @o.stub_chain(:bank_accounts, :map).and_return([ba1])
       @o.stub_chain(:cashes, :map).and_return([c])
       @o.stub_chain(:books, :all).and_return([ib,ob])
+      @o.stub(:cash_books).and_return []
+      @o.stub(:bank_books).and_return []
       ba1.stub(:bank_extracts).and_return([])
       
     end
@@ -38,6 +40,8 @@ describe OrganismsController do
 
       before(:each) do
         @o.stub(:periods).and_return([])
+        
+        
       end
 
       it 'remplit un flash d alerte' do
@@ -50,8 +54,6 @@ describe OrganismsController do
         response.should redirect_to new_admin_organism_period_url(@o)
       end
     
-    
-
     end
     
     it 'doit rendre la vue show' do
@@ -82,10 +84,10 @@ describe OrganismsController do
       assigns[:paves].should be_an_instance_of(Array)
     end
 
-    it 'paves doit avoir 5 éléments' do
+    it 'paves doit avoir 3 éléments (car on stub les cash books et bank_books' do
       # tous les livres sauf OD_Book plus résultat
       get :show, {:id=>@o.id},  {:org_db=>'assotest', :period=>@p.id, :user=>@cu.id}
-      assigns[:paves].size.should == [ib,ob, c, ba1].size + 1
+      assigns[:paves].size.should == [ib,ob].size + 1
     end
 
   
