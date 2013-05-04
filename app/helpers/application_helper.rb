@@ -83,12 +83,10 @@ module ApplicationHelper
 
   # renvoie l'espace dans lequel on est : compta, admin ou main
   def space
-    unless request
-      raise "You cannot use helpers that need to determine the current
-page unless your view context provides a Request object in a #request method"
-    end
+    requ = request
+    return main unless requ
     # request_path est par exemple /admin/organisms/9
-    request_uri = request.path.slice(1..-1) # on enlève le leading /
+    request_uri = requ.path.slice(1..-1) # on enlève le leading /
     prefix = request_uri.split('/').first
     case prefix
     when 'admin' then 'admin'
