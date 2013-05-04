@@ -14,7 +14,7 @@ require 'spec_helper'
     end
 
     it 'to_csv doit être implémenté dans les classes incluant le module' do
-         expect {@tm.to_csv}.to raise_error
+         expect {@tm.send(:to_csv)}.to raise_error 'Vous devez implémentez cette méthode dans la classe dans laquelle vous incluez ce module'
     end
 
     it 'to_xls appelle to_csv avec un encode Windows' do
