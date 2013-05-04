@@ -107,14 +107,9 @@ Faitesvoscomptes::Application.routes.draw do
       
     
       resources :destinations
-      resources :bank_accounts do
-        resources :bank_extracts, :only=>[:index, :edit, :destroy] do
-          member do
-            get 'unlock'
-          end
-        end
-      end
+      resources :bank_accounts 
       resources :cashes do
+        # TODO cette route devrait être supprimée
         resources :cash_controls, only: [:index, :destroy]
       end
       resources :periods do

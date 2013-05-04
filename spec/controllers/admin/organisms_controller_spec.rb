@@ -20,6 +20,27 @@ describe Admin::OrganismsController do
     
   end
 
+  describe 'GET show' do
+
+    it 'redirige vers la création d un exercice si pas de period' do
+      @controller.stub(:current_period).and_return nil
+      get :show, {id:'1'}, valid_session
+      response.should redirect_to new_admin_organism_period_url(@o) 
+    end
+
+    it 'l assigne à organism' do
+      get :show, {id:'1'}, valid_session
+      assigns[:organism].should == @o
+    end
+    
+    it 'puis rend la vue show' do
+      Organism.stub(:find).with('1').and_return('bonjour')
+      get :show, {id:'1'}, valid_session
+      response.should render_template('show')
+    end
+
+  end
+
 
 
   describe 'GET edit'  do
