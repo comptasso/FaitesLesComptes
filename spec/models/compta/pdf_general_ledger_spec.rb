@@ -31,6 +31,10 @@ describe Compta::PdfGeneralLedger do
       mls.first.should be_an_instance_of(Compta::MonthlyLedger)
     end
 
+     it 'pages est un hash donnant les limites des mois' do
+      @pgl.pages.should == {1=>0..4, 2=>5..10, 3=>11..11}
+    end
+
     it 'nb pages renvoie le nombre de pages'do
       @pgl.nb_pages.should == 3 # cas général
       # si on a plus de journaux (6) le nb_de pages est plus élevé
@@ -38,9 +42,7 @@ describe Compta::PdfGeneralLedger do
       Compta::PdfGeneralLedger.new(p).nb_pages.should == 4
     end
 
-    it 'pages est un hash donnant les limites des mois' do
-      @pgl.pages.should == {1=>0..4, 2=>5..10, 3=>11..11}
-    end
+   
 
     it 'page renvoie une instance de PdfDocument::GeneralLedgerPage' do
       @pgl.page(1).should be_an_instance_of(Editions::GeneralLedgerPage)

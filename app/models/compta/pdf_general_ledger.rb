@@ -9,7 +9,7 @@ module Compta
    class PdfGeneralLedger < PdfDocument::Default
 
      include Compta::GeneralInfo
-     attr_reader :pages
+     attr_reader :period
 
       def initialize(period) 
         @period = period
@@ -20,41 +20,21 @@ module Compta
         @columns_alignements = [:left, :left, :left, :right, :right]
         @stamp = @period.open ? 'Provisoire' : ''
         @created_at = Time.now
-        set_pages
+        pages
       end
 
       # retourne la collection de monthly_ledgers avec un cache
       def monthly_ledgers
-        @monthly_ledgers ||= @period.monthly_ledgers
+        @monthly_ledgers ||= period.monthly_ledgers
       end
 
-      # calcule et définit les pages du general ledger, l'ensemble des pages
-      # est un hash avec comme clé un numéro de page et comme valeur un
-      # range d'integer qui correspondent à l'index du tableau des monthly_ledgers
-      # On suppose qu'il n'y a aucun list_months avec plus de lignes que la
-      # constante NB_PER_PAGE_LANDSCAPE
-      def set_pages  
-        @pages = {}
-        i = 1
-        nbl = 0
-        last = nil
-        from = 0
-        @period.list_months.each_with_index do |my, j| 
-          raise 'Trop grand nombre de journaux' if monthly_ledgers[j].size > NB_PER_PAGE_LANDSCAPE
-          nbl += monthly_ledgers[j].size
-          if nbl >  NB_PER_PAGE_LANDSCAPE
-            @pages[i] = from..last # on fixe les paramètres de la page
-            nbl = 0
-            i +=  1 # on passe à la page suivante
-            from = j
-          end
-        last = j
-        end
-        @pages[i] = from..last # pour finaliser la série avec les derniers 
+      def pages
+        @pages ||= set_pages
       end
 
+     
       def nb_pages
-        @pages.size
+        pages.size
       end
 
       # la méthode page retourne les PdfDocument::GeneralLedgerPage
@@ -66,10 +46,37 @@ module Compta
       # TODO puisqu'on envoie self, alors le deuxième argument est redondant
       #
       def page(n)
-        Editions::GeneralLedgerPage.new(self,  @pages[n].map {|i| monthly_ledgers[i]}, n)
+        Editions::GeneralLedgerPage.new(self,  pages[n].map {|i| monthly_ledgers[i]}, n)
       end
 
+      protected
 
+ # calcule et définit les pages du general ledger, l'ensemble des pages
+      # est un hash avec comme clé un numéro de page et comme valeur un
+      # range d'integer qui correspondent à l'index du tableau des monthly_ledgers
+      # On suppose qu'il n'y a aucun list_months avec plus de lignes que la
+      # constante NB_PER_PAGE_LANDSCAPE
+      def set_pages
+        table_des_matieres = {}
+        i = 1
+        nbl = 0
+        last = nil
+        from = 0
+        period.list_months.each_with_index do |my, j|
+          raise 'Trop grand nombre de journaux' if monthly_ledgers[j].size > NB_PER_PAGE_LANDSCAPE
+          nbl += monthly_ledgers[j].size
+          if nbl >  NB_PER_PAGE_LANDSCAPE
+            table_des_matieres[i] = from..last # on fixe les paramètres de la page
+            nbl = 0
+            i +=  1 # on passe à la page suivante
+            from = j
+          end
+        last = j
+        end
+        table_des_matieres[i] = from..last # pour finaliser la série avec les derniers
+        table_des_matieres
+      end
+     
 
    end
 

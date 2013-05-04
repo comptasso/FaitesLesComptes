@@ -4,11 +4,11 @@
 # afin de pouvoir répondre aux besoins de base pour le pdf
 module Compta::GeneralInfo
   def organism_name
-    @period.organism.title
+    period.organism.title
   end
 
   def exercice
-    @period.exercice
+    period.exercice
   end
 
   
