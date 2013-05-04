@@ -30,6 +30,14 @@ describe RoomsController do
        response.should redirect_to organism_url(@o)
      end
 
+    it 'should redirect to new_admin_room_path si pas d organisme' do
+      @cu.stub(:rooms).and_return @a=double(Arel)
+       @a.stub(:find).with(@r.id.to_s).and_return @r
+      Organism.stub(:first).and_return nil
+      get :show, {user_id:@cu.id, id:@r.id}, valid_session
+      response.should redirect_to new_admin_room_path
+    end
+
   end
 
  

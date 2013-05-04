@@ -5,7 +5,7 @@ require "#{Rails.root}/app/models/income_outcome_book"
 require "#{Rails.root}/app/models/outcome_book"
 
 RSpec.configure do |config|  
- # config.filter = {wip:true}
+ #  config.filter = {wip:true}
 
 end
  
@@ -15,15 +15,43 @@ describe Extract::MonthlyInOut do
     create_minimal_organism
   end
 
-  it "is created with a book and a date" do
-    @book_extract = Extract::MonthlyInOut.new(@ob, year:Date.today.year, month:Date.today.month)
-  end
+  describe 'création' do
 
+    let(:y) {Date.today.year}
+    let(:m) {Date.today.month}
+
+    before(:each) do
+   
+     @book_extract = Extract::MonthlyInOut.new(@ob, year:y, month:m)
+    end
+
+
+  
   it 'respond to book' do
-    @book_extract = Extract::MonthlyInOut.new(@ob, year:Date.today.year, month:Date.today.month)
     @book_extract.book.should == @ob
   end
 
+  it 'subtitile rend le mois et l année' do
+    @book_extract.subtitle.should == I18n.l(Date.today, :format=>'%B %Y')
+  end
+  
+  it 'a initialité begin_date et end_date' do
+    @book_extract.begin_date.should == Date.today.beginning_of_month
+    @book_extract.end_date.should == Date.today.end_of_month
+  end
+
+    it 'a demandé au livre de trouver l exercice' do
+      @ob.should_receive(:organism).and_return(@o)
+      @o.should_receive(:find_period).with(Date.today.beginning_of_month).and_return @p
+      Extract::MonthlyInOut.new(@ob, year:y, month:m)
+    end
+
+    it 'appelle super'  do
+      Extract::InOut.should_receive(:new)
+      Extract::MonthlyInOut.new(@ob, year:y, month:m)
+    end
+
+  end
   context "when a MonthlyInOutExtract exists" do 
 
     before(:each) do
@@ -43,7 +71,7 @@ describe Extract::MonthlyInOut do
 
     end
 
-    it 'vérifier que MonthlyInOutExtract est bien également initialisé avec un hash month et year'
+    
 
     it "has a collection of lines" do
      @extract.lines.should == @ob.writings.where('date >= ? AND date <= ?',
