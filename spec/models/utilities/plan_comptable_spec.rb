@@ -5,9 +5,10 @@ require 'utilities/plan_comptable'
 
 describe Utilities::PlanComptable do
 
-  before(:each) do
-     ActiveModel::MassAssignmentSecurity::WhiteList.any_instance.stub(:deny?).and_return(false)
-     @p = Period.new(:organism_id=>1, start_date:Date.today.beginning_of_month, close_date:Date.today.end_of_month)
+  before(:each) do 
+     
+     @p = Period.new(start_date:Date.today.beginning_of_month, close_date:Date.today.end_of_month)
+     @p.organism_id = 1
      @p.stub(:should_not_have_more_than_two_open_periods).and_return(true)
      @p.stub(:create_plan) # car create_plan est appelé par un after_create
      @p.stub(:create_bank_and_cash_accounts) # inutile de tester ce point ici

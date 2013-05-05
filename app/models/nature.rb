@@ -16,6 +16,7 @@ class Nature < ActiveRecord::Base
   acts_as_list :scope=>[:period_id, :income_outcome]
 
   attr_accessible :name, :comment, :income_outcome, :account, :account_id
+  
 
   before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
 

@@ -12,8 +12,11 @@ describe Nature do
   let(:p) {stub_model(Period, :list_months=>ListMonths.new(Date.today.beginning_of_year, Date.today.end_of_year))}
   
   before(:each) do
-    @nature = p.natures.new(name: 'Nature test', income_outcome: false)
+    @nature = Nature.new(name: 'Nature test', income_outcome: false)
+    @nature.period_id = 1
   end
+
+  
 
   it "should be valid" do
     @nature.should be_valid 

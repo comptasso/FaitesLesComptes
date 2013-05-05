@@ -18,8 +18,9 @@ describe  NatureObserver do
 
   before(:each) do
 
-    ActiveModel::MassAssignmentSecurity::WhiteList.any_instance.stub(:deny?).and_return(false)
-    @nature = Nature.new(:account_id=>1, name:'ecolo', :period_id=>1)
+    @nature = Nature.new(name:'ecolo', :account_id => 1)
+    @nature.period_id = 1
+    
     @nature.stub(:compta_lines).and_return([cl1, cl2])
 
     
