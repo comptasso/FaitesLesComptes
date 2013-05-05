@@ -100,7 +100,7 @@ class Period < ActiveRecord::Base
  
   before_destroy :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
 
-  # TODO mettre dans la migration que start_date et close_date sont obligatoires
+ 
  
   # trouve l'exercice précédent en recherchant le premier exercice
   # avec la date de cloture < au start_date de l'exercice actuel
@@ -533,7 +533,7 @@ class Period < ActiveRecord::Base
   private
 
   def create_plan
-    Utilities::PlanComptable.new.create_accounts(id, "#{organism.status.downcase}/plan_comptable.yml")
+    Utilities::PlanComptable.create_accounts(self, organism.status)
   end
 
   def create_bank_and_cash_accounts
@@ -545,6 +545,9 @@ class Period < ActiveRecord::Base
 
   # recopie les comptes de l'exercice précédent (s'il y en a un) en modifiant period_id.
   # s'il n'y en a pas, crée un compte pour chaque caisse et bank_account
+  #
+  # TODO pourrait être déplace dans Utilities::PlanComptable pour regrouper la gestion du plan comptable
+  #
   def copy_accounts
     if self.previous_period?
       previous_period.accounts.all.each do |a|
@@ -575,6 +578,8 @@ class Period < ActiveRecord::Base
   # retourne le nombre de natures
   #
   # TODO améliorer la gestion d'une éventuelle erreur
+  # TODO voir aussi si on ne peut utiliser une classe similaire à Utilities::PlanComtpable pour simplifier
+  # copy_natures et load_natures et retirer de cette clase également load_file_natures. On pourrait aussi envisager de passer ces callbacks dans un Observer.
   def load_natures 
     Rails.logger.info 'Création des natures'
     t = load_file_natures("#{Rails.root}/app/assets/parametres/#{organism.status.downcase}/natures.yml")
@@ -599,6 +604,7 @@ class Period < ActiveRecord::Base
   #
   # TODO voir si on peut se passer de la requête sql; actuellement cela bloque
   # probablement par le verrouillage qu'il y a sur l'une ou l'autre des tables
+  # A revoir après modification de la logique des bank_extract_lines_lines
   #
   def destroy_bank_extracts
     BankAccount.all.each do |ba|

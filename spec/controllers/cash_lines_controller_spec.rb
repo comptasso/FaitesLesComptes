@@ -64,6 +64,12 @@ describe CashLinesController do
       get :index,{ :cash_id=>ca.to_param }, valid_session
       response.should redirect_to(cash_cash_lines_url(ca.id, :mois=>current_month, :an=>current_year))
     end
+
+    it 'si mois == tous alors définit un Extract::Cash' do
+       Extract::Cash.should_receive(:new).with(ca, @p).and_return 'coucou'
+       get :index, {:cash_id=>ca.to_param, :mois=>'tous'}, valid_session
+       assigns[:monthly_extract].should == 'coucou'
+    end
   end
  
 end

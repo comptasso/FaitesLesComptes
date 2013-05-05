@@ -26,5 +26,14 @@ describe Editions::DetailedSheet do
     @ds.should_receive(:numerote).and_return true
     @ds.render
   end
+
+  it 'sait rendre aussi un pdf avec une source demandant un sens passif' do
+    source.stub(:sens).and_return(:passif)
+     @ds = Editions::DetailedSheet.new(p, source, {})
+    # on stub le Prawn::Document pour ne tester que l'appel
+    Prawn::Document.stub(:new).and_return(double(Prawn::Document, :render=>true))
+    @ds.should_receive(:numerote).and_return true
+    @ds.render
+  end
   
 end 

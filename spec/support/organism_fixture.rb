@@ -58,9 +58,12 @@ module OrganismFixture
     end
     Transfer.delete_all # on utilise delete_all car certains tests verrouillent
     # les écritures, lesquelles dès lors, ne peuvent plus être effacées
+    Account.delete_all
     InOutWriting.delete_all
     ComptaLine.delete_all
     CheckDeposit.delete_all
+    BankAccount.delete_all
+    Cash.delete_all
   end
 
   # Malgré son nom, cette méthode ne crée que des écritures de type recettes

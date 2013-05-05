@@ -2,27 +2,61 @@
 
 # Plan Comptable est une classe rattachée à un exercice
 # qui permet de lire un fichier yml et de créer les comptes pour l'exercice concerné
+# 
+# Le premier argument de initialize est le period, le second le statut de l'organisme
+#
+# Le fichier yml fournissant les informations de compte s'appelle obligatoirement 'plan_comptable.yml'
+# et doit être placé dans le répertoire app/assets/parametres/#{status}, ou status
+# est le statut de l'organisme (actuellement Association ou Entreprise, mais cette liste sera surment étendue ultérieurement)
+#
+# La méthode de clase self.create_accounts est essentiellement la seule utilisée, en
+# l'occurence dans le callback create_plan de period.
+#
 class Utilities::PlanComptable
 
+  FICHIER = 'plan_comptable.yml'
   
- # crée des comptes à partir d'un fichier source
- # A terme d'autres type de sources seront possibles. Il faudra modifier
- # ou surcharger load_accounts
-  def create_accounts(period_id, source)
-    p=Period.find(period_id)
-    nba=p.accounts.count # nb de comptes existants pour cet exercice
-    t=self.load_accounts("#{Rails.root}/app/assets/parametres/#{source}")
-    raise "Erreur lors du chargement du fichier #{source}" if t.is_a?(String)
-    t.each {|a| p.accounts.create(a)}
-    p.accounts.count-nba # renvoie le nombre de comptes créés
+  attr_reader :period, :status
+
+  def initialize(period, status)
+    @period = period
+    @status = status.downcase
+  end
+
+  
+  # crée des comptes à partir d'un fichier source
+  # A terme d'autres type de sources seront possibles. Il faudra modifier
+  # ou surcharger load_accounts
+  def self.create_accounts(period, status)
+    pc = new(period, status)
+    pc.create_accounts
+  end
+
+  def create_accounts
+    nba = period.accounts.count # nb de comptes existants pour cet exercice
+    t = load_accounts
+    # TODO gérer ces questions par des erreurs et non par des tests
+    if t && !(t.is_a?(String)) # si load_accounts a renvoyé la chaine 'Erreur...
+      t.each {|a| period.accounts.create(a)}
+      nb_comptes_crees = period.accounts(true).count - nba
+      Rails.logger.info "Création de #{nb_comptes_crees} comptes"
+      return nb_comptes_crees # renvoie le nombre de comptes créés
+    else
+      Rails.logger.warn("Erreur lors du chargement du fichier #{source_path}")
+      return 0
+    end
   end
 
   protected
+
+  def source_path
+    "#{Rails.root}/app/assets/parametres/#{status}/#{FICHIER}"
+  end
   
-  def load_accounts(source)
-    YAML::load_file(source) 
-  rescue
-    "Erreur lors du chargement du fichier #{source}"
+  def load_accounts
+    YAML::load_file(source_path)
+  rescue 
+    "Erreur lors du chargement du fichier #{status}"
   end
 end
 
