@@ -52,5 +52,22 @@ describe Compta::MonthlyLedger do
     end
   end
 
+  describe 'lines with _total' do
+
+    before(:each) do
+      @ml = Compta::MonthlyLedger.new(p, my)
+      @ml.stub(:lines).and_return [['ligne 1'], ['ligne 2']]
+    end
+
+    it 'encadre les ligne par une ligne de titre et une de total' do
+      @ml.stub(:title_line).and_return 'la ligne de titre'
+      @ml.stub(:total_line).and_return 'la ligne de total'
+      @ml.stub(:lines).and_return ['ligne 1', 'ligne 2']
+      @ml.lines_with_total.should == ['la ligne de titre', 'ligne 1', 'ligne 2', 'la ligne de total']
+    end
+
+
+  end
+
 
 end

@@ -20,6 +20,14 @@ describe Compta::RubrikResult do
     @rr.amortissement.should == 0
   end
 
+  it 'renvoie 0,0 si pas de compte' do
+    @p.stub_chain(:accounts, :find_by_number).and_return(nil)
+    @p.stub(:organism).and_return((mock_model(Organism, :title=>'Ma petite affaire')))
+    @rr = Compta::RubrikResult.new(@p, :passif, '12')
+    @rr.brut.should == 0
+    @rr.amortissement.should == 0
+  end
+
   describe 'previous_net' do
 
     before(:each) do
@@ -33,7 +41,10 @@ describe Compta::RubrikResult do
 
     it 'demande le résultat si un period précédent' do
       @p.stub('previous_period?').and_return true
-      @p.should_receive(:previous_period).and_return(@q = mock_model(Period))
+      @p.stub(:organism).and_return((mock_model(Organism, :title=>'Ma petite affaire')))
+      @q = mock_model(Period)
+      @q.stub(:organism) {mock_model(Organism, :title=>'Ma petite affaire')}
+      @p.should_receive(:previous_period).and_return(@q)
       @q.stub_chain(:accounts, :find_by_number).and_return(double(Account, :sold_at=>5))
       @q.should_receive(:resultat).and_return 22
       @rr.previous_net.should == 27

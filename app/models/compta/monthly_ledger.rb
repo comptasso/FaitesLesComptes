@@ -20,7 +20,7 @@ module Compta
      end
 
      def lines_with_total
-       lines.insert(0, ml.title_line).push(total_line)
+       lines.insert(0, title_line).push(total_line)
      end
 
       # la taille d'un MonthlyLedger est son nombre de lignes plus une ligne de titre et une ligne de total

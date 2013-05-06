@@ -314,8 +314,16 @@ context 'with real models' do
         @w.support_line.account.number.should match /^5/
       end
 
-      it 'support renvoie le long name de account' do
+      it 'retourne le long_name du support' do
         @w.support.should == 'Compte courant'
+      end
+
+      # TODO faire un spec de writing et un de in_out_writing correctement séparé
+      it 'cas ou @w n est pas un in_out_writing' do
+        w = Writing.new
+        w.stub(:support_line).and_return(@sl = mock_model(ComptaLine))
+        @sl.should_receive(:account).exactly(2).times.and_return(mock_model(Account, :long_name=>'le nom du compte'))
+        w.support.should == 'le nom du compte'
       end
 
 

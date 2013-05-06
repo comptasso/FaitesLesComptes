@@ -50,5 +50,15 @@ describe Editions::Stats do
     sts.fetch_lines(1).first.size.should == 14 # le titre plus 12 mois plus le total
   end
 
+  it 'sait rendre un pdf' do
+    p.stub(:organism).and_return(stub(title:'Ma petite affaire'))
+    p.stub(:exercice).and_return('Exercice 2013')
+    source.stub(:lines).at_least(1).times.and_return(stub_lines(30,14))
+    source.stub(:stats).and_return(stub_lines(30,14))
+    sts = Editions::Stats.new(p, source)
+    sts.render
+
+  end
+
 
 end

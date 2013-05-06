@@ -248,12 +248,10 @@ module Compta
         end
       end
 
+      
+
       def numbers_with_options_from_document(doc)
-        if @instructions[doc]
-          accumulated_values(@instructions[doc][:rubriks]).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list}.flatten
-        else
-          []
-        end
+           accumulated_values(@instructions[doc][:rubriks]).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list}.flatten
       end
 
       def collection_numbers_with_option(*docs)

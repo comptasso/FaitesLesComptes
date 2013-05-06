@@ -64,15 +64,7 @@ describe CashControl do
         10.times { @c.cash_controls.create(date: (@p.start_date + rand(laps).days), amount: rand(1000)) }
       end
 
-      it 'mois should get all Lines within specified month' do
-        debut = @p.start_date.months_since(2)
-        fin= debut.end_of_month
-        @c.cash_controls.mois(@p, 2).each do |ccc|
-          ccc.date.should <= fin
-          ccc.date.should >= debut
-        end
-      end
-
+      
       it 'cash_controls order date' , wip:true do
         @c.cash_controls.create(date:Date.today, amount:0)
         @c.cash_controls.create(date:(Date.today - 1), amount:0)

@@ -84,6 +84,12 @@ describe BankAccount do
       @ba.accounts.last.number.should == '51201'
     end
 
+    it 'changer le nick_name du compte bancaire change le compte du compte comptable' do
+      @ba.nickname = 'Un autre nom'
+      @ba.save
+      @ba.accounts.last.title.should == 'Un autre nom'
+    end
+
     
 
     context 'avec deux exercices' do

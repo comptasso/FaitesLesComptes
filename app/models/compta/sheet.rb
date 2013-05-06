@@ -82,12 +82,14 @@ module Compta
         csv << [@name.capitalize] # par ex Actif
         csv << entetes  # la ligne des titres
         datas.fetch_lines.each do |rubs|
-          csv << (@sens==:actif ? prepare_line(rubs.total_actif) : format_line(rubs.total_passif))
+          csv << prepare_line(rubs.total_actif)
         end
       end
     end
 
 
+    # TODO il serait mieux de faire une classe Sheets qui serait alors une collection
+    # 
     # utilisé pour le csv de l'action index
     def to_index_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|

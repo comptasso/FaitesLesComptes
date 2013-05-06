@@ -85,10 +85,7 @@ class MonthYear
     MonthYear.from_date(@date.years_ago(1))
   end
 
-  # nombre de jous du mois représenté
-  def nb_jour_mois
-    end_of_month.day
-  end
+  
 
   # trouve la date la plus adaptée. Date du jour si Date.today est dans le mois,
   # sinon début du mois si Date.today est ancien

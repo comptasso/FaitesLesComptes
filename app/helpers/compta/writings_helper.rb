@@ -20,7 +20,7 @@ module Compta::WritingsHelper
     link_to_function(name, "add_fields(this, 'compta_lines', \"#{escape_javascript(fields)}\")")
   end
 
-  # Réfinit les actions disponibles pour l'affichage des writings dans compta
+  # Rédefinit les actions disponibles pour l'affichage des writings dans compta
   #
   # Les règles sont les suivantes :
   # - lorsque le livre est OD

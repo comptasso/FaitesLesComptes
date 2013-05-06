@@ -35,11 +35,18 @@ describe Utilities::NotPointedLines do
     @npls.total_credit.should == 13
   end
 
-  it 'total_credit renvoie le total de ses lignes ' do
+  it 'total_debit renvoie le total de ses lignes ' do
     @ar = double(Arel)
     @npls = Utilities::NotPointedLines.new(@ba)
     @npls.stub(:lines).and_return([mock_model(ComptaLine, :debit=>3), mock_model(ComptaLine, :debit=>3)])
     @npls.total_debit.should == 6
+  end
+
+  it 'et peut aussi calculer le solde' do
+    @npls = Utilities::NotPointedLines.new(@ba)
+    @npls.stub(:total_credit).and_return 12
+    @npls.stub(:total_debit).and_return 5
+    @npls.sold.should == 7
   end
 
  
