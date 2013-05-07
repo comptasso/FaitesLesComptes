@@ -74,7 +74,7 @@ module Compta
       @total_general.collection.first
     end
 
-# TODO voir si preprare_line et format_line ne devrait pas faire une seule méthode
+
 # 
     # utilisé pour le csv de l'option show
     def to_csv(options = {col_sep:"\t"})
@@ -82,14 +82,12 @@ module Compta
         csv << [@name.capitalize] # par ex Actif
         csv << entetes  # la ligne des titres
         datas.fetch_lines.each do |rubs|
-          csv << prepare_line(rubs.total_actif)
+          csv << (@sens==:actif ? prepare_line(rubs.total_actif) : format_line(rubs.total_passif))
         end
       end
     end
 
 
-    # TODO il serait mieux de faire une classe Sheets qui serait alors une collection
-    # 
     # utilisé pour le csv de l'action index
     def to_index_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
