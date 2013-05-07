@@ -60,9 +60,19 @@ describe Compta::RubrikLine do
     
   end
 
-  it 'to_a rencoie les 4 valeurs' do 
+  it 'to_a rencoie les 5 valeurs' do
     @rl = Compta::RubrikLine.new(p, :actif, '201')
     @rl.to_a.should == ['201 - Un compte', 120,0,120,14]
+  end
+
+  it 'to_passif renvoie un array avec le titre, le net et le previous_net' do
+    @rl = Compta::RubrikLine.new(p, :actif, '201')
+    @rl.to_passif.should == ['201 - Un compte', 120,14]
+  end
+
+  it 'to actif est un alial de to_a' do
+    @rl = Compta::RubrikLine.new(p, :actif, '201')
+    @rl.to_actif.should == @rl.to_a
   end
 
   it 'une rubrique line a une profondeur de -1' do

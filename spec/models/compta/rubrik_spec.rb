@@ -114,8 +114,20 @@ describe Compta::Rubrik do
       @r.previous_net.should == 28 # 4 fois 7 car il y a 4 comptes (201 206 208 et le -2801)
     end
 
+  end
+
+  describe 'autres méthodes' do
+
+    before(:each) do
+      @r = Compta::Rubrik.new(@p, 'Immobilisations incorporelles',  :actif, '20 201 206 207 208 -2801')
+    end
+
     it 'la profondeur est 0' do
       @r.depth.should == 0
+    end
+
+    it 'total_passif contruit un array avec le titre, le net et le previous_net' do
+      @r.total_passif.should == ['Immobilisations incorporelles', 105.0, 0]
     end
 
   end
