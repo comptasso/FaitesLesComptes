@@ -79,7 +79,7 @@ include OrganismFixture
   it 'peut rendre un csv avec un sens passif' do
     lr = list_rubriks
     lr[:sens]=:passif
-    cs = Compta::Sheet.new(@p, list_rubriks, 'ACTIF')
+    cs = Compta::Sheet.new(@p, lr, 'PASSIF')
     cs.to_index_csv
   end
 

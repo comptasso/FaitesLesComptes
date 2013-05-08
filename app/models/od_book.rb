@@ -11,7 +11,7 @@ class OdBook < Book
     true
   end
 
-
+  # TODO simplifier la requête (voire en faire une méthode de comptalines
   def cumulated_at(date, dc)
     p = organism.find_period(date)
     val = p ? writings.joins(:compta_lines).period(p).where('date <= ?', date).sum(dc) : 0

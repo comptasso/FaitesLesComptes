@@ -525,11 +525,8 @@ class Period < ActiveRecord::Base
   # permet de s'assurer que les dates d'ouverture et de clôture
   # sont respectivement des dates de début et de fin de mois.
   def fix_days
-    if Period.find(:last) && !start_date
-      self.start_date= Period.find(:last).close_date + 1
-    end
-    self.start_date = self.start_date.beginning_of_month if start_date
-    self.close_date = self.close_date.end_of_month if close_date
+    self.start_date = start_date.beginning_of_month if start_date
+    self.close_date = close_date.end_of_month if close_date
   end
 
   private
