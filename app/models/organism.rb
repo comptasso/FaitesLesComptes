@@ -115,6 +115,8 @@ class Organism < ActiveRecord::Base
   end
 
 
+
+
  
 
   # retourne le nombre d'exercices ouverts de l'organisme

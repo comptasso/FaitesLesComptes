@@ -99,7 +99,8 @@ class Period < ActiveRecord::Base
   after_create :create_plan, :create_bank_and_cash_accounts, :load_natures ,:unless=> :previous_period?
   after_create :copy_accounts, :copy_natures, :if=> :previous_period?
  
-  before_destroy :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
+  before_destroy  :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
+  
 
  
  
@@ -196,7 +197,7 @@ class Period < ActiveRecord::Base
     # il faut un exercice suivant
     self.errors.add(:close, "Pas d'exercice suivant") unless next_period? 
     # il faut un livre d'OD
-    self.errors.add(:close, "Il manque un livre d'OD pour passer l'écriture de report") unless organism.books.find_by_type('OdBook')
+    self.errors.add(:close, "Il manque un livre d'OD pour passer l'écriture de report") if organism.od_books.empty?
     # il faut un compte pour le report du résultat
     self.errors.add(:close, "Pas de compte 12 pour le résultat de l'exercice") unless next_period.report_account
 
@@ -542,6 +543,8 @@ class Period < ActiveRecord::Base
     # utilisation de send car create_accounts est une méthode protected
     organism.bank_accounts.each {|ba| ba.send(:create_accounts)}
     organism.cashes.each {|c| c.send(:create_accounts)}
+    accounts(true) # pour mettre à jour la relation avec les comptes
+    # sinon une création et une destruction dans la foulée (cas des tests) laisse une trace de ces deux comptes
   end
 
   # recopie les comptes de l'exercice précédent (s'il y en a un) en modifiant period_id.

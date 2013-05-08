@@ -3,16 +3,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c| 
-  # c.filter = {wip:true}
+ #  c.filter = {wip:true}
 end
 
 describe Period do
   include OrganismFixture
   context 'un organisme' do 
 
-    before(:each) do
-      create_organism
-    end
+    
 
     def valid_params
       {start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year}
@@ -21,88 +19,85 @@ describe Period do
 
     describe 'validations' do
 
+      before(:each) do
+        @org = mock_model(Organism)
+        @p  = Period.new(valid_params)
+        @p.organism_id = @org.id
+      end
+
       it 'est valide' do
-        @p = @o.periods.new(valid_params)
         @p.should be_valid
       end
 
       it 'non valide sans organism' do
-        @p = Period.new(valid_params)
+        @p.organism_id = nil
         @p.should_not be_valid
       end
 
       it 'non valide sans close_date' do
-        @p = @o.periods.new(valid_params)
         @p.close_date = nil
         @p.should_not be_valid
       end
 
       it 'non valide si close date est < start_date' do
-        @p = @o.periods.new(valid_params)
         @p.close_date = @p.start_date - 60 
         @p.should_not be_valid
       end
 
       it 'ne peut durer plus de 24 mois' do
-        @p = @o.periods.new(valid_params)
         @p.close_date = @p.close_date + 400
         @p.should_not be_valid
       end
 
       it 'appelle fix_days avant la validation' do
-        @p = @o.periods.new(valid_params)
         @p.should_receive(:fix_days)
         @p.valid?
       end
 
       it 'fix_days remplit start_date si un exercice précédent et pas de start_date'  do
-        @p = @o.periods.new(valid_params)
-        @p.start_date = nil
         Period.stub(:find).with(:last).and_return(stub_model(Period, close_date:(Date.today.beginning_of_year - 1)))
         @p.valid?
         @p.start_date.should == Date.today.beginning_of_year
       end
 
       it 'ne peut avoir un trou dans les dates' do
-        @p = @o.periods.new(valid_params)
         @p.stub(:previous_period?).and_return true
         @p.stub(:previous_period).and_return(stub_model(Period, :close_date=>Date.today.end_of_year.years_ago(2)))
         @p.should_not be_valid
         @p.errors[:start_date].first.should match 'ne peut avoir un trou dans les dates'
       end
 
-      it 'les dates ne peuvent être modifiées' do
-        @p = @o.periods.create!(valid_params)
-        @p.close_date = @p.close_date.months_ago(1)
-        @p.should_not be_valid
-      end
+      
 
-
-
-      it 'ne peut être réouvert' do
-        @p = @o.periods.create!(valid_params)
-        @p.update_attribute(:open, false)
-        @p.open = true
-        @p.should_not be_valid
-      end
-
-      it 'n est pas valide si plus de deux exercices ouverts' do
-        Organism.any_instance.stub(:nb_open_periods).and_return 2
-        expect { @o.periods.create(valid_params)}.not_to change {Period.count}
+      it 'n est pas valide si plus de deux exercices ouverts', wip:true do
+       @p.stub(:organism).and_return(mock_model(Organism, :nb_open_periods=>2))
+       expect {@p.save}.not_to change {Period.count}
+       @p.save
+       @p.errors[:base].first.should == 'Impossible d\'avoir plus de deux exercices ouverts'
         
       end
 
     end
+
+    
   
-    describe 'la création implique'  do
+    describe 'les call_back after_create font'  do
+      
       before(:each) do
+
+        @org = mock_model(Organism, :nb_open_periods=>1, :status=>'Association')
+        @p  = Period.new(valid_params)
+        @p.organism_id = @org.id
         
-        @p = @o.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
-        
+        @p.stub(:organism) {@org}
+        @p.stub(:create_bank_and_cash_accounts).and_return true
+        @p.save!
       end
+     
     
       it 'la création des comptes' do
-        @p.accounts(true).count.should == 89
+        @p.accounts(true).count.should == 87 # la liste des comptes du plan comptable
+        # on n' aps les deux comptes de caisse et banque car on a stubbé create_bank_and_cash_accounts
       end
 
       it 'la création des natures : 10 natures de dépenses et 6 de recettes '  do
@@ -119,41 +114,66 @@ describe Period do
         @p.should_not be_valid
       end
 
-    end
+      describe 'après création' do
 
-    describe 'destroyable?' do
-      it 'est destructible si le premier ou le dernier' do
-        d = Date.today.beginning_of_year
-        3.times do |i|
-         d = Date.today.beginning_of_year.years_since(i)
-         p = @o.periods.create(start_date:d, close_date:d.end_of_year)
-         p.update_attribute('open', false)
-        end
-        @o.periods.first.should be_destroyable
-        @o.periods.second.should_not be_destroyable
-        @o.periods.last.should be_destroyable
-        
+      it 'les dates ne peuvent être modifiées' do
+
+        @p.close_date = @p.close_date.months_ago(1)
+        @p.should_not be_valid
       end
 
+      it 'ne peut être réouvert' do
+        
+        @p.update_attribute(:open, false)
+        @p.open = true
+        @p.should_not be_valid
+      end
+
+
+    end
+
+    end
+
+    describe 'un exercice est destroyable?' do
+      
+      before(:each) do
+        @p = Period.new(valid_params)
+      end
+
+      it 's il est le premier' do
+        @p.stub('previous_period?').and_return false
+        @p.should be_destroyable
+      end
+
+      it 's il est le dernier' do
+        @p.stub('next_period?').and_return false
+        @p.should be_destroyable
+      end
+
+      it 'mais pas autrement' do
+        @p.stub('next_period?').and_return true
+        @p.stub('previous_period?').and_return true
+        @p.should_not be_destroyable
+      end
+
+      
 
     end
 
     describe 'load_-file_natures - cas d une erreur'  do
-
+    
       it 'avec une erreur load_file_natures renvoie []' do
-        d = Date.today.beginning_of_year
-         p = @o.periods.new(start_date:d, close_date:d.end_of_year)
-         p.send(:load_file_natures, 'inconnu').should == []
+        Period.new(valid_params).send(:load_file_natures, 'inconnu').should == []
       end
 
 
     end
 
-    describe 'les fonctionnalités pour trouver un mois'  do
-
+    describe 'les fonctionnalités pour trouver un mois'   do
+      
       before(:each )do
         # un exercice de mars NN à avril NN+1
-        @p = @o.periods.new(start_date: Date.today.beginning_of_year.months_since(2), close_date:Date.today.end_of_year.months_since(4))
+        @p = Period.new(start_date: Date.today.beginning_of_year.months_since(2), close_date:Date.today.end_of_year.months_since(4))
       end
 
       it 'find_month renvoie un mois si 11'  do
@@ -175,24 +195,143 @@ describe Period do
 
     end
   
-    
+    describe 'two_period_accounts'  do
+
+      before(:each) do
+        @p1 = Period.new
+        @p2 = Period.new
+      end
+
+      it 'renvoie la liste des comptes si pas d ex précédent' do
+        @p1.stub(:account_numbers).and_return %w(un deux trois)
+        @p1.stub('previous_period?').and_return false
+        @p1.two_period_account_numbers.should == %w(un deux trois)
+      end
+
+      it 'fait la fusion des listes de comptes si ex précédent'  do
+        @p2.should_receive(:previous_period?).and_return true
+        @p2.stub_chain(:previous_period, :account_numbers).and_return  ['bonsoir', 'salut']
+        @p2.stub(:account_numbers).and_return(['alpha', 'salut'])
+        @p2.two_period_account_numbers.should == ['alpha', 'bonsoir', 'salut']
+      end
+
+      it 'sait retourner le compte de même number'  do
+        @p2.stub(:previous_period?).and_return true
+        @p2.stub(:previous_period).and_return(@ar = double(Arel))
+        acc13 = mock_model(Account, number:'2801')
+        @ar.should_receive(:accounts).and_return @ar
+        @ar.should_receive(:find_by_number).with('2801').and_return(acc10 = mock_model(Account))
+        @p2.previous_account(acc13).should == acc10
+      end
+
+
+      it 'sans compte corresondant previous_account retourne nil' do
+        @p2.stub(:previous_period?).and_return true
+        @p2.stub(:previous_period).and_return(@ar = double(Arel))
+        acc13 = mock_model(Account, number:'2801')
+        @ar.should_receive(:accounts).and_return @ar
+        @ar.should_receive(:find_by_number).with('2801').and_return(nil)
+        @p2.previous_account(acc13).should == nil
+      end
+
+    end
+
+    # test de la clôture d'un exercice
+    # on a donc ici 3 exercices
+    describe 'closable?'  do
+
+      def error_messages
+        @nat_error = "Des natures ne sont pas reliées à des comptes"
+        @open_error = 'Exercice déja fermé'
+        @previous_error = "L'exercice précédent n'est pas fermé"
+        @line_error = "Toutes les lignes d'écritures ne sont pas verrouillées"
+        @next_error = "Pas d'exercice suivant"
+        @od_error = "Il manque un livre d'OD pour passer l'écriture de report"
+      end
+
+      before(:each) do
+        @p = Period.new(valid_params, :open=>true)
+        @p.stub('accountable?').and_return true
+        @p.stub('next_period?').and_return true
+        @p.stub(:next_period).and_return(@np = mock_model(Period, :report_account=>'oui'))
+        @p.stub(:previous_period).and_return(@pp = mock_model(Period, :open=>false))
+        @p.stub_chain(:compta_lines, :unlocked).and_return []
+        @p.stub(:organism).and_return mock_model(Organism, :od_books=>[mock_model(OdBook)])
+        error_messages
+      end
+
+      it 'p feut être fermé' do
+        @p.closable?.should == true
+      end
+      context 'test des messages d erreur' do
+
+        it 'ne peut être ferme si on ne peut pas passer une écriture' do
+          @p.should_receive('accountable?').and_return false
+          @p.closable?
+          @p.errors[:close].should == [@nat_error]
+        end
+
+      
+
+        it 'un exercice déja fermé ne peut être fermé' do
+          @p.should_receive(:open).and_return(false)
+          @p.closable?
+          @p.errors[:close].should == [@open_error]
+        end
+
+        it 'non fermeture de l exercice précédent' do
+          @p.should_receive(:previous_period?).and_return true
+          @p.should_receive(:previous_period).and_return(@a=double(Period))
+          @a.should_receive(:open).and_return true
+          @p.closable?
+          @p.errors[:close].should == [@previous_error]
+        end
+
+        it 'des lignes non verrouillées' do
+          @p.should_receive(:compta_lines).at_least(1).times.and_return( @a = double(Arel) )
+          @a.should_receive(:unlocked).at_least(1).times.and_return(@a)
+          @a.should_receive(:any?).at_least(1).times.and_return true
+          @p.closable?
+          @p.errors[:close].should == [@line_error]
+        end
+
+        it 'doit avoir un exercice suivant' do
+          @p.should_receive(:next_period?).and_return(false)
+          @p.closable?
+          @p.errors[:close].should == [@next_error]
+        end
+
+        it 'doit avoir un livre d OD' do
+          @p.should_receive(:organism).and_return(@a=double(Arel))
+          @a.should_receive(:od_books).and_return @a
+          @a.should_receive('empty?').and_return true
+          @p.closable?
+          @p.errors[:close].should == [@od_error]
+        end
+
+
+      end
+
+     
+
+
+    end
+
   
 
     context 'avec deux exercices' do
- 
+      
       before(:each) do
-    
-        @p_2010 = @o.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
-        @p_2011= @o.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
-        @ba = @o.bank_accounts.create!(bank_name:'DebiX', number:'123Z', nickname:'Compte épargne')
+        @org = create_organism
+        @p_2010 = @org.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
+        @p_2011= @org.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
+        @ba = @org.bank_accounts.create!(bank_name:'DebiX', number:'123Z', nickname:'Compte épargne')
       end
 
       describe 'compte de remise de chèque' do
   
         it 'avec un compte le retourne' do
           @p_2010.rem_check_account.number.should == REM_CHECK_ACCOUNT[:number]
-          # il ne doit y avoir qu'un seul compte
-          @p_2010.accounts.where('number = ?', REM_CHECK_ACCOUNT[:number]).should have(1).account
         end
       end
    
@@ -207,119 +346,9 @@ describe Period do
         end
       end
 
-      describe 'two_period_accounts' do
-        it 'renvoie la liste des comptes si pas d ex précédent' do
-          @p_2010.two_period_account_numbers.should == @p_2010.account_numbers
-        end
+    
 
-        it 'fait la fusion des listes de comptes si ex précédent'  do
-          @p_2011.should_receive(:previous_period?).and_return true
-          @p_2011.stub_chain(:previous_period, :account_numbers).and_return  ['bonsoir', 'salut']
-          @p_2011.stub(:account_numbers).and_return(['alpha', 'salut'])
-          @p_2011.two_period_account_numbers.should == ['alpha', 'bonsoir', 'salut']
-        end
-
-        it 'sait retourner le compte de même number'  do
-          @p_2011.stub(:previous_period?).and_return true
-          @p_2011.stub(:previous_period).and_return(@ar = double(Arel))
-          acc13 = mock_model(Account, number:'2801')
-          @ar.should_receive(:accounts).and_return @ar
-          @ar.should_receive(:find_by_number).with('2801').and_return(acc10 = mock_model(Account))
-          @p_2011.previous_account(acc13).should == acc10
-        end
-        
-        it 'sait retourner le compte de même number (test sans should_receive)' do
-          acc11 = @p_2011.accounts.find_by_number('201')
-          @p_2011.previous_account(acc11).number.should == '201'
-        end
-
-        it 'sans compte corresondant previous_account retourne nil' do
-          acc11 = mock_model(Account, number:'999')
-          @p_2011.previous_account(acc11).should == nil
-        end
-
-      end
-
-
-      # test de la clôture d'un exercice
-      # on a donc ici 3 exercices
-      describe 'closable?'  do
-
-        def error_messages
-          @nat_error = "Des natures ne sont pas reliées à des comptes"
-          @open_error = 'Exercice déja fermé'
-          @previous_error = "L'exercice précédent n'est pas fermé"
-          @line_error = "Toutes les lignes d'écritures ne sont pas verrouillées"
-          @next_error = "Pas d'exercice suivant"
-          @od_error = "Il manque un livre d'OD pour passer l'écriture de report"
-        end
-
-        before(:each) do
-
-          error_messages
-        end
-
-        it 'p2010 should not be_closable' do
-          @p_2010.natures.create!(name:'nouvelle', income_outcome:false)
-          @p_2010.closable?
-          @p_2010.errors[:close].should == [@nat_error]
-        end
-
-        context 'test des autres messages d erreur' do
-
-          it 'un exercice déja fermé ne peut être fermé' do
-            @p_2010.should_receive(:open).and_return(false)
-            @p_2010.closable?
-            @p_2010.errors[:close].should == [@open_error]
-          end
-        
-          it 'non fermeture de l exercice précédent' do
-            @p_2010.should_receive(:previous_period?).and_return true
-            @p_2010.should_receive(:previous_period).and_return(@a=double(Period))
-            @a.should_receive(:open).and_return true
-            @p_2010.closable?
-            @p_2010.errors[:close].should == [@previous_error]
-          end
-
-          it 'des lignes non verrouillées' do
-            @p_2010.should_receive(:compta_lines).at_least(1).times.and_return( @a = double(Arel) )
-            @a.should_receive(:unlocked).at_least(1).times.and_return(@b = double(Arel))
-            @b.should_receive(:any?).at_least(1).times.and_return true
-            @p_2010.compta_lines.unlocked.any?.should be_true
-            @p_2010.closable?
-            @p_2010.errors[:close].should == [@line_error]
-          end
-
-          it 'doit avoir un exercice suivant' do
-            @p_2010.should_receive(:next_period?).and_return(false)
-            @p_2010.stub_chain(:compta_lines, :unlocked, :any?).and_return(false)
-            @p_2010.closable?
-            @p_2010.errors[:close].should == [@next_error]
-          end
-
-          it 'doit avoir un livre d OD' do
-            @p_2010.should_receive(:organism).and_return   @o
-            @o.should_receive(:books).and_return(@a=double(Arel))
-            @a.should_receive(:find_by_type).with('OdBook').and_return nil
-            @p_2010.stub_chain(:compta_lines, :unlocked, :any?).and_return(false)
-            @p_2010.closable?
-            @p_2010.errors[:close].should == [@od_error]
-          end
-
-
-        end
-
-        it 'quand tout est bon'  do
-          @p_2010.should_receive(:accountable?).and_return(true)
-          @p_2010.should_receive(:next_period).at_least(1).and_return(@p_2011)
-          @p_2011.should_receive(:report_account).and_return(mock_model(Account, number:'12'))
-          #   puts @p_2010.errors[:close].messages unless @p_2010.closable?
-          @p_2010.should be_closable
-        end
-
-
-
-      end
+   
 
       describe 'close' do
 
@@ -415,7 +444,7 @@ describe Period do
           @p_2011.nomenclature.should be_an_instance_of(Compta::Nomenclature)
         end
 
-         it 'report à nouveau renvoie une ComptaLine dont le montant est le résultat et le compte 12'  do
+        it 'report à nouveau renvoie une ComptaLine dont le montant est le résultat et le compte 12'  do
           @p_2011.send(:report_a_nouveau).should be_an_instance_of(ComptaLine)
         end
 
@@ -538,40 +567,52 @@ describe Period do
       end
     end
   end
-  
-  describe 'destruction d un exercice', :wip=>true do
 
+  describe 'destruction des comptes' do
+
+    before(:each) do
+#      r = Room.find_by_database_name('boom')
+#      r.destroy if r
+#      path = ["#{Rails.root}", 'db', 'test', 'organisms', 'boom.sqlite3' ].join('/')
+#      File.delete(path) if File.exist?(path)
+#      room = Room.new(:database_name=>'boom')
+#      room.user_id = 1
+#      room.valid?
+#      puts room.errors.messages unless room.valid?
+#      room.save!
+      @org = Organism.create!(title:'boom', status:'Association', :database_name=>'boum')
+      @period = @org.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
+    end
+
+    it 'a un organisme' do
+      @org.should be_an_instance_of(Organism)
+    end
+
+    it 'a un exercice' do
+      @period.should be_an_instance_of(Period)
+      @period.accounts.count.should == 89
+    end
+
+    it 'destruction de l exercice', wip:true do
+      @period.destroy
+      @period.accounts.count.should == 0
+    end
+
+
+  end
+
+  
+  describe 'destruction d un exercice'  do
+    
     before(:each) do
       create_minimal_organism
       @w = create_in_out_writing
-   #   puts "Nombre de comptes #{Account.count}"
     end
 
     it 'détruit les natures' do
       Nature.count.should == 18
       @p.destroy
       Nature.count.should == 0
-    end
-
-    # TODO à effacer quand on aura réglé le pending qui suit
-    it 'cherher l erreur' do
-  #
-        @baca.destroy
- #     puts test
- #     puts "Nombre de comptes après destruction de @baca  #{Account.count}"
-      @p.destroy
-      Period.count.should == 0 
-    end
-
-    it 'détruit les comptes' do
-      pending 'reste bizarrement deux comptes celui de la banque et de la caisse mais fonctionne en réalité'
-      # TODO voir pour simplifier ces tests du modèle et passer à un test d'intégration
-      acs = Account.count
-      pacs = @p.accounts.count
-      pid = @p.id
-      @p.destroy
-      @p.accounts(true).each {|a| puts "Compte #{a.number} - #{a.title} - exercice #{a.period_id} - @p : #{pid}"}
-      Account.count.should == (acs-pacs)
     end
 
     it 'détruit les écritures' do
@@ -587,9 +628,9 @@ describe Period do
       before(:each) do
         ActiveRecord::Base.connection.execute('DELETE FROM bank_extract_lines_lines')
         BankExtractLine.delete_all
-       @be =  @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month, begin_sold:0, total_debit:0, total_credit:99)
-       @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@w.support_line])
-       @be.save!
+        @be =  @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month, begin_sold:0, total_debit:0, total_credit:99)
+        @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@w.support_line])
+        @be.save!
       end
 
       it 'testing bel' do
@@ -608,9 +649,6 @@ describe Period do
         @p.destroy 
         nbl = ActiveRecord::Base.connection.execute('SELECT COUNT(*) FROM bank_extract_lines_lines').first['COUNT(*)']
         nbl.should == 0
-#        
-#        nbl = ActiveRecord::Base.connection.execute('SELECT COUNT(*) FROM bank_extract_lines_lines').first['COUNT(*)']
-#        puts "Nombre de lignes dans la table jointe : #{nbl}"
       end
 
     end

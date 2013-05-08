@@ -99,6 +99,7 @@ protected
    n = Account.available('512') # un compte 512 avec un précision de deux chiffres par défaut
    organism.periods.where('open = ?', true).each do |p|
      self.accounts.create!(number:n, period_id:p.id, title:nickname)
+     
    end
  end
 
