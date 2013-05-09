@@ -46,4 +46,5 @@ LIST_STATUS = %w(Association Entreprise)
 # version 0.6.5 : corrections de bugs, page avertissant sur la version de IE
 # version 0.6.6 : rebalayage ds fonctionnalités, nombreux petits bugs, gestion de la suppression des exercices
 # version 0.6.7 : encore un grand coup de balayage des fonctionnalités et multiples corrections diverses.
-VERSION = '0.6.7'
+# version 0.6.8 : couverture du programme par les test à 99,9%. Il reste 13 lignes non couvertes liées à l'environnement de test
+VERSION = '0.6.8'
