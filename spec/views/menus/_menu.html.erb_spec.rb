@@ -78,7 +78,7 @@ describe "menus/_menu.html.erb" do
       end
 
       it 'affiche le menu Virement', wip:true do
-        assert_select('ul#menu_general').should have_content ('TRANSFERTS')
+        page.find('ul#menu_general').should have_content ('TRANSFERTS')
       end
 
       it 'affiche le sous menu Afficher' do

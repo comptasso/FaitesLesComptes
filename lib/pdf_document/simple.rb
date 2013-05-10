@@ -102,7 +102,7 @@ module PdfDocument
     # construit l'ensemble des pages et le met dans la variable d'instance
     # @pages qui agit comme un cache
     def pages
-      @pages ||= (1..nb_pages).collect {|i| PdfDocument::Page.new(i, self)}
+      @pages ||= (1..nb_pages).collect { |i| PdfDocument::Page.new(i, self) }
     end
 
     # permet d'appeler la page number

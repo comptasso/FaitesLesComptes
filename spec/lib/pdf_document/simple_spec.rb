@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'spec_helper'
+require 'spec_helper'  
 load 'pdf_document/simple.rb'
 require 'pdf_document/page'
 
@@ -36,7 +36,9 @@ describe PdfDocument::Simple do
     end
 
     it 'sait fabriquer une page' do
-      PdfDocument::Page.should_receive(:new).with(1, @simple)
+      PdfDocument::Page.should_receive(:new).with(1, @simple).exactly(1).times.and_return 'bonjour'
+      PdfDocument::Page.should_receive(:new).with(2, @simple).exactly(1).times.and_return 'bonjour bonjour'
+      PdfDocument::Page.should_receive(:new).with(3, @simple).exactly(1).times.and_return 'bonjour bonjour bonjour'
       @simple.page(1)
     end
 
