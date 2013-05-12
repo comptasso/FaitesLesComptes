@@ -139,13 +139,7 @@ class Room < ActiveRecord::Base
   # ENV['OCRA_EXECUTABLE'] est l'environnement pour la version .exe sous Windows
   #
   def self.path_to_db
-    if Rails.env == 'test'
       File.join(Rails.root, 'db', Rails.env, 'organisms')
-    elsif ENV['OCRA_EXECUTABLE']
-      File.join(ENV['OCRA_EXECUTABLE'], '..', 'db', Rails.env, 'organisms')
-    else
-      File.join(Rails.root, '..', 'db', Rails.env, 'organisms')
-    end
   end
 
   # renvoie par exemple 'app/db/test/organisms/asso.sqlite3'

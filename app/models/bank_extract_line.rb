@@ -114,6 +114,7 @@ class BankExtractLine < ActiveRecord::Base
     BankExtractLine.transaction do
       bel.destroy
       cls.each {|cl| compta_lines << cl}
+      # TODO afficher aussi le fichier concerné pour mieux tracer
       if Rails.env == 'test'
         puts errors.messages unless valid?
         compta_lines.each {|cl| puts "ComptaLine #{cl.debit} #{cl.credit} #{cl.errors.messages}" unless cl.valid?}

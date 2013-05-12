@@ -5,7 +5,7 @@
 #   gem 'sqlite3'
 development:
   adapter: sqlite3
-  database: ../db/development/development.sqlite3
+  database: db/development/development.sqlite3
   pool: 5
   timeout: 5000
 
@@ -32,18 +32,18 @@ assotest2:
 
 production:
   adapter: sqlite3
-  database: ../db/production/production.sqlite3
+  database: db/production/production.sqlite3
   pool: 5
   timeout: 5000
 
 ocra:
   adapter: sqlite3
-  database: <%= File.expand_path('../db/ocra/ocra.sqlite3', ENV['OCRA_EXECUTABLE']) %>
+  database: db/ocra/ocra.sqlite3
   pool: 5
   timeout: 5000
 
 staging:
   adapter: sqlite3
-  database: ../db/staging/staging.sqlite3
+  database: db/staging/staging.sqlite3
   pool: 5
   timeout: 5000
