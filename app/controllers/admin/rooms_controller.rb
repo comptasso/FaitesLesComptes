@@ -14,6 +14,7 @@
 class Admin::RoomsController < Admin::ApplicationController
 
   skip_before_filter :find_organism, :current_period
+  after_filter :clear_org_cache, only:[:create]
 
   # affiche la liste des bases appartenant au current_user
   def index
@@ -122,6 +123,9 @@ class Admin::RoomsController < Admin::ApplicationController
       redirect_to admin_organism_url(@room.organism)
     end
   end
+
+
+  
 
 
   

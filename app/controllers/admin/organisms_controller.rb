@@ -7,7 +7,7 @@ class Admin::OrganismsController < Admin::ApplicationController
   skip_before_filter :find_organism, :current_period, only:[:index, :new] 
   before_filter :use_main_connection, only:[:index, :new, :destroy]
 
-  after_filter :clear_org_cache, only:[:create, :update]
+  after_filter :clear_org_cache, only:[:update]
 
   
   # GET /organisms/1
@@ -47,32 +47,6 @@ class Admin::OrganismsController < Admin::ApplicationController
   end
 
 
-
-#  # DELETE /organisms/1
-#  # DELETE /organisms/1.json
-#  def destroy
-#    @organism = Organism.find(params[:id])
-#    if @organism.destroy
-#      session[:period] = session[:org_db] = nil
-#
-#
-#      redirect_to admin_organisms_url
-#    else
-#      render
-#    end
-#
-#  end
-
-  protected
-
-  
-   # appelé par after_filter pour effacer les caches utilisés pour l'affichage
-   # des menus
-   def clear_org_cache
-     Rails.cache.clear("saisie_#{current_user.name}")
-     Rails.cache.clear("admin_#{current_user.name}")
-     Rails.cache.clear("compta_#{current_user.name}")
-   end
 
  
 end
