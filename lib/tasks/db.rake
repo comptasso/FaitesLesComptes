@@ -5,18 +5,7 @@
 
 
 namespace :db do
-  #  namespace :schema do
-  #    # desc 'Dump additional database schema'
-  #    task :dump => [:environment, :load_config] do
-  #      filename = "#{Rails.root}/db/schema.rb"
-  #      File.open(filename, 'w:utf-8') do |file|
-  #        ActiveRecord::Base.establish_connection("assotest1")
-  #        ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, file)
-  #         ActiveRecord::Base.establish_connection("assotest2")
-  #        ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, file)
-  #      end
-  #    end
-  #  end
+  
 
   # task rajoutée pour avoir des tables test sur 3 bases de données
   # est appelée notamment par db:test:prepare

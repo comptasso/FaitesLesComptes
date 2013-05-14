@@ -22,19 +22,14 @@ namespace :ocra do
   desc "OCRA : création des répertoires et de la base de données"
   task :setup  do
     
-    jc_create_dir("../db/ocra/organisms")
-    jc_create_dir("../logs")
+    jc_create_dir("db/ocra/organisms")
+    jc_create_dir("logs")
     puts "Setup de la base ocra"
     default = Rails.application.config.database_configuration['ocra']
     ActiveRecord::Base.establish_connection(default)
     Rake::Task["db:schema:load"].invoke
   end
 
-#  desc "OCRA : création du fichier exe"
-#  task :build_exe do
-#    Dir.chdir("..") do
-#      `ruby ocra FaitesLesComptes\start.rb FaitesLesComptes --output FaitesLesComptes-v0.4.1.exe --add-all-core --dll ssleay32-1.0.0-msvcrt.dll --dll sqlite3.dll --icon FaitesLesComptes/public/favicon.ico   --gemfile FaitesLesComptes/Gemfile --no-dep-run --gem-full --chdir-first --no-lzma -- server -e ocra`
-#    end
-#  end
+
 
 end

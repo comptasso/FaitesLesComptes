@@ -59,7 +59,7 @@ namespace :landlord do
   
   desc "Création des répertoires et des bases de données"
   task :create_directories => :environment do
-    d = "../db/#{Rails.env}"
+    d = "db/#{Rails.env}"
     if File.directory?(d)
       puts "#{d} existe déjà; passage à l'étape suivante"
     else
@@ -74,7 +74,7 @@ namespace :landlord do
 
 
     puts 'Création du sous répertoire /organisms, lequel recevra les bases individuelles des différents organismes'
-    d = "../db/#{Rails.env}/organisms"
+    d = "db/#{Rails.env}/organisms"
     if File.directory?(d)
       puts  "#{d} existe déjà; passage à l'étape suivante"
     else
