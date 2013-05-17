@@ -32,6 +32,12 @@ gem 'jquery-rails'
 gem 'mongrel'
 
 
+group :ocra do
+  # le gem ocra a été patché sur la partie Windows (voir start.rb)
+  # il est donc important de garder la même version
+  gem 'ocra', '1.3.0'
+end
+
 # Deploy with Capistrano
 # gem 'capistrano'
 
@@ -52,7 +58,5 @@ group :development, :test do
   gem 'capybara', '1.1.2'
   
 
-#  gem 'jasmine'
-  
-  # gem 'database_cleaner'
+
 end
