@@ -26,7 +26,7 @@ namespace :ocra do
 	task :build_installer =>[:clean, :copy_files] do
 		Dir.chdir('..')
 		puts 'appel de ocra'
-		system "ocra FaitesLesComptes/start.rb FaitesLesComptes --output FaitesLesComptes.exe --add-all-core --dll ssleay32-1.0.0-msvcrt.dll --dll sqlite3.dll --icon FaitesLesComptes/public/favicon.ico   --gemfile FaitesLesComptes/Gemfile --gem-full --no-dep-run --chdir-first --no-lzma --innosetup flc2.iss -- server mongrel -e ocra"
+		system "ocra FaitesLesComptes/start.rb FaitesLesComptes --output FaitesLesComptes.exe --add-all-core --dll ssleay32-1.0.0-msvcrt.dll --dll sqlite3.dll --icon FaitesLesComptes/public/favicon.ico   --gemfile FaitesLesComptes/Gemfile --gem-full --no-dep-run --chdir-first --no-lzma --innosetup flc2.iss "
 	end
  
 end
