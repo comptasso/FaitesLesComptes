@@ -16,9 +16,9 @@
 # ocra FaitesLesComptes\start.rb FaitesLesComptes --output FaitesLesComptes.exe --add-all-core --dll ssleay32-1.0.0-msvcrt.dll --dll sqlite3.dll --icon FaitesLesComptes/public/favicon.ico   --gemfile FaitesLesComptes/Gemfile --gem-full --no-dep-run --chdir-first --no-lzma --innosetup flc2.iss -- server mongrel -e ocra
 #
 
-require './config/initializers/all_constants.rb'
 
-puts "Demarrage de FaitesLesComptes, version #{VERSION}, logiciel open-source de comptabilite de tresorerie et de comptabilite simplifiee"
+
+puts "Demarrage de FaitesLesComptes, version 0.7.0, logiciel open-source de comptabilite de tresorerie et de comptabilite simplifiee"
 puts ''
 puts "=== lancement de ruby on rails - merci de patienter (de 30s a 1mn selon la vitesse de votre ordinateur)"
 load 'script/rails'
