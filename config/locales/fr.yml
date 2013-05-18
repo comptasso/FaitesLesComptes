@@ -279,6 +279,7 @@ fr:
         no_period: Pas d'exercice
         no_modif: '%{attribute} non modifiable'
         locked: Record verrouillé
+        invalid: non valide
       models:
         cash_control:
           attributes:

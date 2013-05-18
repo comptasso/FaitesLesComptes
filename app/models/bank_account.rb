@@ -13,8 +13,9 @@ class BankAccount < ActiveRecord::Base
 
   attr_accessible :number, :bank_name, :comment, :nickname
 
-  validates :number, :uniqueness=>{:scope=>[:organism_id, :bank_name]}
-  validates :bank_name, :number, :nickname,  presence: true
+  validates :number, :uniqueness=>{:scope=>[:organism_id, :bank_name]}, :format=>{with:NAME_REGEX}, presence: true
+  validates :bank_name, :nickname , presence: true, :format=>{with:NAME_REGEX}
+  
 
   after_create :create_accounts
   after_update :change_account_title, :if=> lambda {nickname_changed? }
