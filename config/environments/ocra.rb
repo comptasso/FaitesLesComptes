@@ -35,7 +35,9 @@ Faitesvoscomptes::Application.configure do
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new
- 
+  log_file = File.expand_path('log/flc.log', ENV['OCRA_EXECUTABLE'])
+  config.logger = ActiveSupport::BufferedLogger.new(log_file)
+
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
 
