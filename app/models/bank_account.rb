@@ -1,5 +1,23 @@
 # -*- encoding : utf-8 -*-
 
+
+
+
+# Classe représentant les comptes bancaires.
+# Les champs sont
+#   - bank_name pour le nom de la Banque
+#   - number pour le numéro de compte
+#   - nickname pour le surnom par exemple compte courant ou compte sur livret.
+#
+# Un lien est établi entre le compte bancaire et la compta par les callbacks
+#   - after_crate appelle la création du compte comptable (create_accounts)
+#   - after_update permet de mettre à jour le libellé de ce compte comptable si on
+#   change le nickname
+#
+# Il y a un compte comptable par exercices, ce qui explique qu'il y a has_many :accounts
+# Ce lien permet d'accéder aux compta_lines
+#
+#
 class BankAccount < ActiveRecord::Base
   include Utilities::JcGraphic
 
@@ -22,7 +40,9 @@ class BankAccount < ActiveRecord::Base
   after_update :change_account_title, :if=> lambda {nickname_changed? }
   
 
- def current_account(period)
+ # renvoie le premier (mais en fait l'unique) compte comptable correspondant 
+ # à ce compte banciare pour un exercice donné
+  def current_account(period)
    accounts.where('period_id = ?', period.id).first
  end
 
