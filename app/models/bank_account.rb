@@ -15,6 +15,7 @@ class BankAccount < ActiveRecord::Base
 
   validates :number, :uniqueness=>{:scope=>[:organism_id, :bank_name]}, :format=>{with:NAME_REGEX}, presence: true
   validates :bank_name, :nickname , presence: true, :format=>{with:NAME_REGEX}
+  validates :comment, :format=>{with:NAME_REGEX}
   
 
   after_create :create_accounts
