@@ -7,6 +7,8 @@ namespace :ocra do
 	
 	desc 'nettoyage des fichiers tmp et log'
 	task :clean do
+    puts 'creation du fichier flc.log'
+    file 'log/flc.log' # car non suivi par git
 		puts 'Nettoyage des fichiers logs'
 		Rake::Task["log:clear"].invoke
 		puts 'Nettoyage des fichiers tmp'
@@ -19,6 +21,7 @@ namespace :ocra do
 		puts 'copie des fichiers' 
 		cp 'flc2.iss', '../flc2.iss'
 		cp 'public/favicon.ico', '../favicon.ico'
+
 	end
 	
 	
