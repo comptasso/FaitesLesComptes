@@ -19,11 +19,10 @@ class Cash < ActiveRecord::Base
   # un caisse a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
   
+  validates :name, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :uniqueness=>{:scope=>:organism_id}
+  validates :comment, :format=>{with:NAME_REGEX}, :maximum=>MAX_COMMENT_LENGTH, :allow_blank=>true
+  validates :organism_id, :presence=>true
  
-
-  validates :name, :presence=>true, :uniqueness=>{:scope=>:organism_id}
-  validates :organism_id, :presence=> true
-
   
   after_create :create_accounts
   after_update :change_account_title, :if=> lambda {name_changed? }

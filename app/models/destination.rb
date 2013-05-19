@@ -8,7 +8,9 @@ class Destination < ActiveRecord::Base
   has_many :compta_lines
 
   validates :organism_id, :presence=>true
-  validates :name, :presence=>true, uniqueness:true
+  validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
+  validates :comment, :format=>{with:NAME_REGEX}, :maximum=>MAX_COMMENT_LENGTH, :allow_blank=>true
+  validates :income_outcome, :inclusion=>{:in=>[true, false]}
 
   default_scope order: 'name ASC'
 

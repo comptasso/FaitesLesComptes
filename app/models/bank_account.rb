@@ -38,6 +38,7 @@ class BankAccount < ActiveRecord::Base
     :length=>{within:NAME_LENGTH_LIMITS}
   validates :bank_name, :nickname , presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :maximum=>MAX_COMMENT_LENGTH, :allow_blank=>true
+  validates :organism_id, :presence=>true
  
   after_create :create_accounts
   after_update :change_account_title, :if=> lambda {nickname_changed? }
