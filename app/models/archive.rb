@@ -13,6 +13,8 @@ class Archive < ActiveRecord::Base
   attr_reader :collect
 
   attr_accessible :comment
+
+  validates_length_of :comment, :maximum=>MAX_COMMENT_LENGTH
  
   # affiche le titre de l'archive à partir de l'organisme et de la date de création
   def title

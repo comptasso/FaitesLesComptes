@@ -30,7 +30,7 @@ LIST_STATUS = %w(Association Entreprise)
 NAME_LENGTH_MIN = 3
 NAME_LENGTH_MAX = 30
 NAME_LENGTH_LIMITS = NAME_LENGTH_MIN..NAME_LENGTH_MAX
-COMMENT_LENGTH_MAX = 150
+MAX_COMMENT_LENGTH = 150
 
 # 0.3 insertion du champ nickname dans BankAccount
 # VERSION = '0.4'

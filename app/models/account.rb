@@ -7,9 +7,7 @@
 #
 
 # Les comptes peuvent être actifs ou non. Etre actif signifie qu'on peut
-# enregistrer des écritures. Ainsi les comptes 10, 20 ...
-# ne doivent a priori pas être actifs. Dans la vue index, ils sont en gris et en gras.
-
+# enregistrer des écritures. 
 
 
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development
@@ -27,6 +25,7 @@ class Account < ActiveRecord::Base
 
   # period_id est nécessaire car lors de la création d'un compte bancaire ou d'une caisse,
   # il faut créer des comptes en fournissant le champ period_id
+  # TODO revoir ce point car on peut le gérer autrement
   attr_accessible :number, :title, :used, :period_id
 
   belongs_to :period
@@ -37,14 +36,18 @@ class Account < ActiveRecord::Base
   has_many :compta_lines, :dependent=>:destroy
   
 
-  # un compte a plusieurs transferts (en fait c'est limité aux comptes bancaires et caisses)
-  # TODO peut être rajouter un :conditions
+  # un compte peut avoir plusieurs transferts (en fait c'est limité aux comptes bancaires et caisses)
+  #
+  # Dans un transfer, il y a deux champs form_account_id et to_account_id. Les has_many qui suivent
+  # permettent de s'y référer
+  # TODO peut être rajouter un :conditions sur la classe 5 du compte
   has_many :d_transfers, :as=>:to_account, :class_name=>'Transfer'
   has_many :c_transfers, :as=>:from_account, :class_name=>'Transfer'
 
   # la validator cant_change est dans le répertoire lib/validators
   validates :period_id, :title, :presence=>true
-  validates :number, :presence=>true, :format=>{:with=>/\A[1-9]{1}[0-9]{1}[A-Z0-9]{0,8}\Z/}, :cant_change=>true 
+  validates :number, :presence=>true, :format=>{:with=>/\A[1-9]{1}[0-9]{1}[A-Z0-9]{0,8}\Z/}, :cant_change=>true
+  validates :title, presence: true, :format=>{with:NAME_REGEX}
   validates_uniqueness_of :number, :scope=>:period_id
 
   # TODO être sur que period est valide (par exemple on ne doit pas

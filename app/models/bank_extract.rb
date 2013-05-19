@@ -13,9 +13,9 @@ class BankExtract < ActiveRecord::Base
   belongs_to :bank_account 
   has_many :bank_extract_lines, dependent: :destroy 
   
-  
+  validates :reference, :format=>{with:NAME_REGEX}, :length=>{maximum:15}, :allow_blank=>true
+
   validates :begin_sold, :total_debit, :total_credit,:presence=>true, :numericality=>true, :two_decimals => true
-    # :format=>{with:/(^\d+(\.\d{0,2})?$|^\.\d{0,2}$)/}
   validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date , :cant_edit=>true, :if=>Proc.new {|r| r.locked?}
 
   validates :begin_date, :end_date, :presence=>true  
