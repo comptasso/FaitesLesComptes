@@ -17,6 +17,7 @@ class Room < ActiveRecord::Base
 
   validates :user_id, presence:true
   validates :database_name, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*\z/}, uniqueness:true
+  
 
   after_create :create_db, :connect_to_organism
   

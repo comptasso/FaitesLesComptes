@@ -70,7 +70,8 @@ class Organism < ActiveRecord::Base
   before_validation :fill_version
   after_create :create_default
 
-  validates :title, :version, :presence=>true
+  validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
+  validates :description, :format=>{with:NAME_REGEX}, :maximum=>MAX_COMMENT_LENGTH, :allow_blank=>true
   validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/\A[a-z][0-9a-z]*\z/, message:'format incorrect'}
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
 

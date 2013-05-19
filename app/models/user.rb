@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   
   has_many :rooms, :dependent=>:destroy
 
-  validates :name, presence:true
+  validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
 
   def enter_first_room
     rooms.first
