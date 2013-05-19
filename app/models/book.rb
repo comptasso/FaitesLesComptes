@@ -26,7 +26,10 @@ class Book < ActiveRecord::Base
 
  
   # TODO introduce uniqueness and scope
-  validates :title, :abbreviation, presence: true
+
+  validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
+  validates :abbreviation, presence: true, :format=>{:with=>/\A[A-Z]{1}[A-Z0-9]{1,3}\Z/}
+  validates :description, :format=>{with:NAME_REGEX}, :maximum=>MAX_COMMENT_LENGTH, :allow_blank=>true
   
   def book_type
     self.class.name
