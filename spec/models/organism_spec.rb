@@ -9,7 +9,7 @@ RSpec.configure do |c|
 end
 
 describe Organism do
-  include OrganismFixture
+  include OrganismFixture 
 
 
   def valid_attributes

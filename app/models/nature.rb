@@ -25,7 +25,7 @@ class Nature < ActiveRecord::Base
   validates :period_id, :presence=>true
   validates :account_id, :fit_type=>true
   validates :name, presence: true,  :uniqueness=>{ :scope=>[:income_outcome, :period_id] }, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
-  validates :comment, :format=>{with:NAME_REGEX}, :maximum=>MAX_COMMENT_LENGTH, :allow_blank=>true
+  validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :income_outcome, :inclusion=>{:in=>[true, false]}
 
 

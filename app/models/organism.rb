@@ -71,7 +71,7 @@ class Organism < ActiveRecord::Base
   after_create :create_default
 
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
-  validates :description, :format=>{with:NAME_REGEX}, :maximum=>MAX_COMMENT_LENGTH, :allow_blank=>true
+  validates :description, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/\A[a-z][0-9a-z]*\z/, message:'format incorrect'}
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
 
@@ -250,7 +250,7 @@ class Organism < ActiveRecord::Base
     logger.debug  'création livre recettes'
     outcome_books.create(abbreviation:'AC', title:'Dépenses', description:'Dépenses')
     logger.debug 'creation livre dépenses'
-    od_books.create(abbreviation:'OD', :title=>'Opérations diverses', description:'Op° Diverses')
+    od_books.create(abbreviation:'OD', :title=>'Opérations diverses', description:'Opérations Diverses')
     logger.debug 'creation livre OD'
     create_an_book(abbreviation:'AN', :title=>'A nouveau', description:'A nouveau')
 

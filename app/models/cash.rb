@@ -20,7 +20,7 @@ class Cash < ActiveRecord::Base
   has_many :accounts, :as=> :accountable
   
   validates :name, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :uniqueness=>{:scope=>:organism_id}
-  validates :comment, :format=>{with:NAME_REGEX}, :maximum=>MAX_COMMENT_LENGTH, :allow_blank=>true
+  validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :organism_id, :presence=>true
  
   

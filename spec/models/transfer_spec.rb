@@ -3,17 +3,17 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
-  # c.filter = {wip:true}
+ #  c.filter = {wip:true}
 end
 
-describe Transfer  do
+describe Transfer  do 
   include OrganismFixture 
 
   def valid_new_transfer
     t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id
     t.add_lines(112)
     t.compta_lines.first.account_id = @cba.id
-    t.compta_lines.last.account_id = @cbb.id 
+    t.compta_lines.last.account_id = @cbb.id  
     t
   end
  
@@ -30,8 +30,9 @@ describe Transfer  do
       @t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id
     end
 
+   
     it 'le montant est nul' do
-      
+     
     @t.add_lines(0)
     @t.compta_lines.first.account_id = @cba.id
     @t.compta_lines.last.account_id = @cbb.id
@@ -47,7 +48,7 @@ describe Transfer  do
     @t.errors.messages[:amount].should == ['doit être un nombre positif']
     end
 
-    it 'ne peut avoir plus de 2 lignes' , wip:true do
+    it 'ne peut avoir plus de 2 lignes'  do
       @t.add_lines(5)
       @t.compta_lines.new(debit:15, account_id:58)
       @t.valid?
@@ -264,7 +265,7 @@ describe Transfer  do
           expect {@t.destroy}.not_to change {ComptaLine.count}
         end
 
-        it 'destroy the transfer is impossible if any line locked' , wip:true do  
+        it 'destroy the transfer is impossible if any line locked' do
           l = @t.line_from
           l.locked.should be_false 
           l.locked = true

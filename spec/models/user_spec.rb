@@ -10,10 +10,36 @@ describe User do
     @u = User.new
   end
 
-  it 'need a name' do
-    
+  describe 'validations' do
+  
+  it 'exige un nom' do
     @u.should_not be_valid
-    @u.should have(1).errors_on(:name)
+    @u.should have(3).errors_on(:name) # Obligatoire, caractère non admis et trop court
+  end
+
+    it 'ni trop court' do
+      @u.name ='Ab'
+      @u.should_not be_valid
+      @u.errors.messages[:name].should == ['Trop court']
+    end
+
+     it 'ni trop long' do
+      @u.name ='Abcdefghijklmnopqrstuvwxyzabcde'
+      @u.should_not be_valid
+      @u.errors.messages[:name].should == ['Trop long']
+    end
+
+     it 'ni avec des caractères interdits' do
+      @u.name ='Abcde)'
+      @u.should_not be_valid
+      @u.errors.messages[:name].should == ['Caractères non admis']
+    end
+
+    it 'mais juste comme il faut' do
+      @u.name ='Jean Claude Lepage'
+      @u.should be_valid
+
+    end
 
   end
 

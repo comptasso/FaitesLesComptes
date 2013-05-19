@@ -10,7 +10,9 @@ describe BankAccount do
   include OrganismFixture 
 
   def create_bank_account
-    BankAccount.new(:bank_name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
+    ba = BankAccount.new(:bank_name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
+    ba.organism_id = 1
+    ba
   end
 
   

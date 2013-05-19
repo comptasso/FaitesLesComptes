@@ -1,7 +1,6 @@
 # coding: utf-8
 
 
-
 # REM_CHECK_ACCOUNT sert à créer et retrouver le compte remise chèque
 # period.rem_check_account retourne ce compte ou le crée;
 # Il est accountable car cela permet de le traiter à peu près comme un bank_account ou un cash.
@@ -31,6 +30,8 @@ NAME_LENGTH_MIN = 3
 NAME_LENGTH_MAX = 30
 NAME_LENGTH_LIMITS = NAME_LENGTH_MIN..NAME_LENGTH_MAX
 MAX_COMMENT_LENGTH = 150
+
+
 
 # 0.3 insertion du champ nickname dans BankAccount
 # VERSION = '0.4'

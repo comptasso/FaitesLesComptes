@@ -1,5 +1,7 @@
 # coding: utf-8
 
+
+
 # La tables books représente les livres. 
 # Une sous classe IncomeOutcomeBook représente les livres de recettes et de dépénses
 # chacun au travers de leur classe dérivée (IncomeBook et OutcomeBook)
@@ -24,12 +26,12 @@ class Book < ActiveRecord::Base
 
   scope :in_outs, where(:type=> ['IncomeBook', 'OutcomeBook'])
 
- 
+  
   # TODO introduce uniqueness and scope
 
-  validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
+  validates :title, presence: true, :format=>{:with=>NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :abbreviation, presence: true, :format=>{:with=>/\A[A-Z]{1}[A-Z0-9]{1,3}\Z/}
-  validates :description, :format=>{with:NAME_REGEX}, :maximum=>MAX_COMMENT_LENGTH, :allow_blank=>true
+  validates :description, :format=>{:with=>NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   
   def book_type
     self.class.name

@@ -18,7 +18,7 @@
 # Ce lien permet d'accéder aux compta_lines
 #
 #
-class BankAccount < ActiveRecord::Base
+class BankAccount < ActiveRecord::Base 
   include Utilities::JcGraphic
 
   belongs_to :organism
@@ -37,7 +37,7 @@ class BankAccount < ActiveRecord::Base
     :format=>{with:NAME_REGEX},
     :length=>{within:NAME_LENGTH_LIMITS}
   validates :bank_name, :nickname , presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
-  validates :comment, :format=>{with:NAME_REGEX}, :maximum=>MAX_COMMENT_LENGTH, :allow_blank=>true
+  validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :organism_id, :presence=>true
  
   after_create :create_accounts
