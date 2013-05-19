@@ -16,4 +16,4 @@ ALNUM = '[a-zA-Z0-9]|[\u00e0-\u00ff]'    # chiffre, lettre et caractères accent
 ALNUMEND = '[a-zA-Z0-9]|[\u00e0-\u00ff]|[\.]' # les mêmes plus le point final
 WORDCHARS =  '[a-zA-Z0-9]|[\u00e0-\u00ff]|\s|[\u0153@&_\-\'\.,]' # les mêmes plus les espaces, @&-', et .
 WORD = "((#{ALNUM})((#{WORDCHARS})*(#{ALNUMEND}))?)"  # on regroupe le tout
-NAME_REGEX = /^#{WORD}$/ # pour obtenir le regex
+NAME_REGEX = /\A#{WORD}\Z/ # pour obtenir le regex

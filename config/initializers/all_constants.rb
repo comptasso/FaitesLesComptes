@@ -22,10 +22,15 @@ PAYMENT_MODES = %w(CB Chèque Espèces Prélèvement Virement)
 BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
 
 # constante utilisée dans le modèle Room pour trouver le chemin des bases organismes
-# TODO à faire évoluer ultérieurement pour être au choix de l'utilisateur
 PATH_TO_ORGANISMS = 'organisms'
 
 LIST_STATUS = %w(Association Entreprise)
+
+# limites de validation
+NAME_LENGTH_MIN = 3
+NAME_LENGTH_MAX = 30
+NAME_LENGTH_LIMITS = NAME_LENGTH_MIN..NAME_LENGTH_MAX
+COMMENT_LENGTH_MAX = 150
 
 # 0.3 insertion du champ nickname dans BankAccount
 # VERSION = '0.4'

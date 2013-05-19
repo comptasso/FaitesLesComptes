@@ -31,10 +31,14 @@ class BankAccount < ActiveRecord::Base
 
   attr_accessible :number, :bank_name, :comment, :nickname
 
-  validates :number, :uniqueness=>{:scope=>[:organism_id, :bank_name]}, :format=>{with:NAME_REGEX}, presence: true
+  validates :number, 
+    :presence=>true,
+    :uniqueness=>{:scope=>[:organism_id, :bank_name]},
+    :format=>{with:NAME_REGEX}
   validates :bank_name, :nickname , presence: true, :format=>{with:NAME_REGEX}
-  validates :comment, :format=>{with:NAME_REGEX}
-  
+  validates_length_of :number, :bank_name, :nickname, :within=>NAME_LENGTH_LIMITS
+  validates :comment, :format=>{with:NAME_REGEX}, :allow_blank=>true
+  validates_length_of :comment, :maximum=>COMMENT_LENGTH_MAX, :allow_nil=>true
 
   after_create :create_accounts
   after_update :change_account_title, :if=> lambda {nickname_changed? }
