@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-
+require 'strip_arguments'
 
 # La classe Nature permet une indirection entre les comptes d'un exercice
 # et le type de dépenses ou de recettes correspondant
@@ -21,6 +21,8 @@ class Nature < ActiveRecord::Base
   
 
   before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
+
+  strip_before_validation :name, :comment
 
   validates :period_id, :presence=>true
   validates :account_id, :fit_type=>true

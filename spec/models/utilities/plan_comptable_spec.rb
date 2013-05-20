@@ -28,7 +28,7 @@ describe Utilities::PlanComptable do
     end
 
     it 'si p a déja des comptes ne les écrase pas' do
-      @p.accounts.create!(number:101, title:'Fonds associatifs', :period_id=>@p.id)
+      @p.accounts.create!(number:'101', title:'Fonds associatifs', :period_id=>@p.id)
       Utilities::PlanComptable.create_accounts(@p, 'Association').should == 86
       @p.accounts(true).should have(87).accounts
     end

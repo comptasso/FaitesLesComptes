@@ -28,7 +28,7 @@ class Book < ActiveRecord::Base
 
   scope :in_outs, where(:type=> ['IncomeBook', 'OutcomeBook'])
 
-  strip_before_validation(:title, :description, :abbreviation)
+  strip_before_validation :title, :description, :abbreviation
 
   # TODO introduce uniqueness and scope
 

@@ -1,5 +1,7 @@
 # -*- encoding : utf-8 -*-
 
+require 'strip_arguments'
+
 # La classe Organisme est quasiment la tête de toutes les classes du programme.
 # Un organisme a des livres de recettes et de dépenses, mais aussi un livre d'OD et
 # un d'A Nouveau. De même un organisme a un ou des comptes bancaires et une ou 
@@ -70,9 +72,11 @@ class Organism < ActiveRecord::Base
   before_validation :fill_version
   after_create :create_default
 
+  strip_before_validation :title, :description, :database_name
+
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :description, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
-  validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/\A[a-z][0-9a-z]*\z/, message:'format incorrect'}
+  validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/\A[a-z][0-9a-z]*\z/}
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
 
   

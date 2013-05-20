@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 
-
+require 'strip_arguments'
 
 
 # Classe représentant les comptes bancaires.
@@ -31,7 +31,9 @@ class BankAccount < ActiveRecord::Base
 
   attr_accessible :number, :bank_name, :comment, :nickname
 
-  validates :number, 
+  strip_before_validation :number, :bank_name, :comment
+
+  validates :number,
     :presence=>true,
     :uniqueness=>{:scope=>[:organism_id, :bank_name]},
     :format=>{with:NAME_REGEX},

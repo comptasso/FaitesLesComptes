@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-
+require 'strip_arguments'
 class BankExtract < ActiveRecord::Base
   include Utilities::PickDateExtension
 
@@ -11,7 +11,9 @@ class BankExtract < ActiveRecord::Base
     :total_credit, :begin_date_picker, :end_date_picker
   
   belongs_to :bank_account 
-  has_many :bank_extract_lines, dependent: :destroy 
+  has_many :bank_extract_lines, dependent: :destroy
+
+  strip_before_validation :reference
   
   validates :reference, :format=>{with:NAME_REGEX}, :length=>{maximum:15}, :allow_blank=>true
 

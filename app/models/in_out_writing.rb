@@ -1,5 +1,7 @@
 # coding: utf-8
 
+
+
 # une InOutWriting est un type d'écriture qui permet d'enregistrer des lignes de dépenses et
 # de recettes
 #

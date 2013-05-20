@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require 'strip_arguments'
+
 # Writing représente des écritures dans la comptabilité
 #
 # Writing enregistre les informations communes à une écriture telle que la date
@@ -33,7 +35,9 @@ class Writing < ActiveRecord::Base
   belongs_to :book
  
   has_many :compta_lines, :dependent=>:destroy
-  alias children compta_lines 
+  alias children compta_lines
+
+  strip_before_validation :narration, :ref
   
   validates :book_id,  presence:true
   validates :date, presence:true

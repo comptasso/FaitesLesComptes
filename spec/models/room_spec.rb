@@ -15,16 +15,20 @@ describe Room do
   end
 
   it 'has a database_name' do
-    u.rooms.new.should_not be_valid
+    u.rooms.new.should_not be_valid 
   end
 
   it 'database_name is composed of min letters without space - les chiffres sont autorisés mais pas en début' do
     val= ['nom base', 'Nombase', '1nom1base', 'nombase%']
-    val.each do
-      u.rooms.new(database_name:val).should_not be_valid
+    val.each do |db_name|
+      u.rooms.new(database_name:db_name).should_not be_valid
     end
     u.rooms.new(database_name:'unnomdebasecorrect').should be_valid
     u.rooms.new(database_name:'unnom2basecorrect').should be_valid
+  end
+
+  it 'le nom est strippé avant la validation' do
+    u.rooms.new(database_name:'  unnomdebasecorrect  ').should be_valid
   end
 
   it 'save crée le fichier s il n existe pas', wip:true  do

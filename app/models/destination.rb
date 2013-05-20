@@ -1,11 +1,16 @@
 # -*- encoding : utf-8 -*-
 
+require 'strip_arguments'
+
+
 class Destination < ActiveRecord::Base
 
   attr_accessible :name, :comment, :income_outcome
 
   belongs_to :organism
   has_many :compta_lines
+
+  strip_before_validation :name, :comment
 
   validates :organism_id, :presence=>true
   validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}

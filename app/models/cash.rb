@@ -1,5 +1,5 @@
 # coding: utf-8
-
+require 'strip_arguments'
 # La class Cash correspond à une caisse
 #
 class Cash < ActiveRecord::Base
@@ -18,6 +18,8 @@ class Cash < ActiveRecord::Base
   has_many :cash_controls
   # un caisse a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
+
+  strip_before_validation :name, :comment
   
   validates :name, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :uniqueness=>{:scope=>:organism_id}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true

@@ -12,7 +12,7 @@
 
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development
 
-
+require 'strip_arguments'
 require 'pdf_document/simple'
 require 'pdf_document/totalized'
 
@@ -43,6 +43,8 @@ class Account < ActiveRecord::Base
   # TODO peut être rajouter un :conditions sur la classe 5 du compte
   has_many :d_transfers, :as=>:to_account, :class_name=>'Transfer'
   has_many :c_transfers, :as=>:from_account, :class_name=>'Transfer'
+
+  strip_before_validation :number, :title
 
   # la validator cant_change est dans le répertoire lib/validators
   validates :period_id, :title, :presence=>true
