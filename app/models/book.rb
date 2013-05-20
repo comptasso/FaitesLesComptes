@@ -1,6 +1,8 @@
 # coding: utf-8
 
 
+require 'strip_arguments'
+
 
 # La tables books représente les livres. 
 # Une sous classe IncomeOutcomeBook représente les livres de recettes et de dépénses
@@ -26,7 +28,8 @@ class Book < ActiveRecord::Base
 
   scope :in_outs, where(:type=> ['IncomeBook', 'OutcomeBook'])
 
-  
+  strip_before_validation(:title, :description, :abbreviation)
+
   # TODO introduce uniqueness and scope
 
   validates :title, presence: true, :format=>{:with=>NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}

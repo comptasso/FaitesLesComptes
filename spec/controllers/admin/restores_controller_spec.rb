@@ -2,6 +2,10 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
+RSpec.configure do |c|
+  # c.filter = {:wip=>true}
+end
+
 class RestoreError < StandardError; end
 
 describe Admin::RestoresController do 
@@ -56,7 +60,7 @@ describe Admin::RestoresController do
 
     end
 
-    describe 'gestion des anomalies et erreurs' do
+    describe 'gestion des anomalies et erreurs'  do
 
       before(:each) do
         @ro =  mock_model(Room, :user=>cu2, :full_name=>'path_du_fichier.sqlite3', 'save!'=>true)
@@ -72,13 +76,13 @@ describe Admin::RestoresController do
       end
 
 
-      it 'vérifie le format de fichier' do
+      it 'vérifie le format de fichier'   do
         cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, 'save!'=>true))
         post :create, {:file_upload=>fixture_file_upload('spec/fixtures/files/test.biz', 'application/octet-stream'), database_name:'test'}, valid_session
         flash[:alert].should == "L'extension .biz du fichier ne correspond pas aux bases gérées par l'application : .sqlite3"
       end
       
-      it 'vérifie le format de database' do
+      it 'vérifie le format de database'  do
         cu.stub_chain(:rooms, :new).and_return @ro
         @ro.should_receive(:valid?).and_return(false)
         post :create, {:file_upload=>@file, database_name:'2test2'}, valid_session
@@ -92,29 +96,33 @@ describe Admin::RestoresController do
         flash[:alert].should == 'Le contrôle du fichier par SQlite renvoie une erreur'
       end
 
-      context 'vérification de la version' do
+      context 'vérification de la version'  do
 
         before(:each) do
           cu.stub_chain(:rooms, :new).and_return @ro
           @ro.stub(:check_db).and_return true
           @ro.stub(:connect_to_organism).and_return true
-          
         end
-      
-        it 'si la version est same_migration' do
-          
+
+        after(:each) do
+          File.delete('path_du_fichier.sqlite3') if File.exist?('path_du_fichier.sqlite3')
+        end
+
+        it 'redirige vers admin_rooms' do 
           @ro.stub(:relative_version).and_return(:same_migration)
           post :create, {:file_upload=>@file, database_name:'test'}, valid_session
           response.should redirect_to admin_rooms_url
         end
       
-        it 'si la version est différente' do
-          @ro.stub(:relative_version).and_return('something_else')
-
+        it 'si la version est same_migration'  do
+          @ro.stub(:relative_version).and_return(:same_migration)
           post :create, {:file_upload=>@file, database_name:'test'}, valid_session
-          response.should redirect_to admin_rooms_path
+          flash[:notice].should == "Le fichier a été chargé et peut servir de base de données"
         end
-
+      
+        it 'si ce n est pas la même version' do
+          pending 'voir comment on traite cette question car ce n est plus dans restore'
+        end
 
       end
     end

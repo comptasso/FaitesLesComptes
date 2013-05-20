@@ -81,11 +81,11 @@ describe 'vue books index' do
 
   end
 
-  describe 'edit' do
+  describe 'edit' do 
 
     # FIXME js:true a du être rajouté car sinon le click_button ajoute un \n
     # dans les params de description, ce qui crée un caractère invalide et renvoie vers la vue edit
-    it 'On peut changer les deux autres champs', :js=>true  do
+    it 'On peut changer les deux autres champs' do
       bf = @o.books.first
       visit edit_admin_organism_book_path(@o, bf)
       fill_in 'book[title]', :with=>'modif du titre'

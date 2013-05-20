@@ -52,7 +52,7 @@ class Admin::RestoresController < Admin::ApplicationController
       end
 
       File.open(@room.full_name, 'wb') do |file|
-        file.write(uploaded_io.read)
+        file.write(uploaded_io.read) 
       end
 
       @room.save!
