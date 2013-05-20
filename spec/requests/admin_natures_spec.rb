@@ -3,6 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
+#  c.filter = {wip:true}
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true }
 end
@@ -36,13 +37,13 @@ describe 'vue natures index' do
       page.should have_content('Type')
     end
 
-    it 'remplir correctement le formulaire crée une nouvelle nature' do
+    it 'remplir correctement le formulaire crée une nouvelle nature' , wip:true do
       visit new_admin_organism_period_nature_path(@o, @p)
       fill_in 'nature[name]', :with=>'Nature test'
       fill_in 'nature[comment]', :with=>'Une nature pour essayer'
       choose 'Dépenses'
       click_button 'Créer la nature'
-      @p.natures.count.should == 19
+      @p.natures(true).count.should == 19
       @p.natures.last.income_outcome.should be_false
       current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
     end

@@ -13,7 +13,7 @@ describe 'vue transfer index'do
   include OrganismFixture   
 
 
-  before(:each) do 
+  before(:each) do  
     create_user 
     create_minimal_organism
     @bb = @o.bank_accounts.create!(:bank_name=>'Deuxième banque', :number=>'123Y', nickname:'Compte épargne')
@@ -21,7 +21,7 @@ describe 'vue transfer index'do
     login_as('quidam')
   end
 
-  it 'check minimal organism' do
+  it 'check minimal organism' do 
     Organism.count.should == 1
     BankAccount.count.should == 2
     @od.transfers.count.should == 0
@@ -116,7 +116,7 @@ describe 'vue transfer index'do
       alert = page.driver.browser.switch_to.alert
       alert.accept
       sleep 1
-      @od.should have(1).transfers
+      @od.transfers(true).should have(1).virement
     end
 
     it 'on peut le choisir dans la vue index pour le modifier' do

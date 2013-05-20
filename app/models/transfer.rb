@@ -112,15 +112,11 @@ class Transfer < Writing
     to_editable? && from_editable?
   end
 
- 
-  
-  
- 
-
   private
 
   def should_be_destroyable
-    compta_lines.locked.empty?
+    compta_lines(true) # s'assure que les caches sont bien effacés
+    destroyable?
   end
 
 

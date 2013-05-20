@@ -71,7 +71,7 @@ describe Admin::UsersController do
   describe "POST create" do
 
     before(:each) do
-      User.all.each {|u| u.delete}
+      User.delete_all
     end
     
     describe "with valid params" do
@@ -114,7 +114,7 @@ describe Admin::UsersController do
   describe "PUT update" do
 
     before(:each) do
-      User.all.each {|u| u.delete}
+      User.delete_all
     end
 
     describe "with valid params" do
@@ -163,7 +163,7 @@ describe Admin::UsersController do
   describe "DELETE destroy" do
 
     before(:each) do
-      User.all.each {|u| u.delete}
+      User.delete_all
     end
 
     it "destroys the requested user" do

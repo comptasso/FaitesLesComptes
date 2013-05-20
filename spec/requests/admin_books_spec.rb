@@ -6,6 +6,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
  # ActiveRecord::Base.shared_connection = nil
 
 RSpec.configure do |c|
+#  c.filter = {wip:true}
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true }
 end
@@ -75,15 +76,18 @@ describe 'vue books index' do
     it 'on peut le choisir dans la vue index pour le modifier' do
       visit admin_organism_books_path(@o)
       click_link "icon_modifier_book_#{@ob.id.to_s}"
-      page.should have_content("Modification d'un livre")
+      page.should have_content("Modification d'un livre") 
     end
 
   end
 
   describe 'edit' do
 
-    it 'On peut changer les deux autres champs' do
-      visit edit_admin_organism_book_path(@o, @o.books.last)
+    # FIXME js:true a du être rajouté car sinon le click_button ajoute un \n
+    # dans les params de description, ce qui crée un caractère invalide et renvoie vers la vue edit
+    it 'On peut changer les deux autres champs', :js=>true  do
+      bf = @o.books.first
+      visit edit_admin_organism_book_path(@o, bf)
       fill_in 'book[title]', :with=>'modif du titre'
       click_button 'Modifier ce livre'
       current_url.should match /\/admin\/organisms\/#{@o.id}\/books$/

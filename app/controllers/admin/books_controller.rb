@@ -48,7 +48,6 @@ class Admin::BooksController < Admin::ApplicationController
   # PUT /books/1.json
   def update
     @book = Book.find(params[:id])
-    
     respond_to do |format|
       if @book.update_attributes(params[:book])
         format.html { redirect_to admin_organism_books_url(@organism) , notice: 'Le livre a été mis à jour.' }
