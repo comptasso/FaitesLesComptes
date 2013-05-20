@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'spec_helper'
+require 'spec_helper' 
 
 RSpec.configure do |c| 
  #  c.filter = {:wip=>true}
@@ -11,10 +11,10 @@ describe Compta::Balance do
 
 
   before(:each) do
-    create_organism
+    create_organism 
     @p = @o.periods.create!(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     @a1 = @p.accounts.find_by_number('60')
-    @a2 = @p.accounts.find_by_number('603')
+    @a2 = @p.accounts.find_by_number('603') 
   end
 
   it 'has a virtual attributes from_date_picker et to_date_picker' do
@@ -46,7 +46,7 @@ describe Compta::Balance do
 
     describe 'methods' do
 
-      it 'should retrieve period' do
+      it 'should retrieve period', wip:true do
         @b.period_id.should == @p.id
         @b.period.should == @p
       end

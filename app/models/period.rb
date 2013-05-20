@@ -581,14 +581,16 @@ class Period < ActiveRecord::Base
   # TODO améliorer la gestion d'une éventuelle erreur
   # TODO voir aussi si on ne peut utiliser une classe similaire à Utilities::PlanComtpable pour simplifier
   # copy_natures et load_natures et retirer de cette clase également load_file_natures. On pourrait aussi envisager de passer ces callbacks dans un Observer.
-  def load_natures 
+  def load_natures  
     Rails.logger.info 'Création des natures'
     t = load_file_natures("#{Rails.root}/app/assets/parametres/#{organism.status.downcase}/natures.yml")
     t.each do |n|
-      a = accounts.find_by_number(n[:acc])
-      natures.create(name:n[:name], comment:n[:comment], account:a, income_outcome:n[:income_outcome])
+      a = accounts.find_by_number(n[:acc]) 
+       nat = natures.new(name:n[:name], comment:n[:comment], account:a, income_outcome:n[:income_outcome])
+       Rails.logger.warn "#{nat.name} - #{nat.errors.messages}" unless nat.valid?
+       nat.save
     end
-    natures.count
+    natures(true).count
   end
 
   protected

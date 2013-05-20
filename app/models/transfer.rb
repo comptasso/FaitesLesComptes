@@ -18,6 +18,7 @@ class Transfer < Writing
 
   validates :compta_lines, :exactly_two_compta_lines=>true, :not_same_accounts=>true
   validates :amount, :numericality=>{:greater_than=>0, :message=>'doit être un nombre positif'}
+  validates :date, presence:true
 
   before_destroy :should_be_destroyable
 

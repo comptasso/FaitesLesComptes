@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |config|
-   # config.filter = {wip:true}
+   # config.filter = {wip:true} 
 end
 
 describe Writing do

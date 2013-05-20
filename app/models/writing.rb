@@ -35,10 +35,11 @@ class Writing < ActiveRecord::Base
   has_many :compta_lines, :dependent=>:destroy
   alias children compta_lines 
   
-  validates :book_id, :narration, :date, presence:true
+  validates :book_id,  presence:true
+  validates :date, presence:true
   validates :date, :within_period=>true, :nested_period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]} , :unless => 'date.nil?'
-  validates :compta_lines, :two_compta_lines_minimum=>true
-  validates :narration, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
+  validates :compta_lines, presence:true, :two_compta_lines_minimum=>true
+  validates :narration, :format=>{with:NAME_REGEX}, :length=>{:maximum=>60}
   validates :ref, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :allow_blank=>true
   
   validate :balanced?

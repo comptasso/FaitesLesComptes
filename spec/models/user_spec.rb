@@ -7,7 +7,7 @@ describe User do
   let(:o) {mock_model(Organism)}
 
   before(:each) do
-    @u = User.new
+    @u = User.new 
   end
 
   describe 'validations' do
@@ -30,7 +30,7 @@ describe User do
     end
 
      it 'ni avec des caractères interdits' do
-      @u.name ='Abcde)'
+      @u.name ='Abc\\de'
       @u.should_not be_valid
       @u.errors.messages[:name].should == ['Caractères non admis']
     end

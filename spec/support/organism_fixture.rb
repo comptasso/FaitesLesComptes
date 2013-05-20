@@ -80,11 +80,13 @@ module OrganismFixture
     else
       acc_id = @baca.id
     end
-    ecriture = @ib.in_out_writings.create!({date:Date.today, narration:'créée par create_in_out_writing',
+    ecriture = @ib.in_out_writings.new({date:Date.today, narration:'créée par create_in_out_writing',
       :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, credit:montant, payment_mode:payment},
         '1'=>{account_id:acc_id, debit:montant, payment_mode:payment}
       }
     })
+    puts ecriture.errors.messages unless ecriture.valid?
+    ecriture.save!
     ecriture
   end
 

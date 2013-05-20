@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c| 
- #  c.filter = {wip:true}
+   # c.filter = {wip:true}
 end
 
 describe Period do
@@ -616,7 +616,7 @@ describe Period do
     end
 
     it 'détruit les écritures' do
-      @p.compta_lines.count.should > 0
+      @p.compta_lines.count.should > 0 
       Writing.count.should > 0
       @p.destroy
       Writing.count.should == 0

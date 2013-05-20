@@ -37,7 +37,11 @@ class Utilities::PlanComptable
     t = load_accounts
     # TODO gérer ces questions par des erreurs et non par des tests
     if t && !(t.is_a?(String)) # si load_accounts a renvoyé la chaine 'Erreur...
-      t.each {|a| period.accounts.create(a)}
+      t.each do |a|
+        acc = period.accounts.new(a)
+        Rails.logger.warn "#{acc.number} - #{acc.title} - #{acc.errors.messages}" unless acc.valid?
+        acc.save 
+      end
       nb_comptes_crees = period.accounts(true).count - nba
       Rails.logger.info "Création de #{nb_comptes_crees} comptes"
       return nb_comptes_crees # renvoie le nombre de comptes créés

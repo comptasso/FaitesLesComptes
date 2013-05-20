@@ -69,6 +69,11 @@ describe Admin::UsersController do
   end
 
   describe "POST create" do
+
+    before(:each) do
+      User.all.each {|u| u.delete}
+    end
+    
     describe "with valid params" do
       it "creates a new User" do
         expect {
@@ -78,6 +83,7 @@ describe Admin::UsersController do
 
       it "assigns a newly created user as @user" do
         post :create, :user => valid_attributes
+        u = assigns(:user)
         assigns(:user).should be_a(User)
         assigns(:user).should be_persisted
       end
@@ -106,6 +112,11 @@ describe Admin::UsersController do
   end
 
   describe "PUT update" do
+
+    before(:each) do
+      User.all.each {|u| u.delete}
+    end
+
     describe "with valid params" do
       it "updates the requested user" do
         user = User.create! valid_attributes
@@ -150,6 +161,11 @@ describe Admin::UsersController do
   end
 
   describe "DELETE destroy" do
+
+    before(:each) do
+      User.all.each {|u| u.delete}
+    end
+
     it "destroys the requested user" do
       user = User.create! valid_attributes
       expect {

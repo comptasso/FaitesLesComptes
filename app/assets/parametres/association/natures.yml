@@ -28,7 +28,7 @@
   :comment: Les recettes à caractère exceptionnel, per exemple des dommages et intérêts
   :acc: '77'
   :income_outcome: true
-- :name: Achats de marchandises pour revente
+- :name: Achats de march. pour revente
   :comment: Par exemple achats de boissons et de nourriture pour la buvette de l'association
   :acc: '60'
   :income_outcome: false
@@ -58,12 +58,12 @@
   :acc: '641'
   :income_outcome: false
 - :name: Charges sociales
-  :comment: ! 'sur les frais de personnel : Urssaf, arco, agirc, ...'
+  :comment: ! 'sur les frais de personnel - Urssaf, arco, agirc, ...'
   :acc: '645'
   :income_outcome: false
 - :name: Frais financiers
   :comment: ! "Les remboursement des emprunts.\r\nEn fin d'exercice, une écriture
-    devra être passée pour isoler la part intérêt et la part capital.  "
+    devra être passée pour isoler la part intérêt et la part capital."
   :acc: '66'
   :income_outcome: false
 - :name: Exceptionnel

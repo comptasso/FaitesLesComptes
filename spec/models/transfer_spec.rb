@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 describe Transfer  do 
-  include OrganismFixture 
+  include OrganismFixture  
 
   def valid_new_transfer
     t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id

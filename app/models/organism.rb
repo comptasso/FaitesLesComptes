@@ -250,7 +250,7 @@ class Organism < ActiveRecord::Base
     logger.debug  'création livre recettes'
     outcome_books.create(abbreviation:'AC', title:'Dépenses', description:'Dépenses')
     logger.debug 'creation livre dépenses'
-    od_books.create(abbreviation:'OD', :title=>'Opérations diverses', description:'Opérations Diverses')
+    od_books.create(abbreviation:'OD', :title=>'Opérations diverses', description:'Op.Diverses')
     logger.debug 'creation livre OD'
     create_an_book(abbreviation:'AN', :title=>'A nouveau', description:'A nouveau')
 
