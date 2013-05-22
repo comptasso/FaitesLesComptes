@@ -44,4 +44,5 @@ MAX_COMMENT_LENGTH = 300
 # version 0.6.7 : encore un grand coup de balayage des fonctionnalités et multiples corrections diverses.
 # version 0.6.8 : couverture du programme par les test à 99,9%. Il reste 13 lignes non couvertes liées à l'environnement de test
 # version 0.7.0 : remise des bases dans une logique plus proche de Rails, étape vers l'utilisation de schemas
-VERSION = '0.7.0'
+# version 0.7.1 : restrictions sur les caractères utilisés dans les saisies et passage à ruby 2.0
+VERSION = '0.7.1'
