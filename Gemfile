@@ -7,12 +7,12 @@ gem 'simple_form', "~> 2.0.1"
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+gem 'sqlite3', '1.3.7'
 gem 'acts_as_list', '0.1.9'
-gem 'prawn'
-gem 'prawn_rails'
-gem 'haml-rails'
-gem 'browser' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
+gem 'prawn', "~> 0.12"
+gem 'prawn_rails', "0.0.11"
+gem 'haml-rails', "~>0.3"
+gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
 
 
 
@@ -22,20 +22,20 @@ gem 'browser' # utilisé pour détecter la version du navigateur (source github.
 group :assets do
   gem 'sass-rails', "  ~> 3.2.0"
   gem 'coffee-rails', "~> 3.2.0"
-  gem 'uglifier'
+  gem 'uglifier', "1.3.0"
   # gem 'twitter-bootstrap-rails'
 end
 
-gem 'jquery-rails'
+gem 'jquery-rails', "2.1.4"
 
 # Use unicorn as the web server
-gem 'mongrel'
+# gem 'mongrel'
 
 
 group :ocra do
   # le gem ocra a été patché sur la partie Windows (voir start.rb)
   # il est donc important de garder la même version
-  gem 'ocra', '1.3.0'
+  gem 'ocra', '1.3.1'
 end
 
 # Deploy with Capistrano

@@ -1,14 +1,14 @@
-# Trouvé sur le site suivant
+# TrouvÃ© sur le site suivant
 # http://blog.nistu.de/2012/03/25/multi-database-setup-with-rails-and-rspec
-# Modif des tâche db
+# Modif des tÃ¢che db
 #
 
 
 namespace :db do
   
 
-  # task rajoutée pour avoir des tables test sur 3 bases de données
-  # est appelée notamment par db:test:prepare
+  # task rajoutÃ©e pour avoir des tables test sur 3 bases de donnÃ©es
+  # est appelÃ©e notamment par db:test:prepare
   namespace :test do
     desc 'Pour purger et charger les schema des bases de test assotest1 et assotest2'
     task :load_schema do
