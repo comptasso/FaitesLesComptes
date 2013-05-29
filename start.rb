@@ -18,7 +18,7 @@
 
 
 
-puts "Demarrage de FaitesLesComptes, version 0.7.0, logiciel open-source de comptabilite de tresorerie et de comptabilite simplifiee"
+puts "Demarrage de FaitesLesComptes, version 0.7.1, logiciel open-source de comptabilite de tresorerie et de comptabilite simplifiee"
 puts ''
 puts "=== lancement de ruby on rails - merci de patienter (de 30s a 1mn selon la vitesse de votre ordinateur)"
 load 'script/rails'
