@@ -34,7 +34,7 @@ namespace :ocra do
 	end
 		
 	
-	desc 'appel principal et construction de l installer avec ocra'
+	=begin desc 'appel principal et construction de l installer avec ocra'
 	task :build_installer =>[:clean, :copy_files] do
 		Dir.chdir('..')
 		system "bundle install --local --without development test assets"
@@ -44,6 +44,6 @@ namespace :ocra do
 		mv 'Gemfilesave', 'FaitesLesComptes/Gemfile'
 		Dir.chdir('FaitesLesComptes')
 		system "bundle install --local"
-	end
+	end =end
  
 end
