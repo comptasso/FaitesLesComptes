@@ -29,7 +29,7 @@ namespace :ocra do
 	task :ocra =>[:clean, :copy_files] do
 		Dir.chdir('..')
 		puts 'appel de ocra'
-		system "ocra FaitesLesComptes/start.rb FaitesLesComptes --output FaitesLesComptes.exe --add-all-core  --icon FaitesLesComptes/public/favicon.ico   --gemfile FaitesLesComptes/Gemfile --gem-full --no-dep-run --chdir-first --no-lzma  --innosetup flc2.iss -- server -e ocra"
+		system "ocra FaitesLesComptes/start.rb FaitesLesComptes --output FaitesLesComptes.exe --verbose --add-all-core  --icon FaitesLesComptes/public/favicon.ico   --gemfile FaitesLesComptes/Gemfile --gem-full --no-dep-run --chdir-first --no-lzma   -- server -e ocra > log.txt"
 		Dir.chdir('FaitesLesComptes')
 	end
 		
