@@ -32,11 +32,10 @@ gem 'jquery-rails', "2.1.4"
 # gem 'mongrel'
 
 
-group :ocra, :platforms=>:mswin do
+group :ocra do
   # le gem ocra a été patché sur la partie Windows (voir start.rb)
   # il est donc important de garder la même version
   gem 'ocra', '1.3.1'
-  gem 'addressable', '2.3.4' # ajouté car sans cela manque pour l'installation avec Ocra
 end
 
 # Deploy with Capistrano
