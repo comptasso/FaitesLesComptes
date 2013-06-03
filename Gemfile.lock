@@ -57,6 +57,7 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    ffi (1.8.1)
     ffi (1.8.1-x86-mingw32)
     haml (4.0.3)
       tilt
@@ -80,6 +81,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.23)
     multi_json (1.7.4)
+    nokogiri (1.5.9)
     nokogiri (1.5.9-x86-mingw32)
     ocra (1.3.1)
     pdf-reader (1.3.3)
@@ -181,6 +183,7 @@ GEM
       nokogiri (~> 1.3)
 
 PLATFORMS
+  ruby
   x86-mingw32
 
 DEPENDENCIES
