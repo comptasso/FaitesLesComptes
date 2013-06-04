@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   #
   # s'appuie sur organism_with_rooms et ne retien que les accountable?
   def accountable_organisms_with_room
-    organisms_with_room.select {|owr|  owr[:room].look_forg {"accountable?"} }
+    organisms_with_room.select {|owr|  owr[:room].look_for {Organism.first.accountable?} }
   end
 
   # up_to_date effectue un contrôle des bases de l'utilisateur

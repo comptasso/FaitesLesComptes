@@ -81,13 +81,13 @@ describe User do
 
 
     it 'garde les organismes si accountabls?' do
-      @r.stub(:look_forg).and_return true
+      @r.stub(:look_for).and_return true
       @u.accountable_organisms_with_room.should ==  [{:organism=>o, :room=>@r}]
 
     end
 
     it 'mais le retire sinon' do
-      @r.stub(:look_forg).and_return false
+      @r.stub(:look_for).and_return false
       @u.accountable_organisms_with_room.should ==  []
     end
 

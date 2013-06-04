@@ -1,5 +1,9 @@
 # -*- encoding : utf-8 -*-
-require 'spec_helper' 
+require 'spec_helper'
+
+RSpec.configure do |c|
+  # c.filter = {wip:true}
+end
 
 describe Room do
   include OrganismFixture
@@ -31,14 +35,16 @@ describe Room do
     u.rooms.new(database_name:'  unnomdebasecorrect  ').should be_valid
   end
 
-  it 'save crée le fichier s il n existe pas', wip:true  do
+  it 'save crée le fichier s il n existe pas'  do
     r = u.rooms.new(database_name:'unnomdebasecorrect')
+    puts r.full_name
     File.delete(r.full_name) if File.exist? r.full_name
-    r.save 
+    r.save
     File.exist?(r.full_name).should be_true
   end
 
   it 'le nom de base doit être unique' do
+    Apartment::Database.adapter.drop('foo') if File.exist?(File.join(Room.path_to_db, 'foo.sqlite3'))
     u.rooms.find_or_create_by_database_name('foo')
     r = u.rooms.new(valid_attributes)
     r.should_not be_valid
@@ -56,9 +62,9 @@ describe Room do
       @r.db_filename.should == 'foo.monadapteur'
     end
 
-    it 'absolute_db_name retourne le chemin complet de la base' do
+    it 'full_name retourne le chemin complet de la base' do
       Room.stub(:path_to_db).and_return('mon_chemin')
-      @r.absolute_db_name.should == File.join('mon_chemin', @r.db_filename)
+      @r.full_name.should == File.join('mon_chemin', @r.db_filename)
     end
 
     it 'la base est en retard si organism_migration est inférieure à room' do
@@ -96,39 +102,11 @@ describe Room do
       @r.should be_no_base
     end
 
-
-
-
-
   end
 
   describe 'tools' do
     before(:each) do
-      @r = Room.find_or_create_by_user_id_and_database_name(1, 'assotest1')
-    end
-
-    describe 'look_forg' do
-
-      it 'should comme back using the main connection' do
-        cc = ActiveRecord::Base.connection_config
-        Organism.stub(:first).and_return(double(Organism, accountable?:true))
-        @r.look_forg {"accountable?"}
-        ActiveRecord::Base.connection_config.should == cc 
-      end
-
-      it 'should connect to la base assotest1' do
-        Organism.stub(:first).and_return(double(Organism, accountable?:true))
-        @r.should_receive(:connect_to_organism).and_return true
-        @r.look_forg {"accountable?"}
-      end
-
-      it 'retourne la valeur trouvée' do
-        
-        Organism.should_receive(:first).and_return(double(Organism, accountable?:25))
-        @r.look_forg {"accountable?"}.should == 25
-      end
-
-
+      @r = room_and_base('assotest1')
     end
 
     describe 'connnect_to_organism' do
@@ -136,45 +114,32 @@ describe Room do
         @r.connect_to_organism.should be_true
       end
 
-      it 'renvoie false si le fichier n est pas trouvé' do
-        File.stub(:exist?).and_return false
-        @r.connect_to_organism.should be_false
-      end
-
-      it 'peut se faire avec enter et l id de la Room' do
-        Room.should_receive(:find_by_id).with(5).and_return(double(Room, :enter=>true))
-        Room.enter(5).should be_true
-      end
-
-      it 'renvoie nil si l id n existe pas' do
-        Room.should_receive(:find_by_id).with(5).and_return(nil)
-        Room.enter(5).should be_nil
-      end
-      
-      
+      it 'appelle Apartment.reset si le fichier n est pas trouvé', wip:true do
+       @r.database_name = nil
+       @r.connect_to_organism
+       Apartment::Database.current.should == 'test'
+     end
+     
     end
-
-   
+  
 
     describe 'check_db' do
 
       it 'check_db contrôle l intégrité de la base' do
-        @r.stub(:connect_to_organism).and_return true
-        ActiveRecord::Base.connection.should_receive(:execute).with('pragma integrity_check').and_return(['integrity_check'=>'ok'])
+        ActiveRecord::Base.connection.stub(:execute).with('pragma integrity_check').and_return(['integrity_check'=>'ok'])
         @r.check_db.should be_true
       end
 
       it 'indique si pas de réponse' do
-        @r.stub(:connect_to_organism).and_return true
-        ActiveRecord::Base.connection.should_receive(:execute).with('pragma integrity_check').and_return('n importe quoi')
-        @r.check_db.should be_false
+        ActiveRecord::Base.connection.stub(:execute).with('pragma integrity_check').and_return('n importe quoi')
+        @r.check_db #.should be_false
       end
 
     end
 
     describe 'look_for' do
 
-      it 'retourne la valeur demandée par le bloc' do
+      it 'retourne la valeur demandée par le bloc' , wip:true do
         Organism.should_receive(:first).and_return('Voilà')
         @r.look_for {Organism.first}.should == 'Voilà'
       end
@@ -184,17 +149,21 @@ describe Room do
 
     describe 'organism' do
       it 'retourne l organisme correspondant à cette base' do
-        @r.should_receive(:connect_to_organism).and_return true
-        Organism.should_receive(:first).and_return(@o = double(Organism))
-        @r.organism.should == @o
+        Organism.stub(:first).and_return('un organisme')
+        @r.organism.should == 'un organisme'
       end
     end
 
 
-    describe 'version_update and migrate_each' do
+    
+  end
+
+  describe 'version_update and migrate_each' do
 
       before(:each) do
         Room.find_each {|r| r.destroy}
+        Apartment::Database.adapter.drop('assotest1') if File.exist?(File.join(Room.path_to_db, 'assotest1.sqlite3'))
+        Apartment::Database.adapter.drop('assotest2') if File.exist?(File.join(Room.path_to_db, 'assotest2.sqlite3'))
         @r1 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest1')
         @r2 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest2')
         @r1.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest1',  :status=>'Association') if Organism.all.empty?}
@@ -213,6 +182,5 @@ describe Room do
       end
 
     end
-  end
 
 end

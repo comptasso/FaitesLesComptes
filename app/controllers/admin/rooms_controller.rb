@@ -69,6 +69,7 @@ class Admin::RoomsController < Admin::ApplicationController
     @organism = Organism.new(params[:organism])
 
     # vérifie que le fichier de base de données n'existe pas
+    # TODO Faire un message différent que le fichier existe déjà pour éviter de donner une info
     if File.exist? @organism.full_name
       errors= 'Le fichier existe déja; Si vous voulez travailler avec ce fichier, vous devez restaurer l\'organism par le menu Restauration'
       @organism.errors.add(:base, 'fichier déja présent')

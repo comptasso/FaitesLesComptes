@@ -14,19 +14,19 @@ development:
 # Do not set this db to the same as development or production.
 test:
   adapter: sqlite3
-  database: db/test.sqlite3
+  database: db/test/test.sqlite3
   pool: 5
   timeout: 5000
 
 assotest1:
   adapter: sqlite3
-  database: db/test/organisms/assotest1.sqlite3
+  database: db/test/assotest1.sqlite3
   pool: 5
   timeout: 5000
 
 assotest2:
   adapter: sqlite3
-  database: db/test/organisms/assotest2.sqlite3
+  database: db/test/assotest2.sqlite3
   pool: 5
   timeout: 5000
 

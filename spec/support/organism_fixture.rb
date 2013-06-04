@@ -66,6 +66,24 @@ module OrganismFixture
     Cash.delete_all
   end
 
+  # Renvoie une room qui correspond à une base de données
+  def room_and_base(name)
+    filename = name + '.sqlite3'
+    r = Room.find_by_database_name(name)
+    b = File.exist?(File.join(Rails.root, 'db', Rails.env, filename))
+    # on a 4 cas
+    # b n'existe pas mais r existe
+    return r if r && b
+    Apartment::Database.drop(name) if b  # on avait b mais pas r
+    r.delete if r # on avait r mais pas b
+    # et maintenant on recrée
+    r = Room.new(database_name:name)
+    r.user_id = 1
+    r.save!
+    r
+
+  end
+
   # Malgré son nom, cette méthode ne crée que des écritures de type recettes
   #
   # Utiliser create_outcome_writing pour les écritures de type dépenses

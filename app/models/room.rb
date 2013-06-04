@@ -24,6 +24,7 @@ class Room < ActiveRecord::Base
   after_create :create_db, :connect_to_organism
   
   # renvoie l'organisme associé à la base
+  # TODO utiliser les méthode de apartment en l'occurence process
   def organism
     look_for { Organism.first }
   end
@@ -96,9 +97,25 @@ class Room < ActiveRecord::Base
     result
   end
 
-  def full_name
-    "#{Room.path_to_db}/#{database_name}.sqlite3"
+  # renvoie le lieu de stockage des bases de données
+  def self.path_to_db
+      File.join(Rails.root, 'db', Rails.env)
   end
+
+  # construit le nom du fichier de la base en ajoutant l'adapter comme extension
+  #
+  # renvoie par exemple asso.sqlite3
+  def db_filename
+    [database_name, Rails.application.config.database_configuration[Rails.env]['adapter']].join('.')
+  end
+
+  
+  # renvoie par exemple 'app/db/test/organisms/asso.sqlite3'
+  def full_name
+    File.join(Room.path_to_db, db_filename)
+  end
+
+
 
  
 
@@ -121,7 +138,7 @@ class Room < ActiveRecord::Base
   # effectue la migration de la base associée à la Room
   def migrate
     if connect_to_organism && ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).pending_migrations.any?
-        Rails.logger.info "migrating #{absolute_db_name}"
+        Rails.logger.info "migrating #{full_name}"
         # et appel pour chacun de la migration
         ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
         Organism.first.update_attribute(:version, VERSION) # mise à jour de la version
@@ -130,42 +147,12 @@ class Room < ActiveRecord::Base
 
   
 
-  # renvoie par exemple asso.sqlite3
-  def db_filename
-    [database_name, Rails.application.config.database_configuration[Rails.env]['adapter']].join('.')
-  end
-
-  # pour sortir les bases de données du répertoire de l'application;
-  # 
-  # Les bases de test restent dans la hiérarchie conventionnelle de Rails
-  #
-  # ENV['OCRA_EXECUTABLE'] est l'environnement pour la version .exe sous Windows
-  #
-  def self.path_to_db
-      File.join(Rails.root, 'db', Rails.env, 'organisms')
-  end
-
-  # renvoie par exemple 'app/db/test/organisms/asso.sqlite3'
-  def absolute_db_name
-    File.join(Room.path_to_db, db_filename)
-  end
-
   # se connecte à l'organisme correspondant à la base de données
+  #
+  # Le nom de la base est de la forme development_essai ou production_company_name
   # retourne true ou false
-  # TODO à adapter si on change de base de données
   def connect_to_organism
-    f_name  = absolute_db_name
-    if File.exist? f_name
-      logger.info "Connection à la base #{database_name}"
-      # Renvoie un ActiveRecord::ConectionAdapter::ConnectionPool
-      arca = ActiveRecord::Base.establish_connection(
-        :adapter => "sqlite3",
-        :database  => f_name)
-      return arca ? true : false
-    else
-      logger.warn "Tentative de connection à la base #{database_name}, fichier non trouvé"
-      false
-    end
+    Apartment::Database.switch(database_name)
   end
 
   alias enter connect_to_organism
@@ -203,41 +190,21 @@ class Room < ActiveRecord::Base
   # Usage look_for {Organism.first} (qui est également définie dans cette classe comme méthode organism
   # ou look_for {Archive.last}
   #
-  def look_for(&block)
-    cc = ActiveRecord::Base.connection_config
-    yield if connect_to_organism
-  ensure
-    ActiveRecord::Base.establish_connection(cc)
+  def look_for(&block) 
+     Apartment::Database.process(database_name) {block.call}
   end
 
 
-  # look_forg permet d'éviter d'écrire à chaque fois Organism.first
-  # le bloc doit être alors un string
-  # Usage : room.look_forg {"accountable?"} ou room.look_forg {"books.first"}
-  def look_forg(&block)
-    cc = ActiveRecord::Base.connection_config
-    if connect_to_organism
-      org = Organism.first
-      r = org.send yield
-    end
-  ensure
-    ActiveRecord::Base.establish_connection(cc)
-  end
+
+
 
   protected
 
-  # TODO sera à revoir si on gère une autre base que sqlite3
-  # mais surtout voir le TODO de rooms_controller pour déplacer cette logique vers Room
-  # qui doit traiter la totalité des questions de bases de données.
-  #
-  # création du fichier de base de données
   def create_db
-    unless File.exist? full_name
-      File.open(full_name, "w") {} # création d'un fichier avec le nom database.sqlite3 et fermeture
-      connect_to_organism
-      ActiveRecord::Base.connection.load('db/schema.rb')
-    end
+    Apartment::Database.create(database_name)
   end
+
+  
 
 
  
