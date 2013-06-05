@@ -3,11 +3,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |config|
- # config.filter = {wip:true}
+  # config.filter = {wip:true}
 end
 
 describe Compta::WritingsController do
-  include SpecControllerHelper 
+  include SpecControllerHelper  
 
   before(:each) do
     minimal_instances
@@ -52,6 +52,7 @@ describe Compta::WritingsController do
   
 
   describe "GET new"  do
+    
     it "assigns a new writing as @writing" do
       @b.stub_chain(:writings, :new).and_return(Writing.new)
       get :new, {book_id:@b.to_param}, valid_session
