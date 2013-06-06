@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "vue organisme"  do 
-  include OrganismFixture
+  include OrganismFixture 
 
   context 'avec un organisme' do  
 

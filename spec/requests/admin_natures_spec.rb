@@ -2,10 +2,10 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
 #  c.filter = {wip:true}
 #  c.filter = {:js=> true }
-#  c.exclusion_filter = {:js=> true }
+#  c.exclusion_filter = {:js=> true } 
 end
 
 # spec request for testing admin books 
@@ -15,7 +15,7 @@ describe 'vue natures index' do
 
   before(:each) do
     create_user
-    create_minimal_organism
+    create_minimal_organism 
     login_as('quidam')
   end
 
@@ -31,13 +31,18 @@ describe 'vue natures index' do
 
   describe 'new nature' do
     
-    it "affiche la page new" do
-      visit new_admin_organism_period_nature_path(@o, @p)
+    it "affiche la page new" , wip:true do
+      visit new_admin_organism_period_nature_path(@o, @p) 
       page.should have_content("Nouvelle Nature")
       page.should have_content('Type')
+      
     end
 
-    it 'remplir correctement le formulaire crée une nouvelle nature' , wip:true do
+    it 'reaffiche la page' , wip:true do
+      visit new_admin_organism_period_nature_path(@o, @p)
+    end
+
+    it 'remplir correctement le formulaire crée une nouvelle nature'  do
       visit new_admin_organism_period_nature_path(@o, @p)
       fill_in 'nature[name]', :with=>'Nature test'
       fill_in 'nature[comment]', :with=>'Une nature pour essayer'

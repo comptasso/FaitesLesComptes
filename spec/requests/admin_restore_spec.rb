@@ -31,8 +31,8 @@ describe 'restoration de fichier' do
 
 
 
-  it 'remplir le formulaire et cliquer conduit à la vue rooms#index' do
-
+  it 'remplir le formulaire et cliquer conduit à la vue rooms#index' , wip:true do 
+    Apartment::Database.drop('testload') if  File.exist?(File.join(Rails.root, 'db/test/testload.sqlite3'))
     visit new_admin_restore_path
     page.find('input#file_upload')
     attach_file('file_upload', "#{File.dirname(__FILE__)}/../fixtures/files/testv064.sqlite3")
@@ -43,6 +43,7 @@ describe 'restoration de fichier' do
     page.find('table tbody tr:last').should have_content('Tennis Club')
   end
 
+  
   
 
 end

@@ -206,14 +206,20 @@ class Organism < ActiveRecord::Base
   # #look_for permet de chercher quelque chose dans la base principale
   # et de revenir dans la base de l'organisme.
   # Voir la méthode #room pour un exemple
-  def look_for(&block)
-    cc = ActiveRecord::Base.connection_config
-    ActiveRecord::Base.establish_connection Rails.env
-    yield
-  ensure
-    ActiveRecord::Base.establish_connection(cc)
+#  def look_for(&block)
+#    cc = ActiveRecord::Base.connection_config
+#    ActiveRecord::Base.establish_connection Rails.env
+#    yield
+#  ensure
+#    ActiveRecord::Base.establish_connection(cc)
+#
+#  end
 
+  # TODO soit inutilisé, soit non testé
+  def look_for(&block)
+     Apartment::Database.process(Rails.env) {block.call}
   end
+
 
   # méthode produisant le document demandé par l'argument page, avec
   # comme argument optionnel l'exercie.

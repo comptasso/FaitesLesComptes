@@ -55,6 +55,7 @@ class Admin::RestoresController < Admin::ApplicationController
         file.write(uploaded_io.read) 
       end
 
+      
       @room.save!
       # on vérifie la base
       unless @room.check_db

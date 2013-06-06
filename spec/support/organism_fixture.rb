@@ -4,14 +4,11 @@
 # A utiliser en mettant include OrganismFixture dans la fichier spec ou on utilisera la méthode
 module OrganismFixture
 
-  def create_user
-    if User.count > 0
-    Rails.logger.debug "Effacement de #{User.count} utilisateurs avant de recréer quidam"
-      User.find(:all).each {|u| u.destroy}
-    end
+  def create_user 
+    Apartment::Database.switch()
+    User.delete_all
     @cu =  User.create!(name:'quidam')
-    r = @cu.rooms.new(database_name:'assotest1')
-    r.save!
+    @r = room_and_base('assotest1', @cu.id)
   end
 
  # utile pour les requests qui nécessitent d'être identifié
@@ -30,9 +27,7 @@ module OrganismFixture
   # crée un organisme, un income_book, un outcome_book, un exercice (period),
   # une nature. 
   def create_minimal_organism
-    clean_test_base
-   
-    @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
+    create_organism
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
     @od = @o.od_books.first
@@ -51,7 +46,7 @@ module OrganismFixture
 
   # DatabaseCleaner ne semble pas toujours appelé correctement.
   def clean_test_base
-    ActiveRecord::Base.establish_connection('assotest1')
+    Apartment::Database.switch('assotest1')
     if Organism.count > 0
       Rails.logger.debug "Effacement de #{Organism.count} organismes avant de recréer organism_minimal"
       Organism.all.each {|o| o.destroy}
@@ -66,20 +61,31 @@ module OrganismFixture
     Cash.delete_all
   end
 
-  # Renvoie une room qui correspond à une base de données
-  def room_and_base(name)
+  # Associe le user dont l'id est donné à la base en créant la room correspondante
+  #
+  # Retourne la room
+  def room_and_base(name, uid = 1)
     filename = name + '.sqlite3'
     r = Room.find_by_database_name(name)
     b = File.exist?(File.join(Rails.root, 'db', Rails.env, filename))
-    # on a 4 cas
-    # b n'existe pas mais r existe
-    return r if r && b
-    Apartment::Database.drop(name) if b  # on avait b mais pas r
-    r.delete if r # on avait r mais pas b
-    # et maintenant on recrée
-    r = Room.new(database_name:name)
-    r.user_id = 1
-    r.save!
+    # on a 4 cas avec pour r et b
+    # r et b existent
+    if r && b
+      r.update_attribute(:user_id, uid)
+    end
+    # r n'existe pas; alors créer r va créer b si b n'existe pas
+    unless r
+      r = Room.new(database_name:name); r.user_id = uid; r.save!; 
+    end
+    # r existe mais b n'existe pas; a priori une configuration douteuse mais on
+    # ne sait jamais
+    #
+    # On met à jour r et on
+    if r && !b
+      Apartment::Database.create(r.database_name)
+      r.update_attribute(:user_id, uid)
+    end
+
     r
 
   end
