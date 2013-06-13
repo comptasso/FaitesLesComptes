@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  # c.filter = {wip:true}
+ # c.filter = {wip:true}
 end
 
 describe Room do
@@ -12,6 +12,16 @@ describe Room do
 
   def valid_attributes
     {database_name:'foo'}
+  end
+
+  before(:each) do
+    Apartment::Database.reset
+  end
+
+  it 'test de l existence des bases'  do
+    puts Apartment::Database.current
+    db_exist?('public').should == true
+    db_exist?('foo').should == false
   end
 
   it 'has a user' do 
@@ -35,16 +45,17 @@ describe Room do
     u.rooms.new(database_name:'  unnomdebasecorrect  ').should be_valid
   end
 
-  it 'save crée le fichier s il n existe pas'  do
-    r = u.rooms.new(database_name:'unnomdebasecorrect')
+  it 'save crée la base si elle n existe pas', wip:true  do
+    unnom = 'unnomdebasecorrect'
+    r = u.rooms.new(database_name:unnom)
     puts r.full_name
-    File.delete(r.full_name) if File.exist? r.full_name
+    Apartment::Database.drop(unnom) if db_exist?(unnom)
     r.save
-    File.exist?(r.full_name).should be_true
+    db_exist?(unnom).should == true
   end
 
-  it 'le nom de base doit être unique' do
-    Apartment::Database.adapter.drop('foo') if File.exist?(File.join(Room.path_to_db, 'foo.sqlite3'))
+  it 'le nom de base doit être unique'  do
+    Apartment::Database.drop('foo') if db_exist?('foo')
     u.rooms.find_or_create_by_database_name('foo')
     r = u.rooms.new(valid_attributes)
     r.should_not be_valid
@@ -109,28 +120,30 @@ describe Room do
       @r = room_and_base('assotest1')
     end
 
-    describe 'connnect_to_organism' do
+    describe 'connnect_to_organism' , wip:true do
       it 'connect_to_organism retourne true si la base existe' do
         @r.connect_to_organism.should be_true
       end
 
-      it 'appelle Apartment.reset si le fichier n est pas trouvé', wip:true do
+      it 'appelle Apartment.reset si le fichier n est pas trouvé' do
        @r.database_name = nil
        @r.connect_to_organism
-       Apartment::Database.current.should == 'test'
+       Apartment::Database.current.should == 'public'
      end
      
     end
   
 
-    describe 'check_db' do
-
+    describe 'check_db' , wip:true do
+      
       it 'check_db contrôle l intégrité de la base' do
+        pending
         ActiveRecord::Base.connection.stub(:execute).with('pragma integrity_check').and_return(['integrity_check'=>'ok'])
         @r.check_db.should be_true
       end
 
       it 'indique si pas de réponse' do
+        pending
         ActiveRecord::Base.connection.stub(:execute).with('pragma integrity_check').and_return('n importe quoi')
         @r.check_db #.should be_false
       end
@@ -139,7 +152,7 @@ describe Room do
 
     describe 'look_for' do
 
-      it 'retourne la valeur demandée par le bloc' , wip:true do
+      it 'retourne la valeur demandée par le bloc'  do
         Organism.should_receive(:first).and_return('Voilà')
         @r.look_for {Organism.first}.should == 'Voilà'
       end
@@ -162,8 +175,8 @@ describe Room do
 
       before(:each) do
         Room.find_each {|r| r.destroy}
-        Apartment::Database.adapter.drop('assotest1') if File.exist?(File.join(Room.path_to_db, 'assotest1.sqlite3'))
-        Apartment::Database.adapter.drop('assotest2') if File.exist?(File.join(Room.path_to_db, 'assotest2.sqlite3'))
+        Apartment::Database.adapter.drop('assotest1') if db_exist?('assotest1')
+        Apartment::Database.adapter.drop('assotest2') if db_exist?('assotest2')
         @r1 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest1')
         @r2 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest2')
         @r1.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest1',  :status=>'Association') if Organism.all.empty?}

@@ -139,7 +139,8 @@ class BankExtractLine < ActiveRecord::Base
       compta_lines.delete(l) # ici on n'efface pas la compta_line proprement dite mais
       # la bank_extract_line_compta_line de la table jointe
       new_bel = bank_extract.bank_extract_lines.create!(:compta_lines=>[l])
-      new_bel.insert_at(pos + 1)
+      
+      new_bel.insert_at(pos+1)
       new_bel
     end
     grp.insert(0,self) # on rajoute self au groupe ainsi obtenu

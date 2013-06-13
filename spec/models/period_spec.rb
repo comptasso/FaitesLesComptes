@@ -625,6 +625,12 @@ describe Period do
 
     describe 'gestion des relevés de banques'  do
 
+       def count_habtm
+          rep = ActiveRecord::Base.connection.execute('SELECT COUNT(*) FROM bank_extract_lines_lines').first
+          return rep['COUNT(*)'] if ActiveRecord::Base.connection_config[:adpater] == 'sqlite3'
+          return rep['count'].to_i if ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
+        end
+
       before(:each) do
         ActiveRecord::Base.connection.execute('DELETE FROM bank_extract_lines_lines')
         BankExtractLine.delete_all
@@ -643,12 +649,10 @@ describe Period do
         BankExtractLine.count.should == 0
       end
 
-      it 'count the number of items in join table' do
-        nbl = ActiveRecord::Base.connection.execute('SELECT COUNT(*) FROM bank_extract_lines_lines').first['COUNT(*)']
-        nbl.should >= 1
+      it 'count the number of items in join table'  do
+        count_habtm.should >= 1
         @p.destroy 
-        nbl = ActiveRecord::Base.connection.execute('SELECT COUNT(*) FROM bank_extract_lines_lines').first['COUNT(*)']
-        nbl.should == 0
+        count_habtm.should == 0
       end
 
     end

@@ -20,7 +20,7 @@ module OrganismFixture
   end
 
   def create_organism
-    clean_test_base
+    clean_test_base('assotest1') if Apartment::Database.current == 'assotest1'
     @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
   end
 
@@ -45,8 +45,9 @@ module OrganismFixture
   end
 
   # DatabaseCleaner ne semble pas toujours appelé correctement.
-  def clean_test_base
-    Apartment::Database.switch('assotest1')
+  def clean_test_base(db_name = nil)
+    db_name ||= Apartment::Database.current
+    Apartment::Database.switch(db_name)
     if Organism.count > 0
       Rails.logger.debug "Effacement de #{Organism.count} organismes avant de recréer organism_minimal"
       Organism.all.each {|o| o.destroy}
@@ -65,29 +66,17 @@ module OrganismFixture
   #
   # Retourne la room
   def room_and_base(name, uid = 1)
-    filename = name + '.sqlite3'
-    r = Room.find_by_database_name(name)
-    b = File.exist?(File.join(Rails.root, 'db', Rails.env, filename))
-    # on a 4 cas avec pour r et b
-    # r et b existent
-    if r && b
-      r.update_attribute(:user_id, uid)
-    end
-    # r n'existe pas; alors créer r va créer b si b n'existe pas
-    unless r
-      r = Room.new(database_name:name); r.user_id = uid; r.save!; 
-    end
-    # r existe mais b n'existe pas; a priori une configuration douteuse mais on
-    # ne sait jamais
-    #
-    # On met à jour r et on
-    if r && !b
-      Apartment::Database.create(r.database_name)
-      r.update_attribute(:user_id, uid)
-    end
-
+    delete_room_and_base(name)
+    r = Room.new(database_name:name)
+    r.user_id = uid
+    r.save!
     r
+  end
 
+  def delete_room_and_base(name)
+    r = Room.find_by_database_name(name)
+    r.delete if r
+    Apartment::Database.drop(name) if db_exist?(name)
   end
 
   # Malgré son nom, cette méthode ne crée que des écritures de type recettes
@@ -133,6 +122,26 @@ module OrganismFixture
       }
     })
      ecriture
+  end
+
+  # db_exist?
+  def db_exist?(db_name)
+    result = false
+    current = Apartment::Database.current
+    puts current
+    result = true if current == db_name
+    Apartment::Database.switch(db_name)
+    puts 'tout est ok'
+    result = true
+    
+  rescue  Apartment::SchemaNotFound, Apartment::DatabaseNotFound =>e
+      puts 'erreur'
+      result = false
+    
+  ensure
+    puts 'dans le ensure'
+    Apartment::Database.switch(current)
+    return result
   end
 
 

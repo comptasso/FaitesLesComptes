@@ -12,7 +12,7 @@ development:
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
-test:
+sql3test:
   adapter: sqlite3
   database: db/test/test.sqlite3
   pool: 5
@@ -31,7 +31,19 @@ ocra:
   timeout: 5000
 
 staging:
-  adapter: sqlite3
-  database: db/staging/staging.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: faiteslescomptes
   pool: 5
+  username: jcl
+  password: flc
+  timeout: 5000
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: pgtestflc
+  pool: 5
+  username: jcl
+  password: flc
   timeout: 5000

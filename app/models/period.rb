@@ -165,7 +165,7 @@ class Period < ActiveRecord::Base
   
   # renvoie le compte (12) qui sert pour enregistrer le résultat de l'exercice
   def report_account
-    accounts.where('number = ?', 12).first
+    accounts.where('number = ?', '12').first
   end
 
   # Renvoie le compte de l'exercice précédent

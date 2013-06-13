@@ -158,7 +158,7 @@ describe Organism do
  context 'when there is one period'  do 
 
     before(:each) do
-      clean_test_base 
+      clean_test_base
       @organism= Organism.create! valid_attributes
       @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
       @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))

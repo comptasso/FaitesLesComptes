@@ -15,7 +15,9 @@ gem 'haml-rails', "~>0.3"
 gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
 gem 'apartment'
 
-
+group :staging do
+  gem 'pg'
+end
 
 
 # Gems used only for assets and not required

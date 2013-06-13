@@ -57,7 +57,7 @@ class ComptaLine < ActiveRecord::Base
 
   # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
   # et du champ check_deposit_id
-  scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil) }
+  scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil).order('id') }
 
   # renvoie les lignes non pointées (appelé par BankAccount qui a des compta_lines, :through=>:accounts)
   scope :not_pointed, joins(:writing).where("NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES_LINES WHERE LINE_ID = COMPTA_LINES.ID)").order('writings.date')

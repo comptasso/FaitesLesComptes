@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  # c.filter = {:wip=> true }
+ #  c.filter = {:wip=> true }
 end 
 
 
@@ -126,6 +126,8 @@ describe BankExtractLine do
         @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')
       end
 
+
+
       it 'regroup diminue le nombre de lignes' do
         @bel7.regroup @bel29
         @be.should have(2).bank_extract_lines
@@ -155,26 +157,30 @@ describe BankExtractLine do
         @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')
       end
 
+      
+
       it 'renvoie lui même si moins de 2 lignes' do
         @bel7.degroup.should == @bel7
       end
 
-
-
-      it 'un groupe de deux lignes renvoie deux lignes' do
+      it 'un groupe de deux lignes renvoie deux lignes'  do
         group = @bel29.regroup @bel102
         group.degroup.should be_an_instance_of Array
       end
 
-      it 'un groupe de 3 lignes renvoie 3 lignes'  do
+      it 'un groupe de 3 lignes renvoie 3 lignes',  wip:true do
         group = @bel29.regroup(@bel102).regroup(@bel7)
+        puts group.inspect
         degroup = group.degroup
+        
+        cls = degroup.map {|l| l.compta_lines }.flatten
+        puts cls
  # TODO check_deposit devrait pouvoir répondre à support_line car celà complique
  # inutilement d'avoir des méthodes différentes.
         degroup.first.should == @bel29
-        degroup.first.compta_lines.should == [@d7.support_line]
-        degroup.second.compta_lines.should ==[@d29.support_line]
-        degroup.third.compta_lines.should == [@cd.debit_line]
+        cls.include?(@d7.support_line).should be_true
+        cls.include?(@d29.support_line).should be_true
+        cls.include?(@cd.debit_line).should be_true
       end
     end
 

@@ -199,7 +199,7 @@ class Account < ActiveRecord::Base
 
   # Indique si toutes les lignes sont locked
   def all_lines_locked?(from = period.start_date, to = period.close_date)
-    compta_lines.range_date(from, to).where('locked == ?', false ).any? ? false : true
+    compta_lines.range_date(from, to).where('locked = ?', false ).any? ? false : true
   end
 
   # Méthode de classe qui crée un pdf pour afficher le plan comptable

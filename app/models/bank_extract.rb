@@ -33,7 +33,7 @@ class BankExtract < ActiveRecord::Base
   
   scope :period, lambda {|p| where('begin_date >= ? AND end_date <= ?' ,
       p.start_date, p.close_date).order(:begin_date) }
-  scope :unlocked, where('locked IS ?', false)
+  scope :unlocked, where('locked = ?', false)
 
   # indique si l'extrait est le premier de ce compte bancaire qui doive être pointé
   def first_to_point?
