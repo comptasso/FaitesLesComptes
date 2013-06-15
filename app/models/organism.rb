@@ -153,6 +153,7 @@ class Organism < ActiveRecord::Base
   
   # Renvoie la caisse principale (utilisée en priorité)
   # en l'occurence actuellement la première trouvée ou nil s'il n'y en a pas
+  # TODO ? à mettre dans le modèle Cash en méthode de classe par exemple ?
   # Utilisé dans le controller line pour préremplir les select.
   # utilisé également dans le form pour afficher ou non le select cash
   def main_cash_id
@@ -198,26 +199,20 @@ class Organism < ActiveRecord::Base
     look_for {Room.find_by_database_name(database_name)}
   end
 
-  # TODO relève de la responsabilité de Room
+  # TODO relève de la responsabilité de Room;
+  # par ailleurs, il faudrait gérer le cas de postgresql
+  # et enfin, il faudrait avoir plutôt comme nom database_path
   def full_name
     "#{Room.path_to_db}/#{database_name}.sqlite3"
   end
   
   # #look_for permet de chercher quelque chose dans la base principale
+  #
+  # Apartment::Database.default_db est défini dans l'initializer Apartment
   # et de revenir dans la base de l'organisme.
   # Voir la méthode #room pour un exemple
-#  def look_for(&block)
-#    cc = ActiveRecord::Base.connection_config
-#    ActiveRecord::Base.establish_connection Rails.env
-#    yield
-#  ensure
-#    ActiveRecord::Base.establish_connection(cc)
-#
-#  end
-
-  # TODO soit inutilisé, soit non testé
-  def look_for(&block)
-     Apartment::Database.process(Rails.env) {block.call}
+  def look_for(&block) 
+    Apartment::Database.process(Apartment::Database.default_db) {block.call}
   end
 
 

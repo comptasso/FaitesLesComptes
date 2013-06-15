@@ -5,7 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 describe Admin::ArchivesController do
   include SpecControllerHelper
 
-  let(:arch) {mock_model(Archive)}
+  let(:arch) {mock_model(Archive, :archive_filename=>'assotest1 6 juin 2013.dump')}
 
   before(:each) do
     minimal_instances

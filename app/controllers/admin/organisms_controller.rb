@@ -2,7 +2,11 @@
 
 class Admin::OrganismsController < Admin::ApplicationController
 
+  # TODO dans la vue index, il serait préférable que l'action de destrcution
+  # renvoie vers l'organisme plutôt que le room et qu'une redirection soit faite par le controller
+  
   class NomenclatureError < StandardError; end
+  
 
   skip_before_filter :find_organism, :current_period, only:[:index, :new] 
   before_filter :use_main_connection, only:[:index, :new, :destroy]

@@ -9,7 +9,7 @@ RSpec.configure do |c|
 end
 
 describe Organism do
-  include OrganismFixture 
+  include OrganismFixture  
 
 
   def valid_attributes
@@ -259,14 +259,12 @@ describe Organism do
         end
 
         it "should give the main cash id" do
-
           @organism.main_cash_id.should == @ca.id
         end
 
         context 'with another cash' do
           it 'main_cash_id should returns the first one' do
             @organism.cashes.create!(name: 'porte monnaie')
-           
             @organism.main_cash_id.should == @ca.id
           end
         end

@@ -9,8 +9,6 @@ require 'strip_arguments'
 #
 class Room < ActiveRecord::Base
   
-  establish_connection Rails.env # très certainement inutile puisque comportement par défaut
-
   belongs_to :user
 
   attr_accessible :database_name

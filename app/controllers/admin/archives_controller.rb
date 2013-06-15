@@ -27,13 +27,18 @@ class Admin::ArchivesController < Admin::ApplicationController
   end 
 
   def create
-     @archive=@organism.archives.new(params[:archive])
+    @archive=@organism.archives.new(params[:archive])
     if @archive.save
-      nam = @organism.full_name
-      send_file nam, 
-        :filename=>[File.basename(nam, '.sqlite3'), I18n.l(Time.now)].join(' ')+'.sqlite3',
-        :disposition=>'attachment'
+      Tempfile.open(@organism.database_name, File.join(Rails.root, 'tmp')) do |f|
+        dump_database(f)
+        f.flush
+        send_file f,
+          :filename=>@archive.archive_filename,
+          :disposition=>'attachment'
+      end
+    
     else
+      flash[:alert]= "Une erreur s'est produite empêchant la sauvegarde de l'archive"
       render 'new'
     end
   end
@@ -47,8 +52,21 @@ class Admin::ArchivesController < Admin::ApplicationController
     end
     redirect_to admin_organism_archives_url(@organism)
   end
+  
+  protected
 
-
-
+  # crée le fichier représentant l'archive si besoin et retourne son emplacement
+  # si l'adapter est sqlite3, le fichier existe déjà ; si postgres on crée un
+  # fichier temporaire avec un dump
+  # Retourne le fichier
+  def dump_database(file)
+    case ActiveRecord::Base.connection_config[:adapter]
+    when 'sqlite3'
+      system("sqlite3 #{@organism.full_name} .dump > #{file.path}")
+      # yield "#{Room.path_to_db}/#{organism.database_name}.sqlite3"
+    when 'postgresql'
+      system("pg_dump faiteslescomptes -n #{@organism.database_name} > #{file.path}")
+    end
+  end
 
 end
