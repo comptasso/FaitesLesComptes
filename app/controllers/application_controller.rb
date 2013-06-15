@@ -178,8 +178,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  
-  
+  # raccourci pour avoir la configuration
+  def abc
+    ActiveRecord::Base.connection_config
+  end
   
   
 

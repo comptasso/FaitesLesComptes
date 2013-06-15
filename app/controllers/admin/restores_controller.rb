@@ -35,8 +35,13 @@ class Admin::RestoresController < Admin::ApplicationController
       
       # vérification que l'extension est bien la bonne
       extension = File.extname(uploaded_io.original_filename)
-      if  ".sqlite3" != extension
-        raise RestoreError, "L'extension #{extension} du fichier ne correspond pas aux bases gérées par l'application : .sqlite3"
+      if  dump_extension != extension
+        raise RestoreError, "L'extension #{extension} du fichier ne correspond pas aux bases gérées par l'application : #{dump_extension}"
+      end
+
+
+      if abc[:adapter] != 'sqlite3'
+        raise RestoreError, "La restauration de bases n'est possible que pour les bases sqlite3"
       end
 
       # la pièce ne doit pas déjà appartenir à un autre
@@ -51,9 +56,9 @@ class Admin::RestoresController < Admin::ApplicationController
         raise RestoreError, 'Nom de base non valide : impossible de créer la base' unless @room.valid?
       end
 
-      File.open(@room.full_name, 'wb') do |file|
-        file.write(uploaded_io.read) 
-      end
+      dump_restore
+
+
 
       
       @room.save!
@@ -76,6 +81,34 @@ class Admin::RestoresController < Admin::ApplicationController
       render 'new'
     end
   end
+
+  protected
+
+  def dump_extension
+    case ActiveRecord::Base.connection_config[:adapter]
+    when 'sqlite3' then '.sqlite3'
+    when 'postgresql' then '.dump'
+    end
+  end
+
+  def dump_restore
+     case ActiveRecord::Base.connection_config[:adapter]
+       when 'sqlite3' then sqlite_restore
+       when 'postgresql' then postgres_restore
+     end
+  end
+
+  def sqlite_restore
+      File.open(@room.full_name, 'wb') do |file|
+        file.write(uploaded_io.read)
+      end
+  end
+
+  def postgres_restore
+   # system("pg_restore uploaded_io --db_name=#{abc[:database]} --clean --single-transaction")
+  end
+
+
 
 
  

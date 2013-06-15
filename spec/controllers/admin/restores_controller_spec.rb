@@ -6,7 +6,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-class RestoreError < StandardError; end
+class RestoreError < StandardError; end 
 
 describe Admin::RestoresController do 
   include ActionDispatch::TestProcess
@@ -43,10 +43,12 @@ describe Admin::RestoresController do
         @r.stub(:check_db).and_return(true)
         @r.stub(:connect_to_organism).and_return(true)
         @r.stub(:relative_version).and_return(:same_migration)
-
+        @controller.stub(:dump_extension).and_return('.sqlite3')
+        @controller.stub(:abc).and_return({:adapter=>'sqlite3'})
       end
 
-      it 'redirige vers la liste des fichiers' do
+      it 'redirige vers la liste des fichiers'  do
+        
         post :create, {:file_upload=>@file, database_name:'test2'}, valid_session
         flash[:notice].should == "Le fichier a été chargé et peut servir de base de données"
         response.should redirect_to admin_rooms_url
@@ -60,10 +62,19 @@ describe Admin::RestoresController do
 
     end
 
-    describe 'gestion des anomalies et erreurs'  do
+    describe 'gestion des anomalies et erreurs'  do 
 
       before(:each) do
+        @controller.stub(:abc).and_return({:adapter=>'sqlite3'})
+        @controller.stub(:dump_extension).and_return('.sqlite3')
         @ro =  mock_model(Room, :user=>cu2, :full_name=>'path_du_fichier.sqlite3', 'save!'=>true)
+      end
+
+      it 'vérifie que l adapter est sqlite3' do
+        @controller.stub(:abc).and_return({:adapter=>'passqlite3'})
+        post :create, {:file_upload=>@file, database_name:'test'}, valid_session
+        flash[:alert].should == "La restauration de bases n'est possible que pour les bases sqlite3"
+        response.should render_template 'new'
       end
 
       it 'vérifie que le nom de base n est pas pris par un autre user' do
