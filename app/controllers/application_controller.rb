@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :find_organism, :current_period
   
-  helper_method :two_decimals, :virgule, :picker_to_date, :current_user, :current_user?, :current_period?
+  helper_method :two_decimals, :virgule, :picker_to_date, :current_user, :current_user?, :current_period?, :abc
 
   private
 
