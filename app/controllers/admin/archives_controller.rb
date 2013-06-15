@@ -60,12 +60,13 @@ class Admin::ArchivesController < Admin::ApplicationController
   # fichier temporaire avec un dump
   # Retourne le fichier
   def dump_database(file)
-    case ActiveRecord::Base.connection_config[:adapter]
+    abc = ActiveRecord::Base.connection_config
+    case abc[:adapter]
     when 'sqlite3'
       system("sqlite3 #{@organism.full_name} .dump > #{file.path}")
       # yield "#{Room.path_to_db}/#{organism.database_name}.sqlite3"
     when 'postgresql'
-      system("pg_dump faiteslescomptes -n #{@organism.database_name} > #{file.path}")
+      system("pg_dump #{abc[:database]} -n #{@organism.database_name} > #{file.path}")
     end
   end
 

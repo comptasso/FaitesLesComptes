@@ -10,7 +10,7 @@ describe Admin::ArchivesController do
   before(:each) do
     minimal_instances
     @o.stub_chain(:archives, :new).and_return(arch)
-    @o.stub(:full_name).and_return('spec/support/assotest.sqlite3')
+    @o.stub(:full_name).and_return('spec/support/assotest1.sqlite3')
   end
 
   describe 'GET index' do
@@ -60,10 +60,6 @@ describe Admin::ArchivesController do
   end
 
   describe 'POST create' do
-
-    before(:each) do
-      
-    end
 
     it 'doit créer une archive' do
       @o.should_receive(:archives).and_return @a = double(Arel)
