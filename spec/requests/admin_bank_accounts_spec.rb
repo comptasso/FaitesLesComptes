@@ -1,9 +1,9 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c| 
- # c.filter = {:wip=> true }
+  c.filter = {:wip=> true }
 #  c.exclusion_filter = {:js=> true }
 end
 
@@ -13,14 +13,17 @@ describe 'vue bank_accounts index' do
   include OrganismFixture 
   
   
-  before(:each) do  
-
+  before(:each) do   
     create_user
     create_minimal_organism
     login_as('quidam')
   end
 
-  describe 'new bank_account' do
+  after(:each) do
+    Apartment::Database.switch()
+  end
+
+  describe 'new bank_account'  do
     before(:each) do
       visit new_admin_organism_bank_account_path(@o)
     end
@@ -68,13 +71,27 @@ describe 'vue bank_accounts index' do
 
   end
  
-  describe 'index'  do
+  describe 'index'   , wip:true  do
+    it 'la vue index est affichée' do
+      visit admin_organism_bank_accounts_path(@o)
+      current_url.should match(admin_organism_bank_accounts_path(@o))
+    end
 
+    it 'test ' do
+      puts @o.inspect
+      Apartment::Database.process(Apartment::Database.default_db) {puts Room.first.inspect}
+      Apartment::Database.switch('assotest1')
+    end
    
 
-    it 'on peut le choisir dans la vue index pour le modifier' do
+    it 'on peut le choisir dans la vue index pour le modifier'  do
       visit admin_organism_bank_accounts_path(@o)
+
+      puts @o.inspect
+      puts @o.room.inspect
+      # save_and_open_page
       click_link "icon_modifier_bank_account_#{@ba.id.to_s}"
+      # save_and_open_page
       current_url.should match(edit_admin_organism_bank_account_path(@o,@ba)) 
     end
 

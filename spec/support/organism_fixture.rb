@@ -27,6 +27,7 @@ module OrganismFixture
   # crée un organisme, un income_book, un outcome_book, un exercice (period),
   # une nature. 
   def create_minimal_organism
+    puts "base utilisée : #{Apartment::Database.current}"
     create_organism
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
@@ -76,7 +77,7 @@ module OrganismFixture
   def delete_room_and_base(name)
     r = Room.find_by_database_name(name)
     r.delete if r
-    Apartment::Database.drop(name) if db_exist?(name)
+    Apartment::Database.drop(name) if Apartment::Database.db_exist?(name)
   end
 
   # Malgré son nom, cette méthode ne crée que des écritures de type recettes
@@ -124,25 +125,8 @@ module OrganismFixture
      ecriture
   end
 
-  # db_exist?
-  def db_exist?(db_name)
-    result = false
-    current = Apartment::Database.current
-    puts current
-    result = true if current == db_name
-    Apartment::Database.switch(db_name)
-    puts 'tout est ok'
-    result = true
-    
-  rescue  Apartment::SchemaNotFound, Apartment::DatabaseNotFound =>e
-      puts 'erreur'
-      result = false
-    
-  ensure
-    puts 'dans le ensure'
-    Apartment::Database.switch(current)
-    return result
-  end
+  
+  
 
 
   
