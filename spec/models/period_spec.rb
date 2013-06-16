@@ -6,8 +6,8 @@ RSpec.configure do |c|
    # c.filter = {wip:true}
 end
 
-describe Period do
-  include OrganismFixture
+describe Period do 
+  include OrganismFixtureBis
   context 'un organisme' do 
 
     
@@ -322,7 +322,9 @@ describe Period do
     context 'avec deux exercices' do
       
       before(:each) do
-        @org = create_organism
+        clean_assotest1
+        Apartment::Database.switch('assotest1')
+        @org = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
         @p_2010 = @org.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
         @p_2011= @org.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
         @ba = @org.bank_accounts.create!(bank_name:'DebiX', number:'123Z', nickname:'Compte épargne')
@@ -369,8 +371,8 @@ describe Period do
             @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id, income_outcome:true)
         
         
-            @ob= @o.books.find_by_type('OutcomeBook')
-            @ib= @o.books.find_by_type('IncomeBook')
+            @ob= @org.books.find_by_type('OutcomeBook')
+            @ib= @org.books.find_by_type('IncomeBook')
 
             @l6= @ib.in_out_writings.create!({date:Date.civil(2010,8,15), narration:'ligne créée par la méthode create_outcome_writing',
                 :compta_lines_attributes=>{'0'=>{account_id:@acc60.id, nature:@n_dep, credit:54, payment_mode:'Espèces'},
@@ -571,16 +573,8 @@ describe Period do
   describe 'destruction des comptes' do
 
     before(:each) do
-#      r = Room.find_by_database_name('boom')
-#      r.destroy if r
-#      path = ["#{Rails.root}", 'db', 'test', 'organisms', 'boom.sqlite3' ].join('/')
-#      File.delete(path) if File.exist?(path)
-#      room = Room.new(:database_name=>'boom')
-#      room.user_id = 1
-#      room.valid?
-#      puts room.errors.messages unless room.valid?
-#      room.save!
-      @org = Organism.create!(title:'boom', status:'Association', :database_name=>'boum')
+      clean_assotest1
+      @org = Organism.create!(title:'boom', status:'Association', :database_name=>'assotest1')
       @period = @org.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     end
 
@@ -610,7 +604,7 @@ describe Period do
     end
 
     it 'détruit les natures' do
-      Nature.count.should == 18
+      Nature.count.should > 0
       @p.destroy
       Nature.count.should == 0
     end

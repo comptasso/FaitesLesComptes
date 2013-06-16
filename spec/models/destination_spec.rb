@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Destination do
-  include OrganismFixture
+  include OrganismFixtureBis
 
   let(:o) {stub_model(Organism)}
   

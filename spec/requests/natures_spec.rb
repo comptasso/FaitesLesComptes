@@ -8,7 +8,7 @@ RSpec.configure do |c|
 end
 
 describe 'Cash Control Requests' do 
-  include OrganismFixture
+  include OrganismFixtureBis
   
 
   before(:each) do

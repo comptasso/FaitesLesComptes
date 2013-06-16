@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe "Writings" do
-  include OrganismFixture
+  include OrganismFixtureBis
 
 
   before(:each) do

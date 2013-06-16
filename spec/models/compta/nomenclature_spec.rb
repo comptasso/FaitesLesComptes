@@ -8,7 +8,7 @@ end
 
 
 describe Compta::Nomenclature do   
-  include OrganismFixture
+  include OrganismFixtureBis
 
 
   def instructions(file)

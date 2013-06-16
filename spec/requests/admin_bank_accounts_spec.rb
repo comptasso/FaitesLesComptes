@@ -3,25 +3,31 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c| 
-  c.filter = {:wip=> true }
+ # c.filter = {:wip=> true }
 #  c.exclusion_filter = {:js=> true }
 end
 
 # spec request for testing admin bank_accounts 
 
 describe 'vue bank_accounts index' do  
-  include OrganismFixture 
+  include OrganismFixtureBis
   
-  
-  before(:each) do   
+#  def set_host (host)
+#  host! host
+#  Capybara.server_port = 31234
+#  Capybara.app_host = "http://" + host
+#end
+
+
+  before(:each) do
     create_user
-    create_minimal_organism
+    create_organism
     login_as('quidam')
   end
 
-  after(:each) do
-    Apartment::Database.switch()
-  end
+#  after(:each) do
+#    Apartment::Database.switch()
+#  end
 
   describe 'new bank_account'  do
     before(:each) do
@@ -71,24 +77,21 @@ describe 'vue bank_accounts index' do
 
   end
  
-  describe 'index'   , wip:true  do
-    it 'la vue index est affichée' do
+  describe 'index'    do
+    
+    
+    it 'la vue index est affichée'  , wip:true do
+      Apartment::Database.switch('assotest1')
+    
       visit admin_organism_bank_accounts_path(@o)
       current_url.should match(admin_organism_bank_accounts_path(@o))
     end
 
-    it 'test ' do
-      puts @o.inspect
-      Apartment::Database.process(Apartment::Database.default_db) {puts Room.first.inspect}
-      Apartment::Database.switch('assotest1')
-    end
    
 
     it 'on peut le choisir dans la vue index pour le modifier'  do
       visit admin_organism_bank_accounts_path(@o)
 
-      puts @o.inspect
-      puts @o.room.inspect
       # save_and_open_page
       click_link "icon_modifier_bank_account_#{@ba.id.to_s}"
       # save_and_open_page

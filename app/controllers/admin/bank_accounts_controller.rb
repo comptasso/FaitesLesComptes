@@ -8,7 +8,7 @@ class Admin::BankAccountsController < Admin::ApplicationController
   # GET /bank_accounts.json
   def index
     @bank_accounts = @organism.bank_accounts.all
-
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @bank_accounts }

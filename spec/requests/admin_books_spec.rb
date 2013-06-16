@@ -6,7 +6,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
  # ActiveRecord::Base.shared_connection = nil
 
 RSpec.configure do |c|
-#  c.filter = {wip:true}
+ # c.filter = {wip:true}
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true }
 end
@@ -16,7 +16,7 @@ end
 describe 'vue books index' do  
 
  
-  include OrganismFixture  
+  include OrganismFixtureBis
 
    before(:each) do
     create_user
@@ -56,7 +56,7 @@ describe 'vue books index' do
  
   describe 'index' do
 
-     it 'dans la vue index,un livre peut être détruit', :js=>true do
+     it 'dans la vue index,un livre peut être détruit',wip:true , :js=>true do
       @o.income_books.create!(:title=>'livre de test', :abbreviation=>'TE')
       @o.should have(5).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.
@@ -66,10 +66,12 @@ describe 'vue books index' do
         page.should have_content('livre de test') 
         page.click_link 'Supprimer'
       end
+
       alert = page.driver.browser.switch_to.alert 
       alert.accept 
       sleep 1
-      page.all('tbody tr').should have(4).books
+      
+      @o.books(true).should have(4).elements
      end
 
 

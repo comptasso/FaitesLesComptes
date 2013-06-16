@@ -7,7 +7,7 @@ end
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 describe Nature do 
-  include OrganismFixture
+  include OrganismFixtureBis
 
   let(:p) {stub_model(Period, :list_months=>ListMonths.new(Date.today.beginning_of_year, Date.today.end_of_year))}
   

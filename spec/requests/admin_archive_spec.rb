@@ -10,7 +10,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 describe 'resquest admin archive' do    
-  include OrganismFixture
+  include OrganismFixtureBis
 
   before(:each) do
 
@@ -38,9 +38,9 @@ describe 'resquest admin archive' do
       # pour éviter d'avoir des erreurs liées à un changement de seconde
       # pendant le test, on isole le dernier chiffre et on crée une expression
       # régulière
-      filename = name[0,name.length-2]+'[0-5][0-9]'+'.sqlite3'
+      filename = name[0,name.length-2]+'[0-5][0-9]'
       cd = page.response_headers['Content-Disposition']
-      cd[/attachment; filename=(.*)/]
+      cd[/attachment; filename=(.*)[\.sqlite3|\.dump]/]
       $1.should match filename # contrôle du titre du fichier
       
     end

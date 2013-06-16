@@ -7,7 +7,7 @@ RSpec.configure do |config|
 end
 
 describe Writing do
-  include OrganismFixture 
+  include OrganismFixtureBis
 
   describe 'with stub models' do
 

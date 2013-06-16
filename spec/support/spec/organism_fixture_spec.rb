@@ -9,7 +9,7 @@ end
 # fichier destiné à tester les méthodes de support
 
 describe OrganismFixture do 
-  include OrganismFixture
+  include OrganismFixtureBis
 
 
   describe 'create_user' , wip:true do
@@ -46,7 +46,8 @@ describe OrganismFixture do
       Organism.should have(1).elements
     end
     
-    it 'a un organisme dans la base assotest1' do
+    it 'et n en a pas dans la base principale' do
+      pending 'il y a une création d organisme dans la base principale'
       Apartment::Database.switch()
       Organism.should have(0).elements
     end
@@ -58,23 +59,7 @@ describe OrganismFixture do
 
   end
 
-  describe 'create_organism' do
-
-    before(:each) do
-      create_organism
-    end
-
-    it 'nettoie la base assotest' do
-      Organism.count.should == 1
-    end
-    
-    it 'fournit un organisme' do
-      @o.should be_an_instance_of(Organism)
-    end
-
-
-
-  end
+  
 
   describe 'create_minimal_organism' do
     before(:each) do

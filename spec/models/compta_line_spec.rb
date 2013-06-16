@@ -9,7 +9,7 @@ end
 
 describe ComptaLine do
 
-  include OrganismFixture
+  include OrganismFixtureBis
   let(:per) {mock_model(Period)}
   let(:nat) {mock_model(Nature, period:per,  name:'Petite nature')}
   let(:acc) {mock_model(Account, period:per, period_id:per.id)}

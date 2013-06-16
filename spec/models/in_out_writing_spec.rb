@@ -8,7 +8,7 @@ end
 
 
 describe InOutWriting do
-  include OrganismFixture 
+  include OrganismFixtureBis
 
   def valid_attributes
     {date:Date.today, narration:'spec',

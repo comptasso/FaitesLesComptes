@@ -3,11 +3,11 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
- #  c.filter = {wip:true}
+ #  c.filter = {wip:true} 
 end
 
 describe Transfer  do 
-  include OrganismFixture  
+  include OrganismFixtureBis
 
   def valid_new_transfer
     t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id

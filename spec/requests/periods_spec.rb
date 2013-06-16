@@ -4,7 +4,7 @@ require 'spec_helper'
 
 
 describe "Periods" do
-  include OrganismFixture 
+  include OrganismFixtureBis
 
   before(:each) do 
     create_user

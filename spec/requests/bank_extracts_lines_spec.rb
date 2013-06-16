@@ -6,7 +6,7 @@ require 'spec_helper'
 
 describe 'bank_extract_lines' do
 
-  include OrganismFixture 
+  include OrganismFixtureBis
 
   before(:each) do
     create_user

@@ -11,7 +11,7 @@ end
 describe 'Session' do  
 
 
-  it 'permet de se logguer' do
+  it 'permet de se logguer' do 
     visit '/'
     # save_and_open_page
     page.all('form').count.should == 1 

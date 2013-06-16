@@ -7,7 +7,7 @@ require 'pdf_document/page'
 require 'pdf_document/table'  
 
 describe 'test pdf prawn' do   
-  include OrganismFixture
+  include OrganismFixtureBis
    before(:each) do
      create_minimal_organism
      @account =  @p.accounts.find_by_number('60') 

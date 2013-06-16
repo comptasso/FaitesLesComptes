@@ -9,7 +9,7 @@ end
 
 describe 'Recette par chèque' do 
 
-  include OrganismFixture 
+  include OrganismFixtureBis
 
   before(:each) do
     create_user

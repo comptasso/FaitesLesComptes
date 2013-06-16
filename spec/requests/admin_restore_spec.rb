@@ -9,25 +9,24 @@ RSpec.configure do |c|
 end
 
 describe 'restoration de fichier' do    
-  include OrganismFixture
+  include OrganismFixtureBis
 
   before(:each) do
     create_user
-    create_minimal_organism 
+    create_organism
     login_as('quidam')
     @ad = ActiveRecord::Base.connection_config[:adapter]
   end
 
-  after(:each) do
-    Apartment::Database.reset
-  end
+#  after(:each) do
+#    Apartment::Database.reset
+#  end
 
 
      
 
   
   it 'accès par la vue admin#organism#show', :js=>true do
-    
     pending('test à ne faire que pour sqlite3') if @ad != 'sqlite3'
     visit admin_rooms_path
     page.find('a', :href=>new_admin_room_path)

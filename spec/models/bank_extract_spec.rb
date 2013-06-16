@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 describe BankExtract do   
-  include OrganismFixture  
+  include OrganismFixtureBis
   
   
   before(:each) do

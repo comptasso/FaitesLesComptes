@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Archive do
-  include OrganismFixture
+  include OrganismFixtureBis
 
   before(:each) do
     create_minimal_organism

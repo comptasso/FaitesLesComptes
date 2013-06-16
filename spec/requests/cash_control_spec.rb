@@ -8,7 +8,7 @@ RSpec.configure do |c|
 end
 
 describe 'Cash Control Requests' do  
-  include OrganismFixture 
+  include OrganismFixtureBis
 
   before(:each) do
     create_user
@@ -91,7 +91,7 @@ describe 'Cash Control Requests' do
       fill_in 'cash_control[amount]', :with=> 22.12
       click_button 'Enregistrer'
       current_url.should match cash_cash_controls_path(@c)
-      find('tbody tr td:nth-child(2)').text.should == '22,12'
+      find('tbody tr td:nth-child(2)').text.should == '22,12' 
 
     end
 

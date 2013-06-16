@@ -10,7 +10,7 @@ RSpec.configure do |config|
 end
  
 describe Extract::MonthlyInOut do
-  include OrganismFixture
+  include OrganismFixtureBis
   before(:each) do
     create_minimal_organism
   end

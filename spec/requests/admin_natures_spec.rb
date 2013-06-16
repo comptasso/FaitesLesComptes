@@ -11,7 +11,7 @@ end
 # spec request for testing admin books 
 
 describe 'vue natures index' do  
-  include OrganismFixture 
+  include OrganismFixtureBis 
 
   before(:each) do
     create_user
@@ -22,7 +22,7 @@ describe 'vue natures index' do
 
   it 'check minimal organism' do
     Organism.count.should == 1
-    Nature.count.should == 18 # les natures par défaut pour nautres_asso.yml
+    Nature.count.should == 16 # les natures par défaut pour nautres_asso.yml
     # on commence par les natures de recettes
     Nature.first.income_outcome.should be_true
   end
@@ -48,7 +48,7 @@ describe 'vue natures index' do
       fill_in 'nature[comment]', :with=>'Une nature pour essayer'
       choose 'Dépenses'
       click_button 'Créer la nature'
-      @p.natures(true).count.should == 19
+      @p.natures(true).count.should == 17
       @p.natures.last.income_outcome.should be_false
       current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
     end
@@ -61,6 +61,7 @@ describe 'vue natures index' do
       @p.natures.create!(:name=>'deuxième nature', :income_outcome=>false)
       @nb_natures = @p.natures.count
       @nb_depenses = @p.depenses_natures.count
+      @n = @p.natures.second
     end
 
     it 'affiche deux tables' do
@@ -98,6 +99,7 @@ describe 'vue natures index' do
   describe 'edit' do
 
     it 'On peut changer les deux autres champs' do
+      @n = @p.natures.third
       visit edit_admin_organism_period_nature_path(@o, @p, @n)
       fill_in 'nature[name]', :with=>'modif du titre'
       click_button 'Mettre à jour'

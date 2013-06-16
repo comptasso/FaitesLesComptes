@@ -9,12 +9,12 @@ RSpec.configure do |c|
 end
 
 describe Organism do
-  include OrganismFixture  
+  include OrganismFixtureBis
 
 
-  def valid_attributes
+  def valid_attributes 
     {:title =>'Test ASSO',
-      database_name:'testasso1',
+      database_name:'assotest1',
       :status=>'Association'
     }
   end
@@ -22,7 +22,10 @@ describe Organism do
 
   describe 'validations' do
     before(:each) do
+      clean_assotest1
+      Apartment::Database.switch('assotest1')
       @organism= Organism.new valid_attributes
+      puts @organism.errors.messages unless @organism.valid?
     end
 
     it 'should be valid with a title and a database_name' do
@@ -61,6 +64,7 @@ describe Organism do
   describe 'can_write_line' , wip:true do
 
     before(:each) do
+      
       @organism= Organism.new valid_attributes
     end
 
@@ -99,6 +103,7 @@ describe Organism do
 
   describe 'after create' do
     before(:each) do
+      clean_assotest1
       @organism = Organism.create! valid_attributes
     end
 
@@ -158,7 +163,8 @@ describe Organism do
  context 'when there is one period'  do 
 
     before(:each) do
-      clean_test_base
+      clean_assotest1
+      Apartment::Database.switch('assotest1')
       @organism= Organism.create! valid_attributes
       @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
       @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
@@ -228,12 +234,12 @@ describe Organism do
 
 
     
-    describe 'main_bank_id' do
+    describe 'main_bank_id' , wip:true do
       
       context 'with default bank account' do
        
         before(:each) do
-          @ba = BankAccount.first
+          @ba = BankAccount.order(:id).first
         end
 
         

@@ -8,7 +8,7 @@ end
 
 
 describe Compta::Sheet do 
-include OrganismFixture
+include OrganismFixtureBis
 
   def list_rubriks
       {:title=>"BILAN ACTIF", :sens=>:actif,

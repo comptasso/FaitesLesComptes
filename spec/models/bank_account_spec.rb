@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 describe BankAccount do 
-  include OrganismFixture 
+  include OrganismFixtureBis
 
   def create_bank_account
     ba = BankAccount.new(:bank_name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')

@@ -43,13 +43,13 @@ class ApplicationController < ActionController::Base
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
-    
     # utile pour remettre le système cohérent
     use_main_connection if session[:org_db] == nil
     r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
     if r # on doit avoir tru=ouvé une room
       r.connect_to_organism
       @organism = Organism.first # il n'y a qu'un organisme par base
+     
     end
     # si pas d organisme (cas d une base corrompue)
     unless @organism
@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
   # se connecte à la base principale
   def use_main_connection
     Rails.logger.info "début de use_main_connection : connecté à à #{ActiveRecord::Base.connection_config}"
-    ActiveRecord::Base.establish_connection Rails.env.to_sym
+    Apartment::Database.switch()
     Rails.logger.info "appel de use_main connection : connexion à #{ActiveRecord::Base.connection_config}"
   end
   

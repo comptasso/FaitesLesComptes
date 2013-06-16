@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 describe Compta::Balance do 
-  include OrganismFixture
+  include OrganismFixtureBis
 
 
   before(:each) do

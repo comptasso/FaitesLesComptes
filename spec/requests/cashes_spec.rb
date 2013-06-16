@@ -2,11 +2,11 @@
 
 require 'spec_helper' 
 include JcCapybara
-include OrganismFixture
+include OrganismFixtureBis
 
 describe "Cashes" do
 
- before(:each) do
+ before(:each) do 
     create_user
     create_minimal_organism
     login_as('quidam')

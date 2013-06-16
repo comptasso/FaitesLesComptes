@@ -3,11 +3,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-   # c.filter = {wip:true}
+   # c.filter = {wip:true} 
 end
 
 describe Cash , wip:true do
-  include OrganismFixture
+  include OrganismFixtureBis
 
   before(:each) do
     create_minimal_organism
@@ -87,7 +87,7 @@ describe Cash , wip:true do
 
   end
 
-  describe 'level' , wip:true do
+  describe 'level' , wip:true do 
     before(:each) do
       create_cash_income # méthode forunie par OrganismFixture
     end

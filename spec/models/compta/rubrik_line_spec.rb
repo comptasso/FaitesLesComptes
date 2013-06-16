@@ -8,7 +8,7 @@ end
 
 
 describe Compta::RubrikLine do
-  include OrganismFixture
+  include OrganismFixtureBis
 
   let(:pp) {mock_model(Period)}
   let(:p) {mock_model(Period, :close_date=>Date.today.end_of_year, 'previous_period?'=>true, previous_period:pp, :previous_account=>bcc)}

@@ -1,12 +1,12 @@
 # -*- encoding : utf-8 -*-
 require 'spec_helper'
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
  # c.filter = {wip:true}
 end
 
 describe Room  do
-  include OrganismFixture
+  include OrganismFixtureBis
 
   let(:u) {stub_model(User)}
 
@@ -20,8 +20,8 @@ describe Room  do
 
   it 'test de l existence des bases'  do
     puts Apartment::Database.current
-    db_exist?('public').should == true
-    db_exist?('foo').should == false
+    Apartment::Database.db_exist?('public').should == true
+    Apartment::Database.db_exist?('baz').should == false
   end
 
   it 'has a user' do 
@@ -49,13 +49,13 @@ describe Room  do
     unnom = 'unnomdebasecorrect'
     r = u.rooms.new(database_name:unnom)
     puts r.full_name
-    Apartment::Database.drop(unnom) if db_exist?(unnom)
+    Apartment::Database.drop(unnom) if Apartment::Database.db_exist?(unnom)
     r.save
-    db_exist?(unnom).should == true
+    Apartment::Database.db_exist?(unnom).should == true
   end
 
   it 'le nom de base doit être unique'  do
-    Apartment::Database.drop('foo') if db_exist?('foo')
+    Apartment::Database.drop('foo') if Apartment::Database.db_exist?('foo')
     u.rooms.find_or_create_by_database_name('foo')
     r = u.rooms.new(valid_attributes)
     r.should_not be_valid
@@ -117,7 +117,7 @@ describe Room  do
 
   describe 'tools' do
     before(:each) do
-      @r = room_and_base('assotest1')
+      create_user
     end
 
     describe 'connnect_to_organism' , wip:true do
@@ -175,8 +175,8 @@ describe Room  do
   # on indique qu'il y a une migration pendante
       before(:each) do
         Room.find_each {|r| r.destroy}
-        Apartment::Database.adapter.drop('assotest1') if db_exist?('assotest1')
-        Apartment::Database.adapter.drop('assotest2') if db_exist?('assotest2')
+        Apartment::Database.adapter.drop('assotest1') if Apartment::Database.db_exist?('assotest1')
+        Apartment::Database.adapter.drop('assotest2') if Apartment::Database.db_exist?('assotest2')
         @r1 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest1')
         @r2 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest2')
         @r1.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest1',  :status=>'Association') if Organism.all.empty?}
@@ -200,7 +200,7 @@ describe Room  do
    describe 'verification des bases après les tests de room' do
 
     it 'la base assotest1 doit exister' do
-      db_exist?('assotest1').should be_true
+      Apartment::Database.db_exist?('assotest1').should be_true
     end
 
 

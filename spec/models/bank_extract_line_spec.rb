@@ -8,7 +8,7 @@ end
 
 
 describe BankExtractLine do  
-  include OrganismFixture 
+  include OrganismFixtureBis
 
   before(:each) do 
     create_minimal_organism  

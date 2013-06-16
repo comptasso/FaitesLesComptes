@@ -9,10 +9,15 @@ RSpec.configure do |c|
 end
 
 describe Nomenclature do
-  include OrganismFixture
+  include OrganismFixtureBis 
 
-  let(:o) {Organism.create!(title:'titre', :database_name=>'test', status:'Association')}
+  let(:o) {Organism.create!(title:'titre', :database_name=>'assotest1', status:'Association')}
   let(:p) {mock_model(Period, :organism_id=>o.id)}
+
+  before(:each) do
+    Apartment::Database.switch('assotest1')
+    clean_assotest1
+  end
 
   it 'peut lire un fichier yml pour charger ses pages' do
     @n = o.nomenclature

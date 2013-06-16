@@ -157,12 +157,12 @@ class Organism < ActiveRecord::Base
   # Utilisé dans le controller line pour préremplir les select.
   # utilisé également dans le form pour afficher ou non le select cash
   def main_cash_id
-    cashes.any?  ? cashes.first.id  :  nil
+    cashes.any?  ? cashes.order('id').first.id  :  nil
   end
   
   # renvoie le compte bancaire principal, en l'occurence, le premier
   def main_bank_id
-    bank_accounts.any?  ? bank_accounts.first.id  :  nil
+    bank_accounts.any?  ? bank_accounts.order('id').first.id  :  nil
   end
 
 

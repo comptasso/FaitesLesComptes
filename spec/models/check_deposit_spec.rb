@@ -9,7 +9,7 @@ end
 
 
 describe CheckDeposit do   
-  include OrganismFixture  
+  include OrganismFixtureBis
  
   before(:each) do 
     create_minimal_organism

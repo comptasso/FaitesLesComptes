@@ -8,25 +8,10 @@ end
 
 
 describe Account do   
-  include OrganismFixture 
+  include OrganismFixtureBis 
   
   
-  context  'méthode de classe' do
-
-    describe 'available' do
-
-      it 'retourne 5301 si pas encore de compte' do
-        clean_test_base
-        Account.available('53').should == '5301'
-      end
- 
-      it 'retourne 5301 si organisme est créé' do
-        create_organism
-        Account.available('53').should == '5301'
-      end
-
-    end
-  end
+  
 
   context 'avec un organisme' do
 

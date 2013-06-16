@@ -200,7 +200,7 @@ class Room < ActiveRecord::Base
   protected
 
   def create_db
-    if File.exist?(full_name)
+    if Apartment::Database.db_exist?(database_name)
       Apartment::Database.switch(database_name)
     else
       Apartment::Database.create(database_name)

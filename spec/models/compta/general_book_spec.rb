@@ -6,7 +6,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
 
 describe Compta::GeneralBook do
-include OrganismFixture
+include OrganismFixtureBis
 
   describe 'GeneralBook peut exister' do 
 
@@ -19,7 +19,7 @@ include OrganismFixture
   end
 
   it "should exist" do
-   @general_book.should be_an_instance_of(Compta::GeneralBook)
+   @general_book.should be_an_instance_of(Compta::GeneralBook) 
   end
 
   it 'and render pdf' do
@@ -28,7 +28,7 @@ include OrganismFixture
 
   end
 
-  describe 'GeneralBook to pdf a autant de pages que de comptes' do
+  describe 'GeneralBook to pdf a autant de pages que de comptes' do 
 
   it 'test du nombre de page' do
 

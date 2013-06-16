@@ -8,7 +8,7 @@ end
 
 
 describe Compta::RubrikParser do
-  include OrganismFixture
+  include OrganismFixtureBis
 
   let(:p) {mock_model(Period, 
       :two_period_account_numbers=>%w(20 201 206 207 208 2801))}

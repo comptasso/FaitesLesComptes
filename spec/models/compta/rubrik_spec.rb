@@ -8,7 +8,7 @@ end
 
 
 describe Compta::Rubrik do
-  include OrganismFixture
+  include OrganismFixtureBis
 
   # Dans le fichier asso.yml, les immos incorporelles ont
   # 4 comptes à 3 chiffres : 201, 206 et 208

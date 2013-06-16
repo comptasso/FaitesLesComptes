@@ -16,6 +16,7 @@ include JcCapybara
 
   before(:each) do
     @rooms = [r1, r2]
+    view.stub(:abc).and_return(ActiveRecord::Base.connection_config)
     r2.stub(:relative_version).and_return(:same_migration)
     r2.stub('up_to_date?').and_return true
     r2.stub('late?').and_return false
@@ -60,7 +61,7 @@ include JcCapybara
     
   end
 
-  context 'avec une base qui manque' do
+  context 'avec une base qui manque' do 
 
     it 'rend une action destroy' do
       r2.stub('no_base?').and_return(true)

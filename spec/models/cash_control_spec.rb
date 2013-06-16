@@ -3,15 +3,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
   #  c.filter = {:wip => true }
   #  c.exclusion_filter = {:js=> true }
 end
 
 describe CashControl do   
-  include OrganismFixture 
+  include OrganismFixtureBis
 
   before(:each) do
+
     create_minimal_organism 
     @cash_control = @c.cash_controls.new(date: Date.today, amount: 123.45)
   end
@@ -180,7 +181,7 @@ describe CashControl do
 
       before(:each) do
         date = @p.start_date
-
+        @income_account = @o.accounts.classe_7.first
         # on créé une ligne d'écriture par mois relevant de la caisse
         @p.nb_months.times do |i|
           d = date.months_since(i)

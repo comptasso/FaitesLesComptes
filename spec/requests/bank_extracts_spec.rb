@@ -8,7 +8,7 @@ RSpec.configure do |c|
   # c.exclusion_filter = {:js=>true} 
 end
 
-include OrganismFixture   
+include OrganismFixtureBis
  
 describe "BankExtracts" do 
 
@@ -78,7 +78,7 @@ describe "BankExtracts" do
 
       end
 
-      it 'affiche une icone modifier' , wip:true do
+      it 'affiche une icone modifier' do
          page.find('tbody tr:first td:last').should have_icon('afficher', href:"#{bank_account_bank_extract_path(@ba, @be)}")
       end
       
@@ -160,17 +160,18 @@ describe "BankExtracts" do
       end
 
 
-      it 'la page index affiche une table avec deux lignes' do 
+      it 'la page index affiche une table avec deux lignes' , wip:true do
         visit bank_account_bank_extracts_path(@ba)
         page.all('table tbody tr').should have(2).rows
       end
 
-      it 'détruire le premier bank_extract laisse une ligne',  :js=>true do
-        visit bank_account_bank_extracts_path(@ba)
+      it 'détruire le premier bank_extract laisse une ligne', wip:true, :js=>true do
+        visit bank_account_bank_extracts_path(@ba)  
         click_link('Supprimer')
         alert = page.driver.browser.switch_to.alert
         alert.accept
         sleep 1
+        @ba.bank_extracts(true).count.should == 1
         page.all('table tbody tr').should have(1).row  
       end
     
@@ -187,7 +188,7 @@ describe "BankExtracts" do
 
     it 'affiche le formulaire' do
       f = page.find('form')
-      f.find('#bank_extract_reference').value.should == 'Folio 1'
+      f.find('#bank_extract_reference').value.should == 'Folio 1' 
       f.find('#bank_extract_begin_sold').value.should == '0.00'
       f.find('#bank_extract_total_credit').value.should == '1.20'
       f.find('#bank_extract_total_debit').value.should == '0.55'
