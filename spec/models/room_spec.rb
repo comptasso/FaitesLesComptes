@@ -5,7 +5,7 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe Room do
+describe Room  do
   include OrganismFixture
 
   let(:u) {stub_model(User)}
@@ -172,7 +172,7 @@ describe Room do
   end
 
   describe 'version_update and migrate_each' do
-
+  # on indique qu'il y a une migration pendante
       before(:each) do
         Room.find_each {|r| r.destroy}
         Apartment::Database.adapter.drop('assotest1') if db_exist?('assotest1')
@@ -196,4 +196,13 @@ describe Room do
 
     end
 
+
+   describe 'verification des bases après les tests de room' do
+
+    it 'la base assotest1 doit exister' do
+      db_exist?('assotest1').should be_true
+    end
+
+
+   end
 end

@@ -22,7 +22,6 @@ class ApplicationController < ActionController::Base
   def control_version
     Rails.logger.info 'appel de controle version'
     @control_version = Room.version_update?
- #   redirect_to new_admin_version_path unless @control_version
   end
 
    # vérifie que l'on est loggé sous un nom d'utilisateur,

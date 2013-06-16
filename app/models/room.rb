@@ -20,6 +20,7 @@ class Room < ActiveRecord::Base
   
 
   after_create :create_db, :connect_to_organism
+  after_destroy :destroy_db if ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
   
   # renvoie l'organisme associé à la base
   # TODO utiliser les méthode de apartment en l'occurence process
@@ -204,6 +205,10 @@ class Room < ActiveRecord::Base
     else
       Apartment::Database.create(database_name)
     end
+  end
+
+  def destroy_db
+    Apartment::Database.drop(database_name)
   end
 
   

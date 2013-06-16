@@ -6,7 +6,7 @@ RSpec.configure do |c|
    # c.filter = {wip:true}
 end
 
-describe Cash do
+describe Cash , wip:true do
   include OrganismFixture
 
   before(:each) do
