@@ -61,14 +61,22 @@ describe Admin::ArchivesController do
 
   describe 'POST create' do
 
+    after(:each) do
+      # effacement du fichier envoyer par :send_file
+      fi = File.join(Rails.root, 'spec/support/assotest1.sqlite3')
+      File.delete(fi) if File.exist?(fi)
+    end
+
     it 'doit créer une archive' do
+      
       @o.should_receive(:archives).and_return @a = double(Arel)
       @a.should_receive(:new).with( {"comment"=>'spec'}).and_return(arch)
-      arch.stub(:save)
+      arch.stub(:save).and_return(false)
       post :create, {:organism_id=>@o.id, archive: {comment: 'spec'}}, valid_session
     end
 
     it 'le controller doit recevoir send_file' do
+      
       @o.stub_chain(:archives, :new).and_return(arch)
       arch.stub(:save).and_return(true)
       controller.should_receive(:send_file)
@@ -77,6 +85,7 @@ describe Admin::ArchivesController do
     end
 
     it 'si echec rend new' do
+      
       @o.stub_chain(:archives, :new).and_return(arch)
       arch.stub(:save).and_return(false)
       post :create,{ :organism_id=>@o.id, archive: {comment: 'spec'}}, valid_session

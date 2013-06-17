@@ -38,7 +38,9 @@ Spork.prefork do
       Organism.all.each {|o| o.destroy}
     end
 
-
+#    config.after(:each) do
+#
+#    end
 
 #    config.before(:each) do
 #      if example.metadata[:js]
