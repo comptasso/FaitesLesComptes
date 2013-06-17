@@ -3,10 +3,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c| 
-   # c.filter = {wip:true}
+ #  c.filter = {wip:true}
 end
 
-describe Period do 
+describe Period do  
   include OrganismFixtureBis
   context 'un organisme' do 
 
@@ -69,7 +69,7 @@ describe Period do
 
       
 
-      it 'n est pas valide si plus de deux exercices ouverts', wip:true do
+      it 'n est pas valide si plus de deux exercices ouverts' do
        @p.stub(:organism).and_return(mock_model(Organism, :nb_open_periods=>2))
        expect {@p.save}.not_to change {Period.count}
        @p.save
@@ -587,7 +587,7 @@ describe Period do
       @period.accounts.count.should == 89
     end
 
-    it 'destruction de l exercice', wip:true do
+    it 'destruction de l exercice' do
       @period.destroy
       @period.accounts.count.should == 0
     end
@@ -617,11 +617,11 @@ describe Period do
       @p.compta_lines(true).count.should == 0
     end
 
-    describe 'gestion des relevés de banques'  do
+    describe 'gestion des relevés de banques'  , wip:true do
 
        def count_habtm
           rep = ActiveRecord::Base.connection.execute('SELECT COUNT(*) FROM bank_extract_lines_lines').first
-          return rep['COUNT(*)'] if ActiveRecord::Base.connection_config[:adpater] == 'sqlite3'
+          return rep['COUNT(*)'] if ActiveRecord::Base.connection_config[:adapter] == 'sqlite3'
           return rep['count'].to_i if ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
         end
 

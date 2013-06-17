@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Archive do
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
 
   before(:each) do
     create_minimal_organism
@@ -14,7 +14,12 @@ describe Archive do
   describe 'préparation d une archive' do
     
     it 'archive_filename' do
-      @archive.archive_filename.should =~ /^assotest1[a-z0-9:\s]*\.dump$/
+      case ActiveRecord::Base.connection_config[:adapter]
+      when 'sqlite3'
+        @archive.archive_filename.should =~ /^assotest1[a-z0-9:\s]*\.sqlite3$/
+      when 'postgresql'
+        @archive.archive_filename.should =~ /^assotest1[a-z0-9:\s]*\.dump$/
+      end
     end
 
     it 'si l adapter n est pas trouvé, retourne une erreur' do

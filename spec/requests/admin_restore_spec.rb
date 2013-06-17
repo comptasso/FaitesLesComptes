@@ -8,7 +8,7 @@ RSpec.configure do |c|
    # c.exclusion_filter = {:js=> true } 
 end
 
-describe 'restoration de fichier' do    
+describe 'restoration de fichier' do     
   include OrganismFixtureBis
 
   before(:each) do
@@ -41,7 +41,7 @@ describe 'restoration de fichier' do
 
   it 'remplir le formulaire et cliquer conduit à la vue rooms#index' , wip:true do
     pending('test à ne faire que pour sqlite3') if @ad != 'sqlite3'
-    Apartment::Database.drop('testload') if  db_exist?('testload')
+    Apartment::Database.drop('testload') if  Apartment::Database.db_exist?('testload')
     visit new_admin_restore_path
     page.find('input#file_upload')
     attach_file('file_upload', "#{File.dirname(__FILE__)}/../fixtures/files/testv064.sqlite3")

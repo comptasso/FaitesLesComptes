@@ -2,11 +2,11 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
- # c.filter = {wip:true}
+  # c.filter = {wip:true}
 end
 
 describe Room  do
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
 
   let(:u) {stub_model(User)}
 
@@ -19,9 +19,12 @@ describe Room  do
   end
 
   it 'test de l existence des bases'  do
-    puts Apartment::Database.current
-    Apartment::Database.db_exist?('public').should == true
-    Apartment::Database.db_exist?('baz').should == false
+    case ActiveRecord::Base.connection_config[:adapter]
+    when 'sqlite3'
+      Apartment::Database.db_exist?('test').should == true
+    when 'postgresql'
+      Apartment::Database.db_exist?('public').should == true
+    end
   end
 
   it 'has a user' do 
@@ -126,10 +129,16 @@ describe Room  do
       end
 
       it 'appelle Apartment.reset si le fichier n est pas trouvé' do
-       @r.database_name = nil
-       @r.connect_to_organism
-       Apartment::Database.current.should == 'public'
-     end
+        @r.database_name = nil
+        @r.connect_to_organism
+      base = case ActiveRecord::Base.connection_config[:adapter]
+        when 'sqlite3' then 'test'
+        when 'postgresql' then 'public'
+        else
+          'inconnu'
+        end
+        Apartment::Database.current.should == base
+      end
      
     end
   
@@ -172,37 +181,37 @@ describe Room  do
   end
 
   describe 'version_update and migrate_each' do
-  # on indique qu'il y a une migration pendante
-      before(:each) do
-        Room.find_each {|r| r.destroy}
-        Apartment::Database.adapter.drop('assotest1') if Apartment::Database.db_exist?('assotest1')
-        Apartment::Database.adapter.drop('assotest2') if Apartment::Database.db_exist?('assotest2')
-        @r1 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest1')
-        @r2 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest2')
-        @r1.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest1',  :status=>'Association') if Organism.all.empty?}
-        @r2.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest2',  :status=>'Association') if Organism.all.empty?}
-        ActiveRecord::Migrator.any_instance.stub(:pending_migrations).and_return [1]
-      end
-
-      it 'met à jour la version' do
-        # 3 fois car une fois pour la base principale et une fois pour chaque organisme
-        ActiveRecord::Migrator.should_receive(:migrate).with(ActiveRecord::Migrator.migrations_paths).exactly(3).times
-        Room.migrate_each
-      end
-
-      it 'version_update? est capable de vérifier la similitude des versions' do
-        Room.should_not be_version_update
-      end
-
+    # on indique qu'il y a une migration pendante
+    before(:each) do
+      Room.find_each {|r| r.destroy}
+      Apartment::Database.adapter.drop('assotest1') if Apartment::Database.db_exist?('assotest1')
+      Apartment::Database.adapter.drop('assotest2') if Apartment::Database.db_exist?('assotest2')
+      @r1 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest1')
+      @r2 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest2')
+      @r1.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest1',  :status=>'Association') if Organism.all.empty?}
+      @r2.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest2',  :status=>'Association') if Organism.all.empty?}
+      ActiveRecord::Migrator.any_instance.stub(:pending_migrations).and_return [1]
     end
 
+    it 'met à jour la version' do
+      # 3 fois car une fois pour la base principale et une fois pour chaque organisme
+      ActiveRecord::Migrator.should_receive(:migrate).with(ActiveRecord::Migrator.migrations_paths).exactly(3).times
+      Room.migrate_each
+    end
 
-   describe 'verification des bases après les tests de room' do
+    it 'version_update? est capable de vérifier la similitude des versions' do
+      Room.should_not be_version_update
+    end
+
+  end
+
+
+  describe 'verification des bases après les tests de room' do
 
     it 'la base assotest1 doit exister' do
       Apartment::Database.db_exist?('assotest1').should be_true
     end
 
 
-   end
+  end
 end

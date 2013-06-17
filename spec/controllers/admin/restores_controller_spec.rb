@@ -6,7 +6,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-class RestoreError < StandardError; end 
+class RestoreError < StandardError; end  
 
 describe Admin::RestoresController do 
   include ActionDispatch::TestProcess

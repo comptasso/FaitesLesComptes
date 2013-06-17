@@ -56,7 +56,7 @@ class Admin::RestoresController < Admin::ApplicationController
         raise RestoreError, 'Nom de base non valide : impossible de créer la base' unless @room.valid?
       end
 
-      dump_restore
+      dump_restore(uploaded_io)
 
 
 
@@ -91,20 +91,20 @@ class Admin::RestoresController < Admin::ApplicationController
     end
   end
 
-  def dump_restore
+  def dump_restore(uploaded_io)
      case ActiveRecord::Base.connection_config[:adapter]
-       when 'sqlite3' then sqlite_restore
-       when 'postgresql' then postgres_restore
+       when 'sqlite3' then sqlite_restore(uploaded_io)
+       when 'postgresql' then postgres_restore(uploaded_io)
      end
   end
 
-  def sqlite_restore
+  def sqlite_restore(uploaded_io)
       File.open(@room.full_name, 'wb') do |file|
         file.write(uploaded_io.read)
       end
   end
 
-  def postgres_restore
+  def postgres_restore(uploaded_io)
    # system("pg_restore uploaded_io --db_name=#{abc[:database]} --clean --single-transaction")
   end
 
