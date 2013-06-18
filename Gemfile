@@ -1,5 +1,8 @@
 source 'http://rubygems.org'
 
+ruby '2.0.0'
+
+
 gem 'rails', '3.2.13'
 gem 'rack', '1.4.5'
 # gem 'therubyracer' execjs sous windows
@@ -7,7 +10,10 @@ gem 'simple_form', "~> 2.0.1"
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3', '1.3.7'
+
+group :ocra, :test do
+  gem 'sqlite3', '1.3.7'
+end
 gem 'acts_as_list', '0.1.9'
 gem 'prawn', "~> 0.12"
 gem 'prawn_rails', "0.0.11"
@@ -15,7 +21,7 @@ gem 'haml-rails', "~>0.3"
 gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
 gem 'apartment'
 
-group :staging do
+group :production, :staging, :test do
   gem 'pg'
 end
 
