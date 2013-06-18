@@ -12,7 +12,7 @@ gem 'simple_form', "~> 2.0.1"
 
 
 group :ocra, :test do
-  gem 'sqlite3', '1.3.7'
+ # gem 'sqlite3', '1.3.7'
 end
 gem 'acts_as_list', '0.1.9'
 gem 'prawn', "~> 0.12"
