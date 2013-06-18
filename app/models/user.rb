@@ -2,8 +2,6 @@ require 'strip_arguments'
 
 class User < ActiveRecord::Base
 
-  establish_connection Rails.env
-
   attr_accessible :name
   
   has_many :rooms, :dependent=>:destroy
