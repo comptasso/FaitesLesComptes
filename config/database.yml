@@ -19,9 +19,12 @@ sqltest:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: flcprod
   pool: 5
+  username: jcl
+  password: flc
   timeout: 5000
 
 ocra:
