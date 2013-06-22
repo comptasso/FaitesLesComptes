@@ -176,6 +176,7 @@ describe Admin::RoomsController do
     it 'si valid crée la pièce' do
       @cu.should_receive(:rooms).and_return(@a = double(Arel, :save=>true))
       @a.should_receive(:new).with(:database_name=>'test1').and_return @a
+      @a.should_receive(:valid?).and_return true
       
       post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
     end
@@ -186,17 +187,6 @@ describe Admin::RoomsController do
       before(:each) do
         @cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, save:true, connect_to_organism:true).as_new_record)
       end
-
-      context 'quand le fichier existe déjà' do
-
-        it 'remplit un flash alert et rend le formulaire' do
-          File.stub('exist?').and_return true
-          post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
-          flash[:alert].should == 'Le fichier existe déja; Si vous voulez travailler avec ce fichier, vous devez restaurer l\'organism par le menu Restauration'
-          response.should render_template :new
-        end
-      end
-
 
       it 'crée l organisme avec les paramètres' do
         Organism.should_receive(:new).with({'name'=>'Bizarre', 'database_name'=>'test1'}).and_return(stub_model(Organism))
@@ -216,33 +206,29 @@ describe Admin::RoomsController do
         response.should redirect_to new_admin_organism_period_url(@o)
       end
 
+      describe 'gestion des erreurs' do
 
-    end
-
-    context 'quand organism est invalide' do
-
-      it 'renvoie un flash alert et redirige vers new' do
-        @o.should_receive(:valid?).and_return false
-        post :create, {'organism'=>{'name'=>'Bizarre' , 'database_name'=>'test1'}}, valid_session
-        response.should render_template :new
-        flash[:alert].should == 'Impossible de créer l\'organisme'
+        it 'remplit un flash alert et rend le formulaire quand la base existe deja' do
+          @r.stub('valid?').and_return false
+          post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
+          flash[:alert].should == 'Base existante'
+          response.should render_template :new
+        end
+ 
+        it 'renvoie un flash alert et redirige vers new quand organisme est invalide' do
+          @o.should_receive(:valid?).and_return false
+          post :create, {'organism'=>{'name'=>'Bizarre' , 'database_name'=>'test1'}}, valid_session
+          response.should render_template :new
+          flash[:alert].should == 'Impossible de créer l\'organisme'
+        end
+     
+         it 'renvoie le formulaire quand room ne peut être sauvé' do
+          @r.stub(:save).and_return false
+          post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
+          response.should render_template :new
+        end
       end
     end
-
-    context 'quand room est incorrect' do
-
-      before(:each) do
-        @cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, save:false).as_new_record) 
-      end
-
-
-      it 'renvoie le formulaire ' do
-        post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
-        response.should render_template :new
-      end
-
-    end
-
   end
 
 
