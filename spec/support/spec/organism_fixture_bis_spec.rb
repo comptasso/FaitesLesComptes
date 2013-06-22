@@ -8,7 +8,7 @@ end
 
 # fichier destiné à tester les méthodes de support
 
-describe OrganismFixture do 
+describe OrganismFixtureBis do
   include OrganismFixtureBis
 
 

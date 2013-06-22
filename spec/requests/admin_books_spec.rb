@@ -5,13 +5,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
  # ActiveRecord::Base.shared_connection = nil
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
  # c.filter = {wip:true}
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true }
 end
 
-# spec request for testing admin books  
+# spec request for testing admin books   
 
 describe 'vue books index' do  
 
@@ -24,13 +24,6 @@ describe 'vue books index' do
     login_as('quidam')
   end
     
-
-  it 'check minimal organism' do 
-    Organism.count.should == 1
-    Book.count.should == 4
-  end
-
-
 
   describe 'new book' do
     
