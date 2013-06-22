@@ -82,18 +82,7 @@ class Room < ActiveRecord::Base
 
   # renvoie la dernière migration de la base principale (Room et User)
   def self.jcl_last_migration
-    keep_context do
-      ActiveRecord::Base.establish_connection Rails.env.to_sym
-      ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
-    end
-  end
-
-  # keep_context est utilisé pour conserver l'environnement 
-  def self.keep_context
-    cc = ActiveRecord::Base.connection_config
-    result = yield
-    ActiveRecord::Base.establish_connection(cc)
-    result
+    ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
   end
 
   # renvoie le lieu de stockage des bases de données
@@ -124,27 +113,17 @@ class Room < ActiveRecord::Base
   #
   # Met à jour la version
   def self.migrate_each
-    # migration de Room si nécessaire
-    if ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).pending_migrations.any?
-      ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
-    end
-    cc = ActiveRecord::Base.connection_config
-    Room.all.each {|r| r.migrate }
-    # retour à la base Room
-    ActiveRecord::Base.establish_connection(cc)
-  end
-
-  # effectue la migration de la base associée à la Room
-  def migrate
-    if connect_to_organism && ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).pending_migrations.any?
-        Rails.logger.info "migrating #{full_name}"
-        # et appel pour chacun de la migration
+    Apartment::Database.process(Apartment::Database.default_db) do
+        puts "migration de la base principale" 
         ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
-        Organism.first.update_attribute(:version, VERSION) # mise à jour de la version
+      end
+    Apartment.database_names.each do |db|
+      puts("Migration de la base #{db}")
+      Apartment::Migrator.migrate db
     end
+  ensure
+    Apartment::Database.switch()
   end
-
-  
 
   # se connecte à l'organisme correspondant à la base de données
   #
@@ -201,13 +180,16 @@ class Room < ActiveRecord::Base
 
   def create_db
     if Apartment::Database.db_exist?(database_name)
+      Rails.logger.info "Après création de Room :la base #{database_name} existe déjà"
       Apartment::Database.switch(database_name)
     else
+      Rails.logger.info "Après création de Room ; création de la base #{database_name}"
       Apartment::Database.create(database_name)
     end
   end
 
   def destroy_db
+    Rails.logger.info "Destruction de la base #{database_name}"
     Apartment::Database.drop(database_name)
   end
 

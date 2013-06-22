@@ -48,7 +48,7 @@ describe Room  do
     u.rooms.new(database_name:'  unnomdebasecorrect  ').should be_valid
   end
 
-  it 'save crée la base si elle n existe pas', wip:true  do
+  it 'save crée la base si elle n existe pas' do
     unnom = 'unnomdebasecorrect'
     r = u.rooms.new(database_name:unnom)
     puts r.full_name
@@ -123,7 +123,7 @@ describe Room  do
       create_user
     end
 
-    describe 'connnect_to_organism' , wip:true do
+    describe 'connnect_to_organism'  do
       it 'connect_to_organism retourne true si la base existe' do
         @r.connect_to_organism.should be_true
       end
@@ -137,22 +137,22 @@ describe Room  do
         else
           'inconnu'
         end
-        Apartment::Database.current.should == base
+        Apartment::Database.current.should == base 
       end
      
     end
   
 
-    describe 'check_db' , wip:true do
+    describe 'check_db' do
       
       it 'check_db contrôle l intégrité de la base' do
-        pending
+        pending('pas de check pour postgresql') if ActiveRecord::Base.connection_config[:adapter]=='postgresql'
         ActiveRecord::Base.connection.stub(:execute).with('pragma integrity_check').and_return(['integrity_check'=>'ok'])
         @r.check_db.should be_true
       end
 
       it 'indique si pas de réponse' do
-        pending
+        pending('pas de check pour postgresql') if ActiveRecord::Base.connection_config[:adapter]=='postgresql'
         ActiveRecord::Base.connection.stub(:execute).with('pragma integrity_check').and_return('n importe quoi')
         @r.check_db #.should be_false
       end
@@ -180,28 +180,24 @@ describe Room  do
     
   end
 
-  describe 'version_update and migrate_each' do
-    # on indique qu'il y a une migration pendante
-    before(:each) do
-      Room.find_each {|r| r.destroy}
-      Apartment::Database.adapter.drop('assotest1') if Apartment::Database.db_exist?('assotest1')
-      Apartment::Database.adapter.drop('assotest2') if Apartment::Database.db_exist?('assotest2')
-      @r1 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest1')
-      @r2 = Room.find_or_create_by_user_id_and_database_name(1, 'assotest2')
-      @r1.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest1',  :status=>'Association') if Organism.all.empty?}
-      @r2.look_for {Organism.create!(:title =>'Test ASSO',  database_name:'assotest2',  :status=>'Association') if Organism.all.empty?}
-      ActiveRecord::Migrator.any_instance.stub(:pending_migrations).and_return [1]
-    end
-
-    it 'met à jour la version' do
+  describe 'version_update and migrate_each'  , wip:true do
+    
+    it 'met à jour la version'  do
       # 3 fois car une fois pour la base principale et une fois pour chaque organisme
-      ActiveRecord::Migrator.should_receive(:migrate).with(ActiveRecord::Migrator.migrations_paths).exactly(3).times
+      ActiveRecord::Migrator.should_receive(:migrate).exactly(3).times
       Room.migrate_each
     end
 
     it 'version_update? est capable de vérifier la similitude des versions' do
+      ActiveRecord::Migrator.any_instance.stub(:pending_migrations).and_return ['quelquechose']
       Room.should_not be_version_update
     end
+
+    it 'version_update? retourne true s il n y a pas de migration en attente' do
+      ActiveRecord::Migrator.any_instance.stub(:pending_migrations).and_return []
+      Room.should be_version_update
+    end
+
 
   end
 
