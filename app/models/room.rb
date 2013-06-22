@@ -94,18 +94,21 @@ class Room < ActiveRecord::Base
   #
   # renvoie par exemple asso.sqlite3
   def db_filename
-    [database_name, Rails.application.config.database_configuration[Rails.env]['adapter']].join('.')
+    if ActiveRecord::Base.connection_config[:adapter] == 'sqlite3'
+      "#{database_name}.sqlite3"
+    else
+      database_name
+    end
   end
 
   
-  # renvoie par exemple 'app/db/test/organisms/asso.sqlite3'
+  # renvoie par exemple 'app/db/test/asso.sqlite3' pour sqlite3
+  # ou app/db/test/asso pour postgresql (ce qui n'est pas vraiment juste puisque
+  # postgre utilise des schémas.
+  # TODO voir s'il faut améliorer ce point (ou se passer de full_name)
   def full_name
     File.join(Room.path_to_db, db_filename)
   end
-
-
-
- 
 
 
   # Migre la table prinicpale dont dépend Room puis migre chacune des
@@ -114,11 +117,11 @@ class Room < ActiveRecord::Base
   # Met à jour la version
   def self.migrate_each
     Apartment::Database.process(Apartment::Database.default_db) do
-        puts "migration de la base principale" 
+        Rails.logger.info "migration de la base principale"
         ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
       end
     Apartment.database_names.each do |db|
-      puts("Migration de la base #{db}")
+      Rails.logger.info "Migration de la base #{db}"
       Apartment::Migrator.migrate db
     end
   ensure

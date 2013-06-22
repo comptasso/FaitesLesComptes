@@ -199,12 +199,7 @@ class Organism < ActiveRecord::Base
     look_for {Room.find_by_database_name(database_name)}
   end
 
-  # TODO relève de la responsabilité de Room;
-  # par ailleurs, il faudrait gérer le cas de postgresql
-  # et enfin, il faudrait avoir plutôt comme nom database_path
-  def full_name
-    "#{Room.path_to_db}/#{database_name}.sqlite3"
-  end
+  
   
   # #look_for permet de chercher quelque chose dans la base principale
   #

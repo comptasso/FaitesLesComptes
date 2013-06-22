@@ -72,8 +72,8 @@ describe Room  do
     end
 
     it 'db_filename construit le nom de la base de donnée' do
-      Rails.application.config.should_receive(:database_configuration).and_return({'test'=>{'adapter'=>'monadapteur'} })
-      @r.db_filename.should == 'foo.monadapteur'
+      @r.db_filename.should == 'foo.sqlite3' if ActiveRecord::Base.connection_config[:adapter] == 'sqlite3'
+      @r.db_filename.should == 'foo' if ActiveRecord::Base.connection_config[:adapter] != 'sqlite3'
     end
 
     it 'full_name retourne le chemin complet de la base' do

@@ -63,7 +63,7 @@ class Admin::ArchivesController < Admin::ApplicationController
     abc = ActiveRecord::Base.connection_config
     case abc[:adapter]
     when 'sqlite3'
-      system("sqlite3 #{@organism.full_name} .dump > #{file.path}")
+      system("sqlite3 #{@organism.room.full_name} .dump > #{file.path}")
       # yield "#{Room.path_to_db}/#{organism.database_name}.sqlite3"
     when 'postgresql'
       system("pg_dump #{abc[:database]} -n #{@organism.database_name} > #{file.path}")
