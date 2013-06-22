@@ -11,7 +11,7 @@ gem 'simple_form', "~> 2.0.1"
 
 
 group :ocra, :test do
- # gem 'sqlite3', '1.3.7'
+  gem 'sqlite3', '1.3.7'
 end
 gem 'acts_as_list', '0.1.9'
 gem 'prawn', "~> 0.12"
@@ -19,6 +19,7 @@ gem 'prawn_rails', "0.0.11"
 gem 'haml-rails', "~>0.3"
 gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
 gem 'apartment'
+gem 'devise'
 
 group :production, :staging, :test do
   gem 'pg'

@@ -8,7 +8,7 @@ Faitesvoscomptes::Application.routes.draw do
 
   get "modallines/create"
 
-  resource :session
+ # resource :session
 
   
 
@@ -246,7 +246,7 @@ Faitesvoscomptes::Application.routes.draw do
 
  
 
-  root to: 'sessions#new'
+  root to: 'admin/rooms#index'
   
 
   # The priority is based upon order of creation:

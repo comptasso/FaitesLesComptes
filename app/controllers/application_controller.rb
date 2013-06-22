@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
     unless @organism
       session[:org_db] = nil
       use_main_connection
-      redirect_to admin_rooms_url and return
+    #  redirect_to admin_rooms_url and return
     end
   end
 
