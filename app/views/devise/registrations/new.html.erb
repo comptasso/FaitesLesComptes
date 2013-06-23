@@ -1,5 +1,5 @@
 <div class="champ">
-  <h3>Inscription</h3>
+  <h3>Création d'un compte</h3>
 
 <div class="inner-champ">
 
@@ -11,15 +11,15 @@
   
     <%= f.input :name, :required => true, :autofocus => true,  input_html: {class: "span3"} %>
     <%= f.input :email, :required => true,  input_html: {class: "span3"}  %>
-    <%= f.input :password, :required => true,  input_html: {class: "span3"}  %>
+    <%= f.input :password, :required => true, hint:'8 caractères minimum', input_html: {class: "span3"}  %>
     <%= f.input :password_confirmation, :required => true,  input_html: {class: "span3"}  %>
  
 
   <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
+    <%= f.button :submit, "S'inscrire", class: "btn-primary span2" %>
   </div>
 <% end %>
  </div>
-<%= render "devise/shared/links" %>
+
 
 </div></div>
