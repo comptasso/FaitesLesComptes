@@ -95,10 +95,7 @@ module ApplicationHelper
     end
   end
 
-  def current_user?
-    session[:user]
-  end
-
+  
 
  
 end

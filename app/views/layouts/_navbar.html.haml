@@ -6,5 +6,5 @@
           = link_to header_title, organism_path(@organism), :tabindex=>-1, id:'home'
         -else
           = header_title
-        = render 'layouts/login_logout'
+        -#= render 'layouts/login_logout'
       = render 'layouts/upper_menu' if @organism && @organism.persisted?

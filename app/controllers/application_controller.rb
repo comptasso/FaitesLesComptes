@@ -3,9 +3,11 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  before_filter :control_version
+ # before_filter :control_version
 
-  before_filter :log_in?
+  before_filter :authenticate_user!
+
+ #  before_filter :log_in?
 
   before_filter :find_organism, :current_period
   
@@ -95,15 +97,7 @@ class ApplicationController < ActionController::Base
     ActionController::Base.helpers.number_with_precision(montant, precision:2) rescue '0,00'
   end
 
-
-  def current_user
-    @user
-  end
-
-  def current_user?
-    session[:user]
-  end
-
+ 
   # se connecte à la base principale
   def use_main_connection
     Rails.logger.info "début de use_main_connection : connecté à à #{ActiveRecord::Base.connection_config}"

@@ -1,6 +1,8 @@
 Faitesvoscomptes::Application.routes.draw do
 
   
+  devise_for :users
+
 # les chemins pour les liens qui sont dans le bandeau en bas de chaque page
   get "bottom/credit"
   get "bottom/contact"
@@ -17,9 +19,9 @@ Faitesvoscomptes::Application.routes.draw do
 
 
   namespace :compta do
-    resources :users do
-      resources :rooms
-    end
+#    resources :users do
+#      resources :rooms # TODO voir si utilisé
+#    end
 
     # TODO simplifier car on n'utilise que l'action show
     resources :rooms
@@ -80,9 +82,9 @@ Faitesvoscomptes::Application.routes.draw do
     get "versions/new"
     post "versions/migrate_each"
 
-    resources :users do
-      resources :rooms
-    end
+#    resources :users do
+#      resources :rooms
+#    end
 
     resources :rooms do
       member do
@@ -150,9 +152,9 @@ Faitesvoscomptes::Application.routes.draw do
 
   # DEBUTde la zone public
 
-  resources :users do
-    resources :rooms
-  end
+#  resources :users do
+#    resources :rooms
+#  end
 
   # TODO simplifier car on n'utilise que l'action show
   resources :rooms

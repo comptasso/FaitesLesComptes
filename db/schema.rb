@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130126101605) do
+ActiveRecord::Schema.define(:version => 20130622182426) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -129,6 +129,28 @@ ActiveRecord::Schema.define(:version => 20130126101605) do
     t.boolean  "income_outcome", :default => false
   end
 
+  create_table "lines", :force => true do |t|
+    t.date     "line_date"
+    t.string   "narration"
+    t.integer  "nature_id"
+    t.integer  "destination_id"
+    t.decimal  "debit",          :precision => 10, :scale => 2
+    t.decimal  "credit",         :precision => 10, :scale => 2
+    t.integer  "listing_id"
+    t.boolean  "locked",                                        :default => false
+    t.datetime "created_at",                                                       :null => false
+    t.datetime "updated_at",                                                       :null => false
+  end
+
+  create_table "listings", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.string   "image_url"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "organism_id"
+  end
+
   create_table "natures", :force => true do |t|
     t.string   "name"
     t.text     "comment"
@@ -180,7 +202,20 @@ ActiveRecord::Schema.define(:version => 20130126101605) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "email",                  :default => "", :null => false
+    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
   end
+
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "writings", :force => true do |t|
     t.date     "date"
