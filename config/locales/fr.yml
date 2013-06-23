@@ -262,6 +262,8 @@ fr:
         email: E-mail
         password: Mot de passe
         password_confirmation: Confirmation
+        remember_me: Se souvenir de moi
+        current_password: Mot de passe actuel
       compta/balance:
         from_date_picker: Date début
         to_date_picker: Date fin

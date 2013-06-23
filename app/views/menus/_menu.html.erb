@@ -9,7 +9,7 @@
       </a>
       <ul class="dropdown-menu">
         <% cache("saisie_#{current_user.name}")  do %>
-          <%= saisie_consult_organism_list if current_user? %>
+          <%= saisie_consult_organism_list if user_signed_in? %>
         <% end %>
       </ul>
     </li>

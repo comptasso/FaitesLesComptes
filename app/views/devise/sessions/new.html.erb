@@ -1,6 +1,15 @@
 <div class="champ">
-  <h3>Entrée</h3>
+  <h3>Entrée
+  <ul class="mois">
+    <li class="active">
 
+   
+      <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
+         <%= link_to "Mot de passe oublié ?", new_password_path(resource_name) %><br />
+       <% end -%>
+          </li>
+    </ul>
+</h3>
 <div class="inner-champ">
 
 <div class="inputs">
@@ -13,11 +22,11 @@
  
 
   <div class="form-actions">
-    <%= f.button :submit, "Sign in" %>
+    <%= f.button :submit, "Valider", class: "btn-primary span2" %>
   </div>
 <% end %>
  </div>
 
 
-<%= render "devise/shared/links" %>
+
 </div></div>

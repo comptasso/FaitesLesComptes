@@ -7,4 +7,5 @@
         -else
           = header_title
         = render 'layouts/login_logout'
-      = render 'layouts/upper_menu' if @organism && @organism.persisted?
+      - unless controller_name == 'registrations'
+        = render 'layouts/upper_menu' if @organism && @organism.persisted?
