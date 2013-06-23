@@ -16,6 +16,10 @@ class ApplicationController < ActionController::Base
   private
 
 
+  # Overwriting the sign_out redirect path method
+  def after_sign_out_path_for(resource_or_scope)
+    devise_sessions_bye_path
+  end
 
   # A chaque démarrage de l'application, on vérifie que la base principale
   # (celle qui contient les Room)

@@ -1,7 +1,9 @@
 Faitesvoscomptes::Application.routes.draw do
 
   
-  devise_for :users
+  devise_for :users do
+    get "devise/sessions/bye"
+  end
 
 # les chemins pour les liens qui sont dans le bandeau en bas de chaque page
   get "bottom/credit"
@@ -9,6 +11,7 @@ Faitesvoscomptes::Application.routes.draw do
   get "bottom/apropos"
 
   get "modallines/create"
+  
 
  # resource :session
 
