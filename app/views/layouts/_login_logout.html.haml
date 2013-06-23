@@ -1,9 +1,10 @@
 #login_logout
-  - if current_user?
+  - if user_signed_in?
     Connecté en tant que
     %span= " #{current_user.name}"
     &nbsp;-&nbsp;
-    = icon_to 'door-open.png', session_path(current_user), :method=>:delete, title:'Déconnexion', :tabindex=>-1
+    = icon_to 'door-open.png', destroy_user_session_path, :method=>:delete, title:'Déconnexion', :tabindex=>-1
   - else
-    Non connecté
-    = icon_to 'door.png', new_session_path, title:'Connexion'
+    Nouvel utilisateur ?
+    -if devise_mapping.registerable? && controller_name != 'registrations'
+      = icon_to 'door.png', new_registration_path(resource_name), title:"S'enregistrer comme nouvel utilisateur"

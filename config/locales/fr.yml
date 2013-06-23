@@ -259,6 +259,9 @@ fr:
         used: Utilisé
       user:
         name: Nom
+        email: E-mail
+        password: Mot de passe
+        password_confirmation: Confirmation
       compta/balance:
         from_date_picker: Date début
         to_date_picker: Date fin
@@ -356,6 +359,7 @@ fr:
         update: Modifier ce virement
       user:
         create: Entrée
+        Sign up: Valider
       writing:
         create: "Créer l'écriture"
         update: Enregistrer

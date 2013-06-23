@@ -16,7 +16,7 @@
       <div class="row-fluid">
 
         <div>
-          <%= render 'admin/menus/menu' if current_user? %>
+          <%= render 'admin/menus/menu' if user_signed_in? %>
         </div>
         <div id="main-zone">
           <%= render 'layouts/flash_partial' %>

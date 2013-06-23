@@ -22,7 +22,7 @@
  <div class="row-fluid">
 
   <div>
-    <%= render 'menus/menu' if current_user? %>
+    <%= render 'menus/menu' if user_signed_in? %>
   </div>
    <div id="main-zone">
  
