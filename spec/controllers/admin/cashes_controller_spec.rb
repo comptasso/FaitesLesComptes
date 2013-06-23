@@ -18,13 +18,14 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe Admin::CashesController do
+describe Admin::CashesController do 
   include SpecControllerHelper
 
   before(:each) do
     minimal_instances
+    sign_in(@cu)
     @ca = mock_model(Cash)
-    @o.stub(:cashes).and_return @a = double(Arel)
+    @o.stub(:cashes).and_return @a = double(Arel) 
   end
 
   # This should return the minimal set of attributes required to create a valid

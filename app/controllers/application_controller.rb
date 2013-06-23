@@ -1,13 +1,14 @@
 # -*- encoding : utf-8 -*-
 
-class ApplicationController < ActionController::Base
+# TODO l'ancien session_controller (avant Devise) faisait un contrôle du navigateur
+# et indiquait s'il y avait un problème
+
+class ApplicationController < ActionController::Base 
   protect_from_forgery
 
  # before_filter :control_version
 
   before_filter :authenticate_user!
-
- #  before_filter :log_in?
 
   before_filter :find_organism, :current_period
   
@@ -30,22 +31,7 @@ class ApplicationController < ActionController::Base
     @control_version = Room.version_update?
   end
 
-   # vérifie que l'on est loggé sous un nom d'utilisateur,
-  # s'il n'y a pas de session[:user], et à nil session[:org_db]
-  def log_in?
-    if session[:user]
-      @user = User.find_by_id(session[:user])
-    else
-      
-      logger.debug "pas de session[user]"
-      session[:org_db] = nil
-      use_main_connection
-      redirect_to new_session_url
-    end
-   
-
-  end
-
+  
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism

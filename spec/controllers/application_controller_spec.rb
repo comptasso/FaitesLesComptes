@@ -3,13 +3,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
- #  c.filter = {:wip=>true}
+   c.filter = {:wip=>true} 
 end
 
 # on utilise Admin::RoomsController mais le but de cette spec est de faire les tests
 # des actions before_filter de application_controller
 describe Admin::PeriodsController do
-
+  include SpecControllerHelper
   let(:cu) {mock_model(User, 'up_to_date?'=>true)}
   let(:o) {mock_model(Organism)}
   let(:r1) {mock_model(Room)}
@@ -19,22 +19,18 @@ describe Admin::PeriodsController do
   
   describe 'before_filters' do
 
-    before(:each) do
-       User.stub(:find_by_id).with(cu.id).and_return(cu)
-      cu.stub(:rooms).and_return([r1, r2])
-    end
-
-    describe 'log_in?' do
+    describe 'sign_in' do
 
 
-    it 'should redirect without user (filter log_in?)' do
+    it 'should redirect without user (filter log_in?)', :wip=>true do
+      sign_in(nil)
       get :index #'on utilise une action quelconque (ici rooms)'
-      response.should redirect_to new_session_url
+      response.should redirect_to new_user_session_url
     end
     
-    it 'assign user si la session existe' do
-      User.should_receive(:find_by_id).with(cu.id).at_least(1).times.and_return(cu)
-      get :index, {}, {user:cu.id}
+    it 'assign user si la session existe', :wip=>true do
+      sign_in(cu)
+      get :index
       assigns(:user).should == cu
     end
 
@@ -50,7 +46,7 @@ describe Admin::PeriodsController do
          assigns(:organism).should == nil
       end
 
-      it 'si session[:org_db, cherche la chambre et assigne @organism',  wip:true do
+      it 'si session[:org_db, cherche la chambre et assigne @organism' do
         cu.should_receive(:rooms).and_return(@ar = double(Arel))
         @ar.should_receive(:find_by_database_name).with('bonjour').and_return(r1)
         r1.stub(:connect_to_organism).and_return true
