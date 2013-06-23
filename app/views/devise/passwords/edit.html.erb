@@ -12,7 +12,7 @@
   <%= f.full_error :reset_password_token %>
 
  
-    <%= f.input :password, :required => true, :autofocus => true,  input_html: {class: "span3"}  %>
+    <%= f.input :password, :required => true, :hint=>'8 caractères minimum', :autofocus => true,  input_html: {class: "span3"}  %>
     <%= f.input :password_confirmation, :required => true,  input_html: {class: "span3"}  %>
 
 
