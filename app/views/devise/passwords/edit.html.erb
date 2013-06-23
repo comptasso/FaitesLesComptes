@@ -1,19 +1,29 @@
-<h2>Change your password</h2>
+<div class="champ">
+  <h3>Réinitialisation du mot de passe</h3>
+<div class="inner-champ">
 
-<%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
+<div class="inputs">
+
+
+<%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put , class: 'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
 
   <%= f.input :reset_password_token, :as => :hidden %>
   <%= f.full_error :reset_password_token %>
 
-  <div class="form-inputs">
-    <%= f.input :password, :label => "New password", :required => true, :autofocus => true %>
-    <%= f.input :password_confirmation, :label => "Confirm your new password", :required => true %>
-  </div>
+ 
+    <%= f.input :password, :required => true, :autofocus => true,  input_html: {class: "span3"}  %>
+    <%= f.input :password_confirmation, :required => true,  input_html: {class: "span3"}  %>
+
 
   <div class="form-actions">
-    <%= f.button :submit, "Change my password" %>
+    <%= f.button :submit, "Valider", class: "btn-primary span3"  %>
   </div>
 <% end %>
+</div>
 
-<%= render "devise/shared/links" %>
+ </div>
+
+
+
+</div>
