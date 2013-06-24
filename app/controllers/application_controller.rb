@@ -6,11 +6,11 @@
 class ApplicationController < ActionController::Base 
   protect_from_forgery
 
- # before_filter :control_version
+  # before_filter :control_version
 
   before_filter :authenticate_user!
 
-  before_filter :find_organism, :current_period
+  before_filter :find_organism, :current_period, :if=>'user_signed_in?'
   
   helper_method :two_decimals, :virgule, :picker_to_date, :current_user, :current_period?, :abc
 
@@ -35,20 +35,20 @@ class ApplicationController < ActionController::Base
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
-    # utile pour remettre le système cohérent
-    use_main_connection if session[:org_db] == nil
-    r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
-    if r # on doit avoir tru=ouvé une room
-      r.connect_to_organism
-      @organism = Organism.first # il n'y a qu'un organisme par base
+      # utile pour remettre le système cohérent
+      use_main_connection if session[:org_db] == nil
+      r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
+      if r # on doit avoir tru=ouvé une room
+        r.connect_to_organism
+        @organism = Organism.first # il n'y a qu'un organisme par base
      
-    end
-    # si pas d organisme (cas d une base corrompue)
-    unless @organism
-      session[:org_db] = nil
-      use_main_connection
-    #  redirect_to admin_rooms_url and return
-    end
+      end
+      # si pas d organisme (cas d une base corrompue)
+      unless @organism
+        session[:org_db] = nil
+        use_main_connection
+        redirect_to admin_rooms_url and return
+      end
   end
 
   # si pas de session, on prend le premier exercice non clos
@@ -90,9 +90,8 @@ class ApplicationController < ActionController::Base
  
   # se connecte à la base principale
   def use_main_connection
-    Rails.logger.info "début de use_main_connection : connecté à à #{ActiveRecord::Base.connection_config}"
+    Rails.logger.info "use_main_connection : Passage à la base principale"
     Apartment::Database.switch()
-    Rails.logger.info "appel de use_main connection : connexion à #{ActiveRecord::Base.connection_config}"
   end
   
   # Méthode à appeler dans les controller rooms pour
@@ -162,6 +161,8 @@ class ApplicationController < ActionController::Base
   end
 
   # raccourci pour avoir la configuration
+  #
+  # abc pour ActiverecordBaseConnection_config
   def abc
     ActiveRecord::Base.connection_config
   end
