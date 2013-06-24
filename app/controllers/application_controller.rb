@@ -10,12 +10,18 @@ class ApplicationController < ActionController::Base
 
   before_filter :authenticate_user!
 
-  before_filter :find_organism, :current_period, :if=>'user_signed_in?'
+  before_filter :find_organism, :current_period, :unless=>'devise_action?'
   
   helper_method :two_decimals, :virgule, :picker_to_date, :current_user, :current_period?, :abc
 
   private
 
+
+  # on est dans une action du gem devise si on n'est pas loggé ou
+  # si l'action n'est pas précisément de se déconnecter
+  def devise_action?
+    !user_signed_in? || action_name=='bye'
+  end
 
   # Overwriting the sign_out redirect path method
   def after_sign_out_path_for(resource_or_scope)
@@ -31,6 +37,23 @@ class ApplicationController < ActionController::Base
     @control_version = Room.version_update?
   end
 
+  # Lorsqu'il n'y a pas d'organisme, il faut afficher soit la vue
+  # admin/rooms#index soit la vue organism selon qu'il y a plusieurs bases ou une seule
+  #
+  #
+  def default_view
+    session[:org_db] = nil
+    use_main_connection
+    case current_user.rooms.count
+    when 1
+      current_user.room.first.connect_to_organism
+      @organism = Organism.first
+      redirect_to organism_path(@organism) and return
+    else
+      redirect_to admin_rooms_url and return
+    end
+  end
+
   
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
@@ -44,11 +67,8 @@ class ApplicationController < ActionController::Base
      
       end
       # si pas d organisme (cas d une base corrompue)
-      unless @organism
-        session[:org_db] = nil
-        use_main_connection
-        redirect_to admin_rooms_url and return
-      end
+      default_view unless @organism
+      
   end
 
   # si pas de session, on prend le premier exercice non clos

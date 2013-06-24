@@ -1,7 +1,8 @@
 Faitesvoscomptes::Application.routes.draw do
 
   
-  devise_for :users do
+  devise_for :users
+  devise_scope :user do
     get "devise/sessions/bye"
   end
 

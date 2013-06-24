@@ -29,7 +29,9 @@ describe Admin::PeriodsController do
       end
     
       it 'assign user si la session existe' do
+        cu.stub_chain(:rooms, :count).and_return 2
         sign_in(cu)
+
         get :index
         response.should redirect_to admin_rooms_url
       end
@@ -41,6 +43,7 @@ describe Admin::PeriodsController do
 
       before(:each) do
         sign_in(cu)
+        cu.stub_chain(:rooms, :count).and_return 2
       end
 
 
@@ -55,8 +58,17 @@ describe Admin::PeriodsController do
           cu.should_receive(:rooms).and_return(@ar = double(Arel))
           @ar.should_receive(:find_by_database_name).with('bonjour').and_return(r1)
           r1.stub(:connect_to_organism).and_return true
-          get :index, {}, {org_db:'bonjour'}
+          
+        
+        get :index, {}, {org_db:'bonjour'}
           assigns(:organism).should == @o
+        end
+
+        it 'si un seul organisme renvoie vers show' do
+          cu.stub_chain(:rooms, :count).and_return 2
+          get :index, { :action=>'admin/rooms'}
+          assigns(:organism).should == nil
+          response.should redirect_to admin_rooms_url
         end
       end
 
@@ -102,7 +114,14 @@ describe Admin::PeriodsController do
 
       end
 
-   
+    describe 'sign_out' do
+
+      it 'renvoie vers la page bye quand on se déloggue' do
+          pending 'à faire'
+
+        end
+    end
+
 
     
 
