@@ -2,11 +2,11 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
-  # c.filter = {wip:true}
+  # c.filter = {wip:true} 
 end
 
 describe Room  do
-  include OrganismFixtureBis 
+  include OrganismFixtureBis  
 
   let(:u) {stub_model(User)}
 
@@ -120,7 +120,7 @@ describe Room  do
 
   describe 'tools' do
     before(:each) do
-      create_user
+      create_user 
     end
 
     describe 'connnect_to_organism'  do

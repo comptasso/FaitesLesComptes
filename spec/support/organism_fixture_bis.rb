@@ -13,10 +13,8 @@ module OrganismFixtureBis
 
   def create_user
     clean_main_base
-    @cu =  User.create!(name:'quidam')
-    @r = Room.new(database_name:'assotest1')
-    @r.user_id = @cu.id
-    @r.save
+    @cu =  User.create!(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1' )
+    @r = @cu.rooms.create!(database_name:'assotest1')
   end
 
   def clean_assotest1

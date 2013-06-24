@@ -6,16 +6,23 @@ describe User do
   
   let(:o) {mock_model(Organism)}
 
+  def valid_attributes_for_user
+    {name:'Jean-Claude', email:'bonjour@example.com', password:'Bonjour53'}
+  end
+
   before(:each) do
-    @u = User.new 
+    Apartment::Database.switch()
+    User.delete_all
+    @u = User.new(valid_attributes_for_user)
   end
 
   describe 'validations' do
   
-  it 'exige un nom' do
-    @u.should_not be_valid
-    @u.should have(3).errors_on(:name) # Obligatoire, caractère non admis et trop court
-  end
+    it 'exige un nom' do
+      @u.name =  nil
+      @u.should_not be_valid
+      @u.should have(3).errors_on(:name) # Obligatoire, caractère non admis et trop court
+    end
 
     it 'ni trop court' do
       @u.name ='Ab'
@@ -35,9 +42,22 @@ describe User do
       @u.errors.messages[:name].should == ['Caractères non admis']
     end
 
+    it 'non valide sans e_mail' do
+      @u.email = 'super'
+      @u.should_not be_valid
+      @u.errors.messages[:email].should == ['Caractères non admis']
+    end
+
+    it 'non valide sans password' do
+      @u.password = nil
+      @u.should_not be_valid
+      @u.errors.messages[:password].should == ['obligatoire']
+    end
+
     it 'mais juste comme il faut' do
-      @u.name ='Jean Claude Lepage'
-      @u.should be_valid
+     @u.valid?
+     puts @u.errors.messages unless @u.valid?
+     @u.should be_valid
 
     end
 
