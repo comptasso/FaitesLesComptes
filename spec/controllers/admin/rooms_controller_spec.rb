@@ -27,10 +27,7 @@ end
 describe Admin::RoomsController do
   include SpecControllerHelper
  
-  def user_session
-    {user:@cu.id}
-  end
-
+  
   before(:each) do
     minimal_instances
     # minimal instance donne @cu pour current_user et @r comme room
@@ -43,19 +40,19 @@ describe Admin::RoomsController do
     it "assigns all rooms as @rs" do
       @cu.should_receive(:rooms).and_return(@a = double(Arel, :map=>[]))
 
-      get :index,{}, user_session
+      get :index,{}
       assigns(:rooms).should eq(@a) 
     end
 
     it 'renders template index' do
       @cu.stub(:rooms).and_return(@a = double(Arel, :map=>[]))
-      get :index,{}, user_session
+      get :index
       response.should render_template('index')
     end
 
     it 'si toutes les roome sont en phase n affiche pas de flash' do
       @cu.should_receive(:rooms).and_return([mock_model(Room, :relative_version=>:same_migration)])
-      get :index,{}, user_session
+      get :index
       flash[:alert].should == nil
     end
 
@@ -68,19 +65,19 @@ describe Admin::RoomsController do
 
       it 'si une room est en retard affiche un flash' do
         @cu.stub(:status).and_return([:late_migration])
-        get :index,{}, user_session
+        get :index,{}
         flash[:alert].should == 'Une base au moins est en retard par rapport à la version de votre programme, migrer la base correspondante'
       end
 
       it 'si une room est en avance, affiche un flash' do
         @cu.stub(:status).and_return([:advance_migration])
-        get :index,{}, user_session
+        get :index,{}
         flash[:alert].should == 'Une base au moins est en avance par rapport à la version de votre programme, passer à la version adaptée'
       end
 
       it 'si une base n existe pas ' do
         @cu.stub(:status).and_return([:no_base])
-        get :index,{}, user_session
+        get :index,{}
         flash[:alert].should == 'Un fichier correspondant à une base n\'a pu être trouvée ; vous devriez effacer l\'enregistrement correspondant'
       end
 
@@ -96,13 +93,13 @@ describe Admin::RoomsController do
     it "assigns the requested room as @r" do
       @cu.should_receive(:rooms).and_return(@a = double(Arel))
       @a.should_receive(:find).with(@r.to_param).and_return(@r)
-      get :show, {:id => @r.to_param}, user_session
+      get :show, {:id => @r.to_param}
       assigns(:room).should eq(@r)
       
     end
 
     it 'redirige vers l organisme correspondant' do
-      get :show, {:id => @r.to_param}, user_session
+      get :show, {:id => @r.to_param}
       response.should redirect_to(admin_organism_url(@o))
     end
   end
@@ -113,7 +110,7 @@ describe Admin::RoomsController do
       @cu.should_receive(:rooms).and_return(@a = double(Arel))
       @a.should_receive(:find).with(@r.to_param).and_return(@r)
       @r.should_receive(:migrate)
-      post :migrate, {:id => @r.to_param}, user_session 
+      post :migrate, {:id => @r.to_param}
       flash[:notice].should == 'La base a été migrée et mise à jour'
       response.should redirect_to admin_organism_url
     end
@@ -123,7 +120,7 @@ describe Admin::RoomsController do
     it 'trouve l organisme et redirige' do
       @cu.should_receive(:rooms).and_return(@a = double(Arel))
       @a.should_receive(:find).with(@r.to_param).and_return(@r)
-      get :new_archive, {:id => @r.to_param}, user_session
+      get :new_archive, {:id => @r.to_param}
       response.should redirect_to new_admin_organism_archive_url(@o)
     end
   end
@@ -141,13 +138,13 @@ describe Admin::RoomsController do
 
     it 'renvoie vers rooms index' do
       @r.stub(:destroy).and_return true
-      delete :destroy,{:id => @r.to_param}, user_session
+      delete :destroy,{:id => @r.to_param}
       response.should redirect_to admin_rooms_url
     end
 
     it 'crée un flash sur suppression échoue' do
       @r.stub(:destroy).and_return false
-      delete :destroy,{:id => @r.to_param}, user_session
+      delete :destroy,{:id => @r.to_param}
       flash[:alert].should == "Une erreur s'est produite; la base assotest1.sqlite3 n'a pas été supprimée"
       response.should redirect_to admin_organism_url(@organism)
     end
@@ -229,7 +226,7 @@ describe Admin::RoomsController do
         end
       end
     end
-  end
+  end 
 
 
 end

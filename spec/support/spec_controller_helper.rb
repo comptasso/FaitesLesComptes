@@ -43,12 +43,13 @@ module SpecControllerHelper
     @o.stub_chain(:periods, :last).and_return(@p)
     @o.stub_chain(:books, :in_outs, :all).and_return [1,2]
     
+    sign_in(@cu) # introduit suite à Devise
   end
 
 
   # définit les attributs de session systématiques
   def session_attributes
-    {user:@cu.id, period:@p.id, org_db:'test'}
+    {period:@p.id, org_db:'test'}
   end
 
   # cet alias permet d'utiliser les spec créés par scaffold sans avoir à rebaptiser 
