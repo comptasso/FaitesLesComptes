@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe Admin::VersionsController do
+  include SpecControllerHelper
+
+  before(:each) do
+    sign_in(double(User))
+  end
+
 
   describe "GET 'new'" do
     it "returns http success" do

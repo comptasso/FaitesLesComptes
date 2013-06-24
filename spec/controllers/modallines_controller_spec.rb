@@ -7,8 +7,7 @@ end
 describe ModallinesController do
   include SpecControllerHelper
 
-  
-
+ 
   def valid_arguments
     {:book_id=>1, date:Date.today, :narration=>'ligne de test',
       compta_lines_attributes:{'0' =>{account_id:1, nature_id:2, debit:50},
@@ -46,45 +45,46 @@ describe ModallinesController do
 
     before(:each) do
       @ba = mock_model(BankAccount)
-      @be = mock_model(BankExtract)
-      @acc1 = mock_model(Account)
+      @be = mock_model(BankExtract, :bank_account=>@ba)
       @acc2 = mock_model(Account)
-      @ib = mock_model(IncomeBook)
-           
-      BankExtract.stub(:find).with(@be.id.to_s).and_return @be
-      @be.stub(:bank_account).and_return @ba
+      @ib = mock_model(IncomeBook, :organism=>@o)
+      BankExtract.stub(:find).with(@be.to_param).and_return @be
       @ba.stub(:current_account).with(@p).and_return(@acc2)
-      @ib.stub(:organism).and_return(@o)
-      @o.stub(:find_period).and_return(@p)
       InOutWriting.any_instance.stub(:book).and_return(@ib)
+      Utilities::NotPointedLines.stub(:new).and_return []
     end
 
     
     it "returns http success with valid arguments" , wip:true do
-      Utilities::NotPointedLines.stub(:new).and_return []
+      
       post 'create', {:format=>:js, :bank_extract_id=>@be.id, :in_out_writing=>valid_arguments}, valid_session
-      # response.should be_success
+      response.should be_success
     end
 
     it 'should render template create' do
-      Utilities::NotPointedLines.stub(:new).and_return []
+     
+      InOutWriting.any_instance.stub(:save).and_return true
       post 'create',{ :format=>:js, :bank_extract_id=>@be.id, :in_out_writing=>valid_arguments}, valid_session
-      response.should render_template 'modallines/create'
+      response.should render_template 'modallines/create' 
     end
-    
+
+    describe 'invalid arguments' do
+
+    before(:each) do
+      InOutWriting.any_instance.stub(:save).and_return false
+    end
+
     it "return also http success with invalid arguments" do
-      Utilities::NotPointedLines.stub(:new).and_return []
       post 'create', {:format=>:js, :bank_extract_id=>@be.id, :in_out_writing=>invalid_arguments}, valid_session
       response.should be_success
     end
 
     it 'should render template new when invalid arguments' do
-      Utilities::NotPointedLines.stub(:new).and_return []
       post 'create',{ :format=>:js, :bank_extract_id=>@be.id, :in_out_writing=>invalid_arguments}, valid_session
       response.should render_template 'modallines/new'
     end
 
-
+    end
 
   end
 
