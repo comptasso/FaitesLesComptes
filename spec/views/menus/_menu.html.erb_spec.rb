@@ -18,20 +18,30 @@ describe "menus/_menu.html.erb" do
 
   before(:each) do
     assign(:user, cu)
+    view.stub('user_signed_in?').and_return true
   end
 
   context 'sans organisme car on se loggue' do
 
+    before(:each) do
+      view.stub('user_signed_in?').and_return false
+      view.stub_chain(:devise_mapping, 'recoverable?').and_return true
+      view.stub_chain(:devise_mapping, 'registerable?').and_return true
+      view.stub_chain(:devise_mapping, 'rememberable?').and_return true
+      view.stub(:resource_name).and_return('user')
+      view.stub(:resource).and_return(cu)
+      cu.stub(:remember_me).and_return true
+    end
+
     it 'upper_menu ne doit pas s afficher' do
       @request.path = '/'
-      
-      render :template=>'sessions/new', :layout=>'layouts/application'
+      render :template=>'devise/sessions/new', :layout=>'layouts/application'
       page.all('#upper_menu').count.should == 0 
     end
 
     it 'le menu général ne doit pas s afficher' do
       @request.path = '/'
-      render :template=>'sessions/new', :layout=>'layouts/application'
+      render :template=>'devise/sessions/new', :layout=>'layouts/application'
       page.all('#menu_general').count.should == 0
     end
 
@@ -70,7 +80,7 @@ describe "menus/_menu.html.erb" do
       
     end
 
-    describe 'Partie Virements du menu' do
+    describe 'Partie Virements du menu' do 
 
       before(:each) do
          @request.path = '/'

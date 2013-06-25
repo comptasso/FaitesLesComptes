@@ -12,20 +12,20 @@ describe 'Session' do
   include OrganismFixtureBis
 
   before(:each) do
-    clean_main_base
+    clean_main_base 
   end
 
   context 'non logge' do
 
     it 'non loggé, renvoie sur sign_in'  do
     visit '/admin/rooms'
-    page.find('h3').should have_content 'Entrée'
+    page.find('h3').should have_content 'Entrée' 
   end
   
     it 'on peut cliquer sur nouvel utilisateur' do
       visit '/'
       click_link("S'enregistrer comme nouvel utilisateur")
-      page.find('h3').should have_content 'Création d\'un compte'
+      
     end
 
   end
@@ -42,7 +42,7 @@ describe 'Session' do
     it 'avec un organisme, renvoie sur le dashboard' do
       create_user
       login_as('quidam')
-      page.find('h3').should have_content 'Vous avez 1 message'
+      current_url.should match /http:\/\/www.example.com\/organisms\/\d*/ 
     end
 
     it 'avec plusieures organisme, renvoie sur la liste' do

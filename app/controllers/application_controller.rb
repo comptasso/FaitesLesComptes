@@ -20,8 +20,7 @@ class ApplicationController < ActionController::Base
   # on est dans une action du gem devise si on n'est pas loggé ou
   # si l'action n'est pas précisément de se déconnecter
   def devise_action?
-    puts "dans devise_action ? #{action_name}"
-    !user_signed_in? || action_name == 'create' || action_name=='destroy'
+    params[:controller] =~ /^devise/
   end
 
   # Overwriting the sign_out redirect path method
@@ -45,7 +44,6 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(user)
     session[:org_db] = nil
     use_main_connection
-    puts "Nombre de Room pour le current_user : #{current_user.rooms.count}"
     case current_user.rooms.count
     when 0
       flash[:notice] << "Vous pouvez maintenant créer un organisme"
@@ -65,7 +63,7 @@ class ApplicationController < ActionController::Base
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
-      puts 'dans find_organism'
+    
       # utile pour remettre le système cohérent
       use_main_connection if session[:org_db] == nil
       r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]

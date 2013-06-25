@@ -49,12 +49,6 @@ describe Admin::RoomsController do
       response.should render_template('index')
     end
 
-    it 'redirige vers création si pas de room' do
-      @cu.stub(:rooms).and_return(@a = double(Arel, :map=>[], :count=>0))
-      get :index
-      response.should redirect_to new_admin_room_url
-    end
-
     it 'si toutes les roome sont en phase n affiche pas de flash' do
       @cu.should_receive(:rooms).and_return([mock_model(Room, :relative_version=>:same_migration)])
       get :index

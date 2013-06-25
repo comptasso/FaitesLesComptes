@@ -14,7 +14,7 @@
 class Admin::RoomsController < Admin::ApplicationController
 
   skip_before_filter :find_organism, :current_period
-  before_filter :redirect_to_create_organism, only:[:index]
+  
   after_filter :clear_org_cache, only:[:create]
 
   # affiche la liste des bases appartenant au current_user
@@ -125,15 +125,5 @@ class Admin::RoomsController < Admin::ApplicationController
     end
   end
 
- protected
 
-  def redirect_to_create_organism
-    if current_user.rooms.count == 0
-      redirect_to new_admin_room_url and return
-    end
-  end
-  
-
-
-  
 end

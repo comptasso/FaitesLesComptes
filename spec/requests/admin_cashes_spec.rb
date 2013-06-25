@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
 #  c.filter = {:js=> true }
-#  c.exclusion_filter = {:js=> true }
+#  c.exclusion_filter = {:js=> true } 
 end
 
 # spec request for testing admin cashes
@@ -15,8 +15,9 @@ describe 'admin cash' do
   
   before(:each) do
     create_user
-    create_minimal_organism
+    create_minimal_organism 
     login_as('quidam')
+    
   end
 
 
