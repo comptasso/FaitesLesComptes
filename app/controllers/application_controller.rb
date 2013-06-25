@@ -20,12 +20,13 @@ class ApplicationController < ActionController::Base
   # on est dans une action du gem devise si on n'est pas loggé ou
   # si l'action n'est pas précisément de se déconnecter
   def devise_action?
-    !user_signed_in? || action_name=='bye'
+    puts "dans devise_action ? #{action_name}"
+    !user_signed_in? || action_name == 'create' || action_name=='destroy'
   end
 
   # Overwriting the sign_out redirect path method
-  def after_sign_out_path_for(resource_or_scope)
-    devise_sessions_bye_path
+  def after_sign_out_path_for(user)
+    devise_sessions_bye_url
   end
 
   # A chaque démarrage de l'application, on vérifie que la base principale
@@ -41,16 +42,22 @@ class ApplicationController < ActionController::Base
   # admin/rooms#index soit la vue organism selon qu'il y a plusieurs bases ou une seule
   #
   #
-  def default_view
+  def after_sign_in_path_for(user)
     session[:org_db] = nil
     use_main_connection
+    puts "Nombre de Room pour le current_user : #{current_user.rooms.count}"
     case current_user.rooms.count
+    when 0
+      flash[:notice] << "Vous pouvez maintenant créer un organisme"
+      new_admin_room_path
     when 1
-      current_user.room.first.connect_to_organism
+      r = current_user.rooms.first
+      session[:org_db] = r.database_name
+      r.connect_to_organism
       @organism = Organism.first
-      redirect_to organism_path(@organism) and return
+      organism_url(@organism)
     else
-      redirect_to admin_rooms_url and return
+      admin_rooms_url
     end
   end
 
@@ -58,17 +65,17 @@ class ApplicationController < ActionController::Base
   # fait un reset de la session si on a changé d'organism et sinon
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
+      puts 'dans find_organism'
       # utile pour remettre le système cohérent
       use_main_connection if session[:org_db] == nil
       r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
       if r # on doit avoir tru=ouvé une room
         r.connect_to_organism
         @organism = Organism.first # il n'y a qu'un organisme par base
-     
+      else
+        # si pas d organisme (cas d une base corrompue)
+      redirect_to admin_rooms_url and return
       end
-      # si pas d organisme (cas d une base corrompue)
-      default_view unless @organism
-      
   end
 
   # si pas de session, on prend le premier exercice non clos

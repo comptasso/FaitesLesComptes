@@ -58,9 +58,9 @@ module OrganismFixtureBis
   # il faut appeler avant create_user (pour pouvoir utiliser login_as('quidam')
   def login_as(name)
     visit '/'
-    fill_in 'user_name', :with=>name
-    click_button 'Entrée'
-
+    fill_in 'user_email', :with=>'bonjour@example.com'
+    fill_in 'user_password', :with=>'bonjour1'
+    click_button 'Valider'
   end
 
   

@@ -1,9 +1,26 @@
 # coding: utf-8 
 
+# TODO ceci devrait devenir un request spec pour Devise
+
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "vue organisme"  do 
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
+
+  before(:each) do
+    clean_main_base
+  end
+
+  context 'sans organisme' do
+
+    it 'est dirigé vers la création d un organisme' do
+      User.create!(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1' )
+      login_as('quidam')
+      current_path.should == new_admin_room_path  
+    end
+
+  end
+
 
   context 'avec un organisme' do  
 
@@ -35,21 +52,7 @@ describe "vue organisme"  do
   end
 
 
-  context 'sans organisme' do
-
-    before(:each) do
-      @cu = User.create!(name:'untel')
-    end
-
-    it 'est dirigé vers la création d un organisme' do
-      visit '/'
-      fill_in 'user_name', :with=>'untel'
-      click_button 'Entrée'
-      current_path.should == new_admin_room_path
-    end
-
-  end
-
+  
   
 end
 

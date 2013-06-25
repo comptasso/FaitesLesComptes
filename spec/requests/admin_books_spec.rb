@@ -6,7 +6,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
  # ActiveRecord::Base.shared_connection = nil
 
 RSpec.configure do |c| 
- # c.filter = {wip:true}
+#  c.filter = {wip:true}
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true }
 end
@@ -27,7 +27,7 @@ describe 'vue books index' do
 
   describe 'new book' do
     
-    it "affiche la page new" do
+    it "affiche la page new" , wip:true do
       visit new_admin_organism_book_path(@o)
       page.should have_content("Création d'un livre") 
       page.should have_content('Type')

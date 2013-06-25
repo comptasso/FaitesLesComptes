@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
- # c.filter = {:wip=>true}
+  # c.filter = {:wip=>true}
 end
 
 # on utilise Admin::PeriodsController mais le but de cette spec est de faire les tests
@@ -58,9 +58,9 @@ describe Admin::PeriodsController do
           cu.should_receive(:rooms).and_return(@ar = double(Arel))
           @ar.should_receive(:find_by_database_name).with('bonjour').and_return(r1)
           r1.stub(:connect_to_organism).and_return true
-          
-        
-        get :index, {}, {org_db:'bonjour'}
+          Organism.should_receive(:first).and_return(@o = double(Organism))
+          @o.stub_chain(:periods, 'empty?').and_return true
+          get :index, {}, {org_db:'bonjour'}
           assigns(:organism).should == @o
         end
 
@@ -114,13 +114,13 @@ describe Admin::PeriodsController do
 
       end
 
-    describe 'sign_out' do
+      describe 'sign_out' do
 
-      it 'renvoie vers la page bye quand on se déloggue' do
+        it 'renvoie vers la page bye quand on se déloggue' do
           pending 'à faire'
 
         end
-    end
+      end
 
 
     
