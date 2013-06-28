@@ -59,7 +59,8 @@ describe "cash_controls/index" do
     it 'chaque ligne a deux icones (edit et lock)' do
       page.all("tbody tr").each do |row|
         row.find("td:last").all('img').first[:src].should == '/assets/icones/modifier.png'
-        row.find("td:last").all('img').last[:src].should == '/assets/icones/verrouiller.png'
+        # la présence de verrouillé est faite en dessous
+        row.find("td:last").all('img').last[:src].should == '/assets/icones/supprimer.png'
       end
     end
    

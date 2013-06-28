@@ -38,8 +38,15 @@ class CashControlsController < ApplicationController
 
   def edit
     @cash_control=@cash.cash_controls.find(params[:id])
+  end
+
+  def destroy
+    @cash_control = @cash.cash_controls.find(params[:id])
+    @cash_control.destroy
+    redirect_to cash_cash_controls_url(@cash, @period.guess_month(@cash_control.date).to_french_h)
     
-   end
+  end
+
 
   # lock permet de verrouiller un controle de caisse, 
   # ce qui a pour effet (par un before_update) de verrouiller les lignes qui le concernent

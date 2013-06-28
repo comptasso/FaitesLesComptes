@@ -195,7 +195,27 @@ describe CashControlsController do
 
   end
 
-  
+   describe "DELETE destroy" do
+
+
+    before(:each) do
+      Cash.stub(:find).with(ca.to_param).and_return(ca)
+      ca.stub_chain(:cash_controls, :find).with(ccs.first.to_param).and_return(ccs.first)
+    end
+
+
+     it "should look_for the cash_control" do
+      ca.should_receive(:cash_controls).and_return(@ar = double(Arel))
+      @ar.should_receive(:find).with(ccs.first.to_param).and_return(ccs.first)
+      delete :destroy, { cash_id:ca.to_param, :id => ccs.first.id}, valid_session
+
+    end
+
+    it "redirects to the cash_controls list" do
+       delete :destroy, { cash_id: ca.to_param, :id => ccs.first.to_param}, valid_session
+       response.should redirect_to cash_cash_controls_url(ca, mois:@m, an:@y)
+    end
+  end
 
   
 

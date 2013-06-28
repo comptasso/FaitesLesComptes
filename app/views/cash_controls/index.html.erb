@@ -32,6 +32,7 @@
           <%= icon_to 'verrouiller.png', lock_cash_cash_control_path(@cash,cc),
             :confirm=>"Cette action verrouille ce pointage de caisse ainsi que les écritures de caisse correspondantes \n#{cash_difference(cc)}\nConfirmez vous ?" ,
             :method=>:put unless cc.locked? %>
+          <%= icon_to 'supprimer.png', cash_cash_control_path(@cash, cc), :method=>:delete, :confirm=>'Etes vous sûr ?' unless cc.locked? %>
           </td>
        </tr>
       <% end %>
