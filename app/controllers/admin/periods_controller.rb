@@ -53,7 +53,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   def create
     start_date = (@organism.periods.last.close_date) +1 if @organism.periods.any?
     @period = @organism.periods.new(params[:period])
-    @period.start_date = start_date
+    @period.start_date = start_date if start_date
     respond_to do |format|
       if @period.save
         session[:period]=@period.id
