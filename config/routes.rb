@@ -104,7 +104,7 @@ Faitesvoscomptes::Application.routes.draw do
     end
     resources :organisms do
 
-      resource :nomenclature
+      
 
       resources :archives
       resources :books
