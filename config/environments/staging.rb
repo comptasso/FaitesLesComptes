@@ -17,7 +17,7 @@ Faitesvoscomptes::Application.configure do
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = true
 
-  config.action_mailer.default_url_options = { :host => 'faiteslescomptes.herokuapp.com' } # pour Devise
+  config.action_mailer.default_url_options = { :host => 'flcstaging.herokuapp.com' } # pour Devise
 
 
 
