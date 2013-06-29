@@ -151,6 +151,7 @@ class ApplicationController < ActionController::Base
     # troisème cas : on reste dans la même pièce
     if groom && session[:org_db] == groom.database_name
       logger.info "On reste à l'organisation #{groom.database_name}"
+      groom.connect_to_organism
       @organism = Organism.first
       logger.warn 'pas d\'organisme trouvé par has_changed_organism?' unless @organism
       current_period
