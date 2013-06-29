@@ -12,15 +12,19 @@ module Compta
   # Puis une ligne de sous total
   #
   # le MonthlyLedger se construit avec un period et un MonthYear
-   class MonthlyLedger 
+   class MonthlyLedger  
 
      def initialize(period, my)
        @period = period
        @month_year = my
      end
 
+     # reprend le total des lignes puis ajoute la ligne de titre et la ligne de total
      def lines_with_total
-       lines.insert(0, title_line).push(total_line)
+       lwt = []
+       lwt << lines
+       lwt.push(total_line).insert(0, title_line)
+       lwt.flatten
      end
 
       # la taille d'un MonthlyLedger est son nombre de lignes plus une ligne de titre et une ligne de total
@@ -28,7 +32,7 @@ module Compta
        lines.size + 2
      end
 
-     protected
+    # protected
 
      # prend les livres dans l'ordre alphabétique et fait un tableau
      # avec le titre du journal(VE ou OD), la description, le total_debit et le total_credit
@@ -45,7 +49,7 @@ module Compta
 
 
      def total_debit
-       lines.inject(0) {|t, l| t+= l[:debit] } 
+       lines.inject(0) { |t, l| t+= l[:debit] }
      end
 
      def total_credit
