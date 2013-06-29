@@ -7,7 +7,7 @@
     = icon_to 'door-open.png', destroy_user_session_path, :method=>:delete, title:'Déconnexion', :tabindex=>-1
   - else
     -if devise_mapping.registerable? && controller_name != 'registrations' && action_name != 'bye'
-      Nouvel utilisateur ?
+      Créer un compte
       = icon_to 'door.png', new_registration_path(resource_name), title:"S'enregistrer comme nouvel utilisateur"
     - if (controller_name == 'registrations' && action_name == 'new') || action_name == 'bye'
       Se connecter

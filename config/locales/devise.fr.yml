@@ -12,7 +12,7 @@ fr:
   devise:
     failure:
       already_authenticated: "Vous êtes déjà connecté !"
-      unauthenticated: "Vous devez vous connecter ou vous inscrire pour continuer."
+      unauthenticated: "Déja enregistré ? : Connectez vous avec le formulaire ci-dessous. Sinon, créez un compte en cliquant sur l'icône porte d'entrée ci-dessus."
       unconfirmed: "Vous devez valider votre compte pour continuer."
       locked: "Votre compte est verrouillé."
       invalid: "E-mail ou mot de passe incorrect."
