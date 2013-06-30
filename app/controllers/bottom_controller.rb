@@ -17,5 +17,9 @@ class BottomController < ApplicationController
   def contact
   end
 
+  def manuals
+    
+  end
+
   
 end
