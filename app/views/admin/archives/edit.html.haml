@@ -4,6 +4,8 @@
 .champ
   %h3 Modification du commentaire de la sauvegarde
   .inner-champ.row-fluid
-    = simple_form_for [:admin , @organism, @archive] ,:wrapper=>:prepend, :html=> {class: 'form-inline'} do |f|
-      = f.input :comment ,  label_html: {class: "span2"}, input_html: {class: "span6"}
-      .form-actions.offset2= f.button :submit, id: 'edit_archive_button', class: "btn-primary span2"
+    = simple_form_for [:admin , @organism, @archive], :html=> {class: 'form-horizontal'} do |f|
+      = f.input :comment ,  input_html: {class: "span6"}
+      .form-actions= f.button :submit, id: 'edit_archive_button', class: "btn-primary span3"
+
+

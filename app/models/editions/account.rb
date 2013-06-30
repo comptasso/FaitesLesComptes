@@ -15,7 +15,7 @@ module Editions
     def initialize(period, source, options)
       super(period, source, options)
       @title = "Liste des écritures du compte #{source.number}"
-      @subtitle= "Du #{I18n::l @from_date} au #{I18n.l @to_date}"
+      @subtitle= "#{source.title}\nDu #{I18n::l @from_date} au #{I18n.l @to_date}"
       @stamp  = "brouillard" unless source.all_lines_locked?(@from_date, @to_date)
       set_columns ['writings.date AS w_date', 'books.title AS b_title', 'writings.ref AS w_ref', 'writings.narration AS w_narration', 'nature_id', 'destination_id', 'debit',  'credit']
       set_columns_methods ['w_date', 'b_title', 'w_ref', 'w_narration', 'nature.name', 'destination.name', nil, nil]
