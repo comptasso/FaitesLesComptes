@@ -145,11 +145,7 @@ Faitesvoscomptes::Application.routes.draw do
           post :link_nature, :unlink_nature
         end
       end
-      resources :accounts do
-        collection do
-          get :mapping
-        end
-      end
+      resources :accounts 
     end
   end  # FIN DE ADMIN
 

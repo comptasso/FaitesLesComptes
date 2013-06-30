@@ -169,15 +169,7 @@ describe Admin::AccountsController do
    
   end
 
-  describe "GET mapping" do
-    it 'cherche toutes les comptes non liés' do
-      @p.should_receive(:accounts).and_return [a1]
-      @p.stub_chain(:natures, :without_account).and_return ['n1', 'n2']
-      get :mapping, {:period_id=>@p.to_param}, valid_session
-      assigns(:accounts).should == [a1]
-      assigns(:unlinked_natures).should == ['n1', 'n2']
-    end
-  end
+ 
 
   describe "DELETE destroy" do
     it "destroys the requested account" do

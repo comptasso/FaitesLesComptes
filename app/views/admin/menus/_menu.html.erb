@@ -76,11 +76,7 @@
         <ul class="dropdown-menu">
           <%=  content_tag(:li, link_to('Afficher', admin_period_accounts_path(@period)))  %>
           <%= content_tag(:li, link_to('Nouveau', new_admin_period_account_path(@period))) %>
-         <% unless @period.accounts.empty? %>
-            <%=  content_tag(:li, :class=>"divider"){} %>
-            <%= content_tag(:li, link_to( 'Relier aux natures', mapping_admin_period_accounts_path(@period))) %>
-          <% end %>
-       
+         
           
         
          
