@@ -22,8 +22,8 @@
               :required=>true, input_html: {class: "span6 " } %>
      <%=  build.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
               :prompt => "Pour qui ?" ,   input_html: {class: "span6"} %>
-     <%=  build.input :debit ,   input_html: {class: "span3 number", value: two_decimals(@line.debit) }  %>
-     <%=  build.input :credit, input_html: {class: "span3 number", value: two_decimals(@line.credit) } %>
+     <%=  build.input :debit ,   input_html: {class: "span3 number", :type=>'text', value: two_decimals(@line.debit) }  %>
+     <%=  build.input :credit,  input_html: {class: "span3 number", :type=>'text', value: two_decimals(@line.credit) } %>
      
      
   <% end %>
