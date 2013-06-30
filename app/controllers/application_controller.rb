@@ -46,7 +46,11 @@ class ApplicationController < ActionController::Base
     use_main_connection
     case current_user.rooms.count
     when 0
-      flash[:notice] << "Vous pouvez maintenant créer un organisme"
+      accueil = "Bienvenue. "
+      accueil += "<br/>Vous pouvez maintenant créer un organisme"
+      accueil += "<br/>Voir aussi les <a href=#{bottom_manuals_url}>manuels</a> du le logiciel.
+      Le lien vers les manuels est disponible au bas de chaque page"
+      flash[:notice]=accueil.html_safe
       new_admin_room_path
     when 1
       r = current_user.rooms.first

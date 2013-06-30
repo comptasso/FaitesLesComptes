@@ -57,7 +57,8 @@ class Admin::PeriodsController < Admin::ApplicationController
     respond_to do |format|
       if @period.save
         session[:period]=@period.id
-        format.html { redirect_to admin_organism_periods_path(@organism), notice: "L'exercice a été créé et vous travaillez actuellement dans ce nouvel exercice" }
+        format.html { redirect_to admin_organism_periods_path(@organism),
+          notice: "L'exercice a été créé et vous travaillez actuellement dans ce nouvel exercice" }
         format.json { render json: @period, status: :created, location: @period }
       else
         format.html { render action: "new" }
