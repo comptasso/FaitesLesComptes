@@ -31,7 +31,7 @@ class Compta::SheetsController < Compta::ApplicationController
       format.xls {
         datas = ''
         @docs.each {|doc| datas += doc.to_index_xls}
-        send_data datas, :filename=>"#{params[:title] || params[:collection]}.csv" 
+        send_data datas, :filename=>"#{params[:title] || params[:collection]}.xls"
         }
 
       format.pdf {
@@ -60,7 +60,7 @@ class Compta::SheetsController < Compta::ApplicationController
       respond_to do |format|
         format.html 
         format.csv { send_data @sheet.to_csv  } 
-        format.xls { send_data @sheet.to_xls  }
+        format.xls { send_data @sheet.to_xls }
         format.pdf { send_data @sheet.to_detailed_pdf.render}
       end
       else
