@@ -14,7 +14,7 @@ $(document).ready(function () {
     var token = new Date().getTime(); //use the current timestamp as the token value
     
     $('#download_token_value_id').val(token);
-    $('.inner-champ').block({ message: '<h1><img src="loading.gif" /> Juste un instant...</h1>' });
+    $('.inner-champ').block({ message: '<h1><img src="/assets/loading.gif" /> Juste un instant...</h1>' });
     // $.blockUI();
     fileDownloadCheckTimer = window.setInterval(function () {
       var cookieValue = $.cookie('file_archive_token');
@@ -26,7 +26,6 @@ $(document).ready(function () {
 
  function finishDownload() {
  window.clearInterval(fileDownloadCheckTimer);
- $('h3').text('fin de la fonction');
  $.removeCookie('file_archive_token', { path: '/' }); //remove the cookie
  $('.inner-champ').unblock();
  
