@@ -10,7 +10,7 @@ $(document).ready(function () {
   });
 
   var fileDownloadCheckTimer;
-  function blockUIForDownload() {
+ function blockUIForDownload() {
     var token = new Date().getTime(); //use the current timestamp as the token value
     
     $('#download_token_value_id').val(token);
