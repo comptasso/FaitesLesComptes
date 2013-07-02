@@ -22,6 +22,7 @@ class Compta::SheetsController < Compta::ApplicationController
   def index
     @docs = params[:collection].map {|c| @nomenclature.sheet(c.to_sym)}
     respond_to do |format|
+      cookies[:export_token] = { :value =>params[:token], :expires => Time.now + 1800 }
       format.html
       format.csv { 
         datas = ''
