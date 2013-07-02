@@ -31,6 +31,7 @@ class Compta::GeneralBooksController < Compta::ApplicationController
   end
 
   def create
+    cookies[:download_file_token] = { :value =>params[:download_token_value_id], :expires => Time.now + 1800 }
     parameters = {period_id:@period.id}.merge(params[:compta_general_book])
     @general_book = Compta::GeneralBook.new(parameters)
     if @general_book.valid?
