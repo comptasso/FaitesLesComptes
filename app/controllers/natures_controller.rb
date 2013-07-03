@@ -21,7 +21,4 @@ class NaturesController < ApplicationController
     end
   end
 
- 
- 
- 
 end
