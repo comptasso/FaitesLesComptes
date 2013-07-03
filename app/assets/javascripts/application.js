@@ -229,6 +229,49 @@ function _fnAlert(message, type) {
 
   }
 
+/* Ces deux fonctions ont pour objet de bloquer la page pour une action de téléchargement de 
+ * fichier. 
+ * 
+ * Il faut modifier le formulaire utilisé pour introduire un champ caché avec l'id
+ * 'download_token_value_id'. La fonction crée un token avec la date et l'heure puis 
+ * complète ce champ caché et l'envoie au serveur.
+ *
+ * Il met en place un timer pour vérifier l'arrivée du cookie
+ * 
+ * Le serveur, dans sa réponse doit donc renvoyer un cookie avec cette valeur.
+ * Que la réponse soit positive ou pas, ne serait-ce que pour arrêter le timer et 
+ * le blocage.
+ *
+ * Lorsque le cookie arrive, le timer appelle finishDownload qui retire le cookie et
+ * débloque la page.
+ */
+var fileDownloadCheckTimer;
+function blockUIForDownload() {
+    window.clearInterval(fileDownloadCheckTimer);
+    $.removeCookie('download_file_token', { path: '/' }); //remove the cookie
+    var token = new Date().getTime(); //use the current timestamp as the token value
+
+    $('#download_token_value_id').val(token);
+    $('.inner-champ').block({ message: '<h1><img src="/assets/loading.gif" /> Juste un instant...</h1>' });
+    // $.blockUI();
+    fileDownloadCheckTimer = window.setInterval(function () {
+      var cookieValue = $.cookie('download_file_token');
+      if (cookieValue == token)
+       finishDownload();
+    }, 1000);
+  }
+
+
+function finishDownload() {
+ window.clearInterval(fileDownloadCheckTimer);
+ $.removeCookie('download_file_token', { path: '/' }); //remove the cookie
+ $('.inner-champ').unblock();
+
+}
+
+
+
+
 
 // Cette fonction permet de rendre une table sortable en indiquant une action
 // à appeler par la fonction ajax

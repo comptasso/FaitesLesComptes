@@ -6,8 +6,9 @@ class Compta::AccountsController < Compta::ApplicationController
   # index affiche le plan comptable pour l'exercice
   def index
     @compta_accounts = @period.accounts
-
+    send_export_token
     respond_to do |format|
+      
       format.html # index.html.erb
       format.pdf {send_data Account.to_pdf(@period).render, filename:'Plan_comptable.pdf'} #, disposition:'inline'}
       format.json { render json: @compta_accounts }

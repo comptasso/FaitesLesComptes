@@ -15,8 +15,10 @@ class Compta::ListingsController < Compta::ApplicationController
   def show
    
      @listing = Compta::Listing.new(params[:compta_listing])
+      send_export_token
      if @listing.valid?
        respond_to do |format|
+        
         format.html {render 'show'}
         format.pdf { send_data @listing.to_pdf.render ,
           filename:"Listing compte #{@listing.account.long_name}.pdf"} #, disposition:'inline'}

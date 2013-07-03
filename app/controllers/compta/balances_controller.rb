@@ -20,8 +20,10 @@ class Compta::BalancesController < Compta::ApplicationController
   def show
     @params_balance = params[:compta_balance] || {}
     @balance = Compta::Balance.new({period_id:@period.id}.merge @params_balance)
+    send_export_token
     if @balance.valid?
       respond_to do |format|
+     
         format.html 
         format.js
         format.pdf  {send_data @balance.to_pdf.render ,

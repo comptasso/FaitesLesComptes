@@ -20,8 +20,9 @@ class CashLinesController < InOutWritingsController
     else
       @monthly_extract = Extract::MonthlyCash.new(@cash, {year:params[:an], month:params[:mois]})
     end
-    
+    send_export_token
     respond_to do |format|
+
       format.html
       format.pdf {send_data @monthly_extract.to_pdf.render, :filename=>"#{@organism.title}_Caisse_#{@cash.title}.pdf" }
       format.csv { send_data @monthly_extract.to_csv(col_sep:"\t")  }  # pour éviter le problème des virgules

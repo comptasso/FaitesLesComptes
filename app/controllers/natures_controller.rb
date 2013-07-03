@@ -6,6 +6,8 @@ class NaturesController < ApplicationController
     @filter=params[:destination].to_i || 0
     @filter_name = Destination.find(@filter).name if @filter != 0
     @sn = Stats::StatsNatures.new(@period, @filter)
+    send_export_token
+
     respond_to do |format|
       format.html
       format.pdf {

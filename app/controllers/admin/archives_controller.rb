@@ -29,8 +29,9 @@ class Admin::ArchivesController < Admin::ApplicationController
   def create
     
     @archive=@organism.archives.new(params[:archive])
+    cookies[:download_file_token] = { :value =>params[:download_token_value_id], :expires => Time.now + 1800 }
     if @archive.save
-      cookies[:download_file_token] = { :value =>params[:download_token_value_id], :expires => Time.now + 1800 }
+      
       Tempfile.open(@organism.database_name, File.join(Rails.root, 'tmp')) do |f|
         dump_database(f)
         f.flush

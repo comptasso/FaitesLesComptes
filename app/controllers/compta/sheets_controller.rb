@@ -21,25 +21,25 @@ class Compta::SheetsController < Compta::ApplicationController
   # ou le vérifier dans nomenclature.rb
   def index
     @docs = params[:collection].map {|c| @nomenclature.sheet(c.to_sym)}
-   
+    send_export_token
     respond_to do |format|
-      
+     
       format.html
       format.csv {
-        cookies[:export_token] = { :value =>params[:token], :expires => Time.now + 1800 }
+        
         datas = ''
         @docs.each {|doc| datas += doc.to_index_csv } 
         send_data datas
         }
       format.xls {
-        cookies[:export_token] = { :value =>params[:token], :expires => Time.now + 1800 }
+        
         datas = ''
         @docs.each {|doc| datas += doc.to_index_xls}
         send_data datas, :filename=>"#{params[:title] || params[:collection]}.xls"
         }
 
       format.pdf {
-        cookies[:export_token] = { :value =>params[:token], :expires => Time.now + 1800 }
+        
         final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait)
         @docs.each do |doc|
            doc.to_pdf.render_pdf_text(final_pdf)
