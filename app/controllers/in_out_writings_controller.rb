@@ -20,6 +20,7 @@ class InOutWritingsController < ApplicationController
       @monthly_extract = Extract::MonthlyInOut.new(@book, year:params[:an], month:params[:mois])
     end
     respond_to do |format|
+      send_export_token
       format.html  # index.html.erb
       format.pdf { send_data @monthly_extract.to_pdf.render, :filename=>"#{@organism.title}_#{@book.title}.pdf" }
       format.csv { send_data @monthly_extract.to_csv  } 

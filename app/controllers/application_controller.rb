@@ -14,6 +14,23 @@ class ApplicationController < ActionController::Base
   
   helper_method :two_decimals, :virgule, :picker_to_date, :current_user, :current_period?, :abc
 
+
+  protected
+
+  # Envoie un cookie si le format demandé est l'un des 3 (xls, csv, pdf)
+  #
+  # Cette méthode doit être appelée dans les actions qui permettent de l'export de données
+  # sous l'un de ces 3 formats, si possible dans la partie respond_to.
+  #
+  # Elle marche en conjonction avec la méthode qui est dans export.js.coffee la page et
+  # la débloque à la réception du fichier.
+  def send_export_token
+    if request.format.in? ['application/xls', 'text/csv', 'application/pdf']
+      cookies[:export_token] = { :value =>params[:token], :expires => Time.now + 1800 }
+    end
+  end
+
+
   private
 
 
@@ -68,16 +85,16 @@ class ApplicationController < ActionController::Base
   # trouve la session pour toutes les actions qui ont un organism_id
   def find_organism
     
-      # utile pour remettre le système cohérent
-      use_main_connection if session[:org_db] == nil
-      r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
-      if r # on doit avoir tru=ouvé une room
-        r.connect_to_organism
-        @organism = Organism.first # il n'y a qu'un organisme par base
-      else
-        # si pas d organisme (cas d une base corrompue)
+    # utile pour remettre le système cohérent
+    use_main_connection if session[:org_db] == nil
+    r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
+    if r # on doit avoir tru=ouvé une room
+      r.connect_to_organism
+      @organism = Organism.first # il n'y a qu'un organisme par base
+    else
+      # si pas d organisme (cas d une base corrompue)
       redirect_to admin_rooms_url and return
-      end
+    end
   end
 
   # si pas de session, on prend le premier exercice non clos
