@@ -3,6 +3,8 @@
 
 $ ->
   mytoken = 0
+  # TODO utiliser une boucle plutôt que se répéter
+  # il faudrait aussi remettre le lien en état plutot qu'ajouter des token
   finish_export = ->
     window.clearInterval(fileDownloadCheckTimer)
     $.removeCookie('export_token', { path: '/' })
