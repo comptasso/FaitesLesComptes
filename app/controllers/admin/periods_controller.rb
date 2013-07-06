@@ -51,6 +51,8 @@ class Admin::PeriodsController < Admin::ApplicationController
   # POST /periods.json
   # le controller remplit start_date s'il y a un exercice précédent
   def create
+    # on fixe la date de départ s'il existe déjà un exercice
+    # TODO déplacer cette logique dans le modèle en surchargeant new
     start_date = (@organism.periods.last.close_date) +1 if @organism.periods.any?
     @period = @organism.periods.new(params[:period])
     @period.start_date = start_date if start_date

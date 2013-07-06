@@ -27,8 +27,11 @@ describe Admin::PeriodsController do
 
   describe 'POST create' do
 
+    context 'quand il n y a pas d exercice' do
+
     before(:each) do
       @o.stub(:periods).and_return(@a = double(Arel, :find_by_id=>nil))
+      @a.stub('any?').and_return false 
     end
 
     it 'rend vue index si tout est OK' do
@@ -41,6 +44,25 @@ describe Admin::PeriodsController do
       @a.should_receive(:new).with(valid_params).and_return mock_model(Period, :save=>false).as_new_record
       post :create, {organism_id:@o.id, :period=>valid_params}, valid_session
       response.should render_template :new
+    end
+
+    end
+
+    context 'quand il y a daje un exercice' do
+
+      before(:each) do
+        @o.stub(:periods).and_return(@a = double(Arel, :find_by_id=>nil))
+        @a.stub('any?').and_return true
+        @a.stub(:last).and_return(mock_model(Period, :close_date=>Date.today))
+      end
+
+      it 'le nouvel exercice doit avoir la date de départ remplie' do
+        @a.stub(:new).with(valid_params).and_return(@new_period = (mock_model(Period, :save=>true).as_new_record))
+        @new_period.should_receive(:start_date=).with(Date.today + 1 )
+        post :create, {organism_id:@o.id, :period=>valid_params}, valid_session
+      end
+
+
     end
   end
 
