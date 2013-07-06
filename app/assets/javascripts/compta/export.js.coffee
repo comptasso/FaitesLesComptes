@@ -2,9 +2,10 @@
 # lorsqu'on clique sur une des trois icones d'export
 
 $ ->
+  $.removeCookie('export_token', { path: '/' }) # au cas où un précédent serait resté
   mytoken = 0
   # TODO utiliser une boucle plutôt que se répéter
-  # il faudrait aussi remettre le lien en état plutot qu'ajouter des token
+  # il faudrait aussi remettre le lien en état plutot qu'ajouter des token les uns à la suite des autres si on
   finish_export = ->
     window.clearInterval(fileDownloadCheckTimer)
     $.removeCookie('export_token', { path: '/' })
@@ -29,7 +30,7 @@ $ ->
     block_page()
 
   block_page = ->
-    $.blockUI({ message: '<h1><img src="/assets/loading.gif" /> Juste un instant...</h1>' })
+    $.blockUI({ message: 'Juste un instant...</h1>' })
     fileDownloadCheckTimer = window.setInterval( ->
         cookieValue = $.cookie('export_token')
         finish_export() if cookieValue is mytoken
