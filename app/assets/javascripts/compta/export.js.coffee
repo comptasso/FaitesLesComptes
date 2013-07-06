@@ -30,7 +30,7 @@ $ ->
     block_page()
 
   block_page = ->
-    $.blockUI({ message: 'Juste un instant...</h1>' })
+    $.blockUI({ message: '<h1>Juste un instant...</h1>' })
     fileDownloadCheckTimer = window.setInterval( ->
         cookieValue = $.cookie('export_token')
         finish_export() if cookieValue is mytoken
