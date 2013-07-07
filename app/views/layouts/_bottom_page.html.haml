@@ -1,11 +1,11 @@
 %div#bottom_page
-  .small_spacer
+  
   .total_width
     %ul
       %li= link_to 'Manuels', bottom_manuals_path, :tabindex=>-1, :title=>'Voir la liste des manuels disponibles'
       &nbsp;-&nbsp;
-      %li= link_to 'Nous contacter', bottom_contact_path, :tabindex=>-1
+      %li= link_to 'Nous contacter', bottom_contact_path, :tabindex=>-1, :title=>'Besoin d\'une assistance ?, la page pour nous contacter'
       &nbsp;-&nbsp;
-      %li= link_to 'Crédits', bottom_credit_path, :tabindex=>-1
+      %li= link_to 'Crédits', bottom_credit_path, :tabindex=>-1, :title=>'Liste des sources utilisées pour la réalisation du programme'
       &nbsp;-&nbsp;
-      %li= link_to "FaitesLesComptes version #{VERSION}", bottom_apropos_path, :tabindex=>-1
+      %li= link_to "FaitesLesComptes version #{VERSION}", bottom_apropos_path, :tabindex=>-1, :title=>'Version et conditions d\'utilisation'
