@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
-  # c.filter = {wip:true} 
+  # c.filter = {wip:true}
 end
 
 describe Room  do
@@ -25,6 +25,12 @@ describe Room  do
     when 'postgresql'
       Apartment::Database.db_exist?('public').should == true
     end
+  end
+
+  describe 'les validations' do
+
+  before(:each) do
+    Room.any_instance.stub(:user).and_return u
   end
 
   it 'has a user' do 
@@ -63,6 +69,8 @@ describe Room  do
     r = u.rooms.new(valid_attributes)
     r.should_not be_valid
     r.errors.messages[:database_name].should == ['déjà utilisé']
+  end
+
   end
 
   describe 'methods' do
@@ -180,7 +188,7 @@ describe Room  do
     
   end
 
-  describe 'version_update and migrate_each'  , wip:true do
+  describe 'version_update and migrate_each'  do
     
     it 'met à jour la version'  do
       # 3 fois car une fois pour la base principale et une fois pour chaque organisme
@@ -198,6 +206,28 @@ describe Room  do
       Room.should be_version_update
     end
 
+
+  end
+
+  describe 'limitation du nombre de rooms par utilisateur'  do
+
+    before(:each) do 
+      create_user
+    end
+
+    it 'un user qui a déja 3 bases ne peut plus ajouter de room' do
+      User.any_instance.stub_chain(:rooms, :count).and_return(4)
+      r = Room.new(database_name:'base4')
+      r.user_id = @cu.id
+      r.should_not be_valid  
+    end
+
+    it 'un user qui n a que 2 bases ou moins peut ajouter une chambre' do 
+      @cu.stub_chain(:rooms, :count).and_return(2)
+      r = Room.new(database_name:'base3')
+      r.user_id = @cu.id
+      r.should be_valid
+    end
 
   end
 

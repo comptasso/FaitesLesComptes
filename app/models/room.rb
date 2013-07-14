@@ -16,7 +16,8 @@ class Room < ActiveRecord::Base
   strip_before_validation :database_name
   
   validates :user_id, presence:true
-  validates :database_name, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*\z/}, uniqueness:true
+  validates :database_name, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*\z/}, uniqueness:true 
+  validates :database_name, :upper_limit=>true
   
 
   after_create :create_db, :connect_to_organism

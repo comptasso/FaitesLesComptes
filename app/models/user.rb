@@ -14,6 +14,9 @@ class User < ActiveRecord::Base
   
   has_many :rooms, :dependent=>:destroy
 
+
+
+
   strip_before_validation :name
 
   validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
@@ -57,6 +60,8 @@ class User < ActiveRecord::Base
   def status
     rooms.map {|r| r.relative_version}.uniq
   end
+
+ 
 
  
 
