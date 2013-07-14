@@ -1,5 +1,5 @@
 =  content_for :menu do
-  = icon_to  'nouveau.png', new_admin_room_path
+  = icon_to  'nouveau.png', new_admin_room_path if current_user.allowed_to_create_room?
   -if abc[:adapter]=='sqlite3'
     = icon_to 'restauration.png', new_admin_restore_path ,                                                   |
            :confirm=>"Restaurer un organisme ou en créer un nouveau à partir d'un fichier de sauvegarde ?",  |

@@ -61,6 +61,10 @@ class User < ActiveRecord::Base
     rooms.map {|r| r.relative_version}.uniq
   end
 
+  def allowed_to_create_room?
+    rooms(true).count < 4
+  end
+
  
 
  
