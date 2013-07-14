@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   # retourne un array de hash des organismes et des chambres appartenat à cet user
   # le hash ne comprend que les organimes qui ont pu être effectivement trouvés
   def organisms_with_room
-    owrs = rooms.collect { |r| {organism:r.organism, room:r} }
+    owrs = rooms(true).collect { |r| {organism:r.organism, room:r} }
     owrs.select {|o| o[:organism] != nil}
   end
 

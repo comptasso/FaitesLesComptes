@@ -204,24 +204,24 @@ describe Admin::RoomsController do
 
       describe 'gestion des erreurs' do
 
-        it 'remplit un flash alert et rend le formulaire quand la base existe deja' do
+        it 'rend la vue new si room ne peut être sauvé' do
           @r.stub('valid?').and_return false
           post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
-          flash[:alert].should == 'Base existante'
           response.should render_template :new
         end
  
-        it 'renvoie un flash alert et redirige vers new quand organisme est invalide' do
+        it 'rend aussi new si organism n est pas valide' do
           @o.should_receive(:valid?).and_return false
           post :create, {'organism'=>{'name'=>'Bizarre' , 'database_name'=>'test1'}}, valid_session
           response.should render_template :new
-          flash[:alert].should == 'Impossible de créer l\'organisme'
+          
         end
      
-         it 'renvoie le formulaire quand room ne peut être sauvé' do
-          @r.stub(:save).and_return false
+         it 'renvoie vers new_period si room et organism sont valides' do
+          @r.stub('valid?').and_return true
+          @o.stub('valid?').and_return true
           post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
-          response.should render_template :new
+          response.should redirect_to new_admin_organism_period_url(@o)
         end
       end
     end

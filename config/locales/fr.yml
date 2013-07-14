@@ -312,6 +312,10 @@ fr:
           attributes:
             account_id:
               misfit: Nature %{income_outcome} associée à un compte %{account_classe}
+        room:
+          attributes:
+            database_name:
+              upper_limit: Nombre maxiaml de base de données atteint
  
   helpers:
     select:

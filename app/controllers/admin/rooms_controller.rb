@@ -66,45 +66,34 @@ class Admin::RoomsController < Admin::ApplicationController
 
   # POST /rooms
   def create
-    errors = nil
+   
     @organism = Organism.new(params[:organism])
     @room = current_user.rooms.new(database_name:params[:organism][:database_name])
     # vérifie que le fichier de base de données n'existe pas
-    # TODO Faire un message différent que le fichier existe déjà pour éviter de donner une info
-    # TODO logique uniquement
-    unless @room.valid?
-      errors= 'Base existante'
-      @organism.errors.add(:database_name, 'base existante')
-    end
+    # TODO Faire un un nom de base préfixé pour éviter le risque de doublons trop fréquents
+    
+    
+    if @organism.valid? && @room.valid?
 
-    if @organism.valid?
-
-      if @room.save # un after_create du modèle créé la nouvelle base de données et s'y connecte
-        @organism.save
-        session[:org_db]  = @organism.database_name
-       else
-        errors = 'Impossible de créér cette base'
-      end
-    else
-      errors = 'Impossible de créer l\'organisme'
-    end
-    if errors
-      
-      flash[:alert]= errors
-      render :new
-    else
+      @room.save # un after_create du modèle créé la nouvelle base de données et s'y connecte
+      @organism.save
+      session[:org_db]  = @organism.database_name
       redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
           Il vous faut maintenant créer un exercice pour cet organisme"
+    else
+      copy_room_errors(@room)
+      render :new
     end
-
-  end
+    
+   
+  end 
 
 
   # détruit la pièce ainsi que la base associée
   #
   def destroy
     @room = current_user.rooms.find(params[:id])
-    abs_db = @room.absolute_db_name
+    
     db_name= @room.db_filename
     Rails.logger.info "Destruction de la base #{db_name}  - méthode rooms_controller#destroy}"
   
@@ -112,10 +101,9 @@ class Admin::RoomsController < Admin::ApplicationController
       # on détruit le fichier correspondant
       # FIXME sur windows au moins, semble poser un problème de droit d'accès
       # donc on n'efface pas le fichier
-      #  File.delete(abs_db) if File.exist?(abs_db)
       notice = "L'organisme suivi par la base #{db_name} a été supprimé;"
-      notice += "<br/> Le fichier #{abs_db} existe encore.<br/>
-         Pour le supprimer faites le manuellement à partir de l'explorateur de fichiers" if File.exist?(abs_db)
+      notice += "<br/> Le fichier #{db_name} existe encore.<br/>
+         Pour le supprimer faites le manuellement à partir de l'explorateur de fichiers" if ActiveRecord::Base.connection_config[:adapter] == 'sqlite3'
       flash[:notice] =  notice.html_safe
       organism_has_changed?
       redirect_to admin_rooms_url
@@ -125,5 +113,16 @@ class Admin::RoomsController < Admin::ApplicationController
     end
   end
 
+  protected
 
-end
+  # copy les messages d'erreur de room vers organism pour
+  # que le form puisse avoir les informations nécessaires
+  def copy_room_errors(r)
+    unless r.valid?
+      r.errors.messages.each_pair do |k, mess|
+        @organism.errors.add(k, mess.first) # on ne recopie que le premier des messages d'erreur
+      end
+    end
+  end
+
+  end
