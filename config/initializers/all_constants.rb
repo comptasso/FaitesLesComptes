@@ -20,8 +20,6 @@ NB_PER_PAGE_LANDSCAPE = 22
 PAYMENT_MODES = %w(CB Chèque Espèces Prélèvement Virement)
 BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
 
-# constante utilisée dans le modèle Room pour trouver le chemin des bases organismes
-PATH_TO_ORGANISMS = 'organisms'
 
 LIST_STATUS = %w(Association Entreprise)
 
@@ -47,4 +45,5 @@ MAX_COMMENT_LENGTH = 300
 # version 0.7.1 : restrictions sur les caractères utilisés dans les saisies et passage à ruby 2.0
 # version 0.7.3 : utlisation adaptée à sqlite3 et à postgresql
 # version 0.8.0 : utilisation de devise pour la gestion des accès
-VERSION = '0.8.0'
+# version 0.8.1 : mise en place d'une limite de 4 bases pour un user standard
+VERSION = '0.8.1'
