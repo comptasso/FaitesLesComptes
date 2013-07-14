@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-describe 'admin/rooms/index'  do
+describe 'admin/rooms/index'  do 
 include JcCapybara
 
   let(:o) {mock_model(Organism, :title=>'Organisme Test')}
@@ -20,8 +20,10 @@ include JcCapybara
     r2.stub(:relative_version).and_return(:same_migration)
     r2.stub('up_to_date?').and_return true
     r2.stub('late?').and_return false
-     r2.stub('advanced?').and_return false  
+    r2.stub('advanced?').and_return false  
     r2.stub('no_base?').and_return false
+    view.stub(:current_user).and_return(@u = mock_model(User, 'allowed_to_create_room?'=>true, :rooms=>@rooms))
+    
   end
 
   it 'le titre h3 est Liste des organismes' do
@@ -44,6 +46,26 @@ include JcCapybara
       r2.stub('up_to_date?').and_return false
       render
       page.all('tr:last td:last img').should have(0).icons
+    end
+  end
+
+  describe 'l icone de création' do
+
+    before(:each) do
+      view.stub('user_signed_in?').and_return true
+      view.stub(:saisie_consult_organism_list).and_return("<li>Unebase</li><li>Deuxbases</li>")
+    end
+
+    it 's affiche si User peut créer une base' do
+      @u.stub('allowed_to_create_room?').and_return true
+      render :template=>'admin/rooms/index', :layout=>'layouts/application'
+      page.find('li.horizontal_icons > a')[:href].should == '/admin/rooms/new'
+    end
+
+    it 'mais ne s affiche pas dans le cas contraire' do
+      @u.stub('allowed_to_create_room?').and_return false
+      render :template=>'admin/rooms/index', :layout=>'layouts/application'
+      page.all('li.horizontal_icons > a').should have(0).element
     end
   end
 
