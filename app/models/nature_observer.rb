@@ -8,6 +8,8 @@ class NatureObserver < ActiveRecord::Observer
 
   # si on rattache nature à un compte, les lignes qui ont cette nature
   # doivent voir leur champ account_id mis à jour.
+
+  # TODO voir si cette manip ne contrevient pas aux règles d'immutabilité des comptes
   def after_save(nature)
       if nature.account_id_changed?
         
