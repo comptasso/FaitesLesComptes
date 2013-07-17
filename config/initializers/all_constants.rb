@@ -46,4 +46,4 @@ MAX_COMMENT_LENGTH = 300
 # version 0.7.3 : utlisation adaptée à sqlite3 et à postgresql
 # version 0.8.0 : utilisation de devise pour la gestion des accès
 # version 0.8.1 : mise en place d'une limite de 4 bases pour un user standard
-VERSION = '0.8.1'
+VERSION = '0.8.1RC'
