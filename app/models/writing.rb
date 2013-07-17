@@ -37,7 +37,7 @@ class Writing < ActiveRecord::Base
   has_many :compta_lines, :dependent=>:destroy
   alias children compta_lines
 
-  strip_before_validation :narration, :ref
+  strip_before_validation :narration, :ref 
   
   validates :book_id,  presence:true
   validates :date, presence:true
