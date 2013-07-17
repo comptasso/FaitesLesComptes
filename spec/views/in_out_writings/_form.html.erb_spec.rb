@@ -1,7 +1,5 @@
 # coding: utf-8
 
-require 'spec_helper'
-
 describe "in_out_writings/new" do
   include JcCapybara
 
