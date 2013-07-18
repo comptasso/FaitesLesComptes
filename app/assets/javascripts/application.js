@@ -137,7 +137,7 @@ function $f_numberWithPrecision(number) {
     }
 }
 
-// fonction permettant de mettre deux décimales à une chiffre
+// fonction permettant de mettre deux décimales à un nombre
 // appelé lorsque l'utilisateur sort d'un champ pour remettre en forme sa saisir
 // Par exemple 32 devient 32.00 ou 32.5 devient 32.50
 function $f_two_decimals() {

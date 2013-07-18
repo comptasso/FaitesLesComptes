@@ -1,5 +1,5 @@
 "use strict";
-/*global $, jQuery */
+/*global document, $, jQuery */
 
 //var $, jQuery;
 
@@ -67,7 +67,7 @@ function $nb_lines() {
 // Affiche le solde dans la zone h3
 function $check_submit() {
     var bal = $balance(), nb_lines = $nb_lines();
-    if ((bal == 0) && (nb_lines > 1)) {
+    if ((bal === '0.00') && (nb_lines > 1)) {
         $('input.btn').show();
     } else {
         $('input.btn').hide();
@@ -104,6 +104,28 @@ function add_fields(link, association, content) {
 }
 
 
+// il ne peut y avoir une ligne ayant à la fois débit et crédit de rempli
+// donc on fait une fonction qui lorsqu'on quitte le champ remet à zero son
+// correspondant si le montant est différent de zero
+function $zero_field() {
+// on ne fait rien si le champ est à zéro ou s'il est vide'
+    if (($(this).val() === '0.00') || ($(this).val() === '')) {
+        return;
+    }
+
+//  if (parseFloat($(this).val(), 10) == 0.00) {
+//    return
+//  }
+  // sinon on cherche qui on est (soit credit soit débit)
+  // et on remet à zero l'autre champ
+    if ($(this).hasClass('debit') === true) {
+        $(this).closest('.writing_line_form').find('.credit').val('0.00');
+    } else {
+        $(this).closest('.writing_line_form').find('.debit').val('0.00');
+    }
+}
+
+
 // Objectif : avoir une icone plus à côté des forms de compta_line pour
 // pouvoir ajouter des lignes. Problème : l'icone étant dans le partial,
 // il est difficile de ne pas créér une récurrence.
@@ -112,18 +134,21 @@ jQuery(function () {
     // on s'assure que le lien ajout est masqué'
     $('.compta_writings #add_line_link').hide();
     // mettre le focus sur le champ date
-    $('.compta_writings input#writing_date_picker').change(function(){
-      document.getElementById("writing_narration").focus(true);
+    $('.compta_writings input#writing_date_picker').change(function () {
+        document.getElementById("writing_narration").focus(true);
     });
-    
+
     if ($('.compta_writings').size() > 0) {
         $deal_icon_plus();
         $check_submit();
     }
-    
+
+
+
     // $check_submit masque le bouton submit si les conditions ne sont pas remplies
     // conditions 1: au moins une ligne remplie
     // condition 2 : écriture équilibrée
+    $('.compta_writings input.decimal').live('change', $zero_field); // calcule le nouvau solde et l'affiche
     $('.compta_writings input.decimal').live('change', $check_submit); // calcule le nouvau solde et l'affiche
 
 });
