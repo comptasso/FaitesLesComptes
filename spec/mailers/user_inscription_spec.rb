@@ -21,7 +21,7 @@ describe UserInscription do
     end
 
     it 'le corps du mail contient' do
-     email.should have_body_text(/^Bonjour/)
+     email.should have_body_text(/Bonjour/)
      email.should have_body_text(/inscrit : spec/)
     end
 

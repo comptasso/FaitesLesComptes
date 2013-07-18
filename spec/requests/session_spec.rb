@@ -40,7 +40,8 @@ describe 'Session' do
     end
 
     it 'avec un organisme, renvoie sur le dashboard' do
-      create_user
+      create_user 
+      create_organism
       login_as('quidam')
       current_url.should match /http:\/\/www.example.com\/organisms\/\d*/ 
     end
@@ -54,7 +55,7 @@ describe 'Session' do
 
   end
 
-  describe 'création d un compte' do
+  describe 'création d un compte' do 
 
     it 'permet de créer un compte et renvoie sur la page nouvel organisme' do
       visit '/users/sign_up'

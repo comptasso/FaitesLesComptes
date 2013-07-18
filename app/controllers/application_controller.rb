@@ -68,13 +68,16 @@ class ApplicationController < ActionController::Base
       accueil += "<br/>Vous pouvez également <a href=#{bottom_manuals_url}>consulter maintenent les manuels</a> du logiciel
       <br/>ou le faire plus tard; un lien vers les manuels est disponible au bas de chaque page"
       flash[:notice]=accueil.html_safe
-      new_admin_room_path
+      new_admin_room_url
     when 1
       r = current_user.rooms.first
       session[:org_db] = r.database_name
-      r.connect_to_organism
-      @organism = Organism.first
-      organism_url(@organism)
+      if r.connect_to_organism && (@organism = Organism.first)
+        organism_url(@organism)
+      else
+        # TODO vérifier que tous les cas sont bien couverts. Cas où il y aurait eu interruption dans la création de l'org
+        admin_rooms_url
+      end
     else
       admin_rooms_url
     end

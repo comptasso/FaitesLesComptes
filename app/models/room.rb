@@ -131,7 +131,6 @@ class Room < ActiveRecord::Base
 
   # se connecte à l'organisme correspondant à la base de données
   #
-  # Le nom de la base est de la forme development_essai ou production_company_name
   # retourne true ou false
   def connect_to_organism
     Apartment::Database.switch(database_name)
