@@ -1,5 +1,7 @@
 # -*- encoding : utf-8 -*-
 
+# TODO probablement à supprimer puisque le user est maintenant géré par Devise
+
 class Admin::UsersController < Admin::ApplicationController
 
   skip_before_filter :find_organism, :current_period
