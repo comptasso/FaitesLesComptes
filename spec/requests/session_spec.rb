@@ -31,6 +31,8 @@ describe 'Session' do
   end
 
   context 'loggé', wip:true  do
+
+
    
 
     it 'sans organisme, renvoie sur la page de création' do
@@ -66,6 +68,17 @@ describe 'Session' do
       click_button 'S\'inscrire'
       page.find('h3').should have_content 'Nouvel organisme'
     end
+
+    it 'envoie un mail par UserObeserver' do
+      UserInscription.should_receive(:new_user_advice).and_return(double(Object, deliver:true ))
+      visit '/users/sign_up'
+      fill_in 'user_name', with:'test'
+      fill_in 'user_email', :with=>'test@example.com'
+      fill_in 'user_password', :with=>'testtest'
+      fill_in 'user_password_confirmation', :with=>'testtest'
+      click_button 'S\'inscrire'
+      
+    end 
 
   end
 
