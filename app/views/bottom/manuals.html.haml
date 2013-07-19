@@ -1,5 +1,9 @@
+= content_for :menu do
+  = icon_to 'retour.png', :back
+
 .champ
   %h3 Les guides
+.inner-champ
   %ul
     %li
       = link_to 'Guide rapide de prise en main' , 'http://faiteslescomptes.fr/images/sources_pdf/guide_rapide.pdf'

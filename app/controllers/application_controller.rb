@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :authenticate_user!
 
-  before_filter :find_organism, :current_period, :unless=>('devise_action?')
+  before_filter :find_organism, :current_period, :unless=>('devise_or_bottom_action?')
   
   helper_method :two_decimals, :virgule, :picker_to_date, :current_user, :current_period?, :abc
 
@@ -33,6 +33,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+
+  def devise_or_bottom_action?
+    params[:controller] =~ /^devise/ || params[:controller] =~ /^bottom/
+  end
 
   # on est dans une action du gem devise si on n'est pas loggé ou
   # si l'action n'est pas précisément de se déconnecter
