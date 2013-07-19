@@ -9,7 +9,7 @@ RSpec.configure do |c|
 end
  
 describe 'Session' do
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
 
   before(:each) do
     clean_main_base 
@@ -30,13 +30,13 @@ describe 'Session' do
 
   end
 
-  context 'loggé', wip:true  do
+  context 'loggé', wip:true  do 
 
-
-   
 
     it 'sans organisme, renvoie sur la page de création' do
-      User.create!(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1' )
+      u = User.new(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1')
+      u.confirmed_at = Time.now
+      u.save!
       login_as('quidam')
       page.find('h3').should have_content 'Nouvel organisme'
     end
@@ -59,14 +59,14 @@ describe 'Session' do
 
   describe 'création d un compte' do 
 
-    it 'permet de créer un compte et renvoie sur la page nouvel organisme' do
+    it 'permet de créer un compte et renvoie sur la page merci de votre inscription' do
       visit '/users/sign_up'
       fill_in 'user_name', with:'test'
       fill_in 'user_email', :with=>'test@example.com'
       fill_in 'user_password', :with=>'testtest'
       fill_in 'user_password_confirmation', :with=>'testtest'
       click_button 'S\'inscrire'
-      page.find('h3').should have_content 'Nouvel organisme'
+      page.find('h3').should have_content 'Merci pour votre inscription et à très bientôt'
     end
 
     it 'envoie un mail par UserObeserver' do
@@ -76,7 +76,7 @@ describe 'Session' do
       fill_in 'user_email', :with=>'test@example.com'
       fill_in 'user_password', :with=>'testtest'
       fill_in 'user_password_confirmation', :with=>'testtest'
-      click_button 'S\'inscrire'
+      click_button 'S\'inscrire' 
       
     end 
 

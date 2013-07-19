@@ -3,8 +3,10 @@ Faitesvoscomptes::Application.routes.draw do
   
   devise_for :users, :controllers => { :registrations => "devise_registrations" }
   devise_scope :user do
+
     get "devise/sessions/bye"
     get 'devise/registrations/waitingconfirmation'
+    root :to => "devise/sessions#new"
   end
 
 # les chemins pour les liens qui sont dans le bandeau en bas de chaque page
@@ -249,8 +251,8 @@ Faitesvoscomptes::Application.routes.draw do
   resources :transfers
 
  
-
-  root to: 'admin/rooms#index'
+  root :to => "devise/sessions#new"
+  
   
 
   # The priority is based upon order of creation:

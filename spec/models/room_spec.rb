@@ -6,7 +6,7 @@ RSpec.configure do |c|
 end
 
 describe Room  do
-  include OrganismFixtureBis  
+  include OrganismFixtureBis   
 
   let(:u) {stub_model(User)}
 

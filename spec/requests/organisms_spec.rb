@@ -14,7 +14,7 @@ describe "vue organisme"  do
   context 'sans organisme' do
 
     it 'est dirigé vers la création d un organisme' do
-      User.create!(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1' )
+      create_only_user
       login_as('quidam')
       current_path.should == new_admin_room_path  
     end

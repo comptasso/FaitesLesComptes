@@ -3,7 +3,7 @@
 
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 #RSpec.configure do |c|
 # # c.filter = { :wip=>true}
@@ -12,7 +12,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "routes for application root" do 
   it "routes application to organisms controller" do
-    { :get => "/" }.should route_to(:controller => "admin/rooms", :action => "index")
+    { :get => "/" }.should route_to(:controller => "devise/sessions", :action => "new")
   end
 end
 

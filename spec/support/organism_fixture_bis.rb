@@ -10,10 +10,16 @@ module OrganismFixtureBis
     Room.delete_all
   end
 
+  def create_only_user
+    clean_main_base
+    @cu =  User.new(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1' )
+    @cu.confirmed_at = Time.now
+    @cu.save!
+  end
+
 
   def create_user
-    clean_main_base
-    @cu =  User.create!(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1' )
+    create_only_user
     @r = @cu.rooms.create!(database_name:'assotest1')
   end
 
