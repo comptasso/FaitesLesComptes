@@ -1,9 +1,10 @@
 Faitesvoscomptes::Application.routes.draw do
 
   
-  devise_for :users
+  devise_for :users, :controllers => { :registrations => "devise_registrations" }
   devise_scope :user do
     get "devise/sessions/bye"
+    get 'devise/registrations/waitingconfirmation'
   end
 
 # les chemins pour les liens qui sont dans le bandeau en bas de chaque page

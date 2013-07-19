@@ -316,6 +316,10 @@ fr:
           attributes:
             database_name:
               upper_limit: Nombre maxiaml de base de données atteint
+        user:
+          attributes:
+            password:
+              confirmation: Les deux mots de passe doivent être identiques
  
   helpers:
     select:

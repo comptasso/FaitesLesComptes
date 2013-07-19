@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :authenticate_user!
 
-  before_filter :find_organism, :current_period, :unless=>'devise_action?'
+  before_filter :find_organism, :current_period, :unless=>('devise_action?')
   
   helper_method :two_decimals, :virgule, :picker_to_date, :current_user, :current_period?, :abc
 
@@ -44,6 +44,8 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(user)
     devise_sessions_bye_url
   end
+
+  
 
   # A chaque démarrage de l'application, on vérifie que la base principale
   # (celle qui contient les Room)
