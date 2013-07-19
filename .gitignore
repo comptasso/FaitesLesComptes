@@ -1,6 +1,10 @@
 .bundle
 .secret
-db/*
+db/development
+db/production
+db/test
+db/test.sqlite3
+db/staging
 log/*.log
 tmp/
 .sass-cache/
