@@ -21,6 +21,7 @@ class Room < ActiveRecord::Base
   
 
   after_create :create_db, :connect_to_organism
+  after_update :change_schema_name, :if=>:database_name_changed?
   after_destroy :destroy_db if ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
   
   # renvoie l'organisme associé à la base
@@ -118,10 +119,12 @@ class Room < ActiveRecord::Base
   # Met à jour la version
   def self.migrate_each
     Apartment::Database.process(Apartment::Database.default_db) do
+      puts "migration de la base principale"
         Rails.logger.info "migration de la base principale"
         ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
       end
     Apartment.database_names.each do |db|
+      puts "Migration de la base #{db}"
       Rails.logger.info "Migration de la base #{db}"
       Apartment::Migrator.migrate db
     end
@@ -154,14 +157,14 @@ class Room < ActiveRecord::Base
   # sqlite renvoie un array avec un hash [{'integrity_check'=>'ok', 0=>'ok'}]
   # on teste le premier ok
   #
-  def check_db
+  def check_db 
     i = look_for {ActiveRecord::Base.connection.execute('pragma integrity_check')}
     if i.is_a? Array
       logger.debug i.first['integrity_check']
-      i.first['integrity_check'] == 'ok' ? true : false
+      i.first['integrity_check'] == 'ok' ? true : false 
     else
       logger.warn 'check_db  n a pas obtenu de réponse de sa requête'
-      false
+      false 
     end
   end
 
@@ -171,7 +174,8 @@ class Room < ActiveRecord::Base
   # Usage look_for {Organism.first} (qui est également définie dans cette classe comme méthode organism
   # ou look_for {Archive.last}
   #
-  def look_for(&block) 
+  def look_for(&block)
+    puts " nom de la base : #{database_name}"
      Apartment::Database.process(database_name) {block.call}
   end
 
@@ -197,6 +201,13 @@ class Room < ActiveRecord::Base
   end
 
   
+  # change le schéma de la base de données (postgresql uniquement) puis met à jour
+  # le champ database_name de Organism (qui doit être synchronisé avec Room)
+  def change_schema_name
+    Apartment::Database.rename_schema( database_name_was, database_name)
+    Apartment::Database.switch(database_name)
+    Organism.first.update_attribute(:database_name, database_name)
+  end
 
 
  

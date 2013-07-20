@@ -24,11 +24,11 @@ describe 'restoration de fichier' do
 
   describe 'rename schema' do
     it 'changer database_name d une room modifie le schema' do
-  #    @r.database_name = 'new_assotest'
+      @r.database_name = 'new_assotest'
       @r.save
-   #   @r.database_name.should == 'new_assotest'
-
-      @r.organism.database_name.should == 'new_assotest'
+      puts @r.database_name 
+      o = @r.organism
+      o.database_name.should == 'new_assotest'
     end
   end 
 

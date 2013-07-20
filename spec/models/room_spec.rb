@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
-   c.filter = {wip:true}
+  # c.filter = {wip:true}
 end
 
 describe Room  do
@@ -29,47 +29,47 @@ describe Room  do
 
   describe 'les validations' do
 
-  before(:each) do
-    Room.any_instance.stub(:user).and_return u
-  end
-
-  it 'has a user' do 
-    Room.new.should_not be_valid 
-  end
-
-  it 'has a database_name' do
-    u.rooms.new.should_not be_valid 
-  end
-
-  it 'database_name is composed of min letters without space - les chiffres sont autorisés mais pas en début' do
-    val= ['nom base', 'Nombase', '1nom1base', 'nombase%']
-    val.each do |db_name|
-      u.rooms.new(database_name:db_name).should_not be_valid
+    before(:each) do
+      Room.any_instance.stub(:user).and_return u
     end
-    u.rooms.new(database_name:'unnomdebasecorrect').should be_valid
-    u.rooms.new(database_name:'unnom2basecorrect').should be_valid
-  end
 
-  it 'le nom est strippé avant la validation' do
-    u.rooms.new(database_name:'  unnomdebasecorrect  ').should be_valid
-  end
+    it 'has a user' do
+      Room.new.should_not be_valid
+    end
 
-  it 'save crée la base si elle n existe pas' do
-    unnom = 'unnomdebasecorrect'
-    r = u.rooms.new(database_name:unnom)
-    puts r.full_name
-    Apartment::Database.drop(unnom) if Apartment::Database.db_exist?(unnom)
-    r.save
-    Apartment::Database.db_exist?(unnom).should == true
-  end
+    it 'has a database_name' do
+      u.rooms.new.should_not be_valid
+    end
 
-  it 'le nom de base doit être unique'  do
-    Apartment::Database.drop('foo') if Apartment::Database.db_exist?('foo')
-    u.rooms.find_or_create_by_database_name('foo')
-    r = u.rooms.new(valid_attributes)
-    r.should_not be_valid
-    r.errors.messages[:database_name].should == ['déjà utilisé']
-  end
+    it 'database_name is composed of min letters without space - les chiffres sont autorisés mais pas en début' do
+      val= ['nom base', 'Nombase', '1nom1base', 'nombase%']
+      val.each do |db_name|
+        u.rooms.new(database_name:db_name).should_not be_valid
+      end
+      u.rooms.new(database_name:'unnomdebasecorrect').should be_valid
+      u.rooms.new(database_name:'unnom2basecorrect').should be_valid
+    end
+
+    it 'le nom est strippé avant la validation' do
+      u.rooms.new(database_name:'  unnomdebasecorrect  ').should be_valid
+    end
+
+    it 'save crée la base si elle n existe pas' do
+      unnom = 'unnomdebasecorrect'
+      r = u.rooms.new(database_name:unnom)
+      puts r.full_name
+      Apartment::Database.drop(unnom) if Apartment::Database.db_exist?(unnom)
+      r.save
+      Apartment::Database.db_exist?(unnom).should == true
+    end
+
+    it 'le nom de base doit être unique'  do
+      Apartment::Database.drop('foo') if Apartment::Database.db_exist?('foo')
+      u.rooms.find_or_create_by_database_name('foo')
+      r = u.rooms.new(valid_attributes)
+      r.should_not be_valid
+      r.errors.messages[:database_name].should == ['déjà utilisé']
+    end
 
   end
 
@@ -139,7 +139,7 @@ describe Room  do
       it 'appelle Apartment.reset si le fichier n est pas trouvé' do
         @r.database_name = nil
         @r.connect_to_organism
-      base = case ActiveRecord::Base.connection_config[:adapter]
+        base = case ActiveRecord::Base.connection_config[:adapter]
         when 'sqlite3' then 'test'
         when 'postgresql' then 'public'
         else
@@ -184,26 +184,53 @@ describe Room  do
       end
     end
 
-    describe 'gestion des chemas', wip:true  do
+    describe 'gestion des schemas', wip:true  do
+      before(:each) do
+        create_user
+        Apartment::Database.switch('public')
+      end
 
-    it 'un changement de nom de base doit appeler change_schema_name' do
-      @r.database_name = 'newvalue'
-      @r.should_receive(:change_schema_name)
-      @r.save
+     
+
+      it 'un changement de nom de base doit appeler change_schema_name' do
+        @r.database_name = 'newvalue'
+        @r.should_receive(:change_schema_name).exactly(2).times
+        @r.save
+        @r.database_name = 'assotest1'
+        @r.save
+      end
+
+      it 'un changement de nom de base doit appeler change_schema_name' do
+        @r.created_at = Time.now
+        @r.should_not_receive(:change_schema_name)
+        @r.save
+      end
+
+      it 'met à jour le champ database_name de organsim' do
+        
+        Apartment::Database.switch('public')
+        @r.database_name = 'changed_value'
+        @r.save
+        @r.organism.database_name.should == 'changed_value'
+        @r.database_name = 'assotest1'
+        @r.save
+      end
 
     end
-
-  end
 
 
     
   end
 
   describe 'version_update and migrate_each'  do
-    
+
+    before(:each) do
+    #  Apartment.stub(:database_names).and_return(['bonjour', 'bonsoir'])
+    end
+        
     it 'met à jour la version'  do
       # 3 fois car une fois pour la base principale et une fois pour chaque organisme
-      ActiveRecord::Migrator.should_receive(:migrate).exactly(3).times
+      ActiveRecord::Migrator.should_receive(:migrate).exactly(2).times
       Room.migrate_each
     end
 
