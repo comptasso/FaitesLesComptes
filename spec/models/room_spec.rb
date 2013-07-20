@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
-  # c.filter = {wip:true}
+   c.filter = {wip:true}
 end
 
 describe Room  do
@@ -183,6 +183,17 @@ describe Room  do
         @r.organism.should == 'un organisme'
       end
     end
+
+    describe 'gestion des chemas', wip:true  do
+
+    it 'un changement de nom de base doit appeler change_schema_name' do
+      @r.database_name = 'newvalue'
+      @r.should_receive(:change_schema_name)
+      @r.save
+
+    end
+
+  end
 
 
     

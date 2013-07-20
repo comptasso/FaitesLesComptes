@@ -3,7 +3,11 @@
 
 # méthodes ajoutées par jcl 
 module Apartment
+  class JclError < StandardError; end
+
   module Database
+
+    
 
     #    pour pouvoir utiliser Apartment::Database.process sans difficulté
     # lorsqu'on veut lire dans la base principale.
@@ -35,6 +39,28 @@ module Apartment
       result = false
     ensure
       Apartment::Database.switch(current)
+      return result
+    end
+
+    # Cette méthode rename_schema n'est utile que pour Psotgres
+    # elle doit être appelée par Room.after_save dans le cas ou database_name a été modifié.
+    #
+    # Cette méthode trouve son intérêt dans la problématique de la création et restauration
+    # d'archive, permettant de modifier le schema d'une base existante avant de restaurer la suavegarde.
+    #
+    def rename_schema(old_name, new_name)
+      # inutile de vérifier que ce nom est disponible car cette méthode est intégrée dans un after_save de Room
+      # et donc dans une transaction
+      
+      raise Apartment::JclError unless ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
+      Apartment::Database.switch('public')
+      Apartment.connection.execute(%{ALTER SCHEMA "#{old_name}" RENAME TO "#{new_name}"})
+    rescue  Apartment::SchemaNotFound, Apartment::JclError
+      # puts "Erreur dans rename_schema #{old_name} en #{new_name}"
+      Rails.logger.warn "Erreur dans rename_schema #{old_name} en #{new_name}"
+      result = false
+    ensure
+      Apartment::Database.switch('public')
       return result
     end
 

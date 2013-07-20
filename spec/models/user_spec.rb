@@ -2,6 +2,10 @@
 
 require 'spec_helper'
 
+RSpec.configure do |c|
+  # c.filter = {wip:true}
+end
+
 describe User do
   
   let(:o) {mock_model(Organism)}
@@ -92,6 +96,8 @@ describe User do
     end
 
   end
+
+  
 
   describe 'accountable_organisms_with_rooms' do
     before(:each) do
