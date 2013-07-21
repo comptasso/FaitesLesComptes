@@ -57,7 +57,7 @@ describe Room  do
     it 'save crée la base si elle n existe pas' do
       unnom = 'unnomdebasecorrect'
       r = u.rooms.new(database_name:unnom)
-      puts r.full_name
+      
       Apartment::Database.drop(unnom) if Apartment::Database.db_exist?(unnom)
       r.save
       Apartment::Database.db_exist?(unnom).should == true
@@ -187,6 +187,7 @@ describe Room  do
     describe 'gestion des schemas', wip:true  do
       before(:each) do
         create_user
+        create_organism
         Apartment::Database.switch('public')
       end
 
@@ -209,11 +210,22 @@ describe Room  do
       it 'met à jour le champ database_name de organsim' do
         
         Apartment::Database.switch('public')
-        @r.database_name = 'changed_value'
+        @r.database_name = 'changedvalue'
+        puts @r.errors.messages unless @r.valid?
+        @r.save!
+        
+        
+        @r.organism.database_name.should == 'changedvalue'
+        @r.database_name = 'assotest1' 
         @r.save
-        @r.organism.database_name.should == 'changed_value'
-        @r.database_name = 'assotest1'
+      end
+
+      it 'si un changement échoue, l organisme est inchangé' do
+        @r.database_name = 'changed_value' # le soulignement est interdit
+        puts @r.errors.messages unless @r.valid?
         @r.save
+        @r.reload
+        @r.organism.database_name.should == 'assotest1'
       end
 
     end

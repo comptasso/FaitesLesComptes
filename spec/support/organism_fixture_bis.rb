@@ -5,15 +5,16 @@
 module OrganismFixtureBis
 
   def clean_main_base
-    drop_non_public_schemas
+    drop_non_public_schemas_except_assotest1
     Apartment::Database.switch()
     User.delete_all
     Room.delete_all
   end
 
-  def drop_non_public_schemas
+  #
+  def drop_non_public_schemas_except_assotest1
     Apartment::Database.list_schemas.reject {|name| name == 'public'}.each do |schema|
-      Apartment::Database.drop schema
+      Apartment::Database.drop(schema) unless schema == 'assotest1'
     end
   end
 
@@ -28,6 +29,7 @@ module OrganismFixtureBis
   def create_user
     create_only_user
     @r = @cu.rooms.create!(database_name:'assotest1')
+    
   end
 
   def clean_assotest1
