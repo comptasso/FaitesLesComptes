@@ -5,9 +5,16 @@
 module OrganismFixtureBis
 
   def clean_main_base
+    drop_non_public_schemas
     Apartment::Database.switch()
     User.delete_all
     Room.delete_all
+  end
+
+  def drop_non_public_schemas
+    Apartment::Database.list_schemas.reject {|name| name == 'public'}.each do |schema|
+      Apartment::Database.drop schema
+    end
   end
 
   def create_only_user

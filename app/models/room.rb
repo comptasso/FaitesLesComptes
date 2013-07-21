@@ -21,13 +21,12 @@ class Room < ActiveRecord::Base
   
 
   after_create :create_db, :connect_to_organism
-  after_update :change_schema_name, :if=>:database_name_changed?
+  before_update :change_schema_name, :if=>:database_name_changed?
   after_destroy :destroy_db if ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
   
   # renvoie l'organisme associé à la base
-  # TODO utiliser les méthode de apartment en l'occurence process
   def organism
-    look_for { Organism.first }
+    Apartment::Database.process(database_name) {Organism.first}
   end
 
   def last_archive
@@ -117,7 +116,7 @@ class Room < ActiveRecord::Base
   # bases de données qui sont référencées par Room
   #
   # Met à jour la version
-  def self.migrate_each
+  def self.migrate_each 
     Apartment::Database.process(Apartment::Database.default_db) do
       puts "migration de la base principale"
         Rails.logger.info "migration de la base principale"
@@ -204,7 +203,8 @@ class Room < ActiveRecord::Base
   # change le schéma de la base de données (postgresql uniquement) puis met à jour
   # le champ database_name de Organism (qui doit être synchronisé avec Room)
   def change_schema_name
-    Apartment::Database.rename_schema( database_name_was, database_name)
+    result = Apartment::Database.rename_schema( database_name_was, database_name)
+    return result if result == false
     Apartment::Database.switch(database_name)
     Organism.first.update_attribute(:database_name, database_name)
   end

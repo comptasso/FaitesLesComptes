@@ -9,8 +9,9 @@ module Apartment
 
     
 
-    #    pour pouvoir utiliser Apartment::Database.process sans difficulté
+    # Pour pouvoir utiliser Apartment::Database.process sans difficulté
     # lorsqu'on veut lire dans la base principale.
+    #
     # Pour sqlite, on garde la logique de Rails qui est que la base principale est donnée par le
     # fichier database.yml et est development.sqlite3 pour l'environnement development, ou
     # production.sqlite3 pour l'environnement production.
@@ -36,8 +37,18 @@ module Apartment
       Apartment.connection.execute('SELECT DISTINCT SCHEMANAME FROM PG_STAT_USER_TABLES').map {|row| row['schemaname']}
     end
 
-    # Cette méthode rename_schema n'est utile que pour Psotgres
-    # elle doit être appelée par Room.after_save dans le cas ou database_name a été modifié.
+    # list_schemas_except_public renvoie la liste des schémas non public
+    #
+    # Si un bloc est fourni, le bloc est exécuté pour chaque membre de la liste
+    def list_schemas_except_public
+    ls =  Apartment.connection.execute('SELECT DISTINCT SCHEMANAME FROM PG_STAT_USER_TABLES').map {|row| row['schemaname']}.reject {|schema| schema == 'public'}
+    ls.each {|l| yield(l) if block_given?}
+    ls
+    end
+
+    # Cette méthode rename_schema n'est utile que pour Postgres
+    # elle doit être appelée par Room.after_save dans le cas ou database_name a été modifié puisque database_name
+    # désigne le nom du schema.
     #
     # Cette méthode trouve son intérêt dans la problématique de la création et restauration
     # d'archive, permettant de modifier le schema d'une base existante avant de restaurer la suavegarde.
@@ -48,12 +59,20 @@ module Apartment
       # current_db = Apartment::Database.current
       return if old_name == new_name
       raise Apartment::JclError unless ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
-      raise Apartment::JclError, :message=>'On ne peut renommer le schema public' if old_name == 'public'
-      Apartment::Database.switch('public')
+      raise Apartment::JclError  if old_name == 'public'
+      raise Apartment::JclError, "#{new_name} existe déjà" if db_exist?(new_name)
+      Apartment::Database.switch('public') # pour être certain de ne pas être sur le schéma old_name
       Apartment.connection.execute(%{ALTER SCHEMA "#{old_name}" RENAME TO "#{new_name}"})
-    rescue  Apartment::SchemaNotFound, Apartment::JclError
-      puts "Erreur dans rename_schema #{old_name} en #{new_name}"
-      Rails.logger.warn "Erreur dans rename_schema #{old_name} en #{new_name}"
+    rescue  Apartment::SchemaNotFound, Apartment::JclError =>e
+      Rails.logger.warn "Erreur dans rename_schema #{old_name} en #{new_name} - #{e.message}"
+      return false
+    end
+
+    # utile dans les tests pour nettoyer les schémas devenus inutiles
+    def drop_unused_schemas
+      Apartment::Database.list_schemas_except_public do |schema|
+        Apartment::Database.drop(schema) unless Room.find_by_database_name(schema)
+      end
     end
 
 
