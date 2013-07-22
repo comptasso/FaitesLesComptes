@@ -1,6 +1,26 @@
 # coding: utf-8
 
-# TODO : je crains qu'il n'y ait plus d'accès à cette partie du programme
+# FIXME : Il n'y ait plus vraiment d'accès à cette partie du programme
+# 
+# De toute façon, pg_dump ne fonctionne pas de l'intérieur de heroku.
+# 
+# Une option serait d'utiliser pg_dump d'un programme extérieur 
+# en s'inspirant d'un gem du genre heroku_s3_pg_backup.
+# 
+# db = ENV['DATABASE_URL'].match(/postgres:\/\/([^:]+):([^@]+)@([^\/]+)\:[0-9]*\/(.+)/)
+# system "PGPASSWORD=#{db[2]} pg_dump -Fc -i --username=#{db[1]} --host=#{db[3]} #{db[4]} > tmp/#{name}"
+# 
+# Il s'agit donc d'abord de récupérer la database_url puis de la parser avant de faire un dump
+# Dès lors, il devient possible de faire 
+# 
+# system "PGPASSWORD=#{db[2]} pg_dump -n mon-schema --username=#{db[1]} --host=#{db[3]} #{db[4]} > tmp/#{name}"
+# 
+# En retirant -Fc on a un format texte standard et l'on devrait alors pouvoir changer le owner en celui que l'on souhaite
+# avant de faire un pg_restore. Tout celà serait à valider.
+# 
+# On pourrait peut être copier pg_dump dans un répertoire lib pour qu'il devienne accessible; pas certain que ça marche.
+#
+
 
 class Admin::ArchivesController < Admin::ApplicationController
 

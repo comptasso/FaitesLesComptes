@@ -9,7 +9,6 @@ gem 'simple_form', "~> 2.0.1"
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-
 group :ocra, :test do
  # gem 'sqlite3', '1.3.7'
 end
