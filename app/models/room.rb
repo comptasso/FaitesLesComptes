@@ -16,7 +16,7 @@ class Room < ActiveRecord::Base
   strip_before_validation :database_name
   
   validates :user_id, presence:true
-  validates :database_name, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*\z/}, uniqueness:true 
+  validates :database_name, presence:true, :format=>{:with=>/\A[a-z][a-z]*(_[0-9]*)?\z/}, uniqueness:true
   validates :database_name, :upper_limit=>true
   
 
@@ -40,8 +40,8 @@ class Room < ActiveRecord::Base
   # version.
   #
   def self.version_update?
-      arm = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths)
-      arm.pending_migrations.any? ? false : true
+    arm = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths)
+    arm.pending_migrations.any? ? false : true
   end
 
   # relative_version compare la version de l'organisme
@@ -88,7 +88,7 @@ class Room < ActiveRecord::Base
 
   # renvoie le lieu de stockage des bases de données
   def self.path_to_db
-      File.join(Rails.root, 'db', Rails.env)
+    File.join(Rails.root, 'db', Rails.env)
   end
 
   # construit le nom du fichier de la base en ajoutant l'adapter comme extension
@@ -119,9 +119,9 @@ class Room < ActiveRecord::Base
   def self.migrate_each 
     Apartment::Database.process(Apartment::Database.default_db) do
       puts "migration de la base principale"
-        Rails.logger.info "migration de la base principale"
-        ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
-      end
+      Rails.logger.info "migration de la base principale"
+      ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
+    end
     Apartment.database_names.each do |db|
       puts "Migration de la base #{db}"
       Rails.logger.info "Migration de la base #{db}"
@@ -175,7 +175,47 @@ class Room < ActiveRecord::Base
   #
   def look_for(&block)
     puts " nom de la base : #{database_name}"
-     Apartment::Database.process(database_name) {block.call}
+    Apartment::Database.process(database_name) {block.call}
+  end
+
+
+  # le but de clone_db est de pouvoir faire des sauvegardes à un moment voulu d'une base de données
+  #
+  # La logique de clone est donc de créer une nouvelle db appartenant au même user
+  # mais avec comme base de données le database_name incrémenté
+  #
+  # Cette méthode est appelée par archives_controller pour permettre de créer une archive avec un commentaire
+  # 
+  def clone_db
+    # lit le database_name et calcule son incrémentation
+    new_db_name = timestamp_db_name
+    Room.transaction do
+      # crée le nouveau database_name
+      Apartment::Database.create(new_db_name)
+      # puis on copie la totalité des tables
+      Apartment::Database.copy_schema(database_name, new_db_name)
+      # on change le nom de organism#database_name dans organism pour refléter increment_db_name
+      Apartment::Database.process(new_db_name) do
+        Organism.first.update_attribute(:database_name, new_db_name)
+      end
+      # on finit en créant la nouvelle room
+      r = Room.new(:database_name=>new_db_name)
+      r.user_id = user.id
+      r.save!
+
+    end
+  end
+
+  # crée un database_name préfixé par un timestamp
+  # à partir du database_name existant, soit en préfixant le nom avec un nouveau 
+  # timestamp, soit en changeant le timestamp
+  #
+  def timestamp_db_name
+    if database_name =~ /^([a-zA-Z]*)_\d{14}$/
+      $1 + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
+    else
+      database_name + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
+    end
   end
 
 
@@ -184,8 +224,11 @@ class Room < ActiveRecord::Base
 
   protected
 
+
+
   def create_db
     if Apartment::Database.db_exist?(database_name)
+      puts 'dans le callback create_db'
       Rails.logger.info "Après création de Room :la base #{database_name} existe déjà"
       Apartment::Database.switch(database_name)
     else

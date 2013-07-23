@@ -34,6 +34,7 @@ module Apartment
     end
 
     def list_schemas
+      raise Apartment::JclError unless ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
       Apartment.connection.execute('SELECT DISTINCT SCHEMANAME FROM PG_STAT_USER_TABLES').map {|row| row['schemaname']}
     end
 
@@ -41,9 +42,9 @@ module Apartment
     #
     # Si un bloc est fourni, le bloc est exécuté pour chaque membre de la liste
     def list_schemas_except_public
-    ls =  Apartment.connection.execute('SELECT DISTINCT SCHEMANAME FROM PG_STAT_USER_TABLES').map {|row| row['schemaname']}.reject {|schema| schema == 'public'}
-    ls.each {|l| yield(l) if block_given?}
-    ls
+      ls =  list_schemas.reject {|schema| schema == 'public'}
+      ls.each {|l| yield(l) if block_given?}
+      ls
     end
 
     # Cette méthode rename_schema n'est utile que pour Postgres
@@ -75,6 +76,39 @@ module Apartment
       end
     end
 
+    
+
+    # Pour copier complètement un schéma
+    def copy_schema(from_schema, to_schema)
+      raise Apartment::SchemaNotFound, "#{from_schema} n'existe pas" unless db_exist?(from_schema)
+      raise Apartment::JclError, "#{to_schema} n'existe pas" unless db_exist?(to_schema)
+
+      tables = ActiveRecord::Base.connection.tables
+      tables.reject! {|t| t == "schema_migrations"}
+      tables.each {|t| copy_table(t, from_schema, to_schema)}
+    rescue  Apartment::SchemaNotFound, Apartment::JclError =>e
+      Rails.logger.warn "Erreur dans copy_table #{table_name} #{from_schema} en #{to_schema} - #{e.message}"
+      return false
+    end
+
+    protected
+
+    # copy_table recopie exactement les données de la table d un schéma vers un autre
+    #
+    # Cette méthode est utilisée pour créer un clone d'un schma existant
+    #
+    def copy_table(table_name, from_schema, to_schema)
+      raise Apartment::SchemaNotFound, "#{from_schema} n'existe pas" unless db_exist?(from_schema)
+      raise Apartment::JclError, "#{to_schema} n'existe pas" unless db_exist?(to_schema)
+
+      Apartment.connection.execute(%{INSERT INTO #{to_schema}.#{table_name} SELECT * FROM #{from_schema}.#{table_name} })
+
+    rescue  Apartment::SchemaNotFound, Apartment::JclError =>e
+      Rails.logger.warn "Erreur dans copy_table #{table_name} #{from_schema} en #{to_schema} - #{e.message}"
+      return false
+    end
+
+
 
 
 
@@ -85,13 +119,7 @@ end
 
 Apartment.configure do |config|
   config.excluded_models = ['User', 'Room']
-  if Rails.env == 'test'
-    # config.database_names = ['assotest1', 'assotest2']
-    config.database_names = lambda { Room.select('database_name').map {|r| r.database_name}}
-  else
-    config.database_names = lambda { Room.select('database_name').map {|r| r.database_name}}
-  end
-  
+  config.database_names = lambda { Apartment::Database.list_schemas_except_public }
   config.prepend_environment = false
 end
 
