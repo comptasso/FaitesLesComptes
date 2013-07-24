@@ -186,6 +186,7 @@ fr:
     
     
     
+    
    
   Line: ligne
   same_migration: En phase
@@ -215,6 +216,7 @@ fr:
         title: Titre
       organism:
         title: Titre
+        comment: Commentaire
       destination:
         name: Nom
         comment: Commentaire

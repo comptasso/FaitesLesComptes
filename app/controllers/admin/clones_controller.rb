@@ -18,7 +18,8 @@ class Admin::ClonesController < Admin::ApplicationController
   #
   def create
     r = @organism.room
-    if r.clone_db(params[:organism][:comment])
+    comment = params[:organism][:comment]
+    if r.clone_db(comment)
       flash[:notice] = 'Un clone de votre base a été créé'
     else
       flash[:alert] = 'Une erreur s\'est produite lors de la création du clone de votre base'

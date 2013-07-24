@@ -197,15 +197,19 @@ class Room < ActiveRecord::Base
       # on change le nom de organism#database_name dans organism pour refléter new_db_name
       # et on ajoute le commentaire
       Apartment::Database.process(new_db_name) do
+        puts 'Dans Apartment::Database.process'
         o = Organism.first
-        o.database_name= new_db_name
+        
+        o.database_name = new_db_name
         o.comment = comment
-        o.save
+        puts o.errors.messages unless o.valid?
+        o.save!
         
       end
       # on finit en créant la nouvelle room
       r = Room.new(:database_name=>new_db_name)
       r.user_id = user.id
+      puts r.errors.messages unless r.valid?
       r.save!
 
     end

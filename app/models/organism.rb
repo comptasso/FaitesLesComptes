@@ -42,7 +42,7 @@ require 'strip_arguments'
 #
 class Organism < ActiveRecord::Base
 
-  attr_accessible :title, :description, :database_name, :status
+  attr_accessible :title, :description, :database_name, :status, :comment
 
   has_one :nomenclature
   
@@ -76,7 +76,7 @@ class Organism < ActiveRecord::Base
 
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :description, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
-  validates :database_name, uniqueness:true, presence:true, :format=> {:with=>/\A[a-z][0-9a-z]*\z/}
+  validates :database_name, uniqueness:true, presence:true, :format=>{:with=>/\A[a-z][a-z]*(_[0-9]*)?\z/}
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
 
   

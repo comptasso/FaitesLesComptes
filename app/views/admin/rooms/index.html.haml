@@ -13,7 +13,7 @@
   %thead
     %tr
       %th.pc15 Titre
-      %th.pc35 Description
+      %th.pc35 Commentaire
       %th.pc10 Statut
       %th.pc10 Base de données
       %th.pc5 Etat
@@ -26,7 +26,7 @@
       - organ = ro.organism
       %tr
         %td= organ.title rescue 'non renseigné' # pour gérér les cas où la base de données n est pas à jour et où le champ est manquant
-        %td= organ.description rescue 'non renseigné'
+        %td= organ.comment rescue 'non renseigné'
         %td= organ.status rescue 'non renseigné'
         %td= ro.db_filename
         %td 
@@ -38,7 +38,7 @@
         %td= jour(ro.last_archive)
         %td
           - if ro.up_to_date?
-            = icon_to 'sauvegarde.png', new_archive_admin_room_path(ro),  :title=>"Fait une sauvegarde de toutes les données de l'organisme"
+            =# icon_to 'sauvegarde.png', new_admin_clone_path, :title=>"Fait un clone de l'organisme"  if current_user.allowed_to_create_room?
             = icon_to 'afficher.png',ro, title: 'affichage dans la partie saisie'
             = icon_to 'detail.png', [:admin, ro]
           
