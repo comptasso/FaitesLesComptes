@@ -1,6 +1,8 @@
 Faitesvoscomptes::Application.routes.draw do
 
   
+  
+
   devise_for :users, :controllers => { :registrations => "devise_registrations" }
   devise_scope :user do
 
@@ -89,6 +91,8 @@ Faitesvoscomptes::Application.routes.draw do
 
     get "versions/new"
     post "versions/migrate_each"
+
+    resources :clones, :only=>[:new, :create]
 
 #    resources :users do
 #      resources :rooms

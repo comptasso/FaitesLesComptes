@@ -186,7 +186,7 @@ class Room < ActiveRecord::Base
   #
   # Cette méthode est appelée par archives_controller pour permettre de créer une archive avec un commentaire
   # 
-  def clone_db
+  def clone_db(comment = nil)
     # lit le database_name et calcule son incrémentation
     new_db_name = timestamp_db_name
     Room.transaction do
@@ -194,9 +194,14 @@ class Room < ActiveRecord::Base
       Apartment::Database.create(new_db_name)
       # puis on copie la totalité des tables
       Apartment::Database.copy_schema(database_name, new_db_name)
-      # on change le nom de organism#database_name dans organism pour refléter increment_db_name
+      # on change le nom de organism#database_name dans organism pour refléter new_db_name
+      # et on ajoute le commentaire
       Apartment::Database.process(new_db_name) do
-        Organism.first.update_attribute(:database_name, new_db_name)
+        o = Organism.first
+        o.database_name= new_db_name
+        o.comment = comment
+        o.save
+        
       end
       # on finit en créant la nouvelle room
       r = Room.new(:database_name=>new_db_name)
