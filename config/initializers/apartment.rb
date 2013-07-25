@@ -87,11 +87,11 @@ module Apartment
       tables.reject! {|t| t == "schema_migrations"}
       tables.each {|t| copy_table(t, from_schema, to_schema)}
     rescue  Apartment::SchemaNotFound, Apartment::JclError =>e
-      Rails.logger.warn "Erreur dans copy_table #{table_name} #{from_schema} en #{to_schema} - #{e.message}"
+      Rails.logger.warn "Erreur dans copy_table #{from_schema} en #{to_schema} - #{e.message}"
       return false
     end
 
-    protected
+   protected
 
     # copy_table recopie exactement les données de la table d un schéma vers un autre
     #
@@ -102,10 +102,28 @@ module Apartment
       raise Apartment::JclError, "#{to_schema} n'existe pas" unless db_exist?(to_schema)
 
       Apartment.connection.execute(%{INSERT INTO #{to_schema}.#{table_name} SELECT * FROM #{from_schema}.#{table_name} })
+      set_sequence(table_name, from_schema, to_schema)
 
     rescue  Apartment::SchemaNotFound, Apartment::JclError =>e
       Rails.logger.warn "Erreur dans copy_table #{table_name} #{from_schema} en #{to_schema} - #{e.message}"
       return false
+    end
+
+
+    def set_sequence(table_name, from_schema, to_schema)
+      # on vérifie qu'il y a une colonne id
+      return unless ActiveRecord::Base.connection.column_exists?("#{from_schema}.#{table_name}", 'id')
+
+      # on vérifie si une séquence existe
+      pgr = Apartment.connection.execute(%{select pg_get_serial_sequence('#{from_schema}.#{table_name}', 'id') })
+      return if pgr.column_values(0).empty?
+      schema_seq = pgr.column_values(0).first
+      seq = schema_seq.split('.').last
+
+      puts seq
+      puts schema_seq
+#      select setval('tenniscluba_20130725051741.books_id_seq', (select last_value FROM tenniscluba.books_id_seq));
+      Apartment.connection.execute(%{SELECT setval('#{to_schema}.#{seq}', (SELECT last_value FROM #{schema_seq})) })
     end
 
 
