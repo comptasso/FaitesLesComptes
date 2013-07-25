@@ -6,7 +6,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
  # ActiveRecord::Base.shared_connection = nil
 
 RSpec.configure do |c| 
-#  c.filter = {wip:true}
+#  c.filter = {wip:true} 
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true }
 end

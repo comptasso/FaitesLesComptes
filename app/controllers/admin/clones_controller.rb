@@ -10,12 +10,12 @@ class Admin::ClonesController < Admin::ApplicationController
 
   after_filter :clear_org_cache, only:[:create]
 
-  # ici on a besoin que d'un formulaire qui donne une room avec son id et le champ commentaire
+  # ici on a besoin que d'un formulaire qui donne un organism avec son champ commentaire
   def new
     @new_clone = Organism.new
   end
 
-  #
+  # @organism est fourni par le before_filter find_organism
   def create
     r = @organism.room
     comment = params[:organism][:comment]

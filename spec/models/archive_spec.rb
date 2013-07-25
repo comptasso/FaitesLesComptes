@@ -8,7 +8,7 @@ describe Archive do
   before(:each) do
     create_minimal_organism
     @archive = @o.archives.new
-
+ 
   end
 
   describe 'préparation d une archive' do

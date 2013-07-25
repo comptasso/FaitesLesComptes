@@ -7,7 +7,7 @@ require 'strip_arguments'
 # Voir les commentaires sur versions_controller pour la gestion des migrations et
 # des versions
 #
-class Room < ActiveRecord::Base
+class Room < ActiveRecord::Base 
   
   belongs_to :user
 

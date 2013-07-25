@@ -37,9 +37,9 @@ include JcCapybara
   end
 
   describe 'les actions' do
-    it 'rend 3 icones dans la dernière colonne' do
+    it 'rend 2 icones dans la dernière colonne' do
       render
-      page.all('tr:last td:last img').should have(3).icons
+      page.all('tr:last td:last img').should have(2).icons
     end
 
     it 'mais n en rend pas si la room  n est pas à jour' do
