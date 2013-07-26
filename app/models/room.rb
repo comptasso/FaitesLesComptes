@@ -174,7 +174,6 @@ class Room < ActiveRecord::Base
   # ou look_for {Archive.last}
   #
   def look_for(&block)
-    puts " nom de la base : #{database_name}"
     Apartment::Database.process(database_name) {block.call}
   end
 
@@ -197,19 +196,19 @@ class Room < ActiveRecord::Base
       # on change le nom de organism#database_name dans organism pour refléter new_db_name
       # et on ajoute le commentaire
       Apartment::Database.process(new_db_name) do
-        puts 'Dans Apartment::Database.process'
+        Rails.logger.info 'Dans clone_db, partie Apartment::Database.process'
         o = Organism.first
         
         o.database_name = new_db_name
         o.comment = comment
-        puts o.errors.messages unless o.valid?
+        Rails.logger.warn o.errors.messages unless o.valid?
         o.save!
         
       end
       # on finit en créant la nouvelle room
       r = Room.new(:database_name=>new_db_name)
       r.user_id = user.id
-      puts r.errors.messages unless r.valid?
+      Rails.logger.warn r.errors.messages unless r.valid?
       r.save!
 
     end
@@ -237,7 +236,6 @@ class Room < ActiveRecord::Base
 
   def create_db
     if Apartment::Database.db_exist?(database_name)
-      puts 'dans le callback create_db'
       Rails.logger.info "Après création de Room :la base #{database_name} existe déjà"
       Apartment::Database.switch(database_name)
     else
@@ -251,7 +249,8 @@ class Room < ActiveRecord::Base
     Apartment::Database.drop(database_name)
   end
 
-  
+  # TODO retirer le after_update qui appelle ce callback ainsi que le callback
+  # 
   # change le schéma de la base de données (postgresql uniquement) puis met à jour
   # le champ database_name de Organism (qui doit être synchronisé avec Room)
   def change_schema_name
