@@ -5,7 +5,6 @@
 
 <%= content_for :menu do %>
   <%= icon_to 'modifier.png', edit_admin_organism_path(@organism) %>
-  <%= icon_to 'pointer.png', admin_organism_archives_path(@organism), title: 'liste des archives pour cet organisme' %>
   <%= icon_to 'sauvegarde.png', new_admin_clone_path, :title=>"Fait un clone de l'organisme"  if current_user.allowed_to_create_room? %>
   <%= icon_to 'supprimer.png', [:admin, @organism.room], :confirm=>"Cette action est irréversible \nEtes vous sûr ?", :method=>:delete %>
   <%= icon_to 'retour.png', :back %>
