@@ -27,7 +27,7 @@ pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
       redirect_to  :back, alert: "Il n'y a pas de chèque à remettre"
       return
     end
-    @check_deposit = @bank_account.check_deposits.new(deposit_date: Date.today)
+    @check_deposit = @bank_account.check_deposits.new(deposit_date: @period.guess_date)
     @check_deposit.pick_all_checks # par défaut on remet tous les chèques disponibles pour cet organisme
   end
 
