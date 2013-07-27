@@ -4,6 +4,6 @@
   = icon_to 'navigation90.png', organism_bank_account_check_deposits_path(@organism, @bank_account)
 
 .champ
-  %h3 Modification d'une remise chèque
+  %h3 Modification d'une remise chèque sur #{@bank_account.nickname}
   .inner-champ
     = render 'form_edit'

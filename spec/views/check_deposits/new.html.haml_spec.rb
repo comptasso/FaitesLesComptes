@@ -3,7 +3,7 @@
 require 'spec_helper'
 
  
-describe "check_deposits/edit" do
+describe "check_deposits/new" do
   include JcCapybara
 
   let(:ba)  {mock_model(BankAccount, number: '124578AZ', name: 'IBAN', nickname:'Compte courant')}
@@ -40,10 +40,10 @@ describe "check_deposits/edit" do
     end
 
     it "affiche la légende du fieldset" do
-      assert_select "h3", :text => "Modification d'une remise chèque sur Compte courant"
+      assert_select "h3", :text => "Nouvelle remise de chèque sur #{ba.nickname}"
     end
     
-    it "affiche la table desw remises de chèques" do
+    it "affiche le formulaire de remise de chèques" do
       assert_select "form", count: 1
     end
     

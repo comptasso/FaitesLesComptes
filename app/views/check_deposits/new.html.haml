@@ -1,0 +1,7 @@
+= content_for :menu do
+  = icon_to 'retour.png', :back
+
+.champ
+  %h3 Nouvelle remise de chèque sur #{@bank_account.nickname}
+  .inner-champ
+    = render 'form_new'
