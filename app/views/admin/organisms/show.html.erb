@@ -65,12 +65,6 @@
   <%=l @organism.writings.order(:updated_at).last.updated_at if @organism.writings.any? %>
 </p>
 
-<% if @organism.archives.any? %>
-<p>
- <b>Dernière sauvegarde le :</b>
- <%= l @organism.archives.order(:created_at).last.created_at %>
- <b>&nbsp;Commentaire :&nbsp;</b><%= @organism.archives.order(:created_at).last.comment %>
-</p>
-<% end %>
+
 
   </div>

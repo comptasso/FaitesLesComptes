@@ -1,2 +1,0 @@
-module Admin::ArchiveHelper
-end

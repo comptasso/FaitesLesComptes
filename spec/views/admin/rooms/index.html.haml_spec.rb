@@ -7,11 +7,10 @@ include JcCapybara
 
   let(:o) {mock_model(Organism, :title=>'Organisme Test')}
   let(:r1) {mock_model(Room, :organism=>o, db_filename:'db1.sqlite3',
-      :relative_version=>:same_migration, last_archive:nil,
+      :relative_version=>:same_migration,
       'late?'=>false, 'advanced?'=>false,  'no_base?'=>false, 'up_to_date?'=>true)}
   let(:r2) {mock_model(Room, :organism=>o, 
-      db_filename:'db2.sqlite3',
-    last_archive:mock_model(Archive, :created_at=>Date.today))}
+      db_filename:'db2.sqlite3')}
 
 
   before(:each) do

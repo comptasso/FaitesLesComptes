@@ -7,9 +7,7 @@ require 'strip_arguments'
 # un d'A Nouveau. De même un organisme a un ou des comptes bancaires et une ou 
 # des caisses.
 # 
-# Un organisme a également des archives pour faire les suavegardes et les restaurations.
-# 
-# Un organisme a également des exercices (Period), lesquels ont à leur tour des 
+# Un organisme a également des exercices (Period), lesquels ont à leur tour des
 # comptes.
 # 
 # Les champs obligatoires sont le titre de l'organisme, la base de donnée associée, et 
@@ -65,7 +63,6 @@ class Organism < ActiveRecord::Base
   has_many :virtual_books # les virtual_books ne sont pas persisted? donc inutile d'avoir un callback
   
   has_many :accounts, through: :periods
-  has_many :archives,  dependent: :destroy
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
   has_many :transfers
 

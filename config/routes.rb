@@ -100,7 +100,6 @@ Faitesvoscomptes::Application.routes.draw do
 
     resources :rooms do
       member do
-        get 'new_archive'
         post 'migrate'
       end
     end
@@ -114,7 +113,6 @@ Faitesvoscomptes::Application.routes.draw do
 
       
 
-      resources :archives
       resources :books
       resources :income_books
       resources :outcome_books

@@ -52,7 +52,9 @@ module Apartment
     # désigne le nom du schema.
     #
     # Cette méthode trouve son intérêt dans la problématique de la création et restauration
-    # d'archive, permettant de modifier le schema d'une base existante avant de restaurer la suavegarde.
+    # d'archive, permettant de modifier le schema d'une base existante avant de restaurer la sauvegarde.
+    #
+    # Actuellement la fonctionnalité d'archive a été retirée et cette méthode ne devrait donc pas être utilisée.
     #
     def rename_schema(old_name, new_name)
       # inutile de vérifier que ce nom est disponible car cette méthode est intégrée dans un after_save de Room
