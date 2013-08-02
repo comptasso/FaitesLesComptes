@@ -168,7 +168,7 @@ class Room < ActiveRecord::Base
   # look_for permet de chercher quelque chose dans la pièce
   # Le block indique ce qu'on cherche
   #
-  # Usage look_for {Organism.first} (qui est également définie dans cette classe comme méthode organism
+  # Usage possible look_for {Organism.first} mais il vaut mieux utiliser la méthode organism
   #
   def look_for(&block)
     Apartment::Database.process(database_name) {block.call}
