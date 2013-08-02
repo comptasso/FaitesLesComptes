@@ -40,7 +40,7 @@ require 'strip_arguments'
 #
 class Organism < ActiveRecord::Base
 
-  attr_accessible :title, :description, :database_name, :status, :comment
+  attr_accessible :title, :database_name, :status, :comment
 
   has_one :nomenclature
   
