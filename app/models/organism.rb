@@ -69,10 +69,10 @@ class Organism < ActiveRecord::Base
   before_validation :fill_version
   after_create :create_default
 
-  strip_before_validation :title, :description, :database_name
+  strip_before_validation :title, :comment, :database_name 
 
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
-  validates :description, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
+  validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :database_name, uniqueness:true, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*(_[0-9]*)?\z/}
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
 
