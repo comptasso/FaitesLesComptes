@@ -29,9 +29,7 @@ class Room < ActiveRecord::Base
     Apartment::Database.process(database_name) {Organism.first}
   end
 
-  def last_archive
-    look_for {Archive.last}
-  end
+  
 
   # Vérifie que la base de données enregistrant les Room est bien dans la bonne version
   #
@@ -170,8 +168,7 @@ class Room < ActiveRecord::Base
   # look_for permet de chercher quelque chose dans la pièce
   # Le block indique ce qu'on cherche
   #
-  # Usage look_for {Organism.first} (qui est également définie dans cette classe comme méthode organism
-  # ou look_for {Archive.last}
+  # Usage possible look_for {Organism.first} mais il vaut mieux utiliser la méthode organism
   #
   def look_for(&block)
     Apartment::Database.process(database_name) {block.call}
@@ -183,7 +180,7 @@ class Room < ActiveRecord::Base
   # La logique de clone est donc de créer une nouvelle db appartenant au même user
   # mais avec comme base de données le database_name incrémenté
   #
-  # Cette méthode est appelée par archives_controller pour permettre de créer une archive avec un commentaire
+  # Cette méthode est appelée par clones_controller pour permettre de créer un  clone avec un commentaire
   # 
   def clone_db(comment = nil)
     # lit le database_name et calcule son incrémentation

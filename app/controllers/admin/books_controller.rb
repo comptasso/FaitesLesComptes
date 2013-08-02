@@ -2,10 +2,6 @@
 
 class Admin::BooksController < Admin::ApplicationController
 
-  # TODO : on pourrait se passer de organism puisqu'on utilise des bases séparées
-  # ou des schémas
-
-
   # GET /books
   # GET /books.json
   def index

@@ -209,8 +209,6 @@ fr:
 
   activerecord:
     attributes:
-      archive:
-        comment: Commentaire
       book:
         abbreviation: Abbréviation
         title: Titre
@@ -327,9 +325,6 @@ fr:
     select:
       prompt: "Veuillez sélectionner"
     submit:
-      archive:
-        create: "Crée la sauvegarde et la télécharge"
-        update: "Modifier le commentaire"
       book:
         create: "Créer le livre"
         update: "Modifier ce livre"

@@ -35,9 +35,17 @@ class User < ActiveRecord::Base
   # retourne un hash pour la zone Compta avec les seulement les organismes qui
   # sont accountable.
   #
-  # s'appuie sur organism_with_rooms et ne retien que les accountable?
+  # s'appuie sur organism_with_rooms et ne retient que les accountable?
   def accountable_organisms_with_room
-    organisms_with_room.select {|owr|  owr[:room].look_for {Organism.first.accountable?} }
+    organisms_with_room.select {|owr|  owr[:organism].accountable? }
+  end
+
+  # retourne un hash pour la zone de Saisie avec seulement les organismes qui
+  # ont un exercice
+  #
+  # s'appuie sur organism_ith_rooms et ne retient que ceux qui ont un organisme
+  def saisieable_organisms_with_room
+    organisms_with_room.select {|owr|  owr[:organism].periods.any? }
   end
 
   # up_to_date effectue un contrôle des bases de l'utilisateur

@@ -25,8 +25,8 @@
 </p>
 
 <p>
-  <b>Description :</b>
-  <%= @organism.description %>
+  <b>Commentaire :</b>
+  <%= @organism.comment %>
 </p>
 
 <p>
@@ -39,10 +39,7 @@
   <%= @organism.database_name %>
 </p>
 
-<p>
-  <b>Commentaire :</b>
-  <%= @organism.comment %>
-</p>
+
 
 <p>
   <b>Version :</b>
@@ -65,12 +62,6 @@
   <%=l @organism.writings.order(:updated_at).last.updated_at if @organism.writings.any? %>
 </p>
 
-<% if @organism.archives.any? %>
-<p>
- <b>Dernière sauvegarde le :</b>
- <%= l @organism.archives.order(:created_at).last.created_at %>
- <b>&nbsp;Commentaire :&nbsp;</b><%= @organism.archives.order(:created_at).last.comment %>
-</p>
-<% end %>
+
 
   </div>

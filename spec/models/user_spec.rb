@@ -103,17 +103,17 @@ describe User do
     before(:each) do
       @r = mock_model(Room, :organism=>o)
       @u.stub(:organisms_with_room).and_return [{:organism=>o, :room=>@r}]
+
     end
 
-
     it 'garde les organismes si accountabls?' do
-      @r.stub(:look_for).and_return true
+      o.stub('accountable?').and_return true
       @u.accountable_organisms_with_room.should ==  [{:organism=>o, :room=>@r}]
 
     end
 
     it 'mais le retire sinon' do
-      @r.stub(:look_for).and_return false
+      o.stub('accountable?').and_return false
       @u.accountable_organisms_with_room.should ==  []
     end
 

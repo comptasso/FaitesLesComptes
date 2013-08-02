@@ -17,7 +17,7 @@
       %th.pc10 Statut
       %th.pc10 Base de données
       %th.pc5 Etat
-      %th.pc15 Dernière sauvegarde 
+      
       %th.pc10 Actions
 
 
@@ -35,7 +35,7 @@
           = icon_to('supprimer.png', admin_room_path(ro), :method=>:delete) if ro.no_base?
           = image_tag('icones/traffic-light-red.png', title:'Base en avance sur la version du programme; Impossible à utiliser') if ro.advanced?
           = image_tag('icones/traffic-light-green.png', title:'Base OK') if ro.relative_version == :same_migration
-        %td= jour(ro.last_archive)
+        
         %td
           - if ro.up_to_date?
             =# icon_to 'sauvegarde.png', new_admin_clone_path, :title=>"Fait un clone de l'organisme"  if current_user.allowed_to_create_room?

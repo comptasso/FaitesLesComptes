@@ -1,5 +1,6 @@
 # clones_controller permet de produire un clone d'une base de données pour faire
-# une archive de secours.
+# une version de secours avant une opération spécifique, par exemple avant de passer
+# les écritures d'inventaire ou encore avant de clôre un exercice
 #
 # Le commentaire qui sera rentré dans le formulaire affiché par la vue new, servira de
 # commentaire pour la nouvelle room
