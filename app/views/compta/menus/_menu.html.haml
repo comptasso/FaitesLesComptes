@@ -7,7 +7,7 @@
     %ul.dropdown-menu
       - cache("compta_#{current_user.name}")  do
         -current_user.accountable_organisms_with_room.each do |groom|
-          %li= link_to groom[:organism].title, compta_room_path(groom[:room])
+          %li= link_to groom[:organism].title, compta_room_path(groom[:room]), {title:groom[:organism].comment}
 
 
   - unless @period.nil? && @pariod.accounts.nil?

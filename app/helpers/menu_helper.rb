@@ -3,9 +3,9 @@
 module MenuHelper
 
   def saisie_consult_organism_list
-    rooms_with_period = current_user.rooms.select {|r| r.look_for { Organism.first.periods.any? } }
+    rooms_with_period = current_user.saisieable_organisms_with_room
     lis = rooms_with_period.collect do |groom|
-      content_tag :li ,link_to(groom.organism.title, room_path(groom))
+      content_tag :li ,link_to(groom[:organism].title, room_path(groom[:room]), {title:groom[:organism].comment})
     end
     lis.join('').html_safe
   end
