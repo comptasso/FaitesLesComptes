@@ -115,18 +115,6 @@ describe Admin::RoomsController do
     end
   end
 
-  describe 'GET new_archive' do
-    it 'trouve l organisme et redirige' do
-      @cu.should_receive(:rooms).and_return(@a = double(Arel))
-      @a.should_receive(:find).with(@r.to_param).and_return(@r)
-      get :new_archive, {:id => @r.to_param}
-      response.should redirect_to new_admin_organism_archive_url(@o)
-    end
-  end
-
-  #
-
-
   describe "DELETE destroy" do
     before(:each) do
       @cu.stub_chain(:rooms, :find).and_return(@r)

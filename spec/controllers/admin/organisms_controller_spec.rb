@@ -87,7 +87,7 @@ describe Admin::OrganismsController do
 #
 #    before(:each) do
 #      @cu.stub(:rooms).and_return([@r])
-#      @r.stub(:organism_description).and_return({'organism'=>@o, 'room'=>@r, 'archive'=>nil})
+#      @r.stub(:organism_description).and_return({'organism'=>@o, 'room'=>@r})
 #    end
 #
 #    it 'remet la session org_db à nil' do
@@ -101,7 +101,7 @@ describe Admin::OrganismsController do
 #
 #      @cu.should_receive(:rooms).and_return([@r])
 #      get :index,{}, user_session
-#      assigns(:room_organisms).should == [{'organism'=>@o, 'room'=>@r, 'archive'=>nil}]
+#      assigns(:room_organisms).should == [{'organism'=>@o, 'room'=>@r}]
 #    end
 #
 #    it 'renders template index' do
