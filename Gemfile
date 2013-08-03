@@ -2,10 +2,10 @@ source 'http://rubygems.org'
 ruby "2.0.0"
 
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.14'
 gem 'rack', '1.4.5'
 # gem 'therubyracer' execjs sous windows
-gem 'simple_form', "~> 2.0.1"
+gem 'simple_form', "~> 2.1.0"
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
