@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :find_organism, :current_period, :unless=>('devise_or_bottom_action?')
   
-  helper_method :two_decimals, :virgule, :picker_to_date, :current_user, :current_period?, :abc
+  helper_method :two_decimals, :virgule, :current_user, :current_period?, :abc
 
 
   protected

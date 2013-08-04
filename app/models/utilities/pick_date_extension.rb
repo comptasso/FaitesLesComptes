@@ -50,9 +50,7 @@ module Utilities::PickDateExtension
           end
         end
 
-
-
-      # on recopie les erreurs de arg vers ceux de arg_picker. 
+        # on recopie les erreurs de arg vers ceux de arg_picker. 
         dup_errors << "self.errors[:#{arg}].each {|e| self.errors.add(:#{arg}_picker, e)} if self.errors.has_key?(:#{arg})\n"
         dup_errors << "self.errors.delete(:#{arg}_picker) if self.errors.has_key?(:#{arg}_picker) && !self.errors.has_key?(:#{arg})\n"
       
