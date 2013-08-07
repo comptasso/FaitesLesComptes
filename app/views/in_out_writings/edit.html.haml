@@ -3,9 +3,8 @@
 
 .champ
   %h3
-    =  @book.title.capitalize 
-    &nbsp;: modification de ligne
-    =request.env['HTTP_REFERER']
+    =  "#{@book.title.capitalize} : modification de ligne n° #{@in_out_writing.id}" 
+    
 
 .inner-champ
   .inputs.row-fluid{:class=>@book.type.underscore, :id=>"entry_lines"}
