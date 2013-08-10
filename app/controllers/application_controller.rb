@@ -131,6 +131,7 @@ class ApplicationController < ActionController::Base
  
   # pour afficher une virgule à la place du point décimal.
   # TODO remplacer tous les recours à two_decimals par virgule chaque fois que possible.
+  # TODO voir également à supprimer l'une de ces deux méthodes (la même existe dans ApplicationHelper'
   def two_decimals(montant)
     sprintf('%0.02f',montant)
   rescue
