@@ -1,6 +1,6 @@
 Faitesvoscomptes::Application.routes.draw do
 
-  
+  mount Adherent::Engine, at: "/adherent"
   
 
   devise_for :users, :controllers => { :registrations => "devise_registrations" }

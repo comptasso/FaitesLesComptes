@@ -65,6 +65,9 @@ class Organism < ActiveRecord::Base
   has_many :accounts, through: :periods
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
   has_many :transfers
+  
+  # liaison avec le gem adherent
+  has_many :members, class_name: 'Adherent::Member'
 
   before_validation :fill_version
   after_create :create_default

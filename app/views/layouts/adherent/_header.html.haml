@@ -1,0 +1,7 @@
+.navabr
+  .navbar.navbar-inner
+    .container
+      .brand
+        = link_to header_title, main_app.organism_path(@organism), :tabindex=>-1, id:'home'
+        #login_logout Connecté en tant que #{current_user.name}
+           
