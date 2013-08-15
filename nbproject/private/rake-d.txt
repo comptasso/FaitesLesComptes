@@ -1,4 +1,6 @@
 about=List versions of all Rails frameworks and the environment
+adherent\:install\:migrations=Copy migrations from adherent to application
+apartment\:create=Create all multi-tenant databases
 apartment\:migrate=Migrate all multi-tenant databases
 apartment\:migrate\:down=Runs the "down" for a given migration VERSION across all multi-tenant dbs.
 apartment\:migrate\:redo=Rollbacks the database one migration and re migrate up (options: STEP=x, VERSION=x).

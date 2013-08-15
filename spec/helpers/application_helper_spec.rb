@@ -38,7 +38,7 @@ describe ApplicationHelper do
       helper.active_inactive('admin').should == 'active'
     end
 
-    it 's il n y a pas de prefis, l espace est main' do
+    it 's il n y a pas de prefix, l espace est vide' do
       helper.stub(:request).and_return(double URI, :path=>'/organisms')
       helper.active_inactive('main').should == 'active'
       helper.active_inactive('compta').should == 'inactive'

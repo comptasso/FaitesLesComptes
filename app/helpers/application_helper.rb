@@ -84,14 +84,19 @@ module ApplicationHelper
   protected
 
   # renvoie l'espace dans lequel on est : compta, admin ou main
-  # mais ce peut être aussi adherent ou autre prefixe
+  # mais ce peut être aussi adherent ou autre prefixe;
+  #
+  # Si il n'a pas de prefix connu, c'est qu'on est dans l'espace principal
+  # et alors renvoie main
+  #
   def space
     requ = request
     return 'main' unless requ
     # request_path est par exemple /admin/organisms/9
     request_uri = requ.path.slice(1..-1) # on enlève le leading /
-    request_uri.split('/').first
-   
+    prefix = request_uri.split('/').first
+    return prefix if prefix.in? %w(admin compta adherent)
+    'main'
   end
 
   
