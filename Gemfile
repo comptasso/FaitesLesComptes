@@ -61,7 +61,7 @@ gem 'simplecov', :require => false, :group => :test
 group :development, :test do
   # Pretty printed test output
   gem 'turn', :require => false
-  gem 'rspec-rails', '2.8.1'
+  gem 'rspec-rails', '~>  2.0'
   gem 'watchr'
   gem 'spork-rails'
   gem 'launchy'
