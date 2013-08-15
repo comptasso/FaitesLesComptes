@@ -3137,7 +3137,7 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar {
   overflow: visible;
-  margin-bottom: 20px;
+  margin-bottom: 0px; /* modifié par jcl */
   color: #555555;
   *position: relative;
   *z-index: 2;
@@ -3172,7 +3172,7 @@ input[type="submit"].btn.btn-mini {
   float: left;
   display: block;
   padding: 10px 45px 10px;
-  margin-left: -20px;
+  margin-left: -18px;
   font-size: 20px;
   font-weight: 200;
   color: #bbbbbb;

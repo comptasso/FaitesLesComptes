@@ -29,7 +29,38 @@ html, body {
      color: #bbbbbb;
       }
     }
+    
+     .navbar .brand {
+      padding-top:4px;
+      padding-bottom: 4px;
+      height: 2em;
+      }
 
+    .navbar-inner {
+      margin-bottom: 4px;
+      }
+    
+    #login_logout {
+      margin-top: 4px;
+      font-size: 50%;
+      span {
+        font-weight: bold;
+        }
+       a {
+           color: #fff; 
+           }
+      }
+
+.navbar .nav > .adherent > a {
+  color: #89cff9;
+}
+
+.navbar .nav > .adherent > a:hover,
+.navbar .nav > .adherent > a:focus {
+  
+  background-color: #013771;
+  }
+      
   .container-fluid {
     min-height: 100%;
     height: auto !important;

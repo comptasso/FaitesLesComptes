@@ -1,8 +1,9 @@
 %ul.nav.nav-pills.pull-right
-  %li= link_to('Adhérents', adherent.members_path) if @organism.status == 'Association'
+  %li{:class=> [active_inactive('adherent'), 'adherent']}
+    = link_to('Adhérents', adherent.members_path) if @organism.status == 'Association'
   %li{:class=> active_inactive('main')}= link_to "Saisie/Consult",  organism_path(@organism), :tabindex=>-1
   %li{:class=> active_inactive('admin')}
     = link_to "Administration", admin_organism_path(@organism), :tabindex=>-1
-  %li{:class=>active_inactive('compta') }
+  %li{:class=>active_inactive('compta')}
     = link_to("Compta", new_compta_period_balance_path(@period), :tabindex=>-1) if (@period && @period.accountable?)
   

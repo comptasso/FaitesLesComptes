@@ -35,6 +35,8 @@ module ApplicationHelper
   def active_inactive(name)
     name == space ? 'active' : 'inactive'
   end
+  
+  
 
   # Affiche le titre en haut à gauche des vues
   def header_title
@@ -82,17 +84,14 @@ module ApplicationHelper
   protected
 
   # renvoie l'espace dans lequel on est : compta, admin ou main
+  # mais ce peut être aussi adherent ou autre prefixe
   def space
     requ = request
-    return main unless requ
+    return 'main' unless requ
     # request_path est par exemple /admin/organisms/9
     request_uri = requ.path.slice(1..-1) # on enlève le leading /
-    prefix = request_uri.split('/').first
-    case prefix
-    when 'admin' then 'admin'
-    when 'compta' then 'compta'
-    else 'main'
-    end
+    request_uri.split('/').first
+   
   end
 
   

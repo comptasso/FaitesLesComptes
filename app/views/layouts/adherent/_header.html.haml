@@ -1,7 +1,12 @@
-.navabr
-  .navbar.navbar-inner
+.navbar
+  .navbar-inner
     .container
       .brand
         = link_to header_title, main_app.organism_path(@organism), :tabindex=>-1, id:'home'
-        #login_logout Connecté en tant que #{current_user.name}
-           
+        #login_logout
+          Connecté en tant que #{current_user.name}
+          = icon_to 'door-open.png', main_app.destroy_user_session_path, :method=>:delete, title:'Déconnexion', :tabindex=>-1
+
+      %ul.nav.nav-pills.pull-right
+        %li{:class=> active_inactive('adherent')}= link_to('Adhérents', adherent.members_path) 
+        %li{:class=> active_inactive('compta')}= link_to('Compta', main_app.admin_organism_path(@organism))
