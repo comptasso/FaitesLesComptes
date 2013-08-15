@@ -4,9 +4,13 @@
       .brand
         = link_to header_title, main_app.organism_path(@organism), :tabindex=>-1, id:'home'
         #login_logout
-          Connecté en tant que #{current_user.name}
+          Connecté en tant que &nbsp; 
+          %span
+            = link_to "#{current_user.name}", main_app.edit_user_registration_path(:user), title:'Modifier vos données personnelles'
+          &nbsp;-&nbsp;
           = icon_to 'door-open.png', main_app.destroy_user_session_path, :method=>:delete, title:'Déconnexion', :tabindex=>-1
 
       %ul.nav.nav-pills.pull-right
-        %li{:class=> active_inactive('adherent')}= link_to('Adhérents', adherent.members_path) 
-        %li{:class=> active_inactive('compta')}= link_to('Compta', main_app.admin_organism_path(@organism))
+        %li{:class=> active_inactive('compta')}
+          = link_to('COMPTA', main_app.organism_path(@organism), title:'Vers le module de comptabilité')
+        %li{:class=> active_inactive('adherent')}= link_to('ADHERENTS', adherent.members_path) 

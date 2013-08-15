@@ -7,7 +7,7 @@
 #
 #
 class BottomController < ApplicationController
-
+  
   def credit
   end
 

@@ -90,14 +90,15 @@ class ApplicationController < ActionController::Base
   end
 
   
-  # fait un reset de la session si on a changé d'organism et sinon
-  # trouve la session pour toutes les actions qui ont un organism_id
+  # se connecte à la base de données indiquée par session[:org_db]
+  # et instancie @organism
+  # TODO voir s'il ne faudrait pas faire un cache
   def find_organism
     
     # utile pour remettre le système cohérent
     use_main_connection if session[:org_db] == nil
     r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
-    if r # on doit avoir tru=ouvé une room
+    if r # on doit avoir trouvé une room
       r.connect_to_organism
       @organism = Organism.first # il n'y a qu'un organisme par base
     else
