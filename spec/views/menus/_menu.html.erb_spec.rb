@@ -9,7 +9,7 @@ end
 describe "menus/_menu.html.erb" do   
   include JcCapybara 
 
-  let(:o) {mock_model(Organism, main_bank_id:1) }
+  let(:o) {mock_model(Organism, main_bank_id:1, status:'Association') }
   let(:ibook) {stub_model(IncomeBook, :title=>'Recettes') } 
   let(:obook) { stub_model(OutcomeBook, title: 'Dépenses')}
   let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))}
@@ -31,6 +31,7 @@ describe "menus/_menu.html.erb" do
       view.stub(:resource_name).and_return('user')
       view.stub(:resource).and_return(cu)
       cu.stub(:remember_me).and_return true
+      
     end
 
     it 'upper_menu ne doit pas s afficher' do
@@ -79,6 +80,24 @@ describe "menus/_menu.html.erb" do
       
       
     end
+    
+    describe 'lien adherent de l upper_menu' do
+      before(:each) do
+         @request.path = '/admin/oragnisms'
+      end
+      
+      it 'une association rend le lien vers adherent' do 
+        render :template=>'/organisms/show', :layout=>'layouts/application'
+        page.find('#upper-menu li:first a').should have_content('ADHERENTS')
+      end
+      
+      it 'une non association n a que 3 liens' do
+        o.stub(:status).and_return 'Entreprise'
+        render :template=>'/organisms/show', :layout=>'layouts/application'
+        page.all('ul.nav-pills li').should have(3).elements
+      end
+                    
+    end
 
     describe 'Partie Virements du menu' do 
 
@@ -87,7 +106,7 @@ describe "menus/_menu.html.erb" do
          render :template=>'organisms/show', :layout=>'layouts/application'
       end
 
-      it 'affiche le menu Virement', wip:true do
+      it 'affiche le menu Virement' do
         page.find('ul#menu_general').should have_content ('TRANSFERTS')
       end
 

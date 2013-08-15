@@ -25,10 +25,6 @@ describe 'vue bank_accounts index' do
     login_as('quidam')
   end
 
-#  after(:each) do
-#    Apartment::Database.switch()
-#  end
-
   describe 'new bank_account'  do
     before(:each) do
       visit new_admin_organism_bank_account_path(@o)
