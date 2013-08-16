@@ -14,8 +14,8 @@ describe "cash_lines/index" do
       :debit=>montant,
     :date=>Date.today,
     :narration=>'le libellé',
-    :destination=>stub(:name=>'destinée'),
-    :nature=>stub(:name=>'une dépense'),
+    :destination=>double(:name=>'destinée'),
+    :nature=>double(:name=>'une dépense'),
     :credit=>0,
     :ref=>'001',
     'editable?'=>true
@@ -32,7 +32,7 @@ describe "cash_lines/index" do
     @ec = Extract::Cash.new(@ca, @p)
     @ec.stub(:lines).and_return([@cl1, @cl2])
     @ec.stub(:total_debit).and_return 25
-    @ec.stub(:total_credit).and_return 25
+    @ec.stub(:total_credit).and_return 25 
 
 
 

@@ -168,15 +168,14 @@ describe Compta::WritingsController do
       it "assigns the writing as @writing" do
         
         # Trigger the behavior that occurs when invalid params are submitted
-        Writing.any_instance.stub(:save).and_return(false)
+        @w.stub(:update_attributes).and_return false
         put :update, {book_id:@b.id, :id => @w.to_param, :writing => {}}, valid_session
         assigns(:writing).should eq(@w)
       end
 
       it "re-renders the 'edit' template" do
-        
         # Trigger the behavior that occurs when invalid params are submitted
-        Writing.any_instance.stub(:save).and_return(false)
+        @w.stub(:update_attributes).and_return false
         put :update, {book_id:@b.id, :id => @w.to_param, :writing => {}}, valid_session
         response.should render_template("edit")
       end
@@ -228,7 +227,7 @@ describe Compta::WritingsController do
 
     it 'envoie lock à toutes les écritures non verrouillées' do
       @b.stub_chain(:writings, :period).and_return(@ar = double(Arel))
-      @ar.should_receive(:unlocked).and_return([stub(:lock=>true, 'compta_editable?'=>true),stub(:lock=>true, 'compta_editable?'=>true) ])
+      @ar.should_receive(:unlocked).and_return([double(:lock=>true, 'compta_editable?'=>true),double(:lock=>true, 'compta_editable?'=>true) ])
       post :all_lock, {book_id:@b.to_param}, valid_session
       response.should redirect_to compta_book_writings_url(@b)
     end

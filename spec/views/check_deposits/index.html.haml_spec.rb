@@ -22,7 +22,7 @@ describe "check_deposits/index" do
     [cd1, cd2].each do |cd|
       cd.stub(:bank_account).and_return(ba)
     end
-    ba.stub!(:to_s).and_return('124578AZ')
+    ba.stub(:to_s).and_return('124578AZ')
     cd1.stub(:pointed?).and_return(true) # la remise de chèque n° 1 est pointée
     cd2.stub(:pointed?).and_return(false)
 
