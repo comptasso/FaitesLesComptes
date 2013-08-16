@@ -56,7 +56,7 @@ module OrganismFixtureBis
     # @n = @p.natures.create!(name: 'Essai', :income_outcome=>false)
     get_organism_instances
   end
-
+  
   def get_organism_instances
     @ba= @o.bank_accounts.first
     @ib = @o.income_books.first # les livres sont créés par un after_create

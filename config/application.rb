@@ -23,7 +23,7 @@ module Faitesvoscomptes
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
     # Activate observers that should always be running.
-    config.active_record.observers = :nature_observer, :user_observer
+    config.active_record.observers = :nature_observer, :user_observer, 'Adherent::PaymentObserver'
 
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
