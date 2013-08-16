@@ -3,9 +3,17 @@
 require "spec_helper"
 
 describe "routes for adherent engine" do  
-  routes { Adhrent::Engine.routes }
+  routes { Adherent::Engine.routes }
   
   it "routes application to adherent engine" do
-    { :get => "/adherent" }.should route_to(:controller => "adherent/members", :action => "index")
+    pending 'rspec ne supporte pas le routing des engines pour Rails 3'
+    { :get => "/adherent" }.should route_to(:controller => "sessionent/members", :action => "index")
+  end
+  
+  it 'test du path' do
+    pending 'non supporté par rspec'
+    adherent.members_path.should == 'bonjout'
   end
 end
+
+

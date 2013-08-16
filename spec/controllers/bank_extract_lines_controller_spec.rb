@@ -79,7 +79,7 @@ describe BankExtractLinesController do
        ComptaLine.stub(:find).and_return(@cl = double(ComptaLine))
        @a.stub(:new).and_return @bel1
        @bel1.stub(:save).and_return false
-       Utilities::NotPointedLines.should_not_receive(:new).and_return ['npl1', 'npl2']
+       Utilities::NotPointedLines.should_not_receive(:new)
        post :ajoute, {:bank_extract_id=>be.to_param, :line_id=>{"id"=>1}, :format=>:js}, valid_session
        response.should render_template 'flash_error'
         
