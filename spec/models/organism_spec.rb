@@ -158,8 +158,8 @@ describe Organism do
 
       it 'crée la destination non affecté et adhérent car org est une asso' do
         @organism.status.should == 'Association'
-        @organism.destinations.find_by_name('non affecté').should be_an_instance_of(Destination)
-        @organism.destinations.find_by_name('Adhérent').should be_an_instance_of(Destination) 
+        @organism.destinations.find_by_name('Non affecté').should be_an_instance_of(Destination)
+        @organism.destinations.find_by_name('Adhérents').should be_an_instance_of(Destination) 
       end
     end
     
@@ -177,7 +177,7 @@ describe Organism do
       end
       
       it 'crée une seule destination si pas association' do
-        @organism.destinations.find_by_name('non affecté').should be_an_instance_of(Destination)
+        @organism.destinations.find_by_name('Non affecté').should be_an_instance_of(Destination)
       end
 
     end

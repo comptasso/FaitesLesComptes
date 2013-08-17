@@ -260,8 +260,8 @@ class Organism < ActiveRecord::Base
     bank_accounts.create(bank_name:'La Banque', number:'Le Numéro de Compte', nickname:'Compte courant')
     logger.debug 'creation la banque par défaut'
     
-    destinations.create(name:'non affecté')
-    destinations.create(name:'Adhérent') if status == 'Association'
+    destinations.create(name:'Non affecté')
+    destinations.create(name:'Adhérents') if status == 'Association'
 
     fill_nomenclature
   end
