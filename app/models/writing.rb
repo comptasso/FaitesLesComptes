@@ -21,7 +21,13 @@ require 'strip_arguments'
 #   sachant que le verrou (locked) est placé sur chaque compta_lines
 #
 # Chaque écriture de recettes ou de dépenses a pour contrepartie une compta_line
-# de classe 5 (soit un compte bancaire, soit une caisse). Cette ligne est appelée support_line.
+# de classe 5 (soit un compte bancaire, soit une caisse). Cette ligne est appelée support_line
+# et accessible par la méthode du même nom.
+# 
+# Deux champs bridge_id et bridge_type permettent de faire le lien avec des modules
+# extérieurs. Ils ont été ajoutés pour le module Adhérent. Ainsi un payement 
+# enregistré dans ce module génère une écriture qui enregistre en bridge_type Adherent
+# et en bridge id l'id du payement qui est à l'origine de cette écriture.
 #
 class Writing < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
@@ -30,7 +36,8 @@ class Writing < ActiveRecord::Base
 
   # book_id est nécessaire car des classes comme check_deposit ont besoin de
   # créér une écriture en remplissant le champ book_id
-  attr_accessible :date, :date_picker, :narration, :ref, :compta_lines_attributes, :book_id
+  attr_accessible :date, :date_picker, :narration, :ref, :compta_lines_attributes, :book_id, 
+    :bridge_id, :bridge_type
 
   belongs_to :book
  

@@ -24,6 +24,8 @@ module Adherent
          date:record.read_attribute(:date),
          ref:"adh #{member.number} #{record.id}",
          narration:"Payment adhérent #{member.to_s}",
+         bridge_id:record.id,
+         bridge_type:'Adherent',
          compta_lines_attributes:{'1'=>compta_line_attributes(record),
            '2'=>counter_line_attributes(record)}
       )
@@ -31,8 +33,28 @@ module Adherent
       w.save!
     end
     
-    def after_update(record)
-      
+    # Si l'écriture n'est pas verrouillée, met à jour les champs. 
+    #
+    # 
+    def before_update(record)
+      w = InOutWriting.find_by_bridge_id(record.id)
+      return false if w.locked?
+     
+      retour =  true
+      @member = record.member
+      @organism = member.organism
+      set_period(record)
+      # mise à jour des champs writings qui peuvent être influencés par un 
+      # changement des informations du payment 
+      new_values = { date:record.read_attribute(:date),
+         ref:"adh #{member.number}",
+         narration:"Payment adhérent #{member.to_s}"}
+      retour = retour && w.update_attributes(new_values)  # passe retour à false si update_attributes échoue
+      cl = w.compta_lines.first
+      retour = retour && cl.update_attributes(compta_line_attributes(record)) 
+      sl = w.support_line
+      retour = retour && sl.update_attributes(counter_line_attributes(record)) 
+      retour
     end
     
     protected

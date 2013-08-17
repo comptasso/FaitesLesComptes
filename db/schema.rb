@@ -253,10 +253,11 @@ ActiveRecord::Schema.define(:version => 20130817090206) do
     t.string   "narration"
     t.string   "ref"
     t.integer  "book_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.string   "type"
     t.integer  "bridge_id"
+    t.string   "bridge_type"
   end
 
 end
