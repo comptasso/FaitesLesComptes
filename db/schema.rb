@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130812052931) do
+ActiveRecord::Schema.define(:version => 20130817090206) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -256,6 +256,7 @@ ActiveRecord::Schema.define(:version => 20130812052931) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "type"
+    t.integer  "bridge_id"
   end
 
 end

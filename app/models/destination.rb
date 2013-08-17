@@ -2,7 +2,15 @@
 
 require 'strip_arguments'
 
-
+# La classe Destination permet d'avoir un axe d'analyse pour les données de la 
+# comptabilité.
+# 
+# Il n'y a pas d'obligation d'avoir une ou des destinations. Les destinations 
+# enregistrent les dépenses comme les recettes et donc permettent d'avoir des
+# résultats économiques par destinations.
+# 
+# TODO : supprimer le champ income_outcome inutilisé (à vérifier)
+#
 class Destination < ActiveRecord::Base
 
   attr_accessible :name, :comment, :income_outcome

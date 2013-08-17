@@ -6,7 +6,8 @@
 # Enregistrer un payment entraîne la création d'une écriture comptable
 # 
 # TODO : voir comment traiter les natures et destinations qui servent pour
-# l'enregistrement des payements des membres.
+# l'enregistrement des payements des membres. Même problème pour les 
+# banques ou la caisse et le livre des recettes.
 #
 module Adherent
   class PaymentObserver < ::ActiveRecord::Observer
@@ -14,11 +15,10 @@ module Adherent
     attr_reader :organism, :member, :period
     
     def after_create(record)
-      # trouver le livre de recette (par défaut on prend le premier)
       @member = record.member
       @organism = member.organism
       set_period(record)
-      
+      # trouver le livre de recette (par défaut on prend le premier)
       ib = organism.income_books.first
       w = ib.in_out_writings.new(
          date:record.read_attribute(:date),
@@ -27,12 +27,11 @@ module Adherent
          compta_lines_attributes:{'1'=>compta_line_attributes(record),
            '2'=>counter_line_attributes(record)}
       )
-      
-      puts w.errors.messages unless w.valid?
+      Rails.logger.warn "Ecriture générée par un payment de module Adhérent avec des erreurs : #{w.errors.messages}" unless w.valid?
       w.save!
     end
     
-    def after_update
+    def after_update(record)
       
     end
     
@@ -51,11 +50,13 @@ module Adherent
     def counter_line_attributes(record) 
       # selon le mode de paiment, il faut trouver le compte comptable à mouvementer
       # si c'est en Espèces, c'est la caisse, si c'est autrement, c'est la banque
-      if record.mode == 'Espèces'
-        account = period.list_cash_accounts.first
-      else
-        account = period.list_bank_accounts.first
+      account =  case record.mode
+      when 'Espèces' then period.list_cash_accounts.first
+      when 'Chèque' then period.rem_check_account
+      else 
+        period.list_bank_accounts.first
       end
+      
       {account_id:account.id, payment_mode:record.mode, debit:record.amount, credit:0}
     end
   end

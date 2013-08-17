@@ -40,6 +40,7 @@ module OrganismFixtureBis
       ComptaLine.delete_all
       BankAccount.delete_all
       Cash.delete_all
+      Destination.delete_all
     end
   end
 
