@@ -36,7 +36,7 @@ describe Utilities::Graphic do
     it "datas and ticks should have same size" do
       expect {
         @graphic.add_serie({:legend=>'serie 1', :datas=>[1,2,3,1,2,3,1,2,3,1,2,]})
-      }.should raise_error('Number of datas and ticks are different')
+      }.to raise_error('Number of datas and ticks are different')
     end
 
   end

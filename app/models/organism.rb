@@ -242,6 +242,7 @@ class Organism < ActiveRecord::Base
 
   # crée les livres Recettes, Dépenses et OD
   # Crée également une banque et une caisse par défaut
+  # Une ou deux destinations : non affecté et Adhérent (si asso)
   # et crée également la nomenclature
   def create_default
     # les 4 livres
@@ -258,6 +259,9 @@ class Organism < ActiveRecord::Base
     logger.debug 'creation de la caisse par défaut'
     bank_accounts.create(bank_name:'La Banque', number:'Le Numéro de Compte', nickname:'Compte courant')
     logger.debug 'creation la banque par défaut'
+    
+    destinations.create(name:'non affecté')
+    destinations.create(name:'Adhérent') if status == 'Association'
 
     fill_nomenclature
   end

@@ -61,7 +61,7 @@ describe Organism do
   end
 
 
-  describe 'can_write_line' , wip:true do
+  describe 'can_write_line'  do
 
     before(:each) do
       
@@ -83,7 +83,7 @@ describe Organism do
       @organism.can_write_line?.should be_true
     end
 
-     it 'pour pouvoir écrire une compta, il faut un compte bancaire ou une caisse et un income ou outcome book' do
+    it 'pour pouvoir écrire une compta, il faut un compte bancaire ou une caisse et un income ou outcome book' do
       @organism.stub(:outcome_books).and_return([1])
       @organism.can_write_line?.should be_false
       @organism.stub(:bank_accounts).and_return([1])
@@ -102,65 +102,92 @@ describe Organism do
   end
 
   describe 'after create' do
-    before(:each) do
-      clean_assotest1
-      @organism = Organism.create! valid_attributes
+    
+    context 'une association' do
+      before(:each) do
+        clean_assotest1
+        @organism = Organism.create! valid_attributes
+      end
+
+      it 'on a quatre livres' do
+        @organism.should have(4).books
+      end
+
+      it 'on a un livre de recette' do
+        @organism.should have(1).income_book 
+      end
+
+      it 'on a un livre de dépenses' do
+        @organism.should have(1).outcome_book
+      end
+
+      it 'on a un livre d OD' do
+        @organism.should have(1).od_book
+      end
+
+      it 'on a un livre d AN' do
+        @organism.an_book.should be_an_instance_of(AnBook)
+      end
+
+
+      it 'on a une caisse et une banque' do 
+        @organism.should have(1).cashes
+        @organism.should have(1).bank_accounts
+      end
+
+      it 'income_otucome_books renvoie les livres recettes et dépenses' do
+        @organism.in_out_books.should have(2).books
+        @organism.in_out_books.first.title.should == 'Recettes'
+        @organism.in_out_books.last.title.should == 'Dépenses'
+      end
+
+      it 'peut créer un document'  do
+        Period.stub(:last).and_return(double(Period))
+        Compta::Nomenclature.should_receive(:new).with(Period.last).and_return(@cn = double(Compta::Nomenclature))
+        @cn.should_receive(:sheet).with(:actif)
+        @organism.document(:actif)
+      end
+
+      it 'n est pas accountable'  do
+        @organism.should_not be_accountable
+      end
+
+      it 'mais peut écrire des lignes' do
+        @organism.should be_can_write_line
+      end
+
+      it 'crée la destination non affecté et adhérent car org est une asso' do
+        @organism.status.should == 'Association'
+        @organism.destinations.find_by_name('non affecté').should be_an_instance_of(Destination)
+        @organism.destinations.find_by_name('Adhérent').should be_an_instance_of(Destination) 
+      end
     end
+    
+    context 'une non association' do
+      before(:each) do
+        clean_assotest1
+        @organism = Organism.create!({:title =>'Mon Entreprise',
+          database_name:'assotest1',
+      :status=>'Entreprise' })
+         
+      end
+      
+      it 'il n y a qu une destination' do
+        @organism.destinations.count.should == 1
+      end
+      
+      it 'crée une seule destination si pas association' do
+        @organism.destinations.find_by_name('non affecté').should be_an_instance_of(Destination)
+      end
 
-    it 'on a quatre livres' do
-      @organism.should have(4).books
     end
-
-    it 'on a un livre de recette' do
-      @organism.should have(1).income_book 
-    end
-
-    it 'on a un livre de dépenses' do
-      @organism.should have(1).outcome_book
-    end
-
-    it 'on a un livre d OD' do
-      @organism.should have(1).od_book
-    end
-
-    it 'on a un livre d AN' do
-      @organism.an_book.should be_an_instance_of(AnBook)
-    end
-
-
-    it 'on a une caisse et une banque' do 
-      @organism.should have(1).cashes
-      @organism.should have(1).bank_accounts
-    end
-
-    it 'income_otucome_books renvoie les livres recettes et dépenses' do
-      @organism.in_out_books.should have(2).books
-      @organism.in_out_books.first.title.should == 'Recettes'
-      @organism.in_out_books.last.title.should == 'Dépenses'
-    end
-
-    it 'peut créer un document' , wip:true do
-      Period.stub(:last).and_return(double(Period))
-      Compta::Nomenclature.should_receive(:new).with(Period.last).and_return(@cn = double(Compta::Nomenclature))
-      @cn.should_receive(:sheet).with(:actif)
-      @organism.document(:actif)
-    end
-
-    it 'n est pas accountable'  do
-      @organism.should_not be_accountable
-    end
-
-    it 'mais peut écrire des lignes' do
-      @organism.should be_can_write_line
-    end
-
-    it 
+    
 
     
   end
 
 
- context 'when there is one period'  do 
+  context 'when there is one period'  do 
 
     before(:each) do
       clean_assotest1
@@ -171,11 +198,11 @@ describe Organism do
       @organism.periods.count.should == 2
     end
 
-#    after(:all) do
-#      ActiveRecord::Base.establish_connection 'test'
-#    end
+    #    after(:all) do
+    #      ActiveRecord::Base.establish_connection 'test'
+    #    end
 
-     it 'est accountable'  do
+    it 'est accountable'  do
       @organism.should be_accountable
     end
 
@@ -199,16 +226,16 @@ describe Organism do
 
       it 'si la date est future renvoie le plus récent'  do
         @organism.guess_period(Date.today).should == @p_2011
-      end
+      end 
 
-      it 'si la date est trop ancienne, renvoie le plus vieux' do
-        @organism.guess_period(Date.today.years_ago 10).should == @p_2010
-      end
-
-      it 'sinon prend l exercice' do
-        @organism.guess_period(Date.parse('12/08/2010')).should == @p_2010
-        @organism.guess_period(Date.parse('11/11/2011')).should == @p_2011
-      end
+      #      it 'si la date est trop ancienne, renvoie le plus vieux' do
+      #        @organism.guess_period(Date.today.years_ago 10).should == @p_2010
+      #      end
+      #
+      #      it 'sinon prend l exercice' do
+      #        @organism.guess_period(Date.parse('12/08/2010')).should == @p_2010
+      #        @organism.guess_period(Date.parse('11/11/2011')).should == @p_2011
+      #      end
 
 
 
@@ -234,7 +261,7 @@ describe Organism do
 
 
     
-    describe 'main_bank_id' , wip:true do
+    describe 'main_bank_id'  do
       
       context 'with default bank account' do
        

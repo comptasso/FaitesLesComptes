@@ -25,7 +25,7 @@ describe BankExtractsController do
 
   before(:each) do
    minimal_instances
-    BankAccount.stub!(:find).and_return(ba)
+    BankAccount.stub(:find).and_return(ba)
    
   end
 

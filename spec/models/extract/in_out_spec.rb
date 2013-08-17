@@ -46,12 +46,12 @@ describe Extract::InOut do
 
     def line(date, debit, credit)
       double(ComptaLine, ref:'', narration:'Une compta line',
-        destination:stub(:name=>'La destination'),
-        nature:stub(:name=>'La nature'),
+        destination:double(:name=>'La destination'),
+        nature:double(:name=>'La nature'),
         debit:debit,
         credit:credit,
         date:date,
-        writing:stub(payment_mode:'Chèque'),
+        writing:double(payment_mode:'Chèque'),
         support:'Ma banque',
         locked?:true)
     end

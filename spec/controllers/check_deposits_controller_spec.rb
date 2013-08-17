@@ -29,9 +29,9 @@ before(:each) do
     context "no pending_checks" do
 
       before(:each) do
-        CheckDeposit.stub!(:pending_checks).and_return nil # juste pour satisfaire le filtre find_non_deposited_checks
-        CheckDeposit.stub!(:total_to_pick).and_return 0
-        CheckDeposit.stub!(:nb_to_pick).and_return 0
+        CheckDeposit.stub(:pending_checks).and_return nil # juste pour satisfaire le filtre find_non_deposited_checks
+        CheckDeposit.stub(:total_to_pick).and_return 0
+        CheckDeposit.stub(:nb_to_pick).and_return 0
         ba.stub(:check_deposits).and_return @a = double(Arel)
       end
 
@@ -60,9 +60,9 @@ before(:each) do
 
       it "avec chèque en attente, génère un flash" do
         @a.stub(:within_period).and_return nil
-        CheckDeposit.stub!(:pending_checks).and_return [1,2]
-        CheckDeposit.stub!(:total_to_pick).and_return 401
-        CheckDeposit.stub!(:nb_to_pick).and_return 2
+        CheckDeposit.stub(:pending_checks).and_return [1,2]
+        CheckDeposit.stub(:total_to_pick).and_return 401
+        CheckDeposit.stub(:nb_to_pick).and_return 2
         get :index,{ :bank_account_id=>ba.id, :organism_id=>@o.id.to_s}, valid_session
         flash[:alert].should == "Il reste 2 chèques à remettre à l'encaissement pour un montant de 401,00 €"
 
@@ -135,9 +135,9 @@ before(:each) do
     context 'sans chèques à remettre' do
 
       before(:each) do
-        CheckDeposit.stub!(:pending_checks).and_return nil
-        CheckDeposit.stub!(:total_to_pick).and_return 0
-        CheckDeposit.stub!(:nb_to_pick).and_return 0
+        CheckDeposit.stub(:pending_checks).and_return nil
+        CheckDeposit.stub(:total_to_pick).and_return 0
+        CheckDeposit.stub(:nb_to_pick).and_return 0
       end
 
       it 'redirige vers bask et établit le flash d alerte' do
@@ -149,9 +149,9 @@ before(:each) do
 
     context 'avec des chèques à remettre'  do
       before(:each) do
-        CheckDeposit.stub!(:pending_checks).and_return [double(ComptaLine)]
-        CheckDeposit.stub!(:total_to_pick).and_return 100
-        CheckDeposit.stub!(:nb_to_pick).and_return 1
+        CheckDeposit.stub(:pending_checks).and_return [double(ComptaLine)]
+        CheckDeposit.stub(:total_to_pick).and_return 100
+        CheckDeposit.stub(:nb_to_pick).and_return 1
       end
 
 
