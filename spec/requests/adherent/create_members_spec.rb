@@ -24,10 +24,11 @@ describe 'création d un membre' do
     page.should have_content('Nouveau membre') 
   end
 
-  it 'créer un membre renvoie sur la saisie des coordonnées' do
-    fill_in "member_number", with:'001'
+  it 'créer un membre renvoie sur la saisie des coordonnées',  wip:true do
+    fill_in "member_number", with:'Adh001'
     fill_in "member_name", with:'Lepage'
     fill_in "member_forname", with:'Jean-Claude'
+    fill_in "member_birthdate", with:'06/06/1955'
     click_button "Créer le membre"
     page.should have_content('Saisie des coordonnées de Jean-Claude Lepage')
   end
