@@ -5,42 +5,42 @@
 
     <%= stylesheet_link_tag    "application" %>
 
-  <noscript>
+    <noscript>
     <meta http-equiv="refresh" content="1;url=/no_javascript.html" />
-  </noscript>
+    </noscript>
 
-   <%= javascript_include_tag "application" %>
-      
+    <%= javascript_include_tag "application" %>
+
     <%= csrf_meta_tags %>
   </head>
   <body class="<%= 'public_'+controller.controller_name %>">
 
     <div class="container-fluid">
-   
-   <%= render 'layouts/navbar' %>
 
- 
- <div class="row-fluid">
-
-  <div>
-    <%= render 'menus/menu' if user_signed_in? && controller_name != 'registrations' %>
-  </div>
-   <div id="main-zone">
- 
- <%= render 'layouts/flash_partial' %>
+      <%= render 'layouts/navbar' %>
 
 
-  <%= yield %>
-   </div>
- </div>
- 
-    <div class ="push"></div>
-     </div>
-<%= render 'layouts/bottom_page' if user_signed_in? %>
-   
+      <div class="row-fluid">
 
- 
+        <div>
+          <%= render 'menus/menu' if user_signed_in? && controller_name != 'registrations' %>
+        </div>
+        <div id="main-zone">
 
-    
+          <%= render 'layouts/flash_partial' %>
+
+
+          <%= yield %>
+        </div>
+      </div>
+
+      <div class ="push"></div>
+    </div>
+    <%= render 'layouts/bottom_page' if user_signed_in? %>
+
+
+
+
+
   </body>
 </html>

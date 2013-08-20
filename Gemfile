@@ -22,7 +22,7 @@ gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (sourc
 gem 'apartment'
 gem 'devise'
 
-gem 'adherent' #, path: "../../Adherent"
+gem 'adherent'
 
 group :production, :staging, :test do
   gem 'pg'
@@ -62,7 +62,7 @@ group :development, :test do
   # Pretty printed test output
   gem 'turn', :require => false
   gem 'rspec-rails', '~>  2.0'
-  gem 'watchr'
+  
   gem 'spork-rails'
   gem 'launchy'
   gem 'database_cleaner'
