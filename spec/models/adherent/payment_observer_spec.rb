@@ -56,7 +56,7 @@ describe Adherent::Payment do
       @pay.save
       w = InOutWriting.last
       w.book.should == @ib
-      w.narration.should == "Payment adhérent Jean Dupont"
+      w.narration.should == "Payment adhérent Jean DUPONT"
       w.date.should == Date.today
       
      clf =  w.compta_lines.first
@@ -113,7 +113,7 @@ describe Adherent::Payment do
         new_m = @o.members.create!(number:'002', name:'Dupond', forname:'Charles')
         @pay.member = new_m
         @pay.save
-        InOutWriting.last.narration.should == "Payment adhérent Charles Dupond"
+        InOutWriting.last.narration.should == "Payment adhérent Charles DUPOND"
         InOutWriting.last.ref.should match /adh 002/
         
       end

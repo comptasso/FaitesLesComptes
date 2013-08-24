@@ -30,7 +30,7 @@ describe 'création d un membre' do
     fill_in "member_forname", with:'Jean-Claude'
     fill_in "member_birthdate", with:'06/06/1955'
     click_button "Créer le membre"
-    page.should have_content('Saisie des coordonnées de Jean-Claude Lepage')
+    page.should have_content('Saisie des coordonnées de Jean-Claude LEPAGE')
   end
   
 end
