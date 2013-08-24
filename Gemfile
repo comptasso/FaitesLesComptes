@@ -22,8 +22,7 @@ gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (sourc
 gem 'apartment'
 gem 'devise'
 
-gem 'adherent'
-
+gem 'adherent' #, :path=>'../../Adherent'
 group :production, :staging, :test do
   gem 'pg'
 end
