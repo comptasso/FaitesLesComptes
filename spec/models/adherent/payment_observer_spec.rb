@@ -19,7 +19,7 @@ describe Adherent::Payment do
    before(:each) do
     create_organism 
     create_member
-    @dest = @o.destinations.find_by_name('Adhérents') 
+    
   end
   
   it 'on peut enregistrer un payement' do
@@ -45,7 +45,7 @@ describe Adherent::Payment do
 
     end
   
-    it 'crée une écriture conforme aux infos entrées dans le payment' do
+    it 'crée une écriture conforme aux infos entrées dans le payment' , wip:true do
       @pay.save
       w = InOutWriting.last
       w.book.should == @ib
@@ -53,8 +53,9 @@ describe Adherent::Payment do
       w.date.should == Date.today
       
      clf =  w.compta_lines.first
+     puts clf.inspect
      clf.credit.should == @pay.amount
-     clf.destination.should == @dest
+     clf.destination.name.should == 'Adhérents'
      clf.nature.name.should == 'Cotisations des adhérents'
      clf.debit.should == 0.0
      
@@ -80,7 +81,7 @@ describe Adherent::Payment do
     
   end
   
-  describe 'mise à jour de payement' do
+  describe 'mise à jour de payment' do
     
     before(:each) do
       @pay = @m.payments.create!(date:Date.today, amount:125.25, mode:'CB')
@@ -94,7 +95,7 @@ describe Adherent::Payment do
       Adherent::Payment.last.amount.should == 125.25
     end
     
-    describe 'mise à jour des informations' , wip:true do
+    describe 'mise à jour des informations'  do
     
       it 'met à jour la date' do
         @pay.date = Date.today - 1

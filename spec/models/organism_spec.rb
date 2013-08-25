@@ -174,6 +174,7 @@ describe Organism do
           b.income_book = @organism.income_books.first
           b.destination = @organism.destinations.find_by_name('Adhérents')
           b.nature_name = 'Cotisations des adhérents'
+          
         end 
       
       end

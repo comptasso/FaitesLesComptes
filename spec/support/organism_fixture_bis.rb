@@ -54,7 +54,6 @@ module OrganismFixtureBis
     Apartment::Database.switch('assotest1')
     @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
     @p = @o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
-    # @n = @p.natures.create!(name: 'Essai', :income_outcome=>false)
     get_organism_instances
   end
   

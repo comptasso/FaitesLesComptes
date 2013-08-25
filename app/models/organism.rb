@@ -268,12 +268,16 @@ class Organism < ActiveRecord::Base
     destinations.create(name:'Adhérents') if status == 'Association'
   end
   
+  # TODO voir comment gérer les exceptions
+  # remplit les éléments qui permettent de faire le pont entre le module 
+  # Adhérents (et plus précisément, sa partie Payment) et le PaymentObserver
+  # qui écrit sur le livre des recettes.
   def fill_bridge
     b = build_bridge
-    b.bank_account_id = bank_accounts.first.id,
+    b.bank_account_id = bank_accounts.first.id
     b.cash_id = cashes.first.id
-    b.nature_name = 'Cotisation des adhérents'
-    b.destination_id = destinations.find_by_name('Adhérents')
+    b.nature_name = 'Cotisations des adhérents'
+    b.destination_id = destinations.find_by_name('Adhérents').id
     b.income_book_id = income_books.first.id
     b.save
   end

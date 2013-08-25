@@ -9,7 +9,7 @@ end
 
 # spec request for testing admin bank_accounts 
 
-describe 'enregistrement d un payment' do  
+describe 'enregistrement d un payment' do   
   include OrganismFixtureBis
   
 
