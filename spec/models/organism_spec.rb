@@ -161,6 +161,22 @@ describe Organism do
         @organism.destinations.find_by_name('Non affecté').should be_an_instance_of(Destination)
         @organism.destinations.find_by_name('Adhérents').should be_an_instance_of(Destination) 
       end
+      
+      describe 'bridge vers adherent' , wip:true do
+        it 'crée un bridge vers le module adhérent' do
+          @organism.bridge.should be_an_instance_of Adherent::Bridge
+        end
+        
+        it 'avec les bonnes valeures' do 
+          b = @organism.bridge
+          b.bank_account = @organism.bank_accounts.first
+          b.cash = @organism.cashes.first
+          b.income_book = @organism.income_books.first
+          b.destination = @organism.destinations.find_by_name('Adhérents')
+          b.nature_name = 'Cotisations des adhérents'
+        end 
+      
+      end
     end
     
     context 'une non association' do
@@ -170,6 +186,10 @@ describe Organism do
           database_name:'assotest1',
       :status=>'Entreprise' })
          
+      end
+      
+      it 'ne crée pas de bridge vers adhérent' do
+        @organism.bridge.should == nil
       end
       
       it 'il n y a qu une destination' do
@@ -285,7 +305,7 @@ describe Organism do
 
     describe 'main_cash_id' do
      
-      context 'with default cash' do
+      context 'with default cash' do 
 
         before(:each) do
           @ca = @organism.cashes.first

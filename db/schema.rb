@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130817090206) do
+ActiveRecord::Schema.define(:version => 20130825065121) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -34,6 +34,17 @@ ActiveRecord::Schema.define(:version => 20130817090206) do
   end
 
   add_index "adherent_adhesions", ["member_id"], :name => "index_adherent_adhesions_on_member_id"
+
+  create_table "adherent_bridges", :force => true do |t|
+    t.integer  "organism_id"
+    t.integer  "bank_account_id"
+    t.integer  "cash_id"
+    t.integer  "destination_id"
+    t.string   "nature_name"
+    t.integer  "income_book_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
 
   create_table "adherent_coords", :force => true do |t|
     t.string   "mail"

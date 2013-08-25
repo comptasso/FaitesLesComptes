@@ -66,11 +66,14 @@ class Organism < ActiveRecord::Base
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
   has_many :transfers
   
+  has_one :bridge, class_name:'Adherent::Bridge'
+  
   # liaison avec le gem adherent
   has_many :members, class_name: 'Adherent::Member'
 
   before_validation :fill_version
-  after_create :create_default
+  after_create :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
+  after_create :fill_bridge , :if=>"status == 'Association'"
 
   strip_before_validation :title, :comment, :database_name 
 
@@ -240,11 +243,8 @@ class Organism < ActiveRecord::Base
     end
   end
 
-  # crée les livres Recettes, Dépenses et OD
-  # Crée également une banque et une caisse par défaut
-  # Une ou deux destinations : non affecté et Adhérent (si asso)
-  # et crée également la nomenclature
-  def create_default
+  
+  def fill_books
     # les 4 livres
     logger.debug 'Création des livres par défaut'
     income_books.create(abbreviation:'VE', title:'Recettes', description:'Recettes')
@@ -254,16 +254,28 @@ class Organism < ActiveRecord::Base
     od_books.create(abbreviation:'OD', :title=>'Opérations diverses', description:'Op.Diverses')
     logger.debug 'creation livre OD'
     create_an_book(abbreviation:'AN', :title=>'A nouveau', description:'A nouveau')
-
+  end
+  
+  def fill_finances
     cashes.create(name:'La Caisse')
     logger.debug 'creation de la caisse par défaut'
     bank_accounts.create(bank_name:'La Banque', number:'Le Numéro de Compte', nickname:'Compte courant')
     logger.debug 'creation la banque par défaut'
-    
+  end
+  
+  def fill_destinations
     destinations.create(name:'Non affecté')
     destinations.create(name:'Adhérents') if status == 'Association'
-
-    fill_nomenclature
+  end
+  
+  def fill_bridge
+    b = build_bridge
+    b.bank_account_id = bank_accounts.first.id,
+    b.cash_id = cashes.first.id
+    b.nature_name = 'Cotisation des adhérents'
+    b.destination_id = destinations.find_by_name('Adhérents')
+    b.income_book_id = income_books.first.id
+    b.save
   end
   
 end

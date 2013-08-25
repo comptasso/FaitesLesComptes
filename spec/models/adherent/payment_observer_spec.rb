@@ -16,17 +16,10 @@ describe Adherent::Payment do
     @m = @o.members.create!(number:'001', name:'Dupont', forname:'Jean')
   end
   
-  def create_destination_for_adherent  #
-    @dest = @o.destinations(true).create(name:'Adhérents')
-    #|| @o.destinations.create!(name:'Adhérents') 
-   
-  end
-  
-
-  before(:each) do
+   before(:each) do
     create_organism 
     create_member
-    create_destination_for_adherent 
+    @dest = @o.destinations.find_by_name('Adhérents') 
   end
   
   it 'on peut enregistrer un payement' do
