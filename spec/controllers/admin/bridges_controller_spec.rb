@@ -55,19 +55,36 @@ describe Admin::BridgesController do
     
     describe 'cas du succès' do
       it 'doit être mis à jour' do
+        @bridge.stub(:check_nature_name).and_return true
         @bridge.should_receive(:update_attributes).with(@parametres).and_return true
         post :update, {:organism_id=>@o.id.to_s, :id=>@bridge.to_param, :bridge=>@parametres}, valid_session
         response.should redirect_to admin_organism_bridge_url(@o)
       end
       
       it 'envoie un flash notice' do
+        @bridge.stub(:check_nature_name).and_return true
         @bridge.stub(:update_attributes).with(@parametres).and_return true
         post :update, {:organism_id=>@o.id.to_s, :id=>@bridge.to_param, :bridge=>@parametres}, valid_session
         flash[:notice].should == 'Les paramètres ont été modifiés'
       end
       
-      it 'vérifie que le bridge fonctionne pour tous les exercices ouverts'
+      describe 'vérifie que le nature_name existe pour tous les exercices ouverts'
       
+      it 'si oui' do
+        @bridge.stub(:check_nature_name).and_return true
+        @bridge.stub(:update_attributes).with(@parametres).and_return true
+        post :update, {:organism_id=>@o.id.to_s, :id=>@bridge.to_param, :bridge=>@parametres}, valid_session
+        flash[:notice].should == 'Les paramètres ont été modifiés'
+        flash[:alert].should == nil
+      end
+      
+      it 'si non' do
+        @bridge.stub(:check_nature_name).and_return false
+        @bridge.stub(:update_attributes).with(@parametres).and_return true
+        post :update, {:organism_id=>@o.id.to_s, :id=>@bridge.to_param, :bridge=>@parametres}, valid_session
+        flash[:notice].should == 'Les paramètres ont été modifiés'
+        flash[:alert].should_not == nil
+      end
       
     end
     
