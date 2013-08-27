@@ -22,6 +22,21 @@ describe Adherent::Payment do
     
   end
   
+  it 'on vérifie le bridge' do
+    b = @o.bridge
+    b.income_book.should be_an_instance_of IncomeBook
+    b.destination.should be_an_instance_of Destination
+    
+  end
+  
+  it 'et ses payment_values' do
+    pv = @o.bridge.payment_values(@p)
+    bac = Account.find(pv[:bank_account_account_id])
+    bac.should be_an_instance_of Account
+    bac.number.should == '51201'
+    
+  end
+  
   it 'on peut enregistrer un payement' do
     p = @m.payments.new(date:Date.today, amount:125.25, mode:'CB')
     expect {p.save}.to change {Adherent::Payment.count}.by(1) 
@@ -39,7 +54,7 @@ describe Adherent::Payment do
     
     it 'bridge_id enregistre l écriture d origine' do
       @pay.save
-      w = InOutWriting.last
+      w = InOutWriting.find_by_bridge_id(@pay.id)
       w.bridge_id.should == @pay.id
       w.bridge_type.should == 'Adherent'
 
@@ -47,13 +62,13 @@ describe Adherent::Payment do
   
     it 'crée une écriture conforme aux infos entrées dans le payment' , wip:true do
       @pay.save
-      w = InOutWriting.last
+      w = InOutWriting.find_by_bridge_id(@pay.id)
       w.book.should == @ib
       w.narration.should == "Payment adhérent Jean DUPONT"
       w.date.should == Date.today
       
      clf =  w.compta_lines.first
-     puts clf.inspect
+     
      clf.credit.should == @pay.amount
      clf.destination.name.should == 'Adhérents'
      clf.nature.name.should == 'Cotisations des adhérents'
@@ -85,7 +100,13 @@ describe Adherent::Payment do
     
     before(:each) do
       @pay = @m.payments.create!(date:Date.today, amount:125.25, mode:'CB')
-      @writing_pay = InOutWriting.last
+      @writing_pay = InOutWriting.find_by_bridge_id(@pay.id)
+    end
+    
+    it 'on peut retrouver l écriture',wip:true do
+      ecrit = InOutWriting.find_by_bridge_id(@pay.id)
+      ecrit.should be_an_instance_of(InOutWriting)
+     
     end
     
     it 'n est pas possible si écriture validée' do
@@ -100,23 +121,23 @@ describe Adherent::Payment do
       it 'met à jour la date' do
         @pay.date = Date.today - 1
         @pay.save
-        InOutWriting.last.date.should == Date.yesterday
+        InOutWriting.find_by_bridge_id(@pay.id).date.should == Date.yesterday
       end
     
       it 'met à jour le membre' do
         new_m = @o.members.create!(number:'002', name:'Dupond', forname:'Charles')
         @pay.member = new_m
         @pay.save
-        InOutWriting.last.narration.should == "Payment adhérent Charles DUPOND"
-        InOutWriting.last.ref.should match /adh 002/
+        InOutWriting.find_by_bridge_id(@pay.id).narration.should == "Payment adhérent Charles DUPOND"
+        InOutWriting.find_by_bridge_id(@pay.id).ref.should match /adh 002/
         
       end
       
       it 'met à jour le montant' do
         @pay.amount = 47.12
         @pay.save
-        InOutWriting.last.compta_lines.first.credit.should == 47.12
-        InOutWriting.last.support_line.debit.should == 47.12
+        InOutWriting.find_by_bridge_id(@pay.id).compta_lines.first.credit.should == 47.12
+        InOutWriting.find_by_bridge_id(@pay.id).support_line.debit.should == 47.12
       end
     
     end

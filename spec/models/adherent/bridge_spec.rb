@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  c.filter = {wip:true}
+ # c.filter = {wip:true}
 end
 
 describe Adherent::Bridge do
@@ -29,13 +29,7 @@ describe Adherent::Bridge do
         @vals = @bridge.payment_values(@p)
       end  
       
-       it 'destination_id est rempli' do
-        @vals[:destination_id].should == @bridge.destination_id
-      end
-        
-      it 'income_book_id est rempli' do
-        @vals[:income_book_id].should == @bridge.income_book_id  
-      end
+      
       
       it 'bank_account_account_id est rempli' do
         @vals[:bank_account_account_id].should_not be_nil

@@ -1,0 +1,27 @@
+= content_for :menu do
+  = icon_to 'modifier.png', edit_admin_organism_bridge_path(@organism)
+
+.champ
+  %h3
+    Paramètres de connection au module Adhérent pour l'enregistrement des paiements
+
+
+.row-fluid.inner-champ
+  %p
+    %b Destination : 
+    = @bridge.destination.name 
+  %p
+    %b Nature : 
+    = @bridge.nature_name 
+  %p
+    %b Compte bancaire :
+    = @bridge.bank_account.nickname 
+  %p
+    %b Caisse :
+    = @bridge.cash.name
+  %p
+    %b Livre de recettes : 
+    = @bridge.income_book.title 
+   
+
+

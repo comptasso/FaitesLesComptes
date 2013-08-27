@@ -1,5 +1,7 @@
 Faitesvoscomptes::Application.routes.draw do
 
+  
+
   mount Adherent::Engine, at: "/adherent"
   
 
@@ -88,7 +90,7 @@ Faitesvoscomptes::Application.routes.draw do
   ##################### namespace ADMIN ##############################"
    namespace 'admin' do
 
-
+    # TODO voir si encore utile
     get "versions/new"
     post "versions/migrate_each"
 
@@ -112,7 +114,7 @@ Faitesvoscomptes::Application.routes.draw do
     resources :organisms do
 
       
-
+      resource :bridge
       resources :books
       resources :income_books
       resources :outcome_books

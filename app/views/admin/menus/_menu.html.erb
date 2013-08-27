@@ -88,11 +88,11 @@
 
   <% end %> 
       
-      <% if @organism.status == 'Association' %>  
+      <% if @organism.status == 'Association' %>   
          <li class="dropdown <%= 'active' if controller.controller_name =='bridge'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">PARAMETRES<b class="caret"></b></a>
       <ul class="dropdown-menu">
-          <li><%= link_to 'Adhérents', admin_organism_bridges_path(@organism)  %></li>
+          <li><%= link_to 'Adhérents', admin_organism_bridge_path(@organism)  %></li> 
           
         </ul>
     </li>

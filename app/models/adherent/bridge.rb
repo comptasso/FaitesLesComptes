@@ -25,13 +25,12 @@ class Adherent::Bridge < ActiveRecord::Base
   # renvoie les valeurs nécessaires pour que le PaymentObserver puisse passer
   # l'écriture de payment
   def payment_values(period) 
-    { :destination_id=>destination_id,
-      :income_book_id=>income_book_id,
+    { 
       :bank_account_account_id=>find_bank_account_account_id(period),
       :cash_account_id=>find_cash_account_id(period),
       :nature_id=>find_nature_id(period)
     }
-  end
+  end 
   
   protected
     
