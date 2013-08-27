@@ -4,6 +4,6 @@ class Admin::BridgesController < Admin::ApplicationController
   end
   
   def edit
-    
+    @bridge = @organism.bridge
   end
 end
