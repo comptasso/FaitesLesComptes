@@ -25,16 +25,14 @@ require 'list_months'
 # on demande donc la date de début (qui peut être n'importe quoi (mais on
 # va fixer un début de mois et la date de fin qui va être une fin de mois
 # à distance max de deux ans
-# OK un exercice créé est automatiquement le suivant du dernier exercice.
+# 
 # Cela impose sa date de début et une valeur par défaut de 12 mois pour la date de
 # fin.
-# OK un exercice clos ne peut être réouvert
-# OK il ne peut y avoir que deux exercices ouverts à la fois.
+# 
 #
-# OK la création d'un exercice doit enchainer sur la création des journaux
-# TODO faire les oéprations de clôture.
-# - la cloture d'un exercice doit être précédée des opérations de cloture.
-# OK la date de cloture doit forcément être postérieure à la date d'ouverture
+# La cloture d'un exercice doit être précédée des opérations de cloture.
+# 
+# La date de cloture doit forcément être postérieure à la date d'ouverture
 #
 #
 # Period est l'élément central de la comptabilité. Il appartient à Organisme
@@ -45,7 +43,7 @@ require 'list_months'
 #
 # La méthode has_many :used_accounts est utilisée uniquement pour limiter
 # la liste des comptes qui sont affichés dans la partie Compta->Journaux->Ecrire.
-# .
+# 
 #
 class Period < ActiveRecord::Base
 
@@ -101,7 +99,7 @@ class Period < ActiveRecord::Base
   before_destroy  :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
   
 
- 
+  scope :opened, where('open = ?', true)
  
   # trouve l'exercice précédent en recherchant le premier exercice
   # avec la date de cloture < au start_date de l'exercice actuel
@@ -317,6 +315,10 @@ class Period < ActiveRecord::Base
   # renvoie un array de toutes les natures de type recettes
   def recettes_natures
     natures.recettes
+  end
+  
+  def nature_name_exists?(name)
+    natures.find_by_name(name) ? true : false
   end
 
   # renvoie un array de toutes les natures de types dépenses

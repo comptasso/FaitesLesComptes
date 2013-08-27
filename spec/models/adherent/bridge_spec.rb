@@ -16,6 +16,23 @@ describe Adherent::Bridge do
     @bridge.should be_an_instance_of(Adherent::Bridge) 
   end
   
+  describe 'check_nature_name' , wip:true do 
+    
+    before(:each) do
+      @p2 = @o.periods.create!(start_date: @p.start_date+1, close_date: @p.close_date+1)
+    end
+    
+    it 'renvoie true si la nature existe pour toutes les périodes ouvertes' do
+      @bridge.check_nature_name.should be_true
+    end
+    
+    it 'et faux sinon' do
+      @p2.natures.find_by_name('Cotisations des adhérents').delete
+      @bridge.check_nature_name.should be_false
+    end
+    
+  end
+  
   
   
   describe 'payment_values' do
@@ -23,7 +40,7 @@ describe Adherent::Bridge do
       
     end
     
-    describe 'retourne les bonnes valeurs', wip:true  do
+    describe 'retourne les bonnes valeurs'  do
       
       before(:each) do
         @vals = @bridge.payment_values(@p)

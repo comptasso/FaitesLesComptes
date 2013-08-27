@@ -30,7 +30,15 @@ class Adherent::Bridge < ActiveRecord::Base
       :cash_account_id=>find_cash_account_id(period),
       :nature_id=>find_nature_id(period)
     }
-  end 
+  end
+  
+  # Vérifie que la nom utilisé pour la nature (nature_name) existe pour tous les
+  # exercices ouverts.
+  # Renvoie un booléen
+  def check_nature_name
+    res =  organism.periods.opened.collect {|p| p.nature_name_exists?(nature_name)}
+    res.all? {|r| r == true}
+  end
   
   protected
     

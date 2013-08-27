@@ -44,5 +44,51 @@ describe Admin::BridgesController do
     end
     
   end
+  
+  describe 'POST update' do
+    
+    before(:each) do
+      @parametres = {'nature_name'=>'une autre', 'destination_id'=>'3'} 
+      @o.stub(:bridge).and_return(@bridge = mock_model(Adherent::Bridge))
+      
+    end
+    
+    describe 'cas du succès' do
+      it 'doit être mis à jour' do
+        @bridge.should_receive(:update_attributes).with(@parametres).and_return true
+        post :update, {:organism_id=>@o.id.to_s, :id=>@bridge.to_param, :bridge=>@parametres}, valid_session
+        response.should redirect_to admin_organism_bridge_url(@o)
+      end
+      
+      it 'envoie un flash notice' do
+        @bridge.stub(:update_attributes).with(@parametres).and_return true
+        post :update, {:organism_id=>@o.id.to_s, :id=>@bridge.to_param, :bridge=>@parametres}, valid_session
+        flash[:notice].should == 'Les paramètres ont été modifiés'
+      end
+      
+      it 'vérifie que le bridge fonctionne pour tous les exercices ouverts'
+      
+      
+    end
+    
+    describe 'en cas d echec' do
+      
+      it 'réaffiche edit' do
+        @bridge.stub(:update_attributes).with(@parametres).and_return false
+        post :update, {:organism_id=>@o.id.to_s, :id=>@bridge.to_param, :bridge=>@parametres}, valid_session
+        response.should render_template 'edit'
+      end
+      
+      it 'avec un flash d alerte' do
+        @bridge.stub(:update_attributes).with(@parametres).and_return false
+        post :update, {:organism_id=>@o.id.to_s, :id=>@bridge.to_param, :bridge=>@parametres}, valid_session
+        flash[:alert].should == 'Impossible d\'enregistrer les paramètres'
+      end
+      
+    end
+    
+    
+    
+  end
 
 end
