@@ -11,6 +11,6 @@
           = icon_to 'door-open.png', main_app.destroy_user_session_path, :method=>:delete, title:'Déconnexion', :tabindex=>-1
 
       %ul.nav.nav-pills.pull-right
+        %li{:class=> active_inactive('adherent')}= link_to('ADHERENTS', adherent.members_path) 
         %li{:class=> active_inactive('compta')}
           = link_to('COMPTA', main_app.organism_path(@organism), title:'Vers le module de comptabilité')
-        %li{:class=> active_inactive('adherent')}= link_to('ADHERENTS', adherent.members_path) 

@@ -269,6 +269,11 @@ fr:
         to_date_picker: Date fin
         from_date: Date début
         to_date: Date fin
+      adherent/bridge:
+        income_book: Livre de recettes
+        nature_name: Nature
+        bank_account: Compte bancaire
+        cash: Caisse
 
     errors:
       messages:
