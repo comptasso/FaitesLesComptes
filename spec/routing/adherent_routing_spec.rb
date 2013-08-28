@@ -7,7 +7,7 @@ describe "routes for adherent engine" do
   
   it "routes application to adherent engine" do
     pending 'rspec ne supporte pas le routing des engines pour Rails 3'
-    { :get => "/adherent" }.should route_to(:controller => "sessionent/members", :action => "index")
+    { :get => "/adherent" }.should route_to(:controller => "session/members", :action => "index")
   end
   
   it 'test du path' do

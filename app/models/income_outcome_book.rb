@@ -4,6 +4,7 @@
 class IncomeOutcomeBook < Book
 
   has_many :in_out_writings,  foreign_key:'book_id'
+  has_many :adherent_writings,  foreign_key:'book_id'
 
   has_many :in_out_lines, :through=>:in_out_writings, :source=>:compta_lines, foreign_key:'writing_id', :conditions=>['nature_id IS NOT ?', nil]
 

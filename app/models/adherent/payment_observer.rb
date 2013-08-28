@@ -19,7 +19,7 @@ module Adherent
     def after_create(record)
       set_variables(record)
       ib = organism.bridge.income_book
-      w = ib.in_out_writings.new(
+      w = ib.adherent_writings.new(
          date:record.read_attribute(:date),
          ref:"adh #{member.number}",
          narration:"Payment adhérent #{member.to_s}",
@@ -42,7 +42,7 @@ module Adherent
     # affiché par le controller d'Adherent::Payment
     # 
     def before_update(record)
-      w = InOutWriting.find_by_bridge_id(record.id)
+      w = Adherent::Writing.find_by_bridge_id(record.id)
       return false if w.locked?
       retour =  true
       set_variables(record)
@@ -61,7 +61,7 @@ module Adherent
     end
     
     def before_destroy(record)
-      w = InOutWriting.find_by_bridge_id(record.id)
+      w = AdherentWriting.find_by_bridge_id(record.id)
       if w.locked?
         false
       else

@@ -49,12 +49,12 @@ describe Adherent::Payment do
     end
   
     it 'crée un in_out_writing' do
-      expect {@pay.save}.to change {InOutWriting.count}.by(1)
+      expect {@pay.save}.to change {AdherentWriting.count}.by(1)
     end 
     
     it 'bridge_id enregistre l écriture d origine' do
       @pay.save
-      w = InOutWriting.find_by_bridge_id(@pay.id)
+      w = AdherentWriting.find_by_bridge_id(@pay.id)
       w.bridge_id.should == @pay.id
       w.bridge_type.should == 'Adherent'
 
@@ -62,7 +62,7 @@ describe Adherent::Payment do
   
     it 'crée une écriture conforme aux infos entrées dans le payment'  do
       @pay.save
-      w = InOutWriting.find_by_bridge_id(@pay.id)
+      w = AdherentWriting.find_by_bridge_id(@pay.id)
       w.book.should == @ib
       w.narration.should == "Payment adhérent Jean DUPONT"
       w.date.should == Date.today
@@ -84,13 +84,13 @@ describe Adherent::Payment do
     
     it 'avec un chèque le accountable est bien remise de chèque' do
       @m.payments.create!(date:Date.today, amount:125.25, mode:'Chèque')
-      sl = InOutWriting.last.support_line
+      sl = AdherentWriting.last.support_line
       sl.account.should == @p.rem_check_account
     end
     
     it 'et espèces avec des espèces' do
       @m.payments.create!(date:Date.today, amount:125.25, mode:'Espèces')
-      sl = InOutWriting.last.support_line
+      sl = AdherentWriting.last.support_line
       sl.account.accountable.class.should == Cash
     end
     
@@ -100,12 +100,12 @@ describe Adherent::Payment do
     
     before(:each) do
       @pay = @m.payments.create!(date:Date.today, amount:125.25, mode:'CB')
-      @writing_pay = InOutWriting.find_by_bridge_id(@pay.id)
+      @writing_pay = AdherentWriting.find_by_bridge_id(@pay.id)
     end
     
     it 'on peut retrouver l écriture' do
-      ecrit = InOutWriting.find_by_bridge_id(@pay.id)
-      ecrit.should be_an_instance_of(InOutWriting)
+      ecrit = AdherentWriting.find_by_bridge_id(@pay.id)
+      ecrit.should be_an_instance_of(AdherentWriting)
      
     end
     
@@ -121,23 +121,23 @@ describe Adherent::Payment do
       it 'met à jour la date' do
         @pay.date = Date.today - 1
         @pay.save
-        InOutWriting.find_by_bridge_id(@pay.id).date.should == Date.yesterday
+        AdherentWriting.find_by_bridge_id(@pay.id).date.should == Date.yesterday
       end
     
       it 'met à jour le membre' do
         new_m = @o.members.create!(number:'002', name:'Dupond', forname:'Charles')
         @pay.member = new_m
         @pay.save
-        InOutWriting.find_by_bridge_id(@pay.id).narration.should == "Payment adhérent Charles DUPOND"
-        InOutWriting.find_by_bridge_id(@pay.id).ref.should match /adh 002/
+        AdherentWriting.find_by_bridge_id(@pay.id).narration.should == "Payment adhérent Charles DUPOND"
+        AdherentWriting.find_by_bridge_id(@pay.id).ref.should match /adh 002/
         
       end
       
       it 'met à jour le montant' do
         @pay.amount = 47.12
         @pay.save
-        InOutWriting.find_by_bridge_id(@pay.id).compta_lines.first.credit.should == 47.12
-        InOutWriting.find_by_bridge_id(@pay.id).support_line.debit.should == 47.12
+        AdherentWriting.find_by_bridge_id(@pay.id).compta_lines.first.credit.should == 47.12
+        AdherentWriting.find_by_bridge_id(@pay.id).support_line.debit.should == 47.12
       end
     
     end
@@ -147,21 +147,21 @@ describe Adherent::Payment do
     
     before(:each) do
       @pay = @m.payments.create!(date:Date.today, amount:125.25, mode:'Espèces')
-      @w = InOutWriting.find_by_bridge_id(@pay.id)
+      @w = AdherentWriting.find_by_bridge_id(@pay.id)
     end
     
     it 'cherche l écriture associée à ce payment' do
-      InOutWriting.should_receive(:find_by_bridge_id).with(@pay.id).and_return @w
+      AdherentWriting.should_receive(:find_by_bridge_id).with(@pay.id).and_return @w
       @pay.destroy
     end
     
     it 'n est pas possible si l ecriture est verrouillée' do
       @w.lock
-      expect {@pay.destroy}.not_to change{InOutWriting.count}.by(-1)
+      expect {@pay.destroy}.not_to change{AdherentWriting.count}.by(-1)
     end
     
     it 'l est dans le cas contraire' do
-      expect {@pay.destroy}.to change{InOutWriting.count}.by(-1)
+      expect {@pay.destroy}.to change{AdherentWriting.count}.by(-1)
     end
     
     it 'ce qui détruit bien sur les deux compta_lines' do

@@ -14,15 +14,26 @@ module InOutWritingsHelper
   #
   def in_out_line_actions(line)
     html = ' '
+    lw=line.writing
+    
     if line.editable?
-      lw=line.writing
-      if lw.type == 'Transfer'
+      case lw
+      when Transfer
         html <<  icon_to('modifier.png', edit_transfer_path(lw.id)) 
+      when Adherent::Writing then html << icon_to('detail.png', adherent.member_payments_path(lw.member))
       else
         html <<  icon_to('modifier.png', edit_book_in_out_writing_path(lw.book_id, lw)) 
         html <<  icon_to('supprimer.png', book_in_out_writing_path(lw.book, lw), confirm: 'Etes vous sûr?', method: :delete) 
       end
+    else 
+      case lw
+      when Transfer then  html << icon_to('detail.png', transfer_path(lw.id))
+      when Adherent::Writing then html << icon_to('detail.png', adherent.member_payments_path(lw.member))
+      end
     end
+      
+    
+    
 
     content_tag :td, :class=>'icon' do
       html.html_safe
