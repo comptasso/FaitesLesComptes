@@ -1,12 +1,26 @@
 # coding: utf-8
 
-# les livres de recettes et de dépenses
+# Représente les livres de recettes et de dépenses. 
+#
+# Ces livres enregistrent les écritures de recettes et de dépenses (InOutWriting)
+# mais aussi les écritures (toujours de recettes et de dépenses) qui viennent d'un 
+# gem complémentaire (actuellement seulement Adherent). D'où la présence de 
+# has_many adherent_writings.
+# 
+# Chaque écriture Writing (ou ses héritiers) a au moins deux compta_lines. La compta_line
+# principale étant celle qui enregistre une nature. 
+# 
+# Le has_many :in_out_lines, :through=>:writings permet de récupérer ces compta_lines grâce
+# à la condition Nature IS NOT NULL.
+#
 class IncomeOutcomeBook < Book
-
+  has_many :writings,  foreign_key:'book_id'
+  
+ 
   has_many :in_out_writings,  foreign_key:'book_id'
-  has_many :adherent_writings,  foreign_key:'book_id'
+  has_many :adherent_writings,  foreign_key:'book_id', class_name:'Adherent::Writing'
 
-  has_many :in_out_lines, :through=>:in_out_writings, :source=>:compta_lines, foreign_key:'writing_id', :conditions=>['nature_id IS NOT ?', nil]
+  has_many :in_out_lines, :through=>:writings, :source=>:compta_lines, foreign_key:'writing_id', :conditions=>['nature_id IS NOT ?', nil]
 
   # extrait les lignes entre deux dates. Cette méthode ne sélectionne pas sur un exercice.
   def extract_lines(from_date, to_date)

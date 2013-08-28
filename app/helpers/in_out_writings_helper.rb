@@ -28,7 +28,7 @@ module InOutWritingsHelper
     else 
       case lw
       when Transfer then  html << icon_to('detail.png', transfer_path(lw.id))
-      when Adherent::Writing then html << icon_to('detail.png', adherent.member_payments_path(lw.member))
+      when Adherent::Writing then html << icon_to('detail.png', adherent.member_payments_path(lw.member), title:'Table des paiments à l\'origine de cette écriture')
       end
     end
       

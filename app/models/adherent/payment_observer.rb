@@ -61,7 +61,7 @@ module Adherent
     end
     
     def before_destroy(record)
-      w = AdherentWriting.find_by_bridge_id(record.id)
+      w = Adherent::Writing.find_by_bridge_id(record.id)
       if w.locked?
         false
       else
