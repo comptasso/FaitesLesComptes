@@ -60,7 +60,7 @@ describe Adherent::Payment do
 
     end
   
-    it 'crée une écriture conforme aux infos entrées dans le payment' , wip:true do
+    it 'crée une écriture conforme aux infos entrées dans le payment'  do
       @pay.save
       w = InOutWriting.find_by_bridge_id(@pay.id)
       w.book.should == @ib
@@ -103,7 +103,7 @@ describe Adherent::Payment do
       @writing_pay = InOutWriting.find_by_bridge_id(@pay.id)
     end
     
-    it 'on peut retrouver l écriture',wip:true do
+    it 'on peut retrouver l écriture' do
       ecrit = InOutWriting.find_by_bridge_id(@pay.id)
       ecrit.should be_an_instance_of(InOutWriting)
      
@@ -141,6 +141,33 @@ describe Adherent::Payment do
       end
     
     end
+  end
+  
+  describe 'La suppression d un payment' do
+    
+    before(:each) do
+      @pay = @m.payments.create!(date:Date.today, amount:125.25, mode:'Espèces')
+      @w = InOutWriting.find_by_bridge_id(@pay.id)
+    end
+    
+    it 'cherche l écriture associée à ce payment' do
+      InOutWriting.should_receive(:find_by_bridge_id).with(@pay.id).and_return @w
+      @pay.destroy
+    end
+    
+    it 'n est pas possible si l ecriture est verrouillée' do
+      @w.lock
+      expect {@pay.destroy}.not_to change{InOutWriting.count}.by(-1)
+    end
+    
+    it 'l est dans le cas contraire' do
+      expect {@pay.destroy}.to change{InOutWriting.count}.by(-1)
+    end
+    
+    it 'ce qui détruit bien sur les deux compta_lines' do
+      expect {@pay.destroy}.to change{ComptaLine.count}.by(-2)
+    end
+    
   end
   
 end

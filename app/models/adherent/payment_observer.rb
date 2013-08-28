@@ -14,10 +14,10 @@ module Adherent
     
     attr_reader :organism, :member, :period
     
+    
+    # on est obligé d'avoir un after_create car on a besoin du record_id
     def after_create(record)
       set_variables(record)
-      
-      
       ib = organism.bridge.income_book
       w = ib.in_out_writings.new(
          date:record.read_attribute(:date),
@@ -29,7 +29,7 @@ module Adherent
            '2'=>counter_line_attributes(record)}
       )
       Rails.logger.warn "Ecriture générée par un payment de module Adhérent avec des erreurs : #{w.errors.messages}" unless w.valid?
-      w.save!
+      w.save
     end
     
     # Si l'écriture n'est pas verrouillée, met à jour les champs. 
@@ -58,6 +58,15 @@ module Adherent
       sl = w.support_line
       retour = retour && sl.update_attributes(counter_line_attributes(record)) 
       retour
+    end
+    
+    def before_destroy(record)
+      w = InOutWriting.find_by_bridge_id(record.id)
+      if w.locked?
+        false
+      else
+        w.destroy
+      end
     end
     
     protected
