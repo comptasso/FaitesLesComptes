@@ -1,0 +1,16 @@
+= content_for :menu do 
+  = icon_to('nouveau.png', new_book_in_out_writing_path(@book, mois:@mois, an:@an), id: 'new_line_link') 
+  = export_icons(book_id:@book.id, mois:@mois, an:@an) 
+  = icon_to 'retour.png', :back 
+
+#lines_pdf{:title=>"pdf", :style=>"display:none"}
+.champ
+  %h3
+    = "#{@book.title}  : liste des écritures"
+    %ul.mois
+      = submenu_mois(@period, {action:'index', controller:'in_out_writings', :book_id=>@book.id}) 
+  %table.table.table-striped.table-bordered.table-condensed.lines_table{:cellpadding=>"0", :cellspacing=>"0", :border=>"0"}
+    %thead
+      %tr= render 'table_header' 
+    %tbody#table_lines= render 'table_lines'
+    %tfoot#table_foot= render 'table_foot' 
