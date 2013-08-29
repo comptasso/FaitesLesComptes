@@ -274,6 +274,9 @@ fr:
         nature_name: Nature
         bank_account: Compte bancaire
         cash: Caisse
+      
+        
+    
 
     errors:
       messages:
@@ -325,6 +328,12 @@ fr:
           attributes:
             password:
               confirmation: Les deux mots de passe doivent être identiques
+        adherent/payment:
+          
+          attributes:
+            base:
+              writing_uneditable: L'écriture correspondante ne peut être modifiée ni supprimée car verrouillée ou pointée dans un compte bancaire
+              
  
   helpers:
     select:

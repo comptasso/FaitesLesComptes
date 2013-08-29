@@ -1,5 +1,13 @@
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
+# La clase Adherent::Writing est une classe dérivée de Writing et destinée
+# à faire le lien entre le gem Adherent et l'application.
+# 
+# Le PaymentObserver qui observe les Adherent::Payments crée, modifie ou 
+# supprime un élément Adherent::Writing.
+# 
+#  Cette classe est en fait la copie conforme de InOutWriting avec 
+#  deux méthodes supplémentaires #payment et #member qui permettent
+#  de faire le lien avec le payment. 
+# 
 module Adherent
 class Writing < ::Writing
   validates :counter_line ,:counter_line_with_payment_mode=>true

@@ -29,6 +29,7 @@ module Adherent
            '2'=>counter_line_attributes(record)}
       )
       Rails.logger.warn "Ecriture générée par un payment de module Adhérent avec des erreurs : #{w.errors.messages}" unless w.valid?
+      copy_writing_errors(w, record) unless w.valid?
       w.save
     end
     
@@ -43,7 +44,11 @@ module Adherent
     # 
     def before_update(record)
       w = Adherent::Writing.find_by_bridge_id(record.id)
-      return false if w.locked?
+      unless w.editable?
+        record.errors.add(:base, :writing_uneditable)
+        return false
+      end
+       
       retour =  true
       set_variables(record)
   
@@ -57,12 +62,14 @@ module Adherent
       retour = retour && cl.update_attributes(compta_line_attributes(record)) 
       sl = w.support_line
       retour = retour && sl.update_attributes(counter_line_attributes(record)) 
+      copy_writing_errors(w, record) if retour == false
       retour
     end
     
     def before_destroy(record)
       w = Adherent::Writing.find_by_bridge_id(record.id)
-      if w.locked?
+      unless w.editable?
+        record.errors.add(:base, :writing_uneditable)
         false
       else
         w.destroy
@@ -115,6 +122,11 @@ module Adherent
     
     def destination
       organism.bridge.destination
+    end
+    
+    # recopie les erreurs éventuelle de writing dans les erreurs[:base] du payment
+    def copy_writing_errors(writing, record)
+      writing.errors.each {|e| record.errors.add(:base, e)} 
     end
     
   end

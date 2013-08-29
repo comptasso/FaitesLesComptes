@@ -103,6 +103,8 @@ class Transfer < Writing
   end
   
   # le transfert est editable si l'une des deux lignes au moins l'est
+  # TODO voir si cette méthode est encore utile depuis que editable? a été introduit
+  # pour Writing
   def editable?
     to_editable? || from_editable?
   end
