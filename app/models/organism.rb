@@ -70,6 +70,7 @@ class Organism < ActiveRecord::Base
   
   # liaison avec le gem adherent
   has_many :members, class_name: 'Adherent::Member'
+  has_many :payments, :through=>:members, class_name:'Adherent::Payment'
 
   before_validation :fill_version
   after_create :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature

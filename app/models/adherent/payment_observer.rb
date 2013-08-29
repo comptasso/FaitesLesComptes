@@ -44,6 +44,7 @@ module Adherent
     # 
     def before_update(record)
       w = Adherent::Writing.find_by_bridge_id(record.id)
+      return true unless w # il n'y a pas d'écriture associée à ce payment
       unless w.editable?
         record.errors.add(:base, :writing_uneditable)
         return false
@@ -68,6 +69,7 @@ module Adherent
     
     def before_destroy(record)
       w = Adherent::Writing.find_by_bridge_id(record.id)
+      return true unless w # il n'y a pas d'écriture associée à ce payment
       unless w.editable?
         record.errors.add(:base, :writing_uneditable)
         false
