@@ -79,6 +79,11 @@ module ApplicationHelper
   def ordinalize_date(d)
     "#{d.day.ordinalize} #{I18n.l(d, :format=>:month_year)}"
   end
+  
+  def editable?(payment)
+    w = Adherent::Writing.find_by_bridge_id(payment.id)
+    w.editable? if w
+  end
 
 
   protected
