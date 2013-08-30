@@ -31,7 +31,7 @@ GEM
       multi_json (~> 1.0)
     acts_as_list (0.1.9)
     addressable (2.3.5)
-    adherent (0.1.4)
+    adherent (0.1.5)
       haml-rails
       jquery-rails
       jquery-ui-rails
@@ -100,7 +100,7 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    mime-types (1.24)
+    mime-types (1.25)
     mini_portile (0.5.1)
     multi_json (1.7.9)
     nokogiri (1.6.0)
