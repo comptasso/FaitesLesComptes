@@ -60,13 +60,13 @@ describe PdfDocument::Simple do
     end
 
     it 'sait préparer une ligne' do
-      line = stub(:number=>'101')
+      line = double(:number=>'101')
       @simple.set_columns(['number'])
       @simple.prepare_line(line).should == ['101']
     end
 
     it 'par défaut transforme une valeur numérique' do
-      line = stub(:number=>101)
+      line = double(:number=>101)
       @simple.set_columns(['number'])
       @simple.prepare_line(line).should == ['101,00']
     end

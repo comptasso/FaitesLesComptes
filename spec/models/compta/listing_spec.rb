@@ -9,7 +9,7 @@ describe Compta::Listing do
        date:(Date.today-1),
        narration:"Lignen° #{i}",
        ref:'',
-       book:stub(title:'Recettes'),
+       book:double(title:'Recettes'),
        nature_name:'nature',
        destination_name:'dest',
        debit:i,

@@ -7,7 +7,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c| 
 #  c.filter = {wip:true} 
-#  c.filter = {:js=> true }
+  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true }
 end
 
@@ -49,7 +49,7 @@ describe 'vue books index' do
  
   describe 'index' do
 
-     it 'dans la vue index,un livre peut être détruit',wip:true , :js=>true do
+     it 'dans la vue index,un livre peut être détruit', :js=>true do
       @o.income_books.create!(:title=>'livre de test', :abbreviation=>'TE')
       @o.should have(5).books
       # à ce stade chacun des livres est vierge et peut donc être détruit.

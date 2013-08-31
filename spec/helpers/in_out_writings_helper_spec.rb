@@ -15,7 +15,7 @@ require 'spec_helper'
 describe InOutWritingsHelper do
   describe 'in_out_line_actions' do
     it 'retourne blank si line n est pas editable' do
-      line = stub('editable?'=>false, :writing=>(@w = double(:id=>88)))
+      line = double('editable?'=>false, :writing=>(@w = double(:id=>88)))
       helper.in_out_line_actions(line).should == content_tag(:td, :class=>'icon') {' '}
     end
 
@@ -40,7 +40,7 @@ describe InOutWritingsHelper do
     
 
     it 'sinon propose des liens vers  l edition et la suppression de  lecriture' do
-      line = stub('editable?'=>true, :writing=>(@w = stub(:type=>'Autre', :id=>88, :book_id=>7, :book=>mock_model(Book))))
+      line = double('editable?'=>true, :writing=>(@w = double(:type=>'Autre', :id=>88, :book_id=>7, :book=>mock_model(Book))))
       helper.in_out_line_actions(line).should match(edit_book_in_out_writing_path(@w.book_id, @w))
       helper.in_out_line_actions(line).should match(book_in_out_writing_path(@w.book, @w))
     end

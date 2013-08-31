@@ -23,11 +23,6 @@ describe Editions::GeneralLedgerPage do
         {mois:"Total Fructose", title:'', description:'', debit:1200.50, credit:10000.02}
       ]
     )
-
-    #    monthly_ledgers.stub(:title_line).and_return({mois:"Mois de Fructose", title:'', description:'', debit:'', credit:''})
-    #    monthly_ledgers.stub(:lines).and_return([{mois:'', title:'ES', description:'Essai', :debit=>1200.50, :credit=>10000.02},
-    #     {mois:'', title:'VE', description:'Ventes', :debit=>0, :credit=>225000.25}])
-    #    monthly_ledgers.stub(:total_line).and_return({mois:"Total Fructose", title:'', description:'', debit:1200.50, credit:10000.02})
   end
 
   describe 'french_format' do
@@ -66,9 +61,9 @@ describe Editions::GeneralLedgerPage do
 
   it 'une page supérieure à 1 sait collecter des report values' do
       lsm = [monthly_ledgers]
-      doc.should_receive(:page).with(1).and_return(stub(:to_report_values=>['125,00', '56,00']))
+      doc.should_receive(:page).with(1).and_return(double(:to_report_values=>['125,00', '56,00']))
       @glp = Editions::GeneralLedgerPage.new(doc,lsm ,2)
-      @glp.table_report_line.should == ['Reports', '125,00', '56,00']
+      @glp.table_report_line.should == ['Reports', '125,00', '56,00'] 
 
     end
 

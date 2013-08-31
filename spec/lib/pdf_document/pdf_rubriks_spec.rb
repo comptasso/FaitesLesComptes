@@ -6,9 +6,9 @@ require 'pdf_document/pdf_rubriks'
 describe 'PdfDocument::PdfRubriks' do
 
   let(:p) {mock_model(Period)}
-  let(:cr) {stub(:class=>Compta::Rubrik, :title=>'Une rubrik',:net=>2, :previous_net=>1.2)}
-  let(:crs) { stub(:class=>Compta::Rubriks, :title=>'Une rubriks',:net=>20, :previous_net=>12)}
-  let(:source) {stub(:collection=>(1.upto(5).collect {crs} + [cr]),  :title=>'La source',:net=>200, :previous_net=>120)}
+  let(:cr) {double(:class=>Compta::Rubrik, :title=>'Une rubrik',:net=>2, :previous_net=>1.2)}
+  let(:crs) { double(:class=>Compta::Rubriks, :title=>'Une rubriks',:net=>20, :previous_net=>12)}
+  let(:source) {double(:collection=>(1.upto(5).collect {crs} + [cr]),  :title=>'La source',:net=>200, :previous_net=>120)}
 
   it 'crée l instance' do
     pdfr = PdfDocument::PdfRubriks.new(p, source, {})

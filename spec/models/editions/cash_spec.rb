@@ -2,25 +2,25 @@
 
 require'spec_helper'
 
-describe Editions::Cash do
+describe Editions::Cash do 
 
   def line(date, debit, credit)
       double(ComptaLine, writing_id:1, w_ref:'',w_narration:'Une compta line',
-        destination:stub(:name=>'La destination'),
-        nature:stub(:name=>'La nature'),
+        destination:double(:name=>'La destination'),
+        nature:double(:name=>'La nature'),
         debit:debit,
         credit:credit,
         w_date:date,
         w_mode: 'Chèque',
-        writing:stub(payment_mode:'Chèque'),
+        writing:double(payment_mode:'Chèque'),
         support:'Ma banque',
         locked?:true)
     end
 
   before(:each) do
      @cash = mock_model(Cash)
-     @period = stub(Period, organism:stub(:title=>'L\'organisme'), :exercice=>'Exercice en cours')
-     @extract = stub(Extract::InOut, :book=>@cash,
+     @period = double(Period, organism:double(:title=>'L\'organisme'), :exercice=>'Exercice en cours')
+     @extract = double(Extract::InOut, :book=>@cash,
        begin_date:Date.today.beginning_of_year,
        end_date:Date.today.end_of_year,
        'provisoire?'=>true,

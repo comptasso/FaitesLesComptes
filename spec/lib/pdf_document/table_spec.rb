@@ -16,7 +16,7 @@ describe PdfDocument::Table do
  
 
   let(:page) {mock(PdfDocument::Page, :number=>3, :document=>doc)}
-  let(:doc) {stub(:columns_titles=>%w(Date Réf Débit Crédit),
+  let(:doc) {double(:columns_titles=>%w(Date Réf Débit Crédit),
       :prepare_line=>%w(un,deux),
       :columns_to_totalize=>[1,2,3]
     )}
@@ -47,7 +47,7 @@ describe PdfDocument::Table do
   end
 
   it 'sait renvoyer un tableau des profondeurs de lignes' do
-    @table.stub(:lines).and_return([stub(:depth=>1),stub,  stub(:depth=>3)])
+    @table.stub(:lines).and_return([double(:depth=>1),double,  double(:depth=>3)])
     @table.depths.should == [1,nil, 3]
   end
 
