@@ -48,4 +48,5 @@ MAX_COMMENT_LENGTH = 300
 # version 0.8.1 : mise en place d'une limite de 4 bases pour un user standard
 # VERSION = '0.8.3RC' # l'inscription est désormais avec confirmation
 # VERSION = '0.8.4RC' # remplacer les archives par un clone de la base
-VERSION = '0.8.5RC' # suppression du modèle Archive, action, routes, vues, tests corresondants
+# VERSION = '0.8.5RC' # suppression du modèle Archive, action, routes, vues, tests corresondants
+VERSION = '0.9.0RC' # intégration du gem adhérent
