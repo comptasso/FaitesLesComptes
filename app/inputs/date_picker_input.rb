@@ -9,14 +9,27 @@
 class DatePickerInput < SimpleForm::Inputs::Base
 
  def input
-   input_html_options['data-jcmin'] = input_html_options[:date_min].to_formatted_s(:date_picker)
-   input_html_options['data-jcmax'] = input_html_options[:date_max].to_formatted_s(:date_picker)
+   input_html_options['data-jcmin'] = date_min(input_html_options[:date_min])
+   input_html_options['data-jcmax'] = date_max(input_html_options[:date_max])
    input_html_classes.unshift('input_date_picker')
    
    input_html_options.delete :date_min
    input_html_options.delete :date_max
 
     @builder.text_field(attribute_name, input_html_options)
+  end
+  
+ protected
+ 
+  def date_min(option)
+    
+    option ||= Date.today.years_ago(5)
+    option.to_formatted_s(:date_picker)
+  end
+  
+  def date_max(option)
+    option ||= Date.today.years_since(5)
+    option.to_formatted_s(:date_picker)
   end
 end
 
