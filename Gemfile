@@ -21,6 +21,7 @@ gem 'haml-rails', "~>0.3"
 gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
 gem 'apartment'
 gem 'devise'
+gem 'rails_12factor'
 
 gem 'adherent' #, :path=>'../../Adherent'
 group :production, :staging, :test do
