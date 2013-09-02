@@ -1,0 +1,76 @@
+== Bienvenue sur FaitesLesComptes
+
+FaitesLesComptes est un logiciel développé par un expert-comptable et destiné à tenir une comptabilité simplifiée
+(au sens des règles comptables et fiscales) de la comptabilité française.
+
+Cela peut intéresser des petites associations ou des petites entreprises, mais aussi un artisant,
+un autoentrepreneur, ou encore des petits comités d'entreprise. En résumé,
+toute structure dont la taille l'autorise à tenir une comptabilité simplifiée et qui n'est pas soumis à la TVA.
+
+Sa simplicité permettant à chacun d'utiliser ce logiciel sans apprentissage particulier. Il part de ce que chacun peut remplir un livre
+de recettes et un livre de dépenses.
+
+Pour en savoir plus sur la comptabilité simplifiée et la comptabilité de trésorerie, voir le site : 
+http://www.faiteslescomptes.fr 
+
+Ce site présente aussi les manuels ainsi que différentes informations sur l'organisation de la compta, les 
+règles à respecter, les seuils, ...
+
+Une version opérationnelle du logiciel est disponible sur http://faiteslescomptes.herokuapp.com
+
+Ce fichier README est donc destiné au programmeur qui voudrait faire un fork de FaitesLesComptes pour le faire évoluer.
+
+== Installation
+
+Il s'agit d'un programme basé sur Ruby on rails. Il faut donc installer Ruby, de préférence version 2.
+La base de données utilisée est postgres qui doit donc être également installée.
+
+Puis récupérer le programme et faire 
+  ```ruby
+  bundle install
+ ```
+A vous de paramétrer la base de données en éditant le fichier config/database.yml
+Puis initialiser la base de données avec 
+ ` rake db:setup  
+
+Une particularité du logiciel est sa gestion des bases de données. On utilise les schemas de Postgres. 
+Dès lors, la sauvegarde et la restauration de la comptabilité d'un organisme revient à exporter ou importer un
+schema. 
+
+Pour des raisons de sécurité, la fonction import n'est pas actuellement autorisée. Et l'export n'est pas 
+implémenté car pose quelques difficultés sous Heroku. 
+
+Il y a donc un schéma public qui gère les utilisateurs, et un schéma par organisme.
+
+Nous utilisons le gem apartment pour la gestion de ces schémas, étendu de quelques méthodes complémentaires.
+
+Les migrations doivent donc être faites avec la commande rake apartment:migrate.
+
+== Le module Adhérent
+
+Un module Adhérent a été incorporé au logiciel depuis septembre 2013 et permet une gestion 
+(encore basique) des membres et des adhésions d'une association. Ce module est développé sous 
+forme de gem. 
+
+== Etat actuel du projet
+
+La version actuelle est une version Release Candidate mais la partie Compta est couverte à 
+quasi 100% par les tests.
+Le module Adhérent doit encore être significativement amélioré (navigation, tests) pour être 
+considéré comme opérationnel.
+
+Les évolutions à venir sont la possibilité d'avoir des guides pour les écritures et la gestion
+des écritures répétitives (abonnement).
+Un gem devra être également développé pour la gestion des immobilisations et des amortissements.
+
+== Licence
+
+Ce logiciel est open-source et peut être utilitsé, distribué et modifié librement,
+y compris à des fins commerciales.
+
+Il est fourni tel quel et aucune garantie n'est donnée quand à son utilisation ni à son
+fonctionnement.
+
+En aucun cas, nous ne pourrons être tenus responsable pour la perte de données, leurs
+mauvais enregistrements, les erreurs éventuelles sur les états édités, et plus généralement
+tous dommages survenus suite à l'utilisation de ce logiciel.
