@@ -49,7 +49,7 @@ Les migrations doivent donc être faites avec la commande rake apartment:migrate
 
 Un module Adhérent a été incorporé au logiciel depuis septembre 2013 et permet une gestion 
 (encore basique) des membres et des adhésions d'une association. Ce module est développé sous 
-forme de gem. 
+forme de gem (https://github.com/comptasso/Adherent)
 
 == Etat actuel du projet
 
