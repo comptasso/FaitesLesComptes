@@ -26,10 +26,10 @@ Il s'agit d'un programme basé sur Ruby on rails. Il faut donc installer Ruby, d
 La base de données utilisée est postgres qui doit donc être également installée.
 
 Puis récupérer le programme et faire 
- # bundle install
+  ` bundle install
 A vous de paramétrer la base de données en éditant le fichier config/database.yml
 Puis initialiser la base de données avec 
-# rake db:setup  
+ ` rake db:setup  
 
 Une particularité du logiciel est sa gestion des bases de données. On utilise les schemas de Postgres. 
 Dès lors, la sauvegarde et la restauration de la comptabilité d'un organisme revient à exporter ou importer un
