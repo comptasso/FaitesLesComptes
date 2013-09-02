@@ -1,6 +1,6 @@
 == Bienvenue sur FaitesLesComptes
 
-FaitesLesComptes est un logiciel destiné à tenir une comptabilité simplifiée
+FaitesLesComptes est un logiciel développé par un expert-comptable et destiné à tenir une comptabilité simplifiée
 (au sens des règles comptables et fiscales) de la comptabilité française.
 
 Cela peut intéresser des petites associations ou des petites entreprises, mais aussi un artisant,
@@ -10,71 +10,52 @@ toute structure dont la taille l'autorise à tenir une comptabilité simplifiée
 Sa simplicité permettant à chacun d'utiliser ce logiciel sans apprentissage particulier. Il part de ce que chacun peut remplir un livre
 de recettes et un livre de dépenses.
 
+Pour en savoir plus sur la comptabilité simplifiée et la comptabilité de trésorerie, voir le site : 
+http://www.faiteslescomptes.fr 
+
+Ce site présente aussi les manuels ainsi que différentes informations sur l'organisation de la compta, les 
+règles à respecter, les seuils, ...
+
+Une version opérationnelle du logiciel est disponible sur http://faiteslescomptes.herokuapp.com
+
+Ce fichier README est donc destiné au programmeur qui voudrait faire un fork de FaitesLesComptes pour le faire évoluer.
+
 == Installation
 
 Il s'agit d'un programme basé sur Ruby on rails. Il faut donc installer Ruby et Rails pour pouvoir faire fonctionner ce programme, soit sur un ordinateur
 individuel, soit sur un serveur. Voir le site pour les modalités d'installation plus détaillées.
 
-La base de données utilisée est sqlite3 qui doit donc être également installée.
+La base de données utilisée est postgres qui doit donc être également installée.
 
-Une particularité du logiciel est sa gestion des bases de données. Il y a en effet une base de données par organisme suivi,
-ce qui simplifie considérablement la sauvegarde et la restauration de la comptabilité d'un organisme.
-Il suffit de sauver et de recharger un fichier sqlite3.
+Une particularité du logiciel est sa gestion des bases de données. On utilise les schemas de Postgres. 
+Dès lors, la sauvegarde et la restauration de la comptabilité d'un organisme revient à exporter ou importer un
+schema. 
 
-Il y a donc une base qui gère les utilisateurs, et une base par organisme.
-La base pour les utilisateurs est située dans le répertoire ../db/production
-et elle se nomme production.sqlite3.
+Pour des raisons de sécurité, la fonction import n'est pas actuellement autorisée. Et l'export n'est pas 
+implémenté car pose quelques difficultés sous Heroku. 
 
-Les bases des organismes sont situées dans le sous répertoire ../db/production/organisms
-Pour créer ces répertoires, une tâche a été créée.
+Il y a donc un schéma public qui gère les utilisateurs, et un schéma par organisme.
 
-Il suffit donc de se mettre dans le répertoire d'installation du programme et de
-faire RAILS_ENV=production rake landlord:create_directories pour à la fois créer les
-directories nécessaires au programme et initialiser la base de données.
+Nous utilisons le gem apartment pour la gestion de ces schémas, étendu de quelques méthodes complémentaires.
 
-== Guide de démarrage rapide
+Les migrations doivent donc être faites avec la commande rake apartment:migrate.
 
-Après installation et lancement, le logiciel vous proposera de créer un utilisateur, puis un organisme
-puis un exercice pour votre comptabilité. Ces opérations créeront également un livre
-de recettes et de dépenses, ainsi qu'un plan de compte adapté au statut de l'organisme (Entreprise ou Association)
+== Le module Adhérent
 
-Dans le menu Admin, vous pouvez ensuite modifier les paramètres du compte bancaire et de la caisse,
-créer de nouvelles natures de dépenses ou de recettes, ainsi que des destinations.
-
-Les destinations vous permettent de connaître vos recettes et dépenses
-selon leur usage, par exemple :
--  Fonctionnement général (pour les dépenses non affectées),
-- fête annuelle (pour les recettes et dépenses correspondant à cet évènement),
-- ou encore Cours (si vous avez une activité de formation).
-
-Il est préférable de réfléchir avec soin sur les destinations envisagées.
-
-La zone Saisie/Consult permet alors de commencer à saisir les écritures.
-
-Le sous menu Transfert permet de faire des virements de comptes à compte ou entre un
-compte bancaire et une caisse.
-Les menus Banques permettent de gérer les relevés bancaires et de faire les pointages de comptes
-Le menu Caisse permt d'enregistrer les contrôles de caisse qui sont effectués.
-
-Le menu Organisme permet d'afficher un tableau de bord des recettes et dépenses et
-de visualiser l'état des comptes.
-Le menu Analyse permet d'afficher les recettes et dépenses par mois et de les
-filtrer par Destinations.
-
-3) Compta : la partie comptabilité est accessible après création d'un plan de comptes
-(un plan comptable par défaut vous est proposé) et mises en place des correspondances entre
-les Natures et les comptes (Ces deux actions sont à faire dans la partie Administration).
-
-La partie Compta, vous permet alors d'éditer les comptes, d'imprimer une balance, un grand livre,...
+Un module Adhérent a été incorporé au logiciel depuis septembre 2013 et permet une gestion 
+(encore basique) des membres et des adhésions d'une association. Ce module est développé sous 
+forme de gem. 
 
 == Etat actuel du projet
 
-Ce projet est en cours de développement et de test approfondi.
-Il est normalement opérationnel avec cependant encore quelques bugs que nous
-nous attachons à détecter et modifier aussi rapidement que possible.
+La version actuelle est une version Release Candidate mais la partie Compta est couverte à 
+quasi 100% par les tests.
+Le module Adhérent doit encore être significativement amélioré (navigation, tests) pour être 
+considéré comme opérationnel.
 
-Prochainement des sites dédiés seront mis en place avec manuel d'utilisation et
-possibilité de téléchargement.
+Les évolutions à venir sont la possibilité d'avoir des guides pour les écritures et la gestion
+des écritures répétitives (abonnement).
+Un gem devra être également développé pour la gestion des immobilisations et des amortissements.
 
 == Licence
 
