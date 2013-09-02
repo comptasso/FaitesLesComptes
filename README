@@ -26,7 +26,9 @@ Il s'agit d'un programme basé sur Ruby on rails. Il faut donc installer Ruby, d
 La base de données utilisée est postgres qui doit donc être également installée.
 
 Puis récupérer le programme et faire 
-  ` bundle install
+  ```ruby
+  bundle install
+ ```
 A vous de paramétrer la base de données en éditant le fichier config/database.yml
 Puis initialiser la base de données avec 
  ` rake db:setup  
