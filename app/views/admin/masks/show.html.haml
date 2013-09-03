@@ -1,9 +1,9 @@
 = content_for :menu do
   = icon_to 'modifier.png', edit_admin_organism_mask_path(@organism, @mask)
-  =# icon_to 'supprimer.png', [:admin, @organism, @mask], :method=>:delete, confirm:'Etes-vous certain ?'
+  = icon_to 'supprimer.png', admin_organism_mask_path(@organism, @mask), :method=>:delete, confirm:'Etes-vous certain ?'
 
 .champ
-  %h3 Détail du masque de saisie #{@mask.title}
+  %h3 Détail du masque de saisie '#{@mask.title}'
 .row-fluid.inner-champ
   %p
     %b Title:

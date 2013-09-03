@@ -17,82 +17,95 @@ require 'spec_helper'
 # is no simpler way to get a handle on the object needed for the example.
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
+RSpec.configure do |c|
+  # c.filter = {wip:true}
+end
+
 
 describe Admin::MasksController do
+  include SpecControllerHelper
 
+  before(:each) do
+    minimal_instances
+    sign_in(@cu)
+    @ma =  mock_model(Admin::Mask)
+    @o.stub(:masks).and_return @a = double(Arel) 
+  end
   # This should return the minimal set of attributes required to create a valid
   # Admin::Mask. As you add validations to Admin::Mask, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "title" => "MyString" } }
+  let(:valid_attributes) { { "title" => "MyString"} }
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # Admin::MasksController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
-
+  
   describe "GET index" do
     it "assigns all admin_masks as @admin_masks" do
-      mask = Admin::Mask.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:admin_masks).should eq([mask])
+      @a.should_receive(:all).and_return [@ma]
+      get :index, {:organism_id=>@o.to_param}, valid_session
+      assigns(:masks).should eq([@ma])
     end
   end
 
   describe "GET show" do
     it "assigns the requested admin_mask as @admin_mask" do
-      mask = Admin::Mask.create! valid_attributes
-      get :show, {:id => mask.to_param}, valid_session
-      assigns(:admin_mask).should eq(mask)
+      Admin::Mask.stub(:find).with(@ma.to_param).and_return @ma
+      get :show, {:organism_id=>@o.to_param, :id => @ma.to_param}, valid_session
+      assigns(:mask).should eq(@ma)
     end
   end
 
   describe "GET new" do
     it "assigns a new admin_mask as @admin_mask" do
-      get :new, {}, valid_session
-      assigns(:admin_mask).should be_a_new(Admin::Mask)
+      @a.should_receive(:new).and_return(@new_mask = mock_model(Admin::Mask).as_new_record)
+      get :new, {:organism_id=>@o.to_param}, valid_session
+      assigns(:mask).should be_a_new(Admin::Mask)
     end
   end
 
   describe "GET edit" do
     it "assigns the requested admin_mask as @admin_mask" do
-      mask = Admin::Mask.create! valid_attributes
-      get :edit, {:id => mask.to_param}, valid_session
-      assigns(:admin_mask).should eq(mask)
+      Admin::Mask.should_receive(:find).with(@ma.to_param).and_return @ma
+      get :edit, {:organism_id=>@o.to_param, :id => @ma.to_param}, valid_session
+      assigns(:mask).should eq(@ma)
     end
   end
 
-  describe "POST create" do
-    describe "with valid params" do
+  describe "POST create"  do
+    describe "with valid params", wip:true do
       it "creates a new Admin::Mask" do
-        expect {
-          post :create, {:admin_mask => valid_attributes}, valid_session
-        }.to change(Admin::Mask, :count).by(1)
+        @a.should_receive(:new).with(valid_attributes).and_return(@new_mask = mock_model(Admin::Mask))
+        @new_mask.should_receive(:save).and_return true
+        post :create, {:organism_id=>@o.to_param, :admin_mask => valid_attributes}, valid_session
       end
 
-      it "assigns a newly created admin_mask as @admin_mask" do
-        post :create, {:admin_mask => valid_attributes}, valid_session
-        assigns(:admin_mask).should be_a(Admin::Mask)
-        assigns(:admin_mask).should be_persisted
+      it "assigns a newly created mask as @mask" do
+        @a.stub(:new).and_return(@new_mask = mock_model(Admin::Mask))
+        @new_mask.stub(:save).and_return true
+        post :create, {:organism_id=>@o.to_param, :admin_mask => valid_attributes}, valid_session
+        assigns(:mask).should be_a(Admin::Mask)
+        assigns(:mask).should be_persisted
       end
 
-      it "redirects to the created admin_mask" do
-        post :create, {:admin_mask => valid_attributes}, valid_session
-        response.should redirect_to(Admin::Mask.last)
+      it "redirects to the created mask" do
+        @a.stub(:new).and_return(@new_mask = mock_model(Admin::Mask))
+        @new_mask.stub(:save).and_return true
+        post :create, {:organism_id=>@o.to_param, :admin_mask => valid_attributes}, valid_session
+        response.should redirect_to admin_organism_mask_url(@o, @new_mask)
       end
     end
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved admin_mask as @admin_mask" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Admin::Mask.any_instance.stub(:save).and_return(false)
-        post :create, {:admin_mask => { "title" => "invalid value" }}, valid_session
-        assigns(:admin_mask).should be_a_new(Admin::Mask)
+        @a.stub(:new).and_return(@new_mask = mock_model(Admin::Mask).as_new_record)
+        @new_mask.stub(:save).and_return false
+       
+        post :create, {:organism_id=>@o.to_param, :admin_mask => { "title" => "invalid value" }}, valid_session
+        assigns(:mask).should be_a_new(Admin::Mask)
       end
 
       it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Admin::Mask.any_instance.stub(:save).and_return(false)
-        post :create, {:admin_mask => { "title" => "invalid value" }}, valid_session
+        @a.stub(:new).and_return(@new_mask = mock_model(Cash).as_new_record)
+        @new_mask.stub(:save).and_return false
+        post :create, {:organism_id=>@o.to_param, :admin_mask => { "title" => "invalid value" }}, valid_session
         response.should render_template("new")
       end
     end
@@ -101,42 +114,39 @@ describe Admin::MasksController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested admin_mask" do
-        mask = Admin::Mask.create! valid_attributes
-        # Assuming there are no other admin_masks in the database, this
-        # specifies that the Admin::Mask created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        Admin::Mask.any_instance.should_receive(:update_attributes).with({ "title" => "MyString" })
-        put :update, {:id => mask.to_param, :admin_mask => { "title" => "MyString" }}, valid_session
+        Admin::Mask.should_receive(:find).with(@ma.to_param).and_return @ma
+        @ma.stub(:update_attributes).with(valid_attributes).and_return true
+        @ma.should_receive(:update_attributes).with({ "title" => "MyString" })
+        put :update, {:organism_id=>@o.to_param, :id => @ma.to_param, :admin_mask => { "title" => "MyString" }}, valid_session
       end
 
       it "assigns the requested admin_mask as @admin_mask" do
-        mask = Admin::Mask.create! valid_attributes
-        put :update, {:id => mask.to_param, :admin_mask => valid_attributes}, valid_session
-        assigns(:admin_mask).should eq(mask)
+        Admin::Mask.stub(:find).with(@ma.to_param).and_return @ma
+        @ma.stub(:update_attributes).with(valid_attributes).and_return true
+        put :update, {:organism_id=>@o.to_param, :id => @ma.to_param, :admin_mask => valid_attributes}, valid_session
+        assigns(:mask).should eq(@ma)
       end
 
       it "redirects to the admin_mask" do
-        mask = Admin::Mask.create! valid_attributes
-        put :update, {:id => mask.to_param, :admin_mask => valid_attributes}, valid_session
-        response.should redirect_to(mask)
+        Admin::Mask.stub(:find).with(@ma.to_param).and_return @ma
+        @ma.stub(:update_attributes).with(valid_attributes).and_return true
+        put :update, {:organism_id=>@o.to_param, :id => @ma.to_param, :admin_mask => valid_attributes}, valid_session
+        response.should redirect_to admin_organism_mask_url(@o, @ma)
       end
     end
 
     describe "with invalid params" do
       it "assigns the admin_mask as @admin_mask" do
-        mask = Admin::Mask.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Admin::Mask.any_instance.stub(:save).and_return(false)
-        put :update, {:id => mask.to_param, :admin_mask => { "title" => "invalid value" }}, valid_session
-        assigns(:admin_mask).should eq(mask)
+        Admin::Mask.stub(:find).with(@ma.to_param).and_return @ma
+        @ma.stub(:update_attributes).and_return(false)
+        put :update, {:organism_id=>@o.to_param, :id => @ma.to_param, :mask => { "title" => "invalid value" }}, valid_session
+        assigns(:mask).should eq(@ma)
       end
 
       it "re-renders the 'edit' template" do
-        mask = Admin::Mask.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Admin::Mask.any_instance.stub(:save).and_return(false)
-        put :update, {:id => mask.to_param, :admin_mask => { "title" => "invalid value" }}, valid_session
+        Admin::Mask.stub(:find).with(@ma.to_param).and_return @ma
+        @ma.stub(:update_attributes).and_return(false)
+        put :update, {:organism_id=>@o.to_param, :id => @ma.to_param, :mask => { "title" => "invalid value" }}, valid_session
         response.should render_template("edit")
       end
     end
@@ -144,16 +154,15 @@ describe Admin::MasksController do
 
   describe "DELETE destroy" do
     it "destroys the requested admin_mask" do
-      mask = Admin::Mask.create! valid_attributes
-      expect {
-        delete :destroy, {:id => mask.to_param}, valid_session
-      }.to change(Admin::Mask, :count).by(-1)
+      Admin::Mask.should_receive(:find).with(@ma.to_param).and_return(@ma)
+      @ma.should_receive(:destroy).and_return true
+      delete :destroy, {:organism_id=>@o.to_param, :id => @ma.to_param}, valid_session
     end
 
     it "redirects to the admin_masks list" do
-      mask = Admin::Mask.create! valid_attributes
-      delete :destroy, {:id => mask.to_param}, valid_session
-      response.should redirect_to(admin_masks_url)
+      Admin::Mask.stub(:find).with(@ma.to_param).and_return(@ma)
+      delete :destroy, {:organism_id=>@o.to_param, :id => @ma.to_param}, valid_session
+      response.should redirect_to(admin_organism_masks_url(@o))
     end
   end
 

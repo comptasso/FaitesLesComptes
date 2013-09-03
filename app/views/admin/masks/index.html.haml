@@ -16,7 +16,8 @@
         %td= mask.title
         %td= mask.comment
         %td
+          = icon_to 'detail.png', admin_organism_mask_path(@organism, mask)
           = icon_to 'modifier.png', edit_admin_organism_mask_path(@organism, mask)
-          =# icon_to 'supprimer.png',[:admin,@organism, mask], :method=>:destroy, :confirm=>'Etes vous certain ?'
+          = icon_to 'supprimer.png', admin_organism_mask_path(@organism, mask), :method=>:destroy, :confirm=>'Etes vous certain ?'
 
 

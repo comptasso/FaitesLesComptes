@@ -76,7 +76,7 @@ class Admin::MasksController < Admin::ApplicationController
     @mask.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_masks_url }
+      format.html { redirect_to admin_organism_masks_url(@organism) }
       format.json { head :no_content }
     end
   end
