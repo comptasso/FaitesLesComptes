@@ -1,5 +1,10 @@
-%h1 New admin_mask
+= content_for :menu do
+  = icon_to 'retour.png', admin_organism_masks_path(@organism) 
 
-= render 'form'
 
-= link_to 'Back', admin_masks_path
+.champ
+  %h3 Nouveau masque de saisie 
+  .inner-champ
+    = render 'form'
+
+

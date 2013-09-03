@@ -1,10 +1,10 @@
-= simple_form_for(@admin_mask) do |f|
+= simple_form_for([@organism, @mask], :url => admin_organism_masks_path, :method => :post, :html=> {class: 'form-horizontal'}) do |f|
   = f.error_notification
 
   .form-inputs
-    = f.input :title
-    = f.input :comment
+    = f.input :title,  input_html: {class: "span3"}
+    = f.input :comment,  input_html: {rows: 4, class: "span3"}
     
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, class: "btn-primary span2" 

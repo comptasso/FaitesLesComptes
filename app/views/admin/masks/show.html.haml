@@ -1,15 +1,14 @@
-%p#notice= notice
+= content_for :menu do
+  = icon_to 'modifier.png', edit_admin_organism_mask_path(@organism, @mask)
+  =# icon_to 'supprimer.png', [:admin, @organism, @mask], :method=>:delete, confirm:'Etes-vous certain ?'
 
-%p
-  %b Title:
-  = @admin_mask.title
-%p
-  %b Comment:
-  = @admin_mask.comment
-%p
-  %b Organism:
-  = @admin_mask.organism
-
-= link_to 'Edit', edit_admin_mask_path(@admin_mask)
-\|
-= link_to 'Back', admin_masks_path
+.champ
+  %h3 Détail du masque de saisie #{@mask.title}
+.row-fluid.inner-champ
+  %p
+    %b Title:
+    = @mask.title
+  %p
+    %b Comment:
+    = @mask.comment
+  

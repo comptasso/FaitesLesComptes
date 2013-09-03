@@ -1,7 +1,11 @@
-%h1 Editing admin_mask
+= content_for :menu do 
 
-= render 'form'
+  = icon_to 'nouveau.png', new_admin_organism_mask_path(@organism) 
+  = icon_to 'afficher.png', admin_organism_mask_path(@organism,@mask) 
+  = icon_to 'retour.png', admin_organism_masks_path(@organism) 
+ end -
 
-= link_to 'Show', @admin_mask
-\|
-= link_to 'Back', admin_masks_path
+.champ
+  %h3 Modification d'un masque de saisie
+  .inner-champ
+    = render 'form' 

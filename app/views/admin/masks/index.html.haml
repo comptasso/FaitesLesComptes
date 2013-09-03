@@ -1,23 +1,22 @@
-%h1 Listing admin_masks
+= content_for :menu do
+  = icon_to 'nouveau.png', new_admin_organism_mask_path(@organism)
 
-%table
-  %tr
-    %th Title
-    %th Comment
-    %th Organism
-    %th
-    %th
-    %th
+.champ
+  %h3 Liste des masques de saisie d'écritures
 
-  - @admin_masks.each do |admin_mask|
+%table.table.table-striped.table-bordered.table-condensed(cellpadding="0" cellspacing="0" border="0")
+  %thead
     %tr
-      %td= admin_mask.title
-      %td= admin_mask.comment
-      %td= admin_mask.organism
-      %td= link_to 'Show', admin_mask
-      %td= link_to 'Edit', edit_admin_mask_path(admin_mask)
-      %td= link_to 'Destroy', admin_mask, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %th Title
+      %th Comment
+      %th Actions
+  %tbody
+    - @masks.each do |mask|
+      %tr
+        %td= mask.title
+        %td= mask.comment
+        %td
+          = icon_to 'modifier.png', edit_admin_organism_mask_path(@organism, mask)
+          =# icon_to 'supprimer.png',[:admin,@organism, mask], :method=>:destroy, :confirm=>'Etes vous certain ?'
 
-%br
 
-= link_to 'New Mask', new_admin_mask_path
