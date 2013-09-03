@@ -1,0 +1,23 @@
+%h1 Listing admin_masks
+
+%table
+  %tr
+    %th Title
+    %th Comment
+    %th Organism
+    %th
+    %th
+    %th
+
+  - @admin_masks.each do |admin_mask|
+    %tr
+      %td= admin_mask.title
+      %td= admin_mask.comment
+      %td= admin_mask.organism
+      %td= link_to 'Show', admin_mask
+      %td= link_to 'Edit', edit_admin_mask_path(admin_mask)
+      %td= link_to 'Destroy', admin_mask, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Mask', new_admin_mask_path

@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Title:
+  = @admin_mask.title
+%p
+  %b Comment:
+  = @admin_mask.comment
+%p
+  %b Organism:
+  = @admin_mask.organism
+
+= link_to 'Edit', edit_admin_mask_path(@admin_mask)
+\|
+= link_to 'Back', admin_masks_path

@@ -71,6 +71,9 @@ class Organism < ActiveRecord::Base
   # liaison avec le gem adherent
   has_many :members, class_name: 'Adherent::Member'
   has_many :payments, :through=>:members, class_name:'Adherent::Payment'
+  
+  # gestion des masques d'écritures
+  has_many :masks, class_name:'Admin::Mask'
 
   before_validation :fill_version
   after_create :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature

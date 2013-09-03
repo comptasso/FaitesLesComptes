@@ -1,0 +1,10 @@
+= simple_form_for(@admin_mask) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :title
+    = f.input :comment
+    
+
+  .form-actions
+    = f.button :submit

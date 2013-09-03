@@ -2,6 +2,8 @@ Faitesvoscomptes::Application.routes.draw do
 
   
 
+  
+
   mount Adherent::Engine, at: "/adherent"
   
 
@@ -113,7 +115,7 @@ Faitesvoscomptes::Application.routes.draw do
     end
     resources :organisms do
 
-      
+      resources :masks
       resource :bridge
       resources :books
       resources :income_books
