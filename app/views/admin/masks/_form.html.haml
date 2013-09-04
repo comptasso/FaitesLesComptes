@@ -6,5 +6,9 @@
     = f.input :comment,  input_html: {rows: 4, class: "span3"}
     
 
+    =f.fields_for :mask_fields, @date_field do |build|
+      = render :partial=>'mask_field_form', :locals=>{:builder=>build, :f=>f}
+
+
   .form-actions
     = f.button :submit, class: "btn-primary span2" 

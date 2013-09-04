@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130903090411) do
+ActiveRecord::Schema.define(:version => 20130904060900) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -188,6 +188,16 @@ ActiveRecord::Schema.define(:version => 20130903090411) do
     t.datetime "updated_at",                        :null => false
     t.boolean  "income_outcome", :default => false
   end
+
+  create_table "mask_fields", :force => true do |t|
+    t.integer  "mask_id"
+    t.string   "label"
+    t.string   "content"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "mask_fields", ["mask_id"], :name => "index_mask_fields_on_mask_id"
 
   create_table "masks", :force => true do |t|
     t.string   "title"
