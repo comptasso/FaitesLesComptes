@@ -1,11 +1,14 @@
 require 'spec_helper'
 
 describe "admin/masks/new" do
+  include JcCapybara
+  
   before(:each) do
-    assign(:admin_mask, stub_model(Admin::Mask,
+    assign(:organism, @o = stub_model(Organism))
+    assign(:mask, stub_model(Mask,
       :title => "MyString",
       :comment => "MyText",
-      :organism => nil
+      :organism_id => @o.to_param 
     ).as_new_record)
   end
 
@@ -13,10 +16,11 @@ describe "admin/masks/new" do
     render
 
     # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "form[action=?][method=?]", admin_masks_path, "post" do
-      assert_select "input#admin_mask_title[name=?]", "admin_mask[title]"
-      assert_select "textarea#admin_mask_comment[name=?]", "admin_mask[comment]"
-      assert_select "input#admin_mask_organism[name=?]", "admin_mask[organism]"
+    assert_select "form[action=?][method=?]", admin_organism_masks_path(@o), "post" do
+      assert_select "input#mask_title[name=?]", "mask[title]"
+      assert_select "textarea#mask_comment[name=?]", "mask[comment]"
+      
     end
   end
+  
 end

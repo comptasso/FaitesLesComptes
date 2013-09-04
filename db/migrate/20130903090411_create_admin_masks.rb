@@ -1,12 +1,12 @@
 class CreateAdminMasks < ActiveRecord::Migration
   def change
-    create_table :admin_masks do |t|
+    create_table :masks do |t|
       t.string :title
       t.text :comment
       t.references :organism
 
       t.timestamps
     end
-    add_index :admin_masks, :organism_id
+    add_index :masks, :organism_id
   end
 end

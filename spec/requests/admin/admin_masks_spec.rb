@@ -1,11 +1,31 @@
 require 'spec_helper'
 
-describe "Admin::Masks" do
-  describe "GET /admin_masks" do
-    it "works! (now write some real specs)" do
-      # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      get admin_masks_path
-      response.status.should be(200)
+describe "admin mask" do
+  
+  include OrganismFixtureBis
+  
+  
+  before(:each) do
+    create_user
+    create_minimal_organism 
+    login_as('quidam')
+    
+  end
+  
+  
+  describe "EDIT /admin_masks" do
+    
+    before(:each) do
+      @mask = @o.masks.create(title:'Le titre', comment:'Un commentaire')
+    end
+    
+    it "affiche la vue edit" do
+      visit edit_admin_organism_mask_path(@o, @mask)
+      page.all('textarea').should have(1).element
+    end
+    
+    it 'teste le status' do
+      rendered.status.should =='200'
     end
   end
 end

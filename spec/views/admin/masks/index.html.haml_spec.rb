@@ -2,16 +2,17 @@ require 'spec_helper'
 
 describe "admin/masks/index" do
   before(:each) do
-    assign(:admin_masks, [
-      stub_model(Admin::Mask,
+    assign(:organism, stub_model(Organism))
+    assign(:masks, [
+      stub_model(Mask,
         :title => "Title",
         :comment => "MyText",
-        :organism => nil
+        :organism_id => 1
       ),
-      stub_model(Admin::Mask,
+      stub_model(Mask,
         :title => "Title",
-        :comment => "MyText",
-        :organism => nil
+        :comment => "MyText", 
+        :organism_id => 1 
       )
     ])
   end

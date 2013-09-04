@@ -91,16 +91,6 @@ ActiveRecord::Schema.define(:version => 20130903090411) do
   add_index "adherent_reglements", ["adhesion_id"], :name => "index_adherent_reglements_on_adhesion_id"
   add_index "adherent_reglements", ["payment_id"], :name => "index_adherent_reglements_on_payment_id"
 
-  create_table "admin_masks", :force => true do |t|
-    t.string   "title"
-    t.text     "comment"
-    t.integer  "organism_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  add_index "admin_masks", ["organism_id"], :name => "index_admin_masks_on_organism_id"
-
   create_table "bank_accounts", :force => true do |t|
     t.string   "number"
     t.string   "bank_name"
@@ -198,6 +188,16 @@ ActiveRecord::Schema.define(:version => 20130903090411) do
     t.datetime "updated_at",                        :null => false
     t.boolean  "income_outcome", :default => false
   end
+
+  create_table "masks", :force => true do |t|
+    t.string   "title"
+    t.text     "comment"
+    t.integer  "organism_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "masks", ["organism_id"], :name => "index_masks_on_organism_id"
 
   create_table "natures", :force => true do |t|
     t.string   "name"

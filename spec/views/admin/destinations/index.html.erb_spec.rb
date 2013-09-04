@@ -5,7 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 describe 'admin/destinations/index' do
  include JcCapybara
   before(:each) do
-    assign(:organism, stub_model(Organism))
+    assign(:organism, stub_model(Organism)) 
     @destinations = []
     @destinations << mock_model(Destination, :organism_id=>1, name: 'dest1', comment: 'dest1 comment')
     @destinations << mock_model(Destination, :organism_id=>1, name: 'dest2', comment: 'dest2 comment')

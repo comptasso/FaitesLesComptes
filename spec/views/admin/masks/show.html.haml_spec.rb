@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe "admin/masks/show" do
   before(:each) do
-    @admin_mask = assign(:admin_mask, stub_model(Admin::Mask,
+    assign(:organism, @o = stub_model(Organism))
+    @mask = assign(:mask, stub_model(Mask,
       :title => "Title",
       :comment => "MyText",
-      :organism => nil
+      :organism_id => @o.to_param
     ))
   end
 

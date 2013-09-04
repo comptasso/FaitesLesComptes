@@ -73,8 +73,8 @@ class Organism < ActiveRecord::Base
   has_many :payments, :through=>:members, class_name:'Adherent::Payment'
   
   # gestion des masques d'écritures
-  has_many :masks, class_name:'Admin::Mask'
-
+  has_many :masks
+  
   before_validation :fill_version
   after_create :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
   after_create :fill_bridge , :if=>"status == 'Association'"

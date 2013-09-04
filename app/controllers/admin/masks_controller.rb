@@ -13,7 +13,7 @@ class Admin::MasksController < Admin::ApplicationController
   # GET /admin/masks/1
   # GET /admin/masks/1.json
   def show
-    @mask = Admin::Mask.find(params[:id])
+    @mask = Mask.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -34,13 +34,13 @@ class Admin::MasksController < Admin::ApplicationController
 
   # GET /admin/masks/1/edit
   def edit
-    @mask = Admin::Mask.find(params[:id])
+    @mask = Mask.find(params[:id])
   end
 
   # POST /admin/masks
   # POST /admin/masks.json
   def create
-    @mask = @organism.masks.new(params[:admin_mask])
+    @mask = @organism.masks.new(params[:mask])
 
     respond_to do |format|
       if @mask.save
@@ -56,10 +56,10 @@ class Admin::MasksController < Admin::ApplicationController
   # PUT /admin/masks/1
   # PUT /admin/masks/1.json
   def update
-    @mask = Admin::Mask.find(params[:id])
+    @mask = Mask.find(params[:id])
 
     respond_to do |format|
-      if @mask.update_attributes(params[:admin_mask])
+      if @mask.update_attributes(params[:mask])
         format.html { redirect_to admin_organism_mask_url(@organism, @mask), notice: 'Le masque de saisie a été mis à jour' }
         format.json { head :no_content }
       else
@@ -72,7 +72,7 @@ class Admin::MasksController < Admin::ApplicationController
   # DELETE /admin/masks/1
   # DELETE /admin/masks/1.json
   def destroy
-    @mask = Admin::Mask.find(params[:id])
+    @mask = Mask.find(params[:id])
     @mask.destroy
 
     respond_to do |format|

@@ -1,4 +1,4 @@
-= simple_form_for([@organism, @mask], :url => admin_organism_masks_path, :method => :post, :html=> {class: 'form-horizontal'}) do |f|
+= simple_form_for([:admin, @organism, @mask], :html=> {class: 'form-horizontal'}) do |f|
   = f.error_notification
 
   .form-inputs
