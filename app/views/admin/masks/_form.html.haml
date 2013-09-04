@@ -5,10 +5,22 @@
     = f.input :title,  input_html: {class: "span3"}
     = f.input :comment,  input_html: {rows: 4, class: "span3"}
     
-
-    =f.fields_for :mask_fields, @date_field do |build|
-      = render :partial=>'mask_field_form', :locals=>{:builder=>build, :f=>f}
-
+    =f.fields_for :mask_fields, @book_field do |build|
+      = build.input :content, :label=>@book_field.label, :collection=>@organism.books.in_outs, :prompt=>false
+    =f.fields_for :mask_fields, @ref_field do |build|
+      = build.input :content, :label=>@ref_field.label
+    =f.fields_for :mask_fields, @narration_field do |build|
+      = build.input :content, :label=>@narration_field.label
+    =f.fields_for :mask_fields, @nature_field do |build|
+      = build.input :content, :label=>@nature_field.label
+    =f.fields_for :mask_fields, @destination_field do |build|
+      = build.input :content, :label=>@destination_field.label
+    =f.fields_for :mask_fields, @amount_field do |build|
+      = build.input :content, :label=>@amount_field.label
+    =f.fields_for :mask_fields, @mode_field do |build|
+      = build.input :content, :label=>@mode_field.label
+    =f.fields_for :mask_fields, @counterpart_field do |build|
+      = build.input :content, :label=>@counterpart_field.label
 
   .form-actions
     = f.button :submit, class: "btn-primary span2" 

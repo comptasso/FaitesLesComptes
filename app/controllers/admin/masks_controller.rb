@@ -25,7 +25,16 @@ class Admin::MasksController < Admin::ApplicationController
   # GET /admin/masks/new.json
   def new
     @mask = @organism.masks.new
-    @date_field = @mask.mask_fields.build
+    
+    @book_field = @mask.mask_fields.build(label:'Livre')
+    @ref_field = @mask.mask_fields.build(label:'Réf')
+    @narration_field = @mask.mask_fields.build(label:'Narration')
+    @nature_field = @mask.mask_fields.build(label:'Nature')
+    @destination_field = @mask.mask_fields.build(label:'Destination')
+    @amount_field = @mask.mask_fields.build(label:'Montant')
+    @mode_field = @mask.mask_fields.build(label:'Mode de paiement')
+    @counterpart_field = @mask.mask_fields.build(label:'Contrepartie')
+    
 
     respond_to do |format|
       format.html # new.html.erb

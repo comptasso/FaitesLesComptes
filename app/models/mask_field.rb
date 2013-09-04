@@ -3,4 +3,6 @@ class MaskField < ActiveRecord::Base
   attr_accessible :content, :label
   
   validates :mask, :presence=>true
+  
+  
 end
