@@ -57,6 +57,7 @@ class Admin::MasksController < Admin::ApplicationController
         format.html { redirect_to admin_organism_mask_url(@organism, @mask), notice: 'Le masque de saisie a été créé' }
         format.json { render json: @mask, status: :created, location: @mask }
       else
+        flash[:alert] = @mask.errors.messages
         format.html { render action: "new" }
         format.json { render json: @mask.errors, status: :unprocessable_entity }
       end
