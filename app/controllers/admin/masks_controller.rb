@@ -26,14 +26,14 @@ class Admin::MasksController < Admin::ApplicationController
   def new
     @mask = @organism.masks.new
     
-    @book_field = @mask.mask_fields.build(label:'Livre')
-    @ref_field = @mask.mask_fields.build(label:'Réf')
-    @narration_field = @mask.mask_fields.build(label:'Narration')
-    @nature_field = @mask.mask_fields.build(label:'Nature')
-    @destination_field = @mask.mask_fields.build(label:'Destination')
-    @amount_field = @mask.mask_fields.build(label:'Montant')
-    @mode_field = @mask.mask_fields.build(label:'Mode de paiement')
-    @counterpart_field = @mask.mask_fields.build(label:'Contrepartie')
+    @book_field = @mask.mask_fields.build(label:'book_id')
+    @ref_field = @mask.mask_fields.build(label:'réf')
+    @narration_field = @mask.mask_fields.build(label:'narration')
+    @nature_field = @mask.mask_fields.build(label:'nature_name')
+    @destination_field = @mask.mask_fields.build(label:'destination_id')
+    @amount_field = @mask.mask_fields.build(label:'amount')
+    @mode_field = @mask.mask_fields.build(label:'mode')
+    @counterpart_field = @mask.mask_fields.build(label:'counterpart')
     
 
     respond_to do |format|

@@ -33,13 +33,13 @@
 #
 #  Ces deux dernières méthodes name et id doivent évidemment exister
 #  pour les objets concernés
-#
+#  
 class OptionsForAssociationSelect
   attr_reader:title
 
-  def initialize(titre, method, period)
+  def initialize(titre, method, model)
     @title=titre
-    @object=period
+    @object=model
     @method=method
   end
 

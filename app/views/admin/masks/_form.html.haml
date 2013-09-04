@@ -6,21 +6,33 @@
     = f.input :comment,  input_html: {rows: 4, class: "span3"}
     
     =f.fields_for :mask_fields, @book_field do |build|
-      = build.input :content, :label=>@book_field.label, :collection=>@organism.books.in_outs, :prompt=>false
+      = build.input :label, as: :hidden
+      = build.input :content, :label=>'Livre', :collection=>@organism.books.in_outs, :prompt=>false, required:true
     =f.fields_for :mask_fields, @ref_field do |build|
-      = build.input :content, :label=>@ref_field.label
+      = build.input :label, as: :hidden
+      = build.input :content, :label=>'Référence'
     =f.fields_for :mask_fields, @narration_field do |build|
-      = build.input :content, :label=>@narration_field.label
+      = build.input :label, as: :hidden
+      = build.input :content, :label=>'Narration'
     =f.fields_for :mask_fields, @nature_field do |build|
-      = build.input :content, :label=>@nature_field.label
+      = build.input :label, as: :hidden
+      = build.input :content, :label=>'Nature', :collection => options_for_mask_natures(@organism),
+        :as => :grouped_select, :group_method => :options, :group_label_method=> :title
+       
     =f.fields_for :mask_fields, @destination_field do |build|
-      = build.input :content, :label=>@destination_field.label
+      = build.input :label, as: :hidden
+      = build.input :content, :label=>'Destination', :collection=>@organism.destinations
     =f.fields_for :mask_fields, @amount_field do |build|
-      = build.input :content, :label=>@amount_field.label
+      = build.input :label, as: :hidden
+      = build.input :content, :label=>'Montant'
     =f.fields_for :mask_fields, @mode_field do |build|
-      = build.input :content, :label=>@mode_field.label
+      = build.input :label, as: :hidden
+      = build.input :content, :label=>'Mode', :collection=>PAYMENT_MODES
     =f.fields_for :mask_fields, @counterpart_field do |build|
-      = build.input :content, :label=>@counterpart_field.label
+      = build.input :label, as: :hidden
+      = build.input :content, :label=>'Contrepartie', 
+        :collection => options_for_mask_counterpart(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title
+            
 
   .form-actions
     = f.button :submit, class: "btn-primary span2" 
