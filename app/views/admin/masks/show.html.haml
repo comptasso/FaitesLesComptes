@@ -6,10 +6,33 @@
 .champ
   %h3 Détail du masque de saisie '#{@mask.title}'
 .row-fluid.inner-champ
+  
   %p
-    %b Title:
-    = @mask.title
-  %p
-    %b Comment:
+    %b Commentaire :
     = @mask.comment
+  %p
+    %b Livre :
+    = @mask.book.title
+  %p
+    %b Référence :
+    = @mask.ref_content
+  %p
+    %b Narration :
+    = @mask.narration_content
+  %p
+    %b Nature :
+    = @mask.nature_name_content
+  %p
+    %b Destination :
+    = @mask.destination.name
+  %p
+    %b Montant :
+    = @mask.amount_content
+  %p
+    %b Mode :
+    = @mask.mode_content
+  %p
+    %b Contrepartie :
+    = @mask.counterpart_content
+    
   

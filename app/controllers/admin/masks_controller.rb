@@ -27,7 +27,7 @@ class Admin::MasksController < Admin::ApplicationController
     @mask = @organism.masks.new
     
     @book_field = @mask.mask_fields.build(label:'book_id')
-    @ref_field = @mask.mask_fields.build(label:'réf')
+    @ref_field = @mask.mask_fields.build(label:'ref')
     @narration_field = @mask.mask_fields.build(label:'narration')
     @nature_field = @mask.mask_fields.build(label:'nature_name')
     @destination_field = @mask.mask_fields.build(label:'destination_id')
