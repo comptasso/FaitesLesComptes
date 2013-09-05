@@ -5,11 +5,7 @@ describe Mask do
   before(:each) do
     @m = Mask.new(title:'Le masque', comment:'Avec un commentaire')
     @m.organism_id = 1
-  end
-  
-  it 'creéation d un masque' do
-    
-    expect {@m.save}.to change {Mask.count}.by(1) 
+    @m.init_mask_fields
   end
   
   describe 'validations' do
@@ -39,6 +35,19 @@ describe Mask do
         @m.title = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
         @m.should_not be_valid
       end
+    end
+    
+    describe 'les contraintes des mask_fields' do
+      before(:each) do
+        @m.init_mask_fields
+      end
+      
+      it 'un mask doit avoir un book' do
+        @m.should_not be_valid
+      end
+      
+      
+      
     end
     
   end

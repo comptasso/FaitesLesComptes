@@ -19,6 +19,8 @@ class Mask < ActiveRecord::Base
   validates :title, :format=>{with:NAME_REGEX}, :length=>{:within=>LONG_NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   
+  validate :book_presence
+  
   LIST_FIELDS = %w(book_id ref narration nature_name destination_id amount mode counterpart )
   
   # crée les mask_field nécessaires au mask en remplissant les labels
@@ -29,7 +31,7 @@ class Mask < ActiveRecord::Base
   # Définit les méthodes book_id, ...
   LIST_FIELDS.each do |field|
     define_method(field.to_sym) do
-      mask_fields.where('label = ?', field ).first
+      mask_fields.select {|mf| mf.label == field}.first
     end
   end
   
@@ -51,6 +53,12 @@ class Mask < ActiveRecord::Base
   end
   
   
+  protected
+  
+  def book_presence
+    puts 'dans la validation'
+    narration.errors.add(:content, :blank) unless book_id && book_id.content
+  end
   
   
   
