@@ -1,6 +1,7 @@
 module Admin::MasksHelper
 
   
+  
   class OptionsForGroupedSelect
     attr_reader:title, :options
 
@@ -55,6 +56,18 @@ module Admin::MasksHelper
       OptionsForGroupedSelect.new('Caisses', organism.cashes)]
       
     end
-
+  
+  
+  def sf_options(label)
+    case label
+    when 'book_id' then {:label=>label, :collection=>@organism.books.in_outs, :prompt=>false, required:true}
+    when 'nature_name' then {:label=>label, :collection => options_for_mask_natures(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title  }
+    when 'destination_id' then {:label=>label, :collection=>@organism.destinations}
+    when 'mode' then {:label=>label, :collection=>PAYMENT_MODES}
+    when 'counterpart' then { :label=>label, :collection => options_for_mask_counterpart(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title}
+    else {:label=>label}  
+    end
+  end
+  
 
 end
