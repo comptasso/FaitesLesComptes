@@ -21,6 +21,11 @@ class Mask < ActiveRecord::Base
   
   LIST_FIELDS = %w(book_id ref narration nature_name destination_id amount mode counterpart )
   
+  # crée les mask_field nécessaires au mask en remplissant les labels
+  def init_mask_fields
+    LIST_FIELDS.each {|f| mask_fields.build(label:f)}
+  end
+  
   # Définit les méthodes book_id, ...
   LIST_FIELDS.each do |field|
     define_method(field.to_sym) do

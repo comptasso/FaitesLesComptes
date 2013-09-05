@@ -25,15 +25,8 @@ class Admin::MasksController < Admin::ApplicationController
   # GET /admin/masks/new.json
   def new
     @mask = @organism.masks.new
+    @mask.init_mask_fields
     
-    @mask.mask_fields.build(label:'book_id')
-    @mask.mask_fields.build(label:'ref')
-    @mask.mask_fields.build(label:'narration')
-    @mask.mask_fields.build(label:'nature_name')
-    @mask.mask_fields.build(label:'destination_id')
-    @mask.mask_fields.build(label:'amount')
-    @mask.mask_fields.build(label:'mode')
-    @mask.mask_fields.build(label:'counterpart')
     
 
     respond_to do |format|
@@ -57,7 +50,6 @@ class Admin::MasksController < Admin::ApplicationController
         format.html { redirect_to admin_organism_mask_url(@organism, @mask), notice: 'Le masque de saisie a été créé' }
         format.json { render json: @mask, status: :created, location: @mask }
       else
-        flash[:alert] = @mask.errors.messages
         format.html { render action: "new" }
         format.json { render json: @mask.errors, status: :unprocessable_entity }
       end
