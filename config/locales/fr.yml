@@ -183,7 +183,10 @@ fr:
   labels:
     Title: Titre
     Used: Utilisé
-    
+    ref: Référence
+    narration: Narration
+    amount: Montant
+  
     
     
     
@@ -274,6 +277,19 @@ fr:
         nature_name: Nature
         bank_account: Compte bancaire
         cash: Caisse
+      mask:
+        title: Titre
+        comment: Commentaire
+      mask_field:
+        book_id: Livre
+        ref: Référence
+        narration: Narration
+        nature_name: Nature
+        destination_id: Destination
+        amount: Montant
+        mode: Mode de paiement
+        counterpart: Contrepartie
+          
       
         
     

@@ -1,5 +1,5 @@
 = content_for :menu do
-  = icon_to 'retour.png', admin_organism_masks_path(@organism) 
+  = icon_to 'navigation90.png', admin_organism_masks_path(@organism) 
 
 
 .champ
@@ -14,7 +14,7 @@
 
         =f.simple_fields_for :mask_fields do |build|
           = build.input :label, as: :hidden
-          = build.input :content,  sf_options(build.object.label)
+          = build.input :content,  sf_options(build.object.label) # défini dans mask_helper
 
 
       .form-actions
