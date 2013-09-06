@@ -25,10 +25,7 @@ class Admin::MasksController < Admin::ApplicationController
   # GET /admin/masks/new.json
   def new
     @mask = @organism.masks.new
-    @mask.init_mask_fields
     
-    
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @mask }

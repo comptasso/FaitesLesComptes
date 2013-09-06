@@ -19,6 +19,7 @@ NB_PER_PAGE_LANDSCAPE = 22
 # constantes utilisées pour les lignes de saise
 PAYMENT_MODES = %w(CB Chèque Espèces Prélèvement Virement)
 BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
+DIRECT_BANK_PAYMENT_MODES = %w(CB Prélèvement Virement)
 
 
 LIST_STATUS = %w(Association Entreprise)

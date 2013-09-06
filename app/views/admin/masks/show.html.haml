@@ -12,27 +12,27 @@
     = @mask.comment
   %p
     %b Livre :
-    = @mask.book.title
+    = @mask.book.title rescue ''
   %p
     %b Référence :
-    = @mask.ref_content
+    = @mask.ref
   %p
     %b Narration :
-    = @mask.narration_content
+    = @mask.narration
   %p
     %b Nature :
-    = @mask.nature_name_content
+    = @mask.nature_name
   %p
     %b Destination :
-    = @mask.destination.name
+    = @mask.destination.name rescue ''
   %p
     %b Montant :
-    = @mask.amount_content
+    = virgule @mask.amount
   %p
     %b Mode :
-    = @mask.mode_content
+    = @mask.mode
   %p
     %b Contrepartie :
-    = @mask.counterpart_content
+    = @mask.counterpart
     
   

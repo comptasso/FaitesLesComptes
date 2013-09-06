@@ -5,19 +5,5 @@
 .champ
   %h3 Nouveau masque de saisie 
   .inner-champ
-    = simple_form_for([:admin, @organism, @mask], :html=> {class: 'form-horizontal'}) do |f|
-      = f.error_notification
-
-      .form-inputs
-        = f.input :title,  input_html: {class: "span3"}
-        = f.input :comment,  input_html: {rows: 4, class: "span3"}
-
-        =f.simple_fields_for :mask_fields do |build|
-          = build.input :label, as: :hidden
-          = build.input :content,  sf_options(build.object.label) # défini dans mask_helper
-
-
-      .form-actions
-        = f.button :submit, class: "btn-primary span2" 
-
+    = render 'form'
 

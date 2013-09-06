@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130904060900) do
+ActiveRecord::Schema.define(:version => 20130905161022) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -189,22 +189,20 @@ ActiveRecord::Schema.define(:version => 20130904060900) do
     t.boolean  "income_outcome", :default => false
   end
 
-  create_table "mask_fields", :force => true do |t|
-    t.integer  "mask_id"
-    t.string   "label"
-    t.string   "content"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "mask_fields", ["mask_id"], :name => "index_mask_fields_on_mask_id"
-
   create_table "masks", :force => true do |t|
     t.string   "title"
     t.text     "comment"
     t.integer  "organism_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "book_id"
+    t.string   "nature_name"
+    t.string   "narration"
+    t.integer  "destination_id"
+    t.string   "mode"
+    t.string   "counterpart"
+    t.string   "ref"
+    t.decimal  "amount"
   end
 
   add_index "masks", ["organism_id"], :name => "index_masks_on_organism_id"
