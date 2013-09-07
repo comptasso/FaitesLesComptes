@@ -1,11 +1,21 @@
 # Sert de base pour les masques d'écriture en enregistrant juste un titre et 
-# un commentaire.
-# Les informations pertinentes sont stockées dans la table MaskField qui doit 
-# comprendre à chaque fois un certain nombre de champs dont la liste est données
-# par LIST_FIELDS.
+# un commentaire et le livre.
+# Plus les informations facultatives telles que ref, narration, destination_id
+# nature_name, mode, amount et counterpart. 
 # 
-# Des méthodes correspondant à chacun de ses champs permettent de récupérer 
-# l'enregistrement voulu.  
+# nature_name et counterpart sont des string qui permettront de retrouver la nature 
+# et le compte bancaire ou la caisse dès lors que la date de l'écriture sera donnée.
+# 
+# Les méthodes book, destination, bank_account et cash permettent de retrouver
+# les enregistrements correspondant à ce masque.
+# 
+# A noter que la date n'est pas fixée.
+# 
+# Différentes validations permettent de vérifier que les informations sont cohérentes
+# Par exemple, le type de nature (income ou outcome) doit être cohérent avec le livre
+# (Recettes ou Dépenses).  
+# De même pour le mode de règlement avec la contrepartie.
+# 
 #
 class Mask < ActiveRecord::Base
   belongs_to :organism
@@ -25,10 +35,7 @@ class Mask < ActiveRecord::Base
   validate :nature_coherent_with_book, :if=>"nature_name"
   validate :counterpart_coherent_with_mode,  :if=>"mode && counterpart"
   
-  
-  LIST_FIELDS = %w(book_id ref narration nature_name destination_id amount mode counterpart )
-  
-     
+      
   # renvoie le livre sollicité par ce masque
   def book
     Book.find_by_id(book_id) 

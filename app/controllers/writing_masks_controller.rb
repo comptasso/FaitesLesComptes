@@ -1,0 +1,2 @@
+class WritingMasksController < ApplicationController
+end
