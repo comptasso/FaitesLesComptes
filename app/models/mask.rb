@@ -75,7 +75,7 @@ class Mask < ActiveRecord::Base
   end
   
   def counterline(date)
-    writing.compta_lines.build(payment_mode:mode, debit:credit, credit:debit)
+    writing.compta_lines.build(payment_mode:mode, debit:credit, credit:debit, account_id:account_id(date))
   end
   
   def nature_id(date)
@@ -92,6 +92,15 @@ class Mask < ActiveRecord::Base
     if amount
       book.type == 'IncomeBook' ? amount : 0
     end
+  end
+  
+  # renvoie le compte comptable correspondant à la contrepartie
+  def account_id(date)
+    return nil unless counterpart
+    p = organism.find_period(date)
+    return cash.current_account(p).id if cash
+    return bank_account.current_account(p).id if bank_account
+    return p.rem_check_account.id if counterpart == 'Chèque à l\'encaissement'
   end
   
   
