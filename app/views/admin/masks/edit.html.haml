@@ -8,16 +8,4 @@
   %h3 Modification d'un masque de saisie
   .inner-champ
     = render 'form'
-    = simple_form_for([:admin, @organism, @mask], :html=> {class: 'form-horizontal'}) do |f|
-      = f.error_notification
-
-      .form-inputs
-        = f.input :title,  input_html: {class: "span3"}
-        = f.input :comment,  input_html: {rows: 4, class: "span3"}
-
-        - Mask::LIST_FIELDS.each do |field|
-          = f.input field.to_sym,  sf_options(field) # méthode définie dans le helper
-
-
-      .form-actions
-        = f.button :submit, class: "btn-primary span2" 
+    

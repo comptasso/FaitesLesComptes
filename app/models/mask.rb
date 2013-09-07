@@ -20,6 +20,8 @@
 class Mask < ActiveRecord::Base
   belongs_to :organism
   
+  attr_reader :writing
+  
   attr_accessible :comment, :title, :book_id, :ref, :narration, 
     :destination_id, :nature_name, :mode, :amount, :counterpart
   
@@ -35,7 +37,9 @@ class Mask < ActiveRecord::Base
   validate :nature_coherent_with_book, :if=>"nature_name"
   validate :counterpart_coherent_with_mode,  :if=>"mode && counterpart"
   
-      
+  
+  LIST_FIELDS = %w(book_id ref narration nature_name destination_id amount mode counterpart)
+  
   # renvoie le livre sollicité par ce masque
   def book
     Book.find_by_id(book_id) 
@@ -51,10 +55,47 @@ class Mask < ActiveRecord::Base
   end
   
   def bank_account
-    organism.bank_accounts.find_by_name(counterpart) if counterpart
+    organism.bank_accounts.find_by_nickname(counterpart) if counterpart
+  end
+  
+  # construit les éléments du writing
+  def writing_new(date)
+    return  build_writing(date), line(date), counterline(date)
   end
   
   protected
+  
+  # construit un in_out_writing
+  def build_writing(date)
+    @writing = book.in_out_writings.new(date:date, ref:ref, narration:narration)
+  end
+  
+  def line(date)
+    writing.compta_lines.build(nature_id:nature_id(date), debit:debit, credit:credit, destination_id:destination.id)
+  end
+  
+  def counterline(date)
+    writing.compta_lines.build(payment_mode:mode, debit:credit, credit:debit)
+  end
+  
+  def nature_id(date)
+    organism.find_period(date).natures.find_by_name(nature_name).id if nature_name
+  end
+  
+  def debit
+    if amount
+      book.type == 'IncomeBook' ? 0 : amount
+    end
+  end
+  
+  def credit
+    if amount
+      book.type == 'IncomeBook' ? amount : 0
+    end
+  end
+  
+  
+  
   
   def nature_coherent_with_book
     type_of_nature = Nature.find_by_name(nature_name).income_outcome

@@ -225,7 +225,7 @@ Faitesvoscomptes::Application.routes.draw do
     end
   end
   
-  get 'masks/:mask_id/writing_masks/new', :to=>'writing_masks#new'
+  get 'masks/:mask_id/writing_masks/new', :to=>'writing_masks#new', :as=>'new_mask_writing'
 
     
   resources :books do
