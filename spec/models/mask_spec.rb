@@ -60,12 +60,12 @@ describe Mask do
       
         it 'valide si le livre et la nature sont cohérents' do
         
-          Nature.stub(:find_by_name).with('test recettes').and_return([double(Nature, :income_outcome=>true)])
+          Nature.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>true))
           @m.should be_valid
         end
       
         it 'invalide dans le cas contraire' do
-          Nature.stub(:find_by_name).with('test recettes').and_return([double(Nature, :income_outcome=>false)])
+          Nature.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>false))
           @m.should_not be_valid
         end
       end

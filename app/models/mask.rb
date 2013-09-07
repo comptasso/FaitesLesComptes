@@ -16,6 +16,11 @@ class Mask < ActiveRecord::Base
   validates :title, :organism_id, :book_id, presence:true
   validates :title, :format=>{with:NAME_REGEX}, :length=>{:within=>LONG_NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
+  validates :book_id, numericality:true
+  validates :destination_id, numericality:true, allow_blank:true
+  validates :amount, numericality:{:greater_than=>0.0}, allow_blank:true
+  validates :narration, :ref, :nature_name, :mode, :counterpart,
+    :format=>{with:NAME_REGEX}, :length=>{:within=>LONG_NAME_LENGTH_LIMITS}, :allow_blank=>true
   
   validate :nature_coherent_with_book, :if=>"nature_name"
   validate :counterpart_coherent_with_mode,  :if=>"mode && counterpart"
@@ -45,7 +50,7 @@ class Mask < ActiveRecord::Base
   protected
   
   def nature_coherent_with_book
-    type_of_nature = Nature.find_by_name(nature_name).collect(&:income_outcome).uniq.first
+    type_of_nature = Nature.find_by_name(nature_name).income_outcome
     if book.type == 'IncomeBook' && type_of_nature == false
       errors.add(:book_id, 'Incohérent avec le type de nature')
       errors.add(:nature_name, 'Incohérent avec le type de livre choisi')
