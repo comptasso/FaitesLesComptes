@@ -224,6 +224,8 @@ Faitesvoscomptes::Application.routes.draw do
       end
     end
   end
+  
+  get 'masks/:mask_id/writing_masks/new', :to=>'writing_masks#new'
 
     
   resources :books do
@@ -237,6 +239,9 @@ Faitesvoscomptes::Application.routes.draw do
     
   end
 
+  
+  # TODO lines n'est probablement plus utilisé
+  
   resources :income_books do
     resources :lines
     resources :in_out_writings
