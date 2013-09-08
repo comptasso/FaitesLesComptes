@@ -186,6 +186,11 @@ fr:
     ref: Référence
     narration: Narration
     amount: Montant
+    book_id: Livre
+    destination_id: Destination
+    nature_name: Nature
+    mode: Mode de paiement
+    counterpart: Contrepartie
   
     
     

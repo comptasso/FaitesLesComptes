@@ -60,13 +60,14 @@ module Admin::MasksHelper
   
   def sf_options(label)
     case label
-    when 'book_id' then {:label=>'Livre', :collection=>@organism.books.in_outs, :prompt=>false}
-    when 'nature_name' then {:label=>'Nature', :collection => options_for_mask_natures(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title  }
-    when 'destination_id' then {:label=>'Destination', :collection=>@organism.destinations}
-    when 'mode' then {label:'Mode de paiement',  :collection=>PAYMENT_MODES}
-    when 'counterpart' then { :label=>'Contrepartie', :collection => options_for_mask_counterpart(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title}
-    else {:label=>(I18n::t("labels.#{label}"))}  
-    end
+    when 'book_id' then { :collection=>@organism.books.in_outs, :prompt=>false}
+    when 'nature_name' then { :collection => options_for_mask_natures(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title  }
+    when 'destination_id' then { :collection=>@organism.destinations}
+    when 'mode' then {  :collection=>PAYMENT_MODES}
+    when 'counterpart' then {  :collection => options_for_mask_counterpart(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title}
+    else {}
+    end.merge(:label=>(I18n::t("labels.#{label}")))
+    
   end
   
 
