@@ -20,10 +20,15 @@
     </ul>
   </li>
 
-  <% if (@organism  && !@organism.new_record?) %>
-    <li class="dropdown <%= 'active' if controller.controller_name =='lines'  %>">
+  <% if (@organism  && @organism.persisted?) %>
+    <li class="dropdown <%= 'active' if controller.controller_name =='books'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
       <%= admin_menu('book') %>
+    </li>
+    
+    <li class="dropdown <%= 'active' if controller.controller_name =='masks'  %>">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">GUIDES DE SAISIE<b class="caret"></b></a>
+      <%= admin_menu('mask') %>
     </li>
 
     
@@ -36,7 +41,7 @@
       </ul>
     </li>
 
-    <li class="dropdown <%= 'active' if controller.controller_name =='bankaccounts'  %>">
+    <li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">BANQUES<b class="caret"></b></a>
       <%= admin_menu('bank_account') %>
     </li>
@@ -73,7 +78,7 @@
       </li>
    
 
-      <li class="dropdown <%= 'active' if controller.controller_name =='admin_accounts'  %>">
+      <li class="dropdown <%= 'active' if controller.controller_name =='accounts'  %>">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">COMPTES<b class="caret"></b></a>
         <ul class="dropdown-menu">
           <%=  content_tag(:li, link_to('Afficher', admin_period_accounts_path(@period)))  %>
@@ -89,7 +94,7 @@
   <% end %> 
       
       <% if @organism.status == 'Association' %>   
-         <li class="dropdown <%= 'active' if controller.controller_name =='bridge'  %>">
+         <li class="dropdown <%= 'active' if controller.controller_name =='bridges'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">PARAMETRES<b class="caret"></b></a>
       <ul class="dropdown-menu">
           <li><%= link_to 'Adhérents', admin_organism_bridge_path(@organism)  %></li> 
