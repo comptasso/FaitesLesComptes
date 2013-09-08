@@ -18,11 +18,26 @@
     <!--TODO normalement dans ce menu (de la zone Public), il ne peut pas y avoir de new_record? -->
 <% if (@organism  && !@organism.new_record?) %>
 
-<li class="dropdown <%= 'active' if controller.controller_name =='in_out_writings'  %>">
+<li class="dropdown <%= 'active' if controller.controller_name =='in_out_writings' || controller.controller_name == 'writing_masks'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
   <%= content_tag(:ul, :class => "dropdown-menu") do %>
     <%= render :partial=>'menus/menu_book', :collection=>@organism.in_out_books, :spacer_template=>'menus/divider' %>
+    
+
+  
   <% end %>
+</li>
+
+<li id="menu_transfer" class="dropdown <%= 'active' if controller.controller_name =='transfers' || controller.controller_name == 'writing_masks' %>">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">SAISIE GUIDEE<b class="caret"></b></a>
+  <ul class='dropdown-menu'>
+     <li class='nav-header no-link'><%=  link_to 'TRANSFERTS', '#' %></li>
+     <li><%= link_to 'Afficher', transfers_path({:mois=>'tous'}) %>
+     <li><%= link_to 'Nouveau', new_transfer_path %>
+     <%= render :partial=>'menus/guide' %>
+  </ul>
+ 
+  
 </li>
 
 
@@ -44,10 +59,6 @@
 </li>
 <% end %>
 
-<li id="menu_transfer" class="dropdown <%= 'active' if controller.controller_name =='transfers'  %>">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown">TRANSFERTS<b class="caret"></b></a>
-  <%= short_menu('transfer', {:mois=>'tous'})  %>
-</li>
 
 <li class="dropdown <%= 'active' if controller.controller_name =='natures'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">ANALYSES<b class="caret"></b></a>

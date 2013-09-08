@@ -42,7 +42,7 @@ class Mask < ActiveRecord::Base
   
   # renvoie le livre sollicité par ce masque
   def book
-    Book.find_by_id(book_id) 
+    organism.books.find_by_id(book_id) 
   end
 #  
 #  # renvoie la destination sollicitée par ce masque

@@ -1,0 +1,5 @@
+- if @organism.masks.any?
+  %li.divider
+  %li.nav-header.no-link= link_to('Modèles d\'écriture', '#') 
+  - @organism.masks.each do |mask|
+    %li= link_to mask.title, new_mask_writing_path(mask), title:mask.comment
