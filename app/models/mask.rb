@@ -31,11 +31,13 @@ class Mask < ActiveRecord::Base
   validates :book_id, numericality:true
   validates :destination_id, numericality:true, allow_blank:true
   validates :amount, numericality:{:greater_than=>0.0}, allow_blank:true
-  validates :narration, :ref, :nature_name, :mode, :counterpart,
+  validates :ref, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :allow_blank=>true
+  validates :narration, :nature_name, :counterpart,
     :format=>{with:NAME_REGEX}, :length=>{:within=>LONG_NAME_LENGTH_LIMITS}, :allow_blank=>true
+  validates :mode, inclusion: {in: PAYMENT_MODES}, :allow_blank=>true
   
-  validate :nature_coherent_with_book, :if=>"nature_name"
-  validate :counterpart_coherent_with_mode,  :if=>"mode && counterpart"
+  validate :nature_coherent_with_book, :if=>"nature_name != ''"
+  validate :counterpart_coherent_with_mode,  :if=>"mode != '' && counterpart != ''"
   
   
   LIST_FIELDS = %w(book_id ref narration nature_name destination_id amount mode counterpart)
@@ -107,8 +109,8 @@ class Mask < ActiveRecord::Base
   
   
   def nature_coherent_with_book
-    type_of_nature = Nature.find_by_name(nature_name).income_outcome
-    if book.type == 'IncomeBook' && type_of_nature == false
+    type_of_nature = organism.natures.find_by_name(nature_name).income_outcome
+    if (book.type == 'IncomeBook' && type_of_nature == false) || (book.type == 'OutcomeBook' && type_of_nature == true)
       errors.add(:book_id, 'Incohérent avec le type de nature')
       errors.add(:nature_name, 'Incohérent avec le type de livre choisi')
     end

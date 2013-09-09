@@ -1,5 +1,5 @@
 module Admin::MasksHelper
-
+ 
   
   
   class OptionsForGroupedSelect
@@ -34,13 +34,13 @@ module Admin::MasksHelper
 
     def initialize(titre, model, action)
       @title=titre
-      @object=model
+      @model=model
       @action = action
     
     end
 
     def options
-      @object.natures.send(@action).collect(&:name).uniq
+      @model.natures.send(@action).collect(&:name).uniq
     end
 
   end
@@ -57,18 +57,6 @@ module Admin::MasksHelper
       
     end
   
-  
-  def sf_options(label)
-    case label
-    when 'book_id' then { :collection=>@organism.books.in_outs, :prompt=>false}
-    when 'nature_name' then { :collection => options_for_mask_natures(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title  }
-    when 'destination_id' then { :collection=>@organism.destinations}
-    when 'mode' then {  :collection=>PAYMENT_MODES}
-    when 'counterpart' then {  :collection => options_for_mask_counterpart(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title}
-    else {}
-    end.merge(:label=>(I18n::t("labels.#{label}")))
-    
-  end
   
 
 end

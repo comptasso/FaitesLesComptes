@@ -4,7 +4,7 @@ describe Mask do
   
   before(:each) do
     @m = Mask.new(title:'Le masque', 
-      comment:'Avec un commentaire',
+      comment:'Avec un commentaire', nature_name:'', mode:'', counterpart:'',
       book_id:'1')
     @m.stub(:book).and_return(double(IncomeBook, type:'IncomeBook'))
     @m.organism_id = 1
@@ -56,18 +56,38 @@ describe Mask do
       
         before(:each) do
           @m.nature_name = 'test recettes'
+          @m.stub_chain(:organism, :natures).and_return @ar = double(Arel)
         end
       
-        it 'valide si le livre et la nature sont cohérents' do
+        it 'valide si le livre de recettes et la nature sont cohérents' do
         
-          Nature.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>true))
+          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>true))
           @m.should be_valid
         end
       
         it 'invalide dans le cas contraire' do
-          Nature.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>false))
+          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>false))
           @m.should_not be_valid
         end
+        
+        context 'avec un livre de dépenses' do
+          
+        before(:each) do
+          @m.stub(:book).and_return(double(OutcomeBook, type:'OutcomeBook'))          
+        end  
+        
+        it 'valide si le livre de dépenses et la nature sont cohérents' do
+          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>true))
+          @m.should_not be_valid
+        end
+      
+        it 'invalide dans le cas contraire' do
+          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>false))
+          @m.should be_valid
+        end
+        
+        end
+        
       end
       
       describe 'du mode de paiment et de counterpart' do

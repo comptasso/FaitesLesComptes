@@ -25,6 +25,7 @@ class Admin::MasksController < Admin::ApplicationController
   # GET /admin/masks/new.json
   def new
     @mask = @organism.masks.new
+    @mask.book_id = @organism.outcome_books.first.id # on choisit par défaut un livre de dépenses
     
     respond_to do |format|
       format.html # new.html.erb

@@ -4,10 +4,16 @@
   .form-inputs
     = f.input :title,  input_html: {class: "span3"}
     = f.input :comment,  input_html: {rows: 4, class: "span3"}
-
-    - Mask::LIST_FIELDS.each do |field|
-      = f.input field.to_sym,  sf_options(field) # méthode définie dans le helper
-
+    = f.input :book_id do
+      =f.select :book_id, @organism.books.in_outs.collect { |b| [b.title, b.id, {class:b.type.downcase}]}
+    = f.input :ref
+    = f.input :narration
+    = f.input :nature_name, :collection=>options_for_mask_natures(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title
+    = f.input :destination_id, :collection=>@organism.destinations
+    = f.input :amount
+    = f.input :mode, :collection=>PAYMENT_MODES
+    = f.input :counterpart,  :collection => options_for_mask_counterpart(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title
+    
 
   .form-actions
     = f.button :submit, class: "btn-primary span2" 

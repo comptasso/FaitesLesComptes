@@ -183,14 +183,7 @@ fr:
   labels:
     Title: Titre
     Used: Utilisé
-    ref: Référence
-    narration: Narration
-    amount: Montant
-    book_id: Livre
-    destination_id: Destination
-    nature_name: Nature
-    mode: Mode de paiement
-    counterpart: Contrepartie
+    
   
     
     
@@ -285,15 +278,15 @@ fr:
       mask:
         title: Titre
         comment: Commentaire
-      mask_field:
-        book_id: Livre
         ref: Référence
         narration: Narration
-        nature_name: Nature
-        destination_id: Destination
         amount: Montant
+        book_id: Livre
+        destination_id: Destination
+        nature_name: Nature
         mode: Mode de paiement
         counterpart: Contrepartie
+      
           
       
         
