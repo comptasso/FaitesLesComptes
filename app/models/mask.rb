@@ -3,6 +3,21 @@
 # Plus les informations facultatives telles que ref, narration, destination_id
 # nature_name, mode, amount et counterpart. 
 # 
+# Les champs sont les suivants
+#    t.string   "title"
+#    t.text     "comment"
+#    t.integer  "organism_id"
+#    t.datetime "created_at",     :null => false
+#    t.datetime "updated_at",     :null => false
+#    t.integer  "book_id"
+#    t.string   "nature_name"
+#    t.string   "narration"
+#    t.integer  "destination_id"
+#    t.string   "mode"
+#    t.string   "counterpart"
+#    t.string   "ref"
+#    t.decimal  "amount"
+#    
 # nature_name et counterpart sont des string qui permettront de retrouver la nature 
 # et le compte bancaire ou la caisse dès lors que la date de l'écriture sera donnée.
 # 
@@ -36,8 +51,8 @@ class Mask < ActiveRecord::Base
     :format=>{with:NAME_REGEX}, :length=>{:within=>LONG_NAME_LENGTH_LIMITS}, :allow_blank=>true
   validates :mode, inclusion: {in: PAYMENT_MODES}, :allow_blank=>true
   
-  validate :nature_coherent_with_book, :if=>"nature_name != ''"
-  validate :counterpart_coherent_with_mode,  :if=>"mode != '' && counterpart != ''"
+  validate :nature_coherent_with_book, :if=>"nature_name.present?"
+  validate :counterpart_coherent_with_mode,  :if=>"mode.present? && counterpart.present?"
   
   
   LIST_FIELDS = %w(book_id ref narration nature_name destination_id amount mode counterpart)
