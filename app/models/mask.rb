@@ -88,7 +88,7 @@ class Mask < ActiveRecord::Base
   end
   
   def line(date)
-    writing.compta_lines.build(nature_id:nature_id(date), debit:debit, credit:credit, destination_id:destination.id)
+    writing.compta_lines.build(nature_id:nature_id(date), debit:debit, credit:credit, destination_id:destination_id)
   end
   
   def counterline(date)
