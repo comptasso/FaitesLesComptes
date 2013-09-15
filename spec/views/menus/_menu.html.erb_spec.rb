@@ -59,6 +59,7 @@ describe "menus/_menu.html.erb" do
       o.stub(:cashes).and_return([mock_model(Cash, cash_controls:[])])
       o.stub(:in_out_books).and_return [ibook,obook]
       o.stub('can_write_line?').and_return true
+      o.stub(:masks).and_return [mock_model(Mask, title:'un masque de saisie', comment:'no comment')]
 
       o.stub(:find_period).and_return(p2012)
       p2012.stub(:previous_period?).and_return(true)
