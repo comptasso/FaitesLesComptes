@@ -16,9 +16,9 @@
 
 
     <!--TODO normalement dans ce menu (de la zone Public), il ne peut pas y avoir de new_record? -->
-<% if (@organism  && !@organism.new_record?) %>
+<% if (@organism.persisted?) %>
 
-<li class="dropdown <%= 'active' if controller.controller_name =='in_out_writings' || controller.controller_name == 'writing_masks'  %>">
+<li class="dropdown <%= 'active' if controller.controller_name =='in_out_writings' %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
   <%= content_tag(:ul, :class => "dropdown-menu") do %>
     <%= render :partial=>'menus/menu_book', :collection=>@organism.in_out_books, :spacer_template=>'menus/divider' %>
