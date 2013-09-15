@@ -54,8 +54,20 @@ describe Admin::MasksController do
   end
 
   describe "GET new" do
-    it "assigns a new admin_mask as @admin_mask" do
+    it "par défaut le book_id est le premier livre de dépenses " do
+      @o.should_receive(:outcome_books).and_return @ar = double(Arel)
+      @ar.should_receive(:first).and_return @ar
+      @ar.should_receive(:id).and_return 1
       @a.should_receive(:new).and_return(@new_mask = mock_model(Mask).as_new_record)
+      @new_mask.should_receive(:book_id=).with(1).and_return @new_mask
+      get :new, {:organism_id=>@o.to_param}, valid_session
+      
+    end
+    
+    it 'assigns a new admin_mask as @admin_mask' do
+      @o.stub_chain(:outcome_books, :first, :id).and_return 8
+      @a.stub(:new).and_return(@new_mask = mock_model(Mask).as_new_record)
+      @new_mask.stub(:book_id=)
       get :new, {:organism_id=>@o.to_param}, valid_session
       assigns(:mask).should be_a_new(Mask)
     end
