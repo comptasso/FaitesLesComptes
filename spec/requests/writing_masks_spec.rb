@@ -29,7 +29,7 @@ describe 'création d une écriture à partir d un guide' do
     login_as('quidam')
     @nat = @p.natures.recettes.first
     @mask = @o.masks.create!(valid_attributes)
-    visit organism_path(@p)  # pour initier la session 
+   
     visit new_mask_writing_path(@mask) 
   end
   

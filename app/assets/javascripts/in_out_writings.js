@@ -61,7 +61,7 @@ jQuery(function () {
                 for (i = iStart; i < iEnd; i += 1) {
                     iPageCredit += stringToFloat(aaData[aiDisplay[i]][6]);
                 }
-                
+
                 /* Modify the footer row to match what we want */
                 nCells = nRow.getElementsByTagName('th');
                 nCells[1].innerHTML =  $f_numberWithPrecision(iPageDebit) + '<br/>' + $f_numberWithPrecision(iTotalDebit);
@@ -86,6 +86,9 @@ jQuery(function () {
 //
 //
 // gère l'affichage des champs banque et caisse;
+// La fonction est utilisée pour les in_out_writings que le formulaire soit appelé
+// par le controller in_out_writings ou mask_writings. 
+// 
 //
 // evt transmet en original_data la valeur initiale de l'écriture si on est en modification
 // d'écriture. Sinon transmet les valeurs par défaut, donc la première banque de la liste
@@ -167,7 +170,7 @@ function $f_td_bank_cash(evt) {
 // banques : les banques
 // POur les dépenses, la partie chèque à l'encaissement n'est pas utile'
 jQuery(function () {
-    if ($('.public_in_out_writings #entry_lines').length !== 0) {
+    if ($('#entry_lines form').length !== 0) {
         var caisses, banques, bk_value, ca_value, original_value;
         caisses = $('optgroup[label="Caisses"] option');
         banques = $('optgroup[label="Banques"] option');
@@ -181,7 +184,7 @@ jQuery(function () {
         }
 
         // si on est en modification trouver la banque ou la caisse de l'écriture
-        if ($('form').attr('id').match(/^edit_in_out_writing/) !== null) {
+        if ($('form').attr('id').match(/^edit/) !== null) {
             if (banques.select().length === 1) {
                 bk_value = banques.select();
             }

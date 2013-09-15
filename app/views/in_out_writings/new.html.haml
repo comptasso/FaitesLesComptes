@@ -15,7 +15,5 @@
 .champ
   %h3= "#{@book.title.capitalize} : nouvelle ligne"
 
-.inner-champ
-  .inputs.row-fluid{:class=>@book.type.underscore, :id=>"entry_lines"}
-    = simple_form_for([@book, @in_out_writing], :html=>{class:'form-inline'})  do |f|
-      = render 'in_out_writings/form', {:f=>f}
+
+= render 'in_out_writings/form'
