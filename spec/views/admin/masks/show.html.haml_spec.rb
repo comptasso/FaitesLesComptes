@@ -8,7 +8,7 @@ describe "admin/masks/show" do
       :comment => "MyText",
       :organism_id => @o.to_param
     ))
-  end
+  end 
 
   it "renders attributes in <p>" do
     render

@@ -16,7 +16,7 @@
 
 
     <!--TODO normalement dans ce menu (de la zone Public), il ne peut pas y avoir de new_record? -->
-<% if (@organism.persisted?) %>
+<% if (@organism && @organism.persisted?) %>
 
 <li class="dropdown <%= 'active' if controller.controller_name =='in_out_writings' %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
