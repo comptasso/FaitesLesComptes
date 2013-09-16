@@ -172,7 +172,7 @@ class Writing < ActiveRecord::Base
     od_editable? || an_editable?
   end
   
-  # une ligne est editable? si toutes ses compta_lines sont editable?
+  # une écriture est editable? si toutes ses compta_lines sont editable?
   def editable?
     compta_lines.all? {|cl| cl.editable?}
   end

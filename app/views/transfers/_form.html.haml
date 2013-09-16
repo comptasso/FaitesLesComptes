@@ -4,7 +4,7 @@
     .row-fluid
       .span12
         = f.input :date_picker,:label=> 'Du', wrapper_html:{class:'span2'}, label_html:{class: 'span4'}, input_html:{class:'span8', date_min:@period.start_date, date_max:@period.close_date, :disabled=>@transfer.partial_locked?}, :required => true, :as=>:date_picker
-        = f.input :ref, label:'Réf.', :wrapper_html=>{:class=>'span2'}, input_html: {class: "span8" } , :label_html=>{class:'span4'}
+        = f.input :ref, label:'Réf.', :wrapper_html=>{:class=>'span2'}, input_html: {class: "span8" } , :label_html=>{class:'span4'}, :disabled=>@transfer.partial_locked?
         = f.input :narration,  :label=>'Libellé ', :wrapper_html=>{:class=>'span6'}, label_html:{class:'span2'}, input_html: {class: "span10" }, :disabled=>@transfer.partial_locked?
         = f.input :amount , :wrapper_html=> {class: "span2"},label_html:{class:'span6'}, input_html: {class: "span6 numeric decimal", value: two_decimals(@transfer.amount) },  :disabled=>@transfer.partial_locked?, label: 'Montant', :required => true
 

@@ -84,6 +84,7 @@ class Transfer < Writing
 
   
   # line_to est editable si la compta_line qu'elle représente existe et n'est pas verouillée ni pointée
+  # on ne peut pas utiliser le editable? de compta_line car celui-ci regarde la support line
   def to_editable?
     clt = compta_line_to
     clt && !clt.locked && clt.bank_extract_lines.empty?
