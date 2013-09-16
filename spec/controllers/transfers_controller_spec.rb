@@ -33,7 +33,7 @@ describe TransfersController do
     @ba = mock_model(BankAccount, name:'Debix', number:'123Z')
     @bb = mock_model(BankAccount, name:'Debix', number:'784AZ')
     @od = mock_model(OdBook)
-    OdBook.stub(:first).and_return @od
+    @o.stub(:od_books).and_return(double(:first=>@od))
 
     
   end
@@ -61,18 +61,44 @@ describe TransfersController do
      }
   end
 
-  describe "GET index"  do
+  describe "GET index" , wip:true do
+    
     it "recherche tous les transfers appartenant à l organisme dans la period" do
       @od.should_receive(:transfers).and_return(@ar = double(Arel))
-      @ar.should_receive(:within_period).and_return @ar
+      @ar.should_receive(:within_period).with(@p).and_return @ar  
       @ar.should_receive(:order).with('date ASC').and_return [1,2]
-      get :index, {:mois=>'tous'}, valid_session
+      get :index, {mois:'tous'}, valid_session
+      
     end
     
     it 'remplit la variable transfers' do
-      @od.stub_chain(:transfers, :within_period, :order).with('date ASC').and_return [1,2]
-      get :index, {:mois=>'tous'}, valid_session
+      @od.stub_chain(:transfers, :within_period, :order).and_return [1,2]
+      get :index, {mois:'tous'}, valid_session
       assigns(:transfers).should ==  [1,2]
+    end
+    
+    describe 'filtrage par mois' do
+      
+      before(:each) do
+        @my = MonthYear.from_date(Date.today)
+      end
+      
+      it 'avec params mois et an, filtre l affichage des transfers selon ces données' do
+        @od.should_receive(:transfers).and_return(@ar = double(Arel))
+        @ar.should_receive(:mois).with(@my.beginning_of_month).and_return @ar
+        @ar.should_receive(:order).with('date ASC')
+        get :index, @my.to_french_h, valid_session
+      end
+      
+      it 'avec params[:mois] = tous, affiche tous les transferts de l exercice' do
+        @od.should_receive(:transfers).and_return(@ar = double(Arel))
+        @ar.should_receive(:within_period).and_return @ar
+        @ar.should_not_receive(:mois).with(@my.beginning_of_month)
+        @ar.should_receive(:order).with('date ASC').and_return [1,2]
+        get :index, {mois:'tous'}, valid_session
+      end
+      
+      
     end
   end
 

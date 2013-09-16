@@ -1,9 +1,14 @@
 # -*- encoding : utf-8 -*-
 
 
-
-
-
+# le before_filter :find_book renvoie le OdBook de cette compta
+# 
+# le before_filter :fill_mois qui est défini dans ApplicationController
+# a pour objet de remplir les paramètres mois et an et de mettre à disposition
+# la variable d'instance @monthyear qui peut alors être utilisée pour 
+# initialiser les valeurs dans les vues
+#
+#
 class TransfersController < ApplicationController 
 
   before_filter :find_book # find_book renvoie le OdBook
@@ -12,7 +17,8 @@ class TransfersController < ApplicationController
   # GET /transfers
   # GET /transfers.json
   def index
-    @transfers = @book.transfers.within_period(@period).order('date ASC')
+    @transfers = @book.transfers.within_period(@period).order('date ASC') if params[:mois]=='tous'
+    @transfers = @book.transfers.mois(@monthyear.beginning_of_month).order('date ASC') if params[:mois] && params[:an]
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transfers }
@@ -23,7 +29,7 @@ class TransfersController < ApplicationController
   # GET /transfers/new
   # GET /transfers/new.json
   def new
-    @transfer = @book.transfers.new
+    @transfer = @book.transfers.new(date:@monthyear.guess_date)
     @transfer.add_lines # crée les deux lignes dont on a besoin pour le formulaire
 
     respond_to do |format|
@@ -94,7 +100,7 @@ class TransfersController < ApplicationController
   protected
 
   def find_book
-    @book = OdBook.first
+    @book = @organism.od_books.first
   end
 
   
