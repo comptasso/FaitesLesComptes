@@ -31,7 +31,7 @@ class ComptaLine < ActiveRecord::Base
    
   # TODO faire les tests
   validates :nature_id, :destination_id, :debit, :credit, :created_at, :payment_mode, :cant_edit=>true, :if=>Proc.new {|r| r.locked? }
-  
+  # validates :account_id, :cant_edit=>true, :if=>"pointed?" 
 
   before_save  :fill_account, :if=> lambda {nature && nature.account}
   before_destroy :not_locked

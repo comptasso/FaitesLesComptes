@@ -33,19 +33,19 @@ describe Transfer  do
    
     it 'le montant est nul' do
      
-    @t.add_lines(0)
-    @t.compta_lines.first.account_id = @cba.id
-    @t.compta_lines.last.account_id = @cbb.id
-    @t.should_not be_valid
-    @t.errors.messages[:amount].should == ['doit être un nombre positif']
+      @t.add_lines(0)
+      @t.compta_lines.first.account_id = @cba.id
+      @t.compta_lines.last.account_id = @cbb.id
+      @t.should_not be_valid
+      @t.errors.messages[:amount].should == ['doit être un nombre positif']
     end
 
     it 'ou négatif' do
-    @t.add_lines(-10)
-    @t.compta_lines.first.account_id = @cba.id
-    @t.compta_lines.last.account_id = @cbb.id
-    @t.should_not be_valid
-    @t.errors.messages[:amount].should == ['doit être un nombre positif']
+      @t.add_lines(-10)
+      @t.compta_lines.first.account_id = @cba.id
+      @t.compta_lines.last.account_id = @cbb.id
+      @t.should_not be_valid
+      @t.errors.messages[:amount].should == ['doit être un nombre positif']
     end
 
     it 'ne peut avoir plus de 2 lignes'  do
@@ -57,12 +57,12 @@ describe Transfer  do
 
     
     it 'si les deux comptes sont identiques' do
-    @t.add_lines(10)
-    @t.compta_lines.first.account_id = @cba.id
-    @t.compta_lines.last.account_id = @cba.id
-    @t.should_not be_valid
+      @t.add_lines(10)
+      @t.compta_lines.first.account_id = @cba.id
+      @t.compta_lines.last.account_id = @cba.id
+      @t.should_not be_valid
     
-    @t.errors.messages[:base].should == ['Les comptes doivent être différents']
+      @t.errors.messages[:base].should == ['Les comptes doivent être différents']
     end
 
   end
@@ -107,18 +107,17 @@ describe Transfer  do
 
 
   
-  describe 'validations'  do
+  describe 'validations générales'  do
 
     before(:each) do
       @transfer=valid_new_transfer
+      
     end
 
-    it 'should be valid with valid attributes' do
-      @transfer.valid?
-#      puts @transfer.errors.messages
+    it 'est valide' do
       @transfer.should be_valid
     end
-
+    
     it 'but not without a date' do
       @transfer.date = nil
       @transfer.should_not be_valid
@@ -141,9 +140,15 @@ describe Transfer  do
       end
     end
 
-   it 'to_account and from_account should be different' do
+    it 'to_account and from_account should be different' do
       @transfer.line_from.account = @transfer.line_to.account
       @transfer.should_not be_valid
+    end
+    
+    it 'le montant est au bon format' do
+      @transfer.amount = 12.256
+      @transfer.valid?
+      @transfer.should_not be_valid # car la validation se fait au niveau des compta_lines
     end
 
   end
@@ -186,28 +191,27 @@ describe Transfer  do
   end
  
   
- let(:invalid_attributes){ {"date_picker"=>"18/11/2011", 
- "ref"=>"",
- "narration"=>"test",
- "compta_lines_attributes"=>{"0"=>{"account_id"=>"89",
- "credit"=>"112.00"},
- "1"=>{"account_id"=>"90",
- "debit"=>"112.00"} }}  }
+  let(:invalid_attributes){ {"date_picker"=>"18/11/2011", 
+      "ref"=>"",
+      "narration"=>"test",
+      "compta_lines_attributes"=>{"0"=>{"account_id"=>"89",
+          "credit"=>"112.00"},
+        "1"=>{"account_id"=>"90",
+          "debit"=>"112.00"} }}  }
 
   describe 'avec des attributs invalides' do
     # ce test est fait car lorsque le Transfer n'est pas valide, il est réaffiché avec 4 lignes
-      before(:each) do
-        @t = @od.transfers.new(invalid_attributes)
-      end
+    before(:each) do
+      @t = @od.transfers.new(invalid_attributes)
+    end
 
     it 'le montant est connu' do
       @t.amount.should == 112
     end
 
-      it 'le transfert est invalide' do
-        @t.should_not be_valid
-        
-      end
+    it 'le transfert est invalide' do
+      @t.should_not be_valid
+    end
 
     it 'le transfert a deux lignes' do
       @t.should have(2).compta_lines
@@ -223,10 +227,8 @@ describe Transfer  do
       @t = valid_new_transfer
     end
 
-    it 'a new record answers false to partial, debit and credit_locked?' do
+    it 'a new record answers false to partial_locked?' do
       @t.should_not be_partial_locked
-      @t.should_not be_to_locked
-      @t.should_not be_from_locked
     end
 
     context 'check save and after_create' do
@@ -243,7 +245,7 @@ describe Transfer  do
 
      
 
-      context 'with a saved tranfer' do
+      context 'with a saved tranfer'  do
 
         before(:each) do
           @t.save!
@@ -257,31 +259,81 @@ describe Transfer  do
         it 'destroy the transfer should delete the two lines' do
           expect {@t.destroy}.to change {ComptaLine.count}.by(-2)
         end
-        it 'destroy the transfer is impossible if debit_line locked'  do
-          lt = @t.line_to
-          lt.update_attribute(:locked, true)
-          lt.should be_locked
-          @t.should_not be_destroyable
-          expect {@t.destroy}.not_to change {ComptaLine.count}
-        end
+        
+        context 'quand line_to est verrouillé' do
+          before(:each) do
+            @t.line_to.update_attribute(:locked, true)
+          end
+          
+          it {@t.should_not be_destroyable} 
+        
+          it 'on ne peut détruire le transfert'  do
+            expect {@t.destroy}.not_to change {Transfer.count}
+          end
+          
+          it 'ni les lignes associées'  do
+            expect {@t.destroy}.not_to change {ComptaLine.count}
+          end
+           end
+         context 'quand line_from est verrouillé' do
+           before(:each) do
+            @t.line_from.update_attribute(:locked, true)
+          end
+          
+          specify {@t.should_not be_destroyable}
 
-        it 'destroy the transfer is impossible if any line locked' do
-          l = @t.line_from
-          l.locked.should be_false 
-          l.locked = true
-          l.valid?
-  #        puts l.errors.messages unless l.valid?
-          l.save!
-          @t.line_from.should be_locked
-          @t.should_not be_destroyable
-          expect {@t.destroy}.not_to change {Transfer.count}
-        end
-
-        it 'can say what it can edit' do
-          @t.line_to.update_attribute(:locked, true)
-          @t.to_editable?.should be_false
-          @t.from_editable?.should be_true
-        end
+          it 'destruire le transfert est également impossible' do
+            expect {@t.destroy}.not_to change {Transfer.count}
+          end
+          
+         end
+         
+          describe 'editable' do
+            
+            it 'sans verrrouillage, est éditable et destructible' do
+              @t.should be_to_editable
+              @t.should be_from_editable
+              @t.should_not be_partial_locked
+              @t.should be_destroyable
+            end
+            
+            it 'mais pas si line_to est locked' do
+              @t.line_to.locked = true
+              @t.should_not be_to_editable
+              @t.should be_from_editable
+              @t.should be_partial_locked
+              @t.should_not be_destroyable
+            end
+            
+            it 'ni si pointé' do
+              @t.line_to.stub_chain(:bank_extract_lines, :empty?).and_return false
+              @t.should_not be_to_editable
+              @t.should be_from_editable
+              @t.should be_partial_locked
+              @t.should_not be_destroyable
+            end
+            
+          it 'idem si line_from locked' do
+            @t.line_from.locked = true
+              @t.should_not be_from_editable
+              @t.should be_to_editable
+              @t.should be_partial_locked
+              @t.should_not be_destroyable
+            
+          end
+          
+          it 'ni si pointé' do
+            @t.line_from.stub_chain(:bank_extract_lines, :empty?).and_return false
+              @t.should_not be_from_editable
+              @t.should be_to_editable
+              @t.should be_partial_locked
+              @t.should_not be_destroyable
+          end
+         
+          
+          end
+        
+       
 
         describe 'update' do
 
@@ -295,9 +347,7 @@ describe Transfer  do
             end
           
             it 'says debit_locked' do
-              @t.should be_to_locked
               @t.should be_partial_locked
-              @t.should_not be_from_locked
             end
 
 
@@ -313,9 +363,7 @@ describe Transfer  do
 
             
             it 'transfer is credit_locked' do 
-              @t.should be_from_locked
               @t.should be_partial_locked
-              @t.should_not be_to_locked
             end
 
           end
