@@ -12,7 +12,7 @@ class TransfersController < ApplicationController
   # GET /transfers
   # GET /transfers.json
   def index
-    @transfers = Transfer.within_period(@period).order('date ASC')
+    @transfers = @book.transfers.within_period(@period).order('date ASC')
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transfers }
@@ -53,7 +53,8 @@ class TransfersController < ApplicationController
 
     respond_to do |format|
       if @transfer.save
-        format.html { redirect_to transfers_url, notice: "Le transfert a été enregistré sous le numéro d'écriture #{@transfer.id}" }
+        my = MonthYear.from_date(@transfer.date)
+        format.html { redirect_to transfers_url(my.to_french_h), notice: "Le transfert a été enregistré sous le numéro d'écriture #{@transfer.id}" }
       else
      #   Rails.logger.debug "ERREUR dans save : nb de lignes : #{@transfer.compta_lines.inspect}"
         format.html { render action: "new" }

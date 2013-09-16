@@ -62,9 +62,15 @@ describe TransfersController do
   end
 
   describe "GET index"  do
-    it "assigns all transfers as @transfers" do
-      Transfer.should_receive(:within_period).and_return(@ar = double(Arel))
+    it "recherche tous les transfers appartenant à l organisme dans la period" do
+      @od.should_receive(:transfers).and_return(@ar = double(Arel))
+      @ar.should_receive(:within_period).and_return @ar
       @ar.should_receive(:order).with('date ASC').and_return [1,2]
+      get :index, {:mois=>'tous'}, valid_session
+    end
+    
+    it 'remplit la variable transfers' do
+      @od.stub_chain(:transfers, :within_period, :order).with('date ASC').and_return [1,2]
       get :index, {:mois=>'tous'}, valid_session
       assigns(:transfers).should ==  [1,2]
     end
@@ -72,7 +78,6 @@ describe TransfersController do
 
   
   describe "GET new"  do
-
   
     it "assigns a new transfer as @transfer" do
       @od.should_receive(:transfers).and_return a = double(Arel)
@@ -80,7 +85,6 @@ describe TransfersController do
       @t.should_receive(:add_lines)
       get :new, {:mois=>Date.today.month, :an=>Date.today.year}, valid_session
       assigns(:transfer).should be_a_new(Transfer)
-      
     end
   end
 
@@ -112,6 +116,7 @@ describe TransfersController do
       @a.should_receive(:new).with(modified_attributes).and_return(@t = double(Transfer))
       @t.should_receive(:save).and_return(true)
       @t.stub(:id).and_return 999
+      @t.stub(:date).and_return(Date.today) 
       post :create, {:transfer => valid_attributes}, valid_session
     end
 
@@ -119,6 +124,7 @@ describe TransfersController do
 
       before(:each) do
         @a.stub(:new).with(modified_attributes).and_return @t= mock_model(Transfer).as_new_record
+        @t.stub(:date).and_return(Date.today) # car sinon le mock_model ne transforme pas la date
         @t.stub(:save).and_return true
       end
       
@@ -128,9 +134,10 @@ describe TransfersController do
         assigns(:transfer).should == @t
       end
 
-      it "redirects to the created transfer" do
+      it "redirects vers la vue index avec filtre sur le mois et l année" do
+        
         post :create, {:transfer => valid_attributes}, valid_session
-        response.should redirect_to(transfers_url)
+        response.should redirect_to(transfers_url({:mois=>('%02d' % Date.today.month), :an=>Date.today.year}))
       end
 
       it 'sends a flash with writing id' do

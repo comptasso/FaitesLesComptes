@@ -64,7 +64,8 @@ class Organism < ActiveRecord::Base
   
   has_many :accounts, through: :periods
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
-  has_many :transfers
+ # has_many :transfers
+  
   
   has_one :bridge, class_name:'Adherent::Bridge'
   
