@@ -3,8 +3,12 @@
 # Un transfer est une écriture de virement entre deux comptes
 # Un transfer ne peut donc avoir que deux compta_lines, l'une 
 # qui donne (donc crédit) et l'autre qui reçoit (donc débit)
+# 
 # Par convention, la première ligne est celle qui donne
-# et la dernière est celle qui reçoit.
+# et la dernière est celle qui reçoit. La clause order:'credit DESC'
+# permet de s'assurer que c'est bien dans cet ordre que les lignes 
+# sont retournées (ce qui est important pour le formulaire qui affiche
+# le select De avant le select Vers
 #
 # Un transfert ne peut être détruit si une de ses lignes est verrouillée.
 # Un before_destroy dans compta_line gère cette vérification.
@@ -12,13 +16,13 @@
 #
 class Transfer < Writing
 
-  has_many :compta_lines, :dependent=>:destroy, foreign_key:'writing_id'
+  has_many :compta_lines, :dependent=>:destroy, foreign_key:'writing_id', :order=>'credit DESC'
 
   attr_accessible :amount
 
   validates :compta_lines, :exactly_two_compta_lines=>true, :not_same_accounts=>true
   validates :amount, :numericality=>{:greater_than=>0, :message=>'doit être un nombre positif'}
-  validates :date, presence:true
+  validates :date, :narration, presence:true # on répète ces validates pour avoir les * automatiquement dans la vue
 
   before_destroy :should_be_destroyable
 
@@ -30,7 +34,7 @@ class Transfer < Writing
   # ajoute les deux lignes de l'écriture à l'instance du transfert.
   # La valeur par défaut du montant est zero.
   def add_lines(amount = 0)
-   compta_lines.new(debit:0, credit:amount) 
+   compta_lines.new(debit:0, credit:amount)  
    compta_lines.new(debit:amount, credit:0)
   end
   
@@ -38,9 +42,7 @@ class Transfer < Writing
   # donc la ligne débitée. Le compta_lines.last est là pour renvoyer une
   # ligne même si c'est un nouveau transfert qui a encore son montant à zero
   def compta_line_to
-    unless compta_lines.empty?
-      compta_lines.select{|l| l.debit != 0}.first || compta_lines.last
-    end
+    compta_lines.last unless compta_lines.empty?
   end
 
   alias line_to compta_line_to
@@ -48,9 +50,7 @@ class Transfer < Writing
   # retourne la ligne correspondant au compte qui donne le montant
   # donc la ligne créditée
   def compta_line_from
-    unless compta_lines.empty?
-      compta_lines.select{|l| l.credit != 0}.first || compta_lines.first
-    end
+    compta_lines.first unless compta_lines.empty?
   end
 
   alias line_from compta_line_from
@@ -84,16 +84,15 @@ class Transfer < Writing
 
   
   # line_to est editable si la compta_line qu'elle représente existe et n'est pas verouillée ni pointée
-  # on ne peut pas utiliser le editable? de compta_line car celui-ci regarde la support line
   def to_editable?
     clt = compta_line_to
-    clt && !clt.locked && clt.bank_extract_lines.empty?
+    clt && clt.editable?
   end
   
-   # line_from est editable si la compta_line qu'elle représente existe et n'est pas verouillée ni pointée
+   # line_from est editable si la compta_line qu'elle représente existe et est editable
   def from_editable?
     clf = compta_line_from
-    clf && !clf.locked && clf.bank_extract_lines.empty?
+    clf && clf.editable?
   end
   
   # le transfert est editable si l'une des deux lignes au moins l'est

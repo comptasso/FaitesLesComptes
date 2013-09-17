@@ -141,5 +141,27 @@ describe InOutWriting do
 
 
   end
+  
+  describe 'une écriture est editable' do
+    let(:cl1) {double(ComptaLine, editable?:true)}
+    let(:cl2) {double(ComptaLine, editable?:true)}
+    
+    before(:each) do
+      @w = InOutWriting.new
+      
+      
+    end
+    
+    it 'si toutes ses compta lines sont editable' do
+      @w.stub(:comptalines).and_return([cl1, cl2])
+      @w.should be_editable
+    end
+    
+    it 'mais pas dans le cas  contraire' do
+      cl2.stub('editable?').and_return false
+      @w.stub(:compta_lines).and_return([cl1, cl2])
+      @w.should_not be_editable
+    end
+  end
 
 end

@@ -2,7 +2,7 @@
 
 class ComptaLine < ActiveRecord::Base
 
- # belongs_to :book
+  # belongs_to :book
   belongs_to :destination
   belongs_to :nature
   belongs_to :account
@@ -81,15 +81,21 @@ class ComptaLine < ActiveRecord::Base
     bank_extract_lines.any?
   end
 
-  # une compta line est editable si elle est ni pointée, ni verrouillée
+  # une compta line est editable si elle est ni pointée, ni verrouillée, ni associée à une remise de chèque
   def editable?
-    !(pointed? || locked?)
+    !(pointed? || locked? || deposited?)
+  end
+  
+  # une compta line est associée à une remise de chèque dès lors que son champ check_deposit_id
+  # est différent de nil
+  def deposited?
+    check_deposit_id
   end
 
-      # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
-      def label
-        "#{I18n.l date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',debit)}"
-      end
+  # méthode utilisée pour la remise des chèques (pour afficher les chèques dans la zone de sélection)
+  def label
+    "#{I18n.l date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',debit)}"
+  end
 
   protected
 

@@ -9,7 +9,7 @@ end
 
 # spec request for testing admin books 
 
-describe 'vue transfer index'do
+describe 'vue transfer index'do 
   include OrganismFixtureBis
 
 
@@ -20,14 +20,6 @@ describe 'vue transfer index'do
     @bbca = @bb.current_account(@p) # ca pour Current Account
     login_as('quidam')
   end
-
-  it 'check minimal organism' do 
-    Organism.count.should == 1
-    BankAccount.count.should == 2
-    @od.transfers.count.should == 0
-  end
-
-
 
   describe 'new transfer'  do
     
@@ -45,7 +37,7 @@ describe 'vue transfer index'do
       within('#transfer_compta_lines_attributes_0_account_id') do
         select(@ba.nickname)
       end
-      within('#transfer_compta_lines_attributes_0_account_id') do
+      within('#transfer_compta_lines_attributes_1_account_id') do
         select(@bb.nickname)
       end
       click_button 'Enregistrer'
@@ -53,8 +45,8 @@ describe 'vue transfer index'do
       # vérification de o
       t= @od.transfers.last
       t.should be_an_instance_of(Transfer)
-      t.line_to.account_id.should == @baca.id
-      t.line_from.account_id.should == @bbca.id
+      t.line_to.account_id.should == @bbca.id
+      t.line_from.account_id.should == @baca.id
     end
 
     context 'le remplir incorrectement'  do
@@ -68,7 +60,7 @@ describe 'vue transfer index'do
       within('#transfer_compta_lines_attributes_0_account_id') do
         select(@ba.nickname)
       end
-      within('#transfer_compta_lines_attributes_0_account_id') do
+      within('#transfer_compta_lines_attributes_1_account_id') do
         select(@bb.nickname)
       end
 

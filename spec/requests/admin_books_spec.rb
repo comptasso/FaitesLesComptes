@@ -13,7 +13,7 @@ end
 
 # spec request for testing admin books   
 
-describe 'vue books index' do  
+describe 'books' do  
 
  
   include OrganismFixtureBis
@@ -48,16 +48,16 @@ describe 'vue books index' do
   end
  
   describe 'index' do
-
-     it 'dans la vue index,un livre peut être détruit', :js=>true do
+    
+     it 'dans la vue index,un livre peut être détruit' , :js=>true do
       @o.income_books.create!(:title=>'livre de test', :abbreviation=>'TE')
-      @o.should have(5).books
-      # à ce stade chacun des livres est vierge et peut donc être détruit.
+      @o.books(true).should have(5).elements
+      # à ce stade chacun des livres est vierge et peut donc être détruit
+      # sauf le Od_Book ni le An_Book
       visit admin_organism_books_path(@o)
-      # save_and_open_page
-      within 'tbody tr:nth-child(5)' do
-        page.should have_content('livre de test') 
-        page.click_link 'Supprimer'
+      
+      within 'tr', text:'livre de test' do       
+        click_link 'Supprimer'
       end
 
       alert = page.driver.browser.switch_to.alert 
@@ -76,15 +76,21 @@ describe 'vue books index' do
 
   end
 
-  describe 'edit' do 
-
-    # FIXME js:true a du être rajouté car sinon le click_button ajoute un \n
-    # dans les params de description, ce qui crée un caractère invalide et renvoie vers la vue edit
-    it 'On peut changer les deux autres champs' do
-      bf = @o.books.first
-      visit edit_admin_organism_book_path(@o, bf)
+  describe 'edition , du titre', wip:true do 
+    
+    before(:each) do
+      @bfid = @o.books.first.id
+      visit edit_admin_organism_book_path(@o, @bfid)
       fill_in 'book[title]', :with=>'modif du titre'
       click_button 'Modifier ce livre'
+    end
+
+    
+    it 'le titre est changé' do
+      Book.find(@bfid).title.should == 'modif du titre'
+    end
+    
+     it 'et l on revient à la vue index' do
       current_url.should match /\/admin\/organisms\/#{@o.id}\/books$/
     end
 

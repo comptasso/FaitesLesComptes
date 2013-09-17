@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
- #  c.filter = {wip:true} 
+ #  c.filter = {wip:true}  
 end
 
 describe Transfer  do 
@@ -306,7 +306,7 @@ describe Transfer  do
             end
             
             it 'ni si pointé' do
-              @t.line_to.stub_chain(:bank_extract_lines, :empty?).and_return false
+              @t.line_to.stub(:editable?).and_return false
               @t.should_not be_to_editable
               @t.should be_from_editable
               @t.should be_partial_locked
@@ -323,7 +323,7 @@ describe Transfer  do
           end
           
           it 'ni si pointé' do
-            @t.line_from.stub_chain(:bank_extract_lines, :empty?).and_return false
+            @t.line_from.stub(:editable?).and_return false
               @t.should_not be_from_editable
               @t.should be_to_editable
               @t.should be_partial_locked

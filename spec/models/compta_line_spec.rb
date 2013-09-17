@@ -47,6 +47,32 @@ describe ComptaLine do
     end
 
     end
+    
+  describe 'les états d une compta_line', wip:true do
+    
+    
+    
+    describe 'une compta_line est editable' do
+      
+      it 'si elle n est pas pointée' do
+        @cl.stub(:bank_extract_lines).and_return(['oui'])
+        @cl.should_not be_editable
+      end
+      
+      it 'ni verrouillée' do
+        @cl.locked = true
+        @cl.should_not be_editable
+      end
+      
+      it 'ni associée à une remise de chèque' do
+        @cl.check_deposit_id = 1
+        @cl.should_not be_editable
+      end
+      
+    end
+    
+    
+  end
 
   describe 'methods' do
     it 'label renvoie' do

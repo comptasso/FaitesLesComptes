@@ -10,9 +10,9 @@ module JcCapybara
    Capybara::Node::Simple.new(view.content_for(part))
  end
  
- def within(selector)
-  yield rendered.find(selector)
- end
+# def within(selector)
+#  yield rendered.find(selector)
+# end
 
 
 

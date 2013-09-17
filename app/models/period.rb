@@ -603,6 +603,9 @@ class Period < ActiveRecord::Base
     []
   end
 
+  # TODO voir à réintroduire organism dans les callbacks de destroy au cas où
+  # on reviendrait à une seule base de données.
+  
   # supprime les extraits bancaires 
   # avant la destruction d'un exercice
   #
