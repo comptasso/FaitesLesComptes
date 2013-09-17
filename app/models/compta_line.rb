@@ -78,11 +78,10 @@ class ComptaLine < ActiveRecord::Base
 
   # répond à la question si une ligne est affectée à un extrait bancaire ou non.
   def pointed?
-    support_line = writing.support_line
-    support_line.check_deposit_id || support_line.bank_extract_lines.any?
+    bank_extract_lines.any?
   end
 
-
+  # une compta line est editable si elle est ni pointée, ni verrouillée
   def editable?
     !(pointed? || locked?)
   end

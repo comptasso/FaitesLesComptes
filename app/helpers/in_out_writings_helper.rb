@@ -16,7 +16,7 @@ module InOutWritingsHelper
     html = ' '
     lw=line.writing
     
-    if line.editable?
+    if lw.editable?
       case lw
       when Transfer
         html <<  icon_to('modifier.png', edit_transfer_path(lw.id)) 
