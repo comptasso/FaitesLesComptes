@@ -41,17 +41,17 @@
               %ul
                 %li 
                   Débit
-                  = image_tag('icones/exclamation.png', rel:'tooltip', title:"Ecart de pointage de #{debit_credit @bank_extract.diff_debit}", id:"img_danger_total_debit")
+                  = image_tag('icones/exclamation.png', rel:'tooltip', id:"img_danger_total_debit")
                 %li.numeric
-                  %span#bels_total_debit= debit_credit @bank_extract.total_lines_credit
+                  %span#bels_total_debit
 
             %th.pc15
               %ul
                 %li
                   Crédit
-                  = image_tag('icones/exclamation.png', rel:'tooltip', title:"Ecart de pointage de #{debit_credit @bank_extract.diff_credit}", id:"img_danger_total_credit")
+                  = image_tag('icones/exclamation.png', rel:'tooltip', id:"img_danger_total_credit")
                 %li.numeric
-                  %span#bels_total_credit= debit_credit @bank_extract.total_lines_debit
+                  %span#bels_total_credit
             %th.pc10.actions Actions
 
         %tbody.connectedSortable#bels

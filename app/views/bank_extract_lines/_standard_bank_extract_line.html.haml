@@ -2,19 +2,19 @@
   %td= standard_bank_extract_line.position
   %td= l standard_bank_extract_line.date
   %td= standard_bank_extract_line.narration
-  %td.numeric= debit_credit standard_bank_extract_line.credit
-  %td.numeric= debit_credit standard_bank_extract_line.debit
+  %td.numeric.debit= debit_credit standard_bank_extract_line.credit
+  %td.numeric.credit= debit_credit standard_bank_extract_line.debit
 
   %td
-    = icon_to 'retirer.png', remove_bank_extract_bank_extract_line_path(@bank_extract, standard_bank_extract_line),  |
+    =# icon_to 'retirer.png', remove_bank_extract_bank_extract_line_path(@bank_extract, standard_bank_extract_line),  |
       :remote=>true, :method => :post                                                                                
-    = icon_to 'chain--plus.png', regroup_bank_extract_bank_extract_line_path(@bank_extract, standard_bank_extract_line),:remote=>true,   |
+    =# icon_to 'chain--plus.png', regroup_bank_extract_bank_extract_line_path(@bank_extract, standard_bank_extract_line),:remote=>true,   |
       :method=>:post, :title=>'Regroupe avec la ligne du dessous' if standard_bank_extract_line.chainable?                               
-    = icon_to 'chain-unchain.png', degroup_bank_extract_bank_extract_line_path(@bank_extract, standard_bank_extract_line),:remote=>true,    |
+    =# icon_to 'chain-unchain.png', degroup_bank_extract_bank_extract_line_path(@bank_extract, standard_bank_extract_line),:remote=>true,    |
       :method=>:post, :title=>'Dégroupe les lignes' if (standard_bank_extract_line.compta_lines.size > 1)
     -if (standard_bank_extract_line.compta_lines.size > 1)
       %a.icon_menu{:href=>'#'}
-        = image_tag 'icones/detail.png', rel:"popover", 'data-original-title'=> 'Détail des lignes', 'data-content'=>details_for_popover(standard_bank_extract_line)
+        =# image_tag 'icones/detail.png', rel:"popover", 'data-original-title'=> 'Détail des lignes', 'data-content'=>details_for_popover(standard_bank_extract_line)
     
     
     
