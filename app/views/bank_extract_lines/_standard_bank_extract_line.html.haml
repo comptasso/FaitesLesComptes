@@ -1,8 +1,0 @@
-%tr{:id=>"#{standard_bank_extract_line.compta_line_id}", 'class'=> 'bel', 'data-position'=>"#{standard_bank_extract_line.position}" }
-  %td= standard_bank_extract_line.compta_line_id
-  %td= l standard_bank_extract_line.date
-  %td= standard_bank_extract_line.narration
-  %td.numeric.debit= debit_credit standard_bank_extract_line.credit
-  %td.numeric.credit= debit_credit standard_bank_extract_line.debit
-  %td= image_tag 'icones/retirer.png', :class=>'transfert'
-     

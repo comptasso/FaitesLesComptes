@@ -37,24 +37,18 @@ class BankExtractLinesController < ApplicationController
   def enregistrer
     # on efface toutes les bank_extract_lines de cet extrait avant de les reconstruire 
     @bank_extract.bank_extract_lines.all.each {|bel| bel.destroy}
-    ok = true
+    @ok = true
     if params[:lines]
       params[:lines].each do |key, clparam|
          cl = @organism.compta_lines.find_by_id(clparam)
         if cl
           bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[cl])
           bel.position = key
-          ok = false unless bel.save
+          @ok = false unless bel.save
         end
       end
     end  
-    respond_to do |format|
-      if ok
-        format.js
-      else
-        format.js { render 'flash_error'}
-      end
-    end
+    
   end
 
   # Insert est appelée par le drag and drop de la vue pointage lorsqu'une

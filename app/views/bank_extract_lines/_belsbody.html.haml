@@ -1,11 +1,7 @@
--# unless @bank_extract_lines.any?
-  %tr#0
-    %td 
-    %td 
-    %td Faites glisser les lignes disponibles à droite sur cette table
-    %td
-    %td
-    %td
-
 - @bank_extract_lines.all.each do |bel|
-  = render(partial:'standard_bank_extract_line', :object=>bel) 
+  %tr{:id=>"#{bel.compta_line_id}", 'class'=> 'bel'}
+    %td= l bel.date
+    %td= bel.narration
+    %td.numeric.debit= debit_credit bel.credit
+    %td.numeric.credit= debit_credit bel.debit
+    %td= image_tag 'icones/retirer.png', :class=>'transfert'

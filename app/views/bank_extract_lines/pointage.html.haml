@@ -5,7 +5,8 @@
     id:'lock_bank_extract', method:'post', |
     style: ('display: none;' unless @bank_extract.lockable?), |
     confirm:"Cette action verrouillera ce relevé de compte et toutes les lignes qui sont associées.\nConfirmez vous ?" 
-  
+
+.row_fluid#message 
  
 .champ
   %h3= "#{@bank_account.nickname} : Pointage du relevé #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
@@ -26,7 +27,7 @@
           Solde Final :
           = debit_credit @bank_extract.end_sold
         %li.span2
-          = button_tag "Enregistrer", data: { :disable_with => "Patientez..." },id:'enregistrer', class: "btn btn-disabled span8", :disabled=>'disabled'
+          = button_tag "Enregistrer", id:'enregistrer', class: "btn disabled span8", :disabled=>'disabled'
   .row-fluid
     .span6
       
@@ -36,9 +37,9 @@
             %th.centered(colspan="6")
               Liste des écritures associées au relevé
           %tr
-            %th.pc5 N°
+            
             %th.pc15.date-euro Date
-            %th.40 Libellé
+            %th.pc45 Libellé
             %th.pc15
               %ul
                 %li 
@@ -71,9 +72,8 @@
               %a(data-toggle="modal" href="#modal_form_line")
                 =image_tag('icones/nouveau.png')
           %tr
-            %th.pc5 N°
             %th.pc15.date-euro Date
-            %th.pc40 Libellé
+            %th.pc45 Libellé
             %th.pc15 Dépenses
             %th.pc15 Recettes
             %th.pc10 Actions

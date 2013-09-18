@@ -1,25 +1,3 @@
 // Place all the styles related to the Pointage controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.pointage {
-    
-    .not_pointed {
-        background-color: pink;
-        
-        cursor: url(icones/chain--plus.png),auto;
-       
-        }
-    .pointed {
-        background-color: #EFE;
-        cursor: url(icones/chain--minus.png),auto;
-        }
-    }
-    
-.btn-disabled {
-    background-color: #999999;
-    background-image: linear-gradient(to bottom, #888888, #bbbbbb);
-    background-repeat: repeat-x;
-    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    color: #FFFFFF;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-}

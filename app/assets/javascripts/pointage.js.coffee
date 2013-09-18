@@ -79,7 +79,8 @@ jsonfos= ->
  
  # a pour effet de changer le statut du bouton Enregistrer
  activeEnregistrer= ->
-   $('#enregistrer').prop('disabled', false).removeClass('btn-disabled').addClass('btn-success')
+   $('#enregistrer').prop('disabled', false).removeClass('disabled').addClass('btn-success')
+   $('#message').empty()
    
    
 
@@ -107,9 +108,11 @@ $ '#ltps_table', ->
       type: 'post',
       data: jsonfos(),
       success: ->
+        $('#enregistrer').prop('disabled', true).removeClass('btn-success').addClass('disabled')
+      error: ->
+        alert('Une erreur s\'est produite')
       })
   
-  # TODO : griser le bouton tant qu'il n'y a pas eu de modif et l'activer à la 
-  # première modif. Un enregistrement doit le regriser.
+  
 
 

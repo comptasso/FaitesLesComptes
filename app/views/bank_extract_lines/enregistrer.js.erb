@@ -1,1 +1,1 @@
-$('h3').text('energsitrement effectué');
+$('#message').html("<%= j render(@ok ? 'flash_success' : 'flash_error') %>");

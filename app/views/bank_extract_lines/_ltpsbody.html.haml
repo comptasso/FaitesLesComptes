@@ -1,6 +1,5 @@
 - @lines_to_point.lines.each do |ltp|
   %tr{'class'=>'ltp', 'id'=>"#{ltp.id}" }
-    %td= ltp.id
     %td= l ltp.date
     %td= ltp.narration
     %td.numeric.debit= debit_credit ltp.credit
