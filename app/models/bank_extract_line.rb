@@ -42,7 +42,7 @@ class BankExtractLine < ActiveRecord::Base
  
   after_initialize :prepare_datas
 
-  attr_reader :payment, :narration, :debit,  :credit
+  attr_reader :compta_line_id, :payment, :narration, :debit,  :credit
 
   validate :not_empty
 
@@ -173,6 +173,7 @@ class BankExtractLine < ActiveRecord::Base
       self.date ||= clf.date # par défaut on construit les infos de base
       @payment= clf.payment_mode # avec la première ligne associée
       @narration = clf.narration
+      @compta_line_id = clf.id
     end
 
   end

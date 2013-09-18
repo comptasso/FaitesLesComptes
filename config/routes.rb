@@ -21,12 +21,7 @@ Faitesvoscomptes::Application.routes.draw do
   get "bottom/apropos"
   get "bottom/manuals"
 
-  get "modallines/create"
-  
-
- # resource :session
-
-  
+ 
 
   # namespace COMPTA
 
@@ -205,23 +200,14 @@ Faitesvoscomptes::Application.routes.draw do
 
   # match ':controller/:action/:id/with_user/:user_id'
   resources :bank_extracts do
-    resources :modallines     
+    resources :modallines, :only=>:create  
     resources :bank_extract_lines do
       
       collection do
-        get 'pointage'
-        post 'reorder'
-        post 'ajoute'
-        
+        get 'pointage' # affiche la vue de pointage d'un extrait de compte
+        post 'enregistrer' # enregistre les lignes pointées dans la base
       end
-      member do
-        post 'degroup'
-        post 'regroup'
-        post 'remove'
-        post 'insert'
-        
-        
-      end
+      
     end
   end
   

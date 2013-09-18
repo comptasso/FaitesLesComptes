@@ -24,70 +24,38 @@ class BankExtractLinesController < ApplicationController
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
     @lines_to_point = @bank_account.not_pointed_lines
   end
-
-
-  # Regroup permet de regrouper deux lignes
+  
+  # action qui sera appelée par ajax pour enregistrer les nouvelles positions et les
+  # lignes qui sont dans la partie bank_extract_lines de la vue pointage
   #
-  def regroup
-    @bank_extract_line = BankExtractLine.find(params[:id])
-    follower = @bank_extract_line.lower_item
-    @bank_extract_line.regroup(follower)
-    @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
+  # Le javascript envoir les params sous la forme suivante :
+  #  Parameters: {"lines"=>{"0"=>"17"}, {"1", "20"}}, "bank_extract_id"=>"7"}
+  # 
+  #  ou le premier chiffre est la position et le second l'id de la ligne 
+  #
+  
+  def enregistrer
+    # on efface toutes les bank_extract_lines de cet extrait avant de les reconstruire 
+    @bank_extract.bank_extract_lines.all.each {|bel| bel.destroy}
+    ok = true
+    if params[:lines]
+      params[:lines].each do |key, clparam|
+         cl = @organism.compta_lines.find_by_id(clparam)
+        if cl
+          bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[cl])
+          bel.position = key
+          ok = false unless bel.save
+        end
+      end
+    end  
     respond_to do |format|
-      format.js
-    end
-  end
-
-  # Degroupe permet de scinder une ligne
-  #
-  # Appelle le même template que rgroup car c'est une logique de traitement similaire
-  #
-  def degroup
-    @bank_extract_line = BankExtractLine.find(params[:id])
-    @bank_extract_line.degroup
-    @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
-    respond_to do |format|
-      format.js {render 'regroup' }
-    end
-  end
-
-
-  # appelée par le drag and drop de la vue pointage
-  # les paramètres transmis sont
-  # -id - id de la ligne qui vient d'être retirée
-  # -fromPosition qui indique la position initiale de la ligne
-  def remove
-    @bank_extract_line = BankExtractLine.find(params[:id])
-    @bank_extract_line.destroy
-    @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
-    @lines_to_point = @bank_account.not_pointed_lines
-    respond_to do |format|
-      format.js 
-    end
-  end
-
-  # ajoute une ligne de droite (non pointée) au tableau de gauche (en le mettant
-  # donc à la fin)
-  #
-  # Les paramètres sont nature (check_deposit ou standard_line
-  # et line_id (l'id de la ligne)
-  #
-  def ajoute
-      l = ComptaLine.find(params[:line_id])
-      @bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[l])
-      
-    respond_to do |format|
-      if @bel.save
-        @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
-        @lines_to_point = @bank_account.not_pointed_lines
-        format.js 
+      if ok
+        format.js
       else
         format.js { render 'flash_error'}
       end
     end
-
   end
-
 
   # Insert est appelée par le drag and drop de la vue pointage lorsqu'une
   # non pointed line est transférée dans les bank_extract_line
@@ -107,7 +75,7 @@ class BankExtractLinesController < ApplicationController
         @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
         format.js 
       else
-        format.js { render 'flash_error'}
+        
       end
     end
   end

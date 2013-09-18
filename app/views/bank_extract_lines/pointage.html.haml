@@ -8,12 +8,12 @@
   
  
 .champ
-  %h3= "Relevé bancaire #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
+  %h3= "#{@bank_account.nickname} : Pointage du relevé #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
     
   .inner-champ
     .row-fluid
       %ul
-        %li.offset2.span2
+        %li.offset1.span2
           Solde initial :
           %span#begin_sold= debit_credit @bank_extract.begin_sold
         %li.span2.spread
@@ -25,6 +25,8 @@
         %li.span2
           Solde Final :
           = debit_credit @bank_extract.end_sold
+        %li.span2
+          = button_tag "Enregistrer", data: { :disable_with => "Patientez..." },id:'enregistrer', class: "btn btn-disabled span8", :disabled=>'disabled'
   .row-fluid
     .span6
       
@@ -74,9 +76,9 @@
             %th.pc40 Libellé
             %th.pc15 Dépenses
             %th.pc15 Recettes
-            %th.pc10 actions Actions
+            %th.pc10 Actions
             
-          %tbody.connectedSortable#ltps
+          %tbody#ltps
             = render :partial=>'ltpsbody'
 
 = render :partial=>'new_line'

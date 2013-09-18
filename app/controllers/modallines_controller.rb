@@ -1,7 +1,7 @@
 
 # Ce controller est utilisé pour gérer les écritures générées par la vue modale
-# que l'on trouve dans le pointage des comptes bancaires
-
+# que l'on trouve dans le pointage des comptes bancaires.
+# Il n'y a qu'une action (create) qui est appelée par une fonction ajax.
 class ModallinesController < ApplicationController
 
   def create

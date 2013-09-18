@@ -1,12 +1,11 @@
 - @lines_to_point.lines.each do |ltp|
-  %tr{'class'=>'ltp', 'id'=>"line_to_point_#{ltp.id}" }
-    %td -
+  %tr{'class'=>'ltp', 'id'=>"#{ltp.id}" }
+    %td= ltp.id
     %td= l ltp.date
     %td= ltp.narration
-    %td.numeric= debit_credit ltp.credit
-    %td.numeric= debit_credit ltp.debit
-    %td
-      =# icon_to 'ajouter.png', ajoute_bank_extract_bank_extract_lines_path(@bank_extract, nature:ltp.nature, line_id:ltp.id),  |
-      :remote=>true, :method => :post
+    %td.numeric.debit= debit_credit ltp.credit
+    %td.numeric.credit= debit_credit ltp.debit
+    %td=image_tag 'icones/ajouter.png', :class=>'transfert'
+
 
       
