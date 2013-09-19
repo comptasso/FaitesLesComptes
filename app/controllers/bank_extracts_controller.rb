@@ -22,7 +22,6 @@ class BankExtractsController < ApplicationController
   # dans le modèle bank_extract, un after save verrouille alors les lignes correspondantes
   def lock
     @bank_extract = BankExtract.find(params[:id])
-    # ici on change les attributs false
     @bank_extract.locked = true
     if @bank_extract.save
       flash[:notice]= "Relevé validé et verrouillé"

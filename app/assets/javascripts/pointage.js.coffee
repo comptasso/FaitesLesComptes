@@ -2,23 +2,27 @@
 # les soldes ne collent pas
 
 
-# afficher le solde de la colonne des bels credit
+# afficher le solde d'une collection de nombres en format français (20,27; 5,00; ...)
 flcSum= (selector)->
   total = 0
   $(selector).each ->
     total += stringToFloat($(this).text()) || 0
   total
   
+# affiche le total des colonnes débit et credit des lignes pointées
 showSum= ->
   $('#bels_total_debit').text($f_numberWithPrecision(flcSum('#bels .debit')))
   $('#bels_total_credit').text($f_numberWithPrecision(flcSum('#bels .credit')))
   
+# donne l'écart entre le total des lignes débit pointées et le montant débit du relevé
 spreadDebit= ->
   flcSum('#bels .debit') - stringToFloat($('span#total_debit').text())
-  
+ 
+# donne l'écart entre le total des lignes crédit pointées et le montant crédit du relevé 
 spreadCredit= ->
   flcSum('#bels .credit') - stringToFloat($('span#total_credit').text())
   
+# fonction de contrôle des sommes
 checkSum= ->
   # on affiche les totaux de la table des bank_extract_lines dans le haut de la colonne
   showSum() 
@@ -32,12 +36,11 @@ checkSum= ->
     $('#img_danger_total_credit').hide()
   else
     $('#img_danger_total_credit').show().attr('title', "Ecart de pointage de #{spreadCredit().toFixed(2)}")
-    
-  # si debit et credit sont égaux on peut afficher l icone de verrouillage   
-  if Math.abs(spreadDebit()) < 0.001 && Math.abs(spreadCredit()) < 0.001
-    $('#lock_bank_extract').show()
-  else
+  
+  # on masque l icone de verrouillage si les totaux ne sont pas conformes
+  if Math.abs(spreadDebit()) > 0.001 || Math.abs(spreadCredit()) > 0.001
     $('#lock_bank_extract').hide()  
+  
     
 # fait passer une ligne de la droite (les lines to point) vers la gauche (les 
 # bank_extract_lines). Puis recalcule les sommes et refait l'affichage des 
@@ -67,12 +70,11 @@ belsToltps= ->
   checkSum()
   
 # fonction permettant de construire une liste des bank_extract_lines
-# en notant la position et l'id de la ligne
+# en notant la position et l'id de la ligne. Utilisé pour l'argument data de 
+# la fonction enregister
 jsonfos= ->
   a = {lines: {} }
   $('#bels tr').each( (index) ->
-    console.log($(this).attr('id'))
-    #newline = 'line_'+index
     a.lines[index] = $(this).attr('id')
     )
   a
@@ -82,36 +84,48 @@ jsonfos= ->
    $('#enregistrer').prop('disabled', false).removeClass('disabled').addClass('btn-success')
    $('#message').empty()
    
-   
 
-$ '#ltps_table', ->
-  checkSum() 
-  # ici on attache à l'image ajouter.png une fonction qui déplace la ligne correspondante en bas
-  # de la table des bels, ou qui fait l'inverse, replace la ligne à droite (mais alors
-  # elle n'est plus ordonnée (il faudra rafraichir la page pour reordonner)
-  $('#ltps_table tbody').on('click', 'img.transfert', ltpsTobels)
-  $('#bels_table tbody').on('click', 'img.transfert', belsToltps)
-        
-  console.log(JSON.stringify(jsonfos()))
-
-  # LA TABLE DES BELS est triable par drag and drop
-  $("#bels").sortable
-    connectWith: ".connectedSortable",
-    items: "tr",
-    update: activeEnregistrer
+# FONCTION PRINCIPALE
+$ ->
+  if $('#ltps_table').length # ce if est là car sinon checksum agit aussi dans la vue index du controller
+  # bank_extract_lines
+  
+    # contrôle des totaux et affichage des balises dangers et des écarts
+    checkSum() 
     
+    # ici on attache à l'image ajouter.png une fonction qui déplace la ligne correspondante en bas
+    # de la table des bels, ou qui fait l'inverse, replace la ligne à droite (mais alors
+    # elle n'est plus ordonnée (il faudra rafraichir la page pour reordonner)
+    $('#ltps_table tbody').on('click', 'img.transfert', ltpsTobels)
+    $('#bels_table tbody').on('click', 'img.transfert', belsToltps)
+
+
+
+    # LA TABLE DES BELS est triable par drag and drop
+    $("#bels").sortable
+      connectWith: ".connectedSortable",
+      items: "tr",
+      update: activeEnregistrer
+
     # associer au bouton 'Enregistrer' un appel de fonction pour enregistrer les lignes 
-  # pointées.
-  $('#enregistrer').click -> 
-    $.ajax({
-      url: window.location.pathname.replace('pointage', 'enregistrer'),
-      type: 'post',
-      data: jsonfos(),
-      success: ->
-        $('#enregistrer').prop('disabled', true).removeClass('btn-success').addClass('disabled')
-      error: ->
-        alert('Une erreur s\'est produite')
-      })
+    # pointées.
+    $('#enregistrer').click -> 
+      $.ajax({
+        url: window.location.pathname.replace('pointage', 'enregistrer'),
+        type: 'post',
+        data: jsonfos(),
+        success: ->
+          $('#enregistrer').prop('disabled', true).removeClass('btn-success').addClass('disabled')
+          # si debit et credit sont égaux  et si les infos ont bien été enregistrées, 
+          # on peut alors afficher l icone de verrouillage   
+          if Math.abs(spreadDebit()) < 0.001 && Math.abs(spreadCredit()) < 0.001
+            $('#lock_bank_extract').show()
+          else
+            $('#lock_bank_extract').hide()  
+
+        error: ->
+          alert('Une erreur s\'est produite')
+        })
   
   
 
