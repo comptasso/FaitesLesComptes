@@ -14,16 +14,14 @@ describe BankExtractLinesController do
       begin_sold: 120, debit: 450, credit: 1000, end_sold: 120+1000-450)}
  
   
-   def valid_params
-      {"bank_extract_id"=>be.to_param,  date:Date.today, position:1} 
-   end
+   
 
 
   before(:each) do
-   minimal_instances
-   BankExtract.stub(:find).with(be.to_param).and_return be
-   be.stub(:bank_extract_lines).and_return(@a = double(Arel))
-   @a.stub(:order).with(:position).and_return ['bel1', 'bel2']
+    minimal_instances
+    BankExtract.stub(:find).with(be.to_param).and_return be
+    be.stub(:bank_extract_lines).and_return(@a = double(Arel))
+    @a.stub(:order).with(:position).and_return ['bel1', 'bel2']
   end
 
   describe "GET index" do
@@ -34,98 +32,108 @@ describe BankExtractLinesController do
       assigns[:bank_extract_lines].should == ['bel1', 'bel2']
     end
   end
-
-   describe 'POST regroup - degroup' do
-
-     before(:each) do
-       @bel1 = mock_model(BankExtractLine, valid_params)
-       @bel2 = mock_model(BankExtractLine, valid_params)
-       @bel1.stub(:lower_item).and_return @bel2
-       BankExtractLine.stub(:find).with(@bel1.to_param).and_return @bel1
+  
+   
+   
+  describe 'POST enregistrer' do
+    
+    def valid_params
+      {"bank_extract_id"=>be.to_param,  lines:{'0'=>'25', '1'=>'53', '2'=>'89'}, :format=>:js} 
+    end
+     
+    it 'récupère toutes les bank_extract_lines du bank_extract et les détruit' do
+      be.should_receive(:bank_extract_lines).
+        and_return([@bel1 = double(BankExtractLine), @bel2 = double(BankExtractLine)])
+      @bel1.should_receive(:destroy)
+      @bel2.should_receive(:destroy)
+      post :enregistrer, {"bank_extract_id"=>be.to_param, :format=>:js}, valid_session
+    end
+     
+    context 'les comptalines sont bien sauvées' do
       
-     end
-
-     it 'regroupe avec la ligne suivante' do
-      @bel1.should_receive(:regroup).with(@bel2).and_return(@bel1)
-       post :regroup, {:bank_extract_id=>be.to_param, id:@bel1.to_param, :format=>:js}, valid_session
-       response.should render_template 'regroup'
-     end
-
-     it 'degroupe scinde les écritures (et utilise le même js que regroup)' do
-       @bel1.should_receive(:degroup).with().and_return(@bel1)
-       post :degroup, {:bank_extract_id=>be.to_param, id:@bel1.to_param, :format=>:js}, valid_session
-       response.should render_template 'regroup'
-     end
-
-     it 'remove appelle le template remove' do
-       @bel1.should_receive(:destroy)
-       Utilities::NotPointedLines.should_receive(:new).and_return ['npl1', 'npl2']
-       post :remove, {:bank_extract_id=>be.to_param, id:@bel1.to_param, :format=>:js}, valid_session
-       response.should render_template 'remove'
-       assigns[:lines_to_point].should == ['npl1', 'npl2']
-     end
-
-     it 'un ajout réussi appelle le template ajoute' do
-       ComptaLine.should_receive(:find).with({"id"=>1}).and_return(@cl = double(ComptaLine))
-       @a.should_receive(:new).with(:compta_lines=>[@cl]).and_return @bel1
-       @bel1.should_receive(:save).and_return true
-       Utilities::NotPointedLines.should_receive(:new).and_return ['npl1', 'npl2']
-       post :ajoute, {:bank_extract_id=>be.to_param, :line_id=>{"id"=>1}, :format=>:js}, valid_session
-       response.should render_template 'ajoute'
-       assigns[:lines_to_point].should == ['npl1', 'npl2']
-     end
-
-     it 'un ajout qui échoue appelle le template flash_error' do
-       ComptaLine.stub(:find).and_return(@cl = double(ComptaLine))
-       @a.stub(:new).and_return @bel1
-       @bel1.stub(:save).and_return false
-       Utilities::NotPointedLines.should_not_receive(:new)
-       post :ajoute, {:bank_extract_id=>be.to_param, :line_id=>{"id"=>1}, :format=>:js}, valid_session
-       response.should render_template 'flash_error'
+      before(:each) do
+        be.stub(:bank_extract_lines).and_return(@ar = double(Arel))
+        @ar.stub(:each).and_return nil # on a déjà testé la destruction des bank_extract_lines
+        @ar.stub(:new).and_return(mock_model(BankExtractLine, 'position='=>true, :save=>true).as_new_record)
+      end
+           
+      it 'assigne le bank_extract' do
         
-     end
-
-     it 'insert ajoute une ligne déplacée par le drag and drop et lui donne sa position' do
-       ComptaLine.should_receive(:find).with('545').and_return(@cl = double(ComptaLine))
-       @a.stub(:new).and_return @bel1
-       @bel1.should_receive(:position=).with(3)
-       @bel1.stub(:save).and_return true
-       post :insert, {:bank_extract_id=>be.to_param, :id=>@bel1.to_param, :html_id=>'line_545', :at=>'3', :format=>:js}, valid_session
-       response.should render_template 'insert'
-     end
-
-     it 'insert avec erreur renvoie un flash_error' do
-       ComptaLine.stub(:find).with('545').and_return(@cl = double(ComptaLine))
-       @a.stub(:new).and_return @bel1
-       @bel1.should_receive(:position=).with(3)
-       @bel1.stub(:save).and_return false
-       post :insert, {:bank_extract_id=>be.to_param, :id=>@bel1.to_param, :html_id=>'line_545', :at=>'3', :format=>:js}, valid_session
-       response.should render_template 'flash_error'
-     end
-
-     it 'reorder prend 3 paramètres et déplace la ligne' do
-       @bel1.should_receive(:move_higher).exactly(3).times
-       post :reorder, {:bank_extract_id=>be.to_param, :id=>@bel1.to_param, :fromPosition=>'5', :toPosition=>'2', :format=>:js}, valid_session
-       response.should render_template 'reorder'
-     end
-
-     it 'reorder vers le bas' do
-       @bel1.should_receive(:move_lower).exactly(4).times
-       post :reorder, {:bank_extract_id=>be.to_param, :id=>@bel1.to_param, :fromPosition=>'2', :toPosition=>'6', :format=>:js}, valid_session
-       response.should render_template 'reorder'
-     end
-
-     it 'reorder avec une erreur renvoie une bad_request' do
-       BankExtractLine.stub(:find).and_raise(ActiveRecord::RecordNotFound)
-       @bel1.stub(:move_lower)
-       post :reorder, {:bank_extract_id=>be.to_param, :id=>@bel1.to_param, :toPosition=>'6', :format=>:js}, valid_session
-       response.code.should match /^4/
-     end
-
-
-
-   end
-
+        @p.stub_chain(:compta_lines, :find_by_id).and_return(double(ComptaLine))
+        post :enregistrer, valid_params, valid_session
+        assigns[:bank_extract].should == be
+      end
+      
+      it 'cherche les 3 compta_lines indiquées par valid_session' do
+        
+        @p.stub(:compta_lines).and_return(@ar2 =double(Arel))
+        @ar2.should_receive(:find_by_id).with('25').and_return(double(ComptaLine))
+        @ar2.should_receive(:find_by_id).with('53').and_return(double(ComptaLine))
+        @ar2.should_receive(:find_by_id).with('89').and_return(double(ComptaLine))
+        post :enregistrer, valid_params, valid_session
+        
+      end
+      
+      it 'crée les bank_extract_lines' do
+        @p.stub(:compta_lines).and_return(@ar2 =double(Arel))
+        @ar2.stub(:find_by_id).with('25').and_return(@cl1 = double(ComptaLine))
+        @ar2.stub(:find_by_id).with('53').and_return(@cl2 = double(ComptaLine))
+        @ar2.stub(:find_by_id).with('89').and_return(@cl3 = double(ComptaLine))
+        @ar.should_receive(:new).with(:compta_lines=>[@cl1]).and_return(double(BankExtractLine, 'position='=>true, :save=>true))
+        @ar.should_receive(:new).with(:compta_lines=>[@cl2]).and_return(double(BankExtractLine, 'position='=>true, :save=>true))
+        @ar.should_receive(:new).with(:compta_lines=>[@cl3]).and_return(double(BankExtractLine, 'position='=>true, :save=>true))
+        post :enregistrer, valid_params, valid_session
+        
+      end
+      
+      it 'affecte leurs positions' do
+        @p.stub(:compta_lines).and_return(@ar2 =double(Arel))
+        @ar2.stub(:find_by_id).and_return(double(ComptaLine))
+        @ar.stub(:new).and_return(@new_bel = double(BankExtractLine, :save=>true))
+        @new_bel.should_receive('position=').with('0')
+        @new_bel.should_receive('position=').with('1')
+        @new_bel.should_receive('position=').with('2')
+        post :enregistrer, valid_params, valid_session     
+      end 
+      
+      it 'et les sauve' do
+        @p.stub(:compta_lines).and_return(@ar2 =double(Arel))
+        @ar2.stub(:find_by_id).and_return(double(ComptaLine))
+        @ar.stub(:new).and_return(@new_bel = double(BankExtractLine, 'position='=>true))
+        @new_bel.should_receive(:save).exactly(3).times
+        post :enregistrer, valid_params, valid_session     
+      end
+      
+      it 'lorsque tout est correctement sauvé, @ok vaut true' do
+        @p.stub(:compta_lines).and_return(@ar2 =double(Arel))
+        @ar2.stub(:find_by_id).and_return(double(ComptaLine))
+        @ar.stub(:new).and_return(double(BankExtractLine, 'position='=>true, :save=>true))
+        post :enregistrer, valid_params, valid_session    
+        assigns[:ok].should be_true
+      end
+      
+      it 'si une bel n est pas sauvée, @ok vaut false' do
+        @p.stub(:compta_lines).and_return(@ar2 =double(Arel))
+        @ar2.stub(:find_by_id).and_return(double(ComptaLine))
+        @ar.stub(:new).and_return(
+          double(BankExtractLine, 'position='=>true, :save=>true),
+          double(BankExtractLine, 'position='=>true, :save=>false),
+          double(BankExtractLine, 'position='=>true, :save=>true)
+        )
+        post :enregistrer, valid_params, valid_session    
+        assigns[:ok].should be_false
+      end
+      
+      it 'pour rendre le template enregsitrer' do
+        @p.stub(:compta_lines).and_return(@ar2 =double(Arel))
+        @ar2.stub(:find_by_id).and_return(double(ComptaLine))
+        @ar.stub(:new).and_return(double(BankExtractLine, 'position='=>true, :save=>true))
+        post :enregistrer, valid_params, valid_session  
+        response.should render_template 'enregistrer'
+      end
+      
+    end
+  end
 
 end
 

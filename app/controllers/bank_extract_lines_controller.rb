@@ -36,11 +36,11 @@ class BankExtractLinesController < ApplicationController
   
   def enregistrer
     # on efface toutes les bank_extract_lines de cet extrait avant de les reconstruire 
-    @bank_extract.bank_extract_lines.all.each {|bel| bel.destroy}
+    @bank_extract.bank_extract_lines.each {|bel| bel.destroy}
     @ok = true
     if params[:lines]
       params[:lines].each do |key, clparam|
-         cl = @organism.compta_lines.find_by_id(clparam)
+         cl = @period.compta_lines.find_by_id(clparam)
         if cl
           bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[cl])
           bel.position = key

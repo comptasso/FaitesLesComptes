@@ -24,7 +24,7 @@ describe 'bank_extract_lines' do
 
   end
 
-  it 'bank_extract doit avoir deux lignes' do
+  it 'bank_extract doit avoir deux lignes' do 
     @be.should have(2).bank_extract_lines
   end
 

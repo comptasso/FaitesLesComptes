@@ -115,9 +115,9 @@ describe "BankExtracts" do
 
       
 
-      it 'cliquer sur l icone afficher mène à la page affichage' do
+      it 'cliquer sur l icone pointer mène à la page de pointage' do
         click_link('Pointer')
-        page.find('.champ h3').should have_content("Relevé bancaire")
+        page.find('.champ h3').should have_content("Compte courant : Pointage du relevé")
       end
 
       it 'cliquer sur l icone supprimer efface un extrait de compte', :js=>true do
