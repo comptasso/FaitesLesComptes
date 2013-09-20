@@ -100,10 +100,12 @@ class ComptaLine < ActiveRecord::Base
   protected
 
   # remplit le champ account_id avec celui associé à nature si nature est effectivement associée à un compte.
+  # appelé par before save
   def fill_account
     self.account_id = nature.account.id
   end
 
+  # appelé par before_destrou
   def not_locked
     !locked
   end

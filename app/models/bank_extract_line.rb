@@ -6,6 +6,13 @@
 #
 # En pratique on n'utilise pas les possibilité de STI
 # TODO retirer le champ type
+# TODO après modification du avascript de pointage, il a été décidé d'abandonner
+# la logique habtm avec les comptalines. 
+# Il faudrait donc modifier les tables et revenir à une logique classique.
+# de relation has_one, belongs_to. La contrepartie étant qu'on ne peut plus 
+# associer plusieurs lignes de compta à une ligne de relevé et vice-versa.
+# Il n'y aura plus qu'une logique un pour un (ce qui devrait convenir pour 
+# une compta simplifiée).
 #
 # Le modèle BanExtractLine représente une ligne d'un relevé bancaire.
 #
@@ -83,7 +90,7 @@ class BankExtractLine < ActiveRecord::Base
   #
   def lock_line
     compta_lines.each do |l|
-      # verrouillage des siblings 
+      # verrouillage des écritures car les compta_lines délèguent la méthode lock à leur writing 
       l.lock
       # si l est une remise de chèque il faut aussi verrouiller les écritures correspondantes
       if l.check_deposit_id

@@ -10,6 +10,15 @@ class BankExtract < ActiveRecord::Base
   attr_accessible :reference, :begin_date, :end_date, :begin_sold, :total_debit,
     :total_credit, :begin_date_picker, :end_date_picker
   
+  # Valide que le close_date est bien postérieur au start_date
+  class BankExtractChronoValidator < ActiveModel::EachValidator
+    def validate_each(record, attribute, value)
+      if record.begin_date && record.begin_date.is_a?(Date) && value && value.is_a?(Date)
+        record.errors[attribute] << "la date de fin doit être postérieure à la date de début" if (value < record.begin_date)
+      end
+    end
+  end
+  
   belongs_to :bank_account 
   has_many :bank_extract_lines, dependent: :destroy
 
@@ -18,18 +27,12 @@ class BankExtract < ActiveRecord::Base
   validates :reference, :format=>{with:NAME_REGEX}, :length=>{maximum:15}, :allow_blank=>true
 
   validates :begin_sold, :total_debit, :total_credit,:presence=>true, :numericality=>true, :two_decimals => true
-  validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date , :cant_edit=>true, :if=>Proc.new {|r| r.locked?}
+  validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date , :cant_edit=>true, :if=>'locked'
 
-  validates :begin_date, :end_date, :presence=>true  
-  validates :begin_date, :end_date, :within_period=>true
+  validates :begin_date, :end_date, :within_period=>true, :presence=>true 
+  validates :end_date, :bank_extract_chrono=>true
  
-
- # TODO voir si on remet ce after_create
- # after_create :fill_bank_extract_lines
-  after_save :lock_lines_if_locked 
-
- 
-  # TODO add a chrono validator
+  before_save :lock_lines, :if=>'locked' 
   
   scope :period, lambda {|p| where('begin_date >= ? AND end_date <= ?' ,
       p.start_date, p.close_date).order(:begin_date) }
@@ -98,23 +101,10 @@ class BankExtract < ActiveRecord::Base
 
   private
 
-  # méthode appelée après la création d'un bank_extract
-  # tente de pré remplir les lignes du relevé bancaire 
-  # prend l'ensemble des lignes non pointées et 
-  # crée des bank_extract_lines pour toutes les lignes dont les dates sont inférieures à la date de clôture
 
-  # TODO mieux utiliser la requete sql
-#  def fill_bank_extract_lines
-#    npl=bank_account.np_lines
-#    npl.reject! {|l| l.line_date > end_date}
-#    npl.each {|l| BankExtractLine.create!(bank_extract_id: id, line_id: l.id)}
-#    cdl=bank_account.np_check_deposits
-#    cdl.reject! {|l| l.deposit_date > end_date}
-#    cdl.each {|l| BankExtractLine.create!(bank_extract_id: id, check_deposit_id: l.id)}
-#  end
-
-  def lock_lines_if_locked
-    bank_extract_lines.all.each {|bl| bl.lock_line} if locked
+  def lock_lines
+    return false unless equality?
+    bank_extract_lines.all.each {|bl| bl.lock_line}
   end
 
 

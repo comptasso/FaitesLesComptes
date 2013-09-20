@@ -9,42 +9,45 @@ end
 describe BankExtract do   
   include OrganismFixtureBis
   
-  
-  before(:each) do
-    create_minimal_organism
-   
-    
-    @be2= @ba.bank_extracts.create!( 
+  def valid_bank_extract 
+    @ba.bank_extracts.create!( 
       begin_date: Date.today.beginning_of_month,
       end_date: Date.today.end_of_month,
       begin_sold: 2012,
       total_credit: 11,
       total_debit: 10)
-
-
   end
-
-  describe 'date_pickers' do
-    it 'begin_date_picker'  do
-      @be2.begin_date_picker.should == I18n.l(@be2.begin_date) 
-    end
-
-    it 'end_date_picker' do
-      @be2.end_date_picker.should == I18n.l(@be2.end_date)
-    end
-
-    it 'begin_date=' do
-      @be2.begin_date_picker = I18n.l Date.today
-      @be2.begin_date.should == Date.today
+  
+  
+  before(:each) do
+    create_minimal_organism
+    @be2 = valid_bank_extract
+    
+  end
+  
+  describe 'date_pickers', wip:true do 
+    
+    subject { @be2 }  
+         
+    its(:begin_date_picker) {should == I18n.l(@be2.begin_date)}
+    
+    its(:end_date_picker) {should == I18n.l(@be2.end_date)}
+    
+    
+   it 'begin_date=' do
+     @be2.begin_date_picker = I18n.l Date.today
+     @be2.begin_date.should == Date.today
+   end
+    
+    it 'end_date=' do
+      @be2.end_date_picker = I18n.l Date.tomorrow
+      @be2.end_date.should == Date.tomorrow
     end
 
     it 'invalid model if date not acceptable' do
       @be2.begin_date_picker = 'bonjour'
-      @be2.valid?
-     #  puts @be2.errors.messages
-      @be2.should have(2).errors_on(:begin_date_picker) 
-      
-      @be2.errors[:begin_date_picker].should ==  ['obligatoire', 'Date invalide']
+      @be2.should_not be_valid      
+      @be2.errors[:begin_date_picker].should ==  ['Date invalide','obligatoire']
     end
   end
 
@@ -70,7 +73,7 @@ describe BankExtract do
 
     def valid_attributes
       { begin_sold:0, total_debit:1,
-        total_credit:2, begin_date:Date.today, end_date:Date.today}
+        total_credit:2, begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month}
     end
 
     before(:each) do
@@ -90,6 +93,12 @@ describe BankExtract do
       @be.begin_date = @p.close_date + 1
       @be.should_not be_valid
     end
+    
+    it 'la date de fin doit être après la date de début', wip:true do
+      @be.begin_date, @be.end_date = @be.end_date, @be.begin_date
+      @be.should_not be_valid
+    end
+    
 
     it 'les deux dates doivent être dans le même exercice' do
       @precedent_period = @o.periods.create!(start_date:Date.today.years_ago(1).beginning_of_year, close_date:Date.today.years_ago(1).end_of_year)
@@ -129,20 +138,13 @@ describe BankExtract do
       @be.begin_sold = 'bonjour'
       @be.begin_sold.should  == 0
     end
-
-  
-    it 'les valeurs sont arrondies par valid' do
-      @be.begin_sold = 1.124
-      @be.valid?
-      @be.should_not be_valid
-    end
+   
 
     it 'testing two decimals validators with valid values' do
       vals = [+1, -1, +1.1, -1.1, +1.12, -1.12, 1.1, 1.12, 256, 256.1, '-.01']
       vals.each do |v|
         @be.begin_sold = v
-        @be.valid?
-        @be.errors[:begin_sold].should have(0).messages
+        @be.should be_valid
       end
     end
 
@@ -150,11 +152,39 @@ describe BankExtract do
       vals = ['b1', -1.254 , '+1.1b', 1.254]
       vals.each do |v|
         @be.begin_sold = v
-        @be.valid?
-      
+        @be.should_not be_valid      
         @be.errors[:begin_sold].should have_at_least(1).messages
       end
     end
+  end
+  
+  describe 'lockable'  do
+    
+    subject {@be2}
+    
+    before(:each) do
+      @w1 = create_in_out_writing(2 , 'Virement')
+      @bel = @be2.bank_extract_lines.create!(compta_lines:[@w1.support_line])
+    end
+    
+    it 'n est pas lockable' do
+      subject.should_not be_equality
+      subject.should_not be_lockable
+    end
+    
+    it 'lock est refusé car bank_extract n est pas équilibré' do
+      subject.locked = true
+      subject.save.should be_false
+      @w1.should_not be_locked
+    end
+    
+    it 'mais accepté si le bank_extract est équilibré' do
+      subject.stub('equality?').and_return true
+      subject.locked = true
+      subject.save.should be_true
+      @w1.should be_locked
+    end
+     
   end
 
   describe 'when locked' do  
@@ -164,6 +194,7 @@ describe BankExtract do
         total_debit:1, total_credit:2)
       @w1 = create_in_out_writing(97 , 'Chèque')
       @bel = @be.bank_extract_lines.create!(compta_lines:[@w1.support_line])
+      @be.stub(:equality?).and_return true
       @be.locked = true
       @be.save!
     end
@@ -176,9 +207,7 @@ describe BankExtract do
     
     it 'toutes les lignes de l extrait sont verrouillées' do 
       @be.bank_extract_lines.each do |bels|
-
-          bels.compta_lines(true).each {|l| l.should be_locked}
-        
+        bels.compta_lines(true).each {|l| l.should be_locked}
       end
     end
     
@@ -195,7 +224,7 @@ describe BankExtract do
 
   describe 'contrôle des bank_extract_lines'  do
 
-   before(:each) do
+    before(:each) do
       @l1 = create_in_out_writing(97, 'Chèque') 
       @cd = @ba.check_deposits.new(deposit_date:(Date.today + 1.day))
       @cd.checks << @l1.children.last
@@ -253,7 +282,7 @@ describe BankExtract do
       expect {@be2.bank_extract_lines.new(compta_lines:[@l2.support_line])}.to raise_error(ArgumentError)
     end
 
-    context 'suppression du bank_extract' do
+    describe 'suppression du bank_extract' do
       
       it 'la destruction du bank_extract supprime les bank_extract_lines'  do
         expect {@be2.destroy}.to change {BankExtractLine.count}.by(-2)
