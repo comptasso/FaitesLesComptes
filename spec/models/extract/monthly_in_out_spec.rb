@@ -52,6 +52,8 @@ describe Extract::MonthlyInOut do
     end
 
   end
+  
+  
   context "when a MonthlyInOutExtract exists" do 
 
     before(:each) do

@@ -97,11 +97,7 @@ Faitesvoscomptes::Application.routes.draw do
 #      resources :rooms
 #    end
 
-    resources :rooms do
-      member do
-        post 'migrate'
-      end
-    end
+    resources :rooms, :only=>[:index, :show, :new, :create, :destroy] 
     
     resource :restore do
       member do

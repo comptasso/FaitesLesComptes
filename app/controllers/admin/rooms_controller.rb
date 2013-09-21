@@ -15,8 +15,9 @@ class Admin::RoomsController < Admin::ApplicationController
 
   skip_before_filter :find_organism, :current_period
   
-  after_filter :clear_org_cache, only:[:create]
+  after_filter :clear_org_cache, only:[:create, :destroy]
 
+  # TODO  voir s'il faut retirer cette logique de up_to_date puisqu'on est maintenant uniquement sur du full web
   # affiche la liste des bases appartenant au current_user
   def index
     @rooms = current_user.rooms
@@ -41,6 +42,7 @@ class Admin::RoomsController < Admin::ApplicationController
     redirect_to admin_organism_path(@organism)
   end
 
+  # TODO supprimer cette logique et la route
   # Action permettant de mettre à jour la base de données
   def migrate
     @room = current_user.rooms.find(params[:id])

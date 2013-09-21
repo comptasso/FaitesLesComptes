@@ -13,7 +13,7 @@
       %ul
         %li.span2
           Solde initial :
-          = debit_credit @bank_extract.begin_sold
+          = virgule @bank_extract.begin_sold
         %li.span2.spread
           Total débit :
           %span#total_debit= debit_credit @bank_extract.total_debit
@@ -24,7 +24,7 @@
           = image_tag('icones/exclamation.png', title:"Ecart de pointage de #{@bank_extract.diff_credit}", id:"img_danger_total_credit") if @bank_extract.diff_credit?
         %li.span2
           Solde Final :
-          = debit_credit @bank_extract.end_sold
+          = virgule @bank_extract.end_sold
   .row-fluid
     .span8
       

@@ -33,7 +33,8 @@ describe "BankExtracts" do
     it 'filling the elements and click button create a bank_extract and redirect to index' do
       visit new_bank_account_bank_extract_path(@ba)
       fill_in('bank_extract_reference', :with=>'Folio 124')
-      fill_in('bank_extract_begin_date_picker', :with=>(I18n.l Date.today))
+      fill_in('bank_extract_begin_date_picker', :with=>(I18n.l Date.today.beginning_of_month))
+      fill_in('bank_extract_end_date_picker', :with=>(I18n.l Date.today.end_of_month))
       click_button('Créer')
       page.should have_content("L'extrait de compte a été créé")
       page.find('.champ h3').should have_content "Liste des extraits de compte" 
@@ -132,11 +133,12 @@ describe "BankExtracts" do
 
     end
 
-    context 'quand le bank_extract est pointe'  do
+    context 'quand le bank_extract est pointe', wip:true do
       it 'affiche seulement les icones afficher et supprimer' do
         @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
           reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)
-        @be.update_attribute(:locked, true)
+        @be.update_column(:locked, true) # pour bypasser le before save qui refuserait puisque non cohérente avec les 
+        # bank_extract_lines 
         visit bank_account_bank_extracts_path(@ba)
         page.find('tbody tr:first td:last').should_not have_icon('modifier', href:"#{edit_bank_account_bank_extract_path(@ba, @be)}")
         page.find('tbody tr:first td:last').should_not have_icon('pointer', href:"#{pointage_bank_extract_bank_extract_lines_path(@be)}")
@@ -160,12 +162,12 @@ describe "BankExtracts" do
       end
 
 
-      it 'la page index affiche une table avec deux lignes' , wip:true do
+      it 'la page index affiche une table avec deux lignes' do
         visit bank_account_bank_extracts_path(@ba)
         page.all('table tbody tr').should have(2).rows
       end
 
-      it 'détruire le premier bank_extract laisse une ligne', wip:true, :js=>true do
+      it 'détruire le premier bank_extract laisse une ligne', :js=>true do
         visit bank_account_bank_extracts_path(@ba)  
         click_link('Supprimer')
         alert = page.driver.browser.switch_to.alert
