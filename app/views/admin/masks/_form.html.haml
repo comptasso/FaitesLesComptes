@@ -10,7 +10,7 @@
     = f.input :narration
     = f.input :nature_name, :collection=>options_for_mask_natures(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title
     = f.input :destination_id, :collection=>@organism.destinations
-    = f.input :amount
+    = f.input :amount, :input_html=> { value: two_decimals(@mask.amount), class: "numeric", :type=>'text'}
     = f.input :mode, :collection=>PAYMENT_MODES
     = f.input :counterpart,  :collection => options_for_mask_counterpart(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title
     
