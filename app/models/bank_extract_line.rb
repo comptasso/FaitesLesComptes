@@ -80,6 +80,18 @@ class BankExtractLine < ActiveRecord::Base
   end
 
   
+  # méthode provisoire pour déverouiller les lignes relevant d'un extrait bancaire
+  def unlock_line
+    compta_lines.each do |l|
+      # verrouillage des écritures car les compta_lines délèguent la méthode lock à leur writing 
+      l.writing.compta_lines.each { |cl| update_column(:locked, false) }
+      # si l est une remise de chèque il faut aussi verrouiller les écritures correspondantes
+      if l.check_deposit_id
+        cd = l.check_deposit
+        cd.checks.each {|ch| ch.writing.compta_lines.each {|cl| cl.update_column(:locked, false)} }
+      end
+    end
+  end
 
 
   
