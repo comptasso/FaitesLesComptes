@@ -16,10 +16,7 @@ class BankExtractLinesController < ApplicationController
   #
   def pointage
     redirect_to bank_extract_bank_extract_lines_url(@bank_extract) if @bank_extract.locked
-    # les trois variables d'instance pour la modalbox qui permet d'ajouter une écriture
-    @in_out_writing =InOutWriting.new(date:@bank_extract.begin_date)
-    @line = @in_out_writing.compta_lines.build
-    @counter_line = @in_out_writing.compta_lines.build(account_id:@bank_account.current_account(@period).id)
+    prepare_modal_box_instances
     # les variables d'instances pour l'affichage de la vue pointage
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
     @lines_to_point = @bank_account.not_pointed_lines
@@ -33,7 +30,6 @@ class BankExtractLinesController < ApplicationController
   # 
   #  ou le premier chiffre est la position et le second l'id de la ligne 
   #
-  
   def enregistrer
     # on efface toutes les bank_extract_lines de cet extrait avant de les reconstruire 
     @bank_extract.bank_extract_lines.each {|bel| bel.destroy}
@@ -42,7 +38,7 @@ class BankExtractLinesController < ApplicationController
       params[:lines].each do |key, clparam|
          cl = @period.compta_lines.find_by_id(clparam)
         if cl
-          bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[cl])
+          bel = @bank_extract.bank_extract_lines.new(:compta_line_id=>cl.id)
           bel.position = key
           @ok = false unless bel.save
         end
@@ -108,5 +104,12 @@ class BankExtractLinesController < ApplicationController
     # TODO ? ici il faut changer d'exercice si les dates du bank_extract ne sont pas dans l'exercice
     @bank_account = @bank_extract.bank_account
     @organism = @bank_account.organism
+  end
+  
+  # La vue pointage compt
+  def prepare_modal_box_instances
+    @in_out_writing =InOutWriting.new(date:@bank_extract.begin_date)
+    @line = @in_out_writing.compta_lines.build
+    @counter_line = @in_out_writing.compta_lines.build(account_id:@bank_account.current_account(@period).id)
   end
 end

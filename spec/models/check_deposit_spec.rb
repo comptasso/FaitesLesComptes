@@ -209,7 +209,7 @@ describe CheckDeposit do
 
 
 
-    describe 'edition' do
+    describe 'edition' do 
 
       it 'remove a check'  do
         l2 = @w2.children.last
@@ -273,9 +273,8 @@ describe CheckDeposit do
       before(:each) do
         @check_deposit.should have(3).checks
         @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
-        @bel = @be.bank_extract_lines.new
-        @bel.compta_lines << @check_deposit.debit_line
-        @bel.save!
+        @bel = @be.bank_extract_lines.create!(:compta_line_id=>@check_deposit.debit_line.id)
+        
       end
 
       it 'doit être pointé' do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130905161022) do
+ActiveRecord::Schema.define(:version => 20130922063736) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -106,13 +106,10 @@ ActiveRecord::Schema.define(:version => 20130905161022) do
     t.integer  "bank_extract_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
-    t.date     "date"
+    t.integer  "compta_line_id"
   end
 
-  create_table "bank_extract_lines_lines", :id => false, :force => true do |t|
-    t.integer "bank_extract_line_id"
-    t.integer "line_id"
-  end
+  add_index "bank_extract_lines", ["compta_line_id"], :name => "index_bank_extract_lines_on_compta_line_id"
 
   create_table "bank_extracts", :force => true do |t|
     t.integer  "bank_account_id"

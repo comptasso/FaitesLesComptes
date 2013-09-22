@@ -33,52 +33,32 @@
 #
 # Acts as list permet d'utiliser le champ position pour ordonner les lignes du relevé
 #
-class BankExtractLine < ActiveRecord::Base
+class BankExtractLine < ActiveRecord::Base 
 
   attr_accessible :compta_lines
 
   belongs_to :bank_extract
 
-  has_and_belongs_to_many :compta_lines, 
-    :join_table=>:bank_extract_lines_lines,
-    :association_foreign_key=>'line_id',
-    :before_add=>:not_already_included,
-    :uniq=>true # pour les rapprochements bancaires
+  belongs_to :compta_line 
+ #   :before_add=>:not_already_included,
+ #   :uniq=>true # pour les rapprochements bancaires
 
   acts_as_list :scope => :bank_extract
  
-  after_initialize :prepare_datas
+  # TODO modifier payment en payment_mode pour utiliser delegate
+  
+  attr_accessible :compta_line_id, :bank_extract_id
+  
+  delegate :narration, :debit, :credit, :date, :to=>:compta_line
+  
+  validates :bank_extract_id, :compta_line_id, :presence=>true
+  validates :compta_line_id, :uniqueness=>true
 
-  attr_reader :compta_line_id, :payment, :narration, :debit,  :credit
-
-  validate :not_empty
-
-  #est défini dans le plugin acts_as_list
-  #
-  # unless 'empty?' est nécessaire car sinon on ne peut plus détruire un 
-  # bank_extract.
-  before_destroy :remove_from_list, :unless=>'empty?'
-
-  def empty?
-    compta_lines.empty?
+  def payment
+    compta_line.payment_mode
   end
 
  
-  # Chainable? indique si le bank_extract_line peut être relié à son suivant
-  # Ce n'est possible que si
-  #  - ce n'est pas le dernier
-  #  - ils ne sont du même sens.
-  #  - ce n'est pas une remise de chèque
-  #  - le suivant n'est pas une remise de chèque
-  #
-  def chainable?
-    return false unless lower_item
-    return false if (lower_item.debit == 0 && self.debit != 0) || (self.credit != 0 && lower_item.credit == 0)
-    return false if check_deposit? # c'est une remise de chèque
-    return false if lower_item.check_deposit? # le suivant est une remise de chèque
-    true
-  end
-
   
   
 
@@ -90,70 +70,21 @@ class BankExtractLine < ActiveRecord::Base
   # lorsque l'on verrouille le relevé
   #
   def lock_line
-    compta_lines.each do |l|
-      # verrouillage des écritures car les compta_lines délèguent la méthode lock à leur writing 
-      l.lock
-      # si l est une remise de chèque il faut aussi verrouiller les écritures correspondantes
-      if l.check_deposit_id
-        cd = l.check_deposit
-        cd.checks.each {|l| l.lock}
-      end
-    end
-  end
-
-  # Retourne le total débit des lignes associées.
-  def debit
-    compta_lines.sum(:debit)
-  end
-
-  # Retourne le total crédit des lignes associées
-  def credit
-    compta_lines.sum(:credit)
-  end
-
-  # Regroup prend une standard_bank_extract_line comme argument
-  # et la fusionne avec l'instance. Renvoie l'instance
-  #
-  # Cela signifie que l'on tranfère les lignes de l'argument à self.
-  # puis que l'on supprime l'enregistrement correspondant à l'argument par la ligne bel.destroy.
-  #
-  def regroup(bel)
-    cls = bel.compta_lines.all
-    BankExtractLine.transaction do
-      bel.destroy
-      cls.each {|cl| compta_lines << cl}
-      # TODO afficher aussi le fichier concerné pour mieux tracer
-      if Rails.env == 'test'
-        puts errors.messages unless valid?
-        compta_lines.each {|cl| puts "ComptaLine #{cl.debit} #{cl.credit} #{cl.errors.messages}" unless cl.valid?}
-      end
-      save
-    end
-    self
-  end
-
-  # Degroup décompose l'instance ayant plusieurs lignes en autant
-  # de BankExtractLine qu'il y a de lignes.
-  #
-  # La position des différentes bels ainsi obtenue est contigue
-  #
-  # La méthode renvoie un tableau composé des bels nouvellement créées.
-  # (la première étant self mais dépouillée de toutes ses lignes sauf une
-  #
-  def degroup
-    return self if self.compta_lines.size < 2
-    pos = position
-    grp = compta_lines.offset(1).all.map do |l|
-      compta_lines.delete(l) # ici on n'efface pas la compta_line proprement dite mais
-      # la bank_extract_line_compta_line de la table jointe
-      new_bel = bank_extract.bank_extract_lines.create!(:compta_lines=>[l])
+    compta_line.lock
+    
+    # si l est une remise de chèque il faut aussi verrouiller les écritures correspondantes
       
-      new_bel.insert_at(pos+1)
-      new_bel
+    # TODO logique à mettre dans le modèle ComptaLine
+    if compta_line.check_deposit_id
+      cd = compta_line.check_deposit
+      cd.checks.each {|l| l.lock}
     end
-    grp.insert(0,self) # on rajoute self au groupe ainsi obtenu
-    grp
+    
   end
+
+  
+  
+
 
 
   protected
@@ -163,6 +94,8 @@ class BankExtractLine < ActiveRecord::Base
   #
   # En pratique une remise de chèque ne peut avoir qu'une ligne mais
   # on ne part pas de cette certitude. On teste donc toutes les lignes
+  
+# TODO : UTILISE ?
   def check_deposit?
     compta_lines.each do |cl|
       return true if cl.check_deposit_id
@@ -173,24 +106,13 @@ class BankExtractLine < ActiveRecord::Base
 
   private
   
-  # A partir des données de compta_lines, remplit quelques champs dynamiques
-  # de la BankExtractLine
-  def prepare_datas
-    unless compta_lines.empty?
-      clf = compta_lines.first
-      self.date ||= clf.date # par défaut on construit les infos de base
-      @payment= clf.payment_mode # avec la première ligne associée
-      @narration = clf.narration
-      @compta_line_id = clf.id
-    end
-
-  end
+  
 
   # Vérifie que la BankExtractLine n'est pas vide.
   #
   # .
   def not_empty
-    if compta_lines.empty?
+    unless compta_line
       Rails.logger.warn 'Tentative d enregistrer une bank_extract_line sans compta_lines'
       errors.add(:base, 'empty')
     end

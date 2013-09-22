@@ -11,7 +11,7 @@ describe BankExtractLine do
   include OrganismFixtureBis
 
   before(:each) do 
-    create_minimal_organism  
+    create_minimal_organism   
 
     @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month, 
       end_date:Date.today.end_of_month,
@@ -40,7 +40,13 @@ describe BankExtractLine do
     it 'un bank_ectract_line ne peut être vide' do
       bel = @be.bank_extract_lines.new
       bel.should_not be_valid
-      bel.errors.messages[:base].should == ['empty']
+      bel.errors.messages[:compta_line_id].should == ['obligatoire']
+    end
+    
+    it 'le champ bank_extract_id est obligatoire' do
+      bel = BankExtractLine.new(:compta_line_id=>1)
+      bel.should_not be_valid
+      bel.errors.messages[:bank_extract_id].should == ['obligatoire']
     end
 
 
@@ -50,14 +56,14 @@ describe BankExtractLine do
   describe 'un extrait bancaire avec les différents éléments' do
 
     before(:each) do
-      @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@d7.support_line])
-      @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@d29.support_line])
-      @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@cd.debit_line])
+      @be.bank_extract_lines.new(:compta_line_id=>@d7.support_line.id)
+      @be.bank_extract_lines.new(:compta_line_id=>@d29.support_line.id)
+      @be.bank_extract_lines.new(:compta_line_id=>@cd.debit_line.id)
       @be.save!
     end
 
 
-    it 'checks values' do
+    it 'checks values'  do
       @be.total_lines_credit.to_f.should == 36
       @be.total_lines_debit.to_f.should == 102
     end
@@ -68,21 +74,22 @@ describe BankExtractLine do
       @be.bank_extract_lines.all.map {|bel| bel.position}.should == [1,2,3]
     end
 
+   # TODO déplacer ces tests vers compta_line et writing
+    
     describe 'lock_line'  do
       before(:each) do
-        @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@cr.support_line])
-        @be.bank_extract_lines.each {|bel| bel.lock_line }
+        @be.bank_extract_lines.new(:compta_line_id=>@cr.support_line.id)
+        @be.bank_extract_lines.each do |bel|
+          bel.lock_line 
+        end
       end
 
-      it 'verif ' do
-        @g = @be.bank_extract_lines.first
-        @g.compta_lines(true).each {|l| l.should be_locked} 
+      it 'verif ' , wip:true do
+        @be.bank_extract_lines.first.compta_line(true).should be_locked
       end
 
 
       it 'lock_line doit verrouiller les lignes et les siblings' do
-        
-
         ComptaLine.where('payment_mode = ?', 'Virement').all.each do |l|
           puts l.inspect unless l.locked
            l.should be_locked
@@ -104,7 +111,7 @@ describe BankExtractLine do
         @bel7, @bel29, @bel102 = *@be.bank_extract_lines.all
       end
 
-      it 'tst du splat' do
+      it 'test du splat' do
         @be.bank_extract_lines.order('position').all.should  == [@bel7, @bel29, @bel102]
       end
 
@@ -120,130 +127,7 @@ describe BankExtractLine do
 
     end
 
-    describe 'regroup'  do
-
-      before(:each) do
-        @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')
-      end
-
-
-
-      it 'regroup diminue le nombre de lignes' do
-        @bel7.regroup @bel29
-        @be.should have(2).bank_extract_lines
-        @be.bank_extract_lines.first.should have(2).compta_lines
-        @be.bank_extract_lines.last.should have(1).compta_lines
-      end
-
-      it 'regroup met à jour le follower' do
-        @bel7.lower_item.should == @bel29
-        @bel29.lower_item.should == @bel102
-        @bel7.regroup @bel29
-        @bel7.lower_item.should == @bel102
-      end
-
-      it 'regroup en partant de la fin' do
-        @bel29.regroup @bel102
-        @bel29.should have(2).compta_lines
-        @bel7.regroup @bel29
-        @bel7.lower_item.should be_nil
-        @bel7.should have(3).compta_lines
-      end
-
-    end
-
-    describe 'degroup'  do
-      before(:each) do
-        @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')
-      end
-
-      
-
-      it 'renvoie lui même si moins de 2 lignes' do
-        @bel7.degroup.should == @bel7
-      end
-
-      it 'un groupe de deux lignes renvoie deux lignes'  do
-        group = @bel29.regroup @bel102
-        group.degroup.should be_an_instance_of Array
-      end
-
-      it 'un groupe de 3 lignes renvoie 3 lignes',  wip:true do
-        group = @bel29.regroup(@bel102).regroup(@bel7)
-        puts group.inspect
-        degroup = group.degroup
-        
-        cls = degroup.map {|l| l.compta_lines }.flatten
-        puts cls
- # TODO check_deposit devrait pouvoir répondre à support_line car celà complique
- # inutilement d'avoir des méthodes différentes.
-        degroup.first.should == @bel29
-        cls.include?(@d7.support_line).should be_true
-        cls.include?(@d29.support_line).should be_true
-        cls.include?(@cd.debit_line).should be_true
-      end
-    end
-
-    describe 'chainable'  do
-
-      before(:each) do
-        @bel7, @bel29,  @bel102 = *@be.bank_extract_lines.order('position')
-      end
-
-      it 'a check_deposit_bank_extract_line is not chainable' do
-        @bel102.should_not be_chainable
-      end
-
-      it ' a bel followed by a standard bel is chainable' do
-        @bel7.should be_chainable
-      end
-
-      it ' a bel followed by a check_deposit is not chainable' do
-        @bel29.position.should == 2
-        @bel29.should_not be_chainable
-      end
-
-      it 'a bel is chainable only if both debit or both credit'  do
-        bel_cr = @be.bank_extract_lines.create!(compta_lines:[@cr.support_line])
-        bel_cr.move_to_top
-        bel_cr.should_not be_chainable
-
-      end
-
-      it 'move_lower' do
-        @be.bank_extract_lines.order('position').all.should  == [@bel7, @bel29, @bel102]
-        @bel102.move_higher
-        @be.bank_extract_lines.order('position').all.should  == [@bel7, @bel102, @bel29]
-      end
-
-      context 'avec l ordre bel7, 102 et 29' do
-
-        before(:each) do
-          @bel102.move_higher
-          @cel7, @cel102,  @cel29 = *@be.bank_extract_lines.order('position')
-          
-        end
-
-        it 'cel29 est le dernier' do
-          @cel7.position.should == 1
-          @cel102.position.should == 2
-          # @bel102.move_higher
-          @cel29.position.should == 3
-          #be_last
-        end
-
-        it 'aucun n est chainable' do
-          @cel7.should_not be_chainable
-          @cel102.should_not be_chainable
-          @cel29.should_not be_chainable
-        end
-
-
-      end
-
-
-    end
-
+   
   end
 
 
