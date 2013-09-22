@@ -10,10 +10,7 @@ class ComptaLine < ActiveRecord::Base
   
   # les lignes appartiennent à un writing
   belongs_to :writing
-  has_and_belongs_to_many :bank_extract_lines,
-    :join_table=>:bank_extract_lines_lines,
-    :foreign_key=>'line_id',
-    :uniq=>true # pour les rapprochements bancaires
+  has_one :bank_extract_line
 
   attr_accessible :debit, :credit, :writing_id, :account_id, 
     :nature, :nature_id, :destination_id, :check_number, :payment_mode, :check_deposit_id
@@ -53,14 +50,14 @@ class ComptaLine < ActiveRecord::Base
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)
   scope :locked, where('locked = ?', true)
-  scope :classe, lambda {|n| where('number LIKE ?', "#{n}%").order('number ASC')}
+  scope :classe, lambda {|n| where('number LIKE ?', "#{n}%").order('number ASC')} 
 
   # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
   # et du champ check_deposit_id
   scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil).order('id') }
 
-  # renvoie les lignes non pointées (appelé par BankAccount qui a des compta_lines, :through=>:accounts)
-  scope :not_pointed, joins(:writing).where("NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES_LINES WHERE LINE_ID = COMPTA_LINES.ID)").order('writings.date')
+  # renvoie les lignes non pointées (appelé par BankExtract
+  scope :not_pointed, joins(:writing).where("NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE COMPTA_LINE_ID = COMPTA_LINES.ID)").order('writings.date')
 
   delegate :date, :narration, :ref, :book, :support, :lock, :to=>:writing
 
@@ -78,7 +75,7 @@ class ComptaLine < ActiveRecord::Base
 
   # répond à la question si une ligne est affectée à un extrait bancaire ou non.
   def pointed?
-    bank_extract_lines.any?
+    bank_extract_line
   end
 
   # une compta line est editable si elle est ni pointée, ni verrouillée, ni associée à une remise de chèque
