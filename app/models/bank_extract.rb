@@ -98,7 +98,16 @@ class BankExtract < ActiveRecord::Base
   def period
     bank_account.organism.find_period(begin_date) rescue nil
   end
-
+  
+  # méthode provisoire permettant de déverouiller un extrait de compte ainsi que les écritures 
+  # correspondantes
+  def unlock
+    BankExtract.transaction do
+       self.update_attribute(:locked, false)
+       bank_extract_lines.all.each {|bl| bl.unlock_line}
+    end
+  end
+  
   private
 
 
