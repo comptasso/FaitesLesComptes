@@ -52,6 +52,7 @@ class BankExtractLine < ActiveRecord::Base
   delegate :narration, :debit, :credit, :date, :to=>:compta_line
   
   validates :bank_extract_id, :compta_line_id, :presence=>true
+  validates :compta_line_id, :uniqueness=>true
 
   def payment
     compta_line.payment_mode

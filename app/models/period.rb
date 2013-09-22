@@ -614,11 +614,8 @@ class Period < ActiveRecord::Base
   # A revoir après modification de la logique des bank_extract_lines_lines
   #
   def destroy_bank_extracts
-    BankAccount.all.each do |ba|
-      ba.bank_extracts.period(self).each do |be|
-        be.bank_extract_lines.each {|bel| ActiveRecord::Base.connection.execute("DELETE FROM bank_extract_lines_lines WHERE bank_extract_line_id = #{bel.id}") }
-        be.destroy
-      end
+    organism.bank_accounts.each do |ba|
+      ba.bank_extracts.period(self).each {|be| be.destroy }
     end
   end
 
