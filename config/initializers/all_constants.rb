@@ -56,4 +56,5 @@ MAX_COMMENT_LENGTH = 300
 # VERSION = '0.8.5RC' # suppression du modèle Archive, action, routes, vues, tests corresondants
 # VERSION = '0.9.0RC' # intégration du gem adhérent
 # VERSION = '1.0.1RC' # mise en place des guides de saisie et corrections de bugs dans Transferts
-VERSION = '1.0.2RC' # correction bug - la liste des organismes n'était pas mise à jour après une suppression 
+# VERSION = '1.0.2RC' # correction bug - la liste des organismes n'était pas mise à jour après une suppression 
+VERSION = '1.1.0RC' # suppression de la table bank_extract_lines_lines et refonte du pointage des relevés 
