@@ -68,11 +68,7 @@ include JcCapybara
     end
   end
 
-  context 'avec une base qui est late' do
-
-    
-    
-  end
+  
 
   context 'avec une base qui manque' do 
 
