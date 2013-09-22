@@ -55,7 +55,7 @@ describe ComptaLine do
     describe 'une compta_line est editable' do
       
       it 'si elle n est pas pointée' do
-        @cl.stub(:bank_extract_lines).and_return(['oui'])
+        @cl.stub(:bank_extract_line).and_return('oui')
         @cl.should_not be_editable
       end
       

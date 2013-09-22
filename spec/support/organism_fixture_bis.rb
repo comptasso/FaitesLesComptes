@@ -52,7 +52,7 @@ module OrganismFixtureBis
   def create_organism
     clean_assotest1
     Apartment::Database.switch('assotest1')
-    @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
+    @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', comment: 'Un commentaire', status:'Association')
     @p = @o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
     get_organism_instances
   end

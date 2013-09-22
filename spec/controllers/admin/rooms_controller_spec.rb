@@ -103,18 +103,7 @@ describe Admin::RoomsController do
     end
   end
 
-  describe 'POST migrate' do
-
-    it 'migre la base demandée' do
-      @cu.should_receive(:rooms).and_return(@a = double(Arel))
-      @a.should_receive(:find).with(@r.to_param).and_return(@r)
-      @r.should_receive(:migrate)
-      post :migrate, {:id => @r.to_param}
-      flash[:notice].should == 'La base a été migrée et mise à jour'
-      response.should redirect_to admin_organism_url
-    end
-  end
-
+  
   describe "DELETE destroy" do
     before(:each) do
       @cu.stub_chain(:rooms, :find).and_return(@r)
@@ -134,6 +123,12 @@ describe Admin::RoomsController do
       delete :destroy,{:id => @r.to_param}
       flash[:alert].should == "Une erreur s'est produite; la base assotest1.sqlite3 n'a pas été supprimée"
       response.should redirect_to admin_organism_url(@organism)
+    end
+    
+    it 'met à jour le cache pour la liste des organismes' do
+      @r.stub(:destroy).and_return true
+      @controller.should_receive(:clear_org_cache) 
+      delete :destroy,{:id => @r.to_param}
     end
 
     

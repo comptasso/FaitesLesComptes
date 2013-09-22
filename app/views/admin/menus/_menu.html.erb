@@ -1,12 +1,12 @@
 <ul class="nav nav-tabs" id="main-nav">
 
-  <li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> ">
+  <li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> " id="admin_organisms_menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
       ORGANISMES
       <b class="caret"></b>
     </a>
     <ul class="dropdown-menu">
-      <li><%= link_to 'Listes des organismes', admin_rooms_path %></li>
+      <li><%= link_to 'Liste des organismes', admin_rooms_path %></li>
       <%= content_tag(:li, :class=>"divider"){} %>
       <% cache("admin_#{current_user.name}")  do %>
       <% current_user.organisms_with_room.each do |groom| %>

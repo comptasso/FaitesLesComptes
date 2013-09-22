@@ -617,20 +617,13 @@ describe Period do
       @p.compta_lines(true).count.should == 0
     end
 
-    describe 'gestion des relevés de banques'  , wip:true do
+    describe 'détruit les bank_extract et leurs bank_extract_lines'  , wip:true do
 
-       def count_habtm
-          rep = ActiveRecord::Base.connection.execute('SELECT COUNT(*) FROM bank_extract_lines_lines').first
-          return rep['COUNT(*)'] if ActiveRecord::Base.connection_config[:adapter] == 'sqlite3'
-          return rep['count'].to_i if ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
-        end
-
+       
       before(:each) do
-        ActiveRecord::Base.connection.execute('DELETE FROM bank_extract_lines_lines')
         BankExtractLine.delete_all
         @be =  @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month, begin_sold:0, total_debit:0, total_credit:99)
-        @be.bank_extract_lines << @be.bank_extract_lines.new(:compta_lines=>[@w.support_line])
-        @be.save!
+        @be.bank_extract_lines.create!(:compta_line_id=>@w.support_line.id)
       end
 
       it 'testing bel' do
@@ -643,11 +636,7 @@ describe Period do
         BankExtractLine.count.should == 0
       end
 
-      it 'count the number of items in join table'  do
-        count_habtm.should >= 1
-        @p.destroy 
-        count_habtm.should == 0
-      end
+      
 
     end
 

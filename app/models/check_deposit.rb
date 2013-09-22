@@ -94,7 +94,7 @@ class CheckDeposit < ActiveRecord::Base
   # la remise chèque est pointée si la ligne débit est connectée à
   # un bank_extract_line
   def pointed?
-    debit_compta_line && debit_compta_line.bank_extract_lines.any?
+    debit_compta_line && debit_compta_line.bank_extract_line
   end
 
 #  # retourne le nombre de chèque dans cette remise

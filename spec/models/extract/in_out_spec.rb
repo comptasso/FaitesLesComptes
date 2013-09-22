@@ -10,39 +10,46 @@ RSpec.configure do |config|
 end
  
 describe Extract::InOut do
-  
   before(:each) do
-    @ob = mock_model(OutcomeBook)
-    @p = mock_model(Period, start_date:Date.today.beginning_of_year, end_date:Date.today.end_of_year)
-    @extract = Extract::InOut.new(@ob, @p)
+      @ob = mock_model(OutcomeBook)
+      @p = mock_model(Period, start_date:Date.today.beginning_of_year, end_date:Date.today.end_of_year)
+  end
+  
+  describe 'création d un extract' do
+    before(:each) do
+      @extract = Extract::InOut.new(@ob, @p)
+    end
+  
+  
+
+    it 'respond to book' do
+      @extract.book.should == @ob
+    end
+
+    it 'remplit ses arguments par défaut' do
+      @ext = Extract::InOut.new(@ob, @p, Date.today, Date.today >> 1)
+      @ext.begin_date.should == Date.today
+      @ext.end_date.should == (Date.today >> 1) 
+    end
+
+    it 'title est le titre du livre' do
+      @ext = Extract::InOut.new(@ob, @p, Date.today, Date.today >> 1)
+      @ext.title.should == @ob.title
+    end
+
+    it 'subtitle écrit les limites de date' do
+      @ext = Extract::InOut.new(@ob, @p, Date.today, Date.today >> 1)
+      @ext.subtitle.should == "Du #{I18n.l Date.today} au #{I18n.l(Date.today >> 1)}"
+    end
+
+    it 'lines interroge book et filtre ' do
+      @ob.should_receive(:extract_lines).with(@extract.begin_date, @extract.end_date).and_return('voila')
+      @extract.lines.should == 'voila'
+    end
+  
   end
 
-  it 'respond to book' do
-    @extract.book.should == @ob
-  end
-
-  it 'remplit ses arguments par défaut' do
-    @ext = Extract::InOut.new(@ob, @p, Date.today, Date.today >> 1)
-    @ext.begin_date.should == Date.today
-    @ext.end_date.should == (Date.today >> 1) 
-  end
-
-  it 'title est le titre du livre' do
-    @ext = Extract::InOut.new(@ob, @p, Date.today, Date.today >> 1)
-    @ext.title.should == @ob.title
-  end
-
-  it 'subtitle écrit les limites de date' do
-    @ext = Extract::InOut.new(@ob, @p, Date.today, Date.today >> 1)
-    @ext.subtitle.should == "Du #{I18n.l Date.today} au #{I18n.l(Date.today >> 1)}"
-  end
-
-  it 'lines interroge book et filtre ' do
-    @ob.should_receive(:extract_lines).with(@extract.begin_date, @extract.end_date).and_return('voila')
-    @extract.lines.should == 'voila'
-  end
-
-  context "when a InOutExtract exists" do
+  describe  "un extrait sait sélectionner ses lignes" , wip:true do
 
     def line(date, debit, credit)
       double(ComptaLine, ref:'', narration:'Une compta line',
@@ -56,8 +63,9 @@ describe Extract::InOut do
         locked?:true)
     end
 
-    def double_lines
-         ls = []
+    # crée 30 lignes sur 3 avec des débits allant de 1 à 10
+    def thirty_lines
+      ls = []
       3.times do |i|
         1.upto(10) do |j|
           ls << line(@extract.begin_date >> i, j, 0)
@@ -68,7 +76,8 @@ describe Extract::InOut do
     end
 
     before(:each) do
-      @extract.stub(:lines).and_return(@ls = double_lines)
+      @extract = Extract::InOut.new(@ob, @p)
+      @extract.stub(:lines).and_return(@ls = thirty_lines)
       @ob.stub(:cumulated_at).with(@extract.begin_date - 1, :debit).and_return 5
       @ob.stub(:cumulated_at).with(@extract.begin_date - 1, :credit).and_return 18
     end

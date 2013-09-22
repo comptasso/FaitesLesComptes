@@ -68,19 +68,7 @@ include JcCapybara
     end
   end
 
-  context 'avec une base qui est late' do
-
-    it 'rend une action migrate' do
-      r2.stub(:relative_version).and_return(:late_migration)
-      r2.stub('late?').and_return true
-      r2.should be_late
-      render
-      page.find('tr:last td:nth-child(5) img')[:src].should have_content('migrer.png')
-      page.find('tr:last td:nth-child(5) a')[:href].should == migrate_admin_room_path(r2)
-      page.find('tr:last td:nth-child(5) a')['data-method'].should == 'post'
-    end
-    
-  end
+  
 
   context 'avec une base qui manque' do 
 
