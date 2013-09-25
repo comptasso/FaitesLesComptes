@@ -145,7 +145,7 @@ Faitesvoscomptes::Application.routes.draw do
     end
   end  # FIN DE ADMIN
 
-  
+ ################################################################################# 
 
   # DEBUTde la zone public
 
