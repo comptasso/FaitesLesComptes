@@ -1,18 +1,15 @@
 $('div.modal-body').html('<%= j render partial:'form' %>');
 
-// on met en place les actions lors de l affichage
+// on réinitialise les actions de séléction des types de natures en fonction du livre 
+// et de l'affichage ou non du mode de paiement.
+
 $f_modal_book_change();
-if ($('#form_bank_extract_line #line_payment_mode').val() !== 'Chèque') {
-  $('#form_bank_extract_line #td_check_number').hide();
-}
+$f_modal_payment_mode_change();
 
-
-$('.input_date').datepicker(
+// il faut également réinitialiser le datepicker
+$('.input_date_picker').datepicker(
     {
         dateFormat: 'dd/mm/yy',
-        buttonImage: '/assets/cal.gif',
-        buttonImageOnly: true,
-        showOn: 'both',
         minDate: $(this).attr('data-jcmin'),
         maxDate: $(this).attr('data-jcmax')
     }

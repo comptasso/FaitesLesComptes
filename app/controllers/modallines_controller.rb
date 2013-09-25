@@ -8,11 +8,13 @@ class ModallinesController < ApplicationController
     @bank_extract=BankExtract.find(params[:bank_extract_id])
     @bank_account = @bank_extract.bank_account
     complete_params
-    @writing = InOutWriting.new(params[:in_out_writing])
-
-    if @writing.save
-     
-      @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
+    @in_out_writing = InOutWriting.new(params[:in_out_writing])
+    # nécessaire pour pouvoir refaire le formulaire
+    @line = @in_out_writing.compta_lines.first
+    @counter_line = @in_out_writing.compta_lines.last
+    
+    if @in_out_writing.save
+     @lines_to_point = Utilities::NotPointedLines.new(@bank_account)
       respond_to do |format|
         format.js
       end

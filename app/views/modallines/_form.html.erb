@@ -16,7 +16,7 @@
     <%= f.input :narration,  :label=>'Libellé ', input_html: {class: "span10" } %>
     <%= f.input :ref, label:'Référence',  input_html: {class: "span4" }  %>
     <%= f.fields_for :compta_lines, @line do |build| %>
-    <%= build.association :nature , :prompt => "Quoi ?",
+    <%= build.association :nature, :prompt => "Quoi ?",
               :collection => [Utilities::NaturesCollection.new(@period, :recettes), Utilities::NaturesCollection.new(@period, :depenses)],
               :as => :grouped_select, :group_method=>:natures,
               :required=>true, input_html: {class: "span6 " } %>

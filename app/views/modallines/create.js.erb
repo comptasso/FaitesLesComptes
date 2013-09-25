@@ -1,8 +1,8 @@
+
+
 // masque le formulaire modal de saisie
 // retire également la partie qui assombrissait la vue pendant l'affichage de la modal box
 // retrace le tableau des lignes non pointées dans la vue
-$('#modal_form_line').hide();
-$('div.modal-backdrop').remove();
+
+$('#modal_form_line').modal('toggle');
 $('tbody#ltps').html(" <%= j render 'bank_extract_lines/ltpsbody' %>");
-
-
