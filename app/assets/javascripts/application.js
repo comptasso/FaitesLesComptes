@@ -279,6 +279,12 @@ function finishDownload() {
 // reorder du controller qui a affiché la vue (ici natures_controller#index)
 // donc l'url sera par exemple periods/2/natures
 // et l'url appelée par la fonction ajax sera periods/2/natures/reorder'
+//
+//L'attribut data-position de chaque ligne donne sa ligne d'origine
+//Il faut donc trouver la position du drop
+//puis envoyer au controller une action avec les paramètres id, fromPosition et 
+//toPosition. 
+//
 function fnTableSortable(table, action) {
   $(table).sortable({
     connectWith: table.val('id'),
@@ -298,7 +304,7 @@ function fnTableSortable(table, action) {
         // chercher quel est le rang en balayant les lignes
         var to = -1;
         table.find('tr').each(function(index){
-          if ($(this).attr('id') == parseInt(id)) {
+          if ($(this).attr('id') === id) {
             to = index;
           }
 

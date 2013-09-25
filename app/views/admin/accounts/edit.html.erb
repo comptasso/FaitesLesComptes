@@ -1,8 +1,7 @@
-<%= content_for :menu do %>
-
-<%= icon_to 'nouveau.png', new_admin_period_account_path(@period) %>
-<%= icon_to 'retour.png', :back %>
-<% end -%>
+<%= content_for(:menu) do 
+  icon_to('nouveau.png', new_admin_period_account_path(@period)) + 
+  icon_to('retour.png', :back)  
+  end -%>
 
 <div class="champ">
   <h3>

@@ -126,11 +126,7 @@ Faitesvoscomptes::Application.routes.draw do
           get 'close'
           post 'create_plan'
         end
-        resources :lines do
-          member do
-            post 'lock'
-          end
-        end
+        
         resources :natures do
           collection do
             post 'reorder' # pour permettre le tri par javascript

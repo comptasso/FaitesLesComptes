@@ -62,10 +62,10 @@ group :development, :test do
   # Pretty printed test output
   gem 'turn', :require => false
   gem 'rspec-rails', '~>  2.0'
-  
+
   gem 'spork-rails'
   gem 'launchy'
-  gem 'database_cleaner'
+
   gem 'selenium-webdriver', '>= 2.31'
   gem 'capybara', '1.1.2'
   gem 'email_spec'

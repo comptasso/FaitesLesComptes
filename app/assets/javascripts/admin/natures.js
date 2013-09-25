@@ -34,7 +34,9 @@ jQuery(function () {
 
 
 // pour permettre le classement des natures dans la vue index par un drag & drop 
-// TODO a commenter mieux
+// Si la table #index dans le body de classe admin_natures existe, 
+// alors on appelle fnTableSortable qui est défini dans application.js
+// fonction qui appelle l'action reorder du controller - ici admin/natures/controller
 jQuery(function() {
   if ($('.admin_natures #index').length === 1) {
     fnTableSortable($('.admin_natures #recettes'), '/reorder');
