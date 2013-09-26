@@ -136,11 +136,7 @@ Faitesvoscomptes::Application.routes.draw do
       end
     end
     resources :periods do
-      resources :natures do
-        member do
-          post :link_nature, :unlink_nature
-        end
-      end
+      resources :natures 
       resources :accounts 
     end
   end  # FIN DE ADMIN
