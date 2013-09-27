@@ -38,26 +38,14 @@ class Nomenclature < ActiveRecord::Base
 
   # remplit ses instructions à partir d'un fichier et se renvoie
   def load_file(file)
-    yml = YAML::load_file(file)
-    self.actif=yml[:actif]
-    self.passif=yml[:passif]
-    self.resultat=yml[:resultat]
-    self.benevolat=yml[:benevolat]
-    self
+    fill_attributes(YAML::load_file(file))
   end
 
   # remplit ses instructions à partir d'une chaine et se renvoie
   def load_io(io_string)
-    yml = YAML::load(io_string)
-    self.actif=yml[:actif]
-    self.passif=yml[:passif]
-    self.resultat=yml[:resultat]
-    self.benevolat=yml[:benevolat]
-    self
+    fill_attributes(YAML::load(io_string))
   end
-
   
-
   # crée une instance de Compta::Nomenclature pour l'exercice demandé
   def compta_nomenclature(period)
     Compta::Nomenclature.new(period, instructions)
@@ -85,6 +73,14 @@ class Nomenclature < ActiveRecord::Base
   end
 
   protected
+  
+  def fill_attributes(yml)
+    self.actif=yml[:actif]
+    self.passif=yml[:passif]
+    self.resultat=yml[:resultat]
+    self.benevolat=yml[:benevolat]
+    self
+  end
 
 
   # vérifie la validité de la nomenclature pour l'ensemble des exercices

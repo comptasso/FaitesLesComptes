@@ -10,25 +10,25 @@ module Compta
   #
   # Elle affiche un moins si le solde est de sens contraire au sens recherché
   #
-  #  Par exemple Pour la rubrique Immobilisations incorporelles
-  #  les comptes :
-  #  Immo incorporelles 20
-  #  Mais aussi Frais d'établissement 201 debit
-  #  Droit au bail 206
-  #  Fonds commercial 207
-  #  Autres immobilisations incorporelles 208
-  #  amortissement des frais d'établissement 2801 credit
+  # Par exemple Pour la rubrique Immobilisations incorporelles
+  # les comptes :
+  #   Immo incorporelles 20
+  #   Mais aussi Frais d'établissement 201 debit
+  #   Droit au bail 206
+  #   Fonds commercial 207
+  #   Autres immobilisations incorporelles 208
+  #   Amortissement des frais d'établissement 2801 credit
   #
-  #  La classe doit afficher les différentes lignes de comptes mais sans faire de doublon
+  # La classe doit afficher les différentes lignes de comptes mais sans faire de doublon
   #
-  #  On créé la classe avec comme argument period, title, sens (:actif ou :passif), et un string
-  #  de numéros de comptes '20 201 206 207 208'
+  # On créé la classe avec comme argument period, title, sens (:actif ou :passif), et un string
+  # de numéros de comptes '20 201 206 207 208'
   #
-  #  ON utilise quelques symboles pour identifier les comptes que l'on souhaite avoir
+  # On utilise quelques symboles pour identifier les comptes que l'on souhaite avoir
   #  
-  #  -280 signifie que le solde sera à prendre dans la seconde colonne (amortissements ou provisions)
-  #  !201 signifie que ce compte ne doit pas être repris
-  #  47C ou 47D signifie que le compte n'est pris que s'il est créditeur ou débiteur
+  #   -280 signifie que le solde sera à prendre dans la seconde colonne (amortissements ou provisions)
+  #   !201 signifie que ce compte ne doit pas être repris
+  #   47C ou 47D signifie que le compte n'est pris que s'il est créditeur ou débiteur
   #  
   #
   class Rubrik
