@@ -25,21 +25,33 @@
 #
 class Nomenclature < ActiveRecord::Base 
 
-  serialize :actif, Hash
-  serialize :passif, Hash
-  serialize :resultat, Hash
-  serialize :benevolat, Hash
-
+  
   belongs_to :organism
   has_many :folios
   has_many :rubriks, through: :folios
 
   attr_accessible :actif, :passif, :resultat, :benevolat
 
-  # TODO une nomenclature est valide si elle a 3 folios
-  validates :actif, :passif, :resultat, :organism_id, :presence=>true
+  # TODO une nomenclature est valide si elle a 3 folios avec comme nom actif, passif 
+  validates :organism_id, :presence=>true
   # TODO mettre dans une logique de checkup mais pas de validité
-  validate :check_validity
+  # validate :check_validity
+  
+  def actif
+    folios.where('name = ?', :actif).first
+  end
+  
+  def passif
+    folios.where('name = ?', :passif).first
+  end
+  
+  def resultat
+    folios.where('name = ?', :resulat).first
+  end
+  
+  def benevolat
+    folios.where('name = ?', :benevolat).first
+  end
   
   
 
@@ -52,7 +64,7 @@ class Nomenclature < ActiveRecord::Base
   # la présentation des comptes en différentes rubriques.
   # La méthode lit le fichier puis crée les rubriks correspondantes.
   def read_and_fill_folios(filename)
-    yml = YAML::load_file(File.join(Rails.root, filename))
+    yml = YAML::load_file(filename)
     
     Nomenclature.transaction do
       yml.each do |k,v|
@@ -62,15 +74,7 @@ class Nomenclature < ActiveRecord::Base
     end
   end
   
-  # remplit ses instructions à partir d'un fichier et se renvoie
-  def load_file(file)
-    fill_attributes(YAML::load_file(file))
-  end
-
-  # remplit ses instructions à partir d'une chaine et se renvoie
-  def load_io(io_string)
-    fill_attributes(YAML::load(io_string))
-  end
+  
   
   # crée une instance de Compta::Nomenclature pour l'exercice demandé
   def compta_nomenclature(period)
@@ -99,14 +103,6 @@ class Nomenclature < ActiveRecord::Base
   end
 
   protected
-  
-  def fill_attributes(yml)
-    self.actif=yml[:actif]
-    self.passif=yml[:passif]
-    self.resultat=yml[:resultat]
-    self.benevolat=yml[:benevolat]
-    self
-  end
   
   
 

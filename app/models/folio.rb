@@ -1,5 +1,5 @@
 class Folio < ActiveRecord::Base
-  attr_accessible :title, :name, :sens
+  attr_accessible :name, :title, :sens
   has_many :rubriks
   
   # méthode créant les rubriks de façon récursive à partir d'un hash

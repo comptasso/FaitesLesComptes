@@ -246,8 +246,8 @@ class Organism < ActiveRecord::Base
       else
         File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
       end
-      yml = YAML::load_file(path)
-      create_nomenclature(:actif=>yml[:actif], passif:yml[:passif], resultat:yml[:resultat], benevolat:yml[:benevolat])
+      n = create_nomenclature 
+      n.read_and_fill_folios(path)
     end
   end
 

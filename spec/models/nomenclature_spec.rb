@@ -5,7 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
-   c.filter = {wip:true}
+  # c.filter = {wip:true}
 end
 
 describe Nomenclature do
@@ -17,18 +17,6 @@ describe Nomenclature do
   before(:each) do
     Apartment::Database.switch('assotest1')
     clean_assotest1
-  end
-
-  it 'peut lire un fichier yml pour charger ses pages' do
-    @n = o.nomenclature
-    @n.load_file(File.join(Rails.root, 'spec/fixtures/association/good.yml')) 
-    @n.should be_valid
-  end
-  
-  it 'peut lire un string' do
-    @n =o.nomenclature
-    inst = File.open(File.join(Rails.root, 'spec/fixtures/association/good.yml'), 'r') {|f| f.read}
-    @n.load_io(inst).should be_valid
   end
 
   describe 'collect_error' do
@@ -64,14 +52,14 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
 
     it 'peut restituer ses instructions' do
        @n.instructions.should be_an_instance_of(Hash)
-       @n[:actif].should be_an_instance_of(Hash)
-       @n[:passif].should be_an_instance_of(Hash)
-       @n[:resultat].should be_an_instance_of(Hash)
-       @n[:benevolat].should be_an_instance_of(Hash)
+       @n.actif.should be_an_instance_of Folio 
+       @n.passif.should be_an_instance_of Folio
+       @n.resultat.should be_an_instance_of Folio
+       @n.benevolat.should be_an_instance_of Folio
     end
 
     it 'actif a des rubriks' do
-      @n[:actif][:rubriks].should be_an_instance_of(Hash)
+      @n.actif.should have(29).rubriks
     end
 
     it 'peut créer une Compta::Nomenclature' do
@@ -79,22 +67,22 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
     end
 
    it 'n est pas valide sans un actif' do
-     @n[:actif] = nil
+     @n.stub(:actif).and_return nil
      @n.should_not be_valid
    end
 
     it 'invalid sans passif' do
-      @n[:passif] = nil
+      @n.stub(:passif).and_return nil
       @n.should_not be_valid
     end
 
     it 'invalid sans resultat' do
-      @n[:resultat] = nil
+      @n.stub(:resultat).and_return nil
       @n.should_not be_valid
     end
 
     it 'invalide sans organisme' do
-      @n[:organism_id] = nil
+      @n.organism_id = nil
       @n.should_not be_valid
     end
 
@@ -130,7 +118,6 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
     
     before(:each) do
       @n = o.nomenclature  
-      @n.read_and_fill_folios('spec/fixtures/association/good.yml')
     end
     
     it 'crée les 94 rubriks fournies par le fichier yml' do

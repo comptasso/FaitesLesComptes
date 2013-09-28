@@ -226,10 +226,6 @@ ActiveRecord::Schema.define(:version => 20130928095925) do
 
   create_table "nomenclatures", :force => true do |t|
     t.integer  "organism_id"
-    t.text     "actif"
-    t.text     "passif"
-    t.text     "resultat"
-    t.text     "benevolat"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
