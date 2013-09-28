@@ -5,7 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
-  # c.filter = {wip:true}
+   c.filter = {wip:true}
 end
 
 describe Nomenclature do
@@ -70,7 +70,7 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
        @n[:benevolat].should be_an_instance_of(Hash)
     end
 
-    it 'la sérialization marche actif a des rubriks' do
+    it 'actif a des rubriks' do
       @n[:actif][:rubriks].should be_an_instance_of(Hash)
     end
 
@@ -121,6 +121,26 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
     end
 
 
+  end
+  
+  # nouvelles spec pour faire évoluer nomenclature qui enregistre actuellement toutes 
+  # les pages (actif, passif, resultat et bénévolat) dans une logique 
+  # de rubrik ou  les rubrik sont persistants
+  describe 'read and fill rubriks' , wip:true do
+    
+    before(:each) do
+      @n = o.nomenclature  
+      @n.read_and_fill_folios('spec/fixtures/association/good.yml')
+    end
+    
+    it 'crée les 94 rubriks fournies par le fichier yml' do
+      @n.should have(90).rubriks  
+    end
+    
+    it 'la nomenclature a 4 folios' do
+      @n.should have(4).folios  
+    end
+    
   end
 
 

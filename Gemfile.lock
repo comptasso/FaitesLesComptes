@@ -30,6 +30,8 @@ GEM
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     acts_as_list (0.1.9)
+    acts_as_tree (1.4.0)
+      activerecord (>= 3.0.0)
     addressable (2.3.5)
     adherent (0.1.5)
       haml-rails
@@ -212,6 +214,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_list (= 0.1.9)
+  acts_as_tree (~> 1.4)
   adherent
   apartment
   browser (= 0.1.6)

@@ -7,8 +7,13 @@
 # ainsi que le compte de Benevolat.
 #
 # Un cinquième champ organism_id fait le lien avec l'organisme.
+# 
+# Une nomenclature est donc attachée à un organisme
+# Il ne faut pas confondre avec Compta::Nomenclature qui est un objet beaucoup
+# plus concret puisqu'il est associé à un exercice (period) et que Compta::Nomenclature
+# peut donc faire des contrôles sur la validité des éditions qui seront produites.
 #
-# Les validations concernent la présence de l'organisme et des trois documents
+# Les validations ici ne concernent donc que la présence de l'organisme et des trois documents
 # indispensables : actif, passif et résultat.
 #
 # Une dernière validation est réalisée par check_validity, qui en fait délègue la
@@ -26,16 +31,37 @@ class Nomenclature < ActiveRecord::Base
   serialize :benevolat, Hash
 
   belongs_to :organism
+  has_many :folios
+  has_many :rubriks, through: :folios
 
   attr_accessible :actif, :passif, :resultat, :benevolat
 
+  # TODO une nomenclature est valide si elle a 3 folios
   validates :actif, :passif, :resultat, :organism_id, :presence=>true
+  # TODO mettre dans une logique de checkup mais pas de validité
   validate :check_validity
+  
+  
 
   def instructions
     {:actif=>actif, :passif=>passif, :resultat=>resultat, :benevolat=>benevolat}
   end
-
+  
+  
+  # permet de lire un fichier yml représentant la nomenclature utilisée pour
+  # la présentation des comptes en différentes rubriques.
+  # La méthode lit le fichier puis crée les rubriks correspondantes.
+  def read_and_fill_folios(filename)
+    yml = YAML::load_file(File.join(Rails.root, filename))
+    
+    Nomenclature.transaction do
+      yml.each do |k,v|
+        f = folios.create(:name=>k, :title=>v[:title], sens:v[:sens])
+        f.fill_rubriks(v[:rubriks])
+      end
+    end
+  end
+  
   # remplit ses instructions à partir d'un fichier et se renvoie
   def load_file(file)
     fill_attributes(YAML::load_file(file))
@@ -51,13 +77,13 @@ class Nomenclature < ActiveRecord::Base
     Compta::Nomenclature.new(period, instructions)
   end
 
- # méthode de présentation des erreurs
- #
- # TODO : on devrait mettre cette méthode dans un helper de présentation
- #
- # utilisée pour former le flash dans le controller AdminNomenclatures
- # mais également le messages qui est crée par le
- # AccountObserver lorsque la création d'un compte engendre une anomalie avec la nomenclature .
+  # méthode de présentation des erreurs
+  #
+  # TODO : on devrait mettre cette méthode dans un helper de présentation
+  #
+  # utilisée pour former le flash dans le controller AdminNomenclatures
+  # mais également le messages qui est crée par le
+  # AccountObserver lorsque la création d'un compte engendre une anomalie avec la nomenclature .
   def collect_errors
     al = ''
     unless valid?
@@ -81,7 +107,8 @@ class Nomenclature < ActiveRecord::Base
     self.benevolat=yml[:benevolat]
     self
   end
-
+  
+  
 
   # vérifie la validité de la nomenclature pour l'ensemble des exercices
   # et recopie dans les erreurs de l'instance, les erreurs éventuelles trouvées

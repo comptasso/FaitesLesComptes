@@ -66,8 +66,8 @@ module Compta
       def pages
         @instructions.map {|k, v| k}
       end
-
-
+      
+        
     # renvoie une page, par exemple :actif ou :passif, ou :bilan sous forme d'une
     # instance de Compta::Sheet
       def sheet(doc)

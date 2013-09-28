@@ -15,6 +15,7 @@ end
 
 
 gem 'acts_as_list', '0.1.9'
+gem 'acts_as_tree', "~>1.4"
 gem 'prawn', "~> 0.12"
 gem 'prawn_rails', "0.0.11"
 gem 'haml-rails', "~>0.3"
