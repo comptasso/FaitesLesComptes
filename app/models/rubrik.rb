@@ -27,10 +27,14 @@ class Rubrik < ActiveRecord::Base
     # les comptes 6 et 7.
     #
     def lines(period)
-      if resultat?
-        [Compta::RubrikResult.new(period, :passif, '12')]
+      if leaf? 
+        if resultat?
+          return [Compta::RubrikResult.new(period, :passif, '12')]
+        else
+          return all_lines(period)
+        end
       else
-        all_lines
+        return children.collect {|r| r.lines(period) }
       end
     end
     
