@@ -36,6 +36,10 @@ class Nomenclature < ActiveRecord::Base
   validates :organism_id, :presence=>true
   # TODO mettre dans une logique de checkup mais pas de validité
   # validate :check_validity
+  # TODO c'est ici qu'il faut tester que actif passif et resultat sont bien présents
+  # on pourrait aussi avoir des tests sur les comptes 6-7 8 et de bilan
+  # laissant à Compta::Nomenclature juste le soin de vérifier sa bonne adapatation à la 
+  # période.
   
   def actif
     folios.where('name = ?', :actif).first
@@ -78,7 +82,7 @@ class Nomenclature < ActiveRecord::Base
   
   # crée une instance de Compta::Nomenclature pour l'exercice demandé
   def compta_nomenclature(period)
-    Compta::Nomenclature.new(period, instructions)
+    Compta::Nomenclature.new(period, self)
   end
 
   # méthode de présentation des erreurs

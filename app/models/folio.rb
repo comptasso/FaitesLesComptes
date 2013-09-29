@@ -16,5 +16,9 @@ class Folio < ActiveRecord::Base
         end
       end
   end
+  
+  def root
+    rubriks.where('parent_id IS NULL').first
+  end
 
 end

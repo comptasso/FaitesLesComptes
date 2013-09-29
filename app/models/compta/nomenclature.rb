@@ -27,14 +27,14 @@ module Compta
 
     include ActiveModel::Validations
 
-    attr_accessor :instructions
+    attr_accessor :nomenclature
 
     # permet de définir l'ensemble des méthodes d'accès aux pages (:actif, :passif, ...
     # voir juste dessous l'utilisation
     def self.def_doc(*args)
       args.each do |a|
         define_method a do
-          instructions[a]
+          nomenclature.send(a)
         end
       end
     end
@@ -44,7 +44,7 @@ module Compta
     # On accède aux documents par un array : instructions[:document] 
     def_doc :resultat, :actif, :passif, :benevolat
 
-    validates :actif, :passif, :resultat, :presence=>true
+    # validates :actif, :passif, :resultat, :presence=>true
     validate :bilan_complete, :bilan_balanced, :resultats_67, :resultat_complete,
       :benevolat_8, :no_doublon?
 
@@ -57,30 +57,36 @@ module Compta
     #
     # instructions devient un array de Folios
     #
-    def initialize(period, instructions)
+    def initialize(period, nomenclature)
       @period = period
-      @instructions = instructions
+      @nomenclature = nomenclature
     end
 
-     # renvoie la liste des pages existant dans cette nomenclature
+     # renvoie les noms des folios existant dans cette nomenclature
       def pages
-        @instructions.map {|k, v| k}
+        nomenclature.folios.map(&:name)
       end
       
         
     # renvoie une page, par exemple :actif ou :passif, ou :bilan sous forme d'une
     # instance de Compta::Sheet
       def sheet(doc)
-        Compta::Sheet.new(@period, @instructions[doc], doc) if @instructions[doc]
+        Compta::Sheet.new(@period, doc.rubriks, doc.name) if doc
       end
 
-
+# TODO déplacer tous ces tests dans nomenclature 
+# car ils peuvent et doivent être vérifiés à ce niveau
+# 
+# 
       # no_doublon vérifie que la nomenclature ne prend pas deux fois le même compte
-      # pour chacun des éléments : :actif, :passif, :resultat, :benevolat
+      # pour l ensemble des folios 
+      # 
+      # De plus il vérifie également qu'il n'y a pas de doublon à l'intérieur 
+      # d'un bilan qui peut avoir des comptes D et des comptes C
       #
       def no_doublon?
-        pages.each {|p| doc_no_doublon?(p) }
-        collection_with_option_no_doublon?(:bilan, :actif, :passif)
+        nomenclature.folios.each {|p| doc_no_doublon?(p) }
+        collection_with_option_no_doublon?('bilan', actif, passif)
       end
 
       # Cherche les doublons en prenant en compte le fait que les comptes standard (ceux avec nil comme :option
@@ -130,7 +136,7 @@ module Compta
 
       # Indique si le document bilan utilise tous les comptes de bilan
       def bilan_complete?
-        bilan_complete.empty? ? true : false
+        bilan_complete.empty? ? true : false 
       end
 
      
@@ -138,8 +144,7 @@ module Compta
      
 
 
-      protected
-
+      
       
 
       # vérifie que tous les comptes sont pris en compte pour l'établissement du bilan
@@ -147,18 +152,21 @@ module Compta
       def bilan_complete
         list_accs = @period.two_period_account_numbers # on a la liste des comptes
         rubrik_accs = []
-        rubrik_accs += numbers_from_document(:actif) + numbers_from_document(:passif)
+        rubrik_accs += numbers_from_document(actif) + numbers_from_document(passif)
         not_selected =  list_accs.select {|a| !a.in?(rubrik_accs) && !(a=~/^8\d*$/) }
         unless not_selected.empty?
           self.errors[:bilan] << "ne reprend pas tous les comptes. Manque #{not_selected.join(', ')}"
         end
         return not_selected
       end
+      
+      
+protected
 
       # vérifie que tous les comptes 6 et 7 sont pris en compte pour l'établissement du compte de résultats 
       def resultat_complete
         list_accs = rough_accounts_reject(@period.two_period_account_numbers, 1,2,3,4,5,8)
-        rubrik_accounts = numbers_from_document(:resultat)
+        rubrik_accounts = numbers_from_document(resultat)
         not_selected =  list_accs.select {|a| !a.in?(rubrik_accounts) }
         self.errors[:resultat] << "Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque #{not_selected.join(', ')}" if not_selected.any?
       end
@@ -171,7 +179,7 @@ module Compta
       # qui n'ont pas de correspondant
       def bilan_balanced
       
-        array_numbers = rough_accounts_list(:actif) + rough_accounts_list(:passif)
+        array_numbers = rough_accounts_list(actif) + rough_accounts_list(passif)
       
         # maintenant on crée une liste des comptes D et une liste des comptes C
         numbers_d = array_numbers.map {|n| $1 if n =~ /^(\d*)D$/}.compact.sort
@@ -193,19 +201,19 @@ module Compta
       # sert à contrôler que les différentes rubriques de resultats n'utilisent que des comptes 6 et 7
       def resultats_67
         retour = true
-        [:exploitation, :financier, :exceptionnel].each do |partie|
-          r = rough_accounts_reject(rough_accounts_list(partie), 6, 7)
+       
+          r = rough_accounts_reject(rough_accounts_list(resultat), 6, 7)
           unless r.empty?
-            self.errors[partie] << "comprend un compte étranger aux classes 6 et 7 (#{r.join(', ')})"
+            self.errors[:resultat] << "comprend un compte étranger aux classes 6 et 7 (#{r.join(', ')})"
             retour = false
           end
-        end
+        
         retour
       end
 
       # controle que le bénévolat ne comprend que des comptes de classe 8
       def benevolat_8
-        unless  (r = rough_accounts_reject(rough_accounts_list(:benevolat), 8)).empty?
+        unless  (r = rough_accounts_reject(rough_accounts_list(benevolat), 8)).empty?
           self.errors[:benevolat] << "comprend un compte étranger à la classe 8 (#{r.join(', ')})"
           return false
         end
@@ -229,8 +237,8 @@ module Compta
       # rencoie la liste brute des informations de comptes repris dans la partie doc
       # rough_accounts_list(:benevolat) renvoie par exemple %w(87 !870 870 86 !864 864)
       def rough_accounts_list(doc)
-        if @instructions[doc]
-          accumulated_values(@instructions[doc][:rubriks]).join(' ').split
+        if doc
+          accumulated_values(doc).join(' ').split
         else
           []
         end
@@ -241,8 +249,8 @@ module Compta
 
       # doc est un symbol comme :actif, :passif, :resultat
       def numbers_from_document(doc)
-        if @instructions[doc]
-          accumulated_values(@instructions[doc][:rubriks]).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list_numbers}.flatten
+        if doc
+          accumulated_values(doc.rubriks).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list_numbers}.flatten
         else
           []
         end
@@ -251,7 +259,7 @@ module Compta
       
 
       def numbers_with_options_from_document(doc)
-           accumulated_values(@instructions[doc][:rubriks]).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list}.flatten
+           accumulated_values(doc.rubriks).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list}.flatten
       end
 
       def collection_numbers_with_option(*docs)
@@ -270,15 +278,26 @@ module Compta
         []
       end
 
-       # permet d'extraire toutes les instructions de liste de comptes de la nomenclature
+      # Permet d'extraire toutes les instructions de liste de comptes de la nomenclature
       # la logique récursive permet de faire des nomenclatures à plusieurs niveaux
       # sans imposer un nombre de niveaux précis
-      def accumulated_values(hash_rubriks)
+      def accumulated_values(folio)
         values = []
-        hash_rubriks.each do |k,v|
-          values << (v.is_a?(Hash) ? accumulated_values(v) : v)
-        end
+        r = folio.root
+        return r.numeros if r.leaf? # cas quasi impensable où il n'y aurait qu'une rubrique
+        collect_numeros(values, r)
         values.flatten
+      end
+      
+      
+      def collect_numeros(values, rubriks)
+        rubriks.children.each do |r|
+          if r.leaf?
+            values << r.numeros
+          else 
+            collect_numeros(values, r) 
+          end
+        end
       end
 
     
