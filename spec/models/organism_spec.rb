@@ -48,12 +48,12 @@ describe Organism do
 
     it 'should have nomenclature' do
       @organism.save
-      @organism.nomenclature[:actif].should be_a_instance_of(Hash)
+      @organism.nomenclature.actif.should be_a_instance_of(Folio)
     end
 
     it 'before_validation remplit la version avec la constante VERSION' do
       @organism.valid?
-      @organism.version.should == VERSION
+      @organism.version.should == FLCVERSION
     end
 
     

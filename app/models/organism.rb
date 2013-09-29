@@ -236,16 +236,12 @@ class Organism < ActiveRecord::Base
   private
 
   def fill_version
-    self.version = VERSION
+    self.version = FLCVERSION
   end
 
   def fill_nomenclature 
     if status
-      path = case Rails.env
-      when 'test' then File.join Rails.root, 'spec', 'fixtures', status.downcase, 'good.yml'
-      else
-        File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
-      end
+      path = File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
       n = create_nomenclature 
       n.read_and_fill_folios(path)
     end

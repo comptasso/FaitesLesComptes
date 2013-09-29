@@ -51,7 +51,7 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
     end
 
     it 'peut restituer ses instructions' do
-       @n.instructions.should be_an_instance_of(Hash)
+       
        @n.actif.should be_an_instance_of Folio 
        @n.passif.should be_an_instance_of Folio
        @n.resultat.should be_an_instance_of Folio
@@ -68,17 +68,17 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
 
    it 'n est pas valide sans un actif' do
      @n.stub(:actif).and_return nil
-     @n.should_not be_valid
+     @n.should_not be_coherent
    end
 
     it 'invalid sans passif' do
       @n.stub(:passif).and_return nil
-      @n.should_not be_valid
+      @n.should_not be_coherent
     end
 
     it 'invalid sans resultat' do
       @n.stub(:resultat).and_return nil
-      @n.should_not be_valid
+      @n.should_not be_coherent
     end
 
     it 'invalide sans organisme' do
@@ -90,22 +90,22 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
 
 
 
-  context 'with invalid nomenclature' do
-
-    
+  describe 'bilan balanced?'  do
 
     before(:each) do
-      create_minimal_organism
-      @o.periods.first.accounts.create!(:title=>'Compte non repris', number:'709')
-#      @o.nomenclature.load_file(File.join(Rails.root, 'spec/fixtures/association/doublons.yml'))
-#      @o.save!
+      @n = o.nomenclature
+      @n.stub(:actif).and_return(double(Folio, :rough_numbers=>%w(102 506C 407 !805) ) )
+      
     end
 
-    it 'check_validity renvoie les erreurs trouvées par Compta::Nomenclature' do
-      @nome = @o.nomenclature(true)
-      @nome.send(:check_validity)
-      @nome.errors[:resultat].should ==["Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 709 pour Exercice #{Date.today.year}"]
- 
+    it 'vrai si un compte C a une correspondance avec un compte D' do
+      @n.stub(:passif).and_return(double(Folio, :rough_numbers=>%w(202 506D 407 !805)) )
+      @n.should be_bilan_balanced
+    end
+    
+    it 'faux dans le cas contraire' do
+     @n.stub(:passif).and_return(double(Folio, :rough_numbers=>%w(202 506 407 !805)) )
+      @n.should_not be_bilan_balanced
     end
 
 
@@ -121,7 +121,7 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
     end
     
     it 'crée les 94 rubriks fournies par le fichier yml' do
-      @n.should have(90).rubriks  
+      @n.should have(95).rubriks  
     end
     
     it 'la nomenclature a 4 folios' do

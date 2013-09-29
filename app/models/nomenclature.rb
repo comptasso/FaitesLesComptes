@@ -30,39 +30,34 @@ class Nomenclature < ActiveRecord::Base
   has_many :folios
   has_many :rubriks, through: :folios
 
-  attr_accessible :actif, :passif, :resultat, :benevolat
+ 
 
   # TODO une nomenclature est valide si elle a 3 folios avec comme nom actif, passif 
   validates :organism_id, :presence=>true
+  
+  
   # TODO mettre dans une logique de checkup mais pas de validité
   # validate :check_validity
   # TODO c'est ici qu'il faut tester que actif passif et resultat sont bien présents
-  # on pourrait aussi avoir des tests sur les comptes 6-7 8 et de bilan
+  # on doit aussi avoir des tests sur les comptes 6-7 8 et de bilan
   # laissant à Compta::Nomenclature juste le soin de vérifier sa bonne adapatation à la 
   # période.
   
   def actif
-    folios.where('name = ?', :actif).first
+    folios.where('name = ?', :actif).first rescue nil
   end
   
   def passif
-    folios.where('name = ?', :passif).first
+    folios.where('name = ?', :passif).first rescue nil
   end
   
   def resultat
-    folios.where('name = ?', :resulat).first
+    folios.where('name = ?', :resultat).first rescue nil
   end
   
   def benevolat
-    folios.where('name = ?', :benevolat).first
+    folios.where('name = ?', :benevolat).first rescue nil
   end
-  
-  
-
-  def instructions
-    {:actif=>actif, :passif=>passif, :resultat=>resultat, :benevolat=>benevolat}
-  end
-  
   
   # permet de lire un fichier yml représentant la nomenclature utilisée pour
   # la présentation des comptes en différentes rubriques.
@@ -106,26 +101,90 @@ class Nomenclature < ActiveRecord::Base
     al.html_safe
   end
 
-  protected
-  
-  
+    
 
-  # vérifie la validité de la nomenclature pour l'ensemble des exercices
-  # et recopie dans les erreurs de l'instance, les erreurs éventuelles trouvées
-  # dans les Compta::Nomenclature
-  def check_validity
-    if organism # car sinon le test de validité sans organism crée une erreur ici
-      organism.periods.each do |p|
-        cn = Compta::Nomenclature.new(p, instructions)
-        unless cn.valid?
-          cn.errors.messages.each {|k, m| self.errors[k] << "#{m.join('; ')} pour #{p.exercice}"}
+  # vérifie la validité de la nomenclature, laquelle repose sur l'existence 
+  # de folios actif, passif et resultat.
+  # 
+  # Par ailleurs, chacun des folios doit être lui même valide
+  def check_coherent
+    errors.add(:actif, 'Actif est un folio obligatoire') unless actif
+    errors.add(:passif, 'Passif est un folio obligatoire') unless passif
+    errors.add(:resultat, 'Resultat est un folio obligatoire') unless resultat
+    
+    
+    bilan_balanced? # tous les comptes C doivent avoir un compte D correspondant
+    resultat_67?
+    benevolat_8?
+    bilan_no_doublon?
+    
+    # TODO reprendre les validations des folios eux mêmes
+    folios.each do |f|
+      errors.add(:folio, "Le folio #{f.name} indique une incohérence : #{f.errors.full_messages}") unless f.coherent?
+    end
+    # et reprendre la problématique des doublons dans un bilan (actif et passif)
+  end
+  
+  # indique si une nomenclature est cohérente et donc utilisable pour produire des
+  # états comptables
+  def coherent?
+    check_coherent
+    errors.any? ? false : true
+  end
+  
+      # sert à vérifier que si on compte C est pris, on trouve également un compte D
+      # et vice_versa.
+      # Ajoute une erreur à :bilan si c'est le cas avec comme message la liste des comptes
+      # qui n'ont pas de correspondant
+      def bilan_balanced?
+      
+        array_numbers = actif.rough_numbers + passif.rough_numbers
+      
+        # maintenant on crée une liste des comptes D et une liste des comptes C
+        numbers_d = array_numbers.map {|n| $1 if n =~ /^(\d*)D$/}.compact.sort
+        numbers_c = array_numbers.map {|n| $1 if n =~ /^(\d*)C$/}.compact.sort
+    
+        if numbers_d == numbers_c
+          return true
+        else
+          d_no_c = numbers_d.reject {|n| n.in? numbers_c}
+          c_no_d = numbers_c.reject {|n| n.in? numbers_d}
+        
+          self.errors[:bilan] << " : comptes D sans comptes C correspondant (#{d_no_c.join(', ')})" unless d_no_c.empty?
+          self.errors[:bilan] << " : comptes C sans comptes D correspondant (#{c_no_d.join(', ')})" unless c_no_d.empty?
+        
+          return false
         end
       end
-    end
-
-  end
-
+      
+      def bilan_no_doublon?
+        array_numbers = actif.rough_numbers + passif.rough_numbers
+        errors.add(:bilan, 'Un numéro apparait deux fois dans la construction du bilan') unless array_numbers.uniq.size == rough_numbers
+      end
+      
+      
+      
+      # le folio résultat ne peut avoir que des comptes 6 ou 7
+      def resultat_67?
+        list = rough_accounts_reject(resultat.rough_numbers, 6,7)
+        errors.add(:resultat, "comprend un compte étranger aux classes 6 et 7 (#{list.join(', ')})") unless list.empty?
+      end
+      
+      
+      
+      # le folio benevolat ne peut avoir que des comptes 8
+      # le folio résultat ne peut avoir que des comptes 6 ou 7
+      def benevolat_8?
+        list = rough_accounts_reject(benevolat.rough_numbers, 8)
+        errors.add(:benevolat, "comprend une rubrique étrangere à la classe 8 (#{list.join(', ')})") unless list.empty?
+      end
   
+      def rough_accounts_reject(array_numbers, *args)
+        args.each do |a|
+          array_numbers.reject! {|n| n =~ /^[-!]?#{a}\d*/}
+        end
+        array_numbers
+      end
 
 
 end

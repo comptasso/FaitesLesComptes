@@ -29,33 +29,21 @@ module Compta
 
     attr_accessor :nomenclature
 
-    # permet de définir l'ensemble des méthodes d'accès aux pages (:actif, :passif, ...
-    # voir juste dessous l'utilisation
-    def self.def_doc(*args)
-      args.each do |a|
-        define_method a do
-          nomenclature.send(a)
-        end
-      end
-    end
+    
+    delegate :resultat, :actif, :passif, :benevolat, :to=>:nomenclature
+    
+    validate :bilan_complete, :resultat_complete
+    
+  # TODO déplacer ces validations vers Nomenclature
+  #     validate :bilan_balanced, :resultats_67, :benevolat_8, :no_doublon?
+  # validates :actif, :passif, :resultat, :presence=>true
 
-    # Déclaration des documents disponibles.
+
+
+    # initialize se faire à partir d'un exercice et d'une nomenclature.
     #
-    # On accède aux documents par un array : instructions[:document] 
-    def_doc :resultat, :actif, :passif, :benevolat
-
-    # validates :actif, :passif, :resultat, :presence=>true
-    validate :bilan_complete, :bilan_balanced, :resultats_67, :resultat_complete,
-      :benevolat_8, :no_doublon?
-
-
-
-    # initialize peut se faire à partir d'un exercice et d'un hash.
-    #
-    # En pratique, une nomenclature se crée par l'exercice qui demande la nomenclature
+    # En pratique, une nomenclature se crée avec la nomenclature
     # de l'organisme
-    #
-    # instructions devient un array de Folios
     #
     def initialize(period, nomenclature)
       @period = period
@@ -71,23 +59,18 @@ module Compta
     # renvoie une page, par exemple :actif ou :passif, ou :bilan sous forme d'une
     # instance de Compta::Sheet
       def sheet(doc)
-        Compta::Sheet.new(@period, doc.rubriks, doc.name) if doc
+        Compta::Sheet.new(@period, doc) if doc
       end
 
-# TODO déplacer tous ces tests dans nomenclature 
-# car ils peuvent et doivent être vérifiés à ce niveau
+# TODO réactiver ce test sur la cohérence des comptes car pour le bilan, 
+# il n'est pas possible de tester totalement la nomenclature et les folios associés
+# si on ne teste pas également avec les comptes réels.
+# 
+# On pourrait par exemple tromper l'analyse avec un 43 !431 mais pas mettre le 431
+# ou encore un -456 et ailleur un 45 
 # 
 # 
-      # no_doublon vérifie que la nomenclature ne prend pas deux fois le même compte
-      # pour l ensemble des folios 
-      # 
-      # De plus il vérifie également qu'il n'y a pas de doublon à l'intérieur 
-      # d'un bilan qui peut avoir des comptes D et des comptes C
-      #
-      def no_doublon?
-        nomenclature.folios.each {|p| doc_no_doublon?(p) }
-        collection_with_option_no_doublon?('bilan', actif, passif)
-      end
+      
 
       # Cherche les doublons en prenant en compte le fait que les comptes standard (ceux avec nil comme :option
       # ne sont pas déjà pris dans les comptes avec option[:col_2], ce qui pour mémoire, signifie qu'ils sont 
@@ -104,49 +87,33 @@ module Compta
       # Ainsi collection_with_option_no_doublon?(:bilan, :actif, :passif) recherche les doublons dans
       # les documentsw :actif et :passif et ajoute une erreur sur :bilan s'il y en a
       #
-      def collection_with_option_no_doublon?(name, *docs)
-        numbers = collection_numbers_with_option(*docs)
-        dup = []
-        # on doit vérifier que les nil et les col2 n'ont aucun doublon
-        list = numbers.select {|o| o[:option] == nil || o[:option] == :col2}.map {|n| n[:num]}
-        dup += doublon_in_list(list)
-      
-        # on n'accepte pas non plus des doublons entre les nil col2 et les credit d'un côté, les débit de l'autre
-        # les comptes de crédit ne peuvent être dans list
-        n_credit = numbers.select {|n| n[:option] == :credit}.map {|n| n[:num]}
-        dup +=  (n_credit & list) # intersection avec list
-        dup += doublon_in_list(n_credit)
-        # les comptes de débit ne peuvent être dans list
-        n_debit = numbers.select {|n| n[:option] == :credit}.map {|n| n[:num]}
-        dup += (n_debit & list) # intersection avec list
-        dup += doublon_in_list(n_debit)
-        self.errors[name] << "comprend des doublons (#{dup.uniq.join(', ')})" unless dup.empty?
-      end
+#      def collection_with_option_no_doublon?(name, *docs)
+#        numbers = collection_numbers_with_option(*docs)
+#        dup = []
+#        # on doit vérifier que les nil et les col2 n'ont aucun doublon
+#        list = numbers.select {|o| o[:option] == nil || o[:option] == :col2}.map {|n| n[:num]}
+#        dup += doublon_in_list(list)
+#      
+#        # on n'accepte pas non plus des doublons entre les nil col2 et les credit d'un côté, les débit de l'autre
+#        # les comptes de crédit ne peuvent être dans list
+#        n_credit = numbers.select {|n| n[:option] == :credit}.map {|n| n[:num]}
+#        dup +=  (n_credit & list) # intersection avec list
+#        dup += doublon_in_list(n_credit)
+#        # les comptes de débit ne peuvent être dans list
+#        n_debit = numbers.select {|n| n[:option] == :credit}.map {|n| n[:num]}
+#        dup += (n_debit & list) # intersection avec list
+#        dup += doublon_in_list(n_debit)
+#        self.errors[name] << "comprend des doublons (#{dup.uniq.join(', ')})" unless dup.empty?
+#      end
 
-      # Teste la présence de doublons dans un document
-      def doc_no_doublon?(doc)
-        dil = doublon_in_list(numbers_from_document(doc))
-        unless dil.empty?
-          Rails.logger.info "#{doc} comprend un compte en double (#{dil.join(', ')})"
-          self.errors[doc] << "comprend des doublons (#{dil.join(', ')})"
-          return false
-        end
-        true
-      end
+      
 
       # Indique si le document bilan utilise tous les comptes de bilan
       def bilan_complete?
         bilan_complete.empty? ? true : false 
       end
-
-     
-
-     
-
-
+   
       
-      
-
       # vérifie que tous les comptes sont pris en compte pour l'établissement du bilan
       # à l'exception des comptes de classes 8 qui servent à valoriser le bénévolat
       def bilan_complete
@@ -173,93 +140,26 @@ protected
 
    
 
-      # sert à vérifier que si on compte C est pris, on trouve également un compte D
-      # et vice_versa.
-      # Ajoute une erreur à :bilan si c'est le cas avec comme message la liste des comptes
-      # qui n'ont pas de correspondant
-      def bilan_balanced
       
-        array_numbers = rough_accounts_list(actif) + rough_accounts_list(passif)
       
-        # maintenant on crée une liste des comptes D et une liste des comptes C
-        numbers_d = array_numbers.map {|n| $1 if n =~ /^(\d*)D$/}.compact.sort
-        numbers_c = array_numbers.map {|n| $1 if n =~ /^(\d*)C$/}.compact.sort
-    
-        if numbers_d == numbers_c
-          return true
-        else
-          d_no_c = numbers_d.reject {|n| n.in? numbers_c}
-          c_no_d = numbers_c.reject {|n| n.in? numbers_d}
-        
-          self.errors[:bilan] << " : comptes D sans comptes C correspondant (#{d_no_c.join(', ')})" unless d_no_c.empty?
-          self.errors[:bilan] << " : comptes C sans comptes D correspondant (#{c_no_d.join(', ')})" unless c_no_d.empty?
-        
-          return false
-        end
-      end
-
-      # sert à contrôler que les différentes rubriques de resultats n'utilisent que des comptes 6 et 7
-      def resultats_67
-        retour = true
-       
-          r = rough_accounts_reject(rough_accounts_list(resultat), 6, 7)
-          unless r.empty?
-            self.errors[:resultat] << "comprend un compte étranger aux classes 6 et 7 (#{r.join(', ')})"
-            retour = false
-          end
-        
-        retour
-      end
-
-      # controle que le bénévolat ne comprend que des comptes de classe 8
-      def benevolat_8
-        unless  (r = rough_accounts_reject(rough_accounts_list(benevolat), 8)).empty?
-          self.errors[:benevolat] << "comprend un compte étranger à la classe 8 (#{r.join(', ')})"
-          return false
-        end
-        true
-      end
-
 
     
 
-      # A partir d'un array numbers ne garde que les nombres commencent par
-      # les chiffres donnés par args.
-      # Utilisé par resultat_67 et benevolat_8
-      # 
-      def rough_accounts_reject(array_numbers, *args)
-        args.each do |a|
-          array_numbers.reject! {|n| n =~ /^[-!]?#{a}\d*/}
-        end
-        array_numbers
-      end
-
-      # rencoie la liste brute des informations de comptes repris dans la partie doc
-      # rough_accounts_list(:benevolat) renvoie par exemple %w(87 !870 870 86 !864 864)
-      def rough_accounts_list(doc)
-        if doc
-          accumulated_values(doc).join(' ').split
-        else
-          []
-        end
-      end
-
-
-
-
+      
+      
       # doc est un symbol comme :actif, :passif, :resultat
       def numbers_from_document(doc)
         if doc
-          accumulated_values(doc.rubriks).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list_numbers}.flatten
+          doc.all_numbers.map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list_numbers}.flatten
         else
-          []
+          [] 
         end
       end
 
       
 
       def numbers_with_options_from_document(doc)
-           accumulated_values(doc.rubriks).map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list}.flatten
+           doc.all_numbers.map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list}.flatten
       end
 
       def collection_numbers_with_option(*docs)
@@ -278,27 +178,7 @@ protected
         []
       end
 
-      # Permet d'extraire toutes les instructions de liste de comptes de la nomenclature
-      # la logique récursive permet de faire des nomenclatures à plusieurs niveaux
-      # sans imposer un nombre de niveaux précis
-      def accumulated_values(folio)
-        values = []
-        r = folio.root
-        return r.numeros if r.leaf? # cas quasi impensable où il n'y aurait qu'une rubrique
-        collect_numeros(values, r)
-        values.flatten
-      end
-      
-      
-      def collect_numeros(values, rubriks)
-        rubriks.children.each do |r|
-          if r.leaf?
-            values << r.numeros
-          else 
-            collect_numeros(values, r) 
-          end
-        end
-      end
+     
 
     
     end

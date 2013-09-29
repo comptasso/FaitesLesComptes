@@ -7,7 +7,9 @@ require 'yaml'
 # Sheet est destinées à éditer une liste de rubriks
 # Le but est de construire des sous parties de bilan ou de comtpe de résultats
 # Les arguments sont period, une page qui est une partie d'un fichier yml.
-# Concrètement la classe Nomenclature lit un fichier nomenclature.yml.
+# Concrètement la classe Nomenclature lit un fichier nomenclature.yml. et engendre 
+# ainsi des folios (typiquement :actif, :passif, :resultat, :benevolat), lesquels ont
+# des rubriks
 #
 # Le fichier a différentes parties : actif, passif, exploitation, ...
 # Nomenclature a une méthode sheet qui crée un objet Sheet en transmettant
@@ -27,7 +29,7 @@ require 'yaml'
 #
 # Le document est donc composé de rubriks, eux même composé de rubrik
 # Voir les classes correspondantes
-# Voir la classe Compta::Rubrik
+# 
 # 
 # Dans initialize, les arguments sont recopiés, puis on appelle parse_page
 # qui va parser les instructions du document demandé.
@@ -59,10 +61,11 @@ module Compta
     # 
     # parse_page lit les instructions de la page et construit @total_general
     #
-    def initialize(period, page, name)
+    def initialize(period, folio)
+      @folio = folio
       @period = period
-      @list_rubriks = page
-      @name = name
+      @list_rubriks = folio.rubriks
+      @name = folio.name
       parse_page
     end
 
@@ -136,7 +139,7 @@ module Compta
     #
     # S'appuie sur collect_rubriks pour faire la récursivité nécessaire
     def parse_page
-      @sens = @list_rubriks[:sens]
+      @sens = folio.sens
       sous_totaux = @list_rubriks[:rubriks].map do  |k,v| 
         collect_rubriks(k,v,@sens)
       end
