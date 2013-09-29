@@ -15,6 +15,7 @@ class Rubrik < ActiveRecord::Base
     # ceci pour ne pas afficher le détail de tous les comptes 6 et 7
     # lorsque l'on affiche le détail du passif
     def resultat?
+      return false unless leaf? # ce n'est possible que pour une rubrique qui est au bout d'une branche
       '12'.in?(numeros.split) # split est essentiel sinon il répond true pour des numéros comme 212
     end
     
@@ -34,13 +35,13 @@ class Rubrik < ActiveRecord::Base
           return all_lines(period)
         end
       else
-        return children.collect {|r| r.lines(period) }
+        return children
       end
     end
     
       # retourne la ligne de total de la rubrique
-    def totals
-      [name, brut, amortissement, net, previous_net] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
+    def totals(period)
+      [name, brut(period), amortissement(period), net(period), previous_net(period)] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
     end
 
 #    def totals_prefix(prefix = 'Total ')
@@ -51,37 +52,39 @@ class Rubrik < ActiveRecord::Base
 
     alias total_actif totals
 
-    def total_passif
-      [name, net, previous_net]
+    def total_passif(period)
+      [name, net(period), previous_net(period)]
     end
 
     # crée un array avec le titre suivi de l'ensemble des lignes suivi de la ligne de total
-    def complete_list
-      [name] + all_lines + totals
+    def complete_list(period)
+      [name] + all_lines(period) + totals(period) if leaf?
     end
 
 
-    def brut
-      @brut ||= all_lines.sum(&:brut)
+    def brut(period)
+      lines(period).sum { |l| (l.class == Compta::RubrikLine) ? l.brut : l.brut(period) }
     end
 
-    def amortissement
-      @amortissement ||= all_lines.sum(&:amortissement)
+    def amortissement(period)
+      lines(period).sum { |l| (l.class == Compta::RubrikLine) ? l.amortissement : l.amortissement(period) }
     end
 
     alias depreciation amortissement
 
-    def net
-      @net ||= (brut - amortissement) rescue 0.0
+    def net(period)
+      (brut(period) - amortissement(period)) rescue 0.0
     end
 
-    def previous_net
-      @previous_net ||= all_lines.sum(&:previous_net)
+    def previous_net(period)
+      lines(period).sum { |l| (l.class == Compta::RubrikLine) ? l.previous_net : l.previous_net(period) }
     end
 
     # la profondeur (depth) d'une rubrique est 0
     # cette méthode existe pour pouvoir définir la profondeur
     # des Compta::Rubriks
+    # TODO avoir un calcul plus général puisqu'on a plus qu'une rubrik et non 
+    # des compta::rubriks et compta::rubrik
     def depth
       0
     end
