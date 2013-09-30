@@ -8,8 +8,13 @@ class Rubrik < ActiveRecord::Base
   include ActsAsTree
 
   belongs_to :folio
-  attr_accessible :name, :numeros, :parent_id
-  acts_as_tree :order => "name"
+  attr_accessible :name, :numeros, :parent_id, :position
+  attr_reader 
+  acts_as_tree :order => "position"
+  
+  
+  
+  
   
   # indique si la rubrique est le résultat de l'exercice (le compte 12).
     # ceci pour ne pas afficher le détail de tous les comptes 6 et 7

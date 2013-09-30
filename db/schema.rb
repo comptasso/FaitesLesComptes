@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(:version => 20130928095925) do
     t.string   "numeros"
     t.integer  "parent_id"
     t.integer  "folio_id"
+    t.integer  "position"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

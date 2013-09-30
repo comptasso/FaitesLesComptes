@@ -1,24 +1,23 @@
 class Folio < ActiveRecord::Base
   attr_accessible :name, :title, :sens
-  has_many :rubriks
+  attr_reader :counter
+  has_many :rubriks, dependent: :destroy
   
-  
-  # TODO pour être valide un folio ne peut avoir deux fois le même numéro de compte
-  
+  # 
   # méthode créant les rubriks de façon récursive à partir d'un hash
   # la clé :numéros n'est remplie que si la valeur n'est pas elle même un Hash
   # 
   # méthode appelée par read_and_fill_rubriks
-  def fill_rubriks(hash, parent_id = nil)
-    hash.each do |k,v|
-      r = self.rubriks.create(:name=>k, :parent_id=>parent_id)
-      if v.is_a? Hash
-        fill_rubriks(v, r.id)
-      else
-        r.update_attribute(:numeros, v)
-      end
-    end
+  
+  def fill_rubriks_with_position(hash)
+    @counter = 0
+    fill_rubriks(hash, nil)
   end
+  
+  
+  # TODO pour être valide un folio ne peut avoir deux fois le même numéro de compte
+  # TODO mettre les validations sur les champs obligatoires
+  # 
   
   
   
@@ -56,6 +55,24 @@ class Folio < ActiveRecord::Base
   
   
   protected
+  
+  def create_rubrik(name, parent_id)
+    @counter += 1
+    rubriks.create(:name=>name, :parent_id=>parent_id, :position=>counter)
+  end
+  
+  
+  def fill_rubriks(hash, parent_id = nil)
+    hash.each do |k,v|
+      r = create_rubrik(k, parent_id)
+      if v.is_a? Hash
+        fill_rubriks(v, r.id)
+      else
+        r.update_attribute(:numeros, v)
+      end
+    end
+  end
+  
   
     def no_doublon?
       errors.add(:rubriks, 'Un numéro apparait deux fois dans le folio') unless rough_numbers.uniq.size == rough_numbers

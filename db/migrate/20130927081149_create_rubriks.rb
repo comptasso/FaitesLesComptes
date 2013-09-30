@@ -5,6 +5,7 @@ class CreateRubriks < ActiveRecord::Migration
       t.string :numeros
       t.integer :parent_id
       t.references :folio
+      t.integer :position
 
       t.timestamps
     end

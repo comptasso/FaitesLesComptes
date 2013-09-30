@@ -65,10 +65,10 @@ class Nomenclature < ActiveRecord::Base
   def read_and_fill_folios(filename)
     yml = YAML::load_file(filename)
     
-    Nomenclature.transaction do
+    transaction do
       yml.each do |k,v|
         f = folios.create(:name=>k, :title=>v[:title], sens:v[:sens])
-        f.fill_rubriks(v[:rubriks])
+        f.fill_rubriks_with_position(v[:rubriks])
       end
     end
   end
