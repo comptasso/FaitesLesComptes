@@ -39,16 +39,22 @@ class Rubrik < ActiveRecord::Base
       end
     end
     
+    # détermine le niveau dans l'arbre
+    # level = 0 pour root
+    def level
+      niveau = 0
+      r = self
+      while !r.root?
+        r = r.parent; niveau += 1
+      end
+      niveau
+    end
+    
+    
       # retourne la ligne de total de la rubrique
     def totals(period)
       [name, brut(period), amortissement(period), net(period), previous_net(period)] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
     end
-
-#    def totals_prefix(prefix = 'Total ')
-#      v = totals
-#      v[0] = prefix + v[0].to_s
-#      v
-#    end
 
     alias total_actif totals
 

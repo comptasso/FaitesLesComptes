@@ -61,6 +61,10 @@ module Compta
       def sheet(doc)
         Compta::Sheet.new(@period, doc) if doc
       end
+      
+      def sheet2(doc)
+        Compta::Sheet2.new(@period, doc)
+      end
 
 # TODO réactiver ce test sur la cohérence des comptes car pour le bilan, 
 # il n'est pas possible de tester totalement la nomenclature et les folios associés

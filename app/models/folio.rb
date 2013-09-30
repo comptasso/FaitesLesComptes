@@ -20,6 +20,11 @@ class Folio < ActiveRecord::Base
     end
   end
   
+  
+  
+  # un folio doit être capable de retounrer les rubriques dans un ordre précis
+  # les premières branches suivies des branchettes suivies des feuilles
+  
   # renvoie la rubrique racine de ce folio
   def root
     rubriks.where('parent_id IS NULL').first
