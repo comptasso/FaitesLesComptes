@@ -41,6 +41,21 @@ class Rubrik < ActiveRecord::Base
       fl
     end
     
+     # Récupère les différentes rubriks avec les sous rubriks
+    # mais ne prend pas le détail des lignes
+    def fetch_rubriks_with_rubrik
+      result = []
+      children.each do |c|
+        
+        if c.leaf? 
+          result << c
+        else
+          result += c.fetch_rubriks_with_rubrik
+        end
+      end
+      result << self
+    end
+    
     # lines renvoie les rubrik_lines qui construisent la rubrique
     # lines est en fait identique à la méthode protected all_lines
     # sauf pour la Rubrik résultat (le compte 12).
@@ -60,6 +75,19 @@ class Rubrik < ActiveRecord::Base
         return children
       end
     end
+    
+    #produit un document pdf en s'appuyant sur la classe PdfDocument::Simple
+    # et ses classe associées page et table
+    def to_pdf(options = {})
+      options[:title] =  "Détail de la rubrique #{name}"
+      pdf = PdfDocument::PdfRubriks.new(@period, self, options)
+      pdf.set_columns(['title', 'brut', 'amortissement', 'net', 'previous_net'])
+      pdf.set_columns_titles(['', 'Montant brut', "Amortissement\nProvision", 'Montant net', 'Précédent'])
+      pdf.set_columns_widths([40, 15, 15, 15, 15])
+      pdf.set_columns_alignements([:left, :right, :right, :right, :right] )
+      pdf
+    end
+   
     
     # détermine le niveau dans l'arbre
     # level = 0 pour root

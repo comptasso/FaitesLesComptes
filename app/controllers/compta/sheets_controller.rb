@@ -21,7 +21,7 @@ class Compta::SheetsController < Compta::ApplicationController
   # ou le vérifier dans nomenclature.rb
   def index
     @docs = params[:collection].map {|c| @nomenclature.sheet(c.to_sym)}
-    send_export_token
+    send_export_token # pour gérer le spinner lors de la préparation du document
     respond_to do |format|
      
       format.html

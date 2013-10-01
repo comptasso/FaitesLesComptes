@@ -50,8 +50,8 @@ module Editions
 
     def fetch_lines(page_number = 1)
       fl = []
-      @source.total_general.collection.each do |c|
-        fl += c.to_pdf.fetch_lines if c.class == Compta::Rubriks
+      @source.folio.rubriks.root.children.each do |c|
+        fl += c.to_pdf.fetch_lines unless c.leaf?
       end
       fl.compact
     end

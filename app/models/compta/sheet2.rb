@@ -49,7 +49,7 @@ module Compta
     include Utilities::ToCsv
     include ActiveModel::Validations
     
-    attr_accessor :total_general, :sens, :name, :list_rubriks, :folio
+    attr_accessor :total_general,  :name, :list_rubriks, :folio
 
   #  TODO : mettre ce validate dans le modèle Folio
   #  validates :sens, :inclusion=>{:in=>[:actif, :passif]}
@@ -65,9 +65,12 @@ module Compta
     def initialize(period, folio)
       @folio = folio
       @period = period
-      
       @name = folio.name
       # parse_page
+    end
+    
+    def sens
+      folio[:sens].to_sym
     end
 
     
