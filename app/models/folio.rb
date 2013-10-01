@@ -2,6 +2,7 @@ class Folio < ActiveRecord::Base
   attr_accessible :name, :title, :sens
   attr_reader :counter
   has_many :rubriks, dependent: :destroy
+  belongs_to :nomenclature
   
   # 
   # méthode créant les rubriks de façon récursive à partir d'un hash
