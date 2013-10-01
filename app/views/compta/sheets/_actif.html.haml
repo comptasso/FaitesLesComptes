@@ -1,4 +1,4 @@
 -# partial appelé par la vue index pour l'affichage des rubriques et sous rubriques de l'index
-- if actif.depth >=1
+- unless passif.leaf?
   =render :partial=>'actif', :collection=>actif.collection
 = render :partial=>'actif_rubriks_line', :object=>actif

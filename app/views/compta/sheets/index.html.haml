@@ -7,7 +7,7 @@
 - @docs.each do |doc|
   .champ
     %h3
-      = doc.total_general.title
+      = doc.name
       = icon_to 'detail.png', compta_period_sheet_path(@period, doc.name)
   - if doc.sens  == :actif
     .actif
@@ -21,7 +21,7 @@
           %th.pc10 Net
           %th.pc10 Exercice précédent
         %tbody
-          =render :partial=>'actif', :object=>doc.datas
+          =render :partial=>'actif', :object=>doc.folio.root
   -else
     .passif
       %table.pc100
@@ -30,7 +30,7 @@
           %th.pc10 Montant
           %th.pc10 Exercice précédent
         %tbody
-          =render :partial=>'passif', :object=>doc.datas
+          =render :partial=>'passif', :object=>doc.folio.root
 
 
 

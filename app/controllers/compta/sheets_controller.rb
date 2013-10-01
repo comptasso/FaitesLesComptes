@@ -19,8 +19,11 @@ class Compta::SheetsController < Compta::ApplicationController
 
   # TODO ? faire un check de la validité de chaque document ?
   # ou le vérifier dans nomenclature.rb
+  
+  # TODO avec la nouvelle logique des folios, on peut créer le doc directement avec 
+  # un folio
   def index
-    @docs = params[:collection].map {|c| @nomenclature.sheet(c.to_sym)}
+    @docs = params[:collection].map {|c| @nomenclature.sheet(@nomenclature.send(c))}
     send_export_token # pour gérer le spinner lors de la préparation du document
     respond_to do |format|
      

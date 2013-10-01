@@ -59,12 +59,12 @@ module Compta
     # renvoie une page, par exemple :actif ou :passif, ou :bilan sous forme d'une
     # instance de Compta::Sheet
       def sheet(doc)
-        Compta::Sheet.new(@period, doc) if doc
+        Compta::Sheet2.new(@period, doc) if doc
       end
       
-      def sheet2(doc)
-        Compta::Sheet2.new(@period, doc)
-      end
+#      def sheet2(doc)
+#        Compta::Sheet2.new(@period, doc)
+#      end
 
 # TODO réactiver ce test sur la cohérence des comptes car pour le bilan, 
 # il n'est pas possible de tester totalement la nomenclature et les folios associés
@@ -136,7 +136,7 @@ protected
 
       # vérifie que tous les comptes 6 et 7 sont pris en compte pour l'établissement du compte de résultats 
       def resultat_complete
-        list_accs = rough_accounts_reject(@period.two_period_account_numbers, 1,2,3,4,5,8)
+        list_accs = @period.two_period_account_numbers.reject {|acc| acc.to_s =~ /\A[123458]\d*/}
         rubrik_accounts = numbers_from_document(resultat)
         not_selected =  list_accs.select {|a| !a.in?(rubrik_accounts) }
         self.errors[:resultat] << "Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque #{not_selected.join(', ')}" if not_selected.any?
