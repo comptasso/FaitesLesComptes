@@ -65,28 +65,20 @@ module Compta
     def initialize(period, folio)
       @folio = folio
       @period = period
-      @list_rubriks = folio.rubriks
+      
       @name = folio.name
       # parse_page
     end
 
-    # @total_general a comme valeurs period, le titre, et une rubriks
-    #
-    # #collection est une méthode de Rubriks
-    #
-    def datas
-      @total_general.collection.first
-    end
-
-
+    
 # 
     # utilisé pour le csv de l'option show
     def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
-        csv << [@name.capitalize] # par ex Actif
+        csv << [name.capitalize] # par ex Actif
         csv << entetes  # la ligne des titres
-        datas.fetch_lines.each do |rubs|
-          csv << (@sens==:actif ? prepare_line(rubs.total_actif) : format_line(rubs.total_passif))
+        folio.root.fetch_lines(@period).each do |rubs|
+          csv << (@sens==:actif ? prepare_line(rubs.total_actif(@period)) : format_line(rubs.total_passif(@period)))
         end
       end
     end
@@ -97,8 +89,8 @@ module Compta
       CSV.generate(options) do |csv|
         csv << [@name.capitalize] # par ex Actif
         csv << (@sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']) # la ligne des titres
-        datas.fetch_rubriks_with_rubrik.each do |rubs|
-          csv << prepare_line(rubs.total_actif)
+        folio.root.fetch_rubriks_with_rubrik.each do |rubs|
+          csv << prepare_line(rubs.total_actif(@period))
         end
       end
     end

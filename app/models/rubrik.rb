@@ -24,7 +24,24 @@ class Rubrik < ActiveRecord::Base
       '12'.in?(numeros.split) # split est essentiel sinon il répond true pour des numéros comme 212
     end
     
-     # lines renvoie les rubrik_lines qui construisent la rubrique
+    # Utilisé pour les vues de détail de Sheet2,
+    # permet de récupérer les Rubriks, les Rubrik et les RubrikLine
+    #
+    # Fetch_lines est récursif tant que la class est une Compta::Rubriks
+    #
+    def fetch_lines(period)
+      fl = []
+      children.each do |c|
+        
+        fl += c.fetch_lines(period) unless c.leaf?
+        fl += c.lines(period)  if c.leaf? && !c.lines(period).empty? 
+        fl << c if c.leaf?
+      end
+      fl << self
+      fl
+    end
+    
+    # lines renvoie les rubrik_lines qui construisent la rubrique
     # lines est en fait identique à la méthode protected all_lines
     # sauf pour la Rubrik résultat (le compte 12).
     #
@@ -54,6 +71,14 @@ class Rubrik < ActiveRecord::Base
       end
       niveau
     end
+    
+    # la profondeur (depth) d'une rubrique est 0
+    # cette méthode existe pour pouvoir définir la profondeur
+    # des Compta::Rubriks
+    # TODO avoir un calcul plus général puisqu'on a plus qu'une rubrik et non 
+    # des compta::rubriks et compta::rubrik
+    
+    alias depth level
     
     
       # retourne la ligne de total de la rubrique
@@ -91,16 +116,7 @@ class Rubrik < ActiveRecord::Base
       lines(period).sum { |l| (l.class == Compta::RubrikLine) ? l.previous_net : l.previous_net(period) }
     end
 
-    # la profondeur (depth) d'une rubrique est 0
-    # cette méthode existe pour pouvoir définir la profondeur
-    # des Compta::Rubriks
-    # TODO avoir un calcul plus général puisqu'on a plus qu'une rubrik et non 
-    # des compta::rubriks et compta::rubrik
-    def depth
-      0
-    end
-
-    
+       
     protected
 
     # pour chacun des comptes construit un tableau

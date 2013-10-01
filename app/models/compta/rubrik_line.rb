@@ -54,15 +54,16 @@ module Compta
       net_value(mise_en_forme(period.previous_account(account).final_sold)) rescue 0
     end
 
-    
-    def to_actif
+    # TODO ceci a été rajouté car les nouvelles Rubrik ont besoin de period
+    # alors que ce n'est pas vrai pour les Compta::RubrikLines
+    def to_actif(period = nil)
       [title, brut, amortissement, net, previous_net]
     end
 
     alias total_actif to_actif
     alias to_a to_actif
 
-    def to_passif
+    def to_passif(period = nil)
       [title, net, previous_net]
     end
 
