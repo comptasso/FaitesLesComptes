@@ -6,7 +6,7 @@
 class Compta::NomenclaturesController < Compta::ApplicationController
 
   def show
-    @pages =  @period.nomenclature.pages
+    @nomenclature = @organism.nomenclature
   end
 
 

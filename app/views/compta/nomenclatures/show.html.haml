@@ -3,5 +3,5 @@
 
 .row-fluid
   %ul.document_list
-    - @pages.each do |p|
-      %li= link_to p.capitalize, compta_period_sheet_path(@period, p.to_s)
+    - @nomenclature.folios.each do |fol|
+      %li= link_to fol.title.capitalize, compta_sheet_path(fol)

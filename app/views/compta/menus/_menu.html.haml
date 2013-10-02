@@ -35,7 +35,7 @@
           %li= link_to('Bénévolat', benevolats_compta_period_sheets_path(@period))
         %li= link_to('Liasse', liasse_compta_period_sheets_path(@period))
         %li= link_to('Détail des comptes', detail_compta_period_sheets_path(@period))
-        %li= link_to('Liste des documents', compta_period_nomenclature_path(@period))
+        %li= link_to('Liste des documents', compta_nomenclature_path)
 
   - unless @organism.nil? && @organism.periods.count <= 1
     %li.dropdown(class="#{controller.controller_name == "periods" ? "active" : nil}")
