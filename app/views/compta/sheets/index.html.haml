@@ -7,8 +7,8 @@
 - @docs.each do |doc|
   .champ
     %h3
-      = doc.name
-      = icon_to 'detail.png', compta_period_sheet_path(@period, doc.name)
+      = doc.folio.title
+      = icon_to 'detail.png', compta_sheet_path(doc.folio)
   - if doc.sens  == :actif
     .actif
       %table.pc100

@@ -26,6 +26,7 @@
 # - to_csv pour le format csv
 # - to_pdf pour le format pdf 
 #  
+# FIXME le pdf ne donne pas le total général
 # 
 # A la différence de csv et pdf qui construisent toutes les données dans la méthode,
 #  pour l'affichage dans la vue, il suffit de renvoyer la rubrique root et la vue et 

@@ -23,7 +23,10 @@ class Compta::SheetsController < Compta::ApplicationController
   # TODO avec la nouvelle logique des folios, on peut créer le doc directement avec 
   # un folio
   def index
-    @docs = params[:collection].map {|c| @nomenclature.sheet(@nomenclature.send(c))}
+    @docs = params[:collection].map do |c|
+      fol = @nomenclature.folios.find_by_name(c.to_s)
+      @nomenclature.sheet(@period, fol)
+    end
     send_export_token # pour gérer le spinner lors de la préparation du document
     respond_to do |format|
      
@@ -81,17 +84,17 @@ class Compta::SheetsController < Compta::ApplicationController
   # bilans est une action accessoire qui renvoie vers index avec actif et passif comme 
   # paramètres de collection
   def bilans
-    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:actif, :passif], :title=>'Bilan')
+    redirect_to compta_sheets_url(:collection=>[:actif, :passif], :title=>'Bilan')
   end
 
   # resultats renvoie vers index avec exploitation, financier et exceptionnel
   def resultats
-    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:resultat],
+    redirect_to compta_sheets_url(:collection=>[:resultat],
     :title=>'Compte de Résultats')
   end
 
   def liasse
-    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:actif, :passif, :resultat, :benevolat],
+    redirect_to compta_sheets_url(:collection=>[:actif, :passif, :resultat, :benevolat],
     :title=>'Liasse complète')
   end
 
@@ -100,7 +103,7 @@ class Compta::SheetsController < Compta::ApplicationController
   # ce qui perturbe le routage
   # Ici avec sheets/benevolats, on est bien différent de sheets/benevolat qui est routée sur show
   def benevolats
-    redirect_to compta_period_sheets_url(:period_id=>@period.id, :collection=>[:benevolat], :title=>'Bénévolat')
+    redirect_to compta_sheets_url(:collection=>[:benevolat], :title=>'Bénévolat')
   end
 
 

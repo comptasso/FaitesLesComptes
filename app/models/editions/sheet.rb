@@ -50,10 +50,14 @@ module Editions
 
     def fetch_lines(page_number = 1)
       fl = []
-      @source.folio.rubriks.root.children.each do |c|
+      @source.folio.root.children.each do |c|
         fl += c.to_pdf.fetch_lines unless c.leaf?
       end
       fl.compact
+    end
+    
+    def add_children_lines(children)
+      
     end
 
     def set_columns

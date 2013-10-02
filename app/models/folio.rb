@@ -49,7 +49,7 @@ class Folio < ActiveRecord::Base
   
   # renvoie la rubrique racine de ce folio
   def root
-    rubriks.where('parent_id IS NULL').first
+    rubriks.root
   end
   
   # Permet d'extraire toutes les instructions de liste de comptes de la nomenclature
