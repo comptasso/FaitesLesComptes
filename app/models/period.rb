@@ -467,9 +467,11 @@ class Period < ActiveRecord::Base
   end
 
   # retourne une instance de Compta::Nomenclature
-  def nomenclature
-    organism.nomenclature.compta_nomenclature(self)
-  end
+  # MISE EN COMMENTAIRE POUR EVITER QUE CE SOIT PERIOD QUI APPELLE NOMENCLATURE
+  # CEST PLUTÔT ORGANISME OU NOMENCLATURE QUI DOIT APPELER LES FOLIOS AVEC LA PERIOD DEMANDEE
+#  def nomenclature
+#    organism.nomenclature.compta_nomenclature(self)
+#  end
 
 
   protected

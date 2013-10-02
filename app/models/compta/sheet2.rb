@@ -1,45 +1,26 @@
 # coding: utf-8
 
-require 'yaml'
+# require 'yaml'
 
+# TODO probablement à rebaptiser en Compta::Folio
+# TODO supprimer Compta::Sheet après 
 
-
-# Sheet est destinées à éditer une liste de rubriks
+# Sheet2 est destinées à éditer une liste de rubriks concrètement pour un exercice donné
+# 
 # Le but est de construire des sous parties de bilan ou de comtpe de résultats
-# Les arguments sont period, une page qui est une partie d'un fichier yml.
-# Concrètement la classe Nomenclature lit un fichier nomenclature.yml. et engendre 
-# ainsi des folios (typiquement :actif, :passif, :resultat, :benevolat), lesquels ont
-# des rubriks
-#
-# Le fichier a différentes parties : actif, passif, exploitation, ...
-# Nomenclature a une méthode sheet qui crée un objet Sheet en transmettant
-# period,  les informations nécessaires et le nom du document
-#
-# Exemple, extrait de nomenclature.yml
-# :actif:                      -> le document
-#    :title: Bilan Actif        -> son titre
-#    :sens: :actif              -> son sens
-#    :rubriks:                  -> la liste des rubriques   
-#      :Immobilisations incorporelles:            -> première sous rubrique (ce sera une rubriks)
-#        :Frais d'établissement: '201 -2801'       -> une rubrik
-#        :Frais de recherche et développement: 203 -2803
-#        :Fonds commercial#': 206 207 -2807 -2906 -2907
-#        :Autres: 208 -2808 -2809
-#      :Immobilisations corporelles:              -> deuxième sous rubrique
-#
-# Le document est donc composé de rubriks, eux même composé de rubrik
-# Voir les classes correspondantes
+# Les arguments sont period, et un folio
 # 
+#  TODO voir pour faire le document avec une collection de folio
+#  par exemple bilan qui est actif et passif
+#  ou liasse qui est l'ensemble  
 # 
-# Dans initialize, les arguments sont recopiés, puis on appelle parse_page
-# qui va parser les instructions du document demandé.
-#
-#
-# #total_general est une méthode qui renvoie la rubriks principale de sheet
+# TODO La méthode to_index_csv est précisément capable de faire un document composite
+# mais il devrait être capable de faire une seule méthode avec *args
+# 
 #
 # sens permet de savoir si on est un document avec une logique d'actif ou de passif
 # Cette logique permet en fait de choisir si les nombres credit ou débit sont positifs
-# doc est le nom du document.
+# 
 #  
 #
 module Compta
@@ -49,24 +30,12 @@ module Compta
     include Utilities::ToCsv
     include ActiveModel::Validations
     
-    attr_accessor :total_general,  :name, :list_rubriks, :folio
+    attr_accessor  :name, :folio, :period
 
-  #  TODO : mettre ce validate dans le modèle Folio
-  #  validates :sens, :inclusion=>{:in=>[:actif, :passif]}
-
-
-    # page est un des éléments du fichier yml décrivant le document.
-    # 
-    # Concrètement page est :actif, :passif, :resultat, :benevolat.
-    # name sera le nom du document (par exemple Compte de Résultats)
-    # 
-    # parse_page lit les instructions de la page et construit @total_general
-    #
     def initialize(period, folio)
       @folio = folio
       @period = period
       @name = folio.name
-      # parse_page
     end
     
     def sens
@@ -81,7 +50,7 @@ module Compta
         csv << [name.capitalize] # par ex Actif
         csv << entetes  # la ligne des titres
         folio.root.fetch_lines(@period).each do |rubs|
-          csv << (@sens==:actif ? prepare_line(rubs.total_actif(@period)) : format_line(rubs.total_passif(@period)))
+          csv << (sens==:actif ? prepare_line(rubs.total_actif) : format_line(rubs.total_passif))
         end
       end
     end
@@ -90,10 +59,13 @@ module Compta
     # utilisé pour le csv de l'action index
     def to_index_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
-        csv << [@name.capitalize] # par ex Actif
-        csv << (@sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']) # la ligne des titres
+        csv << [name.capitalize] # par ex Actif
+        # TODO à revoir soit pour utiliser entetes
+        # visiblement avec l'appel à total_actif, j'ai supposé qu'on était toujours dans un 
+        # sens actif
+        csv << (sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']) # la ligne des titres
         folio.root.fetch_rubriks_with_rubrik.each do |rubs|
-          csv << prepare_line(rubs.total_actif(@period))
+          csv << prepare_line(rubs.total_actif)
         end
       end
     end
@@ -104,17 +76,16 @@ module Compta
 
 
 
-    # fait une édition de sheet ce qui reprend des titres puis insère les éléments
+    # fait une édition pdf de sheet ce qui reprend des titres puis insère les éléments
     #
     def to_pdf(options = {})
       options[:title] =  name.to_s 
-      options[:documents] = @page
       Editions::Sheet.new(@period, self, options)
     end
 
+   # produit une édition pdf de Sheet avec les détails de lignes
     def to_detailed_pdf(options = {})
       options[:title] =  name.to_s
-      options[:documents] = @page
       Editions::DetailedSheet.new(@period, self, options)
     end
 
@@ -129,25 +100,7 @@ module Compta
 
     protected
 
-    # appelé par initialize, construit l'ensemble des rubriks qui seront utilisées pour
-    # les différentes parties du document (avec à chaque fois le sous total affiché)
-    # puis, utilise ces rubriques, pour faire le total_general.
-    #
-    # S'appuie sur collect_rubriks pour faire la récursivité nécessaire
-#    def parse_page
-#      @sens = folio.sens
-#      sous_totaux = @list_rubriks[:rubriks].map do  |k,v| 
-#        collect_rubriks(k,v,@sens)
-#      end
-#      @total_general = Compta::Rubriks.new(@period, @list_rubriks[:title] , sous_totaux) 
-#    end
-
-#    def collect_rubriks(cle, instruction, sens)
-#      list = instruction.map do |k,v|
-#        v.is_a?(Hash) ? collect_rubriks(k,v,sens) : Compta::Rubrik.new(@period, k, @sens, v)
-#      end
-#      Compta::Rubriks.new(@period, cle, list)
-#    end
+  
 
 
     # prepare line sert à effacer les montant brut et amortissement pour ne garder
@@ -157,7 +110,7 @@ module Compta
     # prepare_line assure également la mise en forme des lignes au format français
     # pour les exportations vers le tableur.
     def prepare_line(line)
-      if @sens != :actif
+      if sens != :actif
         line[1] = line[2]= ''
       end
       format_line(line)
@@ -177,7 +130,7 @@ module Compta
 
     # prépare les entêtes utilisés pour le fichier csv
     def entetes
-      @sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : %w(Rubrique Montant Précédent)
+      sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : %w(Rubrique Montant Précédent)
     end
 
   

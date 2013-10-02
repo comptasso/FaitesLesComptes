@@ -22,6 +22,9 @@ module Compta
   #
   # Par défaut, le fichier est 'nomenclature.yml' et se situe dans le répertoire
   # app/assets/parametres/(association|entreprise)/nomenclature.yml
+  # 
+  # TODO je pense que cette classe va disparaître après la refonte des nomenclatures
+  # et des folios
   #
   class Nomenclature
 
@@ -58,6 +61,7 @@ module Compta
         
     # renvoie une page, par exemple :actif ou :passif, ou :bilan sous forme d'une
     # instance de Compta::Sheet
+    # doc doit être un des folios
       def sheet(doc)
         Compta::Sheet2.new(@period, doc) if doc
       end

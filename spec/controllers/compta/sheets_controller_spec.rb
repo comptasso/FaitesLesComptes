@@ -11,7 +11,7 @@ describe Compta::BalancesController do
         from_account_id:1,
         to_account_id:99
       }
-  end
+    end
 
   before(:each) do 
     minimal_instances

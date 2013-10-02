@@ -2,26 +2,29 @@
 
 
 
-# Nomenclature enregistre dans ses 4 champs texte les informations permettant
-# de construire les documents de bilan, Actif et Passif, le compte de Résultat
-# ainsi que le compte de Benevolat.
-#
-# Un cinquième champ organism_id fait le lien avec l'organisme.
+# Nomenclature est une classe intermédiaire entre Organism et Folio
+# Les folios définissent les données permettant de construire un document 
+# comme l'actif, passif, compte de résultats et bénévolat (et peut être d'autres
+# plus tard).
 # 
-# Une nomenclature est donc attachée à un organisme
-# Il ne faut pas confondre avec Compta::Nomenclature qui est un objet beaucoup
+# Mais les folios ne sont pas totalement indépendant les uns des autres
+# Par exemple actif et passif sont étroitement reliés. 
+# 
+# C'est Nomenclature qui, par ses méthodes check_validity, permet de vérifier
+# la cohérence des folios. 
+# 
+# # Il ne faut pas confondre avec Compta::Nomenclature qui est un objet beaucoup
 # plus concret puisqu'il est associé à un exercice (period) et que Compta::Nomenclature
 # peut donc faire des contrôles sur la validité des éditions qui seront produites.
 #
+# TODO  : Compta::Nomenclature est probablement devenu superflu 
+# Voir à rapatrier ici ses fonctionnalités# 
+# 
 # Les validations ici ne concernent donc que la présence de l'organisme et des trois documents
 # indispensables : actif, passif et résultat.
 #
-# Une dernière validation est réalisée par check_validity, qui en fait délègue la
-# validation à Compta::Nomenclature.
-#
-#
-# Nomenclature peut alors facilement créer une Compta::Nomenclature en lui
-# fournissant l'ensemble des instructions sous forme d'un hash
+# # Nomenclature peut alors facilement créer une Compta::Nomenclature en lui
+# fournissant l'exercice recherché et lui même
 #
 class Nomenclature < ActiveRecord::Base 
 
@@ -78,6 +81,10 @@ class Nomenclature < ActiveRecord::Base
   # crée une instance de Compta::Nomenclature pour l'exercice demandé
   def compta_nomenclature(period)
     Compta::Nomenclature.new(period, self)
+  end
+  
+  def sheet(period, folio)
+    Compta::Sheet2.new(period, folio) 
   end
 
   # méthode de présentation des erreurs

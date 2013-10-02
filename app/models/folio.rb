@@ -1,9 +1,31 @@
+# Un folio décrit le mode de construction d'un document comptable, par exemple
+# actif ou passif ou résultat
+# 
+# Un folio a 
+# - un name : actif, passif, résultat, bénévolat sont actuellement les seuls
+# envisagés.
+# - un title comme Bilan Actif
+# - un sens :actif ou :passif qui déterminera la façon dont on veut produire
+# le document avec 4 colonnes (brut,amortissement, net, previous_net) ou 
+# 2 colonnes (net, previous_net)
+# - des rubriks : ce sont ces rubriks qui décrivent la façon dont les comptes 
+# sont retenus pour former chacune des rubriques
+# 
+# A noter que le folio est indépendant de l'exercice. Il n'est donc pas possible
+# à ce niveau de vérifier que le plan comptable utilisé et le folio sont cohérents.
+# 
+# Seules peuvent être réalisées des contrôle sur le fait qu'un compte n'est pas 
+# pris deux fois
+#
 class Folio < ActiveRecord::Base
   attr_accessible :name, :title, :sens
   attr_reader :counter
   has_many :rubriks, dependent: :destroy
   belongs_to :nomenclature
   
+  # TODO mettre une validation pour name 
+  
+  validates :sens, :inclusion=>{:in=>[:actif, :passif]}
   # 
   # méthode créant les rubriks de façon récursive à partir d'un hash
   # la clé :numéros n'est remplie que si la valeur n'est pas elle même un Hash

@@ -48,7 +48,8 @@ class Rubrik < ActiveRecord::Base
     #
     # Fetch_lines est récursif tant que la class est une Compta::Rubriks
     #
-    def fetch_lines
+    def fetch_lines(period = nil)
+      self.period = period if period
       fl = []
       children.each do |c|
         
