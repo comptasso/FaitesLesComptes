@@ -51,6 +51,8 @@ Faitesvoscomptes::Application.routes.draw do
         end
       end
     end
+    resources :sheets  # TODO voir pour supprimer le resources sheets ci_dessous 
+    # intégré dans periods.
     resources :periods do
       
       resource :balance

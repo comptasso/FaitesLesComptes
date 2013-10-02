@@ -60,8 +60,8 @@ class Compta::SheetsController < Compta::ApplicationController
   # les comptes qui ont contribué au calcul
   #
   def show
-    
-    @sheet = @nomenclature.sheet(params[:id].to_sym)
+    folio = @nomenclature.folios.find(params[:id])
+    @sheet = @nomenclature.sheet(@period, folio)
 
     if @sheet && @sheet.valid?
 
@@ -131,7 +131,7 @@ class Compta::SheetsController < Compta::ApplicationController
 
   # appelé par before_filter pour s'assurer que la nomenclature est valide
   def check_nomenclature
-    @nomenclature = @period.nomenclature
+    @nomenclature = @organism.nomenclature
     unless @nomenclature.valid?
       al = 'La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d\'être faux.</br> '
       al += 'Liste des erreurs relevées : <ul>'
