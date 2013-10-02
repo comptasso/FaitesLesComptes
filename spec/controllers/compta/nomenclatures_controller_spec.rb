@@ -20,7 +20,7 @@ describe Compta::NomenclaturesController do
     it 'crée une sheet et l assigne' do
       @o.should_receive(:nomenclature).and_return(mock_model(Nomenclature))
       get :show, {}, valid_session
-      assigns(:nomenclature).should be_a(Nomenclature) 
+      assigns(:nomenclature).should be_a(Nomenclature)  
     end
 
 

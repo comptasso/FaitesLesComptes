@@ -1,7 +1,7 @@
 -# affichage récursif des lignes de type passif (soit passif, soit compte de résultats)
 -#  appelé par la vue show.
-- if detailed_passif.depth >=1
-  =render :partial=>'detailed_passif', :collection=>detailed_passif.collection
+- unless detailed_passif.leaf?
+  =render :partial=>'detailed_passif', :collection=>detailed_passif.children
 -else
   = render :partial=>'account_passif', :collection=>detailed_passif.lines.map {|l| l.to_a }
 = render :partial=>'passif_rubriks_line', :object=>detailed_passif

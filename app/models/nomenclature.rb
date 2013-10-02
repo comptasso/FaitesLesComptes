@@ -77,11 +77,11 @@ class Nomenclature < ActiveRecord::Base
   end
   
   
-  
+  # TODO à supprimer définitivement ainsi que la classe Compta::Nomenclature
   # crée une instance de Compta::Nomenclature pour l'exercice demandé
-  def compta_nomenclature(period)
-    Compta::Nomenclature.new(period, self)
-  end
+#  def compta_nomenclature(period)
+#    Compta::Nomenclature.new(period, self)
+#  end
   
   def sheet(period, folio)
     Compta::Sheet2.new(period, folio) 

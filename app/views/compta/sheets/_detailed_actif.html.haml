@@ -1,6 +1,6 @@
 -# appelé par la vue show pour afficher les rubrik mais aussi les comptes qui concourrent à ces rubrik
-- if detailed_actif.depth >=1
-  =render :partial=>'detailed_actif', :collection=>detailed_actif.collection
+- unless detailed_actif.leaf?
+  =render :partial=>'detailed_actif', :collection=>detailed_actif.children
 -else
   = render :partial=>'account_actif', :collection=>detailed_actif.lines.map {|l| l.to_a }
 = render :partial=>'actif_rubriks_line', :object=>detailed_actif

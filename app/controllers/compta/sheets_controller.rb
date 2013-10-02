@@ -74,7 +74,7 @@ class Compta::SheetsController < Compta::ApplicationController
       else
       flash[:alert] = "Le document demandé (#{params[:id].capitalize}) n'a pas été trouvé " unless @sheet
       flash[:alert] = "Le document demandé (#{params[:id].capitalize}) comporte des erreurs : #{@sheet.errors.full_messages.join('; ')}"
-      redirect_to compta_period_nomenclature_url(@period)
+      redirect_to compta_nomenclature_url
     end
   end
 

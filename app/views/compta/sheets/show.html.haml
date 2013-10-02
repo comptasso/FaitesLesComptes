@@ -4,7 +4,7 @@
 
 
 .champ
-  %h3= @sheet.total_general.title
+  %h3= @sheet.folio.title
 
 .row-fluid
   -if @sheet.sens == :actif
@@ -19,7 +19,7 @@
           %th.pc10 Net
           %th.pc10 Exercice précédent
         %tbody
-          =render :partial=>'detailed_actif', :object=>@sheet.datas
+          =render :partial=>'detailed_actif', :object=>@sheet.folio.root
   -else
     .passif
       %table.pc100
@@ -28,4 +28,4 @@
           %th.pc10 Montant
           %th.pc10 Exercice précédent
         %tbody
-          =render :partial=>'detailed_passif', :object=>@sheet.datas
+          =render :partial=>'detailed_passif', :object=>@sheet.folio.root

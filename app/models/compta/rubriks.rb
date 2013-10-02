@@ -4,6 +4,8 @@ require 'pdf_document/pdf_rubriks.rb'
 
 require 'compta/rubrik'
 
+# TODO supprimer cette classe Compta::Rubriks ainsi que Compta::Rubrik
+
 module Compta
 
   # Rubriks est une classe comportant un titre et une collection répondant aux

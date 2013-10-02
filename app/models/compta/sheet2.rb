@@ -21,7 +21,15 @@
 # sens permet de savoir si on est un document avec une logique d'actif ou de passif
 # Cette logique permet en fait de choisir si les nombres credit ou débit sont positifs
 # 
+# A partir de folio qui possède des rubriks et de period qui donne l'exercice
+# Sheet dispose de méthodes pour produire les données qui seront utilisées
+# - to_csv pour le format csv
+# - to_pdf pour le format pdf 
 #  
+# 
+# A la différence de csv et pdf qui construisent toutes les données dans la méthode,
+#  pour l'affichage dans la vue, il suffit de renvoyer la rubrique root et la vue et 
+#  ses partial se chargent de construire l'ensemble.
 #
 module Compta
 
