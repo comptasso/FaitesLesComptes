@@ -106,6 +106,7 @@ class Rubrik < ActiveRecord::Base
     
     #produit un document pdf en s'appuyant sur la classe PdfDocument::Simple
     # et ses classe associées page et table
+    # TODO voir si utilisé
     def to_pdf(options = {})
       options[:title] =  "Détail de la rubrique #{name}"
       pdf = PdfDocument::PdfRubriks.new(@period, self, options)
@@ -144,17 +145,18 @@ class Rubrik < ActiveRecord::Base
     end
 
     # crée un array avec le titre suivi de l'ensemble des lignes suivi de la ligne de total
+    # TODO voir si utilisé 
     def complete_list
       [name] + all_lines + totals if leaf?
     end
 
 
     def brut
-      lines.sum { |l| l.brut }
+      lines.sum(&:brut)
     end
 
     def amortissement
-      lines.sum { |l| l.amortissement }
+      lines.sum(&:amortissement)
     end
 
     alias depreciation amortissement

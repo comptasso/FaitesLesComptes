@@ -3,13 +3,30 @@
   tr.account_detail {
     font-style: italic;
     }
+    
+  tr.depth_0 {
+    
+  }
 
-  tr.depth_1 td {
+  tr.depth_0 td{ 
       font-weight: bold;
+      font-size: 1.2em;
+      
+      }
+  
+  tr.depth_1 td {
+    font-weight: bold;
+      font-size: 1.2em;
+       border-top: 1px solid black;
+       border-bottom: 1px solid black;
       }
 
-  tr.depth_2 td, tr.depth_3 td {
-     font-weight: bold;
-     font-size: larger;
+  tr.depth_2 td {
+    font-weight: bold;
+     font-size: 1em;
     }
+    
+  tr.depth_3 td {
+    font-size: 1em;
+  }
   }
