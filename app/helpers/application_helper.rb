@@ -63,7 +63,8 @@ module ApplicationHelper
   # export_icons permet d'afficher les différentes icones d'export.
   #
   # Dans la vue, on utilise export_icons avec comme argument opt les paramètres dont on a besoin pour
-  # permettre au serveur de répondre.
+  # permettre au serveur de répondre. Typiquement tout simplement export_icons(params)
+  # FIXME ceci renvoie le token également en clair
   #
   def export_icons(opt)
     html = icon_to('pdf.png', url_for(opt.merge(:format=>'pdf')), :id=>'icon_pdf')

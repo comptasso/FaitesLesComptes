@@ -38,7 +38,7 @@ module Editions
       set_columns # inutile d'attendre
     end
 
-    # on part de l'idée qu'une rubriks prend toujours moins d'une page à imprimer
+    # on part de l'idée qu'un folio prend toujours moins d'une page à imprimer
     # mais surtout actuellement on surcharge pour éviter que source cherche à compter des lignes
     def nb_pages
       1
@@ -47,18 +47,17 @@ module Editions
     def stamp
       @period.closed? ? '' : 'Provisoire' 
     end
-
-    def fetch_lines(page_number = 1)
-      fl = []
-      @source.folio.root.children.each do |c|
-        fl += c.to_pdf.fetch_lines unless c.leaf?
-      end
-      fl.compact
-    end
     
-    def add_children_lines(children)
+    
+    def fetch_lines(page_number = 1)
+      @source.folio.root.fetch_rubriks_with_rubrik
       
     end
+      
+          
+    
+    
+   
 
     def set_columns
       @columns = case @source.sens

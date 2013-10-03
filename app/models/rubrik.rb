@@ -18,6 +18,7 @@ class Rubrik < ActiveRecord::Base
   
   alias collection children
   
+  
   # title est un alias de name car PdfDocument utilise title et non name
   # period = nil est nécessaire car dans PdfSimple#prepare_line certaines colonnes ont besoin
   # de period pour être calculées.
@@ -61,8 +62,15 @@ class Rubrik < ActiveRecord::Base
       fl
     end
     
-     # Récupère les différentes rubriks avec les sous rubriks
-    # mais ne prend pas le détail des lignes
+    # Récupère les différentes rubriks avec les sous rubriks
+    # mais ne prend pas le détail des lignes. 
+    # 
+    # Utilisé pour la construction des folios (PdfDocument::Sheet) lorsqu'on 
+    # n'affiche pas tous les détails de comptes mais seulement les rubriques
+    # 
+    # TODO à rebaptiser en fetch_rubriks qui serait plus symétrique avec 
+    # fetch_lines. 
+    #
     def fetch_rubriks_with_rubrik
       result = []
       children.each do |c|
@@ -92,7 +100,7 @@ class Rubrik < ActiveRecord::Base
           return all_lines
         end
       else
-        return children
+        return children.map {|child| child.totals }
       end
     end
     
@@ -145,7 +153,7 @@ class Rubrik < ActiveRecord::Base
       [name] + all_lines + totals if leaf?
     end
 
-
+# FIXME voir ses instructions curieuses 
     def brut
       lines.sum { |l| (l.class == Compta::RubrikLine) ? l.brut : l.brut }
     end

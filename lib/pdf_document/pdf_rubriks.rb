@@ -19,8 +19,6 @@ module PdfDocument
   #
   # Et la méthode fetch_lines a la particularité d'être récursive
   #
-  # Enfin le template est différent. Notamment, il utilise la méthode depth des
-  # rubriks pour modifier la présentation des lignes.
   #
   class PdfRubriks < PdfDocument::Simple
 
