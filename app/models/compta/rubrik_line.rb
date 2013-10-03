@@ -26,7 +26,7 @@ module Compta
 
     def initialize(period, sens,  select_num, option= nil )
       @period = period
-      @sens = sens
+      @sens = sens.to_sym
       @select_num = select_num
       @option = option
       @account = period.accounts.find_by_number(@select_num)

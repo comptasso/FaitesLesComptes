@@ -100,7 +100,7 @@ class Rubrik < ActiveRecord::Base
           return all_lines
         end
       else
-        return children.map {|child| child.totals }
+        return children
       end
     end
     
@@ -153,13 +153,13 @@ class Rubrik < ActiveRecord::Base
       [name] + all_lines + totals if leaf?
     end
 
-# FIXME voir ses instructions curieuses 
+
     def brut
-      lines.sum { |l| (l.class == Compta::RubrikLine) ? l.brut : l.brut }
+      lines.sum { |l| l.brut }
     end
 
     def amortissement
-      lines.sum { |l| (l.class == Compta::RubrikLine) ? l.amortissement : l.amortissement }
+      lines.sum { |l| l.amortissement }
     end
 
     alias depreciation amortissement
@@ -169,7 +169,7 @@ class Rubrik < ActiveRecord::Base
     end
 
     def previous_net
-      lines.sum { |l| (l.class == Compta::RubrikLine) ? l.previous_net : l.previous_net }
+      lines.sum { |l| l.previous_net }
     end
 
        
