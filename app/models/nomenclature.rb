@@ -33,9 +33,6 @@ class Nomenclature < ActiveRecord::Base
   has_many :folios
   has_many :rubriks, through: :folios
 
- 
-
-  # TODO une nomenclature est valide si elle a 3 folios avec comme nom actif, passif 
   validates :organism_id, :presence=>true
   
   

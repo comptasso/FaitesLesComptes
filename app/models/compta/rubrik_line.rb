@@ -12,11 +12,12 @@ module Compta
   # Sens permet d'indiquer débit ou credit, ou actif et passif de façon
   # à gérer les signes.
   #
-  #  Options peut être qui peuvent être colon_2, debit, credit
-  #  correspondant au fait que le montant s'inscrit dans la colonne des amortissements
+  #  Options peut être colon_2, debit, credit
+  #  correspondant au fait
+  #  - colon_2 : le montant s'inscrit dans la colonne des amortissements
   #  et provisions,
-  #  que la valeur n'est retenue que s'il est débiteur
-  #  que la valeur n'est retenue que s'il est créditeur
+  #  - debit : la valeur n'est retenue que si le solde est débiteur
+  #  - credit : la valeur n'est retenue que si le solde est créditeur
   #
   class RubrikLine
 
