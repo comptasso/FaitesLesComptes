@@ -118,8 +118,9 @@ class Rubrik < ActiveRecord::Base
    
     
     # détermine le niveau dans l'arbre
-    # level = 0 pour root
-    def level
+    # depth = 0 pour root
+    # son alias depth est utilisé
+    def depth
       niveau = 0
       r = self
       while !r.root?
@@ -128,13 +129,7 @@ class Rubrik < ActiveRecord::Base
       niveau
     end
     
-    # la profondeur (depth) d'une rubrique est 0
-    # cette méthode existe pour pouvoir définir la profondeur
-    # des Compta::Rubriks
-    # TODO avoir un calcul plus général puisqu'on a plus qu'une rubrik et non 
-    # des compta::rubriks et compta::rubrik
     
-    alias depth level
     
     
       # retourne la ligne de total de la rubrique
