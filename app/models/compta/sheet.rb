@@ -5,7 +5,7 @@
 # TODO probablement à rebaptiser en Compta::Folio
 # TODO supprimer Compta::Sheet après 
 
-# Sheet2 est destinées à éditer une liste de rubriks concrètement pour un exercice donné
+# Sheet est destinées à éditer une liste de rubriks concrètement pour un exercice donné
 # 
 # Le but est de construire des sous parties de bilan ou de comtpe de résultats
 # Les arguments sont period, et un folio

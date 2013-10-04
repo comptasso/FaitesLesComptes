@@ -44,7 +44,7 @@ class Rubrik < ActiveRecord::Base
       '12'.in?(numeros.split) # split est essentiel sinon il répond true pour des numéros comme 212
     end
     
-    # Utilisé pour les vues de détail de Sheet2,
+    # Utilisé pour les vues de détail de Sheet,
     # permet de récupérer les Rubrik et les RubrikLine
     #
     # Fetch_lines est récursif

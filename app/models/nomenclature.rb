@@ -81,7 +81,7 @@ class Nomenclature < ActiveRecord::Base
 #  end
   
   def sheet(period, folio)
-    Compta::Sheet2.new(period, folio) 
+    Compta::Sheet.new(period, folio) 
   end
 
   # méthode de présentation des erreurs
