@@ -45,9 +45,9 @@ class Rubrik < ActiveRecord::Base
     end
     
     # Utilisé pour les vues de détail de Sheet2,
-    # permet de récupérer les Rubriks, les Rubrik et les RubrikLine
+    # permet de récupérer les Rubrik et les RubrikLine
     #
-    # Fetch_lines est récursif tant que la class est une Compta::Rubriks
+    # Fetch_lines est récursif
     #
     def fetch_lines(period = nil)
       self.period = period if period
