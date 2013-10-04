@@ -104,6 +104,12 @@ module Compta
     def render_pdf
       to_pdf.render 
     end
+    
+    def rubrik_root(period = nil)
+      r = folio.root
+      r.period = period if period
+      r
+    end
 
 
     protected
