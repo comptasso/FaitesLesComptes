@@ -12,6 +12,12 @@ describe Rubrik do
     @r = Rubrik.find_by_name('Produits financiers')
   end
   
+  it 'voyons les rubriks' do
+    Rubrik.count.should == 89
+    
+    
+  end
+  
   it 'la rubrique existe' do
     @r.should be_an_instance_of(Rubrik)
   end
@@ -25,7 +31,8 @@ describe Rubrik do
   end
   
   it 'sa position est respectée' do
-    @r.position.should == Rubrik.find_by_name('Reprises sur provisions financières').position - 1
+    @r.position.should == 23
+    
     
   end
 end

@@ -42,7 +42,7 @@ class Organism < ActiveRecord::Base
 
   attr_accessible :title, :database_name, :status, :comment
 
-  has_one :nomenclature
+  has_one :nomenclature, dependent: :destroy
   
   has_many :books, dependent: :destroy
   has_many :destinations, dependent: :destroy

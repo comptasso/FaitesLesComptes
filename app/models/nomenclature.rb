@@ -30,7 +30,7 @@ class Nomenclature < ActiveRecord::Base
 
   
   belongs_to :organism
-  has_many :folios
+  has_many :folios, dependent: :destroy
   has_many :rubriks, through: :folios
 
   validates :organism_id, :presence=>true
