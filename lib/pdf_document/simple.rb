@@ -149,23 +149,7 @@ module PdfDocument
       @columns_methods ||= set_columns_methods
     end
 
-    # TODO : à mettre en protected
-    # pour définir les méthodes à applique aux champs sélectionnés
-    #
-    #
-    def set_columns_methods(array_methods = nil)
-      @columns_methods = []
-
-      if array_methods
-        array_methods.each_with_index do |m,i|
-          @columns_methods[i] = m || @columns[i]
-        end
-      else
-        @columns_methods = columns
-      end
-      @columns_methods
-    end
-    
+     
     # récupère les variables d'instance ou les calcule si besoin
     def columns
       @columns ||= set_columns
@@ -179,7 +163,7 @@ module PdfDocument
       @columns_titles ||= set_columns_titles
     end
 
-    # array_wirths doit exprimer en % la largeur des colonnes
+    # array_widths doit exprimer en % la largeur des colonnes
     # set_columns_widths permet d'indiquer les largeurs de colonnes souhaitées
     # Si pas d'argument, toutes les colonnes sont égales,
     #
@@ -273,6 +257,19 @@ module PdfDocument
       @pdf_file.number_pages("page <page>/<total>",
         { :at => [@pdf_file.bounds.right - 150, 0],:width => 150,
           :align => :right, :start_count_at => 1 })
+    end
+    
+    def set_columns_methods(array_methods = nil)
+      @columns_methods = []
+
+      if array_methods
+        array_methods.each_with_index do |m,i|
+          @columns_methods[i] = m || @columns[i]
+        end
+      else
+        @columns_methods = columns
+      end
+      @columns_methods
     end
 
 

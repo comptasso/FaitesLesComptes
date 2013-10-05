@@ -23,7 +23,7 @@ module Compta
     end
 
 
-    def previous_net
+    def previous_net(unused_period=nil)
       if period.previous_period?
         pp = period.previous_period
         acc = pp.accounts.find_by_number(select_num)
