@@ -102,7 +102,7 @@ module Compta
       Editions::DetailedSheet.new(@period, self, options)
     end
 
-    def detailed_lines
+    def detailed_lines(page_number)
       folio.root.fetch_lines(@period)
     end
 

@@ -7,7 +7,8 @@ module Editions
 
 
   # DetailedSheet permet la production de fichier pdf avec le détail des
-  # comptes permettant de comprendre la construction d'un Sheet,
+  # comptes permettant à l'utilisateur de visualiser quels sont les comptes 
+  # pris pour calculer un Sheet,
   # que ce soit compte de résultats, actif, passif ou bénévolat
   class DetailedSheet < Editions::Sheet
 
