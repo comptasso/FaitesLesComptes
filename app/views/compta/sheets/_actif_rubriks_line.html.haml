@@ -1,5 +1,5 @@
 -# partial pour afficher une rubriks_lines
-- totals = actif_rubriks_line.totals
+- totals = actif_rubriks_line.totals(@period)
 %tr{:class=>"depth_#{actif_rubriks_line.depth}" }
   %td= totals[0]
   %td.numeric= debit_credit totals[1]

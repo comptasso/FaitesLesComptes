@@ -21,19 +21,11 @@ class Rubrik < ActiveRecord::Base
   # title est un alias de name car PdfDocument utilise title et non name
   # period = nil est nécessaire car dans PdfSimple#prepare_line certaines colonnes ont besoin
   # de period pour être calculées.
-  def title
+  def title(period = nil)
     name
   end
   
-  def period=(period)
-    @period = period
-  end
-  
-  def period
-    @period || folio.nomenclature.organism.periods.last
-  end
-  
- 
+   
   
   
   # indique si la rubrique est le résultat de l'exercice (le compte 12).
@@ -49,13 +41,13 @@ class Rubrik < ActiveRecord::Base
     #
     # Fetch_lines est récursif
     #
-    def fetch_lines(period = nil)
-      self.period = period if period
+    def fetch_lines(period)
+      
       fl = []
       children.each do |c|
         
-        fl += c.fetch_lines unless c.leaf?
-        fl += c.lines  if c.leaf? && !c.lines.empty? 
+        fl += c.fetch_lines(period) unless c.leaf?
+        fl += c.lines(period)  if c.leaf? && !c.lines(period).empty? 
         fl << c if c.leaf?
       end
       fl << self
@@ -92,12 +84,12 @@ class Rubrik < ActiveRecord::Base
     # que ses valeurs sont calculées à partir du compte 12 mais aussi de tout
     # les comptes 6 et 7.
     #
-    def lines
+    def lines(period)
       if leaf? 
         if resultat?
           return [Compta::RubrikResult.new(period, :passif, '12')]
         else
-          return all_lines
+          return all_lines(period)
         end
       else
         return children
@@ -107,15 +99,15 @@ class Rubrik < ActiveRecord::Base
     #produit un document pdf en s'appuyant sur la classe PdfDocument::Simple
     # et ses classe associées page et table
     # TODO voir si utilisé
-    def to_pdf(options = {})
-      options[:title] =  "Détail de la rubrique #{name}"
-      pdf = PdfDocument::PdfRubriks.new(@period, self, options)
-      pdf.set_columns(['title', 'brut', 'amortissement', 'net', 'previous_net'])
-      pdf.set_columns_titles(['', 'Montant brut', "Amortissement\nProvision", 'Montant net', 'Précédent'])
-      pdf.set_columns_widths([40, 15, 15, 15, 15])
-      pdf.set_columns_alignements([:left, :right, :right, :right, :right] )
-      pdf
-    end
+#    def to_pdf(options = {})
+#      options[:title] =  "Détail de la rubrique #{name}"
+#      pdf = PdfDocument::PdfRubriks.new(@period, self, options)
+#      pdf.set_columns(['title', 'brut', 'amortissement', 'net', 'previous_net'])
+#      pdf.set_columns_titles(['', 'Montant brut', "Amortissement\nProvision", 'Montant net', 'Précédent'])
+#      pdf.set_columns_widths([40, 15, 15, 15, 15])
+#      pdf.set_columns_alignements([:left, :right, :right, :right, :right] )
+#      pdf
+#    end
    
     
     # détermine le niveau dans l'arbre
@@ -134,39 +126,39 @@ class Rubrik < ActiveRecord::Base
     
     
       # retourne la ligne de total de la rubrique
-    def totals
-      [name, brut, amortissement, net, previous_net] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
+    def totals(period)
+      [name, brut(period), amortissement(period), net(period), previous_net(period)] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
     end
 
     alias total_actif totals
 
-    def total_passif
-      [name, net, previous_net]
+    def total_passif(period)
+      [name, net(period), previous_net(period)]
     end
 
     # crée un array avec le titre suivi de l'ensemble des lignes suivi de la ligne de total
     # TODO voir si utilisé 
-    def complete_list
-      [name] + all_lines + totals if leaf?
+    def complete_list(period)
+      [name] + all_lines(period) + totals if leaf?
     end
 
 
-    def brut
-      lines.sum(&:brut)
+    def brut(period)
+      lines(period).sum {|l| l.brut(period) }
     end
 
-    def amortissement
-      lines.sum(&:amortissement)
+    def amortissement(period)
+      lines(period).sum {|l| l.amortissement(period) }
     end
 
     alias depreciation amortissement
 
-    def net
-      (brut - amortissement) rescue 0.0
+    def net(period)
+      (brut(period) - amortissement(period)) rescue 0.0
     end
 
-    def previous_net
-      lines.sum { |l| l.previous_net }
+    def previous_net(period)
+      lines(period).sum { |l| l.previous_net(period) }
     end
 
        
@@ -179,7 +171,7 @@ class Rubrik < ActiveRecord::Base
     # est indiqué comme '12, 7, -6' et pour lequel lines, ne doit renvoyer
     # qu'un compte 12
     #
-    def all_lines
+    def all_lines(period)
         Compta::RubrikParser.new(period, folio.sens, numeros).rubrik_lines
     end
     

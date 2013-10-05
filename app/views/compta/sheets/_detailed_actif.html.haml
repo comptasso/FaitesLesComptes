@@ -2,6 +2,6 @@
 - unless detailed_actif.leaf?
   =render :partial=>'detailed_actif', :collection=>detailed_actif.children
 -else
-  = render :partial=>'account_actif', :collection=>detailed_actif.lines.map {|l| l.to_a }
+  = render :partial=>'account_actif', :collection=>detailed_actif.lines(@period).map {|l| l.to_a }
 = render :partial=>'actif_rubriks_line', :object=>detailed_actif
 

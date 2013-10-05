@@ -130,7 +130,7 @@ module PdfDocument
       source.instance_eval(@select_method).select(columns).offset(offset).limit(limit)
     end
 
-    # appelle les méthodes adéquate pour chacun des éléments de la lignes
+    # appelle les méthodes adéquate pour chacun des éléments de la ligne
     # dans la classe simple, cela ne fait que renvoyer la ligne.
     #
     # Une mise en forme d'office est appliquée aux champs numériques
@@ -138,7 +138,7 @@ module PdfDocument
     # A surcharger lorsqu'on veut faire un traitement de la ligne
     def prepare_line(line)
       columns_methods.collect do |m|
-        val = line.instance_eval(m)
+        val = line.send(m, @period)
         val = ActionController::Base.helpers.number_with_precision(val, :precision=>2) if val.is_a?(Numeric)
         val
       end

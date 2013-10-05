@@ -3,5 +3,5 @@
 - unless detailed_passif.leaf?
   =render :partial=>'detailed_passif', :collection=>detailed_passif.children
 -else
-  = render :partial=>'account_passif', :collection=>detailed_passif.lines.map {|l| l.to_a }
+  = render :partial=>'account_passif', :collection=>detailed_passif.lines(@period).map {|l| l.to_a }
 = render :partial=>'passif_rubriks_line', :object=>detailed_passif

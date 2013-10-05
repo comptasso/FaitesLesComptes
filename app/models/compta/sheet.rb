@@ -49,6 +49,11 @@ module Compta
     def sens
       folio[:sens].to_sym
     end
+    
+    # liste les rubriques pour les afficher au format html
+    def to_html
+      folio.root.fetch_lines(@period)
+    end
 
     
 # 
@@ -58,7 +63,7 @@ module Compta
         csv << [name.capitalize] # par ex Actif
         csv << entetes  # la ligne des titres
         folio.root.fetch_lines(@period).each do |rubs|
-          csv << (sens==:actif ? prepare_line(rubs.total_actif) : format_line(rubs.total_passif))
+          csv << (sens==:actif ? prepare_line(rubs.total_actif(@period)) : format_line(rubs.total_passif(@period)))
         end
       end
     end
@@ -73,7 +78,7 @@ module Compta
         # sens actif
         csv << (sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']) # la ligne des titres
         folio.root.fetch_rubriks_with_rubrik.each do |rubs|
-          csv << prepare_line(rubs.total_actif)
+          csv << prepare_line(rubs.total_actif(@period))
         end
       end
     end
@@ -105,11 +110,7 @@ module Compta
       to_pdf.render 
     end
     
-    def rubrik_root(period = nil)
-      r = folio.root
-      r.period = period if period
-      r
-    end
+    
 
 
     protected

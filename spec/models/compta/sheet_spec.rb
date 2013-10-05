@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |c|
-  # c.filter = {:wip=>true}
+   c.filter = {:wip=>true}
 end
 
 
@@ -93,9 +93,9 @@ describe Compta::Sheet do
     cs.render_pdf.should be_true
   end
 
-  it 'sheet doit donner le total de ses lignes' do
+  it 'sheet doit donner le total de ses lignes', wip:true do
     cs =  Compta::Sheet.new(@p, @folio)
-    cs.folio.root.totals.should == ['TOTAL ACTIF', 1310, 5.0, 1305 ,0 ]
+    cs.folio.root.totals(@p).should == ['TOTAL ACTIF', 1310, 5.0, 1305 ,0 ]
      
   end
   

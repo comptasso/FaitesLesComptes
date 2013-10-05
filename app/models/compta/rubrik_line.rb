@@ -37,41 +37,49 @@ module Compta
     
     # renvoie le libellé du compte. Si le compte n'existe pas pour cet exercice
     # essaye de trouver ce compte dans l'exercice précédent
-    def title
+    def title(unused_period = nil)
       acc = account || period.previous_period.accounts.find_by_number(@select_num)
       "#{acc.number} - #{acc.title}" rescue "Erreur, compte #{@select_num} non trouve"
+    end
+    
+    def brut(unused_period = nil)
+      @brut
+    end
+    
+    def amortissement(unused_period = nil)
+      @amortissement
     end
 
      
     
     # retourne la valeur nette par calcul de la différence entre brut et amortissement
-    def net
+    def net(unused_period = nil)
       brut - amortissement
     end
 
     # previous_net renvoie la valeur nette pour l'exercice précédent
     # 
-    def previous_net
+    def previous_net(unused_period = nil)
       net_value(mise_en_forme(period.previous_account(account).final_sold)) rescue 0
     end
 
     # TODO ceci a été rajouté car les nouvelles Rubrik ont besoin de period
     # alors que ce n'est pas vrai pour les Compta::RubrikLines
-    def to_actif(period = nil)
+    def to_actif(unused_period = nil)
       [title, brut, amortissement, net, previous_net]
     end
 
     alias total_actif to_actif
     alias to_a to_actif
 
-    def to_passif(period = nil)
+    def to_passif(unused_period = nil)
       [title, net, previous_net]
     end
 
     alias total_passif to_passif
 
     # indique la profondeur pour les fonctions récursives d'affichage
-    # rubrik étant 0, rubrik_line est mis à  -1
+    # rubrik_line est mis à  -1
     def depth
       -1
     end
