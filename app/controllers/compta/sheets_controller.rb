@@ -77,9 +77,10 @@ class Compta::SheetsController < Compta::ApplicationController
         format.pdf { send_data @sheet.to_detailed_pdf.render}
       end
       else
-      flash[:alert] = "Le document demandé (#{params[:id].capitalize}) n'a pas été trouvé " unless @sheet
-      flash[:alert] = "Le document demandé (#{params[:id].capitalize}) comporte des erreurs : #{@sheet.errors.full_messages.join('; ')}"
-      redirect_to compta_nomenclature_url
+      flash[:alert] = "Le document demandé n'a pas été trouvé " unless @sheet
+      flash[:alert] = "Le document demandé comporte des erreurs : #{@sheet.errors.full_messages.join('; ')}"
+      redirect_to compta_nomenclature_url # affiche la liste des folios de la nomenclature
+      # TODO gagnerait éventuellement à être un folios_controller et une vue index
     end
   end
 
@@ -117,13 +118,14 @@ class Compta::SheetsController < Compta::ApplicationController
     @detail_lines = @period.two_period_account_numbers.map  {|num| Compta::RubrikLine.new(@period, :actif, num)}
     respond_to do |format|  
         format.html
-        format.csv { send_data @detail_lines.inject('') {|i, line|  i += line.to_csv  } } 
-        format.xls { send_data(@detail_lines.inject('') {|i, line|  i += line.to_xls  }, :filename=>'detail.csv')   }
+        format.csv { send_data(detail_csv(@detail_lines)  , :filename=>'detail.csv')} 
+        format.xls { send_data(detail_csv(@detail_lines).encode("windows-1252"), :filename=>'detail.csv')   }
         format.pdf {
-            pdf = PdfDocument::Base.new(@detail_lines, {:title=>'Détail des comptes', :columns=>[:select_num, :title, :net, :previous_net],
-              :columns_titles=>['Numéro', 'Libellé', 'Montant', 'Ex Précédent']}) do |p|
-                 p.columns_widths = [15,45,20,20]
-                 p.columns_alignements = [:left, :left, :right, :right]
+            pdf = PdfDocument::Base.new(@detail_lines, {:title=>'Détail des comptes',
+                :columns=>[:select_num, :title, :brut, :amortissement, :net, :previous_net],
+              :columns_titles=>['Numéro', 'Libellé', 'Brut', 'Amortissement', 'Net', 'Ex Précédent']}) do |p|
+                 p.columns_widths = [10,30,15,15,15,15]
+                 p.columns_alignements = [:left, :left, :right, :right, :right, :right]
                  p.top_left = "#{@organism.title}\n#{@period.exercice}" 
                  p.stamp = @period.closed? ? '' : 'Provisoire' 
               end
@@ -135,6 +137,8 @@ class Compta::SheetsController < Compta::ApplicationController
   protected
 
   # appelé par before_filter pour s'assurer que la nomenclature est valide
+  # TODO faire un champ de cette validation et le dévalider lorsqu'il y a modification
+  # du plan comptable
   def check_nomenclature
     @nomenclature = @organism.nomenclature
     unless @nomenclature.valid?
@@ -146,6 +150,13 @@ class Compta::SheetsController < Compta::ApplicationController
       al += '</ul>'
       flash[:alert] = al.html_safe
     end
+  end
+  
+  def detail_csv(lines)
+    CSV.generate({:col_sep=>"\t"}) do |csv|
+      csv << ['Numéro', 'Libellé', 'Brut', 'Amortissement', 'Net', 'Ex. précédent']
+      lines.each {|l| csv << [l.select_num, l.title, l.brut, l.amortissement, l.net, l.previous_net] }
+    end.gsub('.', ',')
   end
 
 end

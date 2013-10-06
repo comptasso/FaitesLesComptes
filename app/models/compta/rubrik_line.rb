@@ -21,7 +21,7 @@ module Compta
   #
   class RubrikLine
 
-    include Utilities::ToCsv
+    # include Utilities::ToCsv
 
     attr_reader :brut, :amortissement, :select_num, :account, :period, :sens, :option
 
@@ -39,8 +39,10 @@ module Compta
     # essaye de trouver ce compte dans l'exercice précédent
     def title(unused_period = nil)
       acc = account || period.previous_period.accounts.find_by_number(@select_num)
-      "#{acc.number} - #{acc.title}" rescue "Erreur, compte #{@select_num} non trouve"
+      acc.title rescue "Erreur, compte #{@select_num} non trouve"
     end
+    
+    
     
     def brut(unused_period = nil)
       @brut
@@ -85,11 +87,11 @@ module Compta
       -1
     end
 
-    def to_csv(options = {:col_sep=>"\t"})
-      CSV.generate(options) do |csv|
-        csv << [@select_num, title, @brut, @amortissement, net, previous_net]
-      end.gsub('.', ',')
-    end
+#    def to_csv(options = {:col_sep=>"\t"})
+#      CSV.generate(options) do |csv|
+#        csv << [@select_num, title, net, previous_net]
+#      end.gsub('.', ',')
+#    end
 
 
     protected

@@ -2,5 +2,7 @@
 %tr
   %td= detail_line.select_num
   %td= detail_line.title
+  %td.numeric= debit_credit detail_line.brut
+  %td.numeric= debit_credit detail_line.amortissement
   %td.numeric= debit_credit detail_line.net
   %td.numeric= debit_credit detail_line.previous_net
