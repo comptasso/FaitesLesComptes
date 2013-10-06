@@ -56,8 +56,9 @@ module Compta
     end
 
     
-# 
-    # utilisé pour le csv de l'option show
+ 
+    # utilisé pour le csv de l'option show, c'est à dire avec un seul sheet
+    # show veut dire une édition avec le détail des lignes, d'où l'utilisation de fetch_lines
     def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
         csv << [name.capitalize] # par ex Actif
@@ -69,7 +70,9 @@ module Compta
     end
 
 
-    # utilisé pour le csv de l'action index
+    # utilisé pour le csv de l'action index, donc a priori avec plusieurs sheet
+    # ici on n'affiche donc pas le détail et l'on ne prend que les rubriques
+    # d'où l'appel à fetch_rubriks_with_rubrik
     def to_index_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
         csv << [name.capitalize] # par ex Actif
@@ -83,17 +86,23 @@ module Compta
       end
     end
  
+    # encodage windows
     def to_index_xls(options = {col_sep:"\t"})
       to_index_csv(options).encode("windows-1252") 
     end
 
 
 
-    # fait une édition pdf de sheet ce qui reprend des titres puis insère les éléments
+    # fait une édition pdf de sheet en s'appuyant sur la classe Edition::Sheet
     #
     def to_pdf(options = {})
       options[:title] =  name.to_s 
       Editions::Sheet.new(@period, self, options)
+    end
+    
+    # rend le fichier pdf
+    def render_pdf
+      to_pdf.render 
     end
 
    # produit une édition pdf de Sheet avec les détails de lignes
@@ -102,13 +111,21 @@ module Compta
       Editions::DetailedSheet.new(@period, self, options)
     end
 
+    
+    # appelé par DetailedSheet pour avoir les lignes de la page sollicitée
+    # En l'occurence pour les sheets qui sont a priori en une page, le paramètre page_number
+    # n'est pas utilisé. Même si dans le cas d'un DetailedSheet cela fera souvent 2 pages
+    # voire plus. 
+    # 
+    # Le pdf se débrouille cependant tout seul pour couper le tableau et faire la numérotation
+    # car il n'y a pas de sous totaux affichés en bas des pages. 
+    # 
+    # 
     def detailed_lines(page_number)
       folio.root.fetch_lines(@period)
     end
 
-    def render_pdf
-      to_pdf.render 
-    end
+    
     
     
 

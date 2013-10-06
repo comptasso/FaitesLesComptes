@@ -65,7 +65,7 @@ class Compta::SheetsController < Compta::ApplicationController
   def show
     folio = @nomenclature.folios.find(params[:id])
     @sheet = @nomenclature.sheet(@period, folio)
-    @rubrik_root = @sheet.folio.root
+    @rubriks = @sheet.to_html
     
     
     if @sheet && @sheet.valid?

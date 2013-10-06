@@ -71,6 +71,7 @@ module Compta
 
     alias total_actif to_actif
     alias to_a to_actif
+    alias totals to_actif
 
     def to_passif(unused_period = nil)
       [title, net, previous_net]
