@@ -27,9 +27,9 @@ class Compta::SheetsController < Compta::ApplicationController
       fol = @nomenclature.folios.find_by_name(c.to_s)
       @nomenclature.sheet(@period, fol)
     end
-    send_export_token # pour gérer le spinner lors de la préparation du document
+    
     respond_to do |format|
-     
+      send_export_token # pour gérer le spinner lors de la préparation du document
       format.html
       format.csv {
         
