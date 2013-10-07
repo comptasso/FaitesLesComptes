@@ -2,7 +2,7 @@
   .navbar-inner
     .container
       .brand
-        = link_to header_title, main_app.organism_path(@organism), :tabindex=>-1, id:'home'
+        = link_to header_title, main_app.organism_path(@organism), :tabindex=>-1, id:'home', class:'with_spinner'
         #login_logout
           Connecté en tant que &nbsp; 
           %span
