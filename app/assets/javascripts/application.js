@@ -94,9 +94,13 @@ var jc_spinner_opts = {
     hwaccel: false, // Whether to use hardware acceleration
     className: 'spinner', // The CSS class to assign to the spinner
     zIndex: 2e9, // The z-index (defaults to 2000000000)
-    top: 'auto', // Top position relative to parent in px
+    top: '100px', // car auto fait qu'on ne voit pas le spinner si le document affiché est long 
+    // il se place au milieu de la zone donc alors invisible.
     left: 'auto' // Left position relative to parent in px
   };
+  
+  
+  
 
 // fonction pour transformer une chaine avec virgule en float
 // la fonction retire les espaces et remplace la virgule par le point décimal
