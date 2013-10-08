@@ -14,6 +14,10 @@
 //
 //
 
+
+// voir aussi le fichier general.js.coffee qui est un complément 
+// à ce fichier mais au format coffee
+
 "use strict";
 /*jslint browser: true */
 /*global $, jQuery */
