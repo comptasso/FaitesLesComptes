@@ -70,6 +70,7 @@ class Compta::SheetsController < Compta::ApplicationController
     if @sheet && @sheet.valid?
 
       respond_to do |format|
+        send_export_token # pour gérer le spinner lors de la préparation du document
         format.html {@rubriks = @sheet.to_html}
         format.csv { send_data @sheet.to_csv  } 
         format.xls { send_data @sheet.to_xls }

@@ -1,3 +1,12 @@
+# méthode pour construire une url en rajoutant un token
+fnAddToken= (url, token) ->
+  if /.*\?.*/.test(url) # l'url contient déja un ? et donc des paramètres
+    "#{url}&token=#{token}" # on ajoute notre paramètre
+  else
+    "#{url}?token=#{token}" # il n'y a que ce paramètre
+  
+
+
 # fichier ayant pour objet de bloquer la page et d'afficher un message juste un instant
 # lorsqu'on clique sur une des trois icones d'export
 #
@@ -14,20 +23,21 @@ $ ->
   $('#icon_pdf').click ->
     mytoken = new Date().getTime().toString() #use the current timestamp as the token value
     lien = $('#icon_pdf').attr('href')
-    $('#icon_pdf').attr('href', "#{lien}&token=#{mytoken}")
+    $('#icon_pdf').attr('href', fnAddToken(lien, mytoken))
     block_page()
 
   $('#icon_csv').click ->
     mytoken = new Date().getTime().toString() #use the current timestamp as the token value
     lien = $('#icon_csv').attr('href')
-    $('#icon_csv').attr('href', "#{lien}&token=#{mytoken}")
+    $('#icon_csv').attr('href', fnAddToken(lien, mytoken))
     block_page()
 
   $('#icon_xls').click ->
     mytoken = new Date().getTime().toString() #use the current timestamp as the token value
     lien = $('#icon_xls').attr('href')
-    $('#icon_xls').attr('href', "#{lien}&token=#{mytoken}")
+    $('#icon_xls').attr('href', fnAddToken(lien, mytoken))
     block_page()
+    
 
   block_page = ->
     $.blockUI({ message: '<h1>Juste un instant...</h1>' })
