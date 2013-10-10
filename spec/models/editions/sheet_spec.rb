@@ -72,10 +72,9 @@ describe Editions::Sheet do
 
 
     it 'fetch_lines' do
-      @cr = double(Compta::Rubriks, :class=>Compta::Rubriks)
-      @cr.stub_chain(:to_pdf, :fetch_lines).and_return([['Libellé', 200, 10, 190, 180,25]])
-      bal.stub_chain(:total_general, :collection).and_return(10.times.map {|i| @cr })
-      @pdfs.fetch_lines.size.should == 10
+      bal.should_receive(:folio).and_return(@fol = double(Folio))
+      @folio.stub_chain(:root, :fetch_rubriks_with_rubrik).and_return('une liste de lignes')
+      @pdfs.fetch_lines.should == 'une liste de lignes'
     end
 
     it 'render' do
