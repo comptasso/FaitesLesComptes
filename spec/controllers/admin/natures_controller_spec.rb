@@ -192,41 +192,7 @@ describe Admin::NaturesController do
 
   end
 
-  describe 'LINK_NATURE' do
-    it 'should assign nature et account' do
-      @a.should_receive(:find).with(nat1.to_param).and_return nat1
-      @p.should_receive(:accounts).and_return(@b = double(Arel))
-      @b.should_receive(:find).with(7).and_return(@acc = mock_model(Account))
-      nat1.stub(:update_attribute)
-      post :link_nature, {:period_id=>@p.id, account_id:7, :id=>nat1.to_param, :format=>:js}, valid_session
-      assigns[:nature].should == nat1
-      assigns[:account].should == @acc
-    end
+  
 
-    it 'met à jour la nature' do
-      @a.stub(:find).with(nat1.to_param).and_return nat1
-      @p.stub_chain(:accounts, :find).and_return(@acc = mock_model(Account))
-      nat1.should_receive(:update_attribute).with(:account_id, @acc.id)
-      post :link_nature, {:period_id=>@p.id, account_id:7, :id=>nat1.to_param, :format=>:js}, valid_session
-    end
-
-  end
-
-  describe 'UNLINK_NATURE', wip:true do
-    it 'should assign nature et account' do
-      @a.should_receive(:find).with(nat1.to_param).and_return nat1
-      nat1.stub(:update_attribute)
-      post :unlink_nature, {:period_id=>@p.id, :id=>nat1.to_param, :format=>:js}, valid_session
-      assigns[:nature].should == nat1
-
-    end
-
-    it 'met à jour la nature' do
-      @a.stub(:find).with(nat1.to_param).and_return nat1
-      nat1.should_receive(:update_attribute).with(:account_id, nil)
-      post :unlink_nature, {:period_id=>@p.id,  :id=>nat1.to_param, :format=>:js}, valid_session
-    end
-
-  end
-
+  
 end
