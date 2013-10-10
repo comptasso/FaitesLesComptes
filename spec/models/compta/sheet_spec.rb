@@ -28,7 +28,7 @@ describe Compta::Sheet do
   end
 
   it 'peut créer une instance' do
-    Compta::Sheet.new(@p, @folio ).should be_an_instance_of(Compta::Sheet)
+    Compta::Sheet.new(@p, @folio ).should be_an_instance_of(Compta::Sheet) 
   end
 
   it 'sheet doit rendre un tableau' do
@@ -103,7 +103,7 @@ describe Compta::Sheet do
     
     before(:each) do
       st = Date.today.end_of_year + 1
-      @next_period = @p = @o.periods.create!(start_date: st, close_date: st.end_of_year)
+      @next_period = @o.periods.create!(start_date: st, close_date: st.end_of_year)
     end
     
     it 'csv prend en compte l exercice' do
