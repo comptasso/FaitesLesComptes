@@ -442,11 +442,7 @@ describe Period do
           @p_2011.recettes_natures.should == %w(bonbons cailloux)
         end
 
-        it 'nomenclature renvoie une instance de nomenclature' do
-          @p_2011.nomenclature.should be_an_instance_of(Compta::Nomenclature)
-        end
-
-        it 'report à nouveau renvoie une ComptaLine dont le montant est le résultat et le compte 12'  do
+       it 'report à nouveau renvoie une ComptaLine dont le montant est le résultat et le compte 12'  do
           @p_2011.send(:report_a_nouveau).should be_an_instance_of(ComptaLine)
         end
 

@@ -81,7 +81,7 @@ describe Compta::RubrikLine do
 
   it 'sait rendre un csv' do
     @rl = Compta::RubrikLine.new(p, :actif, '201')
-    @rl.to_csv.should == "201\t201 - Un compte\t120\t0\t120\t14\n"
+    @rl.to_csv.should == "201\t201 - Un compte\t120\t0\t120\t14\n" 
   end
 
 
