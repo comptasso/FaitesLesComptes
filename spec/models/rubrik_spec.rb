@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-   c.filter = {:wip=>true}
+  # c.filter = {:wip=>true}
 end
 
 describe Rubrik do
@@ -39,7 +39,7 @@ describe Rubrik do
        end
        
        it 'le tableau de lignes doit comporter 5 lignes' do
-         @r.fetch_lines.size.should == 5
+         @r.fetch_lines(@p).size.should == 5
          # la ligne de détail des produits financiers plus la rubrik Produits Financiers
          # idem pour reprise de provisions financières
          # et enfin le regroupement de Produits financiers
@@ -52,15 +52,15 @@ describe Rubrik do
         @rub = Rubrik.new
         @rub.stub(:children).and_return 'les enfants'
         @rub.stub('leaf?').and_return false
-        @rub.lines.should == 'les enfants'
+        @rub.lines(@p).should == 'les enfants'
       end
       
       it 'retourne un rubrik_result si c est un leaf et un resultat' do
         @r
         @r.stub('leaf?').and_return true
         @r.stub('resultat?').and_return true
-        Compta::RubrikResult.should_receive(:new).with(@r.period, :passif, '12').and_return(@rr = double(Compta::RubrikResult))
-        @r.lines.should == [@rr]
+        Compta::RubrikResult.should_receive(:new).with(@p, :passif, '12').and_return(@rr = double(Compta::RubrikResult))
+        @r.lines(@p).should == [@rr]
       end
       
       it 'retourne all_lines si c est un leaf non résultat' do
@@ -68,7 +68,7 @@ describe Rubrik do
         @rub.stub('leaf?').and_return true
         @rub.stub('resultat?').and_return false
         @rub.should_receive(:all_lines).and_return 'mes lignes'
-        @rub.lines.should == 'mes lignes'
+        @rub.lines(@p).should == 'mes lignes'
       end
       
     end

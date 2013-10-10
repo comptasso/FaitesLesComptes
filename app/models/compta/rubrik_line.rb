@@ -39,7 +39,7 @@ module Compta
     # essaye de trouver ce compte dans l'exercice précédent
     def title(unused_period = nil)
       acc = account || period.previous_period.accounts.find_by_number(@select_num)
-      acc.title rescue "Erreur, compte #{@select_num} non trouve"
+      "#{acc.number} - #{acc.title}" rescue "Erreur, compte #{@select_num} non trouve"
     end
     
     

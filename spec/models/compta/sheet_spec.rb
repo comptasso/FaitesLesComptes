@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |c|
-   c.filter = {:wip=>true}
+  # c.filter = {:wip=>true}
 end
 
 
@@ -113,13 +113,13 @@ describe Compta::Sheet do
     end
     
     it 'detailed lines est conforme', wip:true do
-      fl = Compta::Sheet.new(@next_period, @folio).detailed_lines.first
+      fl = Compta::Sheet.new(@next_period, @folio).detailed_lines(1).first
       fl.brut.should  == 0.0
       fl.previous_net.should == 1210.0
     end
     
     it 'detailed lines est conforme', wip:true do
-      fl = Compta::Sheet.new(@p, @folio).detailed_lines.first
+      fl = Compta::Sheet.new(@p, @folio).detailed_lines(1).first
       fl.brut.should  == 1210.0
       fl.previous_net.should == 0.0
     end

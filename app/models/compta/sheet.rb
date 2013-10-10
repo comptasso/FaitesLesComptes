@@ -121,7 +121,7 @@ module Compta
     # car il n'y a pas de sous totaux affichés en bas des pages. 
     # 
     # 
-    def detailed_lines(page_number)
+    def detailed_lines(page_number = 1)
       folio.root.fetch_lines(@period)
     end
 
