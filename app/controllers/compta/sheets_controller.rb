@@ -20,8 +20,7 @@ class Compta::SheetsController < Compta::ApplicationController
   # TODO ? faire un check de la validité de chaque document ?
   # ou le vérifier dans nomenclature.rb
   
-  # TODO avec la nouvelle logique des folios, on peut créer le doc directement avec 
-  # un folio
+  
   def index
     @docs = params[:collection].map do |c|
       fol = @nomenclature.folios.find_by_name(c.to_s)
@@ -65,13 +64,13 @@ class Compta::SheetsController < Compta::ApplicationController
   def show
     folio = @nomenclature.folios.find(params[:id])
     @sheet = @nomenclature.sheet(@period, folio)
-    @rubriks = @sheet.to_html
+    
     
     
     if @sheet && @sheet.valid?
 
       respond_to do |format|
-        format.html 
+        format.html {@rubriks = @sheet.to_html}
         format.csv { send_data @sheet.to_csv  } 
         format.xls { send_data @sheet.to_xls }
         format.pdf { send_data @sheet.to_detailed_pdf.render}

@@ -18,7 +18,7 @@ describe Compta::SheetsController do
   
   it 'le controller s assure que la nomenclature est valide'
   
-  
+  # TODO finir les specs de ce controller
 
   describe 'GET show' do  
       
@@ -28,20 +28,23 @@ describe Compta::SheetsController do
     
     it 'cherche le folio à partir du param' do
       @ar.should_receive(:find).with(@f.to_param).and_return @f
-      @nomen.should_receive(:sheet).with(@p, @f).and_return(double(Compta::Sheet, valid?:true))
+      @nomen.should_receive(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:true))
+      @cs.should_receive(:to_html).and_return(@list_rubriks = double(Array))
       get :show, {:id=>@f.to_param}, valid_session
     end
 
     it 'crée une sheet et l assigne' do
       @ar.stub(:find).and_return @f
-      @nomen.should_receive(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:true))
+      @nomen.stub(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:true))
+      @cs.stub(:to_html).and_return(@list_rubriks = double(Array))
       get :show, {:id=>@f.to_param}, valid_session
-      assigns(:sheet).should == @cs
+      assigns(:rubriks).should == @list_rubriks
     end 
     
     it 'si le document n est pas valide, renvoie vers la liste des documents' do
       @ar.stub(:find).and_return @f
-      @nomen.should_receive(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:false))
+      @nomen.stub(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:false))
+      @cs.stub(:to_html).and_return(@list_rubriks = double(Array))
       @cs.stub_chain(:errors, :full_messages, :join).and_return 'Le texte de l erreur'
       get :show, {:id=>@f.to_param}, valid_session
       response.should redirect_to compta_nomenclature_path
