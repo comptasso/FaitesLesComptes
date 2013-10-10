@@ -38,7 +38,6 @@ module PdfDocument
     def fetch_lines(page_number = 1)
       fl = []
       @source.collection.each do |c|
-        puts c.inspect
         fl += c.to_pdf.fetch_lines unless c.leaf?
         fl << c if c.leaf?
       end

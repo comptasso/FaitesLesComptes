@@ -201,6 +201,19 @@ module PdfDocument
       set_columns_alignements
       @columns
     end
+    
+    def set_columns_methods(array_methods = nil)
+      @columns_methods = []
+
+      if array_methods
+        array_methods.each_with_index do |m,i|
+          @columns_methods[i] = m || @columns[i]
+        end
+      else
+        @columns_methods = columns
+      end
+      @columns_methods
+    end
 
 
     # permet de définir les titres qui seront donnés aux colonnes
@@ -259,18 +272,7 @@ module PdfDocument
           :align => :right, :start_count_at => 1 })
     end
     
-    def set_columns_methods(array_methods = nil)
-      @columns_methods = []
-
-      if array_methods
-        array_methods.each_with_index do |m,i|
-          @columns_methods[i] = m || @columns[i]
-        end
-      else
-        @columns_methods = columns
-      end
-      @columns_methods
-    end
+  
 
 
 

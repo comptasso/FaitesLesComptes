@@ -16,7 +16,7 @@ describe 'test pdf prawn' do
      @n.save!
      # on crée 50 lignes de dépenses
      1.upto(50) do |i|
-        create_outcome_writing(i)
+        create_outcome_writing(i) 
      end
  
    end

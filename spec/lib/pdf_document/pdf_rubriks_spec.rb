@@ -6,9 +6,9 @@ require 'pdf_document/pdf_rubriks'
 describe 'PdfDocument::PdfRubriks' do
 
   let(:p) {mock_model(Period)}
-  let(:cr) {double(:class=>Compta::Rubrik, :title=>'Une rubrik',:net=>2, :previous_net=>1.2)}
-  let(:crs) { double(:class=>Compta::Rubriks, :title=>'Une rubriks',:net=>20, :previous_net=>12)}
-  let(:source) {double(:collection=>(1.upto(5).collect {crs} + [cr]),  :title=>'La source',:net=>200, :previous_net=>120)}
+  let(:leaf) {double(Rubrik, :title=>'Une rubrik',:net=>2, :previous_net=>1.2, leaf?: true)}
+  let(:crs) { double(Rubrik, :title=>'Une rubriks',:net=>20, :previous_net=>12, leaf?: false)}
+  let(:source) {double(:collection=>(1.upto(5).collect {crs} + [leaf]),  :title=>'La source',:net=>200, :previous_net=>120)}
 
   it 'crée l instance' do
     pdfr = PdfDocument::PdfRubriks.new(p, source, {})
@@ -26,7 +26,7 @@ describe 'PdfDocument::PdfRubriks' do
     end
 
     it 'fetch_lines renvoie un tableau de toutes les rubrik' do
-      crs.stub_chain(:to_pdf, :fetch_lines).and_return([cr,cr])
+      crs.stub_chain(:to_pdf, :fetch_lines).and_return([leaf,leaf])
       @pdfr.fetch_lines.should have(12).elements # 5 crs avec chacun 2 plus le cr plus le total général
     end
 
