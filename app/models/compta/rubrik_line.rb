@@ -87,12 +87,13 @@ module Compta
       -1
     end
 
-    # utilisé pour l'édition détaillée des folios
-    def to_csv(options = {:col_sep=>"\t"})
-      CSV.generate(options) do |csv|
-        csv << [@select_num, title, net, previous_net]
-      end.gsub('.', ',')
-    end
+    # utilisé pour l'édition détaillée des folios ????
+    # TODO voir si utilisé
+#    def to_csv(options = {:col_sep=>"\t"})
+#      CSV.generate(options) do |csv|
+#        csv << [@select_num, title, net, previous_net]
+#      end.gsub('.', ',')
+#    end
 
 
     protected

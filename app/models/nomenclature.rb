@@ -74,11 +74,13 @@ class Nomenclature < ActiveRecord::Base
   end
   
   
-  # TODO à supprimer définitivement ainsi que la classe Compta::Nomenclature
-  # crée une instance de Compta::Nomenclature pour l'exercice demandé
-#  def compta_nomenclature(period)
-#    Compta::Nomenclature.new(period, self)
-#  end
+ 
+  # crée une instance de Compta::Nomenclature pour l'exercice demandé;
+  # cela permet de valider que la nomenclature est correcte par rapport aux comptes
+  # de l'exercice en question
+  def compta_nomenclature(period)
+    Compta::Nomenclature.new(period, self)
+  end
   
   def sheet(period, folio)
     Compta::Sheet.new(period, folio) 
@@ -141,7 +143,7 @@ class Nomenclature < ActiveRecord::Base
       # Ajoute une erreur à :bilan si c'est le cas avec comme message la liste des comptes
       # qui n'ont pas de correspondant
       def bilan_balanced?
-      
+        return false unless actif && passif
         array_numbers = actif.rough_numbers + passif.rough_numbers
       
         # maintenant on crée une liste des comptes D et une liste des comptes C
@@ -162,14 +164,16 @@ class Nomenclature < ActiveRecord::Base
       end
       
       def bilan_no_doublon?
+        return false unless actif && passif
         array_numbers = actif.rough_numbers + passif.rough_numbers
-        errors.add(:bilan, 'Un numéro apparait deux fois dans la construction du bilan') unless array_numbers.uniq.size == rough_numbers
+        errors.add(:bilan, 'Un numéro apparait deux fois dans la construction du bilan') unless array_numbers.uniq.size == array_numbers.size
       end
       
       
       
       # le folio résultat ne peut avoir que des comptes 6 ou 7
       def resultat_67?
+        return false unless resultat
         list = rough_accounts_reject(resultat.rough_numbers, 6,7)
         errors.add(:resultat, "comprend un compte étranger aux classes 6 et 7 (#{list.join(', ')})") unless list.empty?
       end

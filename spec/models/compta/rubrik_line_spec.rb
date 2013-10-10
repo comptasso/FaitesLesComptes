@@ -80,6 +80,7 @@ describe Compta::RubrikLine do
   end
 
   it 'sait rendre un csv' do
+    pending 'en attente de vérification que cette méthode (to_csv) soit bien utilisée'
     @rl = Compta::RubrikLine.new(p, :actif, '201')
     @rl.to_csv.should == "201\t201 - Un compte\t120\t0\t120\t14\n" 
   end
