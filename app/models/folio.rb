@@ -42,6 +42,8 @@ class Folio < ActiveRecord::Base
   # TODO mettre les validations sur les champs obligatoires
   # 
   
+  # TODO faire les specs de ce modèle
+  
   
   
   # un folio doit être capable de retounrer les rubriques dans un ordre précis
@@ -54,7 +56,9 @@ class Folio < ActiveRecord::Base
   
   # Permet d'extraire toutes les instructions de liste de comptes de la nomenclature
   # la logique récursive permet de faire des nomenclatures à plusieurs niveaux
-  # sans imposer un nombre de niveaux précis
+  # sans imposer un nombre de niveaux précis.
+  #
+  # 
   def all_numbers
     return [root.numeros] if root.leaf? # cas quasi impensable où il n'y aurait qu'une rubrique
     values = []

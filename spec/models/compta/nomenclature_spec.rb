@@ -42,34 +42,13 @@ describe Compta::Nomenclature do
 
 
   context 'qui est  valide' do
-    before(:each) do
-      @cn.stub(:rough_accounts_list).and_return []
-    end
-
-   
     
-#    it 'sait si tous les comptes C ont un compte D et vice vera' do
-#      @cn.should_receive(:bilan_balanced).and_return true
-#      @cn.valid?
-#    end
 
     it 'non valide si le compte de résultats ne prend pas tous les comptes' do
-      @cn.stub(:rough_accounts_reject).and_return(['709'])
+      @p.stub(:two_period_account_numbers).and_return(['709'])
       @cn.valid?
       @cn.errors.messages[:resultat].should == ['Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 709']
     end
-    
-#    it 'le compte de resultats ne comprend que des comptes 6 et 7'  do 
-#      @cn.send(:resultats_67).should be_true
-#    end
-
-    
-
-#    it 'non valide si un résultat comprend un compte autre que 6 ou 7'do
-#      @cn.stub(:rough_accounts_list).with(:resultat).and_return(['60', '70', '401'] )
-#      @cn.should_not be_valid
-#    end
-
 
 
 #    it 'la partie benevolat ne comporte que des comptes 8' do
@@ -90,8 +69,8 @@ describe Compta::Nomenclature do
 #      puts @cn.errors.messages
 #    end
 
-    it 'une nomenclature sait créer un sheet' do
-      @cn.sheet(@cn.resultat).should be_an_instance_of(Compta::Sheet) 
+    it 'une nomenclature connait ses folios' do
+      @cn.resultat.should be_an_instance_of(Folio) 
   end
 
 
@@ -111,62 +90,6 @@ describe Compta::Nomenclature do
       @cn.should_not be_valid
     end
   end
-
-#  context 'un compte de bilan C qui n a pas son D' do
-#    before(:each) {@cn = Compta::Nomenclature.new(@p, instructions('one_C_missing.yml'))}
-#    
-#    it 'fait que la nomenclature n est pas valide' do
-#      @cn.should_not be_valid
-#    end
-#
-#    it 'avec une erreur sur le bilan' do
-#      @cn.should have(1).errors_on(:bilan)
-#    end
-#
-#    it 'qui identifie le numéro de compte' do
-#      @cn.valid?
-#      @cn.errors.messages[:bilan].should ==  [' : comptes D sans comptes C correspondant (43)']
-#    end
-#
-#  end
-#
-#  context 'un compte de resultat avec un compte 4'  do
-#    before(:each) {@cnf = Compta::Nomenclature.new(@p, instructions('resultats_with_4.yml'))}
-#
-#    it 'n est pas valide' do
-#      @cnf.should_not be_valid
-#    end
-#
-#    it 'identifie le numero de compte' do
-#      @cnf.valid?
-#      @cnf.errors.messages[:exploitation].should ==  ['comprend un compte étranger aux classes 6 et 7 (410)']
-#    end
-#  end
-#
-#  context 'vérification des doublons' , wip:true do 
-#    before(:each) {@cnf = Compta::Nomenclature.new(@p, instructions('doublons.yml'))}
-#
-#    it 'n est pas valide' do
-#      @cnf.should_not be_valid
-#    end
-#
-#    it 'identifie le numéro en double' do 
-#      @cnf.valid?
-#      @cnf.errors.messages[:actif].should ==  ['comprend des doublons (27, 45, 455)']
-#    end
-#
-#    it 'identifie les doublons au sein de l ensemble resultats' do 
-#      @cnf.valid?
-#      @cnf.errors.messages[:resultat].should ==  ['comprend des doublons (641, 645, 786)']
-#    end
-#
-#    it 'et ceux du bilan' do
-#      @cnf.valid?
-#      @cnf.errors.messages[:bilan].should ==  ['comprend des doublons (27, 419, 45, 455)']
-#    end
-#
-#
-#  end
 
   
 
