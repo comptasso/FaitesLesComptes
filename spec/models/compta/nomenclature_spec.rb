@@ -23,72 +23,213 @@ describe Compta::Nomenclature do
   end
 
   
-  it 'sait renvoyer un Folio' do
+  it 'sait renvoyer ses divers Folio' do
     @cn.actif.should be_an_instance_of(Folio)
+    @cn.passif.should be_an_instance_of(Folio)
+    @cn.resultat.should be_an_instance_of(Folio) 
+    @cn.benevolat.should be_an_instance_of(Folio) 
   end
   
-  it 'sait si tous les comptes sont pris pour actif et passif', wip:true do
-#    puts 'liste des comptes de l exercice'
-#   puts  @p.two_period_account_numbers.join(', ')
-#   
-#    puts 'nombres actif'
-#    puts @cn.send(:numbers_from_document, @cn.actif).join(', ')
-#    puts 'nombres passif'
-#    puts @cn.send(:numbers_from_document, @cn.passif).join(', ')
-#    puts 'resultat de bilan complete'
-#    puts @cn.bilan_complete.join(', ')
+  context 'avec les valeurs par défaut' do
+    it 'est bilan complete' do
       @cn.should be_bilan_complete
     end
-
-
-  context 'qui est  valide' do
+    
+    it 'est resultat complete' do
+      @cn.should be_resultat_complete
+    end
+    
+    it 'est bilan_no_doublon' do
+      @cn.should be_bilan_no_doublon
+    end
+    
+    it 'est resultat no_doublon' do
+      @cn.should be_resultat_no_doublon
+    end
+    
+    it 'est benevolat no_doublon' do
+      @cn.should be_benevolat_no_doublon
+    end
+    
+    it 'est donc valide' do
+      @cn.should be_valid
+    end
+    
+    context 'pour une non association', wip:true do
+      
+      before(:each) do
+        Organism.any_instance.stub(:status).and_return 'Entreprise'
+      end
+            
+      it 'est valide malgré l absence de folio benevolat' do
+        @cn.stub(:benevolat).and_return nil
+        @cn.should be_valid
+      end
+      
+    end
+  end
+  
+  
+  
+  describe 'resultat complete' do
     
 
-    it 'non valide si le compte de résultats ne prend pas tous les comptes' do
+    it 'aouter un compte 7 non repris dans la nomenclaturenon la rend invalide' do
       @p.stub(:two_period_account_numbers).and_return(['709'])
       @cn.valid?
       @cn.errors.messages[:resultat].should == ['Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 709']
     end
 
 
-#    it 'la partie benevolat ne comporte que des comptes 8' do
-#      @cn.should_receive(:benevolat_8).and_return true
-#      @cn.valid?
-#    end
-
-
-
-#    it 'un compte autre que 8 dans benevolat rend invalide' do
-#      
-#      @cn.stub(:rough_accounts_list).with(:benevolat).and_return(%w(80 !807 86 !860 45))
-#      @cn.should_not be_valid
-#    end
-
-#    it 'visualisation des messages' do
-#      @cn.valid?
-#      puts @cn.errors.messages
-#    end
-
-    it 'une nomenclature connait ses folios' do
-      @cn.resultat.should be_an_instance_of(Folio) 
-  end
-
-
   end
 
   
 
-  context 'tous les comptes ne sont pas repris' do
+  describe 'bilan_complete' do
     
-    before(:each) do
-      @p.accounts.create!(number:'103', title:'Fonds associatifs 3')
-      @cn = Compta::Nomenclature.new(@p, @o.nomenclature)
+    context 'ajouter un compte de bilan non repris rend la nomenclature' do
+      
+      
+      before(:each) do
+        @p.accounts.create!(number:'103', title:'Fonds associatifs 103')
+        @cn = Compta::Nomenclature.new(@p, @o.nomenclature)
+      end
+    
+      it 'non bilan_complete'  do
+        @cn.bilan_complete?.should be_false
+      end
+    
+      it 'et invalide' do
+        @cn.should_not be_valid
+      end
+    
     end
     
-    it 'cn bilan_complete return false' , wip:true do
-      @cn.bilan_complete?.should be_false
-      @cn.should_not be_valid
+    context 'mais ajouter un compte de bilan repris' do
+      before(:each) do
+        @p.accounts.create!(number:'1021', title:'Sous compte du 102')
+        @cn = Compta::Nomenclature.new(@p, @o.nomenclature)
+      end
+      
+      it 'laisse la nomenclature bilan_complete' do
+        @cn.should be_bilan_complete
+        @cn.should be_valid
+      end
+      
     end
+  end
+  
+  describe 'bilan_no_doublon'  do
+    
+    context 'avec un compte qui apparaît une fois à l actif et une au passif' do
+      
+      before(:each) do
+        @p.stub(:two_period_account_numbers).and_return(['201'])
+        @cn.stub(:actif).and_return(@actif = double(Folio, :all_numbers => "201" ))
+        @actif.stub(:all_numbers_with_option).and_return [{:num=>"201", :option=>nil}]
+        @cn.stub(:passif).and_return(@passif = double(Folio, :all_numbers => "201"))
+        @passif.stub(:all_numbers_with_option).and_return [{:num=>"201", :option=>nil}]
+      end
+      
+      it 'est bilan_doublon' do
+        @cn.should_not be_bilan_no_doublon
+      end
+      
+      it 'la nomenclature est invalide' do
+        @cn.should_not be_valid
+      end
+      
+      it 'a une erreur sur bilan' do
+        @cn.should have(1).errors_on(:bilan)
+      end
+       
+    end
+    
+    describe 'autres cas de doublons'  do
+      
+      before(:each) do
+        @p.stub(:two_period_account_numbers).and_return(['102', '201'])
+        @cn.stub(:actif).and_return(@actif = double(Folio, :all_numbers => "201" ))
+        @cn.stub(:passif).and_return(@passif = double(Folio, :all_numbers => "102"))
+        @passif.stub(:all_numbers_with_option).and_return [{:num=>"102", :option=>nil}]
+        
+      end
+      
+      it 'un compte en brut et le même en amortissement'  do
+        @actif.stub(:all_numbers_with_option).and_return [{:num=>"201", :option=>nil}, {:num=>"201", :option=>:col2}]
+        @cn.should_not be_bilan_no_doublon
+      end
+      
+      it 'avec un compte qui apparaît une fois en brut et une fois en debit' do
+        @actif.stub(:all_numbers_with_option).and_return [{:num=>"201", :option=>nil}, {:num=>"201", :option=>:debit}]
+        @cn.should_not be_bilan_no_doublon
+      end
+      
+      it 'avec un compte qui apparaît une fois en brut et une fois en credit' do
+        @actif.stub(:all_numbers_with_option).and_return [{:num=>"201", :option=>nil}, {:num=>"201", :option=>:credit}]
+        @cn.should_not be_bilan_no_doublon
+      end
+         
+    end
+    
+  end
+    
+    describe 'resultat_no_doublon' do
+      
+      context 'avec un compte 6 qui apparaît deux fois' do   
+        
+        before(:each) do
+          @p.stub(:two_period_account_numbers).and_return(['67', '70'])
+          @cn.stub(:resultat).and_return(@result = double(Folio, :all_numbers => ['67', '70'] ))
+          @result.stub(:all_numbers_with_option).and_return [{:num=>"67", :option=>nil}, {:num=>"67", :option=>nil}, {:num=>"70", :option=>nil}]
+       
+        end
+      
+        it 'est bilan_doublon' do
+          @cn.should_not be_resultat_no_doublon
+        end
+      
+        it 'la nomenclature est invalide' do
+          @cn.should_not be_valid
+        end
+      
+        it 'a une erreur sur bilan' do
+          @cn.should have(1).errors_on(:resultat)
+        end
+      
+             
+      end
+      
+    end
+      
+      describe 'benevolat_no_doublon'  do
+      
+      context 'avec un compte 8 qui apparaît deux fois' do   
+        
+        before(:each) do
+          @p.stub(:two_period_account_numbers).and_return(['81', '82'])
+          @cn.stub(:benevolat).and_return(@benevolat = double(Folio, :all_numbers => ['81', '82'] ))
+          @benevolat.stub(:all_numbers_with_option).and_return [{:num=>"81", :option=>nil}, {:num=>"81", :option=>nil}, {:num=>"82", :option=>nil}]
+       
+        end
+      
+        it 'est bilan_doublon' do
+          @cn.should_not be_benevolat_no_doublon
+        end
+      
+        it 'la nomenclature est invalide' do
+          @cn.should_not be_valid
+        end
+      
+        it 'a une erreur sur bilan' do
+          @cn.should have(1).errors_on(:benevolat)
+        end
+      
+             
+      end
+    end
+    
+    
   end
 
   
@@ -96,4 +237,3 @@ describe Compta::Nomenclature do
 
 
 
-end

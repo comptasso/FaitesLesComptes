@@ -25,9 +25,10 @@ module Compta
     attr_accessor :nomenclature
 
     
-    delegate :resultat, :actif, :passif, :benevolat, :to=>:nomenclature
+    delegate :resultat, :actif, :passif, :benevolat, :organism, :to=>:nomenclature
     
-    validate :bilan_complete, :resultat_complete
+    validate :bilan_complete, :resultat_complete, :bilan_no_doublon?, :resultat_no_doublon?
+    validate :benevolat_no_doublon?, :if=>Proc.new {organism.status == 'Association'}
    
     def initialize(period, nomenclature)
       @period = period
@@ -36,18 +37,35 @@ module Compta
 
     
 
-# TODO réactiver ce test sur la cohérence des comptes car pour le bilan, 
+# TODO réactiver ces  test sur la cohérence des comptes car pour le bilan, 
 # il n'est pas possible de tester totalement la nomenclature et les folios associés
 # si on ne teste pas également avec les comptes réels.
 # 
 # On pourrait par exemple tromper l'analyse avec un 43 !431 mais pas mettre le 431
-# ou encore un -456 et ailleur un 45 
+# problème qui est traité par bilan_complete
+# ou encore un -456 et ailleur un 45, problème qui relève du no_doublon
 # 
 # 
       
 
    
 
+      
+      
+      # vérifie que tous les comptes sont pris en compte pour l'établissement du bilan
+      # à l'exception des comptes de classes 8 qui servent à valoriser le bénévolat
+      #
+      # bilan_complete retourne les comptes non utilisés dans le bilan.
+      def bilan_complete
+        list_accs = @period.two_period_account_numbers.reject {|acc| acc.to_s =~ /\A[8]\d*/} # on a la liste des comptes
+        rubrik_accounts = actif.all_numbers(@period) + passif.all_numbers(@period)
+        not_selected =  list_accs.select {|a| !a.in?(rubrik_accounts) }
+        unless not_selected.empty?
+          self.errors[:bilan] << "ne reprend pas tous les comptes. Manque #{not_selected.join(', ')}"
+        end
+        not_selected
+      end
+      
       # Indique si le document bilan utilise tous les comptes de bilan
       # bilan_complete retournant les comptes inutilisés, la réponse
       # est donnée en testant si bilan_complete est vide.
@@ -55,54 +73,49 @@ module Compta
         bilan_complete.empty? ? true : false 
       end
    
-      
-      # vérifie que tous les comptes sont pris en compte pour l'établissement du bilan
-      # à l'exception des comptes de classes 8 qui servent à valoriser le bénévolat
-      #
-      # bilan_complete retourne les comptes non utilisés dans le bilan.
-      def bilan_complete
-        list_accs = @period.two_period_account_numbers # on a la liste des comptes
-        rubrik_accs = []
-        rubrik_accs += numbers_from_document(actif) + numbers_from_document(passif)
-        not_selected =  list_accs.select {|a| !a.in?(rubrik_accs) && !(a=~/^8\d*$/) }
-        unless not_selected.empty?
-          self.errors[:bilan] << "ne reprend pas tous les comptes. Manque #{not_selected.join(', ')}"
-        end
-        return not_selected
-      end
-      
-      
 
 
       # vérifie que tous les comptes 6 et 7 sont pris en compte pour l'établissement du compte de résultats 
+      # renvoie la liste des comptes non repris
       def resultat_complete
         list_accs = @period.two_period_account_numbers.reject {|acc| acc.to_s =~ /\A[123458]\d*/}
-        rubrik_accounts = numbers_from_document(resultat)
+        rubrik_accounts = resultat.all_numbers(@period)
         not_selected =  list_accs.select {|a| !a.in?(rubrik_accounts) }
         self.errors[:resultat] << "Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque #{not_selected.join(', ')}" if not_selected.any?
+        not_selected
       end
+      
+      # Indique si le document bilan utilise tous les comptes de bilan
+      # bilan_complete retournant les comptes inutilisés, la réponse
+      # est donnée en testant si bilan_complete est vide.
+      def resultat_complete?
+        resultat_complete.empty? ? true : false 
+      end
+      
+      
+      # méthode vérifiant qu'il n'y a aucun doublon dans les comptes actif et passif
+      def bilan_no_doublon?
+        collection_with_option_no_doublon?(:bilan, actif, passif)
+      end
+      
+      # méthode vérifiant qu'il n'y a aucun doublon dans le comptes de resultat
+      def resultat_no_doublon?
+        collection_with_option_no_doublon?(:resultat, resultat)
+      end
+      
+      # méthode vérifiant qu'il n'y a aucun doublon dans le comptes de resultat
+      def benevolat_no_doublon?
+        collection_with_option_no_doublon?(:benevolat, benevolat)
+      end
+   
       
 protected      
-       
-      # doc est un symbol comme :actif, :passif, :resultat
-      def numbers_from_document(doc)
-        if doc
-          doc.all_numbers.map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list_numbers}.flatten
-        else
-          [] 
-        end
-      end
-
-      
-
-      def numbers_with_options_from_document(doc)
-           doc.all_numbers.map {|accounts| Compta::RubrikParser.new(@period, :actif, accounts).list}.flatten
-      end
-
+      # renvoie une liste d'instructions avec les options sous forme de hash
+      #  [{:num=>"201", :option=>nil}, {:num=>"2801", :option=>:col2}, 
+      #  {:num=>"2803", :option=>:col2}, {:num=>"206", :option=>nil}, 
+      #  {:num=>"2906", :option=>:col2}, {:num=>"208", :option=>nil}, ...
       def collection_numbers_with_option(*docs)
-        r = []
-        docs.each {|doc| r+= numbers_with_options_from_document(doc)}
-        r
+        docs.collect {|doc| doc.all_numbers_with_option(@period)}.flatten
       end
 
       # à partir d'une liste de numéros, retourne la liste des doublons
@@ -115,7 +128,7 @@ protected
         []
       end
 
-        # Cherche les doublons en prenant en compte le fait que les comptes standard (ceux avec nil comme :option
+      # Cherche les doublons en prenant en compte le fait que les comptes standard (ceux avec nil comme :option
       # ne sont pas déjà pris dans les comptes avec option[:col_2], ce qui pour mémoire, signifie qu'ils sont 
       # retenus en tant qu'amortissement ou provision (deuxième colonne pour les documents actifs)
       # 
@@ -143,10 +156,11 @@ protected
         dup +=  (n_credit & list) # intersection avec list
         dup += doublon_in_list(n_credit)
         # les comptes de débit ne peuvent être dans list
-        n_debit = numbers.select {|n| n[:option] == :credit}.map {|n| n[:num]}
+        n_debit = numbers.select {|n| n[:option] == :debit}.map {|n| n[:num]}
         dup += (n_debit & list) # intersection avec list
         dup += doublon_in_list(n_debit)
         self.errors[name] << "comprend des doublons (#{dup.uniq.join(', ')})" unless dup.empty?
+        dup.empty?
       end
 
       

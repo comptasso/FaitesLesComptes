@@ -38,11 +38,15 @@ class Folio < ActiveRecord::Base
   end
   
   
-  # TODO pour être valide un folio ne peut avoir deux fois le même numéro de compte
+  # TODO pour être valide un folio ne peut avoir deux fois le même numéro de compte, 
+  # la méthode no_doublon et coherent? existe mais n'est pas encore incluse dans les validations
+  # 
   # TODO mettre les validations sur les champs obligatoires
   # 
   
-  # TODO faire les specs de ce modèle
+  # TODO faire les specs de ce modèle, il faut par exemple vérifier que bénévolat ne 
+  # prend que des instructions commençant par 8 et resultat que 6 ou 7
+  # 
   
   
   
@@ -58,18 +62,29 @@ class Folio < ActiveRecord::Base
   # la logique récursive permet de faire des nomenclatures à plusieurs niveaux
   # sans imposer un nombre de niveaux précis.
   #
+  # Le résultat est un array d'instructions comme
+  #  ["201 -2801", "203 -2803", "206 207 -2807 -2906 -2907", "208 -2808 -2809", ..., "53", "486", "481"] 
+  #
   # 
-  def all_numbers
+  def all_instructions
     return [root.numeros] if root.leaf? # cas quasi impensable où il n'y aurait qu'une rubrique
     values = []
-    collect_numeros(values, root)
+    collect_instructions(values, root)
     values.flatten
   end
   
   # rencoie la liste brute des informations de comptes repris dans la partie doc
-  # rough_numbers(:benevolat) renvoie par exemple %w(87 !870 870 86 !864 864)
-  def rough_numbers
-    all_numbers.join(' ').split
+  # rough_instructions(:benevolat) renvoie par exemple %w(87 !870 870 86 !864 864)
+  def rough_instructions
+    all_instructions.join(' ').split
+  end
+  
+  def all_numbers(period)
+    all_instructions.map {|accounts| Compta::RubrikParser.new(period, :actif, accounts).list_numbers}.flatten
+  end
+  
+  def all_numbers_with_option(period)
+    all_instructions.map {|accounts| Compta::RubrikParser.new(period, :actif, accounts).list}.flatten
   end
   
   # méthode permettant de savoir si le folio est cohérent
@@ -77,9 +92,6 @@ class Folio < ActiveRecord::Base
     no_doublon?
     errors.any? ? false : true
   end
-  
-    
-  
   
   protected
   
@@ -100,17 +112,19 @@ class Folio < ActiveRecord::Base
     end
   end
   
-  
+  # vérifie qu'il n'y a pas d'instruction en double.
+  # Attention, cela ne permet pas de s'exonérer d'un contrôle des doublons sur 
+  # les comptes réels de l'exercice.
     def no_doublon?
-      errors.add(:rubriks, 'Un numéro apparait deux fois dans le folio') unless rough_numbers.uniq.size == rough_numbers
+      errors.add(:rubriks, 'Un numéro apparait deux fois dans le folio') unless rough_instructions.uniq.size == rough_instructions
     end
       
-  def collect_numeros(values, rubriks)
+  def collect_instructions(values, rubriks)
     rubriks.children.each do |r|
       if r.leaf?
         values << r.numeros
       else 
-        collect_numeros(values, r) 
+        collect_instructions(values, r) 
       end
     end
   end
