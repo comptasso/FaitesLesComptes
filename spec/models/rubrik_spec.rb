@@ -104,6 +104,19 @@ describe Rubrik do
     
   end
   
+  describe 'all_instructions' do
+    
+    before(:each) do
+        @res = Rubrik.new(numeros:'125 12 13')
+        @res.stub(:children).and_return([Rubrik.new(numeros:'401 402'), Rubrik.new(numeros:'501 502')])
+      end
+    
+    it 'une rubrik peut collecter ses instructions et celles de ses enfants' do
+      @res.all_instructions.should == ['401 402', '501 502', '125 12 13']
+    end
+    
+  end
+  
   
   
 end

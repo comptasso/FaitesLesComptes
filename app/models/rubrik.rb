@@ -76,6 +76,11 @@ class Rubrik < ActiveRecord::Base
       result << self
     end
     
+    # renvoie les informations d une rubrique et de ses sousrubriques
+    def all_instructions
+      fetch_rubriks_with_rubrik.collect(&:numeros)
+    end
+    
     # lines renvoie les rubrik_lines qui construisent la rubrique
     # lines est en fait identique à la méthode protected all_lines
     # sauf pour la Rubrik résultat (le compte 12).

@@ -9,13 +9,16 @@
 # le document avec 4 colonnes (brut,amortissement, net, previous_net) ou 
 # 2 colonnes (net, previous_net)
 # - des rubriks : ce sont ces rubriks qui décrivent la façon dont les comptes 
-# sont retenus pour former chacune des rubriques
+# sont retenus pour former chacune des rubrique
+# un folio doit être capable de retourner les rubriques dans un ordre précis
+# les premières branches suivies des branchettes suivies des feuilles
 # 
 # A noter que le folio est indépendant de l'exercice. Il n'est donc pas possible
 # à ce niveau de vérifier que le plan comptable utilisé et le folio sont cohérents.
 # 
 # Seules peuvent être réalisées des contrôle sur le fait qu'un compte n'est pas 
-# pris deux fois
+# pris deux fois et sur le fait qu'un folio resultat n'utilise que des rubriques 
+# commençant par des 6 et des 7
 #
 class Folio < ActiveRecord::Base
   attr_accessible :name, :title, :sens
@@ -25,13 +28,12 @@ class Folio < ActiveRecord::Base
   
   # TODO mettre une validation pour name 
   
+  validates :nomenclature_id, :name, :title, :presence=>true
   validates :sens, :inclusion=>{:in=>[:actif, :passif]}
   # 
   # méthode créant les rubriks de façon récursive à partir d'un hash
   # la clé :numéros n'est remplie que si la valeur n'est pas elle même un Hash
   # 
-  # méthode appelée par read_and_fill_rubriks
-  
   def fill_rubriks_with_position(hash)
     @counter = 0
     fill_rubriks(hash, nil)
@@ -50,8 +52,7 @@ class Folio < ActiveRecord::Base
   
   
   
-  # un folio doit être capable de retounrer les rubriques dans un ordre précis
-  # les premières branches suivies des branchettes suivies des feuilles
+  
   
   # renvoie la rubrique racine de ce folio
   def root
@@ -67,10 +68,7 @@ class Folio < ActiveRecord::Base
   #
   # 
   def all_instructions
-    return [root.numeros] if root.leaf? # cas quasi impensable où il n'y aurait qu'une rubrique
-    values = []
-    collect_instructions(values, root)
-    values.flatten
+    root.all_instructions
   end
   
   # rencoie la liste brute des informations de comptes repris dans la partie doc
@@ -119,14 +117,14 @@ class Folio < ActiveRecord::Base
       errors.add(:rubriks, 'Un numéro apparait deux fois dans le folio') unless rough_instructions.uniq.size == rough_instructions
     end
       
-  def collect_instructions(values, rubriks)
-    rubriks.children.each do |r|
-      if r.leaf?
-        values << r.numeros
-      else 
-        collect_instructions(values, r) 
-      end
-    end
-  end
+#  def collect_instructions(values, rubriks)
+#    rubriks.children.each do |r|
+#      if r.leaf?
+#        values << r.numeros
+#      else 
+#        collect_instructions(values, r) 
+#      end
+#    end
+#  end
 
 end
