@@ -125,19 +125,19 @@ describe Folio do
   
   end
   
-  describe 'validations de cohérences'  do
+  describe 'coherent'  do
     
     before(:each) do
       @f = valid_folio
     end 
-    it 'valid si pas de doublon' do
+    it ' si pas de doublon' do
       @f.stub(:rough_instructions).and_return(['101', '102', '201', '103'])
-      @f.should be_valid
+      @f.should be_coherent
     end
     
-    it 'invalide sinon' do
+    it 'incoherente sinon' do
       @f.stub(:rough_instructions).and_return(['101', '102', '201', '102'])
-      @f.should_not be_valid
+      @f.should_not be_coherent
     end
     
     context 'un folio de type resultat' do
@@ -146,15 +146,15 @@ describe Folio do
         @f.name = :resultat
       end
       
-      it 'un folio resultat avec uniquement des comptes 6 et 7 est valide' do
+      it 'un folio resultat avec uniquement des comptes 6 et 7 est coherente' do
         
         @f.stub(:rough_instructions).and_return(['61', '62', '71', '72'])
-        @f.should be_valid
+        @f.should be_coherent
       end
-      it 'un folio resultat avec un compte autre que 6 et 7 est invalide' do
+      it 'un folio resultat avec un compte autre que 6 et 7 est incoherente' do
         
         @f.stub(:rough_instructions).and_return(['61', '62', '53', '71', '72'])
-        @f.should_not be_valid
+        @f.should_not be_coherent
       end
     
     end
@@ -168,12 +168,12 @@ describe Folio do
       it 'un folio benevolat n utilise que des rubriks commençant par 8' do
         
         @f.stub(:rough_instructions).and_return(['81', '52', '84', '72'])
-        @f.should_not be_valid
+        @f.should_not be_coherent
       end
       
-      it 'mais valide dans le cas contraire' do
+      it 'mais coherente dans le cas contraire' do
         @f.stub(:rough_instructions).and_return(['81', '82', '84', '8201'])
-        @f.should be_valid
+        @f.should be_coherent
       end
     end
     

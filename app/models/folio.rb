@@ -19,6 +19,16 @@
 # Seules peuvent être réalisées des contrôle sur le fait qu'un compte n'est pas 
 # pris deux fois et sur le fait qu'un folio resultat n'utilise que des rubriques 
 # commençant par des 6 et des 7
+# 
+# La méthode coherent? contrôle que les rubriques sont cohérentes : pas de doublon,
+# que des comptes 6 et 8 pour un compte de résultat, que des comptes 8 pour un compte
+# de bénévolat.
+# 
+# coherent? ne peut être dans les validations car la création des rubriques, enfants du folio
+# ne peut être faite qu'une fois le folio créé (car les rubriques ont une logique 
+# de acts_as_list, ce qui fait qu'il faut les créer réellement pour passer aux enfants. 
+#  
+#  TODO un contrôle pas de compte 8 sur le bilan.
 #
 class Folio < ActiveRecord::Base
   attr_accessible :name, :title, :sens
@@ -31,9 +41,7 @@ class Folio < ActiveRecord::Base
   validates :nomenclature_id, :name, :title, :presence=>true
   validates :sens, :inclusion=>{:in=>[:actif, :passif]}
   validates :name, :inclusion=>{:in=>[:actif, :passif, :resultat, :benevolat]}
-  validate :only_67, :if=>'name == :resultat'
-  validate :only_8, :if=>'name == :benevolat'
-  validate :no_doublon?
+ 
   # 
   # méthode créant les rubriks de façon récursive à partir d'un hash
   # la clé :numéros n'est remplie que si la valeur n'est pas elle même un Hash
@@ -41,6 +49,13 @@ class Folio < ActiveRecord::Base
   def fill_rubriks_with_position(hash)
     @counter = 0
     fill_rubriks(hash, nil)
+  end
+  
+  def coherent?
+    no_doublon?
+    only_67 if name == :resultat
+    only_8 if name == :benevolat
+    errors.empty? ? true : false
   end
   
   
