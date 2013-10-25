@@ -1,9 +1,13 @@
 require 'spec_helper'
 
+RSpec.configure do |c|
+  # c.filter = {:wip=>true}
+end
+
 describe Folio do
   
   def valid_folio
-    f = Folio.new(title:'Bilan Actif', name:'actif', sens: :actif)
+    f = Folio.new(title:'Bilan Actif', name: :actif, sens: :actif)
     f.nomenclature_id = 1
     f
   end
@@ -14,18 +18,18 @@ describe Folio do
       @f = valid_folio
     end  
   
-    it 'le folio est valide' do
-      @f.should be_valid
-    end
-   
-    it 'un folio appartient à une nomenclature' do
-      @f.nomenclature_id = nil
-      @f.should_not be_valid
-    end
-  
-    it 'un folio est constitué de rubriques'
   
     describe 'attributs obligatoires' do
+      
+      before(:each) do
+        @f.stub(:no_doublon?).and_return true  
+      end
+      
+      it 'un folio appartient à une nomenclature' do
+        @f.nomenclature_id = nil
+        @f.should_not be_valid
+      end
+      
       it 'le titre' do
         @f.title = nil
         @f.should_not be_valid
@@ -37,24 +41,54 @@ describe Folio do
         @f.should_not be_valid
       end
       
-      it 'le nom ne peut être que actif passif resultat et benevolat'
-      
       it 'le sens' do
         @f.sens = nil
         @f.should_not be_valid
       end
+      
+      describe 'le sens' do
+      
+        it 'peut être :passif ou :actif' do
+          @f.sens = :passif
+          @f.should be_valid
+          @f.sens = :actif
+          @f.should be_valid
+        end
   
+        it 'mais pas autre chose' do
+          @f.sens = :autre
+          @f.should_not be_valid
+        end
+      
+      end
+      
+      describe 'le nom' do
+        
+        before(:each) do
+          # car les tests sur le nom de resultat et benevolat déclanchent ces 
+          # validations
+          @f.stub(:only_67).and_return true
+          @f.stub(:only_8).and_return true
+        end
+        
+        it 'peut être actif passif resultat ou benevolat' do
+          
+          names = [:actif, :passif, :resultat, :benevolat]
+          names.each do |name|
+            @f.name = name
+            @f.should be_valid
+          end
+        end
+        it 'mais pas autre chose' do
+          @f.name = :autre
+          @f.should_not be_valid
+        end
+        
+      end
+      
     end
     
-    it 'le sens peut être :passif' do
-      @f.sens = :passif
-      @f.should be_valid
-    end
-  
-    it 'mais pas autre chose' do
-      @f.sens = :autre
-      @f.should_not be_valid
-    end
+    
   
   end
   
@@ -91,27 +125,82 @@ describe Folio do
   
   end
   
-  describe 'coherent' do
+  describe 'validations de cohérences'  do
     
     before(:each) do
       @f = valid_folio
-    end  
+    end 
+    it 'valid si pas de doublon' do
+      @f.stub(:rough_instructions).and_return(['101', '102', '201', '103'])
+      @f.should be_valid
+    end
     
-    it 'renvoie faux si un doublon existe' do
+    it 'invalide sinon' do
       @f.stub(:rough_instructions).and_return(['101', '102', '201', '102'])
-      @f.should_not be_coherent
+      @f.should_not be_valid
     end
-    it 'un folio resultat n utilise que des 6 et 7' do
+    
+    context 'un folio de type resultat' do
+    
+      before(:each) do
+        @f.name = :resultat
+      end
       
+      it 'un folio resultat avec uniquement des comptes 6 et 7 est valide' do
+        
+        @f.stub(:rough_instructions).and_return(['61', '62', '71', '72'])
+        @f.should be_valid
+      end
+      it 'un folio resultat avec un compte autre que 6 et 7 est invalide' do
+        
+        @f.stub(:rough_instructions).and_return(['61', '62', '53', '71', '72'])
+        @f.should_not be_valid
+      end
+    
     end
-    it 'un folio benevolat n utilise que des rubriks commençant par 8'
+    
+    
+    context 'un folio de type resultat' do
+    
+      before(:each) do
+        @f.name = :benevolat
+      end
+      it 'un folio benevolat n utilise que des rubriks commençant par 8' do
+        
+        @f.stub(:rough_instructions).and_return(['81', '52', '84', '72'])
+        @f.should_not be_valid
+      end
+      
+      it 'mais valide dans le cas contraire' do
+        @f.stub(:rough_instructions).and_return(['81', '82', '84', '8201'])
+        @f.should be_valid
+      end
+    end
     
   end
   
-  context 'avec un exercice' do
-    it 'all_numbers renvoie tous les numéros de comptes utilisés' 
+  context 'avec un exercice', wip:true do
+    before(:each) do
+      @f = valid_folio
+      @per = double(Period)
+      Compta::RubrikParser.any_instance.stub(:new).and_return(double(Compta::RubrikParser, :list=>['101', '102']))
+    end
     
-    it 'all_numbers_with_option renvoie les numéros de comptes et les options utilisées'
+    it 'all_numbers renvoie tous les numéros de comptes utilisés' do
+      @f.should_receive(:all_instructions).and_return(['25101', '28102'])
+      Compta::RubrikParser.should_receive(:new).with(@per, :actif, '25101').and_return(double(Compta::RubrikParser, :list_numbers=>['251012', '251013']))
+      Compta::RubrikParser.should_receive(:new).with(@per, :actif, '28102').and_return(double(Compta::RubrikParser, :list_numbers=>['281021', '281023']))
+      @f.all_numbers(@per).should == ['251012', '251013', '281021', '281023']
+    end
+    
+    it 'all_numbers_with_option renvoie les numéros de comptes et les options utilisées' do
+      @f.should_receive(:all_instructions).and_return(['un', 'deux'])
+      Compta::RubrikParser.should_receive(:new).with(@per, :actif, 'un').
+        and_return(double(Compta::RubrikParser, :list=>[{:num=>'251012', :option=>'col2'}]))
+      Compta::RubrikParser.should_receive(:new).with(@per, :actif, 'deux').
+        and_return(double(Compta::RubrikParser, :list=>[{:num=>'101', :option=>nil}, {:num=>'102', :option=>nil}]))
+      @f.all_numbers_with_option(@per).should == [{:num=>'251012', :option=>'col2'}, {:num=>'101', :option=>nil}, {:num=>'102', :option=>nil}]
+    end
   end
   
 end

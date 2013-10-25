@@ -32,6 +32,11 @@ module Compta
   # [@credit_nums] pour les comptes qui ne sont retenus que lorsqu'ils sont créditeurs
   # [@debit_nums] pour les comptes qui ne sont retenus que lorsqu'ils sont débiteurs
   # 
+  # 
+  # === #list
+  # #list renvoie la liste des numéros trouvés sous la forme d'un hash de deux éléments
+  # :num qui donne le numéro et :option qui indique si le montant est dans la colonne
+  # amortissement ou à prendre en négatif. Une option nil indique qu'il n'y a rien de spécial.
   #
   class RubrikParser
 

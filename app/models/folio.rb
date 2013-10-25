@@ -30,6 +30,10 @@ class Folio < ActiveRecord::Base
   
   validates :nomenclature_id, :name, :title, :presence=>true
   validates :sens, :inclusion=>{:in=>[:actif, :passif]}
+  validates :name, :inclusion=>{:in=>[:actif, :passif, :resultat, :benevolat]}
+  validate :only_67, :if=>'name == :resultat'
+  validate :only_8, :if=>'name == :benevolat'
+  validate :no_doublon?
   # 
   # méthode créant les rubriks de façon récursive à partir d'un hash
   # la clé :numéros n'est remplie que si la valeur n'est pas elle même un Hash
@@ -85,11 +89,7 @@ class Folio < ActiveRecord::Base
     all_instructions.map {|accounts| Compta::RubrikParser.new(period, :actif, accounts).list}.flatten
   end
   
-  # méthode permettant de savoir si le folio est cohérent
-  def coherent?
-    no_doublon?
-    errors.any? ? false : true
-  end
+ 
   
   protected
   
@@ -114,7 +114,18 @@ class Folio < ActiveRecord::Base
   # Attention, cela ne permet pas de s'exonérer d'un contrôle des doublons sur 
   # les comptes réels de l'exercice.
     def no_doublon?
-      errors.add(:rubriks, 'Un numéro apparait deux fois dans le folio') unless rough_instructions.uniq.size == rough_instructions
+      errors.add(:rubriks, 'Un numéro apparait deux fois dans le folio') unless rough_instructions.uniq.size == rough_instructions.size
+    end
+    
+    # vérifie que rough_instructions ne contient que des instructions commençant par 6 ou 7
+    def only_67
+      no67 = rough_instructions.select {|instr| instr =~ /^[^67]\d*/}
+      errors.add(:rubriks, "Un compte de résultats ne peut prendre que des comptes 6 ou 7 , trouvé #{no67.join(', ')}") unless no67.empty?
+    end
+    
+    def only_8
+      no8 = rough_instructions.select {|instr| instr =~ /^[^8]\d*/}
+      errors.add(:rubriks, "Un compte de résultats ne peut prendre que des comptes 6 ou 7 , trouvé #{no8.join(', ')}") unless no8.empty?
     end
       
 #  def collect_instructions(values, rubriks)
