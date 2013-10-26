@@ -73,7 +73,7 @@ describe Editions::Sheet do
 
     it 'fetch_lines' do
       bal.should_receive(:folio).and_return(@fol = double(Folio))
-      @folio.stub_chain(:root, :fetch_rubriks_with_rubrik).and_return('une liste de lignes')
+      @fol.stub_chain(:root, :fetch_rubriks_with_rubrik).and_return('une liste de lignes')
       @pdfs.fetch_lines.should == 'une liste de lignes'
     end
 
