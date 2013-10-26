@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  # c.filter = {:wip=>true}
+   c.filter = {:wip=>true}
 end
 
 describe Rubrik do
@@ -104,16 +104,20 @@ describe Rubrik do
     
   end
   
-  describe 'all_instructions' do
+  describe 'all_instructions', wip:true do
     
     before(:each) do
-        @res = Rubrik.new(numeros:'125 12 13')
-        @res.stub(:children).and_return([Rubrik.new(numeros:'401 402'), Rubrik.new(numeros:'501 502')])
+        @res = Rubrik.new(numeros:nil)
+        @res.stub(:children).and_return([Rubrik.new(numeros:'401 402'),
+            Rubrik.new(numeros:'501 502'),
+          ])
       end
     
-    it 'une rubrik peut collecter ses instructions et celles de ses enfants' do
-      @res.all_instructions.should == ['401 402', '501 502', '125 12 13']
+    it 'une rubrik peut collecter ses instructions et celles de ses enfants en éliminant les numéros nil' do
+      @res.all_instructions.should == ['401 402', '501 502']
     end
+    
+    
     
   end
   

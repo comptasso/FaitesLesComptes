@@ -76,9 +76,10 @@ class Rubrik < ActiveRecord::Base
       result << self
     end
     
-    # renvoie les informations d une rubrique et de ses sousrubriques
+    # renvoie les numeros des rubriques feuilles
+    # en éliminant les nils
     def all_instructions
-      fetch_rubriks_with_rubrik.collect(&:numeros)
+      fetch_rubriks_with_rubrik.collect(&:numeros).select {|num| num != nil}
     end
     
     # lines renvoie les rubrik_lines qui construisent la rubrique

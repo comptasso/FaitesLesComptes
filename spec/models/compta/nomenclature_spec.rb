@@ -19,7 +19,7 @@ describe Compta::Nomenclature do
   end
 
   it 'se crée à partir de la nomenclature d un organisme' do
-    @cn.should be_an_instance_of(Compta::Nomenclature) 
+    @cn.should be_an_instance_of(Compta::Nomenclature)  
   end
 
   
@@ -74,7 +74,7 @@ describe Compta::Nomenclature do
   describe 'resultat complete' do
     
 
-    it 'aouter un compte 7 non repris dans la nomenclaturenon la rend invalide' do
+    it 'aouter un compte 7 non repris dans la nomenclature la rend invalide' do
       @p.stub(:two_period_account_numbers).and_return(['709'])
       @cn.valid?
       @cn.errors.messages[:resultat].should == ['Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 709']
