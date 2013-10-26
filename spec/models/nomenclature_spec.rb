@@ -66,7 +66,14 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
       @n.compta_nomenclature(p).should be_an_instance_of(Compta::Nomenclature)
     end
 
-   it 'n est pas valide sans un actif' do
+   describe 'coherent?' do
+     
+      before(:each) do
+        Folio.any_instance.stub(:coherent?).and_return true
+        
+      end
+     
+    it 'n est pas valide sans un actif' do
      @n.stub(:actif).and_return nil
      @n.should_not be_coherent
    end
@@ -77,9 +84,14 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
     end
 
     it 'invalid sans resultat' do
+      @n.stub(:actif).and_return false # pour ne pas déclancher le test bilan_balanced
       @n.stub(:resultat).and_return nil
       @n.should_not be_coherent
     end
+    
+     
+    
+   end
 
     it 'invalide sans organisme' do
       @n.organism_id = nil
@@ -94,17 +106,17 @@ La nomenclature utilisée comprend des incohérences avec le plan de comptes. Le
 
     before(:each) do
       @n = o.nomenclature
-      @n.stub(:actif).and_return(double(Folio, :rough_numbers=>%w(102 506C 407 !805) ) )
+      @n.stub(:actif).and_return(double(Folio, :rough_instructions=>%w(102 506C 407 !805) ) )
       
     end
 
     it 'vrai si un compte C a une correspondance avec un compte D' do
-      @n.stub(:passif).and_return(double(Folio, :rough_numbers=>%w(202 506D 407 !805)) )
+      @n.stub(:passif).and_return(double(Folio, :rough_instructions=>%w(202 506D 407 !805)) )
       @n.should be_bilan_balanced
     end
     
     it 'faux dans le cas contraire' do
-     @n.stub(:passif).and_return(double(Folio, :rough_numbers=>%w(202 506 407 !805)) )
+     @n.stub(:passif).and_return(double(Folio, :rough_instructions=>%w(202 506 407 !805)) )
       @n.should_not be_bilan_balanced
     end
 

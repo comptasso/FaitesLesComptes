@@ -118,17 +118,17 @@ class Nomenclature < ActiveRecord::Base
     errors.add(:passif, 'Passif est un folio obligatoire') unless passif
     errors.add(:resultat, 'Resultat est un folio obligatoire') unless resultat
     
-    
-    bilan_balanced? # tous les comptes C doivent avoir un compte D correspondant
-    resultat_67?
-    benevolat_8?
-    bilan_no_doublon?
-    
-    # TODO reprendre les validations des folios eux mêmes
+    if actif && passif
+      bilan_balanced?  # tous les comptes C doivent avoir un compte D correspondant
+      bilan_no_doublon? 
+    end
+    # reprise des validations propres aux folios
+    # ce qui comprend le fait qu'un folio resultat ne doit avoir que des comptes 6 et 7
+    # et qu'un folio benevolat ne peut avoir que des comptes 8
     folios.each do |f|
       errors.add(:folio, "Le folio #{f.name} indique une incohérence : #{f.errors.full_messages}") unless f.coherent?
     end
-    # et reprendre la problématique des doublons dans un bilan (actif et passif)
+    
   end
   
   # indique si une nomenclature est cohérente et donc utilisable pour produire des
@@ -144,7 +144,7 @@ class Nomenclature < ActiveRecord::Base
       # qui n'ont pas de correspondant
       def bilan_balanced?
         return false unless actif && passif
-        array_numbers = actif.rough_numbers + passif.rough_numbers
+        array_numbers = actif.rough_instructions + passif.rough_instructions
       
         # maintenant on crée une liste des comptes D et une liste des comptes C
         numbers_d = array_numbers.map {|n| $1 if n =~ /^(\d*)D$/}.compact.sort
@@ -165,34 +165,10 @@ class Nomenclature < ActiveRecord::Base
       
       def bilan_no_doublon?
         return false unless actif && passif
-        array_numbers = actif.rough_numbers + passif.rough_numbers
+        array_numbers = actif.rough_instructions + passif.rough_instructions
         errors.add(:bilan, 'Un numéro apparait deux fois dans la construction du bilan') unless array_numbers.uniq.size == array_numbers.size
       end
       
-      
-      
-      # le folio résultat ne peut avoir que des comptes 6 ou 7
-      def resultat_67?
-        return false unless resultat
-        list = rough_accounts_reject(resultat.rough_numbers, 6,7)
-        errors.add(:resultat, "comprend un compte étranger aux classes 6 et 7 (#{list.join(', ')})") unless list.empty?
-      end
-      
-      
-      
-      # le folio benevolat ne peut avoir que des comptes 8
-      # le folio résultat ne peut avoir que des comptes 6 ou 7
-      def benevolat_8?
-        list = rough_accounts_reject(benevolat.rough_numbers, 8)
-        errors.add(:benevolat, "comprend une rubrique étrangere à la classe 8 (#{list.join(', ')})") unless list.empty?
-      end
-  
-      def rough_accounts_reject(array_numbers, *args)
-        args.each do |a|
-          array_numbers.reject! {|n| n =~ /^[-!]?#{a}\d*/}
-        end
-        array_numbers
-      end
-
+           
 
 end
