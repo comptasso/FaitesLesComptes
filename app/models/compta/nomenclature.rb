@@ -61,7 +61,7 @@ module Compta
         rubrik_accounts = actif.all_numbers(@period) + passif.all_numbers(@period)
         not_selected =  list_accs.select {|a| !a.in?(rubrik_accounts) }
         unless not_selected.empty?
-          self.errors[:bilan] << "ne reprend pas tous les comptes. Manque #{not_selected.join(', ')}"
+          self.errors[:bilan] << "ne reprend pas tous les comptes pour #{@period.exercice}. Manque #{not_selected.join(', ')}"
         end
         not_selected
       end

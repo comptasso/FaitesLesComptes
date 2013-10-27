@@ -67,7 +67,7 @@ describe Admin::AccountsController do
   describe "POST create" do
     context 'with valid nomenclature' do
     before(:each) do
-      @o.stub(:nomenclature).and_return(mock_model(Nomenclature, 'valid?'=>true))
+      @o.stub(:nomenclature).and_return(mock_model(Nomenclature, 'coherent?'=>true))
     end
 
     describe "with valid params" do
@@ -107,7 +107,7 @@ describe Admin::AccountsController do
 
     context 'with invalid nomenclature' do
       before(:each) do
-      @o.stub(:nomenclature).and_return(mock_model(Nomenclature, 'valid?'=>false, collect_errors:'liste des erreurs'))
+      @o.stub(:nomenclature).and_return(mock_model(Nomenclature, 'coherent?'=>false, collect_errors:'liste des erreurs'))
       @a.stub(:new).and_return(a1)
         a1.stub(:save).and_return(true)
       post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
@@ -119,7 +119,7 @@ describe Admin::AccountsController do
   end
 
   describe "PUT update" do
-    context 'toutes les natures ont reliées' do
+    context 'toutes les natures sont reliées' do
       before(:each) do
         @p.stub(:all_natures_linked_to_account?).and_return true
       end

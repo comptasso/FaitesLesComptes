@@ -78,13 +78,13 @@ describe Editions::Sheet do
     end
 
     it 'render' do
-      ligne = stub(:title=>'Libelle', :brut=>'200,00', :amortissement=>'10,00', :net=>'190,00', :previous_net=>'180,25', :depth=>0)
+      ligne = double(:title=>'Libelle', :brut=>'200,00', :amortissement=>'10,00', :net=>'190,00', :previous_net=>'180,25', :depth=>0)
       @pdfs.stub(:fetch_lines).and_return(10.times.map {|i| ligne })
       @pdfs.render
     end
 
     it 'render pdf_text' do
-      ligne = stub(:title=>'Libelle', :brut=>'200,00', :amortissement=>'10,00', :net=>'190,00', :previous_net=>'180,25', :depth=>0)
+      ligne = double(:title=>'Libelle', :brut=>'200,00', :amortissement=>'10,00', :net=>'190,00', :previous_net=>'180,25', :depth=>0)
       @pdfs.stub(:fetch_lines).and_return(10.times.map {|i| ligne })
       pdf = Prawn::Document.new
       @pdfs.render_pdf_text(pdf)

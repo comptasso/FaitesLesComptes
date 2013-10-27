@@ -31,7 +31,7 @@ class Admin::AccountsController < Admin::ApplicationController
       if @account.save
         # on vérifie la nomenclature et on affiche un message
         nomen = @period.organism.nomenclature
-        unless nomen.valid?
+        unless nomen.coherent?
           flash[:alert] = nomen.collect_errors
         end
         format.html { redirect_to admin_period_accounts_path(@period), notice: 'Le compte a été créé.' }
