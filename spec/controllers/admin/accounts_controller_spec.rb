@@ -66,57 +66,90 @@ describe Admin::AccountsController do
 
   describe "POST create" do
     context 'with valid nomenclature' do
-    before(:each) do
-      @o.stub(:nomenclature).and_return(mock_model(Nomenclature, 'coherent?'=>true))
-    end
-
-    describe "with valid params" do
-      it "creates a new account" do
-        @a.should_receive(:new).with(valid_attributes).and_return(@b = mock_model(Account).as_new_record)
-        @b.stub(:save)
-        post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
+      before(:each) do
+        @o.stub(:nomenclature).and_return(mock_model(Nomenclature, 'coherent?'=>true))
       end
 
-      it "assigns a newly created account as @account" do
-        @a.stub(:new).and_return(a1)
-        a1.stub(:save).and_return(true)
-        post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
-        assigns(:account).should == a1
+      describe "with valid params" do
+        it "creates a new account" do
+          @a.should_receive(:new).with(valid_attributes).and_return(@b = mock_model(Account).as_new_record)
+          @b.stub(:save)
+          post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
+        end
+
+        it "assigns a newly created account as @account" do
+          @a.stub(:new).and_return(a1)
+          a1.stub(:save).and_return(true)
+          post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
+          assigns(:account).should == a1
         
+        end
+
+        it "redirects to the created account" do
+          @a.stub(:new).and_return(a1)
+          a1.stub(:save).and_return(true)
+          post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
+          response.should redirect_to(admin_period_accounts_url(@p))
+        end 
       end
 
-      it "redirects to the created account" do
-        @a.stub(:new).and_return(a1)
-        a1.stub(:save).and_return(true)
-        post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
-        response.should redirect_to(admin_period_accounts_url(@p))
-      end 
-    end
-
-    describe "with invalid params" do
+      describe "with invalid params" do
       
-      it "re-renders the 'new' template" do
-        @a.stub(:new).and_return(a1)
-        a1.stub(:save).and_return(false)
-        post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
-        response.should render_template("new")
+        it "re-renders the 'new' template" do
+          @a.stub(:new).and_return(a1)
+          a1.stub(:save).and_return(false)
+          post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
+          response.should render_template("new")
+        end
       end
-    end
 
     end
 
     context 'with invalid nomenclature' do
       before(:each) do
-      @o.stub(:nomenclature).and_return(mock_model(Nomenclature, 'coherent?'=>false, collect_errors:'liste des erreurs'))
-      @a.stub(:new).and_return(a1)
+        @o.stub(:nomenclature).and_return(@n = Nomenclature.new)
+        @n.stub('coherent?').and_return false
+        @a.stub(:new).and_return(a1)
         a1.stub(:save).and_return(true)
-      post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
+        
+        controller.stub(:collect_errors).and_return 'liste des erreurs'
+        post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
+      end
+      it 'affiche un flash alert' do
+        flash[:alert].should == 'liste des erreurs'
+      end
+      
     end
-    it 'affiche un flash alert' do
-      flash[:alert].should == 'liste des erreurs'
+    
+    describe 'collect_errors' do
+        
+      before(:each) do
+        @o.stub(:nomenclature).and_return(@n = Nomenclature.new)
+        @n.stub('coherent?').and_return false
+        @n.errors.add(:actif, 'Manque le compte 2124 pour l\'exercice 2013')
+        @n.errors.add(:passif, 'Manque le compte 124 pour l\'exercice 2013')
+        @a.stub(:new).and_return(a1)
+        a1.stub(:save).and_return(true)
+        
+        
+        post :create, {:period_id=>@p.to_param, :account => valid_attributes}, valid_session
+      end
+      it 'liste les erreurs' do
+      
+        flash[:alert].should == %Q(La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d'être faux.</br>\
+Liste des erreurs relevées : <ul>\
+<li>Actif Manque le compte 2124 pour l'exercice 2013</li>\
+<li>Passif Manque le compte 124 pour l'exercice 2013</li>\
+</ul>)
+      end
+      
+            
     end
-    end
+    
+    
+      
   end
+  
 
   describe "PUT update" do
     context 'toutes les natures sont reliées' do

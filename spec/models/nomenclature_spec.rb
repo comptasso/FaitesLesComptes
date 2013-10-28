@@ -19,29 +19,7 @@ describe Nomenclature do
     clean_assotest1
   end
 
-  describe 'collect_error' do
-    before(:each) do
-      @n = o.nomenclature(true)
-    end
-
-    it 'renvoie chaine vide si coherent' do
-      @n.stub(:coherent?).and_return true
-      @n.collect_errors.should == ''
-    end
-
-    it 'renvoie une chaine formattée si coherent' do
-      @n.stub(:coherent?).and_return false
-      @n.stub_chain(:errors, :full_messages).and_return(['une erreur', 'deux erreurs'])
-      message =  %q{
-La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d'être faux.</br>
- Liste des erreurs relevées : <ul>
-<li>une erreur</li>
-<li>deux erreurs</li>
-</ul>}.gsub("\n",'')
-      @n.collect_errors.should == message
-    end
-  end
-
+  
 
 
   describe 'with a valid nomenclature' do

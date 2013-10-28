@@ -78,29 +78,6 @@ class Nomenclature < ActiveRecord::Base
     Compta::Sheet.new(period, folio) 
   end
 
-  # méthode de présentation des erreurs
-  #
-  # TODO : on devrait mettre cette méthode dans un helper de présentation
-  #
-  # utilisée pour former le flash dans le controller AdminNomenclatures
-  # mais également le messages qui est crée par le
-  # AccountObserver lorsque la création d'un compte engendre une anomalie avec la nomenclature .
-  def collect_errors
-    al = ''
-    if errors.any?
-      al = 'La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d\'être faux.</br> '
-      al += 'Liste des erreurs relevées : <ul>'
-      errors.full_messages.each do |m|
-        al += "<li>#{m}</li>"
-      end
-      al += '</ul>'
-
-    end
-    al.html_safe
-  end
-
-    
-
   # vérifie la validité de la nomenclature, laquelle repose sur l'existence 
   # de folios actif, passif et resultat.
   # 
