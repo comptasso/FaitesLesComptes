@@ -47,7 +47,8 @@ class Admin::AccountsController < Admin::ApplicationController
   # PUT /compta/accounts/1.json
   def update
     @account = Account.find(params[:id])
-
+# on ne vérifie pas ici la cohérence de la nomenclature car on ne peut modifier le numéro
+# de compte
     respond_to do |format|
       if @account.update_attributes(params[:account])
         format.html { redirect_to admin_period_accounts_path(@period), notice: 'Le compte a été mis à jour' }
