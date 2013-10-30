@@ -225,7 +225,27 @@ class ApplicationController < ActionController::Base
     ActiveRecord::Base.connection_config
   end
   
-  
+  # à partir d'une nomenclature met en forme la liste éventuelle des erreurs
+  # pour affichage dans un flash.
+  # 
+  # utilisée par 
+  # - Admin#AccountsController#create pour créer le flash le messages qui est crée par le
+  # AccountObserver lorsque la création d'un compte engendre une anomalie avec la nomenclature .
+  # - Compta#SheetsController pour vérifier la nomenclature
+  # 
+  def collect_errors(nomen)
+    al = ''
+    if nomen.errors.any?
+      al = 'La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d\'être faux.</br>'
+      al += 'Liste des erreurs relevées : <ul>'
+      nomen.errors.full_messages.each do |m|
+        al += "<li>#{m}</li>"
+      end
+      al += '</ul>'
+
+    end
+    al.html_safe
+  end
 
   
 

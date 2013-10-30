@@ -12,11 +12,14 @@ describe Compta::SheetsController do
   before(:each) do 
     minimal_instances
     @p.stub(:all_natures_linked_to_account?).and_return true 
-    @o.stub(:nomenclature).and_return(@nomen = mock_model(Nomenclature, valid?:true))
+    @o.stub(:nomenclature).and_return(@nomen = mock_model(Nomenclature, coherent?:true))
     @f = mock_model(Folio)    
   end
   
-  it 'le controller s assure que la nomenclature est valide'
+  it 'le controller s assure que la nomenclature est valide' do
+    
+    
+  end
   
   # TODO finir les specs de ce controller
 
@@ -24,6 +27,31 @@ describe Compta::SheetsController do
       
     before(:each) do
       @nomen.stub(:folios).and_return(@ar = double(Arel))
+    end
+    
+    context 'quand nomenclature n est pas coherent' do
+      
+      before(:each) do
+        @nomen.stub('coherent?').and_return false
+        @ar.stub(:find).and_return @f
+        @nomen.stub(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:true))
+        @cs.stub(:to_html).and_return(@list_rubriks = double(Array))
+      end
+    
+    
+      it 'l action show déclanche check_nomenclature' do
+        controller.should_receive('collect_errors').with(@nomen).and_return 'la liste des erreurs'
+        get :show, {:id=>@f.to_param}, valid_session
+      end
+    
+      it 'l action show déclanche check_nomenclature' do
+        controller.stub('collect_errors').with(@nomen).and_return 'la liste des erreurs'
+        get :show, {:id=>@f.to_param}, valid_session
+        flash[:alert].should == 'la liste des erreurs'
+      end
+    
+    
+    
     end
     
     it 'cherche le folio à partir du param' do

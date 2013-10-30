@@ -17,10 +17,6 @@ class Compta::SheetsController < Compta::ApplicationController
   
   before_filter :check_nomenclature, :only=>[:index, :show]
 
-  # TODO ? faire un check de la validité de chaque document ?
-  # ou le vérifier dans nomenclature.rb
-  
-  
   def index
     @docs = params[:collection].map do |c|
       fol = @nomenclature.folios.find_by_name(c.to_s)
@@ -34,7 +30,7 @@ class Compta::SheetsController < Compta::ApplicationController
         
         datas = ''
         @docs.each {|doc| datas += doc.to_index_csv } 
-        send_data datas
+        send_data datas, :filename=>"#{params[:title] || params[:collection]}.csv"
         }
       format.xls {
         
@@ -53,7 +49,7 @@ class Compta::SheetsController < Compta::ApplicationController
         final_pdf.number_pages("page <page>/<total>",
         { :at => [final_pdf.bounds.right - 150, 0],:width => 150,
                :align => :right, :start_count_at => 1 })
-        send_data final_pdf.render
+        send_data final_pdf.render,  :filename=>"#{params[:title] || params[:collection]}.pdf"
       }
     end
   end
@@ -141,16 +137,8 @@ class Compta::SheetsController < Compta::ApplicationController
   # du plan comptable
   def check_nomenclature
     @nomenclature = @organism.nomenclature
-    unless @nomenclature.valid?
-      al = 'La nomenclature utilisée comprend des incohérences avec le plan de comptes. Les documents produits risquent d\'être faux.</br> '
-      al += 'Liste des erreurs relevées : <ul>'
-      @nomenclature.errors.full_messages.each do |m|
-        al += "<li>#{m}</li>"
-      end
-      al += '</ul>'
-      flash[:alert] = al.html_safe
-    end
-  end
+    flash[:alert] = collect_errors(@nomenclature) unless @nomenclature.coherent?
+  end 
   
   def detail_csv(lines)
     CSV.generate({:col_sep=>"\t"}) do |csv|
