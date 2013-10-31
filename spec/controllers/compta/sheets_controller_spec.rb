@@ -2,6 +2,10 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
+RSpec.configure do |c|
+ # c.filter = {wip:true}
+end
+
 describe Compta::SheetsController do
   include SpecControllerHelper
 
@@ -16,12 +20,61 @@ describe Compta::SheetsController do
     @f = mock_model(Folio)    
   end
   
-  it 'le controller s assure que la nomenclature est valide' do
+  
+  
+  describe 'GET index' do
     
+    before(:each) do
+      @nomen.stub(:folios).and_return(@ar = double(Arel))
+      @ar.stub(:find_by_name).and_return(@f)
+      @nomen.stub(:sheet).and_return(@cs = double(Compta::Sheet))
+    end
+    
+    it 'rend la vue index' do
+      get :index, {:collection=>['bilan', 'resultat']}, valid_session
+      response.should render_template('index')
+    end
+    
+    it 'si la nomenclature est incoherent affiche une flash' do
+      @nomen.stub('coherent?').and_return false
+      controller.stub('collect_errors').and_return 'la liste des erreurs'
+      get :index, {:collection=>['bilan', 'resultat']}, valid_session
+      flash[:alert].should == 'la liste des erreurs'
+    end
+    
+    describe 'exportations' do
+      
+      before(:each) do
+        
+      end
+      
+      it 'repond au format csv' do
+        @cs.stub('to_index_csv').and_return 'des lignes aux format csv'
+        controller.should_receive(:send_data).
+          with('des lignes aux format csvdes lignes aux format csv', filename:'Bilan.csv').
+          and_return { @controller.render nothing: true }
+        get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'csv'}, valid_session
+      end
+      
+      it 'repond au format xls' do
+        @cs.stub('to_index_xls').and_return 'des lignes aux format xls\n'
+        controller.should_receive(:send_data).
+          with('des lignes aux format xls\ndes lignes aux format xls\n', filename:'Bilan.xls').
+          and_return { @controller.render nothing: true }
+        get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'xls'}, valid_session
+      end
+      
+      it 'repond au format pdf' do
+        controller.should_receive(:produce_pdf).with([@cs, @cs]).and_return('les données pdf')
+        controller.should_receive(:send_data).
+          with('les données pdf', filename:'Bilan.pdf').
+          and_return { @controller.render nothing: true }
+        get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'pdf'}, valid_session
+      end
+      
+    end
     
   end
-  
-  # TODO finir les specs de ce controller
 
   describe 'GET show' do  
       
@@ -34,7 +87,7 @@ describe Compta::SheetsController do
       before(:each) do
         @nomen.stub('coherent?').and_return false
         @ar.stub(:find).and_return @f
-        @nomen.stub(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:true))
+        @nomen.stub(:sheet).and_return(@cs = double(Compta::Sheet, valid?:true))
         @cs.stub(:to_html).and_return(@list_rubriks = double(Array))
       end
     
@@ -78,26 +131,37 @@ describe Compta::SheetsController do
       response.should redirect_to compta_nomenclature_path
     end
 
-    #      it 'sans params[:compta_balance] redirige vers new' do
-    #        get :show, {:period_id=>@p.id.to_s}, valid_session
-    #        response.should redirect_to new_compta_period_balance_url(@p) 
-    #      end
-    #
-    #      it 'rend le csv' do
-    #        Compta::Balance.any_instance.stub(:valid?).and_return(true)
-    #        Compta::Balance.any_instance.stub(:to_csv).and_return('ceci est une chaine csv\tune autre\tencoe\tenfin\n')
-    #        @controller.should_receive(:send_data).with('ceci est une chaine csv\tune autre\tencoe\tenfin\n').and_return { @controller.render nothing: true }
-    #        get :show, {:period_id=>@p.id.to_s, :compta_balance=>valid_attributes, :format=>'csv'}, valid_session
-    #      end
-    #
-    #       it 'rend le xls' do
-    #        Compta::Balance.any_instance.stub(:valid?).and_return true
-    #        Compta::Balance.any_instance.stub(:to_xls).and_return 'Bonjour'
-    #        @controller.should_receive(:send_data).with('Bonjour').and_return { @controller.render nothing: true }
-    #        get :show, {:period_id=>@p.id.to_s, :compta_balance=>valid_attributes, :format=>'xls'}, valid_session
-    #      end
+    describe 'GET bilans', wip:true do
+      
+      it 'redirige vers index' do
+        get :bilans, {}, valid_session
+        response.should redirect_to compta_sheets_path(collection:['actif', 'passif'], title:'Bilan')
+      end
+    end
+    
+    describe 'GET resultats', wip:true do
+      
+      it 'redirige vers index' do
+        get :resultats, {}, valid_session
+        response.should redirect_to compta_sheets_path(collection:['resultat'], title:'Compte de Résultats')
+      end
+    end
 
-
+    describe 'GET bénévolats', wip:true do
+      
+      it 'redirige vers index' do
+        get :benevolats, {}, valid_session
+        response.should redirect_to compta_sheets_path(collection:['benevolat'], title:'Bénévolat')
+      end
+    end
+    
+    describe 'GET liasse', wip:true do
+      
+      it 'redirige vers index' do
+        get :liasse, {}, valid_session
+        response.should redirect_to compta_sheets_path(collection:['actif', 'passif', 'resultat', 'benevolat'], title:'Liasse complète')
+      end
+    end
   end
 
     

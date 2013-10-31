@@ -11,7 +11,7 @@
 #load "#{Rails.root}/lib/pdf_document/pdf_sheet.rb"
 #load "#{Rails.root}/lib/pdf_document/pdf_detailed_sheet.rb"
 
- require 'pdf_document/base'
+require 'pdf_document/base'
 
 class Compta::SheetsController < Compta::ApplicationController
   
@@ -31,25 +31,17 @@ class Compta::SheetsController < Compta::ApplicationController
         datas = ''
         @docs.each {|doc| datas += doc.to_index_csv } 
         send_data datas, :filename=>"#{params[:title] || params[:collection]}.csv"
-        }
+      }
       format.xls {
         
         datas = ''
         @docs.each {|doc| datas += doc.to_index_xls}
         send_data datas, :filename=>"#{params[:title] || params[:collection]}.xls"
-        }
+      }
 
       format.pdf {
-        
-        final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait)
-        @docs.each do |doc|
-           doc.to_pdf.render_pdf_text(final_pdf)
-           final_pdf.start_new_page unless doc == @docs.last 
-        end
-        final_pdf.number_pages("page <page>/<total>",
-        { :at => [final_pdf.bounds.right - 150, 0],:width => 150,
-               :align => :right, :start_count_at => 1 })
-        send_data final_pdf.render,  :filename=>"#{params[:title] || params[:collection]}.pdf"
+                
+        send_data produce_pdf(@docs),  :filename=>"#{params[:title] || params[:collection]}.pdf"
       }
     end
   end
@@ -72,7 +64,7 @@ class Compta::SheetsController < Compta::ApplicationController
         format.xls { send_data @sheet.to_xls }
         format.pdf { send_data @sheet.to_detailed_pdf.render}
       end
-      else
+    else
       flash[:alert] = "Le document demandé n'a pas été trouvé " unless @sheet
       flash[:alert] = "Le document demandé comporte des erreurs : #{@sheet.errors.full_messages.join('; ')}"
       redirect_to compta_nomenclature_url # affiche la liste des folios de la nomenclature
@@ -89,12 +81,12 @@ class Compta::SheetsController < Compta::ApplicationController
   # resultats renvoie vers index avec exploitation, financier et exceptionnel
   def resultats
     redirect_to compta_sheets_url(:collection=>[:resultat],
-    :title=>'Compte de Résultats')
+      :title=>'Compte de Résultats')
   end
 
   def liasse
     redirect_to compta_sheets_url(:collection=>[:actif, :passif, :resultat, :benevolat],
-    :title=>'Liasse complète')
+      :title=>'Liasse complète')
   end
 
   # pluriel volontaire pour le distinguer de show/benvolat qui montre le détail de la page benevolat
@@ -113,21 +105,21 @@ class Compta::SheetsController < Compta::ApplicationController
   def detail 
     @detail_lines = @period.two_period_account_numbers.map  {|num| Compta::RubrikLine.new(@period, :actif, num)}
     respond_to do |format|  
-        format.html
-        format.csv { send_data(detail_csv(@detail_lines)  , :filename=>'detail.csv')} 
-        format.xls { send_data(detail_csv(@detail_lines).encode("windows-1252"), :filename=>'detail.csv')   }
-        format.pdf {
-            pdf = PdfDocument::Base.new(@detail_lines, {:title=>'Détail des comptes',
-                :columns=>[:select_num, :title, :brut, :amortissement, :net, :previous_net],
-              :columns_titles=>['Numéro', 'Libellé', 'Brut', 'Amortissement', 'Net', 'Ex Précédent']}) do |p|
-                 p.columns_widths = [10,30,15,15,15,15]
-                 p.columns_alignements = [:left, :left, :right, :right, :right, :right]
-                 p.top_left = "#{@organism.title}\n#{@period.exercice}" 
-                 p.stamp = @period.closed? ? '' : 'Provisoire' 
-              end
-            send_data pdf.render
-        }
-      end
+      format.html
+      format.csv { send_data(detail_csv(@detail_lines)  , :filename=>'detail.csv')} 
+      format.xls { send_data(detail_csv(@detail_lines).encode("windows-1252"), :filename=>'detail.csv')   }
+      format.pdf {
+        pdf = PdfDocument::Base.new(@detail_lines, {:title=>'Détail des comptes',
+            :columns=>[:select_num, :title, :brut, :amortissement, :net, :previous_net],
+            :columns_titles=>['Numéro', 'Libellé', 'Brut', 'Amortissement', 'Net', 'Ex Précédent']}) do |p|
+          p.columns_widths = [10,30,15,15,15,15]
+          p.columns_alignements = [:left, :left, :right, :right, :right, :right]
+          p.top_left = "#{@organism.title}\n#{@period.exercice}" 
+          p.stamp = @period.closed? ? '' : 'Provisoire' 
+        end
+        send_data pdf.render
+      }
+    end
   end
 
   protected
@@ -145,6 +137,18 @@ class Compta::SheetsController < Compta::ApplicationController
       csv << ['Numéro', 'Libellé', 'Brut', 'Amortissement', 'Net', 'Ex. précédent']
       lines.each {|l| csv << [l.select_num, l.title, l.brut, l.amortissement, l.net, l.previous_net] }
     end.gsub('.', ',')
+  end
+  
+  def produce_pdf(documents)
+    final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait)
+    documents.each do |doc|
+      doc.to_pdf.render_pdf_text(final_pdf)
+      final_pdf.start_new_page unless doc == @docs.last 
+    end
+    final_pdf.number_pages("page <page>/<total>",
+      { :at => [final_pdf.bounds.right - 150, 0],:width => 150,
+        :align => :right, :start_count_at => 1 })
+    final_pdf.render
   end
 
 end
