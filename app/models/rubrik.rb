@@ -117,8 +117,7 @@ class Rubrik < ActiveRecord::Base
    
     
     # détermine le niveau dans l'arbre
-    # depth = 0 pour root
-    # son alias depth est utilisé
+    # depth = 0 pour root et on augmente le niveau quand on descend dans l'arbre
     def depth
       niveau = 0
       r = self

@@ -66,7 +66,7 @@ column_widths = [70, 15, 15].collect { |w| width*w/100 }
     # si c'est une rubrique de profondeur 0 alors normal,
     # si c'est supérieur à 0 alors en gras
      page.table_lines_depth.each_with_index do |d,i|
-        row(i).font_style = :bold if d > 0
+        row(i).font_style = :bold if (d == 0 || d == 1)
      end
 
  end

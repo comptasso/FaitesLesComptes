@@ -41,7 +41,7 @@ titles = [['', '', '', doc.exercice, 'Précédent'], ['', 'Montant brut', "Amort
     # si c'est une rubrique de profondeur 0 alors normal,
     # si c'est supérieur à 0 alors en gras
      page.table_lines_depth.each_with_index do |d,i|
-        row(i+2).font_style = :bold if d > 0
+        row(i+2).font_style = :bold if d == 0
         row(i+2).font_style = :italic if d == -1
 
      end

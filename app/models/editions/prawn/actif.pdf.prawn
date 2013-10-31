@@ -65,13 +65,13 @@ column_widths = [40, 15, 15, 15, 15].collect { |w| width*w/100 }
 # la table des lignes proprement dites
  table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5], :height => 16, :overflow=>:truncate} do
     column_widths.each_with_index {|w,i| column(i).width = w}
-    [:left, :right, :right, :right, :right].each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
-    # ici, on modifie le style des colonnes en fonction de la profondeur de l'objet
-    # si c'est une rubrique de profondeur 0 alors normal,
-    # si c'est supérieur à 0 alors en gras
-     page.table_lines_depth.each_with_index do |d,i|
-        row(i).font_style = :bold if d > 0
-     end
+      [:left, :right, :right, :right, :right].each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
+      # ici, on modifie le style des colonnes en fonction de la profondeur de l'objet
+      # si c'est une rubrique de profondeur 0 alors normal,
+      # si c'est supérieur à 0 alors en gras
+        page.table_lines_depth.each_with_index do |d,i|
+           row(i).font_style = :bold if (d == 0 || d == 1)
+        end
 
  end
 
