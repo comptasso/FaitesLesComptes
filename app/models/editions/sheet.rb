@@ -83,7 +83,7 @@ module Editions
     def render
       text =   read_template
       doc = self # doc est utilisé dans le template
-      @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait) do |pdf|
+      @pdf_file = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait) do |pdf|
         pdf.instance_eval(text, template)
       end
       numerote

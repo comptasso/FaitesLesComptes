@@ -140,7 +140,7 @@ class Compta::SheetsController < Compta::ApplicationController
   end
   
   def produce_pdf(documents)
-    final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :portrait)
+    final_pdf = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait)
     documents.each do |doc|
       doc.to_pdf.render_pdf_text(final_pdf)
       final_pdf.start_new_page unless doc == @docs.last 
