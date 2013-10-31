@@ -82,7 +82,8 @@ module Compta
     alias total_passif to_passif
 
     # indique la profondeur pour les fonctions récursives d'affichage
-    # rubrik_line est mis à  -1
+    # rubrik_line est mis à  -1, ce qui l'identifie sans confusion
+    # des rubriks qui peuvent avoir des profondeurs de 0 ou plus.
     def depth
       -1
     end

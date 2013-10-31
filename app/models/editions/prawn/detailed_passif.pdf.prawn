@@ -38,10 +38,11 @@ titles = [['', doc.exercice, 'Précédent']]
     column_widths.each_with_index {|w,i| column(i).width = w}
     [:left, :right, :right, :right, :right].each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
     # ici, on modifie le style des colonnes en fonction de la profondeur de l'objet
-    # si c'est une rubrique de profondeur 0 alors normal,
-    # si c'est supérieur à 0 alors en gras
+    # si c'est une rubrique de profondeur 0 ou 1 ou 2 (a priori des totaux ou sous-totaux, alors gras),
+    # si c'est supérieur à 2 on reste en normal
+    # si c'est -1, c'est que c'est un compte et donc en italique
      page.table_lines_depth.each_with_index do |d,i|
-        row(i+2).font_style = :bold if d > 0
+        row(i+2).font_style = :bold if (d == 0 || d == 1 || d == 2)
         row(i+2).font_style = :italic if d == -1
 
      end
