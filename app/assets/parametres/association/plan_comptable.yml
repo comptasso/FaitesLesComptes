@@ -37,30 +37,34 @@
   title: Autres immobilisations financières
 - number: '2801'
   title: Amortissements des frais d'établissements
-- number: '2803'
-  title: Amortissements des frais de recherche et développements
+- number: '2806'
+  title: Amortissements droit au bail
+- number: '2808'
+  title: Amortissements des autres immo incorporelles
 - number: '2812'
   title: Amortissements des agencements et installations
 - number: '2815'
   title: Amortissement des installations techniques, mat...
-- number: '2906'
+- number: '2818'
+  title: Amortissement des autres immos corporelles
+- number: '290'
   title: Dépréciations des immobilisations incorporelles
-- number: '2912'
-  title: Dépréciations des agencements et installations
-- number: '2915'
-  title: Dépréciation des installations techniques, mat...
+- number: '291'
+  title: Dépréciations des immobilisations corporelles
 - number: '297'
-  title: Provisions pour dépréciation des autres immobilisations financières
+  title: Dépréciation des autres immobilisations financières
 - number: '37'
   title: Stocks de marchandises
 - number: '397'
   title: Provisions pour dépréciation des stocks de marchandises
-- number: '400'
+- number: '401'
   title: Fournisseurs et Comptes rattachés
+- number: '404'
+  title: Fournisseur d'immoblisations
 - number: '409'
   title: Fournisseurs débiteurs
-- number: '410'
-  title: Usagers et comptes rattachés
+- number: '411'
+  title: Usagers
 - number: '419'
   title: Usagers créditeurs
 - number: '421'
@@ -73,13 +77,15 @@
   title: Autres organismes sociaux
 - number: '438'
   title: Organismes sociaux - charges à payer et produits à recevoir
+- number: '441'
+  title: Subventions à recevoir
 - number: '445'
   title: Etat - Taxes sur le chiffre d'affaires
 - number: '447'
   title: Autres impôts, taxes et versements assimilés
 - number: '448'
   title: Etat - charges à payer et produits à recevoir
-- number: '45'
+- number: '451'
   title: Confédération, fédération, associations affiliées et sociétaires
 - number: '455'
   title: Sociétaires - Comptes courants
@@ -94,15 +100,13 @@
 - number: '487'
   title: Produits constatés d'avance
 - number: '491'
-  title: Provisions pour dépréciation des créances Usagers
+  title: Dépréciation des créances Usagers
 - number: '495'
-  title: Provision pour dépréciation des autres créances
+  title: Dépréciation des autres créances
 - number: '50'
   title: Valeurs mobiliéres de placement
 - number: '511'
   title: Chèque à encaisser
-- number: '51'
-  title: Banque
 - number: '590'
   title: Provisions pour dépréciation des valeurs mobiliéres de placement
 - number: '60'
@@ -145,8 +149,6 @@
   title: Production immobilisée
 - number: '74'
   title: Subventions d'exploitation
-- number: '75'
-  title: Autres produits de gestion courante
 - number: '756'
   title: Cotisations
 - number: '758'
@@ -165,11 +167,15 @@
   title: Report des ressources non utilisées des exercices antérieurs
 - number: '79'
   title: Transferts de charges
+- number: '860'
+  title: Secours en nature
+- number: '861'
+  title: Mise à disposition gratuite de biens
 - number: '864'
   title: Personnel bénévole
-- number: '86'
-  title: Autres emplois en nature
 - number: '870'
-  title: 'Bénévolat'
-- number: '87'
-  title: Prestations et dons en nature
+  title: Bénévolat
+- number: '871'
+  title: Prestations en nature
+- number: '875'
+  title: Dons en nature
