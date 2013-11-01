@@ -71,7 +71,7 @@ module Editions
     #
     # Sinon, dans un document de type bilan, les entêtes de colonnes doivent alors
     # être des dates
-    def columns_titles
+    def columns_titles  
       if @source.name == :actif || @source.name == :passif
         ['', I18n::l(@period.close_date), I18n::l(@period.start_date - 1)]
       else # on est dans une logique de résultat sur une période

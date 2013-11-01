@@ -63,13 +63,7 @@ describe Editions::Sheet do
       @pdfs.stamp.should == 'Provisoire'
     end
 
-    it 'utilise le template correspondant à son sens' do
-      @pdfs.send(:template).should == "#{Rails.root}/app/models/editions/prawn/actif.pdf.prawn"
-      bal.stub(:sens).and_return :passif
-      @pdfs.send(:template).should == "#{Rails.root}/app/models/editions/prawn/passif.pdf.prawn"
-    end
-
-
+    
 
     it 'fetch_lines' do
       bal.should_receive(:folio).and_return(@fol = double(Folio))
