@@ -40,7 +40,8 @@ class Folio < ActiveRecord::Base
   
   validates :nomenclature_id, :name, :title, :presence=>true
   validates :sens, :inclusion=>{:in=>[:actif, :passif]}
-  validates :name, :inclusion=>{:in=>[:actif, :passif, :resultat, :benevolat]}
+  # test est rajouté pour faciliter les tests
+  validates :name, :inclusion=>{:in=>[:actif, :passif, :resultat, :benevolat, :test]}
  
   # 
   # méthode créant les rubriks de façon récursive à partir d'un hash

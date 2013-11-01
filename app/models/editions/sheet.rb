@@ -81,10 +81,10 @@ module Editions
 
     # Crée le fichier pdf associé
     def render
-      text =   read_template
-      doc = self # doc est utilisé dans le template
-      @pdf_file = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait) do |pdf|
-        pdf.instance_eval(text, template)
+      if source.sens == :actif
+        @pdf_file = Editions::PrawnActifSheet.new(:page_size => 'A4', :page_layout => :portrait) { |pdf| pdf.fill_pdf(self) }
+      else
+        @pdf_file = Editions::PrawnPassifSheet.new(:page_size => 'A4', :page_layout => :portrait) { |pdf| pdf.fill_pdf(self) }
       end
       numerote
       @pdf_file.render

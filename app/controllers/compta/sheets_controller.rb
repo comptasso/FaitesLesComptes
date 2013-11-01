@@ -18,6 +18,7 @@ class Compta::SheetsController < Compta::ApplicationController
   before_filter :check_nomenclature, :only=>[:index, :show]
 
   def index
+    # @docs est une collection de Compta::Sheet
     @docs = params[:collection].map do |c|
       fol = @nomenclature.folios.find_by_name(c.to_s)
       @nomenclature.sheet(@period, fol)
@@ -53,7 +54,7 @@ class Compta::SheetsController < Compta::ApplicationController
     folio = @nomenclature.folios.find(params[:id])
     @sheet = @nomenclature.sheet(@period, folio)
     
-    
+    flash[:notice] = 'je suis dans la méthode show de sheets_controller'
     
     if @sheet && @sheet.valid?
 

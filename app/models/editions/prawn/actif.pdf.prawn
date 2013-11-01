@@ -11,7 +11,7 @@ create_stamp("fond") do
 
     font_size(120) do
       text_rendering_mode(:stroke) do
-        draw_text(doc.stamp, :at=>[250, -150])
+        draw_text('provisoie', :at=>[250, -150]) # à la place de doc.stamp
       end
     end
     fill_color "000000"
