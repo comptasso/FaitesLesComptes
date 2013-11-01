@@ -54,8 +54,6 @@ class Compta::SheetsController < Compta::ApplicationController
     folio = @nomenclature.folios.find(params[:id])
     @sheet = @nomenclature.sheet(@period, folio)
     
-    flash[:notice] = 'je suis dans la méthode show de sheets_controller'
-    
     if @sheet && @sheet.valid?
 
       respond_to do |format|

@@ -19,15 +19,7 @@ module Editions
       @source.detailed_lines(page_number)
     end
 
-    protected
-
-    def read_template
-      template = case @source.sens
-        when :actif then "#{Rails.root}/app/models/editions/prawn/detailed_actif.pdf.prawn"
-        when :passif then "#{Rails.root}/app/models/editions/prawn/detailed_passif.pdf.prawn"
-      end
-      File.open(template, 'r') { |f| f.read}
-    end
+    
 
   end
 

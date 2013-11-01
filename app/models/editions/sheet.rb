@@ -81,11 +81,8 @@ module Editions
 
     # Crée le fichier pdf associé
     def render
-      if source.sens == :actif
-        @pdf_file = Editions::PrawnActifSheet.new(:page_size => 'A4', :page_layout => :portrait) { |pdf| pdf.fill_pdf(self) }
-      else
-        @pdf_file = Editions::PrawnPassifSheet.new(:page_size => 'A4', :page_layout => :portrait) { |pdf| pdf.fill_pdf(self) }
-      end
+      @pdf_file = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait) 
+      source.sens == :actif ? @pdf_file.fill_actif_pdf(self) : @pdf_file.fill_passif_pdf(self)
       numerote
       @pdf_file.render
     end
@@ -93,31 +90,8 @@ module Editions
     # surcharge de Simple::render_pdf_text pour prendre en compte
     # les deux template possibles actif.pdf.prawn et passif.pdf.prawn
     def render_pdf_text(pdf)
-      text =   read_template
-      doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
-      Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
-      pdf.instance_eval(text, template)
+      source.sens == :actif ? pdf.fill_actif_pdf(self) : pdf.fill_passif_pdf(self)
     end
-
-    protected
-
-
-    def template
-      case @source.sens
-      when :actif then "#{Rails.root}/app/models/editions/prawn/actif.pdf.prawn"
-      when :passif then "#{Rails.root}/app/models/editions/prawn/passif.pdf.prawn"
-      end
-    end
-
-    def read_template
-      File.open(template, 'r') { |f| f.read}
-    end
-
-  
-
-
-
-
 
   end
 
