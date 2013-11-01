@@ -60,7 +60,7 @@ class Cash < ActiveRecord::Base
  # appelé par le callback after_create, crée un cash_book puis un compte comptable de rattachement
  # pour chaque exercice ouvert.
  def create_accounts
-   logger.info 'création des comptes liés à la caisse'
+   logger.debug 'création des comptes liés à la caisse'
    # demande un compte de libre sur l'ensemble des exercices commençant par 51
    n = Account.available('53') # un compte 53 avec un précision de deux chiffres par défaut
    organism.periods.where('open = ?', true).each do |p|

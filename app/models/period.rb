@@ -585,7 +585,7 @@ class Period < ActiveRecord::Base
   # TODO voir aussi si on ne peut utiliser une classe similaire à Utilities::PlanComtpable pour simplifier
   # copy_natures et load_natures et retirer de cette clase également load_file_natures. On pourrait aussi envisager de passer ces callbacks dans un Observer.
   def load_natures  
-    Rails.logger.info 'Création des natures'
+    Rails.logger.debug 'Création des natures'
     t = load_file_natures("#{Rails.root}/app/assets/parametres/#{organism.status.downcase}/natures.yml")
     t.each do |n|
       a = accounts.find_by_number(n[:acc]) 

@@ -22,7 +22,8 @@ describe Editions::DetailedSheet do
   it 'et sait rendre le pdf en numérotant les pages' do
     @ds = Editions::DetailedSheet.new(p, source, {})
     # on stub le Prawn::Document pour ne tester que l'appel
-    Prawn::Document.stub(:new).and_return(double(Prawn::Document, :render=>true))
+    Editions::PrawnSheet.stub(:new).and_return(@es = double(Editions::PrawnSheet, :render=>true))
+    @es.should_receive(:fill_actif_pdf)
     @ds.should_receive(:numerote).and_return true
     @ds.render
   end
@@ -31,7 +32,8 @@ describe Editions::DetailedSheet do
     source.stub(:sens).and_return(:passif)
      @ds = Editions::DetailedSheet.new(p, source, {})
     # on stub le Prawn::Document pour ne tester que l'appel
-    Prawn::Document.stub(:new).and_return(double(Prawn::Document, :render=>true))
+    Editions::PrawnSheet.stub(:new).and_return(@es = double(Editions::PrawnSheet, :render=>true))
+    @es.should_receive(:fill_passif_pdf)
     @ds.should_receive(:numerote).and_return true
     @ds.render
   end

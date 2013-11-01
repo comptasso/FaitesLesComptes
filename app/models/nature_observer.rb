@@ -13,7 +13,7 @@ class NatureObserver < ActiveRecord::Observer
   def after_save(nature)
       if nature.account_id_changed?
         
-       Rails.logger.info 'Mise à jour du champ account_id des lignes suite à modification de nature'
+       Rails.logger.debug 'Mise à jour du champ account_id des lignes suite à modification de nature'
        Rails.logger.debug "Nombre de lignes modifiées : #{ComptaLine.where('nature_id = ?', nature.id).count}"
        nature.compta_lines.each do |l|
  

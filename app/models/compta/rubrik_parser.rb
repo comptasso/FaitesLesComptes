@@ -152,7 +152,7 @@ module Compta
 
     # reject doit rejeter que ce soit de la première colonne ou de la seconde
     def reject_numbers(num)
-      Rails.logger.info "le numéro rejeté est #{num}"
+      Rails.logger.debug "le numéro rejeté est #{num}"
       @select_nums.reject! {|n| n =~ /^#{num}\d*/}
       @col2_nums.reject! {|n| n =~ /^#{num}\d*/}
     end

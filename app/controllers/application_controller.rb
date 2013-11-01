@@ -54,9 +54,9 @@ class ApplicationController < ActionController::Base
   # A chaque démarrage de l'application, on vérifie que la base principale
   # (celle qui contient les Room)
   # est cohérente avec la version du logiciel.
-  #
+  # TODO probablement à supprimer avec la version full web
   def control_version
-    Rails.logger.info 'appel de controle version'
+    Rails.logger.debug 'appel de controle version'
     @control_version = Room.version_update?
   end
 
@@ -147,7 +147,7 @@ class ApplicationController < ActionController::Base
  
   # se connecte à la base principale
   def use_main_connection
-    Rails.logger.info "use_main_connection : Passage à la base principale"
+    Rails.logger.debug "use_main_connection : Passage à la base principale"
     Apartment::Database.switch()
   end
   
@@ -159,7 +159,7 @@ class ApplicationController < ActionController::Base
     change = false
     # premier cas : il y a une chambre et on vient de changer
     if groom && session[:org_db] != groom.database_name
-      logger.info "Passage à l'organisation #{groom.database_name}"
+      logger.debug "Passage à l'organisation #{groom.database_name}"
       session[:period] = nil
       session[:org_db]  = groom.database_name
       groom.connect_to_organism
@@ -173,7 +173,7 @@ class ApplicationController < ActionController::Base
     
     # deuxième cas : il n'y a pas ou plus de chambre
     if groom == nil #: on vient d'arriver ou de supprimer un organisme
-      logger.info "Aucune chambre sélectionné"
+      logger.debug "Aucune chambre sélectionné"
       use_main_connection
       session[:period] = nil
       session[:org_db] = nil
@@ -182,7 +182,7 @@ class ApplicationController < ActionController::Base
 
     # troisème cas : on reste dans la même pièce
     if groom && session[:org_db] == groom.database_name
-      logger.info "On reste à l'organisation #{groom.database_name}"
+      logger.debug "On reste à l'organisation #{groom.database_name}"
       groom.connect_to_organism
       @organism = Organism.first
       logger.warn 'pas d\'organisme trouvé par has_changed_organism?' unless @organism

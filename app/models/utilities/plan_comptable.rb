@@ -43,7 +43,7 @@ class Utilities::PlanComptable
         acc.save 
       end
       nb_comptes_crees = period.accounts(true).count - nba
-      Rails.logger.info "Création de #{nb_comptes_crees} comptes"
+      Rails.logger.debug "Création de #{nb_comptes_crees} comptes"
       return nb_comptes_crees # renvoie le nombre de comptes créés
     else
       Rails.logger.warn("Erreur lors du chargement du fichier #{source_path}")
