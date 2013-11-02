@@ -58,4 +58,5 @@ MAX_COMMENT_LENGTH = 300
 # VERSION = '1.0.1RC' # mise en place des guides de saisie et corrections de bugs dans Transferts
 # VERSION = '1.0.2RC' # correction bug - la liste des organismes n'était pas mise à jour après une suppression 
 # VERSION = '1.1.0RC' # suppression de la table bank_extract_lines_lines et refonte du pointage des relevés 
-FLCVERSION = '1.1.1RC' # revu le javascript du pointage et suppression de facebox.js inutilisé 
+# FLCVERSION = '1.1.1RC' # revu le javascript du pointage et suppression de facebox.js inutilisé 
+FLCVERSION = '1.2.0RC' # folio et rubrik deviennent des éléments persistants. 
