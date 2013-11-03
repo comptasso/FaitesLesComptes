@@ -1,4 +1,6 @@
- 
+# fichier utilisé par Editions::Balance
+
+
 width = bounds.right
 font_size(10) 
 
