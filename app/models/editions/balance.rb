@@ -53,6 +53,14 @@ module Editions
         ActionController::Base.helpers.number_with_precision(account.sold_at(to_date),precision:2)
       ]
     end
+    
+    # Crée le fichier pdf associé
+    def render
+      @pdf_file = Editions::PrawnBalance.new(:page_size => 'A4', :page_layout => :portrait) 
+      @pdf_file.fill_balance(self)
+      numerote  # défini dans les PdfDocument::Simple
+      @pdf_file.render
+    end
 
 
 
