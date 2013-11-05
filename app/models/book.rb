@@ -42,8 +42,12 @@ class Book < ActiveRecord::Base
 
  
   # astuces trouvéexs dans le site suivant
-  # http://code.alexreisner.com/articles/single-table-inheritance-in-rails.html
-  # également ajouté un chargement des enfants dans l'initilizer development.rb
+  # http://www.alexreisner.com/code/single-table-inheritance-in-rails
+  # également ajouté un chargement des enfants dans l'initilizer development.rb.
+  # 
+  # Le but de cette méthode est de redéfinir la méthode model_name qui est utilisée
+  # pour la génération des path. Ainsi un IncomeBook répond quand même Book à la méthode model_name
+  # et la construction des path reste correcte.
   def self.inherited(child)
     child.instance_eval do
       def model_name

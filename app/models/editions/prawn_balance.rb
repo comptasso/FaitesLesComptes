@@ -1,12 +1,14 @@
+require 'pdf_document/prawn_base'
+
 module Editions
-  class PrawnBalance < Editions::PrawnBase
+  class PrawnBalance < PdfDocument::PrawnBase
     
     
     
     def fill_balance(document)
       font_size(10) 
       
-      monpdf = self
+      
       page_width = width
       jclfill_stamp(document.stamp)
       
@@ -60,7 +62,7 @@ module Editions
 
         stamp "fond"
 
-        monpdf.start_new_page unless (n == document.nb_pages)
+      start_new_page unless (n == document.nb_pages)
 
       end
     end
