@@ -45,7 +45,7 @@ class Mask < ActiveRecord::Base
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :book_id, numericality:true
   validates :destination_id, numericality:true, allow_blank:true
-  validates :amount, numericality:{:greater_than=>0.0}, allow_blank:true
+  validates :amount, numericality:{:greater_or_equal_to=>0.0}, allow_blank:true
   validates :ref, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :allow_blank=>true
   validates :narration, :nature_name, :counterpart,
     :format=>{with:NAME_REGEX}, :length=>{:within=>LONG_NAME_LENGTH_LIMITS}, :allow_blank=>true
