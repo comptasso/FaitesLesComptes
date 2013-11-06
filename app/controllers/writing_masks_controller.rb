@@ -8,6 +8,7 @@ class WritingMasksController < ApplicationController
       
       fill_natures
       @in_out_writing, @line, @counter_line = @mask.writing_new(@period.guess_date)
+      flash[:retour] = request.env["HTTP_REFERER"]
       render 'in_out_writings/new'
     else
       redirect_to :back and return

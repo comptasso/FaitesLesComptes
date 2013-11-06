@@ -16,6 +16,7 @@ class BankExtractLinesController < ApplicationController
   #
   def pointage
     redirect_to bank_extract_bank_extract_lines_url(@bank_extract) if @bank_extract.locked
+    @previous_line = ComptaLine.find_by_id(flash[:previous_line_id]) if flash[:previous_line_id]
     prepare_modal_box_instances
     # les variables d'instances pour l'affichage de la vue pointage
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)

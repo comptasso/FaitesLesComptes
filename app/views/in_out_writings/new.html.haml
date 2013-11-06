@@ -1,19 +1,11 @@
 = content_for :menu do
   = icon_to 'navigation90.png', book_in_out_writings_path(@book, mois:@mois, an:@an), title:'Affichage des écritures'
 
--if @previous_line
-  .alert.notice
-    %a.close(data-dismiss="alert") x
-    %strong
-      %table
-        %tbody
-          %tr
-            %td
-              = "Ecriture n°#{@previous_line.writing_id} créée : "
-              = render 'line', :line=>@previous_line
+= render 'in_out_writings/previous_line'
 
 .champ
   %h3= "#{@book.title.capitalize} : nouvelle ligne"
+  
 
 
 = render 'in_out_writings/form'

@@ -9,7 +9,7 @@ module InOutWritingsHelper
   # 
   def in_out_line_actions(line)
     content_tag :td, :class=>'icon' do
-      line_actions
+      line_actions(line)
     end
   end
 

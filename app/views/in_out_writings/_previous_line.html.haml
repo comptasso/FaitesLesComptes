@@ -1,0 +1,10 @@
+-if @previous_line
+  .alert.notice
+    %a.close(data-dismiss="alert") x
+    %strong
+      %table
+        %tbody
+          %tr
+            %td
+              = "Ecriture n°#{@previous_line.writing_id} créée : "
+              = render 'in_out_writings/line', :line=>@previous_line

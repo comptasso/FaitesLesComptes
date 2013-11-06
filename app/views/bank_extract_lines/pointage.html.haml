@@ -6,6 +6,8 @@
     style: ('display: none;' unless @bank_extract.lockable?), |
     confirm:"Cette action verrouillera ce relevé de compte et toutes les lignes qui sont associées.\nConfirmez vous ?" 
 
+= render 'in_out_writings/previous_line'
+
 .row_fluid#message 
  
 .champ

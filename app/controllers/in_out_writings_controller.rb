@@ -54,9 +54,15 @@ class InOutWritingsController < ApplicationController
       if @in_out_writing.save
         flash[:date]=@in_out_writing.date # permet de transmettre la date à l'écriture suivante
         flash[:previous_line_id]=@line.id
+        
         mois = sprintf('%.02d',@in_out_writing.date.month); an = @in_out_writing.date.year
-        format.html { redirect_to new_book_in_out_writing_url(@book, mois:mois, an:an) }
-
+        format.html { 
+          if flash[:retour]
+            redirect_to flash[:retour]
+          else
+            redirect_to new_book_in_out_writing_url(@book, mois:mois, an:an) 
+          end 
+          }
       else
         Rails.logger.warn("erreur dans create_line")
         Rails.logger.warn(@in_out_writing.errors.messages)
