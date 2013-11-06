@@ -1,11 +1,12 @@
 require 'pdf_document/prawn_base'
 
 module Editions
+  
   class PrawnBalance < PdfDocument::PrawnBase
     
     
     
-    def fill_balance(document)
+    def fill_pdf(document)
       font_size(10) 
       
       

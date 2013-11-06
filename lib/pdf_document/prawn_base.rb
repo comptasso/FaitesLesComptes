@@ -41,6 +41,7 @@ module PdfDocument
       1.upto(document.nb_pages) do |n|
         
         current_page = document.page(n)
+        
         pad(05) { font_size(12) {entetes(current_page, cursor) } }
         
         stroke_horizontal_rule
@@ -87,7 +88,7 @@ module PdfDocument
 
       bounding_box [150, y_position], :width => width-300, :height => 40 do
         font_size(20) { text page.title.capitalize, :align=>:center }
-        text page.subtitle, :align=>:center
+        text page.subtitle, :align=>:center if page.subtitle
       end
 
       bounding_box [width-150, y_position], :width => 150, :height => 40 do

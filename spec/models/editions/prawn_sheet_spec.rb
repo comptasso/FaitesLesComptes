@@ -13,6 +13,7 @@ class StubDoc
      [["une rubrique enfant", "-50,25", "-100,00", "49,75", "0,00"],
        ["Une ligne de test", "-50,25", "-100,00", "49,75", "0,00"]] 
   end
+  def subtitle; nil; end 
   def table_lines_depth; [1,0]; end
 end
 

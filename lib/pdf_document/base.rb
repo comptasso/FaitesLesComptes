@@ -11,7 +11,7 @@ module PdfDocument
   # Base se crée avec comme argument une collection et des options :
   # - :title pour le titre du document
   # - :subtitle pour un sous titre
-  # - :methods pour les méthodes à appliquer à cette collection pour obtenir les valeurs des colonnes
+  # - :columns pour les méthodes à appliquer à chaque ligne de cette collection pour obtenir les valeurs des colonnes
   # - :orientation permet de donner l'orientation :landscape ou :portrait
   # - :nb_lines_per_page
   # - :columns_titles donne le titre des colonnes du document
@@ -98,12 +98,11 @@ module PdfDocument
 
     # Crée le fichier pdf associé
     def render(template = "lib/pdf_document/prawn_files/base.pdf.prawn")
-      text = File.open(template, 'r') {|f| f.read  }
+   #   text = File.open(template, 'r') {|f| f.read  }
       
-      doc = self # doc est utilisé dans le template
-      @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => @orientation) do |pdf|
-        pdf.instance_eval(text, template)
-      end
+   #   doc = self # doc est utilisé dans le template
+      @pdf_file = Prawn::Document.new(:page_size => 'A4', :page_layout => @orientation) 
+      @pdf_file.fill_pdf
       numerote
       @pdf_file.render
     end

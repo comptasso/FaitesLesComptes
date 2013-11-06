@@ -1,4 +1,4 @@
-
+require 'pdf_document/prawn_base'
 
 module Editions
   # Editions::PrawnSheet hérite de Prawn::Base qui lui-même hérite de Prawn::Document et dispose 
@@ -12,7 +12,7 @@ module Editions
   # Les méthodes publiques sont fill_actif_pdf et fill_passif_pdf qui fournit les deux
   # types de documents. 
   #
-  class PrawnSheet < Editions::PrawnBase
+  class PrawnSheet < PdfDocument::PrawnBase
     
     
      
