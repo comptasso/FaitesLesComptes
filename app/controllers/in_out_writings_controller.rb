@@ -57,7 +57,7 @@ class InOutWritingsController < ApplicationController
         
         mois = sprintf('%.02d',@in_out_writing.date.month); an = @in_out_writing.date.year
         format.html { 
-          if flash[:retour]
+          if flash[:retour] && flash[:retour] =~ /pointage\z/
             redirect_to flash[:retour]
           else
             redirect_to new_book_in_out_writing_url(@book, mois:mois, an:an) 
