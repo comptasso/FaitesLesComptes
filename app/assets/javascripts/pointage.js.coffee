@@ -53,20 +53,21 @@ checkSum= ->
 # Il ne reste plus qu'à recalculer les totaux.
 #
 ltpsTobels=  ->
-  $(this).parents('tr').appendTo($('#bels_table tbody')).
-    find('img.transfert').off('click', ltpsTobels).on('click', belsToltps).
+  ligne = $(this).parents('tr').appendTo($('#bels_table tbody'))
+  ligne.find('img.transfert').off('click', ltpsTobels).on('click', belsToltps).
     attr('src', '/assets/icones/retirer.png')
-  activeEnregistrer()   
+  ligne.find('a.icon_menu').hide() # on masque les icones edition et suppression de la ligne
+  activeEnregistrer() if "disabled" in $('#enregistrer').attr('class').split(' ')     
   checkSum()
 
 # fait passer une ligne de la gauche (les bank_extract_lines) vers la droite (les 
 # lines_to_point). Puis recalcule les sommes et refait l'affichage des 
 # icones danger et des écarts
 belsToltps= ->
-  $(this).parents('tr').appendTo($('#ltps_table tbody')).
-    find('img.transfert').off('click', belsToltps).on('click', ltpsTobels).
+  ligne = $(this).parents('tr').appendTo($('#ltps_table tbody'))
+  ligne.find('img.transfert').off('click', belsToltps).on('click', ltpsTobels).
     attr('src', '/assets/icones/ajouter.png')
-  activeEnregistrer()   
+  activeEnregistrer()  if "disabled" in $('#enregistrer').attr('class').split(' ') 
   checkSum()
   
 # fonction permettant de construire une liste des bank_extract_lines
@@ -79,11 +80,22 @@ jsonfos= ->
     )
   a
  
- # a pour effet de changer le statut du bouton Enregistrer
- activeEnregistrer= ->
-   $('#enregistrer').prop('disabled', false).removeClass('disabled').addClass('btn-success')
-   $('#message').empty()
+# a pour effet de changer le statut du bouton Enregistrer
+activeEnregistrer= ->
+
+  $('#enregistrer').prop('disabled', false).removeClass('disabled').addClass('btn-success')
+  $('#message').empty()
+  hide_icons() # masquage des icones
    
+# masque les icones edit, supprimer des écritures ainsi que l'icone plus de la boite modale
+# qui permet d'écrire une nouvelle ligne
+hide_icons= ->
+  $('a.icon_menu').hide()
+
+# affiche les icones edit, supprimer des écritures ainsi que l'icone plus de la boite modale
+# qui permet d'écrire une nouvelle ligne
+show_icons= ->
+  $('a.icon_menu').show()
 
 # FONCTION PRINCIPALE
 $ ->
@@ -116,6 +128,7 @@ $ ->
         data: jsonfos(),
         success: ->
           $('#enregistrer').prop('disabled', true).removeClass('btn-success').addClass('disabled')
+          show_icons()
           # si debit et credit sont égaux  et si les infos ont bien été enregistrées, 
           # on peut alors afficher l icone de verrouillage   
           if Math.abs(spreadDebit()) < 0.001 && Math.abs(spreadCredit()) < 0.001
