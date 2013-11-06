@@ -95,7 +95,7 @@ hide_icons= ->
 # affiche les icones edit, supprimer des écritures ainsi que l'icone plus de la boite modale
 # qui permet d'écrire une nouvelle ligne
 show_icons= ->
-  $('a.icon_menu').show()
+  $('#ltps_table a.icon_menu').show()
 
 # FONCTION PRINCIPALE
 $ ->
