@@ -3,16 +3,40 @@
 
 module InOutWritingsHelper
   
-# TODO vérifier que les actions sont bien testées
+  # TODO vérifier que les actions sont bien testées
 
   # permet d'afficher les actions possible dans une ligne d'écriture
   # 
-  # Si la ligne est éditable, alors on peut la modifier ou la supprimer
-  # 
-  # Si la ligne est un Transfer, la modification se fait via la rubrique Transfer
-  # La suppression n'est pas possible, car elle doit passer par le menu Transfer
-  #
   def in_out_line_actions(line)
+    content_tag :td, :class=>'icon' do
+      line_actions
+    end
+  end
+
+  # Helper permettant de construire les options de counter_account pour le form
+  # La classe OptionsForAssociationSelect est dans lib
+  #
+  # Le deuxième argument indique si on veut une liste de compte pour une recette ou pour
+  # une dépense, la différence venant du traitement des chèques de recettes qui ne peuvent
+  # être mis que sur le compte chèque à l'encaissement
+  #
+  def options_for_cca(period, io = false)
+    arr =  [OptionsForAssociationSelect.new('Banques', :list_bank_accounts, period),
+      OptionsForAssociationSelect.new('Caisses',:list_cash_accounts, period)]
+    if io == true
+      arr << OptionsForAssociationSelect.new('Chèques à l\'encaissement', :rem_check_accounts, period)
+    end
+    arr
+  end
+
+
+  # renvoie les actions possibles sous forme d'un fragment de html 
+  # pour une compta_line
+  def line_actions(line)
+    # Si la ligne est éditable, alors on peut la modifier ou la supprimer
+    # 
+    # Si la ligne est un Transfer, la modification se fait via la rubrique Transfer
+    # La suppression n'est pas possible, car elle doit passer par le menu Transfer
     html = ' '
     lw=line.writing
     
@@ -31,34 +55,13 @@ module InOutWritingsHelper
       when Adherent::Writing then html << icon_to('detail.png', adherent.member_payment_path(lw.member, lw.bridge_id), title:'Table des paiments à l\'origine de cette écriture')
       end
     end
-      
-    
-    
-
-    content_tag :td, :class=>'icon' do
-      html.html_safe
-    end
+    html.html_safe
+  
   end
 
-# Helper permettant de construire les options de counter_account pour le form
-# La classe OptionsForAssociationSelect est dans lib
-#
-# Le deuxième argument indique si on veut une liste de compte pour une recette ou pour
-# une dépense, la différence venant du traitement des chèques de recettes qui ne peuvent
-# être mis que sur le compte chèque à l'encaissement
-#
-def options_for_cca(period, io = false)
- arr =  [OptionsForAssociationSelect.new('Banques', :list_bank_accounts, period),
-    OptionsForAssociationSelect.new('Caisses',:list_cash_accounts, period)]
-  if io == true
-     arr << OptionsForAssociationSelect.new('Chèques à l\'encaissement', :rem_check_accounts, period)
-  end
-  arr
+
+
 end
-
-
-
-  end
 
 
 
