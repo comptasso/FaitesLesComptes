@@ -48,11 +48,11 @@ describe Compta::Balance do
 
       it 'should retrieve period', wip:true do
         @b.period_id.should == @p.id
-        @b.period.should == @p
+        @b.period.should == @p 
       end
 
       it 'has accounts through periods' do
-        @b.accounts.should == [@a1, @a2]
+        @b.accounts.should == [@a1, @a2] 
       end
 
       it 'testing with_default_values' do
@@ -60,7 +60,7 @@ describe Compta::Balance do
         b.from_date.should == @p.start_date
         b.to_date.should == @p.close_date
         b.from_account.should == @p.accounts.find_by_number('102')
-        b.to_account.should == @p.accounts.find_by_number('870')
+        b.to_account.should == @p.accounts.find_by_number('875')
       end
 
       it 'range_accounts returns an extract of accounts' do

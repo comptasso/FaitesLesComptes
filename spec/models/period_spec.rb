@@ -1,8 +1,8 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
-RSpec.configure do |c| 
+RSpec.configure do |c|  
  #  c.filter = {wip:true}
 end
 
@@ -96,7 +96,7 @@ describe Period do
      
     
       it 'la création des comptes' do
-        @p.accounts(true).count.should == 87 # la liste des comptes du plan comptable
+        @p.accounts(true).count.should == 88 # la liste des comptes du plan comptable
         # on n' aps les deux comptes de caisse et banque car on a stubbé create_bank_and_cash_accounts
       end
 
@@ -104,6 +104,11 @@ describe Period do
         @p.should have(16).natures
       end
 
+      
+
+      describe 'après création' do
+        
+        
       it 'start_date ne peut plus changer' do
         @p.start_date = @p.start_date >> 1 # raccourci qui indique 1 mois plus tard
         @p.should_not be_valid
@@ -114,15 +119,7 @@ describe Period do
         @p.should_not be_valid
       end
 
-      describe 'après création' do
-
-      it 'les dates ne peuvent être modifiées' do
-
-        @p.close_date = @p.close_date.months_ago(1)
-        @p.should_not be_valid
-      end
-
-      it 'ne peut être réouvert' do
+      it 'un exercice clos ne peut être réouvert' do
         
         @p.update_attribute(:open, false)
         @p.open = true
@@ -574,18 +571,11 @@ describe Period do
       @period = @org.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     end
 
-    it 'a un organisme' do
-      @org.should be_an_instance_of(Organism)
-    end
-
-    it 'a un exercice' do
-      @period.should be_an_instance_of(Period)
-      @period.accounts.count.should == 89
-    end
-
-    it 'destruction de l exercice' do
+    it 'la destruction de l exercice entraîne celle des comptes' do
+      nb_accounts = Account.count
+      nb_period_accounts = @period.accounts.count
       @period.destroy
-      @period.accounts.count.should == 0
+      Account.count.should == nb_accounts - nb_period_accounts
     end
 
 
@@ -613,7 +603,7 @@ describe Period do
       @p.compta_lines(true).count.should == 0
     end
 
-    describe 'détruit les bank_extract et leurs bank_extract_lines'  , wip:true do
+    describe 'détruit les bank_extract et leurs bank_extract_lines'  do
 
        
       before(:each) do

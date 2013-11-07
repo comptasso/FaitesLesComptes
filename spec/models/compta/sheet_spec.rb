@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
   # c.filter = {:wip=>true}
 end
 
@@ -17,12 +17,12 @@ describe Compta::Sheet do
         :compta_lines_attributes=>{'0'=>{account_id:Account.find_by_number('206').id, debit:100 },
           '1'=>{account_id:Account.find_by_number('201').id, debit:10},
           '2'=>{account_id:Account.find_by_number('2801').id, credit:5},
-          '3'=>{account_id:Account.find_by_number('51').id, credit:105}
+          '3'=>{account_id:Account.find_by_number('51201').id, credit:105}
         }
       })
     @od.writings.create!({date:Date.today, narration:'ligne de terrain',
         :compta_lines_attributes=>{'0'=>{account_id:Account.find_by_number('201').id, debit:1200 },
-          '1'=>{account_id:Account.find_by_number('51').id, credit:1200}
+          '1'=>{account_id:Account.find_by_number('51201').id, credit:1200}
         }
       })
   end

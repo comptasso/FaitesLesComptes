@@ -23,19 +23,19 @@ describe Utilities::PlanComptable do
   describe 'self.create_accounts' do
 
     it 'demande à period de créer les comptes lus dans le fichier' do
-      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 87
-      @p.should have(87).accounts
+      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 88
+      @p.should have(88).accounts
     end
 
     it 'si p a déja des comptes ne les écrase pas' do
       @p.accounts.create!(number:'102', title:'Fonds associatif sans droit de reprise', :period_id=>@p.id)
-      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 86
-      @p.accounts(true).should have(87).accounts
+      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 87
+      @p.accounts(true).should have(88).accounts
     end
 
     context 'en cas d erreur lors de la lecture du fichier' do
 
-      it 'en cas d erreur sur la lecture : retourn 0' do
+      it 'retourne 0 en cas d erreur sur la lecture' do
         Utilities::PlanComptable.create_accounts(@p, 'Inconnu').should == 0
       end
 

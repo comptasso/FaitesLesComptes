@@ -9,13 +9,13 @@ require 'pdf_document/table'
 
 RSpec.configure do |c|
   # c.filter = {wip:true}
-end
+end 
  
 describe PdfDocument::Table do
 
  
 
-  let(:page) {mock(PdfDocument::Page, :number=>3, :document=>doc)}
+  let(:page) {double(PdfDocument::Page, :number=>3, :document=>doc)}
   let(:doc) {double(:columns_titles=>%w(Date Réf Débit Crédit),
       :prepare_line=>%w(un,deux),
       :columns_to_totalize=>[1,2,3]
