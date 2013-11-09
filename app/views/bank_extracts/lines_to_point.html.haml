@@ -4,7 +4,7 @@
 .row_fluid#message 
  
 .champ
-  %h3= "#{@bank_account.nickname} : Liste des écritures non pointées"
+  %h3= "#{@bank_account.nickname} : écritures non pointées - Solde instantanté : #{debit_credit @bank_account.instant_sold} €"
     
   .inner-champ
 
@@ -18,10 +18,15 @@
           %th.pc15 Actions
 
         %tbody#ltps
-          - @lines_to_point.lines.each do |ltp|
+          - @lines_to_point.each_line do |ltp|
             %tr{'class'=>'ltp', 'id'=>"#{ltp.id}" }
               %td= l ltp.date
               %td= ltp.narration
               %td.numeric.debit= debit_credit ltp.credit
               %td.numeric.credit= debit_credit ltp.debit
               %td= line_actions(ltp)
+        %tfoot#table_foot
+          %tr.total#totaux
+            %th.numeric(colspan="2" rowspan="1") Totaux
+            %th.numeric= @lines_to_point.total_credit
+            %th.numeric= @lines_to_point.total_debit

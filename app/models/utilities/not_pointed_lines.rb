@@ -22,6 +22,12 @@ module Utilities
       @bank_account = bank_account
       fetch_lines
     end
+    
+    # permet d'itérer les lignes et d'effectuer l'action fournie par le block 
+    def each_line
+      raise ArgumentError, "Un bloc est nécessaire" unless block_given?
+      lines.each {|l| yield l}
+    end
 
     def size
       lines.count

@@ -23,13 +23,7 @@ class BankExtractLinesController < ApplicationController
     @lines_to_point = @bank_account.not_pointed_lines
   end
   
-  # action permettant d'afficher les lignes d'écriture qui restent à pointer
-  # cette action est utilisée lorsque les relevés de compte sont tous pointés
-  # pointage redirige vers cette action lorsque c'est le cas
-  def lines_to_point
-    @lines_to_point = @bank_account.not_pointed_lines
-  end
-  
+ 
   # action qui sera appelée par ajax pour enregistrer les nouvelles positions et les
   # lignes qui sont dans la partie bank_extract_lines de la vue pointage
   #

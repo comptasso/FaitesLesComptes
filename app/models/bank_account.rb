@@ -53,8 +53,9 @@ class BankAccount < ActiveRecord::Base
  end
 
  # renvoie le solde du compte bancaire à une date donnée et pour :debit ou :credit
- # arguments à fournir : la date et le sens (:debit ou :credit)
- # renvoie 0 s'il n'y a pas d'écriture ou si un exercice n'existe pas
+ # arguments à fournir : la date et le sens (:debit ou :credit).
+ # 
+ # Renvoie 0 s'il n'y a pas d'écriture ou si un exercice n'existe pas
  # Ce peut être le cas avec un premier exercice commencé en cours d'année
  # quand on est dans l'exerice suivant qui lui est en année pleine.
  def cumulated_at(date, dc)
@@ -87,6 +88,8 @@ class BankAccount < ActiveRecord::Base
 
  # trouve toutes les lignes non pointées et qui ont pour compte comptable le
  # numéro correspondant à ce compte bancaire.
+ # 
+ # Renvoie un objet de la classe Utilities::NotPointedLines
  #
  def not_pointed_lines
    Utilities::NotPointedLines.new(self)
@@ -98,10 +101,17 @@ class BankAccount < ActiveRecord::Base
   def np_lines
     not_pointed_lines.lines
   end
+  
 
-  delegate :nb_lines_to_point, :total_debit_np, :total_credit_np, :sold_np, :to=>:not_pointed_lines
-
- def first_bank_extract_to_point
+ def last_sold
+   bank_extracts.any? ? bank_extracts.order('end_date ASC').last.end_sold : 0.0
+ end
+ 
+ def instant_sold
+   last_sold - not_pointed_lines.sold
+ end
+  
+  def first_bank_extract_to_point
    bank_extracts.where('locked = ?', false).order('begin_date ASC').first
  end
 

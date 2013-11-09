@@ -46,6 +46,14 @@ class BankExtractsController < ApplicationController
   def edit
     @bank_extract = BankExtract.find(params[:id])
   end
+  
+   # action permettant d'afficher les lignes d'écriture qui restent à pointer
+  # cette action est utilisée lorsque les relevés de compte sont tous pointés
+  # pointage redirige vers cette action lorsque c'est le cas
+  def lines_to_point
+    @lines_to_point = @bank_account.not_pointed_lines
+  end
+  
 
   # POST /bank_extracts
   # POST /bank_extracts.json
