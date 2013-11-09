@@ -5,5 +5,5 @@
     %td.numeric.debit= debit_credit ltp.credit
     %td.numeric.credit= debit_credit ltp.debit
     %td
-      %a{href:'#'}=image_tag 'icones/ajouter.png', :class=>'transfert'
-      %a= line_actions(ltp)
+      -# %a{href:'#'}=image_tag 'icones/ajouter.png', :class=>'transfert'
+      = line_actions(ltp) {"<a href='#'>#{image_tag 'icones/ajouter.png', :class=>'transfert'}" }

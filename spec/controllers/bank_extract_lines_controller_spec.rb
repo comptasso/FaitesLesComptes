@@ -2,6 +2,10 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+RSpec.configure do |c|
+  # c.filter = {wip:true}
+end
+
 describe BankExtractLinesController do 
   include SpecControllerHelper 
 
@@ -31,6 +35,40 @@ describe BankExtractLinesController do
       assigns[:period].should == @p
       assigns[:bank_extract_lines].should == ['bel1', 'bel2']
     end
+  end
+  
+  describe "GET pointage", wip:true do
+    
+    before(:each) do
+      @controller.stub(:prepare_modal_box_instances).and_return nil
+    end
+    
+    it 'rend la vue pointage' do
+      get :pointage, {:bank_extract_id=>be.to_param}, valid_session
+      response.should render_template 'pointage'
+    end
+    
+    it 'redirige vers lines_to_pointsi le bank_extract est locked' do
+      be.stub(:locked).and_return true
+      get :pointage, {:bank_extract_id=>be.to_param}, valid_session
+      response.should redirect_to lines_to_point_bank_extract_bank_extract_lines_url(be)
+    end
+    
+    
+  end
+  
+  describe 'GET lines_to_point' , wip:true do 
+    
+    before(:each) do
+      @controller.stub(:prepare_modal_box_instances).and_return nil
+      be.stub(:locked).and_return true 
+    end
+    
+    it 'rend le template lines_to_point' do
+      get :lines_to_point, {:bank_extract_id=>be.to_param}, valid_session
+      response.should render_template 'lines_to_point'
+    end
+    
   end
   
    

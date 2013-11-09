@@ -203,6 +203,7 @@ Faitesvoscomptes::Application.routes.draw do
       
       collection do
         get 'pointage' # affiche la vue de pointage d'un extrait de compte
+        get 'lines_to_point' # affiche les lignes en attente de pointage
         post 'enregistrer' # enregistre les lignes pointées dans la base
       end
       

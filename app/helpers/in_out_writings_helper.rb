@@ -32,12 +32,15 @@ module InOutWritingsHelper
 
   # renvoie les actions possibles sous forme d'un fragment de html 
   # pour une compta_line
+  # Si un block est donné, les instructions de ce block sont reprises dans 
+  # le fragment de html et au début de celui ci.
   def line_actions(line)
     # Si la ligne est éditable, alors on peut la modifier ou la supprimer
     # 
     # Si la ligne est un Transfer, la modification se fait via la rubrique Transfer
     # La suppression n'est pas possible, car elle doit passer par le menu Transfer
     html = ' '
+    html += yield if block_given?
     lw=line.writing
     
     if lw.editable?

@@ -15,11 +15,18 @@ class BankExtractLinesController < ApplicationController
   # qui ne sont pas encore associées à un extrait.
   #
   def pointage
-    redirect_to bank_extract_bank_extract_lines_url(@bank_extract) if @bank_extract.locked
+    redirect_to lines_to_point_bank_extract_bank_extract_lines_url(@bank_extract) if @bank_extract.locked
     @previous_line = ComptaLine.find_by_id(flash[:previous_line_id]) if flash[:previous_line_id]
     prepare_modal_box_instances
     # les variables d'instances pour l'affichage de la vue pointage
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
+    @lines_to_point = @bank_account.not_pointed_lines
+  end
+  
+  # action permettant d'afficher les lignes d'écriture qui restent à pointer
+  # cette action est utilisée lorsque les relevés de compte sont tous pointés
+  # pointage redirige vers cette action lorsque c'est le cas
+  def lines_to_point
     @lines_to_point = @bank_account.not_pointed_lines
   end
   
