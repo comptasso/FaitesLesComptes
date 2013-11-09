@@ -35,6 +35,11 @@ describe "menus/_menu_bank.html.erb" do
         page.find_link("Nouvel extrait") 
       end
       
+      it 'affiche A pointer' do
+        render :template=>'menus/_menu_bank'
+        page.find_link("A pointer") 
+      end
+      
       it 'affiche Liste remise si des remises de chèques' do
         ba.stub(:check_deposits).and_return([double(Object)])
         render :template=>'menus/_menu_bank'
@@ -54,11 +59,7 @@ describe "menus/_menu_bank.html.erb" do
         page.find_link("Pointage") 
       end
       
-      it 'affiche ligne à pointer si pas d extrait à pointer' do
-        ba.stub(:unpointed_bank_extract?).and_return false
-        render :template=>'menus/_menu_bank'
-        page.find_link("A pointer") 
-      end
+      
 # TODO faire des specs qui valident le lien et non seulement le texte du lien
     end
 

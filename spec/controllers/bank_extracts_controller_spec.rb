@@ -17,7 +17,7 @@ describe BankExtractsController do
  
   
    def valid_params
-      {"bank_account_id"=>ba.id.to_s,  "begin_sold"=>be.end_sold.to_s,
+      {"bank_account_id"=>ba.to_param,  "begin_sold"=>be.end_sold.to_s,
         "total_debit"=> 11.to_s, "total_credit"=> 37.to_s , "begin_date_picker"=> '01/05/2012',
       "end_date_picker"=> '31/05/2012' }
     end
@@ -32,7 +32,7 @@ describe BankExtractsController do
   describe "GET index" do
     it "sélectionne les extraits correspondant à l'exercice et les assigns à @bank_extracts" do
       ba.stub_chain(:bank_extracts, :period, :all).and_return([be])
-      get :index,{:organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
+      get :index,{:organism_id=>@o.to_param, bank_account_id: ba.to_param}, valid_session
       assigns[:period].should == @p
       assigns[:bank_extracts].should == [be]
     end
@@ -47,27 +47,45 @@ describe BankExtractsController do
 
 
     it "assigns bank_extract" do
-      get :new, {:organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
+      get :new, {:organism_id=>@o.to_param, bank_account_id: ba.to_param}, valid_session
       assigns(:bank_extract).should == @new_bank_extract
     end
 
     it "renders new template" do
-      get :new,{ :organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
+      get :new,{ :organism_id=>@o.to_param, bank_account_id: ba.to_param}, valid_session
       response.should render_template 'new'
     end
 
      it 'mais redirige vers index si on ne peut pas créer un nouvel extrait' do
        ba.stub(:new_bank_extract).and_return nil
-       get :new,{ :organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s}, valid_session
+       get :new,{ :organism_id=>@o.to_param, bank_account_id: ba.to_param}, valid_session
        response.should redirect_to(bank_account_bank_extracts_url(ba))
      end
+  end
+  
+  describe 'GET lines_to_point' , wip:true do 
+    
+     
+    
+    
+    it 'rend le template lines_to_point' do
+      get :lines_to_point, {:bank_account_id=>ba.to_param}, valid_session
+      response.should render_template 'lines_to_point' 
+    end
+    
+     it 'assigns @lines_to_point' do
+       ba.should_receive(:not_pointed_lines).and_return 'bonjour'
+       get :lines_to_point, {:bank_account_id=>ba.to_param}, valid_session
+       assigns(:lines_to_point).should == 'bonjour'
+     end
+    
   end
 
   describe "GET edit" do
    
     it "assigns the requested bank_extract as @bank_extract" do
-      BankExtract.should_receive(:find).with(be.id.to_s).and_return be
-      get :edit, {:organism_id=>@o.id.to_s, bank_account_id: ba.id.to_s, :id=>be.id}, valid_session
+      BankExtract.should_receive(:find).with(be.to_param).and_return be
+      get :edit, {:organism_id=>@o.to_param, bank_account_id: ba.to_param, :id=>be.id}, valid_session
       assigns(:bank_extract).should == be
     end
   end
@@ -143,7 +161,7 @@ describe BankExtractsController do
     end
     
     it "should look for bank_extract and assigns it" do
-      BankExtract.should_receive(:find).with(be.id.to_s).and_return be
+      BankExtract.should_receive(:find).with(be.to_param).and_return be
       be.stub(:update_attributes).and_return(true)
       put :update, {organism_id: @o.id, bank_account_id: ba.id, :id => be.id,
           :bank_extract => valid_params}, valid_session
@@ -184,13 +202,13 @@ describe BankExtractsController do
     
      
      it "should look_for the bank_extract" do
-      BankExtract.should_receive(:find).with(be.id.to_s).and_return(be)
+      BankExtract.should_receive(:find).with(be.to_param).and_return(be)
       delete :destroy, { bank_account_id: ba.id, :id => be.id}, valid_session
      
     end
 
     it "redirects to the users list" do 
-      BankExtract.stub(:find).with(be.id.to_s).and_return(be)
+      BankExtract.stub(:find).with(be.to_param).and_return(be)
       delete :destroy, { bank_account_id: ba.id, :id => be.id}, valid_session
        response.should redirect_to bank_account_bank_extracts_url(ba)
     end
