@@ -15,7 +15,7 @@ require 'book.rb'
 # TODO voir si on ne pourrait pas utiliser les possibilités de has_many virtual_books dans la modèle organisme
 # pour y rajouter un callback de création.
 # 
-# sold_at est surchargé pour fonctionner le mode recettes dépenses
+# sold_at est surchargé pour fonctionner selon le mode recettes dépenses
 # monthly_value, utilisé pour les graphes est surchargé pour avoir un graphe en ligne
 # et donc en cumul.
 #
@@ -23,7 +23,7 @@ require 'book.rb'
 #
 # Les virtual_books se créent par la méthode Organism#virtual_books définie par un has_many dans la classe Organism
 #
-# En pratique, Orgnaism propose les méthodes cash_books et cash_books pour retourner une collection de virtual books.
+# En pratique, Organism propose les méthodes cash_books et bank_books pour retourner une collection de virtual books.
 #
 class VirtualBook < Book
 
@@ -66,7 +66,7 @@ class VirtualBook < Book
 
   protected
 
-  # virtual peut être une instance de cashAccount ou de Cash
+  # virtual peut être une instance de cashAccount ou de Cash ou de BankAccount
   #
   # virtual class renvoie donc cash ou cash_account.
   # Utilisé par les pavés pour h

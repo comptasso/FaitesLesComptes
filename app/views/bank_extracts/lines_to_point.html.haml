@@ -4,7 +4,7 @@
 .row_fluid#message 
  
 .champ
-  %h3= "#{@bank_account.nickname} : écritures non pointées - Solde instantanté : #{debit_credit @bank_account.instant_sold} €"
+  %h3= "#{@bank_account.nickname} : écritures non pointées - Solde au #{l @period.guess_date} : #{debit_credit(-@bank_account.sold_at(@period.guess_date))} €"
     
   .inner-champ
 

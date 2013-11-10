@@ -16,6 +16,11 @@ require 'strip_arguments'
 #
 # Il y a un compte comptable par exercices, ce qui explique qu'il y a has_many :accounts
 # Ce lien permet d'accéder aux compta_lines
+# 
+# La classe VirtualBook permet de générer un Livre de banque virtuel. La méthode 
+# #virtual_book crée cette classe et retourne un VirtualBook. VirtualBook inclut les
+# méthodes de Utilities::Sold et l'on a ainsi toutes les méthodes nécessaires pour
+# calculer un solde.
 #
 #
 class BankAccount < ActiveRecord::Base 
@@ -102,16 +107,13 @@ class BankAccount < ActiveRecord::Base
     not_pointed_lines.lines
   end
   
-
- def last_sold
-   bank_extracts.any? ? bank_extracts.order('end_date ASC').last.end_sold : 0.0
- end
- 
- def instant_sold
-   last_sold - not_pointed_lines.sold
- end
+  # donne le solde du compte bancaire à une date donnée
+  def sold_at(date)
+    cumulated_at(date, :credit) - cumulated_at(date, :debit)
+  end
   
-  def first_bank_extract_to_point
+  
+ def first_bank_extract_to_point
    bank_extracts.where('locked = ?', false).order('begin_date ASC').first
  end
 
