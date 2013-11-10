@@ -40,12 +40,14 @@ class ComptaLine < ActiveRecord::Base
   # ces scope n'inclut pas with_writings, ce qui veut dire qu'il faut que cela soit fait par
   # ailleurs, c'est notamment le cas lorsqu'on passe par book car book has_many :compta_lines, :through=>:writings
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
-  # extract est comme range_date mais n'inclut pas with_writings
-  scope :extract, lambda {|from, to| where('writings.date >= ? AND writings.date <= ?', from, to ).order('date')}
   # inclut with_writings et donc doit être utilisé pour un query qui ne l'inclut pas déja.
   scope :mois_with_writings, lambda {|date| with_writings.where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month)}
 
   scope :range_date, lambda {|from, to| with_writings.extract(from, to).order('date')}
+  # extract est comme range_date mais n'inclut pas with_writings
+  scope :extract, lambda {|from, to| where('writings.date >= ? AND writings.date <= ?', from, to ).order('date')}
+  
+  # FIXME revoir listing semble faux.... car books.title devrait être books.abbreviation
   scope :listing, lambda {|from, to| with_writing_and_book.where('books.title != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)
@@ -56,8 +58,8 @@ class ComptaLine < ActiveRecord::Base
   # et du champ check_deposit_id
   scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil).order('id') }
 
-  # renvoie les lignes non pointées (appelé par BankExtract
-  scope :not_pointed, joins(:writing).where("NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE COMPTA_LINE_ID = COMPTA_LINES.ID)").order('writings.date')
+  # renvoie les lignes non pointées (appelé par BankExtract), ce qui ne prend pas en compte le journal A nouveau
+  scope :not_pointed, joins(:writing=>:book).where("(books.abbreviation != 'AN') AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE COMPTA_LINE_ID = COMPTA_LINES.ID)").order('writings.date')
 
   delegate :date, :narration, :ref, :book, :support, :lock, :to=>:writing
 

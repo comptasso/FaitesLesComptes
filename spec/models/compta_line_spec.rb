@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
-#  config.filter = {wip:true}
+  config.filter = {wip:true}
 end
 
 
@@ -11,9 +11,10 @@ describe ComptaLine do
 
   include OrganismFixtureBis
   let(:per) {mock_model(Period)}
-  let(:nat) {mock_model(Nature, period:per,  name:'Petite nature')}
+  let(:nat) {mock_model(Nature, period:per,  name:'Petite nature', :account=>acc)}
   let(:acc) {mock_model(Account, period:per, period_id:per.id)}
   let(:des) {mock_model(Destination, name:'Destinée')}
+  let(:bo) {mock_model(Book)}
 
   def valid_attributes
     {writing_id:1, account_id:acc.id, nature:nat, nature_id:nat.id, credit:15.2, payment_mode:'Virement'}
@@ -23,7 +24,7 @@ describe ComptaLine do
  
     @cl = ComptaLine.new(valid_attributes)
     @cl.stub(:account).and_return acc
-    @cl.stub(:writing).and_return(@w = mock_model(Writing, date:Date.today, narration:'Ecriture'))
+    @cl.stub(:writing).and_return(@w = mock_model(Writing, date:Date.today, narration:'Ecriture', :book_id=>bo.id))
     @w.stub_chain(:book, :organism, :find_period, :id).and_return(per.id)
   end
 
@@ -46,9 +47,9 @@ describe ComptaLine do
       @cl.errors[:account].should == ["N'appartient pas à l'exercice comprenant #{I18n::l Date.today}"]
     end
 
-    end
+  end
     
-  describe 'les états d une compta_line', wip:true do
+  describe 'les états d une compta_line' do
     
     
     
@@ -101,5 +102,32 @@ describe ComptaLine do
 
     
   end
-
+  
+  describe 'scope not_pointed_lines'  do
+    
+    context 'pas de compta line non pointée' do    
+      it 'peut renvoyerles lignes non pointées' do
+        ComptaLine.not_pointed.count.should == 0
+      end
+    end
+    
+    context 'il existe une compta_line' , wip:true do
+      
+      before(:each) do
+        @cl.save! 
+      end
+      
+      it 'non pointée' do
+        pending 'à faire sur des modèles réels car teste des requêtes sur la base'
+        puts @cl
+        puts @cl.writing
+        puts @cl.writing.book
+        ComptaLine.not_pointed.count.should == 1
+      end
+      
+    end
+    
+    
+  end
+ 
 end

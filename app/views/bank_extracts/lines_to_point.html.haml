@@ -28,5 +28,5 @@
         %tfoot#table_foot
           %tr.total#totaux
             %th.numeric(colspan="2" rowspan="1") Totaux
-            %th.numeric= @lines_to_point.total_credit
-            %th.numeric= @lines_to_point.total_debit
+            %th.numeric= debit_credit @lines_to_point.total_credit
+            %th.numeric= debit_credit @lines_to_point.total_debit
