@@ -22,7 +22,7 @@ describe CashControlsController do
     @m = '%02d' % Date.today.month.to_s
     @y = '%04d' % Date.today.year.to_s
     
-    @p.stub(:guess_month).and_return(MonthYear.from_date(Date.today))
+    @p.stub(:guess_month).and_return(MonthYear.from_date(Date.today)) 
     
   end
 
