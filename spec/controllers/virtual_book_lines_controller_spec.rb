@@ -32,7 +32,7 @@ describe VirtualBookLinesController do
   
   before(:each) do
     minimal_instances
-    @o.stub(:find_period).and_return @p
+    @o.stub(:find_period).and_return @p 
     month_year_values(Date.today)
     @vb = create_virtual_book
     @vb.stub(:organism).and_return @o
@@ -63,7 +63,7 @@ describe VirtualBookLinesController do
       assigns(:virtual_book).should == @vb
     end
     
-    it 'crée un MonthlyExtract' do
+    it 'crée un MonthlyExtract' do  
       Extract::MonthlyInOut.should_receive(:new).with(@vb, :month=>@m, :year=>@y).and_return(@ex = double(Extract::MonthlyInOut))
       get :index, {:bank_account_id=>ba.to_param, :mois=>@m, :an=>@y}, valid_session
       assigns(:monthly_extract).should == @ex
@@ -72,7 +72,7 @@ describe VirtualBookLinesController do
     context 'si params est tous' do
       
       it 'renvoie un ExtractInOut' do
-      Extract::InOut.should_receive(:new).with(@vb, @p).and_return(@ex = double(Extract::InOut))
+      Extract::BankAccount.should_receive(:new).with(@vb, @p).and_return(@ex = double(Extract::InOut))
       get :index, {:bank_account_id=>ba.to_param, :mois=>'tous'}, valid_session
       assigns(:monthly_extract).should == @ex
       end

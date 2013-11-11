@@ -3,16 +3,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-  # c.filter = {wip:true}
+  # c.filter = {wip:true} 
 end
 
 describe BankExtractLinesController do 
   include SpecControllerHelper 
 
-
-  
+   
+  let(:ba) {stub_model BankAccount}
   let(:be) {mock_model(BankExtract,
-      bank_account: stub_model(BankAccount),
+      bank_account: ba,
       begin_date: Date.today.beginning_of_month,
       end_date: Date.today.end_of_month,
       begin_sold: 120, debit: 450, credit: 1000, end_sold: 120+1000-450)}
@@ -48,10 +48,10 @@ describe BankExtractLinesController do
       response.should render_template 'pointage'
     end
     
-    it 'redirige vers lines_to_pointsi le bank_extract est locked' do
+    it 'redirige vers lines_to_point si le bank_extract est locked' do
       be.stub(:locked).and_return true
       get :pointage, {:bank_extract_id=>be.to_param}, valid_session
-      response.should redirect_to lines_to_point_bank_extract_bank_extract_lines_url(be)
+      response.should redirect_to lines_to_point_bank_account_bank_extracts_url(ba)
     end
     
     

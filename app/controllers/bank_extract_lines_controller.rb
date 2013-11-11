@@ -15,8 +15,11 @@ class BankExtractLinesController < ApplicationController
   # qui ne sont pas encore associées à un extrait.
   #
   def pointage
-    redirect_to lines_to_point_bank_extract_bank_extract_lines_url(@bank_extract) if @bank_extract.locked
-    @previous_line = ComptaLine.find_by_id(flash[:previous_line_id]) if flash[:previous_line_id]
+    if @bank_extract.locked
+      flash[:notice] = 'Extrait verrouillé, redirection vers la liste des lignes restant à pointer'
+      redirect_to lines_to_point_bank_account_bank_extracts_url(@bank_account) 
+    end
+      @previous_line = ComptaLine.find_by_id(flash[:previous_line_id]) if flash[:previous_line_id]
     prepare_modal_box_instances
     # les variables d'instances pour l'affichage de la vue pointage
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
@@ -38,7 +41,7 @@ class BankExtractLinesController < ApplicationController
     @ok = true
     if params[:lines]
       params[:lines].each do |key, clparam|
-         cl = @period.compta_lines.find_by_id(clparam)
+        cl = @period.compta_lines.find_by_id(clparam)
         if cl
           bel = @bank_extract.bank_extract_lines.new(:compta_line_id=>cl.id)
           bel.position = key

@@ -60,4 +60,5 @@ MAX_COMMENT_LENGTH = 300
 # VERSION = '1.1.0RC' # suppression de la table bank_extract_lines_lines et refonte du pointage des relevés 
 # FLCVERSION = '1.1.1RC' # revu le javascript du pointage et suppression de facebox.js inutilisé 
 # FLCVERSION = '1.2.0RC' # folio et rubrik deviennent des éléments persistants. 
-FLCVERSION = '1.2.1RC' # Mise en place d'une vue des écritures non pointées et travail sur le solde instantané 
+# FLCVERSION = '1.2.1RC' # Mise en place d'une vue des écritures non pointées et travail sur le solde instantané 
+FLCVERSION = '1.2.2.RC' # Mise en place d'une vue des écritures du compte bancaire par mois 
