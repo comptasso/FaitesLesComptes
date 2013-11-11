@@ -1,6 +1,6 @@
 = content_for :menu do 
   = icon_to 'retour.png', :back 
-
+  = export_icons(bank_account_id:@bank_account.id, mois:@mois, an:@an)
 
 .champ
   %h3
