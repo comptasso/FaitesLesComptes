@@ -22,7 +22,7 @@ class Cash < Extract::InOut
   # pour une caisse, les lignes sont obtenues par une relation has_many :lines,
   # :through=>:accounts
   def lines
-    @lines ||= cash.compta_lines.extract(@begin_date, @end_date)
+    @lines ||= cash.extract_lines(@begin_date, @end_date)
   end
 
   # produit le document pdf en s'appuyant sur la classe PdfDocument::Book

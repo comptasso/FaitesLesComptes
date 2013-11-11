@@ -13,8 +13,13 @@ class Cash < ActiveRecord::Base
   attr_accessible :name, :comment
 
   belongs_to :organism
-  # ne plus utiliser, cash_id va disparaître
+  # ces deux has_many sont très proche mais le premier en incluant writing
+  # a des effets indésirables sur les requêtes utilisées pour faire un pdf de la 
+  # caisse (on n'arive plus à forcer les noms des colonnes qui sont utilisés pour le pdf).
+  # Le second est utilisé pour extract_lines
   has_many :compta_lines, :through=>:accounts, :include=>:writing
+  has_many :in_out_lines, :source=>:compta_lines, :through=>:accounts
+  
   has_many :cash_controls
   # un caisse a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
@@ -33,6 +38,11 @@ class Cash < ActiveRecord::Base
   # retourne le numéro de compte de la caisse correspondant à l'exercice (period) passé en argument
   def current_account(period)
     accounts.where('period_id = ?', period.id).first rescue nil
+  end
+  
+  # extrait les lignes entre deux dates. Cette méthode ne sélectionne pas sur un exercice.
+  def extract_lines(from_date, to_date)
+    in_out_lines.joins(:writing).where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date')
   end
 
   

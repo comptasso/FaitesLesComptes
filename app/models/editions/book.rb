@@ -5,7 +5,7 @@ module Editions
 
   # Classe destinée à imprimer un livre ou un extrait de livre en format pdf
   #
-  # Cette classe hérite de PdfDocument::Default et surcharge fetch_lines
+  # Cette classe hérite de PdfDocument::Totalized et prepare_line
   class Book < PdfDocument::Totalized
 
     delegate :title, :subtitle, :to=>:source

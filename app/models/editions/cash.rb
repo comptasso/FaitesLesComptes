@@ -7,7 +7,8 @@ module Editions
   # Cette classe hérite de Editions::Book et surcharge fetch_lines
   class Cash < Editions::Book
 
-
+    # TODO comme cash_extract est produit en mentionnant une période, on pourrait
+    # envisager de faire cette initialisation sans l'argument period.
     def initialize(period, cash_extract)
       super(period, cash_extract)
 
@@ -29,7 +30,7 @@ module Editions
     # Par exemple nature.name lorsque nature est nil
     def prepare_line(line)
       pl = columns_methods.collect { |m| line.instance_eval(m) rescue nil }
-      pl[0] = I18n::l(pl[0]) rescue 'date error'
+      pl[0] = I18n::l(Date.parse(pl[0])) rescue pl[0]
       pl
     end
   end
