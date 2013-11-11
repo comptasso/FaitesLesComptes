@@ -120,6 +120,13 @@ class BankAccount < ActiveRecord::Base
  def unpointed_bank_extract?
    bank_extracts.where('locked = ?', false).any?
  end
+ 
+ def virtual_book
+   vb = VirtualBook.new
+   vb.organism_id = organism.id
+   vb.virtual = self
+   vb
+ end
 
  
 

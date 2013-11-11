@@ -34,6 +34,11 @@ class VirtualBook < Book
   def lines
     virtual.compta_lines
   end
+  
+  # extrait les lignes entre deux dates. Cette méthode ne sélectionne pas sur un exercice.
+  def extract_lines(from_date, to_date)
+    virtual.compta_lines.joins(:writing).where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date')
+  end
 
   # renvoie les charactéristique du pavé, en l'occurence la racine du partial et 
   # la classe à utiliser pour le pavé.
