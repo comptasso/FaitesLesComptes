@@ -30,7 +30,9 @@ class VirtualBook < Book
   attr_accessor :virtual
 
   belongs_to :organism
-
+  
+  delegate :nickname, :to=>:virtual
+  
   def lines
     virtual.compta_lines
   end

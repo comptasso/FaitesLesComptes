@@ -4,9 +4,9 @@
 
 .champ
   %h3
-    = "#{@virtual_book.title}  : liste des écritures"
+    = "#{@virtual_book.nickname}  : liste des écritures"
     %ul.mois
-      = submenu_mois(@period, {action:'index', controller:'virtual_bank_book_lines', :id=>@bank_account.id}) 
+      = submenu_mois(@period, {action:'index', controller:'virtual_book_lines'}) 
   .inner-champ
 
     %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0" id="ltps_table")
@@ -29,5 +29,5 @@
         %tfoot#table_foot
           %tr.total#totaux
             %th.numeric(colspan="2" rowspan="1") Totaux
-            %th.numeric= 'total_credit'
-            %th.numeric= 'total_debit'
+            %th.numeric= debit_credit @monthly_extract.total_credit
+            %th.numeric= debit_credit @monthly_extract.total_debit

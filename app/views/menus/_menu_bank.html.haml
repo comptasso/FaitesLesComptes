@@ -1,4 +1,4 @@
-%li.nav-header.no-link= link_to menu_bank.nickname, '#'
+%li.nav-header.no-link= link_to menu_bank.nickname, bank_account_virtual_book_lines_path(menu_bank)
 %li= link_to 'Liste remises', organism_bank_account_check_deposits_path(@organism,menu_bank) if menu_bank.check_deposits.any?
 %li
   =link_to_if(CheckDeposit.nb_to_pick > 0,  'Nlle Remise', new_organism_bank_account_check_deposit_path(@organism,menu_bank)) do |name|
