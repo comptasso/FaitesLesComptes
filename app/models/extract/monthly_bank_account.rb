@@ -7,10 +7,10 @@ module Extract
 # La seule différence avec CashExtract réside dans les arguments de new qui
 # sont la caisse et les paramètres d'un mois#
 #
-class MonthlyCash < Extract::Cash
+class MonthlyBankAccount < Extract::BankAccount
   
-  def initialize(virtual_book, h)
-    @book = virtual_book
+  def initialize(cash, h)
+    @book = cash
     @my = MonthYear.new(h)
     @begin_date = @my.beginning_of_month
     @period = @book.organism.find_period(@begin_date)

@@ -11,7 +11,7 @@ class VirtualBookLinesController < ApplicationController
     if params[:mois] == 'tous'
       @monthly_extract = Extract::BankAccount.new(@virtual_book, @period)
     else
-      @monthly_extract = Extract::MonthlyInOut.new(@virtual_book, year:params[:an], month:params[:mois])
+      @monthly_extract = Extract::MonthlyBankAccount.new(@virtual_book, year:params[:an], month:params[:mois])
     end
     
     send_export_token # envoie un token pour l'affichage du message Juste un instant 

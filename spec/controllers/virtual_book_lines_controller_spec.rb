@@ -64,7 +64,7 @@ describe VirtualBookLinesController do
     end
     
     it 'crée un MonthlyExtract' do  
-      Extract::MonthlyInOut.should_receive(:new).with(@vb, :month=>@m, :year=>@y).and_return(@ex = double(Extract::MonthlyInOut))
+      Extract::MonthlyBankAccount.should_receive(:new).with(@vb, :month=>@m, :year=>@y).and_return(@ex = double(Extract::MonthlyInOut))
       get :index, {:bank_account_id=>ba.to_param, :mois=>@m, :an=>@y}, valid_session
       assigns(:monthly_extract).should == @ex
     end
