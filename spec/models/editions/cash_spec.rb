@@ -55,7 +55,7 @@ describe Editions::Cash do
   it 'prepare_line' do
     Writing.stub(:find_by_id).and_return(double(Writing, support:'CrédiX', :payment_mode=>'Chèque' ))
     @eb = Editions::Cash.new(@period, @extract)
-    @eb.prepare_line(line(Date.today, 1.25, 0.3)).should == [I18n.l(Date.today, format:'%d/%m/%Y'),
+    @eb.prepare_line(line(Date.today, 1.25, 0.3)).should == [Date.today,
         "", 
         "Une compta line",
         "La destination",

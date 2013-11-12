@@ -103,7 +103,7 @@ describe ComptaLine do
     
   end
   
-  describe 'scope not_pointed_lines'  do
+  describe 'scope not_pointed_lines'  do 
     
     context 'pas de compta line non pointée' do    
       it 'peut renvoyerles lignes non pointées' do
