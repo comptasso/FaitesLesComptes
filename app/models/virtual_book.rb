@@ -37,6 +37,13 @@ class VirtualBook < Book
     virtual.compta_lines
   end
   
+  # dans le cas d'un virtual book créé à partir d'un compte bancaire, le titre
+  # est nil donc on essaye alors nickname
+  def title
+    t = read_attribute(:title)
+    t || nickname if virtual.respond_to? :nickname
+  end
+  
   # extrait les lignes entre deux dates. Cette méthode ne sélectionne pas sur un exercice.
   def extract_lines(from_date, to_date)
     virtual.compta_lines.joins(:writing).where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date')

@@ -14,7 +14,7 @@ describe Extract::BankAccount do
   end
 
   it 'to_pdf appelle Editions::Cash' do
-    Editions::BankAccount.should_receive(:new).with(@p, @extract)
+    Editions::BankAccount.should_receive(:new).with(@p, @extract) 
     @extract.to_pdf
   end
 
