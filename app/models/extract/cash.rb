@@ -39,7 +39,7 @@ class Cash < Extract::InOut
   # et qui se situe dans la classe PdfDocument::Cash
   def prepare_line(line)
     
-    [I18n::l(line.line_date),
+    [I18n::l(line.date),
        line.ref,
        line.narration.truncate(40),
        line.destination ? line.destination.name.truncate(22) : '-',

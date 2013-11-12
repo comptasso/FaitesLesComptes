@@ -9,7 +9,7 @@ module Extract
   
     # définit les titres des colonnes
     def titles
-      ['Date', 'Libellé', 'Dépenses', 'Recettes']
+      ['Date', 'Réf', 'Libellé', 'Dépenses', 'Recettes']
     end
 
     # pour une banque, les lignes sont obtenues par une relation has_many :compta_lines,
@@ -34,6 +34,7 @@ module Extract
     def prepare_line(line)
     
       [I18n::l(line.date),
+        line.ref,
         line.narration.truncate(40),
         french_format(line.credit),
         french_format(line.debit)]

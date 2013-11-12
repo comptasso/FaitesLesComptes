@@ -12,22 +12,24 @@
     %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0" id="ltps_table")
       %thead
         %tr
-          %th.pc15.date-euro Date
-          %th.pc40 Libellé
-          %th.pc15 Dépenses
-          %th.pc15 Recettes
-          %th.pc15 Actions
+          %th.pc10.date-euro Date
+          %th.pc10 Réf
+          %th.pc50 Libellé
+          %th.pc10 Dépenses
+          %th.pc10 Recettes
+          %th.pc10 Actions
 
         %tbody#ltps
           - @monthly_extract.lines.each do |ltp|
             %tr{'class'=>'ltp', 'id'=>"#{ltp.id}" }
               %td= l ltp.date
+              %td= ltp.ref
               %td= ltp.narration
               %td.numeric.debit= debit_credit ltp.credit
               %td.numeric.credit= debit_credit ltp.debit
               %td= line_actions(ltp)
         %tfoot#table_foot
           %tr.total#totaux
-            %th.numeric(colspan="2" rowspan="1") Totaux
+            %th.numeric(colspan="3" rowspan="1") Totaux
             %th.numeric= debit_credit @monthly_extract.total_credit
             %th.numeric= debit_credit @monthly_extract.total_debit

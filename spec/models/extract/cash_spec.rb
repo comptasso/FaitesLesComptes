@@ -10,7 +10,7 @@ describe Extract::Cash do
 
   it 'est une instance' do
     @ec.should be_an_instance_of(Extract::Cash)
-    @ec.begin_date.should == Date.today.beginning_of_month
+    @ec.begin_date.should == Date.today.beginning_of_month 
   end
 
   it 'to_pdf appelle Editions::Cash' do
@@ -19,13 +19,12 @@ describe Extract::Cash do
   end
 
   it 'lines appelles les compta_lines avec les arguments de dates' do
-    @b.should_receive(:compta_lines).and_return(@ar = double(Arel))
-    @ar.should_receive(:extract).with(Date.today.beginning_of_month, Date.today.end_of_month)
+    @b.should_receive(:extract_lines).with(Date.today.beginning_of_month, Date.today.end_of_month)
     @ec.lines
   end
 
   it 'to_csv prépare les lignes' do
-    @ec.stub(:lines).and_return([double(ComptaLine, line_date:Date.today,
+    @ec.stub(:lines).and_return([double(ComptaLine, date:Date.today,
         narration:'un libellé', ref:'001', :credit=>0,
         destination:stub(:name=>'la destinée'),
         nature:stub(:name=>'ecolo'),
