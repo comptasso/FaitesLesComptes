@@ -163,6 +163,7 @@ class InOutWritingsController < ApplicationController
   def fill_mois
     if params[:mois] == 'tous'
       @mois = 'tous'
+      @monthyear= @period.guess_month
     else
       super
     end

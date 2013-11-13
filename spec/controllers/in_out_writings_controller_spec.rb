@@ -311,6 +311,15 @@ describe InOutWritingsController do
 
      
     end
+    
+    context 'quand on vient d un affichage avec tous les mois' do
+      it 'rend le template new' do
+        @a.should_receive(:new).with(:date=>Date.today).and_return @nw
+        @nw.stub_chain(:compta_lines, :build)
+        get :new, {income_book_id: @b.id, :mois=>'tous'}, session_attributes
+        response.should render_template('new')
+      end
+    end
 
 
   end
