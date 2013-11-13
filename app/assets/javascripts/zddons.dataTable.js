@@ -119,7 +119,7 @@ $.extend($.fn.dataTableExt.oPagination, {
 });
 
 
-//plug in permettant d'ajouter le type comma-decimals aux colonnes'
+//plug in permettant d'ajouter le type numeric-comma aux colonnes'
 jQuery.fn.dataTableExt.aTypes.unshift(
     function ( sData )
     {
