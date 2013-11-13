@@ -123,7 +123,7 @@ $.extend($.fn.dataTableExt.oPagination, {
 jQuery.fn.dataTableExt.aTypes.unshift(
     function ( sData )
     {
-        var regex = /-?[1-9](?:\d{0,2})(?:\s\d{3})*(?:,\d\d)|-?0,\d\d|-/;
+        var regex = /^-?[1-9](?:\d{0,2})(?:\s\d{3})*(?:,\d\d)$|^-?0,\d\d$|^-$/;
         if (sData.match(regex)) {
           return 'numeric-comma';
         } else {
