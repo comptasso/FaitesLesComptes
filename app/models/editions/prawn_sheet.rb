@@ -1,23 +1,20 @@
 require 'pdf_document/prawn_base'
 
 module Editions
-  # Editions::PrawnSheet hérite de Prawn::Base qui lui-même hérite de Prawn::Document et dispose 
-  # de méthodes permettant de produire un fichier pdf pour un folio de type 
-  # actif (donc avec 4 colonnes : brut, amort net et previous net) ou de type passif
-  # (avec deux colonnes).
-  # 
-  # L'intérêt de cette classe est de regrouper des méthodes comme #entetes pour 
-  # remplir la partie haute de la page ou #jc_fill_stamp qui produit le tampon.
-  # 
-  # Les méthodes publiques sont fill_actif_pdf et fill_passif_pdf qui fournit les deux
-  # types de documents. 
+  # Editions::PrawnSheet hérite de Prawn::Base qui lui-même hérite de Prawn::Document
+  # et apporte les méthodes telles que jc_fill_stamp
+  #  
+  # PrawnSheet n'a plus qu'à avoir deux méthodes spécialisées : fill_actif_pdf
+  # et fill_passif_pdf pour fournir les deux types d'éditions à partir des mêmes données
+  # (appelé ici document) 
   #
   class PrawnSheet < PdfDocument::PrawnBase
     
     
      
     # construit une page complète d'actif avec entêtes, tampon, titre de la table
-    # toutes les lignes
+    # toutes les lignes.
+    # L'argument document est par exemple un Sheet ou un Extract
     def fill_actif_pdf(document)
       
       page = document.page(1)

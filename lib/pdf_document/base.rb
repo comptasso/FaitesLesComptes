@@ -31,14 +31,14 @@ module PdfDocument
   class Base
    
     include ActiveModel::Validations
-    include PdfDocument::Common # le module des méthodes communes 
-    
+        
     attr_accessor :title, :subtitle, :columns_alignements, :columns_widths,
-     :columns_methods, :columns, :orientation, :organism_name, :exercice
+     :columns_methods, :orientation, :organism_name, :exercice
     attr_accessor :top_left, :stamp
     attr_reader :created_at, :nb_lines_per_page, :columns_titles, :collection
 
     validates :title, :columns_methods, :presence=>true
+    validates :orientation, :inclusion=>{in: [:portrait, :landscape]}
 
 # l'instance se crée avec une collection d'objets et de multiples options
 # Si on fournit un bloc, il devient possible de préciser les autres valeurs
@@ -140,9 +140,9 @@ module PdfDocument
 
     # Crée le fichier pdf associé
     def render
-      @pdf_file = PdfDocument::PrawnBase.new(:page_size => 'A4', :page_layout => @orientation) 
-      @pdf_file.fill_pdf(self)
-      @pdf_file.render
+      pdf_file = PdfDocument::PrawnBase.new(:page_size => 'A4', :page_layout => @orientation) 
+      pdf_file.fill_pdf(self)
+      pdf_file.render
     end
 
      # Permet d'insérer un bout de pdf dans un fichier pdf

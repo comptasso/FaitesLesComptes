@@ -4,6 +4,9 @@ require 'prawn'
 
 module PdfDocument
   
+  
+  # TODO supprimer ce module quand numérote aura été intégré à PrawnBase et à ses déscendants
+  
   # module pour contenir des méthodes communes pour l'édition des pdf, notamment
   # numerote pour la numérotation des pages;
   # entetes pour les entetes des pages avec les méthodes top_left, title,...

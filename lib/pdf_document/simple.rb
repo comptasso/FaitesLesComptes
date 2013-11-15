@@ -54,6 +54,9 @@ module PdfDocument
   class Simple
 
     include ActiveModel::Validations
+    
+#    attr_accessor :title, :subtitle, :columns_alignements, :columns_widths,
+#     :columns_methods,:orientation, :organism_name, :exercice
 
     attr_accessor :title, :subtitle, :columns_alignements, :columns_widths, :columns_formats
     attr_accessor :total_columns_widths, :select_method
