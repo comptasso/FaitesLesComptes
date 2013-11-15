@@ -36,7 +36,7 @@ module PdfDocument
       #
       # on démarre la table proprement dite
       # en calculant la largeur des colonnes
-      column_widths = document.columns_widths.collect { |w| width*w/100 }
+      col_widths = document.columns_widths.collect { |w| width*w/100 }
       
       1.upto(document.nb_pages) do |n|
         
@@ -48,13 +48,13 @@ module PdfDocument
 
         table [document.columns_titles],
           :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do
-          column_widths.each_with_index {|w,i| column(i).width = w}
+          col_widths.each_with_index {|w,i| column(i).width = w}
         end
 
 
         # la table des lignes proprement dites
-        table document.table(n) ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5], :height => 16, :overflow=>:truncate} do
-          column_widths.each_with_index {|w,i| column(i).width = w}
+        table current_page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5], :height => 16, :overflow=>:truncate} do
+          col_widths.each_with_index {|w,i| column(i).width = w}
           document.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
         end
 
@@ -63,6 +63,8 @@ module PdfDocument
         start_new_page unless (n == document.nb_pages)
 
       end
+      
+      numerote
     end
     
     protected 
@@ -96,24 +98,38 @@ module PdfDocument
       end
 
     end
-  
+    
+    # réalise la pagination de @pdf_file
+    def numerote
+      number_pages("page <page>/<total>",
+        { :at => [bounds.right - 150, 0],:width => 150,
+          :align => :right, :start_count_at => 1 })
+    end
     # Définit une méthode tampon pour le PrawnSheet qui peut ensuite être appelée 
     # par fill_actif_pdf et fill_passif_pdf 
     #
     def jclfill_stamp(text)
       if stamp_dictionary_registry['fond'].nil?
         create_stamp("fond") do
-          rotate(65) do
+          rotate(stamp_rotation) do
             fill_color "bbbbbbb"
             font_size(120) do
               text_rendering_mode(:stroke) do
-                draw_text(text, :at=>[250, -150])
+                draw_text(text, :at=>stamp_position)
               end
             end
             fill_color "000000"
           end
         end
       end
+    end
+    
+    def stamp_rotation
+      page.layout == :landscape ? 30 : 65
+    end
+    
+    def stamp_position
+      page.layout == :landscape ? [200, -20] : [250, -150]
     end
   
   end

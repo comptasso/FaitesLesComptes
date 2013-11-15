@@ -55,7 +55,8 @@ module PdfDocument
 
     include ActiveModel::Validations
 
-    attr_accessor :title, :subtitle, :total_columns_widths, :columns_alignements, :columns_formats, :select_method
+    attr_accessor :title, :subtitle, :columns_alignements, :columns_widths, :columns_formats
+    attr_accessor :total_columns_widths, :select_method
     attr_reader :created_at, :nb_lines_per_page, :source, :stamp
      
     validates :title, :presence=>true
@@ -73,6 +74,8 @@ module PdfDocument
       @subtitle = options[:subtitle]
     end
 
+    # cette méthode ne fait que rajouter un test sur l'existence de la 
+    # capacité de la source à répondre à cette méthode
     def select_method=(meth)
       raise ArgumentError, 'la source ne répond pas à la méthode sectionnée' unless @source.respond_to?(meth)
       @select_method = meth
@@ -108,9 +111,8 @@ module PdfDocument
     # permet d'appeler la page number
     # retourne une instance de PdfDocument::Page
     def page(number = 1)
-      pages unless @pages # construit la table des pages si elle n'existe pas encore
       raise ArgumentError, "La page demandée n'existe pas"  unless (number > 0 &&  number <= nb_pages)
-      @pages[number-1]
+      pages[number-1]
     end
 
     # enumarator permettant de parcourir les pages

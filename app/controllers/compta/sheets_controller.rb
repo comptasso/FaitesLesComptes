@@ -109,7 +109,7 @@ class Compta::SheetsController < Compta::ApplicationController
       format.xls { send_data(detail_csv(@detail_lines).encode("windows-1252"), :filename=>'detail.csv')   }
       format.pdf {
         pdf = PdfDocument::Base.new(@detail_lines, {:title=>'Détail des comptes',
-            :columns=>[:select_num, :title, :brut, :amortissement, :net, :previous_net],
+            :columns_methods=>[:select_num, :title, :brut, :amortissement, :net, :previous_net],
             :columns_titles=>['Numéro', 'Libellé', 'Brut', 'Amortissement', 'Net', 'Ex Précédent']}) do |p|
           p.columns_widths = [10,30,15,15,15,15]
           p.columns_alignements = [:left, :left, :right, :right, :right, :right]
