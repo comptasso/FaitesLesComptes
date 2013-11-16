@@ -3,6 +3,7 @@
 
 
 require 'prawn'
+require 'pdf_document/base'
 require 'pdf_document/page'
 
 module PdfDocument
@@ -10,11 +11,18 @@ module PdfDocument
   class PdfDocumentError < StandardError; end;
 
   
-  # la classe Simple est une classe qui imprimer juste une liste d'informations
+  # la classe Simple est une classe qui imprime juste une liste d'informations
   # avec les titres et sous titres.
   # Il n'y a pas de possibilité de faire des totaux ni donc d'afficher des reports
   # L'utilisation de Simple se fait en indiquant un exercice, une source et des options
   #
+  # La différence avec PdfDocument::Base est que Base travaille à partir d'une 
+  # collection qui est un array, tandis que Simple travaille à partir d'une source
+  # par exemple un exercice et d'une méthode par exemple :accounts pour générer cette
+  # collection
+  # 
+  # Les méthodes fetch_lines sont donc surchargées pour prendre en compte cette différence
+  # d'approche.
   #
   # Les options obligatoires sont title et select_method
   # Select_method sera alors utilisée pour récupérer les informations nécessaires
@@ -51,46 +59,46 @@ module PdfDocument
   #
   # Simple fonctionne sur un mode paysage.
   #
-  class Simple
+  class Simple < PdfDocument::Base
 
     include ActiveModel::Validations
     
-#    attr_accessor :title, :subtitle, :columns_alignements, :columns_widths,
-#     :columns_methods,:orientation, :organism_name, :exercice
-
-    attr_accessor :title, :subtitle, :columns_alignements, :columns_widths, :columns_formats
     attr_accessor :total_columns_widths, :select_method
-    attr_reader :created_at, :nb_lines_per_page, :source, :stamp
-     
+       
     validates :title, :presence=>true
     validates :select_method, :presence=>true
 
     def initialize(period, source, options)
-      @title = options[:title]
-      @created_at = Time.now
       @period = period
-      @nb_lines_per_page = options[:nb_lines_per_page] || NB_PER_PAGE_LANDSCAPE
       @source = source
-      @select_method = options[:select_method]
-      @template = "lib/pdf_document/simple.pdf.prawn"
-      @stamp = options[:stamp]
-      @subtitle = options[:subtitle]
+      
+      options.each do |k,v|
+        send("#{k}=", v)
+      end
+      @created_at = Time.now
+      # instance_eval car @select_method peut alors être complexe, par exemple 
+      # accounts.order(:number) - ce que ne permet pas un send
+      @collection = @source.instance_eval(@select_method) 
+      yield self if block_given?
+      fill_default_values
+    end
+    
+    def fill_default_values
+      super
+      @columns_methods ||= default_columns_methods
     end
 
     # cette méthode ne fait que rajouter un test sur l'existence de la 
     # capacité de la source à répondre à cette méthode
     def select_method=(meth)
-      raise ArgumentError, 'la source ne répond pas à la méthode sectionnée' unless @source.respond_to?(meth)
+      # raise ArgumentError, 'la source ne répond pas à la méthode sectionnée' unless @source.respond_to?(meth)
       @select_method = meth
     end
-    
-    
-    
+       
     # méthodes pour disposer des infos par self dans le template
     def organism_name
       @period.organism.title
     end
-
 
     def exercice
       @period.exercice
@@ -100,39 +108,13 @@ module PdfDocument
       @period.previous_exercice
     end
 
-    # nombre de pages avec au minimum 1 page
-    def nb_pages
-      [(@source.instance_eval(@select_method).count/@nb_lines_per_page.to_f).ceil, 1].max
-    end
-
-    # construit l'ensemble des pages et le met dans la variable d'instance
-    # @pages qui agit comme un cache
-    def pages
-      @pages ||= (1..nb_pages).collect { |i| PdfDocument::Page.new(i, self) }
-    end
-
-    # permet d'appeler la page number
-    # retourne une instance de PdfDocument::Page
-    def page(number = 1)
-      raise ArgumentError, "La page demandée n'existe pas"  unless (number > 0 &&  number <= nb_pages)
-      pages[number-1]
-    end
-
-    # enumarator permettant de parcourir les pages
-    def each_page
-      pages.each do |p|
-        yield p
-      end
-    end
-
     
-
-
     # renvoie les lignes de la page demandées
     def fetch_lines(page_number)
+      raise PdfDocumentError, 'La page demandée est hors limite' if !page_number.in?(1..nb_pages)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      source.instance_eval(@select_method).select(columns).offset(offset).limit(limit)
+      collection.select(columns_methods).offset(offset).limit(limit)
     end
 
     # appelle les méthodes adéquate pour chacun des éléments de la ligne
@@ -143,30 +125,26 @@ module PdfDocument
     # A surcharger lorsqu'on veut faire un traitement de la ligne
     def prepare_line(line)
       columns_methods.collect do |m|
-        val = line.send(m, @period)
+        val = line.send(m)
         val = ActionController::Base.helpers.number_with_precision(val, :precision=>2) if val.is_a?(Numeric)
         val
       end
     end
 
-    # agit comme un cache.
-    def columns_methods
-      @columns_methods ||= set_columns_methods
-    end
-
+    
      
     # récupère les variables d'instance ou les calcule si besoin
-    def columns
-      @columns ||= set_columns
-    end
+#    def columns
+#      @columns ||= set_columns
+#    end
 
-    def columns_widths
-      @columns_widths ||= set_columns_widths
-    end
+#    def columns_widths
+#      @columns_widths ||= set_columns_widths
+#    end
 
-    def columns_titles
-      @columns_titles ||= set_columns_titles
-    end
+#    def columns_titles
+#      @columns_titles ||= set_columns_titles
+#    end
 
     # array_widths doit exprimer en % la largeur des colonnes
     # set_columns_widths permet d'indiquer les largeurs de colonnes souhaitées
@@ -174,24 +152,24 @@ module PdfDocument
     #
     # Si toutes les colonnes sont définies, le total doit faire 100,
     # sinon, les colonnes restantes se partagent la place non utilisée.
-    def set_columns_widths(array_widths = nil)
-      if array_widths == nil
-        val = 100.0/columns.size
-        return  @columns_widths = columns.collect {|c| val}
-      end
-      raise ArgumentError, 'le total des largeurs de colonnes ne peut être supérieur à  100 % !' if array_widths.sum > 100
-      # si args a moins d'argument que le nombre de colonnes, on ajoute
-      diff = columns.size - array_widths.length
-      if diff > 0
-        place = 100 - array_widths.sum
-        complement = diff.times.collect {|i| place/diff}
-        array_widths += complement
-      end
-      # puis on retourne le nombre nécessaire
-
-      @columns_widths = array_widths
-      Rails.logger.debug "DEBUG : largeur des colonnes : "
-    end
+#    def set_columns_widths(array_widths = nil)
+#      if array_widths == nil
+#        val = 100.0/columns.size
+#        return  @columns_widths = columns.collect {|c| val}
+#      end
+#      raise ArgumentError, 'le total des largeurs de colonnes ne peut être supérieur à  100 % !' if array_widths.sum > 100
+#      # si args a moins d'argument que le nombre de colonnes, on ajoute
+#      diff = columns.size - array_widths.length
+#      if diff > 0
+#        place = 100 - array_widths.sum
+#        complement = diff.times.collect {|i| place/diff}
+#        array_widths += complement
+#      end
+#      # puis on retourne le nombre nécessaire
+#
+#      @columns_widths = array_widths
+#      Rails.logger.debug "DEBUG : largeur des colonnes : "
+#    end
 
 
     # permet de choisir les colonnes que l'on veut sélectionner pour le document
@@ -200,49 +178,31 @@ module PdfDocument
     # Set_columns_widths et set_columns_alignements permettent de fixer les largeur et
     # l'alignement (:right ou :left)
     #
-    def set_columns(array_columns = nil)
-      @columns = array_columns || @source.instance_eval(@select_method).first.class.column_names
-      set_columns_widths
-      set_columns_alignements
-      @columns
-    end
+#    def set_columns(array_columns = nil)
+#      @columns = array_columns || @source.instance_eval(@select_method).first.class.column_names
+#      set_columns_widths
+#      
+#      @columns
+#    end
+#    
     
-    def set_columns_methods(array_methods = nil)
-      @columns_methods = []
-
-      if array_methods
-        array_methods.each_with_index do |m,i|
-          @columns_methods[i] = m || @columns[i]
-        end
-      else
-        @columns_methods = columns
-      end
-      @columns_methods
-    end
-
-
-    # permet de définir les titres qui seront donnés aux colonnes
-    def set_columns_titles(array_titles = nil)
-      Rails.logger.debug "Le nombre de valeurs doit être égal au nombre de colonnes, en l'occurence #{@columns.size}" if array_titles && array_titles.length != @columns.size
-      @columns_titles = array_titles || @columns
-    end
-
+   
     # définit un aligment des colonnes, à gauche par défaut
     # TODO mettre ici, et dans toutes les méthodes similaires un
     # raise error si la taille de l'array n'est pas correcte
-    def set_columns_alignements(array = nil)
-      if array
-        @columns_alignements = array
-      else
-        @columns_alignements = @columns.map{|c| :left}
-      end
-      @columns_alignements
-    end
+#    def set_columns_alignements(array = nil)
+#      if array
+#        @columns_alignements = array
+#      else
+#        @columns_alignements = @columns.map{|c| :left}
+#      end
+#      @columns_alignements
+#    end
 
     
     # Crée le fichier pdf associé
     def render(template = @template)
-      @columns_alignements ||= set_columns_alignements # pour être sur que les alignements soient initialisés
+      template ||= "lib/pdf_document/simple.pdf.prawn"
       text = File.open(template, 'r') {|f| f.read  }
       pages
       doc = self # doc est utilisé dans le template
@@ -269,6 +229,12 @@ module PdfDocument
     end
 
     protected
+    
+    # FIXME caveat si il n'y aucun enregistrement
+    def default_columns_methods
+      @collection.first.class.column_names
+    end
+    
 
     # réalise la pagination de @pdf_file
     def numerote

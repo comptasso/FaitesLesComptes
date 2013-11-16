@@ -205,10 +205,12 @@ class Account < ActiveRecord::Base
   # Méthode de classe qui crée un pdf pour afficher le plan comptable
   def self.to_pdf(period)
     pdf = PdfDocument::Simple.new(period, period,
-      title:"Plan comptable", select_method:'accounts.order(:number)')
-    pdf.set_columns %w(number title)
-    pdf.set_columns_widths [20, 80]
-    pdf.set_columns_titles %w(Numéro Libellé)
+      title:"Plan comptable", select_method:'accounts.order(:number)') do |pdf|
+        pdf.columns_methods = %w(number title)
+        pdf.columns_widths = [20,80]
+        pdf.columns_titles = %w(Numéro Libellé)
+      end
+    
     pdf
   end
 
