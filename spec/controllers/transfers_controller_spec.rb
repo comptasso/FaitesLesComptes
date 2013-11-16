@@ -193,14 +193,37 @@ describe TransfersController do
 
   describe "PUT update"  do
 
+    def changed_attrs 
+      {"date_picker"=>Date.today.to_formatted_s('%d/%m/%Y'),
+      "ref"=>"",
+      "narration"=>"Virement interne", 
+      "amount"=>"1050.00",
+      "compta_lines_attributes"=>{"0"=>{"account_id"=>"89", "id"=>"37"},
+        "1"=>{"account_id"=>"90", "id"=>"38"}}}
+    end
+    
+    def pre_treatment_attrs
+      {"date_picker"=>Date.today.to_formatted_s('%d/%m/%Y'),
+      "ref"=>"",
+      "narration"=>"Virement interne", 
+      "compta_lines_attributes"=>{"0"=>{"account_id"=>"89", "id"=>"37", 'credit'=>changed_attrs["amount"]},
+        "1"=>{"account_id"=>"90", "id"=>"38", 'debit'=>changed_attrs["amount"]}}}
+    end
+    
     before(:each) do
       @t = mock_model(Transfer)
       Transfer.stub(:find).with(@t.id.to_s).and_return(@t)
     end
+    
+    it 'fills transfers nested attributes' do
+      @controller.should_receive(:params_pre_treatment)
+      @t.stub(:update_attributes).and_return true
+      put :update, {:organism_id=>@o.to_param,:id => @t.to_param, :transfer => changed_attrs}, valid_session
+    end
 
     it 'should receive update_attributes' do
-      @t.should_receive(:update_attributes).with({'these' => 'params'}).and_return true
-      put :update, {:organism_id=>@o.to_param,:id => @t.to_param, :transfer => {'these' => 'params'}}, valid_session
+      @t.should_receive(:update_attributes).with(pre_treatment_attrs).and_return true
+      put :update, {:organism_id=>@o.to_param,:id => @t.to_param, :transfer => changed_attrs}, valid_session
     end
 
     it "assigns the requested transfer as @transfer" do

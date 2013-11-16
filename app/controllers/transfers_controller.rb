@@ -48,13 +48,7 @@ class TransfersController < ApplicationController
   # POST /transfers
   # POST /transfers.json
   def create
-    params[:transfer][:compta_lines_attributes]['0'][:credit] = params[:transfer][:amount]
-    params[:transfer][:compta_lines_attributes]['1'][:debit] = params[:transfer][:amount]
-    # effacer le paramètre amount est indispensable car sinon, sur un new, cela aboutit à
-    # créer 4 compta_lines : les deux engendrées par les paramètres compta_lines_attributes en plus des
-    # deux engendrées par le after_initialize
-    params[:transfer].delete(:amount)
-    
+    params_pre_treatment
     @transfer = @book.transfers.new(params[:transfer])
 
     respond_to do |format|
@@ -71,6 +65,7 @@ class TransfersController < ApplicationController
   # PUT /transfers/1
   # PUT /transfers/1.json
   def update
+    params_pre_treatment
     @transfer = Transfer.find(params[:id])
 
     respond_to do |format|
@@ -101,6 +96,15 @@ class TransfersController < ApplicationController
 
   def find_book
     @book = @organism.od_books.first
+  end
+  
+  def params_pre_treatment
+    params[:transfer][:compta_lines_attributes]['0'][:credit] = params[:transfer][:amount]
+    params[:transfer][:compta_lines_attributes]['1'][:debit] = params[:transfer][:amount]
+    # effacer le paramètre amount est indispensable car sinon, sur un new, cela aboutit à
+    # créer 4 compta_lines : les deux engendrées par les paramètres compta_lines_attributes en plus des
+    # deux engendrées par le after_initialize
+    params[:transfer].delete(:amount)
   end
 
   
