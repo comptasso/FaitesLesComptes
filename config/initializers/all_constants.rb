@@ -62,4 +62,5 @@ MAX_COMMENT_LENGTH = 300
 # FLCVERSION = '1.2.0RC' # folio et rubrik deviennent des éléments persistants. 
 # FLCVERSION = '1.2.1RC' # Mise en place d'une vue des écritures non pointées et travail sur le solde instantané 
 # FLCVERSION = '1.2.2.RC' # Mise en place d'une vue des écritures du compte bancaire par mois 
-FLCVERSION = '1.2.3.RC' "Export de la vue des écritures du compte bancaire en csv et pdf"
+# FLCVERSION = '1.2.3.RC' # "Export de la vue des écritures du compte bancaire en csv et pdf"
+FLCVERSION = '1.2.4.RC' # "Correction bug sur mise à jour transfert et sur menu des views bottom'
