@@ -237,9 +237,13 @@ describe Account do
     end
 
     describe 'to_pdf' do
-      it 'on peut imprimer un listing' do
+      it 'on peut créer un listing' do
         # Account.create!(valid_attributes)
         Account.to_pdf(@p).should be_a_instance_of(PdfDocument::Simple)
+      end
+      
+      it 'et le rendre' do
+        Account.to_pdf(@p).render
       end
     end
 

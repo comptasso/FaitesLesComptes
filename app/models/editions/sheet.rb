@@ -29,13 +29,13 @@ module Editions
   #   traite de l'exercice, tandis qu'un bilan traite de date de clôture de l'exercice.
   #   set_title_columns répond à cet objectif
   #
-  class Sheet < PdfDocument::Simple
+  class Sheet < PdfDocument::Simple 
 
     def initialize(period, source, options)
-      super # pour initialiser les données
+      @select_method = 'sens' 
+      super
       raise EditionsError, 'source doit répondre à la méthode :sens' unless @source.respond_to? :sens
       raise EditionsError, 'le sens de la source ne peut être qu\'actif ou passif' unless @source.sens.in? [:actif, :passif]
-      set_columns # inutile d'attendre
     end
 
     # on part de l'idée qu'un folio prend toujours moins d'une page à imprimer
@@ -51,38 +51,27 @@ module Editions
     
     def fetch_lines(page_number = 1)
       @source.folio.root.fetch_rubriks_with_rubrik
-      
     end
-      
-          
     
-    
-   
-
-    def set_columns
-      @columns = case @source.sens
-      when :actif then ['title', 'brut', 'amortissement', 'net', 'previous_net']
-      when :passif then ['title', 'net', 'previous_net']
-      end
-    end
-
-    # si on est dans un document de type résultat, alors, on doit avoir
-    # comme entête de colonne la période, par exemple Exercice 2011
+    # appelle les méthodes adéquate pour chacun des éléments de la ligne
+    # dans la classe simple, cela ne fait que renvoyer la ligne.
     #
-    # Sinon, dans un document de type bilan, les entêtes de colonnes doivent alors
-    # être des dates
-    def columns_titles  
-      if @source.name == :actif || @source.name == :passif
-        ['', I18n::l(@period.close_date), I18n::l(@period.start_date - 1)]
-      else # on est dans une logique de résultat sur une période
-        ['', exercice, previous_exercice]
+    # Une mise en forme d'office est appliquée aux champs numériques
+    #
+    # A surcharger lorsqu'on veut faire un traitement de la ligne
+    def prepare_line(line)
+      columns_methods.collect do |m|
+        val = line.send(m, @period)
+        val = ActionController::Base.helpers.number_with_precision(val, :precision=>2) if val.is_a?(Numeric)
+        val
       end
     end
+         
 
     # Crée le fichier pdf associé
     def render
       @pdf_file = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait) 
-      source.sens == :actif ? @pdf_file.fill_actif_pdf(self) : @pdf_file.fill_passif_pdf(self)
+      collection == :actif ? @pdf_file.fill_actif_pdf(self) : @pdf_file.fill_passif_pdf(self)
       numerote
       @pdf_file.render
     end
@@ -91,6 +80,28 @@ module Editions
     # les deux template possibles actif.pdf.prawn et passif.pdf.prawn
     def render_pdf_text(pdf)
       source.sens == :actif ? pdf.fill_actif_pdf(self) : pdf.fill_passif_pdf(self)
+    end
+    
+    protected
+    
+    # si on est dans un document de type résultat, alors, on doit avoir
+    # comme entête de colonne la période, par exemple Exercice 2011
+    #
+    # Sinon, dans un document de type bilan, les entêtes de colonnes doivent alors
+    # être des dates
+    def default_columns_titles  
+      if @source.name == :actif || @source.name == :passif
+        ['', I18n::l(@period.close_date), I18n::l(@period.start_date - 1)]
+      else # on est dans une logique de résultat sur une période
+        ['', exercice, previous_exercice]
+      end
+    end
+    
+    def default_columns_methods
+      @columns_methods = case @source.sens
+      when :actif then ['title', 'brut', 'amortissement', 'net', 'previous_net']
+      when :passif then ['title', 'net', 'previous_net']
+      end
     end
 
   end

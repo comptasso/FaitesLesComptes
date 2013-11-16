@@ -59,7 +59,7 @@ module Editions
       @pdf_file = Editions::PrawnBalance.new(:page_size => 'A4', :page_layout => :portrait) 
       @pdf_file.fill_pdf(self)
       numerote  # défini dans les PdfDocument::Simple
-      @pdf_file.render
+      @pdf_file.render 
     end
 
 
