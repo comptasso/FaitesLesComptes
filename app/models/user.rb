@@ -14,9 +14,6 @@ class User < ActiveRecord::Base
   
   has_many :rooms, :dependent=>:destroy
 
-
-
-
   strip_before_validation :name
 
   validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
@@ -24,7 +21,7 @@ class User < ActiveRecord::Base
   def enter_first_room
     rooms.first
   end
-
+  
   # retourne un array de hash des organismes et des chambres appartenat à cet user
   # le hash ne comprend que les organimes qui ont pu être effectivement trouvés
   def organisms_with_room
@@ -37,7 +34,7 @@ class User < ActiveRecord::Base
   #
   # s'appuie sur organism_with_rooms et ne retient que les accountable?
   def accountable_organisms_with_room
-    organisms_with_room.select {|owr|  owr[:organism].accountable? }
+    rooms.select {|r|  r.look_for { r.organism.accountable? } }
   end
 
   # retourne un hash pour la zone de Saisie avec seulement les organismes qui
@@ -45,7 +42,7 @@ class User < ActiveRecord::Base
   #
   # s'appuie sur organism_ith_rooms et ne retient que ceux qui ont un organisme
   def saisieable_organisms_with_room
-    organisms_with_room.select {|owr|  owr[:organism].periods.any? }
+    rooms.select {|r| r.look_for {r.organism.periods.any?} }
   end
 
   # up_to_date effectue un contrôle des bases de l'utilisateur

@@ -19,7 +19,7 @@ class BottomController < ApplicationController
 
   def manuals
     
-  end
-
+   end
   
+
 end
