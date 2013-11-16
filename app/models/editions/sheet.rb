@@ -17,17 +17,21 @@ module Editions
   #
   #   Les documents sont des documents de type liasse fiscale (Bilan, Compte de Résultats)
   #   d'où le nom de Sheet.
+  #   
+  #   Ici source n'a plus la logique de source de la collection; c'est simplement
+  #   un objet Sheet qui connaît son folio et qui sait ainsi récupérer les lignes. 
   #
   #   Le nombre et le contenu des colonnes sont donc déterminés selon que
   #   l'on veuille imprimer un :actif ou un :passif (donné par le sympole :sens
   #   de la source. :passif est utilisé pour le compte de résultats et le bilan passif.
-  #   set_columns répond à cet objectif
+  #   default_columns_methodes définit ainsi les colonnes souhaitées en fonction 
+  #   du sens souhaité
   #
   #   TODO faire un équivalent :passif et :resultat pour ne pas avoir à se rappeler ce détail
   #
   #   Et les titres des colones dépendent de ce qu'on imprime : un compte de résultat
   #   traite de l'exercice, tandis qu'un bilan traite de date de clôture de l'exercice.
-  #   set_title_columns répond à cet objectif
+  #   default_columns_titles est donc surchargé à cette fin.
   #
   class Sheet < PdfDocument::Simple 
 
@@ -53,8 +57,9 @@ module Editions
       @source.folio.root.fetch_rubriks_with_rubrik
     end
     
-    # appelle les méthodes adéquate pour chacun des éléments de la ligne
-    # dans la classe simple, cela ne fait que renvoyer la ligne.
+    # appelle les méthodes adéquate pour chacun des éléments de la ligne;
+    # l'argument period permet de transmettre l'exercice pour lequel on demande
+    # les valeurs. Cet exercice et l'exercice précédent
     #
     # Une mise en forme d'office est appliquée aux champs numériques
     #
@@ -78,8 +83,9 @@ module Editions
 
     # surcharge de Simple::render_pdf_text pour prendre en compte
     # les deux template possibles actif.pdf.prawn et passif.pdf.prawn
+    # est ici mal nommé car 
     def render_pdf_text(pdf)
-      source.sens == :actif ? pdf.fill_actif_pdf(self) : pdf.fill_passif_pdf(self)
+      collection == :actif ? pdf.fill_actif_pdf(self) : pdf.fill_passif_pdf(self)
     end
     
     protected

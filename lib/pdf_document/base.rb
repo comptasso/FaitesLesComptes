@@ -131,8 +131,10 @@ module PdfDocument
     # si columns_titles n'a pas été défini par l'appelant on utilise les 
     # nom des méthodes
     def columns_titles
-      @columns_titles ||= columns_methods.collect {|m| m.to_s}
+      @columns_titles ||= default_columns_titles
     end
+    
+    
 
     # permet de définie la largeur des colonnes. Les largeurs sont spécifiées 
     # en % de la largeur de ligne.
@@ -183,11 +185,11 @@ module PdfDocument
         @columns_widths ||= columns_methods.collect {|c| val}
     end
     
-    
-    
     def default_columns_titles
-      @columns_titles = columns_methods
+      columns_methods.collect {|m| m.to_s}
     end
+    
+    
 
 
   end

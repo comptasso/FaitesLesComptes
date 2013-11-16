@@ -11,14 +11,14 @@ describe Editions::Sheet do
   let(:bal) {double(Compta::Sheet, :period=>p, :sens=>:actif, :name=>:actif)} # pour un actif de bilan
 
   it 'création du PdfSheet' do
-    pdfs = Editions::Sheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
+    pdfs = Editions::Sheet.new(p, bal, {title:'Balance test'} )
     pdfs.should be_an_instance_of(Editions::Sheet)
   end
   
   describe 'les méthodes de pdf sheet' do
 
     before(:each) do
-      @pdfs = Editions::Sheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
+      @pdfs = Editions::Sheet.new(p, bal, {title:'Balance test'} )
     end
     it 'page renvoie 1' do
       @pdfs.nb_pages.should == 1
@@ -27,19 +27,19 @@ describe Editions::Sheet do
 
       it 'les colonnes dépendent du sens de la source' do
         bal.stub(:sens).and_return(:actif)
-        @pdfs.columns.should == ['title', 'brut', 'amortissement', 'net', 'previous_net']
+        @pdfs.columns_methods.should == ['title', 'brut', 'amortissement', 'net', 'previous_net']
       end
 
      it 'les colonnes dépendent du sens de la source' do
         bal.stub(:sens).and_return(:passif)
-        pdfs = Editions::Sheet.new(p, bal, {title:'Balance test', select_method:'accounts'} )
-        pdfs.columns.should == ['title',  'net', 'previous_net']
+        pdfs = Editions::Sheet.new(p, bal, {title:'Balance test'} )
+        pdfs.columns_methods.should == ['title',  'net', 'previous_net']
       end
 
 
       describe 'les titres des colonnes dépendent du type de document' do
 
-      it 'si le document a pour name actif' do
+      it 'si le document a pour name actif' do 
         bal.stub(:name).and_return(:actif)
         @pdfs.columns_titles.should == ['',  I18n.l(p.close_date), I18n.l((p.start_date) -1)]
       end
@@ -68,7 +68,7 @@ describe Editions::Sheet do
     it 'fetch_lines' do
       bal.should_receive(:folio).and_return(@fol = double(Folio))
       @fol.stub_chain(:root, :fetch_rubriks_with_rubrik).and_return('une liste de lignes')
-      @pdfs.fetch_lines.should == 'une liste de lignes'
+      @pdfs.fetch_lines.should == 'une liste de lignes' 
     end
 
     it 'render' do
