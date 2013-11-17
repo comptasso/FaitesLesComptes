@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'spec_helper'
+require 'spec_helper' 
 
 require 'pdf_document/default'
 
@@ -25,8 +25,8 @@ describe PdfDocument::Page do
 
 
   before(:each) do
-    doc.set_columns %w(date debit credit)
-    doc.set_columns_titles  %w(Date Débit Crédit)
+    doc.columns_methods =  %w(date debit credit)
+    doc.columns_titles =   %w(Date Débit Crédit)
     doc.stub(:nb_pages).and_return 5
     @page = PdfDocument::Page.new(2, doc)
   end
@@ -78,8 +78,8 @@ describe PdfDocument::Page do
         @l.stub(:writings).and_return @w
         arel.stub(:joins).and_return arel
         arel.stub_chain(:select, :range_date, :offset, :limit).and_return 1.upto(22).collect {|i| @l}
-        doc.set_columns %w(writings.date writings.ref debit credit)
-        doc.set_columns_to_totalize [2]
+        doc.columns_methods = %w(writings.date writings.ref debit credit)
+        doc.columns_to_totalize = [2]
       
       end
 
