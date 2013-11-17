@@ -25,8 +25,6 @@ module Editions
       @columns_methods = ['w_date', 'w_ref', 'w_narration',
         'destination.name', 'nature.name', 'debit', 'credit',
         'w_mode', 'writing_id']
-      
-      
       @columns_titles = %w(Date Réf Libellé Destination Nature Débit Crédit Payement Pièce)
       
       @columns_widths = [8, 6, 20 ,10 ,  10, 10, 10,13,13]

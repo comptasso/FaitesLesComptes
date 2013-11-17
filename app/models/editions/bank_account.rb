@@ -8,19 +8,17 @@ module Editions
   # Cette classe hérite de Editions::Book et surcharge fetch_lines
   class BankAccount < Editions::Book
 
-    # TODO comme bank_account_extract est produit en mentionnant une période, on pourrait
-    # envisager de faire cette initialisation sans l'argument period.
-    def initialize(period, bank_extract)
-      super(period, bank_extract)
-
-       set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
+    def fill_default_values
+      super 
+       @columns_titles = %w(Date Réf Narration Crédit Débit)
+       @columns_select = ['writings.date AS w_date', 'writings.ref AS w_ref',
         'writings.narration AS w_narration',  'credit', 'debit']
-       set_columns_methods ['w_date', 'w_ref', 'w_narration',
+       @columns_methods =  ['w_date', 'w_ref', 'w_narration',
         'credit', 'debit']
+       @columns_widths = [12, 12, 52, 12, 12]
+       @columns_to_totalize = [3,4]
+       @columns_alignements = [:left, :left, :left, :right, :right]
        
-       set_columns_widths([12, 12, 52,12,12])
-       set_columns_to_totalize [3,4]
-       set_columns_alignements [:left, :left, :left, :right, :right]
     end
 
    
