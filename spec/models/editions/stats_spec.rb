@@ -5,10 +5,10 @@ require'spec_helper'
 describe Editions::Stats do
 
   let(:p) {double(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)}
-  let(:source) {double(Object)}
+  let(:source) {double(Object, :stats=>nil)}
 
   def list_months
-    ListMonths.new(p.start_date, p.close_date)
+    ListMonths.new(p.start_date, p.close_date) 
   end
 
   def stub_lines(n, taille)

@@ -19,15 +19,16 @@ describe Editions::Book do
 
   before(:each) do
      @book = mock_model(Book)
-     @period = stub(Period, organism:stub(:title=>'L\'organisme'), :exercice=>'Exercice en cours')
+     @period = stub(Period, organism:stub(:title=>'L\'organisme'),
+       :exercice=>'Exercice en cours',
+       start_date:Date.today.beginning_of_year,
+       close_date:Date.today.end_of_year)
      @extract = stub(Extract::InOut, :book=>@book,
-       begin_date:Date.today.beginning_of_year,
-       end_date:Date.today.end_of_year,
-       'provisoire?'=>true,
+     'provisoire?'=>true,
      title:'Le livre',
      subtitle:'Le sous titre',
      titles:%w(un deux trois quatre cinq),
-     lines:(50.times.collect {line(Date.today, 1.25, 0.3)}))
+     compta_lines:(50.times.collect {line(Date.today, 1.25, 0.3)}))
 
 
    
@@ -42,9 +43,9 @@ describe Editions::Book do
 # que perpare_line est appelé à chaque page pour l'ensemble des 50 lignes
 # et non simplement pour les 22 lignes de la page
   it 'et peut alors rendre un pdf' do
-    @extract.stub(:instance_eval).and_return(@ar = double(Arel, :count=>50))
-    @ar.stub_chain(:select, :offset, :limit).and_return(@extract.lines)
     @eb = Editions::Book.new(@period, @extract)
+    @eb.stub(:nb_pages).and_return 3
+    @eb.stub(:fetch_lines).and_return(@extract.compta_lines)
     @eb.should_receive(:prepare_line).at_least(50).times.and_return %w(un doux)
     @eb.render
   end

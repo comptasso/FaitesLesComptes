@@ -32,11 +32,10 @@ module Editions
     
     def fill_default_values
       plm = last_twelve_months
-      @columns_methods = [:id, :name] # avant super car tenterait d'appeler default_columns_methods de
-      # Simple
+      @columns_methods = [:id, :name] # avant super car tenterait 
+      # d'appeler default_columns_methods de Simple
       super
       @title = 'Statistiques par nature'
-      
       @columns_titles = ['Natures'] + plm.collect {|my| my.to_format('%b %y')} + ['Total']
       @columns_alignements = [:left] + plm.collect{:right} + [:right] # à gauche pour les natures et à droite pour les mois et la colonne Total
       @columns_widths = [100 - (1 + plm.length)*LARGE_COL_NUM] + plm.collect {LARGE_COL_NUM } + [LARGE_COL_NUM]

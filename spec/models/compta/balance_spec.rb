@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 describe Compta::Balance do 
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
 
 
   before(:each) do
@@ -17,7 +17,7 @@ describe Compta::Balance do
     @a2 = @p.accounts.find_by_number('603') 
   end
 
-  it 'has a virtual attributes from_date_picker et to_date_picker' do
+  it 'has a virtual attributes from_date_picker et to_date_picker' do 
     b = Compta::Balance.new
     b.from_date_picker =  '01/01/2012'
     b.from_date.should be_a(Date)
@@ -184,6 +184,7 @@ describe Compta::Balance do
 
       it 'should be able to_pdf with 5 pages' do
         pdf = @b.to_pdf
+        pdf.stub(:collection).and_return @b
         pdf.should be_an_instance_of(Editions::Balance)
         pdf.nb_pages.should == 5
       end
