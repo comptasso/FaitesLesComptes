@@ -90,10 +90,6 @@ describe PdfDocument::Base do
         pdf.columns_widths.should == [20,80]
       end
     
-      it 'controle que l argument a autant de colonnes que columns_widths' do
-        expect {pdf.columns_widths= [20,10,70]}.to raise_error PdfDocument::PdfDocumentError
-      end
-    
       it 'et que le total fait 100' do
         expect {pdf.columns_widths= [20,70]}.to raise_error PdfDocument::PdfDocumentError
       end
@@ -109,9 +105,7 @@ describe PdfDocument::Base do
         @pdfb.columns_alignements.should == [:left, :right]
       end
       
-      it 'déclanche une erreur si le nombre de valeurs est inadapté' do
-        expect {pdf.columns_alignements= [:right, :right, :right]}.to raise_error PdfDocument::PdfDocumentError
-      end
+      
     end
     
   end

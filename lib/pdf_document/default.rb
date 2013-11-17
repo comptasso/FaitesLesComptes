@@ -43,7 +43,9 @@ module PdfDocument
       @template = "lib/pdf_document/default.pdf.prawn"
       @from_date ||= @period.start_date
       @to_date ||= @period.close_date
+      
       super
+      @columns_alignements ||= default_columns_alignements
     end
 
     
@@ -70,7 +72,11 @@ module PdfDocument
     # Par exemple nature.name lorsque nature est nil
     def prepare_line(line)
       columns_methods.collect { |m| line.instance_eval(m) rescue nil }
-    end 
+    end
+    
+    def columns_select
+      @columns_select ||= default_columns_select
+    end
 
     
     protected
@@ -85,10 +91,19 @@ module PdfDocument
         # on prend les colonnes sélectionnées et on construit un tableau
         # left, right selon le type de la colonne
         lch = @select_method.classify.constantize.columns_hash
-        @columns_alignements = @columns.map do |c|
+        @columns_alignements = columns_methods.map do |c|
           (lch[c] && lch[c].number? && lch[c].name !~ /_id$/) ? :right : :left
         end
       @columns_alignements
+    end
+    
+    # par défaut les columns select sont égales aux columns methods
+    def default_columns_select
+      default_columns_methods
+    end
+    
+    def default_columns_methods
+      ComptaLine.column_names
     end
 
    

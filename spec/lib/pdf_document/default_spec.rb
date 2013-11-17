@@ -10,14 +10,14 @@ RSpec.configure do |c|
   # c.filter = {wip:true} 
 end
 
-describe PdfDocument::Default do
+describe PdfDocument::Default do 
 
   let(:o) {mock_model(Organism, title:'Organisme test')} 
   let(:p) {mock_model(Period, organism:o,
       start_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year,
       exercice:'Exercice 2012',
-      compta_lines:[1,2])}
+      compta_lines:[ComptaLine.new, ComptaLine.new])}
 
   def valid_options
     {
@@ -33,7 +33,7 @@ describe PdfDocument::Default do
       @default = PdfDocument::Default.new(p, p, valid_options)
     end
 
-    it "should exists" do
+    it "should exists", wip:true do
       @default.should be_an_instance_of (PdfDocument::Default)
     end
 
@@ -70,58 +70,62 @@ describe PdfDocument::Default do
   end
 
   context 'options complémentaires' do
+    
+    
     it 'accepts options from_date' do
       h = valid_options.merge({:from_date=>Date.today.beginning_of_month})
-      @default = PdfDocument::Default.new(p, nil, h)
+      @default = PdfDocument::Default.new(p, p, h)
       @default.from_date.should == Date.today.beginning_of_month
     end
 
     it 'accepts options to_date' do
       h = valid_options.merge({:to_date=>Date.today.end_of_month})
-      @default = PdfDocument::Default.new(p,nil, h)
+      @default = PdfDocument::Default.new(p, p, h)
       @default.to_date.should == Date.today.end_of_month
     end
 
     it 'accepts options nb_lines_per_page' do
       h = valid_options.merge({:nb_lines_per_page=>30})
-      @default = PdfDocument::Default.new(p,nil, h)
+      @default = PdfDocument::Default.new(p, p, h)
       @default.nb_lines_per_page.should == 30
     end
 
     describe 'stamp' do
       it 'has a nil default stamp' do
-        @default = PdfDocument::Default.new(p,nil, {})
+        @default = PdfDocument::Default.new(p, p, {})
         @default.stamp.should == nil
       end
 
       it 'une option peut permettre de préciser le stamp' do
-        pdf = PdfDocument::Default.new(p, nil, valid_options.merge(stamp:'Provisoire'))
+        pdf = PdfDocument::Default.new(p, p, valid_options.merge(stamp:'Provisoire'))
         pdf.stamp.should == 'Provisoire' 
       end
     end
 
     it 'peut modifir l alignement des colonnes' do
-      pdf = PdfDocument::Default.new(p,nil, {})
-      pdf.set_columns_alignements([:left, :left])
-      pdf.columns_alignements  = [:left, :left]
+      pdf = PdfDocument::Default.new(p, p, {})
+      pdf.columns_alignements = [:left, :left]
+      pdf.columns_alignements.should == [:left, :left]
     end
   end
 
   context 'un listing sans ligne' do 
     
     let(:arel) {double(Arel, first:nil)}
-    let(:source) {mock_model(Account, title:'Achats', number:'60',
-        compta_lines:arel )}
+    # let(:source) {Account.new(title:'Achats', number:'60')}
+        
 
     before(:each) do
-      @default = PdfDocument::Default.new(p, source, valid_options)
-      @default.set_columns  %w(writings.date writings.ref nature_id destination_id debit credit)
-      @default.set_columns_to_totalize [4,5]
+#      source.stub(:compta_lines).and_return(@ar = double(Arel))
+#      @ar.stub(:first).and_return(Account.new)
+      @default = PdfDocument::Default.new(p, p, valid_options)
+      @default.columns_select =  %w(writings.date writings.ref nature_id destination_id debit credit)
+      @default.columns_to_totalize = [4,5]
 
     end
 
     it 'a quand même une page' do
-      arel.stub_chain(:range_date, :count).and_return 0
+      p.stub_chain(:send, :range_date, :count).and_return 0
       @default.nb_pages.should == 1
     end
 
@@ -135,7 +139,7 @@ describe PdfDocument::Default do
   end
 
  
-  context 'création des pages' do
+  context 'création des pages' do 
 
     let(:arel) {double(Arel,  first:mock_model(ComptaLine))}
     let(:source) {mock_model(Account, title:'Achats', number:'60',
@@ -157,8 +161,8 @@ describe PdfDocument::Default do
     end
 
     it 'appelé une page hors limite déclenche une erreur' do
-      expect {@default.page(6)}.to raise_error PdfDocument::Error, 'La page demandée est hors limite'
-      expect {@default.page(0)}.to raise_error PdfDocument::Error, 'La page demandée est hors limite'
+      expect {@default.page(6)}.to raise_error PdfDocument::PdfDocumentError, 'La page demandée est hors limite'
+      expect {@default.page(0)}.to raise_error PdfDocument::PdfDocumentError, 'La page demandée est hors limite'
     end
 
     it 'un doc doit pouvoir énumérer ses pages' do
@@ -175,37 +179,36 @@ describe PdfDocument::Default do
       
     end
 
-    it 'on peut modifier la select_method = ' do
+    it 'on peut modifier la select_method = ' do 
       # title ne répondrait pas aux attentes mais est suffisant pour le test
       @default.select_method = :title
       @default.select_method.should == :title
-    end
+    end 
 
     # TODO ici on fait lines mais on devrait s'appuyer sur select_method
     it 'Par défaut les colonnes demandées sont celle de la classe retournée par select_method' do
-      @default.columns.should == ComptaLine.column_names
+      @default.columns_select.should == ComptaLine.column_names
     end
 
     it 'on peut sélectionner les colonnes' do
-      @default.set_columns   %w(line_date ref nature_id destination_id debit credit)
-      @default.columns.should == %w(line_date ref nature_id destination_id debit credit)
+      @default.columns_select=   %w(line_date ref nature_id destination_id debit credit)
+      @default.columns_select.should == %w(line_date ref nature_id destination_id debit credit)
     end
 
     it 'choisir des colonnes crée un tableau des alignements' do
-      @default.set_columns   %w(line_date ref nature_id destination_id debit credit)
+      @default.columns_methods =    %w(line_date ref nature_id destination_id debit credit)
       @default.columns_alignements.should == [:left, :left,:left,:left,:right, :right]
     end
 
    
     describe 'les méthodes sur les colonnes' do
       it 'par défaut les colonnes utilisent le nom de la colonne' do 
-        @default.columns_methods.should == @default.columns
+        @default.columns_methods.should == ComptaLine.column_names
       end
 
       it 'mais on peut définir d autres méthodes' do
-        @default.set_columns   %w(line_date ref nature_id destination_id debit credit)
-        @default.set_columns_methods([nil, nil, 'nature.name','destination.name', 'debit.to_f',nil])
-        @default.columns_methods.should == ['line_date','ref', 'nature.name','destination.name', 'debit.to_f', 'credit']
+        @default.columns_methods = %w(bonjour ref nature_id destination_id debit credit)
+        @default.columns_methods.should == ['bonjour','ref', 'nature_id','destination_id', 'debit', 'credit']
       end
 
    
@@ -215,7 +218,7 @@ describe PdfDocument::Default do
     describe 'les largeurs de colonnes' do
 
       before(:each) do
-        @default.columns =   %w(line_date ref nature_id destination_id debit credit)
+        @default.columns_methods =   %w(line_date ref nature_id destination_id debit credit)
       end
 
       it 'on a une largeur de colonnes par défaut' do
@@ -227,13 +230,8 @@ describe PdfDocument::Default do
         @default.columns_widths.should == [10,20,30,10,15,15]
       end
 
-      it 'on peut n imposer que les 4 premières' do
-        @default.columns_widths = [10,20,30,10]
-        @default.columns_widths.should == [10,20,30,10,15,15]
-      end
-
       it 'gestion des erreurs des size' do
-        expect {@default.columns_widths= [10,20,30,50]}.to raise_error ArgumentError
+        expect {@default.columns_widths= [10,20,30,50]}.to raise_error PdfDocument::PdfDocumentError
       end
 
     end
@@ -244,24 +242,24 @@ describe PdfDocument::Default do
 
       before(:each) do
         @default.columns_methods=  %w(line_date ref nature_id destination_id debit credit)
-        @default.columns_widths= [10,20,30,10]
+        @default.columns_widths= [10,20,30,10,15,15]
       end
 
       it 'set avec un array vide génère une erreur' do
-        expect { @default.set_columns_to_totalize []}.to raise_error 'Le tableau des colonnes ne peut être vide'
+        expect { @default.columns_to_totalize = []}.to raise_error 'Le tableau des colonnes ne peut être vide'
       end
 
       it 'définir les colonnes permet de définir les largeurs' do
         bcw4 = @default.columns_widths[4]
         bcw5 = @default.columns_widths[5]
-        @default.set_columns_to_totalize [4,5]
+        @default.columns_to_totalize = [4,5]
         @default.total_columns_widths.should == [100 - bcw4 - bcw5, bcw4, bcw5 ]
       end
 
       it 'définir une colonne qui n est pas la dernière complète les colonnes pour avoir 100' do
         bcw4 = @default.columns_widths[4]
         bcw5 = @default.columns_widths[5]
-        @default.set_columns_to_totalize [4]
+        @default.columns_to_totalize = [4]
         @default.total_columns_widths.should == [100 - bcw4 - bcw5, bcw4, bcw5 ]
       end
 
@@ -278,6 +276,11 @@ describe PdfDocument::Default do
 
     it 'peut créer un fichier pdf' do
       @default.should respond_to(:render)
+    end
+    
+    it 'peut vraiment le faire' do
+      pending 'retravailler toutes ces specs avant de tenter un render'
+      @default.render
     end
 
     # l'action de render est testée dans la un spec de vue

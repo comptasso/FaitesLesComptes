@@ -116,13 +116,23 @@ module PdfDocument
     end
     
     
+    # permet de définit les méthodes à appliquer. Cela recalcule les alignements et les largeurs
+    def columns_methods=(array_methods)
+      @columns_methods = array_methods
+      @columns_alignements = default_columns_alignements   # changer les méthodes doit redéfinir les alignements
+      @columns_widths = default_columns_widths 
+    end
+    
+    
     
    
     
     # les alignements des colonnes par défaut sont à gauche
     def columns_alignements
-      @columns_alignements ||= columns_methods.collect {|c| :left}
+      @columns_alignements ||= default_columns_alignements
     end
+    
+    
     
     def columns_widths
       @columns_widths ||= default_columns_widths
@@ -181,6 +191,10 @@ module PdfDocument
     
     def default_columns_titles
       columns_methods.collect {|m| m.to_s}
+    end
+    
+    def default_columns_alignements
+      columns_methods.collect {|c| :left}
     end
     
     
