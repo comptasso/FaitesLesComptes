@@ -7,7 +7,7 @@ require 'pdf_document/page'
 
 describe 'PdfDocument::Totalized' do
 
-  let(:o) {mock_model(Organism, title:'Organisme test')}
+  let(:o) {mock_model(Organism, title:'Organisme test')} 
   let(:p) {mock_model(Period, organism:o,
       start_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year,
@@ -24,25 +24,26 @@ describe 'PdfDocument::Totalized' do
 
 
   it 'peut être instancié' do
+    PdfDocument::Totalized.any_instance.stub_chain(:collection, :first, :class, :column_names).and_return %w(un deux trois quatre cinq six sept)
     PdfDocument::Totalized.new(p, p, valid_options).should be_an_instance_of(PdfDocument::Totalized) 
   end
 
   context 'avec une instance' do
 
     before(:each) do
+     PdfDocument::Totalized.any_instance.stub_chain(:collection, :first, :class, :column_names).and_return %w(un deux trois quatre cinq six sept)
      @pdf =  PdfDocument::Totalized.new(p, p, valid_options)
-     p.stub_chain(:accounts, :first, :class, :column_names).and_return %w(un deux trois quatre cinq six sept)
     end
 
     it 'calcule correctement les largeurs de la ligne des totaux' do
-      @pdf.set_columns_widths [10, 40, 10, 10, 10, 10, 10]
-      @pdf.set_columns_to_totalize [2,3,4,5,6]
-      @pdf.set_total_columns_widths
+      @pdf.columns_widths= [10, 40, 10, 10, 10, 10, 10]
+      @pdf.columns_to_totalize = [2,3,4,5,6]
+     # @pdf.set_total_columns_widths
       @pdf.total_columns_widths.should == [50,10,10,10,10,10]
     end
 
     it 'sait préparer une ligne' do
-      p.stub_chain(:accounts, :first, :class, :column_names).and_return %w(un deux)
+      @pdf.columns_methods =  %w(un deux)
       @cl = mock_model(ComptaLine, :un=>'bonjour', :deux=>'Au revoir')
       @pdf.prepare_line(@cl).should == ['bonjour', 'Au revoir']
 

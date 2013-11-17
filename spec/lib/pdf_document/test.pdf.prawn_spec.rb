@@ -2,7 +2,7 @@
 
 
 require 'spec_helper'
-require 'pdf_document/default'
+require 'pdf_document/default' 
 require 'pdf_document/page'
 require 'pdf_document/table'  
 
@@ -39,12 +39,12 @@ describe 'test pdf prawn' do
   context 'le document est créé' do
     before(:each) do
       @pdf = PdfDocument::Default.new(@p, @account, title:@o.title, subtitle:'Essai')
-      @pdf.set_columns ['writings.date AS w_date', 'nature_id', 'debit', 'credit']
-      @pdf.set_columns_titles %w(Date Nature Débit Crédit)
+      @pdf.columns_select =  ['writings.date AS w_date', 'nature_id', 'debit', 'credit']
+      @pdf.columns_titles = %w(Date Nature Débit Crédit)
       
-      @pdf.set_columns_methods ['w_date', 'nature.name', nil, nil]
-      @pdf.set_columns_widths [10,60,15,15]
-      @pdf.set_columns_to_totalize [2,3]
+      @pdf.columns_methods = ['w_date', 'nature.name', nil, nil]
+      @pdf.columns_widths = [10,60,15,15]
+      @pdf.columns_to_totalize = [2,3]
     end 
 
     it 'should have 3 pages' do 

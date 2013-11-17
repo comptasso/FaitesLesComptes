@@ -8,7 +8,7 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe PdfDocument::Simple do
+describe PdfDocument::Simple do 
 
   let(:o) {mock_model(Organism, :title=>'Ma petite affaire')}
   let(:p) {mock_model(Period, :organism=>o, :exercice=>'Exercice 2013')}
@@ -17,13 +17,14 @@ describe PdfDocument::Simple do
   def valid_options
     {
       title:'PDF Document' ,
-      :select_method=>'map' # on utilise map car c'est un Array.
+      :select_method=>'map {|c| c}' # on utilise map car c'est un Array.
     }
   end
 
   describe 'création de l instance' do
 
     before(:each) do
+      
       @simple = PdfDocument::Simple.new(p, source, valid_options)
     end
 
@@ -47,12 +48,12 @@ describe PdfDocument::Simple do
     end
 
     it 'lance une erreur si la page n existe pas' do
-      expect {@simple.page(5)}.to raise_error ArgumentError
+      expect {@simple.page(5)}.to raise_error PdfDocument::PdfDocumentError, 'La page demandée est hors limite'
     end
 
     it 'fetch_lines récupère les informations' do
-      @simple.set_columns(['number'])
-      source.should_receive(:instance_eval).with('map').and_return @a=double(Arel)
+      @simple.columns_methods=(['number'])
+      @simple.should_receive(:collection).and_return  @a=double(Arel)
       @a.should_receive(:select).with(['number']).and_return @a
       @a.should_receive(:offset).and_return @a
       @a.should_receive(:limit).and_return source.slice(22, 44)
@@ -61,47 +62,45 @@ describe PdfDocument::Simple do
 
     it 'sait préparer une ligne' do
       line = double(:number=>'101')
-      @simple.set_columns(['number'])
+      @simple.columns_methods=(['number'])
       @simple.prepare_line(line).should == ['101']
     end
 
     it 'par défaut transforme une valeur numérique' do
       line = double(:number=>101)
-      @simple.set_columns(['number'])
+      @simple.columns_methods=(['number'])
       @simple.prepare_line(line).should == ['101,00']
     end
 
     it 'par défaut, l alignement des colonnes est à gauche' do
-      @simple.set_columns(['number'])
-      @simple.set_columns_alignements
+      @simple.columns_methods=(['number'])
       @simple.columns_alignements.should == [:left]
     end
 
     it 'sait calculer par défaut des largeurs de colonnes', wip:true do
-      @simple.set_columns(['number', 'autre'])
+      @simple.columns_methods=(['number', 'autre'])
       @simple.columns_widths.should == [50, 50 ]
     end
 
      it 'sait calculer par défaut des largeurs de colonnes', wip:true do
-      @simple.set_columns(['number'])
+      @simple.columns_methods=(['number'])
       @simple.columns_widths.should == [100]  
     end
 
     it 'sait rendre un fichier pdf', wip:true do
-      source.stub(:instance_eval).and_return source
-      source.stub(:count).and_return source.size
-      source.stub_chain(:select, :offset, :limit).and_return source.slice(0,21)
-      @simple.set_columns(['number'])
+      
+      @simple.stub_chain(:collection, :select, :offset, :limit).and_return source.slice(0,21)
+      @simple.columns_methods=(['number'])
       @simple.render.should be_an_instance_of String
     end
 
     it 'sait rendre un partial pdf', wip:true do
-      source.stub(:instance_eval).and_return source
+     
       source.stub(:count).and_return source.size
-      source.stub_chain(:select, :offset, :limit).and_return source.slice(0,21)
-      @simple.set_columns(['number'])
+      @simple.stub_chain(:collection, :select, :offset, :limit).and_return source.slice(0,21)
+      @simple.columns_methods=(['number'])
       pdf = Prawn::Document.new
-      @simple.render_pdf_text(pdf) # juste pour vérifier qu'il n'y a pas d'erreur
+      @simple.render_pdf_text(pdf, ) # juste pour vérifier qu'il n'y a pas d'erreur
       # dans l'exécution de cette méthode
     end
 
@@ -115,7 +114,7 @@ describe PdfDocument::Simple do
 
      it 'should have a select_method' do
         vl =   {title:'PDF Document', subtitle:'Le sous titre'}
-        PdfDocument::Simple.new(p, p, vl).should_not be_valid
+        expect {PdfDocument::Simple.new(p, p, vl)}.to raise_error PdfDocument::PdfDocumentError
       end
     end
 

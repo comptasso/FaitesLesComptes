@@ -78,6 +78,7 @@ module PdfDocument
       @created_at = Time.now
       # instance_eval car @select_method peut alors être complexe, par exemple 
       # accounts.order(:number) - ce que ne permet pas un send
+      raise PdfDocument::PdfDocumentError, 'Vous devez fournir une select_method pour extraire les données de la source' unless @select_method
       @collection = @source.instance_eval(@select_method) 
       yield self if block_given?
       fill_default_values
@@ -153,7 +154,7 @@ module PdfDocument
     #
     # Retourne le fichier pdf après avoir interprété le contenu du template
     def render_pdf_text(pdf, template = @template)
-      # @columns_alignements ||= default_columns_alignements # pour être sur que les alignements soient initialisés
+      template ||= "lib/pdf_document/simple.pdf.prawn"
       text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
       Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
@@ -164,7 +165,7 @@ module PdfDocument
     
     # FIXME caveat si il n'y aucun enregistrement
     def default_columns_methods
-      @collection.first.class.column_names
+      collection.first.class.column_names
     end
     
 
