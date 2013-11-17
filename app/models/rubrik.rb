@@ -102,19 +102,7 @@ class Rubrik < ActiveRecord::Base
       end
     end
     
-    #produit un document pdf en s'appuyant sur la classe PdfDocument::Simple
-    # et ses classe associées page et table
-    # TODO voir si utilisé
-#    def to_pdf(options = {})
-#      options[:title] =  "Détail de la rubrique #{name}"
-#      pdf = PdfDocument::PdfRubriks.new(@period, self, options)
-#      pdf.set_columns(['title', 'brut', 'amortissement', 'net', 'previous_net'])
-#      pdf.set_columns_titles(['', 'Montant brut', "Amortissement\nProvision", 'Montant net', 'Précédent'])
-#      pdf.set_columns_widths([40, 15, 15, 15, 15])
-#      pdf.set_columns_alignements([:left, :right, :right, :right, :right] )
-#      pdf
-#    end
-   
+ 
     
     # détermine le niveau dans l'arbre
     # depth = 0 pour root et on augmente le niveau quand on descend dans l'arbre
