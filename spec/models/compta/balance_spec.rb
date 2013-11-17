@@ -46,7 +46,7 @@ describe Compta::Balance do
 
     describe 'methods' do
 
-      it 'should retrieve period', wip:true do
+      it 'should retrieve period' do
         @b.period_id.should == @p.id
         @b.period.should == @p 
       end
@@ -175,18 +175,42 @@ describe Compta::Balance do
         @b.stub(:provisoire?).and_return true
         @b.stub(:accounts).and_return(@ar = double(Arel))
         @ar.stub(:collect).and_return (1..100).map {|i| bal_line(2)}
-        @ar.stub(:count).and_return 100
+        @ar.stub(:length).and_return 100
       end
 
-      it 'total_balance renvoie le total'  do
+      it 'total_balance renvoie le total' , wip:true  do
         @b.total_balance.should == [1000, 100, 200, 400, -700]
       end
+      
+      describe 'to_pdf'  do
+        
+        def line_to_prepare
+          double(Account,  number:'707' , :title=>'titre du compte', 
+          
+          :cumulated_debit_before=>10,
+          :cumulated_credit_before=>1,
+          :movement=>0,
+          
+          :sold_at=> 45.14 )
+        end
+        
+        before(:each) do 
+          
+          @pdf = @b.to_pdf
+        end
 
-      it 'should be able to_pdf with 5 pages' do
-        pdf = @b.to_pdf
-        pdf.stub(:collection).and_return @b
-        pdf.should be_an_instance_of(Editions::Balance)
-        pdf.nb_pages.should == 5
+        it 'crée une instance de Editions::Balance' do
+          @pdf.should be_an_instance_of(Editions::Balance)
+          
+        end
+      
+        it('ayant 5 pages') {@pdf.nb_pages.should == 5}
+        
+        it 'et pouvant être rendue' , wip:true do 
+          @pdf.stub(:fetch_lines).and_return (1..100).map {|i| line_to_prepare}
+          @pdf.render
+        end
+      
       end
 
       describe 'to_csv'  do
@@ -215,7 +239,7 @@ describe Compta::Balance do
         end
 
         it 'la dernière affiche les totaux' do
-           @b.to_csv.split("\n").last.should == ['Totaux', '""' ,	'20,00',	'2,00',	'4,00',	'8,00',	'-14,00'].join("\t")
+          @b.to_csv.split("\n").last.should == ['Totaux', '""' ,	'20,00',	'2,00',	'4,00',	'8,00',	'-14,00'].join("\t")
 
         end
       end
