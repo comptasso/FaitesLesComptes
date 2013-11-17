@@ -30,7 +30,7 @@ module Extract
     # ce prepare_line prépare les lignes pour les exports en csv et xls
     #
     # ne pas le confondre avec celui qui préparer les lignes pour le pdf
-    # et qui se situe dans la classe PdfDocument::Cash
+    # et qui se situe dans la classe Editions::BankAccount
     def prepare_line(line)
     
       [I18n::l(line.date),
