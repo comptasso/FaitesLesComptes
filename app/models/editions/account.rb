@@ -23,6 +23,7 @@ module Editions
       @columns_select = ['writings.date AS w_date', 'books.title AS b_title', 'writings.ref AS w_ref', 'writings.narration AS w_narration', 'nature_id', 'destination_id', 'debit',  'credit']
       @columns_methods = ['w_date', 'b_title', 'w_ref', 'w_narration', 'nature.name', 'destination.name', nil, nil]
       @columns_widths =  [10, 8, 8, 24, 15, 15, 10, 10]
+      @columns_alignements = 6.times.collect {:left} + 2.times.collect {:right}
       @columns_titles = %w(Date Jnl Réf Libellé Nature Destination Débit Crédit)
       self.first_report_line = ["Soldes au #{I18n::l @from_date}"] + source.formatted_sold(@from_date)
       @columns_to_totalize = [6,7]

@@ -153,7 +153,7 @@ module PdfDocument
     #
     # Retourne le fichier pdf après avoir interprété le contenu du template
     def render_pdf_text(pdf, template = @template)
-      @columns_alignements ||= set_columns_alignements # pour être sur que les alignements soient initialisés
+      # @columns_alignements ||= default_columns_alignements # pour être sur que les alignements soient initialisés
       text = File.open(template, 'r') {|f| f.read  }
       doc = self # doc est nécessaire car utilisé dans default.pdf.prawn
       Rails.logger.debug "render_pdf_text rend #{doc.inspect}, document de #{doc.nb_pages}"
