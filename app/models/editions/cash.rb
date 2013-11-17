@@ -7,20 +7,19 @@ module Editions
   # Cette classe hérite de Editions::Book et surcharge fetch_lines
   class Cash < Editions::Book
 
-    # TODO comme cash_extract est produit en mentionnant une période, on pourrait
-    # envisager de faire cette initialisation sans l'argument period.
-    def initialize(period, cash_extract)
-      super(period, cash_extract)
-
-       set_columns ['writings.date AS w_date', 'writings.ref AS w_ref',
+    
+    def fill_default_values
+      super 
+      @columns_select = ['writings.date AS w_date', 'writings.ref AS w_ref',
         'writings.narration AS w_narration', 'destination_id',
         'nature_id', 'credit', 'debit']
-       set_columns_methods ['w_date', 'w_ref', 'w_narration',
+       @columns_methods = ['w_date', 'w_ref', 'w_narration',
         'destination.name', 'nature.name', 'credit', 'debit']
+       @columns_titles = %w(Date Réf Libellé Destination Nature Crédit Débit)
+       @columns_widths = [12, 12, 28,12,12,12,12]
+       @columns_to_totalize = [5,6]
+       @columns_alignements = [:left, :left, :left, :left, :left, :right, :right]
        
-       set_columns_widths([12, 12, 28,12,12,12,12])
-       set_columns_to_totalize [5,6]
-       set_columns_alignements [:left, :left, :left, :left, :left, :right, :right]
     end
 
    
