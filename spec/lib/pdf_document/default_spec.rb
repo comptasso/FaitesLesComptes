@@ -157,8 +157,8 @@ describe PdfDocument::Default do
     end
 
     it 'appelé une page hors limite déclenche une erreur' do
-      expect {@default.page(6)}.to raise_error ArgumentError
-      expect {@default.page(0)}.to raise_error ArgumentError
+      expect {@default.page(6)}.to raise_error PdfDocument::Error, 'La page demandée est hors limite'
+      expect {@default.page(0)}.to raise_error PdfDocument::Error, 'La page demandée est hors limite'
     end
 
     it 'un doc doit pouvoir énumérer ses pages' do
@@ -215,7 +215,7 @@ describe PdfDocument::Default do
     describe 'les largeurs de colonnes' do
 
       before(:each) do
-        @default.set_columns   %w(line_date ref nature_id destination_id debit credit)
+        @default.columns =   %w(line_date ref nature_id destination_id debit credit)
       end
 
       it 'on a une largeur de colonnes par défaut' do
@@ -223,17 +223,17 @@ describe PdfDocument::Default do
       end
 
       it 'on peut imposer les 6 colonnes' do
-        @default.set_columns_widths([10,20,30,10,15,15])
+        @default.columns_widths= [10,20,30,10,15,15]
         @default.columns_widths.should == [10,20,30,10,15,15]
       end
 
       it 'on peut n imposer que les 4 premières' do
-        @default.set_columns_widths([10,20,30,10])
+        @default.columns_widths = [10,20,30,10]
         @default.columns_widths.should == [10,20,30,10,15,15]
       end
 
       it 'gestion des erreurs des size' do
-        expect {@default.set_columns_widths([10,20,30,50])}.to raise_error ArgumentError
+        expect {@default.columns_widths= [10,20,30,50]}.to raise_error ArgumentError
       end
 
     end
@@ -243,8 +243,8 @@ describe PdfDocument::Default do
     describe 'gestion des totaux' do
 
       before(:each) do
-        @default.set_columns  %w(line_date ref nature_id destination_id debit credit)
-        @default.set_columns_widths([10,20,30,10])
+        @default.columns_methods=  %w(line_date ref nature_id destination_id debit credit)
+        @default.columns_widths= [10,20,30,10]
       end
 
       it 'set avec un array vide génère une erreur' do

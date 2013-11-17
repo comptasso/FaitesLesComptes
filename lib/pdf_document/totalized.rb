@@ -17,8 +17,8 @@ module PdfDocument
   #
   class Totalized < PdfDocument::Simple
 
-    attr_reader :columns_to_totalize
-    attr_accessor :first_report_line
+     
+    attr_accessor :first_report_line, :columns_to_totalize
 
      def initialize(period, source, options)
       super
@@ -40,27 +40,32 @@ module PdfDocument
     # les colonnes à totaliser sont indiquées par un indice
     # par exemple si on demande Date Réf Debit Credit
     # on sélectionne [2,3] pour indices
-    def set_columns_to_totalize(indices)
-      
+    def columns_to_totalize=(indices)
       raise ArgumentError , 'Le tableau des colonnes ne peut être vide' if indices.empty?
       @columns_to_totalize = indices
-      set_total_columns_widths
     end
-
+    
+    def total_columns_widths
+      @total_columns_widths ||= default_total_columns_widths
+    end
+    
+    
+    
+    protected
 
     # Calcule les largeurs de colonnes pour une ligne de total.
     #
     # L'objectif est de regrouper les colonnes qui ne sont pas à totaliser, a priori
     # à gauche, en une seule.
-    def set_total_columns_widths
-      raise 'Impossible de calculer les largeurs des lignes de total car les largeurs de la table ne sont pas fixées' unless @columns_widths
+    def default_total_columns_widths
+      raise 'Impossible de calculer les largeurs des lignes de total car les largeurs de la table ne sont pas fixées' unless columns_widths
       @total_columns_widths = []
       # si la colonne est à totaliser on retourne la valeur
       # sinon on la garde et on examine la colonne suivant
       l = 0 # variable pour accumuler les largeurs des colonnes qui ne sont pas à totaliser
-      Rails.logger.debug "DEBUG : Largeur des colonnes #{@columns_widths.inspect}"
-      @columns_widths.each_with_index do |w,i|
-        if @columns_to_totalize.include? i
+      Rails.logger.debug "DEBUG : Largeur des colonnes #{columns_widths.inspect}"
+      columns_widths.each_with_index do |w,i|
+        if columns_to_totalize.include? i
           if l != 0
             @total_columns_widths << l
             l = 0

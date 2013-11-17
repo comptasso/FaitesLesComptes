@@ -49,7 +49,7 @@ module PdfDocument
     attr_accessor :title, :subtitle, :columns_alignements, :columns_widths,
      :columns_methods, :columns_titles, :orientation, :organism_name, :exercice, :nb_lines_per_page
     attr_accessor :top_left, :stamp
-    attr_reader :created_at,   :collection
+    attr_reader :created_at,   :collection, :source
 
     validates :title, :columns_methods, :presence=>true
     validates :orientation, :inclusion=>{in: [:portrait, :landscape]}
@@ -139,18 +139,12 @@ module PdfDocument
     # permet de définie la largeur des colonnes. Les largeurs sont spécifiées 
     # en % de la largeur de ligne.
     # Le total des valeurs doit être égale à 100
-    # le total doit
     def columns_widths=(array_widths)
-      raise PdfDocument::PdfDocumentError, "Le nombre de valeurs doit être égal au nombre de colonnes, en l'occurence #{columns_methods.size}" if array_widths.length != columns_methods.size
       raise PdfDocument::PdfDocumentError, "Le total des largeurs de colonnes doit être égale à 100, valeur calculée :  #{array_widths.sum}" if array_widths.sum != 100
       @columns_widths = array_widths
     end
 
-    # définit un aligment des colonnes, à gauche par défaut
-    def columns_alignements=(alignements)
-      raise PdfDocumentError, "Le nombre de valeurs doit être égal au nombre de colonnes, en l'occurence #{columns_methods.size}" if alignements.length != columns_methods.size
-      @columns_alignements =  alignements
-    end
+   
 
     # Crée le fichier pdf associé
     def render

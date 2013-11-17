@@ -62,7 +62,7 @@ class Writing < ActiveRecord::Base
 
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
 
-  default_scope order('date ASC')
+  default_scope order('writings.date ASC')
   
   scope :period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }

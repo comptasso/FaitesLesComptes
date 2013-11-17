@@ -2,7 +2,7 @@
 
 module Editions
 
-  # Classe destinée à imprimer le livre vrituel d'un compte bancaire
+  # Classe destinée à imprimer le livre virtuel d'un compte bancaire
   # au format pdf
   #
   # Cette classe hérite de Editions::Book et surcharge fetch_lines

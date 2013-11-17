@@ -66,6 +66,8 @@ module Editions
       start_new_page unless (n == document.nb_pages)
 
       end
+      
+      numerote
     end
   end
 end

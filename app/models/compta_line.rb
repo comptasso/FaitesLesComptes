@@ -43,9 +43,9 @@ class ComptaLine < ActiveRecord::Base
   # inclut with_writings et donc doit être utilisé pour un query qui ne l'inclut pas déja.
   scope :mois_with_writings, lambda {|date| with_writings.where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month)}
 
-  scope :range_date, lambda {|from, to| with_writings.extract(from, to).order('date')}
+  scope :range_date, lambda {|from, to| with_writings.extract(from, to)}
   # extract est comme range_date mais n'inclut pas with_writings
-  scope :extract, lambda {|from, to| where('writings.date >= ? AND writings.date <= ?', from, to ).order('date')}
+  scope :extract, lambda {|from, to| where('writings.date >= ? AND writings.date <= ?', from, to ).order('writings.date')}
   
   # FIXME revoir listing semble faux.... car books.title devrait être books.abbreviation
   scope :listing, lambda {|from, to| with_writing_and_book.where('books.title != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}

@@ -42,7 +42,7 @@ describe 'Editions::Balance' do
        @b.stub(:provisoire?).and_return true
        @b.stub(:accounts).and_return(@ar = double(Arel))
        @ar.stub(:collect).and_return (1..100).map {|i| bal_line(2)}
-       @ar.stub(:count).and_return 100 
+       @ar.stub(:length).and_return 100 
      end
 
      it 'total_balance renvoie le total'  do

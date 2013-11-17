@@ -10,6 +10,7 @@
 #
 # Balance se crée soit en fournissant tous les paramètres, soit
 # en fournissant period_id et en appelant with_default_values
+# 
 #
 #
 class Compta::Balance < ActiveRecord::Base
