@@ -1,4 +1,4 @@
-require 'pdf_document/pdf_rubriks.rb'
+# require 'pdf_document/pdf_rubriks.rb'
 
 # Classe destinée à remplacer les actuels Compta::Rubriks et Compta::Rubrik
 # pour permettre de manipuler les nomenclatures qui servent à établir les documents
