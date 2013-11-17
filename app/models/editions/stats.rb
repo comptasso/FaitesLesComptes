@@ -23,25 +23,29 @@ module Editions
   # Dans l'immédiat on fait la tranche des 12 derniers mois.
   #
   class Stats < PdfDocument::Totalized
-
+    
+    LARGE_COL_NUM = 6.5
     def initialize(period, source)
+      @select_method = 'stats' # stats est la méthode qui renvoie les stats
       super(period, source, {})
-      @from_date = period.start_date
-      @to_date = period.close_date
+    end
+    
+    def fill_default_values
+      plm = last_twelve_months
+      @columns_methods = [:id, :name] # avant super car tenterait d'appeler default_columns_methods de
+      # Simple
+      super
       @title = 'Statistiques par nature'
       
-      # stats est la méthode qui renvoie les stats
-      @select_method = 'stats'
-   
+      @columns_titles = ['Natures'] + plm.collect {|my| my.to_format('%b %y')} + ['Total']
+      @columns_alignements = [:left] + plm.collect{:right} + [:right] # à gauche pour les natures et à droite pour les mois et la colonne Total
+      @columns_widths = [100 - (1 + plm.length)*LARGE_COL_NUM] + plm.collect {LARGE_COL_NUM } + [LARGE_COL_NUM]
+      @columns_to_totalize = 1.upto(1 + plm.length).collect {|i| i}
+    end
+    
+    def subtitle
       plm = last_twelve_months
-      @subtitle = "De #{plm.first.to_format('%B %Y')} à #{plm.last.to_format('%B %Y')}"
-
-      set_columns [:id, :name]
-      set_columns_titles(['Natures'] + plm.collect {|my| my.to_format('%b %y')} + ['Total'])
-      set_columns_alignements([:left] + plm.collect{:right} + [:right]) # à gauche pour les natures et à droite pour les mois et la colonne Total
-      larg_col_num = 6.5
-      set_columns_widths([100 - (1 + plm.length)*larg_col_num] + plm.collect {larg_col_num } + [larg_col_num])
-      set_columns_to_totalize(1.upto(1 + plm.length).collect {|i| i})
+      "De #{plm.first.to_format('%B %Y')} à #{plm.last.to_format('%B %Y')}"
     end
 
    
