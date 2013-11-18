@@ -5,23 +5,23 @@
 require 'pdf_document/page'
 require 'pdf_document/table'
 require 'pdf_document/totalized'
+require 'pdf_document/default_prawn'
 
 module PdfDocument
   # Voir PdfDocument::Base pour les détails de fonctionnement de cette hiérarchie 
   # de classe
   # 
-  # Cette classe est utilisée pour des source qui répondent à #compta_lines
+  # Cette classe est utilisée pour des source qui répondent à #compta_lines et 
+  # comme c'est l'essentiel d'un logiciel de compta, elle s'appelle Default.
   #  
   # first_report_line(array) permet d'insérer dans la première page une ligne de report
   #   par exemple first_report_line['soldes au 01/03/2012', '212.00']
   #   La valeur (ici 212) sera alors reprise pour faire les totaux de la page et le calcul des reports
   #
   # La méthode page(number) permet d'appeler une page spécifique du pdf
-  # La méthode render(filename) permet de rendre le pdf construit sous forme de string en utilisant le fichier
-  # de template filename; par défaut lib/pdf_document/default.pdf.prawn.
   # 
-  # Une nouvelle variable @columns_select est mise en place et sert à faire 
-  # la reqûete sur la base de données
+  # Par rapport à PdfDocument::Totéalized, une nouvelle variable @columns_select
+  # apparait et sert à faire la reqûete sur la base de données
   #
   #
   class Default < PdfDocument::Totalized
@@ -76,6 +76,14 @@ module PdfDocument
     
     def columns_select
       @columns_select ||= default_columns_select
+    end
+    
+    
+    # Crée le fichier pdf associé
+    def render
+      pdf_file = PdfDocument::DefaultPrawn.new(:page_size => 'A4', :page_layout => @orientation) 
+      pdf_file.fill_pdf(self)
+      pdf_file.render
     end
 
     

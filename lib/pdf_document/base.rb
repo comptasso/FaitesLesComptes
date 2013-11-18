@@ -1,8 +1,7 @@
 # coding: utf-8
 
 require 'prawn'
-require 'pdf_document/common'
-require 'pdf_document/prawn_base'
+require 'pdf_document/base_prawn'
 
 module PdfDocument
  
@@ -122,14 +121,11 @@ module PdfDocument
       @columns_alignements = default_columns_alignements   # changer les méthodes doit redéfinir les alignements
       @columns_widths = default_columns_widths 
     end
-    
-    
-    
-   
+       
     
     # les alignements des colonnes par défaut sont à gauche
     def columns_alignements
-      @columns_alignements ||= default_columns_alignements
+      @columns_alignements ||= default_columns_alignements 
     end
     
     
@@ -158,7 +154,7 @@ module PdfDocument
 
     # Crée le fichier pdf associé
     def render
-      pdf_file = PdfDocument::PrawnBase.new(:page_size => 'A4', :page_layout => @orientation) 
+      pdf_file = PdfDocument::BasePrawn.new(:page_size => 'A4', :page_layout => @orientation) 
       pdf_file.fill_pdf(self)
       pdf_file.render
     end

@@ -14,7 +14,7 @@ module PdfDocument
   # remplir la partie haute de la page ou #jc_fill_stamp qui produit le tampon.
   # 
   #
-  class PrawnBase < Prawn::Document
+  class BasePrawn < Prawn::Document
     
     # définit le style d'une ligne en fonction de la profondeur de la rubrique
     # pour rappel, depth = -1 pour une ligne de détail de compte
@@ -46,7 +46,7 @@ module PdfDocument
         
         stroke_horizontal_rule
 
-        table [document.columns_titles],
+        table [current_page.table_title],
           :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do
           col_widths.each_with_index {|w,i| column(i).width = w}
         end
@@ -98,6 +98,9 @@ module PdfDocument
       end
 
     end
+    
+   
+
     
     # réalise la pagination de @pdf_file
     def numerote

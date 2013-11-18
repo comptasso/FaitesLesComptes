@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'pdf_document/base.rb'
 require 'pdf_document/page'
-require 'pdf_document/prawn_base'
+require 'pdf_document/base_prawn'
 
 describe PdfDocument::Base do
   

@@ -7,12 +7,12 @@
 #
 
 # Les comptes peuvent être actifs ou non. Etre actif signifie qu'on peut
-# enregistrer des écritures. 
+# enregistrer des écritures.  
 
 
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development
 
-require 'strip_arguments'
+require 'strip_arguments' 
 require 'pdf_document/simple'
 require 'pdf_document/totalized'
 
