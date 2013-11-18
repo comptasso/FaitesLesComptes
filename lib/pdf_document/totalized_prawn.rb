@@ -32,9 +32,9 @@ module PdfDocument
       # en calculant la largeur des colonnes
       column_widths = document.columns_widths.collect { |w| width*w/100 }
       # la table des pages
-      1.upto(doc.nb_pages) do |n|
-        page = doc.page(n)
-        pad(05) { font_size(12) {entetes(current_page, cursor) } }
+      1.upto(document.nb_pages) do |n|
+        page = document.page(n)
+        pad(05) { font_size(12) {entetes(page, cursor) } }
 
         stroke_horizontal_rule
 
@@ -59,7 +59,7 @@ module PdfDocument
           unless page.table_lines.empty?
             table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5],:height => 16,  :overflow=>:truncate} do
               column_widths.each_with_index {|w,i| column(i).width = w}
-              doc.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
+              document.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
             end
           end
 
@@ -74,16 +74,12 @@ module PdfDocument
 
         end
         
-        # Crée le fichier pdf associé
-        def render
-          pdf_file = PdfDocument::TotalizedPrawn.new(:page_size => 'A4', :page_layout => @orientation) 
-          pdf_file.fill_pdf(self)
-          pdf_file.render
-        end
-
+        
         stamp 'fond'
 
         start_new_page unless (n == document.nb_pages)
+        
+        numerote
 
       end
     end
