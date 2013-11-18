@@ -1,6 +1,7 @@
 # coding: utf-8
 
 require 'prawn'
+require 'pdf_document/base'
 
 module PdfDocument
   

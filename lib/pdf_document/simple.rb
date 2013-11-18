@@ -5,6 +5,7 @@
 require 'prawn'
 require 'pdf_document/base'
 require 'pdf_document/page'
+require 'pdf_document/simple_prawn'
 
 module PdfDocument
 
@@ -130,6 +131,13 @@ module PdfDocument
         val = ActionController::Base.helpers.number_with_precision(val, :precision=>2) if val.is_a?(Numeric)
         val
       end
+    end
+    
+    # Crée le fichier pdf associé
+    def render
+      pdf_file = PdfDocument::SimplePrawn.new(:page_size => 'A4', :page_layout => @orientation) 
+      pdf_file.fill_pdf(self)
+      pdf_file.render
     end
 
     
