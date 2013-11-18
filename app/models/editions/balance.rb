@@ -65,7 +65,7 @@ module Editions
     
     # Crée le fichier pdf associé, le remplit et le rend
     def render
-      pdf_file = Editions::PrawnBalance.new(:page_size => 'A4', :page_layout => :portrait) 
+      pdf_file = Editions::PrawnBalance.new(:page_size => 'A4', :page_layout => :landscape) 
       pdf_file.fill_pdf(self)
       pdf_file.render 
     end

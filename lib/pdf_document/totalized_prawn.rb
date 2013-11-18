@@ -30,7 +30,8 @@ module PdfDocument
       jclfill_stamp(document.stamp) # on initialise le tampon
       # on démarre la table proprement dite
       # en calculant la largeur des colonnes
-      column_widths = document.columns_widths.collect { |w| width*w/100 }
+      column_widths = document.columns_widths.collect { |w| w*width/100 }
+      largeur = width # car après width dans les tables renvoie à une autre largeur
       # la table des pages
       1.upto(document.nb_pages) do |n|
         page = document.page(n)
@@ -51,7 +52,7 @@ module PdfDocument
           # une table de une ligne pour le report
           if page.table_report_line
             table [page.table_report_line],  :cell_style=>{:font_style=>:bold, :align=>:right } do 
-              page.total_columns_widths.each_with_index {|w,i| column(i).width = width*w/100 }
+              page.total_columns_widths.each_with_index {|w,i| column(i).width = w*largeur/100 }
             end
           end
 
@@ -67,7 +68,7 @@ module PdfDocument
           # la table total et la table a reporter
           table [page.table_total_line, page.table_to_report_line],  :cell_style=>{:font_style=>:bold, :align=>:right } do
             page.total_columns_widths.each_with_index do |w,i|
-              column(i).width = width*w/100
+              column(i).width = largeur*w/100
       
             end
           end

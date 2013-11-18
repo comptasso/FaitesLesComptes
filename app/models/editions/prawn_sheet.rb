@@ -1,4 +1,4 @@
-require 'pdf_document/prawn_base'
+require 'pdf_document/base_prawn'
 
 module Editions
   # Editions::PrawnSheet hérite de Prawn::Base qui lui-même hérite de Prawn::Document
@@ -8,7 +8,7 @@ module Editions
   # et fill_passif_pdf pour fournir les deux types d'éditions à partir des mêmes données
   # (appelé ici document) 
   #
-  class PrawnSheet < PdfDocument::PrawnBase
+  class PrawnSheet < PdfDocument::BasePrawn
     
     
      

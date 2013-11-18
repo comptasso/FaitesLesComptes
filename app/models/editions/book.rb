@@ -27,7 +27,7 @@ module Editions
         'w_mode', 'writing_id']
       @columns_titles = %w(Date Réf Libellé Destination Nature Débit Crédit Payement Pièce)
       
-      @columns_widths = [8, 6, 20 ,10 ,  10, 10, 10,13,13]
+      @columns_widths = [8, 6, 20 ,10 , 10, 10, 10,13,13]
       @columns_to_totalize = [5,6]
       @columns_alignements = [:left, :left, :left, :left, :left, :right, :right, :left, :left]
     end

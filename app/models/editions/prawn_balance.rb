@@ -1,8 +1,8 @@
-require 'pdf_document/prawn_base'
+require 'pdf_document/base_prawn'
 
 module Editions
   
-  class PrawnBalance < PdfDocument::PrawnBase
+  class PrawnBalance < PdfDocument::TotalizedPrawn
     
     
     
