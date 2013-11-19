@@ -14,3 +14,4 @@ hello.pdf
 coverage
 testocra.bat
 C:\\nppdf32Log\\debuglog.txt
+spec/models/pdf_files/test_pdf_files

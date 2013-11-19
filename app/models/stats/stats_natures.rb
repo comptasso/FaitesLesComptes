@@ -38,7 +38,8 @@ module Stats
 
     
     # fait les totaux de toutes les lignes et renvoie un array 
-    # Totaux float, float, ..., float, total des floats
+    # Totaux float, float, ..., float, total des floats. Est utile pour 
+    # l'affichage dans la vue et pour les export csv et pdf.
     def totals
       t=['Totaux']
       # bottoms est un arrau de totaux des différents mois de l'exercice
@@ -72,8 +73,8 @@ module Stats
     # par ordre de position puis construit la ligne de statistique
     def stats
       stats = []
-      @period.natures.order('income_outcome DESC', 'position ASC').each do |n|
-        stats << [n.name] + n.stat_with_cumul(@dest_id)
+      @period.natures.order('income_outcome DESC', 'position ASC').each do |nature|
+        stats << [nature.name] + nature.stat_with_cumul(@dest_id)
       end
       @stats = stats
     end

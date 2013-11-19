@@ -25,6 +25,7 @@ module Editions
   class Stats < PdfDocument::Totalized
     
     LARGE_COL_NUM = 6.5
+    
     def initialize(period, source)
       @select_method = 'stats' # stats est la méthode qui renvoie les stats
       super(period, source, {})

@@ -20,12 +20,7 @@ module PdfDocument
      
     attr_accessor :first_report_line, :columns_to_totalize
 
-     def initialize(period, source, options)
-      super
-      @template = 'lib/pdf_document/totalized.pdf.prawn.rb'
-    end
-
-
+    
     # par rapport à la méthode héritée, prepare_line ne fait pas de mise
     # en forme automatique des champs numériques, pour pouvoir permettre la
     # totalisation.
@@ -49,7 +44,12 @@ module PdfDocument
       @total_columns_widths ||= default_total_columns_widths
     end
     
-    
+    # Crée le fichier pdf associé
+    def render
+      pdf_file = PdfDocument::TotalizedPrawn.new(:page_size => 'A4', :page_layout => @orientation) 
+      pdf_file.fill_pdf(self)
+      pdf_file.render
+    end
     
     protected
 

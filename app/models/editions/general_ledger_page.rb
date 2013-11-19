@@ -5,7 +5,6 @@
 module Editions
 
   # la classe GeneralLedgerPage construit une page du journal général
-  # Elle répond donc aux méthodes exigées par default.pdf.prawn.
   #
   # Elle est appelée par Compta::PdfGeneralLedger avec comme argument :
   #  self qui devient le document,
