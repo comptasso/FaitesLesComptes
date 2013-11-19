@@ -47,5 +47,41 @@ describe Editions::Stats do
     end
   end
   
+  describe 'avec un exercice de 6 mois seulement' do
+    before(:each) do
+      p.stub(:close_date).and_return(p.start_date.months_since(5).end_of_month)
+      p.stub(:list_months).and_return ListMonths.new p.start_date, p.close_date
+      @stn.stub(:stats).and_return stub_stats(25, 6)
+      @es = Editions::Stats.new(p, @stn) 
+      @es.stub(:organism_name).and_return 'Pages de  statistiques'  
+    end
+    
+    it 'rend le fichier correctement' do
+    
+    File.open("#{File.dirname(__FILE__)}/test_pdf_files/stats6mois.pdf", 'wb') do |f| 
+      f << @es.render 
+    end
+    end 
+  end
+  
+  describe 'avec un exercice de 18 mois seulement' do   
+    before(:each) do
+      p.stub(:close_date).and_return(p.start_date.months_since(17).end_of_month)
+      p.stub(:list_months).and_return ListMonths.new p.start_date, p.close_date
+      @stn.stub(:stats).and_return stub_stats(25, 18)
+      @es = Editions::Stats.new(p, @stn) 
+      @es.stub(:organism_name).and_return 'Pages de  statistiques' 
+    end
+    
+    it 'rend le fichier correctement' do
+      file_name =  "#{File.dirname(__FILE__)}/test_pdf_files/stats18mois.pdf" 
+    
+    File.delete(file_name) if File.exists?(file_name)
+    File.open(file_name, 'wb') do |f|
+      f << @es.render 
+    end
+    end 
+  end
+  
   
 end   

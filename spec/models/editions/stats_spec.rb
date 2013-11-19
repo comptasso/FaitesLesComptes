@@ -46,7 +46,7 @@ describe Editions::Stats do
   it 'si les lignes ont plus de 14 colonnes ne garde que les douze derniers mois' do
     source.should_receive(:lines).at_least(1).times.and_return(stub_lines(30,18))
     sts = Editions::Stats.new(p, source)
-    sts.fetch_lines(1).should be_an Array
+    sts.fetch_lines(1).should be_an Array 
     sts.fetch_lines(1).first.size.should == 14 # le titre plus 12 mois plus le total
   end
 

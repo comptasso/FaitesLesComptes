@@ -62,7 +62,7 @@ module Editions
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
       fls = source.lines.slice(offset, limit)
-      twelve_months_lines(fls)
+      twelve_months_lines(fls) 
     end
 
     def prepare_line(line)
@@ -82,11 +82,15 @@ module Editions
     # cette méthode est rendue nécessaire pour l'édition de pdf car la mise en
     # page est prévue pour 12 mois.
     #
-    # On tronque donc le tableau s'il y a plus de 12 mois.
+    # On tronque donc le tableau s'il y a plus de 12 mois et on refait le total.
     def twelve_months_lines(collection)
       return collection if collection.first.size <= 14
-      # on prend les colonnes 0 (le libellé) et les 13 dernières
-      collection.collect {|l| l.slice(0,1) + l.slice(-13,13)}
+      collection.collect do |l| 
+        values = l.slice(-13, 12)
+        total = values.sum rescue 'Erreur'
+        l.slice(0,1) + values + [total]
+      end
+      
     end
 
 
