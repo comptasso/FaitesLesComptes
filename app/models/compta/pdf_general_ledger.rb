@@ -12,15 +12,12 @@ module Compta
      attr_reader :period
 
       def initialize(period) 
-        @period = period
-        @title  = 'Journal Général'
-        @subtitle = @period.open ? 'Provisoire' : 'Définitif'
+        @subtitle = period.open ? 'Provisoire' : 'Définitif'
         @columns_widths =  [15.0, 15.0, 40.0, 15.0, 15.0]  # cinq colonnes
         @total_columns_widths = [70.0, 15.0, 15.0]
         @columns_alignements = [:left, :left, :left, :right, :right]
-        @stamp = @period.open ? 'Provisoire' : ''
-        @created_at = Time.now
-        pages
+        @stamp = period.open ? 'Provisoire' : ''
+        super(period, period, {title:'Journal Général'})
       end
 
       # retourne la collection de monthly_ledgers avec un cache
@@ -44,6 +41,7 @@ module Compta
       # la liste des monthly_ledger, et le numéro de la page
       #
       # TODO puisqu'on envoie self, alors le deuxième argument est redondant
+      # TODO refactoriser pour faciliter la relecture.
       #
       def page(n)
         Editions::GeneralLedgerPage.new(self,  pages[n].map {|i| monthly_ledgers[i]}, n)

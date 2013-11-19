@@ -40,7 +40,6 @@ module PdfDocument
     # - @period.start_date et @period.close_date
     #
     def fill_default_values
-      @template = "lib/pdf_document/default.pdf.prawn"
       @from_date ||= @period.start_date
       @to_date ||= @period.close_date
       
