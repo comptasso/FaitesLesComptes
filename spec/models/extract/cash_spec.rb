@@ -26,8 +26,8 @@ describe Extract::Cash do
   it 'to_csv prépare les lignes' do
     @ec.stub(:lines).and_return([double(ComptaLine, date:Date.today,
         narration:'un libellé', ref:'001', :credit=>0,
-        destination:stub(:name=>'la destinée'),
-        nature:stub(:name=>'ecolo'),
+        destination:double(:name=>'la destinée'),
+        nature:double(:name=>'ecolo'),
         :debit=>'125.56')])
 
     @ec.to_csv.should == "Date\tRéf\tLibellé\tDestination\tNature\tSorties\tEntrées\n#{I18n.l(Date.today, :format=>'%d/%m/%Y')}\t001\tun libellé\tla destinée\tecolo\t0,00\t125.56\n"

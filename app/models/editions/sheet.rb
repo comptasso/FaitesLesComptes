@@ -73,10 +73,10 @@ module Editions
     end
          
 
-    # Crée le fichier pdf associé
+    # Crée le fichier pdf associé 
     def render
       pdf_file = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait) 
-      collection == :actif ? @pdf_file.fill_actif_pdf(self) : pdf_file.fill_passif_pdf(self)
+      collection == :actif ? pdf_file.fill_actif_pdf(self) : pdf_file.fill_passif_pdf(self)
       pdf_file.numerote
       pdf_file.render
     end

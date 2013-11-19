@@ -43,6 +43,8 @@ module Editions
       end
       
       stamp "fond"
+      
+      # on ne met pas ici numérote car on peut enchainer les documents
     end
     
     # construit une page complète de passif avec entêtes, tampon, titre de la table
@@ -74,7 +76,7 @@ module Editions
       end
       
       stamp "fond"
-
+      # on ne met pas ici numérote car on peut enchainer les documents
     end
     
     

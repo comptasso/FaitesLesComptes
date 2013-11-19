@@ -67,6 +67,16 @@ module PdfDocument
       numerote
     end
     
+    # réalise la pagination des fichiers pdf.
+    # Est en zone public car peut être appelé par un Editions::Sheet car 
+    # un tel modèle regroupe plusieurs documents et on doit faire la numérotation
+    # en fin de construction du pdf pour pouvoir afficher page x/y
+    def numerote
+      number_pages("page <page>/<total>",
+        { :at => [bounds.right - 150, 0],:width => 150,
+          :align => :right, :start_count_at => 1 })
+    end
+    
     protected 
     
     
@@ -102,12 +112,7 @@ module PdfDocument
    
 
     
-    # réalise la pagination de @pdf_file
-    def numerote
-      number_pages("page <page>/<total>",
-        { :at => [bounds.right - 150, 0],:width => 150,
-          :align => :right, :start_count_at => 1 })
-    end
+    
     # Définit une méthode tampon pour le PrawnSheet qui peut ensuite être appelée 
     # par fill_actif_pdf et fill_passif_pdf 
     #

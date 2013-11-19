@@ -51,7 +51,7 @@ describe Editions::Stats do
   end
 
   it 'sait rendre un pdf' do
-    p.stub(:organism).and_return(stub(title:'Ma petite affaire'))
+    p.stub(:organism).and_return(double(title:'Ma petite affaire'))
     p.stub(:exercice).and_return('Exercice 2013')
     source.stub(:lines).at_least(1).times.and_return(stub_lines(30,14))
     source.stub(:stats).and_return(stub_lines(30,14))

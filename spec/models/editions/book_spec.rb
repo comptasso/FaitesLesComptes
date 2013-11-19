@@ -6,13 +6,13 @@ describe Editions::Book do
 
   def line(date, debit, credit)
       double(ComptaLine, writing_id:1, w_ref:'',w_narration:'Une compta line',
-        destination:stub(:name=>'La destination'),
-        nature:stub(:name=>'La nature'),
+        destination:double(:name=>'La destination'),
+        nature:double(:name=>'La nature'),
         debit:debit,
         credit:credit,
         w_date:date,
         w_mode: 'Chèque',
-        writing:stub(payment_mode:'Chèque'),
+        writing:double(payment_mode:'Chèque'),
         support:'Ma banque',
         locked?:true)
     end
