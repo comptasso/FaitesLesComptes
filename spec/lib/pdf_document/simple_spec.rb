@@ -99,8 +99,8 @@ describe PdfDocument::Simple do
       source.stub(:count).and_return source.size
       @simple.stub_chain(:collection, :select, :offset, :limit).and_return source.slice(0,21)
       @simple.columns_methods=(['number'])
-      pdf = Prawn::Document.new
-      @simple.render_pdf_text(pdf, ) # juste pour vérifier qu'il n'y a pas d'erreur
+      @pdf = PdfDocument::SimplePrawn.new(:page_size => 'A4', :page_layout => @orientation) 
+      @simple.render_pdf_text(@pdf) # juste pour vérifier qu'il n'y a pas d'erreur
       # dans l'exécution de cette méthode
     end
 
