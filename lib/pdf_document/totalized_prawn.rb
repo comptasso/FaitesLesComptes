@@ -80,9 +80,10 @@ module PdfDocument
 
         start_new_page unless (n == document.nb_pages)
         
-        numerote
+        
 
       end
+      numerote
     end
   end
   
