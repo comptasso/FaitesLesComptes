@@ -4,22 +4,37 @@ module Editions
   
   class PrawnBalance < PdfDocument::TotalizedPrawn
     
-    
-    
+        
+    # assure le remplissage du pdf avec le contenu du document
     def fill_pdf(document)
       font_size(10) 
-      
-      
-      page_width = width
       jclfill_stamp(document.stamp)
-      
-      # calcul des largeurs de colonnes
-      column_widths = document.columns_widths.collect { |w| width*w/100 }
-  
+     
       # la table des pages
-      1.upto(document.nb_pages) do |n|
+      document.pages.each_with_index do |current_page, index|
+        contenu(document, current_page)
+        stamp "fond"
+        start_new_page unless (index + 1 == document.nb_pages)
+      end
+      
+      numerote
+    end
     
-        current_page = document.page(n)
+    protected
+    
+    # calcule la largeur des colonnes de la table principale
+    def set_table_columns_widths(document)
+      document.columns_widths.collect { |w| width*w/100 }
+    end
+    
+        
+    # remplit le contenu d'une page
+    def contenu(document, current_page)
+      # recopie de variables locales car les questions de portée posent autrement
+      # un problème dans le dessin des tables
+        table_columns_widths = set_table_columns_widths(document)
+        page_width = width
+        
         pad(05) { font_size(12) {entetes(current_page, cursor) } }
 
         stroke_horizontal_rule
@@ -33,10 +48,7 @@ module Editions
           column(3).width = page_width*(current_page.total_columns_widths[5])/100
         end
 
-        table [current_page.table_title],
-          :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do 
-          column_widths.each_with_index {|w,i| column(i).width = w}
-        end
+        draw_table_title(document, current_page)
 
         # une table de une ligne pour le report
         if current_page.table_report_line
@@ -47,7 +59,7 @@ module Editions
 
         # la table des lignes proprement dites
         table current_page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5], :height => 16, :overflow=>:truncate} do
-          column_widths.each_with_index {|w,i| column(i).width = w}
+          table_columns_widths.each_with_index {|w,i| column(i).width = w}
           document.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
 
         end
@@ -60,14 +72,18 @@ module Editions
           end
         end
 
-
-        stamp "fond"
-
-      start_new_page unless (n == document.nb_pages)
-
-      end
-      
-      numerote
     end
+    
+    def draw_table_title(document, page)
+      table_columns_widths = set_table_columns_widths(document)
+      table [page.table_title],
+          :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do 
+          table_columns_widths.each_with_index {|w,i| column(i).width = w}
+        end
+    end
+    
+    
+    
+    
   end
 end

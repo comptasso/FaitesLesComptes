@@ -38,9 +38,7 @@ module PdfDocument
       # en calculant la largeur des colonnes
       col_widths = document.columns_widths.collect { |w| width*w/100 }
       
-      1.upto(document.nb_pages) do |n|
-        
-        current_page = document.page(n)
+      document.pages.each_with_index do |current_page, index|
         
         pad(05) { font_size(12) {entetes(current_page, cursor) } }
         
@@ -60,7 +58,7 @@ module PdfDocument
 
         stamp 'fond'
 
-        start_new_page unless (n == document.nb_pages)
+        start_new_page unless document.nb_pages == index+1
 
       end
       
