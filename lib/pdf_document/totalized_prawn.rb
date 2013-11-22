@@ -25,7 +25,7 @@ module PdfDocument
   # page.table_to_report_line
   class TotalizedPrawn < PdfDocument::SimplePrawn
           
-    def fill_pdf(document)
+    def fill_pdf(document, numeros = true)
 
       jclfill_stamp(document.stamp) # on initialise le tampon
       # on démarre la table proprement dite
@@ -79,12 +79,12 @@ module PdfDocument
         stamp 'fond'
 
         start_new_page unless (n == document.nb_pages)
-        
-        
+          
 
       end
-      numerote
+      numerote if numeros
     end
+      
   end
   
 end

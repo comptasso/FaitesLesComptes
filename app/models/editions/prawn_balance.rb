@@ -1,4 +1,4 @@
-require 'pdf_document/base_prawn'
+require 'pdf_document/totalized_prawn'
 
 module Editions
   

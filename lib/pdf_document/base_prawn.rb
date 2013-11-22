@@ -31,7 +31,7 @@ module PdfDocument
     # le document produit.
     # On peut aussi créer d'autres fill_... si on veut avoir plusieurs types de documents
     # pour un même objet (par exemple fill_actif_pdf et fill_passif_pdf pour les Sheet).
-    def fill_pdf(document) # la table des pages
+    def fill_pdf(document, numeros= true) # la table des pages
       jclfill_stamp(document.stamp) # on initialise le tampon
       #
       # on démarre la table proprement dite
@@ -64,7 +64,7 @@ module PdfDocument
 
       end
       
-      numerote
+      numerote if numeros
     end
     
     # réalise la pagination des fichiers pdf.

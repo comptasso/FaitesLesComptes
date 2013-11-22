@@ -162,7 +162,7 @@ module PdfDocument
     # Permet d'insérer un bout de pdf dans un fichier pdf
     # prend un fichier pdf en argument 
     def render_pdf_text(pdf)
-      pdf.fill_pdf(self)
+      pdf.fill_pdf(self, false) # false permet de ne pas numeroter les pages
     end
 
     protected 

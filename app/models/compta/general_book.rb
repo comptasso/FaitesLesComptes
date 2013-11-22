@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require 'pdf_document/base_prawn'
+
 module Compta
   # GeneralBook est proche de balance, l'instance se crée avec
   # un range de date, un range de comptes
@@ -60,9 +62,7 @@ module Compta
 
           final_pdf.start_new_page unless a == ras.last # page suivante sauf si le dernier
       end
-      final_pdf.number_pages("page <page>/<total>",
-        { :at => [final_pdf.bounds.right - 150, 0],:width => 150,
-               :align => :right, :start_count_at => 1 })
+      final_pdf.numerote
       final_pdf
     end
  

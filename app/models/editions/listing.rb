@@ -46,6 +46,8 @@ module Editions
       offset = (page_number - 1)*nb_lines_per_page
       source.compta_lines.with_writing_and_book.select(columns_select).without_AN.range_date(from_date, to_date).offset(offset).limit(limit)
     end
+    
+    
 
 
   end

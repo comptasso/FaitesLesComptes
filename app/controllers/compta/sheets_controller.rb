@@ -144,9 +144,7 @@ class Compta::SheetsController < Compta::ApplicationController
       doc.to_pdf.render_pdf_text(final_pdf)
       final_pdf.start_new_page unless doc == @docs.last 
     end
-    final_pdf.number_pages("page <page>/<total>",
-      { :at => [final_pdf.bounds.right - 150, 0],:width => 150,
-        :align => :right, :start_count_at => 1 })
+    final_pdf.numerote
     final_pdf.render
   end
 
