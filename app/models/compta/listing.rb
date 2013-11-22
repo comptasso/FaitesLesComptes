@@ -97,10 +97,11 @@ module Compta
     # Produit un document pdf en s'appuyant sur la classe Editions::Account
     # descendant de PdfDocument::Default
     # et ses classe associées page et table
+    # TODO en fait périod est redondant puisque account descend de period
     def to_pdf(options = {})
       options[:from_date] = from_date
       options[:to_date] = to_date
-      Editions::Account.new(period, account, {from_date:from_date, to_date:to_date})
+      Editions::Listing.new(period, account, {from_date:from_date, to_date:to_date})
     end
 
     protected

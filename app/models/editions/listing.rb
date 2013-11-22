@@ -9,8 +9,8 @@ module Editions
   # La classe hérite de Default et surcharge la méthode prepare_line
   # ainsi que la méthode fetch_lines car on reprend pour les lignes celles 
   # qui ne sont pas dans le livre d'A Nouveau
-  #
-  class Account < PdfDocument::Default
+  # TODO changer pour Listing pour être cohérent avec les actions csv et view
+  class Listing < PdfDocument::Default 
 
     
     # il faut appeler super pour que toutes les valeurs soient déterminées, 
@@ -44,7 +44,7 @@ module Editions
     def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      @source.compta_lines.with_writing_and_book.select(columns_select).without_AN.range_date(from_date, to_date).offset(offset).limit(limit)
+      source.compta_lines.with_writing_and_book.select(columns_select).without_AN.range_date(from_date, to_date).offset(offset).limit(limit)
     end
 
 
