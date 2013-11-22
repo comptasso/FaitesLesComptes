@@ -47,7 +47,7 @@ module Compta
       #
       #
     def to_pdf 
-      final_pdf = Prawn::Document.new(:page_size => 'A4', :page_layout => :landscape)
+      final_pdf = PdfDocument::BasePrawn.new(:page_size => 'A4', :page_layout => :landscape)
 
       ras = accounts.select {|ra| ra.compta_lines.any? }
       ras.each do |a|
