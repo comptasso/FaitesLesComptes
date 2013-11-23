@@ -20,6 +20,8 @@ module PdfDocument
     TITLE_STYLE = {:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }
     LINE_STYLE = {:padding=> [1,5,1,5], :height => 16, :overflow=>:truncate}
     
+    attr_reader :docu
+    
     # définit le style d'une ligne en fonction de la profondeur de la rubrique
     # pour rappel, depth = -1 pour une ligne de détail de compte
     # sinon depth = 0 pour la rubrique racine puis +1 à chaque fois qu'on 
@@ -36,6 +38,7 @@ module PdfDocument
     # On peut aussi créer d'autres fill_... si on veut avoir plusieurs types de documents
     # pour un même objet (par exemple fill_actif_pdf et fill_passif_pdf pour les Sheet).
     def fill_pdf(document, numeros= true) # la table des pages
+      @docu = document
       jclfill_stamp(document.stamp) # on initialise le tampon
       #
       # on démarre la table proprement dite
@@ -48,17 +51,10 @@ module PdfDocument
         
         stroke_horizontal_rule
 
-        table [current_page.table_title],
-          :cell_style=>TITLE_STYLE    do
-          col_widths.each_with_index {|w,i| column(i).width = w}
-        end
+        draw_table_title(current_page, col_widths)
 
 
-        # la table des lignes proprement dites
-        table current_page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>LINE_STYLE do
-          col_widths.each_with_index {|w,i| column(i).width = w}
-          document.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
-        end
+        
 
         stamp 'fond'
 
@@ -70,7 +66,7 @@ module PdfDocument
     end
     
     # réalise la pagination des fichiers pdf.
-    # Est en zone public car peut être appelé par un Editions::Sheet car 
+    # Est en zone public car peut être appelé par un Editions::Sheet puisqu'un
     # un tel modèle regroupe plusieurs documents et on doit faire la numérotation
     # en fin de construction du pdf pour pouvoir afficher page x/y
     def numerote
@@ -80,6 +76,20 @@ module PdfDocument
     end
     
     protected 
+    
+    def draw_table_title(page, col_wid)
+      table [page.table_title], :cell_style=>TITLE_STYLE    do
+          col_wid.each_with_index {|w,i| column(i).width = w}
+        end
+    end
+    
+    def draw_table_lines(page, col_wid)
+      # la table des lignes proprement dites
+        table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>LINE_STYLE do
+          col_wid.each_with_index {|w,i| column(i).width = w}
+          document.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
+        end
+    end
     
     
     # la largeur de la page
