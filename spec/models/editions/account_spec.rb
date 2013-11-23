@@ -9,10 +9,10 @@ end
 
 
 # Classe de test ayant pour objet d'écrire concrètement un fichier pdf 
-describe 'Editions::Account qui est l édition d un listing de compte' do
+describe 'Editions::Listing qui est l édition d un listing de compte' do
   let(:from_date) {Date.today.beginning_of_year}
   let(:to_date) {Date.today.end_of_year}
-  let(:a) {mock_model(Account)}
+  let(:a) {mock_model(Account, :compta_lines=>'bonjour')}
   let(:p) {mock_model(Period)}
   
   def render_file(pdf, file_name)
@@ -38,7 +38,7 @@ describe 'Editions::Account qui est l édition d un listing de compte' do
   
   it 'to_pdf crée un Editions::Account' do
     cl = Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date)
-    cl.to_pdf.should be_an_instance_of(Editions::Account) 
+    cl.to_pdf.should be_an_instance_of(Editions::Listing) 
   end
   
   # TODO finir ces spec

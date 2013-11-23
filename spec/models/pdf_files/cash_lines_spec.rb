@@ -4,7 +4,7 @@
 require 'spec_helper'
 
 RSpec.configure do |config| 
-    config.filter =  {wip:true}
+   # config.filter =  {wip:true}
 end
 
 # Classe de test ayant pour objet d'écrire concrètement un fichier pdf 

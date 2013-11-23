@@ -13,7 +13,7 @@ describe Compta::GeneralLedgersController do
   describe "GET 'new'" do
     it "returns http success" do
       Compta::PdfGeneralLedger.should_receive(:new).with(@p).and_return(@pdf = double(Compta::PdfGeneralLedger))
-      @pdf.should_receive(:render).with("lib/pdf_document/prawn_files/general_ledger.pdf.prawn").and_return 'bonjour'
+      @pdf.should_receive(:render).and_return 'bonjour'
       get 'new', {period_id:@p.to_param, format:'pdf'}, valid_session
       response.should be_success
     end

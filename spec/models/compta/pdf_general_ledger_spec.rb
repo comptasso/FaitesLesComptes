@@ -13,7 +13,7 @@ describe Compta::PdfGeneralLedger do
 
   it 'raise an error si le nombre de journaux dépasse les limites de la page' do
       Compta::MonthlyLedger.any_instance.stub(:size).and_return 200
-      expect {Compta::PdfGeneralLedger.new(p)}.to raise_error('Trop grand nombre de journaux')
+      expect {Compta::PdfGeneralLedger.new(p).nb_pages}.to raise_error('Trop grand nombre de journaux')
   end
 
   describe 'les méthodes de la classe' do
