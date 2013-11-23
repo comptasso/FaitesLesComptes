@@ -33,32 +33,34 @@ module PdfDocument
       column_widths = document.columns_widths.collect { |w| w*width/100 }
       largeur = width # car après width dans les tables renvoie à une autre largeur
       # la table des pages
-      1.upto(document.nb_pages) do |n|
-        page = document.page(n)
-        pad(05) { font_size(12) {entetes(page, cursor) } }
+      document.pages.each_with_index do |current_page, index|
+        
+        pad(05) { font_size(12) {entetes(current_page, cursor) } }
 
         stroke_horizontal_rule
 
         # une table de une ligne pour les titres
-        table [page.table_title],
+        table [current_page.table_title],
           :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :size=>10, :align=>:center }    do 
           column_widths.each_with_index {|w,i| column(i).width = w}
         end
+     #   draw_table_title(current_page) 
 
+      #  draw_table_lines(current_page)
 
         font_size(8) do
 
 
           # une table de une ligne pour le report
-          if page.table_report_line
-            table [page.table_report_line],  :cell_style=>{:font_style=>:bold, :align=>:right } do 
-              page.total_columns_widths.each_with_index {|w,i| column(i).width = w*largeur/100 }
+          if current_page.table_report_line
+            table [current_page.table_report_line],  :cell_style=>{:font_style=>:bold, :align=>:right } do 
+              current_page.total_columns_widths.each_with_index {|w,i| column(i).width = w*largeur/100 }
             end
           end
 
           # la table des lignes proprement dites
-          unless page.table_lines.empty?
-            table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5],:height => 16,  :overflow=>:truncate} do
+          unless current_page.table_lines.empty?
+            table current_page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5],:height => 16,  :overflow=>:truncate} do
               column_widths.each_with_index {|w,i| column(i).width = w}
               document.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
             end
@@ -66,8 +68,8 @@ module PdfDocument
 
 
           # la table total et la table a reporter
-          table [page.table_total_line, page.table_to_report_line],  :cell_style=>{:font_style=>:bold, :align=>:right } do
-            page.total_columns_widths.each_with_index do |w,i|
+          table [current_page.table_total_line, current_page.table_to_report_line],  :cell_style=>{:font_style=>:bold, :align=>:right } do
+            current_page.total_columns_widths.each_with_index do |w,i|
               column(i).width = largeur*w/100
       
             end
@@ -78,7 +80,7 @@ module PdfDocument
         
         stamp 'fond'
 
-        start_new_page unless (n == document.nb_pages)
+        start_new_page unless document.nb_pages == index+1
           
 
       end

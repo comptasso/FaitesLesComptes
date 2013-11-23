@@ -43,8 +43,6 @@ describe PdfDocument::Base do
   
   subject {PdfDocument::BasePrawn.new(:page_size => 'A4', :page_layout => :landscape)}
   
-  # TODO faire les spec de BasePrawn
-  
   it 'est un BasePrawn' do
     subject.should be_an_instance_of PdfDocument::BasePrawn
   end
