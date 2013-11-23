@@ -43,7 +43,7 @@ module PdfDocument
       #
       # on démarre la table proprement dite
       # en calculant la largeur des colonnes
-      col_widths = document.columns_widths.collect { |w| width*w/100 }
+      
       
       document.pages.each_with_index do |current_page, index|
         
@@ -51,10 +51,9 @@ module PdfDocument
         
         stroke_horizontal_rule
 
-        draw_table_title(current_page, col_widths)
+        draw_table_title(current_page) 
 
-
-        
+        draw_table_lines(current_page)
 
         stamp 'fond'
 
@@ -77,18 +76,22 @@ module PdfDocument
     
     protected 
     
-    def draw_table_title(page, col_wid)
-      table [page.table_title], :cell_style=>TITLE_STYLE    do
-          col_wid.each_with_index {|w,i| column(i).width = w}
-        end
+    def draw_table_title(page)
+      table [page.table_title], column_widths:col_widths, :cell_style=>TITLE_STYLE  
     end
     
-    def draw_table_lines(page, col_wid)
+    def draw_table_lines(page)
       # la table des lignes proprement dites
-        table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>LINE_STYLE do
-          col_wid.each_with_index {|w,i| column(i).width = w}
-          document.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
-        end
+        table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"], 
+           :header=> false , 
+           :column_widths=>col_widths,
+           :cell_style=>LINE_STYLE  do |table|
+              docu.columns_alignements.each_with_index {|alignement,i|  table.column(i).style {|c| c.align = alignement}  }
+         end
+    end
+    
+    def col_widths
+      docu.columns_widths.collect { |w| width*w/100 }
     end
     
     
