@@ -16,6 +16,10 @@ module PdfDocument
   #
   class BasePrawn < Prawn::Document
     
+    
+    TITLE_STYLE = {:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }
+    LINE_STYLE = {:padding=> [1,5,1,5], :height => 16, :overflow=>:truncate}
+    
     # définit le style d'une ligne en fonction de la profondeur de la rubrique
     # pour rappel, depth = -1 pour une ligne de détail de compte
     # sinon depth = 0 pour la rubrique racine puis +1 à chaque fois qu'on 
@@ -45,13 +49,13 @@ module PdfDocument
         stroke_horizontal_rule
 
         table [current_page.table_title],
-          :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :align=>:center }    do
+          :cell_style=>TITLE_STYLE    do
           col_widths.each_with_index {|w,i| column(i).width = w}
         end
 
 
         # la table des lignes proprement dites
-        table current_page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5], :height => 16, :overflow=>:truncate} do
+        table current_page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>LINE_STYLE do
           col_widths.each_with_index {|w,i| column(i).width = w}
           document.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
         end

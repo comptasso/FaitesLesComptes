@@ -29,7 +29,6 @@ describe Editions::PrawnSheet do
   end
   
   it 'fill_actif_pdf remplit le pdf' do
-    
     @ps.fill_actif_pdf(@doc)
   end
   

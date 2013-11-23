@@ -17,22 +17,23 @@ describe PdfDocument::Base do
     {title:'Ma spec', columns_methods:['name', 'forname']}
   end
   
-  let(:pdf) {PdfDocument::BasePrawn.new}
+  subject {PdfDocument::BasePrawn.new(:page_size => 'A4', :page_layout => :landscape)}
   
   # TODO faire les spec de BasePrawn
+  
+  it 'est un BasePrawn' do
+    subject.should be_an_instance_of PdfDocument::BasePrawn
+  end
   
   describe 'stamp_rotation' do
     
     it 'vaut 30 pour un landscape' do
-      pending
-      pdf_base =   PdfDocument::PrawnBase.new(:page_size => 'A4', :page_layout => :landscape)
-      pdf_base.send(:stamp_rotation).should == 30
+      subject.send(:stamp_rotation).should == 30
     end
     
     it 'et 65 pour un portrait' do
-      pending
-      pdf_base =   PdfDocument::PrawnBase.new(:page_size => 'A4', :page_layout => :portrait)
-      pdf_base.send(:stamp_rotation).should == 65
+      pdf = PdfDocument::BasePrawn.new(:page_size => 'A4', :page_layout => :portrait)
+      pdf.send(:stamp_rotation).should == 65
     end
     
     

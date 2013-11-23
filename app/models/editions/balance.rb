@@ -18,7 +18,7 @@ module Editions
   # #fill_default_values complète les données par défaut avec les columns_methods,
   # les alignements, les largeurs, les titres et les colonnes à totaliser. 
   #
-  class Balance < PdfDocument::Totalized
+  class Balance < PdfDocument::Totalized 
     
 
     attr_accessor :from_number, :to_number
@@ -52,7 +52,7 @@ module Editions
     # appelle les méthodes adéquate pour chacun des éléments de la ligne
     # qui représente un account 
     def prepare_line(account)
-      Rails.logger.debug "Dans prepare_line de pdf_balance #{account.inspect}"
+      # Rails.logger.debug "Dans prepare_line de pdf_balance #{account.inspect}"
       [ account.number,
         account.title,
         ActionController::Base.helpers.number_with_precision(account.cumulated_debit_before(from_date),precision:2),

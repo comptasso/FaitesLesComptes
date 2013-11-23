@@ -43,11 +43,11 @@ describe 'Edition PDF des MonthlyExtract' do
     Extract::Cash.new(@cash, @period).should be_an_instance_of(Extract::Cash) 
   end
   
-  it 'peut le rendre sous forme de pdf' do
+  it 'peut créer un pdf' do
     Extract::Cash.new(@cash, @period).to_pdf
   end
   
-  it 'peut le rendre sous forme de pdf' , wip:true do
+  it 'et le rendre sous forme de pdf' , wip:true do
     @pdf = Extract::Cash.new(@cash, @period).to_pdf
     @pdf.stub(:nb_pages).and_return 5
     @pdf.stub(:organism_name).and_return 'Asso test'

@@ -4,7 +4,7 @@ require'spec_helper'
 
 describe 'Editions::Balance' do
 
-  let(:p) {mock_model(Period)}
+  let(:p) {mock_model(Period)} 
   let(:a1) { mock_model(Account) }
   let(:a2) { mock_model(Account) }
 

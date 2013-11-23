@@ -8,7 +8,7 @@ module Editions
     # assure le remplissage du pdf avec le contenu du document
     def fill_pdf(document)
       font_size(10) 
-      jclfill_stamp(document.stamp)
+      jclfill_stamp(document.stamp) 
      
       # la table des pages
       document.pages.each_with_index do |current_page, index|
