@@ -95,11 +95,9 @@ module PdfDocument
     # les entêtes de pages. 3 bounding_box donnant respectivement la partie gauche
     # de l'entete, celle du milieu et celle de droite
     def entetes(page, y_position)
-      
-      
-      bounding_box [0, y_position], :width => 150, :height => 40 do
+           
+      bounding_box [0, y_position], :width => 150, :height => 40 do 
         text page.top_left
-
       end
 
       bounding_box [150, y_position], :width => width-300, :height => 40 do

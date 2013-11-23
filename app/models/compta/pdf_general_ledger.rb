@@ -44,17 +44,25 @@ module Compta
       # TODO refactoriser pour faciliter la relecture.
       #
       def page(n)
-        Editions::GeneralLedgerPage.new(self,  pages[n].map {|i| monthly_ledgers[i]}, n)
+        Editions::GeneralLedgerPage.new(self,  table_des_matieres[n].map {|i| monthly_ledgers[i]}, n)
       end
 
       protected
 
- # calcule et définit les pages du general ledger, l'ensemble des pages
+ 
+      def set_pages
+        table_des_matieres.collect do |k,v|
+          Editions::GeneralLedgerPage.new(self,  v.map {|i| monthly_ledgers[i]}, k)
+        end
+      end
+      
+      
+      # calcule et définit les pages du general ledger, l'ensemble des pages
       # est un hash avec comme clé un numéro de page et comme valeur un
       # range d'integer qui correspondent à l'index du tableau des monthly_ledgers
       # On suppose qu'il n'y a aucun list_months avec plus de lignes que la
       # constante NB_PER_PAGE_LANDSCAPE
-      def set_pages
+      def table_des_matieres
         table_des_matieres = {}
         i = 1
         nbl = 0
@@ -74,6 +82,7 @@ module Compta
         table_des_matieres[i] = from..last # pour finaliser la série avec les derniers
         table_des_matieres
       end
+      
      
 
    end
