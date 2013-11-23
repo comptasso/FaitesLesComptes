@@ -24,67 +24,52 @@ module PdfDocument
   # page.table_total_line
   # page.table_to_report_line
   class TotalizedPrawn < PdfDocument::SimplePrawn
+    
+    REPORT_LINE_STYLE = {:font_style=>:bold, :align=>:right }
           
     def fill_pdf(document, numeros = true)
-
+      @docu = document
       jclfill_stamp(document.stamp) # on initialise le tampon
-      # on démarre la table proprement dite
-      # en calculant la largeur des colonnes
-      column_widths = document.columns_widths.collect { |w| w*width/100 }
-      largeur = width # car après width dans les tables renvoie à une autre largeur
-      # la table des pages
-      document.pages.each_with_index do |current_page, index|
-        
-        pad(05) { font_size(12) {entetes(current_page, cursor) } }
-
-        stroke_horizontal_rule
-
-        # une table de une ligne pour les titres
-        table [current_page.table_title],
-          :cell_style=>{:padding=> [1,5,1,5], :font_style=>:bold, :size=>10, :align=>:center }    do 
-          column_widths.each_with_index {|w,i| column(i).width = w}
-        end
-     #   draw_table_title(current_page) 
-
-      #  draw_table_lines(current_page)
-
-        font_size(8) do
-
-
-          # une table de une ligne pour le report
-          if current_page.table_report_line
-            table [current_page.table_report_line],  :cell_style=>{:font_style=>:bold, :align=>:right } do 
-              current_page.total_columns_widths.each_with_index {|w,i| column(i).width = w*largeur/100 }
-            end
-          end
-
-          # la table des lignes proprement dites
-          unless current_page.table_lines.empty?
-            table current_page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"],  :header=> false , :cell_style=>{:padding=> [1,5,1,5],:height => 16,  :overflow=>:truncate} do
-              column_widths.each_with_index {|w,i| column(i).width = w}
-              document.columns_alignements.each_with_index {|alignement,i|  column(i).style {|c| c.align = alignement}  }
-            end
-          end
-
-
-          # la table total et la table a reporter
-          table [current_page.table_total_line, current_page.table_to_report_line],  :cell_style=>{:font_style=>:bold, :align=>:right } do
-            current_page.total_columns_widths.each_with_index do |w,i|
-              column(i).width = largeur*w/100
       
-            end
-          end
-
-        end
-        
-        
+      document.pages.each_with_index do |current_page, index|
+        contenu(current_page)
         stamp 'fond'
-
         start_new_page unless document.nb_pages == index+1
-          
-
       end
       numerote if numeros
+    end
+    
+    
+    
+    protected
+    
+    
+      # remplit le contenu d'une page
+    def contenu(current_page)
+      pad(05) { font_size(12) {entetes(current_page, cursor) } }
+      stroke_horizontal_rule
+      draw_table_title(current_page) # la ligne des titres de colonne
+      # une table de une ligne pour le report
+      font_size(8) do
+        draw_report_line(current_page) if  current_page.table_report_line
+        draw_table_lines(current_page) # les lignes de la table
+        draw_total_lines(current_page) # la ligne de total
+      end
+
+    end
+    
+    
+    def total_col_widths
+      docu.total_columns_widths.collect { |w| width*w/100 }
+    end
+    
+    def draw_report_line(page)
+      table [page.table_report_line], column_widths:total_col_widths,  :cell_style=>REPORT_LINE_STYLE 
+    end
+    
+    def draw_total_lines(page)
+      table [page.table_total_line, page.table_to_report_line], 
+        column_widths:total_col_widths,  :cell_style=>REPORT_LINE_STYLE 
     end
       
   end

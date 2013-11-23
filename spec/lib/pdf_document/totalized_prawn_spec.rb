@@ -17,7 +17,7 @@ describe PdfDocument::TotalizedPrawn do
         top_right:'Le texte de droite',
         table_title:['Nom', 'Valeur'],
         table_lines:valid_collection.slice(22*i, 21),
-        total_columns_widths:[60,40],
+     #   total_columns_widths:[60,40],
         table_report_line:['Un nombre fictif', 10000],
         table_to_report_line:['Encore un nombre bidon', 5421.98],
         table_total_line:['Un total fictif', 100000])
@@ -29,6 +29,7 @@ describe PdfDocument::TotalizedPrawn do
       columns_widths:[40, 60], 
       columns_alignements:[:left, :right],
       nb_pages:5,
+      total_columns_widths:[60,40],
       pages:stub_pages)
   end
 

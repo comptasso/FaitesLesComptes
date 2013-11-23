@@ -43,22 +43,10 @@ module PdfDocument
       #
       # on démarre la table proprement dite
       # en calculant la largeur des colonnes
-      
-      
       document.pages.each_with_index do |current_page, index|
-        
-        pad(05) { font_size(12) {entetes(current_page, cursor) } }
-        
-        stroke_horizontal_rule
-
-        draw_table_title(current_page) 
-
-        draw_table_lines(current_page)
-
+        contenu current_page
         stamp 'fond'
-
         start_new_page unless document.nb_pages == index+1
-
       end
       
       numerote if numeros
@@ -76,18 +64,25 @@ module PdfDocument
     
     protected 
     
+    def contenu(page)
+      pad(05) { font_size(12) {entetes(page, cursor) } }
+      stroke_horizontal_rule
+      draw_table_title(page) 
+      draw_table_lines(page)
+    end
+    
     def draw_table_title(page)
       table [page.table_title], column_widths:col_widths, :cell_style=>TITLE_STYLE  
     end
     
     def draw_table_lines(page)
       # la table des lignes proprement dites
-        table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"], 
-           :header=> false , 
-           :column_widths=>col_widths,
-           :cell_style=>LINE_STYLE  do |table|
-              docu.columns_alignements.each_with_index {|alignement,i|  table.column(i).style {|c| c.align = alignement}  }
-         end
+      table page.table_lines ,  :row_colors => ["FFFFFF", "DDDDDD"], 
+        :header=> false , 
+        :column_widths=>col_widths,
+        :cell_style=>LINE_STYLE  do |table|
+        docu.columns_alignements.each_with_index {|alignement,i|  table.column(i).style {|c| c.align = alignement}  }
+      end
     end
     
     def col_widths
