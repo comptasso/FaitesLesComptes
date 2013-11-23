@@ -22,14 +22,7 @@ module PdfDocument
     
     attr_reader :docu
     
-    # définit le style d'une ligne en fonction de la profondeur de la rubrique
-    # pour rappel, depth = -1 pour une ligne de détail de compte
-    # sinon depth = 0 pour la rubrique racine puis +1 à chaque fois qu'on 
-    # descend dans l'arbre des rubriques.
-    def style(depth)
-      return :bold if (depth == 0 || depth == 1 || depth == 2)
-      return :italic if depth == -1
-    end
+    
     
   
     # méthode pour remplir le document avec le contenu des différentes pages
@@ -86,6 +79,7 @@ module PdfDocument
     end
     
     def col_widths
+      # puts docu.columns_widths
       docu.columns_widths.collect { |w| width*w/100 }
     end
     

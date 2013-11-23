@@ -164,8 +164,8 @@ module Compta
     def entetes
       sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : %w(Rubrique Montant Précédent)
     end
-
-  
+    
+   
 
   end
 

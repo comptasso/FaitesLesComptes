@@ -76,7 +76,7 @@ module Editions
     # Crée le fichier pdf associé 
     def render
       pdf_file = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait) 
-      collection == :actif ? pdf_file.fill_actif_pdf(self) : pdf_file.fill_passif_pdf(self)
+      pdf_file.fill_pdf(self)
       pdf_file.numerote
       pdf_file.render
     end
@@ -84,8 +84,26 @@ module Editions
     # surcharge de Simple::render_pdf_text pour prendre en compte
     # les deux template possibles actif.pdf.prawn et passif.pdf.prawn
     # est ici mal nommé car 
-    def render_pdf_text(pdf)
-      collection == :actif ? pdf.fill_actif_pdf(self) : pdf.fill_passif_pdf(self)
+#    def render_pdf_text(pdf)
+#      collection == :actif ? pdf.fill_tif_pdf(self) : pdf.fill_passif_pdf(self)
+#    end
+#    
+#    def titles
+#      if sens == :actif
+#        [['', '', '', exercice, 'Précédent'], ['', 'Montant brut', "Amortisst\nProvision", 'Montant net', 'Montant net']]
+#      else
+#        [['', exercice, 'Précédent']]
+#      end
+#    end
+    
+    
+    
+    def columns_widths
+      if @source.sens == :actif
+        [40, 15, 15, 15, 15]
+      else
+        [70,15,15]
+      end
     end
     
     protected
@@ -96,8 +114,15 @@ module Editions
     # Sinon, dans un document de type bilan, les entêtes de colonnes doivent alors
     # être des dates
     def default_columns_titles  
-      if @source.name == :actif || @source.name == :passif
-        ['', I18n::l(@period.close_date), I18n::l(@period.start_date - 1)]
+      if @source.name == 'actif' || @source.name == 'passif'
+        if @source.sens == :actif
+          ['', 'Brut', "Amortisst\nDépréciat°",
+            "Net au \n#{I18n::l(@period.close_date)}",
+            "Net au \n#{I18n::l(@period.start_date - 1)}" ]
+        else
+          ['', I18n::l(@period.close_date), I18n::l(@period.start_date - 1)]
+        end
+        
       else # on est dans une logique de résultat sur une période
         ['', exercice, previous_exercice]
       end
@@ -108,6 +133,10 @@ module Editions
       when :actif then ['title', 'brut', 'amortissement', 'net', 'previous_net']
       when :passif then ['title', 'net', 'previous_net']
       end
+    end
+    
+    def default_columns_alignements
+      @source.sens == :actif ? [:left, :right, :right, :right, :right] : [:left, :right, :right]
     end
 
   end

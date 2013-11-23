@@ -13,8 +13,13 @@ class StubDoc
      [["une rubrique enfant", "-50,25", "-100,00", "49,75", "0,00"],
        ["Une ligne de test", "-50,25", "-100,00", "49,75", "0,00"]] 
   end
+  def table_title 
+    ['', 'Montant brut', "Amortisst\nProvision", 'Montant net', 'Montant net']
+  end
+  def columns_alignements; [:left, :right, :right, :right, :right]; end
   def subtitle; nil; end 
   def table_lines_depth; [1,0]; end
+  def columns_widths; [40, 15, 15, 15, 15]; end
 end
 
 describe Editions::PrawnSheet do
@@ -29,15 +34,14 @@ describe Editions::PrawnSheet do
   end
   
   it 'fill_actif_pdf remplit le pdf' do
-    @ps.fill_actif_pdf(@doc)
+    @ps.fill_pdf(@doc)
   end
   
-  it 'fill_passif_pdf remplit le pdf' do
-    @doc.stub(:table_lines).and_return  [["une rubrique enfant", "49,75", "0,00"],
-       ["Une ligne de test", "49,75", "0,00"]] 
-    @ps.fill_passif_pdf(@doc)
+  describe 'style' do
+    it 'devrait appeler le style lié à la profondeur de la ligne' do
+      pending 'à faire'
+    end
   end
-  
   
   
 end
