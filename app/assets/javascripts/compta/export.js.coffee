@@ -7,8 +7,14 @@ fnAddToken= (url, token) ->
   
 
 
-# fichier ayant pour objet de bloquer la page et d'afficher un message juste un instant
+# fichier ayant pour objet de bloquer la page et d'afficher un message "juste un instant"
 # lorsqu'on clique sur une des trois icones d'export
+#
+# Mode d'emploi :
+#   - Dans la vue, il suffit d'introduire les liens avec comme id #icon_pdf, 
+#   icon_csv ou icon_xls.
+#   - Dans le controller, on met dans la partie respond_to de l'action, l'appel
+#   à la méthode send_export_token (définie dans Application::Controller 
 #
 $ ->
   $.removeCookie('export_token', { path: '/' }) # au cas où un précédent serait resté

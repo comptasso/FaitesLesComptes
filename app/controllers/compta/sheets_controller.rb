@@ -108,6 +108,7 @@ class Compta::SheetsController < Compta::ApplicationController
   def detail 
     @detail_lines = @period.two_period_account_numbers.map  {|num| Compta::RubrikLine.new(@period, :actif, num)}
     respond_to do |format|  
+      send_export_token # pour gérer le spinner lors de la préparation du document
       format.html
       format.csv { send_data(detail_csv(@detail_lines), filename:export_filename(@detail_lines, :csv, 'Détail des comptes')) } 
       format.xls { send_data(detail_xls(@detail_lines), filename:export_filename(@detail_lines, :csv, 'Détail des comptes'))   }
