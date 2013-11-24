@@ -25,8 +25,14 @@ class ApplicationController < ActionController::Base
     else
       title = obj.respond_to?(:title) ? obj.title : obj.class.name.split('::').last
     end
-    d = I18n.l(Date.today, format:'%d-%b-%Y').gsub('.', '')
-    "#{title} #{@organism.title} #{d}.#{extension.to_s}"
+    "#{title} #{@organism.title} #{dashed_date(Date.today)}.#{extension.to_s}"
+  end
+  
+  # met en forme une date au format dd-mmm-yyyy en retirant le point 
+  # par exemple 13-nov-2013 (et non 13-nov.-2016), ceci pour pouvoir 
+  # facilement inclure la date dans le nom d'un fichier
+  def dashed_date(date)
+    I18n.l(date, format:'%d-%b-%Y').gsub('.', '')
   end
 
   protected

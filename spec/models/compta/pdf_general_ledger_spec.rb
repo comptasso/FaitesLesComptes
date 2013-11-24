@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'pdf_document/default.rb' 
 
-describe Compta::PdfGeneralLedger do
+describe Compta::PdfGeneralLedger do 
 
   let(:p) {stub_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)}
 
@@ -31,10 +31,14 @@ describe Compta::PdfGeneralLedger do
       mls.first.should be_an_instance_of(Compta::MonthlyLedger)
     end
 
-     it 'pages est un hash donnant les limites des mois' do
-      @pgl.pages.should == {1=>0..4, 2=>5..10, 3=>11..11}
+     it 'table des matières est un hash donnant les limites des mois' do
+      @pgl.send(:table_des_matieres).should == {1=>0..4, 2=>5..10, 3=>11..11}
     end
-
+    
+    it 'tandis que les pages sont des Editions::GeneralLedgerPages' do
+      @pgl.pages.each {|p| p.should be_an_instance_of(Editions::GeneralLedgerPage)}
+    end
+ 
     it 'nb pages renvoie le nombre de pages'do
       @pgl.nb_pages.should == 3 # cas général
       # si on a plus de journaux (6) le nb_de pages est plus élevé

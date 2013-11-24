@@ -18,7 +18,7 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe NaturesController do
+describe NaturesController do 
   include SpecControllerHelper
     
   describe "GET stats" do
@@ -78,9 +78,9 @@ describe NaturesController do
 
        it 'renvoie des datas' do
           Stats::StatsNatures.stub(:new).and_return(@sn = double(Stats::StatsNatures))
-          @sn.stub_chain(:to_pdf, :render).and_return('bonjour')
+          @sn.stub(:to_pdf).and_return double(Object, title:'Statistiques par nature', :render=>'bonjour')
           @p.stub(:exercice).and_return('Exercice 2013')
-          @controller.should_receive(:send_data).with('bonjour', :filename=>"#{@o.title} - Statistiques - #{@p.exercice}.pdf").and_return { @controller.render nothing: true }
+          @controller.should_receive(:send_data).with('bonjour', :filename=>"Statistiques par nature #{@o.title} #{@controller.dashed_date(Date.today)}.pdf").and_return { @controller.render nothing: true }
           get :stats,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}, session_attributes
          
        end

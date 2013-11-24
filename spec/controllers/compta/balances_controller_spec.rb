@@ -71,15 +71,15 @@ describe Compta::BalancesController do
 
       it 'rend le csv' do
         Compta::Balance.any_instance.stub(:valid?).and_return(true)
-        Compta::Balance.any_instance.stub(:to_csv).and_return('ceci est une chaine csv\tune autre\tencoe\tenfin\n')
-        @controller.should_receive(:send_data).with('ceci est une chaine csv\tune autre\tencoe\tenfin\n').and_return { @controller.render nothing: true }
+        Compta::Balance.any_instance.stub(:to_csv).and_return('Bonsoir')
+        @controller.should_receive(:send_data).with('Bonsoir', filename:"Balance #{@o.title} #{@controller.dashed_date(Date.today)}.csv").and_return { @controller.render nothing: true }
         get :show, {:period_id=>@p.id.to_s, :compta_balance=>valid_attributes, :format=>'csv'}, valid_session
       end
 
-       it 'rend le xls' do
+       it 'rend le xls' do 
         Compta::Balance.any_instance.stub(:valid?).and_return true
         Compta::Balance.any_instance.stub(:to_xls).and_return 'Bonjour'
-        @controller.should_receive(:send_data).with('Bonjour').and_return { @controller.render nothing: true }
+        @controller.should_receive(:send_data).with('Bonjour', filename:"Balance #{@o.title} #{@controller.dashed_date(Date.today)}.csv").and_return { @controller.render nothing: true }
         get :show, {:period_id=>@p.id.to_s, :compta_balance=>valid_attributes, :format=>'xls'}, valid_session
       end
 

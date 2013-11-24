@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
  # c.filter = {wip:true}
 end
 
@@ -51,7 +51,7 @@ describe Compta::SheetsController do
       it 'repond au format csv' do
         @cs.stub('to_index_csv').and_return 'des lignes aux format csv'
         controller.should_receive(:send_data).
-          with('des lignes aux format csvdes lignes aux format csv', filename:'Bilan.csv').
+          with('des lignes aux format csvdes lignes aux format csv', filename:"Bilan #{@o.title} #{@controller.dashed_date(Date.today)}.csv").
           and_return { @controller.render nothing: true }
         get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'csv'}, valid_session
       end
@@ -59,7 +59,7 @@ describe Compta::SheetsController do
       it 'repond au format xls' do
         @cs.stub('to_index_xls').and_return 'des lignes aux format xls\n'
         controller.should_receive(:send_data).
-          with('des lignes aux format xls\ndes lignes aux format xls\n', filename:'Bilan.xls').
+          with('des lignes aux format xls\ndes lignes aux format xls\n', filename:"Bilan #{@o.title} #{@controller.dashed_date(Date.today)}.csv").
           and_return { @controller.render nothing: true }
         get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'xls'}, valid_session
       end
@@ -67,7 +67,7 @@ describe Compta::SheetsController do
       it 'repond au format pdf' do
         controller.should_receive(:produce_pdf).with([@cs, @cs]).and_return('les données pdf')
         controller.should_receive(:send_data).
-          with('les données pdf', filename:'Bilan.pdf').
+          with('les données pdf', filename:"Bilan #{@o.title} #{@controller.dashed_date(Date.today)}.pdf").
           and_return { @controller.render nothing: true }
         get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'pdf'}, valid_session
       end

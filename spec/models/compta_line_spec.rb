@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |config| 
+RSpec.configure do |config|  
 # config.filter = {wip:true}
 end
 
