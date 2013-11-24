@@ -28,8 +28,8 @@ class CashLinesController < InOutWritingsController
         pdf = @monthly_extract.to_pdf
         send_data pdf.render, :filename=>export_filename(pdf, :pdf)
       end       
-      format.csv { send_data @monthly_extract.to_csv(col_sep:"\t"), filename:export_filename(@monthly_extract, :csv)  }  # pour éviter le problème des virgules
-      format.xls { send_data @monthly_extract.to_xls(col_sep:"\t"), filename:export_filename(@monthly_extract, :csv)  }
+      format.csv { send_data @monthly_extract.to_csv, filename:export_filename(@monthly_extract, :csv)  }  # pour éviter le problème des virgules
+      format.xls { send_data @monthly_extract.to_xls, filename:export_filename(@monthly_extract, :csv)  }
     end
    end
 
