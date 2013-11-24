@@ -11,13 +11,11 @@ class NaturesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf {
-        filename = "#{@organism.title} - Statistiques - #{@period.exercice}"
-        filename += " filtrées par #{@filter_name}" if @filter !=0
-        filename += '.pdf'
-        send_data @sn.to_pdf.render, filename:filename
+        pdf = @sn.to_pdf
+        send_data @sn.to_pdf.render, filename:export_filename(pdf, :pdf)
         }
-      format.csv { send_data @sn.to_csv  }  # \t pour éviter le problème des virgules
-      format.xls { send_data @sn.to_xls  }
+      format.csv { send_data @sn.to_csv, filename:export_filename(@snf, :csv, 'Statistiques par nature')  }  
+      format.xls { send_data @sn.to_xls, filename:export_filename(@snf, :csv, 'Statistiques par nature')  }
     end
   end
 

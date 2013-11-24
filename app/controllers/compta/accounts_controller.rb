@@ -1,5 +1,7 @@
 # -*- encoding : utf-8 -*-
 
+# TODO faire les spec de ce controller
+
 class Compta::AccountsController < Compta::ApplicationController
   # GET /compta/accounts
   # GET /compta/accounts.json
@@ -10,7 +12,10 @@ class Compta::AccountsController < Compta::ApplicationController
     respond_to do |format|
       
       format.html # index.html.erb
-      format.pdf {send_data Account.to_pdf(@period).render, filename:'Plan_comptable.pdf'} #, disposition:'inline'}
+      format.pdf do
+        pdf = Account.to_pdf(@period)
+        send_data pdf.render, filename:export_filename(pdf, :pdf)
+      end
       format.json { render json: @compta_accounts }
     end
   end

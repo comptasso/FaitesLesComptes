@@ -11,6 +11,10 @@ class Cash < Extract::InOut
   def titles
     ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Sorties', 'Entrées']
   end
+  
+  def title
+    "Caisse #{book.title}"
+  end
 
 
   # pour pouvoir utiliser indifféremment cash ou book car il n'est pas forcément

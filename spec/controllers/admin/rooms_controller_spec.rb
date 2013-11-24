@@ -45,7 +45,7 @@ describe Admin::RoomsController do
 
     it 'renders template index' do
       @cu.stub(:rooms).and_return(@a = double(Arel, :map=>[], :count=>2))
-      get :index
+      get :index 
       response.should render_template('index')
     end
 

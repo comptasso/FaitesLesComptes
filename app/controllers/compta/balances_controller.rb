@@ -26,10 +26,12 @@ class Compta::BalancesController < Compta::ApplicationController
      
         format.html 
         format.js
-        format.pdf  {send_data @balance.to_pdf.render ,
-          filename:"Balance #{@organism.title}.pdf"} #,  disposition:'inline'}
-        format.csv { send_data @balance.to_csv }  # pour éviter le problème des virgules
-        format.xls { send_data @balance.to_xls }
+        format.pdf  do
+          pdf = @balance.to_pdf
+          send_data pdf.render, filename:export_filename(pdf, :pdf) #,  disposition:'inline'}
+        end 
+        format.csv { send_data @balance.to_csv, filename:export_filename(@balance, :csv) }  # pour éviter le problème des virgules
+        format.xls { send_data @balance.to_xls, filename:export_filename(@balance, :csv)}
       end
     else
       redirect_to new_compta_period_balance_url(@period)

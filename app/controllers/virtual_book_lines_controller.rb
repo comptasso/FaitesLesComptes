@@ -18,9 +18,12 @@ class VirtualBookLinesController < ApplicationController
     # pour les exports
     respond_to do |format|
       format.html
-      format.pdf {send_data @monthly_extract.to_pdf.render, :filename=>"#{@bank_account.nickname}_#{Time.now}.pdf" }
-      format.csv { send_data @monthly_extract.to_csv(col_sep:"\t")  }  # pour éviter le problème des virgules
-      format.xls { send_data @monthly_extract.to_xls(col_sep:"\t")  }
+      format.pdf do
+        pdf = @monthly_extract.to_pdf
+        send_data pdf.render, :filename=>export_filename(pdf, :pdf) 
+      end
+      format.csv { send_data @monthly_extract.to_csv(col_sep:"\t"), :filename=>export_filename(@monthly_extract, :csv)   }  # pour éviter le problème des virgules
+      format.xls { send_data @monthly_extract.to_xls(col_sep:"\t"), :filename=>export_filename(@monthly_extract, :csv)  }
     end
   end
 

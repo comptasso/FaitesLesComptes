@@ -5,6 +5,10 @@ require 'pdf_document/base.rb'
 require 'pdf_document/page'
 require 'pdf_document/base_prawn'
 
+RSpec.configure do |c|
+  # c.filter = {wip:true}
+end
+
 describe PdfDocument::Base do
   
   let(:obj) {double(Object, name:'BOURDON', forname:'Jean')}
@@ -148,6 +152,19 @@ describe PdfDocument::Base do
       pdf.organism_name = 'Organisme test'
       pdf.render
     end
+  end
+  
+  describe 'filename' , wip:true do
+    
+    it 'est construit avec le titre, l organisme et la date' do
+      date  = I18n.l(Date.today, format:'%d-%b-%Y').gsub('.', '')
+      pdf.organism_name = 'Organisme test'
+      pdf.filename.should == "Ma spec Organisme test #{date}.pdf"
+      
+      
+
+    end
+    
   end
   
   

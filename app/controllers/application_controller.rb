@@ -12,8 +12,22 @@ class ApplicationController < ActionController::Base
 
   before_filter :find_organism, :current_period, :unless=>('devise_or_bottom_action?')
   
-  helper_method :two_decimals, :virgule, :current_user, :current_period?, :abc
+  helper_method :two_decimals, :virgule, :current_user, :current_period?, :abc # (pour ActiveRecord::Base.connection
 
+  # construit un nom de fichier pour les export de csv ou de pdf avec 
+  # le titre de l'objet, le titre de l'organisme, et la date du jour, suivi de l'extension
+  # 
+  # Les arguments sont un objet (qui devrait répondre à :title si possible) et 
+  # une extension sous forme de texte ou de symbole. 
+  def export_filename(obj, extension, titre=nil)
+    if titre
+      title = titre
+    else
+      title = obj.respond_to?(:title) ? obj.title : obj.class.name.split('::').last
+    end
+    d = I18n.l(Date.today, format:'%d-%b-%Y').gsub('.', '')
+    "#{title} #{@organism.title} #{d}.#{extension.to_s}"
+  end
 
   protected
 

@@ -7,7 +7,7 @@ class Compta::GeneralLedgersController < Compta::ApplicationController
     cookies[:general_ledger_token] = { :value =>params[:token], :expires => Time.now + 1800 }
     respond_to do |format|
         format.pdf  {send_data @general_ledger.render,
-          filename:"Journal_General_#{@organism.title}.pdf"} 
+          filename:export_filename(@general_edger, :pdf, 'Grand livre')} 
     end
   end
   

@@ -17,7 +17,7 @@ module Editions
     # notamment orientation, nb_lines_per_page,...
     def fill_default_values
       super
-      @title = "Liste des écritures du compte #{source.number}"
+      @title = "Listing compte #{source.number}"
       @subtitle = "#{source.title} - Du #{I18n::l @from_date} au #{I18n.l @to_date}"
       @stamp  = "brouillard" unless source.all_lines_locked?(@from_date, @to_date)
       @columns_select = ['writings.date AS w_date', 'books.title AS b_title', 'writings.ref AS w_ref', 'writings.narration AS w_narration', 'nature_id', 'destination_id', 'debit',  'credit']

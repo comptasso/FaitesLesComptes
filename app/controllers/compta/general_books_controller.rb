@@ -20,8 +20,9 @@ class Compta::GeneralBooksController < Compta::ApplicationController
     @general_book = Compta::GeneralBook.new(parameters )
     if @general_book.valid?
       respond_to do |format|
-        format.pdf  {send_data @general_book.render_pdf,
-          filename:"Grand_livre_#{@organism.title}.pdf"} #, disposition:'inline'}
+        format.pdf  do
+           send_data @general_book.render_pdf, filename:export_filename(@general_book, :pdf, 'Grand livre') #, disposition:'inline'}
+        end
       end
     else
       respond_to do |format|

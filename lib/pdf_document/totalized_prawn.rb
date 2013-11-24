@@ -52,7 +52,7 @@ module PdfDocument
       # une table de une ligne pour le report
       font_size(8) do
         draw_report_line(current_page) if  current_page.table_report_line
-        draw_table_lines(current_page) # les lignes de la table
+        draw_table_lines(current_page) unless current_page.table_lines.empty? # les lignes de la table
         draw_total_lines(current_page) # la ligne de total
       end
 

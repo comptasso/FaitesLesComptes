@@ -31,18 +31,19 @@ class Compta::SheetsController < Compta::ApplicationController
         
         datas = ''
         @docs.each {|doc| datas += doc.to_index_csv } 
-        send_data datas, :filename=>"#{params[:title] || params[:collection]}.csv"
+        send_data datas, :filename=>export_filename(@docs, :csv, params[:title])
       }
       format.xls {
         
         datas = ''
         @docs.each {|doc| datas += doc.to_index_xls}
-        send_data datas, :filename=>"#{params[:title] || params[:collection]}.xls"
+        send_data datas, :filename=>export_filename(@docs, :csv, params[:title])
       }
 
       format.pdf {
-                
-        send_data produce_pdf(@docs),  :filename=>"#{params[:title] || params[:collection]}.pdf"
+           
+        send_data produce_pdf(@docs),
+        :filename=>export_filename(@docs, :pdf, params[:title])
       }
     end
   end
@@ -59,9 +60,12 @@ class Compta::SheetsController < Compta::ApplicationController
       respond_to do |format|
         send_export_token # pour gérer le spinner lors de la préparation du document
         format.html {@rubriks = @sheet.to_html}
-        format.csv { send_data @sheet.to_csv  } 
-        format.xls { send_data @sheet.to_xls }
-        format.pdf { send_data @sheet.to_detailed_pdf.render}
+        format.csv { send_data @sheet.to_csv, filename:export_filename(folio, :csv) } 
+        format.xls { send_data @sheet.to_xls, filename:export_filename(folio, :csv) }
+        format.pdf do
+          pdf = @sheet.to_detailed_pdf
+          send_data pdf.render, filename:export_filename(pdf, :pdf)
+        end
       end
     else
       flash[:alert] = "Le document demandé n'a pas été trouvé " unless @sheet
@@ -105,8 +109,8 @@ class Compta::SheetsController < Compta::ApplicationController
     @detail_lines = @period.two_period_account_numbers.map  {|num| Compta::RubrikLine.new(@period, :actif, num)}
     respond_to do |format|  
       format.html
-      format.csv { send_data(detail_csv(@detail_lines)  , :filename=>'detail.csv')} 
-      format.xls { send_data(detail_csv(@detail_lines).encode("windows-1252"), :filename=>'detail.csv')   }
+      format.csv { send_data(detail_csv(@detail_lines), filename:export_filename(@detail_lines, :csv, 'Détail des comptes')) } 
+      format.xls { send_data(detail_xls(@detail_lines), filename:export_filename(@detail_lines, :csv, 'Détail des comptes'))   }
       format.pdf {
         pdf = PdfDocument::Base.new(@detail_lines, {:title=>'Détail des comptes',
             :columns_methods=>[:select_num, :title, :brut, :amortissement, :net, :previous_net],
@@ -116,7 +120,7 @@ class Compta::SheetsController < Compta::ApplicationController
           p.top_left = "#{@organism.title}\n#{@period.exercice}" 
           p.stamp = @period.closed? ? '' : 'Provisoire' 
         end
-        send_data pdf.render
+        send_data pdf.render, filename:export_filename(pdf, :pdf)
       }
     end
   end
@@ -136,6 +140,10 @@ class Compta::SheetsController < Compta::ApplicationController
       csv << ['Numéro', 'Libellé', 'Brut', 'Amortissement', 'Net', 'Ex. précédent']
       lines.each {|l| csv << [l.select_num, l.title, l.brut, l.amortissement, l.net, l.previous_net] }
     end.gsub('.', ',')
+  end
+  
+  def detail_xls(lines)
+    detail_csv(lines).encode("windows-1252")
   end
   
   def produce_pdf(documents)

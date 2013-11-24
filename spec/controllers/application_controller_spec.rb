@@ -64,7 +64,7 @@ describe Admin::PeriodsController do
           assigns(:organism).should == @o
         end
 
-        it 'si un seul organisme renvoie vers show' do
+        it 'si plusieurs organismes renvoie vers admin_rooms' do
           cu.stub_chain(:rooms, :count).and_return 2
           get :index, { :action=>'admin/rooms'}
           assigns(:organism).should == nil
@@ -120,6 +120,38 @@ describe Admin::PeriodsController do
           pending 'à faire'
 
         end
+      end
+      
+      describe 'filename' do
+        
+        let(:obj) {double(Object, title:'Bilan')}
+        let(:dat) { I18n.l(Date.today, format:'%d-%b-%Y').gsub('.', '') }
+        
+        before(:each) do
+          cu.stub_chain(:rooms, :find_by_database_name).and_return(r1)
+          r1.stub(:connect_to_organism)
+          Organism.stub(:first).and_return o
+          o.stub(:periods).and_return []
+          o.stub(:title).and_return 'Asso Test'
+        end
+        
+        it 'renvoie le titre, le nom de l organisme et la date plus l extension' do
+          get :index, {}, {user:cu.id, org_db:'assotest1'}
+          @controller.export_filename(obj, :pdf).should == "Bilan Asso Test #{dat}.pdf"
+        end
+        
+        it 'ou avec le dernier item de la classe de l objet si pas de titre' do
+          obje = double(Object)
+          get :index, {}, {user:cu.id, org_db:'assotest1'}
+          @controller.export_filename(obje, :pdf).should == "Mock Asso Test #{dat}.pdf"
+        end
+        
+        it 'on peut imposer le titre' do
+          get :index, {}, {user:cu.id, org_db:'assotest1'}
+          @controller.export_filename(obj, :pdf, 'TITRE').should == "TITRE Asso Test #{dat}.pdf"
+        end
+        
+        
       end
 
 

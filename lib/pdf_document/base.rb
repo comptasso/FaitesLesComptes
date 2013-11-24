@@ -164,6 +164,11 @@ module PdfDocument
     def render_pdf_text(pdf)
       pdf.fill_pdf(self, false) # false permet de ne pas numeroter les pages
     end
+    
+    def filename
+      d =  I18n.l(created_at, format:'%d-%b-%Y').gsub('.', '')
+      "#{title} #{organism_name} #{d}.pdf"
+    end
 
     protected 
     

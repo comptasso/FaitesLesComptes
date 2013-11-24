@@ -16,7 +16,7 @@ class MonthlyCash < Extract::Cash
     @period = @book.organism.find_period(@begin_date)
     @end_date = @my.end_of_month
   end
-
+  
   
 end
   

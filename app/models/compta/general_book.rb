@@ -36,10 +36,15 @@ module Compta
     def render_pdf
       to_pdf.render
     end
-
+    
     protected
     
-     # Fait une édition du grand livre avec une page de garde
+    def organism_name
+      Period.find(period_id).organism.title
+    end
+    
+    
+    # Fait une édition du grand livre avec une page de garde
      #
      # Pour chacun des comptes, fait un listing donc on aura fixé les informations
       # de page : page de début et page total.
