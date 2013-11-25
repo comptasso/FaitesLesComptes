@@ -31,6 +31,17 @@ module Editions
       pl[0] = I18n::l(Date.parse(pl[0])) rescue pl[0]
       pl
     end
+    
+    
+    # TODO pour essayer dealyed job; à déplacer ensuite à un niveau plus élevé dans 
+    # la hiérarchie
+    # Crée le fichier pdf associé
+    def render
+      pdf_file = PdfDocument::DefaultPrawn.new(:page_size => 'A4', :page_layout => @orientation) 
+      pdf_file.fill_pdf(self)
+      pdf_file.render
+    end
+    
   end
 
 end

@@ -20,9 +20,10 @@ gem 'prawn', "~> 0.12"
 gem 'prawn_rails', "0.0.11"
 gem 'haml-rails', "~>0.3"
 gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
-gem 'apartment'
-gem 'devise'
-gem 'rails_12factor'
+gem 'apartment' # pour la gestion des schemas
+gem 'devise' # pour l'authentification
+gem 'rails_12factor' # 
+gem 'delayed_job_active_record'
 
 gem 'adherent' #, :path=>'../../Adherent'
 group :production, :staging, :test do

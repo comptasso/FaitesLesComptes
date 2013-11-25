@@ -14,13 +14,18 @@ class VirtualBookLinesController < ApplicationController
       @monthly_extract = Extract::MonthlyBankAccount.new(@virtual_book, year:params[:an], month:params[:mois])
     end
     
+    
+    
     send_export_token # envoie un token pour l'affichage du message Juste un instant 
     # pour les exports
     respond_to do |format|
       format.html
       format.pdf do
-        pdf = @monthly_extract.to_pdf
-        send_data pdf.render, :filename=>export_filename(pdf, :pdf) 
+        @monthly_extract.delay.render_pdf
+        flash[:notice] = 'Fichier en cours de préparation'
+        redirect_to :back
+#        pdf = @monthly_extract.to_pdf
+#        send_data pdf.render, :filename=>export_filename(pdf, :pdf) 
       end
       format.csv { send_data @monthly_extract.to_csv, :filename=>export_filename(@monthly_extract, :csv)   }  # pour éviter le problème des virgules
       format.xls { send_data @monthly_extract.to_xls, :filename=>export_filename(@monthly_extract, :csv)  }

@@ -22,6 +22,10 @@ module Extract
     def to_pdf
       Editions::BankAccount.new(@period, self)
     end
+    
+    def render_pdf
+      to_pdf.render
+    end
 
   
     protected
