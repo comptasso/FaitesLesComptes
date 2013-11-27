@@ -1,7 +1,11 @@
 = content_for :menu do 
+  = icon_to 'retour.png', :back 
   = icon_to('nouveau.png', new_book_in_out_writing_path(@book, mois:@mois, an:@an), id: 'new_line_link') 
   = export_icons(book_id:@book.id, mois:@mois, an:@an) 
-  = icon_to 'retour.png', :back 
+  
+  = link_to 'export_pdf', export_pdf_book_in_out_writings_path(@book, mois:@mois, an:@an), remote:true
+  
+.row_fluid#message 
 
 #lines_pdf{:title=>"pdf", :style=>"display:none"}
 .champ

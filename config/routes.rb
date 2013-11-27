@@ -225,7 +225,11 @@ Faitesvoscomptes::Application.routes.draw do
     
   resources :books do
     resources :writings
-    resources :in_out_writings
+    resources :in_out_writings do
+      collection do
+        get :export_pdf
+      end
+    end
     resources :lines do
       member do
         post 'lock' # pour la requete ajax
