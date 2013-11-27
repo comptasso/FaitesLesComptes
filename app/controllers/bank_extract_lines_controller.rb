@@ -34,6 +34,13 @@ class BankExtractLinesController < ApplicationController
   #  Parameters: {"lines"=>{"0"=>"17"}, {"1", "20"}}, "bank_extract_id"=>"7"}
   # 
   #  ou le premier chiffre est la position et le second l'id de la ligne 
+  #  
+  #  Le bouton Enregistrer qui est dans la vue (avec un button_tag) se voit associer
+  #  un appel ajax avec du javascript (voir le fichier pointage.js.coffee).
+  #  
+  #  La vue appelée ne fait qu'ajouter une notice (les partial flash_error ou 
+  #  _flash_success. Une autre partie de l'action est traitée dans le javascript 
+  #  qui réaffiche les icones qui sont utilisées dans la vue pointage.
   #
   def enregistrer
     # on efface toutes les bank_extract_lines de cet extrait avant de les reconstruire 

@@ -1,6 +1,9 @@
 = content_for :menu do 
   = icon_to 'retour.png', :back 
   = export_icons(bank_account_id:@bank_account.id, mois:@mois, an:@an)
+  = link_to 'export_pdf', export_pdf_bank_account_virtual_book_lines_path(bank_account_id:@bank_account.id, mois:@mois, an:@an), remote:true
+
+.row_fluid#message 
 
 .champ
   %h3

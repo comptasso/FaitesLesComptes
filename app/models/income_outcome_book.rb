@@ -22,6 +22,8 @@ class IncomeOutcomeBook < Book
 
   has_many :in_out_lines, :through=>:writings, :source=>:compta_lines, foreign_key:'writing_id', :conditions=>['nature_id IS NOT ?', nil]
 
+  has_one :exportpdf, :as=>:exportable 
+  
   # extrait les lignes entre deux dates. Cette méthode ne sélectionne pas sur un exercice.
   def extract_lines(from_date, to_date)
     in_out_lines.where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date')
