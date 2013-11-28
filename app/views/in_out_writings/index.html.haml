@@ -9,7 +9,7 @@
 
 #lines_pdf{:title=>"pdf", :style=>"display:none"}
 .champ
-  %h3
+  %h3#page_title
     = "#{@book.title}  : liste des écritures"
     %ul.mois
       = submenu_mois(@period, {action:'index', controller:'in_out_writings', :book_id=>@book.id}) 

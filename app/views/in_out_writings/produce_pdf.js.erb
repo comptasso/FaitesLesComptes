@@ -1,5 +1,5 @@
 $('#message').show().html("<%= j render 'message' %>"); // rendu du message
-
+var spinner = new Spinner(small_spinner_opts).spin(document.getElementById('message_spinner'));
 // on lance le poller qui va vérifier la disponibilité du fichier
 $("#message_info").smartupdater({
     url : window.location.pathname + '/pdf_ready',
@@ -12,6 +12,7 @@ $("#message_info").smartupdater({
           }
         if (data === "ready") {
           $("#message_info").text("Fichier prêt, le téléchargement va démarrer");
+          spinner.stop();
           setTimeout(function() {
             $("#message").hide();
             }, 2000);
