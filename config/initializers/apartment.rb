@@ -136,9 +136,10 @@ module Apartment
 end
 
 
-
+# Définit ls modèles qui font référence à la table commune
+# ainsi que la méthode pour lister tous les schémas.
 Apartment.configure do |config|
-  config.excluded_models = ['User', 'Room']
+  config.excluded_models = ['User', 'Room', 'Delayed::Job']
   config.database_names = lambda { Apartment::Database.list_schemas_except_public }
   config.prepend_environment = false
 end

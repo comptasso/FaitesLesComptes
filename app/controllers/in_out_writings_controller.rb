@@ -75,49 +75,20 @@ class InOutWritingsController < ApplicationController
   end
   
   
-  # méthode expérimentale pour utiliser les actions cachées
-  # actuellement la vue affiche création du fichier en cours.
-  # 
-  # Idée générale : on stocke le fichier dans une table avec différents champs
-  # un champ blob pour la page, évidemment un champ organism_id, un champ catégory
-  # pour enregistrer le type de documents (voir avec une STI ?), par exemple compte bancaire
-  # un champ pdf_able_id et pdf_able_type, ce qui permet de le faire appartenir à un
-  # modèle qui serait alors pdf_able.
-  # evidemment un timestamp. 
-  # 
-  # Eventuellement cela permet de vérifier que le fichier est toujours d'actualité si 
-  # aucune écriture nouvelle n'a été passée concernant le compte bancaire en question.
-  # (mais dans un deuxième temps)
-  # 
-  # Il faut alors que le job fasse la création du fichier puis quand il est fait 
-  # qu'il le sauve dans la base correcte.
-  # 
-  # Dans le même temps, il faut déclencher un timer qui va sonder régulièrement
-  # par une requete ajax si le fichier est prêt. 
-  # 
-  # On pourrait avoir dans la table User (ou Organisme) un champ qui indique le début du travail
-  # , puis la fin et l'id du pdf qui vient d'être généré.
-  #  Plutôt une table spécifique ? Ou directement la table sachant qu'on connaît la catégorie
-  #  d'objet demandé (par exemple une balance).
+  
+  # Voir le wiki pour la logique générale de production des pdf 
+  #  TODO mettre une limite au volume du fichier ??
   #  
-  #  Il faudrait commencer par essayer la logique de ce stockage
   #  
-  #  Dans l'immédiat j'ai fait une table exportpdfs et son modèle Exportpdf
-  #  avec un seul champ content. (limité à 1 méga). TODO voir à augmenter cette limite si nécessaire
-  #  
-  #  Dans un premier temps, un seul fichier par organisme. 
   # 
   #
   def produce_pdf
-    if params[:mois] == 'tous'
-      @monthly_extract = Extract::InOut.new(@book, @period)
-    else
-      @monthly_extract = Extract::MonthlyInOut.new(@book, year:params[:an], month:params[:mois])
-    end
-    
-    # création du record export_pdf
-    pdf = @book.create_export_pdf(status:'processing')
-    # @monthly_extract.delay.render_pdf
+    # destruction préalable de l'export s'il existe déja.
+    exp = @book.export_pdf
+    exp.destroy if exp  
+    # création de l'export 
+    exp = @book.create_export_pdf(status:'new')
+    Delayed::Job.enqueue Jobs::WritingsPdfFiller.new(@organism.database_name, exp.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
   end
 
   
