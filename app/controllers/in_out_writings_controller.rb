@@ -79,7 +79,8 @@ class InOutWritingsController < ApplicationController
   # Voir le wiki pour la logique générale de production des pdf 
   #  TODO mettre une limite au volume du fichier ??
   #  
-  #  
+  # Délègue la tâche de création du pdf au Jobs::WritingsPdfFiller
+  # en remplissant dans les options les informations qui seront nécessaires
   # 
   #
   def produce_pdf
@@ -90,6 +91,12 @@ class InOutWritingsController < ApplicationController
     exp = @book.create_export_pdf(status:'new')
     Delayed::Job.enqueue Jobs::WritingsPdfFiller.new(@organism.database_name, exp.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
   end
+  
+  def pdf_ready
+    pdf = @book.export_pdf
+    render :text=>"#{pdf.status}"
+  end
+  
   
   def deliver_pdf
     send_data @book.export_pdf.content, :filename=>export_filename(@book, :pdf) 

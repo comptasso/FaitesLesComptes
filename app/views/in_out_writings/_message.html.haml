@@ -1,7 +1,6 @@
 -# utilisé par produce_pdf.js.erb
 .alert.notice
   %a.close(data-dismiss='alert') x
-  %strong Création du fichier en cours...
+  %strong#message_info Création du fichier... 
   = image_tag('loading.gif')
-= button_to('Charger le fichier', {action:'deliver_pdf', :method=>'get'}, 
-    {class: "btn hidden span2", :disabled=>'disabled', :id=>'deliver_btn', :form_class=>'deliver_btn'})
+

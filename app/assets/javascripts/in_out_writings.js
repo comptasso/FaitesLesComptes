@@ -204,9 +204,3 @@ jQuery(function () {
     }
 });
 
-
-// méthode de polling pour voir si le pdf est prêt, masquer Fichier en cours de préparation...
-// et afficher le bouton de téléchargement
-jQuery(function () {
-    
-});

@@ -227,6 +227,7 @@ Faitesvoscomptes::Application.routes.draw do
       collection do
         get :produce_pdf
         get :deliver_pdf
+        get :pdf_ready # demande au serveur si le fichier est prêt
       end
     end
     resources :lines do
