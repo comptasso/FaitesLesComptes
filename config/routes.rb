@@ -227,7 +227,7 @@ Faitesvoscomptes::Application.routes.draw do
     resources :writings
     resources :in_out_writings do
       collection do
-        get :export_pdf
+        get :produce_pdf
       end
     end
     resources :lines do

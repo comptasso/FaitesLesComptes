@@ -75,6 +75,15 @@ module Extract
       end
     end
     
+    # stocke le rendu du pdf dans la table des Export.
+    # TODO à finir
+    def render_pdf(id)
+      # effacer l'enregistrement exportpdf s'il existe
+      ExportPdf.first.destroy if ExportPdf.any?
+      exp = @book.build_export_pdf(content:to_pdf.render)
+      exp.save!  
+    end
+    
     
 
     # produit le document pdf en s'appuyant sur la classe Editions::Book

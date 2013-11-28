@@ -24,13 +24,7 @@ module Extract
     end
     
     
-    # stocke le rendu du pdf dans la table des Export.
-    def render_pdf
-      # effacer l'enregistrement exportpdf s'il existe
-      Exportpdf.first.destroy if Exportpdf.any?
-      exp = Exportpdf.new!(content:to_pdf.render)
-      exp.save!  
-    end
+    
 
   
     protected

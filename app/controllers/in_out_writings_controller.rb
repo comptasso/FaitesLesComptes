@@ -108,7 +108,7 @@ class InOutWritingsController < ApplicationController
   #  Dans un premier temps, un seul fichier par organisme. 
   # 
   #
-  def export_pdf
+  def produce_pdf
     if params[:mois] == 'tous'
       @monthly_extract = Extract::InOut.new(@book, @period)
     else
@@ -116,6 +116,7 @@ class InOutWritingsController < ApplicationController
     end
     
     # création du record export_pdf
+    pdf = @book.create_export_pdf(status:'processing')
     # @monthly_extract.delay.render_pdf
   end
 
