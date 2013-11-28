@@ -203,3 +203,10 @@ jQuery(function () {
         $('#entry_lines #in_out_writing_compta_lines_attributes_1_payment_mode').change(original_value, $f_td_bank_cash).change();
     }
 });
+
+
+// méthode de polling pour voir si le pdf est prêt, masquer Fichier en cours de préparation...
+// et afficher le bouton de téléchargement
+jQuery(function () {
+    
+});

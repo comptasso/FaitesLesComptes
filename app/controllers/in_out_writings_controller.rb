@@ -90,6 +90,10 @@ class InOutWritingsController < ApplicationController
     exp = @book.create_export_pdf(status:'new')
     Delayed::Job.enqueue Jobs::WritingsPdfFiller.new(@organism.database_name, exp.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
   end
+  
+  def deliver_pdf
+    send_data @book.export_pdf.content, :filename=>export_filename(@book, :pdf) 
+  end
 
   
   

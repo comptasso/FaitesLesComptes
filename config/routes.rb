@@ -193,9 +193,7 @@ Faitesvoscomptes::Application.routes.draw do
   
 
   resources :bank_accounts do
-    resources :virtual_book_lines, only: :index do
-      collection {get 'export_pdf'}
-    end
+    resources :virtual_book_lines, only: :index 
     resources :bank_extracts do
       collection do
         get 'lines_to_point' # affiche les lignes en attente de pointage
@@ -228,6 +226,7 @@ Faitesvoscomptes::Application.routes.draw do
     resources :in_out_writings do
       collection do
         get :produce_pdf
+        get :deliver_pdf
       end
     end
     resources :lines do
