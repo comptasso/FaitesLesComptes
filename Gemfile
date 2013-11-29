@@ -24,6 +24,8 @@ gem 'apartment' # pour la gestion des schemas
 gem 'devise' # pour l'authentification
 gem 'rails_12factor' # 
 gem 'delayed_job_active_record'
+gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écriture des routes)
+# TODO à retirer lors du passage à Rails 4
 
 gem 'adherent' #, :path=>'../../Adherent'
 group :production, :staging, :test do

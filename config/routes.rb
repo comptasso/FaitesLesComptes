@@ -18,22 +18,29 @@ Faitesvoscomptes::Application.routes.draw do
     root :to => "devise/sessions#new"
   end
 
-# les chemins pour les liens qui sont dans le bandeau en bas de chaque page
+  # les chemins pour les liens qui sont dans le bandeau en bas de chaque page
   get "bottom/credit"
   get "bottom/contact"
   get "bottom/apropos"
   get "bottom/manuals"
 
- 
+  concern :exportable do
+    collection do
+      get :produce_pdf
+      get :deliver_pdf
+      get :pdf_ready # demande au serveur si le fichier est prêt
+    end
+  end  
+  
 
   # namespace COMPTA
 
 
 
   namespace :compta do
-#    resources :users do
-#      resources :rooms # TODO voir si utilisé
-#    end
+    #    resources :users do
+    #      resources :rooms # TODO voir si utilisé
+    #    end
 
     # TODO simplifier car on n'utilise que l'action show
     resources :rooms
@@ -54,14 +61,14 @@ Faitesvoscomptes::Application.routes.draw do
         end
       end
     end
-     # TODO voir pour supprimer le resources sheets ci_dessous 
+    # TODO voir pour supprimer le resources sheets ci_dessous 
     resources :sheets do
-        collection do
-          get :bilans
-          get :resultats
-          get :benevolats
-          get :detail
-          get :liasse
+      collection do
+        get :bilans
+        get :resultats
+        get :benevolats
+        get :detail
+        get :liasse
       end
     end
     resource :nomenclature
@@ -74,15 +81,15 @@ Faitesvoscomptes::Application.routes.draw do
       resource :listing
       resource :general_book
       resource :general_ledger
-#      resources :sheets do
-#        collection do
-#          get :bilans
-#          get :resultats
-#          get :benevolats
-#          get :detail
-#          get :liasse
-#        end
-#      end
+      #      resources :sheets do
+      #        collection do
+      #          get :bilans
+      #          get :resultats
+      #          get :benevolats
+      #          get :detail
+      #          get :liasse
+      #        end
+      #      end
       resources :selections do
         member do
           post :lock
@@ -100,7 +107,7 @@ Faitesvoscomptes::Application.routes.draw do
 
   
   ##################### namespace ADMIN ##############################"
-   namespace 'admin' do
+  namespace 'admin' do
 
     # TODO voir si encore utile
     get "versions/new"
@@ -108,9 +115,9 @@ Faitesvoscomptes::Application.routes.draw do
 
     resources :clones, :only=>[:new, :create]
 
-#    resources :users do
-#      resources :rooms
-#    end
+    #    resources :users do
+    #      resources :rooms
+    #    end
 
     resources :rooms, :only=>[:index, :show, :new, :create, :destroy] 
     
@@ -154,13 +161,13 @@ Faitesvoscomptes::Application.routes.draw do
     end
   end  # FIN DE ADMIN
 
- ################################################################################# 
+  ################################################################################# 
 
   # DEBUTde la zone public
 
-#  resources :users do
-#    resources :rooms
-#  end
+  #  resources :users do
+  #    resources :rooms
+  #  end
 
   # TODO simplifier car on n'utilise que l'action show
   resources :rooms
@@ -174,10 +181,12 @@ Faitesvoscomptes::Application.routes.draw do
         get 'change' # pour changer d'exercice
       end
       resources :natures, only: :index do
+        concerns :exportable
         collection do
           get 'stats' # statistiques de recettes et dépenses par natures
         end
       end
+       
     end
 
     resources :check_deposits, :only=>:new # pour faire des remises de chèques
@@ -223,13 +232,7 @@ Faitesvoscomptes::Application.routes.draw do
     
   resources :books do
     resources :writings
-    resources :in_out_writings do
-      collection do
-        get :produce_pdf
-        get :deliver_pdf
-        get :pdf_ready # demande au serveur si le fichier est prêt
-      end
-    end
+    resources :in_out_writings , concerns: :exportable
     resources :lines do
       member do
         post 'lock' # pour la requete ajax

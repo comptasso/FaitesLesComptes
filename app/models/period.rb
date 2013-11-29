@@ -81,6 +81,7 @@ class Period < ActiveRecord::Base
   has_many :compta_lines, :through=>:accounts 
   has_one :balance, :class_name=>'Compta::Balance'
   has_one :listing, :class_name=>'Compta::Listing'
+  has_one :export_pdf, as: :exportable
 
  
   validates :organism_id, :presence=>true

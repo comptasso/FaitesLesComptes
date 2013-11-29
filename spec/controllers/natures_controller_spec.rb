@@ -33,59 +33,79 @@ describe NaturesController do
 
    
 
-      before(:each) do
-        minimal_instances
-        @p.stub_chain(:natures, :recettes).and_return [nr1, nr2]
-        @p.stub_chain(:natures, :depenses).and_return [nd1, nd2, nd3]
+    before(:each) do
+      minimal_instances
+      @p.stub_chain(:natures, :recettes).and_return [nr1, nr2]
+      @p.stub_chain(:natures, :depenses).and_return [nd1, nd2, nd3]
   
-      end
+    end
 
 
-      it 'assigns @organism and @period' do 
-        get :stats , {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
-        assigns(:organism).should == @o
-        assigns(:period).should == @p
-        response.should be_success
+    it 'assigns @organism and @period' do 
+      get :stats , {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
+      assigns(:organism).should == @o
+      assigns(:period).should == @p
+      response.should be_success
       
       
-      end
+    end
 
-      it 'raise error without @organism or period' do
-        expect { get :stats}.to raise_error ActionController::RoutingError
-      end
+    it 'raise error without @organism or period' do
+      expect { get :stats}.to raise_error ActionController::RoutingError
+    end
 
-      it 'assigns @filter with 0 if no params[:filter]' do
-        get :stats, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
-        assigns(:filter).should == 0
-      end
+    it 'assigns @filter with 0 if no params[:filter]' do
+      get :stats, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
+      assigns(:filter).should == 0
+    end
 
-      it 'assigns sn (StatsNatures)' do
-        Stats::StatsNatures.should_receive(:new).with(@p, 0).and_return('sn')
-        get :stats,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
-        assigns(:sn).should == 'sn'
-      end
+    it 'assigns sn (StatsNatures)' do
+      Stats::StatsNatures.should_receive(:new).with(@p, 0).and_return('sn')
+      get :stats,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
+      assigns(:sn).should == 'sn'
+    end
 
-      it 'with filter' do
-        filt = 1
-        Destination.should_receive(:find).with(filt).and_return(double(Object, :name=>'mock'))
-        Stats::StatsNatures.should_receive(:new).with(@p, 1).and_return('sn')
+    it 'with filter' do
+      filt = 1
+      Destination.should_receive(:find).with(filt).and_return(double(Object, :name=>'mock'))
+      Stats::StatsNatures.should_receive(:new).with(@p, 1).and_return('sn')
         
-        get :stats, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :destination=>filt.to_s},  session_attributes
-        assigns(:filter).should == filt
+      get :stats, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :destination=>filt.to_s},  session_attributes
+      assigns(:filter).should == filt
+    end
+
+    describe 'production du pdf' do
+        
+      before(:each) do
+        
       end
 
-      describe 'rendre le pdf' do
-
-       it 'renvoie des datas' do
-          Stats::StatsNatures.stub(:new).and_return(@sn = double(Stats::StatsNatures))
-          @sn.stub(:to_pdf).and_return double(Object, title:'Statistiques par nature', :render=>'bonjour')
-          @p.stub(:exercice).and_return('Exercice 2013')
-          @controller.should_receive(:send_data).with('bonjour', :filename=>"Statistiques par nature #{@o.title} #{@controller.dashed_date(Date.today)}.pdf").and_return { @controller.render nothing: true }
-          get :stats,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}, session_attributes
+      it 'renvoie des datas' do
+        Stats::StatsNatures.stub(:new).and_return(@sn = double(Stats::StatsNatures))
+        @sn.stub(:to_pdf).and_return double(Object, title:'Statistiques par nature', :render=>'bonjour')
+        @p.stub(:exercice).and_return('Exercice 2013')
+        @controller.should_receive(:send_data).with('bonjour', :filename=>"Statistiques par nature #{@o.title} #{@controller.dashed_date(Date.today)}.pdf").and_return { @controller.render nothing: true }
+        get :stats,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}, session_attributes
          
-       end
-
       end
+       
+      it 'crée un export_pdf' do 
+        expect {get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}, session_attributes}.
+          to change {ExportPdf.count}.by(1)
+      end 
+      
+      it 'ayant le status new' do
+        get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}
+        ExportPdf.last.status.should == new
+      end
+      
+      it 'crée la tâche' do
+         @p.stub(:create_export_pdf).and_return(@exp = mock_model(ExportPdf))
+         Jobs::StatsPdfFiller.should_receive(:new).with(@o.database_name, @exp.id, {period_id:@p.id, destination:@filter})  
+         get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}
+      end
+
+    end
     
   
 

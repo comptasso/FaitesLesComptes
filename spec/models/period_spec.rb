@@ -442,6 +442,10 @@ describe Period do
        it 'report à nouveau renvoie une ComptaLine dont le montant est le résultat et le compte 12'  do
           @p_2011.send(:report_a_nouveau).should be_an_instance_of(ComptaLine)
         end
+        
+        it 'un exercice a un export_pdf' do
+          expect {@p_2011.build_export_pdf}.not_to raise_error
+        end
 
       end
 
