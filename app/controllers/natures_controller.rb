@@ -28,6 +28,7 @@ class NaturesController < ApplicationController
     # création de l'export 
     exp = @period.create_export_pdf(status:'new')
     Delayed::Job.enqueue Jobs::StatsPdfFiller.new(@organism.database_name, exp.id, {period_id:@period.id, destination:@filter})
+    render template:'pdf/produce_pdf'
   end
   
   protected
