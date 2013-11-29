@@ -1,10 +1,10 @@
 # -*- encoding : utf-8 -*-
 
 class NaturesController < ApplicationController 
+  
+  before_filter :set_stats_filter
 
   def stats
-    @filter=params[:destination].to_i || 0
-    @filter_name = Destination.find(@filter).name if @filter != 0
     @sn = Stats::StatsNatures.new(@period, @filter)
     send_export_token
 
@@ -32,7 +32,7 @@ class NaturesController < ApplicationController
   
   protected
   
-  def set_filter
+  def set_stats_filter
     @filter = params[:destination].to_i || 0
     @filter_name = Destination.find(@filter).name if @filter != 0
   end

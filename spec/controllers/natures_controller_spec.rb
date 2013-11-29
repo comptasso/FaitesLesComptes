@@ -42,7 +42,7 @@ describe NaturesController do
 
 
     it 'assigns @organism and @period' do 
-      get :stats , {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
+      get :stats , {:organism_id=>@o.to_param, :period_id=>@p.to_param}, session_attributes
       assigns(:organism).should == @o
       assigns(:period).should == @p
       response.should be_success
@@ -88,21 +88,41 @@ describe NaturesController do
         get :stats,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}, session_attributes
          
       end
-       
-      it 'crée un export_pdf' do 
-        expect {get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}, session_attributes}.
-          to change {ExportPdf.count}.by(1)
-      end 
       
-      it 'ayant le status new' do
-        get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}
-        ExportPdf.last.status.should == new
+      it 'cherche l export pdf de period' do 
+        @p.should_receive(:export_pdf).and_return
+        @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf))
+        get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
       end
       
-      it 'crée la tâche' do
+      it 'le détruit s il existe' do
+        @p.stub(:export_pdf).and_return(@obj = double(ExportPdf))
+        @obj.should_receive(:destroy)
+        @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf))
+        get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+      end
+       
+      it 'crée un export_pdf avec un status new' do
+        @p.stub(:export_pdf).and_return nil
+        @p.should_receive(:create_export_pdf).with(:status=>'new').and_return(mock_model(ExportPdf))
+        get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+          
+      end 
+      
+      it 'crée la tâche' do 
+         @p.stub(:export_pdf).and_return nil
          @p.stub(:create_export_pdf).and_return(@exp = mock_model(ExportPdf))
-         Jobs::StatsPdfFiller.should_receive(:new).with(@o.database_name, @exp.id, {period_id:@p.id, destination:@filter})  
-         get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}
+         Jobs::StatsPdfFiller.should_receive(:new).with(@o.database_name, @exp.id, {period_id:@p.id, destination:0})  
+         Delayed::Job.stub(:enqueue)
+         get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+      end
+      
+      it 'le met en queue de delayed_job' do
+        @p.stub(:export_pdf).and_return nil
+        @p.stub(:create_export_pdf).and_return(@exp = mock_model(ExportPdf))
+        Jobs::StatsPdfFiller.stub(:new).and_return(@obj = double(Object, :perform=>true))
+        Delayed::Job.should_receive(:enqueue).with(@obj)
+        get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
       end
 
     end
