@@ -11,7 +11,9 @@
 # lines_controller
 #
 class CashLinesController < InOutWritingsController
+  include Pdf::Controller
   
+  before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
 # la méthode index est héritée de InOutWritingsController
   def index
@@ -38,6 +40,16 @@ class CashLinesController < InOutWritingsController
   # find_book qui est défini dans LinesController est surchargée pour chercher un Cash
   def find_book
     @cash = Cash.find(params[:cash_id])
+  end
+  
+  # créé les variables d'instance attendues par le module PdfController
+  def set_exporter
+    @exporter = @cash
+  end
+  
+  # création du job et insertion dans la queue
+  def enqueue(pdf_export)
+    Delayed::Job.enqueue Jobs::VirtualCashPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
   end
 
   

@@ -252,12 +252,15 @@ Faitesvoscomptes::Application.routes.draw do
     resources :in_out_writings
   end
   resources :cashes, :only=> [:show] do
+    
     resources :cash_controls do
       member do
         put 'lock'
       end
     end
-    resources :cash_lines
+    resources :cash_lines do
+      concerns :exportable # pour les 3 actions permettant d'exporter un pdf en dalayed_job
+    end
   end
 
   resources :transfers

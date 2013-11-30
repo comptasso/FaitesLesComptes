@@ -1,6 +1,6 @@
 <%= content_for :menu do %>
   <%= icon_to 'retour.png', :back, title: 'Retour' %>
-  <%= export_icons(cash_id:@cash.id, mois:@mois, an:@an) %>
+  <%= delayed_export_icons(cash_id:@cash.id, mois:@mois, an:@an) %>
 
 <% end -%>
 

@@ -23,6 +23,8 @@ class Cash < ActiveRecord::Base
   has_many :cash_controls
   # un caisse a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
+  
+  has_one :export_pdf, as: :exportable
 
   strip_before_validation :name, :comment
   
