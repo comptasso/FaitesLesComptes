@@ -182,9 +182,6 @@ Faitesvoscomptes::Application.routes.draw do
       end
       resources :natures, only: :index do
         concerns :exportable
-        collection do
-          get 'stats' # statistiques de recettes et dépenses par natures
-        end
       end
        
     end

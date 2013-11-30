@@ -9,9 +9,9 @@ module Jobs
   # - et des options qui doivent donner l'id de l'exercice (:period_id), 
   #   et :an et :mois qui permettent de savoir quel mois est demandé.
   #   
-  # L'utilisation se fait dans le controller (voir in_out_writings_controller)
+  # L'utilisation se fait dans le controller (voir natures_controller)
   # Delayed::Job.enqueue Jobs::WritingsPdfFiller.new(@organism.database_name, 
-  # export_pdf.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
+  # export_pdf.id, {period_id:@period.id, destination:0})
   #
   # L'argument database_name permet de gérer les jobs dans la schéma Public
   # alors que les enregistrements sont dans les schémas particuliers.
@@ -28,7 +28,7 @@ module Jobs
         @export_pdf.update_attribute(:status, 'processing')
         
         period  = Period.find(options[:period_id])
-        filter = params[:destination].to_i || 0
+        filter = options[:destination]
         @document = Stats::StatsNatures.new(period, filter)
       end
     end

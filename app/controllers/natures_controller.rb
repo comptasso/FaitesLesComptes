@@ -4,7 +4,13 @@ class NaturesController < ApplicationController
   
   before_filter :set_stats_filter
 
-  def stats
+  # index renvoie la liste des natures mais sous forme de statistiques avec les montants
+  # pour chaque mois de l'exercice
+  # 
+  # filter permet de filtrer les calculs des montants selon la destination.
+  # filter est l'id de destination; 0 si pas de filtre
+  #
+  def index
     @sn = Stats::StatsNatures.new(@period, @filter)
     send_export_token
 

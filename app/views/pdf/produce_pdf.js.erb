@@ -1,4 +1,4 @@
-$('#message').show().html("<%= j render 'message' %>"); // rendu du message
+$('#message').show().html("<%= j render 'pdf/message' %>"); // rendu du message
 var spinner = new Spinner(small_spinner_opts).spin(document.getElementById('message_spinner'));
 // on lance le poller qui va vérifier la disponibilité du fichier
 $("#message_info").smartupdater({
