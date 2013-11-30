@@ -42,7 +42,7 @@ describe NaturesController do
 
 
     it 'assigns @organism and @period' do 
-      get :stats , {:organism_id=>@o.to_param, :period_id=>@p.to_param}, session_attributes
+      get :index , {:organism_id=>@o.to_param, :period_id=>@p.to_param}, session_attributes
       assigns(:organism).should == @o
       assigns(:period).should == @p
       response.should be_success
@@ -51,17 +51,17 @@ describe NaturesController do
     end
 
     it 'raise error without @organism or period' do
-      expect { get :stats}.to raise_error ActionController::RoutingError
+      expect { get :index}.to raise_error ActionController::RoutingError
     end
 
     it 'assigns @filter with 0 if no params[:filter]' do
-      get :stats, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
+      get :index, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
       assigns(:filter).should == 0
     end
 
     it 'assigns sn (StatsNatures)' do
       Stats::StatsNatures.should_receive(:new).with(@p, 0).and_return('sn')
-      get :stats,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
+      get :index,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
       assigns(:sn).should == 'sn'
     end
 
@@ -70,25 +70,12 @@ describe NaturesController do
       Destination.should_receive(:find).with(filt).and_return(double(Object, :name=>'mock'))
       Stats::StatsNatures.should_receive(:new).with(@p, 1).and_return('sn')
         
-      get :stats, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :destination=>filt.to_s},  session_attributes
+      get :index, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :destination=>filt.to_s},  session_attributes
       assigns(:filter).should == filt
     end
 
     describe 'production du pdf' do 
         
-      before(:each) do
-        
-      end
-
-      it 'renvoie des datas' do
-        Stats::StatsNatures.stub(:new).and_return(@sn = double(Stats::StatsNatures))
-        @sn.stub(:to_pdf).and_return double(Object, title:'Statistiques par nature', :render=>'bonjour')
-        @p.stub(:exercice).and_return('Exercice 2013')
-        @controller.should_receive(:send_data).with('bonjour', :filename=>"Statistiques par nature #{@o.title} #{@controller.dashed_date(Date.today)}.pdf").and_return { @controller.render nothing: true }
-        get :stats,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :format=>'pdf'}, session_attributes
-         
-      end
-      
       it 'cherche l export pdf de period' do 
         @p.should_receive(:export_pdf).and_return
         @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf))

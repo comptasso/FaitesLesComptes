@@ -16,10 +16,6 @@ class NaturesController < ApplicationController
 
     respond_to do |format| 
       format.html
-      format.pdf {
-        pdf = @sn.to_pdf 
-        send_data @sn.to_pdf.render, filename:export_filename(pdf, :pdf)
-        }
       format.csv { send_data @sn.to_csv, filename:export_filename(nil, :csv, 'Statistiques par nature')  }  
       format.xls { send_data @sn.to_xls, filename:export_filename(nil, :csv, 'Statistiques par nature')  }
     end
