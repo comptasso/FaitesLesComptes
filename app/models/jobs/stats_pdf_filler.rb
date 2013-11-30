@@ -18,38 +18,17 @@ module Jobs
   # Chaque appel de méthode se fait donc par un appel à Apartment::Database.process(dbname) 
   # et un bloc.
   # 
-  class StatsPdfFiller < Struct.new(:db_name, :export_pdf_id, :options)
-    
-    def before(job)
-      Rails.logger.debug 'Dans before job de Jobs::StatsPdfFiller'
-      Apartment::Database.process(db_name) do
-        # trouve le exportable 
-        @export_pdf = ExportPdf.find(export_pdf_id)
-        @export_pdf.update_attribute(:status, 'processing')
+  class StatsPdfFiller < BasePdfFiller
         
+    protected
+    
+    # fournit la variable d'instance document.
+    def set_document(options)
         period  = Period.find(options[:period_id])
         filter = options[:destination]
         @document = Stats::StatsNatures.new(period, filter)
-      end
     end
     
-    
-    # doit se connecter à la base de données pour récupérer 
-    # le record export_pdf. Puis celui-ci donne le document, ce qui permet de 
-    # construire l'extrait demandé. 
-    # Voir s'il ne faudra pas les spécialiser
-    def perform
-        Apartment::Database.process(db_name) do
-          @export_pdf.content = @document.to_pdf.render
-          @export_pdf.save
-        end
-    end
-    
-    def success(job)
-      Apartment::Database.process(db_name) do
-          @export_pdf.update_attribute(:status, 'ready')
-        end
-    end
     
     
   end
