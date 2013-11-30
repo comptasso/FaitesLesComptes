@@ -6,7 +6,7 @@ class VirtualBookLinesController < ApplicationController
   before_filter :fill_mois
   
   def index
-    @bank_account=BankAccount.find(params[:bank_account_id])
+    @bank_account = BankAccount.find(params[:bank_account_id])
     @virtual_book = @bank_account.virtual_book
     if params[:mois] == 'tous'
       @monthly_extract = Extract::BankAccount.new(@virtual_book, @period)

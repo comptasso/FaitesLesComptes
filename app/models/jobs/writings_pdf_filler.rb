@@ -22,6 +22,8 @@ module Jobs
     
     protected
     
+    # TODO dryifier cette logique qui est exactement la même que dans l'action index
+    # du controller (la transférer dans le modèle book)
     def set_document(options)
         @book = @export_pdf.exportable
         @period = Period.find(options[:period_id])
