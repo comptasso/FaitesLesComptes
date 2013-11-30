@@ -3,10 +3,12 @@
 # en distinguant si on a un params[cash_id] ou un params[:bank_account_id]
 
 class VirtualBookLinesController < ApplicationController
-  before_filter :fill_mois
+  include Pdf::Controller
+  
+  before_filter :find_bank_account, :fill_mois
+  before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
   
   def index
-    @bank_account = BankAccount.find(params[:bank_account_id])
     @virtual_book = @bank_account.virtual_book
     if params[:mois] == 'tous'
       @monthly_extract = Extract::BankAccount.new(@virtual_book, @period)
@@ -44,4 +46,19 @@ class VirtualBookLinesController < ApplicationController
       super
     end
   end
+  
+  def find_bank_account
+    @bank_account = BankAccount.find(params[:bank_account_id])
+  end
+  
+  # créé les variables d'instance attendues par le module PdfController
+  def set_exporter
+    @exporter = @bank_account.virtual_book
+  end
+  
+  # création du job et insertion dans la queue
+  def enqueue(pdf_export)
+    Delayed::Job.enqueue Jobs::WritingsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
+  end
+  
 end

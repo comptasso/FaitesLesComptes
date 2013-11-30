@@ -4,7 +4,7 @@ class NaturesController < ApplicationController
   
   include Pdf::Controller
   
-  before_filter :set_stats_filter 
+  before_filter :set_stats_filter  
   before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
   # index renvoie la liste des natures mais sous forme de statistiques avec les montants

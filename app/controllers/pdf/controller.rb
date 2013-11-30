@@ -2,8 +2,6 @@
 
 module Pdf
   
-  module Controller
-    
   # voir le wiki  pour cette méthode et les deux suivantes utilisées pour produire 
   # un pdf avec DelayedJob.
   #
@@ -21,7 +19,16 @@ module Pdf
   #   Delayed::Job.enqueue Jobs::StatsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, destination:@filter})
   # end
   # 
+  # Il faut également définir un before_filter qui va instancier @document,
+  # par exemple
+  # before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
+  # 
   #  
+  module Controller
+     
+  # FIXME voir pour introduire ici le before_filter
+    
+  
   def produce_pdf 
     raise "Impossible de produire un pdf sans @exporter; Faites une méthode pour définir @exporter" unless @exporter
     # FIXME ce raise crée une erreur dans le spec de natures_controller
