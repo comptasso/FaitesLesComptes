@@ -31,7 +31,7 @@ class VirtualBook < Book
 
   belongs_to :organism
   
-  delegate :nickname, :to=>:virtual
+  delegate :nickname, :export_pdf, :create_export_pdf, :to=>:virtual
   
   def lines
     virtual.compta_lines
@@ -45,6 +45,7 @@ class VirtualBook < Book
   end
   
   # extrait les lignes entre deux dates. Cette méthode ne sélectionne pas sur un exercice.
+  # TODO voir s'il ne faudrait pas deléguer cette méthode à la classe virtual (déjà définie dans BankAccount par un scope)
   def extract_lines(from_date, to_date)
     virtual.compta_lines.joins(:writing).where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date')
   end
@@ -76,8 +77,8 @@ class VirtualBook < Book
     # on arrête la courbe au mois en cours
     return sold_at(selector.end_of_month)  unless selector.beginning_of_month.future?
   end
-
-
+  
+  
   protected
 
   # virtual peut être une instance de cashAccount ou de Cash ou de BankAccount

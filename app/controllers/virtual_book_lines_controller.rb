@@ -22,13 +22,6 @@ class VirtualBookLinesController < ApplicationController
     # pour les exports
     respond_to do |format|
       format.html
-      format.pdf do
-        @monthly_extract.delay.render_pdf
-        flash[:notice] = 'Fichier en cours de préparation'
-        redirect_to :back
-#        pdf = @monthly_extract.to_pdf
-#        send_data pdf.render, :filename=>export_filename(pdf, :pdf) 
-      end
       format.csv { send_data @monthly_extract.to_csv, :filename=>export_filename(@monthly_extract, :csv)   }  # pour éviter le problème des virgules
       format.xls { send_data @monthly_extract.to_xls, :filename=>export_filename(@monthly_extract, :csv)  }
     end
@@ -58,7 +51,7 @@ class VirtualBookLinesController < ApplicationController
   
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::WritingsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
+    Delayed::Job.enqueue Jobs::VirtualBookPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
   end
   
 end

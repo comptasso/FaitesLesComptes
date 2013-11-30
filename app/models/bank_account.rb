@@ -33,6 +33,12 @@ class BankAccount < ActiveRecord::Base
   # un compte bancaire a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
   has_many :compta_lines, :through=>:accounts
+  
+  has_one :export_pdf, as: :exportable
+  
+  # extrait les lignes comptables entre deux date et les restitue par ordre de date
+  # scope :extract_lines, lambda {|from_date, to_date| compta_lines.joins(:writing).where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date') }
+
 
   attr_accessible :number, :bank_name, :comment, :nickname
 
