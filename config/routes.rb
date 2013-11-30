@@ -75,7 +75,9 @@ Faitesvoscomptes::Application.routes.draw do
     # intégré dans periods.
     resources :periods do
       
-      resource :balance
+      resource :balance do
+        concerns :exportable 
+      end
       
       resources :accounts
       resource :listing

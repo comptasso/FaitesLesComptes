@@ -6,7 +6,7 @@ describe Compta::BalancesController do
   include SpecControllerHelper
 
   def valid_attributes
-      {from_date:Date.today.beginning_of_year, to_date:Date.today.end_of_month,
+      {from_date:Date.today.beginning_of_year, to_date:Date.today.end_of_month, 
         period_id:@p.id,
         from_account_id:1,
         to_account_id:99
@@ -15,11 +15,11 @@ describe Compta::BalancesController do
 
   before(:each) do 
     minimal_instances
-    @p.stub(:all_natures_linked_to_account?).and_return true 
+    @p.stub(:all_natures_linked_to_account?).and_return true  
   end
   
   describe "GET new" do
-    it "assigns a new balance" do
+    it "assigns a new balance" do 
       get :new, {:period_id=>@p.id.to_s}, valid_session
       assigns(:balance).should be_a_new(Compta::Balance)
     end
@@ -84,6 +84,14 @@ describe Compta::BalancesController do
       end
 
 
+    end
+    
+    describe 'GET deliver_pdf' do 
+      it 'construit le fichier et le rend' do
+        @p.should_receive(:export_pdf).and_return(mock_model(ExportPdf, status:'ready'))
+        get :deliver_pdf,{ :period_id=>@p.to_param, :compta_balance=>valid_attributes, format:'js'}, session_attributes
+        response.content_type.should == "application/pdf" 
+      end
     end
 
     
