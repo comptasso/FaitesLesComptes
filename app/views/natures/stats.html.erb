@@ -1,5 +1,5 @@
 <%= content_for :menu do %>
-  <%=  export_icons(organism_id:@organism.id, period_id:@period.id, destination:@filter) %>
+  <%=  delayed_export_icons(organism_id:@organism.id, period_id:@period.id, destination:@filter) %>
 <% end -%>
 
 

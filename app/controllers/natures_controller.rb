@@ -14,8 +14,8 @@ class NaturesController < ApplicationController
         pdf = @sn.to_pdf 
         send_data @sn.to_pdf.render, filename:export_filename(pdf, :pdf)
         }
-      format.csv { send_data @sn.to_csv, filename:export_filename(@snf, :csv, 'Statistiques par nature')  }  
-      format.xls { send_data @sn.to_xls, filename:export_filename(@snf, :csv, 'Statistiques par nature')  }
+      format.csv { send_data @sn.to_csv, filename:export_filename(nil, :csv, 'Statistiques par nature')  }  
+      format.xls { send_data @sn.to_xls, filename:export_filename(nil, :csv, 'Statistiques par nature')  }
     end
   end
   
@@ -29,6 +29,21 @@ class NaturesController < ApplicationController
     exp = @period.create_export_pdf(status:'new')
     Delayed::Job.enqueue Jobs::StatsPdfFiller.new(@organism.database_name, exp.id, {period_id:@period.id, destination:@filter})
     render template:'pdf/produce_pdf'
+  end
+  
+  # TODO faire pdf_ready et deliver_pdf
+  def pdf_ready
+    pdf = @period.export_pdf
+    render :text=>"#{pdf.status}"
+  end
+  
+  def deliver_pdf
+    pdf = @period.export_pdf
+    if pdf.status == 'ready'
+      send_data pdf.content, :filename=>export_filename(nil, :pdf, 'Statistiques par nature') 
+    else
+      render :nothing=>true
+    end
   end
   
   protected

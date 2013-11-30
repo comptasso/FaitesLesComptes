@@ -74,7 +74,7 @@ describe NaturesController do
       assigns(:filter).should == filt
     end
 
-    describe 'production du pdf' do
+    describe 'production du pdf' do 
         
       before(:each) do
         
@@ -123,6 +123,25 @@ describe NaturesController do
         Jobs::StatsPdfFiller.stub(:new).and_return(@obj = double(Object, :perform=>true))
         Delayed::Job.should_receive(:enqueue).with(@obj)
         get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+      end
+      
+      it 'puis interroge ready qui renvoie le status' do
+        @p.should_receive(:export_pdf).and_return(mock_model(ExportPdf, status:'pret'))
+        get :pdf_ready,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+        response.should be_success
+        response.body.should == 'pret'
+      end
+      
+      it 'et peut livrer le fichier' do
+        @p.should_receive(:export_pdf).and_return(mock_model(ExportPdf, status:'ready'))
+        get :deliver_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+        response.content_type.should == "application/pdf"
+      end
+      
+      it 'deliver_pdf ne renvoie rien si le fichier n est pas prêt' do
+        @p.should_receive(:export_pdf).and_return(mock_model(ExportPdf, status:'not_ready'))
+        get :deliver_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+        response.body.should == ' '
       end
 
     end

@@ -29,7 +29,7 @@ module Jobs
         
         period  = Period.find(options[:period_id])
         filter = params[:destination].to_i || 0
-        @sn = Stats::StatsNatures.new(period, filter)
+        @document = Stats::StatsNatures.new(period, filter)
       end
     end
     
@@ -40,8 +40,7 @@ module Jobs
     # Voir s'il ne faudra pas les spécialiser
     def perform
         Apartment::Database.process(db_name) do
-          Rails.logger.debug 'Processing pdf rendering by Jobs::WritingsPdfFiller'
-          @export_pdf.content = @monthly_extract.to_pdf.render
+          @export_pdf.content = @document.to_pdf.render
           @export_pdf.save
         end
     end
