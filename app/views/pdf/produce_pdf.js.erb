@@ -2,7 +2,7 @@ $('#message').show().html("<%= j render 'pdf/message' %>"); // rendu du message
 var spinner = new Spinner(small_spinner_opts).spin(document.getElementById('message_spinner'));
 // on lance le poller qui va vérifier la disponibilité du fichier
 $("#message_info").smartupdater({
-    url : window.location.pathname + '/pdf_ready',
+    url : "<%= @request_path %>" + '/pdf_ready',
     minTimeout: 2000,  // 2 seconds
     smartStop: {active:true, monitorTimeout:1000} // ce qui permet d'arrêter le polling
     // automatiquement dès que l'on masque la zone de message
@@ -17,8 +17,8 @@ $("#message_info").smartupdater({
             $("#message").hide();
             }, 2000);
           setTimeout(function() {
-            window.location = window.location.pathname + '/deliver_pdf';
-            }, 3000);
+            window.location = "<%= @request_path %>" + '/deliver_pdf';
+            }, 2100);
           }
     }
 );

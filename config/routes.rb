@@ -84,7 +84,9 @@ Faitesvoscomptes::Application.routes.draw do
         concerns :exportable
       end
       resource :general_book
-      resource :general_ledger
+      resource :general_ledger do
+        concerns :exportable
+      end
       #      resources :sheets do
       #        collection do
       #          get :bilans

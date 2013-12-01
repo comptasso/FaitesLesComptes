@@ -1,4 +1,6 @@
 .champ
-  %h3 Paramètres de la balance
+  %h3 
+    Paramètres de la balance
+    %span= link_to 'essai jl g', produce_pdf_compta_period_general_ledger_path(@period), "data-remote" => 'true'
   .inner-champ
     =render 'form'
