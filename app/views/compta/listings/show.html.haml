@@ -1,7 +1,7 @@
 = content_for :menu do
   %a(data-toggle="modal" class="icon_menu" href="#modal_form_listing")
     = image_tag('icones/nouveau.png') 
-  = delayed_export_icons(:period_id=>@period.id, :compta_listing=>{:account_id=>@listing.account_id,                                                   |
+  = export_icons(:period_id=>@period.id, :compta_listing=>{:account_id=>@listing.account_id,                                                   |
     :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker })
 
 .champ
