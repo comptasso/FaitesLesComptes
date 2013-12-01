@@ -80,7 +80,9 @@ Faitesvoscomptes::Application.routes.draw do
       end
       
       resources :accounts
-      resource :listing
+      resource :listing do
+        concerns :exportable
+      end
       resource :general_book
       resource :general_ledger
       #      resources :sheets do

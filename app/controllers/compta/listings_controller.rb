@@ -7,8 +7,10 @@
 # affiche show
 #
 class Compta::ListingsController < Compta::ApplicationController
-
+# TODO spec à faire
   
+  include Pdf::Controller
+  before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
   # show est appelé directement par exemple par les lignes de la balance
   # icon listing qui apparaît à côté des comptes non vides
@@ -61,7 +63,18 @@ class Compta::ListingsController < Compta::ApplicationController
   end
 
  
+  protected
   
+  # créé les variables d'instance attendues par le module PdfController
+  def set_exporter
+    account = Account.find(params[:compta_listing][:account_id])
+    @exporter = account
+  end
+  
+  # création du job et insertion dans la queue
+  def enqueue(pdf_export)
+    Delayed::Job.enqueue Jobs::ListingPdfFiller.new(@organism.database_name, pdf_export.id, {params_listing:params[:compta_listing]})
+  end
  
 
 end

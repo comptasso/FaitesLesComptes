@@ -1,13 +1,13 @@
 = content_for :menu do
   %a(data-toggle="modal" class="icon_menu" href="#modal_form_listing")
-    = image_tag('icones/nouveau.png')
-  = export_icons(:period_id=>@period.id, :compta_listing=>{:account_id=>@listing.account_id,                                                   |
+    = image_tag('icones/nouveau.png') 
+  = delayed_export_icons(:period_id=>@period.id, :compta_listing=>{:account_id=>@listing.account_id,                                                   |
     :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker })
 
 .champ
   %h3
     %span#intitule
-      = "Ecritures du compte #{@listing.account.long_name}"
+      = "Ecritures du compte #{@listing.account.long_name}" 
       = " - Du #{ordinalize_date(@listing.from_date)} au #{ordinalize_date(@listing.to_date)}"
     %a#show-soldes(href= '#' title='Affiche/masque les soldes du comtpe') afficher les soldes
   = render partial: 'modal_form'

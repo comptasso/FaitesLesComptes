@@ -30,6 +30,8 @@ class Account < ActiveRecord::Base
 
   belongs_to :period
   belongs_to :accountable, polymorphic:true
+  
+  has_one :export_pdf, as: :exportable
   has_many :natures
 
   # les lignes sont trouvées par account_id
