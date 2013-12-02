@@ -1,8 +1,10 @@
 # -*- encoding : utf-8 -*-
 
 # TODO faire les spec de ce controller
-
+# on n'utilise pas de delayed job pour la production du pdf car ce ne doit jamais
+# être long.
 class Compta::AccountsController < Compta::ApplicationController
+
   # GET /compta/accounts
   # GET /compta/accounts.json
   # index affiche le plan comptable pour l'exercice
