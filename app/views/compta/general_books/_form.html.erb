@@ -1,6 +1,6 @@
 <div class="inputs row-fluid">
 
-<%= simple_form_for @general_book, :url=>compta_period_general_book_path(@period), :html=> {class: 'form-inline'} do |gl_f| %>
+<%= simple_form_for @general_book, :url=>produce_pdf_compta_period_general_book_path(@period), :method=>:get , remote:true, :html=> {class: 'form-inline'} do |gl_f| %>
  
     
      <%= gl_f.error_notification %>

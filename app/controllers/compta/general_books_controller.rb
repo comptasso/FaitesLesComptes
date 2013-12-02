@@ -7,48 +7,33 @@
 # Un formulaire inclus dans la vue permet de faire un post qui aboutit à create, reconstruit une general_book et
 # affiche show
 #
-class Compta::GeneralBooksController < Compta::ApplicationController
+class Compta::GeneralBooksController < Compta::ApplicationController 
+  
+  include Pdf::Controller # apporte les méthodes pour la production du grand livre en pdf
+  
+  before_filter :set_params_gb, :only=>[:show, :create, :produce_pdf]
+  before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
-
-  def new
-     @general_book = Compta::GeneralBook.new(period_id:@period.id).with_default_values
+  def new 
+    @general_book = Compta::GeneralBook.new(period_id:@period.id).with_default_values
   end
 
-  # utile pour afficher la general_book en pdf
-  def show
-    parameters = {period_id:@period.id}.merge(params[:general_book])
-    @general_book = Compta::GeneralBook.new(parameters )
-    if @general_book.valid?
-      respond_to do |format|
-        format.pdf  do
-           send_data @general_book.render_pdf, filename:export_filename(@general_book, :pdf, 'Grand livre') #, disposition:'inline'}
-        end
-      end
-    else
-      respond_to do |format|
-        format.pdf {redirect_to new_compta_period_general_book_url(@period)}
-      end
-    end
+  protected
+  
+  def set_params_gb
+    @params_gb = {period_id:@period.id}.merge(params[:compta_general_book])
   end
-
-  def create
-    cookies[:download_file_token] = { :value =>params[:download_token_value_id], :expires => Time.now + 1800 }
-    parameters = {period_id:@period.id}.merge(params[:compta_general_book])
-    @general_book = Compta::GeneralBook.new(parameters)
-    if @general_book.valid?
-      respond_to do |format|
-        format.html { redirect_to  compta_period_general_book_url(@period, :general_book=>params[:compta_general_book], :format=>'pdf')}
-        format.js
-      end
-    else
-      respond_to do |format|
-        format.html { render 'new'}
-        format.js {render 'new'}
-      end
-
+  
+  # créé les variables d'instance attendues par le module PdfController
+  def set_exporter
+    @exporter = @period
   end
+  
+  # création du job et insertion dans la queue
+  def enqueue(pdf_export)
+    Delayed::Job.enqueue Jobs::GeneralBookPdfFiller.new(@organism.database_name, pdf_export.id, @params_gb)
   end
-
+ 
 
 
 

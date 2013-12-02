@@ -37,12 +37,7 @@ module Compta
       to_pdf.render
     end
     
-    protected
-    
-    def organism_name
-      Period.find(period_id).organism.title
-    end
-    
+   
     
     # Fait une édition du grand livre avec une page de garde
      #
@@ -71,6 +66,13 @@ module Compta
       final_pdf
     end
  
+    
+    protected
+    
+    def organism_name
+      Period.find(period_id).organism.title
+    end
+    
   end
 
 end

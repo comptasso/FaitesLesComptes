@@ -83,7 +83,9 @@ Faitesvoscomptes::Application.routes.draw do
       resource :listing do
         concerns :exportable
       end
-      resource :general_book
+      resource :general_book do
+        concerns :exportable
+      end
       resource :general_ledger do
         concerns :exportable
       end
