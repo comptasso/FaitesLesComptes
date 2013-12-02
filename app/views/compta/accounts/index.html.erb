@@ -23,8 +23,8 @@
     <td><%=  t_used compta_account %></td>
     <td>
     
-  <%= icon_to 'afficher.png', compta_period_listing_path(@period, compta_listing:{account_id:compta_account.id,
-      from_date:@period.start_date, to_date:@period.close_date}) unless compta_account.lines_empty?  %>
+  <%= icon_to 'afficher.png', compta_account_listing_path(compta_account, 
+    compta_listing:{from_date:@period.start_date, to_date:@period.close_date}) unless compta_account.lines_empty?  %>
     </td>
   </tr>
 <% end %>

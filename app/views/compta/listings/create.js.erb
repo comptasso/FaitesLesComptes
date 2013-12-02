@@ -23,17 +23,16 @@ $('#movements').html("<%= j render 'movements' %>")
 $('#listing_table').html(" <%= j render 'listing_table' %>");
 
 // il faut également mettre à jour le lien pour les icones pdf, csv et xls
-$('#icon_pdf').attr('href', '<%= j compta_period_listing_path(@period,
-  :compta_listing=>{:account_id=>@listing.account_id,
-  :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker },
-  :format=>'pdf') %>');
-$('#icon_csv').attr('href', '<%= j compta_period_listing_path(@period,
-  :compta_listing=>{:account_id=>@listing.account_id,
-  :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker },
+$('#delayed_icon_pdf').attr('href', '<%= j produce_pdf_compta_account_listing_path(@account,
+  :compta_listing=>{:from_date_picker=>@listing.from_date_picker,
+  :to_date_picker=>@listing.to_date_picker }) %>');
+$('#icon_csv').attr('href', '<%= j compta_account_listing_path(@account,
+  :compta_listing=>{:from_date_picker=>@listing.from_date_picker,
+  :to_date_picker=>@listing.to_date_picker },
   :format=>'csv') %>');
-$('#icon_xls').attr('href', '<%= j compta_period_listing_path(@period,
-  :compta_listing=>{:account_id=>@listing.account_id,
-  :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker },
+$('#icon_xls').attr('href', '<%= j compta_account_listing_path(@account,
+  :compta_listing=>{:from_date_picker=>@listing.from_date_picker,
+  :to_date_picker=>@listing.to_date_picker },
   :format=>'xls') %>');
 
 // et on réinitialiser la data_table

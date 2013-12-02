@@ -79,8 +79,8 @@ Faitesvoscomptes::Application.routes.draw do
         concerns :exportable 
       end
       
-      resources :accounts
-      resource :listing do
+      resources :accounts 
+      resource :listing, only: [:new, :show, :create] do
         concerns :exportable
       end
       resource :general_book do
@@ -105,10 +105,14 @@ Faitesvoscomptes::Application.routes.draw do
       end
       
     end
-    
-    
+   
+    resources :accounts do
+      resource :listing, only: :show do
+        concerns :exportable
+      end
+    end
 
-    resources :accounts  
+    
   end
   # fin du namespace COMPTA
 

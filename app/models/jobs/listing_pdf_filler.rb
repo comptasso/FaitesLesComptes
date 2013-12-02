@@ -22,9 +22,11 @@ module Jobs
         
     protected
     
-    # fournit la variable d'instance document.
+    # fournit la variable d'instance document et remplit l'élément account
     def set_document(options)
-        @document = Compta::Listing.new(options[:compta_listing])
+      @document = Compta::Listing.new(options[:compta_listing])
+      @document.account_id = options[:account_id]
+      
     end
     
     
