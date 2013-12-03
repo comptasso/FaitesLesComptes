@@ -1,8 +1,8 @@
-# coding: utf-8
+# coding: utf-8 
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe Compta::BalancesController do
+describe Compta::BalancesController do 
   include SpecControllerHelper
 
   def valid_attributes

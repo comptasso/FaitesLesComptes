@@ -243,7 +243,7 @@ Faitesvoscomptes::Application.routes.draw do
     
   resources :books do
     resources :writings
-    resources :in_out_writings , concerns: :exportable
+    resources(:in_out_writings) { concerns :exportable }
     resources :lines do
       member do
         post 'lock' # pour la requete ajax

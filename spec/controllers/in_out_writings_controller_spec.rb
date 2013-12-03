@@ -17,11 +17,11 @@ describe InOutWritingsController do
 
   end
 
-  describe 'before_filters' , wip:true do
+  describe 'before_filters' , wip:true do 
     # ici on fait les spec du filter change_if_has_changed_period
 
     before(:each) do
-      @p.stub(:list_months).and_return([])
+      @p.stub(:list_months).and_return([]) 
     end
 
     it 'doit redirigé vers la bonne vue ' do

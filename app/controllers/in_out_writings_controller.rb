@@ -2,6 +2,8 @@
 
 class InOutWritingsController < ApplicationController 
  
+  include Pdf::Controller
+  
   # TODO voir pour utiliser ChangePeriod plutôt que check_if_has_changed_period
   # ce qui permettrait probablement de ne pas surcharger fill_mois
 
@@ -9,8 +11,10 @@ class InOutWritingsController < ApplicationController
   before_filter :fill_mois, only: [:index, :new]
   before_filter :check_if_has_changed_period, only: :index # car on peut changer de period quand on clique sur une
   # des barres du graphe.qui est affiché par organism#show
-  before_filter :fill_natures, :only=>[:new,:edit] # pour faire la saisie des natures en fonction du livre concerné
-
+  before_filter :fill_natures, :only=>[:new, :edit] # pour faire la saisie des natures en fonction du livre concerné
+  before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf] # pour l'édition des pdf
+  # voir le wiki sur ce sujet
+  
   # GET /in_out_writings
   # TODO changer @monthly_extract en @extract
   def index
@@ -75,34 +79,7 @@ class InOutWritingsController < ApplicationController
   
   
   
-  # Voir le wiki pour la logique générale de production des pdf 
-  #  TODO mettre une limite au volume du fichier ??
-  #  
-  # Délègue la tâche de création du pdf au Jobs::WritingsPdfFiller
-  # en remplissant dans les options les informations qui seront nécessaires
-  # 
-  #
-  def produce_pdf
-    # destruction préalable de l'export s'il existe déja.
-    exp = @book.export_pdf
-    exp.destroy if exp  
-    # création de l'export 
-    exp = @book.create_export_pdf(status:'new')
-    Delayed::Job.enqueue Jobs::WritingsPdfFiller.new(@organism.database_name, exp.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
-  end
-  
-  def pdf_ready
-    pdf = @book.export_pdf
-    render :text=>"#{pdf.status}"
-  end
-  
-  
-  def deliver_pdf
-    send_data @book.export_pdf.content, :filename=>export_filename(@book, :pdf) 
-  end
-
-  
-  
+ 
 
   # flash[:origin] et la méthode comes_from permet de déterminer la route à reprendre 
   # lorsqu'on sera dans update. Soit on vient de index et y retourne. Soit on vient 
@@ -154,6 +131,19 @@ class InOutWritingsController < ApplicationController
   end
 
   protected
+  
+  
+  # créé les variables d'instance attendues par le module PdfController
+  def set_exporter
+    @exporter = @book
+    
+  end
+  
+  # création du job et insertion dans la queue
+  def enqueue(pdf_export)
+    Delayed::Job.enqueue Jobs::WritingsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
+  end
+  
 
   # permet de savoir si on vient d'une action new
   # utilisé par edit pour remplir un flash qui sera à son tour utilisé par update.
