@@ -61,16 +61,20 @@ Faitesvoscomptes::Application.routes.draw do
         end
       end
     end
-    # TODO voir pour supprimer le resources sheets ci_dessous 
+    
     resources :sheets do
       collection do
         get :bilans
         get :resultats
         get :benevolats
-        get :detail
         get :liasse
       end
     end
+    
+    resource :two_periods_balance , only: :show do
+        concerns :exportable
+    end
+      
     resource :nomenclature
     # intégré dans periods.
     resources :periods do
@@ -78,6 +82,8 @@ Faitesvoscomptes::Application.routes.draw do
       resource :balance do
         concerns :exportable 
       end
+      
+      
       
       resources :accounts 
       resource :listing, only: [:new, :show, :create] do
@@ -89,15 +95,7 @@ Faitesvoscomptes::Application.routes.draw do
       resource :general_ledger do
         concerns :exportable
       end
-      #      resources :sheets do
-      #        collection do
-      #          get :bilans
-      #          get :resultats
-      #          get :benevolats
-      #          get :detail
-      #          get :liasse
-      #        end
-      #      end
+
       resources :selections do
         member do
           post :lock

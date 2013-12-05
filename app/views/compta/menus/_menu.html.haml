@@ -35,7 +35,7 @@
         - if @organism.status == 'Association'
           %li= link_to('Bénévolat', benevolats_compta_sheets_path, class:'with_spinner')
         %li= link_to('Liasse', liasse_compta_sheets_path, class:'with_spinner')
-        %li= link_to('Détail des comptes', detail_compta_sheets_path, class:'with_spinner')
+        %li= link_to('Détail des comptes', compta_two_periods_balance_path, class:'with_spinner')
         %li= link_to('Liste des documents', compta_nomenclature_path, class:'with_spinner')
 
   - unless @organism.nil? && @organism.periods.count <= 1

@@ -101,30 +101,7 @@ class Compta::SheetsController < Compta::ApplicationController
   end
 
 
-  # dernière action de ce controller, detail donne les valeurs des comptes pour l'ensemble des 
-  # comptes avec leur rattachement aux rubrik adéquates.
-  # c'est une sorte de balance mais en fin d'exercice et avec les comptes de l'exercice mais 
-  # aussi de l'exercice précédent
-  def detail 
-    @detail_lines = @period.two_period_account_numbers.map  {|num| Compta::RubrikLine.new(@period, :actif, num)}
-    respond_to do |format|  
-      send_export_token # pour gérer le spinner lors de la préparation du document
-      format.html
-      format.csv { send_data(detail_csv(@detail_lines), filename:export_filename(@detail_lines, :csv, 'Détail des comptes')) } 
-      format.xls { send_data(detail_xls(@detail_lines), filename:export_filename(@detail_lines, :csv, 'Détail des comptes'))   }
-      format.pdf {
-        pdf = PdfDocument::Base.new(@detail_lines, {:title=>'Détail des comptes',
-            :columns_methods=>[:select_num, :title, :brut, :amortissement, :net, :previous_net],
-            :columns_titles=>['Numéro', 'Libellé', 'Brut', 'Amortissement', 'Net', 'Ex Précédent']}) do |p|
-          p.columns_widths = [10,30,15,15,15,15]
-          p.columns_alignements = [:left, :left, :right, :right, :right, :right]
-          p.top_left = "#{@organism.title}\n#{@period.exercice}" 
-          p.stamp = @period.closed? ? '' : 'Provisoire' 
-        end
-        send_data pdf.render, filename:export_filename(pdf, :pdf)
-      }
-    end
-  end
+  
 
   protected
 
@@ -136,16 +113,7 @@ class Compta::SheetsController < Compta::ApplicationController
     flash[:alert] = collect_errors(@nomenclature) unless @nomenclature.coherent?
   end 
   
-  def detail_csv(lines)
-    CSV.generate({:col_sep=>"\t"}) do |csv|
-      csv << ['Numéro', 'Libellé', 'Brut', 'Amortissement', 'Net', 'Ex. précédent']
-      lines.each {|l| csv << [l.select_num, l.title, l.brut, l.amortissement, l.net, l.previous_net] }
-    end.gsub('.', ',')
-  end
   
-  def detail_xls(lines)
-    detail_csv(lines).encode("windows-1252")
-  end
   
   def produce_pdf(documents)
     final_pdf = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait)
