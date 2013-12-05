@@ -122,8 +122,12 @@ class Compta::SheetsController < Compta::ApplicationController
   end
   
   # création du job et insertion dans la queue
+  # on utilise le params :collection pour savoir si on est dans la publication d'une 
+  # collection (une action primitive :index) ou un show.
+  # Mais comme l'action est chaque fois produce_pdf, il faut un autre moyen de 
+  # différentier les deux. 
   def enqueue(pdf_export)
-    if params[:action] == 'index'
+    if params[:collection] 
       Delayed::Job.enqueue Jobs::SheetsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, collection:params[:collection]})
     else # cas de l'action show
       Delayed::Job.enqueue Jobs::SheetPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, folio_id:params[:id]})

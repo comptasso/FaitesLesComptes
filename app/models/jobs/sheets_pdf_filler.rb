@@ -11,7 +11,7 @@ module Jobs
   # 
   # Voir la classe BasePdfFiller pour plus de détail
   #  
-  class SheetsPdfFiller < BasePdfFiller
+  class SheetsPdfFiller < BasePdfFiller 
     
     # surcharge de la méthode de la classe Base car ici on doit rendre une collection
     # de documents (on pourrait aussi créer une classe dédiée à ça mais pour l'instant
@@ -45,8 +45,8 @@ module Jobs
         # @docs est une collection de Compta::Sheet
         @docs = options[:collection].map do |c|
           fol = nomenclature.folios.find_by_name(c.to_s)
-          nomenclature.sheet(period, fol)
-        end
+          nomenclature.sheet(period, fol) if fol
+        end.reject { |r| r.nil?}
         
     end
     
