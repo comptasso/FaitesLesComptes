@@ -123,7 +123,11 @@ class Compta::SheetsController < Compta::ApplicationController
   
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::SheetsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, collection:params[:collection]})
+    if params[:action] == 'index'
+      Delayed::Job.enqueue Jobs::SheetsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, collection:params[:collection]})
+    else # cas de l'action show
+      Delayed::Job.enqueue Jobs::SheetPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, folio_id:params[:id]})
+    end
   end
   
   
