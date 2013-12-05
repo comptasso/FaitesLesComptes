@@ -17,7 +17,7 @@ $('#balance_table').html(" <%= j render 'balance' %>");
 $('.champ > h3').html("Balance <%= j @balance.provisoire? ? 'provisoire' : '' %>")
 
 // il faut également mettre à jour le lien pour les icones pdf, csv et xls
-$('#icon_pdf').attr('href', '<%= j compta_period_balance_path(@period,  :compta_balance=>@params_balance, :format=>'pdf') %>');
-$('#icon_xls').attr('href', '<%= j compta_period_balance_path(@period, :compta_balance=>@params_balance,:format=>'xls') %>');
-$('#icon_csv').attr('href', '<%= j compta_period_balance_path(@period,  :compta_balance=>@params_balance, :format=>'csv') %>');
+$('#delayed_icon_pdf').attr('href', '<%=j  produce_pdf_compta_period_balance_path(@period,  :compta_balance=>@params_balance).html_safe %>');
+$('#icon_xls').attr('href', '<%=  compta_period_balance_path(@period, :compta_balance=>@params_balance,:format=>'xls').html_safe %>');
+$('#icon_csv').attr('href', '<%=  compta_period_balance_path(@period,  :compta_balance=>@params_balance, :format=>'csv').html_safe %>');
 
