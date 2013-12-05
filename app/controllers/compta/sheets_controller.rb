@@ -15,7 +15,10 @@ require 'pdf_document/base'
 
 class Compta::SheetsController < Compta::ApplicationController
   
+  include Pdf::Controller
+  
   before_filter :check_nomenclature, :only=>[:index, :show]
+  before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
   def index
     # @docs est une collection de Compta::Sheet
@@ -113,17 +116,19 @@ class Compta::SheetsController < Compta::ApplicationController
     flash[:alert] = collect_errors(@nomenclature) unless @nomenclature.coherent?
   end 
   
-  
-  
-  def produce_pdf(documents)
-    final_pdf = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait)
-    documents.each do |doc|
-      doc.to_pdf.render_pdf_text(final_pdf)
-      final_pdf.start_new_page unless doc == @docs.last 
-    end
-    final_pdf.numerote
-    final_pdf.render
+  # créé les variables d'instance attendues par le module PdfController
+  def set_exporter
+    @exporter = @period
   end
+  
+  # création du job et insertion dans la queue
+  def enqueue(pdf_export)
+    Delayed::Job.enqueue Jobs::SheetsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, collection:params[:collection]})
+  end
+  
+  
+  
+ 
 
 end
 

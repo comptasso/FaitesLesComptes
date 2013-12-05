@@ -63,6 +63,7 @@ Faitesvoscomptes::Application.routes.draw do
     end
     
     resources :sheets do
+      concerns :exportable
       collection do
         get :bilans
         get :resultats
