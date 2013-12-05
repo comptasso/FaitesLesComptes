@@ -73,7 +73,7 @@ module Pdf
   # déja GeneralLedger (cas par exemple d'un lien dans un menu accessible de plusieurs
   # pages différentes), il faut surcharger la méthode dans le controller.
   def set_request_path
-    request.url[/(.*)\/produce_pdf\?.*/]
+    request.url[/(.*)\/produce_pdf(\?.*)?/]
     @request_path = $1
   end
     

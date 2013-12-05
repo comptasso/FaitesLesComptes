@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require 'pdf_document/base'
+
 # Classe destinée à produire une balance sur deux exercices
 # 
 # Elle s'initialise avec un period et dispose de deux méthodes

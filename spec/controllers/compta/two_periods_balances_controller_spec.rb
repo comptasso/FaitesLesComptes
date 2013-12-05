@@ -29,4 +29,32 @@ describe Compta::TwoPeriodsBalancesController do
         response.should render_template 'show'
       end
     end
+    
+    describe 'produce_pdf' do 
+      before(:each) do
+        @p.stub(:export_pdf)
+        @p.stub(:create_export_pdf).and_return(@expdf =  mock_model(ExportPdf, status:'new'))
+      end
+      
+      it 'lance la production du pdf' do 
+        get :produce_pdf, {format:'js'}, session_attributes
+        response.should be_success
+      end
+      
+      it 'en le mettant dans la queue' do
+        Jobs::TwoPeriodsBalancePdfFiller.should_receive(:new).
+          with(@o.database_name, @expdf.id, {period_id:@p.id} ).and_return(@ctpb = double(Jobs::TwoPeriodsBalancePdfFiller))
+        Delayed::Job.should_receive(:enqueue).with @ctpb
+        get :produce_pdf, {format:'js'}, session_attributes
+      end
+      
+    end
+    
+    describe 'GET deliver_pdf' do 
+      it 'construit le fichier et le rend' do
+        @p.should_receive(:export_pdf).and_return(mock_model(ExportPdf, status:'ready'))
+        get :deliver_pdf,{format:'js'}, session_attributes
+        response.content_type.should == "application/pdf" 
+      end
+    end
 end

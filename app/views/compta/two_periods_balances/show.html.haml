@@ -1,10 +1,13 @@
 -# Vue pour l'action détail 
 =content_for :menu do
-  = export_icons(params)
+  = delayed_export_icons(params)
   
 
 .champ
-  %h3 Liste des comptes et des soldes
+  %h3 
+    Liste des comptes et des soldes
+    
+    
 
 .row-fluid
   .span12
