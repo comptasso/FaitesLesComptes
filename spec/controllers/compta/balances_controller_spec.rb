@@ -7,7 +7,7 @@ describe Compta::BalancesController do
 
   def valid_attributes
       {from_date:Date.today.beginning_of_year, to_date:Date.today.end_of_month, 
-        period_id:@p.id,
+        period_id:@p.id, 
         from_account_id:1,
         to_account_id:99
       }

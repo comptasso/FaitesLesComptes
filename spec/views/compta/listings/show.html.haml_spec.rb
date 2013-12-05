@@ -32,6 +32,7 @@ describe 'compta/listings/show' do
     l.stub(:cumulated_credit_at).with(p.close_date).and_return 0
     assign(:listing, l)
     assign(:period, p)
+    assign(:account, a)
   end
  
   it 'should render' do

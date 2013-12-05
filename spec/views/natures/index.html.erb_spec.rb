@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'list_months'
 
-describe "natures/stats" do 
+describe "natures/index" do  
   include JcCapybara
 
   let(:o) {mock_model(Organism, title: 'spec cd')}
