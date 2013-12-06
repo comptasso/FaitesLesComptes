@@ -40,6 +40,7 @@ module Jobs
     
     # fournit la variable d'instance document.
     def set_document(options)
+      # TODO faire une méthode dans le modèle
         period  = Period.find(options[:period_id])
         nomenclature = period.organism.nomenclature
         # @docs est une collection de Compta::Sheet
