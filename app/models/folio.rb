@@ -1,3 +1,5 @@
+require 'benchmark'
+
 # Un folio décrit le mode de construction d'un document comptable, par exemple
 # actif ou passif ou résultat
 # 
@@ -77,6 +79,12 @@ class Folio < ActiveRecord::Base
   # renvoie la rubrique racine de ce folio
   def root
     rubriks.root
+  end
+  
+  def bench_lines(period)
+    Benchmark.bm do |bm|
+      bm.report {root.fetch_lines(period)}
+    end
   end
   
   # Permet d'extraire toutes les instructions de liste de comptes de la nomenclature

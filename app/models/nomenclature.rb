@@ -74,10 +74,12 @@ class Nomenclature < ActiveRecord::Base
     Compta::Nomenclature.new(period, self)
   end
   
+  # création d'un document à partir du folio demandé
+  # et de 'exercice
   def sheet(period, folio)
     Compta::Sheet.new(period, folio) 
   end
-
+  
   # vérifie la validité de la nomenclature, laquelle repose sur l'existence 
   # de folios actif, passif et resultat.
   # 

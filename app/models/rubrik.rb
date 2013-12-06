@@ -45,12 +45,14 @@ class Rubrik < ActiveRecord::Base
       
       fl = []
       children.each do |c|
+        c_leaf = c.leaf?   # teste une seule fois si c'est une feuille
+        clps = c.lines(period) if c_leaf # récupère les lignes si c'est une feuille
         
-        fl += c.fetch_lines(period) unless c.leaf?
-        fl += c.lines(period)  if c.leaf? && !c.lines(period).empty? 
-        fl << c if c.leaf?
+        fl += c.fetch_lines(period) unless c_leaf # recursif si ce n'est pas une feuille
+        fl += clps if c_leaf && !clps.empty? # ajoute les lignes puisque c'est une feuille non vide
+        fl << c if c_leaf # ajoute la feuille elle-même
       end
-      fl << self
+      fl << self # finalise en ajoutant la rubrik appelante qui se met en total.
       fl
     end
     
