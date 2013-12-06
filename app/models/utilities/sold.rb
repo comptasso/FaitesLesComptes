@@ -38,7 +38,7 @@ module Utilities::Sold
   # débit cumulé à une date (y compris cette date). Renvoie zero s'il n'y a
   # pas de périod et donc pas de compte associé à cette caisse pour cette date
   def cumulated_debit_at(date)
-    cumulated_at(date, :debit)
+    cumulated_at(date, :debit).round 2
   end
 
   

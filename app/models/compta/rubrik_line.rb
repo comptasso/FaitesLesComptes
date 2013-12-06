@@ -116,7 +116,8 @@ module Compta
     #
     def brut_amort
       return [0,0] unless account
-      mise_en_forme(account.final_sold)
+      mise_en_forme(account.sold_at(period.close_date)) # plutôt que final_sold
+      # pour éviter la requête sur period
     end
 
     # Etant donné deux montants (brut et amortissements dans un tableau), calcule le net

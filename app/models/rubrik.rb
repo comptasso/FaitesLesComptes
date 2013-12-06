@@ -1,10 +1,18 @@
 # require 'pdf_document/pdf_rubriks.rb'
 
-# Classe destinée à remplacer les actuels Compta::Rubriks et Compta::Rubrik
-# pour permettre de manipuler les nomenclatures qui servent à établir les documents
-# comptables (Actif, Passif, ...)
+# Classe destinée à produire les documents comptables tels qu'actif ou passif
+# Chaque rubrique qui se lit à partir d'un folio est capable de calculer 
+# ses soldes, en listant ses enfants.
 # 
-# ActsAsTree
+#  Le gem acts_as_tree donne les méthodes leaf et children.
+#  
+#   Un champ booleen is_leaf est ajouté dans la table permettant d'éviter les 
+#   trop nombreuses interrogations de la table à chaque fois qu'on veut savoir
+#   si la rubrik est une feuille ou non (ce qui est dû à la récursivité de 
+#   certaines fonctions)  
+# 
+# Une autre logique aurait pu être de faire deux modèles différents, avec des
+# rubriques et des sous rubriques. Peut être avec la logique STI
 #
 class Rubrik < ActiveRecord::Base
   include ActsAsTree
@@ -16,6 +24,12 @@ class Rubrik < ActiveRecord::Base
   
   
   alias collection children
+  
+  # surcharge de la méthode leaf? du gem acts_as_tree afin d'utiliser le champ
+    # is_leaf.
+    def leaf?
+      is_leaf 
+    end
   
   
   # title est un alias de name car PdfDocument utilise title et non name
@@ -169,6 +183,8 @@ class Rubrik < ActiveRecord::Base
     def all_lines(period)
         Compta::RubrikParser.new(period, folio.sens, numeros).rubrik_lines
     end
+    
+    
     
 
 end

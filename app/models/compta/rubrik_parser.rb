@@ -62,8 +62,7 @@ module Compta
       @col2_nums = []
       @debit_nums = []
       @credit_nums = []
-      # ceci nous donne tous les comptes des deux périodes
-      @numbers = @period.two_period_account_numbers
+      
       set_numbers # déclanche le parsing
       set_lines # construit et réordonne les numéros trouvés
       
@@ -140,14 +139,14 @@ module Compta
     # On ajoute les comptes correspondant à la liste des comptes sélectionnés
     # en veillant à ne pas les ajouter deux fois
     def add_numbers(num)
-      @select_nums += @numbers.select {|n| n =~ /^#{num}\d*/ && !n.in?(@select_nums) }
+      @select_nums += numbers.select {|n| n =~ /^#{num}\d*/ && !n.in?(@select_nums) }
     end
 
     # on rejète le numéro de la liste générale
     # et on l'ajoute dans celle de col2
     def add_col2_numbers(num)
       @select_nums.reject! {|n| n =~ /^#{num}\d*/}
-      @col2_nums += @numbers.select {|n| n =~ /^#{num}\d*/}
+      @col2_nums += numbers.select {|n| n =~ /^#{num}\d*/}
     end
 
     # reject doit rejeter que ce soit de la première colonne ou de la seconde
@@ -161,14 +160,21 @@ module Compta
     # mais avant les retire de la liste générale au cas où ils y seraient
     def add_credit_numbers(num)
       @select_nums.reject! {|n| n =~ /^#{num}\d*/}
-      @credit_nums += @numbers.select {|n| n =~ /^#{num}\d*/}
+      @credit_nums += numbers.select {|n| n =~ /^#{num}\d*/}
     end
 
     # ajoute les numéros à la liste des numéros à logique de crédit
     # mais avant les retire de la liste générale au cas où ils y seraient
     def add_debit_numbers(num)
       @select_nums.reject! {|n| n =~ /^#{num}\d*/}
-      @debit_nums += @numbers.select {|n| n =~ /^#{num}\d*/}
+      @debit_nums += numbers.select {|n| n =~ /^#{num}\d*/}
     end
+    
+       
+    def numbers
+      # ceci nous donne tous les comptes des deux périodes
+      @numbers ||= @period.two_period_account_numbers
+    end
+    
   end
 end

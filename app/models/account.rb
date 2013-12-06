@@ -95,6 +95,13 @@ class Account < ActiveRecord::Base
     # et non 0 ce qui pose des difficultés pour les additions
     end
   end
+  
+  def sold_at(date)
+    sql = %Q(SELECT SUM(credit) AS sum_credit, SUM(debit) AS sum_debit FROM "writings" INNER JOIN "compta_lines" 
+ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND account_id = #{id}))
+    result = Writing.find_by_sql(sql).first
+    (result.sum_debit.to_f - result.sum_credit.to_f).round 2
+  end
 
 
   # surcharge de accountable pour gérer le cas des remises chèques
