@@ -25,23 +25,23 @@ class Rubrik < ActiveRecord::Base
   
   alias collection children
   
-  # repris ces lignes de github ascts_as_tree car curieusement ne semblent pas fonctionner
-  # par défaut
-  # Returns list of descendants, starting from current node, not including current node.
-    #
-    # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
-    def descendants
-      children.each_with_object(children) {|child, arr|
-        arr.concat child.descendants
-      }.uniq
-    end
-
-    # Returns list of descendants, starting from current node, including current node.
-    #
-    # root.self_and_descendants # => [root, child1, child2, subchild1, subchild2, subchild3, subchild4]
-    def self_and_descendants
-      [self] + descendants
-    end
+#  # repris ces lignes de github ascts_as_tree car curieusement ne semblent pas fonctionner
+#  # par défaut
+#  # Returns list of descendants, starting from current node, not including current node.
+#    #
+#    # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
+#    def descendants
+#      children.each_with_object(children) {|child, arr|
+#        arr.concat child.descendants
+#      }.uniq
+#    end
+#
+#    # Returns list of descendants, starting from current node, including current node.
+##
+#    # root.self_and_descendants # => [root, child1, child2, subchild1, subchild2, subchild3, subchild4]
+#    def self_and_descendants
+#      [self] + descendants
+#    end
   
   # surcharge de la méthode leaf? du gem acts_as_tree afin d'utiliser le champ
   # is_leaf.
@@ -98,7 +98,6 @@ class Rubrik < ActiveRecord::Base
     def fetch_rubriks(period)
       result = []
       children.each do |c|
-        
         if c.leaf? 
           result << c.to_compta_rubrik(period)
         else
@@ -116,7 +115,22 @@ class Rubrik < ActiveRecord::Base
     # renvoie les numeros des rubriques feuilles
     # en éliminant les nils
     def all_instructions 
-      self_and_descendants.collect(&:numeros).select {|num| num != nil}
+      self_and_children.collect(&:numeros).select {|num| num != nil}
+    end
+    
+    def self_and_children
+      result = []
+      children.each do |ch|
+        if ch.leaf?
+          result << ch
+        else
+          result += ch.self_and_children
+        end
+        
+      end
+      result << self
+      result.flatten
+      result
     end
     
     # lines renvoie les rubrik_lines qui construisent la rubrique

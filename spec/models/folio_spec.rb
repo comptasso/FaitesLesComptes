@@ -92,6 +92,8 @@ describe Folio do
 
   describe 'fill_rubriks_with_position', wip:true do
     
+#     {:actif=>{:title=>"BILAN ACTIF", :sens=>:actif, :rubriks=>{:"TOTAL ACTIF"=>{:IMMOBILISATIONS=>{:"Immobilisations incorporelles"=>{:"Frais d'établissement"=>"201 -2801", :"Frais de recherche et développement"=>"203 -2803", :"Fonds commercial"=>"206 207 -2806 -2807", :Autres=>"208 -2808 -2809"},
+    
     before(:each) do
      Rubrik.delete_all
      Folio.delete_all
