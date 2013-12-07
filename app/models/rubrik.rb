@@ -118,20 +118,7 @@ class Rubrik < ActiveRecord::Base
       self_and_children.collect(&:numeros).select {|num| num != nil}
     end
     
-    def self_and_children
-      result = []
-      children.each do |ch|
-        if ch.leaf?
-          result << ch
-        else
-          result += ch.self_and_children
-        end
-        
-      end
-      result << self
-      result.flatten
-      result
-    end
+    
     
     # lines renvoie les rubrik_lines qui construisent la rubrique
     # lines est en fait identique à la méthode protected all_lines
@@ -217,6 +204,21 @@ class Rubrik < ActiveRecord::Base
     #
     def all_lines(period)
         Compta::RubrikParser.new(period, folio.sens, numeros).rubrik_lines
+    end
+    
+    def self_and_children
+      result = []
+      children.each do |ch|
+        if ch.leaf?
+          result << ch
+        else
+          result += ch.self_and_children
+        end
+        
+      end
+      result << self
+      result.flatten
+      result
     end
     
     

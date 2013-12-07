@@ -12,7 +12,8 @@ describe Compta::RubrikLine do
 
   let(:pp) {mock_model(Period)}
   let(:p) {mock_model(Period, :close_date=>Date.today.end_of_year, 'previous_period?'=>true, previous_period:pp, :previous_account=>bcc)}
-  let(:acc) {mock_model(Account, :final_sold=>-120, number:'201', title:'Un compte')}
+  let(:acc) {mock_model(Account, :sold_at=>-120, number:'201', title:'Un compte')}
+  # TODO il faudrait utiliser ici aussi sold_at plutôt que final_sold pour gagner en rapidité.
   let(:bcc) {mock_model(Account, :final_sold=>-14)}
 
   before(:each) do
@@ -46,13 +47,13 @@ describe Compta::RubrikLine do
   describe 'correspondance entre passif - credit et actif - debit' do
     
     it 'sait calculer les brut qui vont à l actif et au passif' do
-      acc.stub(:final_sold).and_return -120
+      acc.stub(:sold_at).and_return -120
       Compta::RubrikLine.new(p, :actif, '201', :debit).brut.should == 120
       Compta::RubrikLine.new(p, :actif, '201', :credit).brut.should == 0
     end
     
     it 'sait calculer les brut actif et passif' do
-      acc.stub(:final_sold).and_return 99
+      acc.stub(:sold_at).and_return 99
       Compta::RubrikLine.new(p, :passif, '40', :debit).brut.should == 0
       Compta::RubrikLine.new(p, :passif, '40', :credit).brut.should == 99
     end

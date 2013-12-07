@@ -12,7 +12,7 @@ end
 describe 'Editions::Listing qui est l édition d un listing de compte' do
   let(:from_date) {Date.today.beginning_of_year}
   let(:to_date) {Date.today.end_of_year}
-  let(:a) {mock_model(Account, :compta_lines=>'bonjour')}
+  let(:a) {mock_model(Account, :compta_lines=>'bonjour', period:p)}
   let(:p) {mock_model(Period)}
   
   def render_file(pdf, file_name)
@@ -24,21 +24,20 @@ describe 'Editions::Listing qui est l édition d un listing de compte' do
   end
   
   before(:each) do
-    cl = Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date)
-    cl.stub(:account).and_return a
+    @cl = Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date)
+    @cl.stub(:account).and_return a
     Account.any_instance.stub(:formatted_sold).and_return ['0,00', '0,00']
     Account.any_instance.stub(:fetch_lines).and_return
   end
   
   
   it 'peut créer un listing' do
-    cl = Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date)
-    cl.should be_an_instance_of(Compta::Listing) 
+    @cl.should be_an_instance_of(Compta::Listing) 
   end
   
   it 'to_pdf crée un Editions::Account' do
-    cl = Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date)
-    cl.to_pdf.should be_an_instance_of(Editions::Listing) 
+    Editions::Listing.should_receive(:new).with(p, a, {from_date:from_date, to_date:to_date})
+    @cl.to_pdf
   end
   
   # TODO finir ces spec

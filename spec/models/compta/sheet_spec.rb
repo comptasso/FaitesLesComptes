@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-RSpec.configure do |c| 
+RSpec.configure do |c|  
   # c.filter = {:wip=>true}
 end
 
@@ -27,7 +27,7 @@ describe Compta::Sheet do
       })
   end
 
-  it 'peut créer une instance' do
+  it 'peut créer une instance' do 
     Compta::Sheet.new(@p, @folio ).should be_an_instance_of(Compta::Sheet) 
   end
 
@@ -118,7 +118,7 @@ describe Compta::Sheet do
       fl.previous_net.should == 1210.0
     end
     
-    it 'detailed lines est conforme', wip:true do
+    it 'detailed lines est conforme', wip:true do 
       fl = Compta::Sheet.new(@p, @folio).detailed_lines(1).first
       fl.brut.should  == 1210.0
       fl.previous_net.should == 0.0

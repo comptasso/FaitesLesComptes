@@ -27,9 +27,15 @@ module Compta
     end
     
       # retourne la ligne de total de la rubrique
-    def totals
+    def totals(period = nil)
       [rubrik.name, brut, amortissement, net, previous_net] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
     end
+    
+    alias total_actif totals
+
+    def total_passif(period=nil)
+      [rubrik.name, net, previous_net] rescue ['ERREUR', 0.0, 0,0]
+     end
     
     protected
     

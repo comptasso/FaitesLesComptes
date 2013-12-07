@@ -21,7 +21,7 @@ require 'spec_helper'
 describe NaturesController do 
   include SpecControllerHelper
     
-  describe "GET stats" do
+  describe "GET index" do
 
     
     let(:nr1) {mock_model(Nature, period_id:@p.id, income_outcome:true)}

@@ -68,7 +68,7 @@ module Compta
         csv << [name.capitalize] # par ex Actif
         csv << entetes  # la ligne des titres
         folio.root.fetch_lines(@period).each do |rubs|
-          csv << (sens==:actif ? prepare_line(rubs.total_actif(@period)) : format_line(rubs.total_passif(@period)))
+          csv << (sens==:actif ? prepare_line(rubs.total_actif) : format_line(rubs.total_passif))
         end
       end
     end
@@ -84,8 +84,8 @@ module Compta
         # visiblement avec l'appel à total_actif, j'ai supposé qu'on était toujours dans un 
         # sens actif
         csv << (sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']) # la ligne des titres
-        folio.root.fetch_rubriks_with_rubrik.each do |rubs|
-          csv << prepare_line(rubs.total_actif(@period))
+        folio.root.fetch_rubriks(@period).each do |rubs|
+          csv << prepare_line(rubs.total_actif)
         end
       end
     end
