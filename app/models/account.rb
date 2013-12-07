@@ -100,7 +100,7 @@ class Account < ActiveRecord::Base
     sql = %Q(SELECT SUM(credit) AS sum_credit, SUM(debit) AS sum_debit FROM "writings" INNER JOIN "compta_lines" 
 ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND account_id = #{id}))
     result = Writing.find_by_sql(sql).first
-    (result.sum_debit.to_f - result.sum_credit.to_f).round 2
+    (result.sum_credit.to_f - result.sum_debit.to_f).round 2
   end
 
 

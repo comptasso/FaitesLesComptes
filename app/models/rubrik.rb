@@ -76,17 +76,15 @@ class Rubrik < ActiveRecord::Base
     # Utilisé pour la construction des folios (PdfDocument::Sheet) lorsqu'on 
     # n'affiche pas tous les détails de comptes mais seulement les rubriques
     # 
-    # TODO à rebaptiser en fetch_rubriks qui serait plus symétrique avec 
-    # fetch_lines. 
     #
-    def fetch_rubriks_with_rubrik
+    def fetch_rubriks
       result = []
       children.each do |c|
         
         if c.leaf? 
           result << c
         else
-          result += c.fetch_rubriks_with_rubrik
+          result += c.fetch_rubriks
         end
       end
       result << self
@@ -95,7 +93,7 @@ class Rubrik < ActiveRecord::Base
     # renvoie les numeros des rubriques feuilles
     # en éliminant les nils
     def all_instructions
-      fetch_rubriks_with_rubrik.collect(&:numeros).select {|num| num != nil}
+      fetch_rubriks.collect(&:numeros).select {|num| num != nil}
     end
     
     # lines renvoie les rubrik_lines qui construisent la rubrique

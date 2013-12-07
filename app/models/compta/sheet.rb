@@ -51,8 +51,12 @@ module Compta
     end
     
     # liste les rubriques pour les afficher au format html
-    def to_html
+    def to_detail_html
       folio.root.fetch_lines(@period)
+    end
+    
+    def to_index_html
+      folio.root.fetch_rubriks
     end
 
     

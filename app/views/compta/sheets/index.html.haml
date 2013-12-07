@@ -21,7 +21,7 @@
           %th.pc10 Net
           %th.pc10 Exercice précédent
         %tbody
-          =render :partial=>'actif', :object=>doc.folio.root
+          =render :partial=>'actif_rubriks_lines', :collection=>doc.to_index_html
   -else
     .passif
       %table.pc100
@@ -30,7 +30,8 @@
           %th.pc10 Montant
           %th.pc10 Exercice précédent
         %tbody
-          =render :partial=>'passif', :object=>doc.folio.root
+          = render :partial=>'passif_rubriks_line', :collection=>doc.to_index_html
+          
 
 
 
