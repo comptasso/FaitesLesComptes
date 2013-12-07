@@ -15,6 +15,7 @@ describe Folio do
   describe 'validations' do
     
     before(:each) do
+       
       @f = valid_folio
     end  
   
@@ -87,10 +88,35 @@ describe Folio do
       end
       
     end
-    
-    
-  
   end
+
+  describe 'fill_rubriks_with_position', wip:true do
+    
+    before(:each) do
+     Rubrik.delete_all
+     Folio.delete_all
+     @fol = valid_folio
+     @fol.save!
+     @rubriks = {'Produits financier'=>{'interets'=>'65'}}
+    end
+    
+    it 'peut créer des rubriques' do
+      expect {@fol.fill_rubriks_with_position(@rubriks)}.to change {Rubrik.count}.by(2)
+    end
+    
+    it 'la première n est pas une feuille' do
+      @fol.fill_rubriks_with_position(@rubriks)
+      Rubrik.first.should_not be_leaf
+    end
+    
+    it 'mais le seconde l est' do
+      @fol.fill_rubriks_with_position(@rubriks)
+      Rubrik.last.should be_leaf
+    end
+    
+    
+  end
+
   
   describe 'méthodes d accès aux rubriques et instructions' do
     

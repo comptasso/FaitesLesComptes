@@ -25,8 +25,26 @@ class Rubrik < ActiveRecord::Base
   
   alias collection children
   
+  # repris ces lignes de github ascts_as_tree car curieusement ne semblent pas fonctionner
+  # par défaut
+  # Returns list of descendants, starting from current node, not including current node.
+    #
+    # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
+    def descendants
+      children.each_with_object(children) {|child, arr|
+        arr.concat child.descendants
+      }.uniq
+    end
+
+    # Returns list of descendants, starting from current node, including current node.
+    #
+    # root.self_and_descendants # => [root, child1, child2, subchild1, subchild2, subchild3, subchild4]
+    def self_and_descendants
+      [self] + descendants
+    end
+  
   # surcharge de la méthode leaf? du gem acts_as_tree afin d'utiliser le champ
-    # is_leaf.
+  # is_leaf.
     def leaf?
       is_leaf 
     end
@@ -63,13 +81,13 @@ class Rubrik < ActiveRecord::Base
         clps = c.lines(period) if c_leaf # récupère les lignes si c'est une feuille
         
         fl += c.fetch_lines(period) unless c_leaf # recursif si ce n'est pas une feuille
-        fl += clps if c_leaf && !clps.empty? # ajoute les lignes puisque c'est une feuille non vide
-        fl << c if c_leaf # ajoute la feuille elle-même
+        fl += clps if c_leaf && !clps.empty? # ajoute les lignes si c'est une feuille non vide
+        fl << c.to_compta_rubrik(period) if c_leaf # ajoute la feuille elle-même
       end
-      fl << self # finalise en ajoutant la rubrik appelante qui se met en total.
+      fl << self.to_compta_rubrik(period) # finalise en ajoutant la rubrik appelante qui se met en total.
       fl
     end
-    
+     
     # Récupère les différentes rubriks avec les sous rubriks
     # mais ne prend pas le détail des lignes. 
     # 
@@ -77,27 +95,14 @@ class Rubrik < ActiveRecord::Base
     # n'affiche pas tous les détails de comptes mais seulement les rubriques
     # 
     #
-    def fetch_rubriks
-      result = []
-      children.each do |c|
-        
-        if c.leaf? 
-          result << c
-        else
-          result += c.fetch_rubriks
-        end
-      end
-      result << self
-    end
-    
-    def new_fetch_rubriks(period)
+    def fetch_rubriks(period)
       result = []
       children.each do |c|
         
         if c.leaf? 
           result << c.to_compta_rubrik(period)
         else
-          result += c.new_fetch_rubriks(period)
+          result += c.fetch_rubriks(period)
         end
       end
       result << self.to_compta_rubrik(period)
@@ -110,8 +115,8 @@ class Rubrik < ActiveRecord::Base
     
     # renvoie les numeros des rubriques feuilles
     # en éliminant les nils
-    def all_instructions
-      fetch_rubriks.collect(&:numeros).select {|num| num != nil}
+    def all_instructions 
+      self_and_descendants.collect(&:numeros).select {|num| num != nil}
     end
     
     # lines renvoie les rubrik_lines qui construisent la rubrique

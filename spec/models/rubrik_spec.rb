@@ -24,7 +24,7 @@ describe Rubrik do
     end
   
     it 'title est synonime de name' do
-      @r.title.should == @r.name
+      @r.title.should == @r.name 
     end
   
     it 'sa position est respectée' do 
@@ -33,12 +33,19 @@ describe Rubrik do
       @r.folio.rubriks.find_by_position(22).name.should == 'RESULTAT FINANCIER'
     end
     
+    it 'ses rubriques enfants sont des feuilles', wip:true do
+      
+      @r.children.each do |child|
+        child.leaf?.should be_true
+      end
+    end
+    
     describe 'fetch_lines'  do
        before(:each) do
          Rubrik.any_instance.stub(:lines).and_return ['une serie de lignes terminales']
        end
        
-       it 'le tableau de lignes doit comporter 5 lignes' do
+       it 'le tableau de lignes doit comporter 5 lignes' do 
          @r.fetch_lines(@p).size.should == 5
          # la ligne de détail des produits financiers plus la rubrik Produits Financiers
          # idem pour reprise de provisions financières

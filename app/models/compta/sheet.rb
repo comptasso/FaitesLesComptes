@@ -56,7 +56,7 @@ module Compta
     end
     
     def to_index_html
-      folio.root.new_fetch_rubriks(@period)
+      folio.root.fetch_rubriks(@period)
     end
 
     

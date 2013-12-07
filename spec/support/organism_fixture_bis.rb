@@ -41,6 +41,9 @@ module OrganismFixtureBis
       BankAccount.delete_all
       Cash.delete_all
       Destination.delete_all
+      Folio.delete_all
+      Nomenclature.delete_all
+      Rubrik.delete_all
     end
   end
 

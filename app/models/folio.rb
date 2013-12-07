@@ -129,7 +129,10 @@ class Folio < ActiveRecord::Base
       if v.is_a? Hash
         fill_rubriks(v, r.id)
       else
-        r.update_attribute(:numeros, v)
+        r.numeros = v
+        r.is_leaf = true
+        r.save
+        
       end
     end
   end
