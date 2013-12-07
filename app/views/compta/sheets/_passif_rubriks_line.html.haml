@@ -1,5 +1,5 @@
 -# partial pour afficher les lignes d'une rubriks (au passif)
-- values = passif_rubriks_line.totals(@period)
+- values = passif_rubriks_line.totals
 %tr{:class=>"depth_#{passif_rubriks_line.depth}" }
   %td= values[0]
   %td.numeric= debit_credit values[3]

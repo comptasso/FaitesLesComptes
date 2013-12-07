@@ -90,6 +90,24 @@ class Rubrik < ActiveRecord::Base
       result << self
     end
     
+    def new_fetch_rubriks(period)
+      result = []
+      children.each do |c|
+        
+        if c.leaf? 
+          result << c.to_compta_rubrik(period)
+        else
+          result += c.new_fetch_rubriks(period)
+        end
+      end
+      result << self.to_compta_rubrik(period)
+    end
+    
+    def to_compta_rubrik(period)
+      Compta::Rubrik.new(self, period)
+    end
+    
+    
     # renvoie les numeros des rubriques feuilles
     # en éliminant les nils
     def all_instructions
