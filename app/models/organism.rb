@@ -231,6 +231,14 @@ class Organism < ActiveRecord::Base
   end
 
   
+  # méthode permettant de remettre les folios et les rubriques 
+  # comme ils étaient à l'origine
+  def reset_folios
+    Folio.delete_all
+    Rubrik.delete_all
+    path = File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
+    nomenclature.read_and_fill_folios(path)
+  end
  
   
   private
@@ -246,6 +254,8 @@ class Organism < ActiveRecord::Base
       n.read_and_fill_folios(path)
     end
   end
+  
+  
 
   
   def fill_books
