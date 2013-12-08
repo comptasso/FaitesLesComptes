@@ -62,7 +62,7 @@ class Compta::SheetsController < Compta::ApplicationController
 
       respond_to do |format|
         send_export_token # pour gérer le spinner lors de la préparation du document
-        format.html {@rubriks = @sheet.to_detail_html}
+        format.html {@rubriks = @sheet.fetch_lines}
         format.csv { send_data @sheet.to_csv, filename:export_filename(folio, :csv) } 
         format.xls { send_data @sheet.to_xls, filename:export_filename(folio, :csv) }
         format.pdf do

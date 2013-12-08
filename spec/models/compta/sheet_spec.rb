@@ -69,15 +69,15 @@ describe Compta::Sheet do
     cs.to_pdf.should be_an_instance_of Editions::Sheet
   end
 
-  it 'detailed lines demande à folio.root ses lines via fetch_lines' do
+  it 'fetch_lines demande à folio.root ses lines via fetch_lines' do
     cs = Compta::Sheet.new(@p, @folio)
     @folio.should_receive(:root).and_return(@rub = double(Rubrik))
     @rub.should_receive(:fetch_lines)
-    cs.detailed_lines
+    cs.fetch_lines
   end
   
   it 'detailed lines est conforme' do
-    fl = Compta::Sheet.new(@p, @folio).detailed_lines.first
+    fl = Compta::Sheet.new(@p, @folio).fetch_lines.first
     fl.brut.should  == 1210.0
     fl.previous_net.should == 0.0
   end
@@ -112,14 +112,14 @@ describe Compta::Sheet do
       cs.should match "201 - Frais d'établissement\t0,00\t0,00\t0,00\t1 210,00\n"
     end
     
-    it 'detailed lines est conforme', wip:true do
-      fl = Compta::Sheet.new(@next_period, @folio).detailed_lines(1).first
+    it 'detailed lines est conforme' do
+      fl = Compta::Sheet.new(@next_period, @folio).fetch_lines(1).first
       fl.brut.should  == 0.0
       fl.previous_net.should == 1210.0
     end
     
-    it 'detailed lines est conforme', wip:true do 
-      fl = Compta::Sheet.new(@p, @folio).detailed_lines(1).first
+    it 'detailed lines est conforme' do 
+      fl = Compta::Sheet.new(@p, @folio).fetch_lines(1).first
       fl.brut.should  == 1210.0
       fl.previous_net.should == 0.0
     end

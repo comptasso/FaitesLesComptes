@@ -50,16 +50,25 @@ module Compta
       folio[:sens].to_sym
     end
     
-    # liste les rubriques pour les afficher au format html
-    def to_detail_html
+    # liste les rubriques et les lignes de compte qui ont permis de les construire
+    # 
+    # Egalement utilisé par Editions::DetaileSheet. D'où le page number qui n'est
+    # pas à ce stade utilisé. 
+    #
+    def fetch_lines(page_number = 1)
       folio.root.fetch_lines(@period)
     end
     
-    def to_index_html
+    # liste les rubriques
+    def fetch_rubriks
       folio.root.fetch_rubriks(@period)
     end
 
-    
+    # TODO voir pour refactoriser celà mais il ne faut pas oublier que dans un cas
+    # to_csv on ne garde que 3 colonnes pour un sens passif, tandis que dans le cas 
+    # de to_index_csv on garde les 5 colonnes mais on met à blanc deux colonnes
+    # pour les documents resultat, passif et bénévolat car la collection peut aussi c
+    # comprendre actif. D'où ce passage par prepare_line
  
     # utilisé pour le csv de l'option show, c'est à dire avec un seul sheet
     # show veut dire une édition avec le détail des lignes, d'où l'utilisation de fetch_lines
@@ -67,8 +76,8 @@ module Compta
       CSV.generate(options) do |csv|
         csv << [name.capitalize] # par ex Actif
         csv << entetes  # la ligne des titres
-        folio.root.fetch_lines(@period).each do |rubs|
-          csv << (sens==:actif ? prepare_line(rubs.total_actif) : format_line(rubs.total_passif))
+        fetch_lines.each do |rub|
+          csv << (sens==:actif ? prepare_line(rub, sens) : format_line(rub.total_passif))
         end
       end
     end
@@ -80,12 +89,9 @@ module Compta
     def to_index_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
         csv << [name.capitalize] # par ex Actif
-        # TODO à revoir soit pour utiliser entetes
-        # visiblement avec l'appel à total_actif, j'ai supposé qu'on était toujours dans un 
-        # sens actif
-        csv << (sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']) # la ligne des titres
-        folio.root.fetch_rubriks(@period).each do |rubs|
-          csv << prepare_line(rubs.total_actif)
+        csv << index_entetes # la ligne des titres
+        fetch_rubriks.each do |rub|
+          csv << prepare_line(rub, sens)
         end
       end
     end
@@ -116,20 +122,7 @@ module Compta
     end
 
     
-    # appelé par DetailedSheet pour avoir les lignes de la page sollicitée
-    # En l'occurence pour les sheets qui sont a priori en une page, le paramètre page_number
-    # n'est pas utilisé. Même si dans le cas d'un DetailedSheet cela fera souvent 2 pages
-    # voire plus. 
-    # 
-    # Le pdf se débrouille cependant tout seul pour couper le tableau et faire la numérotation
-    # car il n'y a pas de sous totaux affichés en bas des pages. 
-    # 
-    # 
-    def detailed_lines(page_number = 1)
-      folio.root.fetch_lines(@period)
-    end
-
-    
+   
     
     
 
@@ -145,8 +138,9 @@ module Compta
     # la même logique qu'une page actif.
     # prepare_line assure également la mise en forme des lignes au format français
     # pour les exportations vers le tableur.
-    def prepare_line(line)
-      if sens != :actif
+    def prepare_line(rub, actif_passif)
+      line = rub.total_actif
+      if actif_passif != :actif
         line[1] = line[2]= ''
       end
       format_line(line)
@@ -167,6 +161,12 @@ module Compta
     # prépare les entêtes utilisés pour le fichier csv
     def entetes
       sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : %w(Rubrique Montant Précédent)
+    end
+    
+    # ici on garde 5 colonnes car on est dans une action index et la collection peut
+    # comprendre des documents des deux types (3 et 5 colonnes)
+    def index_entetes
+      sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']
     end
     
    
