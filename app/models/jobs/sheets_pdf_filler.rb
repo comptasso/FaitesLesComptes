@@ -27,6 +27,9 @@ module Jobs
         
     protected
     
+    # TODO cette méthode n'est pas à sa place et devrait être également être testée
+    # mais ailleurs.
+    
     # prend une collection de documents et les insère dans un document pdf
     def produce_pdf(documents)
       final_pdf = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait)

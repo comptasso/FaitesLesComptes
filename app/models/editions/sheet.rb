@@ -54,7 +54,7 @@ module Editions
     
     
     def fetch_lines(page_number = 1)
-      @source.folio.root.fetch_rubriks_with_rubrik
+      @source.folio.root.fetch_rubriks(@period)
     end
     
     # appelle les méthodes adéquate pour chacun des éléments de la ligne;

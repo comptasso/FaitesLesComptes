@@ -1,9 +1,11 @@
 module Compta
   class Rubrik
     
+    # TODO faire les spec de cette classe qui a été construite à la volée.
+    
     attr_reader :period, :rubrik, :brut, :amortissement
     
-    delegate :depth, to: :rubrik
+    delegate :depth, :title, to: :rubrik
     
     def initialize(rubrik, period)
       @period = period

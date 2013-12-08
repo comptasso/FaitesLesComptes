@@ -76,7 +76,7 @@ module Compta
 
     # utilisé pour le csv de l'action index, donc a priori avec plusieurs sheet
     # ici on n'affiche donc pas le détail et l'on ne prend que les rubriques
-    # d'où l'appel à fetch_rubriks_with_rubrik
+    # d'où l'appel à fetch_rubriks
     def to_index_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
         csv << [name.capitalize] # par ex Actif

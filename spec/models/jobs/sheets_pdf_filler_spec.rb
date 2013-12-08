@@ -8,7 +8,7 @@ end
 
 
 
-describe Jobs::SheetsPdfFiller do
+describe Jobs::SheetsPdfFiller do 
   
   let(:p) {mock_model(Period, :organism=>mock_model(Organism, :nomenclature=>nomen))}
   let(:expdf) {ExportPdf.new}
@@ -17,6 +17,7 @@ describe Jobs::SheetsPdfFiller do
   
   before(:each) do
     Period.stub(:find).and_return p
+    ExportPdf.stub(:find).and_return(expdf)
   end
   
   subject {Jobs::SheetsPdfFiller.new('assotest1', expdf.id, period_id:p.id, collection:['actif', 'passif'])}
@@ -34,21 +35,47 @@ describe Jobs::SheetsPdfFiller do
     end
     
     it 'et assigne la variable docs' do
-      ExportPdf.stub(:find).and_return(expdf)
-      Period.stub(:find).and_return p
+      
       nomen.stub_chain(:folios, :find_by_name).and_return(folio)
       subject.before(double Object)
       subject.instance_variable_get('@docs').should be_an_instance_of(Array)
     end
     
     it 'même si le document n existe pas' do
-      ExportPdf.stub(:find).and_return(expdf)
       nomen.stub_chain(:folios, :find_by_name).and_return(nil)
-      
       subject.before(double Object)
       subject.instance_variable_get('@docs').should == []
     end
   
+  end
+  
+  describe 'perform' do
+    
+    let(:resultat) {Editions::Sheet.new(p, double(Compta::Sheet, sens: :passif), {title:'Compte de Résultats'})}
+    
+    before(:each) do
+      Folio.any_instance.stub(:sens).and_return 'passif'
+      subject.instance_variable_set('@docs', [resultat])
+      subject.instance_variable_set('@export_pdf', expdf)
+    end
+            
+    it 'appelle produce_pdf avec les documents' do
+      subject.should_receive(:produce_pdf).with([resultat]).and_return(double(Editions::PrawnSheet, render:'bonjour'))
+      subject.perform
+    end
+    
+    it 'puis render' do
+      subject.stub(:produce_pdf).with([resultat]).and_return(@aps = double(Editions::PrawnSheet))
+      @aps.should_receive(:render).and_return('bonjour')
+      subject.perform
+    end
+    
+    it 'et met à jour PdfExport puis le sauve' do
+      subject.stub_chain(:produce_pdf, :render).and_return('bonjour')
+      expdf.should_receive('content=').with('bonjour')
+      expdf.should_receive(:save)
+      subject.perform
+    end
   end
    
 end
