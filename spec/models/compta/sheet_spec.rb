@@ -73,11 +73,11 @@ describe Compta::Sheet do
     cs = Compta::Sheet.new(@p, @folio)
     @folio.should_receive(:root).and_return(@rub = double(Rubrik))
     @rub.should_receive(:fetch_lines)
-    cs.fetch_lines
+    cs.fetch_lines(@p)
   end
   
   it 'detailed lines est conforme' do
-    fl = Compta::Sheet.new(@p, @folio).fetch_lines.first
+    fl = Compta::Sheet.new(@p, @folio).fetch_lines(@p).first
     fl.brut.should  == 1210.0
     fl.previous_net.should == 0.0
   end
@@ -112,14 +112,14 @@ describe Compta::Sheet do
       cs.should match "201 - Frais d'établissement\t0,00\t0,00\t0,00\t1 210,00\n"
     end
     
-    it 'detailed lines est conforme' do
-      fl = Compta::Sheet.new(@next_period, @folio).fetch_lines(1).first
+    it 'fetch_lines est conforme' do
+      fl = Compta::Sheet.new(@next_period, @folio).fetch_lines(@next_period).first
       fl.brut.should  == 0.0
       fl.previous_net.should == 1210.0
     end
     
-    it 'detailed lines est conforme' do 
-      fl = Compta::Sheet.new(@p, @folio).fetch_lines(1).first
+    it 'fetch_lines est conforme' do 
+      fl = Compta::Sheet.new(@p, @folio).fetch_lines(@p).first
       fl.brut.should  == 1210.0
       fl.previous_net.should == 0.0
     end

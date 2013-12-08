@@ -6,7 +6,7 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe Compta::SheetsController do
+describe Compta::SheetsController do 
   include SpecControllerHelper
 
   def valid_attributes
@@ -16,7 +16,7 @@ describe Compta::SheetsController do
   before(:each) do 
     minimal_instances
     @p.stub(:all_natures_linked_to_account?).and_return true 
-    @o.stub(:nomenclature).and_return(@nomen = mock_model(Nomenclature, coherent?:true))
+    @o.stub(:nomenclature).and_return(@nomenclature = mock_model(Nomenclature, coherent?:true))
     @f = mock_model(Folio)    
   end
   
@@ -25,9 +25,9 @@ describe Compta::SheetsController do
   describe 'GET index' do
     
     before(:each) do
-      @nomen.stub(:folios).and_return(@ar = double(Arel))
+      @nomenclature.stub(:folios).and_return(@ar = double(Arel))
       @ar.stub(:find_by_name).and_return(@f)
-      @nomen.stub(:sheet).and_return(@cs = double(Compta::Sheet))
+      @nomenclature.stub(:sheet).and_return(@cs = double(Compta::Sheet))
     end
     
     it 'rend la vue index' do
@@ -36,7 +36,7 @@ describe Compta::SheetsController do
     end
     
     it 'si la nomenclature est incoherent affiche une flash' do
-      @nomen.stub('coherent?').and_return false
+      @nomenclature.stub('coherent?').and_return false
       controller.stub('collect_errors').and_return 'la liste des erreurs'
       get :index, {:collection=>['bilan', 'resultat']}, valid_session
       flash[:alert].should == 'la liste des erreurs'
@@ -79,26 +79,26 @@ describe Compta::SheetsController do
   describe 'GET show' do  
       
     before(:each) do
-      @nomen.stub(:folios).and_return(@ar = double(Arel))
+      @nomenclature.stub(:folios).and_return(@ar = double(Arel))
     end
     
     context 'quand nomenclature n est pas coherent' do
       
       before(:each) do
-        @nomen.stub('coherent?').and_return false
+        @nomenclature.stub('coherent?').and_return false
         @ar.stub(:find).and_return @f
-        @nomen.stub(:sheet).and_return(@cs = double(Compta::Sheet, valid?:true))
-        @cs.stub(:to_detail_html).and_return(@list_rubriks = double(Array))
+        @nomenclature.stub(:sheet).and_return(@cs = double(Compta::Sheet, valid?:true))
+        @cs.stub(:fetch_lines).and_return(@list_rubriks = double(Array))
       end
     
     
       it 'l action show déclanche check_nomenclature' do
-        controller.should_receive('collect_errors').with(@nomen).and_return 'la liste des erreurs'
+        controller.should_receive('collect_errors').with(@nomenclature).and_return 'la liste des erreurs'
         get :show, {:id=>@f.to_param}, valid_session
       end
     
       it 'l action show déclanche check_nomenclature' do
-        controller.stub('collect_errors').with(@nomen).and_return 'la liste des erreurs'
+        controller.stub('collect_errors').with(@nomenclature).and_return 'la liste des erreurs'
         get :show, {:id=>@f.to_param}, valid_session
         flash[:alert].should == 'la liste des erreurs'
       end
@@ -109,23 +109,23 @@ describe Compta::SheetsController do
     
     it 'cherche le folio à partir du param' do
       @ar.should_receive(:find).with(@f.to_param).and_return @f
-      @nomen.should_receive(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:true))
-      @cs.should_receive(:to_detail_html).and_return(@list_rubriks = double(Array))
+      @nomenclature.should_receive(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:true))
+      @cs.should_receive(:fetch_lines).and_return(@list_rubriks = double(Array))
       get :show, {:id=>@f.to_param}, valid_session
     end
 
     it 'crée une sheet et l assigne' do
       @ar.stub(:find).and_return @f
-      @nomen.stub(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:true))
-      @cs.stub(:to_detail_html).and_return(@list_rubriks = double(Array))
+      @nomenclature.stub(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:true))
+      @cs.stub(:fetch_lines).and_return(@list_rubriks = double(Array))
       get :show, {:id=>@f.to_param}, valid_session
       assigns(:rubriks).should == @list_rubriks
     end 
     
     it 'si le document n est pas valide, renvoie vers la liste des documents' do
       @ar.stub(:find).and_return @f
-      @nomen.stub(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:false))
-      @cs.stub(:to_detail_html).and_return(@list_rubriks = double(Array))
+      @nomenclature.stub(:sheet).with(@p, @f).and_return(@cs = double(Compta::Sheet, valid?:false))
+      @cs.stub(:fetch_lines).and_return(@list_rubriks = double(Array))
       @cs.stub_chain(:errors, :full_messages, :join).and_return 'Le texte de l erreur'
       get :show, {:id=>@f.to_param}, valid_session
       response.should redirect_to compta_nomenclature_path

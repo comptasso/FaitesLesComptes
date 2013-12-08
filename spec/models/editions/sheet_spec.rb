@@ -64,12 +64,12 @@ describe Editions::Sheet do
       subject.stamp.should == 'Provisoire'
     end
 
-    
+      
 
     it 'fetch_lines' do
       bal.should_receive(:folio).and_return(@fol = double(Folio))
-      @fol.stub_chain(:root, :fetch_rubriks_with_rubrik).and_return('une liste de lignes')
-      subject.fetch_lines.should == 'une liste de lignes' 
+      @fol.stub_chain(:root, :fetch_rubriks).and_return('une liste de rubriques')
+      subject.fetch_lines.should == 'une liste de rubriques' 
     end
 
     it 'render' do

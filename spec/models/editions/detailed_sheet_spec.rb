@@ -15,7 +15,7 @@ describe Editions::DetailedSheet do
 
   it 'fetch_lines' do
     @ds = Editions::DetailedSheet.new(p, source, {})
-    source.should_receive(:detailed_lines).and_return('bonjour')
+    source.should_receive(:fetch_lines).with(1).and_return('bonjour')
     @ds.fetch_lines
   end
 
