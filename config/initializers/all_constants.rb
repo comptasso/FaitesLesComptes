@@ -52,7 +52,7 @@ MAX_COMMENT_LENGTH = 300
 # version 0.8.0 : utilisation de devise pour la gestion des accès
 # version 0.8.1 : mise en place d'une limite de 4 bases pour un user standard
 # VERSION = '0.8.3RC' # l'inscription est désormais avec confirmation
-# VERSION = '0.8.4RC' # remplacer les archives par un clone de la base
+# VERSION = '0.8.4RC' # remplacé les archives par un clone de la base
 # VERSION = '0.8.5RC' # suppression du modèle Archive, action, routes, vues, tests corresondants
 # VERSION = '0.9.0RC' # intégration du gem adhérent
 # VERSION = '1.0.1RC' # mise en place des guides de saisie et corrections de bugs dans Transferts
@@ -64,4 +64,5 @@ MAX_COMMENT_LENGTH = 300
 # FLCVERSION = '1.2.2.RC' # Mise en place d'une vue des écritures du compte bancaire par mois 
 # FLCVERSION = '1.2.3.RC' # "Export de la vue des écritures du compte bancaire en csv et pdf"
 # FLCVERSION = '1.2.4.RC' # "Correction bug sur mise à jour transfert et sur menu des views bottom'
-FLCVERSION = '1.2.5.RC' # "Refonte complète des éditions pdf'
+# FLCVERSION = '1.2.5.RC' # "Refonte complète des éditions pdf'
+FLCVERSION = '1.3.0.RC' # "Introduction des delayed jobs pour les pdf et accélération des constructions des bilans'
