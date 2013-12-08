@@ -158,6 +158,7 @@ describe Compta::SheetsController do
     describe 'GET liasse', wip:true do
       
       it 'redirige vers index' do
+        @o.stub_chain(:nomenclature, :folios, :collect).and_return(['actif', 'passif', 'resultat', 'benevolat'])
         get :liasse, {}, valid_session
         response.should redirect_to compta_sheets_path(collection:['actif', 'passif', 'resultat', 'benevolat'], title:'Liasse complète')
       end
