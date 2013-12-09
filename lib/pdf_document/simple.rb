@@ -65,6 +65,7 @@ module PdfDocument
     include ActiveModel::Validations
     
     attr_accessor :total_columns_widths, :select_method
+    attr_reader :period
        
     validates :title, :presence=>true
     validates :select_method, :presence=>true

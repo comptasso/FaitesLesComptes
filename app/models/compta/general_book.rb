@@ -56,8 +56,9 @@ module Compta
 
         # crée un Compta::Listing, en fait un pdf (to_pdf), puis rend ce pdf dans le final_pdf
         Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date).
-          to_pdf({title:'Grand livre', :select_method=>'compta_lines',
-            subtitle:"Compte #{a.number} - #{a.title} \n Du #{I18n::l from_date} au #{I18n.l to_date}"} ).
+          to_pdf({title:"Grand livre - Du #{I18n::l from_date} au #{I18n.l to_date}",
+            :select_method=>'compta_lines',
+            subtitle:"Compte #{a.number} - #{a.title}"} ).
             render_pdf_text(final_pdf)
 
           final_pdf.start_new_page unless a == ras.last # page suivante sauf si le dernier

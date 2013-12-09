@@ -101,7 +101,7 @@ module Compta
     def to_pdf(options = {})
       options[:from_date] = from_date
       options[:to_date] = to_date
-      Editions::Listing.new(period, account, {from_date:from_date, to_date:to_date})
+      Editions::Listing.new(period, account, options)
     end
 
     protected

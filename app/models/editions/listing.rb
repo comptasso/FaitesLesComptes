@@ -17,25 +17,30 @@ module Editions
     # notamment orientation, nb_lines_per_page,...
     def fill_default_values
       super
-      @title = "Listing compte #{source.number}"
-      @subtitle = "#{source.title} - Du #{I18n::l @from_date} au #{I18n.l @to_date}"
+      @title ||= "Listing compte #{source.number}"
+      @subtitle ||= "#{source.title} - Du #{I18n::l @from_date} au #{I18n.l @to_date}"
       @stamp  = "brouillard" unless source.all_lines_locked?(@from_date, @to_date)
-      @columns_select = ['writings.date AS w_date', 'books.title AS b_title', 'writings.ref AS w_ref', 'writings.narration AS w_narration', 'nature_id', 'destination_id', 'debit',  'credit']
-      @columns_methods = ['w_date', 'b_title', 'w_ref', 'w_narration', 'nature.name', 'destination.name', nil, nil]
-      @columns_widths =  [10, 8, 8, 24, 15, 15, 10, 10]
-      @columns_alignements = 6.times.collect {:left} + 2.times.collect {:right}
-      @columns_titles = %w(Date Jnl Réf Libellé Nature Destination Débit Crédit)
+      @columns_select = ['writings.id AS w_id', 'writings.date AS w_date', 'books.abbreviation AS b_abbreviation', 'writings.ref AS w_ref', 'writings.narration AS w_narration', 'nature_id', 'destination_id', 'debit',  'credit']
+      @columns_methods = ['w_id', 'w_date', 'b_abbreviation', 'w_ref', 'w_narration', 'nature.name', 'destination.name', nil, nil]
+      @columns_widths =  [6, 8, 6, 8, 24, 15, 15, 9, 9]
+      @columns_alignements = 7.times.collect {:left} + 2.times.collect {:right}
+      @columns_titles = %w(N° Date Jnl Réf Libellé Nature Destination Débit Crédit)
       self.first_report_line = ["Soldes au #{I18n::l @from_date}"] + source.formatted_sold(@from_date)
-      @columns_to_totalize = [6,7]
+      @columns_to_totalize = [7,8]
       
     end
 
  
     def prepare_line(line)
-      [I18n::l(Date.parse(line.w_date)), line.b_title, line.w_ref, line.w_narration, (line.nature ? line.nature.name  : ''),
-         (line.destination ? line.destination.name  : ''),
-         ActionController::Base.helpers.number_with_precision(line.debit, precision:2),
-         ActionController::Base.helpers.number_with_precision(line.credit, precision:2)]
+      [line.w_id, 
+       I18n::l(Date.parse(line.w_date)),
+       line.b_abbreviation,
+       line.w_ref,
+       line.w_narration,
+       (line.nature ? line.nature.name  : ''),
+       (line.destination ? line.destination.name  : ''),
+       ActionController::Base.helpers.number_with_precision(line.debit, precision:2),
+       ActionController::Base.helpers.number_with_precision(line.credit, precision:2)]
     end
 
     # renvoie les lignes de la page demandées

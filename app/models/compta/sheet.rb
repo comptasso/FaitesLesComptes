@@ -101,12 +101,10 @@ module Compta
       to_index_csv(options).encode("windows-1252") 
     end
 
-
-
     # fait une édition pdf de sheet en s'appuyant sur la classe Edition::Sheet
     #
     def to_pdf(options = {})
-      options[:title] =  name.to_s 
+      options[:title] =  folio.title 
       Editions::Sheet.new(@period, self, options)
     end
     

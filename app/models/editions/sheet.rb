@@ -34,6 +34,7 @@ module Editions
   #   default_columns_titles est donc surchargé à cette fin.
   #
   class Sheet < PdfDocument::Simple 
+    include Compta::GeneralInfo # pour bénéficier des méthodes short_exercice
 
     def initialize(period, source, options)
       @select_method = 'sens' 
@@ -71,31 +72,20 @@ module Editions
         val
       end
     end
-         
-
-    # Crée le fichier pdf associé 
-    def render
+    
+    def to_pdf
       pdf_file = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait) 
       pdf_file.fill_pdf(self)
       pdf_file.numerote
-      pdf_file.render
+    end
+         
+
+    # Rend le fichier 
+    def render
+      to_pdf.render
     end
 
-    # surcharge de Simple::render_pdf_text pour prendre en compte
-    # les deux template possibles actif.pdf.prawn et passif.pdf.prawn
-    # est ici mal nommé car 
-#    def render_pdf_text(pdf)
-#      collection == :actif ? pdf.fill_tif_pdf(self) : pdf.fill_passif_pdf(self)
-#    end
-#    
-#    def titles
-#      if sens == :actif
-#        [['', '', '', exercice, 'Précédent'], ['', 'Montant brut', "Amortisst\nProvision", 'Montant net', 'Montant net']]
-#      else
-#        [['', exercice, 'Précédent']]
-#      end
-#    end
-    
+  
     
     
     def columns_widths
