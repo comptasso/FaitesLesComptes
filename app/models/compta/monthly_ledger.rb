@@ -42,7 +42,7 @@ module Compta
      def lines
        @lines ||= @period.books.map do |b|
          efb =  Extract::Monthly.new(b, @month_year)
-         {mois:'', title:b.title, description:b.description, debit:efb.total_debit, credit:efb.total_credit }
+         {mois:'', abbreviation:b.abbreviation, title:b.title, debit:efb.total_debit, credit:efb.total_credit }
        end.reject {|l| l[:debit] == 0 && l[:credit] == 0}
      end
 

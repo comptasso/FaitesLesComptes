@@ -12,8 +12,7 @@ module Compta
      attr_reader :period
 
       def initialize(period) 
-        @subtitle = period.open ? 'Provisoire' : 'Définitif' 
-        @columns_widths =  [15.0, 15.0, 40.0, 15.0, 15.0]  # cinq colonnes
+        @columns_widths =  [20.0, 10.0, 40.0, 15.0, 15.0]  # cinq colonnes
         @total_columns_widths = [70.0, 15.0, 15.0]
         @columns_alignements = [:left, :left, :left, :right, :right]
         @stamp = period.open ? 'Provisoire' : ''

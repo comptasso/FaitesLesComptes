@@ -27,7 +27,7 @@ module Editions
 
           
       def table_title
-        %w(Mois Journal Libellé Debit Credit)
+        %w(Mois Jnl Libellé Debit Credit)
       end
 
       # forunit la ligne de total de la page
@@ -57,7 +57,7 @@ module Editions
      #
      def table_lines
        fetch_lines.map do |l|
-         [l[:mois], l[:title], l[:description],french_format(l[:debit]), french_format(l[:credit])]
+         [l[:mois], l[:abbreviation], l[:title],french_format(l[:debit]), french_format(l[:credit])]
        end
      end
 
