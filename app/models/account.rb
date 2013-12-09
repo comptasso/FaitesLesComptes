@@ -75,6 +75,14 @@ class Account < ActiveRecord::Base
   def long_name
     [number, title].join(' ')
   end
+  
+  # surcharge de la méthode number créée par Rails pour avoir toujours 
+  # au moins 3 chiffres (puisque les comptes peuvent être de deux chiffres)
+  def number
+    num = read_attribute(:number)
+    num +='0' if num.length < 3
+    num
+  end
 
 
 

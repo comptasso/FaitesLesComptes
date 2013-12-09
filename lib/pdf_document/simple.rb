@@ -103,7 +103,7 @@ module PdfDocument
     end
 
     def exercice
-      @period.exercice
+      @period.long_exercice
     end
 
     def previous_exercice

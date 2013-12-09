@@ -124,7 +124,7 @@ module Editions
         end
         
       else # on est dans une logique de résultat sur une période
-        ['', exercice, previous_exercice]
+        ['', short_exercice, previous_exercice]
       end
     end
     

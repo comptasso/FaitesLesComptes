@@ -380,7 +380,7 @@ class Period < ActiveRecord::Base
   # Exercice\n mai à juin 2014
   def long_exercice
     text = short_exercice
-    if text.length > 4
+    if text.length < 5 # c'est le cas d'une année simple; 2013 par exemple
       "Exercice #{text}"
     else
       "Exercice \n#{text}"
@@ -391,7 +391,7 @@ class Period < ActiveRecord::Base
   # du type Exercice 2011 si period correspond à une année pleine
   # ou de Mars 2011 à Février 2012 si c'est à cheval sur l'année civile.
   def exercice
-    puts 'Exercice is deprecated, utiliser long_exercice à la place'
+    Rails.logger.warn 'Exercice is deprecated, utiliser long_exercice à la place'
     long_exercice
   end
 
@@ -400,7 +400,7 @@ class Period < ActiveRecord::Base
   #
   # Renvoie une chaîne vide s'il n'y a pas d'exercice précédent
   def previous_exercice
-    previous_period? ? previous_period.exercice : ''
+    previous_period? ? previous_period.short_exercice : ''
   end
   
   # renvoie le mois le plus adapté pour un exercice
