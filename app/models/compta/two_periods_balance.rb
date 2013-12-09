@@ -21,11 +21,12 @@ class Compta::TwoPeriodsBalance
   def to_pdf
     # TODO voir pour utiliser une sous classe de PdfDocument::Base
     # et des constantes pour les largeurs de colonnes
-    PdfDocument::Base.new(lines, {:title=>'Détail des comptes',
-            :columns_methods=>[:select_num, :title, :brut, :amortissement, :net, :previous_net],
-            :columns_titles=>['Numéro', 'Libellé', 'Brut', 'Amortissement', 'Net', 'Ex Précédent']}) do |pdf|
-          pdf.columns_widths = [10,30,15,15,15,15]
-          pdf.columns_alignements = [:left, :left, :right, :right, :right, :right]
+    PdfDocument::Base.new(lines, {title:'Détail des comptes',
+            nb_lines_per_page:27,
+            columns_methods:[:title, :brut, :amortissement, :net, :previous_net],
+            columns_titles:['Libellé', 'Brut', 'Amortissement', 'Net', 'Ex Précédent']}) do |pdf|
+          pdf.columns_widths = [48,13,13,13,13]
+          pdf.columns_alignements = [:left, :right, :right, :right, :right]
           pdf.top_left = "#{@period.organism.title}\n#{@period.exercice}" 
           pdf.stamp = @period.closed? ? '' : 'Provisoire' 
         end

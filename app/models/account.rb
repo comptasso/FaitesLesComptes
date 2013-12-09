@@ -214,7 +214,9 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
   # Méthode de classe qui crée un pdf pour afficher le plan comptable
   def self.to_pdf(period)
     pdf = PdfDocument::Simple.new(period, period,
-      title:"Plan comptable", select_method:'accounts.order(:number)') do |pdf|
+      title:"Plan comptable",
+      select_method:'accounts.order(:number)',
+      nb_lines_per_page:27) do |pdf|  # 27 lignes car il n'y pas de total ni de sous totel
         pdf.columns_methods = %w(number title)
         pdf.columns_widths = [20,80]
         pdf.columns_titles = %w(Numéro Libellé)

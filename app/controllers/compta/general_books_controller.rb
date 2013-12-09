@@ -27,6 +27,7 @@ class Compta::GeneralBooksController < Compta::ApplicationController
   # créé les variables d'instance attendues par le module PdfController
   def set_exporter
     @exporter = @period
+    @pdf_file_title = 'Grand livre'
   end
   
   # création du job et insertion dans la queue

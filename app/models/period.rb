@@ -357,17 +357,14 @@ class Period < ActiveRecord::Base
     date.in? Period.all.collect(&:start_date)
   end
 
- 
-
-
-  # permet d'indiquer l'exercice sous la forme d'une chaine de caractère
-  # du type Exercice 2011 si period correspond à une année pleine
-  # ou de Mars 2011 à Février 2012 si c'est à cheval sur l'année civile.
-  def exercice
+  # permet d'indiquer l'exercice sans le mot Exercice,
+  # par exemple 2012 au lieu de Exercice 2012. 
+  # Utilisé dans le titre général et dans les graphiques
+  def short_exercice
     r=''
     # année civile
     if self.start_date==self.start_date.beginning_of_year && self.close_date == self.start_date.end_of_year
-      r= 'Exercice ' << self.start_date.year.to_s
+      r << self.start_date.year.to_s
     elsif self.start_date.year == self.close_date.year # on n'est pas sur une année civile mais dans la même année
       r << (I18n::l self.start_date, :format=>'%b')
       r << ' à ' << (I18n::l self.close_date, :format=>:short_month_year)
@@ -376,6 +373,26 @@ class Period < ActiveRecord::Base
       r << ' à ' << (I18n::l self.close_date, :format=>:short_month_year)
     end
     r
+  end
+  
+  # long exercice rajoute Exercice si on est dans un texte court par exemple
+  # 2013 ou Exercice\n si on est dans un texte plus long par exemple
+  # Exercice\n mai à juin 2014
+  def long_exercice
+    text = short_exercice
+    if text.length > 4
+      "Exercice #{text}"
+    else
+      "Exercice \n#{text}"
+    end
+  end
+  
+  # permet d'indiquer l'exercice sous la forme d'une chaine de caractère
+  # du type Exercice 2011 si period correspond à une année pleine
+  # ou de Mars 2011 à Février 2012 si c'est à cheval sur l'année civile.
+  def exercice
+    puts 'Exercice is deprecated, utiliser long_exercice à la place'
+    long_exercice
   end
 
   # retourne une chaîne de caractère adaptée en fonction des différents cas de figure

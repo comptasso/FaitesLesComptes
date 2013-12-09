@@ -29,7 +29,7 @@ module PdfDocument
     end
 
     def top_right
-      I18n::l(document.created_at, :format=>"%e %B %Y\n%H:%M:%S")
+      I18n::l(document.created_at, :format=>"Edition du\n%e %B %Y\nà %H:%M:%S")
     end
 
     def table_title

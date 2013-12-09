@@ -42,7 +42,7 @@ module ApplicationHelper
   def header_title
     if @organism && @organism.title
       html = sanitize(@organism.title)
-      html += " : #{@period.exercice}" unless @period.nil?
+      html += " : #{@period.short_exercice}" unless @period.nil?
     else
       html="Faites les comptes"
     end

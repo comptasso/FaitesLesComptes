@@ -61,7 +61,7 @@ module PdfDocument
       pad(05) { font_size(12) {entetes(page, cursor) } }
       stroke_horizontal_rule
       draw_table_title(page) 
-      draw_table_lines(page) unless page.table_lines.empty?
+      font_size(10) { draw_table_lines(page) unless page.table_lines.empty? }
     end
     
     def draw_table_title(page)

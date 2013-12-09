@@ -45,7 +45,7 @@
         %b.caret
       %ul.dropdown-menu
         - @organism.periods.each do |p|
-          %li= link_to_unless(current_period?(p), p.exercice, change_admin_organism_period_path(@organism, p)) {|name| content_tag(:span, :class=>'disable') {name} }
+          %li= link_to_unless(current_period?(p), p.short_exercice, change_admin_organism_period_path(@organism, p)) {|name| content_tag(:span, :class=>'disable') {name} }
 
 
   - unless @organism.nil? && @organism.periods.count <= 1
