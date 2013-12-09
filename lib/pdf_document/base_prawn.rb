@@ -122,13 +122,13 @@ module PdfDocument
       if stamp_dictionary_registry['fond'].nil?
         create_stamp("fond") do
           rotate(stamp_rotation) do
-            fill_color "bbbbbbb"
+            stroke_color "888888"
             font_size(120) do
               text_rendering_mode(:stroke) do
                 draw_text(text, :at=>stamp_position)
               end
             end
-            fill_color "000000"
+            stroke_color '000000'
           end
         end
       end

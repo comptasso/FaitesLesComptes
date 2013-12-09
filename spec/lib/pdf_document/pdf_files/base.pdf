@@ -1589,8 +1589,8 @@ q
 [ ] 0 d
 q
 0.86603 0.50000 -0.50000 0.86603 0.00000 0.00000 cm
-/DeviceRGB cs
-0.733 0.733 0.733 scn
+/DeviceRGB CS
+0.533 0.533 0.533 SCN
 
 1 Tr
 
@@ -1602,8 +1602,8 @@ ET
 
 
 0 Tr
-/DeviceRGB cs
-0.000 0.000 0.000 scn
+/DeviceRGB CS
+0.000 0.000 0.000 SCN
 Q
 Q
 
