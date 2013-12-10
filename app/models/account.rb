@@ -78,11 +78,12 @@ class Account < ActiveRecord::Base
   
   # surcharge de la méthode number créée par Rails pour avoir toujours 
   # au moins 3 chiffres (puisque les comptes peuvent être de deux chiffres)
-  def number
-    num = read_attribute(:number)
-    num +='0' if num.length < 3
-    num
-  end
+  # FIXME crée des accounts introuvables 
+#  def number
+#    num = read_attribute(:number)
+#    num +='0' if num.length < 3
+#    num
+#  end
 
 
 

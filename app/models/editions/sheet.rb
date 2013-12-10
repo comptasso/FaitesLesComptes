@@ -77,6 +77,7 @@ module Editions
       pdf_file = Editions::PrawnSheet.new(:page_size => 'A4', :page_layout => :portrait) 
       pdf_file.fill_pdf(self)
       pdf_file.numerote
+      pdf_file
     end
          
 

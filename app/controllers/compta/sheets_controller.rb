@@ -43,11 +43,11 @@ class Compta::SheetsController < Compta::ApplicationController
         send_data datas, :filename=>export_filename(@docs, :csv, params[:title])
       }
 
-      format.pdf {
-           
-        send_data produce_pdf(@docs),
-        :filename=>export_filename(@docs, :pdf, params[:title])
-      }
+#      format.pdf {
+#           
+#        send_data produce_pdf(@docs),
+#        :filename=>export_filename(@docs, :pdf, params[:title])
+#      }
     end
   end
 
@@ -65,10 +65,10 @@ class Compta::SheetsController < Compta::ApplicationController
         format.html {@rubriks = @sheet.fetch_lines}
         format.csv { send_data @sheet.to_csv, filename:export_filename(folio, :csv) } 
         format.xls { send_data @sheet.to_xls, filename:export_filename(folio, :csv) }
-        format.pdf do
-          pdf = @sheet.to_detailed_pdf
-          send_data pdf.render, filename:export_filename(pdf, :pdf)
-        end
+#        format.pdf do
+#          pdf = @sheet.to_detailed_pdf
+#          send_data pdf.render, filename:export_filename(pdf, :pdf)
+#        end
       end
     else
       flash[:alert] = "Le document demandé n'a pas été trouvé " unless @sheet
