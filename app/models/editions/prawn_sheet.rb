@@ -46,7 +46,8 @@ module Editions
         :cell_style=>LINE_STYLE  do |table|
         docu.columns_alignements.each_with_index {|alignement,i|  table.column(i).style {|c| c.align = alignement}  }
         page.table_lines_depth.each_with_index do |d,i|
-          table.row(i+1).font_style = style(d) 
+          table.row(i).font_style = style(d) 
+          table.row(i).size = pdf_font_size(d)
         end
       end
       
@@ -57,8 +58,18 @@ module Editions
     # sinon depth = 0 pour la rubrique racine puis +1 à chaque fois qu'on 
     # descend dans l'arbre des rubriques.
     def style(depth)
-      return :bold if (depth == 0 || depth == 1 || depth == 2)
-      return :italic if depth == -1
+      case depth
+      when -1 then :italic
+      when 0..2 then :bold
+      end
+    end
+    
+    def pdf_font_size(depth)
+      case depth
+      when -1 then 8
+      when 0..2 then 12
+      else 10
+      end
     end
   
   end
