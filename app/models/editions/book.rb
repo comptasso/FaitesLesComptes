@@ -16,6 +16,8 @@ module Editions
     end
     
     def fill_default_values
+      @from_date = source.from_date
+      @to_date = source.to_date
       super
       @subtitle  = "Du #{I18n::l @from_date} au #{I18n.l @to_date}"
       # FIXME @stamp  = "provisoire" unless source.all_lines_locked?(@from_date, @to_date)

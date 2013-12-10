@@ -12,10 +12,11 @@ class MonthlyCash < Extract::Cash
   def initialize(virtual_book, h)
     @book = virtual_book
     @my = MonthYear.new(h)
-    @begin_date = @my.beginning_of_month
-    @period = @book.organism.find_period(@begin_date)
-    @end_date = @my.end_of_month
+    @from_date = @my.beginning_of_month
+    @period = @book.organism.find_period(@from_date)
+    @to_date = @my.end_of_month
   end
+  
   
   
 end

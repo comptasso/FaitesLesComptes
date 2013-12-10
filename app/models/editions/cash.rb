@@ -15,7 +15,9 @@ module Editions
         'nature_id', 'credit', 'debit']
        @columns_methods = ['w_date', 'w_ref', 'w_narration',
         'destination.name', 'nature.name', 'credit', 'debit']
-       @columns_titles = %w(Date Réf Libellé Destination Nature Crédit Débit)
+       
+       @columns_titles = source.titles
+  # ie ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Sorties', 'Entrées']
        @columns_widths = [12, 12, 28,12,12,12,12]
        @columns_to_totalize = [5,6]
        @columns_alignements = [:left, :left, :left, :left, :left, :right, :right]

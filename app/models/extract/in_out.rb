@@ -19,13 +19,13 @@ module Extract
 
     include Utilities::ToCsv
 
-    attr_reader :book, :titles, :begin_date, :end_date
+    attr_reader :book, :titles, :from_date, :to_date
 
-    def initialize(book, period, begin_date = nil, end_date = nil)
+    def initialize(book, period, from_date = nil, to_date = nil )
       @book = book
       @period = period
-      @begin_date = begin_date || period.start_date
-      @end_date = end_date || period.close_date
+      @from_date = from_date || period.start_date
+      @to_date = to_date || period.close_date
     end
 
     # renvoie les titres des colonnes pour une édition ou un export
@@ -40,11 +40,11 @@ module Extract
     end
 
     def subtitle
-      "Du #{I18n::l begin_date} au #{I18n::l end_date}"
+      "Du #{I18n::l from_date} au #{I18n::l to_date}"
     end
 
     def lines
-      @lines ||= @book.extract_lines(begin_date, end_date)
+      @lines ||= @book.extract_lines(from_date, to_date)
     end
 
     alias compta_lines lines
@@ -59,11 +59,11 @@ module Extract
     end
 
     def debit_before
-      super(begin_date)
+      super(from_date)
     end
 
     def credit_before
-      super(begin_date)
+      super(from_date)
     end
 
     def to_csv(options = {:col_sep=>"\t"})

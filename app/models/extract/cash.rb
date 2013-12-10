@@ -8,12 +8,15 @@ module Extract
 class Cash < Extract::InOut
   
   # définit les titres des colonnes
+  # 
+  # en cas de modification, ne pas oublier de vérifier l'incidence sur les 
+  # éditions pdf.
   def titles
     ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Sorties', 'Entrées']
   end
   
   def title
-    "Caisse #{book.title}"
+    "Livre de caisse : #{book.title}"
   end
 
 
@@ -25,7 +28,7 @@ class Cash < Extract::InOut
 
   # remplit les lignes de l'extrait
   def lines
-    @lines ||= cash.extract_lines(@begin_date, @end_date)
+    @lines ||= cash.extract_lines(from_date, to_date)
   end
 
   # produit le document pdf en s'appuyant sur la classe PdfDocument::Book
