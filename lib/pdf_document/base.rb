@@ -38,6 +38,7 @@ module PdfDocument
   # - columns_alignements pour définir l'alignement des valeurs (:right, :center, :left)
   # - top_left pour préciser le texte qui s'affichera en haut à gauche de chaque page
   # - stamp pour précisier un fond
+  # - precision qui permet d'indiquer à page#french_format qu'on veut x décimales
   #
   # Chaque page affiche une table de données qui est appelée par la méthode table
   #
@@ -45,10 +46,10 @@ module PdfDocument
    
     include ActiveModel::Validations
         
-    attr_accessor :title, :subtitle, :columns_alignements, :columns_widths,
+    attr_accessor :title, :subtitle, :columns_alignements, :columns_widths, :precision,
      :columns_methods, :columns_titles, :orientation, :organism_name, :exercice, :nb_lines_per_page
     attr_accessor :top_left, :stamp
-    attr_reader :created_at,   :collection, :source
+    attr_reader :created_at, :collection, :source
 
     validates :title, :columns_methods, :presence=>true
     validates :orientation, :inclusion=>{in: [:portrait, :landscape]}
@@ -58,6 +59,7 @@ module PdfDocument
 # telles que stamp, columns_widths, columns_alignements et top_left
     def initialize(collection, options)
       @collection = collection
+      
       options.each do |k,v|
         send("#{k}=", v)
       end
@@ -176,6 +178,7 @@ module PdfDocument
       @orientation ||= :landscape
       @subtitle ||= ''
       @nb_lines_per_page ||= NB_PER_PAGE_LANDSCAPE
+      @precision ||= 2
     end
     
     

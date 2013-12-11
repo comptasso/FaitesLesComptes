@@ -18,7 +18,10 @@ module Editions
   # et prepare_line l'est également car les lignes sont également mise en forme.
   #
   # Un aspect particulier est le fait que l'on doive limiter les mois à 12
-  # pour les exercices supérieurs à 12 mois.
+  # pour les exercices supérieurs à 12 mois car sinon on aurait des pb de mise en page
+  # 
+  # L'option précision permet de dire à Table de formatter les champs numériques 
+  # avec une précision de 0 chiffres
   #
   # Dans l'immédiat on fait la tranche des 12 derniers mois.
   #
@@ -26,9 +29,10 @@ module Editions
     
     LARGE_COL_NUM = 6.5
     
+    
     def initialize(period, source)
       @select_method = 'stats' # stats est la méthode qui renvoie les stats
-      super(period, source, {})
+      super(period, source, {precision:0})
     end
     
     def fill_default_values
@@ -37,7 +41,7 @@ module Editions
       # d'appeler default_columns_methods de Simple
       super
       @title = 'Statistiques par nature'
-      @columns_titles = ['Natures'] + plm.collect {|my| my.to_format('%b %y')} + ['Total']
+      @columns_titles = ['Natures'] + plm.collect {|my| my.to_format('%b')} + ['Total']
       @columns_alignements = [:left] + plm.collect{:right} + [:right] # à gauche pour les natures et à droite pour les mois et la colonne Total
       @columns_widths = [100 - (1 + plm.length)*LARGE_COL_NUM] + plm.collect {LARGE_COL_NUM } + [LARGE_COL_NUM]
       @columns_to_totalize = 1.upto(1 + plm.length).collect {|i| i}

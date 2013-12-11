@@ -2,4 +2,4 @@
 # 
 
 # Commenter la ligne suivante pour activer Delayed::Jobs
-# Delayed::Worker.delay_jobs = false
+ Delayed::Worker.delay_jobs = false
