@@ -5,21 +5,29 @@ module Editions
   # Classe destinée à imprimer le livre virtuel d'un compte bancaire
   # au format pdf
   #
-  # Cette classe hérite de Editions::Book et surcharge fetch_lines
+  # Cette classe hérite de Editions::Book et surcharge prepare_line
+  #
+  # Le résultat est un pdf qui a pour titre 'Livre de Banque' (du fait de la méthode title)
+  # et pour sous-titre quelque chose comme 'Compte courant n°
+  #
   class BankAccount < Editions::Book
 
     def fill_default_values
       super 
-       @columns_titles = %w(Date Réf Narration Crédit Débit)
-       @columns_select = ['writings.date AS w_date', 'writings.ref AS w_ref',
+       @columns_titles = %w(Pièce Date Réf Libellé Dépenses Recettes)
+       @columns_select = ['writings.id as w_id', 'writings.date AS w_date', 'writings.ref AS w_ref',
         'writings.narration AS w_narration',  'credit', 'debit']
-       @columns_methods =  ['w_date', 'w_ref', 'w_narration',
+       @columns_methods =  ['w_id.to_s', 'w_date', 'w_ref', 'w_narration',
         'credit', 'debit']
-       @columns_widths = [12, 12, 52, 12, 12]
-       @columns_to_totalize = [3,4]
-       @columns_alignements = [:left, :left, :left, :right, :right]
+       @columns_widths = [8, 12, 12, 44, 12, 12]
+       @columns_to_totalize = [4,5]
+       @columns_alignements = [:left, :left, :left, :left, :right, :right]
+       @subtitle = "#{source.book.virtual.bank_name} - n° #{source.book.virtual.number} - " + @subtitle
+       
        
     end
+    
+    
 
    
     # appelle les méthodes adéquate pour chacun des éléments de la lignes
@@ -27,8 +35,8 @@ module Editions
     # pas présent.
     # Par exemple nature.name lorsque nature est nil
     def prepare_line(line)
-      pl = columns_methods.collect { |m| line.send(m) rescue nil }
-      pl[0] = I18n::l(Date.parse(pl[0])) rescue pl[0]
+      pl = columns_methods.collect { |m| line.instance_eval(m) rescue nil }
+      pl[1] = I18n::l(Date.parse(pl[1])) rescue pl[1]
       pl
     end
     

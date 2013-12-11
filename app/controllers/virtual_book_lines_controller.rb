@@ -47,6 +47,7 @@ class VirtualBookLinesController < ApplicationController
   # créé les variables d'instance attendues par le module PdfController
   def set_exporter
     @exporter = @bank_account.virtual_book
+    @pdf_file_title = "#{@bank_account.bank_name} #{@bank_account.number}"
   end
   
   # création du job et insertion dans la queue

@@ -15,7 +15,7 @@ module Extract
     # pour une banque, les lignes sont obtenues par une relation has_many :compta_lines,
     # :through=>:accounts et par la création d'un virtual book
     def lines
-      @lines ||= book.extract_lines(@begin_date, @end_date)
+      @lines ||= book.extract_lines(@from_date, @to_date)
     end
 
     # produit le document pdf en s'appuyant sur la classe PdfDocument::Book
