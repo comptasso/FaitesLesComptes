@@ -48,6 +48,8 @@ module PdfDocument
         
     attr_accessor :title, :subtitle, :columns_alignements, :columns_widths, :precision,
      :columns_methods, :columns_titles, :orientation, :organism_name, :exercice, :nb_lines_per_page
+   # TODO on devrait pouvoir supprimer top_left en initialisant organism_name et exercice
+   # puisque page.top_left définit ce top_left avec ces deux variables.
     attr_accessor :top_left, :stamp
     attr_reader :created_at, :collection, :source
 

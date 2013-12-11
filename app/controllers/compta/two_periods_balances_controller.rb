@@ -31,7 +31,7 @@ class Compta::TwoPeriodsBalancesController < Compta::ApplicationController
   # créé les variables d'instance attendues par le module PdfController
   def set_exporter
     @exporter = @period
-    @pdf_file_title = 'Détail comptes'
+    @pdf_file_title = 'Détail des comptes'
   end
   
   # création du job et insertion dans la queue
