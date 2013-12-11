@@ -8,11 +8,13 @@ module Editions
   # Cette classe hérite de PdfDocument::Totalized et prepare_line
   class Book < PdfDocument::Default
 
-    delegate :title, :to=>:source
-
     def initialize(period, source)
       @select_method = 'compta_lines'
       super(period, source, {})
+    end
+    
+    def title
+      "Livre de #{source.title}"
     end
     
     def fill_default_values
@@ -24,29 +26,28 @@ module Editions
       @columns_select = ['writings.date AS w_date', 'writings.ref AS w_ref',
         'writings.narration AS w_narration', 'destination_id',
         'nature_id', 'debit', 'credit', 'payment_mode', 'writing_id']
-      @columns_methods = ['w_date', 'w_ref', 'w_narration',
+      @columns_methods = ['writing_id', 'w_date', 'w_ref', 'w_narration',
         'destination.name', 'nature.name', 'debit', 'credit',
-        'w_mode', 'writing_id']
-      @columns_titles = %w(Date Réf Libellé Destination Nature Débit Crédit Payement Pièce)
+        'writing_id', 'writing_id' ]
+      @columns_titles = %w(Pce Date Réf Libellé Destination Nature Dépenses Recettes Payt Support)
       
-      @columns_widths = [8, 6, 20 ,10 , 10, 10, 10,13,13]
-      @columns_to_totalize = [5,6]
-      @columns_alignements = [:left, :left, :left, :left, :left, :right, :right, :left, :left]
+      @columns_widths = [5, 8, 6, 20 ,10 , 10, 10, 10, 7, 14]
+      @columns_to_totalize = [6, 7]
+      @columns_alignements = [:left, :left, :left, :left, :left, :left, :right, :right, :left, :left]
     end
 
-    # la méthode support n'est pas directement accessible par les tables
-    # donc on utilise l'id récupéré pour appelé la fonction support.
-    # Une autre option possible serait d'enregistrer cette info dans la table
-    # pour en faciliter la restitution. 
-    # 
+     
     # Ne pas confondre ce prepare_line pour le pdf avec celui qui est dans 
     # InOutExtract et qui est pour l'export vers excel ou csv
     # 
-    # TODO : traiter ce sujet en fonction des performances 
+    # TODO voir en fonction des performances s'il ne faudrait pas faire une requête qui
+    # récupère les données plutôt que de rechercher encore l'écriture.
+    # 
     def prepare_line(line)
-      # TODO - essayer super columns_methods.collect { |m| line.instance_eval(m) rescue nil }
-      pl = columns_methods.collect { |m| line.instance_eval(m) rescue nil }
-      pl[0] = I18n::l(Date.parse(pl[0])) rescue pl[0]
+      pl = super
+      pl[0] = pl[0].to_s # pour éviter que format_line ne transforme ce chiffre
+      # comme si c'était un montant en euros
+      pl[1] = I18n::l(Date.parse(pl[1])) rescue pl[1]
       w = Writing.find_by_id(pl.last)
       pl[-1] = w.support # récupération du support
       pl[-2] = w.payment_mode

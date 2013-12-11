@@ -136,7 +136,7 @@ class InOutWritingsController < ApplicationController
   # créé les variables d'instance attendues par le module PdfController
   def set_exporter
     @exporter = @book
-    
+    @pdf_file_title = @book.title
   end
   
   # création du job et insertion dans la queue

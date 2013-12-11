@@ -12,11 +12,11 @@ module Extract
   class MonthlyInOut < Extract::InOut
 
     def initialize(book, my_hash)
+      @book = book
       @my = MonthYear.new(my_hash)
-      begin_date = @my.beginning_of_month
-      end_date = begin_date.end_of_month
-      period = book.organism.find_period(begin_date)
-      super(book, period, begin_date, end_date )
+      @from_date = @my.beginning_of_month
+      @to_date = @my.end_of_month
+      @period = book.organism.find_period(@from_date)
     end
 
       

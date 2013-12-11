@@ -17,6 +17,11 @@ class MonthlyCash < Extract::Cash
     @to_date = @my.end_of_month
   end
   
+  def subtitle
+      @my.to_format('%B %Y') # pour avoir un format plus sympa (Septembre 2014)
+      # et non du 1er au 30 septembre 2014
+  end
+  
   
   
 end
