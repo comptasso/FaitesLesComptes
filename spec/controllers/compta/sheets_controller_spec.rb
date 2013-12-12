@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
 
 RSpec.configure do |c|  
  # c.filter = {wip:true}
@@ -64,15 +64,35 @@ describe Compta::SheetsController do
         get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'xls'}, valid_session
       end
       
-      it 'repond au format pdf' do
-        controller.should_receive(:produce_pdf).with([@cs, @cs]).and_return('les données pdf')
-        controller.should_receive(:send_data).
-          with('les données pdf', filename:"Bilan #{@o.title} #{@controller.dashed_date(Date.today)}.pdf").
-          and_return { @controller.render nothing: true }
-        get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'pdf'}, valid_session
-      end
-      
+           
     end
+    
+  end
+  
+  describe 'Get produce_pdf' do
+    
+    # on surcharge BasePdfFiller car on veut tester le controller pas le Filler
+    before(:each) do
+      Jobs::BasePdfFiller.any_instance.stub(:before).and_return nil
+    end
+    
+    it 'avec une collection appelle Jobs::SheetsPdfFiller' do
+      @p.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
+      @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
+      Jobs::SheetsPdfFiller.should_receive(:new).and_return double(Object, perform:'delayed_job')
+      get :produce_pdf, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'pdf'}, valid_session
+    end
+    
+    it 'sinon appelle Jobs::SheetPdfFiller avec l id du folio' do
+      @p.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
+      @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
+      # TODO faire avec with pour tester également ce qu'on interroge
+      Jobs::SheetPdfFiller.should_receive(:new).and_return double(Object, perform:'delayed_job')
+      get :produce_pdf, {:id=>1, :format=>'pdf'}, valid_session
+    end
+    
+    
+    
     
   end
 

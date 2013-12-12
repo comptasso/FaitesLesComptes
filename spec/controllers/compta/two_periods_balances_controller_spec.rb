@@ -34,12 +34,9 @@ describe Compta::TwoPeriodsBalancesController do
       before(:each) do
         @p.stub(:export_pdf)
         @p.stub(:create_export_pdf).and_return(@expdf =  mock_model(ExportPdf, status:'new'))
-      end
-      
-      it 'lance la production du pdf' do 
-        get :produce_pdf, {format:'js'}, session_attributes
-        response.should be_success
-      end
+        # on surcharge BasePdfFiller car on veut tester le controller pas le Filler
+        Jobs::BasePdfFiller.any_instance.stub(:before).and_return nil
+       end
       
       it 'en le mettant dans la queue' do
         Jobs::TwoPeriodsBalancePdfFiller.should_receive(:new).

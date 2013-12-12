@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Compta::BalancesController do 
   include SpecControllerHelper
-
+ 
   def valid_attributes
       {from_date:Date.today.beginning_of_year, to_date:Date.today.end_of_month, 
         period_id:@p.id, 

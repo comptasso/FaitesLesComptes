@@ -2,10 +2,12 @@ require 'spec_helper'
 
 describe Compta::GeneralLedgersController do
   include SpecControllerHelper
+  
 
   before(:each) do
     minimal_instances
     @p.stub(:all_natures_linked_to_account?).and_return true
+    @p.stub(:export_pdf).and_return nil
   end
 
   describe 'pdf_ready' do 
@@ -17,9 +19,9 @@ describe Compta::GeneralLedgersController do
   end
   
   describe 'produce_pdf' do
-    it 'lance la production du pdf' do
-      @p.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
-      @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
+    it 'lance la production du pdf' do 
+      @p.stub(:create_export_pdf).and_return(@expdf = mock_model(ExportPdf, status:'mon statut'))
+      Jobs::GeneralLedgerPdfFiller.stub(:new).and_return double(Object, perform:'delayed_job')
       get :produce_pdf, {:period_id=>@p.to_param, format:'js'}, session_attributes
     end
     

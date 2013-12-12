@@ -6,7 +6,10 @@ require 'spec_helper'
 describe Compta::GeneralInfo do
 
   class TestModule
+    def period; end # nécessaire car le module vérifie que la classe répond à Period.
+    
     include Compta::GeneralInfo
+   
   end
 
   before(:each) do

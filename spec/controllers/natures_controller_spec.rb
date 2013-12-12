@@ -56,7 +56,7 @@ describe NaturesController do
 
     it 'assigns @filter with 0 if no params[:filter]' do
       get :index, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
-      assigns(:filter).should == 0
+      assigns(:filter).should == 0 
     end
 
     it 'assigns sn (StatsNatures)' do
@@ -75,10 +75,14 @@ describe NaturesController do
     end
 
     describe 'production du pdf' do 
+      before(:each) do
+        Jobs::BasePdfFiller.any_instance.stub(:before).and_return nil
+      end
         
       it 'cherche l export pdf de period' do 
         @p.should_receive(:export_pdf).and_return
         @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf))
+        Jobs::StatsPdfFiller.stub(:new).and_return(double(Object, perform:'test'))
         get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
       end
       
@@ -86,12 +90,14 @@ describe NaturesController do
         @p.stub(:export_pdf).and_return(@obj = double(ExportPdf))
         @obj.should_receive(:destroy)
         @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf))
+        Jobs::StatsPdfFiller.stub(:new).and_return(double(Object, perform:'test'))
         get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
       end
        
       it 'crée un export_pdf avec un status new' do
         @p.stub(:export_pdf).and_return nil
         @p.should_receive(:create_export_pdf).with(:status=>'new').and_return(mock_model(ExportPdf))
+        Jobs::StatsPdfFiller.stub(:new).and_return(double(Object, perform:'test'))
         get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
           
       end 

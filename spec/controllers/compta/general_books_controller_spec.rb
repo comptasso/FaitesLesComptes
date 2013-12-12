@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Compta::GeneralBooksController do
   include SpecControllerHelper
 
-  before(:each) do
+  before(:each) do 
     minimal_instances
     @p.stub(:all_natures_linked_to_account?).and_return true 
   end
@@ -38,6 +38,7 @@ describe Compta::GeneralBooksController do
       it 'lance la production du pdf' do 
         @p.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
         @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
+        Jobs::GeneralBookPdfFiller.stub(:new).and_return double(Object, perform:'delayed_job')
         get :produce_pdf, pdf_attributes.merge({format:'js'}), session_attributes
       end
       

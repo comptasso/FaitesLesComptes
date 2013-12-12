@@ -43,14 +43,9 @@ class Compta::SheetsController < Compta::ApplicationController
         send_data datas, :filename=>export_filename(@docs, :csv, params[:title])
       }
 
-#      format.pdf {
-#           
-#        send_data produce_pdf(@docs),
-#        :filename=>export_filename(@docs, :pdf, params[:title])
-#      }
     end
   end
-
+  
   # l'action show montre la construction de la sheet en détaillant pour chaque rubrique
   # les comptes qui ont contribué au calcul
   #

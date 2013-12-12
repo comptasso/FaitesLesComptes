@@ -27,7 +27,7 @@ class Compta::ListingsController < Compta::ApplicationController
   before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
   # show est appelé directement par exemple par les lignes de la balance
-  # icon listing qui apparaît à côté des comptes non vides
+  #  au mpyen de l'icon listing qui apparaît à côté des comptes non vides
   def show
      @account = @period.accounts.find(params[:account_id])
      @listing = Compta::Listing.new(params[:compta_listing])
