@@ -1,6 +1,6 @@
 # coding: utf-8
-
-require 'pdf_document/base_prawn'
+require 'pdf_document/default_prawn'
+# require 'pdf_document/base_prawn'
 
 module Compta
   # GeneralBook est proche de balance, l'instance se crée avec
@@ -49,7 +49,7 @@ module Compta
       #
       #
     def to_pdf 
-      final_pdf = PdfDocument::BasePrawn.new(:page_size => 'A4', :page_layout => :landscape)
+      final_pdf = PdfDocument::DefaultPrawn.new(:page_size => 'A4', :page_layout => :landscape)
 
       ras = accounts.select {|ra| ra.compta_lines.any? }
       ras.each do |a|
