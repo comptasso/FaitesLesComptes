@@ -4,7 +4,7 @@
 require 'spec_helper'
 
 RSpec.configure do |config| 
-   # config.filter =  {wip:true}
+   # config.filter =  {wip:true} 
 end
 
 # Classe de test ayant pour objet d'écrire concrètement un fichier pdf 
@@ -35,7 +35,7 @@ describe 'Edition PDF des MonthlyExtract' do
     @period = mock_model(Period, 
       start_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year,
-      exercice:'Exercice 2013')
+      long_exercice:'Exercice 2013')
     @cash = mock_model(Cash, :extract_lines=>extract_lines, title:'La caisse')
   end
   

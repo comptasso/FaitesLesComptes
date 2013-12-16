@@ -10,7 +10,7 @@ describe Extract::Cash do
 
   it 'est une instance' do
     @ec.should be_an_instance_of(Extract::Cash)
-    @ec.begin_date.should == Date.today.beginning_of_month 
+    @ec.from_date.should == Date.today.beginning_of_month 
   end
 
   it 'to_pdf appelle Editions::Cash' do

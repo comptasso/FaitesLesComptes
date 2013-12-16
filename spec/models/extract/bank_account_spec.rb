@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Extract::BankAccount do
+describe Extract::BankAccount do 
 
   before(:each) do
     @extract = Extract::BankAccount.new(@b = mock_model(Book), @p = mock_model(Period, :start_date=>Date.today.beginning_of_month, :close_date=>Date.today.end_of_month))
@@ -10,7 +10,7 @@ describe Extract::BankAccount do
 
   it 'est une instance' do
     @extract.should be_an_instance_of(Extract::BankAccount)
-    @extract.begin_date.should == Date.today.beginning_of_month 
+    @extract.from_date.should == Date.today.beginning_of_month 
   end
 
   it 'to_pdf appelle Editions::Cash' do

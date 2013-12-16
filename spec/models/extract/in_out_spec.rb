@@ -5,14 +5,14 @@ require "#{Rails.root}/app/models/income_outcome_book"
 require "#{Rails.root}/app/models/outcome_book"
 
 RSpec.configure do |config|  
-#  config.filter = {wip:true}
+#  config.filter = {wip:true} 
 
 end
  
 describe Extract::InOut do
   before(:each) do
       @ob = mock_model(OutcomeBook)
-      @p = mock_model(Period, start_date:Date.today.beginning_of_year, end_date:Date.today.end_of_year)
+      @p = mock_model(Period, start_date:Date.today.beginning_of_year, to_date:Date.today.end_of_year)
   end
   
   describe 'création d un extract' do
@@ -28,8 +28,8 @@ describe Extract::InOut do
 
     it 'remplit ses arguments par défaut' do
       @ext = Extract::InOut.new(@ob, @p, Date.today, Date.today >> 1)
-      @ext.begin_date.should == Date.today
-      @ext.end_date.should == (Date.today >> 1) 
+      @ext.from_date.should == Date.today
+      @ext.to_date.should == (Date.today >> 1) 
     end
 
     it 'title est le titre du livre' do
@@ -43,7 +43,7 @@ describe Extract::InOut do
     end
 
     it 'lines interroge book et filtre ' do
-      @ob.should_receive(:extract_lines).with(@extract.begin_date, @extract.end_date).and_return('voila')
+      @ob.should_receive(:extract_lines).with(@extract.from_date, @extract.to_date).and_return('voila')
       @extract.lines.should == 'voila'
     end
   
@@ -68,7 +68,7 @@ describe Extract::InOut do
       ls = []
       3.times do |i|
         1.upto(10) do |j|
-          ls << line(@extract.begin_date >> i, j, 0)
+          ls << line(@extract.from_date >> i, j, 0)
         end
       end
       ls
@@ -78,8 +78,8 @@ describe Extract::InOut do
     before(:each) do
       @extract = Extract::InOut.new(@ob, @p)
       @extract.stub(:lines).and_return(@ls = thirty_lines)
-      @ob.stub(:cumulated_at).with(@extract.begin_date - 1, :debit).and_return 5
-      @ob.stub(:cumulated_at).with(@extract.begin_date - 1, :credit).and_return 18
+      @ob.stub(:cumulated_at).with(@extract.from_date - 1, :debit).and_return 5
+      @ob.stub(:cumulated_at).with(@extract.from_date - 1, :credit).and_return 18
     end
 
     it 'il y a 30 lignes' do

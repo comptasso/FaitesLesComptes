@@ -20,7 +20,7 @@ describe 'Editions::Account qui est l édition d un listing de compte' do
       all_lines_locked?:false,
       formatted_sold:['0,00', '0,00']
       )}
-  let(:p) {mock_model(Period, exercice:'Exercice 2013')}
+  let(:p) {mock_model(Period, long_exercice:'Exercice 2013')}
   
   def render_file(pdf, file_name)
     file =  "#{File.dirname(__FILE__)}/test_pdf_files/#{file_name}.pdf"
@@ -38,8 +38,9 @@ describe 'Editions::Account qui est l édition d un listing de compte' do
   def stub_compta_lines(n)
     n.times.collect do |t|
       double(ComptaLine,
+      w_id:t,
       w_date:I18n::l(Date.today),
-      b_title:(t.even? ? 'Recettes' : 'Dépenses'),
+      b_abbreviation:(t.even? ? 'VE' : 'AC'),
       w_ref:"Réf #{t}",
       w_narration:"Ecriture n° #{t}",
       nature:double(Object, name:'Une nature'),

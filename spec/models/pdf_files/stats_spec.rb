@@ -12,7 +12,7 @@ describe Editions::Stats do
   def stub_stats(nb_lines, nb_values)
     values = nb_values.times.collect {|i| i}
     nb_lines.times.collect do |t|
-      ["Nature n° #{t}"] + values + [values.sum]
+      ["Nature n° #{t}"] + values + [values.sum] 
     end
   end
   
@@ -24,7 +24,7 @@ describe Editions::Stats do
     end
   end
   
-  let(:p) {double(Period, exercice:'Exercice 2013')}
+  let(:p) {double(Period, long_exercice:'Exercice 2013')}
   
   before(:each) do
     

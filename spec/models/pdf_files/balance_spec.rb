@@ -9,7 +9,7 @@ require 'pdf_document/page'
 # Les valeurs sont des fake et il ne faut pas s'attacher à la cohérence
 # des montants. 
 # Par contre, les totaus, reports et sous totaux doivent être correctement calculés.
-describe Editions::Balance do
+describe Editions::Balance do 
   
   def render_file(pdf, file_name) 
     file =  "#{File.dirname(__FILE__)}/test_pdf_files/#{file_name}.pdf"
@@ -33,7 +33,7 @@ describe Editions::Balance do
   end
   
   
-  let(:p) {mock_model(Period, organism:double(Organism, title:'Asso test'), exercice:'Exercice 2013')}
+  let(:p) {mock_model(Period, organism:double(Organism, title:'Asso test'), long_exercice:'Exercice 2013')}
   let(:source) {double(Object, 
     from_date:Date.today.beginning_of_year,
     to_date:Date.today.end_of_year,

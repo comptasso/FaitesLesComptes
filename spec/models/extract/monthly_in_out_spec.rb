@@ -10,7 +10,7 @@ RSpec.configure do |config|
 end
  
 describe Extract::MonthlyInOut do
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
   before(:each) do
     create_minimal_organism
   end
@@ -35,9 +35,9 @@ describe Extract::MonthlyInOut do
     @book_extract.subtitle.should == I18n.l(Date.today, :format=>'%B %Y')
   end
   
-  it 'a initialité begin_date et end_date' do
-    @book_extract.begin_date.should == Date.today.beginning_of_month
-    @book_extract.end_date.should == Date.today.end_of_month
+  it 'a initialité from_date et to_date' do
+    @book_extract.from_date.should == Date.today.beginning_of_month
+    @book_extract.to_date.should == Date.today.end_of_month
   end
 
     it 'a demandé au livre de trouver l exercice' do
