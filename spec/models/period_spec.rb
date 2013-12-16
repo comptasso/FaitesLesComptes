@@ -8,7 +8,7 @@ end
 
 describe Period do  
   include OrganismFixtureBis
-  context 'un organisme' do 
+  context 'un organisme' do  
 
     
 
@@ -514,7 +514,7 @@ describe Period do
             end
 
             it "should have a legend" do
-              @graphic.legend.should == ["Exercice\navr. à déc. 2010", 'Exercice 2011']
+              @graphic.legend.should == ["avr. à déc. 2010", '2011']
             end
             it "should have two séries" do
               @graphic.should have(2).series
@@ -554,7 +554,7 @@ describe Period do
             end
 
             it "check the legend"  do
-              @graphic.legend.should == ['Exercice 2011']
+              @graphic.legend.should == ['2011']
             end
 
             it "check the datas" do

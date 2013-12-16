@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'spec_helper'
+require 'spec_helper' 
 
 
 describe "organisms/show" do 
@@ -37,7 +37,7 @@ before(:each) do
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     assert_select "#book_#{ibook.id}" do
-     assert_select ".legend", 'Exercice 2011;Exercice 2012'
+     assert_select ".legend", '2011;2012'
     end
   end
 
@@ -45,7 +45,7 @@ before(:each) do
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     assert_select "#book_#{ibook.id}" do
-     assert_select ".legend", 'Exercice 2011;Exercice 2012'
+     assert_select ".legend", '2011;2012'
     end
   end
 
@@ -60,7 +60,7 @@ before(:each) do
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     assert_select "#book_#{ibook.id}" do
-     assert_select ".legend", 'Exercice 2011'
+     assert_select ".legend", '2011'
     end
   end
 
