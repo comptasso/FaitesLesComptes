@@ -7,7 +7,7 @@ require 'pdf_document/default.rb'
 require 'pdf_document/page'
 
 RSpec.configure do |c|
-  # c.filter = {wip:true} 
+  # c.filter = {wip:true}  
 end
 
 describe PdfDocument::Default do 
@@ -16,7 +16,7 @@ describe PdfDocument::Default do
   let(:p) {mock_model(Period, organism:o,
       start_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year,
-      exercice:'Exercice 2012',
+      long_exercice:'Exercice 2012',
       compta_lines:[ComptaLine.new, ComptaLine.new])}
 
   def valid_options

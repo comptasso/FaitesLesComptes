@@ -1,13 +1,13 @@
 # coding: utf-8
 
-require 'spec_helper'
+require 'spec_helper' 
 
 describe Compta::MonthlyLedger do
 
   let(:p) {mock_model(Period)}
   let(:my) {MonthYear.from_date(Date.today)}
-  let(:b1) {mock_model(Book, :description=>'Ventes', :title=>'VE')}
-  let(:b2) {mock_model(Book, :description=>'Opérations Diverses', :title=>'OD')}
+  let(:b1) {mock_model(Book,  :abbreviation=>'VE')}
+  let(:b2) {mock_model(Book,  :abbreviation=>'OD')}
 
 
   it 'on peut construire un MonthlyLedger' do
@@ -18,7 +18,8 @@ describe Compta::MonthlyLedger do
 
     before(:each) do
       p.stub(:books).and_return([b1, b2])
-     [b1, b2].each {|b| b.stub_chain(:compta_lines, :mois).and_return(1.upto(10).map {double(ComptaLine, :debit=>3, :credit=>0)}) }
+     [b1, b2].each {|b| b.stub_chain(:compta_lines, :mois).and_return(1.upto(10).
+           map {double(ComptaLine, :debit=>3, :credit=>0)}) }
      Extract::Monthly.any_instance.stub(:total_debit).and_return 101
      Extract::Monthly.any_instance.stub(:total_credit).and_return 99
      @ml = Compta::MonthlyLedger.new(p, my)
@@ -35,10 +36,10 @@ describe Compta::MonthlyLedger do
     it 'une ligne est constituée d un titre, description, total_debit, total_credit' do
       l = @mls.second
       l[:mois].should == ''
-      l[:description].should == b2.description
+      l[:abbreviation].should == b2.abbreviation
       l[:debit].should == 101
       l[:credit].should == 99
-      l[:title].should == b2.title
+    #  l[:title].should == 'bonjour' #b2.title
     end
 
     it 'sait faire sa ligne de titre' do

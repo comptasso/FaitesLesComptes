@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Compta::TwoPeriodsBalancesController do 
-  include SpecControllerHelper
+  include SpecControllerHelper 
   
     before(:each) do
       minimal_instances 

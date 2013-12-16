@@ -2,7 +2,7 @@
 
 require 'spec_helper' 
 
-require 'pdf_document/default'
+require 'pdf_document/default' 
 
 RSpec.configure do |config|
  # config.filter = {wip:true}
@@ -13,7 +13,7 @@ describe PdfDocument::Page do
   let(:p) {mock_model(Period, organism:o,
       from_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year,
-      exercice:'Exercice 2012')}
+      long_exercice:'Exercice 2012')}
   let(:arel) {double(Arel, count:100, first:mock_model(ComptaLine,  debit:12, credit:0))}
   let(:source) {mock_model(Account, title:'Achats', number:'60',
       compta_lines:arel )}
@@ -59,7 +59,7 @@ describe PdfDocument::Page do
     end 
 
     it "répond à top_right" do
-      @page.top_right.should == "#{I18n::l(Date.today, :format=>:long)}\n#{now.strftime('%H:%M:%S')}"
+      @page.top_right.should == "Edition du\n#{I18n::l(Date.today, :format=>:long)}\nà #{now.strftime('%H:%M:%S')}"
     end
 
     it "repond à table_title" do

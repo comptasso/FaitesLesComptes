@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require 'spec_helper'
-require 'pdf_document/page'
+require 'pdf_document/page' 
 
 
 # Ces specs ont essentiellement pour objet de vérifier qu'on peut 
@@ -37,7 +37,7 @@ describe Editions::Balance do
   end
   
   
-  let(:p) {mock_model(Period, organism:double(Organism, title:'Asso test'), exercice:'Exercice 2013')}
+  let(:p) {mock_model(Period, organism:double(Organism, title:'Asso test'), long_exercice:'Exercice 2013')}
   let(:source) {double(Object, 
     from_date:Date.today.beginning_of_year,
     to_date:Date.today.end_of_year,

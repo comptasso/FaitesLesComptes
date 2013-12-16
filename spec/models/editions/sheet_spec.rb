@@ -8,7 +8,7 @@ describe Editions::Sheet do
   let(:o) {stub_model(Organism, :name=>'Ma petite Affaire')}
   let(:p) {stub_model(Period, organism:o, start_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year)}
-  let(:bal) {double(Compta::Sheet, :period=>p, :sens=>:actif, :name=>:actif)} # pour un actif de bilan
+  let(:bal) {double(Compta::Sheet, :period=>p, :sens=>:actif, :name=>:actif)} # pour un actif de bilan 
 
   it 'création du PdfSheet' do
     pdfs = Editions::Sheet.new(p, bal, {title:'Balance test'} )
@@ -52,7 +52,7 @@ describe Editions::Sheet do
       
       it 'pour les autres' do
         bal.stub(:name).and_return(:peu_importe)
-        subject.columns_titles.should == ['', p.exercice, p.previous_exercice]
+        subject.columns_titles.should == ['', p.short_exercice, p.previous_exercice]
       end
 
       end

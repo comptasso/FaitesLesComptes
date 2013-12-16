@@ -6,21 +6,21 @@ require 'pdf_document/default'
 require 'editions/general_ledger_page' 
 require 'pdf_document/page'
 
-RSpec.configure do |config|
+RSpec.configure do |config| 
   # config.filter = {wip:true}
 end
 
-describe Editions::GeneralLedgerPage do
+describe Editions::GeneralLedgerPage do 
 
-  let(:doc) {double(Compta::PdfGeneralLedger)}
+  let(:doc) {double(Compta::PdfGeneralLedger, precision:2)}
   let(:monthly_ledgers) {double(Compta::MonthlyLedger, total_debit:1200.50, total_credit:10000.02)}
 
   before(:each) do
     monthly_ledgers.stub(:lines_with_total).and_return([
-        {mois:"Mois de Fructose", title:'', description:'', debit:'', credit:''},
-        {mois:'', title:'ES', description:'Essai', :debit=>1200.50, :credit=>10000.02},
-        {mois:'', title:'VE', description:'Ventes', :debit=>0, :credit=>225000.25},
-        {mois:"Total Fructose", title:'', description:'', debit:1200.50, credit:10000.02}
+        {mois:"Mois de Fructose", abbreviation:'', title:'', debit:'', credit:''},
+        {mois:'', abbreviation:'ES', title:'Essai', :debit=>1200.50, :credit=>10000.02},
+        {mois:'', abbreviation:'VE', title:'Ventes', :debit=>0, :credit=>225000.25},
+        {mois:"Total Fructose", abbreviation:'', title:'', debit:1200.50, credit:10000.02}
       ]
     )
   end
@@ -33,7 +33,7 @@ describe Editions::GeneralLedgerPage do
     end
 
     it 'répond à titre avec un array défini' do
-      @glp.table_title.should ==  %w(Mois Journal Libellé Debit Credit)
+      @glp.table_title.should ==  %w(Mois Jnl Libellé Debit Credit)
     end
 
     describe 'table_lines' do

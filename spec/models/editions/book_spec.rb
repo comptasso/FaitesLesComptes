@@ -20,13 +20,15 @@ describe Editions::Book do
   before(:each) do
      @book = mock_model(Book)
      @period = stub(Period, organism:stub(:title=>'L\'organisme'),
-       :exercice=>'Exercice en cours',
+       :long_exercice=>'Exercice en cours',
        start_date:Date.today.beginning_of_year,
        close_date:Date.today.end_of_year)
      @extract = stub(Extract::InOut, :book=>@book,
      'provisoire?'=>true,
      title:'Le livre',
      subtitle:'Le sous titre',
+     from_date:Date.civil(2014,2,1),
+     to_date:Date.civil(2014,3,31),
      titles:%w(un deux trois quatre cinq),
      compta_lines:(50.times.collect {line(Date.today, 1.25, 0.3)}))
 
@@ -56,7 +58,7 @@ describe Editions::Book do
   it 'prepare_line' do
     Writing.stub(:find_by_id).and_return(double(Writing, support:'CrédiX', :payment_mode=>'Chèque' ))
     @eb = Editions::Book.new(@period, @extract)
-    @eb.prepare_line(line(Date.today, 1.25, 0.3)).should == [Date.today,
+    @eb.prepare_line(line(Date.today, 1.25, 0.3)).should == [1.to_s, Date.today,
         "",
         "Une compta line",
         "La destination",

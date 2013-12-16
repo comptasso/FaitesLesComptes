@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'spec_helper'
+require 'spec_helper' 
 
 
 describe Compta::GeneralInfo do
@@ -14,7 +14,7 @@ describe Compta::GeneralInfo do
 
   before(:each) do
     @tm = TestModule.new
-    @tm.stub(:period).and_return mock_model(Period, :organism=>mock_model(Organism, title:'une affaire'), :exercice=>'Exercice 2013')
+    @tm.stub(:period).and_return mock_model(Period, :organism=>mock_model(Organism, title:'une affaire'), :long_exercice=>'Exercice 2013')
   end
 
   it 'donne le nom de l organisme' do

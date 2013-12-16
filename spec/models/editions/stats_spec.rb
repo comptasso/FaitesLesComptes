@@ -7,7 +7,7 @@ describe Editions::Stats do
   let(:p) {double(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)}
   let(:source) {double(Object, :stats=>nil)}
 
-  def list_months
+  def list_months 
     ListMonths.new(p.start_date, p.close_date) 
   end
 
@@ -52,7 +52,7 @@ describe Editions::Stats do
 
   it 'sait rendre un pdf' do
     p.stub(:organism).and_return(double(title:'Ma petite affaire'))
-    p.stub(:exercice).and_return('Exercice 2013')
+    p.stub(:long_exercice).and_return('Exercice 2013')
     source.stub(:lines).at_least(1).times.and_return(stub_lines(30,14))
     source.stub(:stats).and_return(stub_lines(30,14))
     sts = Editions::Stats.new(p, source)

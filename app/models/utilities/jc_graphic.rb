@@ -53,8 +53,8 @@ module Utilities::JcGraphic
     mg= Utilities::Graphic.new(self.ticks(period))
     months= period.list_months # les mois du dernier exercice servent de référence
     pp=period.previous_period
-    mg.add_serie(:legend=>pp.exercice, :datas=>previous_year_monthly_datas_for_chart(months), :period_id=>pp.id, :month_years=>month_year_values(months, true))
-    mg.add_serie(:legend=>period.exercice, :datas=>self.monthly_datas_for_chart(months), :period_id=>period.id, :month_years=>month_year_values(months))
+    mg.add_serie(:legend=>pp.short_exercice, :datas=>previous_year_monthly_datas_for_chart(months), :period_id=>pp.id, :month_years=>month_year_values(months, true))
+    mg.add_serie(:legend=>period.short_exercice, :datas=>self.monthly_datas_for_chart(months), :period_id=>period.id, :month_years=>month_year_values(months))
     mg
   end
 

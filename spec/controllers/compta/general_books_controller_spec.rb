@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Compta::GeneralBooksController do
-  include SpecControllerHelper
+  include SpecControllerHelper 
 
   before(:each) do 
     minimal_instances

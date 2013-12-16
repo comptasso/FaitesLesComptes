@@ -8,7 +8,7 @@ RSpec.configure do |c|
 end
 
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 describe Book do 
 
@@ -64,7 +64,7 @@ describe Book do
         @book.stub(:previous_year_monthly_datas_for_chart).with(p2011.list_months).and_return(datas2010)
       end
 
-      it "should have a two_years_monthly_graphic method" , :wip=>true do
+      it "should have a two_years_monthly_graphic method" , :wip=>true do 
         @book.two_years_monthly_graphic(p2011)
       end
 
@@ -76,10 +76,10 @@ describe Book do
         before(:each) { @graphic=@book.two_years_monthly_graphic(p2011)}
 
         it "monthly_graphic has a two series and ticks coming from period" do
-          @graphic.legend.should ==['Exercice 2010', 'Exercice 2011']
+          @graphic.legend.should ==['2010', '2011']
         end
 
-        it "monthly_graphic should have two series of datas" do
+        it "monthly_graphic should have two series of datas" do 
           @graphic.nb_series.should == 2
         end
 
@@ -190,13 +190,13 @@ describe Book do
 
       it "graphic(p3) returns correct legend" do
         @book.stub(:monthly_datas_for_chart).with(p3.list_months).and_return(range_period_datas(13..24))
-        @book.graphic(p3).legend.should == ['Exercice 2011', 'Exercice 2012']
+        @book.graphic(p3).legend.should == ['2011', '2012']
       end
 
       it "graphic(p2) return correct legend " do
         @book.stub(:monthly_datas_for_chart).with(p2.list_months).and_return(range_period_datas(13..24))
         @book.stub(:previous_year_monthly_datas_for_chart).with(p2.list_months).and_return(range_period_datas(1..12))
-           @book.graphic(p2).legend.should == ['sept. 2009 à déc. 2010', 'Exercice 2011']
+           @book.graphic(p2).legend.should == ['sept. 2009 à déc. 2010', '2011']
       end
 
       it "graphic(p1) is a one year graphic" do

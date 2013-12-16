@@ -8,10 +8,10 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe PdfDocument::Simple do 
+describe PdfDocument::Simple do  
 
   let(:o) {mock_model(Organism, :title=>'Ma petite affaire')}
-  let(:p) {mock_model(Period, :organism=>o, :exercice=>'Exercice 2013')}
+  let(:p) {mock_model(Period, :organism=>o, :long_exercice=>'Exercice 2013')}
   let(:source) {(1..50).map {|i| mock_model(Account, number:i.to_s)}}
 
   def valid_options

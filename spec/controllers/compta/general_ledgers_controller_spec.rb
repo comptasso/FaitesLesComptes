@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Compta::GeneralLedgersController do
-  include SpecControllerHelper
+  include SpecControllerHelper 
   
 
   before(:each) do

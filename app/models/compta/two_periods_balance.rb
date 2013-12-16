@@ -28,9 +28,8 @@ class Compta::TwoPeriodsBalance
           pdf.columns_widths = [48,13,13,13,13]
           pdf.columns_alignements = [:left, :right, :right, :right, :right]
           pdf.organism_name = @period.organism.title
-          pdf.exercice = @period.exercice
+          pdf.exercice = @period.long_exercice
           pdf.subtitle = "Du #{I18n.l @period.start_date} au #{I18n.l @period.close_date}"
-       #   pdf.top_left = "#{@period.organism.title}\n#{@period.exercice}" 
           pdf.stamp = @period.closed? ? '' : 'Provisoire' 
         end
   end
