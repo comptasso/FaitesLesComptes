@@ -24,9 +24,9 @@ describe "Periods" do
     it 'change period' do
    
       visit organism_path(@o)
-      page.find('.brand').should have_content "Exercice #{(Date.today.year) + 1}"
+      page.find('.brand').should have_content "#{(Date.today.year) + 1}"
       visit change_organism_period_path(@o, @p)
-      page.find('.brand').should have_content "Exercice #{Date.today.year}"
+      page.find('.brand').should have_content "#{Date.today.year}"
     end
   
 end

@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require 'spec_helper' 
-include JcCapybara
+
 include OrganismFixtureBis
 
 describe "Cashes" do

@@ -103,26 +103,23 @@ describe ComptaLine do
     
   end
   
-  describe 'scope not_pointed_lines'  do 
+  describe 'scope not_pointed_lines'  do
     
-    context 'pas de compta line non pointée' do    
-      it 'peut renvoyerles lignes non pointées' do
+    before(:each) do
+      create_organism
+    end  
+    
+    context 'pas encore d écritures' do    
+      it 'et donc zero lignes non pointées' do
         ComptaLine.not_pointed.count.should == 0
       end
     end
     
-    context 'il existe une compta_line' , wip:true do
-      
-      before(:each) do
-        @cl.save! 
-      end
-      
-      it 'non pointée' do
-        pending 'à faire sur des modèles réels car teste des requêtes sur la base'
-        puts @cl
-        puts @cl.writing
-        puts @cl.writing.book
-        ComptaLine.not_pointed.count.should == 1
+    context 'avec une écriture' , wip:true do
+                      
+      it 'la banque a une ligne non pointée' do
+        @ecriture = create_outcome_writing
+        @baca.compta_lines.not_pointed.count.should == 1
       end
       
     end
