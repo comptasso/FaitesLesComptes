@@ -1,5 +1,7 @@
 # coding: utf-8
 
+
+# Validation qui limite le nombre de société à 4 maximum
 class UpperLimitValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)

@@ -7,7 +7,7 @@ describe 'NotBothAmountsValidator' do
   # TODO revoir les autres spec de validators à l'aune de celle ci
 
   before(:each) do
-    @nbav = NotBothAmountsValidator.new(double(Object))
+    @nbav = NotBothAmountsValidator.new(double(Object)) 
   end
 
   it 'ajoute des erreurs si credit et debit sont tous deux remplis' do

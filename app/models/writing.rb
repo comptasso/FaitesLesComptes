@@ -58,6 +58,9 @@ class Writing < ActiveRecord::Base
   # les écritures dans le livre de report à nouveau doivent avoir le premier jour
   # de l'exercice comme date
   validate :period_start_date, :if=> lambda {book.type == 'AnBook'}
+  # contraint la numérotation continue des écritures (numérotation qui est faite
+  # au moment du verrouillage). Ne pas confondre ce numéro avec le numéro de pièce.
+  validates :continuous_id, continu:true, :allow_blank=>true  
   
 
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
@@ -129,17 +132,26 @@ class Writing < ActiveRecord::Base
   end
 
   # lock verrouille toutes les lignes de l'écriture
+  # Une compta_line peut recevoir lock mais la classe ComptaLine délègue cet
+  # appel à Writing. 
+  # L'objectif est qu'il soit impossible de verrouiller une ligne 
+  # sans verrouiller les autres lignes de l'écriture.  
   def lock
     Writing.transaction do
+      cid = Writing.last_continuous_id
       compta_lines.each do |cl|
         unless cl.locked?
           cl.update_attribute(:locked, true)
         end
       end
+      self.update_attribute(:continuous_id, cid.succ)
     end
   end
+  
+  
 
-  # Une écriture est verrouillée dès lors qu'une seule de ses lignes l'est
+  # Une écriture doit répondre qu'elle est verrouillée
+  # dès lors qu'une seule de ses lignes l'est
   def locked?
     compta_lines.where('locked = ?', true).any?
   end
@@ -177,8 +189,20 @@ class Writing < ActiveRecord::Base
   def editable?
     compta_lines.all? {|cl| cl.editable?}
   end
+  
+  def self.mise_a_jour
+    Writing.all.select {|w| w.locked? && w.continuous_id.nil? }.each do |w|
+      w.continuous_id = Writing.last_continuous_id + 1
+      w.save!
+    end
+    
+  end
 
   protected
+  
+  def self.last_continuous_id
+    Writing.maximum(:continuous_id) || 0
+  end
 
   # méthode de validation utilisée pour vérifier que les écritures sur le 
   # journal d'A Nouveau sont passées au premier jour de l'exercice

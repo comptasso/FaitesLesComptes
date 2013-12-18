@@ -326,6 +326,8 @@ fr:
           attributes:
             date:
               incoherent: Incohérent avec %{field}
+            continuous_id:
+              not_continuous: La numérotation des écritures doit être continue
         compta_line:
           attributes:
             payment_mode:
