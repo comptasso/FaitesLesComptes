@@ -105,12 +105,57 @@ class Account < ActiveRecord::Base
     end
   end
   
+  # méthode redéfinie pour réduire les appels à la base de données
   def sold_at(date)
     sql = %Q(SELECT SUM(credit) AS sum_credit, SUM(debit) AS sum_debit FROM "writings" INNER JOIN "compta_lines" 
 ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND account_id = #{id}))
     result = Writing.find_by_sql(sql).first
     (result.sum_credit.to_f - result.sum_debit.to_f).round 2
   end
+  
+  def self.test_balance(period_id, from_date, to_date)
+    # il faut les soldes initiaux débit et crédit
+    sql = <<EOF
+  SELECT acco.id, acco.number,acco.title,
+  final.sum_debit_from AS debit_from, 
+  final.sum_credit_from AS credit_from, 
+  movements.sum_debit_to AS move_debit, 
+  movements.sum_credit_to AS move_credit
+  
+FROM accounts acco, 
+(SELECT accounts.id AS sacco, COALESCE(SUM(credit), 0) AS sum_credit_from, 
+      COALESCE(SUM(debit), 0) AS sum_debit_from 
+      FROM accounts LEFT JOIN compta_lines ON( compta_lines.account_id = accounts.id) 
+      LEFT JOIN writings ON (writings.id = compta_lines.writing_id) 
+      WHERE (writings.date <= '#{to_date}' OR writings.date IS NULL) GROUP BY accounts.id) final, 
+      
+(SELECT accounts.id AS tacco, COALESCE(SUM(credit),0) AS sum_credit_to, 
+      COALESCE(SUM(debit), 0) AS sum_debit_to 
+      FROM accounts LEFT JOIN compta_lines ON( compta_lines.account_id = accounts.id) 
+      LEFT JOIN writings ON (writings.id = compta_lines.writing_id) 
+      WHERE ((writings.date <= '#{to_date}' AND writings.date >= '#{from_date}') OR writings.date IS NULL ) GROUP BY accounts.id) movements 
+WHERE acco.period_id = #{period_id} AND movements.tacco = acco.id AND final.sacco = acco.id 
+ORDER BY acco.number     
+      
+     
+    
+EOF
+    sql.gsub("\n", '')
+    
+    
+  end
+  
+
+#  
+#    FROM
+#    accounts, 
+  
+   # movements.move_debit, movements.move_credit, movements.m_count
+  
+#   (SELECT SUM(credit) AS move_credit, SUM(debit) AS move_debit, COUNT(*) as m_count FROM compta_lines 
+#      LEFT JOIN writings ON (writings.id = compta_lines.writing_id)
+#      LEFT JOIN accounts ON (accounts.id = compta_lines.account_id)
+#      WHERE (writings.date >= '#{from_date}' AND writings.date <= '#{to_date}') )
 
 
   # surcharge de accountable pour gérer le cas des remises chèques

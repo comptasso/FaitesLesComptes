@@ -138,7 +138,6 @@ describe Compta::Balance do
         @b.balance_lines.first.should ==
           { :account_id=>@a1.id,
           :empty=>true,
-          :provisoire=>false, # car il n'y a pas de ligne
           :number=>"60",
           :title=>"Achats (sauf 603)",
           :cumul_debit_before=>0,

@@ -129,8 +129,7 @@ class Compta::Balance < ActiveRecord::Base
   # construit la ligne qui sera affichée pour chaque compte demandé, sous forme d'un hash
   def balance_line(account, from = self.period.start_date, to = self.period.close_date)
     { :account_id=>account.id,
-      :provisoire=> !account.all_lines_locked?,
-      :empty=> account.lines_empty?(from, to),
+      :empty=> account.lines_empty?(from, to),  # permet d'afficher l'icone listing dans la vue
       :number=>account.number, :title=>account.title,
       :cumul_debit_before=>account.cumulated_debit_before(from),
       :cumul_credit_before=>account.cumulated_credit_before(from),
