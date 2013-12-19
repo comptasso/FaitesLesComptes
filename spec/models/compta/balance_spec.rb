@@ -3,7 +3,7 @@
 require 'spec_helper' 
 
 RSpec.configure do |c| 
- #  c.filter = {:wip=>true}
+   c.filter = {:wip=>true}
 end
 
 describe Compta::Balance do  
@@ -129,6 +129,8 @@ describe Compta::Balance do
       end
 
     end
+    
+    
 
     describe 'balance lines' do
 
@@ -140,15 +142,48 @@ describe Compta::Balance do
           :empty=>true,
           :number=>"60",
           :title=>"Achats (sauf 603)",
-          :cumul_debit_before=>0,
-          :cumul_credit_before=>0,
-          :movement_debit=>0,
-          :movement_credit=>0,
-          :sold_at=>0 }
+          :cumul_debit_before=>0.0,
+          :cumul_credit_before=>0.0,
+          :movement_debit=>0.0,
+          :movement_credit=>0.0,
+          :sold_at=>0.0 }
 
       end
-
-
+    end
+    
+    describe 'query_balance_lines' do
+      
+      before(:each) do
+        @bal = Compta::Balance.new(period_id:@p.id).with_default_values
+        @qbl =  @bal.query_balance_lines
+      end
+      
+      it 'retourne un PG::Result' do
+        @qbl.class.should ==  PG::Result
+      end
+      
+      it 'sans erreur' do
+        @qbl.check.should be_nil
+      end
+      
+      it 'avec 90 tuples'  do
+        @qbl.cmd_tuples.should == 90
+      end
+      
+      it 'chaque tuple est un hash ayant pour clé'   do
+        @acc = @p.accounts.first(order:'number ASC')
+        @qbl.first.should ==
+          { "account_id"=>@acc.id.to_s,
+          "no_empty"=>nil,
+          "number"=>@acc.number,
+          "title"=>@acc.title,
+          "cumul_debit_before"=>"0.00",
+          "cumul_credit_before"=>"0.00",
+          "movement_debit"=>"0.00",
+          "movement_credit"=>"0.00"}
+          
+      end
+      
     end
 
     describe 'page' do
@@ -158,7 +193,6 @@ describe Compta::Balance do
           :account_title=>"compte #{value}",
           :account_number=>'60'+value.to_s,
           :empty=>false,
-          :provisoire=>true,
           :number=>'60'+value.to_s,
           :title=>"compte #{value}",
           :cumul_debit_before=>10,
@@ -171,13 +205,11 @@ describe Compta::Balance do
      
 
       before(:each) do
-        @b.stub(:provisoire?).and_return true
-        @b.stub(:accounts).and_return(@ar = double(Arel))
-        @ar.stub(:collect).and_return (1..100).map {|i| bal_line(2)}
-        @ar.stub(:length).and_return 100
+        @b.stub(:balance_lines).and_return (1..100).map {|i| bal_line(2)}
+        
       end
 
-      it 'total_balance renvoie le total' , wip:true  do
+      it 'total_balance renvoie le total'   do
         @b.total_balance.should == [1000, 100, 200, 400, -700]
       end
       
@@ -194,8 +226,8 @@ describe Compta::Balance do
         end
         
         before(:each) do 
-          
           @pdf = @b.to_pdf
+          @pdf.stub(:fetch_lines).and_return (1..100).map {|i| line_to_prepare}
         end
 
         it 'crée une instance de Editions::Balance' do
@@ -203,19 +235,17 @@ describe Compta::Balance do
           
         end
       
-        it('ayant 5 pages') {@pdf.nb_pages.should == 5}
+        it('ayant 5 pages', wip:true) {@pdf.nb_pages.should == 5}
         
-        it 'et pouvant être rendue' , wip:true do 
-          @pdf.stub(:fetch_lines).and_return (1..100).map {|i| line_to_prepare}
-          @pdf.render
-        end
+        it('et pouvant être rendue') {@pdf_render }
+        
       
       end
 
       describe 'to_csv'  do
        
         before(:each) do
-          @ar.stub(:collect).and_return (1..2).map {|i| bal_line(2)}
+          @b.stub(:balance_lines).and_return (1..2).map {|i| bal_line(2)}
         end
 
 

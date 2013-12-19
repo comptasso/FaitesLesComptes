@@ -88,11 +88,45 @@ class Compta::Balance < ActiveRecord::Base
     end
     self
   end
+  
+  
+  # requete SQL pour accélérer la construction d'une balance. Le benchmark donne
+  # 2,5 secondes par une méthode classique et cela est ramené à 2 centièmes.
+  # 
+  # Les paramètres doivent avoir été définis
+  def query_balance_lines
+     sql = <<EOF
+     SELECT accounts.id AS account_id, accounts.number, accounts.title, 
+            debut.deb_debit AS cumul_debit_before, 
+            debut.deb_credit AS cumul_credit_before,
+            fin.fin_debit AS movement_debit,
+            fin.fin_credit AS movement_credit, fin.no_empty
+ FROM 
+accounts, 
+ 
+(SELECT accounts.id AS acco_id, accounts.number AS num, COALESCE(deb_debit, 0.00) AS deb_debit, COALESCE(deb_credit, 0.00) AS deb_credit 
+ FROM accounts LEFT JOIN 
+ (SELECT compta_lines.account_id AS clacoid, COALESCE(SUM(debit), 0) AS deb_debit, COALESCE(SUM(credit), 0) AS deb_credit
+  FROM compta_lines JOIN writings ON (compta_lines.writing_id = writings.id)
+  WHERE writings.date < '#{from_date}' GROUP BY account_id) AS cls ON cls.clacoid = accounts.id) debut,
+
+(SELECT accounts.id AS acco_id, accounts.number, COALESCE(tot_debit, 0.00) AS fin_debit, COALESCE(tot_credit, 0.00) AS fin_credit, no_empty 
+ FROM accounts LEFT JOIN 
+ (SELECT compta_lines.account_id AS clacoid, SUM(debit) AS tot_debit, SUM(credit) AS tot_credit, COUNT(*) AS no_empty
+  FROM compta_lines JOIN writings ON (compta_lines.writing_id = writings.id)
+  WHERE (writings.date >= '#{from_date}' AND writings.date <= '#{to_date}') GROUP BY account_id) AS clto ON clto.clacoid = accounts.id) fin
+
+ WHERE accounts.id = debut.acco_id AND debut.acco_id = fin.acco_id AND accounts.period_id = #{period.id} AND
+ (accounts.number BETWEEN '#{from_account.number}' AND '#{to_account.number}')
+ ORDER BY accounts.number 
+EOF
+    Compta::Balance.connection.execute( sql.gsub("\n", ''))
+  end
 
   
 
   def balance_lines
-    @balance_lines ||= accounts.collect {|acc| balance_line(acc, from_date, to_date)}
+    @balance_lines ||= query_balance_lines.collect {|acc| balance_line(acc)}
   end
 
   # calcule les totaux généraux de la balance
@@ -127,15 +161,17 @@ class Compta::Balance < ActiveRecord::Base
   end
 
   # construit la ligne qui sera affichée pour chaque compte demandé, sous forme d'un hash
-  def balance_line(account, from = self.period.start_date, to = self.period.close_date)
-    { :account_id=>account.id,
-      :empty=> account.lines_empty?(from, to),  # permet d'afficher l'icone listing dans la vue
-      :number=>account.number, :title=>account.title,
-      :cumul_debit_before=>account.cumulated_debit_before(from),
-      :cumul_credit_before=>account.cumulated_credit_before(from),
-      :movement_debit=>account.movement(from,to, :debit),
-      :movement_credit=>account.movement(from,to, :credit),
-      :sold_at=>account.sold_at(to)
+  def balance_line(row) 
+    { :account_id=>row["account_id"].to_i,
+      :empty=> !row["no_empty"],  # permet d'afficher l'icone listing dans la vue
+      :number=>row["number"],
+      :title=>row["title"],
+      :cumul_debit_before=>row["cumul_debit_before"].to_f,
+      :cumul_credit_before=>row["cumul_credit_before"].to_f,
+      :movement_debit=>row["movement_debit"].to_f,
+      :movement_credit=>row["movement_credit"].to_f,
+      :sold_at=>row["movement_credit"].to_f - row["movement_debit"].to_f + 
+        row["cumul_credit_before"].to_f - row["cumul_debit_before"].to_f
     }
   end
 

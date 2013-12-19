@@ -15,9 +15,15 @@ module Apartment
     # Pour sqlite, on garde la logique de Rails qui est que la base principale est donnée par le
     # fichier database.yml et est development.sqlite3 pour l'environnement development, ou
     # production.sqlite3 pour l'environnement production.
+    # 
+    # TODO supprimer toute référence à sqlite3
     #
     # Pour postgresql qui fonctionne avec une logique de schémas, on utilise donc public pour la
     # base principale.
+    # 
+    # 
+    # RAPPEL : les commandes ActiveRecord::Base.connection.current_database et 
+    # current_schema permettent ... comme leur nom l'indique.
     #
     def default_db
       case ActiveRecord::Base.connection_config[:adapter]
