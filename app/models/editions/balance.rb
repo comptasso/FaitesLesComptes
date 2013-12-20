@@ -47,21 +47,41 @@ module Editions
     def before_title
       ['', "Soldes au #{I18n::l from_date}", 'Mouvements de la période',  "Soldes au #{I18n::l to_date}"]
     end
+    
+    def fetch_lines(page_number)
+      limit = nb_lines_per_page
+      offset = (page_number - 1)*nb_lines_per_page
+      source.balance_lines.slice(offset, limit)
+    end
+
+    
+    
 
       
     # appelle les méthodes adéquate pour chacun des éléments de la ligne
     # qui représente un account 
-    def prepare_line(account)
-      # Rails.logger.debug "Dans prepare_line de pdf_balance #{account.inspect}"
-      [ account.number,
-        account.title,
-        ActionController::Base.helpers.number_with_precision(account.cumulated_debit_before(from_date),precision:2),
-        ActionController::Base.helpers.number_with_precision(account.cumulated_credit_before(from_date),precision:2),
-        ActionController::Base.helpers.number_with_precision(account.movement(from_date, to_date, :debit),precision:2),
-        ActionController::Base.helpers.number_with_precision(account.movement(from_date, to_date, :credit),precision:2),
-        ActionController::Base.helpers.number_with_precision(account.sold_at(to_date),precision:2)
-      ]
+    def prepare_line(row)  
+      [ row["number"],
+        row["title"],
+        row["cumul_debit_before"].to_f,
+        row["cumul_credit_before"].to_f,
+        row["movement_debit"].to_f,
+        row["movement_credit"].to_f,
+        row["movement_credit"].to_f - row["movement_debit"].to_f + 
+          row["cumul_credit_before"].to_f - row["cumul_debit_before"].to_f ]
+      
     end
+    
+    # Rails.logger.debug "Dans prepare_line de pdf_balance #{account.inspect}"
+    #      [ account.number,
+    #        account.title,
+    #        ActionController::Base.helpers.number_with_precision(account.cumulated_debit_before(from_date),precision:2),
+    #        ActionController::Base.helpers.number_with_precision(account.cumulated_credit_before(from_date),precision:2),
+    #        ActionController::Base.helpers.number_with_precision(account.movement(from_date, to_date, :debit),precision:2),
+    #        ActionController::Base.helpers.number_with_precision(account.movement(from_date, to_date, :credit),precision:2),
+    #        ActionController::Base.helpers.number_with_precision(account.sold_at(to_date),precision:2)
+    #      ]
+    #    end
     
     # Crée le fichier pdf associé, le remplit et le rend
     def render

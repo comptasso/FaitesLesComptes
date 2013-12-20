@@ -19,18 +19,16 @@ describe 'Editions::Balance' do
 
 
    def bal_line(value)
-       { :account_id=>value,
-         :account_title=>"compte #{value}",
-         :account_number=>'60'+value.to_s,
-         :empty=>false,
-         :provisoire=>true,
-         :number=>'60'+value.to_s,
-         :title=>"compte #{value}",
-         :cumul_debit_before=>10,
-         :cumul_credit_before=>1,
-         :movement_debit=>value,
-         :movement_credit=>value*2,
-         :sold_at=>1+value*2 - 10 - value}
+       { "account_id"=>value,
+         "title"=>"compte #{value}",
+         "number"=>'60'+value.to_s,
+         "empty"=>false,
+         "provisoire"=>true,
+         "cumul_debit_before"=>10,
+         "cumul_credit_before"=>1,
+         "movement_debit"=>value,
+         "movement_credit"=>value*2,
+         "sold_at"=>1+value*2 - 10 - value}
      end
 
 
@@ -38,20 +36,16 @@ describe 'Editions::Balance' do
   before(:each) do
 
        @b = Compta::Balance.new(valid_arguments)
-
+       Compta::Balance.any_instance.stub(:balance_lines).and_return (1..100).map {|i| bal_line(2)}
        @b.stub(:provisoire?).and_return true
-       @b.stub(:accounts).and_return(@ar = double(Arel))
-       @ar.stub(:collect).and_return (1..100).map {|i| bal_line(2)}
-       @ar.stub(:length).and_return 100 
+     #  @b.stub(:balance_lines).and_return (1..100).map {|i| bal_line(2)}
+       @b.stub(:accounts).and_return [@a1, @a2]
+   #    @ar.stub(:length).and_return 100 
      end
 
-     it 'total_balance renvoie le total'  do
-       @b.total_balance.should == [1000, 100, 200, 400, -700]
-     end
-
-     it 'should be able to_pdf with 5 pages' do
+    it 'should be able to_pdf with 5 pages' do
        pdf = @b.to_pdf
-       pdf.should be_an_instance_of(Editions::Balance)
+       pdf.collection.should_receive(:length).and_return 100
        pdf.nb_pages.should == 5
      end
 
@@ -64,14 +58,9 @@ describe 'Editions::Balance' do
    end
 
    it 'prepare_line appelle les méthodes de account' do
-     @acc = mock_model(Account, :number=>'152', :title=>'Un compte comme un autre')
-     @acc.should_receive(:cumulated_debit_before).with(@b.from_date).and_return 1
-     @acc.should_receive(:cumulated_credit_before).with(@b.from_date).and_return 2
-     @acc.should_receive(:movement).with(@b.from_date, @b.to_date, :debit).and_return 2000
-     @acc.should_receive(:movement).with(@b.from_date, @b.to_date, :credit).and_return 1000225.20
-     @acc.should_receive(:sold_at).with(@b.to_date).and_return(5)
      pdf = @b.to_pdf
-     pdf.prepare_line(@acc).should == ['152', 'Un compte comme un autre', '1,00', '2,00', '2 000,00', '1 000 225,20', '5,00' ]
+     lines = pdf.fetch_lines(1)
+     pdf.prepare_line(lines.first).should ==  ["602", "compte 2", 10.0, 1.0, 2.0, 4.0, -7.0]
    end
 
 end
