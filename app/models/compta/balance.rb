@@ -88,42 +88,7 @@ class Compta::Balance < ActiveRecord::Base
     end
     self
   end
-  
-  
-  # requete SQL pour accélérer la construction d'une balance. Le benchmark donne
-  # 2,5 secondes par une méthode classique et cela est ramené à 2 centièmes.
-  # 
-  # Les paramètres doivent avoir été définis
-  def query_balance_lines
-     sql = <<EOF
-     SELECT accounts.id AS account_id, accounts.number, accounts.title, 
-            debut.deb_debit AS cumul_debit_before, 
-            debut.deb_credit AS cumul_credit_before,
-            fin.fin_debit AS movement_debit,
-            fin.fin_credit AS movement_credit, fin.no_empty
- FROM 
-accounts, 
- 
-(SELECT accounts.id AS acco_id, accounts.number AS num, COALESCE(deb_debit, 0.00) AS deb_debit, COALESCE(deb_credit, 0.00) AS deb_credit 
- FROM accounts LEFT JOIN 
- (SELECT compta_lines.account_id AS clacoid, COALESCE(SUM(debit), 0) AS deb_debit, COALESCE(SUM(credit), 0) AS deb_credit
-  FROM compta_lines JOIN writings ON (compta_lines.writing_id = writings.id)
-  WHERE writings.date < '#{from_date}' GROUP BY account_id) AS cls ON cls.clacoid = accounts.id) debut,
 
-(SELECT accounts.id AS acco_id, accounts.number, COALESCE(tot_debit, 0.00) AS fin_debit, COALESCE(tot_credit, 0.00) AS fin_credit, no_empty 
- FROM accounts LEFT JOIN 
- (SELECT compta_lines.account_id AS clacoid, SUM(debit) AS tot_debit, SUM(credit) AS tot_credit, COUNT(*) AS no_empty
-  FROM compta_lines JOIN writings ON (compta_lines.writing_id = writings.id)
-  WHERE (writings.date >= '#{from_date}' AND writings.date <= '#{to_date}') GROUP BY account_id) AS clto ON clto.clacoid = accounts.id) fin
-
- WHERE accounts.id = debut.acco_id AND debut.acco_id = fin.acco_id AND accounts.period_id = #{period.id} AND
- (accounts.number BETWEEN '#{from_account.number}' AND '#{to_account.number}')
- ORDER BY accounts.number 
-EOF
-    Compta::Balance.connection.execute( sql.gsub("\n", ''))
-  end
-
-  
 
   def balance_lines
     @balance_lines ||= query_balance_lines.collect {|acc| balance_line(acc)}
@@ -161,6 +126,7 @@ EOF
   end
 
   # construit la ligne qui sera affichée pour chaque compte demandé, sous forme d'un hash
+  # row est une ligne retournée par la requête query_balance_lines.
   def balance_line(row) 
     { :account_id=>row["account_id"].to_i,
       :empty=> !row["no_empty"],  # permet d'afficher l'icone listing dans la vue
@@ -181,6 +147,43 @@ EOF
       return number unless number.is_a? Numeric
       ('%0.02f' % number).gsub('.', ',')
     end
+    
+      
+  
+  # requete SQL pour accélérer la construction d'une balance. Le benchmark donne
+  # 2,5 secondes par une méthode classique et cela est ramené à 2 centièmes.
+  # 
+  # Les paramètres doivent avoir été définis
+  def query_balance_lines
+     sql = <<EOF
+     SELECT accounts.id AS account_id, accounts.number, accounts.title, 
+            debut.deb_debit AS cumul_debit_before, 
+            debut.deb_credit AS cumul_credit_before,
+            fin.fin_debit AS movement_debit,
+            fin.fin_credit AS movement_credit, fin.no_empty
+ FROM 
+accounts, 
+ 
+(SELECT accounts.id AS acco_id, accounts.number AS num, COALESCE(deb_debit, 0.00) AS deb_debit, COALESCE(deb_credit, 0.00) AS deb_credit 
+ FROM accounts LEFT JOIN 
+ (SELECT compta_lines.account_id AS clacoid, COALESCE(SUM(debit), 0) AS deb_debit, COALESCE(SUM(credit), 0) AS deb_credit
+  FROM compta_lines JOIN writings ON (compta_lines.writing_id = writings.id)
+  WHERE writings.date < '#{from_date}' GROUP BY account_id) AS cls ON cls.clacoid = accounts.id) debut,
+
+(SELECT accounts.id AS acco_id, accounts.number, COALESCE(tot_debit, 0.00) AS fin_debit, COALESCE(tot_credit, 0.00) AS fin_credit, no_empty 
+ FROM accounts LEFT JOIN 
+ (SELECT compta_lines.account_id AS clacoid, SUM(debit) AS tot_debit, SUM(credit) AS tot_credit, COUNT(*) AS no_empty
+  FROM compta_lines JOIN writings ON (compta_lines.writing_id = writings.id)
+  WHERE (writings.date >= '#{from_date}' AND writings.date <= '#{to_date}') GROUP BY account_id) AS clto ON clto.clacoid = accounts.id) fin
+
+ WHERE accounts.id = debut.acco_id AND debut.acco_id = fin.acco_id AND accounts.period_id = #{period.id} AND
+ (accounts.number BETWEEN '#{from_account.number}' AND '#{to_account.number}')
+ ORDER BY accounts.number 
+EOF
+    Compta::Balance.connection.execute( sql.gsub("\n", ''))
+  end
+
+  
 
 
  

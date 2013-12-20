@@ -53,23 +53,18 @@ module Editions
       offset = (page_number - 1)*nb_lines_per_page
       source.balance_lines.slice(offset, limit)
     end
-
-    
-    
-
       
     # appelle les méthodes adéquate pour chacun des éléments de la ligne
     # qui représente un account 
     def prepare_line(row)  
-      [ row["number"],
-        row["title"],
-        row["cumul_debit_before"].to_f,
-        row["cumul_credit_before"].to_f,
-        row["movement_debit"].to_f,
-        row["movement_credit"].to_f,
-        row["movement_credit"].to_f - row["movement_debit"].to_f + 
-          row["cumul_credit_before"].to_f - row["cumul_debit_before"].to_f ]
-      
+      [ row[:number],
+        row[:title],
+        row[:cumul_debit_before].to_f,
+        row[:cumul_credit_before].to_f,
+        row[:movement_debit].to_f,
+        row[:movement_credit].to_f,
+        row[:movement_credit].to_f - row[:movement_debit].to_f + 
+          row[:cumul_credit_before].to_f - row[:cumul_debit_before].to_f ]
     end
     
     # Rails.logger.debug "Dans prepare_line de pdf_balance #{account.inspect}"

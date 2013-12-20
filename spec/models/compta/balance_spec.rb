@@ -3,7 +3,7 @@
 require 'spec_helper' 
 
 RSpec.configure do |c| 
-   c.filter = {:wip=>true}
+#   c.filter = {:wip=>true}
 end
 
 describe Compta::Balance do  
@@ -132,16 +132,22 @@ describe Compta::Balance do
     
     
 
-    describe 'balance lines' do
+    describe 'balance lines' , wip:true do
+      
+       before(:each) do
+        @bal = Compta::Balance.new(period_id:@p.id).with_default_values
+        @bals = @bal.balance_lines
+      end
 
-      it 'should be an array' do
-        @b.balance_lines.should be_an Array
-        @b.balance_lines.should have(2).elements
-        @b.balance_lines.first.should ==
-          { :account_id=>@a1.id,
+      it('est un array')  { @bals.should be_an Array} 
+      it('de 90 lignes') {@bals.should have(90).lines}
+      it 'chaque ligne est un hash' do
+        @acc = @p.accounts.first(order:'number ASC')
+        @bals.first.should ==
+          { :account_id=>@acc.id,
           :empty=>true,
-          :number=>"60",
-          :title=>"Achats (sauf 603)",
+          :number=>"102",
+          :title=>"Fonds associatif sans droit de reprise",
           :cumul_debit_before=>0.0,
           :cumul_credit_before=>0.0,
           :movement_debit=>0.0,
@@ -150,42 +156,7 @@ describe Compta::Balance do
 
       end
     end
-    
-    describe 'query_balance_lines' do
-      
-      before(:each) do
-        @bal = Compta::Balance.new(period_id:@p.id).with_default_values
-        @qbl =  @bal.query_balance_lines
-      end
-      
-      it 'retourne un PG::Result' do
-        @qbl.class.should ==  PG::Result
-      end
-      
-      it 'sans erreur' do
-        @qbl.check.should be_nil
-      end
-      
-      it 'avec 90 tuples'  do
-        @qbl.cmd_tuples.should == 90
-      end
-      
-      it 'chaque tuple est un hash ayant pour clé'   do
-        @acc = @p.accounts.first(order:'number ASC')
-        @qbl.first.should ==
-          { "account_id"=>@acc.id.to_s,
-          "no_empty"=>nil,
-          "number"=>@acc.number,
-          "title"=>@acc.title,
-          "cumul_debit_before"=>"0.00",
-          "cumul_credit_before"=>"0.00",
-          "movement_debit"=>"0.00",
-          "movement_credit"=>"0.00"}
-          
-      end
-      
-    end
-
+ 
     describe 'page' do
 
       def bal_line(value)
@@ -235,7 +206,7 @@ describe Compta::Balance do
           
         end
       
-        it('ayant 5 pages', wip:true) {@pdf.nb_pages.should == 5}
+       
         
         it('et pouvant être rendue') {@pdf_render }
         
