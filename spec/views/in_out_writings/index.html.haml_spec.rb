@@ -24,7 +24,7 @@ describe "in_out_writings/index" do
     )
   end
   
-  before(:each) do
+  before(:each) do 
     assign(:mois, Date.today.month)
     assign(:an, Date.today.year)
     assign(:book, mock_model(IncomeBook, title:'Recettes'))
