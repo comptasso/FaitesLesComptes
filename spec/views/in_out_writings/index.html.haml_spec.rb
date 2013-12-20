@@ -19,7 +19,7 @@ describe "in_out_writings/index" do
       :destination=>double(:name=>'destinée'),
       :debit=>montant,
       :credit=>0,
-      :writing=>double(Writing, payment_mode:'CB', support:'Compte courant'),
+      :writing=>mock_model(Writing, payment_mode:'CB', support:'Compte courant'),
       'editable?'=>true
     )
   end
