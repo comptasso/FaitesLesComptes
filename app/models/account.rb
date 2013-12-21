@@ -57,7 +57,7 @@ class Account < ActiveRecord::Base
   # TODO être sur que period est valide (par exemple on ne doit pas
   # pouvoir ouvrir ou modifier un compte d'un exercice clos
 
-  default_scope order('number ASC')
+  default_scope order('accounts.number ASC')
 
   scope :classe, lambda {|i| where('number LIKE ?', "#{i}%").order('number ASC')}
   scope :classe_6, classe(6)
