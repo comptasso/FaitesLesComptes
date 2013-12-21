@@ -1,12 +1,5 @@
 Faitesvoscomptes::Application.routes.draw do
 
-  
-
-  
-
-  
-  
-
   mount Adherent::Engine, at: "/adherent"
   
 
@@ -77,6 +70,8 @@ Faitesvoscomptes::Application.routes.draw do
     end
       
     resource :nomenclature
+    resource :fec # pour le fichier des écriture comptable
+    
     # intégré dans periods.
     resources :periods do
       

@@ -3,9 +3,9 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
- # c.filter = {wip:true}
+ # c.filter = {wip:true} 
 end 
-describe "Extract::Fec" do
+describe Extract::Fec do
   include OrganismFixtureBis
   
   before(:each) do
@@ -51,7 +51,7 @@ describe "Extract::Fec" do
         ActionController::Base.helpers.number_with_precision(@l.debit, precision:2), # montant débit
         ActionController::Base.helpers.number_with_precision(@l.credit, precision:2), # montant débit
         '', '', # lettrage et date de lettrage
-        I18n::l(@iow.updated_at.to_date), # date de comptabilisation (on utilise updated_at provisoirement
+        I18n::l(@iow.locked_at.to_date), # date de comptabilisation 
         # en attendant de rajouter un champ locked_at 
         '', '', #montant en devise et identifiant de la devise
         I18n::l(@iow.date), # date du règlement pour les compta de trésorerie

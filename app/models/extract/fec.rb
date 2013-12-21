@@ -71,7 +71,7 @@ class Extract::Fec < ActiveRecord::Base
         ActionController::Base.helpers.number_with_precision(row.debit, precision:2), # debit
         ActionController::Base.helpers.number_with_precision(row.credit, precision:2), # credit
         '', '', # lettrage et date de lettrage
-        I18n::l(row.writing.updated_at.to_date), # date de comptabilisation (on utilise updated_at provisoirement
+        row.writing.locked_at ? I18n::l(row.writing.locked_at.to_date) : '', # date de comptabilisation
         # en attendant de rajouter un champ locked_at 
         '', '', #montant en devise et identifiant de la devise
         I18n::l(row.writing.date), # date du règlement pour les compta de trésorerie

@@ -307,9 +307,18 @@ describe Writing do
           @w.continuous_id.should be_nil
         end
         
+        it 'ni de locked_at' do
+          @w.locked_at.should be_nil
+        end
+        
         it 'mais après elle a un numéro' do
           @w.lock
           @w.continuous_id.should_not be_nil
+        end
+        
+        it 'et une date de verrouillage' do
+          @w.lock
+          @w.locked_at.should == Date.today
         end
         
         it 'la numérotation est continue' do

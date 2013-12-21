@@ -135,21 +135,30 @@ class Writing < ActiveRecord::Base
   # Une compta_line peut recevoir lock mais la classe ComptaLine délègue cet
   # appel à Writing. 
   # L'objectif est qu'il soit impossible de verrouiller une ligne 
-  # sans verrouiller les autres lignes de l'écriture.  
+  # sans verrouiller les autres lignes de l'écriture. 
+  # 
+  # De plus le champ locked_at est rempli avec le jour de verrouillage
+  # et le champ continuous_id est rempli avec le numéro unique incrémenté
+  # qui est demandé par la réglementation.
+  # 
   def lock
-    Writing.transaction do
+    Writing.transaction do 
       cid = Writing.last_continuous_id
       compta_lines.each do |cl|
         unless cl.locked?
           cl.update_attribute(:locked, true)
         end
       end
-      self.update_attribute(:continuous_id, cid.succ)
+     self.continuous_id = cid.succ
+     self.locked_at =  Date.today
+     save validate:false # les validations sont inutiles ici      
     end
   end
   
   
-
+  # TODO changer ceci pour utiliser le nouveau champ locked_at
+  # et voir peut-être à supprimer le champ locked des compta_lines
+  # 
   # Une écriture doit répondre qu'elle est verrouillée
   # dès lors qu'une seule de ses lignes l'est
   def locked?
@@ -196,6 +205,12 @@ class Writing < ActiveRecord::Base
       w.save!
     end
     
+  end
+  
+  def self.fill_locked_at
+    Writing.all.select {|w| w.continuous_id}.each do |row|
+      row.update_attribute(:locked_at, row.updated_at)
+    end
   end
 
   protected
