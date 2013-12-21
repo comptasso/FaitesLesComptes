@@ -59,8 +59,8 @@ class Extract::Fec < ActiveRecord::Base
   def to_fec(row)
      [row.book.abbreviation, # code journal 
        row.book.title, # Libellé journal
-         row.writing.continuous_id, # numéro sur une séquence continue de l'écriture comptable
-        I18n::l(row.writing.updated_at.to_date), # date de comptabilisation de l'écriture
+       row.writing.continuous_id || '', # numéro sur une séquence continue de l'écriture comptable
+       I18n::l(row.writing.updated_at.to_date), # date de comptabilisation de l'écriture
        row.account.number, # numéro de compte
        row.account.title, # libellé du compte
         '', # numéro de compte auxiliaire
@@ -75,7 +75,7 @@ class Extract::Fec < ActiveRecord::Base
         # en attendant de rajouter un champ locked_at 
         '', '', #montant en devise et identifiant de la devise
         I18n::l(row.writing.date), # date du règlement pour les compta de trésorerie
-        row.writing.payment_mode, # mode de règlement
+        row.writing.payment_mode || '', # mode de règlement
         '' # nature de l'opération - est inutilisé
         ]
   end

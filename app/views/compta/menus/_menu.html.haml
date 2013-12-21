@@ -22,7 +22,9 @@
         %li= link_to("Grand Livre", new_compta_period_general_book_path(@period))
         %li
           %a#generalajax{href:'#'}(data-period="#{@period.id}")= "#{image_tag('icones/pdf.png')} Journal Général".html_safe 
-        %li= link_to("Fichier écritures comptables", compta_fec_path(format: :csv), title:'Fichier requis pour les contrôles fiscaux au format csv')
+        %li
+          = image_tag('icones/table-export.png')
+          =link_to("Fichier écritures comptables", compta_fec_path(format: :csv), title:'Fichier requis pour les contrôles fiscaux au format csv')
 
         
 
