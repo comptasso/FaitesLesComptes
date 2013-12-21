@@ -22,6 +22,8 @@
         %li= link_to("Grand Livre", new_compta_period_general_book_path(@period))
         %li
           %a#generalajax{href:'#'}(data-period="#{@period.id}")= "#{image_tag('icones/pdf.png')} Journal Général".html_safe 
+        %li= link_to("Fichier écritures comptables", compta_fec_path(format: :csv), title:'Fichier requis pour les contrôles fiscaux au format csv')
+
         
 
   - unless @period.nil? && @pariod.accounts.nil?
@@ -36,6 +38,7 @@
           %li= link_to('Bénévolat', benevolats_compta_sheets_path, class:'with_spinner')
         %li= link_to('Liasse', liasse_compta_sheets_path, class:'with_spinner')
         %li= link_to('Détail des comptes', compta_two_periods_balance_path, class:'with_spinner')
+        
         %li= link_to('Liste des documents', compta_nomenclature_path, class:'with_spinner')
 
   - unless @organism.nil? && @organism.periods.count <= 1
