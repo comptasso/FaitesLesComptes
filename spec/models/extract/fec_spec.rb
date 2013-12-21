@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  c.filter = {wip:true}
+ # c.filter = {wip:true}
 end 
 describe "Extract::Fec" do
   include OrganismFixtureBis
@@ -13,7 +13,7 @@ describe "Extract::Fec" do
     @iow = create_in_out_writing
     @iow.lock
   end
-      
+  
   it 'un extract::fec a autant de lignes qu il y a de compta_lines'  do
     Extract::Fec.new(period_id:@p.id).lines.length.should == 2
   end
@@ -48,7 +48,8 @@ describe "Extract::Fec" do
         '', # référence de la pièce justificative
         '', # date de la pièce justificative
         @iow.narration, # libellé de l'écriture comptable
-        "99,00", "0,00", # montant débit et crédit
+        ActionController::Base.helpers.number_with_precision(@l.debit, precision:2), # montant débit
+        ActionController::Base.helpers.number_with_precision(@l.credit, precision:2), # montant débit
         '', '', # lettrage et date de lettrage
         I18n::l(@iow.updated_at.to_date), # date de comptabilisation (on utilise updated_at provisoirement
         # en attendant de rajouter un champ locked_at 

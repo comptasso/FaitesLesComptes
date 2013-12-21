@@ -38,7 +38,15 @@ class Extract::Fec < ActiveRecord::Base
     
   belongs_to :period
   
-  has_many :lines, :through=>:period, source: :compta_lines, :include=>[:account, :writing => :book]
+  # on n'utilise pas has_many car on a besoin du unscoped pour retirer l'ordre 
+  # des lignes qui est présent dans le modèle ComptaLine.
+  def lines
+    ComptaLine.unscoped.includes([:account, :writing => :book]).
+      where('period_id =  ?', period_id).order('writings.continuous_id ASC', 'compta_lines.id')
+  end
+  
+#  has_many :lines, :through=>:period, source: :compta_lines, :include=>[:account, :writing => :book], 
+#    :order=>'writings.continuous_id', readonly: :true
   
   def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
