@@ -23,8 +23,7 @@
         %li
           %a#generalajax{href:'#'}(data-period="#{@period.id}")= "#{image_tag('icones/pdf.png')} Journal Général".html_safe 
         %li
-          = image_tag('icones/table-export.png')
-          =link_to("Fichier écritures comptables", compta_fec_path(format: :csv), title:'Fichier requis pour les contrôles fiscaux au format csv')
+          = link_to(image_tag('icones/table-export.png') + "Fichier écrit. comptables", compta_fec_path(format: :csv), title:'Fichier requis pour les contrôles fiscaux au format csv')
 
         
 

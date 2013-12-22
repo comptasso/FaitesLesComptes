@@ -7,7 +7,8 @@
 class Extract::Fec < ActiveRecord::Base
   
   FEC_TITLES = [  # selon la nomenclature de l'arrêté du 29 juillet 2013
-	'JournalLib',
+  'JournalCode',  
+	'JournalLib',  #champ 2
 	'EcritureNum',
 	'EcritureDate',
 	'CompteNum',
@@ -21,7 +22,7 @@ class Extract::Fec < ActiveRecord::Base
 	'Credit',
 	'EcritureLet',
 	'DateLet',
-	'ValidDate',
+	'ValidDate', # champ 15
 	'Montantdevise',
 	'Idevise',
   'DateRglt', 
@@ -52,7 +53,6 @@ class Extract::Fec < ActiveRecord::Base
       CSV.generate(options) do |csv|
         csv << FEC_TITLES
         lines.each {|line| csv << to_fec(line) }
-        
       end
     end
   
@@ -60,23 +60,41 @@ class Extract::Fec < ActiveRecord::Base
      [row.book.abbreviation, # code journal 
        row.book.title, # Libellé journal
        row.writing.continuous_id || '', # numéro sur une séquence continue de l'écriture comptable
-       I18n::l(row.writing.updated_at.to_date), # date de comptabilisation de l'écriture
+       format_timestamp(row.writing.created_at), # date de comptabilisation de l'écriture
        row.account.number, # numéro de compte
        row.account.title, # libellé du compte
         '', # numéro de compte auxiliaire
         '', # libellé du compte auxiliaire
         row.writing.ref || '', # référence de la pièce justificative
-        '', # date de la pièce justificative
+        format_date(row.writing.ref_date), # date de la pièce justificative
         row.writing.narration, # libellé de l'écriture comptable
-        ActionController::Base.helpers.number_with_precision(row.debit, precision:2), # debit
-        ActionController::Base.helpers.number_with_precision(row.credit, precision:2), # credit
+        format_amount(row.debit),  # debit
+        format_amount(row.credit), # credit
         '', '', # lettrage et date de lettrage
-        row.writing.locked_at ? I18n::l(row.writing.locked_at.to_date) : '', # date de comptabilisation
+        format_date(row.writing.locked_at), # date de comptabilisation
         # en attendant de rajouter un champ locked_at 
         '', '', #montant en devise et identifiant de la devise
-        I18n::l(row.writing.date), # date du règlement pour les compta de trésorerie
+        format_date(row.writing.date), # date du règlement pour les compta de trésorerie
         row.writing.payment_mode || '', # mode de règlement
         '' # nature de l'opération - est inutilisé
         ]
   end
+  
+  
+  private
+  
+  # pour sortir au format français (virgule et séparateur de milliers)
+  def format_amount(amount)
+    ActionController::Base.helpers.number_with_precision(amount, precision:2)
+  end
+  
+  # pour ne retenir que la date, ou blanc si pas de date
+  # alias format_date permet d'utiliser le nom qui parait le plus en relation 
+  # avec le type du champ (timestamp pour created_at et updated_at, date
+  # pour date, ref_date et locked_at.
+  def format_timestamp(timestamp)
+    timestamp ? I18n::l(timestamp.to_date) : ''
+  end
+  
+  alias format_date format_timestamp
 end
