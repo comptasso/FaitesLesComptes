@@ -25,14 +25,13 @@ describe Editions::Balance do
     end
   end
   
-  class BalanceLine < Struct.new(:number, :title, :cumul_debit_before,
+  class TestBalanceLine < Struct.new(:number, :title, :cumul_debit_before,
     :cumul_credit_before, :movement_debit, :movement_credit)
-    
-  end
+  end 
   
   def collection
     100.times.collect do |i| 
-      BalanceLine.new(
+      TestBalanceLine.new(
         "#{i}00",
         "Compte n° #{i}",
         0,

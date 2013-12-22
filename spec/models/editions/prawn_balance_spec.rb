@@ -23,14 +23,13 @@ describe Editions::Balance do
     end
   end
   
-  class BalanceLine < Struct.new(:number, :title, :cumul_debit_before,
+  class PdfBalanceLine < Struct.new(:number, :title, :cumul_debit_before,
     :cumul_credit_before, :movement_debit, :movement_credit)
-    
   end
   
   def collection
     100.times.collect do |i| 
-      BalanceLine.new(
+      PdfBalanceLine.new(
         "#{i}00",
         "Compte n° #{i}",
         0,
