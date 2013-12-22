@@ -6,9 +6,15 @@ require 'pdf_document/page'
 
 # Ces specs ont essentiellement pour objet de vérifier qu'on peut 
 # rendre le pdf et visualiser sa mise en page en ouvrant le pdf ainsi créé.
+# 
 # Les valeurs sont des fake et il ne faut pas s'attacher à la cohérence
 # des montants. 
-# Par contre, les totaus, reports et sous totaux doivent être correctement calculés.
+# 
+# Par contre, les totaux, reports et sous totaux doivent être correctement calculés.
+# 
+# Le fichier ainsi rendu se trouve dans le sous répertoire test_pdf_files, 
+# ce qui permet ensuite de tous les imprimer pour examen.
+# 
 describe Editions::Balance do 
   
   def render_file(pdf, file_name) 
@@ -19,15 +25,20 @@ describe Editions::Balance do
     end
   end
   
+  class BalanceLine < Struct.new(:number, :title, :cumul_debit_before,
+    :cumul_credit_before, :movement_debit, :movement_credit)
+    
+  end
+  
   def collection
     100.times.collect do |i| 
-      double(Account,
-        number:"#{i}00",
-        title:"Compte n° #{i}",
-        cumulated_debit_before:0,
-        cumulated_credit_before:0,
-        movement:(100*1),
-        sold_at:52.25
+      BalanceLine.new(
+        "#{i}00",
+        "Compte n° #{i}",
+        0,
+        0,
+        100,
+        0
               )
     end
   end
@@ -39,23 +50,12 @@ describe Editions::Balance do
     to_date:Date.today.end_of_year,
     from_account:'10',
     to_account:'85',
-    accounts:collection
+    accounts:collection,
+    balance_lines:collection
     )}
   
   
   subject {Editions::Balance.new(p, source, {title:'Balance test'})}
-  
-  before(:each) do 
-    5.times do |i|
-      subject.stub(:fetch_lines).with(i+1).and_return collection.slice(22*i, 22)
-    end
-  end
-  
-  
-  
-  it 'on peut créer un Editions::Balance' do
-    subject.should be_an_instance_of Editions::Balance
-  end
   
   it 'on peut le rendre' do
     expect {subject.render}.not_to raise_error
