@@ -24,6 +24,10 @@ class TransfersController < ApplicationController
       format.json { render json: @transfers }
     end
   end
+  
+  def show
+    @transfer = Transfer.find(params[:id])
+  end
 
   
   # GET /transfers/new

@@ -29,8 +29,6 @@ describe "transfers/index" do
     assign(:transfers, [@t1,@t2])
     [@t1, @t2].each {|t| t.stub(:line_to).and_return @line_to }
     [@t1, @t2].each {|t| t.stub(:line_from).and_return @line_from}
-   
-    
   end
 
   describe 'la vue' do
