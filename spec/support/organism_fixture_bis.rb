@@ -62,10 +62,13 @@ module OrganismFixtureBis
   
   def get_organism_instances
     @ba= @o.bank_accounts.first
+    puts @ba.inspect
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
     @od = @o.od_books.first
     @c=@o.cashes.first
+    
+    puts @c.inspect
     @c.update_attribute(:name, 'Magasin'); @c.save;
     @baca = @ba.current_account(@p) # pour baca pour BankAccount Current Account
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
