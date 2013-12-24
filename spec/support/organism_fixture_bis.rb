@@ -127,21 +127,16 @@ module OrganismFixtureBis
   end
   
   def create_cash_income(montant = 59)
-    
-    
     @income_account = @o.accounts.classe_7.first
-    
-    puts @income_account.inspect
-    puts @caca.inspect
-    
+     
     ecriture = @ob.in_out_writings.new({date:Date.today, narration:'ligne créée par la méthode create_cash_income',
-      :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, credit:montant, payment_mode:'Espèces'},
-        '1'=>{account_id:@caca.id, debit:montant, payment_mode:'Espèces'}
-      }
-    })
-  puts ecriture.errors.messages unless ecriture.valid?
-     ecriture.save!
-     ecriture
+        :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, credit:montant, payment_mode:'Espèces'},
+          '1'=>{account_id:@caca.id, debit:montant, payment_mode:'Espèces'}
+        }
+      })
+    #puts ecriture.errors.messages unless ecriture.valid?
+    ecriture.save!
+    ecriture
   end
   
 
