@@ -61,7 +61,7 @@ describe TransfersController do
      }
   end
 
-  describe "GET index" , wip:true do
+  describe "GET index"  do
     
     it "recherche tous les transfers appartenant à l organisme dans la period" do
       @od.should_receive(:transfers).and_return(@ar = double(Arel))
@@ -100,6 +100,34 @@ describe TransfersController do
       
       
     end
+  end
+  
+  # la vue Show est utilisée pour afficher le détail d'un Transfert à 
+  # partir d'une vue Banque ou Caisse.
+  describe "GET show", wip:true do
+    
+    before(:each) do
+      Transfer.stub(:find).and_return(@tra = mock_model(Transfer)) 
+    end
+    
+    it 'cherche le Transfer avec l id' do
+      Transfer.should_receive(:find).and_return(mock_model(Transfer))
+      get :show, {:id=>1}, valid_session
+    end
+    
+    it 'l assigne à la variable transfer' do
+      get :show, {:id=>1}, valid_session
+      assigns[:transfer].should == @tra
+    end
+    
+    
+    it 'puis rend la vue show' do
+      get :show, {:id=>1}, valid_session
+      response.should render_template("show")
+    end
+    
+    
+    
   end
 
   
@@ -256,7 +284,7 @@ describe TransfersController do
     end
   end
 
-  describe "DELETE destroy" , wip:true do
+  describe "DELETE destroy"  do
     before(:each) do
       @t = mock_model(Transfer)
       Transfer.stub(:find).with(@t.id.to_s).and_return(@t)

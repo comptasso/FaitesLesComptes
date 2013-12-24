@@ -130,14 +130,9 @@ class Organism < ActiveRecord::Base
     end
   end
 
-
-
-
- 
-
   # retourne le nombre d'exercices ouverts de l'organisme
   def nb_open_periods
-    periods.where('open = ?', true).count
+    periods.opened.count
   end
 
   def max_open_periods?
@@ -177,31 +172,34 @@ class Organism < ActiveRecord::Base
   end
 
 
-  # TODO on peut faire beaucoup plus simple pour guess_period et find_period
-
+  
   # find_period trouve l'exercice relatif à une date donnée
   # utilisé par exemple pour calculer le solde d'une caisse à une date donnée
   # par défaut la date est celle du jour
+  # 
+  # find_period est différent de #guess_period en ce qu'il renvoie un exercice 
+  # que si la date correspond à un exercice existant.
+  #
   def find_period(date=Date.today)
-    period_array = periods.all.select {|p| p.start_date <= date && p.close_date >= date}
-    if period_array.empty?
-      Rails.logger.warn "organism#find_period a été appelée avec une date pour laquelle il n y a pas d'exercice : #{date} - Organism : #{self.inspect}"
-      return nil if period_array.empty?
-    end
-    period_array.first
+    p = periods.where('? BETWEEN start_date AND close_date', date).first
+    Rails.logger.warn "organism#find_period a été appelée avec une date pour laquelle il n y a pas d'exercice : #{date} - Organism : #{self.inspect}" if p.nil?
+    p    
   end
 
   # trouve l'exercice le plus adapté à la date demandée
-  # ne renvoie nil que s'il n'y a aucun exercice.
+  # NE RENVOIE NIL QUE S'IL N'Y A AUCUN EXERCICE (à la différence de #find_period
+  # qui est plus strict.
   #
-  # Fonctionne en remettant la date dans les limites données par les exercices
-  # et en appelant find_period.
+  # Sinon renvoie l'exercice le plus proche si la date est hors limite
+  # ou évidemment l'exercice demandé s'il y en a un qui comprend cette date.
+  #
   def guess_period(date = Date.today)
     return nil if periods.empty?
     ps = periods.order(:start_date)
-    date = ps.first.start_date if date < ps.first.start_date
-    date = ps.last.close_date if date > ps.last.close_date
-    find_period(date)
+    return ps.first if date < ps.first.start_date
+    return ps.last if date > ps.last.close_date
+    # on a traité les cas où la date demandée est hors limite
+    ps.select {|p| p.start_date <= date && p.close_date >= date}.first  
   end
 
   # recherche la pièce où est logé Organism sur la base de la similitude des
@@ -230,16 +228,24 @@ class Organism < ActiveRecord::Base
     Compta::Nomenclature.new(period).sheet(page)
   end
 
-  
-  # méthode permettant de remettre les folios et les rubriques 
-  # comme ils étaient à l'origine
-  def reset_folios
-    Folio.delete_all
-    Rubrik.delete_all
-    path = File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
-    nomenclature.read_and_fill_folios(path)
+  # méthode appelée par BankAccount ou Cash lorsqu'on crée une nouveau compte 
+  # bancaire ou une nouvelle caisse
+  # 
+  # create_account_for prend en argument l'objet (pour avoir son nickname et sa classe
+  # interroge Account pour obtenir un numéro disponible par exemple 5302 
+  # ou 51204 s'il y a déjà une caisse ou s'il y a déjà 3 comtpes bancaires
+  # 
+  # puis crée les comptes correspondants pour tous les exercices ouverts.
+  def create_accounts_for(objet)
+    racine  = objet.class.compte_racine # donc normalement 512 ou 53
+    new_number = Account.available(racine) # demande à Account le compte à utiliser
+    
+    # création des comptes
+    periods.opened.each do |p|
+      objet.accounts.create!(number:new_number, period_id:p.id, title:objet.nickname)
+    end
   end
- 
+  
   
   private
 
@@ -295,5 +301,17 @@ class Organism < ActiveRecord::Base
     b.income_book_id = income_books.first.id
     b.save
   end
+  
+  # méthode permettant de remettre les folios et les rubriques 
+  # comme ils étaient à l'origine
+  #
+  # utilisé lors de la mise au point de ces classes
+  def reset_folios
+    Folio.delete_all
+    Rubrik.delete_all
+    path = File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
+    nomenclature.read_and_fill_folios(path)
+  end
+ 
   
 end

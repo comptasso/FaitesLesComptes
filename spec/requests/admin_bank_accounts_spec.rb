@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c| 
- # c.filter = {:wip=> true }
+  c.filter = {:wip=> true }
 #  c.exclusion_filter = {:js=> true }
 end
 
@@ -38,15 +38,15 @@ describe 'vue bank_accounts index' do
       
     end
 
-    it 'remplir correctement le formulaire cree une nouvelle ligne' do
-      
+    it 'remplir correctement le formulaire cree une nouvelle ligne', wip:true do
+      @o.should have(1).bank_accounts
       fill_in 'bank_account[bank_name]', :with=>'Crédit Bancaire'
       fill_in 'bank_account[number]', :with=>'12456321AZ'
       fill_in 'bank_account[nickname]', :with=>'Compte courant'
       click_button "Créer le compte" # le compte'
       current_url.should match admin_organism_bank_accounts_path(@o)
       all('tbody tr').should have(2).rows
-      
+      @o.should have(2).bank_accounts
     end
 
     context 'remplir incorrectement le formulaire' do
@@ -76,7 +76,7 @@ describe 'vue bank_accounts index' do
   describe 'index'    do
     
     
-    it 'la vue index est affichée'  , wip:true do
+    it 'la vue index est affichée'   do
       Apartment::Database.switch('assotest1')
     
       visit admin_organism_bank_accounts_path(@o)

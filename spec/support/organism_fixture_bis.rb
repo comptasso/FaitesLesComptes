@@ -62,16 +62,18 @@ module OrganismFixtureBis
   
   def get_organism_instances
     @ba= @o.bank_accounts.first
-    puts @ba.inspect
+    # puts @ba.inspect
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
     @od = @o.od_books.first
     @c=@o.cashes.first
     
-    puts @c.inspect
+    # puts @c.inspect
     @c.update_attribute(:name, 'Magasin'); @c.save;
     @baca = @ba.current_account(@p) # pour baca pour BankAccount Current Account
+    # puts @baca.inspect
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
+    # puts @caca.inspect
     @n = @p.natures.depenses.first
   end
 
@@ -125,12 +127,20 @@ module OrganismFixtureBis
   end
   
   def create_cash_income(montant = 59)
+    
+    
     @income_account = @o.accounts.classe_7.first
-    ecriture = @ob.in_out_writings.create!({date:Date.today, narration:'ligne créée par la méthode create_cash_income',
+    
+    puts @income_account.inspect
+    puts @caca.inspect
+    
+    ecriture = @ob.in_out_writings.new({date:Date.today, narration:'ligne créée par la méthode create_cash_income',
       :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, credit:montant, payment_mode:'Espèces'},
         '1'=>{account_id:@caca.id, debit:montant, payment_mode:'Espèces'}
       }
     })
+  puts ecriture.errors.messages unless ecriture.valid?
+     ecriture.save!
      ecriture
   end
   

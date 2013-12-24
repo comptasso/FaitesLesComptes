@@ -8,14 +8,14 @@ end
 
 # fichier destiné à tester les méthodes de support
 
-describe OrganismFixtureBis do
+describe OrganismFixtureBis do 
   include OrganismFixtureBis
 
 
-  describe 'create_user' , wip:true do
+  describe 'create_user' do
   
 
-    before(:each) do
+    before(:each) do 
       create_user
     end
 
@@ -54,6 +54,17 @@ describe OrganismFixtureBis do
 
     it '@o représente cet organisme' do
       @o.should be_an_instance_of(Organism)
+    end
+    
+    it 'les instances existent' , wip:true do
+    @ba.should be_an_instance_of(BankAccount) 
+    @ib.should be_an_instance_of(IncomeBook) 
+    @od.should be_an_instance_of(OdBook)
+    
+    @c.should be_an_instance_of(Cash)
+    @baca.should be_an_instance_of(Account) # pour baca pour BankAccount Current Account
+    @caca.should be_an_instance_of(Account)  # pour caca pour CashAccount Current Account
+    @n.should be_an_instance_of(Nature)
     end
 
 

@@ -14,13 +14,18 @@ describe BankAccount do
     ba.organism_id = 1
     ba
   end
+  
+  def find_bac
+    @bb = BankAccount.where('number =  ?', '1254L').first
+    @bb ||= create_bank_account
+  end
 
   
 
   describe 'controle des validités' do
 
     before(:each) do
-      @bb=create_bank_account
+      find_bac
     end
 
     it "should be valid" do 
@@ -114,7 +119,7 @@ describe BankAccount do
   describe 'Les méthodes liées aux lignes non pointées' do
 
      before(:each) do
-      @ba=create_bank_account
+      @ba = create_bank_account
     end
 
     it 'np_lines demande à compta_lines ses lignes non pointées' do

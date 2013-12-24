@@ -199,19 +199,7 @@ class Writing < ActiveRecord::Base
     compta_lines.all? {|cl| cl.editable?}
   end
   
-  def self.mise_a_jour
-    Writing.all.select {|w| w.locked? && w.continuous_id.nil? }.each do |w|
-      w.continuous_id = Writing.last_continuous_id + 1
-      w.save!
-    end
-    
-  end
   
-  def self.fill_locked_at
-    Writing.all.select {|w| w.continuous_id}.each do |row|
-      row.update_attribute(:locked_at, row.updated_at)
-    end
-  end
 
   protected
   

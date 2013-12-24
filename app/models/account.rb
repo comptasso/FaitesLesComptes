@@ -131,24 +131,24 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
   def nickname
     accountable.nickname rescue long_name
   end
+  
+  
 
   # Méthode utilisée lors de la création des comptes de caisse ou de banque
   #
   # Renvoie le numéro de compte disponible commençant par number et en incrémentant une liste
   def self.available(number)
-    as = Account.where('number LIKE ?', "#{number}%").order('number ASC')
-    # FIXME : voir à quoi sert as.last.number == '53'
-    # probablement inutile depuis qu'on crée une banque et une caisse par déafaut
-    if as.empty? || as.last.number == '53'
+    raise ArgumentError, 'le numéro du compte demandé doit être 53 ou 512' unless number.match(/^53$|^512$/)
+    # FIXME : voir pour gérer cette anomalie dans le controller au moment de la création 
+    # de la caisse ou de la banque
+    raise RangeError, 'Déjà 99 comptes de ce type, limite atteinte' if number.match(/\d*99$/)
+    as = Account.where('number LIKE ?', "#{number}%").order('number ASC').last
+    if as.nil? || as.number == number # il n'y a que le compte générique
+      # TODO cette méthode devrait maintenant permettre de ne pas créer un compte 53 inutilisé, ni 
+      # un 512
       return number + '01'
     else
-      # il faut prendre le nombre trouvé, vérifier qu'il ne se termine
-      # pas par 99, le transformer en chiffre, y ajouter 1 et le transformer en string
-      n = as.last.number
-      # FIXME : voir pour gérer cette anomalie plus élégamment
-      raise 'Déja 99 comptes de ce type, limite atteinte' if n =~ /99$/
-      m = n.to_i; m = m + 1;
-      return m.to_s
+      as.number.succ
     end
   end 
 
