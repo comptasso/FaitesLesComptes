@@ -64,20 +64,23 @@ class Cash < ActiveRecord::Base
     # to_f est nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
     # problèmes de calcul
   end
+  
+  
+  def self.compte_racine
+   RACINE_CASH
+  end
 
      
  
 
   protected
- # appelé par le callback after_create, crée un cash_book puis un compte comptable de rattachement
- # pour chaque exercice ouvert.
+  
+ # appelé par le callback after_create, demande à l'organisme de lui créer les 
+ # comptes comptables associés (ce qui ne sera fait que pour chacun des exercices
+ # ouverts).
  def create_accounts
-   logger.debug 'création des comptes liés à la caisse'
-   # demande un compte de libre sur l'ensemble des exercices commençant par 51
-   n = Account.available('53') # un compte 53 avec un précision de deux chiffres par défaut
-   organism.periods.where('open = ?', true).each do |p|
-     self.accounts.create!(number:n, period_id:p.id, title:self.name)
-   end
+   logger.debug 'création des comptes liés au compte bancaire' 
+   organism.create_accounts_for(self)
  end
 
  # Permet d'avoir un libellé du compte plus clair en préfixant le libellé du compte

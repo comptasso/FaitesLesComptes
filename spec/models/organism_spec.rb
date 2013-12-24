@@ -162,7 +162,7 @@ describe Organism do
         @organism.destinations.find_by_name('Adhérents').should be_an_instance_of(Destination) 
       end
       
-      describe 'bridge vers adherent' , wip:true do
+      describe 'bridge vers adherent' do
         it 'crée un bridge vers le module adhérent' do
           @organism.bridge.should be_an_instance_of Adherent::Bridge
         end
@@ -249,17 +249,50 @@ describe Organism do
         @organism.guess_period(Date.today).should == @p_2011
       end 
 
-      #      it 'si la date est trop ancienne, renvoie le plus vieux' do
-      #        @organism.guess_period(Date.today.years_ago 10).should == @p_2010
-      #      end
-      #
-      #      it 'sinon prend l exercice' do
-      #        @organism.guess_period(Date.parse('12/08/2010')).should == @p_2010
-      #        @organism.guess_period(Date.parse('11/11/2011')).should == @p_2011
-      #      end
+      it 'si la date est trop ancienne, renvoie le plus vieux' do
+        @organism.guess_period(Date.today.years_ago 10).should == @p_2010
+      end
+      
+      it 'sinon prend l exercice' do
+        @organism.guess_period(Date.parse('12/08/2010')).should == @p_2010
+        @organism.guess_period(Date.parse('11/11/2011')).should == @p_2011
+      end
 
 
 
+    end
+    
+    
+    describe 'create_account_for'  do
+      
+      before(:each) do
+        @bac = BankAccount.new(:nickname=>'Cpte sur livret')
+        
+      end
+      
+      it 'appelle Account.available avec 512' do
+        Account.should_receive(:available).with('512').and_return('51204')
+        @organism.create_accounts_for(@bac)
+      end
+      
+      it 'pour une caisse appelle 53' do
+        @cac = Cash.new(:name=>'local')
+        @organism.stub_chain(:periods, :opened).and_return []        
+        Account.should_receive(:available).with('53').and_return('5301')
+        @organism.create_accounts_for(@cac)
+      end
+      
+      it 'puis appelle create_accounts pour chaque exercice ouvert' do
+        Account.stub(:available).and_return('51204')
+        @organism.stub_chain(:periods, :opened).and_return([@p1 = mock_model(Period), @p2 = mock_model(Period)])
+        @p1.should_receive(:accounts).exactly(1).times.and_return(@ar = double(Arel))
+        @p2.should_receive(:accounts).exactly(1).times.and_return(@as = double(Arel))
+        @ar.should_receive(:create!).with(number:'51204', period_id:@p1.id, title:@bac.nickname).and_return
+        @as.should_receive(:create!).with(number:'51204', period_id:@p2.id, title:@bac.nickname).and_return
+        @organism.create_accounts_for(@bac)
+      end
+      
+      
     end
 
     # TODO ce serait mieux que ce soit le modèle Period qui sache s'il peut

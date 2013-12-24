@@ -34,6 +34,10 @@ LONG_NAME_LENGTH_LIMITS = NAME_LENGTH_MIN..LONG_NAME_LENGTH_MAX
 
 MAX_COMMENT_LENGTH = 300
 
+# plan comptable
+RACINE_BANK = '512'
+RACINE_CASH = '53'
+
 
 
 # 0.3 insertion du champ nickname dans BankAccount

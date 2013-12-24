@@ -3,10 +3,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-   # c.filter = {wip:true} 
+    c.filter = {wip:true} 
 end
 
-describe Cash , wip:true do
+describe Cash  do
   include OrganismFixtureBis
 
   before(:each) do
@@ -19,7 +19,7 @@ describe Cash , wip:true do
     @c.should be_valid
   end
 
-  it 'should not be_valid without name' do
+  it 'should not be_valid without name' do 
     @c.name = nil
     @c.should_not be_valid
   end
@@ -89,7 +89,7 @@ describe Cash , wip:true do
 
   describe 'level' , wip:true do 
     before(:each) do
-      create_cash_income # méthode forunie par OrganismFixture
+      create_cash_income # méthode forunie par OrganismFixture 
     end
 
     it 'le compte Caisse doit être débiteur de 59' do

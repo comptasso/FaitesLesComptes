@@ -144,23 +144,24 @@ protected
   end
 
 
- # appelé par le callback after_create, crée un compte comptable de rattachement
- # pour chaque exercice ouvert.
+ # appelé par le callback after_create, demande à l'organisme de lui créer les 
+ # comptes comptables associés (ce qui ne sera fait que pour chacun des exercices
+ # ouverts).
  def create_accounts
-   puts "dans create accounts #{self.inspect}"
    logger.debug 'création des comptes liés au compte bancaire' 
-   # demande un compte de libre sur l'ensemble des exercices commençant par 51
-   n = Account.available('512') # un compte 512 avec un précision de deux chiffres par défaut
-   organism.periods.where('open = ?', true).each do |p|
-     self.accounts.create!(number:n, period_id:p.id, title:nickname)
-     
-   end
+   organism.create_accounts_for(self)
  end
 
  # quand on change le nickname de la banque il est nécessaire de modifier l'intitulé
  # du compte associé à cette banque.
  def change_account_title
    accounts.each {|acc| acc.update_attribute(:title, nickname)}
+ end
+ 
+ # définit son compte racine (utile pour que organism.create_accounts_for puisse 
+ # créer les comptes comptables lors de la création d'un nouveau compte bancaire
+ def self.compte_racine
+   RACINE_BANK
  end
 
 
