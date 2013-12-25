@@ -70,4 +70,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.2.4.RC' # "Correction bug sur mise à jour transfert et sur menu des views bottom'
 # FLCVERSION = '1.2.5.RC' # "Refonte complète des éditions pdf'
 # FLCVERSION = '1.3.0.RC' # "Introduction des delayed jobs pour les pdf et accélération des constructions des bilans'
-FLCVERSION = '1.3.1.RC' # Mise en place du fichier des écritures comptables
+# FLCVERSION = '1.3.2.RC' # Mise en place du fichier des écritures comptables
+FLCVERSION = '1.3.3.RC' # Refactorisation de l'édition d'une balance qui peut donc se passer de delayed jobs
