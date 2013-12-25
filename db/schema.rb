@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131221102058) do
+ActiveRecord::Schema.define(:version => 20131225095847) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -291,6 +291,18 @@ ActiveRecord::Schema.define(:version => 20131221102058) do
     t.datetime "updated_at",                    :null => false
     t.boolean  "is_leaf",    :default => false
   end
+
+  create_table "subscriptions", :force => true do |t|
+    t.integer  "day"
+    t.integer  "mask_id"
+    t.date     "end_date"
+    t.string   "title"
+    t.integer  "organism_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "subscriptions", ["mask_id"], :name => "index_subscriptions_on_mask_id"
 
   create_table "users", :force => true do |t|
     t.string   "name"
