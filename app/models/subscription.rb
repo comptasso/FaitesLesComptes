@@ -19,4 +19,6 @@ class Subscription < ActiveRecord::Base
   attr_accessible :day, :end_date, :mask_id, :title
   
   belongs_to :mask
+  
+  validates :day, :mask_id, :title, presence:true
 end
