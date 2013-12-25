@@ -31,9 +31,13 @@
 # (Recettes ou Dépenses).  
 # De même pour le mode de règlement avec la contrepartie.
 # 
+# Un masque peut servir pour une saisie directement, mais aussi pour un abonnement
+# avec la relation has_one subscription
+# 
 #
 class Mask < ActiveRecord::Base
   belongs_to :organism
+  has_one :subscription
   
   attr_reader :writing
   

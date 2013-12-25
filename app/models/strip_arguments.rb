@@ -1,5 +1,7 @@
 # coding: utf-8
 
+# TODO déplacer ceci dans un initializer
+
 class ActiveRecord::Base
 
   # méthode permettant d'ajouter un nettoyage de champs avant la validation

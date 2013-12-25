@@ -297,9 +297,8 @@ ActiveRecord::Schema.define(:version => 20131225095847) do
     t.integer  "mask_id"
     t.date     "end_date"
     t.string   "title"
-    t.integer  "organism_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "subscriptions", ["mask_id"], :name => "index_subscriptions_on_mask_id"

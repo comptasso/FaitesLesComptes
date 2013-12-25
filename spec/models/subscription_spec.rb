@@ -1,5 +1,31 @@
 require 'spec_helper'
 
 describe Subscription do
-  pending "add some examples to (or delete) #{__FILE__}"
+  
+  describe 'validations' do
+    subject {Subscription.new(mask_id:1, title:'un abonnement', day:5)}
+  end
+  
+  it('est valide') {subject.should be_valid}
+  describe 'invalide' do
+    
+    it 'sans le jour' do
+      subject.day = nil
+      subject.should_not be_valid
+    end
+    
+    it 'ni le mask_id' do
+      subject.mask_id = nil
+      subject.should_not be_valid
+    end
+    
+    it 'ni le title' do
+      subject.title = nil
+      subject.should_not be_valid
+    end
+    
+    
+  end
+  
+  
 end

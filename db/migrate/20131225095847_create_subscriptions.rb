@@ -5,8 +5,7 @@ class CreateSubscriptions < ActiveRecord::Migration
       t.integer :mask_id
       t.date :end_date
       t.string :title
-      t.integer :organism_id
-
+      
       t.timestamps
     end
     
