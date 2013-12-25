@@ -3,7 +3,7 @@
 require 'spec_helper' 
 
 RSpec.configure do |c| 
-#   c.filter = {:wip=>true}
+  #   c.filter = {:wip=>true}
 end
 
 describe Compta::Balance do  
@@ -190,38 +190,39 @@ describe Compta::Balance do
         @b.to_pdf
       end
         
-    end  
+   
       
       
 
-    describe 'to_csv'  do
+      describe 'to_csv'  do
        
-      before(:each) do
-        @b.stub(:balance_lines).and_return (1..2).map {|i| bal_line(2)}
-      end
+        before(:each) do
+          @b.stub(:balance_lines).and_return (1..2).map {|i| bal_line(2)}
+        end
 
 
-      it 'produit une chaine au format csv'do
-        @b.to_csv.should be_a String
-      end
+        it 'produit une chaine au format csv'do
+          @b.to_csv.should be_a String
+        end
 
-      it 'avec 5 lignes' do
-        @b.to_csv.split("\n").should have(5).lines
-      end
-      it 'la première affiche Soldes au...Mouvements Soldes au...' do
-        @b.to_csv.split("\n").first.should ==  "\"\"\t\"\"\tSoldes au\t#{I18n.l(Date.today.beginning_of_month, :format=>'%d/%m/%Y')}\tMouvements\tde la période\tSoldes au #{I18n.l(Date.today.end_of_month, :format=>'%d/%m/%Y')}"
-      end
-      it 'la deuxième affiche les titres des colonnes' do
-        @b.to_csv.split("\n").second.should ==  %w(Numéro	Intitulé	Débit	Crédit	Débit	Crédit	Solde).join("\t")
-      end
+        it 'avec 5 lignes' do
+          @b.to_csv.split("\n").should have(5).lines
+        end
+        it 'la première affiche Soldes au...Mouvements Soldes au...' do
+          @b.to_csv.split("\n").first.should ==  "\"\"\t\"\"\tSoldes au\t#{I18n.l(Date.today.beginning_of_month, :format=>'%d/%m/%Y')}\tMouvements\tde la période\tSoldes au #{I18n.l(Date.today.end_of_month, :format=>'%d/%m/%Y')}"
+        end
+        it 'la deuxième affiche les titres des colonnes' do
+          @b.to_csv.split("\n").second.should ==  %w(Numéro	Intitulé	Débit	Crédit	Débit	Crédit	Solde).join("\t")
+        end
 
-      it 'les autres sont des lignes de données' do
-        @b.to_csv.split("\n").third.should ==  ['602','compte 2', '10,00',	'1,00',	'2,00',	'4,00',	'-7,00'].join("\t")
-      end
+        it 'les autres sont des lignes de données' do
+          @b.to_csv.split("\n").third.should ==  ['602','compte 2', '10,00',	'1,00',	'2,00',	'4,00',	'-7,00'].join("\t")
+        end
 
-      it 'la dernière affiche les totaux' do
-        @b.to_csv.split("\n").last.should == ['Totaux', '""' ,	'20,00',	'2,00',	'4,00',	'8,00',	'-14,00'].join("\t")
+        it 'la dernière affiche les totaux' do
+          @b.to_csv.split("\n").last.should == ['Totaux', '""' ,	'20,00',	'2,00',	'4,00',	'8,00',	'-14,00'].join("\t")
 
+        end
       end
     end
   end
