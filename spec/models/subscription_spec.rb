@@ -1,5 +1,9 @@
 require 'spec_helper'
 
+RSpec.configure do |config|
+ # config.filter = {wip:true}
+end
+
 describe Subscription do
   
   describe 'validations' do
@@ -28,8 +32,84 @@ describe Subscription do
         subject.should_not be_valid
       end
     
-    
     end
   
   end
+  
+  
+  describe 'writings_late', wip:true do
+    
+    
+    subject {Subscription.new(title:'test de scubscription', mask_id:1, day:5)}
+    
+    it 'doit chercher la dernière écriture pour ce mask' do
+      subject.should_receive(:last_writing_date).and_return(Date.today.months_ago(1).beginning_of_month)
+      subject.nb_late_writings.should == 1
+    end
+    
+    describe 'nbre écritures en retard' do
+    
+      it '1 si debut du même mois' do
+        subject.stub(:last_writing_date).and_return(Date.today.months_ago(1).beginning_of_month)  
+        subject.nb_late_writings.should == 1
+      end
+    
+      it '0 si le bon jour du même mois' do
+        subject.stub(:last_writing_date).and_return(Date.today.beginning_of_month + 4.days)
+        subject.nb_late_writings.should == 0
+      end
+    
+      it '4 si il y a 4 mois de retard' do
+        subject.stub(:last_writing_date).and_return(Date.today.months_ago(1).beginning_of_month.months_ago(3))
+        subject.nb_late_writings.should == 4
+      end
+    end
+    
+    
+    
+    context 'le jour est le dernier du mois' do
+      
+      subject {Subscription.new(title:'test de subscription', mask_id:1, day:31)}
+      
+      
+    
+      it '1 si la dernière écriture est le dernier jour du mois précédent' do
+         Date.stub(:today).and_return Date.civil(2013, 9, 30)
+         subject.stub(:last_writing_date).and_return Date.civil(2013, 8, 31)
+         subject.nb_late_writings.should == 1
+      end
+      
+      it 'pour février' , wip:true do
+         Date.stub(:today).and_return Date.civil(2013, 4, 10)
+         Date.stub(:current).and_return Date.civil(2013, 4, 10) # car Rails utilise current
+         
+         subject.stub(:last_writing_date).and_return Date.civil(2013, 2, 28)
+         subject.nb_late_writings.should == 1 
+      end
+      
+      
+    end
+    
+    
+    
+  end
+  
+  describe 'pass_writing' do
+    
+    subject {Subscription.new(day:5)}
+    
+    before(:each) do
+      subject.stub(:late?).and_return true
+      subject.stub(:month_year_to_write).
+        and_return(@lms = ListMonths.new(Date.today.months_ago(2), Date.today.months_ago(1)))
+    end
+    
+    it 'passe les écritures' do
+      @lms.each {|lm| subject.send(:writer).should_receive(:write).with(lm) } 
+      subject.pass_writings
+    end  
+    
+    
+  end
+  
 end
