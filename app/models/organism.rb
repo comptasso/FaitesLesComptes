@@ -66,10 +66,12 @@ class Organism < ActiveRecord::Base
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
  # has_many :transfers
   
-  # bridge_id et bridge_type sont utilisé pour indiquer qu'une écriture a été produite 
-  # par un bridge. Actuellement un seul bridge existe, le module Adhérent
-  # A terme, il pourrait y avoir d'autres bridges tels qu'un module Immobilisations
-  # La logique sera à revoir à ce moment.
+  # La table adherent_bridges a été mise en place pour eneregistrer les informations
+  # permettant de faire le lien avec le gem adhérent.
+  # 
+  # Cette table enregistre ainsi les données (nature, compte bancaire, caisse, livre
+  # recevant les règlements)
+  # 
   has_one :bridge, class_name:'Adherent::Bridge'
   
   # liaison avec le gem adherent

@@ -40,6 +40,7 @@ class Writing < ActiveRecord::Base
     :bridge_id, :bridge_type
 
   belongs_to :book
+  belongs_to :bridgeable, polymorphic:true
  
   has_many :compta_lines, :dependent=>:destroy
   alias children compta_lines

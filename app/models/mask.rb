@@ -39,6 +39,8 @@ class Mask < ActiveRecord::Base
   belongs_to :organism
   has_one :subscription
   
+  has_many :writings, as: :bridge
+  
   attr_reader :writing
   
   attr_accessible :comment, :title, :book_id, :ref, :narration, 
@@ -88,7 +90,7 @@ class Mask < ActiveRecord::Base
   
   # construit un in_out_writing
   def build_writing(date)
-    @writing = book.in_out_writings.new(date:date, ref:ref, narration:narration)
+    @writing = book.in_out_writings.new(date:date, ref:ref, narration:narration, bridge_type:'Mask', bridge_id:id)
   end
   
   def line(date)
