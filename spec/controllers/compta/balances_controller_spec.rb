@@ -86,13 +86,7 @@ describe Compta::BalancesController do
 
     end
     
-    describe 'GET deliver_pdf' do 
-      it 'construit le fichier et le rend' do
-        @p.should_receive(:export_pdf).and_return(mock_model(ExportPdf, status:'ready', content:'Le texte à produire'))
-        get :deliver_pdf,{ :period_id=>@p.to_param, :compta_balance=>valid_attributes, format:'js'}, session_attributes
-        response.content_type.should == "application/pdf" 
-      end
-    end
+    
 
     
   end

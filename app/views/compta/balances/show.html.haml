@@ -1,17 +1,13 @@
 = content_for :menu do
   %a(data-toggle="modal" class="icon_menu" href="#modal_form_balance")
     = image_tag('icones/nouveau.png')
-  = delayed_export_icons({compta_balance:@params_balance})
+  = export_icons({compta_balance:@params_balance})
 
 
 .champ
   %h3
     Balance
-    = @balance.provisoire? ? 'provisoire' : ''
+    = @balance.provisoire? ? 'provisoire' : '' 
   = render partial: 'modal_form'
 
   #balance_table= render partial: 'balance'
-
-
-
-

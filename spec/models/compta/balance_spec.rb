@@ -132,9 +132,9 @@ describe Compta::Balance do
     
     
 
-    describe 'balance lines' , wip:true do
+    describe 'balance lines'  do
       
-       before(:each) do
+      before(:each) do
         @bal = Compta::Balance.new(period_id:@p.id).with_default_values
         @bals = @bal.balance_lines
       end
@@ -155,9 +155,11 @@ describe Compta::Balance do
           :sold_at=>0.0 }
 
       end
+      
+     
     end
  
-    describe 'page' do
+    describe 'to_pdf' do
 
       def bal_line(value)
         { :account_id=>value,
@@ -173,77 +175,56 @@ describe Compta::Balance do
           :sold_at=>1+value*2 - 10 - value}
       end
 
-     
-
       before(:each) do
         @b.stub(:balance_lines).and_return (1..100).map {|i| bal_line(2)}
-        
       end
 
       it 'total_balance renvoie le total'   do
         @b.total_balance.should == [1000, 100, 200, 400, -700]
       end
       
-      describe 'to_pdf'  do
+      it 'to_pdf appelle Editions::Balance et sa méthode rencer', wip:true do
+        Editions::Balance.should_receive(:new).with(@p, @b, title:"Balance générale", 
+          stamp:'').and_return(@eb = double(Editions::Balance))
+        @eb.should_receive(:render)
+        @b.to_pdf
+      end
         
-        def line_to_prepare
-          double(Account,  number:'707' , :title=>'titre du compte', 
-          
-          :cumulated_debit_before=>10,
-          :cumulated_credit_before=>1,
-          :movement=>0,
-          
-          :sold_at=> 45.14 )
-        end
-        
-        before(:each) do 
-          @pdf = @b.to_pdf
-          @pdf.stub(:fetch_lines).and_return (1..100).map {|i| line_to_prepare}
-        end
+    end  
+      
+      
 
-        it 'crée une instance de Editions::Balance' do
-          @pdf.should be_an_instance_of(Editions::Balance)
-          
-        end
-      
+    describe 'to_csv'  do
        
-        
-        it('et pouvant être rendue') {@pdf_render }
-        
-      
+      before(:each) do
+        @b.stub(:balance_lines).and_return (1..2).map {|i| bal_line(2)}
       end
 
-      describe 'to_csv'  do
-       
-        before(:each) do
-          @b.stub(:balance_lines).and_return (1..2).map {|i| bal_line(2)}
-        end
 
+      it 'produit une chaine au format csv'do
+        @b.to_csv.should be_a String
+      end
 
-        it 'produit une chaine au format csv'do
-          @b.to_csv.should be_a String
-        end
+      it 'avec 5 lignes' do
+        @b.to_csv.split("\n").should have(5).lines
+      end
+      it 'la première affiche Soldes au...Mouvements Soldes au...' do
+        @b.to_csv.split("\n").first.should ==  "\"\"\t\"\"\tSoldes au\t#{I18n.l(Date.today.beginning_of_month, :format=>'%d/%m/%Y')}\tMouvements\tde la période\tSoldes au #{I18n.l(Date.today.end_of_month, :format=>'%d/%m/%Y')}"
+      end
+      it 'la deuxième affiche les titres des colonnes' do
+        @b.to_csv.split("\n").second.should ==  %w(Numéro	Intitulé	Débit	Crédit	Débit	Crédit	Solde).join("\t")
+      end
 
-        it 'avec 102 lignes' do
-          @b.to_csv.split("\n").should have(5).lines
-        end
-        it 'la première affiche Soldes au...Mouvements Soldes au...' do
-          @b.to_csv.split("\n").first.should ==  "\"\"\t\"\"\tSoldes au\t#{I18n.l(Date.today.beginning_of_month, :format=>'%d/%m/%Y')}\tMouvements\tde la période\tSoldes au #{I18n.l(Date.today.end_of_month, :format=>'%d/%m/%Y')}"
-        end
-        it 'la deuxième affiche les titres des colonnes' do
-          @b.to_csv.split("\n").second.should ==  %w(Numéro	Intitulé	Débit	Crédit	Débit	Crédit	Solde).join("\t")
-        end
+      it 'les autres sont des lignes de données' do
+        @b.to_csv.split("\n").third.should ==  ['602','compte 2', '10,00',	'1,00',	'2,00',	'4,00',	'-7,00'].join("\t")
+      end
 
-        it 'les autres sont des lignes de données' do
-          @b.to_csv.split("\n").third.should ==  ['602','compte 2', '10,00',	'1,00',	'2,00',	'4,00',	'-7,00'].join("\t")
-        end
+      it 'la dernière affiche les totaux' do
+        @b.to_csv.split("\n").last.should == ['Totaux', '""' ,	'20,00',	'2,00',	'4,00',	'8,00',	'-14,00'].join("\t")
 
-        it 'la dernière affiche les totaux' do
-          @b.to_csv.split("\n").last.should == ['Totaux', '""' ,	'20,00',	'2,00',	'4,00',	'8,00',	'-14,00'].join("\t")
-
-        end
       end
     end
-
   end
+
 end
+

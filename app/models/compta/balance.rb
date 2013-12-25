@@ -75,7 +75,7 @@ class Compta::Balance < ActiveRecord::Base
     pdf = Editions::Balance.new(period, self,
       title:"Balance générale",
       stamp:stamp)
-    pdf
+    pdf.render
   end
 
    # valeurs par défaut, retourne self permettant de chainer les méthodes

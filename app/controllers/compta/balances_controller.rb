@@ -10,11 +10,13 @@
 class Compta::BalancesController < Compta::ApplicationController 
   # TODO voir à mettre ce include dans les application_controller ?
   #include ActiveModel::MassAssignmentSecurity
-  include Pdf::Controller
+  
+  
+  #include Pdf::Controller
 
   # attr_accessible :from_date, :to_date, :from_account_id, :to_account_id
   before_filter :set_params_balance
-  before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
+ # before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
  
   def new
     @balance = Compta::Balance.new(period_id:@period.id).with_default_values
@@ -27,10 +29,11 @@ class Compta::BalancesController < Compta::ApplicationController
     if @balance.valid?
       respond_to do |format|
      
-        format.html 
+        format.html  
         format.js
-        format.csv { send_data @balance.to_csv, filename:export_filename(@balance, :csv) }  # pour éviter le problème des virgules
+        format.csv { send_data @balance.to_csv, filename:export_filename(@balance, :csv) } 
         format.xls { send_data @balance.to_xls, filename:export_filename(@balance, :csv)}
+        format.pdf { send_data @balance.to_pdf, filename:export_filename(@balance, :pdf)}
       end
     else
       redirect_to new_compta_period_balance_url(@period)
@@ -58,18 +61,18 @@ class Compta::BalancesController < Compta::ApplicationController
   protected
   
   # créé les variables d'instance attendues par le module PdfController
-  def set_exporter
-    @exporter = @period
-  end
+#  def set_exporter
+#    @exporter = @period
+#  end
   
   def set_params_balance
     @params_balance = params[:compta_balance] || {}
   end
   
   # création du job et insertion dans la queue
-  def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::BalancePdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, params_balance:@params_balance})
-  end
- 
+#  def enqueue(pdf_export)
+#    Delayed::Job.enqueue Jobs::BalancePdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, params_balance:@params_balance})
+#  end
+# 
 
 end
