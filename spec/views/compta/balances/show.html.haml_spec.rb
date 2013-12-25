@@ -35,7 +35,7 @@ describe 'compta/balances/show' do
     assign(:period, p)
     b.stub(:balance_lines).and_return((1..12).map {|i| one_balance_line(i)})
 
-    view.stub(:delayed_export_icons).and_return '' # delayed_export_icons est testé ailleurs
+    view.stub(:export_icons).and_return '' 
     # TODO faire le spec de export_icons
     
   end
