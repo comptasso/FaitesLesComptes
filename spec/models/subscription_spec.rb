@@ -9,6 +9,10 @@ describe Subscription do
   describe 'validations' do
     subject {Subscription.new(mask_id:1, title:'un abonnement', day:5)}
     
+    before(:each) do
+      subject.stub(:mask).and_return(mock_model(Mask, complete?:true))     
+    end
+    
     it 'test' do
       puts subject.inspect
     end
@@ -99,6 +103,7 @@ describe Subscription do
     subject {Subscription.new(day:5)}
     
     before(:each) do
+      subject.stub(:mask_complete?).and_return true
       subject.stub(:late?).and_return true
       subject.stub(:month_year_to_write).
         and_return(@lms = ListMonths.new(Date.today.months_ago(2), Date.today.months_ago(1)))
@@ -108,6 +113,12 @@ describe Subscription do
       @lms.each {|lm| subject.send(:writer).should_receive(:write).with(lm) } 
       subject.pass_writings
     end  
+    
+    it 'sauf si le mask est incomplet' do
+      subject.stub(:mask_complete?).and_return false
+       @lms.each {|lm| subject.send(:writer).should_not_receive(:write) } 
+      subject.pass_writings
+    end
     
     
   end

@@ -43,6 +43,8 @@ class Mask < ActiveRecord::Base
   
   attr_reader :writing
   
+  
+  
   attr_accessible :comment, :title, :book_id, :ref, :narration, 
     :destination_id, :nature_name, :mode, :amount, :counterpart
   
@@ -94,6 +96,17 @@ class Mask < ActiveRecord::Base
   def complete_writing_params(date)
     w, cl1, cl2 = writing_params(date), line_params(date), counter_line_params(date)
     w.merge(:compta_lines_attributes=>{'0'=>cl1, '1'=>cl2})
+  end
+  
+  # un masque est complet lorsqu'il permet de passer une écriture à partir d'un 
+  # abonnement.  Comme nature_name peut avoir changé ou autre modifications du 
+  # masque, on recontrôle la validité du masque puis on va un peu plus loin en 
+  # s'assurant que les champs indispensables sont tous présents.
+  # TODO faire spec de cette méthode
+  def complete?
+    return false unless valid?
+    "nature_name" && "narration" && "destination_id" && "mode" &&
+    "counterpart" && "amount"
   end
   
     

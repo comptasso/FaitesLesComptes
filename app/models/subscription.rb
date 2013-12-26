@@ -25,7 +25,7 @@ class Subscription < ActiveRecord::Base
    
   validates :day, :mask_id, :title, presence:true
   
-  # TODO pour être valide, le mask doit être complet sauf le jour
+  validate :mask_complete?
   
   
   def nb_late_writings
@@ -51,9 +51,12 @@ class Subscription < ActiveRecord::Base
   
   # Passe les écritures
   def pass_writings
-    return unless late?
+    return unless mask_complete?  # on ne peut passer d'écriture si le masque est incomplet
+    return unless late? # pas d'écriture à passer
     month_year_to_write.each {|my| writer.write(my)}
   end
+  
+  # TODO gérer le end_date car pour l'instant ne le prend pas du tout en compte
   
   
   protected
@@ -72,9 +75,13 @@ class Subscription < ActiveRecord::Base
     d
   end
   
+  # une souscription ne peut être valide que si le masque est complet
+  # donc attention à la modification du masque après coup
+  def mask_complete?
+    mask.complete?
+  end
   
   
-  # TODO : A faire ou se passer du Writer
   def writer
     @writer ||= Utilities::Writer.new(self)
   end

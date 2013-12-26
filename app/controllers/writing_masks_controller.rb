@@ -2,6 +2,8 @@ class WritingMasksController < ApplicationController
   
   def new
     @mask = @organism.masks.find(params[:mask_id])
+    # TODO introduire un controle de validité du mask (ceci au cas où une modification
+    # serait intervenur (par exemple nature_name rebaptisé)
     if @mask
       @book = @mask.book
       @monthyear= @period.guess_month
@@ -11,6 +13,7 @@ class WritingMasksController < ApplicationController
       flash[:retour] = request.env["HTTP_REFERER"]
       render 'in_out_writings/new'
     else
+      # TODO ajouter un flash d'explication
       redirect_to :back and return
     end
   end

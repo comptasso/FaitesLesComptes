@@ -18,6 +18,8 @@ module Utilities
       @mask.book.in_out_writings.create(params)
     end
     
+    # TODO un writer ne devrait écrire que pour l'éxercice en cours
+    
     
     
   end
