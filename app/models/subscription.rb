@@ -78,7 +78,7 @@ class Subscription < ActiveRecord::Base
   # une souscription ne peut être valide que si le masque est complet
   # donc attention à la modification du masque après coup
   def mask_complete?
-    mask.complete?
+    errors.add(:base, :mask_incomplet) unless mask.complete? 
   end
   
   

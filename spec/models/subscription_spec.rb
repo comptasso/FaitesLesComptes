@@ -12,11 +12,7 @@ describe Subscription do
     before(:each) do
       subject.stub(:mask).and_return(mock_model(Mask, complete?:true))     
     end
-    
-    it 'test' do
-      puts subject.inspect
-    end
-  
+      
     it('est valide') {subject.should be_valid}  
   
     describe 'invalide' do
@@ -33,6 +29,11 @@ describe Subscription do
     
       it 'ni le title' do
         subject.title = nil
+        subject.should_not be_valid
+      end
+      
+      it 'si le masque n est pas complet' do
+        subject.stub(:mask).and_return(mock_model(Mask, complete?:false))
         subject.should_not be_valid
       end
     
