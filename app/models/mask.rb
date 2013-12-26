@@ -81,25 +81,38 @@ class Mask < ActiveRecord::Base
     organism.bank_accounts.find_by_nickname(counterpart) if counterpart
   end
   
-  # construit les éléments du writing
+  # construit les éléments du writing, renvoie une écriture et ses deux compta_lines
+  # 
+  # Utilisé par writing_masks_controller pour générer les champs de saisie
   def writing_new(date)
     return  build_writing(date), line(date), counterline(date)
   end
   
+  # construit seulement les paramètres de l'écriture.
+  # Utilisé par Utilities::Writer en lien avec Subscription pour créer
+  # l'écriture automatiquement. 
+  def complete_writing_params(date)
+    w, cl1, cl2 = writing_params(date), line_params(date), counter_line_params(date)
+    w.merge(:compta_lines_attributes=>{'0'=>cl1, '1'=>cl2})
+  end
+  
+    
   protected
   
   # construit un in_out_writing
   def build_writing(date)
-    @writing = book.in_out_writings.new(date:date, ref:ref, narration:narration, bridge_type:'Mask', bridge_id:id)
+    @writing = book.in_out_writings.new(writing_params(date))
   end
   
   def line(date)
-    writing.compta_lines.build(nature_id:nature_id(date), debit:debit, credit:credit, destination_id:destination_id)
+    writing.compta_lines.build(line_params(date))
   end
   
   def counterline(date)
-    writing.compta_lines.build(payment_mode:mode, debit:credit, credit:debit, account_id:account_id(date))
+    writing.compta_lines.build(counter_line_params(date))
   end
+  
+  
   
   def nature_id(date)
     organism.find_period(date).natures.find_by_name(nature_name).id if nature_name
@@ -156,7 +169,19 @@ class Mask < ActiveRecord::Base
     end
   end
   
+  private
   
+  def writing_params(date)
+    {date:date, ref:ref, narration:narration, bridge_type:'Mask', bridge_id:id}
+  end
+  
+  def line_params(date)
+    {nature_id:nature_id(date), debit:debit, credit:credit, destination_id:destination_id}
+  end
+  
+  def counter_line_params(date)
+    {payment_mode:mode, debit:credit, credit:debit, account_id:account_id(date)}
+  end
   
 
 end

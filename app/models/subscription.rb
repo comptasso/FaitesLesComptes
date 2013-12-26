@@ -21,8 +21,11 @@ class Subscription < ActiveRecord::Base
   attr_accessible :day, :end_date, :mask_id, :title
   
   belongs_to :mask
+  has_many :writings, :through=>:mask
    
   validates :day, :mask_id, :title, presence:true
+  
+  # TODO pour être valide, le mask doit être complet sauf le jour
   
   
   def nb_late_writings
@@ -52,10 +55,10 @@ class Subscription < ActiveRecord::Base
     month_year_to_write.each {|my| writer.write(my)}
   end
   
+  
   protected
   
   # date de la dernière écriture pour cet abonnement
-  # TODO ce qui suppose que mask sache identifier les écritures qu'il a produit
   def last_writing_date
     mask.writings.last.date
   end
