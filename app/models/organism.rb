@@ -80,6 +80,7 @@ class Organism < ActiveRecord::Base
   
   # gestion des masques d'écritures
   has_many :masks
+  has_many :subscriptions, :through=>:masks
   
   before_validation :fill_version
   after_create :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature

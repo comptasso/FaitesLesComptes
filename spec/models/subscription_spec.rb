@@ -80,6 +80,7 @@ describe Subscription do
     
       it '1 si la dernière écriture est le dernier jour du mois précédent' do
          Date.stub(:today).and_return Date.civil(2013, 9, 30)
+         Date.stub(:current).and_return Date.today
          subject.stub(:last_writing_date).and_return Date.civil(2013, 8, 31)
          subject.nb_late_writings.should == 1
       end
@@ -90,6 +91,27 @@ describe Subscription do
          
          subject.stub(:last_writing_date).and_return Date.civil(2013, 2, 28)
          subject.nb_late_writings.should == 1 
+      end
+      
+      
+    end
+    
+    context 'la subscription a une échéance' do
+      
+      subject {Subscription.new(day:5, end_date:Date.civil(2014, 3,12))}
+            
+      it '1 si on est au début de 2014' do
+        Date.stub(:today).and_return Date.civil(2014,1,1)
+        Date.stub(:current).and_return Date.today
+        subject.stub(:last_writing_date).and_return Date.civil(2013, 11, 30)
+        subject.nb_late_writings.should == 1
+      end
+      
+      it 'zero si la date est passée' do
+        Date.stub(:today).and_return Date.civil(2014,12,1)
+        Date.stub(:current).and_return Date.today
+        subject.stub(:last_writing_date).and_return Date.civil(2014, 3, 5) # donc la dernière écriture a été passé
+        subject.nb_late_writings.should == 0
       end
       
       

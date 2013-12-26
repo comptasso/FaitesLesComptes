@@ -286,6 +286,11 @@ fr:
         nature_name: Nature
         mode: Mode de paiement
         counterpart: Contrepartie
+      subscription:
+        day: Jour du mois
+        title: Titre
+        mask: Guide de saisie
+        end_date: Dernière échéance
       
           
       

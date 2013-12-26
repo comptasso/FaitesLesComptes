@@ -1,0 +1,17 @@
+.inputs.row-fluid
+  = simple_form_for([:admin, @organism, @subscription], :html=> {class: 'form-inline'}) do |f|
+    = f.error_notification
+    .row-fluid
+      .span12
+        = f.input :title,  wrapper_html: {class: "span5"}, label_html:{class:"span3"}, input_html:{class:"span9"}
+        = f.association :mask, collection:@masks, wrapper_html: {class: "span5"}, label_html: {class: "span3"}, input_html: {class: "span9"}
+    .row-fluid
+      .span12
+        = f.input :day, :collection=>(1..31), wrapper_html: {class: "span2"}, label_html:{class:"span8"}, input_html: {class: "span4"} 
+        = f.input :permanent, :as=>:radio_buttons,  wrapper_html: {class: "span3"}, label_html:{class:"span4"}, input_html: {class: "span4"} 
+        = f.input(:end_date, wrapper_html: {class: "span4"}, label_html:{class:"span4"}, |
+          input_html: {class: "span4"}, :start_year => @begin_year,:end_year=>@end_year, :discard_day => true)
+    .row-fluid
+      .span12
+        .form-actions
+          = f.button :submit, class: "btn-primary span2 offset1" 

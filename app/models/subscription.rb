@@ -18,6 +18,9 @@ require 'list_months'
 # L'organisme a les abonnements au travers des masques
 #
 class Subscription < ActiveRecord::Base
+  include Utilities::PickDateExtension # apporte les méthodes pick_date_for
+
+  
   attr_accessible :day, :end_date, :mask_id, :title
   
   belongs_to :mask
@@ -44,7 +47,6 @@ class Subscription < ActiveRecord::Base
   # à passer 
   # 
   def month_year_to_write
-    last_to_pass = to_write_this_month? ? subscription_date : subscription_date << 1 
     lwd = last_writing_date
     ListMonths.new(lwd.beginning_of_month, last_to_pass.beginning_of_month)
   end
@@ -56,10 +58,35 @@ class Subscription < ActiveRecord::Base
     month_year_to_write.each {|my| writer.write(my)}
   end
   
-  # TODO gérer le end_date car pour l'instant ne le prend pas du tout en compte
+  # méthodes ajoutées pour faciliter la construction du formulaire
+  # indique si l'abonnement est permanent
+  def permanent
+    !end_date
+  end
+  
+  # si on indique que le virement est permanent, alors on efface end_date
+  # sinon, on garde end_date ou on le remplit avec la date du jour s'il n'était 
+  # pas déjà rempli.
+  def permanent=(bool)
+    if bool
+      end_date = nil
+    else
+      end_date ||= Date.today
+    end
+  end
   
   
   protected
+  
+  # donne la dernière écriture à passer au jour actuel. Donc peut être soit 
+  # dans le mois présent, soit dans le mois précédent si le day n'est pas encore
+  # atteint, 
+  # soit encore sensiblement avant si end_date est dépassé.
+  def last_to_pass
+    ed = end_date || Date.today
+    d = [Date.today, ed].min # on ne dépasse pas le end_date de la subscription s'il existe
+    d.day >= subscription_date(d.month).day ? d : d << 1  
+  end
   
   # date de la dernière écriture pour cet abonnement
   def last_writing_date
@@ -68,7 +95,7 @@ class Subscription < ActiveRecord::Base
    
   # calcule la date à laquelle l'écriture doit être passée pour le mois en cours
   # si le mois ne comprent pas assez de jours, recalcule une bonne date pour le mois
-  def subscription_date
+  def subscription_date(month = Date.today.month)
     d = Date.today.beginning_of_month + (day-1).days # cas général
     d = d.months_ago(1).end_of_month if d.month > Date.today.month # cas où on a changé de mois
     # par exemple on est dans un mois court (février) et le day est à 31

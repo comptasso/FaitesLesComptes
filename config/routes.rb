@@ -135,6 +135,7 @@ Faitesvoscomptes::Application.routes.draw do
     resources :organisms do
 
       resources :masks
+      resources :subscriptions
       resource :bridge
       resources :books
       resources :income_books
