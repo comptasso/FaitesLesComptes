@@ -4,7 +4,7 @@
     .row-fluid
       .span12
         = f.input :title,  wrapper_html: {class: "span5"}, label_html:{class:"span3"}, input_html:{class:"span9"}
-        = f.association :mask, collection:@masks, wrapper_html: {class: "span5"}, label_html: {class: "span3"}, input_html: {class: "span9"}
+        = f.association :mask, collection:@completed, wrapper_html: {class: "span5"}, label_html: {class: "span3"}, input_html: {class: "span9"}
     .row-fluid
       .span12
         = f.input :day, :collection=>(1..31), wrapper_html: {class: "span2"}, label_html:{class:"span8"}, input_html: {class: "span4"} 

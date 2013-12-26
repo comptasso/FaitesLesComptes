@@ -1,0 +1,8 @@
+= content_for :menu do
+  = icon_to 'navigation90.png', admin_organism_subscriptions_path(@organism) 
+
+
+.champ
+  %h3 Nouvelle écriture périodique
+  .inner-champ
+    = render 'form'

@@ -102,11 +102,15 @@ class Mask < ActiveRecord::Base
   # abonnement.  Comme nature_name peut avoir changé ou autre modifications du 
   # masque, on recontrôle la validité du masque puis on va un peu plus loin en 
   # s'assurant que les champs indispensables sont tous présents.
-  # TODO faire spec de cette méthode
+  # TODO faire spec de cette méthode doit être à blanc
   def complete?
     return false unless valid?
-    "nature_name" && "narration" && "destination_id" && "mode" &&
-    "counterpart" && "amount"
+    return false if amount == 0.0
+    return false unless destination_id
+    %w(nature_name narration mode counterpart).each do |field|
+      return false if self.send(field).empty?
+    end
+    return true
   end
   
     
