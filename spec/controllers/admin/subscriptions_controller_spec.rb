@@ -138,6 +138,90 @@ describe Admin::SubscriptionsController do
     
   end
   
+  describe 'edit' do
+    
+    it 'cherche l enregistrement' do
+      Subscription.should_receive(:find).with('2').and_return(@sub = mock_model(Subscription))
+      get :edit, {organism_id:@o.to_param, id:'2'}, valid_session
+    end
+    
+    it 'l assigne à @sub' do
+      Subscription.stub(:find).with('2').and_return(@sub = mock_model(Subscription))
+      get :edit, {organism_id:@o.to_param, id:'2'}, valid_session
+      assigns[:subscription].should == @sub
+    end
+    
+    it 'et rend la vue edit' do
+      Subscription.stub(:find).with('2').and_return(@sub = mock_model(Subscription))
+      get :edit, {organism_id:@o.to_param, id:'2'}, valid_session
+      response.should render_template 'edit' 
+    end
+    
+    it 'si pas trouvé, rend la vue index' do
+      Subscription.stub(:find).with('2').and_return nil
+      get :edit, {organism_id:@o.to_param, id:'2'}, valid_session
+      response.should redirect_to admin_organism_subscriptions_url(@o)
+    end
+    
+    it 'avec un flash d alerte' do
+      Subscription.stub(:find).with('2').and_return nil
+      get :edit, {organism_id:@o.to_param, id:'2'}, valid_session
+      flash[:alert].should == 'Ecriture périodique non trouvée'
+    end
+    
+  end
+  
+  describe 'update' do
+    
+    it 'cherche la subscription' do
+      Subscription.should_receive(:find).with('30').and_return(@sub = mock_model(Subscription))
+      @sub.stub(:update_attributes).and_return true
+      put :update, {:organism_id=>@o.to_param, :id =>'30', subscription:{} }, valid_session
+    end
+    
+    it 'prepare les params' do
+      Subscription.stub(:find).and_return(mock_model(Subscription, update_attributes:true))
+      @controller.should_receive(:prepare_params).with({'bonjour'=>'toi'})
+      put :update, {:organism_id=>@o.to_param, :id =>'30', subscription:{'bonjour'=>'toi'} }, valid_session
+    end
+    
+    it 'appelle update' do
+      Subscription.stub(:find).and_return(@sub = mock_model(Subscription))
+      @sub.should_receive(:update_attributes)
+      put :update, {:organism_id=>@o.to_param, :id =>'30', subscription:{'bonjour'=>'toi'} }, valid_session
+    end
+    
+    context 'quand update ok' do
+      before(:each) {Subscription.stub(:find).and_return(@sub = mock_model(Subscription,
+            title:'abonnement', update_attributes:true))}
+      
+      it 'affiche un flash notice' do
+        put :update, {:organism_id=>@o.to_param, :id =>'30', subscription:{'bonjour'=>'toi'} }, valid_session
+        flash[:notice].should == "L'écriture périodique '#{@sub.title}' a été mise à jour"
+      end
+      
+      it 'et redirige vers index' do
+        put :update, {:organism_id=>@o.to_param, :id =>'30', subscription:{'bonjour'=>'toi'} }, valid_session
+        response.should redirect_to admin_organism_subscriptions_path(@o)
+      end
+      
+      
+      
+    end
+    
+    context 'quand update échoue' do
+       before(:each) {Subscription.stub(:find).and_return(@sub = mock_model(Subscription,
+            title:'abonnement', update_attributes:false))}
+      
+           
+      it 'et rend la vue edit' do
+        put :update, {:organism_id=>@o.to_param, :id =>'30', subscription:{'bonjour'=>'toi'} }, valid_session
+        response.should render_template 'edit'
+      end
+    end
+    
+  end
+  
   describe 'destroy' do
     it 'cherche le subscription' do
       Subscription.should_receive(:find).with('1').and_return(mock_model(Subscription))

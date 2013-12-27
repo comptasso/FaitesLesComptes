@@ -1,0 +1,11 @@
+= content_for :menu do 
+
+  = icon_to 'nouveau.png', new_admin_organism_subscription_path(@organism) 
+  = icon_to 'navigation90.png', admin_organism_subscriptions_path(@organism) 
+ 
+
+.champ
+  %h3 Modification d'une écriture périodique
+  .inner-champ
+    = render 'form'
+    

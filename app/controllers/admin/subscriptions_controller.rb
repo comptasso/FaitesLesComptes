@@ -27,6 +27,30 @@ class Admin::SubscriptionsController < Admin::ApplicationController
     end
   end
   
+  def edit
+     if @completed.empty?
+      flash[:notice] = "Vous n'avez plus de guide de saisie permettant de générer une écriture périodique"
+      redirect_to :back
+    end
+    @subscription = Subscription.find(params[:id])
+    unless @subscription
+      flash[:alert] = 'Ecriture périodique non trouvée'
+      redirect_to admin_organism_subscriptions_url(@organism)
+    end
+  end
+  
+  def update
+    @subscription = Subscription.find(params[:id])
+    prepared_params = prepare_params(params[:subscription])
+    if @subscription.update_attributes(prepared_params)
+      flash[:notice] = "L'écriture périodique '#{@subscription.title}' a été mise à jour"
+      redirect_to admin_organism_subscriptions_url(@organism)
+    else
+      render 'edit'
+    end
+    
+  end
+  
   def destroy
     @sub = Subscription.find(params[:id])
     if @sub && @sub.destroy
