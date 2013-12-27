@@ -3,6 +3,10 @@ class Admin::SubscriptionsController < Admin::ApplicationController
   
   before_filter :limit_year, :complete_masks, :only=>[:new, :edit]
   
+  def index
+    @subs = @organism.subscriptions
+  end
+  
   def new
     if @completed.empty?
       flash[:notice] = "Vous n'avez pas de guide de saisie permettant de générer une écriture périodique"
@@ -12,14 +16,25 @@ class Admin::SubscriptionsController < Admin::ApplicationController
   end
   
   def create
+    prepared_params = prepare_params(params[:subscription])
     
-    @sub = Subscription.new(params[:subscription])
+    @sub = Subscription.new(prepared_params)
     if @sub.save
       flash[:notice] = "L'écriture périodique '#{@sub.title}' a été créée"
       redirect_to admin_organism_subscriptions_url(@organism)
     else
       render 'new'
     end
+  end
+  
+  def destroy
+    @sub = Subscription.find(params[:id])
+    if @sub && @sub.destroy
+      flash[:notice] = "L'écriture périodique '#{@sub.title}' a été supprimée"
+    else
+      flash[:alert] =  "L'écriture périodique n'a pas été trouvée ou n'a pu être supprimée"
+    end
+    redirect_to admin_organism_subscriptions_url(@organism)
   end
   
   protected
@@ -34,6 +49,16 @@ class Admin::SubscriptionsController < Admin::ApplicationController
   # un abonnement
   def complete_masks
     @completed = @organism.masks.select {|m| m.complete?}
+  end
+  
+  def prepare_params(params)
+    if params['permanent'] == 'true'
+      params.delete('end_date(1i)'); params.delete('end_date(2i)'); params.delete('end_date(3i)')
+    else
+      params['end_date(3i)'] = params["day"]
+    end
+    params.delete('permanent')
+    params
   end
   
   
