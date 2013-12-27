@@ -20,8 +20,9 @@ require 'list_months'
 class Subscription < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
+  # TODO utiliser les trim et les règles de validation pour le titre
   
-  attr_accessible :day, :end_date, :mask_id, :title
+  attr_accessible :day, :end_date, :mask_id, :title, :permanent
   
   belongs_to :mask
   has_many :writings, :through=>:mask
