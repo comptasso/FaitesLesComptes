@@ -12,6 +12,12 @@ module Admin::OrganismsHelper
     end
   end
   
+  def admin_sub_menu(title, model)
+   content_tag(:li, class:"nav-header no-link") { link_to(title, '#')} + 
+   content_tag(:li) { link_to 'Afficher', url_for(controller:"admin/#{model.pluralize}", action:'index', organism_id:@organism.id) } +
+   content_tag(:li) {link_to 'Nouveau', url_for(controller:"admin/#{model.pluralize}", action:'new', organism_id:@organism.id) }
+  end
+  
  
 
 

@@ -26,9 +26,13 @@
       <%= admin_menu('book') %>
     </li>
     
-    <li class="dropdown <%= 'active' if controller.controller_name =='masks'  %>">
+    <li class="dropdown <%= 'active' if controller.controller_name =='masks' || controller.controller_name == 'subscriptions' %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">GUIDES DE SAISIE<b class="caret"></b></a>
-      <%= admin_menu('mask') %>
+      <ul class="dropdown-menu">
+        <%= admin_sub_menu('guides', 'mask') %>
+        <li class="divider"></li>
+        <%= admin_sub_menu('abonnements', 'subscription') %>
+      </ul>
     </li>
 
     
