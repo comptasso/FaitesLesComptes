@@ -68,6 +68,18 @@ describe Subscription do
         subject.stub(:last_writing_date).and_return(Date.today.months_ago(1).beginning_of_month.months_ago(3))
         subject.nb_late_writings.should == 4
       end
+      
+      context 'pas encore d écritures pour ce masque' do
+        
+        before(:each) do
+          subject.stub(:mask).and_return mock_model(Mask, :writings=>nil, created_at:Date.today << 3)
+        end
+        
+        it 'part de la date du mask' do
+          subject.nb_late_writings.should == 4 # 3 mois plus tôt plus le mois en cours
+        end
+        
+      end
     end
     
     
@@ -117,6 +129,26 @@ describe Subscription do
       
     end
     
+    
+    
+  end
+  
+  describe 'first_to_write' do
+    it 'appelle month_year_to_write' do
+      subject.should_receive(:month_year_to_write).and_return []
+      subject.first_to_write
+    end
+    
+    it 'renvoie nil si month_year_to_write est vide' do
+      subject.stub(:month_year_to_write).and_return(ListMonths.new(Date.today, Date.today))
+      subject.first_to_write.should == nil
+    end
+    
+    it 'renvoie le premier mois autrement' do
+      subject.stub(:month_year_to_write).and_return(ListMonths.new(Date.today.years_ago(1), Date.today))
+      subject.first_to_write.should == MonthYear.from_date(Date.today.years_ago(1))
+    end
+     
     
     
   end

@@ -21,6 +21,9 @@ class Subscription < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
   # TODO utiliser les trim et les règles de validation pour le titre
+  # TODO gérer le cas où il n'y a encore aucune écriture de passée pour la masque
+  # on crée le masque puis on crée l'abonnement. Ne doit alors passer que 
+  # l'écriture du mois en cours ?!
   
   attr_accessible :day, :end_date, :mask_id, :title, :permanent
   
@@ -41,6 +44,10 @@ class Subscription < ActiveRecord::Base
     nb_late_writings > 0
   end
   
+  def first_to_write
+    month_year_to_write.first if late?
+  end
+  
   # retourne une collection de MonthYear pour lesquelles l'écriture n'a pas encore 
   # été passée alors qu'elle le devrait
   # 
@@ -49,7 +56,9 @@ class Subscription < ActiveRecord::Base
   # 
   def month_year_to_write
     lwd = last_writing_date
-    ListMonths.new(lwd.beginning_of_month, last_to_pass.beginning_of_month)
+    # rappel ListMonths renvoie un MonthYear tant que begin_date < end_date
+    # il est donc essentiel de se mettre au début du mois pour last_to_pass
+    ListMonths.new(lwd.beginning_of_month , last_to_pass.beginning_of_month)
   end
   
   # Passe les écritures
@@ -90,8 +99,10 @@ class Subscription < ActiveRecord::Base
   end
   
   # date de la dernière écriture pour cet abonnement
+  # s'il n'y a pas encore d'écritures, renvoie le mois précédent la création
+  # du mask
   def last_writing_date
-    mask.writings.last.date
+    mask.writings.last.date rescue mask.created_at << 1
   end
    
   # calcule la date à laquelle l'écriture doit être passée pour le mois en cours

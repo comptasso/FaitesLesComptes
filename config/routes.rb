@@ -246,6 +246,8 @@ Faitesvoscomptes::Application.routes.draw do
     end
     
   end
+  # TODO limiter les actions à celles utilisées
+  resources :subscriptions 
 
   
   # TODO lines n'est probablement plus utilisé

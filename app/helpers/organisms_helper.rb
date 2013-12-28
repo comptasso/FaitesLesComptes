@@ -43,8 +43,16 @@ module OrganismsHelper
         end
       end
     end
+    
+    org.subscriptions.each do |sub|
+      sub_info = sub_infos(sub)
+      m << sub_info if sub_info  
+    end
+    
     return m
   end
+  
+  
 
   # Appelé par la vue organism#show pour dessiner chacun des pavés qui figurent 
   # dans le dash board.
