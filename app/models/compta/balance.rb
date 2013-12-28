@@ -71,11 +71,7 @@ class Compta::Balance < ActiveRecord::Base
   #produit un document pdf en s'appuyant sur la classe PdfBalance issue de PdfDocument::Totalized
   # et ses classe associées page et table
   def to_pdf
-    stamp = provisoire? ? 'provisoire' : ''
-    pdf = Editions::Balance.new(period, self,
-      title:"Balance générale",
-      stamp:stamp)
-    pdf.render
+    build_pdf.render
   end
 
    # valeurs par défaut, retourne self permettant de chainer les méthodes
@@ -119,6 +115,13 @@ class Compta::Balance < ActiveRecord::Base
 
   
   protected
+  
+  def build_pdf
+    stamp = provisoire? ? 'provisoire' : ''
+    pdf = Editions::Balance.new(period, self,
+      title:"Balance générale",
+      stamp:stamp)
+  end
 
   # calcule les totaux pour l'index demandé (:cumul_debit_before,...)
   def total(index)

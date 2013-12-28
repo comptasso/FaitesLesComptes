@@ -2,7 +2,10 @@
 
 require'spec_helper'
 
-describe 'Editions::Balance' do
+describe Editions::Balance do
+  
+  # TODO revoir ces spec qui testent plus Compta::Balance.build_pdf
+  # que Editions::Balance
 
   let(:p) {mock_model(Period)} 
   let(:a1) { mock_model(Account) }
@@ -37,13 +40,13 @@ describe 'Editions::Balance' do
   end
 
   it 'should be able to_pdf with 5 pages' do
-    pdf = @b.to_pdf
+    pdf = @b.send(:build_pdf)
     pdf.collection.should_receive(:length).and_return 100
     pdf.nb_pages.should == 5
   end
 
   it 'before_title renvoie une ligne de titre avec des cellules fusionnées' do
-    pdf = @b.to_pdf
+    pdf = @b.send(:build_pdf)
     pdf.before_title.should == ['', "Soldes au #{I18n.l(Date.today.beginning_of_month, :format=>'%d/%m/%Y')}",
       'Mouvements de la période',
       "Soldes au #{I18n.l(Date.today.end_of_month, :format=>'%d/%m/%Y')}"
@@ -51,7 +54,7 @@ describe 'Editions::Balance' do
   end
 
   it 'prepare_line appelle les méthodes de account' do
-    pdf = @b.to_pdf
+    pdf = @b.send(:build_pdf)
     lines = pdf.fetch_lines(1)
     pdf.prepare_line(lines.first).should ==  ["602", "compte 2", 10.0, 1.0, 2.0, 4.0, -7.0]
   end

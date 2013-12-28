@@ -53,7 +53,7 @@ describe SubscriptionsController do
         Utilities::Writer.stub(:new).with(sub).and_return(@uw = double(Utilities::Writer))
       @uw.stub(:write).and_return true
       post :create, {subscription:{id:1}}, valid_session
-      flash[:notice].should == "4 écritures ont été générées pas l'écriture périodique #{sub.title}"
+      flash[:notice].should == "3 écritures ont été générées par l'écriture périodique '#{sub.title}'"
       end
     
   end
