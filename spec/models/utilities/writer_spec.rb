@@ -8,7 +8,7 @@ describe Utilities::Writer do
   
   
   let(:mask) {mock_model(Mask)}
-  let(:my) {MonthYear.new(month:Date.current.month, year:Date.current.year)}
+  let(:my) {Date.current.beginning_of_month + 4.days} 
   
   before(:each) do
     @mask = mask

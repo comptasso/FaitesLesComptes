@@ -165,7 +165,7 @@ describe Subscription do
     end
     
     it 'passe les écritures' do
-      @lms.each {|lm| subject.send(:writer).should_receive(:write).with(lm) } 
+      @lms.each {|lm| subject.send(:writer).should_receive(:write).with(lm.beginning_of_month + 4) } 
       subject.pass_writings
     end  
     

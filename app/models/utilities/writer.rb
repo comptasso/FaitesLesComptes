@@ -11,8 +11,7 @@ module Utilities
     
     # cette méthode est ici et non dans mask car dans la plupart des cas, un masque
     # ne peut pas écrire tout seul une écriture. Il est en général incomplet
-    def write(monthyear)
-      date = Date.civil(monthyear.year.to_i, monthyear.month.to_i, @subscription.day)
+    def write(date)
       params = @mask.complete_writing_params(date)
       params[:narration] = "#{params[:narration]} n°#{@subscription.writings.size + 1}"
       @mask.book.in_out_writings.create(params)

@@ -65,7 +65,7 @@ class Subscription < ActiveRecord::Base
   def pass_writings
     return unless mask_complete?  # on ne peut passer d'écriture si le masque est incomplet
     return unless late? # pas d'écriture à passer
-    month_year_to_write.each {|my| writer.write(my)}
+    month_year_to_write.each {|my| writer.write(subscription_date(my))} 
   end
   
   # méthodes ajoutées pour faciliter la construction du formulaire
@@ -95,7 +95,7 @@ class Subscription < ActiveRecord::Base
   def last_to_pass
     ed = end_date || Date.today
     d = [Date.today, ed].min # on ne dépasse pas le end_date de la subscription s'il existe
-    d.day >= subscription_date(d.month).day ? d : d << 1  
+    d.day >= subscription_date(MonthYear.from_date(d)).day ? d : d << 1  
   end
   
   # date de la dernière écriture pour cet abonnement
@@ -107,8 +107,8 @@ class Subscription < ActiveRecord::Base
    
   # calcule la date à laquelle l'écriture doit être passée pour le mois en cours
   # si le mois ne comprent pas assez de jours, recalcule une bonne date pour le mois
-  def subscription_date(month = Date.today.month)
-    d = Date.today.beginning_of_month + (day-1).days # cas général
+  def subscription_date(monthyear = MonthYear.from_date(Date.today))
+    d = monthyear.beginning_of_month + (day-1).days # cas général
     d = d.months_ago(1).end_of_month if d.month > Date.today.month # cas où on a changé de mois
     # par exemple on est dans un mois court (février) et le day est à 31
     d
