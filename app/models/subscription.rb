@@ -65,7 +65,11 @@ class Subscription < ActiveRecord::Base
   def pass_writings
     return unless mask_complete?  # on ne peut passer d'écriture si le masque est incomplet
     return unless late? # pas d'écriture à passer
-    month_year_to_write.each {|my| writer.write(subscription_date(my))} 
+    count = 0
+    month_year_to_write.each do |my|
+      count += 1 if writer.write(subscription_date(my))
+    end 
+    count
   end
   
   # méthodes ajoutées pour faciliter la construction du formulaire
