@@ -19,6 +19,7 @@ module Utilities
     end
     
     # TODO un writer ne devrait écrire que pour l'éxercice en cours
+    # en tout cas pas pour un exercice clos.
     
     
     

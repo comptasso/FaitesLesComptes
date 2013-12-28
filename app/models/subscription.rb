@@ -58,7 +58,7 @@ class Subscription < ActiveRecord::Base
     lwd = last_writing_date
     # rappel ListMonths renvoie un MonthYear tant que begin_date < end_date
     # il est donc essentiel de se mettre au début du mois pour last_to_pass
-    ListMonths.new(lwd.beginning_of_month , last_to_pass.beginning_of_month)
+    ListMonths.new(lwd.beginning_of_month >> 1 , last_to_pass.end_of_month)
   end
   
   # Passe les écritures

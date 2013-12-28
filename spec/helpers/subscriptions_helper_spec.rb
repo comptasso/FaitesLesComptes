@@ -27,6 +27,7 @@ describe SubscriptionsHelper do
         d = Date.civil(2013, 12, 25)
         subject.stub(:late?).and_return true 
         subject.stub(:first_to_write).and_return(MonthYear.from_date(d.months_ago(3)))
+        subject.stub(:nb_late_writings).and_return 4
         
       end
       
@@ -35,7 +36,7 @@ describe SubscriptionsHelper do
       end
       
       it 'la cle text' do
-        sub_infos(subject)[:text].should == "L'écriture périodique 'Un abonnement' a des écritures à passer à partir de septembre 2013"
+        sub_infos(subject)[:text].should == "L'écriture périodique 'Un abonnement' a 4 écritures à passer (à partir de septembre 2013) "
       end
       
       it 'la clé icon renvoie sur l action' do 
