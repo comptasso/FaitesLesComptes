@@ -71,4 +71,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.2.5.RC' # "Refonte complète des éditions pdf'
 # FLCVERSION = '1.3.0.RC' # "Introduction des delayed jobs pour les pdf et accélération des constructions des bilans'
 # FLCVERSION = '1.3.2.RC' # Mise en place du fichier des écritures comptables
-FLCVERSION = '1.3.3.RC' # Refactorisation de l'édition d'une balance qui peut donc se passer de delayed jobs
+# FLCVERSION = '1.3.3.RC' # Refactorisation de l'édition d'une balance qui peut donc se passer de delayed jobs
+FLCVERSION = '1.4.0RC' # Mise en place des abonnements

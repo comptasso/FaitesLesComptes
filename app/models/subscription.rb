@@ -102,7 +102,7 @@ class Subscription < ActiveRecord::Base
   # s'il n'y a pas encore d'écritures, renvoie le mois précédent la création
   # du mask
   def last_writing_date
-    mask.writings.last.date rescue mask.created_at << 1
+    mask.writings.last.date rescue mask.created_at.to_date << 1
   end
    
   # calcule la date à laquelle l'écriture doit être passée pour le mois en cours
