@@ -74,6 +74,15 @@ class MonthYear
   def end_of_month
     @date.end_of_month
   end
+  
+  # pour générer une date en indiquant le jour du mois.
+  #
+  # Gère les mois de différentes longueurs en indiquant le dernier jour du mois
+  # si le mois n'a pas assez de jours
+  def to_date(day)
+    d = @date.beginning_of_month + day.abs - 1
+    [@date.end_of_month, d].min
+  end
 
   # retourne un hash qui est utilisé dans la constuction des url
   def to_french_h
