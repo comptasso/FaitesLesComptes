@@ -1,4 +1,5 @@
 require 'list_months'
+require 'month_year' 
 
 # Modèle destiné à gérer les abonnements. 
 # 
@@ -21,10 +22,7 @@ class Subscription < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
   # TODO utiliser les trim et les règles de validation pour le titre
-  # TODO gérer le cas où il n'y a encore aucune écriture de passée pour la masque
-  # on crée le masque puis on crée l'abonnement. Ne doit alors passer que 
-  # l'écriture du mois en cours ?!
-  
+   
   attr_accessible :day, :end_date, :mask_id, :title, :permanent
   
   belongs_to :mask
@@ -58,13 +56,14 @@ class Subscription < ActiveRecord::Base
     lwd = last_writing_date
     # rappel ListMonths renvoie un MonthYear tant que begin_date < end_date
     # il est donc essentiel de se mettre au début du mois pour last_to_pass
+    
     ListMonths.new(lwd.beginning_of_month >> 1 , last_to_pass.end_of_month)
   end
   
   # Passe les écritures
   def pass_writings
-    return unless mask_complete?  # on ne peut passer d'écriture si le masque est incomplet
-    return unless late? # pas d'écriture à passer
+    return  0 unless mask_complete?  # on ne peut passer d'écriture si le masque est incomplet
+    return  0 unless late? # pas d'écriture à passer
     count = 0
     month_year_to_write.each do |my|
       count += 1 if writer.write(subscription_date(my))
@@ -92,41 +91,49 @@ class Subscription < ActiveRecord::Base
   
   protected
   
-  # donne la dernière écriture à passer au jour actuel. Donc peut être soit 
+  # donne la dernière écriture qui devrait être à passer au jour actuel. Donc peut être soit 
   # dans le mois présent, soit dans le mois précédent si le day n'est pas encore
   # atteint, 
   # soit encore sensiblement avant si end_date est dépassé.
+  # 
+  # Ne s'occupe pas des écritures déjà passées. 
+  # 
+  # C'est la comparaison de last_writing_date et last_to_pass qui va permettre 
+  # de savoir ce qu'il faut passer
   def last_to_pass
     ed = end_date || Date.today
     d = [Date.today, ed].min # on ne dépasse pas le end_date de la subscription s'il existe
-    d.day >= subscription_date(MonthYear.from_date(d)).day ? d : d << 1  
+    # on trouve le jour où il faut passer l'écriture pour ce mois
+    to_pass = subscription_date(MonthYear.from_date(d))
+    d >= to_pass ? d : d << 1  
   end
   
   # date de la dernière écriture pour cet abonnement
   # s'il n'y a pas encore d'écritures, renvoie le mois précédent la création
-  # du mask
+  # du mask pour permettre une écriture pour le mois en cours
   def last_writing_date
     mask.writings.last.date rescue mask.created_at.to_date << 1
   end
    
-  # calcule la date à laquelle l'écriture doit être passée pour le mois en cours
+  # calcule la date à laquelle l'écriture doit être passée pour un MonthYear donné
+  # 
+  # Si pas d'argument, donne la date pour le mois en cours.
   # si le mois ne comprent pas assez de jours, recalcule une bonne date pour le mois
   def subscription_date(monthyear = MonthYear.from_date(Date.today))
-    d = monthyear.beginning_of_month + (day-1).days # cas général
-    d = d.months_ago(1).end_of_month if d.month > Date.today.month # cas où on a changé de mois
-    # par exemple on est dans un mois court (février) et le day est à 31
-    d
+    monthyear.to_date(day)
   end
   
   # une souscription ne peut être valide que si le masque est complet
   # donc attention à la modification du masque après coup
   def mask_complete?
-    errors.add(:base, :mask_incomplet) unless mask.complete? 
+    reponse = mask.complete?
+    errors.add(:base, :mask_incomplet) unless reponse
+    reponse
   end
   
   
   def writer
-    @writer ||= Utilities::Writer.new(self)
+    Utilities::Writer.new(self)
   end
   
   

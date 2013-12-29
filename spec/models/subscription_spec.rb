@@ -162,11 +162,12 @@ describe Subscription do
       subject.stub(:late?).and_return true
       subject.stub(:month_year_to_write).
         and_return(@lms = ListMonths.new(Date.today.months_ago(2), Date.today.months_ago(1)))
+      subject.stub(:writer).and_return(@writer =  Struct.new(:write))
     end
     
     it 'passe les écritures' do
-      @lms.each {|lm| subject.send(:writer).should_receive(:write).with(lm.beginning_of_month + 4) } 
-      subject.pass_writings
+      @lms.each {|lm| @writer.should_receive(:write).with(subject.send(:subscription_date, lm)) } 
+      subject.pass_writings 
     end  
     
     it 'sauf si le mask est incomplet' do
