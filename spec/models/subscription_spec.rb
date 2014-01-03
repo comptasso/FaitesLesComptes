@@ -7,7 +7,7 @@ end
 describe Subscription do
   
   describe 'validations' do
-    subject {Subscription.new(mask_id:1, title:'un abonnement', day:5)}
+    subject {Subscription.new(mask_id:1, title:'un abonnement', day:5, permanent:true)}
     
     before(:each) do
       subject.stub(:mask).and_return(mock_model(Mask, complete?:true))     
@@ -39,6 +39,29 @@ describe Subscription do
     
     end
   
+  end
+  
+  describe 'before_validation' do
+    
+    describe 'prepare_params' do
+      
+      subject {Subscription.new(:end_date=>Date.today, permanent:true, day:5)}
+      
+      before(:each) {subject.stub(:mask_complete?).and_return true }
+      
+      it 'une souscription permanente a son end_date mise à nil' do
+        subject.valid?
+        subject.end_date.should be_nil
+      end
+      
+      it 'une non permanente complète son end_date avec le day' do
+        subject.permanent = false
+        subject.valid?
+        subject.end_date.day.should == 5
+      end
+      
+    end
+    
   end
   
   
@@ -164,7 +187,7 @@ describe Subscription do
       subject.stub(:mask_complete?).and_return true
       subject.stub(:late?).and_return true
       subject.stub(:month_year_to_write).
-        and_return(@lms = ListMonths.new(Date.today.months_ago(2), Date.today.months_ago(1)))
+        and_return(@lms = MonthYear.from_date(Date.today.months_ago(2))..MonthYear.from_date(Date.today.months_ago(1)))
       subject.stub(:writer).and_return(@writer =  Struct.new(:write))
     end
     

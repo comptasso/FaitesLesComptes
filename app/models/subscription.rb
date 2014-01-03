@@ -1,4 +1,3 @@
-require 'list_months'
 require 'month_year' 
 
 # Modèle destiné à gérer les abonnements. 
@@ -32,6 +31,8 @@ class Subscription < ActiveRecord::Base
   validate :mask_complete?
   # TODO faire une validation coherent avec end_date et permanent
   # ou un before_validation
+  
+  before_validation :prepare_params
   
   
   def nb_late_writings
@@ -121,6 +122,16 @@ class Subscription < ActiveRecord::Base
   # définit si l'écriture devrait être écrite pour le mois en cours
   def to_write_this_month?
     subscription_date.today? || subscription_date.past?
+  end
+  
+  # mais le end_date à nil si l'abonnement est permanent, sinon ajuste le end_date
+  # pour le mettre au jour indiqué par 
+  def prepare_params
+    if permanent
+      self.end_date =  nil
+    else
+      self.end_date = end_date.beginning_of_month + (day-1) 
+    end
   end
   
   

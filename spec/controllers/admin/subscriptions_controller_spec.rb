@@ -59,28 +59,14 @@ describe Admin::SubscriptionsController do
       {'title'=>'nouvel abonnement', 'day'=>'7', 'mask_id'=>'1', 'permanent'=>'true'}
     end
     
-    def prepared_attributes
-      pattr = valid_attributes
-      pattr.delete('permanent')
-      pattr
-    end
+    
     
     it 'crée un nouvel abonnement' do
-      Subscription.should_receive(:new).with(prepared_attributes).and_return(@sub = mock_model(Subscription).as_new_record)
+      Subscription.should_receive(:new).with(valid_attributes).and_return(@sub = mock_model(Subscription).as_new_record)
       @sub.stub(:save).and_return true
       post :create, {organism_id:@o.to_param, subscription:valid_attributes}, valid_session
     end
-    
-   
-      
-    it 'doit recevoir prepare_params' do
-      Subscription.stub(:new).with(prepared_attributes).
-        and_return(@sub = mock_model(Subscription))
-      @sub.stub(:save).and_return false
-      @controller.should_receive(:prepare_params).with(valid_attributes).and_return(prepared_attributes)
-      post :create, {organism_id:@o.to_param, subscription:valid_attributes}, valid_session
-    end
-    
+     
     
     it 'le sauve' do
       Subscription.stub(:new).and_return(@sub = mock_model(Subscription))
@@ -179,11 +165,7 @@ describe Admin::SubscriptionsController do
       put :update, {:organism_id=>@o.to_param, :id =>'30', subscription:{} }, valid_session
     end
     
-    it 'prepare les params' do
-      Subscription.stub(:find).and_return(mock_model(Subscription, update_attributes:true))
-      @controller.should_receive(:prepare_params).with({'bonjour'=>'toi'})
-      put :update, {:organism_id=>@o.to_param, :id =>'30', subscription:{'bonjour'=>'toi'} }, valid_session
-    end
+    
     
     it 'appelle update' do
       Subscription.stub(:find).and_return(@sub = mock_model(Subscription))
@@ -241,17 +223,7 @@ describe Admin::SubscriptionsController do
     end
   end
   
-  describe 'prepare' do
-    
-    it 'supprime les champs date si permanent' do
-      params  = {"title"=>"un test", "mask_id"=>"1",
-        "day"=>"6", "permanent"=>"true", "end_date(3i)"=>"1", "end_date(2i)"=>"12", "end_date(1i)"=>"2013"}
-      @controller.send(:prepare_params, params).should == {"title"=>"un test", "mask_id"=>"1", "day"=>"6"} 
-    end
-    
-    
-    
-  end
+ 
   
   
   

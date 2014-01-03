@@ -16,9 +16,7 @@ class Admin::SubscriptionsController < Admin::ApplicationController
   end
   
   def create
-    prepared_params = prepare_params(params[:subscription])
-    
-    @sub = Subscription.new(prepared_params)
+    @sub = Subscription.new(params[:subscription])
     if @sub.save
       flash[:notice] = "L'écriture périodique '#{@sub.title}' a été créée"
       redirect_to admin_organism_subscriptions_url(@organism)
@@ -41,8 +39,8 @@ class Admin::SubscriptionsController < Admin::ApplicationController
   
   def update
     @subscription = Subscription.find(params[:id])
-    prepared_params = prepare_params(params[:subscription])
-    if @subscription.update_attributes(prepared_params)
+    
+    if @subscription.update_attributes(params[:subscription])
       flash[:notice] = "L'écriture périodique '#{@subscription.title}' a été mise à jour"
       redirect_to admin_organism_subscriptions_url(@organism)
     else
@@ -75,16 +73,7 @@ class Admin::SubscriptionsController < Admin::ApplicationController
     @completed = @organism.masks.select {|m| m.complete?}
   end
   
-  # TODO mettre dans le modèle
-  def prepare_params(params)
-    if params['permanent'] == '1'
-      params['end_date(1i)']=''; params['end_date(2i)']=''; params['end_date(3i)']=''
-    else
-      params['end_date(3i)'] = params["day"]
-    end
-    
-    params
-  end
+  
   
   
 end
