@@ -1,4 +1,5 @@
-require 'month_year' 
+require 'month_year'
+require 'strip_arguments'
 
 # Modèle destiné à gérer les abonnements. 
 # 
@@ -17,20 +18,18 @@ require 'month_year'
 # L'organisme a les abonnements au travers des masques
 #
 class Subscription < ActiveRecord::Base
-  include Utilities::PickDateExtension # apporte les méthodes pick_date_for
-
-  # TODO utiliser les trim et les règles de validation pour le titre
-   
+    
   attr_accessible :day, :end_date, :mask_id, :title, :permanent
   
   belongs_to :mask
   has_many :writings, :through=>:mask
    
   validates :day, :mask_id, :title, presence:true
+  validates :title, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   
   validate :mask_complete?
-  # TODO faire une validation coherent avec end_date et permanent
-  # ou un before_validation
+    
+  strip_before_validation :title
   
   before_validation :prepare_params
   
@@ -45,6 +44,7 @@ class Subscription < ActiveRecord::Base
     nb_late_writings > 0
   end
   
+  # renvoie le premier MonthYear à écrire s'il faut en écrire
   def first_to_write
     month_year_to_write.first if late?
   end

@@ -32,6 +32,11 @@ describe Subscription do
         subject.should_not be_valid
       end
       
+      it 'si le titre comprend des caractères invalides' do
+        subject.title = 'Bonds? oir'
+        subject.should_not be_valid
+      end
+      
       it 'si le masque n est pas complet' do
         subject.stub(:mask).and_return(mock_model(Mask, complete?:false))
         subject.should_not be_valid
@@ -43,11 +48,11 @@ describe Subscription do
   
   describe 'before_validation' do
     
-    describe 'prepare_params' do
-      
-      subject {Subscription.new(:end_date=>Date.today, permanent:true, day:5)}
-      
-      before(:each) {subject.stub(:mask_complete?).and_return true }
+    subject {Subscription.new(:end_date=>Date.today, permanent:true, day:5, title:'  avec des espaces  ')}
+    
+    before(:each) {subject.stub(:mask_complete?).and_return true }
+    
+    describe 'prepare_params' do     
       
       it 'une souscription permanente a son end_date mise à nil' do
         subject.valid?
@@ -58,6 +63,15 @@ describe Subscription do
         subject.permanent = false
         subject.valid?
         subject.end_date.day.should == 5
+      end
+      
+    end
+    
+    describe 'strip_title' do
+      
+      it 'enlève les blancs inutiles' do
+        subject.valid?
+        subject.title.should == 'avec des espaces'
       end
       
     end
