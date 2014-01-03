@@ -8,7 +8,7 @@
     .row-fluid
       .span12
         = f.input :day, :collection=>(1..31), wrapper_html: {class: "span2"}, label_html:{class:"span8"}, input_html: {class: "span4"} 
-        = f.input :permanent, :as=>:radio_buttons,  wrapper_html: {class: "span3"}, label_html:{class:"span4"}, input_html: {class: "span4"} 
+        = f.input :permanent, wrapper_html: {class: "span3"}, label_html:{class:"span4"}, input_html: {class: "span5"} 
         = f.input(:end_date, wrapper_html: {class: "span4"}, label_html:{class:"span4"}, |
           input_html: {class: "span4"}, :start_year => @begin_year,:end_year=>@end_year, :discard_day => true)
     .row-fluid

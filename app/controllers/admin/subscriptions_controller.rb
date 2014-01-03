@@ -76,12 +76,12 @@ class Admin::SubscriptionsController < Admin::ApplicationController
   end
   
   def prepare_params(params)
-    if params['permanent'] == 'true'
-      params.delete('end_date(1i)'); params.delete('end_date(2i)'); params.delete('end_date(3i)')
+    if params['permanent'] == '1'
+      params['end_date(1i)']=''; params['end_date(2i)']=''; params['end_date(3i)']=''
     else
       params['end_date(3i)'] = params["day"]
     end
-    params.delete('permanent')
+    
     params
   end
   

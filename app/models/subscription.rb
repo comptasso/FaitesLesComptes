@@ -5,13 +5,12 @@ require 'month_year'
 # 
 # Les champs utiles sont title pour lui donner un titre,
 # end_date : pour indiquer jusqu'à quelle date il faut passer l'abonnement,
-# laisser vide ce champ indique un abonnement sans limite.
+# laisser ce champ vide indique un abonnement permanent.
 # 
-# Par défaut, la périodicité est mensuelle. A voir ultérieurement si des 
-# besoins complémentaires apparaissent. 
+# Seuls les abonnements mensuels sont gérés.
 # 
 # day est le jour du mois; 31 permet d'indiquer le dernier jour du mois.
-# Pour les mois, plus courts, un jour incorrect sera corrigé. 
+# Pour les mois plus courts, un jour incorrect sera corrigé. 
 # 
 # L'abonnement appartient à un mask_id qui a une relation has_one. 
 # 
@@ -31,6 +30,8 @@ class Subscription < ActiveRecord::Base
   validates :day, :mask_id, :title, presence:true
   
   validate :mask_complete?
+  # TODO faire une validation coherent avec end_date et permanent
+  # ou un before_validation
   
   
   def nb_late_writings
@@ -71,24 +72,7 @@ class Subscription < ActiveRecord::Base
     count
   end
   
-  # méthodes ajoutées pour faciliter la construction du formulaire
-  # indique si l'abonnement est permanent
-  def permanent
-    !end_date
-  end
-  
-  # si on indique que le virement est permanent, alors on efface end_date
-  # sinon, on garde end_date ou on le remplit avec la date du jour s'il n'était 
-  # pas déjà rempli.
-  def permanent=(bool)
-    if bool
-      end_date = nil
-    else
-      end_date ||= Date.today
-    end
-  end
-  
-  
+    
   protected
   
   # donne la dernière écriture qui devrait être à passer au jour actuel. Donc peut être soit 

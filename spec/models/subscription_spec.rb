@@ -94,7 +94,7 @@ describe Subscription do
          Date.stub(:today).and_return Date.civil(2013, 9, 30)
          Date.stub(:current).and_return Date.today
          subject.stub(:last_writing_date).and_return Date.civil(2013, 8, 31)
-         subject.nb_late_writings.should == 1
+         subject.nb_late_writings.should == 1 
       end
       
       it 'pour février' , wip:true do
