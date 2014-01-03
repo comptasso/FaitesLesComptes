@@ -45,7 +45,7 @@ describe Subscription do
   describe 'writings_late', wip:true do
     
     
-    subject {Subscription.new(title:'test de scubscription', mask_id:1, day:5)}
+    subject {Subscription.new(title:'test de scubscription', mask_id:1, day:2, permanent:true)}
     
     it 'doit chercher la dernière écriture pour ce mask' do
       subject.should_receive(:last_writing_date).and_return(Date.today.months_ago(1).beginning_of_month)
@@ -134,18 +134,21 @@ describe Subscription do
   end
   
   describe 'first_to_write' do
+    
+    let(:my) {MonthYear.from_date(Date.today)}
+    
     it 'appelle month_year_to_write' do
-      subject.should_receive(:month_year_to_write).and_return []
+      subject.should_receive(:month_year_to_write).at_least(1).times.and_return(my..my)
       subject.first_to_write
     end
     
-    it 'renvoie nil si month_year_to_write est vide' do
-      subject.stub(:month_year_to_write).and_return(ListMonths.new(Date.today, Date.today))
+    it 'renvoie nil si month_year_to_write a une taille négativevide' do
+      subject.stub(:month_year_to_write).and_return(my..my.previous_month)
       subject.first_to_write.should == nil
     end
     
     it 'renvoie le premier mois autrement' do
-      subject.stub(:month_year_to_write).and_return(ListMonths.new(Date.today.years_ago(1), Date.today))
+      subject.stub(:month_year_to_write).and_return(MonthYear.from_date(Date.today.years_ago(1))..my)
       subject.first_to_write.should == MonthYear.from_date(Date.today.years_ago(1))
     end
      

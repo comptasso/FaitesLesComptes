@@ -35,7 +35,8 @@ class Subscription < ActiveRecord::Base
   
   
   def nb_late_writings
-    month_year_to_write.size
+    mys  = month_year_to_write
+    mys.end - mys.begin + 1 
   end
   
   # late indique s'il y a des écritures à passer
@@ -54,11 +55,7 @@ class Subscription < ActiveRecord::Base
   # à passer 
   # 
   def month_year_to_write
-    lwd = last_writing_date
-    # rappel ListMonths renvoie un MonthYear tant que begin_date < end_date
-    # il est donc essentiel de se mettre au début du mois pour last_to_pass
-    
-    ListMonths.new(lwd.beginning_of_month >> 1 , last_to_pass.end_of_month)
+    MonthYear.from_date(last_writing_date).succ..MonthYear.from_date(last_to_pass)
   end
   
   # Passe les écritures
@@ -89,7 +86,7 @@ class Subscription < ActiveRecord::Base
     d = [Date.today, ed].min # on ne dépasse pas le end_date de la subscription s'il existe
     # on trouve le jour où il faut passer l'écriture pour ce mois
     to_pass = subscription_date(MonthYear.from_date(d))
-    d >= to_pass ? d : d << 1  
+    d >= to_pass ? to_pass : to_pass << 1  
   end
   
   # date de la dernière écriture pour cet abonnement

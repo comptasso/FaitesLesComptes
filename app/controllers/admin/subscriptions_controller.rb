@@ -75,6 +75,7 @@ class Admin::SubscriptionsController < Admin::ApplicationController
     @completed = @organism.masks.select {|m| m.complete?}
   end
   
+  # TODO mettre dans le modèle
   def prepare_params(params)
     if params['permanent'] == '1'
       params['end_date(1i)']=''; params['end_date(2i)']=''; params['end_date(3i)']=''

@@ -36,16 +36,30 @@ class MonthYear
   def self.from_date(date)
     MonthYear.new(year:date.year, month:date.month)
   end
+  
+  # calcule la distance en mois entre deux month_year
+  def -(my)
+     difference = 0
+    if year.to_i != my.year.to_i
+        difference += 12 * (year.to_i - my.year.to_i)
+    end
+    difference + month.to_i - my.month.to_i
+  end
 
   
   def <=>(other)
     comparable_string <=> other.comparable_string
   end
+  
+  # permet de définir un range de MonthYear
+  def succ
+    MonthYear.new(succ_params)  
+  end
 
 
   # format par défaut mm-yyyy
   def to_s
-    [@month.to_s, @year.to_s].join('-')
+    [month, year].join('-')
   end
 
   # permet de définir le format de sortie sous la forme habituelle pour les dates
@@ -93,6 +107,11 @@ class MonthYear
   def previous_year
     MonthYear.from_date(@date.years_ago(1))
   end
+  
+  # crée un hash correspondant au mois précédent
+  def previous_month
+    MonthYear.from_date(@date << 1)
+  end
 
   
 
@@ -126,6 +145,18 @@ class MonthYear
   # indique si le month_year est future par rapport à la date donnée
   def younger_than?(date)
     end_of_month < date
+  end
+  
+  # définit les paramètres permettant de créer le MonthYear suivant 
+  def succ_params
+    mois = month.succ
+    an = year
+    if mois.to_i > 12
+      mois = '01'
+      an = year.succ
+    end
+    {year:an.to_s, month:mois.to_s}
+    
   end
 
  

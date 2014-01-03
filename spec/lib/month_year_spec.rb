@@ -45,7 +45,7 @@ describe 'MonthYear' do
 
   it 'guess_date' do
     d = Date.today
-    my = MonthYear.new(year:d.year, month:d.month)
+    my = MonthYear.new(year:d.year, month:d.month) 
     my.guess_date.should == d
 
     my = MonthYear.from_date(d.prev_year)
@@ -53,5 +53,20 @@ describe 'MonthYear' do
 
     my = MonthYear.from_date(d.next_year)
     my.guess_date.should == my.beginning_of_month
+  end
+  
+  describe 'succ' do
+    
+    it '03-2012 succ = 04-2012' do
+      my = MonthYear.new(month:'03', year:'2012')
+      my.succ.should == MonthYear.new(month:'04', year:'2012')
+    end
+    
+    it 'mais 12-2012 succ = 01-2013' do
+      my = MonthYear.new(month:'12', year:'2012')
+      my.succ.should == MonthYear.new(month:'01', year:'2013')
+    end
+    
+    
   end
 end
