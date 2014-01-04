@@ -26,31 +26,6 @@ Purpose of the stylesheet follows.
 }
 
 
-/* stylesheets/application.css */
-/*.simple_form label {
-    padding-right: 10px;
-    text-align: right;
-    font-weight: bold;
-}
-
-.simple_form div.input {
-    margin-bottom: 10px;
-}
-
-.inputs_inline label{
-    float: none;
-}
-
-
-.simple_form div.boolean {
-    margin-left: 40px;
-}
-
-.simple_form div.boolean label, .simple_form label.collection_radio {
-    float: none;
-    margin: 0;
-}
-
 .simple_form label.collection_radio {
     margin-right: 10px;
     margin-left: 2px;
@@ -78,27 +53,6 @@ img.ui-datepicker-trigger {
     margin-left: -20px;
     margin-right: 4px;
 }
-
-/*form {
-    padding-top: 8px;
-}*/
-
-/* permet  d'avoir une mise en page de formulaire fluide */
-/*.row-fluid form input, .row-fluid form select { float: left; }*/
-
-/*.controls {position: relative;}
-form ul  {
-    list-style: none;
-    li label  { padding-right: 0px;}
-}
-span.error{
-    margin-bottom: 0;
-}
-.control-group {
-    margin-bottom: 0;
-    margin-top: 6px;
-}
-
 
 .help-inline {
     float: right;
