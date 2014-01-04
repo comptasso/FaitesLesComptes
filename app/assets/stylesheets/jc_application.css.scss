@@ -25,25 +25,6 @@ Purpose of the stylesheet follows.
     /*    font-family: sans-serif;*/
 }
 
-
-.simple_form label.collection_radio {
-    margin-right: 10px;
-    margin-left: 2px;
-}
-
-.simple_form .hint {
-    clear: left;
-    margin-left: 140px;
-    font-size: 12px;
-    color: #555;
-    display: block;
-    font-style: italic;
-}
-
-.simple_form abbr {
-    color: red;
-}*/
-
 .picker_date img {
     float: left;
     padding-top: 4px;
@@ -53,23 +34,3 @@ img.ui-datepicker-trigger {
     margin-left: -20px;
     margin-right: 4px;
 }
-
-.help-inline {
-    float: right;
-    font-size: 83%;
-    font-style: italic;
-    margin-top: -10px;
-    padding-right: 10px;
-}
-
-.form-inline span.help-inline {
-    float: none;
-    margin-top: 0px;
-    }
-
-    td p {
-      margin-left: 0px; Pour éviter que simple format de bank_account address laisse une marge à gauche 
-      }
-.input-prepend textarea {
-  margin-bottom: 4px;
-  }*/
