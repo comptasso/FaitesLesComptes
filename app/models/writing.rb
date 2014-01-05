@@ -145,14 +145,11 @@ class Writing < ActiveRecord::Base
   def lock
     Writing.transaction do 
       cid = Writing.last_continuous_id
-      compta_lines.each do |cl|
-        unless cl.locked?
-          cl.update_attribute(:locked, true)
-        end
-      end
-     self.continuous_id = cid.succ
-     self.locked_at =  Date.today
-     save validate:false # les validations sont inutiles ici      
+      compta_lines.each { |cl| cl.send(:verrouillage) } # utilisation volontaire
+      # d'une méthode protected car verrouillage ne devrait pas être appelée directement
+      self.continuous_id = cid.succ
+      self.locked_at =  Date.today
+      save validate:false # les validations sont inutiles ici      
     end
   end
   

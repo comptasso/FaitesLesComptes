@@ -95,8 +95,25 @@ class ComptaLine < ActiveRecord::Base
   def label
     "#{I18n.l date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',debit)}"
   end
-
+  
   protected
+  
+  # utilisé par Writing dans une Transaction pour verrouiller ses compta_lines
+  # Quand une compta_line est une remise de chèque, l'action verrouille également
+  # les chèques associés.
+  # 
+  # Ne devrait pas être appelé directement. 
+  def verrouillage
+    unless locked?
+      update_attribute(:locked, true)
+      if check_deposit_id
+        cd = check_deposit
+        cd.checks.each {|l| l.lock}
+      end
+    end
+  end
+
+  
 
   # remplit le champ account_id avec celui associé à nature si nature est effectivement associée à un compte.
   # appelé par before save

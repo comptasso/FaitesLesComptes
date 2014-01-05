@@ -20,7 +20,7 @@ describe BankExtractLine do
       total_credit:5)
     @d7 = create_outcome_writing(7)  
     @d29 = create_outcome_writing(29)
-    @ch97 = create_in_out_writing(97, 'Chèque')
+    @ch97 = create_in_out_writing(97, 'Chèque') 
     @ch5 = create_in_out_writing(5, 'Chèque')
     @cr = create_in_out_writing(27) # une recette
     @cd = @ba.check_deposits.new(deposit_date:(Date.today + 1.day)) 
@@ -74,33 +74,18 @@ describe BankExtractLine do
       @be.bank_extract_lines.all.map {|bel| bel.position}.should == [1,2,3]
     end
 
-   # TODO déplacer ces tests vers compta_line et writing
+   
     
     describe 'lock_line'  do
-      before(:each) do
-        @be.bank_extract_lines.new(:compta_line_id=>@cr.support_line.id)
-        @be.bank_extract_lines.each do |bel|
-          bel.lock_line 
-        end
+      
+      subject {BankExtractLine.new(bank_extract_id:5, compta_line_id:6)}
+      
+      it 'appelle lock de sa compta_line' do
+        subject.should_receive(:compta_line).and_return(@cl = mock_model(ComptaLine))
+        @cl.should_receive(:lock).and_return true
+        subject.lock_line
       end
-
-      it 'verif ' , wip:true do
-        @be.bank_extract_lines.first.compta_line(true).should be_locked
-      end
-
-
-      it 'lock_line doit verrouiller les lignes et les siblings' do
-        ComptaLine.where('payment_mode = ?', 'Virement').all.each do |l|
-          puts l.inspect unless l.locked
-           l.should be_locked
-         end
-      end
-
-      it 'pour une remise de chèque, il faut aussi verrouiller les lignes d origine' do
-       ComptaLine.where('payment_mode = ?', 'Chèque').all.each do |l|
-          l.should be_locked
-        end
-      end
+      
     end
     
 

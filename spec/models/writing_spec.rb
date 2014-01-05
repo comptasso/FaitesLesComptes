@@ -299,7 +299,7 @@ describe Writing do
         it 'lock doit verrouiller toutes les lignes' do
           cls = [1,2].map {|i| mock_model(ComptaLine, locked?:false) }
           @w.stub(:compta_lines).and_return(cls)
-          cls.each {|cl| cl.should_receive(:update_attribute).with(:locked, true).and_return(true)}
+          cls.each {|cl| cl.should_receive(:send).with(:verrouillage).and_return(true)}
           @w.lock
         end
         
@@ -333,6 +333,8 @@ describe Writing do
           @w.should_not be_valid 
           
         end
+        
+        it 'verrouiller une écriture remise de chèque doit verrouiller les chèques'
       
       end
 
