@@ -72,7 +72,7 @@ class BankAccount < ActiveRecord::Base
  # quand on est dans l'exerice suivant qui lui est en année pleine.
  def cumulated_at(date, dc)
     p = organism.find_period(date)
-    return 0 unless acc = current_account(p)
+    return 0 unless p && acc = current_account(p)
     acc.cumulated_at(date, dc)
  end
  

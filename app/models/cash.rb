@@ -62,7 +62,7 @@ class Cash < ActiveRecord::Base
   #
   def cumulated_at(date, dc) 
     p = organism.find_period(date)
-    return 0 unless acc = current_account(p)
+    return 0 unless p && acc = current_account(p) # on teste p car l'exercice précédent peut être incomplet
     acc.cumulated_at(date, dc)
   end
   
