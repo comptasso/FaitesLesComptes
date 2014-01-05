@@ -24,6 +24,7 @@ require 'strip_arguments'
 #
 #
 class BankAccount < ActiveRecord::Base 
+  include Utilities::Sold
   include Utilities::JcGraphic
 
   belongs_to :organism
@@ -71,13 +72,29 @@ class BankAccount < ActiveRecord::Base
  # quand on est dans l'exerice suivant qui lui est en année pleine.
  def cumulated_at(date, dc)
     p = organism.find_period(date)
-    return 0 unless p
-    acc = current_account(p)
-    Writing.sum(dc, :select=>'debit, credit', :conditions=>['date <= ? AND account_id = ?', date, acc.id], :joins=>:compta_lines).to_f
-    # nécessaire car quand il n'y a aucune compa_lines, le retour est '0' et non 0 ce qui pose des
-    # problèmes de calcul
+    return 0 unless acc = current_account(p)
+    acc.cumulated_at(date, dc)
+ end
+ 
+ # On veut que le solde prenne en compte le solde de l'exercice précédent tant
+  # que l'écriture d'à nouveau n'a pas été générée.
+  # 
+  # On cherche donc l'exercice précédent et on rajoute son solde si cet exercice
+  # est ouvert (ce qui veut dire que l'écriture d'A Nouveau n'est pas encore passée).
+  # 
+  # Lorsque l'exercice a été clos, les écritures d'AN ont été passées et le solde 
+  # donne donc la bonne valeur.
+  #
+  def sold_at(date)
+    reponse = super
+    p = organism.find_period(date)
+    if p.previous_period? 
+      pp = p.previous_period
+      reponse += sold_at(pp.close_date) if pp.open
+    end 
+    reponse
   end
-
+  
  # créé un nouvel extrait bancaire rempli à partir des informations du précédent
  # le mois courant et solde zéro si c'est le premier
   def new_bank_extract(period)
@@ -114,9 +131,9 @@ class BankAccount < ActiveRecord::Base
   end
   
   # donne le solde du compte bancaire à une date donnée
-  def sold_at(date)
-    cumulated_at(date, :credit) - cumulated_at(date, :debit)
-  end
+#  def sold_at(date)
+#    cumulated_at(date, :credit) - cumulated_at(date, :debit)
+#  end
   
   
  def first_bank_extract_to_point

@@ -57,6 +57,10 @@ module Utilities::Sold
     (cumulated_credit_at(date) - cumulated_debit_at(date)).round 2
   end
 
+  # donne les mouvements entre deux dates (appelée from et to). Le sens
+  # est fourni par le troisième argument (dc qui peut donc être :debit ou :credit
+  #
+  # Les mouvements incluent les deux bornes de dates.
   def movement(from, to, dc)
     (cumulated_at(to, dc) - cumulated_at(from - 1 , dc)).round 2
   end

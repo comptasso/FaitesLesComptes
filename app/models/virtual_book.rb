@@ -66,6 +66,10 @@ class VirtualBook < Book
   def cumulated_at(date = Date.today, dc)
     -virtual.cumulated_at(date, dc)
   end
+  
+  def sold_at(date = Date.today)
+    -virtual.sold_at(date)
+  end
 
   # dans les caisses et comptes bancaires, on affiche les soldes
   # TODO je pense que ce n'est pas de la responsabilité de cette classe de ne rien retourner si date future
