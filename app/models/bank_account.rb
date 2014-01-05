@@ -88,7 +88,7 @@ class BankAccount < ActiveRecord::Base
   def sold_at(date)
     reponse = super
     p = organism.find_period(date)
-    if p.previous_period? 
+    if p && p.previous_period? 
       pp = p.previous_period
       reponse += sold_at(pp.close_date) if pp.open
     end 
