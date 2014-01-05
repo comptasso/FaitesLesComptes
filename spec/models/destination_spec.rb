@@ -75,7 +75,7 @@ describe Destination do
 
   end
 
-  it 'tester les méthodes statistiques de destination'
+  
   
 end
 

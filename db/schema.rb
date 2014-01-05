@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140103073836) do
+ActiveRecord::Schema.define(:version => 20140105170944) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -197,9 +197,8 @@ ActiveRecord::Schema.define(:version => 20140103073836) do
     t.string   "name"
     t.integer  "organism_id"
     t.text     "comment"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
-    t.boolean  "income_outcome", :default => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "export_pdfs", :force => true do |t|

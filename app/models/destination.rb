@@ -9,8 +9,6 @@ require 'strip_arguments'
 # enregistrent les dépenses comme les recettes et donc permettent d'avoir des
 # résultats économiques par destinations.
 # 
-# TODO : supprimer le champ income_outcome inutilisé (à vérifier)
-#
 class Destination < ActiveRecord::Base
 
   attr_accessible :name, :comment, :income_outcome
@@ -23,7 +21,7 @@ class Destination < ActiveRecord::Base
   validates :organism_id, :presence=>true
   validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
-  validates :income_outcome, :inclusion=>{:in=>[true, false]}
+  
 
   default_scope order: 'name ASC'
 

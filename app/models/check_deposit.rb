@@ -97,10 +97,6 @@ class CheckDeposit < ActiveRecord::Base
     debit_compta_line && debit_compta_line.bank_extract_line
   end
 
-#  # retourne le nombre de chèque dans cette remise
-#  def nb_checks
-#    checks.count
-#  end
 
   # total checks fait la somme des chèques qui sont dans la cible de l'association.
   # cette approche est nécessaire car un module intégré donne un résultat vide
@@ -124,8 +120,7 @@ class CheckDeposit < ActiveRecord::Base
   
   private
 
-  # appelé par before_save pour éviter les remises chèques vides
-  # TODO devrait être un validator
+  # méthode de validation pour éviter des remises vides
   def not_empty
     self.errors[:base] <<  'Il doit y avoir au moins un chèque dans une remise' if checks.empty?
   end
