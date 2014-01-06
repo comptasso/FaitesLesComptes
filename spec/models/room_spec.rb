@@ -19,12 +19,7 @@ describe Room  do
   end
 
   it 'test de l existence des bases'  do
-    case ActiveRecord::Base.connection_config[:adapter]
-    when 'sqlite3'
-      Apartment::Database.db_exist?('test').should == true
-    when 'postgresql'
-      Apartment::Database.db_exist?('public').should == true
-    end
+    Apartment::Database.db_exist?('public').should == true
   end
 
   describe 'les validations' do

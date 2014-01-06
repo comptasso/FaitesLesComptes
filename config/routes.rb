@@ -127,11 +127,6 @@ Faitesvoscomptes::Application.routes.draw do
 
     resources :rooms, :only=>[:index, :show, :new, :create, :destroy] 
     
-    resource :restore do
-      member do
-        post 'rebuild'
-      end
-    end
     resources :organisms do
 
       resources :masks

@@ -91,13 +91,8 @@ class Room < ActiveRecord::Base
 
   # construit le nom du fichier de la base en ajoutant l'adapter comme extension
   #
-  # renvoie par exemple asso.sqlite3
   def db_filename
-    if ActiveRecord::Base.connection_config[:adapter] == 'sqlite3'
-      "#{database_name}.sqlite3"
-    else
-      database_name
-    end
+    database_name
   end
 
   
