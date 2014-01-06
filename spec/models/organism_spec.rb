@@ -263,7 +263,7 @@ describe Organism do
     end
     
     
-    describe 'create_account_for', wip:true  do
+    describe 'create_account_for'  do
       
       before(:each) do
         @bac = mock_model(BankAccount, :nickname=>'Cpte sur livret')
@@ -288,8 +288,12 @@ describe Organism do
         @organism.stub_chain(:periods, :opened).and_return([@p1 = mock_model(Period), @p2 = mock_model(Period)])
         @bac.should_receive(:accounts).exactly(1).times.and_return(@ar = double(Arel))
         @bac.should_receive(:accounts).exactly(1).times.and_return(@as = double(Arel))
-        @ar.should_receive(:create!).with(number:'51204', period_id:@p1.id, title:@bac.nickname).and_return
-        @as.should_receive(:create!).with(number:'51204', period_id:@p2.id, title:@bac.nickname).and_return
+        @ar.should_receive(:new).with(number:'51204', title:@bac.nickname).and_return @ar
+        @ar.should_receive(:period_id=).with(@p1.id).and_return @ar
+        @ar.should_receive(:save!).and_return
+        @as.should_receive(:new).with(number:'51204', title:@bac.nickname).and_return @as
+        @as.should_receive(:period_id=).with(@p2.id).and_return @as
+        @as.should_receive(:save!).and_return
         @organism.create_accounts_for(@bac)
       end
       

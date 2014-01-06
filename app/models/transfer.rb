@@ -26,11 +26,6 @@ class Transfer < Writing
 
   before_destroy :should_be_destroyable
 
-  # TODO vérifier que ce within_period n'est pas déja défini dans writing
-  scope :within_period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
-
-  
-
   # ajoute les deux lignes de l'écriture à l'instance du transfert.
   # La valeur par défaut du montant est zero.
   def add_lines(amount = 0)

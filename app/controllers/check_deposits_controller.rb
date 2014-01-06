@@ -10,7 +10,7 @@ class CheckDepositsController < ApplicationController
     @nb_to_pick=CheckDeposit.nb_to_pick
     flash[:alert] = "Il reste #{ActionController::Base.helpers.pluralize @nb_to_pick, 'chèque'} à remettre à l'encaissement \
 pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
-    @check_deposits = @bank_account.check_deposits.within_period(@period.start_date, @period.close_date)
+    @check_deposits = @bank_account.check_deposits.within_period(@period) 
   end
   
   # GET /check_deposits/1
@@ -62,7 +62,7 @@ pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
       redirect_to  organism_bank_account_check_deposits_url, notice: 'La remise de chèque a été modifiée.'
     else
       render action: "edit"
-     end
+    end
     
   end
 
@@ -78,7 +78,7 @@ pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
 
   
   def find_bank_account
-      @bank_account = BankAccount.find(params[:bank_account_id])
+    @bank_account = BankAccount.find(params[:bank_account_id])
   end
   
 end

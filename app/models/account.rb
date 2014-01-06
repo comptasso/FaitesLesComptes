@@ -7,7 +7,9 @@
 #
 
 # Les comptes peuvent être actifs ou non. Etre actif signifie qu'on peut
-# enregistrer des écritures.  
+# enregistrer des écritures. 
+# TODO le fait d'être actif devrait également être utilisé pour la création des comptes
+# lorsqu'on crée l'exercice suivant
 
 
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development
@@ -25,8 +27,8 @@ class Account < ActiveRecord::Base
 
   # period_id est nécessaire car lors de la création d'un compte bancaire ou d'une caisse,
   # il faut créer des comptes en fournissant le champ period_id
-  # TODO revoir ce point car on peut le gérer autrement
-  attr_accessible :number, :title, :used, :period_id
+  # TODO revoir ce point car on peut le gérer autrement (ie en faisant un period_id = et non un mass_assign)
+  attr_accessible :number, :title, :used #, :period_id
 
   belongs_to :period
   belongs_to :accountable, polymorphic:true
@@ -42,7 +44,6 @@ class Account < ActiveRecord::Base
   #
   # Dans un transfer, il y a deux champs form_account_id et to_account_id. Les has_many qui suivent
   # permettent de s'y référer
-  # TODO peut être rajouter un :conditions sur la classe 5 du compte
   has_many :d_transfers, :as=>:to_account, :class_name=>'Transfer'
   has_many :c_transfers, :as=>:from_account, :class_name=>'Transfer'
 
@@ -53,9 +54,8 @@ class Account < ActiveRecord::Base
   validates :number, :presence=>true, :format=>{:with=>/\A[1-9]{1}[0-9]{1}[A-Z0-9]{0,8}\Z/}, :cant_change=>true
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:maximum=>80}
   validates_uniqueness_of :number, :scope=>:period_id
-
-  # TODO être sur que period est valide (par exemple on ne doit pas
-  # pouvoir ouvrir ou modifier un compte d'un exercice clos
+  validate :period_open
+ 
 
   default_scope order('accounts.number ASC')
 
@@ -139,13 +139,11 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
   # Renvoie le numéro de compte disponible commençant par number et en incrémentant une liste
   def self.available(number)
     raise ArgumentError, 'le numéro du compte demandé doit être 53 ou 512' unless number.match(/^53$|^512$/)
-    # FIXME : voir pour gérer cette anomalie dans le controller au moment de la création 
+    # TODO : voir pour gérer cette anomalie dans le controller au moment de la création 
     # de la caisse ou de la banque
-    raise RangeError, 'Déjà 99 comptes de ce type, limite atteinte' if number.match(/\d*99$/)
     as = Account.where('number LIKE ?', "#{number}%").order('number ASC').last
+    raise RangeError, 'Déjà 99 comptes de ce type, limite atteinte' if as && as.number.match(/\d*99$/)
     if as.nil? || as.number == number # il n'y a que le compte générique
-      # TODO cette méthode devrait maintenant permettre de ne pas créer un compte 53 inutilisé, ni 
-      # un 512
       return number + '01'
     else
       as.number.succ
@@ -233,6 +231,12 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
       end
     
     pdf
+  end
+  
+  protected 
+  
+  def period_open
+    errors.add(:base, 'Exercice clos') if period && !period.open
   end
 
 

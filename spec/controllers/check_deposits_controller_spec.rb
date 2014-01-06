@@ -48,7 +48,7 @@ before(:each) do
 
       it "bank_account doit recevoir la requête check_deposits et wihtin_period" do
         ba.should_receive(:check_deposits).and_return bac = double(Arel)
-        bac.should_receive(:within_period).with(@p.start_date, @p.close_date).and_return []
+        bac.should_receive(:within_period).with(@p).and_return []
         get :index, {:bank_account_id=>ba.id,  :organism_id=>@o.id.to_s}, valid_session
       end
 

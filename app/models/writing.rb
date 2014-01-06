@@ -69,6 +69,7 @@ class Writing < ActiveRecord::Base
   default_scope order('writings.date ASC')
   
   scope :period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
+  scope :within_period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
   # scope :not_transfer, where('type != ?', 'Transfer')
   

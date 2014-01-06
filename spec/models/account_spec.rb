@@ -8,39 +8,101 @@ end
 
 
 describe Account do   
-  include OrganismFixtureBis 
+  include OrganismFixtureBis
   
+  def valid_attributes
+    {number:'601',
+      title:'Titre du compte',
+      
+    }
+  end
   
-  
+   
 
+  describe 'validations' do
+      
+    subject {acc = Account.new(valid_attributes); acc.period_id = 1;acc}
+      
+    it "should be valid"  do
+      subject.should be_valid
+    end
+
+    describe 'should not be valid lorsque' do
+
+      it 'sans number' do
+        subject.number = nil
+        subject.should_not be_valid
+      end
+
+      it 'sans title' do
+        subject.title =  nil
+        subject.should_not be_valid
+      end
+
+      it 'sans exercice' do
+        subject.period = nil
+        subject.should_not be_valid
+      end
+        
+      it 'non valide si exercice clos' do
+        subject.stub(:period).and_return(mock_model(Period, open:false))
+        subject.should_not be_valid     
+      end
+    end
+      
+    
+  end
+  
+  context  'méthode de classe', wip:true do
+
+      describe 'available' do
+
+        it 'retourne 5301 si c est la première caisse' do
+          Account.available('53').should == '5301'
+        end
+
+        it 'sait incrémenter les numéros' do
+           Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
+          @ar.stub_chain(:last, :number).and_return '5301'
+          Account.available('53').should == '5302'
+        end
+        
+        it 'y compris le passage des dizaines' do
+           Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
+          @ar.stub_chain(:last, :number).and_return '5329'
+          Account.available('53').should == '5330'
+        end
+        
+        it 'bloque à 99' do
+          Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
+          @ar.stub_chain(:last, :number).and_return '5399'
+          expect {Account.available('53')}.to raise_error(RangeError)
+        end
+      end
+    end
+
+ 
   context 'avec un organisme' do
+    
+    def new_with_real_attributes
+        acc = Account.new(valid_attributes)
+        acc.period_id = @p.id
+        acc
+      end
 
     before(:each) do
       create_minimal_organism
     end
 
-    context  'méthode de classe' do
-
-      describe 'available' do
-
-        it 'retourne 5301 si c est la première caisse' do
-          Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
-          @ar.stub(:empty?).and_return false
-          @ar.stub_chain(:last, :number).and_return '53'
-          Account.available('53').should == '5301'
-        end
-
-        it 'retourne 5302 avec minimal_organism' do
-          Account.available('53').should == '5302'
-        end
-      end
-    end
+    
   
     describe 'solde initial'  do
 
       before(:each) do
-        @acc1 = Account.create!({number:'100', title:'Capital', period_id:@p.id})
-        @acc2 = Account.create!({number:'5201', title:'Banque', period_id:@p.id})
+        @acc1 = Account.new(number:'100', title:'Capital')
+        @acc1.period_id = @p.id; @acc1.save!
+        @acc2 = Account.new(number:'5201', title:'Banque')
+        @acc2.period_id = @p.id; @acc2.save!
         @od.writings.create!(date:Date.today.beginning_of_year, narration:'ecriture d od',
           :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:1000},
             '1'=>{account_id:@acc2.id, debit:1000}})
@@ -101,9 +163,11 @@ describe Account do
     end
 
     describe 'solde final' do
-       before(:each) do
-        @acc1 = Account.create!({number:'100', title:'Capital', period_id:@p.id})
-        @acc2 = Account.create!({number:'5201', title:'Banque', period_id:@p.id})
+      before(:each) do
+        @acc1 = Account.new({number:'100', title:'Capital'})
+        @acc1.period_id = @p.id; @acc1.save!
+        @acc2 = Account.new({number:'5201', title:'Banque'})
+        @acc2.period_id = @p.id; @acc2.save!
         @od.writings.create!(date:Date.today.beginning_of_year, narration:'ecriture d od',
           :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:1000},
             '1'=>{account_id:@acc2.id, debit:1000}})
@@ -118,7 +182,7 @@ describe Account do
 
     describe 'solde précédent'  do
       before(:each) do
-        @acc1 = Account.new(number:'100', title:'Capital', period_id:@p.id)
+        @acc1 = Account.new(number:'100', title:'Capital')
         @acc1.stub(:period).and_return @p
       end
 
@@ -133,49 +197,10 @@ describe Account do
 
 
 
-    it "un account non valide peut être instancié" do
-      Account.new.should_not be_valid
-    end
-
-    def valid_attributes
-      {number:'601',
-        title:'Titre du compte',
-        period_id:@p.id
-      }
-    end
-
-    describe 'validations' do
-
-      before(:each) do
-        @account = Account.new(valid_attributes)
-        # puts @account.errors.messages unless @account.valid?
-      end
-  
-      it "should be valid"  do
-        @account.should be_valid
-      end
-
-      describe 'should not be valid lorsque' do
-
-        it 'sans number' do
-          @account.number = nil
-          @account.should_not be_valid
-        end
-
-        it 'sans title' do
-          @account.title =  nil
-          @account.should_not be_valid
-        end
-
-        it 'sans exercice' do
-          @account.period = nil
-          @account.should_not be_valid
-        end
-      end
-    end
-
+   
+   
     describe 'polymorphic' do
-      it 'la création d\'une caisse entraîne celle d\'un compte' do
+      it 'la création d\'une banque entraîne celle d\'un compte' do
         @ba.should have(1).accounts
       end
 
@@ -187,16 +212,19 @@ describe Account do
 
 
     describe 'all_lines_locked?' do
+      
+      
 
       it 'vrai si pas de lignes' do
-        Account.new(valid_attributes).should be_all_lines_locked
+        new_with_real_attributes.should be_all_lines_locked
       end
 
       context 'avec des lignes' do
       
     
         before(:each) do
-          @account = Account.create!(valid_attributes)
+          @account = new_with_real_attributes
+          @account.save!
           @n.account_id = @account.id
           @n.save!
           @l1 = create_outcome_writing(97)
@@ -224,7 +252,8 @@ describe Account do
 
     describe 'fonctionnalités natures' do
       before(:each) do
-        @account = Account.create!(valid_attributes)
+        @account = new_with_real_attributes
+        @account.save!
         @n.account_id = @account.id
         @n.save!
       end
@@ -249,7 +278,7 @@ describe Account do
 
     describe 'classe' do
       it 'un compte connait sa classe comptable' do
-        @account = Account.create!(valid_attributes)
+        @account = new_with_real_attributes
         @account.classe.should == '6'
       end
     end

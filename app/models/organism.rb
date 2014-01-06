@@ -242,10 +242,12 @@ class Organism < ActiveRecord::Base
   def create_accounts_for(objet)
     racine  = objet.class.compte_racine # donc normalement 512 ou 53
     new_number = Account.available(racine) # demande à Account le compte à utiliser
-    
+    # TODO pourrait être demandé à Account ou encore à PlanComptable
     # création des comptes
     periods.opened.each do |p|
-      objet.accounts.create!(number:new_number, period_id:p.id, title:objet.nickname)
+      new_acc = objet.accounts.new(number:new_number, title:objet.nickname)
+      new_acc.period_id = p.id
+      new_acc.save!
     end
   end
   

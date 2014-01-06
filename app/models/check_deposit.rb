@@ -45,7 +45,7 @@ class CheckDeposit < ActiveRecord::Base
   # book_id est nécessaire car on construit les écritures
   attr_accessible :deposit_date, :deposit_date_picker, :check_ids, :bank_account_id
 
-  scope :within_period, lambda {|from_date, to_date| where(['deposit_date >= ? and deposit_date <= ?', from_date, to_date])}
+  scope :within_period, lambda {|p| where(['deposit_date >= ? and deposit_date <= ?', p.sart_date, p.close_date])}
  
   validates :bank_account_id, :deposit_date, :presence=>true
   validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :pointed? # ce qui du coup interdit aussi la destruction
