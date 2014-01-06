@@ -50,6 +50,18 @@ class Utilities::PlanComptable
       return 0
     end
   end
+  
+  # prend les comptes de from_period et crée les comptes correspondants pour period
+  # TODO introduire la copie des seuls comptes utilisés
+  def copy_accounts(from_period)
+    Period.transaction do
+      from_period.accounts.each do |acc|
+        bcc = acc.dup
+        bcc.period_id = period.id
+        bcc.save
+      end
+    end
+  end
 
   protected
 

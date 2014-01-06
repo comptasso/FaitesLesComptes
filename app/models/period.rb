@@ -51,8 +51,7 @@ class Period < ActiveRecord::Base
 
   attr_accessible :start_date, :close_date
   
-   # TODO mettre ces classes dans le répertoire des validators
-  # Les classes ...validator sont des classes spécifiques de validator pour les exercices
+  # Les classes ...validator sont ici des classes spécifiques de validator pour les exercices
   # on ne les met pas dans lib/validators car elles sont réellement dédiées
 
   # Valide que le start_date est le lendemain du close date de l'exercice précédent
@@ -146,11 +145,10 @@ class Period < ActiveRecord::Base
   end
 
   # renvoie la liste des comptes pour deux exercices successifs.
-  # TODO utiliser un Set qui garantira l'unicité
-  # nécessaire pour éditer par exemple une balance sur deux ans
+  # to_set garantit l'unicité des comptes et sort retourne alors un Array
   def two_period_account_numbers
     if previous_period?
-      (previous_period.account_numbers + account_numbers).uniq!.sort
+      previous_period.account_numbers.to_set.merge(account_numbers).sort
     else
       account_numbers
     end
@@ -411,7 +409,14 @@ class Period < ActiveRecord::Base
   def guess_month(date=Date.today)
     date = start_date if date < start_date
     date = close_date if date > close_date
-    MonthYear.new :month=>date.month, :year=>date.year
+    MonthYear.from_date(date) 
+  end
+  
+  # renvoie le mois le plus adapté à partir d'un Hash structuré comme un MonthYear
+  # h[:year] et h[:month]
+  def guess_month_from_params(h)
+    Date.civil(h[:year].to_i, h[:month].to_i)
+    guess_month(Date.civil(h[:year].to_i, h[:month].to_i))
   end
 
   # renvoie la date la plus adaptée pour un exercices
@@ -438,13 +443,7 @@ class Period < ActiveRecord::Base
     list_months.select {|my| my.month == month}
   end
 
-  # destiné à renvoyer un month_year
-  def guess_month_from_params(h)
-    d = Date.civil(h[:year].to_i, h[:month].to_i)
-    d = start_date if d < start_date
-    d = close_date if d > close_date
-    MonthYear.from_date(d)
-  end
+  
 
 
 
@@ -565,21 +564,10 @@ class Period < ActiveRecord::Base
     # sinon une création et une destruction dans la foulée (cas des tests) laisse une trace de ces deux comptes
   end
 
-  # recopie les comptes de l'exercice précédent (s'il y en a un) en modifiant period_id.
-  # s'il n'y en a pas, crée un compte pour chaque caisse et bank_account
-  #
-  # TODO pourrait être déplace dans Utilities::PlanComptable pour regrouper la gestion du plan comptable
+  # demande à PlanComptable de recopier les comptes de l'exercice précédent
   #
   def copy_accounts
-    if self.previous_period?
-      previous_period.accounts.all.each do |a|
-        logger.debug  "Recopie du compte #{a.inspect}"
-        b = a.dup
-        b.period_id = self.id
-        b.save!
-        logger.debug  "Nouveau compte #{b.inspect}"
-      end
-    end
+    Utilities::PlanComptable.new(self, 'statut').copy_accounts(previous_period)
   end
 
   # recopie les natures de l'exercice précédent 's'il y en a un)

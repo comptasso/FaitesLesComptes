@@ -29,7 +29,7 @@ class IncomeOutcomeBook < Book
     in_out_lines.where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date')
   end
 
-  # l'affichage des montants et des lignes dans la vue ne doit prendre en
+  # surchargée car l'affichage des montants et des lignes dans la vue ne doit prendre en
   # compte que les lignes qui ont une nature et être limité à l'exercice.
   def cumulated_at(date, dc)
     p = organism.find_period(date)

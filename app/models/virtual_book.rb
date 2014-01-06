@@ -58,7 +58,7 @@ class VirtualBook < Book
   # TODO : en fait cela relève de la responsabilité d'une classe pavé
   #
   def pave_char
-    vcu = virtual_class.name.underscore
+    vcu = virtual.class.name.underscore
     [vcu + '_pave', vcu + '_book']
   end
   
@@ -82,15 +82,5 @@ class VirtualBook < Book
     return sold_at(selector.end_of_month)  unless selector.beginning_of_month.future?
   end
   
-  
-  protected
-
-  # virtual peut être une instance de cashAccount ou de Cash ou de BankAccount
-  #
-  # virtual class renvoie donc cash ou cash_account.
-  # Utilisé par les pavés pour h
-  def virtual_class
-    virtual.class
-  end
 
 end

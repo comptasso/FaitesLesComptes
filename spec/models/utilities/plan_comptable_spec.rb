@@ -42,5 +42,42 @@ describe Utilities::PlanComptable do
     end
 
   end
+  
+  describe 'copy_accounts' do
+    
+    let(:from_p) {mock_model(Period, :accounts=>@from = [stub_model(Account), stub_model(Account, dup:self)] )}
+    let(:to_p) {mock_model(Period)}
+    
+    subject {Utilities::PlanComptable.new(to_p, 'Association')}
+    
+    it 'prend la liste des comptes de from_period' do
+      from_p.should_receive(:accounts).and_return(@from)
+      @from.each do |f|
+        f.should_receive(:dup).and_return f
+      end
+      subject.copy_accounts(from_p)
+    end
+    
+    it 'modifie le period_id' do
+      from_p.stub(:accounts).and_return(@from)
+      @from.each do |f|
+        f.should_receive(:dup).and_return f
+        f.should_receive(:period_id=).with(to_p.id)
+      end     
+      subject.copy_accounts(from_p)
+    end
+    
+    it 'puis appelle save' do
+      from_p.stub(:accounts).and_return(@from)
+      @from.each do |f|
+        f.should_receive(:dup).and_return f
+        f.stub(:period_id=).and_return f
+        f.should_receive(:save)
+      end     
+      subject.copy_accounts(from_p)
+    end
+    
+    
+  end
 
 end

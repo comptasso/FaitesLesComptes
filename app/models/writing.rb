@@ -51,8 +51,7 @@ class Writing < ActiveRecord::Base
   validates :date, presence:true
   validates :date, :within_period=>true, :nested_period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]} , :unless => 'date.nil?'
   validates :compta_lines, presence:true, :two_compta_lines_minimum=>true
-  validates :narration, :presence=>true
-  validates :narration, :format=>{with:NAME_REGEX}, :length=>{:maximum=>60}
+  validates :narration, presence:true, :format=>{with:NAME_REGEX}, :length=>{:maximum=>60}
   validates :ref, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :allow_blank=>true
   
   validate :balanced?
@@ -61,6 +60,7 @@ class Writing < ActiveRecord::Base
   validate :period_start_date, :if=> lambda {book.type == 'AnBook'}
   # contraint la numérotation continue des écritures (numérotation qui est faite
   # au moment du verrouillage). Ne pas confondre ce numéro avec le numéro de pièce.
+  # S'appuie sur ContinuValidatoir
   validates :continuous_id, continu:true, :allow_blank=>true  
   
 

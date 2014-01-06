@@ -61,9 +61,6 @@ describe Writing do
       end
 
       it 'doit être valide' do
-        #      puts "Book : #{@b.inspect}"
-        #      puts "le livre venant de w : #{@w.book}"
-        #      puts @w.inspect
         @w.valid?
         @w.should be_valid
       end
@@ -78,6 +75,22 @@ describe Writing do
         @w.stub(:total_debit).and_return(10)
         @w.stub(:total_credit).and_return(10)
         @w.should be_valid
+      end
+      
+      describe 'period_start_date_validator' do
+        
+        before(:each) {@b.stub(:type).and_return('AnBook')}
+        
+        it 'est valide si la date doit être le premier jour de l exercice' do
+          @w.date = @p.start_date
+          @w.should be_valid
+        end
+        
+        it 'mais invalide autrement' do
+          @w.date = @p.start_date + 1
+          @w.should_not be_valid
+        end
+        
       end
 
       describe 'test des compta_lines' do
@@ -294,7 +307,7 @@ describe Writing do
 
       end
       
-      describe 'lock', wip:true  do
+      describe 'lock'  do
                 
         it 'lock doit verrouiller toutes les lignes' do
           cls = [1,2].map {|i| mock_model(ComptaLine, locked?:false) }
@@ -327,7 +340,7 @@ describe Writing do
           @w.continuous_id.should == 101
         end
         
-        it 'attribuer un numéro non continu rend invalide' , wip:true do
+        it 'attribuer un numéro non continu rend invalide'  do
           Writing.should_receive(:last_continuous_id).at_least(1).times.and_return(100)
           @w.continuous_id = 50
           @w.should_not be_valid 
