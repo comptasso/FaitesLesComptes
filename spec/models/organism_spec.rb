@@ -300,8 +300,6 @@ describe Organism do
       
     end
 
-    # TODO ce serait mieux que ce soit le modèle Period qui sache s'il peut
-    # ouvrir un nouvel exercice
     describe 'max_open_periods?' do
       it 'nb_open_periods.should == 2' do
         @organism.nb_open_periods.should == 2

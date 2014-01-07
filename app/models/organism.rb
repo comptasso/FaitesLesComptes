@@ -138,11 +138,10 @@ class Organism < ActiveRecord::Base
     periods.opened.count
   end
 
+  # on ne peut avoir plus de deux exercices ouverts pour chaque organisme
   def max_open_periods?
     nb_open_periods >=2 ? true :false
-  end
-
-  
+  end  
 
   # indique si organisme peut écrire des lignes de comptes, ce qui exige qu'il y ait des livres
   # et aussi un compte bancaire ou une caisse

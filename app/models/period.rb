@@ -138,6 +138,10 @@ class Period < ActiveRecord::Base
   def last_period?
     !next_period?
   end
+  
+  def max_open_periods?
+    organism.periods.opened.count >=2
+  end
 
   # un exercice peut être détruit mais uniquement si c'est le premier ou le dernier
   def destroyable?
@@ -527,7 +531,7 @@ class Period < ActiveRecord::Base
    
 
   def should_not_have_more_than_two_open_periods
-    if organism.nb_open_periods >= 2
+    if max_open_periods?
       self.errors.add(:base, "Impossible d'avoir plus de deux exercices ouverts")
       return false
     end

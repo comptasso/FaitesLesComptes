@@ -69,8 +69,8 @@ describe Period do
 
       
 
-      it 'n est pas valide si plus de deux exercices ouverts' do
-       @p.stub(:organism).and_return(mock_model(Organism, :nb_open_periods=>2))
+      it 'n est pas valide si plus de deux exercices ouverts', wip:true do
+       @p.stub(:max_open_periods?).and_return true
        expect {@p.save}.not_to change {Period.count}
        @p.save
        @p.errors[:base].first.should == 'Impossible d\'avoir plus de deux exercices ouverts'
@@ -78,17 +78,33 @@ describe Period do
       end
 
     end
+    
+    describe 'max_open_periods?'  do
+      
+      subject {Period.new}
+      
+      it 'faux si moins de deux exercices ouverts pour cet organisme' do
+        subject.stub_chain(:organism, :periods, :opened, :count).and_return 1
+        subject.max_open_periods?.should be_false
+      end
+      
+      it 'faux si moins de deux exercices ouverts pour cet organisme' do
+        subject.stub_chain(:organism, :periods, :opened, :count).and_return 2
+        subject.max_open_periods?.should be_true
+      end
+          
+    end
 
     
   
-    describe 'les call_back after_create font'  do
+    describe 'les call_back after_create font', wip:true  do
       
       before(:each) do
 
-        @org = mock_model(Organism, :nb_open_periods=>1, :status=>'Association')
+        @org = mock_model(Organism, :status=>'Association')
         @p  = Period.new(valid_params)
         @p.organism_id = @org.id
-        
+        @p.stub(:max_open_periods?).and_return false
         @p.stub(:organism) {@org}
         @p.stub(:create_bank_and_cash_accounts).and_return true
         @p.save!
