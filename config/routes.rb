@@ -115,10 +115,6 @@ Faitesvoscomptes::Application.routes.draw do
   ##################### namespace ADMIN ##############################"
   namespace 'admin' do
 
-    # TODO voir si encore utile
-    get "versions/new"
-    post "versions/migrate_each"
-
     resources :clones, :only=>[:new, :create]
 
     #    resources :users do

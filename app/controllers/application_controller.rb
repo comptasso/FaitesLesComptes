@@ -6,8 +6,6 @@
 class ApplicationController < ActionController::Base 
   protect_from_forgery
 
-  # before_filter :control_version
-
   before_filter :authenticate_user!
 
   before_filter :find_organism, :current_period, :unless=>('devise_or_bottom_action?')
@@ -61,23 +59,12 @@ class ApplicationController < ActionController::Base
   # on est dans une action du gem devise si on n'est pas loggé ou
   # si l'action n'est pas précisément de se déconnecter
   def devise_action?
-    params[:controller] =~ /^devise/
+    params[:controller] =~ /^devise/ 
   end
 
   # Overwriting the sign_out redirect path method
   def after_sign_out_path_for(user)
     devise_sessions_bye_url
-  end
-
-  
-
-  # A chaque démarrage de l'application, on vérifie que la base principale
-  # (celle qui contient les Room)
-  # est cohérente avec la version du logiciel.
-  # TODO probablement à supprimer avec la version full web
-  def control_version
-    Rails.logger.debug 'appel de controle version'
-    @control_version = Room.version_update?
   end
 
   # Lorsqu'il n'y a pas d'organisme, il faut afficher soit la vue
