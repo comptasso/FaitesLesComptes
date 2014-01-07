@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 
-describe'admin/rooms/_form' do
+describe'admin/rooms/_form' do 
     include JcCapybara
 
   before(:each) do

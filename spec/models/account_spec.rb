@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |config| 
+RSpec.configure do |config|  
   #  config.filter =  {wip:true}
 end
 
@@ -58,6 +58,8 @@ describe Account do
       describe 'available' do
 
         it 'retourne 5301 si c est la première caisse' do
+           Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
+          @ar.stub_chain(:last).and_return nil
           Account.available('53').should == '5301'
         end
 
