@@ -90,17 +90,11 @@ class Admin::RoomsController < Admin::ApplicationController
   def destroy
     @room = current_user.rooms.find(params[:id])
     
-    db_name= @room.db_filename
+    db_name= @room.database_name
     Rails.logger.info "Destruction de la base #{db_name}  - méthode rooms_controller#destroy}"
   
     if @room.destroy
-      # on détruit le fichier correspondant
-      # FIXME sur windows au moins, semble poser un problème de droit d'accès
-      # donc on n'efface pas le fichier
-      notice = "L'organisme suivi par la base #{db_name} a été supprimé;"
-      notice += "<br/> Le fichier #{db_name} existe encore.<br/>
-         Pour le supprimer faites le manuellement à partir de l'explorateur de fichiers" if ActiveRecord::Base.connection_config[:adapter] == 'sqlite3'
-      flash[:notice] =  notice.html_safe
+      flash[:notice] =  "L'organisme suivi par la base #{db_name} a été supprimé;".html_safe
       organism_has_changed?
       redirect_to admin_rooms_url
     else

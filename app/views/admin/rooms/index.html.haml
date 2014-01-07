@@ -28,7 +28,7 @@
         %td= organ.title rescue 'non renseigné' # pour gérér les cas où la base de données n est pas à jour et où le champ est manquant
         %td= organ.comment rescue 'non renseigné'
         %td= organ.status rescue 'non renseigné'
-        %td= ro.db_filename
+        %td= ro.database_name
         %td 
           
           = icon_to('supprimer.png', admin_room_path(ro), :method=>:delete) if ro.no_base?

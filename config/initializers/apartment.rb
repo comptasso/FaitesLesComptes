@@ -12,26 +12,14 @@ module Apartment
     # Pour pouvoir utiliser Apartment::Database.process sans difficulté
     # lorsqu'on veut lire dans la base principale.
     #
-    # Pour sqlite, on garde la logique de Rails qui est que la base principale est donnée par le
-    # fichier database.yml et est development.sqlite3 pour l'environnement development, ou
-    # production.sqlite3 pour l'environnement production.
-    # 
-    # TODO supprimer toute référence à sqlite3
-    #
     # Pour postgresql qui fonctionne avec une logique de schémas, on utilise donc public pour la
     # base principale.
     # 
-    # 
-    # RAPPEL : les commandes ActiveRecord::Base.connection.current_database et 
+   # RAPPEL : les commandes ActiveRecord::Base.connection.current_database et 
     # current_schema permettent ... comme leur nom l'indique.
     #
     def default_db
-      case ActiveRecord::Base.connection_config[:adapter]
-      when 'sqlite3'
-        Rails.env
-      when 'postgresql'
-        'public'
-      end
+      'public'
     end
 
     # indique si une base existe
@@ -128,9 +116,7 @@ module Apartment
       schema_seq = pgr.column_values(0).first
       seq = schema_seq.split('.').last
 
-      puts seq
-      puts schema_seq
-#      select setval('tenniscluba_20130725051741.books_id_seq', (select last_value FROM tenniscluba.books_id_seq));
+     # select setval('tenniscluba_20130725051741.books_id_seq', (select last_value FROM tenniscluba.books_id_seq));
       Apartment.connection.execute(%{SELECT setval('#{to_schema}.#{seq}', (SELECT last_value FROM #{schema_seq})) })
     end
 

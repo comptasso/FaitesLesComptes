@@ -107,7 +107,7 @@ describe Admin::RoomsController do
   describe "DELETE destroy" do
     before(:each) do
       @cu.stub_chain(:rooms, :find).and_return(@r)
-      @r.stub(:db_filename).and_return('assotest1.sqlite3')
+      @r.stub(:database_name).and_return('assotest1')
       @r.stub(:absolute_db_name).and_return(File.join(Rails.root,'db', Rails.env, 'organisms', 'assotest1.sqlite3'))
       @r.stub(:organism).and_return(@organism=mock_model(Organism))
     end
@@ -121,7 +121,7 @@ describe Admin::RoomsController do
     it 'crée un flash sur suppression échoue' do
       @r.stub(:destroy).and_return false
       delete :destroy,{:id => @r.to_param}
-      flash[:alert].should == "Une erreur s'est produite; la base assotest1.sqlite3 n'a pas été supprimée"
+      flash[:alert].should == "Une erreur s'est produite; la base assotest1 n'a pas été supprimée"
       response.should redirect_to admin_organism_url(@organism)
     end
     
@@ -148,7 +148,7 @@ describe Admin::RoomsController do
 
   describe 'POST create', wip:true do
     before(:each) do
-      Organism.stub(:new).and_return(@o = mock_model(Organism, :full_name=>'bonjour', create_db:true, :save=>true))
+      Organism.stub(:new).and_return(@o = mock_model(Organism, create_db:true, :save=>true))
       File.stub('exist?').and_return false
     end
 

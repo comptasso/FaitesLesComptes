@@ -74,15 +74,6 @@ describe Room  do
       @r = Room.new(:database_name=>'foo')
     end
 
-    it 'db_filename construit le nom de la base de donnée' do
-      @r.db_filename.should == 'foo.sqlite3' if ActiveRecord::Base.connection_config[:adapter] == 'sqlite3'
-      @r.db_filename.should == 'foo' if ActiveRecord::Base.connection_config[:adapter] != 'sqlite3'
-    end
-
-    it 'full_name retourne le chemin complet de la base' do
-      Room.stub(:path_to_db).and_return('mon_chemin')
-      @r.full_name.should == File.join('mon_chemin', @r.db_filename)
-    end
 
     it 'la base est en retard si organism_migration est inférieure à room' do
       omv = Organism.migration_version
@@ -143,24 +134,7 @@ describe Room  do
         Apartment::Database.current.should == base 
       end
      
-    end
-  
-
-    describe 'check_db' do
-      
-      it 'check_db contrôle l intégrité de la base' do
-        pending('pas de check pour postgresql') if ActiveRecord::Base.connection_config[:adapter]=='postgresql'
-        ActiveRecord::Base.connection.stub(:execute).with('pragma integrity_check').and_return(['integrity_check'=>'ok'])
-        @r.check_db.should be_true
-      end
-
-      it 'indique si pas de réponse' do
-        pending('pas de check pour postgresql') if ActiveRecord::Base.connection_config[:adapter]=='postgresql'
-        ActiveRecord::Base.connection.stub(:execute).with('pragma integrity_check').and_return('n importe quoi')
-        @r.check_db #.should be_false
-      end
-
-    end
+    end    
 
     describe 'look_for' do
 
@@ -206,10 +180,7 @@ describe Room  do
         
         Apartment::Database.switch('public')
         @r.database_name = 'changedvalue'
-        puts @r.errors.messages unless @r.valid?
         @r.save!
-        
-        
         @r.organism.database_name.should == 'changedvalue'
         @r.database_name = 'assotest1' 
         @r.save
@@ -217,7 +188,6 @@ describe Room  do
 
       it 'si un changement échoue, l organisme est inchangé' do
         @r.database_name = 'changed_value' # le soulignement est interdit
-        puts @r.errors.messages unless @r.valid?
         @r.save
         @r.reload
         @r.organism.database_name.should == 'assotest1'
@@ -229,19 +199,9 @@ describe Room  do
     
   end
 
-  describe 'version_update and migrate_each'  do
+  describe 'version_update'  do 
 
-    before(:each) do
-    #  Apartment.stub(:database_names).and_return(['bonjour', 'bonsoir'])
-    end
-        
-    it 'met à jour la version'  do
-      # 3 fois car une fois pour la base principale et une fois pour chaque organisme
-      ActiveRecord::Migrator.should_receive(:migrate).exactly(2).times
-      Room.migrate_each
-    end
-
-    it 'version_update? est capable de vérifier la similitude des versions' do
+   it 'version_update? est capable de vérifier la similitude des versions' do
       ActiveRecord::Migrator.any_instance.stub(:pending_migrations).and_return ['quelquechose']
       Room.should_not be_version_update
     end
