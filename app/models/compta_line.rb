@@ -36,7 +36,7 @@ class ComptaLine < ActiveRecord::Base
   scope :in_out_lines, where('nature_id IS NOT ?', nil)
   scope :with_writings, joins(:writing)
   scope :with_writing_and_book, joins(:writing=>:book)
-  scope :without_AN , where('books.title != ?', 'AN')
+  scope :without_AN , where('books.abbreviation != ?', 'AN')
   # ces scope n'inclut pas with_writings, ce qui veut dire qu'il faut que cela soit fait par
   # ailleurs, c'est notamment le cas lorsqu'on passe par book car book has_many :compta_lines, :through=>:writings
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
@@ -47,8 +47,8 @@ class ComptaLine < ActiveRecord::Base
   # extract est comme range_date mais n'inclut pas with_writings
   scope :extract, lambda {|from, to| where('writings.date >= ? AND writings.date <= ?', from, to ).order('writings.date')}
   
-  # FIXME revoir listing semble faux.... car books.title devrait être books.abbreviation
-  scope :listing, lambda {|from, to| with_writing_and_book.where('books.title != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
+  
+  scope :listing, lambda {|from, to| with_writing_and_book.where('books.abbreviation != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)
   scope :locked, where('locked = ?', true)
