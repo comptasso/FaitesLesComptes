@@ -44,7 +44,6 @@ describe 'vue bank_accounts index' do
 #    end
     
     it 'la vue index est affichée'  do
-      puts 'dans le test'
       # Apartment::Database.switch('assotest1')
       visit admin_organism_bank_accounts_path(@o)
       current_url.should match(admin_organism_bank_accounts_path(@o))
