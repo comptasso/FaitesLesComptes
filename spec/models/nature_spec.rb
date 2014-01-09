@@ -10,10 +10,13 @@ describe Nature do
   include OrganismFixtureBis
 
   let(:p) {stub_model(Period, :list_months=>ListMonths.new(Date.today.beginning_of_year, Date.today.end_of_year))}
+  let(:b) {stub_model(Book, title:'Le titre', type:'IncomeBook')}
   
   before(:each) do
-    @nature = Nature.new(name: 'Nature test', income_outcome: false)
+    @nature = Nature.new(name: 'Nature test')
+    @nature.book_id = 1
     @nature.period_id = 1
+    @nature.stub(:book).and_return(b)
   end
 
   
@@ -32,36 +35,39 @@ describe Nature do
     @nature.should_not be_valid
   end
 
-  it 'should not be valid without income_outcome' do
-    @nature.income_outcome = nil
+  it 'should not be valid without book_id' do
+    @nature.book_id = nil
     @nature.should_not be_valid
   end
 
   it 'une nature ne peut être rattachée qu a un compte de classe 6 ou 7' do
+   # @nature.stub_chain(:book, :type).and_return('IncomeBook')
      Account.stub(:find_by_id).and_return(@acc = mock_model(Account, number:'120'))
-  #   @nature.stub(:account_id).and_return(@acc.id)
      @nature.should_not be_valid
   end
 
   context 'une nature existe déja' do
 
     before(:each) do
-      @nature = p.natures.create!(name: 'Nature test', income_outcome: false)
+      @nature = p.natures.new(name: 'Nature test')
+      @nature.book_id = 1
+      @nature.save
     end
 
     it 'on ne peut créer la même nature' do
-      nat = p.natures.new(name: 'Nature test', income_outcome: false)
+      nat = p.natures.new(name: 'Nature test')
+      nat.book_id = 1
       nat.should_not be_valid
     end
 
-    it 'sauf si elle est dans l autre sens' do
-      nat = p.natures.new(name: 'Nature test', income_outcome: true)
+    it 'sauf si elle dépend d un autre livre' do
+      nat = p.natures.new(name: 'Nature test'); nat.book_id = 2
       nat.should be_valid
     end
 
     it 'sauf si elle est d un autre exercice' do
       p2 = stub_model(Period)
-      nat = p2.natures.new(name: 'Nature test', income_outcome: false)
+      nat = p2.natures.new(name: 'Nature test'); nat.book_id = 1
       nat.should be_valid
     end
 

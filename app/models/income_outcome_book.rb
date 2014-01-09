@@ -15,7 +15,7 @@
 #
 class IncomeOutcomeBook < Book
   has_many :writings,  foreign_key:'book_id'
-  
+  has_many :natures
  
   has_many :in_out_writings,  foreign_key:'book_id'
   has_many :adherent_writings,  foreign_key:'book_id', class_name:'Adherent::Writing'

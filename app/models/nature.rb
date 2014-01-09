@@ -7,34 +7,36 @@ require 'strip_arguments'
 # modifier les natures d'un exercice à l'autre (ainsi que le rattachement aux 
 # comptes). 
 # 
+# Les natures sont reliées aux livres, ce qui permet de limiter les natures
+# disponibles lorsqu'on écrit dans un livre aux seules natures de ce livre (et donc
+# aussi de limiter les comptes accessibles pour un livre).
+# 
 #
 class Nature < ActiveRecord::Base
  
   belongs_to :period
   belongs_to :account
+  belongs_to :nature
 
   has_many :compta_lines
 
-  acts_as_list :scope=>[:period_id, :income_outcome]
+  acts_as_list :scope=>[:period_id, :book_id]
 
-  attr_accessible :name, :comment, :income_outcome, :account, :account_id
+  attr_accessible :name, :comment, :account, :account_id, :book_id 
   
 
   before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
 
   strip_before_validation :name, :comment
 
-  validates :period_id, :presence=>true
+  validates :period_id, :book_id, :presence=>true 
   validates :account_id, :fit_type=>true
-  validates :name, presence: true,  :uniqueness=>{ :scope=>[:income_outcome, :period_id] }, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
+  validates :name, presence: true,  :uniqueness=>{ :scope=>[:book_id, :period_id] }, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
-  validates :income_outcome, :inclusion=>{:in=>[true, false]}
-
-
   
 
-  scope :recettes, where('income_outcome = ?', true).order(:position)
-  scope :depenses, where('income_outcome = ?', false).order(:position)
+  scope :recettes, joins(:book).where('book_type = ?', 'IncomeBook').order(:position)
+  scope :depenses, joins(:book).where('book_type = ?', 'OutcomeBook').order(:position)
   scope :without_account, where('account_id IS NULL')
 
   before_destroy :ensure_no_lines
@@ -50,7 +52,7 @@ class Nature < ActiveRecord::Base
 
   
   def in_out_to_s
-    self.income_outcome ? 'Recettes' : 'Dépenses'
+    book.title
   end
 
  
