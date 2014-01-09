@@ -1,12 +1,14 @@
 # -*- encoding : utf-8 -*-
 
 class Admin::NaturesController < Admin::ApplicationController
+  
+  before_filter :find_income_outcome_books, only:[:index, :edit, :new]  
 
 
   # GET /natures
   # GET /natures.json
   def index 
-    @books =  @organism.income_books + @organism.outcome_books
+    
   end
 
   # reorder est appelé par le drag and drop de la vue . Les paramètres
@@ -40,13 +42,13 @@ class Admin::NaturesController < Admin::ApplicationController
   # GET /natures/new
   # GET /natures/new.json
   def new
-    @books =  @organism.income_books + @organism.outcome_books
+    
     @nature = @period.natures.new
   end
 
   # GET /natures/1/edit
   def edit
-#    @period=Period.find(params[:period_id])
+    
     @nature = @period.natures.find(params[:id])
   end
 
@@ -92,6 +94,12 @@ class Admin::NaturesController < Admin::ApplicationController
       format.html { redirect_to admin_organism_period_natures_url(@organism, @period) }
       format.json { head :ok }
     end
+  end
+  
+  protected
+  
+  def find_income_outcome_books
+    @books =  @organism.income_books + @organism.outcome_books
   end
 
 

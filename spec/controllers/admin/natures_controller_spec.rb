@@ -55,6 +55,8 @@ describe Admin::NaturesController do
 
   describe "GET new"  do
     it "assigns a new nature as @nature" do
+      @o.stub(:income_books).and_return [1,2]
+      @o.stub(:outcome_books).and_return [3,4]
       @a.should_receive(:new).and_return mock_model(Nature).as_new_record
       get :new,  {:period_id=>@p.to_param}, valid_session
       assigns(:nature).should be_a_new(Nature)
@@ -63,7 +65,9 @@ describe Admin::NaturesController do
 
   describe "GET edit"  do
     it "assigns the requested bank_account as @bank_account" do
-       @a.should_receive(:find).with(nat1.to_param).and_return nat1
+      @o.stub(:income_books).and_return [1,2]
+      @o.stub(:outcome_books).and_return [3,4]
+      @a.should_receive(:find).with(nat1.to_param).and_return nat1
       get :edit,  {:period_id=>@p.to_param, :id=>nat1.to_param}, valid_session
       assigns(:nature).should == nat1
     end
