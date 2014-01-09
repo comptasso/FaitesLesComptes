@@ -169,14 +169,8 @@ class InOutWritingsController < ApplicationController
   end
 
   
-  # TODO ici il faut remplacer cette méthode par une méthode period.natures_for_book(@book) qui choisira les natures qui
-  # conviennent à la classe du livre.
   def fill_natures
-    if @book.class.to_s == 'IncomeBook'
-      @natures=@period.natures.recettes
-    elsif @book.class.to_s == 'OutcomeBook'
-      @natures=@period.natures.depenses
-    end
+    @natures=@book.natures.within_period(@period)
   end
 
   # on surcharge fill_mois pour gérer le params[:mois] 'tous'

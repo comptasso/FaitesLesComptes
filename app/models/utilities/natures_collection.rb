@@ -3,25 +3,21 @@
 
 # la classe InOut est utilisée par le formulaire _new_line pour afficher les options de natures
 #
-# s'initialise avec un organism
+# s'initialise avec un exercice
 # et le sens sous forme de symbole :recettes ou depenses
 #
 class Utilities::NaturesCollection
-  def initialize(period, sens)
+  def initialize(period, book)
     @period = period
-    @sens = sens
+    @book = book
   end
-
+  
   def name
-    @sens.to_s.capitalize
+    @book.title.capitalize
   end
 
   def natures
-    case @sens
-    when :recettes then @period.natures.recettes
-    when :depenses then @period.natures.depenses
-    end
-    
+    @book.natures.within_period(@period)    
   end
 
 

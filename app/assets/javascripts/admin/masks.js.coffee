@@ -10,16 +10,13 @@
 # le formulaire est fait de telle façon que les options des livres ont une classe incomebook ou outcomebook
 # ce qui permet de faire le lien avec les natures.
 natures_selection = ->
-  if $('#mask_book_id option:selected').attr('class') == 'outcomebook'
-    $('optgroup[label=Dépenses] option').attr('disabled', false)
-    $('optgroup[label=Recettes] option').attr('disabled', true)
-  else
-    $('optgroup[label=Recettes] option').attr('disabled', false);
-    $('optgroup[label=Dépenses] option').attr('disabled', true);
+  book_id = $('#mask_book_id option:selected').attr('data-id') 
+  $('#mask_nature_name optgroup').attr('disabled', true);
+  # avant de réactiver celui qui correspond au livre sélectionné
+  $('#mask_nature_name optgroup[data-id="'+book_id+'"]').attr('disabled', false);
     
+
 counterpart_selection = ->
-  
-  
   if $('form #mask_mode option:selected').val() == 'Espèces'
     $('optgroup[label=Caisses] option').attr('disabled', false)
     $('optgroup[label=Banques] option').attr('disabled', true)

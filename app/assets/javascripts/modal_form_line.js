@@ -14,11 +14,23 @@
 /*jslint browser: true */
 /*global $, jQuery , stringToFloat, $f_numberWithPrecision*/
 
+// la fonction le changement de livre, ce qui a pour conséquence :
+// de devoir accepter ou disable les options de natues correspondant au livre choisi
+// d'afficher le bon champ pour le montant (débit ou crédit) en fonction du type de livre (Income ou Outcome)
+// et de réafficher le champ n° de chèques si c'est une dépense par chèque
+//
+// Il est important de bien conserver la présentation du titre du livre avec 
+// R et D comme première lettre pour indiquer facilement la nature du livre (Recettes ou Dépenses)
+
 function $f_modal_book_change() {
     // lire la valeur du champ et déterminer si c'est une recette ou une dépense
-    var income_outcome = $('#in_out_writing_book_id option:selected').text();
+    // à partir du data-type
+    var income_outcome = $('#in_out_writing_book_id option:selected').attr('data-type'),
+        book_id = $('#in_out_writing_book_id option:selected').attr('data-id');
+    
     $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_credit').val('0.00');
     $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_debit').val('0.00');
+    // afficher le champ de n° de chèque si Chèque est le moyen de paiement
     if ($('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_payment_mode') === 'Chèque') {
         $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().show();
     }
@@ -26,22 +38,24 @@ function $f_modal_book_change() {
 
     // et agit en conséquence - on affiche les champs débit ou credit
     // on désactive les natures qui ne sont pas adaptées au livre
-    if (income_outcome.match(/^R/) !== null) {
+    if (income_outcome === "IncomeBook") {
         
         $('label[for="in_out_writing_compta_lines_attributes_0_debit"]').parent().hide();
         $('label[for="in_out_writing_compta_lines_attributes_0_credit"]').parent().show();
-        $('optgroup[label="Depenses"]').attr('disabled', true);
-        $('optgroup[label="Recettes"]').attr('disabled', false);
         $("#in_out_writing_compta_lines_attributes_1_payment_mode option[value='Chèque']").attr('disabled', true);
     }
-    if (income_outcome.match(/^D/) !== null) {
+    if (income_outcome === 'OutcomeBook') {
         
         $('label[for="in_out_writing_compta_lines_attributes_0_debit"]').parent().show();
         $('label[for="in_out_writing_compta_lines_attributes_0_credit"]').parent().hide();
-        $('optgroup[label="Depenses"]').attr('disabled', false);
-        $('optgroup[label="Recettes"]').attr('disabled', true);
         $("#in_out_writing_compta_lines_attributes_1_payment_mode option[value='Chèque']").attr('disabled', false);
     }
+    // on désactive tous les optgroup
+    $('#in_out_writing_compta_lines_attributes_0_nature_id optgroup').attr('disabled', true);
+    // avant de réactiver celui qui correspond au livre sélectionné
+    $('#in_out_writing_compta_lines_attributes_0_nature_id optgroup[data-id="'+book_id+'"]').attr('disabled', false);
+    
+    
 }
 
 function $f_modal_payment_mode_change() {

@@ -5,21 +5,22 @@
   <%=  simple_form_for(@in_out_writing, :url=>bank_extract_modallines_path(@bank_extract), :method=>:post, :remote=>true,  :html=> {class: 'form-horizontal'}) do |f| %>
 
     <%= f.error_notification %>
+  
+  
+   <%= f.input :livre, include_blank:false do %>
+      <%= f.select :book_id, @organism.in_out_books.map{ |b| [b.title, b.id, {'data-type'=> b.type, 'data-id'=>b.id}] } %>
+ <% end %>
    
-      <%= f.association :book, label:'Livre',
-        :collection=>@organism.in_out_books,
-        required:true, 
-        label_method: lambda {|b| "#{b.class.name == 'IncomeBook' ? 'R' : 'D'} - #{b.title}" },
-        include_blank:false, input_html: {class: "span4" } %>
+  
 
     <%= f.input :date_picker, :label=> 'Date', input_html: { class: "span4", date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
     <%= f.input :narration,  :label=>'Libellé ', input_html: {class: "span10" } %>
     <%= f.input :ref, label:'Référence',  input_html: {class: "span4" }  %>
     <%= f.fields_for :compta_lines, @line do |build| %>
-    <%= build.association :nature, :prompt => "Quoi ?",
-              :collection => [Utilities::NaturesCollection.new(@period, :recettes), Utilities::NaturesCollection.new(@period, :depenses)],
-              :as => :grouped_select, :group_method=>:natures,
-              :required=>true, input_html: {class: "span6 " } %>
+   <%= build.input :nature do %>
+     <%=  build.select :nature_id, modal_nature_options(@period) %>
+   <% end %>
+    
      <%=  build.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
               :prompt => "Pour qui ?" ,   input_html: {class: "span6"} %>
      <%=  build.input :debit ,   input_html: {class: "span3 number", :type=>'text', value: two_decimals(@line.debit) }  %>

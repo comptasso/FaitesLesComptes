@@ -158,12 +158,13 @@ class Mask < ActiveRecord::Base
   
   
   
-  
+  # comme on n'enregistre que le nom de la nature, il faut s'assurer que 
+  # la nature est bien cohérente avec le livre
   def nature_coherent_with_book
-    type_of_nature = organism.natures.find_by_name(nature_name).income_outcome
-    if (book.type == 'IncomeBook' && type_of_nature == false) || (book.type == 'OutcomeBook' && type_of_nature == true)
-      errors.add(:book_id, 'Incohérent avec le type de nature')
-      errors.add(:nature_name, 'Incohérent avec le type de livre choisi')
+    nat = organism.natures.find_by_name(nature_name)
+    if (book.id != nat.book_id)
+      errors.add(:book_id, 'Incohérent avec la nature')
+      errors.add(:nature_name, 'Incohérent avec le livre')
     end
   end
   
