@@ -39,8 +39,8 @@ class OptionsForAssociationSelect
 
   def initialize(titre, method, model)
     @title=titre
-    @object=model
     @method=method
+    @object=model
   end
 
   def options

@@ -49,9 +49,10 @@ describe Nature do
   context 'une nature existe déja' do
 
     before(:each) do
+      Nature.delete_all
       @nature = p.natures.new(name: 'Nature test')
       @nature.book_id = 1
-      @nature.save
+      @nature.save!
     end
 
     it 'on ne peut créer la même nature' do

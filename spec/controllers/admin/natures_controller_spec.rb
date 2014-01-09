@@ -44,11 +44,10 @@ describe Admin::NaturesController do
 
 
     it "assigns recettes et dépenses" do
-      @p.stub_chain(:natures, :depenses).and_return [1,2]
-      @p.stub_chain(:natures, :recettes).and_return [3,4]
+      @o.stub(:income_books).and_return [1,2]
+      @o.stub(:outcome_books).and_return [3,4]
       get :index, {:period_id=>@p.to_param}, valid_session
-      assigns(:depenses).should == [1,2]
-      assigns(:recettes).should == [3,4]
+      assigns(:books).should == [1,2, 3, 4]
     end
   end
 

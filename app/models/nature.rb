@@ -16,7 +16,7 @@ class Nature < ActiveRecord::Base
  
   belongs_to :period
   belongs_to :account
-  belongs_to :nature
+  belongs_to :book
 
   has_many :compta_lines
 
@@ -38,6 +38,8 @@ class Nature < ActiveRecord::Base
   scope :recettes, joins(:book).where('book_type = ?', 'IncomeBook').order(:position)
   scope :depenses, joins(:book).where('book_type = ?', 'OutcomeBook').order(:position)
   scope :without_account, where('account_id IS NULL')
+  
+  scope :within_period, lambda { |per| where('period_id = ?' , per.id)}
 
   before_destroy :ensure_no_lines
 

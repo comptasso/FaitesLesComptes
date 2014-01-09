@@ -5,14 +5,8 @@ class Admin::NaturesController < Admin::ApplicationController
 
   # GET /natures
   # GET /natures.json
-  def index
-    @recettes = @period.natures.recettes
-    @depenses = @period.natures.depenses
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @natures }
-    end
+  def index 
+    @books =  @organism.income_books + @organism.outcome_books
   end
 
   # reorder est appelé par le drag and drop de la vue . Les paramètres
@@ -46,12 +40,8 @@ class Admin::NaturesController < Admin::ApplicationController
   # GET /natures/new
   # GET /natures/new.json
   def new
+    @books =  @organism.income_books + @organism.outcome_books
     @nature = @period.natures.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @nature }
-    end
   end
 
   # GET /natures/1/edit

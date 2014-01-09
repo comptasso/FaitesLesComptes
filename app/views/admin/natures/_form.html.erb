@@ -4,9 +4,7 @@
 
    <%= f.input :name , input_html: {class:'span4'} %>
    <%= f.input :comment, input_html: {rows: 4, class: 'span4'} %>
-   <%= f.input :income_outcome, :label=>'Type',
-         :collection=>[['Recettes', true], ['Dépenses', false]], 
-         label_method: :first, value_method: :last, :as=>:inline_radio_buttons %>
+   <%= f.association :book, :label=>'Livre' #, collection:@books %>
    <%= f.association :account, :label=> 'Compte associé', input_html: {size: 10},
                 :collection => options_for_natures(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :title,
                 :label_method=> :long_name, :value_method=> :id if @period.accounts.any? %>
