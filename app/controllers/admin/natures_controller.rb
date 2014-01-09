@@ -41,9 +41,9 @@ class Admin::NaturesController < Admin::ApplicationController
  
   # GET /natures/new
   # GET /natures/new.json
-  def new
-    
+  def new    
     @nature = @period.natures.new
+    @nature.book_id = @books.first.id
   end
 
   # GET /natures/1/edit

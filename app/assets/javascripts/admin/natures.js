@@ -7,13 +7,13 @@
 // function utilisée pour disable ou able les différentes parties
 // du select 
 function change_radio() {
-    var rec = $('#nature_income_outcome_true'),
-        dep = $('#nature_income_outcome_false');
-    if (dep.attr("checked") === 'checked') {
+    var sel = $('select#nature_book_id option').filter(':selected');
+        
+    if (sel.attr("data-type") === 'OutcomeBook') {
         $('optgroup[label=Dépenses] option').attr('disabled', false);
         $('optgroup[label=Recettes] option').attr('disabled', true);
     }
-    if (rec.attr("checked") === 'checked') {
+    if (sel.attr("data-type") === 'IncomeBook') {
         $('optgroup[label=Recettes] option').attr('disabled', false);
         $('optgroup[label=Dépenses] option').attr('disabled', true);
     }
@@ -27,7 +27,7 @@ jQuery(function () {
     $('.admin_natures optgroup[label=Dépenses] option').attr('disabled', true);
     $('.admin_natures optgroup[label=Recettes] option').attr('disabled', true);
     change_radio();
-    $('.admin_natures form [type=radio]').click(function () {
+    $('.admin_natures select#nature_book_id').change(function () {
         change_radio();
     });
 });
