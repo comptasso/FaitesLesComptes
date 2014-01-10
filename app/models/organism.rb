@@ -84,7 +84,7 @@ class Organism < ActiveRecord::Base
   
   before_validation :fill_version
   after_create :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
-  after_create :fill_bridge , :if=>"status == 'Association'"
+  
 
   strip_before_validation :title, :comment, :database_name 
 
@@ -250,6 +250,26 @@ class Organism < ActiveRecord::Base
     end
   end
   
+  # TODO voir comment gérer les exceptions
+  # remplit les éléments qui permettent de faire le pont entre le module 
+  # Adhérents (et plus précisément, sa partie Payment) et le PaymentObserver
+  # qui écrit sur le livre des recettes.
+  # 
+  # Cette méthode est appelée par after_create de Period pour créer les éléments du bridge
+  # uniquement si le statut est association et si le bridge n'existe pas déjà.
+  #
+  def fill_bridge 
+    return unless status == 'Association'
+    return if bridge
+    b = build_bridge
+    b.bank_account_id = bank_accounts.first.id
+    b.cash_id = cashes.first.id
+    b.nature_name = 'Cotisations des adhérents'
+    b.destination_id = destinations.find_by_name('Adhérents').id
+    b.income_book_id = income_books.first.id
+    b.save!
+  end
+  
   
   private
 
@@ -292,19 +312,7 @@ class Organism < ActiveRecord::Base
     destinations.create(name:'Adhérents') if status == 'Association'
   end
   
-  # TODO voir comment gérer les exceptions
-  # remplit les éléments qui permettent de faire le pont entre le module 
-  # Adhérents (et plus précisément, sa partie Payment) et le PaymentObserver
-  # qui écrit sur le livre des recettes.
-  def fill_bridge
-    b = build_bridge
-    b.bank_account_id = bank_accounts.first.id
-    b.cash_id = cashes.first.id
-    b.nature_name = 'Cotisations des adhérents'
-    b.destination_id = destinations.find_by_name('Adhérents').id
-    b.income_book_id = income_books.first.id
-    b.save
-  end
+  
   
   # méthode permettant de remettre les folios et les rubriques 
   # comme ils étaient à l'origine

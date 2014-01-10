@@ -97,13 +97,14 @@ describe Period do
 
     
   
-    describe 'les call_back after_create font', wip:true  do
+    describe 'les call_back after_create font'  do
       
       before(:each) do
 
-        @org = mock_model(Organism, :status=>'Association')
+        @org = mock_model(Organism, :status=>'Association', :fill_bridge=>true)
         @p  = Period.new(valid_params)
         @p.organism_id = @org.id
+        @p.stub(:collect_books).and_return({'Recettes'=>1, "Dépenses"=>2})
         @p.stub(:max_open_periods?).and_return false
         @p.stub(:organism) {@org}
         @p.stub(:create_bank_and_cash_accounts).and_return true
@@ -119,6 +120,8 @@ describe Period do
       it 'la création des natures : 10 natures de dépenses et 6 de recettes '  do
         @p.should have(16).natures
       end
+      
+      
 
       
 
@@ -365,7 +368,7 @@ describe Period do
 
    
 
-      describe 'close' do
+      describe 'close'  do
 
         it 'vérifie closable avant tout' do
           @p_2010.should_receive(:closable?).and_return false
@@ -375,17 +378,18 @@ describe Period do
         context 'l exerice est closable' do
       
           before(:each) do
+             @ob= @org.books.find_by_type('OutcomeBook')
+            @ib= @org.books.find_by_type('IncomeBook')
             @baca = @ba.current_account(@p_2010)
             @acc60 = @p_2010.accounts.find_by_number '60'
             @acc70 = @p_2010.accounts.find_by_number '701'
             @acc61 = @p_2011.accounts.find_by_number '60'
             @acc71 = @p_2011.accounts.find_by_number '701'
-            @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc60.id)
-            @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id, income_outcome:true)
+            @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc60.id, book_id:@ob.id)
+            @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id, book_id:@ib.id)
         
         
-            @ob= @org.books.find_by_type('OutcomeBook')
-            @ib= @org.books.find_by_type('IncomeBook')
+           
 
             @l6= @ib.in_out_writings.create!({date:Date.civil(2010,8,15), narration:'ligne créée par la méthode create_outcome_writing',
                 :compta_lines_attributes=>{'0'=>{account_id:@acc60.id, nature:@n_dep, credit:54, payment_mode:'Espèces'},

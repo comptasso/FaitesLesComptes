@@ -95,6 +95,7 @@ class Period < ActiveRecord::Base
     
   after_create :create_plan, :create_bank_and_cash_accounts, :load_natures ,:unless=> :previous_period?
   after_create :copy_accounts, :copy_natures, :if=> :previous_period?
+  after_create :fill_bridge 
  
   before_destroy  :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
   
@@ -578,7 +579,7 @@ class Period < ActiveRecord::Base
   def copy_natures
     pp = self.previous_period
     pp.natures.all.each do |n|
-      nn = {name: n.name, comment: n.comment, income_outcome: n.income_outcome} # on commence à construire le hash
+      nn = {name: n.name, comment: n.comment, book_id: n.book_id} # on commence à construire le hash
       if n.account_id # cas où il y avait un rattachement à un compte
         previous_account=pp.accounts.find(n.account_id) # on identifie le compte de rattachement
         nn[:account_id] = self.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
@@ -596,23 +597,42 @@ class Period < ActiveRecord::Base
   # copy_natures et load_natures et retirer de cette clase également load_file_natures. On pourrait aussi envisager de passer ces callbacks dans un Observer.
   def load_natures  
     Rails.logger.debug 'Création des natures'
-    t = load_file_natures("#{Rails.root}/app/assets/parametres/#{organism.status.downcase}/natures.yml")
+    t = load_file_natures
+    books = collect_books(t)
     t.each do |n|
       a = accounts.find_by_number(n[:acc]) 
-       nat = natures.new(name:n[:name], comment:n[:comment], account:a, income_outcome:n[:income_outcome])
+       nat = natures.new(name:n[:name], comment:n[:comment], account:a)
+       nat.book_id = books[n[:book]] 
        Rails.logger.warn "#{nat.name} - #{nat.errors.messages}" unless nat.valid?
        nat.save
     end
     natures(true).count
   end
-
+  
   protected
+  
+  # fait la collecte des livres qui sont nécessaires à la création des natures
+  def collect_books(natures)
+    livres = natures.collect {|n| n[:book]}.uniq
+    hash_books = {}
+    livres.each {|b| hash_books[b] = organism.books.where('title = ?', b).first.id }
+    hash_books
+  end
 
-  def load_file_natures(source)
+  def load_file_natures(source = nil)
+    source ||= "#{Rails.root}/app/assets/parametres/#{organism.status.downcase}/natures.yml"
     YAML::load_file(source)
   rescue
     logger.warn "Erreur dans le chargement du fichier #{source}"
     []
+  end
+  
+   # TODO voir comment gérer les exceptions
+  # remplit les éléments qui permettent de faire le pont entre le module 
+  # Adhérents (et plus précisément, sa partie Payment) et le PaymentObserver
+  # qui écrit sur le livre des recettes.
+  def fill_bridge
+    organism.fill_bridge
   end
 
   # TODO voir à réintroduire organism dans les callbacks de destroy au cas où

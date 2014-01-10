@@ -65,7 +65,7 @@ describe Organism do
 
     before(:each) do
       
-      @organism= Organism.new valid_attributes
+      @organism= Organism.new(valid_attributes)
     end
 
     it 'pour pouvoir écrire une compta, il faut un compte bancaire ou une caisse et un income ou outcome book' do
@@ -106,7 +106,9 @@ describe Organism do
     context 'une association' do
       before(:each) do
         clean_assotest1
-        @organism = Organism.create! valid_attributes
+        @organism = Organism.first || Organism.new(valid_attributes)
+        puts @organism.errors.messages unless @organism.valid?
+        @organism.save!
       end
 
       it 'on a quatre livres' do
@@ -162,7 +164,14 @@ describe Organism do
         @organism.destinations.find_by_name('Adhérents').should be_an_instance_of(Destination) 
       end
       
-      describe 'bridge vers adherent' do
+      describe 'bridge vers adherent', wip:true do
+        
+        before(:each) do
+          Adherent::Bridge.any_instance.stub(:nature_coherent_with_book).and_return true
+          @organism.fill_bridge
+          
+        end
+        
         it 'crée un bridge vers le module adhérent' do
           @organism.bridge.should be_an_instance_of Adherent::Bridge
         end

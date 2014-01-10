@@ -55,7 +55,7 @@ class Adherent::Bridge < ActiveRecord::Base
       cash.current_account(period).id rescue nil
   end
     
-  # TODO A vérifier
+  
   def find_nature_id(period)
     period.natures.recettes.find_by_name(nature_name).id rescue nil
   end

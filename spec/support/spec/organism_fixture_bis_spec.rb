@@ -9,7 +9,7 @@ end
 # fichier destiné à tester les méthodes de support
 
 describe OrganismFixtureBis do 
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
 
 
   describe 'create_user' do
