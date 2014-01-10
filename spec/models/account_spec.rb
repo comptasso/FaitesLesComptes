@@ -53,7 +53,7 @@ describe Account do
     
   end
   
-  context  'méthode de classe', wip:true do
+  context  'méthode de classe' do
 
       describe 'available' do
 
@@ -129,7 +129,7 @@ describe Account do
           @acc1.init_sold_credit.should == 66
         end
 
-        it 'donne un an_sold' do
+        it 'donne un an_sold' do 
           @acc1.init_sold('debit').should == 0
           @acc1.init_sold('credit').should == 66
         end
@@ -221,52 +221,33 @@ describe Account do
         new_with_real_attributes.should be_all_lines_locked
       end
 
-      context 'avec des lignes' do
-      
+      context 'avec des lignes'  do
     
         before(:each) do
-          @account = new_with_real_attributes
-          @account.save!
-          @n.account_id = @account.id
-          @n.save!
-          @l1 = create_outcome_writing(97)
-          @l2 = create_outcome_writing(3)
-
+          @w1 = create_outcome_writing(97)
+          @w2 = create_outcome_writing(3)
+          @ac = @w1.compta_lines.first.account
         end
-
-        it 'faux si des lignes dont au moins une n est pas locked' do
-          @account.should_not be_all_lines_locked
+        
+        it 'faux si plusieurs lignes ne sont pas verrouillées' do
+          @ac.should_not be_all_lines_locked
         end
     
-        it 'false si une ligne est unlocked' do
-          @l1.lock
-          @account.should_not be_all_lines_locked
+        it 'faux si une ligne est non verrouillée' do
+          @w1.lock
+          @ac.should_not be_all_lines_locked
         end
 
         it 'true si toutes les lignes sont locked' do
-          @l1.lock
-          @l2.lock
-          @account.should be_all_lines_locked
+          @w1.lock
+          @w2.lock
+          @ac.should be_all_lines_locked
         end
       end
 
     end
 
-    describe 'fonctionnalités natures' do
-      before(:each) do
-        @account = new_with_real_attributes
-        @account.save!
-        @n.account_id = @account.id
-        @n.save!
-      end
-
-      it 'un compte peut avoir des natures' do
-        @account.should have(1).natures
-      end
-    
    
-    end
-
     describe 'to_pdf' do
       it 'on peut créer un listing' do
         # Account.create!(valid_attributes)
