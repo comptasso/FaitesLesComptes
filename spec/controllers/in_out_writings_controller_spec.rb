@@ -10,8 +10,9 @@ describe InOutWritingsController do
   include SpecControllerHelper
 
  before(:each) do
-    minimal_instances
+    minimal_instances 
     @b = mock_model(Book)
+    @b.stub_chain(:natures, :within_period).and_return(@ar = double(Arel))
     Book.stub(:find).with(@b.id.to_s).and_return @b
     @b.stub_chain(:organism, :find_period).and_return @p
 

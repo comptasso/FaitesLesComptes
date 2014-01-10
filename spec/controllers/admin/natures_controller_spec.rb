@@ -53,11 +53,12 @@ describe Admin::NaturesController do
 
   
 
-  describe "GET new"  do
+  describe "GET new"  do 
     it "assigns a new nature as @nature" do
-      @o.stub(:income_books).and_return [1,2]
+      @o.stub(:income_books).and_return [@mb = mock_model(Book),2] 
       @o.stub(:outcome_books).and_return [3,4]
-      @a.should_receive(:new).and_return mock_model(Nature).as_new_record
+      @a.should_receive(:new).and_return(@mock_nat = mock_model(Nature).as_new_record)
+      @mock_nat.should_receive('book_id=').with(@mb.id).and_return
       get :new,  {:period_id=>@p.to_param}, valid_session
       assigns(:nature).should be_a_new(Nature)
     end
