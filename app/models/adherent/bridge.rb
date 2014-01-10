@@ -34,7 +34,8 @@ class Adherent::Bridge < ActiveRecord::Base
   
   # Vérifie que la nom utilisé pour la nature (nature_name) existe pour tous les
   # exercices ouverts.
-  # Renvoie un booléen
+  # Renvoie un booléen   
+  # TODO devrait aussi vérifier la cohérence de la nature et du livre (nature de recettes et livre de recettes)
   def check_nature_name
     res =  organism.periods.opened.collect {|p| p.nature_name_exists?(nature_name)}
     res.all? {|r| r == true}
@@ -53,6 +54,7 @@ class Adherent::Bridge < ActiveRecord::Base
       cash.current_account(period).id rescue nil
   end
     
+  # TODO A vérifier
   def find_nature_id(period)
     period.natures.recettes.find_by_name(nature_name).id rescue nil
   end

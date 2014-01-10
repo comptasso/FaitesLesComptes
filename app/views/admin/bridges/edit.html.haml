@@ -10,7 +10,8 @@
       = f.error_notification
       = f.association :income_book, :collection=>@organism.income_books, :prompt=>false
       = f.association :destination, :collection=>@organism.destinations, :prompt=>false
-      = f.input :nature_name, :collection=>@period.natures.recettes.map(&:name), :prompt=>false
+      = f.input :nature do
+        =f.select :nature_name, bridge_nature_options(@period, @bridge)
       = f.association :bank_account, :collection=>@organism.bank_accounts, :label_method=>:nickname, :prompt=>false
       = f.association :cash, :collection=>@organism.cashes, :prompt=>false
 
