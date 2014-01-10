@@ -21,6 +21,7 @@ class Adherent::Bridge < ActiveRecord::Base
   
   validates :destination_id, :nature_name, :income_book_id, :cash_id, 
     :bank_account_id, :organism_id, :presence=>true
+  validate :nature_coherent_with_book
   
   # renvoie les valeurs nécessaires pour que le PaymentObserver puisse passer
   # l'écriture de payment
@@ -57,6 +58,16 @@ class Adherent::Bridge < ActiveRecord::Base
   # TODO A vérifier
   def find_nature_id(period)
     period.natures.recettes.find_by_name(nature_name).id rescue nil
+  end
+  
+  # comme on n'enregistre que le nom de la nature, il faut s'assurer que 
+  # la nature est bien cohérente avec le livre
+  def nature_coherent_with_book
+    nat = organism.natures.find_by_name(nature_name)
+    if (income_book.id != nat.book_id)
+      errors.add(:income_book_id, 'Incohérent avec la nature')
+      errors.add(:nature_name, 'Incohérent avec le livre')
+    end
   end
     
   
