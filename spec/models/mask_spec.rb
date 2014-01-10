@@ -6,8 +6,8 @@ describe Mask do
     @mask = Mask.new(title:'Le masque', 
       comment:'Avec un commentaire', nature_name:'', mode:'', counterpart:'',
       book_id:'1')
-    @mask.stub(:book).and_return(double(IncomeBook, type:'IncomeBook'))
-    @mask.organism_id = 1
+    @mask.stub(:book).and_return(double(IncomeBook, type:'IncomeBook', id:1))
+    @mask.organism_id = 1 
     
   end
   
@@ -61,28 +61,28 @@ describe Mask do
         end
       
         it 'valide si le livre de recettes et la nature sont cohérents' do
-          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>true))
+          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, book_id:1))
           @mask.should be_valid
         end
       
         it 'invalide dans le cas contraire' do
-          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>false))
+          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, book_id:2))
           @mask.should_not be_valid
         end
         
         context 'avec un livre de dépenses' do
           
         before(:each) do
-          @mask.stub(:book).and_return(double(OutcomeBook, type:'OutcomeBook'))          
+          @mask.stub(:book).and_return(double(OutcomeBook, type:'OutcomeBook', id:2))          
         end  
         
         it 'valide si le livre de dépenses et la nature sont cohérents' do
-          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>true))
+          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, book_id:1))
           @mask.should_not be_valid
         end
       
         it 'invalide dans le cas contraire' do
-          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, :income_outcome=>false))
+          @ar.stub(:find_by_name).with('test recettes').and_return(double(Nature, book_id:2))
           @mask.should be_valid
         end
         

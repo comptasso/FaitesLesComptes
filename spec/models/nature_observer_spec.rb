@@ -20,7 +20,7 @@ describe  NatureObserver do
     
     clean_assotest1
     Apartment::Database.switch('assotest1')
-    @nature = Nature.new(name:'ecolo', :account_id => 1)
+    @nature = Nature.new(name:'ecolo', :account_id => 1, book_id:1)
     @nature.period_id = 1
     @nature.stub(:compta_lines).and_return([cl1, cl2])
 

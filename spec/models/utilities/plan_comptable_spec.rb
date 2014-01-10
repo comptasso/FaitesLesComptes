@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'utilities/plan_comptable'
 
-describe Utilities::PlanComptable do
+describe Utilities::PlanComptable do 
 
   before(:each) do 
      
@@ -12,6 +12,7 @@ describe Utilities::PlanComptable do
     @p.stub(:should_not_have_more_than_two_open_periods).and_return(true)
     @p.stub(:create_plan) # car create_plan est appelé par un after_create
     @p.stub(:create_bank_and_cash_accounts) # inutile de tester ce point ici
+    @p.stub(:fill_bridge)
     @p.stub(:load_natures)
     @p.save!
   end
