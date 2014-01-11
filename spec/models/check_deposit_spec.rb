@@ -13,7 +13,7 @@ describe CheckDeposit do
  
   before(:each) do 
     create_minimal_organism
-    @w1 = create_in_out_writing(44, 'Chèque')
+    @w1 = create_in_out_writing(44, 'Chèque') 
     @w2 = create_in_out_writing(101, 'Chèque')
     @w3 = create_in_out_writing(300, 'Chèque')
     @w4 = create_in_out_writing(50000, 'Virement')
