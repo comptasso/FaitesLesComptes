@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |c| 
 #  c.filter = {wip:true}
@@ -22,9 +22,9 @@ describe 'vue natures index' do
 
   it 'check minimal organism' do
     Organism.count.should == 1
-    Nature.count.should == 16 # les natures par défaut pour nautres_asso.yml
+    Nature.count.should == 16 # les natures par défaut pour natures_asso.yml
     # on commence par les natures de recettes
-    Nature.first.income_outcome.should be_true
+    Book.first.should have(6).natures
   end
 
 
@@ -34,7 +34,7 @@ describe 'vue natures index' do
     it "affiche la page new" , wip:true do
       visit new_admin_organism_period_nature_path(@o, @p) 
       page.should have_content("Nouvelle Nature")
-      page.should have_content('Type')
+      page.should have_content('Livre')
       
     end
 
@@ -46,10 +46,10 @@ describe 'vue natures index' do
       visit new_admin_organism_period_nature_path(@o, @p)
       fill_in 'nature[name]', :with=>'Nature test'
       fill_in 'nature[comment]', :with=>'Une nature pour essayer'
-      choose 'Dépenses'
+      select 'Dépenses'
       click_button 'Créer la nature'
       @p.natures(true).count.should == 17
-      @p.natures.last.income_outcome.should be_false
+      @p.natures.last.book.should == OutcomeBook.first
       current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
     end
 
@@ -58,7 +58,8 @@ describe 'vue natures index' do
   describe 'index' do
 
     before(:each) do
-      @p.natures.create!(:name=>'deuxième nature', :income_outcome=>false)
+      @n = @p.natures.new(:name=>'deuxième nature')
+      @n.book_id = OutcomeBook.first.id; @n.save!
       @nb_natures = @p.natures.count
       @nb_depenses = @p.depenses_natures.count
       @n = @p.natures.second

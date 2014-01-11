@@ -14,7 +14,8 @@ describe 'Recette par chèque' do
   before(:each) do
     create_user
     create_minimal_organism
-    @p.natures.create!(name: 'Vte Nourriture', :income_outcome=>true)
+    n = @p.natures.new(name: 'Vte Nourriture')
+    n.book = IncomeBook.first; n.save!
 
     login_as('quidam')  
     #    @w = @ib.writings.new

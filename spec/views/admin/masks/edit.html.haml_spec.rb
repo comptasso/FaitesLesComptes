@@ -5,6 +5,7 @@ describe "admin/masks/edit" do
   
   before(:each) do
     assign(:organism, @o = stub_model(Organism))
+     assign(:period, @p = mock_model(Period, organism:@o))
     assign(:mask, @ma = stub_model(Mask,
       :title => "MyString",
       :comment => "MyText",

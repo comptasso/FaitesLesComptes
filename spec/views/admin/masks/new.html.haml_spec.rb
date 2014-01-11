@@ -3,14 +3,17 @@ require 'spec_helper'
 describe "admin/masks/new" do
   include JcCapybara
   
-  before(:each) do
+  before(:each) do 
+    
     assign(:organism, @o = stub_model(Organism))
+    assign(:period, @p = mock_model(Period, organism:@o))
     assign(:mask, stub_model(Mask,
       :title => "MyString",
       :comment => "MyText",
       :organism_id => @o.to_param 
     ).as_new_record)
   end
+  
 
   it "renders new admin_mask form" do
     render

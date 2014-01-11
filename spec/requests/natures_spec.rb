@@ -7,7 +7,7 @@ RSpec.configure do |c|
   #  c.exclusion_filter = {:js=> true }
 end
 
-describe 'Cash Control Requests' do 
+describe 'Statistiques' do 
   include OrganismFixtureBis
   
 

@@ -73,7 +73,7 @@ module Stats
     # par ordre de position puis construit la ligne de statistique
     def stats
       stats = []
-      @period.natures.order('income_outcome DESC', 'position ASC').each do |nature|
+      @period.natures.joins(:book).order('type ASC', 'position ASC').each do |nature|
         stats << [nature.name] + nature.stat_with_cumul(@dest_id)
       end
       @stats = stats

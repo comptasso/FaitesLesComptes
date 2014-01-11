@@ -37,7 +37,7 @@ describe Stats::StatsNatures do
 
      
     before(:each) do
-      p.stub(:natures).and_return a
+      p.stub_chain(:natures, :joins).and_return a
       a.stub(:all).and_return [n1,n2,n3,n4]
       [n1,n2,n3,n4].each do |n|
         n.stub(:stat_with_cumul).and_return(1.upto(12).collect {|i| i} + [78])
@@ -46,7 +46,7 @@ describe Stats::StatsNatures do
     end
   
     it 'les natures doivent être classées par ordre recettes puis dépenses et par position' do
-      a.should_receive(:order).with('income_outcome DESC', 'position ASC').and_return([n1, n3, n4, n2])
+      a.should_receive(:order).with('type ASC', 'position ASC').and_return([n1, n3, n4, n2])
       @stats_natures.lines.collect {|l| l[0] }.should == %w(Recette1 Recette2 ARecette2 Depense1)
     end
   
@@ -54,7 +54,7 @@ describe Stats::StatsNatures do
 
     describe 'restitution des stats' do
       before(:each) do
-        p.stub_chain(:natures, :order).and_return([n1, n3, n2, n4])
+        p.stub_chain(:natures, :joins, :order).and_return([n1, n3, n2, n4])
       end
 
       it 'construit les lignes de statistiques' do
@@ -108,7 +108,7 @@ describe Stats::StatsNatures do
 
       before(:each) do
         @sn = Stats::StatsNatures.new(p, d.id)
-        p.stub_chain(:natures, :order).and_return [n1]
+        p.stub_chain(:natures, :joins, :order).and_return [n1]
       end
       it 'appelle stat_with_cumul avec d.id comme argument' do
         n1.should_receive(:stat_with_cumul).with(d.id).and_return 1.upto(13).collect {|i| i }

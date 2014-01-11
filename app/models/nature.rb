@@ -35,8 +35,8 @@ class Nature < ActiveRecord::Base
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   
 
-  scope :recettes, joins(:book).where('type = ?', 'IncomeBook').order(:position)
-  scope :depenses, joins(:book).where('type = ?', 'OutcomeBook').order(:position)
+  scope :recettes, includes(:book).where('books.type = ?', 'IncomeBook').order(:position)
+  scope :depenses, includes(:book).where('books.type = ?', 'OutcomeBook').order(:position)
   scope :without_account, where('account_id IS NULL')
   
   scope :within_period, lambda { |per| where('period_id = ?' , per.id)}

@@ -18,14 +18,17 @@ include JcCapybara
     @depenses.each {|r| r.stub(:account).and_return(nil)}
     @recettes.each {|r| r.stub_chain(:compta_lines, :empty?).and_return true }
     @depenses.each {|r| r.stub_chain(:compta_lines, :empty?).and_return true }
-
+    @books= [@b1 = mock_model(Book, title:'Recettes'),
+      @b2 = mock_model(Book, title:'Dépenses')]
+    @b1.stub_chain(:natures, :within_period).and_return @recettes
+    @b2.stub_chain(:natures, :within_period).and_return @depenses
 
   end
 
-  it "should have two titles h3" do
+  it "should have two titles h3" do 
     render
-    page.find('h3').text.should == 'Natures du type Recettes'
-    page.find('h3:last').text.should == 'Natures du type Dépenses'
+    page.find('h3').text.should == 'Natures du livre Recettes'
+    page.find('h3:last').text.should == 'Natures du livre Dépenses'
   end
   
   

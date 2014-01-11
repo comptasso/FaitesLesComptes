@@ -74,7 +74,7 @@ module OrganismFixtureBis
     # puts @baca.inspect
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
     # puts @caca.inspect
-    @n = @p.natures.depenses.first
+    @n = @p.natures.depenses.first 
   end
 
   # utile pour les requests qui nécessitent d'être identifié
