@@ -25,6 +25,7 @@ gem 'devise' # pour l'authentification
 gem 'rails_12factor' # 
 gem 'delayed_job_active_record'
 gem 'unicorn'
+gem 'rack-timeout' # coneil de heroku - utilisé par le fichier intializers/timeout.rb
 gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écriture des routes)
 # TODO à retirer lors du passage à Rails 4
 
