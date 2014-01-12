@@ -15,7 +15,7 @@ require 'pdf_document/base'
 
 class Compta::SheetsController < Compta::ApplicationController
   
-  include Pdf::Controller
+  include Pdf::Controller # apporte les méthodes pour les delayed_export_jobs
   
   before_filter :check_nomenclature, :only=>[:index, :show]
   before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
@@ -119,7 +119,7 @@ class Compta::SheetsController < Compta::ApplicationController
   # création du job et insertion dans la queue
   # on utilise le params :collection pour savoir si on est dans la publication d'une 
   # collection (une action primitive :index) ou un show.
-  # Mais comme l'action est chaque fois produce_pdf, il faut un autre moyen de 
+  # Car comme l'action est chaque fois produce_pdf, il faut un autre moyen de 
   # différentier les deux. 
   def enqueue(pdf_export)
     if params[:collection] 

@@ -9,6 +9,8 @@ fnAddToken= (url, token) ->
 
 # fichier ayant pour objet de bloquer la page et d'afficher un message "juste un instant"
 # lorsqu'on clique sur une des trois icones d'export
+# 
+# Ne pas confondre avec la logique delayed_export_tokens qui fonctionne différemment.
 #
 # Mode d'emploi :
 #   - Dans la vue, il suffit d'introduire les liens avec comme id #icon_pdf, 

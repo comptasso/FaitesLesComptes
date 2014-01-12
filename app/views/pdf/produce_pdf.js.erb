@@ -1,6 +1,8 @@
+
 $('#message').show().html("<%= j render 'pdf/message' %>"); // rendu du message
 var spinner = new Spinner(small_spinner_opts).spin(document.getElementById('message_spinner'));
 // on lance le poller qui va vérifier la disponibilité du fichier
+
 $("#message_info").smartupdater({
     url : "<%= @request_path %>" + '/pdf_ready',
     minTimeout: 2000,  // 2 seconds
