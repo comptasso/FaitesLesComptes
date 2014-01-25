@@ -14,17 +14,7 @@ class Admin::CashesController < Admin::ApplicationController
     end
   end
 
-  # GET /cashes/1
-  # GET /cashes/1.json
-  def show
-    @cash = @organism.cashes.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @cash }
-    end
-  end
-
+  
   # GET /cashes/new
   # GET /cashes/new.json
   def new

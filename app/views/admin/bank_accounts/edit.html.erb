@@ -1,6 +1,5 @@
 <%= content_for :menu do %>
-  <%= icon_to 'nouveau.png', new_admin_organism_bank_account_path(@organism) %>
-  <%= icon_to 'afficher.png', [:admin,@organism,@bank_account] %>
+  <%= icon_to 'afficher.png', admin_organism_bank_accounts_path(@organism), title:'Liste des comptes bancaires' %>
   <%= icon_to 'retour.png', :back %>
 <% end -%>
 
