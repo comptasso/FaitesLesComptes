@@ -14,6 +14,9 @@
 # à la condition Nature IS NOT NULL.
 #
 class IncomeOutcomeBook < Book
+  
+  attr_accessible :sector_id
+  
   has_many :writings,  foreign_key:'book_id'
   has_many :natures, foreign_key:'book_id'
  

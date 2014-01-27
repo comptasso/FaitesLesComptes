@@ -83,7 +83,8 @@ class Organism < ActiveRecord::Base
   has_many :subscriptions, :through=>:masks
   
   before_validation :fill_version
-  after_create :fill_sector, :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
+  after_create :fill_children
+  # sector, :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
   
 
   strip_before_validation :title, :comment, :database_name 
@@ -257,47 +258,18 @@ class Organism < ActiveRecord::Base
     self.version = FLCVERSION
   end
   
-  def fill_sector
-    @sect = sectors.create(name:'Global')
-    logger.info @sect.inspect
+  def fill_children
+    filler = "Utilities::Filler::#{status_class}".constantize
+    filler.new(self).remplit    
+  end
+  
+  def status_class
+    status == 'Comité d\'entreprise' ? 'Comite' : status
   end
 
-  def fill_nomenclature 
-    if status
-      path = File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
-      n = create_nomenclature 
-      n.read_and_fill_folios(path)
-    end
-  end
   
   
-
-  
-  def fill_books
-    # les 4 livres
-    logger.debug 'Création des livres par défaut'
-    income_books.create(abbreviation:'VE', title:'Recettes', description:'Recettes')
-    logger.debug  'création livre recettes'
-    outcome_books.create(abbreviation:'AC', title:'Dépenses', description:'Dépenses')
-    logger.debug 'creation livre dépenses'
-    od_books.create(abbreviation:'OD', :title=>'Opérations diverses', description:'Op.Diverses')
-    logger.debug 'creation livre OD'
-    create_an_book(abbreviation:'AN', :title=>'A nouveau', description:'A nouveau')
-  end
-  
-  def fill_finances
-    cashes.create(name:'La Caisse', sector_id:@sect.id)
-    logger.debug 'creation de la caisse par défaut'
-    bank_accounts.create(bank_name:'La Banque', number:'Le Numéro de Compte', nickname:'Compte courant', sector_id:@sect.id)
-    logger.debug 'creation la banque par défaut'
-  end
-  
-  def fill_destinations
-    destinations.create(name:'Non affecté')
-    destinations.create(name:'Adhérents') if status == 'Association'
-  end
-  
-  
+ 
   
   # méthode permettant de remettre les folios et les rubriques 
   # comme ils étaient à l'origine
