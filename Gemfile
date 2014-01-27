@@ -19,10 +19,11 @@ gem 'acts_as_tree', "~>1.4"
 gem 'prawn', "~> 0.12"
 gem 'prawn_rails', "0.0.11"
 gem 'haml-rails', "~>0.3"
+gem 'pg'
 gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
 gem 'apartment' # pour la gestion des schemas
 gem 'devise' # pour l'authentification
-gem 'rails_12factor' # 
+gem 'rails_12factor' , group: :production 
 gem 'delayed_job_active_record'
 gem 'unicorn'
 gem 'rack-timeout' # coneil de heroku - utilisé par le fichier intializers/timeout.rb
@@ -30,9 +31,7 @@ gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écritu
 # TODO à retirer lors du passage à Rails 4
 
 gem 'adherent' #, :path=>'../../Adherent'
-group :production, :staging, :test do
-  gem 'pg'
-end
+
 
 
 # Gems used only for assets and not required
@@ -46,15 +45,7 @@ end
 
 gem 'jquery-rails', "2.1.4"
 
-# Use unicorn as the web server
-# gem 'mongrel'
 
-
-group :ocra do
-  # le gem ocra a été patché sur la partie Windows (voir start.rb)
-  # il est donc important de garder la même version
-  gem 'ocra', '1.3.1'
-end
 
 # Deploy with Capistrano
 # gem 'capistrano'
