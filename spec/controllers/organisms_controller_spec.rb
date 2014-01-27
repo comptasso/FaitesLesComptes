@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
    
 RSpec.configure do |c|
   # c.filter = {:wip=> true }
-  #  c.exclusion_filter = {:js=> true }  
+  #  c.exclusion_filter = {:js=> true }   
 end
 
 describe OrganismsController do 
@@ -21,15 +21,14 @@ describe OrganismsController do
     
     let(:c) {mock_model(Cash)}
     let(:ba1) {mock_model(BankAccount)} 
-    let(:ib) {mock_model(IncomeBook) }
-    let(:ob) {mock_model(OutcomeBook) }
+   
     
 
     before(:each) do
       
       @o.stub_chain(:bank_accounts, :map).and_return([ba1])
       @o.stub_chain(:cashes, :map).and_return([c])
-      @o.stub_chain(:books, :all).and_return([ib,ob])
+      @o.stub_chain(:sectors).and_return([mock_model(Sector, paves:['un', 'deux', 'trois'])])
       @o.stub(:cash_books).and_return []
       @o.stub(:bank_books).and_return []
       ba1.stub(:bank_extracts).and_return([])
@@ -87,7 +86,7 @@ describe OrganismsController do
     it 'paves doit avoir 3 éléments (car on stub les cash books et bank_books' do
       # tous les livres sauf OD_Book plus résultat
       get :show, {:id=>@o.id},  {:org_db=>'assotest', :period=>@p.id, :user=>@cu.id}
-      assigns[:paves].size.should == [ib,ob].size + 1
+      assigns[:paves].size.should == 3
     end
 
   

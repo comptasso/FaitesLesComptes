@@ -28,13 +28,13 @@ module Utilities
       
       def remplit_books
         # les 4 livres
-        Rails.logger.info 'Création des livres par défaut'
+        Rails.logger.debug 'Création des livres par défaut'
         @org.income_books.create(abbreviation:'VE', title:'Recettes', description:'Recettes', sector_id:@sect.id)
-        Rails.logger.info  'création livre recettes'
+        Rails.logger.debug  'création livre recettes'
         @org.outcome_books.create(abbreviation:'AC', title:'Dépenses', description:'Dépenses', sector_id:@sect.id)
-        Rails.logger.info 'creation livre dépenses'
+        Rails.logger.debug 'creation livre dépenses'
         @org.od_books.create(abbreviation:'OD', :title=>'Opérations diverses', description:'Op.Diverses')
-        Rails.logger.info 'creation livre OD'
+        Rails.logger.debug 'creation livre OD'
         @org.create_an_book(abbreviation:'AN', :title=>'A nouveau', description:'A nouveau')
       end
   

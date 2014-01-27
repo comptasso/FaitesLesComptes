@@ -85,7 +85,7 @@ describe Adherent::Payment do
     it 'avec un chèque le accountable est bien remise de chèque' do
       @m.payments.create!(date:Date.today, amount:125.25, mode:'Chèque')
       sl = Adherent::Writing.last.support_line
-      sl.account.should == @p.rem_check_account
+      sl.account.should == @sector.rem_check_accounts(@p).first
     end
     
     it 'et espèces avec des espèces' do

@@ -3,7 +3,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-#  c.filter = {wip:true}
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true } 
 end
@@ -40,11 +39,14 @@ describe 'admin cash' do
       
     end
 
-    it 'remplir correctement le formulaire cree une nouvelle caisse', wip:true do
+    it 'remplir correctement le formulaire cree une nouvelle ligne' do
+      
       fill_in 'cash[name]', :with=>'Entrepôt'
+      
       click_button "Créer la caisse" # le compte'
       current_url.should match admin_organism_cashes_path(@o)
       all('tbody tr').should have(2).rows
+      
     end
 
     context 'remplir incorrectement le formulaire' do

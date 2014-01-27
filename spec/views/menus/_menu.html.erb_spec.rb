@@ -6,7 +6,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe "menus/_menu.html.erb" do   
+describe "menus/_menu.html.erb" do    
   include JcCapybara 
 
   let(:o) {mock_model(Organism, main_bank_id:1, status:'Association') }
@@ -14,6 +14,7 @@ describe "menus/_menu.html.erb" do
   let(:obook) { stub_model(OutcomeBook, title: 'Dépenses')}
   let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))}
   let(:p2011) {stub_model(Period, start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31)) }
+  let(:sect) {Sector.new(name:'Global')}
   let(:cu) {mock_model(User, name:'jcl')}
 
   before(:each) do
@@ -55,7 +56,8 @@ describe "menus/_menu.html.erb" do
       assign(:organism, o)
       assign(:user, cu)
       o.stub(:periods).and_return([p2011,p2012])
-      o.stub(:bank_accounts).and_return([@ba = mock_model(BankAccount, bank_extracts:[], :check_deposits=>[], 'unpointed_bank_extract?'=>false)])
+      o.stub(:bank_accounts).and_return([@ba = mock_model(BankAccount, sector:sect,
+            bank_extracts:[], :check_deposits=>[], 'unpointed_bank_extract?'=>false)])
       o.stub(:cashes).and_return([mock_model(Cash, cash_controls:[])])
       o.stub(:in_out_books).and_return [ibook,obook]
       o.stub('can_write_line?').and_return true
@@ -70,7 +72,7 @@ describe "menus/_menu.html.erb" do
       assign(:books, [ibook,obook])
       assign(:period, p2012 )
       o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))
-      assign(:paves, [ibook, obook, p2012])
+      assign(:paves, [ibook, obook, sect])
      
       @ba.stub_chain(:bank_extracts, :period, :unlocked).and_return []
 

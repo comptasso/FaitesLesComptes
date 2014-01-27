@@ -28,6 +28,7 @@ class BankAccount < ActiveRecord::Base
   include Utilities::JcGraphic
 
   belongs_to :organism
+  belongs_to :sector
   has_many :check_deposits
   has_many :bank_extracts
   

@@ -11,16 +11,16 @@ let(:o) {stub_model(Organism) }
 let(:book) {stub_model(Book) }
 let(:n) {stub_model(Nature, name:'nature')}
 let(:d) {stub_model(Destination, name:'destination')}
+let(:sector) {stub_model(Sector)}
 
 before(:each) do
     assign(:in_out_writing, stub_model(InOutWriting, book_id:1,  date:Date.today).as_new_record)
     assign(:line, stub_model(ComptaLine, ref:nil).as_new_record)
     assign(:counter_line, stub_model(ComptaLine).as_new_record)
-    assign(:book, stub_model(IncomeBook, :title=>'Recettes'))
+    assign(:book, stub_model(IncomeBook, :title=>'Recettes', sector:sector))
     assign(:period, stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31)) )
     assign(:organism, o)
-    
-    o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque)) 
+    view.stub(:sectored_destinations).and_return(%w(lille dunkerque))
    end
 
   it "renders new line  form" do

@@ -187,7 +187,7 @@ describe BankExtract do
      
   end
 
-  describe 'when locked' do  
+  describe 'when locked' do   
 
     before(:each) do
       @be = @ba.bank_extracts.create!(:begin_date=>Date.today, end_date:Date.today, begin_sold:1,
@@ -215,7 +215,7 @@ describe BankExtract do
     it 'toutes les siblings sont verrouillés' do
       @be.bank_extract_lines.each do |bels|
         bels.compta_line.siblings.each {|l| l.should be_locked}
-      end
+      end 
     end
 
 

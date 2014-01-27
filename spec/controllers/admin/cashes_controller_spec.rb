@@ -45,13 +45,7 @@ describe Admin::CashesController do
 
   end
 
-  describe "GET show" do
-    it "assigns the requested ca as @ca" do
-      @a.stub(:find).with(@ca.id.to_s).and_return @ca
-      get :show, {:organism_id=>@o.id.to_s, :id => @ca.id}, valid_session
-      assigns(:cash).should == @ca
-    end
-  end
+ 
 
   describe "GET new" do
     it "assigns a new ca as @ca" do

@@ -189,6 +189,9 @@ describe Organism do
       end
     end
     
+    
+    # TODO partie à transférer dans les tests des filler puisque cette interface
+    # a été transformée en classe.
     context 'une non association' do
       before(:each) do
         clean_assotest1
@@ -203,10 +206,10 @@ describe Organism do
       end
       
       it 'il n y a qu une destination' do
-        @organism.destinations.count.should == 1
+        @organism.destinations.count.should == 3
       end
       
-      it 'crée une seule destination si pas association' do
+      it 'dont Non affecté' do
         @organism.destinations.find_by_name('Non affecté').should be_an_instance_of(Destination)
       end
 

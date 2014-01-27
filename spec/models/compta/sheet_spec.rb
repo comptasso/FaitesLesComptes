@@ -33,7 +33,7 @@ describe Compta::Sheet do
 
   it 'sheet doit rendre un tableau' do
     cs = Compta::Sheet.new(@p, @folio ).to_csv
-    cs.should match "Actif\nRubrique\tBrut\tAmort\tNet\tPrécédent\n"
+    cs.should match "Bilan actif\nRubrique\tBrut\tAmort\tNet\tPrécédent\n"
     cs.should match "201 - Frais d'établissement\t1 210,00\t0,00\t1 210,00\t0,00\n"
     cs.should match "2801 - Amortissements des frais d'établissements\t0,00\t5,00\t-5,00\t0,00\n"
     cs.should match "Frais d'établissement\t1 210,00\t5,00\t1 205,00\t0,00"
@@ -43,7 +43,7 @@ describe Compta::Sheet do
   it 'si le sens n est pas actif, met certains champs à vide et inverse le signe' do
     
     cs = Compta::Sheet.new(@p, @o.nomenclature.passif).to_csv
-    cs.should match "Passif\nRubrique\tMontant\tPrécédent\n"
+    cs.should match "Bilan passif\nRubrique\tMontant\tPrécédent\n"
     cs.should match "102 - Fonds associatif sans droit de reprise\t0,00\t0,00\n"
   end
 
@@ -108,7 +108,7 @@ describe Compta::Sheet do
     
     it 'csv prend en compte l exercice' do
       cs = Compta::Sheet.new(@next_period, @folio ).to_csv
-      cs.should match "Actif\nRubrique\tBrut\tAmort\tNet\tPrécédent\n"
+      cs.should match "Bilan actif\nRubrique\tBrut\tAmort\tNet\tPrécédent\n"
       cs.should match "201 - Frais d'établissement\t0,00\t0,00\t0,00\t1 210,00\n"
     end
     

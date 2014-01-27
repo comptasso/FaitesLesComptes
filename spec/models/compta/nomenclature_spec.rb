@@ -3,9 +3,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |c|
- #  c.filter = {:wip=>true} 
+ # c.filter = {:wip=>true} 
 end
-
+ 
 
 describe Compta::Nomenclature do   
   include OrganismFixtureBis 
@@ -68,18 +68,15 @@ describe Compta::Nomenclature do
       
     end
   end
-  
-  
+    
   
   describe 'resultat complete' do
-    
 
     it 'aouter un compte 7 non repris dans la nomenclature la rend invalide' do
       @p.stub(:two_period_account_numbers).and_return(['709'])
       @cn.valid?
       @cn.errors.messages[:resultat].should == ['Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 709']
     end
-
 
   end
 
@@ -174,63 +171,85 @@ describe Compta::Nomenclature do
     
   end
     
-    describe 'resultat_no_doublon' do
+  describe 'resultat_no_doublon', wip:true do
       
-      context 'avec un compte 6 qui apparaît deux fois' do   
+    context 'avec un compte 6 qui apparaît deux fois' do   
         
-        before(:each) do
-          @p.stub(:two_period_account_numbers).and_return(['67', '70'])
-          @cn.stub(:resultat).and_return(@result = double(Folio, :all_numbers => ['67', '70'] ))
-          @result.stub(:all_numbers_with_option).and_return [{:num=>"67", :option=>nil}, {:num=>"67", :option=>nil}, {:num=>"70", :option=>nil}]
-       
-        end
+      before(:each) do
+        @p.stub(:two_period_account_numbers).and_return(['67', '70'])
+        @cn.stub(:resultats).and_return(@results = [@result = double(Folio, :all_numbers => ['67', '70'] )])
+        @results.stub(:all).and_return([@result])
+        @result.stub(:all_numbers_with_option).and_return [{:num=>"67", :option=>nil}, {:num=>"67", :option=>nil}, {:num=>"70", :option=>nil}]
+      end
       
-        it 'est bilan_doublon' do
-          @cn.should_not be_resultat_no_doublon
-        end
+      it 'est bilan_doublon' do
+        @cn.should_not be_resultat_no_doublon
+      end
       
-        it 'la nomenclature est invalide' do
-          @cn.should_not be_valid
-        end
+      it 'la nomenclature est invalide' do
+        @cn.should_not be_valid
+      end
       
-        it 'a une erreur sur bilan' do
-          @cn.should have(1).errors_on(:resultat)
-        end
+      it 'a une erreur sur bilan' do
+        @cn.should have(1).errors_on(:resultat)
+      end
       
              
+    end
+      
+    context 'avec plusieurs folios resultats' do
+      
+      before(:each) do
+        @p.stub(:two_period_account_numbers).and_return(['67', '68', '70'])
+        @cn.stub(:resultats).and_return(@results = [@resulta = double(Folio, :all_numbers => ['67', '68'] ), 
+            @resultb = double(Folio, :all_numbers => ['67', '70'] )])
+        @results.stub(:all).and_return([@resulta, @resultb])
+        @resulta.stub(:all_numbers_with_option).and_return [{:num=>"67", :option=>nil}, {:num=>"68", :option=>nil}]
+        @resultb.stub(:all_numbers_with_option).and_return [{:num=>"67", :option=>nil}, {:num=>"70", :option=>nil}]
+
+      end
+      
+      it 'contrôle globalement resultat_complete' do
+        @cn.should be_resultat_complete
+      end
+      
+      it 'ainsi que resultat_no_doublon' do
+        @cn.should_not be_resultat_no_doublon
       end
       
     end
       
-      describe 'benevolat_no_doublon'  do
-      
-      context 'avec un compte 8 qui apparaît deux fois' do   
-        
-        before(:each) do
-          @p.stub(:two_period_account_numbers).and_return(['81', '82'])
-          @cn.stub(:benevolat).and_return(@benevolat = double(Folio, :all_numbers => ['81', '82'] ))
-          @benevolat.stub(:all_numbers_with_option).and_return [{:num=>"81", :option=>nil}, {:num=>"81", :option=>nil}, {:num=>"82", :option=>nil}]
-       
-        end
-      
-        it 'est bilan_doublon' do
-          @cn.should_not be_benevolat_no_doublon
-        end
-      
-        it 'la nomenclature est invalide' do
-          @cn.should_not be_valid
-        end
-      
-        it 'a une erreur sur bilan' do
-          @cn.should have(1).errors_on(:benevolat)
-        end
-      
-             
-      end
-    end
-    
-    
   end
+      
+  describe 'benevolat_no_doublon'  do
+      
+    context 'avec un compte 8 qui apparaît deux fois' do   
+        
+      before(:each) do
+        @p.stub(:two_period_account_numbers).and_return(['81', '82'])
+        @cn.stub(:benevolat).and_return(@benevolat = double(Folio, :all_numbers => ['81', '82'] ))
+        @benevolat.stub(:all_numbers_with_option).and_return [{:num=>"81", :option=>nil}, {:num=>"81", :option=>nil}, {:num=>"82", :option=>nil}]
+       
+      end
+      
+      it 'est bilan_doublon' do
+        @cn.should_not be_benevolat_no_doublon
+      end
+      
+      it 'la nomenclature est invalide' do
+        @cn.should_not be_valid
+      end
+      
+      it 'a une erreur sur bilan' do
+        @cn.should have(1).errors_on(:benevolat)
+      end
+      
+             
+    end
+  end
+    
+    
+end
 
   
 

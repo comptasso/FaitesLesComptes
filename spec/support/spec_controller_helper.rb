@@ -27,6 +27,8 @@ module SpecControllerHelper
       guess_date:Date.today,
       guess_month:MonthYear.from_date(Date.today),
       guess_month_from_params:MonthYear.from_date(Date.today))
+    
+    @sect = mock_model(Sector)
 
 
     Organism.stub(:first).and_return(@o)

@@ -4,9 +4,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
- #   c.filter = {:wip=> true } 
+ #   c.filter = {:wip=> true }  
 end
-
+# TODO on pourrait accélérer ces tests en testant pending_checks 
+# dans ComptaLine et après ensuite en utilisant des stubs
 
 describe CheckDeposit do   
   include OrganismFixtureBis
@@ -21,7 +22,7 @@ describe CheckDeposit do
   end
 
  
-  describe "methodes de classe sur les chèques à déposer"  do
+  describe "methodes de classe sur les chèques à déposer" do
 
     it "la classe check_deposit can give the total of non_deposited checks" do
       CheckDeposit.total_to_pick.should == 445
@@ -45,11 +46,11 @@ describe CheckDeposit do
    
   end
 
-  describe "création d'une remise de chèque"  do
-    it "save the right date" do
+  describe "création d'une remise de chèque" do 
+    it "save the right date" ,  wip:true do 
       d = @p.start_date.months_since(4)
       cd = @ba.check_deposits.new deposit_date_picker:I18n::l(d, :format=>:date_picker)
-      cd.pick_all_checks
+      cd.pick_all_checks(@sector)
       cd.save!
       cd.deposit_date.should == d
     end
@@ -58,7 +59,7 @@ describe CheckDeposit do
 
       before(:each) do
         @cd = @ba.check_deposits.new deposit_date:Date.today 
-        @cd.pick_all_checks
+        @cd.pick_all_checks(@sector)
 
       end
 
@@ -104,7 +105,7 @@ describe CheckDeposit do
 
     it "n'est pas valide sans date" do
       @check_deposit.bank_account_id = @ba.id
-      @check_deposit.pick_all_checks
+      @check_deposit.pick_all_checks(@sector)
       @check_deposit.deposit_date = nil
       @check_deposit.should have(1).errors_on(:deposit_date)
       @check_deposit.save.should == false
@@ -112,7 +113,7 @@ describe CheckDeposit do
   
     it 'est valide avec un compte bancaire et au moins un chèque' do
       @check_deposit.bank_account=@ba
-      @check_deposit.pick_all_checks
+      @check_deposit.pick_all_checks(@sector)
       @check_deposit.should be_valid
       @check_deposit.errors.messages.should == {}
       @check_deposit.save.should == true
@@ -128,18 +129,18 @@ describe CheckDeposit do
     end
 
     it 'pick_all_checks récupère tous les chèques' do
-      @check_deposit.pick_all_checks
+      @check_deposit.pick_all_checks(@sector)
       @check_deposit.checks.should == [@w1.children.last,@w2.children.last,@w3.children.last]
     end
 
     it "un nouvel enregistrement a son total à zero" do
-      @check_deposit.total_checks.should == 0
+      @check_deposit.total_checks.should == 0 
     end
 
     context "lorsque la remise est un nouvel enregistrement, la fonction total fonctionne" do
 
       before(:each) do
-        @check_deposit.pick_all_checks
+        @check_deposit.pick_all_checks(@sector)
       end
 
       it 'total renvoie le total des lignes associées' do
@@ -171,7 +172,7 @@ describe CheckDeposit do
     before(:each) do
       date = Date.today + 2
       @check_deposit = @ba.check_deposits.new(deposit_date: date)
-      @check_deposit.pick_all_checks
+      @check_deposit.pick_all_checks(@sector)
       @check_deposit.save!
     end
 

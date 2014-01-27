@@ -61,6 +61,7 @@ module OrganismFixtureBis
   end
   
   def get_organism_instances
+    @sector = @o.sectors.first
     @ba= @o.bank_accounts.first
     # puts @ba.inspect
     @ib = @o.income_books.first # les livres sont créés par un after_create
@@ -109,7 +110,7 @@ module OrganismFixtureBis
   # pour le montant (99) et pour le mode de payment (Virement).
   #
   #
-  def create_in_out_writing(montant=99, payment='Virement')
+  def create_in_out_writing(montant=99, payment='Virement')  
     @income_account = @o.accounts.classe_7.first
     if payment == 'Chèque'
       acc_id = @p.rem_check_account.id

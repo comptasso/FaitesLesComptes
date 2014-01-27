@@ -42,7 +42,7 @@ describe Compta::SheetsController do
       flash[:alert].should == 'la liste des erreurs'
     end
     
-    describe 'exportations' do
+    describe 'exportations' do 
       
       before(:each) do
         
@@ -162,8 +162,9 @@ describe Compta::SheetsController do
     describe 'GET resultats', wip:true do
       
       it 'redirige vers index' do
+        @nomenclature.stub(:resultats).and_return([double(Folio, name:'resulta'), double(Folio, name:'resultb')])
         get :resultats, {}, valid_session
-        response.should redirect_to compta_sheets_path(collection:['resultat'], title:'Compte de Résultats')
+        response.should redirect_to compta_sheets_path(collection:['resulta', 'resultb'], title:'Comptes de Résultats')
       end
     end
 

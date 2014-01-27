@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'spec_helper' 
+require 'spec_helper'  
 
 RSpec.configure do |c|
  # c.filter = {wip:true}
@@ -9,8 +9,8 @@ end
 describe CheckDepositsController do 
   include SpecControllerHelper
 
-  let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id:@o.id)}
-  let(:ba2) {mock_model(BankAccount, name: 'IBAN', number: '124578B', organism_id:@o.id)}
+  let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id:@o.id, sector:@sect)}
+  let(:ba2) {mock_model(BankAccount, name: 'IBAN', number: '124578B', organism_id:@o.id, sector:@sect)}
   let(:be) {mock_model(BankExtract, bank_account_id: ba.id, begin_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month,
       begin_sold: 120, debit: 450, credit: 1000, end_sold: 120+1000-450)}
   

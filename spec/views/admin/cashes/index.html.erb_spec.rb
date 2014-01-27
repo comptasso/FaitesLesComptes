@@ -47,10 +47,10 @@ describe 'admin/cashes/index' do
     context 'title row' do
       it "shows Caisse" do
         page.find('thead th:first').text.should == 'Nom'
-         page.find('thead th:nth-child(2)').text.should == 'Commentaire'
-           page.find('thead th:nth-child(3)').text.should == 'Compte de rattach.'
-        page.find('thead th:nth-child(4)').text.should == 'Créée le'
-        page.find('thead th:nth-child(5)').text.should == 'Mis à jour le'
+        page.find('thead th:nth-child(2)').text.should == 'Commentaire'
+        page.find('thead th:nth-child(3)').text.should == 'Secteur'
+        page.find('thead th:nth-child(4)').text.should == 'Compte de rattach.' 
+        page.find('thead th:nth-child(5)').text.should == 'Actions'
       end
     end
 
@@ -59,9 +59,9 @@ describe 'admin/cashes/index' do
         @ca=@cashes.first
         page.find('tbody tr td:nth-child(1)').text.should == @ca.name
         page.find('tbody tr td:nth-child(2)').text.should == @ca.comment
-        page.find('tbody tr td:nth-child(3)').text.should == '5301'
-        page.find('tbody tr td:nth-child(4)').text.should == l(@ca.created_at)
-        page.find('tbody tr td:nth-child(5)').text.should == l(@ca.updated_at)
+        page.find('tbody tr td:nth-child(3)').text.should == ''
+        page.find('tbody tr td:nth-child(4)').text.should == '5301'
+        
       end
     end
 

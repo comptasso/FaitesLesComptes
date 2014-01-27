@@ -18,18 +18,20 @@ describe Nomenclature do
     Apartment::Database.switch('assotest1')
     clean_assotest1
   end
-
   
-
+  it 'invalide sans organisme' do
+      @n = o.nomenclature(true)
+      @n.organism_id = nil
+      @n.should_not be_valid
+    end
 
   describe 'with a valid nomenclature' do
 
     before(:each) do
       @n = o.nomenclature(true)
     end
-
-    it 'peut restituer ses instructions' do
-       
+    
+    it 'peut restituer ses instructions'  do       
       @n.actif.should be_an_instance_of Folio 
       @n.passif.should be_an_instance_of Folio
       @n.resultat.should be_an_instance_of Folio
@@ -45,8 +47,6 @@ describe Nomenclature do
     end
 
     describe 'check_coherent'  do
-      
-      
   
       context 'tous les folios sont coherents' do
         before(:each) do
@@ -68,6 +68,7 @@ describe Nomenclature do
           @n.stub(:resultat).and_return nil
           @n.should_not be_coherent
         end
+        
         describe 'appelle bilan_balanced?' do
         
           it 'si actif et passif' do
@@ -75,13 +76,13 @@ describe Nomenclature do
             @n.coherent?
           end
         
-          it 'mais pas si actif ou passif manque' do
+          it 'mais pas si actif manque' do
             @n.stub(:actif).and_return nil
             @n.should_not_receive('bilan_balanced?')
             @n.coherent?
           end
           
-          it 'mais pas si actif ou passif manque' do
+          it 'ou si passif manque' do
             @n.stub(:passif).and_return nil
             @n.should_not_receive('bilan_balanced?')
             @n.coherent?
@@ -94,20 +95,20 @@ describe Nomenclature do
             @n.coherent?
           end
         
-          it 'mais pas si actif ou passif manque' do
+          it 'mais pas si actif manque' do
             @n.stub(:actif).and_return nil
             @n.should_not_receive('bilan_no_doublon?')
             @n.coherent?
           end
           
-          it 'mais pas si actif ou passif manque' do
+          it 'ou si passif manque' do
             @n.stub(:passif).and_return nil
             @n.should_not_receive('bilan_no_doublon?')
             @n.coherent?
           end
         end
         
-        describe 'contrôle des compta nomenclature' do
+        describe 'coherent?' do
           before(:each) do
             @n.stub_chain(:organism, :periods, :opened).and_return([@p1 = double(Period), @p2 = double(Period)])
           end
@@ -118,7 +119,7 @@ describe Nomenclature do
             @n.coherent? 
           end
           
-          it 'incoherent si une compta_nomenclature est invalide' do
+          it 'faux si une compta_nomenclature est invalide' do
             @n.stub(:compta_nomenclature).with(@p1).and_return(double(Compta::Nomenclature, valid?:true))
             @n.stub(:compta_nomenclature).with(@p2).
               and_return(@cn2 = Compta::Nomenclature.new(p, @n))
@@ -128,7 +129,7 @@ describe Nomenclature do
             
           end
           
-          it 'en recopiant l erreur dans la nomenclature'  do
+          it 'recopie l erreur dans la nomenclature'  do
             @n.stub(:compta_nomenclature).with(@p1).and_return(double(Compta::Nomenclature, valid?:true))
             @n.stub(:compta_nomenclature).with(@p2).
               and_return(@cn2 = Compta::Nomenclature.new(p, @n))
@@ -163,10 +164,7 @@ describe Nomenclature do
     
     end
 
-    it 'invalide sans organisme' do
-      @n.organism_id = nil
-      @n.should_not be_valid
-    end
+    
 
   end
 

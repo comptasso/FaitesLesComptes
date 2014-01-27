@@ -2,13 +2,13 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-RSpec.configure do |c| 
+RSpec.configure do |c|  
 #  c.filter = {wip:true}
 #  c.filter = {:js=> true } 
 #  c.exclusion_filter = {:js=> true } 
 end
 
-# spec request for testing admin books 
+# spec request for testing admin books  
 
 describe 'vue natures index' do  
   include OrganismFixtureBis 
@@ -31,18 +31,18 @@ describe 'vue natures index' do
 
   describe 'new nature' do
     
-    it "affiche la page new" , wip:true do
+    it "affiche la page new"  do
       visit new_admin_organism_period_nature_path(@o, @p) 
       page.should have_content("Nouvelle Nature")
       page.should have_content('Livre')
       
     end
 
-    it 'reaffiche la page' , wip:true do
+    it 'reaffiche la page'  do
       visit new_admin_organism_period_nature_path(@o, @p)
     end
 
-    it 'remplir correctement le formulaire crée une nouvelle nature'  do
+    it 'remplir correctement le formulaire crée une nouvelle nature', wip:true  do
       visit new_admin_organism_period_nature_path(@o, @p)
       fill_in 'nature[name]', :with=>'Nature test'
       fill_in 'nature[comment]', :with=>'Une nature pour essayer'
@@ -70,7 +70,7 @@ describe 'vue natures index' do
       page.should have_selector("tbody", :count=>2)
     end
 
-    it 'dans la vue index,une nature peut être détruite', :js=>true do 
+    it 'dans la vue index,une nature peut être détruite', :js=>true, wip:true do 
       
       
       visit admin_organism_period_natures_path(@o, @p)
@@ -99,7 +99,7 @@ describe 'vue natures index' do
 
   describe 'edit' do
 
-    it 'On peut changer les deux autres champs' do
+    it 'On peut changer les deux autres champs', wip:true do
       @n = @p.natures.third
       visit edit_admin_organism_period_nature_path(@o, @p, @n)
       fill_in 'nature[name]', :with=>'modif du titre'
