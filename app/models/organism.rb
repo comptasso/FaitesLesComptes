@@ -43,7 +43,7 @@ class Organism < ActiveRecord::Base
   attr_accessible :title, :database_name, :status, :comment
 
   has_one :nomenclature, dependent: :destroy
-  
+  has_many :sectors, dependent: :destroy
   has_many :books, dependent: :destroy
   has_many :destinations, dependent: :destroy
   has_many :natures, through: :periods
@@ -83,7 +83,7 @@ class Organism < ActiveRecord::Base
   has_many :subscriptions, :through=>:masks
   
   before_validation :fill_version
-  after_create :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
+  after_create :fill_sector, :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
   
 
   strip_before_validation :title, :comment, :database_name 
@@ -229,26 +229,6 @@ class Organism < ActiveRecord::Base
   def document(page, period = Period.last)
     Compta::Nomenclature.new(period).sheet(page)
   end
-
-  # méthode appelée par BankAccount ou Cash lorsqu'on crée une nouveau compte 
-  # bancaire ou une nouvelle caisse
-  # 
-  # create_account_for prend en argument l'objet (pour avoir son nickname et sa classe
-  # interroge Account pour obtenir un numéro disponible par exemple 5302 
-  # ou 51204 s'il y a déjà une caisse ou s'il y a déjà 3 comtpes bancaires
-  # 
-  # puis crée les comptes correspondants pour tous les exercices ouverts.
-  def create_accounts_for(objet)
-    racine  = objet.class.compte_racine # donc normalement 512 ou 53
-    new_number = Account.available(racine) # demande à Account le compte à utiliser
-    # TODO pourrait être demandé à Account ou encore à PlanComptable
-    # création des comptes
-    periods.opened.each do |p|
-      new_acc = objet.accounts.new(number:new_number, title:objet.nickname)
-      new_acc.period_id = p.id
-      new_acc.save!
-    end
-  end
   
   # TODO voir comment gérer les exceptions
   # remplit les éléments qui permettent de faire le pont entre le module 
@@ -276,6 +256,11 @@ class Organism < ActiveRecord::Base
   def fill_version
     self.version = FLCVERSION
   end
+  
+  def fill_sector
+    @sect = sectors.create(name:'Global')
+    logger.info @sect.inspect
+  end
 
   def fill_nomenclature 
     if status
@@ -301,9 +286,9 @@ class Organism < ActiveRecord::Base
   end
   
   def fill_finances
-    cashes.create(name:'La Caisse')
+    cashes.create(name:'La Caisse', sector_id:@sect.id)
     logger.debug 'creation de la caisse par défaut'
-    bank_accounts.create(bank_name:'La Banque', number:'Le Numéro de Compte', nickname:'Compte courant')
+    bank_accounts.create(bank_name:'La Banque', number:'Le Numéro de Compte', nickname:'Compte courant', sector_id:@sect.id)
     logger.debug 'creation la banque par défaut'
   end
   

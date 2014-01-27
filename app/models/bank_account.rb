@@ -54,7 +54,7 @@ class BankAccount < ActiveRecord::Base
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :organism_id, :presence=>true
  
-  after_create :create_accounts
+  after_create :create_accounts, :if=>lambda {organism.periods.opened.any? }
   after_update :change_account_title, :if=> lambda {nickname_changed? }
   
 
@@ -173,7 +173,7 @@ protected
  # ouverts).
  def create_accounts
    logger.debug 'création des comptes liés au compte bancaire' 
-   organism.create_accounts_for(self)
+   Utilities::PlanComptable.create_financial_accounts(self)
  end
 
  # quand on change le nickname de la banque il est nécessaire de modifier l'intitulé

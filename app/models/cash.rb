@@ -33,7 +33,7 @@ class Cash < ActiveRecord::Base
   validates :organism_id, :presence=>true
  
   
-  after_create :create_accounts
+  after_create :create_accounts, :if=>lambda {organism.periods.opened.any? }
   after_update :change_account_title, :if=> lambda {name_changed? }
   
 
@@ -100,7 +100,7 @@ class Cash < ActiveRecord::Base
  # ouverts).
  def create_accounts
    logger.debug 'création des comptes liés à la caisse' 
-   organism.create_accounts_for(self)
+   Utilities::PlanComptable.create_financial_accounts(self)
  end
 
  # Permet d'avoir un libellé du compte plus clair en préfixant le libellé du compte
