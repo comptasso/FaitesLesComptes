@@ -99,7 +99,7 @@ module Compta
       @list += @col2_nums.map {|n| {:num=>n, :option=>:col2}}
       @list += @credit_nums.map {|n| {:num=>n, :option=>:credit}}
       @list += @debit_nums.map {|n| {:num=>n, :option=>:debit}}
-      # il faut maintenant les comptacter ou rejeter dans débit
+      # il faut maintenant les comptacter ou les classer
       check_list
       reorder_list!
       @list

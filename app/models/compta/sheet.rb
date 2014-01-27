@@ -38,12 +38,13 @@ module Compta
     include Utilities::ToCsv
     include ActiveModel::Validations
     
-    attr_accessor  :name, :folio, :period
+    attr_accessor  :name, :title, :folio, :period
 
     def initialize(period, folio)
       @folio = folio
       @period = period
       @name = folio.name
+      @title = folio.title
     end
     
     def sens
@@ -74,7 +75,7 @@ module Compta
     # show veut dire une édition avec le détail des lignes, d'où l'utilisation de fetch_lines
     def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
-        csv << [name.capitalize] # par ex Actif
+        csv << [title.capitalize] # par ex Actif
         csv << entetes  # la ligne des titres
         fetch_lines.each do |rub|
           csv << (sens==:actif ? prepare_line(rub, sens) : format_line(rub.total_passif))
@@ -88,7 +89,7 @@ module Compta
     # d'où l'appel à fetch_rubriks
     def to_index_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
-        csv << [name.capitalize] # par ex Actif
+        csv << [title.capitalize] # par ex Actif
         csv << index_entetes # la ligne des titres
         fetch_rubriks.each do |rub|
           csv << prepare_line(rub, sens)
