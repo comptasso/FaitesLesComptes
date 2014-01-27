@@ -1,4 +1,4 @@
 <%= content_tag :div, :class=>"pave result #{local_classes}" do %>
-  <h3>Résultat</h3>
-  <%= render partial: 'organisms/bar_graphic', object: result_pave.graphic(result_pave) , :locals=>{id: 'book_0'} %>
+  <h3>Résultat <%=  result_pave.name %></h3>
+  <%= render partial: 'organisms/bar_graphic', object: result_pave.graphic(@period) , :locals=>{id: "sector_#{result_pave.id}"} %>
 <% end %>

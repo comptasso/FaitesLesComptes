@@ -6,12 +6,13 @@
   <h3>Liste des caisses</h3>
 <table class="table table-striped table-bordered table-condensed" cellpadding="0" cellspacing="0" border="0">
   <thead>
-  <tr>
+  <tr> 
     <th>Nom</th>
     <th>Commentaire</th>
+    <th>Secteur</th>
     <th>Compte de rattach.</th>
-    <th>Créée le</th>
-    <th>Mis à jour le</th> 
+    
+    
     <th>Actions</th>
   </tr>
   </thead>
@@ -20,9 +21,10 @@
   <tr>
     <td><%= cash.name %></td>
     <td><%= cash.comment %></td>
+    <td><%= cash.sector.name if cash.sector %></td>
     <td><%= cash.accounts.first.number %></td>
-  <td><%= l cash.created_at %></td>
-    <td><%= l cash.updated_at %></td>
+  
+   
     <td><%= icon_to 'modifier.png', edit_admin_organism_cash_path(@organism,cash), :id=>"icon_modifier_cash_#{cash.id}" %></td>
          
   </tr>

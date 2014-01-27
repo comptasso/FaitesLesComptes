@@ -81,8 +81,8 @@ class Compta::SheetsController < Compta::ApplicationController
 
   # resultats renvoie vers index avec exploitation, financier et exceptionnel
   def resultats
-    redirect_to compta_sheets_url(:collection=>[:resultat],
-      :title=>'Compte de Résultats')
+    redirect_to compta_sheets_url(:collection=>@organism.nomenclature.resultats.collect(&:name),
+      :title=>'Comptes de Résultats')
   end
 
   def liasse

@@ -25,24 +25,7 @@ class Rubrik < ActiveRecord::Base
   
   alias collection children
   
-#  # repris ces lignes de github ascts_as_tree car curieusement ne semblent pas fonctionner
-#  # par défaut
-#  # Returns list of descendants, starting from current node, not including current node.
-#    #
-#    # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
-#    def descendants
-#      children.each_with_object(children) {|child, arr|
-#        arr.concat child.descendants
-#      }.uniq
-#    end
-#
-#    # Returns list of descendants, starting from current node, including current node.
-##
-#    # root.self_and_descendants # => [root, child1, child2, subchild1, subchild2, subchild3, subchild4]
-#    def self_and_descendants
-#      [self] + descendants
-#    end
-  
+ 
   # surcharge de la méthode leaf? du gem acts_as_tree afin d'utiliser le champ
   # is_leaf.
     def leaf?

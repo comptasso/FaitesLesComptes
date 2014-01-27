@@ -3,7 +3,7 @@ class Admin::CashesController < Admin::ApplicationController
 
 
 
-  # GET /cashes
+  # GET /cashes 
   # GET /cashes.json
   def index
     @cashes = @organism.cashes.all
@@ -14,7 +14,7 @@ class Admin::CashesController < Admin::ApplicationController
     end
   end
 
-  
+
   # GET /cashes/new
   # GET /cashes/new.json
   def new

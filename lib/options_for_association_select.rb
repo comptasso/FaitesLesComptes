@@ -37,14 +37,19 @@
 class OptionsForAssociationSelect
   attr_reader:title
 
-  def initialize(titre, method, model)
+  def initialize(titre, method, model, option=nil)
     @title=titre
     @method=method
     @object=model
+    @option = option
   end
 
   def options
-    @object.send(@method)
+    if @option
+      @object.send(@method, @option)
+    else
+      @object.send(@method)
+    end
   end
 
 end

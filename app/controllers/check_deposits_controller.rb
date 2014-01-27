@@ -23,12 +23,12 @@ pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
   # GET /check_deposits/new
   # GET /check_deposits/new.json
   def new
-    if CheckDeposit.nb_to_pick < 1
+    if CheckDeposit.nb_to_pick(@sector) < 1
       redirect_to  :back, alert: "Il n'y a pas de chèque à remettre"
       return
     end
     @check_deposit = @bank_account.check_deposits.new(deposit_date: @period.guess_date)
-    @check_deposit.pick_all_checks # par défaut on remet tous les chèques disponibles pour cet organisme
+    @check_deposit.pick_all_checks(@sector) # par défaut on remet tous les chèques disponibles pour cet organisme
   end
 
 
@@ -79,6 +79,7 @@ pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
   
   def find_bank_account
     @bank_account = BankAccount.find(params[:bank_account_id])
+    @sector = @bank_account.sector
   end
   
 end

@@ -19,8 +19,7 @@ class OrganismsController < ApplicationController
 
     # Construction des éléments des paves
     @paves = []
-    @paves += @organism.books.in_outs.all
-    @paves << @period
+    @organism.sectors.each {|sec| @paves += sec.paves}
     @paves += @organism.cash_books
     @paves += @organism.bank_books
  

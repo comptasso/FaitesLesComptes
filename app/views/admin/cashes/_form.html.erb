@@ -6,6 +6,7 @@
     <%= f.input :name,  input_html: {class: "span3"}%>
 
     <%= f.input :comment,  input_html: {rows: 4, class: "span3"} %>
+    <%= f.association :sector,  input_html: {class: "span3"}, prompt:'Choisissez un secteur', required:true if @organism.sectored? %>
 
 
   <div class="form-actions">
