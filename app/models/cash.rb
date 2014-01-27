@@ -13,7 +13,7 @@ class Cash < ActiveRecord::Base
   attr_accessible :name, :comment, :sector_id
 
   belongs_to :organism
-  
+  belongs_to :sector
   
   # ces deux has_many sont très proche mais le premier en incluant writing
   # a des effets indésirables sur les requêtes utilisées pour faire un pdf de la 

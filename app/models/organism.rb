@@ -133,6 +133,10 @@ class Organism < ActiveRecord::Base
       vb
     end
   end
+  
+  def sectored?
+    sectors.count > 1
+  end
 
   # retourne le nombre d'exercices ouverts de l'organisme
   def nb_open_periods

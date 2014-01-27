@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true } 
 end
@@ -10,7 +10,7 @@ end
 # spec request for testing admin cashes
 
 describe 'admin cash' do
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
   
   
   before(:each) do
