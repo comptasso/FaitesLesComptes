@@ -9,7 +9,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe Adherent::Payment do 
+describe Adherent::Payment do  
   include OrganismFixtureBis 
 
   def create_member
@@ -85,7 +85,7 @@ describe Adherent::Payment do
     it 'avec un chèque le accountable est bien remise de chèque' do
       @m.payments.create!(date:Date.today, amount:125.25, mode:'Chèque')
       sl = Adherent::Writing.last.support_line
-      sl.account.should == @sector.rem_check_accounts(@p).first
+      sl.account.should == @p.rem_check_accounts.first
     end
     
     it 'et espèces avec des espèces' do

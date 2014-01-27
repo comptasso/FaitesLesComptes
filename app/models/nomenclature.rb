@@ -47,6 +47,10 @@ class Nomenclature < ActiveRecord::Base
     folios.where('name = ?', :resultat).first rescue nil
   end
   
+  def resultats
+    folios.where('name LIKE ?', 'resultat%')
+  end
+  
   def benevolat
     folios.where('name = ?', :benevolat).first rescue nil
   end

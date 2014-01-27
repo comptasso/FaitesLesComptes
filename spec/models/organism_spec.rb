@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c| 
+RSpec.configure do |c|  
   #  c.filter = {:js=> true }
   #  c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true } 
@@ -192,7 +192,7 @@ describe Organism do
     
     # TODO partie à transférer dans les tests des filler puisque cette interface
     # a été transformée en classe.
-    context 'une non association' do
+    context 'une non association' do 
       before(:each) do
         clean_assotest1
         @organism = Organism.create!({:title =>'Mon Entreprise',
@@ -205,7 +205,7 @@ describe Organism do
         @organism.bridge.should == nil
       end
       
-      it 'il n y a qu une destination' do
+      it 'créé 3 destinations' do
         @organism.destinations.count.should == 3
       end
       
@@ -275,43 +275,7 @@ describe Organism do
     end
     
     
-    describe 'create_account_for'  do
-      
-      before(:each) do
-        @bac = mock_model(BankAccount, :nickname=>'Cpte sur livret')
-        
-      end
-      
-      it 'appelle Account.available avec 512' do
-        @organism.stub_chain(:periods, :opened).and_return [] # pour couper court à la suite de la méthode
-        Account.should_receive(:available).with('512').and_return('51204')
-        @organism.create_accounts_for(@bac)
-      end
-      
-      it 'pour une caisse appelle 53' do
-        @cac = Cash.new(:name=>'local')
-        @organism.stub_chain(:periods, :opened).and_return []        
-        Account.should_receive(:available).with('53').and_return('5301')
-        @organism.create_accounts_for(@cac)
-      end
-      
-      it 'puis appelle create_accounts pour chaque exercice ouvert' do
-        Account.stub(:available).and_return('51204')
-        @organism.stub_chain(:periods, :opened).and_return([@p1 = mock_model(Period), @p2 = mock_model(Period)])
-        @bac.should_receive(:accounts).exactly(1).times.and_return(@ar = double(Arel))
-        @bac.should_receive(:accounts).exactly(1).times.and_return(@as = double(Arel))
-        @ar.should_receive(:new).with(number:'51204', title:@bac.nickname).and_return @ar
-        @ar.should_receive(:period_id=).with(@p1.id).and_return @ar
-        @ar.should_receive(:save!).and_return
-        @as.should_receive(:new).with(number:'51204', title:@bac.nickname).and_return @as
-        @as.should_receive(:period_id=).with(@p2.id).and_return @as
-        @as.should_receive(:save!).and_return
-        @organism.create_accounts_for(@bac)
-      end
-      
-      
-    end
-
+ 
     describe 'max_open_periods?' do
       it 'nb_open_periods.should == 2' do
         @organism.nb_open_periods.should == 2

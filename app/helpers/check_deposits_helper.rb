@@ -11,9 +11,9 @@
 # pour un exemple.
 #
 # Et dans le formulaire utiliser une collection avec comme group_label_méthod :name
-# et group_method :checks
+# et group_method :checks 
 #
-class OptionsForChecksSelect
+class OptionsForChecksSelect 
   attr_reader :name
 
   def initialize(name, type, check_deposit, sector)

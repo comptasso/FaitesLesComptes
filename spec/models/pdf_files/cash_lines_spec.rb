@@ -8,7 +8,7 @@ RSpec.configure do |config|
 end
 
 # Classe de test ayant pour objet d'écrire concrètement un fichier pdf 
-describe 'Edition PDF des MonthlyExtract' do
+describe 'Edition PDF des MonthlyExtract' do 
   
   def extract_lines
     100.times.collect do |t|

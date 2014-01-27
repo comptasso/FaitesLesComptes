@@ -15,7 +15,7 @@ describe Compta::Nomenclature do
   before(:each) do
     create_organism
     @p = @o.periods.create!(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
-    @cn =  Compta::Nomenclature.new(@p, @o.nomenclature)
+    @cn =  Compta::Nomenclature.new(@p, @o.nomenclature) 
   end
 
   it 'se crée à partir de la nomenclature d un organisme' do
@@ -191,7 +191,7 @@ describe Compta::Nomenclature do
       end
       
       it 'a une erreur sur bilan' do
-        @cn.should have(1).errors_on(:resultat)
+        @cn.should have(1).errors_on(:resultat) 
       end
       
              

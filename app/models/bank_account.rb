@@ -23,7 +23,7 @@ require 'strip_arguments'
 # calculer un solde.
 #
 #
-class BankAccount < ActiveRecord::Base 
+class BankAccount < ActiveRecord::Base  
   include Utilities::Sold
   include Utilities::JcGraphic
 
