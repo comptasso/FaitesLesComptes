@@ -1,15 +1,23 @@
 # coding: utf-8
 
 
-# REM_CHECK_ACCOUNT sert à créer et retrouver le compte remise chèque
-# period.rem_check_account retourne ce compte ou le crée;
+# REM_CHECK_ACCOUNT sert à créer retrouver le compte remise chèque
+# 
 # Il est accountable car cela permet de le traiter à peu près comme un bank_account ou un cash.
 # Notamment pour la fonction support.
+# TODO revoir ce sujet, j'ai retiré le accountable type et id car en pratique la création
+# du rem_check_account se fait par le fichier yml du plan comptable.
+# 
+# Des modifs sont en cours pour que cela soit fait par Period.create_rem_check_accounts
+# afin de gérer la sectorisation. 
+# 
+# Voir la solution finale adoptée et faire le ménage alors. 
+# 
 # Il a donc has_many :accounts, :as=>accountable pour que accountable fonctionne
 # et to_s qui retourne 'Chèque à l'encaissement'
 # Par ailleurs accountable a été surchargé dans Account pour retourner une instance de RemCheckAccount 
 # si le type est RemCheckAccount.
-REM_CHECK_ACCOUNT = {number:'511', title:'Chèques à l\'encaissement', accountable_type:'RemCheckAccount', accountable_id:1}
+REM_CHECK_ACCOUNT = {number:'511', title:'Chèques à l\'encaissement'}.freeze
 
 
 # constante utilisée pour les éditions de pdf
@@ -22,7 +30,7 @@ BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
 DIRECT_BANK_PAYMENT_MODES = %w(CB Prélèvement Virement)
 
 
-LIST_STATUS = %w(Association Entreprise)
+LIST_STATUS = ['Association', 'Comité d\'entreprise', 'Entreprise' ]
 
 # limites de validation
 NAME_LENGTH_MIN = 3

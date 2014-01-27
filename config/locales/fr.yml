@@ -204,7 +204,6 @@ fr:
     account: Compte
     end_date: date de fin
     begin_date: date de début
-    
 
 
 
@@ -219,6 +218,7 @@ fr:
       destination:
         name: Nom
         comment: Commentaire
+        sector: Secteur
       nature:
         name: Nom
         comment: Commentaire
@@ -237,6 +237,7 @@ fr:
         comment: Commentaire
         number: "N° de compte"
         nickname: Surnom
+        sector: Secteur
         
        
       check_deposit:
@@ -248,6 +249,7 @@ fr:
       cash:
         name: 'Nom'
         comment: Commentaire
+        sector: Secteur
       compta_line:
         payment_mode: 'Paiement'
         bank_account: 'Compte'
