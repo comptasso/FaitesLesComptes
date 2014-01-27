@@ -103,8 +103,6 @@
   title: Provisions pour dépréciation des comptes de débiteurs divers
 - number: '50'
   title: Valeurs mobiliéres de placement
-- number: '511'
-  title: Chèque à encaisser
 - number: '590'
   title: Provisions pour dépréciation des valeurs mobiliéres de placement
 - number: '60'

@@ -101,8 +101,6 @@
   title: Dépréciation des autres créances
 - number: '50'
   title: Valeurs mobiliéres de placement
-- number: '511'
-  title: Chèque à encaisser
 - number: '590'
   title: Provisions pour dépréciation des valeurs mobiliéres de placement
 - number: '60'

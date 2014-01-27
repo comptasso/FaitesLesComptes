@@ -1,4 +1,6 @@
 ---
+- number: '1060'
+  title: 'reserve initiale'
 - number: '1061'
   title: Réserves des ASC
 - number: '1062'
@@ -13,6 +15,8 @@
   title: Provisions pour risques et charges
 - number: '160'
   title: Emprunts et dettes assimilées
+- number: '171'
+  title: Dettes envers participations
 - number: '205'
   title: Logiciels
 - number: '208'
@@ -21,6 +25,8 @@
   title: Agencements et aménagements des installations
 - number: '215'
   title: Installations techniques, matériel et outillage industriel
+- number: '2151'
+  title: Matériel d'activités
 - number: '218'
   title: Autres immobilisations corporelles
 - number: '230'
@@ -85,9 +91,11 @@
   title: CC Direction autres prestations
 - number: '4521'
   title: CC CCE
-- number: '460'
-  title: Débiteurs divers et créditeurs divers
-- number: '470'
+- number: '4686'
+  title: Charges à payer
+- number: '4687'
+  title: Produits à recevoir
+- number: '471'
   title: Comptes transitoires ou d'attente
 - number: '486'
   title: Charges constatées d'avance
@@ -99,8 +107,6 @@
   title: Dépréciation des autres créances
 - number: '503'
   title: Valeurs mobiliéres de placement
-- number: '511'
-  title: Chèque à encaisser
 - number: '590'
   title: Provisions pour dépréciation des valeurs mobiliéres de placement
 - number: '601'
@@ -115,6 +121,8 @@
   title: Variations des stocks bons d'achat
 - number: '60312'
   title: Variations des stocks restauration, denrées, boissons
+- number: '606'
+  title: 'Autres fournitures'
 - number: '611'
   title: Sous traitance
 - number: '612'
@@ -157,6 +165,8 @@
   title: Charges de sécurité sociale et de prévoyance
 - number: '650'
   title: Autres charges de gestion courante
+- number: '658'
+  title: 'Subventions allouées aux ayants droits'
 - number: '660'
   title: Charges financiéres
 - number: '670'
@@ -183,8 +193,6 @@
   title: Subventions CCE
 - number: '748'
   title: Autres subventions
-- number: '750'
-  title: Produits sur activités
 - number: '758'
   title: Produits divers de gestion courante
 - number: '760'
@@ -200,12 +208,10 @@
 - number: '787'
   title: Reprises sur provisions (exceptionnel)
 - number: '791'
-  title: Transferts de charges
-- number: '801'
-  title: Engagements données par le CE
-- number: '802'
-  title: Engagements reçus par le CE
+  title: Transferts de charges ASC
+- number: '792'
+  title: Transferts de charges fonctionnement
 - number: '860'
-  title: Contributions en natures (charges)
+  title: Contributions volontaires en nature (charges)
 - number: '870'
-  title: Contributions en natures (produits)
+  title: Contributions volontaires en nature (produits)
