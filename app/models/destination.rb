@@ -14,6 +14,7 @@ class Destination < ActiveRecord::Base
   attr_accessible :name, :comment, :income_outcome, :sector_id
 
   belongs_to :organism
+  belongs_to :sector
   has_many :compta_lines
 
   strip_before_validation :name, :comment
