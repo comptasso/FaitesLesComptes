@@ -10,7 +10,7 @@ class Cash < ActiveRecord::Base
   include Utilities::Sold
   include Utilities::JcGraphic
 
-  attr_accessible :name, :comment
+  attr_accessible :name, :comment, :sector_id
 
   belongs_to :organism
   # ces deux has_many sont très proche mais le premier en incluant writing
