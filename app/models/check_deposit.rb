@@ -21,7 +21,7 @@
 # et ne peut plus être modifié, ce qui veut dire aussi qu'on ne peut plus retirer ou
 # ajouter des chèques à cette remise
 # 
-class CheckDeposit < ActiveRecord::Base
+class CheckDeposit < ActiveRecord::Base 
 
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
 
@@ -45,28 +45,33 @@ class CheckDeposit < ActiveRecord::Base
   # book_id est nécessaire car on construit les écritures
   attr_accessible :deposit_date, :deposit_date_picker, :check_ids, :bank_account_id
 
-  scope :within_period, lambda {|p| where(['deposit_date >= ? and deposit_date <= ?', p.sart_date, p.close_date])}
+  scope :within_period, lambda {|p| where(['deposit_date >= ? and deposit_date <= ?', p.start_date, p.close_date])}
  
   validates :bank_account_id, :deposit_date, :presence=>true
   validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :pointed? # ce qui du coup interdit aussi la destruction
   validate :not_empty # une remise chèque vide n'a pas de sens
 
   after_create :create_writing
-  after_update :update_writing
+  after_update :update_writing 
 
-  # permet de trouver les cheques à encaisser pour  tout l'organisme
-  def self.pending_checks
-    ComptaLine.pending_checks.all
+  # permet de trouver les cheques à encaisser pour  tout l'organisme ou pour un 
+  # secteur donné
+  def self.pending_checks(sector = nil)
+    if sector
+      ComptaLine.sectored_pending_checks(sector).all
+    else
+      ComptaLine.pending_checks.all
+    end
   end
 
   # donne le total des chèques à encaisser pour cet organisme
-  def self.total_to_pick
-    pending_checks.sum(&:debit)
+  def self.total_to_pick(sector = nil)
+    pending_checks(sector).sum(&:debit)
   end
 
   # donne le nombre total des chèques à encaisser pour un organisme
-  def self.nb_to_pick
-    pending_checks.size
+  def self.nb_to_pick(sector = nil)
+    pending_checks(sector).size
   end
 
   # lorsque la remise de chèque est sauvegardée, il y a création d'une ligne au crédit du compte 511
@@ -108,13 +113,14 @@ class CheckDeposit < ActiveRecord::Base
     end
   end
 
-  # pour remplir la remise de chèques avec la totalité des chèques disponibles
-  def pick_all_checks
-    CheckDeposit.pending_checks.each {|l| checks << l}
+  # pour remplir la remise de chèques avec la totalité des chèques disponibles dans un secteur donné
+  def pick_all_checks(sector)
+    CheckDeposit.pending_checks(sector).each {|l| checks << l}
   end
 
   def rem_check_account
-    Organism.first!.find_period(deposit_date).rem_check_account
+    p = bank_account.organism.find_period(deposit_date)
+    p.rem_check_account
   end
 
   
@@ -151,7 +157,7 @@ class CheckDeposit < ActiveRecord::Base
 
   
   def bank_account_account
-    bank_account.current_account(Organism.first!.find_period(deposit_date))
+    bank_account.current_account(bank_account.organism.find_period(deposit_date))
   end
 
   def update_writing

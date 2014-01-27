@@ -25,7 +25,7 @@ module Compta
     attr_accessor :nomenclature
 
     
-    delegate :resultat, :actif, :passif, :benevolat, :organism, :to=>:nomenclature
+    delegate :resultat, :resultats, :actif, :passif, :benevolat, :organism, :to=>:nomenclature
     
     validate :bilan_complete, :resultat_complete, :bilan_no_doublon?, :resultat_no_doublon?
     validate :benevolat_no_doublon?, :if=>Proc.new {organism.status == 'Association'}
@@ -79,8 +79,7 @@ module Compta
       # renvoie la liste des comptes non repris
       def resultat_complete
         list_accs = @period.two_period_account_numbers.reject {|acc| acc.to_s =~ /\A[123458]\d*/}
-        rubrik_accounts = resultat.all_numbers(@period)
-        not_selected =  list_accs.select {|a| !a.in?(rubrik_accounts) }
+        not_selected =  list_accs.select {|a| !a.in?(resultats_accounts) }
         self.errors[:resultat] << "Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque #{not_selected.join(', ')}" if not_selected.any?
         not_selected
       end
@@ -98,9 +97,10 @@ module Compta
         collection_with_option_no_doublon?(:bilan, actif, passif)
       end
       
-      # méthode vérifiant qu'il n'y a aucun doublon dans le comptes de resultat
+      # méthode vérifiant qu'il n'y a aucun doublon dans le (ou les) compte(s) de resultats
+      # traite les comptes de résultats l'un après l'autre
       def resultat_no_doublon?
-        collection_with_option_no_doublon?(:resultat, resultat)
+        collection_with_option_no_doublon?(:resultat, *resultats.all)
       end
       
       # méthode vérifiant qu'il n'y a aucun doublon dans le comptes de resultat
@@ -109,7 +109,20 @@ module Compta
       end
    
       
-protected      
+protected    
+
+      def resultats_accounts
+        @resultats_accounts ||= build_resultats_accounts
+      end
+
+      # renvoie la liste des comptes utilisés dans le ou les folios resultats
+      def build_resultats_accounts
+        rubrik_accounts = []
+        resultats.each { |result| rubrik_accounts += result.all_numbers(@period)}
+        rubrik_accounts
+      end
+      
+      
       # renvoie une liste d'instructions avec les options sous forme de hash
       #  [{:num=>"201", :option=>nil}, {:num=>"2801", :option=>:col2}, 
       #  {:num=>"2803", :option=>:col2}, {:num=>"206", :option=>nil}, 
