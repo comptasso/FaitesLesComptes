@@ -31,6 +31,7 @@ gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écritu
 # TODO à retirer lors du passage à Rails 4
 
 gem 'adherent' #, :path=>'../../Adherent'
+gem 'sass'
 
 
 

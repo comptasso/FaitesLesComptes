@@ -252,6 +252,7 @@ DEPENDENCIES
   rails_12factor
   routing_concerns
   rspec-rails (~> 2.0)
+  sass
   sass-rails (~> 3.2.0)
   selenium-webdriver (>= 2.39)
   simple_form (~> 2.1.0)
