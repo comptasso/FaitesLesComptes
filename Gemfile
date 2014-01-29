@@ -32,7 +32,7 @@ gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écritu
 
 gem 'adherent' #, :path=>'../../Adherent'
 gem 'sass'
-
+gem 'coffee-script'
 
 
 # Gems used only for assets and not required
