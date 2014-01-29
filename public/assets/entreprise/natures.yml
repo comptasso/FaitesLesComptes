@@ -1,0 +1,96 @@
+---
+- :name: Ventes de produits finis
+  :comment: Pour les produits fabriqués ou transformés par l'entreprise
+  :acc: '701'
+  :book: Recettes
+- :name: Prestations de services
+  :comment: Pour toutes les recettes correspondant à des prestations de service
+  :acc: '706'
+  :book: Recettes
+- :name: Ventes de marchandises
+  :comment: Pour toutes les recettes correspondant à des ventes de marchandises achetées
+  :acc: '707'
+  :book: Recettes
+- :name: Subventions d'exploitation
+  :comment: ! "Ce compte concerne les subventions d'exploitation.\r\nY mettre aussi
+    provisoirement les subventions d'investissements. Une écriture devra être ensuite
+    passée pour inscrire cette subvention au bilan."
+  :acc: '74'
+  :book: Recettes
+- :name: Autres recettes
+  :comment: ''
+  :acc: '75'
+  :book: Recettes
+- :name: Produits financiers
+  :comment: ! "Les intérêts versés sur un livret, mais aussi le montant des prêts
+    bancaires obtenus.\r\nUne écriture devra être passée pour inscrire au bilan le
+    montant du capital du prêt."
+  :acc: '76'
+  :book: Recettes
+- :name: Exceptionnel
+  :comment: Les recettes à caractère exceptionnel, per exemple des dommages et intérêts
+  :acc: '77'
+  :book: Recettes
+- :name: Achats de marchandises pour revente
+  :comment: Marchandises, donc revendues en l'état
+  :acc: '60'
+  :book: Dépenses
+- :name: Achats de matières premières
+  :comment: Destinées à être transformées ou intégrées dans un produit fini
+  :acc: '60'
+  :book: Dépenses
+- :name: Loyer
+  :comment: Y compris charges locatives et dépenses de chauffage
+  :acc: '61'
+  :book: Dépenses
+- :name: Energie
+  :comment: Electricité, gaz, fuel, carburant pour les véhicules
+  :acc: '61'
+  :book: Dépenses
+- :name: Téléphone, internet,...
+  :comment: Tout ce qui concerne les communications
+  :acc: '61'
+  :book: Dépenses
+- :name: Autres frais de fonctionnement
+  :comment: Timbres, fournitures, ...
+  :acc: '61'
+  :book: Dépenses
+- :name: Déplacements
+  :comment: Dépenses de déplacement quel que soit le moyen de transport. Hôtel et restaurant en déplacement
+  :acc: '61'
+  :book: Dépenses
+- :name: Impôts d'exploitation
+  :comment: Exploitation donc taxe profressionnelle, foncière mais pas impôts sur les résultats
+  :acc: '63'
+  :book: Dépenses
+- :name: Personnel
+  :comment: Salaires et rémunérations du personnel
+  :acc: '641'
+  :book: Dépenses
+- :name: Charges sociales
+  :comment: ! 'sur les frais de personnel : Urssaf, arco, agirc, ...'
+  :acc: '645'
+  :book: Dépenses
+- :name: Cotisations sociales de l'exploitant
+  :comment: ! 'sur les frais de personnel : Urssaf, arco, agirc, ...'
+  :acc: '646'
+  :book: Dépenses
+- :name: Charges diverses d'exploitation
+  :comment: Normalement inutilisé
+  :acc: '65'
+  :book: Dépenses
+- :name: Frais financiers
+  :comment: ! "Les remboursement des emprunts.\r\nEn fin d'exercice, une écriture
+    devra être passée pour isoler la part intérêt et la part capital.  "
+  :acc: '66'
+  :book: Dépenses
+- :name: Exceptionnel
+  :comment: Les dépenses à caractère exceptionnel (vol dans la caisse, procès, dégât
+    des eaux, ...)
+  :acc: '67'
+  :book: Dépenses
+- :name: Impôts sur les bénéfices
+  :comment: Y compris impôts forfaitaire annuel
+  :acc: '695'
+  :book: Dépenses
+
