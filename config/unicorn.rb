@@ -1,7 +1,7 @@
 # voir la source sur heroku/rails-unicorn
 
 # config/unicorn.rb
-worker_processes 2
+worker_processes 3
 timeout 30
 preload_app true
 

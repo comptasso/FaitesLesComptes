@@ -23,7 +23,7 @@ gem 'pg'
 gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
 gem 'apartment' # pour la gestion des schemas
 gem 'devise' # pour l'authentification
-gem 'rails_12factor' , group: :production 
+
 gem 'delayed_job_active_record'
 gem 'unicorn'
 gem 'rack-timeout' # coneil de heroku - utilisé par le fichier intializers/timeout.rb
@@ -34,6 +34,10 @@ gem 'adherent' #, :path=>'../../Adherent'
 gem 'sass'
 gem 'coffee-script'
 
+
+group :production, :staging do
+  gem 'rails_12factor' 
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
