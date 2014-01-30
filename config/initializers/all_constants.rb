@@ -3,16 +3,7 @@
 
 # REM_CHECK_ACCOUNT sert à créer retrouver le compte remise chèque
 # 
-# Il est accountable car cela permet de le traiter à peu près comme un bank_account ou un cash.
-# Notamment pour la fonction support.
-# TODO revoir ce sujet, j'ai retiré le accountable type et id car en pratique la création
-# du rem_check_account se fait par le fichier yml du plan comptable.
-# 
-# Des modifs sont en cours pour que cela soit fait par Period.create_rem_check_accounts
-# afin de gérer la sectorisation. 
-# 
-# Voir la solution finale adoptée et faire le ménage alors. 
-# 
+# TODO A revoir ???
 # Il a donc has_many :accounts, :as=>accountable pour que accountable fonctionne
 # et to_s qui retourne 'Chèque à l'encaissement'
 # Par ailleurs accountable a été surchargé dans Account pour retourner une instance de RemCheckAccount 

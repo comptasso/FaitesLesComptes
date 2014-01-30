@@ -9,7 +9,7 @@ end
 describe BankAccount do  
   include OrganismFixtureBis
 
-  def create_bank_account
+  def new_bank_account
     ba = BankAccount.new(:bank_name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
     ba.organism_id = 1
     ba
@@ -17,7 +17,7 @@ describe BankAccount do
   
   def find_bac
     @bb = BankAccount.where('number =  ?', '1254L').first
-    @bb ||= create_bank_account
+    @bb ||= new_bank_account
   end
 
   
@@ -49,8 +49,9 @@ describe BankAccount do
 
     it "should have a unique number in the scope of bank and organism", wip:true do
       @bb.stub(:create_accounts).and_return true
+      @bb.stub_chain(:organism, :periods, :opened, :any?).and_return true
       @bb.save
-      ba = create_bank_account
+      ba = new_bank_account
       ba.number = '1245X'
      
       ba.should be_valid
@@ -119,7 +120,7 @@ describe BankAccount do
   describe 'Les méthodes liées aux lignes non pointées' do
 
      before(:each) do
-      @ba = create_bank_account
+      @ba = new_bank_account
     end
 
     it 'np_lines demande à compta_lines ses lignes non pointées' do
