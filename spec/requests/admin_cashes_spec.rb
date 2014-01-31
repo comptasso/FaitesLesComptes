@@ -39,14 +39,20 @@ describe 'admin cash' do
       all('form div.control-group').should have(2).elements # name et comment
       
     end
+    
+    it 'il y a une caisse', wip:true do
+      @o.cashes.count.should == 1
+    end
 
     it 'remplir correctement le formulaire cree une nouvelle ligne', wip:true do
       
       fill_in 'cash[name]', :with=>'Entrepôt'
-      
-      click_button "Créer la caisse" # le compte'
-      current_url.should match admin_organism_cashes_path(@o)
-      all('tbody tr').should have(2).rows
+      save_and_open_page
+      click_button "Créer la caisse" # le compte' 
+      #
+      @o.cashes.count.should == 1
+#      current_url.should match admin_organism_cashes_path(@o)
+#      all('tbody tr').should have(2).rows
       
     end
 
