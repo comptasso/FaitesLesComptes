@@ -30,7 +30,7 @@ gem 'sass'
 gem 'coffee-script'
 
 
-group :production, :staging, :test do
+group :production, :staging do
   gem 'rails_12factor' 
 end
 
@@ -64,7 +64,8 @@ group :development, :test do
   gem 'launchy'
   gem 'daemons' # mis en place pour pouvoir lancer les Delayed::Job dans la console
   gem 'selenium-webdriver', '>= 2.39'
-  gem 'capybara', '1.1.2'
+  gem 'capybara', '2.2.1'
+  # gem 'capybara-webkit'
   gem 'email_spec'
   
 
