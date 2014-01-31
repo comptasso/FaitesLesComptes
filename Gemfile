@@ -30,7 +30,7 @@ gem 'sass'
 gem 'coffee-script'
 
 
-group :production, :staging do
+group :production, :staging, :test do
   gem 'rails_12factor' 
 end
 

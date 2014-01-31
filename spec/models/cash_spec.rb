@@ -121,7 +121,7 @@ describe Cash  do
     end
     
     it 'cree une autre caisse sectorisée' do
-      c2 = @o.cashes.new(name:'Entrepôt', sector_id:@sector.id)
+      c2 = @o.cashes.new(name:'Entrepôt')
       puts c2.errors.messages unless c2.valid?
       c2.save!
       @o.cashes.count.should == 2
