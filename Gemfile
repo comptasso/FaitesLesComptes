@@ -9,11 +9,6 @@ gem 'simple_form', "~> 2.1.0"
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-group :ocra, :test do
- # gem 'sqlite3', '1.3.7'
-end
-
-
 gem 'acts_as_list', '0.1.9'
 gem 'acts_as_tree', "~>1.4"
 gem 'prawn', "~> 0.12"
@@ -56,7 +51,7 @@ gem 'jquery-rails', "2.1.4"
 # gem 'capistrano'
 
 # To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+# gem 'debugger'
 
 gem 'simplecov', :require => false, :group => :test
 

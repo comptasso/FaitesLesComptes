@@ -33,6 +33,7 @@ class Cash < ActiveRecord::Base
   validates :name, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :uniqueness=>{:scope=>:organism_id}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :organism_id, :presence=>true
+  validates :sector_id, :presence=>true
  
   
   after_create :create_accounts, :if=>lambda {organism.periods.opened.any? }

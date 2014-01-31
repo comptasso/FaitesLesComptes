@@ -17,9 +17,11 @@ class IncomeOutcomeBook < Book
   
   attr_accessible :sector_id
   
+  
+  belongs_to :sector
   has_many :writings,  foreign_key:'book_id'
   has_many :natures, foreign_key:'book_id'
- 
+  
   has_many :in_out_writings,  foreign_key:'book_id'
   has_many :adherent_writings,  foreign_key:'book_id', class_name:'Adherent::Writing'
 
