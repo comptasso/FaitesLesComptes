@@ -35,7 +35,7 @@ describe 'admin/cashes/index' do
     end
 
     it "each row should show 2 icons (edit and delete)" do
-      page.find('tbody tr').should have_css('img',:count=>1)
+      page.find('tbody tr:first').should have_css('img',:count=>1)
     end
 
     it "each row should show edit icon" do
@@ -57,10 +57,10 @@ describe 'admin/cashes/index' do
     context 'check content of a row' do
       it "shows the relevant informations" do
         @ca=@cashes.first
-        page.find('tbody tr td:nth-child(1)').text.should == @ca.name
-        page.find('tbody tr td:nth-child(2)').text.should == @ca.comment
-        page.find('tbody tr td:nth-child(3)').text.should == ''
-        page.find('tbody tr td:nth-child(4)').text.should == '5301'
+        page.find('tbody tr:first td:nth-child(1)').text.should == @ca.name
+        page.find('tbody tr:first td:nth-child(2)').text.should == @ca.comment
+        page.find('tbody tr:first td:nth-child(3)').text.should == ''
+        page.find('tbody tr:first td:nth-child(4)').text.should == '5301'
         
       end
     end

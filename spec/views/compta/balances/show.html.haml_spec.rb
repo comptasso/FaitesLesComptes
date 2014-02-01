@@ -44,7 +44,7 @@ describe 'compta/balances/show' do
     b.stub(:provisoire?).and_return true
     assign(:balance, b)
     render
-    page.find('h3').should have_content 'Balance provisoire' 
+    page.first('h3').should have_content 'Balance provisoire' 
     
   end
 
@@ -52,7 +52,7 @@ describe 'compta/balances/show' do
     b.stub(:provisoire?).and_return true
     assign(:balance, b)
     render
-    page.find('h3').should have_content 'Balance'
+    page.first('h3').should have_content 'Balance'
   end
 
   it 'affiche la table des comptes' do

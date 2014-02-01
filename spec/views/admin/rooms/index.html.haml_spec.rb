@@ -75,7 +75,7 @@ include JcCapybara
     it 'rend une action destroy' do
       r2.stub('no_base?').and_return(true)
       render
-      page.find('tr:last td:nth-child(5) img')[:src].should have_content('supprimer.png')
+      page.first('tr:last td:nth-child(5) img')[:src].should have_content('supprimer.png') 
       page.find('tr:last td:nth-child(5) a')[:href].should == admin_room_path(r2)
       page.find('tr:last td:nth-child(5) a')['data-method'].should == 'delete'
     end

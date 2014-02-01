@@ -36,7 +36,7 @@ describe 'admin/books/index' do
 
     it "each row should show 2 icons (edit and delete)" do
       render
-      page.find('tbody tr').should have_css('img',:count=>2)
+      page.find('tbody tr:first').should have_css('img',:count=>2)
     end
 
     it "each row should show delete icon" do

@@ -330,7 +330,7 @@ describe Organism do
 
         context 'with another cash' do
           it 'main_cash_id should returns the first one' do
-            @organism.cashes.create!(name: 'porte monnaie')
+            @organism.cashes.create!(name: 'porte monnaie', sector_id:@organism.sectors.first.id)
             @organism.main_cash_id.should == @ca.id
           end
         end

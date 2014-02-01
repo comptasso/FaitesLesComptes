@@ -46,7 +46,7 @@ describe "admin rooms" do
       
       click_button 'Créer l\'organisme'
       page.all('#admin_organisms_menu ul li a').should have(2).elements
-      page.find('#admin_organisms_menu ul li a').text.should == 'Liste des organismes'
+      page.first('#admin_organisms_menu ul li a').text.should == 'Liste des organismes'
       page.find('#admin_organisms_menu ul li:last a').text.should == 'Mon association'
     end
     end

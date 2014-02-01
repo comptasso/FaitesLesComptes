@@ -28,7 +28,7 @@ describe 'admin/bank_accounts/new' do
     end
 
     it 'with label * Banque' do
-      page.find('label:first').text().should == '* Banque' 
+      page.first('label').text.should == '* Banque' 
     end
 
     it "form should have field numero de compte" do

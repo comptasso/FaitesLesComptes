@@ -35,9 +35,9 @@ describe 'compta/balances/new' do
 
   it 'le form a deux champs select qui affichent la liste des comptes' do
     page.find('select#compta_balance_from_account_id').all('option').should have(10).elements
-    page.find('select#compta_balance_from_account_id').find('option').text.should == '1-compte 1'
+    page.find('select#compta_balance_from_account_id').first('option').text.should == '1-compte 1'
     page.find('select#compta_balance_to_account_id').all('option').should have(10).elements
-    page.find('select#compta_balance_to_account_id').find('option:last').text.should == '10-compte 10'
+    page.find('select#compta_balance_to_account_id').first('option:last').text.should == '10-compte 10'
   end
 end 
 

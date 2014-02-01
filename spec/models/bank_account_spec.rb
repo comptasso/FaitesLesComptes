@@ -6,7 +6,7 @@ RSpec.configure do |c|
    # c.filter = {:wip=> true }
 end
 
-describe BankAccount do  
+describe BankAccount do   
   include OrganismFixtureBis
 
   def new_bank_account

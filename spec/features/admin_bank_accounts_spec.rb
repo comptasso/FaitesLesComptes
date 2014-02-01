@@ -92,12 +92,12 @@ describe 'vue bank_accounts index' do
 
   describe 'edit' do
 
-    it 'On peut changer les deux autres champs et revenir à la vue index' do
+    it 'On peut changer le nom de la banque et revenir à la vue index' do
       visit edit_admin_organism_bank_account_path(@o, @ba)
       fill_in 'bank_account[bank_name]', :with=>'DebiX'
       click_button 'Enregistrer'
       current_url.should match admin_organism_bank_accounts_path(@o)
-      find('tbody tr td').text.should == 'DebiX'
+      first('tbody tr td').text.should == 'DebiX'
 
       
     end

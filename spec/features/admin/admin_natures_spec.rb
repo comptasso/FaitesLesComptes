@@ -42,7 +42,7 @@ describe 'vue natures index' do
       visit new_admin_organism_period_nature_path(@o, @p)
     end
 
-    it 'remplir correctement le formulaire crée une nouvelle nature', wip:true  do
+    it 'remplir correctement le formulaire crée une nouvelle nature' do
       visit new_admin_organism_period_nature_path(@o, @p)
       fill_in 'nature[name]', :with=>'Nature test'
       fill_in 'nature[comment]', :with=>'Une nature pour essayer'
@@ -55,7 +55,7 @@ describe 'vue natures index' do
 
   end
  
-  describe 'index' do
+  describe 'vue index' do
 
     before(:each) do
       @n = @p.natures.new(:name=>'deuxième nature')
@@ -69,13 +69,16 @@ describe 'vue natures index' do
       visit admin_organism_period_natures_path(@o, @p)
       page.should have_selector("tbody", :count=>2)
     end
-
-    it 'dans la vue index,une nature peut être détruite', :js=>true, wip:true do 
-      
-      
+    
+    it 'avec autant de lignes que de natures' do
       visit admin_organism_period_natures_path(@o, @p)
       page.all('tbody tr').size.should == @nb_natures
-      within "tbody:last tr:nth-child(#{@nb_depenses})" do
+    end
+
+    it 'dans la vue index,une nature peut être détruite', :js=>true do 
+      visit admin_organism_period_natures_path(@o, @p)
+    
+      within("table#depenses tbody tr:last-child") do
         page.should have_content('deuxième nature')
         page.click_link 'Supprimer'
       end
@@ -86,11 +89,8 @@ describe 'vue natures index' do
     
     end
 
-    
-
-    it 'on peut le choisir dans la vue index pour le modifier'  do
+    it 'cliquer sur modifier une nature affiche la vue edit'  do
       visit admin_organism_period_natures_path(@o, @p)
-      page.should have_selector "img", :title=>'Modifier'
       click_link("icon_modifier_#{@n.id}")
       current_url.should match /.*natures\/#{@n.id.to_s}\/edit$/ # retour à la vue index
     end
@@ -99,7 +99,7 @@ describe 'vue natures index' do
 
   describe 'edit' do
 
-    it 'On peut changer les deux autres champs', wip:true do
+    it 'On peut changer les deux autres champs' do
       @n = @p.natures.third
       visit edit_admin_organism_period_nature_path(@o, @p, @n)
       fill_in 'nature[name]', :with=>'modif du titre'
