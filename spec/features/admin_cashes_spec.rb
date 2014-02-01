@@ -2,8 +2,8 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c| 
- c.filter = {wip:true}
+RSpec.configure do |c|  
+#  c.filter = {wip:true}
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true } 
 end
@@ -36,7 +36,7 @@ describe 'admin cash' do
     it "affiche la page new" do
       current_url.should match new_admin_organism_cash_path(@o)
       page.should have_content("Nouvelle caisse")
-      all('form div.control-group').should have(2).elements # name et comment
+      all('form div.control-group').should have(3).elements # name, comment et sector
       
     end
     
@@ -96,7 +96,7 @@ describe 'admin cash' do
       fill_in 'cash[name]', :with=>'Entrepôt'
       click_button 'Enregistrer'
       current_url.should match admin_organism_cashes_path(@o)
-      find('tbody tr td').text.should == 'Entrepôt'
+      find('tbody tr:last-child td:first-child').text.should == 'Entrepôt'
 
       
     end

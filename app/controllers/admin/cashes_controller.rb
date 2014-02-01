@@ -19,6 +19,7 @@ class Admin::CashesController < Admin::ApplicationController
   # GET /cashes/new.json
   def new
     @cash = @organism.cashes.new
+    @cash.sector_id = @organism.sectors.first.id unless @organism.sectored?
 
     respond_to do |format|
       format.html # new.html.erb

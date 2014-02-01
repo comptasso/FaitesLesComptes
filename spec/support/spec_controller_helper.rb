@@ -29,7 +29,7 @@ module SpecControllerHelper
       guess_month_from_params:MonthYear.from_date(Date.today))
     
     @sect = mock_model(Sector)
-
+    
 
     Organism.stub(:first).and_return(@o)
     User.stub(:find_by_id).with(@cu.id).and_return @cu
@@ -44,6 +44,7 @@ module SpecControllerHelper
     @o.stub_chain(:periods, :any?).and_return !(@o.periods.empty?)
     @o.stub_chain(:periods, :last).and_return(@p)
     @o.stub_chain(:books, :in_outs, :all).and_return [1,2]
+    @o.stub_chain(:sectors, :first).and_return @sect
     
     sign_in(@cu) # introduit suite à Devise
   end

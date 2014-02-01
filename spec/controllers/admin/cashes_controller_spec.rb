@@ -18,6 +18,11 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
+RSpec.configure do |c|
+#  c.filter = {wip:true}
+end
+
+
 describe Admin::CashesController do 
   include SpecControllerHelper
 
@@ -47,12 +52,36 @@ describe Admin::CashesController do
 
  
 
-  describe "GET new" do
+  describe "GET new" , wip:true do
+    before(:each) {@a.stub(:new).and_return(@cas = mock_model(Cash).as_new_record)}
+    
     it "assigns a new ca as @ca" do
-      @a.should_receive(:new).and_return mock_model(Cash).as_new_record
+      @o.stub('sectored?').and_return false
+      @a.should_receive(:new).and_return(@cas= stub_model(Cash).as_new_record)
       get :new,  {:organism_id=>@o.id.to_s}, valid_session
       assigns(:cash).should be_a_new(Cash)      
     end
+    
+    context 'si un seul secteur' do
+      
+      it 'preremplit le champ secteur' do
+        @o.stub('sectored?').and_return false
+        @cas.should_receive('sector_id=').with(@sect.id)
+        get :new,  {:organism_id=>@o.id.to_s}, valid_session
+        
+      end
+      
+    end
+    
+    context 'avec plusieurs secteurs' do
+      
+      it 'ne préremplit pas le champ secteur' do
+        @o.stub('sectored?').and_return true
+        get :new,  {:organism_id=>@o.to_param}, valid_session
+        @cas.sector_id.should == nil
+      end
+    end
+    
   end
 
   describe "GET edit" do 

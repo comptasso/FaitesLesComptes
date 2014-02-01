@@ -181,6 +181,7 @@ class Room < ActiveRecord::Base
   def destroy_db
     Rails.logger.info "Destruction de la base #{database_name}"
     Apartment::Database.drop(database_name)
+    Apartment::Database.switch # pour revenir à la base de données par défaut
   end
 
   # Cette action ne devrait a priori jamais être appelée.
