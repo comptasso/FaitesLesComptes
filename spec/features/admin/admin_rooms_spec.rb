@@ -5,7 +5,7 @@ RSpec.configure do |c|
 end
 
 describe "admin rooms" do
-  
+   
   include OrganismFixtureBis
   
   describe 'Création d un premier organisme' do 

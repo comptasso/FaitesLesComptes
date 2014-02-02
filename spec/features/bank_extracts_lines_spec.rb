@@ -41,7 +41,7 @@ describe 'bank_extract_lines' do
         click_link('Afficher')
       end
       current_path.should == bank_extract_bank_extract_lines_path(@be)
-      page.find('thead th').should have_content("Liste des écritures")
+      
     end
 
   end

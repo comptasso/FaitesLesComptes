@@ -25,10 +25,11 @@ describe 'Recette par chèque' do
     visit new_book_in_out_writing_path(@ib)
     fill_in 'in_out_writing_date_picker', :with=>I18n::l(Date.today, :foramt=>:date_picker)
     fill_in 'in_out_writing_narration', :with=>'Vente par chèque'
-    select 'Vte Nourriture', :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
+    select 'Vte Nourriture', :from=>'in_out_writing_compta_lines_attributes_0_nature_id'
     fill_in 'in_out_writing_compta_lines_attributes_0_credit', with: 50.21
     select 'Chèque'
-    select 'Chèque à encaisser', :for=>'in_out_writing_compta_lines_attributes_1_nature_id'
+    save_and_open_page
+    select 'Chèque à l\'encaissement', :from=>'in_out_writing_compta_lines_attributes_1_account_id'
   end
 
  

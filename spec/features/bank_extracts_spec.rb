@@ -103,10 +103,10 @@ describe "BankExtracts" do
       end
 
       it 'les actions proposent edit, pointage, afficher et suppression' , js:true do
-        page.find('tbody tr:first td:last').should have_icon('modifier', href:"#{edit_bank_account_bank_extract_path(@ba, @be)}")
-        page.find('tbody tr:first td:last').should have_icon('pointer', href:"#{pointage_bank_extract_bank_extract_lines_path(@be)}")
+        page.find('tbody tr:first-child td:last-child').should have_icon('modifier', href:"#{edit_bank_account_bank_extract_path(@ba, @be)}")
+        page.find('tbody tr:first-child td:last-child').should have_icon('pointer', href:"#{pointage_bank_extract_bank_extract_lines_path(@be)}")
        
-        page.find('tbody tr:first td:last').should have_icon('supprimer', href:"#{bank_account_bank_extract_path(@ba, @be)}")
+        page.find('tbody tr:first-child td:last-child').should have_icon('supprimer', href:"#{bank_account_bank_extract_path(@ba, @be)}")
       end
 
       it 'cliquer sur l icone edit mène à la page edit' do
@@ -168,8 +168,10 @@ describe "BankExtracts" do
       end
 
       it 'détruire le premier bank_extract laisse une ligne', :js=>true do
-        visit bank_account_bank_extracts_path(@ba)  
-        click_link('Supprimer')
+        visit bank_account_bank_extracts_path(@ba) 
+        within('tbody tr:last-child') do 
+          click_link('Supprimer')
+        end
         alert = page.driver.browser.switch_to.alert
         alert.accept
         sleep 1

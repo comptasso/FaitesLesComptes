@@ -31,7 +31,7 @@ describe "vue organisme"  do
     end
 
     it 'should show organism' do
-      page.find('h3').should have_content 'Vous avez 1 message'
+      page.find('div.message h3').should have_content 'Vous avez 1 message'
       current_path.should == organism_path(@o)
     end
 
