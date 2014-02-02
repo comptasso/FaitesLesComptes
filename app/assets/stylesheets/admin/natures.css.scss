@@ -11,11 +11,12 @@
   Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
 */
 
-.admin {
-  .natures {
+.admin_natures {  
     a {
       float: none;
       margin-left: 10px;
     }
+    table.table-nature tbody {
+      cursor: move;
+    }
   }
-}
