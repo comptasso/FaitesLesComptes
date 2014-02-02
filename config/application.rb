@@ -48,7 +48,7 @@ module Faitesvoscomptes
 
 
     # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.4.1'
+    config.assets.version = '1.4.1RC'
     
     # added by jcl to load app/validators
     config.autoload_paths += %W( #{config.root}/lib/validators)

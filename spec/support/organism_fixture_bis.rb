@@ -94,11 +94,13 @@ module OrganismFixtureBis
   def create_outcome_writing(montant=99, payment='Virement')
     # TODO passer à un outcome_account
     @income_account = @o.accounts.classe_7.first
-    ecriture = @ob.in_out_writings.create!({date:Date.today, narration:'ligne créée par la méthode create_outcome_writing',
+    ecriture = @ob.in_out_writings.new({date:Date.today, narration:'ligne créée par la méthode create_outcome_writing',
         :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, debit:montant, payment_mode:payment},
           '1'=>{account_id:@baca.id, credit:montant, payment_mode:payment}
         }
       })
+    puts ecriture.errors.messages unless ecriture.valid?
+    ecriture.save
     ecriture
   end
 

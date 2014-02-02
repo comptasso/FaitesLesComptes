@@ -8,7 +8,7 @@ end
 
 
 describe Account do   
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
   
   def valid_attributes
     {number:'601',
@@ -105,9 +105,11 @@ describe Account do
         @acc1.period_id = @p.id; @acc1.save!
         @acc2 = Account.new(number:'5201', title:'Banque')
         @acc2.period_id = @p.id; @acc2.save!
-        @od.writings.create!(date:Date.today.beginning_of_year, narration:'ecriture d od',
+        odw = @od.writings.new(date:Date.today.beginning_of_year, narration:'ecriture d od',
           :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:1000},
             '1'=>{account_id:@acc2.id, debit:1000}})
+        puts odw.errors.messages unless odw.valid?
+        odw.save!
       end
 
       it 'sans exercice précédent, et sans report à nouveau, zero' do

@@ -16,12 +16,12 @@ describe Compta::WritingsHelper do
 
   describe 'class_style' do
     it 'retourne credit pour une écriture avec un credit' do
-      line = stub(:credit=>7)
+      line = double(:credit=>7)
       helper.class_style(line).should == 'credit'
     end
 
     it 'et debit si credit est nul' do
-      line = stub(:credit=>0)
+      line = double(:credit=>0)
       helper.class_style(line).should == 'debit'
     end 
   end

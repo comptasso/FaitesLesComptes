@@ -2,7 +2,7 @@
 
 
 require 'spec_helper'
-require 'pdf_document/default' 
+require 'pdf_document/default'  
 require 'pdf_document/page'
 require 'pdf_document/table'  
 
