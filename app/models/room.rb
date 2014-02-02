@@ -29,7 +29,7 @@ class Room < ActiveRecord::Base
     Apartment::Database.process(database_name) {Organism.first}
   end
   
-   # look_for permet de chercher quelque chose dans la pièce
+  # look_for permet de chercher quelque chose dans la pièce
   # Le block indique ce qu'on cherche
   #
   # Usage possible look_for {Organism.first} mais il vaut mieux utiliser la méthode organism
@@ -91,7 +91,9 @@ class Room < ActiveRecord::Base
 
   # renvoie la dernière migration de la base principale (Room et User)
   def self.jcl_last_migration
-    ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
+    Apartment::Database.process() do
+      ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
+    end
   end
 
   # se connecte à l'organisme correspondant à la base de données
