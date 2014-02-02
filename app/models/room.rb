@@ -91,7 +91,9 @@ class Room < ActiveRecord::Base
 
   # renvoie la dernière migration de la base principale (Room et User)
   def self.jcl_last_migration
-    ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
+    Apartment::Database.process() do
+      ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
+    end
   end
 
   # se connecte à l'organisme correspondant à la base de données
