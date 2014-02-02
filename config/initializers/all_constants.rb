@@ -72,5 +72,6 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.3.2.RC' # Mise en place du fichier des écritures comptables
 # FLCVERSION = '1.3.3.RC' # Refactorisation de l'édition d'une balance qui peut donc se passer de delayed jobs
 # FLCVERSION = '1.4.0RC' # Mise en place des abonnements
-FLCVERSION = '1.4.1RC' # Préparation pour les CE. Modifications de la logique des natures qui ont 
+# FLCVERSION = '1.4.1RC' # Préparation pour les CE. Modifications de la logique des natures qui ont 
 # maintenant également belongs_to book.
+FLCVERSION = '1.4.2RC' # Version sectorisée pour les CE avec nouveau type de structure possible
