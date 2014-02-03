@@ -27,7 +27,7 @@ describe Admin::CashesController do
   include SpecControllerHelper
 
   before(:each) do
-    minimal_instances
+    minimal_instances 
     sign_in(@cu)
     @ca = mock_model(Cash)
     @o.stub(:cashes).and_return @a = double(Arel) 

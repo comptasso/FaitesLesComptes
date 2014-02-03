@@ -20,7 +20,7 @@ class Admin::BankAccountsController < Admin::ApplicationController
   # GET /bank_accounts/new.json
   def new
     @bank_account = @organism.bank_accounts.new
-   
+    @bank_account.sector_id = @organism.sectors.first.id unless @organism.sectored?
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @bank_account }
