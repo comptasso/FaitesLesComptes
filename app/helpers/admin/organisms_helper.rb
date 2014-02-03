@@ -18,6 +18,12 @@ module Admin::OrganismsHelper
    content_tag(:li) {link_to 'Nouveau', url_for(controller:"admin/#{model.pluralize}", action:'new', organism_id:@organism.id) }
   end
   
+  def admin_afficher(model)
+    content_tag(:ul, :class=>"dropdown-menu") do
+      content_tag(:li) { link_to 'Afficher', url_for(controller:"admin/#{model.pluralize}", action:'index', organism_id:@organism.id) }
+    end
+  end
+  
  
 
 

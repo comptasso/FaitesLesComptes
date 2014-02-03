@@ -30,15 +30,15 @@ describe Admin::BooksController do
     end
   end
 
-  describe 'GET new' do
-
-    it 'construit un nouveau livre et  l assigne' do
-      @o.should_receive(:books).and_return(@ar = double(Arel))
-      @ar.should_receive(:build).and_return(mock_model(Book).as_new_record)
-      get :new , {:organism_id=>@o.to_param}, valid_session
-      assigns[:book].should be_a_new(Book)
-    end
-  end
+#  describe 'GET new' do
+#
+#    it 'construit un nouveau livre et  l assigne' do
+#      @o.should_receive(:books).and_return(@ar = double(Arel))
+#      @ar.should_receive(:build).and_return(mock_model(Book).as_new_record)
+#      get :new , {:organism_id=>@o.to_param}, valid_session
+#      assigns[:book].should be_a_new(Book)
+#    end
+#  end
 
 
   describe "GET edit" do
@@ -129,25 +129,25 @@ describe Admin::BooksController do
     end
   end
 
-  describe "DELETE destroy" do
-    before(:each) do
-       @bo = mock_model(Book)
-    end
-
-    it "destroys the requested book" do
-      Book.should_receive(:find).with(@bo.to_param).and_return @bo
-      @bo.should_receive(:destroy)
-      delete :destroy,{:organism_id=>@o.to_param,  :id => @bo.to_param}, valid_session
-
-    end
-
-    it "redirects to the cashes list" do
-      Book.should_receive(:find).with(@bo.to_param).and_return @bo
-      @bo.stub(:destroy)
-      delete :destroy,{:organism_id=>@o.to_param,  :id => @bo.id}, valid_session
-      response.should redirect_to(admin_organism_books_url(@o))
-    end
-  end
+#  describe "DELETE destroy" do
+#    before(:each) do
+#       @bo = mock_model(Book)
+#    end
+#
+#    it "destroys the requested book" do
+#      Book.should_receive(:find).with(@bo.to_param).and_return @bo
+#      @bo.should_receive(:destroy)
+#      delete :destroy,{:organism_id=>@o.to_param,  :id => @bo.to_param}, valid_session
+#
+#    end
+#
+#    it "redirects to the cashes list" do
+#      Book.should_receive(:find).with(@bo.to_param).and_return @bo
+#      @bo.stub(:destroy)
+#      delete :destroy,{:organism_id=>@o.to_param,  :id => @bo.id}, valid_session
+#      response.should redirect_to(admin_organism_books_url(@o))
+#    end
+#  end
 
 
 end

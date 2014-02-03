@@ -11,9 +11,9 @@ class Admin::BooksController < Admin::ApplicationController
   
   # GET /books/new
   # GET /books/new.json
-  def new
-    @book=@organism.books.build
-  end
+#  def new
+#    @book=@organism.books.build
+#  end
 
   # GET /books/1/edit
   def edit
@@ -57,15 +57,15 @@ class Admin::BooksController < Admin::ApplicationController
 
   # DELETE /books/1
   # DELETE /books/1.json
-  def destroy
-    @book = Book.find(params[:id])
-    @book.destroy
-
-    respond_to do |format|
-      format.html { redirect_to admin_organism_books_url(@organism) }
-      format.json { head :ok }
-    end
-  end
+#  def destroy
+#    @book = Book.find(params[:id])
+#    @book.destroy
+#
+#    respond_to do |format|
+#      format.html { redirect_to admin_organism_books_url(@organism) }
+#      format.json { head :ok }
+#    end
+#  end
 
  
 end

@@ -23,7 +23,7 @@
   <% if (@organism  && @organism.persisted?) %>
     <li class="dropdown <%= 'active' if controller.controller_name =='books'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
-      <%= admin_menu('book') %>
+      <%= admin_afficher('book') %>
     </li>
     
     <li class="dropdown <%= 'active' if controller.controller_name =='masks' || controller.controller_name == 'subscriptions' %>">
