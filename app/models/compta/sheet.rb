@@ -106,6 +106,7 @@ module Compta
     #
     def to_pdf(options = {})
       options[:title] =  folio.title 
+      options[:subtitle] = folio.subtitle
       Editions::Sheet.new(@period, self, options)
     end
     

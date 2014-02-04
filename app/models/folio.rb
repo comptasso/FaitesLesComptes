@@ -81,6 +81,7 @@ class Folio < ActiveRecord::Base
     rubriks.root
   end
   
+  # TODO à supprimer après mise au point
   def bench_lines(period)
     Benchmark.bm do |bm|
       bm.report {root.fetch_lines(period)}
@@ -113,6 +114,22 @@ class Folio < ActiveRecord::Base
     all_instructions.map {|accounts| Compta::RubrikParser.new(period, :actif, accounts).list}.flatten
   end
   
+  # surcharge de title pour gérer les CE qui affichent en subtitle leur secteur
+  def title
+    return 'Compte de Résultats' if name == 'resultatASC' || name == 'resultatfonc'
+    read_attribute(:title)
+  end
+  
+  # permet d afficher en subtitle le secteur pour les organisations sectorisées
+  # (comité d'entreprise)
+  def subtitle
+    case name
+    when 'resultatASC' then 'Activités sociales et culturelles'
+    when 'resultatfonc' then 'Fonctionnement'
+    else ''
+    end
+  end
+  
  
   
   protected
@@ -140,29 +157,21 @@ class Folio < ActiveRecord::Base
   # vérifie qu'il n'y a pas d'instruction en double.
   # Attention, cela ne permet pas de s'exonérer d'un contrôle des doublons sur 
   # les comptes réels de l'exercice.
-    def no_doublon?
-      errors.add(:rubriks, 'Un numéro apparait deux fois dans le folio') unless rough_instructions.uniq.size == rough_instructions.size
-    end
+  def no_doublon?
+    errors.add(:rubriks, 'Un numéro apparait deux fois dans le folio') unless rough_instructions.uniq.size == rough_instructions.size
+  end
     
-    # vérifie que rough_instructions ne contient que des instructions commençant par 6 ou 7
-    def only_67
-      no67 = rough_instructions.select {|instr| instr =~ /^[^67]\d*/}
-      errors.add(:rubriks, "Un compte de résultats ne peut prendre que des comptes 6 ou 7 , trouvé #{no67.join(', ')}") unless no67.empty?
-    end
+  # vérifie que rough_instructions ne contient que des instructions commençant par 6 ou 7
+  def only_67
+    no67 = rough_instructions.select {|instr| instr =~ /^[^67]\d*/}
+    errors.add(:rubriks, "Un compte de résultats ne peut prendre que des comptes 6 ou 7 , trouvé #{no67.join(', ')}") unless no67.empty?
+  end
     
-    def only_8
-      no8 = rough_instructions.select {|instr| instr =~ /^[^8]\d*/}
-      errors.add(:rubriks, "Un compte de résultats ne peut prendre que des comptes 6 ou 7 , trouvé #{no8.join(', ')}") unless no8.empty?
-    end
+  def only_8
+    no8 = rough_instructions.select {|instr| instr =~ /^[^8]\d*/}
+    errors.add(:rubriks, "Un compte de résultats ne peut prendre que des comptes 6 ou 7 , trouvé #{no8.join(', ')}") unless no8.empty?
+  end
       
-#  def collect_instructions(values, rubriks)
-#    rubriks.children.each do |r|
-#      if r.leaf?
-#        values << r.numeros
-#      else 
-#        collect_instructions(values, r) 
-#      end
-#    end
-#  end
+
 
 end
