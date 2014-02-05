@@ -10,27 +10,23 @@
 - number: '1202'
   title: Résultat de l'exercice Fonctionnement  
 - number: '130'
-  title: Subvention d'investissement affectées à des biens non renouvelables
+  title: Subvention d'investissement
 - number: '150'
   title: Provisions pour risques et charges
 - number: '160'
   title: Emprunts et dettes assimilées
-- number: '171'
-  title: Dettes envers participations
+- number: '170'
+  title: Dettes envers participants
 - number: '205'
   title: Logiciels
 - number: '208'
   title: Droit de réservation prioritaire
-- number: '212'
-  title: Agencements et aménagements des installations
 - number: '215'
   title: Installations techniques, matériel et outillage industriel
 - number: '2151'
   title: Matériel d'activités
 - number: '218'
-  title: Autres immobilisations corporelles
-- number: '230'
-  title: Immobilisations en cours
+  title: Agencements et installations
 - number: '2741'
   title: Prêts à des organismes
 - number: '2743'
@@ -41,12 +37,8 @@
   title: Amortissements des logiciels
 - number: '2808'
   title: Amortissements des autres immo incorporelles
-- number: '2812'
-  title: Amortissements des agencements et installations
-- number: '2815'
-  title: Amortissement des installations techniques, mat...
 - number: '2818'
-  title: Amortissement des autres immos corporelles
+  title: Amortissements des agencements et installations
 - number: '29741'
   title: Dépréciation des prêts aux organismes
 - number: '29743'
@@ -66,7 +58,7 @@
 - number: '411'
   title: Participants
 - number: '417'
-  title: Prêts aus salariés
+  title: Prêts aux salariés
 - number: '419'
   title: Acomptes des participants
 - number: '421'

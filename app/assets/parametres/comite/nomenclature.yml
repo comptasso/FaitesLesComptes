@@ -43,7 +43,6 @@
             :Réserve initiale: '1060'
             :Réserves ASC: '1061'
             :Réserves fonctionnement: '1062'
-            :Report à nouveau: 110 119
             :Résultat de l'exercice: 12 7 -6
             :Subventions d'investissement: '13'
           :Provisions:
@@ -51,7 +50,7 @@
         :DETTES ENVERS LES TIERS:
           :Dettes bancaires:
             :Emprunts et dettes assimilées: '16'
-            :Emprunts et dettes auprès de structures associées: '171'
+            :Emprunts et dettes auprès de participants: '17'
             :Emprunts et dettes auprès des établissements de crédit: 51C
           :Dettes courantes:
             :Fournisseurs et comptes rattachés: '40 !409'
@@ -92,8 +91,7 @@
         :RESULTAT D'EXPLOITATION:
           :Produits d'exploitation:
             :Subvention d'exploitation: '742'
-            :Cotisations: '756'
-            :Autres produits: '708 75 !756'
+            :Autres produits: 708 75
             :Transferts de charges: '792'
           :Charges d'exploitation:
             :Autres charges externes: '61'
