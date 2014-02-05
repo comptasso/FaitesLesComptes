@@ -64,7 +64,7 @@ class Organism < ActiveRecord::Base
   
   has_many :accounts, through: :periods
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
- # has_many :transfers
+  # has_many :transfers
   
   # La table adherent_bridges a été mise en place pour eneregistrer les informations
   # permettant de faire le lien avec le gem adhérent.
@@ -118,11 +118,11 @@ class Organism < ActiveRecord::Base
 
   # créé un cash_book pour chacune des caisses
   def cash_books
-   cashes.map do |c|
-     vb = virtual_books.new
-     vb.virtual = c
-     vb
-   end
+    cashes.map do |c|
+      vb = virtual_books.new
+      vb.virtual = c
+      vb
+    end
   end
 
   # créé un virtual_book pour chacun des comptes bancaires

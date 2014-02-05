@@ -100,6 +100,41 @@ describe Organism do
 
 
   end
+  
+  describe 'main_bank_id' do
+    
+    subject {Organism.new(valid_attributes)}
+    
+    it 'main_bank_id should returns the first one' do
+      subject.should_receive(:bank_accounts).exactly(2).times.and_return(@ar = double(Arel, 'any?'=>true))
+      @ar.should_receive(:order).with('id').and_return @ar
+      @ar.should_receive(:first).and_return(double(BankAccount, id:999))
+      subject.main_bank_id.should == 999
+    end
+          
+    it 'ou nil si pas de compte bancaire' do
+      subject.should_receive(:bank_accounts).and_return(@ar = double(Arel, 'any?'=>false))
+      subject.main_bank_id.should == nil
+    end
+  end
+  
+  describe 'main_cash_id' do
+    
+    subject {Organism.new(valid_attributes)}
+    
+    it 'main_bank_id should returns the first one' do
+      subject.should_receive(:cashes).exactly(2).times.and_return(@ar = double(Arel, 'any?'=>true))
+      @ar.should_receive(:order).with('id').and_return @ar
+      @ar.should_receive(:first).and_return(double(Cash, id:999))
+      subject.main_cash_id.should == 999
+    end
+          
+    it 'ou nil si pas de compte bancaire' do
+      subject.should_receive(:cashes).and_return(@ar = double(Arel, 'any?'=>false))
+      subject.main_cash_id.should == nil
+    end
+  end
+
 
   describe 'after create' do
     
@@ -196,8 +231,8 @@ describe Organism do
       before(:each) do
         clean_assotest1
         @organism = Organism.create!({:title =>'Mon Entreprise',
-          database_name:'assotest1',
-      :status=>'Entreprise' })
+            database_name:'assotest1',
+            :status=>'Entreprise' })
          
       end
       
@@ -292,51 +327,7 @@ describe Organism do
     end
 
 
-
     
-    describe 'main_bank_id'  do
-      
-      context 'with default bank account' do
-       
-        before(:each) do
-          @ba = BankAccount.order(:id).first
-        end
-
-        
-        it "should give the main bank id" do
-          @organism.main_bank_id.should == @ba.id
-        end
-
-        context 'with another bank account' do
-          it 'main_bank_id should returns the first one' do
-            @organism.bank_accounts.create!(bank_name: 'CrédiX', number: '124577ZA', nickname:'Compte courant')
-            @organism.main_bank_id.should == @ba.id
-          end
-        end
-      end
-    end
-
-    describe 'main_cash_id' do
-     
-      context 'with default cash' do 
-
-        before(:each) do
-          @ca = @organism.cashes.first
-        end
-
-        it "should give the main cash id" do
-          @organism.main_cash_id.should == @ca.id
-        end
-
-        context 'with another cash' do
-          it 'main_cash_id should returns the first one' do
-            @organism.cashes.create!(name: 'porte monnaie', sector_id:@organism.sectors.first.id)
-            @organism.main_cash_id.should == @ca.id
-          end
-        end
-      end
-    end
-
    
 
   end
