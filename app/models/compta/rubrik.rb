@@ -65,6 +65,12 @@ module Compta
       end
     end
     
+    # en fait, il faudrait plutôt que rubrik.resultat? renvoie all_lines puis cherche
+    # la ligne avec le compte de résultat (12 ->120) et y ajoute le montant du résultat 
+    # de l'exercice (et éventuellement modifie l'intitulé pour avoir résultat provisoire')
+    
+    # voir alors ce que donnent les opérations de clôture
+    
     
     def all_lines
       @all_lines ||= Compta::RubrikParser.new(period, rubrik.folio.sens, rubrik.numeros).rubrik_lines
