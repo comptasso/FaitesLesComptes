@@ -75,4 +75,4 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.4.0RC' # Mise en place des abonnements
 # FLCVERSION = '1.4.1RC' # Préparation pour les CE. Modifications de la logique des natures qui ont 
 # maintenant également belongs_to book.
-FLCVERSION = '1.4.2RC' # Version sectorisée pour les CE avec nouveau type de structure possible
+FLCVERSION = '1.4.2RC' # Version sectorisée pour les CE

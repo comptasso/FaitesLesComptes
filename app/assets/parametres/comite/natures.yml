@@ -11,18 +11,10 @@
   :comment: ''
   :acc: '6012'
   :book: Dépenses ASC
-- :name: Var. stocks sur activités
-  :comment: ''
-  :acc: '6031'
+- :name: Achats Prestations activités
+  :comment: Par exemple dépenses voyagiste, spectacle de cirque,...
+  :acc: '604'
   :book: Dépenses ASC
-- :name: Var. stocks bons d'achat
-  :comment: ''
-  :acc: '60311'
-  :book: Dépenses ASC
-- :name: Var. stocks restau., boissons
-  :comment: ''
-  :acc: '60312'
-  :book: Dépenses fonctionnement
 - :name: Sous traitance
   :comment: ''
   :acc: '611'
@@ -66,7 +58,7 @@
 - :name: Dons et secours
   :comment: ''
   :acc: '6238'
-  :book: Dépenses fonctionnement
+  :book: Dépenses ASC
 - :name: Déplacements
   :comment: ''
   :acc: '625'

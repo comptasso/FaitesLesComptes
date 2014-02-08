@@ -67,15 +67,17 @@
         :RESULTAT D'EXPLOITATION:
           :Produits d'exploitation:
             :Ventes de marchandises: '707'
-            :Production vendue (bien et services): '701 706'
+            :Participation salariés: '701 706'
             :Variation stocks production: '713'
             :Production immobilisée: '72'
-            :Subvention d'exploitation: '74 !742'
+            :Subventions reçues: '74 !742'
             :Reprises sur provisions, amortissements et transferts de charge: '781'
             :Transferts de charges: '791'
           :Charges d'exploitation:
-            :Achats de marchandises: '-60 !603'
+            :Achats de marchandises: '-60 !603 !604'
             :Variation stocks de marchandises: '603'
+            :Achats prestations sur activités: '604'
+            :Dons et secours: '6238'
         :RESULTAT EXCEPTIONNEL:
           :Produits exceptionnels:
             :Report des ressources non utilisées: '789'
@@ -95,7 +97,7 @@
             :Transferts de charges: '792'
           :Charges d'exploitation:
             :Autres charges externes: '61'
-            :Autres services extérieurs: '62'
+            :Autres services extérieurs: '62 !6238'
             :Impôts, taxes et versements assimilés: '63'
             :Salaires et traitements: '641'
             :Charges sociales: '645'

@@ -115,6 +115,8 @@
   title: Variations des stocks bons d'achat
 - number: '60312'
   title: Variations des stocks restauration, denrées, boissons
+- number: '604'
+  title: Achats de prestations pour activités
 - number: '606'
   title: 'Autres fournitures'
 - number: '611'
