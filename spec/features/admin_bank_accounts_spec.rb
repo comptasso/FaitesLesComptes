@@ -28,7 +28,7 @@ describe 'vue bank_accounts index' do
     it "affiche la page new" do
       current_url.should match new_admin_organism_bank_account_path(@o)
       page.should have_content("Nouveau compte bancaire")
-      all('form div.control-group').should have(4).elements # name, number, nickname et comment
+      all('form div.control-group').should have(5).elements # name, number, nickname et comment et sector
       
     end
 

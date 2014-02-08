@@ -8,7 +8,7 @@ class Admin::BooksController < Admin::ApplicationController
     @books = @organism.books
   end
 
-  
+  # TODO supprimer la route correspondante
   # GET /books/new
   # GET /books/new.json
 #  def new
@@ -22,23 +22,23 @@ class Admin::BooksController < Admin::ApplicationController
 
   # POST /books
   # POST /books.json
-  def create
-    # rendu nécessaire par la single table inheritance
-    type = params[:book][:book_type]
-    params[:book].delete :book_type
-    if type == 'IncomeBook'
-      @book = @organism.income_books.build(params[:book])
-    else # OutcomeBook par défaut
-      @book= @organism.outcome_books.build(params[:book])
-    end
-     respond_to do |format|
-      if @book.save
-        format.html { redirect_to admin_organism_books_url(@organism), notice: 'Le livre a été créé.'}
-      else
-        format.html {render action: "new" }
-      end
-    end
-  end
+#  def create
+#    # rendu nécessaire par la single table inheritance
+#    type = params[:book][:book_type]
+#    params[:book].delete :book_type
+#    if type == 'IncomeBook'
+#      @book = @organism.income_books.build(params[:book])
+#    else # OutcomeBook par défaut
+#      @book= @organism.outcome_books.build(params[:book])
+#    end
+#     respond_to do |format|
+#      if @book.save
+#        format.html { redirect_to admin_organism_books_url(@organism), notice: 'Le livre a été créé.'}
+#      else
+#        format.html {render action: "new" }
+#      end
+#    end
+#  end
 
   # PUT /books/1
   # PUT /books/1.json
