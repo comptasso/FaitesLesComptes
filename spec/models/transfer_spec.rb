@@ -16,10 +16,14 @@ describe Transfer  do
     t.compta_lines.last.account_id = @cbb.id  
     t
   end
+  
+  def second_bank
+    @o.bank_accounts.where('number = ?', '123Y').first || create_second_bank
+  end
  
   before(:each) do 
     create_minimal_organism  
-    @bb=@o.bank_accounts.create!(bank_name: 'DebiX', number: '123Y', nickname:'Compte courant')
+    @bb = second_bank
     @cba = @ba.current_account @p
     @cbb = @bb.current_account @p
   end

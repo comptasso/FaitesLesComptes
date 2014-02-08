@@ -169,7 +169,7 @@ describe Period do
       end
       
       it 'entraîne celle des comptes' do
-        @p.accounts(true).count.should == 108 # la liste des comptes du plan comptable
+        @p.accounts(true).count.should == 105 # la liste des comptes du plan comptable
         # on n'a pas les deux comptes de caisse et banque car on a stubbé create_bank_and_cash_accounts
       end
       
@@ -371,7 +371,7 @@ describe Period do
         @org = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
         @p_2010 = @org.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
         @p_2011= @org.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
-        @ba = @org.bank_accounts.create!(bank_name:'DebiX', number:'123Z', nickname:'Compte épargne')
+       
       end
 
       
@@ -403,6 +403,8 @@ describe Period do
           before(:each) do
              @ob= @org.books.find_by_type('OutcomeBook')
             @ib= @org.books.find_by_type('IncomeBook')
+             @ba = @org.bank_accounts.new(bank_name:'DebiX', number:'123Z', nickname:'Compte épargne')
+             @ba.sector_id = 1; @ba.save!
             @baca = @ba.current_account(@p_2010)
             @acc60 = @p_2010.accounts.find_by_number '60'
             @acc70 = @p_2010.accounts.find_by_number '701'

@@ -289,7 +289,7 @@ describe CheckDeposit do
       end
 
       it "la banque ne peut plus être modifiée" do
-        @ba2=@o.bank_accounts.create!(bank_name: "L'autre Banque", number: 'Un autre compte', nickname:'Cpte Epargne')
+        @ba2= create_second_bank
         @check_deposit.bank_account = @ba2
         @check_deposit.should_not be_valid
       end

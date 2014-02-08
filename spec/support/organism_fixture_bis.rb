@@ -75,7 +75,15 @@ module OrganismFixtureBis
     # puts @baca.inspect
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
     # puts @caca.inspect
-    @n = @p.natures.depenses.first 
+    @n = @p.natures.depenses.first  
+  end
+  
+  def create_second_bank
+    b2 = @o.bank_accounts.new(:bank_name=>'Deuxième banque', :number=>'123Y',
+      nickname:'Compte épargne')
+    b2.sector_id = @sector.id
+    b2.save!
+    b2
   end
 
   # utile pour les requests qui nécessitent d'être identifié

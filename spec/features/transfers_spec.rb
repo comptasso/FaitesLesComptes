@@ -12,13 +12,7 @@ end
 describe 'vue transfer index'do 
   include OrganismFixtureBis
 
-  def create_second_bank
-    b2 = @o.bank_accounts.new(:bank_name=>'Deuxième banque', :number=>'123Y',
-      nickname:'Compte épargne')
-    b2.sector_id = @sector.id
-    b2.save!
-    b2
-  end
+  
   
   def second_bank
     @o.bank_accounts.where('number = ?', '123Y').first || create_second_bank
