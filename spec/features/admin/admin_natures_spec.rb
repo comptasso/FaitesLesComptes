@@ -61,7 +61,7 @@ describe 'vue natures index' do
       @n = @p.natures.new(:name=>'deuxième nature')
       @n.book_id = OutcomeBook.first.id; @n.save!
       @nb_natures = @p.natures.count
-      @nb_depenses = @p.depenses_natures.count
+      @nb_depenses = @p.depenses_natures.count 
       @n = @p.natures.second
     end
 
