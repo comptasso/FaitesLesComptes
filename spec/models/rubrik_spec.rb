@@ -62,14 +62,6 @@ describe Rubrik do
         @rub.lines(@p).should == 'les enfants'
       end
       
-      it 'retourne un rubrik_result si c est un leaf et un resultat' do
-        @r
-        @r.stub('leaf?').and_return true
-        @r.stub('resultat?').and_return true
-        Compta::RubrikResult.should_receive(:new).with(@p, :passif, '12').and_return(@rr = double(Compta::RubrikResult))
-        @r.lines(@p).should == [@rr]
-      end
-      
       it 'retourne all_lines si c est un leaf non résultat' do
         @rub = Rubrik.new
         @rub.stub('leaf?').and_return true

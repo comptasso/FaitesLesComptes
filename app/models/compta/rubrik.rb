@@ -1,7 +1,7 @@
 module Compta
   class Rubrik
     
-    # TODO faire les spec de cette classe qui a été construite à la volée.
+    
     
     attr_reader :period, :rubrik, :brut, :amortissement
     
@@ -55,22 +55,11 @@ module Compta
     
     def set_lines
       if rubrik.leaf? 
-        if rubrik.resultat?
-          return [Compta::RubrikResult.new(period, :passif, '12')]
-        else
-          return all_lines
-        end
+        return all_lines
       else
         return rubrik.children.collect {|ch| ch.to_compta_rubrik(period)}
       end
     end
-    
-    # en fait, il faudrait plutôt que rubrik.resultat? renvoie all_lines puis cherche
-    # la ligne avec le compte de résultat (12 ->120) et y ajoute le montant du résultat 
-    # de l'exercice (et éventuellement modifie l'intitulé pour avoir résultat provisoire')
-    
-    # voir alors ce que donnent les opérations de clôture
-    
     
     def all_lines
       @all_lines ||= Compta::RubrikParser.new(period, rubrik.folio.sens, rubrik.numeros).rubrik_lines

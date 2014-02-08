@@ -113,11 +113,7 @@ class Rubrik < ActiveRecord::Base
     #
     def lines(period)
       if leaf? 
-        if resultat?
-          return [Compta::RubrikResult.new(period, :passif, '12')]
-        else
-          return all_lines(period)
-        end
+        return all_lines(period)
       else
         return children
       end
@@ -137,7 +133,8 @@ class Rubrik < ActiveRecord::Base
     end
     
     
-    
+    # TODO voir si ces fonctions sont utilisées, car je pense qu'on appelle en fait 
+    # les méthodes des Compta::Rubrik
     
       # retourne la ligne de total de la rubrique
     def totals(period)

@@ -8,7 +8,9 @@
 - number: '1201'
   title: Résultat de l'exercice ASC
 - number: '1202'
-  title: Résultat de l'exercice Fonctionnement  
+  title: Résultat de l'exercice Fonctionnement
+- number: '12'
+  title: 'Résultat à ventiler'
 - number: '130'
   title: Subvention d'investissement
 - number: '150'

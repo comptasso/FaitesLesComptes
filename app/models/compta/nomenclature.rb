@@ -52,18 +52,19 @@ module Compta
 
       
       
-      # vérifie que tous les comptes sont pris en compte pour l'établissement du bilan
-      # à l'exception des comptes de classes 8 qui servent à valoriser le bénévolat
+      # vérifie que tous les comptes de classe 1 à 5 sont pris en compte 
+      # pour l'établissement du bilan
+      # donc on rejette les comptes de classes 6 à 9 qui servent à valoriser le bénévolat
       #
       # bilan_complete retourne les comptes non utilisés dans le bilan.
       def bilan_complete
-        list_accs = @period.two_period_account_numbers.reject {|acc| acc.to_s =~ /\A[8]\d*/} # on a la liste des comptes
+        list_accs = @period.two_period_account_numbers.reject {|acc| acc.to_s =~ /\A[6789]\d*/} # on a la liste des comptes
         rubrik_accounts = actif.all_numbers(@period) + passif.all_numbers(@period)
         not_selected =  list_accs.select {|a| !a.in?(rubrik_accounts) }
         unless not_selected.empty?
           self.errors[:bilan] << "ne reprend pas tous les comptes pour #{@period.exercice}. Manque #{not_selected.join(', ')}"
         end
-        not_selected
+        not_selected 
       end
       
       # Indique si le document bilan utilise tous les comptes de bilan

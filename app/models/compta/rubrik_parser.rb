@@ -37,6 +37,11 @@ module Compta
   # #list renvoie la liste des numéros trouvés sous la forme d'un hash de deux éléments
   # :num qui donne le numéro et :option qui indique si le montant est dans la colonne
   # amortissement ou à prendre en négatif. Une option nil indique qu'il n'y a rien de spécial.
+  # 
+  # #rubrik_lines renvoie la collection de Compta::RubrikLine correspondante. Lorsque le 
+  # compte est RESULT_ACCOUNT, la classe retournée est un RubrikResult, descendant de RubrikLine.
+  # Ceci permet de surcharger les méthodes donnant les valeurs à afficher pour inclure le 
+  # résultat de l'exercice.
   #
   class RubrikParser
 
@@ -70,7 +75,13 @@ module Compta
     
     # construit et renvoie la série des rubrik_lines
     def rubrik_lines
-      @list.map {|l| Compta::RubrikLine.new(@period, @sens, l[:num], l[:option])}
+      @list.map do |l|
+        if l[:num] != RESULT_ACCOUNT
+          Compta::RubrikLine.new(@period, @sens, l[:num], l[:option])
+        else
+          Compta::RubrikResult.new(@period, @sens, l[:num], l[:option])
+        end
+      end
     end
     
     # renvoie la liste des numéros de compte qui ont été retenus
