@@ -6,7 +6,7 @@ describe 'admin/natures/index'  do
 include JcCapybara
 
   before(:each) do
-    assign(:organism, stub_model(Organism)) 
+    assign(:organism, stub_model(Organism))  
     assign(:period, stub_model(Period)) 
     @depenses = []
     @depenses << mock_model(Nature, :period_id=>1, name: 'dep1', comment: 'dep1 comment')
@@ -27,7 +27,7 @@ include JcCapybara
 
   it "should have two titles h3" do 
     render
-    page.find('h3').text.should == 'Natures du livre Recettes'
+    page.find('h3:first').text.should == 'Natures du livre Recettes'
     page.find('h3:last').text.should == 'Natures du livre Dépenses'
   end
   

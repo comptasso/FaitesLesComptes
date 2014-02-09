@@ -43,7 +43,7 @@ class Organism < ActiveRecord::Base
   attr_accessible :title, :database_name, :status, :comment
 
   has_one :nomenclature, dependent: :destroy
-  
+  has_many :sectors, dependent: :destroy
   has_many :books, dependent: :destroy
   has_many :destinations, dependent: :destroy
   has_many :natures, through: :periods
@@ -64,7 +64,7 @@ class Organism < ActiveRecord::Base
   
   has_many :accounts, through: :periods
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
- # has_many :transfers
+  # has_many :transfers
   
   # La table adherent_bridges a été mise en place pour eneregistrer les informations
   # permettant de faire le lien avec le gem adhérent.
@@ -83,7 +83,8 @@ class Organism < ActiveRecord::Base
   has_many :subscriptions, :through=>:masks
   
   before_validation :fill_version
-  after_create :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
+  after_create :fill_children
+  # sector, :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
   
 
   strip_before_validation :title, :comment, :database_name 
@@ -117,11 +118,11 @@ class Organism < ActiveRecord::Base
 
   # créé un cash_book pour chacune des caisses
   def cash_books
-   cashes.map do |c|
-     vb = virtual_books.new
-     vb.virtual = c
-     vb
-   end
+    cashes.map do |c|
+      vb = virtual_books.new
+      vb.virtual = c
+      vb
+    end
   end
 
   # créé un virtual_book pour chacun des comptes bancaires
@@ -131,6 +132,10 @@ class Organism < ActiveRecord::Base
       vb.virtual = ba
       vb
     end
+  end
+  
+  def sectored?
+    sectors.count > 1
   end
 
   # retourne le nombre d'exercices ouverts de l'organisme
@@ -229,26 +234,6 @@ class Organism < ActiveRecord::Base
   def document(page, period = Period.last)
     Compta::Nomenclature.new(period).sheet(page)
   end
-
-  # méthode appelée par BankAccount ou Cash lorsqu'on crée une nouveau compte 
-  # bancaire ou une nouvelle caisse
-  # 
-  # create_account_for prend en argument l'objet (pour avoir son nickname et sa classe
-  # interroge Account pour obtenir un numéro disponible par exemple 5302 
-  # ou 51204 s'il y a déjà une caisse ou s'il y a déjà 3 comtpes bancaires
-  # 
-  # puis crée les comptes correspondants pour tous les exercices ouverts.
-  def create_accounts_for(objet)
-    racine  = objet.class.compte_racine # donc normalement 512 ou 53
-    new_number = Account.available(racine) # demande à Account le compte à utiliser
-    # TODO pourrait être demandé à Account ou encore à PlanComptable
-    # création des comptes
-    periods.opened.each do |p|
-      new_acc = objet.accounts.new(number:new_number, title:objet.nickname)
-      new_acc.period_id = p.id
-      new_acc.save!
-    end
-  end
   
   # TODO voir comment gérer les exceptions
   # remplit les éléments qui permettent de faire le pont entre le module 
@@ -276,43 +261,19 @@ class Organism < ActiveRecord::Base
   def fill_version
     self.version = FLCVERSION
   end
+  
+  def fill_children
+    filler = "Utilities::Filler::#{status_class}".constantize
+    filler.new(self).remplit    
+  end
+  
+  def status_class
+    status == 'Comité d\'entreprise' ? 'Comite' : status
+  end
 
-  def fill_nomenclature 
-    if status
-      path = File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
-      n = create_nomenclature 
-      n.read_and_fill_folios(path)
-    end
-  end
   
   
-
-  
-  def fill_books
-    # les 4 livres
-    logger.debug 'Création des livres par défaut'
-    income_books.create(abbreviation:'VE', title:'Recettes', description:'Recettes')
-    logger.debug  'création livre recettes'
-    outcome_books.create(abbreviation:'AC', title:'Dépenses', description:'Dépenses')
-    logger.debug 'creation livre dépenses'
-    od_books.create(abbreviation:'OD', :title=>'Opérations diverses', description:'Op.Diverses')
-    logger.debug 'creation livre OD'
-    create_an_book(abbreviation:'AN', :title=>'A nouveau', description:'A nouveau')
-  end
-  
-  def fill_finances
-    cashes.create(name:'La Caisse')
-    logger.debug 'creation de la caisse par défaut'
-    bank_accounts.create(bank_name:'La Banque', number:'Le Numéro de Compte', nickname:'Compte courant')
-    logger.debug 'creation la banque par défaut'
-  end
-  
-  def fill_destinations
-    destinations.create(name:'Non affecté')
-    destinations.create(name:'Adhérents') if status == 'Association'
-  end
-  
-  
+ 
   
   # méthode permettant de remettre les folios et les rubriques 
   # comme ils étaient à l'origine
@@ -321,7 +282,7 @@ class Organism < ActiveRecord::Base
   def reset_folios
     Folio.delete_all
     Rubrik.delete_all
-    path = File.join Rails.root, 'app', 'assets', 'parametres', status.downcase, 'nomenclature.yml'
+    path = File.join Rails.root, 'app', 'assets', 'parametres', status_class.downcase, 'nomenclature.yml'
     nomenclature.read_and_fill_folios(path)
   end
  

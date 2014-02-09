@@ -12,11 +12,17 @@ end
 describe 'vue transfer index'do 
   include OrganismFixtureBis
 
-
+  
+  
+  def second_bank
+    @o.bank_accounts.where('number = ?', '123Y').first || create_second_bank
+  end
+  
+  
   before(:each) do  
     create_user 
     create_minimal_organism
-    @bb = @o.bank_accounts.create!(:bank_name=>'Deuxième banque', :number=>'123Y', nickname:'Compte épargne')
+    @bb = second_bank
     @bbca = @bb.current_account(@p) # ca pour Current Account
     login_as('quidam')
   end
@@ -52,17 +58,17 @@ describe 'vue transfer index'do
     context 'le remplir incorrectement'  do
 
       before(:each) do
-      visit new_transfer_path
-      fill_in 'transfer[date_picker]', :with=>I18n::l(Date.today, :format=>:date_picker)
-      fill_in 'transfer[narration]', :with=>'Premier virement'
-      fill_in 'transfer[amount]', :with=>'123.50'
+        visit new_transfer_path
+        fill_in 'transfer[date_picker]', :with=>I18n::l(Date.today, :format=>:date_picker)
+        fill_in 'transfer[narration]', :with=>'Premier virement'
+        fill_in 'transfer[amount]', :with=>'123.50'
       
-      within('#transfer_compta_lines_attributes_0_account_id') do
-        select(@ba.nickname)
-      end
-      within('#transfer_compta_lines_attributes_1_account_id') do
-        select(@bb.nickname)
-      end
+        within('#transfer_compta_lines_attributes_0_account_id') do
+          select(@ba.nickname)
+        end
+        within('#transfer_compta_lines_attributes_1_account_id') do
+          select(@bb.nickname)
+        end
 
       end
 
@@ -87,10 +93,10 @@ describe 'vue transfer index'do
       # création de deux transfers
       @t1 = Transfer.create!(book_id:@od.id, date: Date.today, narration: 'création',
         :compta_lines_attributes=> {'0'=>{account_id:@baca.id, credit:100000}, 
-        '1'=>{account_id:@bbca.id, debit:100000}})
+          '1'=>{account_id:@bbca.id, debit:100000}})
       @t2 = Transfer.create!(book_id:@od.id, date: Date.today, narration: 'création',
         :compta_lines_attributes=> {'0'=>{account_id:@bbca.id, credit:999990},
-        '1'=>{account_id:@baca.id, debit:999990}})
+          '1'=>{account_id:@baca.id, debit:999990}})
       
       visit transfers_path
     end
@@ -123,10 +129,10 @@ describe 'vue transfer index'do
   describe 'edit'  do
 
     before(:each) do
-      @bb = @o.bank_accounts.create!(:bank_name=>'DebiX', :number=>'987654', nickname:'Compte épargne')
-     @t1 = Transfer.create!(book_id:@od.id, date: Date.today, narration: 'création',
+      @bb = second_bank 
+      @t1 = Transfer.create!(book_id:@od.id, date: Date.today, narration: 'création',
         :compta_lines_attributes=> {'0'=>{account_id:@baca.id, credit:100000},
-        '1'=>{account_id:@bbca.id, debit:100000}})    end
+          '1'=>{account_id:@bbca.id, debit:100000}})    end
 
     it 'On peut changer les deux autres champs' do
       visit edit_transfer_path(@t1.to_param)

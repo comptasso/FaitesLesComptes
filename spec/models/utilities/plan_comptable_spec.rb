@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'utilities/plan_comptable'
 
-describe Utilities::PlanComptable do 
+describe Utilities::PlanComptable do  
 
   before(:each) do 
      
@@ -12,6 +12,7 @@ describe Utilities::PlanComptable do
     @p.stub(:should_not_have_more_than_two_open_periods).and_return(true)
     @p.stub(:create_plan) # car create_plan est appelé par un after_create
     @p.stub(:create_bank_and_cash_accounts) # inutile de tester ce point ici
+    @p.stub(:create_rem_check_accounts) # idem
     @p.stub(:fill_bridge)
     @p.stub(:load_natures)
     @p.save!
@@ -24,14 +25,14 @@ describe Utilities::PlanComptable do
   describe 'self.create_accounts' do
 
     it 'demande à period de créer les comptes lus dans le fichier' do
-      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 88
-      @p.should have(88).accounts
+      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 87
+      @p.should have(87).accounts
     end
 
-    it 'si p a déja des comptes ne les écrase pas' do
+    it 'si p a déja des comptes ne crée pas de doublon' do
       @p.accounts.create!(number:'102', title:'Fonds associatif sans droit de reprise')
-      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 87
-      @p.accounts(true).should have(88).accounts
+      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 86
+      @p.accounts(true).should have(87).accounts
     end
 
     context 'en cas d erreur lors de la lecture du fichier' do

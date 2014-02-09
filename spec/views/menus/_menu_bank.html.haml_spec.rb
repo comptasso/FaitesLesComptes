@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
   # c.filter = {:wip=>true}
 end
   
@@ -11,7 +11,8 @@ describe "menus/_menu_bank.html.erb" do
   include JcCapybara 
   
   let(:o) {mock_model Organism}
-  let(:ba) {mock_model(BankAccount)}
+  let(:sect) {mock_model(Sector)}
+  let(:ba) {mock_model(BankAccount, sector:sect)}
     
   before(:each) do
     view.stub('user_signed_in?').and_return true
@@ -51,6 +52,8 @@ describe "menus/_menu_bank.html.erb" do
         render :template=>'menus/_menu_bank'
         page.find_link("Nlle Remise") 
       end
+      
+      # TODO faire des spec pour la sectorisation des remises de chèques
       
       it 'affiche Pointage si des un extrait est à pointer' do
         ba.stub(:unpointed_bank_extract?).and_return true

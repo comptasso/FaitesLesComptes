@@ -25,24 +25,7 @@ class Rubrik < ActiveRecord::Base
   
   alias collection children
   
-#  # repris ces lignes de github ascts_as_tree car curieusement ne semblent pas fonctionner
-#  # par défaut
-#  # Returns list of descendants, starting from current node, not including current node.
-#    #
-#    # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
-#    def descendants
-#      children.each_with_object(children) {|child, arr|
-#        arr.concat child.descendants
-#      }.uniq
-#    end
-#
-#    # Returns list of descendants, starting from current node, including current node.
-##
-#    # root.self_and_descendants # => [root, child1, child2, subchild1, subchild2, subchild3, subchild4]
-#    def self_and_descendants
-#      [self] + descendants
-#    end
-  
+ 
   # surcharge de la méthode leaf? du gem acts_as_tree afin d'utiliser le champ
   # is_leaf.
     def leaf?
@@ -130,11 +113,7 @@ class Rubrik < ActiveRecord::Base
     #
     def lines(period)
       if leaf? 
-        if resultat?
-          return [Compta::RubrikResult.new(period, :passif, '12')]
-        else
-          return all_lines(period)
-        end
+        return all_lines(period)
       else
         return children
       end
@@ -154,7 +133,8 @@ class Rubrik < ActiveRecord::Base
     end
     
     
-    
+    # TODO voir si ces fonctions sont utilisées, car je pense qu'on appelle en fait 
+    # les méthodes des Compta::Rubrik
     
       # retourne la ligne de total de la rubrique
     def totals(period)

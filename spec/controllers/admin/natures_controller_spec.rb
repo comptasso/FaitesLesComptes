@@ -164,7 +164,7 @@ describe Admin::NaturesController do
     end
   end
 
-  describe 'REORDER' do
+  describe 'POST REORDER' do
     it 'should look for nature and assing it' do
       Nature.should_receive(:find).with(nat1.to_param).and_return nat1
       nat1.stub(:move_higher)

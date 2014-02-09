@@ -3,8 +3,20 @@
 
 module InOutWritingsHelper
   
-  # TODO vérifier que les actions sont bien testées
+  # TODO vérifier que ces méthodes soient bien testées
 
+  # renvoie les destinations correspondant au secteur si l'organisme est sectorisé
+  def sectored_destinations(org, book)
+    if org.sectored?
+      ar = book.sector.destinations
+    else
+      ar = org.destinations
+    end
+    ar.order('name').all
+  end
+  
+  
+  
   # permet d'afficher les actions possible dans une ligne d'écriture
   # 
   def in_out_line_actions(line)
@@ -16,14 +28,14 @@ module InOutWritingsHelper
   # Helper permettant de construire les options de counter_account pour le form
   # La classe OptionsForAssociationSelect est dans lib
   #
-  # Le deuxième argument indique si on veut une liste de compte pour une recette ou pour
-  # une dépense, la différence venant du traitement des chèques de recettes qui ne peuvent
-  # être mis que sur le compte chèque à l'encaissement
-  #
-  def options_for_cca(period, io = false)
-    arr =  [OptionsForAssociationSelect.new('Banques', :list_bank_accounts, period),
-      OptionsForAssociationSelect.new('Caisses',:list_cash_accounts, period)]
-    if io == true
+  # Le premier argument est l'exercice car on a besoin des numéros de compte, 
+  # tandis que le deuxième est le livre qui permet de déduire le secteur 
+  # 
+  def options_for_cca(period, book)
+    sector = book.sector
+    arr =  [OptionsForAssociationSelect.new('Banques', :list_bank_accounts, sector, period),
+      OptionsForAssociationSelect.new('Caisses',:list_cash_accounts, sector, period)]
+    if book.income_outcome == true
       arr << OptionsForAssociationSelect.new('Chèques à l\'encaissement', :rem_check_accounts, period)
     end
     arr

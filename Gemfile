@@ -9,20 +9,16 @@ gem 'simple_form', "~> 2.1.0"
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-group :ocra, :test do
- # gem 'sqlite3', '1.3.7'
-end
-
-
 gem 'acts_as_list', '0.1.9'
 gem 'acts_as_tree', "~>1.4"
 gem 'prawn', "~> 0.12"
 gem 'prawn_rails', "0.0.11"
 gem 'haml-rails', "~>0.3"
+gem 'pg'
 gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
 gem 'apartment' # pour la gestion des schemas
 gem 'devise' # pour l'authentification
-gem 'rails_12factor' # 
+
 gem 'delayed_job_active_record'
 gem 'unicorn'
 gem 'rack-timeout' # coneil de heroku - utilisé par le fichier intializers/timeout.rb
@@ -30,10 +26,13 @@ gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écritu
 # TODO à retirer lors du passage à Rails 4
 
 gem 'adherent' #, :path=>'../../Adherent'
-group :production, :staging, :test do
-  gem 'pg'
-end
+gem 'sass'
+gem 'coffee-script'
 
+
+group :production, :staging do
+  gem 'rails_12factor' 
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -46,21 +45,13 @@ end
 
 gem 'jquery-rails', "2.1.4"
 
-# Use unicorn as the web server
-# gem 'mongrel'
 
-
-group :ocra do
-  # le gem ocra a été patché sur la partie Windows (voir start.rb)
-  # il est donc important de garder la même version
-  gem 'ocra', '1.3.1'
-end
 
 # Deploy with Capistrano
 # gem 'capistrano'
 
 # To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+# gem 'debugger'
 
 gem 'simplecov', :require => false, :group => :test
 
@@ -73,7 +64,8 @@ group :development, :test do
   gem 'launchy'
   gem 'daemons' # mis en place pour pouvoir lancer les Delayed::Job dans la console
   gem 'selenium-webdriver', '>= 2.39'
-  gem 'capybara', '1.1.2'
+  gem 'capybara', '2.2.1'
+  # gem 'capybara-webkit'
   gem 'email_spec'
   
 

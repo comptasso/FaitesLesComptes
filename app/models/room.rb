@@ -29,7 +29,7 @@ class Room < ActiveRecord::Base
     Apartment::Database.process(database_name) {Organism.first}
   end
   
-   # look_for permet de chercher quelque chose dans la pièce
+  # look_for permet de chercher quelque chose dans la pièce
   # Le block indique ce qu'on cherche
   #
   # Usage possible look_for {Organism.first} mais il vaut mieux utiliser la méthode organism
@@ -183,6 +183,7 @@ class Room < ActiveRecord::Base
   def destroy_db
     Rails.logger.info "Destruction de la base #{database_name}"
     Apartment::Database.drop(database_name)
+    Apartment::Database.switch # pour revenir à la base de données par défaut
   end
 
   # Cette action ne devrait a priori jamais être appelée.

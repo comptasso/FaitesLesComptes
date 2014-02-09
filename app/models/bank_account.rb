@@ -23,11 +23,12 @@ require 'strip_arguments'
 # calculer un solde.
 #
 #
-class BankAccount < ActiveRecord::Base 
+class BankAccount < ActiveRecord::Base  
   include Utilities::Sold
   include Utilities::JcGraphic
 
   belongs_to :organism
+  belongs_to :sector
   has_many :check_deposits
   has_many :bank_extracts
   
@@ -41,7 +42,7 @@ class BankAccount < ActiveRecord::Base
   # scope :extract_lines, lambda {|from_date, to_date| compta_lines.joins(:writing).where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date') }
 
 
-  attr_accessible :number, :bank_name, :comment, :nickname
+  attr_accessible :number, :bank_name, :comment, :nickname, :sector_id
 
   strip_before_validation :number, :bank_name, :comment
 
@@ -52,9 +53,10 @@ class BankAccount < ActiveRecord::Base
     :length=>{within:NAME_LENGTH_LIMITS}
   validates :bank_name, :nickname , presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
-  validates :organism_id, :presence=>true
+  validates :organism_id, :sector_id, presence:true
+  
  
-  after_create :create_accounts
+  after_create :create_accounts, :if=>lambda {organism.periods.opened.any? }
   after_update :change_account_title, :if=> lambda {nickname_changed? }
   
 
@@ -173,7 +175,7 @@ protected
  # ouverts).
  def create_accounts
    logger.debug 'création des comptes liés au compte bancaire' 
-   organism.create_accounts_for(self)
+   Utilities::PlanComptable.create_financial_accounts(self)
  end
 
  # quand on change le nickname de la banque il est nécessaire de modifier l'intitulé

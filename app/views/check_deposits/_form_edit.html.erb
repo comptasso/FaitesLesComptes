@@ -9,7 +9,7 @@
               :collection => @organism.bank_accounts.map {|b| [b.nickname, b.id]},
               :prompt => "Numero de compte ?", :label=>'Compte' %>
   <%= f.association :checks, :label=> 'Chèques', input_html: {class: "span4", multiple: true, size: 10},
-              :collection => options_for_checks(@check_deposit), :as => :grouped_select, :group_method => :checks, :group_label_method=> :name,
+              :collection => options_for_checks(@check_deposit, @sector), :as => :grouped_select, :group_method => :checks, :group_label_method=> :name,
               :label_method=> :label, :value_method=> :id %>
 
 

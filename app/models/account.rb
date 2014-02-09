@@ -53,7 +53,7 @@ class Account < ActiveRecord::Base
   validates :period_id, :title, :presence=>true
   validates :number, :presence=>true, :format=>{:with=>/\A[1-9]{1}[0-9]{1}[A-Z0-9]{0,8}\Z/}, :cant_change=>true
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:maximum=>80}
-  validates_uniqueness_of :number, :scope=>:period_id
+  validates_uniqueness_of :number , :scope=>:period_id
   validate :period_open
  
 

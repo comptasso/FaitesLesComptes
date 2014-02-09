@@ -27,7 +27,7 @@ describe "transfers/show" do
   end
   
   it 'rendant la ligne de titre' do
-    page.find('table tr:first').text.should == "Date\nLibellé\nMontant\nDe\nVers\nActions\n"
+    page.first('table tr').text.should == "Date\nLibellé\nMontant\nDe\nVers\nActions\n"
   end
     
   it 'et la ligne de détail du transfert' do

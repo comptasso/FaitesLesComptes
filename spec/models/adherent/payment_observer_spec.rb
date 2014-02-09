@@ -9,7 +9,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe Adherent::Payment do 
+describe Adherent::Payment do  
   include OrganismFixtureBis 
 
   def create_member
@@ -52,7 +52,8 @@ describe Adherent::Payment do
       expect {@pay.save}.to change {Adherent::Writing.count}.by(1)
     end 
     
-    it 'bridge_id enregistre l écriture d origine' do 
+    it 'bridge_id enregistre l écriture d origine' do
+      puts @pay.errors.messages unless @pay.valid?
       @pay.save
       w = Adherent::Writing.find_by_bridge_id(@pay.id)
       w.bridge_id.should == @pay.id
@@ -61,6 +62,7 @@ describe Adherent::Payment do
     end
   
     it 'crée une écriture conforme aux infos entrées dans le payment'  do
+      puts @pay.errors.messages unless @pay.valid?
       @pay.save
       w = Adherent::Writing.find_by_bridge_id(@pay.id)
       w.book.should == @ib
@@ -83,13 +85,18 @@ describe Adherent::Payment do
     end
     
     it 'avec un chèque le accountable est bien remise de chèque' do
-      @m.payments.create!(date:Date.today, amount:125.25, mode:'Chèque')
+      @pay.mode =  'Chèque'
+       puts @pay.errors.messages unless @pay.valid?
+       @pay.save!
+      
       sl = Adherent::Writing.last.support_line
-      sl.account.should == @p.rem_check_account
+      sl.account.should == @p.rem_check_accounts.first
     end
     
     it 'et espèces avec des espèces' do
-      @m.payments.create!(date:Date.today, amount:125.25, mode:'Espèces')
+      @pay.mode =  'Espèces'
+       puts @pay.errors.messages unless @pay.valid?
+       @pay.save!
       sl = Adherent::Writing.last.support_line
       sl.account.accountable.class.should == Cash
     end

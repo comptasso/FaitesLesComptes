@@ -10,9 +10,11 @@ class Cash < ActiveRecord::Base
   include Utilities::Sold
   include Utilities::JcGraphic
 
-  attr_accessible :name, :comment
+  attr_accessible :name, :comment, :sector_id
 
   belongs_to :organism
+  belongs_to :sector
+  
   # ces deux has_many sont très proche mais le premier en incluant writing
   # a des effets indésirables sur les requêtes utilisées pour faire un pdf de la 
   # caisse (on n'arive plus à forcer les noms des colonnes qui sont utilisés pour le pdf).
@@ -31,9 +33,10 @@ class Cash < ActiveRecord::Base
   validates :name, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :uniqueness=>{:scope=>:organism_id}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :organism_id, :presence=>true
+  validates :sector_id, :presence=>true
  
   
-  after_create :create_accounts
+  after_create :create_accounts, :if=>lambda {organism.periods.opened.any? }
   after_update :change_account_title, :if=> lambda {name_changed? }
   
 
@@ -100,7 +103,7 @@ class Cash < ActiveRecord::Base
  # ouverts).
  def create_accounts
    logger.debug 'création des comptes liés à la caisse' 
-   organism.create_accounts_for(self)
+   Utilities::PlanComptable.create_financial_accounts(self)
  end
 
  # Permet d'avoir un libellé du compte plus clair en préfixant le libellé du compte

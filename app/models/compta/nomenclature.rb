@@ -25,7 +25,7 @@ module Compta
     attr_accessor :nomenclature
 
     
-    delegate :resultat, :actif, :passif, :benevolat, :organism, :to=>:nomenclature
+    delegate :resultat, :resultats, :actif, :passif, :benevolat, :organism, :to=>:nomenclature
     
     validate :bilan_complete, :resultat_complete, :bilan_no_doublon?, :resultat_no_doublon?
     validate :benevolat_no_doublon?, :if=>Proc.new {organism.status == 'Association'}
@@ -52,18 +52,19 @@ module Compta
 
       
       
-      # vérifie que tous les comptes sont pris en compte pour l'établissement du bilan
-      # à l'exception des comptes de classes 8 qui servent à valoriser le bénévolat
+      # vérifie que tous les comptes de classe 1 à 5 sont pris en compte 
+      # pour l'établissement du bilan
+      # donc on rejette les comptes de classes 6 à 9 qui servent à valoriser le bénévolat
       #
       # bilan_complete retourne les comptes non utilisés dans le bilan.
       def bilan_complete
-        list_accs = @period.two_period_account_numbers.reject {|acc| acc.to_s =~ /\A[8]\d*/} # on a la liste des comptes
+        list_accs = @period.two_period_account_numbers.reject {|acc| acc.to_s =~ /\A[6789]\d*/} # on a la liste des comptes
         rubrik_accounts = actif.all_numbers(@period) + passif.all_numbers(@period)
         not_selected =  list_accs.select {|a| !a.in?(rubrik_accounts) }
         unless not_selected.empty?
           self.errors[:bilan] << "ne reprend pas tous les comptes pour #{@period.exercice}. Manque #{not_selected.join(', ')}"
         end
-        not_selected
+        not_selected 
       end
       
       # Indique si le document bilan utilise tous les comptes de bilan
@@ -79,8 +80,7 @@ module Compta
       # renvoie la liste des comptes non repris
       def resultat_complete
         list_accs = @period.two_period_account_numbers.reject {|acc| acc.to_s =~ /\A[123458]\d*/}
-        rubrik_accounts = resultat.all_numbers(@period)
-        not_selected =  list_accs.select {|a| !a.in?(rubrik_accounts) }
+        not_selected =  list_accs.select {|a| !a.in?(resultats_accounts) }
         self.errors[:resultat] << "Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque #{not_selected.join(', ')}" if not_selected.any?
         not_selected
       end
@@ -98,9 +98,10 @@ module Compta
         collection_with_option_no_doublon?(:bilan, actif, passif)
       end
       
-      # méthode vérifiant qu'il n'y a aucun doublon dans le comptes de resultat
+      # méthode vérifiant qu'il n'y a aucun doublon dans le (ou les) compte(s) de resultats
+      # traite les comptes de résultats l'un après l'autre
       def resultat_no_doublon?
-        collection_with_option_no_doublon?(:resultat, resultat)
+        collection_with_option_no_doublon?(:resultat, *resultats.all)
       end
       
       # méthode vérifiant qu'il n'y a aucun doublon dans le comptes de resultat
@@ -109,7 +110,20 @@ module Compta
       end
    
       
-protected      
+protected    
+
+      def resultats_accounts
+        @resultats_accounts ||= build_resultats_accounts
+      end
+
+      # renvoie la liste des comptes utilisés dans le ou les folios resultats
+      def build_resultats_accounts
+        rubrik_accounts = []
+        resultats.each { |result| rubrik_accounts += result.all_numbers(@period)}
+        rubrik_accounts
+      end
+      
+      
       # renvoie une liste d'instructions avec les options sous forme de hash
       #  [{:num=>"201", :option=>nil}, {:num=>"2801", :option=>:col2}, 
       #  {:num=>"2803", :option=>:col2}, {:num=>"206", :option=>nil}, 

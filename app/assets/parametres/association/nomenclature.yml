@@ -22,7 +22,7 @@
             :Marchandises: 37 -397
           :Créances:
             :Avances et acomptes versés sur commandes: '409'
-            :Créances usagers et comptes rattachés: 41 !419 -491 -492
+            :Créances Ayant droits et comptes rattachés: 41 !419 -491 -492
             :Autres: 43D 44D 45D 46D 47D -495 -496
         :DISPONIBILITES ET AUTRES:
           :Disponibilités:
@@ -55,7 +55,7 @@
             :Emprunts et dettes auprès des établissements de crédit: 51C
           :Dettes courantes:
             :Fournisseurs et comptes rattachés: '40 !409'
-            :Usagers créditeurs: '419'
+            :Ayant droits créditeurs: '419'
             :Personnel et charges sociales: 421 428
             :Produits constatés d'avance: '487'
             :Autres: 43C 44C 45C 46C 47C
@@ -101,7 +101,7 @@
             :Charges exceptionnelles: '-67'
             :Dotations aux provisions exceptionnelles: '-687'
             :Engagements à réaliser: '-689'
-
+  
   :benevolat:
     :title: Bénévolat
     :sens: :passif

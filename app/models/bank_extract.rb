@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'strip_arguments'
-class BankExtract < ActiveRecord::Base
+class BankExtract < ActiveRecord::Base 
   include Utilities::PickDateExtension
 
   # utilise le module Utilities::PickDateExtension pour créer des virtual attributes

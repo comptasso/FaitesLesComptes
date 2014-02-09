@@ -34,23 +34,17 @@ describe 'admin/books/index' do
       page.all('table tbody tr').should have(2).elements
     end
 
-    it "each row should show 2 icons (edit and delete)" do
+    it "each row should show 1 icon (edit)" do
       render
-      page.find('tbody tr').should have_css('img',:count=>2)
+      page.find('tbody tr:first').should have_css('img',:count=>1)
     end
 
-    it "each row should show delete icon" do
+    it "each row should show modifier icon" do
       render
       page.all('tbody tr img').first[:src].should match /\/assets\/icones\/modifier.png/
     end
 
-    it "each row should show delete icon" do
-      render
-      page.all('tbody tr img').last[:src].should == '/assets/icones/supprimer.png'
-    end
-
-
-    context 'les titres des colonnes' do
+   context 'les titres des colonnes' do
       it "title row should show Titre" do
         render
         page.find('th:first').text.should == 'Abbreviation'

@@ -51,13 +51,16 @@ class ComptaLine < ActiveRecord::Base
   scope :listing, lambda {|from, to| with_writing_and_book.where('books.abbreviation != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)
-  scope :locked, where('locked = ?', true)
+  scope :definitive, where('locked = ?', true) # locked engendre un conflit avec les arel de Rails
   scope :classe, lambda {|n| where('number LIKE ?', "#{n}%").order('number ASC')} 
 
   # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
   # et du champ check_deposit_id
+  scope :sectored_pending_checks, lambda { |sector| includes(:writing=>:book).
+      where('books.sector_id'=>sector.id, :account_id=>Account.rem_check_accounts.map {|a| a.id},
+      :check_deposit_id => nil).order('compta_lines.id') }
   scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil).order('id') }
-
+  
   # renvoie les lignes non pointées (appelé par BankExtract), ce qui ne prend pas en compte le journal A nouveau
   scope :not_pointed, joins(:writing=>:book).where("(books.abbreviation != 'AN') AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE COMPTA_LINE_ID = COMPTA_LINES.ID)").order('writings.date')
 

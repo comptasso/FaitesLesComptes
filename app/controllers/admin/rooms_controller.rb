@@ -57,6 +57,7 @@ class Admin::RoomsController < Admin::ApplicationController
 
   # GET /rooms/new
   def new
+    use_main_connection
     @organism = Organism.new
   end
 
@@ -94,7 +95,7 @@ class Admin::RoomsController < Admin::ApplicationController
     Rails.logger.info "Destruction de la base #{db_name}  - méthode rooms_controller#destroy}"
   
     if @room.destroy
-      flash[:notice] =  "L'organisme suivi par la base #{db_name} a été supprimé;".html_safe
+      flash[:notice] =  "L'organisme suivi par la base #{db_name} a été supprimé".html_safe
       organism_has_changed?
       redirect_to admin_rooms_url
     else

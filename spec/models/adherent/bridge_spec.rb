@@ -19,7 +19,9 @@ describe Adherent::Bridge do
   describe 'check_nature_name' , wip:true do 
     
     before(:each) do
-      @p2 = @o.periods.create!(start_date: @p.start_date+1, close_date: @p.close_date+1)
+      @p2 = @o.periods.new(start_date: @p.start_date+1, close_date: @p.close_date+1)
+      puts @p2.errors.messages unless @p2.valid?
+      @p2.save!
     end
     
     it 'renvoie true si la nature existe pour toutes les périodes ouvertes' do

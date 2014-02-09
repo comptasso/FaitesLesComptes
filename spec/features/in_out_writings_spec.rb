@@ -44,7 +44,7 @@ describe 'vue lines' do
    
     fill_in 'in_out_writing_date_picker', :with=>I18n::l(Date.today, :format=>:date_picker)
     fill_in 'in_out_writing_narration', :with=>'Ecriture test'
-    select nature_name, :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
+    select nature_name, :from=>'in_out_writing_compta_lines_attributes_0_nature_id'
     fill_in 'in_out_writing_compta_lines_attributes_0_debit', with: 50.21
     select 'Virement'
     select 'Compte courant'
@@ -58,7 +58,7 @@ describe 'vue lines' do
     
     fill_in 'in_out_writing_date_picker', :with=>'01/04/2012'
     fill_in 'in_out_writing_narration', :with=>'Ecriture test'
-    select nature_name, :for=>'in_out_writing_compta_lines_attributes_0_nature_id'
+    select nature_name, :from=>'in_out_writing_compta_lines_attributes_0_nature_id'
     fill_in 'in_out_writing_compta_lines_attributes_0_debit', with: 50.21
     select 'Chèque'
     click_button 'Enregistrer'

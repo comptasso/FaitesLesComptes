@@ -96,13 +96,20 @@ module Apartment
     def copy_table(table_name, from_schema, to_schema)
       raise Apartment::SchemaNotFound, "#{from_schema} n'existe pas" unless db_exist?(from_schema)
       raise Apartment::JclError, "#{to_schema} n'existe pas" unless db_exist?(to_schema)
+      list_cols = liste_columns(table_name)
 
-      Apartment.connection.execute(%{INSERT INTO #{to_schema}.#{table_name} SELECT * FROM #{from_schema}.#{table_name} })
+      Apartment.connection.execute(%{INSERT INTO #{to_schema}.#{table_name}(#{list_cols}) SELECT #{list_cols} FROM #{from_schema}.#{table_name} })
       set_sequence(table_name, from_schema, to_schema)
 
     rescue  Apartment::SchemaNotFound, Apartment::JclError =>e
       Rails.logger.warn "Erreur dans copy_table #{table_name} #{from_schema} en #{to_schema} - #{e.message}"
       return false
+    end
+    
+    # fournit une chaîne de caractères reprenant la liste des colonnes d'une table
+    # dont le nom est donné en argument
+    def liste_columns(table_name)
+       ActiveRecord::Base.connection.columns(table_name).map(&:name).join(', ')
     end
 
 

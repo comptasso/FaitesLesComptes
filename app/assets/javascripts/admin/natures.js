@@ -8,7 +8,7 @@
 // du select 
 function change_radio() {
     var sel = $('select#nature_book_id option').filter(':selected');
-        
+
     if (sel.attr("data-type") === 'OutcomeBook') {
         $('optgroup[label=Dépenses] option').attr('disabled', false);
         $('optgroup[label=Recettes] option').attr('disabled', true);
@@ -35,11 +35,13 @@ jQuery(function () {
 
 // pour permettre le classement des natures dans la vue index par un drag & drop 
 // Si la table #index dans le body de classe admin_natures existe, 
-// alors on appelle fnTableSortable qui est défini dans application.js
-// fonction qui appelle l'action reorder du controller - ici admin/natures_controller/reorder
-jQuery(function() {
-  if ($('.admin_natures #index').length === 1) {
-    fnTableSortable($('.admin_natures #recettes'), '/reorder');
-    fnTableSortable($('.admin_natures #depenses'), '/reorder');
-  }
-})
+// alors on appelle fnTableSortable pour chacune des tables.
+// fnTableSortable est définie dans application.js
+// Cette fonction appelle alors l'action reorder du controller - ici admin/natures_controller/reorder
+jQuery(function () {
+    if ($('.admin_natures #index').length === 1) {
+        $('.admin_natures table').each(function (i) {
+            fnTableSortable($(this), '/reorder');
+        });
+    }
+});

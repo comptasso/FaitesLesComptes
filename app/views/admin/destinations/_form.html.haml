@@ -1,0 +1,7 @@
+.inputs
+  = simple_form_for([:admin,@organism,@destination], :html=> {class: 'form-horizontal'} ) do |f| 
+    = f.error_notification 
+    = f.input :name,  input_html: {class: "span3"}
+    = f.input :comment,  input_html: {rows: 4, class: "span3"}
+    = f.association :sector,  input_html: {class: "span3"}, prompt:'Choisissez un secteur', required:true if @organism.sectored?
+    .form-actions= f.button :submit, class: "btn-primary span2"

@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c| 
+RSpec.configure do |c|  
   #  c.filter = {:js=> true }
   #  c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true } 
@@ -100,6 +100,41 @@ describe Organism do
 
 
   end
+  
+  describe 'main_bank_id' do
+    
+    subject {Organism.new(valid_attributes)}
+    
+    it 'main_bank_id should returns the first one' do
+      subject.should_receive(:bank_accounts).exactly(2).times.and_return(@ar = double(Arel, 'any?'=>true))
+      @ar.should_receive(:order).with('id').and_return @ar
+      @ar.should_receive(:first).and_return(double(BankAccount, id:999))
+      subject.main_bank_id.should == 999
+    end
+          
+    it 'ou nil si pas de compte bancaire' do
+      subject.should_receive(:bank_accounts).and_return(@ar = double(Arel, 'any?'=>false))
+      subject.main_bank_id.should == nil
+    end
+  end
+  
+  describe 'main_cash_id' do
+    
+    subject {Organism.new(valid_attributes)}
+    
+    it 'main_bank_id should returns the first one' do
+      subject.should_receive(:cashes).exactly(2).times.and_return(@ar = double(Arel, 'any?'=>true))
+      @ar.should_receive(:order).with('id').and_return @ar
+      @ar.should_receive(:first).and_return(double(Cash, id:999))
+      subject.main_cash_id.should == 999
+    end
+          
+    it 'ou nil si pas de compte bancaire' do
+      subject.should_receive(:cashes).and_return(@ar = double(Arel, 'any?'=>false))
+      subject.main_cash_id.should == nil
+    end
+  end
+
 
   describe 'after create' do
     
@@ -189,12 +224,15 @@ describe Organism do
       end
     end
     
-    context 'une non association' do
+    
+    # TODO partie à transférer dans les tests des filler puisque cette interface
+    # a été transformée en classe.
+    context 'une non association' do 
       before(:each) do
         clean_assotest1
         @organism = Organism.create!({:title =>'Mon Entreprise',
-          database_name:'assotest1',
-      :status=>'Entreprise' })
+            database_name:'assotest1',
+            :status=>'Entreprise' })
          
       end
       
@@ -202,11 +240,11 @@ describe Organism do
         @organism.bridge.should == nil
       end
       
-      it 'il n y a qu une destination' do
-        @organism.destinations.count.should == 1
+      it 'créé 3 destinations' do
+        @organism.destinations.count.should == 3
       end
       
-      it 'crée une seule destination si pas association' do
+      it 'dont Non affecté' do
         @organism.destinations.find_by_name('Non affecté').should be_an_instance_of(Destination)
       end
 
@@ -272,43 +310,7 @@ describe Organism do
     end
     
     
-    describe 'create_account_for'  do
-      
-      before(:each) do
-        @bac = mock_model(BankAccount, :nickname=>'Cpte sur livret')
-        
-      end
-      
-      it 'appelle Account.available avec 512' do
-        @organism.stub_chain(:periods, :opened).and_return [] # pour couper court à la suite de la méthode
-        Account.should_receive(:available).with('512').and_return('51204')
-        @organism.create_accounts_for(@bac)
-      end
-      
-      it 'pour une caisse appelle 53' do
-        @cac = Cash.new(:name=>'local')
-        @organism.stub_chain(:periods, :opened).and_return []        
-        Account.should_receive(:available).with('53').and_return('5301')
-        @organism.create_accounts_for(@cac)
-      end
-      
-      it 'puis appelle create_accounts pour chaque exercice ouvert' do
-        Account.stub(:available).and_return('51204')
-        @organism.stub_chain(:periods, :opened).and_return([@p1 = mock_model(Period), @p2 = mock_model(Period)])
-        @bac.should_receive(:accounts).exactly(1).times.and_return(@ar = double(Arel))
-        @bac.should_receive(:accounts).exactly(1).times.and_return(@as = double(Arel))
-        @ar.should_receive(:new).with(number:'51204', title:@bac.nickname).and_return @ar
-        @ar.should_receive(:period_id=).with(@p1.id).and_return @ar
-        @ar.should_receive(:save!).and_return
-        @as.should_receive(:new).with(number:'51204', title:@bac.nickname).and_return @as
-        @as.should_receive(:period_id=).with(@p2.id).and_return @as
-        @as.should_receive(:save!).and_return
-        @organism.create_accounts_for(@bac)
-      end
-      
-      
-    end
-
+ 
     describe 'max_open_periods?' do
       it 'nb_open_periods.should == 2' do
         @organism.nb_open_periods.should == 2
@@ -325,51 +327,7 @@ describe Organism do
     end
 
 
-
     
-    describe 'main_bank_id'  do
-      
-      context 'with default bank account' do
-       
-        before(:each) do
-          @ba = BankAccount.order(:id).first
-        end
-
-        
-        it "should give the main bank id" do
-          @organism.main_bank_id.should == @ba.id
-        end
-
-        context 'with another bank account' do
-          it 'main_bank_id should returns the first one' do
-            @organism.bank_accounts.create!(bank_name: 'CrédiX', number: '124577ZA', nickname:'Compte courant')
-            @organism.main_bank_id.should == @ba.id
-          end
-        end
-      end
-    end
-
-    describe 'main_cash_id' do
-     
-      context 'with default cash' do 
-
-        before(:each) do
-          @ca = @organism.cashes.first
-        end
-
-        it "should give the main cash id" do
-          @organism.main_cash_id.should == @ca.id
-        end
-
-        context 'with another cash' do
-          it 'main_cash_id should returns the first one' do
-            @organism.cashes.create!(name: 'porte monnaie')
-            @organism.main_cash_id.should == @ca.id
-          end
-        end
-      end
-    end
-
    
 
   end

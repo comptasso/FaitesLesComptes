@@ -93,8 +93,9 @@ class Period < ActiveRecord::Base
   before_validation :fix_days
   before_create :should_not_have_more_than_two_open_periods
     
-  after_create :create_plan, :create_bank_and_cash_accounts, :load_natures ,:unless=> :previous_period?
+  after_create :create_plan, :create_bank_and_cash_accounts, :create_rem_check_accounts, :load_natures ,:unless=> :previous_period?
   after_create :copy_accounts, :copy_natures, :if=> :previous_period?
+  # TODO probablement inutile si pas asssociation
   after_create :fill_bridge 
  
   before_destroy  :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
@@ -176,8 +177,8 @@ class Period < ActiveRecord::Base
   end
 
   # permet de fournir au dashboard les informations nécessaires pour faire le graphe de 
-  # résultats
-  # TODO serait mieux dans la classe graphic
+  # résultats.
+  # Surcharge de la méthode par défaut fournie par Utilities::JcGraphic
   def pave_char
     ['result_pave', 'result']
   end
@@ -276,7 +277,7 @@ class Period < ActiveRecord::Base
     sold_classe(7) + sold_classe(6)
   end
 
-
+  # TODO a retirer puisque ces informations sont désormais fournies par Sector
   # revoie la liste des comptes commençant par 512
   def list_bank_accounts
     accounts.where('number LIKE ?', '512%')
@@ -287,23 +288,20 @@ class Period < ActiveRecord::Base
     accounts.where('number LIKE ?', '53%')
   end
 
-  # renvoie la liste des comptes commençant par 511
+  # renvoie les comptes correspondant aux remises de chèques (511)
+  # retourne un Arel
   #
   # A priori, il ne doit y en avoir qu'un
   def rem_check_accounts
     accounts.where('number = ?', REM_CHECK_ACCOUNT[:number])
   end
-
   
-
-  # rem_check_account retourne le compte de Chèques à l'encaissement
-  # ou le créé s'il n'existe pas.
-  # Pour le créer, il s'appuie sur la constante REM_CHECK_ACCOUNT qui est dans
-  # le fichier constants.rb
-  def rem_check_account
-    as =  accounts.find_by_number(REM_CHECK_ACCOUNT[:number])
-    as ? as : accounts.create!(REM_CHECK_ACCOUNT)
+  # renvoie le premier (et normalement l'unique) compte de remise de chèque
+   def rem_check_account
+    rem_check_accounts.first
   end
+
+
 
   # renvoie un array de tous les comptes de classe 7
   def recettes_accounts
@@ -488,12 +486,7 @@ class Period < ActiveRecord::Base
     all_natures_linked_to_account?
   end
 
-  # retourne une instance de Compta::Nomenclature
-  # MISE EN COMMENTAIRE POUR EVITER QUE CE SOIT PERIOD QUI APPELLE NOMENCLATURE
-  # CEST PLUTÔT ORGANISME OU NOMENCLATURE QUI DOIT APPELER LES FOLIOS AVEC LA PERIOD DEMANDEE
-#  def nomenclature
-#    organism.nomenclature.compta_nomenclature(self)
-#  end
+ 
 
 
   protected
@@ -556,8 +549,9 @@ class Period < ActiveRecord::Base
 
   private
 
+  # TODO vraiment pas terrible de voir que Period doit solliciter organism.send(:status_class)
   def create_plan
-    Utilities::PlanComptable.create_accounts(self, organism.status)
+    Utilities::PlanComptable.create_accounts(self, organism.send(:status_class))
   end
 
   def create_bank_and_cash_accounts
@@ -568,6 +562,14 @@ class Period < ActiveRecord::Base
     accounts(true) # pour mettre à jour la relation avec les comptes
     # sinon une création et une destruction dans la foulée (cas des tests) laisse une trace de ces deux comptes
   end
+  
+  # crée le compte de remise de chèques
+  # TODO faire spec d'intégration
+  def create_rem_check_accounts
+      accounts.create!(REM_CHECK_ACCOUNT)
+  end
+  
+ 
 
   # demande à PlanComptable de recopier les comptes de l'exercice précédent
   #
@@ -597,13 +599,13 @@ class Period < ActiveRecord::Base
   # copy_natures et load_natures et retirer de cette clase également load_file_natures. On pourrait aussi envisager de passer ces callbacks dans un Observer.
   def load_natures  
     Rails.logger.debug 'Création des natures'
-    t = load_file_natures
-    books = collect_books(t)
-    t.each do |n|
+    nats = load_file_natures
+    books = collect_books(nats)
+    nats.each do |n|
       a = accounts.find_by_number(n[:acc]) 
        nat = natures.new(name:n[:name], comment:n[:comment], account:a)
        nat.book_id = books[n[:book]] 
-       Rails.logger.warn "#{nat.name} - #{nat.errors.messages}" unless nat.valid?
+       puts "#{nat.name} - #{nat.errors.messages}" unless nat.valid?
        nat.save
     end
     natures(true).count
@@ -620,7 +622,7 @@ class Period < ActiveRecord::Base
   end
 
   def load_file_natures(source = nil)
-    source ||= "#{Rails.root}/app/assets/parametres/#{organism.status.downcase}/natures.yml"
+    source = "#{Rails.root}/app/assets/parametres/#{organism.send(:status_class).downcase}/natures.yml"
     YAML::load_file(source)
   rescue
     logger.warn "Erreur dans le chargement du fichier #{source}"

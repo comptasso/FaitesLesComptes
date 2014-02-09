@@ -57,11 +57,14 @@ module OrganismsHelper
   # Appelé par la vue organism#show pour dessiner chacun des pavés qui figurent 
   # dans le dash board.
   # 
-  # Chacun des pavés correspond à un livre (mais pas le livre d'OdBook)
-  # un des pavé est généré par period
+  # Le dashboard comprend plusieurs types de pavés :
+  # - ceux correspondant aux livres de recettes et de dépenses
+  # - ceux correspondant aux secteur
+  # - enfin ceux correspondant aux caisses et aux comptes bancaires (générés par 
+  # des cash_books ou des bank_books)
+  # - un des pavé de type resultat est généré par period et cumule donc les résultats des
+  # pavés des secteurs
   # 
-  # Les derniers pavés sont générés par les caisses et les banques (au travers des cash_books et
-  # des bank_books).
   # 
   # html_class, permet d'associer des classes à chacun des pavés, sachant qu'actuellement
   # l'appel dans la vue show est systématiquement fait avec la classe span4
@@ -74,10 +77,10 @@ module OrganismsHelper
   # Les IncomeBook et OutcomeBook ont une méthode similaire par le biais de Utilities::JcGraphic
   # 
   # Enfin pour le pave résultat, c'est Period#pave_char qui fournit les infos 
-  def draw_pave(pave, html_class)
-    if pave
-      partial_and_class  =   pave.pave_char
-      render partial: "organisms/#{partial_and_class[0]}", object: pave,  locals: {:local_classes => "#{partial_and_class[1]} #{html_class}" }
+  def draw_pave(source, html_class)
+    if source
+      partial_and_class  =   source.pave_char
+      render partial: "organisms/#{partial_and_class[0]}", object: source,  locals: {:local_classes => "#{partial_and_class[1]} #{html_class}" }
     else
       ''
     end

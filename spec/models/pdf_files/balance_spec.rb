@@ -1,7 +1,7 @@
 # coding: utf-8
 
 require 'spec_helper'
-require 'pdf_document/page'
+require 'pdf_document/page' 
 
 
 # Ces specs ont essentiellement pour objet de vérifier qu'on peut 
@@ -15,7 +15,7 @@ require 'pdf_document/page'
 # Le fichier ainsi rendu se trouve dans le sous répertoire test_pdf_files, 
 # ce qui permet ensuite de tous les imprimer pour examen.
 # 
-describe Editions::Balance do 
+describe Editions::Balance do  
   
   def render_file(pdf, file_name) 
     file =  "#{File.dirname(__FILE__)}/test_pdf_files/#{file_name}.pdf"

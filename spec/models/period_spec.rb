@@ -10,8 +10,6 @@ describe Period do
   include OrganismFixtureBis
   context 'un organisme' do  
 
-    
-
     def valid_params
       {start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year}
     end
@@ -97,29 +95,34 @@ describe Period do
 
     
   
-    describe 'les call_back after_create font'  do
+    describe 'les call_back after_create entrainent'  do
       
       before(:each) do
 
-        @org = mock_model(Organism, :status=>'Association', :fill_bridge=>true)
+        @org = mock_model(Organism, :status_class=>'Association', :fill_bridge=>true)
         @p  = Period.new(valid_params)
         @p.organism_id = @org.id
         @p.stub(:collect_books).and_return({'Recettes'=>1, "Dépenses"=>2})
         @p.stub(:max_open_periods?).and_return false
         @p.stub(:organism) {@org}
         @p.stub(:create_bank_and_cash_accounts).and_return true
+        @p.stub(:create_rem_check_accounts).and_return true
         @p.save!
       end
      
     
       it 'la création des comptes' do
-        @p.accounts(true).count.should == 88 # la liste des comptes du plan comptable
-        # on n' aps les deux comptes de caisse et banque car on a stubbé create_bank_and_cash_accounts
+        @p.accounts(true).count.should == 87 # la liste des comptes du plan comptable
+        # on n'a pas les deux comptes de caisse et banque 
+        # car on a stubbé create_bank_and_cash_accounts
+        # ni le compte de remise de chèque
       end
 
       it 'la création des natures : 10 natures de dépenses et 6 de recettes '  do
         @p.should have(16).natures
       end
+      
+      
       
       
 
@@ -148,6 +151,31 @@ describe Period do
 
     end
 
+    end
+    
+    describe 'la création du premier exercice d un comité', wip:true do
+      
+      before(:each) do
+        @org = mock_model(Organism, :status_class=>'Comite', :fill_bridge=>true)
+        @p  = Period.new(valid_params)
+        @p.organism_id = @org.id
+        @p.stub(:collect_books).and_return({'Recettes ASC'=>1, "Dépenses ASC"=>2,
+            'Recettes fonctionnement'=>3, 'Dépenses fonctionnement'=>4})
+        @p.stub(:max_open_periods?).and_return false 
+        @p.stub(:organism) {@org}
+        @p.stub(:create_bank_and_cash_accounts).and_return true
+        @p.stub(:create_rem_check_accounts).and_return true
+        @p.save!
+      end
+      
+      it 'entraîne celle des comptes' do
+        @p.accounts(true).count.should == 105 # la liste des comptes du plan comptable
+        # on n'a pas les deux comptes de caisse et banque car on a stubbé create_bank_and_cash_accounts
+      end
+      
+      it 'entraîne celle des natures' do
+        @p.natures(true).count.should == 46
+      end
     end
 
     describe 'un exercice est destroyable?' do
@@ -343,15 +371,10 @@ describe Period do
         @org = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
         @p_2010 = @org.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
         @p_2011= @org.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
-        @ba = @org.bank_accounts.create!(bank_name:'DebiX', number:'123Z', nickname:'Compte épargne')
+       
       end
 
-      describe 'compte de remise de chèque' do
-  
-        it 'avec un compte le retourne' do
-          @p_2010.rem_check_account.number.should == REM_CHECK_ACCOUNT[:number]
-        end
-      end
+      
    
       describe 'period_next' do
         it "2010 doit repondre 2011" do
@@ -380,6 +403,8 @@ describe Period do
           before(:each) do
              @ob= @org.books.find_by_type('OutcomeBook')
             @ib= @org.books.find_by_type('IncomeBook')
+             @ba = @org.bank_accounts.new(bank_name:'DebiX', number:'123Z', nickname:'Compte épargne')
+             @ba.sector_id = 1; @ba.save!
             @baca = @ba.current_account(@p_2010)
             @acc60 = @p_2010.accounts.find_by_number '60'
             @acc70 = @p_2010.accounts.find_by_number '701'

@@ -18,7 +18,7 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe Admin::BankAccountsController do
+describe Admin::BankAccountsController do 
   include SpecControllerHelper
 
   let(:ba1) {mock_model(BankAccount)}
@@ -48,10 +48,35 @@ describe Admin::BankAccountsController do
   
 
   describe "GET new" do
+    
+    before(:each) do
+      @a.stub(:new).and_return(@bac = mock_model(BankAccount).as_new_record)
+    end
+    
     it "assigns a new bank_account as @bank_account" do
-      @a.should_receive(:new).and_return mock_model(BankAccount).as_new_record
+      @o.stub('sectored?').and_return false
+      @a.should_receive(:new).and_return stub_model(BankAccount).as_new_record
       get :new,  {:organism_id=>@o.id.to_s}, valid_session
       assigns(:bank_account).should be_a_new(BankAccount) 
+    end
+    
+      context 'si un seul secteur' do
+      
+      it 'preremplit le champ secteur' do
+        @o.stub('sectored?').and_return false
+        @bac.should_receive('sector_id=').with(@sect.id)
+        get :new,  {:organism_id=>@o.id.to_s}, valid_session
+        
+      end
+    end
+    
+    context 'avec plusieurs secteurs' do
+      
+      it 'ne préremplit pas le champ secteur' do
+        @o.stub('sectored?').and_return true
+        get :new,  {:organism_id=>@o.to_param}, valid_session
+        @bac.sector_id.should == nil
+      end
     end
   end
 

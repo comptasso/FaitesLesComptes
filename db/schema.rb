@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140108193729) do
+ActiveRecord::Schema.define(:version => 20140124060808) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(:version => 20140108193729) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.string   "nickname"
+    t.integer  "sector_id"
   end
 
   create_table "bank_extract_lines", :force => true do |t|
@@ -132,6 +133,7 @@ ActiveRecord::Schema.define(:version => 20140108193729) do
     t.integer  "organism_id"
     t.string   "type"
     t.string   "abbreviation"
+    t.integer  "sector_id"
   end
 
   create_table "cash_controls", :force => true do |t|
@@ -149,6 +151,7 @@ ActiveRecord::Schema.define(:version => 20140108193729) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.text     "comment"
+    t.integer  "sector_id"
   end
 
   create_table "check_deposits", :force => true do |t|
@@ -199,6 +202,7 @@ ActiveRecord::Schema.define(:version => 20140108193729) do
     t.text     "comment"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.integer  "sector_id"
   end
 
   create_table "export_pdfs", :force => true do |t|
@@ -289,6 +293,13 @@ ActiveRecord::Schema.define(:version => 20140108193729) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.boolean  "is_leaf",    :default => false
+  end
+
+  create_table "sectors", :force => true do |t|
+    t.integer  "organism_id"
+    t.string   "name"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "subscriptions", :force => true do |t|

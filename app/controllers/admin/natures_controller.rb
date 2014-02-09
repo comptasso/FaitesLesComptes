@@ -23,6 +23,7 @@ class Admin::NaturesController < Admin::ApplicationController
   # puisque il n'y a que ça de changé.
   def reorder
     @nature = Nature.find(params[:id])
+    raise 'Absence de paramètres de position obligatoires' unless params[:fromPosition] && params[:toPosition]
     from_position = params[:fromPosition].to_i
     to_position = params[:toPosition].to_i
     if from_position > to_position

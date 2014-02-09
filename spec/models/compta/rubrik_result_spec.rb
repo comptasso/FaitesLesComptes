@@ -16,15 +16,15 @@ describe Compta::RubrikResult do
 
   it 'initialise ses valeurs' do
     @rr = Compta::RubrikResult.new(@p, :passif, '12')
-    @rr.brut.should == 70.25
+    @rr.brut.should == 70.25  # le solde 51.25 plus le résultat : 19)
     @rr.amortissement.should == 0
   end
 
-  it 'renvoie 0,0 si pas de compte' do
+  it 'ne crée pas d erreur si pas de compte' do
     @p.stub_chain(:accounts, :find_by_number).and_return(nil)
     @p.stub(:organism).and_return((mock_model(Organism, :title=>'Ma petite affaire')))
     @rr = Compta::RubrikResult.new(@p, :passif, '12')
-    @rr.brut.should == 0
+    @rr.brut.should == 19
     @rr.amortissement.should == 0
   end
 

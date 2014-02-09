@@ -3,7 +3,7 @@ class Admin::CashesController < Admin::ApplicationController
 
 
 
-  # GET /cashes
+  # GET /cashes 
   # GET /cashes.json
   def index
     @cashes = @organism.cashes.all
@@ -14,11 +14,12 @@ class Admin::CashesController < Admin::ApplicationController
     end
   end
 
-  
+
   # GET /cashes/new
   # GET /cashes/new.json
   def new
     @cash = @organism.cashes.new
+    @cash.sector_id = @organism.sectors.first.id unless @organism.sectored?
 
     respond_to do |format|
       format.html # new.html.erb

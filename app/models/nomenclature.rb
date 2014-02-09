@@ -43,8 +43,15 @@ class Nomenclature < ActiveRecord::Base
     folios.where('name = ?', :passif).first rescue nil
   end
   
+  # s'appuie sur resultats pour pouvoir gérer le cas des comités d'entreprise
   def resultat
-    folios.where('name = ?', :resultat).first rescue nil
+    resultats.first rescue nil
+  end
+  
+  # Pour les comités d'entreprise, il peut y avoir plusieurs résultats
+  # résultat ASC et résultat FONC
+  def resultats
+    folios.where('name LIKE ?', 'resultat%')
   end
   
   def benevolat

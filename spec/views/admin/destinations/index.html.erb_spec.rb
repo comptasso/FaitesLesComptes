@@ -31,12 +31,12 @@ describe 'admin/destinations/index' do
     end
 
     it "each row should show edit icon" do
-      page.find('tr img:first')[:src].should match /\/assets\/icones\/modifier.png/
+      page.first('tbody tr:first img')[:src].should match /\/assets\/icones\/modifier.png/
       
     end
 
     it "each row should show delete icon" do
-      page.find('tr a:last').find('img')[:src].should match /\/assets\/icones\/supprimer.png/
+      page.find('tr:first a:last').find('img')[:src].should match /\/assets\/icones\/supprimer.png/
       
     end
   end 

@@ -1,15 +1,15 @@
 # coding: utf-8
 
 
-# REM_CHECK_ACCOUNT sert à créer et retrouver le compte remise chèque
-# period.rem_check_account retourne ce compte ou le crée;
-# Il est accountable car cela permet de le traiter à peu près comme un bank_account ou un cash.
-# Notamment pour la fonction support.
+# REM_CHECK_ACCOUNT sert à créer retrouver le compte remise chèque
+# 
+# TODO A revoir ???
 # Il a donc has_many :accounts, :as=>accountable pour que accountable fonctionne
 # et to_s qui retourne 'Chèque à l'encaissement'
 # Par ailleurs accountable a été surchargé dans Account pour retourner une instance de RemCheckAccount 
 # si le type est RemCheckAccount.
-REM_CHECK_ACCOUNT = {number:'511', title:'Chèques à l\'encaissement', accountable_type:'RemCheckAccount', accountable_id:1}
+REM_CHECK_ACCOUNT = {number:'511', title:'Chèques à l\'encaissement'}.freeze
+RESULT_ACCOUNT = '12'
 
 
 # constante utilisée pour les éditions de pdf
@@ -22,7 +22,7 @@ BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
 DIRECT_BANK_PAYMENT_MODES = %w(CB Prélèvement Virement)
 
 
-LIST_STATUS = %w(Association Entreprise)
+LIST_STATUS = ['Association', 'Comité d\'entreprise', 'Entreprise' ]
 
 # limites de validation
 NAME_LENGTH_MIN = 3
@@ -73,5 +73,6 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.3.2.RC' # Mise en place du fichier des écritures comptables
 # FLCVERSION = '1.3.3.RC' # Refactorisation de l'édition d'une balance qui peut donc se passer de delayed jobs
 # FLCVERSION = '1.4.0RC' # Mise en place des abonnements
-FLCVERSION = '1.4.1RC' # Préparation pour les CE. Modifications de la logique des natures qui ont 
+# FLCVERSION = '1.4.1RC' # Préparation pour les CE. Modifications de la logique des natures qui ont 
 # maintenant également belongs_to book.
+FLCVERSION = '1.4.2RC' # Version sectorisée pour les CE

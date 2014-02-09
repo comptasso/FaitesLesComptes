@@ -8,12 +8,16 @@
       %tr
         %th Nom
         %th Commentaire
+        -if @organism.sectored?
+          %th Secteur
         %th Actions
     %tbody
       - @destinations.each do |destination|
         %tr
           %td= destination.name
           %td= destination.comment
+          -if @organism.sectored?
+            %td= destination.sector.name
           %td= icon_to('modifier.png', edit_admin_organism_destination_path(@organism,destination))  |
              << (icon_to('supprimer.png', [:admin,@organism,destination],:confirm => 'Etes vous sur ?', :method => :delete) if destination.compta_lines.empty?)        |
 

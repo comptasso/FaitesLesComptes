@@ -2,7 +2,8 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c|
+RSpec.configure do |c|  
+#  c.filter = {wip:true}
 #  c.filter = {:js=> true }
 #  c.exclusion_filter = {:js=> true } 
 end
@@ -10,7 +11,7 @@ end
 # spec request for testing admin cashes
 
 describe 'admin cash' do
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
   
   
   before(:each) do
@@ -35,17 +36,23 @@ describe 'admin cash' do
     it "affiche la page new" do
       current_url.should match new_admin_organism_cash_path(@o)
       page.should have_content("Nouvelle caisse")
-      all('form div.control-group').should have(2).elements # name et comment
+      all('form div.control-group').should have(3).elements # name, comment et sector
       
     end
+    
+    it 'il y a une caisse' do
+      @o.cashes.count.should == 1
+    end
 
-    it 'remplir correctement le formulaire cree une nouvelle ligne' do
+    it 'remplir correctement le formulaire cree une nouvelle ligne', wip:true do
       
       fill_in 'cash[name]', :with=>'Entrepôt'
-      
-      click_button "Créer la caisse" # le compte'
-      current_url.should match admin_organism_cashes_path(@o)
-      all('tbody tr').should have(2).rows
+      # save_and_open_page
+      click_button "Créer la caisse" # le compte' 
+      #
+      @o.cashes.count.should == 2
+#      current_url.should match admin_organism_cashes_path(@o)
+#      all('tbody tr').should have(2).rows
       
     end
 
@@ -89,7 +96,7 @@ describe 'admin cash' do
       fill_in 'cash[name]', :with=>'Entrepôt'
       click_button 'Enregistrer'
       current_url.should match admin_organism_cashes_path(@o)
-      find('tbody tr td').text.should == 'Entrepôt'
+      find('tbody tr:last-child td:first-child').text.should == 'Entrepôt'
 
       
     end

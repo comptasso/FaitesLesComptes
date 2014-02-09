@@ -30,19 +30,19 @@ describe Admin::BooksController do
     end
   end
 
-  describe 'GET new' do
-
-    it 'construit un nouveau livre et  l assigne' do
-      @o.should_receive(:books).and_return(@ar = double(Arel))
-      @ar.should_receive(:build).and_return(mock_model(Book).as_new_record)
-      get :new , {:organism_id=>@o.to_param}, valid_session
-      assigns[:book].should be_a_new(Book)
-    end
-  end
+#  describe 'GET new' do
+#
+#    it 'construit un nouveau livre et  l assigne' do
+#      @o.should_receive(:books).and_return(@ar = double(Arel))
+#      @ar.should_receive(:build).and_return(mock_model(Book).as_new_record)
+#      get :new , {:organism_id=>@o.to_param}, valid_session
+#      assigns[:book].should be_a_new(Book)
+#    end
+#  end
 
 
   describe "GET edit" do
-    it "assigns the requested book as @book" do
+    it "assigns the requested book as @book" do 
       @o.should_receive(:books).and_return(@ar = double(Arel))
       @ar.should_receive(:find).with('7').and_return(@bo = mock_model(Book))
       get :edit, {organism_id:@o.id, :id => '7'}, valid_session
@@ -50,37 +50,37 @@ describe Admin::BooksController do
     end
   end
 
-  describe 'PUT create' do
-
-    it 'avec un income_book crée un income_book' do
-      @o.should_receive(:income_books).and_return(@ar = double(Arel))
-      @ar.stub(:build).and_return(double(Book, :save=>true))
-      post :create, {:organism_id=>@o.to_param, :book => {:book_type=>'IncomeBook'} }, valid_session
-      
-    end
-
-    it 'avec un outcome_book crée un outcome_book' do
-      @o.should_receive(:outcome_books).and_return(@ar = double(Arel))
-      @ar.stub(:build).and_return(double(Book, :save=>true))
-      post :create, {:organism_id=>@o.to_param, :book => {:book_type=>'OutcomeBook'} }, valid_session
-      
-    end
-
-    it 'doit recevoir save et rediriger si true' do
-      @o.stub_chain(:outcome_books, :build).and_return(@bo = double(Book))
-      @bo.should_receive(:save).and_return true
-      post :create, {:organism_id=>@o.to_param, :book => {:book_type=>'OutcomeBook'} }, valid_session
-      response.should redirect_to(admin_organism_books_url(@o))
-    end
-
-    it 'rend le formulaire new dans le cas contraire' do
-      @o.stub_chain(:outcome_books, :build).and_return(double(Book, :save=>false))
-      post :create, {:organism_id=>@o.to_param, :book => {:book_type=>'OutcomeBook'} }, valid_session
-      response.should render_template('new')
-    end
-
-
-  end
+#  describe 'PUT create' do
+#
+#    it 'avec un income_book crée un income_book' do
+#      @o.should_receive(:income_books).and_return(@ar = double(Arel))
+#      @ar.stub(:build).and_return(double(Book, :save=>true))
+#      post :create, {:organism_id=>@o.to_param, :book => {:book_type=>'IncomeBook'} }, valid_session
+#      
+#    end
+#
+#    it 'avec un outcome_book crée un outcome_book' do
+#      @o.should_receive(:outcome_books).and_return(@ar = double(Arel))
+#      @ar.stub(:build).and_return(double(Book, :save=>true))
+#      post :create, {:organism_id=>@o.to_param, :book => {:book_type=>'OutcomeBook'} }, valid_session
+#      
+#    end
+#
+#    it 'doit recevoir save et rediriger si true' do
+#      @o.stub_chain(:outcome_books, :build).and_return(@bo = double(Book))
+#      @bo.should_receive(:save).and_return true
+#      post :create, {:organism_id=>@o.to_param, :book => {:book_type=>'OutcomeBook'} }, valid_session
+#      response.should redirect_to(admin_organism_books_url(@o))
+#    end
+#
+#    it 'rend le formulaire new dans le cas contraire' do
+#      @o.stub_chain(:outcome_books, :build).and_return(double(Book, :save=>false))
+#      post :create, {:organism_id=>@o.to_param, :book => {:book_type=>'OutcomeBook'} }, valid_session
+#      response.should render_template('new')
+#    end
+#
+#
+#  end
 
   describe "PUT update" do
 
@@ -129,25 +129,25 @@ describe Admin::BooksController do
     end
   end
 
-  describe "DELETE destroy" do
-    before(:each) do
-       @bo = mock_model(Book)
-    end
-
-    it "destroys the requested book" do
-      Book.should_receive(:find).with(@bo.to_param).and_return @bo
-      @bo.should_receive(:destroy)
-      delete :destroy,{:organism_id=>@o.to_param,  :id => @bo.to_param}, valid_session
-
-    end
-
-    it "redirects to the cashes list" do
-      Book.should_receive(:find).with(@bo.to_param).and_return @bo
-      @bo.stub(:destroy)
-      delete :destroy,{:organism_id=>@o.to_param,  :id => @bo.id}, valid_session
-      response.should redirect_to(admin_organism_books_url(@o))
-    end
-  end
+#  describe "DELETE destroy" do
+#    before(:each) do
+#       @bo = mock_model(Book)
+#    end
+#
+#    it "destroys the requested book" do
+#      Book.should_receive(:find).with(@bo.to_param).and_return @bo
+#      @bo.should_receive(:destroy)
+#      delete :destroy,{:organism_id=>@o.to_param,  :id => @bo.to_param}, valid_session
+#
+#    end
+#
+#    it "redirects to the cashes list" do
+#      Book.should_receive(:find).with(@bo.to_param).and_return @bo
+#      @bo.stub(:destroy)
+#      delete :destroy,{:organism_id=>@o.to_param,  :id => @bo.id}, valid_session
+#      response.should redirect_to(admin_organism_books_url(@o))
+#    end
+#  end
 
 
 end

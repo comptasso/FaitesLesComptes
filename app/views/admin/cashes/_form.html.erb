@@ -6,7 +6,14 @@
     <%= f.input :name,  input_html: {class: "span3"}%>
 
     <%= f.input :comment,  input_html: {rows: 4, class: "span3"} %>
-
+   <% if @organism.sectored? %>
+   
+    <%= f.association :sector,  input_html: {class: "span3"}, prompt:'Choisissez un secteur',
+        required:true %>
+   <% else %>
+ <%= f.association :sector,  input_html: {class: "span3"}, prompt:'Choisissez un secteur',
+        required:true, as: :hidden %>
+   <% end %>
 
   <div class="form-actions">
     <%= f.button :submit, class: "btn-primary span2"  %>

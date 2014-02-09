@@ -31,6 +31,20 @@ class Utilities::PlanComptable
     pc = new(period, status)
     pc.create_accounts
   end
+  
+  # crée des comptes pour une caisse ou une banque pour tous les exercices ouverts
+  # méthode appelée par after_create des modèles Cash et BankAccount
+  def self.create_financial_accounts(finance)
+    racine  = finance.class.compte_racine # donc normalement 512 ou 53
+    new_number = Account.available(racine)
+    
+    ps = finance.organism.periods.opened
+    ps.each do |p|
+      new_acc = finance.accounts.new(number:new_number, title:finance.nickname)
+      new_acc.period_id = p.id
+      new_acc.save!
+    end
+  end
 
   def create_accounts
     nba = period.accounts.count # nb de comptes existants pour cet exercice

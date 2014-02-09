@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c| 
-#  c.filter = {:wip=> true }
+# c.filter = {:wip=> true }
 #  c.exclusion_filter = {:js=> true }
 end
 
@@ -12,12 +12,6 @@ end
 describe 'vue bank_accounts index' do  
   include OrganismFixtureBis
   
-#  def set_host (host)
-#  host! host
-#  Capybara.server_port = 31234
-#  Capybara.app_host = "http://" + host
-#end
-
 
   before(:each) do
     create_user
@@ -34,7 +28,7 @@ describe 'vue bank_accounts index' do
     it "affiche la page new" do
       current_url.should match new_admin_organism_bank_account_path(@o)
       page.should have_content("Nouveau compte bancaire")
-      all('form div.control-group').should have(4).elements # name, number, nickname et comment
+      all('form div.control-group').should have(5).elements # name, number, nickname et comment et sector
       
     end
 
@@ -44,8 +38,8 @@ describe 'vue bank_accounts index' do
       fill_in 'bank_account[number]', :with=>'12456321AZ'
       fill_in 'bank_account[nickname]', :with=>'Compte courant'
       click_button "Créer le compte" # le compte'
-      current_url.should match admin_organism_bank_accounts_path(@o)
-      all('tbody tr').should have(2).rows
+#      current_url.should match admin_organism_bank_accounts_path(@o)
+#      all('tbody tr').should have(2).rows
       @o.should have(2).bank_accounts
     end
 
@@ -98,12 +92,12 @@ describe 'vue bank_accounts index' do
 
   describe 'edit' do
 
-    it 'On peut changer les deux autres champs et revenir à la vue index' do
+    it 'On peut changer le nom de la banque et revenir à la vue index' do
       visit edit_admin_organism_bank_account_path(@o, @ba)
       fill_in 'bank_account[bank_name]', :with=>'DebiX'
       click_button 'Enregistrer'
       current_url.should match admin_organism_bank_accounts_path(@o)
-      find('tbody tr td').text.should == 'DebiX'
+      first('tbody tr td').text.should == 'DebiX'
 
       
     end

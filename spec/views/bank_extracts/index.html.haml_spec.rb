@@ -59,7 +59,7 @@ describe "bank_extracts/index" do
   it 'un bank_extract sans ligne n affiche pas l icone afficher' do
     @be1.stub_chain(:bank_extract_lines, :empty?).and_return true
     render
-    @be1.bank_extract_lines.should be_empty
+    @be1.bank_extract_lines.should be_empty  
     page.find('table tbody tr:first td:last').should_not have_icon('afficher', href:bank_extract_bank_extract_lines_path(@be1))
   end
 

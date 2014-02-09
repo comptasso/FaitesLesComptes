@@ -12,6 +12,7 @@ let(:ibook) {stub_model(IncomeBook, :title=>'Recettes') }
 let(:obook) { stub_model(OutcomeBook, title: 'Dépenses')}
 let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))}
 let(:p2011) {stub_model(Period, start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31)) }
+let(:sect) {Sector.new(name:'Global')}
 
 before(:each) do
   CheckDeposit.stub(:nb_to_pick).and_return 0
@@ -26,7 +27,7 @@ before(:each) do
     obook.stub_chain(:organism, :all).and_return([p2011, p2012])
     assign(:books, [ibook,obook])
     assign(:period, p2012 )
-    assign(:paves, [ibook,obook,p2012])
+    assign(:paves, [ibook,obook,sect])
     # assign(:p2011, p2011 )
     o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))
    end

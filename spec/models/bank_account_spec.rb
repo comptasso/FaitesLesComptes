@@ -6,18 +6,23 @@ RSpec.configure do |c|
    # c.filter = {:wip=> true }
 end
 
-describe BankAccount do  
+describe BankAccount do   
   include OrganismFixtureBis
+  
+  def valid_attributes
+    {:bank_name=>'Crédit Universel', :number=>'1254L',
+      :nickname=>'Compte courant', sector_id:1}
+  end
 
-  def create_bank_account
-    ba = BankAccount.new(:bank_name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
+  def new_bank_account
+    ba = BankAccount.new(valid_attributes)
     ba.organism_id = 1
     ba
   end
   
   def find_bac
     @bb = BankAccount.where('number =  ?', '1254L').first
-    @bb ||= create_bank_account
+    @bb ||= new_bank_account
   end
 
   
@@ -25,32 +30,39 @@ describe BankAccount do
   describe 'controle des validités' do
 
     before(:each) do
+      BankAccount.delete_all
       find_bac
     end
+    
+    subject {find_bac}
 
-    it "should be valid" do 
-      @bb.should be_valid
-    end
-
-    it 'should not be_valid without name' do
+    it {subject.should be_valid}
+    
+    it 'should not be_valid without bank_name' do
       @bb.bank_name = nil
       @bb.should_not be_valid
     end
-
-    it 'should not be_valid without name' do
+    
+    it 'should not be_valid without number' do
       @bb.number = nil
       @bb.should_not be_valid
     end
 
-    it 'should not be_valid without name' do
+    it 'nor without nickname' do
       @bb.nickname = nil
+      @bb.should_not be_valid
+    end
+    
+    it 'nor without sector_id' do
+      @bb.sector_id = nil
       @bb.should_not be_valid
     end
 
     it "should have a unique number in the scope of bank and organism", wip:true do
       @bb.stub(:create_accounts).and_return true
+      @bb.stub_chain(:organism, :periods, :opened, :any?).and_return true
       @bb.save
-      ba = create_bank_account
+      ba = new_bank_account
       ba.number = '1245X'
      
       ba.should be_valid
@@ -64,7 +76,7 @@ describe BankAccount do
 
     before(:each) do
       create_minimal_organism
-      @bb=@o.bank_accounts.new(:bank_name=>'Crédit Universel', :number=>'1254L', :nickname=>'Compte courant')
+      @bb=@o.bank_accounts.new(valid_attributes)
     end
 
     it 'la création d un compte bancaire doit entraîner celle d un compte comptable' do
@@ -72,7 +84,7 @@ describe BankAccount do
       @bb.should have(1).accounts
       
     end
-
+# TODO doit être testé dans Utilities Plan Comptable (comme pour Cash)
     it 'incrémente les numéros de compte' do
       @ba.accounts.first.number.should == '51201'
       @bb.save
@@ -119,7 +131,7 @@ describe BankAccount do
   describe 'Les méthodes liées aux lignes non pointées' do
 
      before(:each) do
-      @ba = create_bank_account
+      @ba = new_bank_account
     end
 
     it 'np_lines demande à compta_lines ses lignes non pointées' do

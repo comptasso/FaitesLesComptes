@@ -61,6 +61,7 @@ module OrganismFixtureBis
   end
   
   def get_organism_instances
+    @sector = @o.sectors.first
     @ba= @o.bank_accounts.first
     # puts @ba.inspect
     @ib = @o.income_books.first # les livres sont créés par un after_create
@@ -74,7 +75,15 @@ module OrganismFixtureBis
     # puts @baca.inspect
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
     # puts @caca.inspect
-    @n = @p.natures.depenses.first 
+    @n = @p.natures.depenses.first  
+  end
+  
+  def create_second_bank
+    b2 = @o.bank_accounts.new(:bank_name=>'Deuxième banque', :number=>'123Y',
+      nickname:'Compte épargne')
+    b2.sector_id = @sector.id
+    b2.save!
+    b2
   end
 
   # utile pour les requests qui nécessitent d'être identifié
@@ -93,11 +102,13 @@ module OrganismFixtureBis
   def create_outcome_writing(montant=99, payment='Virement')
     # TODO passer à un outcome_account
     @income_account = @o.accounts.classe_7.first
-    ecriture = @ob.in_out_writings.create!({date:Date.today, narration:'ligne créée par la méthode create_outcome_writing',
+    ecriture = @ob.in_out_writings.new({date:Date.today, narration:'ligne créée par la méthode create_outcome_writing',
         :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, debit:montant, payment_mode:payment},
           '1'=>{account_id:@baca.id, credit:montant, payment_mode:payment}
         }
       })
+    puts ecriture.errors.messages unless ecriture.valid?
+    ecriture.save
     ecriture
   end
 
@@ -109,7 +120,7 @@ module OrganismFixtureBis
   # pour le montant (99) et pour le mode de payment (Virement).
   #
   #
-  def create_in_out_writing(montant=99, payment='Virement')
+  def create_in_out_writing(montant=99, payment='Virement')  
     @income_account = @o.accounts.classe_7.first
     if payment == 'Chèque'
       acc_id = @p.rem_check_account.id
