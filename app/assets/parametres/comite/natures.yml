@@ -107,26 +107,6 @@
   :comment: ''
   :acc: '670'
   :book: Dépenses fonctionnement
-- :name: Dot. aux amortissements
-  :comment: ''
-  :acc: '6811'
-  :book: Dépenses ASC
-- :name: Dot. prov. dép. de stocks
-  :comment: ''
-  :acc: '68173'
-  :book: Dépenses ASC
-- :name: Dot. prov. actifs circulants
-  :comment: ''
-  :acc: '68174'
-  :book: Dépenses ASC
-- :name: Dot. prov. financières
-  :comment: ''
-  :acc: '686'
-  :book: Dépenses ASC
-- :name: Dot. prov. exceptionnelles
-  :comment: ''
-  :acc: '687'
-  :book: Dépenses ASC
 - :name: Participation des salariés 
   :comment: ''
   :acc: '706'
@@ -158,20 +138,4 @@
 - :name: Produits exceptionnels
   :comment: ''
   :acc: '770'
-  :book: Recettes ASC
-- :name: Reprises provisions stocks
-  :comment: ''
-  :acc: '78173'
-  :book: Recettes ASC
-- :name: Reprises prov. actif circulant
-  :comment: ''
-  :acc: '78174'
-  :book: Recettes ASC
-- :name: Reprises prov. financières
-  :comment: ''
-  :acc: '786'
-  :book: Recettes ASC
-- :name: Reprises prov. exceptionnelles
-  :comment: ''
-  :acc: '787'
   :book: Recettes ASC
