@@ -18,14 +18,13 @@ require 'strip_arguments'
 # Ce lien permet d'accéder aux compta_lines
 # 
 # La classe VirtualBook permet de générer un Livre de banque virtuel. La méthode 
-# #virtual_book crée cette classe et retourne un VirtualBook. VirtualBook inclut les
-# méthodes de Utilities::Sold et l'on a ainsi toutes les méthodes nécessaires pour
-# calculer un solde.
+# #virtual_book crée cette classe et retourne un VirtualBook. VirtualBook hérite de Book et 
+# inclut donc les modules Sold et Graphic
 #
 #
 class BankAccount < ActiveRecord::Base  
   include Utilities::Sold
-  include Utilities::JcGraphic
+ 
 
   belongs_to :organism
   belongs_to :sector
