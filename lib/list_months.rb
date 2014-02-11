@@ -47,5 +47,5 @@ class ListMonths
   end
 
   alias length size
-
+  
 end

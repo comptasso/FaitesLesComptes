@@ -32,7 +32,8 @@ module Utilities::JcGraphic
     end
   end
 
-
+  protected
+  
   # construit un tableau pour l'axe des abscisse : du genre jan,fév, mar,...
   def ticks(period)
     period.list_months.to_abbr
@@ -42,7 +43,9 @@ module Utilities::JcGraphic
   # la construction d'un graphique sur un an
   def one_year_monthly_graphic(period)
     mg= Utilities::Graphic.new(self.ticks(period))
-    mg.add_serie(:legend=>period.short_exercice, :datas=>self.monthly_datas_for_chart(period.list_months), :period_id=>period.id, :month_years=>period.list_months.to_list('%m-%Y' ))
+    mg.add_serie(:legend=>period.short_exercice, 
+      :datas=>self.monthly_datas_for_chart(period.list_months),
+      :period_id=>period.id, :month_years=>period.list_months.to_list('%m-%Y' ))
     mg
   end
 
@@ -53,10 +56,16 @@ module Utilities::JcGraphic
     mg= Utilities::Graphic.new(self.ticks(period))
     months= period.list_months # les mois du dernier exercice servent de référence
     pp=period.previous_period
-    mg.add_serie(:legend=>pp.short_exercice, :datas=>previous_year_monthly_datas_for_chart(months), :period_id=>pp.id, :month_years=>month_year_values(months, true))
-    mg.add_serie(:legend=>period.short_exercice, :datas=>self.monthly_datas_for_chart(months), :period_id=>period.id, :month_years=>month_year_values(months))
+    mg.add_serie(:legend=>pp.short_exercice,
+      :datas=>previous_year_monthly_datas_for_chart(months),
+      :period_id=>pp.id, :month_years=>month_year_values(months, true))
+    mg.add_serie(:legend=>period.short_exercice, 
+      :datas=>self.monthly_datas_for_chart(months),
+      :period_id=>period.id, :month_years=>month_year_values(months))
     mg
   end
+  
+  
 
   # calcule le total des lignes pour chacun des mois de l'exercice transmis en paramètres
   # renvoie un array donnant le total credit - debit des lignes des mois
@@ -77,8 +86,8 @@ module Utilities::JcGraphic
   end
 
 
-  # utilise une collection de date pour renvoyer un array sous la forme mm-yyyy
-  # le booleen previous permet de se mettre un an plus tôt
+  # utilise une collection de date pour renvoyer un array de string sous la forme 'mm-yyyy'
+  # le booleen previous_period permet de se mettre un an plus tôt
   def month_year_values(months, previous_period = false)
     months.map {|m| MonthYear.from_date(previous_period ? m.end_of_month.years_ago(1) : m.end_of_month).to_s}
   end
