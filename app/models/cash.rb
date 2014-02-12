@@ -8,7 +8,7 @@ class Cash < ActiveRecord::Base
   #
  
   include Utilities::Sold
-  include Utilities::JcGraphic
+ # include Utilities::JcGraphic
 
   attr_accessible :name, :comment, :sector_id
 
@@ -87,46 +87,11 @@ class Cash < ActiveRecord::Base
     end 
     reponse
   end
-  
-#  def monthly_datas_for_chart(months)
-#    
-#  end
-  
-  # donne la liste des soldes de la caisse à la fin de chaque mois d'un exercice
-  # fourni en argument.
-  def monthly_datas(period)
-    
-  end
-  
+ 
     
   def self.compte_racine
    RACINE_CASH
   end
-  
-  protected
-  
-  # A partir de query_monthly_datas, construit les valeurs mensuelles
- # sans trou
- def monthly_data_for_chart(months)
-   # trouve l'exercice correspondant 
-   p = organism.find_period(months.first.beginning_of_month)
-   h = query_monthly_datas(p)
-   datas  = p.list_months.collect { |my| h[my.to_s]}
-   puts datas.inspect
-   # il faut encore ajuster le solde du début d'exercice si l'exercice précédent
-   # n'est pas fermé (car alors les reports des comptes de caisse ne sont pas encore faits)
-   if p && p.previous_period? && p.previous_period.open 
-      solde_anterieur = sold_at(p.previous_period.close_date)
-      datas = datas.collect { |d| (d.to_f + solde_anterieur).to_s }
-   end 
-    
-   datas
- end
- 
-
-     
- 
-
   
   
  # appelé par le callback after_create, demande à l'organisme de lui créer les 
@@ -144,43 +109,7 @@ class Cash < ActiveRecord::Base
  end
  
  
- # récupère les soldes pour une caisse pour un exercice
- #
- # Renvoie un hash selon le format suivant 
- # {"09-2013"=>"-24.00", "01-2013"=>"-75.00", "08-2013"=>"-50.00"}
- #
- # Les mois où il n'y a pas de valeur ne renvoient rien.
- # Il faut donc ensuite faire un mapping ce qui est fait par la méthode
- # map_query_months(period)
- #
- def query_monthly_datas(period)
-   
  
- acc = current_account(period)  
- 
- sql = <<-hdoc
- SELECT 
-     to_char(writings.date, 'MM-YYYY') AS mony,
-   
-     SUM(compta_lines.credit) - SUM(compta_lines.debit) AS valeur 
- FROM 
-     writings, 
-     compta_lines,
-     cashes
- WHERE 
-     writings.id = compta_lines.writing_id AND
-     compta_lines.account_id = #{acc.id} 
- GROUP BY mony
-hdoc
-
-   res = Cash.connection.execute( sql.gsub("\n", ''))
-   h = Hash.new('0')
-   res.each {|r| h[r['mony']]= r["valeur"] }
-   h
-   
-   end
- 
-  
 
 
 

@@ -43,7 +43,7 @@ protected
 
   # la construction d'un graphique sur un an
   def one_year_monthly_graphic(period)
-    mg= Utilities::Graphic.new(self.ticks(period))
+    mg= Utilities::Graphic.new(ticks(period))
     mg.add_serie(:legend=>period.short_exercice, 
       :datas=>monthly_datas_for_chart(period.list_months),
       :period_id=>period.id, :month_years=>period.list_months.to_list('%m-%Y' ))
@@ -54,7 +54,7 @@ protected
   # référence car il est plus fréquent que le premier exercice soit plus court que les autres
   # mais la chose est rare en sens inverse.
   def two_years_monthly_graphic(period)
-    mg= Utilities::Graphic.new(self.ticks(period))
+    mg= Utilities::Graphic.new(ticks(period))
     months= period.list_months # les mois du dernier exercice servent de référence
     pp=period.previous_period
     

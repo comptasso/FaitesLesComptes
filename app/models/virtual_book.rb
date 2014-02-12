@@ -98,17 +98,17 @@ class VirtualBook < Book
  def query_monthly_datas(period)
    
  
- acc = virtual.current_account(period)  
- 
- sql = <<-hdoc
+   acc = virtual.current_account(period)  
+   return Hash.new('0') unless acc # ce cas (pas de compte) peut arriver si le 
+   # compte bancaire a été créé un exercice alors que le précédent était fermé.
+sql = <<-hdoc
  SELECT 
      to_char(writings.date, 'MM-YYYY') AS mony,
    
      SUM(compta_lines.credit) - SUM(compta_lines.debit) AS valeur 
  FROM 
      writings, 
-     compta_lines,
-     bank_accounts
+     compta_lines
  WHERE 
      writings.id = compta_lines.writing_id AND
      compta_lines.account_id = #{acc.id} 
@@ -125,12 +125,12 @@ hdoc
     
   # A partir de query_monthly_datas, construit les valeurs mensuelles
  # sans trou
- def monthly_data_for_chart(months)
+ def monthly_datas_for_chart(months)
    # trouve l'exercice correspondant 
-   p = organism.find_period(months.first.beginning_of_month)
+   p = organism.find_period(months.to_a.last.beginning_of_month)
    h = query_monthly_datas(p)
-   datas  = p.list_months.collect { |my| h[my.to_s]}
-   puts datas.inspect
+   datas  = months.collect { |my| h[my.to_s]}
+ 
    # il faut encore ajuster le solde du début d'exercice si l'exercice précédent
    # n'est pas fermé (car alors les reports des comptes de caisse ne sont pas encore faits)
    if p && p.previous_period? && p.previous_period.open 
