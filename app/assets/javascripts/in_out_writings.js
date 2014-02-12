@@ -46,20 +46,20 @@ jQuery(function () {
                     iPageCredit = 0.0,
                     nCells;
                 for (i = 0; i < aaData.length; i += 1) {
-                    iTotalDebit += stringToFloat(aaData[i][5]);
+                    iTotalDebit += stringToFloat(aaData[i][6]);
                 }
 
                 /* stringToFloat est défini par JCL dans application.js pour 
                  * pouvoir faire des calculs sur des nombres en format français */
                 for (i = iStart; i < iEnd; i += 1) {
-                    iPageDebit += stringToFloat(aaData[aiDisplay[i]][5]);
+                    iPageDebit += stringToFloat(aaData[aiDisplay[i]][6]);
                 }
                 for (i = 0; i < aaData.length; i += 1) {
-                    iTotalCredit += stringToFloat(aaData[i][6]);
+                    iTotalCredit += stringToFloat(aaData[i][7]);
                 }
                 /* Calculate the market share for browsers on this page */
                 for (i = iStart; i < iEnd; i += 1) {
-                    iPageCredit += stringToFloat(aaData[aiDisplay[i]][6]);
+                    iPageCredit += stringToFloat(aaData[aiDisplay[i]][7]);
                 }
 
                 /* Modify the footer row to match what we want */
