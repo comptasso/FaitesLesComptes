@@ -66,7 +66,7 @@ class Book < ActiveRecord::Base
   end
 
   
-  #protected
+ protected
   
     # mise en place des fonctions qui permettent de construire les graphiques avec 
   # très peu d'appel à la base de données
