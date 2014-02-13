@@ -169,12 +169,12 @@ describe Period do
       end
       
       it 'entraîne celle des comptes' do
-        @p.accounts(true).count.should == 105 # la liste des comptes du plan comptable
+        @p.accounts(true).count.should == 106 # la liste des comptes du plan comptable
         # on n'a pas les deux comptes de caisse et banque car on a stubbé create_bank_and_cash_accounts
       end
       
       it 'entraîne celle des natures' do
-        @p.natures(true).count.should == 46
+        @p.natures(true).count.should == 35
       end
     end
 
@@ -582,7 +582,7 @@ describe Period do
           context "check the default graphic with one periods" do
             before(:each) do
               @p_2011.stub(:previous_period?).and_return(false)
-              @graphic= @p_2011.default_graphic(@p_2011)
+              @graphic= @p_2011.graphic(@p_2011)
             end
 
             it "shoudl have only one serie" do
@@ -595,6 +595,7 @@ describe Period do
 
 
             it "checks the monthly_values" do
+              pending 'attente de refont de Graphic'
               @p_2011.monthly_datas_for_chart(@p_2011.list_months).should == P2011_RESULTS
             end
 

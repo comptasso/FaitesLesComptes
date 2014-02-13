@@ -109,7 +109,7 @@ hdoc
    
    end
  
- # TODO on devrait modifier cela pour le mettre dans JCGraphic et 
+ # TODO on devrait modifier cela pour le mettre dans JCGraphic et  
  # appeler les méthodes avec period. 
  # 
  # Ce n'est pas au livre, ni peut-être à JCGraphic de savoir qu'on ne veut pas
