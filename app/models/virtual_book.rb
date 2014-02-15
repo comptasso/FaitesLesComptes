@@ -82,29 +82,28 @@ class VirtualBook < Book
     return sold_at(selector.end_of_month)  unless selector.beginning_of_month.future?
   end
   
-  protected
+ 
   
   # mise en place des fonctions qui permettent de construire les graphiques avec 
   # très peu d'appel à la base de données
   # récupère les soldes pour une caisse pour un exercice
- #
- # Renvoie un hash selon le format suivant 
- # {"09-2013"=>"-24.00", "01-2013"=>"-75.00", "08-2013"=>"-50.00"}
- #
- # Les mois où il n'y a pas de valeur ne renvoient rien.
- # Il faut donc ensuite faire un mapping ce qui est fait par la méthode
- # map_query_months(period)
- #
- def query_monthly_datas(period)
+  #
+  # Renvoie un hash selon le format suivant 
+  # {"09-2013"=>"-24.00", "01-2013"=>"-75.00", "08-2013"=>"-50.00"}
+  #
+  # Les mois où il n'y a pas de valeur ne renvoient rien.
+  # Il faut donc ensuite faire un mapping ce qui est fait par la méthode
+  # map_query_months(period)
+  #
+  def query_monthly_datas(period)
    
  
-   acc = virtual.current_account(period)  
-   return Hash.new('0') unless acc # ce cas (pas de compte) peut arriver si le 
-   # compte bancaire a été créé un exercice alors que le précédent était fermé.
-sql = <<-hdoc
+    acc = virtual.current_account(period)  
+    return Hash.new('0') unless acc # ce cas (pas de compte) peut arriver si le 
+    # compte bancaire a été créé un exercice alors que le précédent était fermé.
+    sql = <<-hdoc
  SELECT 
      to_char(writings.date, 'MM-YYYY') AS mony,
-   
      SUM(compta_lines.credit) - SUM(compta_lines.debit) AS valeur 
  FROM 
      writings, 
@@ -113,33 +112,43 @@ sql = <<-hdoc
      writings.id = compta_lines.writing_id AND
      compta_lines.account_id = #{acc.id} 
  GROUP BY mony
-hdoc
+    hdoc
 
-   res = VirtualBook.connection.execute( sql.gsub("\n", ''))
-   h = Hash.new('0')
-   res.each {|r| h[r['mony']]= r["valeur"] }
-   h
+    res = VirtualBook.connection.execute( sql.gsub("\n", ''))
+    h = Hash.new('0')
+    res.each {|r| h[r['mony']]= r["valeur"] }
    
-   end
- 
+    # ajoute éventuellement le solde antérieur
     
-  # A partir de query_monthly_datas, construit les valeurs mensuelles
- # sans trou
- def monthly_datas_for_chart(months)
-   # trouve l'exercice correspondant 
-   p = organism.find_period(months.to_a.last.beginning_of_month)
-   h = query_monthly_datas(p)
-   datas  = months.collect { |my| h[my.to_s]}
- 
-   # il faut encore ajuster le solde du début d'exercice si l'exercice précédent
-   # n'est pas fermé (car alors les reports des comptes de caisse ne sont pas encore faits)
-   if p && p.previous_period? && p.previous_period.open 
-      solde_anterieur = sold_at(p.previous_period.close_date)
-      datas = datas.collect { |d| (d.to_f + solde_anterieur).to_s }
-   end 
+    offset = initial_offset(period)
     
-   datas
- end
+    decale(h, offset)  if offset != 0.0
+      
+    h
+   
+  end
+ 
+  protected 
+  
+  # decale les valeurs données par la clé valeur de h d'un offset
+  def decale(h, offset)
+    h.each {|k, v| h[k] = (v.to_f + offset).to_s}
+    h
+  end
+  # renvoie le solde antérieur si un exercice précédent existe et qu'il n'est pas 
+  # clos, ceci pour que les courbes des caisses et comptes bancaires soient cohérentes
+  # tant que l'exercice précédent n'est pas clos.
+  def initial_offset(period)
+    if period.previous_period? && period.previous_period.open 
+      solde_anterieur = sold_at(period.previous_period.close_date)
+    else
+      solde_anterieur = 0.0
+    end 
+    solde_anterieur
+  end
+ 
+ 
+ 
  
 
 end

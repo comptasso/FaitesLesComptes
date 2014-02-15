@@ -66,7 +66,7 @@ class Book < ActiveRecord::Base
   end
 
   
- protected
+
   
     # mise en place des fonctions qui permettent de construire les graphiques avec 
   # très peu d'appel à la base de données
@@ -108,6 +108,8 @@ hdoc
    h
    
    end
+   
+  protected
  
  # TODO on devrait modifier cela pour le mettre dans JCGraphic et  
  # appeler les méthodes avec period. 
@@ -118,13 +120,13 @@ hdoc
  # 
  # A partir de query_monthly_datas, construit les valeurs mensuelles
  # sans trou
- def monthly_datas_for_chart(months)
-   # trouve l'exercice correspondant 
-   p = organism.find_period(months.to_a.last.beginning_of_month)
-   h = query_monthly_datas(p)
-   datas  = months.collect { |my| h[my.to_s]}
-   datas
- end
+# def monthly_datas_for_chart(months)
+#   # trouve l'exercice correspondant 
+#   p = organism.find_period(months.to_a.last.beginning_of_month)
+#   h = query_monthly_datas(p)
+#   datas  = months.collect { |my| h[my.to_s]}
+#   datas
+# end
 # 
  
 
