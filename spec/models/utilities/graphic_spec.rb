@@ -4,9 +4,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Utilities::Graphic do
   
-   def monthly_datas
-      {'01-2014'=> '1', '10-2014'=>'10', '11-2014'=>'11' }
-    end
+  def monthly_datas
+    {'01-2014'=> '1', '10-2014'=>'10', '11-2014'=>'11' }
+  end
   
   let(:obj) {Book.new}
   
@@ -70,17 +70,14 @@ describe Utilities::Graphic do
     end
     
     it 'ajoute un élément à la légende' do
-      subject.add_serie(period)
-      subject.legend.should == ['2014']
+      subject.legend.should == ['2014'] 
     end
     
     it 'ajoute l id de l exercice à ' do
-      subject.add_serie(period)
       subject.period_ids.should == [127]
     end
     
     it 'ajoute les month_years de l exercice' do
-      subject.add_serie(period)
       subject.month_years.should == [ListMonths.new(period.start_date, period.close_date).to_list('%m-%Y')]
     end
     
@@ -90,150 +87,67 @@ describe Utilities::Graphic do
     end
     
     it 'comlète la série avec des zeros' do
-      subject.add_serie(period)
-      subject.series.should == %w(1 0 0 0 0 0 0 0 0 10 11 0)
+      subject.series.should == [%w(1 0 0 0 0 0 0 0 0 10 11 0)]
     end
     
     it 'ajoute les datas à series' do
       subject.should_receive(:build_datas).with(obj, period).and_return 'le tableau de données'
       subject.add_serie(period)
-      subject.series.should == 'le tableau de données'
     end
     
+    # TODO compléter ces tests avec la gestion du type de graphique
     
+    describe 'graphes de type line' do
+      
+      before(:each) do
+        period.stub('previous_period?').and_return true
+        period.stub(:previous_period).and_return previous_period
+        previous_period.stub(:short_exercice).and_return '2013'
+        previous_period.stub(:id).and_return 126
+        obj.stub(:query_monthly_datas).with(previous_period).and_return({'09-2013'=> '25', '10-2013'=>'10' })
+      end
+       
+      context 'quand l exercice précédent est ouvert' do
+         
+        before(:each) do
+          previous_period.stub(:open).and_return true
+        end  
+       
+        subject {Utilities::Graphic.new(obj, period, :line)}
+       
+        it 'les valeurs de la série sont accumulées' do
+          subject.series.first.should == ["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "25.0", "35.0", "35.0", "35.0"]
+        end
+       
+        it 'y compris pour la deuxième série' do
+          subject.series.last.should == %w(36.0 36.0 36.0 36.0 36.0 36.0 36.0 36.0 36.0 46.0 57.0 57.0)
+        end
+       
+      end
+       
+      context 'mais lorsque l exercice précédent est clos' do
+         
+        before(:each) do
+          previous_period.stub(:open).and_return false
+        end
+         
+        subject {Utilities::Graphic.new(obj, period, :line)}
+         
+        it 'la deuxième série n accumule pas ses valeurs avec la première' do
+          subject.series.should ==  [["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "25.0", "35.0", "35.0", "35.0"],
+            ["1.0", "1.0", "1.0", "1.0", "1.0", "1.0", "1.0", "1.0", "1.0", "11.0", "22.0", "22.0"]] 
+        end
+         
+      end
+       
+       
+       
+       
+    end
     
   end
     
-  
-  
-  #  let(:t) {%w(jan fev mar avr mai juin jui aout sept oct nov dec)}
-  #  before(:each) do
-  #    @graphic = Utilities::Graphic.new(t) 
-  #  end
-  #
-  #  it "ticks should be attr readable" do
-  #    @graphic.ticks.should == t
-  #  end
-  #
-  #  it "adding a serie with success return true" do
-  #    @graphic.add_serie({:legend=>'serie 1', :datas=>[1,2,3,1,2,3,1,2,3,1,2,3]}).should == true
-  #  end
-  #
-  #  context "with a malformatted serie" do
-  #
-  #    it "tcks should be an array with at least an element" do
-  #      expect {Utilities::Graphic.new('bonjour')}.to raise_error('Ticks should be an array with at least one element')
-  #      expect {Utilities::Graphic.new([])}.to raise_error('Ticks should be an array with at least one element')
-  #    end
-  #
-  #    it "missing datas raise error" do
-  #      expect {
-  #        @graphic.add_serie({:legend=>'serie 1'}) }.to raise_error('Missing datas for this serie')
-  #    end
-  #    
-  #    it "missing legend raise error" do
-  #      expect {
-  #        @graphic.add_serie({:datas=>[1,2,3,1,2,3,1,2,3,1,2,3]}) }.to raise_error('Missing legend for this serie')
-  #    end
-  #
-  #    it "datas and ticks should have same size" do
-  #      expect {
-  #        @graphic.add_serie({:legend=>'serie 1', :datas=>[1,2,3,1,2,3,1,2,3,1,2,]})
-  #      }.to raise_error('Number of datas and ticks are different')
-  #    end
-  #
-  #  end
-  #
-  #  context "after adding a serie" do
-  #    let(:p1) {stub_model(Period, :start_date=>Date.civil(2010,01,01), :close_date=>Date.civil(2010,12,31))}
-  #
-  #    before(:each) do
-  #      @graphic.add_serie({:legend=>'serie 1', :datas=>[1,2,3,1,2,3,1,2,3,1,2,3], :period_id=>p1.id})
-  #    end
-  #
-  #    it "should return the number of serie" do
-  #      @graphic.nb_series.should == 1
-  #    end
-  #
-  #    it "the legend is an array with 1 element" do
-  #      @graphic.legend.should == ['serie 1']
-  #    end
-  #
-  #    it "returns the id of the period" do
-  #      @graphic.period_ids.should == [p1.id]
-  #    end
-  #
-  #    it "datas is an array with the serie 1 datas" do
-  #      @graphic.series.should be_an(Array)
-  #      @graphic.series.should have(1).element
-  #      @graphic.series[0].should == [1,2,3,1,2,3,1,2,3,1,2,3]
-  #    end
-  #
-  #    context "after adding another serie" do
-  #      let(:p2) {stub_model(Period, :start_date=>Date.civil(2011,01,01), :close_date=>Date.civil(2011,12,31))}
-  #
-  #      before(:each) do
-  #        @graphic.add_serie({:legend=>'serie 2', :datas=> [7,8,9,7,8,9,7,8,9,7,8,9], :period_id=>p2.id})
-  #      end
-  #
-  #      it "the legend is now an array with two elements" do
-  #        @graphic.legend.should have(2).elements 
-  #      end
-  #
-  #      it "with name serie 1 and serie 2" do
-  #        @graphic.legend.first.should == 'serie 1'
-  #        @graphic.legend.second.should =='serie 2'
-  #      end
-  #
-  #      it 'period_ids should return an array' do
-  #        @graphic.period_ids.should == [p1.id,p2.id]
-  #      end
-  #
-  #      it "series[0] si still the same" do
-  #        @graphic.series.first.should == [1,2,3,1,2,3,1,2,3,1,2,3]
-  #      end
-  #
-  #      it "and there is a serie 2 with valued added" do
-  #        @graphic.series.second.should ==  [7,8,9,7,8,9,7,8,9,7,8,9]
-  #      end
-  #
-  #      it "nb_series return now 2" do
-  #        @graphic.nb_series.should == 2
-  #      end
-  #
-  #    end
-  #
-  #  end
-  #
-  #  describe "equality" do
-  #    let(:t) {%w(jan fev mar avr mai juin jui aout sept oct nov dec)}
-  #    let(:p1) {stub_model(Period, :start_date=>Date.civil(2010,01,01), :close_date=>Date.civil(2010,12,31))}
-  #    let(:p2) {stub_model(Period, :start_date=>Date.civil(2011,01,01), :close_date=>Date.civil(2011,12,31))}
-  #
-  #    before(:each) do
-  #      @graphic = Utilities::Graphic.new(t)
-  #      @graphic.add_serie({:legend=>'serie 1', :datas=>[1,2,3,1,2,3,1,2,3,1,2,3], :period_id=>p1.id})
-  #      @graphic.add_serie({:legend=>'serie 2', :datas=> [7,8,9,7,8,9,7,8,9,7,8,9], :period_id=> p2.id})
-  #      @graphic2 = Utilities::Graphic.new(t)
-  #    end
-  #
-  #    # TODO complete these tests
-  #    it "non similar graphics should not be equal" do
-  #      @graphic2.add_serie({:legend=>'serie 1', :datas=>[1,2,3,1,2,3,1,2,3,1,2,3]})
-  #      @graphic2.add_serie({:legend=>'serie 2', :datas=> [7,8,9,7,8,9,7,8,9,7,8,9]})
-  #      @graphic2.should_not == @graphic
-  #    end
-  #
-  #    it "two similar graphics should be equal" do
-  #      @graphic2.add_serie({:legend=>'serie 1', :datas=>[1,2,3,1,2,3,1,2,3,1,2,3], :period_id=>p1.id})
-  #      @graphic2.add_serie({:legend=>'serie 2', :datas=> [7,8,9,7,8,9,7,8,9,7,8,9], :period_id=>p2.id})
-  #      @graphic2.should == @graphic
-  #    end
-  #
-  #
-  #  end 
-  #
-  #  
+
 
 end
 

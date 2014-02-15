@@ -62,6 +62,8 @@ class VirtualBook < Book
     [vcu + '_pave', vcu + '_book']
   end
   
+ 
+  
   # surcharge de cumulated_at pour avoir toutes les méthodes de sold
   def cumulated_at(date = Date.today, dc)
     -virtual.cumulated_at(date, dc)
@@ -82,6 +84,8 @@ class VirtualBook < Book
     return sold_at(selector.end_of_month)  unless selector.beginning_of_month.future?
   end
   
+  
+  
  
   
   # mise en place des fonctions qui permettent de construire les graphiques avec 
@@ -100,11 +104,11 @@ class VirtualBook < Book
  
     acc = virtual.current_account(period)  
     return Hash.new('0') unless acc # ce cas (pas de compte) peut arriver si le 
-    # compte bancaire a été créé un exercice alors que le précédent était fermé.
+    # compte bancaire a été créé sur un exercice alors que le précédent exercice était fermé.
     sql = <<-hdoc
  SELECT 
      to_char(writings.date, 'MM-YYYY') AS mony,
-     SUM(compta_lines.credit) - SUM(compta_lines.debit) AS valeur 
+     SUM(compta_lines.debit) - SUM(compta_lines.credit) AS valeur 
  FROM 
      writings, 
      compta_lines
@@ -117,36 +121,36 @@ class VirtualBook < Book
     res = VirtualBook.connection.execute( sql.gsub("\n", ''))
     h = Hash.new('0')
     res.each {|r| h[r['mony']]= r["valeur"] }
-   
-    # ajoute éventuellement le solde antérieur
     
-    offset = initial_offset(period)
-    
-    decale(h, offset)  if offset != 0.0
-      
     h
    
   end
  
   protected 
   
-  # decale les valeurs données par la clé valeur de h d'un offset
-  def decale(h, offset)
-    h.each {|k, v| h[k] = (v.to_f + offset).to_s}
-    h
-  end
-  # renvoie le solde antérieur si un exercice précédent existe et qu'il n'est pas 
-  # clos, ceci pour que les courbes des caisses et comptes bancaires soient cohérentes
-  # tant que l'exercice précédent n'est pas clos.
-  def initial_offset(period)
-    if period.previous_period? && period.previous_period.open 
-      solde_anterieur = sold_at(period.previous_period.close_date)
-    else
-      solde_anterieur = 0.0
-    end 
-    solde_anterieur
+ # construit un graphique des données mensuelles du livre par défaut avec deux exercices
+  def default_graphic(period)
+    @graphic = Utilities::Graphic.new(self, period, :line)
   end
  
+ 
+  # decale les valeurs données par la clé valeur de h d'un offset
+#  def decale(h, offset)
+#    h.each {|k, v| h[k] = (v.to_f + offset).to_s}
+#    h
+#  end
+#  # renvoie le solde antérieur si un exercice précédent existe et qu'il n'est pas 
+#  # clos, ceci pour que les courbes des caisses et comptes bancaires soient cohérentes
+#  # tant que l'exercice précédent n'est pas clos.
+#  def initial_offset(period)
+#    if period.previous_period? && period.previous_period.open 
+#      solde_anterieur = sold_at(period.previous_period.close_date)
+#    else
+#      solde_anterieur = 0.0
+#    end 
+#    solde_anterieur
+#  end
+# 
  
  
  
