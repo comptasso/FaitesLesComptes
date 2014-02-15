@@ -23,9 +23,9 @@
 
 <% @paves.in_groups_of(3, false) do |p|  %>
 <div class ="row-fluid row-pave">
-  <%= draw_pave(p[0], 'span4')  %>
-  <%= draw_pave(p[1], 'span4')  %>
-  <%= draw_pave(p[2], 'span4')  %>
+  <%= draw_pave(p[0], @period, 'span4')  %>
+  <%= draw_pave(p[1], @period, 'span4')  %>
+  <%= draw_pave(p[2], @period, 'span4')  %>
 </div>
 <% end %>
 

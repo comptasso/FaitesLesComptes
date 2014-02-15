@@ -1,0 +1,7 @@
+<%= content_tag :div, :class=>"pave #{local_classes}"  do %>
+
+<h3><%=  line_pave.virtual.name %> : <%= number_to_currency line_pave.sold_at(@date) %>
+   
+</h3>
+  <%= render partial: 'line_graphic', object: line_pave.graphic(@period)  , :locals=>{id: "#{line_pave.virtual.class.name.underscore}_#{line_pave.virtual.id}" } %>
+<% end %>

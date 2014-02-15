@@ -9,14 +9,9 @@ module Utilities::JcGraphic
   # ce qui fait un cache puisque graphic est ensuite appelé à plusieurs
   # reprises pour founir ses différentes éléments
   def graphic(period)
-    @graphic ||= default_graphic(period)
+    @graphic ||= default_graphic(period) 
   end
 
-
-  # renvoie le type de graphique et le nom de la class
-  def pave_char
-    ['book_pave', self.class.name.underscore]
-  end
 
 protected
 

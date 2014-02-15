@@ -34,17 +34,11 @@ class Sector < ActiveRecord::Base
     books.all << self
   end
   
-  # Surcharge de la méthode apportée par Utilities::JcGraphic
-  # Le pavé gaphique d'un secteur est de type result_pave
-  def pave_char
-    ['result_pave', 'result']
-  end
   
- 
   # renvoie les comptes comptables correspondant aux banques de ce secteur pour l'exercice
   # demandé
   def list_bank_accounts(period)
-    bank_accounts.collect {|ba| ba.current_account(period)}
+    bank_accounts.collect {|ba| ba.current_account(period)} 
   end
   
   # renvoie les comptes comptables correspondant aux caisses de ce secteur pour l'exercice

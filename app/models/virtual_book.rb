@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'book.rb'
+require 'book.rb' 
 
 # un VirtualBook est un modèle non persistent qui représente un livre de caisse ou de banque
 # Le virtual_book fonctionne en trésorerie (entrées sorties) et le sold est donc
@@ -9,15 +9,16 @@ require 'book.rb'
 # Un virtual_book hérite de Book et donc des méthodes Utilities::JcGraphic et
 # Utilities::Sold
 #
-# L'attribut virtual représente la classe sous jacente, donc une caisse ou un compte bancaire
+# L'attribut virtual représente la classe sous jacente, donc une caisse ou un compte bancaire 
 # Cet attribut doit être rempli par la partie appelante
 # 
-# 
-# pave_char (également surchargé) permet d'indiquer le type de graphique que l'on souhaite pour l'affichage du DashBoard
 #
 # Les virtual_books se créent par la méthode Organism#virtual_books définie par un has_many dans la classe Organism
 #
 # En pratique, Organism propose les méthodes cash_books et bank_books pour retourner une collection de virtual books.
+# Un BnakAccount a aussi une méthode virtual_book pour construire son virtual_book
+# # TODO il est curieux que Cash ne propose pas cette méthode... 
+# 
 #
 class VirtualBook < Book
 
@@ -44,17 +45,6 @@ class VirtualBook < Book
     virtual.compta_lines.joins(:writing).where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date')
   end
 
-  # renvoie les charactéristique du pavé, en l'occurence la racine du partial et 
-  # la classe à utiliser pour le pavé.
-  #
-  # Cela peut donc être ['cash_pave', 'cash_book'] ou  ['bank_account_pave', 'bank_account_book']
-  #
-  # TODO : en fait cela relève de la responsabilité d'une classe pavé
-  #
-  def pave_char
-    vcu = virtual.class.name.underscore
-    [vcu + '_pave', vcu + '_book']
-  end
   
  
   
@@ -112,7 +102,7 @@ class VirtualBook < Book
  
   protected 
   
- # construit un graphique des données mensuelles du livre par défaut avec deux exercices
+  # construit un graphique des données mensuelles du livre par défaut avec deux exercices
   def default_graphic(period)
     @graphic = Utilities::Graphic.new(self, period, :line)
   end

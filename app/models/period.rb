@@ -8,7 +8,7 @@ require 'list_months'
 #
 # Table name: periods
 #
-#  id                 :integer         not null, primary key
+#  id                 :integer         not null, primary key 
 #  start_date         :date
 #  close_date         :date
 #  organism_id       :integer
@@ -176,12 +176,7 @@ class Period < ActiveRecord::Base
     previous_period.accounts.find_by_number(account.number)
   end
 
-  # permet de fournir au dashboard les informations nécessaires pour faire le graphe de 
-  # résultats.
-  # Surcharge de la méthode par défaut fournie par Utilities::JcGraphic
-  def pave_char
-    ['result_pave', 'result']
-  end
+  
 
   # Les conditions pour qu'un exercice puisse être fermé sont :
   # qu'il soit ouvert

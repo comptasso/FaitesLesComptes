@@ -69,18 +69,11 @@ module OrganismsHelper
   # html_class, permet d'associer des classes à chacun des pavés, sachant qu'actuellement
   # l'appel dans la vue show est systématiquement fait avec la classe span4
   # 
-  # Les paves doivent répondre à la méthode pave_char
   # 
-  # En pratique, les paves peuvent être des virtual_book (donc reliés aux caisses et aux banques)
-  # qui répondent en pave_char en retournant [cash_pave, cash_book] ou [bank_pave, bank_book]
-  # 
-  # Les IncomeBook et OutcomeBook ont une méthode similaire par le biais de Utilities::JcGraphic
-  # 
-  # Enfin pour le pave résultat, c'est Period#pave_char qui fournit les infos 
-  def draw_pave(source, html_class)
+  def draw_pave(source, period, html_class)
     if source
-      partial_and_class  =   source.pave_char
-      render partial: "organisms/#{partial_and_class[0]}", object: source,  locals: {:local_classes => "#{partial_and_class[1]} #{html_class}" }
+      render partial: "organisms/#{pave_partial(source)}", object: source,  
+        locals: {:local_classes => "#{local_class(source)} #{html_class}", :graph=>source.graphic(period) }
     else
       ''
     end
@@ -89,12 +82,35 @@ module OrganismsHelper
   # Gère mieux que pluralize le fait que num soit == à zero
   def vous_avez_des_messages(num)
     html = if (num == 0)
-       "Aucun message "
+      "Aucun message "
     else
       "Vous avez #{pluralize(num, 'message')} "
     end
     html += image_tag 'icones/mail-open.png', id: 'mail_img' unless num == 0
     html.html_safe
+  end
+  
+  protected
+  
+  # indique quelle est la classe css à appliquer pour la graphique dont la source est
+  # donnée par source
+  def local_class(source)
+    case source.class.name
+      when 'VirtualBook' then source.virtual.class.name.underscore
+    else 
+      source.class.name.underscore
+    end
+  end
+  
+  def pave_partial(source)
+    puts source.inspect
+    part = case source.class.name
+    when "Sector" then 'sector_pave'
+    when "VirtualBook" then 'line_pave'
+    else 'bar_pave'
+    end
+    puts part.inspect
+    part
   end
 
 

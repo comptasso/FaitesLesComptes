@@ -15,10 +15,7 @@ describe VirtualBook do
     @vb.virtual.should == @c
   end
 
-  it 'fournit les informations pour les données du pavé graphique' do
-    @vb.pave_char.should ==  ['cash_pave', 'cash_book']
-  end
-
+ 
   it 'lines appelles compta_lines de la caisse ou de la banque' do
     @c.should_receive(:compta_lines).and_return 'bonjour'
     @vb.lines.should == 'bonjour'

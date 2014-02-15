@@ -13,7 +13,7 @@
 #
 class  Utilities::Graphic
 
-  attr_reader :ticks, :series, :legend, :period_ids, :month_years
+  attr_reader :ticks, :series, :legend, :period_ids, :month_years, :type
 
   # initialisation à partir d'un objet (un book, un virtual_book ou un sector)
   # 

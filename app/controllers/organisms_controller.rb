@@ -17,7 +17,7 @@ class OrganismsController < ApplicationController
    
     @date = @period.guess_date
 
-    # Construction des éléments des paves
+    # Construction des éléments des paves graphiques
     @paves = []
     @organism.sectors.each {|sec| @paves += sec.paves}
     @paves += @organism.cash_books

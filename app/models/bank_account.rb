@@ -58,7 +58,11 @@ class BankAccount < ActiveRecord::Base
   after_create :create_accounts, :if=>lambda {organism.periods.opened.any? }
   after_update :change_account_title, :if=> lambda {nickname_changed? }
   
-
+  def name
+    nickname
+  end
+  
+  
  # renvoie le premier (mais en fait l'unique) compte comptable correspondant 
  # à ce compte banciare pour un exercice donné
   def current_account(period)
