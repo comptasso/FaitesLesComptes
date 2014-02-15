@@ -12,13 +12,7 @@ require 'book.rb'
 # L'attribut virtual représente la classe sous jacente, donc une caisse ou un compte bancaire
 # Cet attribut doit être rempli par la partie appelante
 # 
-# TODO voir si on ne pourrait pas utiliser les possibilités de has_many virtual_books dans la modèle organisme
-# pour y rajouter un callback de création.
 # 
-# sold_at est surchargé pour fonctionner selon le mode recettes dépenses
-# monthly_value, utilisé pour les graphes est surchargé pour avoir un graphe en ligne
-# et donc en cumul.
-#
 # pave_char (également surchargé) permet d'indiquer le type de graphique que l'on souhaite pour l'affichage du DashBoard
 #
 # Les virtual_books se créent par la méthode Organism#virtual_books définie par un has_many dans la classe Organism
@@ -65,6 +59,9 @@ class VirtualBook < Book
  
   
   # surcharge de cumulated_at pour avoir toutes les méthodes de sold
+  # celà consiste juste à une inversion de la méthode par défaut de l'objet 
+  # sous jacent (une caisse ou un compte bancaire) pour avoir des soldes 
+  # intuitifs.
   def cumulated_at(date = Date.today, dc)
     -virtual.cumulated_at(date, dc)
   end
@@ -73,20 +70,7 @@ class VirtualBook < Book
     -virtual.sold_at(date)
   end
 
-  # dans les caisses et comptes bancaires, on affiche les soldes
-  # TODO je pense que ce n'est pas de la responsabilité de cette classe de ne rien retourner si date future
-  # voir à mettre cette subtilité dans la classe appelante.
-  def monthly_value(selector)
-    if selector.is_a?(String)
-      selector = Date.civil(selector[/\d{4}$/].to_i, selector[/^\d{2}/].to_i,1)
-    end
-    # on arrête la courbe au mois en cours
-    return sold_at(selector.end_of_month)  unless selector.beginning_of_month.future?
-  end
   
-  
-  
- 
   
   # mise en place des fonctions qui permettent de construire les graphiques avec 
   # très peu d'appel à la base de données
@@ -133,24 +117,6 @@ class VirtualBook < Book
     @graphic = Utilities::Graphic.new(self, period, :line)
   end
  
- 
-  # decale les valeurs données par la clé valeur de h d'un offset
-#  def decale(h, offset)
-#    h.each {|k, v| h[k] = (v.to_f + offset).to_s}
-#    h
-#  end
-#  # renvoie le solde antérieur si un exercice précédent existe et qu'il n'est pas 
-#  # clos, ceci pour que les courbes des caisses et comptes bancaires soient cohérentes
-#  # tant que l'exercice précédent n'est pas clos.
-#  def initial_offset(period)
-#    if period.previous_period? && period.previous_period.open 
-#      solde_anterieur = sold_at(period.previous_period.close_date)
-#    else
-#      solde_anterieur = 0.0
-#    end 
-#    solde_anterieur
-#  end
-# 
  
  
  

@@ -40,11 +40,7 @@ class Sector < ActiveRecord::Base
     ['result_pave', 'result']
   end
   
-  # donne les soldes de chaque mois, est appelé par le module JcGraphic pour constuire les graphes
-  def monthly_value(date)
-    books.all.sum {|b| b.monthly_value(date) }
-  end
-  
+ 
   # renvoie les comptes comptables correspondant aux banques de ce secteur pour l'exercice
   # demandé
   def list_bank_accounts(period)

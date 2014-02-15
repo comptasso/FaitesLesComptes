@@ -29,15 +29,5 @@ describe VirtualBook do
     @vb.cumulated_at(Date.today, :debit).should == -10
   end
 
-  it 'monthly_values fait appel à sold_at en se placçant à la fin du mois' do
-    @vb.should_receive(:sold_at).with(Date.today.end_of_month).and_return(56.25)
-    @vb.monthly_value(Date.today).should == 56.25
-  end
-
-  it 'on peut appeler monthly_value avec un string comme \'04-2013\' ' do
-    @vb.should_receive(:sold_at).with(Date.civil(2013,01,01).end_of_month).and_return(-56.25)
-    @vb.monthly_value('01-2013').should == -56.25
-  end
-
 
 end

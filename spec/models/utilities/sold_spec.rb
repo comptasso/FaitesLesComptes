@@ -28,7 +28,7 @@ describe 'sold' do
     end
 
     it 'monthly_value doit retourner une string 0' do
-      @ts.monthly_value(Date.today).should == 0.0
+      @ts.sold_at(Date.today).should == 0.0
       
     end
 

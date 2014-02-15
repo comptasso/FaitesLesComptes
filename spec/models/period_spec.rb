@@ -547,67 +547,6 @@ describe Period do
             @p_2011.previous_period.should == @p_2010
           end
 
-     
-          it 'have a default graphic method' do
-            @p_2011.graphic(@p_2011).should be_an_instance_of(Utilities::Graphic)
-          end
-
-          context "check the default graphic with two periods" do
-            before(:each) do
-              @p_2011.stub(:previous_period).and_return(@p_2010)
-              @graphic= @p_2011.graphic(@p_2011)
-            end
-
-            it "should have a legend" do
-              @graphic.legend.should == ["avr. à déc. 2010", '2011']
-            end
-            it "should have two séries" do
-              @graphic.should have(2).series
-            end
-
-            it "the first with ..."   do
-              b1.monthly_value(Date.civil(2010,04,30)).should == 1400
-              b1.monthly_value(Date.civil(2010,03,31)).should == 0
-              @graphic.series[0].should == P2010_RESULTS
-            end
-
-            it "the second with..." do
-              @graphic.series[1].should == P2011_RESULTS
-            end
-
-        
-
-          end
-      
-          context "check the default graphic with one periods" do
-            before(:each) do
-              @p_2011.stub(:previous_period?).and_return(false)
-              @graphic= @p_2011.graphic(@p_2011)
-            end
-
-            it "shoudl have only one serie" do
-              @graphic.should have(1).serie
-            end
-
-            it "checks_list_months" do
-              @p_2011.list_months.to_list('%m-%Y').should == %w(01-2011 02-2011 03-2011 04-2011 05-2011 06-2011 07-2011 08-2011 09-2011 10-2011 11-2011 12-2011)
-            end
-
-
-            it "checks the monthly_values" do
-              pending 'attente de refont de Graphic'
-              @p_2011.monthly_datas_for_chart(@p_2011.list_months).should == P2011_RESULTS
-            end
-
-            it "check the legend"  do
-              @graphic.legend.should == ['2011']
-            end
-
-            it "check the datas" do
-              @p_2011.monthly_value(Date.civil(2011,01,31)).should == -5
-              @graphic.series[0].should == P2011_RESULTS
-            end
-          end
         end
       end
     end

@@ -468,11 +468,7 @@ class Period < ActiveRecord::Base
   end
 
  
-  # donne les soldes de chaque mois, est appelé par le module JcGraphic pour constuire les graphes
-  def monthly_value(date)
-    books.all.sum {|b| b.monthly_value(date) }
-  end
-
+  
 
   # informe si toutes les natures sont bien reliées à un compte
   def all_natures_linked_to_account?

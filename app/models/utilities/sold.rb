@@ -67,25 +67,5 @@ module Utilities::Sold
 
   
 
-  
-  # TODO je pense qu'on pourrait utiliser movement plutôt que les contorsions imposées par sold_at et les différences
-  # donne un solde en prenant toutes les lignes du mois correspondant
-  # à cette date;
-  #
-  #
-  # Le calcul se fait en déduisant le solde à la fin du mois du solde à la
-  # fin du mois précédent.
-  #
-  # Cas particulier, si on est en début d'exercice : on ne retire pas le solde du mois
-  # précédent
-  def monthly_value(selector)
-    Rails.logger.debug "monthly_value appelée avec #{selector} comme argument sur #{title}"
-    # selector = string_to_date(selector) if selector.is_a?(String)
-    r = sold_at(selector.end_of_month)
-    # on ne déduit le solde antérieur que si on n'est pas au début de l'exercice
-    r -= sold_before(selector.beginning_of_month) unless Period.beginning_of_period?(selector.beginning_of_month)
-    r.to_f.round 2  # nécessaire car quand il n'y a pas de lignes, le retour est '0' et non 0
-  end
-
 
 end
