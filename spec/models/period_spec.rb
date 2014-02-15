@@ -497,58 +497,7 @@ describe Period do
   
 
 
-      # result est un module qui est destiné à produire les résultats mensuels d'un exercice
-      # c'est aussi ce module qui permet de produire les graphiques résultats
-      describe "resultat" do
- 
-        it "without datas, a period return 0" do
-          @p_2010.monthly_value(Date.civil(2010,03,01)).should == 0
-        end
-
-       
-
-
-        context 'the result is calculated from books' do
-
-
-
-          let(:b1) {stub_model(IncomeBook)}
-          let(:b2) {stub_model(OutcomeBook)}
-     
-          P2011_RESULTS = [-5, 10,25,40,55,70,85,100,115,130,145,160]
-          P2010_RESULTS = [0,0,0,400, 550, 700, 850, 1000, 1150, 1300, 1450, 1600]
-  
- 
-          before(:each) do
-
-            @p_2011.stub_chain(:books, :all).and_return([b1,b2])
-            @p_2010.stub_chain(:books, :all).and_return([b1,b2])
-            @p_2011.list_months.each do |m|
-          
-              b1.stub(:monthly_value).with(m.end_of_month).and_return(100 + 10*(m.month.to_i))
-              b2.stub(:monthly_value).with(m.end_of_month).and_return(-120 + 5*(m.month.to_i))
-            end
-            @p_2010.list_months.each do |m|
-              b1.stub(:monthly_value).with(m.end_of_month).and_return(1000 + 100*(m.month.to_i))
-              b2.stub(:monthly_value).with(m.end_of_month).and_return(-1200 + 50*(m.month.to_i))
-            end
-            (1..3).each do |i|
-              my=Date.civil(2010,i,1).end_of_month
-              b1.stub(:monthly_value).with(my).and_return(0)
-              b2.stub(:monthly_value).with(my).and_return(0)
-            end
-          end
-
-          it "check the monthly result" do
-            @p_2011.monthly_value(Date.civil(2011,03,31)).should == 25
-          end
-
-          it 'check_previous_period' do
-            @p_2011.previous_period.should == @p_2010
-          end
-
-        end
-      end
+    
     end
   end
 

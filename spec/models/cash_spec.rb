@@ -110,10 +110,10 @@ describe Cash  do
   context 'annex methods' do
 
     it 'to_s return name' do
-      subject.to_s.should == subject.name
+      subject.to_s.should == subject.name  
     end
     
-    it {should respond_to(:monthly_value)}
+  
   
   end
   

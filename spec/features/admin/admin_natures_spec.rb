@@ -8,7 +8,7 @@ RSpec.configure do |c|
 #  c.exclusion_filter = {:js=> true }  
 end
 
-# spec request for testing admin books  
+# spec request for testing admin books   
 
 describe 'vue natures index' do  
   include OrganismFixtureBis 
@@ -58,7 +58,7 @@ describe 'vue natures index' do
   describe 'vue index' do
 
     before(:each) do
-      @n = @p.natures.new(:name=>'deuxième nature')
+      @n = @p.natures.new(:name=>'deuxieme nature')
       @n.book_id = OutcomeBook.first.id; @n.save!
       @nb_natures = @p.natures.count
       @nb_depenses = @p.depenses_natures.count 
@@ -75,11 +75,11 @@ describe 'vue natures index' do
       page.all('tbody tr').size.should == @nb_natures
     end
 
-    it 'dans la vue index,une nature peut être détruite', :js=>true do 
+    it 'dans la vue index,une nature peut être détruite', :js=>true, wip:true do 
       visit admin_organism_period_natures_path(@o, @p)
-    
+       
       within("table#depenses tbody tr:last-child") do
-        page.should have_content('deuxième nature')
+        page.should have_content('deuxieme nature')
         page.click_link 'Supprimer'
       end
       alert = page.driver.browser.switch_to.alert

@@ -14,8 +14,9 @@ describe "menus/_menu.html.erb" do
   let(:obook) { stub_model(OutcomeBook, title: 'Dépenses')}
   let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))}
   let(:p2011) {stub_model(Period, start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31)) }
-  let(:sect) {Sector.new(name:'Global')}
+ 
   let(:cu) {mock_model(User, name:'jcl')}
+  let(:sect) {stub_model(Sector, name:'Global', query_monthly_datas:{'11-2012'=>'10.20', '12-2012'=>'15.25'})}
 
   before(:each) do
     assign(:user, cu)
