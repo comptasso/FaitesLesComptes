@@ -103,14 +103,11 @@ module OrganismsHelper
   end
   
   def pave_partial(source)
-    puts source.inspect
-    part = case source.class.name
+    case source.class.name
     when "Sector" then 'sector_pave'
     when "VirtualBook" then 'line_pave'
     else 'bar_pave'
     end
-    puts part.inspect
-    part
   end
 
 
