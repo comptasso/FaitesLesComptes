@@ -12,7 +12,7 @@
   :comment: ! "Ce compte concerne les subventions d'exploitation.\r\nY mettre aussi
     provisoirement les subventions d'investissements. Une écriture devra être ensuite
     passée pour inscrire cette subvention au bilan."
-  :acc: '74'
+  :acc: '740'
   :book: Recettes
 - :name: Cotisations des adhérents
   :comment: ''
@@ -22,27 +22,37 @@
   :comment: ! "Les intérêts versés sur un livret, mais aussi le montant des prêts
     bancaires obtenus.\r\nUne écriture devra être passée pour inscrire au bilan le
     montant du capital du prêt."
-  :acc: '76'
+  :acc: '762'
+  :book: Recettes
+- :name: Déblocage de prêts
+  :comment: ! "Par exemple le montant d'un prêt
+    bancaire obtenu.\r\nUne écriture devra être passée pour inscrire au bilan le
+    montant du capital du prêt."
+  :acc: '7687'
   :book: Recettes
 - :name: Exceptionnel
   :comment: Les recettes à caractère exceptionnel, per exemple des dommages et intérêts
-  :acc: '77'
+  :acc: '771'
   :book: Recettes
 - :name: Achats de march. pour revente
   :comment: Par exemple achats de boissons et de nourriture pour la buvette de l'association
-  :acc: '60'
+  :acc: '601'
   :book: Dépenses
 - :name: Loyer
-  :comment: Y compris charges locatives et dépenses de chauffage
-  :acc: '61'
+  :comment: Attention, ne pas mettre les charges locatives
+  :acc: '613'
+  :book: Dépenses
+- :name: Charges locatives
+  :comment: charges locatives, dépenses de chauffage,...
+  :acc: '614'
   :book: Dépenses
 - :name: Energie
-  :comment: Electricité, gaz, fuel, carburant pour les véhicules
-  :acc: '61'
+  :comment: Electricité, gaz, fuel
+  :acc: '606'
   :book: Dépenses
 - :name: Téléphone, internet,...
   :comment: Tout ce qui concerne les communications
-  :acc: '61'
+  :acc: '626'
   :book: Dépenses
 - :name: Autres frais de fonctionnement
   :comment: Timbres, fournitures, ...
@@ -51,7 +61,7 @@
 - :name: Déplacements
   :comment: Dépenses de déplacement quel que soit le moyen de transport. Hôtel et
     restaurant en déplacement
-  :acc: '61'
+  :acc: '625'
   :book: Dépenses
 - :name: Personnel
   :comment: Salaires et rémunérations du personnel
@@ -62,13 +72,18 @@
   :acc: '645'
   :book: Dépenses
 - :name: Frais financiers
-  :comment: ! "Les remboursement des emprunts.\r\nEn fin d'exercice, une écriture
+  :comment: "Agios et intérêtsLes remboursement des emprunts.\r\nEn fin d'exercice, une écriture
     devra être passée pour isoler la part intérêt et la part capital."
-  :acc: '66'
+  :acc: '661'
+  :book: Dépenses
+- :name: Remboursement des emprunts
+  :comment: "En fin d'exercice, une écriture
+    devra être passée pour isoler la part intérêt et la part capital."
+  :acc: '6687'
   :book: Dépenses
 - :name: Exceptionnel
   :comment: Les dépenses à caractère exceptionnel (vol dans la caisse, procès, dégât
     des eaux, ...)
-  :acc: '67'
+  :acc: '671'
   :book: Dépenses
 

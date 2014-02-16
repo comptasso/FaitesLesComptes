@@ -137,6 +137,8 @@
   title: Achats stockés (sauf 603)
 - number: '603'
   title: Variations des stocks approvisionnements et marchandises
+- number: '606'
+  title: Achats non stockés
 - number: '611'
   title: Sous traitance générale
 - number: '612'
@@ -235,6 +237,8 @@
   title: Produits divers de gestion courante
 - number: '761'
   title: Produits des participations
+- number: '762'
+  title: Produits des autres immobilisations financières
 - number: '767'
   title: Produits nets sur cessions de valeurs mobilières de placement
 - number: '768'
