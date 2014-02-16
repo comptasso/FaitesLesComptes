@@ -25,7 +25,7 @@
   title: Emprunts auprès d'établissements de crédit
 - number: '168'
   title: Autres emprunts
-- number: '19'
+- number: '190'
   title: Fonds dédiés
 - number: '201'
   title: Frais d'établissement
@@ -34,15 +34,27 @@
 - number: '208'
   title: Autres immobilisations incorporelles
 - number: '212'
-  title: Agencements et aménagements des installations
+  title: Agencements et aménagements de terrains
+- number: '213'
+  title: Constructions
 - number: '215'
   title: Installations techniques, matériel et outillage industriel
 - number: '218'
   title: Autres immobilisations corporelles
-- number: '23'
-  title: Immobilisations en cours
-- number: '27'
-  title: Autres immobilisations financières
+- number: '231'
+  title: Immobilisations corporelles en cours
+- number: '232'
+  title: Immobilisations incorporelles en cours
+- number: '238'
+  title: Avances et acomptes versés sur commandes d'immobilisation
+- number: '261'
+  title: Titres de participation
+- number: '271'
+  title: Titres immobilisés
+- number: '274'
+  title: Prêts
+- number: '275'
+  title: Dépôts et cautionnements
 - number: '2801'
   title: Amortissements des frais d'établissements
 - number: '2806'
@@ -50,14 +62,22 @@
 - number: '2808'
   title: Amortissements des autres immo incorporelles
 - number: '2812'
-  title: Amortissements des agencements et installations
+  title: Amortissements des agencements et aménagements de terrain
+- number: '2812'
+  title: Amortissements des constructions
 - number: '2815'
   title: Amortissement des installations techniques, mat...
 - number: '2818'
   title: Amortissement des autres immos corporelles
+- number: '290'
+  title: Dépréciation des immobilisations incorporelles
+- number: '291'
+  title: Dépréciation des immobilisations corporelles
+- number: '296'
+  title: Dépréciation des titres de participation
 - number: '297'
   title: Dépréciation des autres immobilisations financières
-- number: '37'
+- number: '370'
   title: Stocks de marchandises
 - number: '397'
   title: Provisions pour dépréciation des stocks de marchandises
@@ -93,9 +113,11 @@
   title: Confédération, fédération, associations affiliées et sociétaires
 - number: '455'
   title: Sociétaires - Comptes courants
-- number: '46'
+- number: '467'
   title: Débiteurs divers et créditeurs divers
-- number: '47'
+- number: '468'
+  title: Charges à payer et produits à recevoir
+- number: '470'
   title: Comptes transitoires ou d'attente
 - number: '481'
   title: Charges à répartir sur plusieurs exercices
@@ -107,28 +129,80 @@
   title: Dépréciation des créances Usagers
 - number: '495'
   title: Dépréciation des autres créances
-- number: '50'
+- number: '500'
   title: Valeurs mobiliéres de placement
 - number: '590'
   title: Provisions pour dépréciation des valeurs mobiliéres de placement
-- number: '60'
-  title: Achats (sauf 603)
+- number: '601'
+  title: Achats stockés (sauf 603)
 - number: '603'
   title: Variations des stocks approvisionnements et marchandises
-- number: '61'
-  title: Services extérieurs
-- number: '63'
-  title: Impôts, taxes et versements assimilés
+- number: '611'
+  title: Sous traitance générale
+- number: '612'
+  title: Redevances de crédit bail
+- number: '613'
+  title: Locations
+- number: '614'
+  title: Charges locatives
+- number: '615'
+  title: Entretiens et réparations
+- number: '616'
+  title: Primes d'assurance
+- number: '617'
+  title: Etudes et recherches
+- number: '618'
+  title: Divers
+- number: '619'
+  title: Rabais, remises et ristournes obtenus sur services extérieurs
+- number: '621'
+  title: Personnel extérieur à l'association
+- number: '622'
+  title: Rémunération d'intermédiaires et honoraires
+- number: '623'
+  title: Publicité, publications, relations publiques
+- number: '624'
+  title: Transport de biens et transport collectif du personnel
+- number: '625'
+  title: Déplacements, missions et réceptions
+- number: '626'
+  title: Frais postaux et de télécommunication
+- number: '627'
+  title: Services bancaires et assimilés
+- number: '628'
+  title: Divers
+- number: '629'
+  title: Rabais, remises et ristournes obtenus sur autres services extérieurs
+- number: '631'
+  title: Impôts, taxes et versements assimilés sur rémunérations (impôts)
+- number: '633'
+  title: Impôts, taxes et versements assimilés sur rémunérations (autres)
+- number: '635'
+  title: Autres impôts et taxes (impôts)
+- number: '635'
+  title: Autres impôts et taxes (autres)
 - number: '641'
   title: Rémunérations du personnel
 - number: '645'
   title: Charges de sécurité sociale et de prévoyance
-- number: '65'
-  title: Autres charges de gestion courante
-- number: '66'
-  title: Charges financiéres
-- number: '67'
-  title: Charges exceptionnelles
+- number: '647'
+  title: Autres charges sociales
+- number: '658'
+  title: Charges diverses de gestion courante
+- number: '661'
+  title: Charges d'intérêts
+- number: '668'
+  title: Autres charges financières
+- number: '6687'
+  title: Charges financières (à reclasser)
+- number: '671'
+  title: Charges exceptionnelles sur opérations de gestion
+- number: '672'
+  title: Charges sur exercices antérieurs
+- number: '675'
+  title: Valeurs comptables des éléments d'actifs cédés
+- number: '678'
+  title: Autres charges exceptionnelles
 - number: '681'
   title: Dotations aux amortissements et aux provisions - Charges d'exploitation
 - number: '686'
@@ -139,26 +213,42 @@
   title: Engagements à réaliser sur ressources affectées
 - number: '701'
   title: Ventes de produits finis
+- number: '704'
+  title: Travaux
 - number: '706'
   title: Prestations de services
 - number: '707'
   title: Ventes de marchandises
 - number: '708'
   title: Produits des activités annexes
+- number: '709'
+  title: Rabais, ristournes, remises accordés par l'association
 - number: '713'
   title: Variation des stocks en-cours de production, produits
-- number: '72'
+- number: '720'
   title: Production immobilisée
-- number: '74'
+- number: '740'
   title: Subventions d'exploitation
 - number: '756'
   title: Cotisations
 - number: '758'
   title: Produits divers de gestion courante
-- number: '76'
-  title: Produits financiers
-- number: '77'
-  title: Produits exceptionnels
+- number: '761'
+  title: Produits des participations
+- number: '767'
+  title: Produits nets sur cessions de valeurs mobilières de placement
+- number: '768'
+  title: Autres produits financiers
+- number: '7687'
+  title: Produits financiers (à ventiler)
+- number: '771'
+  title: Produits exceptionnels sur opération de gestion
+- number: '772'
+  title: Produits sur exercices antérieurs
+- number: '775'
+  title: Produits de cession d'éléments d'actifs
+- number: '778'
+  title: Autres produits exceptionnels
 - number: '781'
   title: Reprises sur amortissements et provisions (exploitation)
 - number: '786'
@@ -167,7 +257,7 @@
   title: Reprises sur provisions (exceptionnel)
 - number: '789'
   title: Report des ressources non utilisées des exercices antérieurs
-- number: '79'
+- number: '790'
   title: Transferts de charges
 - number: '860'
   title: Secours en nature
