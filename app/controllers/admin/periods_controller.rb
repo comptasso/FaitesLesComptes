@@ -52,7 +52,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   # le controller remplit start_date s'il y a un exercice précédent
   def create
     # on fixe la date de départ s'il existe déjà un exercice
-    # TODO déplacer cette logique dans le modèle en surchargeant new
+    # TODO on pourrait déplacer cette logique dans le modèle en surchargeant new
     start_date = (@organism.periods.last.close_date) +1 if @organism.periods.any?
     @period = @organism.periods.new(params[:period])
     @period.start_date = start_date if start_date
@@ -60,7 +60,7 @@ class Admin::PeriodsController < Admin::ApplicationController
       if @period.save
         session[:period]=@period.id
         format.html { redirect_to admin_organism_periods_path(@organism),
-          notice: "L'exercice a été créé et vous travaillez actuellement dans ce nouvel exercice" }
+          notice: flash_creation }
         format.json { render json: @period, status: :created, location: @period }
       else
         format.html { render action: "new" }
@@ -105,6 +105,23 @@ class Admin::PeriodsController < Admin::ApplicationController
      render :index
     end
   end
-
+  
+  protected
+  
+  # créé le flash qui suit un POST create réussi
+  # si l'exercice est le premier, on a donc affaire à une nouvelle base et on 
+  # donne le conseil de personnaliser Banques, Caisse et Destinations
+  # sinon on indique simplement que la création a été faite.
+  def flash_creation
+    html =''
+    if @period.previous_period?
+      html += 'L\'exercice a été créé et vous travaillez actuellement dans ce nouvel exercice'
+    else
+      html += 'L\'exercice a été créé et vous travaillez actuellement dans ce nouvel exercice<br />'
+      html += 'Nous vous conseillons maintenant de personnaliser Banques, Caisses et Destinations avant de saisir vos premières écritures'
+    end
+    html.html_safe
+  end
+  
 
 end

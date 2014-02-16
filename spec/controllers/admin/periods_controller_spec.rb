@@ -35,7 +35,7 @@ describe Admin::PeriodsController do
     end
 
     it 'rend vue index si tout est OK' do
-      @a.should_receive(:new).with(valid_params).and_return mock_model(Period, :save=>true).as_new_record
+      @a.should_receive(:new).with(valid_params).and_return mock_model(Period, :save=>true, 'previous_period?'=>false).as_new_record
       post :create, {organism_id:@o.id, :period=>valid_params}, valid_session
       response.should redirect_to admin_organism_periods_url(@o)
     end
@@ -57,7 +57,7 @@ describe Admin::PeriodsController do
       end
 
       it 'le nouvel exercice doit avoir la date de départ remplie' do
-        @a.stub(:new).with(valid_params).and_return(@new_period = (mock_model(Period, :save=>true).as_new_record))
+        @a.stub(:new).with(valid_params).and_return(@new_period = (mock_model(Period, :save=>true, 'previous_period?'=>false).as_new_record))
         @new_period.should_receive(:start_date=).with(Date.today + 1 )
         post :create, {organism_id:@o.id, :period=>valid_params}, valid_session
       end

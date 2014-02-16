@@ -75,8 +75,7 @@ class Admin::RoomsController < Admin::ApplicationController
       @room.save # un after_create du modèle créé la nouvelle base de données et s'y connecte
       @organism.save
       session[:org_db]  = @organism.database_name
-      redirect_to new_admin_organism_period_url(@organism), notice: "Création de l'organisme effectuée, un livre des recettes et un livre des dépenses ont été créés.\n
-          Il vous faut maintenant créer un exercice pour cet organisme"
+      redirect_to new_admin_organism_period_url(@organism), notice: flash_creation_livres
     else
       copy_room_errors(@room)
       render :new
@@ -114,6 +113,18 @@ class Admin::RoomsController < Admin::ApplicationController
         @organism.errors.add(k, mess.first) # on ne recopie que le premier des messages d'erreur
       end
     end
+  end
+  
+  def flash_creation_livres
+    html = 'Création de l\'organisme effectuée<br />'
+    if @organism.status == 'Comité d\'entreprise'
+      html += 'Un livre des recettes et un livre des dépenses ont été créés 
+pour le budget de fonctionnement; de même pour le budget des activités socio_culturelles<br />'
+    else
+      html += 'Un livre des recettes et un livre des dépenses ont été créés<br />'
+    end
+    html += 'Il vous faut maintenant créer un exercice pour cet organisme'
+    html.html_safe
   end
 
   end

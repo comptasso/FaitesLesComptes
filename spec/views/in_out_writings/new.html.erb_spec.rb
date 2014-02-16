@@ -43,7 +43,7 @@ before(:each) do
     @pl.stub(:writing).and_return @w
     
     render
-    rendered.should have_content 'Ecriture n°1 créée'
+    rendered.should have_content 'Pièce n°1 enregistrée'
   end
 
  
