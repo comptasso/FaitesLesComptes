@@ -6,6 +6,14 @@
     display: inline;
 }
 
+// espacement des icones dans le flash après création d'une écriture
+
+.notice strong a img
+    {
+    margin-left: 4px;
+    margin-right: 4px;
+    }
+
 .public_lines {
     .nombre {
         text-align: right;

@@ -2,9 +2,14 @@
   .alert.notice
     %a.close(data-dismiss="alert") x
     %strong
-      %table
-        %tbody
-          %tr
-            %td
-              = "Ecriture n°#{@previous_line.writing_id} créée : "
-              = render 'in_out_writings/line', :line=>@previous_line
+      = "Pièce n°#{@previous_line.writing_id} enregistrée : "
+      = "#{l @previous_line.date} - "
+      = "#{@previous_line.ref} - "
+      = "#{@previous_line.narration} - "
+      = "#{@previous_line.nature.name} - "
+      = "#{@previous_line.destination.name} - " if @previous_line.destination
+      = debit_credit(@previous_line.debit)
+      = debit_credit(@previous_line.credit)
+      = "#{@previous_line.writing.payment_mode} - "
+      = "#{@previous_line.writing.support}"
+      = in_out_line_actions(@previous_line)
