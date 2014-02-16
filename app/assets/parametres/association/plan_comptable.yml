@@ -9,14 +9,22 @@
   title: Report à nouveau débiteur
 - number: '12'
   title: Résultat de l'exercice (excédent ou déficit)
-- number: '13'
-  title: Subvention d'investissement affectées à des biens non renouvelables
-- number: '14'
+- number: '131'
+  title: Subventions d'investissement affectées à des biens non renouvelables
+- number: '139'
+  title: Subventions d'investissement inscrites au compte de résultat
+- number: '148'
   title: Provisions réglementées
-- number: '15'
-  title: Provisions pour risques et charges
-- number: '16'
-  title: Emprunts et dettes assimilées
+- number: '151'
+  title: Provisions pour risques
+- number: '157'
+  title: Provisions pour charges  répartir sur plusieurs exercices 
+- number: '158'
+  title: Autres provisions pour charges 
+- number: '164'
+  title: Emprunts auprès d'établissements de crédit
+- number: '168'
+  title: Autres emprunts
 - number: '19'
   title: Fonds dédiés
 - number: '201'
