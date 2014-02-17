@@ -1,11 +1,19 @@
 ---
+- :name: Vente produits finis
+  :comment: Pour les associations ayant une activité de fabricatiion
+  :acc: '701'
+  :book: Recettes
+- :name: Travaux
+  :comment: Pour les associations réalisant des travaux
+  :acc: '704'
+  :book: Recettes
 - :name: Prestations de services
   :comment: Par exemple, un cours ou une formation, les recettes d'un concert...
   :acc: '706'
   :book: Recettes
 - :name: Ventes de marchandises
   :comment: Par exemple, la vente de boissons et de sandwiches à la buvette de l'association,
-    ou de la revue de l'association
+    ou de la revue de l'association. Plus généralement, des biens non fabriqués par l'association.
   :acc: '707'
   :book: Recettes
 - :name: Activités annexes
@@ -22,8 +30,8 @@
   :comment: ''
   :acc: '756'
   :book: Recettes
-- :name: Produits divers de gestion courante
-  :comment: Comme son nom l'indique, pour du divers
+- :name: Produits divers
+  :comment: Comme son nom l'indique, pour du divers, mais relevant de la gestion courante
   :acc: '758'
   :book: Recettes
 - :name: Produits financiers
@@ -72,10 +80,6 @@
   :comment: charges locatives, dépenses de chauffage,...
   :acc: '614'
   :book: Dépenses
-- :name: Téléphone, internet,...
-  :comment: Tout ce qui concerne les communications
-  :acc: '626'
-  :book: Dépenses
 - :name: Entretien réparations
   :comment: Entretiens des batiments, matériels, véhicules,...
   :acc: '615'
@@ -85,8 +89,8 @@
   :acc: '616'
   :book: Dépenses
 - :name: Etudes et recherches
-  :comment: Coûts des études achetées, dépenses relevant de recherches\r\n
-    Attention, ne pas confondre avec sous traitance si l'asso vend elle-même des études.
+  :comment: ! "Coûts des études achetées, dépenses relevant de recherches\r\n
+    Attention, ne pas confondre avec sous traitance si l'asso vend elle-même des études."
   :acc: '617'
   :book: Dépenses
 - :name: Divers services extérieurs
@@ -94,7 +98,7 @@
   :acc: '618'
   :book: Dépenses
 - :name: Intérimaires
-  :comment: "y compris personnel extérieur à l'association : détaché, prêté,..."
+  :comment: "Y compris personnel extérieur à l'association : détaché, prêté,..."
   :acc: '621'
   :book: Dépenses
 - :name: Honoraires
@@ -110,7 +114,7 @@
   :acc: '624'
   :book: Dépenses
 - :name: Déplacements, réception
-  :comment: "Frais de déplacements : trains, hôtels, restaurants,..."
+  :comment: ! "Frais de déplacements : trains, hôtels, restaurants,..."
   :acc: '625'
   :book: Dépenses
 - :name: Timbres, téléphone, internet
@@ -118,11 +122,10 @@
   :acc: '626'
   :book: Dépenses
 - :name: Frais bancaires
-  :comment: Frais de tenue de compte, commissions sur opérations, mais pas les frais financiers 
-    ou agios qui doivent aller dans la nature 'frais financiers'
+  :comment: Frais de tenue de compte, commissions sur opérations, mais pas les frais financiers ou agios qui doivent aller dans la nature 'frais financiers'
   :acc: '627'
   :book: Dépenses
-- :name: Divers autres services extérieurs
+- :name: Divers autres services
   :comment: Pour les dépenses réellement inclassables
   :acc: '628'
   :book: Dépenses
@@ -131,7 +134,8 @@
   :acc: '631'
   :book: Dépenses
 - :name: Taxes sur rémunérations 
-  :comment: Taxe d'apprentissage, taxe de formation,... \r\nNe pas confondre avec les impôts sur rémunérations
+  :comment: ! "Taxe d'apprentissage, taxe de formation,... \r\n
+    Ne pas confondre avec les impôts sur rémunérations"
   :acc: '633'
   :book: Dépenses
 - :name: Autres impôts et taxes 
@@ -150,7 +154,7 @@
   :comment: Par exemple, l'organisation d'un arbre de Noël
   :acc: '647'
   :book: Dépenses
-- :name: Charges diverses de gestion courante 
+- :name: Charges div. de gestion courante 
   :comment: Dépenses courantes mais non classable dans les autres rubriques
   :acc: '658'
   :book: Dépenses
