@@ -122,7 +122,7 @@
   :acc: '626'
   :book: Dépenses
 - :name: Frais bancaires
-  :comment: Frais de tenue de compte, commissions sur opérations, mais pas les frais financiers ou agios qui doivent aller dans la nature 'frais financiers'
+  :comment: "Frais de tenue de compte, commissions sur opérations, mais pas les frais financiers ou agios qui doivent aller dans la nature 'frais financiers'."
   :acc: '627'
   :book: Dépenses
 - :name: Divers autres services
