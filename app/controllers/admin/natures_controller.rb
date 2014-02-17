@@ -2,7 +2,7 @@
 
 class Admin::NaturesController < Admin::ApplicationController
   
-  before_filter :find_income_outcome_books, only:[:index, :edit, :new]  
+  before_filter :find_income_outcome_books, except: [:reorder, :destroy]
 
 
   # GET /natures
@@ -49,7 +49,6 @@ class Admin::NaturesController < Admin::ApplicationController
 
   # GET /natures/1/edit
   def edit
-    
     @nature = @period.natures.find(params[:id])
   end
 
