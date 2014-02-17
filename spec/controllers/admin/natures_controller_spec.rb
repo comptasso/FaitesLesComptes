@@ -38,14 +38,14 @@ describe Admin::NaturesController do
   before(:each) do
     minimal_instances
     @p.stub(:natures).and_return(@a = double(Arel))
+    @o.stub(:income_books).and_return [1,2]
+      @o.stub(:outcome_books).and_return [3,4]
   end
 
   describe "GET index"  do 
 
 
     it "assigns recettes et dépenses" do
-      @o.stub(:income_books).and_return [1,2]
-      @o.stub(:outcome_books).and_return [3,4]
       get :index, {:period_id=>@p.to_param}, valid_session
       assigns(:books).should == [1,2, 3, 4]
     end
@@ -66,8 +66,6 @@ describe Admin::NaturesController do
 
   describe "GET edit"  do
     it "assigns the requested bank_account as @bank_account" do
-      @o.stub(:income_books).and_return [1,2]
-      @o.stub(:outcome_books).and_return [3,4]
       @a.should_receive(:find).with(nat1.to_param).and_return nat1
       get :edit,  {:period_id=>@p.to_param, :id=>nat1.to_param}, valid_session
       assigns(:nature).should == nat1
