@@ -8,6 +8,10 @@
     ou de la revue de l'association
   :acc: '707'
   :book: Recettes
+- :name: Activités annexes
+  :comment: Recettes accessoires
+  :acc: '708'
+  :book: Recettes
 - :name: Subventions
   :comment: ! "Ce compte concerne les subventions d'exploitation.\r\nY mettre aussi
     provisoirement les subventions d'investissements. Une écriture devra être ensuite
@@ -18,11 +22,17 @@
   :comment: ''
   :acc: '756'
   :book: Recettes
+- :name: Produits divers de gestion courante
+  :comment: Comme son nom l'indique, pour du divers
+  :acc: '758'
+  :book: Recettes
 - :name: Produits financiers
-  :comment: ! "Les intérêts versés sur un livret, mais aussi le montant des prêts
-    bancaires obtenus.\r\nUne écriture devra être passée pour inscrire au bilan le
-    montant du capital du prêt."
+  :comment: "Les intérêts versés sur un livret"
   :acc: '762'
+  :book: Recettes
+- :name: Autres produits financiers
+  :comment: Par exemple, un gain de change...
+  :acc: '768'
   :book: Recettes
 - :name: Déblocage de prêts
   :comment: ! "Par exemple le montant d'un prêt
@@ -30,13 +40,29 @@
     montant du capital du prêt."
   :acc: '7687'
   :book: Recettes
-- :name: Exceptionnel
-  :comment: Les recettes à caractère exceptionnel, per exemple des dommages et intérêts
+- :name: Exceptionnel (gestion)
+  :comment: Les recettes à caractère exceptionnel, par exemple un trop perçu
   :acc: '771'
+  :book: Recettes
+- :name: Exceptionnel (hors gestion)
+  :comment: Par exemple, remboursement d'un dégât des eaux
+  :acc: '778'
   :book: Recettes
 - :name: Achats de march. pour revente
   :comment: Par exemple achats de boissons et de nourriture pour la buvette de l'association
   :acc: '601'
+  :book: Dépenses
+- :name: Energie
+  :comment: Electricité, gaz, fuel
+  :acc: '606'
+  :book: Dépenses
+- :name: Sous traitance
+  :comment: Couts des prestataires auxquels on a confié une partie des tâches
+  :acc: '611'
+  :book: Dépenses
+- :name: Crédit bail
+  :comment: Redevances de biens pris en crédit bail
+  :acc: '612'
   :book: Dépenses
 - :name: Loyer
   :comment: Attention, ne pas mettre les charges locatives
@@ -46,22 +72,71 @@
   :comment: charges locatives, dépenses de chauffage,...
   :acc: '614'
   :book: Dépenses
-- :name: Energie
-  :comment: Electricité, gaz, fuel
-  :acc: '606'
-  :book: Dépenses
 - :name: Téléphone, internet,...
   :comment: Tout ce qui concerne les communications
   :acc: '626'
   :book: Dépenses
-- :name: Autres frais de fonctionnement
-  :comment: Timbres, fournitures, ...
-  :acc: '61'
+- :name: Entretien réparations
+  :comment: Entretiens des batiments, matériels, véhicules,...
+  :acc: '615'
   :book: Dépenses
-- :name: Déplacements
-  :comment: Dépenses de déplacement quel que soit le moyen de transport. Hôtel et
-    restaurant en déplacement
+- :name: Assurances
+  :comment: Primes d'assurance
+  :acc: '616'
+  :book: Dépenses
+- :name: Etudes et recherches
+  :comment: Coûts des études achetées, dépenses relevant de recherches\r\n
+    Attention, ne pas confondre avec sous traitance si l'asso vend elle-même des études.
+  :acc: '617'
+  :book: Dépenses
+- :name: Divers services extérieurs
+  :comment: 
+  :acc: '618'
+  :book: Dépenses
+- :name: Intérimaires
+  :comment: "y compris personnel extérieur à l'association : détaché, prêté,..."
+  :acc: '621'
+  :book: Dépenses
+- :name: Honoraires
+  :comment: Avocat, expert-comptable,...
+  :acc: '622'
+  :book: Dépenses
+- :name: Publicité
+  :comment: Publications, brochures et plus génralement dépenses de relations publiques
+  :acc: '623'
+  :book: Dépenses
+- :name: Transport de biens
+  :comment: Frais de transport de marchandises achetées ou vendues
+  :acc: '624'
+  :book: Dépenses
+- :name: Déplacements, réception
+  :comment: "Frais de déplacements : trains, hôtels, restaurants,..."
   :acc: '625'
+  :book: Dépenses
+- :name: Timbres, téléphone, internet
+  :comment: Frais postaux et de télécommunication
+  :acc: '626'
+  :book: Dépenses
+- :name: Frais bancaires
+  :comment: Frais de tenue de compte, commissions sur opérations, mais pas les frais financiers 
+    ou agios qui doivent aller dans la nature 'frais financiers'
+  :acc: '627'
+  :book: Dépenses
+- :name: Divers autres services extérieurs
+  :comment: Pour les dépenses réellement inclassables
+  :acc: '628'
+  :book: Dépenses
+- :name: Impôts sur rémunérations 
+  :comment: Relevant des impôts (utiliser Taxes sur rémunérations pour les taxes)
+  :acc: '631'
+  :book: Dépenses
+- :name: Taxes sur rémunérations 
+  :comment: Taxe d'apprentissage, taxe de formation,... \r\nNe pas confondre avec les impôts sur rémunérations
+  :acc: '633'
+  :book: Dépenses
+- :name: Autres impôts et taxes 
+  :comment: Pour les impôts et taxes qui ne rentreraient pas dans la rubrique précédente
+  :acc: '635'
   :book: Dépenses
 - :name: Personnel
   :comment: Salaires et rémunérations du personnel
@@ -71,19 +146,33 @@
   :comment: ! 'sur les frais de personnel - Urssaf, arco, agirc, ...'
   :acc: '645'
   :book: Dépenses
+- :name: Autres charges sociales
+  :comment: Par exemple, l'organisation d'un arbre de Noël
+  :acc: '647'
+  :book: Dépenses
+- :name: Charges diverses de gestion courante 
+  :comment: Dépenses courantes mais non classable dans les autres rubriques
+  :acc: '658'
+  :book: Dépenses
 - :name: Frais financiers
-  :comment: "Agios et intérêtsLes remboursement des emprunts.\r\nEn fin d'exercice, une écriture
-    devra être passée pour isoler la part intérêt et la part capital."
+  :comment: Agios et intérêts
   :acc: '661'
+  :book: Dépenses
+- :name: Autres charges financières 
+  :comment: Une perte de change, une perte sur opération de placement de trésorerie,...
+  :acc: '668'
   :book: Dépenses
 - :name: Remboursement des emprunts
   :comment: "En fin d'exercice, une écriture
     devra être passée pour isoler la part intérêt et la part capital."
   :acc: '6687'
   :book: Dépenses
-- :name: Exceptionnel
-  :comment: Les dépenses à caractère exceptionnel (vol dans la caisse, procès, dégât
-    des eaux, ...)
+- :name: Exceptionnel (gestion)
+  :comment: Les dépenses à caractère exceptionnel (vol dans la caisse, procès,...) 
   :acc: '671'
+  :book: Dépenses
+- :name: Exceptionnel (hors gestion)
+  :comment: Par exemple un dégât des eaux
+  :acc: '678'
   :book: Dépenses
 
