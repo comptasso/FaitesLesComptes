@@ -8,7 +8,7 @@ end
 
 describe Period do  
   include OrganismFixtureBis
-  context 'un organisme' do  
+  context 'un organisme' do   
 
     def valid_params
       {start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year}
@@ -67,11 +67,11 @@ describe Period do
 
       
 
-      it 'n est pas valide si plus de deux exercices ouverts', wip:true do
-       @p.stub(:max_open_periods?).and_return true
-       expect {@p.save}.not_to change {Period.count}
-       @p.save
-       @p.errors[:base].first.should == 'Impossible d\'avoir plus de deux exercices ouverts'
+      it 'n est pas valide si plus de deux exercices ouverts' do
+        @p.stub(:max_open_periods?).and_return true
+        expect {@p.save}.not_to change {Period.count}
+        @p.save
+        @p.errors[:base].first.should == 'Impossible d\'avoir plus de deux exercices ouverts'
         
       end
 
@@ -111,15 +111,16 @@ describe Period do
       end
      
     
-      it 'la création des comptes' do
-        @p.accounts(true).count.should == 87 # la liste des comptes du plan comptable
+      it 'la création des comptes' , wip:true do
+        # @p.accounts(true).each {|acc| p acc}
+        @p.accounts(true).count.should == 137 # la liste des comptes du plan comptable
         # on n'a pas les deux comptes de caisse et banque 
         # car on a stubbé create_bank_and_cash_accounts
         # ni le compte de remise de chèque
       end
 
       it 'la création des natures : 10 natures de dépenses et 6 de recettes '  do
-        @p.should have(16).natures
+        @p.should have(43).natures
       end
       
       
@@ -131,29 +132,29 @@ describe Period do
       describe 'après création' do
         
         
-      it 'start_date ne peut plus changer' do
-        @p.start_date = @p.start_date >> 1 # raccourci qui indique 1 mois plus tard
-        @p.should_not be_valid
-      end
+        it 'start_date ne peut plus changer' do
+          @p.start_date = @p.start_date >> 1 # raccourci qui indique 1 mois plus tard
+          @p.should_not be_valid
+        end
 
-      it 'close_date ne peut plus changer' do
-        @p.close_date = @p.close_date << 1
-        @p.should_not be_valid
-      end
+        it 'close_date ne peut plus changer' do
+          @p.close_date = @p.close_date << 1
+          @p.should_not be_valid
+        end
 
-      it 'un exercice clos ne peut être réouvert' do
+        it 'un exercice clos ne peut être réouvert' do
         
-        @p.update_attribute(:open, false)
-        @p.open = true
-        @p.should_not be_valid
+          @p.update_attribute(:open, false)
+          @p.open = true
+          @p.should_not be_valid
+        end
+
+
       end
-
-
-    end
 
     end
     
-    describe 'la création du premier exercice d un comité', wip:true do
+    describe 'la création du premier exercice d un comité' do
       
       before(:each) do
         @org = mock_model(Organism, :status_class=>'Comite', :fill_bridge=>true)
@@ -177,6 +178,35 @@ describe Period do
         @p.natures(true).count.should == 35
       end
     end
+    
+    
+    context 'pour une entreprises' do
+    
+      describe 'la création du premier exercice', wip:true do
+      
+        before(:each) do
+          @org = mock_model(Organism, :status_class=>'Entreprise', :fill_bridge=>false)
+          @p  = Period.new(valid_params)
+          @p.organism_id = @org.id
+          @p.stub(:collect_books).and_return({'Recettes'=>1, "Dépenses"=>2})
+          @p.stub(:max_open_periods?).and_return false 
+          @p.stub(:organism) {@org}
+          @p.stub(:create_bank_and_cash_accounts).and_return true
+          @p.stub(:create_rem_check_accounts).and_return true
+          @p.save!
+        end
+      
+        it 'entraîne celle de 99 comptes' do
+          @p.accounts(true).count.should == 99 # la liste des comptes du plan comptable
+          # on n'a pas les deux comptes de caisse et banque car on a stubbé create_bank_and_cash_accounts
+        end
+      
+        it 'et de 24 natures' do
+          @p.natures(true).count.should == 24
+        end
+      end
+    end
+    
 
     describe 'un exercice est destroyable?' do
       
@@ -401,14 +431,14 @@ describe Period do
         context 'l exerice est closable' do
       
           before(:each) do
-             @ob= @org.books.find_by_type('OutcomeBook')
+            @ob= @org.books.find_by_type('OutcomeBook')
             @ib= @org.books.find_by_type('IncomeBook')
-             @ba = @org.bank_accounts.new(bank_name:'DebiX', number:'123Z', nickname:'Compte épargne')
-             @ba.sector_id = 1; @ba.save!
+            @ba = @org.bank_accounts.new(bank_name:'DebiX', number:'123Z', nickname:'Compte épargne')
+            @ba.sector_id = 1; @ba.save!
             @baca = @ba.current_account(@p_2010)
-            @acc60 = @p_2010.accounts.find_by_number '60'
+            @acc60 = @p_2010.accounts.find_by_number '601'
             @acc70 = @p_2010.accounts.find_by_number '701'
-            @acc61 = @p_2011.accounts.find_by_number '60'
+            @acc61 = @p_2011.accounts.find_by_number '601'
             @acc71 = @p_2011.accounts.find_by_number '701'
             @n_dep = @p_2010.natures.create!(name:'nature_dep', account_id:@acc60.id, book_id:@ob.id)
             @n_rec = @p_2010.natures.create!(name:'nature_rec', account_id:@acc70.id, book_id:@ib.id)
@@ -432,7 +462,7 @@ describe Period do
         
           end
 
-          it "génère les écritures d'ouverture de l'exercice" do
+          it "génère les écritures d'ouverture de l'exercice"  do
             @p_2010.close
             @p_2010.should be_closed
           end
@@ -484,7 +514,7 @@ describe Period do
           @p_2011.recettes_natures.should == %w(bonbons cailloux)
         end
 
-       it 'report à nouveau renvoie une ComptaLine dont le montant est le résultat et le compte 12'  do
+        it 'report à nouveau renvoie une ComptaLine dont le montant est le résultat et le compte 12'  do
           @p_2011.send(:report_a_nouveau).should be_an_instance_of(ComptaLine)
         end
         

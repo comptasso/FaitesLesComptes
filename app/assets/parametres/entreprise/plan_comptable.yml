@@ -1,8 +1,7 @@
 ---
+# soit 99 comptes sans banque, chèque à l'encaissement et caisse
 - number: '101'
   title: Capital
-- number: '102'
-  title: Fonds fiduciaires
 - number: '105'
   title: Ecart de réévaluatuion
 - number: '1061'
@@ -39,24 +38,30 @@
   title: Autres immobilisations incorporelles
 - number: '210'
   title: Immobilisations corporelles
-- number: '215'
-  title: Installations techniques, matériel et outillage industriel
-- number: '220'
-  title: Immobilisations mises en concessions
 - number: '230'
   title: Immobilisations en cours
 - number: '270'
   title: Autres immobilisations financières
-- number: '280'
-  title: Amortissements des immobilisations incorporelles
+- number: '2801'
+  title: Amortissements frais établissement
+- number: '2806'
+  title: Amortissements droit au bail
+- number: '2807'
+  title: Amortissements fonds commercial
+- number: '2808'
+  title: Amortissements autres immos. incorporelles
 - number: '281'
   title: Amortissements des immobilisations corporelles
-- number: '290'
-  title: Dépréciations des immobilisations incorporelles
+- number: '2901'
+  title: Dépréciations frais établissements
+- number: '2906'
+  title: Dépréciations droit au bail
+- number: '2907'
+  title: Dépréciations fonds commercial
+- number: '2908'
+  title: Dépréciations autres immos.incorporelles
 - number: '291'
   title: Dépréciations des immobilisations corporelles
-- number: '292'
-  title: Dépréciation des immobilisations mises en concession
 - number: '293'
   title: Dépréciations des immobilisations en cours
 - number: '297'

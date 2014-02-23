@@ -235,7 +235,7 @@ describe Room  do
     end
 
   end
-
+  
 
   describe 'verification des bases après les tests de room' do
 

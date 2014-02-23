@@ -181,8 +181,6 @@
   title: Impôts, taxes et versements assimilés sur rémunérations (autres)
 - number: '635'
   title: Autres impôts et taxes (impôts)
-- number: '635'
-  title: Autres impôts et taxes (autres)
 - number: '641'
   title: Rémunérations du personnel
 - number: '645'
