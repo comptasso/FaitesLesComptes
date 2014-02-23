@@ -73,9 +73,9 @@ describe Compta::Nomenclature do
   describe 'resultat complete' do
 
     it 'aouter un compte 7 non repris dans la nomenclature la rend invalide' do
-      @p.stub(:two_period_account_numbers).and_return(['709'])
+      @p.stub(:two_period_account_numbers).and_return(['710'])
       @cn.valid?
-      @cn.errors.messages[:resultat].should == ['Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 709']
+      @cn.errors.messages[:resultat].should == ['Le compte de résultats ne reprend pas tous les comptes 6 et 7. Manque 710']
     end
 
   end

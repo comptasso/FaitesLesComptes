@@ -27,7 +27,7 @@ describe 'création d une écriture à partir d un guide' do
     create_user
     create_minimal_organism 
     login_as('quidam')
-    @nat = @p.natures.recettes.first
+    @nat = @p.natures.recettes.third
     @mask = @o.masks.create!(valid_attributes)
    
     visit new_mask_writing_path(@mask) 
@@ -40,7 +40,7 @@ describe 'création d une écriture à partir d un guide' do
   it 'le formulaire est affiché' do
      page.all('form').should have(1).element
      page.find('#in_out_writing_narration').value.should == 'Facture régulière'
-      page.find('#in_out_writing_compta_lines_attributes_0_nature_id option[selected]').text.should =='Prestations de services'
+      page.find('#in_out_writing_compta_lines_attributes_0_nature_id option[selected]').text.should == @nat.name
       page.find('#in_out_writing_compta_lines_attributes_1_payment_mode option[selected]').value.should == 'CB'
       page.find('#in_out_writing_compta_lines_attributes_0_credit').value.should == '111.11'
   end

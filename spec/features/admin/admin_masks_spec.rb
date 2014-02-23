@@ -47,7 +47,7 @@ describe "admin mask" do
     
     it 'avec les informations pré remplies' do
       page.find('#mask_narration').value.should == 'Facture régulière'
-      page.find('#mask_nature_name option[selected]').value.should =='Prestations de services'
+      page.find('#mask_nature_name option[selected]').value.should == @nat.name
       page.find('#mask_mode option[selected]').value.should == 'CB'
       page.find('#mask_amount').value.should == '111.11'
       

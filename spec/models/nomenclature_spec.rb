@@ -39,7 +39,7 @@ describe Nomenclature do
     end
 
     it 'actif a des rubriks' do
-      @n.actif.should have(29).rubriks
+      @n.actif.should have(31).rubriks
     end
 
     it 'peut créer une Compta::Nomenclature' do
@@ -200,8 +200,11 @@ describe Nomenclature do
       @n = o.nomenclature  
     end
     
+    # TODO gérer la problématique du test sur un nombre qui évolue lorsqu'on modifie
+    # le fichier nomenclature. Il faudrait mieux qu'il compte le nombre de rubriques par lui
+    # même
     it 'crée les 94 rubriks fournies par le fichier yml' do
-      @n.should have(95).rubriks  
+      @n.should have(98).rubriks  
     end
     
     it 'la nomenclature a 4 folios' do

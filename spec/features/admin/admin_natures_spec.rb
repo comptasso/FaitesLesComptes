@@ -10,23 +10,15 @@ end
 
 # spec request for testing admin books   
 
-describe 'vue natures index' do  
+describe 'vue natures index' do   
   include OrganismFixtureBis 
 
   before(:each) do
     create_user
     create_minimal_organism 
     login_as('quidam')
+    @nats_count = Nature.count
   end
-
-
-  it 'check minimal organism' do
-    Organism.count.should == 1
-    Nature.count.should == 16 # les natures par défaut pour natures_asso.yml
-    # on commence par les natures de recettes
-    Book.first.should have(6).natures
-  end
-
 
 
   describe 'new nature' do
@@ -48,7 +40,7 @@ describe 'vue natures index' do
       fill_in 'nature[comment]', :with=>'Une nature pour essayer'
       select 'Dépenses'
       click_button 'Créer la nature'
-      @p.natures(true).count.should == 17
+      @p.natures(true).count.should == @nats_count + 1
       @p.natures.last.book.should == OutcomeBook.first
       current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
     end

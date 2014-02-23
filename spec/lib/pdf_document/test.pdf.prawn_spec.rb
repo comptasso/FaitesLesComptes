@@ -10,7 +10,7 @@ describe 'test pdf prawn' do
   include OrganismFixtureBis
    before(:each) do
      create_minimal_organism
-     @account =  @p.accounts.find_by_number('60') 
+     @account =  @p.accounts.find_by_number('601') 
     # on relie la nature @n au compte
      @n.account_id = @account.id 
      @n.save!

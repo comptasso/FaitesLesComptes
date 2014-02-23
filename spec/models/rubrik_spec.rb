@@ -4,6 +4,9 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
+# TODO voir à faire un test plus autonome
+# le nombre de rubriques avec un organisme réel pouvant être testé dans un features
+
 describe Rubrik do
   include OrganismFixtureBis
   
@@ -28,9 +31,9 @@ describe Rubrik do
     end
   
     it 'sa position est respectée' do 
-      @r.position.should == 23
+      @r.position.should == 24
       @r.folio.rubriks.find_by_position(24).name.should == 'Produits financiers'
-      @r.folio.rubriks.find_by_position(22).name.should == 'RESULTAT FINANCIER'
+      @r.folio.rubriks.find_by_position(23).name.should == 'RESULTAT FINANCIER'
     end
     
     it 'ses rubriques enfants sont des feuilles', wip:true do

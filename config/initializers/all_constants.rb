@@ -76,4 +76,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.4.1RC' # Préparation pour les CE. Modifications de la logique des natures qui ont 
 # maintenant également belongs_to book.
 # FLCVERSION = '1.4.2RC' # Version sectorisée pour les CE
-FLCVERSION = '1.4.3RC' # Refonte des graphiques pour accélérer l'affichage du DashBoard
+# FLCVERSION = '1.4.3RC' # Refonte des graphiques pour accélérer l'affichage du DashBoard
+FLCVERSION = '1.4.4RC' # revision des plans comptables et nomenclatures

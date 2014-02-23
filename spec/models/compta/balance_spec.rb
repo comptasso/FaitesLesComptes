@@ -13,7 +13,7 @@ describe Compta::Balance do
   before(:each) do
     create_organism 
     @p = @o.periods.create!(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
-    @a1 = @p.accounts.find_by_number('60')
+    @a1 = @p.accounts.find_by_number('601')
     @a2 = @p.accounts.find_by_number('603') 
   end
 
@@ -140,7 +140,7 @@ describe Compta::Balance do
       end
 
       it('est un array')  { @bals.should be_an Array} 
-      it('de 90 lignes') {@bals.should have(90).lines}
+      it('avec autant de lignes que de comptes') {@bals.should have(@p.accounts.count).lines}
       it 'chaque ligne est un hash' do
         @acc = @p.accounts.first(order:'number ASC')
         @bals.first.should ==
