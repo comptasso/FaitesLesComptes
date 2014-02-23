@@ -1,4 +1,4 @@
-# coding: utf-8
+# coding: utf-8 
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
@@ -197,7 +197,7 @@ describe Period do
         end
       
         it 'entraîne celle de 99 comptes' do
-          @p.accounts(true).count.should == 99 # la liste des comptes du plan comptable
+          @p.accounts(true).count.should == 103 # la liste des comptes du plan comptable
           # on n'a pas les deux comptes de caisse et banque car on a stubbé create_bank_and_cash_accounts
         end
       
