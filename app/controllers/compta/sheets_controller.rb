@@ -23,6 +23,7 @@ class Compta::SheetsController < Compta::ApplicationController
   def index
     # @docs est une collection de Compta::Sheet
     @docs = params[:collection].map do |c|
+      # TODO mettre cela dans le modèle
       fol = @nomenclature.folios.find_by_name(c.to_s)
       @nomenclature.sheet(@period, fol)
     end

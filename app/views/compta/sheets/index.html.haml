@@ -1,13 +1,10 @@
 =content_for :menu do
   = delayed_export_icons(params)
-  
-
-
 
 - @docs.each do |doc|
   .champ
     %h3
-      = doc.folio.title
+      = doc.title
       = icon_to 'detail.png', compta_sheet_path(doc.folio)
   - if doc.sens  == :actif
     .actif

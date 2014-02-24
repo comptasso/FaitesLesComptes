@@ -115,7 +115,8 @@ class Folio < ActiveRecord::Base
   end
   
   # surcharge de title pour gérer les CE qui affichent en subtitle leur secteur
-  def title
+  # dans les pdf. (Ceci pour des questions de mise en page)
+  def pdf_title
     return 'Compte de Résultats' if name == 'resultatASC' || name == 'resultatfonc'
     read_attribute(:title)
   end

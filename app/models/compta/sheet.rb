@@ -103,9 +103,13 @@ module Compta
     end
 
     # fait une édition pdf de sheet en s'appuyant sur la classe Edition::Sheet
+    # 
+    # On utilise ici pdf_title car Compte de résultats fonctionnement entraîne un
+    # renvoi à la page suivante. Donc pdf_title => 'Compte de résultats'
+    # et subtitle affichera alors Fonctionnement ou Activités Sociales et Culturelles
     #
     def to_pdf(options = {})
-      options[:title] =  folio.title 
+      options[:title] =  folio.pdf_title 
       options[:subtitle] = folio.subtitle
       Editions::Sheet.new(@period, self, options)
     end
