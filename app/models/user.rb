@@ -67,6 +67,7 @@ class User < ActiveRecord::Base
   end
 
   def allowed_to_create_room?
+    return true if role == 'expert'
     rooms(true).count < 4
   end
 
