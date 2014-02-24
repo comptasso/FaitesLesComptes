@@ -20,7 +20,7 @@ describe User do
     @u = User.new(valid_attributes_for_user)
   end
 
-  describe 'validations' do
+  describe 'validations' do 
   
     it 'exige un nom' do
       @u.name =  nil
@@ -54,8 +54,23 @@ describe User do
 
     it 'non valide sans password' do
       @u.password = nil
-      @u.should_not be_valid
+      @u.should_not be_valid 
       @u.errors.messages[:password].should == ['obligatoire']
+    end
+    
+    it 'non valide sans role' do
+      @u.role = nil
+      @u.should_not be_valid
+    end
+    
+    it 'un user peut etre expert' do
+      @u.role = 'expert'
+      @u.should be_valid
+    end
+    
+    it 'mais pas autre chose que standard et expert' do
+      @u.role = 'autrrechose'
+      @u.should_not be_valid
     end
 
     it 'mais juste comme il faut' do

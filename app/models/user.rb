@@ -8,16 +8,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me
-
-  attr_accessible :name
+  attr_accessible :name, :email, :password, :password_confirmation, :remember_me
   
   has_many :rooms, :dependent=>:destroy
 
   strip_before_validation :name
 
   validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
-
+  validates :role, presence: true, :inclusion=>{:in=>['standard', 'expert'] }
+  
+  
   def enter_first_room
     rooms.first
   end

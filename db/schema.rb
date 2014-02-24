@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140124060808) do
+ActiveRecord::Schema.define(:version => 20140224183608) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -130,9 +130,9 @@ ActiveRecord::Schema.define(:version => 20140124060808) do
     t.text     "description"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
-    t.integer  "organism_id"
     t.string   "type"
     t.string   "abbreviation"
+    t.integer  "organism_id"
     t.integer  "sector_id"
   end
 
@@ -316,10 +316,10 @@ ActiveRecord::Schema.define(:version => 20140124060808) do
 
   create_table "users", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
-    t.string   "email",                  :default => "", :null => false
-    t.string   "encrypted_password",     :default => "", :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.string   "email",                  :default => "",         :null => false
+    t.string   "encrypted_password",     :default => "",         :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -331,6 +331,7 @@ ActiveRecord::Schema.define(:version => 20140124060808) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.string   "role",                   :default => "standard"
   end
 
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
