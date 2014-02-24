@@ -20,7 +20,7 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe Admin::AccountsController do
+describe Admin::AccountsController do 
   include SpecControllerHelper
 
   let(:a1) {mock_model(Account)}
@@ -37,10 +37,14 @@ describe Admin::AccountsController do
   end
 
   describe "GET index" do
-
-
-    it "assigns all accounts as @accounts" do
-      @a.stub(:all).and_return [1,2] 
+    
+    it 'demande à Account sa list de compte pour la périod' do
+      Account.should_receive(:list_for).with(@p).and_return [1,2] 
+      get :index, {:period_id=>@p.to_param}, valid_session
+    end
+    
+    it "et l'assigne à @accounts" do
+      Account.stub(:list_for).and_return [1,2] 
       get :index, {:period_id=>@p.to_param}, valid_session
       assigns(:accounts).should == [1,2]
     end
