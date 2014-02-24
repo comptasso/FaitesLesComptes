@@ -90,7 +90,7 @@ class Subscription < ActiveRecord::Base
     d >= to_pass ? to_pass : to_pass << 1  
   end
   
-  # date de la dernière écriture pour cet abonnement
+  # date de la dernière écriture pour cet abonnement 
   # s'il n'y a pas encore d'écritures, renvoie le mois précédent la création
   # du mask pour permettre une écriture pour le mois en cours
   def last_writing_date

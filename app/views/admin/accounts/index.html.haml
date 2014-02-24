@@ -18,10 +18,10 @@
         %tr
           %td= account.number.to_s
           %td= account.title
-          %td= render partial: 'nature', collection: account.natures.all if account.natures.count > 0
+          %td= render partial: 'nature', collection: account.natures.all if account.nb_nats.to_i > 0
           %td= t_used account
           %td
-           
             = icon_to 'modifier.png', edit_admin_period_account_path(@period, account)
-            = icon_to 'supprimer.png', [:admin,@period,account], :confirm => 'Etes vous sur ?', :method => :delete unless account.compta_lines.any?
+            - if (account.nb_cls.to_i == 0 && account.nb_nats.to_i == 0)
+              = icon_to 'supprimer.png', [:admin,@period,account], :confirm => 'Etes vous sur ?', :method => :delete 
   

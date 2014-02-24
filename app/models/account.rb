@@ -66,6 +66,16 @@ class Account < ActiveRecord::Base
   scope :classe_1_to_5, where('number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ?', '1%', '2%', '3%', '4%', '5%').order('number ASC')
   scope :rem_check_accounts, where('number = ?', '511')
   
+  # Liste tous les comptes pour un exercice donné. Cette requête permet de limiter 
+  # grandement le nombre d'interrogations de la base dans l'affichage de la vue index
+  # qui a besoin de connaître pour chaque compte s'il a une nature (pour les afficher et icone supprimer) 
+  # et s'il a des compta_lines (pour l'affichage de l'icone supprimer).
+  scope :list_for, lambda {|period| joins("LEFT OUTER JOIN natures ON (accounts.id = natures.account_id) LEFT OUTER JOIN compta_lines ON (accounts.id = compta_lines.account_id)").
+   select("accounts.id, number, title, used, COUNT(compta_lines) AS nb_cls, COUNT(natures) AS nb_nats").
+   where("accounts.period_id = ?", period.id ).
+   group("accounts.id") } 
+  
+  
  def <=>(other) 
    number <=> other.number
  end
@@ -75,16 +85,6 @@ class Account < ActiveRecord::Base
   def long_name
     [number, title].join(' ')
   end
-  
-  # surcharge de la méthode number créée par Rails pour avoir toujours 
-  # au moins 3 chiffres (puisque les comptes peuvent être de deux chiffres)
-  # FIXME crée des accounts introuvables 
-#  def number
-#    num = read_attribute(:number)
-#    num +='0' if num.length < 3
-#    num
-#  end
-
 
 
   # Surcharge de cumulated_at comme indiqué dans Utilities::Sold
