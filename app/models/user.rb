@@ -10,12 +10,18 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me
   
-  has_many :rooms, :dependent=>:destroy
+  has_many :holders, :dependent=>:destroy
+  has_many :rooms, :through=>:holders
+  
 
   strip_before_validation :name
 
   validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :role, presence: true, :inclusion=>{:in=>['standard', 'expert'] }
+  
+  def own_rooms
+    holders.where('status = ?', 'owner') 
+  end
   
   
   def enter_first_room
@@ -68,7 +74,7 @@ class User < ActiveRecord::Base
 
   def allowed_to_create_room?
     return true if role == 'expert'
-    rooms(true).count < 4
+    own_rooms.count < 4
   end
 
  

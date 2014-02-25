@@ -188,7 +188,8 @@ fr:
     
     
     
-   
+  owner: Propriétaire
+  guest: Invité
   Line: ligne
   same_migration: En phase
   late_migration: En retard

@@ -9,20 +9,23 @@ require 'strip_arguments'
 #
 class Room < ActiveRecord::Base 
   
-  belongs_to :user
-
+  has_many :holders, dependent: :destroy
+   
   attr_accessible :database_name
 
   strip_before_validation :database_name 
-  
-  validates :user_id, presence:true
+    
   validates :database_name, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*(_[0-9]*)?\z/}, uniqueness:true
   validates :database_name, :upper_limit=>true
   
-
   after_create :create_db, :connect_to_organism
   before_update :change_schema_name, :if=>:database_name_changed?
-  after_destroy :destroy_db 
+  after_destroy :destroy_db
+  
+  # renvoie le propriétaire de la base
+  def owner
+    holders.where('status = ?', 'owner').first.user
+  end
   
   # renvoie l'organisme associé à la base
   def organism
@@ -149,7 +152,7 @@ class Room < ActiveRecord::Base
       Rails.logger.warn r.errors.messages unless r.valid?
       r.save!
 
-    end
+    end 
   end
 
   protected
@@ -182,9 +185,9 @@ class Room < ActiveRecord::Base
 
   def destroy_db
     Rails.logger.info "Destruction de la base #{database_name}"
-    Apartment::Database.drop(database_name)
+    Apartment::Database.drop(database_name) 
     Apartment::Database.switch # pour revenir à la base de données par défaut
-  end
+  end 
 
   # Cette action ne devrait a priori jamais être appelée.
   # 

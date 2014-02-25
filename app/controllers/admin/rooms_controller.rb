@@ -15,6 +15,8 @@ class Admin::RoomsController < Admin::ApplicationController
 
   skip_before_filter :find_organism, :current_period
   
+  before_filter :owner_only, only:[:destroy]
+  
   after_filter :clear_org_cache, only:[:create, :destroy]
 
   # TODO  voir s'il faut retirer cette logique de up_to_date puisqu'on est maintenant uniquement sur du full web
@@ -68,12 +70,13 @@ class Admin::RoomsController < Admin::ApplicationController
     @room = current_user.rooms.new(database_name:params[:organism][:database_name])
     # vérifie que le fichier de base de données n'existe pas
     # TODO Faire un un nom de base préfixé pour éviter le risque de doublons trop fréquents
-    
+    # TODO mettre cette logique de création de room... dans le modèle User
     
     if @organism.valid? && @room.valid?
 
       @room.save # un after_create du modèle créé la nouvelle base de données et s'y connecte
-      @organism.save
+      @organism.save 
+      current_user.holders.create(room_id:@room.id, status:'owner') # on créé le holder
       session[:org_db]  = @organism.database_name
       redirect_to new_admin_organism_period_url(@organism), notice: flash_creation_livres
     else
@@ -85,11 +88,12 @@ class Admin::RoomsController < Admin::ApplicationController
   end 
 
 
-  # détruit la pièce ainsi que la base associée
+  # détruit la pièce ainsi que la base associée.
+  # 
+  # Le before_filter only_owner instancie @room
   #
   def destroy
-    @room = current_user.rooms.find(params[:id])
-    
+        
     db_name= @room.database_name
     Rails.logger.info "Destruction de la base #{db_name}  - méthode rooms_controller#destroy}"
   
@@ -126,5 +130,14 @@ pour le budget de fonctionnement; de même pour le budget des activités socio_c
     html += 'Il vous faut maintenant créer un exercice pour cet organisme'
     html.html_safe
   end
-
+  
+  # les actions edit, destroy et update ne sont permises que si le current_user est le owner
+  def owner_only
+    @room = current_user.rooms.find(params[:id])
+    unless current_user == @room.owner
+      flash[:alert] = "Vous ne pouvez executer cette action car vous n'êtes pas le propriétaire de la base"
+      redirect_to admin_rooms_url
+    end
+  end
+    
   end

@@ -9,8 +9,9 @@
   %thead
     %tr
       %th.pc15 Titre
-      %th.pc35 Commentaire
+      %th.pc25 Commentaire
       %th.pc10 Statut
+      %th.pc10 Vous êtes
       %th.pc10 Base de données
       %th.pc5 Etat
       
@@ -24,6 +25,7 @@
         %td= organ.title rescue 'non renseigné' # pour gérér les cas où la base de données n est pas à jour et où le champ est manquant
         %td= organ.comment rescue 'non renseigné'
         %td= organ.status rescue 'non renseigné'
+        %td= holder_status(ro, current_user)
         %td= ro.database_name
         %td 
           

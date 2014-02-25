@@ -5,8 +5,8 @@
 class UpperLimitValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
-    if record.user_id # le cas ou user_id est nil est traité par une autre validation
-      u = record.user
+    if record.owner # le cas ou user_id est nil est traité par une autre validation
+      u = record.owner
       record.errors.add(attribute, :upper_limit) unless u.allowed_to_create_room?
     end
   end

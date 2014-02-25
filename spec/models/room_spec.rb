@@ -214,23 +214,23 @@ describe Room  do
 
   end
 
-  describe 'limitation du nombre de rooms par utilisateur'  do
+  describe 'vaidator upper_limit'  do
 
     before(:each) do 
-      create_user
+      @u = User.new
     end
 
-    it 'un user qui a déja 3 bases ne peut plus ajouter de room' do
-      User.any_instance.stub_chain(:rooms, :count).and_return(4)
+    it 'un owner non autorisé ne peut pas ajouter de room' do
+      @u.stub('allowed_to_create_room?').and_return(false)
       r = Room.new(database_name:'base4')
-      r.user_id = @cu.id
+      r.stub(:owner).and_return @u
       r.should_not be_valid  
     end
 
-    it 'un user qui n a que 2 bases ou moins peut ajouter une chambre' do 
-      @cu.stub_chain(:rooms, :count).and_return(2)
+    it 'un user autorisé peut ajouter une room' do 
+      @u.stub('allowed_to_create_room?').and_return(true)
       r = Room.new(database_name:'base3')
-      r.user_id = @cu.id
+      r.stub(:owner).and_return @u
       r.should be_valid
     end
 
