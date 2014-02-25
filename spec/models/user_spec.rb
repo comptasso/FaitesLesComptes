@@ -158,19 +158,21 @@ describe User do
   
   describe 'allowed_to_create_room' do
     
+    subject {u = User.new(); u.role = 'standard'; u}
+    
     it 'si moins de 4 rooms pour un user standard' do
-      @u.stub_chain(:rooms, :count).and_return 3
-      @u.should be_allowed_to_create_room
+      subject.stub_chain(:owned_rooms, :count).and_return 3 
+      subject.should be_allowed_to_create_room
     end
     
     it 'sans limite pour un user expert' do
-      @u.role = 'expert'
-      @u.should be_allowed_to_create_room
+      subject.role = 'expert'
+      subject.should be_allowed_to_create_room
     end
     
     it 'mais pas si 4 ou plus pour un user standard' do
-      @u.stub_chain(:rooms, :count).and_return 4
-      @u.should_not be_allowed_to_create_room
+      subject.stub_chain(:owned_rooms, :count).and_return 4
+      subject.allowed_to_create_room?.should == false
     end
     
     

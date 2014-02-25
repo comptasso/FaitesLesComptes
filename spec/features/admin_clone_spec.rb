@@ -9,12 +9,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 #end
 
 
-describe 'resquest clone' do
+describe 'resquest clone' do 
   include OrganismFixtureBis
 
   before(:each) do
     create_user
-    create_minimal_organism   
+    create_minimal_organism    
     login_as('quidam')
   end
 
@@ -28,12 +28,12 @@ describe 'resquest clone' do
       current_url.should match new_admin_clone_path
     end
 
-    it 'remplir la vue et cliquer sur le bouton crée une nouvelle base' do
+    it 'remplir la vue et cliquer sur le bouton crée une nouvelle base', js:true do
       nb_rooms = @cu.rooms.count
       visit new_admin_clone_path
       fill_in 'organism[comment]', :with=>'test clonage'
       click_button 'clone_button'
-      @cu.rooms.count.should == (nb_rooms + 1)
+      @cu.rooms(true).count.should == (nb_rooms + 1)
     end
 
 

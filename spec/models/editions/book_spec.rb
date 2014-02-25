@@ -19,7 +19,7 @@ describe Editions::Book do
 
   before(:each) do
      @book = mock_model(Book)
-     @period = double(Period, organism:stub(:title=>'L\'organisme'),
+     @period = double(Period, organism:double(:title=>'L\'organisme'),
        :long_exercice=>'Exercice en cours',
        start_date:Date.today.beginning_of_year,
        close_date:Date.today.end_of_year)

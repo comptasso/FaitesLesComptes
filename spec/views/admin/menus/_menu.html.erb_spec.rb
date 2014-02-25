@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'spec_helper'
+require 'spec_helper' 
 
 
 RSpec.configure do |c|
@@ -18,8 +18,9 @@ describe "admin/menus/_menu.html.erb" do
     assign(:user, cu)
     view.stub(:current_user).and_return cu 
     view.stub('user_signed_in?').and_return true
+    view.stub('owner?').and_return true
     assign(:organism, o)
-    @request.path = '/admin/oragnisms/show'
+    @request.path = '/admin/organisms/show'
   end
   
   describe 'bridge' do

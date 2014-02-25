@@ -60,7 +60,7 @@ describe Admin::ClonesController do
   context 'quand le user n est pas le owner' do
     
     before(:each) do
-      @cu.stub_chain(:rooms, :find).and_return @r
+      @o.stub(:room).and_return @r
       @r.stub(:owner).and_return(User.new) # donc évidemment pas le même que @cu
     end
     

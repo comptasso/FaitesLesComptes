@@ -1,10 +1,10 @@
 require 'spec_helper' 
 
 RSpec.configure do |c|
-  # c.filter = {wip:true}
+  # c.filter = {wip:true} 
 end
 
-describe "admin rooms" do 
+describe "admin rooms" do  
    
   include OrganismFixtureBis
   
@@ -71,7 +71,7 @@ describe "admin rooms" do
    
   
   
-  describe 'cloner un organisme' do
+  describe 'cloner un organisme' do 
     
       it 'crée un clone' do
         visit admin_organism_path(@o.to_param)

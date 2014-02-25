@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   validates :role, presence: true, :inclusion=>{:in=>['standard', 'expert'] }
   
   # renvoie les rooms qui sont détenues par le user
-  def own_rooms
+  def owned_rooms
     holders.where('status = ?', 'owner').map(&:room) 
   end
   
@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
 
   def allowed_to_create_room?
     return true if role == 'expert'
-    own_rooms.count < 4
+    owned_rooms.count < 4
   end
 
   protected

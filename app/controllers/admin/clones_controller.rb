@@ -34,12 +34,10 @@ class Admin::ClonesController < Admin::ApplicationController
   
   # l action destroy ne sont permises que si le current_user est le owner
   def owner_only
-    room = current_user.rooms.find(params[:id])
-    check = (current_user == room.owner)
-    unless check
+    unless current_user == @organism.room.owner
       flash[:alert] = "Vous ne pouvez executer cette action car vous n'êtes pas le propriétaire de la base"
       redirect_to admin_rooms_url
     end
-    check
+    
   end
 end

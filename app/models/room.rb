@@ -158,9 +158,9 @@ class Room < ActiveRecord::Base
   # que la room actuelle mais avec room_id pointant sur la nouvelle Room
   def clone_room(new_db_name)
     # on crée la Room
-    r = Room.create(:database_name=>new_db_name)
+    r = Room.create!(:database_name=>new_db_name)
     # puis pour chaque holder on duplique
-    holders.each {|h| h.dup; h.room_id = r.id; h.save}
+    holders.each {|h| newholder = h.dup; newholder.room_id = r.id; newholder.save!}
   end
 
   
@@ -169,7 +169,7 @@ class Room < ActiveRecord::Base
   # timestamp, soit en changeant le timestamp
   #
   def timestamp_db_name
-    if database_name =~ /^([a-zA-Z]*)_\d{14}$/
+    if database_name =~ /^([a-zA-Z0-9]*)_\d{14}$/
       $1 + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
     else
       database_name + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
