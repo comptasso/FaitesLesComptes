@@ -16,6 +16,7 @@ include JcCapybara
   before(:each) do
     @rooms = [r1, r2]
     view.stub(:abc).and_return(ActiveRecord::Base.connection_config)
+    view.stub(:holder_status).and_return 'Propriétaire'
     r2.stub(:relative_version).and_return(:same_migration)
     r2.stub('up_to_date?').and_return true
     r2.stub('late?').and_return false
@@ -75,9 +76,9 @@ include JcCapybara
     it 'rend une action destroy' do
       r2.stub('no_base?').and_return(true)
       render
-      page.first('tr:last td:nth-child(5) img')[:src].should have_content('supprimer.png') 
-      page.find('tr:last td:nth-child(5) a')[:href].should == admin_room_path(r2)
-      page.find('tr:last td:nth-child(5) a')['data-method'].should == 'delete'
+      page.first('tr:last td:nth-child(6) img')[:src].should have_content('supprimer.png') 
+      page.find('tr:last td:nth-child(6) a')[:href].should == admin_room_path(r2)
+      page.find('tr:last td:nth-child(6) a')['data-method'].should == 'delete'
     end
   end
 
@@ -85,7 +86,7 @@ include JcCapybara
     it 'rend un feu rouge' do
       r2.stub('advanced?').and_return(true)
       render
-      page.find('tr:last td:nth-child(5)').should have_icon('traffic-light-red')
+      page.find('tr:last td:nth-child(6)').should have_icon('traffic-light-red')
     end
   end
 

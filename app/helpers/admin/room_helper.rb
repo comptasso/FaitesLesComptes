@@ -15,5 +15,5 @@ module Admin::RoomHelper
   def holder_status(room, cu)
     I18n.t(room.holders.where('user_id = ?', cu.id).first.status)
   end
-
+  
 end

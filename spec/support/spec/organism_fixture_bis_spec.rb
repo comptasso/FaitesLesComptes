@@ -32,6 +32,10 @@ describe OrganismFixtureBis do
       @cu.rooms.should == [@r]
       @cu.rooms.first.should == @r
     end
+    
+    it 'cu est owner de room' do
+      @r.owner.should == @cu
+    end
 
 
   end

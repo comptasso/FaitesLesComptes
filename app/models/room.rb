@@ -7,7 +7,7 @@ require 'strip_arguments'
 # Voir les commentaires sur versions_controller pour la gestion des migrations et
 # des versions
 #
-class Room < ActiveRecord::Base 
+class Room < ActiveRecord::Base  
   
   has_many :holders, dependent: :destroy
    
@@ -16,7 +16,7 @@ class Room < ActiveRecord::Base
   strip_before_validation :database_name 
     
   validates :database_name, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*(_[0-9]*)?\z/}, uniqueness:true
-  validates :database_name, :upper_limit=>true
+  
   
   after_create :create_db, :connect_to_organism
   before_update :change_schema_name, :if=>:database_name_changed?
@@ -144,18 +144,24 @@ class Room < ActiveRecord::Base
         o.comment = comment
         Rails.logger.warn o.errors.messages unless o.valid?
         o.save!
-        
       end
       # on finit en créant la nouvelle room
-      r = Room.new(:database_name=>new_db_name)
-      r.user_id = user.id
-      Rails.logger.warn r.errors.messages unless r.valid?
-      r.save!
+      clone_room(new_db_name)
+      
 
     end 
   end
 
   protected
+  
+  # clone_room est appelé par clone_db pour créer une room ayant les mêmes holder
+  # que la room actuelle mais avec room_id pointant sur la nouvelle Room
+  def clone_room(new_db_name)
+    # on crée la Room
+    r = Room.create(:database_name=>new_db_name)
+    # puis pour chaque holder on duplique
+    holders.each {|h| h.dup; h.room_id = r.id; h.save}
+  end
 
   
   # crée un database_name préfixé par un timestamp

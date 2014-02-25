@@ -110,6 +110,7 @@ describe Admin::RoomsController do
       @r.stub(:database_name).and_return('assotest1')
       @r.stub(:absolute_db_name).and_return(File.join(Rails.root,'db', Rails.env, 'organisms', 'assotest1.sqlite3'))
       @r.stub(:organism).and_return(@organism=mock_model(Organism))
+      @r.stub(:owner).and_return @cu
     end
 
     it 'renvoie vers rooms index' do
@@ -149,65 +150,43 @@ describe Admin::RoomsController do
   describe 'POST create', wip:true do
     before(:each) do
       Organism.stub(:new).and_return(@o = mock_model(Organism, create_db:true, :save=>true))
-      File.stub('exist?').and_return false
     end
-
-    it 'si valid crée la pièce' do
-      @cu.should_receive(:rooms).and_return(@a = double(Arel, :save=>true))
-      @a.should_receive(:new).with(:database_name=>'test1').and_return @a
-      @a.should_receive(:valid?).and_return true
-      
+    
+    it 'appelle build_a_new_room' do
+      @controller.should_receive(:build_a_new_room)
       post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
     end
 
-    
-    context 'quand room est correct' do
+    context 'quand build_a_new_room a tout bien fait' do
 
       before(:each) do
-        @cu.stub_chain(:rooms, :new).and_return(@r = mock_model(Room, save:true, connect_to_organism:true).as_new_record)
+        @controller.stub(:build_a_new_room)
+        @o.stub('persisted?').and_return true
       end
 
-      it 'crée l organisme avec les paramètres' do
-        Organism.should_receive(:new).with({'name'=>'Bizarre', 'database_name'=>'test1'}).and_return(stub_model(Organism))
-        post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
-      end
-
-      it 'sauve l organisme et la pièce' do
-        @o.should_receive(:save).and_return true
-        @r.should_receive(:save).and_return true
-        post :create, {'organism'=>{'name'=>'Bizarre' , 'database_name'=>'test1'}}, valid_session
-      end
-
-      it 'redirige vers l action crétaion de period si sauvé' do
-        @o.stub('valid?').and_return true
-        @o.stub(:save).and_return true
+      it 'redirige vers la création d un exercice' do
+        
         post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
         response.should redirect_to new_admin_organism_period_url(@o)
       end
-
-      describe 'gestion des erreurs' do
-
-        it 'rend la vue new si room ne peut être sauvé' do
-          @r.stub('valid?').and_return false
-          post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
-          response.should render_template :new
-        end
- 
-        it 'rend aussi new si organism n est pas valide' do
-          @o.should_receive(:valid?).and_return false
-          post :create, {'organism'=>{'name'=>'Bizarre' , 'database_name'=>'test1'}}, valid_session
-          response.should render_template :new
-          
-        end
-     
-         it 'renvoie vers new_period si room et organism sont valides' do
-          @r.stub('valid?').and_return true
-          @o.stub('valid?').and_return true
-          post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
-          response.should redirect_to new_admin_organism_period_url(@o)
-        end
-      end
+  
     end
+    context 'quand build new room échoue' do
+      
+       before(:each) do
+        @controller.stub(:build_a_new_room)
+        @o.stub('persisted?').and_return false
+      end
+
+      it 'rend la vue new'  do
+        post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
+        response.should render_template :new
+      end
+ 
+    end
+  
+  # TODO faire les tests de build_new_room  
+    
   end 
 
 

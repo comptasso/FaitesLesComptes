@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
-         :recoverable, :rememberable, :trackable, :validatable
+    :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me
@@ -19,14 +19,15 @@ class User < ActiveRecord::Base
   validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :role, presence: true, :inclusion=>{:in=>['standard', 'expert'] }
   
+  # renvoie les rooms qui sont détenues par le user
   def own_rooms
-    holders.where('status = ?', 'owner') 
+    holders.where('status = ?', 'owner').map(&:room) 
   end
   
   
-  def enter_first_room
-    rooms.first
-  end
+  
+  
+ 
   
   # retourne un array de hash des organismes et des chambres appartenat à cet user
   # le hash ne comprend que les organimes qui ont pu être effectivement trouvés
@@ -77,8 +78,34 @@ class User < ActiveRecord::Base
     own_rooms.count < 4
   end
 
- 
-
+  protected
+  
+  # Méthode utilisée pour les tests
+  # 
+  # construit une nouvelle room. Ce nom alambiqué pour ne pas risquer de 
+  # surcharger une méthode automatique des associations de Rails.
+  #
+  # On vérifie que les paramètres sont valides, avant de créer un holder
+  # avec le statut propriétaire, puis on crée la Room. 
+  # 
+  # On sauve d'abord le holder (ce qui sauve également la room associée) avant de 
+  # passer dans le schéma récemment créé et d'y sauver l'organisme
+  # 
+  # La méthode retourne l'organisme.  
+  #
+  def build_a_new_room(db_name, org_title, org_status)
+    org = Organism.new(:database_name=>db_name, title:org_title, status:org_status)
+    return org unless allowed_to_create_room? && org.valid?
+    h = holders.new(status:'owner')
+    r  = h.build_room(database_name:db_name)
+    return org unless r.valid?
+    User.transaction do
+      h.save
+      Apartment::Database.switch(db_name)
+      org.save # ici on sauve org dans la nouvelle base
+    end
+    org
+  end
  
 
   

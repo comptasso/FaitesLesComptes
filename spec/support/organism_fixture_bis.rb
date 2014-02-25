@@ -28,8 +28,9 @@ module OrganismFixtureBis
 
   def create_user
     create_only_user
-    @r = @cu.rooms.create!(database_name:'assotest1')
-    
+    @h = @cu.holders.new(status:'owner')
+    @r  = @h.build_room(database_name:'assotest1')    
+    @h.save
   end
 
   def clean_assotest1

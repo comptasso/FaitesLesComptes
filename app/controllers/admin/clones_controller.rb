@@ -8,6 +8,8 @@
 class Admin::ClonesController < Admin::ApplicationController
 
   skip_before_filter :current_period
+  
+  before_filter :owner_only
 
   after_filter :clear_org_cache, only:[:create]
 
@@ -26,5 +28,18 @@ class Admin::ClonesController < Admin::ApplicationController
       flash[:alert] = 'Une erreur s\'est produite lors de la création du clone de votre base'
     end
     redirect_to admin_rooms_url
+  end
+  
+  protected
+  
+  # l action destroy ne sont permises que si le current_user est le owner
+  def owner_only
+    room = current_user.rooms.find(params[:id])
+    check = (current_user == room.owner)
+    unless check
+      flash[:alert] = "Vous ne pouvez executer cette action car vous n'êtes pas le propriétaire de la base"
+      redirect_to admin_rooms_url
+    end
+    check
   end
 end

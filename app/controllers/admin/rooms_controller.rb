@@ -65,22 +65,18 @@ class Admin::RoomsController < Admin::ApplicationController
 
   # POST /rooms
   def create
-   
-    @organism = Organism.new(params[:organism])
-    @room = current_user.rooms.new(database_name:params[:organism][:database_name])
-    # vérifie que le fichier de base de données n'existe pas
+ 
     # TODO Faire un un nom de base préfixé pour éviter le risque de doublons trop fréquents
-    # TODO mettre cette logique de création de room... dans le modèle User
+    @organism = Organism.new(:database_name=>params[:organism][:database_name],
+      title:params[:organism][:title], status:params[:organism][:status])   
     
-    if @organism.valid? && @room.valid?
-
-      @room.save # un after_create du modèle créé la nouvelle base de données et s'y connecte
-      @organism.save 
-      current_user.holders.create(room_id:@room.id, status:'owner') # on créé le holder
+    build_a_new_room(params[:organism][:database_name])
+    
+    if @organism.persisted? # ce qui indique que tout s'est bien passé
       session[:org_db]  = @organism.database_name
       redirect_to new_admin_organism_period_url(@organism), notice: flash_creation_livres
     else
-      copy_room_errors(@room)
+      flash[:alert] = 'Il n\'a pas été possible d\'enregistrer la structure'
       render :new
     end
     
@@ -118,6 +114,27 @@ class Admin::RoomsController < Admin::ApplicationController
       end
     end
   end
+
+  def build_a_new_room(db_name)
+    
+    unless current_user.allowed_to_create_room?
+      @organism.errors.add(:base, 'Nombre maximal atteint')
+      return
+    end
+    return unless @organism.valid?
+    h = current_user.holders.new(status:'owner')
+    r = h.build_room(database_name:db_name)
+    unless r.valid?
+      copy_room_errors(r) 
+      return 
+    end
+    User.transaction do
+      h.save
+      Apartment::Database.switch(db_name)
+      @organism.save # ici on sauve org dans la nouvelle base
+    end
+  end
+  
   
   def flash_creation_livres
     html = 'Création de l\'organisme effectuée<br />'
@@ -131,9 +148,9 @@ pour le budget de fonctionnement; de même pour le budget des activités socio_c
     html.html_safe
   end
   
-  # les actions edit, destroy et update ne sont permises que si le current_user est le owner
+  # l action destroy ne sont permises que si le current_user est le owner
   def owner_only
-    @room = current_user.rooms.find(params[:id])
+    @room = current_user.rooms.find(params[:id]) 
     unless current_user == @room.owner
       flash[:alert] = "Vous ne pouvez executer cette action car vous n'êtes pas le propriétaire de la base"
       redirect_to admin_rooms_url

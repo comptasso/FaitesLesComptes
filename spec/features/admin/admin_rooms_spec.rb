@@ -1,10 +1,10 @@
-require 'spec_helper'
+require 'spec_helper' 
 
 RSpec.configure do |c|
   # c.filter = {wip:true}
 end
 
-describe "admin rooms" do
+describe "admin rooms" do 
    
   include OrganismFixtureBis
   
@@ -32,7 +32,6 @@ describe "admin rooms" do
     end
     
     it 'cliquer sur le bouton crée un organisme'  do
-      
       expect {click_button 'Créer l\'organisme'}.to change {Organism.count}.by(1)
     end
     
