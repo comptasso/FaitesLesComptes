@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'strip_arguments'
+require 'strip_arguments' 
 
 # Writing représente des écritures dans la comptabilité
 #

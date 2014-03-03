@@ -77,4 +77,5 @@ RACINE_CASH = '53'
 # maintenant également belongs_to book.
 # FLCVERSION = '1.4.2RC' # Version sectorisée pour les CE
 # FLCVERSION = '1.4.3RC' # Refonte des graphiques pour accélérer l'affichage du DashBoard
-FLCVERSION = '1.4.4RC' # revision des plans comptables et nomenclatures
+# FLCVERSION = '1.4.4RC' # revision des plans comptables et nomenclatures
+FLCVERSION = '1.4.5RC' # mise en place d un modèle Holder pour avoir des status owner et guest

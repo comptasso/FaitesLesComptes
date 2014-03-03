@@ -3,7 +3,7 @@
 # Plus les informations facultatives telles que ref, narration, destination_id
 # nature_name, mode, amount et counterpart. 
 # 
-# Les champs sont les suivants
+# Les champs sont les suivants 
 #    t.string   "title"
 #    t.text     "comment"
 #    t.integer  "organism_id"

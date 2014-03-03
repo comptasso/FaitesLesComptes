@@ -1,4 +1,4 @@
-# coding: utf-8
+# coding: utf-8 
 
 # Un transfer est une écriture de virement entre deux comptes
 # Un transfer ne peut donc avoir que deux compta_lines, l'une 

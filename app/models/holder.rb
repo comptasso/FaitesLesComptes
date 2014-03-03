@@ -3,4 +3,8 @@ class Holder < ActiveRecord::Base
   
   belongs_to :room
   belongs_to :user
+  
+  validates :room_id, :user_id, presence:true
+  validates :status, :inclusion=>{:in=>%w(owner guest)}
+ 
 end

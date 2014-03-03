@@ -12,7 +12,7 @@ require 'strip_arguments'
 # aussi de limiter les comptes accessibles pour un livre).
 # 
 #
-class Nature < ActiveRecord::Base
+class Nature < ActiveRecord::Base 
  
   belongs_to :period
   belongs_to :account
