@@ -21,7 +21,7 @@ describe OrganismFixtureBis do
 
 
     it 'should create a user' do
-      @cu.should be_an_instance_of(User)
+      @cu.should be_an_instance_of(User) 
     end
 
     it 'should create room' do

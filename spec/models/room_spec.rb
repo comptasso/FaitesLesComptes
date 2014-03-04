@@ -131,7 +131,7 @@ describe Room  do
         else
           'inconnu'
         end
-        Apartment::Database.current.should == base 
+        Apartment::Database.current.should == base  
       end
      
     end    
@@ -152,51 +152,7 @@ describe Room  do
         @r.organism.should == 'un organisme'
       end
     end
-
-    describe 'gestion des schemas', wip:true  do
-      before(:each) do
-        create_user
-        create_organism
-        Apartment::Database.switch('public')
-      end
-
-     
-
-      it 'un changement de nom de base doit appeler change_schema_name' do
-        @r.database_name = 'newvalue'
-        @r.should_receive(:change_schema_name).exactly(2).times
-        @r.save
-        @r.database_name = 'assotest1'
-        @r.save
-      end
-
-      it 'un changement de nom de base doit appeler change_schema_name' do
-        @r.created_at = Time.now
-        @r.should_not_receive(:change_schema_name)
-        @r.save
-      end
-
-      it 'met à jour le champ database_name de organsim' do
-        
-        Apartment::Database.switch('public')
-        @r.database_name = 'changedvalue'
-        @r.save!
-        @r.organism.database_name.should == 'changedvalue'
-        @r.database_name = 'assotest1' 
-        @r.save
-      end
-
-      it 'si un changement échoue, l organisme est inchangé' do
-        @r.database_name = 'changed_value' # le soulignement est interdit
-        @r.save
-        @r.reload
-        @r.organism.database_name.should == 'assotest1'
-      end
-
-    end
-
-
-    
+  
   end
 
   describe 'version_update'  do 

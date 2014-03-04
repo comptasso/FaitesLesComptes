@@ -2,7 +2,7 @@
 
 
 
-# Cette classe agit comme un proxy pour accéder aux organismes qui sont dans
+# Cette classe agit comme un proxy pour accéder aux organismes qui sont dans 
 # des bases séparées (Room étant par contre dans la base commune).
 #
 # Ce controller gère ce qui relève de la création des bases de données (ou des schémas).
@@ -129,6 +129,8 @@ class Admin::RoomsController < Admin::ApplicationController
       return 
     end
     User.transaction do
+      r.save
+      h.room_id = r.id
       h.save
       Apartment::Database.switch(db_name)
       @organism.save # ici on sauve org dans la nouvelle base
