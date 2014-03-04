@@ -3,18 +3,27 @@
 # Module regroupant des méthodes pour générer les éléments minimaux d'organisation
 # A utiliser en mettant include OrganismFixture dans la fichier spec ou on utilisera la méthode
 module OrganismFixtureBis
+  
+  def find_or_create_schema_test
+    Apartment::Database.create(SCHEMA_TEST) unless Apartment::Database.db_exist?(SCHEMA_TEST)
+    puts Apartment::Database.list_schemas
+  end
 
   def clean_main_base
-    drop_non_public_schemas_except_assotest1
+    drop_non_public_schemas_except_schema_test
+    find_or_create_schema_test
     Apartment::Database.switch()
     User.delete_all
     Room.delete_all
   end
 
   #
-  def drop_non_public_schemas_except_assotest1
+  def drop_non_public_schemas_except_schema_test
     Apartment::Database.list_schemas.reject {|name| name == 'public'}.each do |schema|
-      Apartment::Database.drop(schema) unless schema == 'assotest1'
+      unless schema == SCHEMA_TEST
+        puts "suppression du schema #{schema}"
+        Apartment::Database.drop(schema) 
+      end
     end
   end
 
@@ -29,12 +38,15 @@ module OrganismFixtureBis
   def create_user
     create_only_user
     @h = @cu.holders.new(status:'owner')
-    @r  = @h.build_room(database_name:'assotest1')    
-    @h.save
+    @r  = @h.build_room(database_name:SCHEMA_TEST) 
+    
+    @r.save!
+    puts @h.errors.messages unless @h.valid?
+    @h.save!
   end
 
   def clean_assotest1
-    Apartment::Database.process('assotest1') do
+    Apartment::Database.process(SCHEMA_TEST) do
       Organism.all.each {|o| o.destroy }
       Nature.delete_all
       Account.delete_all
@@ -55,8 +67,8 @@ module OrganismFixtureBis
 
   def create_organism
     clean_assotest1
-    Apartment::Database.switch('assotest1')
-    @o = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', comment: 'Un commentaire', status:'Association')
+    Apartment::Database.switch(SCHEMA_TEST)
+    @o = Organism.create!(title: 'ASSO TEST', database_name:SCHEMA_TEST, comment: 'Un commentaire', status:'Association')
     @p = @o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
     get_organism_instances 
   end

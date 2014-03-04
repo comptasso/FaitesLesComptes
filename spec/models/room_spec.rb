@@ -1,8 +1,8 @@
 # -*- encoding : utf-8 -*-
-require 'spec_helper'
+require 'spec_helper' 
 
 RSpec.configure do |c| 
-  # c.filter = {wip:true}
+   c.filter = {wip:true}
 end
 
 describe Room  do
@@ -11,7 +11,7 @@ describe Room  do
   let(:u) {stub_model(User)}
 
   def valid_attributes
-    {database_name:'foo'}
+    {database_name:'foo_11112233444555'}
   end
 
   before(:each) do
@@ -42,72 +42,80 @@ describe Room  do
         u.rooms.new(database_name:db_name).should_not be_valid
       end
       u.rooms.new(database_name:'unnomdebasecorrect').should be_valid
-      u.rooms.new(database_name:'unnom2basecorrect').should be_valid
+      
     end
 
     it 'le nom est strippé avant la validation' do
       u.rooms.new(database_name:'  unnomdebasecorrect  ').should be_valid
     end
 
-    it 'save crée la base si elle n existe pas' do
-      unnom = 'unnomdebasecorrect'
-      r = u.rooms.new(database_name:unnom)
+    context 'avec un nom correct, la création de la room' do
       
-      Apartment::Database.drop(unnom) if Apartment::Database.db_exist?(unnom)
-      r.save
-      Apartment::Database.db_exist?(unnom).should == true
-    end
-
-    it 'le nom de base doit être unique'  do
-      Apartment::Database.drop('foo') if Apartment::Database.db_exist?('foo')
-      u.rooms.find_or_create_by_database_name('foo')
-      r = u.rooms.new(valid_attributes)
-      r.should_not be_valid
-      r.errors.messages[:database_name].should == ['déjà utilisé']
+      before(:each) do
+        unnom = 'unnomdebasecorrect'
+        @new_room = u.rooms.new(database_name:unnom)
+        @new_room.save
+      end
+      
+      after(:each) do
+        Apartment::Database.drop(@new_room.database_name) if Apartment::Database.db_exist?(@new_room.database_name)
+      end
+    
+      it 'entraîne celle du schéma' do
+        Apartment::Database.db_exist?(@new_room.database_name).should == true
+      end
+          
     end
 
   end
 
   describe 'methods' do
+    
+    subject {Room.new(:database_name=>'foofoo_19991212123456')}
 
-    before(:each) do
-      @r = Room.new(:database_name=>'foo')
+    it 'racine' do
+      subject.racine.should == 'foofoo'
+    end
+    
+    it 'racine=' do
+      subject.racine = 'barabar'
+      subject.database_name.should =~ /\Abarabar_\d{14}\z/
     end
 
 
     it 'la base est en retard si organism_migration est inférieure à room' do
       omv = Organism.migration_version
-      @r.stub(:look_for).and_return omv
+      subject.stub(:look_for).and_return omv
       Room.should_receive(:jcl_last_migration).and_return(omv+1)
-      @r.relative_version.should == :late_migration
+      subject.relative_version.should == :late_migration
     end
     
     it 'en phase si les deux migrations sont égales' do
       omv = Organism.migration_version
-      @r.stub(:look_for).and_return omv
+      subject.stub(:look_for).and_return omv
       Room.stub(:jcl_last_migration).and_return(omv)
-      @r.relative_version.should == :same_migration
+      subject.relative_version.should == :same_migration
     end
     
     it 'en avance si organism_migration est supérieure à celle de room' do
       omv = Organism.migration_version
-      @r.stub(:look_for).and_return omv
+      subject.stub(:look_for).and_return omv
       Room.stub(:jcl_last_migration).and_return(omv-1)
-      @r.relative_version.should == :advance_migration
+      subject.relative_version.should == :advance_migration
     end
 
     it 'et renvoie no_base si elle n est pas trouvée' do
-      @r.stub(:look_for).and_return nil
-      @r.relative_version.should == :no_base
+      subject.stub(:look_for).and_return nil
+      subject.relative_version.should == :no_base
     end
  
     it 'sait répondre aux questions late?, no_base? et advance_migration?' do
-      @r.stub(:relative_version).and_return :late_migration
-      @r.should be_late
-      @r.stub(:relative_version).and_return :advance_migration
-      @r.should be_advanced
-      @r.stub(:relative_version).and_return :no_base
-      @r.should be_no_base
+      subject.stub(:relative_version).and_return :late_migration
+      subject.should be_late
+      subject.stub(:relative_version).and_return :advance_migration
+      subject.should be_advanced
+      subject.stub(:relative_version).and_return :no_base
+      subject.should be_no_base
     end
 
   end
@@ -116,8 +124,12 @@ describe Room  do
     before(:each) do
       create_user 
     end
+    
+    it 'liste des schemas'  do
+      puts Apartment::Database.list_schemas      
+    end
 
-    describe 'connnect_to_organism'  do
+    describe 'connnect_to_organism' , wip:true do
       it 'connect_to_organism retourne true si la base existe' do
         @r.connect_to_organism.should be_true
       end
@@ -125,13 +137,7 @@ describe Room  do
       it 'appelle Apartment.reset si le fichier n est pas trouvé' do
         @r.database_name = nil
         @r.connect_to_organism
-        base = case ActiveRecord::Base.connection_config[:adapter]
-        when 'sqlite3' then 'test'
-        when 'postgresql' then 'public'
-        else
-          'inconnu'
-        end
-        Apartment::Database.current.should == base 
+        Apartment::Database.current.should == "public" 
       end
      
     end    
@@ -153,45 +159,42 @@ describe Room  do
       end
     end
 
-    describe 'gestion des schemas', wip:true  do
+    describe 'gestion des schemas'  do
       before(:each) do
         create_user
         create_organism
-        Apartment::Database.switch('public')
-      end
-
-     
-
-      it 'un changement de nom de base doit appeler change_schema_name' do
-        @r.database_name = 'newvalue'
-        @r.should_receive(:change_schema_name).exactly(2).times
-        @r.save
-        @r.database_name = 'assotest1'
-        @r.save
-      end
-
-      it 'un changement de nom de base doit appeler change_schema_name' do
-        @r.created_at = Time.now
-        @r.should_not_receive(:change_schema_name)
-        @r.save
-      end
-
-      it 'met à jour le champ database_name de organsim' do
+        Apartment::Database.switch('public') 
         
-        Apartment::Database.switch('public')
-        @r.database_name = 'changedvalue'
-        @r.save!
-        @r.organism.database_name.should == 'changedvalue'
-        @r.database_name = 'assotest1' 
-        @r.save
+      end
+         
+
+      it 'un changement de nom de base est interdit' do
+        @r.racine = 'newvalue'
+        @r.should_not be_valid
       end
 
-      it 'si un changement échoue, l organisme est inchangé' do
-        @r.database_name = 'changed_value' # le soulignement est interdit
-        @r.save
-        @r.reload
-        @r.organism.database_name.should == 'assotest1'
-      end
+      #      it 'un changement de nom de base doit appeler change_schema_name' do
+      #        @r.created_at = Time.now
+      #        @r.should_not_receive(:change_schema_name)
+      #        @r.save
+      #      end
+      #
+      #      it 'met à jour le champ database_name de organsim' do
+      #        
+      #        Apartment::Database.switch('public')
+      #        @r.database_name = 'changedvalue'
+      #        @r.save!
+      #        @r.organism.database_name.should == 'changedvalue'
+      #        @r.database_name = 'assotest1' 
+      #        @r.save
+      #      end
+      #
+      #      it 'si un changement échoue, l organisme est inchangé' do
+      #        @r.database_name = 'changed_value' # le soulignement est interdit
+      #        @r.save
+      #        @r.reload
+      #        @r.organism.database_name.should == 'assotest1'
+      #      end
 
     end
 
@@ -201,7 +204,7 @@ describe Room  do
 
   describe 'version_update'  do 
 
-   it 'version_update? est capable de vérifier la similitude des versions' do
+    it 'version_update? est capable de vérifier la similitude des versions' do
       ActiveRecord::Migrator.any_instance.stub(:pending_migrations).and_return ['quelquechose']
       Room.should_not be_version_update
     end
@@ -219,7 +222,7 @@ describe Room  do
   describe 'verification des bases après les tests de room' do
 
     it 'la base assotest1 doit exister' do
-      Apartment::Database.db_exist?('assotest1').should be_true
+      Apartment::Database.db_exist?(SCHEMA_TEST).should be_true
     end
 
 

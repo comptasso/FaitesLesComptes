@@ -14,12 +14,13 @@ class Room < ActiveRecord::Base
   attr_accessible :database_name
 
   strip_before_validation :database_name 
-    
-  validates :database_name, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*(_[0-9]*)?\z/}, uniqueness:true
+  
+  validates :database_name, presence:true, :format=>{:with=>/\A[a-z]{6}[a-z]*_[0-9]{14}\z/},
+    uniqueness:true, cant_change:true
   
   
   after_create :create_db, :connect_to_organism
-  before_update :change_schema_name, :if=>:database_name_changed?
+  # before_update :change_schema_name, :if=>:database_name_changed?
   after_destroy :destroy_db
   
   # renvoie le propriétaire de la base
@@ -30,6 +31,16 @@ class Room < ActiveRecord::Base
   # renvoie l'organisme associé à la base
   def organism
     Apartment::Database.process(database_name) {Organism.first}
+  end
+  
+  
+  def racine
+    database_name[/^[a-zA-Z0-9]*/]
+  end
+  
+  def racine=(val)
+    val ||= ''
+    self.database_name = val + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
   end
   
   # look_for permet de chercher quelque chose dans la pièce
@@ -162,17 +173,18 @@ class Room < ActiveRecord::Base
     # puis pour chaque holder on duplique
     holders.each {|h| newholder = h.dup; newholder.room_id = r.id; newholder.save!}
   end
-
   
+    
   # crée un database_name préfixé par un timestamp
   # à partir du database_name existant, soit en préfixant le nom avec un nouveau 
   # timestamp, soit en changeant le timestamp
   #
   def timestamp_db_name
-    if database_name =~ /^([a-zA-Z0-9]*)_\d{14}$/
+    nom = database_name || '' # pour éviter les nil
+    if nom =~ /^([a-zA-Z0-9]*)_\d{14}$/
       $1 + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
     else
-      database_name + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
+      nom + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
     end
   end
 
@@ -199,12 +211,12 @@ class Room < ActiveRecord::Base
   # 
   # Change le schéma de la base de données (postgresql uniquement) puis met à jour
   # le champ database_name de Organism (qui doit être synchronisé avec Room)
-  def change_schema_name
-    result = Apartment::Database.rename_schema( database_name_was, database_name)
-    return result if result == false
-    Apartment::Database.switch(database_name)
-    Organism.first.update_attribute(:database_name, database_name)
-  end
+#  def change_schema_name
+#    result = Apartment::Database.rename_schema( database_name_was, database_name)
+#    return result if result == false
+#    Apartment::Database.switch(database_name)
+#    Organism.first.update_attribute(:database_name, database_name)
+#  end
 
 
  

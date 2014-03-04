@@ -3,16 +3,16 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  # c.filter = {wip:true}
+   c.filter = {wip:true}
 end
 
 # fichier destiné à tester les méthodes de support
 
-describe OrganismFixtureBis do 
+describe OrganismFixtureBis do  
   include OrganismFixtureBis 
 
 
-  describe 'create_user' do
+  describe 'create_user'  do 
   
 
     before(:each) do 
@@ -27,10 +27,17 @@ describe OrganismFixtureBis do
     it 'should create room' do
       @r.should be_an_instance_of(Room)
     end
+    
+    it 'on vérifie', wip:true do  
+      puts @cu.inspect
+      puts @h.inspect
+      puts @r.inspect
+      
+    end
 
     it 'les deux sont reliées' do
       @cu.rooms.should == [@r]
-      @cu.rooms.first.should == @r
+      @cu.rooms.first.should == @r 
     end
     
     it 'cu est owner de room' do
@@ -46,7 +53,7 @@ describe OrganismFixtureBis do
     end
 
     it 'a un organisme dans la base assotest1' do
-      Apartment::Database.switch('assotest1')
+      Apartment::Database.switch(SCHEMA_TEST)
       Organism.should have(1).elements
     end
     
