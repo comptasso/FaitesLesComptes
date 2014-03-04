@@ -8,15 +8,18 @@ require 'strip_arguments'
 # des versions
 #
 class Room < ActiveRecord::Base  
+  include Utilities::Racine # module permettant de gérer le timestamp des noms de base
   
-  has_many :holders, dependent: :destroy
+  has_many :holders, dependent: :destroy 
    
-  attr_accessible :database_name
+  attr_accessible :database_name, :racine
 
-  strip_before_validation :database_name 
+  strip_before_validation :database_name
   
+  validates :racine, :format=>{:with=>/\A[a-z]*\z/}, :length=>{:minimum=>6}
   validates :database_name, presence:true, :format=>{:with=>/\A[a-z]{6}[a-z]*_[0-9]{14}\z/},
     uniqueness:true, cant_change:true
+  
   
   
   after_create :create_db, :connect_to_organism
@@ -33,15 +36,6 @@ class Room < ActiveRecord::Base
     Apartment::Database.process(database_name) {Organism.first}
   end
   
-  
-  def racine
-    database_name[/^[a-zA-Z0-9]*/]
-  end
-  
-  def racine=(val)
-    val ||= ''
-    self.database_name = val + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
-  end
   
   # look_for permet de chercher quelque chose dans la pièce
   # Le block indique ce qu'on cherche

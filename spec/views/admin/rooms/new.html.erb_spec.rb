@@ -6,7 +6,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 describe '/admin/rooms/new' do
   include JcCapybara
 
-  let(:o) { mock_model(Organism) }
+  let(:o) { mock_model(Organism, racine:'assotest') }
 
   before(:each) do
     assign(:organism, o)

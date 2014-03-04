@@ -25,7 +25,7 @@ RSpec.configure do |c|
 end
 
 describe Admin::RoomsController do
-  include SpecControllerHelper
+  include SpecControllerHelper 
  
   
   before(:each) do
@@ -154,7 +154,7 @@ describe Admin::RoomsController do
     
     it 'appelle build_a_new_room' do
       @controller.should_receive(:build_a_new_room)
-      post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
+      post :create, {'organism'=>{'name'=>'Bizarre', 'racine'=>'montest'}}, valid_session
     end
 
     context 'quand build_a_new_room a tout bien fait' do
@@ -166,7 +166,7 @@ describe Admin::RoomsController do
 
       it 'redirige vers la création d un exercice' do
         
-        post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
+        post :create, {'organism'=>{'name'=>'Bizarre', 'racine'=>'montest'}}, valid_session
         response.should redirect_to new_admin_organism_period_url(@o)
       end
   
@@ -179,7 +179,7 @@ describe Admin::RoomsController do
       end
 
       it 'rend la vue new'  do
-        post :create, {'organism'=>{'name'=>'Bizarre', 'database_name'=>'test1'}}, valid_session
+        post :create, {'organism'=>{'name'=>'Bizarre', 'racine'=>'montest'}}, valid_session
         response.should render_template :new
       end
  

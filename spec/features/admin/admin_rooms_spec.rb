@@ -1,7 +1,7 @@
 require 'spec_helper' 
 
 RSpec.configure do |c|
-  # c.filter = {wip:true} 
+  c.filter = {wip:true} 
 end
 
 describe "admin rooms" do   
@@ -19,15 +19,14 @@ describe "admin rooms" do
       page.find('h3').should have_content 'Nouvel organisme' 
     end
   
-    context 'quand je remplis le formulaire' do
+    context 'quand je remplis le formulaire', wip:true do
       
       
     before(:each) do 
-      Apartment::Database.process('assotest1') {  Organism.all.each {|o| o.destroy } }
       visit new_admin_room_path
       fill_in 'organism_title', with:'Mon association'
       fill_in 'organism_comment', with:'Une première'
-      fill_in 'organism_database_name', with:'assotest1'
+      fill_in 'organism_racine', with:'assotest'
       choose 'Association'
     end
     
@@ -55,7 +54,7 @@ describe "admin rooms" do
     
     before(:each) do
       create_user
-      create_minimal_organism
+      create_minimal_organism 
       login_as('quidam')
       visit admin_rooms_path 
     end
@@ -117,7 +116,7 @@ describe "admin rooms" do
     
       
     
-    it 'le menu organisme est mis à jour', js:true, wip:true do
+    it 'le menu organisme est mis à jour', js:true do
       pending
       visit admin_rooms_path
       sleep 2

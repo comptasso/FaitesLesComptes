@@ -23,7 +23,7 @@ describe Organism do
   describe 'validations' do
     before(:each) do
       clean_assotest1
-      Apartment::Database.switch('assotest1')
+      Apartment::Database.switch(SCHEMA_TEST)
       @organism= Organism.new valid_attributes
       puts @organism.errors.messages unless @organism.valid?
     end
@@ -231,7 +231,7 @@ describe Organism do
       before(:each) do
         clean_assotest1
         @organism = Organism.create!({:title =>'Mon Entreprise',
-            database_name:'assotest1',
+            database_name:SCHEMA_TEST,
             :status=>'Entreprise' })
          
       end
@@ -259,7 +259,7 @@ describe Organism do
 
     before(:each) do
       clean_assotest1
-      Apartment::Database.switch('assotest1')
+      Apartment::Database.switch(SCHEMA_TEST)
       @organism= Organism.create! valid_attributes
       @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
       @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))

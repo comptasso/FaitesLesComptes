@@ -6,7 +6,7 @@ module OrganismFixtureBis
   
   def find_or_create_schema_test
     Apartment::Database.create(SCHEMA_TEST) unless Apartment::Database.db_exist?(SCHEMA_TEST)
-    puts Apartment::Database.list_schemas
+   # puts Apartment::Database.list_schemas
   end
 
   def clean_main_base
@@ -38,7 +38,7 @@ module OrganismFixtureBis
   def create_user
     create_only_user
     @h = @cu.holders.new(status:'owner')
-    @r  = @h.build_room(database_name:'assotest1')    
+    @r  = @h.build_room(database_name:SCHEMA_TEST)    
     @r.save!
     @h.room_id = @r.id
     @h.save!

@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-   c.filter = {wip:true}
+ #  c.filter = {wip:true}
 end
 
 # fichier destiné à tester les méthodes de support
@@ -28,16 +28,13 @@ describe OrganismFixtureBis do
       @r.should be_an_instance_of(Room)
     end
     
-    it 'on vérifie', wip:true do  
-      puts @cu.inspect
-      puts @h.inspect
-      puts @r.inspect
-      
-    end
-
     it 'les deux sont reliées' do
       @cu.rooms.should == [@r]
       @cu.rooms.first.should == @r 
+    end
+    
+    it 'le user est propriétaire de la room' do
+      @r.owner.should == @cu
     end
     
     it 'cu est owner de room' do

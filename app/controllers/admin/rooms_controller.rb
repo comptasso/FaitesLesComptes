@@ -65,18 +65,16 @@ class Admin::RoomsController < Admin::ApplicationController
 
   # POST /rooms
   def create
- 
-    # TODO Faire un un nom de base préfixé pour éviter le risque de doublons trop fréquents
-    @organism = Organism.new(:database_name=>params[:organism][:database_name],
-      title:params[:organism][:title], status:params[:organism][:status])   
+    @organism = Organism.new(title:params[:organism][:title], status:params[:organism][:status], 
+    racine:params[:organism][:racine])   
     
-    build_a_new_room(params[:organism][:database_name])
+    build_a_new_room(params[:organism][:racine])
     
     if @organism.persisted? # ce qui indique que tout s'est bien passé
       session[:org_db]  = @organism.database_name
       redirect_to new_admin_organism_period_url(@organism), notice: flash_creation_livres
     else
-      flash[:alert] = 'Il n\'a pas été possible d\'enregistrer la structure'
+      flash[:alert] = 'Il n\'a pas été possible d\'enregistrer la structure' # + @organism.errors.messages
       render :new
     end
     
@@ -115,7 +113,8 @@ class Admin::RoomsController < Admin::ApplicationController
     end
   end
 
-  def build_a_new_room(db_name)
+  # TODO faire spec de cette méthode
+  def build_a_new_room(racine)
     
     unless current_user.allowed_to_create_room?
       @organism.errors.add(:base, 'Nombre maximal atteint')
@@ -123,7 +122,7 @@ class Admin::RoomsController < Admin::ApplicationController
     end
     return unless @organism.valid?
     h = current_user.holders.new(status:'owner')
-    r = h.build_room(database_name:db_name)
+    r = h.build_room(racine:racine)
     unless r.valid?
       copy_room_errors(r) 
       return 
@@ -132,7 +131,8 @@ class Admin::RoomsController < Admin::ApplicationController
       r.save
       h.room_id = r.id
       h.save
-      Apartment::Database.switch(db_name)
+      Apartment::Database.switch(r.database_name)
+      @organism.database_name = r.database_name
       @organism.save # ici on sauve org dans la nouvelle base
     end
   end

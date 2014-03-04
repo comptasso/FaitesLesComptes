@@ -22,7 +22,7 @@ describe Room  do
     Apartment::Database.db_exist?('public').should == true
   end
 
-  describe 'les validations' do
+  describe 'les validations' , wip:true do
 
     before(:each) do
       Room.any_instance.stub(:user).and_return u
@@ -39,21 +39,21 @@ describe Room  do
     it 'database_name is composed of min letters without space - les chiffres sont autorisés mais pas en début' do
       val= ['nom base', 'Nombase', '1nom1base', 'nombase%']
       val.each do |db_name|
-        u.rooms.new(database_name:db_name).should_not be_valid
+        u.rooms.new(racine:db_name).should_not be_valid
       end
-      u.rooms.new(database_name:'unnomdebasecorrect').should be_valid
+      u.rooms.new(racine:'unnomdebasecorrect').should be_valid
       
     end
 
     it 'le nom est strippé avant la validation' do
-      u.rooms.new(database_name:'  unnomdebasecorrect  ').should be_valid
+      u.rooms.new(racine:'  unnomdebasecorrect  ').should be_valid
     end
 
     context 'avec un nom correct, la création de la room' do
       
       before(:each) do
         unnom = 'unnomdebasecorrect'
-        @new_room = u.rooms.new(database_name:unnom)
+        @new_room = u.rooms.new(racine:unnom)
         @new_room.save
       end
       
@@ -166,7 +166,7 @@ describe Room  do
         create_organism
         Apartment::Database.switch('public') 
         
-      end
+      end 
          
 
       it 'un changement de nom de base est interdit' do

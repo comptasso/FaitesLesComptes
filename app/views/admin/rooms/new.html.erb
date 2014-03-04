@@ -16,10 +16,10 @@
 
     <%= f.input :title,  input_html: {class: "span3"} %>
     <%= f.input :comment,  input_html: {class: "span6"} %>
-    <%= f.input :database_name,
+    <%= f.input :racine, 
            label:'Nom de la base',
            input_html: {class: "span3"},
-           hint:'lettres minuscules uniquement, sans espace' %>
+           hint:'lettres minuscules uniquement, minimum 6, sans espace' %>
 
     <%= f.input :status, :label=>'Statut',
          :collection=>LIST_STATUS, :as=>:inline_radio_buttons %>
