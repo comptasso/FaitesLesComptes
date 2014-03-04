@@ -4,7 +4,7 @@ RSpec.configure do |c|
   # c.filter = {wip:true} 
 end
 
-describe "admin rooms" do  
+describe "admin rooms" do   
    
   include OrganismFixtureBis
   
@@ -51,13 +51,13 @@ describe "admin rooms" do
     end
   end
   
-  context 'avec un organisme existant'  do
+  context 'avec un organisme existant'  do 
     
     before(:each) do
       create_user
       create_minimal_organism
       login_as('quidam')
-      visit admin_rooms_path
+      visit admin_rooms_path 
     end
     
     # TODO déplacer ça dans un test de vue    

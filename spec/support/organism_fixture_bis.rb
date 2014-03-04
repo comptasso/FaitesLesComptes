@@ -38,10 +38,9 @@ module OrganismFixtureBis
   def create_user
     create_only_user
     @h = @cu.holders.new(status:'owner')
-    @r  = @h.build_room(database_name:SCHEMA_TEST) 
-    
+    @r  = @h.build_room(database_name:'assotest1')    
     @r.save!
-    puts @h.errors.messages unless @h.valid?
+    @h.room_id = @r.id
     @h.save!
   end
 

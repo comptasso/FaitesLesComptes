@@ -35,7 +35,6 @@ Spork.prefork do
     config.before(:suite) do
       # DatabaseCleaner.clean_with :truncation
       Apartment::Database.create(SCHEMA_TEST) unless Apartment::Database.db_exist?(SCHEMA_TEST)
-   #   Apartment::Database.create('assotest_20133112999999') unless Apartment::Database.db_exist?('assotest_20133112999999')
       Apartment::Database.switch()
       Organism.all.each {|o| o.destroy}
     end
