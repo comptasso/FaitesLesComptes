@@ -143,30 +143,26 @@ describe Admin::RoomsController do
     end
   end
 
-
-
-
-
   describe 'POST create', wip:true do
     before(:each) do
-      Organism.stub(:new).and_return(@o = mock_model(Organism, create_db:true, :save=>true))
+      Room.any_instance.stub(:database_name).and_return SCHEMA_TEST
     end
     
     it 'appelle build_a_new_room' do
       @controller.should_receive(:build_a_new_room)
-      post :create, {'organism'=>{'name'=>'Bizarre', 'racine'=>'montest'}}, valid_session
+      post :create, {'room'=>{'title'=>'Bizarre', 'racine'=>'assotest', status:'Association'}}, valid_session
     end
 
     context 'quand build_a_new_room a tout bien fait' do
 
       before(:each) do
         @controller.stub(:build_a_new_room)
-        @o.stub('persisted?').and_return true
+        
       end
 
       it 'redirige vers la création d un exercice' do
         
-        post :create, {'organism'=>{'name'=>'Bizarre', 'racine'=>'montest'}}, valid_session
+        post :create, {'room'=>{'title'=>'Bizarre', 'racine'=>'assotest', status:'Association'}}, valid_session
         response.should redirect_to new_admin_organism_period_url(@o)
       end
   
@@ -175,11 +171,11 @@ describe Admin::RoomsController do
       
        before(:each) do
         @controller.stub(:build_a_new_room)
-        @o.stub('persisted?').and_return false
+        Room.any_instance.stub(:organism).and_return nil
       end
 
       it 'rend la vue new'  do
-        post :create, {'organism'=>{'name'=>'Bizarre', 'racine'=>'montest'}}, valid_session
+        post :create, {'room'=>{'title'=>'Bizarre', 'racine'=>'assotest', status:'Association'}}, valid_session
         response.should render_template :new
       end
  

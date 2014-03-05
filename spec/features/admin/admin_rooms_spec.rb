@@ -1,4 +1,4 @@
-require 'spec_helper' 
+require 'spec_helper'  
 
 RSpec.configure do |c|
   c.filter = {wip:true} 
@@ -24,9 +24,9 @@ describe "admin rooms" do
       
     before(:each) do 
       visit new_admin_room_path
-      fill_in 'organism_title', with:'Mon association'
-      fill_in 'organism_comment', with:'Une première'
-      fill_in 'organism_racine', with:'assotest'
+      fill_in 'room_title', with:'Mon association'
+      fill_in 'room_comment', with:'Une première'
+      fill_in 'room_racine', with:'assotest'
       choose 'Association'
     end
     
@@ -40,7 +40,7 @@ describe "admin rooms" do
       page.find('h3').should have_content 'Nouvel exercice' 
     end
   
-    it "et met à jour le cache" do
+    it "et met à jour le cache" do 
       
       click_button 'Créer l\'organisme'
       page.all('#admin_organisms_menu ul li a').should have(2).elements

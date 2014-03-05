@@ -3,6 +3,14 @@ require 'strip_arguments'
 # Room est un modèle qui se situe dans le schéma public et qui sert à
 # enregistrer les noms des bases de données puisque chaque organisme dispose de
 # sa propre base de donnée.
+# 
+# En pratique, on rajoute les éléments racine (par le biais du module Utilities::Racine
+# qui permet de transformer une racine en database_name en y adjoignant un timestamp
+# ainsi que les attributes :title et :comment qui sont utilisés dans le formulaire de 
+# création et qui sont utiles pour la création d'un organisme.
+# 
+# La création d'une room entraine celle d'un schéma, puis dans ce schéma, celle
+# de l'organisme.
 #
 # Voir les commentaires sur versions_controller pour la gestion des migrations et
 # des versions
@@ -12,17 +20,20 @@ class Room < ActiveRecord::Base
   
   has_many :holders, dependent: :destroy 
    
-  attr_accessible :database_name, :racine
+  attr_accessible :database_name, :racine, :title, :comment, :status
+  attr_accessor :title, :comment, :status
 
   strip_before_validation :database_name
   
-  validates :racine, :format=>{:with=>/\A[a-z]*\z/}, :length=>{:minimum=>6}
+  validates :racine, :format=>{:with=>/\A[a-z]*\z/}, :length=>{:minimum=>6}, presence:true
   validates :database_name, presence:true, :format=>{:with=>/\A[a-z]{6}[a-z]*_[0-9]{14}\z/},
     uniqueness:true, cant_change:true
+  validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
+  validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
+  validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
   
   
-  
-  after_create :create_db, :connect_to_organism
+  after_create :create_db, :connect_to_organism, :create_organism
   # before_update :change_schema_name, :if=>:database_name_changed?
   after_destroy :destroy_db
   
@@ -193,6 +204,13 @@ class Room < ActiveRecord::Base
       Rails.logger.info "Après création de Room ; création de la base #{database_name}"
       Apartment::Database.create(database_name)
     end
+  end
+  
+  def create_organism
+    connect_to_organism
+    o = Organism.new(title:title, comment:comment, status:status, database_name:database_name)
+    puts o.errors.messages unless o.valid?
+    o.save!
   end
 
   def destroy_db

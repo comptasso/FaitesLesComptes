@@ -36,9 +36,13 @@ module OrganismFixtureBis
 
 
   def create_user
+    clean_assotest1
     create_only_user
     @h = @cu.holders.new(status:'owner')
-    @r  = @h.build_room(database_name:SCHEMA_TEST)    
+    @r = Room.where('database_name =  ?', SCHEMA_TEST).first
+    @r  ||= Room.new(database_name:SCHEMA_TEST, title:'Asso test',
+      status:'Association') 
+    puts @r.errors.messages unless @r.valid?
     @r.save!
     @h.room_id = @r.id
     @h.save!
@@ -46,7 +50,7 @@ module OrganismFixtureBis
 
   def clean_assotest1
     Apartment::Database.process(SCHEMA_TEST) do
-      Organism.all.each {|o| o.destroy }
+      Organism.find_each {|o| o.destroy }
       Nature.delete_all
       Account.delete_all
       ComptaLine.delete_all

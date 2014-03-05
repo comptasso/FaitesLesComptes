@@ -60,17 +60,15 @@ class Admin::RoomsController < Admin::ApplicationController
   # GET /rooms/new
   def new
     use_main_connection
-    @organism = Organism.new
+    @room = Room.new
   end
 
   # POST /rooms
   def create
-    @organism = Organism.new(title:params[:organism][:title], status:params[:organism][:status], 
-    racine:params[:organism][:racine])   
-    
-    build_a_new_room(params[:organism][:racine])
-    
-    if @organism.persisted? # ce qui indique que tout s'est bien passé
+    @room = Room.new(params[:room])
+    build_a_new_room
+    @organism = @room.organism
+    if @organism # ce qui indique que tout s'est bien passé
       session[:org_db]  = @organism.database_name
       redirect_to new_admin_organism_period_url(@organism), notice: flash_creation_livres
     else
@@ -105,35 +103,25 @@ class Admin::RoomsController < Admin::ApplicationController
 
   # copy les messages d'erreur de room vers organism pour
   # que le form puisse avoir les informations nécessaires
-  def copy_room_errors(r)
-    unless r.valid?
-      r.errors.messages.each_pair do |k, mess|
-        @organism.errors.add(k, mess.first) # on ne recopie que le premier des messages d'erreur
-      end
-    end
-  end
+#  def copy_room_errors(r)
+#    unless r.valid?
+#      r.errors.messages.each_pair do |k, mess|
+#        @organism.errors.add(k, mess.first) # on ne recopie que le premier des messages d'erreur
+#      end
+#    end
+#  end
 
   # TODO faire spec de cette méthode
-  def build_a_new_room(racine)
-    
-    unless current_user.allowed_to_create_room?
-      @organism.errors.add(:base, 'Nombre maximal atteint')
-      return
-    end
-    return unless @organism.valid?
+  def build_a_new_room
+    @room.errors.add(:base, 'Nombre maximal atteint') unless current_user.allowed_to_create_room?
+    return unless @room.valid?
+    # TODO à déplacer dans le modèle ROOM
     h = current_user.holders.new(status:'owner')
-    r = h.build_room(racine:racine)
-    unless r.valid?
-      copy_room_errors(r) 
-      return 
-    end
     User.transaction do
-      r.save
-      h.room_id = r.id
+      @room.save
+      h.room_id = @room.id
       h.save
-      Apartment::Database.switch(r.database_name)
-      @organism.database_name = r.database_name
-      @organism.save # ici on sauve org dans la nouvelle base
+      Apartment::Database.switch(@room.database_name)
     end
   end
   

@@ -289,6 +289,10 @@ fr:
         nature_name: Nature
         mode: Mode de paiement
         counterpart: Contrepartie
+      room:
+        title: Titre
+        comment: Commentaire
+        
       subscription:
         day: Jour du mois
         title: Titre
@@ -369,6 +373,8 @@ fr:
       organism:
         create: "Créer l'organisme"
         update: "Modifier cet organisme"
+      room:
+        create: "Créer l'organisme"
       destination:
         create: "Créer la destination"
         update: "Mettre à jour"

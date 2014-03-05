@@ -11,7 +11,7 @@ describe Room  do
   let(:u) {stub_model(User)}
 
   def valid_attributes
-    {database_name:'foo_11112233444555'}
+    {database_name:'foofoo_11112233444555', title:'Le titre', comment:'Un commentaire', status:'Association'}
   end
 
   before(:each) do
@@ -27,34 +27,60 @@ describe Room  do
     before(:each) do
       Room.any_instance.stub(:user).and_return u
     end
-
-    it 'has a user' do
-      Room.new.should_not be_valid
-    end
+    
+    subject {u.rooms.new(valid_attributes)}
+    
+    it {subject.should be_valid}
 
     it 'has a database_name' do
-      u.rooms.new.should_not be_valid
+      subject.database_name = nil
+      subject.should_not be_valid
     end
 
     it 'database_name is composed of min letters without space - les chiffres sont autorisés mais pas en début' do
       val= ['nom base', 'Nombase', '1nom1base', 'nombase%']
       val.each do |db_name|
-        u.rooms.new(racine:db_name).should_not be_valid
-      end
-      u.rooms.new(racine:'unnomdebasecorrect').should be_valid
-      
+        subject.racine = db_name
+        subject.should_not be_valid
+      end      
+    end
+    
+    it 'has a title' do
+      subject.title = nil
+      subject.should_not be_valid
+    end
+    
+    it 'mais peut ne pas avoir de commentaire' do
+      subject.comment = nil
+      subject.should be_valid
     end
 
     it 'le nom est strippé avant la validation' do
-      u.rooms.new(racine:'  unnomdebasecorrect  ').should be_valid
+      subject.racine = '  unnomdebasecorrect  '
+      subject.should be_valid
     end
+    
+    it 'et doit respecter certaines limites'
+    
+    it 'le statut est obligatoire' do
+      subject.status = nil
+      subject.should_not be_valid
+    end
+    
+    it 'et doit être dans la liste' do
+      subject.status = 'inconnu'
+      subject.should_not be_valid
+    end
+    
+    
 
     context 'avec un nom correct, la création de la room' do
       
       before(:each) do
-        unnom = 'unnomdebasecorrect'
-        @new_room = u.rooms.new(racine:unnom)
-        @new_room.save
+        @new_room = u.rooms.new(valid_attributes)
+        @new_room.racine = 'untest'
+        puts @new_room.errors.messages unless @new_room.valid?
+        @new_room.save!
       end
       
       after(:each) do
@@ -63,6 +89,10 @@ describe Room  do
     
       it 'entraîne celle du schéma' do
         Apartment::Database.db_exist?(@new_room.database_name).should == true
+      end
+      
+      it 'et celle de l organisme' do
+        @new_room.organism.should  be_an_instance_of Organism
       end
           
     end
@@ -81,6 +111,13 @@ describe Room  do
       subject.racine = 'barabar'
       subject.database_name.should =~ /\Abarabar_\d{14}\z/
     end
+    
+    it 'racine ne doit pas déformer le nom donné' do
+      subject.racine = 'bar bar'
+      subject.racine.should == 'bar bar'
+    end
+    
+    
 
 
     it 'la base est en retard si organism_migration est inférieure à room' do
@@ -115,14 +152,14 @@ describe Room  do
       subject.stub(:relative_version).and_return :advance_migration
       subject.should be_advanced
       subject.stub(:relative_version).and_return :no_base
-      subject.should be_no_base
+      subject.should be_no_base 
     end
 
   end
 
   describe 'tools' do
     before(:each) do
-      create_user 
+      create_user  
     end
     
     it 'liste des schemas'  do
