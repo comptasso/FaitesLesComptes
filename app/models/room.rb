@@ -16,8 +16,7 @@ require 'strip_arguments'
 # des versions
 #
 class Room < ActiveRecord::Base  
-  include Utilities::Racine # module permettant de gérer le timestamp des noms de base
-  
+    
   has_many :holders, dependent: :destroy 
    
   attr_accessible :database_name, :racine, :title, :comment, :status
@@ -45,6 +44,20 @@ class Room < ActiveRecord::Base
   # renvoie l'organisme associé à la base
   def organism
     Apartment::Database.process(database_name) {Organism.first}
+  end
+  
+  def racine
+    if database_name =~ /^(.*)_\d{14}$/
+      $1
+    else
+      database_name
+    end
+  end
+  
+  def racine=(val)
+    val ||= ''
+    val.strip!
+    self.database_name = val + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
   end
   
   
@@ -223,12 +236,12 @@ class Room < ActiveRecord::Base
   # 
   # Change le schéma de la base de données (postgresql uniquement) puis met à jour
   # le champ database_name de Organism (qui doit être synchronisé avec Room)
-#  def change_schema_name
-#    result = Apartment::Database.rename_schema( database_name_was, database_name)
-#    return result if result == false
-#    Apartment::Database.switch(database_name)
-#    Organism.first.update_attribute(:database_name, database_name)
-#  end
+  #  def change_schema_name
+  #    result = Apartment::Database.rename_schema( database_name_was, database_name)
+  #    return result if result == false
+  #    Apartment::Database.switch(database_name)
+  #    Organism.first.update_attribute(:database_name, database_name)
+  #  end
 
 
  

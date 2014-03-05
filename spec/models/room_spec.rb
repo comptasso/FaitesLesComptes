@@ -2,7 +2,7 @@
 require 'spec_helper' 
 
 RSpec.configure do |c| 
-   c.filter = {wip:true}
+ # c.filter = {wip:true}
 end
 
 describe Room  do
@@ -113,7 +113,7 @@ describe Room  do
     end
     
     it 'racine ne doit pas déformer le nom donné' do
-      subject.racine = 'bar bar'
+      subject.database_name = 'bar bar'
       subject.racine.should == 'bar bar'
     end
     
@@ -162,10 +162,7 @@ describe Room  do
       create_user  
     end
     
-    it 'liste des schemas'  do
-      puts Apartment::Database.list_schemas      
-    end
-
+   
     describe 'connnect_to_organism' , wip:true do
       it 'connect_to_organism retourne true si la base existe' do
         @r.connect_to_organism.should be_true

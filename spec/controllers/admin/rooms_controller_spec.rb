@@ -156,8 +156,8 @@ describe Admin::RoomsController do
     context 'quand build_a_new_room a tout bien fait' do
 
       before(:each) do
-        @controller.stub(:build_a_new_room)
-        
+        @controller.stub(:build_a_new_room).and_return true
+        Room.any_instance.stub(:organism).and_return @o
       end
 
       it 'redirige vers la création d un exercice' do
@@ -170,8 +170,8 @@ describe Admin::RoomsController do
     context 'quand build new room échoue' do
       
        before(:each) do
-        @controller.stub(:build_a_new_room)
-        Room.any_instance.stub(:organism).and_return nil
+        @controller.stub(:build_a_new_room).and_return false
+        
       end
 
       it 'rend la vue new'  do

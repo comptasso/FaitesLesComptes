@@ -39,8 +39,7 @@ require 'strip_arguments'
 #
 #
 class Organism < ActiveRecord::Base
-  include Utilities::Racine # module permettant de gérer le timestamp des noms de base
-
+  
   attr_accessible :title, :database_name, :status, :comment, :racine
 
   has_one :nomenclature, dependent: :destroy

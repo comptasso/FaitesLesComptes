@@ -66,13 +66,13 @@ class Admin::RoomsController < Admin::ApplicationController
   # POST /rooms
   def create
     @room = Room.new(params[:room])
-    build_a_new_room
-    @organism = @room.organism
-    if @organism # ce qui indique que tout s'est bien passé
+      
+    if build_a_new_room # ce qui indique que tout s'est bien passé
+      @organism = @room.organism
       session[:org_db]  = @organism.database_name
       redirect_to new_admin_organism_period_url(@organism), notice: flash_creation_livres
     else
-      flash[:alert] = 'Il n\'a pas été possible d\'enregistrer la structure' # + @organism.errors.messages
+      flash[:alert] = 'Il n\'a pas été possible d\'enregistrer la structure'
       render :new
     end
     
@@ -114,15 +114,17 @@ class Admin::RoomsController < Admin::ApplicationController
   # TODO faire spec de cette méthode
   def build_a_new_room
     @room.errors.add(:base, 'Nombre maximal atteint') unless current_user.allowed_to_create_room?
-    return unless @room.valid?
+    return false unless @room.valid?
     # TODO à déplacer dans le modèle ROOM
     h = current_user.holders.new(status:'owner')
-    User.transaction do
+    result  = User.transaction do
       @room.save
       h.room_id = @room.id
       h.save
       Apartment::Database.switch(@room.database_name)
     end
+    
+    result
   end
   
   
