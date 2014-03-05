@@ -21,6 +21,7 @@ class Admin::ClonesController < Admin::ApplicationController
   # @organism est fourni par le before_filter find_organism
   def create
     r = @organism.room
+    r.title, r.status = @organism.title, @organism.status
     comment = params[:organism][:comment]
     if r.clone_db(comment)
       flash[:notice] = 'Un clone de votre base a été créé'

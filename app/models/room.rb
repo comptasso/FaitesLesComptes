@@ -32,7 +32,7 @@ class Room < ActiveRecord::Base
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
   
   
-  after_create :create_db, :connect_to_organism, :create_organism
+  after_create :create_db, :connect_to_organism
   # before_update :change_schema_name, :if=>:database_name_changed?
   after_destroy :destroy_db
   
@@ -60,6 +60,7 @@ class Room < ActiveRecord::Base
     self.database_name = val + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
   end
   
+    
   
   # look_for permet de chercher quelque chose dans la pièce
   # Le block indique ce qu'on cherche
@@ -187,7 +188,8 @@ class Room < ActiveRecord::Base
   # que la room actuelle mais avec room_id pointant sur la nouvelle Room
   def clone_room(new_db_name)
     # on crée la Room
-    r = Room.create!(:database_name=>new_db_name)
+    r = Room.new(:database_name=>new_db_name, title:title, status:status)
+    r.save!
     # puis pour chaque holder on duplique
     holders.each {|h| newholder = h.dup; newholder.room_id = r.id; newholder.save!}
   end
@@ -206,9 +208,6 @@ class Room < ActiveRecord::Base
     end
   end
 
-
-
-
   def create_db
     if Apartment::Database.db_exist?(database_name)
       Rails.logger.info "Après création de Room :la base #{database_name} existe déjà"
@@ -216,6 +215,7 @@ class Room < ActiveRecord::Base
     else
       Rails.logger.info "Après création de Room ; création de la base #{database_name}"
       Apartment::Database.create(database_name)
+      create_organism
     end
   end
   

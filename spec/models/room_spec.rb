@@ -22,7 +22,7 @@ describe Room  do
     Apartment::Database.db_exist?('public').should == true
   end
 
-  describe 'les validations' , wip:true do
+  describe 'les validations'  do
 
     before(:each) do
       Room.any_instance.stub(:user).and_return u
@@ -163,7 +163,7 @@ describe Room  do
     end
     
    
-    describe 'connnect_to_organism' , wip:true do
+    describe 'connnect_to_organism'  do
       it 'connect_to_organism retourne true si la base existe' do
         @r.connect_to_organism.should be_true
       end
@@ -229,6 +229,30 @@ describe Room  do
     end
 
 
+  end
+  
+  
+  describe 'clonage', wip:true do
+    
+    before(:each) do
+      create_user
+      create_organism
+      Apartment::Database.switch('public') 
+    end
+    
+    it 'la room existe' do
+      @r.should be_an_instance_of Room
+    end
+    
+    it 'on peut la cloner' do
+      @r.clone_db
+      
+      Apartment::Database.list_schemas
+      Room.count.should == 2
+    end
+    
+    
+    
   end
 
     

@@ -6,7 +6,7 @@ module OrganismFixtureBis
   
   def find_or_create_schema_test
     Apartment::Database.create(SCHEMA_TEST) unless Apartment::Database.db_exist?(SCHEMA_TEST)
-   # puts Apartment::Database.list_schemas
+    # puts Apartment::Database.list_schemas
   end
 
   def clean_main_base
@@ -21,7 +21,7 @@ module OrganismFixtureBis
   def drop_non_public_schemas_except_schema_test
     Apartment::Database.list_schemas.reject {|name| name == 'public'}.each do |schema|
       unless schema == SCHEMA_TEST
-        puts "suppression du schema #{schema}"
+        # puts "suppression du schema #{schema}"
         Apartment::Database.drop(schema) 
       end
     end
@@ -49,18 +49,20 @@ module OrganismFixtureBis
   end
 
   def clean_assotest1
-    Apartment::Database.process(SCHEMA_TEST) do
-      Organism.find_each {|o| o.destroy }
-      Nature.delete_all
-      Account.delete_all
-      ComptaLine.delete_all
-      BankAccount.delete_all
-      Cash.delete_all
-      Destination.delete_all
-      Folio.delete_all
-      Nomenclature.delete_all
-      Rubrik.delete_all
-    end
+    
+      Apartment::Database.process(SCHEMA_TEST) do
+        Organism.find_each {|o| o.destroy }
+        Nature.delete_all
+        Account.delete_all
+        ComptaLine.delete_all
+        BankAccount.delete_all
+        Cash.delete_all
+        Destination.delete_all
+        Folio.delete_all
+        Nomenclature.delete_all
+        Rubrik.delete_all
+      end if Apartment::Database.db_exist?(SCHEMA_TEST)
+    
   end
 
 

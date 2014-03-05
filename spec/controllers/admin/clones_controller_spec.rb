@@ -6,7 +6,8 @@ describe Admin::ClonesController do
   before(:each) do
     minimal_instances
     sign_in(@cu)
-   
+    @r.stub('title=').and_return @o.title
+    @r.stub('status=').and_return @o.status 
     
   end
   
@@ -21,7 +22,7 @@ describe Admin::ClonesController do
       end
     end
 
-    describe "GET 'create'" do
+    describe "GET 'create'" do 
     
       before(:each) do
         @o.stub(:room).and_return @r
