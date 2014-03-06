@@ -96,7 +96,7 @@ describe Admin::PeriodsController do
           o.should_receive(:periods).exactly(3).times.and_return(@a = double(Arel))
           @a.stub(:empty?).and_return(false)
           @a.should_receive(:last).and_return(p)
-          get :index, {}, {user:cu.id, org_db:'assotest1'}
+          get :index, {}, {user:cu.id, org_db:SCHEMA_TEST}
           assigns(:period).should == p
           session[:period].should == p.id
         end
@@ -107,7 +107,7 @@ describe Admin::PeriodsController do
           r1.stub(:connect_to_organism)
           o.should_receive(:periods).exactly(2).times.and_return(@a=double(Arel))
           @a.should_receive(:find_by_id).with(p.id).and_return p
-          get :index,{}, {user:cu.id, org_db:'assotest1', period:p.id}
+          get :index,{}, {user:cu.id, org_db:SCHEMA_TEST, period:p.id}
           assigns(:period).should == p
           session[:period].should == p.id
         end
@@ -136,18 +136,18 @@ describe Admin::PeriodsController do
         end
         
         it 'renvoie le titre, le nom de l organisme et la date plus l extension' do
-          get :index, {}, {user:cu.id, org_db:'assotest1'}
+          get :index, {}, {user:cu.id, org_db:SCHEMA_TEST}
           @controller.export_filename(obj, :pdf).should == "Bilan Asso Test #{dat}.pdf"
         end
         
         it 'ou avec le dernier item de la classe de l objet si pas de titre' do
           obje = double(Object)
-          get :index, {}, {user:cu.id, org_db:'assotest1'}
+          get :index, {}, {user:cu.id, org_db:SCHEMA_TEST}
           @controller.export_filename(obje, :pdf).should == "Mock Asso Test #{dat}.pdf"
         end
         
         it 'on peut imposer le titre' do
-          get :index, {}, {user:cu.id, org_db:'assotest1'}
+          get :index, {}, {user:cu.id, org_db:SCHEMA_TEST}
           @controller.export_filename(obj, :pdf, 'TITRE').should == "TITRE Asso Test #{dat}.pdf"
         end
         

@@ -11,11 +11,11 @@ end
 describe Nomenclature do
   include OrganismFixtureBis 
 
-  let(:o) {Organism.create!(title:'titre', :database_name=>'assotest1', status:'Association')}
-  let(:p) {mock_model(Period, :organism_id=>o.id)}
+  let(:o) {Organism.create!(title:'titre', :database_name=>SCHEMA_TEST, status:'Association')}
+  let(:p) {mock_model(Period, :organism_id=>o.id)} 
 
   before(:each) do
-    Apartment::Database.switch('assotest1')
+    Apartment::Database.switch(SCHEMA_TEST)
     clean_assotest1
   end
   

@@ -109,7 +109,7 @@ describe Rubrik do
   describe 'all_instructions', wip:true do
     
     before(:each) do
-        @res = Rubrik.new(numeros:nil)
+        @res = Rubrik.new(numeros:nil) 
         @res.stub(:children).and_return([Rubrik.new(numeros:'401 402'),
             Rubrik.new(numeros:'501 502'),
           ])

@@ -51,7 +51,8 @@ class ApplicationController < ActionController::Base
 
   private
 
-
+  # bottom_action est une actions qui relève de bottom_controller, controller
+  # appelé par les liens en bas de page (manuels, contact, ...)
   def devise_or_bottom_action?
     params[:controller] =~ /^devise/ || params[:controller] =~ /^bottom/
   end
@@ -67,6 +68,8 @@ class ApplicationController < ActionController::Base
     devise_sessions_bye_url
   end
 
+  # Devise : surcharge de l'action après sign_in
+  # 
   # Lorsqu'il n'y a pas d'organisme, il faut afficher soit la vue
   # admin/rooms#index soit la vue organism selon qu'il y a plusieurs bases ou une seule
   #

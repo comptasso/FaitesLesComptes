@@ -2,7 +2,7 @@
 require 'spec_helper' 
 
 RSpec.configure do |c| 
- # c.filter = {wip:true}
+ # c.filter = {wip:true} 
 end
 
 describe Room  do
@@ -250,19 +250,7 @@ describe Room  do
       Apartment::Database.list_schemas
       Room.count.should == 2
     end
-    
-    
-    
+ 
   end
 
-    
-
-  describe 'verification des bases après les tests de room' do
-
-    it 'la base assotest1 doit exister' do
-      Apartment::Database.db_exist?(SCHEMA_TEST).should be_true
-    end
-
-
-  end
 end

@@ -397,8 +397,8 @@ describe Period do
       
       before(:each) do
         clean_assotest1
-        Apartment::Database.switch('assotest1')
-        @org = Organism.create!(title: 'ASSO TEST', database_name:'assotest1', status:'Association')
+        Apartment::Database.switch(SCHEMA_TEST)
+        @org = Organism.create!(title: 'ASSO TEST', database_name:SCHEMA_TEST, status:'Association')
         @p_2010 = @org.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
         @p_2011= @org.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
        
@@ -535,7 +535,7 @@ describe Period do
 
     before(:each) do
       clean_assotest1
-      @org = Organism.create!(title:'boom', status:'Association', :database_name=>'assotest1')
+      @org = Organism.create!(title:'boom', status:'Association', :database_name=>SCHEMA_TEST)
       @period = @org.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
     end
 

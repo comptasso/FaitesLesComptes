@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config| 
-  #  config.filter =  {wip:true}
+  #  config.filter =  {wip:true} 
 end
 
 
@@ -19,7 +19,7 @@ describe  NatureObserver do
   before(:each) do
     
     clean_assotest1
-    Apartment::Database.switch('assotest1')
+    Apartment::Database.switch(SCHEMA_TEST)
     @nature = Nature.new(name:'ecolo', :account_id => 1, book_id:1)
     @nature.period_id = 1
     @nature.stub(:compta_lines).and_return([cl1, cl2])

@@ -5,7 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 RSpec.configure do |c|  
   #  c.filter = {:js=> true }
   #c.filter = { :wip=>true}
-  #  c.exclusion_filter = {:js=> true }
+  #  c.exclusion_filter = {:js=> true } 
 end
  
 describe 'Session' do
@@ -50,7 +50,8 @@ describe 'Session' do
 
     it 'avec plusieures organisme, renvoie sur la liste' do
       create_user
-      @cu.rooms.create!(database_name:'assotest2')
+      # plutôt que de créer réellement plusieurs bases, on fait un stub
+      @cu.stub_chain(:rooms, :count).and_return 4
       login_as('quidam')
       page.find('h3').should have_content 'Liste des organismes'
     end

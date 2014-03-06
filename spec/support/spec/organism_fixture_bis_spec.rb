@@ -49,7 +49,7 @@ describe OrganismFixtureBis do
       create_organism
     end
 
-    it 'a un organisme dans la base assotest1' do
+    it 'a un organisme dans la base SCHEMA_TEST' do
       Apartment::Database.switch(SCHEMA_TEST)
       Organism.should have(1).elements
     end

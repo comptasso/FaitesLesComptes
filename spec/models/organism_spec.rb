@@ -14,7 +14,7 @@ describe Organism do
 
   def valid_attributes 
     {:title =>'Test ASSO',
-      database_name:'assotest1',
+      database_name:'assotest',
       :status=>'Association'
     }
   end
