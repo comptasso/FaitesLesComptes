@@ -16,7 +16,7 @@ describe Nomenclature do
 
   before(:each) do
     Apartment::Database.switch(SCHEMA_TEST)
-    clean_assotest1
+    clean_organism
   end
   
   it 'invalide sans organisme' do

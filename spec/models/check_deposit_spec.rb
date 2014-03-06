@@ -8,17 +8,23 @@ RSpec.configure do |c|
 end
 # TODO on pourrait accélérer ces tests en testant pending_checks 
 # dans ComptaLine et après ensuite en utilisant des stubs
+# A refactoriser car il y a des doublons dans les tests (création écriture notamment)
 
 describe CheckDeposit do   
   include OrganismFixtureBis
  
-  before(:each) do 
-    create_minimal_organism
+  before(:each) do  
+    use_test_organism
     @w1 = create_in_out_writing(44, 'Chèque') 
     @w2 = create_in_out_writing(101, 'Chèque')
     @w3 = create_in_out_writing(300, 'Chèque')
     @w4 = create_in_out_writing(50000, 'Virement')
     @ch= CheckDeposit.new
+  end
+  
+  after(:each) do  
+    Writing.delete_all
+    ComptaLine.delete_all 
   end
 
  
@@ -47,7 +53,7 @@ describe CheckDeposit do
   end
 
   describe "création d'une remise de chèque" do 
-    it "save the right date" ,  wip:true do 
+    it "save the right date"  do 
       d = @p.start_date.months_since(4)
       cd = @ba.check_deposits.new deposit_date_picker:I18n::l(d, :format=>:date_picker)
       cd.pick_all_checks(@sector)
@@ -167,7 +173,7 @@ describe CheckDeposit do
 
   end
 
-  describe "après sauvegarde"  do
+  describe "l'action de sauver"  do
  
     before(:each) do
       date = Date.today + 2
@@ -177,9 +183,9 @@ describe CheckDeposit do
     end
 
     
-    describe 'sauver doit avoir créé une écriture'  do
+    describe 'crée une écriture'  do
 
-      it 'ligne au credit du 511'  do
+      it 'avec une ligne au credit du 511'  do
         cl = @check_deposit.credit_line
         cl.date.should == @check_deposit.deposit_date
         cl.account.number.should == REM_CHECK_ACCOUNT[:number]
@@ -187,7 +193,7 @@ describe CheckDeposit do
 
       end
 
-      it 'ligne au débit du 511' do
+      it 'et une ligne au débit de la banque' do
         dl = @check_deposit.debit_line
         dl.date.should == @check_deposit.deposit_date
         dl.account.should == @check_deposit.bank_account.current_account(@p)
@@ -196,7 +202,7 @@ describe CheckDeposit do
 
     end
 
-    it 'sauver devrait avoir mis à jour le champ check_deposit_id des lignes ayant 511 comme compte'  do
+    it 'met à jour le champ check_deposit_id des lignes relevant du compte 511'  do
       @check_deposit.total_checks.should == 445
       ls = ComptaLine.where('account_id = ?', @p.rem_check_account.id)
       ls.size.should == 4 # les 3 chèques plus la contrepartie
@@ -204,7 +210,7 @@ describe CheckDeposit do
 
     end
 
-    it 'le compte est soldé puisqu on a pris tous les chèques' do
+    it 'du coup, le compte de remise de chèque est soldé puisqu on a pris tous les chèques' do
       @p.rem_check_account.sold_at(@p.close_date).should == 0
     end
 
@@ -278,31 +284,30 @@ describe CheckDeposit do
         
       end
 
-      it 'doit être pointé' do
+      it 'fait que la remise de chèque est pointée' do
         @check_deposit.should be_pointed
       end
 
      
-      it "la date ne peut plus être modifiée" do
+      it "que la date ne peut plus être modifiée" do
         @check_deposit.deposit_date = Date.today+6
         @check_deposit.should_not be_valid
       end
 
-      it "la banque ne peut plus être modifiée" do
-        @ba2= create_second_bank
-        @check_deposit.bank_account = @ba2
+      it "que la banque ne peut plus être modifiée", wip:true do 
+        @check_deposit.bank_account = find_second_bank
         @check_deposit.should_not be_valid
       end
 
-      it "ne peut plus être détruit" do
+      it "la remise de chèque ne peut plus être détruite" do
         expect {@check_deposit.destroy}.to raise_error
       end
 
-      it "ne peut plus retirer de chèque" do
+      it "on ne peut plus retirer de chèque" do
         expect {@check_deposit.checks.delete(@w2.supportline)}.to raise_error
       end
 
-      it "ne peut plus ajouter de chèque" do
+      it "ni en ajouter" do
         @w5 = create_in_out_writing(44, 'Chèque')
         expect {@check_deposit.checks << @w5.supportline}.to raise_error
         

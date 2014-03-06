@@ -12,7 +12,7 @@ describe Organism do
   include OrganismFixtureBis
 
 
-  def valid_attributes 
+  def valid_attributes  
     {:title =>'Test ASSO',
       database_name:'assotest',
       :status=>'Association'
@@ -22,7 +22,7 @@ describe Organism do
 
   describe 'validations' do
     before(:each) do
-      clean_assotest1
+      clean_organism
       Apartment::Database.switch(SCHEMA_TEST)
       @organism= Organism.new valid_attributes
       puts @organism.errors.messages unless @organism.valid?
@@ -140,7 +140,7 @@ describe Organism do
     
     context 'une association' do
       before(:each) do
-        clean_assotest1
+        clean_organism
         @organism = Organism.first || Organism.new(valid_attributes)
         puts @organism.errors.messages unless @organism.valid?
         @organism.save!
@@ -229,7 +229,7 @@ describe Organism do
     # a été transformée en classe.
     context 'une non association' do 
       before(:each) do
-        clean_assotest1
+        clean_organism
         @organism = Organism.create!({:title =>'Mon Entreprise',
             database_name:SCHEMA_TEST,
             :status=>'Entreprise' })
@@ -258,7 +258,7 @@ describe Organism do
   context 'when there is one period'  do 
 
     before(:each) do
-      clean_assotest1
+      clean_organism
       Apartment::Database.switch(SCHEMA_TEST)
       @organism= Organism.create! valid_attributes
       @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))

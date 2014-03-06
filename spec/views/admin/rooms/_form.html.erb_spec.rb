@@ -3,11 +3,11 @@
 require 'spec_helper'
 
 
-describe'admin/rooms/_form' do 
+describe'admin/rooms/_form' do  
     include JcCapybara
 
   before(:each) do
-    assign(:organism, mock_model(Organism)) 
+    assign(:room, stub_model(Room)) 
   end
 
   it 'should render form with two inputs ' do
@@ -17,8 +17,8 @@ describe'admin/rooms/_form' do
   it 'has des radio button avec association et entreprise' do
      render :template=>'admin/rooms/new'
      page.all('.controls .inline_radio_buttons').should have(3).elements # 'association et entreprise'
-     page.find('#organism_status_association').value().should == 'Association'
-     page.find('#organism_status_comit_dentreprise').value().should == 'Comité d\'entreprise'
-     page.find('#organism_status_entreprise').value().should == 'Entreprise'
+     page.find('#room_status_association').value().should == 'Association'
+     page.find('#room_status_comit_dentreprise').value().should == 'Comité d\'entreprise'
+     page.find('#room_status_entreprise').value().should == 'Entreprise'
   end
 end

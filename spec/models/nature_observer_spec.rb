@@ -18,7 +18,7 @@ describe  NatureObserver do
 
   before(:each) do
     
-    clean_assotest1
+    clean_organism
     Apartment::Database.switch(SCHEMA_TEST)
     @nature = Nature.new(name:'ecolo', :account_id => 1, book_id:1)
     @nature.period_id = 1

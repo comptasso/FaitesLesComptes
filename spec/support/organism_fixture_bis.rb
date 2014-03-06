@@ -16,6 +16,15 @@ module OrganismFixtureBis
     User.delete_all
     Room.delete_all
   end
+  
+   
+  def use_test_organism
+    Apartment::Database.switch(SCHEMA_TEST)
+    @o = Organism.first
+    create_organism unless @o
+    @p = @o.periods.first
+    get_organism_instances
+  end
 
   #
   def drop_non_public_schemas_except_schema_test
@@ -36,7 +45,7 @@ module OrganismFixtureBis
 
 
   def create_user
-    clean_assotest1
+    clean_organism
     create_only_user
     @h = @cu.holders.new(status:'owner')
     @r = Room.where('database_name =  ?', SCHEMA_TEST).first
@@ -48,7 +57,7 @@ module OrganismFixtureBis
     @h.save!
   end
 
-  def clean_assotest1
+  def clean_organism
     
       Apartment::Database.process(SCHEMA_TEST) do
         Organism.find_each {|o| o.destroy }
@@ -69,9 +78,10 @@ module OrganismFixtureBis
   def create_minimal_organism
     create_organism
   end
+ 
 
   def create_organism
-    clean_assotest1
+    clean_organism
     Apartment::Database.switch(SCHEMA_TEST)
     @o = Organism.create!(title: 'ASSO TEST', database_name:SCHEMA_TEST, comment: 'Un commentaire', status:'Association')
     @p = @o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
@@ -80,15 +90,13 @@ module OrganismFixtureBis
   
   def get_organism_instances
     @sector = @o.sectors.first
-    @ba= @o.bank_accounts.first
+    @ba = @o.bank_accounts.first
     # puts @ba.inspect
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
     @od = @o.od_books.first
-    @c=@o.cashes.first
-    
-    # puts @c.inspect
-    @c.update_attribute(:name, 'Magasin'); @c.save;
+    @c=  @o.cashes.first || @o.cashes.create!(:name=>'Magasin')
+  
     @baca = @ba.current_account(@p) # pour baca pour BankAccount Current Account
     # puts @baca.inspect
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
@@ -96,10 +104,16 @@ module OrganismFixtureBis
     @n = @p.natures.depenses.first  
   end
   
+  def find_second_bank
+    b2 = @o.bank_accounts.where('number = ?', '123Z').first
+    b2 ||= create_second_bank
+  end
+  
   def create_second_bank
-    b2 = @o.bank_accounts.new(:bank_name=>'Deuxième banque', :number=>'123Y',
+    b2 = @o.bank_accounts.new(:bank_name=>'Deuxième banque', :number=>'123Z',
       nickname:'Compte épargne')
     b2.sector_id = @sector.id
+    puts b2.errors.messages unless b2.valid?
     b2.save!
     b2
   end

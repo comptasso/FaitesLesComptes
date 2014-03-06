@@ -8,7 +8,7 @@ end
 
 
 
-describe Jobs::SheetsPdfFiller do 
+describe Jobs::SheetsPdfFiller do  
   
   let(:p) {mock_model(Period, :organism=>mock_model(Organism, :nomenclature=>nomen))}
   let(:expdf) {ExportPdf.new}
@@ -20,7 +20,7 @@ describe Jobs::SheetsPdfFiller do
     ExportPdf.stub(:find).and_return(expdf)
   end
   
-  subject {Jobs::SheetsPdfFiller.new('assotest1', expdf.id, period_id:p.id, collection:['actif', 'passif'])}
+  subject {Jobs::SheetsPdfFiller.new(SCHEMA_TEST, expdf.id, period_id:p.id, collection:['actif', 'passif'])}
   
   it 'crée une instance' do
     subject.should be_an_instance_of(Jobs::SheetsPdfFiller)

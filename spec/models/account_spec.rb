@@ -8,10 +8,10 @@ end
 
 
 describe Account do   
-  include OrganismFixtureBis 
+  include OrganismFixtureBis  
   
   def valid_attributes
-    {number:'601',
+    {number:'6011',
       title:'Titre du compte',
       
     }
@@ -93,28 +93,31 @@ describe Account do
       end
 
     before(:each) do
-      create_minimal_organism
+      use_test_organism 
     end
-
     
+    after(:each) do
+      Writing.delete_all
+    end
   
-    describe 'solde initial'  do
+    describe 'solde initial', wip:true do
 
       before(:each) do
-        @acc1 = Account.new(number:'100', title:'Capital')
-        @acc1.period_id = @p.id; @acc1.save!
-        @acc2 = Account.new(number:'5201', title:'Banque')
-        @acc2.period_id = @p.id; @acc2.save!
-        odw = @od.writings.new(date:Date.today.beginning_of_year, narration:'ecriture d od',
-          :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:1000},
-            '1'=>{account_id:@acc2.id, debit:1000}})
-        puts odw.errors.messages unless odw.valid?
-        odw.save!
+        @acc1 = @p.accounts.first
       end
-
+      
+      
       it 'sans exercice précédent, et sans report à nouveau, zero' do
         @acc1.init_sold_debit.should == 0
         @acc1.init_sold_credit.should == 0
+      end
+      
+      it 'même avec une écriture dans l exercice' do
+        odw = @od.writings.new(date:@p.start_date, narration:'ecriture d od',
+          :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:1000},
+            '1'=>{account_id:@baca.id, debit:1000}})
+        puts odw.errors.messages unless odw.valid?
+        odw.save!
       end
     
       context 'avec report à nouveau' do
@@ -123,7 +126,7 @@ describe Account do
         before(:each) do
           @o.an_book.writings.create!(date:Date.today.beginning_of_year, narration:'ecriture d an',
             :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:66},
-              '1'=>{account_id:@acc2.id, debit:66}})
+              '1'=>{account_id:@baca.id, debit:66}})
         end
 
         it 'sans exercice précédent et avec RAN, donne ce montant' do
@@ -167,16 +170,11 @@ describe Account do
     end
 
     describe 'solde final' do
+      
       before(:each) do
-        @acc1 = Account.new({number:'100', title:'Capital'})
-        @acc1.period_id = @p.id; @acc1.save!
-        @acc2 = Account.new({number:'5201', title:'Banque'})
-        @acc2.period_id = @p.id; @acc2.save!
-        @od.writings.create!(date:Date.today.beginning_of_year, narration:'ecriture d od',
-          :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:1000},
-            '1'=>{account_id:@acc2.id, debit:1000}})
+        @acc1 = @p.accounts.first
       end
-
+      
       it 'final_sold' do
         @acc1.should_receive(:sold_at).with(@p.close_date).and_return(1000)
         @acc1.final_sold

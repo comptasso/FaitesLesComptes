@@ -16,16 +16,10 @@ describe 'admin cash' do
   
   before(:each) do
     create_user
-    create_minimal_organism 
+    use_test_organism
     login_as('quidam')
     
   end
-
-
-  it 'check minimal organism' do
-    Organism.count.should == 1
-    Cash.count.should == 1
- end
 
   describe 'new cash' do
     before(:each) do
@@ -59,7 +53,7 @@ describe 'admin cash' do
     context 'remplir incorrectement le formulaire' do
     it 'test uniqueness organism, name, number' do
      
-      fill_in 'cash[name]', :with=>'Magasin'
+      fill_in 'cash[name]', :with=>@c.name
       click_button "Créer la caisse" # le compte'
       page.should have_content('déjà utilisé')
       @o.should have(1).cashes
