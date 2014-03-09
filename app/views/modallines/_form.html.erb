@@ -7,8 +7,9 @@
     <%= f.error_notification %>
   
   
-   <%= f.input :livre, include_blank:false do %>
-      <%= f.select :book_id, @organism.in_out_books.map{ |b| [b.title, b.id, {'data-type'=> b.type, 'data-id'=>b.id}] } %>
+   <%= f.input :livre, include_blank:false, required:true do %>
+      <%= f.select :book_id,
+        @organism.in_out_books.map{ |b| [b.title, b.id, {'data-type'=> b.type, 'data-id'=>b.id}] } %>
  <% end %>
    
   
@@ -17,9 +18,9 @@
     <%= f.input :narration,  :label=>'Libellé ', input_html: {class: "span10" } %>
     <%= f.input :ref, label:'Référence',  input_html: {class: "span4" }  %>
     <%= f.fields_for :compta_lines, @line do |build| %>
-   <%= build.input :nature do %>
-     <%=  build.select :nature_id, modal_nature_options(@period) %>
-   <% end %>
+        <%= build.input :nature, required:true do %>
+          <%=  build.select :nature_id, modal_nature_options(@period) %>
+        <% end %>
     
      <%=  build.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
               :prompt => "Pour qui ?" ,   input_html: {class: "span6"} %>
@@ -35,7 +36,7 @@
                           :required=>true,  input_html: {class: "span6"} %>
 
      <%= build.association :account, :label=> 'Contrepartie', input_html: {class: "span6"}, :collection=>[@counter_line.account], :label_method=>:title,
-               :disabled=>true, :include_blank=>false  %>
+               :disabled=>true, :include_blank=>false, as: :hidden  %>
      <%= build.input :check_number, label:'N° ch.', input_html: {class: "span6" } %>
 
   
