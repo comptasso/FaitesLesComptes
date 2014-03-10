@@ -28,8 +28,8 @@ function $f_modal_book_change() {
     var income_outcome = $('#in_out_writing_book_id option:selected').attr('data-type'),
         book_id = $('#in_out_writing_book_id option:selected').attr('data-id');
     
-    $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_credit').val('0.00');
-    $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_debit').val('0.00');
+//    $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_credit').val('0.00');
+//    $('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_debit').val('0.00');
     // afficher le champ de n° de chèque si Chèque est le moyen de paiement
     if ($('#form_bank_extract_line #in_out_writing_compta_lines_attributes_0_payment_mode') === 'Chèque') {
         $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().show();
@@ -66,6 +66,27 @@ function $f_modal_payment_mode_change() {
         }
 }
 
+function $f_modal_prompt() {
+  
+        var select_nature_id = $('#in_out_writing_compta_lines_attributes_0_nature_id');
+        var select_dest_id = $('#in_out_writing_compta_lines_attributes_0_destination_id');
+        var select_payment_mode = $('#in_out_writing_compta_lines_attributes_1_payment_mode');
+  // On ne peut réintroduire les prompts que par javascript car Rails ne les affiche pas
+       // lorsque le champ a déjà une sélection.
+       if (select_nature_id.find('option[value=""]').length === 0) {
+          select_nature_id.prepend('<option value="">Quoi ?</option>;');
+          select_nature_id.find('option[value=""]').attr('selected', "selected");
+        }
+        if (select_dest_id.find('option[value=""]').length === 0) {
+          select_dest_id.prepend('<option value="">Pour qui ?</option>;');
+          select_dest_id.find('option[value=""]').attr('selected', "selected");
+        }
+        if (select_payment_mode.find('option[value=""]').length === 0) {
+          select_payment_mode.prepend('<option value="">Mode de réglement</option>;');
+          select_payment_mode.find('option[value=""]').attr('selected', "selected");
+        }
+}
+
 function $f_modal_raz() {
         var select_nature_id = $('#in_out_writing_compta_lines_attributes_0_nature_id');
         var select_dest_id = $('#in_out_writing_compta_lines_attributes_0_destination_id');
@@ -92,21 +113,8 @@ function $f_modal_raz() {
         $('#in_out_writing_compta_lines_attributes_0_destination_id option').removeAttr('selected');
         $('#in_out_writing_compta_lines_attributes_1_payment_mode option').removeAttr('selected');
         
-  
-       // On ne peut réintroduire les prompts que par javascript car Rails ne les affiche pas
-       // lorsque le champ a déjà une sélection.
-       if (select_nature_id.find('option[value=""]').length === 0) {
-          select_nature_id.prepend('<option value="">Quoi ?</option>;');
-          select_nature_id.find('option[value=""]').attr('selected', "selected");
-        }
-        if (select_dest_id.find('option[value=""]').length === 0) {
-          select_dest_id.prepend('<option value="">Pour qui ?</option>;');
-          select_dest_id.find('option[value=""]').attr('selected', "selected");
-        }
-        if (select_payment_mode.find('option[value=""]').length === 0) {
-          select_payment_mode.prepend('<option value="">Mode de réglement</option>;');
-          select_payment_mode.find('option[value=""]').attr('selected', "selected");
-        }
+        $f_modal_prompt();
+       
         
     }
 
@@ -117,7 +125,7 @@ jQuery(function () {
     $f_modal_book_change();
     // selon la nature du livre, on veut disable les natures qui sont inadaptées
     $('#modal_form_line').on('change', '#in_out_writing_book_id', $f_modal_book_change);
-    // Attacher un évènement onChange au champ book
+    // Attacher un évènement onChange au champ payment_mode
     $('#modal_form_line').on('change', '#in_out_writing_compta_lines_attributes_1_payment_mode', $f_modal_payment_mode_change);
        
     $('#modal_form_line').on('shown', $f_modal_raz);

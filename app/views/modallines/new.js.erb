@@ -1,5 +1,12 @@
 $('div.modal-body').html('<%= j render partial:'form' %>');
 
+// pour des raisons qui restent à creuser, la nature n'est pas initialisée si 
+// elle a été remplie. Du coup, on tombe sur la première nature par défaut. 
+<% if @line.nature_id  %>
+  $('#in_out_writing_compta_lines_attributes_0_nature_id').find('option[value="<%= @line.nature_id%>"]').attr('selected', "selected")
+
+<% end %>
+
 // on réinitialise les actions de séléction des types de natures en fonction du livre 
 // et de l'affichage ou non du mode de paiement.
 

@@ -18,8 +18,8 @@
     <%= f.input :narration,  :label=>'Libellé ', input_html: {class: "span10" } %>
     <%= f.input :ref, label:'Référence',  input_html: {class: "span4" }  %>
     <%= f.fields_for :compta_lines, @line do |build| %>
-        <%= build.input :nature, required:true do %>
-          <%=  build.select :nature_id, modal_nature_options(@period) %>
+        <%= build.input :nature_id, required:true  do %>
+          <%=  build.select :nature_id, modal_nature_options(@period), :prompt => "Pour quoi ?" %>
         <% end %>
     
      <%=  build.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',

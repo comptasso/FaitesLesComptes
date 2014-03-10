@@ -46,7 +46,7 @@ module InOutWritingsHelper
   # pour une compta_line
   # Si un block est donné, les instructions de ce block sont reprises dans 
   # le fragment de html et au début de celui ci.
-  def line_actions(line)
+  def line_actions(line, deletable = true)
     # Si la ligne est éditable, alors on peut la modifier ou la supprimer
     # 
     # Si la ligne est un Transfer, la modification se fait via la rubrique Transfer
@@ -62,7 +62,7 @@ module InOutWritingsHelper
       when Adherent::Writing then html << icon_to('detail.png', adherent.member_payments_path(lw.member))
       else
         html <<  icon_to('modifier.png', edit_book_in_out_writing_path(lw.book_id, lw)) 
-        html <<  icon_to('supprimer.png', book_in_out_writing_path(lw.book, lw), confirm: 'Etes vous sûr?', method: :delete) 
+        html <<  icon_to('supprimer.png', book_in_out_writing_path(lw.book, lw), confirm: 'Etes vous sûr?', method: :delete) if deletable 
       end
     else 
       case lw
