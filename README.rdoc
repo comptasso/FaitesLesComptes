@@ -64,12 +64,15 @@ Un gem devra être également développé pour la gestion des immobilisations et
 
 == Licence
 
-Ce logiciel est open-source et peut être utilitsé, distribué et modifié librement,
-y compris à des fins commerciales.
+Copyright FLC Expertise Jean-Claude Lepage
 
-Il est fourni tel quel et aucune garantie n'est donnée quand à son utilisation ni à son
-fonctionnement.
+L'ensemble du logiciel FaitesLesComptes est sous licence Apache, Version 2.0 (la "Licence").
 
-En aucun cas, nous ne pourrons être tenus responsable pour la perte de données, leurs
-mauvais enregistrements, les erreurs éventuelles sur les états édités, et plus généralement
-tous dommages survenus suite à l'utilisation de ce logiciel.
+vous ne pouvez pas utiliser ces fichiers, sauf conformément à la licence.
+Vous pouvez obtenir une copie de la Licence sur
+    http://www.apache.org/licenses/LICENSE-2.0 (en anglais)
+
+Une version française figure dans le fichier public/licence_fr.html
+
+Sauf si requis par la loi en vigueur ou par accord écrit, le logiciel distribué sous la licence est distribué "TEL QUEL", SANS GARANTIE NI CONDITION DE QUELQUE NATURE QUE CE SOIT, implicite ou explicite.
+Consultez la Licence pour connaître la terminologie spécifique régissant les autorisations et les limites prévues par la licence.
