@@ -95,7 +95,7 @@ module OrganismFixtureBis
     @ib = @o.income_books.first # les livres sont créés par un after_create
     @ob = @o.outcome_books.first
     @od = @o.od_books.first
-    @c=  @o.cashes.first || @o.cashes.create!(:name=>'Magasin')
+    @c=  @o.cashes.first || @o.cashes.create!(:name=>'Magasin', sector_id:@sector.id)
   
     @baca = @ba.current_account(@p) # pour baca pour BankAccount Current Account
     # puts @baca.inspect
