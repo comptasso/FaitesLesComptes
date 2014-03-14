@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140225053618) do
+ActiveRecord::Schema.define(:version => 20140314191226) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -359,7 +359,5 @@ ActiveRecord::Schema.define(:version => 20140225053618) do
     t.date     "locked_at"
     t.date     "ref_date"
   end
-
-  add_index "writings", ["continuous_id"], :name => "index_writings_on_continuous_id", :unique => true
 
 end
