@@ -1,20 +1,7 @@
 
   <ul class="nav nav-tabs" id="menu_general">
    
-    <li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> ">
-
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        ORGANISMES
-        <b class="caret"></b>
-      </a>
-      <ul class="dropdown-menu">
-        <% cache("saisie_#{current_user.name}")  do %>
-          <%= saisie_consult_organism_list if user_signed_in? %>
-        <% end %>
-      </ul>
-    </li>
-
-
+    
     <!--TODO normalement dans ce menu (de la zone Public), il ne peut pas y avoir de new_record? -->
 <% if (@organism && @organism.persisted?) %>
 
