@@ -148,6 +148,8 @@ class CheckDeposit < ActiveRecord::Base
     book = OdBook.first!
     CheckDeposit.transaction do
       w = build_check_deposit_writing(date:deposit_date, narration:'Remise chèque', book_id:book.id)
+      w.user_ip = user_ip
+      w.written_by = written_by
       w.compta_lines.build(check_deposit_id:id, account_id:rem_check_account.id, credit:total_checks)
       w.compta_lines.build(check_deposit_id:id, debit:total_checks, account_id:bank_account_account.id)
       w.save!
@@ -162,7 +164,10 @@ class CheckDeposit < ActiveRecord::Base
 
   def update_writing
     CheckDeposit.transaction do
-      check_deposit_writing.update_attribute(:date, deposit_date)
+      check_deposit_writing.date = deposit_date
+      check_deposit_writing.user_ip = user_ip
+      check_deposit_writing.written_by = written_by
+      check_deposit_writing.save
       credit_compta_line.update_attribute(:credit, total_checks)
       debit_compta_line.update_attribute(:debit, total_checks)
     end

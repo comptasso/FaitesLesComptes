@@ -52,7 +52,7 @@ class InOutWritingsController < ApplicationController
     @in_out_writing = @book.in_out_writings.build(params[:in_out_writing])
     @line = @in_out_writing.in_out_line
     @counter_line=@in_out_writing.counter_line
-    
+    fill_author(@in_out_writing)
     respond_to do |format|
       if @in_out_writing.save
         flash[:date]=@in_out_writing.date # permet de transmettre la date à l'écriture suivante
@@ -100,6 +100,7 @@ class InOutWritingsController < ApplicationController
     @in_out_writing = @book.in_out_writings.find(params[:id])
     @line = @in_out_writing.in_out_line
     @counter_line = @in_out_writing.counter_line
+    fill_author(@in_out_writing)
     fill_counter_line
     respond_to do |format|
       if @in_out_writing.update_attributes(params[:in_out_writing])
@@ -151,6 +152,8 @@ class InOutWritingsController < ApplicationController
     request.env['HTTP_REFERER'][/(\w*)\?/]
     @origin = ($1 == 'new') ? 'new' : 'index'
   end
+  
+  
 
 
   # complète les informations pour la counter_line en remplissant les
@@ -159,7 +162,6 @@ class InOutWritingsController < ApplicationController
       p  = params[:in_out_writing][:compta_lines_attributes]
       p['1'][:credit] = p['0'][:debit] || 0
       p['1'][:debit]= p['0'][:credit] || 0
-      
   end
 
 

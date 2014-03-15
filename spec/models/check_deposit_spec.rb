@@ -178,6 +178,8 @@ describe CheckDeposit do
     before(:each) do
       date = Date.today + 2
       @check_deposit = @ba.check_deposits.new(deposit_date: date)
+      @check_deposit.user_ip = '127.0.0.1'
+      @check_deposit.written_by = 3
       @check_deposit.pick_all_checks(@sector)
       @check_deposit.save!
     end
@@ -185,6 +187,16 @@ describe CheckDeposit do
     
     describe 'crée une écriture'  do
 
+      it 'a une écriture' do
+        @check_deposit.check_deposit_writing.should be_an_instance_of(CheckDepositWriting)
+      end
+      
+      it 'dont les champs written_by et uesr_ip sont remplis' do
+        cdw = @check_deposit.check_deposit_writing
+        cdw.written_by.should == @check_deposit.written_by
+        cdw.user_ip.should == @check_deposit.user_ip
+      end
+      
       it 'avec une ligne au credit du 511'  do
         cl = @check_deposit.credit_line
         cl.date.should == @check_deposit.deposit_date
@@ -199,6 +211,8 @@ describe CheckDeposit do
         dl.account.should == @check_deposit.bank_account.current_account(@p)
         dl.debit.should == @check_deposit.total_checks
       end
+      
+      
 
     end
 

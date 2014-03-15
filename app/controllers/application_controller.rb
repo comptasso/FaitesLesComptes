@@ -227,6 +227,16 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+  
+  # remplit les champs written_by et user_ip pour savoir qui a créé ou modifié
+  # en dernier une écriture. 
+  # 
+  # Appelé par in_out_writings_controller mais aussi par check_deposits, transfer,...
+  #
+  def fill_author(writing)
+    writing.written_by = current_user.id
+    writing.user_ip = current_user.current_sign_in_ip
+  end
 
   # raccourci pour avoir la configuration
   #

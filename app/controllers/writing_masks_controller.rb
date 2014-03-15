@@ -13,7 +13,7 @@ class WritingMasksController < ApplicationController
       flash[:retour] = request.env["HTTP_REFERER"]
       render 'in_out_writings/new'
     else
-      # TODO ajouter un flash d'explication
+      flash[:alert] = 'Le masque de saisie demandé n\a pas été trouvé'
       redirect_to :back and return
     end
   end

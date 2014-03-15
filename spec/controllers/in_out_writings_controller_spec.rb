@@ -9,7 +9,7 @@ end
 describe InOutWritingsController do
   include SpecControllerHelper
 
- before(:each) do
+  before(:each) do
     minimal_instances 
     @b = mock_model(Book)
     @b.stub_chain(:natures, :within_period).and_return(@ar = double(Arel))
@@ -78,7 +78,7 @@ describe InOutWritingsController do
       Book.stub(:find).and_return(@b)
       @w = mock_model(InOutWriting)
       request.env["HTTP_REFERER"] = 'http://period/1/in_out_writings'
-   end
+    end
 
    
 
@@ -110,7 +110,8 @@ describe InOutWritingsController do
       assigns[:line].should == @l
       assigns[:counter_line].should == @cl
     end
-
+    
+    
     it "should render edit" do
       @b.stub_chain(:in_out_writings, :find).and_return(@w)
       @w.stub(:in_out_line).and_return mock_model(ComptaLine)
@@ -125,7 +126,7 @@ describe InOutWritingsController do
 
     def update_parameters
       {"narration"=>'libellé corrigé', 'compta_lines_attributes'=>{'0'=>{'debit'=>'12', 'credit'=>'0', 'payment_mode'=>'Virement'},
-        '1'=>{'debit'=>'0', 'credit'=>'12', 'payment_mode'=>'Virement'}}}
+          '1'=>{'debit'=>'0', 'credit'=>'12', 'payment_mode'=>'Virement'}}}
     end
 
     before(:each) do
@@ -134,9 +135,16 @@ describe InOutWritingsController do
       @w.stub(:in_out_line).and_return(mock_model(ComptaLine))
       @w.stub(:counter_line).and_return(mock_model(ComptaLine))
     end
+    
+    it 'appelle fill author' do
+      @controller.should_receive(:fill_author).with(@w)
+      @w.stub(:update_attributes).with( update_parameters).and_return(true)
+      put :update,  {:income_book_id=>@b.id, :id=>@w.id, :in_out_writing=>update_parameters}, session_attributes
+    end
+
 
     it 'redirige en cas de succès de la sauvegarde' do
-      
+      @controller.stub(:fill_author).with(@w)
       @w.should_receive(:update_attributes).with( update_parameters).and_return(true)
       put :update,  {:income_book_id=>@b.id, :id=>@w.id, :in_out_writing=>update_parameters}, session_attributes
       my = MonthYear.from_date(Date.today)
@@ -144,7 +152,7 @@ describe InOutWritingsController do
     end
 
     it 'render edit en cas d échec de la sauvegarde' do
-      
+      @controller.stub(:fill_author).with(@w)
       @w.should_receive(:update_attributes).with(update_parameters).and_return(false)
       put :update,  {:income_book_id=>@b.id, :id=>@w.id,  :in_out_writing=>update_parameters }, session_attributes
       response.should render_template 'edit'
@@ -186,7 +194,7 @@ describe InOutWritingsController do
 
     def create_parameters
       {"narration"=>'linellé corrigé', 'compta_lines_attributes'=>{'0'=>{'debit'=>'12', 'credit'=>'0', 'payment_mode'=>'Virement'},
-        '1'=>{'debit'=>'0', 'credit'=>'12', 'payment_mode'=>'Virement'}}}
+          '1'=>{'debit'=>'0', 'credit'=>'12', 'payment_mode'=>'Virement'}}}
     end
 
     before (:each) do
@@ -194,65 +202,77 @@ describe InOutWritingsController do
       @my = MonthYear.from_date(Date.civil(2012,4,18))
       @iol = mock_model(ComptaLine)
       @cl = mock_model(ComptaLine)
+      @controller.stub(:fill_author)
     end
 
-    context "post successful" do
-      it "creates a writing" do
-        @b.stub(:in_out_writings).and_return a =double(Arel)
-        a.should_receive(:build).with(create_parameters).and_return(@nw)
-        @nw.should_receive(:in_out_line).and_return @iol
-        @nw.should_receive(:counter_line).and_return @cl
-        @nw.stub(:save).and_return true
-        post :create, { :income_book_id=>@b.id,
-          :in_out_writing=>create_parameters, commit: 'Créer' }, session_attributes
-        assigns(:in_out_writing).should == @nw
-        assigns(:line).should == @iol
-        assigns(:counter_line).should == @cl
-      end
+    
+    it "creates a writing" do
+      @b.stub(:in_out_writings).and_return a =double(Arel)
+      a.should_receive(:build).with(create_parameters).and_return(@nw)
+      @nw.should_receive(:in_out_line).and_return @iol
+      @nw.should_receive(:counter_line).and_return @cl
+      @nw.stub(:save).and_return true
+      post :create, { :income_book_id=>@b.id,
+        :in_out_writing=>create_parameters, commit: 'Créer' }, session_attributes
+      assigns(:in_out_writing).should == @nw
+      assigns(:line).should == @iol
+      assigns(:counter_line).should == @cl
+    end
+      
+    it 'appelle fill author' do
+      @b.stub_chain(:in_out_writings, :build).and_return @nw
+        @nw.stub(:in_out_line).and_return @iol
+      @nw.stub(:counter_line).and_return @cl
+      @controller.should_receive(:fill_author).with(@nw)
+      @nw.stub(:save).and_return true
+      post :create, { :income_book_id=>@b.id,
+        :in_out_writing=>create_parameters, commit: 'Créer' }, session_attributes
+    end
 
-      it "reçoit save" do
+
+    it "reçoit save" do
+      @b.stub_chain(:in_out_writings, :build).and_return @nw
+      @nw.stub(:in_out_line).and_return @iol
+      @nw.stub(:counter_line).and_return @cl
+      @nw.should_receive(:save).and_return true
+      post :create, { :income_book_id=>@b.id,
+        :in_out_writing=>create_parameters, commit: 'Créer' }, session_attributes
+    end
+
+    context 'after_save' do
+      before(:each) do
         @b.stub_chain(:in_out_writings, :build).and_return @nw
         @nw.stub(:in_out_line).and_return @iol
         @nw.stub(:counter_line).and_return @cl
-        @nw.should_receive(:save).and_return true
+      end
+
+      it 'succès -> remplit les flashs' do
+        @nw.stub(:save).and_return(true)
         post :create, { :income_book_id=>@b.id,
           :in_out_writing=>create_parameters, commit: 'Créer' }, session_attributes
+        assigns(:in_out_writing).should == @nw
+        flash[:previous_line_id].should ==  @iol.id
+        flash[:date].should == @nw.date
       end
 
-      context 'after_save' do
-        before(:each) do
-          @b.stub_chain(:in_out_writings, :build).and_return @nw
-          @nw.stub(:in_out_line).and_return @iol
-          @nw.stub(:counter_line).and_return @cl
-        end
-
-        it 'succès -> remplit les flashs' do
-          @nw.stub(:save).and_return(true)
-          post :create, { :income_book_id=>@b.id,
-            :in_out_writing=>create_parameters, commit: 'Créer' }, session_attributes
-          assigns(:in_out_writing).should == @nw
-          flash[:previous_line_id].should ==  @iol.id
-          flash[:date].should == @nw.date
-        end
-
-        it 'succès -> redirige pour une nouvelle saise' do
-          @nw.stub(:save).and_return(true)
-          post :create, { :income_book_id=>@b.id,
-            :in_out_writing=>create_parameters, commit: 'Créer' }, session_attributes
-          response.should redirect_to (new_book_in_out_writing_path(:book_id=>@b.id, :mois=>@my.month, :an=>@my.year) )
-        end
-
-        it 'echec -> rend new' do
-          @nw.stub(:save).and_return(false)
-          post :create, { :income_book_id=>@b.id,
-            :in_out_writing=>create_parameters, commit: 'Créer' }, session_attributes
-          response.should render_template 'new'
-        end
-
+      it 'succès -> redirige pour une nouvelle saise' do
+        @nw.stub(:save).and_return(true)
+        post :create, { :income_book_id=>@b.id,
+          :in_out_writing=>create_parameters, commit: 'Créer' }, session_attributes
+        response.should redirect_to (new_book_in_out_writing_path(:book_id=>@b.id, :mois=>@my.month, :an=>@my.year) )
       end
+
+      it 'echec -> rend new' do
+        @nw.stub(:save).and_return(false)
+        post :create, { :income_book_id=>@b.id,
+          :in_out_writing=>create_parameters, commit: 'Créer' }, session_attributes
+        response.should render_template 'new'
+      end
+
+    end
 
      
-    end
+   
   end
 
   describe 'Get new'      do

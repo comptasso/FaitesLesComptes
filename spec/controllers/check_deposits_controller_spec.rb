@@ -196,12 +196,23 @@ before(:each) do
 
 
   describe 'GET create' do
-
+    before(:each) do
+      @controller.stub(:fill_author)
+    end
 
     it 'bank_account create a check_deposit and try to save it' do
       ba.should_receive(:check_deposits).and_return @a = double(Arel)
       @a.should_receive(:new).with({"param"=>'value'}).and_return(@cd=mock_model(CheckDeposit))
       @cd.should_receive(:save).and_return true
+      post :create, {:bank_account_id=>ba.id, :organism_id=>@o.id.to_s,
+          :check_deposit=>{param:'value'} }, valid_session
+    end
+    
+    it 'le controlleur reçoit fill_author' do
+      
+      ba.stub_chain(:check_deposits, :new).and_return @cd=mock_model(CheckDeposit)
+      @controller.should_receive(:fill_author).with(@cd)
+      @cd.stub(:save).and_return true
       post :create, {:bank_account_id=>ba.id, :organism_id=>@o.id.to_s,
           :check_deposit=>{param:'value'} }, valid_session
     end
@@ -225,10 +236,23 @@ before(:each) do
   end
 
   describe 'GET update' do
+    
+    before(:each) do
+      @controller.stub(:fill_author)
+    end
 
     it 'bank_account create a check_deposit and try to save it' do
       CheckDeposit.should_receive(:find).with(cd.id.to_s).and_return cd
       cd.should_receive(:update_attributes).and_return true
+      post :update, {:bank_account_id=>ba.id, :organism_id=>@o.id.to_s, id:cd.id,
+          :check_deposit=>{param:'value'} }, valid_session
+    end
+    
+    it 'le controlleur reçoit fill_author' do
+      
+      CheckDeposit.stub(:find).with(cd.id.to_s).and_return cd
+      @controller.should_receive(:fill_author).with(cd)
+      cd.stub(:update_attributes).and_return true
       post :update, {:bank_account_id=>ba.id, :organism_id=>@o.id.to_s, id:cd.id,
           :check_deposit=>{param:'value'} }, valid_session
     end

@@ -161,6 +161,8 @@ ActiveRecord::Schema.define(:version => 20140315161131) do
     t.datetime "updated_at",           :null => false
     t.integer  "bank_extract_line_id"
     t.integer  "writing_id"
+    t.integer  "written_by"
+    t.string   "user_ip"
   end
 
   create_table "compta_lines", :force => true do |t|
@@ -358,7 +360,7 @@ ActiveRecord::Schema.define(:version => 20140315161131) do
     t.integer  "continuous_id"
     t.date     "locked_at"
     t.date     "ref_date"
-    t.decimal  "written_by"
+    t.integer  "written_by"
     t.string   "user_ip"
   end
 
