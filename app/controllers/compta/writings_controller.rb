@@ -74,7 +74,7 @@ class Compta::WritingsController < Compta::ApplicationController
   def create
     params[:writing][:date_picker] ||=  l(@period.start_date)
     @writing = @book.writings.new(params[:writing])
-
+    fill_author(@writing)
     respond_to do |format|
       if @writing.save
         flash[:date]=@writing.date # permet de transmettre la date à l'écriture suivante
@@ -96,7 +96,7 @@ class Compta::WritingsController < Compta::ApplicationController
   # PUT /writings/1.json
   def update
     @writing = Writing.find(params[:id])
-
+    fill_author(@writing)
     respond_to do |format|
       if @writing.update_attributes(params[:writing])
          my = MonthYear.from_date(@writing.date)

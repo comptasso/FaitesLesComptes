@@ -54,7 +54,7 @@ class TransfersController < ApplicationController
   def create
     params_pre_treatment
     @transfer = @book.transfers.new(params[:transfer])
-
+    fill_author(@transfer)
     respond_to do |format|
       if @transfer.save
         my = MonthYear.from_date(@transfer.date)
@@ -71,7 +71,7 @@ class TransfersController < ApplicationController
   def update
     params_pre_treatment
     @transfer = Transfer.find(params[:id])
-
+    fill_author(@transfer)
     respond_to do |format|
       if @transfer.update_attributes(params[:transfer])
         format.html { redirect_to transfers_url, notice: 'Transfert mis à jour' }

@@ -47,7 +47,7 @@ describe TransfersController do
     { "amount"=>1245.to_s, 'book_id'=>@od.to_param,
       "narration"=>'Premier virement', "date"=>Date.today.to_formatted_s('%d-%m-%Y'),
       :compta_lines_attributes=>{'0'=>{account_id:@ba.to_param}, '1'=>{account_id:@bb.to_param}}
-     }
+    }
   end
 
 
@@ -57,8 +57,8 @@ describe TransfersController do
     {  'book_id'=>@od.to_param,
       "narration"=>'Premier virement', "date"=>Date.today.to_formatted_s('%d-%m-%Y'),
       'compta_lines_attributes'=>{'0'=>{'account_id'=>@ba.to_param, 'credit'=>'1245'},
-          '1'=>{'account_id'=>@bb.to_param, 'debit'=>'1245'} }
-     }
+        '1'=>{'account_id'=>@bb.to_param, 'debit'=>'1245'} }
+    }
   end
 
   describe "GET index"  do
@@ -162,7 +162,7 @@ describe TransfersController do
     
     before(:each) do
       @od.stub(:transfers).and_return @a = double(Arel)
-      
+      @controller.stub(:fill_author)
     end
 
 
@@ -173,6 +173,8 @@ describe TransfersController do
       @t.stub(:date).and_return(Date.today) 
       post :create, {:transfer => valid_attributes}, valid_session
     end
+    
+   
 
     describe "with valid params" do
 
@@ -180,6 +182,11 @@ describe TransfersController do
         @a.stub(:new).with(modified_attributes).and_return @t= mock_model(Transfer).as_new_record
         @t.stub(:date).and_return(Date.today) # car sinon le mock_model ne transforme pas la date
         @t.stub(:save).and_return true
+      end
+      
+      it 'recoit fill_author' do
+        @controller.should_receive(:fill_author).with(@t)
+        post :create, {:transfer => valid_attributes}, valid_session
       end
       
 
@@ -223,22 +230,23 @@ describe TransfersController do
 
     def changed_attrs 
       {"date_picker"=>Date.today.to_formatted_s('%d/%m/%Y'),
-      "ref"=>"",
-      "narration"=>"Virement interne", 
-      "amount"=>"1050.00",
-      "compta_lines_attributes"=>{"0"=>{"account_id"=>"89", "id"=>"37"},
-        "1"=>{"account_id"=>"90", "id"=>"38"}}}
+        "ref"=>"",
+        "narration"=>"Virement interne", 
+        "amount"=>"1050.00",
+        "compta_lines_attributes"=>{"0"=>{"account_id"=>"89", "id"=>"37"},
+          "1"=>{"account_id"=>"90", "id"=>"38"}}}
     end
     
     def pre_treatment_attrs
       {"date_picker"=>Date.today.to_formatted_s('%d/%m/%Y'),
-      "ref"=>"",
-      "narration"=>"Virement interne", 
-      "compta_lines_attributes"=>{"0"=>{"account_id"=>"89", "id"=>"37", 'credit'=>changed_attrs["amount"]},
-        "1"=>{"account_id"=>"90", "id"=>"38", 'debit'=>changed_attrs["amount"]}}}
+        "ref"=>"",
+        "narration"=>"Virement interne", 
+        "compta_lines_attributes"=>{"0"=>{"account_id"=>"89", "id"=>"37", 'credit'=>changed_attrs["amount"]},
+          "1"=>{"account_id"=>"90", "id"=>"38", 'debit'=>changed_attrs["amount"]}}}
     end
     
     before(:each) do
+      @controller.stub(:fill_author)
       @t = mock_model(Transfer)
       Transfer.stub(:find).with(@t.id.to_s).and_return(@t)
     end
@@ -253,6 +261,12 @@ describe TransfersController do
       @t.should_receive(:update_attributes).with(pre_treatment_attrs).and_return true
       put :update, {:organism_id=>@o.to_param,:id => @t.to_param, :transfer => changed_attrs}, valid_session
     end
+    
+    it 'recoit fill_author' do
+        @controller.should_receive(:fill_author).with(@t)
+        @t.stub(:update_attributes)
+      put :update, { :id => @t.to_param, :transfer => valid_attributes}, valid_session
+      end
 
     it "assigns the requested transfer as @transfer" do
       @t.stub(:update_attributes)

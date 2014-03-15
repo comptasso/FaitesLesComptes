@@ -77,21 +77,30 @@ describe Compta::WritingsController do
   end
 
   describe "POST create"  do
+    
+    before(:each) do
+      @controller.stub(:fill_author)
+      @r = mock_model(Writing)
+      @b.stub(:writings).and_return @a = double(Arel)
+    end
 
    
     describe "with valid params"  do
 
       before(:each) do
-        @r = mock_model(Writing)
-        @b.stub(:writings).and_return @a = double(Arel)
         @a.stub(:new).with({'date_picker'=>(I18n::l Date.today.beginning_of_year)}).and_return @r
-        
       end
 
       it "assigns a newly created writing as @writing" do
         @r.stub(:save).and_return(true)
         post :create, {book_id:@b.to_param, :writing => {} }, valid_session
         assigns(:writing).should be_a(Writing)
+      end
+      
+      it 'appelle fill_author' do
+        @r.stub(:save).and_return(@r)
+        @controller.should_receive(:fill_author).with(@r)
+        post :create, {book_id:@b.to_param, :writing => {} }, valid_session
       end
 
       it "redirects to the form new" do
@@ -110,8 +119,6 @@ describe Compta::WritingsController do
 
     describe "with invalid params"   do
       before(:each) do
-        @r = mock_model(Writing)
-        @b.stub(:writings).and_return @a = double(Arel)
         @a.stub(:new).and_return @r
       end
 
@@ -138,6 +145,7 @@ describe Compta::WritingsController do
       @va = {id:@w.id, book_id:@b.id, date:Date.today, narration:'Ecriture', :compta_lines_attributes=>{'0'=>{account_id:1, debit:100, credit:0},
           '1'=>{account_id:2, debit:0, credit:100}} }
       Writing.stub(:find).with(@w.to_param).and_return @w
+      @controller.stub(:fill_author)
     end
 
     describe "with valid params" do
@@ -148,6 +156,11 @@ describe Compta::WritingsController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         @w.should_receive(:update_attributes).with({'these' => 'params'}).and_return @w
+        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {'these' => 'params'}}, valid_session
+      end
+      
+      it 'appelle fill_author' do
+        @controller.should_receive(:fill_author).with(@w)
         put :update, {book_id:@b.id, :id => @w.to_param, :writing => {'these' => 'params'}}, valid_session
       end
 
