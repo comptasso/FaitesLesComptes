@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140314191226) do
+ActiveRecord::Schema.define(:version => 20140315161131) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -358,6 +358,8 @@ ActiveRecord::Schema.define(:version => 20140314191226) do
     t.integer  "continuous_id"
     t.date     "locked_at"
     t.date     "ref_date"
+    t.decimal  "written_by"
+    t.string   "user_ip"
   end
 
 end
