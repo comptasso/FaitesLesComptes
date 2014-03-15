@@ -79,4 +79,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.4.3RC' # Refonte des graphiques pour accélérer l'affichage du DashBoard
 # FLCVERSION = '1.4.4RC' # revision des plans comptables et nomenclatures
 # FLCVERSION = '1.4.5RC' # mise en place d un modèle Holder pour avoir des status owner et guest
-FLCVERSION = '1.4.6RC' # les noms de bases de données sont suffixées par un timestamp
+# FLCVERSION = '1.4.6RC' # les noms de bases de données sont suffixées par un timestamp
+FLCVERSION = '1.4.7RC' # retrait de la contrainte unique sur continuous_id (pour pb de verrouillage)

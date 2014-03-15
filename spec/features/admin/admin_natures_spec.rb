@@ -11,7 +11,7 @@ end
 # spec request for testing admin books   
 
 describe 'vue natures index' do   
-  include OrganismFixtureBis 
+  include OrganismFixtureBis  
 
   before(:each) do
     create_user
@@ -41,7 +41,7 @@ describe 'vue natures index' do
       select 'Dépenses'
       click_button 'Créer la nature'
       @p.natures(true).count.should == @nats_count + 1
-      @p.natures.last.book.should == OutcomeBook.first
+      @p.natures.order(:id).last.book.should == OutcomeBook.first
       current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
     end
 
