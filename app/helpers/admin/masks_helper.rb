@@ -40,6 +40,10 @@ module Admin::MasksHelper
     
   end
   
+  def etat(masque)
+    masque.complete? ? 'Complet' : 'Incomplet'
+  end
+  
   
 
 end

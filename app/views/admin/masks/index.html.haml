@@ -9,12 +9,14 @@
     %tr
       %th Titre
       %th Commentaire
+      %th Etat
       %th Actions
   %tbody
     - @masks.each do |mask|
       %tr
         %td= mask.title
         %td= mask.comment
+        %td= etat(mask)
         %td
           = icon_to 'detail.png', admin_organism_mask_path(@organism, mask)
           = icon_to 'modifier.png', edit_admin_organism_mask_path(@organism, mask)
