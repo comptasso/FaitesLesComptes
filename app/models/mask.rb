@@ -108,7 +108,8 @@ class Mask < ActiveRecord::Base
     return false if amount == 0.0
     return false unless destination_id
     %w(nature_name narration mode counterpart).each do |field|
-      return false if self.send(field).empty?
+      info = self.send(field)
+      return false unless info && info.empty?
     end
     return true
   end
