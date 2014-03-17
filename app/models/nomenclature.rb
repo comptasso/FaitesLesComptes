@@ -121,6 +121,19 @@ class Nomenclature < ActiveRecord::Base
     errors.any? ? false : true
   end
   
+  # vérifie que nomenclature est coherent pour une période donnée en 
+  # créant Compta::Nomenclature et en appelant valid sur cet objet
+  # Puis recopie les erreurs s'il y en a.
+  # 
+  # Non protégé car appelé par Period pour la persistence de cette réponse
+  #
+  def period_coherent?(period)
+    cn = compta_nomenclature(period)
+    validity = cn.valid?
+    cn.errors.each { |k, err| errors.add(k, err) } unless validity
+    validity
+  end  
+  
    protected
   # sert à vérifier que si on compte C est pris, on trouve également un compte D
   # et vice_versa.
@@ -153,14 +166,7 @@ class Nomenclature < ActiveRecord::Base
     errors.add(:bilan, 'Une instruction apparait deux fois dans la construction du bilan') unless array_numbers.uniq.size == array_numbers.size
   end
   
-  # vérifie que nomenclature est coherent pour une période donnée en 
-  # créant Compta::Nomenclature; puis recopie les erreurs s'il y en a
-  def period_coherent?(period)
-    cn = compta_nomenclature(period)
-    validity = cn.valid?
-    cn.errors.each { |k, err| errors.add(k, err) } unless validity
-    validity
-  end  
+  
   
       
            

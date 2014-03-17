@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140315161131) do
+ActiveRecord::Schema.define(:version => 20140317051614) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -282,9 +282,10 @@ ActiveRecord::Schema.define(:version => 20140315161131) do
     t.date     "start_date"
     t.date     "close_date"
     t.integer  "organism_id"
-    t.boolean  "open",        :default => true
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.boolean  "open",            :default => true
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+    t.boolean  "nomenclature_ok", :default => false
   end
 
   create_table "rooms", :force => true do |t|

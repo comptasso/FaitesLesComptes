@@ -99,20 +99,23 @@ describe Period do
       
       before(:each) do
 
-        @org = mock_model(Organism, :status_class=>'Association', :fill_bridge=>true)
+        @org = mock_model(Organism, :status_class=>'Association',
+          :fill_bridge=>true, nomenclature:(@nomen=Nomenclature.new))
         @p  = Period.new(valid_params)
         @p.organism_id = @org.id
+        
         @p.stub(:collect_books).and_return({'Recettes'=>1, "Dépenses"=>2})
         @p.stub(:max_open_periods?).and_return false
         @p.stub(:organism) {@org}
         @p.stub(:create_bank_and_cash_accounts).and_return true
         @p.stub(:create_rem_check_accounts).and_return true
-        @p.save!
+        
       end
      
     
-      it 'la création des comptes' , wip:true do
-        # @p.accounts(true).each {|acc| p acc}
+      it 'la création des comptes'  do
+        @p.stub(:check_nomenclature).and_return true
+        @p.save!
         @p.accounts(true).count.should == 137 # la liste des comptes du plan comptable
         # on n'a pas les deux comptes de caisse et banque 
         # car on a stubbé create_bank_and_cash_accounts
@@ -120,16 +123,44 @@ describe Period do
       end
 
       it 'la création des natures : 10 natures de dépenses et 6 de recettes '  do
+        @p.stub(:check_nomenclature).and_return true
+        @p.save!
         @p.should have(43).natures
       end
       
+      describe 'persistence du contrôle de la nomenclature', wip:true do
       
+        it 'le controle de la nomenclature est appelé' do
+          
+          # @org.should_receive(:nomenclature).and_return(@nomen = Nomenclature.new)
+          @nomen.should_receive('period_coherent?').with(@p).and_return true
+          @p.save!
+        end
+        
+        it 'et indique false si l exercice n est pas coherent' do
+          @nomen.stub('period_coherent?').and_return false
+          @p.save!
+          @p.nomenclature_ok.should be_false
+        end
+        
+        it 'et true si l exercice est coherent' do
+          @nomen.stub('period_coherent?').and_return true
+          @p.save!
+          @p.nomenclature_ok.should be_true
+        end
+      
+      end
       
       
 
       
 
       describe 'après création' do
+        
+        before(:each) do
+          @p.stub(:check_nomenclature).and_return true
+          @p.save!
+        end
         
         
         it 'start_date ne peut plus changer' do
@@ -166,6 +197,7 @@ describe Period do
         @p.stub(:organism) {@org}
         @p.stub(:create_bank_and_cash_accounts).and_return true
         @p.stub(:create_rem_check_accounts).and_return true
+        @p.stub(:check_nomenclature).and_return true
         @p.save!
       end
       
@@ -193,6 +225,7 @@ describe Period do
           @p.stub(:organism) {@org}
           @p.stub(:create_bank_and_cash_accounts).and_return true
           @p.stub(:create_rem_check_accounts).and_return true
+          @p.stub(:check_nomenclature).and_return true
           @p.save!
         end
       

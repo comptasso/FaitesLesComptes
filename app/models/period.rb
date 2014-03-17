@@ -95,6 +95,7 @@ class Period < ActiveRecord::Base
     
   after_create :create_plan, :create_bank_and_cash_accounts, :create_rem_check_accounts, :load_natures ,:unless=> :previous_period?
   after_create :copy_accounts, :copy_natures, :if=> :previous_period?
+  after_create :check_nomenclature
   # TODO probablement inutile si pas asssociation
   after_create :fill_bridge 
  
@@ -580,6 +581,14 @@ class Period < ActiveRecord::Base
       self.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
     end
   end
+  
+  # Destiné à rendre persistant la vérification que la nomenclature est OK, ceci 
+  # pour éviter d'avoir à faire cette vérification à chaque usage de la nomenclature
+  # 
+  def check_nomenclature
+    control = organism.nomenclature.period_coherent?(self)
+    self.update_attribute(:nomenclature_ok, control)
+  end
 
   # load natures est appelé lors de la création d'un premier exercice
   # load_natures lit le fichier natures_asso.yml et crée les natures correspondantes
@@ -644,7 +653,7 @@ class Period < ActiveRecord::Base
     end
   end
 
-  # supprime les extraits bancaires
+  # supprime les controles de caisse
   # avant la destruction d'un exercice
   #
   def destroy_cash_controls
@@ -653,6 +662,7 @@ class Period < ActiveRecord::Base
     end
   end
 
+  # suppression des écritures et des remises de chèques
   def destroy_writings
     Writing.period(self).each do |w|
       w.compta_lines.each {|cl| cl.delete }
@@ -661,6 +671,7 @@ class Period < ActiveRecord::Base
     end
   end
 
+  # suppression des natures
   def destroy_natures
     natures.each { |n| n.delete} 
   end

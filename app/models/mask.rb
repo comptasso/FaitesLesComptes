@@ -19,7 +19,10 @@
 #    t.decimal  "amount"
 #    
 # nature_name et counterpart sont des string qui permettront de retrouver la nature 
-# et le compte bancaire ou la caisse dès lors que la date de l'écriture sera donnée.
+# et le compte bancaire ou la caisse dès lors que la date de l'écriture sera donnée
+# et donc que l'on connaîtra l'exercice concerné (c'est pourquoi on ne peut 
+# utiliser nature_id). Pour le faire, il faudrait que les masks soient dépendants 
+# de l'exercice.
 # 
 # Les méthodes book, destination, bank_account et cash permettent de retrouver
 # les enregistrements correspondant à ce masque.
@@ -104,6 +107,8 @@ class Mask < ActiveRecord::Base
   # s'assurant que les champs indispensables sont tous présents.
   # TODO faire spec de cette méthode doit être à blanc
   # TODO il faudrait gérer le cas où on change le nom de la nature
+  # introduire en fait un valid_for?(period) qui indiquerait si nature_name est
+  # renseigné et aussi counterpart.
   def complete?
     return false unless valid?
     return false if amount == 0.0
