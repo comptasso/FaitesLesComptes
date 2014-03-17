@@ -5,24 +5,29 @@ require 'utilities/plan_comptable'
 
 describe Utilities::PlanComptable do  
 
-  before(:each) do 
-     
-    @p = Period.new(start_date:Date.today.beginning_of_month, close_date:Date.today.end_of_month)
-    @p.organism_id = 1
-    @p.stub(:should_not_have_more_than_two_open_periods).and_return(true)
-    @p.stub(:create_plan) # car create_plan est appelé par un after_create
-    @p.stub(:create_bank_and_cash_accounts) # inutile de tester ce point ici
-    @p.stub(:create_rem_check_accounts) # idem
-    @p.stub(:fill_bridge)
-    @p.stub(:load_natures)
-    @p.save!
-  end
+  
 
-  it 'se crée avec un exercice et un statut d organisme' do
-    Utilities::PlanComptable.new(@p, 'Association').should be_an_instance_of(Utilities::PlanComptable)
-  end
+  
 
   describe 'self.create_accounts' do
+    
+    before(:each) do  
+     
+      @p = Period.new(start_date:Date.today.beginning_of_month, close_date:Date.today.end_of_month)
+      @p.organism_id = 1
+      @p.stub(:should_not_have_more_than_two_open_periods).and_return(true)
+      @p.stub(:create_plan) # car create_plan est appelé par un after_create
+      @p.stub(:create_bank_and_cash_accounts) # inutile de tester ce point ici
+      @p.stub(:create_rem_check_accounts) # idem
+      @p.stub(:check_nomenclature).and_return true
+      @p.stub(:fill_bridge)
+      @p.stub(:load_natures)
+      @p.save!
+    end
+  
+    it 'se crée avec un exercice et un statut d organisme' do
+      Utilities::PlanComptable.new(@p, 'Association').should be_an_instance_of(Utilities::PlanComptable)
+    end
 
     # TODO supprimer les spec similaires qui sont dans period_spec
     it 'demande à period de créer les comptes lus dans le fichier' do
@@ -36,17 +41,17 @@ describe Utilities::PlanComptable do
       @p.accounts(true).should have(137).accounts
     end
 
-    context 'en cas d erreur lors de la lecture du fichier' do
+    
 
-      it 'retourne 0 en cas d erreur sur la lecture' do
-        Utilities::PlanComptable.create_accounts(@p, 'Inconnu').should == 0
-      end
-
+    it 'retourne 0 en cas d erreur sur la lecture' do
+      Utilities::PlanComptable.create_accounts(@p, 'Inconnu').should == 0
     end
+
+   
 
   end
   
-  describe 'copy_accounts' do
+  describe 'copy_accounts' do 
     
     let(:from_p) {mock_model(Period, :accounts=>@from = [stub_model(Account), stub_model(Account, dup:self)] )}
     let(:to_p) {mock_model(Period)}

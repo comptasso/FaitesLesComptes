@@ -111,6 +111,8 @@ describe Nomenclature do
         describe 'coherent?' do
           before(:each) do
             @n.stub_chain(:organism, :periods, :opened).and_return([@p1 = double(Period), @p2 = double(Period)])
+            @p1.stub(:update_attribute)
+            @p2.stub(:update_attribute)
           end
           
           it 'doit créer deux compta nomenclature' do
@@ -140,6 +142,20 @@ describe Nomenclature do
           end
           
         end 
+        
+        describe 'period_coherent?' do
+          
+          it 'met à jour le champ nomenclature_ok de period avec le resultat de valid?' do
+            @n.stub(:compta_nomenclature).with(p).
+              and_return(@cn2 = Compta::Nomenclature.new(p, @n))
+            @cn2.stub('valid?').and_return 'bizarre'
+            p.should_receive(:update_attribute).with(:nomenclature_ok, 'bizarre')
+            @n.period_coherent?(p)
+          end
+          
+          
+          
+        end
     
       end
       

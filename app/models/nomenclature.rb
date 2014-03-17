@@ -130,6 +130,7 @@ class Nomenclature < ActiveRecord::Base
   def period_coherent?(period)
     cn = compta_nomenclature(period)
     validity = cn.valid?
+    period.update_attribute(:nomenclature_ok, validity)
     cn.errors.each { |k, err| errors.add(k, err) } unless validity
     validity
   end  

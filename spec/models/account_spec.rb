@@ -13,21 +13,25 @@ describe Account do
   def valid_attributes
     {number:'6011',
       title:'Titre du compte',
-      
     }
   end
   
+  def valid_account
+    acc = Account.new(valid_attributes)
+    acc.period_id = 1
+    acc
+  end
    
 
   describe 'validations' do
       
-    subject {acc = Account.new(valid_attributes); acc.period_id = 1;acc}
+    subject {valid_account}
       
     it "should be valid"  do
       subject.should be_valid
     end
 
-    describe 'should not be valid lorsque' do
+    describe 'should not be valid' do
 
       it 'sans number' do
         subject.number = nil

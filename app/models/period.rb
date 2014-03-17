@@ -45,7 +45,7 @@ require 'list_months'
 # la liste des comptes qui sont affichés dans la partie Compta->Journaux->Ecrire.
 # 
 #
-class Period < ActiveRecord::Base
+class Period < ActiveRecord::Base 
 
   include Utilities::JcGraphic
 
@@ -585,9 +585,10 @@ class Period < ActiveRecord::Base
   # Destiné à rendre persistant la vérification que la nomenclature est OK, ceci 
   # pour éviter d'avoir à faire cette vérification à chaque usage de la nomenclature
   # 
+  # period_coherent? enregistre son resultat dans le champ de nomenclature_ok
+  # 
   def check_nomenclature
-    control = organism.nomenclature.period_coherent?(self)
-    self.update_attribute(:nomenclature_ok, control)
+    organism.nomenclature.period_coherent?(self)
   end
 
   # load natures est appelé lors de la création d'un premier exercice

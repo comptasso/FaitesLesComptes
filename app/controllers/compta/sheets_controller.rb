@@ -61,10 +61,10 @@ class Compta::SheetsController < Compta::ApplicationController
         format.html {@rubriks = @sheet.fetch_lines}
         format.csv { send_data @sheet.to_csv, filename:export_filename(folio, :csv) } 
         format.xls { send_data @sheet.to_xls, filename:export_filename(folio, :csv) }
-#        format.pdf do
-#          pdf = @sheet.to_detailed_pdf
-#          send_data pdf.render, filename:export_filename(pdf, :pdf)
-#        end
+        #        format.pdf do
+        #          pdf = @sheet.to_detailed_pdf
+        #          send_data pdf.render, filename:export_filename(pdf, :pdf)
+        #        end
       end
     else
       flash[:alert] = "Le document demandé n'a pas été trouvé " unless @sheet
@@ -105,11 +105,11 @@ class Compta::SheetsController < Compta::ApplicationController
   protected
 
   # appelé par before_filter pour s'assurer que la nomenclature est valide
-  # TODO faire un champ de cette validation et le dévalider lorsqu'il y a modification
-  # du plan comptable
   def check_nomenclature
     @nomenclature = @organism.nomenclature
-    flash[:alert] = collect_errors(@nomenclature) unless @nomenclature.coherent?
+    if !@period.nomenclature_ok
+      flash[:alert] = collect_errors(@nomenclature) unless @nomenclature.coherent?
+    end
   end 
   
   # créé les variables d'instance attendues par le module PdfController

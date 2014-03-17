@@ -128,26 +128,14 @@ describe Period do
         @p.should have(43).natures
       end
       
-      describe 'persistence du contrôle de la nomenclature', wip:true do
+      describe 'persistence du contrôle de la nomenclature' do
       
         it 'le controle de la nomenclature est appelé' do
-          
-          # @org.should_receive(:nomenclature).and_return(@nomen = Nomenclature.new)
           @nomen.should_receive('period_coherent?').with(@p).and_return true
           @p.save!
         end
         
-        it 'et indique false si l exercice n est pas coherent' do
-          @nomen.stub('period_coherent?').and_return false
-          @p.save!
-          @p.nomenclature_ok.should be_false
-        end
-        
-        it 'et true si l exercice est coherent' do
-          @nomen.stub('period_coherent?').and_return true
-          @p.save!
-          @p.nomenclature_ok.should be_true
-        end
+       
       
       end
       
@@ -214,7 +202,7 @@ describe Period do
     
     context 'pour une entreprises' do
     
-      describe 'la création du premier exercice', wip:true do
+      describe 'la création du premier exercice' do
       
         before(:each) do
           @org = mock_model(Organism, :status_class=>'Entreprise', :fill_bridge=>false)
