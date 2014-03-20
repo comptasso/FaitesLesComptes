@@ -61,12 +61,13 @@ describe InOutWriting do
   describe "creation de ligne" do
 
     before(:each) do
-    create_minimal_organism
+    use_test_organism
     @acc = @p.accounts.classe_6.first
-  end
-
-    before(:each) do
-      @w = @ob.in_out_writings.new(valid_attributes)
+    @w = @ob.in_out_writings.new(valid_attributes)
+    end
+    
+    after(:each) do
+      Writing.delete_all
     end
 
     it 'should be valid' do

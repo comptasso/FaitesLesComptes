@@ -12,7 +12,7 @@ end
 describe Extract::MonthlyBankAccount do
   include OrganismFixtureBis
   before(:each) do
-    create_minimal_organism
+    use_test_organism
     @vb = @ba.virtual_book
   end
 

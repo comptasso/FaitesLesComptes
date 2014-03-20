@@ -30,7 +30,11 @@ describe Destination do
 
     describe 'creation de l organisme minimal' do
       before(:each) do
-        create_minimal_organism
+        use_test_organism
+      end
+      
+      after(:each) do
+        Destination.delete_all
       end
 
       it 'une destination peut être créée' do

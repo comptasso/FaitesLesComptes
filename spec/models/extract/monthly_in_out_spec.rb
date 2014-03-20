@@ -12,7 +12,7 @@ end
 describe Extract::MonthlyInOut do
   include OrganismFixtureBis 
   before(:each) do
-    create_minimal_organism
+    use_test_organism
   end
 
   describe 'création' do
@@ -71,6 +71,10 @@ describe Extract::MonthlyInOut do
       # création du MonthlyInOutExtract puor le mois de février
       @extract = Extract::MonthlyInOut.new(@ob, year:Date.today.year, month:2)
 
+    end
+    
+    after(:each) do
+      Writing.delete_all
     end
 
     
