@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.configure do |c| 
+RSpec.configure do |c|  
  #  c.filter = {wip:true}  
 end
 
@@ -17,15 +17,17 @@ describe Transfer  do
     t
   end
   
-  def second_bank
-    @o.bank_accounts.where('number = ?', '123Y').first || create_second_bank
-  end
+  
  
   before(:each) do 
-    create_minimal_organism  
-    @bb = second_bank
+    use_test_organism  
+    @bb = find_second_bank
     @cba = @ba.current_account @p
     @cbb = @bb.current_account @p
+  end
+  
+  after(:each) do
+    Transfer.delete_all
   end
 
   describe 'un transfert est invalide si'  do

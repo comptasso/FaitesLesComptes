@@ -3,14 +3,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 RSpec.configure do |c| 
-   # c.filter = {:wip=> true }
+  # c.filter = {:wip=> true }
 end
 
 describe BankAccount do   
   include OrganismFixtureBis
   
   def valid_attributes
-    {:bank_name=>'Crédit Universel', :number=>'1254L',
+    {:bank_name=>'Crédit Universel', :number=>'1254LM',
       :nickname=>'Compte courant', sector_id:1}
   end
 
@@ -21,7 +21,7 @@ describe BankAccount do
   end
   
   def find_bac
-    @bb = BankAccount.where('number =  ?', '1254L').first
+    @bb = BankAccount.where('number =  ?', '1254LM').first
     @bb ||= new_bank_account
   end
 
@@ -30,7 +30,6 @@ describe BankAccount do
   describe 'controle des validités' do
 
     before(:each) do
-      BankAccount.delete_all
       find_bac
     end
     
@@ -59,15 +58,10 @@ describe BankAccount do
     end
 
     it "should have a unique number in the scope of bank and organism", wip:true do
-      @bb.stub(:create_accounts).and_return true
-      @bb.stub_chain(:organism, :periods, :opened, :any?).and_return true
-      @bb.save
-      ba = new_bank_account
-      ba.number = '1245X'
-     
-      ba.should be_valid
-      ba.number = @bb.number
-      ba.should_not be_valid
+      use_test_organism
+      @bb.organism_id = @o.id
+      @bb.number = @ba.number
+      @bb.should_not be_valid
     end
 
   end
@@ -75,33 +69,33 @@ describe BankAccount do
   describe 'création du compte comptable'  do
 
     before(:each) do
-      create_minimal_organism
+      use_test_organism
       @bb=@o.bank_accounts.new(valid_attributes)
+    end
+    
+    after(:each) do
+      @bb.accounts.each(&:delete)
+      @bb.delete
     end
 
     it 'la création d un compte bancaire doit entraîner celle d un compte comptable' do
-      @bb.save
-      @bb.should have(1).accounts
-      
+      puts @bb.errors.messages unless @bb.valid?
+      expect {@bb.save!}.to change {Account.count}.by @o.periods.count
     end
-# TODO doit être testé dans Utilities Plan Comptable (comme pour Cash)
+
+    
+    # TODO doit être testé dans Utilities Plan Comptable (comme pour Cash)
     it 'incrémente les numéros de compte' do
-      @ba.accounts.first.number.should == '51201'
+      pending 'A tester dans PlanComptable'
+      numb = @ba.accounts.order(:number).last.number 
+      
+      
       @bb.save
-      @bb.accounts.first.number.should == '51202'
+    
+      @bb.accounts.first.number.should == numb.succ
     end
 
-    it 'crée le compte pour tous les exercices ouverts' do 
-      @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
-      @bb.save
-      @bb.accounts.count.should == 2
-    end
-
-    it 'créer un nouvel exercice recopie le compte correspondant au compte bancaire' do
-      @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
-      @ba.accounts.count.should == 2
-      @ba.accounts.last.number.should == '51201'
-    end
+    
 
     it 'changer le nick_name du compte bancaire change le compte du compte comptable' do
       @ba.nickname = 'Un autre nom'
@@ -114,7 +108,12 @@ describe BankAccount do
     context 'avec deux exercices' do
 
       before(:each) do
-        @p2 = @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+        @p2 = find_second_period 
+      end
+  
+      it 'créer un nouvel exercice recopie le compte correspondant au compte bancaire' do
+        @ba.accounts.count.should == 2
+        @ba.accounts.last.number.should == @ba.accounts.first.number
       end
 
       it 'répond à current_account' do
@@ -124,13 +123,10 @@ describe BankAccount do
 
     end
   end
-
-
-
-  
+ 
   describe 'Les méthodes liées aux lignes non pointées' do
 
-     before(:each) do
+    before(:each) do
       @ba = new_bank_account
     end
 
@@ -142,51 +138,51 @@ describe BankAccount do
 
   end
 
-    describe 'new_bank_extract'  do
+  describe 'new_bank_extract'  do
 
-      before(:each) do
-        create_minimal_organism
-      end
+    before(:each) do
+      use_test_organism
+    end
 
-      context 'without any bank extract' do
+    context 'without any bank extract' do
        
-        it 'new_bank_extract returns a bank_extract'  do
-          @ba.new_bank_extract(@p).should be_an_instance_of(BankExtract)
-        end
-      
-        it 'a new bank_extract is prefilled with date and a zero sold' do
-          @be = @ba.new_bank_extract(@p)
-          @be.begin_sold.should == 0
-          @be.begin_date.should == @p.start_date
-          @be.end_date.should == @be.begin_date.end_of_month
-        end
-
+      it 'new_bank_extract returns a bank_extract'  do
+        @ba.new_bank_extract(@p).should be_an_instance_of(BankExtract)
       end
       
-      context 'with already some bank_extract' do
-        before(:each) do
-          @last_bank_extract = mock_model(BankExtract, 
-            :end_date => ((Date.today.beginning_of_month) -1.day),
-            :end_sold => 123.45)  
-        end
-        
-        it 'a new bank_extract is prefilled with infos coming from last bank_extract'  do
-          @ba.stub(:last_bank_extract).and_return @last_bank_extract
-          @be = @ba.new_bank_extract(@p)
-          @be.begin_sold.should == @last_bank_extract.end_sold
-          @be.begin_date.should == (@last_bank_extract.end_date + 1.day)
-          @be.end_date.should == @be.begin_date.end_of_month
-        end
-        
-      end
-
-      it 'new_bank_extract return nil si on est déja à la fin de l exercice' do
-        @last_bank_extract = mock_model(BankExtract, :end_date=>Date.today.end_of_year, :end_sold=>3.14)
-        @ba.stub(:last_bank_extract).and_return @last_bank_extract
-        @ba.new_bank_extract(@p).should be_nil
+      it 'a new bank_extract is prefilled with date and a zero sold' do
+        @be = @ba.new_bank_extract(@p)
+        @be.begin_sold.should == 0
+        @be.begin_date.should == @p.start_date
+        @be.end_date.should == @be.begin_date.end_of_month
       end
 
     end
+      
+    context 'with already some bank_extract' do
+      before(:each) do
+        @last_bank_extract = mock_model(BankExtract, 
+          :end_date => ((Date.today.beginning_of_month) -1.day),
+          :end_sold => 123.45)  
+      end
+        
+      it 'a new bank_extract is prefilled with infos coming from last bank_extract'  do
+        @ba.stub(:last_bank_extract).and_return @last_bank_extract
+        @be = @ba.new_bank_extract(@p)
+        @be.begin_sold.should == @last_bank_extract.end_sold
+        @be.begin_date.should == (@last_bank_extract.end_date + 1.day)
+        @be.end_date.should == @be.begin_date.end_of_month
+      end
+        
+    end
+
+    it 'new_bank_extract return nil si on est déja à la fin de l exercice' do
+      @last_bank_extract = mock_model(BankExtract, :end_date=>Date.today.end_of_year, :end_sold=>3.14)
+      @ba.stub(:last_bank_extract).and_return @last_bank_extract
+      @ba.new_bank_extract(@p).should be_nil
+    end
+
+  end
 
   
 end

@@ -11,7 +11,7 @@ describe Writing do
 
   describe 'with stub models' do
 
-    before(:each) do 
+    before(:each) do  
       @o = stub_model(Organism)
       @p = stub_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
       @b = stub_model(Book, :organism=>@o, :type=>'IncomeBook')
@@ -137,12 +137,16 @@ describe Writing do
     describe 'save' do
 
       before(:each) do
-        create_minimal_organism
+        use_test_organism
         @l1 = ComptaLine.new(account_id:Account.first.id, debit:0, credit:10)
         @l2 = ComptaLine.new(account_id:Account.last.id, debit:10, credit:0)
         @r = @od.writings.new(date:Date.today, narration:'Une écriture')
         @r.compta_lines<< @l1
         @r.compta_lines<< @l2
+      end
+      
+      after(:each) do
+        Writing.delete_all
       end
 
       it 'find period' do
@@ -169,8 +173,12 @@ describe Writing do
     describe 'methods'  do
 
       before(:each) do
-        create_minimal_organism
+        use_test_organism
         @w = create_in_out_writing
+      end
+      
+      after(:each) do
+        Writing.delete_all
       end
       
       it 'check compta_lines' do

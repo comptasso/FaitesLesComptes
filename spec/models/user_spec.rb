@@ -15,7 +15,7 @@ describe User do
   end
 
   before(:each) do
-    Apartment::Database.switch()
+    Apartment::Database.switch() 
     User.delete_all
     @u = User.new(valid_attributes_for_user)
   end

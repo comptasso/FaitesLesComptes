@@ -11,13 +11,9 @@ describe BankExtractLine do
   include OrganismFixtureBis
 
   before(:each) do 
-    create_minimal_organism   
+    use_test_organism    
 
-    @be = @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month, 
-      end_date:Date.today.end_of_month,
-      begin_sold:1,
-      total_debit:2,
-      total_credit:5)
+    @be = find_bank_extract
     @d7 = create_outcome_writing(7)  
     @d29 = create_outcome_writing(29)
     @ch97 = create_in_out_writing(97, 'Chèque') 
@@ -27,6 +23,12 @@ describe BankExtractLine do
     @cd.checks << @ch97.support_line << @ch5.support_line
     @cd.save!
 
+  end
+  
+  after(:each) do
+    BankExtract.delete_all
+    Writing.delete_all 
+    CheckDeposit.delete_all
   end
 
   it 'les écritures doivent être valides' do
@@ -59,7 +61,9 @@ describe BankExtractLine do
       @be.bank_extract_lines.new(:compta_line_id=>@d7.support_line.id)
       @be.bank_extract_lines.new(:compta_line_id=>@d29.support_line.id)
       @be.bank_extract_lines.new(:compta_line_id=>@cd.debit_line.id)
-      @be.save!
+      puts @be.errors.messages unless @be.valid?
+      
+      @be.save! 
     end
 
 

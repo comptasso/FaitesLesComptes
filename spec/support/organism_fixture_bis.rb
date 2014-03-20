@@ -113,9 +113,31 @@ module OrganismFixtureBis
     b2 = @o.bank_accounts.new(:bank_name=>'Deuxième banque', :number=>'123Z',
       nickname:'Compte épargne')
     b2.sector_id = @sector.id
-    puts b2.errors.messages unless b2.valid?
+    puts b2.errors.messages unless b2.valid?  
     b2.save!
     b2
+  end
+  
+  def create_second_period
+    @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+  end
+  
+  def find_second_period
+    p2 = @p.next_period
+    p2 ||= create_second_period
+  end
+  
+  def create_bank_extract
+    @ba.bank_extracts.create!(:begin_date=>Date.today.beginning_of_month, 
+      end_date:Date.today.end_of_month,
+      begin_sold:1,
+      total_debit:2,
+      total_credit:5)
+  end
+  
+  def find_bank_extract
+    be = @ba.bank_extracts.first
+    be ||= create_bank_extract
   end
 
   # utile pour les requests qui nécessitent d'être identifié
@@ -133,7 +155,7 @@ module OrganismFixtureBis
   #
   def create_outcome_writing(montant=99, payment='Virement')
     # TODO passer à un outcome_account
-    @income_account = @o.accounts.classe_7.first
+    @income_account = @p.accounts.classe_7.first
     ecriture = @ob.in_out_writings.new({date:Date.today, narration:'ligne créée par la méthode create_outcome_writing',
         :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, debit:montant, payment_mode:payment},
           '1'=>{account_id:@baca.id, credit:montant, payment_mode:payment}
@@ -153,7 +175,7 @@ module OrganismFixtureBis
   #
   #
   def create_in_out_writing(montant=99, payment='Virement')  
-    @income_account = @o.accounts.classe_7.first
+    @income_account = @p.accounts.classe_7.first
     if payment == 'Chèque'
       acc_id = @p.rem_check_account.id
     else

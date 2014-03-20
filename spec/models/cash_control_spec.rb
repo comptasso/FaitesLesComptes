@@ -12,10 +12,11 @@ describe CashControl do
   include OrganismFixtureBis
 
   before(:each) do
-
-    create_minimal_organism 
+    use_test_organism
     @cash_control = @c.cash_controls.new(date: Date.today, amount: 123.45)
   end
+  
+  after(:each) {CashControl.delete_all}
 
   
   context 'test constraints' do
@@ -34,7 +35,7 @@ describe CashControl do
       @cash_control.should_not be_valid
     end
 
-     it 'not valid if date after max_date' do
+    it 'not valid if date after max_date' do
       @cash_control.date = @cash_control.max_date(@p) + 1.day
       @cash_control.should_not be_valid
     end
@@ -80,10 +81,7 @@ describe CashControl do
       context 'with two periods and 7 cash_controls for @p2' do
 
         before(:each) do
-          # création d'un deuxième exercice
-          start_date = @o.periods.last.close_date + 1.day
-          close_date = start_date.end_of_year
-          @p2 = @o.periods.create!(start_date: start_date, close_date: close_date)
+          @p2 = find_second_period
           # on fait sauter la limite max_date = Date.today pour pouvoir créer des cash controls
           # qui sont dans le futur
           CashControl.any_instance.stub(:max_date).and_return(@p2.close_date)
@@ -173,7 +171,7 @@ describe CashControl do
       end
 
       it 'if it has a date, nil otherwise' do
-       @c.cash_controls.new.previous.should be_nil
+        @c.cash_controls.new.previous.should be_nil
       end
     end
 
@@ -181,22 +179,24 @@ describe CashControl do
 
       before(:each) do
         date = @p.start_date
-        @income_account = @o.accounts.classe_7.first
+        @income_account = @p.accounts.classe_7.first
         # on créé une ligne d'écriture par mois relevant de la caisse
         @p.nb_months.times do |i|
           d = date.months_since(i)
           @ib.in_out_writings.create!({date:d, narration:"test #{i}",
-      :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, debit:i+1, payment_mode:'Espèces'},
-        '1'=>{account_id:@caca.id, credit:i+1, payment_mode:'Espèces'}
-      }
-    })
-       
+              :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, debit:i+1, payment_mode:'Espèces'},
+                '1'=>{account_id:@caca.id, credit:i+1, payment_mode:'Espèces'} } })
         end
-        # création de lignes 
       end
+      
+      after(:each) do 
+        CashControl.delete_all
+        Writing.delete_all
+        ComptaLine.delete_all 
+      end 
 
       it 'vérification de la recherche des lignes à verrouiller' do
-        @cash_control.cash.compta_lines.count.should == 12
+        @cash_control.cash.compta_lines.count.should == @p.nb_months
         @cash_control.cash.compta_lines.before_including_day(Date.today).should have(Date.today.month).elements
       end
 
