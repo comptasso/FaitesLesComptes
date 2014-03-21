@@ -552,30 +552,18 @@ describe Period do
     end
   end
 
-  describe 'destruction des comptes' do
-
-    before(:each) do
-      clean_organism
-      @org = Organism.create!(title:'boom', status:'Association', :database_name=>SCHEMA_TEST)
-      @period = @org.periods.create(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
-    end
-
-    it 'la destruction de l exercice entraîne celle des comptes' do
-      nb_accounts = Account.count
-      nb_period_accounts = @period.accounts.count
-      @period.destroy
-      Account.count.should == nb_accounts - nb_period_accounts
-    end
-
-
-  end
-
-  
   describe 'destruction d un exercice'  do
     
     before(:each) do
       create_minimal_organism
-      @w = create_in_out_writing
+      
+    end
+    
+    it 'la destruction de l exercice entraîne celle des comptes' do
+      nb_accounts = Account.count
+      nb_period_accounts = @p.accounts.count
+      @p.destroy
+      Account.count.should == nb_accounts - nb_period_accounts
     end
 
     it 'détruit les natures' do
@@ -585,6 +573,7 @@ describe Period do
     end
 
     it 'détruit les écritures' do
+      @w = create_in_out_writing
       @p.compta_lines.count.should > 0 
       Writing.count.should > 0
       @p.destroy
@@ -597,6 +586,7 @@ describe Period do
        
       before(:each) do
         BankExtractLine.delete_all
+        @w = create_in_out_writing
         @be =  @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month, begin_sold:0, total_debit:0, total_credit:99)
         @be.bank_extract_lines.create!(:compta_line_id=>@w.support_line.id)
       end
