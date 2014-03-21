@@ -81,4 +81,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.4.5RC' # mise en place d un modèle Holder pour avoir des status owner et guest
 # FLCVERSION = '1.4.6RC' # les noms de bases de données sont suffixées par un timestamp
 # FLCVERSION = '1.4.7RC' # retrait de la contrainte unique sur continuous_id (pour pb de verrouillage)
-FLCVERSION = '1.4.8RC' # ajout de written by suite à Holder
+# FLCVERSION = '1.4.8RC' # ajout de written by suite à Holder
+FLCVERSION = '1.4.9RC' # peristence de check_nomenclature
