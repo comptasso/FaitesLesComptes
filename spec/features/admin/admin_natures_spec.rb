@@ -3,9 +3,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |c|  
-#  c.filter = {wip:true}
-#  c.filter = {:js=> true } 
-#  c.exclusion_filter = {:js=> true }  
+  #  c.filter = {wip:true}
+  #  c.filter = {:js=> true } 
+  #  c.exclusion_filter = {:js=> true }  
 end
 
 # spec request for testing admin books   
@@ -14,10 +14,10 @@ describe 'vue natures index' do
   include OrganismFixtureBis  
 
   before(:each) do
-    create_user
-    create_minimal_organism 
+     use_test_user
     login_as('quidam')
-    @nats_count = Nature.count
+    use_test_organism
+    
   end
 
 
@@ -33,30 +33,33 @@ describe 'vue natures index' do
     it 'reaffiche la page'  do
       visit new_admin_organism_period_nature_path(@o, @p)
     end
+    
+    describe 'création d une nature' do
 
-    it 'remplir correctement le formulaire crée une nouvelle nature' do
-      visit new_admin_organism_period_nature_path(@o, @p)
-      fill_in 'nature[name]', :with=>'Nature test'
-      fill_in 'nature[comment]', :with=>'Une nature pour essayer'
-      select 'Dépenses'
-      click_button 'Créer la nature'
-      @p.natures(true).count.should == @nats_count + 1
-      @p.natures.order(:id).last.book.should == OutcomeBook.first
-      current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
+      after(:each) do
+        @nouvelle_nature.destroy
+      end
+      
+      it 'remplir correctement le formulaire crée une nouvelle nature' do
+        @nats_count = Nature.count
+        visit new_admin_organism_period_nature_path(@o, @p)
+        fill_in 'nature[name]', :with=>'Nature test'
+        fill_in 'nature[comment]', :with=>'Une nature pour essayer'
+        select 'Dépenses'
+        click_button 'Créer la nature'
+        @p.natures(true).count.should == @nats_count + 1
+        @nouvelle_nature = @p.natures.order(:created_at).last
+        @nouvelle_nature.book.should == OutcomeBook.first
+        current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
+      end
+    
+    
     end
 
   end
  
   describe 'vue index' do
-
-    before(:each) do
-      @n = @p.natures.new(:name=>'deuxieme nature')
-      @n.book_id = OutcomeBook.first.id; @n.save!
-      @nb_natures = @p.natures.count
-      @nb_depenses = @p.depenses_natures.count 
-      @n = @p.natures.second
-    end
-
+    
     it 'affiche deux tables' do
       visit admin_organism_period_natures_path(@o, @p)
       page.should have_selector("tbody", :count=>2)
@@ -64,20 +67,23 @@ describe 'vue natures index' do
     
     it 'avec autant de lignes que de natures' do
       visit admin_organism_period_natures_path(@o, @p)
-      page.all('tbody tr').size.should == @nb_natures
+      page.all('tbody tr').size.should == @p.natures.count
     end
 
     it 'dans la vue index,une nature peut être détruite', :js=>true, wip:true do 
+      
+      find_second_nature
+      nb_nats = @p.natures.count
       visit admin_organism_period_natures_path(@o, @p)
-       
+      # save_and_open_page
       within("table#depenses tbody tr:last-child") do
         page.should have_content('deuxieme nature')
-        page.click_link 'Supprimer'
+        page.click_link 'Supprimer'  
       end
       alert = page.driver.browser.switch_to.alert
       alert.accept
       current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures$/
-      page.all("tbody tr").size.should == (@nb_natures - 1)
+      page.all("tbody tr").size.should == (nb_nats - 1)
     
     end
 
@@ -89,10 +95,10 @@ describe 'vue natures index' do
 
   end
 
-  describe 'edit' do
+  describe 'edit' do 
 
     it 'On peut changer les deux autres champs' do
-      @n = @p.natures.third
+      @n = @p.natures.first
       visit edit_admin_organism_period_nature_path(@o, @p, @n)
       fill_in 'nature[name]', :with=>'modif du titre'
       click_button 'Mettre à jour'

@@ -11,9 +11,13 @@ describe 'Cash Control Requests' do
   include OrganismFixtureBis
 
   before(:each) do
-    create_user
-    create_minimal_organism
+    use_test_user
+    use_test_organism 
     login_as('quidam')
+  end
+  
+  after(:each) do
+    CashControl.delete_all
   end
   
   describe 'new cash_control' do  

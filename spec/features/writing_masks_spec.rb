@@ -24,13 +24,17 @@ describe 'création d une écriture à partir d un guide' do
 
   
   before(:each) do
-    create_user
-    create_minimal_organism 
+    use_test_user
     login_as('quidam')
+    use_test_organism 
     @nat = @p.natures.recettes.third
     @mask = @o.masks.create!(valid_attributes)
    
     visit new_mask_writing_path(@mask) 
+  end
+  
+  after(:each) do
+    Mask.delete_all
   end
   
   it 'la page affiche le titre' do

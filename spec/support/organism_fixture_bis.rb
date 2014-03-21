@@ -14,6 +14,7 @@ module OrganismFixtureBis
     find_or_create_schema_test
     Apartment::Database.switch()
     User.delete_all
+    Holder.delete_all
     Room.delete_all
   end
   
@@ -24,6 +25,7 @@ module OrganismFixtureBis
     create_organism unless @o
     @p = @o.periods.first
     get_organism_instances
+    @o
   end
 
   #
@@ -45,7 +47,6 @@ module OrganismFixtureBis
 
 
   def create_user
-    clean_organism
     create_only_user
     @h = @cu.holders.new(status:'owner')
     @r = Room.where('database_name =  ?', SCHEMA_TEST).first
@@ -55,6 +56,12 @@ module OrganismFixtureBis
     @r.save!
     @h.room_id = @r.id
     @h.save!
+    @cu
+  end
+  
+  def use_test_user
+    @cu = User.first || create_user
+    @r = @cu.rooms.first
   end
 
   def clean_organism
@@ -118,13 +125,24 @@ module OrganismFixtureBis
     b2
   end
   
+  def create_second_nature
+    nat2 = @p.natures.new(:name=>'deuxieme nature')
+    nat2.book_id = @o.outcome_books.first.id
+    nat2.save!
+    nat2
+  end
+  
+  def find_second_nature
+    nat2 = @p.natures.where('name = ?', 'deuxieme nature').first
+    nat2 || create_second_nature    
+  end
+  
   def create_second_period
     @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
   end
   
   def find_second_period
-    p2 = @p.next_period
-    p2 ||= create_second_period
+    p2 = @p.next_period? ? @p.next_period : create_second_period
   end
   
   def create_bank_extract

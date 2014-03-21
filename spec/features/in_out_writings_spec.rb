@@ -14,10 +14,15 @@ describe 'vue lines' do
   end
    
   before(:each) do
-    create_user 
-    create_minimal_organism 
+     use_test_user
     login_as('quidam')
+    use_test_organism 
   end 
+  
+  after(:each) do
+    Writing.delete_all
+    ComptaLine.delete_all
+  end
 
 #  it 'test' , wip:true do
 #    puts @ba.inspect

@@ -14,10 +14,14 @@ describe 'création d un membre' do
   
 
   before(:each) do
-    create_user
-    create_organism
+    use_test_user
     login_as('quidam')
+    use_test_organism 
     visit adherent.new_member_path 
+  end
+  
+  after(:each) do
+    Adherent::Member.delete_all
   end
   
   it 'La vue est celle d un nouveau membre' do

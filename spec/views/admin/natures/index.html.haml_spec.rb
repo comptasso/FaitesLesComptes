@@ -20,8 +20,8 @@ include JcCapybara
     @depenses.each {|r| r.stub_chain(:compta_lines, :empty?).and_return true }
     @books= [@b1 = mock_model(Book, title:'Recettes'),
       @b2 = mock_model(Book, title:'Dépenses')]
-    @b1.stub_chain(:natures, :within_period).and_return @recettes
-    @b2.stub_chain(:natures, :within_period).and_return @depenses
+    @b1.stub_chain(:natures, :within_period, :order).and_return @recettes
+    @b2.stub_chain(:natures, :within_period, :order).and_return @depenses
 
   end
 

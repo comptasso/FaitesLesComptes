@@ -12,9 +12,9 @@ describe 'Statistiques' do
   
 
   before(:each) do
-    create_user
-    create_minimal_organism
+    use_test_user
     login_as('quidam')
+    use_test_organism 
   end
 
   describe 'stats' do
