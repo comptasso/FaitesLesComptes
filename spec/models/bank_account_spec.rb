@@ -11,7 +11,7 @@ describe BankAccount do
   
   def valid_attributes
     {:bank_name=>'Crédit Universel', :number=>'1254LM',
-      :nickname=>'Compte courant', sector_id:1}
+      :nickname=>'Compte courant', sector_id:1} 
   end
 
   def new_bank_account
@@ -54,13 +54,14 @@ describe BankAccount do
     
     it 'nor without sector_id' do
       @bb.sector_id = nil
-      @bb.should_not be_valid
+      @bb.should_not be_valid 
     end
 
     it "should have a unique number in the scope of bank and organism", wip:true do
       use_test_organism
       @bb.organism_id = @o.id
       @bb.number = @ba.number
+      @bb.bank_name = @ba.bank_name
       @bb.should_not be_valid
     end
 

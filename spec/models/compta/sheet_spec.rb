@@ -11,20 +11,25 @@ describe Compta::Sheet do
   include OrganismFixtureBis
 
   before(:each) do
-    create_organism
+    use_test_organism
     @folio = @o.nomenclature.actif
     @od.writings.create!({date:Date.today, narration:'ligne pour controller rubrik',
-        :compta_lines_attributes=>{'0'=>{account_id:Account.find_by_number('206').id, debit:100 },
+        :compta_lines_attributes=>{'0'=>{account_id:@p.accounts.find_by_number('206').id, debit:100 },
           '1'=>{account_id:Account.find_by_number('201').id, debit:10},
           '2'=>{account_id:Account.find_by_number('2801').id, credit:5},
           '3'=>{account_id:Account.find_by_number('51201').id, credit:105}
         }
       })
     @od.writings.create!({date:Date.today, narration:'ligne de terrain',
-        :compta_lines_attributes=>{'0'=>{account_id:Account.find_by_number('201').id, debit:1200 },
+        :compta_lines_attributes=>{'0'=>{account_id:@p.accounts.find_by_number('201').id, debit:1200 },
           '1'=>{account_id:Account.find_by_number('51201').id, credit:1200}
         }
       })
+  end
+  
+  after(:each) do
+    Writing.delete_all
+    ComptaLine.delete_all
   end
 
   it 'peut créer une instance' do 
@@ -102,8 +107,7 @@ describe Compta::Sheet do
   describe 'avec 2 exercices'  do
     
     before(:each) do
-      st = Date.today.end_of_year + 1
-      @next_period = @o.periods.create!(start_date: st, close_date: st.end_of_year)
+      @next_period = find_second_period
     end
     
     it 'csv prend en compte l exercice' do

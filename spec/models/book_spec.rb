@@ -56,13 +56,13 @@ describe Book do
     describe 'uniqueness' do
       
       before(:each) do
-        b = Book.new(title:'Un livre de test', abbreviation:'TE')
-        b.organism_id = 1
-        b.save!
+        @book_test = Book.new(title:'Un livre de test', abbreviation:'TE')
+        @book_test.organism_id = 1
+        @book_test.save!
       end
       
       after(:each) do
-        Book.delete_all
+        @book_test.destroy
       end
       
       it('est valide') {subject.should be_valid}

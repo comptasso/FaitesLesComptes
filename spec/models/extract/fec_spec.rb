@@ -9,9 +9,14 @@ describe Extract::Fec do
   include OrganismFixtureBis
   
   before(:each) do
-    create_organism
+    use_test_organism
     @iow = create_in_out_writing
     @iow.lock
+  end
+  
+  after(:each) do
+    Writing.delete_all
+    ComptaLine.delete_all
   end
   
   it 'un extract::fec a autant de lignes qu il y a de compta_lines'  do

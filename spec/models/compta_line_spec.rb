@@ -106,8 +106,13 @@ describe ComptaLine do
   describe 'scope not_pointed_lines'  do
     
     before(:each) do
-      create_organism
+      use_test_organism
     end  
+    
+    after(:each) do
+      Writing.delete_all
+      ComptaLine.delete_all
+    end
     
     context 'pas encore d écritures' do    
       it 'et donc zero lignes non pointées' do

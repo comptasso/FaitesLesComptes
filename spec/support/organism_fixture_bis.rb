@@ -139,7 +139,7 @@ module OrganismFixtureBis
   end
   
   def find_second_period
-    p2 = @p.next_period? ? @p.next_period : create_second_period
+    @p.next_period? ? @p.next_period : create_second_period
   end
   
   def create_bank_extract

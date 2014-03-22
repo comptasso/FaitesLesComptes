@@ -13,13 +13,12 @@ describe Adherent::Payment do
   include OrganismFixtureBis 
 
   def create_member
-    @m = @o.members.create!(number:'001', name:'Dupont', forname:'Jean')
+    @o.members.create!(number:'001', name:'Dupont', forname:'Jean')
   end
   
-   before(:each) do
-    create_organism 
-    create_member
-    
+  before(:each) do
+    use_test_organism    
+    @m = @o.members.any? ? @o.members.first : create_member
   end
   
   it 'on vérifie le bridge' do
@@ -47,6 +46,11 @@ describe Adherent::Payment do
     before(:each) do
       @pay = @m.payments.new(date:Date.today, amount:125.25, mode:'CB')
     end
+    
+    after(:each) do
+      Writing.delete_all
+      ComptaLine.delete_all
+    end
   
     it 'crée un in_out_writing' do
       expect {@pay.save}.to change {Adherent::Writing.count}.by(1)
@@ -69,12 +73,12 @@ describe Adherent::Payment do
       w.narration.should == "Payment adhérent Jean DUPONT"
       w.date.should == Date.today
       
-     clf =  w.compta_lines.first
+      clf =  w.compta_lines.first
      
-     clf.credit.should == @pay.amount
-     clf.destination.name.should == 'Adhérents'
-     clf.nature.name.should == 'Cotisations des adhérents'
-     clf.debit.should == 0.0
+      clf.credit.should == @pay.amount
+      clf.destination.name.should == 'Adhérents'
+      clf.nature.name.should == 'Cotisations des adhérents'
+      clf.debit.should == 0.0
      
       sl = w.support_line
       sl.account.accountable.class.should == BankAccount
@@ -86,8 +90,8 @@ describe Adherent::Payment do
     
     it 'avec un chèque le accountable est bien remise de chèque' do
       @pay.mode =  'Chèque'
-       puts @pay.errors.messages unless @pay.valid?
-       @pay.save!
+      puts @pay.errors.messages unless @pay.valid?
+      @pay.save!
       
       sl = Adherent::Writing.last.support_line
       sl.account.should == @p.rem_check_accounts.first
@@ -95,8 +99,8 @@ describe Adherent::Payment do
     
     it 'et espèces avec des espèces' do
       @pay.mode =  'Espèces'
-       puts @pay.errors.messages unless @pay.valid?
-       @pay.save!
+      puts @pay.errors.messages unless @pay.valid?
+      @pay.save!
       sl = Adherent::Writing.last.support_line
       sl.account.accountable.class.should == Cash
     end
@@ -117,7 +121,7 @@ describe Adherent::Payment do
     end
     
     it 'n est pas possible si écriture validée' do
-      @writing_pay.lock
+      @writing_pay.lock 
       @pay.amount = 135.45
       @pay.save
       Adherent::Payment.last.amount.should == 125.25

@@ -13,8 +13,7 @@ describe Compta::Nomenclature do
 
   
   before(:each) do
-    create_organism
-    @p = @o.periods.create!(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
+    use_test_organism
     @cn =  Compta::Nomenclature.new(@p, @o.nomenclature) 
   end
 
@@ -91,6 +90,11 @@ describe Compta::Nomenclature do
         @p.accounts.create!(number:'103', title:'Fonds associatifs 103')
         @cn = Compta::Nomenclature.new(@p, @o.nomenclature)
       end
+      
+      after(:each) do
+        acc = @p.accounts.where('number = ?', '103').first
+        acc.destroy
+      end
     
       it 'non bilan_complete'  do
         @cn.bilan_complete?.should be_false
@@ -106,6 +110,11 @@ describe Compta::Nomenclature do
       before(:each) do
         @p.accounts.create!(number:'1021', title:'Sous compte du 102')
         @cn = Compta::Nomenclature.new(@p, @o.nomenclature)
+      end
+      
+      after(:each) do
+        acc = @p.accounts.where('number = ?', '1021').first
+        acc.destroy
       end
       
       it 'laisse la nomenclature bilan_complete' do

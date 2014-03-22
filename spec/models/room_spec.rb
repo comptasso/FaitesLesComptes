@@ -196,8 +196,7 @@ describe Room  do
 
     describe 'gestion des schemas'  do
       before(:each) do
-        create_user
-        create_organism
+        use_test_organism
         Apartment::Database.switch('public') 
         
       end 
@@ -237,7 +236,6 @@ describe Room  do
     before(:each) do
       create_user
       create_organism
-      Apartment::Database.switch('public') 
     end
     
     it 'la room existe' do
@@ -246,8 +244,6 @@ describe Room  do
     
     it 'on peut la cloner' do
       @r.clone_db
-      
-      Apartment::Database.list_schemas
       Room.count.should == 2
     end
  

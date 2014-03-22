@@ -189,6 +189,7 @@ class Room < ActiveRecord::Base
   def clone_room(new_db_name)
     # on crée la Room
     r = Room.new(:database_name=>new_db_name, title:title, status:status)
+    puts r.errors.messages unless r.valid? 
     r.save!
     # puis pour chaque holder on duplique
     holders.each {|h| newholder = h.dup; newholder.room_id = r.id; newholder.save!}
