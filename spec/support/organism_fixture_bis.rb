@@ -31,10 +31,7 @@ module OrganismFixtureBis
   #
   def drop_non_public_schemas_except_schema_test
     Apartment::Database.list_schemas.reject {|name| name == 'public'}.each do |schema|
-      unless schema == SCHEMA_TEST
-        # puts "suppression du schema #{schema}"
-        Apartment::Database.drop(schema) 
-      end
+      Apartment::Database.drop(schema) unless schema == SCHEMA_TEST
     end
   end
 

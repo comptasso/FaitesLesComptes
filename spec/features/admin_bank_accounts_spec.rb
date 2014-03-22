@@ -15,20 +15,19 @@ end
 # spec request for testing admin bank_accounts 
 
 describe 'vue bank_accounts index' do  
-  include OrganismFixtureBis 
+  include OrganismFixtureBis  
 
   before(:each) do
     use_test_user
     login_as('quidam')
-    use_test_organism 
+    use_test_organism  
   end
   
   describe 'new bank_account'  do
     before(:each) do
       visit new_admin_organism_bank_account_path(@o)
     end
-
-
+    
     it "affiche la page new" do
       current_url.should match new_admin_organism_bank_account_path(@o)
       page.should have_content("Nouveau compte bancaire")

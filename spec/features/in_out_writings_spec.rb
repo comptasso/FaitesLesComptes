@@ -14,7 +14,7 @@ describe 'vue lines' do
   end
    
   before(:each) do
-     use_test_user
+    use_test_user
     login_as('quidam')
     use_test_organism 
   end 
@@ -38,11 +38,9 @@ describe 'vue lines' do
   end 
 
   it "affiche la page new" do
-    
     visit new_book_in_out_writing_path(@ob)
     page.should have_content('nouvelle ligne') 
-    Writing.count.should == 0
-  end
+ end
 
   it 'remplir correctement le formulaire crée une nouvelle ligne' do 
     visit new_book_in_out_writing_path(@ob)

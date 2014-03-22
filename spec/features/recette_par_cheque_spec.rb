@@ -19,7 +19,7 @@ describe 'Recette par chèque' do
     
 
     visit new_book_in_out_writing_path(@ib)
-    fill_in 'in_out_writing_date_picker', :with=>I18n::l(Date.today, :foramt=>:date_picker)
+    fill_in 'in_out_writing_date_picker', :with=>I18n::l(Date.today, :format=>:date_picker)
     fill_in 'in_out_writing_narration', :with=>'Vente par chèque'
     select @nature_name, :from=>'in_out_writing_compta_lines_attributes_0_nature_id'
     fill_in 'in_out_writing_compta_lines_attributes_0_credit', with: 50.21
@@ -29,7 +29,7 @@ describe 'Recette par chèque' do
   
   after(:each) do
     Writing.delete_all
-    ComptaLine.delete_all
+    ComptaLine.delete_all 
   end
 
  

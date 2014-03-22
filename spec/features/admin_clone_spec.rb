@@ -13,8 +13,7 @@ describe 'resquest clone' do
   include OrganismFixtureBis
 
   before(:each) do
-    @cu = use_test_user 
-    @r = @cu.rooms.first
+    use_test_user 
     login_as('quidam')
     use_test_organism 
     visit admin_room_path(@r)

@@ -14,7 +14,7 @@ describe 'vue transfer index'do
 
   
   before(:each) do  
-    use_test_user
+    use_test_user 
     login_as('quidam')
     use_test_organism 
     @bb = find_second_bank

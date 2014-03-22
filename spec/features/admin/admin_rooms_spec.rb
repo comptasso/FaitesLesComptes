@@ -33,9 +33,13 @@ describe "admin rooms" do
         fill_in 'room_racine', with:'assotest'
         choose 'Association'
       end
+      
+      after(:each) do
+        Room.order('created_at ASC').last.destroy if Room.count > 1
+      end
     
       it 'cliquer sur le bouton crée un organisme'  do
-        expect {click_button 'Créer l\'organisme'}.to change {Organism.count}.by(1)
+        expect {click_button 'Créer l\'organisme'}.to change {Room.count}.by(1)
       end
     
       it 'renvoie sur la page de création d un exercice' do
@@ -93,6 +97,10 @@ describe "admin rooms" do
         @clone_room = Room.order('created_at ASC' ).last
         @clone_org = @clone_room.organism
       
+      end
+      
+      after(:each) do
+        Room.order('created_at ASC').last.destroy if Room.count > 1
       end
     
       it 'supprime l organisme', js:true do

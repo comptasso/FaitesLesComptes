@@ -11,7 +11,13 @@ describe "Periods" do
     login_as('quidam')
     use_test_organism 
     @next_period = find_second_period
-    
+    # puts "début #{@next_period.inspect}"
+  end
+  
+  after(:each) do
+    # puts @next_period.inspect
+    @next_period.destroy 
+    # puts "nombre d exercice #{Period.count}"
   end
   
      it 'deux exercices' do
@@ -26,6 +32,7 @@ describe "Periods" do
     it 'change period' do
    
       visit organism_path(@o)
+      visit change_organism_period_path(@o, @next_period)
       page.find('.brand').should have_content "#{(Date.today.year) + 1}"
       visit change_organism_period_path(@o, @p)
       page.find('.brand').should have_content "#{Date.today.year}"
