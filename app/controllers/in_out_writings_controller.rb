@@ -172,7 +172,7 @@ class InOutWritingsController < ApplicationController
 
   
   def fill_natures
-    @natures=@book.natures.within_period(@period)
+    @natures=@book.natures.within_period(@period).order(:position)
   end
 
   # on surcharge fill_mois pour gérer le params[:mois] 'tous'
