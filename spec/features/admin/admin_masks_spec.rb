@@ -22,10 +22,16 @@ describe "admin mask" do
   end
   
   before(:each) do
-    create_user
-    create_minimal_organism 
+    use_test_user
     login_as('quidam')
+    use_test_organism 
     @nat = @p.natures.recettes.first
+  end
+  
+  after(:each) do
+    Mask.delete_all
+    Writing.delete_all
+    ComptaLine.delete_all
   end
   
   

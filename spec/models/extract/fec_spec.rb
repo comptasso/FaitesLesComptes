@@ -9,13 +9,18 @@ describe Extract::Fec do
   include OrganismFixtureBis
   
   before(:each) do
-    create_organism
+    use_test_organism
     @iow = create_in_out_writing
     @iow.lock
   end
   
+  after(:each) do
+    Writing.delete_all
+    ComptaLine.delete_all
+  end
+  
   it 'un extract::fec a autant de lignes qu il y a de compta_lines'  do
-    Extract::Fec.new(period_id:@p.id).lines.length.should == 2
+    Extract::Fec.new(period_id:@p.id).lines.length.should == ComptaLine.count
   end
   
   it 'extract::fec extrait les lignes en joignant l écriture et le livre' do

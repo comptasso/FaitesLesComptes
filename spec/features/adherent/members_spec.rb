@@ -14,9 +14,9 @@ describe 'accès au module adhérent' do
   
 
   before(:each) do
-    create_user
-    create_organism
+    use_test_user
     login_as('quidam')
+    use_test_organism 
     visit admin_organism_path(@o)
   end
   

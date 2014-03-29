@@ -14,9 +14,13 @@ describe "BankExtracts" do
 
   
   before(:each) do
-    create_user
-    create_minimal_organism  
+    use_test_user
+    use_test_organism 
     login_as('quidam')
+  end
+  
+  after(:each) do
+    BankExtract.delete_all
   end
 
   describe "GET /new_bank_extract" do  

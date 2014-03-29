@@ -7,9 +7,10 @@ describe "Writings" do
 
 
   before(:each) do
-    create_user
-    create_minimal_organism
+    use_test_user
+    use_test_organism 
     login_as('quidam')
+    # visit admin_room_path(@r)    
   end
 
   describe "GET compta/writings" do

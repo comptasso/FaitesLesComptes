@@ -18,10 +18,10 @@ describe 'books' do
  
   include OrganismFixtureBis
 
-   before(:each) do
-    create_user
-    create_minimal_organism 
+   before(:each) do 
+    use_test_user
     login_as('quidam')
+    use_test_organism 
   end
     
 
@@ -79,16 +79,22 @@ describe 'books' do
   describe 'edition , du titre', wip:true do 
     
     before(:each) do
-      @bfid = @o.books.first.id
-      visit edit_admin_organism_book_path(@o, @bfid)
+      @book = @o.books.first
+      @bid = @book.id
+      @title = @book.title
+      visit edit_admin_organism_book_path(@o, @bid)
       fill_in 'book[title]', :with=>'modif du titre'
       click_button 'Modifier ce livre'
+    end
+    
+    after(:each) do
+      Book.find(@bid).update_attribute(:title,  @title)
     end
 
     
     it 'le titre est changé' do
-      Book.find(@bfid).title.should == 'modif du titre'
-    end
+      Book.find(@bid).title.should == 'modif du titre' 
+    end  
     
      it 'et l on revient à la vue index' do
       current_url.should match /\/admin\/organisms\/#{@o.id}\/books$/

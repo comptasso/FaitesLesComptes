@@ -13,12 +13,12 @@ describe 'enregistrement d un payment' do
   include OrganismFixtureBis
   
 
-  before(:each) do
-    create_user
-    create_organism
-    login_as('quidam')
-    
-  end
+#  before(:each) do
+#    create_user
+#    create_organism
+#    login_as('quidam')
+#    
+#  end
   
   it 'Enregistrer un payment' 
   

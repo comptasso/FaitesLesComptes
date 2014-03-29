@@ -34,28 +34,51 @@ Spork.prefork do
 
     config.before(:suite) do
       # DatabaseCleaner.clean_with :truncation
-      Apartment::Database.create(SCHEMA_TEST) unless Apartment::Database.db_exist?(SCHEMA_TEST)
+      # nettoyage de la base Public
       Apartment::Database.switch()
-      Organism.all.each {|o| o.destroy}
+      User.delete_all
+      Holder.delete_all
+      Room.delete_all
+      # Suppression de toutes les bases sauf SCHEMA_TEST
+      Apartment::Database.list_schemas.reject {|name| name == 'public'}.each do |schema|
+        Apartment::Database.drop(schema) unless schema == SCHEMA_TEST
+      end
+      # création de SCHEMA_TEST si n'existe pas encore
+      Apartment::Database.create(SCHEMA_TEST) unless Apartment::Database.db_exist?(SCHEMA_TEST)
+      # nettoyage des tables de SCHEMA_TEST
+      # TODO voir s'il ne faudrait pas compléter ces tables.
+      Apartment::Database.process(SCHEMA_TEST) do
+        Organism.find_each {|o| o.destroy }
+        Nature.delete_all
+        Account.delete_all
+        ComptaLine.delete_all
+        BankAccount.delete_all
+        Cash.delete_all
+        Destination.delete_all
+        Folio.delete_all
+        Nomenclature.delete_all
+        Rubrik.delete_all
+        Adherent::Member.delete_all
+      end
     end
 
-#    config.after(:each) do
-#
-#    end
+    #    config.after(:each) do
+    #
+    #    end
 
-#    config.before(:each) do
-#      if example.metadata[:js]
-#        DatabaseCleaner.strategy = :truncation
-#      else
-#        DatabaseCleaner.strategy = :truncation
-#      end
-#
-#      DatabaseCleaner.start
-#    end
+    #    config.before(:each) do
+    #      if example.metadata[:js]
+    #        DatabaseCleaner.strategy = :truncation
+    #      else
+    #        DatabaseCleaner.strategy = :truncation
+    #      end
+    #
+    #      DatabaseCleaner.start
+    #    end
 
-#    config.after(:each) do
-#      DatabaseCleaner.clean
-#    end
+    #    config.after(:each) do
+    #      DatabaseCleaner.clean
+    #    end
 
     #ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
     #DatabaseCleaner.strategy = :truncation

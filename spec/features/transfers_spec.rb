@@ -14,14 +14,21 @@ describe 'vue transfer index'do
 
   
   before(:each) do  
-    create_user 
-    create_minimal_organism
+    use_test_user 
+    login_as('quidam')
+    use_test_organism 
     @bb = find_second_bank
     @bbca = @bb.current_account(@p) # ca pour Current Account
-    login_as('quidam')
+    
   end
+  
+  after(:each) do
+    Transfer.delete_all 
+  end
+    
 
   describe 'new transfer'  do
+    
     
     it "affiche la page new" do
       visit new_transfer_path

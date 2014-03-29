@@ -11,8 +11,7 @@ describe Compta::Balance do
 
 
   before(:each) do
-    create_organism 
-    @p = @o.periods.create!(start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
+    use_test_organism    
     @a1 = @p.accounts.find_by_number('601')
     @a2 = @p.accounts.find_by_number('603') 
   end

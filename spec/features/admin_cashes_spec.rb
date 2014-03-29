@@ -15,9 +15,9 @@ describe 'admin cash' do
   
   
   before(:each) do
-    create_user
-    use_test_organism
+   use_test_user
     login_as('quidam')
+    use_test_organism 
     
   end
 
@@ -40,13 +40,10 @@ describe 'admin cash' do
 
     it 'remplir correctement le formulaire cree une nouvelle ligne', wip:true do
       
-      fill_in 'cash[name]', :with=>'Entrepôt'
+      fill_in 'cash[name]', :with=>'Entrepôt2'
       # save_and_open_page
-      click_button "Créer la caisse" # le compte' 
-      #
-      @o.cashes.count.should == 2
-#      current_url.should match admin_organism_cashes_path(@o)
-#      all('tbody tr').should have(2).rows
+      expect {click_button "Créer la caisse"}.to change {Cash.count}.by(1)
+      Cash.where('name = ?', 'Entrepôt2').first.delete 
       
     end
 

@@ -13,16 +13,21 @@ describe 'resquest clone' do
   include OrganismFixtureBis
 
   before(:each) do
-    create_user
-    create_minimal_organism    
+    use_test_user 
     login_as('quidam')
+    use_test_organism 
+    visit admin_room_path(@r)
+  end
+  
+  after(:each) do
+    # on efface toutes les rooms autres que celle d'origine
+    Room.all.reject {|r| r.id == @r.id}.each {|r| r.destroy} 
   end
 
 
-  describe 'create clone' do
+  describe 'create clone' do 
 
-    it 'afficher la vue de organisme puis cliquer sur l icone sauvegarder renvoie sur la vue new clone' do
-      visit admin_organism_path(@o)
+    it 'afficher la vue de organisme puis cliquer sur l icone sauvegarder renvoie sur la vue new clone'  do
       click_link("Fait un clone de l'organisme")
       page.find('.champ h3').should have_content "Cloner une base de données : ajouter un commentaire"
       current_url.should match new_admin_clone_path
@@ -33,7 +38,7 @@ describe 'resquest clone' do
       visit new_admin_clone_path
       fill_in 'organism[comment]', :with=>'test clonage'
       click_button 'clone_button'
-      @cu.rooms(true).count.should == (nb_rooms + 1)
+      @cu.rooms(true).count.should == (nb_rooms + 1) 
     end
 
 

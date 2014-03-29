@@ -14,7 +14,7 @@ describe Rubrik do
   
     before(:each) do
     
-      create_organism
+      use_test_organism
       @r = Rubrik.find_by_name('RESULTAT FINANCIER').children.first
     end
   

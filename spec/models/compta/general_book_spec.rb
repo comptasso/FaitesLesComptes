@@ -14,7 +14,7 @@ include OrganismFixtureBis
 
   describe 'GeneralBook peut exister' do 
 
-  before(:each) do
+  before(:each) do 
     
     @a1 = @p.accounts.find_by_number('60')
     @a2 = @p.accounts.find_by_number('701')
