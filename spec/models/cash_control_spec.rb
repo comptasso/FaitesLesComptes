@@ -155,10 +155,13 @@ describe CashControl do
     end
 
     describe 'previous' do
+      
+      
 
       it 'returns the previous cash_control' do
         previous_cash_control = @c.cash_controls.create!(date: Date.today - 1.day, amount: 1)
         @cash_control.previous.should == previous_cash_control
+        previous_cash_control.delete
       end
       
       it 'but nil if no previous cash_control' do
@@ -178,6 +181,8 @@ describe CashControl do
     describe 'lock_lines' do
 
       before(:each) do
+        Writing.delete_all
+        ComptaLine.delete_all
         date = @p.start_date
         @income_account = @p.accounts.classe_7.first
         # on créé une ligne d'écriture par mois relevant de la caisse
@@ -190,7 +195,6 @@ describe CashControl do
       end
       
       after(:each) do 
-        CashControl.delete_all
         Writing.delete_all
         ComptaLine.delete_all 
       end 

@@ -18,12 +18,18 @@ module OrganismFixtureBis
     Room.delete_all
   end
   
+  def erase_writings
+    Writing.delete_all
+    ComptaLine.delete_all
+  end
+  
    
   def use_test_organism
     Apartment::Database.switch(SCHEMA_TEST)
     @o = Organism.first
     create_organism unless @o
     @p = @o.periods.first
+    erase_writings
     get_organism_instances
     @o
   end
@@ -64,7 +70,9 @@ module OrganismFixtureBis
   def clean_organism
     
       Apartment::Database.process(SCHEMA_TEST) do
-        Organism.find_each {|o| o.destroy }
+        Organism.delete_all
+        Period.delete_all
+        Book.delete_all
         Nature.delete_all
         Account.delete_all
         ComptaLine.delete_all

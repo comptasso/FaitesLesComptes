@@ -196,6 +196,7 @@ describe Room  do
 
     describe 'gestion des schemas'  do
       before(:each) do
+        clean_organism
         use_test_organism
         Apartment::Database.switch('public') 
         

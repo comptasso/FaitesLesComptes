@@ -26,7 +26,7 @@ module Utilities
         @sect = @org.sectors.first
       end
       
-      def remplit_books
+      def remplit_books 
         # les 4 livres
         Rails.logger.debug 'Création des livres par défaut'
         @org.income_books.create(abbreviation:'VE', title:'Recettes', description:'Recettes', sector_id:@sect.id)

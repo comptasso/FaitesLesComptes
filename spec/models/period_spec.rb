@@ -573,6 +573,7 @@ describe Period do
     end
 
     it 'détruit les écritures' do
+      Writing.delete_all
       @w = create_in_out_writing
       @p.compta_lines.count.should > 0 
       Writing.count.should > 0

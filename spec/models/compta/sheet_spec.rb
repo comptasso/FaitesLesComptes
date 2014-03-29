@@ -1,4 +1,4 @@
-# coding: utf-8
+# coding: utf-8 
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
@@ -11,20 +11,25 @@ describe Compta::Sheet do
   include OrganismFixtureBis
 
   before(:each) do
+    clean_organism
     use_test_organism
     @folio = @o.nomenclature.actif
-    @od.writings.create!({date:Date.today, narration:'ligne pour controller rubrik',
+    w = @od.writings.new({date:Date.today, narration:'ligne pour controller rubrik',
         :compta_lines_attributes=>{'0'=>{account_id:@p.accounts.find_by_number('206').id, debit:100 },
           '1'=>{account_id:Account.find_by_number('201').id, debit:10},
           '2'=>{account_id:Account.find_by_number('2801').id, credit:5},
           '3'=>{account_id:Account.find_by_number('51201').id, credit:105}
         }
       })
-    @od.writings.create!({date:Date.today, narration:'ligne de terrain',
+    puts w.errors.messages unless w.valid?
+    w.save!
+    w = @od.writings.new({date:Date.today, narration:'ligne de terrain',
         :compta_lines_attributes=>{'0'=>{account_id:@p.accounts.find_by_number('201').id, debit:1200 },
           '1'=>{account_id:Account.find_by_number('51201').id, credit:1200}
         }
       })
+    puts w.errors.messages unless w.valid?
+    w.save!
   end
   
   after(:each) do

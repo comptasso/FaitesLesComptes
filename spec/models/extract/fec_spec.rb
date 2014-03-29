@@ -20,7 +20,7 @@ describe Extract::Fec do
   end
   
   it 'un extract::fec a autant de lignes qu il y a de compta_lines'  do
-    Extract::Fec.new(period_id:@p.id).lines.length.should == 2
+    Extract::Fec.new(period_id:@p.id).lines.length.should == ComptaLine.count
   end
   
   it 'extract::fec extrait les lignes en joignant l écriture et le livre' do

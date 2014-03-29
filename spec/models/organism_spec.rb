@@ -12,7 +12,7 @@ describe Organism do
   include OrganismFixtureBis
 
 
-  def valid_attributes  
+  def valid_attributes   
     {:title =>'Test ASSO',
       database_name:'assotest',
       :status=>'Association'
@@ -24,36 +24,27 @@ describe Organism do
     before(:each) do
       clean_organism
       Apartment::Database.switch(SCHEMA_TEST)
-      @organism= Organism.new valid_attributes
-      puts @organism.errors.messages unless @organism.valid?
+      @o= Organism.new valid_attributes
+      puts @o.errors.messages unless @o.valid?
     end
 
     it 'should be valid with a title and a database_name' do
-      @organism.should be_valid
+      @o.should be_valid
     end
 
     it 'should not be valid without title' do
-      @organism.title = nil
-      @organism.should_not be_valid
+      @o.title = nil
+      @o.should_not be_valid
     end
 
     it 'should not be valid without status' do
-      @organism.status= nil
-      @organism.should_not be_valid
-    end
-
-    it 'should create 4 books (un recettes, un dépenses, un OD, un AN)' do
-      expect {@organism.save}.to change {Book.count}.by(4)
-    end
-
-    it 'should have nomenclature' do
-      @organism.save
-      @organism.nomenclature.actif.should be_a_instance_of(Folio)
+      @o.status= nil
+      @o.should_not be_valid
     end
 
     it 'before_validation remplit la version avec la constante VERSION' do
-      @organism.valid?
-      @organism.version.should == FLCVERSION
+      @o.valid?
+      @o.version.should == FLCVERSION
     end
 
     
@@ -65,37 +56,37 @@ describe Organism do
 
     before(:each) do
       
-      @organism= Organism.new(valid_attributes)
+      @o= Organism.new(valid_attributes)
     end
 
     it 'pour pouvoir écrire une compta, il faut un compte bancaire ou une caisse et un income ou outcome book' do
-      @organism.stub(:income_books).and_return([1])
-      @organism.can_write_line?.should be_false
-      @organism.stub(:bank_accounts).and_return([1])
-      @organism.can_write_line?.should be_true
+      @o.stub(:income_books).and_return([1])
+      @o.can_write_line?.should be_false
+      @o.stub(:bank_accounts).and_return([1])
+      @o.can_write_line?.should be_true
      
     end
 
     it 'avec un outcome' do
-      @organism.stub(:outcome_books).and_return([1])
-      @organism.can_write_line?.should be_false
-      @organism.stub(:cashes).and_return([1])
-      @organism.can_write_line?.should be_true
+      @o.stub(:outcome_books).and_return([1])
+      @o.can_write_line?.should be_false
+      @o.stub(:cashes).and_return([1])
+      @o.can_write_line?.should be_true
     end
 
     it 'pour pouvoir écrire une compta, il faut un compte bancaire ou une caisse et un income ou outcome book' do
-      @organism.stub(:outcome_books).and_return([1])
-      @organism.can_write_line?.should be_false
-      @organism.stub(:bank_accounts).and_return([1])
-      @organism.can_write_line?.should be_true
+      @o.stub(:outcome_books).and_return([1])
+      @o.can_write_line?.should be_false
+      @o.stub(:bank_accounts).and_return([1])
+      @o.can_write_line?.should be_true
 
     end
 
     it 'avec un outcome' do
-      @organism.stub(:income_books).and_return([1])
-      @organism.can_write_line?.should be_false
-      @organism.stub(:cashes).and_return([1])
-      @organism.can_write_line?.should be_true
+      @o.stub(:income_books).and_return([1])
+      @o.can_write_line?.should be_false
+      @o.stub(:cashes).and_return([1])
+      @o.can_write_line?.should be_true
     end
 
 
@@ -138,85 +129,72 @@ describe Organism do
 
   describe 'after create' do
     
-    context 'une association' do
+    after(:each) do
+        clean_organism
+      end
+    
+    context 'une association'  do 
       before(:each) do
         clean_organism
-        @organism = Organism.first || Organism.new(valid_attributes)
-        puts @organism.errors.messages unless @organism.valid?
-        @organism.save!
+        use_test_organism 
+      end
+      
+      
+      
+      
+      it 'on a tous les éléments' do
+        @o.should have(4).books # 4 livres
+        @o.should have(1).income_book
+        @o.should have(1).outcome_book
+        @o.should have(1).od_book
+        @o.an_book.should be_an_instance_of(AnBook)
+        @o.should have(1).cashes
+        @o.should have(1).bank_accounts
       end
 
-      it 'on a quatre livres' do
-        @organism.should have(4).books
-      end
-
-      it 'on a un livre de recette' do
-        @organism.should have(1).income_book 
-      end
-
-      it 'on a un livre de dépenses' do
-        @organism.should have(1).outcome_book
-      end
-
-      it 'on a un livre d OD' do
-        @organism.should have(1).od_book
-      end
-
-      it 'on a un livre d AN' do
-        @organism.an_book.should be_an_instance_of(AnBook)
-      end
-
-
-      it 'on a une caisse et une banque' do 
-        @organism.should have(1).cashes
-        @organism.should have(1).bank_accounts
-      end
-
-      it 'income_otucome_books renvoie les livres recettes et dépenses' do
-        @organism.in_out_books.should have(2).books
-        @organism.in_out_books.first.title.should == 'Recettes'
-        @organism.in_out_books.last.title.should == 'Dépenses'
+     
+      it 'income_outcome_books renvoie les livres recettes et dépenses' do
+        @o.in_out_books.should have(2).books
+        @o.in_out_books.first.title.should == 'Recettes'
+        @o.in_out_books.last.title.should == 'Dépenses'
       end
 
       it 'peut créer un document'  do
         Period.stub(:last).and_return(double(Period))
         Compta::Nomenclature.should_receive(:new).with(Period.last).and_return(@cn = double(Compta::Nomenclature))
         @cn.should_receive(:sheet).with(:actif)
-        @organism.document(:actif)
+        @o.document(:actif)
       end
 
       it 'n est pas accountable'  do
-        @organism.should_not be_accountable
+        @o.stub_chain(:periods, :select).and_return []
+        @o.should_not be_accountable
       end
 
       it 'mais peut écrire des lignes' do
-        @organism.should be_can_write_line
+        @o.should be_can_write_line
       end
 
-      it 'crée la destination non affecté et adhérent car org est une asso' do
-        @organism.status.should == 'Association'
-        @organism.destinations.find_by_name('Non affecté').should be_an_instance_of(Destination)
-        @organism.destinations.find_by_name('Adhérents').should be_an_instance_of(Destination) 
-      end
       
-      describe 'bridge vers adherent', wip:true do
+      
+      describe 'bridge vers adherent' do
         
         before(:each) do
           Adherent::Bridge.any_instance.stub(:nature_coherent_with_book).and_return true
-          @organism.fill_bridge
+          @o.fill_bridge
           
         end
         
         it 'crée un bridge vers le module adhérent' do
-          @organism.bridge.should be_an_instance_of Adherent::Bridge
+          @o.bridge.should be_an_instance_of Adherent::Bridge
         end
         
-        it 'avec les bonnes valeures' do 
-          b = @organism.bridge
-          b.bank_account = @organism.bank_accounts.first
-          b.cash = @organism.cashes.first
-          b.income_book = @organism.income_books.first
-          b.destination = @organism.destinations.find_by_name('Adhérents')
+        it 'avec les bonnes valeurs' do 
+          b = @o.bridge
+          b.bank_account = @o.bank_accounts.first
+          b.cash = @o.cashes.first
+          b.income_book = @o.income_books.first
+          b.destination = @o.destinations.find_by_name('Adhérents')
           b.nature_name = 'Cotisations des adhérents'
           
         end 
@@ -230,22 +208,25 @@ describe Organism do
     context 'une non association' do 
       before(:each) do
         clean_organism
-        @organism = Organism.create!({:title =>'Mon Entreprise',
+        Apartment::Database.switch(SCHEMA_TEST)
+        @o = Organism.create!({:title =>'Mon Entreprise',
             database_name:SCHEMA_TEST,
             :status=>'Entreprise' })
          
       end
       
+      
+      
       it 'ne crée pas de bridge vers adhérent' do
-        @organism.bridge.should == nil
+        @o.bridge.should == nil
       end
       
       it 'créé 3 destinations' do
-        @organism.destinations.count.should == 3
+        @o.destinations.count.should == 3
       end
       
       it 'dont Non affecté' do
-        @organism.destinations.find_by_name('Non affecté').should be_an_instance_of(Destination)
+        @o.destinations.find_by_name('Non affecté').should be_an_instance_of(Destination)
       end
 
     end
@@ -255,31 +236,23 @@ describe Organism do
   end
 
 
-  context 'when there is one period'  do 
+  context 'avec des exercices', wip:true  do 
 
     before(:each) do
-      clean_organism
-      Apartment::Database.switch(SCHEMA_TEST)
-      @organism= Organism.create! valid_attributes
-      @p_2010 = @organism.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
-      @p_2011= @organism.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
-      @organism.periods.count.should == 2
+      use_test_organism
+      @p2 = find_second_period
     end
-
-    #    after(:all) do
-    #      ActiveRecord::Base.establish_connection 'test'
-    #    end
-
+    
     it 'est accountable'  do
-      @organism.should be_accountable
+      @o.should be_accountable
     end
 
     describe 'find_period' do
 
       it "doit trouver l'exercice avec une date" do
-        @organism.find_period(Date.civil(2010,5,15)).should == @p_2010
-        @organism.find_period(Date.civil(2011,6,15)).should == @p_2011
-        @organism.find_period(Date.civil(1990,5,15)).should == nil
+        @o.find_period(Date.today).should == @p
+        @o.find_period(Date.today >> 12).should == @p2
+        @o.find_period(Date.civil(1990,5,15)).should == nil
       end
 
     end
@@ -288,47 +261,36 @@ describe Organism do
     describe 'guess period'  do
 
       it 'renvoie nil si pas de periods' do
-        @organism.stub(:periods).and_return []
-        @organism.guess_period(Date.today).should be_nil
+        @o.stub(:periods).and_return []
+        @o.guess_period(Date.today).should be_nil
       end
 
       it 'si la date est future renvoie le plus récent'  do
-        @organism.guess_period(Date.today).should == @p_2011
+        @o.guess_period(Date.today >> 36).should == @p2
       end 
 
       it 'si la date est trop ancienne, renvoie le plus vieux' do
-        @organism.guess_period(Date.today.years_ago 10).should == @p_2010
+        @o.guess_period(Date.today.years_ago 10).should == @p
       end
       
-      it 'sinon prend l exercice' do
-        @organism.guess_period(Date.parse('12/08/2010')).should == @p_2010
-        @organism.guess_period(Date.parse('11/11/2011')).should == @p_2011
-      end
-
-
-
-    end
+   end
     
     
  
     describe 'max_open_periods?' do
       it 'nb_open_periods.should == 2' do
-        @organism.nb_open_periods.should == 2
+        @o.nb_open_periods.should == 2
       end
 
       it 'should be true ' do
-        @organism.max_open_periods?.should be_true
+        @o.max_open_periods?.should be_true
       end
 
       it 'should be false when the first period is closes' do
-        @organism.stub(:nb_open_periods).and_return(1)
-        @organism.max_open_periods?.should be_false
+        @o.stub(:nb_open_periods).and_return(1)
+        @o.max_open_periods?.should be_false
       end
     end
-
-
-    
-   
 
   end
 end

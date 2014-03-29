@@ -618,7 +618,9 @@ class Period < ActiveRecord::Base
   def collect_books(natures)
     livres = natures.collect {|n| n[:book]}.uniq
     hash_books = {}
-    livres.each {|b| hash_books[b] = organism.books.where('title = ?', b).first.id }
+    livres.each do |b|
+      hash_books[b] = organism.books.where('title = ?', b).first.id
+    end
     hash_books
   end
 
