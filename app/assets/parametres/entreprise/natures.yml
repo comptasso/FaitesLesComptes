@@ -36,9 +36,13 @@
   :comment: Les recettes à caractère exceptionnel, per exemple des dommages et intérêts
   :acc: '770'
   :book: Recettes
-- :name: Achats
-  :comment: Marchandises, ou destinées à être transformées ou intégrées dans un produit fini
-  :acc: '600'
+- :name: Achats matières premièree
+  :comment: Destinées à être transformées ou intégrées dans un produit fini
+  :acc: '601'
+  :book: Dépenses
+- :name: Achats marchandises
+  :comment: Pour revente en l'état
+  :acc: '607'
   :book: Dépenses
 - :name: Loyer
   :comment: Y compris charges locatives et dépenses de chauffage

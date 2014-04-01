@@ -139,6 +139,8 @@
   title: Variations des stocks approvisionnements et marchandises
 - number: '606'
   title: Achats non stockés
+- number: '607'
+  title: Achats de marchandises
 - number: '611'
   title: Sous traitance générale
 - number: '612'

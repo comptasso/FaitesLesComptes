@@ -130,10 +130,14 @@
   title: Valeurs mobiliéres de placement
 - number: '590'
   title: Dépréciation des valeurs mobiliéres de placement
-- number: '600'
-  title: Achats (sauf 603)
+- number: '601'
+  title: Achats stockés mat. prem. et fournitures
+- number: '602'
+  title: Achats stockés autres approvisionnements
 - number: '603'
   title: Variations des stocks approvisionnements et marchandises
+- number: '607'
+  title: Achats de marchandises
 - number: '610'
   title: Services extérieurs
 - number: '620'
