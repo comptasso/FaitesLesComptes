@@ -34,8 +34,7 @@ class Utilities::PlanComptable
   # A terme d'autres type de sources seront possibles. Il faudra modifier
   # ou surcharger load_accounts
   def self.create_accounts(period, status)
-    pc = new(period, status)
-    pc.create_accounts
+    new(period, status).create_accounts
   end
   
   # crée des comptes pour une caisse ou une banque pour tous les exercices ouverts
@@ -52,24 +51,6 @@ class Utilities::PlanComptable
     end
   end
 
-  def create_accounts
-    nba = period.accounts.count # nb de comptes existants pour cet exercice
-    t = load_accounts
-    # TODO gérer ces questions par des erreurs et non par des tests
-    if t && !(t.is_a?(String)) # si load_accounts a renvoyé la chaine 'Erreur...
-      t.each do |a|
-        acc = period.accounts.new(a)
-        Rails.logger.warn "#{acc.number} - #{acc.title} - #{acc.errors.messages}" unless acc.valid?
-        acc.save 
-      end
-      nb_comptes_crees = period.accounts(true).count - nba
-      Rails.logger.debug "Création de #{nb_comptes_crees} comptes"
-      return nb_comptes_crees # renvoie le nombre de comptes créés
-    else
-      Rails.logger.warn("Erreur lors du chargement du fichier #{source_path}")
-      return 0
-    end
-  end
   
   # prend les comptes de from_period et crée les comptes correspondants pour period
   # s'ils sont marqués comme utilisé dans l'exercice d'origine
@@ -83,16 +64,51 @@ class Utilities::PlanComptable
     end
   end
 
-  protected
+ 
+  
+  
+  
+  # create_accounts est appelé par un callback de Period lors de la création d'un 
+  # premier exercice. 
+  # 
+  # create_accounts lit le fichier yml du plan comptable correspondant au statut de 
+  # l'organisme, puis crée les comptes lus dans ce fichier. 
+  # 
+  # Il compte le nombre de compte avant la création (il pourrait y avoir des comptes de 
+  # banques et de caisse, si jamais l'ordre des callbacks était changé dans Period.
+  # 
+  # La méthode renvoie le nombre de comptes créés. 
+  # 
+  # Deux exceptions sont capturées, celle où le fichier n'existe pas et celle où
+  # le fichier est mal formé.
+  #
+  def create_accounts
+    nba = period.accounts.count # nb de comptes existants pour cet exercice
+    t = YAML::load_file(source_path)
+    t.each do |a|
+      acc = period.accounts.new(a)
+      Rails.logger.warn "#{acc.number} - #{acc.title} - #{acc.errors.messages}" unless acc.valid?
+      acc.save 
+    end
+    nb_comptes_crees = period.accounts(true).count - nba
+    Rails.logger.debug "Création de #{nb_comptes_crees} comptes"
+    return nb_comptes_crees # renvoie le nombre de comptes créés
+   
+  rescue Errno::ENOENT # cas où le fichier n est pas trouvé
+    Rails.logger.warn("Erreur lors du chargement du fichier #{source_path}")
+    return 0
+  rescue Psych::SyntaxError # cas où le fichier est mal formé
+    Rails.logger.warn("Erreur lors de la lecture du fichier #{source_path}")
+    return 0
+    
+  end
+  
+   protected
 
   def source_path
     "#{Rails.root}/app/assets/parametres/#{status}/#{FICHIER}"
   end
   
-  def load_accounts
-    YAML::load_file(source_path)
-  rescue 
-    "Erreur lors du chargement du fichier #{status}"
-  end
+  
 end
 
