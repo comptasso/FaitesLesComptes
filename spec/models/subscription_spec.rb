@@ -81,12 +81,18 @@ describe Subscription do
   
   describe 'writings_late', wip:true do
     
-    
+    before(:each) do
+      tdy = Date.today
+      Date.stub(:today).and_return(tdy+3.days) # pour considérer qu'on est le 3 du 
+      # mois courant
+    end
+     
+    # une souscription qui a lieu le 2
     subject {Subscription.new(title:'test de scubscription', mask_id:1, day:2, permanent:true)}
     
     it 'doit chercher la dernière écriture pour ce mask' do
-      subject.should_receive(:last_writing_date).and_return(Date.today.months_ago(1).beginning_of_month)
-      subject.nb_late_writings.should == 1
+      subject.should_receive(:last_writing_date).and_return(Date.today.months_ago(1).beginning_of_month + 2.days)
+      subject.nb_late_writings
     end
     
     describe 'nbre écritures en retard' do

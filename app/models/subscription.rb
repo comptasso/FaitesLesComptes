@@ -17,7 +17,7 @@ require 'strip_arguments'
 # Tous les arguments sont obligatoires sauf end_date.
 # L'organisme a les abonnements au travers des masques
 #
-class Subscription < ActiveRecord::Base
+class Subscription < ActiveRecord::Base 
     
   attr_accessible :day, :end_date, :mask_id, :title, :permanent
   

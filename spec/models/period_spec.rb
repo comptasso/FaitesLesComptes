@@ -112,14 +112,12 @@ describe Period do
         
       end
      
-    
-      it 'la création des comptes'  do
+      # la vérification de cette action est faite au travers des tests d'intégration
+      # et de ceux de Utilities::PlanComptable
+      it 'demandent à PlanComptable la création des comptes'  do
         @p.stub(:check_nomenclature).and_return true
+        Utilities::PlanComptable.should_receive(:create_accounts).with(@p, 'Association')
         @p.save!
-        @p.accounts(true).count.should == 137 # la liste des comptes du plan comptable
-        # on n'a pas les deux comptes de caisse et banque 
-        # car on a stubbé create_bank_and_cash_accounts
-        # ni le compte de remise de chèque
       end
 
       it 'la création des natures : 10 natures de dépenses et 6 de recettes '  do
@@ -189,11 +187,7 @@ describe Period do
         @p.save!
       end
       
-      it 'entraîne celle des comptes' do
-        @p.accounts(true).count.should == 106 # la liste des comptes du plan comptable
-        # on n'a pas les deux comptes de caisse et banque car on a stubbé create_bank_and_cash_accounts
-      end
-      
+    
       it 'entraîne celle des natures' do
         @p.natures(true).count.should == 35
       end
@@ -217,13 +211,8 @@ describe Period do
           @p.save!
         end
       
-        it 'entraîne celle de 99 comptes' do
-          @p.accounts(true).count.should == 103 # la liste des comptes du plan comptable
-          # on n'a pas les deux comptes de caisse et banque car on a stubbé create_bank_and_cash_accounts
-        end
-      
-        it 'et de 24 natures' do
-          @p.natures(true).count.should == 24
+        it 'entraine la création de 25 natures' do
+          @p.natures(true).count.should == 25 
         end
       end
     end

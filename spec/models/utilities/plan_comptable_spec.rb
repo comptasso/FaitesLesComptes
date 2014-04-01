@@ -46,6 +46,14 @@ describe Utilities::PlanComptable do
     it 'retourne 0 en cas d erreur sur la lecture' do
       Utilities::PlanComptable.create_accounts(@p, 'Inconnu').should == 0
     end
+    
+    it 'retourne 106 pour un comité d entreprise' do
+      Utilities::PlanComptable.create_accounts(@p, 'Comite').should == 106
+    end
+    
+    it 'et 105 pour une entreprise' do
+      Utilities::PlanComptable.create_accounts(@p, 'Entreprise').should == 105
+    end
 
    
 
