@@ -9,8 +9,14 @@
 # et doit être placé dans le répertoire app/assets/parametres/#{status}, ou status
 # est le statut de l'organisme (actuellement Association ou Entreprise, mais cette liste sera surment étendue ultérieurement)
 #
-# La méthode de clase self.create_accounts est essentiellement la seule utilisée, en
-# l'occurence dans le callback create_plan de period.
+# La méthode de clase self.create_accounts est appelée par le callback 
+# create_plan de period pour le premier exercice d'une compte.
+# 
+# Une autre méthode copy_accounts est appelée pour la création des comptes 
+# d'un exercice à partir de ceux de l'exercice précédent.
+# 
+# De même #create_financial_accounts est appelée par le callback after_create
+# des modèles Bank et Cash
 #
 class Utilities::PlanComptable
 
@@ -66,10 +72,10 @@ class Utilities::PlanComptable
   end
   
   # prend les comptes de from_period et crée les comptes correspondants pour period
-  # TODO introduire la copie des seuls comptes utilisés
+  # s'ils sont marqués comme utilisé dans l'exercice d'origine
   def copy_accounts(from_period)
     Period.transaction do
-      from_period.accounts.each do |acc|
+      from_period.accounts.where('used = ?', true).each do |acc|
         bcc = acc.dup
         bcc.period_id = period.id
         bcc.save

@@ -31,14 +31,14 @@ describe Utilities::PlanComptable do
 
     # TODO supprimer les spec similaires qui sont dans period_spec
     it 'demande à period de créer les comptes lus dans le fichier' do
-      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 137
-      @p.should have(137).accounts
+      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 138
+      @p.should have(138).accounts
     end
 
     it 'si p a déja des comptes ne crée pas de doublon' do
       @p.accounts.create!(number:'102', title:'Fonds associatif sans droit de reprise')
-      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 136
-      @p.accounts(true).should have(137).accounts
+      Utilities::PlanComptable.create_accounts(@p, 'Association').should == 137
+      @p.accounts(true).should have(138).accounts
     end
 
     
@@ -53,21 +53,23 @@ describe Utilities::PlanComptable do
   
   describe 'copy_accounts' do 
     
-    let(:from_p) {mock_model(Period, :accounts=>@from = [stub_model(Account), stub_model(Account, dup:self)] )}
+    let(:from_p) {mock_model(Period)}
     let(:to_p) {mock_model(Period)}
+    
+    before(:each) do
+      from_p.stub_chain(:accounts, :where).and_return @from = 
+          [@acc1 = stub_model(Account, used:true), @acc2 = stub_model(Account, used:true)]
+    end
     
     subject {Utilities::PlanComptable.new(to_p, 'Association')}
     
-    it 'prend la liste des comptes de from_period' do
+    it 'prend la liste des comptes utilisés de from_period' do
       from_p.should_receive(:accounts).and_return(@from)
-      @from.each do |f|
-        f.should_receive(:dup).and_return f
-      end
+      @from.should_receive(:where).with('used = ?', true).and_return([@acc1])
       subject.copy_accounts(from_p)
     end
     
     it 'modifie le period_id' do
-      from_p.stub(:accounts).and_return(@from)
       @from.each do |f|
         f.should_receive(:dup).and_return f
         f.should_receive(:period_id=).with(to_p.id)
@@ -76,9 +78,8 @@ describe Utilities::PlanComptable do
     end
     
     it 'puis appelle save' do
-      from_p.stub(:accounts).and_return(@from)
       @from.each do |f|
-        f.should_receive(:dup).and_return f
+        f.stub(:dup).and_return f
         f.stub(:period_id=).and_return f
         f.should_receive(:save)
       end     

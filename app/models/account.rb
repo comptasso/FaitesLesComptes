@@ -8,9 +8,6 @@
 
 # Les comptes peuvent être actifs ou non. Etre actif signifie qu'on peut
 # enregistrer des écritures. 
-# TODO le fait d'être actif devrait également être utilisé pour la création des comptes
-# lorsqu'on crée l'exercice suivant
-
 
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development
 
