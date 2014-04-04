@@ -82,4 +82,6 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.4.6RC' # les noms de bases de données sont suffixées par un timestamp
 # FLCVERSION = '1.4.7RC' # retrait de la contrainte unique sur continuous_id (pour pb de verrouillage)
 # FLCVERSION = '1.4.8RC' # ajout de written by suite à Holder
-FLCVERSION = '1.4.9RC' # peristence de check_nomenclature
+# FLCVERSION = '1.4.9RC' # peristence de check_nomenclature
+# FLCVERSION = '1.4.10RC' # seuls les comptes used sont reproduits lors de la créa d'un nouvel exercice
+FLCVERSION = '1.4.11RC' # les valeurs futures ne sont plus affichées dans les graphes

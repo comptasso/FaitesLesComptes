@@ -95,7 +95,7 @@ describe Utilities::Graphic do
       subject.add_serie(period)
     end
     
-    describe 'tronque les séries pour les mois futurs' do
+    describe 'Si l exercice n a que 5 mois passés et 7 futurs' do
       
       before(:each) do
         period.stub(:start_date).and_return(Date.today.beginning_of_month << 4)
