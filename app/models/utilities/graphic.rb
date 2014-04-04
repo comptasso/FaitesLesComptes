@@ -24,6 +24,10 @@ class  Utilities::Graphic
   # C'est la classe appelante qui demande son type de graphe et l'exercice voulu, 
   # son type (:bar ou :line) 
   # 
+  # TODO faire deux classes GraphicBar et GraphicLine pour gérer les subtiles
+  # différences qu'il y a entre les deux types de graphes (on doit cumuler les 
+  # valeurs et on doit supprimer les valeurs futures pour les seconds)
+  # 
   def initialize(obj, period, type)
     @period = period
     @type = type
@@ -74,26 +78,37 @@ class  Utilities::Graphic
   # month_years 
   # 
   def build_month_years(exercice) 
-    if exercice == @period
-      return @period.list_months.to_list('%m-%Y' )
-    else # on a demandé l'exercice précédent
-      nbm = @period.nb_months
-      ListMonths.new(@period.start_date << nbm, @period.close_date << nbm ).to_list('%m-%Y')
-    end
+    ListMonths.new(*fourchette_dates(exercice)).collect(&:to_s) 
   end
+  
+  
     
   # interroge obj pour lui demander ses données pour l'exercice en deuxième argument
-  def build_datas(obj, exercice)
+  # le résultat est un tableau des valeurs à afficher pour l'exercice
+  # 
+  # Si le graphe est de type line, fait une accumulation des valeurs
+  #
+  def build_datas(obj, exercice) 
     h = obj.query_monthly_datas(exercice)
     h.default = '0' # car la requete ne renvoie pas les mois où il n'y a pas d'écriture
-    res = build_month_years(exercice).collect {|my| h[my] }
-    res = accumulate_values(res, exercice) if @type == :line
-    res
+    values = past_month_years(exercice).collect {|my| h[my]}
+    values = accumulate_values(values, exercice) if @type == :line
+    values 
   end
     
    
 
   protected
+  
+  # ne renvoie les month_years que s'ils sont passés ou dans le mois actuel
+  def past_month_years(exercice)
+    ListMonths.new(*fourchette_dates(exercice)).reject(&:future?).collect(&:to_s) 
+  end
+  
+  
+  
+  
+  
 
   # prend l'ensemble des valeurs et en fait une somme accumulée. 
   # Utile pour les graphiques de type line.
@@ -109,6 +124,25 @@ class  Utilities::Graphic
       acc = @series.last.last.to_f 
     end
     res.collect { |val| acc += val.to_f; acc.to_s }
+  end
+  
+  private
+  
+  # renvoie les dates de début et de fin de l'exercice si on est dans l'exercice
+  # en cours, sinon les dates de l'exercice précédent à partir de l'exercice actuel
+  # 
+  # Ceci est nécessaire pour la construction des graphes car les deux exercices
+  # affichés peuvent avoir des durées différentes. On se cale donc sur la longueur
+  # de l'exercice en cours pour afficher les mois de l'exercice précédent même si celui
+  # ci est plus court (ou plus long)
+  def fourchette_dates(exercice)
+    std = @period.start_date
+    cld = @period.close_date
+    if exercice != @period # on a demandé l'exercice précédent
+      nbm = @period.nb_months # et donc on décale les dates du nombre de mois de l'exercice
+      std =std << nbm; cld = cld << nbm
+    end
+    return std, cld
   end
 
 end

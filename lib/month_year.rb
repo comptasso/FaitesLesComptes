@@ -34,7 +34,14 @@ class MonthYear
 
   # méthode de classe permettant de créer unn MonthYear à partir d'une date
   def self.from_date(date)
-    MonthYear.new(year:date.year, month:date.month)
+    MonthYear.new(month:date.month, year:date.year)
+  end
+  
+  # retourne un MonthYear à partir d'une chaine formée sur le 
+  # schéma mm-yyyy
+  def self.from_string(mmyyyy)
+    raise ArgumentError, 'Le format doit être mm-yyyy' unless mmyyyy =~ /^\d{2}-\d{4}$/
+    MonthYear.new(month:mmyyyy[0,2], year:mmyyyy[3,4])
   end
   
   # calcule la distance en mois entre deux month_year
@@ -123,6 +130,11 @@ class MonthYear
     return d if include? d
     return end_of_month if younger_than? d
     return beginning_of_month if older_than? d
+  end
+  
+  # indique si un MonthYear représente un mois postérieur à la date du jour
+  def future?
+    older_than?(Date.today)
   end
 
   protected

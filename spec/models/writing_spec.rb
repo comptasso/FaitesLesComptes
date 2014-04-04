@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.configure do |config|
+RSpec.configure do |config| 
    # config.filter = {wip:true} 
 end
 
@@ -138,8 +138,8 @@ describe Writing do
 
       before(:each) do
         use_test_organism
-        @l1 = ComptaLine.new(account_id:Account.first.id, debit:0, credit:10)
-        @l2 = ComptaLine.new(account_id:Account.last.id, debit:10, credit:0)
+        @l1 = ComptaLine.new(account_id:@p.accounts.first.id, debit:0, credit:10)
+        @l2 = ComptaLine.new(account_id:@p.accounts.last.id, debit:10, credit:0)
         @r = @od.writings.new(date:Date.today, narration:'Une écriture')
         @r.compta_lines<< @l1
         @r.compta_lines<< @l2
@@ -148,16 +148,9 @@ describe Writing do
       after(:each) do
         Writing.delete_all
       end
-
-      it 'find period' do
-        @r.book.organism.should == @o
-        @r.should have(2).compta_lines
-        @r.compta_lines.size.should == 2
-
-      end
-
+      
       it 'should save' do
-        @r.valid?
+        puts @r.errors.messages unless @r.valid?
         @r.should be_valid
         expect {@r.save}.to change {Writing.count}.by(1)
       end

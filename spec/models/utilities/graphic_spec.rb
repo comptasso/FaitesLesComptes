@@ -5,13 +5,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 describe Utilities::Graphic do
   
   def monthly_datas
-    {'01-2014'=> '1', '10-2014'=>'10', '11-2014'=>'11' }
+    {'01-2013'=> '1', '10-2013'=>'10', '11-2013'=>'11' }
   end
   
   let(:obj) {Book.new}
   
-  let(:period) {Period.new(start_date:Date.today.beginning_of_year,
-      close_date:Date.today.end_of_year)}
+  let(:period) {Period.new(start_date:Date.civil(2013, 1,1),
+      close_date:Date.civil(2013,12,31) ) }
   
   let(:previous_period) {Period.new(start_date:Date.today.beginning_of_year << 12,
       close_date:Date.today.end_of_year << 12)}
@@ -64,17 +64,17 @@ describe Utilities::Graphic do
    
     
     before(:each) do
-      period.stub(:short_exercice).and_return '2014'
+      period.stub(:short_exercice).and_return '2013'
       period.stub(:id).and_return 127
       
     end
     
     it 'ajoute un élément à la légende' do
-      subject.legend.should == ['2014'] 
+      subject.legend.should == ['2013'] 
     end
     
     it 'ajoute l id de l exercice à ' do
-      subject.period_ids.should == [127]
+      subject.period_ids.should == [127] 
     end
     
     it 'ajoute les month_years de l exercice' do
@@ -95,6 +95,19 @@ describe Utilities::Graphic do
       subject.add_serie(period)
     end
     
+    describe 'tronque les séries pour les mois futurs' do
+      
+      before(:each) do
+        period.stub(:start_date).and_return(Date.today.beginning_of_month << 4)
+        period.stub(:close_date).and_return((period.start_date >> 12) - 1 )
+      end
+      
+      it 'la série n a que 5 valeurs' do
+        subject.series.should == [%w(0 0 0 0 0)]
+      end
+      
+    end
+    
     # TODO compléter ces tests avec la gestion du type de graphique
     
     describe 'graphes de type line' do
@@ -104,7 +117,7 @@ describe Utilities::Graphic do
         period.stub(:previous_period).and_return previous_period
         previous_period.stub(:short_exercice).and_return '2013'
         previous_period.stub(:id).and_return 126
-        obj.stub(:query_monthly_datas).with(previous_period).and_return({'09-2013'=> '25', '10-2013'=>'10' })
+        obj.stub(:query_monthly_datas).with(previous_period).and_return({'09-2012'=> '25', '10-2012'=>'10' })
       end
        
       context 'quand l exercice précédent est ouvert' do
@@ -139,10 +152,7 @@ describe Utilities::Graphic do
         end
          
       end
-       
-       
-       
-       
+        
     end
     
   end

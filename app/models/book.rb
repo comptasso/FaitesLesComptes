@@ -53,6 +53,7 @@ class Book < ActiveRecord::Base
   # astuces trouvéexs dans le site suivant
   # http://www.alexreisner.com/code/single-table-inheritance-in-rails
   # 
+  # TODO voir les méthodes adaptées de Rails. Il semble qu'elles existent
   # Le but de cette méthode est de redéfinir la méthode model_name qui est utilisée
   # pour la génération des path. Ainsi un IncomeBook répond quand même Book à la méthode model_name
   # et la construction des path reste correcte.
