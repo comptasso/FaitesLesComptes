@@ -2,10 +2,11 @@
   %thead
     %tr
       %th.pc5.date-euro Date
+      %th.pc5 Pce
       %th.pc5 Jnl
       %th.pc10 Réf
       %th.pc25 Libellé
-      %th.pc20 Nature
+      %th.pc15 Nature
       %th.pc15 Destination
       %th.pc10 Débit
       %th.pc10 Crédit
@@ -13,15 +14,17 @@
     = render  partial:'compta/lines/line', collection:@listing.lines
   %tfoot
     %tr.total#totaux
-      %th(colspan="6" style="text-align:right" rowspan="1")
+      %th(colspan="7" style="text-align:right" rowspan="1")
         Totaux:
         %br Valeurs au #{I18n.l @listing.to_date}
         
-      %th#tgdebit(rowspan="1" colspan="1" class="numeric nombre")
-        %span#tdebit=  debit_credit(@listing.total_debit)
+      %th#tgdebit.numeric.nombre
+        %span#tdebit
+        =# le total débit des lignes est affiché par un calcul en javascript
         %br
-        =  debit_credit(@listing.cumulated_debit_at(@listing.to_date))
-      %th#tgcredit(rowspan="1" colspan="1" class="numeric nombre")
-        %span#tcredit=  debit_credit(@listing.total_credit)
+        %span#cumul_debit=  debit_credit(@listing.cumulated_debit_at(@listing.to_date))
+      %th#tgcredit.numeric.nombre
+        %span#tcredit 
+        =# le total crédit des lignes est affiché par un calcul en javascript
         %br
-        =  debit_credit(@listing.cumulated_credit_at(@listing.to_date))
+        %span#cumul_credit=  debit_credit(@listing.cumulated_credit_at(@listing.to_date))

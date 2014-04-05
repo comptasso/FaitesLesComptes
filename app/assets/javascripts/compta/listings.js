@@ -38,14 +38,14 @@ function drawDataTable() {
 
             /* Calculate the market share for browsers on this page */
             for (i = iStart; i < iEnd; i += 1) {
-                iPageDebit += stringToFloat(aaData[aiDisplay[i]][6]);
+                iPageDebit += stringToFloat(aaData[aiDisplay[i]][7]);
             }
 
 
 
             /* Calculate the market share for browsers on this page */
             for (i = iStart; i < iEnd; i += 1) {
-                iPageCredit += stringToFloat(aaData[aiDisplay[i]][7]);
+                iPageCredit += stringToFloat(aaData[aiDisplay[i]][8]);
             }
 
             /* Modify the footer row to match what we want */
