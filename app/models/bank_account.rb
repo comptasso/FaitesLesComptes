@@ -124,8 +124,8 @@ class BankAccount < ActiveRecord::Base
  # 
  # Renvoie un objet de la classe Utilities::NotPointedLines
  #
- def not_pointed_lines
-   Utilities::NotPointedLines.new(self)
+ def not_pointed_lines(before_date = nil)
+   Utilities::NotPointedLines.new(self, before_date)
  end
 
 

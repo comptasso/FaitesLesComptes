@@ -47,11 +47,15 @@ class BankExtractsController < ApplicationController
     @bank_extract = BankExtract.find(params[:id])
   end
   
-   # action permettant d'afficher les lignes d'écriture qui restent à pointer
+  # action permettant d'afficher les lignes d'écriture qui restent à pointer
   # cette action est utilisée lorsque les relevés de compte sont tous pointés
-  # pointage redirige vers cette action lorsque c'est le cas
+  # pointage redirige vers cette action lorsque c'est le cas.
+  # 
+  # L'argument permet de n'afficher que les lignes antérieures à la cloture
+  # de l'exercice sur lequel on travaille.
+  #
   def lines_to_point
-    @lines_to_point = @bank_account.not_pointed_lines
+    @lines_to_point = @bank_account.not_pointed_lines(@period.close_date)
   end
   
 

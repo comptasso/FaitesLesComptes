@@ -13,14 +13,14 @@ module Utilities
   # A savoir le type d'écriture par un symbole (:check_deposit ou :standard_line)
   # la date, un libéllé qui peut être Remise de chèque ou narration,
   # le débit et le crédit
-
+  #
   class NotPointedLines
 
     attr_reader :lines, :bank_account
 
-    def initialize(bank_account)
+    def initialize(bank_account, before_date = nil)
       @bank_account = bank_account
-      fetch_lines
+      fetch_lines(before_date)
     end
     
     # permet d'itérer les lignes et d'effectuer l'action fournie par le block 
@@ -44,13 +44,29 @@ module Utilities
     def sold
       total_credit - total_debit
     end
+    
+    
 
     private
-
-    def fetch_lines
-      @lines ||= bank_account.compta_lines.not_pointed
+    
+     def fetch_lines(before_date)
+      @lines ||= set_lines(before_date) 
     end
 
+    # permet de limiter les écritures retournées à celles qui sont antérieures
+    # à une date.
+    #
+    # Cela est utile pour ne pas afficher des lignes de 2014, alors qu'on est 
+    # en train de traiter la clôture de 2013 et qu'on veut vérifier qu'il n'y a 
+    # plus de ligne à pointer pour cet exercice.
+    def set_lines(before_date)
+      ls = bank_account.compta_lines.not_pointed 
+      ls = ls.where('writings.date < ?', before_date) if before_date 
+      ls
+    end
+    
+   
+    
   end
 
 

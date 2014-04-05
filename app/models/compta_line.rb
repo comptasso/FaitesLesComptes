@@ -51,7 +51,8 @@ class ComptaLine < ActiveRecord::Base
   scope :listing, lambda {|from, to| with_writing_and_book.where('books.abbreviation != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, where('locked = ?', false)
-  scope :definitive, where('locked = ?', true) # locked engendre un conflit avec les arel de Rails
+  scope :definitive, where('locked = ?', true) # remplacé le nom du scope locked par definitive car
+  # engendrait un conflit avec les arel de Rails
   scope :classe, lambda {|n| where('number LIKE ?', "#{n}%").order('number ASC')} 
 
   # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
