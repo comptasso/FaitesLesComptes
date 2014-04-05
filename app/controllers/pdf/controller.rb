@@ -6,7 +6,7 @@ module Pdf
   # un pdf avec DelayedJob.
   #
   # Lorsqu'un controller dispose d'une action pdf, on peut inclure ce module,
-  # ce qui ajoute les trois actions
+  # ce qui ajoute les trois actions #produce_pdf, #pdf_ready et #deliver_pdf
   # 
   # Il faut alors définir deux méthodes : 
   # - la première est set_exporter qui indique 

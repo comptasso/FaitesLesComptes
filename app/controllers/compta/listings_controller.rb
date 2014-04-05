@@ -39,10 +39,7 @@ class Compta::ListingsController < Compta::ApplicationController
        respond_to do |format|
         
         format.html {render 'show'}
-        format.pdf do 
-          pdf = @listing.to_pdf
-          send_data pdf.render, filename:export_filename(pdf, :pdf) #, disposition:'inline'}
-        end
+        # format.pdf n'existe pas car l'action est produce_pdf qui est assuré par le Pdf::Controller
         format.csv { send_data @listing.to_csv, filename:export_filename(@listing, :csv) }  # pour éviter le problème des virgules
         format.xls { send_data @listing.to_xls, filename:export_filename(@listing, :csv) }
       end

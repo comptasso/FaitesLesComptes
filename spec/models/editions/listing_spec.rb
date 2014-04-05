@@ -12,7 +12,7 @@ end
 describe 'Editions::Listing qui est l édition d un listing de compte' do
   let(:from_date) {Date.today.beginning_of_year}
   let(:to_date) {Date.today.end_of_year}
-  let(:a) {mock_model(Account, :compta_lines=>'bonjour', period:p)}
+  let(:a) {mock_model(Account, number:'102', title:'Réserves', :compta_lines=>'bonjour', period:p)}
   let(:p) {mock_model(Period)}
   
   def render_file(pdf, file_name)
@@ -35,12 +35,28 @@ describe 'Editions::Listing qui est l édition d un listing de compte' do
     @cl.should be_an_instance_of(Compta::Listing) 
   end
   
-  it 'to_pdf crée un Editions::Account' do
+  it 'to_pdf crée un Editions::Listing' do
     Editions::Listing.should_receive(:new).with(p, a, {from_date:from_date, to_date:to_date})
     @cl.to_pdf
   end
   
-  # TODO finir ces spec
+  describe 'les paramètres sont implémentés' do
+    subject {Editions::Listing.new(p,a,{from_date:from_date, to_date:to_date} )}
+    
+    before(:each) do
+      a.stub('all_lines_locked?').and_return false  
+      a.stub('formatted_sold').and_return ['50,00']
+    end
+    
+    it 'title' do
+      subject.title.should == 'Listing compte 102'
+    end
+    
+    it 'subtitle' do
+      subject.subtitle.should == "Réserves - Du #{I18n.l from_date} au #{I18n.l to_date}"
+    end
+    
+  end
   
   
   

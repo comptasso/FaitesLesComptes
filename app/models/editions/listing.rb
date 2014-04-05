@@ -9,7 +9,6 @@ module Editions
   # La classe hérite de Default et surcharge la méthode prepare_line
   # ainsi que la méthode fetch_lines car on reprend pour les lignes celles 
   # qui ne sont pas dans le livre d'A Nouveau
-  # TODO changer pour Listing pour être cohérent avec les actions csv et view
   class Listing < PdfDocument::Default 
 
     
@@ -18,7 +17,7 @@ module Editions
     def fill_default_values
       super
       @title ||= "Listing compte #{source.number}"
-      @subtitle ||= "#{source.title} - Du #{I18n::l @from_date} au #{I18n.l @to_date}"
+      @subtitle = "#{source.title} - Du #{I18n::l @from_date} au #{I18n.l @to_date}" if @subtitle == ''
       @stamp  = "brouillard" unless source.all_lines_locked?(@from_date, @to_date)
       @columns_select = ['writings.id AS w_id', 'writings.date AS w_date', 'books.abbreviation AS b_abbreviation', 'writings.ref AS w_ref', 'writings.narration AS w_narration', 'nature_id', 'destination_id', 'debit',  'credit']
       @columns_methods = ['w_id', 'w_date', 'b_abbreviation', 'w_ref', 'w_narration', 'nature.name', 'destination.name', nil, nil]
