@@ -3,7 +3,7 @@ class Compta::SelectionsController < Compta::ApplicationController
  def index
     @select_method = params[:scope_condition] == 'unlocked' ? :unlocked : nil
     if @select_method
-      @writings = Writing.period(@period).send(:unlocked)
+      @writings = Writing.period(@period).unlocked
     else
       redirect_to :back
     end
