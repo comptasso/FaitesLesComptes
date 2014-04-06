@@ -66,7 +66,7 @@ class Compta::WritingsController < Compta::ApplicationController
   def all_lock
     find_writings
     @writings.unlocked.each {|w| w.lock if w.compta_editable?}
-    redirect_to compta_book_writings_url(@book)
+    redirect_to compta_book_writings_url(@book) 
   end
 
   # POST /writings

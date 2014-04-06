@@ -73,7 +73,7 @@ class Writing < ActiveRecord::Base
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
   # scope :not_transfer, where('type != ?', 'Transfer')
   
-  scope :unlocked, joins(:compta_lines).where('locked = ?', false).uniq
+  scope :unlocked, where('locked_at IS NULL')
   scope :no_type, where('writings.type IS NULL')
   scope :an_od_book, joins(:book).where('books.type'=>['OdBook', 'AnBook'])
   scope :compta_editable, unlocked.an_od_book.no_type
