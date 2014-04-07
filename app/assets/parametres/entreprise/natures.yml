@@ -46,26 +46,26 @@
   :book: Dépenses
 - :name: Loyer
   :comment: Y compris charges locatives et dépenses de chauffage
-  :acc: '620'
+  :acc: '613'
   :book: Dépenses
 - :name: Energie
   :comment: Electricité, gaz, fuel, carburant pour les véhicules
-  :acc: '610'
+  :acc: '606'
   :book: Dépenses
-- :name: Téléphone, internet,...
+- :name: Courrier, téléphone, internet,...
   :comment: Tout ce qui concerne les communications
-  :acc: '620'
+  :acc: '626'
   :book: Dépenses
 - :name: Autres frais de fonctionnement
-  :comment: Timbres, fournitures, ...
-  :acc: '620'
+  :comment: 
+  :acc: '628'
   :book: Dépenses
 - :name: Déplacements
   :comment: Dépenses de déplacement quel que soit le moyen de transport. Hôtel et restaurant en déplacement
-  :acc: '620'
+  :acc: '625'
   :book: Dépenses
 - :name: Impôts d'exploitation
-  :comment: "Exploitation : taxe profressionnelle, foncière mais pas impôts sur les résultats"
+  :comment: "Exploitation : taxe professionnelle, foncière mais pas impôts sur les résultats"
   :acc: '630'
   :book: Dépenses
 - :name: Personnel
@@ -77,7 +77,7 @@
   :acc: '645'
   :book: Dépenses
 - :name: Cot. sociales de l'exploitant
-  :comment: ! 'sur les frais de personnel : Urssaf, arco, agirc, ...'
+  :comment: 
   :acc: '646'
   :book: Dépenses
 - :name: Charges div. d'exploitation

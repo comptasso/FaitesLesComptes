@@ -134,14 +134,48 @@
   title: Achats stockés mat. prem. et fournitures
 - number: '602'
   title: Achats stockés autres approvisionnements
+- number: '606'
+  title: Achats non stockés
 - number: '603'
   title: Variations des stocks approvisionnements et marchandises
 - number: '607'
   title: Achats de marchandises
-- number: '610'
-  title: Services extérieurs
-- number: '620'
-  title: Autres services extérieurs
+- number: '611'
+  title: Sous traitance générale
+- number: '612'
+  title: Redevances de crédit bail
+- number: '613'
+  title: Locations
+- number: '614'
+  title: Charges locatives
+- number: '615'
+  title: Entretiens et réparations
+- number: '616'
+  title: Primes d'assurance
+- number: '617'
+  title: Etudes et recherches
+- number: '618'
+  title: Divers
+- number: '619'
+  title: Rabais, remises et ristournes obtenus sur services extérieurs
+- number: '621'
+  title: Personnel extérieur à l'association
+- number: '622'
+  title: Rémunération d'intermédiaires et honoraires
+- number: '623'
+  title: Publicité, publications, relations publiques
+- number: '624'
+  title: Transport de biens et transport collectif du personnel
+- number: '625'
+  title: Déplacements, missions et réceptions
+- number: '626'
+  title: Frais postaux et de télécommunication
+- number: '627'
+  title: Services bancaires et assimilés
+- number: '628'
+  title: Divers
+- number: '629'
+  title: Rabais, remises et ristournes obtenus sur autres services extérieurs
 - number: '630'
   title: Impôts, taxes et versements assimilés
 - number: '641'
