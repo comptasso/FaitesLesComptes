@@ -23,7 +23,8 @@ class Compta::WritingsController < Compta::ApplicationController
     
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @writings }
+      format.csv { send_data @extract.to_csv, filename:export_filename(@extract, :csv)  }
+      format.xls { send_data @extract.to_xls, filename:export_filename(@extract, :csv)  }
     end
   end
 
@@ -130,11 +131,15 @@ class Compta::WritingsController < Compta::ApplicationController
       @mois = params[:mois]
       @an = params[:an]
       date = Date.civil(@an.to_i, @mois.to_i, 1) rescue @period.guess_month
-      @writings = @book.writings.mois(date)
+      from_date = date.beginning_of_month
+      to_date = date.end_of_month
     else
       @mois = 'tous'
-      @writings = @book.writings.period(@period)
+      from_date = @period.start_date
+      to_date = @period.close_date
     end
+    @extract = Extract::Book.new(@book, @period, from_date, to_date)
+    @writings = @extract.writings
   end
 
   # préremplit la date

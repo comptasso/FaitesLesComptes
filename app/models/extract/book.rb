@@ -47,6 +47,10 @@ module Extract
       @lines ||= @book.compta_lines.includes(:writing, :account).
         where('date >= ? AND date <= ?', from_date, to_date)
     end
+    
+    def writings
+      @book.writings.laps(from_date, to_date)
+    end
 
     alias compta_lines lines
 
@@ -80,7 +84,7 @@ module Extract
 
     # produit le document pdf en s'appuyant sur la classe Editions::Book
     def to_pdf      
-      Editions::Book.new(@period, self)
+      # Editions::Book.new(@period, self)
     end
 
     protected
