@@ -21,8 +21,8 @@ describe Compta::WritingsController do
  
   describe "GET index"  do
     it "assigns all writings as @writings" do
-      @b.should_receive(:writings).and_return @a = double(Arel)
-      @a.should_receive(:period).with(@p).and_return(@a)
+      Extract::Book.should_receive(:new).with(@b, @p, @p.start_date, @p.close_date).and_return @a = double(Arel)
+      @a.should_receive(:writings).and_return(@a)
             
       get :index, {book_id:@b.id, mois:'tous' }, valid_session
       assigns(:writings).should == @a
@@ -30,7 +30,7 @@ describe Compta::WritingsController do
 
     it 'quand le book-type est AnBook, c est tous par defaut' do
       @b.stub(:type).and_return 'AnBook'
-      @b.stub_chain(:writings, :period).and_return 'bonjour'
+      Extract::Book.any_instance.stub(:writings).and_return 'bonjour'
       get :index, {book_id:@b.id  }, valid_session
       assigns(:mois).should == 'tous'
       assigns[:an].should == nil
@@ -42,8 +42,8 @@ describe Compta::WritingsController do
     end
 
     it 'avec params mois et an, wherche les writings du mois' do
-      @b.should_receive(:writings).and_return(@ar = double(Arel))
-      @ar.should_receive(:mois).with(Date.today.beginning_of_month)
+      Extract::Book.should_receive(:new).with(@b, @p, Date.today.beginning_of_month, Date.today.end_of_month).and_return @a = double(Arel)
+      @a.should_receive(:writings).and_return(@a)
       get :index, {book_id:@b.id,  an:Date.today.year, mois:Date.today.month}, valid_session
     end
 
@@ -239,7 +239,7 @@ describe Compta::WritingsController do
     end
 
     it 'envoie lock à toutes les écritures non verrouillées' do
-      @b.stub_chain(:writings, :period).and_return(@ar = double(Arel))
+      Extract::Book.any_instance.stub(:writings).and_return(@ar = double(Arel))
       @ar.should_receive(:unlocked).and_return([double(:lock=>true, 'compta_editable?'=>true),double(:lock=>true, 'compta_editable?'=>true) ])
       post :all_lock, {book_id:@b.to_param}, valid_session
       response.should redirect_to compta_book_writings_url(@b)

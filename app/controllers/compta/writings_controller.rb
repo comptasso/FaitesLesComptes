@@ -9,7 +9,7 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings.json
   def index
     # pas de sélection par mois pour la AnBook
-    if @book.type == 'AnBook'
+    if @book.type == 'AnBook' 
        params[:mois] = 'tous'
        params[:an] = nil
     end

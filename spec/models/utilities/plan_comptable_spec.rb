@@ -52,7 +52,7 @@ describe Utilities::PlanComptable do
     end
     
     it 'et 105 pour une entreprise' do
-      Utilities::PlanComptable.create_accounts(@p, 'Entreprise').should == 105
+      Utilities::PlanComptable.create_accounts(@p, 'Entreprise').should == 122
     end
 
    

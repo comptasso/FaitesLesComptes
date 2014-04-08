@@ -1,5 +1,5 @@
 ---
-# 24 natures
+# 25 natures
 - :name: Ventes de produits finis
   :comment: Pour les produits fabriqués ou transformés par l'entreprise
   :acc: '701'
@@ -52,7 +52,7 @@
   :comment: Electricité, gaz, fuel, carburant pour les véhicules
   :acc: '606'
   :book: Dépenses
-- :name: Courrier, téléphone, internet,...
+- :name: Courrier, tél., internet,...
   :comment: Tout ce qui concerne les communications
   :acc: '626'
   :book: Dépenses
