@@ -82,6 +82,41 @@ describe Book do
     
     
   end
+  
+  describe 'to_csv', wip:true do
+   
+    it 'peut produire un csv' do
+      expect {subject.to_csv}.not_to raise_error
+    end
+    
+    it 'la première ligne du fichier est' do
+      subject.to_csv.split("\n").first.should == 
+        "Date\tPce\tRéf\tLibellé\tCompte\tIntitulé\tDébit\tCrédit"
+    end
+    
+    context 'avec des lignes' do
+      
+      before(:each) do
+        subject.stub(:compta_lines).and_return   [double(Object, 
+               writing:double(Object, date:'12/04/2013', id:125, ref:125, narration:'une écriture'),
+               account:double(Account, number:621, title:'Intérim'),
+               debit:12.25, credit:0), 
+             double(Object, 
+               writing:double(Object, date:'12/04/2013', id:125, ref:125, narration:'une écriture'),
+               account:double(Account, number:531, title:'Caisse'),
+               debit:0, credit:12.25)] 
+             
+      end
+      
+      it 'le csv comporte 3 lignes' do
+        subject.to_csv.split("\n").should have(3).lines
+      end
+      
+      
+    end
+    
+    
+  end
 
 
   

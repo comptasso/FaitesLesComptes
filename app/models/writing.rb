@@ -198,6 +198,10 @@ class Writing < ActiveRecord::Base
     compta_lines.all? {|cl| cl.editable?}
   end
   
+  def to_csv
+    
+  end
+  
   
 
   protected

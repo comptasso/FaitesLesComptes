@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |config| 
-   # config.filter = {wip:true} 
+   config.filter = {wip:true} 
 end
 
 describe Writing do
@@ -371,6 +371,15 @@ describe Writing do
         end
 
 
+      end
+      
+      describe 'to_csv', wip:true do
+        
+        it 'peut rendre un csv' do
+          pending 'voir si utile puisqu on passe par Extract'
+          expect {@w.to_csv}.not_to raise_error
+        end
+        
       end
 
 

@@ -65,8 +65,22 @@ class Book < ActiveRecord::Base
     end
     super
   end
-
   
+# méthode en cours de développement pour l'édition du csv
+# TODO il faudra filtrer les compta_lines sur une période bien déterminée
+# voir également pour faire des sous_totaux par mois
+# TODO voir si on conserve car en fait on utilise plus les fonctionnalités 
+# des Extract et des Editions
+def to_csv(options = {col_sep:"\t"})
+      CSV.generate(options) do |csv|
+        csv << %w(Date Pce Réf Libellé Compte Intitulé Débit Crédit)
+        compta_lines.each do |cl|
+         csv << [cl.writing.date, cl.writing.id, cl.writing.ref, cl.writing.narration, 
+           cl.account.number, cl.account.title, cl.debit, cl.credit]
+        end
+#        csv << ['Totaux', ''] + total_balance.collect {|val| reformat(val)}
+      end
+    end
 
   
     # mise en place des fonctions qui permettent de construire les graphiques avec 

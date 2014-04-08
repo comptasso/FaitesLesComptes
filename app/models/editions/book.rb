@@ -4,6 +4,7 @@ require 'pdf_document/default'
 module Editions
 
   # Classe destinée à imprimer un livre ou un extrait de livre en format pdf
+  # Il s'agit ici plus d'imprimer
   #
   # Cette classe hérite de PdfDocument::Totalized et prepare_line
   class Book < PdfDocument::Default

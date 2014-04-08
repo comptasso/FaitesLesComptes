@@ -6,28 +6,28 @@
 #
 class Extract::Fec < ActiveRecord::Base
   
-  FEC_TITLES = [  # selon la nomenclature de l'arrêté du 29 juillet 2013
-  'JournalCode',  
-	'JournalLib',  #champ 2
-	'EcritureNum',
-	'EcritureDate',
-	'CompteNum',
-	'CompteLib',
-	'CompAuxNum',
-	'CompAuxLib',
-	'PieceRef',
-	'PieceDate',
+  FEC_TITLES = [  # selon la nomenclature de l'arrêté du 29 juillet 2013 
+    'JournalCode',  
+    'JournalLib',  #champ 2
+    'EcritureNum',
+    'EcritureDate',
+    'CompteNum',
+    'CompteLib',
+    'CompAuxNum',
+    'CompAuxLib',
+    'PieceRef',
+    'PieceDate',
 		'EcritureLib',
-	'Debit',
-	'Credit',
-	'EcritureLet',
-	'DateLet',
-	'ValidDate', # champ 15
-	'Montantdevise',
-	'Idevise',
-  'DateRglt', 
-  'ModeRglt',
-  'NatOp']
+    'Debit',
+    'Credit',
+    'EcritureLet',
+    'DateLet',
+    'ValidDate', # champ 15
+    'Montantdevise',
+    'Idevise',
+    'DateRglt', 
+    'ModeRglt',
+    'NatOp']
   
   def self.columns() @columns ||= []; end
 
@@ -46,38 +46,34 @@ class Extract::Fec < ActiveRecord::Base
       where('period_id =  ?', period_id).order('writings.continuous_id ASC', 'compta_lines.id')
   end
   
-#  has_many :lines, :through=>:period, source: :compta_lines, :include=>[:account, :writing => :book], 
-#    :order=>'writings.continuous_id', readonly: :true
-  
   def to_csv(options = {col_sep:"\t"})
-      CSV.generate(options) do |csv|
-        csv << FEC_TITLES
-        lines.each {|line| csv << to_fec(line) }
-      end
+    CSV.generate(options) do |csv|
+      csv << FEC_TITLES
+      lines.each {|line| csv << to_fec(line) }
     end
+  end
   
   def to_fec(row)
-     [row.book.abbreviation, # code journal 
-       row.book.title, # Libellé journal
-       row.writing.continuous_id || '', # numéro sur une séquence continue de l'écriture comptable
-       format_timestamp(row.writing.created_at), # date de comptabilisation de l'écriture
-       row.account.number, # numéro de compte
-       row.account.title, # libellé du compte
-        '', # numéro de compte auxiliaire
-        '', # libellé du compte auxiliaire
-        row.writing.ref || '', # référence de la pièce justificative
-        format_date(row.writing.ref_date), # date de la pièce justificative
-        row.writing.narration, # libellé de l'écriture comptable
-        format_amount(row.debit),  # debit
-        format_amount(row.credit), # credit
-        '', '', # lettrage et date de lettrage
-        format_date(row.writing.locked_at), # date de comptabilisation
-        # en attendant de rajouter un champ locked_at 
-        '', '', #montant en devise et identifiant de la devise
-        format_date(row.writing.date), # date du règlement pour les compta de trésorerie
-        row.writing.payment_mode || '', # mode de règlement
-        '' # nature de l'opération - est inutilisé
-        ]
+    [row.book.abbreviation, # code journal 
+      row.book.title, # Libellé journal
+      row.writing.continuous_id || '', # numéro sur une séquence continue de l'écriture comptable
+      format_timestamp(row.writing.created_at), # date de comptabilisation de l'écriture
+      row.account.number, # numéro de compte
+      row.account.title, # libellé du compte
+      '', # numéro de compte auxiliaire
+      '', # libellé du compte auxiliaire
+      row.writing.ref || '', # référence de la pièce justificative
+      format_date(row.writing.ref_date), # date de la pièce justificative
+      row.writing.narration, # libellé de l'écriture comptable
+      format_amount(row.debit),  # debit
+      format_amount(row.credit), # credit
+      '', '', # lettrage et date de lettrage
+      format_date(row.writing.locked_at), # date de verrouillage
+      '', '', #montant en devise et identifiant de la devise
+      format_date(row.writing.date), # date du règlement pour les compta de trésorerie
+      row.writing.payment_mode || '', # mode de règlement
+      '' # nature de l'opération - est inutilisé
+    ]
   end
   
   

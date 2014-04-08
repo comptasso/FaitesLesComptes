@@ -7,12 +7,12 @@ module Extract
 
   # un extrait d'un livre donné avec capacité à calculer les totaux et les soldes.
   # se crée avec deux paramètres : le livre et l'exercice.
-  # 
-  # Un enfant de cette classe MonthlyInOutExtract permet d'avoir des extraits mensuels
-  # se créé en appelant new avec un book et une date quelconque du mois souhaité
-  # my_hash est un hash :year=>xxxx, :month=>yy
-  class InOut < Extract::Base
-
+  #
+  # Cette classe est utilisée pour afficher les extraits de livre dans un mode
+  # comptable, à savoir avec les données des writings et pour chaque writings
+  # les compta_lines associées.
+  #
+  class Book < Extract::Base
     # utilities::sold définit les méthodes cumulated_debit_before(date) et
     # cumulated_debit_at(date) et les contreparties correspondantes.
     include Utilities::Sold
@@ -32,7 +32,7 @@ module Extract
     #
     # utilisé par to_csv et to_xls et probablement aussi par to_pdf
     def titles
-     ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
+     %w(Date Pce Réf Libellé Compte Intitulé Débit Crédit)
     end
 
     def title
@@ -44,12 +44,13 @@ module Extract
     end
 
     def lines
-      @lines ||= @book.extract_lines(from_date, to_date)
+      @lines ||= @book.compta_lines.includes(:writing, :account).
+        where('date >= ? AND date <= ?', from_date, to_date)
     end
 
     alias compta_lines lines
 
-    # l'extrait est provisoire s'il y a des lignes qui ne sont pas verrouillées
+    # l'extrait est provisoire si il y a des lignes qui ne sont pas verrouillées
     def provisoire?
       lines.reject {|l| l.locked?}.any?
     end
@@ -78,7 +79,6 @@ module Extract
       
 
     # produit le document pdf en s'appuyant sur la classe Editions::Book
-    # TODO il faudra une classe Editions::ComptaBook
     def to_pdf      
       Editions::Book.new(@period, self)
     end
@@ -96,15 +96,8 @@ module Extract
     # On ne tronque pas les informations car celà est destiné à l'export vers un fichier csv ou xls
     # 
     def prepare_line(line)
-      [I18n::l(line.date),
-        line.ref, line.narration,
-        line.destination ? line.destination.name : '',
-        line.nature ? line.nature.name : '',
-        french_format(line.debit),
-        french_format(line.credit),
-        line.writing.payment_mode,
-        line.support
-      ]
+      [I18n::l(line.writing.date), line.writing.id, line.writing.ref, line.writing.narration, 
+           line.account.number, line.account.title, french_format(line.debit), french_format(line.credit)]
     end
 
     # est un proxy de ActionController::Base.helpers.number_with_precicision
