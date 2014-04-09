@@ -1,5 +1,6 @@
 =content_for :menu do
   =icon_to 'nouveau.png', new_compta_book_writing_path(@book), title:'Nouvelle écriture'
+  = delayed_export_icons(book_id:@book.id, mois:@mois, an:@an)
   - if @book.writings.compta_editable.any? && @mois == 'tous'
     =icon_to 'verrouiller.png', all_lock_compta_book_writings_path(@book, :mois=>@mois, :an=>@an),
       :method=>:post, confirm:'Cette action verrouille toutes les lignes de ce livre et est définitive. Confirmez-vous ?',

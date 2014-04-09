@@ -46,6 +46,7 @@ Faitesvoscomptes::Application.routes.draw do
     end
     resources :books do
       resources :writings do
+        concerns :exportable
         member do
           post :lock
         end

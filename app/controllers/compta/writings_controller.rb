@@ -1,9 +1,14 @@
 # -*- encoding : utf-8 -*-
 
 class Compta::WritingsController < Compta::ApplicationController
+  
+  include Pdf::Controller
+ 
 
   before_filter :find_book
   before_filter :prefill_date, :only=>:new
+  
+  before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
   # GET /writings
   # GET /writings.json
@@ -25,6 +30,7 @@ class Compta::WritingsController < Compta::ApplicationController
       format.html # index.html.erb
       format.csv { send_data @extract.to_csv, filename:export_filename(@extract, :csv)  }
       format.xls { send_data @extract.to_xls, filename:export_filename(@extract, :csv)  }
+      format.pdf { send_data @extract.to_pdf.render, filename:export_filename(@extract, :pdf)  }
     end
   end
 
