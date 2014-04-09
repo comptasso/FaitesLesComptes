@@ -199,9 +199,16 @@ class Writing < ActiveRecord::Base
     compta_lines.all? {|cl| cl.editable?}
   end
   
-  def to_csv
-    
+  # méthode utilisée dans l'édition des livres dans la partie compta.
+  # Une méthode similaire existe pour ComptaLine, ce qui permet d'avoir
+  # indifféremment des lignes de type Writing et ComptaLine dans la collection
+  # 
+  # Attention, un changement du nombre de colonne doit être fait sur les 
+  # deux méthodes.
+  def to_pdf
+    ['', "#{I18n::l(date)} - N°: #{id} - Réf: #{ref} - Libellé : #{narration}", nil, nil]
   end
+  
   
   
 

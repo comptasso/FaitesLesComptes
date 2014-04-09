@@ -100,6 +100,19 @@ class ComptaLine < ActiveRecord::Base
     "#{I18n.l date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',debit)}"
   end
   
+  # méthode utilisée dans l'édition des livres dans la partie compta.
+  # Une méthode similaire existe pour ComptaLine, ce qui permet d'avoir
+  # indifféremment des lignes de type Writing et ComptaLine dans la collection
+  # 
+  # Attention, un changement du nombre de colonne doit être fait sur les 
+  # deux méthodes.
+  def to_pdf
+    [account.number, account.title, 
+      ActionController::Base.helpers.number_with_precision(debit, :precision=>2),
+      ActionController::Base.helpers.number_with_precision(credit, :precision=>2)]
+  end
+  
+  
   protected
   
   # utilisé par Writing dans une Transaction pour verrouiller ses compta_lines

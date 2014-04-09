@@ -2,6 +2,7 @@
 
 require 'prawn'
 require 'pdf_document/base_prawn'
+require 'pdf_document/page'
 
 module PdfDocument
  
@@ -37,7 +38,7 @@ module PdfDocument
   # - columns_widths pour définir les largeurs
   # - columns_alignements pour définir l'alignement des valeurs (:right, :center, :left)
   # - top_left pour préciser le texte qui s'affichera en haut à gauche de chaque page
-  # - stamp pour précisier un fond
+  # - stamp pour préciser un fond
   # - precision qui permet d'indiquer à page#french_format qu'on veut x décimales
   #
   # Chaque page affiche une table de données qui est appelée par la méthode table

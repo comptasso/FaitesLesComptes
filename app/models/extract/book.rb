@@ -30,7 +30,7 @@ module Extract
 
     # renvoie les titres des colonnes pour une édition ou un export
     #
-    # utilisé par to_csv et to_xls et probablement aussi par to_pdf
+    # utilisé par to_csv et to_xls
     def titles
      %w(Date Pce Réf Libellé Compte Intitulé Débit Crédit)
     end
@@ -43,11 +43,18 @@ module Extract
       "Du #{I18n::l from_date} au #{I18n::l to_date}"
     end
 
+    # renvoie les compta_lines avec les writings et account
+    # utilisé par la classe fille in_out pour les éditions de 
+    # TODO voir à supprimer cette méthode ici car inutilisée
     def lines
       @lines ||= @book.compta_lines.includes(:writing, :account).
         where('date >= ? AND date <= ?', from_date, to_date)
     end
     
+    # Renvoie les writings du livre. Utilisé pour la vue index de l'affichage 
+    # des livres dans la partie compta.
+    # TODO on peut surement accélérer l'affichage de la vue en faisant un 
+    # inclue writings.
     def writings
       @book.writings.laps(from_date, to_date)
     end
@@ -75,7 +82,7 @@ module Extract
       CSV.generate(options) do |csv|
         csv << titles
         lines.each do |line|
-          csv << prepare_line(line)
+          csv << prepare_line(line) 
         end
       end
     end
@@ -84,10 +91,29 @@ module Extract
 
     # produit le document pdf en s'appuyant sur la classe Editions::Book
     def to_pdf      
-      # Editions::Book.new(@period, self)
+      Editions::ComptaBook.new(lines_collection, 
+        {title:title, subtitle:subtitle, organism_name:book.organism.title, exercice:@period.long_exercice}) do |ecb|
+        ecb.columns_widths = [10, 60, 15, 15]
+        ecb.columns_titles = %w(Compte Libellé Débit Crédit)
+        ecb.columns_to_totalize = [2, 3]
+        ecb.columns_alignements = [:left, :left, :right, :right]
+        ecb.subtitle = subtitle
+      end
     end
 
     protected
+    
+    
+    # crée un array d'objet qui est composé des writings et de leur compta_lines
+    #
+    # Successivement un writing, puis les compta_lines de ce writing, 
+    # puis un autre writings puis les compta_lines.
+    # 
+    def lines_collection
+      writings.map do |w|
+        [w] +   w.compta_lines
+      end.flatten
+    end
 
   
     
