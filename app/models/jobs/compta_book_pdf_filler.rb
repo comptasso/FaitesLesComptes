@@ -1,3 +1,5 @@
+autoload :ComptaBook, 'extract/book'
+
 module Jobs
   
   # Cette classe est un delayed job qui a pour fonction de préparer le 
@@ -18,22 +20,18 @@ module Jobs
   # Chaque appel de méthode se fait donc par un appel à Apartment::Database.process(dbname) 
   # et un bloc.
   # 
-  class WritingsPdfFiller < BasePdfFiller
+  class ComptaBookPdfFiller < BasePdfFiller
     
     protected
     
-    # TODO dryifier cette logique qui est exactement la même que dans l'action index
-    # du controller (la transférer dans le modèle book)
     def set_document(options)
         @book = @export_pdf.exportable
         @period = Period.find(options[:period_id])
-        
-        if options[:mois] == 'tous'
-          @document = Extract::InOut.new(@book, @period)
-        else
-          @document = Extract::MonthlyInOut.new(@book, year:options[:an], month:options[:mois])
-        end
+        @document = Extract::ComptaBook.new(@book, @period, options[:from_date], options[:to_date])
     end
+    
+    
+  
     
     
   end 

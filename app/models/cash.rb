@@ -26,6 +26,7 @@ class Cash < ActiveRecord::Base
   # un caisse a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
   
+  # utilisé pour les delayed_jobs
   has_one :export_pdf, as: :exportable
 
   strip_before_validation :name, :comment

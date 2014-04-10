@@ -12,7 +12,7 @@ module Extract
   # comptable, à savoir avec les données des writings et pour chaque writings
   # les compta_lines associées.
   #
-  class Book < Extract::Base
+  class ComptaBook < Extract::Base
     # utilities::sold définit les méthodes cumulated_debit_before(date) et
     # cumulated_debit_at(date) et les contreparties correspondantes.
     include Utilities::Sold

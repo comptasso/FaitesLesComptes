@@ -18,7 +18,7 @@ module Jobs
   # Chaque appel de méthode se fait donc par un appel à Apartment::Database.process(dbname) 
   # et un bloc.
   # 
-  class VirtualCashPdfFiller < BasePdfFiller
+  class VirtualCashPdfFiller < BasePdfFiller 
     
     protected
     

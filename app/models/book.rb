@@ -25,6 +25,9 @@ class Book < ActiveRecord::Base
   belongs_to :organism
   has_many :writings, :dependent=>:destroy
   has_many :compta_lines, :through=>:writings
+  
+  # utilisé pour les delayed_jobs
+  has_one :export_pdf, as: :exportable
 
   scope :in_outs, where(:type=> ['IncomeBook', 'OutcomeBook'])
 
@@ -66,38 +69,38 @@ class Book < ActiveRecord::Base
     super
   end
   
-# méthode en cours de développement pour l'édition du csv
-# TODO il faudra filtrer les compta_lines sur une période bien déterminée
-# voir également pour faire des sous_totaux par mois
-# TODO voir si on conserve car en fait on utilise plus les fonctionnalités 
-# des Extract et des Editions
-def to_csv(options = {col_sep:"\t"})
-      CSV.generate(options) do |csv|
-        csv << %w(Date Pce Réf Libellé Compte Intitulé Débit Crédit)
-        compta_lines.each do |cl|
-         csv << [cl.writing.date, cl.writing.id, cl.writing.ref, cl.writing.narration, 
-           cl.account.number, cl.account.title, cl.debit, cl.credit]
-        end
-#        csv << ['Totaux', ''] + total_balance.collect {|val| reformat(val)}
+  # méthode en cours de développement pour l'édition du csv
+  # TODO il faudra filtrer les compta_lines sur une période bien déterminée
+  # voir également pour faire des sous_totaux par mois
+  # TODO voir si on conserve car en fait on utilise plus les fonctionnalités 
+  # des Extract et des Editions
+  def to_csv(options = {col_sep:"\t"})
+    CSV.generate(options) do |csv|
+      csv << %w(Date Pce Réf Libellé Compte Intitulé Débit Crédit)
+      compta_lines.each do |cl|
+        csv << [cl.writing.date, cl.writing.id, cl.writing.ref, cl.writing.narration, 
+          cl.account.number, cl.account.title, cl.debit, cl.credit]
       end
+      #        csv << ['Totaux', ''] + total_balance.collect {|val| reformat(val)}
     end
+  end
 
   
-    # mise en place des fonctions qui permettent de construire les graphiques avec 
+  # mise en place des fonctions qui permettent de construire les graphiques avec 
   # très peu d'appel à la base de données
   # récupère les soldes pour une caisse pour un exercice
- #
- # Renvoie un hash selon le format suivant 
- # {"09-2013"=>"-24.00", "01-2013"=>"-75.00", "08-2013"=>"-50.00"}
- #
- # Les mois où il n'y a pas de valeur ne renvoient rien.
- # Il faut donc ensuite faire un mapping ce qui est fait par la méthode
- # map_query_months(period)
- #
- def query_monthly_datas(period)
+  #
+  # Renvoie un hash selon le format suivant 
+  # {"09-2013"=>"-24.00", "01-2013"=>"-75.00", "08-2013"=>"-50.00"}
+  #
+  # Les mois où il n'y a pas de valeur ne renvoient rien.
+  # Il faut donc ensuite faire un mapping ce qui est fait par la méthode
+  # map_query_months(period)
+  #
+  def query_monthly_datas(period)
    
    
-sql = <<-hdoc
+    sql = <<-hdoc
  SELECT 
      to_char(writings.date, 'MM-YYYY') AS mony,
    
@@ -115,14 +118,14 @@ writings.date <= '#{period.close_date}' AND
 nature_id IS NOT NULL
      
  GROUP BY mony
-hdoc
+    hdoc
 
-   res = VirtualBook.connection.execute( sql.gsub("\n", ''))
-   h = Hash.new('0')
-   res.each {|r| h[r['mony']]= r["valeur"] }
-   h
+    res = VirtualBook.connection.execute( sql.gsub("\n", ''))
+    h = Hash.new('0')
+    res.each {|r| h[r['mony']]= r["valeur"] }
+    h
    
-   end
+  end
  
 
 end

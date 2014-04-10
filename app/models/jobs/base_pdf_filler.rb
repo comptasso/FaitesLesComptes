@@ -13,9 +13,16 @@ module Jobs
   # 
   # Le document doit répondre à to_pdf 
   # 
+  # Les méthodes before, perform et success sont demandées par le gem
+  # DelayedJobs.
+  # 
+  # Pour tester ces classes, on doit s'assurer que ces méthodes fonctionnent
+  # correctement.
+  # 
   # 
   #
   class BasePdfFiller < Struct.new(:db_name, :export_pdf_id, :options)
+    
     def before(job)
       Rails.logger.debug 'Dans before job de Jobs::StatsPdfFiller'
       Apartment::Database.process(db_name) do

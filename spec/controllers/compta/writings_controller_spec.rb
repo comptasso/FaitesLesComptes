@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |config|
-  # config.filter = {wip:true}
+   config.filter = {wip:true}
 end
 
 describe Compta::WritingsController do
@@ -245,5 +245,57 @@ describe Compta::WritingsController do
       response.should redirect_to compta_book_writings_url(@b)
     end
   end
+  
+  describe 'production du pdf', wip:true do
+    
+    def pdf_attributes
+      {book_id:@b.to_param, an:Date.today.year.to_s, mois:Date.today.month.to_s} 
+    end
+    
+    def merged_attributes
+      {period_id:@p.id,
+        from_date:Date.today.beginning_of_month, to_date:Date.today.end_of_month }
+    end
+    
+       
+    describe 'produce_pdf' do
+      
+      it 'lance la production du pdf' do 
+        @b.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
+        @b.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
+        Jobs::ComptaBookPdfFiller.stub(:new).and_return double(Object, perform:'delayed_job')
+        get :produce_pdf, pdf_attributes.merge({format:'js'}), session_attributes 
+      end
+      
+      it 'en le mettant dans la queue' do
+        @b.stub(:export_pdf)
+        @b.stub(:create_export_pdf).and_return(@expdf =  mock_model(ExportPdf, status:'new'))
+        Jobs::ComptaBookPdfFiller.should_receive(:new).
+          with(@o.database_name, @expdf.id, merged_attributes).and_return(@gb_filler = double(Jobs::GeneralBookPdfFiller))
+        Delayed::Job.should_receive(:enqueue).with @gb_filler
+        get :produce_pdf, pdf_attributes.merge(format:'js'), session_attributes
+      end
+      
+    end
+
+    describe 'pdf_ready' do 
+      it 'interroge si prêt' do
+        @b.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
+        get :pdf_ready, {:book_id=>@b.to_param, format:'js'}, session_attributes
+        response.body.should == 'mon statut' 
+      end
+    end
+   
+  
+    describe 'GET deliver_pdf' do 
+      it 'rend le fichier' do
+        @b.should_receive(:export_pdf).and_return(mock_model(ExportPdf, status:'ready'))
+        get :deliver_pdf, {:book_id=>@b.to_param, format:'js'}, session_attributes
+        response.content_type.should == "application/pdf" 
+      end
+    end
+  
+  end
+
 
 end

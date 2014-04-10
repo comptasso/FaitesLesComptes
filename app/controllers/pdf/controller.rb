@@ -10,7 +10,7 @@ module Pdf
   # 
   # Il faut alors définir deux méthodes : 
   # - la première est set_exporter qui indique 
-  # l'objet qui sera utiliser pour créer un export_pdf. Cet objet doit donc avoir 
+  # l'objet qui sera utilisé pour créer un export_pdf. Cet objet doit donc avoir 
   # une relation has_one :export_pdf pour que cela fonctionne.
   # - la deuxième est enqueue qui a pour fonction de créer le job et de le mettre dans 
   # la file d'attente, par exemple

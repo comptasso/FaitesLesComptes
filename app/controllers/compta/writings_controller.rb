@@ -24,13 +24,13 @@ class Compta::WritingsController < Compta::ApplicationController
        my = MonthYear.from_date(@period.guess_month)
        redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year) and return
     end
-    
+    send_export_token
     
     respond_to do |format|
       format.html # index.html.erb
       format.csv { send_data @extract.to_csv, filename:export_filename(@extract, :csv)  }
       format.xls { send_data @extract.to_xls, filename:export_filename(@extract, :csv)  }
-      format.pdf { send_data @extract.to_pdf.render, filename:export_filename(@extract, :pdf)  }
+      
     end
   end
 
@@ -133,19 +133,23 @@ class Compta::WritingsController < Compta::ApplicationController
   end
 
   def find_writings
+    find_dates
+    @extract = Extract::ComptaBook.new(@book, @period, @from_date, @to_date)
+    @writings = @extract.writings
+  end
+  
+  def find_dates
     if params[:mois] && params[:an]
       @mois = params[:mois]
       @an = params[:an]
       date = Date.civil(@an.to_i, @mois.to_i, 1) rescue @period.guess_month
-      from_date = date.beginning_of_month
-      to_date = date.end_of_month
+      @from_date = date.beginning_of_month
+      @to_date = date.end_of_month
     else
       @mois = 'tous'
-      from_date = @period.start_date
-      to_date = @period.close_date
+      @from_date = @period.start_date
+      @to_date = @period.close_date
     end
-    @extract = Extract::Book.new(@book, @period, from_date, to_date)
-    @writings = @extract.writings
   end
 
   # préremplit la date
@@ -153,6 +157,20 @@ class Compta::WritingsController < Compta::ApplicationController
     @d = flash[:date] # en priorité la date venant de l'écriture précédente
     @d = @period.start_date if @book.type == 'AnBook' # mais toujours le début de l'éxercice si livre d'A Nouveau
     @d ||= @period.guess_date # sinon par défaut, on devine
+  end
+  
+  private
+  
+  # créé les variables d'instance attendues par le module PdfController
+  def set_exporter
+    @exporter = @book
+    @pdf_file_title = @book.title
+    find_dates
+  end
+  
+  # création du job et insertion dans la queue
+  def enqueue(pdf_export)
+    Delayed::Job.enqueue Jobs::ComptaBookPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, from_date:@from_date, to_date:@to_date})
   end
 
 

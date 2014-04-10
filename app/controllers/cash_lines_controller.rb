@@ -26,6 +26,7 @@ class CashLinesController < InOutWritingsController
     # pour les exports
     respond_to do |format|
       format.html
+      # TODO ligne à supprimer puisqu'on utilise le delayed jobs
       format.pdf do
         pdf = @monthly_extract.to_pdf
         send_data pdf.render, :filename=>export_filename(pdf, :pdf)
