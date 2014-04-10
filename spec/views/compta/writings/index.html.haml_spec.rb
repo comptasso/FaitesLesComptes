@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe "compta/writings/index" do 
+describe "compta/writings/index" do  
   include JcCapybara
 
   before(:each) do
@@ -101,25 +101,17 @@ describe "compta/writings/index" do
 
   describe 'test de la partie content_menu' do
     
-    it 'une seule icone Nouveau si le livre a toutes ses écritures verrouillées' do
+    it 'icone Nouveau et les 3 icones exports si le livre a toutes ses écritures verrouillées' do
       @b.stub_chain(:writings, :compta_editable, :any?).and_return false
       render
       list_icons = content(:menu).all('a.icon_menu img')
-      list_icons.should have(1).icons
+      list_icons.should have(4).icons
       list_icons[0][:src].should == '/assets/icones/nouveau.png'
+      list_icons[1][:src].should == '/assets/icones/pdf.png'
+      list_icons[2][:src].should == '/assets/icones/table-export.png'
+      list_icons[3][:src].should == '/assets/icones/report-excel.png'
     end
 
-
-
-    it 'affiche un cadenas noir et blanc dans la partie haute si le livre n est pas un livre dOD' do
-      @b.stub_chain(:writings, :compta_editable, :any?).and_return false
-      @b.stub(:type).and_return('IncomeBook')
-      render
-      
-      list_icons = content(:menu).all('img')
-      list_icons.should have(1).icons
-      list_icons[0][:src].should == '/assets/icones/nouveau.png'
-    end
 
     it 'affiche un cadenas de couleur si le livre est un livre OD et que les écritures furent écrite dans OD manuellement' do
       @b.stub_chain(:writings, :compta_editable, :any?).and_return true
@@ -128,8 +120,8 @@ describe "compta/writings/index" do
       render
       
       list_icons = content(:menu).all('img')
-      list_icons.should have(2).elements
-      list_icons[1][:src].should == '/assets/icones/verrouiller.png'
+      list_icons.should have(5).elements
+      list_icons[4][:src].should == '/assets/icones/verrouiller.png'
     
     end
 
@@ -140,7 +132,7 @@ describe "compta/writings/index" do
       render
 
       list_icons = content(:menu).all('img')
-      list_icons.should have(1).elements
+      list_icons.should have(4).elements
     end
 
   end

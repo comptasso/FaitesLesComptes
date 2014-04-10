@@ -2,13 +2,13 @@
 
 require'spec_helper' 
 
-describe Editions::BankAccount do 
+describe Editions::BankAccount do  
 
   def line(date, debit, credit)
-      double(ComptaLine, writing_id:1, w_ref:'ma réf', w_narration:'Une compta line',
+      double(ComptaLine, writing_id:1, w_ref:'ma réf', w_narration:'Une compta line', 
         debit:debit,
         credit:credit,
-        w_date:date, locked?:false)
+        w_date:date, locked?:false)  
     end
 
   before(:each) do

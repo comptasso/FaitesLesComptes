@@ -3,14 +3,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |config|
-   config.filter = {wip:true}
+   # config.filter = {wip:true}
 end
 
 describe Compta::WritingsController do
   include SpecControllerHelper  
 
   before(:each) do
-    minimal_instances
+    minimal_instances 
     @my = MonthYear.from_date(Date.today)
     @p.stub(:all_natures_linked_to_account?).and_return true
     @p.stub(:guess_month).and_return(MonthYear.from_date(Date.today))
@@ -30,7 +30,7 @@ describe Compta::WritingsController do
 
     it 'quand le book-type est AnBook, c est tous par defaut' do
       @b.stub(:type).and_return 'AnBook'
-      Extract::Book.any_instance.stub(:writings).and_return 'bonjour'
+      Extract::ComptaBook.any_instance.stub(:writings).and_return 'bonjour'
       get :index, {book_id:@b.id  }, valid_session
       assigns(:mois).should == 'tous'
       assigns[:an].should == nil
@@ -42,7 +42,7 @@ describe Compta::WritingsController do
     end
 
     it 'avec params mois et an, wherche les writings du mois' do
-      Extract::Book.should_receive(:new).with(@b, @p, Date.today.beginning_of_month, Date.today.end_of_month).and_return @a = double(Arel)
+      Extract::ComptaBook.should_receive(:new).with(@b, @p, Date.today.beginning_of_month, Date.today.end_of_month).and_return @a = double(Arel)
       @a.should_receive(:writings).and_return(@a)
       get :index, {book_id:@b.id,  an:Date.today.year, mois:Date.today.month}, valid_session
     end
@@ -239,7 +239,7 @@ describe Compta::WritingsController do
     end
 
     it 'envoie lock à toutes les écritures non verrouillées' do
-      Extract::Book.any_instance.stub(:writings).and_return(@ar = double(Arel))
+      Extract::ComptaBook.any_instance.stub(:writings).and_return(@ar = double(Arel))
       @ar.should_receive(:unlocked).and_return([double(:lock=>true, 'compta_editable?'=>true),double(:lock=>true, 'compta_editable?'=>true) ])
       post :all_lock, {book_id:@b.to_param}, valid_session
       response.should redirect_to compta_book_writings_url(@b)

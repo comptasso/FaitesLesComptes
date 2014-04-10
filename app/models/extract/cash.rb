@@ -26,10 +26,12 @@ class Cash < Extract::InOut
     @book
   end
 
-  # remplit les lignes de l'extrait
-  def lines
-    @lines ||= cash.extract_lines(from_date, to_date)
-  end
+#  # remplit les lignes de l'extrait
+#  def lines
+#    @lines ||= cash.extract_lines(from_date, to_date)
+#  end
+  
+  alias compta_lines lines
 
   # produit le document pdf en s'appuyant sur la classe PdfDocument::Book
   def to_pdf

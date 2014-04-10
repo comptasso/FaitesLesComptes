@@ -36,7 +36,7 @@ describe 'Edition PDF des MonthlyExtract' do
       start_date:Date.today.beginning_of_year,
       close_date:Date.today.end_of_year,
       long_exercice:'Exercice 2013')
-    @cash = mock_model(Cash, :extract_lines=>extract_lines, title:'La caisse')
+    @cash = mock_model(Cash, :extract_lines=>extract_lines, title:'La caisse') 
   end
   
   it 'peut produire un MonthlyExtract' do
@@ -44,7 +44,7 @@ describe 'Edition PDF des MonthlyExtract' do
   end
   
   it 'peut créer un pdf' do
-    Extract::Cash.new(@cash, @period).to_pdf
+    Extract::Cash.new(@cash, @period).to_pdf 
   end
   
   it 'et le rendre sous forme de pdf' , wip:true do
