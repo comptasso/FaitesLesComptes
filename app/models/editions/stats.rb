@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'pdf_document/default.rb'
+require 'pdf_document/default.rb' 
 
 module Editions
 

@@ -47,7 +47,9 @@ module Extract
 
     # renvoie les compta_lines avec les writings et account
     # utilisé par la classe fille in_out pour les éditions de 
-    # TODO voir à supprimer cette méthode ici car inutilisée
+    # TODO voir à ne pas ssurcharger cette méthode dans les classes filles
+    # et éventuellement à supprimer les méthodes extract_lines dans les modèles
+    # car elles sont similaires.
     def lines
       @lines ||= @book.compta_lines.includes(:writing, :account).
         where('date >= ? AND date <= ?', from_date, to_date).order('writings.date')

@@ -8,6 +8,7 @@ module Extract
 #
 # Se créé en appelant new avec un book et une date quelconque du mois souhaité
 #
+# TODO voir si encore utilisé car on a spécialisé les monthly in_out, bank et cash
 class Monthly < Extract::Base
 
     attr_reader :book

@@ -26,9 +26,10 @@ module Extract
     def lines
       @lines ||= @book.extract_lines(from_date, to_date)
     end
+    
+    alias compta_lines lines
 
     # produit le document pdf en s'appuyant sur la classe Editions::Book
-    # TODO il faudra une classe Editions::ComptaBook
     def to_pdf      
       Editions::Book.new(@period, self)
     end

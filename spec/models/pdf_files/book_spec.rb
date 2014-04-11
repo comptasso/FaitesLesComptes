@@ -6,19 +6,21 @@ RSpec.configure do |config|
   #  config.filter =  {wip:true} 
 end
 
+
 # Classe de test ayant pour objet d'écrire concrètement un fichier pdf 
-# correspondant au listing d'un compte.
+# à partir d'un livre de recettes ou de dépenses pour en vérifier la présentation.
 #
-# Le fichier test est écrit dans le sous répertoire test_pdf_files. Il suffit 
-# donc de faire tourner ce test pour obtenir le pdf correspondant et ensuite
-# l'ouvrir pour vérifier la présentation et la mise en page.
-describe 'Editions::Listing' do
+# Attention, du fait des nombreux stub et mock, le test est rapide mais 
+# ne permet pas de vérifier que la fonctionnalité est opérationnelle. D'autant 
+# qu'elle passe par delayed_jobs.
+describe 'Editions::Book qui est l édition d un listing de compte' do
   let(:from_date) {Date.today.beginning_of_year}
   let(:to_date) {Date.today.end_of_year}
-  let(:a) {mock_model(Account, 
+  let(:b) {mock_model(Book, 
       compta_lines:stub_compta_lines(100),
       all_lines_locked?:false,
-      formatted_sold:['0,00', '0,00']
+      formatted_sold:['0,00', '0,00'],
+      from_date:from_date, to_date:to_date,
       )}
   let(:p) {mock_model(Period, long_exercice:'Exercice 2013')}
   
@@ -29,16 +31,11 @@ describe 'Editions::Listing' do
       f << pdf.render 
     end
   end
-  
-  
-#    [I18n::l(Date.parse(line.w_date)), line.b_title, line.w_ref, line.w_narration, (line.nature ? line.nature.name  : ''),
-#         (line.destination ? line.destination.name  : ''),
-#         ActionController::Base.helpers.number_with_precision(line.debit, precision:2),
-#         ActionController::Base.helpers.number_with_precision(line.credit, precision:2)]
+ 
   def stub_compta_lines(n)
     n.times.collect do |t|
       double(ComptaLine,
-      w_id:t,
+      writing_id:t,
       w_date:I18n::l(Date.today),
       b_abbreviation:(t.even? ? 'VE' : 'AC'),
       w_ref:"Réf #{t}",
@@ -52,25 +49,24 @@ describe 'Editions::Listing' do
   end
   
   before(:each) do
-    @el = Editions::Listing.new(p,a, {title:'listing du compte',
-        :from_date=>from_date,
-      :to_date=>to_date})
-  @el.stub(:nb_pages).and_return 5
-  @el.stub(:organism_name).and_return 'Association Test'
-  @el.stub(:fetch_lines).and_return(stub_compta_lines(22))
+    @eb = Editions::Book.new(p,b)
+    @eb.stub(:nb_pages).and_return 5
+    @eb.stub(:organism_name).and_return 'Association Test'
+    @eb.stub(:fetch_lines).and_return(stub_compta_lines(22))
+    Writing.stub(:find_by_id).and_return(double(Writing, support:'Compte courant', payment_mode:'Chèque'))
   end
   
   
   it 'peut créer un Listing' do
-    @el.should be_an_instance_of Editions::Listing
+    @eb.should be_an_instance_of Editions::Book
    end
    
   it 'et le rendre' do
-    @el.render
+    @eb.render
   end
   
   it 'créée le fichier correspondant' do
-    render_file(@el, 'listing')
+    render_file(@eb, 'livre') 
   end
   
 end
