@@ -13,6 +13,19 @@ module Extract
   #
   # Une classe descendante Compta::Book est utilisée pour afficher les extraits dans
   # une logique comptable.
+  # 
+  # TODO refactorisation à faire : les méthodes lines avec alias compta_lines
+  # pourraient devenir tout simplement compta_lines
+  # 
+  # Les méthodes lines surchargées des classes filles sont probablement inutiles, 
+  # ce qui permettrait de supprimer les méthodes extract_lines des classes. 
+  # Ou alors on garde extract_lines (mais en évitant la duplication) et on 
+  # simplifie ici.
+  # 
+  # Voir également si on garde bank_account et monthly_bank_account car en 
+  # fait il n'y a pas d'édition de ce type.
+  # 
+  # TODO on pourrait renommer compta_book en ledger.
   #
   class Book < Extract::Base
     # utilities::sold définit les méthodes cumulated_debit_before(date) et

@@ -84,4 +84,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.4.8RC' # ajout de written by suite à Holder
 # FLCVERSION = '1.4.9RC' # peristence de check_nomenclature
 # FLCVERSION = '1.4.10RC' # seuls les comptes used sont reproduits lors de la créa d'un nouvel exercice
-FLCVERSION = '1.4.11RC' # les valeurs futures ne sont plus affichées dans les graphes
+# FLCVERSION = '1.4.11RC' # les valeurs futures ne sont plus affichées dans les graphes
+FLCVERSION = '1.4.12RC' # mise en place des exports pour les journaux
