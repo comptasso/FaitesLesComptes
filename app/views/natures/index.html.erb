@@ -12,7 +12,7 @@
     <%= form_tag organism_period_natures_path(@organism, @period),:method =>:get, :class=>"form-search"  do %>
      <label for="destination" class="control-label">Filtre</label>
       <%= select_tag :destination,
-        options_for_select([['Toutes destinations', 0]] + @organism.destinations.collect {|d| [d.name, d.id]}, @filter),
+        options_for_select([['Toutes activités', 0]] + @organism.destinations.collect {|d| [d.name, d.id]}, @filter),
       :class=>"input-medium" %> 
  
     <%= submit_tag 'Rafraichir', :class=>'btn' %>

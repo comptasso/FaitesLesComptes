@@ -10,7 +10,7 @@ module Admin::BridgesHelper
   # recettes; ce qui est plutôt une exception. D'où la condition qui cré un optgroup 
   # s'il y a plusieurs livres ou seulement des options si un seul livre de recettes.
   #
-  def bridge_nature_options(period, bridge)
+  def bridge_nature_options(period, bridge) 
     ibs = period.organism.income_books
     body = "".html_safe
     mytag = ''
@@ -22,7 +22,7 @@ module Admin::BridgesHelper
         body.safe_concat mytag
       end 
     else
-      mytag =  options_for_select(ibs.natures.collect {|n| [n.name]}, bridge.nature_name)
+      mytag =  options_for_select(ibs.first.natures.collect {|n| [n.name]}, bridge.nature_name)
       body.safe_concat mytag
     end
     

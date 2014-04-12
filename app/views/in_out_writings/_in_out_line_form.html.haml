@@ -1,7 +1,7 @@
 = builder.association :nature , :wrapper_html=>{:class=>'span4'}, input_html: {class: "span8" } , :label_html=>{class:'span4'},
           :collection => @natures, :prompt => "Quoi ?", :required=>true
 
-= builder.association :destination, :collection =>sectored_destinations(@organism, @book), :label=>'Destinat°',
+= builder.association :destination, :collection =>sectored_destinations(@organism, @book), :label=>'Activité',
           :prompt => "Pour qui ?" ,  :wrapper_html=>{class: "span4"}, input_html: {class: "span8" } , :label_html=>{class:'span4'}
 = builder.input(:debit , :wrapper_html=> {class: "span4"}, :label_html=>{class:'span4'},
               input_html:{class: "numeric decimal span8", value:two_decimals(@line.debit) }, :as=>:french_decimal) if (@book.type=='OutcomeBook')

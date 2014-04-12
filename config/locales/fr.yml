@@ -183,6 +183,7 @@ fr:
   labels:
     Title: Titre
     Used: Utilisé
+    Destination: Activité
     
   
     
@@ -285,7 +286,7 @@ fr:
         narration: Narration
         amount: Montant
         book_id: Livre
-        destination_id: Destination
+        destination_id: Activité
         nature_name: Nature
         mode: Mode de paiement
         counterpart: Contrepartie
@@ -376,7 +377,7 @@ fr:
       room:
         create: "Créer l'organisme"
       destination:
-        create: "Créer la destination"
+        create: "Créer l'activité"
         update: "Mettre à jour"
       nature:
         create: "Créer la nature"

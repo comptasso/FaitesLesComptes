@@ -54,7 +54,7 @@ describe "cash_lines/index" do
 
   it 'avec une ligne de titre' do
     titles = page.all('thead th').collect {|el| el.text}
-    titles.should == %w(Date Réf Libellé Destination Nature Sorties Entrées Actions)
+    titles.should == %w(Date Réf Libellé Activité Nature Sorties Entrées Actions)
 
   end
   it 'deux lignes' do

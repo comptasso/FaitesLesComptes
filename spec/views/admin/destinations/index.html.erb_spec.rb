@@ -18,7 +18,7 @@ describe 'admin/destinations/index' do
     end
     
     it "should have title h3" do
-      page.find('h3').text.should match  'Liste des Destinations'
+      page.find('h3').text.should match  'Liste des Activités'
       
     end
 

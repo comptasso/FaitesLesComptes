@@ -25,6 +25,11 @@ module Admin::MasksHelper
   #
   # Ceci afin que le javascript associé puisse activer ou désactiver les groupes 
   # en fonction de la sélection du livre.
+  # 
+  # On utilise name dans ces formulaires car les masques sont valables 
+  # pour plusieurs exercices. Il faut donc que la nature de l'écriture soit
+  # trouvée à partir du nom de la nature et non de son id. 
+  # 
   #
   def mask_nature_options(period, mask)
     org = period.organism

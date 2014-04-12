@@ -9,7 +9,7 @@
     = simple_form_for([:admin, @organism, @bridge], :html=> {class: 'form-horizontal'}) do |f|
       = f.error_notification
       = f.association :income_book, :collection=>@organism.income_books, :prompt=>false
-      = f.association :destination, :collection=>@organism.destinations, :prompt=>false
+      = f.association :destination, :collection=>@organism.destinations, :prompt=>false, :label=>'Activité'
       = f.input :nature_name do
         =f.select :nature_name, bridge_nature_options(@period, @bridge)
       = f.association :bank_account, :collection=>@organism.bank_accounts, :label_method=>:nickname, :prompt=>false
