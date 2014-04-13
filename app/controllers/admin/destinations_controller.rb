@@ -2,7 +2,8 @@
 
 class Admin::DestinationsController < Admin::ApplicationController
 
-
+# TODO faire le spec de ce controller
+  
   # GET /destinations
   # GET /destinations.json
   def index
@@ -38,7 +39,9 @@ class Admin::DestinationsController < Admin::ApplicationController
 
     respond_to do |format|
       if @destination.save
-        format.html { redirect_to admin_organism_destinations_path(@organism), notice: 'La Destination a été créée.' }
+        format.html { redirect_to admin_organism_destinations_path(@organism),
+          notice: "L'activité #{@destination.name} a été créée." }
+        
         format.json { render json: @destination, status: :created, location: @destination }
       else
         format.html { render action: "new" }
@@ -54,7 +57,8 @@ class Admin::DestinationsController < Admin::ApplicationController
 
     respond_to do |format|
       if @destination.update_attributes(params[:destination])
-        format.html { redirect_to admin_organism_destinations_path(@organism), notice: 'La Destination a été mise à jour.' }
+        format.html { redirect_to admin_organism_destinations_path(@organism), 
+          notice: "L'activité #{@destination.name} a été mise à jour." }
         format.json { head :ok }
       else
         format.html { render action: "edit" }

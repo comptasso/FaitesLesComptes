@@ -110,7 +110,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   
   # créé le flash qui suit un POST create réussi
   # si l'exercice est le premier, on a donc affaire à une nouvelle base et on 
-  # donne le conseil de personnaliser Banques, Caisse et Destinations
+  # donne le conseil de personnaliser Banques, Caisse et Activités
   # sinon on indique simplement que la création a été faite.
   def flash_creation
     html =''
@@ -118,7 +118,7 @@ class Admin::PeriodsController < Admin::ApplicationController
       html += 'L\'exercice a été créé et vous travaillez actuellement dans ce nouvel exercice'
     else
       html += 'L\'exercice a été créé et vous travaillez actuellement dans ce nouvel exercice<br />'
-      html += 'Nous vous conseillons maintenant de personnaliser Banques, Caisses et Destinations avant de saisir vos premières écritures'
+      html += 'Nous vous conseillons maintenant de personnaliser Banques, Caisses et Activités avant de saisir vos premières écritures'
     end
     html.html_safe
   end
