@@ -10,7 +10,7 @@ describe Extract::Cash do
 
   it 'est une instance' do
     @ec.should be_an_instance_of(Extract::Cash)
-    @ec.from_date.should == Date.today.beginning_of_month 
+    @ec.from_date.should == Date.today.beginning_of_month  
   end
 
   it 'to_pdf appelle Editions::Cash' do
@@ -30,7 +30,7 @@ describe Extract::Cash do
         nature:double(:name=>'ecolo'),
         :debit=>'125.56')])
 
-    @ec.to_csv.should == "Date\tRéf\tLibellé\tDestination\tNature\tSorties\tEntrées\n#{I18n.l(Date.today, :format=>'%d/%m/%Y')}\t001\tun libellé\tla destinée\tecolo\t0,00\t125.56\n"
+    @ec.to_csv.should == "Date\tRéf\tLibellé\tActivité\tNature\tSorties\tEntrées\n#{I18n.l(Date.today, :format=>'%d/%m/%Y')}\t001\tun libellé\tla destinée\tecolo\t0,00\t125.56\n"
   end
 
 

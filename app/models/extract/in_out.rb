@@ -18,7 +18,7 @@ module Extract
     #
     # utilisé par to_csv et to_xls et probablement aussi par to_pdf
     def titles
-     ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
+     ['Date', 'Réf', 'Libellé', 'Activité', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
     end
 
     # extract_lines est une méthode de IncomeOutcomeBook qui récupère les compta_lines

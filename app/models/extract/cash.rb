@@ -12,7 +12,7 @@ class Cash < Extract::InOut
   # en cas de modification, ne pas oublier de vérifier l'incidence sur les 
   # éditions pdf.
   def titles
-    ['Date', 'Réf', 'Libellé', 'Destination', 'Nature', 'Sorties', 'Entrées']
+    ['Date', 'Réf', 'Libellé', 'Activité', 'Nature', 'Sorties', 'Entrées']
   end
   
   def title

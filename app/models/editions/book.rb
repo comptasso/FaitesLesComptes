@@ -30,7 +30,7 @@ module Editions
       @columns_methods = ['writing_id', 'w_date', 'w_ref', 'w_narration',
         'destination.name', 'nature.name', 'debit', 'credit',
         'writing_id', 'writing_id' ]
-      @columns_titles = %w(Pce Date Réf Libellé Destination Nature Dépenses Recettes Payt Support)
+      @columns_titles = %w(Pce Date Réf Libellé Activité Nature Dépenses Recettes Payt Support)
       
       @columns_widths = [5, 8, 6, 20 ,10 , 10, 10, 10, 7, 14]
       @columns_to_totalize = [6, 7]
