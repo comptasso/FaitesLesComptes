@@ -2,54 +2,26 @@
 
 module OrganismsHelper
  
+  # Méthode pour afficher les messages venant des différents modèles.
+  # 
+  # infos appelle successivement les différents méthodes pour chacun des objets
+  # générant des messages.
+  #
   def infos(org)
 
     m=[]
 
     m << session[:messages] unless session[:messages].nil?
-    
-    if (cdnb = CheckDeposit.nb_to_pick) > 0
-      info= {}
-      info[:text] = "<b>#{cdnb} chèques à déposer</b> pour \
-            un montant total de #{number_to_currency CheckDeposit.total_to_pick}".html_safe
-      info[:icon] = icon_to('nouveau.png', new_organism_bank_account_check_deposit_path(org, org.main_bank_id))
-      m << info
-    end
+     
+    m << check_deposit_message(org)
+   
+    org.bank_accounts.each  { |ba| m << bank_account_message(ba) }
 
-    org.bank_accounts.each  do |ba|
-      be_to_point = ba.bank_extracts.period(@period).unlocked
-      if be_to_point.any?
-        info={}
-        info[:text] = "<b>#{sanitize ba.nickname}</b> : Le pointage du dernier relevé n'est pas encore effectué".html_safe
-        info[:icon] = icon_to 'pointer.png', pointage_bank_extract_bank_extract_lines_path(be_to_point.first)
-        m << info
-      end
-    end
-
-    org.cashes.each do |ca|
-      unless ca.cash_controls.any?
-        info={}
-        info[:text] = "Caisse <b>#{sanitize ca.name}</b> : Pas encore de contrôle de caisse à ce jour".html_safe
-        info[:icon] = icon_to 'pointer.png', new_cash_cash_control_path(ca)
-        m << info
-      end
-      if ca.cash_controls.any?
-        info={}
-        cash_control = ca.cash_controls.order('date ASC').last
-        if cash_control.different?
-          info[:text] = "Caisse <b>#{sanitize ca.name}</b> : Ecart de caisse de  #{cash_control.difference}".html_safe
-          info[:icon] = icon_to 'detail.png', cash_cash_controls_path(ca)
-          m << info
-        end
-      end
-    end
+    org.cashes.each { |ca| m << cash_message(ca) }
     
-    org.subscriptions.each do |sub|
-      sub_info = sub_infos(sub)
-      m << sub_info if sub_info  
-    end
+    org.subscriptions.each { |sub| m << sub_infos(sub) }
     
-    return m
+    return m.compact # pour retirer les éventuels messages nil
   end
   
   
@@ -91,6 +63,57 @@ module OrganismsHelper
   end
   
   protected
+  
+  # Produit les messages lié à la présence de chèques à déposer
+  # 
+  # Les arguments sont org (l'organisme) et cdnb, le nombre de chèques à déposer
+  # On utilise directement la table CheckDeposit car on est dans une logique de
+  # schéma.
+  # 
+  # TODO : voir si on garde cette logique au cas où on voudrait revenir à une 
+  # logique plus classique.
+  #
+  def check_deposit_message(org)
+     if (cdnb = CheckDeposit.nb_to_pick) > 0
+      info= {}
+      info[:text] = "<b>#{cdnb} chèques à déposer</b> pour \
+            un montant total de #{number_to_currency CheckDeposit.total_to_pick}".html_safe
+      info[:icon] = icon_to('nouveau.png', new_organism_bank_account_check_deposit_path(org, org.main_bank_id))
+     else
+      info = nil
+     end
+     info
+  end
+  
+  # Une banque peut envoyer un message s'il y a un relevé de compte non pointé
+  # Renvoie nil sinon
+  def bank_account_message(ba)
+    be_to_point = ba.bank_extracts.period(@period).unlocked
+      if be_to_point.any?
+        info={}
+        info[:text] = "<b>#{sanitize ba.nickname}</b> : Le pointage du dernier relevé n'est pas encore effectué".html_safe
+        info[:icon] = icon_to 'pointer.png', pointage_bank_extract_bank_extract_lines_path(be_to_point.first)
+      else
+        info = nil
+      end
+    info
+  end
+  
+  def cash_message(ca)
+    info = {}
+      if ca.cash_controls.any?
+        cash_control = ca.cash_controls.order('date ASC').last
+        if cash_control.different?
+          info[:text] = "Caisse <b>#{sanitize ca.name}</b> : Ecart de caisse de  #{cash_control.difference}".html_safe
+          info[:icon] = icon_to 'detail.png', cash_cash_controls_path(ca)
+          m << info
+        end
+      else
+        info[:text] = "Caisse <b>#{sanitize ca.name}</b> : Pas encore de contrôle de caisse à ce jour".html_safe
+        info[:icon] = icon_to 'pointer.png', new_cash_cash_control_path(ca)
+      end
+    info
+  end
   
   # indique quelle est la classe css à appliquer pour la graphique dont la source est
   # donnée par source
