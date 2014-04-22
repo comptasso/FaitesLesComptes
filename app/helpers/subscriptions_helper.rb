@@ -15,7 +15,7 @@ module SubscriptionsHelper
       icon:icon_to('nouveau.png', subscriptions_path(subscription:{:id=>sub.id}),
         method: :post, remote:true, id:"subscription_#{sub.id}")
     }
-  end
+  end 
     
     # pluralize de rails mais sans le nombre pour pouvoir accorder
     # les phrases.

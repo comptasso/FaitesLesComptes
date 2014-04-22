@@ -40,7 +40,11 @@ describe SubscriptionsHelper do
       end
       
       it 'la clé icon renvoie sur l action' do 
-        sub_infos(subject)[:icon].should == icon_to('nouveau.png', subscriptions_path(subscription:{id:subject.id}), method: :post)
+        sub_infos(subject)[:icon].should == icon_to('nouveau.png', 
+          subscriptions_path(subscription:{id:subject.id}),
+          method: :post,
+          id:"subscription_#{subject.id}",
+          remote:true)
       end
       
     end

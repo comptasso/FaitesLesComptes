@@ -7,8 +7,6 @@
     confirm:"Cette action verrouillera ce relevé de compte et toutes les lignes qui sont associées.\nConfirmez vous ?" 
 
 = render 'in_out_writings/previous_line'
-
-.row_fluid#message 
  
 .champ
   %h3= "#{@bank_account.nickname} : Pointage du relevé #{@bank_extract.reference} du #{l @bank_extract.begin_date} au #{l @bank_extract.end_date}"
