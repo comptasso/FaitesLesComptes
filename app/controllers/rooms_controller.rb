@@ -9,7 +9,8 @@
 # y a eu un changement d'organisme mais surtout met à jour les éléments de la
 # session dans ce cas.
 #
-
+# TODO probablement devenu inutile maintenant que le changement de Room ne se fait plus
+# qu'en passant par la zone admin
 
 class RoomsController < ApplicationController
 

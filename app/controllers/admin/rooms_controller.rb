@@ -114,7 +114,10 @@ class Admin::RoomsController < Admin::ApplicationController
   # TODO faire spec de cette méthode
   def build_a_new_room
     @room.errors.add(:base, 'Nombre maximal atteint') unless current_user.allowed_to_create_room?
-    return false unless @room.valid?
+    unless @room.valid?
+      Rails.logger.warn(@room.errors.messages)
+      return false 
+    end
     # TODO à déplacer dans le modèle ROOM
     h = current_user.holders.new(status:'owner')
     result  = User.transaction do

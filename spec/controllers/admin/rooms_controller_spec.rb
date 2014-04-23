@@ -152,7 +152,7 @@ describe Admin::RoomsController do
       post :create, {'room'=>{'title'=>'Bizarre', 'racine'=>'assotest', status:'Association'}}, valid_session
     end
 
-    context 'quand build_a_new_room a tout bien fait' do
+    context 'quand build_a_new_room a tout bien fait' do 
 
       before(:each) do
         @controller.stub(:build_a_new_room).and_return true

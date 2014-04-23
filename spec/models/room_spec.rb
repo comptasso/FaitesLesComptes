@@ -22,7 +22,7 @@ describe Room  do
     Apartment::Database.db_exist?('public').should == true
   end
 
-  describe 'les validations'  do
+  describe 'les validations', wip:true  do
 
     before(:each) do
       Room.any_instance.stub(:user).and_return u
@@ -70,6 +70,12 @@ describe Room  do
     it 'et doit être dans la liste' do
       subject.status = 'inconnu'
       subject.should_not be_valid
+    end
+    
+    it 'doit striper l argument title' do 
+      subject.title = ' un test '
+      subject.valid?
+      subject.title = 'un test'
     end
     
     

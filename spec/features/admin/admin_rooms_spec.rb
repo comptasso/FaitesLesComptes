@@ -8,7 +8,7 @@ describe "admin rooms" do
    
   include OrganismFixtureBis
   
-  describe 'Création d un premier organisme' do 
+  describe 'Création d un premier organisme' do
   
     before(:each) do
       create_only_user
@@ -23,9 +23,8 @@ describe "admin rooms" do
       page.find('h3').should have_content 'Nouvel organisme' 
     end
   
-    context 'quand je remplis le formulaire', wip:true do
-      
-      
+    context 'quand je remplis le formulaire' do
+           
       before(:each) do 
         visit new_admin_room_path
         fill_in 'room_title', with:'Mon association'
@@ -52,6 +51,11 @@ describe "admin rooms" do
         page.all('#admin_organisms_menu ul li a').should have(2).elements
         page.first('#admin_organisms_menu ul li a').text.should == 'Liste des organismes'
         page.find('#admin_organisms_menu ul li:last a').text.should == 'Mon association'
+      end
+      
+      it 'stripe les champs en cas de nécessité', wip:true do
+        fill_in 'room_comment', with:' Une première'
+        expect {click_button 'Créer l\'organisme'}.to change {Room.count}.by(1)
       end
     end
   end

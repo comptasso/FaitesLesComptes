@@ -22,7 +22,9 @@ class Room < ActiveRecord::Base
   attr_accessible :database_name, :racine, :title, :comment, :status
   attr_accessor :title, :comment, :status
 
-  strip_before_validation :database_name
+  strip_before_validation :database_name 
+  before_validation :strip_title_and_comment # le callback strip_before_validation
+  # ne fonctionne pas avec ces attributs qui ne sont pas dans le modèle
   
   validates :racine, :format=>{:with=>/\A[a-z]*\z/}, :length=>{:minimum=>6}, presence:true
   validates :database_name, presence:true, :format=>{:with=>/\A[a-z]{6}[a-z]*_[0-9]{14}\z/},
@@ -183,6 +185,11 @@ class Room < ActiveRecord::Base
   end
 
   protected
+  
+  def strip_title_and_comment
+    self.title.strip! if title
+    self.comment.strip! if comment
+  end
   
   # clone_room est appelé par clone_db pour créer une room ayant les mêmes holder
   # que la room actuelle mais avec room_id pointant sur la nouvelle Room
