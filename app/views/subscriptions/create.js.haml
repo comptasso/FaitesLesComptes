@@ -1,2 +1,6 @@
+// TODO ce javascript ne met pas à jour les graphes... Voir si c'est un problème.
+// on pourrait avoir une page des subscriptions plutôt que le faire dans le dashboard
+// ce qui éviterait tout pb de mise à jour du dashboard.
+// pb aussi le nombre de messages
 $("a#subscription_#{@sub.to_param}").parent('li').hide('drop', {direction:'up'})
 $('#message').html("#{j render('flash_notice')}");
