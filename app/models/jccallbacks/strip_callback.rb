@@ -8,7 +8,7 @@
 #
 module Jccallbacks
 
-class StripCallback
+class StripCallback 
 
   def initialize(attributes_to_strip)
     @attributes_to_strip = attributes_to_strip
