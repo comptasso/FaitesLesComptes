@@ -12,8 +12,8 @@ module SubscriptionsHelper
     nb = sub.nb_late_writings
     { 
       text:"L'écriture périodique '#{sanitize sub.title}' a #{pluralize(nb, 'écriture')} à passer (à partir de #{my.to_format('%B %Y')}) ",
-      icon:icon_to('nouveau.png', subscriptions_path(subscription:{:id=>sub.id}),
-        method: :post, remote:true, id:"subscription_#{sub.id}")
+      icon:icon_to('afficher.png', subscriptions_path,
+        title:'Liste des abonnements ayant des écritures à passer')
     }
   end 
     

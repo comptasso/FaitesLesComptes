@@ -34,6 +34,7 @@ class Subscription < ActiveRecord::Base
   before_validation :prepare_params
   
   
+  # renvoie le nombre d'écriture en retard
   def nb_late_writings
     mys  = month_year_to_write
     mys.end - mys.begin + 1 
@@ -113,7 +114,9 @@ class Subscription < ActiveRecord::Base
     reponse
   end
   
-  
+  # Crée l'interface Utilities::Writer, classe qui sait passer
+  # une écriture à partir d'un abonnement. Cette interface a une méthode
+  # utile qui est #write
   def writer
     Utilities::Writer.new(self)
   end

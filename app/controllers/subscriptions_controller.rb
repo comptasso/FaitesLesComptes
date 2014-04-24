@@ -1,7 +1,8 @@
 class SubscriptionsController < ApplicationController
   
   def index 
-    
+    @late_subscriptions = Subscription.all.select(&:late?)
+    flash[:notice] = 'Pas d\'écriture à passer pour les abonnements existants' if @late_subscriptions.empty?
   end
   
   def create
@@ -9,15 +10,13 @@ class SubscriptionsController < ApplicationController
        
     if @sub && @sub.late?
       count = @sub.pass_writings
-      @notice = "#{view_context.pluralize(count, 'écriture')} #{view_context.jc_pluralize(count, 'a', 'ont')} été #{view_context.jc_pluralize(count, 'générée')} par l'écriture périodique '#{@sub.title}'"
-      flash[:notice] = @notice
+      @notice = "#{view_context.pluralize(count, 'écriture')} #{view_context.jc_pluralize(count, 'a', 'ont')} été #{view_context.jc_pluralize(count, 'générée')} par l'abonnement '#{@sub.title}'"
     else
-      flash[:alert] = "Ecriture périodique '#{@sub.title}' n'a pas d'écritures à passer" if @sub
-      flash[:alert] = 'Ecriture périodique non trouvée' unless @sub
+      @error = "Ecriture périodique '#{@sub.title}' n'a pas d'écritures à passer" if @sub
+      @error = 'Ecriture périodique non trouvée' unless @sub
     end
     
     respond_to do |format|
-      format.html  {redirect_to :back}
       format.js
     end
     

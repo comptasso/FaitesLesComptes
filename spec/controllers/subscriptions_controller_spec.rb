@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  c.filter = {wip:true}
+  # c.filter = {wip:true}
 end
 
 describe SubscriptionsController do
@@ -18,24 +18,24 @@ describe SubscriptionsController do
   describe 'POST index', wip:true do
     
     it 'récupère les subscriptions qui ont des écritures à passer' do
-      Subscription.should_receive(:lates).and_return([sub])
+      Subscription.should_receive(:all).and_return([sub])
       get :index, {}, valid_session
     end
     
     it 'assigne les subscriptions' do
-      Subscription.stub(:lates).and_return([sub])
+      Subscription.stub_chain(:all, :select).and_return([sub, sub])
       get :index, {}, valid_session
-      assigns(:late_subscriptions).should == sub
+      assigns(:late_subscriptions).should == [sub, sub]
     end
     
     it 'et rend la vue index' do
-      Subscription.stub(:lates).and_return([sub])
+      Subscription.stub_chain(:all, :select).and_return([sub])
       get :index, {}, valid_session
       response.should render_template('index')
     end
     
     it 'sans subscription en retard, rend un flash' do
-      Subscription.stub(:lates).and_return([])
+      Subscription.stub_chain(:all, :select).and_return([])
       get :index, {}, valid_session
       flash[:notice].should == 'Pas d\'écriture à passer pour les abonnements existants'
     end
@@ -53,7 +53,7 @@ describe SubscriptionsController do
     it 'si ne la trouve pas, crée un flash d erreur' do
       Subscription.stub(:find).with('1').and_return nil      
       post :create, {subscription:{id:1}}, valid_session
-      flash[:alert].should == 'Ecriture périodique non trouvée'
+      assigns[:error].should == 'Ecriture périodique non trouvée'
     end
     
     context 'la subscription existe' do
@@ -67,7 +67,7 @@ describe SubscriptionsController do
       it 'mais n  est pas en retard' do
         sub.stub(:late?).and_return false
         post :create, {subscription:{id:1}}, valid_session
-        flash[:alert].should == "Ecriture périodique '#{sub.title}' n'a pas d'écritures à passer"
+        assigns[:error].should == "Ecriture périodique '#{sub.title}' n'a pas d'écritures à passer"
       end
     
       it 'passe les écritures pour chaque mois en retard' do
@@ -78,7 +78,7 @@ describe SubscriptionsController do
       it 'et crée un flash notice' do
         sub.should_receive(:pass_writings).and_return 3
         post :create, {subscription:{id:1}}, valid_session
-        flash[:notice].should == "3 écritures ont été générées par l'écriture périodique '#{sub.title}'"
+        assigns[:notice].should == "3 écritures ont été générées par l'abonnement '#{sub.title}'"
       end
     
     end
