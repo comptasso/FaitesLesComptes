@@ -1,0 +1,21 @@
+= content_for :menu do
+  = icon_to 'retour.png', :back
+
+.champ#index
+  - @late_subscriptions.each do |sub|
+    %h3 Liste des écritures d'abonnements à passer
+    %table.table.table-nature.table-striped.table-bordered.table-condensed(cellpadding="0" cellspacing="0" border="0"  )
+      
+      %thead
+        %tr
+          %th.pc40 Titre
+          %th.pc10 Jour
+          %th.pc35 Depuis
+          %th.pc15 Actions
+      %tbody
+        %tr{:id=>"#{sub.id}", 'class'=> 'subscription'}
+          %td= sub.title
+          %td= sub.day
+          %td= sub.first_to_write.to_format('%B %Y')
+          %td= icon_to('nouveau.png', subscriptions_path(subscription:{:id=>sub.id}),
+            method: :post, remote:true, id:"subscription_#{sub.id}")
