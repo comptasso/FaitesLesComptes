@@ -14,7 +14,7 @@ describe 'subscriptions/index'  do
   
   it 'le titre' do
     render
-    page.find('h3').should have_content 'Liste des écritures d\'abonnements à passer'
+    page.find('h3').should have_content 'Liste des abonnements ayant des écritures à passer'
   end
   
   it 'rend une table' do
