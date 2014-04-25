@@ -106,7 +106,7 @@ module OrganismsHelper
         if cash_control.different?
           info[:text] = "Caisse <b>#{sanitize ca.name}</b> : Ecart de caisse de  #{cash_control.difference}".html_safe
           info[:icon] = icon_to 'detail.png', cash_cash_controls_path(ca)
-          m << info
+          
         end
       else
         info[:text] = "Caisse <b>#{sanitize ca.name}</b> : Pas encore de contrôle de caisse à ce jour".html_safe
