@@ -2,7 +2,7 @@
 // on pourrait avoir une page des subscriptions plutôt que le faire dans le dashboard
 // ce qui éviterait tout pb de mise à jour du dashboard.
 // pb aussi le nombre de messages
-$("a#subscription_#{@sub.to_param}").hide()
+$("a#subscription_#{@sub.to_param}").parents('tr').hide('drop', {direction:'up'})
 $('#message').html("#{j render('flash_notice')}");
 - if @error
   $('#message').html("#{j render('flash_error')}");
