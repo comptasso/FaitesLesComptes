@@ -36,7 +36,7 @@ class BankAccount < ActiveRecord::Base
   has_many :accounts, :as=> :accountable
   
   has_many :compta_lines, :through=>:accounts
-  has_many :imported_bels
+  has_many :imported_bels, dependent: :destroy
   
   has_one :export_pdf, as: :exportable
   

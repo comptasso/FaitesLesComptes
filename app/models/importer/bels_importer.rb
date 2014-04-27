@@ -1,4 +1,4 @@
-module Utilities
+
   
   module Importer
     
@@ -16,7 +16,7 @@ module Utilities
       include ActiveModel::Conversion
       include ActiveModel::Validations
       
-      attr_accessor :file
+      attr_accessor :file, :bank_account_id
       
       def initialize(attributes = {})
         attributes.each { |name, value| send("#{name}=", value) }
@@ -68,12 +68,15 @@ module Utilities
       def load_imported_rows(options = {headers:true, encoding:'iso-8859-1:utf-8', col_sep:';'})
         lirs = []
         position = 1
-        CSV.foreach(file, options) do |row|
+        CSV.foreach(file.tempfile, options) do |row|
           # vérification des champs
           if not_empty?(row) && correct?(row)
             # création d'un array de Bel
-            lirs << ImportedBel.new(position:position, 
-              date:row[0], narration:row[1], debit:row[2], credit:row[3])
+            lirs << ImportedBel.new(bank_account_id:bank_account_id, 
+              position:position, 
+              date:row[0], 
+              narration:row[1],
+              debit:row[2], credit:row[3])
             position += 1
           end
         end 
@@ -121,4 +124,3 @@ module Utilities
   end
   
   
-end

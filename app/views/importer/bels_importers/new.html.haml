@@ -1,0 +1,21 @@
+=content_for :menu do
+  = icon_to 'retour.png', :back
+
+
+.champ
+  %h3
+    =@bank_account.nickname
+    &nbsp: importation d'un extrait de compte à partir d'un fichier csv
+  .inner-champ
+
+    =form_for [@bank_account, @bels_importer], :url => importer_bank_account_bels_importer_path do |f| 
+      -if @bels_importer.errors.any?
+        %div#error_explanation
+          %h2 
+            = pluralize(@bels_importer.errors.count, "erreur")
+            n'ont pas permis l'importation du relevé
+            %ul
+              - @product_import.errors.full_messages.each do |msg|
+                %li= msg 
+      .field= f.file_field :file 
+      .buttons= f.submit "Import"

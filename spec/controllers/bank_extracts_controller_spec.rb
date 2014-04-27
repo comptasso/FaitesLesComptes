@@ -81,7 +81,7 @@ describe BankExtractsController do
     
   end
 
-  describe "GET edit" do
+  describe "GET edit" do 
    
     it "assigns the requested bank_extract as @bank_extract" do
       BankExtract.should_receive(:find).with(be.to_param).and_return be

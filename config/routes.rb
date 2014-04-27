@@ -26,16 +26,15 @@ Faitesvoscomptes::Application.routes.draw do
   end  
   
 
-  # namespace COMPTA
-
-
+  ##### ----------------- namespace COMPTA -------------------------
 
   namespace :compta do
     #    resources :users do
     #      resources :rooms # TODO voir si utilisé
     #    end
 
-    # TODO simplifier car on n'utilise que l'action show
+    # TODO simplifier car on n'utilise que l'action show (et probablement 
+    # même plus rien maintenant de la ressource rooms
     resources :rooms
     resources :organisms do
       resources :periods do
@@ -159,6 +158,15 @@ Faitesvoscomptes::Application.routes.draw do
       resources :accounts 
     end
   end  # FIN DE ADMIN
+  
+  ####### namespace Importer ###########################
+  namespace 'importer' do
+    
+    resources :bank_accounts do
+      resource :bels_importer
+    end
+  end
+  
 
   ################################################################################# 
 
@@ -186,18 +194,19 @@ Faitesvoscomptes::Application.routes.draw do
     end
 
     resources :check_deposits, :only=>:new # pour faire des remises de chèques
-    #    resources :income_books
-    #    resources :outcome_books
-    
+     
     
     resources :bank_accounts do
       resources :check_deposits
+      
     end
 
   end
   
 
   resources :bank_accounts do
+    resources :imported_bels
+    resource :bels_importer
     resources :virtual_book_lines, only: :index  do
       concerns :exportable
     end
