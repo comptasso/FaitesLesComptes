@@ -3,6 +3,7 @@
 require 'strip_arguments'
 
 
+
 # Classe représentant les comptes bancaires.
 # Les champs sont
 #   - bank_name pour le nom de la Banque
@@ -33,7 +34,9 @@ class BankAccount < ActiveRecord::Base
   
   # un compte bancaire a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
+  
   has_many :compta_lines, :through=>:accounts
+  has_many :imported_bels
   
   has_one :export_pdf, as: :exportable
   
