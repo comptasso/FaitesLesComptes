@@ -6,6 +6,7 @@
 //
 //= require jquery
 //= require jquery-ui
+//= require best_in_place
 //= require jquery_ujs
 //= require jquery.jqplot
 //= require_tree .
@@ -32,7 +33,15 @@ $(document).ready(function () {
     });
 });
 
+// pour les menus déroulants de bootstrap ?
 $('.dropdown-toggle').dropdown();
+
+// activation de best_in_place
+$(document).ready(function() {
+  /* Activating Best In Place */
+  jQuery(".best_in_place").best_in_place();
+});
+
 
 
 // fonction utilisée pour afficher un date picker pour chaque champ de class

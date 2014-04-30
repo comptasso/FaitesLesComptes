@@ -8,28 +8,41 @@
     %thead
       %tr
         %th.pc5.date-euro Date
+        %th.pc5 Type
         %th.pc5 Réf
         %th.pc30 Libellé
         %th.pc10 Activité
         %th.pc10 Nature
         %th.pc10 Dépenses
         %th.pc10 Recettes
-        %th.pc10 Support
+        %th.pc10 Mode Pt
         %th.actions Actions
     %tbody
-      - @imported_bels.each do |bel| 
+      - @imported_bels.each do |ibel| 
         %tr
-        %td= I18n.l bel.date
-        %td
-        %td= bel.narration
-        %td
-        %td
-        %td.numeric= debit_credit bel.debit
-        %td.numeric= debit_credit bel.credit
-        %td
-        %td
-          =# icon_to 'afficher.png', bank_extract_bank_extract_lines_path(bank_extract) unless bank_extract.bank_extract_lines.empty?
-          =# icon_to('modifier.png', edit_bank_account_bank_extract_path(@bank_account,bank_extract)) unless bank_extract.locked?
+          %td= I18n.l ibel.date
+          %td.bip
+            = best_in_place ibel, :cat, type: :select,
+            collection:collection_cat(ibel),
+            path: bank_account_imported_bel_path(@bank_account, ibel),
+            inner_class: 'pc95'
+          %td.bip
+            = best_in_place ibel, :ref, :type => :input,
+            path: bank_account_imported_bel_path(@bank_account, ibel),
+            inner_class: 'pc95'
+          %td= ibel.narration
+          %td= ibel.destination
+          %td= ibel.nature
+          %td.numeric= debit_credit ibel.debit
+          %td.numeric= debit_credit ibel.credit
+          %td.bip
+            = best_in_place ibel, :payment_mode, type: :select, 
+            collection:collection_payment_mode,
+            path: bank_account_imported_bel_path(@bank_account, ibel),
+            inner_class: 'pc95'
+          %td
+            =# icon_to 'afficher.png', bank_extract_bank_extract_lines_path(bank_extract) unless bank_extract.bank_extract_lines.empty?
+            =# icon_to('modifier.png', edit_bank_account_bank_extract_path(@bank_account,bank_extract)) unless bank_extract.locked?
           =# icon_to('pointer.png', pointage_bank_extract_bank_extract_lines_path(bank_extract)) if bank_extract.first_to_point?
           =# icon_to('supprimer.png', [@bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete) unless bank_extract.locked?
  

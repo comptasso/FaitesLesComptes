@@ -22,9 +22,12 @@
 
 class ImportedBel < ActiveRecord::Base
   
-  attr_accessible :date, :narration, :debit, :credit, :position, :bank_account_id
+  attr_accessible :date, :narration, :debit, :credit, :position, 
+    :bank_account_id, :ref, :nature_id, :destination_id, :payment_mode, :cat
   
-  belongs_to 'bank_account'
+  belongs_to :bank_account
+  belongs_to :destination
+  belongs_to :nature
   
   validates :date, :narration, presence:true
   validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}

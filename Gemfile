@@ -29,6 +29,8 @@ gem 'adherent' #, :path=>'../../Adherent'
 gem 'sass'
 gem 'coffee-script'
 
+gem 'best_in_place'
+
 
 group :production, :staging do
   gem 'rails_12factor' 

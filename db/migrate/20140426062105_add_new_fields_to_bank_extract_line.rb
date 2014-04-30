@@ -1,3 +1,4 @@
+# ce nom est tout à fait inadapté. Il devrait être CreateImportedBels
 class AddNewFieldsToBankExtractLine < ActiveRecord::Migration
   def change
     create_table :imported_bels do |t|
