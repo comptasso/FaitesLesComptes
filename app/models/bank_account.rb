@@ -66,25 +66,25 @@ class BankAccount < ActiveRecord::Base
   end
   
   
- # renvoie le premier (mais en fait l'unique) compte comptable correspondant 
- # à ce compte banciare pour un exercice donné
+  # renvoie le premier (mais en fait l'unique) compte comptable correspondant 
+  # à ce compte banciare pour un exercice donné
   def current_account(period)
-   accounts.where('period_id = ?', period.id).first
- end
+    accounts.where('period_id = ?', period.id).first
+  end
 
- # renvoie le solde du compte bancaire à une date donnée et pour :debit ou :credit
- # arguments à fournir : la date et le sens (:debit ou :credit).
- # 
- # Renvoie 0 s'il n'y a pas d'écriture ou si un exercice n'existe pas
- # Ce peut être le cas avec un premier exercice commencé en cours d'année
- # quand on est dans l'exerice suivant qui lui est en année pleine.
- def cumulated_at(date, dc)
+  # renvoie le solde du compte bancaire à une date donnée et pour :debit ou :credit
+  # arguments à fournir : la date et le sens (:debit ou :credit).
+  # 
+  # Renvoie 0 s'il n'y a pas d'écriture ou si un exercice n'existe pas
+  # Ce peut être le cas avec un premier exercice commencé en cours d'année
+  # quand on est dans l'exerice suivant qui lui est en année pleine.
+  def cumulated_at(date, dc)
     p = organism.find_period(date)
     return 0 unless p && acc = current_account(p)
     acc.cumulated_at(date, dc)
- end
+  end
  
- # On veut que le solde prenne en compte le solde de l'exercice précédent tant
+  # On veut que le solde prenne en compte le solde de l'exercice précédent tant
   # que l'écriture d'à nouveau n'a pas été générée.
   # 
   # On cherche donc l'exercice précédent et on rajoute son solde si cet exercice
@@ -103,8 +103,8 @@ class BankAccount < ActiveRecord::Base
     reponse
   end
   
- # créé un nouvel extrait bancaire rempli à partir des informations du précédent
- # le mois courant et solde zéro si c'est le premier
+  # créé un nouvel extrait bancaire rempli à partir des informations du précédent
+  # le mois courant et solde zéro si c'est le premier
   def new_bank_extract(period)
     previous_be = last_bank_extract(period)
     if previous_be
@@ -118,77 +118,77 @@ class BankAccount < ActiveRecord::Base
     end
     return nil if end_date > period.close_date
     bank_extracts.new(begin_date:begin_date,
-                        end_date:end_date,
-                        begin_sold:begin_sold)
+      end_date:end_date,
+      begin_sold:begin_sold)
   end
 
- # trouve toutes les lignes non pointées et qui ont pour compte comptable le
- # numéro correspondant à ce compte bancaire.
- # 
- # Renvoie un objet de la classe Utilities::NotPointedLines
- #
- def not_pointed_lines(before_date = nil)
-   Utilities::NotPointedLines.new(self, before_date)
- end
+  # trouve toutes les lignes non pointées et qui ont pour compte comptable le
+  # numéro correspondant à ce compte bancaire.
+  # 
+  # Renvoie un objet de la classe Utilities::NotPointedLines
+  #
+  def not_pointed_lines(before_date = nil)
+    Utilities::NotPointedLines.new(self, before_date)
+  end
 
 
- # lines est une méthode de la classe NotPointedLines
- #
+  # lines est une méthode de la classe NotPointedLines
+  #
   def np_lines
     not_pointed_lines.lines
   end
   
   # donne le solde du compte bancaire à une date donnée
-#  def sold_at(date)
-#    cumulated_at(date, :credit) - cumulated_at(date, :debit)
-#  end
+  #  def sold_at(date)
+  #    cumulated_at(date, :credit) - cumulated_at(date, :debit)
+  #  end
   
   
- def first_bank_extract_to_point
-   bank_extracts.where('locked = ?', false).order('begin_date ASC').first
- end
+  def first_bank_extract_to_point
+    bank_extracts.where('locked = ?', false).order('begin_date ASC').first
+  end
 
- def unpointed_bank_extract?
-   bank_extracts.where('locked = ?', false).any?
- end
+  def unpointed_bank_extract?
+    bank_extracts.where('locked = ?', false).any?
+  end
  
- def virtual_book
-   vb = VirtualBook.new
-   vb.organism_id = organism.id 
-   vb.virtual = self
-   vb
- end
+  def virtual_book
+    vb = VirtualBook.new
+    vb.organism_id = organism.id 
+    vb.virtual = self
+    vb
+  end
  
- # définit son compte racine (utile pour que organism.create_accounts_for puisse 
- # créer les comptes comptables lors de la création d'un nouveau compte bancaire
- def self.compte_racine
-   RACINE_BANK
- end
-
-
- 
-
-protected
-
- # renvoie le dernier relevé de compte (par date de fin) faisant partie de l'exercice
-  def last_bank_extract(period)
-     bank_extracts.where('end_date <= ?', period.close_date).order(:end_date).last
+  # définit son compte racine (utile pour que organism.create_accounts_for puisse 
+  # créer les comptes comptables lors de la création d'un nouveau compte bancaire
+  def self.compte_racine
+    RACINE_BANK
   end
 
 
- # appelé par le callback after_create, demande à l'organisme de lui créer les 
- # comptes comptables associés (ce qui ne sera fait que pour chacun des exercices
- # ouverts).
- def create_accounts
-   logger.debug 'création des comptes liés au compte bancaire' 
-   Utilities::PlanComptable.create_financial_accounts(self)
- end
+ 
 
- # quand on change le nickname de la banque il est nécessaire de modifier l'intitulé
- # du compte associé à cette banque.
- def change_account_title
-   accounts.each {|acc| acc.update_attribute(:title, nickname)}
- end
+  protected
+
+  # renvoie le dernier relevé de compte (par date de fin) faisant partie de l'exercice
+  def last_bank_extract(period)
+    bank_extracts.where('end_date <= ?', period.close_date).order(:end_date).last
+  end
+
+
+  # appelé par le callback after_create, demande à l'organisme de lui créer les 
+  # comptes comptables associés (ce qui ne sera fait que pour chacun des exercices
+  # ouverts).
+  def create_accounts
+    logger.debug 'création des comptes liés au compte bancaire' 
+    Utilities::PlanComptable.create_financial_accounts(self)
+  end
+
+  # quand on change le nickname de la banque il est nécessaire de modifier l'intitulé
+  # du compte associé à cette banque.
+  def change_account_title
+    accounts.each {|acc| acc.update_attribute(:title, nickname)}
+  end
  
  
 

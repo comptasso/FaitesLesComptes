@@ -43,8 +43,24 @@
         end
       end
       
+      # récupère la banque et le dernier extrait, vérifie si des lignes ont 
+      # des dates postérieures au dernier extrait.
+      # Si non : retourne false 
+      # Si oui, calcule un hash donnant les éléments nécessaires à la construction
+      # de l'extrait suivant.
+      def need_extract?(period)
+        lbe_date = bank_account.bank_extracts.order('end_date ASC').last.end_date rescue (period.start_date) -1
+        if imported_rows.sort {|r| r.date}.last.date > lbe_date
+          true # il faudrait un extrait
+        else
+          false # pas besoin d'extrait
+        end
+      end
       
       
+      def bank_account
+        @bank_account ||= BankAccount.find(bank_account_id)
+      end
       
       def imported_rows
         @imported_rows ||= load_imported_rows
@@ -68,7 +84,10 @@
       def load_imported_rows(options = {headers:true, encoding:'iso-8859-1:utf-8', col_sep:';'})
         lirs = []
         position = 1
-        CSV.foreach(file.tempfile, options) do |row|
+        # permet d'avoir à la fois un fichier temporaire comme le prévoit rails
+        # ou un nom de fichier (ce qui facilite les tests et essais).
+        f = file.respond_to?(:tempfile) ? file.tempfile : file
+        CSV.foreach(f, options) do |row|
           # vérification des champs
           if not_empty?(row) && correct?(row)
             # création d'un array de Bel

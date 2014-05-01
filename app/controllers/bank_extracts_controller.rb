@@ -35,6 +35,7 @@ class BankExtractsController < ApplicationController
   # GET /bank_extracts/new.json
   def new
     @bank_extract = @bank_account.new_bank_extract(@period)
+    fill_with_imported_bels if @bank_extract
     unless @bank_extract
       flash[:alert] = 'Impossible de créer un nouveau relevé de compte pour cet exercice'
       redirect_to bank_account_bank_extracts_url 
@@ -65,9 +66,14 @@ class BankExtractsController < ApplicationController
     @bank_extract = @bank_account.bank_extracts.new(params[:bank_extract])
 
     respond_to do |format|
-      if @bank_extract.save
+      if @bank_extract.save && @bank_account.imported_bels.empty?
         format.html { redirect_to bank_account_bank_extracts_url(@bank_account), notice: "L'extrait de compte a été créé." }
         format.json { render json: @bank_extract, status: :created, location: @bank_extract }
+      elsif
+        format.html { redirect_to bank_account_imported_bels_url(@bank_account),
+          notice: 'L\'extrait de compte a été créé ; 
+Vous pouvez maintenant procéder aux modifications des lignes importées puis générer les écritures'
+        }
       else
         format.html { render action: "new" }
         format.json { render json: @bank_extract.errors, status: :unprocessable_entity } 
@@ -107,6 +113,16 @@ class BankExtractsController < ApplicationController
 
   def find_bank_account
     @bank_account=BankAccount.find(params[:bank_account_id])
+  end
+  
+  # méthode qui tente de remplir les champs total_debit et total_credit avec 
+  # les imported_bels en attente
+  def fill_with_imported_bels
+    ibels = @bank_account.imported_bels.all.select {|r| r.date.in? @bank_extract.begin_date..@bank_extract.end_date}
+    if ibels.any?
+      @bank_extract.total_debit = ibels.sum(&:debit)
+      @bank_extract.total_credit = ibels.sum(&:credit)
+    end
   end
 
  
