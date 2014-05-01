@@ -19,7 +19,25 @@ class ImportedBelsController < ApplicationController
       format.json { respond_with_bip(@imported_bel) }
     end
   end
-end
+  
+  end
+  
+  def destroy
+    ibel = ImportedBel.find_by_id(params[:id])
+    @ibelid = params[:id] # on mémorise l'id pour pouvoir effacer en javascript
+    @destruction = ibel.destroy if ibel
+    
+        
+    respond_to do |format|
+      format.html { redirect_to bank_account_imported_bels_url(@bank_account) }
+      format.js 
+    end
+    
+    
+  end  
+    
+    
+
   
   private
 

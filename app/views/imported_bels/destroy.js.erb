@@ -1,0 +1,10 @@
+<%# retire la ligne si la destruction a eu lieu (cas normal) %>
+<%# sinon affiche une alerte %>
+<%- if @destruction %> 
+  $("tr#imported_bel_<%= @ibelid %>").fadeOut('fast', function(){
+        $(this).remove();
+      });
+<%-  else %> 
+  alert("La destruction de la ligne n'a pu être faite");
+<%- end %>
+  

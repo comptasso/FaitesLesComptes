@@ -53,13 +53,10 @@
             path: bank_account_imported_bel_path(@bank_account, ibel),
             inner_class: 'pc95'
           %td
-            -if ibel.complete?
-              = icon_to 'nouveau.png', 
-                write_bank_account_imported_bel_path(@bank_account, ibel),
-                :method=>:post 
-            -else
-              = icon_to 'nouveau.png', 
-                write_bank_account_imported_bel_path(@bank_account, ibel),
-                :method=>:post, hidden:true
-            = icon_to('supprimer.png', [@bank_account, ibel], :method => :delete)
+            
+            = icon_to 'nouveau.png', 
+              write_bank_account_imported_bel_path(@bank_account, ibel),
+              :method=>:post, hidden:!ibel.complete? 
+            
+            = icon_to('supprimer.png', [@bank_account, ibel], :method => :delete, remote:true)
  

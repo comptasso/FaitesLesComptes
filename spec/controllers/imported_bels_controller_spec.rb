@@ -24,6 +24,18 @@ describe ImportedBelsController do
     end
   end
   
+  describe  'DELETE destroy' do
+    
+    it 'trouve l ibel et le détruit' do
+      BankAccount.should_receive(:find).with(ba.to_param).and_return ba 
+      ImportedBel.should_receive(:find).with('3').and_return(@ibel = mock_model(ImportedBel))
+      @ibel.should_receive(:destroy)
+      delete :destroy, {:bank_account_id=>ba.to_param,  :id => '3',format: :js}, valid_session
+    end
+      
+    
+  end
+  
   
   
   
