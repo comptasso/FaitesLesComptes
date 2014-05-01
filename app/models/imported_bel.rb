@@ -33,6 +33,46 @@ class ImportedBel < ActiveRecord::Base
   validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
 
   
+  # indique si une ImportedBel est une dépense. 
+  # nil si debit et credit sont tous deux à zero (ce qui n'est pas valide)
+  def depense?
+    return true if debit != 0.0
+    return false if credit != 0.0
+  end
+  
+  def recette?
+    return true if credit != 0.0
+    return false if debit != 0.0
+  end
   
   
+  # interpreter tente de compléter les champs de imported_bel par 
+      # la lecture des données et notamment de la narration.
+      # 
+      # A terme, il faudra mettre cette méthode dans une classe spécifique 
+      # et envisager des classes enfants pour différentes banques
+      # 
+      # La méthode renvoie hash de données qui sera utilisé pour un imported_bel
+      #
+      def cat_interpreter
+        # si c'est une dépense on passe le champ cat à D, sinon à C
+        self.cat = depense? ? 'D' : 'C' 
+        # si c'est une dépense et que le libellé est retrait on passe cat à T
+        self.cat = 'T' if depense? && narration=~/Retrait/
+        # TODO si c'est une recette et que le libellé est Remise on passe cat à C
+      end
+      
+      def payment_mode_interpreter
+        if depense?
+        self.payment_mode = 'CB' if narration=~/Carte/
+        self.payment_mode = 'Prélèvement' if narration=~/Prelevement|Prelevmnt|Echeance|Interbancaire/
+        self.payment_mode = 'Virement' if narration=~/Virement/
+        self.payment_mode = 'Chèque' if narration=~/Cheque/
+        else
+        self.payment_mode = 'Virement' if narration=~/Virement/
+        end
+      end
+      
+      
+      
 end

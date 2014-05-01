@@ -19,4 +19,10 @@ module ImportedBelsHelper
       [['R', 'R'], ['T', 'T'], ['C', 'C']]
     end
   end
+  
+  # renvoie les natures correspondant à l'exercice en cours en fonction de l'ibel
+  def collection_nature(ibel)
+    ar =  ibel.depense? ? @period.natures.depenses : @period.natures.recettes
+    ar.all.collect {|n| [n.id, n.name]}
+  end
 end

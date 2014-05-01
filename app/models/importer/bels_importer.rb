@@ -72,17 +72,21 @@
           # vérification des champs
           if not_empty?(row) && correct?(row)
             # création d'un array de Bel
-            lirs << ImportedBel.new(bank_account_id:bank_account_id, 
+            ibel =  ImportedBel.new(bank_account_id:bank_account_id, 
               position:position, 
               date:row[0], 
               narration:row[1],
               debit:row[2], credit:row[3])
+            ibel.cat_interpreter # on remplit les champs cat
+            ibel.payment_mode_interpreter # on tente de remplir le champ mode de paiement
+            lirs << ibel
             position += 1
           end
         end 
         lirs
       
       end
+      
       
       # controle la validité d'une ligne. Si les transformations
       # échoues (to_f ou Date.parse) on arrive dans le bloc et la ligne 

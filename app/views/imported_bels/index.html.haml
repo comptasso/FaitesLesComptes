@@ -11,10 +11,10 @@
         %th.pc5 Type
         %th.pc5 Réf
         %th.pc30 Libellé
-        %th.pc10 Activité
-        %th.pc10 Nature
-        %th.pc10 Dépenses
-        %th.pc10 Recettes
+        %th.pc15 Activité
+        %th.pc15 Nature
+        %th.pc5 Dépenses
+        %th.pc5 Recettes
         %th.pc10 Mode Pt
         %th.actions Actions
     %tbody
@@ -30,9 +30,20 @@
             = best_in_place ibel, :ref, :type => :input,
             path: bank_account_imported_bel_path(@bank_account, ibel),
             inner_class: 'pc95'
-          %td= ibel.narration
-          %td= ibel.destination
-          %td= ibel.nature
+          %td.bip
+            = best_in_place ibel, :narration, :type => :input,
+            path: bank_account_imported_bel_path(@bank_account, ibel),
+            inner_class: 'pc95'
+          %td.bip
+            = best_in_place ibel, :destination_id, type: :select,
+            collection:@bank_account.sector.destinations.all.collect {|d| [d.id, d.name]},
+            path: bank_account_imported_bel_path(@bank_account, ibel),
+            inner_class: 'pc95'
+          %td.bip 
+            = best_in_place ibel, :nature_id, type: :select,
+            collection:collection_nature(ibel),
+            path: bank_account_imported_bel_path(@bank_account, ibel),
+            inner_class: 'pc95'
           %td.numeric= debit_credit ibel.debit
           %td.numeric= debit_credit ibel.credit
           %td.bip
