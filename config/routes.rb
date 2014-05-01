@@ -205,7 +205,12 @@ Faitesvoscomptes::Application.routes.draw do
   
 
   resources :bank_accounts do
-    resources :imported_bels
+    resources :imported_bels do
+      member do
+        post :write # pour écrire une écriture à partir d'une importation de 
+      end
+      # relevé bancaire
+    end
     resource :bels_importer
     resources :virtual_book_lines, only: :index  do
       concerns :exportable

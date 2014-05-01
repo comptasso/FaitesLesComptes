@@ -45,6 +45,15 @@ class ImportedBel < ActiveRecord::Base
     return false if debit != 0.0
   end
   
+  # constate que les trois champs sont remplis
+  # on n'utilise pas un système de validation car best_in_place oblige à remplir
+  # par champ et non tous les champs d'un coup.
+  def complete?
+    nature_id && destination_id && payment_mode
+  end
+  
+  
+  
   
   # interpreter tente de compléter les champs de imported_bel par 
       # la lecture des données et notamment de la narration.

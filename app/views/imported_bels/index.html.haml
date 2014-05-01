@@ -19,7 +19,7 @@
         %th.actions Actions
     %tbody
       - @imported_bels.each do |ibel| 
-        %tr
+        %tr{:id=>dom_id(ibel)}
           %td= I18n.l ibel.date
           %td.bip
             = best_in_place ibel, :cat, type: :select,
@@ -34,26 +34,32 @@
             = best_in_place ibel, :narration, :type => :input,
             path: bank_account_imported_bel_path(@bank_account, ibel),
             inner_class: 'pc95'
-          %td.bip
+          %td.bip.destination
             = best_in_place ibel, :destination_id, type: :select,
             collection:@bank_account.sector.destinations.all.collect {|d| [d.id, d.name]},
             path: bank_account_imported_bel_path(@bank_account, ibel),
             inner_class: 'pc95'
-          %td.bip 
+          %td.bip.nature
             = best_in_place ibel, :nature_id, type: :select,
             collection:collection_nature(ibel),
             path: bank_account_imported_bel_path(@bank_account, ibel),
+            classes:'bip_nature',
             inner_class: 'pc95'
           %td.numeric= debit_credit ibel.debit
           %td.numeric= debit_credit ibel.credit
-          %td.bip
+          %td.bip.payment_mode
             = best_in_place ibel, :payment_mode, type: :select, 
             collection:collection_payment_mode,
             path: bank_account_imported_bel_path(@bank_account, ibel),
             inner_class: 'pc95'
           %td
-            =# icon_to 'afficher.png', bank_extract_bank_extract_lines_path(bank_extract) unless bank_extract.bank_extract_lines.empty?
-            =# icon_to('modifier.png', edit_bank_account_bank_extract_path(@bank_account,bank_extract)) unless bank_extract.locked?
-          =# icon_to('pointer.png', pointage_bank_extract_bank_extract_lines_path(bank_extract)) if bank_extract.first_to_point?
-          =# icon_to('supprimer.png', [@bank_account,bank_extract], :confirm => 'Etes vous sur ?', :method => :delete) unless bank_extract.locked?
+            -if ibel.complete?
+              = icon_to 'nouveau.png', 
+                write_bank_account_imported_bel_path(@bank_account, ibel),
+                :method=>:post 
+            -else
+              = icon_to 'nouveau.png', 
+                write_bank_account_imported_bel_path(@bank_account, ibel),
+                :method=>:post, hidden:true
+            = icon_to('supprimer.png', [@bank_account, ibel], :method => :delete)
  
