@@ -1,0 +1,12 @@
+%tr{:id=>dom_id(notimportable), class:'not_importable'}
+  %td= I18n.l notimportable.date
+  %td= notimportable.cat
+  %td= notimportable.ref
+  %td= notimportable.narration
+  %td
+  %td
+  %td.numeric= debit_credit notimportable.debit
+  %td.numeric= debit_credit notimportable.credit
+  %td
+  %td
+    = icon_to('supprimer.png', [@bank_account, notimportable], :method => :delete, remote:true)

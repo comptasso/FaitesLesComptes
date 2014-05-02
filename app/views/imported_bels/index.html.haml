@@ -18,45 +18,8 @@
         %th.pc10 Mode Pt
         %th.actions Actions
     %tbody
-      - @imported_bels.each do |ibel| 
-        %tr{:id=>dom_id(ibel)}
-          %td= I18n.l ibel.date
-          %td.bip
-            = best_in_place ibel, :cat, type: :select,
-            collection:collection_cat(ibel),
-            path: bank_account_imported_bel_path(@bank_account, ibel),
-            inner_class: 'pc95'
-          %td.bip
-            = best_in_place ibel, :ref, :type => :input,
-            path: bank_account_imported_bel_path(@bank_account, ibel),
-            inner_class: 'pc95'
-          %td.bip
-            = best_in_place ibel, :narration, :type => :input,
-            path: bank_account_imported_bel_path(@bank_account, ibel),
-            inner_class: 'pc95'
-          %td.bip.destination
-            = best_in_place ibel, :destination_id, type: :select,
-            collection:@bank_account.sector.destinations.all.collect {|d| [d.id, d.name]},
-            path: bank_account_imported_bel_path(@bank_account, ibel),
-            inner_class: 'pc95'
-          %td.bip.nature
-            = best_in_place ibel, :nature_id, type: :select,
-            collection:collection_nature(ibel),
-            path: bank_account_imported_bel_path(@bank_account, ibel),
-            classes:'bip_nature',
-            inner_class: 'pc95'
-          %td.numeric= debit_credit ibel.debit
-          %td.numeric= debit_credit ibel.credit
-          %td.bip.payment_mode
-            = best_in_place ibel, :payment_mode, type: :select, 
-            collection:collection_payment_mode,
-            path: bank_account_imported_bel_path(@bank_account, ibel),
-            inner_class: 'pc95'
-          %td
-            
-            = icon_to 'nouveau.png', 
-              write_bank_account_imported_bel_path(@bank_account, ibel),
-              :method=>:post, hidden:!ibel.complete? 
-            
-            = icon_to('supprimer.png', [@bank_account, ibel], :method => :delete, remote:true)
- 
+      - @imported_bels.each do |ibel|
+        - if ibel.date.in?(@correct_range_date)
+          =render(partial:'importable', object: ibel)
+        - else
+          =render(partial:'notimportable', object: ibel)

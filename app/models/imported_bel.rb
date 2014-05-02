@@ -55,6 +55,8 @@ class ImportedBel < ActiveRecord::Base
   
   
   
+  
+  
   # interpreter tente de compléter les champs de imported_bel par 
       # la lecture des données et notamment de la narration.
       # 
