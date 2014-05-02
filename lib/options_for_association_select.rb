@@ -12,11 +12,18 @@
 #   -salaire
 #   - poker
 #
-#   La classe est créée avec trois argument : titre, method et period
+#   La classe est créée avec trois argument : titre, method et model
 #   method est un symbole de méthode qui permet de construire les options à
-#   partir de period (ici period.recettes_natures par ex)
+#   partir du modèle (par exemple period.recettes_natures si le modèle est period
+#   et la méthode :recette_natures)
 #   title donnera le titre du groupe
-#   options donnera la liste des objets (ici des natures)
+#   options donnera des options qui seront utilisées comme argument 
+#   de l'appel à la méthode. 
+#   
+#   Par exemple 
+#   OptionsForAssociationSelect.new('Banques', :list_bank_accounts, sector, period)
+#   permet se traduit par le titre Banques et 
+#   par les éléments collectés par la méthode sector.list_bank_accounts(period)
 #
 #
 #   On peut alors créer la collection nécessaire pour le formulaire.

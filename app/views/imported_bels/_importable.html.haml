@@ -28,7 +28,7 @@
   %td.numeric= debit_credit importable.credit
   %td.bip.payment_mode
     = best_in_place importable, :payment_mode, type: :select, 
-    collection:collection_payment_mode,
+    collection:collection_payment_mode(importable),
     path: bank_account_imported_bel_path(@bank_account, importable),
     inner_class: 'pc95'
   %td

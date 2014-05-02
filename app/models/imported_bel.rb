@@ -18,6 +18,12 @@
 # 
 # Un ImportedBel appartient à un compte bancaire
 # 
+# Les Catégories sont 
+# - T pour un transfert interne
+# - C pour un crédit
+# - D pour un débit
+# - R pour une remise chèque
+# 
 #
 
 class ImportedBel < ActiveRecord::Base
@@ -70,7 +76,8 @@ class ImportedBel < ActiveRecord::Base
         self.cat = depense? ? 'D' : 'C' 
         # si c'est une dépense et que le libellé est retrait on passe cat à T
         self.cat = 'T' if depense? && narration=~/Retrait/
-        # TODO si c'est une recette et que le libellé est Remise on passe cat à C
+        # R pour Remise Chèque
+        self.cat = 'R' if recette? && narration=~/Remise/
       end
       
       def payment_mode_interpreter
