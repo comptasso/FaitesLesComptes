@@ -44,6 +44,7 @@ $(document).ready(function() {
 
 
 
+
 // fonction utilisée pour afficher un date picker pour chaque champ de class
 // .input_date_picker. Ces champs imput_date sont créés facilement par une extension de simple_form_form
 //

@@ -1,6 +1,6 @@
 %tr{:id=>dom_id(importable), class:'importable'}
   %td= I18n.l importable.date
-  %td.bip
+  %td.bip.cat
     = best_in_place importable, :cat, type: :select,
     collection:collection_cat(importable),
     path: bank_account_imported_bel_path(@bank_account, importable),
@@ -30,7 +30,8 @@
     = best_in_place importable, :payment_mode, type: :select, 
     collection:collection_payment_mode(importable),
     path: bank_account_imported_bel_path(@bank_account, importable),
-    inner_class: 'pc95'
+    inner_class: 'pc95',
+    data: {cat:importable.cat}
   %td
 
     = icon_to 'nouveau.png', 

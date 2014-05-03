@@ -16,6 +16,7 @@ class ImportedBelsController < ApplicationController
   @imported_bel = ImportedBel.find params[:id]
 
   respond_to do |format|
+    # TODO ici il faut changer le payment_mode si on passe de D à T par exemple
     if @imported_bel.update_attributes(params[:imported_bel])
       format.html { redirect_to(@user, :notice => 'User was successfully updated.') }
       format.json { respond_with_bip(@imported_bel) }

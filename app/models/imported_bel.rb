@@ -54,7 +54,11 @@ class ImportedBel < ActiveRecord::Base
   # constate que les trois champs sont remplis
   # on n'utilise pas un système de validation car best_in_place oblige à remplir
   # par champ et non tous les champs d'un coup.
+  #
+  # Si c'est un transfert, payment_mode est suffisant
+  #
   def complete?
+    return true if cat == 'T' && payment_mode
     nature_id && destination_id && payment_mode
   end
   

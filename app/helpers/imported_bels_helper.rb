@@ -5,13 +5,24 @@ module ImportedBelsHelper
   # TODO faire une collection différente pour les transferts
   def collection_payment_mode(ibel)
     if ibel.cat != 'T'
-      PAYMENT_MODES.map {|pm| [pm, pm]}  
+      coll_payment_mode 
     else
-      bas = @organism.bank_accounts.collect{|ba| [ba.id, ba.nickname]}
-      cas = @organism.cashes.collect {|ca| [ca.id, ca.name]}
-      bas + cas 
+      transfer_counterpart
     end
   end
+  
+  def transfer_counterpart
+    bas = @organism.bank_accounts.collect{|ba| [ba.id, ba.nickname]}.
+        reject {|r| r.first == @bank_account.id}
+      cas = @organism.cashes.collect {|ca| [ca.id, ca.name]}
+      bas + cas 
+  end
+  
+  def coll_payment_mode
+    PAYMENT_MODES.map {|pm| [pm, pm]}
+  end
+  
+  
   
   
   
