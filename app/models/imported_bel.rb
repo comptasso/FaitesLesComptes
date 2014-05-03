@@ -38,6 +38,11 @@ class ImportedBel < ActiveRecord::Base
   validates :date, :narration, presence:true
   validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
 
+  # on fait un reset du payment_mode si on a changé de catégorie, ceci pour 
+  # que dans la vue index, et en cas de changement par best_in_place de la catégorie,
+  # on ne reste pas avec des valeurs inadaptées pour le payment_mode.
+  before_validation 'self.payment_mode = nil', :if=>'cat_changed?' 
+    
   
   # indique si une ImportedBel est une dépense. 
   # nil si debit et credit sont tous deux à zero (ce qui n'est pas valide)
