@@ -14,11 +14,7 @@ check_ibel_complete = (row) ->
   complete = !(/—/.test(t.text()) || /—/.test(u.text()) || /—/.test(v.text()))
   # les transferts n'ont pas de destination ni de nature, on ne test que sur
   # payment_mode
-  #console.log(row.find('td.cat span').text().trim())
-  if row.find('td.cat span').text().trim() == 'T'
-    complete = !(/—/.test(v.text()))
-    
-  #console.log("ligne #{row.attr('id')} -  - complet ? : #{complete}")  
+  complete = !(/—/.test(v.text())) if row.find('td.cat span').text().trim() == 'T'
   # on affiche le lien nouveau si c'est OK  
   row.find('a[title="Nouveau"]').show() if complete
   
@@ -26,13 +22,12 @@ check_ibel_complete = (row) ->
   
   
 
-# remplace la data_collection de dest par celle de source
+# remplace la data_collection de dest par celle de source et remet le champ 
+# dest à un long dash
 replace_collection = (source, dest) -> 
   dest.data('bestInPlaceEditor').values = JSON.parse(source.attr('data-collection'))
   dest.text('—')
-  #
-  console.log(dest.attr('data-collection'))
-  console.log(source.attr('data-collection'))
+  
 
 
 # L'objectf de cette méthode est de modifier les valeurs du champ payment_mode
@@ -45,13 +40,12 @@ refill_payment_mode_values = (field) ->
   pm = field.parents('tr').find('td.payment_mode span.best_in_place')
   # S'il y a une différence entre data-cat de payment_mode et la valeur de cat
   if field.text() != pm.attr('data-cat')
-    console.log('changement')
   # alors il faut remplacer le data_attributes par un data_attributes qui convient.
     pm.attr('data-cat', field.text()) # on met à jour le champ
   # Les attributes de réserve sont dans la vue dans un div#transfer et div#depenses
     if field.text() == 'T'
       replace_collection($('div#transfer'), pm)
-      # TODO un tansfert n' pas de nature ni de destination donc on masque le champ
+      # un tansfert n' pas de nature ni de destination donc on masque le champ
       # destination_id et nature_id
       field.parents('tr').find('td.destination span.best_in_place').hide()
       field.parents('tr').find('td.nature span.best_in_place').hide()
