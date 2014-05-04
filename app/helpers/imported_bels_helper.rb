@@ -11,15 +11,21 @@ module ImportedBelsHelper
     end
   end
   
+  
+  # Fait une collection des caisses et banques. La construction de l'id est 
+  # particulière pour tenir compte que dans la  même liste on a des caisses et 
+  # des banques.
+  # Ceci impose au controller de trouver la contrepartie de façon plus fine 
+  # qu'un simple find.
   def transfer_counterpart
-    bas = @organism.bank_accounts.collect{|ba| [ba.id, ba.nickname]}.
-        reject {|r| r.first == @bank_account.id}
-      cas = @organism.cashes.collect {|ca| [ca.id, ca.name]}
+    bas = @organism.bank_accounts.collect{|ba| ["bank_#{ba.id}", ba.nickname]}.
+        reject {|r| r.first == "bank_#{@bank_account.id}" }
+      cas = @organism.cashes.collect {|ca| ["cash_#{ca.id}", ca.name]}
       bas + cas 
   end
   
   def coll_payment_mode
-    PAYMENT_MODES.map {|pm| [pm, pm]}
+    PAYMENT_MODES.reject{|pm| pm == 'Espèces'}.map {|pm| [pm, pm]}
   end
   
   

@@ -25,6 +25,24 @@ class Transfer < Writing
   validates :date, :narration, presence:true # on répète ces validates pour avoir les * automatiquement dans la vue
 
   before_destroy :should_be_destroyable
+  
+  # permet de créer un transfer à partir des informations minimales
+  def self.write(from_accountable, to_accountable, amount, date,
+      narration = 'virement interne', ref='')
+    p = Organism.first.find_period(date)
+    return false unless p.accountable?
+    t = Transfer.new(narration:narration, date:date, ref:ref)
+    # la relation est has_many, même si actuellement, il n'y a qu'un od_book
+    # mais ceci pourrait évoluer avec la question des secteurs
+    t.book = Organism.first.od_books.first 
+    t.add_lines(amount)
+    t.compta_line_from.account_id = from_accountable.current_account(p).id
+    t.compta_line_to.account_id = to_accountable.current_account(p).id
+    puts t.errors.messages unless t.valid?
+    t.save!
+    
+    t
+  end
 
   # ajoute les deux lignes de l'écriture à l'instance du transfert.
   # La valeur par défaut du montant est zero.

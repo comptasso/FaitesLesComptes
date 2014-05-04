@@ -24,6 +24,12 @@
 # - D pour un débit
 # - R pour une remise chèque
 # 
+# Les validations restent très souples afin de pouvoir modifier les enregistrements
+# dans le formulaire avec best_in_place. Ainsi, nature_id, payment_mode et 
+# destination_id ne sont pas obligatoires. 
+# 
+# Les champs obligatoires sont en fait ceux qui sont préremplis par le BelsImporter
+# à la lecture du fichier.
 #
 
 class ImportedBel < ActiveRecord::Base
@@ -37,11 +43,11 @@ class ImportedBel < ActiveRecord::Base
   
   validates :date, :narration, presence:true
   validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
-
+  validates :cat, inclusion: {in:%w(D C T R)}
   # on fait un reset du payment_mode si on a changé de catégorie, ceci pour 
   # que dans la vue index, et en cas de changement par best_in_place de la catégorie,
   # on ne reste pas avec des valeurs inadaptées pour le payment_mode.
-  before_validation 'self.payment_mode = nil', :if=>'cat_changed?' 
+  before_update 'self.payment_mode = nil', :if=>'cat_changed?' 
     
   
   # indique si une ImportedBel est une dépense. 
@@ -68,37 +74,104 @@ class ImportedBel < ActiveRecord::Base
   end
   
   
+  # méthode destinée à écrire l'écriture comptable proprement dite
+  # et la bank_extract_line qui lui est associée
+  def write
+    # vérification que l'ibel est writable
+    return false unless valid?
+    unless complete?
+      errors.add(:base, 'Informations manquantes')
+    end
+    ImportedBel.transaction do
+      # case appel des méthodes protégées spécialisées
+      writing = case cat
+        when 'T' then write_transfer # méthode qui écrit le transfert et la bank_extract_line
+      end
+    # Ne pas oublier de détruire l'ibel puisqu'on ne devra plus l'importer
+    # il s'agit d'une action qui doit être faite dans le controller
+      writing # on renvoie la writing car celà va permettre au controller de 
+      # afficher le numéro de l'écriture
+    end 
+    
+    
+    # 
+  end
+  
+  
   
   
   
   
   # interpreter tente de compléter les champs de imported_bel par 
-      # la lecture des données et notamment de la narration.
-      # 
-      # A terme, il faudra mettre cette méthode dans une classe spécifique 
-      # et envisager des classes enfants pour différentes banques
-      # 
-      # La méthode renvoie hash de données qui sera utilisé pour un imported_bel
-      #
-      def cat_interpreter
-        # si c'est une dépense on passe le champ cat à D, sinon à C
-        self.cat = depense? ? 'D' : 'C' 
-        # si c'est une dépense et que le libellé est retrait on passe cat à T
-        self.cat = 'T' if depense? && narration=~/Retrait/
-        # R pour Remise Chèque
-        self.cat = 'R' if recette? && narration=~/Remise/
-      end
+  # la lecture des données et notamment de la narration.
+  # 
+  # A terme, il faudra mettre cette méthode dans une classe spécifique 
+  # et envisager des classes enfants pour différentes banques
+  # 
+  # La méthode renvoie hash de données qui sera utilisé pour un imported_bel
+  #
+  def cat_interpreter
+    # si c'est une dépense on passe le champ cat à D, sinon à C
+    self.cat = depense? ? 'D' : 'C' 
+    # si c'est une dépense et que le libellé est retrait on passe cat à T
+    self.cat = 'T' if depense? && narration=~/Retrait/
+    # R pour Remise Chèque
+    self.cat = 'R' if recette? && narration=~/Remise/
+  end
       
-      def payment_mode_interpreter
-        if depense?
-        self.payment_mode = 'CB' if narration=~/Carte/
-        self.payment_mode = 'Prélèvement' if narration=~/Prelevement|Prelevmnt|Echeance|Interbancaire/
-        self.payment_mode = 'Virement' if narration=~/Virement/
-        self.payment_mode = 'Chèque' if narration=~/Cheque/
-        else
-        self.payment_mode = 'Virement' if narration=~/Virement/
-        end
-      end
+  def payment_mode_interpreter
+    if depense?
+      self.payment_mode = 'CB' if narration=~/Carte/
+      self.payment_mode = 'Prélèvement' if narration=~/Prelevement|Prelevmnt|Echeance|Interbancaire/
+      self.payment_mode = 'Virement' if narration=~/Virement/
+      self.payment_mode = 'Chèque' if narration=~/Cheque/
+    else
+      self.payment_mode = 'Virement' if narration=~/Virement/
+    end
+  end
+  
+  protected
+  
+  def write_transfer
+    # savoir dans quel sens on doit faire le transfert
+    if depense?
+      from = bank_account
+      to = to_accountable # trouve la caisse ou la banque qui reçoit
+      amount = debit
+    else
+      to = bank_account
+      from = to_accountable
+      amount =  credit
+    end
+    t = Transfer.write(from, to, amount, date, narration, ref)
+    # on cherche maintenant la compta_line qui correspond à bank_account
+    cl = depense? ? t.compta_line_from : t.compta_line_to 
+    # puis  l'extrait qui correspond à la date
+    bex = bank_account.bank_extracts.where('begin_date <= ? AND end_date >= ?', date, date).first
+    # pour créer la bank_extract_line en précisant sa position
+    new_bel = bex.bank_extract_lines.new(compta_line_id:cl.id)
+    new_bel.save
+    # TODO faut-il se préoccuper de  la position ? On peut bien sur valider
+    # les écritures dans le désordre.
+    t
+  end
+  
+  # permet de trouver la banque ou la caisse à partir du champ payment_mode
+  # la valeur est de la forme bank_xx ou cash_xx 
+  # 
+  # On cherche donc la caisse ou la banque
+  #
+  def to_accountable
+    return nil unless payment_mode =~ /(bank|cash)_\d+/
+    vals = payment_mode.split('_')
+    case vals[0]
+    when 'bank' then BankAccount.find(vals[1])
+    when 'cash' then Cash.find(vals[1])
+    else 
+      nil
+    end
+  end
+  
       
       
       

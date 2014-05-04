@@ -473,6 +473,7 @@ class Period < ActiveRecord::Base
 
   # boolean : indique si l'on peut faire de la comptabilité
   # Il faut des natures et que toutes ces natures soient reliées à des comptes
+  # TODO : ajouter aussi que l'exercice ne doit pas être fermé
   def accountable?
     return false if natures.empty?
     all_natures_linked_to_account?

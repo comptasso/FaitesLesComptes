@@ -21,6 +21,23 @@ describe ImportedBel do
     
   end
   
+  describe 'validation' do
+    
+    subject {ImportedBel.new(valid_attributes)}
+    
+    it {subject.should be_valid}
+    
+    it 'les cat peuvent être D, C, T et R' do
+      subject.cat = 'D'; subject.should be_valid
+      subject.cat = 'C'; subject.should be_valid
+      subject.cat = 'T'; subject.should be_valid
+      subject.cat = 'R'; subject.should be_valid
+      subject.cat = 'v'; subject.should_not be_valid
+    end
+    
+    
+  end
+  
   describe 'complete?' do
     subject {ImportedBel.new(destination_id:1, nature_id:1, payment_mode:'CB')}
     

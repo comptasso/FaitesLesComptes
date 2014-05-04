@@ -49,7 +49,8 @@ class Writing < ActiveRecord::Base
   
   validates :book_id,  presence:true
   validates :date, presence:true
-  validates :date, :within_period=>true, :nested_period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]} , :unless => 'date.nil?'
+  validates :date, :within_period=>true,
+    :nested_period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]} , :unless => 'date.nil?'
   validates :compta_lines, presence:true, :two_compta_lines_minimum=>true
   validates :narration, presence:true, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MEDIUM_NAME_LENGTH_MAX}
   validates :ref, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :allow_blank=>true

@@ -72,6 +72,14 @@ describe Transfer  do
     end
 
   end
+  
+  describe 'self.write', wip:true do
+    
+    it 'crée un transfert' do
+      Transfer.write(@bb, @ba, 125.25, Date.today, 'Retrait espèces').should be_true
+    end
+    
+  end
 
   
   describe 'virtual attribute pick date' do

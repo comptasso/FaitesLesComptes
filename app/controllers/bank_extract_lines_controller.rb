@@ -118,7 +118,9 @@ class BankExtractLinesController < ApplicationController
     @organism = @bank_account.organism
   end
   
-  # La vue pointage compt
+  # La vue pointage comprend une boite modale pour ajouter des écritures sans 
+  # revenir à la vue de saisie. Cette boîte a besoin de variable d'instances
+  # pour que le formulaire soit opérationnel quand il s'affiche.
   def prepare_modal_box_instances
     @in_out_writing =InOutWriting.new(date:@bank_extract.begin_date)
     @line = @in_out_writing.compta_lines.build

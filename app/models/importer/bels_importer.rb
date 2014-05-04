@@ -135,7 +135,10 @@
       # le nombre de caractères.  
       #
       def correct_narration(text)
-        text.gsub("\n",'- ').gsub(/\s+/, ' ').strip.truncate(MEDIUM_NAME_LENGTH_MAX)
+        text.gsub("\n",'- ').gsub(/\s+/, ' ').strip.
+          truncate(MEDIUM_NAME_LENGTH_MAX). # on tronque
+          gsub(/\s+\-$/, '')# on retire le - final au cas où le troncate tombe 
+         
       end 
       
       
