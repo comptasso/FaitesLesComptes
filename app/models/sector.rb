@@ -27,7 +27,8 @@ class Sector < ActiveRecord::Base
   has_many :destinations
   has_many :bank_accounts
   has_many :cashes
-  
+  has_one :income_book
+  has_one :outcome_book
   
   # permet d'ajouter les livres de ce secteur et lui même dans la collection des graphes
   def paves

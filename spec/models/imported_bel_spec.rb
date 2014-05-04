@@ -55,9 +55,9 @@ describe ImportedBel do
     
     subject {@ibel}
     
-    it 'changer la catégorie et appeler valid met payment_mode à nil' do
+    it 'mettre à jour la catégorie et appeler valid met payment_mode à nil' do
       subject.cat = 'R'
-      subject.valid?
+      subject.save
       subject.payment_mode.should be_nil
     end
     

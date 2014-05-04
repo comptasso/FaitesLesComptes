@@ -81,11 +81,13 @@ class ImportedBel < ActiveRecord::Base
     return false unless valid?
     unless complete?
       errors.add(:base, 'Informations manquantes')
+      return false
     end
     ImportedBel.transaction do
       # case appel des méthodes protégées spécialisées
       writing = case cat
         when 'T' then write_transfer # méthode qui écrit le transfert et la bank_extract_line
+        when 'D' then write_depense
       end
     # Ne pas oublier de détruire l'ibel puisqu'on ne devra plus l'importer
     # il s'agit d'une action qui doit être faite dans le controller
@@ -132,6 +134,8 @@ class ImportedBel < ActiveRecord::Base
   
   protected
   
+  # write_transfer écrit le transfert défini par l'ImportedBel
+  # puis écrit la bank_extract_line correspondante
   def write_transfer
     # savoir dans quel sens on doit faire le transfert
     if depense?
@@ -152,8 +156,29 @@ class ImportedBel < ActiveRecord::Base
     new_bel = bex.bank_extract_lines.new(compta_line_id:cl.id)
     new_bel.save
     # TODO faut-il se préoccuper de  la position ? On peut bien sur valider
-    # les écritures dans le désordre.
+    # les écritures dans le désordre mais celà est probablement de la responsabilité du user.
+    
+    # TODO voir comment enregistrer les user_id et ip
     t
+  end
+  
+  # write_depense écrit une écriture qui est venue au débit du compte
+  def write_depense
+    # trouver le livre sur lequel on doit écrire
+    book = bank_account.sector.outcome_book
+    params = {date:date, ref:ref, narration:narration,
+      compta_lines_attributes:{[0]=>{nature_id:nature_id, 
+          destination_id:destination_id,
+          payment_mode:payment_mode,
+          account_id:nature.account_id,
+          debit:debit,
+          credit:0},
+      [1]=>{account_id:bank_account.current_account(Organism.first.find_period(date)),
+          debit:0, credit:debit}},
+    }
+    w = book.in_out_writings.build(params)
+    w.save!
+    
   end
   
   # permet de trouver la banque ou la caisse à partir du champ payment_mode
