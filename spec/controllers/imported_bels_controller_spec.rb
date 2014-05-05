@@ -46,24 +46,45 @@ describe ImportedBelsController do
   
   describe 'POST write' do
     
+    def writing_params
+      {ref:'ref', compta_lines_attributes:{'0'=>
+            {nature_id:1, destination_id:1, debit:10, credit:0},
+        '1'=>{account_id:2, debit:0, credit:10}}}
+    end
+    
+    before(:each) do
+      @ibel = mock_model(ImportedBel, depense?:true, update_attribute:true) 
+      ImportedBel.stub(:find).with('3').and_return(@ibel)
+      @ibel.stub(:to_write).and_return(writing_params)
+  
+      ba.stub_chain(:sector, :outcome_book).and_return(@ob = mock_model(OutcomeBook))
+      @ob.stub(:in_out_writings).and_return(@ar = double(Arel))
+      @ar.stub(:new).and_return(@w = mock_model(Writing, 
+           save:true))
+      @controller.stub(:fill_author)
+    end
+    
     it 'cheche le ImportedBel' do 
-      ImportedBel.should_receive(:find).with('3').and_return(@ibel = mock_model(ImportedBel))
-      @ibel.stub(:write).and_return true
+      ImportedBel.should_receive(:find).with('3').and_return @ibel
       post :write, {:bank_account_id=>ba.to_param,  :id => '3',format: :js}, valid_session
     end
     
     it 'écrit l\'écriture' do
-      ImportedBel.stub(:find).with('3').and_return(@ibel = mock_model(ImportedBel))
-      @ibel.should_receive(:write).and_return 126
+      @ibel.should_receive(:to_write).and_return writing_params
       post :write, {:bank_account_id=>ba.to_param,  :id => '3',format: :js}, valid_session
     end
     
     it 'en cas de succès, affecte le numéro d écriture' do
-      ImportedBel.stub(:find).with('3').and_return(@ibel = mock_model(ImportedBel))
-      @ibel.stub(:write).and_return 126
+      
       post :write, {:bank_account_id=>ba.to_param,  :id => '3',format: :js}, valid_session
-      assigns(:writing_number).should == 126
-    end 
+      assigns(:writing).should == @w
+    end
+    
+    it 'en cas de succès, détruit l ibel' do
+      @ibel.should_receive(:update_attribute).with(:writing_id, @w.id)
+      post :write, {:bank_account_id=>ba.to_param,  :id => '3',format: :js}, valid_session
+      
+    end
     
     
   end

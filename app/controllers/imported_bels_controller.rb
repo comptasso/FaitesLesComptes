@@ -28,7 +28,31 @@ class ImportedBelsController < ApplicationController
   # bank_extract_line qui lui correspond
   def write
     @imported_bel = ImportedBel.find params[:id]
-    @writing_number = @imported_bel.write
+    # récupérer les paramètres
+    par = @imported_bel.to_write
+    # créer soit le transfert soit le in_out_writing
+    if @imported_bel == 'T'
+      book = @organism.od_books.first
+      @writing = book.transfer.new(par)
+    else
+      book = @imported_bel.depense? ? 
+        @bank_account.sector.outcome_book : bank_account.sector.income_book
+      @writing = book.in_out_writings.new(par)
+    end
+    # rajouter les informations de user (id et ip)
+    fill_author(@writing)
+    # tenter de le sauver 
+    respond_to do |format|
+      if @writing.save
+        # on détruit l'ibel
+        @imported_bel.update_attribute(:writing_id, @writing.id)
+        # on renvoie le numéro de la ligne par un message
+        format.js {}
+      else
+        # on envoie un message d'erreur
+        format.js {} 
+      end
+    end 
     
   end
   

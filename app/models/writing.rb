@@ -44,6 +44,8 @@ class Writing < ActiveRecord::Base
  
   has_many :compta_lines, :dependent=>:destroy
   alias children compta_lines
+  
+  has_one :imported_bel
 
   strip_before_validation :narration, :ref 
   

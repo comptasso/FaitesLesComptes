@@ -19,9 +19,11 @@
         %th.actions Actions
     %tbody
       - @imported_bels.each do |ibel|
-        - if ibel.date.in?(@correct_range_date)
+        - if !ibel.writing_id && ibel.date.in?(@correct_range_date)
           =render(partial:'importable', object: ibel)
-        - else
+        - elsif
+          =render(partial:'imported', object: ibel)
+        -else
           =render(partial:'notimportable', object: ibel)
 .attributes#transfer{'data-collection'=> transfer_counterpart}
 .attributes#depenses{'data-collection'=> coll_payment_mode}

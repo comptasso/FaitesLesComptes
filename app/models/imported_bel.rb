@@ -41,6 +41,8 @@ class ImportedBel < ActiveRecord::Base
   belongs_to :destination
   belongs_to :nature
   
+  belongs_to :writing
+  
   validates :date, :narration, presence:true
   validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :cat, inclusion: {in:%w(D C T R)}
@@ -73,19 +75,6 @@ class ImportedBel < ActiveRecord::Base
     nature_id && destination_id && payment_mode
   end
   
-  
-  # construit seulement les paramètres de l'écriture.
-  # 
-  def complete_writing_params
-    writing_params.merge(:compta_lines_attributes=>
-        {'0'=>line_params, '1'=>counter_line_params})
-  end
-  
-  def complete_transfer_params
-    writing_params.merge(:compta_lines_attributes=>
-        {'0'=>transfer_params, '1'=>counter_transfer_params})
-  end
-  
   # renvoie le hash permettant de générer la Writing ou le Transfert
   def to_write
     # vérification que l'ibel est writable
@@ -94,18 +83,12 @@ class ImportedBel < ActiveRecord::Base
       errors.add(:base, 'Informations manquantes')
       return nil
     end
-    ImportedBel.transaction do
-      # case appel des méthodes protégées spécialisées
     case cat
-        when 'T' then complete_transfer_params 
-        when 'D' || 'C' then complete_writing_params
+      when 'T' then complete_transfer_params 
+      else
+        complete_writing_params
       end
-    
-    end 
-    
-    
-    # 
-  end
+   end
   
   
   
@@ -141,6 +124,21 @@ class ImportedBel < ActiveRecord::Base
   end
   
   protected
+  
+  
+  
+  # construit seulement les paramètres de l'écriture.
+  # 
+  def complete_writing_params
+    writing_params.merge(:compta_lines_attributes=>
+        {'0'=>line_params, '1'=>counter_line_params})
+  end
+  
+  def complete_transfer_params
+    writing_params.merge(:compta_lines_attributes=>
+        {'0'=>transfer_params, '1'=>counter_transfer_params})
+  end
+  
   
   def transfer_params
     from = depense? ? bank_account : to_accountable
