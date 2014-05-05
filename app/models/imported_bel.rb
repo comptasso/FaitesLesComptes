@@ -74,25 +74,33 @@ class ImportedBel < ActiveRecord::Base
   end
   
   
-  # méthode destinée à écrire l'écriture comptable proprement dite
-  # et la bank_extract_line qui lui est associée
-  def write
+  # construit seulement les paramètres de l'écriture.
+  # 
+  def complete_writing_params
+    writing_params.merge(:compta_lines_attributes=>
+        {'0'=>line_params, '1'=>counter_line_params})
+  end
+  
+  def complete_transfer_params
+    writing_params.merge(:compta_lines_attributes=>
+        {'0'=>transfer_params, '1'=>counter_transfer_params})
+  end
+  
+  # renvoie le hash permettant de générer la Writing ou le Transfert
+  def to_write
     # vérification que l'ibel est writable
-    return false unless valid?
+    return nil unless valid?
     unless complete?
       errors.add(:base, 'Informations manquantes')
-      return false
+      return nil
     end
     ImportedBel.transaction do
       # case appel des méthodes protégées spécialisées
-      writing = case cat
-        when 'T' then write_transfer # méthode qui écrit le transfert et la bank_extract_line
-        when 'D' then write_depense
+    case cat
+        when 'T' then complete_transfer_params 
+        when 'D' || 'C' then complete_writing_params
       end
-    # Ne pas oublier de détruire l'ibel puisqu'on ne devra plus l'importer
-    # il s'agit d'une action qui doit être faite dans le controller
-      writing # on renvoie la writing car celà va permettre au controller de 
-      # afficher le numéro de l'écriture
+    
     end 
     
     
@@ -134,53 +142,38 @@ class ImportedBel < ActiveRecord::Base
   
   protected
   
-  # write_transfer écrit le transfert défini par l'ImportedBel
-  # puis écrit la bank_extract_line correspondante
-  def write_transfer
-    # savoir dans quel sens on doit faire le transfert
-    if depense?
-      from = bank_account
-      to = to_accountable # trouve la caisse ou la banque qui reçoit
-      amount = debit
-    else
-      to = bank_account
-      from = to_accountable
-      amount =  credit
-    end
-    t = Transfer.write(from, to, amount, date, narration, ref)
-    # on cherche maintenant la compta_line qui correspond à bank_account
-    cl = depense? ? t.compta_line_from : t.compta_line_to 
-    # puis  l'extrait qui correspond à la date
-    bex = bank_account.bank_extracts.where('begin_date <= ? AND end_date >= ?', date, date).first
-    # pour créer la bank_extract_line en précisant sa position
-    new_bel = bex.bank_extract_lines.new(compta_line_id:cl.id)
-    new_bel.save
-    # TODO faut-il se préoccuper de  la position ? On peut bien sur valider
-    # les écritures dans le désordre mais celà est probablement de la responsabilité du user.
-    
-    # TODO voir comment enregistrer les user_id et ip
-    t
+  def transfer_params
+    from = depense? ? bank_account : to_accountable
+    {debit:debit, credit:credit, 
+      account_id:from.current_account(current_period).id }
   end
   
-  # write_depense écrit une écriture qui est venue au débit du compte
-  def write_depense
-    # trouver le livre sur lequel on doit écrire
-    book = bank_account.sector.outcome_book
-    params = {date:date, ref:ref, narration:narration,
-      compta_lines_attributes:{[0]=>{nature_id:nature_id, 
-          destination_id:destination_id,
-          payment_mode:payment_mode,
-          account_id:nature.account_id,
-          debit:debit,
-          credit:0},
-      [1]=>{account_id:bank_account.current_account(Organism.first.find_period(date)),
-          debit:0, credit:debit}},
-    }
-    w = book.in_out_writings.build(params)
-    w.save!
-    
+  def counter_transfer_params
+    to = depense? ? to_accountable : bank_account
+    {debit:debit, credit:credit, 
+      account_id:to.current_account(current_period).id }
   end
   
+  def current_period
+    @current_period || Organism.first.find_period(date) if date
+  end
+  
+  
+  def writing_params
+    {date:date, ref:ref, narration:narration}
+  end
+  
+  def line_params
+    {nature_id:nature_id, debit:debit, credit:credit, 
+      destination_id:destination_id}
+  end
+  
+  def counter_line_params
+    bank_account.current_account(current_period).id
+    {payment_mode:payment_mode, debit:credit, credit:debit,
+      account_id:bank_account.current_account(current_period).id}
+  end
+   
   # permet de trouver la banque ou la caisse à partir du champ payment_mode
   # la valeur est de la forme bank_xx ou cash_xx 
   # 

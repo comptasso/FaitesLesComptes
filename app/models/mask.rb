@@ -97,8 +97,8 @@ class Mask < ActiveRecord::Base
   # Utilisé par Utilities::Writer en lien avec Subscription pour créer
   # l'écriture automatiquement. 
   def complete_writing_params(date)
-    w, cl1, cl2 = writing_params(date), line_params(date), counter_line_params(date)
-    w.merge(:compta_lines_attributes=>{'0'=>cl1, '1'=>cl2})
+    writing_params(date).merge(:compta_lines_attributes=>
+        {'0'=>line_params(date), '1'=>counter_line_params(date)})
   end
   
   # un masque est complet lorsqu'il permet de passer une écriture à partir d'un 
