@@ -31,9 +31,9 @@ class ImportedBelsController < ApplicationController
     # récupérer les paramètres
     par = @imported_bel.to_write
     # créer soit le transfert soit le in_out_writing
-    if @imported_bel == 'T'
+    if @imported_bel.cat == 'T'
       book = @organism.od_books.first
-      @writing = book.transfer.new(par)
+      @writing = book.transfers.new(par)
     else
       book = @imported_bel.depense? ? 
         @bank_account.sector.outcome_book : bank_account.sector.income_book
@@ -44,8 +44,13 @@ class ImportedBelsController < ApplicationController
     # tenter de le sauver 
     respond_to do |format|
       if @writing.save
-        # on détruit l'ibel
+        # on met à jour l'ibel
         @imported_bel.update_attribute(:writing_id, @writing.id)
+        # on créé la bank_extract_line
+        bex = @bank_account.bank_extracts.
+          where('begin_date <= ? AND end_date >= ?', 
+          @imported_bel.date, @imported_bel.date).first
+        bex.bank_extract_lines.create(compta_line_id:@writing.support_line.id)
         # on renvoie le numéro de la ligne par un message
         format.js {}
       else

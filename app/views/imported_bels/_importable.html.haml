@@ -36,6 +36,6 @@
 
     = icon_to 'nouveau.png', 
       write_bank_account_imported_bel_path(@bank_account, importable),
-      :method=>:post, hidden:!importable.complete? 
+      :method=>:post, hidden:!importable.complete?, remote:true
 
     = icon_to('supprimer.png', [@bank_account, importable], :method => :delete, remote:true)

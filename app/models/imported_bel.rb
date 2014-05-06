@@ -142,7 +142,7 @@ class ImportedBel < ActiveRecord::Base
   
   def transfer_params
     from = depense? ? bank_account : to_accountable
-    {debit:debit, credit:credit, 
+    {debit:credit, credit:debit, 
       account_id:from.current_account(current_period).id }
   end
   
@@ -167,7 +167,6 @@ class ImportedBel < ActiveRecord::Base
   end
   
   def counter_line_params
-    bank_account.current_account(current_period).id
     {payment_mode:payment_mode, debit:credit, credit:debit,
       account_id:bank_account.current_account(current_period).id}
   end

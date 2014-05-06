@@ -1,0 +1,12 @@
+%td= I18n.l imported_line.date
+%td= imported_line.cat
+%td= imported_line.ref
+%td= imported_line.narration
+%td= imported_line.destination.name if imported_line.destination
+%td= imported_line.nature.name if imported_line.nature
+%td.numeric= debit_credit imported_line.debit
+%td.numeric= debit_credit imported_line.credit
+%td= imported_line.payment_mode 
+%td
+  = imported_line.id
+  = icon_to('supprimer.png', [@bank_account, imported_line], :method => :delete, remote:true)

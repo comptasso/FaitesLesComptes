@@ -1,13 +1,2 @@
 %tr{:id=>dom_id(imported), class:'not_importable'}
-  %td= I18n.l imported.date
-  %td= imported.cat
-  %td= imported.ref
-  %td= imported.narration
-  %td= imported.destination.name if imported.destination
-  %td= imported.nature.name if imported.name
-  %td.numeric= debit_credit imported.debit
-  %td.numeric= debit_credit imported.credit
-  %td= imported.payment_mode 
-  %td
-    = imported.id
-    = icon_to('supprimer.png', [@bank_account, imported], :method => :delete, remote:true)
+  =render(partial:'imported_line', object:imported)
