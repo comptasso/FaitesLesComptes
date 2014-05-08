@@ -18,7 +18,7 @@ module Importer
             notice: 'Les écritures importées nécessitent la création d\'un extrait de compte'
         else
           redirect_to bank_account_imported_bels_path(@bank_account), 
-            notice: "Importation du relevé réussie"
+            notice: "Importation du relevé effectuée"
         end
       else
         render :new

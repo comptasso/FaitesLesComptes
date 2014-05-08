@@ -9,4 +9,7 @@
 %td= imported_line.payment_mode 
 %td
   = imported_line.writing_id
-  = icon_to('supprimer.png', [@bank_account, imported_line], :method => :delete, remote:true)
+  = icon_to('supprimer.png',
+    [@bank_account, imported_line], :method => :delete,
+    title: 'Supprime cette ligne mais pas l\'écriture associée',
+    remote:true)

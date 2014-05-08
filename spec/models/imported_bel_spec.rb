@@ -10,7 +10,7 @@ end
 describe ImportedBel do   
   include OrganismFixtureBis  
   
-  def valid_attributes
+  def valid_attributes 
     {date:Date.today,
       cat:'D',
       narration:'une ibel',

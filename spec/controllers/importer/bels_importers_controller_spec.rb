@@ -24,7 +24,7 @@ describe Importer::BelsImportersController do
     it 'créé le BelsImporter' do
       Importer::BelsImporter.should_receive(:new).
         with({"bonus"=>"1", "bank_account_id"=>ba.id}).
-        and_return(double(Importer::BelsImporter, save:true))
+        and_return(double(Importer::BelsImporter, save:true, need_extract?:false))
       post :create, {bank_account_id:ba.to_param, importer_bels_importer:{bonus:1} }, valid_session 
     end
     
@@ -35,12 +35,42 @@ describe Importer::BelsImportersController do
       response.should render_template 'new'
     end
     
-    it 'vérifie que les extraits sont créés' do
-      Importer::BelsImporter.stub(:new).
-        and_return(@ibel = double(Importer::BelsImporter, save:true))
-      @ibel.should_receive(:need_extract?).and_return(true)
-      post :create, {bank_account_id:ba.to_param, importer_bels_importer:{bonus:1} }, valid_session 
-      flash[:notice].should == 'Des écritures ont des dates qui ne sont pas couvertes par les extraits bancaires'
+    context 'il faut un extrait  de compte' do
+      
+      before(:each) do
+        Importer::BelsImporter.stub(:new).
+          and_return(@ibel = double(Importer::BelsImporter, save:true))
+        @ibel.should_receive(:need_extract?).and_return(true)
+      end
+      it 'indique le besoin d un extrait' do 
+        post :create, {bank_account_id:ba.to_param, importer_bels_importer:{bonus:1} }, valid_session 
+        flash[:notice].should == 'Les écritures importées nécessitent la création d\'un extrait de compte'
+      end
+      
+      it 'et renvoie sur new_bank_extract' do
+        post :create, {bank_account_id:ba.to_param, importer_bels_importer:{bonus:1} }, valid_session 
+        response.should redirect_to new_bank_account_bank_extract_url(ba)
+      end
+       
+    end
+    
+    context 'sans besoin d un extrait  de compte' do
+      
+      before(:each) do
+        Importer::BelsImporter.stub(:new).
+          and_return(@ibel = double(Importer::BelsImporter, save:true))
+        @ibel.should_receive(:need_extract?).and_return(false)
+      end
+      it 'indique le succès de  l importation' do 
+        post :create, {bank_account_id:ba.to_param, importer_bels_importer:{bonus:1} }, valid_session 
+        flash[:notice].should == 'Importation du relevé effectuée'
+      end
+      
+      it 'et renvoie sur new_bank_extract' do
+        post :create, {bank_account_id:ba.to_param, importer_bels_importer:{bonus:1} }, valid_session 
+        response.should redirect_to bank_account_imported_bels_url(ba)
+      end
+       
     end
     
     

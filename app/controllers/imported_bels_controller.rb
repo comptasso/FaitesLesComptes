@@ -64,15 +64,16 @@ class ImportedBelsController < ApplicationController
     ibel = ImportedBel.find_by_id(params[:id])
     @ibelid = params[:id] # on mémorise l'id pour pouvoir effacer en javascript
     @destruction = ibel.destroy if ibel
-    
-        
     respond_to do |format|
       format.html { redirect_to bank_account_imported_bels_url(@bank_account) }
       format.js 
     end
-    
-    
   end  
+  
+  def destroy_all
+    ImportedBel.delete_all
+    redirect_to bank_account_imported_bels_url(@bank_account) 
+  end
    
   private
 

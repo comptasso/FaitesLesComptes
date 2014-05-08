@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 
-describe BankExtractsController do
+describe BankExtractsController do 
   include SpecControllerHelper 
 
 
@@ -112,6 +112,14 @@ describe BankExtractsController do
           :bank_extract => valid_params}, valid_session
         response.should redirect_to bank_account_bank_extracts_url(ba)
       end
+      
+     it 'redirige vers imported_bels s il y en a' do
+       ba.stub_chain(:imported_bels, :empty?).and_return false
+       @be.stub(:save).and_return true
+        post :create,{ :organism_id=>@o.id, :bank_account_id=> ba.id,
+          :bank_extract => valid_params}, valid_session
+        response.should redirect_to bank_account_imported_bels_url(ba)
+     end
     
 
      it "re-renders the 'new' template" do

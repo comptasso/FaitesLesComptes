@@ -123,6 +123,17 @@ describe ImportedBelsController do
     end
   end
   
+  describe 'DELETE destroy_all' , wip:true do
+    
+    it 'renvoie un message d erreur' do
+        pending 'indique que l action n existe pas'
+        ImportedBel.should_receive(:delete_all)
+        delete :destroy_all, {bank_account_id:ba.to_param}, valid_session
+        
+      end
+    
+  end
+  
   
   
   

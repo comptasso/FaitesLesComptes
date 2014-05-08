@@ -69,7 +69,7 @@ class BankExtractsController < ApplicationController
       if @bank_extract.save && @bank_account.imported_bels.empty?
         format.html { redirect_to bank_account_bank_extracts_url(@bank_account), notice: "L'extrait de compte a été créé." }
         format.json { render json: @bank_extract, status: :created, location: @bank_extract }
-      elsif
+      elsif @bank_extract.save 
         format.html { redirect_to bank_account_imported_bels_url(@bank_account),
           notice: 'L\'extrait de compte a été créé ; 
 Vous pouvez maintenant procéder aux modifications des lignes importées puis générer les écritures'

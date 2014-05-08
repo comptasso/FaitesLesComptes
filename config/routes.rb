@@ -207,8 +207,11 @@ Faitesvoscomptes::Application.routes.draw do
   resources :bank_accounts do
     resources :imported_bels do
       member do
-        post 'write' # pour écrire une écriture à partir d'une importation de 
+        post 'write' # pour écrire une écriture à partir d'une importation de
         # relevé bancaire
+      end
+      collection do
+        delete 'destroy_all' 
       end
       
     end
