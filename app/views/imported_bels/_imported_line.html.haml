@@ -8,5 +8,5 @@
 %td.numeric= debit_credit imported_line.credit
 %td= imported_line.payment_mode 
 %td
-  = imported_line.id
+  = imported_line.writing_id
   = icon_to('supprimer.png', [@bank_account, imported_line], :method => :delete, remote:true)

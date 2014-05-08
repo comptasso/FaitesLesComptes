@@ -42,7 +42,7 @@ class ImportedBelsController < ApplicationController
     # rajouter les informations de user (id et ip)
     fill_author(@writing)
     # tenter de le sauver 
-    respond_to do |format|
+    respond_to do |format| 
       if @writing.save
         # on met à jour l'ibel
         @imported_bel.update_attribute(:writing_id, @writing.id)
@@ -52,6 +52,7 @@ class ImportedBelsController < ApplicationController
           @imported_bel.date, @imported_bel.date).first
         bex.bank_extract_lines.create(compta_line_id:@writing.support_line.id)
         # on renvoie le numéro de la ligne par un message
+        @message = "Création de l'écriture #{@writing.id} effectuée"
         format.js {}
       else
         # on envoie un message d'erreur

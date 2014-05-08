@@ -1,1 +1,3 @@
-$('div.champ h3').text('<%= "Ecriture #{@writing.id} enregistrée" %>');
+$('div#message').text('<%= @message.html_safe %>');
+<%#*$('tr#<%= dom_id(@imported_bel) %>').removeClass('importable').%>
+  <%#*addClass('imported').html('<%= render partial:'imported_line', object:@imported_bel %>')%>
