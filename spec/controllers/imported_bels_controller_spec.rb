@@ -103,11 +103,23 @@ describe ImportedBelsController do
         post :write, {:bank_account_id=>ba.to_param,  :id => '3',format: :js}, valid_session
       end
       
-      it 'et créer un message' do
-        post :write, {:bank_account_id=>ba.to_param,  :id => '3',format: :js}, valid_session
-        assigns(:message).should == "Création de l'écriture #{@w.id} effectuée"
-      end
+      
     
+    end
+    
+    context 'en cas d échec' do
+      
+      before(:each) do
+        @w.stub(:save).and_return false
+      end
+      
+      it 'renvoie un message d erreur' do
+        @w.errors.add(:base, 'une explication')
+        post :write, {:bank_account_id=>ba.to_param,  :id => '3',format: :js}, valid_session
+        assigns(:message).should == 
+          "Erreur lors de la création de l'écriture : une explication"
+      end
+      
     end
   end
   

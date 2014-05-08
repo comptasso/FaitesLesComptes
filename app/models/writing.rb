@@ -60,7 +60,7 @@ class Writing < ActiveRecord::Base
   validate :balanced?
   # les écritures dans le livre de report à nouveau doivent avoir le premier jour
   # de l'exercice comme date
-  validate :period_start_date, :if=> lambda {book.type == 'AnBook'}
+  validate :period_start_date, :if=> lambda {book_id && book.type == 'AnBook'}
   # contraint la numérotation continue des écritures (numérotation qui est faite
   # au moment du verrouillage). Ne pas confondre ce numéro avec le numéro de pièce.
   # S'appuie sur ContinuValidatoir

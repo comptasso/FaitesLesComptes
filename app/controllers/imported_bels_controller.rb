@@ -51,12 +51,10 @@ class ImportedBelsController < ApplicationController
           where('begin_date <= ? AND end_date >= ?', 
           @imported_bel.date, @imported_bel.date).first
         bex.bank_extract_lines.create(compta_line_id:@writing.support_line.id)
-        # on renvoie le numéro de la ligne par un message
-        @message = "Création de l'écriture #{@writing.id} effectuée"
-        format.js {}
+        format.js 
       else
-        # on envoie un message d'erreur
-        format.js {} 
+        @message = "Erreur lors de la création de l'écriture : #{@writing.errors.full_messages.join('; ')}"
+        format.js 
       end
     end 
     

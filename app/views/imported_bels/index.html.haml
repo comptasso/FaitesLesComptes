@@ -15,8 +15,8 @@
         %th.pc15 Nature
         %th.pc5 Dépenses
         %th.pc5 Recettes
-        %th.pc10 Mode Pt
-        %th.actions Actions
+        %th.pc5 Mode Pt
+        %th.actions N°/Actions
     %tbody
       - @imported_bels.each do |ibel|
         - if !ibel.writing_id && ibel.date.in?(@correct_range_date)
