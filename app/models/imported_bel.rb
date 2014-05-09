@@ -16,7 +16,7 @@
 # inaboutis. Il aurait par exemple fallu retirer le champ bank_extract_id des validations
 # car une BankExtractLine doit appartenir à un bank_extract_id.
 # 
-# Un ImportedBel appartient à un compte bancaire
+# Un ImportedBel appartient à un compte bancaire 
 # 
 # Les Catégories sont 
 # - T pour un transfert interne
@@ -44,6 +44,7 @@ class ImportedBel < ActiveRecord::Base
   belongs_to :writing
   
   validates :date, :narration, presence:true
+  validates :narration, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MEDIUM_NAME_LENGTH_MAX}
   validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :cat, inclusion: {in:%w(D C T R)}
   # on fait un reset du payment_mode si on a changé de catégorie, ceci pour 

@@ -101,6 +101,7 @@ module OrganismFixtureBis
   end
   
   def get_organism_instances
+    # TODO utiliser des ||= pour réduire le nombre de requetes
     @sector = @o.sectors.first
     @ba = @o.bank_accounts.first
     # puts @ba.inspect
@@ -113,7 +114,8 @@ module OrganismFixtureBis
     # puts @baca.inspect
     @caca = @c.current_account(@p) # pour caca pour CashAccount Current Account
     # puts @caca.inspect
-    @n = @p.natures.depenses.first  
+    @n = @p.natures.depenses.first 
+    @d = @o.destinations.first rescue @o.destinations.create!(name:'Non affecte')
   end
   
   def find_second_bank

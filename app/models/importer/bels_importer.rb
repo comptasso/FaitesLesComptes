@@ -1,4 +1,4 @@
-
+  
   
   module Importer
     
@@ -15,8 +15,10 @@
       extend ActiveModel::Naming
       include ActiveModel::Conversion
       include ActiveModel::Validations
-      
+ 
       attr_accessor :file, :bank_account_id
+      
+      validates :file, :bank_account_id, presence:true
       
       def initialize(attributes = {})
         attributes.each { |name, value| send("#{name}=", value) }
@@ -83,13 +85,16 @@
       #
       def load_imported_rows(options = {headers:true, encoding:'iso-8859-1:utf-8', col_sep:';'})
         lirs = []
+        index = 2
         position = 1
         # permet d'avoir à la fois un fichier temporaire comme le prévoit rails
         # ou un nom de fichier (ce qui facilite les tests et essais).
         f = file.respond_to?(:tempfile) ? file.tempfile : file
         CSV.foreach(f, options) do |row|
-          # vérification des champs
-          if not_empty?(row) && correct?(row)
+          
+          # vérification des champs pour les lignes autres que la ligne de titre
+          if not_empty?(row) && correct?(row, index)
+            
             # création d'un array de Bel
             ibel =  ImportedBel.new(bank_account_id:bank_account_id, 
               position:position, 
@@ -100,7 +105,9 @@
             ibel.payment_mode_interpreter # on tente de remplir le champ mode de paiement
             lirs << ibel
             position += 1
+            
           end
+          index += 1
         end 
         lirs
       
@@ -110,10 +117,10 @@
       # controle la validité d'une ligne. Si les transformations
       # échoues (to_f ou Date.parse) on arrive dans le bloc et la ligne 
       # n'est pas lue.
-      def correct?(row)
+      def correct?(row, index)
         # row[3] et row[2] ne doivent pas être vide tous les deux
         return false if row[2] == nil && row[3] == nil
-        Date.parse(row[0]) # on peut lire la date
+        row[0] = guess_date(row[0], index) # on peut lire la date
         row[1] = correct_narration(row[1])
         row[2] ||= '0.0' # on remplace les nil par des zéros
         row[3] ||= '0.0'
@@ -121,9 +128,23 @@
         row[2] = row[2].gsub(',','.').to_d.round(2)  # on peut faire un chiffre du débit
         row[3] = row[3].gsub(',','.').to_d.round(2)  # on peut faire un chiffre du crédit
         true
-      rescue
+      rescue Exception =>e 
+        puts e.inspect  
+#        puts e.backtrace.inspect  
+        errors.add(:base, 
+          "Ligne #{index} non conforme : #{e.message}") 
         Rails.logger.warn "une erreut s est produite #{row}"
         false
+      end
+      
+      
+      # guess_date tente de lire la date et sinon ajoute une erreur au modèle
+      # guess_date retourne toujours une date, soit la bonne, soit la date du jour.
+      def guess_date(str, index)
+        str.to_date
+      rescue
+        errors.add(:base, "Date non comprise à la ligne #{index}")
+        Date.today
       end
       
       # méthode qui permet d'éliminer les lignes dont tous les champs sont nil
