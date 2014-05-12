@@ -45,7 +45,7 @@ class ImportedBel < ActiveRecord::Base
   
   validates :date, :narration, presence:true
   validates :narration, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MEDIUM_NAME_LENGTH_MAX}
-  validates :debit, :credit, presence:true, numericality:true, :not_null_amounts=>true, :not_both_amounts=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
+  validates :debit, :credit, presence:true, numericality:true, :not_both_null_or_full=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :cat, inclusion: {in:%w(D C T R)}
   # on fait un reset du payment_mode si on a changé de catégorie, ceci pour 
   # que dans la vue index, et en cas de changement par best_in_place de la catégorie,
@@ -63,6 +63,11 @@ class ImportedBel < ActiveRecord::Base
   def recette?
     return true if credit != 0.0
     return false if debit != 0.0
+  end
+  
+  # méthode ajoutée pour aider le validator
+  def values
+    debit || credit
   end
   
   # constate que les trois champs sont remplis

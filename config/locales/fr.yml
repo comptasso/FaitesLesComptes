@@ -206,7 +206,7 @@ fr:
     account: Compte
     end_date: date de fin
     begin_date: date de début
-
+    
 
 
   activerecord:
@@ -299,7 +299,7 @@ fr:
         title: Titre
         mask: Guide de saisie
         end_date: Dernière échéance
-          
+      
       
         
     
@@ -321,6 +321,7 @@ fr:
         invalid: Caractères non admis
         too_short: Trop court
         too_long: Trop long
+        
       models:
         cash_control:
           attributes:
@@ -356,8 +357,15 @@ fr:
           attributes:
             password:
               confirmation: Les deux mots de passe doivent être identiques
+        imported_bel:
+          attributes:
+            values:
+              both_null: Montant débit et crédit tous deux à zéro
+              both_full: Montant débit et crédit tous deux remplis
+            narration:
+              invalid: Caractères non admis dans le libellé
+              
         adherent/payment:
-          
           attributes:
             base:
               writing_uneditable: L'écriture correspondante ne peut être modifiée ni supprimée car verrouillée ou pointée dans un compte bancaire

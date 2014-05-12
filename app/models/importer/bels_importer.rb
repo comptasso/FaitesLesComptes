@@ -36,9 +36,13 @@
           imported_rows.each(&:save!)
           true
         else
+          # TODO ici on pourrait mieux gérer les messages pour éviter d'avoir
+          # deux messages :debit montant nul, :credit montant nul, mais un seul
+          # On pourrait modifier directement les validators pour ajouter une 
+          # erreur sur ligne (et peut-être) retirer les autres erreurs. 
           imported_rows.each_with_index do |bel, index|
-            bel.errors.full_messages.each do |message|
-              errors.add :base, "Ligne #{index+2}: #{message}"
+            bel.errors.messages.each do |message|
+              errors.add :base, "Ligne #{index+2}: #{message[1].join(', ')}" if message[1].any?
             end
           end
           false
@@ -143,7 +147,7 @@
       def guess_date(str, index)
         str.to_date
       rescue
-        errors.add(:base, "Date non comprise à la ligne #{index}")
+        errors.add(:base, "Erreur de date à la ligne #{index}")
         Date.today
       end
       
