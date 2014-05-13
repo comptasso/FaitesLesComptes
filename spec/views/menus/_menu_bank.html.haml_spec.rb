@@ -31,10 +31,8 @@ describe "menus/_menu_bank.html.erb" do
         
       end
 
-      it 'affiche nouvel extrait' do
-        render :template=>'menus/_menu_bank'
-        page.find_link("Nouvel extrait") 
-      end
+      
+     
       
       it 'affiche A pointer' do
         render :template=>'menus/_menu_bank'
@@ -61,6 +59,13 @@ describe "menus/_menu_bank.html.erb" do
         render :template=>'menus/_menu_bank'
         page.find_link("Pointage") 
       end
+      
+      it 'affiche Extraits de comptes' do
+        render :template=>'menus/_menu_bank'
+        page.find_link("Extraits de comptes") 
+      end
+      
+      
       
       
 # TODO faire des specs qui valident le lien et non seulement le texte du lien

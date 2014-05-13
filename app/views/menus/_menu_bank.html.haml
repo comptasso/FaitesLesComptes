@@ -5,5 +5,4 @@
     %span.no-link= name
 %li= link_to 'Pointage', pointage_bank_extract_bank_extract_lines_path(menu_bank.first_bank_extract_to_point) if menu_bank.unpointed_bank_extract?
 %li= link_to 'A pointer', lines_to_point_bank_account_bank_extracts_path(menu_bank) 
-%li= link_to 'Extraits de comptes', bank_account_bank_extracts_path(menu_bank) if menu_bank.bank_extracts.any?
-%li= link_to 'Nouvel extrait', new_bank_account_bank_extract_path(menu_bank)
+%li= link_to 'Extraits de comptes', bank_account_bank_extracts_path(menu_bank) 

@@ -1,5 +1,8 @@
 = content_for :menu do
   = icon_to 'nouveau.png', new_bank_account_bank_extract_path(@bank_account)
+  = icon_to 'restauration.png', 
+    new_importer_bank_account_bels_importer_path(@bank_account),
+    title: 'Importe un extrait de compte bancaire'
   
 
 .champ
