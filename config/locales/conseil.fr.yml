@@ -1,11 +1,20 @@
 fr:
   conseils:
-    bels_importers:
+    BelsImporterController:
       new: >
              Votre fichier csv doit avoir une ligne de titre et 4 colonnes ; 
              contenant dans l'ordre, la date, le libellé, le débit et le crédit 
              de vos écritures en banque.
-    bank_accounts:
+    BankAccountsController:
       new: >
              Par précaution, nous vous conseillons de rentrez le numéro de 
-             compte avec une partie masquée, par exemple 12345XXX789. 
+             compte avec une partie masquée, par exemple 12345XXX789.
+    ImportedBelsController:
+      index: >
+               Complétez Activité, Nature, éventuellement Réf et Mode Pt puis 
+               cliquer sur l'icone + pour créer l'écriture.
+               Pour les virements internes, attention à ne pas créer l'écriture
+               en double.
+               Les lignes en orange ne peuvent être importées, soit parce que 
+               leur date correspond à un relevé verrouillé, soit parce que
+               le relevé n'est pas créé

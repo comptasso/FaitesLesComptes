@@ -40,14 +40,15 @@ module ApplicationHelper
   # la clé existe dans le fichier conseil.fr.yml.
   # Ce conseil est utilisé dans le _flash_partial.html.haml
   def give_advice
-    conseil = I18n.t(['conseils', controller.controller_name, controller.action_name].join('.'), 
-      :default=>'')
+    key = ['conseils', controller.class.name.split('::'), controller.action_name].join('.')
+    conseil = I18n.t(key, :default=>'')
+    
     unless conseil.empty? 
       content_tag(:div, 'class'=>"alert conseil") do
           content_tag(:a, 'x', {'class'=>'close', 'data-dismiss'=>'alert'}) + 
           content_tag(:strong, conseil) 
         end
-      end
+    end
     end
   
   

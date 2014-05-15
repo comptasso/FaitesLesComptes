@@ -1,9 +1,12 @@
 = content_for :menu do
-  = icon_to 'nouveau.png', new_bank_account_bank_extract_path(@bank_account)
+  = icon_to 'nouveau.png', new_bank_account_bank_extract_path(@bank_account),
+    title:'Nouveau relevé de compte'
   = icon_to 'restauration.png', 
     new_importer_bank_account_bels_importer_path(@bank_account),
-    title: 'Importe un extrait de compte bancaire'
-  
+    title: 'Importe un relevé de compte bancaire'
+  = icon_to 'afficher.png',
+    bank_account_imported_bels_path(@bank_account),
+    title: 'Affiche les lignes importées en attente d\'affectation'
 
 .champ
   %h3 Banque #{@bank_account.nickname} : Liste des extraits de compte
