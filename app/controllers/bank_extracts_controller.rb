@@ -9,17 +9,14 @@ class BankExtractsController < ApplicationController
   # GET /bank_extracts.json
   def index
     @bank_extracts = @bank_account.bank_extracts.period(@period).all 
-    if @bank_extracts.size == 0
-      flash[:alert] = 'Pas encore d\'extrait de compte pour cet exercice ; Peut-être vouliez vous en saisir un ?'
-      redirect_to new_bank_account_bank_extract_url(@bank_account) and return
-    end
   end
 
   
  
   # lock est appelé par le bouton 'valider et verrouillé' de la vue pointage html
-  # bouton qui est lui même affiché que lorsque les soldes sont concordants avec les lignes affichées
-  # dans le modèle bank_extract, un after save verrouille alors les lignes correspondantes
+  # bouton qui n'est lui même affiché que lorsque les soldes sont concordants
+  # avec les lignes affichées
+  # Dans le modèle bank_extract, un after save verrouille alors les lignes correspondantes
   def lock
     @bank_extract = BankExtract.find(params[:id])
     @bank_extract.locked = true
@@ -35,7 +32,7 @@ class BankExtractsController < ApplicationController
   # GET /bank_extracts/new.json
   def new
     @bank_extract = @bank_account.new_bank_extract(@period)
-    fill_with_imported_bels if @bank_extract
+    fill_totals_from_imported_bels if @bank_extract
     unless @bank_extract
       flash[:alert] = 'Impossible de créer un nouveau relevé de compte pour cet exercice'
       redirect_to bank_account_bank_extracts_url 
@@ -117,7 +114,7 @@ Vous pouvez maintenant procéder aux modifications des lignes importées puis g�
   
   # méthode qui tente de remplir les champs total_debit et total_credit avec 
   # les imported_bels en attente
-  def fill_with_imported_bels
+  def fill_totals_from_imported_bels
     ibels = @bank_account.imported_bels.all.select {|r| r.date.in? @bank_extract.begin_date..@bank_extract.end_date}
     if ibels.any?
       @bank_extract.total_debit = ibels.sum(&:debit)

@@ -170,9 +170,11 @@ class BankAccount < ActiveRecord::Base
 
   protected
 
-  # renvoie le dernier relevé de compte (par date de fin) faisant partie de l'exercice
+  # renvoie le dernier relevé de compte (par date de fin) 
+  # faisant partie de l'exercice
   def last_bank_extract(period)
-    bank_extracts.where('end_date <= ?', period.close_date).order(:end_date).last
+    bank_extracts.where('begin_date >= ? AND end_date <= ?', 
+      period.start_date, period.close_date).order(:end_date).last
   end
 
 
