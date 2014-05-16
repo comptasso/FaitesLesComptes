@@ -1,4 +1,4 @@
-%td= I18n.l imported_line.date
+%td= l imported_line.writing_date
 %td= imported_line.cat
 %td= imported_line.ref
 %td= imported_line.narration
@@ -6,7 +6,7 @@
 %td= imported_line.nature.name if imported_line.nature
 %td.numeric= debit_credit imported_line.debit
 %td.numeric= debit_credit imported_line.credit
-%td= imported_line.payment_mode 
+%td= imported_line.support 
 %td
   = imported_line.writing_id
   = icon_to('supprimer.png',

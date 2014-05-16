@@ -7,6 +7,8 @@
 # La méthode input transforme ces valeurs en un format lisible par javascript.
 #
 class DatePickerInput < SimpleForm::Inputs::Base
+  
+  # TODO cette méthode input est probablement inutilement compliquée
 
  def input
    input_html_options['data-jcmin'] = date_min(input_html_options[:date_min])

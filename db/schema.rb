@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140505173728) do
+ActiveRecord::Schema.define(:version => 20140516042525) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -248,6 +248,7 @@ ActiveRecord::Schema.define(:version => 20140505173728) do
     t.integer  "destination_id"
     t.string   "ref"
     t.integer  "writing_id"
+    t.date     "writing_date"
   end
 
   create_table "masks", :force => true do |t|

@@ -35,12 +35,12 @@
 class ImportedBel < ActiveRecord::Base
   include Utilities::PickDateExtension
   
-  attr_accessible :date, :date_picker, :narration, :debit, :credit, :position, 
+  attr_accessible :date, :writing_date, :writing_date_picker, :narration, :debit, :credit, :position, 
     :bank_account_id, :ref, :nature_id, :destination_id, :payment_mode, :cat
   
   # utilise le module Utilities::PickDateExtension pour créer des virtual attributes
   # date_picker
-  pick_date_for :date
+  pick_date_for :writing_date
   
   belongs_to :bank_account
   belongs_to :destination
@@ -52,6 +52,9 @@ class ImportedBel < ActiveRecord::Base
   validates :narration, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MEDIUM_NAME_LENGTH_MAX}
   validates :debit, :credit, presence:true, numericality:true, :not_both_null_or_full=>true, two_decimals:true  # format: {with: /^-?\d*(.\d{0,2})?$/}
   validates :cat, inclusion: {in:%w(D C T R)}
+  
+  # on initialise writing_date avec la date du relevé
+  before_create 'self.writing_date = date'
   # on fait un reset du payment_mode si on a changé de catégorie, ceci pour 
   # que dans la vue index, et en cas de changement par best_in_place de la catégorie,
   # on ne reste pas avec des valeurs inadaptées pour le payment_mode.
@@ -134,6 +137,19 @@ class ImportedBel < ActiveRecord::Base
     end
   end
   
+  # pour afficher le mode de paiement ou le nom de la contrepartie 
+  # dans la colonne Mode Pt des Ibels
+  def support
+    return payment_mode unless payment_mode =~ /(bank|cash)_\d+/
+    vals = payment_mode.split('_')
+    case vals[0]
+    when 'bank' then BankAccount.find(vals[1]).nickname
+    when 'cash' then 'Caisse ' + Cash.find(vals[1]).nickname
+    else 
+      nil
+    end
+  end
+  
   protected
   
   
@@ -169,7 +185,7 @@ class ImportedBel < ActiveRecord::Base
   
   
   def writing_params
-    {date:date, ref:ref, narration:narration}
+    {date:writing_date, ref:ref, narration:narration}
   end
   
   def line_params

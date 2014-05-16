@@ -75,8 +75,9 @@ describe ImportedBel do
     
     context 'quand l ibel est une dépense' do
       
-      subject {ImportedBel.new(date:Date.today, cat:'D', ref:'Ecriture n°...', 
-          narration:'Ecriture importée',
+      subject {ImportedBel.new(date:Date.today, writing_date: Date.today,
+          cat:'D', ref:'Ecriture n...', 
+          narration:'Ecriture importee',
           bank_account_id:1,
           nature_id:1, destination_id:1, 
           debit:25.45, credit:0, payment_mode:'CB')}
@@ -89,8 +90,8 @@ describe ImportedBel do
       end
     
       it 'to write renvoie les params' do
-        subject.to_write.should == {date:Date.today, ref:'Ecriture n°...',
-          narration:'Ecriture importée',
+        subject.to_write.should == {date:Date.today, ref:'Ecriture n...',
+          narration:'Ecriture importee',
           compta_lines_attributes:{'0'=> {nature_id:1, destination_id:1,
               debit:25.45, credit:0}, 
             '1'=>{account_id:107, debit:0, credit:25.45, payment_mode:'CB'}
@@ -109,9 +110,11 @@ describe ImportedBel do
       use_test_organism
     end
     
+      
     describe 'une dépense' do
     
-      subject {ImportedBel.new(date:Date.today, cat:'D', ref:'Ecriture n°...', 
+      subject {ImportedBel.new(date:Date.today, writing_date:Date.today,
+          cat:'D', ref:'Ecriture n°...', 
           narration:'Ecriture importée',
           bank_account_id:@ba.id,
           nature_id:@n.id, destination_id:@o.destinations.first.id, 
@@ -127,7 +130,9 @@ describe ImportedBel do
     
     describe 'un transfert' do
       
-      subject {ImportedBel.new(date:Date.today, cat:'T', ref:'Ecriture n°...', 
+      subject {ImportedBel.new(date:Date.today, 
+          writing_date_picker:I18n.l(Date.today),
+          cat:'T', ref:'Ecriture n°...', 
           narration:'Transfert',
           bank_account_id:@ba.id,
           nature_id:nil, destination_id:nil, 
