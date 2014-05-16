@@ -71,9 +71,9 @@ describe "BankExtracts" do
 
   describe 'GET INDEX bank_extracts'  do
 
-    it 'sans extrait la page renvoie sur new' do
+    it 'sans extrait la page renvoie sur index' do
       visit bank_account_bank_extracts_path(@ba)
-      page.find('.champ h3').should have_content "Compte courant : création d'un extrait de compte"
+      page.find('.champ h3').should have_content "Compte courant : Liste des extraits de compte"
     end
 
     context 'avec un extrait de compte non vide' do

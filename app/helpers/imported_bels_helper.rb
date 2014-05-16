@@ -28,22 +28,33 @@ module ImportedBelsHelper
     PAYMENT_MODES.reject{|pm| pm == 'Espèces'}.map {|pm| [pm, pm]}
   end
   
+  # pour afficher le mode de paiement ou le nom de la contrepartie 
+  # dans la colonne Mode Pt
+  def support(ibel)
+    return ibel.payment_mode unless ibel.payment_mode =~ /(bank|cash)_\d+/
+    vals = ibel.payment_mode.split('_')
+    case vals[0]
+    when 'bank' then BankAccount.find(vals[1]).nickname
+    when 'cash' then 'Caisse ' + Cash.find(vals[1]).nickname
+    else 
+      ''
+    end
+  end
   
   
   
   
-  
-  # la collection peut être T pour un transfert, D pour une dépense, R pour 
-  #  une recette, C pour une remise de chèque
+  # la collection peut être T pour un transfert, D pour une dépense, C pour 
+  #  un crédit. 
   #  
   #  Pour les écritures qui sont des débits, on peut avoir D ou T
-  #  Pour les crédits on peut avoir R T C
+  #  Pour les crédits on peut avoir C ou T 
   #
   def collection_cat(ibel)
     if ibel.debit != 0.0
       [['D', 'D'], ['T', 'T']]
     else
-      [['R', 'R'], ['T', 'T'], ['C', 'C']]
+      [['C', 'C'], ['T', 'T']]
     end
   end
   

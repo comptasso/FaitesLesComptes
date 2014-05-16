@@ -42,10 +42,10 @@ describe Importer::BelsImporter do
         subject.should have(8).imported_rows
       end
       
-      it 'et comprend 4 erreurs sur la base' do
+      it 'et comprend 5 erreurs sur la base' do
         subject.save
-        p subject.errors.full_messages
-        subject.should have(7).errors
+        # p subject.errors.full_messages
+        subject.should have(5).errors
       end
       
     end

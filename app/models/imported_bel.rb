@@ -137,18 +137,7 @@ class ImportedBel < ActiveRecord::Base
     end
   end
   
-  # pour afficher le mode de paiement ou le nom de la contrepartie 
-  # dans la colonne Mode Pt des Ibels
-  def support
-    return payment_mode unless payment_mode =~ /(bank|cash)_\d+/
-    vals = payment_mode.split('_')
-    case vals[0]
-    when 'bank' then BankAccount.find(vals[1]).nickname
-    when 'cash' then 'Caisse ' + Cash.find(vals[1]).nickname
-    else 
-      nil
-    end
-  end
+  
   
   protected
   
