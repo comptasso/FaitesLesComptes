@@ -33,9 +33,14 @@
 #
 
 class ImportedBel < ActiveRecord::Base
+  include Utilities::PickDateExtension
   
-  attr_accessible :date, :narration, :debit, :credit, :position, 
+  attr_accessible :date, :date_picker, :narration, :debit, :credit, :position, 
     :bank_account_id, :ref, :nature_id, :destination_id, :payment_mode, :cat
+  
+  # utilise le module Utilities::PickDateExtension pour créer des virtual attributes
+  # date_picker
+  pick_date_for :date
   
   belongs_to :bank_account
   belongs_to :destination

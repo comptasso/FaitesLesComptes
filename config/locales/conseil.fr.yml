@@ -4,17 +4,22 @@ fr:
       new: >
              Votre fichier csv doit avoir une ligne de titre et 4 colonnes ; 
              contenant dans l'ordre, la date, le libellé, le débit et le crédit 
-             de vos écritures en banque.
+             de vos écritures en banque
     BankAccountsController:
       new: >
              Par précaution, nous vous conseillons de rentrez le numéro de 
-             compte avec une partie masquée, par exemple 12345XXX789.
+             compte avec une partie masquée, par exemple 12345XXX789
     ImportedBelsController:
       index: >
-               Complétez Activité, Nature, éventuellement Réf et Mode Pt puis 
-               cliquer sur l'icone + pour créer l'écriture.
-               Pour les virements internes, attention à ne pas créer l'écriture
-               en double.
-               Les lignes en orange ne peuvent être importées, soit parce que 
-               leur date correspond à un relevé verrouillé, soit parce que
-               le relevé n'est pas créé
+               Modifiez et complétez les différents champs pour chaque ligne que 
+               vous souhaitez importer, puis 
+               cliquer sur l'icone + qui apparaîtra, permettant de 
+               créer l'écriture.</p>
+               N'oubliez pas de noter le numéro de l'écriture (qui apparaîtra 
+               alors à la place de l'icône +) sur la pièce justificative.</p>
+               Pour les virements internes, modifiez le type en 'T', puis
+               sélectionnez la contrepartie dans la colonne Mode Pt ; 
+               attention à ne pas créer l'écriture
+               en double lorsque vous importerez les écritures de vos autres 
+               comptes.
+               

@@ -17,10 +17,12 @@ table a img
 }
 
 .conseil {
-   color: #33f;
+   color: #271;
 }
 
-.nav {margin-bottom: 4px;}
+
+
+.nav, .conseil p {margin-bottom: 4px;}
 
 .nav > li > a:hover {
     background-color: #CBEECB;

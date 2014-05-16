@@ -42,11 +42,12 @@ module ApplicationHelper
   def give_advice
     key = ['conseils', controller.class.name.split('::'), controller.action_name].join('.')
     conseil = I18n.t(key, :default=>'')
+    conseil.gsub!('</p>', '</p><p>')
     
     unless conseil.empty? 
       content_tag(:div, 'class'=>"alert conseil") do
           content_tag(:a, 'x', {'class'=>'close', 'data-dismiss'=>'alert'}) + 
-          content_tag(:strong, conseil) 
+          content_tag(:p, conseil.html_safe) 
         end
     end
     end

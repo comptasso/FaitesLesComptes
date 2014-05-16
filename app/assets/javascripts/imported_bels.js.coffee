@@ -2,6 +2,18 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+# lit l'attribut date-min et date-max du body de la table
+# et affecte ces valeurs aux date-picker
+set_date_limits = ->
+  datemin = $('tbody').attr('data-mindate')
+  datemax = $('tbody').attr('data-maxdate')
+  $.datepicker.setDefaults
+    dateFormat: 'dd/mm/yy',
+    minDate: datemin,
+    maxDate: datemax
+
+
+
 # Vérifie que la ligne a ses champs destination_id, nature_id et 
 # payment_mode rempli. Alors affiche le bouton nouveau qui autrement est caché.
 #
@@ -59,6 +71,7 @@ refill_payment_mode_values = (field) ->
 # de best_in_place  
       
 $ ->
+  set_date_limits()
   $(".public_imported_bels .best_in_place").best_in_place()
   $('.public_imported_bels tr.importable').each ->
     if $(@).find('td.cat').text().trim() == 'T'
