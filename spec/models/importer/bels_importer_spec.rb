@@ -32,7 +32,18 @@ describe Importer::BelsImporter do
     
     end
     
-    context 'avec un fichier mal formé' do
+    context 'avec un ficher illisible' do
+      let(:source_file) {File.join(Rails.root, 'spec/fixtures/importer/releve.slk')}
+     
+      subject {Importer::BelsImporter.new(file:source_file, bank_account_id:1)}
+      
+      it 'indique CSVMalformedCSVError' do
+        subject.imported_rows
+        subject.errors[:read].first.should == 'Fichier mal formé, fin de la lecture en ligne 11'
+      end
+    end
+    
+    context 'avec un fichier avec des lignes mal formées' do
       let(:source_file) {File.join(Rails.root, 'spec/fixtures/importer/releve_bad.csv')}
      
       subject {Importer::BelsImporter.new(file:source_file, bank_account_id:1)}

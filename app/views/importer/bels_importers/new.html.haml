@@ -12,6 +12,6 @@
         :url => importer_bank_account_bels_importer_path,
         :html=> {class: 'form-horizontal'}  do |f| 
         -# error_messages est un helper défini dans bels_importer_helper
-        = f.error_notification(message: error_messages(@bels_importer))
+        = f.error_notification(message: error_messages(@bels_importer)) 
         = f.input :file, as: :file, label:'Fichier', required:true
         .form-actions= f.submit "Importer", class: "btn-primary span2"

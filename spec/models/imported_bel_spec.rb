@@ -7,7 +7,7 @@ RSpec.configure do |config|
 end
 
 
-describe ImportedBel do   
+describe ImportedBel do    
   include OrganismFixtureBis  
   
   def valid_attributes 
@@ -117,7 +117,8 @@ describe ImportedBel do
           cat:'D', ref:'Ecriture n°...', 
           narration:'Ecriture importée',
           bank_account_id:@ba.id,
-          nature_id:@n.id, destination_id:@o.destinations.first.id, 
+          nature_id:@n.id,
+          destination_id:@o.destinations.first.id, 
           debit:25.45, credit:0, payment_mode:'CB')}
         
       it 'to_write' do
