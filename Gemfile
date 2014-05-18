@@ -18,6 +18,7 @@ gem 'pg'
 gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
 gem 'apartment' # pour la gestion des schemas
 gem 'devise' # pour l'authentification
+gem 'ofx' # pour la lecture des fichiers bancaires au format ofx
 
 gem 'delayed_job_active_record'
 gem 'unicorn'

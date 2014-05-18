@@ -6,11 +6,11 @@ RSpec.configure do |config|
   #  config.filter =  {wip:true}
 end
 
-describe Importer::BelsImporter do
+describe Importer::CsvImporter do
   
   describe 'validations' do
     
-    subject {Importer::BelsImporter.new(file:'releve.csv', bank_account_id:1)}
+    subject {Importer::CsvImporter.new(file:'releve.csv', bank_account_id:1)}
     
     it {subject.should be_valid}
     it {subject.file = nil; subject.should_not be_valid}
@@ -24,7 +24,7 @@ describe Importer::BelsImporter do
     
       let(:source_file) {File.join(Rails.root, 'spec/fixtures/importer/releve.csv')}
     
-      subject {Importer::BelsImporter.new(file:source_file, bank_account_id:1)}
+      subject {Importer::CsvImporter.new(file:source_file, bank_account_id:1)}
     
       it 'sait lire les lignes d un fichier' do
         subject.should have(49).imported_rows
@@ -35,7 +35,7 @@ describe Importer::BelsImporter do
     context 'avec un ficher illisible' do
       let(:source_file) {File.join(Rails.root, 'spec/fixtures/importer/releve.slk')}
      
-      subject {Importer::BelsImporter.new(file:source_file, bank_account_id:1)}
+      subject {Importer::CsvImporter.new(file:source_file, bank_account_id:1)}
       
       it 'indique CSVMalformedCSVError' do
         subject.imported_rows
@@ -46,7 +46,7 @@ describe Importer::BelsImporter do
     context 'avec un fichier avec des lignes mal formées' do
       let(:source_file) {File.join(Rails.root, 'spec/fixtures/importer/releve_bad.csv')}
      
-      subject {Importer::BelsImporter.new(file:source_file, bank_account_id:1)}
+      subject {Importer::CsvImporter.new(file:source_file, bank_account_id:1)}
     
       it 'enregistre des erreurs en notant les lignes' do
         subject.save
