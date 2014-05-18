@@ -7,7 +7,7 @@ module Importer
   # reprenant les champs Date, Libellé, Débit et Crédit, dans cet ordre,
   # mais pas forcément ces libellés.
   # 
-  class CsvImporter < Importer::BaseImporter  
+  class CsvImporter < BaseImporter  
   
     
  
@@ -32,32 +32,28 @@ module Importer
       # permet d'avoir à la fois un fichier temporaire comme le prévoit rails
       # ou un nom de fichier (ce qui facilite les tests et essais).
       f = file.respond_to?(:tempfile) ? file.tempfile : file
-      begin
-        CSV.foreach(f, options) do |row|
+      
+      CSV.foreach(f, options) do |row|
           
-          # vérification des champs pour les lignes autres que la ligne de titre
-          if not_empty?(row) && correct?(row, index)
+        # vérification des champs pour les lignes autres que la ligne de titre
+        if not_empty?(row) 
+          prepare(row)
+          # création d'un array de Bel
+          ibel =  ImportedBel.new(bank_account_id:ba_id, 
+            position:position, 
+            date:row[0], 
+            narration:row[1],
+            debit:row[2], credit:row[3])
+          ibel.cat_interpreter # on remplit les champs cat
+          ibel.payment_mode_interpreter # on tente de remplir le champ mode de paiement
+          lirs << ibel
+          position += 1 
             
-            # création d'un array de Bel
-            ibel =  ImportedBel.new(bank_account_id:ba_id, 
-              position:position, 
-              date:row[0], 
-              narration:row[1],
-              debit:row[2], credit:row[3])
-            ibel.cat_interpreter # on remplit les champs cat
-            ibel.payment_mode_interpreter # on tente de remplir le champ mode de paiement
-            lirs << ibel
-            position += 1 
-            
-          end
-          index += 1
         end
-        lirs
-      rescue CSV::MalformedCSVError
-        # puts 'dans le rescue de lecture du csv'
-        errors.add(:read, "Fichier mal formé, fin de la lecture en ligne #{index}")
-        lirs
+        index += 1
       end
+      lirs
+      
     end
     
     protected
@@ -65,10 +61,10 @@ module Importer
     # controle la validité d'une ligne. Si les transformations
     # échoues (to_f ou Date.parse) on arrive dans le bloc et la ligne 
     # n'est pas lue.
-    def correct?(row, index)
+    def prepare(row)
       # row[3] et row[2] ne doivent pas être vide tous les deux
       return false if row[2] == nil && row[3] == nil
-      row[0] = guess_date(row[0], index) # on peut lire la date
+      row[0] = row[0].to_date rescue '' # on peut lire la date
       row[1] = correct_narration(row[1])
       row[2] ||= '0.0' # on remplace les nil par des zéros
       row[3] ||= '0.0'
@@ -76,15 +72,9 @@ module Importer
       row[2] = row[2].gsub(',','.').to_d.round(2)  # on peut faire un chiffre du débit
       row[3] = row[3].gsub(',','.').to_d.round(2)  # on peut faire un chiffre du crédit
       true
-    rescue Exception =>e 
-        
-      #        puts e.backtrace.inspect  
-      errors.add(:base, 
-        "Ligne #{index} non conforme : #{e.message}") 
-      Rails.logger.info "Lecture de fichier csv : une erreut s est produite #{row}"
-      false
     end
-      
+    
+    
     
   end
   

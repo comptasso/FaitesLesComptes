@@ -27,14 +27,7 @@ module Importer
     end     
     
     protected 
-    # guess_date tente de lire la date et sinon ajoute une erreur au modèle
-    # guess_date retourne toujours une date, soit la bonne, soit la date du jour.
-    def guess_date(str, index)
-      str.to_date
-    rescue
-      errors.add(:base, "Erreur de date à la ligne #{index}")
-      Date.today
-    end
+   
       
     # méthode qui permet d'éliminer les lignes dont tous les champs sont nil
     def not_empty?(row)

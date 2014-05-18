@@ -4,7 +4,7 @@ require 'spec_helper'
 
 
 RSpec.configure do |c|
-   c.filter = {wip:true} 
+ #  c.filter = {wip:true} 
 end
 
 
@@ -37,46 +37,25 @@ describe Importer::BelsImportersController do
       
     
     it 'créé le BaseImporter' do
-      Importer::CsvImporter.should_receive(:new).
+      Importer::Loader.should_receive(:new).
         with({"file"=>lefichiercsv, "bank_account_id"=>ba.id}).
         and_return(double(Importer::BaseImporter, save:true, need_extract?:false))
       post :create, {bank_account_id:ba.to_param, importer_bels_importer:{file:lefichiercsv} }, valid_session 
     end
     
     it 'rend la vue new si echec de la sauvegarde' do
-      Importer::BaseImporter.stub(:new).
-        and_return(double(Importer::BaseImporter, save:false))
+      Importer::Loader.stub(:new).
+        and_return(double(Importer::Loader, save:false))
       post :create, {bank_account_id:ba.to_param, importer_bels_importer:{file:lefichiercsv} }, valid_session 
       response.should render_template 'new'
     end
     
-    describe 'la classe du BelsImporter dépend de l extension', wip:true do
-      
-      it 'avec un fichier csv' do
-        
-        ba.stub_chain(:bank_extracts, :order, :last, :end_date).and_return Date.today.end_of_year 
-        post :create, {bank_account_id:ba.to_param,
-          importer_bels_importer:{file:lefichiercsv} }, valid_session 
-        assigns(:bels_importer).should be_an_instance_of(Importer::CsvImporter)
-      end
-      
-      it 'avec un fichier csv' do
-        
-        ba.stub_chain(:bank_extracts, :order, :last, :end_date).and_return Date.today.end_of_year 
-        post :create, {bank_account_id:ba.to_param,
-          importer_bels_importer:{file:lefichierofx} }, valid_session 
-        assigns(:bels_importer).should be_an_instance_of(Importer::OfxImporter) 
-      end
-      
-      
-      
-      
-    end 
+    
     
     context 'il faut un extrait  de compte' do
       
       before(:each) do
-        Importer::BaseImporter.stub(:new).
+        Importer::Loader.stub(:new).
           and_return(@ibel = double(Importer::BaseImporter, save:true))
         @ibel.should_receive(:need_extract?).and_return(true)
       end
@@ -95,7 +74,7 @@ describe Importer::BelsImportersController do
     context 'sans besoin d un extrait  de compte' do
       
       before(:each) do
-        Importer::BaseImporter.stub(:new).
+        Importer::Loader.stub(:new).
           and_return(@ibel = double(Importer::BaseImporter, save:true))
         @ibel.should_receive(:need_extract?).and_return(false)
       end

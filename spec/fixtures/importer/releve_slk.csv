@@ -1,0 +1,2286 @@
+ID;PWXL;N;E
+P;PGeneral
+P;P0
+P;P0.00
+P;P#,##0
+P;P#,##0.00
+P;P#,##0\ _E;;\-#,##0\ _E
+P;P#,##0\ _E;;[Red]\-#,##0\ _E
+P;P#,##0.00\ _E;;\-#,##0.00\ _E
+P;P#,##0.00\ _E;;[Red]\-#,##0.00\ _E
+P;P#,##0\ "E";;\-#,##0\ "E"
+P;P#,##0\ "E";;[Red]\-#,##0\ "E"
+P;P#,##0.00\ "E";;\-#,##0.00\ "E"
+P;P#,##0.00\ "E";;[Red]\-#,##0.00\ "E"
+P;P0%
+P;P0.00%
+P;P0.00E+00
+P;P##0.0E+0
+P;P#" "?/?
+P;P#" "??/??
+P;Pdd/mm/yy
+P;Pdd\-mmm\-yy
+P;Pdd\-mmm
+P;Pmmm\-yy
+P;Ph:mm\ AM/PM
+P;Ph:mm:ss\ AM/PM
+P;Phh:mm
+P;Phh:mm:ss
+P;Pdd/mm/yy\ hh:mm
+P;Pmm:ss
+P;Pmm:ss.0
+P;P@
+P;P[h]:mm:ss
+P;P_-* #,##0\ "E"_-;;\-* #,##0\ "E"_-;;_-* "-"\ "E"_-;;_-@_-
+P;P_-* #,##0\ _E_-;;\-* #,##0\ _F_-;;_-* "-"\ _E_-;;_-@_-
+P;P_-* #,##0.00\ "E"_-;;\-* #,##0.00\ "E"_-;;_-* "-"??\ "E"_-;;_-@_-
+P;P_-* #,##0.00\ _E_-;;\-* #,##0.00\ _E_-;;_-* "-"??\ _E_-;;_-@_-
+P;FArial;M200;L9
+P;FArial;M200;L9
+P;FArial;M200;L9
+P;FArial;M200;L9
+P;EArial;M200;L9
+P;EArial;M200;L9
+P;EArial;M200;L9
+P;EArial;M200;L9
+P;EArial;M200;SB
+P;EArial;M400
+P;EArial;M400;SB
+P;EArial;M320
+P;EArial;M320;SB
+P;EArial;M240;SB
+P;EArial;M280;SB
+P;EArial;M240
+P;EArial;M200;L9
+P;EArial;M200;SBI;L17
+P;EArial;M160
+F;P0;DG0G10;SM0;M255
+B;Y3;X4;D0 0 141 3
+O;L;D;V0;K47;G100 0.001
+F;W1 1 11
+F;W2 2 58
+F;W3 3 17
+F;W4 4 15
+F;W5 256 11
+
+F;SDM11;M525;R1
+F;Y1;X1
+C;K"TNBelNBechargement du 18/05/2014"
+F;X2
+F;X3
+F;X4
+
+F;Y3;X1
+F;X2
+F;X3
+F;X4
+F;SDM13;M405;R4
+F;Y4;X1
+C;K"M.OU MME LEPAGE JEAN-CLAUDE        "
+F;X2
+F;X3
+F;X4
+F;SDM13;M405;R5
+F;Y5;X1
+C;K"CCHQ       nN0 50348351022"
+F;X2
+F;X3
+F;X4
+F;M315;R6
+F;Y6;X1
+F;P0;FG0R;SDM14;X2
+C;K"Solde au 17/05/14"
+F;P4;FF2G;SDM14;X3
+C;K1218.59
+F;SDM14;X4
+C;K"EUR"
+F;Y7;X1
+F;X2
+F;X3
+F;X4
+F;SDM14;M315;R8
+F;Y8;X1
+C;K"Liste des opérations du compte entre le 01/02/2014 et le 17/05/2014"
+F;X2
+F;X3
+F;X4
+F;SDM9;R9
+F;P0;FG0R;SLRTBM9;Y9;X1
+C;K"Date"
+F;P0;FG0C;SLRTBM9;X2
+C;K"Libellé"
+F;P0;FG0R;SLRTBM9;X3
+C;K"Débit Euros"
+F;P0;FG0R;SLRTBM9;X4
+C;K"Crédit Euros"
+
+
+F;M450;R10
+F;P21;FG0G;SLRTBM0;Y10;X1
+C;K"16-Mai"
+F;SLRTBM19;X2
+C;K"Predica Predissime 9     237434     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K100.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R11
+F;P21;FG0G;SLRTBM0;Y11;X1
+C;K"15-Mai"
+F;SLRTBM19;X2
+C;K"Le Cristal 92 Nanterre     14/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K53.60
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R12
+F;P21;FG0G;SLRTBM0;Y12;X1
+C;K"15-Mai"
+F;SLRTBM19;X2
+C;K"Sanef 06/05-12/05/14 Senli 10/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K35.60
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M675;R13
+F;P21;FG0G;SLRTBM0;Y13;X1
+C;K"15-Mai"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Ag Mr   Lepage Thomas               :15/05/2014"
+F;P4;FF2G;SLRTBM0;X3
+C;K10.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R14
+F;P21;FG0G;SLRTBM0;Y14;X1
+C;K"14-Mai"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Transpole                           :1434888 Maxi Rythmo Pde R50 :Fr61597437061 :++tco000000031370"
+F;P4;FF2G;SLRTBM0;X3
+C;K22.75
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R15
+F;P21;FG0G;SLRTBM0;Y15;X1
+C;K"13-Mai"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Societe Lilloise D'autopartage      :Fact Lepage Jean Claude :Fr29zzz521154 :++aplil000000192731122013211819"
+F;P4;FF2G;SLRTBM0;X3
+C;K27.87
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R16
+F;P21;FG0G;SLRTBM0;Y16;X1
+C;K"12-Mai"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :American Express Carte-France       :Xxxx X12778 3xxxx :Fr48zzz101869 :E2013067064007965"
+F;P4;FF2G;SLRTBM0;X3
+C;K43.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R17
+F;P21;FG0G;SLRTBM0;Y17;X1
+C;K"12-Mai"
+F;SLRTBM19;X2
+C;K"Lille            09/05 18h40        :Retrait Au Distributeur            "
+F;P4;FF2G;SLRTBM0;X3
+C;K80.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R18
+F;P21;FG0G;SLRTBM0;Y18;X1
+C;K"12-Mai"
+F;SLRTBM19;X2
+C;K"Shell 3298 Rumaucourt      10/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K61.94
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R19
+F;P21;FG0G;SLRTBM0;Y19;X1
+C;K"12-Mai"
+F;SLRTBM19;X2
+C;K"Estaminet Au Vieux Lille   11/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K72.20
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R20
+F;P21;FG0G;SLRTBM0;Y20;X1
+C;K"09-Mai"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Spb                                 :Sfr Assur  0072455153 :Fr55zzz115711 :++1090800109363191"
+F;P4;FF2G;SLRTBM0;X3
+C;K3.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R21
+F;P21;FG0G;SLRTBM0;Y21;X1
+C;K"09-Mai"
+F;SLRTBM19;X2
+C;K"Esso St Sauveur Lille      07/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K15.35
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R22
+F;P21;FG0G;SLRTBM0;Y22;X1
+C;K"09-Mai"
+F;SLRTBM19;X2
+C;K"Ugc Bornes Lille           08/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K22.20
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R23
+F;P21;FG0G;SLRTBM0;Y23;X1
+C;K"09-Mai"
+F;SLRTBM19;X2
+C;K"Le Challenge Martigues     07/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K24.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R24
+F;P21;FG0G;SLRTBM0;Y24;X1
+C;K"09-Mai"
+F;SLRTBM19;X2
+C;K"Liv Kang Hellemmes Lille   07/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K42.50
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R25
+F;P21;FG0G;SLRTBM0;Y25;X1
+C;K"09-Mai"
+F;SLRTBM19;X2
+C;K"Siaci Saint Honore Sa Mut 055965    :Virement En Votre Faveur            :Mut  05596577        35701686 :Mut  05596577        35701686"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K39.00
+
+
+F;M450;R26
+F;P21;FG0G;SLRTBM0;Y26;X1
+C;K"07-Mai"
+F;SLRTBM19;X2
+C;K"Assoc Polytechni Paris     06/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K105.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R27
+F;P21;FG0G;SLRTBM0;Y27;X1
+C;K"07-Mai"
+F;SLRTBM19;X2
+C;K"Effia Lille Cedex          06/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K7.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R28
+F;P21;FG0G;SLRTBM0;Y28;X1
+C;K"07-Mai"
+F;SLRTBM19;X2
+C;K"Siaci Saint Honore Sa Mut 055965    :Virement En Votre Faveur            :Mut  05596577        35697377 :Mut  05596577        35697377"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K6.90
+
+
+F;M450;R29
+F;P21;FG0G;SLRTBM0;Y29;X1
+C;K"07-Mai"
+F;SLRTBM19;X2
+C;K"0501123                             :Cheque Emis                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K948.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R30
+F;P21;FG0G;SLRTBM0;Y30;X1
+C;K"06-Mai"
+F;SLRTBM19;X2
+C;K"Ps Cl Lille                         :Interets Crediteurs                "
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K0.73
+
+
+F;M450;R31
+F;P21;FG0G;SLRTBM0;Y31;X1
+C;K"06-Mai"
+F;SLRTBM19;X2
+C;K"Effia Lille Cedex          05/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K14.20
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R32
+F;P21;FG0G;SLRTBM0;Y32;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"Assurance Pret Habitat 05/14        :Reglement                          "
+F;P4;FF2G;SLRTBM0;X3
+C;K106.82
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R33
+F;P21;FG0G;SLRTBM0;Y33;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"99146171890 Echeance    05/05/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K475.27
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R34
+F;P21;FG0G;SLRTBM0;Y34;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"99140207159 Echeance    05/05/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K346.79
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R35
+F;P21;FG0G;SLRTBM0;Y35;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"99140206837 Echeance    05/05/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K462.38
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R36
+F;P21;FG0G;SLRTBM0;Y36;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"01000676949 Echeance    05/05/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K8.18
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R37
+F;P21;FG0G;SLRTBM0;Y37;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"01000676930 Echeance    05/05/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K86.57
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R38
+F;P21;FG0G;SLRTBM0;Y38;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"01000676922 Echeance    05/05/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K50.92
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R39
+F;P21;FG0G;SLRTBM0;Y39;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"01000676914 Echeance    05/05/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K18.37
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R40
+F;P21;FG0G;SLRTBM0;Y40;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"01000676906 Echeance    05/05/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K1087.63
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R41
+F;P21;FG0G;SLRTBM0;Y41;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"Numericable (02)         473678     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K45.60
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R42
+F;P21;FG0G;SLRTBM0;Y42;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"Cora Flers Villeneuve D A  03/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K53.72
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R43
+F;P21;FG0G;SLRTBM0;Y43;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"Fnac Lille Cedex           03/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K19.99
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R44
+F;P21;FG0G;SLRTBM0;Y44;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"Secafi Dse 001-B051400958-1         :Virement En Votre Faveur            :20140430 :001-B051400958-1"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K505.83
+
+
+F;M675;R45
+F;P21;FG0G;SLRTBM0;Y45;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Ag Mme Lepage Brosse A              :05/05/2014"
+F;P4;FF2G;SLRTBM0;X3
+C;K1000.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R46
+F;P21;FG0G;SLRTBM0;Y46;X1
+C;K"05-Mai"
+F;SLRTBM19;X2
+C;K"L'oreal                             :Paiement De Coupons                "
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K7.95
+
+
+F;M450;R47
+F;P21;FG0G;SLRTBM0;Y47;X1
+C;K"02-Mai"
+F;SLRTBM19;X2
+C;K"Cotis Csca Confort Famille          :Cotisation                         "
+F;P4;FF2G;SLRTBM0;X3
+C;K3.38
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R48
+F;P21;FG0G;SLRTBM0;Y48;X1
+C;K"02-Mai"
+F;SLRTBM19;X2
+C;K"Canalplay Infin Issy Les M 01/05    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K6.99
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R49
+F;P21;FG0G;SLRTBM0;Y49;X1
+C;K"02-Mai"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Web Lepage Jean Claude Apport Ma    :Apport Mai :02/05/2014"
+F;P4;FF2G;SLRTBM0;X3
+C;K500.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M675;R50
+F;P21;FG0G;SLRTBM0;Y50;X1
+C;K"02-Mai"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Web Lepage Jean-Claude              :02/05/2014"
+F;P4;FF2G;SLRTBM0;X3
+C;K2000.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R51
+F;P21;FG0G;SLRTBM0;Y51;X1
+C;K"30-Avr"
+F;SLRTBM19;X2
+C;K"Lille            29/04 13h28        :Retrait Au Distributeur            "
+F;P4;FF2G;SLRTBM0;X3
+C;K100.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R52
+F;P21;FG0G;SLRTBM0;Y52;X1
+C;K"30-Avr"
+F;SLRTBM19;X2
+C;K"Selarl Sohier Lille        29/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K23.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R53
+F;P21;FG0G;SLRTBM0;Y53;X1
+C;K"30-Avr"
+F;SLRTBM19;X2
+C;K"Vinci                               :Paiement De Coupons                "
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K8.53
+
+
+F;M900;R54
+F;P21;FG0G;SLRTBM0;Y54;X1
+C;K"30-Avr"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Web Lepage Thomas Virement Mensu    :Virement Mensuel :30/04/2014"
+F;P4;FF2G;SLRTBM0;X3
+C;K100.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R55
+F;P21;FG0G;SLRTBM0;Y55;X1
+C;K"29-Avr"
+F;SLRTBM19;X2
+C;K"Ratp Paris Cedex 12        28/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K21.20
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R56
+F;P21;FG0G;SLRTBM0;Y56;X1
+C;K"29-Avr"
+F;SLRTBM19;X2
+C;K"Hippo Gare Nord Paris      28/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K38.40
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R57
+F;P21;FG0G;SLRTBM0;Y57;X1
+C;K"29-Avr"
+F;SLRTBM19;X2
+C;K"Secafi D S E Gra/40731/2014-04-2    :Virement En Votre Faveur            :Payment    Avril     2014 :Gra/40731/2014-04-24"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K5828.13
+
+
+F;M450;R58
+F;P21;FG0G;SLRTBM0;Y58;X1
+C;K"28-Avr"
+F;SLRTBM19;X2
+C;K"Ratp Paris Cedex 12        25/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K13.70
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1350;R59
+F;P21;FG0G;SLRTBM0;Y59;X1
+C;K"24-Avr"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Sfr                                 :Prelevement Sfr Mobile 4n-Easg98-01 :008105554095 :Fr44zzz332801 :++gp20131020356748226"
+F;P4;FF2G;SLRTBM0;X3
+C;K19.99
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R60
+F;P21;FG0G;SLRTBM0;Y60;X1
+C;K"23-Avr"
+F;SLRTBM19;X2
+C;K"Intermarche Dac Mons En Ba 22/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K20.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R61
+F;P21;FG0G;SLRTBM0;Y61;X1
+C;K"23-Avr"
+F;SLRTBM19;X2
+C;K"Siaci Saint Honore Sa Mut 055965    :Virement En Votre Faveur            :Mut  05596577        35405254 :Mut  05596577        35405254"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K13.80
+
+
+F;M900;R62
+F;P21;FG0G;SLRTBM0;Y62;X1
+C;K"23-Avr"
+F;SLRTBM19;X2
+C;K"Siaci Saint Honore Sa Mut 055965    :Virement En Votre Faveur            :Mut  05596577        35444503 :Mut  05596577        35444503"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K0.90
+
+
+F;M450;R63
+F;P21;FG0G;SLRTBM0;Y63;X1
+C;K"22-Avr"
+F;SLRTBM19;X2
+C;K"Lille Bourse     19/04 11h12        :Retrait Au Distributeur            "
+F;P4;FF2G;SLRTBM0;X3
+C;K80.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R64
+F;P21;FG0G;SLRTBM0;Y64;X1
+C;K"22-Avr"
+F;SLRTBM19;X2
+C;K"Ratp Paris Cedex 12        21/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K5.30
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R65
+F;P21;FG0G;SLRTBM0;Y65;X1
+C;K"22-Avr"
+F;SLRTBM19;X2
+C;K"Novotel Palaiseau          19/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K101.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R66
+F;P21;FG0G;SLRTBM0;Y66;X1
+C;K"22-Avr"
+F;SLRTBM19;X2
+C;K"Sncf Internet Isles Les Me 19/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K125.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R67
+F;P21;FG0G;SLRTBM0;Y67;X1
+C;K"18-Avr"
+F;SLRTBM19;X2
+C;K"Rel.Mons Baroeul           17/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K12.27
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R68
+F;P21;FG0G;SLRTBM0;Y68;X1
+C;K"17-Avr"
+F;SLRTBM19;X2
+C;K"Relais Bolmon Marignane    16/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K11.32
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R69
+F;P21;FG0G;SLRTBM0;Y69;X1
+C;K"16-Avr"
+F;SLRTBM19;X2
+C;K"Siaci Saint Honore Sa Mut 055965    :Virement En Votre Faveur            :Mut  05596577        35317662 :Mut  05596577        35317662"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K39.00
+
+
+F;M450;R70
+F;P21;FG0G;SLRTBM0;Y70;X1
+C;K"16-Avr"
+F;SLRTBM19;X2
+C;K"Predica Predissime 9     237434     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K100.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R71
+F;P21;FG0G;SLRTBM0;Y71;X1
+C;K"15-Avr"
+F;SLRTBM19;X2
+C;K"Transpole Gr Lille       437061     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K22.75
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M675;R72
+F;P21;FG0G;SLRTBM0;Y72;X1
+C;K"15-Avr"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Ag Mr   Lepage Thomas               :15/04/2014"
+F;P4;FF2G;SLRTBM0;X3
+C;K10.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1350;R73
+F;P21;FG0G;SLRTBM0;Y73;X1
+C;K"14-Avr"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :American Express Carte-France       :Prelevement American Express Carte :France :Fr48zzz101869 :E2013067064007965"
+F;P4;FF2G;SLRTBM0;X3
+C;K29.69
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R74
+F;P21;FG0G;SLRTBM0;Y74;X1
+C;K"14-Avr"
+F;SLRTBM19;X2
+C;K"Selarl Sohier Lille        11/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K23.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R75
+F;P21;FG0G;SLRTBM0;Y75;X1
+C;K"14-Avr"
+F;SLRTBM19;X2
+C;K"Cora Flers Villeneuve D A  11/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K49.11
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R76
+F;P21;FG0G;SLRTBM0;Y76;X1
+C;K"11-Avr"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Societe Lilloise D'autopartage      :Fact Lepage Jean Claude :Fr29zzz521154 :++aplil000000192731122013211819"
+F;P4;FF2G;SLRTBM0;X3
+C;K6.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R77
+F;P21;FG0G;SLRTBM0;Y77;X1
+C;K"11-Avr"
+F;SLRTBM19;X2
+C;K"Lille            10/04 09h28        :Retrait Au Distributeur            "
+F;P4;FF2G;SLRTBM0;X3
+C;K80.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R78
+F;P21;FG0G;SLRTBM0;Y78;X1
+C;K"11-Avr"
+F;SLRTBM19;X2
+C;K"Armand Thiery * Lille      10/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K311.95
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R79
+F;P21;FG0G;SLRTBM0;Y79;X1
+C;K"10-Avr"
+F;SLRTBM19;X2
+C;K"Lib. Eyrolles Paris        09/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K25.29
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R80
+F;P21;FG0G;SLRTBM0;Y80;X1
+C;K"09-Avr"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Spb                                 :Sfr Assur  0069362419 :Fr55zzz115711 :++1090800109363191"
+F;P4;FF2G;SLRTBM0;X3
+C;K3.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R81
+F;P21;FG0G;SLRTBM0;Y81;X1
+C;K"09-Avr"
+F;SLRTBM19;X2
+C;K"Sncf Internet Isles Les Me 08/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K66.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R82
+F;P21;FG0G;SLRTBM0;Y82;X1
+C;K"08-Avr"
+F;SLRTBM19;X2
+C;K"0501118                             :Cheque Emis                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K120.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R83
+F;P21;FG0G;SLRTBM0;Y83;X1
+C;K"08-Avr"
+F;SLRTBM19;X2
+C;K"0501121                             :Cheque Emis                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K5.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R84
+F;P21;FG0G;SLRTBM0;Y84;X1
+C;K"07-Avr"
+F;SLRTBM19;X2
+C;K"Numericable (02)         473678     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K45.60
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R85
+F;P21;FG0G;SLRTBM0;Y85;X1
+C;K"04-Avr"
+F;SLRTBM19;X2
+C;K"Edf Simm                 001007     :Paiement Interbancaire             "
+F;P4;FF2G;SLRTBM0;X3
+C;K130.12
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R86
+F;P21;FG0G;SLRTBM0;Y86;X1
+C;K"07-Avr"
+F;SLRTBM19;X2
+C;K"Cofiroute Rueil Malmaison  03/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K6.30
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R87
+F;P21;FG0G;SLRTBM0;Y87;X1
+C;K"07-Avr"
+F;SLRTBM19;X2
+C;K"Au Soir D Ete Mesquer      05/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K385.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R88
+F;P21;FG0G;SLRTBM0;Y88;X1
+C;K"05-Avr"
+F;SLRTBM19;X2
+C;K"99146171890 Echeance    05/04/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K475.27
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R89
+F;P21;FG0G;SLRTBM0;Y89;X1
+C;K"05-Avr"
+F;SLRTBM19;X2
+C;K"99140207159 Echeance    05/04/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K346.79
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R90
+F;P21;FG0G;SLRTBM0;Y90;X1
+C;K"05-Avr"
+F;SLRTBM19;X2
+C;K"99140206837 Echeance    05/04/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K462.38
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R91
+F;P21;FG0G;SLRTBM0;Y91;X1
+C;K"05-Avr"
+F;SLRTBM19;X2
+C;K"01000676949 Echeance    05/04/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K8.18
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R92
+F;P21;FG0G;SLRTBM0;Y92;X1
+C;K"05-Avr"
+F;SLRTBM19;X2
+C;K"01000676930 Echeance    05/04/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K86.57
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R93
+F;P21;FG0G;SLRTBM0;Y93;X1
+C;K"05-Avr"
+F;SLRTBM19;X2
+C;K"01000676922 Echeance    05/04/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K50.92
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R94
+F;P21;FG0G;SLRTBM0;Y94;X1
+C;K"05-Avr"
+F;SLRTBM19;X2
+C;K"01000676914 Echeance    05/04/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K18.37
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R95
+F;P21;FG0G;SLRTBM0;Y95;X1
+C;K"05-Avr"
+F;SLRTBM19;X2
+C;K"01000676906 Echeance    05/04/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K1087.63
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R96
+F;P21;FG0G;SLRTBM0;Y96;X1
+C;K"04-Avr"
+F;SLRTBM19;X2
+C;K"Gdf Tip                  002381     :Paiement Interbancaire             "
+F;P4;FF2G;SLRTBM0;X3
+C;K453.22
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R97
+F;P21;FG0G;SLRTBM0;Y97;X1
+C;K"04-Avr"
+F;SLRTBM19;X2
+C;K"Auchan Carburan Poitiers   03/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K22.70
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R98
+F;P21;FG0G;SLRTBM0;Y98;X1
+C;K"04-Avr"
+F;SLRTBM19;X2
+C;K"Sas Si.Do.Re St Martin De  03/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K15.59
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R99
+F;P21;FG0G;SLRTBM0;Y99;X1
+C;K"04-Avr"
+F;SLRTBM19;X2
+C;K"Autoroute Du Su Vedene     02/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K6.30
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R100
+F;P21;FG0G;SLRTBM0;Y100;X1
+C;K"04-Avr"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Web Lepage Jean Claude Apport Cc    :Apport Cc :04/04/2014"
+F;P4;FF2G;SLRTBM0;X3
+C;K500.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R101
+F;P21;FG0G;SLRTBM0;Y101;X1
+C;K"03-Avr"
+F;SLRTBM19;X2
+C;K"Peage Pt De Re La Rochelle 02/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K8.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M675;R102
+F;P21;FG0G;SLRTBM0;Y102;X1
+C;K"03-Avr"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Ag Mme Lepage Brosse A              :03/04/2014"
+F;P4;FF2G;SLRTBM0;X3
+C;K1000.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R103
+F;P21;FG0G;SLRTBM0;Y103;X1
+C;K"02-Avr"
+F;SLRTBM19;X2
+C;K"Assurance Pret Habitat 04/14        :Reglement                          "
+F;P4;FF2G;SLRTBM0;X3
+C;K106.82
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R104
+F;P21;FG0G;SLRTBM0;Y104;X1
+C;K"02-Avr"
+F;SLRTBM19;X2
+C;K"Canalplay Infin Issy Les M 01/04    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K6.99
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R105
+F;P21;FG0G;SLRTBM0;Y105;X1
+C;K"01-Avr"
+F;SLRTBM19;X2
+C;K"Cotis Csca Confort Famille          :Cotisation                         "
+F;P4;FF2G;SLRTBM0;X3
+C;K3.38
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R106
+F;P21;FG0G;SLRTBM0;Y106;X1
+C;K"01-Avr"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :A.G.P.M. Toulon                     :Ref Creancier Fr29def000264 :Fr29def000264 :++02064451u-Def-G"
+F;P4;FF2G;SLRTBM0;X3
+C;K91.65
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R107
+F;P21;FG0G;SLRTBM0;Y107;X1
+C;K"01-Avr"
+F;SLRTBM19;X2
+C;K"Assevillers      31/03 18h50        :Retrait Au Distributeur            "
+F;P4;FF2G;SLRTBM0;X3
+C;K90.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R108
+F;P21;FG0G;SLRTBM0;Y108;X1
+C;K"31-Mar"
+F;SLRTBM19;X2
+C;K"Rel.Mons Baroeul           28/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K26.01
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R109
+F;P21;FG0G;SLRTBM0;Y109;X1
+C;K"31-Mar"
+F;SLRTBM19;X2
+C;K"Carre Du Vinage Roncq      28/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K17.07
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R110
+F;P21;FG0G;SLRTBM0;Y110;X1
+C;K"31-Mar"
+F;SLRTBM19;X2
+C;K"Secafi Dse 001-B051400716-1         :Virement En Votre Faveur            :20140327 :001-B051400716-1"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K247.34
+
+
+F;M450;R111
+F;P21;FG0G;SLRTBM0;Y111;X1
+C;K"31-Mar"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Web Lepage Thomas Virement Mensu   "
+F;P4;FF2G;SLRTBM0;X3
+C;K100.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R112
+F;P21;FG0G;SLRTBM0;Y112;X1
+C;K"31-Mar"
+F;SLRTBM19;X2
+C;K"Siaci Saint Honore Sa Mut 055965    :Virement En Votre Faveur            :Mut  05596577        35023315 :Mut  05596577        35023315"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K23.74
+
+
+F;M450;R113
+F;P21;FG0G;SLRTBM0;Y113;X1
+C;K"28-Mar"
+F;SLRTBM19;X2
+C;K"Rel.Mons Baroeul           27/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K12.52
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R114
+F;P21;FG0G;SLRTBM0;Y114;X1
+C;K"28-Mar"
+F;SLRTBM19;X2
+C;K"Secafi D S E Gra/69351/2014-03-2    :Virement En Votre Faveur            :Payment    Mars      2014 :Gra/69351/2014-03-24"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K8832.14
+
+
+F;M450;R115
+F;P21;FG0G;SLRTBM0;Y115;X1
+C;K"27-Mar"
+F;SLRTBM19;X2
+C;K"Relais Bolmon Marignane    26/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K13.41
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R116
+F;P21;FG0G;SLRTBM0;Y116;X1
+C;K"26-Mar"
+F;SLRTBM19;X2
+C;K"Taxi Fernando Capinghem    24/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K35.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R117
+F;P21;FG0G;SLRTBM0;Y117;X1
+C;K"25-Mar"
+F;SLRTBM19;X2
+C;K"Foncia Buat Gerance 334911          :Virement En Votre Faveur            :Ob:378033 Rglt 1er Trimestre L - Rg :Lt 1er Trimestre Lepage (2869 :334911"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K63.93
+
+
+F;M900;R118
+F;P21;FG0G;SLRTBM0;Y118;X1
+C;K"25-Mar"
+F;SLRTBM19;X2
+C;K"Siaci Saint Honore Sa Mut 055965    :Virement En Votre Faveur            :Mut  05596577        34927134 :Mut  05596577        34927134"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K7.80
+
+
+F;M450;R119
+F;P21;FG0G;SLRTBM0;Y119;X1
+C;K"24-Mar"
+F;SLRTBM19;X2
+C;K"Ugc Bornes Lille           23/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K22.20
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R120
+F;P21;FG0G;SLRTBM0;Y120;X1
+C;K"24-Mar"
+F;SLRTBM19;X2
+C;K"Dr Ton Van Nhon Lille      21/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K79.12
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R121
+F;P21;FG0G;SLRTBM0;Y121;X1
+C;K"24-Mar"
+F;SLRTBM19;X2
+C;K"Rel.Mons Baroeul           21/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K14.73
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1350;R122
+F;P21;FG0G;SLRTBM0;Y122;X1
+C;K"21-Mar"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Sfr                                 :Prelevement Sfr Mobile 4n-Easg98-01 :008861697021 :Fr44zzz332801 :++gp20131020356748226"
+F;P4;FF2G;SLRTBM0;X3
+C;K19.99
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R123
+F;P21;FG0G;SLRTBM0;Y123;X1
+C;K"21-Mar"
+F;SLRTBM19;X2
+C;K"0501119                             :Cheque Emis                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K1448.95
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R124
+F;P21;FG0G;SLRTBM0;Y124;X1
+C;K"20-Mar"
+F;SLRTBM19;X2
+C;K"Transpole Gr Lille       437061     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K22.75
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R125
+F;P21;FG0G;SLRTBM0;Y125;X1
+C;K"20-Mar"
+F;SLRTBM19;X2
+C;K"0501120                             :Cheque Emis                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K260.30
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1350;R126
+F;P21;FG0G;SLRTBM0;Y126;X1
+C;K"17-Mar"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :American Express Carte-France       :Prelevement American Express Carte :France :Fr48zzz101869 :E2013067064007965"
+F;P4;FF2G;SLRTBM0;X3
+C;K31.60
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R127
+F;P21;FG0G;SLRTBM0;Y127;X1
+C;K"16-Mar"
+F;SLRTBM19;X2
+C;K"0501116/0000000/000000000           :Cheque Emis                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K100.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R128
+F;P21;FG0G;SLRTBM0;Y128;X1
+C;K"17-Mar"
+F;SLRTBM19;X2
+C;K"Le Grill Des Bui Lille     14/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K136.60
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R129
+F;P21;FG0G;SLRTBM0;Y129;X1
+C;K"17-Mar"
+F;SLRTBM19;X2
+C;K"Intermarche Dac Mons En Ba 15/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K25.69
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R130
+F;P21;FG0G;SLRTBM0;Y130;X1
+C;K"16-Mar"
+F;SLRTBM19;X2
+C;K"Predica Predissime 9     237434     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K100.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R131
+F;P21;FG0G;SLRTBM0;Y131;X1
+C;K"14-Mar"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Ag Mr   Lepage Thomas              "
+F;P4;FF2G;SLRTBM0;X3
+C;K10.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R132
+F;P21;FG0G;SLRTBM0;Y132;X1
+C;K"13-Mar"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Societe Lilloise D'autopartage      :Fact Lepage Jean Claude :Fr29zzz521154 :++aplil000000192731122013211819"
+F;P4;FF2G;SLRTBM0;X3
+C;K6.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R133
+F;P21;FG0G;SLRTBM0;Y133;X1
+C;K"13-Mar"
+F;SLRTBM19;X2
+C;K"Siaci Saint Honore Sa Mut 055965    :Virement En Votre Faveur            :Mut  05596577        34693240 :Mut  05596577        34693240"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K39.00
+
+
+F;M450;R134
+F;P21;FG0G;SLRTBM0;Y134;X1
+C;K"12-Mar"
+F;SLRTBM19;X2
+C;K"Lille            11/03 18h24        :Retrait Au Distributeur            "
+F;P4;FF2G;SLRTBM0;X3
+C;K80.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R135
+F;P21;FG0G;SLRTBM0;Y135;X1
+C;K"10-Mar"
+F;SLRTBM19;X2
+C;K"Lde Sen                  002631     :Paiement Interbancaire             "
+F;P4;FF2G;SLRTBM0;X3
+C;K213.71
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R136
+F;P21;FG0G;SLRTBM0;Y136;X1
+C;K"07-Mar"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Spb                                 :Sfr Assur  0066647278 :Fr55zzz115711 :++1090800109363191"
+F;P4;FF2G;SLRTBM0;X3
+C;K3.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R137
+F;P21;FG0G;SLRTBM0;Y137;X1
+C;K"07-Mar"
+F;SLRTBM19;X2
+C;K"Sncf Internet Isles Les Me 06/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K132.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R138
+F;P21;FG0G;SLRTBM0;Y138;X1
+C;K"07-Mar"
+F;SLRTBM19;X2
+C;K"Fleuride Lille             06/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K92.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R139
+F;P21;FG0G;SLRTBM0;Y139;X1
+C;K"06-Mar"
+F;SLRTBM19;X2
+C;K"Frais Droits De Garde Titres        :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K245.19
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R140
+F;P21;FG0G;SLRTBM0;Y140;X1
+C;K"06-Mar"
+F;SLRTBM19;X2
+C;K"Frais Droits De Garde Titres        :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K40.08
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R141
+F;P21;FG0G;SLRTBM0;Y141;X1
+C;K"06-Mar"
+F;SLRTBM19;X2
+C;K"6302438                             :Remise De Cheque                   "
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K16.00
+
+
+F;M450;R142
+F;P21;FG0G;SLRTBM0;Y142;X1
+C;K"06-Mar"
+F;SLRTBM19;X2
+C;K"Sanef 25/02-03/03/14 Senli 02/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K14.30
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R143
+F;P21;FG0G;SLRTBM0;Y143;X1
+C;K"06-Mar"
+F;SLRTBM19;X2
+C;K"Rel.Mons Baroeul           05/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K15.05
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R144
+F;P21;FG0G;SLRTBM0;Y144;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"Numericable (02)         473678     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K49.31
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R145
+F;P21;FG0G;SLRTBM0;Y145;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"Sapn 25/02-03/03/14 76530  02/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K2.80
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R146
+F;P21;FG0G;SLRTBM0;Y146;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"Sapn 76 Grand Couron       02/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K8.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R147
+F;P21;FG0G;SLRTBM0;Y147;X1
+C;K"04-Mar"
+F;SLRTBM19;X2
+C;K"Assurance Pret Habitat 03/14        :Reglement                          "
+F;P4;FF2G;SLRTBM0;X3
+C;K106.82
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R148
+F;P21;FG0G;SLRTBM0;Y148;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"99146171890 Echeance    05/03/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K475.27
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R149
+F;P21;FG0G;SLRTBM0;Y149;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"99140207159 Echeance    05/03/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K346.79
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R150
+F;P21;FG0G;SLRTBM0;Y150;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"99140206837 Echeance    05/03/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K462.38
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R151
+F;P21;FG0G;SLRTBM0;Y151;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"01000676949 Echeance    05/03/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K8.18
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R152
+F;P21;FG0G;SLRTBM0;Y152;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"01000676930 Echeance    05/03/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K86.57
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R153
+F;P21;FG0G;SLRTBM0;Y153;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"01000676922 Echeance    05/03/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K50.92
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R154
+F;P21;FG0G;SLRTBM0;Y154;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"01000676914 Echeance    05/03/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K18.37
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R155
+F;P21;FG0G;SLRTBM0;Y155;X1
+C;K"05-Mar"
+F;SLRTBM19;X2
+C;K"01000676906 Echeance    05/03/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K1087.63
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R156
+F;P21;FG0G;SLRTBM0;Y156;X1
+C;K"04-Mar"
+F;SLRTBM19;X2
+C;K"Ponts Norm-Tanc Le Havre C 02/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K5.40
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R157
+F;P21;FG0G;SLRTBM0;Y157;X1
+C;K"04-Mar"
+F;SLRTBM19;X2
+C;K"Cora Flers Villeneuve D A  03/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K67.97
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R158
+F;P21;FG0G;SLRTBM0;Y158;X1
+C;K"04-Mar"
+F;SLRTBM19;X2
+C;K"Rel.Mons Baroeul           03/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K24.37
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R159
+F;P21;FG0G;SLRTBM0;Y159;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Cotis Csca Confort Famille          :Cotisation                         "
+F;P4;FF2G;SLRTBM0;X3
+C;K3.30
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R160
+F;P21;FG0G;SLRTBM0;Y160;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :A.G.P.M. Toulon                     :Ref Creancier Fr29def000264 :Fr29def000264 :++02064451u-Def-G"
+F;P4;FF2G;SLRTBM0;X3
+C;K47.19
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R161
+F;P21;FG0G;SLRTBM0;Y161;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Cabourg 01       02/03 12h02        :Retrait Au Distributeur            "
+F;P4;FF2G;SLRTBM0;X3
+C;K120.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R162
+F;P21;FG0G;SLRTBM0;Y162;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Rennes Saint Jac 28/02 14h15        :Retrait Au Distributeur            "
+F;P4;FF2G;SLRTBM0;X3
+C;K80.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R163
+F;P21;FG0G;SLRTBM0;Y163;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Carte Sncf                 01/03    :Avoir                              "
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K70.00
+
+
+F;M450;R164
+F;P21;FG0G;SLRTBM0;Y164;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Sncf Rennes Cedex          28/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K14.50
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R165
+F;P21;FG0G;SLRTBM0;Y165;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Canalplay Infin Issy Les M 01/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K6.99
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R166
+F;P21;FG0G;SLRTBM0;Y166;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Le Cadre Cabourg           01/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K84.70
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R167
+F;P21;FG0G;SLRTBM0;Y167;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Relais Bolmon Marignane    28/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K11.84
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R168
+F;P21;FG0G;SLRTBM0;Y168;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Mc Donald's Cesson Sevigne 01/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K6.70
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R169
+F;P21;FG0G;SLRTBM0;Y169;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Essoassevillers Peronne    02/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K28.76
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R170
+F;P21;FG0G;SLRTBM0;Y170;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Sncf Lorient               01/03    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K17.50
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R171
+F;P21;FG0G;SLRTBM0;Y171;X1
+C;K"03-Mar"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Ag Mme Lepage Brosse A             "
+F;P4;FF2G;SLRTBM0;X3
+C;K1000.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R172
+F;P21;FG0G;SLRTBM0;Y172;X1
+C;K"28-Fév"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Web Lepage Thomas Virement Mensu   "
+F;P4;FF2G;SLRTBM0;X3
+C;K100.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R173
+F;P21;FG0G;SLRTBM0;Y173;X1
+C;K"27-Fév"
+F;SLRTBM19;X2
+C;K"Secafi D S E Gra/69346/2014-02-2    :Virement En Votre Faveur            :Payment    Fevrier   2014 :Gra/69346/2014-02-21"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K8296.22
+
+
+F;M450;R174
+F;P21;FG0G;SLRTBM0;Y174;X1
+C;K"27-Fév"
+F;SLRTBM19;X2
+C;K"Reglement Impot Irps     005002     :Paiement Electronique              "
+F;P4;FF2G;SLRTBM0;X3
+C;K3606.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R175
+F;P21;FG0G;SLRTBM0;Y175;X1
+C;K"26-Fév"
+F;SLRTBM19;X2
+C;K"Sanef 18/02-24/02/14 Senli 22/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K22.30
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R176
+F;P21;FG0G;SLRTBM0;Y176;X1
+C;K"26-Fév"
+F;SLRTBM19;X2
+C;K"Cora Flers Villeneuve D A  25/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K26.68
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R177
+F;P21;FG0G;SLRTBM0;Y177;X1
+C;K"26-Fév"
+F;SLRTBM19;X2
+C;K"Sapn 76 Grand Couron       22/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K7.30
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R178
+F;P21;FG0G;SLRTBM0;Y178;X1
+C;K"26-Fév"
+F;SLRTBM19;X2
+C;K"Sapn 18/02-24/02/14 76530  22/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K1.70
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R179
+F;P21;FG0G;SLRTBM0;Y179;X1
+C;K"26-Fév"
+F;SLRTBM19;X2
+C;K"Transports En Commun De La Metro    :Virement En Votre Faveur            :1379734 Maxi Rythmo Remboursement P :Artiel :Recdiv000008-0108"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K22.75
+
+
+F;M450;R180
+F;P21;FG0G;SLRTBM0;Y180;X1
+C;K"25-Fév"
+F;SLRTBM19;X2
+C;K"Lille Saint Maurice  25/02 11h03    :Retrait Au Distributeur            "
+F;P4;FF2G;SLRTBM0;X3
+C;K120.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1350;R181
+F;P21;FG0G;SLRTBM0;Y181;X1
+C;K"24-Fév"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Sfr                                 :Prelevement Sfr Mobile 4n-Easg98-01 :008758848916 :Fr44zzz332801 :++gp20131020356748226"
+F;P4;FF2G;SLRTBM0;X3
+C;K24.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R182
+F;P21;FG0G;SLRTBM0;Y182;X1
+C;K"24-Fév"
+F;SLRTBM19;X2
+C;K"Intermarche Dives Sur Mer  22/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K68.47
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R183
+F;P21;FG0G;SLRTBM0;Y183;X1
+C;K"24-Fév"
+F;SLRTBM19;X2
+C;K"Rel.Mons Baroeul           23/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K32.88
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R184
+F;P21;FG0G;SLRTBM0;Y184;X1
+C;K"24-Fév"
+F;SLRTBM19;X2
+C;K"Sncf Internet Isles Les Me 23/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K102.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R185
+F;P21;FG0G;SLRTBM0;Y185;X1
+C;K"24-Fév"
+F;SLRTBM19;X2
+C;K"Siaci Saint Honore Sa Mut 055965    :Virement En Votre Faveur            :Mut  05596577        34375055 :Mut  05596577        34375055"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K7.80
+
+
+F;M1125;R186
+F;P21;FG0G;SLRTBM0;Y186;X1
+C;K"17-Fév"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Iseg Lille                          :3eme Echeance 0214 :Fr17zzz631174 :Lepage"
+F;P4;FF2G;SLRTBM0;X3
+C;K2460.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R187
+F;P21;FG0G;SLRTBM0;Y187;X1
+C;K"17-Fév"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Societe Lilloise D'autopartage      :Fact Lepage Jean Claude :Fr29zzz521154 :++aplil000000192731122013211819"
+F;P4;FF2G;SLRTBM0;X3
+C;K6.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R188
+F;P21;FG0G;SLRTBM0;Y188;X1
+C;K"17-Fév"
+F;SLRTBM19;X2
+C;K"Transpole Gr Lille       437061     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K45.50
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R189
+F;P21;FG0G;SLRTBM0;Y189;X1
+C;K"17-Fév"
+F;SLRTBM19;X2
+C;K"New Cuir Lille             15/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K23.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R190
+F;P21;FG0G;SLRTBM0;Y190;X1
+C;K"17-Fév"
+F;SLRTBM19;X2
+C;K"Marche + Lille             14/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K30.71
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R191
+F;P21;FG0G;SLRTBM0;Y191;X1
+C;K"16-Fév"
+F;SLRTBM19;X2
+C;K"Predica Predissime 9     237434     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K100.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R192
+F;P21;FG0G;SLRTBM0;Y192;X1
+C;K"17-Fév"
+F;SLRTBM19;X2
+C;K"Lille Faidherbe      17/02 12h32    :Retrait Au Distributeur            "
+F;P4;FF2G;SLRTBM0;X3
+C;K80.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R193
+F;P21;FG0G;SLRTBM0;Y193;X1
+C;K"14-Fév"
+F;SLRTBM19;X2
+C;K"Digital Virgo Aix En Prove 12/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K9.90
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R194
+F;P21;FG0G;SLRTBM0;Y194;X1
+C;K"14-Fév"
+F;SLRTBM19;X2
+C;K"Ratp Paris Cedex 12        13/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K13.70
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R195
+F;P21;FG0G;SLRTBM0;Y195;X1
+C;K"14-Fév"
+F;SLRTBM19;X2
+C;K"Belharra Paris             13/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K70.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R196
+F;P21;FG0G;SLRTBM0;Y196;X1
+C;K"14-Fév"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Ag Mr   Lepage Thomas              "
+F;P4;FF2G;SLRTBM0;X3
+C;K10.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1125;R197
+F;P21;FG0G;SLRTBM0;Y197;X1
+C;K"13-Fév"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :Spb                                 :Sfr Assur  0064287525 :Fr55zzz115711 :++1090800109363191"
+F;P4;FF2G;SLRTBM0;X3
+C;K3.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R198
+F;P21;FG0G;SLRTBM0;Y198;X1
+C;K"13-Fév"
+F;SLRTBM19;X2
+C;K"Macif Nord Pas De Calais 110663     :Paiement Interbancaire             "
+F;P4;FF2G;SLRTBM0;X3
+C;K319.26
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R199
+F;P21;FG0G;SLRTBM0;Y199;X1
+C;K"13-Fév"
+F;SLRTBM19;X2
+C;K"New Cuir Lille             12/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K25.00
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R200
+F;P21;FG0G;SLRTBM0;Y200;X1
+C;K"12-Fév"
+F;SLRTBM19;X2
+C;K"Sanef 04/02-10/02/14 Senli 07/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K10.20
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M900;R201
+F;P21;FG0G;SLRTBM0;Y201;X1
+C;K"11-Fév"
+F;SLRTBM19;X2
+C;K"Secafi Dse 001-B051400337-1         :Virement En Votre Faveur            :20140206 :001-B051400337-1"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K132.55
+
+
+F;M450;R202
+F;P21;FG0G;SLRTBM0;Y202;X1
+C;K"10-Fév"
+F;SLRTBM19;X2
+C;K"Frais Carte Heroku                  :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K0.77
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M1350;R203
+F;P21;FG0G;SLRTBM0;Y203;X1
+C;K"11-Fév"
+F;SLRTBM19;X2
+C;K"Prelevmnt                           :American Express Carte-France       :Prelevement American Express Carte :France :Fr48zzz101869 :E2013067064007965"
+F;P4;FF2G;SLRTBM0;X3
+C;K53.13
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R204
+F;P21;FG0G;SLRTBM0;Y204;X1
+C;K"10-Fév"
+F;SLRTBM19;X2
+C;K"Marche U Lille             08/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K50.23
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R205
+F;P21;FG0G;SLRTBM0;Y205;X1
+C;K"10-Fév"
+F;SLRTBM19;X2
+C;K"Heroku 4156924655          08/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K18.87
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R206
+F;P21;FG0G;SLRTBM0;Y206;X1
+C;K"09-Fév"
+F;SLRTBM19;X2
+C;K"Virement En Votre Faveur            :From Annie Lepage Brosse A         "
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K3000.00
+
+
+F;M450;R207
+F;P21;FG0G;SLRTBM0;Y207;X1
+C;K"09-Fév"
+F;SLRTBM19;X2
+C;K"Virement En Votre Faveur            :De Lepage Jean-Claude              "
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K1000.00
+
+
+F;M900;R208
+F;P21;FG0G;SLRTBM0;Y208;X1
+C;K"07-Fév"
+F;SLRTBM19;X2
+C;K"Siaci Saint Honore Sa Mut 055965    :Virement En Votre Faveur            :Mut  05596577        34039515 :Mut  05596577        34039515"
+F;SLRTBM0;X3
+F;P4;FF2G;SLRTBM0;X4
+C;K6.90
+
+
+F;M450;R209
+F;P21;FG0G;SLRTBM0;Y209;X1
+C;K"05-Fév"
+F;SLRTBM19;X2
+C;K"Numericable (02)         422161     :Prelevement                        "
+F;P4;FF2G;SLRTBM0;X3
+C;K45.60
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R210
+F;P21;FG0G;SLRTBM0;Y210;X1
+C;K"04-Fév"
+F;SLRTBM19;X2
+C;K"Assurance Pret Habitat 02/14        :Reglement                          "
+F;P4;FF2G;SLRTBM0;X3
+C;K106.82
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R211
+F;P21;FG0G;SLRTBM0;Y211;X1
+C;K"05-Fév"
+F;SLRTBM19;X2
+C;K"99146171890 Echeance    05/02/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K475.27
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R212
+F;P21;FG0G;SLRTBM0;Y212;X1
+C;K"05-Fév"
+F;SLRTBM19;X2
+C;K"99140207159 Echeance    05/02/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K346.79
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R213
+F;P21;FG0G;SLRTBM0;Y213;X1
+C;K"05-Fév"
+F;SLRTBM19;X2
+C;K"99140206837 Echeance    05/02/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K462.38
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R214
+F;P21;FG0G;SLRTBM0;Y214;X1
+C;K"05-Fév"
+F;SLRTBM19;X2
+C;K"01000676949 Echeance    05/02/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K8.18
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R215
+F;P21;FG0G;SLRTBM0;Y215;X1
+C;K"05-Fév"
+F;SLRTBM19;X2
+C;K"01000676930 Echeance    05/02/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K86.57
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R216
+F;P21;FG0G;SLRTBM0;Y216;X1
+C;K"05-Fév"
+F;SLRTBM19;X2
+C;K"01000676922 Echeance    05/02/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K50.92
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R217
+F;P21;FG0G;SLRTBM0;Y217;X1
+C;K"05-Fév"
+F;SLRTBM19;X2
+C;K"01000676914 Echeance    05/02/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K18.37
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R218
+F;P21;FG0G;SLRTBM0;Y218;X1
+C;K"05-Fév"
+F;SLRTBM19;X2
+C;K"01000676906 Echeance    05/02/14    :Remboursement De Pret              "
+F;P4;FF2G;SLRTBM0;X3
+C;K1087.63
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R219
+F;P21;FG0G;SLRTBM0;Y219;X1
+C;K"04-Fév"
+F;SLRTBM19;X2
+C;K"Batteryupgrade Eindhoven   03/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K69.21
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R220
+F;P21;FG0G;SLRTBM0;Y220;X1
+C;K"03-Fév"
+F;SLRTBM19;X2
+C;K"Cotis Csca Confort Famille          :Cotisation                         "
+F;P4;FF2G;SLRTBM0;X3
+C;K3.30
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R221
+F;P21;FG0G;SLRTBM0;Y221;X1
+C;K"03-Fév"
+F;SLRTBM19;X2
+C;K"Gdf Tip                  002381     :Paiement Interbancaire             "
+F;P4;FF2G;SLRTBM0;X3
+C;K441.80
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R222
+F;P21;FG0G;SLRTBM0;Y222;X1
+C;K"03-Fév"
+F;SLRTBM19;X2
+C;K"Salamander Lille           31/01    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K71.90
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R223
+F;P21;FG0G;SLRTBM0;Y223;X1
+C;K"03-Fév"
+F;SLRTBM19;X2
+C;K"Canalplay Infin Issy Les M 01/02    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K6.99
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R224
+F;P21;FG0G;SLRTBM0;Y224;X1
+C;K"03-Fév"
+F;SLRTBM19;X2
+C;K"Asialiment Lille           31/01    :Paiement Par Carte                 "
+F;P4;FF2G;SLRTBM0;X3
+C;K26.22
+F;P4;FF2G;SLRTBM0;X4
+
+
+F;M450;R225
+F;P21;FG0G;SLRTBM0;Y225;X1
+C;K"03-Fév"
+F;SLRTBM19;X2
+C;K"Virement Emis                       :Ag Mme Lepage Brosse A             "
+F;P4;FF2G;SLRTBM0;X3
+C;K1000.00
+F;P4;FF2G;SLRTBM0;X4
+F;Y226;X1
+F;X2
+F;X3
+F;X4
+F;Y227;X1
+F;X2
+F;X3
+F;X4
+E
+
+

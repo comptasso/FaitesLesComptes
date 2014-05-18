@@ -7,12 +7,12 @@ module Importer
     before_filter  :find_bank_account
   
     def new
-      @bels_importer = Importer::BaseImporter.new
+      @bels_importer = Importer::Loader.new
     end
 
     def create
-      @bels_importer = Importer::BaseImporter.
-        new(params[:importer_bels_importer].
+      @bels_importer = Importer::Loader.
+        new(params[:importer_loader].
         merge({bank_account_id:@bank_account.id}))
       if @bels_importer.save
         if @bels_importer.need_extract?(@period)
@@ -34,23 +34,6 @@ module Importer
       @bank_account=BankAccount.find(params[:bank_account_id])
     end
     
-    def choose_importer
-      puts params #[:importer_base_importer].inspect
-      ext = extension(params[:importer_bels_importer][:file].original_filename)
-      all_params = params[:importer_bels_importer].merge({bank_account_id:@bank_account.id})
-      case ext  
-      when 'csv' then Importer::CsvImporter.new(all_params)
-      when 'ofx' then Importer::OfxImporter.new(all_params)
-      else 
-        Importer::BaseImporter.new(all_params)
-      end
-    end
-    
-    def extension(filename)
-      t = filename.split('.') rescue [] # pour traiter le cas où le nom du fichier ne 
-      # répond pas correctement
-      t.size > 1 ? t.last : ''
-    end
     
   end
 

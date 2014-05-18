@@ -20,13 +20,13 @@ require 'ofx'
 # le montant, et @name pour la narration
 #
 module Importer
-  class OfxImporter < Importer::BaseImporter 
+  class OfxImporter < BaseImporter 
     
     
     
     def load_imported_rows(options = nil)
       lirs = []
-      index = 2
+      
       position = 1
       transacs = []
       # permet d'avoir à la fois un fichier temporaire comme le prévoit rails
@@ -37,21 +37,18 @@ module Importer
         rows = transacs.map {|t| build_row(t)}  
         rows.each do |row|
           # vérification des champs pour les lignes autres que la ligne de titre
-          if correct?(row, index)
-            
-            # création d'un array de Bel
-            ibel =  ImportedBel.new(bank_account_id:ba_id, 
-              position:position, 
-              date:row[0], 
-              narration:row[1],
-              debit:row[2], credit:row[3])
-            ibel.cat_interpreter # on remplit les champs cat
-            ibel.payment_mode_interpreter # on tente de remplir le champ mode de paiement
-            lirs << ibel
-            position += 1
-            
-          end
-          index += 1
+          prepare(row)
+          # création d'un array de Bel
+          ibel =  ImportedBel.new(bank_account_id:ba_id, 
+            position:position, 
+            date:row[0], 
+            narration:row[1],
+            debit:row[2], credit:row[3])
+          ibel.cat_interpreter # on remplit les champs cat
+          ibel.payment_mode_interpreter # on tente de remplir le champ mode de paiement
+          lirs << ibel
+          position += 1
+          
         end
         lirs
         
@@ -68,13 +65,13 @@ module Importer
       [transac.posted_at, transac.name, debit, credit]
     end
   
-  # controle la validité d'une ligne. Si les transformations
+    # controle la validité d'une ligne. Si les transformations
     # échoues (to_f ou Date.parse) on arrive dans le bloc et la ligne 
     # n'est pas lue.
-    def correct?(row, index)
+    def prepare(row)
       # row[3] et row[2] ne doivent pas être vide tous les deux
       return false if row[2] == nil && row[3] == nil
-      row[0] = guess_date(row[0], index) # on peut lire la date
+      row[0] = row[0].to_date
       row[1] = correct_narration(row[1])
       row[2] ||= '0.0' # on remplace les nil par des zéros
       row[3] ||= '0.0'
@@ -82,23 +79,16 @@ module Importer
       row[2] = row[2].to_d.round(2)  # on peut faire un chiffre du débit
       row[3] = row[3].to_d.round(2)  # on peut faire un chiffre du crédit
       true
-    rescue Exception =>e 
-        
-      #        puts e.backtrace.inspect  
-      errors.add(:base, 
-        "Ligne #{index} non conforme : #{e.message}") 
-      Rails.logger.info "Lecture de fichier csv : une erreut s est produite #{row}"
-      false
     end
   
   
-  def debit_credit(amount)
-    if amount < 0
-      return [-amount, 0]
-    else
-      return [0, amount]
+    def debit_credit(amount)
+      if amount < 0
+        return [-amount, 0]
+      else
+        return [0, amount]
+      end
     end
-  end
   
   end
 end

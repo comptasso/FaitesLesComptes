@@ -6,7 +6,7 @@ class ImportedBelsController < ApplicationController
    
   def index
     @imported_bels = @bank_account.imported_bels.order(:date, :position)
-    flash.now[:notice] = 'Aucune ligne importée en attente' if @imported_bels.empty?
+    flash.now[:notice] += ' Aucune ligne importée en attente' if @imported_bels.empty?
   end
   
   def update
