@@ -7,13 +7,13 @@ module Importer
   # reprenant les champs Date, Libellé, Débit et Crédit, dans cet ordre,
   # mais pas forcément ces libellés.
   # 
-  class CsvImporter < Importer::BaseImporter
+  class CsvImporter < Importer::BaseImporter  
   
     
-    
-  protected
+ 
   
-      # TODO voir à gérer les options
+  
+    # TODO voir à gérer les options
     # la méthode qui lit réellement le fichier.
     # l'option headers:true indique que la prmeière ligne du fichier contient
     # les headers
@@ -39,7 +39,7 @@ module Importer
           if not_empty?(row) && correct?(row, index)
             
             # création d'un array de Bel
-            ibel =  ImportedBel.new(bank_account_id:bank_account_id, 
+            ibel =  ImportedBel.new(bank_account_id:ba_id, 
               position:position, 
               date:row[0], 
               narration:row[1],
@@ -47,7 +47,7 @@ module Importer
             ibel.cat_interpreter # on remplit les champs cat
             ibel.payment_mode_interpreter # on tente de remplir le champ mode de paiement
             lirs << ibel
-            position += 1
+            position += 1 
             
           end
           index += 1
@@ -59,6 +59,8 @@ module Importer
         lirs
       end
     end
+    
+    protected
   
     # controle la validité d'une ligne. Si les transformations
     # échoues (to_f ou Date.parse) on arrive dans le bloc et la ligne 

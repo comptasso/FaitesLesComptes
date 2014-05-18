@@ -1,3 +1,5 @@
+require 'ofx'
+
 # Classe destinée à lire les écritures d'un relevé bancaire à partir d'un
 # fichier OFX-money. 
 # 
@@ -18,14 +20,9 @@
 # le montant, et @name pour la narration
 #
 module Importer
-  class OfxImporter < Importer::BaseImporter
+  class OfxImporter < Importer::BaseImporter 
     
-    protected
     
-    def build_row(transac)
-      debit, credit = debit_credit transac.amount
-      [transac.posted_at, transac.name, debit, credit]
-    end
     
     def load_imported_rows(options = nil)
       lirs = []
@@ -43,7 +40,7 @@ module Importer
           if correct?(row, index)
             
             # création d'un array de Bel
-            ibel =  ImportedBel.new(bank_account_id:bank_account_id, 
+            ibel =  ImportedBel.new(bank_account_id:ba_id, 
               position:position, 
               date:row[0], 
               narration:row[1],
@@ -62,6 +59,13 @@ module Importer
         errors.add(:read, "Erreur de lecture du Fichier OFX")
         lirs
       end
+    end
+    
+    protected
+    
+    def build_row(transac)
+      debit, credit = debit_credit transac.amount
+      [transac.posted_at, transac.name, debit, credit]
     end
   
   # controle la validité d'une ligne. Si les transformations
