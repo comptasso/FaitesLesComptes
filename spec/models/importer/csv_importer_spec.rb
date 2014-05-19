@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 
+
 RSpec.configure do |config|  
   #  config.filter =  {wip:true}
 end
@@ -28,9 +29,10 @@ describe Importer::CsvImporter do
     context 'avec un ficher illisible' do
       let(:source_file) {File.join(Rails.root, 'spec/fixtures/importer/releve.slk')}
     
-      it 'indique CSVMalformedCSVError' do
-        subject.load_imported_rows
-        subject.errors[:read].first.should == 'Fichier mal formé, fin de la lecture en ligne 11'
+      it 'indique CSV::MalformedCSVError' do
+       
+        expect {subject.load_imported_rows}.to raise_error(CSV::MalformedCSVError)
+        
       end
     end
     
