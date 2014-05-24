@@ -40,7 +40,7 @@
     = icon_to 'nouveau.png', 
       write_bank_account_imported_bel_path(@bank_account, importable),
       :method=>:post, hidden:!importable.complete?, remote:true, 
-      title:'Créer l\'écriture'
+      title:'Créer l\'écriture', class:'ibel_write'
 
     = icon_to('supprimer.png', [@bank_account, importable],
       :method => :delete, class:'ibel_delete' ,remote:true)

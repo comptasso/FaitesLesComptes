@@ -28,7 +28,7 @@ check_ibel_complete = (row) ->
   # payment_mode
   complete = !(/—/.test(v.text())) if row.find('td.cat span').text().trim() == 'T'
   # on affiche le lien nouveau si c'est OK  
-  row.find('a[title="Nouveau"]').show() if complete
+  row.find('a.ibel_write').show() if complete
   
   
   
