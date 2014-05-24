@@ -65,47 +65,13 @@ describe Importer::BelsImportersController do
       response.should render_template 'new'
     end
     
-    
-    
-    context 'il faut un extrait  de compte' do
-      
-      before(:each) do
-        Importer::Loader.stub(:new).
-          and_return(@ibel = double(Importer::Loader, save:true))
-        @ibel.should_receive(:need_extract?).and_return(true)
-      end
-      it 'indique le besoin d un extrait' do 
-        post :create, {bank_account_id:ba.to_param, importer_loader:{file:lefichiercsv} }, valid_session 
-        flash[:notice].should == 'Les écritures importées nécessitent la création d\'un extrait de compte'
-      end
-      
-      it 'et renvoie sur new_bank_extract' do
-        post :create, {bank_account_id:ba.to_param, importer_loader:{file:lefichiercsv} }, valid_session 
-        response.should redirect_to new_bank_account_bank_extract_url(ba)
-      end
-       
-    end
-    
-    context 'sans besoin d un extrait  de compte' do
-      
-      before(:each) do
-        Importer::Loader.stub(:new).
-          and_return(@ibel = double(Importer::Loader, save:true))
-        @ibel.should_receive(:need_extract?).and_return(false)
-      end
-      it 'indique le succès de  l importation' do 
-        post :create, {bank_account_id:ba.to_param, importer_loader:{file:lefichiercsv} }, valid_session 
-        flash[:notice].should == 'Importation du relevé effectuée'
-      end
-      
-      it 'et renvoie sur new_bank_extract' do
-        post :create, {bank_account_id:ba.to_param, importer_loader:{file:lefichiercsv} }, valid_session 
-        response.should redirect_to bank_account_imported_bels_url(ba)
-      end
-       
-    end
-    
-    
+     it 'ou redirige vers index de imported_bels' do
+       Importer::Loader.stub(:new).
+        and_return(double(Importer::Loader, save:true))
+      post :create, {bank_account_id:ba.to_param, importer_loader:{file:lefichiercsv} }, valid_session 
+      response.should redirect_to bank_account_imported_bels_url(ba)
+     end
+   
     
     
   end

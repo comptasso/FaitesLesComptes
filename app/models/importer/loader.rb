@@ -30,19 +30,6 @@ module Importer
       false
     end
     
-   
-    # récupère la banque et le dernier extrait, vérifie si des lignes ont 
-    # des dates postérieures au dernier extrait.
-    # Retourne un boolean
-    def need_extract?(period)
-      lbe_date = bank_account.bank_extracts.order('end_date ASC').last.end_date rescue (period.start_date) -1
-      if imported_rows.any? && imported_rows.sort {|r| r.date}.last.date > lbe_date
-        true # il faudrait un extrait
-      else
-        false # pas besoin d'extrait
-      end
-    end
-    
     # Il s'agit de sauve les BelsImporter qui ont été chargées par cet importateur
     # pas de faire persister ce modèle.
     def save
