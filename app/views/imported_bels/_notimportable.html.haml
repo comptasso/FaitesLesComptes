@@ -9,4 +9,6 @@
   %td.numeric= debit_credit notimportable.credit
   %td
   %td
-    = icon_to('supprimer.png', [@bank_account, notimportable], :method => :delete, remote:true)
+    = icon_to('supprimer.png', 
+      [@bank_account, notimportable], class:'ibel_delete',
+      :method => :delete, remote:true)

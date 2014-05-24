@@ -1,6 +1,6 @@
 ---
 - :name: Vente produits finis
-  :comment: Pour les associations ayant une activité de fabricatiion
+  :comment: Pour les associations ayant une activité de fabrication
   :acc: '701'
   :book: Recettes
 - :name: Travaux
