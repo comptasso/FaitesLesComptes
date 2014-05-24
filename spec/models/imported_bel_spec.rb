@@ -104,7 +104,7 @@ describe ImportedBel do
     
   end
   
-  describe 'avec un véritable organisme' do
+  describe 'avec un véritable organisme' , wip:true do
         
     before(:each) do
       use_test_organism
@@ -118,7 +118,7 @@ describe ImportedBel do
           narration:'Ecriture importée',
           bank_account_id:@ba.id,
           nature_id:@n.id,
-          destination_id:@o.destinations.first.id, 
+          destination_id:1, # @o.destinations.first.id, 
           debit:25.45, credit:0, payment_mode:'CB')}
         
       it 'to_write' do
