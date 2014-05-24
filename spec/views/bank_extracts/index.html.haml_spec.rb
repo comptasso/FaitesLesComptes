@@ -35,7 +35,7 @@ describe "bank_extracts/index" do
     
     @be2.stub_chain(:bank_extract_lines, :empty?).and_return false
 
-    assign(:bank_account, @ba = mock_model(BankAccount))
+    assign(:bank_account, @ba = mock_model(BankAccount, imported_bels:[1]))
     assign(:bank_extracts, [@be1, @be2])
         
     view.stub(:virgule).and_return '25,00'
@@ -53,7 +53,7 @@ describe "bank_extracts/index" do
   it 'testing has_icon?' do
     @be1.stub_chain(:bank_extract_lines, :empty?).and_return false
     render
-   page.find('table tbody tr:first td:last').should have_icon('afficher', href:bank_extract_bank_extract_lines_path(@be1))
+    page.find('table tbody tr:first td:last').should have_icon('afficher', href:bank_extract_bank_extract_lines_path(@be1))
   end
 
   it 'un bank_extract sans ligne n affiche pas l icone afficher' do
@@ -84,5 +84,34 @@ describe "bank_extracts/index" do
     actions.should_not have_icon('pointer', href:pointage_bank_extract_bank_extract_lines_path(@be1))
     actions.should_not have_icon('supprimer', href:bank_account_bank_extract_path(@ba, @be1))
   end
+  
+  
+  describe 'test du menu' do
+    
+    before(:each) do
+      view.stub(:current_user).and_return(@u = mock_model(User, name:'testeur'))
+      view.stub('user_signed_in?').and_return true
+    end  
+  
+    it 'nouveau et afficher avec des imported_bels' do
+      render template:'bank_extracts/index', layout:'layouts/application'
+      local_icons  = page.find('li.horizontal_icons')
+      local_icons.should have_icon('nouveau', href:new_bank_account_bank_extract_path(@ba))
+      local_icons.should have_icon('afficher',
+        href:bank_account_imported_bels_path(@ba))
+    end
+    
+    it 'nouveau et restauration sans imported_bels' do
+      @ba.stub(:imported_bels).and_return []
+      render template:'bank_extracts/index', layout:'layouts/application'
+      local_icons = page.find('li.horizontal_icons')
+      local_icons.should have_icon('nouveau', href:new_bank_account_bank_extract_path(@ba))
+      local_icons.should have_icon('restauration',
+        href:new_importer_bank_account_bels_importer_path(@ba))
+      
+    end
+    
+    
+  end 
 
 end

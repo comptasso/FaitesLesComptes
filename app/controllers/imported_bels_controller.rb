@@ -4,9 +4,10 @@ class ImportedBelsController < ApplicationController
   before_filter :correct_range_date, only: [:index] 
   
    
-  def index
+  def index 
     @imported_bels = @bank_account.imported_bels.order(:date, :position)
-    flash.now[:notice] = flash[:notice] + ' Aucune ligne importée en attente' if @imported_bels.empty?
+    notice = flash[:notice] || ''
+    flash.now[:notice] = notice + ' Aucune ligne importée en attente' if @imported_bels.empty?
   end
   
   def update
