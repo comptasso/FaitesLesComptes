@@ -82,9 +82,14 @@ class ImportedBelsController < ApplicationController
     @bank_account = BankAccount.find(params[:bank_account_id])
   end
   
-  # On ne peut écrire que dans l'exercice
+  # On ne peut écrire que dans les comptes bancaires de l'exercice
+  # qui sont présents
   def correct_range_date
-    @correct_range_date = @period.start_date..@period.close_date
+    last_bank_extract_date = @bank_account.bank_extracts.period(@period).last.end_date
+    @correct_range_date = @period.start_date..last_bank_extract_date
+  rescue
+    @correct_range_date = [] # ceci permet dans la vue de faire fonctionner le 
+    # in?(@correct_range_date) même s'il n'y a pas d'extrait
   end
   
 end
