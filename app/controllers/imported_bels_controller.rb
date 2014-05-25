@@ -41,7 +41,7 @@ class ImportedBelsController < ApplicationController
       @writing = book.transfers.new(par)
     else
       book = @imported_bel.depense? ? 
-        @bank_account.sector.outcome_book : bank_account.sector.income_book
+        @bank_account.sector.outcome_book : @bank_account.sector.income_book
       @writing = book.in_out_writings.new(par)
     end
     # rajouter les informations de user (id et ip)
