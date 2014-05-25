@@ -1,11 +1,17 @@
 = content_for :menu do
-  = icon_to 'nouveau.png',
-    new_importer_bank_account_bels_importer_path(@bank_account),
-    title: 'Importation d\'un relevé bancaire'
-  = icon_to 'supprimer.png', [:destroy_all, @bank_account, :imported_bels],
-    method: :delete,
-    title: 'Supprime toutes les lignes importées', 
-    confirm:'Cette action supprime toutes les lignes importées; mais n\'efface pas les écritures déjà créées à partir de ces lignes'                     
+  -if @border_closed
+    = icon_to 'nouveau.png',
+      new_bank_account_bank_extract_path(@bank_account),
+      title: 'Création d\'un nouvel extrait de compte'
+  - if @imported_bels.empty?
+    = icon_to 'restauration.png',
+      new_importer_bank_account_bels_importer_path(@bank_account),
+      title: 'Importation d\'un relevé bancaire'
+  - else
+    = icon_to 'supprimer.png', [:destroy_all, @bank_account, :imported_bels],
+      method: :delete,
+      title: 'Supprime toutes les lignes importées', 
+      confirm:'Cette action supprime toutes les lignes importées; mais n\'efface pas les écritures déjà créées à partir de ces lignes'                     
 
 .champ
   %h3 Banque #{@bank_account.nickname} : Liste des lignes importées
@@ -25,9 +31,9 @@
         %th.actions N°/Actions
     %tbody{'data-mindate'=>l(@period.start_date), 'data-maxdate'=>l(@period.close_date)}
       - @imported_bels.each do |ibel|
-        - if !ibel.writing_id && ibel.date.in?(@correct_range_date)
+        - if ibel.importable?(@correct_range_date)
           =render(partial:'importable', object: ibel)
-        - elsif
+        - elsif ibel.imported?
           =render(partial:'imported', object: ibel)
         -else
           =render(partial:'notimportable', object: ibel)

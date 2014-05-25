@@ -103,6 +103,17 @@ class ImportedBel < ActiveRecord::Base
         complete_writing_params
       end
    end
+   
+  def imported?
+    writing_id ? true :false
+  end
+  
+  
+  def importable?(range_date)
+    return false if imported? # déjà importée
+    return false unless date # n'a pas de date pour comparer
+    date.in?(range_date) rescue false # permet de transmettre un range_date nil
+  end
   
   
   

@@ -6,8 +6,12 @@ class ImportedBelsController < ApplicationController
    
   def index 
     @imported_bels = @bank_account.imported_bels.order(:date, :position)
-    notice = flash[:notice] || ''
-    flash.now[:notice] = notice + ' Aucune ligne importée en attente' if @imported_bels.empty?
+    set_border
+    if @border_closed
+      flash.now[:alert] = 'Aucune ligne ne peut être importée : extraits verrouillés
+    ou absent; utiliser l\'icone + 
+      pour créer un nouvel extrait de compte si besoin' 
+    end
   end
   
   def update
@@ -83,13 +87,23 @@ class ImportedBelsController < ApplicationController
   end
   
   # On ne peut écrire que dans les comptes bancaires de l'exercice
-  # qui sont présents
+  # qui sont présents et non verrouillés
   def correct_range_date
-    last_bank_extract_date = @bank_account.bank_extracts.period(@period).last.end_date
-    @correct_range_date = @period.start_date..last_bank_extract_date
+    bexs = @bank_account.bank_extracts.period(@period).order(:begin_date)
+    last_bex_date = bexs.last.end_date
+    first_bex_date = bexs.unlocked.first.begin_date
+    @correct_range_date = first_bex_date..last_bex_date
   rescue
-    @correct_range_date = [] # ceci permet dans la vue de faire fonctionner le 
-    # in?(@correct_range_date) même s'il n'y a pas d'extrait
+    nil
+  end
+  
+  # on peut importer à condition qu'il y ait au moins une écriture importable
+  # crée l'instance @border_closed permettant de savoir ou non si on peut 
+  # importer au moins une écriture.
+  def set_border
+    @border_closed = false if @imported_bels.empty?
+    @border_closed = @imported_bels.
+      collect {|ibel| ibel.importable?(@correct_range_date)}.uniq == [false] 
   end
   
 end
