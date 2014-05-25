@@ -20,7 +20,7 @@ class Admin::DestinationsController < Admin::ApplicationController
   # GET /destinations/new.json
   def new
     @destination = @organism.destinations.new
-
+    @destination.sector_id = @organism.sectors.first.id
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @destination }

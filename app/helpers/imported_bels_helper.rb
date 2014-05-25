@@ -40,10 +40,7 @@ module ImportedBelsHelper
       ''
     end
   end
-  
-  
-  
-  
+   
   # la collection peut être T pour un transfert, D pour une dépense, C pour 
   #  un crédit. 
   #  
