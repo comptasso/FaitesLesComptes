@@ -21,7 +21,7 @@ describe ImportedBelsController do
   describe 'GET index' do  
     
     before(:each) do
-      ba.stub_chain(:bank_extracts, :period, :unlocked).
+      ba.stub_chain(:bank_extracts, :period, :order).
         and_return([mock_model(BankExtract, begin_date:Date.today.beginning_of_month,
             end_date:Date.today.end_of_month)])
     end

@@ -82,8 +82,8 @@ describe Subscription do
   describe 'writings_late', wip:true do
     
     before(:each) do
-      tdy = Date.today
-      Date.stub(:today).and_return(tdy+3.days) # pour considérer qu'on est le 3 du 
+      tdy = Date.today.beginning_of_month
+      Date.stub(:today).and_return(tdy+5.days) # pour considérer qu'on est le 5 du 
       # mois courant
     end
      

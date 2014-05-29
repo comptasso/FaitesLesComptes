@@ -1,5 +1,5 @@
 require 'month_year'
-require 'strip_arguments'
+require 'strip_arguments' 
 
 # Modèle destiné à gérer les abonnements. 
 # 
