@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
     when 0
       accueil = "Bienvenue ! "
       accueil += "<br/>Vous pouvez maintenant créer un organisme "
-      accueil += "<br/>Vous pouvez également <a href=#{bottom_manuals_url}>consulter maintenent les manuels</a> du logiciel
+      accueil += "<br/>Vous pouvez également <a href=#{bottom_manuals_url}>consulter maintenant les manuels</a> du logiciel
       <br/>ou le faire plus tard; un lien vers les manuels est disponible au bas de chaque page"
       flash[:notice]=accueil.html_safe
       new_admin_room_url
