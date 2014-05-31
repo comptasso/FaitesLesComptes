@@ -1,20 +1,25 @@
-<h2>Sign up</h2>
+<div class="champ">
+  <h3>Création d'un compte</h3>
 
+<div class="inner-champ">
 
+<div class="inputs">
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+<%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name),  :html=> {class: 'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
-<p><%=  resource.errors.inspect %></p>
-  <div class="form-inputs">
-    <%= f.input :name, required: true, autofocus: true %>
-    <%= f.input :email, required: true %>
-    <%= f.input :password, required: true %>
-    <%= f.input :password_confirmation, required: true %>
-  </div>
+
+  
+    <%= f.input :name, :required => true, :autofocus => true,  input_html: {class: "span3"} %>
+    <%= f.input :email, :required => true,  input_html: {class: "span3"}  %>
+    <%= f.input :password, :required => true, hint:'8 caractères minimum', input_html: {class: "span3"}  %>
+    <%= f.input :password_confirmation, :required => true,  input_html: {class: "span3"}  %>
+ 
 
   <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
+    <%= f.button :submit, "S'inscrire", class: "btn-primary span2" %>
   </div>
 <% end %>
+ </div>
 
-<%= render "devise/shared/links" %>
+
+</div></div>
