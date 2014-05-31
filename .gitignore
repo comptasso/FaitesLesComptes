@@ -1,5 +1,6 @@
 .bundle
 .secret
+.env
 db/development
 db/production
 db/test

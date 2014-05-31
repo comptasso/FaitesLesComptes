@@ -1,6 +1,21 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  
+  # rajout fait suite au changement de version de Devise (passage de 3.0 à 3.2
+  # On utilise les possibilités de foreman pour gérer cette clé en la mettant 
+  # dans un fichier local .env qui n'est pas suivi par git (voir le fichier 
+  # .gitignore) et la même clé a été déposée dans les variables d'environnement
+  # de heroku.
+  if Rails.env == 'production'
+    cle = ENV['DEVISE_SEC_KEY']
+  else
+    cle = '1cletropsimple'
+  end
+  
+  config.secret_key = cle
+ 
+  
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
