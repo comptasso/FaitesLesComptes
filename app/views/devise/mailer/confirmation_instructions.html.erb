@@ -1,7 +1,5 @@
-<p>Bienvenue <%= @email %>!</p>
+<p>Welcome <%= @email %>!</p>
 
-<p>Vous devez confirmez votre inscription au moyen du lien ci-dessous :</p>
+<p>You can confirm your account email through the link below:</p>
 
-<p><%= link_to 'Confirmer mon compte', confirmation_url(@resource, :confirmation_token => @resource.confirmation_token) %></p>
-
-<p>L'équipe de FaitesLesComptes</p>
+<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>

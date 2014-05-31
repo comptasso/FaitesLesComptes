@@ -1,47 +1,27 @@
-<div class="champ">
-  <h3>Modification de vos données personnelles
+<h2>Edit <%= resource_name.to_s.humanize %></h2>
 
-    <ul class="mois">
-      <li class="inactive">
-        Pas satisfait :
-      </li>
-      <li class="active">
-        <%= link_to "Supprimer mon compte", registration_path(resource_name),
-          :data => { :confirm => "Cette action est définitive, votre compte et toutes les comptabilités créées seront supprimés" }, :method => :delete %>
-      </li>
-    </ul>
-
-
-
-
-  </h3>
-
-<div class="inner-champ">
-
-<div class="inputs">
-
-<%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put , class: 'form-horizontal'}) do |f| %>
+<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= f.error_notification %>
 
-    <%= f.input :name, :required => true, :autofocus => true,   input_html: {class: "span3"} %>
-    <%= f.input :email, :required => true, input_html: {class: "span3"} %>
+  <div class="form-inputs">
+    <%= f.input :email, required: true, autofocus: true %>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-      <p>Actuellement en attente de confirmation de: <%= resource.unconfirmed_email %></p>
+      <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
     <% end %>
 
-    <%= f.input :password, :autocomplete => "off",   input_html: {class: "span3"}, :hint => "laisser en blanc si pas de changement", :required => false %>
-    <%= f.input :password_confirmation,   input_html: {class: "span3"}, :required => false %>
-    <%= f.input :current_password,  input_html: {class: "span3"}, :hint => "obligatoire pour valider vos changements", :required => true %>
- 
+    <%= f.input :password, autocomplete: "off", hint: "leave it blank if you don't want to change it", required: false %>
+    <%= f.input :password_confirmation, required: false %>
+    <%= f.input :current_password, hint: "we need your current password to confirm your changes", required: true %>
+  </div>
 
   <div class="form-actions">
-    <%= f.button :submit, "Mettre à jour", class: "btn-primary span2"  %>
+    <%= f.button :submit, "Update" %>
   </div>
 <% end %>
- </div>
 
-</div></div>
+<h3>Cancel my account</h3>
 
+<p>Unhappy? <%= link_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
 
-
+<%= link_to "Back", :back %>
