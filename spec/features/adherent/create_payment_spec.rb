@@ -13,13 +13,17 @@ describe 'enregistrement d un payment' do
   include OrganismFixtureBis
   
 
-#  before(:each) do
-#    create_user
-#    create_organism
-#    login_as('quidam')
-#    
-#  end
+  before(:each) do
+    use_test_user 
+    login_as('quidam')
+    use_test_organism 
+    create_first_member(@o)
+    visit admin_organism_path(@o)
+     
+  end
   
-  it 'Enregistrer un payment' 
+  after(:each) {Adherent::Member.delete_all}
+  
+  it 'test à faire'
   
 end

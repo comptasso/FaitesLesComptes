@@ -7,7 +7,6 @@ RSpec.configure do |c|
 #  c.exclusion_filter = {:js=> true }
 end
 
-# spec request for testing admin bank_accounts 
 
 describe 'accès au module adhérent' do  
   include OrganismFixtureBis
@@ -20,6 +19,8 @@ describe 'accès au module adhérent' do
     visit admin_organism_path(@o)
   end
   
+  after(:each) {Adherent::Member.delete_all}
+  
   it 'on a un lien adherent' do
     page.should have_content('ADHERENTS') 
   end
@@ -28,5 +29,9 @@ describe 'accès au module adhérent' do
     click_link 'ADHERENTS'
     page.should have_content('Liste des membres')
   end
+  
+  
+  
+  
   
 end

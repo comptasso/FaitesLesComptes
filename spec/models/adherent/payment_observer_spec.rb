@@ -51,6 +51,17 @@ describe Adherent::Payment do
       Writing.delete_all
       ComptaLine.delete_all
     end
+    
+    describe 'gestion d une erreur lors de  l enregistrement' do
+      
+      it 'avec une date sans exercice' do
+        @pay.date = Date.today.years_ago(2)
+        @pay.save.should be_false
+        @pay.errors.messages[:date].should == ['hors limite']
+      end
+      
+      
+    end
   
     it 'crée un in_out_writing' do
       expect {@pay.save}.to change {Adherent::Writing.count}.by(1)

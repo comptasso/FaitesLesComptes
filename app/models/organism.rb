@@ -164,6 +164,17 @@ class Organism < ActiveRecord::Base
     periods.select {|p| p.accountable? }.any?
   end
   
+  # renvoie les dates pour lesquelles il est possible d écrire
+  # utilisé par le gem adhérent pour savoir un paiement est valide
+  def range_date
+    opers = periods.opened.order(:start_date)
+    if opers.empty?
+      return [] # permet de faire la validation avec in? dans Adherent
+    else
+      return opers.first.start_date..opers.last.close_date
+    end
+  end
+  
   # Renvoie la caisse principale (utilisée en priorité)
   # en l'occurence actuellement la première trouvée ou nil s'il n'y en a pas
   # TODO ? à mettre dans le modèle Cash en méthode de classe par exemple ?

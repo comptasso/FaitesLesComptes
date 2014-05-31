@@ -173,6 +173,16 @@ module OrganismFixtureBis
     fill_in 'user_password', :with=>'bonjour1'
     click_button 'Valider'
   end
+  
+  def create_first_member(organism, params = {})
+    name = params[:name] || 'Defaut'
+    number = params[:number] || 'Adh001'
+    forname = params[:forname] || 'Jean'
+    birthdate = params[:birthdate].to_date rescue Date.civil(1955,6,6)
+    am = Adherent::Member.new(name:name, number:number, forname:forname, birthdate:birthdate)
+    am.organism_id = organism.id
+    am.save!
+  end
 
   
   # Permet de créer une écriture de type dépenses avec par défaut un montant de 99 et un
