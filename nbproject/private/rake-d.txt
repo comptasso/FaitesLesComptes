@@ -1,12 +1,12 @@
 about=List versions of all Rails frameworks and the environment
 adherent\:install\:migrations=Copy migrations from adherent to application
-apartment\:create=Create all multi-tenant databases
-apartment\:migrate=Migrate all multi-tenant databases
-apartment\:migrate\:down=Runs the "down" for a given migration VERSION across all multi-tenant dbs.
-apartment\:migrate\:redo=Rollbacks the database one migration and re migrate up (options: STEP=x, VERSION=x).
-apartment\:migrate\:up=Runs the "up" for a given migration VERSION across all multi-tenant dbs.
-apartment\:rollback=Rolls the schema back to the previous version (specify steps w/ STEP=n) across all multi-tenant dbs.
-apartment\:seed=Seed all multi-tenant databases
+apartment\:create=Create all tenants
+apartment\:migrate=Migrate all tenants
+apartment\:migrate\:down=Runs the "down" for a given migration VERSION across all tenants.
+apartment\:migrate\:redo=Rolls back the tenant one migration and re migrate up (options: STEP=x, VERSION=x).
+apartment\:migrate\:up=Runs the "up" for a given migration VERSION across all tenants.
+apartment\:rollback=Rolls the migration back to the previous version (specify steps w/ STEP=n) across all tenants.
+apartment\:seed=Seed all tenants
 assets\:clean=Remove compiled assets
 assets\:clean\:all=
 assets\:environment=
@@ -76,7 +76,6 @@ jobs\:work=Start a delayed_job worker.
 jobs\:workoff=Start a delayed_job worker and exit when all available jobs are complete.
 log\:clear=Truncates all *.log files in log/ to zero bytes
 middleware=Prints out your Rack middleware stack
-noop=
 notes=Enumerate all annotations (use notes:optimize, :fixme, :todo for focus)
 notes\:custom=Enumerate a custom annotation, specify with ANNOTATION=CUSTOM
 notes\:fixme=
@@ -104,6 +103,7 @@ spec\:helpers=Run the code examples in spec/helpers
 spec\:lib=Run the code examples in spec/lib
 spec\:mailers=Run the code examples in spec/mailers
 spec\:models=Run the code examples in spec/models
+spec\:prepare=
 spec\:routing=Run the code examples in spec/routing
 spec\:statsetup=
 spec\:support=Run the code examples in spec/support

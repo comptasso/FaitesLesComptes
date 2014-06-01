@@ -27,12 +27,12 @@ describe "transfers/show" do
   end
   
   it 'rendant la ligne de titre' do
-    page.first('table tr').text.should == "Date\nLibellé\nMontant\nDe\nVers\nActions\n"
+    page.first('table tr').text.should == "\nDate\nLibellé\nMontant\nDe\nVers\nActions\n"
   end
     
   it 'et la ligne de détail du transfert' do
     page.find('tbody tr').text.should ==
-      "#{I18n.l(Date.today)}\nPremier transfert\n125,14\nle compte\nla caisse\n\n\n\n\n"
+      "\n#{I18n.l(Date.today)}\nPremier transfert\n125,14\nle compte\nla caisse\n\n\n\n\n"
   end
   
   
