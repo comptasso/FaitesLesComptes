@@ -108,6 +108,8 @@ module ApplicationHelper
       w = Adherent::Writing.find_by_bridge_id(payment.id)
       w.editable? if w
     end
+    
+    
 
 
     protected

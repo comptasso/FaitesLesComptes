@@ -4,11 +4,11 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|  
   #  c.filter = {:js=> true }
-   c.filter = { :wip=>true}
+  # c.filter = { :wip=>true}
   #  c.exclusion_filter = {:js=> true } 
 end
  
-describe 'Session' do
+describe 'Session' do 
   include OrganismFixtureBis 
 
   before(:each) do
@@ -124,7 +124,7 @@ describe 'Session' do
         User.delete_all
       end
       
-      it 'la confirmation marche', wip:true do
+      it 'la confirmation marche' do
         puts @enc
         bis = Devise.token_generator.digest(User, :confirmation_token, @raw)
         puts bis 
@@ -132,18 +132,19 @@ describe 'Session' do
         @cu.reload.should be_confirmed  
       end
       
-      it 'l utilisteur est non confirmé', wip:true do
+      it 'l utilisteur est non confirmé' do
         @cu.should_not be_confirmed
       end
       
-      it 'un utilisateur non confirmé le devient avec un bon token', wip:true do
+      it 'un utilisateur non confirmé le devient avec un bon token' do
         # pending 'A revoir avec la nouvelle démarche de Devise'
         visit user_confirmation_path(confirmation_token: @raw)
-        @cu.reload.should be_confirmed  
+        @cu.reload.should be_confirmed   
       end
       
       it 'il est loggé'  , wip:true  do
         visit user_confirmation_path(confirmation_token: @raw)
+        page.find('.notice').should have_content 'Félicitations'
         page.find('h3').text.should == 'Nouvel organisme'
       end
       

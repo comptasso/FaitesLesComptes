@@ -72,18 +72,15 @@ class ApplicationController < ActionController::Base
   # 
   # Lorsqu'il n'y a pas d'organisme, il faut afficher soit la vue
   # admin/rooms#index soit la vue organism selon qu'il y a plusieurs bases ou une seule
-  #
+  # TODO pourrait être un peu plus simple en renvoyant une partie de la logique
+  # vers le admin_rooms_controller
   #
   def after_sign_in_path_for(user)
     session[:org_db] = nil
     use_main_connection
     case current_user.rooms.count
     when 0
-      accueil = "Bienvenue ! "
-      accueil += "<br/>Vous pouvez maintenant créer un organisme "
-      accueil += "<br/>Vous pouvez également <a href=#{bottom_manuals_url}>consulter maintenant les manuels</a> du logiciel
-      <br/>ou le faire plus tard; un lien vers les manuels est disponible au bas de chaque page"
-      flash[:notice]=accueil.html_safe
+      flash[:notice]=premier_accueil
       new_admin_room_url
     when 1
       r = current_user.rooms.first
@@ -266,6 +263,16 @@ class ApplicationController < ActionController::Base
     end
     al.html_safe
   end
+  
+  # Message de bienvenue pour un utilisateur qui n'a encore créé aucune 
+    # Room
+    def premier_accueil
+      accueil = "Bienvenue ! "
+      accueil += "<br/>Vous pouvez maintenant créer un organisme "
+      accueil += "<br/>Vous pouvez également <a href=#{bottom_manuals_url}>consulter maintenant les manuels</a> du logiciel
+      <br/>ou le faire plus tard; un lien vers les manuels est disponible au bas de chaque page"
+      accueil.html_safe
+    end
 
   
 

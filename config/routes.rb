@@ -4,7 +4,9 @@ Faitesvoscomptes::Application.routes.draw do
   
 
   devise_for :users, 
-    :controllers => { :registrations => "devise_registrations"}
+    :controllers => { :registrations => "devise_registrations",
+                      :confirmations => "devise_confirmations"
+                    }
   devise_scope :user do
 
     get "devise/sessions/bye"
