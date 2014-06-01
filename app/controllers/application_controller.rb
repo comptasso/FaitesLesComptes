@@ -98,8 +98,8 @@ class ApplicationController < ActionController::Base
       admin_rooms_url
     end
   end
-
   
+
   # se connecte à la base de données indiquée par session[:org_db]
   # et instancie @organism
   # TODO voir s'il ne faudrait pas faire un cache

@@ -29,6 +29,7 @@ Spork.prefork do
   SCHEMA_TEST = 'assotest_20140304044313'
 
   RSpec.configure do |config|
+    config.include Devise::TestHelpers, :type => :controller
     config.mock_with :rspec
     config.use_transactional_fixtures = false
 

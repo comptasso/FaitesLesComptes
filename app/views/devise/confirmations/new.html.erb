@@ -1,16 +1,18 @@
-<h2>Renvoyer les insctructions de confirmation</h2>
-
-<%= simple_form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+<div class="champ">
+<h3>Renvoyer les instructions de confirmation</h3>
+<div class="inner-champ">
+<%= simple_form_for(resource, as: resource_name, url: confirmation_path(resource_name),
+    html: { method: :post, class: 'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
-  <%= f.full_error :confirmation_token %>
+  
 
   <div class="form-inputs">
     <%= f.input :email, required: true, autofocus: true %>
-  </div>
-
+ 
   <div class="form-actions">
-    <%= f.button :submit, "Renvoyer" %>
+    <%= f.button :submit, "Renvoyer", class: "btn-primary span2" %>
   </div>
 <% end %>
-
-<%= render "devise/shared/links" %>
+ </div>
+</div>
+</div>

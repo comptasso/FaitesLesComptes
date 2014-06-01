@@ -42,6 +42,8 @@ module OrganismFixtureBis
   end
 
   def create_only_user
+    # TODO enlever le clean_main_base en nettoyant au fil des 
+    # tests
     clean_main_base
     @cu =  User.new(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1' )
     @cu.confirmed_at = Time.now

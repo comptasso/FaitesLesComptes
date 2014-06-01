@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|  
   #  c.filter = {:js=> true }
-  #  c.filter = { :wip=>true}
+   c.filter = { :wip=>true}
   #  c.exclusion_filter = {:js=> true } 
 end
  
@@ -45,7 +45,7 @@ describe 'Session' do
       current_url.should match /http:\/\/www.example.com\/organisms\/\d*/ 
     end
 
-    it 'avec plusieures organisme, renvoie sur la liste' , wip:true do
+    it 'avec plusieures organisme, renvoie sur la liste'do
       create_user
       create_organism
       # plutôt que de créer réellement plusieurs bases, on fait un stub
@@ -58,7 +58,7 @@ describe 'Session' do
 
   end
 
-  describe 'création d un compte' do
+  describe 'création d un compte' do 
     
     after(:each) do
       User.delete_all
@@ -85,6 +85,71 @@ describe 'Session' do
       
     end 
 
+  end
+  
+  describe 'confirmation du compte' do
+    
+    
+    
+    
+    it 'un nouvel utilisateur n est pas confirmé' do
+      u = User.new(name:'essai', email:'bonjour@example.com')
+      u.should_not be_confirmed
+    end
+    
+    context 'avec un mauvais token' do
+      
+      
+    it 'on est renvoyé sur la page de renvoi des instructions' do
+      visit user_confirmation_path(confirmation_token: '1234567789')
+      page.find('h3').should have_content 'Renvoyer les instructions de confirmation'
+    end
+    
+      
+    
+    end
+    
+    context 'avec un bon token'  do
+      
+      
+      
+      before(:each) do
+        @cu =  User.create!(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1' )
+        @raw, @enc = Devise.token_generator.generate(User, :confirmation_token)
+        @cu.update_attribute(:confirmation_token, @enc)
+        
+      end
+      
+      after(:each) do
+        User.delete_all
+      end
+      
+      it 'la confirmation marche', wip:true do
+        puts @enc
+        bis = Devise.token_generator.digest(User, :confirmation_token, @raw)
+        puts bis 
+        User.confirm_by_token(@raw)
+        @cu.reload.should be_confirmed  
+      end
+      
+      it 'l utilisteur est non confirmé', wip:true do
+        @cu.should_not be_confirmed
+      end
+      
+      it 'un utilisateur non confirmé le devient avec un bon token', wip:true do
+        # pending 'A revoir avec la nouvelle démarche de Devise'
+        visit user_confirmation_path(confirmation_token: @raw)
+        @cu.reload.should be_confirmed  
+      end
+      
+      it 'il est loggé'  , wip:true  do
+        visit user_confirmation_path(confirmation_token: @raw)
+        page.find('h3').text.should == 'Nouvel organisme'
+      end
+      
+    end
+    
+    
   end
 
   

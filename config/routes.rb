@@ -3,7 +3,8 @@ Faitesvoscomptes::Application.routes.draw do
   mount Adherent::Engine, at: "/adherent"
   
 
-  devise_for :users, :controllers => { :registrations => "devise_registrations" }
+  devise_for :users, 
+    :controllers => { :registrations => "devise_registrations"}
   devise_scope :user do
 
     get "devise/sessions/bye"
