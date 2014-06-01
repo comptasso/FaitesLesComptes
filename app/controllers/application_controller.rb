@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
     use_main_connection
     case current_user.rooms.count
     when 0
-      flash[:notice]=premier_accueil
+      flash[:notice]=premier_accueil(user)
       new_admin_room_url
     when 1
       r = current_user.rooms.first
