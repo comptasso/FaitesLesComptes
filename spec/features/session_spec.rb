@@ -125,9 +125,6 @@ describe 'Session' do
       end
       
       it 'la confirmation marche' do
-        puts @enc
-        bis = Devise.token_generator.digest(User, :confirmation_token, @raw)
-        puts bis 
         User.confirm_by_token(@raw)
         @cu.reload.should be_confirmed  
       end

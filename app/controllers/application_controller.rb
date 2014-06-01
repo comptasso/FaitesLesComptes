@@ -266,11 +266,9 @@ class ApplicationController < ActionController::Base
   
   # Message de bienvenue pour un utilisateur qui n'a encore créé aucune 
     # Room
-    def premier_accueil
-      accueil = "Bienvenue ! "
-      accueil += "<br/>Vous pouvez maintenant créer un organisme "
-      accueil += "<br/>Vous pouvez également <a href=#{bottom_manuals_url}>consulter maintenant les manuels</a> du logiciel
-      <br/>ou le faire plus tard; un lien vers les manuels est disponible au bas de chaque page"
+    def premier_accueil(user)
+      accueil = "Bienvenue #{user.name} !"
+      accueil += "<br/>La première chose à faire est de créer un organisme "
       accueil.html_safe
     end
 

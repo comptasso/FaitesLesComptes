@@ -25,9 +25,9 @@ class DeviseConfirmationsController < Devise::ConfirmationsController
   # Message de bienvenue pour un utilisateur qui n'a encore créé aucune 
     # Room
     def premier_accueil
-      accueil = "Félicitations, votre inscription est maintenant confirmée !"
-      accueil += "<br/>Vous pouvez maintenant créer un organisme "
-      accueil += "<br/>Vous pouvez également <a href=#{bottom_manuals_url}>consulter maintenant les manuels</a> du logiciel
+      accueil = "Félicitations, votre inscription est confirmée !"
+      accueil += "<br/>La première chose à faire est de créer un organisme "
+      accueil += "<br/>Vous pouvez aussi <a href=#{bottom_manuals_url}>consulter maintenant les manuels</a> du logiciel
       <br/>ou le faire plus tard; un lien vers les manuels est disponible au bas de chaque page"
       accueil.html_safe
     end
