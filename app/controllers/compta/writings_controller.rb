@@ -39,7 +39,7 @@ class Compta::WritingsController < Compta::ApplicationController
   # GET /writings/new
   # GET /writings/new.json
   def new
-    flash[:alert] = 'Peut-être devriez vous plutôt écrire sur ce livre dans la partie saisie' if @book.type.in? ['IncomeBook', 'OutcomeBook']
+    flash.now[:alert] = 'Peut-être devriez vous plutôt écrire sur ce livre dans la partie saisie' if @book.type.in? ['IncomeBook', 'OutcomeBook']
     @writing = @book.writings.new(date: @d)
     if flash[:previous_writing_id]
       @previous_writing = Writing.find_by_id(flash[:previous_writing_id])

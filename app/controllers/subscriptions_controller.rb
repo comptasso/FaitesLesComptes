@@ -2,7 +2,7 @@ class SubscriptionsController < ApplicationController
   
   def index 
     @late_subscriptions = Subscription.all.select(&:late?)
-    flash[:notice] = 'Pas d\'écriture à passer pour les abonnements existants' if @late_subscriptions.empty?
+    flash.now[:notice] = 'Pas d\'écriture à passer pour les abonnements existants' if @late_subscriptions.empty?
   end
   
   def create

@@ -18,7 +18,7 @@ class Admin::BridgesController < Admin::ApplicationController
       end
        redirect_to admin_organism_bridge_url(@organism)
     else
-      flash[:alert] = 'Impossible d\'enregistrer les paramètres'
+      flash.now[:alert] = 'Impossible d\'enregistrer les paramètres'
       render action: 'edit'
     end
     

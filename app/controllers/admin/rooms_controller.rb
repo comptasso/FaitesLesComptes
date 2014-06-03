@@ -30,7 +30,7 @@ class Admin::RoomsController < Admin::ApplicationController
       alert += ["Une base au moins est en retard par rapport à la version de votre programme, migrer la base correspondante"] if status.include? (:late_migration)
       alert += ["Une base au moins est en avance par rapport à la version de votre programme, passer à la version adaptée"] if status.include? (:advance_migration)
       alert += ['Un fichier correspondant à une base n\'a pu être trouvée ; vous devriez effacer l\'enregistrement correspondant'] if status.include? (:no_base)
-      flash[:alert] = alert.join("\n")
+      flash.now[:alert] = alert.join("\n")
     end
     
   end
@@ -72,7 +72,7 @@ class Admin::RoomsController < Admin::ApplicationController
       session[:org_db]  = @organism.database_name
       redirect_to new_admin_organism_period_url(@organism), notice: flash_creation_livres
     else
-      flash[:alert] = 'Il n\'a pas été possible d\'enregistrer la structure'
+      flash.now[:alert] = 'Il n\'a pas été possible d\'enregistrer la structure'
       render :new
     end
     

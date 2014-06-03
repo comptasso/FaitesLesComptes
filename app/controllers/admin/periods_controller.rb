@@ -99,7 +99,7 @@ class Admin::PeriodsController < Admin::ApplicationController
      # construction du message d'alerte
      alert = "#{@period.exercice} ne peut être clos : \n"
      @period.errors[:close].each {|message| alert += '- ' + message + "\n"}
-     flash[:alert]= alert
+     flash.now[:alert]= alert
      # et retour à la vue index
      @periods=@organism.periods
      render :index

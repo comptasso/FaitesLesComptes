@@ -23,7 +23,7 @@ class BankExtractsController < ApplicationController
     if @bank_extract.save
       flash[:notice]= "Relevé validé et verrouillé"
     else
-      flash[:alert]= "Une erreur n'a pas permis de valider le relevé"
+      flash.now[:alert]= "Une erreur n'a pas permis de valider le relevé"
     end
     redirect_to bank_extract_bank_extract_lines_url(@bank_extract)
   end

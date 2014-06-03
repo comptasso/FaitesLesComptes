@@ -45,7 +45,7 @@ class Compta::ListingsController < Compta::ApplicationController
       end
       
      else
-       flash[:alert] = @listing.errors.messages
+       flash.now[:alert] = @listing.errors.messages
       render 'new' # le form new affichera Des erreurs ont été trouvées 
      end
   end
