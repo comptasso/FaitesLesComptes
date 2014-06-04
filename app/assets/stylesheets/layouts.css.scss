@@ -1,102 +1,106 @@
 /*
-Document   : layouts
-Created on : 30 août 2012, 09:25:47
-Author     : jcl
-Description:
-Purpose of the stylesheet follows.
+  Document   : layouts
+  Created on : 30 août 2012, 09:25:47
+  Author     : jcl
+  Description:
+  Purpose of the stylesheet follows.
 */
 
 /*
-TODO customize this sample style
-Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+  TODO customize this sample style
+  Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
 */
 html, body {
   padding: 0px;
   margin: 0px;
   height:100%;
+}
+
+
+
+
+.brand {
+  background-image: image-url("sigma.png");
+  background-repeat: no-repeat;
+  background-position: 3px 3px;
+  a {color: #bbb}
+  a:hover { text-decoration: none;}
+  a:visited {
+    color: #bbbbbb;
   }
+}
 
- 
+.navbar .brand {
+  padding-top:4px;
+  padding-bottom: 4px;
+  height: 2em;
+}
 
+.navbar-inner {
+  margin-bottom: 4px;
+}
 
-  .brand {
-    background-image: image-url("sigma.png");
-    background-repeat: no-repeat;
-    background-position: 3px 3px;
-    a {color: #bbb}
-    a:hover { text-decoration: none;}
-    a:visited {
-     color: #bbbbbb;
-      }
-    }
-    
-     .navbar .brand {
-      padding-top:4px;
-      padding-bottom: 4px;
-      height: 2em;
-      }
-
-    .navbar-inner {
-      margin-bottom: 4px;
-      }
-    
-    #login_logout {
-      margin-top: 4px;
-      font-size: 50%;
-      span {
-        font-weight: bold;
-        }
-       a {
-           color: #fff; 
-           }
-      }
+#login_logout {
+  margin-top: 4px;
+  font-size: 50%;
+  span {
+    font-weight: bold;
+  }
+  a {
+    color: #fff; 
+  }
+}
 
 
-      
-  .container-fluid {
-    min-height: 100%;
-    height: auto !important;
-	  height: 100%;
-	  margin: 0 auto -1.5em; /* the bottom margin is the negative value of the footer's height */
-    
- //   position:relative;
-    }
+
+.container-fluid {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -1.5em; /* the bottom margin is the negative value of the footer's height */
+  
+  //   position:relative;
+}
+
+#main-zone {
+  padding-bottom:0.8em;
+}
 
 .push {
   clear: both;
   height: 1.5em;
-  }
+}
 
-  #bottom_page {
-    height: 1.5em;
-    }
+#bottom_page {
+  height: 1.5em;
+}
 
 
 .total_width {
- 
+  
   text-align: center;
   width: 100%;
   
   background-color: #CBEECB;
   border-top: 1px solid  #1b431b;
-
-   
-    ul {
-      margin: 0;
-      list-style: none;
-      display: inline;
-    
-    }
-
-    li {  display: inline;
-      list-style: none;
-      font-size: 80%;
-      a { color: #1b431b; }
-      a:visited {  color: #1b431b;}
-      a:hover {color: #fff;}
-      
-
-    }
   
-
+  
+  ul {
+    margin: 0;
+    list-style: none;
+    display: inline;
+    
+  }
+  
+  li {  display: inline;
+    list-style: none;
+    font-size: 80%;
+    a { color: #1b431b; }
+    a:visited {  color: #1b431b;}
+    a:hover {color: #fff;}
+    
+    
+  }
+  
+  
 }

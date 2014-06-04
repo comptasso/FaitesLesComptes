@@ -39,15 +39,22 @@ describe Admin::NaturesController do
     minimal_instances
     @p.stub(:natures).and_return(@a = double(Arel))
     @o.stub(:income_books).and_return [1,2]
-      @o.stub(:outcome_books).and_return [3,4]
+    @o.stub(:outcome_books).and_return [3,4]
   end
 
   describe "GET index"  do 
 
 
-    it "assigns recettes et dépenses" do
-      get :index, {:period_id=>@p.to_param}, valid_session
-      assigns(:books).should == [1,2, 3, 4]
+    it "cherche le livre" do
+      @o.should_receive(:in_out_books).and_return(@ar = double(Arel))
+      @ar.should_receive(:find).with('1').and_return(@db = double(Book))
+      get :index, {:period_id=>@p.to_param, book_id:1}, valid_session
+    end
+    
+    it 'et l assigne' do
+      @o.stub_chain(:in_out_books, :find).and_return('un livre')
+      get :index, {:period_id=>@p.to_param, book_id:1}, valid_session
+      assigns(:book).should == 'un livre'
     end
   end
 

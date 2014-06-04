@@ -1,0 +1,13 @@
+%li.dropdown{:class=>('active' if controller.controller_name =='natures')}
+  %a.dropdown-toggle{href:"#", 'data-toggle'=>"dropdown"}
+    NATURES
+    %b.caret
+  %ul.dropdown-menu
+    %li.nav-header.no-link
+      %a{href:'#'} AFFICHER
+    - @organism.in_out_books.each do |b|
+      %li= link_to b.title,
+        admin_organism_period_natures_path(@organism,@period, book_id:b.id)
+    %li.divider
+    %li= link_to  'Nouveau', new_admin_organism_period_nature_path(@organism, @period)
+     

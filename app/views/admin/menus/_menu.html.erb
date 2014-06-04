@@ -73,13 +73,7 @@
     <% if  @period && @period.persisted? %>
 
 
-      <li class="dropdown <%= 'active' if controller.controller_name =='natures'  %>">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">NATURES<b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><%= link_to 'Afficher', admin_organism_period_natures_path(@organism,@period)  %></li>
-          <li><%=link_to  'Nouveau', new_admin_organism_period_nature_path(@organism, @period)  %></li>
-        </ul>
-      </li>
+    <%=  render :partial=>'admin/menus/bank' %>
    
 
       <li class="dropdown <%= 'active' if controller.controller_name =='accounts'  %>">

@@ -2,13 +2,13 @@
 
 class Admin::NaturesController < Admin::ApplicationController
   
-  before_filter :find_income_outcome_books, except: [:reorder, :destroy]
+ 
 
 
   # GET /natures
   # GET /natures.json
   def index 
-    
+    @book = @organism.in_out_books.find(params[:book_id])
   end
 
   # reorder est appelé par le drag and drop de la vue . Les paramètres
@@ -42,13 +42,15 @@ class Admin::NaturesController < Admin::ApplicationController
  
   # GET /natures/new
   # GET /natures/new.json
-  def new    
+  def new 
+    @books =  @organism.income_books + @organism.outcome_books
     @nature = @period.natures.new
     @nature.book_id = @books.first.id
   end
 
   # GET /natures/1/edit
   def edit
+    @books =  @organism.income_books + @organism.outcome_books
     @nature = @period.natures.find(params[:id])
   end
 
@@ -96,11 +98,7 @@ class Admin::NaturesController < Admin::ApplicationController
     end
   end
   
-  protected
-  
-  def find_income_outcome_books
-    @books =  @organism.income_books + @organism.outcome_books
-  end
+ 
 
 
 end
