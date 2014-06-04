@@ -42,6 +42,7 @@ class Nature < ActiveRecord::Base
   scope :within_period, lambda { |per| where('period_id = ?' , per.id)}
 
   before_destroy :ensure_no_lines
+  after_create :fix_position
 
  
   # stat with cumul fournit un tableau comportant le total des lignes pour la nature
@@ -59,6 +60,34 @@ class Nature < ActiveRecord::Base
 
  
   protected
+  
+  # donne la position par défaut pour une nouvelle nature basée sur 
+  # l'ordre des numéros de comptes.
+  # 
+  # Si une (ou des) natures sont déjà connectées à ce compte, alors
+  # elle se place en dernière position
+  #  
+  # S'il n'y a pas de nature correspondant à ce compte, cherche la nature ayant 
+  # un numéro de compte correspondant. On ne parle évidemment que des natures 
+  # qui relèvent du même livre et du même exercice. 
+  #
+  def fix_position
+    return unless account_id
+    acc =  Account.find(account_id)
+    ns = Nature.includes(:account).
+      where('natures.period_id = ? AND book_id = ?', period_id, book_id).
+      order('accounts.number').all
+    #cherche la nature qui est juste au dessus du compte de notre récente nature
+    pos =  ns.bsearch { |n| n.account.number > acc.number }
+    if pos
+      self.insert_at(pos.position)
+    else # si pos est nil, alors l'insertion en dernière place
+      # était adapté à la situation
+      return
+    end
+    
+    
+  end
 
   # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
   # pour toutes les destinations confondues

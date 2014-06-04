@@ -241,5 +241,18 @@ module OrganismFixtureBis
     ecriture
   end
   
+  # Crée une série de comptes dont les comptes sont donnés par le premier 
+  # argument (un tableau) et l'exercice par le deuxième (facultatif)
+  def create_accounts(numbers, period_id=1)
+    numbers.collect do |n|
+      a = Account.new(number:n, title:"Numero#{n}")
+      a.period_id = period_id
+      puts a.inspect unless a.valid?
+      puts a.errors.messages unless a.valid?
+      a.save!
+      a
+    end
+  end
+  
 
 end

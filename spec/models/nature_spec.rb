@@ -16,7 +16,7 @@ describe Nature do
     @nature = Nature.new(name: 'Nature test')
     @nature.book_id = 1
     @nature.period_id = 1
-    @nature.stub(:book).and_return(b)
+    @nature.stub(:book).and_return(b) 
   end
 
   
@@ -49,10 +49,13 @@ describe Nature do
   context 'une nature existe déja' do
 
     before(:each) do
-      Nature.delete_all
       @nature = p.natures.new(name: 'Nature test')
       @nature.book_id = 1
       @nature.save!
+    end
+    
+    after(:each) do
+      Nature.delete_all
     end
 
     it 'on ne peut créer la même nature' do
@@ -96,10 +99,58 @@ describe Nature do
         @nature.stat_with_cumul(1).should == 12.times.map {|i| 2 } << 24
       end
   end
-
-
-
+  
   end
+  
+  describe 'position d une nouvelle nature'  do
+    
+      
+    
+      before(:each) do
+        @accounts = create_accounts(%w(110 200 201))
+        @accounts.each do |a|
+          n = Nature.new(book_id:1,
+            account_id:a.id, name:"nature#{a.number}")          
+          n.period_id = 1
+          n.save!
+        end
+        
+        @acc = @accounts.second
+      end
+      
+      after(:each) do
+        Account.delete_all 
+        Nature.delete_all
+      end
+    
+      it 'une nouvelle nature se met à la position dans l ordre des comptes' do
+        n = Nature.new(book_id:1, account_id:@acc.id, name:'nouveau')
+        n.period_id = 1
+        n.save
+        n.position.should == 3
+      end
+      
+      it 'elle peut être en premier' do
+        acc = create_accounts(['100']).first
+        n = Nature.new(book_id:1, account_id:acc.id, name:'nouveau')
+        n.period_id = 1
+        n.save
+        n.position.should == 1
+      end
+      
+     it 'ou en dernier' do
+       acc = create_accounts(['300']).first
+        n = Nature.new(book_id:1, account_id:acc.id, name:'nouveau')
+        n.period_id = 1
+        n.save
+        n.position.should == 4
+     end
+      
+  end
+
+
+
+  
 
 
   
