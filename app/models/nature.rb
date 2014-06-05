@@ -76,11 +76,11 @@ class Nature < ActiveRecord::Base
     acc =  Account.find(account_id)
     ns = Nature.includes(:account).
       where('natures.period_id = ? AND book_id = ?', period_id, book_id).
-      order('accounts.number', 'position DESC').all
+      order('accounts.number', 'position').reject { |n| n == self}
     #cherche la nature qui est juste au dessus du compte de notre récente nature
-    pos =  ns.bsearch { |n| n.account.number > acc.number }
+    pos =  ns.bsearch { |n| n.account.number >= acc.number }
     if pos
-      self.insert_at(pos.position)
+      self.insert_at(pos.position)  
     else # si pos est nil, alors l'insertion en dernière place
       # était adapté à la situation
       return
