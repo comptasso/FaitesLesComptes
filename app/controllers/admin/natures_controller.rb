@@ -16,23 +16,16 @@ class Admin::NaturesController < Admin::ApplicationController
   # transmis sont les suivants :
   #
   #  - id :- id of the row that is moved. This information is set in the id attribute of the TR element.
-  #  - fromPosition : initial position of the row that is moved. This was value in the indexing cell of the row that is moved.
-  #  - toPosition : new position where row is dropped. This value will be placed in the indexing column of the row.
+  #  - toPosition : new position where row is dropped. 
+  #  This value will be placed in the indexing column of the row.
   #  
   # Plutôt que de faire un render de la table, reorder renvoie ok ou bad_request
   # et laisse javascript mettre à jour la vue, en l'occurence juste réécrire les positions
   # puisque il n'y a que ça de changé.
   def reorder
     @nature = Nature.find(params[:id])
-    raise 'Absence de paramètres de position obligatoires' unless params[:fromPosition] && params[:toPosition]
-    from_position = params[:fromPosition].to_i
-    to_position = params[:toPosition].to_i
-    if from_position > to_position
-      # on remonte vers le haut de la liste
-      (from_position - to_position).times { @nature.move_higher }
-    else
-      (to_position - from_position).times { @nature.move_lower }
-    end
+    raise 'Absence de paramètres de position obligatoires' unless params[:toPosition]
+    @nature.insert_at(params[:toPosition].to_i)
     head :ok
   rescue
     head :bad_request
@@ -46,13 +39,15 @@ class Admin::NaturesController < Admin::ApplicationController
   def new 
     @books =  @organism.income_books + @organism.outcome_books
     @nature = @period.natures.new
-    @nature.book_id = params[:book_id] || @in_out_books.first.id
+    @nature.book_id = params[:book_id] || @organism.in_out_books.first.id
+    @book = @nature.book
   end
 
   # GET /natures/1/edit
   def edit
     @books =  @organism.income_books + @organism.outcome_books
     @nature = @period.natures.find(params[:id])
+    @book = @nature.book
   end
 
   # POST /natures

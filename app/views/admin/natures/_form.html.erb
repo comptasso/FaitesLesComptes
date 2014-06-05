@@ -4,12 +4,13 @@
 
    <%= f.input :name , input_html: {class:'span4'} %>
    <%= f.input :comment, input_html: {rows: 4, class: 'span4'} %>
-   <%#= f.association :book, :label=>'Livre', collection:@books, prompt:false %>
-   <%= f.input :livre do %>
+   <%= f.input :livre  do %>
       <%= f.select :book_id, @books.map{ |b| [b.title, b.id, {'data-type'=> b.type}] } %>
- <% end %>
+   <% end %>
    <%= f.association :account, :label=> 'Compte associé', input_html: {size: 10, class:'span4'},
-                :collection => options_for_natures(@period), :as => :grouped_select, :group_method => :options, :group_label_method=> :title,
+                :collection => options_for_natures(@period),
+                :as => :grouped_select, :group_method => :options,
+                :group_label_method=> :title,
                 :label_method=> :long_name, :value_method=> :id if @period.accounts.any? %>
 
 

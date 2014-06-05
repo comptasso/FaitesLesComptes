@@ -1,14 +1,15 @@
 <%= content_for :menu do %>
 
-<%= icon_to 'nouveau.png', new_admin_organism_period_nature_path(@organism, @period) %>
+<%= icon_to 'nouveau.png', new_admin_organism_period_nature_path(@organism, @period, book_id:@book.id) %>
 
-<%= icon_to 'retour.png', admin_organism_period_natures_path(@organism, @period) %>
+<%= icon_to 'retour.png', admin_organism_period_natures_path(@organism, @period, book_id:@book.id) %>
 <% end -%>
 
 <div class="champ">
   <h3>
     Modification nature
-  </h3><div class="inner-champ">
+  </h3>
+  <div class="inner-champ">
 
 <%= render 'form' %>
 </div></div>

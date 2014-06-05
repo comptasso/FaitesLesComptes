@@ -27,7 +27,7 @@ end
 describe Admin::NaturesController do
   include SpecControllerHelper
 
-  let(:nat1) {mock_model(Nature)}
+  let(:nat1) {mock_model(Nature, book:@ib)}
   let(:nat2) {mock_model(Nature)}
    
 
@@ -73,13 +73,18 @@ describe Admin::NaturesController do
   
 
   describe "GET new"  do 
-    it "assigns a new nature as @nature" do
-      @o.stub(:income_books).and_return [@mb = mock_model(Book),2] 
-      @o.stub(:outcome_books).and_return [3,4]
-      @a.should_receive(:new).and_return(@mock_nat = mock_model(Nature).as_new_record)
+    it "assigns a new nature as @nature avec le premier livre" do
+      @o.stub(:in_out_books).and_return [@mb = mock_model(Book),2,3,4]
+      @a.should_receive(:new).and_return(@mock_nat = Nature.new)
       @mock_nat.should_receive('book_id=').with(@mb.id).and_return
       get :new,  {:period_id=>@p.to_param}, valid_session
       assigns(:nature).should be_a_new(Nature)
+    end
+    
+    it 'un paramètre book_id peut être utilisé pour initialiser la nature' do
+      @a.should_receive(:new).and_return(@mock_nat = Nature.new)
+      @mock_nat.should_receive('book_id=').with('1').and_return
+      get :new,  {:period_id=>@p.to_param, book_id:'1'}, valid_session
     end
   end
 
@@ -184,25 +189,18 @@ describe Admin::NaturesController do
   describe 'POST REORDER' do
     it 'should look for nature and assing it' do
       Nature.should_receive(:find).with(nat1.to_param).and_return nat1
-      nat1.stub(:move_higher)
+      nat1.stub(:insert_at)
       post :reorder, {organism_id:@o.to_param, :period_id=>@p.to_param, 
-        id:nat1.to_param, :fromPosition=>'3', :toPosition=>'1', :format=>:js}, valid_session
+        id:nat1.to_param, :toPosition=>'1', :format=>:js}, valid_session
       
       assigns[:nature].should == nat1
     end
 
-    it 'reçoit move_higher le nombre de fois nécessaire' do
+    it 'reçoit insert_at' do
       Nature.stub(:find).with(nat1.to_param).and_return nat1
-      nat1.should_receive(:move_higher).exactly(2).times
+      nat1.should_receive(:insert_at).with(1)
       post :reorder, {organism_id:@o.to_param, :period_id=>@p.to_param,
-        id:nat1.to_param, :fromPosition=>'3', :toPosition=>'1', :format=>:js}, valid_session
-     end
-
-    it 'reçoit move_lower le nombre de fois nécessaire' do
-      Nature.stub(:find).with(nat1.to_param).and_return nat1
-      nat1.should_receive(:move_lower).exactly(2).times
-      post :reorder, {organism_id:@o.to_param, :period_id=>@p.to_param,
-        id:nat1.to_param, :fromPosition=>'1', :toPosition=>'3', :format=>:js}, valid_session
+        id:nat1.to_param, :toPosition=>'1', :format=>:js}, valid_session
      end
 
     it 'renvoie bad_request si mauvais argument' , wip:true do
