@@ -5,10 +5,7 @@ fr:
              Votre fichier csv doit avoir une ligne de titre et 4 colonnes ; 
              contenant dans l'ordre, la date, le libellé, le débit et le crédit 
              de vos écritures en banque
-    BankAccountsController:
-      new: >
-             Par précaution, nous vous conseillons de rentrez le numéro de 
-             compte avec une partie masquée, par exemple 12345XXX789
+    
     ImportedBelsController:
       index: >
                Modifiez et complétez les différents champs pour chaque ligne que 
@@ -22,4 +19,13 @@ fr:
                attention à ne pas créer l'écriture
                en double lorsque vous importerez les écritures de vos autres 
                comptes.
-               
+    Admin:
+      NaturesController:
+        index: >
+                Vous pouvez réordonner les natures par un simple glisser-deposer.</p>
+                Cet ordre sera utilisé pour l'affichage des statistiques et des
+                listes déroulantes.
+      BankAccountsController:
+        new: >
+               Par précaution, nous vous conseillons de rentrer le numéro de 
+               compte avec une partie masquée, par exemple 12345XXX789        
