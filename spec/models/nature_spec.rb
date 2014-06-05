@@ -119,8 +119,8 @@ describe Nature do
       end
       
       after(:each) do
-        Account.delete_all 
-        Nature.delete_all
+        @accounts.each(&:destroy) 
+        Nature.delete_all 
       end
     
       it 'une nouvelle nature se met à la position dans l ordre des comptes' do
@@ -136,7 +136,7 @@ describe Nature do
         n.period_id = 1
         n.save
         n.position.should == 1
-      end
+        end
       
      it 'ou en dernier' do
        acc = create_accounts(['300']).first
@@ -144,6 +144,7 @@ describe Nature do
         n.period_id = 1
         n.save
         n.position.should == 4
+        acc.destroy 
      end
       
   end

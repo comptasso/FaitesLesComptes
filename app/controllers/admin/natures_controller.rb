@@ -8,7 +8,8 @@ class Admin::NaturesController < Admin::ApplicationController
   # GET /natures
   # GET /natures.json
   def index 
-    @book = @organism.in_out_books.find(params[:book_id])
+    @book = @organism.in_out_books.find(params[:book_id]) rescue @organism.in_out_books.first
+    @natures = @book.natures.includes('account').within_period(@period).order(:position)
   end
 
   # reorder est appelé par le drag and drop de la vue . Les paramètres
@@ -45,7 +46,7 @@ class Admin::NaturesController < Admin::ApplicationController
   def new 
     @books =  @organism.income_books + @organism.outcome_books
     @nature = @period.natures.new
-    @nature.book_id = @books.first.id
+    @nature.book_id = params[:book_id] || @in_out_books.first.id
   end
 
   # GET /natures/1/edit
@@ -61,7 +62,8 @@ class Admin::NaturesController < Admin::ApplicationController
 
     respond_to do |format|
       if @nature.save
-        format.html { redirect_to admin_organism_period_natures_path(@organism, @period), notice: 'La Nature a été créée.' }
+        format.html { redirect_to admin_organism_period_natures_path(@organism, 
+            @period, book_id:@nature.book_id), notice: 'La Nature a été créée.' }
         format.json { render json: @nature, status: :created, location: @nature }
       else
         format.html { render action: "new" }
@@ -77,7 +79,8 @@ class Admin::NaturesController < Admin::ApplicationController
 
     respond_to do |format|
       if @nature.update_attributes(params[:nature])
-        format.html { redirect_to admin_organism_period_natures_path(@organism, @period), notice: 'Nature a été mise à jour.' }
+        format.html { redirect_to admin_organism_period_natures_path(@organism,
+            @period, book_id:@nature.book_id), notice: 'Nature a été mise à jour.' }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -93,7 +96,7 @@ class Admin::NaturesController < Admin::ApplicationController
     @nature.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_organism_period_natures_url(@organism, @period) }
+      format.html { redirect_to admin_organism_period_natures_url(@organism, @period, book_id:@nature.book_id) }
       format.json { head :ok }
     end
   end

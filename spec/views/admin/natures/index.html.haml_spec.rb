@@ -3,59 +3,55 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 describe 'admin/natures/index'  do
-include JcCapybara
+  include JcCapybara
 
   before(:each) do
     assign(:organism, stub_model(Organism))  
     assign(:period, stub_model(Period)) 
-    @depenses = []
-    @depenses << mock_model(Nature, :period_id=>1, name: 'dep1', comment: 'dep1 comment')
-    @depenses << mock_model(Nature, :period_id=>1, name: 'dep2', comment: 'dep2 comment')
-    @recettes = []
-    @recettes << mock_model(Nature, :period_id=>1, name: 'rec1', comment: 'rec1 comment')
-    @recettes << mock_model(Nature, :period_id=>1, name: 'rec2', comment: 'rec2 comment')
-    @recettes.each {|r| r.stub(:account).and_return(nil)}
-    @depenses.each {|r| r.stub(:account).and_return(nil)}
-    @recettes.each {|r| r.stub_chain(:compta_lines, :empty?).and_return true }
-    @depenses.each {|r| r.stub_chain(:compta_lines, :empty?).and_return true }
-    @books= [@b1 = mock_model(Book, title:'Recettes'),
-      @b2 = mock_model(Book, title:'Dépenses')]
-    @b1.stub_chain(:natures, :within_period, :order).and_return @recettes
-    @b2.stub_chain(:natures, :within_period, :order).and_return @depenses
+    
+    @natures = []
+    @natures << mock_model(Nature, :period_id=>1, name: 'rec1', comment: 'rec1 comment')
+    @natures << mock_model(Nature, :period_id=>1, name: 'rec2', comment: 'rec2 comment')
+    @natures.each {|r| r.stub(:account).and_return(nil)}
+   
+    @natures.each {|r| r.stub_chain(:compta_lines, :empty?).and_return true }
+   
+    @book=  mock_model(Book, title:'Recettes')
+    @book.stub_chain(:natures, :includes, :within_period, :order).and_return @natures
+    
 
   end
 
-  it "should have two titles h3" do 
+  it "should have a h3 title" do  
     render
-    page.find('h3:first').text.should == 'Natures du livre Recettes'
-    page.find('h3:last').text.should == 'Natures du livre Dépenses'
+    page.find('h3').text.should == 'Natures du livre Recettes'
+    
   end
   
   
-  it "should have two tables" do
+  it "should have une table" do
     render
-    page.all('table').should have(2).elements
+    page.all('table').should have(1).elements
   end
 
-  it "each body tables should have two lines" do
+  it "avec deux lignes" do
     render
-    page.all('table tbody tr').should have(4).elements
+    page.all('table tbody tr').should have(2).elements
 
   end
 
   it "each line should show edit icon" do
-   render
-   page.all('tbody tr img').first[:src].should match /\/assets\/icones\/modifier.png/
+    render
+    page.all('tbody tr img').first[:src].should match /\/assets\/icones\/modifier.png/
   end
 
-   it "each row should show delete icon" do
+  it "each row should show delete icon" do
     render
-   page.all('tbody tr img').last[:src].should == '/assets/icones/supprimer.png'
+    page.all('tbody tr img').last[:src].should == '/assets/icones/supprimer.png'
   end
 
   it "with a line, row should not propose supprimer" do
-    @recettes.first.stub_chain(:compta_lines, :empty?).and_return(false)
-    @depenses.first.stub_chain(:compta_lines, :empty?).and_return(false)
+    @natures.first.stub_chain(:compta_lines, :empty?).and_return(false)
     render
     page.should_not have_css('tbody tr:first img[src="/assets/icones/supprimer.png"]')
   end 

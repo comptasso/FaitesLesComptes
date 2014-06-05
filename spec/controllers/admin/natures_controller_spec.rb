@@ -48,13 +48,25 @@ describe Admin::NaturesController do
     it "cherche le livre" do
       @o.should_receive(:in_out_books).and_return(@ar = double(Arel))
       @ar.should_receive(:find).with('1').and_return(@db = double(Book))
+      @db.stub_chain(:natures, :includes, :within_period, :order)
       get :index, {:period_id=>@p.to_param, book_id:1}, valid_session
     end
     
     it 'et l assigne' do
-      @o.stub_chain(:in_out_books, :find).and_return('un livre')
+      @o.stub_chain(:in_out_books, :find).and_return(@db = Book.new)
+      @db.stub_chain(:natures, :includes, :within_period, :order)
       get :index, {:period_id=>@p.to_param, book_id:1}, valid_session
-      assigns(:book).should == 'un livre'
+      assigns(:book).should == @db
+    end
+    
+    it 'récupère les natures' do
+      @o.stub_chain(:in_out_books, :find).and_return(@db = Book.new)
+      @db.should_receive(:natures).and_return(@ar = double(Arel))
+      @ar.should_receive(:includes).with('account').and_return @ar
+      @ar.should_receive(:within_period).with(@p).and_return @ar
+      @ar.should_receive(:order).with(:position).and_return 'la collection de natures'
+      get :index, {:period_id=>@p.to_param, book_id:1}, valid_session
+      assigns(:natures).should == 'la collection de natures'
     end
   end
 

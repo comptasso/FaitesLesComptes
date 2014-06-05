@@ -76,7 +76,7 @@ class Nature < ActiveRecord::Base
     acc =  Account.find(account_id)
     ns = Nature.includes(:account).
       where('natures.period_id = ? AND book_id = ?', period_id, book_id).
-      order('accounts.number').all
+      order('accounts.number', 'position DESC').all
     #cherche la nature qui est juste au dessus du compte de notre récente nature
     pos =  ns.bsearch { |n| n.account.number > acc.number }
     if pos

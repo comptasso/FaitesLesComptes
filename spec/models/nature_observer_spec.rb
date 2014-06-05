@@ -7,7 +7,7 @@ RSpec.configure do |config|
 end
 
 
-describe  NatureObserver do
+describe  NatureObserver do 
   include OrganismFixtureBis
 
 
@@ -23,8 +23,9 @@ describe  NatureObserver do
     @nature = Nature.new(name:'ecolo', :account_id => 1, book_id:1)
     @nature.period_id = 1
     @nature.stub(:compta_lines).and_return([cl1, cl2])
-
-    
+     
+    @nature.stub(:fix_position) # pour éviter les difficultés de test
+    # liées à ce after_create
   end
   
   
