@@ -10,7 +10,8 @@ class DeviseConfirmationsController < Devise::ConfirmationsController
     yield resource if block_given?
 
     if resource.errors.empty? 
-      # les 3 lignes modifiées sont ici
+      # les 4 lignes modifiées sont ici
+      UserInscription.welcome_user(resource).deliver
       sign_in(resource_name, resource)
       flash[:notice] = premier_accueil
       redirect_to new_admin_room_url
