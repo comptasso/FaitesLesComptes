@@ -1,5 +1,5 @@
 RSpec.configure do |c|  
-  # c.filter = {wip:true}
+  # c.filter = {wip:true} 
 end
 
 describe UserInscription do
