@@ -11,5 +11,12 @@ class UserInscription < ActionMailer::Base
       :to=>'expert@faiteslescomptes.fr',
       :subject=>'ouverture d\'un nouveau compte')
   end
+  
+  def welcome(user)
+    @user = user
+    mail(
+      :to=>user.email,
+      :subject=>'Bienvenue sur FaitesLesComptes !')
+  end
 
 end
