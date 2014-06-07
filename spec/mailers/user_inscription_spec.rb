@@ -1,4 +1,6 @@
-
+RSpec.configure do |c|  
+  c.filter = {wip:true}
+end
 
 describe UserInscription do
   include EmailSpec::Helpers
@@ -9,7 +11,7 @@ describe UserInscription do
 
   describe 'new_user_advice retourne un objet mail' do 
 
-    let(:email) { UserInscription.new_user_advice(user) } 
+    let(:email) { UserInscription.new_user_advice(user) }  
     
 
     it 'destiné à expert@faiteslescomptes.fr' do
@@ -26,8 +28,31 @@ describe UserInscription do
     end
 
     it 'le corps du mail donne le mail du nouvel user' do
-      email.should have_body_text(/spec@example.com/)
+      email.should have_body_text(/spec@example.com/)  
     end
+
+
+  end
+  
+  describe 'welcome_user', wip:true do  
+
+    let(:email) { UserInscription.welcome_user(user) } 
+    
+
+    it 'destiné à expert@faiteslescomptes.fr' do
+      email.should deliver_to 'spec@example.com'
+    end
+
+    it 'le sujet est l ouverture d un nouveau compte' do
+      email.should have_subject 'Bienvenue sur FaitesLesComptes !'
+    end
+
+    it 'le corps du mail contient' do 
+      email.body.to_s.should == 'bonjour'
+    # email.should have_body_text(/inscrit : spec/) 
+    end
+
+    
 
 
   end

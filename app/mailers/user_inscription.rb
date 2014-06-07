@@ -12,7 +12,7 @@ class UserInscription < ActionMailer::Base
       :subject=>'ouverture d\'un nouveau compte')
   end
   
-  def welcome(user)
+  def welcome_user(user)
     @user = user
     mail(
       :to=>user.email,
