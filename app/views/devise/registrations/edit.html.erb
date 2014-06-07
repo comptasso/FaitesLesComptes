@@ -1,16 +1,13 @@
+<%= content_for :menu do %>
+  <%= icon_to 'retour.png', :back %>
+  <%= icon_to 'supprimer.png', registration_path(resource_name),
+     {:data => { :confirm => "Cette action est définitive, votre compte et toutes les comptabilités créées seront supprimés" },
+     :method => :delete, title:'Pas satisfait ? Supprimer votre compte'} %>
+  
+<% end %>
+
 <div class="champ">
   <h3>Modification de vos données personnelles
-
- 
-    <ul class="mois">
-      <li class="inactive">
-        Pas satisfait :
-      </li>
-      <li class="active">
-        <%= link_to "Supprimer mon compte", registration_path(resource_name),
-          :data => { :confirm => "Cette action est définitive, votre compte et toutes les comptabilités créées seront supprimés" }, :method => :delete %>
-      </li>
-    </ul>
  </h3>
 
 
@@ -28,7 +25,7 @@
       <p>Actuellement en attente de confirmation de: <%= resource.unconfirmed_email %></p>
      <% end %>
  
-    <%= f.input :password, :autocomplete => "off",   input_html: {class: "span3"}, :hint => "laisser en blanc si pas de changement", :required => false %>
+    <%= f.input :password, :autocomplete => "off", label:'Nouveau mot de passe',  input_html: {class: "span3"}, :hint => "laisser en blanc si pas de changement", :required => false %>
     <%= f.input :password_confirmation,   input_html: {class: "span3"}, :required => false %>
     <%= f.input :current_password,  input_html: {class: "span3"}, :hint => "obligatoire pour valider vos changements", :required => true %>
  
