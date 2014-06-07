@@ -1,5 +1,5 @@
 RSpec.configure do |c|  
-  c.filter = {wip:true}
+  # c.filter = {wip:true}
 end
 
 describe UserInscription do
@@ -47,9 +47,15 @@ describe UserInscription do
       email.should have_subject 'Bienvenue sur FaitesLesComptes !'
     end
 
-    it 'le corps du mail contient' do 
-      email.body.to_s.should == 'bonjour'
+    it 'le corps du mail contient une partie texte' do 
+      bd = email.body.parts.first.body.to_s
+      bd.should =~ /Vous venez de confirmer/
     # email.should have_body_text(/inscrit : spec/) 
+    end
+    
+    it 'et une partie html' do
+      bd = email.body.parts.last.body.to_s
+      bd.should =~ /<p>Notre objectif/ 
     end
 
     

@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
-<p> Bonjour, 
+<p> Bonjour <%= @user.name %> , </p>
 
 <p> 
-  Vous avez tout récemment ouvert un compte sur FaitesLesComptes et 
+  Vous venez de confirmer votre compte sur FaitesLesComptes et 
   nous espérons que cet outil répondra à vos besoins.
 </p>
-<p> 
-  Notre objectif est de proposer un logiciel libre,                           
+<p>Notre objectif est de proposer un logiciel libre,                           
   accessible à un non professionnel de la comptabilité,                       
   qui aille de la saisie des recettes et dépenses jusqu'à l'édition du bilan  
   et du compte de résultats.  
@@ -25,9 +18,9 @@
 </p>
 <p>
   FaitesLesComptes est un logiciel encore jeune et qui évolue rapidement 
-  en fonction des retours des utilisateurs. Nous travaillons notamment 
-  sur l'importation de relevés de comptes bancaires ou encore sur la liaison 
-  entre le plan comptable et les éditions de bilans et de comptes de résultats.
+  en fonction des retours des utilisateurs. Nous avons récemment introduit 
+  la création d'écritures à partir de relevés de comptes bancaires pour 
+  faciliter encore plus les saisies. 
   N'hésitez pas à nous faire part de vos remarques, tant sur le plan 
   de l'ergonomie que des fonctionnalités.
 </p>
@@ -40,16 +33,15 @@
 
 <p> Cordialement</p>
 
-
+<div id='signature'>
 <p> Jean-Claude Lepage</p>
 <p> Expert-Comptable</p>
 
 <p>
-  <a href='http://faiteslescomptes/fr'>FaitesLesComptes</a>
+  <a href='http://faiteslescomptes.fr'>FaitesLesComptes</a>
   est un logiciel libre de comptabilité dédié aux petites structures
 </p>
 <p>
   Nous soutenons le <a href='http://april.org'>logiciel libre
 </p>
-</body>
-</html>
+</div>
