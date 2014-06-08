@@ -39,7 +39,7 @@ fr:
     devise_registrations:
       user:
         signed_up_but_unconfirmed: 'Un message contenant un lien de confirmation a été envoyé à votre adresse email. Cliquez sur ce lien pour activer votre compte.'
-        destroyed: 'Votre compte a été supprimé avec succès. Nous espérons vous revoir bientôt '
+        destroyed: 'Votre compte a été supprimé avec succès. Nous espérons néanmoins vous revoir prochainement'
     registrations:
       signed_up: 'Bienvenue, vous êtes connecté. '
       signed_up_but_unconfirmed: 'Un message contenant un lien de confirmation a été envoyé à votre adresse email. Ouvrez ce lien pour activer votre compte.'
