@@ -1,4 +1,8 @@
 
+# permet d'afficher un message d'attente dans une zone ayant l'id message-d-attente
+# 
+# fnMessageAttente= (mess)->
+#   $('#message-d-attente').text(mess)
 
 
 

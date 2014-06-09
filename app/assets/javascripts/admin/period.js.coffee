@@ -1,6 +1,5 @@
 
-fnMessageAttente= (mess)->
-  $('#message-d-attente').text(mess)
+
 
 jQuery ->
   $('#new_period #period-button').click -> 
