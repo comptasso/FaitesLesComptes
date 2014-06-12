@@ -62,6 +62,9 @@ Spork.prefork do
         Adherent::Member.delete_all
       end
     end
+    
+    # pour les tests
+    Delayed::Worker.delay_jobs = false
 
     #    config.after(:each) do
     #

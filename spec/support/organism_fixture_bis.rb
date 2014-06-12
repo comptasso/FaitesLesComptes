@@ -71,20 +71,20 @@ module OrganismFixtureBis
 
   def clean_organism
     
-      Apartment::Database.process(SCHEMA_TEST) do
-        Organism.delete_all
-        Period.delete_all
-        Book.delete_all
-        Nature.delete_all
-        Account.delete_all
-        ComptaLine.delete_all
-        BankAccount.delete_all
-        Cash.delete_all
-        Destination.delete_all
-        Folio.delete_all
-        Nomenclature.delete_all
-        Rubrik.delete_all
-      end if Apartment::Database.db_exist?(SCHEMA_TEST)
+    Apartment::Database.process(SCHEMA_TEST) do
+      Organism.delete_all
+      Period.delete_all
+      Book.delete_all
+      Nature.delete_all
+      Account.delete_all
+      ComptaLine.delete_all
+      BankAccount.delete_all
+      Cash.delete_all
+      Destination.delete_all
+      Folio.delete_all
+      Nomenclature.delete_all
+      Rubrik.delete_all
+    end if Apartment::Database.db_exist?(SCHEMA_TEST)
     
   end
 
@@ -99,6 +99,7 @@ module OrganismFixtureBis
     Apartment::Database.switch(SCHEMA_TEST)
     @o = Organism.create!(title: 'ASSO TEST', database_name:SCHEMA_TEST, comment: 'Un commentaire', status:'Association')
     @p = @o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
+    @p.create_datas
     get_organism_instances 
   end
   
@@ -147,7 +148,9 @@ module OrganismFixtureBis
   end
   
   def create_second_period
-    @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+    p = @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+    p.create_datas
+    p
   end
   
   def find_second_period
@@ -245,11 +248,15 @@ module OrganismFixtureBis
   # argument (un tableau) et l'exercice par le deuxième (facultatif)
   def create_accounts(numbers, period_id=1)
     numbers.collect do |n|
-      a = Account.new(number:n, title:"Numero#{n}")
-      a.period_id = period_id
-      puts a.inspect unless a.valid?
-      puts a.errors.messages unless a.valid?
-      a.save!
+      # s'il existe on ne le recrée pas
+      a = Account.find_by_number(n)
+      unless a
+        a = Account.new(number:n, title:"Numero#{n}")
+        a.period_id = period_id
+        puts a.inspect unless a.valid?
+        puts a.errors.messages unless a.valid?
+        a.save!
+      end
       a
     end
   end

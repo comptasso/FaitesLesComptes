@@ -1,0 +1,18 @@
+$('.inner-champ').block({ message: '<h4 id="message-d-attente">Juste un instant...</h4>' });
+
+// smartupdater pour l'action create de period
+$("#new_period").smartupdater({
+    url : "<%= @request_path %>" + '/prepared',
+    minTimeout: 500,  // 2 seconds
+    smartStop: {active:true, monitorTimeout:1000} // ce qui permet d'arrêter le polling
+    // automatiquement dès que l'on masque la zone de message
+    }, function (data) {
+        if (data === "faux") {
+          $('#message-d-attente').text('Création du plan de comptes...');
+          }
+        if (data === "vrai") {
+          window.location = "<%= @request_path %>";
+            }
+          }
+    }
+);

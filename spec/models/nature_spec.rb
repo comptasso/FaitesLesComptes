@@ -41,9 +41,9 @@ describe Nature do
   end
 
   it 'une nature ne peut être rattachée qu a un compte de classe 6 ou 7' do
-   # @nature.stub_chain(:book, :type).and_return('IncomeBook')
-     Account.stub(:find_by_id).and_return(@acc = mock_model(Account, number:'120'))
-     @nature.should_not be_valid
+    # @nature.stub_chain(:book, :type).and_return('IncomeBook')
+    Account.stub(:find_by_id).and_return(@acc = mock_model(Account, number:'120'))
+    @nature.should_not be_valid
   end
 
   context 'une nature existe déja' do
@@ -84,21 +84,21 @@ describe Nature do
       expect {@nature.destroy}.not_to change {Nature.count}
     end
 
-  describe 'les méthodes statistiques' do
-    before(:each) do
-      @nature.stub(:period).and_return p
-      @nature.stub_chain(:compta_lines, :mois_with_writings, :sum, :to_f, :round).and_return 10
-    end
+    describe 'les méthodes statistiques' do
+      before(:each) do
+        @nature.stub(:period).and_return p
+        @nature.stub_chain(:compta_lines, :mois_with_writings, :sum, :to_f, :round).and_return 10
+      end
 
-     it 'stat renvoie un tableau de données' do
-       @nature.stat_with_cumul.should == 12.times.map {|i| 10 } << 120
-     end
+      it 'stat renvoie un tableau de données' do
+        @nature.stat_with_cumul.should == 12.times.map {|i| 10 } << 120
+      end
 
       it 'stat peut être filtré avec un argument pour stat_with_cumul' do
         @nature.stub_chain(:compta_lines, :mois_with_writings, :where, :sum, :to_f, :round).and_return 2
         @nature.stat_with_cumul(1).should == 12.times.map {|i| 2 } << 24
       end
-  end
+    end
   
   end
   
@@ -106,46 +106,52 @@ describe Nature do
     
       
     
-      before(:each) do
-        @accounts = create_accounts(%w(110 200 201))
-        @accounts.each do |a|
-          n = Nature.new(book_id:1,
-            account_id:a.id, name:"nature#{a.number}")          
-          n.period_id = 1
-          n.save!
-        end
-        
-        @acc = @accounts.second
-      end
-      
-      after(:each) do
-        @accounts.each(&:destroy) 
-        Nature.delete_all 
-      end
-    
-      it 'une nouvelle nature se met à la position dans l ordre des comptes' do
-        n = Nature.new(book_id:1, account_id:@acc.id, name:'nouveau')
+    before(:each) do
+      @accounts = create_accounts(%w(110 200 201)) 
+      @accounts.each do |a|
+        n = Nature.new(book_id:1,
+          account_id:a.id, name:"nature#{a.number}")          
         n.period_id = 1
-        n.save
-        n.position.should == 3
+        n.save!
       end
+    end
       
-      it 'elle peut être en premier' do
+    after(:each) do
+      @accounts.each(&:destroy) 
+      Nature.delete_all 
+    end
+    
+    it 'une nouvelle nature se met à la position dans l ordre des comptes' do
+      acc = @accounts.second
+      n = Nature.new(book_id:1, account_id:acc.id, name:'nouveau')
+      n.period_id = 1
+      n.save
+      n.position.should == 2
+    end
+      
+    it 'elle peut être en premier' do
+      begin
         acc = create_accounts(['100']).first
         n = Nature.new(book_id:1, account_id:acc.id, name:'nouveau')
         n.period_id = 1
         n.save
         n.position.should == 1
-        end
+      ensure
+        acc.destroy
+      end
+    end
       
-     it 'ou en dernier' do
-       acc = create_accounts(['300']).first
+    it 'ou en dernier' do
+      begin
+        acc = create_accounts(['300']).first
         n = Nature.new(book_id:1, account_id:acc.id, name:'nouveau')
         n.period_id = 1
         n.save
         n.position.should == 4
-        acc.destroy 
-     end
+      ensure
+        acc.destroy
+      end
+    end
       
   end
 

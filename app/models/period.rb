@@ -92,12 +92,14 @@ class Period < ActiveRecord::Base
   
   before_validation :fix_days
   before_create :should_not_have_more_than_two_open_periods
+  
+# after_create :create_datas
     
-  after_create :create_plan, :create_bank_and_cash_accounts, :create_rem_check_accounts, :load_natures ,:unless=> :previous_period?
-  after_create :copy_accounts, :copy_natures, :if=> :previous_period?
-  after_create :check_nomenclature
-  # TODO probablement inutile si pas asssociation
-  after_create :fill_bridge 
+#  after_create :create_plan, :create_bank_and_cash_accounts, :create_rem_check_accounts, :load_natures ,:unless=> :previous_period?
+#  after_create :copy_accounts, :copy_natures, :if=> :previous_period?
+#  after_create :check_nomenclature
+#  # TODO probablement inutile si pas asssociation
+#  after_create :fill_bridge 
  
   before_destroy  :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
   
@@ -468,7 +470,7 @@ class Period < ActiveRecord::Base
 
   # informe si toutes les natures sont bien reliées à un compte
   def all_natures_linked_to_account?
-    natures.without_account.empty? 
+    natures.without_account.empty?  
   end
 
   # boolean : indique si l'on peut faire de la comptabilité
@@ -478,10 +480,32 @@ class Period < ActiveRecord::Base
     return false if natures.empty?
     all_natures_linked_to_account?
   end
+  
+     
+  
+  
+  # appelle la création du plan comptable en arrière plan 
+  def create_datas 
+#    jpp = Jobs::PeriodPlan.new(organism.database_name, id)
+#    jpp.before(nil)
+#    jpp.perform    
+    
+    Delayed::Job.enqueue Jobs::PeriodPlan.new(organism.database_name, id)
+  end
+  
+  # Destiné à rendre persistant la vérification que la nomenclature est OK, ceci 
+  # pour éviter d'avoir à faire cette vérification à chaque usage de la nomenclature
+  # 
+  # period_coherent? enregistre son resultat dans le champ de nomenclature_ok
+  # TODO nomenclature.period_coherent devrait juste répondre true ou false
+  # laissant à period le soin de savoir ce qu'il fait de cette info.
+  # 
+  def check_nomenclature
+    organism.nomenclature.period_coherent?(self)
+  end
 
- 
 
-
+  
   protected
  
   # report_compta_line crée la ligne de report de l'exercice
@@ -539,107 +563,93 @@ class Period < ActiveRecord::Base
     self.start_date = start_date.beginning_of_month if start_date
     self.close_date = close_date.end_of_month if close_date
   end
+  
+  
 
   private
 
-  # TODO vraiment pas terrible de voir que Period doit solliciter organism.send(:status_class)
-  def create_plan
-    Utilities::PlanComptable.create_accounts(self, organism.send(:status_class))
-  end
+ 
 
-  def create_bank_and_cash_accounts
-    # organisme a créé une banque et une caisse par défaut et il faut leur créer des comptes
-    # utilisation de send car create_accounts est une méthode protected
-    organism.bank_accounts.each {|ba| ba.send(:create_accounts)}
-    organism.cashes.each {|c| c.send(:create_accounts)}
-    accounts(true) # pour mettre à jour la relation avec les comptes
-    # sinon une création et une destruction dans la foulée (cas des tests) laisse une trace de ces deux comptes
-  end
+#  def create_bank_and_cash_accounts
+#    # organisme a créé une banque et une caisse par défaut et il faut leur créer des comptes
+#    # utilisation de send car create_accounts est une méthode protected
+#    organism.bank_accounts.each {|ba| ba.send(:create_accounts)}
+#    organism.cashes.each {|c| c.send(:create_accounts)}
+#    accounts(true) # pour mettre à jour la relation avec les comptes
+#    # sinon une création et une destruction dans la foulée (cas des tests) laisse une trace de ces deux comptes
+#  end
   
   # crée le compte de remise de chèques
   # TODO faire spec d'intégration
-  def create_rem_check_accounts
-      accounts.create!(REM_CHECK_ACCOUNT)
-  end
+#  def create_rem_check_accounts
+#      accounts.create!(REM_CHECK_ACCOUNT)
+#  end
   
  
 
   # demande à PlanComptable de recopier les comptes de l'exercice précédent
   #
-  def copy_accounts
-    Utilities::PlanComptable.new(self, 'statut').copy_accounts(previous_period)
-  end
+#  def copy_accounts
+#    Utilities::PlanComptable.new(self, 'statut').copy_accounts(previous_period)
+#  end
 
-  # recopie les natures de l'exercice précédent 's'il y en a un)
-  def copy_natures
-    pp = self.previous_period
-    pp.natures.all.each do |n|
-      nn = {name: n.name, comment: n.comment, book_id: n.book_id} # on commence à construire le hash
-      if n.account_id # cas où il y avait un rattachement à un compte
-        previous_account=pp.accounts.find(n.account_id) # on identifie le compte de rattachement
-        nn[:account_id] = self.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
-      end
-      self.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
-    end
-  end
+#  # recopie les natures de l'exercice précédent 's'il y en a un)
+#  def copy_natures
+#    pp = self.previous_period
+#    pp.natures.all.each do |n|
+#      nn = {name: n.name, comment: n.comment, book_id: n.book_id} # on commence à construire le hash
+#      if n.account_id # cas où il y avait un rattachement à un compte
+#        previous_account=pp.accounts.find(n.account_id) # on identifie le compte de rattachement
+#        nn[:account_id] = self.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
+#      end
+#      self.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
+#    end
+#  end
   
-  # Destiné à rendre persistant la vérification que la nomenclature est OK, ceci 
-  # pour éviter d'avoir à faire cette vérification à chaque usage de la nomenclature
-  # 
-  # period_coherent? enregistre son resultat dans le champ de nomenclature_ok
-  # 
-  def check_nomenclature
-    organism.nomenclature.period_coherent?(self)
-  end
-
-  # load natures est appelé lors de la création d'un premier exercice
-  # load_natures lit le fichier natures_asso.yml et crée les natures correspondantes
-  # retourne le nombre de natures
-  #
-  # TODO améliorer la gestion d'une éventuelle erreur
-  # TODO voir aussi si on ne peut utiliser une classe similaire à Utilities::PlanComtpable pour simplifier
-  # copy_natures et load_natures et retirer de cette clase également load_file_natures. On pourrait aussi envisager de passer ces callbacks dans un Observer.
-  def load_natures  
-    Rails.logger.debug 'Création des natures'
-    nats = load_file_natures
-    books = collect_books(nats)
-    nats.each do |n|
-      a = accounts.find_by_number(n[:acc]) 
-       nat = natures.new(name:n[:name], comment:n[:comment], account:a)
-       nat.book_id = books[n[:book]] 
-       puts "#{nat.name} - #{nat.errors.messages}" unless nat.valid?
-       nat.save
-    end
-    natures(true).count
-  end
+  
+#  # load natures est appelé lors de la création d'un premier exercice
+#  # load_natures lit le fichier natures_asso.yml et crée les natures correspondantes
+#  # retourne le nombre de natures
+#  #
+#  # TODO améliorer la gestion d'une éventuelle erreur
+#  # TODO voir aussi si on ne peut utiliser une classe similaire à Utilities::PlanComtpable pour simplifier
+#  # copy_natures et load_natures et retirer de cette clase également load_file_natures. On pourrait aussi envisager de passer ces callbacks dans un Observer.
+#  def load_natures  
+#    Rails.logger.debug 'Création des natures'
+#    nats = load_file_natures
+#    books = collect_books(nats)
+#    nats.each do |n|
+#      a = accounts.find_by_number(n[:acc]) 
+#       nat = natures.new(name:n[:name], comment:n[:comment], account:a)
+#       nat.book_id = books[n[:book]] 
+#       puts "#{nat.name} - #{nat.errors.messages}" unless nat.valid?
+#       nat.save
+#    end
+#    natures(true).count
+#  end
   
   protected
   
   # fait la collecte des livres qui sont nécessaires à la création des natures
-  def collect_books(natures)
-    livres = natures.collect {|n| n[:book]}.uniq
-    hash_books = {}
-    livres.each do |b|
-      hash_books[b] = organism.books.where('title = ?', b).first.id
-    end
-    hash_books
-  end
+#  def collect_books(natures)
+#    livres = natures.collect {|n| n[:book]}.uniq
+#    hash_books = {}
+#    livres.each do |b|
+#      hash_books[b] = organism.books.where('title = ?', b).first.id
+#    end
+#    hash_books
+#  end
+  
 
-  def load_file_natures(source = nil)
-    source = "#{Rails.root}/app/assets/parametres/#{organism.send(:status_class).downcase}/natures.yml"
-    YAML::load_file(source)
-  rescue
-    logger.warn "Erreur dans le chargement du fichier #{source}"
-    []
-  end
+ 
   
    # TODO voir comment gérer les exceptions
   # remplit les éléments qui permettent de faire le pont entre le module 
   # Adhérents (et plus précisément, sa partie Payment) et le PaymentObserver
   # qui écrit sur le livre des recettes.
-  def fill_bridge
-    organism.fill_bridge
-  end
+#  def fill_bridge
+#    organism.fill_bridge
+#  end
 
   # TODO voir à réintroduire organism dans les callbacks de destroy au cas où
   # on reviendrait à une seule base de données.

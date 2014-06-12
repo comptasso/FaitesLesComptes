@@ -7,7 +7,7 @@ class Admin::PeriodsController < Admin::ApplicationController
 
   logger.debug 'dans Admin::PeriodsController'
   # ChangePeriod ajoute la méthode change, méthode partagée par les différents PeriodsController
-  # Voir le fichier lib/change_period.rb.
+  # Voir le fichier controllers/change_period.rb.
   #
   # Change a pour effet de changer d'exercice et de revenir à l'action initiale.
   # Dans le cas où cette action a des paramètres mois et an, change recalcule des
@@ -29,7 +29,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   # GET /periods/new
   # GET /periods/new.json
   def new
-     if @organism.periods.any?
+    if @organism.periods.any?
       @disable_start_date = true
       start_date = (@organism.periods.last.close_date) +1
       # begin_year and end_year limit the select in the the view
@@ -52,21 +52,29 @@ class Admin::PeriodsController < Admin::ApplicationController
   # le controller remplit start_date s'il y a un exercice précédent
   def create
     # on fixe la date de départ s'il existe déjà un exercice
-    # TODO on pourrait déplacer cette logique dans le modèle en surchargeant new
+    # TODO déplacer cette logique dans le modèle en faisant un 
+    # before_validation
     start_date = (@organism.periods.last.close_date) +1 if @organism.periods.any?
     @period = @organism.periods.new(params[:period])
     @period.start_date = start_date if start_date
     respond_to do |format|
       if @period.save
+        @period.create_datas # remplit le nouvel exercice avec les données 
+        # nécessaires telles que comptes, natures, ...
         session[:period]=@period.id
         format.html { redirect_to admin_organism_periods_path(@organism),
           notice: flash_creation }
-        format.json { render json: @period, status: :created, location: @period }
+        format.js
       else
         format.html { render action: "new" }
-        format.json { render json: @period.errors, status: :unprocessable_entity }
+        format.js { render action:'new' }
       end
     end
+  end
+  
+  def prepared 
+    period = Period.find(params[:id])
+    render :text=>"#{period.prepared? ? 'vrai' : 'faux' }"
   end
 
   
@@ -81,7 +89,7 @@ class Admin::PeriodsController < Admin::ApplicationController
     end
     respond_to do |format|
       format.html do
-          redirect_to admin_organism_periods_url(@organism)
+        redirect_to admin_organism_periods_url(@organism)
       end
       format.json { head :ok }
     end
@@ -89,20 +97,20 @@ class Admin::PeriodsController < Admin::ApplicationController
 
   # TODO - vérifier qu'il n'y a pas de problème lorsqu'on crée un exercice
   # après les avoir supprimé tous. (est-ce que les comptes sont bien créés)
-   
+  # voir dans les routes : devrait plutôt être un post
   # action de cloture d'un exercice
   def close
     if @period.close
-       flash[:notice] = 'L\'exercice est maintenant clos'
-       redirect_to admin_organism_periods_url(@organism)
+      flash[:notice] = 'L\'exercice est maintenant clos'
+      redirect_to admin_organism_periods_url(@organism)
     else
-     # construction du message d'alerte
-     alert = "#{@period.exercice} ne peut être clos : \n"
-     @period.errors[:close].each {|message| alert += '- ' + message + "\n"}
-     flash.now[:alert]= alert
-     # et retour à la vue index
-     @periods=@organism.periods
-     render :index
+      # construction du message d'alerte
+      alert = "#{@period.exercice} ne peut être clos : \n"
+      @period.errors[:close].each {|message| alert += '- ' + message + "\n"}
+      flash.now[:alert]= alert
+      # et retour à la vue index
+      @periods=@organism.periods
+      render :index
     end
   end
   

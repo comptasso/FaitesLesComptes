@@ -4,7 +4,7 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe Adherent::Bridge do
+describe Adherent::Bridge do 
   include OrganismFixtureBis 
   
   before(:each) do
@@ -19,7 +19,7 @@ describe Adherent::Bridge do
   describe 'check_nature_name' , wip:true do 
     
     before(:each) do
-      @p2 = find_second_period
+      @p2 = find_second_period 
     end
     
     it 'renvoie true si la nature existe pour toutes les périodes ouvertes' do

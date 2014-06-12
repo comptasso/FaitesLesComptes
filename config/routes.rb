@@ -142,10 +142,8 @@ Faitesvoscomptes::Application.routes.draw do
       resources :periods do
         member do
           get 'change'
-          # TODO revoir la logique de plan qui je crois n'est plus opérationnelle
-          get 'select_plan'
           get 'close'
-          post 'create_plan'
+          get 'prepared'    
         end
         
         resources :natures do
