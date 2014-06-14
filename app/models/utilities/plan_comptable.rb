@@ -63,14 +63,72 @@ class Utilities::PlanComptable
       end
     end
   end
+  
+  # recopie les natures de l'exercice précédent 's'il y en a un) 
+  def copy_natures(from_period)
+    from_period.natures.all.each do |n|
+      nn = {name: n.name, comment: n.comment, book_id: n.book_id} # on commence à construire le hash
+      if n.account_id # cas où il y avait un rattachement à un compte
+        previous_account=from_period.accounts.find(n.account_id) # on identifie le compte de rattachement
+        nn[:account_id] = period.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
+      end
+      period.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
+    end
+  end
+  
+   # crée le compte de remise de chèques
+  # TODO faire spec d'intégration
+  def create_rem_check_accounts
+      period.accounts.create!(REM_CHECK_ACCOUNT)
+  end
+  
+  
+  
+  # crée les comptes de banques et de caisse lorsqu'il n'y a pas d'exercice 
+  # précédent
+  def create_bank_and_cash_accounts
+    organism = period.organism
+    # organisme a créé une banque et une caisse par défaut et il faut leur créer des comptes
+    # utilisation de send car create_accounts est une méthode protected
+    organism.bank_accounts.each {|ba| ba.send(:create_accounts)}
+    organism.cashes.each {|c| c.send(:create_accounts)}
+    period.accounts(true) # pour mettre à jour la relation avec les comptes
+    # sinon une création et une destruction dans la foulée (cas des tests) laisse une trace de ces deux comptes
+  end
+  
+  
+  # load natures est appelé lors de la création d'un premier exercice
+  # load_natures lit le fichier natures_asso.yml et crée les natures correspondantes
+  # retourne le nombre de natures
+  #
+  # TODO améliorer la gestion d'une éventuelle erreur
+   def load_natures  
+    Rails.logger.debug 'Création des natures'
+    nats = load_file_natures
+    books = collect_books(nats)
+    nats.each do |n|
+      a = period.accounts.find_by_number(n[:acc]) 
+       nat = period.natures.new(name:n[:name], comment:n[:comment], account:a)
+       nat.book_id = books[n[:book]] 
+       puts "#{nat.name} - #{nat.errors.messages}" unless nat.valid?
+       nat.save
+    end
+    period.natures(true).count
+  end
+  
+   
+    # TODO voir comment gérer les exceptions
+  # remplit les éléments qui permettent de faire le pont entre le module 
+  # Adhérents (et plus précisément, sa partie Payment) et le PaymentObserver
+  # qui écrit sur le livre des recettes.
+  def fill_bridge
+    period.organism.fill_bridge
+  end
 
  
   
   
   
-  # create_accounts est appelé par un callback de Period lors de la création d'un 
-  # premier exercice. 
-  # 
   # create_accounts lit le fichier yml du plan comptable correspondant au statut de 
   # l'organisme, puis crée les comptes lus dans ce fichier. 
   # 
@@ -107,6 +165,24 @@ class Utilities::PlanComptable
 
   def source_path
     "#{Rails.root}/app/assets/parametres/#{status}/#{FICHIER}"
+  end
+  
+   def load_file_natures(source = nil)
+    source = "#{Rails.root}/app/assets/parametres/#{status.downcase}/natures.yml"
+    YAML::load_file(source)
+  rescue
+    Rails.logger.warn "Erreur dans le chargement du fichier #{source}"
+    []
+  end
+  
+   # fait la collecte des livres qui sont nécessaires à la création des natures
+  def collect_books(natures)
+    livres = natures.collect {|n| n[:book]}.uniq
+    hash_books = {}
+    livres.each do |b|
+      hash_books[b] = period.organism.books.where('title = ?', b).first.id
+    end
+    hash_books
   end
   
   

@@ -92,4 +92,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.4.14RC' # les abonnements sont passés dans la vue principale avec du javascript
 # FLCVERSION = '1.5.0RC' # Mise en place des importations de relevés bancaires
 # FLCVERSION = '1.5.1RC' # Modification du menu Natures et de l'affichage index
-FLCVERSION = '1.5.2RC' # Retouche vue de désinscription et automatisation message de bienvenue'
+# FLCVERSION = '1.5.2RC' # Retouche vue de désinscription et automatisation message de bienvenue'
+FLCVERSION = '1.5.3RC' # DelayedJob pour remplir les tables d'un nouvelle exercice

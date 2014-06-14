@@ -8,7 +8,7 @@
 # Si cette action comprend des paramètres an et mois, elle tente de
 # trouver le mois et l'année adaptés au nouvel exercice
 #
-#
+# TODO spec à faire
 #
 module ChangePeriod
     # change d'exercice sans pour autant afficher l'exercice concerné

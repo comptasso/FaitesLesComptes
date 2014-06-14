@@ -1,0 +1,29 @@
+
+// smartupdater pour l'action create de period
+<%- if @period.errors.empty? %>
+
+var messs = [
+  'Juste un test...',
+  'Création du plan de comptes...',
+  'Création des états...'
+];
+var ind = 0;
+
+$("#new_period").smartupdater({
+    url : "<%=  @polling_path %>",
+    minTimeout: 2000,  // 2 seconds
+    smartStop: {active:true, monitorTimeout:1000} // ce qui permet d'arrêter le polling
+    // automatiquement dès que l'on masque la zone de message
+                              }, function (data) {
+        
+        if (data === "vrai") {
+          window.location = "<%= @next_path %>";
+            }
+          }
+    );
+    
+ <%- else %>
+    $('.blockUI').remove();
+    $('#new_period').html('<%= j render partial:'admin/periods/form' %>  ');
+    
+ <%- end %>

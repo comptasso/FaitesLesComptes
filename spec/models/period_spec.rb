@@ -95,128 +95,12 @@ describe Period do
 
     
   
-    describe 'les call_back after_create entrainent'  do
-      
-      before(:each) do
-
-        @org = mock_model(Organism, :status_class=>'Association',
-          :fill_bridge=>true, nomenclature:(@nomen=Nomenclature.new))
-        @p  = Period.new(valid_params)
-        @p.organism_id = @org.id
-        
-        @p.stub(:collect_books).and_return({'Recettes'=>1, "Dépenses"=>2})
-        @p.stub(:max_open_periods?).and_return false
-        @p.stub(:organism) {@org}
-        @p.stub(:create_bank_and_cash_accounts).and_return true
-        @p.stub(:create_rem_check_accounts).and_return true
-        
-      end
+    
+    
+    
+    
+    
      
-      # la vérification de cette action est faite au travers des tests d'intégration
-      # et de ceux de Utilities::PlanComptable
-      it 'demandent à PlanComptable la création des comptes'  do
-        @p.stub(:check_nomenclature).and_return true
-        Utilities::PlanComptable.should_receive(:create_accounts).with(@p, 'Association')
-        @p.save!
-      end
-
-      it 'la création des natures : 10 natures de dépenses et 6 de recettes '  do
-        @p.stub(:check_nomenclature).and_return true
-        @p.save!
-        @p.should have(43).natures
-      end
-      
-      describe 'persistence du contrôle de la nomenclature' do
-      
-        it 'le controle de la nomenclature est appelé' do
-          @nomen.should_receive('period_coherent?').with(@p).and_return true
-          @p.save!
-        end
-        
-       
-      
-      end
-      
-      
-
-      
-
-      describe 'après création' do
-        
-        before(:each) do
-          @p.stub(:check_nomenclature).and_return true
-          @p.save!
-        end
-        
-        
-        it 'start_date ne peut plus changer' do
-          @p.start_date = @p.start_date >> 1 # raccourci qui indique 1 mois plus tard
-          @p.should_not be_valid
-        end
-
-        it 'close_date ne peut plus changer' do
-          @p.close_date = @p.close_date << 1
-          @p.should_not be_valid
-        end
-
-        it 'un exercice clos ne peut être réouvert' do
-        
-          @p.update_attribute(:open, false)
-          @p.open = true
-          @p.should_not be_valid
-        end
-
-
-      end
-
-    end
-    
-    describe 'la création du premier exercice d un comité' do
-      
-      before(:each) do
-        @org = mock_model(Organism, :status_class=>'Comite', :fill_bridge=>true)
-        @p  = Period.new(valid_params)
-        @p.organism_id = @org.id
-        @p.stub(:collect_books).and_return({'Recettes ASC'=>1, "Dépenses ASC"=>2,
-            'Recettes fonctionnement'=>3, 'Dépenses fonctionnement'=>4})
-        @p.stub(:max_open_periods?).and_return false 
-        @p.stub(:organism) {@org}
-        @p.stub(:create_bank_and_cash_accounts).and_return true
-        @p.stub(:create_rem_check_accounts).and_return true
-        @p.stub(:check_nomenclature).and_return true
-        @p.save!
-      end
-      
-    
-      it 'entraîne celle des natures' do
-        @p.natures(true).count.should == 35
-      end
-    end
-    
-    
-    context 'pour une entreprises' do
-    
-      describe 'la création du premier exercice' do
-      
-        before(:each) do
-          @org = mock_model(Organism, :status_class=>'Entreprise', :fill_bridge=>false)
-          @p  = Period.new(valid_params)
-          @p.organism_id = @org.id
-          @p.stub(:collect_books).and_return({'Recettes'=>1, "Dépenses"=>2})
-          @p.stub(:max_open_periods?).and_return false 
-          @p.stub(:organism) {@org}
-          @p.stub(:create_bank_and_cash_accounts).and_return true
-          @p.stub(:create_rem_check_accounts).and_return true
-          @p.stub(:check_nomenclature).and_return true
-          @p.save!
-        end
-      
-        it 'entraine la création de 25 natures' do
-          @p.natures(true).count.should == 25 
-        end
-      end
-    end
-    
 
     describe 'un exercice est destroyable?' do
       
@@ -244,14 +128,7 @@ describe Period do
 
     end
 
-    describe 'load_-file_natures - cas d une erreur'  do
     
-      it 'avec une erreur load_file_natures renvoie []' do
-        Period.new(valid_params).send(:load_file_natures, 'inconnu').should == []
-      end
-
-
-    end
 
     describe 'les fonctionnalités pour trouver un mois'   do
       
@@ -406,17 +283,18 @@ describe Period do
     context 'avec deux exercices' do
       
       before(:each) do
-        clean_organism
+        clean_organism 
         Apartment::Database.switch(SCHEMA_TEST)
         @org = Organism.create!(title: 'ASSO TEST', database_name:SCHEMA_TEST, status:'Association')
         @p_2010 = @org.periods.create!(start_date: Date.civil(2010,04,01), close_date: Date.civil(2010,12,31))
+        @p_2010.create_datas
         @p_2011= @org.periods.create!(start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31))
-       
+        @p_2011.create_datas
       end
 
       
    
-      describe 'period_next' do
+      describe 'period_next' , wip:true do
         it "2010 doit repondre 2011" do
           @p_2010.next_period.should == @p_2011
         end
@@ -541,7 +419,7 @@ describe Period do
     end
   end
 
-  describe 'destruction d un exercice'  do
+  describe 'destruction d un exercice', wip:true do
     
     before(:each) do
       create_minimal_organism

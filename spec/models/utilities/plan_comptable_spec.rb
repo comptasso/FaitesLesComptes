@@ -3,11 +3,11 @@
 require 'spec_helper'
 require 'utilities/plan_comptable'
 
-describe Utilities::PlanComptable do  
+ # TODO compléter les spec de cette classe
 
-  
+describe Utilities::PlanComptable do
 
-  
+  let(:o) {double(Organism, database_name:SCHEMA_TEST)}  
 
   describe 'self.create_accounts' do
     
@@ -15,13 +15,14 @@ describe Utilities::PlanComptable do
      
       @p = Period.new(start_date:Date.today.beginning_of_month, close_date:Date.today.end_of_month)
       @p.organism_id = 1
+      @p.stub(:organism).and_return o
       @p.stub(:should_not_have_more_than_two_open_periods).and_return(true)
-      @p.stub(:create_plan) # car create_plan est appelé par un after_create
-      @p.stub(:create_bank_and_cash_accounts) # inutile de tester ce point ici
-      @p.stub(:create_rem_check_accounts) # idem
+#      @p.stub(:create_plan) # car create_plan est appelé par un after_create
+#      @p.stub(:create_bank_and_cash_accounts) # inutile de tester ce point ici
+#      @p.stub(:create_rem_check_accounts) # idem
       @p.stub(:check_nomenclature).and_return true
-      @p.stub(:fill_bridge)
-      @p.stub(:load_natures)
+#      @p.stub(:fill_bridge)
+#      @p.stub(:load_natures)
       @p.save!
     end
   
@@ -29,7 +30,7 @@ describe Utilities::PlanComptable do
       Utilities::PlanComptable.new(@p, 'Association').should be_an_instance_of(Utilities::PlanComptable)
     end
 
-    # TODO supprimer les spec similaires qui sont dans period_spec
+   
     it 'demande à period de créer les comptes lus dans le fichier' do
       Utilities::PlanComptable.create_accounts(@p, 'Association').should == 138
       @p.should have(138).accounts

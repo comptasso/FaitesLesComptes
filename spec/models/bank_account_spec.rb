@@ -109,7 +109,7 @@ describe BankAccount do
     context 'avec deux exercices' do
 
       before(:each) do
-        @p2 = find_second_period 
+        @p2 = find_second_period  
       end
   
       it 'créer un nouvel exercice recopie le compte correspondant au compte bancaire' do

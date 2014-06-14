@@ -109,10 +109,10 @@ describe Compta::Sheet do
      
   end
   
-  describe 'avec 2 exercices'  do
+  describe 'avec 2 exercices' , wip:true do
     
     before(:each) do
-      @next_period = find_second_period
+      @next_period = find_second_period 
     end
     
     it 'csv prend en compte l exercice' do
