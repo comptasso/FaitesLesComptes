@@ -1,18 +1,29 @@
-$('.inner-champ').block({ message: '<h4 id="message-d-attente">Juste un instant...</h4>' });
 
 // smartupdater pour l'action create de period
+<%- if @period.errors.empty? %>
+
+var messs = [
+  'Juste un test...',
+  'Création du plan de comptes...',
+  'Création des états...'
+];
+var ind = 0;
+
 $("#new_period").smartupdater({
-    url : "<%= @request_path %>" + '/prepared',
-    minTimeout: 500,  // 2 seconds
+    url : "<%=  @polling_path %>",
+    minTimeout: 2000,  // 2 seconds
     smartStop: {active:true, monitorTimeout:1000} // ce qui permet d'arrêter le polling
     // automatiquement dès que l'on masque la zone de message
-    }, function (data) {
-        if (data === "faux") {
-          $('#message-d-attente').text('Création du plan de comptes...');
-          }
+                              }, function (data) {
+        
         if (data === "vrai") {
-          window.location = "<%= @request_path %>";
+          window.location = "<%= @next_path %>";
             }
           }
-    }
-);
+    );
+    
+ <%- else %>
+    $('.blockUI').remove();
+    $('#new_period').html('<%= j render partial:'admin/periods/form' %>  ');
+    
+ <%- end %>

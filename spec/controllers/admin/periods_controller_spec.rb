@@ -36,6 +36,7 @@ describe Admin::PeriodsController do
       before(:each) do
         @o.stub(:periods).and_return(@a = double(Arel, :find_by_id=>nil))
         @a.stub('any?').and_return false 
+        @a.stub(:first).and_return(mock_model(Period, previous_period?:false))
       end
       
     context 'la sauvegarde est OK' do
@@ -53,6 +54,14 @@ describe Admin::PeriodsController do
         @mp.should_receive(:create_datas)   
         post :create, {organism_id:@o.id, :period=>valid_params}, valid_session
         response.should redirect_to admin_organism_periods_url(@o)
+      end
+      
+      it 'polling_path est initialisé' do
+        @a.should_receive(:new).with(valid_params).and_return mock_model(Period,
+          previous_period?:false, :save=>true, create_datas:true).as_new_record
+        post :create, {organism_id:@o.id, :period=>valid_params}, valid_session
+        assigns(:polling_path).should =~ /periods\/\d*\/prepared$/
+        assigns(:next_path).should =~ /periods$/
       end
       
       it 'marche avec le format js' do

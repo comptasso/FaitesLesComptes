@@ -57,22 +57,30 @@ class Admin::PeriodsController < Admin::ApplicationController
     start_date = (@organism.periods.last.close_date) +1 if @organism.periods.any?
     @period = @organism.periods.new(params[:period])
     @period.start_date = start_date if start_date
+    
     respond_to do |format|
       if @period.save
+        
         @period.create_datas # remplit le nouvel exercice avec les données 
         # nécessaires telles que comptes, natures, ...
         session[:period]=@period.id
-        format.html { redirect_to admin_organism_periods_path(@organism),
-          notice: flash_creation }
+        @next_path = request.path
+        @polling_path = "#{request.path}/#{@period.id}/prepared"
+        flash[:notice] = flash_creation 
+        format.html { redirect_to admin_organism_periods_path(@organism) }
         format.js
       else
         format.html { render action: "new" }
-        format.js { render action:'new' }
+        format.js 
       end
     end
   end
   
+  
+  # indique si l'exercice a fini d'être préparé par le DelayedJob lancé 
+  # par create_datas
   def prepared 
+    flash[:notice] = flash[:notice]
     period = Period.find(params[:id])
     render :text=>"#{period.prepared? ? 'vrai' : 'faux' }"
   end
