@@ -95,10 +95,9 @@ class Account < ActiveRecord::Base
     if date == (period.start_date - 1)
       init_sold(dc)
     else
-    Writing.sum(dc, :select=>'debit, credit',
-      :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines).to_f
-    # to_f est nécessaire car quand il n'y a aucune compa_lines, le retour est '0'
-    # et non 0 ce qui pose des difficultés pour les additions
+    # TODO voir si super ne serait pas juste suffisant
+    BigDecimal.new(Writing.sum(dc, :select=>'debit, credit',
+      :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines))
     end
   end
   
@@ -107,7 +106,7 @@ class Account < ActiveRecord::Base
     sql = %Q(SELECT SUM(credit) AS sum_credit, SUM(debit) AS sum_debit FROM "writings" INNER JOIN "compta_lines" 
 ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND account_id = #{id}))
     result = Writing.find_by_sql(sql).first
-    (result.sum_credit.to_f - result.sum_debit.to_f).round 2
+    BigDecimal.new(result.sum_credit || 0) - BigDecimal.new(result.sum_debit || 0)
   end
   
 
@@ -167,7 +166,9 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
   # Donne le montant d'ouverture du compte à partir du livre d'A nouveau
   def init_sold(dc)
     anb = period.organism.an_book
-    Writing.sum(dc, :select=>dc, :conditions=>['book_id = ? AND account_id = ?', anb.id, id], :joins=>:compta_lines).to_f
+    BigDecimal.new(Writing.sum(dc, :select=>dc,
+        :conditions=>['book_id = ? AND account_id = ?', anb.id, id],
+        :joins=>:compta_lines))
   end
 
 # Montant du solde d'à nouveau débit
