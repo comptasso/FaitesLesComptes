@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-RSpec.configure do |c|  
+RSpec.configure do |c|   
   # c.filter = {:wip=>true}
 end
 
@@ -41,7 +41,7 @@ describe Compta::Sheet do
     Compta::Sheet.new(@p, @folio ).should be_an_instance_of(Compta::Sheet) 
   end
 
-  it 'sheet doit rendre un tableau' do
+  it 'sheet doit rendre un tableau' do  
     cs = Compta::Sheet.new(@p, @folio ).to_csv
     cs.should match "Bilan actif\nRubrique\tBrut\tAmort\tNet\tPrécédent\n"
     cs.should match "201 - Frais d'établissement\t1 210,00\t0,00\t1 210,00\t0,00\n"

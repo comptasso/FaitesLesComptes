@@ -74,16 +74,16 @@ describe Admin::PeriodsController do
     
     context 'la sauvegarde echoue' do
       
-      it 'rend la vue edit si erreur dans la sauvegarde' do
+      it 'rend la vue new en html' do
         @a.should_receive(:new).with(valid_params).and_return mock_model(Period, :save=>false).as_new_record
         post :create, {organism_id:@o.id, :period=>valid_params}, valid_session
         response.should render_template :new
       end
       
-      it 'idem avec le format js' do
+      it 'et create en js car la vue period.js.erb gère le réaffichage' do
         @a.stub(:new).with(valid_params).and_return mock_model(Period, :save=>false).as_new_record
         post :create, {organism_id:@o.id, :period=>valid_params, format: :js}, valid_session
-        response.should render_template :new
+        response.should render_template :create
       end
 
     end

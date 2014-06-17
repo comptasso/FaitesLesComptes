@@ -11,7 +11,8 @@
   </h3><div class="inner-champ">
 
 <div class="inputs">
-<%= simple_form_for([:admin,@room], :url =>admin_rooms_path, :method => :post, :html=> {class: 'form-horizontal'}) do |f| %>
+<%= simple_form_for([:admin,@room], :url =>admin_rooms_path, :method => :post, 
+  :html=> {class: 'form-horizontal', id:'new_admin_room'}) do |f| %>
 <%= f.error_notification %>
 
     <%= f.input :title,  input_html: {class: "span3"} %> 
