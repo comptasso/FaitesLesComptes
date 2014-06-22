@@ -22,7 +22,7 @@ module SpecControllerHelper
     @cu = mock_model(User) # cu pour current_user
     @o = mock_model(Organism, title:'le titre', database_name:SCHEMA_TEST)
     @p = mock_model(Period, :start_date=>Date.today.beginning_of_year,
-      close_date:Date.today.end_of_year,
+      close_date:Date.today.end_of_year, open?:true,
       organism:@o,
       guess_date:Date.today,
       guess_month:MonthYear.from_date(Date.today),

@@ -18,9 +18,7 @@
 <li id="menu_transfer" class="dropdown <%= 'active' if controller.controller_name =='transfers' || controller.controller_name == 'writing_masks' %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">SAISIE GUIDEE<b class="caret"></b></a>
   <ul class='dropdown-menu'>
-     <li class='nav-header no-link'><%=  link_to 'TRANSFERTS', '#' %></li>
-     <li><%= link_to 'Afficher', transfers_path({:mois=>'tous'}) %>
-     <li><%= link_to 'Nouveau', new_transfer_path %>
+     <%= render :partial=>'menus/transfer' %>
      <%= render :partial=>'menus/guide' %>
   </ul>
  

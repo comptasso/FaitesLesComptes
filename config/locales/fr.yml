@@ -315,9 +315,10 @@ fr:
         incoherent: Incohérent avec %{field}
         invalid_date: Date invalide
         out_limits: '%{attribute} hors limite'
+        closed_period: '%{attribute} dans un exercice fermé'
         no_period: Pas d'exercice
         no_modif: '%{attribute} non modifiable'
-        locked: Record verrouillé
+        locked: Enregistrement verrouillé
         invalid: Caractères non admis
         too_short: Trop court
         too_long: Trop long

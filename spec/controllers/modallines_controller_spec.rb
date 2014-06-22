@@ -4,7 +4,7 @@ RSpec.configure do |c|
  # c.filter = {wip:true}
 end
  
-describe ModallinesController do
+describe ModallinesController do 
   include SpecControllerHelper
 
  

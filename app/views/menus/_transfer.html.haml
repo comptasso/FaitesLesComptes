@@ -1,0 +1,4 @@
+%li.nav-header.no-link
+  = link_to('TRANSFERTS', '#') 
+  %li= link_to 'Afficher', transfers_path({:mois=>'tous'})
+  %li= link_to 'Nouveau', new_transfer_path

@@ -4,7 +4,8 @@ require 'spec_helper'
 
 describe 'PeriodCoherentValidator' do 
 
-  let(:p) {mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)}
+  let(:p) {mock_model(Period, start_date:Date.today.beginning_of_year,
+      close_date:Date.today.end_of_year, open?:true)}
   let(:n) {mock_model(Nature, period:p)}
   let(:a1) {mock_model(Account, period:p)}
   let(:a2) {mock_model(Account, period:p)}
@@ -34,7 +35,8 @@ describe 'PeriodCoherentValidator' do
 
   it 'est invalide si la date correspond à un autre exercice que nature' do
     next_year = p.close_date + 1
-    @p2 = mock_model(Period, start_date:next_year, close_date:next_year.end_of_year)
+    @p2 = mock_model(Period, start_date:next_year,
+      close_date:next_year.end_of_year, open?:true)
     @w.stub(:period).and_return(@p2)
     @w.should_not be_valid
     puts @w.errors.messages

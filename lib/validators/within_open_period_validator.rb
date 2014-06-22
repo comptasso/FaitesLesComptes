@@ -3,10 +3,12 @@
 # Comme son nom l'indique ce validator vérifie que les champs date
 # du modèle sont compris dans l'exercice.
 # 
+# Il vérifie également que l'exercice est ouvert.
+#
 # Le modèle doit avoir une méthode period qui renvoie l'exercice.
 #
 #
-class WithinPeriodValidator < ActiveModel::EachValidator
+class WithinOpenPeriodValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     unless  value.is_a?(Date)
@@ -15,6 +17,7 @@ class WithinPeriodValidator < ActiveModel::EachValidator
     end
     raise 'Le modèle doit répondre à la méthode period' unless record.respond_to?(:period)
     if p = record.period
+      record.errors.add(attribute, :closed_period) unless p.open?
       record.errors.add(attribute, :out_limits) unless value >= p.start_date && value <=p.close_date
     else
       record.errors.add(attribute, :no_period)

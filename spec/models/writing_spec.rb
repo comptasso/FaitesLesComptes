@@ -134,7 +134,7 @@ describe Writing do
 
   context 'with real models' do
 
-    describe 'save' do
+    describe 'save' , wip:true do
 
       before(:each) do
         use_test_organism
@@ -157,6 +157,18 @@ describe Writing do
 
       it 'should save the lines' do
         expect {@r.save}.to change {ComptaLine.count}.by(2)
+      end
+      
+      describe 'on ne peut ecrire dans un exercice clos' do 
+        before(:each) do 
+          @p.stub(:open?).and_return false
+          @r.stub(:period).and_return @p 
+        end
+        
+        it 'on vérifie' do
+          # @p.should be_closed
+          @r.should_not be_valid
+        end
       end
 
 
@@ -373,7 +385,7 @@ describe Writing do
 
       end
       
-      describe 'to_csv', wip:true do
+      describe 'to_csv' do
         
         it 'peut rendre un csv' do
           pending 'voir si utile puisqu on passe par Extract'
