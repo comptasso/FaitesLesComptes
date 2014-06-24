@@ -78,6 +78,8 @@ class Admin::NaturesController < Admin::ApplicationController
             @period, book_id:@nature.book_id), notice: 'Nature a été mise à jour.' }
         format.json { head :ok }
       else
+        @books =  @organism.income_books + @organism.outcome_books
+        @book = @nature.book
         format.html { render action: "edit" }
         format.json { render json: @nature.errors, status: :unprocessable_entity }
       end
