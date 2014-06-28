@@ -1,7 +1,7 @@
 # coding: utf-8
 
 describe "in_out_writings/new" do 
-  include JcCapybara 
+  include JcCapybara  
 
 
 
