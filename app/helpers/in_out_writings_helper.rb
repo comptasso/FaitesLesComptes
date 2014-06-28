@@ -40,6 +40,11 @@ module InOutWritingsHelper
     end
     arr
   end
+  
+  
+  def frontline_actions(frontline)
+    
+  end
 
 
   # renvoie les actions possibles sous forme d'un fragment de html 

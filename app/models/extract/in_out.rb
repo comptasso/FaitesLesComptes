@@ -27,6 +27,10 @@ module Extract
       @lines ||= @book.extract_lines(from_date, to_date)
     end
     
+    def frontlines
+      @frontlines ||= @book.test_extract_lines(from_date, to_date)
+    end
+    
     alias compta_lines lines
 
     # produit le document pdf en s'appuyant sur la classe Editions::Book

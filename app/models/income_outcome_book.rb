@@ -38,14 +38,14 @@ class IncomeOutcomeBook < Book
   def test_extract_lines(from_date, to_date)
     sql = <<-hdoc
       SELECT writings.book_id, writings.id, writings.date, writings.ref, writings.narration,
+      cls.clid,
       cls.nname, cls.dname, cls.debit, cls.credit,
       support.pay_mode, acc_number, acc_title, bel_id
       FROM
       writings, 
-      (SELECT compta_lines.writing_id as wid, natures.name AS nname,
-       destinations.name AS dname, 
-      compta_lines.debit AS debit,
-       compta_lines.credit AS credit
+      (SELECT compta_lines.id AS clid, compta_lines.writing_id as wid, 
+      natures.name AS nname, destinations.name AS dname, 
+      compta_lines.debit AS debit, compta_lines.credit AS credit
       FROM compta_lines 
       LEFT JOIN natures ON (natures.id = compta_lines.nature_id)
       LEFT JOIN destinations ON (destinations.id = compta_lines.destination_id)
