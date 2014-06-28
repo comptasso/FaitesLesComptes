@@ -28,7 +28,7 @@ module Extract
     end
     
     def frontlines
-      @frontlines ||= @book.test_extract_lines(from_date, to_date)
+      @frontlines ||= Request::Frontline.fetch(@book.id, from_date, to_date)
     end
     
     alias compta_lines lines

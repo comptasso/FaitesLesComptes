@@ -112,10 +112,10 @@ class Book < ActiveRecord::Base
  WHERE
     
    writings.book_id = #{id} AND 
-writings.date >= '#{period.start_date}' AND 
-writings.date <= '#{period.close_date}' AND 
+ writings.date >= '#{period.start_date}' AND 
+ writings.date <= '#{period.close_date}' AND 
      compta_lines.writing_id = writings.id AND 
-nature_id IS NOT NULL
+ nature_id IS NOT NULL
      
  GROUP BY mony
     hdoc
