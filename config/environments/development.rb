@@ -45,4 +45,17 @@ config.autoload_paths +=  Dir["#{config.root}/lib/**/"]
 end
 
 
-ActionMailer::Base.delivery_method = :sendmail
+include '.smtp'
+
+  ActionMailer::Base.smtp_settings = {
+  :address        => 'smtp.faiteslescomptes.fr',
+  :port           => '25',
+  :authentication => :plain,
+  :user_name      => OVH_USER_NAME,
+  :password       => OVH_PASSWORD,
+  :domain         => 'faiteslescomptes.fr',
+  :enable_starttls_auto => true
+}
+
+
+ ActionMailer::Base.delivery_method = :smtp
