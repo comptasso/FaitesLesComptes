@@ -1,15 +1,29 @@
+# Le module Request contient des classes qui héritent de ActiveRecord::Base
+# pour avoir toutes les méthodes qui permettent d'interpréter le résultat 
+# d'une Query SQL. 
+# 
+# L'idée est d'utiliser une classe spécifique lorsque les reqûetes sont 
+# vraiment complexes et que un simple joins ou includes ne suffit pas. 
+# 
+# Une méthode de classe fetch permet d'effectuer la requête. 
+# 
+# On définit les colonnes en début de classe, on rend ces colonnes accessibles
+# pour que la requête puisse remplir les items. 
+# 
+# TODO voir ici comment gérer une logique similaire à find_each
 module Request
   
   # La class Request::Frontline est destinée à fournir en une seule requête 
   # les informations nécessaires pour l'affichage des lignes dans les livres
   # de recettes et de dépenses. 
   # 
+  # Attention, ne fonctionne pas avec un livre d'OD car il n'y a pas de nature
+  # TODO si on étend OD pour pouvoir enregistrer des destinations, alors, 
+  # il faudra probablement trier sur le type de record.  
+  # 
   # Une frontline est initialisée avec un tuple qui vient de la requête.
   # 
   # La méthode de classe fetch permet d'obtenir la collection de tuples
-  # 
-  # 
-  # TODO voir ici comment gérer une logique similaire à find_each
   # 
   class Frontline < ActiveRecord::Base
     
@@ -53,6 +67,8 @@ module Request
     
     # méthode exécutant la requête
     def self.fetch(book_id, from_date, to_date)
+      
+      # TODO introduire ici une erreur si le livre n'est pas un income_outcome_book
       sql = <<-hdoc
       SELECT writings.book_id, writings.id, writings.date, writings.ref,
       writings.narration, writings.type AS writing_type, 
@@ -100,8 +116,6 @@ module Request
     # reprend la même logique que pour une compta_line
     # une frontline est editable si elle n'est pas verrouillée, si son champ
     # check_deposit_id est nil et s'il n'y a pas de bank_extract_line associée
-    # TODO gérer le cas des transferts qui est éditable si une de ses lignes 
-    # l'est alors que pour une recette ou dépense ce n'est pas le cas.
     def editable?
       !(support_check_id || cl_locked || support_locked || bel_id)
     end
