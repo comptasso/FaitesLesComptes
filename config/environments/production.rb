@@ -67,7 +67,7 @@ end
 
 
   ActionMailer::Base.smtp_settings = {
-  :address        => 'smtp.sendgrid.net',
+  :address        => 'smtp.faiteslescomptes.fr',
   :port           => '587',
   :authentication => :plain,
   :user_name      => ENV['OVH_USER_NAME'],
