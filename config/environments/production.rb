@@ -72,7 +72,7 @@ end
   :authentication => :plain,
   :user_name      => ENV['OVH_USER_NAME'],
   :password       => ENV['OVH_PASSWORD'],
-  :domain         => 'heroku.com',
+  :domain         => 'faiteslescomptes.fr',
   :enable_starttls_auto => true
 }
 
