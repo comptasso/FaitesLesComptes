@@ -1,3 +1,6 @@
+load "#{Rails.root}/.smtp"
+
+
 Faitesvoscomptes::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -45,11 +48,11 @@ config.autoload_paths +=  Dir["#{config.root}/lib/**/"]
 end
 
 
-include '.smtp'
+
 
   ActionMailer::Base.smtp_settings = {
   :address        => 'smtp.faiteslescomptes.fr',
-  :port           => '25',
+  :port           => '587',
   :authentication => :plain,
   :user_name      => OVH_USER_NAME,
   :password       => OVH_PASSWORD,
