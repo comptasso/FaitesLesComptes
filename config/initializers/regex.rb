@@ -16,9 +16,9 @@
 # chiffre, lettre et caractères accentués
 ALNUM = '[a-zA-Z0-9]|[\u00e0-\u00ff]|[€]'
 # les mêmes plus le point final, point d'interrogation et parenthèse fermante
-ALNUMEND = '[a-zA-Z0-9]|[\u00e0-\u00ff]|[\?)€\.]' 
+ALNUMEND = '[a-zA-Z0-9]|[\u00e0-\u00ff]|[\?)€\.%]' 
 # les mêmes plus les espaces ainsi que () ° @ & / - +' , et .
-WORDCHARS =  '[a-zA-Z0-9]|[\u00e0-\u00ff]|\s|[\u0153€@()&_\*\:°\-\+\'\.\/,]' 
+WORDCHARS =  '[a-zA-Z0-9]|[\u00e0-\u00ff]|\s|[\u0153€@()=%&_\*\:°\-\+\'\.\/,]' 
  # on regroupe le tout
 WORD = "((#{ALNUM})((#{WORDCHARS})*(#{ALNUMEND}))?)" 
 NAME_REGEX = /\A#{WORD}\Z/ # pour obtenir le name_regex
