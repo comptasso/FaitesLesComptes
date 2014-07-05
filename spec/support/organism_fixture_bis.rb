@@ -205,6 +205,8 @@ module OrganismFixtureBis
     ecriture.save
     ecriture
   end
+  
+  
 
   # Malgré son nom, cette méthode ne crée que des écritures de type recettes
   #
@@ -214,7 +216,9 @@ module OrganismFixtureBis
   # pour le montant (99) et pour le mode de payment (Virement).
   #
   #
-  def create_in_out_writing(montant=99, payment='Virement')  
+  def create_in_out_writing(montant=99, payment='Virement') 
+    # TODO refactoriser en utilisant des options et des valeurs par défaut
+    # pour plus de souplesse.
     @income_account = @p.accounts.classe_7.first
     if payment == 'Chèque'
       acc_id = @p.rem_check_account.id
@@ -222,7 +226,9 @@ module OrganismFixtureBis
       acc_id = @baca.id
     end
     ecriture = @ib.in_out_writings.new({date:Date.today, narration:'créée par create_in_out_writing',
-        :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, credit:montant, payment_mode:payment},
+        :compta_lines_attributes=>{
+          '0'=>{account_id:@income_account.id,
+            nature:@n, credit:montant, payment_mode:payment},
           '1'=>{account_id:acc_id, debit:montant, payment_mode:payment}
         }
       })
@@ -241,6 +247,26 @@ module OrganismFixtureBis
       })
     #puts ecriture.errors.messages unless ecriture.valid?
     ecriture.save!
+    ecriture
+  end
+  
+  # créé un transfert , 
+  # par défaut de 99.99 de la banque vers la caisse à la date du jour
+  def create_transfer(options = {})
+    date = options[:date] || Date.today
+    amount = options[:amount] || 99.99.to_s
+    from_account_id = options[:from_account] || BankAccount.first.current_account(@p).id
+    to_account_id = options[:to_account] || Cash.first.current_account(@p).id
+    narration = options[:narration] || 'virement interne créé par méthode de test'
+        
+    ecriture = @od.transfers.new({date:date, narration:narration,
+        :compta_lines_attributes=>{
+          '0'=>{account_id:from_account_id, credit:amount},
+          '1'=>{account_id:to_account_id, debit:amount}
+        }
+      })
+    puts ecriture.errors.messages unless ecriture.valid?
+    ecriture.save
     ecriture
   end
   

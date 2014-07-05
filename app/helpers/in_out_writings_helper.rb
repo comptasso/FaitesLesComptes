@@ -40,6 +40,41 @@ module InOutWritingsHelper
     end
     arr
   end
+  
+  
+  def frontline_actions(frontline)
+     # Si la ligne est éditable, alors on peut la modifier ou la supprimer
+    # 
+    # Si la ligne est un Transfer, la modification se fait via la rubrique Transfer
+    # La suppression n'est pas possible, car elle doit passer par le menu Transfer
+    html = ' '
+    
+    if frontline.editable?
+      case frontline.writing_type
+      when 'Transfer'
+        html <<  icon_to('modifier.png', edit_transfer_path(frontline.id)) 
+      when 'Adherent::Writing' then 
+        html << icon_to('detail.png', adherent.member_payments_path(frontline.adherent_member_id))
+      else
+        html <<  icon_to('modifier.png', 
+          edit_book_in_out_writing_path(frontline.book_id, frontline.id)) 
+        html <<  icon_to('supprimer.png', 
+          book_in_out_writing_path(frontline.book_id, frontline.id),
+          confirm: 'Etes vous sûr?', method: :delete)
+      end
+    else 
+      case frontline.writing_type
+      when 'Transfer' then  html << icon_to('detail.png', transfer_path(frontline.id))
+      when 'Adherent::Writing' then
+        html << icon_to('detail.png', 
+          adherent.member_payment_path(frontline.adherent_member_id, 
+            frontline.adherent_payment_id),
+          title:'Table des paiments à l\'origine de cette écriture')
+      end
+    end
+    html.html_safe
+  
+  end
 
 
   # renvoie les actions possibles sous forme d'un fragment de html 

@@ -1,5 +1,4 @@
--  @monthly_extract.lines.each do |line|
-  %tr#line{id:line.id}
-    = render :partial=>'in_out_writings/line', :object=>line
+- @monthly_extract.frontlines.each do |frontline|
+  = render :partial=>'in_out_writings/frontline', :object=>frontline
 
 

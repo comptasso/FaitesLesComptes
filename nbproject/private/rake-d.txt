@@ -104,6 +104,7 @@ spec\:lib=Run the code examples in spec/lib
 spec\:mailers=Run the code examples in spec/mailers
 spec\:models=Run the code examples in spec/models
 spec\:prepare=
+spec\:request=Run the code examples in spec/request
 spec\:routing=Run the code examples in spec/routing
 spec\:statsetup=
 spec\:support=Run the code examples in spec/support

@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'month_year'
 
-describe Extract::Monthly do
+describe Extract::Monthly do 
 
   let(:b) {mock_model(Book)}
   let(:my) {MonthYear.from_date(Date.today)}

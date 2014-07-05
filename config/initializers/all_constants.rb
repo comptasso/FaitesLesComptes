@@ -94,4 +94,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.5.1RC' # Modification du menu Natures et de l'affichage index
 # FLCVERSION = '1.5.2RC' # Retouche vue de désinscription et automatisation message de bienvenue'
 # FLCVERSION = '1.5.3RC' # DelayedJob pour remplir les tables d'un nouvelle exercice
-FLCVERSION = '1.5.4RC' # Les writings ne peuvent être écrites que si l'ex est ouvert
+# FLCVERSION = '1.5.4RC' # Les writings ne peuvent être écrites que si l'ex est ouvert
+FLCVERSION = '1.5.5RC' # Création d'une request en SQL pour affichage plus rapide des writings

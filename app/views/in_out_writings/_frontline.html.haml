@@ -1,0 +1,12 @@
+%tr#line{id:frontline.compta_line_id}
+  %td= l frontline.date
+  %td= frontline.id
+  %td= frontline.ref
+  %td= frontline.narration
+  %td= frontline.nature_name
+  %td= frontline.destination_name
+  %td.numeric= debit_credit(frontline.debit)
+  %td.numeric= debit_credit(frontline.credit)
+  %td= frontline.payment_mode
+  %td= frontline.acc_title
+  %td.icon= frontline_actions(frontline)

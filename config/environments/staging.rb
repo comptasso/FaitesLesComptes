@@ -64,16 +64,16 @@ Faitesvoscomptes::Application.configure do
   config.active_support.deprecation = :notify
 end
 
-
   ActionMailer::Base.smtp_settings = {
-  :address        => 'smtp.sendgrid.net',
+  :address        => 'smtp.faiteslescomptes.fr',
   :port           => '587',
   :authentication => :plain,
-  :user_name      => ENV['SENDGRID_USERNAME'],
-  :password       => ENV['SENDGRID_PASSWORD'],
-  :domain         => 'heroku.com',
+  :user_name      => ENV['OVH_USER_NAME'],
+  :password       => ENV['OVH_PASSWORD'],
+  :domain         => 'faiteslescomptes.fr',
   :enable_starttls_auto => true
 }
+
 
 
  ActionMailer::Base.delivery_method = :smtp

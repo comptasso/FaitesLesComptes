@@ -40,7 +40,8 @@ module Importer
     def correct_narration(text)
       text.gsub("\n",'- ').gsub(/\s+/, ' ').strip.
         truncate(MEDIUM_NAME_LENGTH_MAX). # on tronque
-      gsub(/\s+\-$/, '')# on retire le - final au cas où le troncate tombe 
+      gsub(/\s+\-$/, '')# on retire le - final au cas où le troncate tombe sur
+      # -
          
     end 
       
