@@ -1,12 +1,10 @@
 <%= content_for :menu do %>
-<%= icon_to 'afficher.png', admin_organism_bank_accounts_path(@organism), title:'Liste des comptes bancaires' %>
-
   <%= icon_to 'retour.png', :back %>
 <% end -%>
 
 <div class="champ">
   <h3>
-    Modification d'un compte bancaire
+    Modification d'un compte bancaire 
   </h3>
   <div class="inner-champ">
     <%= render 'form' %>
