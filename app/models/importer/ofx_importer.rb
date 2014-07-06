@@ -11,7 +11,7 @@ require 'ofx'
 # #<OFX::Transaction:0xace3d1c @amount=#<BigDecimal:ac67938,'-0.1E3',9(18)>, 
 # @amount_in_pennies=-10000, 
 # @fit_id="3597400034599",
-# @memo="PRELEVEMENT",
+# @memo="PRELEVMNT",
 # @name="PREDICA PREDISSIME 9     237434",
 # @payee="", @check_number="", @ref_number="",
 # @posted_at=2014-05-16 00:00:00 +0200, @type=:other, @sic=""> 
@@ -62,7 +62,22 @@ module Importer
     
     def build_row(transac)
       debit, credit = debit_credit transac.amount
-      [transac.posted_at, transac.name, debit, credit]
+      [transac.posted_at, narration(transac), debit, credit]
+    end
+    
+    # sur la base des relevés du Crédit Agricole traite les narrations 
+    # qui peuvent être soit plus explicites dans name ou dans memo.
+    def narration(transac)
+      narr = case transac.name
+      when 'PRELEVMNT' then "#{transac.memo} #{transac.name}"
+      when 'VIREMENT EMIS' then "#{transac.memo} #{transac.name}"
+      when /\A\d*\z/ then "#{transac.memo} n° #{transac.name}"
+      else transac.name
+      end
+      case transac.memo
+      when /\ARETRAIT/ then narr = 'RETRAIT ' + narr 
+      end
+      narr
     end
   
     # controle la validité d'une ligne. Si les transformations
