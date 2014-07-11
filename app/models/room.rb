@@ -71,6 +71,7 @@ class Room < ActiveRecord::Base
       u = r.owner
       derniere_connexion = u.current_sign_in_at.to_date.to_s rescue 'jamais'
       ret << {email:u.email,
+        db_name:r.database_name,
         nb_writings:r.look_for {Writing.count}, 
         nb_connexions:u.sign_in_count,
         last_connexion:derniere_connexion}
