@@ -22,7 +22,7 @@ describe Room  do
     Apartment::Database.db_exist?('public').should == true
   end
 
-  describe 'les validations', wip:true  do
+  describe 'les validations' do
 
     before(:each) do
       Room.any_instance.stub(:user).and_return u
@@ -60,7 +60,12 @@ describe Room  do
       subject.should be_valid
     end
     
-    it 'et doit respecter certaines limites'
+    it 'et doit respecter certaines limites' do
+      subject.racine = 'court'
+      subject.should_not be_valid
+      subject.racine = 'vraimenttroplongbeaucouptroplonginfiniementtroplong'
+      subject.should_not be_valid
+    end
     
     it 'le statut est obligatoire' do
       subject.status = nil
@@ -89,7 +94,7 @@ describe Room  do
         @new_room.save!
       end
       
-      after(:each) do
+      after(:each) do 
         Apartment::Database.drop(@new_room.database_name) if Apartment::Database.db_exist?(@new_room.database_name)
       end
     
@@ -241,12 +246,12 @@ describe Room  do
   describe 'clonage', wip:true do
     
     before(:each) do
-      create_user
-      create_organism
+      use_test_user
+      use_test_organism
     end
     
-    it 'la room existe' do
-      @r.should be_an_instance_of Room
+    after(:each) do
+      Room.order('created_at ASC').last.destroy if Room.count > 1
     end
     
     it 'on peut la cloner' do
@@ -254,6 +259,26 @@ describe Room  do
       Room.count.should == 2
     end
  
+  end
+  
+  describe 'statistiques', wip:true do
+    before(:each) do
+      use_test_user
+      use_test_organism
+    end
+    
+    it 'une seule Room' do
+      Room.count.should == 1
+    end
+    
+    it 'lest statistiques rendent un array' do
+      Room.stats.should == [
+        email:@cu.email,
+        nb_writings:@o.writings.count,
+        nb_connexions:@cu.sign_in_count, 
+        last_connexion:@cu.current_sign_in_at 
+      ]
+    end
   end
 
 end

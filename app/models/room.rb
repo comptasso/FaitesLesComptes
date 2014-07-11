@@ -26,7 +26,7 @@ class Room < ActiveRecord::Base
   before_validation :strip_title_and_comment # le callback strip_before_validation
   # ne fonctionne pas avec ces attributs qui ne sont pas dans le modèle
   
-  validates :racine, :format=>{:with=>/\A[a-z]*\z/}, :length=>{:minimum=>6}, presence:true
+  validates :racine, :format=>{:with=>/\A[a-z]*\z/}, :length=>{:minimum=>6, :maximum=>32}, presence:true
   validates :database_name, presence:true, :format=>{:with=>/\A[a-z]{6}[a-z]*_[0-9]{14}\z/},
     uniqueness:true, cant_change:true
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
@@ -60,6 +60,22 @@ class Room < ActiveRecord::Base
     val ||= ''
     val.strip!
     self.database_name = val + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
+  end
+  
+  # méthode permettant d'obtenir les informations de base pour chaque Room.
+  # Le retour est un array de hash donnant l'email du user, la dernière connexion
+  # le nombre de connexion et le nombre d'écriture 
+  def self.stats
+    ret = []
+    Room.find_each do |r|
+      u = r.owner
+      ret << {email:u.email,
+        nb_writings:r.look_for {Writing.count}, 
+        nb_connexions:u.sign_in_count,
+        last_connexion:u.current_sign_in_at}
+      
+    end
+    ret
   end
   
     
@@ -165,9 +181,10 @@ class Room < ActiveRecord::Base
       # crée le nouveau database_name
       Apartment::Database.create(new_db_name)
       # puis on copie la totalité des tables
+      # TODO changer le nom de copy_schema en copy_all_tables
       Apartment::Database.copy_schema(database_name, new_db_name)
-      # on change le nom de organism#database_name dans organism pour refléter new_db_name
-      # et on ajoute le commentaire
+      # on change le nom de organism#database_name dans organism pour refléter 
+      # new_db_name et on ajoute le commentaire
       Apartment::Database.process(new_db_name) do
         Rails.logger.info 'Dans clone_db, partie Apartment::Database.process'
         o = Organism.first
@@ -194,8 +211,9 @@ class Room < ActiveRecord::Base
   # clone_room est appelé par clone_db pour créer une room ayant les mêmes holder
   # que la room actuelle mais avec room_id pointant sur la nouvelle Room
   def clone_room(new_db_name)
+    o = organism
     # on crée la Room
-    r = Room.new(:database_name=>new_db_name, title:title, status:status)
+    r = Room.new(:database_name=>new_db_name, title:o.title, status:o.status)
     puts r.errors.messages unless r.valid? 
     r.save!
     # puis pour chaque holder on duplique
