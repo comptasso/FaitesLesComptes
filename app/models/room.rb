@@ -69,10 +69,11 @@ class Room < ActiveRecord::Base
     ret = []
     Room.find_each do |r|
       u = r.owner
+      derniere_connexion = u.current_sign_in_at.to_date.to_s rescue 'jamais'
       ret << {email:u.email,
         nb_writings:r.look_for {Writing.count}, 
         nb_connexions:u.sign_in_count,
-        last_connexion:u.current_sign_in_at}
+        last_connexion:derniere_connexion}
       
     end
     ret

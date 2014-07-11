@@ -276,7 +276,7 @@ describe Room  do
         email:@cu.email,
         nb_writings:@o.writings.count,
         nb_connexions:@cu.sign_in_count, 
-        last_connexion:@cu.current_sign_in_at 
+        last_connexion:'jamais'
       ]
     end
   end
