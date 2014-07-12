@@ -62,24 +62,6 @@ class Room < ActiveRecord::Base
     self.database_name = val + '_' + Time.now.utc.strftime("%Y%m%d%H%M%S")
   end
   
-  # méthode permettant d'obtenir les informations de base pour chaque Room.
-  # Le retour est un array de hash donnant l'email du user, la dernière connexion
-  # le nombre de connexion et le nombre d'écriture 
-  def self.stats
-    ret = []
-    Room.find_each do |r|
-      u = r.owner
-      derniere_connexion = u.current_sign_in_at.to_date.to_s rescue 'jamais'
-      ret << {email:u.email,
-        db_name:r.database_name,
-        nb_writings:r.look_for {Writing.count}, 
-        nb_connexions:u.sign_in_count,
-        last_connexion:derniere_connexion}
-      
-    end
-    ret
-  end
-  
     
   
   # look_for permet de chercher quelque chose dans la pièce

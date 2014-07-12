@@ -261,25 +261,6 @@ describe Room  do
  
   end
   
-  describe 'statistiques', wip:true do
-    before(:each) do
-      use_test_user
-      use_test_organism
-    end
-    
-    it 'une seule Room' do
-      Room.count.should == 1
-    end
-    
-    it 'lest statistiques rendent un array' do
-      Room.stats.should == [
-        email:@cu.email,
-        db_name:"assotest_20140304044313",
-        nb_writings:@o.writings.count,
-        nb_connexions:@cu.sign_in_count, 
-        last_connexion:'jamais'
-      ]
-    end
-  end
+  
 
 end
