@@ -61,7 +61,7 @@ module Utilities
     # plus de ligne à pointer pour cet exercice.
     def set_lines(before_date)
       ls = bank_account.compta_lines.not_pointed 
-      ls = ls.where('writings.date < ?', before_date) if before_date 
+      ls = ls.where('writings.date <= ?', before_date) if before_date 
       ls
     end
     
