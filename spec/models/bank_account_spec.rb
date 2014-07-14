@@ -159,6 +159,34 @@ describe BankAccount do
       end
 
     end
+    
+    context 'with no bank_extract for this period but a previous period' do
+      
+      # le premier appel de bank_extract est pour  l'exercice en cours
+      # et le second pour l'exercice précédent
+      
+      before(:each) do
+        @p.stub(:previous_period?).and_return true
+        @p.stub(:previous_period).and_return(@pp = mock_model(Period))
+        
+      end
+      
+      it 'begin_sold est rempli avec le dernier relevé de l exercice precedent' do
+        
+        @ba.stub(:last_bank_extract).and_return(nil,
+          double(BankExtract, end_sold:123))
+        @be = @ba.new_bank_extract(@p)
+        @be.begin_sold.should == 123
+      end
+      
+      it 'ou zero s il n existe pas' do
+        
+        @ba.stub(:last_bank_extract).and_return(nil, nil)
+        @be = @ba.new_bank_extract(@p)
+        @be.begin_sold.should == 0
+      end
+      
+    end
       
     context 'with already some bank_extract' do
       before(:each) do

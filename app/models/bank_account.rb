@@ -114,7 +114,7 @@ class BankAccount < ActiveRecord::Base
     else
       begin_date = period.start_date
       end_date = begin_date.end_of_month
-      begin_sold = 0
+      begin_sold = previous_period_last_bank_extract_sold(period)
     end
     return nil if end_date > period.close_date
     bank_extracts.new(begin_date:begin_date,
@@ -171,10 +171,19 @@ class BankAccount < ActiveRecord::Base
   protected
 
   # renvoie le dernier relevé de compte (par date de fin) 
-  # faisant partie de l'exercice
+  # faisant partie de l'exercice fourni en argument
   def last_bank_extract(period)
     bank_extracts.where('begin_date >= ? AND end_date <= ?', 
       period.start_date, period.close_date).order(:end_date).last
+  end
+  
+  # cherche le dernier relevé de l'exercice précédent et renvoie son 
+  # son solde final
+  def previous_period_last_bank_extract_sold(period)
+    return 0 unless period.previous_period?
+    pp = period.previous_period
+    lbe = last_bank_extract(pp)
+    lbe ? lbe.end_sold : 0
   end
 
 
