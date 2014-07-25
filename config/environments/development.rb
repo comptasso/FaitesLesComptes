@@ -51,12 +51,12 @@ end
 
 
   ActionMailer::Base.smtp_settings = {
-  :address        => 'smtp.faiteslescomptes.fr',
+  :address        => ENV['MAIL_ADDRESS'],
   :port           => '587',
   :authentication => :plain,
-  :user_name      => ENV['OVH_USER_NAME'],
-  :password       => ENV['OVH_PASSWORD'],
-  :domain         => 'faiteslescomptes.fr',
+  :user_name      => ENV['MAIL_USER_NAME'],
+  :password       => ENV['MAIL_PASSWORD'],
+  :domain         => ENV['DOMAIN'],
   :enable_starttls_auto => true
 }
 

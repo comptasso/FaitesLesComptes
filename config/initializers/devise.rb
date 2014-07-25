@@ -7,13 +7,13 @@ Devise.setup do |config|
   # dans un fichier local .env qui n'est pas suivi par git (voir le fichier 
   # .gitignore) et la même clé a été déposée dans les variables d'environnement
   # de heroku.
-  if Rails.env == 'production'
-    cle = ENV['DEVISE_SEC_KEY']
+  if Rails.env == 'test' || Raisl.env == 'development'
+    config.secret_key = '1cletropsimple'
   else
-    cle = '1cletropsimple'
+    config.secret_key = ENV['DEVISE_SEC_KEY']
   end
   
-  config.secret_key = cle
+  
  
   
   # ==> Mailer Configuration
