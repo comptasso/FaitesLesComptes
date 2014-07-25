@@ -7,7 +7,7 @@ Devise.setup do |config|
   # dans un fichier local .env qui n'est pas suivi par git (voir le fichier 
   # .gitignore) et la même clé a été déposée dans les variables d'environnement
   # de heroku.
-  if Rails.env == 'test' || Raisl.env == 'development'
+  if Rails.env == 'test' || Rails.env == 'development'
     config.secret_key = '1cletropsimple'
   else
     config.secret_key = ENV['DEVISE_SEC_KEY']
