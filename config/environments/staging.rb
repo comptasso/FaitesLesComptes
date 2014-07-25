@@ -68,8 +68,8 @@ end
   :address        => 'smtp.faiteslescomptes.fr',
   :port           => '587',
   :authentication => :plain,
-  :user_name      => ENV['OVH_USER_NAME'],
-  :password       => ENV['OVH_PASSWORD'],
+  :user_name      => ENV['MAIL_USER_NAME'],
+  :password       => ENV['MAIL_PASSWORD'],
   :domain         => 'faiteslescomptes.fr',
   :enable_starttls_auto => true
 }
