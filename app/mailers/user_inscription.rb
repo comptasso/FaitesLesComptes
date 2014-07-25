@@ -2,13 +2,13 @@
 # Classe permettant d'envoyer un mail pour signaler un nouvel inscrit
 # 
 class UserInscription < ActionMailer::Base
-  default :from=>'expert@faiteslescomptes.fr'
+  default :from=>ENV['MAIL_USER_NAME']
 
   # renvoie au template new_user_advice qui est dans views/new_user_advice 
   def new_user_advice(user)
     @user = user
     mail(
-      :to=>'expert@faiteslescomptes.fr',
+      :to=>ENV['MAIL_USER_NAME'],
       :subject=>'ouverture d\'un nouveau compte')
   end
   

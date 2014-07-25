@@ -17,7 +17,7 @@ Faitesvoscomptes::Application.configure do
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = true
 
-  config.action_mailer.default_url_options = { :host => 'staging.faiteslescomptes.fr' } # pour Devise
+  config.action_mailer.default_url_options = { :host => ENV['MAIL_HOST'] } # pour Devise
 
 
 
@@ -65,12 +65,12 @@ Faitesvoscomptes::Application.configure do
 end
 
   ActionMailer::Base.smtp_settings = {
-  :address        => 'smtp.faiteslescomptes.fr',
+  :address        => ENV['MAIL_ADDRESS'],
   :port           => '587',
   :authentication => :plain,
   :user_name      => ENV['MAIL_USER_NAME'],
   :password       => ENV['MAIL_PASSWORD'],
-  :domain         => 'faiteslescomptes.fr',
+  :domain         => ENV['DOMAIN'],
   :enable_starttls_auto => true
 }
 
