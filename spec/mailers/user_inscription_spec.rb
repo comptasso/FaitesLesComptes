@@ -1,11 +1,15 @@
+# coding: utf-8
+
 RSpec.configure do |c|  
   # c.filter = {wip:true} 
 end
 
-describe UserInscription do
-  include EmailSpec::Helpers
-  include EmailSpec::Matchers
+describe UserInscription  do
+  
+include EmailSpec::Helpers
+include EmailSpec::Matchers
 
+  
   let(:user){mock_model(User, name:'spec', email:'spec@example.com')}
   
 
@@ -15,7 +19,7 @@ describe UserInscription do
     
 
     it 'destiné à expert@faiteslescomptes.fr' do
-      email.should deliver_to 'expert@faiteslescomptes.fr'
+      email.should deliver_to 'test@faiteslescomptes.fr' 
     end
 
     it 'le sujet est l ouverture d un nouveau compte' do
