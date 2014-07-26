@@ -20,7 +20,7 @@ Faitesvoscomptes::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
-  config.action_mailer.default_url_options = { :host => 'compta.faiteslescomptes.fr' } # pour Devise
+  config.action_mailer.default_url_options = { :host => ENV['MAIL_HOST'] } # pour Devise
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
@@ -66,13 +66,13 @@ end
 
 
 
-  ActionMailer::Base.smtp_settings = {
-  :address        => 'smtp.faiteslescomptes.fr',
+ ActionMailer::Base.smtp_settings = {
+  :address        => ENV['MAIL_ADDRESS'],
   :port           => '587',
   :authentication => :plain,
-  :user_name      => ENV['OVH_USER_NAME'],
-  :password       => ENV['OVH_PASSWORD'],
-  :domain         => 'faiteslescomptes.fr',
+  :user_name      => ENV['MAIL_USER_NAME'],
+  :password       => ENV['MAIL_PASSWORD'],
+  :domain         => ENV['DOMAIN'],
   :enable_starttls_auto => true
 }
 
