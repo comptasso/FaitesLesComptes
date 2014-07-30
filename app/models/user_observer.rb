@@ -2,10 +2,10 @@
 
 class UserObserver < ActiveRecord::Observer
 
-
+  # Voir les instructions de DelayedJob pour Rails 3 sur cette curieuse approche
+  # mais deliver est bien effectué par delay.
   def after_create(user)
-      message = UserInscription.new_user_advice(user)
-      message.deliver
+      UserInscription.delay.new_user_advice(user)
   end
-
+  
 end
