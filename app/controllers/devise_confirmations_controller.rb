@@ -11,7 +11,7 @@ class DeviseConfirmationsController < Devise::ConfirmationsController
 
     if resource.errors.empty? 
       # les 4 lignes modifiées sont ici
-      UserInscription.welcome_user(resource).deliver
+      UserInscription.delay.welcome_user(resource)
       sign_in(resource_name, resource)
       flash[:notice] = premier_accueil
       redirect_to new_admin_room_url
