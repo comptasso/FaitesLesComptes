@@ -61,6 +61,9 @@ class Admin::NaturesController < Admin::ApplicationController
             @period, book_id:@nature.book_id), notice: 'La Nature a été créée.' }
         format.json { render json: @nature, status: :created, location: @nature }
       else
+        @books =  @organism.income_books + @organism.outcome_books
+        @nature.book_id ||= @books.first.id
+        @book = @nature.book
         format.html { render action: "new" }
         format.json { render json: @nature.errors, status: :unprocessable_entity }
       end
