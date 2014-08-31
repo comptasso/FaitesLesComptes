@@ -72,6 +72,22 @@ class Nomenclature < ActiveRecord::Base
     end
   end
   
+  # Méthode remplissant les valeurs des rubriques pour l'exercice donné
+  # avec les valeurs bruts, amortissement, net et previous_net.
+  # 
+  #  Quand on démarre l'appel au job, on met le champ job_finished_at à nil 
+  #
+  def start_fill_rubrik_with_values(period)
+    Delayed::Job.enqueue Jobs::NomenclaturePeriodPlan.new(organism.database_name,
+      period.id)
+    update_attribute(:job_finished_at, nil) 
+  end
+  
+  # Indique si les valaurs des rubriques ont été remplies
+  def rubrik_values_filled?
+    job_finished_at.present?  
+  end
+  
   
  
   # crée une instance de Compta::Nomenclature pour l'exercice demandé;

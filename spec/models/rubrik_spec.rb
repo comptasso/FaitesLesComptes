@@ -123,6 +123,38 @@ describe Rubrik do
     
   end
   
+  describe 'fill_values' do
+    
+    let(:p) {mock_model(Period)}
+    
+    subject {Rubrik.new(numeros:'701') } 
+    
+    
+    it 'appelle to_compta_rubrik' do
+      subject.should_receive(:to_compta_rubrik).with(p).and_return(
+      double(Object, brut:100,
+          amortissement:20, previous_net:60))
+      subject.fill_values(p)
+    end
+    
+    it 'et remplit ses champs avec ceux de la compta_rubrik' do
+      subject.stub(:to_compta_rubrik).and_return(double(Object, brut:100,
+          amortissement:20, previous_net:60))
+      subject.fill_values(p)
+      subject.brut.should == 100
+      subject.amortissement.should == 20
+      subject.previous_net.should == 60 
+    end
+    
+    it 'et remplit également le champ period_id' do
+      subject.stub(:to_compta_rubrik).and_return(double(Object, brut:100,
+          amortissement:20, previous_net:60))
+      subject.fill_values(p)
+      subject.period_id.should == p.id
+    end
+    
+  end
+  
   
   
 end

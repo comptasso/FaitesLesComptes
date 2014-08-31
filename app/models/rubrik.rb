@@ -94,6 +94,21 @@ class Rubrik < ActiveRecord::Base
       Compta::Rubrik.new(self, period)
     end
     
+    # remplit les valeurs d'une rubrique pour un exercice donné
+    def fill_values(period)
+      tcr = to_compta_rubrik(period)
+      self.period_id = period.id
+      self.brut = tcr.brut
+      self.amortissement = tcr.amortissement
+      self.previous_net = tcr.previous_net
+      save
+    end
+    
+    
+    def net
+      brut-amortissement
+    end
+    
     
     # renvoie les numeros des rubriques feuilles
     # en éliminant les nils. Utilisé dans Folio pour lister 

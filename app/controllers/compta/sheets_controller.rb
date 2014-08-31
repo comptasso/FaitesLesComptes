@@ -48,7 +48,9 @@ class Compta::SheetsController < Compta::ApplicationController
   end
   
   # l'action show montre la construction de la sheet en détaillant pour chaque rubrique
-  # les comptes qui ont contribué au calcul
+  # les comptes qui ont contribué au calcul. 
+  # 
+  # La variable d'instance @rubriks est donc constituée ici de rubriks et de rubrik_lines
   #
   def show
     folio = @nomenclature.folios.find(params[:id])
