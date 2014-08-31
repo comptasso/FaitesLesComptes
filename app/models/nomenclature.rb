@@ -122,7 +122,7 @@ class Nomenclature < ActiveRecord::Base
   end
   
   # vérifie que nomenclature est coherent pour une période donnée en 
-  # créant Compta::Nomenclature et en appelant valid sur cet objet
+  # créant Compta::Nomenclature et en appelant valid? sur cet objet
   # Puis recopie les erreurs s'il y en a.
   # 
   # Non protégé car appelé par Period pour la persistence de cette réponse

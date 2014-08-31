@@ -96,7 +96,8 @@ class Rubrik < ActiveRecord::Base
     
     
     # renvoie les numeros des rubriques feuilles
-    # en éliminant les nils
+    # en éliminant les nils. Utilisé dans Folio pour lister 
+    # toutes les instructions servant à la construction du document
     def all_instructions 
       self_and_children.collect(&:numeros).select {|num| num != nil}
     end
@@ -104,13 +105,7 @@ class Rubrik < ActiveRecord::Base
     
     
     # lines renvoie les rubrik_lines qui construisent la rubrique
-    # lines est en fait identique à la méthode protected all_lines
-    # sauf pour la Rubrik résultat (le compte 12).
-    #
-    # Le but est d'avoir une seule ligne pour cette Rubrik résultat alors
-    # que ses valeurs sont calculées à partir du compte 12 mais aussi de tout
-    # les comptes 6 et 7.
-    #
+    # 
     def lines(period)
       if leaf? 
         return all_lines(period)
@@ -137,40 +132,40 @@ class Rubrik < ActiveRecord::Base
     # les méthodes des Compta::Rubrik
     
       # retourne la ligne de total de la rubrique
-    def totals(period)
-      [name, brut(period), amortissement(period), net(period), previous_net(period)] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
-    end
-
-    alias total_actif totals
-
-    def total_passif(period)
-      [name, net(period), previous_net(period)]
-    end
+#    def totals(period)
+#      [name, brut(period), amortissement(period), net(period), previous_net(period)] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
+#    end
+#
+#    alias total_actif totals
+#
+#    def total_passif(period)
+#      [name, net(period), previous_net(period)]
+#    end
 
     # crée un array avec le titre suivi de l'ensemble des lignes suivi de la ligne de total
     # TODO voir si utilisé 
-    def complete_list(period)
-      [name] + all_lines(period) + totals if leaf?
-    end
+#    def complete_list(period)
+#      [name] + all_lines(period) + totals if leaf?
+#    end
 
 
-    def brut(period)
-      lines(period).sum {|l| l.brut(period) }
-    end
-
-    def amortissement(period)
-      lines(period).sum {|l| l.amortissement(period) }
-    end
-
-    alias depreciation amortissement
-
-    def net(period)
-      (brut(period) - amortissement(period)) rescue 0.0
-    end
-
-    def previous_net(period)
-      lines(period).sum { |l| l.previous_net(period) }
-    end
+#    def brut(period)
+#      lines(period).sum {|l| l.brut(period) }
+#    end
+#
+#    def amortissement(period)
+#      lines(period).sum {|l| l.amortissement(period) }
+#    end
+#
+#    alias depreciation amortissement
+#
+#    def net(period)
+#      (brut(period) - amortissement(period)) rescue 0.0
+#    end
+#
+#    def previous_net(period)
+#      lines(period).sum { |l| l.previous_net(period) }
+#    end
 
        
     protected
