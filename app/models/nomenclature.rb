@@ -77,8 +77,8 @@ class Nomenclature < ActiveRecord::Base
   # 
   #  Quand on démarre l'appel au job, on met le champ job_finished_at à nil 
   #
-  def start_fill_rubrik_with_values(period)
-    Delayed::Job.enqueue Jobs::NomenclaturePeriodPlan.new(organism.database_name,
+  def fill_rubrik_with_values(period)
+    Delayed::Job.enqueue Jobs::NomenclatureFillRubriks.new(organism.database_name,
       period.id)
     update_attribute(:job_finished_at, nil) 
   end

@@ -11,39 +11,36 @@ end
 describe Nomenclature do
   include OrganismFixtureBis 
 
-  let(:o) {Organism.create!(title:'titre', :database_name=>SCHEMA_TEST, status:'Association')}
-  let(:p) {mock_model(Period, :organism_id=>o.id)} 
 
   before(:each) do
-    Apartment::Database.switch(SCHEMA_TEST)
-    clean_organism
+    use_test_organism
   end
   
   it 'invalide sans organisme' do
-      @n = o.nomenclature(true)
-      @n.organism_id = nil
-      @n.should_not be_valid
-    end
+    @nomen = @o.nomenclature(true)
+    @nomen.organism_id = nil
+    @nomen.should_not be_valid
+  end
 
   describe 'with a valid nomenclature' do
 
     before(:each) do
-      @n = o.nomenclature(true)
+      @nomen = @o.nomenclature(true)
     end
     
     it 'peut restituer ses instructions'  do       
-      @n.actif.should be_an_instance_of Folio 
-      @n.passif.should be_an_instance_of Folio
-      @n.resultat.should be_an_instance_of Folio
-      @n.benevolat.should be_an_instance_of Folio
+      @nomen.actif.should be_an_instance_of Folio 
+      @nomen.passif.should be_an_instance_of Folio
+      @nomen.resultat.should be_an_instance_of Folio
+      @nomen.benevolat.should be_an_instance_of Folio
     end
 
     it 'actif a des rubriks' do
-      @n.actif.should have(31).rubriks
+      @nomen.actif.should have(31).rubriks
     end
 
     it 'peut créer une Compta::Nomenclature' do
-      @n.compta_nomenclature(p).should be_an_instance_of(Compta::Nomenclature)
+      @nomen.compta_nomenclature(@p).should be_an_instance_of(Compta::Nomenclature)
     end
 
     describe 'check_coherent'  do
@@ -51,125 +48,135 @@ describe Nomenclature do
       context 'tous les folios sont coherents' do
         before(:each) do
           Folio.any_instance.stub(:coherent?).and_return true
+          
         end
+        
+        context 'on stub period_coherent?' do
+          
+          
+          before(:each) {@nomen.stub(:period_coherent?).and_return true}
      
-        it 'n est pas valide sans un actif' do
-          @n.stub(:actif).and_return nil
-          @n.should_not be_coherent
-        end
+          it 'n est pas valide sans un actif' do
+            @nomen.stub(:actif).and_return nil
+            @nomen.should_not be_coherent
+          end
 
-        it 'invalid sans passif' do
-          @n.stub(:passif).and_return nil
-          @n.should_not be_coherent
-        end
+          it 'invalid sans passif' do
+            @nomen.stub(:passif).and_return nil
+            @nomen.should_not be_coherent
+          end
 
-        it 'invalid sans resultat' do
-          @n.stub(:actif).and_return false # pour ne pas déclancher le test bilan_balanced
-          @n.stub(:resultat).and_return nil
-          @n.should_not be_coherent
-        end
-        
-        describe 'appelle bilan_balanced?' do
-        
-          it 'si actif et passif' do
-            @n.should_receive('bilan_balanced?')
-            @n.coherent?
+          it 'invalid sans resultat' do
+            @nomen.stub(:actif).and_return false # pour ne pas déclancher le test bilan_balanced
+            @nomen.stub(:resultat).and_return nil
+            @nomen.should_not be_coherent
           end
         
-          it 'mais pas si actif manque' do
-            @n.stub(:actif).and_return nil
-            @n.should_not_receive('bilan_balanced?')
-            @n.coherent?
-          end
+          describe 'appelle bilan_balanced?' do
+        
+            it 'si actif et passif' do
+              @nomen.should_receive('bilan_balanced?')
+              @nomen.coherent?
+            end
+        
+            it 'mais pas si actif manque' do
+              @nomen.stub(:actif).and_return nil
+              @nomen.should_not_receive('bilan_balanced?')
+              @nomen.coherent?
+            end
           
-          it 'ou si passif manque' do
-            @n.stub(:passif).and_return nil
-            @n.should_not_receive('bilan_balanced?')
-            @n.coherent?
-          end
-        end
-        
-        describe 'appelle bilan_no_doublon?' do
-          it 'si actif et passif' do
-            @n.should_receive('bilan_no_doublon?')
-            @n.coherent?
+            it 'ou si passif manque' do
+              @nomen.stub(:passif).and_return nil
+              @nomen.should_not_receive('bilan_balanced?')
+              @nomen.coherent?
+            end
           end
         
-          it 'mais pas si actif manque' do
-            @n.stub(:actif).and_return nil
-            @n.should_not_receive('bilan_no_doublon?')
-            @n.coherent?
-          end
+          describe 'appelle bilan_no_doublon?' do
+            it 'si actif et passif' do
+              @nomen.should_receive('bilan_no_doublon?')
+              @nomen.coherent?
+            end
+        
+            it 'mais pas si actif manque' do
+              @nomen.stub(:actif).and_return nil
+              @nomen.should_not_receive('bilan_no_doublon?')
+              @nomen.coherent?
+            end
           
-          it 'ou si passif manque' do
-            @n.stub(:passif).and_return nil
-            @n.should_not_receive('bilan_no_doublon?')
-            @n.coherent?
+            it 'ou si passif manque' do
+              @nomen.stub(:passif).and_return nil
+              @nomen.should_not_receive('bilan_no_doublon?')
+              @nomen.coherent?
+            end
           end
         end
         
-        describe 'coherent?' do
+        # TODO retravailler ce sujet qui oscille entre Period et Nomenclature
+        # il faut se décider sur quel modèle a la main.
+        
+        describe 'appel de la cohérence des exercices?' do
           before(:each) do
-            @n.stub_chain(:organism, :periods, :opened).and_return([@p1 = double(Period), @p2 = double(Period)])
+            @nomen.stub_chain(:organism, :periods, :opened).and_return([@p1 = double(Period), @p2 = double(Period)])
             @p1.stub(:update_attribute)
             @p2.stub(:update_attribute)
           end
           
           it 'doit créer deux compta nomenclature' do
-            @n.should_receive(:compta_nomenclature).with(@p1).and_return(double(Compta::Nomenclature, valid?:true))
-            @n.should_receive(:compta_nomenclature).with(@p2).and_return(double(Compta::Nomenclature, valid?:true))
-            @n.coherent? 
+            @nomen.should_receive(:compta_nomenclature).with(@p1).and_return(double(Compta::Nomenclature, valid?:true))
+            @nomen.should_receive(:compta_nomenclature).with(@p2).and_return(double(Compta::Nomenclature, valid?:true))
+            @nomen.coherent? 
           end
           
           it 'faux si une compta_nomenclature est invalide' do
-            @n.stub(:compta_nomenclature).with(@p1).and_return(double(Compta::Nomenclature, valid?:true))
-            @n.stub(:compta_nomenclature).with(@p2).
-              and_return(@cn2 = Compta::Nomenclature.new(p, @n))
+            @nomen.stub(:compta_nomenclature).with(@p1).and_return(double(Compta::Nomenclature, valid?:true))
+            @nomen.stub(:compta_nomenclature).with(@p2).
+              and_return(@cn2 = Compta::Nomenclature.new(@p, @nomen))
             @cn2.stub('valid?').and_return false
             @cn2.errors.add(:bilan, 'manque une valeur')
-            @n.should_not be_coherent
+            @nomen.should_not be_coherent
             
           end
           
           it 'recopie l erreur dans la nomenclature'  do
-            @n.stub(:compta_nomenclature).with(@p1).and_return(double(Compta::Nomenclature, valid?:true))
-            @n.stub(:compta_nomenclature).with(@p2).
-              and_return(@cn2 = Compta::Nomenclature.new(p, @n))
+            @nomen.stub(:compta_nomenclature).with(@p1).and_return(double(Compta::Nomenclature, valid?:true))
+            @nomen.stub(:compta_nomenclature).with(@p2).
+              and_return(@cn2 = Compta::Nomenclature.new(@p, @nomen))
             @cn2.stub('valid?').and_return false
             @cn2.errors.add(:bilan, 'manque une valeur')
-            @n.coherent?
-            @n.errors.messages.should == {:bilan=>['manque une valeur']}
+            @nomen.coherent?
+            @nomen.errors.messages.should == {:bilan=>['manque une valeur']}
           end
           
         end 
         
-        describe 'period_coherent?' do
-          
-          it 'met à jour le champ nomenclature_ok de period avec le resultat de valid?' do
-            @n.stub(:compta_nomenclature).with(p).
-              and_return(@cn2 = Compta::Nomenclature.new(p, @n))
-            @cn2.stub('valid?').and_return 'bizarre'
-            p.should_receive(:update_attribute).with(:nomenclature_ok, 'bizarre')
-            @n.period_coherent?(p)
-          end
-          
-          
-          
-        end
+        
     
+      end
+      
+      describe 'period_coherent?' do
+          
+        it 'met à jour le champ nomenclature_ok de period avec le resultat de valid?' do
+          @nomen.stub(:compta_nomenclature).with(@p).
+            and_return(@cn2 = Compta::Nomenclature.new(@p, @nomen))
+          @cn2.stub('valid?').and_return 'bizarre'
+          @p.should_receive(:update_attribute).with(:nomenclature_ok, 'bizarre')
+          @nomen.period_coherent?(@p)
+        end
       end
       
       context 'un folio incohérent'  do
         
         before(:each) do 
-          @n.stub('bilan_balanced?').and_return true
-          @n.stub('bilan_no_doublon?').and_return true
-          @n.stub(:folios).and_return([double(Folio, name:'test',
+          @nomen.stub('bilan_balanced?').and_return true
+          @nomen.stub('bilan_no_doublon?').and_return true
+          @nomen.stub(:period_coherent?).and_return true
+          @nomen.stub(:folios).and_return([double(Folio, name:'test',
                 errors:double(Object, full_messages:'une erreur'), coherent?:false)])
         end
          
         it 'rend la nomenclature incohérente' do
-          @n.should_not be_coherent
+          @nomen.should_not be_coherent
         end
         
         
@@ -189,19 +196,19 @@ describe Nomenclature do
   describe 'bilan balanced?'  do
 
     before(:each) do
-      @n = o.nomenclature
-      @n.stub(:actif).and_return(double(Folio, :rough_instructions=>%w(102 506C 407 !805) ) )
+      @nomen = @o.nomenclature
+      @nomen.stub(:actif).and_return(double(Folio, :rough_instructions=>%w(102 506C 407 !805) ) )
       
     end
 
     it 'vrai si un compte C a une correspondance avec un compte D' do
-      @n.stub(:passif).and_return(double(Folio, :rough_instructions=>%w(202 506D 407 !805)) )
-      @n.should be_bilan_balanced
+      @nomen.stub(:passif).and_return(double(Folio, :rough_instructions=>%w(202 506D 407 !805)) )
+      @nomen.should be_bilan_balanced
     end
     
     it 'faux dans le cas contraire' do
-      @n.stub(:passif).and_return(double(Folio, :rough_instructions=>%w(202 506 407 !805)) )
-      @n.should_not be_bilan_balanced
+      @nomen.stub(:passif).and_return(double(Folio, :rough_instructions=>%w(202 506 407 !805)) )
+      @nomen.should_not be_bilan_balanced
     end
 
 
@@ -213,18 +220,32 @@ describe Nomenclature do
   describe 'read and fill rubriks'  do
     
     before(:each) do
-      @n = o.nomenclature  
+      @nomen = @o.nomenclature  
     end
     
     # TODO gérer la problématique du test sur un nombre qui évolue lorsqu'on modifie
     # le fichier nomenclature. Il faudrait mieux qu'il compte le nombre de rubriques par lui
     # même
     it 'crée les 94 rubriks fournies par le fichier yml' do
-      @n.should have(98).rubriks  
+      @nomen.should have(98).rubriks  
     end
     
     it 'la nomenclature a 4 folios' do
-      @n.should have(4).folios  
+      @nomen.should have(4).folios  
+    end
+    
+  end
+  
+  describe 'fill_rubrik_with_values' do
+    
+    subject {@o.nomenclature}
+    
+    it 'appelle le Job' do
+      Delayed::Job.should_receive(:enqueue).with(
+        Jobs::NomenclatureFillRubriks.new(@o.database_name,
+          @p.id)
+      )
+      subject.fill_rubrik_with_values(@p)
     end
     
   end
