@@ -18,9 +18,13 @@ class Compta::SheetsController < Compta::ApplicationController
   include Pdf::Controller # apporte les méthodes pour les delayed_export_jobs
   
   before_filter :check_nomenclature, :only=>[:index, :show]
+  # on effectue la construction des données si elle ne sont pas à jour.
+  before_filter :fill_rubrik_values, :only=>[:index]
   before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
   def index
+    
+    
     # @docs est une collection de Compta::Sheet
     @docs = params[:collection].map do |c|
       # TODO mettre cela dans le modèle
@@ -85,7 +89,7 @@ class Compta::SheetsController < Compta::ApplicationController
   # resultats renvoie vers index avec exploitation, financier et exceptionnel
   def resultats
     redirect_to compta_sheets_url(:collection=>@organism.nomenclature.resultats.collect(&:name),
-      :title=>'Comptes de Résultats')
+      :title=>'Comptes de Résultats') and return
   end
 
   def liasse
@@ -100,11 +104,34 @@ class Compta::SheetsController < Compta::ApplicationController
   def benevolats
     redirect_to compta_sheets_url(:collection=>[:benevolat], :title=>'Bénévolat')
   end
-
-
+  
+  def preparing
+    puts 'JE SUIS dans preparing'
+  end
+  
+  protected
+  
+  # action permettant de remplir les rubriques avec les valeurs en cours
+  # et de signaler au record Nomanclature quand cela a été fait. 
+  def fill_rubrik_values
+    unless fresh_values?
+    @organism.nomenclature.fill_rubrik_with_values(@period)
+    # affichage d'une vue d'attente
+    redirect_to(preparing_compta_sheets_url(collection:params[:collection])) and return
+    end
+    fresh_values?
+  end
+  
+  
+  def fresh_values?
+    @nomenclature = @organism.nomenclature
+    return false unless @nomenclature.job_finished_at # il n'y a pas eu encore de construction des données
+    # une écriture au moins a été modifiée après la construction des données
+    ComptaLine.maximum(:updated_at) < @organism.nomenclature.job_finished_at
+  end
   
 
-  protected
+  
 
   # appelé par before_filter pour s'assurer que la nomenclature est valide
   # TODO la logique devrait être de rendre cette persistence dans le modèle 
