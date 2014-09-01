@@ -114,13 +114,21 @@ class Compta::SheetsController < Compta::ApplicationController
   # action permettant de remplir les rubriques avec les valeurs en cours
   # et de signaler au record Nomanclature quand cela a été fait. 
   def fill_rubrik_values
-    frais = @organism.nomenclature.fresh_values?
+    frais = @organism.nomenclature.fresh_values? && period_adhoc?
     unless frais 
     @organism.nomenclature.fill_rubrik_with_values(@period)
     # affichage d'une vue d'attente
     redirect_to(preparing_compta_sheets_url(collection:params[:collection])) and return
     end
     frais
+  end
+  
+  # la période demandée est adéquate quand toutes les rubriques sont effectivement
+  # remplies avec des valeurs relevant de l'exercice voulu
+  # dont un seul exercice et le bon
+  def period_adhoc?
+    rsu = Rubrik.select(:period_id).uniq
+    rsu.count == 1 && rsu.first.period_id == @period.id
   end
   
   
