@@ -14,6 +14,7 @@ module Jobs
     def perform
       Apartment::Database.process(db_name) do
         @nomenclature.rubriks.each do |r|
+          puts r.inspect
           r.fill_values(@period)
         end 
         
