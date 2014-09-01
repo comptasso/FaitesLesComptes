@@ -88,6 +88,13 @@ class Nomenclature < ActiveRecord::Base
     job_finished_at.present?  
   end
   
+  # indique si les rubriques ont été fraichement remplies
+  def fresh_values?
+    return false unless job_finished_at # il n'y a pas eu encore de construction des données
+    # une écriture au moins a été modifiée après la construction des données
+    ComptaLine.maximum(:updated_at) < job_finished_at
+  end
+  
   
  
   # crée une instance de Compta::Nomenclature pour l'exercice demandé;

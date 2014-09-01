@@ -1,0 +1,8 @@
+-# partial pour afficher une rubrik
+
+%tr{:class=>"depth_#{actif_rubriks.depth}" }
+  %td= actif_rubriks.title
+  %td.numeric= debit_credit actif_rubriks.brut
+  %td.numeric= debit_credit actif_rubriks.amortissement
+  %td.numeric= debit_credit actif_rubriks.net
+  %td.numeric= debit_credit actif_rubriks.previous_net

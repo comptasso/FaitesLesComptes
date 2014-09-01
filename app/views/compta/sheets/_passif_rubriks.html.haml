@@ -1,0 +1,5 @@
+-# partial pour afficher les lignes d'une rubriks (au passif)
+%tr{:class=>"depth_#{passif_rubriks.depth}" }
+  %td= passif_rubriks.title
+  %td.numeric= debit_credit passif_rubriks.net
+  %td.numeric= debit_credit passif_rubriks.previous_net

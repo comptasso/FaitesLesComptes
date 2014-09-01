@@ -114,21 +114,15 @@ class Compta::SheetsController < Compta::ApplicationController
   # action permettant de remplir les rubriques avec les valeurs en cours
   # et de signaler au record Nomanclature quand cela a été fait. 
   def fill_rubrik_values
-    unless fresh_values?
+    frais = @organism.nomenclature.fresh_values?
+    unless frais 
     @organism.nomenclature.fill_rubrik_with_values(@period)
     # affichage d'une vue d'attente
     redirect_to(preparing_compta_sheets_url(collection:params[:collection])) and return
     end
-    fresh_values?
+    frais
   end
   
-  
-  def fresh_values?
-    @nomenclature = @organism.nomenclature
-    return false unless @nomenclature.job_finished_at # il n'y a pas eu encore de construction des données
-    # une écriture au moins a été modifiée après la construction des données
-    ComptaLine.maximum(:updated_at) < @organism.nomenclature.job_finished_at
-  end
   
 
   

@@ -77,6 +77,8 @@ class Rubrik < ActiveRecord::Base
     # Utilisé pour la construction des folios (PdfDocument::Sheet) lorsqu'on 
     # n'affiche pas tous les détails de comptes mais seulement les rubriques
     # 
+    # TODO retirer period puisque maintenant on remplit les rubriques avant 
+    # de les utiliser?
     #
     def fetch_rubriks(period)
       result = []
