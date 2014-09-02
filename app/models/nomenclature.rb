@@ -91,8 +91,12 @@ class Nomenclature < ActiveRecord::Base
   # indique si les rubriques ont été fraichement remplies
   def fresh_values?
     return false unless job_finished_at # il n'y a pas eu encore de construction des données
+    fresh = ComptaLine.maximum(:updated_at) < job_finished_at
     # une écriture au moins a été modifiée après la construction des données
-    ComptaLine.maximum(:updated_at) < job_finished_at
+    # du coup on met le champ job_finished_at à nil puisque c'est l'existence
+    # d'une valeur qui va définir si le travail est fini.
+    update_attribute(:job_finished_at, nil) unless fresh
+    fresh
   end
   
   

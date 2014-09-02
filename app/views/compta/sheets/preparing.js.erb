@@ -1,0 +1,28 @@
+
+
+
+// on lance le poller qui va vérifier la disponibilité du fichier
+
+$("#message_info").smartupdater({
+    url : "<%= @request_path %>" + '/pdf_ready',
+    minTimeout: 2000,  // 2 seconds
+    smartStop: {active:true, monitorTimeout:1000} // ce qui permet d'arrêter le polling
+    // automatiquement dès que l'on masque la zone de message
+    }, function (data) {
+        if (data === "processing") {
+          $("#message_info").text("Remplissage du pdf... ");
+          }
+        if (data === "ready") {
+          $("#message_info").text("Fichier prêt, le téléchargement va démarrer");
+          spinner.stop();
+          setTimeout(function() {
+            $("#message").hide();
+            }, 2000);
+          setTimeout(function() {
+            window.location = "<%= @request_path %>" + '/deliver_pdf';
+            }, 2100);
+          }
+    }
+);
+        
+        

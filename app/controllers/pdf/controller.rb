@@ -19,16 +19,28 @@ module Pdf
   #   Delayed::Job.enqueue Jobs::StatsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, destination:@filter})
   # end
   # 
-  # Il faut également définir un before_filter qui va instancier @document,
+  # Il faut également définir un before_filter qui va instancier @exporter,
   # par exemple
   # before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
   # 
+  # et voici ce que peut être la méthode set_exporter (issue de SheetsController)
+  # 
+  # # créé les variables d'instance attendues par le module PdfController
+  #  def set_exporter
+  #    @exporter = @period
+  #  end
+  #  
+  #  Il faut également définir enqueue dans le controller et que cette méthode 
+  #  passe les informations nécéssaires à l'objet Job
   #  
   module Controller
      
   # TODO voir pour introduire ici le before_filter que je mets dans chacun des controllers
   # et qui est 
   # before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
+  
+  # TODO ici on pourrait aussi gagner beaucoup en vérifiant d'abord si
+  # le pdf a besoin d'être reconstruit.
   
   def produce_pdf 
     raise "Impossible de produire un pdf sans @exporter; Faites une méthode pour définir @exporter" unless @exporter
@@ -42,6 +54,7 @@ module Pdf
     set_request_path
     enqueue(exp)
     respond_to do |format|
+      # voir le fichier pdf/produce_pdf.js.erb
       format.js {render 'pdf/produce_pdf', type:'text/javascript'}
     end
   end

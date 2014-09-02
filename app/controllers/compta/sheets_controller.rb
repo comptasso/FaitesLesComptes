@@ -105,8 +105,11 @@ class Compta::SheetsController < Compta::ApplicationController
     redirect_to compta_sheets_url(:collection=>[:benevolat], :title=>'Bénévolat')
   end
   
-  def preparing
-    puts 'JE SUIS dans preparing'
+  # l'action values_ready est appelée par le javascript de la page preparing 
+  # par un polling et répond 'vrai' ou 'faux' selon que les valeurs 
+  # demandées ont été construites. 
+  def values_ready
+    render :text=>"#{@organism.nomenclature.job_finished_at ? 'ready' : 'processing'}"
   end
   
   protected
@@ -116,18 +119,21 @@ class Compta::SheetsController < Compta::ApplicationController
   def fill_rubrik_values
     frais = @organism.nomenclature.fresh_values? && period_adhoc?
     unless frais 
+      
+    puts 'APPEL CONSTRUCTION DES DONNEES'  
+    
     @organism.nomenclature.fill_rubrik_with_values(@period)
     # affichage d'une vue d'attente
-    redirect_to(preparing_compta_sheets_url(collection:params[:collection])) and return
+    render 'preparing' and return
     end
     frais
   end
   
   # la période demandée est adéquate quand toutes les rubriques sont effectivement
   # remplies avec des valeurs relevant de l'exercice voulu
-  # dont un seul exercice et le bon
+  # donc : un seul exercice et le bon
   def period_adhoc?
-    rsu = Rubrik.select(:period_id).uniq
+    rsu = ::Rubrik.select(:period_id).uniq
     rsu.count == 1 && rsu.first.period_id == @period.id
   end
   
