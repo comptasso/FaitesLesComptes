@@ -61,8 +61,9 @@ module Compta
     end
     
     # liste les rubriques
+    # TODO mettre en protected ? et passer à fetch_rubriks pour gagner du temps
     def fetch_rubriks
-      folio.root.fetch_rubriks(@period)
+      folio.root.fetch_compta_rubriks(@period)
     end
 
     # TODO voir pour refactoriser celà mais il ne faut pas oublier que dans un cas

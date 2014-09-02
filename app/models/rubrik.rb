@@ -71,16 +71,16 @@ class Rubrik < ActiveRecord::Base
       fl
     end
      
-    # Récupère les différentes rubriks avec les sous rubriks
+    # Récupère les différentes compta_rubriks avec les sous rubriks
     # mais ne prend pas le détail des lignes. 
     # 
     # Utilisé pour la construction des folios (PdfDocument::Sheet) lorsqu'on 
     # n'affiche pas tous les détails de comptes mais seulement les rubriques
     # 
-    # TODO retirer period puisque maintenant on remplit les rubriques avant 
-    # de les utiliser?
+    #  Voir aussi fetch_rubriks si on ne veut que les rubriks et non les 
+    #  compta rubriks. 
     #
-    def fetch_rubriks(period)
+    def fetch_compta_rubriks(period)
       result = []
       children.each do |c|
         if c.leaf? 
@@ -90,6 +90,24 @@ class Rubrik < ActiveRecord::Base
         end
       end
       result << self.to_compta_rubrik(period)
+    end
+    
+    # récupère toutes les rubriques filles de la rubrique concernée. 
+    # Utile pour l'affichage rapide des documents financiers (Bilan, 
+    # compte de résultats,...). 
+    #
+    # Il faut bien sûr que les champs des rubriks aient été préalablement 
+    # remplis.
+    def fetch_rubriks
+      result = []
+      children.each do |c|
+        if c.leaf? 
+          result << c
+        else
+          result += c.fetch_rubriks
+        end
+      end
+      result << self
     end
     
     def to_compta_rubrik(period)

@@ -1,6 +1,7 @@
 module Compta
   class Rubrik
-      
+    
+    
     
     attr_reader :period, :rubrik, :brut, :amortissement
     
@@ -8,20 +9,15 @@ module Compta
     
     def initialize(rubrik, period)
       @period = period
-      @rubrik = rubrik 
-      # TODO voir éventuellement à mettre ici une alerte si le period 
-      # n'est pas celui déja calculé. 
-      # TODO Où se passer peut-être complètement de Compta::Rubrik qui 
-      # avait du sens pour prendre en compte l'exercice.
-      
+      @rubrik = rubrik      
     end
     
     def brut(period = nil)
-      rubrik.brut # ||= lines.sum(&:brut)
+      @brut ||= lines.sum(&:brut)
     end
     
     def amortissement(period = nil)
-      rubrik.amortissement #||= lines.sum(&:amortissement)
+      @amortissement ||= lines.sum(&:amortissement)
     end
     
     def net(period=nil)
@@ -29,7 +25,7 @@ module Compta
     end
     
     def previous_net(period=nil)
-      rubrik.previous_net 
+      lines.sum { |l| l.previous_net(period) }
     end
     
       # retourne la ligne de total de la rubrique
@@ -53,21 +49,21 @@ module Compta
     # que ses valeurs sont calculées à partir du compte 12 mais aussi de tout
     # les comptes 6 et 7.
     #
-#    def lines
-#      @lines ||= set_lines
-#    end
-#    
-#    def set_lines
-#      if rubrik.leaf? 
-#        return all_lines
-#      else
-#        return rubrik.children.collect {|ch| ch.to_compta_rubrik(period)}
-#      end
-#    end
-#    
-#    def all_lines
-#      @all_lines ||= Compta::RubrikParser.new(period, rubrik.folio.sens, rubrik.numeros).rubrik_lines
-#    end
+    def lines
+      @lines ||= set_lines
+    end
+    
+    def set_lines
+      if rubrik.leaf? 
+        return all_lines
+      else
+        return rubrik.children.collect {|ch| ch.to_compta_rubrik(period)}
+      end
+    end
+    
+    def all_lines
+      @all_lines ||= Compta::RubrikParser.new(period, rubrik.folio.sens, rubrik.numeros).rubrik_lines
+    end
     
     
   end
