@@ -107,9 +107,11 @@ class Compta::SheetsController < Compta::ApplicationController
   
   # l'action values_ready est appelée par le javascript de la page preparing 
   # par un polling et répond 'vrai' ou 'faux' selon que les valeurs 
-  # demandées ont été construites. 
+  # demandées ont été construites.
+  # 
+  #
   def values_ready
-    render :text=>"#{@organism.nomenclature.job_finished_at ? 'ready' : 'processing'}"
+    render :text=>"#{@organism.nomenclature.job_finished_at ? 'ready' : 'processinge'}"
   end
   
   protected
@@ -119,9 +121,9 @@ class Compta::SheetsController < Compta::ApplicationController
   def fill_rubrik_values
     frais = @organism.nomenclature.fresh_values? && period_adhoc?
     unless frais 
-    @organism.nomenclature.fill_rubrik_with_values(@period)
-    # affichage d'une vue d'attente
-    render 'preparing' and return
+      @organism.nomenclature.fill_rubrik_with_values(@period)
+      # affichage d'une vue d'attente
+      render 'preparing' and return
     end
     frais
   end
