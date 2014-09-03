@@ -119,9 +119,6 @@ class Compta::SheetsController < Compta::ApplicationController
   def fill_rubrik_values
     frais = @organism.nomenclature.fresh_values? && period_adhoc?
     unless frais 
-      
-    puts 'APPEL CONSTRUCTION DES DONNEES'  
-    
     @organism.nomenclature.fill_rubrik_with_values(@period)
     # affichage d'une vue d'attente
     render 'preparing' and return

@@ -30,43 +30,109 @@ describe Compta::SheetsController do
       @nomenclature.stub(:sheet).and_return(@cs = double(Compta::Sheet))
     end
     
-    it 'rend la vue index' do
-      get :index, {:collection=>['bilan', 'resultat']}, valid_session
-      response.should render_template('index')
-    end
+    context 'les rubriques sont fraiches et période ad_hoc' do
+      
+      
+      before(:each) do 
+        @nomenclature.stub(:fresh_values?).and_return true
+        @controller.stub(:period_adhoc?).and_return true
+      end
     
-    it 'si la nomenclature est incoherent affiche une flash' do
-      @nomenclature.stub('coherent?').and_return false
-      controller.stub('collect_errors').and_return 'la liste des erreurs'
-      get :index, {:collection=>['bilan', 'resultat']}, valid_session
-      flash[:alert].should == 'la liste des erreurs'
-    end
+      it 'rend la vue index' do
+        get :index, {:collection=>['bilan', 'resultat']}, valid_session
+        response.should render_template('index')
+      end
     
-    describe 'exportations' do 
+      it 'si la nomenclature est incoherent affiche une flash' do
+        @nomenclature.stub('coherent?').and_return false
+        controller.stub('collect_errors').and_return 'la liste des erreurs'
+        get :index, {:collection=>['bilan', 'resultat']}, valid_session
+        flash[:alert].should == 'la liste des erreurs'
+      end
+    
+      describe 'exportations' do 
+      
+        it 'repond au format csv' do
+          @cs.stub('to_index_csv').and_return 'des lignes aux format csv'
+          controller.should_receive(:send_data).
+            with('des lignes aux format csvdes lignes aux format csv', filename:"Bilan #{@o.title} #{@controller.dashed_date(Date.today)}.csv").
+            and_return { @controller.render nothing: true }
+          get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'csv'}, valid_session
+        end
+      
+        it 'repond au format xls' do
+          @cs.stub('to_index_xls').and_return 'des lignes aux format xls\n'
+          controller.should_receive(:send_data).
+            with('des lignes aux format xls\ndes lignes aux format xls\n', filename:"Bilan #{@o.title} #{@controller.dashed_date(Date.today)}.csv").
+            and_return { @controller.render nothing: true }
+          get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'xls'}, valid_session
+        end
+      
+           
+      end
+    end 
+    
+    describe 'rend la vue preparing' do
       
       before(:each) do
+        @nomenclature.stub(:fill_rubrik_with_values).and_return true
+      end
+      
+      
+      it 'quand les valeurs ne sont pas fraiches' do
+        @nomenclature.stub(:fresh_values?).and_return false
+        @controller.stub(:period_adhoc?).and_return true
+        get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'xls'}, valid_session
+        response.should render_template('preparing')
+      end
+      
+      it 'ou que l exercice n est pas adhoc' do
+        @nomenclature.stub(:fresh_values?).and_return true
+        @controller.stub(:period_adhoc?).and_return false
+        get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'xls'}, valid_session
+        response.should render_template('preparing')
+      end
+      
+      it 'ou les deux simultanément' do
+        @nomenclature.stub(:fresh_values?).and_return true
+        @controller.stub(:period_adhoc?).and_return false
+        get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'xls'}, valid_session
+        response.should render_template('preparing')
+      end
+      
+      context 'dans ce cas' do
+        
+        it 'demande à nomenclature de rafraichir les données' do
+          @nomenclature.stub(:fresh_values?).and_return true
+          @controller.stub(:period_adhoc?).and_return false
+          @nomenclature.should_receive(:fill_rubrik_with_values)
+          get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'xls'}, valid_session
+        
+        end
         
       end
       
-      it 'repond au format csv' do
-        @cs.stub('to_index_csv').and_return 'des lignes aux format csv'
-        controller.should_receive(:send_data).
-          with('des lignes aux format csvdes lignes aux format csv', filename:"Bilan #{@o.title} #{@controller.dashed_date(Date.today)}.csv").
-          and_return { @controller.render nothing: true }
-        get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'csv'}, valid_session
-      end
-      
-      it 'repond au format xls' do
-        @cs.stub('to_index_xls').and_return 'des lignes aux format xls\n'
-        controller.should_receive(:send_data).
-          with('des lignes aux format xls\ndes lignes aux format xls\n', filename:"Bilan #{@o.title} #{@controller.dashed_date(Date.today)}.csv").
-          and_return { @controller.render nothing: true }
-        get :index, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'xls'}, valid_session
-      end
-      
-           
     end
     
+    
+  end
+  
+  describe 'values_ready' , wip:true do
+    it 'teste le champ job finished_at' do
+      @nomenclature.should_receive(:job_finished_at).and_return Time.current
+      xhr :get, :values_ready, {}, valid_session
+    end
+    it 'et renvoie processing' do
+      @nomenclature.stub(:job_finished_at).and_return nil
+      xhr :get, :values_ready, {}, valid_session
+      response.body.should == 'processing'
+    end
+    
+    it 'ou ready' do
+      @nomenclature.stub(:job_finished_at).and_return Time.current
+      xhr :get, :values_ready, {}, valid_session
+      response.body.should == 'ready'  
+    end
   end
   
   describe 'Get produce_pdf' do
@@ -151,34 +217,26 @@ describe Compta::SheetsController do
       response.should redirect_to compta_nomenclature_path
     end
 
-    describe 'GET bilans', wip:true do
+    describe 'fonctions de redirection' do
       
-      it 'redirige vers index' do
+      it 'get bilans redirige vers index avec actif et passif' do
         get :bilans, {}, valid_session
         response.should redirect_to compta_sheets_path(collection:['actif', 'passif'], title:'Bilan')
       end
-    end
     
-    describe 'GET resultats', wip:true do
-      
-      it 'redirige vers index' do
+      it 'get index redirige vers index avec resultats' do
         @nomenclature.stub(:resultats).and_return([double(Folio, name:'resulta'), double(Folio, name:'resultb')])
         get :resultats, {}, valid_session
         response.should redirect_to compta_sheets_path(collection:['resulta', 'resultb'], title:'Comptes de Résultats')
       end
-    end
-
-    describe 'GET bénévolats', wip:true do
-      
-      it 'redirige vers index' do
+    
+      it 'benevolat redirige vers index avec benevolat' do
         get :benevolats, {}, valid_session
         response.should redirect_to compta_sheets_path(collection:['benevolat'], title:'Bénévolat')
       end
-    end
     
-    describe 'GET liasse', wip:true do
       
-      it 'redirige vers index' do
+      it 'et liasse avec tous es folios' do
         @o.stub_chain(:nomenclature, :folios, :collect).and_return(['actif', 'passif', 'resultat', 'benevolat'])
         get :liasse, {}, valid_session
         response.should redirect_to compta_sheets_path(collection:['actif', 'passif', 'resultat', 'benevolat'], title:'Liasse complète')
