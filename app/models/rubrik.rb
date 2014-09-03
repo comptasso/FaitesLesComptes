@@ -1,15 +1,25 @@
 # require 'pdf_document/pdf_rubriks.rb'
 
-# Classe destinée à produire les documents comptables tels qu'actif ou passif
-# Chaque rubrique qui se lit à partir d'un folio est capable de calculer 
-# ses soldes, en listant ses enfants.
-# 
-#  Le gem acts_as_tree donne les méthodes leaf et children.
+# Classe destinée à produire les documents comptables tels qu'actif ou passif.
+# Les rubriks se lisent à partir des folios.
+# A partir d'un exercice, chaque rubrique est capable de calculer 
+# ses soldes, en listant ses enfants, en ayant recours à la classe
+# Compta::Rubrik via la méthode #to_compta_rubrik.
 #  
-#   Un champ booleen is_leaf est ajouté dans la table permettant d'éviter les 
-#   trop nombreuses interrogations de la table à chaque fois qu'on veut savoir
-#   si la rubrik est une feuille ou non (ce qui est dû à la récursivité de 
-#   certaines fonctions)  
+# Le modèle comprend les champs period_id, brut, amortissement, et previous_net
+# qui permettent de rendre persistants les valeurs des rubriks pour un exercice
+# identifié par period_id. 
+# 
+# Cela permet de ne pas recalculer toutes les valeurs à chaque fois qu'on 
+# demande une édition de documents (opération un peu longue, et souvent on 
+# édite le bilan, puis le compte de résultats,..;)
+# 
+# Le gem acts_as_tree donne les méthodes leaf et children.
+#  
+# Un champ booleen is_leaf est ajouté dans la table permettant d'éviter les 
+# trop nombreuses interrogations de la table à chaque fois qu'on veut savoir
+# si la rubrik est une feuille ou non (ce qui est dû à la récursivité de 
+# certaines fonctions)  
 # 
 # Une autre logique aurait pu être de faire deux modèles différents, avec des
 # rubriques et des sous rubriques. Peut être avec la logique STI
@@ -147,7 +157,8 @@ class Rubrik < ActiveRecord::Base
     
     
     
-  # lines renvoie les rubrik_lines qui construisent la rubrique
+  # lines renvoie les rubrik_lines qui construisent la rubrique, ou 
+  # les enfants de la rubrique
   # 
   def lines(period)
     if leaf? 
@@ -171,44 +182,7 @@ class Rubrik < ActiveRecord::Base
   end
     
     
-  # TODO voir si ces fonctions sont utilisées, car je pense qu'on appelle en fait 
-  # les méthodes des Compta::Rubrik
-    
-  # retourne la ligne de total de la rubrique
-  #    def totals(period)
-  #      [name, brut(period), amortissement(period), net(period), previous_net(period)] rescue ['ERREUR', 0.0, 0.0, 0.0, 0.0]
-  #    end
-  #
-  #    alias total_actif totals
-  #
-  #    def total_passif(period)
-  #      [name, net(period), previous_net(period)]
-  #    end
-
-  # crée un array avec le titre suivi de l'ensemble des lignes suivi de la ligne de total
-  # TODO voir si utilisé 
-  #    def complete_list(period)
-  #      [name] + all_lines(period) + totals if leaf?
-  #    end
-
-
-  #    def brut(period)
-  #      lines(period).sum {|l| l.brut(period) }
-  #    end
-  #
-  #    def amortissement(period)
-  #      lines(period).sum {|l| l.amortissement(period) }
-  #    end
-  #
-  #    alias depreciation amortissement
-  #
-  #    def net(period)
-  #      (brut(period) - amortissement(period)) rescue 0.0
-  #    end
-  #
-  #    def previous_net(period)
-  #      lines(period).sum { |l| l.previous_net(period) }
-  #    end
+  
 
        
   protected
