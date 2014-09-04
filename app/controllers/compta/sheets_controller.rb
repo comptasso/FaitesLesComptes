@@ -111,7 +111,7 @@ class Compta::SheetsController < Compta::ApplicationController
   # 
   #
   def values_ready
-    render :text=>"#{@organism.nomenclature.job_finished_at ? 'ready' : 'processinge'}"
+    render :text=>"#{@organism.nomenclature.job_finished_at ? 'ready' : 'processing'}"
   end
   
   protected

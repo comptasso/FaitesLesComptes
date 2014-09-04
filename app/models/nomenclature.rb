@@ -100,7 +100,7 @@ class Nomenclature < ActiveRecord::Base
   def fresh_values?
     return false unless job_finished_at 
     # donc un calcul a été fait mais est-il récent ?
-    derniere_date = ComptaLine.maximum(:update_at) 
+    derniere_date = ComptaLine.maximum(:updated_at) 
     return true unless derniere_date # oui car pas d'écriture
     fresh = derniere_date < job_finished_at 
     # une écriture au moins a été modifiée après la construction des données
