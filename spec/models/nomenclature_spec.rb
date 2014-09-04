@@ -165,6 +165,35 @@ describe Nomenclature do
         end
       end
       
+      describe 'fresh_values?' do
+        
+        it 'retourne faux si job_finished_at est vide' do
+          @nomen.stub(:job_finished_at).and_return nil
+          @nomen.fresh_values?.should be_false
+        end
+        
+        context 'mais quand job_finished_at est rempli' do
+          it 'retourne vrai si aucune écriture' do
+            @nomen.stub(:job_finished_at).and_return Time.current
+            ComptaLine.stub(:maximum).and_return nil
+            @nomen.fresh_values?.should be_true
+          end
+          
+          it 'vrai si le champ est postérieur à la dernière modification de ComptaLine' do
+            ComptaLine.stub(:maximum).and_return(Time.current - 1.day)
+            @nomen.stub(:job_finished_at).and_return Time.current
+            @nomen.fresh_values?.should be_true
+          end
+          
+          it 'faux si la dernière modification de ComptaLine est plus récente' do
+            ComptaLine.stub(:maximum).and_return(Time.current)
+            @nomen.stub(:job_finished_at).and_return(Time.current - 1.day)
+            @nomen.fresh_values?.should be_false
+          end
+        end
+        
+      end
+      
       context 'un folio incohérent'  do
         
         before(:each) do 

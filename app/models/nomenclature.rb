@@ -88,10 +88,21 @@ class Nomenclature < ActiveRecord::Base
     job_finished_at.present?  
   end
   
-  # indique si les rubriques ont été fraichement remplies
+  # indique si les rubriques ont été fraichement remplies en les comparant 
+  # avec la date de modification de la table des ComptaLine.
+  #
+  # Si les rubriques ne sont pas fraiches, alors remet le champ job_finished_at
+  # à nil; ce qui permettra ensuite au controller de constater plus vite que 
+  # le travail de mise à jour n'est pas encore fini. Sachant que celui-ci est 
+  # effectué en tâche de fond.
+  # 
+  # Gère le cas où il n'y a pas encore de ComptaLine
   def fresh_values?
-    return false unless job_finished_at # il n'y a pas eu encore de construction des données
-    fresh = ComptaLine.maximum(:updated_at) < job_finished_at
+    return false unless job_finished_at 
+    # donc un calcul a été fait mais est-il récent ?
+    derniere_date = ComptaLine.maximum(:update_at) 
+    return true unless derniere_date # oui car pas d'écriture
+    fresh = derniere_date < job_finished_at 
     # une écriture au moins a été modifiée après la construction des données
     # du coup on met le champ job_finished_at à nil puisque c'est l'existence
     # d'une valeur qui va définir si le travail est fini.
