@@ -97,4 +97,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.5.4RC' # Les writings ne peuvent être écrites que si l'ex est ouvert
 # FLCVERSION = '1.5.5RC' # Création d'une request en SQL pour affichage plus rapide des writings
 # FLCVERSION = '1.5.6RC' # Modification des variables d'environnement pour une install autonome
-FLCVERSION = '1.5.7RC' # Passage en delayed::job des envois de mails
+# FLCVERSION = '1.5.7RC' # Passage en delayed::job des envois de mails
+FLCVERSION = '1.6.0RC' # Passage en persistant des valeurs des rubriques

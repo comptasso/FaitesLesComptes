@@ -165,13 +165,13 @@ describe Period do
 
       it 'renvoie la liste des comptes si pas d ex précédent' do
         @p1.stub(:account_numbers).and_return %w(un deux trois)
-        @p1.stub('previous_period?').and_return false
+        @p1.stub('previous_period').and_return @p1
         @p1.two_period_account_numbers.should == %w(un deux trois)
       end
 
       it 'fait la fusion des listes de comptes si ex précédent'  do
-        @p2.should_receive(:previous_period?).and_return true
-        @p2.stub_chain(:previous_period, :account_numbers).and_return  ['bonsoir', 'salut']
+        @p2.stub(:previous_period).and_return @p1
+        @p1.stub(:account_numbers).and_return  ['bonsoir', 'salut']
         @p2.stub(:account_numbers).and_return(['alpha', 'salut'])
         @p2.two_period_account_numbers.should == ['alpha', 'bonsoir', 'salut']
       end

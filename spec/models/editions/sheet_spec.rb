@@ -68,7 +68,7 @@ describe Editions::Sheet do
 
     it 'fetch_lines' do
       bal.should_receive(:folio).and_return(@fol = double(Folio))
-      @fol.stub_chain(:root, :fetch_rubriks).and_return('une liste de rubriques')
+      @fol.stub_chain(:root, :fetch_compta_rubriks).and_return('une liste de rubriques')
       subject.fetch_lines.should == 'une liste de rubriques' 
     end
 

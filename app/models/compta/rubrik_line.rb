@@ -62,7 +62,7 @@ module Compta
     # previous_net renvoie la valeur nette pour l'exercice précédent
     # 
     def previous_net(unused_period = nil)
-      net_value(mise_en_forme(period.previous_account(account).final_sold)) rescue 0
+      net_value(mise_en_forme(period.previous_account(account).sold_at(period.close_date))) rescue 0
     end
 
     # TODO ceci a été rajouté car les nouvelles Rubrik ont besoin de period
@@ -87,14 +87,6 @@ module Compta
     def depth
       -1
     end
-
-    # utilisé pour l'édition détaillée des folios ????
-    # TODO voir si utilisé
-#    def to_csv(options = {:col_sep=>"\t"})
-#      CSV.generate(options) do |csv|
-#        csv << [@select_num, title, net, previous_net]
-#      end.gsub('.', ',')
-#    end
 
 
     protected

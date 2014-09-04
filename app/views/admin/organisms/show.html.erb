@@ -61,6 +61,11 @@
   <%=l @organism.writings.order(:updated_at).last.updated_at if @organism.writings.any? %>
 </p>
 
+<p>
+  <b>Dernière construction des données :</b>
+  <%= last_data_build(@organism) %>
+</p>
+
 
 
   </div>

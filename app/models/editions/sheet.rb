@@ -53,9 +53,9 @@ module Editions
       @period.closed? ? '' : 'Provisoire' 
     end
     
-    
+    # TODO Voir si on peut utiliser fetch_rubriks
     def fetch_lines(page_number = 1)
-      @source.folio.root.fetch_rubriks(@period)
+      @source.folio.root.fetch_compta_rubriks(@period)
     end
     
     # appelle les méthodes adéquate pour chacun des éléments de la ligne;

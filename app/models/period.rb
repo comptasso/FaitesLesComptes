@@ -156,8 +156,9 @@ class Period < ActiveRecord::Base
   # renvoie la liste des comptes pour deux exercices successifs.
   # to_set garantit l'unicité des comptes et sort retourne alors un Array
   def two_period_account_numbers
-    if previous_period?
-      previous_period.account_numbers.to_set.merge(account_numbers).sort
+    pp = previous_period
+    if pp != self # ce qui évite une double interrogation de la base.
+      pp.account_numbers.to_set.merge(account_numbers).sort
     else
       account_numbers
     end
@@ -175,8 +176,9 @@ class Period < ActiveRecord::Base
 
   # Renvoie le compte de l'exercice précédent
   def previous_account(account)
-    return nil unless previous_period?
-    previous_period.accounts.find_by_number(account.number)
+    pp = previous_period
+    return nil if pp == self # pour éviter une double requête sur la table Period
+    pp.accounts.find_by_number(account.number)
   end
 
   
@@ -486,10 +488,6 @@ class Period < ActiveRecord::Base
   
   # appelle la création du plan comptable en arrière plan 
   def create_datas 
-#    jpp = Jobs::PeriodPlan.new(organism.database_name, id)
-#    jpp.before(nil)
-#    jpp.perform    
-    
     Delayed::Job.enqueue Jobs::PeriodPlan.new(organism.database_name, id)
   end
   

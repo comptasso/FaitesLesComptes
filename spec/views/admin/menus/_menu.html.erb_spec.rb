@@ -29,6 +29,7 @@ describe "admin/menus/_menu.html.erb" do
       cu.stub(:organisms_with_room).and_return []
       o.stub(:periods).and_return []
       o.stub('max_open_periods?').and_return false
+      o.stub(:nomenclature).and_return(double(Nomenclature, :job_finished_at=>DateTime.civil(2014,6,6)))
       
     end
     
@@ -46,8 +47,8 @@ describe "admin/menus/_menu.html.erb" do
         page.find('a', text:'Adhérents')
       end
     
-      it 'qui mène à Adherent::Bridge.show' do
-         pending
+      it 'qui mène à Adherent::Bridge.members' do
+        rendered.should have_selector('a[href="/adherent/members"]')
       end
     
     end

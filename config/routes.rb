@@ -32,13 +32,7 @@ Faitesvoscomptes::Application.routes.draw do
   ##### ----------------- namespace COMPTA -------------------------
 
   namespace :compta do
-    #    resources :users do
-    #      resources :rooms # TODO voir si utilisé
-    #    end
-
-    # TODO simplifier car on n'utilise que l'action show (et probablement 
-    # même plus rien maintenant de la ressource rooms
-    resources :rooms
+    
     resources :organisms do
       resources :periods do
         member do
@@ -65,6 +59,7 @@ Faitesvoscomptes::Application.routes.draw do
         get :resultats
         get :benevolats
         get :liasse
+        get :values_ready
       end
     end
     

@@ -72,6 +72,44 @@ class Nomenclature < ActiveRecord::Base
     end
   end
   
+  # Méthode remplissant les valeurs des rubriques pour l'exercice donné
+  # avec les valeurs bruts, amortissement, net et previous_net.
+  # 
+  #  Quand on démarre l'appel au job, on met le champ job_finished_at à nil 
+  #
+  def fill_rubrik_with_values(period)
+    Delayed::Job.enqueue Jobs::NomenclatureFillRubriks.new(organism.database_name,
+      period.id)
+    update_attribute(:job_finished_at, nil) 
+  end
+  
+  # Indique si les valaurs des rubriques ont été remplies
+  def rubrik_values_filled?
+    job_finished_at.present?  
+  end
+  
+  # indique si les rubriques ont été fraichement remplies en les comparant 
+  # avec la date de modification de la table des ComptaLine.
+  #
+  # Si les rubriques ne sont pas fraiches, alors remet le champ job_finished_at
+  # à nil; ce qui permettra ensuite au controller de constater plus vite que 
+  # le travail de mise à jour n'est pas encore fini. Sachant que celui-ci est 
+  # effectué en tâche de fond.
+  # 
+  # Gère le cas où il n'y a pas encore de ComptaLine
+  def fresh_values?
+    return false unless job_finished_at 
+    # donc un calcul a été fait mais est-il récent ?
+    derniere_date = ComptaLine.maximum(:updated_at) 
+    return true unless derniere_date # oui car pas d'écriture
+    fresh = derniere_date < job_finished_at 
+    # une écriture au moins a été modifiée après la construction des données
+    # du coup on met le champ job_finished_at à nil puisque c'est l'existence
+    # d'une valeur qui va définir si le travail est fini.
+    update_attribute(:job_finished_at, nil) unless fresh
+    fresh
+  end
+  
   
  
   # crée une instance de Compta::Nomenclature pour l'exercice demandé;
@@ -122,7 +160,7 @@ class Nomenclature < ActiveRecord::Base
   end
   
   # vérifie que nomenclature est coherent pour une période donnée en 
-  # créant Compta::Nomenclature et en appelant valid sur cet objet
+  # créant Compta::Nomenclature et en appelant valid? sur cet objet
   # Puis recopie les erreurs s'il y en a.
   # 
   # Non protégé car appelé par Period pour la persistence de cette réponse

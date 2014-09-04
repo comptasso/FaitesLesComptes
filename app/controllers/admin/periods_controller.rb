@@ -50,6 +50,27 @@ class Admin::PeriodsController < Admin::ApplicationController
   # POST /periods
   # POST /periods.json
   # le controller remplit start_date s'il y a un exercice précédent
+  #
+  # La création d'un exercice utilise le javascript (grâce à remote:true du 
+  # formulaire)
+  # 
+  # Si le save réussit, il y a alors l'appel de
+  # create_datas qui est une tâche en arrière plan. Lorsqu'elle est finie le champ 
+  # prepared du record Period est rempli avec true. 
+  # 
+  # Sur le plan de l'interface UI, il y a deux choses qui sont faites : 
+  # Tout d'abord, le fait de cliquer sur le formulaire dont l'id est #new_period
+  # déclenche l'apparition d'une zone grise et le défilement de 3 messages
+  # successifs (fichier admin/period.js).
+  # 
+  # D'autre part, l'action s'achève avec l'appel de create.js.erb
+  # qui utilise smartupdater pour interroger toutes les 2 secondes la base 
+  # afin de voir si Period est prêt.
+  # 
+  # Voir l'action #prepare qui renvoie vrai ou faux, ce qui permet alors de 
+  # rafraichir la page.
+  # 
+  #
   def create
     # on fixe la date de départ s'il existe déjà un exercice
     # TODO déplacer cette logique dans le modèle en faisant un 
@@ -78,7 +99,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   
   
   # indique si l'exercice a fini d'être préparé par le DelayedJob lancé 
-  # par create_datas
+  # par create_datas. Voir l'action #create pour plus de détail
   def prepared 
     flash[:notice] = flash[:notice]
     period = Period.find(params[:id])

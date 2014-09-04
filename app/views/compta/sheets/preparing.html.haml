@@ -1,0 +1,13 @@
+=content_for :menu do
+  = icon_to 'retour.png', :back
+  
+.alert.notice
+  %a.close(data-dismiss='alert') x
+  %strong
+    %em#sheets_message_info Recalcul des valeurs... 
+    %em#message_spinner 
+    
+
+.champ
+  %h3 Etats financiers
+

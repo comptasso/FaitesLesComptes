@@ -14,7 +14,7 @@ describe Compta::RubrikLine do
   let(:p) {mock_model(Period, :close_date=>Date.today.end_of_year, 'previous_period?'=>true, previous_period:pp, :previous_account=>bcc)}
   let(:acc) {mock_model(Account, :sold_at=>-120, number:'201', title:'Un compte')}
   # TODO il faudrait utiliser ici aussi sold_at plutôt que final_sold pour gagner en rapidité.
-  let(:bcc) {mock_model(Account, :final_sold=>-14)}
+  let(:bcc) {mock_model(Account, :sold_at=>-14)}
 
   before(:each) do
     p.stub_chain(:accounts, :find_by_number).and_return acc

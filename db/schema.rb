@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140609143857) do
+ActiveRecord::Schema.define(:version => 20140831153404) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -282,8 +282,9 @@ ActiveRecord::Schema.define(:version => 20140609143857) do
 
   create_table "nomenclatures", :force => true do |t|
     t.integer  "organism_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.datetime "job_finished_at"
   end
 
   create_table "organisms", :force => true do |t|
@@ -319,9 +320,13 @@ ActiveRecord::Schema.define(:version => 20140609143857) do
     t.integer  "parent_id"
     t.integer  "folio_id"
     t.integer  "position"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.boolean  "is_leaf",    :default => false
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
+    t.boolean  "is_leaf",                                      :default => false
+    t.integer  "period_id"
+    t.decimal  "brut",          :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "amortissement", :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "previous_net",  :precision => 10, :scale => 2, :default => 0.0
   end
 
   create_table "sectors", :force => true do |t|

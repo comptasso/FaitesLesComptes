@@ -1,8 +1,8 @@
 -# partial pour afficher une rubriks_lines
-- totals = actif_rubriks_line.totals
+- values = actif_rubriks_line.totals
 %tr{:class=>"depth_#{actif_rubriks_line.depth}" }
-  %td= totals[0]
-  %td.numeric= debit_credit totals[1]
-  %td.numeric= debit_credit totals[2]
-  %td.numeric= debit_credit totals[3]
-  %td.numeric= debit_credit totals[4]
+  %td= values[0]
+  %td.numeric= debit_credit values[1]
+  %td.numeric= debit_credit values[2]
+  %td.numeric= debit_credit values[3]
+  %td.numeric= debit_credit values[4]

@@ -41,18 +41,14 @@ module Compta
     
     protected
     
-    # lines renvoie les rubrik_lines qui construisent la rubrique
-    # lines est en fait identique à la méthode protected all_lines
-    # sauf pour la Rubrik résultat (le compte 12).
-    #
-    # Le but est d'avoir une seule ligne pour cette Rubrik résultat alors
-    # que ses valeurs sont calculées à partir du compte 12 mais aussi de tout
-    # les comptes 6 et 7.
-    #
+    
     def lines
       @lines ||= set_lines
     end
     
+    # construit les lignes qui sont soit des lignes liées à des comptes
+    # si la rubrik est une feuille de l'arborescence, 
+    # soit une collection de sous rubriks.
     def set_lines
       if rubrik.leaf? 
         return all_lines
@@ -61,6 +57,7 @@ module Compta
       end
     end
     
+    # Récupère toutes les lignes dépendant d'une rubrik feuille de l'arborescence
     def all_lines
       @all_lines ||= Compta::RubrikParser.new(period, rubrik.folio.sens, rubrik.numeros).rubrik_lines
     end

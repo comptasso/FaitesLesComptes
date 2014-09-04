@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
  jQuery(function () {
-   $('#new_period')
+   $('#new_period') //id du formulaire de création d'un exercice
     .bind("ajax:beforeSend", function(evt, xhr, settings){
       $('.inner-champ').block({ message: '<h4 id="message-d-attente">Juste un instant...</h4>' });
       setTimeout(function() {

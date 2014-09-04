@@ -105,7 +105,7 @@ describe Compta::Sheet do
 
   it 'sheet doit donner le total de ses lignes', wip:true do
     cs =  Compta::Sheet.new(@p, @folio)
-    cs.folio.root.totals(@p).should == ['TOTAL ACTIF', 1310, 5.0, 1305 ,0 ]
+    cs.folio.root.to_compta_rubrik(@p).totals.should == ['TOTAL ACTIF', 1310, 5.0, 1305 ,0 ]
      
   end
   
