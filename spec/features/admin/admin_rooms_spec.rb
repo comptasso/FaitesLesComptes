@@ -127,8 +127,8 @@ describe "admin rooms" do
         #      page.should have_content('ASSO TEST')
         elem = find_by_id('admin_organisms_menu')
         node = elem.native
-        puts node.inspect
-        puts node.html
+        # puts node.inspect
+        # puts node.html
         #find_by_id('admin_organisms_menu').find('ul').all('li').count.should == 3 
         # puts find('ul.dropdown-menu').children #.count.should == 2 #have(2).element
         visit admin_room_path(@clone_room)

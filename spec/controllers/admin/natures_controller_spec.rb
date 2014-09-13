@@ -38,7 +38,7 @@ describe Admin::NaturesController do
   before(:each) do
     minimal_instances
     @p.stub(:natures).and_return(@a = double(Arel))
-    @o.stub(:income_books).and_return [1,2]
+    @o.stub(:income_books).and_return [mock_model(IncomeBook),2]
     @o.stub(:outcome_books).and_return [3,4]
   end
 
@@ -100,7 +100,7 @@ describe Admin::NaturesController do
     describe "with valid params" do
       it "creates a new nature" do
           @a.should_receive(:new).with(valid_attributes).and_return(@n = mock_model(Nature).as_new_record)
-          @n.stub(:save)
+          @n.stub(:save).and_return true
           post :create, {:period_id=>@p.to_param, :nature => valid_attributes}, valid_session
       end
 
@@ -125,6 +125,7 @@ describe Admin::NaturesController do
       it "re-renders the 'new' template" do
         @a.stub(:new).and_return(nat1)
         nat1.stub(:save).and_return(false)
+        nat1.should_receive(:book_id=).and_return
         post :create, {:period_id=>@p.to_param, :nature => valid_attributes}, valid_session
         response.should render_template("new")
       end

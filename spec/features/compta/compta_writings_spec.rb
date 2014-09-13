@@ -10,7 +10,7 @@ end
 describe "Writings" do
   include OrganismFixtureBis
   
-  def create_od_writing(montant = 1, date= Date.today)
+  def create_od_writing(montant = 1, date= Date.today) 
     compte1 = @p.accounts.classe_7.first
     compte2 = @p.accounts.classe_7.first
     
@@ -19,7 +19,7 @@ describe "Writings" do
           '1'=>{account_id:compte2.id, debit:montant}
         }
       })
-    puts ecriture.errors.messages unless ecriture.valid?
+    # puts ecriture.errors.messages unless ecriture.valid?
     ecriture.save!
     ecriture
   end

@@ -15,7 +15,7 @@ describe Admin::OrganismsHelper do
     
     it 'renvoie la date et l heure autrement' do
       @nomen.job_finished_at = Time.mktime(1955,6,6, 11, 10)
-      last_data_build(o).should == 'il y a environ 59 ans'
+      last_data_build(o).should == 'il y a plus de 59 ans'
     end
     
     

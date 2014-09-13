@@ -144,8 +144,6 @@ describe ImportedBel do
         
         w = @od.transfers.new(subject.to_write)
         w.should be_an_instance_of(Transfer)
-#        puts w.compta_line_from.inspect
-#        puts w.compta_line_to.inspect
         puts w.errors.messages unless w.valid?
         
         expect {w.save!}.not_to raise_error

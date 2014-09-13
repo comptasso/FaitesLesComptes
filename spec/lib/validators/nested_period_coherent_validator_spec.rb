@@ -39,7 +39,7 @@ describe 'PeriodCoherentValidator' do
       close_date:next_year.end_of_year, open?:true)
     @w.stub(:period).and_return(@p2)
     @w.should_not be_valid
-    puts @w.errors.messages
+    # puts @w.errors.messages
     @w.should have(4).errors_on(:date) # une incohérence pour la date, une pour la
     # nature et une pour chacun des comptes
   end
