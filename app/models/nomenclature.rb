@@ -125,84 +125,12 @@ class Nomenclature < ActiveRecord::Base
     Compta::Sheet.new(period, folio) 
   end
   
-  # vérifie la validité de la nomenclature, laquelle repose sur l'existence 
-  # de folios actif, passif et resultat.
-  # 
-  # Par ailleurs, chacun des folios doit être lui même valide.
-  # 
-  # Enfin on controle que toutes les Compta::Nomenclature sont coherent
-  # pour tous les exercices de l'organism
-  def check_coherent
-    errors.add(:actif, 'Actif est un folio obligatoire') unless actif
-    errors.add(:passif, 'Passif est un folio obligatoire') unless passif
-    errors.add(:resultat, 'Resultat est un folio obligatoire') unless resultat
-    
-    if actif && passif
-      bilan_balanced?  # tous les comptes C doivent avoir un compte D correspondant
-      bilan_no_doublon? 
-    end
-    # reprise des validations propres aux folios
-    # ce qui comprend le fait qu'un folio resultat ne doit avoir que des comptes 6 et 7
-    # et qu'un folio benevolat ne peut avoir que des comptes 8
-    folios.each do |f|
-      errors.add(:folio, "Le folio #{f.name} indique une incohérence : #{f.errors.full_messages}") unless f.coherent?
-    end
-    
-    organism.periods.opened.each { |p| period_coherent?(p) }
-    
-  end
   
   # indique si une nomenclature est cohérente et donc utilisable pour produire des
-  # états comptables
+  # états comptables.
+  # Utilité dans SheetsController pour vérifier que la nomenclature est cohérente
   def coherent?
-    check_coherent
-    errors.any? ? false : true
-  end
-  
-  # vérifie que nomenclature est coherent pour une période donnée en 
-  # créant Compta::Nomenclature et en appelant valid? sur cet objet
-  # Puis recopie les erreurs s'il y en a.
-  # 
-  # Non protégé car appelé par Period pour la persistence de cette réponse
-  #
-  def period_coherent?(period)
-    cn = compta_nomenclature(period)
-    validity = cn.valid?
-    period.update_attribute(:nomenclature_ok, validity)
-    cn.errors.each { |k, err| errors.add(k, err) } unless validity
-    validity
-  end  
-  
-   protected
-  # sert à vérifier que si on compte C est pris, on trouve également un compte D
-  # et vice_versa.
-  # Ajoute une erreur à :bilan si c'est le cas avec comme message la liste des comptes
-  # qui n'ont pas de correspondant
-  def bilan_balanced?
-    return false unless actif && passif
-    array_numbers = actif.rough_instructions + passif.rough_instructions
-      
-    # maintenant on crée une liste des comptes D et une liste des comptes C
-    numbers_d = array_numbers.map {|n| $1 if n =~ /^(\d*)D$/}.compact.sort
-    numbers_c = array_numbers.map {|n| $1 if n =~ /^(\d*)C$/}.compact.sort
-    
-    if numbers_d == numbers_c
-      return true
-    else
-      d_no_c = numbers_d.reject {|n| n.in? numbers_c}
-      c_no_d = numbers_c.reject {|n| n.in? numbers_d}
-        
-      self.errors[:bilan] << " : comptes D sans comptes C correspondant (#{d_no_c.join(', ')})" unless d_no_c.empty?
-      self.errors[:bilan] << " : comptes C sans comptes D correspondant (#{c_no_d.join(', ')})" unless c_no_d.empty?
-        
-      return false
-    end
-  end
-      
-  def bilan_no_doublon?
-    return false unless actif && passif
-    array_numbers = actif.rough_instructions + passif.rough_instructions
-    errors.add(:bilan, 'Une instruction apparait deux fois dans la construction du bilan') unless array_numbers.uniq.size == array_numbers.size
+    Utilities::NomenclatureChecker.new(self).valid?
   end
   
   

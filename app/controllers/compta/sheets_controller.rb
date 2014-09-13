@@ -138,11 +138,7 @@ class Compta::SheetsController < Compta::ApplicationController
   
   
 
-  
-
   # appelé par before_filter pour s'assurer que la nomenclature est valide
-  # TODO la logique devrait être de rendre cette persistence dans le modèle 
-  # Nomenclature
   def check_nomenclature
     @nomenclature = @organism.nomenclature
     if !@period.nomenclature_ok

@@ -492,14 +492,11 @@ class Period < ActiveRecord::Base
   end
   
   # Destiné à rendre persistant la vérification que la nomenclature est OK, ceci 
-  # pour éviter d'avoir à faire cette vérification à chaque usage de la nomenclature
-  # 
-  # period_coherent? enregistre son resultat dans le champ de nomenclature_ok
-  # TODO nomenclature.period_coherent devrait juste répondre true ou false
-  # laissant à period le soin de savoir ce qu'il fait de cette info.
-  # 
+  # pour éviter d'avoir à faire cette vérification à chaque usage de la nomenclature.
+  # Ce contrôle est délégué à une classe interface entre Nomenclature et 
+  # Period, et aussi Compta::Nomenclature
   def check_nomenclature
-    organism.nomenclature.period_coherent?(self)
+    Utilities::NomenclatureChecker.period_coherent?(self)
   end
 
 
