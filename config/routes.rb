@@ -77,6 +77,8 @@ Faitesvoscomptes::Application.routes.draw do
         concerns :exportable 
       end
       
+      resource :analytical_balance
+      
       
       
       resources :accounts 

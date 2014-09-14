@@ -1,0 +1,11 @@
+$('div.modal-body').html('<%= j render partial:'modal_body_form_analytical_balance' %>');
+
+
+$('.input_date_picker').datepicker(
+    {
+        dateFormat: 'dd/mm/yy',
+        minDate: $(this).attr('data-jcmin'),
+        maxDate: $(this).attr('data-jcmax')
+    }
+);
+

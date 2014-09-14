@@ -55,16 +55,29 @@ class Destination < ActiveRecord::Base
   # Renvoie une collection de comptes avec le libellé, et les totaux débit
   # et crédit qui sont accessibles avec les méthodes t_debit et t_credit
   def ab_lines(period_id, from_date, to_date)
-    Account.joins(:compta_lines=>:writing).
-      select([:number, :title, "SUM(debit) AS t_debit", "SUM(credit) AS t_credit"]).
-        where('destination_id = ? AND period_id = ? AND date >= ? AND date <= ?',
-        id, period_id, from_date, to_date).
-        group(:title,:number)
-    
+    {lines:lines(period_id, from_date, to_date), debit:debit, credit:credit}
   end
   
   
   private
+  
+  def lines(period_id, from_date, to_date)
+    @lines ||= Account.joins(:compta_lines=>:writing).
+      select([:number, :title, "SUM(debit) AS t_debit", "SUM(credit) AS t_credit"]).
+        where('destination_id = ? AND period_id = ? AND date >= ? AND date <= ?',
+        id, period_id, from_date, to_date).
+        group(:title,:number)
+  end
+  
+  def debit
+    @lines.sum {|l| l.t_debit.to_d}
+  end
+  
+  def credit
+    @lines.sum {|l| l.t_credit.to_d}
+  end
+  
+  
 
   def ensure_no_lines
     if compta_lines.empty?

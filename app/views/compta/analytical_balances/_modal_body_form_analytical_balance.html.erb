@@ -1,0 +1,22 @@
+<%= simple_form_for @anabal, :url=>compta_period_balance_path(@period, @anabal),
+  :method=>:post, :remote=>true,
+  :html=> {class: 'form-horizontal inner-champ'} do |anabal_f| %>
+
+    <%= anabal_f.error_notification %>
+
+    <%= anabal_f.input :from_date_picker, 
+      :label=> 'Date début',
+      input_html: {class: 'span4', date_min:@period.start_date, date_max:@period.close_date},
+      :required => true, :as=>:date_picker %>
+     
+    <%= anabal_f.input :to_date_picker,
+      :label=> 'Date fin',
+      input_html: {class: 'span4', date_min:@period.start_date, date_max:@period.close_date},
+      :required => true, :as=>:date_picker %>
+
+    <div class="form-actions">
+       <%=  anabal_f.button :submit,
+         'Afficher', id: 'new_anabal_button', class: "btn-primary span6" %>
+    </div>
+
+<% end %>

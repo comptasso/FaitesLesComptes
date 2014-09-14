@@ -1,0 +1,13 @@
+= content_for :menu do
+  %a(data-toggle="modal" class="icon_menu" href="#modal_form_analytical_balance")
+    = image_tag('icones/nouveau.png')
+  = export_icons({compta_analytical_balance:@params_analytical_balance})
+
+
+.champ
+  %h3
+    Balance analytique 
+    = "du #{l @anabal.from_date} au #{l @anabal.to_date}"
+  = render partial: 'modal_form_analytical_balance'
+
+  #anabal_table= render partial: 'analytical_balance'

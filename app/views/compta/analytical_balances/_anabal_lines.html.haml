@@ -1,0 +1,12 @@
+- @anabal.lines.each do |k, ab_lines|
+  %tr.destination
+    %th(colspan="3")= k
+    %th.numeric= debit_credit(ab_lines[:debit])
+    %th.numeric= debit_credit(ab_lines[:credit])
+  - ab_lines[:lines].each do |l|
+    %tr
+      %td
+      %td= l.number
+      %td= l.title
+      %td.numeric= debit_credit(l.t_debit.to_d)
+      %td.numeric= debit_credit(l.t_credit.to_d)

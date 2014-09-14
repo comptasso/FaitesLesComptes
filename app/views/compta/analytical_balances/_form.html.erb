@@ -1,0 +1,27 @@
+<div class="inputs row-fluid">
+
+<%= simple_form_for @anabal,
+  :url=>compta_period_analytical_balance_path(@period),
+  :html=> {class: 'form-inline'} do |anabal_f| %>
+ 
+    
+     <%= anabal_f.error_notification %>
+    <div class="row-fluid">
+      <div class="span12">
+    <%= anabal_f.input :from_date_picker,  wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+    <%= anabal_f.input :to_date_picker,  wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+      </div>
+      </div>
+
+  
+     
+ <div class="row-fluid">
+         <div class="span12">
+          <div class="form-actions offset1">
+            <%=  anabal_f.button :submit, 'Afficher',
+              id: 'new_anabal_button', class: "btn-primary span2 with_spinner" %>
+            </div>
+         </div>
+       </div>
+<% end %>
+</div>

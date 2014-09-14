@@ -1,0 +1,20 @@
+
+
+%table(cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-condensed analytical_balance")
+  %thead
+    
+    %tr
+      %th.pc20 Activité
+      %th.pc10 Numéro
+      %th Libellé
+      %th.pc10.numeric Débit
+      %th.pc10.numeric Crédit
+          
+  %tbody
+    = render partial:'anabal_lines'
+
+  %tfoot#table_foot
+    %tr.total#totaux
+      %th.numeric(colspan="3" rowspan="1") Totaux
+      %th.numeric= debit_credit(@anabal.total_credit)
+      %th.numeric= debit_credit(@anabal.total_debit)
