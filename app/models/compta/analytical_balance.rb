@@ -61,7 +61,8 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
     destinations.each do |d|
       matable[d.name] = d.ab_lines(period_id, from_date, to_date)
     end
-    matable['Sans Activité']={lines:orphan_lines, debit:orphan_debit, credit:orphan_credit}
+    matable['Sans Activité']={lines:orphan_lines, sector_name:': aucun', 
+      debit:orphan_debit, credit:orphan_credit}
     matable
   end
   

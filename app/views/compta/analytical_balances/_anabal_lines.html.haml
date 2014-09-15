@@ -1,6 +1,6 @@
 - @anabal.lines.each do |k, ab_lines|
   %tr.destination
-    %th(colspan="3")= k
+    %th(colspan="3")= destination_and_sector_name(k, ab_lines[:sector_name])
     %th.numeric= debit_credit(ab_lines[:debit])
     %th.numeric= debit_credit(ab_lines[:credit])
   - ab_lines[:lines].each do |l|

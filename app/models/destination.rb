@@ -55,7 +55,10 @@ class Destination < ActiveRecord::Base
   # Renvoie une collection de comptes avec le libellé, et les totaux débit
   # et crédit qui sont accessibles avec les méthodes t_debit et t_credit
   def ab_lines(period_id, from_date, to_date)
-    {lines:lines(period_id, from_date, to_date), debit:debit, credit:credit}
+    {lines:lines(period_id, from_date, to_date),
+      sector_name:sector.name,
+      debit:debit,
+      credit:credit}
   end
   
   
