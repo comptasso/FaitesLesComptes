@@ -44,11 +44,11 @@ class Destination < ActiveRecord::Base
     exercice = organism.find_period(date)
     raise 'Aucun exercice trouvé pour cette date' unless exercice
     BigDecimal.new(Writing.sum(sens,
-      :conditions=>['date <= ? AND destination_id = ? AND accounts.period_id = ?', date, id, exercice.id],
-      :joins=>[:compta_lines=>:account]))
+        :conditions=>['date <= ? AND destination_id = ? AND accounts.period_id = ?', date, id, exercice.id],
+        :joins=>[:compta_lines=>:account]))
   end
   
-  # Pour AnalyticalBalance lines. 
+  # ab pour AnalyticalBalance lines. 
   # Donne les totaux débit et crédit des comptes qui ont eu des mouvements
   # à une date donnée.
   # 
@@ -61,15 +61,35 @@ class Destination < ActiveRecord::Base
       credit:credit}
   end
   
+  # pour l'édition des pdf avec des sous totaux par destination
+  # on utilise une table à 4 colonnes 
+  def ab_lines_with_total(period_id, from_date, to_date)
+    lwt = []
+    lwt << title_line
+    lines(period_id, from_date, to_date).each do |l|
+      lwt << {number:l.number, title:l.title, debit:l.t_debit, credit:l.t_credit }
+    end
+    lwt.push(total_line)
+    lwt.flatten
+  end
   
-  private
+  
+  protected
+  
+  def title_line
+    {number:'', title:"#{name} (#{sector.name})", debit:'', credit:''}  
+  end
+  
+  def total_line
+    {number:'', title:"Total #{name}", debit:debit, credit:credit}  
+  end
   
   def lines(period_id, from_date, to_date)
     @lines ||= Account.joins(:compta_lines=>:writing).
       select([:number, :title, "SUM(debit) AS t_debit", "SUM(credit) AS t_credit"]).
-        where('destination_id = ? AND period_id = ? AND date >= ? AND date <= ?',
-        id, period_id, from_date, to_date).
-        group(:title,:number)
+      where('destination_id = ? AND period_id = ? AND date >= ? AND date <= ?',
+      id, period_id, from_date, to_date).
+      group(:title,:number)
   end
   
   def debit
