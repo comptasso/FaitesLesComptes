@@ -68,6 +68,21 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
     end
   end
   
+  # on crée la collection, puis on génère la classe 
+  def to_pdf
+    Editions::AnalyticalBalance.new(self).render
+  end
+  
+  def collection_for_pdf
+    collection = destinations.map do |d|
+      d.ab_lines_with_total(period_id, from_date, to_date)
+    end
+    collection << {number:'', title:"Sans activité", debit:'', credit:''}
+    collection << orphan_lines_to_h
+    collection << {number:'', title:"Total sans activité", debit:orphan_debit, credit:orphan_credit}
+    collection.flatten
+  end
+  
   protected
   
   def collect_lines
@@ -97,6 +112,12 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
   def orphan_credit
     orphan_lines.sum {|l| l.t_credit.to_d}
   end
+  
+  def orphan_lines_to_h
+    orphan_lines.map {|ol| {number:ol.number, title:ol.title, debit:ol.t_debit, credit:ol.t_credit} } 
+  end
+  
+  
 end
 
 
