@@ -29,7 +29,8 @@ class Compta::AnalyticalBalancesController < Compta::ApplicationController
         format.pdf { send_data @anabal.to_pdf, filename:export_filename(@anabal, :pdf)}
       end
     else
-      redirect_to new_compta_period_balance_url(@period)
+      puts @anabal.errors.messages
+      redirect_to new_compta_period_analytical_balance_url(@period)
     
     end
   end

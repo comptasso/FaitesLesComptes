@@ -7,7 +7,7 @@
 #
 # La dernière destination regroupe les lignes qui n'ont pas de destinations
 class Compta::AnalyticalBalance < ActiveRecord::Base
-  
+  include Utilities::ToCsv # apporte to_xls dès lors que to_csv est défini
   include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
   
   def self.columns() @columns ||= []; end
@@ -25,13 +25,14 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
   attr_accessible :from_date, :to_date,  
     :period_id, :from_date_picker, :to_date_picker
   
-   pick_date_for :from_date, :to_date # donne les méthodes from_date_picker 
+  pick_date_for :from_date, :to_date # donne les méthodes from_date_picker 
   # et to_date_picker utilisées par le input as:date_picker 
    
-   belongs_to :period
+  belongs_to :period
    
-   validates :from_date, :to_date, :within_period=>true
-   validates :from_date, :to_date, :period_id, :presence=>true
+  validates :from_date, :to_date, :period_id, :presence=>true
+  validates :from_date, :to_date, :within_period=>true
+   
    
   
   def self.with_default_values(exercice)
@@ -54,6 +55,19 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
     lines.sum {|k, v| v[:credit]}
   end
   
+  def to_csv(options = {col_sep:"\t"})
+    CSV.generate(options) do |csv|
+      csv << ['Balance analytique','' ,'' ,'', "Du #{I18n.l(from_date)}", "Au #{I18n.l(to_date)}"]
+      csv << %w(Secteur Activité  Numéro Libellé Débit Crédit)
+      lines.each do |dest_name, ls|
+        ls[:lines].each do |l|  
+          csv << [ls[:sector_name], dest_name, l.number, l.title, l.t_debit, l.t_credit]
+        end
+      end
+        
+    end
+  end
+  
   protected
   
   def collect_lines
@@ -61,7 +75,7 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
     destinations.each do |d|
       matable[d.name] = d.ab_lines(period_id, from_date, to_date)
     end
-    matable['Sans Activité']={lines:orphan_lines, sector_name:': aucun', 
+    matable['Sans Activité']={lines:orphan_lines, sector_name:'', 
       debit:orphan_debit, credit:orphan_credit}
     matable
   end
@@ -71,9 +85,9 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
   def orphan_lines
     @orphan_lines ||= Account.joins(:compta_lines=>:writing).
       select([:number, :title, "SUM(debit) AS t_debit", "SUM(credit) AS t_credit"]).
-        where('destination_id IS NULL AND period_id = ? AND date >= ? AND date <= ?',
-        period_id, from_date, to_date).
-        group(:title,:number)
+      where('destination_id IS NULL AND period_id = ? AND date >= ? AND date <= ?',
+      period_id, from_date, to_date).
+      group(:title,:number)
   end
   
   def orphan_debit
