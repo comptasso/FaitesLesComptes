@@ -73,28 +73,7 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
     Editions::AnalyticalBalance.new(self).render
   end
   
-  def collection_for_pdf
-    collection = destinations.map do |d|
-      d.ab_lines_with_total(period_id, from_date, to_date)
-    end
-    collection << {number:'', title:"Sans activité", debit:'', credit:''}
-    collection << orphan_lines_to_h
-    collection << {number:'', title:"Total sans activité", debit:orphan_debit, credit:orphan_credit}
-    collection.flatten
-  end
-  
-  protected
-  
-  def collect_lines
-    matable = {}
-    destinations.each do |d|
-      matable[d.name] = d.ab_lines(period_id, from_date, to_date)
-    end
-    matable['Sans Activité']={lines:orphan_lines, sector_name:'', 
-      debit:orphan_debit, credit:orphan_credit}
-    matable
-  end
-  
+    
   # Récupère une table de comptes pour les compta_lines
   # qui n'ont pas de destination
   def orphan_lines
@@ -113,8 +92,16 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
     orphan_lines.sum {|l| l.t_credit.to_d}
   end
   
-  def orphan_lines_to_h
-    orphan_lines.map {|ol| {number:ol.number, title:ol.title, debit:ol.t_debit, credit:ol.t_credit} } 
+  protected
+  
+  def collect_lines
+    matable = {}
+    destinations.each do |d|
+      matable[d.name] = d.ab_lines(period_id, from_date, to_date)
+    end
+    matable['Sans Activité']={lines:orphan_lines, sector_name:'', 
+      debit:orphan_debit, credit:orphan_credit}
+    matable
   end
   
   

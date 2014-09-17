@@ -1,5 +1,7 @@
 # coding: utf-8
 
+require 'pdf_document/table_line'
+
 module PdfDocument
 
   # TODO : on devrait se passer de document car page connait document
@@ -74,9 +76,14 @@ module PdfDocument
       r.insert(0, 'Totaux')
     end
 
-    # appelle les méthodes adéquate pour chacun des éléments de la lignes
+    # demande au document de préparer la ligne
     def prepare_line(line)
+      if line.is_a?(PdfDocument::TableLine)
+        line.prepared_values
+      else
+      Rails.logger.warn 'L\'appel d\'une méthode prepare_line du document est dépréciéé. Il faut utiliser des TableLine'
       document.prepare_line(line)
+      end
     end
 
     
