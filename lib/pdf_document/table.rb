@@ -48,7 +48,7 @@ module PdfDocument
 
     # lines renvoie un array
     def prepared_lines
-        @prepared_lines ||= lines.collect {|l| prepare_line(l)} if lines
+      @prepared_lines ||= lines.collect {|l| prepare_line(l)} if lines
     end
 
     # renvoie un array des profondeur de lignes. Utilisé par rubriks.pdf.prawn pour
@@ -81,8 +81,8 @@ module PdfDocument
       if line.is_a?(PdfDocument::TableLine)
         line.prepared_values
       else
-      Rails.logger.warn 'L\'appel d\'une méthode prepare_line du document est dépréciéé. Il faut utiliser des TableLine'
-      document.prepare_line(line)
+        Rails.logger.warn 'L\'appel d\'une méthode prepare_line du document est dépréciéé. Il faut utiliser des TableLine'
+        document.prepare_line(line)
       end
     end
 
@@ -97,16 +97,26 @@ module PdfDocument
     # Pour que les totaux fonctionnent sur les chiffres français,
     # il faut enlever les espaces et remplacer les virgules par des
     # points.
-    #
+    # TODO supprimer le if lorsqu'on aura passé toutes les éditions 
+    # avec des PdfDocument::TableLine
+    # 
     # N'additionne que s'il y a une valeur
     # ce qui permet d'avoir des valeurs vides dans les colonnes
     # 
     # Retourne 0 s'il n'y a aucune ligne
     def totalize_column(i)
-      prepared_lines.each.sum do |l|
-           french_to_f(l[i])
-        end rescue 0
-     end
+      total = 0
+      prepared_lines.each_with_index do |l,j|
+        if lines[j].is_a? PdfDocument::TableLine
+          
+          total += lines[j].options[:subtotal] ? 0 : french_to_f(l[i])
+        else
+          total += french_to_f(l[i])
+        end
+      end 
+      total.to_d.round(2)
+    
+    end
 
 
     # Transforme un string représentant un nombre en format français, par exemple

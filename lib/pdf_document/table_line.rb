@@ -23,7 +23,7 @@ module PdfDocument
   # 
   class TableLine 
     
-    attr_reader :values, :types, :depth
+    attr_reader :values, :types, :options, :depth
     
     def initialize(values, types, options={})
       @values = values

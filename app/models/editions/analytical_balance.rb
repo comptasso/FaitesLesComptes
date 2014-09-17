@@ -62,7 +62,7 @@ module Editions
       dest.lines(period_id, from_date, to_date).each do |l|
         lwt << {number:l.number, title:l.title, debit:l.t_debit, credit:l.t_credit }
       end
-      lwt.insert(0, title_line(dest))
+      lwt.insert(0, title_line(dest)) 
       lwt.flatten
     end
    

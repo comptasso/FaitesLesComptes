@@ -52,8 +52,42 @@ describe PdfDocument::Table do
   end
 
   it 'table sait faire son total' do
+    @table.stub(:lines).and_return 1.upto(20).collect { |j| ['bonjou', j, -j, j/4.0]}
     @table.stub(:prepared_lines).and_return 1.upto(20).collect {|i| ['bonjour', i, -i, i/4.0]}
     @table.total_line.should == ['Totaux', 210, -210, 52.5]
+  end
+  
+  it 'table sait aussi totaliser avec des TableLine' do
+    @table.stub(:lines).and_return 1.upto(20).
+      collect { |j| PdfDocument::TableLine.new(
+        ['601', j, 50, 10.10],
+        %w(String Numeric Numeric Numeric)) }
+    @table.total_line.should == ['Totaux', 210, 1000, 10.10*20]
+    
+    
+  end
+  
+  it 'ou mélanger' do
+    @table.stub(:lines).and_return( 1.upto(5).
+      collect { |j| PdfDocument::TableLine.new(
+        ['601', 1, 12, 10.10],
+        %w(String Numeric Numeric Numeric)) } + 
+      1.upto(5).collect { |i| ['ici peu importe', i, -1, 2]}
+    )
+    doc.stub(:prepare_line).and_return ['bonjour', 2, -3, 2]
+    @table.total_line.should == ['Totaux', 15, 45, 10.10*5+10]
+  end
+  
+  it 'les table_lines de type subtotal ne sont pas additionnées' do
+    @table.stub(:lines).and_return(tls =  1.upto(5).
+      collect { |j| PdfDocument::TableLine.new(
+        ['601', 1, 12, 10.10],
+        %w(String Numeric Numeric Numeric), {subtotal:true}) } + 
+      1.upto(5).collect { |i| ['ici peu importe', i, -1, 2]}
+    )
+    
+    doc.stub(:prepare_line).and_return ['bonjour', 2, -3, 2]
+    @table.total_line.should == ['Totaux', 10, -15, 10]
   end
 
   
