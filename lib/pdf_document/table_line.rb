@@ -32,12 +32,12 @@ module PdfDocument
       @depth = options[:depth] || 0
     end
     
-    # appelle les méthodes adéquate pour chacun des éléments de la lignes
+    # appelle les méthodes adéquates pour chacun des éléments de la lignes
     # A surcharger lorsqu'on veut faire un traitement de la ligne
     # Par défaut applique number_with_precision à toutes les valeurs numériques
     def prepared_values
       values.collect.with_index do |v, i|
-       types[i] == 'Numeric' ? french_format(v) : v 
+        types[i] == 'Numeric' ? french_format(v) : v 
       end
     end
     
@@ -47,9 +47,6 @@ module PdfDocument
       ActionController::Base.helpers.number_with_precision(num, :precision=>2)
     end
     
-    
-    
-  end
-  
+  end  
   
 end

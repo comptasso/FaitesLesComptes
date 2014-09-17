@@ -77,6 +77,7 @@ module PdfDocument
     end
 
     # demande au document de préparer la ligne
+    # TODO à éliminer dès que possible
     def prepare_line(line)
       if line.is_a?(PdfDocument::TableLine)
         line.prepared_values
@@ -108,13 +109,13 @@ module PdfDocument
       total = 0
       prepared_lines.each_with_index do |l,j|
         if lines[j].is_a? PdfDocument::TableLine
-          
           total += lines[j].options[:subtotal] ? 0 : french_to_f(l[i])
         else
           total += french_to_f(l[i])
         end
       end 
-      total.to_d.round(2)
+      
+      total.to_d.round(2) 
     
     end
 

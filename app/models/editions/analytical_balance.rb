@@ -32,10 +32,12 @@ module Editions
     # appelle les méthodes adéquate pour chacun des éléments de la lignes
     # A surcharger lorsqu'on veut faire un traitement de la ligne
     # Par défaut applique number_with_precision à toutes les valeurs numériques
-        def prepare_line(line)
-          [ line[:number], line[:title], line[:debit], line[:credit]]
+    def prepare_line(line)
+      [ line[:number], line[:title], 
+        ActionController::Base.helpers.number_with_precision(line[:debit],precision:2),
+        ActionController::Base.helpers.number_with_precision(line[:credit],precision:2)]
           
-        end
+    end
     
     protected
     
@@ -46,13 +48,16 @@ module Editions
         collection << ab_lines_with_total(dest)
       end 
       collection << PdfDocument::TableLine.new(['', "Sans activité", 
-        cab.orphan_debit, cab.orphan_credit], EABTYPES, subtotal:true)
-      collection << orphan_lines_to_h(cab)
+          cab.orphan_debit, cab.orphan_credit], EABTYPES, subtotal:true)
+      collection << orphan_lines(cab)
       collection.flatten
     end
   
-    def orphan_lines_to_h(cab)
-      cab.orphan_lines.map {|ol| {number:ol.number, title:ol.title, debit:ol.t_debit, credit:ol.t_credit} } 
+    def orphan_lines(cab)
+      cab.orphan_lines.map do |ol| 
+        PdfDocument::TableLine.new([ol.number, ol.title, ol.t_debit, ol.t_credit],
+          EABTYPES)
+      end
     end
    
     # pour l'édition des pdf avec des sous totaux par destination
@@ -60,7 +65,8 @@ module Editions
     def ab_lines_with_total(dest)
       lwt = []
       dest.lines(period_id, from_date, to_date).each do |l|
-        lwt << {number:l.number, title:l.title, debit:l.t_debit, credit:l.t_credit }
+      lwt <<  PdfDocument::TableLine.new([l.number, l.title, l.t_debit, l.t_credit],
+          EABTYPES)
       end
       lwt.insert(0, title_line(dest)) 
       lwt.flatten
