@@ -109,7 +109,7 @@ module PdfDocument
       total = BigDecimal.new(0, 2)
       lines.each_with_index do |l,j|
         if l.is_a? PdfDocument::TableLine
-          total += l.subtotal? ? 0 : l.values[i]
+          total += l.subtotal? ? 0 : french_to_d(l.values[i])
         else
           total += french_to_d(prepared_lines[j][i])
         end

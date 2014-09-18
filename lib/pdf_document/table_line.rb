@@ -29,7 +29,7 @@ module PdfDocument
       @values = values
       @types = types
       @options = options
-      @depth = options[:depth] || 0
+      @depth = options[:depth] || (subtotal? ? 1 : 0)
     end
     
     # appelle les méthodes adéquates pour chacun des éléments de la lignes

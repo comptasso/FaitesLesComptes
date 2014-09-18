@@ -110,7 +110,7 @@ module PdfDocument
     end
     
     def default_columns_methods
-      ComptaLine.column_names
+      ComptaLine.column_names.collect {|field| "compta_lines.#{field}"}
     end
 
    

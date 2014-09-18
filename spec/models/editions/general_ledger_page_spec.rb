@@ -10,7 +10,7 @@ RSpec.configure do |config|
   # config.filter = {wip:true}
 end
 
-describe Editions::GeneralLedgerPage do 
+describe Editions::GeneralLedgerPage do  
 
   let(:doc) {double(Compta::PdfGeneralLedger, precision:2)}
   let(:monthly_ledgers) {double(Compta::MonthlyLedger, total_debit:1200.50, total_credit:10000.02)}

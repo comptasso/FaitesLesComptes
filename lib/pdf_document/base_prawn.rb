@@ -75,6 +75,20 @@ module PdfDocument
         :column_widths=>col_widths,
         :cell_style=>LINE_STYLE  do |table|
         docu.columns_alignements.each_with_index {|alignement,i|  table.column(i).style {|c| c.align = alignement}  }
+        page.table_lines_depth.each_with_index do |d,i|
+          table.row(i).font_style = style(d) 
+          
+        end
+      end
+    end
+    
+    # définit le style d'une ligne en fonction de la profondeur de la rubrique
+    # pour rappel, depth = -1 pour une ligne de détail de compte
+    # sinon depth = 0 pour la rubrique racine puis +1 à chaque fois qu'on 
+    # descend dans l'arbre des rubriques.
+    def style(depth)
+      case depth
+        when 1 then :bold
       end
     end
     
