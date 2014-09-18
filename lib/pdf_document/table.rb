@@ -106,17 +106,15 @@ module PdfDocument
     # 
     # Retourne 0 s'il n'y a aucune ligne
     def totalize_column(i)
-      total = 0
-      prepared_lines.each_with_index do |l,j|
-        if lines[j].is_a? PdfDocument::TableLine
-          total += lines[j].options[:subtotal] ? 0 : french_to_f(l[i])
+      total = BigDecimal.new(0, 2)
+      lines.each_with_index do |l,j|
+        if l.is_a? PdfDocument::TableLine
+          total += l.subtotal? ? 0 : l.values[i]
         else
-          total += french_to_f(l[i])
+          total += french_to_d(prepared_lines[j][i])
         end
       end 
-      
-      total.to_d.round(2) 
-    
+      total
     end
 
 
@@ -127,8 +125,8 @@ module PdfDocument
     #
     # TODO faire une sous classe de Float qui sache additionner nativement le
     # format français.
-    def french_to_f(number = 0)
-      number.is_a?(Numeric) ? number : number.gsub(',', '.').gsub(' ', '').to_f rescue 0
+    def french_to_d(number = 0)
+      number.is_a?(Numeric) ? number : number.gsub(',', '.').gsub(' ', '').to_d rescue 0
     end
 
     

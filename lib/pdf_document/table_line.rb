@@ -41,6 +41,10 @@ module PdfDocument
       end
     end
     
+    def subtotal?
+      options[:subtotal]
+    end
+    
     protected
     
     def french_format(num)
