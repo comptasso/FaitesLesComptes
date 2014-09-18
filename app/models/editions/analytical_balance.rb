@@ -29,20 +29,11 @@ module Editions
       @columns_titles = %w(Numero Libellé Débit Crédit)
     end
     
-    # appelle les méthodes adéquate pour chacun des éléments de la lignes
-    # A surcharger lorsqu'on veut faire un traitement de la ligne
-    # Par défaut applique number_with_precision à toutes les valeurs numériques
-    def prepare_line(line)
-      [ line[:number], line[:title], 
-        ActionController::Base.helpers.number_with_precision(line[:debit],precision:2),
-        ActionController::Base.helpers.number_with_precision(line[:credit],precision:2)]
-          
-    end
-    
     protected
     
+    # collecte l'ensemble des lignes de la collection en commençant par les 
+    # destinations et finit avec les lignes orphelines (sans destination) 
     def collection_for_pdf(cab)
-      
       collection = []
       cab.destinations.each do |dest|
         collection << ab_lines_with_total(dest)
@@ -53,6 +44,8 @@ module Editions
       collection.flatten
     end
   
+    
+    # Collecte les lignes de détail des mouvements des comptes sans destination
     def orphan_lines(cab)
       cab.orphan_lines.map do |ol| 
         PdfDocument::TableLine.new([ol.number, ol.title, ol.t_debit, ol.t_credit],
@@ -60,8 +53,7 @@ module Editions
       end
     end
    
-    # pour l'édition des pdf avec des sous totaux par destination
-    # on utilise une table à 4 colonnes 
+    # Fournit les lignes de détail pour une destination
     def ab_lines_with_total(dest)
       lwt = []
       dest.lines(period_id, from_date, to_date).each do |l|
@@ -72,6 +64,7 @@ module Editions
       lwt.flatten
     end
    
+    # donne la ligne de sous total pour une destination
     def title_line(destination)
       PdfDocument::TableLine.new(['',
           "#{destination.name} (#{destination.sector.name})",
