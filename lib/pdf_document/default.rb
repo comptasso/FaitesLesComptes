@@ -20,7 +20,7 @@ module PdfDocument
   #
   # La méthode page(number) permet d'appeler une page spécifique du pdf
   # 
-  # Par rapport à PdfDocument::Totéalized, une nouvelle variable @columns_select
+  # Par rapport à PdfDocument::Totalized, une nouvelle variable @columns_select
   # apparait et sert à faire la reqûete sur la base de données
   #
   #
