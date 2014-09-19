@@ -15,7 +15,7 @@ class Compta::GeneralLedger
   end
   
   def to_pdf
-    Compta::PdfGeneralLedger.new(@period)
+    Editions::GeneralLedger.new(@period)
   end
   
 end
