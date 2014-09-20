@@ -8,6 +8,7 @@
       %ul.dropdown-menu
         %li= link_to('Plan comptable', compta_period_accounts_path(@period))
         %li= link_to('Balance', new_compta_period_balance_path(@period))
+        %li= link_to('Balance anlaytique', new_compta_period_analytical_balance_path(@period))
         %li= link_to('Compte', new_compta_period_listing_path(@period))
         %li= link_to("Grand Livre", new_compta_period_general_book_path(@period))
         %li

@@ -9,7 +9,7 @@ module Editions
   class GeneralLedger < PdfDocument::Totalized
 
     include Compta::GeneralInfo
-    attr_reader :period, :collection
+    attr_reader :collection
 
     def initialize(period)
       fill_default_values

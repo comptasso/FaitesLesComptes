@@ -4,12 +4,16 @@ module Editions
 
   class AnalyticalBalance < PdfDocument::BaseTotalized
     
+    
     EABTYPES = %w(String String Numeric Numeric)
     
-    attr_reader :from_date, :to_date, :period_id, :created_at
+    attr_reader :from_date, :to_date, :period_id, :created_at, :period
     
+    # après attr_reader car le include vérifie que period est présent
+    include Compta::GeneralInfo
     
     def initialize(cab) # cab pour Compta::AnalayticalBalance
+      @period = cab.period 
       @period_id = cab.period_id
       @from_date = cab.from_date
       @to_date = cab.to_date
@@ -38,7 +42,7 @@ module Editions
       cab.destinations.each do |dest|
         collection << ab_lines_with_total(dest)
       end 
-      collection << PdfDocument::TableLine.new(['', "Sans activité", 
+      collection << PdfDocument::TableLine.new(['', "Total sans activité", 
           cab.orphan_debit, cab.orphan_credit], EABTYPES, subtotal:true)
       collection << orphan_lines(cab)
       collection.flatten
@@ -67,7 +71,7 @@ module Editions
     # donne la ligne de sous total pour une destination
     def title_line(destination)
       PdfDocument::TableLine.new(['',
-          "#{destination.name} (#{destination.sector.name})",
+          "Total #{destination.name} (#{destination.sector.name})",
           destination.debit,
           destination.credit], EABTYPES, {subtotal:true})
     end
