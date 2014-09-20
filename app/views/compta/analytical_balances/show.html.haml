@@ -5,9 +5,7 @@
 
 
 .champ
-  %h3
-    Balance analytique 
-    = "du #{l @anabal.from_date} au #{l @anabal.to_date}"
+  %h3= h3_title(@anabal)
   = render partial: 'modal_form_analytical_balance'
 
   #anabal_table= render partial: 'analytical_balance'

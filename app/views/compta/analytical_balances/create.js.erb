@@ -14,6 +14,8 @@ $('.input_date_picker').datepicker(
 // on rend la balance
 $('#anabal_table').html(" <%= j render 'analytical_balance' %>");
 
+$('.champ > h3').html("<%= j h3_title(@anabal) %>")
+
 // il faut également mettre à jour le lien pour les icones pdf, csv et xls
 $('#delayed_icon_pdf').attr('href', '<%=j  produce_pdf_compta_period_analytical_balance_path(@period,  :compta_analytical_balance=>@params_anabal).html_safe %>');
 $('#icon_xls').attr('href', '<%=  compta_period_analytical_balance_path(@period, :compta_analytical_balance=>@params_anabal,:format=>'xls').html_safe %>');

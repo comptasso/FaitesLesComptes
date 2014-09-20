@@ -10,5 +10,9 @@ module Compta::AnalyticalBalancesHelper
     end
   end
   
+  def h3_title(anabal)
+    "Balance analytique : du #{l anabal.from_date} au #{l anabal.to_date}"
+  end
+  
   
 end
