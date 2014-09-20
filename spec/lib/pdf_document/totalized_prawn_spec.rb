@@ -17,6 +17,7 @@ describe PdfDocument::TotalizedPrawn do
         top_right:'Le texte de droite',
         table_title:['Nom', 'Valeur'],
         table_lines:valid_collection.slice(22*i, 21),
+        table_lines_depth:valid_collection.size.times.collect { 0 }, 
      #   total_columns_widths:[60,40],
         table_report_line:['Un nombre fictif', 10000],
         table_to_report_line:['Encore un nombre bidon', 5421.98],

@@ -25,7 +25,8 @@ describe PdfDocument::Base do
       subtitle:'le sous titre',
       top_right:'Le texte de droite',
       table_title:['Nom', 'Prénom'],
-      table_lines:valid_collection.slice(22*i, 21))
+      table_lines:valid_collection.slice(22*i, 21),
+      table_lines_depth:valid_collection.size.times.collect { 0 })
     end
   end
   

@@ -1,4 +1,5 @@
-# Construit un nouveau Journal Général et l'affiche
+# Construit un nouveau Journal Général et le transmet sous forme de 
+# pdf uniquement
 
 class Compta::GeneralLedgersController < Compta::ApplicationController
   include Pdf::Controller
@@ -8,8 +9,9 @@ class Compta::GeneralLedgersController < Compta::ApplicationController
   
   protected
   
-  # surcharge de la méthode de Pdf::Controller car il faut fixer la valeur du path
-  # pour les autres actions
+  # surcharge de la méthode de Pdf::Controller le path des actions pdf_ready?
+  # et autres ne peut être deviné à partir de la page courante puisque 
+  # l'action est obtenue par un élément du menu
   def set_request_path
     @request_path = "/compta/periods/#{@period.id}/general_ledger"
   end 
@@ -23,7 +25,8 @@ class Compta::GeneralLedgersController < Compta::ApplicationController
   
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::GeneralLedgerPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id})
+    Delayed::Job.enqueue Jobs::GeneralLedgerPdfFiller.new(
+      @organism.database_name, pdf_export.id, {period_id:@period.id})
   end
  
   

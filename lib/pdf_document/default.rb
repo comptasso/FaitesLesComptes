@@ -62,7 +62,9 @@ module PdfDocument
     def fetch_lines(page_number)
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
-      @source.compta_lines.joins(:writing=>:book).select(columns_select).range_date(from_date, to_date).offset(offset).limit(limit)
+      @source.compta_lines.joins(:writing=>:book).
+        select(columns_select).
+        range_date(from_date, to_date).offset(offset).limit(limit)
     end
 
     # appelle les méthodes adéquate pour chacun des éléments de la lignes

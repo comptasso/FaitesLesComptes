@@ -111,30 +111,23 @@ describe PdfDocument::Default do
 
   context 'un listing sans ligne' do 
     
-    let(:arel) {double(Arel, first:nil)}
-    # let(:source) {Account.new(title:'Achats', number:'60')}
-        
+    subject {PdfDocument::Default.new(p, p, valid_options)}
 
     before(:each) do
-#      source.stub(:compta_lines).and_return(@ar = double(Arel))
-#      @ar.stub(:first).and_return(Account.new)
-      @default = PdfDocument::Default.new(p, p, valid_options)
-      @default.columns_select =  %w(writings.date writings.ref nature_id destination_id debit credit)
-      @default.columns_to_totalize = [4,5]
-
+      subject.columns_to_totalize = [4,5]
+      subject.stub(:fetch_lines).and_return([])
     end
 
     it 'a quand même une page' do
       p.stub_chain(:send, :range_date, :count).and_return 0
-      @default.nb_pages.should == 1
+      subject.nb_pages.should == 1
     end
 
     it 'avec un total de 0', wip:true do
-      arel.stub_chain(:joins).and_return arel
-      arel.stub_chain(:select, :range_date, :offset, :limit).and_return nil
-      @default.stub(:nb_pages).and_return 1
-      @default.page(1).table_total_line.should == ['Totaux', '0,00', '0,00']
-      @default.page(1).table_to_report_line.should == ['Total général', '0,00', '0,00']
+      
+      subject.stub(:nb_pages).and_return 1
+      subject.page(1).table_total_line.should == ['Totaux', '0,00', '0,00']
+      subject.page(1).table_to_report_line.should == ['Total général', '0,00', '0,00']
     end
   end
 
@@ -185,10 +178,6 @@ describe PdfDocument::Default do
       @default.select_method.should == :title
     end 
 
-    # TODO ici on fait lines mais on devrait s'appuyer sur select_method
-    it 'Par défaut les colonnes demandées sont celle de la classe retournée par select_method' do
-      @default.columns_select.should == ComptaLine.column_names
-    end
 
     it 'on peut sélectionner les colonnes' do
       @default.columns_select=   %w(line_date ref nature_id destination_id debit credit)
@@ -202,8 +191,9 @@ describe PdfDocument::Default do
 
    
     describe 'les méthodes sur les colonnes' do
-      it 'par défaut les colonnes utilisent le nom de la colonne' do 
-        @default.columns_methods.should == ComptaLine.column_names
+      it 'par défaut les colonnes utilisent le nom de la colonne, préfixées' do 
+        list = ComptaLine.column_names.collect {|cn| "compta_lines.#{cn}"}
+        @default.columns_methods.should == list
       end
 
       it 'mais on peut définir d autres méthodes' do
