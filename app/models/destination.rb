@@ -78,7 +78,11 @@ class Destination < ActiveRecord::Base
     @lines.sum {|l| l.t_credit.to_d}
   end
   
+  def name_with_sector
+    organism.sectored? ? "#{name} (#{sector.name})" : name
+  end
   
+  protected
 
   def ensure_no_lines
     if compta_lines.empty?

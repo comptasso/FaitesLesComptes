@@ -2,6 +2,10 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+RSpec.configure do |c|
+  # c.filter = {:wip=>true}
+end
+
 describe Destination do
   include OrganismFixtureBis
 
@@ -48,7 +52,7 @@ describe Destination do
         end
              
         it 'name should be unique' do
-            expect {@o.destinations.create(name: 'Essai')}.not_to change{Destination.count}
+          expect {@o.destinations.create(name: 'Essai')}.not_to change{Destination.count}
         end
 
        
@@ -74,6 +78,38 @@ describe Destination do
  
       end
 
+    end
+    
+    describe 'name_with_sector', wip:true do
+      
+      subject do
+        Destination.new(name:'mon nom') 
+      end
+      
+      context 'avec un seul secteur' do
+      
+        before(:each) do
+          subject.stub(:organism).and_return(double(Organism, sectored?:false))  
+        end
+      
+        it 'renvoie le nom de la destination' do
+          subject.name_with_sector.should == subject.name
+        end
+      end
+      
+      context 'avec plusieurs secteurs' do
+        
+        before(:each) do
+          subject.stub(:organism).and_return(double(Organism, sectored?:true))
+          subject.stub(:sector).and_return(double(Sector, name:'Gros secteur'))
+        end
+        
+        it 'renvoie le nom de la destination, suivi de celui du secteur' do
+          subject.name_with_sector.should == "#{subject.name} (#{subject.sector.name})"
+        end
+        
+      end
+      
     end
 
 

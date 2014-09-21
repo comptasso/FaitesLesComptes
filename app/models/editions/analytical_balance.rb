@@ -71,10 +71,14 @@ module Editions
     # donne la ligne de sous total pour une destination
     def title_line(destination)
       PdfDocument::TableLine.new(['',
-          "Total #{destination.name} (#{destination.sector.name})",
+    #      Compta::AnalyticalBalancesHelper::destination_and_sector_name(destination.name, destination.sector.name),
+          "Total #{destination.name_with_sector}",
           destination.debit,
           destination.credit], EABTYPES, {subtotal:true})
     end
+    
+    
+    
   
   
   
