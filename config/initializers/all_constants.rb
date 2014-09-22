@@ -100,4 +100,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.5.7RC' # Passage en delayed::job des envois de mails
 # FLCVERSION = '1.6.0RC' # Passage en persistant des valeurs des rubriques
 # FLCVERSION = '1.6.1RC' # NomenclatureChecker pour le contrôle des nomenclatures
-FLCVERSION = '1.6.2RC' # Création d'une balance analytique
+# FLCVERSION = '1.6.2RC' # Création d'une balance analytique
+FLCVERSION = '1.6.3RC' # Correction bug Listing#show si chngt d'exercice

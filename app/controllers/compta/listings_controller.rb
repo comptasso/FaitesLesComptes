@@ -21,7 +21,7 @@
 #  
 #
 class Compta::ListingsController < Compta::ApplicationController
-# TODO faire fonctionner le pdf en arrière plan
+
   
   include Pdf::Controller
   before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
@@ -29,34 +29,47 @@ class Compta::ListingsController < Compta::ApplicationController
   # show est appelé directement par exemple par les lignes de la balance
   #  au mpyen de l'icon listing qui apparaît à côté des comptes non vides
   def show
-     @account = @period.accounts.find(params[:account_id])
-     @listing = Compta::Listing.new(params[:compta_listing])
-     @listing.account_id = @account.id
+    @account = @period.accounts.find_by_id(params[:account_id])
+     
+    unless @account 
+      # ce cas arrive lorsque l'on change d'exercice alors que l'on est sur la 
+      # vue show
+      # On recopie le flash notice qui indique 'Vous avez changé d'exercice'
+      redirect_to(new_compta_period_listing_url(@period),
+        notice:flash[:notice]) and return
+    end
+    @listing = Compta::Listing.new(params[:compta_listing])
+    @listing.account_id = @account.id 
      
      
-     if @listing.valid?
-       send_export_token
-       respond_to do |format|
+    if @listing.valid?
+       
+      respond_to do |format|
         
-        format.html {render 'show'}
+        format.html 
         # format.pdf n'existe pas car l'action est produce_pdf qui est assuré par le Pdf::Controller
-        format.csv { send_data @listing.to_csv, filename:export_filename(@listing, :csv) }  # pour éviter le problème des virgules
-        format.xls { send_data @listing.to_xls, filename:export_filename(@listing, :csv) }
+        format.csv do
+          send_export_token
+          send_data @listing.to_csv, filename:export_filename(@listing, :csv)
+        end  # pour éviter le problème des virgules
+        format.xls do
+          send_export_token
+          send_data @listing.to_xls, filename:export_filename(@listing, :csv)
+        end
       end
       
-     else
-       flash.now[:alert] = @listing.errors.messages
+    else
       render 'new' # le form new affichera Des erreurs ont été trouvées 
-     end
+    end
   end
 
   # permet de créer un Listing à partir du formualaire qui demande un compte
   # GET periods/listing/new
   def new
-     @listing = Compta::Listing.new(from_date:@period.start_date, to_date:@period.close_date)
-     @listing.account_id = params[:account_id] # permet de préremplir le formulaire avec le compte si
-     # on vient de l'affichage du plan comptable (accounts#index)
-     @accounts = @period.accounts.order('number ASC')
+    @listing = Compta::Listing.new(from_date:@period.start_date, to_date:@period.close_date)
+    @listing.account_id = params[:account_id] # permet de préremplir le formulaire avec le compte si
+    # on vient de l'affichage du plan comptable (accounts#index)
+    @accounts = @period.accounts.order('number ASC')
   end
 
   
@@ -66,12 +79,12 @@ class Compta::ListingsController < Compta::ApplicationController
     @listing = Compta::Listing.new(params[:compta_listing])
     @account = @listing.account
     if @listing.valid?
-       respond_to do |format|
+      respond_to do |format|
         format.html {
           
           redirect_to compta_account_listing_url(@account, compta_listing:params[:compta_listing].except(:account_id))
           
-          }
+        }
         format.js # vers fichier create.js.erb
         
       end
@@ -82,7 +95,7 @@ class Compta::ListingsController < Compta::ApplicationController
         format.js {render 'new'} # vers fichier new.js.erb
       end
 
-  end
+    end
   end
 
  

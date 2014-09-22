@@ -40,8 +40,9 @@ class ApplicationController < ActionController::Base
   # Cette méthode doit être appelée dans les actions qui permettent de l'export de données
   # sous l'un de ces 3 formats, si possible dans la partie respond_to.
   #
-  # Elle marche en conjonction avec la méthode qui est dans export.js.coffee la page et
-  # la débloque à la réception du fichier.
+  # Elle marche en conjonction avec la méthode qui est dans export.js.coffee
+  # pour permettre un retour à l'utilisateur en bolquant la page (avec la 
+  # mention Juste un instant) et en la débloquant à la réception du fichier.
   def send_export_token
     if request.format.in? ['application/xls', 'text/csv', 'application/pdf']
       cookies[:export_token] = { :value =>params[:token], :expires => Time.now + 1800 }
