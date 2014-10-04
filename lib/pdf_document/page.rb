@@ -53,11 +53,20 @@ module PdfDocument
     end
 
     def table_total_line
-      format_line pdf_table.total_line
+      @ttl ||= format_line table_float_total_line
+    end
+    
+    # pour conserver en mémoire les valeurs des totaux
+    def table_float_total_line
+      @tftl ||= pdf_table.total_line
     end
 
     # forunit le report
     def table_report_line
+      @trl ||= set_table_report_line
+    end
+    
+    def set_table_report_line
       return document.first_report_line if @number == 1 # première page
       r =  document.page(@number -1).table_to_report_line
       r[0] = 'Reports'
@@ -92,8 +101,7 @@ module PdfDocument
      protected
 
 
-    # construit une table en donnant comme argument la page et le document
-    # 
+    # construit une table en donnant comme argument la page 
     def pdf_table
       @table ||= Table.new(self)
     end

@@ -52,9 +52,7 @@ module PdfDocument
     # même s'il n'y a pas de lignes dans le comptes
     # ne serait-ce que pour afficher les soldes en début et en fin de période
     def nb_pages
-      nb_lines = @source.send(@select_method).range_date(from_date, to_date).count
-      return 1 if nb_lines == 0
-      (nb_lines/nb_lines_per_page.to_f).ceil
+      @nb_pages ||= set_nb_pages
     end
 
     
@@ -112,7 +110,12 @@ module PdfDocument
     def default_columns_methods
       ComptaLine.column_names
     end
-
+    
+    def set_nb_pages
+      nb_lines = @source.send(@select_method).range_date(from_date, to_date).count
+      return 1 if nb_lines == 0
+      (nb_lines/nb_lines_per_page.to_f).ceil
+    end
    
 
    
