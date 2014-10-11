@@ -27,7 +27,7 @@ gem 'rack-timeout' # coneil de heroku - utilisé par le fichier intializers/time
 gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écriture des routes)
 # TODO à retirer lors du passage à Rails 4
 
-gem 'adherent', '~>0.1.8', :path=>'../../Adherent'
+gem 'adherent', '~>0.1.9' #, :path=>'../../Adherent'
 gem 'sass', '>= 3.2.10', '< 3.3'
 gem 'coffee-script'
 
