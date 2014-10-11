@@ -6,11 +6,16 @@ class CheckDepositsController < ApplicationController
   
   # GET /check_deposits
   def index
-    @total_lines_credit=CheckDeposit.total_to_pick
     @nb_to_pick=CheckDeposit.nb_to_pick
-    flash.now[:alert] = "Il reste #{ActionController::Base.helpers.pluralize @nb_to_pick, 'chèque'} à remettre à l'encaissement \
-pour un montant de #{virgule @total_lines_credit} €" if @nb_to_pick > 0
-    @check_deposits = @bank_account.check_deposits.within_period(@period) 
+    if @nb_to_pick > 0
+      @total_lines_credit=CheckDeposit.total_to_pick
+      flash.now[:alert] = "Il reste \
+        #{ActionController::Base.helpers.pluralize @nb_to_pick, 'chèque'} \
+        à remettre à l'encaissement \
+        pour un montant de #{virgule @total_lines_credit} €" 
+      end
+    @check_deposits = @bank_account.check_deposits.
+      within_period(@period).order('deposit_date ASC') 
   end
   
   # GET /check_deposits/1
