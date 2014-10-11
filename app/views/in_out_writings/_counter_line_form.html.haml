@@ -1,10 +1,29 @@
-= builder.input :payment_mode , collection: PAYMENT_MODES, :prompt=>'Mode de réglement',
-                          disabled: "#{'Espèces' unless @organism.cashes.any?}",
-                          :wrapper_html=> {class: "span4"},
-                          :required=>true,  input_html: {class: "span8"}, :label_html=>{class:'span4'}
+= builder.input :payment_mode ,
+  collection: PAYMENT_MODES,
+  :prompt=>'Mode de réglement',
+  disabled: "#{'Espèces' unless @organism.cashes.any?}",
+  :wrapper_html=> {class: "span4"},
+  :required=>true,
+  input_html: {class: "span8"},
+ :label_html=>{class:'span4'}
 
-= builder.association :account, :label=> 'Contrepartie',  :wrapper_html=>{class: "span4", id:'td_cca'}, input_html: {class: "span8"}, :label_html=>{class:'span4'},
-            :collection => options_for_cca(@period, @book), :as => :grouped_select, :group_method => :options, :group_label_method=> :title,
-            :label_method=> :title, :value_method=> :id, :required=>true, :prompt => "Choisissez..."
+= builder.input :account, :label=> 'Contrepartie',
+  :wrapper_html=>{class: "span4", id:'td_cca'},
+  input_html: {class: "span8"},
+  :label_html=>{class:'span4'},
+  :collection => options_for_cca(@period, @book),
+  :as => :grouped_select,
+  :group_method => :options,
+  :group_label_method=> :title,
+  :label_method=> :title,
+  :value_method=> :id,
+  :required=>true,
+  :prompt => "Choisissez..."
 
-= builder.input :check_number, label:'N° ch.', :wrapper_html=>{:class=>'span4', id:'td_check_number'},:label_html=>{class:'span4'}, input_html: {class: "span8" }
+
+= builder.input :check_number,
+  label:'N° ch.',
+  :wrapper_html=>{:class=>'span4',
+  id:'td_check_number'},
+  :label_html=>{class:'span4'},
+  input_html: {class: "span8" }

@@ -41,7 +41,8 @@ module CheckDepositsHelper
   # Helper permettant de construire les options pour le form
   #
   def options_for_checks(check_deposit, sector)
-    [OptionsForChecksSelect.new('Déja inclus', :target, check_deposit, sector), OptionsForChecksSelect.new('Non inclus',:tank, check_deposit, sector)]
+    [OptionsForChecksSelect.new('Déja inclus', :target, check_deposit, sector),
+      OptionsForChecksSelect.new('Non inclus',:tank, check_deposit, sector)]
   end
 
 
