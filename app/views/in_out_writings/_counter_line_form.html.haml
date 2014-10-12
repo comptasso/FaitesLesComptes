@@ -7,7 +7,7 @@
   input_html: {class: "span8"},
  :label_html=>{class:'span4'}
 
-= builder.input :account, :label=> 'Contrepartie',
+= builder.input :account_id, :label=> 'Contrepartie',
   :wrapper_html=>{class: "span4", id:'td_cca'},
   input_html: {class: "span8"},
   :label_html=>{class:'span4'},
@@ -23,7 +23,6 @@
 
 = builder.input :check_number,
   label:'N° ch.',
-  :wrapper_html=>{:class=>'span4',
-  id:'td_check_number'},
+  :wrapper_html=>{:class=>'span4', id:'td_check_number'},
   :label_html=>{class:'span4'},
   input_html: {class: "span8" }

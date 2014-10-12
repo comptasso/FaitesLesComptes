@@ -13,7 +13,8 @@ class ComptaLine < ActiveRecord::Base
   has_one :bank_extract_line
 
   attr_accessible :debit, :credit, :writing_id, :account_id, 
-    :nature, :nature_id, :destination_id, :check_number, :payment_mode, :check_deposit_id
+    :nature, :nature_id, :destination_id, 
+    :check_number, :payment_mode, :check_deposit_id
 
   # La présence est assurée par la valeur par défaut
   # mais on laisse presence:true, ne serait-ce que parce que cela permet d'avoir l'*
