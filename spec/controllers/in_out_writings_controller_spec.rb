@@ -6,7 +6,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe InOutWritingsController do
+describe InOutWritingsController do 
   include SpecControllerHelper
 
   before(:each) do
