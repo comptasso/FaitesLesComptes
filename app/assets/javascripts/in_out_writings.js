@@ -117,12 +117,11 @@ function $f_td_bank_cash(evt) {
         $('#td_check_number').hide();
         caisses.attr('disabled', false);
         banques.attr('selected', false);
+        // on masque la zone chèque à l'encaissement si elle existe
         if (income_outcome) {
             encaissement.attr('selected', false).attr('disabled', 'disabled');
         }
-        if (caisses.size() >= 1) {
-            cash_value.attr('selected', 'selected');
-        }
+        cash_value.attr('selected', 'selected');
         break;
     case 'Chèque':
         caisses.attr('disabled', 'disabled');
@@ -170,37 +169,33 @@ function $f_td_bank_cash(evt) {
 jQuery(function () {
     if ($('#entry_lines form').length !== 0) {
         var caisses, banques, bk_value, ca_value, original_value;
-        caisses = $('optgroup[label="Caisses"] option');
-        banques = $('optgroup[label="Banques"] option');
 
-        // les valeurs par défaut
-        if (banques.size() >= 1) {
+        banques = $('optgroup[label="Banques"] option');
+        caisses = $('optgroup[label="Caisses"] option');
+
+        // on mémorise les bk_value et ca_value qui serviront de selection
+        //
+        // soit celle déjà sélectionnée (en mode édition)
+        bk_value = $("optgroup[label='Banques'] option[selected='selected']");
+        ca_value = $("optgroup[label='Caisses'] option[selected='selected']");
+
+        // soit la première de chaque groupe 
+        if (bk_value.length === 0) {
             bk_value = banques.first();
         }
-        if (caisses.size() >= 1) {
+        if (ca_value.length === 0) {
             ca_value = caisses.first();
         }
 
-        // si on est en modification trouver la banque ou la caisse de l'écriture
-        if ($('form').attr('id').match(/^edit/) !== null) {
-            if (banques.select().length === 1) {
-                bk_value = banques.select();
-            }
-            if (caisses.select().length === 1) {
-                ca_value = caisses.select();
-            }
-
-        }
-
-        // les enregistrer comme valeur originales
+       // les enregistrer comme valeur originales
         original_value = {
             bank_value: bk_value,
             cash_value: ca_value
         };
         // attacher la fonction $f_td_bank_cash au champ payment_mode 
         // et l'exécuter une première fois'
-//        $('#entry_lines #in_out_writing_compta_lines_attributes_1_payment_mode').
-//            change(original_value, $f_td_bank_cash).change();
+        $('#entry_lines #in_out_writing_compta_lines_attributes_1_payment_mode').
+            change(original_value, $f_td_bank_cash).change();
     }
 });
 
