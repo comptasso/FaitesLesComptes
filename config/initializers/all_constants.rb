@@ -103,4 +103,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.6.2RC' # Création d'une balance analytique
 # FLCVERSION = '1.6.3RC' # Correction bug Listing#show si chngt d'exercice
 # FLCVERSION = '1.6.4RC' # accélération des pdf de Listing et Grand Livre
-FLCVERSION = '1.6.5RC' # mise en place d'un recu pour le gem adhérent
+# FLCVERSION = '1.6.5RC' # mise en place d'un recu pour le gem adhérent
+FLCVERSION = '1.6.6RC' # correction bug sur form in_out_writings
