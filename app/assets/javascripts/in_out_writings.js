@@ -82,9 +82,6 @@ jQuery(function () {
 // champs de classe décimal
 //
 //
-//
-//
-//
 // gère l'affichage des champs banque et caisse;
 // La fonction est utilisée pour les in_out_writings que le formulaire soit appelé
 // par le controller in_out_writings ou mask_writings. 
@@ -111,7 +108,8 @@ function $f_td_bank_cash(evt) {
     payment_mode = $(this).val();
 
 
-    // s'il y a plus d'un élément dans td_bank et si le mode de payemnt est autre que Espèces alors afficher td_bank et disable td_cash
+    // s'il y a plus d'un élément dans td_bank et si le mode de payemnt 
+    // est autre que Espèces alors afficher td_bank et disable td_cash
 
     switch (payment_mode) {
     case 'Espèces':
@@ -145,7 +143,7 @@ function $f_td_bank_cash(evt) {
         break;
         // autres cas : une recette en banque qui n'est pas un chèque
     default:
-        $('#td_check_number').hide(); // masquage du champ pour  saisir le n° de chèque de la dépenses
+        $('#td_check_number').hide(); // masquage du champ n° de chèque
         caisses.attr('disabled', 'disabled'); // désactivation des caisses
         caisses.attr('selected', false);
         banques.attr('disabled', false);
@@ -168,7 +166,7 @@ function $f_td_bank_cash(evt) {
 // lorsque c'est espèces les caisses et rien d'autres
 // chèques : le compte chèque à l'encaissement
 // banques : les banques
-// POur les dépenses, la partie chèque à l'encaissement n'est pas utile'
+// Pour les dépenses, la partie chèque à l'encaissement n'est pas utile'
 jQuery(function () {
     if ($('#entry_lines form').length !== 0) {
         var caisses, banques, bk_value, ca_value, original_value;
@@ -199,8 +197,10 @@ jQuery(function () {
             bank_value: bk_value,
             cash_value: ca_value
         };
-        // attacher la fonction $f_td_bank_cash au champ payment_mode et l'exécuter une première fois'
-        $('#entry_lines #in_out_writing_compta_lines_attributes_1_payment_mode').change(original_value, $f_td_bank_cash).change();
+        // attacher la fonction $f_td_bank_cash au champ payment_mode 
+        // et l'exécuter une première fois'
+//        $('#entry_lines #in_out_writing_compta_lines_attributes_1_payment_mode').
+//            change(original_value, $f_td_bank_cash).change();
     }
 });
 
