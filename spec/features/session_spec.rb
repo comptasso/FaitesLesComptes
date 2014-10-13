@@ -50,8 +50,10 @@ describe 'Session' do
       create_organism
       # plutôt que de créer réellement plusieurs bases, on fait un stub
       ApplicationController.any_instance.stub(:current_user).and_return @cu
-      @cu.stub_chain(:rooms).and_return([@r, @r])
-      #@cu.stub(:up_to_date?).and_return true
+      @cu.stub(:rooms).and_return(@ar = double(Arel))
+      @ar.stub(:includes).and_return([@r, @r])
+      @ar.stub(:count).and_return 2
+      @ar.stub(:collect).and_return([{organism:@o, room:@r}, {organism:@o, room:@r}])
       login_as('quidam')
       page.find('h3').should have_content 'Liste des organismes'
     end

@@ -2,7 +2,7 @@ require 'pdf_document/base_totalized'
 
 module Editions
 
-  class AnalyticalBalance < PdfDocument::BaseTotalized
+  class AnalyticalBalance < PdfDocument::BaseTotalized 
     
     
     EABTYPES = %w(String String Numeric Numeric)

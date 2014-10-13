@@ -3,7 +3,7 @@
 require 'month_year'
 
 
-module Extract
+module Extract 
 
 
   # un extrait d'un mois d'un livre donné avec capacité à calculer les totaux et les soldes

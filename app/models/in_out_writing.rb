@@ -15,7 +15,7 @@
 #
 # La méthode #support permet de renvoyer le long_name du compte de la counterline (utilisé dans les éditions)
 #
-class  InOutWriting < Writing
+class  InOutWriting < Writing 
 
   validates :counter_line ,:counter_line_with_payment_mode=>true
   

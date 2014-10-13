@@ -10,7 +10,7 @@ describe Admin::RoomsController do
   
   include SpecControllerHelper 
   
-  let(:cu) {mock_model(User, 'up_to_date?'=>true)}
+  let(:cu) {mock_model(User)}
   
   describe 'sign_in' do
 
@@ -21,7 +21,9 @@ describe Admin::RoomsController do
     end
     
     it 'assign user si la session existe' do
-      cu.stub_chain(:rooms, :count).and_return 2
+      cu.stub_chain(:rooms, :includes).and_return [
+        double(Room, relative_version: :same_migration),
+        double(Room, relative_version: :same_migration)] 
       sign_in(cu)
 
       get :index

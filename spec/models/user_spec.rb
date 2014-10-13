@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.configure do |c|
+RSpec.configure do |c| 
   # c.filter = {wip:true}
 end
 
@@ -161,7 +161,8 @@ describe User do
     subject {u = User.new(); u.role = 'standard'; u}
     
     it 'si moins de 4 rooms pour un user standard' do
-      subject.stub_chain(:owned_rooms, :count).and_return 3 
+      subject.stub(:holders).and_return(@ar = double(Arel))
+      @ar.stub(:where).and_return [1,2,3]
       subject.should be_allowed_to_create_room
     end
     
@@ -171,7 +172,8 @@ describe User do
     end
     
     it 'mais pas si 4 ou plus pour un user standard' do
-      subject.stub_chain(:owned_rooms, :count).and_return 4
+      subject.stub(:holders).and_return(@ar = double(Arel))
+      @ar.stub(:where).and_return [1,2,3,4]
       subject.allowed_to_create_room?.should == false
     end
     

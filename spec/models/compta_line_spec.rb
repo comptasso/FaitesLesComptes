@@ -7,7 +7,7 @@ RSpec.configure do |config|
 end
 
 
-describe ComptaLine do 
+describe ComptaLine do  
 
   include OrganismFixtureBis
   let(:per) {mock_model(Period)}

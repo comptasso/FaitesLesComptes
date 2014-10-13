@@ -4,7 +4,7 @@
 # d'où le nom du modèle qui est exigé par le Ministère des Finances 
 # pour toute comptabilité informatisée.
 #
-class Extract::Fec < ActiveRecord::Base
+class Extract::Fec < ActiveRecord::Base 
   
   FEC_TITLES = [  # selon la nomenclature de l'arrêté du 29 juillet 2013 
     'JournalCode',  

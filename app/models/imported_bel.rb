@@ -1,7 +1,7 @@
 # La classe ImportedBel représente une ligne importée d'un relevé de compte 
 # bancaire. 
 # 
-# Cette classe est ensuite destinée à créer des compta_line qui seront rattachés  
+# Cette classe est ensuite destinée à créer des compta_line qui seront rattachés   
 # à l'extrait bancaire correspondant. 
 # 
 # Ne pas confondre cette classe avec les BankExtractLines qui sont des lignes 

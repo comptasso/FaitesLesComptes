@@ -6,7 +6,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe Destination do
+describe Destination do 
   include OrganismFixtureBis
 
   let(:o) {stub_model(Organism)}
