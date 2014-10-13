@@ -15,13 +15,9 @@ include JcCapybara
 
   before(:each) do
     @rooms = [r1, r2]
+    @status = [:same_migration, :same_migration]
     view.stub(:abc).and_return(ActiveRecord::Base.connection_config)
     view.stub(:holder_status).and_return 'Propriétaire'
-    r2.stub(:relative_version).and_return(:same_migration)
-    r2.stub('up_to_date?').and_return true
-    r2.stub('late?').and_return false
-    r2.stub('advanced?').and_return false  
-    r2.stub('no_base?').and_return false
     view.stub(:current_user).and_return(@u = mock_model(User, 'allowed_to_create_room?'=>true, :rooms=>@rooms))
     
   end
@@ -43,7 +39,7 @@ include JcCapybara
     end
 
     it 'mais n en rend pas si la room  n est pas à jour' do
-      r2.stub('up_to_date?').and_return false
+      @status = [:same_migration, :late_migration]
       render
       page.all('tr:last td:last img').should have(0).icons
     end
@@ -74,7 +70,7 @@ include JcCapybara
   context 'avec une base qui manque' do 
 
     it 'rend une action destroy' do
-      r2.stub('no_base?').and_return(true)
+      @status = [:same_migration, :no_base]
       render
       page.first('tr:last td:nth-child(6) img')[:src].should have_content('supprimer.png') 
       page.find('tr:last td:nth-child(6) a')[:href].should == admin_room_path(r2)
@@ -84,7 +80,7 @@ include JcCapybara
 
   context 'avec une base en avance' do
     it 'rend un feu rouge' do
-      r2.stub('advanced?').and_return(true)
+      @status = [:same_migration, :advance_migration]
       render
       page.find('tr:last td:nth-child(6)').should have_icon('traffic-light-red')
     end

@@ -23,12 +23,7 @@ class User < ActiveRecord::Base
   def owned_rooms
     holders.where('status = ?', 'owner').map(&:room) 
   end
-  
-  
-  
-  
- 
-  
+    
   # retourne un array de hash des organismes et des chambres appartenat à cet user
   # le hash ne comprend que les organimes qui ont pu être effectivement trouvés
   def organisms_with_room
@@ -73,9 +68,10 @@ class User < ActiveRecord::Base
     rooms.map {|r| r.relative_version}.uniq
   end
 
+ 
   def allowed_to_create_room?
     return true if role == 'expert'
-    owned_rooms.count < 4
+    holders.where('status = ?', 'owner').count < 4
   end
 
   protected

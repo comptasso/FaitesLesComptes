@@ -30,28 +30,32 @@ describe Admin::RoomsController do
   
   before(:each) do
     minimal_instances
-    
-    
   end
 
  
   describe "GET index" do
     
     it "assigns all rooms as @rs" do
-      @cu.stub(:rooms).and_return(@a = double(Arel, :collect=>[:same_migration], :count=>2))
+      @cu.stub(:rooms).and_return(@b = double(Arel))
+      @b.stub(:includes).and_return(@a = double(Arel, 
+          :collect=>[:same_migration], :count=>2))
       get :index
       assigns(:rooms).should == @a
       assigns(:status).should == [:same_migration]
     end
 
     it 'renders template index' do
-      @cu.stub(:rooms).and_return(@a = double(Arel, :collect=>[:same_migration], :count=>2))
+      @cu.stub(:rooms).and_return(@b = double(Arel))
+      @b.stub(:includes).and_return(@a = double(Arel, 
+          :collect=>[:same_migration], :count=>2))
       get :index 
       response.should render_template('index')
     end
 
     it 'si toutes les roome sont en phase n affiche pas de flash' do
-      @cu.should_receive(:rooms).and_return([mock_model(Room, :relative_version=>:same_migration)])
+      @cu.should_receive(:rooms).and_return(@b = double(Arel))
+      @b.should_receive(:includes).with(:holders).and_return(
+        [mock_model(Room, :relative_version=>:same_migration)])
       get :index
       flash[:alert].should == nil
     end
@@ -59,7 +63,8 @@ describe Admin::RoomsController do
     describe 'contrôle des flash' do
       
       before(:each) do
-        @cu.stub(:rooms).and_return([@ro = mock_model(Room)])
+        @cu.stub(:rooms).and_return(@b = double(Arel))
+        @b.stub(:includes).and_return([@ro = mock_model(Room)])
       end
 
       it 'si une room est en retard affiche un flash' do

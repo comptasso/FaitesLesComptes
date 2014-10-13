@@ -24,7 +24,7 @@ class Admin::RoomsController < Admin::ApplicationController
   # importe une base (même si en pratique on ne le fait jamais).
   def index
     lm = Room.jcl_last_migration
-    @rooms = current_user.rooms
+    @rooms = current_user.rooms.includes(:holders)
     @status = @rooms.collect {|r| r.relative_version(lm)}
     build_flash_from_status(@status)
   end

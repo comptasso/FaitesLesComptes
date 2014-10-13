@@ -1,5 +1,6 @@
 =  content_for :menu do
-  = icon_to  'nouveau.png', new_admin_room_path if current_user.allowed_to_create_room?
+  = icon_to  'nouveau.png',
+    new_admin_room_path if current_user.allowed_to_create_room?
 
 .champ
   %h3 Liste des organismes
@@ -9,7 +10,7 @@
   %thead
     %tr
       %th.pc15 Titre
-      %th.pc25 Commentaire
+      %th.pc25 Commentaire 
       %th.pc10 Statut
       %th.pc10 Vous êtes
       %th.pc10 Base de données
@@ -25,7 +26,7 @@
         %td= organ.title rescue 'non renseigné' # pour gérér les cas où la base de données n est pas à jour et où le champ est manquant
         %td= organ.comment rescue 'non renseigné'
         %td= organ.status rescue 'non renseigné'
-        %td= holder_status(ro, current_user)
+        %td= holder_status(ro)
         %td= ro.database_name
         %td 
           
@@ -36,6 +37,6 @@
         %td
           - if @status[i] == :same_migration
             =# icon_to 'sauvegarde.png', new_admin_clone_path, :title=>"Fait un clone de l'organisme"  if current_user.allowed_to_create_room?
-            = icon_to 'afficher.png',ro, title: 'affichage dans la partie saisie'
+            = icon_to 'afficher.png', ro, title: 'affichage dans la partie saisie'
             = icon_to 'detail.png', [:admin, ro]
           
