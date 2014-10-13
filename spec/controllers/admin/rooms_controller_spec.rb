@@ -30,21 +30,22 @@ describe Admin::RoomsController do
   
   before(:each) do
     minimal_instances
-    # minimal instance donne @cu pour current_user et @r comme room
-    @cu.stub('up_to_date?').and_return true
+    
+    
   end
 
  
   describe "GET index" do
     
     it "assigns all rooms as @rs" do
-      @cu.stub(:rooms).and_return(@a = double(Arel, :map=>[], :count=>2))
+      @cu.stub(:rooms).and_return(@a = double(Arel, :collect=>[:same_migration], :count=>2))
       get :index
       assigns(:rooms).should == @a
+      assigns(:status).should == [:same_migration]
     end
 
     it 'renders template index' do
-      @cu.stub(:rooms).and_return(@a = double(Arel, :map=>[], :count=>2))
+      @cu.stub(:rooms).and_return(@a = double(Arel, :collect=>[:same_migration], :count=>2))
       get :index 
       response.should render_template('index')
     end
@@ -58,24 +59,23 @@ describe Admin::RoomsController do
     describe 'contrôle des flash' do
       
       before(:each) do
-        @cu.stub(:rooms).and_return([mock_model(Room)])
-        @cu.stub('up_to_date?').and_return false
+        @cu.stub(:rooms).and_return([@ro = mock_model(Room)])
       end
 
       it 'si une room est en retard affiche un flash' do
-        @cu.stub(:status).and_return([:late_migration])
+        @ro.stub(:relative_version).and_return(:late_migration)
         get :index,{}
         flash[:alert].should == 'Une base au moins est en retard par rapport à la version de votre programme, migrer la base correspondante'
       end
 
       it 'si une room est en avance, affiche un flash' do
-        @cu.stub(:status).and_return([:advance_migration])
+        @ro.stub(:relative_version).and_return(:advance_migration)
         get :index,{}
         flash[:alert].should == 'Une base au moins est en avance par rapport à la version de votre programme, passer à la version adaptée'
       end
 
       it 'si une base n existe pas ' do
-        @cu.stub(:status).and_return([:no_base])
+        @ro.stub(:relative_version).and_return(:no_base)
         get :index,{}
         flash[:alert].should == 'Un fichier correspondant à une base n\'a pu être trouvée ; vous devriez effacer l\'enregistrement correspondant'
       end

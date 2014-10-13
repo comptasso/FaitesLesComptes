@@ -91,17 +91,19 @@ class Room < ActiveRecord::Base
   # et indique si cet organisme est en avance ou en retard par rapport
   # aux migrations qui sont enregistrées dans Room
   #
-  # La valeur retournée est un hash avec l'id de la Room et un symbole indiquant
+  # La valeur retournée est un symbole indiquant
   # l'état de la migration par rapport à la base principale (Room).
-  #
-  # nil si la base n'est pas trouvée.
-  def relative_version
-    room_last_migration  = Room.jcl_last_migration
+  # 
+  # Les valeurs peuvent être :same_migration, :late_migration, 
+  # :advance_migration, :no_base
+  # 
+  def relative_version(migration_number = nil)
+    migration_number ||= Room.jcl_last_migration
     organism_last_migration = look_for {Organism.migration_version}
     if organism_last_migration
-      v =:same_migration if room_last_migration == organism_last_migration
-      v = :late_migration if room_last_migration > organism_last_migration
-      v = :advance_migration if room_last_migration < organism_last_migration
+      v = :same_migration if migration_number == organism_last_migration
+      v = :late_migration if migration_number > organism_last_migration
+      v = :advance_migration if migration_number < organism_last_migration
     else
       v = :no_base
     end

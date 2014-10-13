@@ -19,20 +19,14 @@ class Admin::RoomsController < Admin::ApplicationController
   
   after_filter :clear_org_cache, only:[:create, :destroy]
 
-  # TODO  voir s'il faut retirer cette logique de up_to_date puisqu'on est maintenant uniquement sur du full web
   # affiche la liste des bases appartenant au current_user
+  # le status permet de gérer les éventuels différences de migration si on
+  # importe une base (même si en pratique on ne le fait jamais).
   def index
+    lm = Room.jcl_last_migration
     @rooms = current_user.rooms
-   
-    unless current_user.up_to_date?
-      status = current_user.status 
-      alert = []
-      alert += ["Une base au moins est en retard par rapport à la version de votre programme, migrer la base correspondante"] if status.include? (:late_migration)
-      alert += ["Une base au moins est en avance par rapport à la version de votre programme, passer à la version adaptée"] if status.include? (:advance_migration)
-      alert += ['Un fichier correspondant à une base n\'a pu être trouvée ; vous devriez effacer l\'enregistrement correspondant'] if status.include? (:no_base)
-      flash.now[:alert] = alert.join("\n")
-    end
-    
+    @status = @rooms.collect {|r| r.relative_version(lm)}
+    build_flash_from_status(@status)
   end
     
   # trouve la pièce demandée, connecte la base
@@ -103,14 +97,23 @@ class Admin::RoomsController < Admin::ApplicationController
 
   # copy les messages d'erreur de room vers organism pour
   # que le form puisse avoir les informations nécessaires
-#  def copy_room_errors(r)
-#    unless r.valid?
-#      r.errors.messages.each_pair do |k, mess|
-#        @organism.errors.add(k, mess.first) # on ne recopie que le premier des messages d'erreur
-#      end
-#    end
-#  end
+  #  def copy_room_errors(r)
+  #    unless r.valid?
+  #      r.errors.messages.each_pair do |k, mess|
+  #        @organism.errors.add(k, mess.first) # on ne recopie que le premier des messages d'erreur
+  #      end
+  #    end
+  #  end
 
+  def build_flash_from_status(status)
+    return if status.uniq == [:same_migration]
+    alert = []
+    alert += ["Une base au moins est en retard par rapport à la version de votre programme, migrer la base correspondante"] if status.include? (:late_migration)
+    alert += ["Une base au moins est en avance par rapport à la version de votre programme, passer à la version adaptée"] if status.include? (:advance_migration)
+    alert += ['Un fichier correspondant à une base n\'a pu être trouvée ; vous devriez effacer l\'enregistrement correspondant'] if status.include? (:no_base)
+    flash.now[:alert] = alert.join("\n")
+  end
+  
   # TODO faire spec de cette méthode
   def build_a_new_room
     @room.errors.add(:base, 'Nombre maximal atteint') unless current_user.allowed_to_create_room?
@@ -152,4 +155,4 @@ pour le budget de fonctionnement; de même pour le budget des activités socio_c
     end
   end
     
-  end
+end
