@@ -22,7 +22,7 @@ class BankExtractLinesController < ApplicationController
       @previous_line = ComptaLine.find_by_id(flash[:previous_line_id]) if flash[:previous_line_id]
     prepare_modal_box_instances
     # les variables d'instances pour l'affichage de la vue pointage
-    @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
+    @bank_extract_lines = @bank_extract.bank_extract_lines.includes(:compta_line=>:writing).order(:position)
     @lines_to_point = @bank_account.not_pointed_lines
   end
   
@@ -115,7 +115,7 @@ class BankExtractLinesController < ApplicationController
     @bank_extract=BankExtract.find(params[:bank_extract_id])
     # TODO ? ici il faut changer d'exercice si les dates du bank_extract ne sont pas dans l'exercice
     @bank_account = @bank_extract.bank_account
-    @organism = @bank_account.organism
+    # @organism = @bank_account.organism
   end
   
   # La vue pointage comprend une boite modale pour ajouter des écritures sans 

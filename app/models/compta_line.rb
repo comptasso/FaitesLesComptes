@@ -64,7 +64,11 @@ class ComptaLine < ActiveRecord::Base
   scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil).order('id') }
   
   # renvoie les lignes non pointées (appelé par BankExtract), ce qui ne prend pas en compte le journal A nouveau
-  scope :not_pointed, joins(:writing=>:book).where("(books.abbreviation != 'AN') AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE COMPTA_LINE_ID = COMPTA_LINES.ID)").order('writings.date')
+  scope :not_pointed,
+    includes(:writing).
+    joins(:writing=>:book).
+    where("(books.abbreviation != 'AN') AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE COMPTA_LINE_ID = COMPTA_LINES.ID)").
+    order('writings.date')
 
   delegate :date, :narration, :ref, :book, :support, :lock, :to=>:writing
 

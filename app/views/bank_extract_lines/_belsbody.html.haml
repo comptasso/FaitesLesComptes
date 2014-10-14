@@ -1,4 +1,4 @@
-- @bank_extract_lines.all.each do |bel|
+- @bank_extract_lines.each do |bel|
   %tr{:id=>"#{bel.compta_line_id}", 'class'=> 'bel'}
     %td= l bel.date
     %td= bel.narration
