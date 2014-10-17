@@ -33,17 +33,20 @@ module InOutWritingsHelper
   # 
   def options_for_cca(period, book)
     sector = book.sector
-    arr =  [OptionsForAssociationSelect.new('Banques', :list_bank_accounts, sector, period),
-      OptionsForAssociationSelect.new('Caisses',:list_cash_accounts, sector, period)]
+    arr =  [OptionsForAssociationSelect.
+        new('Banques', :list_bank_accounts, sector, period),
+      OptionsForAssociationSelect.
+        new('Caisses',:list_cash_accounts, sector, period)]
     if book.income_outcome == true
-      arr << OptionsForAssociationSelect.new('Chèques à l\'encaissement', :rem_check_accounts, period)
+      arr << OptionsForAssociationSelect.
+        new('Chèques à l\'encaissement', :rem_check_accounts, period)
     end
     arr
   end
   
   
   def frontline_actions(frontline)
-     # Si la ligne est éditable, alors on peut la modifier ou la supprimer
+    # Si la ligne est éditable, alors on peut la modifier ou la supprimer
     # 
     # Si la ligne est un Transfer, la modification se fait via la rubrique Transfer
     # La suppression n'est pas possible, car elle doit passer par le menu Transfer
@@ -54,7 +57,8 @@ module InOutWritingsHelper
       when 'Transfer'
         html <<  icon_to('modifier.png', edit_transfer_path(frontline.id)) 
       when 'Adherent::Writing' then 
-        html << icon_to('detail.png', adherent.member_payments_path(frontline.adherent_member_id))
+        html << icon_to('detail.png',
+          adherent.member_payments_path(frontline.adherent_member_id))
       else
         html <<  icon_to('modifier.png', 
           edit_book_in_out_writing_path(frontline.book_id, frontline.id)) 
@@ -64,7 +68,8 @@ module InOutWritingsHelper
       end
     else 
       case frontline.writing_type
-      when 'Transfer' then  html << icon_to('detail.png', transfer_path(frontline.id))
+      when 'Transfer' then  html << icon_to('detail.png', 
+          transfer_path(frontline.id))
       when 'Adherent::Writing' then
         html << icon_to('detail.png', 
           adherent.member_payment_path(frontline.adherent_member_id, 
@@ -81,32 +86,56 @@ module InOutWritingsHelper
   # pour une compta_line
   # Si un block est donné, les instructions de ce block sont reprises dans 
   # le fragment de html et au début de celui ci.
+  # TODO voir si on utilise deletable dans le programme.
   def line_actions(line, deletable = true)
-    # Si la ligne est éditable, alors on peut la modifier ou la supprimer
-    # 
-    # Si la ligne est un Transfer, la modification se fait via la rubrique Transfer
-    # La suppression n'est pas possible, car elle doit passer par le menu Transfer
     html = ' '
     html += yield if block_given?
     lw=line.writing
     
     if lw.editable?
-      case lw
-      when Transfer
-        html <<  icon_to('modifier.png', edit_transfer_path(lw.id)) 
-      when Adherent::Writing then html << icon_to('detail.png', adherent.member_payments_path(lw.member))
-      else
-        html <<  icon_to('modifier.png', edit_book_in_out_writing_path(lw.book_id, lw)) 
-        html <<  icon_to('supprimer.png', book_in_out_writing_path(lw.book, lw), confirm: 'Etes vous sûr?', method: :delete) if deletable 
-      end
+      html << actions_for_editable(lw, deletable=true)
     else 
-      case lw
-      when Transfer then  html << icon_to('detail.png', transfer_path(lw.id))
-      when Adherent::Writing then html << icon_to('detail.png', adherent.member_payment_path(lw.member, lw.bridge_id), title:'Table des paiments à l\'origine de cette écriture')
-      end
+      html << actions_for_not_editable(lw, deletable=true)
     end
     html.html_safe
+  end
   
+  protected
+  
+  
+  # Si la ligne est éditable, alors on peut la modifier ou la supprimer
+  # sauf pour les transferts et les écritures venant de la zone Adhérent
+  def actions_for_editable(writing, deletable=true)
+    html = ''
+    case writing
+    when Transfer
+      html <<  icon_to('modifier.png', edit_transfer_path(writing.id)) 
+    when Adherent::Writing then html << icon_to('detail.png', 
+        adherent.member_payments_path(writing.member))
+    else
+      html <<  icon_to('modifier.png', 
+        edit_book_in_out_writing_path(writing.book_id, writing)) 
+      html <<  icon_to('supprimer.png', 
+        book_in_out_writing_path(writing.book, writing),
+        confirm: 'Etes vous sûr?', method: :delete) if deletable 
+    end
+    html
+  end
+  
+  
+  # lorsque la ligne n'est pas editable, alors on peut seulement afficher les 
+  # informations de détail
+  # TODO rajouter des icones N&B pour avoir un conseil pour les lignes 
+  # pointées.
+  def actions_for_not_editable(writing, deletable=true)
+    html = ''
+    case writing
+    when Transfer then  html << icon_to('detail.png', transfer_path(writing.id))
+    when Adherent::Writing then html << icon_to('detail.png', 
+        adherent.member_payment_path(writing.member, writing.bridge_id),
+        title:'Table des paiments à l\'origine de cette écriture')
+    end
+    html
   end
 
 
