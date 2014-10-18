@@ -1,0 +1,8 @@
+%td= l line.date 
+%td= line.ref 
+%td= line.narration 
+%td= line.destination.name if line.destination 
+%td= line.nature.name if line.nature   
+%td.numeric= debit_credit(line.credit) 
+%td.numeric= debit_credit(line.debit) 
+%td= line_actions(line) 
