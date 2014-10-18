@@ -17,14 +17,7 @@ module InOutWritingsHelper
   
   
   
-  # permet d'afficher les actions possible dans une ligne d'écriture
-  # 
-  def in_out_line_actions(line)
-    content_tag :td, :class=>'icon' do
-      line_actions(line)
-    end
-  end
-
+  
   # Helper permettant de construire les options de counter_account pour le form
   # La classe OptionsForAssociationSelect est dans lib
   #
@@ -44,7 +37,9 @@ module InOutWritingsHelper
     arr
   end
   
-  
+  # affichage des icones pour les éléments de classe Request::FrontLine
+  # un peu différent d'une ligne standard. Pour les compta_lines, utiliser
+  # le helper line_actions.
   def frontline_actions(frontline)
     # Si la ligne est éditable, alors on peut la modifier ou la supprimer
     # 
@@ -81,9 +76,17 @@ module InOutWritingsHelper
   
   end
 
+  # permet d'afficher les actions possible dans une ligne d'écriture
+  # 
+  def in_out_line_actions(line)
+    content_tag :td, :class=>'icon' do
+      line_actions(line)
+    end
+  end
+
 
   # renvoie les actions possibles sous forme d'un fragment de html 
-  # pour une compta_line
+  # pour une compta_line. 
   # Si un block est donné, les instructions de ce block sont reprises dans 
   # le fragment de html et au début de celui ci.
   # TODO voir si on utilise deletable dans le programme.

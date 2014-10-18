@@ -1,8 +1,0 @@
-          <td><%=l line.date %></td>
-          <td><%= line.ref %></td>
-          <td><%= line.narration %></td>
-          <td><%= line.destination.name if line.destination %></td>
-          <td><%= line.nature.name if line.nature %></td>  
-          <td class="numeric"><%= debit_credit(line.credit) %></td>
-          <td class="numeric"><%= debit_credit(line.debit) %></td>
-       <%= in_out_line_actions(line) %>
