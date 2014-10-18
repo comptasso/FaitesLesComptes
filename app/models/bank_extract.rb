@@ -59,13 +59,13 @@ class BankExtract < ActiveRecord::Base
   # on utilise all.sum... car le champ debit et credit est en fait
   # dans la table compta_lines
   def total_lines_debit
-    bank_extract_lines.all.sum(&:debit)
+    bank_extract_lines.joins(:compta_line).sum(:debit).to_d
   end
 
   # on utilise all.sum... car le champ debit et credit est en fait
   # dans la table compta_lines
   def total_lines_credit
-    bank_extract_lines.all.sum(&:credit)
+    bank_extract_lines.joins(:compta_line).sum(:credit).to_d
   end
 
   # Il est normal que l'on est débit d'un côté et crédit de l'autre
