@@ -25,6 +25,7 @@ describe BankExtractLinesController do
     minimal_instances
     BankExtract.stub(:find).with(be.to_param).and_return be
     be.stub(:bank_extract_lines).and_return(@a = double(Arel))
+    @a.stub(:includes).with(:compta_line=>:writing).and_return @a
     @a.stub(:order).with(:position).and_return ['bel1', 'bel2']
   end
 

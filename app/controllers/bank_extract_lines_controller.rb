@@ -1,6 +1,8 @@
 class BankExtractLinesController < ApplicationController
   
-  # TODO on pourrait modifier les routes pour avoir juste bank_extract_bank_extract_line et récupérer les variables d'instances nécessaires
+  # TODO on pourrait modifier les routes pour avoir juste 
+  # bank_extract_bank_extract_line 
+  # et récupérer les variables d'instances nécessaires
  
   before_filter :find_params
 
@@ -8,21 +10,22 @@ class BankExtractLinesController < ApplicationController
     @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
   end
 
-  
-
   # action pour procéder au pointage d'un extrait bancaire
   # récupère l'extrait, les lignes qui lui sont déjà associées et les lignes de ce compte bancaire
   # qui ne sont pas encore associées à un extrait.
   #
   def pointage
     if @bank_extract.locked
-      flash[:notice] = 'Extrait verrouillé, redirection vers la liste des lignes restant à pointer'
+      flash[:notice] = 'Extrait verrouillé, 
+redirection vers la liste des lignes restant à pointer'
       redirect_to lines_to_point_bank_account_bank_extracts_url(@bank_account) 
     end
-      @previous_line = ComptaLine.find_by_id(flash[:previous_line_id]) if flash[:previous_line_id]
+      @previous_line = ComptaLine.find_by_id(flash[:previous_line_id]) if 
+        flash[:previous_line_id]
     prepare_modal_box_instances
     # les variables d'instances pour l'affichage de la vue pointage
-    @bank_extract_lines = @bank_extract.bank_extract_lines.includes(:compta_line=>:writing).order(:position)
+    @bank_extract_lines = @bank_extract.bank_extract_lines.
+      includes(:compta_line=>:writing).order(:position)
     @lines_to_point = @bank_account.not_pointed_lines
   end
   
@@ -87,9 +90,12 @@ class BankExtractLinesController < ApplicationController
   # reorder est appelé par le drag and drop de la vue . Les paramètres
   # transmis sont les suivants :
   #
-  #  - id :- id of the row that is moved. This information is set in the id attribute of the TR element.
-  #  - fromPosition : initial position of the row that is moved. This was value in the indexing cell of the row that is moved.
-  #  - toPosition : new position where row is dropped. This value will be placed in the indexing column of the row.
+  #  - id :- id of the row that is moved. This information is 
+  #  set in the id attribute of the TR element.
+  #  - fromPosition : initial position of the row that is moved.
+  #   This was value in the indexing cell of the row that is moved.
+  #  - toPosition : new position where row is dropped. This value will 
+  #  be placed in the indexing column of the row.
   def reorder
     @bank_extract_line = BankExtractLine.find(params[:id])
     from_position = params[:fromPosition].to_i
@@ -113,7 +119,8 @@ class BankExtractLinesController < ApplicationController
   def find_params
     
     @bank_extract=BankExtract.find(params[:bank_extract_id])
-    # TODO ? ici il faut changer d'exercice si les dates du bank_extract ne sont pas dans l'exercice
+    # TODO ? ici il faut changer d'exercice si les dates du bank_extract 
+    # ne sont pas dans l'exercice
     @bank_account = @bank_extract.bank_account
     # @organism = @bank_account.organism
   end
