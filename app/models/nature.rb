@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-require 'strip_arguments'
 
 # La classe Nature permet une indirection entre les comptes d'un exercice
 # et le type de dépenses ou de recettes correspondant

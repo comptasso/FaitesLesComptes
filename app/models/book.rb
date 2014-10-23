@@ -1,9 +1,5 @@
 # coding: utf-8
 
-
-require 'strip_arguments'
-
-
 # La tables books représente les livres. 
 # Une sous classe IncomeOutcomeBook représente les livres de recettes et de dépénses
 # chacun au travers de leur classe dérivée (IncomeBook et OutcomeBook)

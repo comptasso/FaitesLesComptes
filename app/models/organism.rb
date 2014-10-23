@@ -1,7 +1,5 @@
 # -*- encoding : utf-8 -*-
 
-require 'strip_arguments'
-
 # La classe Organisme est quasiment la tête de toutes les classes du programme.
 # Un organisme a des livres de recettes et de dépenses, mais aussi un livre d'OD et
 # un d'A Nouveau. De même un organisme a un ou des comptes bancaires et une ou 

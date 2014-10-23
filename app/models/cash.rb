@@ -1,5 +1,4 @@
 # coding: utf-8
-require 'strip_arguments'
 # La class Cash correspond à une caisse
 #
 class Cash < ActiveRecord::Base

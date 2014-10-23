@@ -12,13 +12,13 @@ describe "cash_lines/index" do
   def mock_cash_line(montant)
     mock_model(ComptaLine,
       :debit=>montant,
-    :date=>Date.today,
-    :narration=>'le libellé',
-    :destination=>double(:name=>'destinée'),
-    :nature=>double(:name=>'une dépense'),
-    :credit=>0,
-    :ref=>'001',
-    'editable?'=>true
+      :date=>Date.today,
+      :narration=>'le libellé',
+      :destination=>double(:name=>'destinée'),
+      :nature=>double(:name=>'une dépense'),
+      :credit=>0,
+      :ref=>'001',
+      'editable?'=>true
   )
   end
 
@@ -39,7 +39,7 @@ describe "cash_lines/index" do
 
     assign(:cash, @ca)
     @view.stub(:submenu_mois).and_return(['jan', 'fev']) 
-    @view.stub(:in_out_line_actions).and_return('les actions')
+    @view.stub(:line_actions).and_return('les actions')
    
 
     assign(:mois, Date.today.month)

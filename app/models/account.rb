@@ -11,7 +11,6 @@
 
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development
 
-require 'strip_arguments' 
 require 'pdf_document/simple'
 require 'pdf_document/totalized'
 

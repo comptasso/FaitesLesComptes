@@ -1,9 +1,5 @@
 # -*- encoding : utf-8 -*-
 
-require 'strip_arguments'
-
-
-
 # Classe représentant les comptes bancaires.
 # Les champs sont
 #   - bank_name pour le nom de la Banque

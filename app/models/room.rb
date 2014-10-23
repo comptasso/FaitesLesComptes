@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'strip_arguments'
+
 # Room est un modèle qui se situe dans le schéma public et qui sert à
 # enregistrer les noms des bases de données puisque chaque organisme dispose de
 # sa propre base de donnée.

@@ -1,7 +1,5 @@
 # -*- encoding : utf-8 -*-
 
-require 'strip_arguments'
-
 # La classe Destination permet d'avoir un axe d'analyse pour les données de la 
 # comptabilité.
 # 

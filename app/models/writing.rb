@@ -1,7 +1,5 @@
 # coding: utf-8
 
-require 'strip_arguments' 
-
 # Writing représente des écritures dans la comptabilité
 #
 # Writing enregistre les informations communes à une écriture telle que la date
