@@ -59,6 +59,14 @@ module Pdflc
       end
     end
     
+    # permet de passer à la page suivante; incrémente le numéro de page
+    # et remet à nil les variables caches des lignes et des lignes préparées
+    def next_page
+      @page_number += 1
+      @lines = nil
+      @prepared_lines = nil
+    end
+    
     protected
     
     # ici on exécute la query avec le nombre de lignes demandées et l'offset
