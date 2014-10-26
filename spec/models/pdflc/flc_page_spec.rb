@@ -32,7 +32,7 @@ describe Pdflc::FlcPage do
     ar = account.compta_lines.with_writing_and_book.
       select(cls).without_AN.range_date(from_date, to_date)
     
-    Pdflc::FlcTable.new(ar, 1, 22, champs, [7, 8], [1] )
+    Pdflc::FlcTable.new(ar, 22, champs, [7, 8], [1] )
   end
   
   def set_pdf
@@ -81,13 +81,7 @@ describe Pdflc::FlcPage do
       totrs.should == [200.14, 550.68]
     end
     
-    it 'peut rendre les lignes' do
-      @pdf.draw_pdf(1)
-      # render_file(@pdf, 'listing')
-    end
-    
     it 'peut rendre plusieurs pages' do
-      @pdf.draw_pdf(3)
       render_file(@pdf, 'listing')
     end
   end

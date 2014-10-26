@@ -72,7 +72,7 @@ module Compta
 
     # permet notamment de contrôler les limites de date
     def period
-      account.period rescue nil
+      account.period rescue nil 
     end
 
     # utile pour le formulaire de saisie pour changer de compte
@@ -98,7 +98,7 @@ module Compta
     # descendant de PdfDocument::Default
     # et ses classe associées page et table
     # TODO en fait périod est redondant puisque account descend de period
-    def to_pdf(options = {})
+    def to_oldpdf(options = {})
       options[:from_date] = from_date
       options[:to_date] = to_date
       Editions::Listing.new(period, account, options)
@@ -106,23 +106,15 @@ module Compta
     
     # création d'un pdf à partir des options déjà connues. 
     # S'appuie sur le module Pdflc
-    def to_pdf2
-      trame = Pdflc::FlcTrame.new(
-        title:"Listing compte #{account.number}",
-        subtitle: "#{account.title} - Du #{I18n::l from_date} au #{I18n.l to_date}",
-        organism_name:period.organism.title, 
-        exercice:period.long_exercice
-    )
-      table = Pdflc::FlcTable.new(listing_arel, 0, 22, listing_fields, [7,8], [1] ) 
+    def to_pdf
       Pdflc::FlcPage.new(%w(N° Date Jnl Réf Libellé Nature Activité Débit Crédit), # les titres
       [6, 8, 6, 8, 24, 15, 15, 9, 9], # les largeurs
       7.times.collect {:left} + 2.times.collect {:right}, # les alignements
       [solde_debit_avant, solde_credit_avant], 
-      table, trame)
-
+      set_table, set_trame)
     end
 
-    protected
+    
 
     # remplace les points décimaux par des virgules pour s'adapter au paramétrage
     # des tableurs français
@@ -130,11 +122,30 @@ module Compta
       sprintf('%0.02f',number).gsub('.', ',') if number
     end
     
+    def set_trame
+      Pdflc::FlcTrame.new(
+        title:"Listing compte #{account.number}",
+        subtitle: "#{account.title} - Du #{I18n::l from_date} au #{I18n.l to_date}",
+        organism_name:period.organism.title, 
+        exercice:period.long_exercice
+    )
+    end
+    
+    # utilise l'arel, avec 22 lignes par page, la liste des champs demandés, 
+    # puis les champs à totaliser et le champ date
+    def set_table
+      Pdflc::FlcTable.new(listing_arel, 22, listing_fields, [7,8], [1] ) 
+    end
+    
+    protected
+    
     def listing_arel
-      account.compta_lines.with_writing_and_book.includes(:destination, :nature).
+      account.compta_lines.with_writing_and_book.
+        joins('LEFT OUTER JOIN destinations ON compta_lines.destination_id = destinations.id').
+        joins('LEFT OUTER JOIN natures ON compta_lines.nature_id = natures.id').
         select(listing_select).without_AN.
         range_date(from_date, to_date).
-        order(['date ASC', 'writings.id'])
+        order('writings.id')
     end
     
     def listing_fields

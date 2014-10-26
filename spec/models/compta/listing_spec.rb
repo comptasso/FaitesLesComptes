@@ -126,13 +126,30 @@ describe Compta::Listing do
   
   describe 'test en réel', wip:true do
     
+    def render_file(pdf, file_name) 
+    file =  "#{File.dirname(__FILE__)}/pdf_files/#{file_name}.pdf"
+    File.delete(file) if File.exists?(file)
+    File.open(file, 'wb') do |f| 
+      f << pdf.render 
+    end
+  end  
+    
     before(:each) do
       use_test_organism
+      50.times do |i|
+        create_outcome_writing(i+1)
+      end
       @listing = Compta::Listing.new(account_id:@baca.id).with_default_values 
     end
     
     it 'peut créer un pdflc::flc_page' do
-      @listing.to_pdf2
+      pdf = @listing.to_pdf
+      render_file(pdf, 'listing2')
+    end
+    
+    it 'peut le créer aussi avec l ancienne méthode' do
+      pdf = @listing.to_pdf_old
+      render_file(pdf, 'listing1')
     end
     
     

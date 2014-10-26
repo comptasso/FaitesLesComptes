@@ -18,12 +18,12 @@ module Pdflc
   # 
   class FlcTable
     
-    attr_reader :columns_to_totalize, :fields, :date_fields
+    attr_reader :columns_to_totalize, :fields, :date_fields, :arel
     
-    def initialize(arel, page_number, nb_lines_per_page, fields,
+    def initialize(arel, nb_lines_per_page, fields,
         columns_to_totalize = [], date_fields = [])
       @arel = arel
-      @page_number = page_number
+      @page_number = 1
       @nb_lines_per_page = nb_lines_per_page
       @fields = fields
       @columns_to_totalize = columns_to_totalize
@@ -46,6 +46,7 @@ module Pdflc
           v = l.send(f)
           v = french_format(v) if i.in?(columns_to_totalize)
           v = I18n.l(v.to_date, format:'%d-%m-%Y') if i.in?(date_fields)
+          v ||= '' # pour gérer les nil
           v
         end
       end
@@ -54,8 +55,8 @@ module Pdflc
     
     # renvoie un array de Decimal, correspondant aux champs qui sont à totaliser
     def totals
-      columns_to_totalize.collect.with_index do |ctt, i|
-        lines.sum(&fields[i])
+      columns_to_totalize.collect do |i|
+        lines.sum {|l| l.send(fields[i].to_sym) }
       end
     end
     
@@ -65,6 +66,11 @@ module Pdflc
       @page_number += 1
       @lines = nil
       @prepared_lines = nil
+    end
+    
+    # renvoie le nombre de page; au minimum 1
+    def nb_pages
+      [(@arel.count.to_f/@nb_lines_per_page).ceil , 1].max
     end
     
     protected

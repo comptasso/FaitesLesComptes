@@ -49,10 +49,11 @@ module Pdflc
     end
     
     # 
-    def draw_pdf(nb_pages) 
+    def draw_pdf
       trame.trame_stamp(self) # création du stamp 'trame' à partir de la trame
-      nb_pages.times do |i|
-        last_page =  (i+1) == nb_pages ? true : false
+      nb_p = flctable.nb_pages
+      nb_p.times do |i|
+        last_page =  (i+1) == nb_p ? true : false
         first_page = (i == 0) ? true : false
         stamp('trame') # on applique le stamp sur la page
         
@@ -66,6 +67,11 @@ module Pdflc
         end
         next_page unless last_page
       end
+    end
+    
+    def render
+      draw_pdf
+      super
     end
     
     

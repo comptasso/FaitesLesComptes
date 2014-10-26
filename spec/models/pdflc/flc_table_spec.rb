@@ -19,11 +19,11 @@ describe Pdflc::FlcTable do
     
     before(:each) do
       @arel = Arel::Table.new(:compta_lines)
-      @table = Pdflc::FlcTable.new(@arel, 2, 22, [:debit])
+      @table = Pdflc::FlcTable.new(@arel, 22, [:debit])
     end
     
     it 'fait une requête avec un offset et une limit' do
-      @arel.should_receive(:offset).with(22).and_return @arel
+      @arel.should_receive(:offset).with(0).and_return @arel
       @arel.should_receive(:limit).with(22).and_return @arel
       @table.lines
     end
@@ -45,9 +45,9 @@ describe Pdflc::FlcTable do
         with_writing_and_book.
         select(['writings.id AS w_id', 'writings.date AS w_date', 'debit']).
         without_AN.range_date(@p.start_date, @p.close_date).
-        order(['w_date ASC', 'writings.id'])
+        order(['writings.id ASC'])
       
-      @pdft = Pdflc::FlcTable.new(@ar, 2, 22, [:debit], [0])
+      @pdft = Pdflc::FlcTable.new(@ar, 22, [:debit], [0])
     end
     
     after(:each) do
@@ -60,8 +60,10 @@ describe Pdflc::FlcTable do
     end
     
     it 'sait calculer le total' do
-       p1 = Pdflc::FlcTable.new(@ar, 1, 22, [:debit], [0] )
-       p1.totals.should == [66.to_d] # 11*12/2
+       p = Pdflc::FlcTable.new(@ar, 22, [:debit], [0] )
+       p.totals.should == [66.to_d] # 11*12/2
+       @pdft.totals.should == [66.to_d]
+       @pdft.next_page
        @pdft.totals.should == [(23*11 - 66).to_d]
     end 
     
@@ -75,8 +77,8 @@ describe Pdflc::FlcTable do
         with_writing_and_book.
         select(['writings.id AS w_id', 'writings.date AS w_date', 'debit', 'credit']).
         without_AN.range_date(@p.start_date, @p.close_date).
-        order(['w_date ASC', 'w_id'])
-      @pdf = Pdflc::FlcTable.new(@ar, 1, 22, [:w_id, :w_date, :debit, :credit],
+        order(['w_date ASC', 'w_id ASC'])
+      @pdf = Pdflc::FlcTable.new(@ar, 22, [:w_id, :w_date, :debit, :credit],
         [2, 3], [1] )
     end
     
