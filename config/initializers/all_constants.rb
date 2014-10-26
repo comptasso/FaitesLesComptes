@@ -105,4 +105,5 @@ RACINE_CASH = '53'
 # FLCVERSION = '1.6.4RC' # accélération des pdf de Listing et Grand Livre
 # FLCVERSION = '1.6.5RC' # mise en place d'un recu pour le gem adhérent
 # FLCVERSION = '1.6.6RC' # correction bug sur form in_out_writings
-FLCVERSION = '1.6.7RC' # accélératin vue Room#index
+# FLCVERSION = '1.6.7RC' # accélératin vue Room#index
+FLCVERSION = '1.6.8RC' # accélératin vue pointage des comptes bancaires
