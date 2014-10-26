@@ -107,11 +107,13 @@ module Compta
     # création d'un pdf à partir des options déjà connues. 
     # S'appuie sur le module Pdflc
     def to_pdf
+      stamp  = "brouillard" unless account.all_lines_locked?(from_date, to_date)
+      options = {fond:stamp} if stamp
       Pdflc::FlcPage.new(%w(N° Date Jnl Réf Libellé Nature Activité Débit Crédit), # les titres
       [6, 8, 6, 8, 24, 15, 15, 9, 9], # les largeurs
       7.times.collect {:left} + 2.times.collect {:right}, # les alignements
       [solde_debit_avant, solde_credit_avant], 
-      set_table, set_trame)
+      set_table, set_trame, options)
     end
 
     

@@ -40,7 +40,7 @@ describe Pdflc::FlcPage do
       [6, 8, 6, 8, 24, 15, 15, 9, 9], # les largeurs
       7.times.collect {:left} + 2.times.collect {:right}, # les alignements
       [0, 10.56],  # les reports
-      @flc_table, @flc_trame) 
+      @flc_table, @flc_trame, fond:'bizarre')  
   end
   
   before(:each) do
@@ -50,14 +50,6 @@ describe Pdflc::FlcPage do
     acc = @p.accounts.classe_7.first
     @flc_table = set_table(acc, @p.start_date, @p.close_date)
   end
-  
-#  it 'un fichier vierge' do
-#    pdf = set_pdf
-#  
-#    pdf.should be_an_instance_of(Pdflc::FlcPage)
-#    pdf.draw_pdf(1)
-#    render_file(pdf, 'listing')
-#  end
   
   describe 'avec des lignes' do
     
@@ -81,9 +73,11 @@ describe Pdflc::FlcPage do
       totrs.should == [200.14, 550.68]
     end
     
-    it 'peut rendre plusieurs pages' do
-      render_file(@pdf, 'listing')
+    it 'peut rendre le fichier' do
+      render_file(@pdf, 'spec_listing')
     end
+    
+   
   end
   
   

@@ -147,10 +147,7 @@ describe Compta::Listing do
       render_file(pdf, 'listing2')
     end
     
-    it 'peut le créer aussi avec l ancienne méthode' do
-      pdf = @listing.to_pdf_old
-      render_file(pdf, 'listing1')
-    end
+    
     
     
   end

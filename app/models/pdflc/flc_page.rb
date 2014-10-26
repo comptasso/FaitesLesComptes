@@ -16,6 +16,9 @@ module Pdflc
   # 
   # Un array de titres fournit les titres
   # Enfin un array d'alignements fournit les alignements
+  # 
+  # La seule option actuellement prévue est :fond pour pouvoir définir un 
+  # fond tel que 'Provisoire' ou 'Brouillard'
   #
   class FlcPage < Prawn::Document
     
@@ -25,7 +28,7 @@ module Pdflc
     
     attr_reader :titles, :widths, :alignments, :reports, :trame, :flctable 
     
-    def initialize(titles, widths, alignments, reports, table, trame)
+    def initialize(titles, widths, alignments, reports, table, trame, options={})
       @titles = titles
       @widths = widths
       @alignments = alignments
@@ -33,9 +36,14 @@ module Pdflc
       @flctable = table # la logique veut que la table soit initialisée
       # à la page 1
       @trame = trame
+      
       # TODO rajouter quelques validations 
-      # la somme des widths doit faire 100,
+      #  par exemplela somme des widths doit faire 100,
       super(page_layout: :landscape, page_size:'A4')
+      if options[:fond]
+        set_stamp_fond(options[:fond])
+        @fond = true
+      end
       set_total_columns_widths # calcule les dimensions pour les colonnes totals
     end
     
@@ -55,8 +63,10 @@ module Pdflc
       nb_p.times do |i|
         last_page =  (i+1) == nb_p ? true : false
         first_page = (i == 0) ? true : false
+        
         stamp('trame') # on applique le stamp sur la page
         
+        draw_page_titles
         bounding_box [0, height-50], width:width, height:height-40 do
           font_size(10) do 
             draw_table_title # on écrit les titres de la table
@@ -65,6 +75,7 @@ module Pdflc
             draw_total_lines(last_page) # le total de la table plus la ligne A reporter
           end
         end
+        stamp('fond') if @fond
         next_page unless last_page
       end
     end
@@ -83,19 +94,26 @@ module Pdflc
       start_new_page
     end
     
+    def draw_page_titles
+      bounding_box [150, height], :width => width-300, :height => 40 do
+        font_size(20) { text trame.title.capitalize, :align=>:center }
+        text trame.subtitle, :align=>:center if trame.subtitle
+      end
+    end
+    
     def draw_table_title
       table [titles], column_widths:col_widths, :cell_style=>FLC_TITLE_STYLE  
     end
     
     def draw_report_line(first_page = false)
-      int = [first_page ? "Soldes initiaux" : 'A reporter']
+      int = [first_page ? "Valeurs début de période" : 'A reporter']
       table [int + format_num_values(reports)], column_widths:@total_columns_widths,
         :cell_style=>FLC_REPORT_LINE_STYLE 
     end
     
     def draw_total_lines(last_page = false)
       tl = ['Totaux'] + format_num_values(@flctable.totals)
-      lib = last_page ? 'Total général' : 'A reporter'
+      lib = last_page ? 'Valeurs fin de période' : 'A reporter'
       trs = [lib] + format_num_values(to_reports)
       
       table [tl, trs], 
@@ -162,6 +180,34 @@ car les largeurs de la table ne sont pas fixées' unless widths
         ActionController::Base.helpers.
           number_with_precision(v, precision:2)
       end
+    end
+    
+     # Définit une méthode tampon pour le PrawnSheet qui peut ensuite être appelée 
+    # par fill_actif_pdf et fill_passif_pdf 
+    #
+    def set_stamp_fond(text)
+      if stamp_dictionary_registry['fond'].nil?
+         create_stamp("fond") do
+          rotate(stamp_rotation) do
+            stroke_color "888888"
+            font_size(120) do
+              text_rendering_mode(:stroke) do
+                draw_text(text, :at=>stamp_position)
+              end
+            end
+            stroke_color '000000'
+          end
+          
+        end
+      end
+    end
+    
+    def stamp_rotation
+      page.layout == :landscape ? 30 : 65
+    end
+    
+    def stamp_position
+      page.layout == :landscape ? [200, -20] : [250, -150]
     end
     
   end

@@ -17,7 +17,7 @@ module Pdflc
       options.each do |k,v|
         send("#{k}=", v)
       end
-      @subtitle ||= options[:subtitle]
+      @subtitle ||= '' # pour ne pas risquer de vouloir imprimer des nil
       
       
     end
@@ -26,6 +26,12 @@ module Pdflc
     # et rempli par la méthode protégée #entetes
     def trame_stamp(pdf)
         pdf.create_stamp("trame") do
+          entetes(pdf)
+        end
+    end
+    
+    def provisoire_stamp(pdf)
+      pdf.create_stamp("provisoire") do
           entetes(pdf)
         end
     end
@@ -43,10 +49,10 @@ module Pdflc
         pdf.text top_left 
       end
 
-      pdf.bounding_box [150, h], :width => width-300, :height => 40 do
-        pdf.font_size(20) { pdf.text title.capitalize, :align=>:center }
-        pdf.text subtitle, :align=>:center if subtitle
-      end
+#      pdf.bounding_box [150, h], :width => width-300, :height => 40 do
+#        pdf.font_size(20) { pdf.text title.capitalize, :align=>:center }
+#        pdf.text subtitle, :align=>:center if subtitle
+#      end
 
       pdf.bounding_box [width-150, h], :width => 150, :height => 40 do
         pdf.text top_right, :align=>:right
@@ -61,6 +67,9 @@ module Pdflc
      def top_right
       I18n::l(Time.now, :format=>"Edition du\n%e %B %Y\nà %H:%M:%S")
     end
+    
+     
+    
     
   end
 

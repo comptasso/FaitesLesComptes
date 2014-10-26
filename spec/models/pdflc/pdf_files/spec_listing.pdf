@@ -17,11 +17,25 @@ endobj
 >>
 endobj
 4 0 obj
-<< /Length 95990
+<< /Length 96189
 >>
 stream
 q
-/Stamp1 Do
+/Stamp2 Do
+
+BT
+390.375 544.92 Td
+/F1.0 20 Tf
+[<4c65207469747265>] TJ
+ET
+
+
+BT
+387.933 527.544 Td
+/F1.0 12 Tf
+[<4c6520736f75732d7469747265>] TJ
+ET
+
 1 w
 /DeviceRGB CS
 0.000 0.000 0.000 SCN
@@ -348,9 +362,9 @@ S
 0.000 0.000 0.000 SCN
 
 BT
-592.7298 480.84 Td
+544.7798 480.84 Td
 /F2.0 10 Tf
-[<536f6c64657320696e697469617578>] TJ
+[<56> 60 <616c657572> 15 <732064e962> 20 <75742064652070e972696f6465>] TJ
 ET
 
 1 w
@@ -7873,9 +7887,9 @@ S
 0.000 0.000 0.000 SCN
 
 BT
-601.7698 85.04000000000002 Td
+559.5798 85.04000000000002 Td
 /F2.0 10 Tf
-[<54> 80 <6f74616c2067> -10 <e96ee972616c>] TJ
+[<56> 60 <616c657572> 15 <732066696e2064652070e972696f6465>] TJ
 ET
 
 1 w
@@ -7944,6 +7958,7 @@ BT
 [<3535302c3638>] TJ
 ET
 
+/Stamp1 Do
 Q
 
 endstream
@@ -7954,10 +7969,11 @@ endobj
 /MediaBox [0 0 841.89 595.28]
 /Contents 4 0 R
 /Resources << /ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
-/XObject << /Stamp1 6 0 R
+/XObject << /Stamp2 8 0 R
+/Stamp1 6 0 R
 >>
-/Font << /F2.0 8 0 R
-/F1.0 7 0 R
+/Font << /F1.0 7 0 R
+/F2.0 9 0 R
 >>
 >>
 >>
@@ -7969,7 +7985,55 @@ endobj
 /Resources << /Font << /F1.0 7 0 R
 >>
 >>
-/Length 605
+/Length 291
+>>
+stream
+q
+/DeviceRGB cs
+0.000 0.000 0.000 scn
+/DeviceRGB CS
+0.000 0.000 0.000 SCN
+1 w
+0 J
+0 j
+[ ] 0 d
+q
+0.86603 0.50000 -0.50000 0.86603 0.00000 0.00000 cm
+/DeviceRGB CS
+0.533 0.533 0.533 SCN
+
+1 Tr
+
+BT
+236 16.0 Td
+/F1.0 120 Tf
+[<62697a61727265>] TJ
+ET
+
+
+0 Tr
+/DeviceRGB CS
+0.000 0.000 0.000 SCN
+Q
+Q
+
+endstream
+endobj
+7 0 obj
+<< /Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+>>
+endobj
+8 0 obj
+<< /Type /XObject
+/Subtype /Form
+/BBox [0 0 841.89 595.28]
+/Resources << /Font << /F1.0 7 0 R
+>>
+>>
+/Length 470
 >>
 stream
 q
@@ -7997,20 +8061,6 @@ ET
 
 
 BT
-390.375 544.92 Td
-/F1.0 20 Tf
-[<4c65207469747265>] TJ
-ET
-
-
-BT
-387.933 527.544 Td
-/F1.0 12 Tf
-[<4c6520736f75732d7469747265>] TJ
-ET
-
-
-BT
 752.526 550.664 Td
 /F1.0 12 Tf
 [<45646974696f6e206475>] TJ
@@ -8027,21 +8077,14 @@ ET
 BT
 749.178 522.92 Td
 /F1.0 12 Tf
-[<e02031303a32343a3033>] TJ
+[<e02031343a34393a3532>] TJ
 ET
 
 Q
 
 endstream
 endobj
-7 0 obj
-<< /Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica
-/Encoding /WinAnsiEncoding
->>
-endobj
-8 0 obj
+9 0 obj
 << /Type /Font
 /Subtype /Type1
 /BaseFont /Helvetica-Bold
@@ -8049,21 +8092,22 @@ endobj
 >>
 endobj
 xref
-0 9
+0 10
 0000000000 65535 f 
 0000000015 00000 n 
 0000000109 00000 n 
 0000000158 00000 n 
 0000000215 00000 n 
-0000096258 00000 n 
-0000096479 00000 n 
-0000097232 00000 n 
-0000097329 00000 n 
+0000096457 00000 n 
+0000096692 00000 n 
+0000097131 00000 n 
+0000097228 00000 n 
+0000097846 00000 n 
 trailer
-<< /Size 9
+<< /Size 10
 /Root 2 0 R
 /Info 1 0 R
 >>
 startxref
-97431
+97948
 %%EOF
