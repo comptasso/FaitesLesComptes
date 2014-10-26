@@ -44,6 +44,7 @@ module Pdflc
         set_stamp_fond(options[:fond])
         @fond = true
       end
+      trame.trame_stamp(self) # création du stamp 'trame' à partir de la trame
       set_total_columns_widths # calcule les dimensions pour les colonnes totals
     end
     
@@ -57,28 +58,40 @@ module Pdflc
     end
     
     # 
-    def draw_pdf
-      trame.trame_stamp(self) # création du stamp 'trame' à partir de la trame
+    def draw_pdf(pdf_doc = nil)
+      pdf_doc ||= self
       nb_p = flctable.nb_pages
       nb_p.times do |i|
         last_page =  (i+1) == nb_p ? true : false
         first_page = (i == 0) ? true : false
-        
-        stamp('trame') # on applique le stamp sur la page
-        
-        draw_page_titles
-        bounding_box [0, height-50], width:width, height:height-40 do
-          font_size(10) do 
-            draw_table_title # on écrit les titres de la table
-            draw_report_line(first_page) # on écrit les reports 
-            draw_table_lines # on écrit le contenu de la table
-            draw_total_lines(last_page) # le total de la table plus la ligne A reporter
-          end
-        end
-        stamp('fond') if @fond
+        draw_heart(pdf_doc, first_page, last_page)        
+        draw_stamps if pdf_doc == self # sinon on laisse ce soin au pdf_doc 
+        # qui a initié la demande
         next_page unless last_page
       end
+      numerote # if pdf_doc == self # sinon on laisse ce soin au pdf_doc qui
+      # a initié la demande.
     end
+    
+    # juste imprimer le coeur des informatiosn
+    def draw_heart(pdf_doc, first_page, last_page)
+      pdf_doc.draw_page_titles
+      pdf_doc.bounding_box [0, pdf_doc.height-50], width:pdf_doc.width, height:pdf_doc.height-40 do
+        pdf_doc.font_size(10) do 
+          pdf_doc.draw_table_title # on écrit les titres de la table
+          pdf_doc.draw_report_line(first_page) # on écrit les reports 
+          pdf_doc.draw_table_lines # on écrit le contenu de la table
+          pdf_doc.draw_total_lines(last_page) # le total de la table plus la ligne A reporter
+        end
+      end
+    end
+    
+    def draw_stamps
+      stamp('trame') # on applique le stamp trame sur la page
+      stamp('fond') if @fond
+    end
+    
+   
     
     def render
       draw_pdf
@@ -182,12 +195,18 @@ car les largeurs de la table ne sont pas fixées' unless widths
       end
     end
     
-     # Définit une méthode tampon pour le PrawnSheet qui peut ensuite être appelée 
+    def numerote
+      number_pages("page <page>/<total>",
+        { :at => [width - 150, 0],:width => 150,
+          :align => :right, :start_count_at => 1 })
+    end
+    
+    # Définit une méthode tampon pour le PrawnSheet qui peut ensuite être appelée 
     # par fill_actif_pdf et fill_passif_pdf 
     #
     def set_stamp_fond(text)
       if stamp_dictionary_registry['fond'].nil?
-         create_stamp("fond") do
+        create_stamp("fond") do
           rotate(stamp_rotation) do
             stroke_color "888888"
             font_size(120) do
