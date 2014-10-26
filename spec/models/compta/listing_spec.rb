@@ -2,7 +2,14 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
+RSpec.configure do |c|  
+  c.filter = {wip:true}  
+end
+
 describe Compta::Listing do
+  include OrganismFixtureBis
+  
+  describe 'test avec des mock' do
 
    def double_compta_line(i)
      double(ComptaLine,
@@ -113,6 +120,24 @@ describe Compta::Listing do
     end
 
    end
+   
+    
+  end
+  
+  describe 'test en réel', wip:true do
+    
+    before(:each) do
+      use_test_organism
+      @listing = Compta::Listing.new(account_id:@baca.id).with_default_values 
+    end
+    
+    it 'peut créer un pdflc::flc_page' do
+      @listing.to_pdf2
+    end
+    
+    
+  end
+    
 
 end
 

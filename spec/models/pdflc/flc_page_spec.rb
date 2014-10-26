@@ -78,14 +78,16 @@ describe Pdflc::FlcPage do
     
     it 'sait caluler ses totaux' do
       totrs = @pdf.to_reports
-      
       totrs.should == [200.14, 550.68]
     end
     
     it 'peut rendre les lignes' do
-       lereport = @pdf.to_reports
-       puts "Mes reports : #{lereport}"
-       @pdf.draw_pdf(1)
+      @pdf.draw_pdf(1)
+      # render_file(@pdf, 'listing')
+    end
+    
+    it 'peut rendre plusieurs pages' do
+      @pdf.draw_pdf(3)
       render_file(@pdf, 'listing')
     end
   end

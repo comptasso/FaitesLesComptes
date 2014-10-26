@@ -42,8 +42,6 @@ module Pdflc
     # to_reports additionne les reports et les totaux de la table
     def to_reports
       tls = @flctable.totals
-      puts "La table des totaux #{tls}"
-      puts "Les reports à la création #{@reports}"
       torpts = @reports.collect.with_index do |r, i|
         r + tls[i]
       end
@@ -57,20 +55,27 @@ module Pdflc
         last_page =  (i+1) == nb_pages ? true : false
         first_page = (i == 0) ? true : false
         stamp('trame') # on applique le stamp sur la page
-        stroke_horizontal_rule
-        font_size(10) do 
-          draw_table_title # on écrit les titres de la table
-          draw_report_line(first_page) # on écrit les reports 
-          draw_table_lines # on écrit le contenu de la table
-          draw_total_lines(last_page) # le total de la table plus la ligne A reporter
-        end
         
-        # on passe à la page suivante
+        bounding_box [0, height-50], width:width, height:height-40 do
+          font_size(10) do 
+            draw_table_title # on écrit les titres de la table
+            draw_report_line(first_page) # on écrit les reports 
+            draw_table_lines # on écrit le contenu de la table
+            draw_total_lines(last_page) # le total de la table plus la ligne A reporter
+          end
+        end
+        next_page unless last_page
       end
     end
     
     
     protected 
+    
+    def next_page
+      @reports = to_reports
+      @flctable.next_page
+      start_new_page
+    end
     
     def draw_table_title
       table [titles], column_widths:col_widths, :cell_style=>FLC_TITLE_STYLE  
@@ -104,7 +109,6 @@ module Pdflc
     end
     
     def col_widths
-      # puts docu.columns_widths
       @col_widths ||= widths.collect { |w| width*w/100 }
     end
     
@@ -112,6 +116,10 @@ module Pdflc
     # la largeur de la page
     def width
       bounds.right
+    end
+    
+    def height
+      bounds.top
     end
     
     def set_total_columns_widths

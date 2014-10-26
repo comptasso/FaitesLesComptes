@@ -103,6 +103,24 @@ module Compta
       options[:to_date] = to_date
       Editions::Listing.new(period, account, options)
     end
+    
+    # création d'un pdf à partir des options déjà connues. 
+    # S'appuie sur le module Pdflc
+    def to_pdf2
+      trame = Pdflc::FlcTrame.new(
+        title:"Listing compte #{account.number}",
+        subtitle: "#{account.title} - Du #{I18n::l from_date} au #{I18n.l to_date}",
+        organism_name:period.organism.title, 
+        exercice:period.long_exercice
+    )
+      table = Pdflc::FlcTable.new(listing_arel, 0, 22, listing_fields, [7,8], [1] ) 
+      Pdflc::FlcPage.new(%w(N° Date Jnl Réf Libellé Nature Activité Débit Crédit), # les titres
+      [6, 8, 6, 8, 24, 15, 15, 9, 9], # les largeurs
+      7.times.collect {:left} + 2.times.collect {:right}, # les alignements
+      [solde_debit_avant, solde_credit_avant], 
+      table, trame)
+
+    end
 
     protected
 
@@ -110,6 +128,25 @@ module Compta
     # des tableurs français
     def reformat(number)
       sprintf('%0.02f',number).gsub('.', ',') if number
+    end
+    
+    def listing_arel
+      account.compta_lines.with_writing_and_book.includes(:destination, :nature).
+        select(listing_select).without_AN.
+        range_date(from_date, to_date).
+        order(['date ASC', 'writings.id'])
+    end
+    
+    def listing_fields
+      ['w_id', 'w_date', 'b_abbreviation', 'w_ref', 'w_narration',
+      'nat_name', 'dest_name', 'debit', 'credit']
+    end
+    
+    def listing_select
+      ['writings.id AS w_id', 'writings.date AS w_date',
+        'books.abbreviation AS b_abbreviation', 'writings.ref AS w_ref', 
+        'writings.narration AS w_narration', 'natures.name AS nat_name',
+        'destinations.name AS dest_name', 'debit',  'credit']
     end
 
 
