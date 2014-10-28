@@ -18,7 +18,8 @@ module Pdflc
   # 
   class FlcTable
     
-    attr_reader :columns_to_totalize, :fields, :date_fields, :arel
+    attr_reader :columns_to_totalize, :fields, :date_fields
+    attr_accessor :arel
     
     def initialize(arel, nb_lines_per_page, fields,
         columns_to_totalize = [], date_fields = [])
@@ -32,6 +33,14 @@ module Pdflc
     
     def lines
       @lines ||= fetch_lines
+    end
+    
+    # change la requête, ce qui permet de garder le même objet pour l'ensemble
+    # des listings du grand livre.
+    def change_arel(ar)
+      self.arel = ar
+      @lines = nil
+      @prepared_lines = nil
     end
     
     # les lignes préparées sont la transformation des champs à additionner 

@@ -92,17 +92,7 @@ module Compta
         csv << ["Soldes au #{I18n::l to_date}", '', '', '', '','', reformat(solde_debit_avant + total_debit), reformat(solde_credit_avant + total_credit)]
       end
     end
-
- 
-    # Produit un document pdf en s'appuyant sur la classe Editions::Account
-    # descendant de PdfDocument::Default
-    # et ses classe associées page et table
-    # TODO en fait périod est redondant puisque account descend de period
-    def to_oldpdf(options = {})
-      options[:from_date] = from_date
-      options[:to_date] = to_date
-      Editions::Listing.new(period, account, options)
-    end
+   
     
     # création d'un pdf à partir des options déjà connues. 
     # S'appuie sur le module Pdflc
@@ -112,7 +102,7 @@ module Compta
       Pdflc::FlcPage.new(%w(N° Date Jnl Réf Libellé Nature Activité Débit Crédit), # les titres
       [6, 8, 6, 8, 24, 15, 15, 9, 9], # les largeurs
       7.times.collect {:left} + 2.times.collect {:right}, # les alignements
-      [solde_debit_avant, solde_credit_avant], 
+      [solde_debit_avant, solde_credit_avant], # les reports
       set_table, set_trame, options)
     end
 

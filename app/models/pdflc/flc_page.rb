@@ -26,7 +26,8 @@ module Pdflc
     FLC_LINE_STYLE = {:padding=> [1,5,1,5], :height => 16, :overflow=>:truncate}
     FLC_REPORT_LINE_STYLE = {:font_style=>:bold, :align=>:right }
     
-    attr_reader :titles, :widths, :alignments, :reports, :trame, :flctable 
+    attr_reader :titles, :widths, :alignments, :trame, :flctable 
+    attr_accessor :reports
     
     def initialize(titles, widths, alignments, reports, table, trame, options={})
       @titles = titles
@@ -58,30 +59,29 @@ module Pdflc
     end
     
     # 
-    def draw_pdf(pdf_doc = nil)
-      pdf_doc ||= self
+    def draw_pdf(pagination = true)
+      
       nb_p = flctable.nb_pages
       nb_p.times do |i|
         last_page =  (i+1) == nb_p ? true : false
         first_page = (i == 0) ? true : false
-        draw_heart(pdf_doc, first_page, last_page)        
-        draw_stamps if pdf_doc == self # sinon on laisse ce soin au pdf_doc 
-        # qui a initié la demande
+        draw_heart(first_page, last_page)        
+        draw_stamps 
         next_page unless last_page
       end
-      numerote # if pdf_doc == self # sinon on laisse ce soin au pdf_doc qui
+      numerote if pagination # sinon on laisse ce soin au pdf_doc qui
       # a initié la demande.
     end
     
     # juste imprimer le coeur des informatiosn
-    def draw_heart(pdf_doc, first_page, last_page)
-      pdf_doc.draw_page_titles
-      pdf_doc.bounding_box [0, pdf_doc.height-50], width:pdf_doc.width, height:pdf_doc.height-40 do
-        pdf_doc.font_size(10) do 
-          pdf_doc.draw_table_title # on écrit les titres de la table
-          pdf_doc.draw_report_line(first_page) # on écrit les reports 
-          pdf_doc.draw_table_lines # on écrit le contenu de la table
-          pdf_doc.draw_total_lines(last_page) # le total de la table plus la ligne A reporter
+    def draw_heart(first_page, last_page)
+      draw_page_titles
+      bounding_box [0, height-50], width:width, height:height-40 do
+        font_size(10) do 
+          draw_table_title # on écrit les titres de la table
+          draw_report_line(first_page) # on écrit les reports 
+          draw_table_lines # on écrit le contenu de la table
+          draw_total_lines(last_page) # le total de la table plus la ligne A reporter
         end
       end
     end
@@ -134,6 +134,8 @@ module Pdflc
     end
     
     def draw_table_lines
+      pls = @flctable.prepared_lines
+      
       # la table des lignes proprement dites
       table @flctable.prepared_lines,  :row_colors => ["FFFFFF", "DDDDDD"], 
         :header=> false , 
@@ -142,7 +144,7 @@ module Pdflc
         alignments.each_with_index do |alignement,i|
           table.column(i).style {|c| c.align = alignement} 
         end
-      end
+      end unless pls.empty?
     end
     
     def col_widths

@@ -48,20 +48,37 @@ module Compta
       # de pagination
       #
       #
-    def to_pdf 
+#    def to_pdf 
+#      final_pdf = PdfDocument::DefaultPrawn.new(:page_size => 'A4', :page_layout => :landscape)
+#
+#      ras = accounts.select {|ra| ra.compta_lines.any? }
+#      ras.each do |a|
+#
+#        # crée un Compta::Listing, en fait un pdf (to_pdf), puis rend ce pdf dans le final_pdf
+#        Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date).
+#          to_pdf({title:"Grand livre - Du #{I18n::l from_date} au #{I18n.l to_date}",
+#            :select_method=>'compta_lines',
+#            subtitle:"Compte #{a.number} - #{a.title}"} ).
+#            render_pdf_text(final_pdf)
+#
+#          final_pdf.start_new_page unless a == ras.last # page suivante sauf si le dernier
+#      end
+#      final_pdf.numerote
+#      final_pdf
+#    end
+    
+    def to_pdf
       final_pdf = PdfDocument::DefaultPrawn.new(:page_size => 'A4', :page_layout => :landscape)
-
       ras = accounts.select {|ra| ra.compta_lines.any? }
       ras.each do |a|
-
-        # crée un Compta::Listing, en fait un pdf (to_pdf), puis rend ce pdf dans le final_pdf
-        Compta::Listing.new(account_id:a.id, from_date:from_date, to_date:to_date).
-          to_pdf({title:"Grand livre - Du #{I18n::l from_date} au #{I18n.l to_date}",
-            :select_method=>'compta_lines',
-            subtitle:"Compte #{a.number} - #{a.title}"} ).
-            render_pdf_text(final_pdf)
-
-          final_pdf.start_new_page unless a == ras.last # page suivante sauf si le dernier
+        # crée un Compta::Listing
+        cl = Compta::Listing.new(account_id:a.id, 
+          from_date:from_date, 
+          to_date:to_date).
+          to_pdf
+        
+        final_pdf cl.draw_pdf
+        final_pdf.start_new_page unless a == ras.last # page suivante sauf si le dernier
       end
       final_pdf.numerote
       final_pdf
