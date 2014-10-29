@@ -27,7 +27,8 @@ describe Compta::Listing do
 
    before(:each) do
     @p = mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year )
-    @a1 = mock_model(Account, :period=>@p, :period_id=>@p.id)
+    @a1 = mock_model(Account, :period=>@p, :period_id=>@p.id,
+      all_lines_locked?:false)
     @a1.stub_chain(:compta_lines, :listing).and_return
     @listing = Compta::Listing.new  
   end
