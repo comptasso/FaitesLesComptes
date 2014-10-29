@@ -72,7 +72,7 @@ module Compta
 
     # permet notamment de contrôler les limites de date
     def period
-      account.period rescue nil
+      account.period rescue nil 
     end
 
     # utile pour le formulaire de saisie pour changer de compte
@@ -92,28 +92,28 @@ module Compta
         csv << ["Soldes au #{I18n::l to_date}", '', '', '', '','', reformat(solde_debit_avant + total_debit), reformat(solde_credit_avant + total_credit)]
       end
     end
-
- 
-    # Produit un document pdf en s'appuyant sur la classe Editions::Account
-    # descendant de PdfDocument::Default
-    # et ses classe associées page et table
-    # TODO en fait périod est redondant puisque account descend de period
-    def to_pdf(options = {})
+   
+    
+    # création d'un pdf à partir des options déjà connues. 
+    # S'appuie sur le module Pdflc
+    def to_pdf
+      stamp  = "brouillard" unless account.all_lines_locked?(from_date, to_date)
+      options = {fond:stamp} if stamp
+      options[:from_account] = account
       options[:from_date] = from_date
       options[:to_date] = to_date
-      Editions::Listing.new(period, account, options)
+      pdf = Pdflc::FlcBook.new(options)
+      pdf.draw_pdf
     end
 
-    protected
+    
 
     # remplace les points décimaux par des virgules pour s'adapter au paramétrage
     # des tableurs français
     def reformat(number)
       sprintf('%0.02f',number).gsub('.', ',') if number
     end
-
-
-
+    
 
   end
 end

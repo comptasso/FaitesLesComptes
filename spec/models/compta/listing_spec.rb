@@ -2,7 +2,14 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
+RSpec.configure do |c|  
+ # c.filter = {wip:true}  
+end
+
 describe Compta::Listing do
+  include OrganismFixtureBis
+  
+  describe 'test avec des mock' do
 
    def double_compta_line(i)
      double(ComptaLine,
@@ -20,7 +27,8 @@ describe Compta::Listing do
 
    before(:each) do
     @p = mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year )
-    @a1 = mock_model(Account, :period=>@p, :period_id=>@p.id)
+    @a1 = mock_model(Account, :period=>@p, :period_id=>@p.id,
+      all_lines_locked?:false)
     @a1.stub_chain(:compta_lines, :listing).and_return
     @listing = Compta::Listing.new  
   end
@@ -113,6 +121,38 @@ describe Compta::Listing do
     end
 
    end
+   
+    
+  end
+  
+  describe 'test en réel', wip:true do
+    
+    def render_file(pdf, file_name) 
+    file =  "#{File.dirname(__FILE__)}/pdf_files/#{file_name}.pdf"
+    File.delete(file) if File.exists?(file)
+    File.open(file, 'wb') do |f| 
+      f << pdf.render 
+    end
+  end  
+    
+    before(:each) do
+      use_test_organism
+      50.times do |i|
+        create_outcome_writing(i+1)
+      end
+      @listing = Compta::Listing.new(account_id:@baca.id).with_default_values 
+    end
+    
+    it 'peut créer un pdflc::flc_page' do
+      pdf = @listing.to_pdf
+      render_file(pdf, 'listing2')
+    end
+    
+    
+    
+    
+  end
+    
 
 end
 

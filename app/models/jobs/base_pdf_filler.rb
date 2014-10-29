@@ -40,7 +40,9 @@ module Jobs
     # construire l'extrait demandé. 
     # Voir s'il ne faudra pas les spécialiser
     def perform
+        Rails.logger.debug 'performing le job'
         Apartment::Database.process(db_name) do
+          Rails.logger.debug @document
           @export_pdf.content = @document.to_pdf.render
           @export_pdf.save
         end
