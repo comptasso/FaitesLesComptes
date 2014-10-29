@@ -30,6 +30,7 @@ module Pdflc
     attr_accessor :from_account, :to_account # pour pouvoir les mettre dans le
     # bon ordre
     attr_reader :period, :from_date, :to_date, :pdf
+    attr_reader :table
    
     
     def initialize(options={})
@@ -61,7 +62,8 @@ module Pdflc
       end
           
       @pdf.numerote
-      @pdf     
+      @pdf  
+
     end 
     
     

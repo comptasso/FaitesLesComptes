@@ -41,6 +41,7 @@ module Pdflc
       self.arel = ar
       @lines = nil
       @prepared_lines = nil
+      @page_number = 1
     end
     
     # les lignes préparées sont la transformation des champs à additionner 
