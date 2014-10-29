@@ -98,7 +98,8 @@ module Compta
     # S'appuie sur le module Pdflc
     def to_pdf
       stamp  = "brouillard" unless account.all_lines_locked?(from_date, to_date)
-      options = {fond:stamp} if stamp
+      options = {}
+      options[:fond] = stamp if stamp
       options[:from_account] = account
       options[:from_date] = from_date
       options[:to_date] = to_date

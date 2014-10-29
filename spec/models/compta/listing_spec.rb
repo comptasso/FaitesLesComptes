@@ -137,7 +137,7 @@ describe Compta::Listing do
     
     before(:each) do
       use_test_organism
-      50.times do |i|
+      50.times do |i| 
         create_outcome_writing(i+1)
       end
       @listing = Compta::Listing.new(account_id:@baca.id).with_default_values 
@@ -145,7 +145,12 @@ describe Compta::Listing do
     
     it 'peut créer un pdflc::flc_page' do
       pdf = @listing.to_pdf
-      render_file(pdf, 'listing2')
+      render_file(pdf, 'listing2') 
+    end
+    
+    it 'avec les lignes verrouillées' do
+      Account.any_instance.stub(:all_lines_locked?).and_return true
+      pdf = @listing.to_pdf
     end
     
     
