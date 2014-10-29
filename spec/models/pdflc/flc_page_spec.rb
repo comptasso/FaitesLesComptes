@@ -74,6 +74,7 @@ describe Pdflc::FlcPage do
     end
     
     it 'peut rendre le fichier' do
+      @pdf.draw_pdf
       render_file(@pdf, 'spec_listing')
     end
     

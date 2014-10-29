@@ -37,7 +37,7 @@ module Pdflc
       @fond = options[:fond]
       
       @period = from_account.period   
-      @to_account = options[:to_account] || period.accounts.order('number ASC').last
+      @to_account = options[:to_account] || @from_account
       @from_date = options[:from_date] || period.start_date
       @to_date = options[:to_date] || period.close_date
       
@@ -53,17 +53,16 @@ module Pdflc
     def draw_pdf
    
       @pdf = Pdflc::FlcPage.new(BOOK_TITLES, BOOK_WIDTHS, BOOK_ALIGNMENTS,
-        @reports, @table, @trame)
+        @reports, @table, @trame, fond:@fond)
       each_account do |acc|
-        @pdf.draw_pdf(false) # pour ne pas paginer car on le fera à la fin
-        @pdf.start_new_page
         change_account(acc) 
+        @pdf.draw_pdf(false) # pour ne pas paginer car on le fera à la fin
+        @pdf.start_new_page unless acc == to_account
       end
           
-      @pdf
-      
-      
-    end
+      @pdf.numerote
+      @pdf     
+    end 
     
     
     
@@ -79,10 +78,9 @@ module Pdflc
     # la trame;
     # De changer de compte pour la table
     def change_account(account)
-      @trame.title = "Listing compte #{account.number}"
-      @trame.subtitle =  "#{account.title} - Du #{I18n::l from_date} au #{I18n.l to_date}"
+      set_trame_title_and_subtitle(account)
       @table.change_arel(book_arel(account))
-      @reports = set_reports(account)
+      @pdf.reports = set_reports(account)
     end
     
     def book_arel(account)
@@ -108,17 +106,21 @@ module Pdflc
         
     def set_trame(account)
       @trame = Pdflc::FlcTrame.new(
-        title:"Listing compte #{account.number}",
-        subtitle: "#{account.title} - Du #{I18n::l from_date} au #{I18n.l to_date}",
         organism_name:@organism_name, 
         exercice:@exercice
       )
+      set_trame_title_and_subtitle(account)
     end
     
     def set_table(account)
       @table = Pdflc::FlcTable.new(
         book_arel(account), 22, BOOK_FIELDS, [7,8], [1] 
       )
+    end
+    
+    def set_trame_title_and_subtitle(account)
+      @trame.title = "Listing compte #{account.number}"
+      @trame.subtitle =  "#{account.title.truncate 50} - Du #{I18n::l from_date} au #{I18n.l to_date}"
     end
     
     

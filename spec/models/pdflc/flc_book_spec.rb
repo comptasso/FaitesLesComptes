@@ -25,6 +25,13 @@ describe Pdflc::FlcBook do
     b =  Pdflc::FlcBook.new(from_account:@p.accounts.first, 
     to_account:@p.accounts[5])
     b.draw_pdf
+    
+  end
+  
+  it 'peut rendre le texte avec un fond' do
+    b =  Pdflc::FlcBook.new(from_account:@p.accounts.first, 
+    to_account:@p.accounts[5], fond:'Mise au point')
+    b.draw_pdf
     render_file(b.pdf, 'book')
   end
   

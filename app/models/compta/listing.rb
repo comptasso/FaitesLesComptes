@@ -99,11 +99,11 @@ module Compta
     def to_pdf
       stamp  = "brouillard" unless account.all_lines_locked?(from_date, to_date)
       options = {fond:stamp} if stamp
-      Pdflc::FlcPage.new(%w(N° Date Jnl Réf Libellé Nature Activité Débit Crédit), # les titres
-      [6, 8, 6, 8, 24, 15, 15, 9, 9], # les largeurs
-      7.times.collect {:left} + 2.times.collect {:right}, # les alignements
-      [solde_debit_avant, solde_credit_avant], # les reports
-      set_table, set_trame, options)
+      options[:from_account] = account
+      options[:from_date] = from_date
+      options[:to_date] = to_date
+      pdf = Pdflc::FlcBook.new(options)
+      pdf.draw_pdf
     end
 
     
@@ -114,46 +114,6 @@ module Compta
       sprintf('%0.02f',number).gsub('.', ',') if number
     end
     
-    def set_trame
-      Pdflc::FlcTrame.new(
-        title:"Listing compte #{account.number}",
-        subtitle: "#{account.title} - Du #{I18n::l from_date} au #{I18n.l to_date}",
-        organism_name:period.organism.title, 
-        exercice:period.long_exercice
-    )
-    end
-    
-    # utilise l'arel, avec 22 lignes par page, la liste des champs demandés, 
-    # puis les champs à totaliser et le champ date
-    def set_table
-      Pdflc::FlcTable.new(listing_arel, 22, listing_fields, [7,8], [1] ) 
-    end
-    
-    protected
-    
-    def listing_arel
-      account.compta_lines.with_writing_and_book.
-        joins('LEFT OUTER JOIN destinations ON compta_lines.destination_id = destinations.id').
-        joins('LEFT OUTER JOIN natures ON compta_lines.nature_id = natures.id').
-        select(listing_select).without_AN.
-        range_date(from_date, to_date).
-        order('writings.id')
-    end
-    
-    def listing_fields
-      ['w_id', 'w_date', 'b_abbreviation', 'w_ref', 'w_narration',
-      'nat_name', 'dest_name', 'debit', 'credit']
-    end
-    
-    def listing_select
-      ['writings.id AS w_id', 'writings.date AS w_date',
-        'books.abbreviation AS b_abbreviation', 'writings.ref AS w_ref', 
-        'writings.narration AS w_narration', 'natures.name AS nat_name',
-        'destinations.name AS dest_name', 'debit',  'credit']
-    end
-
-
-
 
   end
 end

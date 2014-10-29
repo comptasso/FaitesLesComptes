@@ -33,6 +33,8 @@ module Pdflc
       @titles = titles
       @widths = widths
       @alignments = alignments
+      # TODO on peut s'en passer en faisant calculer les reports  
+      # au bon moment par Book
       @reports = reports # reports initiaux
       @flctable = table # la logique veut que la table soit initialisée
       # à la page 1
@@ -91,12 +93,13 @@ module Pdflc
       stamp('fond') if @fond
     end
     
-   
-    
-    def render
-      draw_pdf
-      super
+    def numerote
+      number_pages("page <page>/<total>",
+        { :at => [width - 150, 0],:width => 150,
+          :align => :right, :start_count_at => 1 })
     end
+    
+   
     
     
     protected 
@@ -110,7 +113,8 @@ module Pdflc
     def draw_page_titles
       bounding_box [150, height], :width => width-300, :height => 40 do
         font_size(20) { text trame.title.capitalize, :align=>:center }
-        text trame.subtitle, :align=>:center if trame.subtitle
+        text trame.subtitle,
+          :align=>:center if trame.subtitle
       end
     end
     
@@ -197,11 +201,7 @@ car les largeurs de la table ne sont pas fixées' unless widths
       end
     end
     
-    def numerote
-      number_pages("page <page>/<total>",
-        { :at => [width - 150, 0],:width => 150,
-          :align => :right, :start_count_at => 1 })
-    end
+    
     
     # Définit une méthode tampon pour le PrawnSheet qui peut ensuite être appelée 
     # par fill_actif_pdf et fill_passif_pdf 
