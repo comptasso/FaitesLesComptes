@@ -31,4 +31,10 @@ fr:
                compte avec une partie masquée, par exemple 12345XXX789      
         edit: >
                Par précaution, nous vous conseillons de rentrer le numéro de 
-               compte avec une partie masquée, par exemple 12345XXX789                       
+               compte avec une partie masquée, par exemple 12345XXX789   
+               
+    Compta:
+      GeneralBooksController:
+        new: >
+              L'édition du grand livre peut être assez longue ; comptez environ
+              une minute pour 1500 écritures.

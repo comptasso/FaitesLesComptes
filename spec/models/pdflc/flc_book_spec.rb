@@ -39,31 +39,59 @@ describe Pdflc::FlcBook do
     end
   end
   
-  # on a deux pages  par compte et 22 lignes à chaque fois
-  before(:each) do
-    @fas = five_accounts
-    Pdflc::FlcTable.any_instance.stub(:nb_pages).and_return 2
-    Pdflc::FlcTable.any_instance.stub(:lines).and_return twenty_two_lines
-    Pdflc::FlcBook.any_instance.stub(:set_accounts).and_return @fas
-    Account.any_instance.stub(:period).and_return(double Period, 
-      organism:double(Organism, title:'Asso Essai'),
-      long_exercice:'Exercice 2014')
-    Account.any_instance.stub(:cumulated_at).and_return 0
+  describe 'page de garde', wip:true do
     
-    @b = Pdflc::FlcBook.new(from_account:@fas.first, 
-    to_account:@fas.last, from_date:Date.today.beginning_of_year,
-    to_date:Date.today.end_of_year,
-    fond:'Mise au point')
+    before(:each) do
+       @acc = Account.new(number:'124578', title:'Un compte')
+       Account.any_instance.stub(:period).and_return(double Period, 
+        organism:double(Organism, title:'Asso Essai'),
+        long_exercice:'Exercice 2014')
+       Account.any_instance.stub(:cumulated_at).and_return 0
+    end
+    
+    it 'imprime la page de garde' do
+      Pdflc::FlcBook.any_instance.stub(:set_accounts).and_return(@fas = [@acc])
+      @b = Pdflc::FlcBook.new(from_account:@fas.first, 
+        to_account:@fas.last, from_date:Date.today.beginning_of_year,
+        to_date:Date.today.end_of_year,
+        fond:'Mise au point')
+      @b.stub(:book_arel).and_return(@as = double(Arel, count:0))
+    
+      @b.draw_pdf
+      render_file(@b.pdf, 'page_de_garde')
+    end
+    
   end
+   
+  context 'impression de pages' do
   
-  # le pdf fera 8 pages, 2 pages pour chacun des comptes sauf pour le second
-  # qui n'a pas de lignes.  
-  it 'peut rendre le texte avec un fond' do
-    @b.stub(:book_arel).and_return(@as = double(Arel, count:44))
-    @b.stub(:book_arel).with(@fas.second).and_return(@ar = double(Arel))
-    @ar.stub(:count).and_return 0
-    @b.draw_pdf
-    render_file(@b.pdf, 'book')
+    # on a deux pages  par compte et 22 lignes à chaque fois
+    before(:each) do
+      @fas = five_accounts
+      Pdflc::FlcTable.any_instance.stub(:nb_pages).and_return 2
+      Pdflc::FlcTable.any_instance.stub(:lines).and_return twenty_two_lines
+      Pdflc::FlcBook.any_instance.stub(:set_accounts).and_return @fas
+      Account.any_instance.stub(:period).and_return(double Period, 
+        organism:double(Organism, title:'Asso Essai'),
+        long_exercice:'Exercice 2014')
+      Account.any_instance.stub(:cumulated_at).and_return 0
+    
+      @b = Pdflc::FlcBook.new(from_account:@fas.first, 
+        to_account:@fas.last, from_date:Date.today.beginning_of_year,
+        to_date:Date.today.end_of_year,
+        fond:'Mise au point')
+    end
+  
+    # le pdf fera 8 pages, 2 pages pour chacun des comptes sauf pour le second
+    # qui n'a pas de lignes.  
+    it 'peut rendre le texte avec un fond' do
+      @b.stub(:book_arel).and_return(@as = double(Arel, count:44))
+      @b.stub(:book_arel).with(@fas.second).and_return(@ar = double(Arel))
+      @ar.stub(:count).and_return 0
+      @b.draw_pdf
+      render_file(@b.pdf, 'book')
+    end
+  
   end
   
 end

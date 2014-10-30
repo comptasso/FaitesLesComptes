@@ -29,23 +29,20 @@ module Pdflc
     # TODO à retirer avec la mise en place d'une page de garde
     #
     def draw_pdf
-      @commence = false
+      
       @pdf = Pdflc::FlcPage.new(BOOK_TITLES, BOOK_WIDTHS, BOOK_ALIGNMENTS,
         @reports, @table, @trame, fond:@fond)
+      page_de_garde
       each_account do |acc|
         nb_lines = change_account(acc) 
         if nb_lines == 0 && @pdf.reports.uniq == [0.0]
           next # ni report, ni écriture donc on passe
         else
-          @pdf.start_new_page if @commence
+          @pdf.start_new_page 
           @pdf.draw_pdf(false) 
           # false pour ne pas paginer car fait à la fin
-          @commence = true
-        end 
          
-        
-        
-        
+        end 
       end
           
       @pdf.numerote 
@@ -54,6 +51,24 @@ module Pdflc
     end 
      
     protected
+    
+    # Imprime la page de garde du Grand Livre
+    # 
+    def page_de_garde
+      h = @pdf.bounds.top * 0.6
+      @pdf.bounding_box([0, h], :width => @pdf.bounds.right, :height => 100) do 
+        
+        @pdf.font_size(30) { @pdf.text @organism_name.capitalize, :align=>:center }
+        @pdf.font_size(18) { @pdf.text 'Grand livre', :align=>:center }
+        @pdf.text "Du compte #{from_account.number} au compte #{to_account.number}", align: :center
+        @pdf.text "Du #{I18n::l from_date} au #{I18n::l to_date}", align: :center
+      end
+      h = @pdf.bounds.top * 0.1
+      @pdf.bounding_box [0, h], :width => @pdf.bounds.right, :height => 100 do
+         @pdf.text "Note : Les comptes sans reports ni mouvements sur la période ne sont pas repris",
+           style: :italic
+      end
+    end
     
     # passe au compte suivant
     def each_account
