@@ -3,7 +3,9 @@
 module Pdflc
   
   
-  # Cette classe permet d'enchaîner les listings de compte dans un grand livre.
+  # Cette classe permet de produire les fichiers pdf pour les listings de 
+  # comptes ou pour un grand livre. 
+  # 
   # Par rapport à FlcPage, elle est enrichie lors de l'initialisation de 
   # l'information sur le compte final (from_account, to_account). 
   # 
@@ -12,7 +14,6 @@ module Pdflc
   # et d'arrivée
   # 
   # 
-  #
   # Par ailleurs, elle sait demander à FlcTable de se réinitialiser avec un 
   # nouveau compte
   class FlcBook 
@@ -56,35 +57,44 @@ module Pdflc
       @pdf = Pdflc::FlcPage.new(BOOK_TITLES, BOOK_WIDTHS, BOOK_ALIGNMENTS,
         @reports, @table, @trame, fond:@fond)
       each_account do |acc|
-        change_account(acc) 
-        @pdf.draw_pdf(false) # pour ne pas paginer car on le fera à la fin
+        nb_lines = change_account(acc) 
+        next if nb_lines == 0 && @pdf.reports.uniq == [0.0] 
+        @pdf.draw_pdf(false) 
+        # false pour ne pas paginer car fait à la fin
         @pdf.start_new_page unless acc == to_account
       end
+      
           
-      @pdf.numerote
+      @pdf.numerote 
       @pdf  
 
     end 
-    
-    
-    
-    
+     
     protected
+    
+    
     
     # passe au compte suivant
     def each_account
       @accounts.each {|a| yield a if block_given?}
     end
     
-    # change de compte, ce qui impose de changer le titre et le sous-titre de 
-    # la trame;
-    # De changer de compte pour la table
+    # change de compte, ce qui impose de
+    # - changer le titre et le sous-titre de la trame;
+    # - changer de compte pour la table
+    # la méthode retourne le nombre de lignes 
     def change_account(account)
       set_trame_title_and_subtitle(account)
-      @table.change_arel(book_arel(account))
+      baa = book_arel(account)
+      @table.change_arel(baa)
       @pdf.reports = set_reports(account)
+      baa.count 
     end
     
+    
+    
+    # construit l'arel nécessaire à collecter en une seule requête l'ensemble
+    # des informations nécessaires.
     def book_arel(account)
       account.compta_lines.with_writing_and_book.
         joins('LEFT OUTER JOIN destinations ON compta_lines.destination_id = destinations.id').
@@ -98,7 +108,8 @@ module Pdflc
       self.from_account, self.to_account = to_account, from_account if
       to_account.number  < from_account.number
       period.accounts.order('number').
-        where('number >= ? AND number <= ?', from_account.number, to_account.number)
+        where('number >= ? AND number <= ?',
+        from_account.number, to_account.number)
     end
     
     def set_reports(account)

@@ -36,8 +36,7 @@ module Pdflc
       # TODO on peut s'en passer en faisant calculer les reports  
       # au bon moment par Book
       @reports = reports # reports initiaux
-      @flctable = table # la logique veut que la table soit initialisée
-      # à la page 1
+      @flctable = table 
       @trame = trame
       
       # TODO rajouter quelques validations 
@@ -60,9 +59,11 @@ module Pdflc
       torpts
     end
     
+    # La seule option, pagination, indique si on souhaite avoir la pagination
     # 
+    # Actuellement, Page n'est utilisé que par FlcBook qui fait la numérotation
+    # et utilise donc l'option false.
     def draw_pdf(pagination = true)
-      
       nb_p = flctable.nb_pages
       nb_p.times do |i|
         last_page =  (i+1) == nb_p ? true : false
@@ -71,8 +72,23 @@ module Pdflc
         draw_stamps 
         next_page unless last_page
       end
-      numerote if pagination # sinon on laisse ce soin au pdf_doc qui
-      # a initié la demande.
+      numerote if pagination 
+    end
+    
+    def numerote
+      number_pages("page <page>/<total>",
+        { :at => [width - 150, 0],:width => 150,
+          :align => :right, :start_count_at => 1 })
+    end
+    
+    protected 
+    
+    # passe à la page suivante en reprenant les reports et en demandant à la 
+    # table de passer elle-même à la page suivante.
+    def next_page
+      @reports = to_reports
+      @flctable.next_page
+      start_new_page
     end
     
     # juste imprimer le coeur des informatiosn
@@ -93,22 +109,9 @@ module Pdflc
       stamp('fond') if @fond
     end
     
-    def numerote
-      number_pages("page <page>/<total>",
-        { :at => [width - 150, 0],:width => 150,
-          :align => :right, :start_count_at => 1 })
-    end
-    
    
     
     
-    protected 
-    
-    def next_page
-      @reports = to_reports
-      @flctable.next_page
-      start_new_page
-    end
     
     def draw_page_titles
       bounding_box [150, height], :width => width-300, :height => 40 do

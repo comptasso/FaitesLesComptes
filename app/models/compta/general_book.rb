@@ -41,8 +41,6 @@ module Compta
     # TODO on pourrait rajouter une page de garde
     # TODO gérer l'affichage d'un tampon provisoire
     def to_pdf
-      # stamp  = "brouillard" unless account.all_lines_locked?(from_date, to_date)
-      # options = {fond:stamp} if stamp
       options = {}
       options[:from_account] = Account.find(from_account_id)
       options[:to_account] = Account.find(to_account_id)
@@ -50,30 +48,6 @@ module Compta
       options[:to_date] = to_date
       pdf = Pdflc::FlcBook.new(options)
       pdf.draw_pdf
-    end
-    
-#    def to_pdf
-#      final_pdf = PdfDocument::DefaultPrawn.new(:page_size => 'A4', :page_layout => :landscape)
-#      ras = accounts.select {|ra| ra.compta_lines.any? }
-#      ras.each do |a|
-#        # crée un Compta::Listing
-#        cl = Compta::Listing.new(account_id:a.id, 
-#          from_date:from_date, 
-#          to_date:to_date).
-#          to_pdf
-#        
-#        final_pdf cl.draw_pdf
-#        final_pdf.start_new_page unless a == ras.last # page suivante sauf si le dernier
-#      end
-#      final_pdf.numerote
-#      final_pdf
-#    end
-# 
-    
-    protected
-    
-    def organism_name
-      Period.find(period_id).organism.title
     end
     
   end
