@@ -103,7 +103,7 @@ module Compta
       options[:from_account] = account
       options[:from_date] = from_date
       options[:to_date] = to_date
-      pdf = Pdflc::FlcBook.new(options)
+      pdf = Pdflc::FlcListing.new(options)
       pdf.draw_pdf
     end
 
