@@ -16,23 +16,36 @@ module Pdflc
     # bon ordre
     
     def initialize(options={})
-      @from_account = options[:from_account]
+      super
       @to_account = options[:to_account] || @from_account
       @accounts = set_accounts
-      super
-      
     end
     
+    # draw_pdf crée le pdf puis le remplit pour chacun des comptes qui ont 
+    # des reports ou des écritures
+    # 
+    # Le booléen commence permet de ne pas créer une page vide en 
+    # début de texte pour le premier
+    # TODO à retirer avec la mise en place d'une page de garde
+    #
     def draw_pdf
-   
+      @commence = false
       @pdf = Pdflc::FlcPage.new(BOOK_TITLES, BOOK_WIDTHS, BOOK_ALIGNMENTS,
         @reports, @table, @trame, fond:@fond)
       each_account do |acc|
         nb_lines = change_account(acc) 
-        next if nb_lines == 0 && @pdf.reports.uniq == [0.0] 
-        @pdf.draw_pdf(false) 
-        # false pour ne pas paginer car fait à la fin
-        @pdf.start_new_page unless acc == to_account
+        if nb_lines == 0 && @pdf.reports.uniq == [0.0]
+          next # ni report, ni écriture donc on passe
+        else
+          @pdf.start_new_page if @commence
+          @pdf.draw_pdf(false) 
+          # false pour ne pas paginer car fait à la fin
+          @commence = true
+        end 
+         
+        
+        
+        
       end
           
       @pdf.numerote 
