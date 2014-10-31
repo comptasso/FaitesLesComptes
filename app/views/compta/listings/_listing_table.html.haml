@@ -22,9 +22,9 @@
         %span#tdebit
         =# le total débit des lignes est affiché par un calcul en javascript
         %br
-        %span#cumul_debit=  debit_credit(@listing.cumulated_debit_at(@listing.to_date))
+        %span#cumul_debit=  debit_credit(@listing_cumulated_debit_at)
       %th#tgcredit.numeric.nombre
         %span#tcredit 
         =# le total crédit des lignes est affiché par un calcul en javascript
         %br
-        %span#cumul_credit=  debit_credit(@listing.cumulated_credit_at(@listing.to_date))
+        %span#cumul_credit=  debit_credit(@listing_cumulated_credit_at)

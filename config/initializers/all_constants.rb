@@ -111,4 +111,5 @@ LISTING_SELECT = ['writings.id AS w_id', 'writings.date AS w_date',
 # FLCVERSION = '1.6.5RC' # mise en place d'un recu pour le gem adhérent
 # FLCVERSION = '1.6.6RC' # correction bug sur form in_out_writings
 # FLCVERSION = '1.6.7RC' # accélératin vue Room#index
-FLCVERSION = '1.6.8RC' # accélératin vue pointage des comptes bancaires
+# FLCVERSION = '1.6.8RC' # accélératin vue pointage des comptes bancaires
+FLCVERSION = '1.6.9RC' # accélératin listing et refonte pdf listing et gd livre
