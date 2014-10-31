@@ -72,9 +72,9 @@ describe Compta::Listing do
          @l.period.should == @p
       end
 
-        it 'lines returns a array of lines' do
-          @a1.stub_chain(:compta_lines, :listing).and_return(ar = double(Arel))
-          @l.lines.should == ar
+        it 'lines returns un arel' do
+          @l.should_receive(:set_lines)
+          @l.lines
         end
 
         it 'with_default_values renvoie @l après avoir mis les dates par defaut' do

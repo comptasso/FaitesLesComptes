@@ -10,20 +10,20 @@
 # Le même mécanisme est lancé par une vue modale.
 # Le chemin est alors periods/id/listing
 # 
-# Cela renvoie sur poste/create qui crée le listing et le rend à l'aide de la vue show
-# (on aurait pu aussi faire un redirect mais ce serait une perte de temps).
+# Cela renvoie sur poste/create qui crée le listing et le rend à l'aide de la
+# vue show (on aurait pu aussi faire un redirect).
 # 
 # Méthode 2 : Soit par la vue index des comptes ou par une balance.
 # Dans ce cas, on connait le compte demandé. Et l'on peut arriver directement
 # sur la vue show. Le chemin est alors account/id/listing? 
 # 
-# Les exports (pdf, xls, csv) se font par la méthode 1.
+# Les exports (pdf, xls, csv) se font par la méthode 2.
 #  
 #
 class Compta::ListingsController < Compta::ApplicationController
 
   
-  include Pdf::Controller
+  include Pdf::Controller 
   before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
   # show est appelé directement par exemple par les lignes de la balance
@@ -43,11 +43,12 @@ class Compta::ListingsController < Compta::ApplicationController
      
      
     if @listing.valid?
-       
+      calculate_solds(@listing)
       respond_to do |format|
         
         format.html 
-        # format.pdf n'existe pas car l'action est produce_pdf qui est assuré par le Pdf::Controller
+        # format.pdf n'existe pas car l'action est produce_pdf 
+        # qui est assuré par le Pdf::Controller
         format.csv do
           send_export_token
           send_data @listing.to_csv, filename:export_filename(@listing, :csv)
@@ -66,9 +67,11 @@ class Compta::ListingsController < Compta::ApplicationController
   # permet de créer un Listing à partir du formualaire qui demande un compte
   # GET periods/listing/new
   def new
-    @listing = Compta::Listing.new(from_date:@period.start_date, to_date:@period.close_date)
-    @listing.account_id = params[:account_id] # permet de préremplir le formulaire avec le compte si
-    # on vient de l'affichage du plan comptable (accounts#index)
+    @listing = Compta::Listing.new(from_date:@period.start_date,
+      to_date:@period.close_date)
+    @listing.account_id = params[:account_id] # permet de préremplir 
+    # le formulaire avec le compte si on vient de l'affichage
+    # du plan comptable (accounts#index)
     @accounts = @period.accounts.order('number ASC')
   end
 
@@ -81,14 +84,11 @@ class Compta::ListingsController < Compta::ApplicationController
     if @listing.valid?
       respond_to do |format|
         format.html {
-          
-          redirect_to compta_account_listing_url(@account, compta_listing:params[:compta_listing].except(:account_id))
-          
+          redirect_to compta_account_listing_url(@account, 
+            compta_listing:params[:compta_listing].except(:account_id))
         }
         format.js # vers fichier create.js.erb
-        
       end
-
     else
       respond_to do |format|
         format.html { render 'new'}
@@ -111,7 +111,24 @@ class Compta::ListingsController < Compta::ApplicationController
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
     Delayed::Job.enqueue Jobs::ListingPdfFiller.new(@organism.database_name, 
-      pdf_export.id, {account_id:@account.id, params_listing:params[:compta_listing]})
+      pdf_export.id, {account_id:@account.id, 
+        params_listing:params[:compta_listing]})
+  end
+  
+  def calculate_solds(listing)
+    @listing_cumulated_debit_before = listing.solde_debit_avant
+    @listing_cumulated_credit_before = listing.solde_credit_avant 
+    @listing_sold_before = @listing_cumulated_credit_before - 
+      @listing_cumulated_debit_before
+    @listing_total_debit = listing.total_debit
+    @listing_total_credit = listing.total_credit
+    @listing_cumulated_debit_at = @listing_cumulated_debit_before +
+      @listing_total_debit
+    @listing_cumulated_credit_at = @listing_cumulated_credit_before +
+      @listing_total_credit
+    @listing_sold_at = @listing_cumulated_credit_at - 
+      @listing_cumulated_debit_at
+    
   end
  
 

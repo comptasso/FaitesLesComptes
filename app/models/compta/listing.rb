@@ -14,12 +14,13 @@ module Compta
 
     include Utilities::Sold
     include Utilities::ToCsv
-    include Utilities::PickDateExtension # apporte la méthode de classe pick_date_for
+    include Utilities::PickDateExtension # pour les méthodes pick_date_for
 
     def self.columns() @columns ||= []; end
 
     def self.column(name, sql_type = nil, default = nil, null = true)
-      columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
+      columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, 
+        default, sql_type.to_s, null)
     end
 
     column :from_date, :date
@@ -28,13 +29,14 @@ module Compta
      
     belongs_to :account
    
-    pick_date_for :from_date, :to_date # donne les méthodes begin_date_picker et end_date_picker
-    # utilisées par le input as:date_picker
+    pick_date_for :from_date, :to_date # donne les méthodes begin_date_picker 
+    # et end_date_picker utilisées par le input as:date_picker
 
-    attr_accessible :from_date_picker, :to_date_picker, :from_date, :to_date, :account_id
+    attr_accessible :from_date_picker, :to_date_picker,
+      :from_date, :to_date, :account_id
    
-
-    # je mets within_period en premier car je préfère les affichages Dates invalide ou hors limite
+    # je mets within_period en premier car je préfère les affichages 
+    # Dates invalide ou hors limite
     # que obligatoire (sachant que le form n'affiche que la première erreur).
     validates :from_date, :to_date, within_period:true
     validates :from_date, :to_date, :account_id, :presence=>true
@@ -67,7 +69,7 @@ module Compta
 
 
     def lines
-      @lines ||= account.compta_lines.listing(from_date, to_date)
+      @lines ||= set_lines
     end
 
     # permet notamment de contrôler les limites de date
@@ -107,6 +109,20 @@ module Compta
       pdf.draw_pdf
     end
 
+    protected
+    
+    
+    
+    # construit l'arel nécessaire à collecter en une seule requête l'ensemble
+    # des informations nécessaires.
+    def set_lines
+      account.compta_lines.with_writing_and_book.
+        joins('LEFT OUTER JOIN destinations ON compta_lines.destination_id = destinations.id').
+        joins('LEFT OUTER JOIN natures ON compta_lines.nature_id = natures.id').
+        select(LISTING_SELECT).without_AN.
+        range_date(from_date, to_date).
+        order('writings.id')
+    end
     
 
     # remplace les points décimaux par des virgules pour s'adapter au paramétrage

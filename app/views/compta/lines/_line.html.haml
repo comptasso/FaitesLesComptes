@@ -1,10 +1,10 @@
 %tr
-  %td.clickable= l line.date
-  %td.clickable= line.writing_id
-  %td.clickable= line.book.abbreviation
-  %td.clickable= line.ref
-  %td.clickable= line.narration
-  %td.clickable= line.nature.name if line.nature
-  %td.clickable= line.destination.name if line.destination
+  %td.clickable= l line.w_date.to_date 
+  %td.clickable= line.w_id
+  %td.clickable= line.b_abbreviation
+  %td.clickable= line.w_ref
+  %td.clickable= line.w_narration
+  %td.clickable= line.nat_name
+  %td.clickable= line.dest_name
   %td.numeric= debit_credit(line.debit)
   %td.numeric= debit_credit(line.credit)

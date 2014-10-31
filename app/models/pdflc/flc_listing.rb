@@ -7,6 +7,7 @@ module Pdflc
     BOOK_ALIGNMENTS = 7.times.collect {:left} + 2.times.collect {:right}
     BOOK_FIELDS =  ['w_id', 'w_date', 'b_abbreviation', 'w_ref', 'w_narration',
       'nat_name', 'dest_name', 'debit', 'credit']
+    # TODO identique à LISTING_SELECT, à refactoriser
     BOOK_SELECT =  ['writings.id AS w_id', 'writings.date AS w_date',
       'books.abbreviation AS b_abbreviation', 'writings.ref AS w_ref', 
       'writings.narration AS w_narration', 'natures.name AS nat_name',
