@@ -45,4 +45,85 @@ describe InOutWritingsHelper do
       helper.in_out_line_actions(line).should match(book_in_out_writing_path(@w.book, @w))
     end
   end
+  
+  describe 'frontline_actions' do
+    
+    context 'editable?, renvoie vers' do
+      
+      before(:each) do
+         @line = double(id:'50',
+           book_id:1,
+           editable?:true,
+           adherent_member_id:1)
+      end
+      
+      it 'l action edit transfer si c est un transfert'  do
+        @line.stub(:writing_type).and_return 'Transfer'
+        helper.frontline_actions(@line).
+          should match(edit_transfer_path(@line.id))
+      end
+      
+      it 'l affichage des payements des adhérent si c est un adhérent' do
+        @line.stub(:writing_type).and_return 'Adherent::Writing'
+        helper.frontline_actions(@line).
+          should match(adherent.member_payments_path(@line.adherent_member_id))
+      end
+      
+      it 'l action edit dans les autres cas' do
+        @line.stub(:writing_type).and_return 'Autre'
+        helper.frontline_actions(@line).
+          should match(edit_book_in_out_writing_path(@line.book_id, @line.id)) 
+      end
+      
+      it 'ainsi que l action supprimer' do
+        @line.stub(:writing_type).and_return 'Autre'
+        helper.frontline_actions(@line).
+          should match(book_in_out_writing_path(@line.book_id, @line.id)) 
+      end
+      
+      
+    end
+    
+    context 'non editable?, affiche des conseils' do
+      
+      before(:each) do
+        @line = double(
+           editable?:false,
+           writing_type:'Autre',
+          cl_locked:false,
+          support_locked:false)
+           
+      end
+      
+      it 'indique que l écriture est dans une remise de chèque' do
+        @line.stub(:support_check_id).and_return 1
+        helper.frontline_actions(@line).
+          should match('Chèque inclus dans une remise de chèque,
+  le retirer de la remise pour pouvoir l&#x27;éditer') 
+      end
+      
+       it 'ou qu elle pointée' do
+        @line.stub(:support_check_id).and_return nil
+        @line.stub(:bel_id).and_return 2
+        helper.frontline_actions(@line).
+          should match('Ecriture incluse dans un pointage de compte bancaire,
+    le retirer du pointage pour pouvoir l&#x27;éditer' ) 
+      end
+      
+       it 'ou qu elle est verrouillée' do
+         @line.stub(:cl_locked).and_return true
+         helper.frontline_actions(@line).
+          should match('Ecriture verrouillée, modification impossible')
+       end
+       
+      it 'ou que son support est verrouillé' do
+         @line.stub(:support_locked).and_return true
+         helper.frontline_actions(@line).
+          should match('Ecriture verrouillée, modification impossible')
+       end
+      
+    end
+    
+    
+  end
 end

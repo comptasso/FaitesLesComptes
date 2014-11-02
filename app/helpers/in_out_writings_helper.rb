@@ -70,10 +70,29 @@ module InOutWritingsHelper
           adherent.member_payment_path(frontline.adherent_member_id, 
             frontline.adherent_payment_id),
           title:'Table des paiments à l\'origine de cette écriture')
+      else
+        # on va donner des conseils à l'utilisateur pour comprendre pourquoi
+        # il ne peut travailler l'image
+        if frontline.cl_locked || frontline.support_locked
+          html << image_tag('icones/nb_verrouiller.png', title:'Ecriture verrouillée, modification impossible')
+        else
+          html << image_tag('icones/nb_modifier.png', title:reason(frontline))
+          html << '&nbsp'
+          html << image_tag('icones/nb_supprimer.png', title:reason(frontline))
+        end
+        
       end
     end
     html.html_safe
   
+  end
+  
+  # affiche pourquoi les icones modifier et supprimer sont en noir et blanc
+  def reason(line)
+    return 'Chèque inclus dans une remise de chèque,
+  le retirer de la remise pour pouvoir l\'éditer' if line.support_check_id
+    return 'Ecriture incluse dans un pointage de compte bancaire,
+    le retirer du pointage pour pouvoir l\'éditer' if line.bel_id
   end
 
   # permet d'afficher les actions possible dans une ligne d'écriture

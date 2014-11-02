@@ -119,7 +119,8 @@ module Request
     def editable?
       !(support_check_id || cl_locked || support_locked || bel_id)
     end
-  
+    
+     
     
    
   
