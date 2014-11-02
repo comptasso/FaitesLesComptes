@@ -118,6 +118,7 @@ describe Compta::AnalyticalBalance do
         
     after(:each) do
       Writing.delete_all
+      ComptaLine.delete_all
     end
     
     subject {Compta::AnalyticalBalance.with_default_values(@p)}

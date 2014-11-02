@@ -23,9 +23,9 @@ describe Editions::AnalyticalBalance do
   it 'ses lignes ne sont que des PdfDocument::TableLine' do
     subject.nb_pages.should == 1
     leslignes = subject.fetch_lines(1)
-    leslignes.size.should == 5
-    leslignes.each {|l| puts l.inspect} 
     leslignes.each {|l| l.should be_an_instance_of(PdfDocument::TableLine)}
+    leslignes.size.should == 5
+   
   end
   
   end

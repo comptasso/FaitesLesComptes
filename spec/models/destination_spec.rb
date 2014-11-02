@@ -35,48 +35,30 @@ describe Destination do
     describe 'creation de l organisme minimal' do
       before(:each) do
         use_test_organism
+        @d = Destination.first
       end
       
-      after(:each) do
-        Destination.delete_all
+      
+
+      it 'name should be unique' do
+         @o.destinations.new(name:@d.name).should_not be_valid
       end
 
-      it 'une destination peut être créée' do
-        expect {@o.destinations.create!(name: 'Destination test')}.to change{Destination.count}
-      end
-
-      context 'with already a destination' do
-
-        before(:each) do
-          @o.destinations.create!(name: 'Essai')
+      it 'cant be destroyed when not empty' do
+          @w = create_outcome_writing
+          @w.in_out_line.destination = @d; @w.save
+          
+          @d.compta_lines.count.should == 1
+          expect {@d.destroy}.not_to change {Destination.count}
         end
-             
-        it 'name should be unique' do
-          expect {@o.destinations.create(name: 'Essai')}.not_to change{Destination.count}
-        end
-
-       
-
-      end
-
-      describe 'destroy destination' do
-        before(:each) do
-          @destination = @o.destinations.create!(name: 'Destination test')
-        end
-
+ 
         it 'can be destroy when empty' do
+          @destination = @o.destinations.create!(name: 'Destination test')
           expect {@destination.destroy}.to change {Destination.count}.by(-1)
         end
 
-        it 'cant be destroyed when not empty' do
-          @w = create_outcome_writing
-          @w.in_out_line.destination = @destination
-          @w.save
-          @destination.compta_lines.count.should == 1
-          expect {@destination.destroy}.not_to change {Destination.count}
-        end
- 
-      end
+        
+      
 
     end
     

@@ -17,7 +17,8 @@ describe "in_out_writings/_table_lines" do
       compta_line_id:457,
       acc_title:'Compte courant', 
       writing_type:'InOutWriting',
-      'editable?'=>false)
+      'editable?'=>false, 
+      cl_locked:true) 
   end
 
   before(:each) do
