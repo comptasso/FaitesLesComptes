@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 ruby "2.0.0"
 
 
-gem 'rails', '3.2.19'
+gem 'rails', '3.2.20'
 gem 'rack', '1.4.5'
 # gem 'therubyracer' execjs sous windows
 gem 'simple_form', "~> 2.1.0"
@@ -27,7 +27,7 @@ gem 'rack-timeout' # coneil de heroku - utilisé par le fichier intializers/time
 gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écriture des routes)
 # TODO à retirer lors du passage à Rails 4
 
-gem 'adherent', '~>0.1.9' #, :path=>'../../Adherent'
+gem 'adherent', '~>0.1.10' #, :path=>'../../Adherent'
 gem 'sass', '>= 3.2.10', '< 3.3'
 gem 'coffee-script'
 
