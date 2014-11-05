@@ -7,9 +7,12 @@ describe "check_deposits/index" do
   include JcCapybara
 
   let(:o) {mock_model(Organism, title: 'spec cd')}
-  let(:ba)  {mock_model(BankAccount, number: '124578AZ', name: 'IBAN', nickname:'Compte courant')}
-  let(:cd1) {mock_model(CheckDeposit, bank_account_id: ba.id, deposit_date: Date.today - 5)}
-  let(:cd2) {mock_model(CheckDeposit, bank_account_id: ba.id, deposit_date: Date.today - 20)}
+  let(:ba)  {mock_model(BankAccount, number: '124578AZ',
+      name: 'IBAN', nickname:'Compte courant')}
+  let(:cd1) {mock_model(CheckDeposit, bank_account_id: ba.id,
+      deposit_date: Date.today - 5)}
+  let(:cd2) {mock_model(CheckDeposit, bank_account_id: ba.id,
+      deposit_date: Date.today - 20)}
 
   10.times do |t| 
     s=('l'+t.to_s).to_sym
@@ -45,7 +48,8 @@ describe "check_deposits/index" do
     end
 
     it "affiche la légende du fieldset" do
-      assert_select "h3", :text => "Compte courant : liste des remises de chèques"
+      assert_select "h3",
+        :text => "Compte courant : liste des remises de chèques"
     end
     
     it "affiche la table desw remises de chèques" do
@@ -58,55 +62,72 @@ describe "check_deposits/index" do
 
     
     context "chaque ligne affiche ..." do
+      
+      it 'le numéro de pièce' do
+        assert_select('tr:nth-child(2) td:nth-child(1)',
+          :text=>cd2.writing_id)
+      end
 
       it "le numéro de compte" do
-        assert_select('tr:nth-child(2) td', :text=>cd2.bank_account.number)
+        assert_select('tr:nth-child(2) td:nth-child(2)',
+          :text=>cd2.bank_account.number)
       end
       it "la date" do
-       assert_select('tr:nth-child(2) td:nth-child(2)', :text=>I18n::l(cd2.deposit_date))
+       assert_select('tr:nth-child(2) td:nth-child(3)',
+         :text=>I18n::l(cd2.deposit_date))
       end
       
       it "le montant (formatté avec une virgule et deux décimales)" do
-        assert_select('tr:nth-child(2) td:nth-child(4)', :text=>'35,00')
+        assert_select('tr:nth-child(2) td:nth-child(5)', :text=>'35,00')
       end
 
       it "les liens pour l'affichage" do
-        assert_select("tr:nth-child(2) td:nth-child(5) img[src='/assets/icones/afficher.png']")
-        assert_select('tr:nth-child(2) td:nth-child(5) a[href=?]',organism_bank_account_check_deposit_path(o,ba, cd2))
+        assert_select("tr:nth-child(2) td:nth-child(6) img[src='/assets/icones/afficher.png']")
+        assert_select('tr:nth-child(2) td:nth-child(6) a[href=?]',
+          organism_bank_account_check_deposit_path(o,ba, cd2))
       end
 
       
 
       it "le lien pour la modification" do
-        assert_select('tbody tr:nth-child(2) td:nth-child(5) img[src=?]','/assets/icones/modifier.png')
-        assert_select('tbody tr:nth-child(2) td:nth-child(5) a[href=?]',edit_organism_bank_account_check_deposit_path(o,ba, cd2))
+        assert_select('tbody tr:nth-child(2) td:nth-child(6) img[src=?]',
+          '/assets/icones/modifier.png')
+        assert_select('tbody tr:nth-child(2) td:nth-child(6) a[href=?]',
+          edit_organism_bank_account_check_deposit_path(o,ba, cd2))
       end
 
       it "le lien pour la suppression" do
-        assert_select('tr:nth-child(2) > td:nth-child(5)  img[src=?]','/assets/icones/supprimer.png')
-        assert_select('tr:nth-child(2) > td:nth-child(5) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd2))
+        assert_select('tr:nth-child(2) > td:nth-child(6)  img[src=?]',
+          '/assets/icones/supprimer.png')
+        assert_select('tr:nth-child(2) > td:nth-child(6) a[href=?]',
+          organism_bank_account_check_deposit_path(o,ba, cd2))
       end
 
     
     end
 
-    context "quand la remise de chèque est pointée, ie elle est reliée à une bank_extract_line" do
+    context "quand la remise de chèque est pointée,
+       ie elle est reliée à une bank_extract_line" do
 
       it 'une seul icone' do
         assert_select('tr:nth-child(1) img', count:1)
       end
 
       it "le lien affichage est toujours disponible" do
-        assert_select('tr:nth-child(1) td:nth-child(5) img[src= ?]' , '/assets/icones/afficher.png')
-        assert_select('tr:nth-child(1) td:nth-child(5) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd1))
+        assert_select('tr:nth-child(1) td:nth-child(6) img[src= ?]',
+          '/assets/icones/afficher.png')
+        assert_select('tr:nth-child(1) td:nth-child(6) a[href=?]',
+          organism_bank_account_check_deposit_path(o,ba, cd1))
       end
 
       it "mais pas le lien modification" do
-        assert_select('tr:nth-child(1) td:nth-child(6) a[href=?]',edit_organism_bank_account_check_deposit_path(o,ba, cd1), false)
+        assert_select('tr:nth-child(1) td:nth-child(6) a[href=?]',
+          edit_organism_bank_account_check_deposit_path(o,ba, cd1), false)
       end
 
       it 'ni le lien suppression' do
-        assert_select('tr:nth-child(1) > td:nth-child(7) a[href=?]', organism_bank_account_check_deposit_path(o,ba, cd1), false)
+        assert_select('tr:nth-child(1) > td:nth-child(6) img[src= ?]',
+          '/assets/icones/supprimer.png', false)
       end
     end
 

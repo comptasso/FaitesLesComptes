@@ -68,3 +68,4 @@
 # FLCVERSION = '1.6.8RC' # accélératin vue pointage des comptes bancaires
 # FLCVERSION = '1.6.9RC' # accélératin listing et refonte pdf listing et gd livre
 FLCVERSION = '1.6.10RC' # Passage à Rails 3.2.20 et conseils dans les vues in_out_lines
+# info sur num° de pièce pour les remises de chèques

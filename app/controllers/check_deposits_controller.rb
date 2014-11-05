@@ -50,7 +50,8 @@ pour un montant de #{virgule @total_lines_credit} €"
     @check_deposit = @bank_account.check_deposits.new(params[:check_deposit])
     fill_author(@check_deposit)
     if @check_deposit.save     
-      redirect_to  organism_bank_account_check_deposits_url, notice: 'La remise de chèques a été créée.'
+      redirect_to  organism_bank_account_check_deposits_url,
+        notice: "La remise de chèques a été créée ; pièce n° #{@check_deposit.writing_id}"
     else
       render action: "new"
     end

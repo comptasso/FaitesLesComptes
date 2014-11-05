@@ -1,20 +1,26 @@
-= simple_form_for([:admin, @organism, @mask], :html=> {class: 'form-horizontal'}) do |f|
+= simple_form_for([:admin, @organism, @mask],
+  :html=> {class: 'form-horizontal'}) do |f|
   = f.error_notification
 
   .form-inputs
     = f.input :title,  input_html: {class: "span3"}
     = f.input :comment,  input_html: {rows: 4, class: "span3"}
     = f.input :book_id do
-      =f.select :book_id, @organism.books.in_outs.collect { |b| [b.title, b.id, {class:b.type.downcase, 'data-id'=>b.id}]}
+      =f.select :book_id, @organism.books.in_outs.collect { |b| [b.title,
+        b.id, {class:b.type.downcase, 'data-id'=>b.id}]}
     = f.input :ref
     = f.input :narration
     = f.input :nature_name do 
       =f.select :nature_name, mask_nature_options(@period, @mask)
    
     = f.input :destination_id, :collection=>@organism.destinations
-    = f.input :amount, :input_html=> { value: two_decimals(@mask.amount), class: "numeric", :type=>'text'}
+    = f.input :amount, :input_html=> { value: two_decimals(@mask.amount),
+      class: "numeric", :type=>'text'}
     = f.input :mode, :collection=>PAYMENT_MODES
-    = f.input :counterpart,  :collection => options_for_mask_counterpart(@organism), :as => :grouped_select, :group_method => :options, :group_label_method=> :title
+    = f.input :counterpart,
+      :collection => options_for_mask_counterpart(@organism),
+      :as => :grouped_select, :group_method => :options,
+      :group_label_method=> :title
     
 
   .form-actions
