@@ -4,5 +4,4 @@
 # affiché dans la console lors du lancement.
 # Sans accent pour éviter les problèmes d'affichage sous windows
 
-  puts "Bienvenue sur FaitesLesComptes version #{FLCVERSION}
-logiciel open-source de comptabilite de tresorerie"
+puts "Bienvenue sur FaitesLesComptes version #{FLCVERSION}, logiciel libre de comptabilite de tresorerie"

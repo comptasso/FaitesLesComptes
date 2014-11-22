@@ -46,7 +46,7 @@ describe Jobs::NomenclatureFillRubriks do
     
     before(:each) do
       subject.instance_variable_set('@nomenclature', nomen)
-      Time.stub!(:current).and_return(Time.mktime(2014,1,1))
+      Time.stub(:current).and_return(Time.mktime(2014,1,1))
     end
     
     it 'remplit le champ de job_finished_at de Nomenclature avec Time.current' do

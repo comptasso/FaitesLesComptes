@@ -10,7 +10,7 @@ end
 describe "Writings" do
   include OrganismFixtureBis
   
- before(:each) do
+  before(:each) do
     use_test_user
     use_test_organism 
     login_as('quidam')
@@ -25,24 +25,26 @@ describe "Writings" do
     
     describe 'Calcul des rubriques en arrière plan' do  
       
-    before(:each) do
-      @nomen = @o.nomenclature
-    end   
+      before(:each) do
+        @nomen = @o.nomenclature
+      end 
+    
     
               
-    it 'la première fois Nomenclature recalcule' do
-      @nomen.update_attribute(:job_finished_at, nil)
-      visit benevolats_compta_sheets_path
-      @nomen.reload
-      @nomen.job_finished_at.should_not be_nil
-    end
+      it 'la première fois Nomenclature recalcule', wip:true do
+        pending 'revoir avec delayed_job'
+        @o.nomenclature.update_attribute(:job_finished_at, nil)
+        Nomenclature.any_instance.stub(:fill_rubriks_with_values).with(@p).and_return('fait')
+        visit benevolats_compta_sheets_path
+        
+        response.should == 'preparing'
+      end
     
-    it 'la deuxième fois ne recalcule pas' do
-      travail = @nomen.job_finished_at
-      visit resultats_compta_sheets_path
-      @nomen.reload
-      @nomen.job_finished_at.should == travail
-    end
+      it 'la deuxième fois ne recalcule pas' do
+        @nomen.fill_rubrik_with_values(@p)
+        @nomen.should_not_receive(:fill_rubriks_with_values).with(@p)
+        visit resultats_compta_sheets_path
+      end
 
     
     

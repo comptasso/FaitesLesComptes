@@ -117,7 +117,7 @@ class Compta::SheetsController < Compta::ApplicationController
   protected
   
   # action permettant de remplir les rubriques avec les valeurs en cours
-  # et de signaler au record Nomanclature quand cela a été fait. 
+  # et de signaler au record Nomenclature quand cela a été fait. 
   def fill_rubrik_values
     frais = @organism.nomenclature.fresh_values? && period_adhoc?
     unless frais 
