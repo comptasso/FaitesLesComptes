@@ -1,11 +1,11 @@
 # voir la source sur heroku/rails-unicorn
 
 # config/unicorn.rb
-worker_processes 2
-timeout 30
+worker_processes Integer(ENV["WEB_CONCURRENCY"] || 3)
+
+timeout 15
 preload_app true
 
-@jc_delayed_job = nil
 
 before_fork do |server, worker|
   Signal.trap 'TERM' do
@@ -13,8 +13,6 @@ before_fork do |server, worker|
     Process.kill 'QUIT', Process.pid
   end
   
-  @jc_delayed_job ||= spawn("bundle exec rake jobs:work")
-
   defined?(ActiveRecord::Base) and
     ActiveRecord::Base.connection.disconnect!
 end
