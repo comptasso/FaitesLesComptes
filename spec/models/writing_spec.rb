@@ -359,8 +359,6 @@ describe Writing do
           @w.should_not be_valid 
           
         end
-        
-        it 'verrouiller une écriture remise de chèque doit verrouiller les chèques'
       
       end
 
@@ -382,19 +380,8 @@ describe Writing do
           w.support.should == 'le nom du compte'
         end
 
-
       end
       
-      describe 'to_csv' do
-        
-        it 'peut rendre un csv' do
-          pending 'voir si utile puisqu on passe par Extract'
-          expect {@w.to_csv}.not_to raise_error
-        end
-        
-      end
-
-
     end
   end
 

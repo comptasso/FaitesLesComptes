@@ -1,15 +1,11 @@
 ---
-- :name: Achats stockés sur activités
-  :comment: ''
-  :acc: '601'
-  :book: Dépenses ASC
 - :name: Bons d'achats
   :comment: ''
-  :acc: '6011'
+  :acc: '602'
   :book: Dépenses ASC
 - :name: Achats restauration, boissons
   :comment: ''
-  :acc: '6012'
+  :acc: '602'
   :book: Dépenses ASC
 - :name: Achats Prestations activités
   :comment: Par exemple dépenses voyagiste, spectacle de cirque,...

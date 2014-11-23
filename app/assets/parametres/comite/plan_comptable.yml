@@ -103,18 +103,10 @@
   title: Valeurs mobiliéres de placement
 - number: '590'
   title: Provisions pour dépréciation des valeurs mobiliéres de placement
-- number: '601'
+- number: '602'
   title: Achats stockés sur activités (sauf 603)
-- number: '6011'
-  title: Bons d'achats
-- number: '6012'
-  title: Achats restauration, denrées, boissons
-- number: '6031'
+- number: '6032'
   title: Variations des stocks sur activités
-- number: '60311'
-  title: Variations des stocks bons d'achat
-- number: '60312'
-  title: Variations des stocks restauration, denrées, boissons
 - number: '604'
   title: Achats de prestations pour activités
 - number: '606'
