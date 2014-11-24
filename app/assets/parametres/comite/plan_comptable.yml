@@ -155,10 +155,14 @@
   title: Autres charges de gestion courante
 - number: '658'
   title: 'Subventions allouées aux ayants droits'
-- number: '660'
-  title: Charges financiéres
-- number: '670'
-  title: Charges exceptionnelles
+- number: '6601'
+  title: Charges financiéres ASC
+- number: '6602'
+  title: Charges exceptionnelles FONC
+- number: '6701'
+  title: Charges exceptionnelles ASC
+- number: '6702'
+  title: Charges exceptionnelles FONC
 - number: '6811'
   title: Dotations aux amortissements
 - number: '68173'
@@ -183,10 +187,14 @@
   title: Autres subventions
 - number: '758'
   title: Produits divers de gestion courante
-- number: '760'
-  title: Produits financiers
-- number: '770'
-  title: Produits exceptionnels
+- number: '7601'
+  title: Produits financiers ASC
+- number: '7602'
+  title: Produits financiers FONC
+- number: '7701'
+  title: Produits exceptionnels ASC
+- number: '7702'
+  title: Produits exceptionnels FONC
 - number: '78173'
   title: Reprises sur provisions sur stocks
 - number: '78174'

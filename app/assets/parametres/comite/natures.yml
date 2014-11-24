@@ -11,6 +11,18 @@
   :comment: Par exemple dépenses voyagiste, spectacle de cirque,...
   :acc: '604'
   :book: Dépenses ASC
+- :name: Dons et secours
+  :comment: ''
+  :acc: '6238'
+  :book: Dépenses ASC
+- :name: Charges financières
+  :comment: Les intérêts débités par la banque, mais pas les frais bancaire
+  :acc: '6601'
+  :book: Dépenses ASC
+- :name: Charges financières
+  :comment: Les intérêts débités par la banque, mais pas les frais bancaire
+  :acc: '6602'
+  :book: Dépenses fonctionnement
 - :name: Sous traitance
   :comment: ''
   :acc: '611'
@@ -51,10 +63,6 @@
   :comment: ''
   :acc: '6236'
   :book: Dépenses fonctionnement
-- :name: Dons et secours
-  :comment: ''
-  :acc: '6238'
-  :book: Dépenses ASC
 - :name: Déplacements
   :comment: ''
   :acc: '625'
@@ -95,13 +103,13 @@
   :comment: ''
   :acc: '650'
   :book: Dépenses fonctionnement
-- :name: Charges financiéres
-  :comment: ''
-  :acc: '660'
-  :book: Dépenses fonctionnement
 - :name: Charges exceptionnelles
   :comment: ''
-  :acc: '670'
+  :acc: '6701'
+  :book: Dépenses ASC
+- :name: Charges exceptionnelles
+  :comment: ''
+  :acc: '6702'
   :book: Dépenses fonctionnement
 - :name: Participation des salariés 
   :comment: ''
@@ -129,9 +137,17 @@
   :book: Recettes ASC
 - :name: Produits financiers
   :comment: ''
-  :acc: '760'
+  :acc: '7601'
+  :book: Recettes ASC
+- :name: Produits financiers
+  :comment: ''
+  :acc: '7602'
+  :book: Recettes fonctionnement
+- :name: Produits exceptionnels
+  :comment: ''
+  :acc: '7701'
   :book: Recettes ASC
 - :name: Produits exceptionnels
   :comment: ''
-  :acc: '770'
-  :book: Recettes ASC
+  :acc: '7702'
+  :book: Recettes fonctionnement

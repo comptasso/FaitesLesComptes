@@ -78,11 +78,18 @@
             :Variation stocks de marchandises: '603'
             :Achats prestations sur activités: '604'
             :Dons et secours: '6238'
+        :RESULTAT FINANCIER:
+          :Produits financiers:
+            :Produits financiers: '7601'
+          :Charges financières:
+            :Charges financières: '-6601'
         :RESULTAT EXCEPTIONNEL:
           :Produits exceptionnels:
             :Report des ressources non utilisées: '789'
+            :Autres produits exceptionnels: '7701'
           :Charges exceptionnelles:
             :Engagements à réaliser: '-689'
+            :Autres charges exceptionnelles: '-6701'
         
 
   :resultatfonc:
@@ -105,20 +112,18 @@
             :Autres charges: '65'
         :RESULTAT FINANCIER:
           :Produits financiers:
-            :Produits financiers: '76'
+            :Produits financiers: '7602'
             :Reprises sur provisions financières: '786'
           :Charges financières:
-            :Charges financières: '-66'
+            :Charges financières: '-6602'
             :Dotations aux provisions financières: '686'
         :RESULTAT EXCEPTIONNEL:
           :Produits exceptionnels:
-            :Produits exceptionnels: '77'
+            :Produits exceptionnels: '7702'
             :Reprises sur provisions exceptionnelles: '787'
-            :Report des ressources non utilisées: '789'
           :Charges exceptionnelles:
-            :Charges exceptionnelles: '-67'
+            :Charges exceptionnelles: '-6702'
             :Dotations aux provisions exceptionnelles: '-687'
-            :Engagements à réaliser: '-689'
         :IMPOTS:
           :IS au taux réduit: '695'
 
