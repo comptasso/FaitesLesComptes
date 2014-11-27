@@ -20,7 +20,10 @@ module SpecControllerHelper
   # find_organism, current_period, current_user
   def minimal_instances
     @cu = mock_model(User) # cu pour current_user
-    @o = mock_model(Organism, title:'le titre', database_name:SCHEMA_TEST)
+    @o = mock_model(Organism,
+      title:'le titre',
+      sectored?:false,
+      database_name:SCHEMA_TEST)
     @p = mock_model(Period, :start_date=>Date.today.beginning_of_year,
       close_date:Date.today.end_of_year, open?:true,
       organism:@o,

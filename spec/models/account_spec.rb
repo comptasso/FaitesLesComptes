@@ -26,6 +26,10 @@ describe Account do
   describe 'validations' do
       
     subject {valid_account}
+    
+    before(:each) do
+      subject.stub(:organism).and_return(double(Organism, sectored?:false))
+    end
       
     it "should be valid"  do
       subject.should be_valid
@@ -54,6 +58,30 @@ describe Account do
       end
     end
       
+    
+  end
+  
+  context 'avec un comite d entreprise', wip:true do
+    
+    subject {valid_account}
+    
+    before(:each) do
+      subject.stub(:organism).and_return(double(Organism, sectored?:true))
+    end
+    
+    # OPTIMIZE on pourrait imposer un secteur pour tous les comptes
+    # par exemple ASC/FONCTIONNEMENT pour les 6 et 7 et COMMON pour les autres 
+    it 'un compte de classe 6 ou 7 invalide sans sector_id' do
+      subject.should_not be_valid
+      subject.errors.messages.should == {sector_id:['Un secteur est obligatoire pour ce compte']}
+    end
+    
+    it 'et valide avec sector_id' do
+      subject.sector_id = 1
+      subject.should be_valid
+      
+    end
+    
     
   end
   
@@ -104,7 +132,7 @@ describe Account do
       Writing.delete_all
     end
   
-    describe 'solde initial', wip:true do
+    describe 'solde initial' do
 
       before(:each) do
         @acc1 = @p.accounts.first

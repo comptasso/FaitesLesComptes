@@ -29,6 +29,7 @@ class Sector < ActiveRecord::Base
   has_many :cashes
   has_one :income_book
   has_one :outcome_book
+  has_many :accounts # rajouté lors de la sectorisation des comptes
   
   # permet d'ajouter les livres de ce secteur et lui même dans la collection des graphes
   def paves

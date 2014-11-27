@@ -15,7 +15,7 @@
 # Une autre méthode copy_accounts est appelée pour la création des comptes 
 # d'un exercice à partir de ceux de l'exercice précédent.
 # 
-# De même #create_financial_accounts est appelée par le callback after_create
+# De même #create_financial_accounts est appelée par le callback after_create 
 # des modèles Bank et Cash
 #
 class Utilities::PlanComptable
@@ -24,6 +24,7 @@ class Utilities::PlanComptable
   
   attr_reader :period, :status
 
+  # OPTIMIZE : on pourrait faire status = nil lorsque le period est persistant
   def initialize(period, status)
     @period = period
     @status = status.downcase
@@ -124,6 +125,24 @@ class Utilities::PlanComptable
   def fill_bridge
     period.organism.fill_bridge
   end
+  
+  # méthode provisoire rajoutée lors de la sectorisation des comptes pour 
+  # identifier les comptabilités ayant potentiellement une difficulté
+  def fill_sectorisation
+    return unless status == 'comité d\'entreprise'
+    val = ['Fonctionnement', 'ASC']
+    val.each do |v|
+    f = Folio.where('title LIKE ?', "%#{v}%").first
+    s = Sector.where('name LIKE ?', "%#{v}%").first
+    puts s.inspect
+    puts f.inspect
+    f.all_numbers(period).each do |number|
+      acc = Account.where('number = ?', number)
+      acc.each {|a| a.sector_id = s.id; a.save }
+      
+    end
+    end
+  end
 
  
   
@@ -140,7 +159,7 @@ class Utilities::PlanComptable
   # Deux exceptions sont capturées, celle où le fichier n'existe pas et celle où
   # le fichier est mal formé.
   #
-  def create_accounts
+  def create_accounts 
     nba = period.accounts.count # nb de comptes existants pour cet exercice
     t = YAML::load_file(source_path)
     t.each do |a|

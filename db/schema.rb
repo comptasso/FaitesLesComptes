@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141029165825) do
+ActiveRecord::Schema.define(:version => 20141127063546) do
 
   create_table "accounts", :force => true do |t|
     t.string   "number"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20141029165825) do
     t.datetime "updated_at"
     t.string   "accountable_type"
     t.integer  "accountable_id"
+    t.integer  "sector_id"
   end
 
   create_table "adherent_adhesions", :force => true do |t|

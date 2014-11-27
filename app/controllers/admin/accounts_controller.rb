@@ -3,7 +3,8 @@ class Admin::AccountsController < Admin::ApplicationController
   # GET /compta/accounts
   # GET /compta/accounts.json
   def index
-    @accounts = Account.list_for(@period)
+    @accounts = Account.list_for(@period) 
+    @sectorized = @organism.sectored?
 
     respond_to do |format|
       format.html # index.html.erb

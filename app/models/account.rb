@@ -16,18 +16,17 @@ require 'pdf_document/totalized'
 
 
 class Account < ActiveRecord::Base
-   # utilities::sold définit les méthodes cumulated_debit_before(date) et
+  # utilities::sold définit les méthodes cumulated_debit_before(date) et
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
   include Comparable
 
-  # period_id est nécessaire car lors de la création d'un compte bancaire ou d'une caisse,
-  # il faut créer des comptes en fournissant le champ period_id
-  # TODO revoir ce point car on peut le gérer autrement (ie en faisant un period_id = et non un mass_assign)
-  attr_accessible :number, :title, :used #, :period_id
+  attr_accessible :number, :title, :used
 
   belongs_to :period
+  has_one :organism, through: :period
   belongs_to :accountable, polymorphic:true
+  belongs_to :sector
   
   has_one :export_pdf, as: :exportable
   has_many :natures
@@ -51,6 +50,9 @@ class Account < ActiveRecord::Base
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:maximum=>80}
   validates_uniqueness_of :number , :scope=>:period_id
   validate :period_open
+  # TODO ceci est très spécifique aux comités d'entreprise. Devra être revu 
+  # si on veut étendre les possibilités de la sectorisation
+  validate :sectorise_for_67
  
 
   default_scope order('accounts.number ASC')
@@ -66,15 +68,18 @@ class Account < ActiveRecord::Base
   # grandement le nombre d'interrogations de la base dans l'affichage de la vue index
   # qui a besoin de connaître pour chaque compte s'il a une nature (pour les afficher et icone supprimer) 
   # et s'il a des compta_lines (pour l'affichage de l'icone supprimer).
-  scope :list_for, lambda {|period| joins("LEFT OUTER JOIN natures ON (accounts.id = natures.account_id) LEFT OUTER JOIN compta_lines ON (accounts.id = compta_lines.account_id)").
-   select("accounts.id, number, title, used, COUNT(compta_lines) AS nb_cls, COUNT(natures) AS nb_nats").
-   where("accounts.period_id = ?", period.id ).
-   group("accounts.id") } 
+  scope :list_for, lambda {|period| joins("LEFT OUTER JOIN natures ON (accounts.id = natures.account_id) 
+LEFT OUTER JOIN compta_lines ON (accounts.id = compta_lines.account_id)
+LEFT OUTER JOIN sectors ON (sectors.id = accounts.sector_id)").
+      select("sectors.name AS s_name, accounts.id, number, title, used, COUNT(compta_lines) AS nb_cls, COUNT(natures) AS nb_nats").
+      where("accounts.period_id = ?", period.id ).
+      group("accounts.id", "sectors.name").
+      order("number") }
   
   
- def <=>(other) 
-   number <=> other.number
- end
+  def <=>(other) 
+    number <=> other.number
+  end
 
 
   # le numero de compte plus le title pour les input select
@@ -94,9 +99,9 @@ class Account < ActiveRecord::Base
     if date == (period.start_date - 1)
       init_sold(dc)
     else
-    # TODO voir si super ne serait pas juste suffisant
-    BigDecimal.new(Writing.sum(dc, :select=>'debit, credit',
-      :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines))
+      # TODO voir si super ne serait pas juste suffisant
+      BigDecimal.new(Writing.sum(dc, :select=>'debit, credit',
+          :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines))
     end
   end
   
@@ -170,14 +175,14 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
         :joins=>:compta_lines))
   end
 
-# Montant du solde d'à nouveau débit
+  # Montant du solde d'à nouveau débit
   def init_sold_debit
     init_sold('debit')
   end
 
   # Montant du solde d'à nouveau crédit
   def init_sold_credit
-     init_sold('credit')
+    init_sold('credit')
   end
 
   def final_sold
@@ -195,11 +200,11 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
 
 
   
-# TODO cette méthode n'est utilisée qu'une fois pour edition de Account listing.
-# la mettre ailleurs d'autant qu'il s'agit d'un sujet de présentation
-#
-# Montant du sole à une date donnée sous forme d'un Array [debit, credit] mais
-# mis en forme avec les helpers de Rails
+  # TODO cette méthode n'est utilisée qu'une fois pour edition de Account listing.
+  # la mettre ailleurs d'autant qu'il s'agit d'un sujet de présentation
+  #
+  # Montant du sole à une date donnée sous forme d'un Array [debit, credit] mais
+  # mis en forme avec les helpers de Rails
   def formatted_sold(date)
     [ActionController::Base.helpers.number_with_precision(cumulated_debit_before(date), precision:2),
       ActionController::Base.helpers.number_with_precision(cumulated_credit_before(date), precision:2)]
@@ -222,10 +227,10 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
       title:"Plan comptable",
       select_method:'accounts.order(:number)',
       nb_lines_per_page:27) do |pdf|  # 27 lignes car il n'y pas de total ni de sous totel
-        pdf.columns_methods = %w(number title)
-        pdf.columns_widths = [20,80]
-        pdf.columns_titles = %w(Numéro Libellé)
-      end
+      pdf.columns_methods = %w(number title)
+      pdf.columns_widths = [20,80]
+      pdf.columns_titles = %w(Numéro Libellé)
+    end
     
     pdf
   end
@@ -234,6 +239,16 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
   
   def period_open
     errors.add(:base, 'Exercice clos') if period && !period.open
+  end
+  
+  # pour les comités, les deux comptes de résultats imposent que les 
+  # comptes 6 et 7 soient affectés à un secteur
+  def sectorise_for_67
+    if organism.sectored?
+      if number =~ /\A(6|7).*/ && !sector_id  
+        errors.add(:sector_id, 'Un secteur est obligatoire pour ce compte')
+      end
+    end
   end
 
 

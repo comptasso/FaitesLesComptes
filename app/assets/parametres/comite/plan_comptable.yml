@@ -1,4 +1,4 @@
----
+no_sector:
 - number: '1060'
   title: 'reserve initiale'
 - number: '1061'
@@ -103,6 +103,8 @@
   title: Valeurs mobiliéres de placement
 - number: '590'
   title: Provisions pour dépréciation des valeurs mobiliéres de placement
+  
+ASC:
 - number: '602'
   title: Achats stockés sur activités (sauf 603)
 - number: '6032'
@@ -111,6 +113,32 @@
   title: Achats de prestations pour activités
 - number: '606'
   title: 'Autres fournitures'
+- number: '6238'
+  title: Dons et secours
+- number: '6601'
+  title: Charges financiéres ASC
+- number: '6701'
+  title: Charges exceptionnelles ASC
+- number: '706'
+  title: Participation des salariés aux activités
+- number: '741'
+  title: Subventions ASC
+- number: '743'
+  title: Subventions CCE
+- number: '748'
+  title: Autres subventions
+- number: '7601'
+  title: Produits financiers ASC
+- number: '7701'
+  title: Produits exceptionnels ASC  
+- number: '78173'
+  title: Reprises sur provisions sur stocks
+- number: '78174'
+  title: Reprises sur provisions sur actifs circulants
+- number: '791'
+  title: Transferts de charges ASC
+ 
+Fonctionnement: 
 - number: '611'
   title: Sous traitance
 - number: '612'
@@ -131,8 +159,7 @@
   title: Honoraires et frais d'actes
 - number: '6236'
   title: Catalogue et imprimés
-- number: '6238'
-  title: Dons et secours
+
 - number: '625'
   title: Voyages, déplacements, missions
 - number: '626'
@@ -155,12 +182,8 @@
   title: Autres charges de gestion courante
 - number: '658'
   title: 'Subventions allouées aux ayants droits'
-- number: '6601'
-  title: Charges financiéres ASC
 - number: '6602'
-  title: Charges exceptionnelles FONC
-- number: '6701'
-  title: Charges exceptionnelles ASC
+  title: Charges financières FONC
 - number: '6702'
   title: Charges exceptionnelles FONC
 - number: '6811'
@@ -175,39 +198,24 @@
   title: Dotations aux amortissements et aux provisions - Charges exceptionnelles
 - number: '695'
   title: IS au taux réduit
-- number: '706'
-  title: Participation des salariés aux activités
-- number: '741'
-  title: Subventions ASC
+
 - number: '742'
   title: Subventions fonctionnement
-- number: '743'
-  title: Subventions CCE
-- number: '748'
-  title: Autres subventions
+
 - number: '758'
   title: Produits divers de gestion courante
-- number: '7601'
-  title: Produits financiers ASC
+
 - number: '7602'
   title: Produits financiers FONC
-- number: '7701'
-  title: Produits exceptionnels ASC
+
 - number: '7702'
   title: Produits exceptionnels FONC
-- number: '78173'
-  title: Reprises sur provisions sur stocks
-- number: '78174'
-  title: Reprises sur provisions sur actifs circulants
+
 - number: '786'
   title: Reprises sur provisions pour risques (financiers)
 - number: '787'
   title: Reprises sur provisions (exceptionnel)
-- number: '791'
-  title: Transferts de charges ASC
+
 - number: '792'
   title: Transferts de charges fonctionnement
-- number: '860'
-  title: Contributions volontaires en nature (charges)
-- number: '870'
-  title: Contributions volontaires en nature (produits)
+

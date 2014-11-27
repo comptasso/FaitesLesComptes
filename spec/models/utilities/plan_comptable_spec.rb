@@ -7,7 +7,7 @@ require 'utilities/plan_comptable'
 
 describe Utilities::PlanComptable do
 
-  let(:o) {double(Organism, database_name:SCHEMA_TEST)}  
+  let(:o) {double(Organism, sectored?:false, database_name:SCHEMA_TEST)}  
 
   describe 'self.create_accounts' do
     
@@ -17,13 +17,8 @@ describe Utilities::PlanComptable do
       @p.organism_id = 1
       @p.stub(:organism).and_return o
       @p.stub(:should_not_have_more_than_two_open_periods).and_return(true)
-#      @p.stub(:create_plan) # car create_plan est appelé par un after_create
-#      @p.stub(:create_bank_and_cash_accounts) # inutile de tester ce point ici
-#      @p.stub(:create_rem_check_accounts) # idem
       @p.stub(:check_nomenclature).and_return true
-#      @p.stub(:fill_bridge)
-#      @p.stub(:load_natures)
-      @p.save!
+      @p.save! 
     end
   
     it 'se crée avec un exercice et un statut d organisme' do
@@ -41,8 +36,6 @@ describe Utilities::PlanComptable do
       Utilities::PlanComptable.create_accounts(@p, 'Association').should == 137
       @p.accounts(true).should have(138).accounts
     end
-
-    
 
     it 'retourne 0 en cas d erreur sur la lecture' do
       Utilities::PlanComptable.create_accounts(@p, 'Inconnu').should == 0

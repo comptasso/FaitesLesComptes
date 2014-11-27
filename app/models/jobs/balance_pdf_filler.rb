@@ -3,7 +3,7 @@ module Jobs
   # Cette classe est un delayed job qui a pour fonction de préparer le 
   # contenu du fichier pdf pour un livre de recettes ou de dépenses.
   #
-  # Les arguments sont 
+  # Les arguments sont  
   # - db_name : la base de données
   # - export_pdf_id : qui est l'id du record export_pdf
   # - et des options qui doivent donner l'id de l'exercice (:period_id), 

@@ -5,9 +5,11 @@
   %h3 Liste des comptes
 
   %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0")
-    %thead
+    %thead(class="#{@sectorized ? 'sectored' : 'not_sectored'}")
       %tr
         %th Numéro
+        -if @sectorized
+          %th Secteur 
         %th Intitulé
         %th Natures rattachées
         %th Actif
@@ -17,6 +19,8 @@
       - @accounts.each do |account|
         %tr
           %td= account.number.to_s
+          -if @sectorized
+            %td= secteur(account)
           %td= account.title
           %td= render partial: 'nature', collection: account.natures.all if account.nb_nats.to_i > 0
           %td= t_used account

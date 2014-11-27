@@ -13,8 +13,8 @@ module Jobs
     def perform
       Apartment::Database.process(db_name) do
         
-        # TODO vraiment pas terrible de voir que Period doit solliciter organism.send(:status_class)
-        pc = Utilities::PlanComptable.new(@period, @period.organism.send(:status_class))
+        
+        pc = plan_comptable
         
         if @period.previous_period?
           pc.copy_accounts(@period.previous_period)
@@ -35,6 +35,19 @@ module Jobs
       Apartment::Database.process(db_name) do
         @period = Period.find(period_id)
         @period.update_attribute(:prepared, true)
+      end
+    end
+    
+    protected
+    
+    
+    def plan_comptable
+      # TODO vraiment pas terrible de voir que Period doit solliciter organism.send(:status_class)
+      statut = @period.organism.send(:status_class)
+      if statut == 'Comite'
+        Utilities::PlanComptableComite.new(@period)  
+      else
+        Utilities::PlanComptable.new(@period, statut)
       end
     end
     

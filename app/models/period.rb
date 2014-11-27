@@ -91,16 +91,7 @@ class Period < ActiveRecord::Base
   
   
   before_validation :fix_days
-  before_create :should_not_have_more_than_two_open_periods
-  
-# after_create :create_datas
-    
-#  after_create :create_plan, :create_bank_and_cash_accounts, :create_rem_check_accounts, :load_natures ,:unless=> :previous_period?
-#  after_create :copy_accounts, :copy_natures, :if=> :previous_period?
-#  after_create :check_nomenclature
-#  # TODO probablement inutile si pas asssociation
-#  after_create :fill_bridge 
- 
+  before_create :should_not_have_more_than_two_open_periods 
   before_destroy  :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
   
 
@@ -228,9 +219,8 @@ class Period < ActiveRecord::Base
       Period.transaction do
         
         w = an_book.writings.new(date:date, narration:'A nouveau')
-        # on fait d'abord les compta_liens du compte de bilan
+        # on fait d'abord les compta_lines du compte de bilan
         report_comptes_bilan.each { |cl| w.compta_lines << cl }
-        
         
         # puis on intègre la compta_line de report à nouveau
         w.compta_lines << report_a_nouveau if resultat != 0.0

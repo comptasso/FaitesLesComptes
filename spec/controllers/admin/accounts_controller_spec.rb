@@ -30,10 +30,10 @@ describe Admin::AccountsController do
     {"name"=>'CrediX', "number"=>'5555', "period_id"=>@p.to_param}
   end
 
-  before(:each) do
+  before(:each) do 
     minimal_instances
     @p.stub(:accounts).and_return @a = double(Arel)
-
+     
   end
 
   describe "GET index" do
