@@ -21,7 +21,7 @@ class Account < ActiveRecord::Base
   include Utilities::Sold
   include Comparable
 
-  attr_accessible :number, :title, :used
+  attr_accessible :number, :title, :used, :sector_id
 
   belongs_to :period
   has_one :organism, through: :period

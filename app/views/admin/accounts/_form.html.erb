@@ -6,9 +6,10 @@
  
     <%= f.input :number ,:input_html=>{:placeholder=>'2 à 8 chiffres', :size=>'20'},:disabled=>!@account.new_record? %>
     <%= f.input :title %>
+   <% if @organism.sectored? %>
+    <%= f.association :sector %>
+   <% end %>
     <%= f.input :used %>
-
- 
 
   <div class="form-actions">
     <%= f.button :submit, class: "btn-primary" %>

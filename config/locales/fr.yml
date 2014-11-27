@@ -262,6 +262,7 @@ fr:
         title: Intitulé
         number: Numéro
         used: Utilisé
+        sector: Secteur
       user:
         name: Nom
         email: E-mail
