@@ -138,7 +138,11 @@ class Utilities::PlanComptable
     puts f.inspect
     f.all_numbers(period).each do |number|
       acc = Account.where('number = ?', number)
-      acc.each {|a| a.sector_id = s.id; a.save }
+      acc.each do |a|
+          next if a.sector_id # déja rempli 
+          a.sector_id = s.id
+          a.save
+        end
       
     end
     end
