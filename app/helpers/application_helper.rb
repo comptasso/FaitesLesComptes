@@ -110,6 +110,21 @@ module ApplicationHelper
     end
     
     
+    def option_groups_from_collection_for_select_with_datas(collection, group_method, group_label_method, option_key_method, option_value_method, selected_key = nil)
+  collection.map do |group|
+    option_tags = options_from_collection_for_select(
+      group.send(group_method), option_key_method, option_value_method, selected_key)
+   if group.argument
+     mes_options = {label: group.send(group_label_method)}.merge(group.html_options)  
+     
+   else
+    mes_options =  {label: group.send(group_label_method)} 
+   end
+   content_tag(:optgroup, option_tags, mes_options)
+  end.join.html_safe
+end
+    
+    
 
 
     protected

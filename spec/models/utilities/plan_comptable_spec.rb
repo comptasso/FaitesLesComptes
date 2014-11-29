@@ -5,14 +5,18 @@ require 'utilities/plan_comptable'
 
  # TODO compléter les spec de cette classe
 
-describe Utilities::PlanComptable do
+describe Utilities::PlanComptable do 
+  
+  before(:each) do
+    Account.any_instance.stub(:sectorise_for_67).and_return true
+  end
 
   let(:o) {double(Organism, sectored?:false, database_name:SCHEMA_TEST)}  
 
   describe 'self.create_accounts' do
     
     before(:each) do  
-     
+      
       @p = Period.new(start_date:Date.today.beginning_of_month, close_date:Date.today.end_of_month)
       @p.organism_id = 1
       @p.stub(:organism).and_return o
@@ -39,10 +43,6 @@ describe Utilities::PlanComptable do
 
     it 'retourne 0 en cas d erreur sur la lecture' do
       Utilities::PlanComptable.create_accounts(@p, 'Inconnu').should == 0
-    end
-    
-    it 'retourne 106 pour un comité d entreprise' do
-      Utilities::PlanComptable.create_accounts(@p, 'Comite').should == 106
     end
     
     it 'et 105 pour une entreprise' do

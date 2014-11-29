@@ -107,6 +107,7 @@ describe Nature do
       
     
     before(:each) do
+      Account.any_instance.stub(:sectorise_for_67).and_return true
       @accounts = create_accounts(%w(110 200 201)) 
       @accounts.each do |a|
         n = Nature.new(book_id:1,

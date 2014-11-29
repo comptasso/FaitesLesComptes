@@ -42,18 +42,19 @@
 #  pour les objets concernés
 #  
 class OptionsForAssociationSelect
-  attr_reader:title
+  attr_reader :title, :argument, :html_options
 
-  def initialize(titre, method, model, option=nil)
+  def initialize(titre, method, obj, argument=nil, html_options={})
     @title=titre
     @method=method
-    @object=model
-    @option = option
+    @object= obj
+    @argument = argument 
+    @html_options = html_options.merge({'data-sector'=>argument.to_s})
   end
 
   def options
-    if @option
-      @object.send(@method, @option)
+    if @argument
+      @object.send(@method, @argument)
     else
       @object.send(@method)
     end

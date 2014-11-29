@@ -1,24 +1,22 @@
 "use strict";
 /*jslint browser: true */
-/*global $, jQuery */
+/*global $, jQuery, fnTableSortable*/
 
 //var $, jQuery;
 
 // function utilisée pour disable ou able les différentes parties
 // du select 
 function change_radio() {
-    var sel = $('select#nature_book_id option').filter(':selected');
+    var sel = $('select#nature_book_id option').filter(':selected'),
+        d_type = sel.data('type'),
+        d_sector = sel.data('sector');
 
-    if (sel.attr("data-type") === 'OutcomeBook') {
-        $('optgroup[label=Dépenses] option').attr('disabled', false);
-        $('optgroup[label=Recettes] option').attr('disabled', true);
-    }
-    if (sel.attr("data-type") === 'IncomeBook') {
-        $('optgroup[label=Recettes] option').attr('disabled', false);
-        $('optgroup[label=Dépenses] option').attr('disabled', true);
-    }
+    $('optgroup option').attr('disabled', true);
+    $("optgroup[data-sector = '" + d_sector + "'][data-type = '" + d_type + "'] option").
+        attr('disabled', false);
+
 }
-//
+// VUE FORM
 // Le but est ici de garder dynamiquement la cohérence dans le formulaire
 // de création de nature entre le type de nature (recette ou dépenses)
 // et le compte auquel elle peut être rattachée.
@@ -32,8 +30,9 @@ jQuery(function () {
     });
 });
 
-
-// pour permettre le classement des natures dans la vue index par un drag & drop 
+// VUE INDEX
+// Pour permettre le classement des natures dans la vue index par un drag & drop 
+// 
 // Si la table #index dans le body de classe admin_natures existe, 
 // alors on appelle fnTableSortable pour chacune des tables.
 // fnTableSortable est définie dans application.js

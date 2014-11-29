@@ -13,7 +13,7 @@
 #
 class Nature < ActiveRecord::Base 
  
-  belongs_to :period
+  belongs_to :period 
   belongs_to :account
   belongs_to :book
 

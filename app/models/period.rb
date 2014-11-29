@@ -294,14 +294,24 @@ class Period < ActiveRecord::Base
 
 
   # renvoie un array de tous les comptes de classe 7
-  def recettes_accounts
-    accounts.classe_7
+  # TODO ajouter une gestion d'erreur si pas de sector fourni alors que 
+  # l'organisme est sectorisé
+  def recettes_accounts(sector_id = nil)
+    if organism.sectored? 
+      accounts.classe_7.where('sector_id = ?', sector_id)
+    else
+      accounts.classe_7
+    end
   end
 
 
   # renvoie un array de tous les comptes de classe 6
-  def depenses_accounts
-    accounts.classe_6 
+  def depenses_accounts(sector_id = nil)
+    if organism.sectored? 
+      accounts.classe_6.where('sector_id = ?', sector_id)
+    else
+      accounts.classe_6
+    end
   end
 
   # renvoie un array de toutes les natures de type recettes
