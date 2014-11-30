@@ -18,6 +18,7 @@ class Nature < ActiveRecord::Base
   belongs_to :book
 
   has_many :compta_lines
+  has_many :writings, through: :compta_lines
 
   acts_as_list :scope=>[:period_id, :book_id]
 
@@ -59,27 +60,32 @@ class Nature < ActiveRecord::Base
   
   # méthode provisoire pour tester la cohérence des natures
   def self.check_coherence
+    coherent = true
+    db = Organism.first.database_name
     Nature.find_each do |n|
       next unless n.account
       sector1id = n.account.sector.id if n.account.sector
       sector2id = n.book.sector.id 
-      db = n.book.organism.database_name
+      
       if sector1id != sector2id
         puts "#{db} : #{n.id} reliée à #{sector1id} et #{sector2id}"
         Rails.logger.warn "#{db} : #{n.id} reliée à #{sector1id} et #{sector2id}"
-        n.change_book_to_fit_account
+        coherent = n.change_book_to_fit_account
+        
       end
     end
+    coherent ? nil : db
   end
   
   # 
   def change_book_to_fit_account
-    return if compta_lines.any?
+    return false if compta_lines.any?
     new_sector = account.sector
     new_book = Book.where('type = ? AND sector_id = ?', book.type, new_sector.id).first
     self.book_id = new_book.id
     save!
     puts "modification de la nature #{id}"
+    return true
   end
 
  

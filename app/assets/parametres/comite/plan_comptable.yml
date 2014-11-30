@@ -139,6 +139,8 @@ ASC:
   title: Transferts de charges ASC
  
 Fonctionnement: 
+- number: '606'
+  title: Achats non stockés matières et fournitures
 - number: '611'
   title: Sous traitance
 - number: '612'

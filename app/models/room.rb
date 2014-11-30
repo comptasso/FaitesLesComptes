@@ -189,7 +189,7 @@ class Room < ActiveRecord::Base
 
   # pour faire la transition avec la sectorisation des comptes
   def self.check_natures
-    Room.find_each do |r| 
+    Room.all.collect do |r| 
       r.look_for do
         o = Organism.first
         next if o.status != 'Comité d\'entreprise'

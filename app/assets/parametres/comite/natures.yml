@@ -11,6 +11,10 @@
   :comment: Par exemple dépenses voyagiste, spectacle de cirque,...
   :acc: '604'
   :book: Dépenses ASC
+- :name: Fournitures de bureau
+  :comment: et plus généralement achats non stockés de matières et fournitures
+  :acc: '606'
+  :book: Dépenses fonctionnement
 - :name: Dons et secours
   :comment: ''
   :acc: '6238'
