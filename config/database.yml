@@ -1,7 +1,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: restau20141111
+  database: restau20141130
   pool: 5
   username: jcl
   password: flc
