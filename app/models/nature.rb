@@ -63,12 +63,23 @@ class Nature < ActiveRecord::Base
       next unless n.account
       sector1id = n.account.sector.id if n.account.sector
       sector2id = n.book.sector.id 
-      db = n.book.organism.database
+      db = n.book.organism.database_name
       if sector1id != sector2id
         puts "#{db} : #{n.id} reliée à #{sector1id} et #{sector2id}"
         Rails.logger.warn "#{db} : #{n.id} reliée à #{sector1id} et #{sector2id}"
+        n.change_book_to_fit_account
       end
     end
+  end
+  
+  # 
+  def change_book_to_fit_account
+    return if compta_lines.any?
+    new_sector = account.sector
+    new_book = Book.where('type = ? AND sector_id = ?', book.type, new_sector.id).first
+    self.book_id = new_book.id
+    save!
+    puts "modification de la nature #{id}"
   end
 
  
