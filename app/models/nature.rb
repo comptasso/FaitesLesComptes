@@ -56,6 +56,20 @@ class Nature < ActiveRecord::Base
   def in_out_to_s
     book.title
   end
+  
+  # méthode provisoire pour tester la cohérence des natures
+  def self.check_coherence
+    Nature.find_each do |n|
+      next unless n.account
+      sector1id = n.account.sector.id if n.account.sector
+      sector2id = n.book.sector.id 
+      db = n.book.organism.database
+      if sector1id != sector2id
+        puts "#{db} : #{n.id} reliée à #{sector1id} et #{sector2id}"
+        Rails.logger.warn "#{db} : #{n.id} reliée à #{sector1id} et #{sector2id}"
+      end
+    end
+  end
 
  
   protected
