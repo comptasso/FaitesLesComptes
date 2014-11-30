@@ -186,18 +186,6 @@ class Room < ActiveRecord::Base
 
     end 
   end
-  
-  # pour faire la transition avec la sectorisation des comptes
-  def self.fill_sector_id
-    Room.find_each do |r| 
-      r.look_for do
-        o = Organism.first
-        p = Period.first
-        upc = Utilities::PlanComptable.new(p, o.status)
-        upc.fill_sectorisation
-      end
-    end
-  end
 
   protected
   

@@ -125,28 +125,7 @@ class Utilities::PlanComptable
   def fill_bridge
     period.organism.fill_bridge
   end
-  
-  # méthode provisoire rajoutée lors de la sectorisation des comptes pour 
-  # identifier les comptabilités ayant potentiellement une difficulté
-  def fill_sectorisation
-    return unless status == 'comité d\'entreprise'
-    val = ['Fonctionnement', 'ASC']
-    val.each do |v|
-    f = Folio.where('title LIKE ?', "%#{v}%").first
-    s = Sector.where('name LIKE ?', "%#{v}%").first
-    puts s.inspect
-    puts f.inspect
-    f.all_numbers(period).each do |number|
-      acc = Account.where('number = ?', number)
-      acc.each do |a|
-          next if a.sector_id # déja rempli 
-          a.sector_id = s.id
-          a.save
-        end
-      
-    end
-    end
-  end
+
 
  
   
