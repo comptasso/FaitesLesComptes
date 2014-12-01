@@ -181,9 +181,9 @@ module Compta
       @debit_nums += numbers.select {|n| n =~ /^#{num}\d*/}
     end
     
-       
+    # Donne tous les numéros de comptes existant pour les deux exercice
+    # celui demandé et le précédent.
     def numbers
-      # ceci nous donne tous les comptes des deux périodes
       @numbers ||= @period.two_period_account_numbers
     end
     
