@@ -66,7 +66,10 @@ class Nomenclature < ActiveRecord::Base
     
     transaction do
       yml.each do |k,v|
-        f = folios.create(:name=>k, :title=>v[:title], sens:v[:sens])
+        
+        f = folios.new(:name=>k, :title=>v[:title], sens:v[:sens])
+        fill_sector_id(f, v[:sector]) if v[:sector]
+        f.save!
         f.fill_rubriks_with_position(v[:rubriks])
       end
     end
@@ -131,6 +134,18 @@ class Nomenclature < ActiveRecord::Base
   # Utilité dans SheetsController pour vérifier que la nomenclature est cohérente
   def coherent?
     Utilities::NomenclatureChecker.new(self).valid?
+  end
+  
+  protected
+  
+  def trouve_sector_id(sector_name)
+    return nil unless sector_name
+    organism.sectors.where('name = ?', sector_name).first.id    
+  end
+  
+  def fill_sector_id(folio, sector_name)
+    return unless sector_name
+    folio.sector_id = trouve_sector_id(sector_name)
   end
   
   

@@ -60,6 +60,7 @@
             :Autres: 43C 44C 45C 46C 47C
 
   :resultatASC:
+    :sector: ASC
     :title: Compte de résultats ASC
     :sens: :passif
     :rubriks:
@@ -93,6 +94,7 @@
         
 
   :resultatfonc:
+    :sector: Fonctionnement
     :title: Compte de résultats Fonctionnement
     :sens: :passif
     :rubriks:

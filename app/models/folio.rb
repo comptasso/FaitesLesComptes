@@ -37,6 +37,7 @@ class Folio < ActiveRecord::Base
   attr_reader :counter
   has_many :rubriks, dependent: :destroy
   belongs_to :nomenclature
+  belongs_to :sector
   
   # TODO mettre une validation pour name 
   
