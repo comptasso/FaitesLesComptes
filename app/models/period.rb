@@ -146,18 +146,23 @@ class Period < ActiveRecord::Base
 
   # renvoie la liste des comptes pour deux exercices successifs.
   # to_set garantit l'unicité des comptes et sort retourne alors un Array
-  def two_period_account_numbers
+  def two_period_account_numbers(sector = nil)
     pp = previous_period
     if pp != self # ce qui évite une double interrogation de la base.
-      pp.account_numbers.to_set.merge(account_numbers).sort
+      pp.account_numbers(sector).to_set.merge(account_numbers(sector)).sort
     else
-      account_numbers
+      account_numbers(sector)
     end
   end
 
   # renvoie la liste des numéros de comptes de l'exercice
-  def account_numbers
-    accounts.map {|acc| acc.number}
+  # Un filtre est effectué sur le secteur si celui-ci est fourni
+  def account_numbers(sector=nil)
+    if sector
+      accounts.select {|a| a.sector_id == sector.id}.collect(&:number)
+    else
+      accounts.collect(&:number)
+    end
   end
   
   # renvoie le compte (12) qui sert pour enregistrer le résultat de l'exercice

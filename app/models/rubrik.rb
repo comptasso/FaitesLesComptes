@@ -195,7 +195,7 @@ class Rubrik < ActiveRecord::Base
   # qu'un compte 12
   #
   def all_lines(period)
-    Compta::RubrikParser.new(period, folio.sens, numeros).rubrik_lines
+    Compta::RubrikParser.new(period, folio.sens, numeros, folio.sector).rubrik_lines
   end
     
   def self_and_children

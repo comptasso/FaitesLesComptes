@@ -214,20 +214,22 @@ describe Folio do
       Compta::RubrikParser.any_instance.stub(:new).and_return(double(Compta::RubrikParser, :list=>['101', '102']))
     end
     
-    it 'all_numbers renvoie tous les numéros de comptes utilisés' do
-      @f.should_receive(:all_instructions).and_return(['25101', '28102'])
-      Compta::RubrikParser.should_receive(:new).with(@per, :actif, '25101').and_return(double(Compta::RubrikParser, :list_numbers=>['251012', '251013']))
-      Compta::RubrikParser.should_receive(:new).with(@per, :actif, '28102').and_return(double(Compta::RubrikParser, :list_numbers=>['281021', '281023']))
-      @f.all_numbers(@per).should == ['251012', '251013', '281021', '281023']
-    end
+    
     
     it 'all_numbers_with_option renvoie les numéros de comptes et les options utilisées' do
       @f.should_receive(:all_instructions).and_return(['un', 'deux'])
-      Compta::RubrikParser.should_receive(:new).with(@per, :actif, 'un').
+      Compta::RubrikParser.should_receive(:new).with(@per, :actif, 'un', nil).
         and_return(double(Compta::RubrikParser, :list=>[{:num=>'251012', :option=>'col2'}]))
-      Compta::RubrikParser.should_receive(:new).with(@per, :actif, 'deux').
+      Compta::RubrikParser.should_receive(:new).with(@per, :actif, 'deux', nil).
         and_return(double(Compta::RubrikParser, :list=>[{:num=>'101', :option=>nil}, {:num=>'102', :option=>nil}]))
       @f.all_numbers_with_option(@per).should == [{:num=>'251012', :option=>'col2'}, {:num=>'101', :option=>nil}, {:num=>'102', :option=>nil}]
+    end
+    
+    it 'all_numbers renvoie tous les numéros de comptes utilisés' do
+      # @f.stub(:all_instructions).and_return(['un', 'deux'])
+      @f.should_receive(:all_numbers_with_option).with(@per).
+        and_return([{num:'101', option:nil}, {num:'102', option:nil}])
+      @f.all_numbers(@per).should == ['101', '102']
     end
   end
   
