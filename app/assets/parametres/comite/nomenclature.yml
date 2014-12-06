@@ -6,17 +6,17 @@
       :TOTAL ACTIF:
         :IMMOBILISATIONS:
           :Immobilisations incorporelles:
-            :Frais d'établissement: '201 -2801'
-            :Frais de recherche et développement: 203 -2803
-            :Fonds commercial: 206 207 -2806 -2807
-            :Autres: 205 208 -2805 -2808 -2809
+            :Logiciels et droits similaires: 205 -2805 
+            :Autres: 20 -280 !205 !2805
           :Immobilisations corporelles:
+            :Terrains: 211 -2811
             :Agencements: 212 -2812
+            :Constructions: 213 -2813
             :Installations techniques, matériel et outillage: 215 -2815
             :Autres: 218 -2818
-            :Immobilisations en cours: 23 
+            :Immobilisations en cours: '23' 
           :Immobilisations financières:
-            :Immobilisations financières: 27 -297
+            :Immobilisations financières: 26 27 -296 -297
         :ACTIF CIRCULANT:
           :Stocks et encours:
             :Marchandises: 37 -397
@@ -26,7 +26,7 @@
             :Autres: 43D 44D 45D 46D 47D -495 -496
         :DISPONIBILITES ET AUTRES:
           :Disponibilités:
-            :Autres titres: 50 -590
+            :Valeurs mobilières de placement: 50 -590
             :Banques: '51D'
             :Disponibilités: '53'
           :Autres actifs:
@@ -44,7 +44,7 @@
             :Réserves ASC: '1061'
             :Réserves fonctionnement: '1062'
             :Résultat de l'exercice: '12' 
-            :Subventions d'investissement: '13'
+            :Subventions d'investissement: '102 13'
           :Provisions:
             :Provisions pour risques et charges: '15'
         :DETTES ENVERS LES TIERS:
@@ -68,29 +68,42 @@
         :RESULTAT D'EXPLOITATION:
           :Produits d'exploitation:
             :Ventes de marchandises: '707'
-            :Participation salariés: '701 706'
+            :Participation salariés: '706'
             :Variation stocks production: '713'
             :Production immobilisée: '72'
-            :Subventions reçues: '74 !742'
+            :Subventions reçues: '74'
+            :Autres produits: '75 701'
             :Reprises sur provisions, amortissements et transferts de charge: '781'
             :Transferts de charges: '791'
           :Charges d'exploitation:
-            :Achats de marchandises: '-60 !603 !604 !606'
+            :Achats de marchandises: '-60 !603 !604'
             :Variation stocks de marchandises: '603'
             :Achats prestations sur activités: '604'
-            :Dons et secours: '6238'
+            :Charges externes: '61'
+            :Autres charges externes: '62'
+            :Impôts et taxes: '63'
+            :Salaires et traitements: '64 !645'
+            :Charges sociales: '645'
+            :Dotations aux amortissements et provisions: '681'
+            :Autres charges: '65'
+        
         :RESULTAT FINANCIER:
           :Produits financiers:
-            :Produits financiers: '7601'
+            :Produits financiers: '76'
+            :Reprises sur provisions financières: '786'
           :Charges financières:
-            :Charges financières: '-6601'
+            :Charges financières: '-66'
+            :Dotations aux provisions financières: '686'
         :RESULTAT EXCEPTIONNEL:
           :Produits exceptionnels:
+            :Produits exceptionnels: '77'
+            :Reprises sur provisions exceptionnelles: '787'
             :Report des ressources non utilisées: '789'
-            :Autres produits exceptionnels: '7701'
           :Charges exceptionnelles:
+            :Charges exceptionnelles: '-67'
+            :Dotations aux provisions exceptionnelles: '-687'
             :Engagements à réaliser: '-689'
-            :Autres charges exceptionnelles: '-6701'
+            
         
 
   :resultatfonc:
@@ -101,31 +114,32 @@
       :RESULTAT NET:
         :RESULTAT D'EXPLOITATION:
           :Produits d'exploitation:
-            :Subvention d'exploitation: '742'
-            :Autres produits: 708 75
-            :Transferts de charges: '792'
+            :Subventions: '74'
+            :Autres produits: '70 71 72 73 75 78 !786 !787'
+            :Transferts de charges: '79'
           :Charges d'exploitation:
             :Achats matières et fourn. non stockables : '606'
-            :Autres charges externes: '61'
-            :Autres services extérieurs: '62 !6238'
+            :Autres achats: '60 !606'
+            :Charges externes: '61'
+            :Autres services extérieurs: '62'
             :Impôts, taxes et versements assimilés: '63'
             :Salaires et traitements: '641'
-            :Charges sociales: '645'
-            :Dotations aux amortissements et provisions: '681'
+            :Charges sociales et assimilés: '64 !641'
+            :Dotations aux amortissements et provisions: '68 !686 !687'
             :Autres charges: '65'
         :RESULTAT FINANCIER:
           :Produits financiers:
-            :Produits financiers: '7602'
+            :Produits financiers: '76'
             :Reprises sur provisions financières: '786'
           :Charges financières:
-            :Charges financières: '-6602'
+            :Charges financières: '-66'
             :Dotations aux provisions financières: '686'
         :RESULTAT EXCEPTIONNEL:
           :Produits exceptionnels:
-            :Produits exceptionnels: '7702'
+            :Produits exceptionnels: '77'
             :Reprises sur provisions exceptionnelles: '787'
           :Charges exceptionnelles:
-            :Charges exceptionnelles: '-6702'
+            :Charges exceptionnelles: '-67'
             :Dotations aux provisions exceptionnelles: '-687'
         :IMPOTS:
           :IS au taux réduit: '695'
