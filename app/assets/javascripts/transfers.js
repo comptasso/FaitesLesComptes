@@ -31,7 +31,6 @@ $(document).ready(function () {
 // lit la valeur qui est sélectionnée dans le champ from account
 // et la disable pour sa propre liste d'option'
 function $f_transfer_from_account() {
-
     var s = $('#transfer_compta_lines_attributes_0_account_id').val();
     $('#transfer_compta_lines_attributes_1_account_id option[value=' + s + ']').attr('selected', false);
 }
