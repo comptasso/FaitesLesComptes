@@ -10,7 +10,7 @@
     
     <div class="navbar navbar-fixed-top" role="navigation">
           <%= render 'layouts/navbar' %>
-          <%= render 'compta/menus/menu' if user_signed_in? %>
+      <div>   <%= render 'compta/menus/menu' if user_signed_in? %></div>
     </div>
     
     <div> 
@@ -21,10 +21,8 @@
     <div class="container-fluid">
 
      <div id="main-zone">
-          <div class='col-lg-12'>
-          <%= render 'layouts/flash_partial' %>
-          </div>
-          <div id="message" class="col-lg-12"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
+          <div><%= render 'layouts/flash_partial' %></div>
+          <div id="message" class="row"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
          
             <%= yield %>
           

@@ -22,7 +22,9 @@
 
     <nav class="navbar navbar-fixed-top" role="navigation">
           <%= render 'layouts/navbar' %>
+      <div>
           <%= render 'menus/menu' if user_signed_in? && controller_name != 'registrations' %>
+      </div>
     </nav>
     
     <div> 
@@ -32,12 +34,9 @@
     <div class="container-fluid" >
 
       <div id="main-zone">
-          <div class='col-lg-12'>
-          <%= render 'layouts/flash_partial' %>
-          </div>  
-          <div id="message" class="col-lg-12"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
-          
-            <%= yield %>
+          <div><%= render 'layouts/flash_partial' %></div>  
+          <div id="message" class="row"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
+          <%= yield %>
           
         </div>
       
