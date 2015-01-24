@@ -117,6 +117,10 @@ color: red;
     background-image: linear-gradient(to bottom, #11ad11, #11ad45);
 }
 
+.btn-primary:active {
+  background-color: #184b18;
+}
+
 input.input_date_picker {
   background-image: url('cal.gif');
   background-repeat:no-repeat;
