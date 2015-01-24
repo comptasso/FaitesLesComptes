@@ -1,25 +1,27 @@
-<div class="inputs row-fluid" id="new_check_deposit" >
+<div class="panel-body" id="new_check_deposit" >
 
-<%= simple_form_for([@cash, @cash_control],  :html=> {class: 'form-inline'}) do |f| %>
+<%= simple_form_for([@cash, @cash_control], 
+  :html=> {class: 'form-inline'}, wrapper: :inline_form) do |f| %>
   <%= f.error_notification %>
 
-   <div class="row-fluid">
-      <div class="span12">
+  <div class='form-inputs'>
+  
       
 
-  <%= f.input :date_picker, :label=> 'Date', wrapper_html:{class:'span3'}, label_html: {class: 'span4'},
-        input_html: {class: 'span8', date_min:@cash_control.min_date(@period), date_max:@cash_control.max_date(@period)} ,:required => true, :as=>:date_picker %>
+  <%= f.input :date_picker, :label=> 'Date', wrapper_html:{class:'col-lg-3'}, 
+        input_html: { date_min:@cash_control.min_date(@period), date_max:@cash_control.max_date(@period)} ,
+        :required => true, :as=>:date_picker %>
 
      
          
-        <%= f.input :amount,  :wrapper_html=>{:class=>'span3'}, label_html: {class: 'span4'},
-            :input_html=> { value: two_decimals(@cash_control.amount), class: "numeric span8", :type=>'text'} %>
+        <%= f.input :amount,  :wrapper_html=>{:class=>'col-lg-3'}, 
+            :input_html=> { value: two_decimals(@cash_control.amount), class: "numeric", :type=>'text'} %>
         </div>
-      </div>
+     
  
 
- <div class="form-actions offset1">
-    <%= f.button :submit, class: "btn-primary span2" %>
+ <div class="form-actions col-lg-12">
+    <%= f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-3 " %>
    </div>
 <% end %>
 </div>

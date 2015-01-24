@@ -19,8 +19,8 @@ describe "transfers/new" do
     @t.stub(:partial_locked?).and_return false
     assign(:transfer, @t)
 
-    @p.stub_chain(:list_bank_accounts, :all).and_return @bas
-    @p.stub_chain(:list_cash_accounts, :all).and_return @cas
+    @p.stub_chain(:list_bank_accounts, :to_a).and_return @bas
+    @p.stub_chain(:list_cash_accounts, :to_a).and_return @cas
     
 
   end

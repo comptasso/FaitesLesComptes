@@ -2,11 +2,11 @@
   = icon_to 'navigation90.png', admin_organism_masks_path(@organism), title:'Vers la liste des masques de saisie'
   = icon_to 'nouveau.png', new_admin_organism_mask_path(@organism)
   = icon_to 'modifier.png', edit_admin_organism_mask_path(@organism, @mask)
-  = icon_to 'supprimer.png', [:admin, @organism, @mask], :method=>:delete, :confirm=>'Etes vous certain ?'
+  = icon_to 'supprimer.png', [:admin, @organism, @mask], :method=>:delete, data: {confirm: 'Etes vous sûr ?'} 
   
 .champ
   %h3 Détail du masque de saisie '#{@mask.title}'
-.row-fluid.inner-champ
+.row.inner-champ
   
   %p
     %b Commentaire :

@@ -81,7 +81,8 @@ describe Extract::MonthlyInOut do
 
     it "has a collection of lines" do 
      @extract.lines.should == @ob.writings.where('date >= ? AND date <= ?',
-        @p.start_date.months_since(1), @p.start_date.months_since(1).end_of_month).all.map {|w| w.in_out_line}
+        @p.start_date.months_since(1),
+        @p.start_date.months_since(1).end_of_month).to_a.map {|w| w.in_out_line}
         
     end
 

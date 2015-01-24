@@ -4,7 +4,13 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require_self
  *= require_tree .
+ *= require jquery-ui/datepicker
 */
+
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
 /*body {
 background-image: url("grid.png");
 background-position: 0 40px;

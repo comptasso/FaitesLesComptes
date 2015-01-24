@@ -28,7 +28,7 @@ class Rubrik < ActiveRecord::Base
   include ActsAsTree
 
   belongs_to :folio
-  attr_accessible :name, :numeros, :parent_id, :position
+  # attr_accessible :name, :numeros, :parent_id, :position
   
   acts_as_tree :order => "position"
   
@@ -195,7 +195,7 @@ class Rubrik < ActiveRecord::Base
   # qu'un compte 12
   #
   def all_lines(period)
-    Compta::RubrikParser.new(period, folio.sens, numeros).rubrik_lines
+    Compta::RubrikParser.new(period, folio.sens, numeros, folio.sector).rubrik_lines
   end
     
   def self_and_children

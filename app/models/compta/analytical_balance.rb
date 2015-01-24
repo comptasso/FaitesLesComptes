@@ -22,8 +22,8 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
   
   
   
-  attr_accessible :from_date, :to_date,  
-    :period_id, :from_date_picker, :to_date_picker
+  # attr_accessible :from_date, :to_date,  
+  #   :period_id, :from_date_picker, :to_date_picker
   
   pick_date_for :from_date, :to_date # donne les méthodes from_date_picker 
   # et to_date_picker utilisées par le input as:date_picker 
@@ -34,7 +34,8 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
   validates :from_date, :to_date, :within_period=>true
    
    
-  
+  # retourne une instance de compta::analytical_balance remplit avec
+  # les valeurs par défaut à partir d'un objet period
   def self.with_default_values(exercice)
     new(period_id:exercice.id, from_date:exercice.start_date, to_date:exercice.close_date)
   end
@@ -85,11 +86,11 @@ class Compta::AnalyticalBalance < ActiveRecord::Base
   end
   
   def orphan_debit
-    orphan_lines.sum {|l| l.t_debit.to_d}
+    orphan_lines.to_a.sum {|l| l.t_debit.to_d}
   end
   
   def orphan_credit
-    orphan_lines.sum {|l| l.t_credit.to_d}
+    orphan_lines.to_a.sum {|l| l.t_credit.to_d}
   end
   
   protected

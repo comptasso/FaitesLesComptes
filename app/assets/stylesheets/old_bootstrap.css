@@ -72,8 +72,12 @@ margin-top: 9px;
 
 }
 
-.form-inline label {
+form.form-inline label {
   padding-left: 8px;
+}
+
+form.form-inline .col-lg-12 {
+ margin-bottom: 8px; 
 }
 
 select[class*="span"] {
@@ -103,6 +107,16 @@ border-bottom: none;
 color: red;
 }
 
+/*.form-actions input.btn {
+  margin-left: 15px;  En commentaire car empêche le bon fonctionnement 
+   des col-lg-offset-2
+}*/
+
+.btn-primary {
+    background-color: #11ad26;
+    background-image: linear-gradient(to bottom, #11ad11, #11ad45);
+}
+
 input.input_date_picker {
   background-image: url('cal.gif');
   background-repeat:no-repeat;
@@ -110,19 +124,21 @@ input.input_date_picker {
   
 }
 
+/* Sinon les labels sont en gras pour les forms avec des boutons radios */
+span.radio-inline label {
+  font-weight: normal;
+}
+
+/* pour permettre l'affichage des champs mois et année côte à côte */
+.period_start_date select.form-control, .period_close_date select.form-control,
+.subscription_end_date select.form-control {
+  display: inline;
+  width: 45%;
+}
+
 .help-inline {
 font-style: italic;
 font-size: smaller
-}
-
-
-/* inséré pour avoir la même couleur dans les liens visités des menus */
-li.dropdown a:visited {
- color: #333 !important;
-}
-
-li.dropdown a:hover {
- color: #FFF !important;
 }
 
 

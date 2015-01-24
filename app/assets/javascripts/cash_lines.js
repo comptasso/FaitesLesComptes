@@ -11,7 +11,7 @@ jQuery(function () {
         var oTable = $('.public_cash_lines .cash_lines_table').dataTable(
                 {
                     "sDom": "lfrtip",
-                    "sPaginationType": "bootstrap",
+                    
                     "oLanguage": {
                         "sUrl": "/frenchdatatable.txt"
                     },

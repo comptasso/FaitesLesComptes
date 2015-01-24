@@ -24,7 +24,7 @@ function $compute() {
 
 // les 3 champs de saisie ont la classe décimale
 jQuery(function () {
-    $('input.decimal').live('change', $compute); // calcule le nouvau solde et l'affiche
+    $('body.public_bank_extracts form').on('change','input.decimal', $compute); // calcule le nouvau solde et l'affiche
 });
 
 

@@ -32,7 +32,7 @@ counterpart_selection = ->
     $("form #mask_counterpart option[value='"+'Chèque à l\'encaissement'+"']").attr('disabled', false)
     
   if $('form #mask_mode option:selected').attr('class') == 'outcomebook' || $('form #mask_mode option:selected').val() != 'Chèque'
-    $("form #mask_counterpart option[value='"+'Chèque à l\'encaissement'+"']").attr('disabled', true)
+    $("form #mask_counterpart option[value='"+'Chèque à lencaissement'+"']").attr('disabled', true)
   
     
 
@@ -44,7 +44,7 @@ $ ->
     counterpart_selection() # car le changement de livre influe sur le mode pour chèque à l'encaissement
     
   # gestion du mode  
-  counterpart_selection() if $('form #mask_counterpart')
+  counterpart_selection() if $('form #mask_counterpart')?
   $('form #mask_mode').change ->
     counterpart_selection()
   

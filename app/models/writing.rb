@@ -34,8 +34,8 @@ class Writing < ActiveRecord::Base
 
   # book_id est nécessaire car des classes comme check_deposit ont besoin de
   # créér une écriture en remplissant le champ book_id
-  attr_accessible :date, :date_picker, :narration, :ref, :compta_lines_attributes, :book_id, 
-    :bridge_id, :bridge_type
+#  attr_accessible :date, :date_picker, :narration, :ref, :compta_lines_attributes, :book_id, 
+#    :bridge_id, :bridge_type
 
   belongs_to :book
   belongs_to :bridgeable, polymorphic:true
@@ -67,7 +67,7 @@ class Writing < ActiveRecord::Base
 
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
 
-  default_scope order('writings.date ASC')
+  default_scope -> {order('writings.date ASC')}
   
   scope :period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
   scope :within_period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
@@ -75,10 +75,10 @@ class Writing < ActiveRecord::Base
   scope :laps, lambda {|from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
   # scope :not_transfer, where('type != ?', 'Transfer')
   
-  scope :unlocked, where('locked_at IS NULL')
-  scope :no_type, where('writings.type IS NULL')
-  scope :an_od_book, joins(:book).where('books.type'=>['OdBook', 'AnBook'])
-  scope :compta_editable, unlocked.an_od_book.no_type
+  scope :unlocked, ->{ where('locked_at IS NULL')}
+  scope :no_type, -> {where('writings.type IS NULL')}
+  scope :an_od_book, -> {joins(:book).where('books.type'=>['OdBook', 'AnBook'])}
+  scope :compta_editable, -> {unlocked.an_od_book.no_type}
   
 
   # Fait le total des debit des compta_lines

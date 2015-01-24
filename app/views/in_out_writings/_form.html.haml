@@ -1,32 +1,35 @@
 .inner-champ
-  .inputs.row-fluid{:class=>@book.type.underscore, :id=>"entry_lines"}
-    = simple_form_for([@book, @in_out_writing], :html=>{class:'form-inline'})  do |f|
+  .panel-body{:class=>@book.type.underscore, :id=>"entry_lines"}
+    = simple_form_for([@book, @in_out_writing])  do |f|
       
 
       =f.error_notification
+      .form-inputs
+        .row
 
-      .row-fluid
-        .span12
-          = f.input :date_picker,:label=> 'Du', wrapper_html:{class:'span2'}, label_html:{class: 'span4'}, input_html:{class:'span8', date_min:@period.start_date, date_max:@period.close_date},  :required => true, :as=>:date_picker
-          = f.input :ref, label:'Réf.', :wrapper_html=>{:class=>'span2'}, input_html: {class: "span8"}, :label_html=>{class:'span4'}
-          = f.input :narration,  :label=>'Libellé ', :wrapper_html=>{:class=>'span6'}, label_html:{class:'span2'}, input_html: {class: "span10" }
+          = f.input :date_picker,:label=> 'Du', wrapper_html:{class:'col-lg-2'},
+            input_html:{date_min:@period.start_date, date_max:@period.close_date},
+            :required => true, :as=>:date_picker
+          = f.input :ref,
+            label:'Réf.',
+            :wrapper_html=>{:class=>'col-lg-2'}
+        
+          = f.input :narration,
+            :label=>'Libellé ',
+            :wrapper_html=>{:class=>'col-lg-8'}
           = f.input :bridge_id, as: :hidden
           = f.input :bridge_type, as: :hidden
-      .row-fluid
-        .span12
+        .row
           =f.fields_for :compta_lines, @line do |build|
             = render :partial=>'in_out_writings/in_out_line_form', :locals=>{:builder=>build, :f=>f}
-      -# la counter line
-      .row-fluid
-        .span12
+        -# la counter line
+        .row
           =f.fields_for :compta_lines, @counter_line do |build|
             = render :partial=>'in_out_writings/counter_line_form', :locals=>{:builder=>build, :f=>f}
       
           
-      .row-fluid
-        .span12
-          .form-actions.offset1
-            = f.button :submit, 'Enregistrer', id: 'new_line_button', class: "btn-primary span3"
+      .form-actions
+        = f.button :submit, 'Enregistrer', id: 'new_line_button', class: "btn-primary col-lg-3 col-lg-offset-8"
 
 
   

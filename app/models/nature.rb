@@ -20,34 +20,45 @@ class Nature < ActiveRecord::Base
   has_many :compta_lines
   has_many :writings, through: :compta_lines
 
+  
+ 
   acts_as_list :scope=>[:period_id, :book_id]
 
-  attr_accessible :name, :comment, :account, :account_id, :book_id 
+#  attr_accessible :name, :comment, :account, :account_id, :book_id 
   
 
-  before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
+  
 
   strip_before_validation :name, :comment
 
   validates :period_id, :book_id, :presence=>true 
   validates :account_id, :fit_type=>true
-  validates :name, presence: true,  :uniqueness=>{ :scope=>[:book_id, :period_id] }, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
-  validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
+  validates :name, presence: true,
+    :uniqueness=>{ :scope=>[:book_id, :period_id] },
+    :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
+  validates :comment, :format=>{with:NAME_REGEX},
+    :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   
 
-  scope :recettes, includes(:book).where('books.type = ?', 'IncomeBook').order(:position)
-  scope :depenses, includes(:book).where('books.type = ?', 'OutcomeBook').order(:position)
-  scope :without_account, where('account_id IS NULL')
+  scope :recettes, 
+    -> {includes(:book).where('books.type = ?', 'IncomeBook').
+      order(:position).references(:books)}
+  scope :depenses, 
+    -> {includes(:book).where('books.type = ?', 'OutcomeBook').
+      order(:position).references(:books)}
+  scope :without_account, -> {where('account_id IS NULL')}
   
   scope :within_period, lambda { |per| where('period_id = ?' , per.id)}
 
   before_destroy :ensure_no_lines
-  after_create :fix_position
+  before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
+  before_create :fix_position
 
  
-  # stat with cumul fournit un tableau comportant le total des lignes pour la nature
-  # pour chaque mois plus un cumul de ce montant en dernière position
-  # fait appel selon le cas à deux méthodes protected stat ou stat_filtered.
+  # Stat_with_cumul fournit un tableau comportant le total des lignes 
+  # pour la nature pour chaque mois plus un cumul de ce montant
+  # en dernière position
+  # Fait appel selon le cas à deux méthodes protected stat ou stat_filtered.
   def stat_with_cumul(destination_id = 0)
     s = (destination_id == 0) ? self.stat : self.stat_filtered(destination_id) 
     s << s.sum.round(2) # rajoute le total en dernière colonne
@@ -91,6 +102,23 @@ class Nature < ActiveRecord::Base
  
   protected
   
+  def position_for_new_nature
+    return nil unless account_id
+    acc =  Account.find(account_id)
+    return nil unless acc # cas théorique impossible sauf dans les tests
+    # TODO améliorer éventuellement find_second_nature pour traiter ce sujet
+    ns = Nature.includes(:account).
+      where('natures.period_id = ? AND book_id = ?', period_id, book_id).
+      order('accounts.number', 'position')
+    #cherche la nature qui est juste au dessus du compte de notre récente nature
+    pos =  ns.bsearch do |n|
+      n.account.number >= acc.number if n.account
+    end
+    pos ? pos.position : nil
+  end
+  
+  
+  
   # donne la position par défaut pour une nouvelle nature basée sur 
   # l'ordre des numéros de comptes.
   # 
@@ -102,25 +130,15 @@ class Nature < ActiveRecord::Base
   # qui relèvent du même livre et du même exercice. 
   #
   def fix_position
-    return unless account_id
-    acc =  Account.find(account_id)
-    ns = Nature.includes(:account).
-      where('natures.period_id = ? AND book_id = ?', period_id, book_id).
-      order('accounts.number', 'position').reject { |n| n == self}
-    #cherche la nature qui est juste au dessus du compte de notre récente nature
-    pos =  ns.bsearch { |n| n.account.number >= acc.number }
-    if pos
-      self.insert_at(pos.position)  
-    else # si pos est nil, alors l'insertion en dernière place
-      # était adapté à la situation
-      return
+    pos = position_for_new_nature
+    # puts "la position trouvée est la suivante : #{pos}"
+    if pos 
+       self.position = pos
     end
-    
-    
   end
 
-  # Stat crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
-  # pour toutes les destinations confondues
+  # Stat crée un tableau donnant les montants totaux de la nature pour chacun
+  # des mois de la période pour toutes les destinations confondues
   def stat
     period.list_months.map do |m|
       compta_lines.mois_with_writings(m).sum('credit-debit').to_f.round(2)

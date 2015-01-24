@@ -141,7 +141,7 @@ describe Compta::Balance do
       it('est un array')  { @bals.should be_an Array} 
       it('avec autant de lignes que de comptes') {@bals.should have(@p.accounts.count).lines}
       it 'chaque ligne est un hash' do
-        @acc = @p.accounts.first(order:'number ASC')
+        @acc = @p.accounts.order('number ASC').first
         @bals.first.should ==
           { :account_id=>@acc.id,
           :empty=>true,

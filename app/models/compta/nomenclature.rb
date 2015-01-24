@@ -101,7 +101,7 @@ module Compta
       # méthode vérifiant qu'il n'y a aucun doublon dans le (ou les) compte(s) de resultats
       # traite les comptes de résultats l'un après l'autre
       def resultat_no_doublon?
-        collection_with_option_no_doublon?(:resultat, *resultats.all)
+        collection_with_option_no_doublon?(:resultat, *resultats.to_a)
       end
       
       # méthode vérifiant qu'il n'y a aucun doublon dans le comptes de resultat

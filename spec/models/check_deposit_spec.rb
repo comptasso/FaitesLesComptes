@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
- #   c.filter = {:wip=> true }  
+  c.filter = {:wip=> true }  
 end
 # TODO on pourrait accélérer ces tests en testant pending_checks 
 # dans ComptaLine et après ensuite en utilisant des stubs
@@ -176,7 +176,8 @@ describe CheckDeposit do
   describe "l'action de sauver"  do
  
     before(:each) do
-      date = Date.today + 2
+      # attention pose un problème si 
+      date = @p.start_date + 2
       @check_deposit = @ba.check_deposits.new(deposit_date: date)
       @check_deposit.user_ip = '127.0.0.1'
       @check_deposit.written_by = 3
@@ -254,43 +255,44 @@ describe CheckDeposit do
       end
 
       it 'change date' do
-        @check_deposit.check_deposit_writing.date.should == (Date.today + 2)
+        @check_deposit.check_deposit_writing.date.should == (@p.start_date + 2)
         @check_deposit.deposit_date  =  Date.today
+        @check_deposit.should be_valid
         @check_deposit.save
         @check_deposit.check_deposit_writing.date.should == Date.today
 
       end
+      
+      it "on peut changer le compte bancaire" do  
+        @check_deposit.bank_account_id = 9999 
+        @check_deposit.should be_valid 
+      end
 
     end
+    
+    describe 'destruction' do
+    
 
-    it 'on peut détruire la remise'  do
-      expect {@check_deposit.destroy}.to change{CheckDeposit.count}.by(-1)
-    end
+      it 'on peut détruire la remise'  do
+        expect {@check_deposit.destroy}.to change{CheckDeposit.count}.by(-1)
+      end
 
-    it 'lorsqu on détruit la remise les lignes sont mises à jour'do
-     # CheckDeposit.pending_checks.each {|c| puts c.inspect}
-      CheckDeposit.nb_to_pick.should == 0
-      @check_deposit.destroy
-      CheckDeposit.nb_to_pick.should == 3
-    end
+      it 'lorsqu on détruit la remise les lignes sont mises à jour'do
+        # CheckDeposit.pending_checks.each {|c| puts c.inspect}
+        CheckDeposit.nb_to_pick.should == 0
+        @check_deposit.destroy
+        CheckDeposit.nb_to_pick.should == 3
+      end
 
-    it 'l ecriture est détruite'   do
-      expect {@check_deposit.destroy}.to change {ComptaLine.count}.by(-2)
-    end
+      it 'l ecriture est détruite'   do
+        expect {@check_deposit.destroy}.to change {ComptaLine.count}.by(-2)
+      end
 
-    it "on peut changer la date" do
-      @check_deposit.deposit_date += 2
-      @check_deposit.should be_valid
-    end
-
-    it "on peut changer le compte bancaire" do  
-      @check_deposit.bank_account_id = 9999 
-      @check_deposit.should be_valid 
     end
 
     
 
-    describe "le rattachement à un extrait de compte" do
+    describe "le rattachement à un extrait de compte", wip:true do
       before(:each) do
         @check_deposit.should have(3).checks
         @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
@@ -308,12 +310,16 @@ describe CheckDeposit do
         @check_deposit.should_not be_valid
       end
 
-      it "que la banque ne peut plus être modifiée", wip:true do 
+      it "que la banque ne peut plus être modifiée" do 
         @check_deposit.bank_account = find_second_bank
         @check_deposit.should_not be_valid
       end
 
-      it "la remise de chèque ne peut plus être détruite" do
+      it "la remise de chèque ne peut plus être détruite", wip:true do
+        pending 'ne crée pas d erreur car les cheques sont retirés par nullify avant le test'
+#        puts @check_deposit.pointed?.inspect
+#        puts @check_deposit.debit_compta_line.inspect
+        # @check_deposit.destroy
         expect {@check_deposit.destroy}.to raise_error
       end
 

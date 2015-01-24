@@ -2,33 +2,41 @@ source 'http://rubygems.org'
 ruby "2.0.0"
 
 
-gem 'rails', '3.2.21'
-gem 'rack', '1.4.5'
+gem 'rails', '4.0.12'
+# gem 'protected_attributes' # pour la transition vers Rails 4
+gem 'rails-observers' # idem
+gem 'actionpack-page_caching'
+gem 'actionpack-action_caching' 
+
+gem 'rack', '~>1.5'
 # gem 'therubyracer' execjs sous windows
-gem 'simple_form', "~> 2.1.0"
+gem 'simple_form', "~> 3.1"
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-gem 'acts_as_list', '0.1.9'
+gem 'acts_as_list', '0.6.0'
 gem 'acts_as_tree', "~>1.4"
 gem 'prawn', "~> 0.12"
 gem 'prawn_rails', "0.0.11"
 gem 'haml-rails', "~>0.3"
 gem 'pg'
 gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (source github.com/fnando/browser)
-gem 'apartment' # pour la gestion des schemas
+
+
+
+gem 'apartment', '~> 0.24.3' # pour la gestion des schemas
 gem 'devise' # pour l'authentification
 gem "devise-async" # pour avoir l'envoi des mails en background
 gem 'ofx' # pour la lecture des fichiers bancaires au format ofx
 
-gem 'delayed_job_active_record'
+gem 'delayed_job_active_record', '= 4.0.2'
 gem 'unicorn'
-gem 'rack-timeout' # coneil de heroku - utilisé par le fichier intializers/timeout.rb
-gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écriture des routes)
+gem 'rack-timeout' # conseil de heroku - utilisé par le fichier intializers/timeout.rb
+# gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écriture des routes)
 # TODO à retirer lors du passage à Rails 4
 
-gem 'adherent', '~>0.1.10' #, :path=>'../../Adherent'
-gem 'sass', '>= 3.2.10', '< 3.3'
+gem 'adherent',  :path=>'../../Adherent' #'~>0.2.1' #,
+
 gem 'coffee-script'
 
 gem 'best_in_place'
@@ -38,17 +46,26 @@ group :production, :staging do
   gem 'rails_12factor' 
 end
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails', "  ~> 3.2.0"
-  gem 'coffee-rails', "~> 3.2.0"
-  gem 'uglifier', "1.3.0"
+
+
+  gem 'bootstrap-sass', '~> 3.3.1'
+  
+  gem 'autoprefixer-rails'
+ 
   # gem 'twitter-bootstrap-rails'
-end
+# Use SCSS for stylesheets
+gem 'sass-rails', '~> 4.0.2'
 
-gem 'jquery-rails', "2.1.4"
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier', '>= 1.3.0'
 
+# Use CoffeeScript for .js.coffee assets and views
+gem 'coffee-rails', '~> 4.0.0'
+
+
+# correspondent à la version 1.11.1 de jQuery
+gem 'jquery-rails', "3.1.2"
+gem 'jquery-ui-rails', '5.0.2'
 
 
 # Deploy with Capistrano
@@ -62,7 +79,7 @@ gem 'simplecov', :require => false, :group => :test
 group :development, :test do
   # Pretty printed test output
   gem 'turn', :require => false
-  gem 'rspec-rails', '~>  2.0'
+  gem 'rspec-rails', '~>  2.14.0'
 
   gem 'spork-rails'
   gem 'launchy'

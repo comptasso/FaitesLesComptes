@@ -133,7 +133,7 @@ class Compta::SheetsController < Compta::ApplicationController
   # donc : un seul exercice et le bon
   def period_adhoc?
     rsu = ::Rubrik.select(:period_id).uniq
-    rsu.count == 1 && rsu.first.period_id == @period.id
+    rsu.count == 1 && rsu.to_a.first.period_id == @period.id
   end
   
   

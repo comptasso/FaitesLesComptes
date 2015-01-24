@@ -21,6 +21,7 @@ Spork.prefork do
   require 'capybara/rspec'
   require 'capybara/rails'
   require 'email_spec'
+  require 'active_model/forbidden_attributes_protection'
   
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.

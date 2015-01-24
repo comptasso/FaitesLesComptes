@@ -1,8 +1,11 @@
 
 .inner-champ
-  .inputs
-    = simple_form_for([:admin, @user], :html=> {class: 'form-horizontal'}) do |f|
+  .panel-body
+    = simple_form_for([:admin, @user],
+      :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form) do |f|
       = f.error_notification
-      = f.input :name , input_html: {class:'span4'}
-      .form-actions= f.button :submit, 'Confirmer', class: "btn-primary"
+      .form-inputs
+        = f.input :name , my_wrapper_html: {class:'col-lg-4'}
+      .form-actions= f.button :submit, 'Confirmer',
+        class: "btn-primary col-lg-2 col-lg-offset-2"
  

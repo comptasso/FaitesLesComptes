@@ -3,6 +3,10 @@
 # Cette classe est exactement identique à celle de rooms controller
 # et n'a qu'une action show, servant de proxy à l'application pour
 # accéder à Organism#show
+
+
+# TODO voir si encore utile car servait lorsqu'on changeait d'organisme
+# ce qui se fait maintenant en passant par la partie Admin.
 class Compta::RoomsController < Compta::ApplicationController
 
   skip_before_filter :find_organism, :current_period

@@ -7,8 +7,9 @@
 
 
 jQuery(function () {
-    // la table des comptes sans ou avec secteur 
-    var table_account, table_sectored_account, col_types;
+//    // la table des comptes sans ou avec secteur 
+//    var table_account, table_sectored_account, col_types;
+    var table_account;
     table_account = [
         {
             "sType": "string"
@@ -30,15 +31,15 @@ jQuery(function () {
     }
     $('.admin_accounts .data_table').dataTable(
         {
-            "sDom": "lfrtip",
-            "sPaginationType": "bootstrap",
+              "sDom": "lfrtip",
+//            "sPaginationType": "bootstrap"
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
             },
             "aoColumns": col_types,
             "iDisplayLength": 10,
             "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tous"]]
-        }
+            }
     );
 });
 

@@ -11,24 +11,25 @@
     Modification organisme
   </h3><div class="inner-champ">
 
-<div class="inputs">
-<%= simple_form_for([:admin,@organism],  :html=> {class: 'form-horizontal'}) do |f| %>
+<div class="panel-body">
+<%= simple_form_for([:admin,@organism],  
+  :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form) do |f| %>
 <%= f.error_notification %>
 
-
-    <%= f.input :title,  input_html: {class: "span3"} %>
-    <%= f.input :comment,  input_html: {class: "span6"} %>
+  <div class='form-inputs'>
+    <%= f.input :title,  my_wrapper_html: {class: "col-lg-3"} %>
+    <%= f.input :comment,  my_wrapper_html: {class: "col-lg-6"} %>
   
     <%= f.input :database_name,
            label:'Nom de la base',
-           input_html: {class: "span3"},
+           my_wrapper_html: {class: "col-lg-3"},
            hint:'lettres minuscules uniquement, sans espace',
            disabled:true %>
      <%= f.input :status, :label=>'Statut',
          :collection=>LIST_STATUS, :as=>:inline_radio_buttons, disabled:true %>
-
+  </div>
    <div class="form-actions">
-    <%= f.button :submit, class: "btn-primary span2" %>
+    <%= f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-2" %>
    </div>
 <% end %>
   </div>

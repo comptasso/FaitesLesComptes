@@ -49,7 +49,7 @@ class InOutWritingsController < ApplicationController
   # POST /lines.json
   def create
     fill_counter_line
-    @in_out_writing = @book.in_out_writings.build(params[:in_out_writing])
+    @in_out_writing = @book.in_out_writings.build(in_out_writing_params)
     @line = @in_out_writing.in_out_line
     @counter_line=@in_out_writing.counter_line
     fill_author(@in_out_writing)
@@ -75,6 +75,9 @@ class InOutWritingsController < ApplicationController
 
       end
     end
+    
+    
+    
   end
   
   
@@ -103,7 +106,7 @@ class InOutWritingsController < ApplicationController
     fill_author(@in_out_writing)
     fill_counter_line
     respond_to do |format|
-      if @in_out_writing.update_attributes(params[:in_out_writing])
+      if @in_out_writing.update_attributes(in_out_writing_params)
         mois = sprintf('%.02d',@in_out_writing.date.month); an =  @in_out_writing.date.year
         format.html { redirect_to url_for(book_id:@book.id, action:actio, mois:mois, an:an) }#], notice: 'Line was successfully updated.')}
         format.json { head :ok }
@@ -211,6 +214,16 @@ class InOutWritingsController < ApplicationController
 
   end
 
+  
+  private 
+    
+    def in_out_writing_params
+      params.require(:in_out_writing).permit(:date, :date_picker, :narration, :ref,
+        :book_id, :bridge_id, :bridge_type,
+        compta_lines_attributes: [:debit, :credit, :writing_id, :account_id, 
+    :nature, :nature_id, :destination_id, 
+    :check_number, :payment_mode, :check_deposit_id] )  
+    end
 
 
 end

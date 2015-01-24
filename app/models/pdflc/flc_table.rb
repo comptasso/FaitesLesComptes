@@ -66,7 +66,7 @@ module Pdflc
     # renvoie un array de Decimal, correspondant aux champs qui sont à totaliser
     def totals
       columns_to_totalize.collect do |i|
-        lines.sum {|l| l.send(fields[i].to_sym) }
+        lines.to_a.sum {|l| l.send(fields[i].to_sym) }
       end
     end
     

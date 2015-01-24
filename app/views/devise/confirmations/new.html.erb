@@ -1,8 +1,9 @@
 <div class="champ">
 <h3>Renvoyer les instructions de confirmation</h3>
 <div class="inner-champ">
+  <div class='panel-body'>
 <%= simple_form_for(resource, as: resource_name, url: confirmation_path(resource_name),
-    html: { method: :post, class: 'form-horizontal'}) do |f| %>
+    html: { method: :post}, wrapper: :horizontal_form) do |f| %>
   <%= f.error_notification %>
   
 
@@ -14,5 +15,6 @@
   </div>
 <% end %>
  </div>
+  </div>
 </div>
 </div>

@@ -8,7 +8,8 @@
        class:'icon_menu', title:'Imprimer un reçu')    
   - if editable?(@payment)
     = icon_to 'modifier.png', edit_member_payment_path(@payment.member, @payment) 
-    = icon_to 'supprimer.png', [@member,@payment], method: :delete, confirm: 'Etes vous sûr ?' 
+    = icon_to 'supprimer.png', [@member,@payment],
+      method: :delete, data: {confirm: 'Etes vous sûr ?'} 
 
 
 .champ

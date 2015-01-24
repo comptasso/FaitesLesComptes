@@ -148,7 +148,7 @@ jQuery(function () {
     // $check_submit masque le bouton submit si les conditions ne sont pas remplies
     // conditions 1: au moins une ligne remplie
     // condition 2 : écriture équilibrée
-    $('.compta_writings input.decimal').live('change', $zero_field); // calcule le nouvau solde et l'affiche
-    $('.compta_writings input.decimal').live('change', $check_submit); // calcule le nouvau solde et l'affiche
+    $('.compta_writings' ).on('change', 'input.decimal', $zero_field); // calcule le nouvau solde et l'affiche
+    $('.compta_writings').on('change', 'input.decimal', $check_submit); // calcule le nouvau solde et l'affiche
 
 });

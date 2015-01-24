@@ -14,15 +14,16 @@
 #
 class BankExtractLine < ActiveRecord::Base 
 
-  attr_accessible :compta_lines
+  
 
   belongs_to :bank_extract
 
   belongs_to :compta_line 
  
   acts_as_list :scope => :bank_extract
-   
-  attr_accessible :compta_line_id, :bank_extract_id, :date, :narration, :debit, :credit
+  
+  # attr_accessible :compta_lines
+  # attr_accessible :compta_line_id, :bank_extract_id, :date, :narration, :debit, :credit
   
   delegate :narration, :debit, :credit, :date, :payment_mode,  :to=>:compta_line
   

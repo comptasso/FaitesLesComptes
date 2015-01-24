@@ -20,7 +20,7 @@ class Sector < ActiveRecord::Base
   
   include Utilities::JcGraphic
   
-  attr_accessible :name, :organism_id
+  # attr_accessible :name, :organism_id
   
   belongs_to :organism
   has_many :books
@@ -33,7 +33,7 @@ class Sector < ActiveRecord::Base
   
   # permet d'ajouter les livres de ce secteur et lui même dans la collection des graphes
   def paves
-    books.all << self
+    books.to_a << self
   end
   
   

@@ -16,7 +16,7 @@ class Admin::SubscriptionsController < Admin::ApplicationController
   end
   
   def create
-    @sub = Subscription.new(params[:subscription])
+    @sub = Subscription.new(subscription_params)
     if @sub.save
       flash[:notice] = "L'écriture périodique '#{@sub.title}' a été créée"
       redirect_to admin_organism_subscriptions_url(@organism)
@@ -40,7 +40,7 @@ class Admin::SubscriptionsController < Admin::ApplicationController
   def update
     @subscription = Subscription.find(params[:id])
     
-    if @subscription.update_attributes(params[:subscription])
+    if @subscription.update_attributes(subscription_params)
       flash[:notice] = "L'écriture périodique '#{@subscription.title}' a été mise à jour"
       redirect_to admin_organism_subscriptions_url(@organism)
     else
@@ -71,6 +71,12 @@ class Admin::SubscriptionsController < Admin::ApplicationController
   # un abonnement
   def complete_masks
     @completed = @organism.masks.select {|m| m.complete?}
+  end
+  
+  private
+  
+  def subscription_params
+    params.require(:subscription).permit(:day, :end_date, :mask_id, :title, :permanent)
   end
   
   

@@ -11,7 +11,7 @@
     = icon_to 'supprimer.png', [:destroy_all, @bank_account, :imported_bels],
       method: :delete,
       title: 'Supprime toutes les lignes importées', 
-      confirm:'Cette action supprime toutes les lignes importées; mais n\'efface pas les écritures déjà créées à partir de ces lignes'                     
+      data:{confirm:'Cette action supprime toutes les lignes importées; mais n\'efface pas les écritures déjà créées à partir de ces lignes'}                    
 
 .champ
   %h3 Banque #{@bank_account.nickname} : Liste des lignes importées

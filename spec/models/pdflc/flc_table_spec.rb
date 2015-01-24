@@ -85,8 +85,8 @@ describe Pdflc::FlcTable do
     it 'sait mettre en forme les lignes' do
       d = I18n::l(Date.today, format:'%d-%m-%Y')
       @pdf.prepared_lines.should == [
-        [@w.id.to_s, d, '10 000,00', '0,00'],
-        [@w.id.to_s, d, '0,00', '10 000,00']
+        [@w.id, d, '10 000,00', '0,00'],
+        [@w.id, d, '0,00', '10 000,00']
       ]
     end
   end

@@ -4,13 +4,17 @@
   = delayed_export_icons(:account_id=>@account.id,                                                  |
     :compta_listing=>{ :from_date_picker=>@listing.from_date_picker, :to_date_picker=>@listing.to_date_picker })
 
+= content_for :modal do
+  =# voir modal_helpers pour cette méthode
+  = modal_form('Modification des paramètres', 'modal_form_listing', 'modal_body_form')
+
 .champ
   %h3
     %span#intitule
       = "Ecritures du compte #{@listing.account.long_name}" 
       = " - Du #{ordinalize_date(@listing.from_date)} au #{ordinalize_date(@listing.to_date)}"
     %a#show-soldes(href= '#' title='Affiche/masque les soldes du comtpe') afficher les soldes
-  = render partial: 'modal_form'
+  
 #div-movements= render partial: 'movements'
 %div#listing_table
   = render partial:"listing_table"

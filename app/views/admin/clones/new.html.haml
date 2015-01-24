@@ -3,7 +3,7 @@
 
 .champ
   %h3 Cloner une base de données : ajouter un commentaire
-  .inner-champ.row-fluid
+  .inner-champ.row
     = simple_form_for @new_clone , :url=>admin_clones_path, :html=> {class: 'form-horizontal'} do |f|
-      = f.input :comment ,  input_html: {class: "span6"}
-      .form-actions= f.button :submit, 'Cloner la base', id: 'clone_button', class: "btn-primary span3"
+      = f.input :comment ,  input_html: {class: "col-lg-6"}
+      .form-actions= f.button :submit, 'Cloner la base', id: 'clone_button', class: "btn-primary col-lg-3"

@@ -16,7 +16,7 @@ describe "Periods" do
   
   after(:each) do
     # puts @next_period.inspect
-    @next_period.destroy 
+    @next_period.destroy if @next_period 
     # puts "nombre d exercice #{Period.count}"
   end
   

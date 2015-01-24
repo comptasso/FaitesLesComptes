@@ -155,8 +155,8 @@ describe Compta::WritingsController do
         # specifies that the Writing created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        @w.should_receive(:update_attributes).with({'these' => 'params'}).and_return @w
-        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {'these' => 'params'}}, valid_session
+        @w.should_receive(:update_attributes).with({'book_id'=>'5'}).and_return @w
+        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {"book_id"=>'5'}}, valid_session
       end
       
       it 'appelle fill_author' do
@@ -182,14 +182,14 @@ describe Compta::WritingsController do
         
         # Trigger the behavior that occurs when invalid params are submitted
         @w.stub(:update_attributes).and_return false
-        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {}}, valid_session
+        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {book_id:5}}, valid_session
         assigns(:writing).should eq(@w)
       end
 
       it "re-renders the 'edit' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         @w.stub(:update_attributes).and_return false
-        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {}}, valid_session
+        put :update, {book_id:@b.id, :id => @w.to_param, :writing => {book_id:5}}, valid_session
         response.should render_template("edit")
       end
     end

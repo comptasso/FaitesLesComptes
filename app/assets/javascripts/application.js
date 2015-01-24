@@ -8,7 +8,8 @@
 //= require jquery-ui
 //= require best_in_place
 //= require jquery_ujs
-//= require jquery.jqplot
+//= require bootstrap-sprockets
+//= require jqplot/jquery.jqplot
 //= require_tree .
 //
 //
@@ -33,8 +34,6 @@ $(document).ready(function () {
     });
 });
 
-// pour les menus déroulants de bootstrap ?
-$('.dropdown-toggle').dropdown();
 
 // activation de best_in_place
 $(document).ready(function() {
@@ -160,7 +159,7 @@ function $f_numberWithPrecision(number) {
     }
     number =  number.toFixed(2); // on garde deux décimales
     if (isNaN(number)) {
-      return '-'
+      return '-';
     } else {
   parts = String(number).split('.');
   part1 = parts[0];
@@ -195,8 +194,8 @@ function $f_empty() {
 
 
 jQuery(function () {
-    $('.decimal').live('focus', $f_empty); //vide le champ s'il est à zero (pour faciliter la saisie)
-    $('.decimal').live('blur', $f_two_decimals);
+    $('table').on('focus', '.decimal', $f_empty); //vide le champ s'il est à zero (pour faciliter la saisie)
+    $('table').on('blur', '.decimal', $f_two_decimals);
    
 });
 
@@ -217,7 +216,7 @@ function _fnAlert(message, type) {
   // appelée par ajax en cas d'erreur
   function fnCancelSorting(tbody, sMessage) {
     tbody.sortable('cancel');
-    if(sMessage!= undefined){
+    if(sMessage !== undefined){
       _fnAlert(sMessage, "");
     }else{
       _fnAlert("La ligne n'a pas pu être déplacée", "");
@@ -237,7 +236,7 @@ function _fnAlert(message, type) {
         tbody.find('tr').each(function(index){
         pos = parseInt($(this).attr('data-position'));
         // et la ligne 2 devient la ligne 6
-        if (pos == iFrom) {
+        if (pos === iFrom) {
           fnChangeValue($(this), iTo.toString());
         }
         // les lignes 3 à 6 perdent 1 cran
@@ -252,7 +251,7 @@ function _fnAlert(message, type) {
       tbody.find('tr').each(function(index){
         pos = parseInt($(this).attr('data-position'));
         // et la ligne 6 devient la ligne 2
-        if (pos == iFrom) {
+        if (pos === iFrom) {
           fnChangeValue($(this), iTo.toString());
         }
 
@@ -292,7 +291,7 @@ function blockUIForDownload() {
     // $.blockUI();
     fileDownloadCheckTimer = window.setInterval(function () {
       var cookieValue = $.cookie('download_file_token');
-      if (cookieValue == token)
+      if (cookieValue === token)
        finishDownload();
     }, 1000);
   }
@@ -371,5 +370,5 @@ function fnTableSortable(table, action) {
         });
 
     }
-})
+});
 }

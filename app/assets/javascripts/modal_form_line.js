@@ -104,9 +104,9 @@ function $f_modal_raz() {
         $('label[for="in_out_writing_compta_lines_attributes_1_check_number"]').parent().hide();
         // on retire les éventuels messages d'erreur, au cas où on soit passé par une 
         // telle phase
-        $('#modal_form_line .alert').remove(); // retrait du message des erreurs ont été trouvées
-        $('#modal_form_line div').removeClass('error'); // retrait des classes erreurs
-        $('#modal_form_line .help-inline').remove(); // retrait des classes erreurs
+        $('#modal_form_line_dialog .alert').remove(); // retrait du message des erreurs ont été trouvées
+        $('#modal_form_line_dialog div').removeClass('error'); // retrait des classes erreurs
+        $('#modal_form_line_dialog .help-inline').remove(); // retrait des classes erreurs
         
         // on enlève les selected éventuels
         $('#in_out_writing_compta_lines_attributes_0_nature_id option').removeAttr('selected');
@@ -124,9 +124,9 @@ jQuery(function () {
     
     $f_modal_book_change();
     // selon la nature du livre, on veut disable les natures qui sont inadaptées
-    $('#modal_form_line').on('change', '#in_out_writing_book_id', $f_modal_book_change);
+    $('#modal_form_line_dialog').on('change', '#in_out_writing_book_id', $f_modal_book_change);
     // Attacher un évènement onChange au champ payment_mode
-    $('#modal_form_line').on('change', '#in_out_writing_compta_lines_attributes_1_payment_mode', $f_modal_payment_mode_change);
+    $('#modal_form_line_dialog').on('change', '#in_out_writing_compta_lines_attributes_1_payment_mode', $f_modal_payment_mode_change);
        
-    $('#modal_form_line').on('shown', $f_modal_raz);
+    $('#modal_form_line').on('shown.bs.modal', $f_modal_raz);
 });

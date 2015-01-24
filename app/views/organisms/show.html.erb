@@ -2,8 +2,8 @@
   
 <% end %>
 
-<div class="row-fluid"> 
-<div class="span12 row-pave pave message">
+<div class="row"> 
+<div class="col-lg-12 message">
   <h3>
     <%= vous_avez_des_messages infos(@organism).size %>
   </h3>
@@ -22,10 +22,10 @@
 </div>
 
 <% @paves.in_groups_of(3, false) do |p|  %>
-<div class ="row-fluid row-pave">
-  <%= draw_pave(p[0], @period, 'span4')  %>
-  <%= draw_pave(p[1], @period, 'span4')  %>
-  <%= draw_pave(p[2], @period, 'span4')  %>
+<div class ="row row-pave">
+  <%= draw_pave(p[0], @period, 'col-lg-4')  %>
+  <%= draw_pave(p[1], @period, 'col-lg-4')  %>
+  <%= draw_pave(p[2], @period, 'col-lg-4')  %>
 </div>
 <% end %>
 

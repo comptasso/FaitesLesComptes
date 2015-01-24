@@ -59,12 +59,12 @@ describe Admin::OrganismsController do
 
     it 'cherche l organisme' do
       Organism.should_receive(:find).with('1').and_return(stub_model(Organism))
-      put :update, {id:'1'}, valid_session
+      put :update, {id:'1', organism:{title:'Bizarre'}}, valid_session
     end
     
     it 'met à jour l organisme' do
-      @o.should_receive(:update_attributes).with({'name'=>'Bizarre'}).and_return true
-      put :update, {id:'1', organism:{name:'Bizarre'}}, valid_session
+      @o.should_receive(:update_attributes).with({'title'=>'Bizarre'}).and_return true
+      put :update, {id:'1', organism:{title:'Bizarre'}}, valid_session
     end
 
     it 'renvoie le formulaire si non sauvé' do

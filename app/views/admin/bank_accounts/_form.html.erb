@@ -1,27 +1,30 @@
- <div class="inputs">
-<%= simple_form_for([:admin,@organism,@bank_account],  :html=> {class: 'form-horizontal'}) do |f| %>
-  <%= f.error_notification %> 
+<div class="panel-body">
+  <%= simple_form_for([:admin,@organism,@bank_account],
+    :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form) do |f| %>
+      <%= f.error_notification %> 
 
- 
-    <%= f.input :bank_name,  input_html: {class: "span3"}%>
-    <%= f.input :number, input_html: {class: "span3"} %>
-    <%= f.input :nickname, input_html: {class: "span3"} %>
-    
-    <%= f.input :comment,  input_html: {rows: 3, class: "span3"} %>
-   
-  <% if @organism.sectored? %>
-   
-    <%= f.association :sector,  input_html: {class: "span3"}, prompt:'Choisissez un secteur',
-        required:true %>
-   <% else %>
- <%= f.association :sector,  input_html: {class: "span3"}, prompt:'Choisissez un secteur',
-        required:true, as: :hidden %>
-   <% end %>
-   
-   
-  <div class="form-actions">
-    <%= f.button :submit, class: "btn-primary span2"  %>
+      <div class='form-inputs'>
+        <%= f.input :bank_name, my_wrapper_html: {class: "col-lg-3"}%>
+        <%= f.input :number, my_wrapper_html: {class: "col-lg-3"} %>
+        <%= f.input :nickname, my_wrapper_html: {class: "col-lg-3"} %>
+
+        <%= f.input :comment,  my_wrapper_html: {rows: 3, class: "col-lg-3"} %>
+
+        <% if @organism.sectored? %>
+
+          <%= f.association :sector,  my_wrapper_html: {class: "col-lg-3"},
+              prompt:'Choisissez un secteur',
+              required:true %>
+          <% else %>
+            <%= f.association :sector,  my_wrapper_html: {class: "col-lg-3"},
+                prompt:'Choisissez un secteur',
+                required:true, as: :hidden %>
+        <% end %>
+
+      </div>
+      <div class="form-actions">
+        <%= f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-2"  %>
+      </div>
+    <% end %>
   </div>
-<% end %>
- </div>
 

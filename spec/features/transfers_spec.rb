@@ -92,10 +92,10 @@ describe 'vue transfer index'do
 
     before(:each) do
       # création de deux transfers
-      @t1 = Transfer.create!(book_id:@od.id, date: Date.today, narration: 'création',
+      @t1 = Transfer.create!(book_id:@od.id, date:(Date.today), narration: 'création',
         :compta_lines_attributes=> {'0'=>{account_id:@baca.id, credit:100000}, 
           '1'=>{account_id:@bbca.id, debit:100000}})
-      @t2 = Transfer.create!(book_id:@od.id, date: Date.today, narration: 'création',
+      @t2 = Transfer.create!(book_id:@od.id, date:(Date.today + 1), narration: 'création',
         :compta_lines_attributes=> {'0'=>{account_id:@bbca.id, credit:999990},
           '1'=>{account_id:@baca.id, debit:999990}})
       

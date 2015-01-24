@@ -47,12 +47,12 @@ describe SubscriptionsController do
     
     it 'cherche la subscription' do
       Subscription.should_receive(:find).with('1').and_return nil     
-      post :create, {subscription:{id:1}}, valid_session
+      xhr :post, :create, { subscription:{id:'1'} }, valid_session
     end
     
     it 'si ne la trouve pas, crée un flash d erreur' do
       Subscription.stub(:find).with('1').and_return nil      
-      post :create, {subscription:{id:1}}, valid_session
+      xhr :post, :create, {subscription:{id:1}}, valid_session
       assigns[:error].should == 'Ecriture périodique non trouvée'
     end
     
@@ -66,18 +66,18 @@ describe SubscriptionsController do
     
       it 'mais n  est pas en retard' do
         sub.stub(:late?).and_return false
-        post :create, {subscription:{id:1}}, valid_session
+        xhr :post, :create, {subscription:{id:1}}, valid_session
         assigns[:error].should == "Ecriture périodique '#{sub.title}' n'a pas d'écritures à passer"
       end
     
       it 'passe les écritures pour chaque mois en retard' do
         sub.should_receive(:pass_writings)
-        post :create, {subscription:{id:1}}, valid_session
+        xhr :post, :create, {subscription:{id:1}}, valid_session
       end
     
       it 'et crée un flash notice' do
         sub.should_receive(:pass_writings).and_return 3
-        post :create, {subscription:{id:1}}, valid_session
+        xhr :post, :create, {subscription:{id:1}}, valid_session
         assigns[:notice].should == "3 écritures ont été générées par l'abonnement '#{sub.title}'"
       end
     

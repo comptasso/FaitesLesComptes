@@ -1,0 +1,36 @@
+.modal-body
+  =simple_form_for(@balance, :url=>compta_period_balance_path(@period),
+    :html=> {class: 'form-horizontal'},  wrapper: :horizontal_form) do |balance_f|
+    
+    = balance_f.error_notification
+    .form-inputs
+      = balance_f.input :from_date_picker, :label=> 'Date début',
+      my_wrapper_html:{class:'col-lg-6'},
+      input_html: {date_min:@period.start_date, date_max:@period.close_date},
+      :required => true,
+      :as=>:date_picker
+
+      = balance_f.input :to_date_picker, :label=> 'Date fin',
+      my_wrapper_html:{class:'col-lg-6'},
+      input_html: {date_min:@period.start_date, date_max:@period.close_date},
+      :required => true,
+      :as=>:date_picker
+
+      =balance_f.input :from_account_id, :collection=>@period.accounts.order('number ASC'),
+        :prompt=>false,
+        my_wrapper_html:{class:'col-lg-10'},
+        label:'Du compte',
+        label_method: :long_name,
+        required: true
+
+      =balance_f.input :to_account_id, :collection=>@period.accounts.order('number ASC'),
+        :prompt=>false,
+        my_wrapper_html:{class:'col-lg-10'},
+        label:'Au compte',
+        label_method: :long_name,
+        required: true
+    .form-actions
+    
+      =balance_f.button :submit, 'Réafficher la balance',
+          id: 'new_balance_button', class: "btn-primary col-lg-offset-2 with_spinner"
+

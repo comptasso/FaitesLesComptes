@@ -274,7 +274,7 @@ Faitesvoscomptes::Application.routes.draw do
     
     resources :cash_controls do
       member do
-        put 'lock'
+        patch 'lock'
       end
     end
     resources :cash_lines do
@@ -285,7 +285,7 @@ Faitesvoscomptes::Application.routes.draw do
   resources :transfers
 
  
-  root :to => "devise/sessions#new"
+  
   
   
 

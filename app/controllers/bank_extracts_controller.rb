@@ -8,7 +8,7 @@ class BankExtractsController < ApplicationController
   # GET /bank_extracts
   # GET /bank_extracts.json
   def index
-    @bank_extracts = @bank_account.bank_extracts.period(@period).all 
+    @bank_extracts = @bank_account.bank_extracts.period(@period).to_a 
   end
 
   
@@ -60,7 +60,7 @@ class BankExtractsController < ApplicationController
   # POST /bank_extracts
   # POST /bank_extracts.json
   def create
-    @bank_extract = @bank_account.bank_extracts.new(params[:bank_extract])
+    @bank_extract = @bank_account.bank_extracts.new(bank_extract_params)
 
     respond_to do |format|
       if @bank_extract.save && @bank_account.imported_bels.empty?
@@ -84,7 +84,7 @@ Vous pouvez maintenant procéder aux modifications des lignes importées puis g�
     @bank_extract = BankExtract.find(params[:id])
 
     respond_to do |format|
-      if @bank_extract.update_attributes(params[:bank_extract])
+      if @bank_extract.update_attributes(bank_extract_params)
         format.html { redirect_to bank_account_bank_extracts_url(@bank_account), notice: "L'extrait a été modifié " }
         format.json { head :ok }
       else
@@ -115,11 +115,16 @@ Vous pouvez maintenant procéder aux modifications des lignes importées puis g�
   # méthode qui tente de remplir les champs total_debit et total_credit avec 
   # les imported_bels en attente
   def fill_totals_from_imported_bels
-    ibels = @bank_account.imported_bels.all.select {|r| r.date.in? @bank_extract.begin_date..@bank_extract.end_date}
+    ibels = @bank_account.imported_bels.to_a.select {|r| r.date.in? @bank_extract.begin_date..@bank_extract.end_date}
     if ibels.any?
       @bank_extract.total_debit = ibels.sum(&:debit)
       @bank_extract.total_credit = ibels.sum(&:credit)
     end
+  end
+  
+  def bank_extract_params
+    params.require(:bank_extract).permit(:bank_account_id, :begin_sold, 
+      :total_debit, :total_credit, :begin_date_picker, :end_date_picker)
   end
 
  

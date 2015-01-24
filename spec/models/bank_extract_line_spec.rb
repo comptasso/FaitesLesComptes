@@ -73,9 +73,9 @@ describe BankExtractLine do
     end
 
     it 'checks positions' do
-      @be.bank_extract_lines.all.map {|bel| bel.debit}.should == [0,0,102]
-      @be.bank_extract_lines.all.map {|bel| bel.credit}.should == [7,29,0]
-      @be.bank_extract_lines.all.map {|bel| bel.position}.should == [1,2,3]
+      @be.bank_extract_lines.to_a.map {|bel| bel.debit}.should == [0,0,102]
+      @be.bank_extract_lines.to_a.map {|bel| bel.credit}.should == [7,29,0]
+      @be.bank_extract_lines.to_a.map {|bel| bel.position}.should == [1,2,3]
     end
 
    
@@ -97,11 +97,11 @@ describe BankExtractLine do
     describe 'testing move_higher and move_lower' do
 
       before(:each) do
-        @bel7, @bel29, @bel102 = *@be.bank_extract_lines.all
+        @bel7, @bel29, @bel102 = *@be.bank_extract_lines.to_a
       end
 
       it 'test du splat' do
-        @be.bank_extract_lines.order('position').all.should  == [@bel7, @bel29, @bel102]
+        @be.bank_extract_lines.order('position').to_a.should  == [@bel7, @bel29, @bel102]
       end
 
       it '@bel7 is in first position' do
@@ -110,7 +110,7 @@ describe BankExtractLine do
 
       it 'move lower' do
         @bel7.move_lower
-        @be.bank_extract_lines.order('position').all.should  == [@bel29, @bel7, @bel102]
+        @be.bank_extract_lines.order('position').to_a.should  == [@bel29, @bel7, @bel102]
       end
 
 

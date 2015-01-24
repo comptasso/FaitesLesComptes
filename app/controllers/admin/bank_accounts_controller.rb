@@ -7,7 +7,7 @@ class Admin::BankAccountsController < Admin::ApplicationController
   # GET /bank_accounts
   # GET /bank_accounts.json
   def index
-    @bank_accounts = @organism.bank_accounts.all
+    @bank_accounts = @organism.bank_accounts.to_a
     
     respond_to do |format|
       format.html # index.html.erb
@@ -37,7 +37,7 @@ class Admin::BankAccountsController < Admin::ApplicationController
   # POST /bank_accounts.json
   def create
    
-    @bank_account = @organism.bank_accounts.new(params[:bank_account])
+    @bank_account = @organism.bank_accounts.new(bank_account_params)
 
     respond_to do |format|
       if @bank_account.save
@@ -57,7 +57,7 @@ class Admin::BankAccountsController < Admin::ApplicationController
     @bank_account = BankAccount.find(params[:id])
 
     respond_to do |format|
-      if @bank_account.update_attributes(params[:bank_account])
+      if @bank_account.update_attributes(bank_account_params)
         format.html { redirect_to admin_organism_bank_accounts_url(@organism), notice: 'Le compte bancaire a été mis à jour.' }
         format.json { head :ok }
       else
@@ -78,4 +78,11 @@ class Admin::BankAccountsController < Admin::ApplicationController
 #      format.json { head :ok }
 #    end
 #  end
+
+  private
+  
+  def bank_account_params
+    params.require(:bank_account).permit(:number, :bank_name, 
+      :comment, :nickname, :sector_id, :organism_id)
+  end
 end

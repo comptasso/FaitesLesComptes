@@ -23,8 +23,10 @@ class Admin::RoomsController < Admin::ApplicationController
   # le status permet de gérer les éventuels différences de migration si on
   # importe une base (même si en pratique on ne le fait jamais).
   def index
+    # TODO probablement améliorable en utilisant la méthode
+    # User#organisms_with_romm
     lm = Room.jcl_last_migration
-    @rooms = current_user.rooms.includes(:holders)
+    @rooms = current_user.rooms.includes(:holders).references(:holders).to_a
     @status = @rooms.collect {|r| r.relative_version(lm)}
     build_flash_from_status(@status)
   end
@@ -59,7 +61,7 @@ class Admin::RoomsController < Admin::ApplicationController
 
   # POST /rooms
   def create
-    @room = Room.new(params[:room])
+    @room = Room.new(room_params)
       
     if build_a_new_room # ce qui indique que tout s'est bien passé
       @organism = @room.organism
@@ -153,6 +155,13 @@ pour le budget de fonctionnement; de même pour le budget des activités socio_c
       flash[:alert] = "Vous ne pouvez executer cette action car vous n'êtes pas le propriétaire de la base"
       redirect_to admin_rooms_url
     end
+  end
+  
+  private
+  
+  def room_params
+    params.require(:room).permit(:database_name, :racine, 
+      :title, :comment, :status)
   end
     
 end

@@ -67,7 +67,7 @@ class Utilities::PlanComptable
   
   # recopie les natures de l'exercice précédent 's'il y en a un) 
   def copy_natures(from_period)
-    from_period.natures.all.each do |n|
+    from_period.natures.find_each do |n|
       nn = {name: n.name, comment: n.comment, book_id: n.book_id} # on commence à construire le hash
       if n.account_id # cas où il y avait un rattachement à un compte
         previous_account=from_period.accounts.find(n.account_id) # on identifie le compte de rattachement

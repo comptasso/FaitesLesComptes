@@ -32,8 +32,8 @@ module Compta
     pick_date_for :from_date, :to_date # donne les méthodes begin_date_picker 
     # et end_date_picker utilisées par le input as:date_picker
 
-    attr_accessible :from_date_picker, :to_date_picker,
-      :from_date, :to_date, :account_id
+    # attr_accessible :from_date_picker, :to_date_picker,
+    #   :from_date, :to_date, :account_id
    
     # je mets within_period en premier car je préfère les affichages 
     # Dates invalide ou hors limite

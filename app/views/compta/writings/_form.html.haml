@@ -1,20 +1,19 @@
-.inputs.row-fluid{:class=>@book.type}
-  = simple_form_for(['compta', @book, @writing], :html=> {class: 'form-inline'}) do |f|
+.panel-body{:class=>@book.type}
+  = simple_form_for(['compta', @book, @writing]) do |f|
     = f.error_notification
-    .row-fluid
-      .span12
-        =f.input :date_picker, :label=> 'Date', wrapper_html:{class:'span3'},
-           label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,
+    .form-inputs
+      .row
+        =f.input :date_picker, :label=> 'Date', wrapper_html:{class:'col-lg-3'},
+           input_html: { date_min:@period.start_date, date_max:@period.close_date} ,
            :required => true, :disabled=>(@book.type == 'AnBook'), :as=>:date_picker
-        =f.input :narration,  :label=>'Libellé ', :wrapper_html=>{:class=>'span6'}, label_html:{class:'span2'}, input_html: {class:"span9" }
-        =f.input :ref, label:'Référence', :wrapper_html=>{:class=>'span3'}, input_html: {class: "span8" } , :label_html=>{class:'span4'}
+        =f.input :narration,  :label=>'Libellé ',
+          :wrapper_html=>{:class=>'col-lg-7'}        
+        =f.input :ref, label:'Référence', :wrapper_html=>{:class=>'col-lg-2'}
 
       =f.fields_for :compta_lines do |build|
         = render :partial=>'compta_line_fields', :locals=>{:builder=>build}
       .add_line_link#add_line_link
         =link_to_add_fields('ajout', f) # défini dans le helper (ComptaWritingsHelper)
         
-    .row-fluid
-      .span12
-        .form-actions.offset1
-          =  f.button :submit, class: "btn-primary span2"
+    .form-actions
+      =  f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-6"

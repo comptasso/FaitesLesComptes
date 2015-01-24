@@ -7,11 +7,17 @@
     =@bank_account.nickname
     &nbsp: importation d'un extrait de compte à partir d'un fichier csv
   .inner-champ
-    .inputs
-      =simple_form_for [@bank_account, @bels_importer],
+    .panel-body
+      =simple_form_for([@bank_account, @bels_importer],
         :url => importer_bank_account_bels_importer_path,
-        :html=> {class: 'form-horizontal'}  do |f| 
+        :html=> {class: 'form-horizontal'},
+        wrapper: :horizontal_form,
+        wrapper_mappings:{check_boxes: :horizontal_radio_and_checkboxes,
+        radio_buttons: :horizontal_radio_and_checkboxes,
+        file: :horizontal_file_input,
+        boolean: :horizontal_boolean})  do |f| 
         -# error_messages est un helper défini dans bels_importer_helper
         = f.error_notification(message: error_messages(@bels_importer)) 
-        = f.input :file, as: :file, label:'Fichier', required:true
-        .form-actions= f.submit "Importer", class: "btn-primary span2"
+        .form-inputs
+          = f.input :file, as: :file, label:'Fichier', required:true
+        .form-actions= f.submit "Importer", class:"btn btn-primary col-lg-2 col-lg-offset-3"

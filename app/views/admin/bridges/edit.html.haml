@@ -5,16 +5,24 @@
   %h3
     Modification des paramètres de connection au module Adhérent pour l'enregistrement des paiements
 .inner-champ
-  .inputs
-    = simple_form_for([:admin, @organism, @bridge], :html=> {class: 'form-horizontal'}) do |f|
+  .panel-body
+    = simple_form_for([:admin, @organism, @bridge],
+     :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form) do |f|
       = f.error_notification
-      = f.association :income_book, :collection=>@organism.income_books, :prompt=>false
-      = f.association :destination, :collection=>@organism.destinations, :prompt=>false, :label=>'Activité'
-      = f.input :nature_name do
-        =f.select :nature_name, bridge_nature_options(@period, @bridge)
-      = f.association :bank_account, :collection=>@organism.bank_accounts, :label_method=>:nickname, :prompt=>false
-      = f.association :cash, :collection=>@organism.cashes, :prompt=>false
+      .form-inputs
+        = f.association :income_book, :collection=>@organism.income_books,
+          my_wrapper_html: {class: "col-lg-3"}, :prompt=>false
+        = f.association :destination, :collection=>@organism.destinations,
+          my_wrapper_html: {class: "col-lg-3"}, :prompt=>false, :label=>'Activité'
+        = f.input :nature_name, label:'Nature utilisée', my_wrapper_html: {class: "col-lg-3"} do
+          = f.select :nature_name, bridge_nature_options(@period, @bridge),
+            {include_blank:false}, {size: 10, class:'col-lg-12'}
+        = f.association :bank_account, :collection=>@organism.bank_accounts,
+          my_wrapper_html: {class: "col-lg-3"},
+          :label_method=>:nickname, :prompt=>false
+        = f.association :cash, :collection=>@organism.cashes,
+          my_wrapper_html: {class: "col-lg-3"}, :prompt=>false
 
       .form-actions
-        = f.button :submit, class: "btn-primary span2"
+        = f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-2"
  

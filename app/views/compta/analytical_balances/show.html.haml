@@ -3,9 +3,12 @@
     = image_tag('icones/nouveau.png')
   = export_icons({compta_analytical_balance:@params_anabal})
 
+= content_for :modal do
+  =# voir modal_helpers pour cette méthode
+  = modal_form('Modification des paramètres', 'modal_form_analytical_balance', 'modal_body_form_analytical_balance')
 
 .champ
   %h3= h3_title(@anabal)
-  = render partial: 'modal_form_analytical_balance'
+  
 
   #anabal_table= render partial: 'analytical_balance'

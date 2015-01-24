@@ -136,8 +136,8 @@ describe Admin::NaturesController do
     describe "with valid params" do
       it "updates the requested nature" do
         @a.should_receive(:find).with(nat1.to_param).and_return(nat1)
-        nat1.should_receive(:update_attributes).with({'these' => 'params'}).and_return(true)
-        put :update,{:period_id=>@p.id.to_s,  :id => nat1.id, :nature => {'these' => 'params'}}, valid_session
+        nat1.should_receive(:update_attributes).with({'comment' => 'test'}).and_return(true)
+        put :update,{:period_id=>@p.id.to_s,  :id => nat1.id, :nature => {comment:'test'}}, valid_session
       end
 
       it "assigns the requested nature as @nature" do

@@ -53,7 +53,7 @@ class Admin::NaturesController < Admin::ApplicationController
   # POST /natures
   # POST /natures.json
   def create
-    @nature = @period.natures.new(params[:nature])
+    @nature = @period.natures.new(admin_nature_params)
 
     respond_to do |format|
       if @nature.save
@@ -76,7 +76,7 @@ class Admin::NaturesController < Admin::ApplicationController
     @nature = @period.natures.find(params[:id])
 
     respond_to do |format|
-      if @nature.update_attributes(params[:nature])
+      if @nature.update_attributes(admin_nature_params)
         format.html { redirect_to admin_organism_period_natures_path(@organism,
             @period, book_id:@nature.book_id), notice: 'Nature a été mise à jour.' }
         format.json { head :ok }
@@ -99,6 +99,14 @@ class Admin::NaturesController < Admin::ApplicationController
       format.html { redirect_to admin_organism_period_natures_url(@organism, @period, book_id:@nature.book_id) }
       format.json { head :ok }
     end
+  end
+  
+  
+  private 
+  
+  def admin_nature_params
+    params.require(:nature).
+      permit(:name, :comment, :account, :account_id, :book_id, :period_id)
   end
   
  

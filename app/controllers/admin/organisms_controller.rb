@@ -39,7 +39,7 @@ class Admin::OrganismsController < Admin::ApplicationController
     @organism = Organism.find(params[:id])
 
     respond_to do |format|
-      if @organism.update_attributes(params[:organism])
+      if @organism.update_attributes(admin_organism_params)
 
         format.html { redirect_to [:admin, @organism], notice: "Modification de l'organisme effectuée" }
         format.json { head :ok }
@@ -50,7 +50,11 @@ class Admin::OrganismsController < Admin::ApplicationController
     end
   end
 
-
+  private 
+   
+  def admin_organism_params
+    params.require(:organism).permit(:title, :comment)
+  end
 
  
 end

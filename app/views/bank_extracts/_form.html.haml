@@ -1,23 +1,35 @@
-.inputs.row-fluid#bank_extracts
-  = simple_form_for([@bank_account, @bank_extract], :html=> {class: 'form-inline'}) do |f|
+.panel-body#bank_extracts
+  = simple_form_for([@bank_account, @bank_extract],
+   :html=> {class: 'form-inline'}, wrapper: :inline_form) do |f|
     =f.error_notification
     
-    .row-fluid
-      .span12
-        = f.input :reference, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8'}
-        = f.input :begin_date_picker,:label=> 'Du', wrapper_html:{class:'span3'},
-          label_html: {class: 'span4'}, 
-          input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,
+    .form-inputs
+      .col-lg-12
+        = f.input :reference, wrapper_html:{class:'col-lg-3'},
+          label_html: {class:'col-lg-4'}, input_html: {class: 'col-lg-8', :type=>'text'}
+        = f.input :begin_date_picker,:label=> 'Du', wrapper_html:{class:'col-lg-3'},
+          label_html: {class: 'col-lg-4'}, 
+          input_html: {class: 'col-lg-8', date_min:@period.start_date, date_max:@period.close_date} ,
           required:true, :as=>:date_picker
-        = f.input :end_date_picker,  :label=> 'Au', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker
-    .row-fluid
-      .span12
-        = f.input :begin_sold, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8', :type=>'text', value: two_decimals(@bank_extract.begin_sold)}
-        = f.input :total_debit, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8', :type=>'text', value: two_decimals(@bank_extract.total_debit)}
-        = f.input :total_credit, wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8', :type=>'text', value: two_decimals(@bank_extract.total_credit)}
-        = f.input :end_sold,  wrapper_html:{class:'span3'}, label_html: {class:'span4'}, input_html: {class: 'span8', value: two_decimals(@bank_extract.end_sold)}, disabled: true
+        = f.input :end_date_picker,  :label=> 'Au', wrapper_html:{class:'col-lg-3'},
+          label_html: {class: 'col-lg-4'},
+          input_html: {class: 'col-lg-8', date_min:@period.start_date, date_max:@period.close_date} ,
+          :required => true, :as=>:date_picker
+
+      .col-lg-12
+        = f.input :begin_sold, wrapper_html:{class:'col-lg-3'},
+          input_html: { :type=>'text', value: two_decimals(@bank_extract.begin_sold)}
+        = f.input :total_debit, wrapper_html:{class:'col-lg-3'},
+          input_html: { :type=>'text', value: two_decimals(@bank_extract.total_debit)}
+        = f.input :total_credit, wrapper_html:{class:'col-lg-3'},
+          label_html: {class:'col-lg-6'},
+          input_html: {class: 'col-lg-6', :type=>'text', value: two_decimals(@bank_extract.total_credit)}
+        = f.input :end_sold,  wrapper_html:{class:'col-lg-3'},
+          label_html: {class:'col-lg-6'},
+          input_html: {class: 'col-lg-6', :type=>'text', value: two_decimals(@bank_extract.end_sold)},
+          disabled: true
+
+
     
-    .row-fluid
-      .span12
-        .form-actions.offset8
-          = f.button :submit, class: "btn-primary span3"
+    .form-actions
+      = f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-9"

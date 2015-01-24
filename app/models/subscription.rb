@@ -18,7 +18,7 @@ require 'month_year'
 #
 class Subscription < ActiveRecord::Base 
     
-  attr_accessible :day, :end_date, :mask_id, :title, :permanent
+#  attr_accessible :day, :end_date, :mask_id, :title, :permanent
   
   belongs_to :mask
   has_many :writings, :through=>:mask

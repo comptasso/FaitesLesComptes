@@ -3,36 +3,44 @@
   <head>
     <title>Faites les comptes !</title>
 
-    <%= stylesheet_link_tag    "application" %>
+    
 
     <noscript>
     <meta http-equiv="refresh" content="1;url=/no_javascript.html" />
     </noscript>
+<!-- Latest compiled and minified CSS -->
 
-    <%= javascript_include_tag "application" %>
+<%= stylesheet_link_tag    "application" %>
+
+<%= javascript_include_tag "application" %>
+
+ 
 
     <%= csrf_meta_tags %>
   </head>
-  <body class="<%= 'public_'+controller.controller_name %>">
+  <body class="<%= 'public_'+controller.controller_name %>" style="padding-top:90px;">
 
-    <div class="container-fluid">
-
-      <%= render 'layouts/navbar' %>
-
-
-      <div class="row-fluid">
-
-        <div>
+    <nav class="navbar navbar-fixed-top" role="navigation">
+          <%= render 'layouts/navbar' %>
           <%= render 'menus/menu' if user_signed_in? && controller_name != 'registrations' %>
-        </div>
-        <div id="main-zone">
+    </nav>
+    
+    <div> 
+      <%=  yield :modal %>
+    </div>
+    
+    <div class="container-fluid" >
 
+      <div id="main-zone">
+          <div class='col-lg-12'>
           <%= render 'layouts/flash_partial' %>
-          <div id="message" class="row-fluid"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
-
-          <%= yield %>
+          </div>  
+          <div id="message" class="col-lg-12"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
+          
+            <%= yield %>
+          
         </div>
-      </div>
+      
 
       <div class ="push"></div>
     </div>

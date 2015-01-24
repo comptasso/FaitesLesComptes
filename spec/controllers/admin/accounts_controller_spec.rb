@@ -27,7 +27,7 @@ describe Admin::AccountsController do
 
   
   def valid_attributes
-    {"name"=>'CrediX', "number"=>'5555', "period_id"=>@p.to_param}
+    {"title"=>'CrediX', "number"=>'5555', "period_id"=>@p.to_param}
   end
 
   before(:each) do 
@@ -167,21 +167,24 @@ Liste des erreurs relevées : <ul>\
 
         it "updates the requested account" do
           Account.should_receive(:find).with(a1.to_param).and_return(a1)
-          a1.should_receive(:update_attributes).with({'these' => 'params'}).and_return(true)
-          put :update,{:period_id=>@p.to_param,  :id => a1.to_param, :account => {'these' => 'params'}}, valid_session
+          a1.should_receive(:update_attributes).with({'title' => 'test'}).and_return(true)
+          put :update,{:period_id=>@p.to_param,
+            :id => a1.to_param, :account => {'title' => 'test'}}, valid_session
         end
 
         it "assigns the requested account as @account" do
           Account.stub(:find).with(a1.to_param).and_return(a1)
           a1.stub(:update_attributes).and_return(true)
-          put :update,{:period_id=>@p.to_param,  :id => a1.to_param, :account => {'these' => 'params'}}, valid_session
+          put :update,{:period_id=>@p.to_param,
+            :id => a1.to_param, :account => {'title' => 'test'}}, valid_session
           assigns(:account).should eq(a1)
         end
 
         it "redirects to the account" do
           Account.stub(:find).with(a1.to_param).and_return(a1)
           a1.stub(:update_attributes).and_return(true)
-          put :update,{:period_id=>@p.to_param,  :id => a1.to_param, :account => {'these' => 'params'}}, valid_session
+          put :update,{:period_id=>@p.to_param,
+            :id => a1.to_param, :account => {'title' => 'test'}}, valid_session
           response.should redirect_to(admin_period_accounts_url(@p))
         end
       end
@@ -190,14 +193,16 @@ Liste des erreurs relevées : <ul>\
         it "assigns the account as @account" do
           Account.stub(:find).with(a1.to_param).and_return(a1)
           a1.stub(:update_attributes).and_return(false)
-          put :update,{:period_id=>@p.to_param,  :id => a1.to_param, :account => {'these' => 'params'}}, valid_session
+          put :update,{:period_id=>@p.to_param,
+            :id => a1.to_param, :account => {'title' => 'test'}}, valid_session
           assigns(:account).should eq(a1)
         end
 
         it "re-renders the 'edit' template" do
           Account.stub(:find).with(a1.to_param).and_return(a1)
           a1.stub(:update_attributes).and_return(false)
-          put :update,{:period_id=>@p.to_param,  :id => a1.to_param, :account => {'these' => 'params'}}, valid_session
+          put :update,{:period_id=>@p.to_param,
+            :id => a1.to_param, :account => {'title' => 'test'}}, valid_session
           response.should render_template("edit")
         end
       end
@@ -211,20 +216,23 @@ Liste des erreurs relevées : <ul>\
   describe "DELETE destroy" do
     it "destroys the requested account" do
       Account.should_receive(:find).with(a1.to_param).and_return(a1)
-      delete :destroy, {:period_id=>@p.to_param,  :id => a1.to_param}, valid_session
+      delete :destroy, {:period_id=>@p.to_param,
+        :id => a1.to_param}, valid_session
 
     end
 
     it "redirects to the accounts list" do
       Account.should_receive(:find).with(a1.id.to_s).and_return(a1)
-      delete :destroy, {:period_id=>@p.to_param,  :id => a1.id.to_s}, valid_session
+      delete :destroy, {:period_id=>@p.to_param,
+        :id => a1.id.to_s}, valid_session
       response.should redirect_to(admin_period_accounts_url(@p))
     end
 
     it 'en cas d echec crée un flash' do
       Account.should_receive(:find).with(a1.id.to_s).and_return(a1)
       a1.stub(:destroy).and_return false
-      delete :destroy, {:period_id=>@p.to_param,  :id => a1.id.to_s}, valid_session
+      delete :destroy, {:period_id=>@p.to_param,
+        :id => a1.id.to_s}, valid_session
       flash[:error].should  match 'Une erreur s\'est produite'
     end
   end

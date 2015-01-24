@@ -49,7 +49,7 @@ class Period < ActiveRecord::Base
 
   include Utilities::JcGraphic
 
-  attr_accessible :start_date, :close_date
+  # attr_accessible :start_date, :close_date
   
   # Les classes ...validator sont ici des classes spécifiques de validator pour les exercices
   # on ne les met pas dans lib/validators car elles sont réellement dédiées
@@ -75,7 +75,7 @@ class Period < ActiveRecord::Base
   has_many :books, :through=>:organism
 
   has_many :accounts, :dependent=>:destroy
-  has_many :used_accounts, class_name:'Account', :conditions=>{:used=>true}
+  has_many :used_accounts, -> {where('used = ?', true)}, class_name:'Account'
   has_many :natures
   has_many :compta_lines, :through=>:accounts 
   has_one :balance, :class_name=>'Compta::Balance'
@@ -95,14 +95,14 @@ class Period < ActiveRecord::Base
   before_destroy  :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
   
 
-  scope :opened, where('open = ?', true)
+  scope :opened, -> {where('open = ?', true)}
  
   # trouve l'exercice précédent en recherchant le premier exercice
   # avec la date de cloture < au start_date de l'exercice actuel
   # renvoie lui même s'il n'y en a pas
   def previous_period
-    ::Period.first(:conditions=>['organism_id = ? AND close_date < ?', organism_id, start_date],
-      :order=>'close_date DESC') || self
+    ::Period.where('organism_id = ? AND close_date < ?', organism_id, start_date).
+      order('close_date DESC').first || self
   end
 
   # indique s'il y a un exercice précédent en testant si previous period renvoie un exercice différent de self
@@ -118,8 +118,8 @@ class Period < ActiveRecord::Base
   # trouve l'exercice suivant en recherchant l'exercice qui à la première date qui soit au dela de close_date de l'exercice actuel
   # renvoie lui même s'il n'y en a pas
   def next_period
-    Period.first(:conditions=>['organism_id = ? AND start_date > ?', organism_id, close_date],
-      :order=>'start_date ASC') || self
+    Period.where('organism_id = ? AND start_date > ?', organism_id, close_date).
+      order('start_date ASC').first || self
   end
 
   # indique s'il y a un exercice suivant en testant si l'exercice suivant est différent de lui même
@@ -146,18 +146,23 @@ class Period < ActiveRecord::Base
 
   # renvoie la liste des comptes pour deux exercices successifs.
   # to_set garantit l'unicité des comptes et sort retourne alors un Array
-  def two_period_account_numbers
+  def two_period_account_numbers(sector = nil)
     pp = previous_period
     if pp != self # ce qui évite une double interrogation de la base.
-      pp.account_numbers.to_set.merge(account_numbers).sort
+      pp.account_numbers(sector).to_set.merge(account_numbers(sector)).sort
     else
-      account_numbers
+      account_numbers(sector)
     end
   end
 
   # renvoie la liste des numéros de comptes de l'exercice
-  def account_numbers
-    accounts.map {|acc| acc.number}
+  # Un filtre est effectué sur le secteur si celui-ci est fourni
+  def account_numbers(sector=nil)
+    if sector
+      accounts.select {|a| a.sector_id == sector.id}.collect(&:number)
+    else
+      accounts.collect(&:number)
+    end
   end
   
   # renvoie le compte (12) qui sert pour enregistrer le résultat de l'exercice
@@ -267,8 +272,7 @@ class Period < ActiveRecord::Base
     sold_classe(7) + sold_classe(6)
   end
 
-  # TODO a retirer puisque ces informations sont désormais fournies par Sector
-  # revoie la liste des comptes commençant par 512
+  # utilisé pour les tansferts...
   def list_bank_accounts
     accounts.where('number LIKE ?', '512%')
   end
@@ -518,7 +522,7 @@ class Period < ActiveRecord::Base
     rcb = []
     # POur le comptes de classe 1 à 5
     np = next_period
-    accounts.find_each(conditions:['number < ?', '5Z']) do |acc|
+    accounts.where('number < ?', '5Z').to_a.each do |acc|
       # on trouve le compte correspondant
       next_acc = np.accounts.find_by_number(acc.number)
       # et on créé une compta_line respectant les principes

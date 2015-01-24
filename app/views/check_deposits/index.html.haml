@@ -26,6 +26,6 @@
               %span= icon_to 'afficher.png', organism_bank_account_check_deposit_path(@organism, @bank_account, check_deposit)
               %span= icon_to 'modifier.png', edit_organism_bank_account_check_deposit_path(@organism, @bank_account, check_deposit) unless check_deposit.pointed?
               %span= icon_to 'supprimer.png', [@organism, @bank_account, check_deposit],
-                :confirm => 'Etes vous sur ?', :method => :delete unless check_deposit.pointed?
+                data: {confirm: 'Etes vous sûr ?'} , :method => :delete unless check_deposit.pointed?
 
 

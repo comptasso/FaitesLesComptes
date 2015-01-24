@@ -38,7 +38,7 @@
 #
 class Organism < ActiveRecord::Base
   
-  attr_accessible :title, :database_name, :status, :comment, :racine
+  # attr_accessible :title, :database_name, :status, :comment, :racine
 
   has_one :nomenclature, dependent: :destroy
   has_many :sectors, dependent: :destroy
@@ -102,7 +102,7 @@ class Organism < ActiveRecord::Base
 
   # Retourne la dernière migration effectuée pour la base de données représentant cet organisme
   def self.migration_version
-    ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
+    ActiveRecord::Migrator.current_version
   end
 
 

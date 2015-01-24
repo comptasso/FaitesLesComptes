@@ -49,6 +49,28 @@ describe Compta::RubrikParser do
     end
   
   end
+  
+  describe 'filtre les comptes sur la base du secteur' do
+    
+#    let(:p) {mock_model(Period, 
+#      :two_period_account_numbers=>[@acc1, @acc2])}
+    
+    before(:each) do
+      @sec1 = mock_model(Sector)
+      @acc1 = mock_model(Account, sector_id:@sec1.id, number:'6001')
+    end
+    
+    it 'le folio de secteur 1 a un compte' do
+      p.should_receive(:two_period_account_numbers).with(@sec1).and_return(['6001'])
+      @rp = Compta::RubrikParser.new(p, :actif, '60', @sec1)
+      puts @rp.instance_variable_get('@numeros')
+      puts @rp.instance_variable_get('@numbers')
+      @rp.list_numbers.should == ['6001']
+    end
+    
+    
+    
+  end
 
   
 end

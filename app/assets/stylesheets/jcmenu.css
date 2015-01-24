@@ -30,6 +30,10 @@
     text-decoration: none;
 }
 
+li.dropdown-header > a {
+  text-transform: uppercase;
+}
+
 li.dropdown > a:hover {
   color: #333 !important;
   
@@ -39,5 +43,13 @@ li.dropdown span.no-link {
   padding: 3px 20px;
   color: #888;
 }
+
+
+/* inséré pour avoir la même couleur dans les liens visités des menus */
+li.dropdown a:visited {
+ color: #333 !important;
+}
+
+
 
 

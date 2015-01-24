@@ -53,16 +53,21 @@ module Compta
     # représentant une liste de numéros par exemple '20 -280'
     # * première étape, il identifie les numéros de comptes dont il aura besoin
     # * deuxième étape, il crée les RubrikLine correspondantes
-    # il fait ça pour les deux exercices (celui demandé et précédent s'il existe)
+    # il fait ça pour les comptes des deux exercices (celui demandé et
+    # précédent s'il existe).
+    # 
+    # Un argument sector permet de filtrer les comptes selon le secteur choisi.
+    # Typiquement pour les comités d'entreprises, ASC et Fonctionnement.
     #
     # A la fin de initialize, on a une variable d'instance @list
     # qui contient un tableau de hash ordonné
     # il suffit d'appeler la méthode rubrik_lines pour avoir les lignes de rubriques
-    def initialize(period, sens, args)
+    def initialize(period, sens, args, sector=nil)
       @period = period
+      @sens = sens
       # TODO Les rejets doivent être à la fin
       @numeros = args.split
-      @sens = sens
+      @sector = sector
       @select_nums = []
       @col2_nums = []
       @debit_nums = []
@@ -184,7 +189,7 @@ module Compta
     # Donne tous les numéros de comptes existant pour les deux exercice
     # celui demandé et le précédent.
     def numbers
-      @numbers ||= @period.two_period_account_numbers
+      @numbers ||= @period.two_period_account_numbers(@sector)
     end
     
   end

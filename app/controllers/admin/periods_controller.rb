@@ -76,7 +76,7 @@ class Admin::PeriodsController < Admin::ApplicationController
     # TODO déplacer cette logique dans le modèle en faisant un 
     # before_validation
     start_date = (@organism.periods.last.close_date) +1 if @organism.periods.any?
-    @period = @organism.periods.new(params[:period])
+    @period = @organism.periods.new(admin_period_params)
     @period.start_date = start_date if start_date
     
     respond_to do |format|
@@ -158,6 +158,10 @@ class Admin::PeriodsController < Admin::ApplicationController
       html += 'Nous vous conseillons maintenant de personnaliser Banques, Caisses et Activités avant de saisir vos premières écritures'
     end
     html.html_safe
+  end
+  
+  def admin_period_params
+    params.require(:period).permit(:start_date, :close_date)
   end
   
 

@@ -1,23 +1,33 @@
-<div class="inputs" id="edit_check_deposit" >
+<div class="panel-body" id="edit_check_deposit" >
 
-<%= simple_form_for([@organism, @bank_account, @check_deposit], html:{class:'form-horizontal'}) do |f| %>
+<%= simple_form_for([@organism, @bank_account, @check_deposit],
+  html:{class:'form-horizontal'}, wrapper: :horizontal_form) do |f| %>
   <%= f.error_notification %>
-  <%= f.input :deposit_date_picker, :label=> 'Date', input_html: {class: 'span2', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+  <div class="formp-inputs">
+  <%= f.input :deposit_date_picker,
+    my_wrapper_html:{class:'col-lg-2'},
+    :label=> 'Date',
+    input_html: {date_min:@period.start_date, date_max:@period.close_date},
+    :required => true, :as=>:date_picker %>
 
   <%= f.association :bank_account,
-              input_html: {:class=> "span2"},
-              :collection => @organism.bank_accounts.map {|b| [b.nickname, b.id]},
-              :prompt => "Numero de compte ?", :label=>'Compte' %>
-  <%= f.association :checks, :label=> 'Chèques', input_html: {class: "span4", multiple: true, size: 10},
-              :collection => options_for_checks(@check_deposit, @sector), :as => :grouped_select, :group_method => :checks, :group_label_method=> :name,
-              :label_method=> :label, :value_method=> :id %>
+      my_wrapper_html:{class:'col-lg-2'},
+      :collection => @organism.bank_accounts.map {|b| [b.nickname, b.id]},
+      :prompt => "Numero de compte ?", :label=>'Compte' %>
+  <%= f.association :checks,
+    my_wrapper_html:{class:'col-lg-4'},
+    :label=> 'Chèques',
+    input_html: {multiple: true, size:15},
+    :collection => options_for_checks(@check_deposit, @sector),
+    :as => :grouped_select,
+    :group_method => :checks, :group_label_method=> :name,
+    :label_method=> :label, :value_method=> :id %>
+  </div>
 
-
-       <div class="form-actions">
-
-             <%=  f.button :submit, :id=>'edit_check_deposit_button', :class=> "btn-primary span2" %>
-
-       </div>
+  <div class="form-actions">
+     <%=  f.button :submit, :id=>'edit_check_deposit_button',
+       :class=> "btn-primary col-lg-2 col-lg-offset-2" %>
+  </div>
 
 
 

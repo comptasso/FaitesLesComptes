@@ -45,15 +45,19 @@ describe 'Session' do
       current_url.should match /http:\/\/www.example.com\/organisms\/\d*/ 
     end
 
-    it 'avec plusieures organisme, renvoie sur la liste'do
+    it 'avec plusieures organisme, renvoie sur la liste', wip:true do
       create_user
       create_organism
       # plutôt que de créer réellement plusieurs bases, on fait un stub
       ApplicationController.any_instance.stub(:current_user).and_return @cu
+      
       @cu.stub(:rooms).and_return(@ar = double(Arel))
-      @ar.stub(:includes).and_return([@r, @r])
       @ar.stub(:count).and_return 2
-      @ar.stub(:collect).and_return([{organism:@o, room:@r}, {organism:@o, room:@r}])
+      @ar.stub(:includes).and_return(@ar = double(Arel))
+      @ar.stub(:references).and_return(@ar = double(Arel))
+      @ar.stub(:to_a).and_return(@arr = [@r, @r])
+      # nécessaire pour l'affichage du menu des organismes
+      @cu.stub(:organisms_with_room).and_return([{organism:@o, room:@r}, {organism:@o, room:@r}])
       login_as('quidam')
       page.find('h3').should have_content 'Liste des organismes'
     end
@@ -76,11 +80,11 @@ describe 'Session' do
       page.find('h3').should have_content 'Merci pour votre inscription et à très bientôt'
     end
 
-    it 'envoie un mail par UserObeserver' do
+    it 'envoie un mail par UserObserver' do
       UserInscription.should_receive(:new_user_advice).and_return(double(Object, deliver:true ))
       visit '/users/sign_up'
-      fill_in 'user_name', with:'test'
-      fill_in 'user_email', :with=>'test@example.com'
+      fill_in 'user_name', with:'test2'
+      fill_in 'user_email', :with=>'test2@example.com'
       fill_in 'user_password', :with=>'testtest'
       fill_in 'user_password_confirmation', :with=>'testtest'
       click_button 'S\'inscrire' 

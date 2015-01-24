@@ -1,18 +1,24 @@
 <div class="champ">
   <h3>Mot de passe oublié</h3>
   <div class="inner-champ">
-
-    <div class="inputs">
+    <div class="panel-body">
+    
       <%= simple_form_for(resource, as: resource_name, 
         url: password_path(resource_name),  
-        html: {class: 'form-horizontal', method: :post }) do |f| %>
+        html: {class:'form-horizontal', method: :post },
+        wrapper: :horizontal_form) do |f| %>
+        
         <%= f.error_notification %>
-        <%= f.input :email, :required => true, :autofocus => true,  input_html: {class: "span3"}  %>
-    
+      <div class="form-inputs">
+        <%= f.input :email, :required => true, :autofocus => true,
+          my_wrapper_html:{class:"col-lg-4"}  %>
+     </div>
     <div class="form-actions">
-          <%= f.button :submit, "Envoyer les instructions de récupération" , class: "btn-primary span3" %>
+          <%= f.button :submit, "Envoyer les instructions de récupération",
+            class: "btn-primary col-lg-3 col-lg-offset-2" %>
         </div>
       <% end %>
-     </div>
+    
+  </div>
   </div>
 </div>

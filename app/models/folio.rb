@@ -33,10 +33,11 @@ require 'benchmark'
 #  TODO un contrôle pas de compte 8 sur le bilan.
 #
 class Folio < ActiveRecord::Base
-  attr_accessible :name, :title, :sens
+  # attr_accessible :name, :title, :sens
   attr_reader :counter
   has_many :rubriks, dependent: :destroy
   belongs_to :nomenclature
+  belongs_to :sector
   
   # TODO mettre une validation pour name 
   
@@ -106,12 +107,15 @@ class Folio < ActiveRecord::Base
     all_instructions.join(' ').split
   end
   
+  # renvoir la liste des numéros de comptes utilisés pour la construction
+  # des états
   def all_numbers(period)
-    all_instructions.map {|accounts| Compta::RubrikParser.new(period, :actif, accounts).list_numbers}.flatten
+    all_numbers_with_option(period).collect{|l| l[:num]}.flatten
   end
   
+  # renvoie la list des numéros avec leurs options (sens
   def all_numbers_with_option(period)
-    all_instructions.map {|accounts| Compta::RubrikParser.new(period, :actif, accounts).list}.flatten
+    all_instructions.map {|accounts| Compta::RubrikParser.new(period, :actif, accounts, sector).list}.flatten
   end
   
   # surcharge de title pour gérer les CE qui affichent en subtitle leur secteur

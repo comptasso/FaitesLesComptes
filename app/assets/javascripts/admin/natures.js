@@ -11,7 +11,7 @@ function change_radio() {
         d_type = sel.data('type'),
         d_sector = sel.data('sector');
 
-    $('optgroup option').attr('disabled', true);
+    $('.admin_natures optgroup option').attr('disabled', true);
     $("optgroup[data-sector = '" + d_sector + "'][data-type = '" + d_type + "'] option").
         attr('disabled', false);
 
@@ -22,12 +22,14 @@ function change_radio() {
 // et le compte auquel elle peut être rattachée.
 //
 jQuery(function () {
-    $('.admin_natures optgroup[label=Dépenses] option').attr('disabled', true);
-    $('.admin_natures optgroup[label=Recettes] option').attr('disabled', true);
-    change_radio();
-    $('.admin_natures select#nature_book_id').change(function () {
+    if ($('.admin_natures form').length !== null) {
+        $('.admin_natures optgroup[label=Dépenses] option').attr('disabled', true);
+        $('.admin_natures optgroup[label=Recettes] option').attr('disabled', true);
         change_radio();
-    });
+        $('.admin_natures select#nature_book_id').change(function () {
+            change_radio();
+        });
+    }
 });
 
 // VUE INDEX

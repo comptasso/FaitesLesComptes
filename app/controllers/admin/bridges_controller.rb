@@ -9,7 +9,7 @@ class Admin::BridgesController < Admin::ApplicationController
   
   def update
     @bridge = @organism.bridge
-    if @bridge.update_attributes(params[:bridge])
+    if @bridge.update_attributes(bridge_params)
       flash[:notice] = 'Les paramètres ont été modifiés'
       unless @bridge.check_nature_name
       flash[:alert] = "Attention, un exercice ouvert ne dispose pas de ce nom de nature. <br/>
@@ -23,5 +23,12 @@ class Admin::BridgesController < Admin::ApplicationController
     end
     
     
+  end
+  
+  private
+  
+  def bridge_params
+    params.require(:bridge).permit(:bank_account_id, :cash_id,
+      :destination_id, :income_book_id, :nature_name)
   end
 end

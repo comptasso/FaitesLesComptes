@@ -9,8 +9,9 @@
 class DatePickerInput < SimpleForm::Inputs::Base
   
   # TODO cette méthode input est probablement inutilement compliquée
+  # TODO et à déplacer avec les autres inputs dans config
 
- def input
+ def input(wrapper_parameters)
    input_html_options['data-jcmin'] = date_min(input_html_options[:date_min])
    input_html_options['data-jcmax'] = date_max(input_html_options[:date_max])
    input_html_classes.unshift('input_date_picker')

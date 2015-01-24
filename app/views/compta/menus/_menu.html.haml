@@ -1,4 +1,4 @@
-%ul.nav.nav-tabs 
+%ul.nav.navbar-nav#main_nav 
   
   - unless @period.nil? && @period.accounts.nil?
     %li.dropdown(class="#{controller.controller_name == "accounts" ? "active" : nil}")

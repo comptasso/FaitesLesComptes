@@ -5,7 +5,7 @@
 #
 class FrenchDecimalInput < SimpleForm::Inputs::Base
 
- def input
+ def input(wrapper_parameters)
    input_html_options['type'] = 'text' # probablement inutile
    input_html_options['pattern'] = '\-?\d+(\.\d{0,2})?'
    @builder.text_field(attribute_name, input_html_options)

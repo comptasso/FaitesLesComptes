@@ -10,7 +10,7 @@
       = "Ecriture n°#{@previous_writing.id} créée : #{l @previous_writing.date} #{@previous_writing.ref} |
         #{@previous_writing.narration} #{debit_credit(@previous_writing.total_credit)}"                  |
       = icon_to 'modifier.png', edit_compta_book_writing_path(@book, @previous_writing)
-      = icon_to 'supprimer.png', ['compta', @book, @previous_writing], :method=>:delete, :confirm=>'Etes vous sur ?'
+      = icon_to 'supprimer.png', ['compta', @book, @previous_writing], :method=>:delete, data: {confirm: 'Etes vous sûr ?'} 
 
 
 .champ

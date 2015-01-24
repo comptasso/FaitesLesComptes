@@ -30,11 +30,14 @@ class CheckDeposit < ActiveRecord::Base
   belongs_to :bank_account 
   belongs_to :bank_extract_line
   belongs_to :check_deposit_writing, :dependent=>:destroy, :foreign_key=>'writing_id'
-
-  has_many :checks, class_name: 'ComptaLine',
-    conditions: proc { ['account_id = ? AND debit > 0', rem_check_account.id] },
+  
+  has_many :checks, 
+    ->(owner) { where('account_id = ? AND debit > 0', owner.rem_check_account_id) },
+    class_name: 'ComptaLine',
+    # conditions: proc { ['account_id = ? AND debit > 0', rem_check_account_id] },
     dependent: :nullify,
-    before_remove: :cant_if_pointed, #on ne peut retirer un chèque si la remise de chèque a été pointée avec le compte bancaire
+    before_remove: :cant_if_pointed, #on ne peut retirer un chèque 
+    # si la remise de chèque a été pointée avec le compte bancaire
     before_add: :cant_if_pointed
  
   # utile pour les méthode credit_compta_line et debit_compta_line
@@ -43,24 +46,27 @@ class CheckDeposit < ActiveRecord::Base
   alias children compta_lines
 
   # book_id est nécessaire car on construit les écritures
-  attr_accessible :deposit_date, :deposit_date_picker, :check_ids, :bank_account_id
+  # attr_accessible :deposit_date, :deposit_date_picker, :check_ids, :bank_account_id
 
   scope :within_period, lambda {|p| where(['deposit_date >= ? and deposit_date <= ?', p.start_date, p.close_date])}
  
   validates :bank_account_id, :deposit_date, :presence=>true
-  validates :bank_account_id, :deposit_date, :cant_change=>true,  :if=> :pointed? # ce qui du coup interdit aussi la destruction
+  validates :bank_account_id, :deposit_date, :cant_change=>true, :if=> :pointed?
+  # ce qui du coup interdit aussi la destruction
+  # TODO ne semble plus vrai
   validate :not_empty # une remise chèque vide n'a pas de sens
 
   after_create :create_writing
+  before_destroy :check_pointed
   after_update :update_writing 
-
+  
   # permet de trouver les cheques à encaisser pour  tout l'organisme ou pour un 
   # secteur donné
   def self.pending_checks(sector = nil)
     if sector
-      ComptaLine.sectored_pending_checks(sector).all
+      ComptaLine.sectored_pending_checks(sector).to_a
     else
-      ComptaLine.pending_checks.all
+      ComptaLine.pending_checks.to_a
     end
   end
 
@@ -86,8 +92,8 @@ class CheckDeposit < ActiveRecord::Base
     credit_compta_line if credit_compta_line
   end
 
-  # persisted? est là pour éviter qu'on recherche une credit_compta_line ou une debit_compta_line alors qu'elles ne
-  # sont pas encore créées.
+  # persisted? est là pour éviter qu'on recherche une credit_compta_line
+  # ou une debit_compta_line alors qu'elles ne sont pas encore créées.
   def debit_compta_line
     persisted? ? compta_lines.where('debit > 0').first : nil
   end
@@ -119,9 +125,16 @@ class CheckDeposit < ActiveRecord::Base
   end
 
   def rem_check_account
+    return nil unless bank_account_id
     p = bank_account.organism.find_period(deposit_date)
     p.rem_check_account
   end
+  
+  def rem_check_account_id
+    rca = rem_check_account
+    rca ? rca.id : nil 
+  end
+  
 
   
   private
@@ -140,6 +153,14 @@ class CheckDeposit < ActiveRecord::Base
       raise 'Impossible de retirer un chèque d une remise pointée'
     end
   
+  end
+  
+  def check_pointed
+    if pointed?
+      puts 'dans pointed?'
+      logger.warn "Tentative de détruire la remise de chèques #{id}, alors qu'elle est pointée."
+      raise 'Impossible de détruire une remise de chèque pointée'
+    end
   end
 
   

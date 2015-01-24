@@ -12,9 +12,9 @@ class ComptaLine < ActiveRecord::Base
   belongs_to :writing
   has_one :bank_extract_line
 
-  attr_accessible :debit, :credit, :writing_id, :account_id, 
-    :nature, :nature_id, :destination_id, 
-    :check_number, :payment_mode, :check_deposit_id
+#  attr_accessible :debit, :credit, :writing_id, :account_id, 
+#    :nature, :nature_id, :destination_id, 
+#    :check_number, :payment_mode, :check_deposit_id
 
   # La présence est assurée par la valeur par défaut
   # mais on laisse presence:true, ne serait-ce que parce que cela permet d'avoir l'*
@@ -34,10 +34,10 @@ class ComptaLine < ActiveRecord::Base
   before_save  :fill_account, :if=> lambda {nature && nature.account}
   before_destroy :not_locked
 
-  scope :in_out_lines, where('nature_id IS NOT ?', nil)
-  scope :with_writings, joins(:writing)
-  scope :with_writing_and_book, joins(:writing=>:book)
-  scope :without_AN , where('books.abbreviation != ?', 'AN')
+  scope :in_out_lines, -> {where('nature_id IS NOT ?', nil)}
+  scope :with_writings, -> {joins(:writing)}
+  scope :with_writing_and_book, -> {joins(:writing=>:book)}
+  scope :without_AN , -> {where('books.abbreviation != ?', 'AN')}
   # ces scope n'inclut pas with_writings, ce qui veut dire qu'il faut que cela soit fait par
   # ailleurs, c'est notamment le cas lorsqu'on passe par book car book has_many :compta_lines, :through=>:writings
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
@@ -51,8 +51,8 @@ class ComptaLine < ActiveRecord::Base
   
   scope :listing, lambda {|from, to| with_writing_and_book.where('books.abbreviation != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
-  scope :unlocked, where('locked = ?', false)
-  scope :definitive, where('locked = ?', true) # remplacé le nom du scope locked par definitive car
+  scope :unlocked, -> {where('locked = ?', false)}
+  scope :definitive, -> {where('locked = ?', true)} # remplacé le nom du scope locked par definitive car
   # engendrait un conflit avec les arel de Rails
   scope :classe, lambda {|n| where('number LIKE ?', "#{n}%").order('number ASC')} 
 
@@ -64,11 +64,11 @@ class ComptaLine < ActiveRecord::Base
   scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil).order('id') }
   
   # renvoie les lignes non pointées (appelé par BankExtract), ce qui ne prend pas en compte le journal A nouveau
-  scope :not_pointed,
+  scope :not_pointed, -> {
     includes(:writing).
     joins(:writing=>:book).
     where("(books.abbreviation != 'AN') AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE COMPTA_LINE_ID = COMPTA_LINES.ID)").
-    order('writings.date')
+    order('writings.date')}
 
   delegate :date, :narration, :ref, :book, :support, :lock, :to=>:writing
 

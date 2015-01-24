@@ -59,7 +59,9 @@ module Compta
     
     # Récupère toutes les lignes dépendant d'une rubrik feuille de l'arborescence
     def all_lines
-      @all_lines ||= Compta::RubrikParser.new(period, rubrik.folio.sens, rubrik.numeros).rubrik_lines
+      @all_lines ||= Compta::RubrikParser.
+        new(period, rubrik.folio.sens, rubrik.numeros, rubrik.folio.sector).
+        rubrik_lines
     end
     
     

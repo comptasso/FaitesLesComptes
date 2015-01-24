@@ -7,13 +7,13 @@ apartment\:migrate\:redo=Rolls back the tenant one migration and re migrate up (
 apartment\:migrate\:up=Runs the "up" for a given migration VERSION across all tenants.
 apartment\:rollback=Rolls the migration back to the previous version (specify steps w/ STEP=n) across all tenants.
 apartment\:seed=Seed all tenants
-assets\:clean=Remove compiled assets
-assets\:clean\:all=
-assets\:environment=
+assets\:clean[keep]=Remove old compiled assets
+assets\:clobber=Remove compiled assets
+assets\:environment=Load asset compile environment
 assets\:precompile=Compile all the assets named in config.assets.precompile
-assets\:precompile\:all=
-assets\:precompile\:nondigest=
-assets\:precompile\:primary=
+autoprefixer\:info=Show selected browsers and prefixed CSS properties and values
+cache_digests\:dependencies=Lookup first-level dependencies for TEMPLATE (like messages/show or comments/_comment.html)
+cache_digests\:nested_dependencies=Lookup nested dependencies for TEMPLATE (like messages/show or comments/_comment.html)
 db\:_dump=
 db\:abort_if_pending_migrations=
 db\:charset=
@@ -26,7 +26,7 @@ db\:fixtures\:identify=
 db\:fixtures\:load=Load fixtures into the current environment's database. Load specific fixtures using FIXTURES=x,y. Load from subdirectory in test/fixtures using FIXTURES_DIR=z. Specify an alternative path (eg. spec/fixtures) using FIXTURES_PATH=spec/fixtures.
 db\:forward=
 db\:load_config=
-db\:migrate=Migrate the database (options: VERSION=x, VERBOSE=false).
+db\:migrate=Migrate the database (options: VERSION=x, VERBOSE=false, SCOPE=blog).
 db\:migrate\:down=
 db\:migrate\:redo=
 db\:migrate\:reset=
@@ -34,17 +34,18 @@ db\:migrate\:status=Display status of migrations
 db\:migrate\:up=
 db\:reset=
 db\:rollback=Rolls the schema back to the previous version (specify steps w/ STEP=n).
+db\:schema\:cache\:clear=Clear a db/schema_cache.dump file.
+db\:schema\:cache\:dump=Create a db/schema_cache.dump file.
 db\:schema\:dump=Create a db/schema.rb file that can be portably used against any DB supported by AR
 db\:schema\:load=Load a schema.rb file into the database
 db\:schema\:load_if_ruby=
 db\:seed=Load the seed data from db/seeds.rb
-db\:sessions\:clear=
-db\:sessions\:create=
 db\:setup=Create the database, load the schema, and initialize with the seed data (use db:reset to also drop the db first)
 db\:structure\:dump=Dump the database structure to db/structure.sql. Specify another file with DB_STRUCTURE=db/my_structure.sql
 db\:structure\:load=
 db\:structure\:load_if_sql=
 db\:test\:clone=
+db\:test\:clone_schema=
 db\:test\:clone_structure=
 db\:test\:load=
 db\:test\:load_schema=
@@ -54,27 +55,25 @@ db\:test\:purge=
 db\:version=Retrieves the current schema version number
 default=
 doc=
-doc/api=
-doc/api/index.html=
 doc/app=
 doc/app/index.html=
-doc\:app=Generate docs for the app -- also available doc:rails, doc:guides, doc:plugins (options: TEMPLATE=/rdoc-template.rb, TITLE="Custom Title")
+doc\:app=Generate docs for the app -- also available doc:rails, doc:guides (options: TEMPLATE=/rdoc-template.rb, TITLE="Custom Title")
 doc\:clobber=
 doc\:clobber_app=
-doc\:clobber_plugins=
 doc\:clobber_rails=
 doc\:guides=
-doc\:plugins=
 doc\:rails=
 doc\:reapp=
 doc\:rerails=
 environment=
+html=
+html/index.html=
 jobs\:check[max_age]=Exit with error status if any jobs older than max_age seconds haven't been attempted yet.
 jobs\:clear=Clear the delayed_job queue.
 jobs\:environment_options=
 jobs\:work=Start a delayed_job worker.
 jobs\:workoff=Start a delayed_job worker and exit when all available jobs are complete.
-log\:clear=Truncates all *.log files in log/ to zero bytes
+log\:clear=Truncates all *.log files in log/ to zero bytes (specify which logs with LOGS=test,development)
 middleware=Prints out your Rack middleware stack
 notes=Enumerate all annotations (use notes:optimize, :fixme, :todo for focus)
 notes\:custom=Enumerate a custom annotation, specify with ANNOTATION=CUSTOM
@@ -87,11 +86,10 @@ ocra\:copy_files=copie des fichiers necessaires
 ocra\:ocra=juste la construction du ocra
 rails\:template=Applies the template supplied by LOCATION=(/path/to/template) or URL
 rails\:templates\:copy=
-rails\:update=Update configs and some other initially generated files (or use just update:configs, update:scripts, or update:application_controller)
+rails\:update=Update configs and some other initially generated files (or use just update:configs, update:bin, or update:application_controller)
 rails\:update\:application_controller=
+rails\:update\:bin=
 rails\:update\:configs=
-rails\:update\:scripts=
-rails_env=
 railties\:install\:migrations=
 routes=Print out all defined routes in match order, with names. Target specific controller with CONTROLLER=x.
 secret=Generate a cryptographically secure secret key (this is typically used to generate a secret for cookie sessions).
@@ -110,22 +108,34 @@ spec\:statsetup=
 spec\:support=Run the code examples in spec/support
 spec\:views=Run the code examples in spec/views
 stats=Report code statistics (KLOCs, etc) from the application
-test=Runs test:units, test:functionals, test:integration together (also available: test:benchmark, test:profile, test:plugins)
-test\:benchmark=
+test=Runs test:units, test:functionals, test:integration together
+test\:all=Run tests quickly by merging all types and not resetting db
+test\:all\:db=Run tests quickly, but also reset db
+test\:controllers=
+test\:deprecated=
 test\:functionals=
+test\:helpers=
 test\:integration=
-test\:plugins=
+test\:mailers=
+test\:models=
 test\:prepare=
-test\:profile=
-test\:recent=Run tests for {:recent=>"test:prepare"}\nTest recent changes
+test\:recent=Run tests for {:recent=>["test:deprecated", "test:prepare"]}\nDeprecated; Test recent changes
 test\:run=
-test\:single=Run tests for {:single=>"test:prepare"}
-test\:test\:benchmark_mode=
-test\:uncommitted=Run tests for {:uncommitted=>"test:prepare"}\nTest changes since last checkin (only Subversion and Git)
+test\:single=
+test\:uncommitted=Run tests for {:uncommitted=>["test:deprecated", "test:prepare"]}\nDeprecated; Test changes since last checkin (only Subversion and Git)
 test\:units=
 time\:zones\:all=Displays all time zones, also available: time:zones:us, time:zones:local -- filter with OFFSET parameter, e.g., OFFSET=-6
 time\:zones\:local=
 time\:zones\:us=
+tmp=
+tmp/cache=
+tmp/cache/assets=
+tmp/cache/assets/development=
+tmp/cache/assets/production=
+tmp/cache/assets/test=
+tmp/pids=
+tmp/sessions=
+tmp/sockets=
 tmp\:cache\:clear=
 tmp\:clear=Clear session, cache, and socket files from tmp/ (narrow w/ tmp:sessions:clear, tmp:cache:clear, tmp:sockets:clear)
 tmp\:create=Creates tmp directories for sessions, cache, sockets, and pids

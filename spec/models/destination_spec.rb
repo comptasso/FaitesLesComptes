@@ -12,7 +12,8 @@ describe Destination do
   let(:o) {stub_model(Organism)}
   
   before(:each) do
-    @destination = o.destinations.new(name: 'Destination test')
+    @destination = o.destinations.new()
+    @destination.name =  'Destination test'
   end
 
   it "should be valid" do

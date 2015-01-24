@@ -26,7 +26,8 @@ describe Admin::BankAccountsController do
    
 
   def valid_attributes
-    {"name"=>'CrediX', "number"=>'5555', "nickname"=>'Compte sur livret', "organism_id"=>@o.id.to_s}
+    {"bank_name"=>'CrediX', "number"=>'5555',
+      "nickname"=>'Compte sur livret', "organism_id"=>@o.id.to_s}
   end
 
   before(:each) do
@@ -94,15 +95,18 @@ describe Admin::BankAccountsController do
   describe "POST create" do
     describe "with valid params" do
       it "creates a new bank_account" do
-          @a.should_receive(:new).with(valid_attributes).and_return(@b = mock_model(BankAccount).as_new_record)
+          @a.should_receive(:new).with(valid_attributes).
+            and_return(@b = mock_model(BankAccount).as_new_record)
           @b.stub(:save)
-          post :create, {:organism_id=>@o.id.to_s, :bank_account => valid_attributes}, valid_session
+          post :create, {:organism_id=>@o.id.to_s,
+            :bank_account => valid_attributes}, valid_session
       end
 
       it "assigns a newly created bank_account as @bank_account" do
         @a.stub(:new).and_return(ba1)
         ba1.stub(:save).and_return(true)
-        post :create, {:organism_id=>@o.id.to_s, :bank_account => valid_attributes}, valid_session
+        post :create, {:organism_id=>@o.id.to_s,
+          :bank_account => valid_attributes}, valid_session
         assigns(:bank_account).should == ba1
         
       end
@@ -110,7 +114,8 @@ describe Admin::BankAccountsController do
       it "redirects to the created bank_account" do
         @a.stub(:new).and_return(ba1)
         ba1.stub(:save).and_return(true)
-        post :create, {:organism_id=>@o.id.to_s,  :bank_account => valid_attributes}, valid_session
+        post :create, {:organism_id=>@o.id.to_s,
+          :bank_account => valid_attributes}, valid_session
         response.should redirect_to(admin_organism_bank_accounts_url(@o))
       end 
     end
@@ -120,7 +125,8 @@ describe Admin::BankAccountsController do
       it "re-renders the 'new' template" do
         @a.stub(:new).and_return(ba1)
         ba1.stub(:save).and_return(false)
-        post :create,  {:organism_id=>@o.id.to_s,  :bank_account => {}}, valid_session
+        post :create,  {:organism_id=>@o.id.to_s,
+          :bank_account => {comment:'test'}}, valid_session
         response.should render_template("new")
       end
     end
@@ -130,21 +136,25 @@ describe Admin::BankAccountsController do
     describe "with valid params" do
       it "updates the requested bank_account" do
         BankAccount.should_receive(:find).with(ba1.id.to_s).and_return(ba1)
-        ba1.should_receive(:update_attributes).with({'these' => 'params'}).and_return(true)
-        put :update,{:organism_id=>@o.id.to_s,  :id => ba1.id, :bank_account => {'these' => 'params'}}, valid_session
+        ba1.should_receive(:update_attributes).
+          with({'comment' => 'test'}).and_return(true)
+        put :update,{:organism_id=>@o.id.to_s, 
+          :id => ba1.id, :bank_account => {comment:'test'}}, valid_session
       end
 
       it "assigns the requested bank_account as @bank_account" do
         BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
         ba1.stub(:update_attributes).and_return(true)
-        put :update, {:organism_id=>@o.id.to_s,  :id => ba1.id, :bank_account => valid_attributes}, valid_session
+        put :update, {:organism_id=>@o.id.to_s,
+          :id => ba1.id, :bank_account => valid_attributes}, valid_session
         assigns(:bank_account).should eq(ba1)
       end
 
       it "redirects to the bank_account" do
         BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
         ba1.stub(:update_attributes).and_return(true)
-        put :update, {:organism_id=>@o.id.to_s, :id => ba1.id, :bank_account => valid_attributes}, valid_session
+        put :update, {:organism_id=>@o.id.to_s, :id => ba1.id,
+          :bank_account => valid_attributes}, valid_session
         response.should redirect_to(admin_organism_bank_accounts_url(@o))
       end
     end
@@ -153,14 +163,16 @@ describe Admin::BankAccountsController do
       it "assigns the bank_account as @bank_account" do
         BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
         ba1.stub(:update_attributes).and_return(false)
-        put :update, {:organism_id=>@o.id.to_s, :id => ba1.id.to_s, :bank_account => {}}, valid_session
+        put :update, {:organism_id=>@o.id.to_s,
+          :id => ba1.id.to_s, :bank_account => {comment:'test'}}, valid_session
         assigns(:bank_account).should eq(ba1)
       end
 
       it "re-renders the 'edit' template" do
          BankAccount.stub(:find).with(ba1.id.to_s).and_return(ba1)
         ba1.stub(:update_attributes).and_return(false)
-        put :update, {:organism_id=>@o.id.to_s,  :id => ba1.id.to_s, :bank_account => {}}, valid_session
+        put :update, {:organism_id=>@o.id.to_s,
+          :id => ba1.id.to_s, :bank_account => {comment:'test'}}, valid_session
         response.should render_template("edit")
       end
     end

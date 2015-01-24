@@ -15,7 +15,7 @@
 #
 class IncomeOutcomeBook < Book
   
-  attr_accessible :sector_id
+  # attr_accessible :sector_id
   
   
   belongs_to :sector
@@ -25,7 +25,8 @@ class IncomeOutcomeBook < Book
   has_many :in_out_writings,  foreign_key:'book_id'
   has_many :adherent_writings,  foreign_key:'book_id', class_name:'Adherent::Writing'
 
-  has_many :in_out_lines, :through=>:writings, :source=>:compta_lines, foreign_key:'writing_id', :conditions=>['nature_id IS NOT ?', nil]
+  has_many :in_out_lines, ->{where('nature_id IS NOT ?', nil)},
+    :through=>:writings, :source=>:compta_lines, foreign_key:'writing_id' 
 
   has_one :export_pdf, :as=>:exportable 
   

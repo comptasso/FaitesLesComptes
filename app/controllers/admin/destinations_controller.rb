@@ -35,7 +35,7 @@ class Admin::DestinationsController < Admin::ApplicationController
   # POST /destinations
   # POST /destinations.json
   def create
-    @destination = @organism.destinations.new(params[:destination])
+    @destination = @organism.destinations.new(destination_params)
 
     respond_to do |format|
       if @destination.save
@@ -56,7 +56,7 @@ class Admin::DestinationsController < Admin::ApplicationController
     @destination = @organism.destinations.find(params[:id])
 
     respond_to do |format|
-      if @destination.update_attributes(params[:destination])
+      if @destination.update_attributes(destination_params)
         format.html { redirect_to admin_organism_destinations_path(@organism), 
           notice: "L'activité #{@destination.name} a été mise à jour." }
         format.json { head :ok }
@@ -78,4 +78,12 @@ class Admin::DestinationsController < Admin::ApplicationController
       format.json { head :ok }
     end
   end
+  
+  private
+  
+  def destination_params
+    params.require(:destination).permit(:name, :comment, 
+      :income_outcome, :sector_id)
+  end
+  
 end

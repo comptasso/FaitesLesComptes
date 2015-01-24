@@ -1,45 +1,48 @@
-<div class="inputs row-fluid">
+<div class="panel-body">
 
-<%= simple_form_for @balance, :url=>compta_period_balance_path(@period), :html=> {class: 'form-inline'} do |balance_f| %>
- 
-    
-     <%= balance_f.error_notification %>
-    <div class="row-fluid">
-      <div class="span12">
-    <%= balance_f.input :from_date_picker, 
-      wrapper_html:{class:'span3'},
-      label_html: {class: 'span4'},
-      input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date},
-      :required => true, :as=>:date_picker %>
-       
-    <%= balance_f.input :to_date_picker,  
-          wrapper_html:{class:'span3'},
-          label_html: {class: 'span4'},
-          input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date},
-          :required => true, :as=>:date_picker %>
-      
-      </div>
+  <%= simple_form_for @balance, :url=>compta_period_balance_path(@period),
+    :html=> {class: 'form-inline'}, wrapper:'inline_form' do |balance_f| %>
+
+
+    <%= balance_f.error_notification %>
+    <div class='form-inputs'> 
+      <div class="col-lg-12">
+        <%= balance_f.input :from_date_picker, 
+          wrapper_html:{class:'col-lg-6'},
+            
+            input_html:{date_min:@period.start_date, date_max:@period.close_date},
+            :required => true, :as=>:date_picker %>
+
+        <%= balance_f.input :to_date_picker,  
+          wrapper_html:{class:'col-lg-6'},
+            input_html:{date_min:@period.start_date, date_max:@period.close_date},
+            :required => true, :as=>:date_picker %>
+
       </div>
 
-  <div class="row-fluid">
-        <div class="span12">
-          <%= balance_f.input :from_account_id, :collection=>@period.accounts.order('number ASC'),
-              wrapper_html:{class:'span6'}, :prompt=>false,
-              label:'Du compte', label_html: {class: 'span2'}, :label_method=>:long_name,
-              input_html: {class: 'span10'} ,:required => true %>
 
-          <%= balance_f.input :to_account_id, :collection=>@period.accounts.order('number ASC'),
-              wrapper_html:{class:'span6'}, :prompt=>false,
-              label:'Au compte',  label_html: {class: 'span2'}, :label_method=>:long_name,
-              input_html: {class: 'span10'} ,:required => true %>
-  </div>
+
+      <div class="col-lg-12">
+        <%= balance_f.input :from_account_id, :collection=>@period.accounts.order('number ASC'),
+          wrapper_html:{class:'col-lg-6'}, :prompt=>false,
+            label:'Du compte', :label_method=>:long_name,
+            my_wrapper_html:{class:'col-lg-6'},
+            :required => true %>
+
+        <%= balance_f.input :to_account_id, :collection=>@period.accounts.order('number ASC'),
+          wrapper_html:{class:'col-lg-6'}, :prompt=>false,
+            label:'Au compte', :label_method=>:long_name,
+            my_wrapper_html:{class:'col-lg-6'},
+            :required => true %>
       </div>
- <div class="row-fluid">
-         <div class="span12">
-          <div class="form-actions offset1">
-            <%=  balance_f.button :submit, 'Afficher la balance', id: 'new_balance_button', class: "btn-primary span2 with_spinner" %>
-            </div>
-         </div>
-       </div>
-<% end %>
-</div>
+
+    </div>
+
+
+    <div class="form-actions">
+      <%=  balance_f.button :submit, 'Afficher la balance',
+        id: 'new_balance_button', class: "btn-primary col-lg-2 col-lg-offset-9 with_spinner" %>
+    </div>
+   
+  <% end %>
+ </div>

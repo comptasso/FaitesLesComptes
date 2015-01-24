@@ -1,15 +1,16 @@
 <%= f.error_notification %>
+<div class='form-inputs'>
 
-
-    <%= f.input(:start_date, input_html: {class: "span2"}, :discard_day => true,
+    <%= f.input(:start_date, as: :date, my_wrapper_html:{class:"col-lg-4"}, :discard_day => true,
       :hint=>'Premier jour du mois de ...' , :disabled=>@disable_start_date) %>
 
 
-    <%= f.input :close_date , input_html: {class: "span2"},:discard_day => true, :start_year => @begin_year,:end_year=>@end_year,
+    <%= f.input :close_date, as: :date, my_wrapper_html:{class:"col-lg-4"},
+      :discard_day => true, :start_year => @begin_year,:end_year=>@end_year,
       :hint=>'Dernier jour du mois de...' %>
 
-
+</div>
 
     <div class="form-actions">
-      <%= f.button :submit , :class=>"btn-primary span2", id:"period-button" %>
+      <%= f.button :submit , :class=>"btn-primary col-lg-2 col-lg-offset-2", id:"period-button" %>
     </div>

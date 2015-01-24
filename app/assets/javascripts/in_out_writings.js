@@ -11,7 +11,7 @@ jQuery(function () {
         $('.lines_table').dataTable({
             "sDom": "lfrtip",
             //   "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span8'i><'span4'p> >",
-            "sPaginationType": "bootstrap",
+            
             "bAutoWidth": false,
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"

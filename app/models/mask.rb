@@ -48,8 +48,8 @@ class Mask < ActiveRecord::Base
   
   
   
-  attr_accessible :comment, :title, :book_id, :ref, :narration, 
-    :destination_id, :nature_name, :mode, :amount, :counterpart
+#  attr_accessible :comment, :title, :book_id, :ref, :narration, 
+#    :destination_id, :nature_name, :mode, :amount, :counterpart
   
   validates :title, :organism_id, :book_id, presence:true
   validates :title, :format=>{with:NAME_REGEX}, :length=>{:within=>LONG_NAME_LENGTH_LIMITS}

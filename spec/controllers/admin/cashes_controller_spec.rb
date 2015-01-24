@@ -53,7 +53,9 @@ describe Admin::CashesController do
  
 
   describe "GET new" , wip:true do
-    before(:each) {@a.stub(:new).and_return(@cas = mock_model(Cash).as_new_record)}
+    before(:each) do 
+      @a.stub(:new).and_return(@cas = mock_model(Cash).as_new_record)
+    end
     
     it "assigns a new ca as @ca" do
       @o.stub('sectored?').and_return false
@@ -95,16 +97,19 @@ describe Admin::CashesController do
   describe "POST create" do
     describe "with valid params" do
       it "creates a new @ca" do
-        @a.should_receive(:new).with(valid_attributes).and_return(@c = mock_model(Cash).as_new_record)
+        @a.should_receive(:new).with(valid_attributes).
+          and_return(@c = mock_model(Cash).as_new_record)
         @c.should_receive(:save)
-        post :create,{ :organism_id=>@o.id.to_s, :cash => valid_attributes}, valid_session
+        post :create,{ :organism_id=>@o.id.to_s,
+          :cash => valid_attributes}, valid_session
        
       end
 
       it "assigns a newly created @ca as @@ca" do
         @a.stub(:new).and_return(@c = mock_model(Cash).as_new_record)
         @c.stub(:save).and_return true
-        post :create, {:organism_id=>@o.id.to_s, :cash => valid_attributes}, valid_session
+        post :create, {:organism_id=>@o.id.to_s,
+          :cash => valid_attributes}, valid_session
         assigns(:cash).should == @c
         
       end
@@ -112,7 +117,8 @@ describe Admin::CashesController do
       it "redirects to index @ca" do
         @a.stub(:new).and_return(@c = mock_model(Cash))
         @c.stub(:save).and_return true
-        post :create, {:organism_id=>@o.id.to_s,  :cash => valid_attributes}, valid_session
+        post :create, {:organism_id=>@o.id.to_s,
+          :cash => valid_attributes}, valid_session
         response.should redirect_to(admin_organism_cashes_url(@o))
       end 
     end
@@ -121,14 +127,16 @@ describe Admin::CashesController do
       it "assigns a newly created but unsaved @ca as @@ca" do
         @a.stub(:new).and_return(@c = mock_model(Cash).as_new_record)
         @c.stub(:save).and_return false
-        post :create, {:organism_id=>@o.id.to_s,  :cash => {}}, valid_session
+        post :create, {:organism_id=>@o.id.to_s,
+          :cash => {comment:'test'}}, valid_session
         assigns(:cash).should be_a_new(Cash)
       end
 
       it "re-renders the 'new' template" do
         @a.stub(:new).and_return(@c = mock_model(Cash).as_new_record)
         @c.stub(:save).and_return false
-        post :create,{:organism_id=>@o.id.to_s,  :cash => {}}, valid_session
+        post :create,{:organism_id=>@o.id.to_s, 
+          :cash => {comment:'test'}}, valid_session
         response.should render_template("new")
       end
     end
@@ -138,21 +146,24 @@ describe Admin::CashesController do
     describe "with valid params" do
       it "updates the requested @ca" do
         @a.stub(:find).with(@ca.id.to_s).and_return @ca
-        @ca.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update,{:organism_id=>@o.id.to_s,  :id => @ca.id, :cash => {'these' => 'params'}}, valid_session
+        @ca.should_receive(:update_attributes).with({'comment' => 'test'})
+        put :update,{:organism_id=>@o.id.to_s,
+          :id => @ca.id, :cash => {comment:'test'}}, valid_session
       end
 
       it "assigns the requested @ca as @@ca" do
         @a.stub(:find).with(@ca.id.to_s).and_return @ca
         @ca.stub(:update_attributes).and_return true
-        put :update,{:organism_id=>@o.id.to_s,  :id => @ca.id, :cash => valid_attributes}, valid_session
+        put :update,{:organism_id=>@o.id.to_s,
+          :id => @ca.id, :cash => valid_attributes}, valid_session
         assigns(:cash).should eq(@ca)
       end
 
       it "redirects to index" do
         @a.stub(:find).with(@ca.id.to_s).and_return @ca
         @ca.stub(:update_attributes).and_return true
-        put :update, {:organism_id=>@o.id.to_s, :id => @ca.id, :cash => valid_attributes}, valid_session
+        put :update, {:organism_id=>@o.id.to_s, 
+          :id => @ca.id, :cash => valid_attributes}, valid_session
         response.should redirect_to(admin_organism_cashes_url(@o))
       end
     end
@@ -161,7 +172,8 @@ describe Admin::CashesController do
       it "assigns the @ca as @@ca" do
         @a.stub(:find).with(@ca.id.to_s).and_return @ca
         @ca.stub(:update_attributes).and_return false
-        put :update, {:organism_id=>@o.id.to_s, :id => @ca.id.to_s, :cash => {}}, valid_session
+        put :update, {:organism_id=>@o.id.to_s, :id => @ca.id.to_s, 
+          :cash => {comment:'test'}}, valid_session
         assigns(:cash).should eq(@ca)
       end
 
@@ -169,7 +181,8 @@ describe Admin::CashesController do
         @a.stub(:find).with(@ca.id.to_s).and_return @ca
         @ca.stub(:update_attributes).and_return false
         Cash.any_instance.stub(:save).and_return(false)
-        put :update,{:organism_id=>@o.id.to_s,  :id => @ca.id.to_s, :cash => {}}, valid_session
+        put :update,{:organism_id=>@o.id.to_s,  :id => @ca.id.to_s,
+          :cash => {comment:'test'}}, valid_session
         response.should render_template("edit")
       end
     end

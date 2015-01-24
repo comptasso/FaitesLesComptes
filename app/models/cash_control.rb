@@ -14,7 +14,7 @@
 class CashControl < ActiveRecord::Base
   include Utilities::PickDateExtension
 
-  attr_accessible :date, :amount, :date_picker
+  # attr_accessible :date, :amount, :date_picker
    
   belongs_to :cash
 
@@ -32,7 +32,7 @@ class CashControl < ActiveRecord::Base
       p.start_date.months_since(mois.to_i).beginning_of_month, p.start_date.months_since(mois.to_i).end_of_month).order('date ASC')}
 
   scope :monthyear, lambda {|my| where('date >= ? AND date <= ?',
-     my.beginning_of_month, my.end_of_month).order('date ASC')}
+      my.beginning_of_month, my.end_of_month).order('date ASC')}
 
 
   before_update :lock_lines, :if => lambda { self.changed_attributes.include?("locked") && self.locked == true }
@@ -56,7 +56,7 @@ class CashControl < ActiveRecord::Base
   # en fonction de l'exercice en cours d'utilisation
   # 
   def min_date(period)
-      period.start_date
+    period.start_date
   end
 
   # renvoie la date maximum  que peut prendre un new cash_control
@@ -65,7 +65,7 @@ class CashControl < ActiveRecord::Base
   # On ne peut rentrer un cash_control pour une date postérieure au jour même
   #
   def max_date(period)
-     [period.close_date, Date.today].min
+    [period.close_date, Date.today].min
   end
 
 
@@ -79,19 +79,21 @@ class CashControl < ActiveRecord::Base
   #
   def previous
     if persisted?
-   previous_cash = cash.cash_controls.for_period(period).order('date ASC').where('date <= ?', date).limit(2).all rescue nil
-   return nil unless (previous_cash && previous_cash.size == 2)
-   return previous_cash.first
+      previous_cash = cash.cash_controls.for_period(period).order('date ASC').
+        where('date <= ?', date).limit(2).load rescue nil
+      return nil unless (previous_cash && previous_cash.size == 2)
+      return previous_cash.first
     else
-    return cash.cash_controls.for_period(period).order('date ASC').where('date <= ?', date).last rescue nil
+      return cash.cash_controls.for_period(period).order('date ASC').
+        where('date <= ?', date).last rescue nil
     end
- end
+  end
 
 
 
   private
 
-   def date_within_limit 
+  def date_within_limit 
     if period
       errors[:date] <<  'Date interdite' if self.date < min_date(period)
       errors[:date] << 'Date impossible' if self.date > max_date(period)
@@ -109,7 +111,7 @@ class CashControl < ActiveRecord::Base
     cash.compta_lines.before_including_day(self.date).unlocked.each {|l| l.lock } if locked
   end
 
-    # trouve l'exercice auquel appartient ce cash_control
+  # trouve l'exercice auquel appartient ce cash_control
   def period
     @period ||= cash.organism.find_period(date) rescue nil
   end

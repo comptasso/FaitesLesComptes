@@ -66,7 +66,10 @@ class Nomenclature < ActiveRecord::Base
     
     transaction do
       yml.each do |k,v|
-        f = folios.create(:name=>k, :title=>v[:title], sens:v[:sens])
+        
+        f = folios.new(:name=>k, :title=>v[:title], sens:v[:sens])
+        fill_sector_id(f, v[:sector]) if v[:sector]
+        f.save!
         f.fill_rubriks_with_position(v[:rubriks])
       end
     end
@@ -100,9 +103,11 @@ class Nomenclature < ActiveRecord::Base
   def fresh_values?
     return false unless job_finished_at 
     # donc un calcul a été fait mais est-il récent ?
-    derniere_date = ComptaLine.maximum(:updated_at) 
-    return true unless derniere_date # oui car pas d'écriture
-    fresh = derniere_date < job_finished_at 
+    derniere_ecriture = ComptaLine.maximum(:updated_at)
+    dernier_compte = Account.maximum(:updated_at)
+    
+    return true unless derniere_ecriture # oui car pas d'écriture
+    fresh = derniere_ecriture < job_finished_at &&  dernier_compte < job_finished_at 
     # une écriture au moins a été modifiée après la construction des données
     # du coup on met le champ job_finished_at à nil puisque c'est l'existence
     # d'une valeur qui va définir si le travail est fini.
@@ -131,6 +136,18 @@ class Nomenclature < ActiveRecord::Base
   # Utilité dans SheetsController pour vérifier que la nomenclature est cohérente
   def coherent?
     Utilities::NomenclatureChecker.new(self).valid?
+  end
+  
+  protected
+  
+  def trouve_sector_id(sector_name)
+    return nil unless sector_name
+    organism.sectors.where('name = ?', sector_name).first.id    
+  end
+  
+  def fill_sector_id(folio, sector_name)
+    return unless sector_name
+    folio.sector_id = trouve_sector_id(sector_name)
   end
   
   

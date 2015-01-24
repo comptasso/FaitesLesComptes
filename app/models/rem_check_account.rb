@@ -15,7 +15,7 @@ class RemCheckAccount < ActiveRecord::Base
     columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
   end
 
-  attr_accessible nil
+  # attr_accessible nil
 
   has_many :accounts, :as=> :accountable
 

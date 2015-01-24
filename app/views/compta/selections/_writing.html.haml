@@ -1,5 +1,5 @@
-.row-fluid.writing{:id=>dom_id(writing) }
-  .span12.title
+.row.writing{:id=>dom_id(writing) }
+  .col-lg-12.title
     .span2
       Jnl :
       = writing.book.title
@@ -9,7 +9,7 @@
     .span2
       Date :
       =l writing.date
-    .span4
+    .col-lg-4
       Libellé :
       =writing.narration
     .span1
@@ -24,9 +24,9 @@
 
 
   - writing.compta_lines.each do |cl|
-    .row-fluid
-      .span12.compta_lines
-        .span6{:class=>class_style(cl) }
+    .row
+      .col-lg-12.compta_lines
+        .col-lg-6{:class=>class_style(cl) }
           =cl.account.long_name
-        .span3.numeric=debit_credit cl.debit
-        .span3.numeric=debit_credit cl.credit
+        .col-lg-3.numeric=debit_credit cl.debit
+        .col-lg-3.numeric=debit_credit cl.credit

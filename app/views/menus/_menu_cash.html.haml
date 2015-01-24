@@ -1,4 +1,9 @@
-%li.nav-header.no-link= link_to menu_cash.name, cash_cash_lines_path(menu_cash)
-%li= link_to 'Afficher', cash_cash_lines_path(menu_cash)
-%li= link_to 'Listes contrôles', cash_cash_controls_path(menu_cash) if menu_cash.cash_controls.any?
-%li= link_to 'Ajouter controle ', new_cash_cash_control_path(menu_cash)
+%li.dropdown-header.no-link{role:'presentation'}
+  = link_to menu_cash.name, cash_cash_lines_path(menu_cash), {role:'menuitem'}
+%li{role:'presentation'}
+  = link_to 'Afficher', cash_cash_lines_path(menu_cash), {role:'menuitem'}
+%li{role:'presentation'}
+  = link_to 'Listes contrôles', cash_cash_controls_path(menu_cash),
+  {role:'menuitem'} if menu_cash.cash_controls.any?
+%li{role:'presentation'}
+  = link_to 'Ajouter controle ', new_cash_cash_control_path(menu_cash), {role:'menuitem'}

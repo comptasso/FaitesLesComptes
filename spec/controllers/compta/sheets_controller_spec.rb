@@ -146,7 +146,7 @@ describe Compta::SheetsController do
       @p.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
       @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
       Jobs::SheetsPdfFiller.should_receive(:new).and_return double(Object, perform:'delayed_job')
-      get :produce_pdf, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>'pdf'}, valid_session
+      get :produce_pdf, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>:js}, valid_session
     end
     
     it 'sinon appelle Jobs::SheetPdfFiller avec l id du folio' do
@@ -154,7 +154,7 @@ describe Compta::SheetsController do
       @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
       # TODO faire avec with pour tester également ce qu'on interroge
       Jobs::SheetPdfFiller.should_receive(:new).and_return double(Object, perform:'delayed_job')
-      get :produce_pdf, {:id=>1, :format=>'pdf'}, valid_session
+      get :produce_pdf, {:id=>1, :format=>:js}, valid_session
     end
     
     

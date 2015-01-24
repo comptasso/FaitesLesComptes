@@ -1,5 +1,5 @@
 
-  <ul class="nav nav-tabs" id="menu_general">
+  <ul class="nav navbar-nav" id="main_nav">
    
     
     <!--TODO normalement dans ce menu (de la zone Public), il ne peut pas y avoir de new_record? -->
@@ -7,7 +7,7 @@
 
 <li class="dropdown <%= 'active' if controller.controller_name =='in_out_writings' %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
-  <%= content_tag(:ul, :class => "dropdown-menu") do %>
+  <%= content_tag(:ul, :class => "dropdown-menu", :role=>"menu") do %>
     <%= render :partial=>'menus/menu_book', :collection=>@organism.in_out_books, :spacer_template=>'menus/divider' %>
     
 
@@ -17,10 +17,10 @@
 
 <li id="menu_transfer" class="dropdown <%= 'active' if controller.controller_name =='transfers' || controller.controller_name == 'writing_masks' %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">SAISIE GUIDEE<b class="caret"></b></a>
-  <ul class='dropdown-menu'>
+  <%= content_tag(:ul, :class => "dropdown-menu", :role=>"menu") do %>
      <%= render :partial=>'menus/transfer' %>
      <%= render :partial=>'menus/guide' %>
-  </ul>
+  <% end %>
  
   
 </li>
@@ -29,7 +29,7 @@
 <% if @organism.bank_accounts.any?  %>
 <li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">BANQUES<b class="caret"></b></a>
-  <%= content_tag(:ul, :class => "dropdown-menu") do %>
+  <%= content_tag(:ul, :class => "dropdown-menu", :role=>"menu") do %>
     <%= render :partial=>'menus/menu_bank', :collection=>@organism.bank_accounts, :spacer_template=>'menus/divider' %>
   <% end %>
 </li>
@@ -38,7 +38,7 @@
 <% if @organism.cashes.any? %>
 <li class="dropdown <%= 'active' if controller.controller_name =='cash_lines'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">CAISSES<b class="caret"></b></a>
-  <%= content_tag(:ul, :class => "dropdown-menu") do %>
+  <%= content_tag(:ul, :class => "dropdown-menu", :role=>"menu") do %>
     <%= render :partial=>'menus/menu_cash', :collection=>@organism.cashes, :spacer_template=>'menus/divider' %>
   <% end %>
 </li>
@@ -47,24 +47,35 @@
 
 <li class="dropdown <%= 'active' if controller.controller_name =='natures'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">ANALYSES<b class="caret"></b></a>
-  <ul class="dropdown-menu">
-    <li class="nav-header">
-      <%= link_to 'Par Nature', organism_period_natures_path(@organism,@period), title: 'Analyser les recettes et dépenses par nature'  %>
+  <%= content_tag(:ul, :class => "dropdown-menu", :role=>"menu") do %>
+    <li class="dropdown-header" role='presentation'>
+      <%= link_to 'Par Nature', organism_period_natures_path(@organism,@period),
+        title:'Analyser les recettes et dépenses par nature',
+        role:'menuitem' %>
     </li>
-  </ul>
+  <% end %>
 </li>
 
 <li class="dropdown <%= 'active' if controller.controller_name =='periods'  %>">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        EXERCICES
-        <b class="caret"></b>
-      </a>
-      <ul class="dropdown-menu">
-          <%  @organism.periods.each do |p| %>
-             <li><%= link_to_unless(current_period?(p), p.long_exercice, change_organism_period_path(@organism, p)) {|name| content_tag(:span, :class=>'disable') {name} } %></li>
-          <% end %>
-        </ul>
-      </li>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    EXERCICES
+    <b class="caret"></b>
+  </a>
+  <%= content_tag(:ul, :class => "dropdown-menu", :role=>"menu") do %>
+    <%  @organism.periods.each do |p| %>
+        <li role='presentation'>
+      <%= link_to_unless(current_period?(p), p.long_exercice, 
+        change_organism_period_path(@organism, p), {role:'menuitem'}) do |name|
+          content_tag(:span, :class=>'disable') {name} 
+        end %>
+           
+        </li>
+     <% end %>
+  <% end %>
+</li>
+
+
+
 <% end %>
 
 <!-- pas très bien nommé, la suite affiche les icones -->

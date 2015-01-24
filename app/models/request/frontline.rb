@@ -54,12 +54,12 @@ module Request
   column :adherent_payment_id, :integer
   column :adherent_member_id, :integer
   
-  attr_accessible :id, :writing_type, :nature_name, :book_id,     
-   :date, :ref, :narration, :compta_line_id, :destination_name, :debit, :credit,
-   :payment_mode, 
-   :acc_number, :acc_title, :bel_id, :support_check_id, :support_locked, 
-   :cl_locked, 
-   :adherent_payment_id, :adherent_member_id
+#  attr_accessible :id, :writing_type, :nature_name, :book_id,     
+#   :date, :ref, :narration, :compta_line_id, :destination_name, :debit, :credit,
+#   :payment_mode, 
+#   :acc_number, :acc_title, :bel_id, :support_check_id, :support_locked, 
+#   :cl_locked, 
+#   :adherent_payment_id, :adherent_member_id
     
   # TODO attention : cette requête fonctionne tant que bridge ne renvoie
   # qu'à des adhérents. En cas de nouveau module, il faudra gérer le type 

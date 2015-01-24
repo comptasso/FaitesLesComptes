@@ -2,7 +2,7 @@
 
 class CheckDepositsController < ApplicationController
 
-  before_filter :find_bank_account    
+  before_filter :find_bank_account     
   
   # GET /check_deposits
   def index
@@ -47,8 +47,9 @@ pour un montant de #{virgule @total_lines_credit} €"
   # POST /check_deposits.json
   def create
     #  @bank_account a été créé par le before_filter
-    @check_deposit = @bank_account.check_deposits.new(params[:check_deposit])
+    @check_deposit = @bank_account.check_deposits.new(check_deposit_params)
     fill_author(@check_deposit)
+    logger.debug @check_deposit.errors.messages unless @check_deposit.valid?
     if @check_deposit.save     
       redirect_to  organism_bank_account_check_deposits_url,
         notice: "La remise de chèques a été créée ; pièce n° #{@check_deposit.writing_id}"
@@ -65,7 +66,7 @@ pour un montant de #{virgule @total_lines_credit} €"
     # la modification peut avoir pour objet de changer de compte
     @check_deposit = CheckDeposit.find(params[:id])
     fill_author(@check_deposit)
-    if @check_deposit.update_attributes(params[:check_deposit])
+    if @check_deposit.update_attributes(check_deposit_params)
       redirect_to  organism_bank_account_check_deposits_url, notice: 'La remise de chèque a été modifiée.'
     else
       render action: "edit"
@@ -87,6 +88,11 @@ pour un montant de #{virgule @total_lines_credit} €"
   def find_bank_account
     @bank_account = BankAccount.find(params[:bank_account_id])
     @sector = @bank_account.sector
+  end
+  
+  def check_deposit_params
+    params.require(:check_deposit).permit(:deposit_date, :deposit_date_picker, 
+      {check_ids: []}, :bank_account_id)
   end
   
 end

@@ -1,3 +1,4 @@
-%li.nav-header.no-link= link_to menu_book.title, '#'
-%li= link_to 'Afficher', book_in_out_writings_path(menu_book)
-%li= link_to 'Ecrire', new_book_in_out_writing_path(menu_book)  if  @organism.can_write_line? && @period.open
+%li.dropdown-header.no-link{role:'presentation'}= link_to menu_book.title, '#'
+%li= link_to 'Afficher', book_in_out_writings_path(menu_book), {role:'menuitem'}
+%li= link_to 'Ecrire', new_book_in_out_writing_path(menu_book),
+  {role:'menuitem'}  if @organism.can_write_line? && @period.open

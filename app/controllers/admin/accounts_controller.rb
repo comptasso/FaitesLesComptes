@@ -26,7 +26,7 @@ class Admin::AccountsController < Admin::ApplicationController
   # POST /compta/accounts
   # POST /compta/accounts.json
   def create
-    @account = @period.accounts.new(params[:account])
+    @account = @period.accounts.new(account_params)
 
     respond_to do |format|
       if @account.save
@@ -51,7 +51,7 @@ class Admin::AccountsController < Admin::ApplicationController
 # on ne vérifie pas ici la cohérence de la nomenclature car on ne peut modifier le numéro
 # de compte
     respond_to do |format|
-      if @account.update_attributes(params[:account])
+      if @account.update_attributes(account_params)
         format.html { redirect_to admin_period_accounts_path(@period), notice: 'Le compte a été mis à jour' }
         format.json { head :ok }
       else
@@ -80,8 +80,14 @@ class Admin::AccountsController < Admin::ApplicationController
   
 protected
 
-# collect_errors est défini dans ApplicationController
-  
+# pour info, collect_errors est défini dans ApplicationController
+
+  def account_params
+    params.require(:account).
+      permit(:number, :title, :used, :sector_id, :period_id)
+  end
+
+
 
   
 end

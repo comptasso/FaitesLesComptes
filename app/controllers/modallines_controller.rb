@@ -7,8 +7,8 @@ class ModallinesController < ApplicationController
   def create
     @bank_extract=BankExtract.find(params[:bank_extract_id])
     @bank_account = @bank_extract.bank_account
-    complete_params
-    @in_out_writing = InOutWriting.new(params[:in_out_writing])
+    # complete_params
+    @in_out_writing = InOutWriting.new(complete_params)
     # nécessaire pour pouvoir refaire le formulaire
     @line = @in_out_writing.compta_lines.first
     @counter_line = @in_out_writing.compta_lines.last
@@ -35,11 +35,19 @@ class ModallinesController < ApplicationController
   # En même temps, complète l'attribut account_id avec le numéro de compte correspondant
   # à l'exercice.
   def complete_params
-    param =  params[:in_out_writing][:compta_lines_attributes]
+    p = modalline_params
+    param =  p[:compta_lines_attributes]
     param['1'][:account_id] = @bank_account.current_account(@period).id
     param['1'][:credit] = param['0'][:debit] || 0
     param['1'][:debit]= param['0'][:credit] || 0
+    p
     
+  end
+  
+  def modalline_params
+    params.require(:in_out_writing).permit(:book_id, :date_picker, :narration, 
+      compta_lines_attributes:[:account_id, :nature_id, :debit, :credit, 
+        :payment_mode, :destination_id])
   end
 
 end

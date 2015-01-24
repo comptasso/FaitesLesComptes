@@ -15,14 +15,14 @@ class Compta::WritingsController < Compta::ApplicationController
   def index
     # pas de sélection par mois pour la AnBook
     if @book.type == 'AnBook' 
-       params[:mois] = 'tous'
-       params[:an] = nil
+      params[:mois] = 'tous'
+      params[:an] = nil
     end
     if params[:mois]
       find_writings
     else
-       my = MonthYear.from_date(@period.guess_month)
-       redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year) and return
+      my = MonthYear.from_date(@period.guess_month)
+      redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year) and return
     end
     send_export_token
     
@@ -80,7 +80,7 @@ class Compta::WritingsController < Compta::ApplicationController
   # POST /writings.json
   def create
     params[:writing][:date_picker] ||=  l(@period.start_date)
-    @writing = @book.writings.new(params[:writing])
+    @writing = @book.writings.new(compta_writing_params)
     fill_author(@writing)
     respond_to do |format|
       if @writing.save
@@ -92,7 +92,7 @@ class Compta::WritingsController < Compta::ApplicationController
           else
             redirect_to new_compta_book_writing_url(@book)
           end
-           }
+        }
       else
         format.html { render action: "new" }
       end
@@ -105,12 +105,12 @@ class Compta::WritingsController < Compta::ApplicationController
     @writing = Writing.find(params[:id])
     fill_author(@writing)
     respond_to do |format|
-      if @writing.update_attributes(params[:writing])
-         my = MonthYear.from_date(@writing.date)
-         format.html { redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year), notice: 'Ecriture mise à jour.' }
-     else
+      if @writing.update_attributes(compta_writing_params)
+        my = MonthYear.from_date(@writing.date)
+        format.html { redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year), notice: 'Ecriture mise à jour.' }
+      else
         format.html { render action: "edit" }
-     end
+      end
     end
   end
 
@@ -171,6 +171,16 @@ class Compta::WritingsController < Compta::ApplicationController
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
     Delayed::Job.enqueue Jobs::ComptaBookPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, from_date:@from_date, to_date:@to_date})
+  end
+  
+  def compta_writing_params
+    
+    params.require(:writing).permit(:date, :date_picker, :narration, :ref,
+      :book_id, :bridge_id, :bridge_type,
+      compta_lines_attributes: [:debit, :credit, :writing_id, :account_id, 
+        :nature, :nature_id, :destination_id, 
+        :check_number, :payment_mode, :check_deposit_id] )  
+    
   end
 
 

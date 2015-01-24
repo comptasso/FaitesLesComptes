@@ -17,9 +17,37 @@ html, body {
 }
 
 
+.navbar {
+  padding-left: 15px;
+  padding-right: 15px;
+}
 
 
-.brand {
+
+.navbar .container-fluid {
+  background-color: #184b18;
+    background-repeat: repeat-x;
+    border: 1px solid #112911;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+    min-height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+  margin-bottom: 0;
+}
+
+.navbar .home .nav > .active > a, .navbar .home .nav > .active > a:hover,
+.navbar .home .nav > .active > a:focus {
+    background-color: #1b431b;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125) inset;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
+
+.home {
+  display: block;
   background-image: image-url("sigma.png");
   background-repeat: no-repeat;
   background-position: 3px 3px;
@@ -28,32 +56,38 @@ html, body {
   a:visited {
     color: #bbbbbb;
   }
-}
-
-.navbar .brand {
-  padding-top:4px;
+  padding:4px;
   padding-bottom: 4px;
-  height: 2em;
+  padding-left: 48px;
+  height: 48px;
+  font-size: 1.5em;
+  
+  
 }
 
-.navbar-inner {
-  margin-bottom: 4px;
-}
+
 
 #login_logout {
   margin-top: 4px;
+  color: #bbb;
   font-size: 50%;
   span {
     font-weight: bold;
   }
+  
   a {
     color: #fff; 
   }
 }
 
+#main_nav {
+  background-color: #bfa;
+  width: 100%;
+}
 
 
 .container-fluid {
+  
   min-height: 100%;
   height: auto !important;
   height: 100%;

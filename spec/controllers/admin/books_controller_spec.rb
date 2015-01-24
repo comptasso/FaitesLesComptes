@@ -91,22 +91,24 @@ describe Admin::BooksController do
 
     describe "with valid params" do
       it "updates the requested @bo" do
-        
-        @bo.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update,{:organism_id=>@o.id.to_s,  :id => @bo.id, :book => {'these' => 'params'}}, valid_session
+        @bo.should_receive(:update_attributes).with({'description' => 'test'})
+        put :update,{:organism_id=>@o.id.to_s,
+          :id => @bo.id, :book => {description:'test'}}, valid_session
       end
 
       it "assigns the requested @bo as @@bo" do
         
         @bo.stub(:update_attributes).and_return true
-        put :update,{:organism_id=>@o.id.to_s,  :id => @bo.id, :book => valid_attributes}, valid_session
+        put :update,{:organism_id=>@o.id.to_s,
+          :id => @bo.id, :book => valid_attributes}, valid_session
         assigns(:book).should eq(@bo)
       end
 
       it "redirects to index" do
         
         @bo.stub(:update_attributes).and_return true
-        put :update, {:organism_id=>@o.id.to_s, :id => @bo.id, :book => valid_attributes}, valid_session
+        put :update, {:organism_id=>@o.id.to_s,
+          :id => @bo.id, :book => valid_attributes}, valid_session
         response.should redirect_to(admin_organism_books_url(@o))
       end
     end
@@ -115,7 +117,8 @@ describe Admin::BooksController do
       it "assigns the @bo as @@bo" do
         
         @bo.stub(:update_attributes).and_return false
-        put :update, {:organism_id=>@o.id.to_s, :id => @bo.id.to_s, :book => {}}, valid_session
+        put :update, {:organism_id=>@o.id.to_s,
+          :id => @bo.id.to_s, :book => {description:'test'}}, valid_session
         assigns(:book).should eq(@bo)
       end
 
@@ -123,7 +126,8 @@ describe Admin::BooksController do
        
         @bo.stub(:update_attributes).and_return false
         Cash.any_instance.stub(:save).and_return(false)
-        put :update,{:organism_id=>@o.id.to_s,  :id => @bo.id.to_s, :book => {}}, valid_session
+        put :update,{:organism_id=>@o.id.to_s,
+          :id => @bo.id.to_s, :book => {description:'test'}}, valid_session
         response.should render_template("edit")
       end
     end

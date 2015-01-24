@@ -45,7 +45,7 @@ class Admin::BooksController < Admin::ApplicationController
   def update
     @book = Book.find(params[:id])
     respond_to do |format|
-      if @book.update_attributes(params[:book])
+      if @book.update_attributes(book_params)
         format.html { redirect_to admin_organism_books_url(@organism) , notice: 'Le livre a été mis à jour.' }
         format.json { head :ok }
       else
@@ -67,5 +67,9 @@ class Admin::BooksController < Admin::ApplicationController
 #    end
 #  end
 
- 
+  private 
+  
+  def book_params
+    params.require(:book).permit(:title, :description, :abbreviation)
+  end
 end

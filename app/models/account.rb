@@ -21,7 +21,7 @@ class Account < ActiveRecord::Base
   include Utilities::Sold
   include Comparable
 
-  attr_accessible :number, :title, :used, :sector_id
+  # attr_accessible :number, :title, :used, :sector_id
 
   belongs_to :period
   has_one :organism, through: :period
@@ -55,14 +55,14 @@ class Account < ActiveRecord::Base
   validate :sectorise_for_67
  
 
-  default_scope order('accounts.number ASC')
+  default_scope -> {order('accounts.number ASC')}
 
   scope :classe, lambda {|i| where('number LIKE ?', "#{i}%").order('number ASC')}
-  scope :classe_6, classe(6)
-  scope :classe_7, classe(7)
-  scope :classe_6_and_7, where('number LIKE ? OR number LIKE ?', '6%', '7%')
-  scope :classe_1_to_5, where('number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ?', '1%', '2%', '3%', '4%', '5%').order('number ASC')
-  scope :rem_check_accounts, where('number = ?', '511')
+  scope :classe_6, ->{classe(6)}
+  scope :classe_7, ->{classe(7)}
+  scope :classe_6_and_7, ->{where('number LIKE ? OR number LIKE ?', '6%', '7%')}
+  scope :classe_1_to_5, ->{where('number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ?', '1%', '2%', '3%', '4%', '5%').order('number ASC')}
+  scope :rem_check_accounts, -> {where('number = ?', '511')}
   
   # Liste tous les comptes pour un exercice donné. Cette requête permet de limiter 
   # grandement le nombre d'interrogations de la base dans l'affichage de la vue index
@@ -100,8 +100,8 @@ LEFT OUTER JOIN sectors ON (sectors.id = accounts.sector_id)").
       init_sold(dc)
     else
       # TODO voir si super ne serait pas juste suffisant
-      BigDecimal.new(Writing.sum(dc, :select=>'debit, credit',
-          :conditions=>['date <= ? AND account_id = ?', date, id], :joins=>:compta_lines))
+      BigDecimal.new(Writing.joins(:compta_lines).select([:debit, :credit]).
+          where('date <= ? AND account_id = ?', date, id).sum(dc))
     end
   end
   
@@ -168,11 +168,12 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
   end
 
   # Donne le montant d'ouverture du compte à partir du livre d'A nouveau
+  # L'argument dc peut être soit 'debit', soit 'credit'.
   def init_sold(dc)
     anb = period.organism.an_book
-    BigDecimal.new(Writing.sum(dc, :select=>dc,
-        :conditions=>['book_id = ? AND account_id = ?', anb.id, id],
-        :joins=>:compta_lines))
+    BigDecimal.new(Writing.joins(:compta_lines).select(dc).
+        where('book_id = ? AND account_id = ?', anb.id, id).sum(dc))
+        
   end
 
   # Montant du solde d'à nouveau débit

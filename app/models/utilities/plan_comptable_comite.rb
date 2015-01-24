@@ -44,6 +44,8 @@ class Utilities::PlanComptableComite < Utilities::PlanComptable
     
   end
   
+  protected
+  
   def find_sector_id(name)
    
     case name

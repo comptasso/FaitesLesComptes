@@ -1,5 +1,5 @@
 # classe destinée à permettre un affichage inline des radio buttons
-# bootstrap indique que le lable doit avoir la classe inline
+# bootstrap indique que le label doit avoir la classe radio-inline
 # mais simple_form as: radio_buttons donne la classe radio qui ne semble pas
 # pouvoir être complétée facilement.
 #
@@ -8,12 +8,12 @@
 
 class InlineRadioButtonsInput < SimpleForm::Inputs::CollectionRadioButtonsInput
   def item_wrapper_class
-    "radio inline"
+    "radio-inline"
   end
 
   # on surcharge également input car @builder.send de radio buttons
   # ne trouve pas la collection_radio_buttons
-  def input
+  def input(wrapper_parameters)
     label_method, value_method = detect_collection_methods
 
     @builder.send("collection_radio_buttons",

@@ -38,7 +38,7 @@ class Compta::ListingsController < Compta::ApplicationController
       redirect_to(new_compta_period_listing_url(@period),
         notice:flash[:notice]) and return
     end
-    @listing = Compta::Listing.new(params[:compta_listing])
+    @listing = Compta::Listing.new(listing_params)
     @listing.account_id = @account.id 
      
      
@@ -79,7 +79,7 @@ class Compta::ListingsController < Compta::ApplicationController
   # POST periods/listing/create
   # on arrive sur cette actions lorsque l'on remplit le formulaire venant de new
   def create
-    @listing = Compta::Listing.new(params[:compta_listing])
+    @listing = Compta::Listing.new(listing_params)
     @account = @listing.account
     if @listing.valid?
       respond_to do |format|
@@ -129,6 +129,11 @@ class Compta::ListingsController < Compta::ApplicationController
     @listing_sold_at = @listing_cumulated_credit_at - 
       @listing_cumulated_debit_at
     
+  end
+  
+  def listing_params
+    params.require(:compta_listing).permit(:from_date_picker, :to_date_picker,
+      :from_date, :to_date, :account_id)
   end
  
 

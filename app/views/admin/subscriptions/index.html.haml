@@ -21,6 +21,6 @@
         %td= date_de_fin(sub)
         %td
           = icon_to 'modifier.png', edit_admin_organism_subscription_path(@organism, sub)
-          = icon_to 'supprimer.png', [:admin, @organism, sub], :confirm=>'Etes vous sûr ?', :method => :delete
+          = icon_to 'supprimer.png', [:admin, @organism, sub], data: {confirm: 'Etes vous sûr ?'} , :method => :delete
           
 

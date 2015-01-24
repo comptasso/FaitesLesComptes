@@ -18,7 +18,7 @@ class ImportedBelsController < ApplicationController
     @imported_bel = ImportedBel.find params[:id]
 
     respond_to do |format|
-      if @imported_bel.update_attributes(params[:imported_bel])
+      if @imported_bel.update_attributes(imported_bel_params)
         format.html { redirect_to(@user, :notice => 'User was successfully updated.') }
         format.json { respond_with_bip(@imported_bel) }
       else
@@ -104,6 +104,12 @@ class ImportedBelsController < ApplicationController
     @border_closed = false if @imported_bels.empty?
     @border_closed = @imported_bels.
       collect {|ibel| ibel.importable?(@correct_range_date)}.uniq == [false] 
+  end
+  
+  def imported_bel_params
+    params.require(:imported_bel).permit(:date, :writing_date, 
+      :writing_date_picker, :narration, :debit, :credit, :position, 
+    :bank_account_id, :ref, :nature_id, :destination_id, :payment_mode, :cat)
   end
   
 end

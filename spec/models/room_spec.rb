@@ -134,21 +134,21 @@ describe Room  do
     it 'la base est en retard si organism_migration est inférieure à room' do
       omv = Organism.migration_version
       subject.stub(:look_for).and_return omv
-      Room.should_receive(:jcl_last_migration).and_return(omv+1)
+      Room.should_receive(:migrator_current_version).and_return(omv+1)
       subject.relative_version.should == :late_migration
     end
     
     it 'en phase si les deux migrations sont égales' do
       omv = Organism.migration_version
       subject.stub(:look_for).and_return omv
-      Room.stub(:jcl_last_migration).and_return(omv)
+      Room.stub(:migrator_current_version).and_return(omv)
       subject.relative_version.should == :same_migration
     end
     
     it 'en avance si organism_migration est supérieure à celle de room' do
       omv = Organism.migration_version
       subject.stub(:look_for).and_return omv
-      Room.stub(:jcl_last_migration).and_return(omv-1)
+      Room.stub(:migrator_current_version).and_return(omv-1)
       subject.relative_version.should == :advance_migration
     end
 
@@ -230,12 +230,12 @@ describe Room  do
   describe 'version_update'  do 
 
     it 'version_update? est capable de vérifier la similitude des versions' do
-      ActiveRecord::Migrator.any_instance.stub(:pending_migrations).and_return ['quelquechose']
+      ActiveRecord::Migrator.stub(:needs_migration?).and_return true
       Room.should_not be_version_update
     end
 
     it 'version_update? retourne true s il n y a pas de migration en attente' do
-      ActiveRecord::Migrator.any_instance.stub(:pending_migrations).and_return []
+      ActiveRecord::Migrator.stub(:needs_migration?).and_return false
       Room.should be_version_update
     end
 

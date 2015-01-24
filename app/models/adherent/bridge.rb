@@ -11,7 +11,7 @@
 # est dépendante de l'exercice.
 #
 class Adherent::Bridge < ActiveRecord::Base
-  attr_accessible :bank_account_id, :cash_id, :destination_id, :income_book_id, :nature_name
+  # attr_accessible :bank_account_id, :cash_id, :destination_id, :income_book_id, :nature_name
   
   belongs_to :organism
   belongs_to :bank_account

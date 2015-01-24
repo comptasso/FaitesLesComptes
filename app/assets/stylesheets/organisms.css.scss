@@ -2,90 +2,96 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .public_organisms {
-
-    // mise en forme des data_table
-
-
-    /*    .top_table {
+  
+  // mise en forme des data_table
+  
+  
+  /*    .top_table {
     clear: both;
     }
     table.data_table tbody {
     clear: both;
-    }*/
-
-    pre {  // pre est utilisé pour afficher les informations de debuggage
-        clear: both;
+  }*/
+  
+  pre {  // pre est utilisé pour afficher les informations de debuggage
+    clear: both;
+  }
+  
+  td.jqplot-display-legend {
+    font-size: 8pt;
+  }
+  
+  .numeric {
+    text-align: right;
+    padding: 3px 10px;
+  }
+  
+  .row-pave{
+    margin-top :5px;
+    margin-bottom: 10px;
+  }
+  
+  .pave {
+    display: inline-block;
+    
+    h3 {
+      margin: 0px;
+      padding: 3px 10px;
+      border-radius: 4px 4px 0px 0px;
     }
-
-    td.jqplot-display-legend {
-        font-size: 8pt;
+    p {
+      display: block;
+      margin: 5px;
     }
-
-    .numeric {
-        text-align: right;
-        padding: 3px 10px;
+    .bar_graph, .line_graph {
+      border-radius: 0px 0px 4px 4px;
+      background-color: #DDD;
     }
- 
-    .pave {
-        display: inline-block;
-
-        h3 {
-            margin: 0px;
-            padding: 3px 10px;
-            border-radius: 4px 4px 0px 0px;
-        }
-        p {
-            display: block;
-            margin: 5px;
-        }
-        .bar_graph, .line_graph {
-            border-radius: 0px 0px 4px 4px;
-            background-color: #DDD;
-        }
-        .bar_monthly_graphic, .jqplot-xaxis, .jqplot-yaxis {
-            border-radius: 0px 0px 4px 4px;
-        }
-
-        a.icon_menu {
-            float: right;
-        }
-
+    .bar_monthly_graphic, .jqplot-xaxis, .jqplot-yaxis {
+      border-radius: 0px 0px 4px 4px;
     }
-    .income_book h3{
-        background-color: green;
+    
+    a.icon_menu {
+      float: right;
     }
-
-    .outcome_book h3{
-        background-color: pink;
+    
+  }
+  .income_book h3{
+    background-color: green;
+  }
+  
+  .outcome_book h3{
+    background-color: pink;
+  }
+  
+  .bank_account h3 {
+    background-color: #A19B9E;
+  }
+  
+  .cash h3 {
+    background-color: lightblue;
+  }
+  
+  .sector h3 {
+    background-color: goldenrod;
+  }
+  
+  .message {
+    h3 {
+      background-color : khaki;
+      border-radius: 4px 4px 4px 4px;
+      padding-left:10px;
     }
-
-    .bank_account h3 {
-        background-color: #A19B9E;
+    div {
+      background-color: #EEE;
+      padding: 10px 0px 5px 0px;
+      
+      li {
+        .icon_menu { float: none;}
+      }
     }
-
-    .cash h3 {
-        background-color: lightblue;
-    }
-
-    .sector h3 {
-        background-color: goldenrod;
-    }
-
-    .message {
-        h3 {
-            background-color : khaki;
-            border-radius: 4px 4px 4px 4px;
-        }
-        div {
-            background-color: #EEE;
-            padding: 10px 0px 5px 0px;
-
-            li {
-                .icon_menu { float: none;}
-            }
-        }
-
-    }
-
-
+    
+  }
+  
+  
 }

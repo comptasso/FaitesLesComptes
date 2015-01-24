@@ -1,57 +1,80 @@
 
 
-<div class="inputs" id="form_bank_extract_line" >
+<div class="modal-body" id="form_bank_extract_line" >
 
-  <%=  simple_form_for(@in_out_writing, :url=>bank_extract_modallines_path(@bank_extract), :method=>:post, :remote=>true,  :html=> {class: 'form-horizontal'}) do |f| %>
+<%=  simple_form_for(@in_out_writing,
+  :url=>bank_extract_modallines_path(@bank_extract),
+  :method=>:post, :remote=>true,
+  :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form) do |f| %>
 
-    <%= f.error_notification %>
-  
-  
-   <%= f.input :livre, include_blank:false, required:true do %>
-      <%= f.select :book_id,
-        @organism.in_out_books.map{ |b| [b.title, b.id, {'data-type'=> b.type, 'data-id'=>b.id}] } %>
- <% end %>
-   
-  
+<%= f.error_notification %>
 
-    <%= f.input :date_picker, :label=> 'Date', input_html: { class: "span4", date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
-    <%= f.input :narration,  :label=>'Libellé ', input_html: {class: "span10" } %>
-    <%= f.input :ref, label:'Référence',  input_html: {class: "span4" }  %>
-    <%= f.fields_for :compta_lines, @line do |build| %>
-        <%= build.input :nature_id, required:true  do %>
-          <%=  build.select :nature_id, modal_nature_options(@period), :prompt => "Pour quoi ?" %>
+  <div class='form-inputs'>
+<%= f.input :livre, include_blank:false, required:true, 
+  my_wrapper_html:{class:'col-lg-6'} do %>
+  <%= f.select :book_id,
+  @organism.in_out_books.map{ |b| [b.title, b.id, {'data-type'=> b.type, 'data-id'=>b.id}] },
+   {}, {'class'=>'select form-control'}%>
+<% end %>
+
+
+
+<%= f.input :date_picker, :label=> 'Date', 
+    my_wrapper_html:{class:'col-lg-6'},
+    input_html: {date_min:@period.start_date, date_max:@period.close_date},
+    :required => true, :as=>:date_picker %>
+<%= f.input :narration,  :label=>'Libellé ',
+  my_wrapper_html:{class:'col-lg-10'} %>
+<%= f.input :ref, label:'Référence', my_wrapper_html:{class:'col-lg-4'}  %>
+<%= f.fields_for :compta_lines, @line, :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form do |build| %>
+  <%= build.input :nature_id, required:true, my_wrapper_html:{class:'col-lg-6'}  do  %>
+    <%=  build.select(:nature_id, modal_nature_options,
+        {:prompt => "Pour quoi ?"},
+        {'class'=>'select form-control'}) %>
+    <% end %>
+
+<%=  build.association :destination,
+  :collection =>@organism.destinations.order('name ASC').to_a,
+  :label=>'Destinat°',
+  :prompt => "Pour qui ?" , my_wrapper_html:{class:'col-lg-6'} %>
+
+  <%=  build.input :debit ,   my_wrapper_html:{class:'col-lg-6'},
+      input_html: {class: "number",
+      :type=>'text', value: two_decimals(@line.debit) }  %>
+ <%=  build.input :credit, my_wrapper_html:{class:'col-lg-6'},
+     input_html: {class: "number",
+     :type=>'text', value: two_decimals(@line.credit) } %>
+
+
+    <% end %>
+    <%= f.fields_for :compta_lines, @counter_line, :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form do |build| %>
+
+      <%= build.input :payment_mode , collection: PAYMENT_MODES,
+        :prompt=>'Mode de réglement', disabled: 'Espèces',
+        :required=>true,  my_wrapper_html: {class: "col-lg-6"} %>
+
+        <%= build.association :account, :label=> 'Contrepartie',
+          my_wrapper_html: {class: "col-lg-6"}, :collection=>[@counter_line.account],
+            :label_method=>:title, :disabled=>true, 
+            :include_blank=>false, as: :hidden  %>
+        <%= build.input :check_number, label:'N° ch.',
+          my_wrapper_html:{class: "col-lg-6" } %>
+
+
+
         <% end %>
-    
-     <%=  build.association :destination, :collection =>@organism.destinations.all(:order => 'name'), :label=>'Destinat°',
-              :prompt => "Pour qui ?" ,   input_html: {class: "span6"} %>
-     <%=  build.input :debit ,   input_html: {class: "span3 number", :type=>'text', value: two_decimals(@line.debit) }  %>
-     <%=  build.input :credit,  input_html: {class: "span3 number", :type=>'text', value: two_decimals(@line.credit) } %>
-     
-     
-  <% end %>
-  <%= f.fields_for :compta_lines, @counter_line do |build| %>
-
-     <%= build.input :payment_mode , collection: PAYMENT_MODES, :prompt=>'Mode de réglement',
-                          disabled: 'Espèces',
-                          :required=>true,  input_html: {class: "span6"} %>
-
-     <%= build.association :account, :label=> 'Contrepartie', input_html: {class: "span6"}, :collection=>[@counter_line.account], :label_method=>:title,
-               :disabled=>true, :include_blank=>false, as: :hidden  %>
-     <%= build.input :check_number, label:'N° ch.', input_html: {class: "span6" } %>
 
   
-    
-  <% end %>
-           
-
-<div class="form-actions">
-  <%=  f.button :submit, id: 'new_line_button', class: "btn-primary span4" %>
-</div>
-  <% end %>
-</div>
+    <div class='form-group'>
+          <%=  f.button :submit, id: 'new_line_button', class: "btn-primary col-lg-4 col-lg-offset-3" %>
+    </div>
+       </div>
+        <% end %>
+      </div>
 
 
 
 
-              
+
+
 

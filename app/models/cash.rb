@@ -9,7 +9,7 @@ class Cash < ActiveRecord::Base
   include Utilities::Sold
  # include Utilities::JcGraphic
 
-  attr_accessible :name, :comment, :sector_id
+  # attr_accessible :name, :comment, :sector_id
 
   belongs_to :organism
   belongs_to :sector
@@ -18,7 +18,7 @@ class Cash < ActiveRecord::Base
   # a des effets indésirables sur les requêtes utilisées pour faire un pdf de la 
   # caisse (on n'arive plus à forcer les noms des colonnes qui sont utilisés pour le pdf).
   # Le second est utilisé pour extract_lines
-  has_many :compta_lines, :through=>:accounts, :include=>:writing
+  has_many :compta_lines, -> {includes(:writing) }, :through=>:accounts
   has_many :in_out_lines, :source=>:compta_lines, :through=>:accounts
   
   has_many :cash_controls

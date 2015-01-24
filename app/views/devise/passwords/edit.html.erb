@@ -3,7 +3,7 @@
 <div class="inner-champ">
 
 
-
+  <div class='panel-body'>
 <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), 
   html: {class: 'form-horizontal', method: :put }) do |f| %>
   <%= f.error_notification %>
@@ -12,11 +12,14 @@
   <%= f.full_error :reset_password_token %>
 
  
-    <%= f.input :password, :required => true, :hint=>'8 caractères minimum', :autofocus => true,  input_html: {class: "span3"}  %>
-    <%= f.input :password_confirmation, :required => true,  input_html: {class: "span3"}  %>
+    <%= f.input :password, :required => true, :hint=>'8 caractères minimum', :autofocus => true,  my_wrapper_html: {class: "col-lg-3"}  %>
+    <%= f.input :password_confirmation, :required => true,  my_wrapper_html: {class: "col-lg-3"}  %>
   
 
   <div class="form-actions">
-    <%= f.button :submit, "Valider", class: "btn-primary span3"  %>
+    <%= f.button :submit, "Valider", class: "btn-primary col-lg-3 col-lg-offset-2"  %>
   </div>
 <% end %>
+  </div>
+</div>
+</div>

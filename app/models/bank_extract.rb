@@ -7,8 +7,8 @@ class BankExtract < ActiveRecord::Base
   # begin_date_picker et end_date_picker
   pick_date_for :begin_date, :end_date
 
-  attr_accessible :reference, :begin_date, :end_date, :begin_sold, :total_debit,
-    :total_credit, :begin_date_picker, :end_date_picker
+  # attr_accessible :reference, :begin_date, :end_date, :begin_sold, :total_debit,
+  #  :total_credit, :begin_date_picker, :end_date_picker
   
   # Valide que le close_date est bien postérieur au start_date
   class BankExtractChronoValidator < ActiveModel::EachValidator
@@ -37,7 +37,7 @@ class BankExtract < ActiveRecord::Base
   
   scope :period, lambda {|p| where('begin_date >= ? AND end_date <= ?' ,
       p.start_date, p.close_date).order(:begin_date) }
-  scope :unlocked, where('locked = ?', false)
+  scope :unlocked, ->{where('locked = ?', false)}
 
   # indique si l'extrait est le premier de ce compte bancaire qui doive être pointé
   def first_to_point?
@@ -117,7 +117,7 @@ class BankExtract < ActiveRecord::Base
   # appelé par before save mais vérifie d'abord l'équality
   def lock_lines
     return false unless equality?
-    bank_extract_lines.all.each {|bl| bl.lock_line}
+    bank_extract_lines.find_each {|bl| bl.lock_line}
   end
 
 

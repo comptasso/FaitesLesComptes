@@ -56,7 +56,13 @@ class Compta::BalancesController < Compta::ApplicationController
   protected
   
   def set_params_balance
-    @params_balance = params[:compta_balance] || {}
+    @params_balance = compta_balance_params 
+  end
+  
+  def compta_balance_params
+    params.fetch(:compta_balance, {}).permit(:from_date, :to_date,
+      :from_account_id, :to_account_id, :period_id,
+      :from_date_picker, :to_date_picker)
   end
   
 end

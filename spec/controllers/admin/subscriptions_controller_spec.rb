@@ -162,7 +162,7 @@ describe Admin::SubscriptionsController do
     it 'cherche la subscription' do
       Subscription.should_receive(:find).with('30').and_return(@sub = mock_model(Subscription))
       @sub.stub(:update_attributes).and_return true
-      put :update, {:organism_id=>@o.to_param, :id =>'30', subscription:{} }, valid_session
+      put :update, {:organism_id=>@o.to_param, :id =>'30', subscription:{'bonjour'=>'toi'} }, valid_session
     end
     
     

@@ -91,7 +91,7 @@ describe "BankExtracts" do
       
     end
 
-    context 'avec un extrait de compte' do
+    context 'avec un extrait de compte', wip:true do
 
       before(:each) do
         @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,

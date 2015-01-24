@@ -2,8 +2,8 @@
  * jqPlot
  * Pure JavaScript plotting plugin using jQuery
  *
- * Version: 1.0.7
- * Revision: 1224
+ * Version: 1.0.8
+ * Revision: 1250
  *
  * Copyright (c) 2009-2013 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
@@ -211,7 +211,11 @@
             }
             
             if (isMerged && this.sortMergedLabels) {
-                labels.sort(function(a,b) { return a - b; });
+                if (typeof labels[0] == "string") {
+                    labels.sort();
+                } else {
+                    labels.sort(function(a,b) { return a - b; });
+                }
             }
             
             // keep a reference to these tick labels to use for redrawing plot (see bug #57)
@@ -432,7 +436,7 @@
         var offmin = offsets.min;
         var lshow = (this._label == null) ? false : this._label.show;
         var i;
-		
+
         for (var p in pos) {
             this._elem.css(p, pos[p]);
         }
@@ -564,11 +568,12 @@
                 }
                 
                 // draw the group labels
-                var step = parseInt(this._ticks.length/this.groups, 10);
+                var step = parseInt(this._ticks.length/this.groups, 10) + 1;
                 for (i=0; i<this._groupLabels.length; i++) {
                     var mid = 0;
                     var count = 0;
-                    for (var j=i*step; j<=(i+1)*step; j++) {
+                    for (var j=i*step; j<(i+1)*step; j++) {
+                        if (j >= this._ticks.length-1) continue; // the last tick does not exist as there is no other group in order to have an empty one.
                         if (this._ticks[j]._elem && this._ticks[j].label != " ") {
                             var t = this._ticks[j]._elem;
                             var p = t.position();
@@ -648,11 +653,12 @@
                 }
                 
                 // draw the group labels, position top here, do left after label position.
-                var step = parseInt(this._ticks.length/this.groups, 10);
+                var step = parseInt(this._ticks.length/this.groups, 10) + 1; // step is one more than before as we don't want to have overlaps in loops
                 for (i=0; i<this._groupLabels.length; i++) {
                     var mid = 0;
                     var count = 0;
-                    for (var j=i*step; j<=(i+1)*step; j++) {
+                    for (var j=i*step; j<(i+1)*step; j++) { // j must never reach (i+1)*step as we don't want to have overlap between loops
+                        if (j >= this._ticks.length-1) continue; // the last tick does not exist as there is no other group in order to have an empty one.
                         if (this._ticks[j]._elem && this._ticks[j].label != " ") {
                             var t = this._ticks[j]._elem;
                             var p = t.position();

@@ -9,7 +9,7 @@
 #
 class Compta::AnalyticalBalancesController < Compta::ApplicationController 
     
-  before_filter :set_params_anabal
+  before_filter :set_params_anabal, except: :new
   
   def new
     @anabal = Compta::AnalyticalBalance.with_default_values(@period)
@@ -55,7 +55,12 @@ class Compta::AnalyticalBalancesController < Compta::ApplicationController
   protected
   
   def set_params_anabal
-    @params_anabal = params[:compta_analytical_balance] || {}
+    @params_anabal = compta_analytical_balance_params || {}
+  end
+  
+  def compta_analytical_balance_params
+    params.require(:compta_analytical_balance).permit(:from_date, :to_date,  
+    :period_id, :from_date_picker, :to_date_picker)
   end
   
 end

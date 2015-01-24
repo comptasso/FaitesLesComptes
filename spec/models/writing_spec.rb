@@ -12,9 +12,11 @@ describe Writing do
   describe 'with stub models' do
 
     before(:each) do  
-      @o = stub_model(Organism)
-      @p = stub_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
-      @b = stub_model(Book, :organism=>@o, :type=>'IncomeBook')
+      @o = stub_model(Organism, marked_for_destruction?:false)
+      @p = stub_model(Period, marked_for_destruction?:false,
+        start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year)
+      @b = stub_model(Book, :organism=>@o, :type=>'IncomeBook',
+        marked_for_destruction?:false)
       @o.stub(:find_period).and_return @p
       Writing.any_instance.stub_chain(:compta_lines, :size).and_return 2
       Writing.any_instance.stub(:complete_lines).and_return true
@@ -22,31 +24,6 @@ describe Writing do
 
     def valid_parameters
       {narration:'Première écriture', date:Date.today}
-    end
-
-  
-
-    describe 'presence validator' do
-
-      before(:each) do
-        Writing.any_instance.stub(:total_credit).and_return 10
-        Writing.any_instance.stub(:total_debit).and_return 10
-        Writing.any_instance.stub(:book).and_return @b
-        Writing.any_instance.stub_chain(:compta_lines, :each).and_return nil
-        Writing.any_instance.stub(:period).and_return @p
-       
-      end
-
-      it 'champs obligatoires' do
-        @w = @b.writings.new(valid_parameters)
-        @w.should be_valid
-        [:narration, :date, :book_id].each do |field|
-          f_eq = (field.to_s + '=').to_sym
-          @w = Writing.new(valid_parameters)
-          @w.send(f_eq, nil)
-          @w.should_not be_valid, "Paramètres obligatoire manquant : #{field}"
-        end
-      end
     end
 
 
@@ -60,48 +37,14 @@ describe Writing do
         Writing.any_instance.stub_chain(:compta_lines, :each).and_return nil
       end
 
-      it 'doit être valide' do
-        @w.valid?
-        @w.should be_valid
-      end
-
-      it 'non valide si déséquilibrée' do
-        @w.stub(:total_debit).and_return(10)
-        @w.stub(:total_credit).and_return(20)
-        @w.should_not be_valid
-      end
-
-      it 'et valide si équilibrée' do
-        @w.stub(:total_debit).and_return(10)
-        @w.stub(:total_credit).and_return(10)
-        @w.should be_valid
-      end
       
-      describe 'period_start_date_validator' do
-        
-        before(:each) {@b.stub(:type).and_return('AnBook')}
-        
-        it 'est valide si la date doit être le premier jour de l exercice' do
-          @w.date = @p.start_date
-          @w.should be_valid
-        end
-        
-        it 'mais invalide autrement' do
-          @w.date = @p.start_date + 1
-          @w.should_not be_valid
-        end
-        
-      end
+      
 
       describe 'test des compta_lines' do
 
         it 'doit avoir au moins deux lignes' do
           @w.stub(:compta_lines).and_return([mock_model(ComptaLine, nature:mock_model(Nature, period:@p), account:mock_model(Account, period:@p))])
-          @w.should_not be_valid
-        end
-
-        it 'la date doit être dans l exercice' do
-          @o.should_receive(:find_period).with(@w.date).and_return nil
+          @w.valid?
           @w.should_not be_valid
         end
 
@@ -131,13 +74,18 @@ describe Writing do
     end
 
   end
+  
+  # fin de la partie avec des mock_models
 
   context 'with real models' do
+    
+    before(:each) do
+      use_test_organism
+    end
 
-    describe 'save' , wip:true do
+    describe 'validations et sauvegarde' , wip:true do
 
       before(:each) do
-        use_test_organism
         @l1 = ComptaLine.new(account_id:@p.accounts.first.id, debit:0, credit:10)
         @l2 = ComptaLine.new(account_id:@p.accounts.last.id, debit:10, credit:0)
         @r = @od.writings.new(date:Date.today, narration:'Une écriture')
@@ -149,14 +97,63 @@ describe Writing do
         Writing.delete_all
       end
       
-      it 'should save' do
-        puts @r.errors.messages unless @r.valid?
-        @r.should be_valid
-        expect {@r.save}.to change {Writing.count}.by(1)
+      describe 'validations' do
+        it 'l écriture est valide' do
+          puts @r.errors.messages unless @r.valid?
+          @r.should be_valid
+        end
+        
+        it 'mais pas sans les paramètres obligatoires' do
+          [:narration, :date, :book_id].each do |field|
+            f_eq = (field.to_s + '=').to_sym
+            @r.send(f_eq, nil)
+            @r.should_not be_valid, "Paramètres obligatoire manquant : #{field}"
+          end
+        end
+        
+        it 'non valide si déséquilibrée' do
+          @r.stub(:total_debit).and_return(10)
+          @r.stub(:total_credit).and_return(20)
+          @r.should_not be_valid
+        end
+        
+        it 'la date doit être dans l exercice' do
+          @r.date = @p.close_date + 1
+          @r.should_not be_valid
+        end
+        
+        
       end
+      
+      describe 'period_start_date_validator pour le livre a nouveau' do
+        
+        before(:each) do
+          @anb = @o.an_book
+          @w = @anb.writings.new(date:Date.today, narration:'Une écriture')
+          @w.compta_lines<< @l1
+          @w.compta_lines<< @l2
+        end
+        
+        it 'est valide si la date doit être le premier jour de l exercice' do
+          @w.date = @p.start_date
+          @w.should be_valid
+        end
+        
+        it 'mais invalide autrement' do
+          @w.date = @p.start_date + 1
+          @w.should_not be_valid
+        end
+        
+      end
+      
+      describe 'sauvegarde' do
+        it 'sauve l écriture' do
+          expect {@r.save}.to change {Writing.count}.by(1)
+        end
 
-      it 'should save the lines' do
-        expect {@r.save}.to change {ComptaLine.count}.by(2)
+        it 'et ses lignes associéess' do
+          expect {@r.save}.to change {ComptaLine.count}.by(2)
+        end
       end
       
       describe 'on ne peut ecrire dans un exercice clos' do 
@@ -187,7 +184,6 @@ describe Writing do
       end
       
       it 'check compta_lines' do
-        @w.compta_lines.should be_an(Array)
         @w.compta_lines.first.should be_an_instance_of(ComptaLine)
       end
 

@@ -1,25 +1,30 @@
-<div class="inputs" id="new_check_deposit" >
+<div class="panel-body" id="new_check_deposit" >
 
-<%= simple_form_for([@organism, @bank_account, @check_deposit], html:{class:'form-horizontal'}) do |f| %>
-  <%= f.error_notification %>
-  <%= f.input :deposit_date_picker, :label=> 'Date', input_html: {class: 'span2', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
-
-  
-
-          <%= f.association :checks,
-              input_html: {:class=> "span5", size:20},
-              :collection => CheckDeposit.pending_checks(@sector).map {|c| [c.label, c.id]},
-              :prompt => 'Chèques à remettre', :label=> 'Chèques' %>
+  <%= simple_form_for([@organism, @bank_account, @check_deposit],
+    html:{class:'form-horizontal'}, wrapper: :horizontal_form) do |f| %>
     
-   
-       <div class="form-actions">
-          
-             <%=  f.button :submit, :id=>'new_check_deposit_button', :class=> "btn-primary span2" %>
-        
-       </div>
-    
-   
+    <%= f.error_notification %>
+    <div class='form-inputs'>
+      <%= f.input :deposit_date_picker, :label=> 'Date',
+        my_wrapper_html:{class:'col-lg-2'},
+        input_html: {date_min:@period.start_date, date_max:@period.close_date},
+        :required => true, :as=>:date_picker %>
 
-   <% end %>
+      <%= f.association :checks,
+          my_wrapper_html:{class:'col-lg-5'},
+          input_html: {size:15},
+          :collection => CheckDeposit.pending_checks(@sector).map {|c| [c.label, c.id]},
+          :label=> 'Chèques à remettre',
+          required:true %>
+
+    </div> 
+    <div class="form-actions">
+      <%=  f.button :submit, :id=>'new_check_deposit_button',
+        :class=> "btn-primary col-lg-2 col-lg-offset-2" %>
+    </div>
+
+
+
+     <% end -%>
 </div>
 

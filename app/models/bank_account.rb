@@ -40,7 +40,7 @@ class BankAccount < ActiveRecord::Base
   # scope :extract_lines, lambda {|from_date, to_date| compta_lines.joins(:writing).where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date') }
 
 
-  attr_accessible :number, :bank_name, :comment, :nickname, :sector_id
+  # attr_accessible :number, :bank_name, :comment, :nickname, :sector_id
 
   strip_before_validation :number, :bank_name, :comment
 

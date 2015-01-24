@@ -1,27 +1,30 @@
-= simple_form_for([:admin, @organism, @mask],
-  :html=> {class: 'form-horizontal'}) do |f|
-  = f.error_notification
+.panel-body
+  = simple_form_for([:admin, @organism, @mask],
+    :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form) do |f|
+    = f.error_notification
 
-  .form-inputs
-    = f.input :title,  input_html: {class: "span3"}
-    = f.input :comment,  input_html: {rows: 4, class: "span3"}
-    = f.input :book_id do
-      =f.select :book_id, @organism.books.in_outs.collect { |b| [b.title,
-        b.id, {class:b.type.downcase, 'data-id'=>b.id}]}
-    = f.input :ref
-    = f.input :narration
-    = f.input :nature_name do 
-      =f.select :nature_name, mask_nature_options(@period, @mask)
-   
-    = f.input :destination_id, :collection=>@organism.destinations
-    = f.input :amount, :input_html=> { value: two_decimals(@mask.amount),
-      class: "numeric", :type=>'text'}
-    = f.input :mode, :collection=>PAYMENT_MODES
-    = f.input :counterpart,
-      :collection => options_for_mask_counterpart(@organism),
-      :as => :grouped_select, :group_method => :options,
-      :group_label_method=> :title
-    
+    .form-inputs
+      = f.input :title,  my_wrapper_html: {class: "col-lg-3"}
+      = f.input :comment,  my_wrapper_html: {class: "col-lg-3"}, input_html:{rows:4}
+      = f.input :book_id, my_wrapper_html: {class: "col-lg-2"} do
+        =f.select :book_id, @organism.books.in_outs.collect { |b| [b.title,
+          b.id, {class:b.type.downcase, 'data-id'=>b.id}]}, {}, {class:'col-lg-12'}
+      = f.input :ref, my_wrapper_html: {class: "col-lg-2"}
+      = f.input :narration, my_wrapper_html: {class: "col-lg-5"}
+      = f.input :nature_name, my_wrapper_html: {class: "col-lg-4"} do 
+        =f.select :nature_name, mask_nature_options(@period, @mask), {}, {class:'col-lg-12', size:5}
 
-  .form-actions
-    = f.button :submit, class: "btn-primary span2" 
+      = f.input :destination_id, my_wrapper_html: {class: "col-lg-4"},
+        :collection=>@organism.destinations
+      = f.input :amount, my_wrapper_html: {class: "col-lg-3"}, 
+        :input_html=> { value: two_decimals(@mask.amount),
+        class: "numeric", :type=>'text'}
+      = f.input :mode, my_wrapper_html: {class: "col-lg-3"}, :collection=>PAYMENT_MODES
+      = f.input :counterpart, my_wrapper_html: {class: "col-lg-3"},
+        :collection => options_for_mask_counterpart(@organism),
+        :as => :grouped_select, :group_method => :options,
+        :group_label_method=> :title
+
+
+    .form-actions
+      = f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-2" 

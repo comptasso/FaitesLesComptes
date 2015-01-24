@@ -41,7 +41,7 @@ class Admin::MasksController < Admin::ApplicationController
   # POST /admin/masks
   # POST /admin/masks.json
   def create
-    @mask = @organism.masks.new(params[:mask])
+    @mask = @organism.masks.new(admin_mask_params)
 
     respond_to do |format|
       if @mask.save
@@ -60,7 +60,7 @@ class Admin::MasksController < Admin::ApplicationController
     @mask = Mask.find(params[:id])
 
     respond_to do |format|
-      if @mask.update_attributes(params[:mask])
+      if @mask.update_attributes(admin_mask_params)
         format.html { redirect_to admin_organism_mask_url(@organism, @mask), notice: 'Le masque de saisie a été mis à jour' }
         format.json { head :no_content }
       else
@@ -80,5 +80,12 @@ class Admin::MasksController < Admin::ApplicationController
       format.html { redirect_to admin_organism_masks_url(@organism) }
       format.json { head :no_content }
     end
+  end
+  
+  private
+  
+  def admin_mask_params
+    params.require(:mask).permit(:comment, :title, :book_id, :ref, :narration, 
+    :destination_id, :nature_name, :mode, :amount, :counterpart)
   end
 end

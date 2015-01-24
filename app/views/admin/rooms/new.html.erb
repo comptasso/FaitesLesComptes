@@ -8,26 +8,32 @@
 <div class="champ">
   <h3>
     Nouvel organisme
-  </h3><div class="inner-champ">
+  </h3>
 
-<div class="inputs">
-<%= simple_form_for([:admin,@room], :url =>admin_rooms_path, :method => :post, 
-  :html=> {class: 'form-horizontal', id:'new_admin_room'}) do |f| %>
-<%= f.error_notification %>
+  <div class="inner-champ">
 
-    <%= f.input :title,  input_html: {class: "span3"} %> 
-    <%= f.input :comment,  input_html: {class: "span6"} %>
-    <%= f.input :racine, 
-           label:'Nom de la base',
-           input_html: {class: "span3"},
-           hint:'lettres minuscules uniquement, 6 minimum, sans espace' %>
+    <div class="panel-body">
+    <%= simple_form_for([:admin,@room], :url =>admin_rooms_path, :method => :post, 
+      :html=> {class: 'form-horizontal', id:'new_admin_room'},
+        wrapper: :horizontal_form) do |f| %>
 
-    <%= f.input :status, :label=>'Statut',
-         :collection=>LIST_STATUS, :as=>:inline_radio_buttons %>
+      <%= f.error_notification %>
+      <div class='form-inputs'>
+        <%= f.input :title,  my_wrapper_html: {class: "col-lg-3"} %> 
+        <%= f.input :comment,  my_wrapper_html: {class: "col-lg-6"} %>
+        <%= f.input :racine, 
+               label:'Nom de la base',
+               my_wrapper_html: {class: "col-lg-3"},
+               hint:'lettres minuscules uniquement, 6 minimum, sans espace' %>
 
-   <div class="form-actions">
-    <%= f.button :submit, class: "btn-primary span2", id:'new_admin_room' %>
-   </div>
-<% end %>
+        <%= f.input :status, :label=>'Statut', input_html:{class:'col_lg-offset-2'},
+             :collection=>LIST_STATUS, :as=>:inline_radio_buttons %>
+      </div>
+      <div class="form-actions">
+        <%= f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-2", id:'new_admin_room' %>
+      </div>
+    <% end %>
+
+    </div>
   </div>
-</div></div>
+</div>

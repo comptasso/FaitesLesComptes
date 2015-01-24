@@ -34,7 +34,7 @@ module Compta::WritingsHelper
     html =''
     if writing.od_editable? || writing.an_editable?
       html += icon_to 'modifier.png', edit_compta_book_writing_path(book, writing)
-      html += icon_to('supprimer.png', compta_book_writing_path(book, writing), :method=>:delete, :confirm=>'Etes vous sur ?')
+      html += icon_to('supprimer.png', compta_book_writing_path(book, writing), :method=>:delete, data:{confirm:'Etes vous sûr ?'})
       html += icon_to('verrouiller.png', lock_compta_book_writing_path(book, writing, :mois=>@mois, :an=>@an), :method=>:post)
     else
       html += image_tag('icones/nb_verrouiller.png', title:'Le verrouillage de cette écriture doit se faire dans la partie Saisie/Consult par pointage du compte bancaire et/ou de la caisse') unless writing.locked?

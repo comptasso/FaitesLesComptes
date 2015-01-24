@@ -30,7 +30,7 @@
 
           %td
             = icon_to 'modifier.png', edit_transfer_path(transfer) if transfer.editable?
-            = icon_to 'supprimer.png', [transfer], :confirm => 'Etes vous sur ?', :method => :delete if transfer.destroyable?
+            = icon_to 'supprimer.png', [transfer], data: {confirm: 'Etes vous sûr ?'} , :method => :delete if transfer.destroyable?
 
 
 

@@ -52,8 +52,8 @@ class TransfersController < ApplicationController
   # POST /transfers
   # POST /transfers.json
   def create
-    params_pre_treatment
-    @transfer = @book.transfers.new(params[:transfer])
+    
+    @transfer = @book.transfers.new(params_pre_treatment)
     fill_author(@transfer)
     respond_to do |format|
       if @transfer.save
@@ -69,11 +69,11 @@ class TransfersController < ApplicationController
   # PUT /transfers/1
   # PUT /transfers/1.json
   def update
-    params_pre_treatment
+    
     @transfer = Transfer.find(params[:id])
     fill_author(@transfer)
     respond_to do |format|
-      if @transfer.update_attributes(params[:transfer])
+      if @transfer.update_attributes(params_pre_treatment)
         format.html { redirect_to transfers_url, notice: 'Transfert mis à jour' }
         # format.json { head :no_content }
       else
@@ -103,12 +103,21 @@ class TransfersController < ApplicationController
   end
   
   def params_pre_treatment
-    params[:transfer][:compta_lines_attributes]['0'][:credit] = params[:transfer][:amount]
-    params[:transfer][:compta_lines_attributes]['1'][:debit] = params[:transfer][:amount]
+    p = transfer_params
+    p[:compta_lines_attributes]['0'][:credit] = p[:amount]
+    p[:compta_lines_attributes]['1'][:debit] = p[:amount]
     # effacer le paramètre amount est indispensable car sinon, sur un new, cela aboutit à
     # créer 4 compta_lines : les deux engendrées par les paramètres compta_lines_attributes en plus des
     # deux engendrées par le after_initialize
-    params[:transfer].delete(:amount)
+    p.delete(:amount)
+    p
+  end
+  
+  def transfer_params
+    params.require(:transfer).permit(:date_picker, :narration, :ref, :amount, :date,
+        :book_id, :bridge_id, :bridge_type,
+        compta_lines_attributes: [:debit, :credit, :writing_id, :account_id, :id,
+    :nature, :payment_mode] )  
   end
 
   

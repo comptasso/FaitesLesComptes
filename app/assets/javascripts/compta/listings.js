@@ -10,7 +10,7 @@ function drawDataTable() {
     $('.compta_listings .listing_data_table').dataTable({
         "sDom": "lfrtip",
         "bAutoWidth": false,
-        "sPaginationType": "bootstrap",
+        
         "oLanguage": {
             "sUrl": "/frenchdatatable.txt"
         },

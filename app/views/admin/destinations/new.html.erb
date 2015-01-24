@@ -1,13 +1,12 @@
 <%= content_for :menu do %>
-
-<%= icon_to 'navigation90.png', admin_organism_destinations_path(@organism), title: 'Liste des activités' %>
+  <%= icon_to 'navigation90.png', admin_organism_destinations_path(@organism), title: 'Liste des activités' %>
 <% end -%>
 
 <div class="champ">
   <h3 id="sous-titre">
     Nouvelle Activité
-  </h3><div class="inner-champ">
-
-<%= render 'form' %>
-</div></div>
-
+  </h3>
+  <div class="inner-champ">
+    <%= render 'form' %>
+  </div>
+</div>

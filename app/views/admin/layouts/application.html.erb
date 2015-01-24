@@ -6,24 +6,23 @@
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
-  <body class='<%= "admin_#{controller.controller_name}" %>  admin'>
+  <body class='<%= "admin_#{controller.controller_name}"  %>  admin' style="padding-top:90px;">
     <div class="container-fluid">
-
-      <%= render 'layouts/navbar' %>
-
-
-
-      <div class="row-fluid">
-
-        <div>
+    <div class="navbar navbar-fixed-top" role="navigation">
+          <%= render 'layouts/navbar' %>
           <%= render 'admin/menus/menu' if user_signed_in? %>
-        </div>
-        <div id="main-zone">
+    </div>
+    
+    
+      <div id="main-zone">
+          <div class='col-lg-12'>
           <%= render 'layouts/flash_partial' %>
-
+         </div>
+        <div id="message" class="col-lg-12"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
           <%= yield %>
+        
         </div>
-      </div>
+      
     </div>
     <%= render 'layouts/bottom_page' %>
   </body>

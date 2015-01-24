@@ -181,9 +181,12 @@ before(:each) do
         end
 
         it 'assigns check_deposit' do
-          ba.stub_chain(:check_deposits, :new).and_return(@cd = mock_model( CheckDeposit, :bank_account_id=>ba.id).as_new_record)
+          ba.stub_chain(:check_deposits, :new).
+            and_return(@cd = mock_model(CheckDeposit,
+              :bank_account_id=>ba.id).as_new_record)
           @cd.stub(:pick_all_checks)
-          get :new, {:organism_id=>@o.id.to_s, :bank_account_id=>ba.id}, valid_session
+          get :new, {:organism_id=>@o.id.to_s,
+            :bank_account_id=>ba.id}, valid_session
           assigns(:check_deposit).should == @cd
         end
       end
@@ -201,15 +204,17 @@ before(:each) do
 
     it 'bank_account create a check_deposit and try to save it' do
       ba.should_receive(:check_deposits).and_return @a = double(Arel)
-      @a.should_receive(:new).with({"param"=>'value'}).and_return(@cd=mock_model(CheckDeposit))
+      @a.should_receive(:new).with({'bank_account_id'=>'2'}).
+        and_return(@cd=mock_model(CheckDeposit))
       @cd.should_receive(:save).and_return true
       post :create, {:bank_account_id=>ba.id, :organism_id=>@o.id.to_s,
-          :check_deposit=>{param:'value'} }, valid_session
+          :check_deposit=>{bank_account_id:2} }, valid_session
     end
     
     it 'le controlleur reçoit fill_author' do
       
-      ba.stub_chain(:check_deposits, :new).and_return @cd=mock_model(CheckDeposit)
+      ba.stub_chain(:check_deposits, :new).
+        and_return @cd=mock_model(CheckDeposit)
       @controller.should_receive(:fill_author).with(@cd)
       @cd.stub(:save).and_return true
       post :create, {:bank_account_id=>ba.id, :organism_id=>@o.id.to_s,
@@ -217,7 +222,8 @@ before(:each) do
     end
 
     it  "when check_deposit is valid" do
-      ba.stub_chain(:check_deposits, :new).and_return @cd=mock_model(CheckDeposit)
+      ba.stub_chain(:check_deposits, :new).
+        and_return @cd=mock_model(CheckDeposit)
       @cd.stub(:save).and_return true
       post :create, {:bank_account_id=>ba.id, :organism_id=>@o.id.to_s,
           :check_deposit=>{param:'value'} }, valid_session

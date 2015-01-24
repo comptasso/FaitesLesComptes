@@ -72,7 +72,7 @@ describe CashControl do
         @c.cash_controls.create(date:(Date.today - 1), amount:0)
         @c.cash_controls.create(date:(Date.today + 1), amount:0)
         my = MonthYear.from_date(Date.today)
-        ccs = @c.cash_controls.monthyear(my).all
+        ccs = @c.cash_controls.monthyear(my).load
         ccs.each_with_index do |cc, i|
           cc.date.should <= ccs[i+1].date if ccs[i+1]
         end

@@ -1,16 +1,22 @@
- <div class="inputs">
-<%= simple_form_for([:admin,@organism,@book],  :html=> {class: 'form-horizontal'} ) do |f| %>
- 
+ <div class="panel-body">
+<%= simple_form_for([:admin, @organism, @book],
+  :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form ) do |f| %>
+   <div class='form-inputs'>
   <%= f.error_notification %>
-   <%= f.input :abbreviation %>
-   <%= f.input :title %>
-   <%= f.input :description, input_html: {rows: 4} %>
-    <%= f.input :book_type, :label=>'Type',
-           :collection=>[['Recettes','IncomeBook'], ['Dépenses', 'OutcomeBook']],
-         label_method: :first, value_method: :last, :as=>:inline_radio_buttons, :required=>true, :disabled=>@book.persisted? %>
-
+   <%= f.input :abbreviation, my_wrapper_html: {class: "col-lg-3"} %>
+   <%= f.input :title, my_wrapper_html: {class: "col-lg-3"} %>
+   <%= f.input :description, my_wrapper_html: {class: "col-lg-3"}, 
+       input_html: {rows: 4} %>
+    <%= f.input :book_type, my_wrapper_html: {class: "col-lg-3"}, 
+        :label=>'Type',
+        :collection=>[['Recettes','IncomeBook'], ['Dépenses', 'OutcomeBook']],
+        label_method: :first, value_method: :last,
+        :as=>:inline_radio_buttons,
+        :required=>true,
+        :disabled=>@book.persisted? %>
+   </div>
   <div class="form-actions">
-    <%= f.button :submit, class: "btn-primary span2" %>
+    <%= f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-2" %>
    </div>
 <% end %>
   </div>

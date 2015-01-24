@@ -12,7 +12,7 @@ class Destination < ActiveRecord::Base
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
 
-  attr_accessible :name, :comment, :income_outcome, :sector_id
+  # attr_accessible :name, :comment, :income_outcome, :sector_id
 
   belongs_to :organism
   belongs_to :sector
@@ -26,7 +26,7 @@ class Destination < ActiveRecord::Base
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   
 
-  default_scope order: 'name ASC'
+  default_scope {order('name ASC')}
   
   
 
@@ -69,11 +69,11 @@ class Destination < ActiveRecord::Base
   end
   
   def debit
-    @lines.sum {|l| l.t_debit.to_d}
+    @lines.to_a.sum {|l| l.t_debit.to_d}
   end
   
   def credit
-    @lines.sum {|l| l.t_credit.to_d}
+    @lines.to_a.sum {|l| l.t_credit.to_d}
   end
   
   def name_with_sector

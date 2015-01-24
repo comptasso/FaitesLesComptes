@@ -1,19 +1,21 @@
-<ul class="nav nav-tabs" id="main-nav">
+<ul class="nav navbar-nav" id="main_nav">
 
   <li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> " id="admin_organisms_menu">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role='button'>
       ORGANISMES
       <b class="caret"></b>
     </a>
-    <ul class="dropdown-menu">
-      <li><%= link_to 'Liste des organismes', admin_rooms_path %></li>
+    <ul class="dropdown-menu" role='menu'>
+      <li role='presentation'>
+        <%= link_to 'Liste des organismes', admin_rooms_path, role:'menuitem' %>
+      </li>
       <%= content_tag(:li, :class=>"divider"){} %>
       <% cache("admin_#{current_user.name}")  do %>
       <% current_user.organisms_with_room.each do |groom| %>
-        <li>
+        <li role='presentation'>
           <%= link_to(groom[:organism].title,
             admin_room_path(groom[:room]),
-            {title:groom[:organism].comment})    %>
+            {title:groom[:organism].comment, role:'menuitem'})    %>
         </li>
         <%  end %>
       <% end %>
@@ -28,7 +30,7 @@
     
     <li class="dropdown <%= 'active' if controller.controller_name =='masks' || controller.controller_name == 'subscriptions' %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">GUIDES DE SAISIE<b class="caret"></b></a>
-      <ul class="dropdown-menu">
+      <ul class="dropdown-menu" >
         <%= admin_sub_menu('guides', 'mask') %>
         <li class="divider"></li>
         <%= admin_sub_menu('abonnements', 'subscription') %>

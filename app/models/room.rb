@@ -16,10 +16,11 @@
 # des versions
 #
 class Room < ActiveRecord::Base  
+  include ActiveModel::ForbiddenAttributesProtection
     
   has_many :holders, dependent: :destroy 
    
-  attr_accessible :database_name, :racine, :title, :comment, :status
+#  attr_accessible :database_name, :racine, :title, :comment, :status
   attr_accessor :title, :comment, :status
 
   strip_before_validation :database_name 
@@ -83,8 +84,7 @@ class Room < ActiveRecord::Base
   # Mais pourrait redevenir d'actualité si on prévoit des restaurations de schémas
   #
   def self.version_update?
-    arm = ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths)
-    arm.pending_migrations.any? ? false : true
+    !ActiveRecord::Migrator.needs_migration? 
   end
 
   # relative_version compare la version de l'organisme
@@ -98,7 +98,7 @@ class Room < ActiveRecord::Base
   # :advance_migration, :no_base
   # 
   def relative_version(migration_number = nil)
-    migration_number ||= Room.jcl_last_migration
+    migration_number ||= Room.migrator_current_version
     organism_last_migration = look_for {Organism.migration_version}
     if organism_last_migration
       v = :same_migration if migration_number == organism_last_migration
@@ -129,7 +129,13 @@ class Room < ActiveRecord::Base
   # renvoie la dernière migration de la base principale (Room et User)
   def self.jcl_last_migration
     Apartment::Database.process() do
-      ActiveRecord::Migrator.new(:up, ActiveRecord::Migrator.migrations_paths).migrated.last
+      ActiveRecord::Migrator.last_migration.version
+    end
+  end
+  
+  def self.migrator_current_version
+    Apartment::Database.process() do
+      ActiveRecord::Migrator.current_version
     end
   end
 

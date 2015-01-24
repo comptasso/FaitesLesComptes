@@ -1,22 +1,29 @@
+<div class="modal-body">
 <%= simple_form_for @anabal, :url=>compta_period_analytical_balance_path(@period, @anabal),
   :method=>:post, :remote=>true,
-  :html=> {class: 'form-horizontal inner-champ'} do |anabal_f| %>
+  :html=> {class: 'form-horizontal inner-champ'},
+  wrapper: :horizontal_form do |anabal_f| %>
 
     <%= anabal_f.error_notification %>
-
+  <div class="form-inputs">
     <%= anabal_f.input :from_date_picker, 
       :label=> 'Date début',
-      input_html: {class: 'span4', date_min:@period.start_date, date_max:@period.close_date},
+      my_wrapper_html:{class:'col-lg-6'},
+      input_html: {date_min:@period.start_date, date_max:@period.close_date},
       :required => true, :as=>:date_picker %>
      
     <%= anabal_f.input :to_date_picker,
       :label=> 'Date fin',
-      input_html: {class: 'span4', date_min:@period.start_date, date_max:@period.close_date},
+      my_wrapper_html:{class:'col-lg-6'},
+      input_html: {date_min:@period.start_date, date_max:@period.close_date},
       :required => true, :as=>:date_picker %>
-
+  </div>
     <div class="form-actions">
        <%=  anabal_f.button :submit,
-         'Afficher', id: 'new_anabal_button', class: "btn-primary span6" %>
+         'Réafficher la balance analytique',
+         id: 'new_anabal_button',
+         class: "btn-primary" %>
     </div>
 
 <% end %>
+</div>

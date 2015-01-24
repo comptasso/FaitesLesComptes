@@ -15,8 +15,8 @@ describe 'création d un membre' do
 
   before(:each) do
     use_test_user
-    login_as('quidam')
     use_test_organism 
+    login_as('quidam')
     visit adherent.new_member_path 
   end
   

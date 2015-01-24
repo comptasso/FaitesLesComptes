@@ -6,25 +6,30 @@
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
-  <body class='<%=  "compta_#{controller.controller_name}" %> compta'>
+  <body class='<%=  "compta_#{controller.controller_name}" %> compta' style="padding-top:90px;">
+    
+    <div class="navbar navbar-fixed-top" role="navigation">
+          <%= render 'layouts/navbar' %>
+          <%= render 'compta/menus/menu' if user_signed_in? %>
+    </div>
+    
+    <div> 
+      <%=  yield :modal %>
+    </div>
+    
+    
     <div class="container-fluid">
 
-      <%= render 'layouts/navbar' %>
-
-      <div class="row-fluid">
-
-        <div>
-          <%= render 'compta/menus/menu' %>
-        </div>
-        
-        
-        
-        <div id="main-zone">
+     <div id="main-zone">
+          <div class='col-lg-12'>
           <%= render 'layouts/flash_partial' %>
-          <div id="message" class="row-fluid"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
-          <%= yield %>
+          </div>
+          <div id="message" class="col-lg-12"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
+         
+            <%= yield %>
+          
         </div>
-      </div>
+      
        <div class ="push"></div>
     </div>
 

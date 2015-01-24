@@ -16,7 +16,7 @@
     <td><%= user.name %></td>
     <td><%= icon_to 'afficher.png', user %></td>
     <td><%= icon_to 'modifier.png', edit_user_path(user) %></td>
-    <td><%= icon_to 'supprimer.png', user, :confirm => 'Etes vous sur ?', :method => :delete %></td>
+    <td><%= icon_to 'supprimer.png', user, data: {confirm: 'Etes vous sûr ?'} , :method => :delete %></td>
   </tr>
 <% end %>
 </table>

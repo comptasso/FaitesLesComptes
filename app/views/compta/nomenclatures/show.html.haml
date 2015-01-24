@@ -1,7 +1,7 @@
 .champ
   %h3 Liste des documents individuels disponibles
 
-.row-fluid
+.row
   %ul.document_list
     - @nomenclature.folios.each do |fol|
       %li= link_to fol.title.capitalize, compta_sheet_path(fol)

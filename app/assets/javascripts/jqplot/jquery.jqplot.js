@@ -5,8 +5,8 @@
  * 
  * About: Version
  * 
- * version: 1.0.7 
- * revision: 1224
+ * version: 1.0.8 
+ * revision: 1250
  * 
  * About: Copyright & License
  * 
@@ -244,8 +244,8 @@
         }
     };
 
-    $.jqplot.version = "1.0.7";
-    $.jqplot.revision = "1224";
+    $.jqplot.version = "1.0.8";
+    $.jqplot.revision = "1250";
 
     $.jqplot.targetCounter = 1;
 
@@ -1966,7 +1966,7 @@
             // remove any error class that may be stuck on target.
             this.target.removeClass('jqplot-error');
             if (!this.target.get(0)) {
-                throw "No plot target specified";
+                throw new Error("No plot target specified");
             }
             
             // make sure the target is positioned by some means and set css
@@ -2025,7 +2025,7 @@
             this.eventCanvas._plotDimensions = this._plotDimensions;
             this.legend._plotDimensions = this._plotDimensions;
             if (this._height <=0 || this._width <=0 || !this._height || !this._width) {
-                throw "Canvas dimension not set";
+                throw new Error("Canvas dimension not set");
             }
             
             if (options.dataRenderer && $.isFunction(options.dataRenderer)) {
@@ -2043,7 +2043,7 @@
             if (data == null || $.isArray(data) == false || data.length == 0 || $.isArray(data[0]) == false || data[0].length == 0) {
                 
                 if (this.noDataIndicator.show == false) {
-                    throw "No Data";
+                    throw new Error("No data specified");
                 }
                 
                 else {
@@ -2208,7 +2208,7 @@
             this._width = this.target.width();
             
             if (this._height <=0 || this._width <=0 || !this._height || !this._width) {
-                throw "Target dimension not set";
+                throw new Error("Target dimension not set");
             }
             
             this._plotDimensions.height = this._height;
@@ -2364,7 +2364,7 @@
             this._width = this.target.width();
             
             if (this._height <=0 || this._width <=0 || !this._height || !this._width) {
-                throw "Target dimension not set";
+                throw new Error("Target dimension not set");
             }
             
             this._plotDimensions.height = this._height;
@@ -3299,7 +3299,7 @@
                                 minang = (j>0) ? s.gridData[j-1][1]+sm : sm;
                                 maxang = s.gridData[j][1];
                                 if (theta > minang && theta < maxang) {
-                                    return {seriesIndex:s.index, pointIndex:j, gridData:s.gridData[j], data:s.data[j]};
+                                    return {seriesIndex:s.index, pointIndex:j, gridData:[gridpos.x,gridpos.y], data:s.data[j]};
                                 }
                             }
                         }
@@ -3344,7 +3344,7 @@
                                 minang = (j>0) ? s.gridData[j-1][1]+sm : sm;
                                 maxang = s.gridData[j][1];
                                 if (theta > minang && theta < maxang) {
-                                    return {seriesIndex:s.index, pointIndex:j, gridData:s.gridData[j], data:s.data[j]};
+                                    return {seriesIndex:s.index, pointIndex:j, gridData:[gridpos.x,gridpos.y], data:s.data[j]};
                                 }
                             }
                         }
@@ -3909,7 +3909,7 @@
             return $.jqplot.hex2rgb(s, a);
         }
         else {
-            throw 'invalid color spec';
+            throw new Error('Invalid color spec');
         }
     };
     
@@ -4217,7 +4217,7 @@
         // true to escape HTML entities in the label.
         this.escapeHTML = false;
         this._elem;
-		this._breakTick = false;
+        this._breakTick = false;
         
         $.extend(true, this, options);
     };
@@ -4277,9 +4277,9 @@
         if (this.textColor) {
             this._elem.css('color', this.textColor);
         }
-		if (this._breakTick) {
-			this._elem.addClass('jqplot-breakTick');
-		}
+        if (this._breakTick) {
+          this._elem.addClass('jqplot-breakTick');
+        }
         
         return this._elem;
     };
@@ -4353,8 +4353,8 @@
         this._elem.addClass('jqplot-grid-canvas');
         this._elem.css({ position: 'absolute', left: 0, top: 0 });
         
-		elem = plot.canvasManager.initCanvas(elem);
-		
+        elem = plot.canvasManager.initCanvas(elem);
+
         this._top = this._offsets.top;
         this._bottom = h - this._offsets.bottom;
         this._left = this._offsets.left;
@@ -4758,11 +4758,11 @@
 
     $.jqplot.LinePattern = function (ctx, pattern) {
 
-		var defaultLinePatterns = {
-			dotted: [ dotlen, $.jqplot.config.dotGapLength ],
-			dashed: [ $.jqplot.config.dashLength, $.jqplot.config.gapLength ],
-			solid: null
-		};   	
+        var defaultLinePatterns = {
+            dotted: [ dotlen, $.jqplot.config.dotGapLength ],
+            dashed: [ $.jqplot.config.dashLength, $.jqplot.config.gapLength ],
+            solid: null
+        };
 
         if (typeof pattern === 'string') {
             if (pattern[0] === '.' || pattern[0] === '-') {
@@ -5736,7 +5736,7 @@
                                     tempgd.push(gd[i]);
                                     this._areaPoints.push(gd[i]);
                                     // do we have an axis crossing?
-                                    if (pd[i][1] * pd[i+1][1] < 0) {
+                                    if (pd[i][1] * pd[i+1][1] <= 0) {
                                         if (pd[i][1] < 0) {
                                             isnegative = true;
                                             opts.fillStyle = negativeColor;
@@ -5996,7 +5996,7 @@
             plot.target.trigger(evt1, ins);
             if (plot.series[ins[0]].highlightMouseOver && !(ins[0] == plot.plugins.lineRenderer.highlightedSeriesIndex)) {
                 var evt = jQuery.Event('jqplotDataHighlight');
-		evt.which = ev.which;
+                evt.which = ev.which;
                 evt.pageX = ev.pageX;
                 evt.pageY = ev.pageY;
                 plot.target.trigger(evt, ins);
@@ -6013,7 +6013,7 @@
             var ins = [neighbor.seriesIndex, neighbor.pointIndex, neighbor.data];
             if (plot.series[ins[0]].highlightMouseDown && !(ins[0] == plot.plugins.lineRenderer.highlightedSeriesIndex)) {
                 var evt = jQuery.Event('jqplotDataHighlight');
-		evt.which = ev.which;
+                evt.which = ev.which;
                 evt.pageX = ev.pageX;
                 evt.pageY = ev.pageY;
                 plot.target.trigger(evt, ins);
@@ -6036,7 +6036,7 @@
         if (neighbor) {
             var ins = [neighbor.seriesIndex, neighbor.pointIndex, neighbor.data];
             var evt = jQuery.Event('jqplotDataClick');
-	    evt.which = ev.which;
+            evt.which = ev.which;
             evt.pageX = ev.pageX;
             evt.pageY = ev.pageY;
             plot.target.trigger(evt, ins);
@@ -6051,7 +6051,7 @@
                 unhighlight(plot);
             }
             var evt = jQuery.Event('jqplotDataRightClick');
-	    evt.which = ev.which;
+            evt.which = ev.which;
             evt.pageX = ev.pageX;
             evt.pageY = ev.pageY;
             plot.target.trigger(evt, ins);
@@ -7954,7 +7954,7 @@
         
             var pad = false, 
                 reverse = false,
-				s;
+                s;
             for (var i = 0; i< series.length; i++) {
                 s = series[i];
                 if (s._stack || s.renderer.constructor == $.jqplot.BezierCurveRenderer){
@@ -9287,7 +9287,7 @@
         return str;
     };
 
-    // Not gauranteed to work, even on canvas supporting browsers due to 
+    // Not guaranteed to work, even on canvas supporting browsers due to 
     // limitations with location.href and browser support.
     $.fn.jqplotSaveImage = function() {
         var imgData = $(this).jqplotToImageStr({});
@@ -9297,7 +9297,7 @@
 
     };
 
-    // Not gauranteed to work, even on canvas supporting browsers due to
+    // Not guaranteed to work, even on canvas supporting browsers due to
     // limitations with window.open and arbitrary data.
     $.fn.jqplotViewImage = function() {
         var imgStr = $(this).jqplotToImageElemStr({});
@@ -10021,6 +10021,22 @@
             monthNamesShort: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze','Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
             dayNames: ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'],
             dayNamesShort: ['Ni', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb'],
+            formatString: '%Y-%m-%d %H:%M:%S'
+        },
+
+        'nl': {
+            monthNames: ['Januari','Februari','Maart','April','Mei','Juni','July','Augustus','September','Oktober','November','December'],
+            monthNamesShort: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'],
+            dayNames:','['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'],
+            dayNamesShort: ['Zo','Ma','Di','Wo','Do','Vr','Za'],
+            formatString: '%Y-%m-%d %H:%M:%S'
+        },
+
+        'sv': {
+            monthNames: ['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'],
+          monthNamesShort: ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'],
+            dayNames: ['söndag','måndag','tisdag','onsdag','torsdag','fredag','lördag'],
+            dayNamesShort: ['sön','mån','tis','ons','tor','fre','lör'],
             formatString: '%Y-%m-%d %H:%M:%S'
         }
     

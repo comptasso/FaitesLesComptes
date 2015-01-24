@@ -54,7 +54,7 @@ module Pdf
     set_request_path
     enqueue(exp)
     respond_to do |format|
-      # voir le fichier pdf/produce_pdf.js.erb
+  #    format.pdf { render pdf/produce_pdf.js.erb }
       format.js {render 'pdf/produce_pdf', type:'text/javascript'}
     end
   end

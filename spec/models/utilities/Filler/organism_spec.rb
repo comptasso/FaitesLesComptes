@@ -1,7 +1,7 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 
-require 'spec_helper'
+require 'spec_helper' 
 
 describe Utilities::Filler::Organism do
   include OrganismFixtureBis

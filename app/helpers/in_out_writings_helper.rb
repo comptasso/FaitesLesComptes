@@ -12,7 +12,7 @@ module InOutWritingsHelper
     else
       ar = org.destinations
     end
-    ar.order('name').all
+    ar.order('name').to_a
   end
   
   
@@ -59,7 +59,7 @@ module InOutWritingsHelper
           edit_book_in_out_writing_path(frontline.book_id, frontline.id)) 
         html <<  icon_to('supprimer.png', 
           book_in_out_writing_path(frontline.book_id, frontline.id),
-          confirm: 'Etes vous sûr?', method: :delete)
+          data:{confirm: 'Etes vous sûr?'}, method: :delete)
       end
     else 
       case frontline.writing_type
@@ -139,7 +139,7 @@ module InOutWritingsHelper
         edit_book_in_out_writing_path(writing.book_id, writing)) 
       html <<  icon_to('supprimer.png', 
         book_in_out_writing_path(writing.book, writing),
-        confirm: 'Etes vous sûr?', method: :delete) if deletable 
+        data:{confirm: 'Etes vous sûr?'}, method: :delete) if deletable 
     end
     html
   end

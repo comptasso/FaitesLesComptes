@@ -3,8 +3,9 @@
 <%  end %>
 
 
- <div class="inputs">
-  <%= simple_form_for [:admin,@organism, @period] ,   :html=> {class: 'form-horizontal'}, remote:true do |f| %>
+ <div class="panel-body">
+  <%= simple_form_for [:admin,@organism, @period] ,
+    :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form, remote:true do |f| %>
     <%= render partial:'inputs', :locals=>{f:f} %>
   <% end %>
 </div>

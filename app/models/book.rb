@@ -16,7 +16,7 @@ class Book < ActiveRecord::Base
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
 
-  attr_accessible :title, :description, :abbreviation
+  # attr_accessible :title, :description, :abbreviation
   
   belongs_to :organism
   has_many :writings, :dependent=>:destroy
@@ -25,7 +25,7 @@ class Book < ActiveRecord::Base
   # utilisé pour les delayed_jobs
   has_one :export_pdf, as: :exportable
 
-  scope :in_outs, where(:type=> ['IncomeBook', 'OutcomeBook'])
+  scope :in_outs, -> {where(:type=> ['IncomeBook', 'OutcomeBook'])}
 
   strip_before_validation :title, :description, :abbreviation
 

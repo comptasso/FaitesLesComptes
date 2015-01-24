@@ -2,24 +2,45 @@
   %h3 Tirage d'un compte : sélection des critères
   .inner-champ
 
-    %inputs.row-fluid
-      = simple_form_for @listing, :url=>compta_period_listing_path(@period),  :html=> {class: 'form-inline'} do |f|
+    .panel-body
+      = simple_form_for @listing,
+        :url=>compta_period_listing_path(@period),
+        :html=> {class: 'form-inline'},
+        wrapper: :inline_form do |f|
 
         = f.error_notification
-        .row-fluid
-          .span12
-            = f.input :from_date_picker, :label=> 'Date début', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker
-            = f.input :to_date_picker, :label=> 'Date fin', wrapper_html:{class:'span3'}, label_html: {class: 'span4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker
+        
+        .form-inputs
+          .col-lg-12
+            = f.input :from_date_picker,
+              wrapper_html:{class:'col-lg-4'},
+              :label=> 'Date début',
+              label_html: {class: 'col-lg-4'},
+              input_html: {date_min:@period.start_date, date_max:@period.close_date},
+              :required => true, :as=>:date_picker
+            = f.input :to_date_picker,
+              wrapper_html:{class:'col-lg-4'},
+              :label=> 'Date fin',
+              inline_wrapper_html:{class:'col-lg-4'},
+              label_html: {class: 'col-lg-4'},
+              input_html: {date_min:@period.start_date, date_max:@period.close_date},
+              :required => true, :as=>:date_picker
 
 
-        .row-fluid
-          .span12
-            = f.input :account_id, :collection=>@period.accounts.order('number ASC'),          |
-              wrapper_html:{class:'span6'}, :prompt=>false,                            |
-               label:'Compte', label_html: {class: 'span2'}, :label_method=>:long_name, |
-               input_html: {class: 'span10'} ,:required => true                 |
+        
+          .col-lg-12
+            = f.input :account_id, :collection=>@period.accounts.order('number ASC'),  
+               wrapper_html:{class:'col-lg-8'},
+               inline_wrapper_html:{class:'col-lg-8'}, :prompt=>false,
+               label:'Compte', :label_method=>:long_name,
+               label_html: {class: 'col-lg-2'},
+               :required => true              
 
-        .row-fluid
-          .span12
-            .form-actions.offset1
-              =  f.button :submit, 'Afficher les écritures du compte', id: 'new_line_button', class: "btn-primary span3"
+        
+          
+        .form-actions
+          .col-lg-12
+            =  f.button :submit,
+              'Afficher les écritures du compte',
+              id:'new_line_button',
+              class:'btn-primary col-lg-offset-9'

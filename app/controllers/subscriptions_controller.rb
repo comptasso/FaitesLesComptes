@@ -6,7 +6,8 @@ class SubscriptionsController < ApplicationController
   end
   
   def create
-    @sub = Subscription.find(params[:subscription][:id])
+    
+    @sub = Subscription.find(subscription_params[:id])
        
     if @sub && @sub.late?
       count = @sub.pass_writings
@@ -21,5 +22,10 @@ class SubscriptionsController < ApplicationController
     end
     
   end
-   
+  
+  private
+  
+  def subscription_params
+    params.require(:subscription).permit(:id)
+  end
 end

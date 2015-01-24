@@ -28,8 +28,8 @@ class Compta::Balance < ActiveRecord::Base
   column :to_account_id, :integer
   column :period_id, :integer
 
-  attr_accessible :from_date, :to_date, :from_account_id, :to_account_id, 
-    :period_id, :from_date_picker, :to_date_picker
+  # attr_accessible :from_date, :to_date, :from_account_id, :to_account_id, 
+  #  :period_id, :from_date_picker, :to_date_picker
 
   attr_accessor :nb_per_page
 

@@ -27,5 +27,6 @@
           %td
             = icon_to 'modifier.png', edit_admin_period_account_path(@period, account)
             - if (account.nb_cls.to_i == 0 && account.nb_nats.to_i == 0)
-              = icon_to 'supprimer.png', [:admin,@period,account], :confirm => 'Etes vous sur ?', :method => :delete 
+              = icon_to 'supprimer.png', [:admin,@period,account], 
+                data: {confirm: 'Etes vous sûr ?'} , :method => :delete 
   

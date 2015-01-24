@@ -16,7 +16,7 @@ class CashControlsController < ApplicationController
   end
 
   def create
-    @cash_control = @cash.cash_controls.new(params[:cash_control])
+    @cash_control = @cash.cash_controls.new(cash_control_params)
 
     if @cash_control.save
       redirect_to cash_cash_controls_url(@cash, @period.guess_month(@cash_control.date).to_french_h)
@@ -28,7 +28,7 @@ class CashControlsController < ApplicationController
 
   def update
     @cash_control=@cash.cash_controls.find(params[:id])
-     if @cash_control.update_attributes(params[:cash_control])
+     if @cash_control.update_attributes(cash_control_params)
       redirect_to cash_cash_controls_url(@cash, @period.guess_month(@cash_control.date).to_french_h)
     else
       @cash_control.date ||= @cash_control.max_date
@@ -69,6 +69,10 @@ class CashControlsController < ApplicationController
     @cash = Cash.find(params[:cash_id])
     @organism = @cash.organism
     current_period
+  end
+  
+  def cash_control_params
+    params.require(:cash_control).permit(:date, :amount, :date_picker)
   end
 
 
