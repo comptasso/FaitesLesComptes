@@ -24,7 +24,7 @@ html, body {
 
 
 
-.navbar .container-fluid {
+.navbar-fixed-top {
   background-color: #184b18;
     background-repeat: repeat-x;
     border: 1px solid #112911;
@@ -97,6 +97,7 @@ html, body {
 }
 
 #main-zone {
+  margin-top: 15px;
   padding-bottom:0.8em;
 }
 
