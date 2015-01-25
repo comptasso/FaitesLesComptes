@@ -8,7 +8,6 @@
 
 /* 
  * Fichier ajouté par JC pour avoir des fonctionnalités nouvelles de DataTable
- * La première partie permet une adaptation de datatable et de bootstrap
  * La deuxième partie apporte des ajouts pour pouvoir trier sur des nombres avec une décimale.
  * et sur les dates au format français.
  */

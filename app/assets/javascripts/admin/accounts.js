@@ -31,7 +31,7 @@ jQuery(function () {
     }
     $('.admin_accounts .data_table').dataTable(
         {
-              "sDom": "lfrtip",
+              "sDom": "<'col-lg-6'l>frt<'col-lg-6'i><'col-lg-6'p>",
 //            "sPaginationType": "bootstrap"
             "oLanguage": {
                 "sUrl": "/frenchdatatable.txt"
