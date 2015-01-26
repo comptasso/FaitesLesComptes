@@ -16,7 +16,7 @@ describe'admin/rooms/_form' do
 
   it 'has des radio button avec association et entreprise' do
      render :template=>'admin/rooms/new'
-     page.all('.controls .inline_radio_buttons').should have(3).elements # 'association et entreprise'
+     page.all('.radio-inline').should have(3).elements 
      page.find('#room_status_association').value().should == 'Association'
      page.find('#room_status_comit_dentreprise').value().should == 'Comité d\'entreprise'
      page.find('#room_status_entreprise').value().should == 'Entreprise'

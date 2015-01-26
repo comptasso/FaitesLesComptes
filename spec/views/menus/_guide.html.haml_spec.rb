@@ -48,7 +48,7 @@ describe "menus/_guide.html.haml" do
   end
   
   it 'le second affiche le sous titre' do
-    page.find('li:nth-child(2)').text.should == 'Modèles d\'écriture'
+    expect(page.find('li:nth-child(2)').text).to match("Modèles d'écriture")
   end
   
   it 'puis des liens avec le titre du masque comme texte' do

@@ -45,7 +45,7 @@ describe "menus/_menu.html.erb" do
     it 'le menu général ne doit pas s afficher' do
       @request.path = '/'
       render :template=>'devise/sessions/new', :layout=>'layouts/application'
-      page.all('#menu_general').count.should == 0
+      page.all('#main_nav').count.should == 0
     end
 
   end
@@ -112,7 +112,7 @@ describe "menus/_menu.html.erb" do
       end
 
       it 'affiche le menu Virement' do
-        page.find('ul#menu_general').should have_content ('TRANSFERTS')
+        page.find('ul#main_nav').should have_content ('TRANSFERTS')
       end
 
       it 'affiche le sous menu Afficher' do

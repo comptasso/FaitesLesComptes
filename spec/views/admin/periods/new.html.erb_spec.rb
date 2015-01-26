@@ -37,7 +37,7 @@ describe 'admin/periods/new'  do
 
   it 'form shoudl have submit button' do
     render
-    page.find('input[class="btn btn-primary span2"]').value.should == "Créer l'exercice"
+    page.find('input[class="btn btn-default btn-primary col-lg-2 col-lg-offset-2"]').value.should == "Créer l'exercice"
   end
 end
 
