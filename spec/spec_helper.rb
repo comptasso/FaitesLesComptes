@@ -49,7 +49,9 @@ Spork.prefork do
       # nettoyage des tables de SCHEMA_TEST
       # TODO voir s'il ne faudrait pas compléter ces tables.
       Apartment::Database.process(SCHEMA_TEST) do
-        Organism.find_each {|o| o.destroy }
+        Organism.delete_all
+        Period.delete_all
+        Book.delete_all
         Nature.delete_all
         Account.delete_all
         ComptaLine.delete_all
@@ -59,8 +61,8 @@ Spork.prefork do
         Folio.delete_all
         Nomenclature.delete_all
         Rubrik.delete_all
-        Adherent::Member.delete_all
-      end
+        Sector.delete_all
+      end if Apartment::Database.db_exist?(SCHEMA_TEST)
     end
     
     # pour les tests

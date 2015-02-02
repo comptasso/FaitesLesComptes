@@ -79,7 +79,7 @@ describe Stats::StatsNatures do
       end
 
       it 'peut produire un csv' do
-        @stats_natures.to_csv.should == "Natures\tjan. 14\tfév. 14\tmar. 14\tavr. 14\tmai 14\tjuin 14\tjuil. 14\taoût 14\tsept. 14\toct. 14\tnov. 14\tdéc. 14\tTotal\nRecette1\t1,00\t2,00\t3,00\t4,00\t5,00\t6,00\t7,00\t8,00\t9,00\t10,00\t11,00\t12,00\t78,00\t\nRecette2\t1,00\t2,00\t3,00\t4,00\t5,00\t6,00\t7,00\t8,00\t9,00\t10,00\t11,00\t12,00\t78,00\t\nDepense1\t1,00\t2,00\t3,00\t4,00\t5,00\t6,00\t7,00\t8,00\t9,00\t10,00\t11,00\t12,00\t78,00\t\nARecette2\t1,00\t2,00\t3,00\t4,00\t5,00\t6,00\t7,00\t8,00\t9,00\t10,00\t11,00\t12,00\t78,00\t\nTotaux\t4,00\t8,00\t12,00\t16,00\t20,00\t24,00\t28,00\t32,00\t36,00\t40,00\t44,00\t48,00\t312,00\t\n"
+        @stats_natures.to_csv.should == "Natures\tjan. 15\tfév. 15\tmar. 15\tavr. 15\tmai 15\tjuin 15\tjuil. 15\taoût 15\tsept. 15\toct. 15\tnov. 15\tdéc. 15\tTotal\nRecette1\t1,00\t2,00\t3,00\t4,00\t5,00\t6,00\t7,00\t8,00\t9,00\t10,00\t11,00\t12,00\t78,00\t\nRecette2\t1,00\t2,00\t3,00\t4,00\t5,00\t6,00\t7,00\t8,00\t9,00\t10,00\t11,00\t12,00\t78,00\t\nDepense1\t1,00\t2,00\t3,00\t4,00\t5,00\t6,00\t7,00\t8,00\t9,00\t10,00\t11,00\t12,00\t78,00\t\nARecette2\t1,00\t2,00\t3,00\t4,00\t5,00\t6,00\t7,00\t8,00\t9,00\t10,00\t11,00\t12,00\t78,00\t\nTotaux\t4,00\t8,00\t12,00\t16,00\t20,00\t24,00\t28,00\t32,00\t36,00\t40,00\t44,00\t48,00\t312,00\t\n"
       end
 
       # TODO ne pas oublier de tester le module Editions

@@ -14,10 +14,10 @@ describe 'vue natures index' do
   include OrganismFixtureBis  
 
   before(:each) do
-     use_test_user
-    login_as('quidam')
-    use_test_organism
     
+    use_test_user
+    use_test_organism
+    login_as('quidam')
   end
 
 
@@ -31,13 +31,15 @@ describe 'vue natures index' do
     end
 
     it 'reaffiche la page'  do
+      pending 'à compléter'
       visit new_admin_organism_period_nature_path(@o, @p)
     end
     
     describe 'création d une nature' do
 
       after(:each) do
-        @nouvelle_nature.destroy
+        @nouvelle_nature.destroy if @nouvelle_nature #car si le test 
+        # suivant ne marche pas, cela crée une erreur
       end
       
       it 'remplir correctement le formulaire crée une nouvelle nature' do
