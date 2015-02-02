@@ -58,9 +58,9 @@ describe Editions::Sheet do
       end
 
     it 'stamp' do
-      p.stub(:closed?).and_return true
+      p.stub_chain(:compta_lines, :unlocked, :any?).and_return false
       subject.stamp.should == ''
-      p.stub(:closed?).and_return false
+      p.stub_chain(:compta_lines, :unlocked, :any?).and_return true
       subject.stamp.should == 'Provisoire'
     end
 
