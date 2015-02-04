@@ -62,7 +62,7 @@ describe 'vue natures index' do
  
   describe 'vue index' do
     
-    it 'affiche deux tables' do
+    it 'affiche une table' do
       visit admin_organism_period_natures_path(@o, @p, book_id:@ob.id)
       page.should have_selector("tbody", :count=>1)
     end
