@@ -12,7 +12,7 @@ class Destination < ActiveRecord::Base
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
 
-  attr_accessible :name, :comment, :income_outcome, :sector_id
+  attr_accessible :name, :comment, :income_outcome, :sector_id, :used
 
   belongs_to :organism
   belongs_to :sector

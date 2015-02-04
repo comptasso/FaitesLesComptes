@@ -8,5 +8,6 @@
         required:true
     -else
       = f.association :sector,  input_html: {class: "span3"}, prompt:'Choisissez un secteur',
-        required:true, as: :hidden 
+        required:true, as: :hidden
+    =f.input :used, :as => :boolean 
     .form-actions= f.button :submit, class: "btn-primary span2" 

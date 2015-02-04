@@ -10,6 +10,7 @@
         %th Commentaire
         -if @organism.sectored?
           %th Secteur
+        %th Utilisé
         %th Actions
     %tbody
       - @destinations.each do |destination|
@@ -18,6 +19,9 @@
           %td= destination.comment
           -if @organism.sectored?
             %td= destination.sector.name
+          %td.dest_used{id:"td_used_#{destination.id}"}
+            =check_box_tag("used_#{destination.id}", destination.id, destination.used)
+              
           %td= icon_to('modifier.png', edit_admin_organism_destination_path(@organism,destination))  |
              << (icon_to('supprimer.png', [:admin,@organism,destination],:confirm => 'Etes vous sur ?', :method => :delete) if destination.compta_lines.empty?)        |
 

@@ -25,6 +25,10 @@ fr:
                 Vous pouvez réordonner les natures par un simple glisser-deposer.</p>
                 Cet ordre sera utilisé pour l'affichage des statistiques et des
                 listes déroulantes.
+      DestinationsController:
+        index: >
+                Activez ou désactivez les activités en cliquant sur la case à 
+                cocher 'Utilisé'. 
       BankAccountsController:
         new: >
                Par précaution, nous vous conseillons de rentrer le numéro de 

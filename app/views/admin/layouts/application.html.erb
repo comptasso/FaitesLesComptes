@@ -19,7 +19,7 @@
           <%= render 'admin/menus/menu' if user_signed_in? %>
         </div>
         <div id="main-zone">
-          <%= render 'layouts/flash_partial' %>
+          <div id="flashes"><%= render 'layouts/flash_partial' %></div>
 
           <%= yield %>
         </div>
