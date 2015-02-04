@@ -7,7 +7,7 @@ $ ->
       # récupérer l'id de la destination (value)
       url: window.location.pathname + '/' + destid.attr('value') + '/toggle_used'
       type: 'post'
-      success: (data, textStatus, jqXHR) ->
-        destid.parent('td').effect('highlight', {}, 1500)
+#      success: (data, textStatus, jqXHR) ->
+#        destid.parent('tr').effect('highlight', {}, 1500)
       error: (jqXHR, textStatus, errorThrown) ->
         destid.parent('td').effect('highlight', {}, 1500)

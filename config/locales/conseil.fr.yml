@@ -27,8 +27,8 @@ fr:
                 listes déroulantes.
       DestinationsController:
         index: >
-                Activez ou désactivez les activités en cliquant sur la case à 
-                cocher 'Utilisé'. 
+                Nouveau : Activez ou désactivez les activités en cliquant sur les
+                cases à cocher de la colonne 'Actif'. 
       BankAccountsController:
         new: >
                Par précaution, nous vous conseillons de rentrer le numéro de 

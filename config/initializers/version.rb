@@ -70,4 +70,5 @@
 # FLCVERSION = '1.6.10RC' # Passage à Rails 3.2.20 et conseils dans les vues in_out_lines
 # FLCVERSION = '1.6.11RC' # info sur num° de pièce pour les remises de chèques
 # FLCVERSION = '1.7.0RC' # sectorisation des numéros de comptes
-FLCVERSION = '1.7.1RC' # changer la banque d'une remise de chèque est possible
+# FLCVERSION = '1.7.1RC' # changer la banque d'une remise de chèque est possible
+FLCVERSION = '1.7.2RC' # mise en place d'un champ used pour les destinations

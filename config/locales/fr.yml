@@ -221,6 +221,7 @@ fr:
         name: Nom
         comment: Commentaire
         sector: Secteur
+        used: Actif
       nature:
         name: Nom
         comment: Commentaire
