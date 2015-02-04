@@ -124,9 +124,10 @@ describe 'vue transfer index'do
 
     it 'on peut le choisir dans la vue index pour le modifier', wip:true do
       within 'tbody tr:nth-child(2)' do
+        @lien =  find('a[title="Modifier"]')['href'] 
         click_link 'Modifier'
       end 
-      current_url.should match /.*#{edit_transfer_path(@t2)}\z/
+      current_url.should match /.*#{@lien}\z/
     end 
 
   end
