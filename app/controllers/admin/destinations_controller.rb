@@ -38,9 +38,9 @@ class Admin::DestinationsController < Admin::ApplicationController
     @destination = @organism.destinations.find(params[:id])
     if @destination
       @destination.toggle(:used).save
-      flash.now[:notice] = "Destination '#{@destination.name}' #{used_indication}"
+      flash.now[:notice] = "Activité '#{@destination.name}' #{used_indication}"
     else
-      flash.now[:alert] = 'Impossible de trouver la destination demandée'
+      flash.now[:alert] = 'Impossible de trouver l\'activité demandée'
     end
   end
 

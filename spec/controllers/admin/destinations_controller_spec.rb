@@ -205,7 +205,7 @@ describe Admin::DestinationsController do
     it 'si ne la trouve pas crée un flash alert' do
       @a.stub(:find).with(dest1.to_param).and_return(nil)
       post :toggle_used, {:organism_id=>@o.to_param,  :id => dest1.to_param, format: :js}, valid_session
-      flash[:alert].should == 'Impossible de trouver la destination demandée'
+      flash[:alert].should == 'Impossible de trouver l\'activité demandée'
     end
     
     
