@@ -2,6 +2,12 @@
 
 require 'spec_helper'
 
+RSpec.configure do |c|
+  #  c.filter = {:js=> true }
+  # c.filter = { :wip=>true}
+   # c.exclusion_filter = {:js=> true } 
+end
+
 # Specs in this file have access to a helper object that includes
 # the WritingsHelper. For example:
 #
@@ -95,11 +101,11 @@ describe InOutWritingsHelper do
            
       end
       
-      it 'indique que l écriture est dans une remise de chèque' do
+      it 'indique que l écriture est dans une remise de chèque', wip:true do
         @line.stub(:support_check_id).and_return 1
         helper.frontline_actions(@line).
           should match('Chèque inclus dans une remise de chèque,
-  le retirer de la remise pour pouvoir l&#x27;éditer') 
+  le retirer de la remise pour pouvoir l&#39;éditer') 
       end
       
        it 'ou qu elle pointée' do
@@ -107,7 +113,7 @@ describe InOutWritingsHelper do
         @line.stub(:bel_id).and_return 2
         helper.frontline_actions(@line).
           should match('Ecriture incluse dans un pointage de compte bancaire,
-    le retirer du pointage pour pouvoir l&#x27;éditer' ) 
+    le retirer du pointage pour pouvoir l&#39;éditer' ) 
       end
       
        it 'ou qu elle est verrouillée' do

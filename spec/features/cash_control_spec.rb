@@ -30,7 +30,7 @@ describe 'Cash Control Requests' do
     it "affiche la page new" do
       current_url.should match new_cash_cash_control_path(@c) 
       page.should have_content("Enregistrement d'un contrôle de la caisse")
-      all('form div.control-group').should have(2).elements # date et amount
+      all('form div.form-group').should have(2).elements # date et amount
 
     end  
 

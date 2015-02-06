@@ -132,9 +132,7 @@ class Nature < ActiveRecord::Base
   def fix_position
     pos = position_for_new_nature
     # puts "la position trouvée est la suivante : #{pos}"
-    if pos 
-       self.position = pos
-    end
+    self.position = pos if pos
   end
 
   # Stat crée un tableau donnant les montants totaux de la nature pour chacun

@@ -122,12 +122,7 @@ describe Nature do
       Nature.destroy_all 
     end
     
-    it 'regarde '  do
-      acc = @accounts.second
-      n = Nature.new(book_id:1, account_id:acc.id, name:'nouveau')
-      n.period_id = 1
-      n.position_for_new_nature.should == 2
-    end
+    
     
     it 'une nouvelle nature se met à la position dans l ordre des comptes', wip:true do
       acc = @accounts.second

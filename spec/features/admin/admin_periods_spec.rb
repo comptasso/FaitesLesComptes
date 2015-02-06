@@ -33,9 +33,9 @@ describe "Periods" do
    
       visit organism_path(@o)
       visit change_organism_period_path(@o, @next_period)
-      page.find('.brand').should have_content "#{(Date.today.year) + 1}"
+      page.find('a#home').should have_content "#{(Date.today.year) + 1}"
       visit change_organism_period_path(@o, @p)
-      page.find('.brand').should have_content "#{Date.today.year}"
+      page.find('a#home').should have_content "#{Date.today.year}"
     end
   
-end
+end 

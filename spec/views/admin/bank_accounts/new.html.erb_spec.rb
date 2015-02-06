@@ -15,7 +15,7 @@ describe 'admin/bank_accounts/new' do
     end
 
     it "should have title h3" do
-      page.find('h3').text.should ==  "Nouveau compte bancaire"
+      page.find('h3').should have_content "Nouveau compte bancaire"
 
     end
 

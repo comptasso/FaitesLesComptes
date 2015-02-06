@@ -30,7 +30,7 @@ describe 'admin cash' do
     it "affiche la page new" do
       current_url.should match new_admin_organism_cash_path(@o)
       page.should have_content("Nouvelle caisse")
-      all('form div.control-group').should have(3).elements # name, comment et sector
+      all('form div.form-group').should have(3).elements # name, comment et sector
       
     end
     

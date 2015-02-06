@@ -40,11 +40,11 @@ describe "admin/menus/_menu.html.erb" do
       end
     
       it 'le menu doit avoir un item Paramètres' do
-        page.find('ul#main-nav li a', text:'PARAMETRES')
+        page.find('ul#main_nav li a', text:'PARAMETRES')
       end
     
       it 'avec un sous item Bridge' do
-        page.find('a', text:'Adhérents')
+        page.find('ul#main_nav li a', text:'Adhérents')
       end
     
       it 'qui mène à Adherent::Bridge.members' do
