@@ -31,7 +31,7 @@ describe Admin::DestinationsController do
      
 
   def valid_attributes
-    {"name"=>'une activité', 'organism_id'=>@o.to_param, "used"=>true}
+    {"name"=>'une activité', "used"=>true}
   end
 
   before(:each) do

@@ -18,7 +18,7 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe Admin::BankAccountsController do 
+describe Admin::BankAccountsController do  
   include SpecControllerHelper
 
   let(:ba1) {mock_model(BankAccount)}
@@ -40,7 +40,7 @@ describe Admin::BankAccountsController do
 
 
     it "assigns all bank_accounts as @bank_accounts" do
-      @a.stub(:all).and_return [1,2] 
+      @a.stub(:to_a).and_return [1,2] 
       get :index, {:organism_id=>@o.id.to_s}, valid_session
       assigns(:bank_accounts).should == [1,2]
     end

@@ -21,7 +21,7 @@ describe Admin::RoomsController do
     end
     
     it 'assign user si la session existe' do
-      cu.stub_chain(:rooms, :includes).and_return [
+      cu.stub_chain(:rooms, :includes, :references).and_return [
         double(Room, relative_version: :same_migration),
         double(Room, relative_version: :same_migration)] 
       sign_in(cu)

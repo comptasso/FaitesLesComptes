@@ -28,7 +28,7 @@ class Destination < ActiveRecord::Base
 
   default_scope {order('name ASC')}
   
-  scope :used_filtered, where('used = ?', true)
+  scope :used_filtered, -> {where('used = ?', true)}
 
   before_destroy :ensure_no_lines
   

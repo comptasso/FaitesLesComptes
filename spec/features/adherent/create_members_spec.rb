@@ -25,7 +25,7 @@ describe 'création d un membre' do
   end
   
   it 'La vue est celle d un nouveau membre' do
-    page.should have_content('Nouveau membre') 
+    page.should have_content('Nouveau membre')  
   end
 
   it 'créer un membre renvoie sur la saisie des coordonnées',  wip:true do

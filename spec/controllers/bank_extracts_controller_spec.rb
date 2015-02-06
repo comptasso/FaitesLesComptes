@@ -31,7 +31,7 @@ describe BankExtractsController do
 
   describe "GET index" do
     it "sélectionne les extraits correspondant à l'exercice et les assigns à @bank_extracts" do
-      ba.stub_chain(:bank_extracts, :period, :all).and_return([be])
+      ba.stub_chain(:bank_extracts, :period, :to_a).and_return([be])
       get :index,{:organism_id=>@o.to_param, bank_account_id: ba.to_param}, valid_session
       assigns[:period].should == @p
       assigns[:bank_extracts].should == [be]

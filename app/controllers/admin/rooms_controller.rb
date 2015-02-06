@@ -26,7 +26,7 @@ class Admin::RoomsController < Admin::ApplicationController
     # TODO probablement améliorable en utilisant la méthode
     # User#organisms_with_romm
     lm = Room.jcl_last_migration
-    @rooms = current_user.rooms.includes(:holders).references(:holders).to_a
+    @rooms = current_user.rooms.includes(:holders).references(:holders)
     @status = @rooms.collect {|r| r.relative_version(lm)}
     build_flash_from_status(@status)
   end
