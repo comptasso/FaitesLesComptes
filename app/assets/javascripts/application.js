@@ -36,9 +36,9 @@ $(document).ready(function () {
 
 
 // activation de best_in_place
-$(document).ready(function() {
+$(document).ready(function () {
   /* Activating Best In Place */
-  jQuery(".best_in_place").best_in_place();
+    jQuery(".best_in_place").best_in_place();
 });
 
 
@@ -110,8 +110,8 @@ var jc_spinner_opts = {
     top: '100px', // car auto fait qu'on ne voit pas le spinner si le document affiché est long 
     // il se place au milieu de la zone donc alors invisible.
     left: 'auto' // Left position relative to parent in px
-  };
-  
+};
+
 var small_spinner_opts = {
     lines: 13, //# The number of lines to draw
     length: 5, // The length of each line
@@ -128,10 +128,17 @@ var small_spinner_opts = {
     zIndex: 2e9, // The z-index (defaults to 2000000000)
     // il se place au milieu de la zone donc alors invisible.
     left: '200px' // Left position relative to parent in px
-  };
-  
-  
-  
+};
+
+ // Valeurs par défaut pour les dataTables pour avoir la mise en page 
+// voulue pour les 4 accessoires (search, pagination,...)
+$.extend($.fn.dataTable.defaults, {
+    "sDom": "<'col-lg-6'l>frt<'col-lg-6'i><'col-lg-6'p>",
+    "oLanguage": {
+        "sUrl": "/frenchdatatable.txt"
+    }
+});
+
 
 // fonction pour transformer une chaine avec virgule en float
 // la fonction retire les espaces et remplace la virgule par le point décimal
@@ -153,22 +160,21 @@ function stringToFloat(jcdata) {
 // prend un nombre et en fait une chaîne avec deux décimales et 
 // une virgule comme séparateur décimal
 function $f_numberWithPrecision(number) {
-  var part1, part2, parts;
-  if (number === undefined) {
+    var part1, part2, parts, rgx = /(\d+)(\d{3})/;
+    if (number === undefined) {
         return '-';
     }
     number =  number.toFixed(2); // on garde deux décimales
     if (isNaN(number)) {
-      return '-';
+        return '-';
     } else {
-  parts = String(number).split('.');
-  part1 = parts[0];
-	part2 = parts.length > 1 ? ',' + parts[1] : '';
-	var rgx = /(\d+)(\d{3})/;
-	while (rgx.test(part1)) {
-		part1 = part1.replace(rgx, '$1' + ' ' + '$2');
-	}
-	return part1 + part2;
+        parts = String(number).split('.');
+        part1 = parts[0];
+        part2 = parts.length > 1 ? ',' + parts[1] : '';
+        while (rgx.test(part1)) {
+            part1 = part1.replace(rgx, '$1' + ' ' + '$2');
+        }
+        return part1 + part2;
     }
 }
 
@@ -196,73 +202,69 @@ function $f_empty() {
 jQuery(function () {
     $('table').on('focus', '.decimal', $f_empty); //vide le champ s'il est à zero (pour faciliter la saisie)
     $('table').on('blur', '.decimal', $f_two_decimals);
-   
 });
 
 // série de 3 fonctions utilisées pour le tri des tables
 // _fnAlert affiche un message si l'opération échoue'
 function _fnAlert(message, type) {
     alert(message);
-  }
+}
 
 
 // fnChangeValue met data-position et le premier champ de la ligne de la table
 // à la valeur donnéé par new_value
-  function fnChangeValue(element, new_value) {
+function fnChangeValue(element, new_value) {
     element.attr('data-position', new_value);
     element.find('td:first-child').text(new_value);
-  }
+}
 
-  // appelée par ajax en cas d'erreur
-  function fnCancelSorting(tbody, sMessage) {
+// appelée par ajax en cas d'erreur
+function fnCancelSorting(tbody, sMessage) {
     tbody.sortable('cancel');
-    if(sMessage !== undefined){
-      _fnAlert(sMessage, "");
-    }else{
-      _fnAlert("La ligne n'a pas pu être déplacée", "");
+    if (sMessage !== undefined) {
+        _fnAlert(sMessage, "");
+    } else {
+        _fnAlert("La ligne n'a pas pu être déplacée", "");
     }
-  }
+}
 
-  // fnMoveRows est la fonction appelée après la réponse ok de
-  // reorder du controller pour renuméroter l'information de position des lignes
-  // en effet, la mise à jour de l'affichage est faite par javascript et non par un
-  // render du controller
-  function fnMoveRows(tbody, from, to) {
-    var iFrom = parseInt(from);
-    var iTo = parseInt(to);
-    var pos;
+// fnMoveRows est la fonction appelée après la réponse ok de
+// reorder du controller pour renuméroter l'information de position des lignes
+// en effet, la mise à jour de l'affichage est faite par javascript et non par un
+// render du controller
+function fnMoveRows(tbody, from, to) {
+    var iFrom = parseInt(from), iTo = parseInt(to), pos;
     // par exemple, je passe la ligne 2 à la ligne 6,
     if (iTo > iFrom) {
-        tbody.find('tr').each(function(index){
-        pos = parseInt($(this).attr('data-position'));
-        // et la ligne 2 devient la ligne 6
-        if (pos === iFrom) {
-          fnChangeValue($(this), iTo.toString());
-        }
-        // les lignes 3 à 6 perdent 1 cran
-        if (pos > iFrom && pos <= iTo) {
-          fnChangeValue($(this), (pos-1).toString());
-        }
-      });
+        tbody.find('tr').each(function (index) {
+            pos = parseInt($(this).attr('data-position'));
+            // et la ligne 2 devient la ligne 6
+            if (pos === iFrom) {
+                fnChangeValue($(this), iTo.toString());
+            }
+            // les lignes 3 à 6 perdent 1 cran
+            if (pos > iFrom && pos <= iTo) {
+                fnChangeValue($(this), (pos - 1).toString());
+            }
+        });
     }
     //dans l'autre sens, je passe de la ligne 6 à la ligne 2'
     // donc iFrom = 6 et iTo = 2
     if (iTo < iFrom) {
-      tbody.find('tr').each(function(index){
-        pos = parseInt($(this).attr('data-position'));
-        // et la ligne 6 devient la ligne 2
-        if (pos === iFrom) {
-          fnChangeValue($(this), iTo.toString());
-        }
+        tbody.find('tr').each(function (index) {
+            pos = parseInt($(this).attr('data-position'));
+            // et la ligne 6 devient la ligne 2
+            if (pos === iFrom) {
+                fnChangeValue($(this), iTo.toString());
+            }
 
-        // les lignes 2 à 5 gagnent 1 cran
-        if (pos >= iTo && pos < iFrom) {
-          fnChangeValue($(this), (parseInt(pos)+1).toString());
-        }
-      });
+            // les lignes 2 à 5 gagnent 1 cran
+            if (pos >= iTo && pos < iFrom) {
+                fnChangeValue($(this), (parseInt(pos) + 1).toString());
+            }
+        });
     }
-
-  }
+}
 
 /* Ces deux fonctions ont pour objet de bloquer la page pour une action de téléchargement de 
  * fichier. 
@@ -290,17 +292,18 @@ function blockUIForDownload() {
     $('.inner-champ').block({ message: '<h1>Juste un instant...</h1>' });
     // $.blockUI();
     fileDownloadCheckTimer = window.setInterval(function () {
-      var cookieValue = $.cookie('download_file_token');
-      if (cookieValue === token)
-       finishDownload();
+        var cookieValue = $.cookie('download_file_token');
+        if (cookieValue === token) {
+            finishDownload();
+        }
     }, 1000);
-  }
+}
 
 
 function finishDownload() {
- window.clearInterval(fileDownloadCheckTimer);
- $.removeCookie('download_file_token', { path: '/' }); //remove the cookie
- $('.inner-champ').unblock();
+    window.clearInterval(fileDownloadCheckTimer);
+    $.removeCookie('download_file_token', { path: '/' }); //remove the cookie
+    $('.inner-champ').unblock();
 }
 
 
@@ -321,54 +324,55 @@ function finishDownload() {
 //toPosition. 
 //
 function fnTableSortable(table, action) {
-  $(table).sortable({
-    connectWith: table.val('id'),
-    items: "tr",
-    //callback utilisée pour le changement d'emplacement à l'intérieur de la table
-    // des natures.
-    update: function(event, ui) {
+    $(table).sortable({
+        connectWith: table.val('id'),
+        items: "tr",
+        //callback utilisée pour le changement d'emplacement à l'intérieur de la table
+        // des natures.
+        update: function (event, ui) {
+            var tbody = table,
+                id = ui.item.context.id,
+                from = $("#" + id).attr('data-position'),
+                to = -1;
+            // les id des lignes sont constituées uniquement de l'id de la Nature
 
-      var tbody = table;
-      var id = ui.item.context.id;
-      // les id des lignes sont constituées uniquement de l'id de la Nature
+            // la logique est la suivante : data-position donne la position initiale de la ligne
+            // après un déplacement data-position est du coup le numéro de ligne d'origine
 
-        // la logique est la suivante : data-position donne la position initiale de la ligne
-        // après un déplacement data-position est du coup le numéro de ligne d'origine
-        var from = $("#" + id).attr('data-position');
-        // il faut donc trouver à quelle place se trouve le drop
-        // chercher quel est le rang en balayant les lignes
-        var to = -1;
-        table.find('tr').each(function(index){
-          if ($(this).attr('id') === id) {
-            to = index;
-          }
+            // il faut donc trouver à quelle place se trouve le drop
+            // chercher quel est le rang en balayant les lignes
 
-        });
+            table.find('tr').each(function (index) {
+                if ($(this).attr('id') === id) {
+                    to = index;
+                }
 
-        $.ajax({
-          // l'action actuelle avec en plus l'action transmise en paramètre
-          // celà permet pour une vue index de l'appeler avec /reorder
-          // en supposant que l'action dans le controller est reorder
-          // Si on est dans une action précise par exemple pointage,
-          // cela permet de transmettre _reorder comme paramètre action
-          // ce qui appelera l'action pointage_reorder dans le controller'
-          url: window.location.pathname + action,
-          type: 'post',
-          data: {
-            id: id,
-            fromPosition: from,
-            toPosition: to
-          },
-          // puis on fait la mise à jour des données de la table
-          success: function () {
-            fnMoveRows(tbody, from, to);
-          },
-          // ou inversement on annule si erreur
-          error: function (jqXHR) {
-            fnCancelSorting(tbody, jqXHR.statusText);
-          }
-        });
+            });
 
-    }
-});
+            $.ajax({
+              // l'action actuelle avec en plus l'action transmise en paramètre
+              // celà permet pour une vue index de l'appeler avec /reorder
+              // en supposant que l'action dans le controller est reorder
+              // Si on est dans une action précise par exemple pointage,
+              // cela permet de transmettre _reorder comme paramètre action
+              // ce qui appelera l'action pointage_reorder dans le controller'
+                url: window.location.pathname + action,
+                type: 'post',
+                data: {
+                    id: id,
+                    fromPosition: from,
+                    toPosition: to
+                },
+                // puis on fait la mise à jour des données de la table
+                success: function () {
+                    fnMoveRows(tbody, from, to);
+                },
+                // ou inversement on annule si erreur
+                error: function (jqXHR) {
+                    fnCancelSorting(tbody, jqXHR.statusText);
+                }
+            });
+
+        }
+    });
 }

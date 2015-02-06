@@ -9,13 +9,7 @@
 jQuery(function () {
     if ($('.lines_table').length !== 0) {
         $('.lines_table').dataTable({
-            "sDom": "lfrtip",
-            //   "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span8'i><'span4'p> >",
-            
             "bAutoWidth": false,
-            "oLanguage": {
-                "sUrl": "/frenchdatatable.txt"
-            },
             "aoColumnDefs": [
                 {
                     "bSortable": false,

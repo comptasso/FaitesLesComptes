@@ -11,25 +11,24 @@ $(document).ready(function () {
     });
 });
 
-
-
-// mise en forme de la table index des organismes
-jQuery(function () {
-    /* Table initialisation */
-    $('.public_organisms .data_table').dataTable({
-        "sDom": "<'row-fluid'<'span9'l><'span3'f>r>t<'row-fluid'<'span9'i><'span3'p> >",
-        "bAutoWidth": false,
-        
-        "aoColumns": [
-            { "sWidth": "40%" },
-            { "sWidth": "50%" },
-            { "sWidth": "10%" },
-        ],
-        "oLanguage": {
-            "sUrl": "/frenchdatatable.txt"
-        }
-    });
-});
+// TODO à effacer après vérification qu'on ne se sert pas de dataTable pour
+// l'index des organismes
+//
+//// mise en forme de la table index des organismes
+//jQuery(function () {
+//    /* Table initialisation */
+//    $('.public_organisms .data_table').dataTable({
+//        
+//        "bAutoWidth": false,
+//        
+//        "aoColumns": [
+//            { "sWidth": "40%" },
+//            { "sWidth": "50%" },
+//            { "sWidth": "10%" }
+//        ]
+//        
+//    });
+//});
 //    fin de jQuery application#data_table
 
 

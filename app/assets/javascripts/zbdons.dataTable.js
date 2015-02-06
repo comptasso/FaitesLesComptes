@@ -14,6 +14,8 @@
 
 
 
+
+
 //plug in permettant d'ajouter le type numeric-comma aux colonnes'
 jQuery.fn.dataTableExt.aTypes.unshift(
     function (sData) {

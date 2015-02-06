@@ -146,6 +146,15 @@ font-size: smaller
 }
 
 
+/* pour modifier les couleurs des paginations de datatable */
+.pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus, .pagination > .active > span, .pagination > .active > span:hover, .pagination > .active > span:focus {
+    background-color: #1ab333;
+    border-color: #1ab333;
+}
+
+.pagination > li > a, .pagination > li > span {
+    color: #006633;
+}
 
 
 

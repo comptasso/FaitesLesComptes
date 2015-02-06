@@ -8,11 +8,7 @@
 
 $(document).ready(function () {
 	$('#transfer-table').dataTable({
-        "sDom": 'lfrtip',
-       
-        "oLanguage": {
-            "sUrl": "/frenchdatatable.txt"   // ce fichier est dans /public
-        },
+        
         "aoColumnDefs": [
             {
                 "bSortable": false,
