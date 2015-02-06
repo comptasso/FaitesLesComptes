@@ -183,6 +183,8 @@ class CheckDeposit < ActiveRecord::Base
     bank_account.current_account(bank_account.organism.find_period(deposit_date))
   end
 
+  # met à jour l'écriture après une modification de la remise
+  # y compris la banque qui est débitée
   def update_writing
     CheckDeposit.transaction do
       check_deposit_writing.date = deposit_date
@@ -190,7 +192,10 @@ class CheckDeposit < ActiveRecord::Base
       check_deposit_writing.written_by = written_by
       check_deposit_writing.save
       credit_compta_line.update_attribute(:credit, total_checks)
-      debit_compta_line.update_attribute(:debit, total_checks)
+      
+      debit_compta_line.update_attributes(debit:total_checks, 
+        account_id:bank_account_account.id)
+      
     end
   end
   

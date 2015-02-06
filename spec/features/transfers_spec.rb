@@ -101,13 +101,17 @@ describe 'vue transfer index'do
       
       visit transfers_path
     end
+    
+    after(:each) do
+      Transfer.delete_all
+    end
 
     it 'affiche une table avec deux virements' do
       page.should have_css('table tbody')
       page.all('table tbody tr').should have(2).rows
     end
 
-    it 'dans la vue virement,un virement peut être détruit si ',  :wip=> true, :js=>true do
+    it 'dans la vue virement,un virement peut être détruit si ', :js=>true do
       # à ce stade aucun virement n'est confirmé et peut être détruit
       within 'tbody tr:nth-child(2)' do
         click_link 'Supprimer' 
@@ -118,11 +122,12 @@ describe 'vue transfer index'do
       @od.transfers(true).should have(1).virement
     end
 
-    it 'on peut le choisir dans la vue index pour le modifier' do
+    it 'on peut le choisir dans la vue index pour le modifier', wip:true do
       within 'tbody tr:nth-child(2)' do
+        @lien =  find('a[title="Modifier"]')['href'] 
         click_link 'Modifier'
-      end
-      current_url.should match edit_transfer_path(@t2)
+      end 
+      current_url.should match /.*#{@lien}\z/
     end 
 
   end

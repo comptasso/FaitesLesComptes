@@ -12,7 +12,7 @@ class Destination < ActiveRecord::Base
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
 
-  # attr_accessible :name, :comment, :income_outcome, :sector_id
+
 
   belongs_to :organism
   belongs_to :sector
@@ -28,7 +28,7 @@ class Destination < ActiveRecord::Base
 
   default_scope {order('name ASC')}
   
-  
+  scope :used_filtered, where('used = ?', true)
 
   before_destroy :ensure_no_lines
   

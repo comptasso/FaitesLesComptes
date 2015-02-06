@@ -13,6 +13,7 @@
           <%= render 'layouts/navbar' %>
       <div>
           <%= render 'admin/menus/menu' if user_signed_in? %>
+
       </div>
     </div>
      
@@ -21,6 +22,7 @@
         <div id="flashpartial"><%= render 'layouts/flash_partial' %></div>
         <div id="message" class="row"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
         <%= yield %>
+
       </div>
     </div>
     <%= render 'layouts/bottom_page' %>

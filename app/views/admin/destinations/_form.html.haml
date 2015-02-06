@@ -10,5 +10,6 @@
           required:true
       -else
         = f.association :sector,  my_wrapper_html:{class: "col-lg-3"}, prompt:'Choisissez un secteur',
-          required:true, as: :hidden 
+          required:true, as: :hidden
+      =f.input :used, :as => :boolean  
     .form-actions= f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-2" 

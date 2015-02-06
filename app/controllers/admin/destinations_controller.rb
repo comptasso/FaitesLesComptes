@@ -7,7 +7,7 @@ class Admin::DestinationsController < Admin::ApplicationController
   # GET /destinations
   # GET /destinations.json
   def index
-    @destinations = @organism.destinations.all
+    @destinations = @organism.destinations
 
     respond_to do |format|
       format.html # index.html.erb
@@ -30,6 +30,18 @@ class Admin::DestinationsController < Admin::ApplicationController
   # GET /destinations/1/edit
   def edit
     @destination = @organism.destinations.find(params[:id])
+  end
+  
+  # permet de modifier le champ used. Appelé par du javascript de la vue index
+  # de admin_destinations
+  def toggle_used
+    @destination = @organism.destinations.find(params[:id])
+    if @destination
+      @destination.toggle(:used).save
+      flash.now[:notice] = "Activité '#{@destination.name}' #{used_indication}"
+    else
+      flash.now[:alert] = 'Impossible de trouver l\'activité demandée'
+    end
   end
 
   # POST /destinations
@@ -79,11 +91,22 @@ class Admin::DestinationsController < Admin::ApplicationController
     end
   end
   
+  
+  protected
+  
+  def used_indication   
+    @destination.used ? 'activée' : 'désactivée'
+  end
+
   private
   
   def destination_params
     params.require(:destination).permit(:name, :comment, 
-      :income_outcome, :sector_id)
+      :income_outcome, :sector_id, :used)
   end
   
+
+  
+  
+
 end

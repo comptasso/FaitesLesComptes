@@ -158,7 +158,7 @@ describe Compta::AnalyticalBalance do
     
     it 'la première contient les titres' do
       subject.to_csv.split("\n").first.should ==  
-        "Balance analytique\t\"\"\t\"\"\t\"\"\tDu 01/01/2014\tAu 31/12/2014"
+        "Balance analytique\t\"\"\t\"\"\t\"\"\tDu 01/01/2015\tAu 31/12/2015"
     end
     
     it 'la première contient les titres' do

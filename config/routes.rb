@@ -135,7 +135,9 @@ Faitesvoscomptes::Application.routes.draw do
       resources :outcome_books
       
     
-      resources :destinations
+      resources :destinations do
+        member { post 'toggle_used'}
+      end
       resources :bank_accounts 
       resources :cashes 
       resources :periods do

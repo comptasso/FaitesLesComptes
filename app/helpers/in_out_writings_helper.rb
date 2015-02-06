@@ -8,9 +8,9 @@ module InOutWritingsHelper
   # renvoie les destinations correspondant au secteur si l'organisme est sectorisé
   def sectored_destinations(org, book)
     if org.sectored?
-      ar = book.sector.destinations
+      ar = book.sector.destinations.used_filtered
     else
-      ar = org.destinations
+      ar = org.destinations.used_filtered
     end
     ar.order('name').to_a
   end

@@ -84,6 +84,7 @@ module OrganismFixtureBis
       Folio.delete_all
       Nomenclature.delete_all
       Rubrik.delete_all
+      Sector.delete_all
     end if Apartment::Database.db_exist?(SCHEMA_TEST)
     
   end

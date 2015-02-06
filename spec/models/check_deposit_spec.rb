@@ -233,16 +233,16 @@ describe CheckDeposit do
 
     describe 'edition' do 
 
-      it 'remove a check'  do
+      it 'enlever un chèque modifie le montant total de la remise'  do
         l2 = @w2.children.last
         @check_deposit.checks.delete(l2)
         @check_deposit.total_checks.should == 344
         @check_deposit.save!
-        # doit modifier la ligne total de la remise
+        # TODO vérifier la modif sur les lignes débit crédit 
         
       end
 
-      it 'add_check'  do
+      it 'after_update met à jour le montant des compta_lines'  do
         @check_deposit.total_checks.should == 445
         @check_deposit.checks.delete(@w1.support_line)
         @check_deposit.checks.delete(@w3.support_line)
@@ -254,13 +254,36 @@ describe CheckDeposit do
         @check_deposit.debit_line.debit.should == 401
       end
 
-      it 'change date' do
+
+      it 'after_update met à jour la date de la writing' do
         @check_deposit.check_deposit_writing.date.should == (@p.start_date + 2)
         @check_deposit.deposit_date  =  Date.today
         @check_deposit.should be_valid
         @check_deposit.save
         @check_deposit.check_deposit_writing.date.should == Date.today
-
+      end
+      
+      describe 'avec deux banques', wip:true do
+        
+        before(:each) do
+          # crée une deuxième banque 
+           @ba2 = @o.bank_accounts.new(bank_name:'CMNE', number:'8887',
+             nickname:'Livret', sector_id:1)
+           puts @ba2.errors.messages if @ba2.errors.any?
+           @ba2.save!
+        end
+        
+        after(:each) do
+          # détruit cette deuxième banque
+          @ba2.destroy
+        end
+        
+        it 'after_update met à jour la banque de la compta_line débitée' do
+          @check_deposit.bank_account_id = @ba2.id
+          @check_deposit.save!
+          @check_deposit.debit_line.account_id.should == @ba2.current_account(@p).id
+        end
+      
       end
       
       it "on peut changer le compte bancaire" do  
