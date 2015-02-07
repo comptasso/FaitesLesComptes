@@ -39,6 +39,15 @@ li.dropdown > a:hover {
   
 }
 
+.nav .dropdown-toggle .caret {
+    border-bottom-color: #11ad11;
+    border-top-color: #11ad11;
+}
+
+.dropdown .caret {
+    margin-left: 2px;
+}
+
 li.dropdown span.no-link {
   padding: 3px 20px;
   color: #888;

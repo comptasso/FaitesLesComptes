@@ -23,31 +23,8 @@
   </li>
 
   <% if (@organism  && @organism.persisted?) %>
-    <li class="dropdown <%= 'active' if controller.controller_name =='books'  %>">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">LIVRES<b class="caret"></b></a>
-      <%= admin_afficher('book') %>
-    </li>
-    
-    <li class="dropdown <%= 'active' if controller.controller_name =='masks' || controller.controller_name == 'subscriptions' %>">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">GUIDES DE SAISIE<b class="caret"></b></a>
-      <ul class="dropdown-menu" >
-        <%= admin_sub_menu('guides', 'mask') %>
-        <li class="divider"></li>
-        <%= admin_sub_menu('abonnements', 'subscription') %>
-      </ul>
-    </li>
-
-    
-
-    <li class="dropdown <%= 'active' if controller.controller_name =='destinations'  %>">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">ACTIVITES<b class="caret"></b></a>
-      <ul class="dropdown-menu">
-        <li><%= link_to 'Afficher', admin_organism_destinations_path(@organism)  %></li>
-        <li><%=link_to  'Nouveau', new_admin_organism_destination_path(@organism)  %></li>
-      </ul>
-    </li>
-
-    <li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
+  
+   <li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">BANQUES<b class="caret"></b></a>
       <%= admin_menu('bank_account') %>
     </li>
@@ -56,6 +33,50 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">CAISSES<b class="caret"></b></a>
       <%= admin_menu('cash') %>
     </li>
+  
+    <li class="dropdown <%= 'active' if controller.controller_name =='destinations'  %>">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">ACTIVITES<b class="caret"></b></a>
+      <ul class="dropdown-menu">
+        <li><%= link_to 'Afficher', admin_organism_destinations_path(@organism)  %></li>
+        <li><%=link_to  'Nouveau', new_admin_organism_destination_path(@organism)  %></li>
+      </ul>
+    </li>
+  
+   
+    
+   
+
+     <% if  @period && @period.persisted? %>
+
+
+    <%=  render :partial=>'admin/menus/nature'  %>
+   
+
+      <li class="dropdown <%= 'active' if controller.controller_name =='accounts'  %>">
+         
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">COMPTES<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <%=  content_tag(:li, link_to('Afficher', admin_period_accounts_path(@period)))  %>
+          <%= content_tag(:li, link_to('Nouveau', new_admin_period_account_path(@period))) %>
+         
+          
+        
+         
+         </ul>
+
+      </li>
+   <% end %>    
+
+    
+ <li class="dropdown <%= 'active' if controller.controller_name =='masks' || controller.controller_name == 'subscriptions' %>">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">GUIDES DE SAISIE<b class="caret"></b></a>
+      <ul class="dropdown-menu" >
+        <%= admin_sub_menu('guides', 'mask') %>
+        <li class="divider"></li>
+        <%= admin_sub_menu('abonnements', 'subscription') %>
+      </ul>
+    </li>
+   
 
 
     <li class="dropdown <%= 'active' if controller.controller_name =='periods'  %>">
@@ -72,37 +93,27 @@
       </ul>
     </li>
 
-    <% if  @period && @period.persisted? %>
-
-
-    <%=  render :partial=>'admin/menus/nature'  %>
    
-
-      <li class="dropdown <%= 'active' if controller.controller_name =='accounts'  %>">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">COMPTES<b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <%=  content_tag(:li, link_to('Afficher', admin_period_accounts_path(@period)))  %>
-          <%= content_tag(:li, link_to('Nouveau', new_admin_period_account_path(@period))) %>
-         
-          
-        
-         
+      <li class="dropdown <%= 'active' if controller.controller_name.in? ['books', 'bridges']   %>" >
+         <a href="#" class="dropdown-toggle" data-toggle="dropdown">DIVERS<b class="caret"></b></a>
+         <ul class="dropdown-menu">
+      
+            <li><%= link_to 'Livres', admin_organism_books_path(@organism)  %></li> 
+            <% if @organism.status == 'Association' %>  
+               <li><%= link_to 'Adhérents', admin_organism_bridge_path(@organism)  %></li> 
+            <% end %>
          </ul>
+        </li>
 
-      </li>
-
-  <% end %> 
+  
       
-      <% if @organism.status == 'Association' %>   
-         <li class="dropdown <%= 'active' if controller.controller_name =='bridges'  %>">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">PARAMETRES<b class="caret"></b></a>
-      <ul class="dropdown-menu">
-          <li><%= link_to 'Adhérents', admin_organism_bridge_path(@organism)  %></li> 
-          
-        </ul>
-    </li>
+       
       
-      <% end %>
+      
+        
+    
+      
+     
 
 <% end %>
 <!-- pas très bien nommé, la suite affiche les icones -->
