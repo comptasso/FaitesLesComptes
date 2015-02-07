@@ -1,16 +1,15 @@
-.navbar
-  .navbar-inner
-    .container
-      .brand
-        = link_to header_title, main_app.organism_path(@organism), :tabindex=>-1, id:'home', class:'with_spinner'
-        #login_logout
-          Connecté en tant que &nbsp; 
-          %span
-            = link_to "#{current_user.name}", main_app.edit_user_registration_path(:user), title:'Modifier vos données personnelles'
-          &nbsp;-&nbsp;
-          = icon_to 'door-open.png', main_app.destroy_user_session_path, :method=>:delete, title:'Déconnexion', :tabindex=>-1
-
-      %ul.nav.nav-pills.pull-right
-        %li{:class=> active_inactive('adherent')}= link_to('ADHERENTS', adherent.members_path) 
-        %li{:class=> active_inactive('compta')}
-          = link_to('COMPTA', main_app.organism_path(@organism), title:'Vers le module de comptabilité')
+%nav.navbar.navbar-fixed-top{role:"navigation"}
+  .home
+    %ul.nav.nav-pills.pull-right#upper-menu
+      %li{:class=> active_inactive('adherent')}= link_to('ADHERENTS',
+        adherent.members_path) 
+      %li{:class=> active_inactive('compta')}= link_to('COMPTA',
+        main_app.organism_path(@organism), title:'Vers le module de comptabilité')
+    = link_to header_title, main_app.organism_path(@organism),
+      :tabindex=>-1, id:'home', class:'with_spinner'
+    = render 'layouts/login_logout'
+  %div#main_nav
+    %ul.nav.nav-tabs#menu_general
+      -# pas très bien nommé, la suite affiche les icones
+      %li.horizontal_icons
+        = yield :menu

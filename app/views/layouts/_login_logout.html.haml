@@ -4,7 +4,7 @@
     %span
       = link_to " #{current_user.name}", edit_registration_path(:user), title:'Modifier vos données personnelles'
     &nbsp;-&nbsp;
-    = icon_to 'door-open.png', destroy_user_session_path, :method=>:delete, title:'Déconnexion', :tabindex=>-1
+    = icon_to 'door-open.png', main_app.destroy_user_session_path, :method=>:delete, title:'Déconnexion', :tabindex=>-1
   - else
     -if devise_mapping.registerable? && controller_name != 'devise_registrations' && action_name != 'bye'
       Créer un compte
