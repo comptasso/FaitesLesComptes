@@ -66,6 +66,18 @@
     text-decoration: none;
 }
 
+/* rajouté pour avoir link_to_if et link_to_unless qui affichent le lien en grisé */
+.dropdown-menu span.disable {
+    clear: both;
+    color: #888888;
+    display: block;
+    font-weight: normal;
+    line-height: 18px;
+    padding: 3px 10px;
+    white-space: nowrap;
+}
+
+
 li.nav-header > a {
   text-transform: uppercase;
   text-align: center;
