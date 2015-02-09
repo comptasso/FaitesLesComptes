@@ -24,9 +24,12 @@
       <div id="top_navigation">
           <%= render 'layouts/navbar' %>
         </div>
-      <div id="main_nav">
-          <%= render 'menus/menu' if user_signed_in? && controller_name != 'registrations' %>
-      </div>
+      <%  if user_signed_in? && controller_name != 'registrations' %>
+        <div id="main_nav">
+            <%= render 'menus/menu'  %>
+        </div>
+      <% end %>
+      
     </nav>
     
     <div> 
@@ -36,7 +39,7 @@
     <div class="container-fluid" >
 
       <div id="main-zone">
-          <div><%= render 'layouts/flash_partial' %></div>  
+          <div id="flashpartial"><%= render 'layouts/flash_partial' %></div>  
           <div id="message" class="row"></div><%# pour les messages utilisés par produce_pdf.js_erb%> 
           <%= yield %>
           
