@@ -6,16 +6,17 @@
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
-  <body class='<%= "admin_#{controller.controller_name}"  %>  admin' style="padding-top:90px;">
+  <body class='<%= "admin_#{controller.controller_name}"  %>  admin' >
     
      
-    <div class="navbar navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-fixed-top" role="navigation">
+      <div id="top_navigation">
           <%= render 'layouts/navbar' %>
-      <div>
+        </div>
+      <div id="main_nav">
           <%= render 'admin/menus/menu' if user_signed_in? %>
-
       </div>
-    </div>
+    </nav>
      
     <div class="container-fluid">
       <div id="main-zone">

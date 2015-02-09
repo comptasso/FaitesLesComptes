@@ -21,8 +21,10 @@
   <body class="<%= 'public_'+controller.controller_name %>" >
 
     <nav class="navbar navbar-fixed-top" role="navigation">
+      <div id="top_navigation">
           <%= render 'layouts/navbar' %>
-      <div>
+        </div>
+      <div id="main_nav">
           <%= render 'menus/menu' if user_signed_in? && controller_name != 'registrations' %>
       </div>
     </nav>

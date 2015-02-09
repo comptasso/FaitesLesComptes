@@ -6,12 +6,17 @@
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
-  <body class='<%=  "compta_#{controller.controller_name}" %> compta' style="padding-top:90px;">
+  <body class='<%=  "compta_#{controller.controller_name}" %> compta'>
     
-    <div class="navbar navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-fixed-top" role="navigation">
+      
+      <div id="top_navigation">
           <%= render 'layouts/navbar' %>
-      <div>   <%= render 'compta/menus/menu' if user_signed_in? %></div>
-    </div>
+        </div>
+      <div id="main_nav">
+         <%= render 'compta/menus/menu' if user_signed_in? %>
+      </div>
+    </nav>
     
     <div> 
       <%=  yield :modal %>
