@@ -24,9 +24,7 @@ table a img
 
 .nav, .conseil p {margin-bottom: 4px;}
 
-.nav > li > a:hover {
-    background-color: #CBEECB;
-}
+
 
 /* rajouté pour avoir link_to_if et link_to_unless qui affichent le lien en grisé */
 .dropdown-menu span.disable {
