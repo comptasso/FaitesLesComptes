@@ -200,8 +200,8 @@ function $f_empty() {
 
 
 jQuery(function () {
-    $('table').on('focus', '.decimal', $f_empty); //vide le champ s'il est à zero (pour faciliter la saisie)
-    $('table').on('blur', '.decimal', $f_two_decimals);
+    $('#main-zone').on('focus', '.decimal', $f_empty); //vide le champ s'il est à zero (pour faciliter la saisie)
+    $('#main-zone').on('blur', '.decimal', $f_two_decimals);
 });
 
 // série de 3 fonctions utilisées pour le tri des tables
