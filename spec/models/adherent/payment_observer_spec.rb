@@ -81,7 +81,7 @@ describe Adherent::Payment do
       @pay.save
       w = Adherent::Writing.find_by_bridge_id(@pay.id)
       w.book.should == @ib
-      w.narration.should == "Payment adhérent Jean DUPONT"
+      w.narration.should == "Paiement adhérent Jean DUPONT"
       w.date.should == Date.today
       
       clf =  w.compta_lines.first
