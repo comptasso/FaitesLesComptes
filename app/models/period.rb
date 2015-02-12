@@ -389,7 +389,7 @@ class Period < ActiveRecord::Base
     if text.length < 5 # c'est le cas d'une année simple; 2013 par exemple
       "Exercice #{text}"
     else
-      "Exercice \n#{text}"
+      text
     end
   end
   
