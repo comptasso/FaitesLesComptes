@@ -22,7 +22,7 @@ module Adherent
       w = ib.adherent_writings.new(
          date:record.read_attribute(:date),
          ref:"adh #{member.number}",
-         narration:"Payment adhérent #{member.to_s}",
+         narration:"Paiement adhérent #{member.to_s}",
          bridge_id:record.id,
          bridge_type:'Adherent',
          compta_lines_attributes:{'1'=>compta_line_attributes(record),
