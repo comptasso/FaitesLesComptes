@@ -11,66 +11,66 @@ describe Compta::Listing do
   
   describe 'test avec des mock' do
 
-   def double_compta_line(i)
-     double(ComptaLine,
-       date:(Date.today-1),
-       narration:"Lignen° #{i}",
-       ref:'',
-       book:double(title:'Recettes'),
-       nature_name:'nature',
-       destination_name:'dest',
-       debit:i,
-       credit:0)
-   end
-
-
-
-   before(:each) do
-    @p = mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year )
-    @a1 = mock_model(Account, :period=>@p, :period_id=>@p.id,
-      all_lines_locked?:false)
-    @a1.stub_chain(:compta_lines, :listing).and_return
-    @listing = Compta::Listing.new  
-  end
-
-  it "has a virtual attribute date_from_picker et et date_do_picker" do
-    @listing.from_date_picker =  '01/01/2012'
-    @listing.from_date.should == Date.civil(2012,1,1)
-    @listing.to_date_picker =  '01/01/2012'
-    @listing.to_date.should == Date.civil(2012,1,1)
-  end
-
-  it 'should have a account_id' do
-    @listing.valid?
-    @listing.should have(1).errors_on(:account_id)
-  end
-
-  it 'test de date hors de la période' do
-    @listing.from_date_picker = '01/01/2011'
-     @listing.to_date_picker =  '31/12/2012'
-     @listing.account_id = @a1.id
-     @listing.should have(1).errors_on(:from_date)
-     
-  end
-
-   context 'testing methods and validations' do
-      def valid_arguments
-      { 
-        from_date:Date.today.beginning_of_month,
-        to_date:Date.today.end_of_month,
-        account_id:@a1.id
-      }
+    def double_compta_line(i)
+      double(ComptaLine,
+        date:(Date.today-1),
+        narration:"Lignen° #{i}",
+        ref:'',
+        book:double(title:'Recettes'),
+        nature_name:'nature',
+        destination_name:'dest',
+        debit:i,
+        credit:0)
     end
+
+
+
+    before(:each) do
+      @p = mock_model(Period, start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year )
+      @a1 = mock_model(Account, :period=>@p, :period_id=>@p.id,
+        all_lines_locked?:false)
+      @a1.stub_chain(:compta_lines, :listing).and_return
+      @listing = Compta::Listing.new  
+    end
+
+    it "has a virtual attribute date_from_picker et et date_do_picker" do
+      @listing.from_date_picker =  '01/01/2012'
+      @listing.from_date.should == Date.civil(2012,1,1)
+      @listing.to_date_picker =  '01/01/2012'
+      @listing.to_date.should == Date.civil(2012,1,1)
+    end
+
+    it 'should have a account_id' do
+      @listing.valid?
+      @listing.should have(1).errors_on(:account_id)
+    end
+
+    it 'test de date hors de la période' do
+      @listing.from_date_picker = '01/01/2011'
+      @listing.to_date_picker =  '31/12/2012'
+      @listing.account_id = @a1.id
+      @listing.should have(1).errors_on(:from_date)
+     
+    end
+
+    context 'testing methods and validations' do
+      def valid_arguments
+        { 
+          from_date:Date.today.beginning_of_month,
+          to_date:Date.today.end_of_month,
+          account_id:@a1.id
+        }
+      end
 
       before(:each) do
-      @l = Compta::Listing.new(valid_arguments)
-      @l.stub(:account).and_return @a1
-    end
-
-    describe 'methods' do
-       it 'should retrieve period' do
-         @l.period.should == @p
+        @l = Compta::Listing.new(valid_arguments)
+        @l.stub(:account).and_return @a1
       end
+
+      describe 'methods' do
+        it 'should retrieve period' do
+          @l.period.should == @p
+        end
 
         it 'lines returns un arel' do
           @l.should_receive(:set_lines)
@@ -91,7 +91,7 @@ describe Compta::Listing do
           @l.solde_debit_avant.should == 256
         end
 
-         it 'connait son solde de départ credit' do
+        it 'connait son solde de départ credit' do
           @l.should_receive(:cumulated_credit_before).with(@l.from_date).and_return -16256
           @l.solde_credit_avant.should == -16256
         end
@@ -101,39 +101,27 @@ describe Compta::Listing do
           @l.total_debit.should == 27.56
         end
 
-         it 'total credit reprend les mouvements de credit' do
+        it 'total credit reprend les mouvements de credit' do
           @l.should_receive(:movement).with(@l.from_date, @l.to_date, 'credit').and_return 277777.56
           @l.total_credit.should == 277777.56
-        end
+        end 
 
-        it 'sait produire un csv' do
-          @l.stub(:solde_debit_avant).and_return 0
-          @l.stub(:solde_credit_avant).and_return 0
-          @l.stub(:total_debit).and_return 27
-          @l.stub(:total_credit).and_return 568
-          @l.stub(:lines).and_return(1.upto(45).collect {|i| double_compta_line(i)  })
-          @l.to_csv.should be_a String
-          
-        end
-
-  
+      end
 
     end
-
-   end
    
     
   end
   
-  describe 'test en réel', wip:true do
+  describe 'test en réel' do
     
     def render_file(pdf, file_name) 
-    file =  "#{File.dirname(__FILE__)}/pdf_files/#{file_name}.pdf"
-    File.delete(file) if File.exists?(file)
-    File.open(file, 'wb') do |f| 
-      f << pdf.render 
-    end
-  end  
+      file =  "#{File.dirname(__FILE__)}/pdf_files/#{file_name}.pdf"
+      File.delete(file) if File.exists?(file)
+      File.open(file, 'wb') do |f| 
+        f << pdf.render 
+      end
+    end  
     
     before(:each) do
       use_test_organism
@@ -151,6 +139,10 @@ describe Compta::Listing do
     it 'avec les lignes verrouillées' do
       Account.any_instance.stub(:all_lines_locked?).and_return true
       pdf = @listing.to_pdf
+    end
+    
+    it 'peut aussi créer un csv' do
+      @listing.to_csv.should match /\AListe des écritures.*/
     end
     
     
