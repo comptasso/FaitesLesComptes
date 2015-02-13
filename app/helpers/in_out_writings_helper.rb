@@ -96,7 +96,7 @@ module InOutWritingsHelper
   end
 
   # permet d'afficher les actions possible dans une ligne d'écriture
-  # 
+  # ne fait qu'entourer d'une balise td.icon le résultat de line_actions
   def in_out_line_actions(line)
     content_tag :td, :class=>'icon' do
       line_actions(line)
@@ -134,12 +134,19 @@ module InOutWritingsHelper
       html <<  icon_to('modifier.png', edit_transfer_path(writing.id)) 
     when Adherent::Writing then html << icon_to('detail.png', 
         adherent.member_payments_path(writing.member))
-    else
+    when InOutWriting
       html <<  icon_to('modifier.png', 
         edit_book_in_out_writing_path(writing.book_id, writing)) 
       html <<  icon_to('supprimer.png', 
-        book_in_out_writing_path(writing.book, writing),
-        confirm: 'Etes vous sûr?', method: :delete) if deletable 
+        book_in_out_writing_path(writing.book_id, writing),
+        confirm: 'Etes vous sûr?', method: :delete) if deletable
+    else # cas d'une Writing passée par le journal d'OD, on va sur le module
+      # compta
+      html <<  icon_to('modifier.png', 
+        edit_compta_book_writing_path(writing.book_id, writing)) 
+      html <<  icon_to('supprimer.png', 
+        compta_book_writing_path(writing.book_id, writing),
+        confirm: 'Etes vous sûr?', method: :delete) if deletable
     end
     html
   end
