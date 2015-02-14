@@ -16,7 +16,7 @@ module Admin::OrganismsHelper
   # Indique jamais si ce n'a pas encore été fait
   def last_data_build(organism)
     nomen = organism.nomenclature
-    return 'jamais' unless nomen.job_finished_at
+    return 'pas encore' unless nomen.job_finished_at
     return 'il y a ' + time_ago_in_words(nomen.job_finished_at,
       include_seconds:true)
   end
