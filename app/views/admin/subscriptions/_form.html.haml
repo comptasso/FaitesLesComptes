@@ -1,12 +1,13 @@
 .panel-body
   = simple_form_for([:admin, @organism, @subscription],
-    :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form) do |f|
+    :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form, 
+    wrapper_mappings:{boolean: :horizontal_boolean}) do |f|
     = f.error_notification
     .form-inputs
       = f.input :title,  my_wrapper_html:{class: "col-lg-6"}
       = f.association :mask, collection:@completed, my_wrapper_html:{class: "col-lg-6"}
       = f.input :day, :collection=>(1..31), my_wrapper_html:{class: "col-lg-2"}
-      .col-lg-offset-2= f.input :permanent
+      = f.input :permanent
       = f.input(:end_date, as: :date, my_wrapper_html: {class: "col-lg-4"}, 
         :start_year => @begin_year,:end_year=>@end_year, :discard_day => true)
     .form-actions
