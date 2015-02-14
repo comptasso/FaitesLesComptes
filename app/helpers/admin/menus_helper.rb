@@ -24,7 +24,7 @@ module Admin::MenusHelper
   
   # sous menu avec un title intermédiaire
   def admin_sub_menu(title, model)
-    content_tag(:li, class:"nav-header no-link", role:'presentation') do
+    content_tag(:li, class:"dropdown-header no-link", role:'presentation') do
           link_to(title, '#', role:'menuitem')
         end + 
           content_tag(:li, role:'presentation') do

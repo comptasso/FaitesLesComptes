@@ -78,7 +78,7 @@
 }
 
 
-li.nav-header > a {
+li.dropdown-header > a {
   text-transform: uppercase;
   text-align: center;
 }
