@@ -6,7 +6,7 @@ class Admin::CashesController < Admin::ApplicationController
   # GET /cashes 
   # GET /cashes.json
   def index
-    @cashes = @organism.cashes.to_a
+    @cashes = @organism.cashes 
 
     respond_to do |format|
       format.html # index.html.erb

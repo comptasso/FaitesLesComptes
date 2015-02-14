@@ -43,9 +43,8 @@ describe Admin::CashesController do
   describe "GET index" do
 
     it "assigns all cashes as @cashes" do
-      @a.stub(:all).and_return [@ca]
       get :index, {:organism_id=>@o.id.to_s}, valid_session
-      assigns(:cashes).should == [@ca]
+      assigns(:cashes).should == @a
     end
 
   end

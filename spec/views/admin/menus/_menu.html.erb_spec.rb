@@ -7,7 +7,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe "admin/menus/_menu.html.erb" do   
+describe "admin/menus/_menu.html.erb" do    
   include JcCapybara 
   
   let(:o) {mock_model(Organism, main_bank_id:1, status:'Association', room:mock_model(Room),
@@ -39,8 +39,8 @@ describe "admin/menus/_menu.html.erb" do
         render :template=>'/admin/organisms/show', :layout=>'admin/layouts/application'
       end
     
-      it 'le menu doit avoir un item Paramètres' do
-        page.find('ul#main_nav li a', text:'PARAMETRES')
+      it 'le menu doit avoir un item Divers' do
+        page.find('ul#main_nav li a', text:'DIVERS')
       end
     
       it 'avec un sous item Bridge' do
