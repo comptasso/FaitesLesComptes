@@ -1,16 +1,13 @@
 = builder.association :nature,
  :wrapper_html=>{:class=>'col-lg-5'},
- input_html: {class: "span8" },
- :label_html=>{class:'col-lg-4'},
  :collection => @natures, :prompt => "Quoi ?", :required=>true
 
 = builder.association :destination,
  :collection =>sectored_destinations(@organism, @book),
  :label=>'Activité',
  :prompt => "Pour qui ?",
- :wrapper_html=>{class: "col-lg-5"},
- input_html: {class: "span8" },
- :label_html=>{class:'col-lg-4'}
+ :wrapper_html=>{class: "col-lg-5"}
+ 
 = builder.input(:debit,
  :wrapper_html=> {class: "col-lg-2"}, label:'Montant',
  input_html:{class: "numeric decimal",
