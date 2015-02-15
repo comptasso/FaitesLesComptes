@@ -86,12 +86,18 @@ module Compta
       CSV.generate(options) do |csv|
         csv << ["Liste des écritures du compte #{account.number}",'', '',  '', '', '','', '']
         csv << %w(Date Journal Référence Libellé Nature Activité Débit Crédit)
-        csv << ["Soldes au #{I18n::l from_date}",'', '', '', '','', reformat(solde_debit_avant), reformat(solde_credit_avant) ]
+        csv << ["Soldes au #{I18n::l from_date}",'', '', '', '','',
+          reformat(solde_debit_avant), reformat(solde_credit_avant) ]
         lines.each do |l|
-          csv << [I18n::l(l.date), l.book.title, l.ref, l.narration, l.nature_name, l.destination_name, reformat(l.debit), reformat(l.credit)]
+          csv << [I18n::l(l.w_date.to_date), l.b_abbreviation, l.w_ref,
+            l.w_narration, l.nat_name, l.dest_name,
+            reformat(l.debit), reformat(l.credit)]
         end
-        csv << ['Totaux', '', '', '', '','', reformat(total_debit), reformat(total_credit)]
-        csv << ["Soldes au #{I18n::l to_date}", '', '', '', '','', reformat(solde_debit_avant + total_debit), reformat(solde_credit_avant + total_credit)]
+        csv << ['Totaux', '', '', '', '','',
+          reformat(total_debit), reformat(total_credit)]
+        csv << ["Soldes au #{I18n::l to_date}", '', '', '', '','',
+          reformat(solde_debit_avant + total_debit),
+          reformat(solde_credit_avant + total_credit)]
       end
     end
    

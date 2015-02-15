@@ -45,10 +45,16 @@ describe InOutWritingsHelper do
     end
     
 
-    it 'sinon propose des liens vers  l edition et la suppression de  lecriture' do
+    it 'une InOutWriting propose des liens vers l edition et la suppression de la partie principale ' do
+      line = double(:writing=>(@w = mock_model(InOutWriting, 'editable?'=>true, :id=>88, :book_id=>7, :book=>mock_model(Book))))
+      helper.line_actions(line).should match(edit_book_in_out_writing_path(@w.book_id, @w))
+      helper.line_actions(line).should match(book_in_out_writing_path(@w.book_id, @w))
+    end
+    
+    it 'et les autrs, vers la partie compta' do 
       line = double(:writing=>(@w = double(:type=>'Autre', 'editable?'=>true, :id=>88, :book_id=>7, :book=>mock_model(Book))))
-      helper.in_out_line_actions(line).should match(edit_book_in_out_writing_path(@w.book_id, @w))
-      helper.in_out_line_actions(line).should match(book_in_out_writing_path(@w.book, @w))
+      helper.line_actions(line).should match(edit_compta_book_writing_path(@w.book_id, @w))
+      helper.line_actions(line).should match(compta_book_writing_path(@w.book_id, @w))
     end
   end
   
