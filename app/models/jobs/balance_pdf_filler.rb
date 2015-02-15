@@ -24,6 +24,8 @@ module Jobs
     
     # fournit la variable d'instance document.
     def set_document(options)
+      # TODO simplifier cette première requete inutile
+      # TODO et utiliser ce delayed job (ou le supprimer) car actuellement ce n'est pas le cas
         period  = Period.find(options[:period_id])
         @document = Compta::Balance.new({period_id:period.id}.merge(options[:params_balance]))
     end

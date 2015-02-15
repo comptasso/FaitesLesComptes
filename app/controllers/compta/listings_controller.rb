@@ -103,7 +103,9 @@ class Compta::ListingsController < Compta::ApplicationController
   
   # créé les variables d'instance attendues par le module PdfController
   def set_exporter
+    
     @account = Account.find(params[:account_id])
+    logger.debug( "voici le compte trouvé #{@account.inspect}")
     @exporter = @account
     @pdf_file_title = "Listing Cte #{@account.number}"
   end
@@ -112,7 +114,7 @@ class Compta::ListingsController < Compta::ApplicationController
   def enqueue(pdf_export)
     Delayed::Job.enqueue Jobs::ListingPdfFiller.new(@organism.database_name, 
       pdf_export.id, {account_id:@account.id, 
-        params_listing:params[:compta_listing]})
+        params_listing:listing_params})
   end
   
   def calculate_solds(listing)

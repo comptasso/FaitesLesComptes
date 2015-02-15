@@ -24,8 +24,11 @@ module Jobs
     
     # fournit la variable d'instance document et remplit l'élément account
     def set_document(options)
-      @document = Compta::Listing.new(options[:params_listing])
+      Rails.logger.debug options.inspect
+      @document = Compta::Listing.new(options[:params_listing].
+          permit(:from_date_picker, :to_date_picker))
       @document.account_id = options[:account_id]
+      Rails.logger.debug @document.inspect
     end
     
     
