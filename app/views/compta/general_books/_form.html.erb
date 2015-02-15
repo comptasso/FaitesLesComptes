@@ -10,32 +10,37 @@
     
       <%= gl_f.error_notification %>
     <div class="form-inputs">
-      <div class="col-lg-12">
+      <div class="row">
     <%= gl_f.input :from_date_picker,
       :label=> 'Date début',
-      wrapper_html:{class:'col-lg-6'}, label_html: {class: 'col-lg-4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+      wrapper_html:{class:'col-lg-6'}, label_html: {class: 'col-lg-4'},
+      input_html: {date_min:@period.start_date, date_max:@period.close_date},
+      :required => true, :as=>:date_picker %>
+          
     <%= gl_f.input :to_date_picker,
       :label=> 'Date fin',
-      wrapper_html:{class:'col-lg-6'}, label_html: {class: 'col-lg-4'}, input_html: {class: 'span8', date_min:@period.start_date, date_max:@period.close_date} ,:required => true, :as=>:date_picker %>
+      wrapper_html:{class:'col-lg-6'}, label_html: {class: 'col-lg-4'},
+     input_html: {date_min:@period.start_date, date_max:@period.close_date} ,
+     :required => true, :as=>:date_picker %>
       </div>
       
 
   
-        <div class="col-lg-12">
-          <%= gl_f.input :from_account_id, :collection=>@general_book.accounts.order('number ASC'),
-              wrapper_html:{class:'col-lg-6'}, :prompt=>false,
-              label:'Du compte', label_html: {class: 'span2'}, :label_method=>:long_name,
-              input_html: {class: 'span10'} ,:required => true %>
+    <div class="row">
+      <%= gl_f.input :from_account_id, :collection=>@general_book.accounts.order('number ASC'),
+          wrapper_html:{class:'col-lg-6'}, :prompt=>false,
+          label:'Du compte', :label_method=>:long_name,
+          :required => true %>
 
-          <%= gl_f.input :to_account_id, :collection=>@general_book.accounts.order('number ASC'),
-              wrapper_html:{class:'col-lg-6'}, :prompt=>false,
-              label:'Au compte',  label_html: {class: 'span2'}, :label_method=>:long_name,
-              input_html: {class: 'span10'} ,:required => true %>
+      <%= gl_f.input :to_account_id, :collection=>@general_book.accounts.order('number ASC'),
+          wrapper_html:{class:'col-lg-6'}, :prompt=>false,
+          label:'Au compte',  :label_method=>:long_name,
+         :required => true %>
   
     <input type="hidden" name="download_token_value_id" id="download_token_value_id"/>
     </div>
       </div>
-     <div class="form-actions1">
+     <div class="form-actions">
         <%=  gl_f.button :submit,
           'Produire le grand livre',
           id: 'new_general_book_button',
