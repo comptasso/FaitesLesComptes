@@ -8,13 +8,15 @@
   <div class="form-inputs">
     <%= anabal_f.input :from_date_picker, 
       :label=> 'Date début',
-      my_wrapper_html:{class:'col-lg-6'},
+      my_wrapper_html:{class:'col-lg-4'},
+      label_html:{class:'col-lg-4'},
       input_html: {date_min:@period.start_date, date_max:@period.close_date},
       :required => true, :as=>:date_picker %>
      
     <%= anabal_f.input :to_date_picker,
       :label=> 'Date fin',
-      my_wrapper_html:{class:'col-lg-6'},
+      my_wrapper_html:{class:'col-lg-4'},
+      label_html:{class:'col-lg-4'},
       input_html: {date_min:@period.start_date, date_max:@period.close_date},
       :required => true, :as=>:date_picker %>
   </div>
@@ -22,7 +24,7 @@
        <%=  anabal_f.button :submit,
          'Réafficher la balance analytique',
          id: 'new_anabal_button',
-         class: "btn-primary" %>
+         class: "btn-primary col-lg-offset-2" %>
     </div>
 
 <% end %>

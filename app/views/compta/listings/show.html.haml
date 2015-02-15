@@ -13,7 +13,7 @@
     %span#intitule
       = "Ecritures du compte #{@listing.account.long_name}" 
       = " - Du #{ordinalize_date(@listing.from_date)} au #{ordinalize_date(@listing.to_date)}"
-    %a#show-soldes(href= '#' title='Affiche/masque les soldes du comtpe') afficher les soldes
+    %a#show-soldes(href= '#' title='Affiche/masque les soldes du comtpe') Afficher les soldes
   
 #div-movements= render partial: 'movements'
 %div#listing_table

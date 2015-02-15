@@ -8,20 +8,13 @@
 
 function drawDataTable() {
     $('.compta_listings .listing_data_table').dataTable({
-        "sDom": "lfrtip",
         "bAutoWidth": false,
-        
-        "oLanguage": {
-            "sUrl": "/frenchdatatable.txt"
-        },
         "aoColumnDefs": [
             {
                 "sType": "date-euro",
                 "asSortable": ['asc', 'desc'],
                 "aTargets": ['date-euro'] // les colonnes date au format français ont la classe date-euro
             }],
-        "iDisplayLength": 10,
-        "aLengthMenu": [[10, 10, 25, 50, -1], [10, 10, 25, 50, "Tous"]],
         "bStateSave": true,
         "fnStateSave": function (oSettings, oData) {
             localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
@@ -61,15 +54,18 @@ function drawDataTable() {
 
 // mise en forme des tables de lignes
 jQuery(function () {
-    $('.compta_listings #div-movements').hide();
+  if ($('body.compta_listings').length >= 1) {
+    $('body.compta_listings #div-movements').hide();
     drawDataTable();
-    $('.compta_listings #show-soldes').toggle(function () {
-        $('#div-movements').show();
-        $('a#show-soldes').text('masquer les soldes');
-    },
-        function () {
-            $('#div-movements').hide();
-            $('a#show-soldes').text('afficher les soldes');
-        });
+    $('body.compta_listings #show-soldes').click(function () {
+        $('#div-movements').toggle();
+        if ($('a#show-soldes').text() === 'Masquer les soldes') {
+            $('a#show-soldes').text('Afficher les soldes');
+        }
+        else {
+            $('a#show-soldes').text('Masquer les soldes');
+        }
+    });
+  }
 });
 

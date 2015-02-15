@@ -5,13 +5,13 @@
     = balance_f.error_notification
     .form-inputs
       = balance_f.input :from_date_picker, :label=> 'Date début',
-      my_wrapper_html:{class:'col-lg-6'},
+      my_wrapper_html:{class:'col-lg-4'},
       input_html: {date_min:@period.start_date, date_max:@period.close_date},
       :required => true,
       :as=>:date_picker
 
       = balance_f.input :to_date_picker, :label=> 'Date fin',
-      my_wrapper_html:{class:'col-lg-6'},
+      my_wrapper_html:{class:'col-lg-4'},
       input_html: {date_min:@period.start_date, date_max:@period.close_date},
       :required => true,
       :as=>:date_picker

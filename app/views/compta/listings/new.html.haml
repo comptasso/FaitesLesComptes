@@ -4,43 +4,33 @@
 
     .panel-body
       = simple_form_for @listing,
-        :url=>compta_period_listing_path(@period),
-        :html=> {class: 'form-inline'},
-        wrapper: :inline_form do |f|
+        :url=>compta_period_listing_path(@period) do |f|
 
         = f.error_notification
         
         .form-inputs
-          .col-lg-12
-            = f.input :from_date_picker,
-              wrapper_html:{class:'col-lg-4'},
-              :label=> 'Date début',
-              label_html: {class: 'col-lg-4'},
-              input_html: {date_min:@period.start_date, date_max:@period.close_date},
-              :required => true, :as=>:date_picker
-            = f.input :to_date_picker,
-              wrapper_html:{class:'col-lg-4'},
-              :label=> 'Date fin',
-              inline_wrapper_html:{class:'col-lg-4'},
-              label_html: {class: 'col-lg-4'},
-              input_html: {date_min:@period.start_date, date_max:@period.close_date},
-              :required => true, :as=>:date_picker
-
-
-        
-          .col-lg-12
-            = f.input :account_id, :collection=>@period.accounts.order('number ASC'),  
-               wrapper_html:{class:'col-lg-8'},
-               inline_wrapper_html:{class:'col-lg-8'}, :prompt=>false,
-               label:'Compte', :label_method=>:long_name,
-               label_html: {class: 'col-lg-2'},
-               :required => true              
+          
+          = f.input :from_date_picker,
+            wrapper_html:{class:'col-lg-2'},
+            :label=> 'Date début',
+            input_html: {date_min:@period.start_date, date_max:@period.close_date},
+            :required => true, :as=>:date_picker
+          = f.input :to_date_picker,
+            wrapper_html:{class:'col-lg-2'},
+            :label=> 'Date fin',
+            input_html: {date_min:@period.start_date, date_max:@period.close_date},
+            :required => true, :as=>:date_picker
+          
+          = f.input :account_id, :collection=>@period.accounts.order('number ASC'),  
+             wrapper_html:{class:'col-lg-6'},
+             :prompt=>false,
+             label:'Compte', :label_method=>:long_name,
+             :required => true              
 
         
           
         .form-actions
-          .col-lg-12
-            =  f.button :submit,
-              'Afficher les écritures du compte',
-              id:'new_line_button',
-              class:'btn-primary col-lg-offset-9'
+          =  f.button :submit,
+            'Afficher les écritures du compte',
+            id:'new_line_button',
+            class:'btn-primary col-lg-offset-8'

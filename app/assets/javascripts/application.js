@@ -136,7 +136,9 @@ $.extend($.fn.dataTable.defaults, {
     "sDom": "<'col-lg-6'l>frt<'col-lg-6'i><'col-lg-6'p>",
     "oLanguage": {
         "sUrl": "/frenchdatatable.txt"
-    }
+    },
+    "iDisplayLength": 10,
+    "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tous"]]
 });
 
 

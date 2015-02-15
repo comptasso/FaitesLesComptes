@@ -21,7 +21,8 @@ body {
 }
 
 
-body.public_sessions {
+body.public_sessions, body.public_passwords,
+body.public_devise_registrations, body.public_registrations {
   padding-top: 50px;
 }
 
