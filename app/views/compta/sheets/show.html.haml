@@ -6,26 +6,26 @@
 .champ
   %h3= @sheet.folio.title
 
-.row
-  -if @sheet.sens == :actif
-    .actif
-      %table.pc100
-        %thead
-          %th.pc60 Rubrique
-          %th.pc10 Brut
-          %th.pc10
-            Amortissement
-            %br Provision
-          %th.pc10 Net
-          %th.pc10 Exercice précédent
-        %tbody
-          =render :partial=>'actif_rubriks_line', :collection=>@rubriks
-  -else
-    .passif
-      %table.pc100
-        %thead
-          %th.pc80 Rubrique
-          %th.pc10 Montant
-          %th.pc10 Exercice précédent
-        %tbody
-          =render :partial=>'passif_rubriks_line', :collection=>@rubriks
+
+-if @sheet.sens == :actif
+  .actif
+    %table.pc100
+      %thead
+        %th.pc60 Rubrique
+        %th.pc10 Brut
+        %th.pc10
+          Amortissement
+          %br Provision
+        %th.pc10 Net
+        %th.pc10 Exercice précédent
+      %tbody
+        =render :partial=>'actif_rubriks_line', :collection=>@rubriks
+-else
+  .passif
+    %table.pc100
+      %thead
+        %th.pc80 Rubrique
+        %th.pc10 Montant
+        %th.pc10 Exercice précédent
+      %tbody
+        =render :partial=>'passif_rubriks_line', :collection=>@rubriks
