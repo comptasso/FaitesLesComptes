@@ -1,2 +1,0 @@
-module Compta::AccountsHelper
-end

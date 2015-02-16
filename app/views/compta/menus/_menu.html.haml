@@ -1,8 +1,8 @@
 %ul.nav.navbar-nav#main_nav 
   
   - unless @period.nil? && @period.accounts.nil?
-    %li.dropdown(class="#{controller.controller_name == "accounts" ? "active" : nil}")
-      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle', :data=>{:toggle=>'dropdown'} }
+    %li.dropdown(class="#{editions_active?}")
+      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle', role:'button', :data=>{:toggle=>'dropdown'} }
         EDITIONS
         %b.caret
       %ul.dropdown-menu
@@ -19,8 +19,8 @@
         
 
   - unless @period.nil? && @period.accounts.nil?
-    %li.dropdown(class="#{controller.controller_name == "accounts" ? "active" : nil}")
-      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle', :data=>{:toggle=>'dropdown'} }
+    %li.dropdown(class="#{documents_active?}")
+      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle', role:'button', :data=>{:toggle=>'dropdown'} }
         DOCUMENTS
         %b.caret
       %ul.dropdown-menu
@@ -34,8 +34,8 @@
         %li= link_to('Liste des documents', compta_nomenclature_path, class:'with_spinner')
 
   - unless @organism.nil? && @organism.periods.count <= 1
-    %li.dropdown(class="#{controller.controller_name == "periods" ? "active" : nil}")
-      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }
+    %li.dropdown(class="#{'active' if controller.controller_name == 'periods'}")
+      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle', role:'button', :data=>{:toggle=>'dropdown'} }
         EXERCICES
         %b.caret
       %ul.dropdown-menu
@@ -44,8 +44,8 @@
 
 
   - unless @organism.nil? && @organism.periods.count <= 1
-    %li.dropdown(class="#{controller.controller_name == "writings" ? "active" : nil}")
-      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle',  :data=>{:toggle=>'dropdown'} }
+    %li.dropdown(class="#{'active' if controller.controller_name == 'writings'}")
+      %a{:href=>'#',:tabindex=>-1, :class=>'dropdown-toggle', role:'button', :data=>{:toggle=>'dropdown'} }
         JOURNAUX
         %b.caret
       = content_tag(:ul, :class => "dropdown-menu") do

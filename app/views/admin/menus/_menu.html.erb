@@ -11,14 +11,14 @@
       </li>
       <%= content_tag(:li, :class=>"divider"){} %>
       <% cache("admin_#{current_user.name}")  do %>
-      <% current_user.organisms_with_room.each do |groom| %>
-        <li role='presentation'>
-          <%= link_to(groom[:organism].title,
-            admin_room_path(groom[:room]),
-            {title:groom[:organism].comment, role:'menuitem'})    %>
-        </li>
-        <%  end %>
-      <% end %>
+        <% current_user.organisms_with_room.each do |groom| %>
+          <li role='presentation'>
+            <%= link_to(groom[:organism].title,
+              admin_room_path(groom[:room]),
+              {title:groom[:organism].comment, role:'menuitem'})    %>
+          </li>
+          <%  end %>
+        <% end %>
     </ul>
   </li>
 
