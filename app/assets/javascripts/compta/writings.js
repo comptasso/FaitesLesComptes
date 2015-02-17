@@ -77,11 +77,9 @@ function $check_submit() {
 
 // retire une compta_line du formulaire ou plutôt la cache
 function remove_writing_line_form(link) {
-    var wlf = $(link).closest(".writing_line_form"), last = false;
+    var wlf = $(link).closest(".writing_line_form");
     // wlf est-elle la dernière ligne visible ?
-    if ($('.writing_line_form:visible:last').is(wlf)) {
-        last = true;
-    }
+    
     $(link).prev("input[type=hidden]").val("1");
     wlf.hide();
     // on masque ou affiche l'icone plus qui convient

@@ -85,13 +85,27 @@ class Writing < ActiveRecord::Base
   # la méthode utilisée permet de neutraliser les nil éventuels
   # utile notamment pour les tests de validité
   def total_debit
-    compta_lines.inject(0) {|tot, cl| cl.debit ? tot + cl.debit  : tot}
+    compta_lines.inject(0) do |tot, cl|
+      if cl.marked_for_destruction? 
+        tot
+      else
+        cl.debit ? tot + cl.debit  : tot
+      end
+    end
   end
 
   # Fait le total des debit des compta_lines
   # la méthode utilisée permet de neutraliser les nil éventuels
+  # ne prend pas en compte les éventuels marqués pour destruction
   def total_credit
-    compta_lines.inject(0) {|tot, cl| cl.credit ? tot + cl.credit  : tot}
+    compta_lines.inject(0) do |tot, cl|
+      if cl.marked_for_destruction? 
+        tot
+      else
+        cl.credit ? tot + cl.credit  : tot
+      end
+      
+    end
   end
 
   # trouve l'exercice correspondant à la date de l'écriture
