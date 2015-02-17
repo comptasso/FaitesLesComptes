@@ -30,13 +30,6 @@
 
 .writing {
 
-  
-   
-  .title, .compta_lines {
-    padding-left: 2%;
-    padding-right: 2%;
-
-    }
 
     .title {
         font-weight: bold;
@@ -48,14 +41,18 @@
           }
 
         }
+  .compta_lines {
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+  }
 
-  .compta_lines .credit {
+  .credit {
      padding-left:8%;
     }
 
-    .compta_lines .debit {
-        padding-left: 3%
-        }
+  .debit {
+      padding-left: 3%
+      }
 
    form {
      #add_line_link {

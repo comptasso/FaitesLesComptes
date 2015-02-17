@@ -175,9 +175,9 @@ class Compta::WritingsController < Compta::ApplicationController
   
   def compta_writing_params
     
-    params.require(:writing).permit(:date, :date_picker, :narration, :ref,
+    params.require(:writing).permit(:id, :date, :date_picker, :narration, :ref,
       :book_id, :bridge_id, :bridge_type,
-      compta_lines_attributes: [:debit, :credit, :writing_id, :account_id, 
+      compta_lines_attributes: [:id, :debit, :credit, :writing_id, :account_id, 
         :nature, :nature_id, :destination_id, 
         :check_number, :payment_mode, :check_deposit_id] )  
     
