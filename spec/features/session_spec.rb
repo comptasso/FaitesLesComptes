@@ -55,7 +55,7 @@ describe 'Session' do
       @ar.stub(:count).and_return 2
       @ar.stub(:includes).and_return(@ar = double(Arel))
       @ar.stub(:references).and_return(@ar = double(Arel))
-      @ar.stub(:to_a).and_return(@arr = [@r, @r])
+      @ar.stub(:collect).and_return(@arr = [@r, @r])
       # nécessaire pour l'affichage du menu des organismes
       @cu.stub(:organisms_with_room).and_return([{organism:@o, room:@r}, {organism:@o, room:@r}])
       login_as('quidam')
