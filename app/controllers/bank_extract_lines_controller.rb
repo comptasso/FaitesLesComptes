@@ -51,7 +51,7 @@ redirection vers la liste des lignes restant à pointer'
     @ok = true
     if params[:lines]
       params[:lines].each do |key, clparam|
-        cl = ComptaLine.find_by_id(clparam)
+        cl = @organism.compta_lines.find_by_id(clparam)
         if cl
           bel = @bank_extract.bank_extract_lines.new(:compta_line_id=>cl.id)
           bel.position = key

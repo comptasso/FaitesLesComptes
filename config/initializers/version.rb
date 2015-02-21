@@ -72,4 +72,5 @@
 # FLCVERSION = '1.7.0RC' # sectorisation des numéros de comptes
 # FLCVERSION = '1.7.1RC' # changer la banque d'une remise de chèque est possible
 # FLCVERSION = '1.7.2RC' # mise en place d'un champ used pour les destinations
-FLCVERSION = '1.7.3RC' # correction de 3 bugs (nom trop long, cash_line vers compta et listing#to_csv)
+# FLCVERSION = '1.7.3RC' # correction de 3 bugs (nom trop long, cash_line vers compta et listing#to_csv)
+FLCVERSION = '1.7.4RC' # correction d'1 bug sur le pointage bancaire à la cloture
