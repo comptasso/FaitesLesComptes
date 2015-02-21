@@ -51,15 +51,15 @@ describe 'Session' do
       # plutôt que de créer réellement plusieurs bases, on fait un stub
       ApplicationController.any_instance.stub(:current_user).and_return @cu
       
-      @cu.stub(:rooms).and_return(@ar = double(Arel))
-      @ar.stub(:count).and_return 2
-      @ar.stub(:includes).and_return(@ar = double(Arel))
-      @ar.stub(:references).and_return(@ar = double(Arel))
-      @ar.stub(:collect).and_return(@arr = [@r, @r])
+      @cu.stub(:rooms).and_return(@ar = double(Arel, count:2))
+      @ar.stub(:includes).and_return(@arr = double(Arel))
+      @arr.stub(:references).and_return([@r, @r])
+      @arr.stub(:collect).and_return([:same_migration, :same_migration])
       # nécessaire pour l'affichage du menu des organismes
       @cu.stub(:organisms_with_room).and_return([{organism:@o, room:@r}, {organism:@o, room:@r}])
       login_as('quidam')
       page.find('h3').should have_content 'Liste des organismes'
+      
     end
 
   end
@@ -145,7 +145,7 @@ describe 'Session' do
         @cu.reload.should be_confirmed   
       end
       
-      it 'il est loggé'  , wip:true  do
+      it 'il est loggé' do
         visit user_confirmation_path(confirmation_token: @raw)
         page.find('.notice').should have_content 'Félicitations'
         page.find('h3').text.should == 'Nouvel organisme'

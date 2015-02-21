@@ -139,14 +139,14 @@ module InOutWritingsHelper
         edit_book_in_out_writing_path(writing.book_id, writing)) 
       html <<  icon_to('supprimer.png', 
         book_in_out_writing_path(writing.book_id, writing),
-        confirm: 'Etes vous sûr?', method: :delete) if deletable
+        data:{confirm: 'Etes vous sûr?'}, method: :delete) if deletable
     else # cas d'une Writing passée par le journal d'OD, on va sur le module
       # compta
       html <<  icon_to('modifier.png', 
         edit_compta_book_writing_path(writing.book_id, writing)) 
       html <<  icon_to('supprimer.png', 
         compta_book_writing_path(writing.book_id, writing),
-        confirm: 'Etes vous sûr?', method: :delete) if deletable
+        data:{confirm: 'Etes vous sûr?'}, method: :delete) if deletable
     end
     html
   end
