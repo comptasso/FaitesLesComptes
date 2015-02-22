@@ -10,14 +10,19 @@ table a img
     background-color: #ece8d3;
     color: #d25;
     margin-bottom: 4px;
+    padding: 8px;
 }
 
 .notice {
     color: #271;
+    padding: 8px;
+    font-weight: bold;
 }
 
 .conseil {
    color: #271;
+   padding: 8px;
+   font-weight: normal;
 }
 
 
