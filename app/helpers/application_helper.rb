@@ -47,7 +47,7 @@ module ApplicationHelper
     unless conseil.empty? 
       content_tag(:div, 'class'=>"alert conseil") do
           content_tag(:a, 'x', {'class'=>'close', 'data-dismiss'=>'alert'}) + 
-          content_tag(:strong, conseil.html_safe) 
+          content_tag(:div, conseil.html_safe) 
         end
     end
     end

@@ -1,6 +1,6 @@
 %li.dropdown-header.no-link= link_to menu_book.title, '#'
 %li
-  = link_to_if(menu_book.writings.period(@period).any?, 'Afficher', compta_book_writings_path(menu_book)) do |name|
-    %span.no-link= name
+  = link_to_if(menu_book.writings.period(@period).any?, 'Afficher', compta_book_writings_path(menu_book)) do |lien|
+    %span.disable= lien
 - if menu_book.type == 'OdBook' || menu_book.type == 'AnBook'
   %li= link_to('Ecrire', new_compta_book_writing_path(menu_book)) if @period.open?

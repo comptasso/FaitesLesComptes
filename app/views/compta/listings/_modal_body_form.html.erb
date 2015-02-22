@@ -12,26 +12,29 @@
   <div class='form-inputs'>
     <%= f.input :from_date_picker, :label=> 'Date début',
       my_wrapper_html:{class:'col-lg-6'},
-      input_html: {class: 'col-lg-4', date_min:@period.start_date, date_max:@period.close_date},
+      label_html: {class:'col-lg-3'},
+      input_html: {class: 'col-lg-3', date_min:@period.start_date, date_max:@period.close_date},
       :required => true, :as=>:date_picker %>
       
       
     <%= f.input :to_date_picker, :label=> 'Date fin', 
-      my_wrapper_html:{class:'col-lg-6'},
-      input_html: {class: 'col-lg-4', date_min:@period.start_date, date_max:@period.close_date},
+      my_wrapper_html:{class:'col-lg-6'},      
+      label_html: {class:'col-lg-3'},      
+      input_html: {class: 'col-lg-3', date_min:@period.start_date, date_max:@period.close_date},
       :required => true, :as=>:date_picker %>
 
-          <%= f.input :account_id, :collection=>@listing.accounts.order('number ASC'),
-              :prompt=>false,
-              label:'Compte',  :label_method=>:long_name,
-              my_wrapper_html:{class:'col-lg-10'},
-              :required => true %>
+    <%= f.input :account_id, :collection=>@listing.accounts.order('number ASC'),
+        :prompt=>false,
+        label:'Compte',  :label_method=>:long_name,
+        my_wrapper_html:{class:'col-lg-9'},
+        label_html: {class:'col-lg-3'},              
+        :required => true %>
   </div>
          
           <div class="form-actions">
             <%=  f.button :submit, 'Afficher le compte',
               
-              id: 'new_listing_button', class: "btn-primary col-lg-offset-2" %>
+              id: 'new_listing_button', class: "btn-primary col-lg-offset-3" %>
             </div>
 
 
