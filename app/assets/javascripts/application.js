@@ -138,7 +138,15 @@ $.extend($.fn.dataTable.defaults, {
         "sUrl": "/frenchdatatable.txt"
     },
     "iDisplayLength": 10,
-    "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tous"]]
+    "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tous"]],
+    "bStateSave": true, // pour pouvoir sauvegarder l'état de la table
+        "fnStateSave": function (oSettings, oData) { //localStorage avec un chemin pour que les
+          // paramètres spécifiques  aux cash_lines soient mémorisés.
+            localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+        },
+        "fnStateLoad": function (oSettings) {
+            return JSON.parse(localStorage.getItem('DataTables_' + window.location.pathname));
+        }
 });
 
 
