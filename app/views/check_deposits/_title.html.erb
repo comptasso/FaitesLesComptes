@@ -1,1 +1,3 @@
-<h3>Date : <%=l @check_deposit.deposit_date %> - <%= @bank_account.bank_name %> - <%= @bank_account.number %> - <%= @bank_account.nickname %></h3>
+<h3>Remise de chèque du <%=l @check_deposit.deposit_date %> sur
+<%= @bank_account.nickname %> pour un total de 
+<%= number_to_currency(@check_deposit.total_checks) %> </h3>
