@@ -10,10 +10,10 @@
  
 = builder.input(:debit,
  :wrapper_html=> {class: "col-lg-2"}, label:'Montant',
- input_html:{class: "numeric decimal",
- value:two_decimals(@line.debit) }, :as=>:french_decimal) if (@book.type=='OutcomeBook')
+ input_html:{value:two_decimals(@line.debit) },
+ :as=>:french_decimal) if (@book.type=='OutcomeBook')
 = builder.input(:credit,
  :wrapper_html=> {class: "col-lg-2"}, label:'Montant',
- input_html: {class: "numeric decimal",
- value: two_decimals(@line.credit) }, :as=>:french_decimal) if (@book.type=='IncomeBook')
+ input_html: {value: two_decimals(@line.credit) },
+ :as=>:french_decimal) if (@book.type=='IncomeBook')
 
