@@ -27,4 +27,4 @@ def find_secure_token
   end
 end
 
-Faitesvoscomptes::Application.config.secret_token = find_secure_token
+Faitesvoscomptes::Application.config.secret_key_base = find_secure_token
