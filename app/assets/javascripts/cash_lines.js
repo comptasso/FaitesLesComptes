@@ -8,7 +8,7 @@
 // mise en forme des tables de lignes
 jQuery(function () {
     if ($('.public_cash_lines .cash_lines_table').length !== 0) {
-        var oTable = $('.public_cash_lines .cash_lines_table').dataTable(
+        $('.public_cash_lines .cash_lines_table').dataTable(
                 {
                     "aoColumnDefs": [
                 {
@@ -21,8 +21,7 @@ jQuery(function () {
                     "aTargets": ['date-euro'] // les colonnes date au format français ont la classe date-euro
                 }],
                     
-                    "iDisplayLength": 10, // affichage par défaut
-                    "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tous"]], // le menu affichage
+                 
                     
                     "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                      
