@@ -90,7 +90,7 @@ class TransfersController < ApplicationController
     @transfer.destroy
 
     respond_to do |format|
-      format.html { redirect_to transfers_url }
+      format.html { redirect_to transfers_url, notice:'Le transfert a été détruit' }
       format.json { head :no_content }
     end
   end
