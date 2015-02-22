@@ -10,11 +10,6 @@ jQuery(function () {
     if ($('.public_cash_lines .cash_lines_table').length !== 0) {
         var oTable = $('.public_cash_lines .cash_lines_table').dataTable(
                 {
-                    "sDom": "lfrtip",
-                    
-                    "oLanguage": {
-                        "sUrl": "/frenchdatatable.txt"
-                    },
                     "aoColumnDefs": [
                 {
                     "bSortable": false,
