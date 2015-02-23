@@ -6,11 +6,11 @@
     :label_method=> :long_name, :value_method=> :id, :required=>true
 
     =builder.input :debit, :wrapper_html=> {class: "col-lg-2"},
-      input_html:{class: "numeric debit decimal", value:two_decimals(builder.object.debit) },
+      input_html:{class: "debit", value:two_decimals(builder.object.debit) },
      :as=>:french_decimal
 
     =builder.input :credit, :wrapper_html=> {class: "col-lg-2"},
-      input_html:{class: "numeric credit decimal", value:two_decimals(builder.object.credit) },
+      input_html:{class: "credit", value:two_decimals(builder.object.credit) },
      :as=>:french_decimal
 
     %a.add_form_line= image_tag('icones/nouveau.png')

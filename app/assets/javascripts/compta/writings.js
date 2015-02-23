@@ -140,13 +140,10 @@ jQuery(function () {
         $deal_icon_plus();
         $check_submit();
     }
-
-
-
-    // $check_submit masque le bouton submit si les conditions ne sont pas remplies
+   // $check_submit masque le bouton submit si les conditions ne sont pas remplies
     // conditions 1: au moins une ligne remplie
     // condition 2 : écriture équilibrée
-    $('.compta_writings' ).on('change', 'input.decimal', $zero_field); // calcule le nouvau solde et l'affiche
+    $('.compta_writings').on('change', 'input.decimal', $zero_field); // calcule le nouvau solde et l'affiche
     $('.compta_writings').on('change', 'input.decimal', $check_submit); // calcule le nouvau solde et l'affiche
 
 });
