@@ -21,16 +21,19 @@ module Adherent
       ib = organism.bridge.income_book
       w = ib.adherent_writings.new(
          date:record.read_attribute(:date),
-         ref:"adh #{member.number}",
-         narration:"Paiement adhérent #{member.to_s}",
+         ref:"adh #{member.number}".truncate(NAME_LENGTH_MAX),
+         narration:"Paiement adhérent #{member.to_s}".truncate(LONG_NAME_LENGTH_MAX),
          bridge_id:record.id,
          bridge_type:'Adherent',
          compta_lines_attributes:{'1'=>compta_line_attributes(record),
            '2'=>counter_line_attributes(record)}
       )
-      Rails.logger.warn "Ecriture générée par un payment de module Adhérent avec des erreurs : #{w.errors.messages}" unless w.valid?
-      copy_writing_errors(w, record) unless w.valid?
-      w.save
+      if w.valid?
+        w.save
+      else
+        Rails.logger.warn "Ecriture générée par un payment de module Adhérent avec des erreurs : #{w.errors.messages}"
+        copy_writing_errors(w, record)
+      end
     end
     
     # Si l'écriture n'est pas verrouillée, met à jour les champs. 
