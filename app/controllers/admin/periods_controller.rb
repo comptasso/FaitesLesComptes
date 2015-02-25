@@ -113,7 +113,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   def destroy
     @period = Period.find(params[:id])
     if @period.destroy
-      session[:period] = @organism.periods.any? ? @organism.periods.last : nil
+      session[:period] = @organism.periods.any? ? @organism.periods.order(:close_date).last.id : nil
       flash[:notice] = 'L\'exercice a été détruit ; vous avez changé d\'exercice'
     end
     respond_to do |format|
