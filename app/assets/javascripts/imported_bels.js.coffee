@@ -19,14 +19,14 @@ set_date_limits = ->
 #
 check_ibel_complete = (row) ->
   # lecture des 3 champs
-  t = row.find('span[data-attribute="destination_id"]')
-  u = row.find('span[data-attribute="nature_id"]')
-  v = row.find('span[data-attribute="payment_mode"]')
+  t = row.find('span[data-bip-attribute="destination_id"]')
+  u = row.find('span[data-bip-attribute="nature_id"]')
+  v = row.find('span[data-bip-attribute="payment_mode"]')
   # un des trois est-il rempli avec la valeur par défaut
-  complete = !(/—/.test(t.text()) || /—/.test(u.text()) || /—/.test(v.text()))
+  complete = !(/-/.test(t.text()) || /-/.test(u.text()) || /-/.test(v.text()))
   # les transferts n'ont pas de destination ni de nature, on ne test que sur
   # payment_mode
-  complete = !(/—/.test(v.text())) if row.find('td.cat span').text().trim() == 'T'
+  complete = !(/-/.test(v.text())) if row.find('td.cat span').text().trim() == 'T'
   # on affiche le lien nouveau si c'est OK  
   row.find('a.ibel_write').show() if complete
   

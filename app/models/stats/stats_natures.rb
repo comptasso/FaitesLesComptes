@@ -25,7 +25,7 @@ module Stats
     end
 
     # retourne la ligne de titre 
-    def title 
+    def title
       t = ['Natures']
       t += @period.list_months.to_abbr_with_year 
       t << 'Total' 

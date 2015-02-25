@@ -7,6 +7,7 @@
 //= require jquery
 //= require jquery-ui
 //= require best_in_place
+//= require best_in_place.jquery-ui
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require jqplot/jquery.jqplot

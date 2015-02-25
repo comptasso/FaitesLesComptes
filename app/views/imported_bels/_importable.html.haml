@@ -1,28 +1,28 @@
 %tr{:id=>dom_id(importable), class:'importable'}
   %td.bip
-    = best_in_place importable, :writing_date_picker, type: :date,
+    = best_in_place importable, :writing_date_picker, as: :date,
     path: bank_account_imported_bel_path(@bank_account, importable),
     inner_class: 'pc95'
   %td.bip.cat
-    = best_in_place importable, :cat, type: :select,
+    = best_in_place importable, :cat, as: :select,
     collection:collection_cat(importable),
     path: bank_account_imported_bel_path(@bank_account, importable),
     inner_class: 'pc95'
   %td.bip
-    = best_in_place importable, :ref, :type => :input,
+    = best_in_place importable, :ref, as: :input,
     path: bank_account_imported_bel_path(@bank_account, importable),
     inner_class: 'pc95'
   %td.bip
-    = best_in_place importable, :narration, :type => :input,
+    = best_in_place importable, :narration, as: :input,
     path: bank_account_imported_bel_path(@bank_account, importable),
     inner_class: 'pc95'
   %td.bip.destination
-    = best_in_place importable, :destination_id, type: :select,
+    = best_in_place importable, :destination_id, as: :select,
     collection:@bank_account.sector.destinations.all.collect {|d| [d.id, d.name]},
     path: bank_account_imported_bel_path(@bank_account, importable),
     inner_class: 'pc95'
   %td.bip.nature
-    = best_in_place importable, :nature_id, type: :select,
+    = best_in_place importable, :nature_id, as: :select,
     collection:collection_nature(importable),
     path: bank_account_imported_bel_path(@bank_account, importable),
     classes:'bip_nature',
@@ -30,7 +30,7 @@
   %td.numeric= debit_credit importable.debit
   %td.numeric= debit_credit importable.credit
   %td.bip.payment_mode
-    = best_in_place importable, :payment_mode, type: :select, 
+    = best_in_place importable, :payment_mode, as: :select, 
     collection:collection_payment_mode(importable),
     path: bank_account_imported_bel_path(@bank_account, importable),
     inner_class: 'pc95',
