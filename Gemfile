@@ -86,7 +86,7 @@ group :development, :test do
   gem 'spork-rails'
   gem 'launchy'
   gem 'daemons' # mis en place pour pouvoir lancer les Delayed::Job dans la console
-  gem 'selenium-webdriver', '= 2.45.0.dev2'
+  gem 'selenium-webdriver', '= 2.45.0'
   gem 'capybara', '2.4.4'
   # gem 'capybara-webkit'
   gem 'email_spec'
