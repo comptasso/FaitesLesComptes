@@ -19,7 +19,8 @@ class Utilities::PlanComptableComite < Utilities::PlanComptable
   
   def create_accounts 
     nba = period.accounts.count # nb de comptes existants pour cet exercice
-    y = YAML::load_file(source_path)
+    fichier = "#{source_path}/#{FICHIER}"
+    y = YAML::load_file(fichier)
     y.each do |k, accs|
     sid = find_sector_id(k)      
  

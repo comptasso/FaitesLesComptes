@@ -169,7 +169,7 @@ class Utilities::PlanComptable
    protected
 
   def source_path
-    "#{Rails.root}/app/assets/parametres/#{status.downcase}"
+    "#{Rails.root}/lib/parametres/#{status.downcase}"
   end
   
    def load_file_natures(source = nil)

@@ -3,7 +3,7 @@ module Utilities
     class Comite < Utilities::Filler::Organism
       
       def remplit_sectors
-        puts @org
+        # puts @org
         @org.sectors.create!(name:'Fonctionnement')
         @org.sectors.create!(name:'ASC')
         @fonc = @org.sectors.where('name = ?', 'Fonctionnement').first

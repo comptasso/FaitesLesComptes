@@ -27,15 +27,15 @@ describe Utilities::Filler::Organism do
   
     it {should have(5).folios}  
   
-        describe 'les folios de resultats sont sectorisés' do
-          
-          subject {@o.nomenclature.folios.where('sector_id IS NOT NULL')}  
-        
-          it {subject.count.should == 2}
-          it {subject.order(:title).first.sector.name.should == 'ASC'}
-          it {subject.order(:title).last.sector.name.should == 'Fonctionnement'} 
-        
-        end
+    describe 'les folios de resultats sont sectorisés' do
+
+      subject {@o.nomenclature.folios.where('sector_id IS NOT NULL')}  
+
+      it {subject.count.should == 2}
+      it {subject.order(:title).first.sector.name.should == 'ASC'}
+      it {subject.order(:title).last.sector.name.should == 'Fonctionnement'} 
+
+    end
     
   end
 end
