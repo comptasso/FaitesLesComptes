@@ -5,9 +5,11 @@
 # 
 # Le premier argument de initialize est le period, le second le statut de l'organisme
 #
-# Le fichier yml fournissant les informations de compte s'appelle obligatoirement 'plan_comptable.yml'
-# et doit être placé dans le répertoire app/assets/parametres/#{status}, ou status
-# est le statut de l'organisme (actuellement Association ou Entreprise, mais cette liste sera surment étendue ultérieurement)
+# Le fichier yml fournissant les informations de compte s'appelle 
+# obligatoirement 'plan_comptable.yml' et doit être placé dans le répertoire 
+# lib/parametres/#{status}, ou status
+# est le statut de l'organisme (actuellement association, comite ou entreprise,
+# mais cette liste sera surment étendue ultérieurement)
 #
 # La méthode de clase self.create_accounts est appelée par le callback 
 # create_plan de period pour le premier exercice d'une compte.
@@ -21,7 +23,7 @@
 class Utilities::PlanComptable
 
   FICHIER = 'plan_comptable.yml'
-  
+    
   attr_reader :period, :status
 
   # OPTIMIZE : on pourrait faire status = nil lorsque le period est persistant
@@ -144,7 +146,8 @@ class Utilities::PlanComptable
   #
   def create_accounts 
     nba = period.accounts.count # nb de comptes existants pour cet exercice
-    t = YAML::load_file(source_path)
+    fichier = "#{source_path}/#{FICHIER}"
+    t = YAML::load_file(fichier)
     t.each do |a|
       acc = period.accounts.new(a)
       Rails.logger.warn "#{acc.number} - #{acc.title} - #{acc.errors.messages}" unless acc.valid?
@@ -155,10 +158,10 @@ class Utilities::PlanComptable
     return nb_comptes_crees # renvoie le nombre de comptes créés
    
   rescue Errno::ENOENT # cas où le fichier n est pas trouvé
-    Rails.logger.warn("Erreur lors du chargement du fichier #{source_path}")
+    Rails.logger.warn("Erreur lors du chargement du fichier #{fichier}")
     return 0
   rescue Psych::SyntaxError # cas où le fichier est mal formé
-    Rails.logger.warn("Erreur lors de la lecture du fichier #{source_path}")
+    Rails.logger.warn("Erreur lors de la lecture du fichier #{fichier}")
     return 0
     
   end
@@ -166,11 +169,11 @@ class Utilities::PlanComptable
    protected
 
   def source_path
-    "#{Rails.root}/app/assets/parametres/#{status}/#{FICHIER}"
+    "#{Rails.root}/app/assets/parametres/#{status.downcase}"
   end
   
    def load_file_natures(source = nil)
-    source = "#{Rails.root}/app/assets/parametres/#{status.downcase}/natures.yml"
+    source = "#{source_path}/natures.yml"
     YAML::load_file(source)
   rescue
     Rails.logger.warn "Erreur dans le chargement du fichier #{source}"

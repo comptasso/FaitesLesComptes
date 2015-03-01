@@ -291,7 +291,7 @@ class Organism < ActiveRecord::Base
   def reset_folios
     Folio.delete_all
     Rubrik.delete_all
-    path = File.join Rails.root, 'app', 'assets', 'parametres', status_class.downcase, 'nomenclature.yml'
+    path = File.join Rails.root, 'lib', 'parametres', status_class.downcase, 'nomenclature.yml'
     nomenclature.read_and_fill_folios(path)
   end
  

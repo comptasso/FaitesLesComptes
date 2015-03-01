@@ -58,7 +58,7 @@ module Utilities
   
       def remplit_nomenclature 
         if @org.status
-          path = File.join Rails.root, 'app', 'assets', 'parametres',
+          path = File.join Rails.root, 'lib', 'parametres',
             @org.send(:status_class).downcase, 'nomenclature.yml'
           n = @org.create_nomenclature 
           n.read_and_fill_folios(path)
