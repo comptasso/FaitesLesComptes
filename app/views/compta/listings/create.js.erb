@@ -17,7 +17,7 @@ h3text += "<%= " - Du #{ordinalize_date(@listing.from_date)} au #{ordinalize_dat
 $('.champ > h3 > span#intitule').text(h3text);
 
 //on met à jour les soldes
-$('#movements').html("<%= j render 'movements' %>")
+$('#div-movements').html("<%= j render 'movements' %>")
 
 // on rend le listing
 $('#listing_table').html(" <%= j render 'listing_table' %>");

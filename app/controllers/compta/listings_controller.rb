@@ -87,7 +87,7 @@ class Compta::ListingsController < Compta::ApplicationController
           redirect_to compta_account_listing_url(@account, 
             compta_listing:params[:compta_listing].except(:account_id))
         }
-        format.js # vers fichier create.js.erb
+        format.js { calculate_solds(@listing)}# vers fichier create.js.erb
       end
     else
       respond_to do |format|
