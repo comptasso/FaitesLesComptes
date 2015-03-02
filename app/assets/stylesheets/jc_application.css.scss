@@ -46,3 +46,44 @@ img.ui-datepicker-trigger {
         text-align: right;
         padding: 3px 10px;
     }
+    
+// affichage des mois dans les titres h3 des vues lines, mais aussi cash_lines
+
+h3  ul.mois {
+        background-color: #271;
+        display: inline-block;
+        text-decoration: none;
+        list-style: disc outside none;
+        float: right;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-size: 13px;
+        padding-top: 4px;
+
+       > li {
+            display: inline-block;
+
+            padding-left: 12px;
+            padding-right: 12px;
+            line-height: 14px;
+            a {
+                border-radius: 5px 5px 5px 5px;
+                color: #fff;
+                padding-left: 4px;
+                padding-right: 4px;
+                            }
+            a:hover {
+                     background-color: #1b431b;
+                     text-decoration: none;
+                            }
+            a.icon_menu {
+                float: none;
+                img {
+                    padding-bottom: 3px;
+                    }
+                }
+
+        }
+     > li.active  {color: #11ad11;}
+
+
+  }

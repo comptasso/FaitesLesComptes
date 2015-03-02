@@ -1,0 +1,29 @@
+// Place all the styles related to the Lines controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.inputs_inline div.input {
+    display: inline;
+}
+
+// espacement des icones dans le flash après création d'une écriture
+
+.notice strong a img
+    {
+    margin-left: 4px;
+    margin-right: 4px;
+    }
+
+.public_lines {
+    .nombre {
+        text-align: right;
+        
+    }
+
+    table.data_table {width: 100%; }
+
+    div.notice table td {
+        padding-left: 4px;
+        }
+
+}
