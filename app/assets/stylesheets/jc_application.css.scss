@@ -3,10 +3,9 @@ Document   : jc_application
 Created on : 17 mars 2012, 09:09:07
 Author     : jcl
 Description:
-Purpose of the stylesheet follows.
+Purpose of the stylesheet : Fichier destiné à regrouper des styles globaux 
+  pour l'ensemble du site 
 */
-
-
 
 .inner-champ {
     padding-top: 8px;
@@ -40,3 +39,10 @@ img.ui-datepicker-trigger {
 .dataTables_wrapper label {
   font-weight: 300;
 }
+
+
+
+.nombre, .numeric {
+        text-align: right;
+        padding: 3px 10px;
+    }

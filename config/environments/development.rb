@@ -29,7 +29,7 @@ Faitesvoscomptes::Application.configure do
   config.assets.compress = false
 
   # Expands the lines which load the assets
-  config.assets.debug = false
+  config.assets.debug = true
   
   # pour éviter que le serveur utilise les assets précompilés dans le mode développement
   config.assets.prefix = "/dev-assets"
