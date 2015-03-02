@@ -22,7 +22,7 @@ module Extract
     # Renvoie les writings du livre. Utilisé pour la vue index de l'affichage 
     # des livres dans la partie compta.
     # TODO on peut surement accélérer l'affichage de la vue en faisant un 
-    # include writings.
+    # include compta_lines.
     def writings
       @book.writings.laps(from_date, to_date)
     end
