@@ -21,10 +21,10 @@ module Extract
     
     # Renvoie les writings du livre. Utilisé pour la vue index de l'affichage 
     # des livres dans la partie compta.
-    # TODO on peut surement accélérer l'affichage de la vue en faisant un 
-    # include compta_lines.
+    # On accélére la vue en incluant dans la requête les compta_lines et le
+    # compte
     def writings
-      @book.writings.laps(from_date, to_date)
+      @book.writings.laps(from_date, to_date).includes(compta_lines: :account)
     end
 
    
