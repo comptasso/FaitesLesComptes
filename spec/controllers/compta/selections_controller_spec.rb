@@ -16,14 +16,15 @@ describe Compta::SelectionsController do
       response.should be_success 
     end
 
-    it 'Writing receive period and scope_condition' do
+    it 'Récupère les écritures en incluant livre, compta_lines et account' do
       Writing.should_receive(:period).with(@p).and_return(@ar = double(Arel))
-      @ar.should_receive(:unlocked).and_return [1,2]
+      @ar.should_receive(:unlocked).and_return @ar
+      @ar.should_receive(:includes).with([:book, compta_lines: :account]).and_return [1,2]
       get :index,{ :period_id=>@p.to_param, :scope_condition=>'unlocked'}, valid_session
     end
 
     it 'assigns @writings' do
-      Writing.stub_chain(:period, :unlocked).and_return [1,2]
+      Writing.stub_chain(:period, :unlocked, :includes).and_return [1,2]
       get :index,{ :period_id=>@p.to_param, :scope_condition=>'unlocked'}, valid_session
       assigns(:writings).should == [1,2]
     end
