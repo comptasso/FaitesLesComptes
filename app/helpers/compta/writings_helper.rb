@@ -7,8 +7,6 @@ module Compta::WritingsHelper
     compta_line.credit == 0 ? 'debit' : 'credit'
   end
 
-
-
   # Cette méthode helper ajoute une ligne de saisie d'une ComptaLine. 
   # l'index utilisé new_compta_lines sera remplacé par javascript en un autre identifiant lié au 
   # temps.
@@ -36,27 +34,31 @@ module Compta::WritingsHelper
   # cl.type est là pour identifier les écritures qui sont des transferts et 
   # des remises de chèques.
   # 
+  # La méthode est testée dans la vue index
   #
   def compta_line_actions(book, writing)
     html =''
     # if writing.od_editable? || writing.an_editable?
-    if (book.is_a?(OdBook) && !writing.type)  || book.is_a?(AnBook) 
+    if (book.type == 'OdBook' && !writing.type)  || book.type =='AnBook' 
+      
       unless verrouillee?(writing)
         html += icon_to 'modifier.png', edit_compta_book_writing_path(book, writing)
         html += icon_to('supprimer.png', compta_book_writing_path(book, writing), :method=>:delete, data:{confirm:'Etes vous sûr ?'})
         html += icon_to('verrouiller.png', lock_compta_book_writing_path(book, writing, :mois=>@mois, :an=>@an), :method=>:post)
       end
+      
     else
+      
       unless verrouillee?(writing)
         html += image_tag('icones/nb_verrouiller.png',
           title:'Le verrouillage de cette écriture doit se faire dans la partie Saisie/Consult par pointage du compte bancaire et/ou de la caisse')
       end
+      
     end
     
     html.html_safe
   end
-  
-  
+ 
   protected
   
   # refactorisation ; à n'utiliser que si writing a été obtenue avec 
