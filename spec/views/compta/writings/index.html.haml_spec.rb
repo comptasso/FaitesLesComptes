@@ -9,12 +9,8 @@ end
 describe "compta/writings/index" do  
   include JcCapybara
   
-  def unlocked_compta_line
-    ComptaLine.new(debit:100, credit:0, locked:false) 
-  end
-  
-  def locked_compta_line
-    ComptaLine.new(debit:100, credit:0, locked:true) 
+  def compta_line
+    ComptaLine.new(debit:100, credit:0) 
   end
   
   before(:each) do
@@ -94,15 +90,12 @@ describe "compta/writings/index" do
   describe 'les icones des lignes de la table affichée' do
   
     context 'le livre est OD' do
-      before(:each) do
-     
-      end
       
           
       it 'chaque writing non verrouillée a 3 actions représentées par des icones' do
-        @a = [stub_model(Writing, :book=>@b, date:Date.today)]    
+        @a = [stub_model(Writing, :book=>@b, locked_at:nil, date:Date.today)]    
         @a.first.stub(:compta_lines).and_return([
-            unlocked_compta_line, unlocked_compta_line
+            compta_line, compta_line
           ])
         assign(:writings,@a)
         render
@@ -114,9 +107,9 @@ describe "compta/writings/index" do
       end
 
       it 'la deuxième écriture, verrouillée, ne propose pas de lien' do
-        @a = [stub_model(Writing, :book=>@b, date:Date.today)] 
+        @a = [stub_model(Writing, :book=>@b, locked_at:Time.now, date:Date.today)] 
         @a.first.stub(:compta_lines).and_return([
-            unlocked_compta_line, locked_compta_line
+            compta_line, compta_line
           ])
         assign(:writings,@a)
         render
@@ -124,9 +117,9 @@ describe "compta/writings/index" do
       end
 
       it 'Une écriture de transfert non verrouillée affiche un cadenas en noir et blanc' do
-        @a = [stub_model(Transfer, :book=>@b, date:Date.today)] 
+        @a = [stub_model(Transfer, :book=>@b, locked_at:nil, date:Date.today)] 
         @a.first.stub(:compta_lines).and_return([
-            unlocked_compta_line, unlocked_compta_line
+            compta_line, compta_line
           ])
         assign(:writings,@a)
         render
@@ -135,10 +128,10 @@ describe "compta/writings/index" do
         fra[0][:src].should == '/assets/icones/nb_verrouiller.png'
       end
 
-      it 'un Transfert verrouillé, affiche aucune icône' do
-        @a = [stub_model(Transfer, :book=>@b, date:Date.today)] 
+      it 'un Transfert verrouillé n affiche aucune icône' do
+        @a = [stub_model(Transfer, :book=>@b, locked_at:Time.now, date:Date.today)] 
         @a.first.stub(:compta_lines).and_return([
-            locked_compta_line, unlocked_compta_line
+            compta_line, compta_line
           ])
         assign(:writings,@a)
         render
@@ -148,7 +141,7 @@ describe "compta/writings/index" do
       it 'une remise de chèque apparait avec une icone noir et blanc' do
         @a = [stub_model(CheckDepositWriting, :book=>@b, date:Date.today)] 
         @a.first.stub(:compta_lines).and_return([
-            unlocked_compta_line, unlocked_compta_line
+            compta_line, compta_line
           ])
         assign(:writings,@a)
         render
@@ -171,7 +164,7 @@ describe "compta/writings/index" do
       it 'il n y des icones de verrouillage uniquement mais en noir et blanc' do
         @a = [stub_model(Writing, :book=>@b, date:Date.today)] 
         @a.first.stub(:compta_lines).and_return([
-            unlocked_compta_line, unlocked_compta_line
+            compta_line, compta_line
           ])
         assign(:writings,@a)
         render
