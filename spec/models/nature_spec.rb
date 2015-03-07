@@ -13,9 +13,7 @@ describe Nature do
   let(:b) {stub_model(Book, title:'Le titre', type:'IncomeBook')}
   
   before(:each) do
-    @nature = Nature.new(name: 'Nature test')
-    @nature.book_id = 1
-    @nature.period_id = 1
+    @nature = Nature.new(name: 'Nature test', book_id:1, period_id:1)
     @nature.stub(:book).and_return(b) 
   end
 
@@ -102,7 +100,7 @@ describe Nature do
   
   end
   
-  describe 'position d une nouvelle nature'  do
+  describe 'position d une nouvelle nature', wip:true  do
     
       
     
@@ -110,11 +108,9 @@ describe Nature do
       Account.any_instance.stub(:sectorise_for_67).and_return true
       @accounts = create_accounts(%w(110 200 201)) 
       @accounts.each do |a|
-        n = Nature.new(book_id:1,
-          account_id:a.id, name:"nature#{a.number}")          
-        n.period_id = 1
-        n.save!
-      end
+        n = Nature.create!(book_id:1,
+          account_id:a.id, name:"nature#{a.number}", period_id:1)          
+        end
     end
       
     after(:each) do
@@ -122,22 +118,25 @@ describe Nature do
       Nature.destroy_all 
     end
     
+#    it 'liste les positions' do
+#      @accounts.each {|a| puts a.inspect}
+#      Nature.find_each {|n| puts n.inspect}
+#    end   
     
     
-    it 'une nouvelle nature se met à la position dans l ordre des comptes', wip:true do
+    it 'une nouvelle nature se met à la position dans l ordre des comptes' do
+      
       acc = @accounts.second
-      n = Nature.new(book_id:1, account_id:acc.id, name:'nouveau')
-      n.period_id = 1
-      n.save
-      n.position.should == 2
+      n = Nature.create(book_id:1, account_id:acc.id, name:'nouveau', period_id:1)
+      n.reload
+      n.position.should == 2 
     end
       
     it 'elle peut être en premier' do
+      
       begin
         acc = create_accounts(['100']).first
-        n = Nature.new(book_id:1, account_id:acc.id, name:'nouveau')
-        n.period_id = 1
-        n.save
+        n = Nature.create!(book_id:1, account_id:acc.id, name:'nouveau', period_id:1)
         n.position.should == 1
       ensure
         acc.destroy
@@ -145,11 +144,10 @@ describe Nature do
     end
       
     it 'ou en dernier' do
+      
       begin
         acc = create_accounts(['300']).first
-        n = Nature.new(book_id:1, account_id:acc.id, name:'nouveau')
-        n.period_id = 1
-        n.save
+        n = Nature.create!(book_id:1, account_id:acc.id, name:'nouveau', period_id:1)
         n.position.should == 4
       ensure
         acc.destroy

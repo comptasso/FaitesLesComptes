@@ -50,22 +50,17 @@ describe 'admin/books/index' do
         page.find('th:first').text.should == 'Abbreviation'
         page.find('th:nth-child(2)').text.should == 'Titre'
         page.find('th:nth-child(3)').text.should == 'Description'
-        
-        page.find('th:nth-child(4)').text.should == 'Créé le'
-        page.find('th:nth-child(5)').text.should == 'Mis à jour le'
-       
-        page.find('th:nth-child(6)').text.should =='Actions'
+        page.find('th:nth-child(4)').text.should =='Actions'
       end
 
     end
   end
   # on ne peut le traiter comme les autres car le render ne doit pas arriver
   # avant le stub_chain
-  context 'test de l affichage de l icone destroy' do
-    it "with a compta_line, row should not propose supprimer" do
-      @books.first.stub_chain(:compta_lines, :empty?).and_return(false)
+  context 'test de l affichage de l icone edit' do
+    it "affiche l icone edit" do
       render
-      page.should_not have_css('tbody tr:first img[src="/assets/icones/supprimer.png"]')
+      page.should have_css('tbody tr:first img[src="/assets/icones/modifier.png"]')
     end
   end 
        

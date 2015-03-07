@@ -75,4 +75,5 @@
 # FLCVERSION = '1.7.3RC' # correction de 3 bugs (nom trop long, cash_line vers compta et listing#to_csv)
 # FLCVERSION = '1.7.4RC' # correction d'1 bug sur le pointage bancaire à la cloture
 # FLCVERSION = '1.9.0RC' # passage à Rails 4e
-FLCVERSION = '1.9.1RC' # dernières corrections Rails 4
+# FLCVERSION = '1.9.1RC' # dernières corrections Rails 4
+FLCVERSION = '1.9.2RC' # réaffichage des soldes sur listing, accélération vues compta, nettoyage css

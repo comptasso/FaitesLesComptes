@@ -22,9 +22,9 @@ class Nature < ActiveRecord::Base
 
   
  
-  acts_as_list :scope=>[:period_id, :book_id]
+  acts_as_list :scope=>[:period_id, :book_id], add_new_at:'perso'
 
-#  attr_accessible :name, :comment, :account, :account_id, :book_id 
+
   
 
   
@@ -52,7 +52,7 @@ class Nature < ActiveRecord::Base
 
   before_destroy :ensure_no_lines
   before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
-  before_create :fix_position
+  after_create :fix_position
 
  
   # Stat_with_cumul fournit un tableau comportant le total des lignes 
@@ -81,7 +81,7 @@ class Nature < ActiveRecord::Base
       if sector1id != sector2id
         puts "#{db} : #{n.id} reliée à #{sector1id} et #{sector2id}"
         Rails.logger.warn "#{db} : #{n.id} reliée à #{sector1id} et #{sector2id}"
-        coherent = n.change_book_to_fit_account
+        coherent = n.change_book_to_fit_account 
         
       end
     end
@@ -101,38 +101,11 @@ class Nature < ActiveRecord::Base
 
  
   protected
+    
   
-  def position_for_new_nature
-    return nil unless account_id
-    acc =  Account.find(account_id)
-    return nil unless acc # cas théorique impossible sauf dans les tests
-    # TODO améliorer éventuellement find_second_nature pour traiter ce sujet
-    ns = Nature.includes(:account).
-      where('natures.period_id = ? AND book_id = ?', period_id, book_id).
-      order('accounts.number', 'position')
-    #cherche la nature qui est juste au dessus du compte de notre récente nature
-    pos =  ns.bsearch do |n|
-      n.account.number >= acc.number if n.account
-    end
-    pos ? pos.position : nil
-  end
-  
-  
-  
-  # donne la position par défaut pour une nouvelle nature basée sur 
-  # l'ordre des numéros de comptes.
-  # 
-  # Si une (ou des) natures sont déjà connectées à ce compte, alors
-  # elle se place en dernière position
-  #  
-  # S'il n'y a pas de nature correspondant à ce compte, cherche la nature ayant 
-  # un numéro de compte correspondant. On ne parle évidemment que des natures 
-  # qui relèvent du même livre et du même exercice. 
-  #
+  # appelé par after_create pour définir la position
   def fix_position
-    pos = position_for_new_nature
-    # puts "la position trouvée est la suivante : #{pos}"
-    self.position = pos if pos
+    insert_at(find_right_position) 
   end
 
   # Stat crée un tableau donnant les montants totaux de la nature pour chacun
@@ -160,6 +133,43 @@ class Nature < ActiveRecord::Base
       errors.add(:base, 'Des écritures font référence à cette nature')
       return false
     end
+  end
+  
+  # hack utilisé pour éviter que acts_as_list gère la position d'un new
+  # record.
+  # TODO on pourrait peut-être regrouper cette méthode, find_right_position
+  # fix_position
+  def add_to_list_perso
+  
+  end
+  
+  # Par défaut, on cherche à regrouper les natures par numéro de compte associé
+  # et on met la nouvelle nature en début du groupe. 
+  # 
+  # Donne la position par défaut pour une nouvelle nature basée sur 
+  # l'ordre des numéros de comptes.
+  # 
+  # Si une (ou des) natures sont déjà connectées à ce compte, alors
+  # elle se place en dernière position
+  #  
+  # S'il n'y a pas de nature correspondant à ce compte, cherche la nature ayant 
+  # un numéro de compte correspondant. On ne parle évidemment que des natures 
+  # qui relèvent du même livre et du même exercice. 
+  def find_right_position
+    
+    return (self.send(:bottom_position_in_list) +1) unless account_id
+    acc =  Account.find(account_id)
+    return (self.send(:bottom_position_in_list) +1) unless acc # cas théorique impossible sauf dans les tests
+    
+   
+    n = Nature.includes(:account).
+      where('natures.period_id = ? AND book_id = ? AND accounts.number >= ? AND natures.id != ?',
+      period_id, book_id, acc.number, id).
+      order('accounts.number', 'position').first
+    
+    n ? n.position : (self.send(:bottom_position_in_list) +1)
+    
+    
   end
 
 end

@@ -1,15 +1,10 @@
-
-
 <tr>
   <td><%= book.abbreviation %></td>
   <td><%= book.title %></td>
   <td><%= book.description  %></td>
-  
-  <td><%= l book.created_at %></td>
-  <td><%= l book.updated_at %></td>
-
   <td>
-    <%= icon_to 'modifier.png', edit_admin_organism_book_path(@organism, book), :id=>"icon_modifier_book_#{book.id}" %>
-   
+    <%= icon_to 'modifier.png', 
+      edit_admin_organism_book_path(@organism, book),
+      :id=>"icon_modifier_book_#{book.id}" %>
   </td>
 </tr>

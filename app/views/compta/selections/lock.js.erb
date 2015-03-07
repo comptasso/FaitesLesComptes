@@ -1,1 +1,1 @@
-$(<%= dom_id(@writing) %>).hide('drop', {direction:'up'})
+$('#<%= dom_id(@writing)%>').fadeOut(100, function(){ $(this).remove();});
