@@ -21,7 +21,6 @@ class Account < ActiveRecord::Base
   include Utilities::Sold
   include Comparable
 
-  # attr_accessible :number, :title, :used, :sector_id
 
   belongs_to :period
   has_one :organism, through: :period
@@ -32,7 +31,7 @@ class Account < ActiveRecord::Base
   has_many :natures
 
   # les lignes sont trouvées par account_id
-  has_many :compta_lines, :dependent=>:destroy
+  has_many :compta_lines
   
 
   # un compte peut avoir plusieurs transferts (en fait c'est limité aux comptes bancaires et caisses)
@@ -53,6 +52,10 @@ class Account < ActiveRecord::Base
   # TODO ceci est très spécifique aux comités d'entreprise. Devra être revu 
   # si on veut étendre les possibilités de la sectorisation
   validate :sectorise_for_67
+  
+  before_destroy :non_accountable, :no_line, :no_nature
+  
+  
  
 
   default_scope -> {order('accounts.number ASC')}
@@ -76,7 +79,7 @@ LEFT OUTER JOIN sectors ON (sectors.id = accounts.sector_id)").
       group("accounts.id", "sectors.name").
       order("number") }
   
-  
+  # pour avoir les fonctionnalités enumerable sur le champ number
   def <=>(other) 
     number <=> other.number
   end
@@ -140,7 +143,7 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
   def self.available(number)
     raise ArgumentError, 'le numéro du compte demandé doit être 53 ou 512' unless number.match(/^53$|^512$/)
     # TODO : voir pour gérer cette anomalie dans le controller au moment de la création 
-    # de la caisse ou de la banque
+    # de la caisse ou de la banque et en faire éventuellement une validation côté modèle
     as = Account.where('number LIKE ?', "#{number}%").order('number ASC').last
     raise RangeError, 'Déjà 99 comptes de ce type, limite atteinte' if as && as.number.match(/\d*99$/)
     if as.nil? || as.number == number # il n'y a que le compte générique
@@ -249,6 +252,33 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND ac
       if number =~ /\A(6|7).*/ && !sector_id  
         errors.add(:sector_id, 'Un secteur est obligatoire pour ce compte')
       end
+    end
+  end
+  
+  # indique si un compte est relié à une caisse ou une banque
+  # utilisé par before_destroy pour interdire la destruction d'un tel compte
+  def non_accountable
+    if accountable_id 
+      errors[:base] << "On ne peut supprimer un compte rattacher à une banque ou à une caisse"
+      return false
+    end
+  end
+  
+  # callback before_destroy pour vérifier qu'il n'y aucune ligne attachée à ce
+  # compte
+  def no_line
+    if compta_lines.any?
+      errors[:base] << "On ne peut supprimer un compte avec des écritures"
+      return false
+    end
+  end
+  
+  # callback before_destroy pour interdire la suppression d'un compte 
+  # utilisé par une nature
+  def no_nature
+    if natures.any? 
+      errors[:base] << "On ne peut supprimer un compte utilisé par une nature"
+      return false
     end
   end
 
