@@ -68,7 +68,7 @@ class Admin::AccountsController < Admin::ApplicationController
     if @compta_account.destroy
       flash[:notice]= "Le compte #{@compta_account.number} - #{@compta_account.title} a été supprimé"
     else
-      flash[:error]= "Une erreur s'est produite, le compte #{@compta_account.number} n'a pas pu être supprimé"
+      flash[:error]= @compta_account.errors.full_messages.join('; ')
     end
 
     respond_to do |format|

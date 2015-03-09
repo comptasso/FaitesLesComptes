@@ -102,7 +102,6 @@ LEFT OUTER JOIN sectors ON (sectors.id = accounts.sector_id)").
     if date == (period.start_date - 1)
       init_sold(dc)
     else
-      # TODO voir si super ne serait pas juste suffisant
       BigDecimal.new(Writing.joins(:compta_lines).select([:debit, :credit]).
           where('date <= ? AND account_id = ?', date, id).sum(dc))
     end
@@ -111,8 +110,8 @@ LEFT OUTER JOIN sectors ON (sectors.id = accounts.sector_id)").
   # méthode redéfinie pour réduire les appels à la base de données
   def sold_at(date)
     sql = %Q(SELECT SUM(credit) AS sum_credit, SUM(debit) AS sum_debit FROM "writings" INNER JOIN "compta_lines" 
-ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= '#{date}' AND account_id = #{id}))
-    result = Writing.find_by_sql(sql).first
+ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id = ?))
+    result = Writing.find_by_sql(sql, date, id).first
     BigDecimal.new(result.sum_credit || 0) - BigDecimal.new(result.sum_debit || 0)
   end
   
