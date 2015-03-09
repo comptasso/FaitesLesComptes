@@ -74,7 +74,7 @@ class Account < ActiveRecord::Base
   scope :list_for, lambda {|period| joins("LEFT OUTER JOIN natures ON (accounts.id = natures.account_id) 
 LEFT OUTER JOIN compta_lines ON (accounts.id = compta_lines.account_id)
 LEFT OUTER JOIN sectors ON (sectors.id = accounts.sector_id)").
-      select("sectors.name AS s_name, accounts.id, number, title, used, COUNT(compta_lines) AS nb_cls, COUNT(natures) AS nb_nats").
+      select("sectors.name AS s_name, accounts.id, number, title, used, accountable_id, COUNT(compta_lines) AS nb_cls, COUNT(natures) AS nb_nats").
       where("accounts.period_id = ?", period.id ).
       group("accounts.id", "sectors.name").
       order("number") }
@@ -258,7 +258,7 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id
   # utilisé par before_destroy pour interdire la destruction d'un tel compte
   def non_accountable
     if accountable_id 
-      errors[:base] << "On ne peut supprimer un compte rattacher à une banque ou à une caisse"
+      errors[:base] << "On ne peut supprimer un compte rattaché à une banque ou à une caisse"
       return false
     end
   end

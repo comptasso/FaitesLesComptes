@@ -26,7 +26,8 @@
           %td= t_used account
           %td
             = icon_to 'modifier.png', edit_admin_period_account_path(@period, account)
-            - if (account.nb_cls.to_i == 0 && account.nb_nats.to_i == 0)
+            -# pas rattaché à une banque ou une caisse, ni avec des lignes, ni avec une nature
+            - if (account.accountable_id == nil && account.nb_cls.to_i == 0 && account.nb_nats.to_i == 0)
               = icon_to 'supprimer.png', [:admin,@period,account], 
                 data: {confirm: 'Etes vous sûr ?'} , :method => :delete 
   
