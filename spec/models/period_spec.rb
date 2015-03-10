@@ -7,7 +7,7 @@ RSpec.configure do |c|
 end
 
 describe Period do  
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
   context 'un organisme' do   
 
     def valid_params
@@ -294,7 +294,7 @@ describe Period do
 
       
    
-      describe 'period_next' , wip:true do
+      describe 'period_next'  do
         it "2010 doit repondre 2011" do
           @p_2010.next_period.should == @p_2011
         end
@@ -419,14 +419,14 @@ describe Period do
     end
   end
 
-  describe 'destruction d un exercice', wip:true do
+  describe 'destruction d un exercice' do
     
     before(:each) do
       create_minimal_organism
       
     end
     
-    it 'la destruction de l exercice entraîne celle des comptes' do
+    it 'la destruction de l exercice entraîne celle des comptes', wip:true do
       nb_accounts = Account.count
       nb_period_accounts = @p.accounts.count
       @p.destroy

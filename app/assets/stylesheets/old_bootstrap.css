@@ -1,28 +1,33 @@
 
 p {margin-left: 20px;}
-table a img
-    {
-    margin-left: 4px;
-    margin-right: 4px;
-    }
+table a img {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+/* Mise en forme des icones d'actions dans les tables*/
+.actions img, .actions a img {
+  margin-left: 4px;
+  margin-right: 4px;
+}
 
 .alert {
-    background-color: #ece8d3;
-    color: #d25;
-    margin-bottom: 4px;
-    padding: 8px;
+  background-color: #ece8d3;
+  color: #d25;
+  margin-bottom: 4px;
+  padding: 8px;
 }
 
 .notice {
-    color: #271;
-    padding: 8px;
-    font-weight: bold;
+  color: #271;
+  padding: 8px;
+  font-weight: bold;
 }
 
 .conseil {
-   color: #271;
-   padding: 8px;
-   font-weight: normal;
+  color: #271;
+  padding: 8px;
+  font-weight: normal;
 }
 
 
@@ -32,36 +37,36 @@ table a img
 
 
 
- 
+
 .table-striped tbody tr:nth-child(2n+1) td, .table-striped tbody tr:nth-child(2n+1) th {
-    background-color: #EFEFEF;
+  background-color: #EFEFEF;
 }
 
- .table tbody tr:hover td, .table tbody tr:hover th {
-    background-color: #CBEECB;
+.table tbody tr:hover td, .table tbody tr:hover th {
+  background-color: #CBEECB;
 }
 
 .table thead  th {vertical-align: top; }
 
 table thead  th ul {
-      margin-left: 0px;
-      margin-bottom: 0px;
-      list-style: none inside none;
-    }
+  margin-left: 0px;
+  margin-bottom: 0px;
+  list-style: none inside none;
+}
 
 .numeric , td.numeric, th.numeric, input.numeric{
-    text-align: right;
-  }
+  text-align: right;
+}
 
 .form-horizontal .form-actions, .form-inline .form-actions {
-background-color: #dbffdb;
-margin-top: 9px;
-padding-top: 0px;
-border-top: none;
+  background-color: #dbffdb;
+  margin-top: 9px;
+  padding-top: 0px;
+  border-top: none;
 }
 
 .form-horizontal .control-group {
-margin-top: 9px;
+  margin-top: 9px;
 
 }
 
@@ -70,34 +75,34 @@ form.form-inline label {
 }
 
 form.form-inline .col-lg-12 {
- margin-bottom: 8px; 
+  margin-bottom: 8px; 
 }
 
 select[class*="span"] {
   background-color: #fff;
-  
+
 }
 
 .row-fluid select[class*="span"] {
-display: inline;
+  display: inline;
 }
 
 .form-horizontal .help-block {
- font-style: italic;
-        margin-top: 6px;
-        margin-left: 6px;
-        font-weight: smaller;
-        
+  font-style: italic;
+  margin-top: 6px;
+  margin-left: 6px;
+  font-weight: smaller;
+
 
 }
 
 select[disabled] {
-background-color: #dbffdb;
+  background-color: #dbffdb;
 }
 
 abbr[title] {
-border-bottom: none;
-color: red;
+  border-bottom: none;
+  color: red;
 }
 
 /*.form-actions input.btn {
@@ -106,8 +111,8 @@ color: red;
 }*/
 
 .btn-primary {
-    background-color: #11ad26;
-    background-image: linear-gradient(to bottom, #11ad11, #11ad45);
+  background-color: #11ad26;
+  background-image: linear-gradient(to bottom, #11ad11, #11ad45);
 }
 
 .btn-primary:active {
@@ -118,7 +123,7 @@ input.input_date_picker {
   background-image: url('cal.gif');
   background-repeat:no-repeat;
   background-position:97% 50%;
-  
+
 }
 
 /* Sinon les labels sont en gras pour les forms avec des boutons radios */
@@ -134,19 +139,19 @@ span.radio-inline label {
 }
 
 .help-inline {
-font-style: italic;
-font-size: smaller
+  font-style: italic;
+  font-size: smaller
 }
 
 
 /* pour modifier les couleurs des paginations de datatable */
 .pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus, .pagination > .active > span, .pagination > .active > span:hover, .pagination > .active > span:focus {
-    background-color: #1ab333;
-    border-color: #1ab333;
+  background-color: #1ab333;
+  border-color: #1ab333;
 }
 
 .pagination > li > a, .pagination > li > span {
-    color: #006633;
+  color: #006633;
 }
 
 

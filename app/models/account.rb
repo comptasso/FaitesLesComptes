@@ -111,7 +111,7 @@ LEFT OUTER JOIN sectors ON (sectors.id = accounts.sector_id)").
   def sold_at(date)
     sql = %Q(SELECT SUM(credit) AS sum_credit, SUM(debit) AS sum_debit FROM "writings" INNER JOIN "compta_lines" 
 ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id = ?))
-    result = Writing.find_by_sql(sql, date, id).first
+    result = Writing.find_by_sql([sql, date, id]).first
     BigDecimal.new(result.sum_credit || 0) - BigDecimal.new(result.sum_debit || 0)
   end
   
