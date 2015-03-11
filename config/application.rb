@@ -38,6 +38,8 @@ module Faitesvoscomptes
     # added by jcl to load app/validators
     config.autoload_paths += %W( #{config.root}/lib/validators)
     
+    # filtre pour que le password n'apparaisse pas dans les logs
+    config.filter_parameters+=[:password]
     
   end
 end
