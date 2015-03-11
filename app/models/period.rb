@@ -74,7 +74,7 @@ class Period < ActiveRecord::Base
   belongs_to :organism
   has_many :books, :through=>:organism
 
-  has_many :accounts, :dependent=>:destroy
+  has_many :accounts, :dependent=>:delete_all
   has_many :used_accounts, -> {where('used = ?', true)}, class_name:'Account'
   has_many :natures
   has_many :compta_lines, :through=>:accounts 
@@ -92,7 +92,8 @@ class Period < ActiveRecord::Base
   
   before_validation :fix_days
   before_create :should_not_have_more_than_two_open_periods 
-  before_destroy  :destroy_writings,:destroy_cash_controls, :destroy_bank_extracts, :destroy_natures
+  before_destroy  :destroy_writings,:destroy_cash_controls,
+    :destroy_bank_extracts, :destroy_natures
   
 
   scope :opened, -> {where('open = ?', true)}
@@ -480,9 +481,10 @@ class Period < ActiveRecord::Base
   end
 
   # boolean : indique si l'on peut faire de la comptabilité
-  # Il faut des natures et que toutes ces natures soient reliées à des comptes
-  # TODO : ajouter aussi que l'exercice ne doit pas être fermé
+  # Il faut  que l'exercice soit ouvert, qu'il ait des natures et que toutes 
+  # ces natures soient reliées à des comptes
   def accountable?
+    return false unless open
     return false if natures.empty?
     all_natures_linked_to_account?
   end
@@ -564,91 +566,11 @@ class Period < ActiveRecord::Base
   end
   
   
-
-  private
-
  
-
-#  def create_bank_and_cash_accounts
-#    # organisme a créé une banque et une caisse par défaut et il faut leur créer des comptes
-#    # utilisation de send car create_accounts est une méthode protected
-#    organism.bank_accounts.each {|ba| ba.send(:create_accounts)}
-#    organism.cashes.each {|c| c.send(:create_accounts)}
-#    accounts(true) # pour mettre à jour la relation avec les comptes
-#    # sinon une création et une destruction dans la foulée (cas des tests) laisse une trace de ces deux comptes
-#  end
-  
-  # crée le compte de remise de chèques
-  # TODO faire spec d'intégration
-#  def create_rem_check_accounts
-#      accounts.create!(REM_CHECK_ACCOUNT)
-#  end
-  
- 
-
-  # demande à PlanComptable de recopier les comptes de l'exercice précédent
-  #
-#  def copy_accounts
-#    Utilities::PlanComptable.new(self, 'statut').copy_accounts(previous_period)
-#  end
-
-#  # recopie les natures de l'exercice précédent 's'il y en a un)
-#  def copy_natures
-#    pp = self.previous_period
-#    pp.natures.all.each do |n|
-#      nn = {name: n.name, comment: n.comment, book_id: n.book_id} # on commence à construire le hash
-#      if n.account_id # cas où il y avait un rattachement à un compte
-#        previous_account=pp.accounts.find(n.account_id) # on identifie le compte de rattachement
-#        nn[:account_id] = self.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
-#      end
-#      self.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
-#    end
-#  end
-  
-  
-#  # load natures est appelé lors de la création d'un premier exercice
-#  # load_natures lit le fichier natures_asso.yml et crée les natures correspondantes
-#  # retourne le nombre de natures
-#  #
-#  # TODO améliorer la gestion d'une éventuelle erreur
-#  # TODO voir aussi si on ne peut utiliser une classe similaire à Utilities::PlanComtpable pour simplifier
-#  # copy_natures et load_natures et retirer de cette clase également load_file_natures. On pourrait aussi envisager de passer ces callbacks dans un Observer.
-#  def load_natures  
-#    Rails.logger.debug 'Création des natures'
-#    nats = load_file_natures
-#    books = collect_books(nats)
-#    nats.each do |n|
-#      a = accounts.find_by_number(n[:acc]) 
-#       nat = natures.new(name:n[:name], comment:n[:comment], account:a)
-#       nat.book_id = books[n[:book]] 
-#       puts "#{nat.name} - #{nat.errors.messages}" unless nat.valid?
-#       nat.save
-#    end
-#    natures(true).count
-#  end
   
   protected
   
-  # fait la collecte des livres qui sont nécessaires à la création des natures
-#  def collect_books(natures)
-#    livres = natures.collect {|n| n[:book]}.uniq
-#    hash_books = {}
-#    livres.each do |b|
-#      hash_books[b] = organism.books.where('title = ?', b).first.id
-#    end
-#    hash_books
-#  end
-  
 
- 
-  
-   # TODO voir comment gérer les exceptions
-  # remplit les éléments qui permettent de faire le pont entre le module 
-  # Adhérents (et plus précisément, sa partie Payment) et le PaymentObserver
-  # qui écrit sur le livre des recettes.
-#  def fill_bridge
-#    organism.fill_bridge
-#  end
 
   # TODO voir à réintroduire organism dans les callbacks de destroy au cas où
   # on reviendrait à une seule base de données.
@@ -658,7 +580,8 @@ class Period < ActiveRecord::Base
   #
   # TODO voir si on peut se passer de la requête sql; actuellement cela bloque
   # probablement par le verrouillage qu'il y a sur l'une ou l'autre des tables
-  # A revoir après modification de la logique des bank_extract_lines_lines
+  # A revoir après modification de la logique des bank_extract_lines_lines, ou 
+  # en utilisant delete_all
   #
   def destroy_bank_extracts
     organism.bank_accounts.each do |ba|
@@ -688,6 +611,8 @@ class Period < ActiveRecord::Base
   def destroy_natures
     natures.each { |n| n.delete} 
   end
+  
+ 
 
  
 end

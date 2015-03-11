@@ -9,7 +9,7 @@ class Cash < ActiveRecord::Base
   include Utilities::Sold
  # include Utilities::JcGraphic
 
-  # attr_accessible :name, :comment, :sector_id
+  # TODO interdire la destruction des caisses (et banques) qui ont des écritures
 
   belongs_to :organism
   belongs_to :sector
@@ -30,8 +30,10 @@ class Cash < ActiveRecord::Base
 
   strip_before_validation :name, :comment
   
-  validates :name, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :uniqueness=>{:scope=>:organism_id}
-  validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
+  validates :name, presence: true, :format=>{with:NAME_REGEX},
+    :length=>{:within=>NAME_LENGTH_LIMITS}, :uniqueness=>{:scope=>:organism_id}
+  validates :comment, :format=>{with:NAME_REGEX},
+    :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :organism_id, :presence=>true
   validates :sector_id, :presence=>true
  

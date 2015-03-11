@@ -13,13 +13,12 @@ describe Account do
   def valid_attributes
     {number:'6011',
       title:'Titre du compte',
+      period_id:1
     }
   end
   
   def valid_account
-    acc = Account.new(valid_attributes)
-    acc.period_id = 1
-    acc
+    Account.new(valid_attributes)
   end
    
 
@@ -61,7 +60,7 @@ describe Account do
     
   end
   
-  context 'avec un comite d entreprise', wip:true do
+  context 'avec un comite d entreprise' do
     
     subject {valid_account}
     
@@ -87,42 +86,42 @@ describe Account do
   
   context  'méthode de classe' do
 
-      describe 'available' do
+    describe 'available' do
 
-        it 'retourne 5301 si c est la première caisse' do
-           Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
-          @ar.stub_chain(:last).and_return nil
-          Account.available('53').should == '5301'
-        end
+      it 'retourne 5301 si c est la première caisse' do
+        Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
+        @ar.stub_chain(:last).and_return nil
+        Account.available('53').should == '5301'
+      end
 
-        it 'sait incrémenter les numéros' do
-           Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
-          @ar.stub_chain(:last, :number).and_return '5301'
-          Account.available('53').should == '5302'
-        end
+      it 'sait incrémenter les numéros' do
+        Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
+        @ar.stub_chain(:last, :number).and_return '5301'
+        Account.available('53').should == '5302'
+      end
         
-        it 'y compris le passage des dizaines' do
-           Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
-          @ar.stub_chain(:last, :number).and_return '5329'
-          Account.available('53').should == '5330'
-        end
+      it 'y compris le passage des dizaines' do
+        Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
+        @ar.stub_chain(:last, :number).and_return '5329'
+        Account.available('53').should == '5330'
+      end
         
-        it 'bloque à 99' do
-          Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
-          @ar.stub_chain(:last, :number).and_return '5399'
-          expect {Account.available('53')}.to raise_error(RangeError)
-        end
+      it 'bloque à 99' do
+        Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
+        @ar.stub_chain(:last, :number).and_return '5399'
+        expect {Account.available('53')}.to raise_error(RangeError)
       end
     end
+  end
 
  
   context 'avec un organisme' do
     
     def new_with_real_attributes
-        acc = Account.new(valid_attributes)
-        acc.period_id = @p.id
-        acc
-      end
+      acc = Account.new(valid_attributes)
+      acc.period_id = @p.id
+      acc
+    end
 
     before(:each) do
       use_test_organism 
@@ -154,7 +153,6 @@ describe Account do
     
       context 'avec report à nouveau' do
       
-      
         before(:each) do
           @o.an_book.writings.create!(date:Date.today.beginning_of_year, narration:'ecriture d an',
             :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:66},
@@ -170,9 +168,6 @@ describe Account do
           @acc1.init_sold('debit').should == 0
           @acc1.init_sold('credit').should == 66
         end
-
-
-    
 
         context 'avec exercice précédent clos' do
 
@@ -190,15 +185,10 @@ describe Account do
             @acc1.init_sold_credit.should == 66
           end
 
-
-
-
         end
 
       end
-    
-     
-  
+   
     end
 
     describe 'solde final' do
@@ -228,11 +218,7 @@ describe Account do
    
 
     end
-
-
-
-   
-   
+ 
     describe 'polymorphic' do
       it 'la création d\'une banque entraîne celle d\'un compte' do
         @ba.should have(1).accounts
@@ -242,8 +228,6 @@ describe Account do
         @c.accounts.length.should == 1
       end
     end
-
-
 
     describe 'all_lines_locked?' do
       
@@ -278,8 +262,7 @@ describe Account do
       end
 
     end
-
-   
+  
     describe 'to_pdf' do
       it 'on peut créer un listing' do
         # Account.create!(valid_attributes)
@@ -298,7 +281,38 @@ describe Account do
       end
     end
 
-
+    describe 'cas de destruction impossible'  do
+      
+      it 'un compte avec des écritures' do
+        @w1 = create_outcome_writing(97)
+        @abc = @w1.compta_lines.first.account
+        expect {@abc.destroy}.to_not change{Account.count}.by(-1)
+      end
+      it 'un compte relié à une caisse' do
+        @caca.destroy.should be_false
+      end
+      it 'un compte relié à une banque' do
+        @baca.destroy.should be_false
+      end 
+      it 'le compte cotisation pour une association' do
+        n = @p.natures.recettes.find_by_name(@o.bridge.nature_name)
+        a = n.account
+        a.destroy.should be_false
+      end
+      it 'et d une manière générale, tout compte relié à une nature' do
+        a = @n.account
+        a.destroy.should be_false
+      end
+      
+      
+    end
+    
+    describe 'mais on peut détruire'  do
+      it 'un compte sans attache ni lignes' do
+        a = Account.where('number = ?', '106').first
+        expect {a.destroy}.to change{Account.count}.by(-1)
+      end
+    end
     
 
   end
