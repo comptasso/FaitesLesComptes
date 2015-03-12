@@ -55,7 +55,7 @@ checkSum= ->
 ltpsTobels=  ->
   ligne = $(this).parents('tr').appendTo($('#bels_table tbody'))
   ligne.find('img.transfert').off('click', ltpsTobels).on('click', belsToltps).
-    attr('src', '/assets/icones/retirer.png')
+    attr('src', '<%= asset_path "icones/retirer.png" %>')
   ligne.find('a.icon_menu').hide() # on masque les icones edition et suppression de la ligne
   activeEnregistrer() if "disabled" in $('#enregistrer').attr('class').split(' ')     
   checkSum()
@@ -66,7 +66,7 @@ ltpsTobels=  ->
 belsToltps= ->
   ligne = $(this).parents('tr').appendTo($('#ltps_table tbody'))
   ligne.find('img.transfert').off('click', belsToltps).on('click', ltpsTobels).
-    attr('src', '/assets/icones/ajouter.png')
+    attr('src', '<%= asset_path "icones/ajouter.png" %>')
   activeEnregistrer()  if "disabled" in $('#enregistrer').attr('class').split(' ') 
   checkSum()
   

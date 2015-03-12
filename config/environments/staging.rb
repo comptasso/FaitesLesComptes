@@ -17,7 +17,8 @@ Faitesvoscomptes::Application.configure do
   config.assets.compress = true
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
-  config.assets.compile = true
+  config.assets.compile = false # pour être certain que si un fichier manque,
+  # il le signale tout de suite
 
   config.action_mailer.default_url_options = { :host => ENV['MAIL_HOST'] } # pour Devise
 

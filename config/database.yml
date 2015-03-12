@@ -19,7 +19,7 @@ production:
 staging:
   adapter: postgresql
   encoding: unicode
-  database: faiteslescomptes
+  database: restau20150218
   pool: 5
   username: jcl
   password: flc
