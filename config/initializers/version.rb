@@ -76,4 +76,6 @@
 # FLCVERSION = '1.7.4RC' # correction d'1 bug sur le pointage bancaire à la cloture
 # FLCVERSION = '1.9.0RC' # passage à Rails 4e
 # FLCVERSION = '1.9.1RC' # dernières corrections Rails 4
-FLCVERSION = '1.9.2RC' # réaffichage des soldes sur listing, accélération vues compta, nettoyage css
+# FLCVERSION = '1.9.2RC' # réaffichage des soldes sur listing, accélération vues compta, nettoyage css
+# FLCVERSION = '1.9.3RC' # before_destroy pour Account et modif vue index des comptes
+FLCVERSION = '1.9.4RC' # précompilation des assets en local pour accélération heroku
