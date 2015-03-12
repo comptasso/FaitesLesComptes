@@ -32,10 +32,8 @@ gem 'ofx' # pour la lecture des fichiers bancaires au format ofx
 gem 'delayed_job_active_record', '= 4.0.2'
 gem 'unicorn'
 gem 'rack-timeout' # conseil de heroku - utilisé par le fichier intializers/timeout.rb
-# gem 'routing_concerns'  # Voir le gem sur github (permet de simplifier l'écriture des routes)
-# TODO à retirer lors du passage à Rails 4
 
-gem 'adherent', '~>0.2.2' #  :path=>'../../Adherent' # #,'~>0.2.2' 
+gem 'adherent', '~>0.2.2' 
 # gem 'adherent', :path=>'../../Adherent'  
 
 
