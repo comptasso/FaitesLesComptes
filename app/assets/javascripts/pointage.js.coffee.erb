@@ -52,10 +52,11 @@ checkSum= ->
 #
 # Il ne reste plus qu'à recalculer les totaux.
 #
+
 ltpsTobels=  ->
   ligne = $(this).parents('tr').appendTo($('#bels_table tbody'))
   ligne.find('img.transfert').off('click', ltpsTobels).on('click', belsToltps).
-    attr('src', '<%= asset_path "icones/retirer.png" %>')
+    attr('src', '<%= asset_path("icones/retirer.png") %>')
   ligne.find('a.icon_menu').hide() # on masque les icones edition et suppression de la ligne
   activeEnregistrer() if "disabled" in $('#enregistrer').attr('class').split(' ')     
   checkSum()
@@ -66,7 +67,7 @@ ltpsTobels=  ->
 belsToltps= ->
   ligne = $(this).parents('tr').appendTo($('#ltps_table tbody'))
   ligne.find('img.transfert').off('click', belsToltps).on('click', ltpsTobels).
-    attr('src', '<%= asset_path "icones/ajouter.png" %>')
+    attr('src', '<%= asset_path("icones/ajouter.png") %>')
   activeEnregistrer()  if "disabled" in $('#enregistrer').attr('class').split(' ') 
   checkSum()
   
@@ -101,7 +102,7 @@ show_icons= ->
 $ ->
   if $('#ltps_table').length # ce if est là car sinon checksum agit aussi dans la vue index du controller
   # bank_extract_lines
-  
+    
     # contrôle des totaux et affichage des balises dangers et des écarts
     checkSum() 
     
