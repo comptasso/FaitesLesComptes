@@ -45,11 +45,24 @@ describe Compta::TwoPeriodsBalance do
       subject.stub(:lines).and_return(['1','2'])
       @p.stub(:organism).and_return(double(Organism, title:'Asso test'))
       @p.stub(:long_exercice).and_return('Exercice 2014')
-      @p.stub(:closed?).and_return false
+      @p.stub(:provisoire?).and_return false
     end
     
     it 'retourne un PdfDocument::Base' do
+      @p.stub(:provisoire?).and_return true
       subject.to_pdf.should be_an_instance_of(PdfDocument::Base)
     end
+    
+    it 'le pdf est marqué provisoire' do
+      @p.stub(:provisoire?).and_return true
+      expect(subject.to_pdf.stamp).to eql('Provisoire')
+    end
+    
+    it 'le pdf n est pas marqué' do
+      @p.stub(:provisoire?).and_return false
+      expect(subject.to_pdf.stamp).to eql('')
+    end
+    
+    
   end
 end

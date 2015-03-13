@@ -178,8 +178,14 @@ class Period < ActiveRecord::Base
     pp.accounts.find_by_number(account.number)
   end
 
+  # un exercice est provisoire dès lors que des écritures ne sont pas
+  # verrouillées
+  #
+  def provisoire?
+    compta_lines.unlocked.any?
+  end
   
-
+  
   # Les conditions pour qu'un exercice puisse être fermé sont :
   # qu'il soit ouvert
   # que tous ses journaux soit fermés
@@ -192,7 +198,7 @@ class Period < ActiveRecord::Base
     # l'exercice doit être accountable (ce qui veut dire avoir des natures et que celles ci soient toutes reliées à des comptes
     self.errors.add(:close, "Des natures ne sont pas reliées à des comptes") unless accountable?
     # toutes les lignes doivent être verrouillées
-    self.errors.add(:close, "Toutes les lignes d'écritures ne sont pas verrouillées") if compta_lines.unlocked.any?
+    self.errors.add(:close, "Toutes les lignes d'écritures ne sont pas verrouillées") if provisoire?
     # il faut un exercice suivant
     self.errors.add(:close, "Pas d'exercice suivant") unless next_period? 
     # il faut un livre d'OD

@@ -306,7 +306,22 @@ describe Period do
       end
 
     
-
+      describe 'provisoire?', wip:true do
+        before(:each) do
+          @p_2010.stub(:compta_lines).and_return @r = double(Arel)
+          @r.stub(:unlocked).and_return @r
+        end
+        
+        it 'est provisoire si des lignes ne sont pas verrouillées' do
+          @r.should_receive(:any?).and_return true
+          expect(@p_2010.provisoire?).to be_true
+        end
+        
+        it 'et ne l est pas si toutes les lignes sont verrouillées' do
+          @r.should_receive(:any?).and_return false
+          expect(@p_2010.provisoire?).to be_false
+        end
+      end
    
 
       describe 'close'  do

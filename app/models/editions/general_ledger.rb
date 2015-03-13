@@ -19,7 +19,7 @@ module Editions
       @columns_alignements = [:left, :left, :left, :right, :right]
       @columns_titles = %w(Mois Journal Libellé Debit Credit)
       @columns_to_totalize=[3,4]
-      @stamp = period.open ? 'Provisoire' : ''
+      @stamp = @period.provisoire?  ? 'Provisoire' : '' 
       @title = 'Journal Général'
       @subtitle = "Du #{I18n::l period.start_date} au #{I18n::l period.close_date}"
       @created_at = Time.now

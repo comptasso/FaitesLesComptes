@@ -30,7 +30,7 @@ class Compta::TwoPeriodsBalance
           pdf.organism_name = @period.organism.title
           pdf.exercice = @period.long_exercice
           pdf.subtitle = "Du #{I18n.l @period.start_date} au #{I18n.l @period.close_date}"
-          pdf.stamp = @period.closed? ? '' : 'Provisoire' 
+          pdf.stamp = @period.provisoire? ? 'Provisoire' : '' 
         end
   end
   

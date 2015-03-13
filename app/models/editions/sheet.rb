@@ -50,7 +50,7 @@ module Editions
     end
 
     def stamp
-      @period.compta_lines.unlocked.any?  ? 'Provisoire' : '' 
+      @period.provisoire?  ? 'Provisoire' : '' 
     end
     
     # TODO Voir si on peut utiliser fetch_rubriks

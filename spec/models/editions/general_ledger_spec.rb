@@ -30,6 +30,32 @@ describe Editions::GeneralLedger do
     end
     
   end
+  
+  describe 'tampon sur le document' do
+    before(:each) {use_test_organism}
+    
+    after(:each) do
+      erase_writings
+    end
+    
+    it 'affiche le tampon provisoire si des lignes ne sont pas verrouillées' do
+      create_outcome_writing
+      ep = Editions::GeneralLedger.new(Period.first)
+      expect(ep.stamp).to eql 'Provisoire'
+    end
+    
+    it 'affiche un tampon vide sans ligne' do
+      ep = Editions::GeneralLedger.new(Period.first)
+      expect(ep.stamp).to eql ''
+    end
+    
+    it 'affiche un tampon vide si toutes les lignes sont verrouillées' do
+      w = create_outcome_writing
+      w.compta_lines.each {|l| l.update_attribute(:locked, true)}
+      ep = Editions::GeneralLedger.new(Period.first)
+      expect(ep.stamp).to eql ''
+    end
+  end
 
 
 end
