@@ -60,6 +60,19 @@ class Admin::AccountsController < Admin::ApplicationController
       end
     end
   end
+  
+  # permet de modifier le champ used. Appelé par du javascript de la vue index
+  # de admin_destinations
+  def toggle_used
+    @account = @period.accounts.find(params[:id])
+    if @account
+      @account.toggle(:used).save
+      flash.now[:notice] = "Compte '#{@account.long_name}' #{used_indication}"
+    else
+      flash.now[:alert] = 'Impossible de trouver le compte demandé'
+    end
+  end
+
 
   # DELETE /compta/accounts/1
   # DELETE /compta/accounts/1.json
@@ -85,6 +98,10 @@ protected
   def account_params
     params.require(:account).
       permit(:number, :title, :used, :sector_id, :period_id)
+  end
+  
+  def used_indication   
+    @account.used ? 'activé' : 'désactivé'
   end
 
 

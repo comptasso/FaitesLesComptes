@@ -23,7 +23,8 @@
             %td= secteur(account)
           %td= account.title
           %td= render partial: 'nature', collection: account.natures.all if account.nb_nats.to_i > 0
-          %td= t_used account
+          %td.acc_used{id:"td_used_#{account.id}"}
+            =check_box_tag("used_#{account.id}", account.id, account.used)
           %td.actions= account_actions(account)
             
   

@@ -157,7 +157,9 @@ Faitesvoscomptes::Application.routes.draw do
     end
     resources :periods do
       resources :natures 
-      resources :accounts 
+      resources :accounts do 
+        member { put 'toggle_used'}
+      end 
     end
   end  # FIN DE ADMIN
   

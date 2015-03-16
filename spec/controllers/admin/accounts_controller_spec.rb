@@ -23,7 +23,7 @@ require 'spec_helper'
 describe Admin::AccountsController do 
   include SpecControllerHelper
 
-  let(:a1) {mock_model(Account)}
+  let(:a1) {mock_model(Account, long_name:'999 compte de test')} 
 
   
   def valid_attributes
@@ -66,6 +66,25 @@ describe Admin::AccountsController do
       get :edit,{ period_id:@p.to_param, :id => a1.to_param}, valid_session
       assigns(:account).should == a1
     end
+  end
+  
+  describe 'toggle_used permet de changer le champ used' do
+    
+    it 'cherche le compte, toggle used et l assigne' do
+      @a.should_receive(:find).with(a1.to_param).and_return(a1)
+      a1.stub(:toggle).with(:used).and_return a1
+      a1.stub(:save).and_return true
+      post :toggle_used, {:period_id=>@p.to_param,  :id => a1.to_param, format: :js}, valid_session
+      assigns(:account).should == a1 
+    end
+    
+    it 'si ne la trouve pas crée un flash alert' do
+      @a.stub(:find).with(a1.to_param).and_return(nil)
+      post :toggle_used, {:period_id=>@p.to_param,  :id => a1.to_param, format: :js}, valid_session
+      flash[:alert].should == 'Impossible de trouver le compte demandé'
+    end
+    
+    
   end
 
   describe "POST create" do

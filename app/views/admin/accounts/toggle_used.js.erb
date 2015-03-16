@@ -1,0 +1,3 @@
+$('#flashpartial').html('<%= j render partial:'layouts/flash_partial' %>');
+$("td.acc_used#td_used_<%=@account.id%>").
+  html('<%=  check_box_tag("used_#{@account.id}", @account.id, @account.used) %>')
