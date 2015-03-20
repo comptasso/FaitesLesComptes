@@ -1,11 +1,11 @@
-
-
 # config/initializers/timeout.rb
 # 
 # lignes venant de la page heroku/rails-unicorn
-# Rack::Timeout.timeout = 15  # seconds
+# j'ai ajouté le if car je ne charge pas Rack::Timeout pour les environnements
+# de test et de développement
+
+unless Rails.env.test? || Rails.env.development?
+  Rack::Timeout.timeout = 15  # seconds
+end
 
 
-# Ligne ajoutée en mars 2015, suite à problèmes de test pour les features
-# utilisant javascript. Voir issue 55 sur Github/heroku/rack-timeout
-Rack::Timeout.timeout = (Rails.env.test? ? 0 : 20)

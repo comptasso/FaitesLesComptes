@@ -142,6 +142,8 @@ GEM
     prawn_rails (0.0.11)
       prawn (>= 0.11.1)
       railties (>= 3.0.0)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (1.5.2)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -269,6 +271,7 @@ DEPENDENCIES
   pg
   prawn (~> 0.12)
   prawn_rails (= 0.0.11)
+  quiet_assets
   rack (~> 1.5)
   rack-timeout
   rails (= 4.0.12)

@@ -31,7 +31,7 @@ gem 'ofx' # pour la lecture des fichiers bancaires au format ofx
 
 gem 'delayed_job_active_record', '= 4.0.2'
 gem 'unicorn'
-gem 'rack-timeout' # conseil de heroku - utilisé par le fichier intializers/timeout.rb
+
 
 gem 'adherent', '~>0.2.2' 
 # gem 'adherent', :path=>'../../Adherent'  
@@ -43,16 +43,26 @@ gem 'best_in_place'
 
 
 group :production, :staging do
-  gem 'rails_12factor' 
+  # conseil de heroku - utilisé par le fichier intializers/timeout.rb
+  # on le désactive pour development et test car gêne les test features
+  # et complique les logs de develoment
+  gem 'rack-timeout' 
 end
 
+group :production, :staging, :development do
+  gem 'rails_12factor' # conseillé sinon imposé par Heroku 
+end
+
+# permet de ne pas avoir les log indiquant les assets dans le mode development
+gem 'quiet_assets', group: :development 
 
 
-  gem 'bootstrap-sass', '~> 3.3.1'
+
+gem 'bootstrap-sass', '~> 3.3.1'
   
-  gem 'autoprefixer-rails'
+gem 'autoprefixer-rails'
  
-  # gem 'twitter-bootstrap-rails'
+# gem 'twitter-bootstrap-rails'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.2'
 
