@@ -10,7 +10,7 @@ describe Extract::Fec do
   
   before(:each) do
     use_test_organism
-    @iow = create_in_out_writing
+    @iow = create_in_out_writing(10001.35)
     @iow.lock
   end
   
@@ -45,21 +45,21 @@ describe Extract::Fec do
         ['VE', # code journal 
         'Recettes', # Libellé journal
         @iow.continuous_id || '', # numéro sur une séquence continue de l'écriture comptable
-        I18n::l(@iow.created_at.to_date), # date de comptabilisation de l'écriture
+        Date.today.strftime('%Y%m%d'), # date de comptabilisation de l'écriture
         @l.account.number, # numéro de compte
         @l.account.title, # libellé du compte
         '', # numéro de compte auxiliaire
         '', # libellé du compte auxiliaire
         '', # référence de la pièce justificative
-        '', # date de la pièce justificative
+        @iow.date.strftime('%Y%m%d'), # date de la pièce justificative
         @iow.narration, # libellé de l'écriture comptable
-        ActionController::Base.helpers.number_with_precision(@l.debit, precision:2), # montant débit
-        ActionController::Base.helpers.number_with_precision(@l.credit, precision:2), # montant débit
+        ActionController::Base.helpers.number_with_precision(@l.debit, precision:2, delimiter:''), # montant débit
+        ActionController::Base.helpers.number_with_precision(@l.credit, precision:2, delimiter:''), # montant débit
         '', '', # lettrage et date de lettrage
-        I18n::l(@iow.locked_at.to_date), # date de comptabilisation 
+        @iow.locked_at.to_date.strftime('%Y%m%d'), # date de comptabilisation 
         # en attendant de rajouter un champ locked_at 
         '', '', #montant en devise et identifiant de la devise
-        I18n::l(@iow.date), # date du règlement pour les compta de trésorerie
+        @iow.date.strftime('%Y%m%d'), # date du règlement pour les compta de trésorerie
         @iow.payment_mode, # mode de règlement
         '' # nature de l'opération - est inutilisé
         ]

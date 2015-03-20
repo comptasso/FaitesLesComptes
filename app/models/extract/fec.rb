@@ -81,7 +81,7 @@ class Extract::Fec < ActiveRecord::Base
   
   # pour sortir au format français (virgule et séparateur de milliers)
   def format_amount(amount)
-    ActionController::Base.helpers.number_with_precision(amount, precision:2)
+    ActionController::Base.helpers.number_with_precision(amount, precision:2, delimiter:'')
   end
   
   # pour ne retenir que la date, ou blanc si pas de date
@@ -89,7 +89,7 @@ class Extract::Fec < ActiveRecord::Base
   # avec le type du champ (timestamp pour created_at et updated_at, date
   # pour date, ref_date et locked_at.
   def format_timestamp(timestamp)
-    timestamp ? I18n::l(timestamp.to_date) : ''
+    timestamp ? timestamp.to_date.strftime('%Y%m%d') : ''
   end
   
   alias format_date format_timestamp
