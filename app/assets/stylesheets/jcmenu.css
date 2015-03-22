@@ -23,6 +23,14 @@
     float: left;
 }
 
+
+#main_nav {
+  background-color: #fff;
+  width: 100%;
+  height: 40px;
+  border-bottom: 1px solid #ddd;
+}
+
 #main_nav > .active, #main_nav > .inactive {
   margin-bottom: -1px;
 }

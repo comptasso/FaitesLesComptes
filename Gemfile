@@ -33,11 +33,11 @@ gem 'delayed_job_active_record', '= 4.0.2'
 gem 'unicorn'
 
 
-gem 'adherent', '~>0.2.2' 
+gem 'adherent', '~>0.2' 
 # gem 'adherent', :path=>'../../Adherent'  
 
 
-gem 'coffee-script'
+
 
 gem 'best_in_place'
 
@@ -71,7 +71,7 @@ gem 'uglifier', '>= 1.3.0'
 
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
-
+gem 'coffee-script'
 
 # correspondent à la version 1.11.1 de jQuery
 gem 'jquery-rails', "3.1.2"

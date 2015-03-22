@@ -5,9 +5,13 @@
 # 
 # Enregistrer un payment entraîne la création d'une écriture comptable
 # 
-# TODO : voir comment traiter les natures et destinations qui servent pour
-# l'enregistrement des payements des membres. Même problème pour les 
-# banques ou la caisse et le livre des recettes.
+# Les informations nécessaires à cet enregistrement (livre, compte recevant
+# la cotisation, compte bancaire, caisse) sont obtenues à partir du modèle
+# Bridge dont le but est de faire le pont avec le module Adhérent.
+# 
+# Le libellé de l'écriture est produit par le commentaire entré lors de la 
+# saisie du paiement (payement.comment) où, s'il est vide, par un libellé
+# automatique.
 #
 module Adherent
   class PaymentObserver < ::ActiveRecord::Observer
@@ -22,7 +26,7 @@ module Adherent
       w = ib.adherent_writings.new(
          date:record.read_attribute(:date),
          ref:"adh #{member.number}".truncate(NAME_LENGTH_MAX),
-         narration:"Paiement adhérent #{member.to_s}".truncate(LONG_NAME_LENGTH_MAX),
+         narration:libelle(record),
          bridge_id:record.id,
          bridge_type:'Adherent',
          compta_lines_attributes:{'1'=>compta_line_attributes(record),
@@ -42,8 +46,6 @@ module Adherent
     # Etant un before_callback, cela permet de faire un rollback si
     # la modification ne peut se faire (cas notamment d'une écriture verrouillée)
     # 
-    # TODO : voir comment ajouter un message d'erreur qui pourrait être 
-    # affiché par le controller d'Adherent::Payment
     # 
     def before_update(record)
       w = Adherent::Writing.find_by_bridge_id(record.id)
@@ -59,14 +61,18 @@ module Adherent
       # mise à jour des champs writings qui peuvent être influencés par un 
       # changement des informations du payment 
       new_values = { date:record.read_attribute(:date),
-         ref:"adh #{member.number}",
-         narration:"Payment adhérent #{member.to_s}"} 
+         ref:"adh #{member.number}".truncate(NAME_LENGTH_MAX),
+         narration:libelle(record)} 
       retour = retour && w.update_attributes(new_values)  # passe retour à false si update_attributes échoue
+      # puts w.inspect
+      Rails.logger.debug w.errors.messages unless retour
       cl = w.compta_lines.first
       retour = retour && cl.update_attributes(compta_line_attributes(record)) 
+      Rails.logger.debug cl.errors.messages unless retour
       sl = w.support_line
       retour = retour && sl.update_attributes(counter_line_attributes(record)) 
-      copy_writing_errors(w, record) if retour == false
+      Rails.logger.debug sl.errors.messages unless retour
+      copy_writing_errors(w, record) unless retour
       retour
     end
     
@@ -89,6 +95,24 @@ module Adherent
       @member = record.member
       @organism = member.organism
       @period = organism.find_period(record.read_attribute(:date))
+    end
+    
+    # construit la narration qui sera utilisée pour l'écriture, soit 
+    # en reprenant le commentaire de payment, soit en créant un libellé 
+    # automatique
+    # 
+    #  On utilise read_attribute car libelle est également utilisé dans 
+    #  un before update
+    #  TODO voir si on pourrait utiliser un nested_attribute pour simplifier
+    #  cette logicue (payment nested_attributes writing) 
+    #
+    def libelle(record)
+      c = record.read_attribute(:comment)
+      if c && !c.empty?  
+        return c
+      else
+        return "Paiement adhérent #{member.to_s}".truncate(LONG_NAME_LENGTH_MAX)
+      end
     end
     
     

@@ -78,4 +78,5 @@
 # FLCVERSION = '1.9.1RC' # dernières corrections Rails 4
 # FLCVERSION = '1.9.2RC' # réaffichage des soldes sur listing, accélération vues compta, nettoyage css
 # FLCVERSION = '1.9.3RC' # before_destroy pour Account et modif vue index des comptes
-FLCVERSION = '1.9.4RC' # précompilation des assets en local pour accélération heroku
+# FLCVERSION = '1.9.4RC' # précompilation des assets en local pour accélération heroku
+FLCVERSION = '1.9.5RC' # champ comment dans payment pour servir de libellé

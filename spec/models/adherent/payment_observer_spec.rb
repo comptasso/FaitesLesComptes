@@ -118,7 +118,7 @@ describe Adherent::Payment do
     
   end
   
-  describe 'mise à jour de payment' do
+  describe 'mise à jour de payment' , wip:true do
     
     before(:each) do
       @pay = @m.payments.create!(date:Date.today, amount:125.25, mode:'CB')
@@ -150,7 +150,7 @@ describe Adherent::Payment do
         new_m = @o.members.create!(number:'002', name:'Dupond', forname:'Charles')
         @pay.member = new_m
         @pay.save
-        Adherent::Writing.find_by_bridge_id(@pay.id).narration.should == "Payment adhérent Charles DUPOND"
+        Adherent::Writing.find_by_bridge_id(@pay.id).narration.should == "Paiement adhérent Charles DUPOND"
         Adherent::Writing.find_by_bridge_id(@pay.id).ref.should match /adh 002/
         
       end
@@ -160,6 +160,12 @@ describe Adherent::Payment do
         @pay.save
         Adherent::Writing.find_by_bridge_id(@pay.id).compta_lines.first.credit.should == 47.12
         Adherent::Writing.find_by_bridge_id(@pay.id).support_line.debit.should == 47.12
+      end
+      
+      it 'met à jour le commentaire' do
+        @pay.comment = 'En faite je précise ma pensée'
+        @pay.save
+        Adherent::Writing.find_by_bridge_id(@pay.id).narration.should == 'En faite je précise ma pensée'
       end
     
     end

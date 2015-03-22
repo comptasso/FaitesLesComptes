@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150204055649) do
+ActiveRecord::Schema.define(version: 20150322050823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 20150204055649) do
     t.integer  "member_id"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.string   "comment"
   end
 
   add_index "adherent_payments", ["member_id"], name: "index_adherent_payments_on_member_id", using: :btree

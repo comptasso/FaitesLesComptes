@@ -377,6 +377,7 @@ fr:
           attributes:
             base:
               writing_uneditable: L'écriture correspondante ne peut être modifiée ni supprimée car verrouillée ou pointée dans un compte bancaire
+              ref: Erreur sur la référence (probablement trop longue ou avec des caractères invalides)
               
  
   helpers:
