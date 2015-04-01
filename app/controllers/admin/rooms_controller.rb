@@ -161,7 +161,7 @@ pour le budget de fonctionnement; de même pour le budget des activités socio_c
   
   def room_params
     params.require(:room).permit(:database_name, :racine, 
-      :title, :comment, :status)
+      :title, :comment, :status, :postcode, :siren)
   end
     
 end

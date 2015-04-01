@@ -47,6 +47,20 @@ describe Organism do
       @o.version.should == FLCVERSION
     end
 
+    it 'le siren comprend 9 chiffres mais peut être nul' do
+      @o.siren = '123456789'; @o.should be_valid
+      @o.siren = nil; @o.should be_valid
+      @o.siren = 'abc123def'; @o.should_not be_valid
+      @o.siren = '12456'; @o.should_not be_valid
+    end
+    
+    it 'le code postal peut être nul ou contenir 2 à 5 chiffres' do
+      @o.postcode = '29'; @o.should be_valid
+      @o.postcode = '59000'; @o.should be_valid
+      @o.postcode = 'abc56'; @o.should_not be_valid
+    end
+    
+    
     
 
   end

@@ -8,10 +8,12 @@ end
 describe Room  do
   include OrganismFixtureBis   
 
-  let(:u) {stub_model(User)}
+  let(:u) {stub_model(User)} 
 
   def valid_attributes
-    {database_name:'foofoo_11112233444555', title:'Le titre', comment:'Un commentaire', status:'Association'}
+    {database_name:'foofoo_11112233444555', title:'Le titre',
+      comment:'Un commentaire', status:'Association', siren:'999888777',
+      postcode:'59800' }
   end
 
   before(:each) do
@@ -104,6 +106,15 @@ describe Room  do
       
       it 'et celle de l organisme' do
         @new_room.organism.should  be_an_instance_of Organism
+      end
+      
+      it 'avec les mêmes informations que la room', wip:true do
+        o = @new_room.organism
+        o.title.should == 'Le titre'
+        o.comment.should == 'Un commentaire'
+        o.status.should == 'Association'
+        o.siren.should == '999888777'
+        o.postcode.should == '59800'
       end
           
     end

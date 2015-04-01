@@ -53,7 +53,7 @@ class Admin::OrganismsController < Admin::ApplicationController
   private 
    
   def admin_organism_params
-    params.require(:organism).permit(:title, :comment)
+    params.require(:organism).permit(:title, :comment, :siren, :postcode)
   end
 
  

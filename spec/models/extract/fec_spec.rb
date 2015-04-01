@@ -92,6 +92,11 @@ describe Extract::Fec do
       @exfec.to_csv
     end
     
+    it 'le titre du FEC est conforme' do
+      # d = Date.today.end_of_year.strftime()
+      @exfec.fec_title.should == '123456789FEC20151231.csv'
+    end
+    
     
   end
   

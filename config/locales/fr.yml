@@ -217,6 +217,8 @@ fr:
       organism:
         title: Titre
         comment: Commentaire
+        siren: N° Siren
+        postcode: Code postal
       destination:
         name: Nom
         comment: Commentaire
@@ -343,6 +345,10 @@ fr:
           attributes:
             status:
               inclusion: Statut '%{value}' non accepté
+            siren:
+              wrong_length: Le numéro Siren doit comporter 9 chiffres
+            postcode:
+              wrong_length: Doit comprendre 2 à 5 chiffres
         writing:
           attributes:
             date:

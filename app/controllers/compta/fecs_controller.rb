@@ -7,7 +7,7 @@ class Compta::FecsController < Compta::ApplicationController
   def show
     @exfec = Extract::Fec.new(period_id:@period.id)
     respond_to do |format|
-        format.csv { send_data @exfec.to_csv, filename:export_filename(@exfec, :csv, "FEC #{@period.short_exercice}") }  # pour éviter le problème des virgules
+        format.csv { send_data @exfec.to_csv, filename:@exfec.fec_title }  
     end
 
   end

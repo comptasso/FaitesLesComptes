@@ -30,12 +30,15 @@ class Extract::Fec < ActiveRecord::Base
     'NatOp', 
     'IdClient']
   
+  # permet de définir la variable d'instance @columns
   def self.columns() @columns ||= []; end
 
+  # définit la méthode de classe pour ajouter des colonnes à @columns
   def self.column(name, sql_type = nil, default = nil, null = true)
     columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
   end
 
+  # et utilise cette méthode de classe pour définir le pseudo champ :period_id
   column :period_id, :integer
     
   belongs_to :period
@@ -76,6 +79,15 @@ class Extract::Fec < ActiveRecord::Base
       '', # nature de l'opération - est inutilisé
       '' #IdClient, inutilisé
     ]
+  end
+  
+  # Selon le code des impôts, le titre du FEC doit être construit selon 
+  # le format suivant : les 9 chiffres du SIREN, puis les trois lettres FEC,
+  # puis la date de clôture au format AAAAMMDD.
+  # Un sirec par defaut est fourni au cas où il n'a pas été renseigné.
+  def fec_title
+    siren = period.organism.siren || '123456789'
+    siren + 'FEC' + period.close_date.strftime('%Y%m%d') + '.csv'
   end
   
   

@@ -30,6 +30,7 @@ describe "admin rooms" do
         fill_in 'room_title', with:'Mon association'
         fill_in 'room_comment', with:'Une première'
         fill_in 'room_racine', with:'assotest'
+        fill_in 'room_siren', with:'123455666' 
         choose 'Association'
       end
       
@@ -53,10 +54,7 @@ describe "admin rooms" do
         page.find('#admin_organisms_menu ul li:last a').text.should == 'Mon association'
       end
       
-      it 'stripe les champs en cas de nécessité', wip:true do
-        fill_in 'room_comment', with:' Une première'
-        expect {click_button 'Créer l\'organisme'}.to change {Room.count}.by(1)
-      end
+            
     end
   end
   

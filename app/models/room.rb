@@ -21,7 +21,7 @@ class Room < ActiveRecord::Base
   has_many :holders, dependent: :destroy 
    
 #  attr_accessible :database_name, :racine, :title, :comment, :status
-  attr_accessor :title, :comment, :status
+  attr_accessor :title, :comment, :status, :postcode, :siren
 
   strip_before_validation :database_name 
   before_validation :strip_title_and_comment # le callback strip_before_validation
@@ -33,6 +33,8 @@ class Room < ActiveRecord::Base
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
+  validates :siren, allow_blank:true, :length=>{:is=>9}, format:/\A\d*\z/
+  validates :postcode, allow_blank:true, :length=>{:within=>2..5}, format:/\A\d*\z/  
   
   
   after_create :create_db, :connect_to_organism
@@ -254,8 +256,10 @@ class Room < ActiveRecord::Base
   
   def create_organism
     connect_to_organism
-    o = Organism.new(title:title, comment:comment, status:status, database_name:database_name)
-    puts o.errors.messages unless o.valid?
+    o = Organism.new(title:title, comment:comment, 
+      status:status, database_name:database_name,
+      siren:siren, postcode:postcode)
+    Rails.logger.warn o.errors.messages unless o.valid?
     o.save!
   end
 

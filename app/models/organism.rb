@@ -91,8 +91,8 @@ class Organism < ActiveRecord::Base
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :database_name, uniqueness:true, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*(_[0-9]*)?\z/}
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
-
-  
+  validates :siren, allow_blank:true, :length=>{:is=>9}, format:/\A\d*\z/
+  validates :postcode, allow_blank:true, :length=>{:within=>2..5}, format:/\A\d*\z/  
 
   
 
