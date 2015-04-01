@@ -27,7 +27,8 @@ class Extract::Fec < ActiveRecord::Base
     'Idevise',
     'DateRglt', 
     'ModeRglt',
-    'NatOp']
+    'NatOp', 
+    'IdClient']
   
   def self.columns() @columns ||= []; end
 
@@ -58,21 +59,22 @@ class Extract::Fec < ActiveRecord::Base
       row.book.title, # Libellé journal
       row.writing.continuous_id || '', # numéro sur une séquence continue de l'écriture comptable
       format_timestamp(row.writing.created_at), # date de comptabilisation de l'écriture
-      row.account.number, # numéro de compte
+      format_acc_num(row.account.number), # numéro de compte
       row.account.title, # libellé du compte
       '', # numéro de compte auxiliaire
       '', # libellé du compte auxiliaire
       row.writing.ref || '', # référence de la pièce justificative
-      format_date(row.writing.ref_date), # date de la pièce justificative
+      nil, #format_date(row.writing.ref_date), # date de la pièce justificative
       row.writing.narration, # libellé de l'écriture comptable
       format_amount(row.debit),  # debit
       format_amount(row.credit), # credit
-      '', '', # lettrage et date de lettrage
+      '', nil, # lettrage et date de lettrage
       format_date(row.writing.locked_at), # date de verrouillage
-      '', '', #montant en devise et identifiant de la devise
+      nil, '', #montant en devise et identifiant de la devise
       format_date(row.writing.date), # date du règlement pour les compta de trésorerie
       row.writing.payment_mode || '', # mode de règlement
-      '' # nature de l'opération - est inutilisé
+      '', # nature de l'opération - est inutilisé
+      '' #IdClient, inutilisé
     ]
   end
   
@@ -90,6 +92,16 @@ class Extract::Fec < ActiveRecord::Base
   # pour date, ref_date et locked_at.
   def format_timestamp(timestamp)
     timestamp ? timestamp.to_date.strftime('%Y%m%d') : ''
+  end
+  
+  # Le FEC demande un numéro de compte au moins sur 3 chiffres
+  # sachant que l'argument account_number est un string
+  def format_acc_num(account_number)
+    l = account_number.size
+    if l < 3
+      (3-l).times { account_number += '0'}
+    end
+    account_number
   end
   
   alias format_date format_timestamp

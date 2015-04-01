@@ -32,7 +32,7 @@ describe Extract::Fec do
 
   describe 'les différents champs'  do
     
-    let(:line) { }
+    
     
     before(:each) do
       @exfec = Extract::Fec.new(period_id:@p.id)
@@ -40,7 +40,14 @@ describe Extract::Fec do
       @fec_line = @exfec.to_fec(@l)       
     end
     
+    it 'le numéro de compte est complété par des zéros pour avoir au moins 3 chiffres' do
+      @l.stub(:account).and_return(double(number:'60', title:'Le compte'))
+      fec_line = @exfec.to_fec(@l)
+      fec_line[4].should == '600'
+    end
+    
     it 'sont conformes aux spéc du ministère' do
+      
       @fec_line.should == 
         ['VE', # code journal 
         'Recettes', # Libellé journal
@@ -52,17 +59,18 @@ describe Extract::Fec do
         '', # libellé du compte auxiliaire
         '', # référence de la pièce justificative
         # TODO à modifier lorsque le champ ref_date sera utilisé.
-        '', # @iow.ref_date.strftime('%Y%m%d'), # date de la pièce justificative
+        nil, # @iow.ref_date.strftime('%Y%m%d'), # date de la pièce justificative
         @iow.narration, # libellé de l'écriture comptable
         ActionController::Base.helpers.number_with_precision(@l.debit, precision:2, delimiter:''), # montant débit
         ActionController::Base.helpers.number_with_precision(@l.credit, precision:2, delimiter:''), # montant débit
-        '', '', # lettrage et date de lettrage
+        '', nil, # lettrage et date de lettrage
         @iow.locked_at.to_date.strftime('%Y%m%d'), # date de comptabilisation 
         # en attendant de rajouter un champ locked_at 
-        '', '', #montant en devise et identifiant de la devise
+        nil, '', #montant en devise et identifiant de la devise
         @iow.date.strftime('%Y%m%d'), # date du règlement pour les compta de trésorerie
         @iow.payment_mode, # mode de règlement
-        '' # nature de l'opération - est inutilisé
+        '', # nature de l'opération - est inutilisé
+        ''
         ]
     end
   end
@@ -86,4 +94,31 @@ describe Extract::Fec do
     
     
   end
+  
+  
 end
+
+
+#  FEC_TITLES = [  # selon la nomenclature de l'arrêté du 29 juillet 2013 
+#    'JournalCode',  
+#    'JournalLib',  #champ 2
+#    'EcritureNum',
+#    'EcritureDate',
+#    'CompteNum',
+#    'CompteLib',
+#    'CompAuxNum',
+#    'CompAuxLib',
+#    'PieceRef',
+#    'PieceDate',
+#		'EcritureLib',
+#    'Debit',
+#    'Credit',
+#    'EcritureLet',
+#    'DateLet',
+#    'ValidDate', # champ 15
+#    'Montantdevise',
+#    'Idevise',
+#    'DateRglt', 
+#    'ModeRglt',
+#    'NatOp', 
+#    'IdClient']
