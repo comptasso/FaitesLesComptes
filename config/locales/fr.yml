@@ -302,7 +302,8 @@ fr:
       room:
         title: Titre
         comment: Commentaire
-        
+        siren: N° Siren
+        postcode: Code postal
       subscription:
         day: Jour du mois
         title: Titre
