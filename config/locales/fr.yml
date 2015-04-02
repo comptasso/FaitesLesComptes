@@ -368,14 +368,15 @@ fr:
           attributes:
             database_name:
               upper_limit: Nombre maxiaml de base de données atteint
-        user:
-          attributes:
-            password:
-              confirmation: Les deux mots de passe doivent être identiques
             siren:
               wrong_length: Le numéro Siren doit comporter 9 chiffres
             postcode:
               wrong_length: Si rempli, doit comprendre 2 à 5 chiffres
+        user:
+          attributes:
+            password:
+              confirmation: Les deux mots de passe doivent être identiques
+            
         imported_bel:
           attributes:
             values:
