@@ -349,7 +349,7 @@ fr:
             siren:
               wrong_length: Le numéro Siren doit comporter 9 chiffres
             postcode:
-              wrong_length: Doit comprendre 2 à 5 chiffres
+              wrong_length: Si rempli, doit comprendre 2 à 5 chiffres
         writing:
           attributes:
             date:
@@ -372,6 +372,10 @@ fr:
           attributes:
             password:
               confirmation: Les deux mots de passe doivent être identiques
+            siren:
+              wrong_length: Le numéro Siren doit comporter 9 chiffres
+            postcode:
+              wrong_length: Si rempli, doit comprendre 2 à 5 chiffres
         imported_bel:
           attributes:
             values:
