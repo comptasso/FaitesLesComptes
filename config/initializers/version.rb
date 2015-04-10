@@ -80,4 +80,5 @@
 # FLCVERSION = '1.9.3RC' # before_destroy pour Account et modif vue index des comptes
 # FLCVERSION = '1.9.4RC' # précompilation des assets en local pour accélération heroku
 # FLCVERSION = '1.10.0RC' # champ comment dans payment pour servir de libellé
-FLCVERSION = '1.11.0RC' # champ siren et code postal dans organism
+# FLCVERSION = '1.11.0RC' # champ siren et code postal dans organism
+FLCVERSION = '1.11.1RC' # passage à ruby 2.2.1
