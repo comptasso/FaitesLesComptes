@@ -4,7 +4,7 @@ describe Admin::MasksController do
   describe "routing" do
 
     it "routes to #index" do
-      get("/admin/organisms/1/masks").should route_to("admin/masks#index", organism_id:'1') 
+      expect(:get=>"/admin/organisms/1/masks").to route_to("admin/masks#index", organism_id:'1') 
     end
 
     it "routes to #new" do

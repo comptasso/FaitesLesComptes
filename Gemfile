@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-ruby "2.0.0"
+ruby "2.2.1"
 
 
 gem 'rails', '4.0.12'
@@ -90,7 +90,7 @@ group :development, :test do
   # Pretty printed test output
   gem 'turn', :require => false
   gem 'rspec-rails', '~>  2.14.0'
-
+  gem 'test-unit', '~> 3.0.9'
   gem 'spork-rails'
   gem 'launchy'
   gem 'daemons' # mis en place pour pouvoir lancer les Delayed::Job dans la console
