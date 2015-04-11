@@ -62,7 +62,7 @@
     <b class="caret"></b>
   </a>
   <%= content_tag(:ul, :class => "dropdown-menu", :role=>"menu") do %>
-    <%  @organism.periods.each do |p| %>
+    <%  @organism.periods.order('start_date ASC').each do |p| %>
         <li role='presentation'>
       <%= link_to_unless(current_period?(p), p.long_exercice, 
         change_organism_period_path(@organism, p), {role:'menuitem'}) do |name|

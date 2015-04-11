@@ -56,7 +56,8 @@ describe "menus/_menu.html.erb" do
     
       assign(:organism, o)
       assign(:user, cu)
-      o.stub(:periods).and_return([p2011,p2012])
+      o.stub(:periods).and_return(@par=double(Arel))
+      @par.stub(:order).and_return([p2011,p2012])
       o.stub(:bank_accounts).and_return([@ba = mock_model(BankAccount, sector:sect,
             bank_extracts:[], :check_deposits=>[], 'unpointed_bank_extract?'=>false)])
       o.stub(:cashes).and_return([mock_model(Cash, cash_controls:[])])

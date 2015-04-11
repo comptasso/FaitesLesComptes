@@ -10,7 +10,8 @@ describe Admin::PeriodsController do
   include SpecControllerHelper
 
   def valid_params
-    {'start_date'=>Date.today.beginning_of_year.to_formatted_s(:db), 'close_date'=>Date.today.end_of_year.to_formatted_s(:db)}
+    {'start_date'=>Date.today.beginning_of_year.to_formatted_s(:db), 
+      'close_date'=>Date.today.end_of_year.to_formatted_s(:db)}
   end
 
   before(:each) do
@@ -19,11 +20,13 @@ describe Admin::PeriodsController do
 
   describe 'GET index' do
     before(:each) do
-      @o.stub(:periods).and_return [mock_model(Period), mock_model(Period)]
+      @o.stub(:periods).and_return(@ar = [mock_model(Period), mock_model(Period)])
+      @ar.stub(:order).with('start_date ASC').
+        and_return [mock_model(Period), mock_model(Period)] 
 
     end
 
-    it 'renden index template' do
+    it 'render index template' do
       get :index, {organism_id:@o.id}, valid_session
       response.should render_template(:index)
     end

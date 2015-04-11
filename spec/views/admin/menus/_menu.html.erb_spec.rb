@@ -27,7 +27,8 @@ describe "admin/menus/_menu.html.erb" do
     
     before(:each) do
       cu.stub(:organisms_with_room).and_return []
-      o.stub(:periods).and_return []
+      o.stub(:periods).and_return(@par = double(Arel))
+      @par.stub(:order).with('start_date ASC').and_return  []
       o.stub('max_open_periods?').and_return false
       o.stub(:nomenclature).and_return(double(Nomenclature, :job_finished_at=>DateTime.civil(2014,6,6)))
       
