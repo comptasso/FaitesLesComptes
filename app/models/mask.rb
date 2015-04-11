@@ -24,6 +24,10 @@
 # utiliser nature_id). Pour le faire, il faudrait que les masks soient dépendants 
 # de l'exercice.
 # 
+# FIXME : du coup, si on change le nom d'une nature, on peut se retrouver 
+# avec un masque qui génère une erreur. Il faudrait avoir des rescue
+# dans les méthodes privées qui font les interrogations de la base de données
+# 
 # Les méthodes book, destination, bank_account et cash permettent de retrouver
 # les enregistrements correspondant à ce masque.
 # 
@@ -67,6 +71,9 @@ class Mask < ActiveRecord::Base
   
   
   LIST_FIELDS = %w(book_id ref narration nature_name destination_id amount mode counterpart)
+  
+  before_validation :trim_values
+  
   
   # renvoie le livre sollicité par ce masque
   def book
@@ -205,6 +212,13 @@ class Mask < ActiveRecord::Base
   
   def counter_line_params(date)
     {payment_mode:mode, debit:credit, credit:debit, account_id:account_id(date)}
+  end
+  
+  def trim_values
+    self.title.try('strip!')
+    self.narration.try('strip!')
+    self.ref.try('strip!')
+    self.comment.try('strip!')
   end
   
 

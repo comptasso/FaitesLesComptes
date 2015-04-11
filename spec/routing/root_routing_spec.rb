@@ -11,8 +11,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 describe "routes for application root" do 
-  pending 'attendre le passage à RSpec 3 car ne fonctionne plus depuis Ruby 2.2.'
+  
   it "routes application to organisms controller" do
+    pending 'attendre le passage à RSpec 3 car ne fonctionne plus depuis Ruby 2.2.'
     { :get => "/" }.should route_to(:controller => "devise/sessions", :action => "new")
   end
 end
