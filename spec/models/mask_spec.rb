@@ -28,6 +28,14 @@ describe Mask do
       should_not be_valid
     end
     
+    it 'trim le texte de quatre champs (title, comment, narration, ref)' do
+      @mask.title +=  ' '
+      @mask.narration = 'bonjour    '
+      @mask.comment += ' '
+      @mask.ref = '001 '
+      should be_valid
+    end
+    
     it 'et un book_id' do
       @mask.book_id = nil
       @mask.should_not be_valid

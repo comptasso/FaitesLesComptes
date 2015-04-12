@@ -39,7 +39,7 @@
         EXERCICES
         %b.caret
       %ul.dropdown-menu
-        - @organism.periods.each do |p|
+        - @organism.periods.order('start_date ASC').each do |p|
           %li= link_to_unless(current_period?(p), p.short_exercice, change_admin_organism_period_path(@organism, p)) {|name| content_tag(:span, :class=>'disable') {name} }
 
 

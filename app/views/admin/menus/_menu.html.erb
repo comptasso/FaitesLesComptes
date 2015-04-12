@@ -84,7 +84,7 @@
       <ul class="dropdown-menu">
         <%= content_tag(:li) {link_to 'Afficher', admin_organism_periods_path(@organism)} %>
         <%=  content_tag(:li, :class=>"divider"){} %>
-        <% @organism.periods.reject {|r| r.new_record? }.each do |p| %>
+        <% @organism.periods.order('start_date ASC').reject {|r| r.new_record? }.each do |p| %>
           <li><%= link_to_unless(current_period?(p), p.long_exercice, change_admin_organism_period_path(@organism, p)) {|name| content_tag(:span, :class=>'disable') {name} } %></li>
          
         <% end %>

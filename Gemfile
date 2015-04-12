@@ -86,6 +86,10 @@ gem 'jquery-ui-rails', '5.0.2'
 
 gem 'simplecov', :require => false, :group => :test
 
+group :development do
+   gem 'guard-rspec', require: false
+end
+
 group :development, :test do
   # Pretty printed test output
   gem 'turn', :require => false

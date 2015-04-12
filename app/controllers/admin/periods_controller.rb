@@ -18,10 +18,10 @@ class Admin::PeriodsController < Admin::ApplicationController
   # GET /periods
   # GET /periods.json
   def index
-    @periods = @organism.periods
+    @periods = @organism.periods.order('start_date ASC')
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @periods }
+      format.json { render json: @periods } 
     end
   end
 

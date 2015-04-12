@@ -26,7 +26,7 @@ describe "menus/_menu_bank.html.erb" do
       
       before(:each) do
         ba.stub(:check_deposits).and_return([])
-        ba.stub('unpointed_bank_extract?').and_return false
+        ba.stub('unpointed_bank_extract?').and_return false 
         ba.stub(:bank_extracts).and_return([])
         
       end
