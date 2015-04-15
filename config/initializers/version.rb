@@ -82,4 +82,5 @@
 # FLCVERSION = '1.10.0RC' # champ comment dans payment pour servir de libellé
 # FLCVERSION = '1.11.0RC' # champ siren et code postal dans organism
 # FLCVERSION = '1.11.1RC' # passage à ruby 2.2.1
-FLCVERSION = '1.11.2RC' # Guard plus ordre des exercices, et autres mineures 
+# FLCVERSION = '1.11.2RC' # Guard plus ordre des exercices, et autres mineures 
+FLCVERSION = '1.11.3RC' # Passage à la version 0.2.4 du gem Adherent 
