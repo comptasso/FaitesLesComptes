@@ -33,7 +33,7 @@ gem 'delayed_job_active_record', '= 4.0.2'
 gem 'unicorn'
 
 
-gem 'adherent', '~>0.2',  '>=0.2.6' 
+gem 'adherent', '~>0.2',  '>=0.2.7' 
 # gem 'adherent', :path=>'../../Adherent'  
 
 
