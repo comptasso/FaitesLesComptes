@@ -34,7 +34,7 @@ GEM
     acts_as_tree (1.6.1)
       activerecord (>= 3.0.0)
     addressable (2.3.7)
-    adherent (0.2.7)
+    adherent (0.2.8)
       autoprefixer-rails (~> 5.1)
       bootstrap-sass (~> 3.3, >= 3.3.4.0)
       coffee-rails (~> 4.0, >= 4.0.0)
@@ -295,7 +295,7 @@ DEPENDENCIES
   actionpack-page_caching
   acts_as_list (= 0.6.0)
   acts_as_tree (~> 1.4)
-  adherent (~> 0.2, >= 0.2.7)
+  adherent (~> 0.2, >= 0.2.8)
   apartment (~> 0.24.3)
   autoprefixer-rails
   best_in_place
