@@ -1,0 +1,67 @@
+/*
+  Style basique pour le media print trouvé sur le site AlsaCreations
+complété en fin de fichier par des modifications pour une mise en page
+adaptée.
+*/
+
+@media print {
+  
+  /* On masque les bandeaux de navigation, les bandeux d'alerte ainsi que 
+  le bandeau de bas de page*/
+  nav, #bottom_page, .conseil, .alert, .icon_menu, .message {
+    display: none;
+  }
+  
+  body {
+    width: auto!important;
+    margin: auto!important;
+    font-family: serif;
+    font-size: 12pt;
+    background-color: #fff!important;
+    color: #000!important;
+    // rajouté pour avoir un peu plus de marge à gauche et droite
+    padding-left:1em;
+    padding-right:1em;
+    
+    font-family:arial, sans-serif;;
+  }
+  p, h1, h2, h3, h4, h5, h6, blockquote, ul, ol {
+    color: #000!important;
+    margin: auto!important;
+  }
+  
+ 
+  
+  .print {
+    display: block; /* affichage des éléments de classe print */
+    
+  }
+  p, blockquote {
+    orphans: 3; /* pas de ligne seule en bas */
+    widows: 3; /* pas de ligne seule en haut */
+  }
+  blockquote, ul, ol {
+    page-break-inside: avoid; /* pas de coupure dans ces élements */
+  }
+  
+  h1, h2, h3, caption {
+    page-break-after: avoid; /* pas de saut après ces éléments */
+  }
+  a {
+    color: #000!important;
+    text-decoration: underline!important;
+  }
+  
+  a[href]:after {
+    content: none !important;
+  }
+/*  a[href]:after {
+    content: " (" attr(href) ")";  affichage des URL des liens 
+  }*/
+
+/* Pour que les pavés graphiques ne se chevauchent pas à l'impression'*/
+.pave {
+  page-break-inside: avoid;
+} 
+  
+}

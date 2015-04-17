@@ -21,12 +21,8 @@
 </div>
 </div>
 
-<% @paves.in_groups_of(3, false) do |p|  %>
-<div class ="row row-pave">
-  <%= draw_pave(p[0], @period, 'col-lg-4')  %>
-  <%= draw_pave(p[1], @period, 'col-lg-4')  %>
-  <%= draw_pave(p[2], @period, 'col-lg-4')  %>
-</div>
+<% @paves.each do |p|  %>
+  <%= draw_pave(p, @period, 'col-lg-4 col-md-6 col-sm-12 col-xs-12')  %>
 <% end %>
 
 
