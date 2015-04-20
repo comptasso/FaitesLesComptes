@@ -69,7 +69,7 @@ module InOutWritingsHelper
         html << icon_to('detail.png', 
           adherent.member_payment_path(frontline.adherent_member_id, 
             frontline.adherent_payment_id),
-          title:'Table des paiments à l\'origine de cette écriture')
+          title:'Paiment à l\'origine de cette écriture')
       else
         # on va donner des conseils à l'utilisateur pour comprendre pourquoi
         # il ne peut travailler l'image
@@ -132,8 +132,7 @@ module InOutWritingsHelper
     case writing
     when Transfer
       html <<  icon_to('modifier.png', edit_transfer_path(writing.id)) 
-    when Adherent::Writing then html << icon_to('detail.png', 
-        adherent.member_payments_path(writing.member))
+    when Adherent::Writing then html << actions_for_editable_adherent_writing(writing)
     when InOutWriting
       html <<  icon_to('modifier.png', 
         edit_book_in_out_writing_path(writing.book_id, writing)) 
@@ -151,6 +150,19 @@ module InOutWritingsHelper
     html
   end
   
+  # Renvoie vers l'écriture à l'origine du paiement. 
+  # Si le membre n'est pas trouvé, affiche une icone désactivée.
+  def actions_for_adherent_writing(writing)
+    if wm = writing.member
+      icon_to('detail.png', 
+        adherent.member_payment_path(wm, writing.bridge_id),
+         title:'Paiement à l\'origine de cette écriture')
+    else
+      image_tag('icones/nb_detail.png', 
+        title:'L\'adhérent semble avoir été effacé - Impossible d\'afficher l\'origine de ce paiement')
+    end
+  end
+  
   
   # lorsque la ligne n'est pas editable, alors on peut seulement afficher les 
   # informations de détail
@@ -160,9 +172,7 @@ module InOutWritingsHelper
     html = ''
     case writing
     when Transfer then  html << icon_to('detail.png', transfer_path(writing.id))
-    when Adherent::Writing then html << icon_to('detail.png', 
-        adherent.member_payment_path(writing.member, writing.bridge_id),
-        title:'Table des paiments à l\'origine de cette écriture')
+    when Adherent::Writing then html << actions_for_adherent_writing(writing)
     end
     html
   end
