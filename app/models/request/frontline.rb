@@ -32,6 +32,16 @@ module Request
   def self.column(name, sql_type = nil, default = nil, null = true)
     columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
   end
+  
+  # les deux derniers champs adherent_member_id et member_id sont normalement
+  # identiques. Le premier est obtenu par le champ de la Writing, tandis que le 
+  # second est obtenu par le champ de la table des Adhérents. 
+  # Il peut donc être nul si l'adhérent a été supprimé. Ceci permet de ne pas 
+  # tenter de faire le lien avec le membre dans les line_actions.
+  # 
+  # TODO on pourrait probablement supprimer adherent_member_id en modifiant 
+  # les méthodes frontline_actions. 
+  # 
 
   column :writing_type, :string
   column :nature_name, :string
@@ -53,13 +63,8 @@ module Request
   column :cl_locked, :boolean
   column :adherent_payment_id, :integer
   column :adherent_member_id, :integer
+  column :member_id, :integer 
   
-#  attr_accessible :id, :writing_type, :nature_name, :book_id,     
-#   :date, :ref, :narration, :compta_line_id, :destination_name, :debit, :credit,
-#   :payment_mode, 
-#   :acc_number, :acc_title, :bel_id, :support_check_id, :support_locked, 
-#   :cl_locked, 
-#   :adherent_payment_id, :adherent_member_id
     
   # TODO attention : cette requête fonctionne tant que bridge ne renvoie
   # qu'à des adhérents. En cas de nouveau module, il faudra gérer le type 
@@ -73,7 +78,8 @@ module Request
       SELECT writings.book_id, writings.id, writings.date, writings.ref,
       writings.narration, writings.type AS writing_type, 
       adherent_payments.id AS adherent_payment_id,
-      adherent_payments.member_id AS adherent_member_id,
+      adherent_payments.member_id AS adherent_member_id, 
+      (SELECT adherent_members.id AS member_id FROM adherent_members WHERE adherent_members.id = adherent_payments.member_id),
       cls.compta_line_id,
       nature_name, destination_name, cls.debit, cls.credit,
       support.payment_mode AS payment_mode, acc_number, acc_title, bel_id, 
@@ -107,8 +113,8 @@ module Request
       ORDER BY writings.date
       hdoc
   
-      res = IncomeOutcomeBook.connection.execute( sql.gsub("\n", ''))
-      res.collect {|tuple| Frontline.new(tuple)}
+      Request::Frontline.find_by_sql( sql)
+      
     end
   
     
