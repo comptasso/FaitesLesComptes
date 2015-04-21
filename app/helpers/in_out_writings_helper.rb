@@ -132,7 +132,7 @@ module InOutWritingsHelper
     case writing
     when Transfer
       html <<  icon_to('modifier.png', edit_transfer_path(writing.id)) 
-    when Adherent::Writing then html << actions_for_editable_adherent_writing(writing)
+    when Adherent::Writing then html << actions_for_adherent_writing(writing)
     when InOutWriting
       html <<  icon_to('modifier.png', 
         edit_book_in_out_writing_path(writing.book_id, writing)) 
