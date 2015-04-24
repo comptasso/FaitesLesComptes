@@ -23,12 +23,19 @@ module OrganismFixtureBis
     ComptaLine.delete_all
   end
   
-   
+  # TODO refactorisé pour obtenir plus facilement une base saine de tests
   def use_test_organism
     Apartment::Database.switch(SCHEMA_TEST)
     @o = Organism.first
-    create_organism unless @o
+    unless @o
+      create_organism # rappel : fait déja un appel à get_organism_instances
+      return
+    end
     @p = @o.periods.first
+    unless @p # c'est qu'on a effacé les exercices dans des tests
+      create_organism 
+      return
+    end
     erase_writings
     get_organism_instances
     @o
