@@ -22,7 +22,7 @@ describe InOutWritingsHelper do
   describe 'in_out_line_actions' do
     it 'retourne blank si line n est pas editable' do
       line = double(:writing=>(@w = double(:id=>88, 'editable?'=>false)))
-      helper.in_out_line_actions(line).should == content_tag(:td, :class=>'icon') {' '}
+      helper.in_out_line_actions(line).should == content_tag(:td, :class=>'actions') {' '}
     end
 
     it 'retourne un lien vers transfer si c est une écriture de transfert' do
@@ -46,7 +46,8 @@ describe InOutWritingsHelper do
     
 
     it 'une InOutWriting propose des liens vers l edition et la suppression de la partie principale ' do
-      line = double(:writing=>(@w = mock_model(InOutWriting, 'editable?'=>true, :id=>88, :book_id=>7, :book=>mock_model(Book))))
+      line = double(:writing=>(@w = mock_model(InOutWriting,
+            'editable?'=>true, :id=>88, :book_id=>7, :book=>mock_model(Book))))
       helper.line_actions(line).should match(edit_book_in_out_writing_path(@w.book_id, @w))
       helper.line_actions(line).should match(book_in_out_writing_path(@w.book_id, @w))
     end
@@ -60,13 +61,37 @@ describe InOutWritingsHelper do
   
   describe 'frontline_actions' do
     
+    describe 'pour un Adherent::Writing' do
+      before(:each) do
+         @line = double(id:'50',
+           writing_type:'Adherent::Writing',
+           book_id:1,
+           editable?:true,
+           adherent_payment_id:3)
+      end
+      
+      it 'oriente vers le payment de cet adhérent' do
+        @line.stub(:member_id).and_return 1
+        helper.frontline_actions(@line).
+          should match(adherent.member_payment_path(@line.member_id, @line.adherent_payment_id))
+      end
+      
+      it 'ou affiche un conseil si member_id non présent' do
+        @line.stub(:member_id).and_return nil
+        helper.frontline_actions(@line).
+          should match("<img alt=\"Nb detail\" ")
+      
+      end
+    end
+    
     context 'editable?, renvoie vers' do
       
       before(:each) do
          @line = double(id:'50',
            book_id:1,
            editable?:true,
-           adherent_member_id:1)
+           member_id:1,
+           adherent_payment_id:3)
       end
       
       it 'l action edit transfer si c est un transfert'  do
@@ -75,11 +100,7 @@ describe InOutWritingsHelper do
           should match(edit_transfer_path(@line.id))
       end
       
-      it 'l affichage des payements des adhérent si c est un adhérent' do
-        @line.stub(:writing_type).and_return 'Adherent::Writing'
-        helper.frontline_actions(@line).
-          should match(adherent.member_payments_path(@line.adherent_member_id))
-      end
+      
       
       it 'l action edit dans les autres cas' do
         @line.stub(:writing_type).and_return 'Autre'

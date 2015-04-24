@@ -52,8 +52,7 @@ module InOutWritingsHelper
       when 'Transfer'
         html <<  icon_to('modifier.png', edit_transfer_path(frontline.id)) 
       when 'Adherent::Writing' then 
-        html << icon_to('detail.png',
-          adherent.member_payments_path(frontline.adherent_member_id))
+        html << frontline_actions_for_adherent_writing(frontline)
       else
         html <<  icon_to('modifier.png', 
           edit_book_in_out_writing_path(frontline.book_id, frontline.id)) 
@@ -66,13 +65,10 @@ module InOutWritingsHelper
       when 'Transfer' then  html << icon_to('detail.png', 
           transfer_path(frontline.id))
       when 'Adherent::Writing' then
-        html << icon_to('detail.png', 
-          adherent.member_payment_path(frontline.adherent_member_id, 
-            frontline.adherent_payment_id),
-          title:'Paiment à l\'origine de cette écriture')
+        html << frontline_actions_for_adherent_writing(frontline)
       else
         # on va donner des conseils à l'utilisateur pour comprendre pourquoi
-        # il ne peut travailler l'image
+        # il ne peut pas éditer cette écriture
         if frontline.cl_locked || frontline.support_locked
           html << image_tag('icones/nb_verrouiller.png', title:'Ecriture verrouillée, modification impossible')
         else
@@ -98,7 +94,7 @@ module InOutWritingsHelper
   # permet d'afficher les actions possible dans une ligne d'écriture
   # ne fait qu'entourer d'une balise td.icon le résultat de line_actions
   def in_out_line_actions(line)
-    content_tag :td, :class=>'icon' do
+    content_tag :td, :class=>'actions' do
       line_actions(line)
     end
   end
@@ -147,7 +143,7 @@ module InOutWritingsHelper
         compta_book_writing_path(writing.book_id, writing),
         data:{confirm: 'Etes vous sûr?'}, method: :delete) if deletable
     end
-    html
+    html 
   end
   
   # Renvoie vers l'écriture à l'origine du paiement. 
@@ -156,7 +152,21 @@ module InOutWritingsHelper
     if wm = writing.member
       icon_to('detail.png', 
         adherent.member_payment_path(wm, writing.bridge_id),
-         title:'Paiement à l\'origine de cette écriture')
+        title:'Paiement à l\'origine de cette écriture')
+    else
+      image_tag('icones/nb_detail.png', 
+        title:'L\'adhérent semble avoir été effacé - Impossible d\'afficher l\'origine de ce paiement')
+    end
+  end
+  
+  # Pour éviter de renvoyer vers un adhérent supprimé, on teste member_id
+  # et on affiche des icones et actions en conséquence.
+  def frontline_actions_for_adherent_writing(frontline)
+    if frontline.member_id
+      icon_to('detail.png',
+        adherent.member_payment_path(frontline.member_id, 
+          frontline.adherent_payment_id ),
+        title:'Paiment à l\'origine de cette écriture')
     else
       image_tag('icones/nb_detail.png', 
         title:'L\'adhérent semble avoir été effacé - Impossible d\'afficher l\'origine de ce paiement')
@@ -164,22 +174,22 @@ module InOutWritingsHelper
   end
   
   
-  # lorsque la ligne n'est pas editable, alors on peut seulement afficher les 
-  # informations de détail
-  # TODO rajouter des icones N&B pour avoir un conseil pour les lignes 
-  # pointées.
-  def actions_for_not_editable(writing, deletable=true)
-    html = ''
-    case writing
-    when Transfer then  html << icon_to('detail.png', transfer_path(writing.id))
-    when Adherent::Writing then html << actions_for_adherent_writing(writing)
+    # lorsque la ligne n'est pas editable, alors on peut seulement afficher les 
+    # informations de détail
+    # TODO rajouter des icones N&B pour avoir un conseil pour les lignes 
+    # pointées.
+    def actions_for_not_editable(writing, deletable=true)
+      html = ''
+      case writing
+      when Transfer then  html << icon_to('detail.png', transfer_path(writing.id))
+      when Adherent::Writing then html << actions_for_adherent_writing(writing)
+      end
+      html
     end
-    html
+
+
+
   end
-
-
-
-end
 
 
 
