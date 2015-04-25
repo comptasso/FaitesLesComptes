@@ -84,4 +84,6 @@
 # FLCVERSION = '1.11.1RC' # passage à ruby 2.2.1
 # FLCVERSION = '1.11.2RC' # Guard plus ordre des exercices, et autres mineures 
 # FLCVERSION = '1.11.3RC' # v 0.2.8 gem Adherent vue index et export csv des membres 
-FLCVERSION = '1.11.4RC' # Mise en place css media print 
+# FLCVERSION = '1.11.4RC' # Mise en place css media print 
+# FLCVERSION = '1.12.4RC' # Gestion des adhérents qui seraient supprimés 
+FLCVERSION = '1.13.4RC' # Mise à jour de Nature lignes verrouillées et gestion masques si changement de nom
