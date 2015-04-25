@@ -9,7 +9,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Nature do 
   include OrganismFixtureBis
 
-  let(:p) {stub_model(Period, :list_months=>ListMonths.new(Date.today.beginning_of_year, Date.today.end_of_year))}
+  let(:p) {stub_model(Period,
+      :list_months=>ListMonths.new(Date.today.beginning_of_year, Date.today.end_of_year))}
   let(:b) {stub_model(Book, title:'Le titre', type:'IncomeBook')}
   
   before(:each) do
@@ -47,7 +48,11 @@ describe Nature do
   context 'une nature existe déja' do
 
     before(:each) do
-      @nature = p.natures.new(name: 'Nature test')
+      Nature.any_instance.stub(:period).and_return p
+      p.stub(:organism).and_return(@ar = double(Arel))
+      @ar.stub(:masks).and_return @ar
+      @ar.stub(:filtered_by_name).and_return []
+      @nature = p.natures.new(name: 'Nature test')   
       @nature.book_id = 1
       @nature.save!
     end
@@ -107,10 +112,14 @@ describe Nature do
     before(:each) do
       Account.any_instance.stub(:sectorise_for_67).and_return true
       @accounts = create_accounts(%w(110 200 201)) 
+      Nature.any_instance.stub(:period).and_return p
+      p.stub(:organism).and_return(@ar = double(Arel))
+      @ar.stub(:masks).and_return @ar
+      @ar.stub(:filtered_by_name).and_return []
       @accounts.each do |a|
         n = Nature.create!(book_id:1,
           account_id:a.id, name:"nature#{a.number}", period_id:1)          
-        end
+        end 
     end
       
     after(:each) do

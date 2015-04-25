@@ -19,15 +19,8 @@ class Nature < ActiveRecord::Base
 
   has_many :compta_lines
   has_many :writings, through: :compta_lines
-
-  
  
   acts_as_list :scope=>[:period_id, :book_id], add_new_at:'perso'
-
-
-  
-
-  
 
   strip_before_validation :name, :comment
 
@@ -48,11 +41,17 @@ class Nature < ActiveRecord::Base
       order(:position).references(:books)}
   scope :without_account, -> {where('account_id IS NULL')}
   
-  scope :within_period, lambda { |per| where('period_id = ?' , per.id)}
+  scope :within_period, lambda { |per| where('period_id = ?' , per.id)} 
 
   before_destroy :ensure_no_lines
   before_destroy :remove_from_list  #est défini dans le plugin acts_as_list
   after_create :fix_position
+  # after_update obligatoire car mask a des validations qui vont chercher 
+  # la nature dans la base
+  after_update :update_masks, if: :name_changed?
+  
+  
+  # Attention, il existe aussi un NatureObserver qui a des actions after_save
 
  
   # Stat_with_cumul fournit un tableau comportant le total des lignes 
@@ -101,6 +100,16 @@ class Nature < ActiveRecord::Base
 
  
   protected
+  
+  
+  # FIXME Le plugin acts_as_list fait un appel à update position, ce qui crée du 
+  # coup un appel à cette méthode, même pour un nouvel enregistrement.
+  def update_masks
+    period.organism.masks.filtered_by_name(name_was).each do |m|
+      m.update_attributes(nature_name:name)
+    end 
+  end
+  
     
   
   # appelé par after_create pour définir la position
@@ -137,8 +146,11 @@ class Nature < ActiveRecord::Base
   
   # hack utilisé pour éviter que acts_as_list gère la position d'un new
   # record.
-  # TODO on pourrait peut-être regrouper cette méthode, find_right_position
-  # fix_position
+  # Dans la déclaration plus haut de acts_as_list, on a indiqué que la gestion
+  # des nouveaux items se faisait par cette méthode, laquelle ne fait rien
+  # car on gère autrement les changements de position.
+  # Il semble difficile de faire autrement par défaut de maîtrise de l'ordre
+  # des after_save introduit par le gem acts_as_list.
   def add_to_list_perso
   
   end

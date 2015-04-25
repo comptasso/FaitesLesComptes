@@ -8,20 +8,22 @@ class NatureObserver < ActiveRecord::Observer
 
   # si on rattache nature à un compte, les lignes qui ont cette nature
   # doivent voir leur champ account_id mis à jour.
-
-  # TODO voir si cette manip ne contrevient pas aux règles d'immutabilité des comptes
-  def after_save(nature)
-      if nature.account_id_changed?
-        
-       Rails.logger.debug 'Mise à jour du champ account_id des lignes suite à modification de nature'
-       Rails.logger.debug "Nombre de lignes modifiées : #{ComptaLine.where('nature_id = ?', nature.id).count}"
-       nature.compta_lines.each do |l|
- 
-          l.update_attributes(:account_id=>nature.account_id)
-   
-        end
-
-      end
+  # 
+  # De même, on met à jour les masks si un masque dépend de cette nature
+  # 
+  def after_update(nature)
+    change_account_id(nature) if nature.account_id_changed?
+  end
+    
+  private
+  
+  
+  def change_account_id(nature)
+    Rails.logger.debug 'Mise à jour du champ account_id des lignes suite à modification de nature'
+    Rails.logger.debug "Nombre de lignes modifiées : #{ComptaLine.where('nature_id = ?', nature.id).count}"
+    nature.compta_lines.unlocked.each do |l|
+      l.update_attributes(account_id:nature.account_id)
+    end
   end
 
 end

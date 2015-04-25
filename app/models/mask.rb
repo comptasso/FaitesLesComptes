@@ -74,6 +74,7 @@ class Mask < ActiveRecord::Base
   
   before_validation :trim_values
   
+  scope :filtered_by_name, lambda{|nat_name| where('nature_name = ?', nat_name)}
   
   # renvoie le livre sollicité par ce masque
   def book
@@ -145,7 +146,10 @@ class Mask < ActiveRecord::Base
   
   
   def nature_id(date)
-    organism.find_period(date).natures.find_by_name(nature_name).id if nature_name
+    if nature_name
+      organism.find_period(date).natures.
+        find_by_name(nature_name).id rescue nil
+    end
   end
   
   def debit

@@ -12,7 +12,8 @@
       = f.input :ref, my_wrapper_html: {class: "col-lg-2"}
       = f.input :narration, my_wrapper_html: {class: "col-lg-5"}
       = f.input :nature_name, my_wrapper_html: {class: "col-lg-4"} do 
-        =f.select :nature_name, mask_nature_options(@period, @mask), {},
+        =f.select :nature_name, mask_nature_options(@period, @mask), 
+          {include_blank: true},
           {class:'col-lg-12 select form-control'}
 
       = f.input :destination_id, my_wrapper_html: {class: "col-lg-4"},

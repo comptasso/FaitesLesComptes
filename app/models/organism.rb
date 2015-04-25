@@ -59,7 +59,6 @@ class Organism < ActiveRecord::Base
   has_one :an_book, dependent: :destroy
   has_many :od_books, dependent: :destroy
   has_many :virtual_books # les virtual_books ne sont pas persisted? donc inutile d'avoir un callback
-  
   has_many :accounts, through: :periods
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
   # has_many :transfers
@@ -95,7 +94,7 @@ class Organism < ActiveRecord::Base
   validates :postcode, allow_blank:true, :length=>{:within=>2..5}, format:/\A\d*\z/  
 
   
-
+  
 
   
  

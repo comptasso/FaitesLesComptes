@@ -13,7 +13,7 @@ class WritingMasksController < ApplicationController
       flash[:retour] = request.env["HTTP_REFERER"]
       render 'in_out_writings/new'
     else
-      flash[:alert] = 'Le masque de saisie demandé n\a pas été trouvé'
+      flash[:alert] = 'Le masque de saisie demandé n\'a pas été trouvé'
       redirect_to :back and return
     end
   end
@@ -21,7 +21,7 @@ class WritingMasksController < ApplicationController
   protected
   
   def fill_natures
-    @natures=@book.natures.within_period(@period)
+    @natures=@book.natures.within_period(@period).order(:position)
   end
   
 end

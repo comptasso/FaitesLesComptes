@@ -36,8 +36,9 @@ module Admin::MasksHelper
     body = "".html_safe
     org.in_out_books.collect do |book|
       mytag =  content_tag :optgroup, {:label=>book.title, 'data-id'=>book.id} do
-        options_for_select(book.natures.order(:position).
-            collect {|n| [n.name]}, mask.nature_name)
+        options_for_select(book.natures.within_period(period).
+            order(:position).collect {|n| [n.name]},
+            mask.nature_name)
       end
       body.safe_concat mytag
     end 
