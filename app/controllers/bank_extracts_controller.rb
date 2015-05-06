@@ -123,8 +123,9 @@ Vous pouvez maintenant procéder aux modifications des lignes importées puis g�
   end
   
   def bank_extract_params
-    params.require(:bank_extract).permit(:bank_account_id, :begin_sold, 
-      :total_debit, :total_credit, :begin_date_picker, :end_date_picker)
+    params.require(:bank_extract).permit(:bank_account_id, :reference, 
+      :begin_sold, :total_debit, :total_credit,
+      :begin_date_picker, :end_date_picker)
   end
 
  
