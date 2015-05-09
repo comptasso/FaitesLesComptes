@@ -5,7 +5,7 @@
 # de test et de développement
 
 unless Rails.env.test? || Rails.env.development?
-  Rack::Timeout.timeout = 15  # seconds
+  Rack::Timeout.timeout = 20  # seconds
 end
 
 

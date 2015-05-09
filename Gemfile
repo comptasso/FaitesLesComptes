@@ -30,8 +30,8 @@ gem "devise-async" # pour avoir l'envoi des mails en background
 gem 'ofx' # pour la lecture des fichiers bancaires au format ofx
 
 gem 'delayed_job_active_record', '= 4.0.2'
-gem 'unicorn'
-
+# gem 'unicorn'
+gem 'puma'
 
  gem 'adherent', '~>0.2',  '>=0.2.8' 
 # gem 'adherent', :path=>'../../Adherent'  
