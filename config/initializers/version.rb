@@ -86,4 +86,5 @@
 # FLCVERSION = '1.11.3RC' # v 0.2.8 gem Adherent vue index et export csv des membres 
 # FLCVERSION = '1.11.4RC' # Mise en place css media print 
 # FLCVERSION = '1.11.5RC' # Gestion des adhérents qui seraient supprimés 
-FLCVERSION = '1.11.6RC' # Mise à jour de Nature lignes verrouillées et gestion masques si changement de nom
+# FLCVERSION = '1.11.6RC' # Mise à jour de Nature lignes verrouillées et gestion masques si changement de nom
+FLCVERSION = '1.11.7RC' # Passage au serveur Puma à la place de Unicorn
