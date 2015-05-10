@@ -108,7 +108,7 @@ describe Room  do
         @new_room.organism.should  be_an_instance_of Organism
       end
       
-      it 'avec les mêmes informations que la room', wip:true do
+      it 'avec les mêmes informations que la room' do
         o = @new_room.organism
         o.title.should == 'Le titre'
         o.comment.should == 'Un commentaire'
@@ -176,6 +176,8 @@ describe Room  do
       subject.stub(:relative_version).and_return :no_base
       subject.should be_no_base 
     end
+    
+    
 
   end
 
@@ -237,6 +239,23 @@ describe Room  do
 
 
   end
+  
+  describe 'user_status', wip:true do
+    
+    before(:each) do
+      @u = stub_model(User)
+      @r = stub_model(Room)
+      @h = stub_model(Holder, user_id:@u.id, status:'owner', room_id:@r.id)
+      @r.stub(:holders).and_return @ar = double(Arel)
+    end
+        
+    it 'user_status renvoie le statut de l argument' do
+      @ar.should_receive(:where).with('user_id = ?', @u.id).and_return [@h]
+      expect(@r.user_status(@u)).to eq('owner')       
+    end
+    
+    
+  end
 
   describe 'version_update'  do 
 
@@ -254,7 +273,7 @@ describe Room  do
   end
   
   
-  describe 'clonage', wip:true do
+  describe 'clonage' do
     
     before(:each) do
       use_test_user

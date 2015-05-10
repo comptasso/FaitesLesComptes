@@ -46,6 +46,12 @@ class Room < ActiveRecord::Base
     holders.where('status = ?', 'owner').first.user
   end
   
+  # la room cherche dans ses holders celui qui correspond au user demandé
+  # et renvoie son statut
+  def user_status(user)
+    holders.where('user_id = ?', user.id).first.status
+  end
+  
   # renvoie l'organisme associé à la base
   def organism
     Apartment::Database.process(database_name) {Organism.first}
