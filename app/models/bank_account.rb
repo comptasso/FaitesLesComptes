@@ -57,6 +57,8 @@ class BankAccount < ActiveRecord::Base
   after_create :create_accounts, :if=>lambda {organism.periods.opened.any? }
   after_update :change_account_title, :if=> lambda {nickname_changed? }
   
+  scope :communs, ->{includes(:sector).where('sectors.name = ?', 'Commun').references(:sector)}
+  
   def name
     nickname
   end

@@ -29,42 +29,70 @@ describe BankAccount do
 
   describe 'controle des validités' do
 
-    before(:each) do
-      find_bac
-    end
-    
     subject {find_bac}
 
     it {subject.should be_valid}
     
     it 'should not be_valid without bank_name' do
-      @bb.bank_name = nil
-      @bb.should_not be_valid
+      subject.bank_name = nil
+      subject.should_not be_valid
     end
     
     it 'should not be_valid without number' do
-      @bb.number = nil
-      @bb.should_not be_valid
+      subject.number = nil
+      subject.should_not be_valid
     end
 
     it 'nor without nickname' do
-      @bb.nickname = nil
-      @bb.should_not be_valid
+      subject.nickname = nil
+      subject.should_not be_valid
     end
     
     it 'nor without sector_id' do
-      @bb.sector_id = nil
-      @bb.should_not be_valid 
+      subject.sector_id = nil
+      subject.should_not be_valid 
     end
 
-    it "should have a unique number in the scope of bank and organism", wip:true do
+    it "should have a unique number in the scope of bank and organism" do
       use_test_organism
-      @bb.organism_id = @o.id
-      @bb.number = @ba.number
-      @bb.bank_name = @ba.bank_name
-      @bb.should_not be_valid
+      subject.organism_id = @o.id
+      subject.number = @ba.number
+      subject.bank_name = @ba.bank_name
+      subject.should_not be_valid
     end
 
+  end
+  
+  describe 'scope commun', wip:true do
+    context 'sans secteur commun' do
+      before(:each) do
+        use_test_organism
+      end
+      
+      it 'communs renvoie un tableau vide' do
+        expect(BankAccount.communs.to_a).to eq([])
+      end
+    end
+    
+    context 'avec un secteur commun' do 
+    
+      before(:each) do
+        use_test_organism
+        @sec = @o.sectors.create!(name:'Commun')
+        @bc = @o.bank_accounts.create!(bank_name:'le compte commun', number:'12345XYZ',
+          nickname:'compte commun', sector_id:@sec.id)
+      end
+    
+      after(:each) do
+        @bc.accounts.each(&:delete)
+        @bc.delete
+      end
+    
+      it 'communs renvoient les comptes bancaires du secteur commun' do
+        expect(BankAccount.communs.to_a).to eq([@bc])
+      end
+    end
+    
   end
 
   describe 'création du compte comptable'  do

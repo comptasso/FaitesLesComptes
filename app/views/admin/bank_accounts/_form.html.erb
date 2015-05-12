@@ -14,7 +14,7 @@
 
           <%= f.association :sector,  my_wrapper_html: {class: "col-lg-3"},
               prompt:'Choisissez un secteur',
-              required:true %>
+              hint:'L`utilisation de comptes communs est possible mais déconseillée' %>
           <% else %>
             <%= f.association :sector,  my_wrapper_html: {class: "col-lg-3"},
                 prompt:'Choisissez un secteur',

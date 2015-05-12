@@ -8,19 +8,12 @@ module OrganismsHelper
   # générant des messages.
   #
   def infos(org)
-
     m=[]
-
     m << session[:messages] unless session[:messages].nil?
-     
     m << check_deposit_message(org)
-   
     org.bank_accounts.each  { |ba| m << bank_account_message(ba) }
-
     org.cashes.each { |ca| m << cash_message(ca) }
-    
     org.subscriptions.each { |sub| m << sub_infos(sub) }
-    
     return m.compact # pour retirer les éventuels messages nil
   end
   

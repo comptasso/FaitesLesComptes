@@ -18,8 +18,10 @@ class OrganismsController < ApplicationController
     @date = @period.guess_date
 
     # Construction des éléments des paves graphiques
+    # On ne prend pas en compte un éventuel secteur commun, car il n'a 
+    # pas de livres à proprement parler
     @paves = []
-    @organism.sectors.each {|sec| @paves += sec.paves}
+    @organism.sectors.reject {|s| s.name == 'Commun'}.each {|sec| @paves += sec.paves}
     @paves += @organism.cash_books
     @paves += @organism.bank_books
  

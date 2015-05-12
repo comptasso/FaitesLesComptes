@@ -5,7 +5,7 @@
 <div class="row"> 
 <div class="col-lg-12 message">
   <h3>
-    <%= vous_avez_des_messages infos(@organism).size %>
+    <%= vous_avez_des_messages infos(@organism).size %> 
   </h3>
   <div id="mail_ul">
   <ul>
@@ -21,8 +21,8 @@
 </div>
 </div>
 
-<% @paves.each do |p|  %>
-  <%= draw_pave(p, @period, 'col-lg-4 col-md-6 col-sm-12 col-xs-12')  %>
+<% @paves.each do |pave|  %>
+  <%= draw_pave(pave, @period, 'col-lg-4 col-md-6 col-sm-12 col-xs-12')  %>
 <% end %>
 
 

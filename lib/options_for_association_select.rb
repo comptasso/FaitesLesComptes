@@ -22,7 +22,7 @@
 #   
 #   Par exemple 
 #   OptionsForAssociationSelect.new('Banques', :list_bank_accounts, sector, period)
-#   permet se traduit par le titre Banques et 
+#   se traduit par le titre Banques et 
 #   par les éléments collectés par la méthode sector.list_bank_accounts(period)
 #
 #

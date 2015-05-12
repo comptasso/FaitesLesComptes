@@ -67,7 +67,7 @@ class Utilities::PlanComptable
     end
   end
   
-  # recopie les natures de l'exercice précédent 's'il y en a un) 
+  # recopie les natures de l'exercice précédent
   def copy_natures(from_period)
     from_period.natures.find_each do |n|
       nn = {name: n.name, comment: n.comment, book_id: n.book_id} # on commence à construire le hash

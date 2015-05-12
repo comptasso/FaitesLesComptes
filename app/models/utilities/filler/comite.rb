@@ -3,11 +3,9 @@ module Utilities
     class Comite < Utilities::Filler::Organism
       
       def remplit_sectors
-        # puts @org
-        @org.sectors.create!(name:'Fonctionnement')
-        @org.sectors.create!(name:'ASC')
-        @fonc = @org.sectors.where('name = ?', 'Fonctionnement').first
-        @asc = @org.sectors.where('name = ?', 'ASC').first
+        @fonc = @org.sectors.create!(name:'Fonctionnement')
+        @asc = @org.sectors.create!(name:'ASC')
+        @commun = @org.sectors.create!(name:'Commun')
       end
       
       def remplit_books

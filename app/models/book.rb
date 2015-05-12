@@ -91,7 +91,7 @@ class Book < ActiveRecord::Base
   #
   # Les mois où il n'y a pas de valeur ne renvoient rien.
   # Il faut donc ensuite faire un mapping ce qui est fait par la méthode
-  # map_query_months(period)
+  # build_datas de Utilities::Graphic
   #
   def query_monthly_datas(period)
    
