@@ -27,7 +27,7 @@ module InOutWritingsHelper
   def options_for_cca(period, book)
     sector = book.sector
     arr =  [OptionsForAssociationSelect.
-        new('Banques', :list_bank_accounts_with_communs, sector, period),
+        new('Banques',  :list_bank_accounts_with_communs, sector, period),
       OptionsForAssociationSelect.
         new('Caisses',:list_cash_accounts, sector, period)]
     if book.income_outcome == true

@@ -46,11 +46,7 @@ class Sector < ActiveRecord::Base
   end
   
     
-  # renvoie les comptes comptables correspondant aux banques de ce secteur pour l'exercice
-  # demandé
-  def list_bank_accounts(period)
-    bank_accounts.collect {|ba| ba.current_account(period)} 
-  end
+ 
   
   # renvoie les commptes comptables correspondant aux banque de ce secteur 
   # pour l'exercice demandé et ajoute d'éventuels comptes bancaires relevant 
@@ -59,10 +55,6 @@ class Sector < ActiveRecord::Base
     list_bank_accounts(period) + list_common_bank_accounts(period)
   end
   
-  # renvoie la liste des comptes bancaire communs
-  def list_common_bank_accounts(period)
-    organism.bank_accounts.communs.collect {|ba| ba.current_account(period)}
-  end
   
   # renvoie les comptes comptables correspondant aux caisses de ce secteur pour l'exercice
   # demandé
@@ -87,36 +79,47 @@ class Sector < ActiveRecord::Base
  # build_datas de Utilities::Graphic
  # 
  # TODO : Optimiser cette requête en faisant une liste des mois voulus
+ # avec un join left, ce qui évitera les mois qui ne sont pas remplis
  #
  def query_monthly_datas(period)
    bids = books.collect(&:id).join(', ')
    
-sql = <<-hdoc
- SELECT 
-     to_char(writings.date, 'MM-YYYY') AS mony,
-   
-     SUM(compta_lines.credit) - SUM(compta_lines.debit) AS valeur 
- FROM 
-     
-     writings, 
-     compta_lines
- WHERE
-    
-   writings.book_id IN (#{bids}) AND 
-writings.date >= '#{period.start_date}' AND 
-writings.date <= '#{period.close_date}' AND 
-     compta_lines.writing_id = writings.id AND 
-nature_id IS NOT NULL
-     
- GROUP BY mony
+   sql = <<-hdoc
+     SELECT 
+         to_char(writings.date, 'MM-YYYY') AS mony,
+         SUM(compta_lines.credit) - SUM(compta_lines.debit) AS valeur 
+     FROM 
+         writings, 
+         compta_lines
+     WHERE
+       writings.book_id IN (#{bids}) AND 
+       writings.date >= '#{period.start_date}' AND 
+       writings.date <= '#{period.close_date}' AND 
+       compta_lines.writing_id = writings.id AND 
+       nature_id IS NOT NULL
+     GROUP BY mony
 hdoc
 
-   res = VirtualBook.connection.execute( sql.gsub("\n", ''))
+   res = VirtualBook.find_by_sql(sql)
    h = Hash.new('0')
    res.each {|r| h[r['mony']]= r["valeur"] }
    h
    
    end
+   
+ protected
+ 
+  # renvoie les comptes comptables correspondant aux banques de ce secteur pour l'exercice
+  # demandé
+  def list_bank_accounts(period)
+    bank_accounts.collect {|ba| ba.current_account(period)} 
+  end
+  
+  # renvoie la liste des comptes bancaire communs
+  def list_common_bank_accounts(period)
+    organism.bank_accounts.communs.collect {|ba| ba.current_account(period)}
+  end
+  
   
   
   

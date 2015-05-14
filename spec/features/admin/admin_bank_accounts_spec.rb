@@ -1,11 +1,6 @@
 # coding: utf-8
 
-
-
- 
-
-
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
+require 'spec_helper'
 
 RSpec.configure do |c| 
   # c.filter = {:wip=> true }
@@ -14,7 +9,7 @@ end
 
 # spec request for testing admin bank_accounts 
 
-describe 'vue bank_accounts index' do  
+describe 'vue bank_accounts index' do   
   include OrganismFixtureBis  
 
   before(:each) do

@@ -3,16 +3,14 @@
 describe "in_out_writings/new" do 
   include JcCapybara  
 
-
-
-  let(:o) {stub_model(Organism) }
+  let(:o) {stub_model(Organism) } 
   let(:book) {stub_model(Book) }
   let(:n) {stub_model(Nature, name:'nature')}
   let(:d) {stub_model(Destination, name:'destination')}
-  let(:sector) {stub_model(Sector)}
+  let(:sector) {stub_model(Sector, organism:o)}
 
-  before(:each) do
- assign(:in_out_writing, stub_model(InOutWriting, book_id:1, date:Date.today).as_new_record)
+  before(:each) do 
+    assign(:in_out_writing, stub_model(InOutWriting, book_id:1, date:Date.today).as_new_record)
     assign(:line, stub_model(ComptaLine, ref:nil).as_new_record)
     assign(:counter_line, stub_model(ComptaLine).as_new_record)
     assign(:book, stub_model(IncomeBook, :title=>'Recettes', sector:sector))
