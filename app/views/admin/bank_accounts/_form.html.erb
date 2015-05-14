@@ -13,8 +13,8 @@
         <% if @organism.sectored? %>
 
           <%= f.association :sector,  my_wrapper_html: {class: "col-lg-3"},
-              prompt:'Choisissez un secteur',
-              hint:'L`utilisation de comptes communs est possible mais déconseillée' %>
+              prompt:'Choisissez un secteur', 
+              hint:'L\'utilisation de comptes communs est possible mais déconseillée' %>
           <% else %>
             <%= f.association :sector,  my_wrapper_html: {class: "col-lg-3"},
                 prompt:'Choisissez un secteur',

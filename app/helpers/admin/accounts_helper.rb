@@ -10,7 +10,7 @@ module Admin::AccountsHelper
   # pour indiquer le nom du secteur dans les compta avec secteurs;
   # Commun pour les comptes qui ne sont pas rattachés à un secteur.
   def secteur(account)
-    account.s_name  || 'Commun'
+    account.s_name 
   end
   
   # Pour les actions sur un account dans la vue index
