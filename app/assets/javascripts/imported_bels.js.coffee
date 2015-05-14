@@ -1,6 +1,15 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+# Les imported_bels permettent de créer des écritures à partir d'un relevé 
+# de compte. 
+# Il est nécessaire évidemment de compléter ou de modifier les champs 
+# Ces modifications se font à l'aide du gem best_in_place. 
+#
+# Il peut y avoir 3 types d'écritures : 
+# - D pour les dépenses
+# - C pour les recettes 
+# - et T pour les virements internes qui seront donc écrits dans un journal 
+# d'OD.
+# 
+#
 
 # lit l'attribut date-min et date-max du body de la table
 # et affecte ces valeurs aux date-picker
@@ -15,7 +24,9 @@ set_date_limits = ->
 
 
 # Vérifie que la ligne a ses champs destination_id, nature_id et 
-# payment_mode rempli. Alors affiche le bouton nouveau qui autrement est caché.
+# payment_mode rempli. Pour les transferts, on ne demande qu'à avoir la 
+# colonne PaymentMode. 
+# Alors affiche le bouton nouveau qui autrement est caché.
 #
 check_ibel_complete = (row) ->
   # lecture des 3 champs
@@ -27,18 +38,19 @@ check_ibel_complete = (row) ->
   # les transferts n'ont pas de destination ni de nature, on ne test que sur
   # payment_mode
   complete = !(/-/.test(v.text())) if row.find('td.cat span').text().trim() == 'T'
-  # on affiche le lien nouveau si c'est OK  
-  row.find('a.ibel_write').show() if complete
-  
-  
-  
+  # on affiche le lien nouveau si c'est OK 
+  if complete
+    row.find('a.ibel_write').show()
+  else
+    row.find('a.ibel_write').hide()
   
 
 # remplace la data_collection de dest par celle de source et remet le champ 
-# dest à un long dash
+# dest à un long dash. 
+# 
 replace_collection = (source, dest) -> 
   dest.data('bestInPlaceEditor').values = JSON.parse(source.attr('data-collection'))
-  dest.text('—')
+  dest.text('-')
   
 
 
@@ -80,7 +92,7 @@ $ ->
   $('.public_imported_bels .best_in_place').bind "ajax:success", ->
   # si l'attribut catégorie (Transfert, Remise, Débit, Crédit) a changé, on 
   # appelle la fonction qui va modifier les values du select de payment_mode
-    refill_payment_mode_values($(@)) if $(@).attr('data-attribute') == 'cat'
+    refill_payment_mode_values($(@)) if $(@).attr('data-bip-attribute') == 'cat'
     check_ibel_complete($(@).parents('tr'))
   
     
