@@ -88,4 +88,5 @@
 # FLCVERSION = '1.11.5RC' # Gestion des adhérents qui seraient supprimés 
 # FLCVERSION = '1.11.6RC' # Mise à jour de Nature lignes verrouillées et gestion masques si changement de nom
 # FLCVERSION = '1.11.7RC' # Passage au serveur Puma à la place de Unicorn
-FLCVERSION = '1.11.8RC' # Secteur commun pour les CE qui n'ont qu'un compte bancaire
+# FLCVERSION = '1.11.8RC' # Secteur commun pour les CE qui n'ont qu'un compte bancaire
+FLCVERSION = '1.11.9RC' # Accélération des stats Natures

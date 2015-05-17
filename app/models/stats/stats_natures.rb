@@ -3,25 +3,32 @@
 module Stats
 
   # la classe construit un tableau de statistiques sur les débits et crédits
-  # de chaque nature d'un exercice et par mois.
-  # La classe se construit donc à partir d'un exercice et est capable de
-  # restituer tous les éléments nécessaires à l'affichage des statistiques.
-  # Un deuxième argument optionnel est l'id d'une destination pour filter les résultats
-  # sur une destination
-  # La ligne de titre, généralement de 14 colonnes (Natures, suivi des mois,
-  # puis de Total)
-  # puis un array de 14 valeurs également pour chaque colonne
-  # le nom de la nature, les totaux par mois et le total de l'exercice 
-  # puis la ligne de total
+  # de chaque nature d'un exercice et par mois à partir de la méthode de classe
+  # #statistics de Nature.
+  # 
+  # Les arguments de new sont l'exercice et un array facultatif des ids des 
+  # destinations. La valeur [0] par défaut indique que l'on ne veut pas filtrer
+  # sur les destinations.
+  # 
+  # La méthode #title renvoie la ligne de titre, généralement
+  # de 14 colonnes : Natures, suivi des mois, Total
+  # 
+  # La méthode #lines renvoie une Array avec pour ligne, 
+  # le nom de la nature, les totaux par mois et le total de l'exercice
+  # 
+  # La méthode #totals renvoie la ligne de totaux de ce tableau
+  # 
+  # Les méthode #to_csv et #to_pdf permettent l'export
+  # 
   class StatsNatures
 
     include Utilities::ToCsv
     
     attr_reader :period
 
-    def initialize(period, dest_id = 0)
+    def initialize(period, dest_ids = [0])
       @period = period
-      @dest_id = dest_id
+      @dest_ids =  dest_ids 
     end
 
     # retourne la ligne de titre 
@@ -33,7 +40,7 @@ module Stats
 
     # retourne les lignes du tableau de stats
     def lines
-      @stats ||= stats
+      @stats ||= Nature.statistics(@period, @dest_ids)
     end
 
     
@@ -62,22 +69,9 @@ module Stats
     def to_pdf
       Editions::Stats.new(@period, self)
     end
-
-# Eliminer les doublons avec le modèle Nature qui a aussi une méthode stats
-# et une méthode stats_filtered.
-    
+   
 
     protected
-
-    #  récupère toutes les natures par ordre recette suivis de dépenses et
-    # par ordre de position puis construit la ligne de statistique
-    def stats
-      stats = []
-      @period.natures.joins(:book).order('type ASC', 'position ASC').each do |nature|
-        stats << [nature.name] + nature.stat_with_cumul(@dest_id)
-      end
-      @stats = stats
-    end
 
     # le nom de la nature suivi des autres valeurs reformatées
     def prepare_line(line)

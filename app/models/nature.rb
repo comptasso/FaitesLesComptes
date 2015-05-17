@@ -2,13 +2,14 @@
 
 # La classe Nature permet une indirection entre les comptes d'un exercice
 # et le type de dépenses ou de recettes correspondant
+# 
 # Le choix de relier Nature aux Account d'une Period, permet de 
 # modifier les natures d'un exercice à l'autre (ainsi que le rattachement aux 
 # comptes). 
 # 
 # Les natures sont reliées aux livres, ce qui permet de limiter les natures
-# disponibles lorsqu'on écrit dans un livre aux seules natures de ce livre (et donc
-# aussi de limiter les comptes accessibles pour un livre).
+# disponibles lorsqu'on écrit dans un livre aux seules natures de ce livre 
+# (et donc incidemment de limiter les comptes accessibles pour un livre).
 # 
 #
 class Nature < ActiveRecord::Base 
@@ -53,15 +54,30 @@ class Nature < ActiveRecord::Base
   
   # Attention, il existe aussi un NatureObserver qui a des actions after_save
 
- 
+  # TODO probablement inutile maintenant
   # Stat_with_cumul fournit un tableau comportant le total des lignes 
   # pour la nature pour chaque mois plus un cumul de ce montant
   # en dernière position
   # Fait appel selon le cas à deux méthodes protected stat ou stat_filtered.
-  def stat_with_cumul(destination_id = 0)
-    s = (destination_id == 0) ? self.stat : self.stat_filtered(destination_id) 
-    s << s.sum.round(2) # rajoute le total en dernière colonne
+#  def stat_with_cumul(destination_id = 0)
+#    s = (destination_id == 0) ? self.stat : self.stat_filtered(destination_id) 
+#    s << s.sum.round(2) # rajoute le total en dernière colonne
+#  end
+  
+  # Stat crée un tableau donnant les montants totaux de la nature pour chacun
+  # des mois de la période pour toutes les destinations confondues
+  # TODO probablement inutile maintenant
+#  def stat
+#    period.list_months.map do |m| 
+#      compta_lines.mois_with_writings(m).sum('credit-debit').to_f.round(2)
+#    end
+#  end
+  
+  def self.statistics(period, destination_ids = [0])
+    res = query_monthly_datas(period, destination_ids)
+    mise_en_forme(res, period)
   end
+
 
   
   def in_out_to_s
@@ -101,6 +117,70 @@ class Nature < ActiveRecord::Base
  
   protected
   
+    
+  # Extrait de nature les champs book_id, position, id, name (nname)
+  # pour chaque nature de l'exercice. 
+  # mony est un champ de la forme MM-YYYY, valeur donne le total du mois 
+  # 
+  # On récupère alors un tableau de Natures.
+  # On peut filter sur le champ destination qui peut comprendre 
+  # 
+  def self.query_monthly_datas(period, destination_ids = [0])
+    if destination_ids == [0]
+      dids = nil
+    else
+      dids = destination_ids.join(', ')
+    end
+    
+    inrequest = "AND compta_lines.destination_id IN (#{dids})"
+    
+    sql = <<-hdoc
+SELECT natures.id, position, name, mony, valeur FROM
+
+natures,
+(SELECT 
+     natures.id AS nid, natures.name AS nname, 
+     SUM(compta_lines.credit) - SUM(compta_lines.debit) AS valeur,
+     to_char(writings.date, 'MM-YYYY') AS mony
+FROM 
+     writings, 
+     compta_lines,
+     natures
+WHERE 
+     writings.id = compta_lines.writing_id AND
+     compta_lines.nature_id = natures.id  #{dids ? inrequest : nil}
+GROUP BY nid, mony) AS subt 
+
+WHERE natures.period_id = #{period.id} AND natures.id = subt.nid 
+
+ORDER BY position
+
+
+hdoc
+   
+    Nature.find_by_sql(sql)
+    
+    # ici on a donc une table d'enregistrement Nature avec un nombre 
+    # d'enregistrement égale au nombre de mois avec une valeur
+  end
+  
+  
+  def self.mise_en_forme(res, period)
+    
+    lms= period.list_months
+    period.natures.joins(:book).order('type ASC', 'position ASC').collect do |n|
+      ligne = 
+      lms.collect do |lm|
+        val = res.select {|r| r.id == n.id && r.mony == lm.to_s}
+        val.empty? ? 0.0 : val.first.valeur
+      end
+      ligne << ligne.inject(:+) # fait le total
+      ligne.unshift(n.name)
+      
+    end
+    
+  end
+  
   
   # FIXME Le plugin acts_as_list fait un appel à update position, ce qui crée du 
   # coup un appel à cette méthode, même pour un nouvel enregistrement.
@@ -117,13 +197,7 @@ class Nature < ActiveRecord::Base
     insert_at(find_right_position) 
   end
 
-  # Stat crée un tableau donnant les montants totaux de la nature pour chacun
-  # des mois de la période pour toutes les destinations confondues
-  def stat
-    period.list_months.map do |m|
-      compta_lines.mois_with_writings(m).sum('credit-debit').to_f.round(2)
-    end
-  end
+  
 
   # Stat_filtered crée un tableau donnant les montants totaux de la nature pour chacun des mois de la période
   # pour une destination donnée

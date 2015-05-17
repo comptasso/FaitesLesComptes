@@ -14,7 +14,7 @@ class NaturesController < ApplicationController
   # filter est l'id de destination; 0 si pas de filtre
   #
   def index
-    @sn = Stats::StatsNatures.new(@period, @filter)
+    @sn = Stats::StatsNatures.new(@period, [@filter])
     send_export_token
 
     respond_to do |format| 
@@ -29,7 +29,7 @@ class NaturesController < ApplicationController
   protected
   
   def set_stats_filter 
-    @filter = params[:destination].to_i || 0 
+    @filter = params[:destination].to_i || 0
     @filter_name = Destination.find(@filter).name if @filter != 0
   end
   
@@ -41,7 +41,7 @@ class NaturesController < ApplicationController
   
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::StatsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, destination:@filter})
+    Delayed::Job.enqueue Jobs::StatsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, destination:[@filter]})
   end
   
 

@@ -31,7 +31,8 @@ module Editions
     
     
     def initialize(period, source)
-      @select_method = 'stats' # stats est la méthode qui renvoie les stats
+      @select_method = 'lines' # lines est la méthode de stats_natures qui
+      # renvoie les lignes à imprimer
       super(period, source, {precision:0})
     end
     

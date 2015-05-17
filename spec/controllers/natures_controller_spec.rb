@@ -60,7 +60,7 @@ describe NaturesController do
     end
 
     it 'assigns sn (StatsNatures)' do
-      Stats::StatsNatures.should_receive(:new).with(@p, 0).and_return('sn')
+      Stats::StatsNatures.should_receive(:new).with(@p, [0]).and_return('sn')
       get :index,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
       assigns(:sn).should == 'sn'
     end
@@ -68,7 +68,7 @@ describe NaturesController do
     it 'with filter' do
       filt = 1
       Destination.should_receive(:find).with(filt).and_return(double(Object, :name=>'mock'))
-      Stats::StatsNatures.should_receive(:new).with(@p, 1).and_return('sn')
+      Stats::StatsNatures.should_receive(:new).with(@p, [1]).and_return('sn')
         
       get :index, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :destination=>filt.to_s},  session_attributes
       assigns(:filter).should == filt
@@ -105,7 +105,7 @@ describe NaturesController do
       it 'crée la tâche' do 
          @p.stub(:export_pdf).and_return nil
          @p.stub(:create_export_pdf).and_return(@exp = mock_model(ExportPdf))
-         Jobs::StatsPdfFiller.should_receive(:new).with(@o.database_name, @exp.id, {period_id:@p.id, destination:0})  
+         Jobs::StatsPdfFiller.should_receive(:new).with(@o.database_name, @exp.id, {period_id:@p.id, destination:[0]})  
          Delayed::Job.stub(:enqueue)
          get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
       end

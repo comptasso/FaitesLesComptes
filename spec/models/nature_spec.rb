@@ -18,8 +18,6 @@ describe Nature do
     @nature.stub(:book).and_return(b) 
   end
 
-  
-
   it "should be valid" do
     @nature.should be_valid 
   end
@@ -45,7 +43,7 @@ describe Nature do
     @nature.should_not be_valid
   end
 
-  context 'une nature existe déja' do
+  context 'avec une nature' do
 
     before(:each) do
       Nature.any_instance.stub(:period).and_return p
@@ -87,28 +85,12 @@ describe Nature do
       expect {@nature.destroy}.not_to change {Nature.count}
     end
 
-    describe 'les méthodes statistiques' do
-      before(:each) do
-        @nature.stub(:period).and_return p
-        @nature.stub_chain(:compta_lines, :mois_with_writings, :sum, :to_f, :round).and_return 10
-      end
-
-      it 'stat renvoie un tableau de données' do
-        @nature.stat_with_cumul.should == 12.times.map {|i| 10 } << 120
-      end
-
-      it 'stat peut être filtré avec un argument pour stat_with_cumul' do
-        @nature.stub_chain(:compta_lines, :mois_with_writings, :where, :sum, :to_f, :round).and_return 2
-        @nature.stat_with_cumul(1).should == 12.times.map {|i| 2 } << 24
-      end
-    end
+    
   
   end
   
-  describe 'position d une nouvelle nature', wip:true  do
-    
-      
-    
+  describe 'position d une nouvelle nature' do
+        
     before(:each) do
       Account.any_instance.stub(:sectorise_for_67).and_return true
       @accounts = create_accounts(%w(110 200 201)) 
@@ -119,22 +101,15 @@ describe Nature do
       @accounts.each do |a|
         n = Nature.create!(book_id:1,
           account_id:a.id, name:"nature#{a.number}", period_id:1)          
-        end 
+      end 
     end
       
     after(:each) do
       @accounts.each(&:destroy) 
       Nature.destroy_all 
     end
-    
-#    it 'liste les positions' do
-#      @accounts.each {|a| puts a.inspect}
-#      Nature.find_each {|n| puts n.inspect}
-#    end   
-    
-    
+        
     it 'une nouvelle nature se met à la position dans l ordre des comptes' do
-      
       acc = @accounts.second
       n = Nature.create(book_id:1, account_id:acc.id, name:'nouveau', period_id:1)
       n.reload
@@ -142,7 +117,6 @@ describe Nature do
     end
       
     it 'elle peut être en premier' do
-      
       begin
         acc = create_accounts(['100']).first
         n = Nature.create!(book_id:1, account_id:acc.id, name:'nouveau', period_id:1)
@@ -153,7 +127,6 @@ describe Nature do
     end
       
     it 'ou en dernier' do
-      
       begin
         acc = create_accounts(['300']).first
         n = Nature.create!(book_id:1, account_id:acc.id, name:'nouveau', period_id:1)
@@ -163,6 +136,68 @@ describe Nature do
       end
     end
       
+  end
+  
+  describe 'les statistiques' do
+    before(:each) {use_test_organism}
+    
+    it 'renvoie une table de lignes' do 
+      expect(Nature.statistics(@p)).to be_instance_of(Array)
+    end
+    
+    it 'avec autant de lignes que de natures' do
+      expect(Nature.statistics(@p).size).to eq(@p.natures.count) 
+    end
+    
+    it 'chaque ligne comprend le nom de la nature suivi de 13 valeurs (des 0 ici)' do
+      expect(Nature.statistics(@p).first).to eq(
+        ['Vente produits finis'] + 13.times.collect {0}      )
+    end
+    
+    context 'avec une écritures', wip:true do 
+      
+      before(:each) do
+        @w = create_outcome_writing # montant 99, nature @n, pas de destination
+      end
+      
+      after(:each) do
+        erase_writings
+      end
+      
+      context 'avec une destination' do
+        
+        before(:each) do
+          @dest1 = @o.destinations.first
+          @w.in_out_line.destination_id = @dest1.id
+          @w.save!
+          @m = @w.date.month
+        end
+        
+        it 'la ligne de la nature @n contient le montant de 99 pour le mois en cours' do
+          ligne = Nature.statistics(@p).select {|r| r[0] == @n.name}.first
+          expect(ligne).to eq([@n.name] + (@m-1).times.collect {0} + [-99.0] + (12-@m).times.collect {0} + [-99.0])
+        end
+        
+        it 'de même si filtre sur la destinations' do
+          ligne = Nature.statistics(@p, [@dest1.id]).select {|r| r[0] == @n.name}.first
+          expect(ligne).to eq([@n.name] + (@m-1).times.collect {0} + [-99.0] + (12-@m).times.collect {0} + [-99.0])
+        end
+        
+        it 'mais pas sur une autre destination' do
+          n = @dest1.id + 1
+          ligne = Nature.statistics(@p, [n]).select {|r| r[0] == @n.name}.first
+          expect(ligne).to eq([@n.name] + (13).times.collect {0})
+        end
+        
+      end
+      
+      # TODO Pour être vraiment certain de la qualité de la requête, il 
+      # faudrait créer une base test, non modifiée, avec suffisemment d'écritures
+      # sur deux ou trois exercices. Ce qui permettrait aussi de tester toutes 
+      # les éditions.
+      
+    end
+    
   end
 
 
