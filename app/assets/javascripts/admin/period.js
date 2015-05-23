@@ -1,6 +1,7 @@
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * A pour effet d'afficher deux trois messages d'attente pendant que la 
+ * création de l'exercice se fait en arrière plan
+ * 
  */
  jQuery(function () {
    $('#new_period') //id du formulaire de création d'un exercice

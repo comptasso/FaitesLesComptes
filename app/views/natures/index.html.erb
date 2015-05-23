@@ -15,54 +15,16 @@
         options_for_select([['Toutes activités', 0]] + @organism.destinations.collect {|d| [d.name, d.id]}, @filter),
       :class=>"input-medium" %> 
  
-    <%= submit_tag 'Rafraichir', :class=>'btn' %>
  
     <% end %>
-      
-  
+     
+     
+      <table cellpadding="0" cellspacing="0" border="0" id='analyse_natures'
+        class="table table-striped table-bordered table-condensed data_table" >
+ 
+    <%=  render 'index_table' %>
+
+       </table>
 
 
-<div class="row"> 
-
-  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed data_table" >
-    <thead>
-      <tr>
-        
-        <% @sn.title.each do |t| %>
-          <%=  content_tag :th, t  %> 
-        <% end %> 
-        
-
-      </tr>
-    </thead>
-
-    <tfoot>
-      <tr class="total" id="totaux">
-        <% @sn.totals.each do |t| %>
-        
-         <%=  content_tag :th , debit_credit(t) , class:'numeric'  %>
-        <% end %>
-      </tr>
-
-    </tfoot>
-
-    <tbody>
-
-      <% @sn.lines.each do |line| %>
-        <tr>
-          <% line.each do |val| %>
-            <%=  content_tag :td, debit_credit(val), :class=>'numeric'  %>
-          <% end %>
-        </tr>
-      <% end %>
-        
-  
-
-
-    </tbody>
-
-
-  </table>
-
-</div>
-
+ 

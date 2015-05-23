@@ -1,0 +1,41 @@
+   
+<thead>
+      <tr>
+        
+        <% @sn.title.each do |t| %>
+          <%=  content_tag :th, t  %> 
+        <% end %> 
+        
+
+      </tr>
+    </thead>
+
+    <tfoot>
+      <tr class="total" id="totaux">
+        <% @sn.totals.each do |t| %>
+        
+         <%=  content_tag :th , debit_credit(t) , class:'numeric'  %>
+        <% end %>
+      </tr>
+
+    </tfoot>
+
+    <tbody>
+
+      <% @sn.lines.each do |line| %>
+         <tr>
+          <% line.each do |val| %>
+            <%=  content_tag :td, debit_credit(val), :class=>'numeric'  %>
+          <% end %>
+        </tr>
+      <% end %>
+        
+  
+
+
+    </tbody>
+
+
+ 
+
+

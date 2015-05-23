@@ -1,0 +1,5 @@
+<%# cette vue n'est appelée que par un changement de valeur de la liste
+de sélection des destinations dans la vue index, qui doit donc 
+avoir été auparavant affichée par un appel html normal
+%>
+$('#analyse_natures').html("<%= j render  'index_table' %>");
