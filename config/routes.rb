@@ -194,6 +194,9 @@ Faitesvoscomptes::Application.routes.draw do
       resources :natures, only: :index do
         concerns :exportable
       end
+      resources :destinations, only: :index do
+        concerns :exportable
+      end
        
     end
 

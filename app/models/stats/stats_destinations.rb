@@ -18,29 +18,35 @@ module Stats
   # 
   # La méthode #totals renvoie la ligne de totaux de ce tableau
   # 
-  # Les méthode #to_csv et #to_pdf permettent l'export
+  # Les méthode #to_csv (héritée de la classe Statistics) permet l'export.
+  # #to_pdf n'est pas défini car le nombre fluctuant de natures ne permet 
+  # pas de faire la mise en page.
   # 
-  class StatsNatures < Statistics
+  class StatsDestinationstats < Statistics
 
     
     # retourne la ligne de titre 
     def title
-      t = ['Natures']
-      t += @period.list_months.to_abbr_with_year 
+      t = ['Activités']
+      t += @period.destinations.used_filtered.collect(&:name) 
+      t << 'Aucune'
       t << 'Total' 
     end
 
     # retourne les lignes du tableau de stats
     def lines
-      @stats ||= Nature.statistics(@period, @list_ids)
+      @stats ||= Natures.dest_statistics(@period, @list_ids)
     end
 
     
     
     def to_pdf
-      Editions::Stats.new(@period, self)
+      raise NotImplementedError, 'car le nombre de colonnes n\'est pas fixe.'
+     # Editions::Stats.new(@period, self)
     end
-   
+    
+    
+    
 
     
     
