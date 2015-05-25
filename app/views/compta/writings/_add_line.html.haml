@@ -1,0 +1,7 @@
+-# partiel utilisé pour rajouter une ligne de saisie au formulaire 
+  Compta::Writing. 
+  Utilisé par add_line.js.erb puisque l'ajout de lignes se fait par ajax.
+= simple_form_for(['compta', @book, @writing]) do |f|
+  .form-inputs
+    =f.fields_for :compta_lines, ComptaLine.new, child_index:@num_line do |build|
+      = render :partial=>'compta_line_fields', :locals=>{:builder=>build}

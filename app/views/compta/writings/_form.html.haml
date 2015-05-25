@@ -12,8 +12,6 @@
 
       =f.fields_for :compta_lines do |build|
         = render :partial=>'compta_line_fields', :locals=>{:builder=>build}
-      .add_line_link#add_line_link
-        =link_to_add_fields('ajout', f) # défini dans le helper (ComptaWritingsHelper)
-        
+      
     .form-actions
       =  f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-6"

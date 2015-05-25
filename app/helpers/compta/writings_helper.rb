@@ -6,17 +6,32 @@ module Compta::WritingsHelper
   def class_style(compta_line)
     compta_line.credit == 0 ? 'debit' : 'credit'
   end
-
-  # Cette méthode helper ajoute une ligne de saisie d'une ComptaLine. 
-  # l'index utilisé new_compta_lines sera remplacé par javascript en un autre identifiant lié au 
-  # temps.
-  # Voir le railscasts#197.
-  def link_to_add_fields(name, f)
-    fields = f.fields_for(:compta_lines, ComptaLine.new, :child_index => "new_compta_lines") do |builder|
-      render('compta_line_fields', :builder => builder)
-    end
-    link_to_function(name, "add_fields(this, 'compta_lines', \"#{escape_javascript(fields)}\")")
+  
+  # Méthode utilisée pour retirer les lignes non voulues lorsqu'on utilise le 
+  # bouton + dans la saisie d'écriture. Appelé par add_line.js.erb
+  # 
+  # En effet, le partiel est un formulaire simple_form_for dont on ne veut 
+  # garder que la partie correspondant à la ligne de saisie de compta_line
+  # 
+  # Il est apparu plus simple de construire le form avec les méthodes classiques
+  # et de retirer quelques lignes plutôt que de construire les 3 champs voulus.
+  # 
+  def new_compta_line_to_add(texte)
+    # lines = texte.split('\n')
+    # trouver la ligne qui contient form-inputs
+    debut = 0
+    texte.each_line do |l|
+      debut += 1 
+      break if /.*form-inputs.*/.match(l)
+    end 
+    # ne garder que les lignes entre celle-la
+    res = texte.split("\n")
+    res = res.slice(debut..-3)
+    res.join("\n").html_safe
+   
   end
+
+  
 
   # Rédefinit les actions disponibles pour l'affichage des writings dans compta
   #

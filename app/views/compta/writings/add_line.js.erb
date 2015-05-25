@@ -1,0 +1,12 @@
+<%#
+On rend un formulaire minimal défini dans _add_line.html.haml puis on retire 
+les lignes non voulues par la méthode new_compta_line_to_add (définie dans un 
+helper). 
+Avant d'ajouter l'ensemble après la dernière ligne du formulaire. 
+
+success de la méthode ajax refait ensuite le lien des boutons avec les méthodes
+d'ajout et de suppression de ligne.
+%>
+<% texte = render 'add_line' %>
+<% ajout = new_compta_line_to_add(texte) %>
+$('.writing_line_form').filter(':last').parent('.row').after("<%= j ajout %> ")

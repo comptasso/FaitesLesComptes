@@ -45,9 +45,11 @@ Faitesvoscomptes::Application.routes.draw do
         concerns :exportable
         member do
           post :lock
+          post :add_line
         end
         collection do
           post :all_lock
+          post :add_line
         end
       end
     end

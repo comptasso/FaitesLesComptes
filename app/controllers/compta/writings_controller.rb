@@ -50,6 +50,24 @@ class Compta::WritingsController < Compta::ApplicationController
       format.json { render json: @writing }
     end
   end
+  
+  # action javascript pour rajouter une ligne au formulaire de saisie
+  # cette action est définie deux foix dans routes, une en tant que member
+  # lorsqu'on est en édition, l'autre en tant que collection quand on est en 
+  # nouvelle écriture.
+  # 
+  # Cette méthode est appellée par l'appel ajax de $deal_icon_plus défini
+  # dans compta::writing.js 
+  # 
+  # La seule chose que fasse add_line est de définir une instance quelconque 
+  # de Writing (pour que le partiel simple_form_for connaisse les compta_lines
+  # et de fixer le numéro de ligne du formulaire de compta_line qui sera ajouté. 
+  #  
+  def add_line
+    params.permit(:num_line)
+    @num_line = params[:num_line].to_i + 1
+    @writing = Writing.new
+  end
 
   # GET /writings/1/edit
   def edit
