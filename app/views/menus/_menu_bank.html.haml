@@ -8,7 +8,7 @@
     new_organism_bank_account_check_deposit_path(@organism,menu_bank), {role:'menuitem'}) do |name|
     %span.disable= name
 -if menu_bank.unpointed_bank_extract?
-  %li{role:'presentation'}= link_to 'Pointage',
+  %li{role:'presentation'}= link_to 'Pointage', 
   pointage_bank_extract_bank_extract_lines_path(menu_bank.first_bank_extract_to_point),
   {role:'menuitem'} 
 %li{role:'presentation'}= link_to 'A pointer',

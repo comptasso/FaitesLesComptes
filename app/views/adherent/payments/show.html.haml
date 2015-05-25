@@ -3,9 +3,9 @@
   = icon_to 'money-plus.png', new_member_payment_path(@member), title:'Nouveau paiement'
   - if (@payment.non_impute != 0.0)
     = icon_to 'imputation.png', new_payment_reglement_path(@payment), title: 'Imputer le solde sur une autre adhésion'
-  = link_to_function(image_tag("adherent/icones/printer.png"),
-      "javascript:print()",
-       class:'icon_menu', title:'Imprimer un reçu')    
+  %a.icon_menu#payment_receipt_print(title="Imprimer un reçu")
+    =image_tag("adherent/icones/printer.png", class:'icon_print')    
+      
   - if editable?(@payment)
     = icon_to 'modifier.png', edit_member_payment_path(@payment.member, @payment) 
     = icon_to 'supprimer.png', [@member,@payment],

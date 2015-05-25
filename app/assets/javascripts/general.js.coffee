@@ -13,4 +13,3 @@ jQuery ->
   $('.with_spinner').click ->
     target = document.getElementById('main-zone')
     new Spinner(jc_spinner_opts).spin(target)
-    
