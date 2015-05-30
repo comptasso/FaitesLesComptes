@@ -5,7 +5,7 @@ $ ->
 #    accid = $(this)
      $.ajax 
 #      # récupérer l'id de la account (value)
-       url: window.location.pathname + '.js?destination=' + $('select option:selected').index()
+       url: window.location.pathname + '.js?destination=' + $('select option:selected').attr('value')
 #       type: 'get'
        success: (data, textStatus, jqXHR) ->
          $('#analyse_natures').effect('highlight', {}, 1500)
