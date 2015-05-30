@@ -137,7 +137,7 @@ describe "menus/_menu.html.erb" do
       end
 
       it "affiche le sous menu exercice" do
-        rendered.should match( organism_period_path(o, p2011))
+        rendered.should match( organism_period_path(o, p2011)) 
       end
 
 

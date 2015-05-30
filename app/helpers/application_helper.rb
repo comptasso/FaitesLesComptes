@@ -65,15 +65,20 @@ module ApplicationHelper
       html
     end
 
-    def debit_credit(montant)
+    def debit_credit(montant, precision = 2)
       return montant if montant.is_a? String
       if montant > -0.01 && montant < 0.01
         '-'
       else
-        number_with_precision(montant, :precision=> 2)
+        number_with_precision(montant, :precision=> precision)
       end
     rescue
       ''
+    end
+    
+    def insecable_debit_credit(montant, precision=2)
+      res = debit_credit(montant, precision)
+      res.gsub(' ', '&nbsp;').html_safe
     end
 
     # export_icons permet d'afficher les différentes icones d'export.
