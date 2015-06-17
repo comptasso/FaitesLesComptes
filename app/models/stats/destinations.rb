@@ -31,8 +31,10 @@ module Stats
     
     attr_reader :title_line, :dests,  :lines, :total_line
     
-    def initialize(period)
-      super
+    def initialize(period, options = {})
+      super(period)
+      @sector = options[:sector] || Sector.first
+      @books =  @sector.books.order(:type)
       @dests = find_destinations
       @title_line = title
       @lines = dest_statistics.map {|r| [r.name] + table(r.dest_vals)}
@@ -67,7 +69,9 @@ module Stats
       tots
     end
     
-   
+    
+    
+       
    
     
     protected
@@ -87,6 +91,7 @@ module Stats
       sql = <<EOF
 
 SELECT book_id, position,  natures.id, natures.name, 
+
 array_to_json(array_agg(ROW(destination_id, montant) ORDER BY destination_id))
 AS dest_vals
 FROM
@@ -95,13 +100,16 @@ FROM compta_lines
 LEFT JOIN writings ON writings.id = compta_lines.writing_id 
 WHERE writings.date >= ? AND writings.date <= ?  AND nature_id IS NOT NULL 
 GROUP BY destination_id, nature_id ORDER by destination_id) AS ROW 
+
 LEFT JOIN natures ON natures.id = nature_id
-WHERE row.nature_id = nature_id
+WHERE row.nature_id = nature_id AND book_id IN (?)
 GROUP BY book_id, position, natures.id, name ORDER BY book_id, position
     
     
 EOF
-      res = Nature.find_by_sql([sql, @period.start_date, @period.close_date])
+      res = Nature.find_by_sql([sql, 
+          @period.start_date, @period.close_date,
+          @books.collect(&:id)])
       res
       
       
@@ -110,17 +118,18 @@ EOF
     
     # à partir d'une table de valeur, on doit prendre la liste des destinations
     def table(hash_vals)
-      # pour chaque destination recherchée on cherche l'item qui a cet id en 
-      # f1 et on récupère le montant en f2
+      
       ids = dests.collect(&:id).reject(&:nil?)
-      sup = ids.max
-      ids << (sup+1)
+      sup = ids.max || 0 # cas ou on a aucune dest avec un id
+      ids << (sup+1) # pour intégrer la colonne Aucune
       # si la destination n'a pas été utilisée, on a des nil
       hash_vals.last['f1']= (sup+1) if  hash_vals.last['f1'] == nil
-      valeurs = Array.new(((ids.max) +1),0)
+      valeurs = Array.new(((ids.max) +1),0) 
+      # pour chaque destination recherchée on cherche l'item qui a cet id en 
+      # f1 et on récupère le montant en f2
       hash_vals.each {|f| valeurs[f['f1']] = f['f2'] } 
       # ici valeurs est un array avec trop de valeurs puisqu'on a toutes les 
-      # destinations existant
+      # destinations existant et pas seulement celles avec des mouvements
       val_sel = ids.collect {|id| valeurs[id]}
       # reste à totaliser
       val_sel << val_sel.sum.to_d # pour avoir un big_decimal
@@ -138,10 +147,14 @@ EOF
       SELECT DISTINCT destinations.id, name FROM 
 compta_lines LEFT JOIN destinations ON destinations.id = destination_id
 LEFT JOIN writings ON writings.id = writing_id
-WHERE nature_id IS NOT NULL AND writings.date >= ? AND writings.date < ?
+
+WHERE nature_id IS NOT NULL AND writings.date >= ? AND writings.date <= ?
+AND book_id IN (?)
 ORDER BY id     
 EOF
-      res = Destination.find_by_sql([sql, @period.start_date, @period.close_date ])
+      res = Destination.find_by_sql([sql,
+          @period.start_date, @period.close_date,
+          @books.collect(&:id)])
       # cas où la table est vide
       return res if res.empty?
       res.last.name ||= 'Aucune' # si la dernière colonne est nil, 

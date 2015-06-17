@@ -1,0 +1,20 @@
+
+%li.dropdown-header{role:'presentation'}
+  = link_to 'Par Natures', organism_period_natures_path(@organism,@period), 
+        title:'Analyser les recettes et dépenses par nature',
+        role:'menuitem'
+%li.dropdown-header{role:'presentation'}
+  -if @organism.sectors.count == 1 
+    = link_to 'Par Activités', organism_period_destinations_path(@organism,@period),
+      title:'Analyser les recettes et dépenses par activités', 
+      role:'menuitem'
+  -else 
+    %li.divider
+    %li.dropdown-header.no-link{role:'presentation'}
+      %a{href:'#'}Par Activités
+    - @organism.ce_sectors.each do |s|
+      %li{role:"presentation"}
+        = link_to s.name,
+          organism_period_destinations_path(@organism,@period, sector_id:s.id),
+          title:'Analyser les recettes et dépenses par activités', 
+          role:'menuitem'    

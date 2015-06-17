@@ -45,20 +45,12 @@
 <% end %>
 
 
-<li class="dropdown <%= 'active' if controller.controller_name =='natures'  %>">
+<li class="dropdown 
+<%= 'active' if controller.controller_name =='natures' || controller.controller_name == 'destinations'  %>">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">ANALYSES<b class="caret"></b></a>
-  <%= content_tag(:ul, :class => "dropdown-menu", :role=>"menu") do %>
-    <li class="dropdown-header" role='presentation'>
-      <%= link_to 'Par Natures', organism_period_natures_path(@organism,@period),
-        title:'Analyser les recettes et dépenses par nature',
-        role:'menuitem' %>
-    </li>
-    <li class="dropdown-header" role='presentation'>
-      <%= link_to 'Par Activités', organism_period_destinations_path(@organism,@period),
-        title:'Analyser les recettes et dépenses par activités', 
-        role:'menuitem' %>
-    </li>
-  <% end %>
+<%= content_tag(:ul, :class => "dropdown-menu", :role=>"menu") do %>
+  <%= render partial:'menus/menu_analyse' %>
+<% end %>
 </li>
 
 <li class="dropdown <%= 'active' if controller.controller_name =='periods'  %>">

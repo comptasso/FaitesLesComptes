@@ -11,12 +11,13 @@
 # natures et des comptes comptables différents.
 # 
 # A ce stade, il n'y a pas d'interface puisqu'on ne traite que les CE et que les 
-# deux secteurs sont créés lors de la création de l'organisme.
+# deux secteurs (en fait 3) sont créés lors de la création de l'organisme.
 # 
 # Un secteur a deux champs : name et organism_id
 # 
 # Le secteur peut être Global (cas général), Fonctionnement ou ASC (cas des CE)
-# qui ont ces deux secteurs. 
+# qui ont ces deux secteurs. Dans le cas des CE, le secteur Global est baptisé 
+# Commun 
 # 
 # 
 # Un secteur devrait normalement avoir deux livres (recettes et dépenses).
@@ -44,6 +45,9 @@ class Sector < ActiveRecord::Base
   def paves
     books.to_a << self
   end
+  
+  
+  
   
     
  

@@ -25,8 +25,8 @@ describe Extract::BankAccount do
 
   it 'to_csv prépare les lignes' do
     @extract.stub(:lines).and_return([double(ComptaLine, date:Date.today,
-          ref:'001',
-        narration:'un libellé', ref:'001', :credit=>0,
+        ref:'001',
+        narration:'un libellé', :credit=>0,
         :debit=>'125.56')])
 
     @extract.to_csv.should == "Date\tRéf\tLibellé\tDépenses\tRecettes\n#{I18n.l(Date.today, :format=>'%d/%m/%Y')}\t001\tun libellé\t0,00\t125.56\n"

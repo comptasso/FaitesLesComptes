@@ -201,12 +201,17 @@ module OrganismFixtureBis
   # Permet de créer une écriture de type dépenses avec par défaut un montant de 99 et un
   # mode de paiement de Virement
   #
-  def create_outcome_writing(montant=99, payment='Virement')
+  def create_outcome_writing(montant=99, payment='Virement', dest_id=nil)
     # TODO passer à un outcome_account
     @income_account = @p.accounts.classe_7.first
-    ecriture = @ob.in_out_writings.new({date:Date.today, narration:'ligne créée par la méthode create_outcome_writing',
-        :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, debit:montant, payment_mode:payment},
-          '1'=>{account_id:@baca.id, credit:montant, payment_mode:payment}
+    ecriture = @ob.in_out_writings.new(
+      {date:Date.today,
+       narration:'ligne créée par la méthode create_outcome_writing',
+       :compta_lines_attributes=>{
+         '0'=>{account_id:@income_account.id, 
+           destination_id:dest_id,
+           nature:@n, debit:montant, payment_mode:payment},
+         '1'=>{account_id:@baca.id, credit:montant, payment_mode:payment}
         }
       })
     puts ecriture.errors.messages unless ecriture.valid?

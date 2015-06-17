@@ -79,6 +79,11 @@ class Organism < ActiveRecord::Base
   has_many :masks
   has_many :subscriptions, :through=>:masks
   
+  # renvoie juste les secteurs ASC et Fonctionnement d'un CE
+  has_many :ce_sectors, 
+    -> {where "sectors.name = 'Fonctionnement' OR sectors.name = 'ASC' "},
+    class_name:'Sector' 
+  
   before_validation :fill_version
   after_create :fill_children
   # sector, :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature

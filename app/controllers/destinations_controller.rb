@@ -4,17 +4,10 @@ class DestinationsController < ApplicationController
   
 #  include Pdf::Controller
   
-#  before_filter :set_nats_filter  
-#  before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
+  before_filter :set_sector  
 
-  # index renvoie la liste des natures mais sous forme de statistiques avec les montants
-  # pour chaque mois de l'exercice
-  # 
-  # filter permet de filtrer les calculs des montants selon la destination.
-  # filter est l'id de destination; 0 si pas de filtre
-  #
   def index
-    @sd = Stats::Destinations.new(@period)# [@filter])
+    @sd = Stats::Destinations.new(@period, sector:@sector)
     flash.now[:alert] = 'Aucune donnée à afficher' if @sd.lines.empty?
 #    send_export_token
 
@@ -29,6 +22,10 @@ class DestinationsController < ApplicationController
   
   
   protected
+  
+  def set_sector
+    @sector = @organism.sectors.find(params[:sector_id]) if params[:sector_id]
+  end
   
 #  def set_stats_filter 
 #    @filter = params[:nature].to_i || 0
