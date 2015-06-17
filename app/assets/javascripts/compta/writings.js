@@ -33,12 +33,8 @@ function $deal_icon_plus(e) {
     type: 'post',
     success: function(data, textStatus, jqXHR) {
       bouton.hide(); // on masque l'icone + sur laquelle on vient de cliquer
-      $('h3').text('Dans la partie succès');
-      // pour la nouvelle ligne affichée, on rattache les évènements 
-      $('.compta_writings .writing_line_form:visible:last a.remove_form_line').
-              bind('click', $remove_writing_line_form);
-      $('.compta_writings .writing_line_form:visible:last a.add_form_line').
-              bind('click', $deal_icon_plus);
+ // comme on a rattaché les évènements par délagation au début de l'action
+ // on n'a pas besoin de les rattacher de nouveau. Voir la doc sur on().
     }
   });
 
@@ -142,17 +138,15 @@ function $zero_field() {
 // il est difficile de ne pas créér une récurrence.
 // On s'appuie donc sur un lien hors formulaire mais caché
 jQuery(function() {
-  // on s'assure que le lien ajout est masqué'
-  //$('.compta_writings #add_line_link').hide();
+  
   // mettre le focus sur le champ date
   $('.compta_writings input#writing_date_picker').change(function() {
     document.getElementById("writing_narration").focus(true);
   });
 
-  $('.compta_writings a.add_form_line img').hide();
-//    $('.compta_writings a.add_form_line img').unbind('click');
-  $('.compta_writings .writing_line_form:visible:last a.add_form_line img').show();
-
+  
+  
+// on masque tous les boutons ajouts de ligne sauf le dernier qu'on réaffiche
   if ($('.compta_writings').size() > 0) {
     $('.compta_writings a.add_form_line img').hide();
     $('.compta_writings .writing_line_form:visible:last a.add_form_line img').show();
@@ -164,8 +158,10 @@ jQuery(function() {
   $('.compta_writings').on('change', 'input.decimal', $zero_field); // calcule le nouvau solde et l'affiche
   $('.compta_writings').on('change', 'input.decimal', $check_submit); // calcule le nouvau solde et l'affiche
   // enfin, on attache les évènements aux boutons des lignes
-  $('a.remove_form_line').on('click', $remove_writing_line_form);
-  $('.compta_writings .writing_line_form:visible:last a.add_form_line').on('click', $deal_icon_plus);
+  $('.compta_writings').on('click', 'a.remove_form_line', $remove_writing_line_form);
+  $('.compta_writings').on('click', 'a.add_form_line', $deal_icon_plus);
+  //$('a.remove_form_line').on('click', $remove_writing_line_form);
+  //$('.compta_writings .writing_line_form:visible:last a.add_form_line').on('click', $deal_icon_plus);
 
 
 });
