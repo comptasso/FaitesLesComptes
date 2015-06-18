@@ -6,10 +6,10 @@
 %tfoot
   %tr.total#totaux
     - @sd.total_line.each do |t|
-      %th.numeric= insecable_debit_credit(t, 0)
+      %th.numeric= insecable_debit_credit(t)
 
 %tbody
   - @sd.lines.each do |line|
     %tr
       - line.each do |val|
-        %td.numeric= insecable_debit_credit(val, 0)
+        %td.numeric= insecable_debit_credit(val)

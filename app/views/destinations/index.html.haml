@@ -1,4 +1,7 @@
+= content_for :menu do 
+  = csv_export_icons(sector_id:@sector.id)
+
 .champ
   %h3 Statistiques par activités
-%table(cellpadding="0" cellspacing="0" border="0" id='analyse_natures' class="table table-striped table-bordered table-condensed data_table")
+%table(cellpadding="0" cellspacing="0" border="0" id='analyse_destinations' class="table table-striped table-bordered table-condensed dataTable")
   = render 'dests_table'

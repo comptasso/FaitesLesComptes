@@ -89,15 +89,21 @@ module ApplicationHelper
     #
     def export_icons(opt)
       html = icon_to('pdf.png', url_for(opt.merge(:format=>'pdf')), :id=>'icon_pdf')
-      html += icon_to('table-export.png', url_for(opt.merge(:format=>'csv')), :id=>'icon_csv', title:'csv', target:'_blank')
+      html += csv_export_icons(opt)
+      html.html_safe
+    end
+    
+    def csv_export_icons(opt)
+      html = icon_to('table-export.png', url_for(opt.merge(:format=>'csv')), :id=>'icon_csv', title:'csv', target:'_blank')
       html += icon_to('report-excel.png', url_for(opt.merge(:format=>'xls')), :id=>'icon_xls', title:'xls', target:'_blank')
       html.html_safe
     end
   
+    # l'action pour le pdf est ici 'produce_pdf'. Dans les controllers cette 
+    # action est confiée à un job d'arrière plan. 
     def delayed_export_icons(opt)
       html = icon_to('pdf.png', url_for(opt.merge(:action=>'produce_pdf')), {:id=>'delayed_icon_pdf', :remote=>true})
-      html += icon_to('table-export.png', url_for(opt.merge(:format=>'csv')), :id=>'icon_csv', title:'csv', target:'_blank')
-      html += icon_to('report-excel.png', url_for(opt.merge(:format=>'xls')), :id=>'icon_xls', title:'xls', target:'_blank')
+      html += csv_export_icons(opt)
       html.html_safe
     end
 

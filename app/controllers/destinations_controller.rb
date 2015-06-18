@@ -1,16 +1,22 @@
 # -*- encoding : utf-8 -*-
 
+# Controller destiné à afficher les statistiques par activités. 
+# Il n'y a qu'une seule action qui est index, affichant les lignes d'une 
+# instance de la classe Stats::Destinations
+# 
+# L'export est possible au format csv et xls mais pas en pdf car le nombre 
+# de colonnes est non déterminé (Autant de colonnes que d'activités). 
+#
 class DestinationsController < ApplicationController 
   
-#  include Pdf::Controller
   
   before_filter :set_sector  
 
   def index
     @sd = Stats::Destinations.new(@period, sector:@sector)
     flash.now[:alert] = 'Aucune donnée à afficher' if @sd.lines.empty?
-#    send_export_token
 
+    send_export_token
     respond_to do |format| 
       format.html
 #      format.js
@@ -27,21 +33,6 @@ class DestinationsController < ApplicationController
     @sector = @organism.sectors.find(params[:sector_id]) if params[:sector_id]
   end
   
-#  def set_stats_filter 
-#    @filter = params[:nature].to_i || 0
-#    @filter_name = Nature.find(@filter).name if @filter != 0
-#  end
-  
-  # créé les variables d'instance attendues par le module PdfController
-#  def set_exporter
-#    @exporter = @period
-#    @pdf_file_title = 'Statistiques par activités'
-#  end
-#  
-  # création du job et insertion dans la queue
-#  def enqueue(pdf_export)
-#    Delayed::Job.enqueue Jobs::StatsDestsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, nature:[@filter]})
-#  end
-  
+
 
 end
