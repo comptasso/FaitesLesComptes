@@ -30,7 +30,11 @@ class DestinationsController < ApplicationController
   protected
   
   def set_sector
-    @sector = @organism.sectors.find(params[:sector_id]) if params[:sector_id]
+    if params[:sector_id]
+      @sector = @organism.sectors.find(params[:sector_id])
+    else
+      @sector = @organism.sectors.first
+    end
   end
   
 

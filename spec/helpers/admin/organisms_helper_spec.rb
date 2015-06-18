@@ -10,12 +10,12 @@ describe Admin::OrganismsHelper do
     
     it 'renvoie jamais si le champ job_finished_at est nil' do
       @nomen.job_finished_at = nil 
-      last_data_build(o).should == 'pas encore' 
+      last_data_build(o).should == 'pas encore'
     end
     
     it 'renvoie la date et l heure autrement' do
       @nomen.job_finished_at = Time.mktime(1955,6,6, 11, 10)
-      last_data_build(o).should == 'il y a presque 60 ans'
+      last_data_build(o).should == 'il y a environ 60 ans'
     end
     
     

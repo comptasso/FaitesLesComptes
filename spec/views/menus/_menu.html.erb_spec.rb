@@ -6,7 +6,7 @@ RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe "menus/_menu.html.erb" do    
+describe "menus/_menu.html.erb" do   
   include JcCapybara 
 
   let(:o) {mock_model(Organism, main_bank_id:1, status:'Association') }
@@ -50,8 +50,10 @@ describe "menus/_menu.html.erb" do
 
   end
 
-  context 'avec organisme' do
+  context 'avec organisme ayant un seul secteur' do
 
+    # le menu Analyses avec deux secteurs est testé par un fichier spécifique
+    # TODO ce fichier ne teste qu'un petit bout du menu; à compléter
     before(:each) do
     
       assign(:organism, o)
@@ -65,6 +67,7 @@ describe "menus/_menu.html.erb" do
       o.stub('can_write_line?').and_return true
       o.stub(:masks).and_return [mock_model(Mask, title:'un masque de saisie', comment:'no comment')]
       o.stub(:subscriptions).and_return []
+      o.stub(:sectors).and_return [double(Sector)]
 
       o.stub(:find_period).and_return(p2012)
       p2012.stub(:previous_period?).and_return(true)
