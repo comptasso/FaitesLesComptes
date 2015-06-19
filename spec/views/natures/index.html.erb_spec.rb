@@ -9,7 +9,7 @@ describe "natures/index" do
   let(:o) {mock_model(Organism, title: 'spec cd')}
   let(:p) {mock_model(Period, :start_date=>Date.today.beginning_of_year, :close_date=>Date.today.end_of_year)}
   let(:ds) {[mock_model(Destination, name:'dest1'), mock_model(Destination, name:'Dest2')]}
-  let(:sn) {double(Stats::StatsNatures,
+  let(:sn) {double(Stats::Natures,
       :title=>(%w{Nature jan fev mar avr mai jui jui aou sep oct nov dec total}),
       :totals=>(['Totaux'] + 1.upto(12).collect {|i| '20,00'} + ['4800,00']),
       :lines=>(1.upto(4).collect {|i| ["Ligne #{i}"] + 1.upto(12).collect {|j| j}  + ['240,00']})

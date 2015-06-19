@@ -28,7 +28,7 @@ describe Editions::Stats do
   
   before(:each) do
     
-    @stn = Stats::StatsNatures.new(p)
+    @stn = Stats::Natures.new(p)
     p.stub(:start_date).and_return Date.today.beginning_of_year
     p.stub(:close_date).and_return Date.today.end_of_year
     p.stub(:list_months).and_return ListMonths.new p.start_date, p.close_date

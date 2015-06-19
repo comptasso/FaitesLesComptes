@@ -6,7 +6,7 @@ RSpec.configure do |c|
  # c.filter = {wip:true} 
 end
 
-describe Stats::StatsNatures do
+describe Stats::Natures do
   include OrganismFixtureBis
   
   let(:p) {mock_model(Period, start_date:Date.today.beginning_of_year, end_date:Date.today.end_of_year)}
@@ -14,11 +14,11 @@ describe Stats::StatsNatures do
   
   before(:each) do
     p.stub(:list_months).and_return(ListMonths.new(Date.today.beginning_of_year, Date.today.end_of_year))
-    @stats_natures = Stats::StatsNatures.new(p)
+    @stats_natures = Stats::Natures.new(p)
   end
 
   it "création de stats_natures demande un exercice" do
-    @stats_natures.should be_an_instance_of(Stats::StatsNatures)
+    @stats_natures.should be_an_instance_of(Stats::Natures)
   end
 
 
@@ -87,10 +87,10 @@ describe Stats::StatsNatures do
     
     let(:d) {mock_model(Destination)}
        
-    subject { Stats::StatsNatures.new(p, [d.id])}
+    subject { Stats::Natures.new(p, [d.id])}
 
     it 'créationd de stats_natures accepte un filtre'  do
-      subject.should be_an_instance_of(Stats::StatsNatures)
+      subject.should be_an_instance_of(Stats::Natures)
     end
     
     it 'et le transmet à statistics pour obtenir les lines' do
@@ -106,19 +106,19 @@ describe Stats::StatsNatures do
     before(:each) {use_test_organism}
     
     it 'peut créer l instance' do
-      lambda {Stats::StatsNatures.new(@p)}.should_not raise_error
+      lambda {Stats::Natures.new(@p)}.should_not raise_error
     end
     
     it 'peut créer un csv' do
-      lambda {Stats::StatsNatures.new(@p).to_csv}.should_not raise_error
+      lambda {Stats::Natures.new(@p).to_csv}.should_not raise_error
     end
     
     it 'peut créer un pdf' do
-      lambda {Stats::StatsNatures.new(@p).to_pdf}.should_not raise_error
+      lambda {Stats::Natures.new(@p).to_pdf}.should_not raise_error
     end
     
     it 'et peut rendre le pdf' do
-      lambda {Stats::StatsNatures.new(@p).to_pdf.render}.should_not raise_error
+      lambda {Stats::Natures.new(@p).to_pdf.render}.should_not raise_error
     end
     
     

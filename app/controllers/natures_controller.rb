@@ -14,7 +14,7 @@ class NaturesController < ApplicationController
   # filter est l'id de destination; 0 si pas de filtre
   #
   def index
-    @sn = Stats::StatsNatures.new(@period, [@filter])
+    @sn = Stats::Natures.new(@period, [@filter]) 
     send_export_token
 
     respond_to do |format| 

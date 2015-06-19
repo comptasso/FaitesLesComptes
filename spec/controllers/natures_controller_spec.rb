@@ -59,8 +59,8 @@ describe NaturesController do
       assigns(:filter).should == 0 
     end
 
-    it 'assigns sn (StatsNatures)' do
-      Stats::StatsNatures.should_receive(:new).with(@p, [0]).and_return('sn')
+    it 'assigns sn (Natures)' do
+      Stats::Natures.should_receive(:new).with(@p, [0]).and_return('sn')
       get :index,{ :organism_id=>@o.id.to_s, :period_id=>@p.id.to_s}, session_attributes
       assigns(:sn).should == 'sn'
     end
@@ -68,7 +68,7 @@ describe NaturesController do
     it 'with filter' do
       filt = 1
       Destination.should_receive(:find).with(filt).and_return(double(Object, :name=>'mock'))
-      Stats::StatsNatures.should_receive(:new).with(@p, [1]).and_return('sn')
+      Stats::Natures.should_receive(:new).with(@p, [1]).and_return('sn')
         
       get :index, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :destination=>filt.to_s},  session_attributes
       assigns(:filter).should == filt

@@ -6,7 +6,7 @@ RSpec.configure do |c|
    # c.filter = {wip:true} 
 end
 
-describe Stats::StatsNatures do
+describe Stats::Destinations do
   include OrganismFixtureBis
   
   before(:each) do
@@ -80,6 +80,14 @@ describe Stats::StatsNatures do
       
       it 'les dests ' do
         expect(@sd.dests.collect(&:name)).to eq [@d.name]
+      end
+      
+      it 'la ligne de titre doit être' do
+        expect(@sd.title).to eq ['Natures', @d.name, 'Total']
+      end
+      
+      it 'la ligne de valeur doit être' do
+        expect(@sd.lines).to eq [['Energie', -99, -99]] 
       end
       
       context 'avec une deuxième écriture sans destination', wip:true do

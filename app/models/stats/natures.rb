@@ -20,7 +20,7 @@ module Stats
   # 
   # Les méthode #to_csv et #to_pdf permettent l'export
   # 
-  class StatsNatures < Statistics
+  class Natures < Statistics 
 
     
     # retourne la ligne de titre 

@@ -18,7 +18,7 @@ module Jobs
   # Chaque appel de méthode se fait donc par un appel à Apartment::Database.process(dbname) 
   # et un bloc.
   # 
-  class StatsPdfFiller < BasePdfFiller
+  class StatsPdfFiller < BasePdfFiller 
         
     protected
     
@@ -26,7 +26,7 @@ module Jobs
     def set_document(options)
         period  = Period.find(options[:period_id])
         filter = options[:destination]
-        @document = Stats::StatsNatures.new(period, filter)
+        @document = Stats::Natures.new(period, filter)
     end
     
     

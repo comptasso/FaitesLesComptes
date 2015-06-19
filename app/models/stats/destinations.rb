@@ -84,9 +84,9 @@ module Stats
     # Les natures sont classées dans l'ordre des livres avec ensuite l'ordre 
     # des positions.
     # 
-    # Le array de json est sous forme d'un hash avec 'f1' comme clé pour l'id 
-    # de la destination et 'f2' comme clé pour la valeur du solde  
-    # TODO voir ce que ça donne pour les comités d'entreprise avec 4 livres
+    # Le array de valeurs (dest_vals) est au format json avec 'f1' comme clé 
+    # pour l'id de la destination et 'f2' comme clé pour la valeur du solde  
+    
     def dest_statistics
       sql = <<EOF
 
@@ -117,14 +117,23 @@ EOF
     
     
     # à partir d'une table de valeur, on doit prendre la liste des destinations
+    # Il faut gérer le cas où toutes les écritures sont avec une destinations
+    # et donc il n'y a pas besoin d'une colonne additionnelle
+    # ainsi que celui où à l'inverse, aucune écriture n'a de destinations, et 
+    # où il n'y a donc qu'une seule colonne Aucune
     def table(hash_vals)
       
       ids = dests.collect(&:id).reject(&:nil?)
       sup = ids.max || 0 # cas ou on a aucune dest avec un id
-      ids << (sup+1) # pour intégrer la colonne Aucune
-      # si la destination n'a pas été utilisée, on a des nil
-      hash_vals.last['f1']= (sup+1) if  hash_vals.last['f1'] == nil
-      valeurs = Array.new(((ids.max) +1),0) 
+      if @additional_column
+        ids << (sup+1) # pour intégrer la colonne Aucune
+        # si la destination n'a pas été utilisée, on a des nil
+        hash_vals.last['f1']= (sup+1) if  hash_vals.last['f1'] == nil
+      end
+      # définition de la taille du tableau
+      taille = @additional_column ? (ids.max) + 1 : ids.max
+      # que l'on créé      
+      valeurs = Array.new(taille,0) 
       # pour chaque destination recherchée on cherche l'item qui a cet id en 
       # f1 et on récupère le montant en f2
       hash_vals.each {|f| valeurs[f['f1']] = f['f2'] } 
@@ -157,9 +166,21 @@ EOF
           @books.collect(&:id)])
       # cas où la table est vide
       return res if res.empty?
-      res.last.name ||= 'Aucune' # si la dernière colonne est nil, 
+      
+      # Ajout ou non de la colonne Aucune
+      # Si la dernière colonne est nil, 
       # on l'intitule alors Aucune; ceci gère le cas le plus fréquent
       # où il y a eu des écritures sans qu'on leur attache une activité
+      # 
+      # On mémorise ce choix dans la variable d'instance Additionnal Column
+      # 
+      if res.last.name
+        @additional_column = false
+      else
+        @additional_column = true
+        res.last.name ||= 'Aucune' 
+      end
+      
       res
     end
     
