@@ -34,7 +34,7 @@
   .row
     .col-lg-6
       
-      %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0" id="bels_table")
+      %table.table.table-striped.table-bordered.table-condensed.dataTable(cellpadding="0" cellspacing="0" border="0" id="bels_table")
         %thead
           %tr
             %th.centered(colspan="6")
@@ -67,12 +67,12 @@
 
     .col-lg-6#zone_ltps
       
-      %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0" id="ltps_table")
+      %table.table.table-striped.table-bordered.table-condensed.dataTable(cellpadding="0" cellspacing="0" border="0" id="ltps_table")
         %thead
           %tr
-            %th.centered(colspan="4")
+            %th.centered(colspan="5")
               Liste des écritures non pointées
-              %a(data-toggle="modal" href="#modal_form_line" class='icon_menu')
+              %a.icon_menu(data-toggle="modal" href="#modal_form_line")
                 =image_tag('icones/nouveau.png')
           %tr
             %th.pc15.date-euro Date
@@ -81,5 +81,5 @@
             %th.pc15 Recettes
             %th.pc15 Actions
             
-          %tbody#ltps
-            = render :partial=>'ltpsbody'
+        %tbody#ltps
+          = render :partial=>'ltpsbody'

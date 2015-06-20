@@ -6,31 +6,31 @@
 .champ
   %h3= "#{@bank_account.nickname} : écritures non pointées - Solde au #{l @period.guess_date} : #{debit_credit(-@bank_account.sold_at(@period.guess_date))} €"
     
-  .inner-champ
+  
 
-    %table.table.table-striped.table-bordered.table-condensed.data_table(cellpadding="0" cellspacing="0" border="0" id="ltps_table")
-      %thead
-        %tr
-          %th.pc10.date-euro Date
-          %th.pc10 Pièce
-          %th.pc10 Réf
-          %th.pc40 Libellé
-          %th.pc10 Dépenses
-          %th.pc10 Recettes
-          %th.pc10 Actions
+  %table.table.table-striped.table-bordered.table-condensed.dataTable(cellpadding="0" cellspacing="0" border="0" id="ltps_table")
+    %thead
+      %tr
+        %th.pc10.date-euro Date
+        %th.pc10 Pièce
+        %th.pc10 Réf
+        %th.pc40 Libellé
+        %th.pc10 Dépenses
+        %th.pc10 Recettes
+        %th.pc10 Actions
 
-        %tbody#ltps
-          - @lines_to_point.each_line do |ltp|
-            %tr{'class'=>'ltp', 'id'=>"#{ltp.id}" }
-              %td= l ltp.date
-              %td= ltp.id
-              %td= ltp.ref
-              %td= ltp.narration
-              %td.numeric.debit= debit_credit ltp.credit
-              %td.numeric.credit= debit_credit ltp.debit
-              %td= line_actions(ltp)
-        %tfoot#table_foot
-          %tr.total#totaux
-            %th.numeric(colspan="4" rowspan="1") Totaux
-            %th.numeric= debit_credit @lines_to_point.total_credit
-            %th.numeric= debit_credit @lines_to_point.total_debit
+      %tbody#ltps
+        - @lines_to_point.each_line do |ltp|
+          %tr{'class'=>'ltp', 'id'=>"#{ltp.id}" }
+            %td= l ltp.date
+            %td= ltp.id
+            %td= ltp.ref
+            %td= ltp.narration
+            %td.numeric.debit= debit_credit ltp.credit
+            %td.numeric.credit= debit_credit ltp.debit
+            %td= line_actions(ltp)
+      %tfoot#table_foot
+        %tr.total#totaux
+          %th.numeric(colspan="4" rowspan="1") Totaux
+          %th.numeric= debit_credit @lines_to_point.total_credit
+          %th.numeric= debit_credit @lines_to_point.total_debit

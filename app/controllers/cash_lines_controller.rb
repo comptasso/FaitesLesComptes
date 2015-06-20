@@ -1,21 +1,20 @@
 # -*- encoding : utf-8 -*-
 
-
 # CashLines est un controller spécialisé pour afficher les lignes qui relèvent
-# d'une écriture attachée à une caisse.
+# d'écritures ayant mouvementé une caisse.
 #
-# Elle hérite de LinesController car en fait c'est la même logique
+# Elle hérite de InOutWritingsController car en fait c'est la même logique
 # Book devient simplement ici un livre de caisse, lequel est virtuel.
 #
 # Les before_filter find_book et fill_mois sont une surcharge de ceux définis dans
-# lines_controller
+# in_out_writings_controller
+# 
+# TODO : on devrait vérifier que les autres actions de ce controller ne sont 
+# pas accessibles. 
 #
 class CashLinesController < InOutWritingsController
-  include Pdf::Controller
-  
-  before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
-# la méthode index est héritée de InOutWritingsController
+  # surcharge de Index
   def index
     if params[:mois] == 'tous'
       @monthly_extract = Extract::Cash.new(@cash, @period)

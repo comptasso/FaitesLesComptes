@@ -2,6 +2,8 @@
 # pourrait si besoin être utilisé pour une caisse.
 # en distinguant si on a un params[cash_id] ou un params[:bank_account_id]
 
+# TODO : ce controller ne semble plus être utilisé
+
 class VirtualBookLinesController < ApplicationController
   include Pdf::Controller
   

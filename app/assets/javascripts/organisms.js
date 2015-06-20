@@ -11,25 +11,6 @@ $(document).ready(function () {
     });
 });
 
-// TODO à effacer après vérification qu'on ne se sert pas de dataTable pour
-// l'index des organismes
-//
-//// mise en forme de la table index des organismes
-//jQuery(function () {
-//    /* Table initialisation */
-//    $('.public_organisms .data_table').dataTable({
-//        
-//        "bAutoWidth": false,
-//        
-//        "aoColumns": [
-//            { "sWidth": "40%" },
-//            { "sWidth": "50%" },
-//            { "sWidth": "10%" }
-//        ]
-//        
-//    });
-//});
-//    fin de jQuery application#data_table
 
 
 // petite fonction helper pour transformer des strings en float.
