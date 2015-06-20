@@ -95,7 +95,7 @@ group :development, :test do
   gem 'turn', :require => false
   gem 'rspec-rails', '~>  2.14.0'
   gem 'test-unit', '~> 3.0.9'
-  gem 'spork-rails'
+  # gem 'spork-rails'
   gem 'launchy'
   gem 'daemons' # mis en place pour pouvoir lancer les Delayed::Job dans la console
   gem 'selenium-webdriver', '= 2.45.0'

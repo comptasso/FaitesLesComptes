@@ -5,11 +5,6 @@ require 'simplecov'
 #  add_filter "/config/" # on ne teste pas la couverture des fichiers config.
 #end
 
-
-require 'spork'
-
-#
-Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However, 
   # if you change any configuration or code from libraries loaded here, you'll
   # need to restart spork for it take effect.
@@ -92,7 +87,7 @@ Spork.prefork do
     #
     ####
 
-  end
+  
 
   #  RSpec.configure do |config|
   #    # == Mock Framework
@@ -109,9 +104,7 @@ Spork.prefork do
 
 end
 
-Spork.each_run do
 
-end
 # If you're not using ActiveRecord, or you'd prefer not to run each of your
 # examples within a transaction, remove the following line or assign false
 # instead of true.
