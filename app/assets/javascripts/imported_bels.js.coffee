@@ -89,7 +89,7 @@ $ ->
     if $(@).find('td.cat').text().trim() == 'T'
       $(@).find('td.destination span').hide()
       $(@).find('td.nature span').hide()
-  $('.public_imported_bels .best_in_place').bind "ajax:success", ->
+  $('.public_imported_bels .best_in_place').on "ajax:success", ->
   # si l'attribut catégorie (Transfert, Remise, Débit, Crédit) a changé, on 
   # appelle la fonction qui va modifier les values du select de payment_mode
     refill_payment_mode_values($(@)) if $(@).attr('data-bip-attribute') == 'cat'

@@ -155,7 +155,7 @@ function options_for_graph(all_datas) {
 
 // fonction qui associe les éléments du graphe à l'affichage du book_extract correspondant'
 function bind_bars(all_datas) {
-    $('#chart_' + all_datas.dcomplete_id).bind('jqplotDataClick',
+    $('#chart_' + all_datas.dcomplete_id).on('jqplotDataClick',
         function (ev, seriesIndex, pointIndex, data) {
             var mois = '', la = [], an = '', lien = '';
             lien = all_datas.dlinks[seriesIndex][pointIndex]; // lien = mm-yyyy à ce stade
@@ -172,7 +172,7 @@ function bind_bars(all_datas) {
  *  mais plutôt des extraits bancaires.  
  *  */
 function bind_cashes(all_datas) {
-    $('#chart_' + all_datas.dcomplete_id).bind('jqplotDataClick',
+    $('#chart_' + all_datas.dcomplete_id).on('jqplotDataClick',
         function (ev, seriesIndex, pointIndex, data) {
             var mois = '', la = [], an = '', lien = '';
             lien = all_datas.dlinks[seriesIndex][pointIndex]; // lien = mm-yyyy à ce stade
