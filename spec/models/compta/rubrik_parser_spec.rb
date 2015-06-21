@@ -63,8 +63,8 @@ describe Compta::RubrikParser do
     it 'le folio de secteur 1 a un compte' do
       p.should_receive(:two_period_account_numbers).with(@sec1).and_return(['6001'])
       @rp = Compta::RubrikParser.new(p, :actif, '60', @sec1)
-      puts @rp.instance_variable_get('@numeros')
-      puts @rp.instance_variable_get('@numbers')
+#      puts @rp.instance_variable_get('@numeros')
+#      puts @rp.instance_variable_get('@numbers')
       @rp.list_numbers.should == ['6001']
     end
     

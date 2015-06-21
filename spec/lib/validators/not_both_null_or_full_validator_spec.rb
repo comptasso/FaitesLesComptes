@@ -4,7 +4,8 @@ require 'spec_helper'
 
 describe 'NotBothNullOrFullValidator' do
   
-   subject {NotBothNullOrFullValidator.new(double(Object))} 
+  
+   subject {NotBothNullOrFullValidator.new} 
    
   it 'ajoute des erreurs si credit et debit sont tous deux null' do
     ibel = ImportedBel.new(:debit=>0, :credit=>0)

@@ -89,7 +89,7 @@ class CheckDeposit < ActiveRecord::Base
   end
   
   def credit_line
-    credit_compta_line if credit_compta_line
+    credit_compta_line
   end
 
   # persisted? est là pour éviter qu'on recherche une credit_compta_line
@@ -99,7 +99,7 @@ class CheckDeposit < ActiveRecord::Base
   end
 
   def debit_line
-    debit_compta_line if debit_compta_line
+    debit_compta_line
   end
 
   # la remise chèque est pointée si la ligne débit est connectée à
@@ -180,7 +180,7 @@ class CheckDeposit < ActiveRecord::Base
 
   
   def bank_account_account
-    bank_account.current_account(bank_account.organism.find_period(deposit_date))
+    bank_account(true).current_account(bank_account.organism.find_period(deposit_date))
   end
 
   # met à jour l'écriture après une modification de la remise

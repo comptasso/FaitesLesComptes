@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 ruby "2.2.1"
 
 
-gem 'rails', '4.0.12'
+gem 'rails', "~> 4.1"
 # gem 'protected_attributes' # pour la transition vers Rails 4
 gem 'rails-observers' # idem
 gem 'actionpack-page_caching'
@@ -33,7 +33,7 @@ gem 'delayed_job_active_record', '= 4.0.2'
 # gem 'unicorn'
 gem 'puma'
 
- gem 'adherent', '~>0.2',  '>=0.2.9' 
+ gem 'adherent', '~>0.3' 
 # gem 'adherent', :path=>'../../Adherent'  
 
 

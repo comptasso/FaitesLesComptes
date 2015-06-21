@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|  
- #  c.filter = {wip:true}  
+  #  c.filter = {wip:true}  
 end
 
 describe Transfer  do 
@@ -13,7 +13,7 @@ describe Transfer  do
     t = Transfer.new date: Date.today, narration:'test de transfert', book_id: @od.id
     t.add_lines(112)
     t.compta_lines.first.account_id = @cba.id
-    t.compta_lines.last.account_id = @cbb.id  
+    t.compta_lines.last.account_id = @cbb.id 
     t
   end
   
@@ -274,72 +274,68 @@ describe Transfer  do
           end
           
           it {@t.should_not be_destroyable} 
-        
-          it 'on ne peut détruire le transfert'  do
-            expect {@t.destroy}.not_to change {Transfer.count}
-          end
           
-          it 'ni les lignes associées'  do
-            expect {@t.destroy}.not_to change {ComptaLine.count}
+          it 'renvoie une erreur' do
+            expect {@t.destroy}.to raise_error(ActiveRecord::RecordNotDestroyed)
           end
-           end
-         context 'quand line_from est verrouillé' do
-           before(:each) do
+                   
+        end
+        
+        context 'quand line_from est verrouillé' do
+          before(:each) do
             @t.line_from.update_attribute(:locked, true)
           end
           
           specify {@t.should_not be_destroyable}
 
-          it 'destruire le transfert est également impossible' do
-            expect {@t.destroy}.not_to change {Transfer.count}
-          end
           
-         end
+          
+        end
          
-          describe 'editable' do
+        describe 'editable' do
             
-            it 'sans verrrouillage, est éditable et destructible' do
-              @t.should be_to_editable
-              @t.should be_from_editable
-              @t.should_not be_partial_locked
-              @t.should be_destroyable
-            end
+          it 'sans verrrouillage, est éditable et destructible' do
+            @t.should be_to_editable
+            @t.should be_from_editable
+            @t.should_not be_partial_locked
+            @t.should be_destroyable
+          end
             
-            it 'mais pas si line_to est locked' do
-              @t.line_to.locked = true
-              @t.should_not be_to_editable
-              @t.should be_from_editable
-              @t.should be_partial_locked
-              @t.should_not be_destroyable
-            end
+          it 'mais pas si line_to est locked' do
+            @t.line_to.locked = true
+            @t.should_not be_to_editable
+            @t.should be_from_editable
+            @t.should be_partial_locked
+            @t.should_not be_destroyable
+          end
             
-            it 'ni si pointé' do
-              @t.line_to.stub(:editable?).and_return false
-              @t.should_not be_to_editable
-              @t.should be_from_editable
-              @t.should be_partial_locked
-              @t.should_not be_destroyable
-            end
+          it 'ni si pointé' do
+            @t.line_to.stub(:editable?).and_return false
+            @t.should_not be_to_editable
+            @t.should be_from_editable
+            @t.should be_partial_locked
+            @t.should_not be_destroyable
+          end
             
           it 'idem si line_from locked' do
             @t.line_from.locked = true
-              @t.should_not be_from_editable
-              @t.should be_to_editable
-              @t.should be_partial_locked
-              @t.should_not be_destroyable
+            @t.should_not be_from_editable
+            @t.should be_to_editable
+            @t.should be_partial_locked
+            @t.should_not be_destroyable
             
           end
           
           it 'ni si pointé' do
             @t.line_from.stub(:editable?).and_return false
-              @t.should_not be_from_editable
-              @t.should be_to_editable
-              @t.should be_partial_locked
-              @t.should_not be_destroyable
+            @t.should_not be_from_editable
+            @t.should be_to_editable
+            @t.should be_partial_locked
+            @t.should_not be_destroyable
           end
          
           
-          end
+        end
         
        
 

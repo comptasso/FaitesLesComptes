@@ -102,6 +102,7 @@ describe CashControlsController do
     end
 
     it 'assign cash' do
+      CashControl.any_instance.stub(:save).and_return(true)
       post :create,{ :cash_id=>ca.to_param, :cash_control=> {:date=>Date.today, :amount=>5 }}, valid_session
       assigns[:cash].should == ca
     end
@@ -211,7 +212,7 @@ describe CashControlsController do
 
     end
 
-    it "redirects to the cash_controls list" do
+    it "redirects to the cash_controls list" do 
        delete :destroy, { cash_id: ca.to_param, :id => ccs.first.to_param}, valid_session
        response.should redirect_to cash_cash_controls_url(ca, mois:@m, an:@y)
     end

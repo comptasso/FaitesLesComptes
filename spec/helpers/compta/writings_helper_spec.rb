@@ -60,7 +60,6 @@ describe Compta::WritingsHelper do
     end
     
     it 'il n\' y a plus de form' do
-      puts @res
       expect(@res.scan('<form').size).to eq(0) 
     end
     

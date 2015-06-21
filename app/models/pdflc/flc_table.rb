@@ -80,7 +80,7 @@ module Pdflc
     
     # renvoie le nombre de page; au minimum 1
     def nb_pages
-      [(@arel.count.to_f/@nb_lines_per_page).ceil , 1].max
+      [(@arel.size.to_f/@nb_lines_per_page).ceil , 1].max
     end
     
     protected

@@ -18,7 +18,7 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe NaturesController do  
+describe NaturesController do   
   include SpecControllerHelper
     
   describe "GET index" do
@@ -83,7 +83,7 @@ describe NaturesController do
         @p.should_receive(:export_pdf).and_return
         @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf))
         Jobs::StatsPdfFiller.stub(:new).and_return(double(Object, perform:'test'))
-        get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+        xhr :get, :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
       end
       
       it 'le détruit s il existe' do
@@ -91,14 +91,14 @@ describe NaturesController do
         @obj.should_receive(:destroy)
         @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf))
         Jobs::StatsPdfFiller.stub(:new).and_return(double(Object, perform:'test'))
-        get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+        xhr :get, :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
       end
        
       it 'crée un export_pdf avec un status new' do
         @p.stub(:export_pdf).and_return nil
         @p.should_receive(:create_export_pdf).with(:status=>'new').and_return(mock_model(ExportPdf))
         Jobs::StatsPdfFiller.stub(:new).and_return(double(Object, perform:'test'))
-        get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+        xhr :get, :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
           
       end 
       
@@ -107,7 +107,7 @@ describe NaturesController do
          @p.stub(:create_export_pdf).and_return(@exp = mock_model(ExportPdf))
          Jobs::StatsPdfFiller.should_receive(:new).with(@o.database_name, @exp.id, {period_id:@p.id, destination:[0]})  
          Delayed::Job.stub(:enqueue)
-         get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+         xhr :get, :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
       end
       
       it 'le met en queue de delayed_job' do
@@ -115,12 +115,12 @@ describe NaturesController do
         @p.stub(:create_export_pdf).and_return(@exp = mock_model(ExportPdf))
         Jobs::StatsPdfFiller.stub(:new).and_return(@obj = double(Object, :perform=>true))
         Delayed::Job.should_receive(:enqueue).with(@obj)
-        get :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+        xhr :get, :produce_pdf,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
       end
       
       it 'puis interroge ready qui renvoie le status' do
         @p.should_receive(:export_pdf).and_return(mock_model(ExportPdf, status:'pret'))
-        get :pdf_ready,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
+        xhr :get, :pdf_ready,{ :organism_id=>@o.id.to_s, :period_id=>@p.to_param, format:'js'}, session_attributes
         response.should be_success
         response.body.should == 'pret'
       end

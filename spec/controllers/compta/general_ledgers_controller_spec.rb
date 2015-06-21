@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Compta::GeneralLedgersController do
-  include SpecControllerHelper 
+  include SpecControllerHelper
   
 
   before(:each) do
@@ -13,7 +13,7 @@ describe Compta::GeneralLedgersController do
   describe 'pdf_ready' do 
     it 'interroge si prêt' do
       @p.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
-      get :pdf_ready, {:period_id=>@p.to_param, format:'js'}, session_attributes
+      xhr :get, :pdf_ready, {:period_id=>@p.to_param, format:'js'}, session_attributes
       response.body.should == 'mon statut' 
     end
   end
@@ -22,7 +22,7 @@ describe Compta::GeneralLedgersController do
     it 'lance la production du pdf' do 
       @p.stub(:create_export_pdf).and_return(@expdf = mock_model(ExportPdf, status:'mon statut'))
       Jobs::GeneralLedgerPdfFiller.stub(:new).and_return double(Object, perform:'delayed_job')
-      get :produce_pdf, {:period_id=>@p.to_param, format:'js'}, session_attributes
+      xhr :get, :produce_pdf, {:period_id=>@p.to_param, format:'js'}, session_attributes
     end
     
     

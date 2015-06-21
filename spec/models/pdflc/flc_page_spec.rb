@@ -3,7 +3,7 @@
 require 'spec_helper' 
 
 RSpec.configure do |c| 
-  # c.filter = {:wip=>true}
+  # c.filter = {:wip=>true} 
 end
 
 describe Pdflc::FlcPage do
@@ -13,11 +13,11 @@ describe Pdflc::FlcPage do
     file =  "#{File.dirname(__FILE__)}/pdf_files/#{file_name}.pdf"
     File.delete(file) if File.exists?(file)
     File.open(file, 'wb') do |f| 
-      f << pdf.render 
+      f << pdf.render  
     end
   end  
   
-  def set_table(account, from_date, to_date)
+  def set_table(account, from_date, to_date) 
     cls = ['writings.id AS w_id', 'writings.date AS w_date', 
       'books.abbreviation AS b_abbreviation', 
       'writings.ref AS w_ref',

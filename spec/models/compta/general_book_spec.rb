@@ -3,13 +3,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper') 
 
 describe Compta::GeneralBook do
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
 
   before(:each) do
     use_test_organism
     create_outcome_writing
   end
-  
+ 
   after(:each) do
     Writing.delete_all
     ComptaLine.delete_all

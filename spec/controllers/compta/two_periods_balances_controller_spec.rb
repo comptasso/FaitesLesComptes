@@ -7,7 +7,7 @@ describe Compta::TwoPeriodsBalancesController do
   
     before(:each) do
       minimal_instances 
-      controller.stub(:check_natures).and_return true 
+      controller.stub(:check_natures).and_return true  
     end
   
     describe 'GET show' do
@@ -42,7 +42,7 @@ describe Compta::TwoPeriodsBalancesController do
         Jobs::TwoPeriodsBalancePdfFiller.should_receive(:new).
           with(@o.database_name, @expdf.id, {period_id:@p.id} ).and_return(@ctpb = double(Jobs::TwoPeriodsBalancePdfFiller))
         Delayed::Job.should_receive(:enqueue).with @ctpb
-        get :produce_pdf, {format:'js'}, session_attributes
+        xhr :get, :produce_pdf, {format:'js'}, session_attributes
       end
       
     end

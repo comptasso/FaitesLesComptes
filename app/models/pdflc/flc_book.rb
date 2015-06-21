@@ -24,10 +24,6 @@ module Pdflc
     # draw_pdf crée le pdf puis le remplit pour chacun des comptes qui ont 
     # des reports ou des écritures
     # 
-    # Le booléen commence permet de ne pas créer une page vide en 
-    # début de texte pour le premier
-    # TODO à retirer avec la mise en place d'une page de garde
-    #
     def draw_pdf
       
       @pdf = Pdflc::FlcPage.new(BOOK_TITLES, BOOK_WIDTHS, BOOK_ALIGNMENTS,
@@ -84,7 +80,7 @@ module Pdflc
       baa = book_arel(account)
       @table.change_arel(baa)
       @pdf.reports = set_reports(account)
-      baa.count 
+      baa.size
     end
      
     def set_accounts

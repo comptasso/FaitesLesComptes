@@ -25,13 +25,16 @@ describe "BankExtracts" do
 
   describe "GET /new_bank_extract" do  
  
-    it 'the page has a form with 6 input fields' do
+    it 'the page has a form with 6 input fields', wip:true do
       visit new_bank_account_bank_extract_path(@ba)
       page.all('form').should have(1).element
       # 9 inputs dont 1 caché, 1 pour le bouton, 6 pour la saisie et le dernier
+      # 
+     #  page.find('form').all('input', visible:false).each_with_index {|i, j| puts "input #{j} - #{i[:type]} - #{i.value}" }
       # non disponible pour afficher le solde final
-      page.find('form').all('input').should have(9).elements
+      page.find('form').all('input', visible:false).should have(9).elements
       page.all(:xpath, '//input[@disabled]').should have(1).element
+      
     end
 
     it 'filling the elements and click button create a bank_extract and redirect to index' do
@@ -60,7 +63,7 @@ describe "BankExtracts" do
         fill_in('bank_extract_total_credit', with:'3.15')
         sleep 1
         end_sold.value.should == '1.30'
-        fill_in('bank_extract_reference', :with=>'Folio 124')
+        fill_in('bank_extract_reference', :with=>'Folio 124') 
         sleep 1
         end_sold.value.should == '4.45'
       
@@ -91,7 +94,7 @@ describe "BankExtracts" do
       
     end
 
-    context 'avec un extrait de compte', wip:true do
+    context 'avec un extrait de compte' do
 
       before(:each) do
         @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
@@ -138,7 +141,7 @@ describe "BankExtracts" do
 
     end
 
-    context 'quand le bank_extract est pointe', wip:true do
+    context 'quand le bank_extract est pointe' do
       it 'affiche seulement les icones afficher et supprimer' do
         @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
           reference:'Folio 1', begin_sold:0.00, total_credit:1.20, total_debit:0.55)

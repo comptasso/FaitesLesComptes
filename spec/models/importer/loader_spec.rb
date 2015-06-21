@@ -34,7 +34,7 @@ describe Importer::Loader do
   it 'avec un fichier csv mal formé' do
     subject.file = uploaded_file('releve_slk.csv')
     subject.save
-    puts subject.errors.messages
+    # puts subject.errors.messages
     subject.errors[:read].should == ['Impossible de lire le fichier; Fichier mal formé ?'] 
   end
   

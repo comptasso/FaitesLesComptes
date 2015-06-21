@@ -2,11 +2,11 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-RSpec.configure do |c|  
+RSpec.configure do |c|   
  # c.filter = {wip:true}  
 end
 
-describe Compta::Listing do
+describe Compta::Listing do 
   include OrganismFixtureBis
   
   describe 'test avec des mock' do
@@ -142,7 +142,7 @@ describe Compta::Listing do
     end
     
     it 'peut aussi créer un csv' do
-      @listing.to_csv.should match /\AListe des écritures.*/
+      @listing.to_csv.should match /\AListe des écritures.*/ 
     end
     
     

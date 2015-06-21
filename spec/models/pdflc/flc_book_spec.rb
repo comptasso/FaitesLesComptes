@@ -55,7 +55,7 @@ describe Pdflc::FlcBook do
         to_account:@fas.last, from_date:Date.today.beginning_of_year,
         to_date:Date.today.end_of_year,
         fond:'Mise au point')
-      @b.stub(:book_arel).and_return(@as = double(Arel, count:0))
+      @b.stub(:book_arel).and_return(@as = double(Arel, size:0))
     
       @b.draw_pdf
       render_file(@b.pdf, 'page_de_garde')
@@ -85,9 +85,8 @@ describe Pdflc::FlcBook do
     # le pdf fera 8 pages, 2 pages pour chacun des comptes sauf pour le second
     # qui n'a pas de lignes.  
     it 'peut rendre le texte avec un fond' do
-      @b.stub(:book_arel).and_return(@as = double(Arel, count:44))
-      @b.stub(:book_arel).with(@fas.second).and_return(@ar = double(Arel))
-      @ar.stub(:count).and_return 0
+      @b.stub(:book_arel).and_return(@as = double(Arel, size:44))
+      @b.stub(:book_arel).with(@fas.second).and_return(@ar = double(Arel, size:0))
       @b.draw_pdf
       render_file(@b.pdf, 'book')
     end

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Compta::GeneralBooksController do
   include SpecControllerHelper 
 
-  before(:each) do 
+  before(:each) do  
     minimal_instances
     @p.stub(:all_natures_linked_to_account?).and_return true 
   end
@@ -39,7 +39,7 @@ describe Compta::GeneralBooksController do
         @p.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
         @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
         Jobs::GeneralBookPdfFiller.stub(:new).and_return double(Object, perform:'delayed_job')
-        get :produce_pdf, pdf_attributes.merge({format:'js'}), session_attributes
+        xhr :get, :produce_pdf, pdf_attributes.merge({format:'js'}), session_attributes
       end
       
       it 'en le mettant dans la queue' do
@@ -49,7 +49,7 @@ describe Compta::GeneralBooksController do
         Jobs::GeneralBookPdfFiller.should_receive(:new).
           with(@o.database_name, @expdf.id, merged_attributes).and_return(@gb_filler = double(Jobs::GeneralBookPdfFiller))
         Delayed::Job.should_receive(:enqueue).with @gb_filler
-        get :produce_pdf, pdf_attributes.merge(format:'js'), session_attributes
+        xhr :get, :produce_pdf, pdf_attributes.merge(format:'js'), session_attributes
       end
       
     end
@@ -57,7 +57,7 @@ describe Compta::GeneralBooksController do
     describe 'pdf_ready' do 
       it 'interroge si prêt' do
         @p.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
-        get :pdf_ready, {:period_id=>@p.to_param, format:'js'}, session_attributes
+        xhr :get, :pdf_ready, {:period_id=>@p.to_param, format:'js'}, session_attributes
         response.body.should == 'mon statut' 
       end
     end

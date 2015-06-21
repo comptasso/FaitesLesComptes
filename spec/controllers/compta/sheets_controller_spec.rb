@@ -146,7 +146,7 @@ describe Compta::SheetsController do
       @p.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
       @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
       Jobs::SheetsPdfFiller.should_receive(:new).and_return double(Object, perform:'delayed_job')
-      get :produce_pdf, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>:js}, valid_session
+      xhr :get, :produce_pdf, {:collection=>['bilan', 'resultat'], title:'Bilan', :format=>:js}, valid_session
     end
     
     it 'sinon appelle Jobs::SheetPdfFiller avec l id du folio' do
@@ -154,7 +154,7 @@ describe Compta::SheetsController do
       @p.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
       # TODO faire avec with pour tester également ce qu'on interroge
       Jobs::SheetPdfFiller.should_receive(:new).and_return double(Object, perform:'delayed_job')
-      get :produce_pdf, {:id=>1, :format=>:js}, valid_session
+      xhr :get, :produce_pdf, {:id=>1, :format=>:js}, valid_session
     end
     
     
@@ -186,7 +186,7 @@ describe Compta::SheetsController do
       it 'l action show déclanche check_nomenclature' do
         controller.stub('collect_errors').with(@nomenclature).and_return 'la liste des erreurs'
         get :show, {:id=>@f.to_param}, valid_session
-        flash[:alert].should == 'la liste des erreurs'
+        flash[:alert].should == 'la liste des erreurs' 
       end
     
     

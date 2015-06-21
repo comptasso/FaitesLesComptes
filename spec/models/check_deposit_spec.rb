@@ -1,4 +1,4 @@
-# coding: utf-8
+# coding: utf-8 
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
@@ -20,7 +20,7 @@ describe CheckDeposit do
     @w3 = create_in_out_writing(300, 'Chèque')
     @w4 = create_in_out_writing(50000, 'Virement')
     @ch= CheckDeposit.new
-  end
+  end 
   
   after(:each) do  
     Writing.delete_all
@@ -278,7 +278,7 @@ describe CheckDeposit do
           @ba2.destroy
         end
         
-        it 'after_update met à jour la banque de la compta_line débitée' do
+        it 'after_update met à jour la banque de la compta_line débitée', wip:true do
           @check_deposit.bank_account_id = @ba2.id
           @check_deposit.save!
           @check_deposit.debit_line.account_id.should == @ba2.current_account(@p).id
@@ -315,7 +315,7 @@ describe CheckDeposit do
 
     
 
-    describe "le rattachement à un extrait de compte", wip:true do
+    describe "le rattachement à un extrait de compte" do
       before(:each) do
         @check_deposit.should have(3).checks
         @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
@@ -338,7 +338,7 @@ describe CheckDeposit do
         @check_deposit.should_not be_valid
       end
 
-      it "la remise de chèque ne peut plus être détruite", wip:true do
+      it "la remise de chèque ne peut plus être détruite" do
         pending 'ne crée pas d erreur car les cheques sont retirés par nullify avant le test'
 #        puts @check_deposit.pointed?.inspect
 #        puts @check_deposit.debit_compta_line.inspect
