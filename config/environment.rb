@@ -1,8 +1,8 @@
-# Load the rails application
+# Load the Rails application.
 require File.expand_path('../application', __FILE__)
 
-# Initialize the rails application
-Faitesvoscomptes::Application.initialize!
+# Initialize the Rails application.
+Rails.application.initialize!
 
 # ne pas oublier de mettre en place un fichier .env avec les variables
 # d'environnement nécessaires, en l'occurence 

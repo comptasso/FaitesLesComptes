@@ -2,11 +2,9 @@ require File.expand_path('../boot', __FILE__)
 require 'csv'
 require 'rails/all'
 
-
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-
 
 module Faitesvoscomptes
   class Application < Rails::Application
@@ -14,17 +12,9 @@ module Faitesvoscomptes
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # Custom directories with classes and modules you want to be autoloadable.
-    # config.autoload_paths += %W(#{config.root}/extras)
-
-    # Only load the plugins named here, in the order given (default is alphabetical).
-    # :all can be used as a placeholder for all plugins not explicitly named.
-    # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
-
     # Activate observers that should always be running.
     config.active_record.observers = :nature_observer, :user_observer, 'Adherent::PaymentObserver'
-
-
+    
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
@@ -38,8 +28,6 @@ module Faitesvoscomptes
     # added by jcl to load app/validators
     config.autoload_paths += %W( #{config.root}/lib/validators)
     
-    # filtre pour que le password n'apparaisse pas dans les logs
-    config.filter_parameters+=[:password]
     
   end
 end
