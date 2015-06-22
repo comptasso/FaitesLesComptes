@@ -74,7 +74,8 @@ end
   :user_name      => ENV['MAIL_USER_NAME'],
   :password       => ENV['MAIL_PASSWORD'],
   :domain         => ENV['DOMAIN'],
-  :enable_starttls_auto => true
+  :enable_starttls_auto => true,
+  :openssl_verify_mode  => 'none'
 }
 
 
