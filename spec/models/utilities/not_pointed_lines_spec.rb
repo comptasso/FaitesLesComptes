@@ -31,7 +31,8 @@ describe Utilities::NotPointedLines do
   it 'total_credit renvoie le total de ses lignes ' do
     @ar = double(Arel)
     @npls = Utilities::NotPointedLines.new(@ba)
-    @npls.stub(:lines).and_return([mock_model(ComptaLine, :credit=>5), mock_model(ComptaLine, :credit=>8)])
+    @npls.stub(:lines).and_return([mock_model(ComptaLine, :credit=>5),
+        mock_model(ComptaLine, :credit=>8)])
     @npls.total_credit.should == 13
   end
 

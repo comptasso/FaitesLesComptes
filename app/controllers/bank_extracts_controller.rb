@@ -115,6 +115,7 @@ Vous pouvez maintenant procéder aux modifications des lignes importées puis g�
   # méthode qui tente de remplir les champs total_debit et total_credit avec 
   # les imported_bels en attente
   def fill_totals_from_imported_bels
+    # TODO on pourrait éviter le select en écrivant mieux la requête
     ibels = @bank_account.imported_bels.to_a.select {|r| r.date.in? @bank_extract.begin_date..@bank_extract.end_date}
     if ibels.any?
       @bank_extract.total_debit = ibels.sum(&:debit)

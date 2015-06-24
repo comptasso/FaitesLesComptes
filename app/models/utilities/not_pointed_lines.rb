@@ -20,7 +20,7 @@ module Utilities
 
     def initialize(bank_account, before_date = nil)
       @bank_account = bank_account
-      fetch_lines(before_date)
+      fetch_lines(before_date) 
     end
     
     # permet d'itérer les lignes et d'effectuer l'action fournie par le block 
@@ -61,8 +61,8 @@ module Utilities
     # plus de ligne à pointer pour cet exercice.
     def set_lines(before_date)
       ls = bank_account.compta_lines.not_pointed 
-      ls = ls.where('writings.date <= ?', before_date) if before_date 
-      ls
+      ls = ls.where('writings.date <= ?', before_date) if before_date
+      ls.to_a
     end
     
    
