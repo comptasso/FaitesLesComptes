@@ -63,7 +63,7 @@ class CheckDeposit < ActiveRecord::Base
   # permet de trouver les cheques à encaisser pour  tout l'organisme ou pour un 
   # secteur donné
   def self.pending_checks(sector = nil)
-    if sector
+    if sector && sector.name != 'Commun'
       ComptaLine.sectored_pending_checks(sector).to_a
     else
       ComptaLine.pending_checks.to_a

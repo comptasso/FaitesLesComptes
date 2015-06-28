@@ -22,31 +22,40 @@ describe CheckDeposit do
     @ch= CheckDeposit.new
   end 
   
-  after(:each) do  
-    Writing.delete_all
-    ComptaLine.delete_all 
-  end
-
+  after(:each) { erase_writings }
  
   describe "methodes de classe sur les chèques à déposer" do
 
-    it "la classe check_deposit can give the total of non_deposited checks" do
+    it 'total_to pick donne le total' do
       CheckDeposit.total_to_pick.should == 445
     end
 
-    it 'vérif des contre lignes' do
-      ComptaLine.pending_checks.count.should == 3
-    end
-
-    it "3 chèques à déposer" do
+    it 'pending_checks donne les 3 chèques qui sont à déposer' do
       CheckDeposit.pending_checks.should have(3).elements
       CheckDeposit.pending_checks.should == [@w1.children.last,@w2.children.last,@w3.children.last]
-    end
+    end    
 
-    
-
-    it "la classe donne le nombre total de chèques à encaisser pour l'organsime" do
+    it 'nb_to_pick renvoie le nombre de chèques à encaisser' do
       CheckDeposit.nb_to_pick.should == 3
+    end
+    
+    context 'quand on précise un secteur', wip:true  do 
+      
+      before(:each) {@sect2 = mock_model(Sector, name:'ASC')}
+      # after(:each) {@ba.update_attribute(sector_id:@sid) unless @ba.sector_id == @sid}
+      
+      it 'pending_checks ne renvoie pas de chèques si le secteur demandé est différent' do
+        @sect2 = mock_model(Sector)
+        expect(CheckDeposit.nb_to_pick(@sector)).to eq(3)
+        expect(CheckDeposit.nb_to_pick(@sect2)).to eq(0)
+      end
+      
+      it 'si le secteur est commun, alors on prend tous les chèques' do
+        @sect2 = mock_model(Sector, name:'Commun')
+        expect(CheckDeposit.nb_to_pick(@sect2)).to eq(3)
+      end
+      
+      
     end
 
    
