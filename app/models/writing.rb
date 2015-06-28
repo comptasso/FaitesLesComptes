@@ -39,6 +39,7 @@ class Writing < ActiveRecord::Base
 
   belongs_to :book
   belongs_to :bridgeable, polymorphic:true
+  belongs_to :user, foreign_key:'written_by'
  
   has_many :compta_lines, :dependent=>:destroy
   alias children compta_lines

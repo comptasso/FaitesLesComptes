@@ -11,12 +11,16 @@
             input_html:{date_min:@period.start_date, date_max:@period.close_date},
             :required => true, :as=>:date_picker
           = f.input :ref,
-            label:'Réf.',
             :wrapper_html=>{:class=>'col-lg-2'}
         
           = f.input :narration,
-            :label=>'Libellé ',
-            :wrapper_html=>{:class=>'col-lg-8'}
+            :wrapper_html=>{:class=>'col-lg-6'}
+
+          = f.input :date_piece,
+            :wrapper_html=>{:class=>'col-lg-2'},
+            input_html:{date_min:@period.start_date << 6, date_max:@period.close_date},
+            :as=>:date_picker
+
           = f.input :bridge_id, as: :hidden
           = f.input :bridge_type, as: :hidden
         .row

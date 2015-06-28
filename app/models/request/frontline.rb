@@ -11,7 +11,7 @@
 # pour que la requête puisse remplir les items. 
 # 
 # TODO voir ici comment gérer une logique similaire à find_each
-module Request
+module Request 
   
   # La class Request::Frontline est destinée à fournir en une seule requête 
   # les informations nécessaires pour l'affichage des lignes dans les livres
@@ -48,6 +48,7 @@ module Request
   column :book_id, :integer
   column :id, :integer
   column :date, :date
+  column :date_piece, :date
   column :ref, :string
   column :narration, :string
   column :compta_line_id, :integer
@@ -75,7 +76,8 @@ module Request
       
       # TODO introduire ici une erreur si le livre n'est pas un income_outcome_book
       sql = <<-hdoc
-      SELECT writings.book_id, writings.id, writings.date, writings.ref,
+      SELECT writings.book_id, writings.id, writings.date,
+      writings.date_piece, writings.ref,
       writings.narration, writings.type AS writing_type, 
       adherent_payments.id AS adherent_payment_id,
       adherent_payments.member_id AS adherent_member_id, 

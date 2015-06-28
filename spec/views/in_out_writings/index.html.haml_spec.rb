@@ -12,17 +12,18 @@ describe "in_out_writings/index" do
 
   def mock_writing_line(montant)
     double(Request::Frontline,
+      book_id:1,
       :ref=>'001',
       :date=>Date.today,
       :narration=>'le libellé',
       :nature_name=>'une dépense',
-      :destination_name=>'destinée',
+      :destination_name=>'destinée', 
       :debit=>montant,
       :credit=>0,
       :id=>156,
       :payment_mode=>'CB',
       compta_line_id:457,
-      acc_title:'Compte courant', 
+      acc_title:'Compte courant',
       writing_type:'InOutWriting',
       editable?:false,
       cl_locked:true)

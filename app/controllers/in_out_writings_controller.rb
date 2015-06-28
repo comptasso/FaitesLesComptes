@@ -80,6 +80,18 @@ class InOutWritingsController < ApplicationController
     
   end
   
+  def show
+    # TODO avec une frontline, on pourrait avoir moins de requêtes
+    @in_out_writing = @book.in_out_writings.find(params[:id])
+    @line = @in_out_writing.in_out_line
+    @counter_line = @in_out_writing.counter_line
+    @account = @line.account
+    @counter_account = @counter_line.account
+    @author = @in_out_writing.user
+    
+    
+  end
+  
   
   
  
@@ -89,6 +101,7 @@ class InOutWritingsController < ApplicationController
   # de new mais on a fait une modif lors de la saisie et on retourne alors dans new
   def edit
     flash[:origin] = comes_from
+    
     @in_out_writing = @book.in_out_writings.find(params[:id])
     @line = @in_out_writing.in_out_line
     @counter_line = @in_out_writing.counter_line
@@ -220,7 +233,8 @@ class InOutWritingsController < ApplicationController
   private 
     
     def in_out_writing_params
-      params.require(:in_out_writing).permit(:date, :date_picker, :narration, :ref,
+      params.require(:in_out_writing).permit(:date, :date_picker, :date_piece,
+        :narration, :ref,
         :book_id, :bridge_id, :bridge_type,
         compta_lines_attributes: [:id, :debit, :credit, :writing_id, :account_id, 
     :nature, :nature_id, :destination_id, 

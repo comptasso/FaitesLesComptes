@@ -79,6 +79,11 @@ module InOutWritingsHelper
         
       end
     end
+    # on ajoute une icone de détail
+    html << icon_to('detail.png',
+      book_in_out_writing_path(frontline.book_id, frontline.id), 
+      title:'Infos complémentaires', remote:true )
+    
     html.html_safe
   
   end
