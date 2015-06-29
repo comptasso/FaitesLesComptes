@@ -66,8 +66,8 @@ class Extract::Fec < ActiveRecord::Base
       row.account.title, # libellé du compte
       '', # numéro de compte auxiliaire
       '', # libellé du compte auxiliaire
-      row.writing.ref || '', # référence de la pièce justificative
-      nil, #format_date(row.writing.ref_date), # date de la pièce justificative
+      row.writing.ref || '', # référence de la pièce justificative 
+      format_timestamp(row.writing.date_piece || row.writing.date), #format_date(row.writing.ref_date), # date de la pièce justificative
       row.writing.narration, # libellé de l'écriture comptable
       format_amount(row.debit),  # debit
       format_amount(row.credit), # credit

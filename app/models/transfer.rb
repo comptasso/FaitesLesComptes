@@ -107,6 +107,12 @@ class Transfer < Writing
   def destroyable?
     to_editable? && from_editable?
   end
+  
+  protected
+  
+  def fill_date_piece
+    self.date_piece = date
+  end
 
   private
 

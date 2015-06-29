@@ -59,7 +59,7 @@ describe Extract::Fec do
         '', # libellé du compte auxiliaire
         '', # référence de la pièce justificative
         # TODO à modifier lorsque le champ ref_date sera utilisé.
-        nil, # @iow.ref_date.strftime('%Y%m%d'), # date de la pièce justificative
+        @iow.date.strftime('%Y%m%d'), # date de la pièce justificative
         @iow.narration, # libellé de l'écriture comptable
         ActionController::Base.helpers.number_with_precision(@l.debit, precision:2, delimiter:''), # montant débit
         ActionController::Base.helpers.number_with_precision(@l.credit, precision:2, delimiter:''), # montant débit

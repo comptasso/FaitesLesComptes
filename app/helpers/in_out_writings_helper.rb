@@ -46,6 +46,10 @@ module InOutWritingsHelper
     # Si la ligne est un Transfer, la modification se fait via la rubrique Transfer
     # La suppression n'est pas possible, car elle doit passer par le menu Transfer
     html = ' '
+    # on commence par ajouter une icone de détail
+    html << icon_to('detail.png',
+      book_in_out_writing_path(frontline.book_id, frontline.id), 
+      title:'Infos complémentaires', remote:true )
     
     if frontline.editable?
       case frontline.writing_type
@@ -79,10 +83,7 @@ module InOutWritingsHelper
         
       end
     end
-    # on ajoute une icone de détail
-    html << icon_to('detail.png',
-      book_in_out_writing_path(frontline.book_id, frontline.id), 
-      title:'Infos complémentaires', remote:true )
+    
     
     html.html_safe
   

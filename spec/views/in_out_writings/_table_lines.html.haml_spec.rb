@@ -1,10 +1,13 @@
 # coding: utf-8
 
+require 'spec_helper'
+
 describe "in_out_writings/_table_lines" do 
   include JcCapybara
   
   def mock_writing_line(montant)
     double(Request::Frontline,
+      book_id:1,
       :ref=>'001',
       :date=>Date.today,
       :narration=>'le libellé',
