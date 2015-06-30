@@ -21,7 +21,7 @@ Faitesvoscomptes::Application.configure do
   # il le signale tout de suite
 
   config.action_mailer.default_url_options = { :host => ENV['MAIL_HOST'] } # pour Devise
-
+  config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
 
 
 
