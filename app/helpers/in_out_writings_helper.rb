@@ -43,13 +43,14 @@ module InOutWritingsHelper
   def frontline_actions(frontline)
     # Si la ligne est éditable, alors on peut la modifier ou la supprimer
     # 
+    # TODO retirer la question du Transfer qui n'apparait pas dans 
+    # les in_out_writings ?
     # Si la ligne est un Transfer, la modification se fait via la rubrique Transfer
     # La suppression n'est pas possible, car elle doit passer par le menu Transfer
     html = ' '
-    # on commence par ajouter une icone de détail
-    html << icon_to('detail.png',
-      book_in_out_writing_path(frontline.book_id, frontline.id), 
-      title:'Infos complémentaires', remote:true )
+    
+    
+    
     
     if frontline.editable?
       case frontline.writing_type
@@ -58,6 +59,10 @@ module InOutWritingsHelper
       when 'Adherent::Writing' then 
         html << frontline_actions_for_adherent_writing(frontline)
       else
+        # on commence par ajouter une icone de détail
+        html << icon_to('detail.png',
+          book_in_out_writing_path(frontline.book_id, frontline.id), 
+          title:'Infos complémentaires', remote:true )
         html <<  icon_to('modifier.png', 
           edit_book_in_out_writing_path(frontline.book_id, frontline.id)) 
         html <<  icon_to('supprimer.png', 
@@ -71,6 +76,10 @@ module InOutWritingsHelper
       when 'Adherent::Writing' then
         html << frontline_actions_for_adherent_writing(frontline)
       else
+        # on commence par ajouter une icone de détail
+        html << icon_to('detail.png',
+          book_in_out_writing_path(frontline.book_id, frontline.id), 
+          title:'Infos complémentaires', remote:true )
         # on va donner des conseils à l'utilisateur pour comprendre pourquoi
         # il ne peut pas éditer cette écriture
         if frontline.cl_locked || frontline.support_locked
@@ -180,22 +189,22 @@ module InOutWritingsHelper
   end
   
   
-    # lorsque la ligne n'est pas editable, alors on peut seulement afficher les 
-    # informations de détail
-    # TODO rajouter des icones N&B pour avoir un conseil pour les lignes 
-    # pointées.
-    def actions_for_not_editable(writing, deletable=true)
-      html = ''
-      case writing
-      when Transfer then  html << icon_to('detail.png', transfer_path(writing.id))
-      when Adherent::Writing then html << actions_for_adherent_writing(writing)
-      end
-      html
+  # lorsque la ligne n'est pas editable, alors on peut seulement afficher les 
+  # informations de détail
+  # TODO rajouter des icones N&B pour avoir un conseil pour les lignes 
+  # pointées.
+  def actions_for_not_editable(writing, deletable=true)
+    html = ''
+    case writing
+    when Transfer then  html << icon_to('detail.png', transfer_path(writing.id))
+    when Adherent::Writing then html << actions_for_adherent_writing(writing)
     end
-
-
-
+    html
   end
+
+
+
+end
 
 
 

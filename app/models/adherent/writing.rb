@@ -51,6 +51,14 @@ class Writing < ::Writing
   def member
     payment.member
   end
+  
+  protected
+  
+  def fill_date_piece
+    self.date_piece = date
+  end
+  
+  
 end
 
 end

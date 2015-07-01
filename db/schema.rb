@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20150628052219) do
   create_table "accounts", force: true do |t|
     t.string   "number"
     t.string   "title"
-    t.boolean  "used",             default: true
+    t.boolean  "used",             default: true 
     t.integer  "period_id"
     t.datetime "created_at"
     t.datetime "updated_at"

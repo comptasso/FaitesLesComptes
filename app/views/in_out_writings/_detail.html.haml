@@ -1,4 +1,4 @@
-%p Date pièce justificative : #{l @in_out_writing.date_piece}
+%p Date pièce justificative : #{l @in_out_writing.date_piece if @in_out_writing.date_piece}
 %p Compte mouvementé : #{@account.number} #{@account.title}
 %p Compte financier mouvementé : #{@counter_account.number} #{@counter_account.title}
 %p Date et heure de création : #{l @in_out_writing.created_at}
