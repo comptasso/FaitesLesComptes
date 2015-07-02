@@ -31,7 +31,7 @@ module Importer
       transacs = []
       # permet d'avoir à la fois un fichier temporaire comme le prévoit rails
       # ou un nom de fichier (ce qui facilite les tests et essais).
-      f = file.respond_to?(:tempfile) ? file.tempfile : file
+      f = file.respond_to?(:tempfile) ? file.tempfile : file 
       begin
         OFX(f) {transacs = account.transactions } 
         rows = transacs.map {|t| build_row(t)}  
@@ -39,14 +39,7 @@ module Importer
           # vérification des champs pour les lignes autres que la ligne de titre
           prepare(row)
           # création d'un array de Bel
-          ibel =  ImportedBel.new(bank_account_id:ba_id, 
-            position:position, 
-            date:row[0], 
-            narration:row[1],
-            debit:row[2], credit:row[3])
-          ibel.cat_interpreter # on remplit les champs cat
-          ibel.payment_mode_interpreter # on tente de remplir le champ mode de paiement
-          lirs << ibel
+          lirs << build_ibel(ba_id, position, row) 
           position += 1
           
         end

@@ -35,6 +35,8 @@ class ImportedBelsController < ApplicationController
     @imported_bel = ImportedBel.find params[:id]
     # récupérer les paramètres
     par = @imported_bel.to_write
+    # TODO mettre ceci dans le modèle plutôt que le controller
+    # TODO vérifier l'absence de problème avec un secteur commun pour les CE
     # créer soit le transfert soit le in_out_writing
     if @imported_bel.cat == 'T'
       book = @organism.od_books.first

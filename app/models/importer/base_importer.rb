@@ -43,7 +43,20 @@ module Importer
       gsub(/\s+\-$/, '')# on retire le - final au cas où le troncate tombe sur
       # -
          
-    end 
+    end
+    
+    # Construit un nouveau ImportedBel rattaché à la banque dont l'id est fourni,
+    # avec la position position et les informations de la ligne row
+    def build_ibel(bank_account_id, position, row)
+      ibel = ImportedBel.new(bank_account_id:bank_account_id,  
+        position:position, 
+        date:row[0],
+        narration:row[1],
+        debit:row[2], credit:row[3])
+      ibel.cat_interpreter # on remplit les champs cat
+      ibel.payment_mode_interpreter # on tente de remplir le champ mode de paiement
+      ibel
+    end
       
       
       
