@@ -82,7 +82,7 @@ describe Extract::Fec do
     end
     
     it 'première ligne de titre est conforme aux spéc du ministère' do
-      @exfec.to_csv.lines.first.should == Extract::Fec::FEC_TITLES.join("\t") + "\n"
+      @exfec.to_csv.lines.first.should == Extract::Fec::FEC_TITLES.join("|") + "\n"
     end
     
     it 'les autres lignes font appel à to_fec' , wip:true do 

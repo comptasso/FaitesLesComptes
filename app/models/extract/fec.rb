@@ -53,7 +53,7 @@ class Extract::Fec < ActiveRecord::Base
       where('period_id =  ?', period_id).order('writings.continuous_id ASC', 'compta_lines.id')
   end
   
-  def to_csv(options = {col_sep:"\t"})
+  def to_csv(options = {col_sep:"|"})
     CSV.generate(options) do |csv|
       csv << FEC_TITLES
       lines.each {|line| csv << to_fec(line) }
