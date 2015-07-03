@@ -5,7 +5,7 @@
 class Compta::FecsController < Compta::ApplicationController
 
   def show
-    @exfec = Extract::Fec.new(period_id:@period.id)
+    @exfec = Extract::Fec.new(@period)
     respond_to do |format|
         format.csv { send_data @exfec.to_csv, filename:@exfec.fec_title }  
     end

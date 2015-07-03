@@ -22,7 +22,7 @@ describe Compta::FecsController do
   end
   
   it 'construit un extract' do
-    Extract::Fec.should_receive(:new).with({period_id:@p.id}).and_return(@exf = double(Extract::Fec))
+    Extract::Fec.should_receive(:new).with(@p).and_return(@exf = double(Extract::Fec))
     @exf.stub(:to_csv).and_return(['test'])
     @exf.stub(:fec_title).and_return 'FEC2015.csv'
     get :show, {:format=>'csv'}, valid_session

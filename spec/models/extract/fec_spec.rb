@@ -20,11 +20,11 @@ describe Extract::Fec do
   end
   
   it 'un extract::fec a autant de lignes qu il y a de compta_lines'  do
-    Extract::Fec.new(period_id:@p.id).lines.length.should == ComptaLine.count
+    Extract::Fec.new(@p).lines.length.should == ComptaLine.count
   end
   
   it 'extract::fec extrait les lignes en joignant l écriture et le livre' do
-    l = Extract::Fec.new(period_id:@p.id).lines.first
+    l = Extract::Fec.new(@p).lines.first
     l.book.title.should == 'Recettes'
     l.writing.date.should == Date.today
   end
@@ -35,7 +35,7 @@ describe Extract::Fec do
     
     
     before(:each) do
-      @exfec = Extract::Fec.new(period_id:@p.id)
+      @exfec = Extract::Fec.new(@p)
       @l = @exfec.lines.first
       @fec_line = @exfec.to_fec(@l)       
     end
@@ -75,7 +75,7 @@ describe Extract::Fec do
   
   describe 'to_csv' do
     
-    before(:each) { @exfec = Extract::Fec.new(period_id:@p.id) }
+    before(:each) { @exfec = Extract::Fec.new(@p) }
     
     it 'fournit ici un fichier de 3 lignes' do
       @exfec.to_csv.should have(3).lines
@@ -98,7 +98,7 @@ describe Extract::Fec do
     
       it 'le titre du FEC est conforme' do
         @o.update_attribute(:siren, '999888777')
-        Extract::Fec.new(period_id:@p.id).fec_title.should == '999888777FEC20151231.csv'
+        Extract::Fec.new(@p).fec_title.should == '999888777FEC20151231.csv'
       end
     
     end
@@ -107,7 +107,7 @@ describe Extract::Fec do
       # Lorsque le champ est enregistré, il est mis à blank "" et non à nil
       it 'le titre est quand même conforme' do
         @o.update_attribute(:siren, '')
-        Extract::Fec.new(period_id:@p.id).fec_title.should == '123456789FEC20151231.csv'
+        Extract::Fec.new(@p).fec_title.should == '123456789FEC20151231.csv'
       end
     
     end

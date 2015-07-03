@@ -4,10 +4,7 @@
 # d'où le nom du modèle qui est exigé par le Ministère des Finances 
 # pour toute comptabilité informatisée.
 #
-class Extract::Fec < ActiveRecord::Base 
-  
-  # TODO le transformer en objet tout simple avec une initialisation
-  # car en fait on n'utilise quasiment pas les ajouts de ActiveRecord::Base
+class Extract::Fec 
   
   FEC_TITLES = [  # selon la nomenclature de l'arrêté du 29 juillet 2013 
     'JournalCode',  
@@ -33,24 +30,18 @@ class Extract::Fec < ActiveRecord::Base
     'NatOp', 
     'IdClient']
   
-  # permet de définir la variable d'instance @columns
-  def self.columns() @columns ||= []; end
-
-  # définit la méthode de classe pour ajouter des colonnes à @columns
-  def self.column(name, sql_type = nil, default = nil, null = true)
-    columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
-  end
-
-  # et utilise cette méthode de classe pour définir le pseudo champ :period_id
-  column :period_id, :integer
-    
-  belongs_to :period
+  attr_reader :period
   
+  def initialize(period)
+    @period = period
+  end
+  
+    
   # on n'utilise pas has_many car on a besoin du unscoped pour retirer l'ordre 
   # des lignes qui est présent dans le modèle ComptaLine.
   def lines
     ComptaLine.unscoped.includes([:account, :writing => :book]).
-      where('period_id =  ?', period_id).order('writings.continuous_id ASC', 'compta_lines.id')
+      where('period_id =  ?', period.id).order('writings.continuous_id ASC', 'compta_lines.id')
   end
   
   def to_csv(options = {col_sep:"|"})
