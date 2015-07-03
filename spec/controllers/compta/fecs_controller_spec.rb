@@ -14,9 +14,9 @@ describe Compta::FecsController do
   end
   
   it 'rend un fichier csv' do
-    Extract::Fec.any_instance.stub(:to_csv).and_return 'Bonsoir'
-    Extract::Fec.any_instance.stub(:fec_title).and_return 'FEC2015.csv'
-    @controller.should_receive(:send_data).with('Bonsoir', filename:'FEC2015.csv').
+    Extract::Fec.any_instance.stub(:to_csv).and_return 'Bonsoir' 
+    Extract::Fec.any_instance.stub(:fec_title).and_return '123456789FEC2015.csv'
+    @controller.should_receive(:send_data).with('Bonsoir', filename:'123456789FEC2015.csv').
       and_return { @controller.render nothing: true }
     get :show, {:format=>'csv'}, valid_session
   end

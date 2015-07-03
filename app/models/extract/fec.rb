@@ -6,6 +6,9 @@
 #
 class Extract::Fec < ActiveRecord::Base 
   
+  # TODO le transformer en objet tout simple avec une initialisation
+  # car en fait on n'utilise quasiment pas les ajouts de ActiveRecord::Base
+  
   FEC_TITLES = [  # selon la nomenclature de l'arrêté du 29 juillet 2013 
     'JournalCode',  
     'JournalLib',  #champ 2
@@ -86,7 +89,8 @@ class Extract::Fec < ActiveRecord::Base
   # puis la date de clôture au format AAAAMMDD.
   # Un sirec par defaut est fourni au cas où il n'a pas été renseigné.
   def fec_title
-    siren = period.organism.siren || '123456789'
+    siren = period.organism.siren
+    siren = '123456789' if siren.blank?
     siren + 'FEC' + period.close_date.strftime('%Y%m%d') + '.csv'
   end
   

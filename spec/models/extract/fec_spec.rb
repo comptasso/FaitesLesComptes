@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
- # c.filter = {wip:true} 
+  # c.filter = {wip:true} 
 end 
 describe Extract::Fec do
   include OrganismFixtureBis
@@ -58,20 +58,18 @@ describe Extract::Fec do
         '', # numéro de compte auxiliaire
         '', # libellé du compte auxiliaire
         '', # référence de la pièce justificative
-        # TODO à modifier lorsque le champ ref_date sera utilisé.
-        @iow.date.strftime('%Y%m%d'), # date de la pièce justificative
+        @iow.date_piece.strftime('%Y%m%d'), # date de la pièce justificative
         @iow.narration, # libellé de l'écriture comptable
         ActionController::Base.helpers.number_with_precision(@l.debit, precision:2, delimiter:''), # montant débit
         ActionController::Base.helpers.number_with_precision(@l.credit, precision:2, delimiter:''), # montant débit
         '', nil, # lettrage et date de lettrage
         @iow.locked_at.to_date.strftime('%Y%m%d'), # date de comptabilisation 
-        # en attendant de rajouter un champ locked_at 
         nil, '', #montant en devise et identifiant de la devise
         @iow.date.strftime('%Y%m%d'), # date du règlement pour les compta de trésorerie
         @iow.payment_mode, # mode de règlement
         '', # nature de l'opération - est inutilisé
         ''
-        ]
+      ]
     end
   end
   
@@ -87,14 +85,31 @@ describe Extract::Fec do
       @exfec.to_csv.lines.first.should == Extract::Fec::FEC_TITLES.join("\t") + "\n"
     end
     
-    it 'les autres lignes font appel à to_fec' , wip:true do
+    it 'les autres lignes font appel à to_fec' , wip:true do 
       @exfec.should_receive(:to_fec).exactly(2).times.and_return(['bonjour'])
       @exfec.to_csv
     end
     
-    it 'le titre du FEC est conforme' do
-      # d = Date.today.end_of_year.strftime()
-      @exfec.fec_title.should == '123456789FEC20151231.csv'
+  end
+  
+  describe 'titre du FEC' do
+    
+    context 'l organism a un SIREN' do
+    
+      it 'le titre du FEC est conforme' do
+        @o.update_attribute(:siren, '999888777')
+        Extract::Fec.new(period_id:@p.id).fec_title.should == '999888777FEC20151231.csv'
+      end
+    
+    end
+    
+    context 'quand l organisme n a pas de siren' do
+      # Lorsque le champ est enregistré, il est mis à blank "" et non à nil
+      it 'le titre est quand même conforme' do
+        @o.update_attribute(:siren, '')
+        Extract::Fec.new(period_id:@p.id).fec_title.should == '123456789FEC20151231.csv'
+      end
+    
     end
     
     
@@ -103,27 +118,3 @@ describe Extract::Fec do
   
 end
 
-
-#  FEC_TITLES = [  # selon la nomenclature de l'arrêté du 29 juillet 2013 
-#    'JournalCode',  
-#    'JournalLib',  #champ 2
-#    'EcritureNum',
-#    'EcritureDate',
-#    'CompteNum',
-#    'CompteLib',
-#    'CompAuxNum',
-#    'CompAuxLib',
-#    'PieceRef',
-#    'PieceDate',
-#		'EcritureLib',
-#    'Debit',
-#    'Credit',
-#    'EcritureLet',
-#    'DateLet',
-#    'ValidDate', # champ 15
-#    'Montantdevise',
-#    'Idevise',
-#    'DateRglt', 
-#    'ModeRglt',
-#    'NatOp', 
-#    'IdClient']
