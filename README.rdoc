@@ -1,4 +1,4 @@
-== Bienvenue sur FaitesLesComptes
+== Bienvenue sur FaitesLesComptes !
 
 FaitesLesComptes est un logiciel développé par un expert-comptable et destiné à tenir une comptabilité simplifiée
 (au sens des règles comptables et fiscales) de la comptabilité française.
