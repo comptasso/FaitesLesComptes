@@ -29,8 +29,9 @@
 #
 class Writing < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
-
-  pick_date_for :date
+  
+  # TODO voir si encore utile avec simple_form_for (voir utilisation date_piece)
+  pick_date_for :date, :date_piece
 
   # book_id est nécessaire car des classes comme check_deposit ont besoin de
   # créér une écriture en remplissant le champ book_id
@@ -39,6 +40,7 @@ class Writing < ActiveRecord::Base
 
   belongs_to :book
   belongs_to :bridgeable, polymorphic:true
+  belongs_to :user, foreign_key:'written_by'
  
   has_many :compta_lines, :dependent=>:destroy
   alias children compta_lines
@@ -64,7 +66,8 @@ class Writing < ActiveRecord::Base
   # S'appuie sur ContinuValidator
   validates :continuous_id, continu:true, :allow_blank=>true  
   
-
+  before_save :fill_date_piece
+  
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
 
   default_scope -> {order('writings.date ASC, writings.id ASC')}
@@ -80,7 +83,6 @@ class Writing < ActiveRecord::Base
   scope :an_od_book, -> {joins(:book).where('books.type'=>['OdBook', 'AnBook'])}
   scope :compta_editable, -> {unlocked.an_od_book.no_type}
   
-
   # Fait le total des debit des compta_lines
   # la méthode utilisée permet de neutraliser les nil éventuels
   # utile notamment pour les tests de validité
@@ -229,6 +231,10 @@ class Writing < ActiveRecord::Base
 
   protected
   
+  def fill_date_piece
+    self.date_piece ||= date
+  end
+  
   def self.last_continuous_id
     Writing.maximum(:continuous_id) || 0
   end
@@ -244,6 +250,7 @@ class Writing < ActiveRecord::Base
       true
     end
   end
+  
 
   
 

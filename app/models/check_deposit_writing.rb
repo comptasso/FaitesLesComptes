@@ -7,4 +7,11 @@
 class CheckDepositWriting < Writing
   has_many :compta_lines, :dependent=>:destroy, foreign_key:'writing_id'
   has_one :check_deposit, foreign_key:'writing_id'
+  
+  protected
+  
+  # Pour les remises de chèques, la date de pièce est la date opération
+  def fill_date_piece
+    self.date_piece = date
+  end
 end

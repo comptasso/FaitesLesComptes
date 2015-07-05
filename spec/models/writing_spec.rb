@@ -82,7 +82,9 @@ describe Writing do
     before(:each) do
       use_test_organism
     end
-
+    
+    
+   
     describe 'validations et sauvegarde' , wip:true do
 
       before(:each) do
@@ -93,9 +95,7 @@ describe Writing do
         @r.compta_lines<< @l2
       end
       
-      after(:each) do
-        Writing.delete_all
-      end
+      after(:each) {erase_writings}
       
       describe 'validations' do
         it 'l écriture est valide' do
@@ -123,6 +123,20 @@ describe Writing do
         end
         
         
+      end
+      
+      describe 'remplissage de date_piece', wip:true do
+        
+        it 'conserve la date si elle est donnée' do
+          @r.date_piece = Date.today - 5
+          @r.save
+          expect(@r.date_piece).to eq(Date.today - 5)
+        end
+        
+        it 'ou reprend la date d écriture' do
+          @r.save
+          expect(@r.date_piece).to eq(@r.date)
+        end
       end
       
       describe 'period_start_date_validator pour le livre a nouveau' do

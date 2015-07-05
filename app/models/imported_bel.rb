@@ -30,6 +30,18 @@
 # 
 # Les champs obligatoires sont en fait ceux qui sont préremplis par le BelsImporter
 # à la lecture du fichier.
+# 
+# Pour la gestion du champ DatePiece, on a choisi d'utiliser le champ writing_date
+# qui était précédemment utilisé pour saisir la date. Cela permet un patch 
+# facile. Mais fait qu'on considère que la date de l'opération ne peut plus être
+# modifiée et reste la date d'écriture sur le relevé. 
+# TODO voir éventuellement à faire évoluer ce sujet à terme
+# TODO Autre sujet, la date est limitée à l'exercice, alors que la date de la pièce
+# peut être antérieure. Voir éventuellement à modifier la borne du calendrier
+# sauf si on fait évoluer le mode de saisie vers une modal box, probablement 
+# souhaitable.
+# TODO Et enfin, si on reste comme ça, il faudra alors changer le champ
+# writing_date en writing_date_piece. 
 #
 
 class ImportedBel < ActiveRecord::Base
@@ -183,9 +195,9 @@ class ImportedBel < ActiveRecord::Base
     @current_period || Organism.first.find_period(date) if date
   end
   
-  
+  # TODO changer le champ writing_date en writing_date_piece
   def writing_params
-    {date:writing_date, ref:ref, narration:narration}
+    {date:date, ref:ref, narration:narration, date_piece:writing_date}
   end
   
   def line_params

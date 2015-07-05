@@ -31,22 +31,15 @@ module Importer
       position = 1
       # permet d'avoir à la fois un fichier temporaire comme le prévoit rails
       # ou un nom de fichier (ce qui facilite les tests et essais).
-      f = file.respond_to?(:tempfile) ? file.tempfile : file
+      f = file.respond_to?(:tempfile) ? file.tempfile : file 
       
       CSV.foreach(f, options) do |row|
           
         # vérification des champs pour les lignes autres que la ligne de titre
         if not_empty?(row) 
           prepare(row)
-          # création d'un array de Bel
-          ibel =  ImportedBel.new(bank_account_id:ba_id, 
-            position:position, 
-            date:row[0], 
-            narration:row[1],
-            debit:row[2], credit:row[3])
-          ibel.cat_interpreter # on remplit les champs cat
-          ibel.payment_mode_interpreter # on tente de remplir le champ mode de paiement
-          lirs << ibel
+          # ajout de la Bel à la table
+          lirs << build_ibel(ba_id, position, row) 
           position += 1 
             
         end

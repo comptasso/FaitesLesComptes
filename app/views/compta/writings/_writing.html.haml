@@ -6,12 +6,15 @@
   .title.col-lg-2
     Date :
     =l writing.date
-  .title.col-lg-5
-    Libellé :
-    =writing.narration
   .title.col-lg-2
     Réf :
     =writing.ref
+  .title.col-lg-3
+    Libellé :
+    =writing.narration
+  .title.col-lg-2
+    Date pièce :
+    =l writing.date_piece if writing.date_piece
   .title.col-lg-2
     Actions :
     =compta_line_actions(@book, writing)

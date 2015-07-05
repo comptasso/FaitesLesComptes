@@ -309,6 +309,13 @@ fr:
         title: Titre
         mask: Guide de saisie
         end_date: Dernière échéance
+      writing:
+        date_piece: Date pièce
+        date_piece_picker: Date pièce
+        date_picker: Date
+        narration: Libellé
+        ref: Réf.
+        
       
       
         

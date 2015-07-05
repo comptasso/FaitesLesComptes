@@ -120,8 +120,9 @@ describe InOutWritingsHelper do
     context 'non editable?, affiche des conseils' do
       
       before(:each) do
-        @line = double(
+        @line = double(id:50,
            editable?:false,
+           book_id:1,
            writing_type:'Autre',
           cl_locked:false,
           support_locked:false)

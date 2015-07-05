@@ -91,7 +91,7 @@ describe ImportedBel do
     
       it 'to write renvoie les params' do
         subject.to_write.should == {date:Date.today, ref:'Ecriture n...',
-          narration:'Ecriture importee',
+          narration:'Ecriture importee', date_piece:Date.today,
           compta_lines_attributes:{'0'=> {nature_id:1, destination_id:1,
               debit:25.45, credit:0}, 
             '1'=>{account_id:107, debit:0, credit:25.45, payment_mode:'CB'}

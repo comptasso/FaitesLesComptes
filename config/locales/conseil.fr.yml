@@ -19,6 +19,19 @@ fr:
                attention à ne pas créer l'écriture
                en double lorsque vous importerez les écritures de vos autres 
                comptes.
+    InOutWritingsController:
+      new: >
+                Le champ "Date pièce" a été ajouté pour la conformité au format
+                du fichier des écritues comptables défini par le fisc.<br/>Sera rempli
+                avec la date de l'opération si laissé en blanc.<br/>Voir le site 
+                <a href="http://faiteslescomptes.fr/index.php/versions/suivi-version/111-version-1-12-0rc-nouveau-champ-date-piece">
+                FaitesLesComptes</a> pour plus de détail. 
+      edit: >
+                Le champ "Date pièce" a été ajouté pour la conformité au format
+                du fichier des écritues comptables défini par le fisc. <br/>Sera rempli
+                avec la date de l'opération si laissé en blanc. <br/>Voir le site 
+                <a href="http://faiteslescomptes.fr/index.php/versions/suivi-version/111-version-1-12-0rc-nouveau-champ-date-piece">
+                FaitesLesComptes</a> pour plus de détail. 
     Admin:
       NaturesController:
         index: >
@@ -27,7 +40,7 @@ fr:
                 listes déroulantes.
       DestinationsController:
         index: >
-                Nouveau : Activez ou désactivez les activités en cliquant sur les
+                Activez ou désactivez les activités en cliquant sur les
                 cases à cocher de la colonne 'Actif'. 
       BankAccountsController:
         new: >
