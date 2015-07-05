@@ -78,33 +78,35 @@ describe Rubrik do
   
   end
   
-  describe 'Resultats' do
-    
-    context 'une rubrique est une rubrique de resultat si' do
-      
-      before(:each) do
-        @res = Rubrik.new(numeros:'125 12 13')
-      end
-      
-      it 'si c est une feuille terminale et si la liste des numéros contient 12' do
-        @res.stub('leaf?').and_return true
-        @res.should be_resultat
-      end
-      
-      it 'mais pas si 12 n est pas dans la liste' do
-        @res.numeros = '125 13'
-        @res.stub('leaf?').and_return true 
-        @res.should_not be_resultat
-      end
-      
-      it 'mais pas si ce n est pas une feuille terminale' do
-        @res.stub('leaf?').and_return false
-        @res.should_not be_resultat
-      end
-      
-    end
-    
-  end
+#  # TODO à supprimer définitivment si ce n'est vraiment plus utilisé.
+#  # voir le commentaire dans le Rubrik#resultat?
+#  describe 'Resultats' do
+#    
+#    context 'une rubrique est une rubrique de resultat si' do
+#      
+#      before(:each) do
+#        @res = Rubrik.new(numeros:'125 12 13')
+#      end
+#      
+#      it 'si c est une feuille terminale et si la liste des numéros contient 12' do
+#        @res.stub('leaf?').and_return true
+#        @res.should be_resultat
+#      end
+#      
+#      it 'mais pas si 12 n est pas dans la liste' do
+#        @res.numeros = '125 13'
+#        @res.stub('leaf?').and_return true 
+#        @res.should_not be_resultat
+#      end
+#      
+#      it 'mais pas si ce n est pas une feuille terminale' do
+#        @res.stub('leaf?').and_return false
+#        @res.should_not be_resultat
+#      end
+#      
+#    end
+#    
+#  end
   
   describe 'all_instructions', wip:true do
     

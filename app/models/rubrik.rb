@@ -63,14 +63,16 @@ class Rubrik < ActiveRecord::Base
   
    
   
-  
+  # TODO en fait ne semble plus utilisé (à vérifier)
+  # Effectivement, l'utilisation des rubriks et de RubrikResult
+  # permet de se passer de cette méthode  # 
   # indique si la rubrique est le résultat de l'exercice (le compte 12).
   # ceci pour ne pas afficher le détail de tous les comptes 6 et 7
   # lorsque l'on affiche le détail du passif
-  def resultat?
-    return false unless leaf? # ce n'est possible que pour une rubrique qui est au bout d'une branche
-    '12'.in?(numeros.split) # split est essentiel sinon il répond true pour des numéros comme 212
-  end
+#  def resultat?
+#    return false unless leaf? # ce n'est possible que pour une rubrique qui est au bout d'une branche
+#    '12'.in?(numeros.split) # split est essentiel sinon il répond true pour des numéros comme 212
+#  end
     
   # Utilisé pour les vues de détail de Sheet,
   # permet de récupérer les Rubrik et les RubrikLine

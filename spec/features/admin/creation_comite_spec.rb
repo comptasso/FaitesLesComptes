@@ -51,6 +51,7 @@ describe "creation d un comité" do
           click_button 'Créer l\'organisme'
           click_button 'Créer l\'exercice'
           @o = Organism.first
+          @p = @o.periods.first
         end 
       
         it 'ce comité a trois secteurs' do
@@ -59,6 +60,18 @@ describe "creation d un comité" do
       
         it 'et 4 livres + OD + AN' do
           expect(@o.books.count).to eq(6)
+        end
+        
+        it 'l exercice est créé' do
+          expect(@p).to be_an_instance_of(Period)
+        end
+        
+        it 'et 39 natures' do
+          expect(@p.natures.count).to eq(39)
+        end
+        
+        it 'la nomenclature est ok' do
+          expect(Utilities::NomenclatureChecker).to be_period_coherent(@p)
         end
       
       end

@@ -39,12 +39,17 @@
     :rubriks:
       :TOTAL PASSIF:
         :FONDS PERMANENTS:
-          :Fonds propres:
-            :Réserve initiale: '1060'
+          :Fonds propres non affectés:
+            :Réserve initiale: '106 !1061 !1062'
+            :Résultat de l'exercice: '12 !1201 !1202'
+          :Fonds propres ASC:
             :Réserves ASC: '1061'
+            :Résultat de l'exercice: '1201'
+            :Subvention d'investissement: '1301'
+          :Fonds propres AEP:  
             :Réserves fonctionnement: '1062'
-            :Résultat de l'exercice: '12' 
-            :Subventions d'investissement: '102 13'
+            :Résultat de l'exercice: '1202'
+            :Subventions d'investissement: '102 13 !1301'
           :Provisions:
             :Provisions pour risques et charges: '15'
         :DETTES ENVERS LES TIERS:
@@ -64,15 +69,15 @@
     :title: Compte de résultats ASC
     :sens: :passif
     :rubriks:
-      :RESULTAT NET:
+      :EXCEDENT (DEFICIT):
         :RESULTAT D'EXPLOITATION:
           :Produits d'exploitation:
             :Ventes de marchandises: '707'
             :Participation salariés: '706'
             :Variation stocks production: '713'
             :Production immobilisée: '72'
-            :Subventions reçues: '74'
-            :Autres produits: '75 701'
+            :Subventions reçues: '74 756'
+            :Autres produits: '75 701 !756'
             :Reprises sur provisions, amortissements et transferts de charge: '781'
             :Transferts de charges: '791'
           :Charges d'exploitation:
@@ -114,8 +119,8 @@
       :RESULTAT NET:
         :RESULTAT D'EXPLOITATION:
           :Produits d'exploitation:
-            :Subventions: '74'
-            :Autres produits: '70 71 72 73 75 78 !786 !787'
+            :Subventions: '74 756'
+            :Autres produits: '70 71 72 73 75 !756 78 !786 !787'
             :Transferts de charges: '79'
           :Charges d'exploitation:
             :Achats matières et fourn. non stockables : '606'

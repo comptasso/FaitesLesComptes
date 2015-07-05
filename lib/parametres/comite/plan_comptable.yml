@@ -11,8 +11,10 @@ no_sector:
   title: Résultat de l'exercice Fonctionnement
 - number: '12'
   title: 'Résultat à ventiler'
-- number: '130'
-  title: Subvention d'investissement
+- number: '1301'
+  title: Subvention d'investissement ASC
+- number: '1302'
+  title: Subvention d'investissement AEP
 - number: '150'
   title: Provisions pour risques et charges
 - number: '160'
@@ -119,7 +121,7 @@ ASC:
   title: Charges exceptionnelles ASC
 - number: '706'
   title: Participation des salariés aux activités
-- number: '741'
+- number: '75602'
   title: Subventions ASC
 - number: '743'
   title: Subventions CCE
@@ -199,7 +201,7 @@ Fonctionnement:
 - number: '695'
   title: IS au taux réduit
 
-- number: '742'
+- number: '75601'
   title: Subventions fonctionnement
 
 - number: '758'

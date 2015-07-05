@@ -7,7 +7,7 @@
 
 # Sheet est destinées à éditer une liste de rubriks concrètement pour un exercice donné
 # 
-# Le but est de construire des sous parties de bilan ou de comtpe de résultats
+# Le but est de construire des sous parties de bilan ou de compte de résultats
 # Les arguments sont period, et un folio
 # 
 #  TODO voir pour faire le document avec une collection de folio
@@ -26,11 +26,6 @@
 # - to_csv pour le format csv
 # - to_pdf pour le format pdf 
 #  
-
-# A la différence de csv et pdf qui construisent toutes les données dans la méthode,
-#  pour l'affichage dans la vue, il suffit de renvoyer la rubrique root et la vue et 
-#  ses partial se chargent de construire l'ensemble.
-#
 module Compta
 
   class Sheet
@@ -126,16 +121,7 @@ module Compta
       Editions::DetailedSheet.new(@period, self, options)
     end
 
-    
-   
-    
-    
-
-
     protected
-
-  
-
 
     # prepare line sert à effacer les montant brut et amortissement pour ne garder
     # que le net.
@@ -173,13 +159,7 @@ module Compta
     def index_entetes
       sens == :actif ? %w(Rubrique Brut Amort Net Précédent) : ['Rubrique', '', '',  'Montant', 'Précédent']
     end
-    
-   
 
   end
-
-
-
-
 
 end
