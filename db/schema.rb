@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version:  20150401085758) do
+ActiveRecord::Schema.define(version: 20150628052219) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version:  20150401085758) do
   create_table "accounts", force: true do |t|
     t.string   "number"
     t.string   "title"
-    t.boolean  "used",             default: true 
+    t.boolean  "used",             default: true
     t.integer  "period_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -418,7 +418,7 @@ ActiveRecord::Schema.define(version:  20150401085758) do
     t.date     "ref_date"
     t.integer  "written_by"
     t.string   "user_ip"
-    
+    t.date     "date_piece"
   end
 
   add_index "writings", ["date"], name: "index_writings_on_date", using: :btree
