@@ -95,6 +95,8 @@ group :development, :test do
   gem 'turn', :require => false
   gem 'rspec-rails', '~>  2.14.0'
   gem 'test-unit', '~> 3.0.9'
+  gem 'spring'
+  gem 'spring-commands-rspec'
   # gem 'spork-rails'
   gem 'launchy'
   gem 'daemons' # mis en place pour pouvoir lancer les Delayed::Job dans la console
