@@ -15,7 +15,11 @@ module Compta
     def set_value
       Rails.logger.warn "RubrikResult appelé par l'organisme #{period.organism.title} sans compte de résultats " unless account
       super
-      @brut += period.resultat
+      if @account.sector_id
+        @brut += resultat_sectorise(@account.sector_id)
+      else
+        @brut += resultat_non_sectorise
+      end
       return @brut, @amortissement
     end
 
@@ -25,13 +29,30 @@ module Compta
         pp = period.previous_period
         acc = pp.accounts.find_by_number(select_num)
         s = acc ? acc.sold_at(pp.close_date) : 0
-        s += pp.resultat
+        s += pp.resultat(acc.sector_id)
       else
         return 0.0
       end
-      
     end
+    
+    protected
+    
+    # calcul de la valeur brute
+    # une méthode indiquant s'il y a des comptes 12 sectorisés
+    def resultat_sectorise(sector_id)
+      period.resultat(@account.sector_id)
+    end 
+    
+    def total_resultat_sectorise
+      sacs = period.accounts.where('number LIKE ? AND sector_id IS NOT NULL', '12%')
+      sacs.inject { |s| resultat_sectorise(s.sector_id)}
+    end
+    
+    def resultat_non_sectorise
+      period.resultat - total_resultat_sectorise
+    end
+    
+    
   end
-
 
 end

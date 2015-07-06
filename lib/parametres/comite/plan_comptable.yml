@@ -5,10 +5,6 @@ no_sector:
   title: Réserves des ASC
 - number: '1062'
   title: Réserves de fonctionnement
-- number: '1201'
-  title: Résultat de l'exercice ASC
-- number: '1202'
-  title: Résultat de l'exercice Fonctionnement
 - number: '12'
   title: 'Résultat à ventiler'
 - number: '1301'
@@ -107,6 +103,8 @@ no_sector:
   title: Provisions pour dépréciation des valeurs mobiliéres de placement
   
 ASC:
+- number: '1201'
+  title: Résultat de l'exercice ASC
 - number: '602'
   title: Achats stockés sur activités (sauf 603)
 - number: '6032'
@@ -138,7 +136,9 @@ ASC:
 - number: '791'
   title: Transferts de charges ASC
  
-Fonctionnement: 
+Fonctionnement:
+- number: '1202'
+  title: Résultat de l'exercice Fonctionnement
 - number: '606'
   title: Achats non stockés matières et fournitures
 - number: '611'

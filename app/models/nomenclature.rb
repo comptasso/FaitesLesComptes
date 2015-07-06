@@ -134,6 +134,8 @@ class Nomenclature < ActiveRecord::Base
   # indique si une nomenclature est cohérente et donc utilisable pour produire des
   # états comptables.
   # Utilité dans SheetsController pour vérifier que la nomenclature est cohérente
+  # TODO introduire un niveau de contrôle moins complet pour traiter 
+  # uniquement ce qui doit l'être lors d'un ajout ou suppression de compte.
   def coherent?
     Utilities::NomenclatureChecker.new(self).valid?
   end

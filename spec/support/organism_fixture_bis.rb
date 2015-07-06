@@ -101,15 +101,21 @@ module OrganismFixtureBis
     create_organism
   end
  
-
-  def create_organism
+  # créé un organisme dans la base SCHEMA_TEST
+  # l'argument status permet de choisir le type d'organisme
+  # Par défaut, une association
+  def create_organism(status='Association')
     clean_organism
     Apartment::Database.switch(SCHEMA_TEST)
-    @o = Organism.create!(title: 'ASSO TEST', database_name:SCHEMA_TEST, comment: 'Un commentaire', status:'Association')
-    @p = @o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
+    @o = Organism.create!(title: 'ASSO TEST', database_name:SCHEMA_TEST,
+      comment: 'Un commentaire', status:status)
+    @p = @o.periods.create!(start_date: Date.today.beginning_of_year, 
+      close_date: Date.today.end_of_year)
     @p.create_datas
     get_organism_instances 
   end
+  
+  
   
   def get_organism_instances
     # TODO utiliser des ||= pour réduire le nombre de requetes
@@ -214,6 +220,45 @@ module OrganismFixtureBis
          '1'=>{account_id:@baca.id, credit:montant, payment_mode:payment}
         }
       })
+    puts ecriture.errors.messages unless ecriture.valid?
+    ecriture.save
+    ecriture
+  end
+  
+  # Options est un hash 
+  def create_writing(book, options)
+    
+    # gestion des valeurs par défaut et des options
+    d = options[:date] || Date.today
+    narration = options[:narration] || 'ligne créée par la méthode create_writing'
+    aid = options[:account_id] || @p.accounts.classe_7.first
+    if options[:nature_id]
+      nature = Nature.find_by_id(options[:nature_id])
+    else
+      nature = @p.natures.depenses.first 
+    end
+    montant = options[:montant] || 33.33
+    p_mode = options[:p_mode] || 'Virement'
+    if options[:finance_account_id] 
+      baca_id = options[:finance_account_id]
+    else
+      ba = @o.bank_accounts.first
+      baca_id = ba.current_account(@p).id
+    end
+      
+    # création de l'écriture
+      ecriture = book.in_out_writings.new(
+      {date:d,
+       narration:narration,
+       :compta_lines_attributes=>{
+         '0'=>{account_id:aid, 
+           destination_id:options[:dest_id],
+           nature:nature, debit:montant, payment_mode:p_mode},
+         '1'=>{account_id:baca_id, credit:montant, payment_mode:p_mode}
+        }
+      })
+    
+    # vérification de la validité et enregistrement
     puts ecriture.errors.messages unless ecriture.valid?
     ecriture.save
     ecriture

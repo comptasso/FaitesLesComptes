@@ -2,10 +2,6 @@
 
 module Compta
 
-
-
-
-
   # Permet de controler que la nomenclature et les comptes de l'exercice sont 
   # cohérents.
   # 
@@ -16,8 +12,6 @@ module Compta
   # Les méthodes de Compta::Nomenclature sont destinées à vérifier que tous les 
   # comptes sont utilisés pour le bilan et pour le compte de résultat, ainsi que
   # pour le bénévolat. 
-  #
- 
   class Nomenclature
 
     include ActiveModel::Validations
@@ -43,14 +37,9 @@ module Compta
 # 
 # On pourrait par exemple tromper l'analyse avec un 43 !431 mais pas mettre le 431
 # problème qui est traité par bilan_complete
-# ou encore un -456 et ailleur un 45, problème qui relève du no_doublon
+# ou encore un -456 et ailleurs un 45, problème qui relève du no_doublon
 # 
 # 
-      
-
-   
-
-      
       
       # vérifie que tous les comptes de classe 1 à 5 sont pris en compte 
       # pour l'établissement du bilan
@@ -73,11 +62,10 @@ module Compta
       def bilan_complete?
         bilan_complete.empty? ? true : false 
       end
-   
-
-
-      # vérifie que tous les comptes 6 et 7 sont pris en compte pour l'établissement du compte de résultats 
-      # renvoie la liste des comptes non repris
+ 
+      # vérifie que tous les comptes 6 et 7 sont pris en compte pour
+      # l'établissement du compte de résultats. 
+      # Renvoie la liste des comptes non repris
       def resultat_complete
         list_accs = @period.two_period_account_numbers.reject {|acc| acc.to_s =~ /\A[123458]\d*/}
         not_selected =  list_accs.select {|a| !a.in?(resultats_accounts) }
@@ -85,9 +73,6 @@ module Compta
         not_selected
       end
       
-      # Indique si le document bilan utilise tous les comptes de bilan
-      # bilan_complete retournant les comptes inutilisés, la réponse
-      # est donnée en testant si bilan_complete est vide.
       def resultat_complete?
         resultat_complete.empty? ? true : false 
       end
@@ -104,7 +89,7 @@ module Compta
         collection_with_option_no_doublon?(:resultat, *resultats.to_a)
       end
       
-      # méthode vérifiant qu'il n'y a aucun doublon dans le comptes de resultat
+      # méthode vérifiant qu'il n'y a aucun doublon dans le comptes de bénévolat
       def benevolat_no_doublon?
         collection_with_option_no_doublon?(:benevolat, benevolat)
       end
@@ -122,7 +107,6 @@ protected
         resultats.each { |result| rubrik_accounts += result.all_numbers(@period)}
         rubrik_accounts
       end
-      
       
       # renvoie une liste d'instructions avec les options sous forme de hash
       #  [{:num=>"201", :option=>nil}, {:num=>"2801", :option=>:col2}, 

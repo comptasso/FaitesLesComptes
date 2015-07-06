@@ -259,26 +259,34 @@ class Period < ActiveRecord::Base
     return closed?
   end
 
- 
+### Partie consacrée au calcul de soldes 
+# TODO voir si tout ça ne crée pas trop d'appel à la base de données
 
-  
-
-  # renvoie le total des comptes commenaçnt par n
-  def total_classe(n, dc)
-    compta_lines.classe(n).sum(dc)
+  # renvoie le total des comptes commençant par n
+  def total_classe(n, dc, sector_id=nil)
+    if sector_id
+      compta_lines.
+        where('sector_id = ? AND number LIKE ?', sector_id,  "#{n}%").
+        sum(dc)
+    else
+      compta_lines.classe(n).sum(dc)
+    end
+    
   end
 
   # renvoie le solde des comptes de la classe transmis en argument.
   #
   # Applique round(2) au résultat du calcul pour éviter les nombres approchés
-  def sold_classe(n)
-    (total_classe(n, 'credit')- total_classe(n, 'debit')).round(2)
+  def sold_classe(n, sector_id = nil)
+    (total_classe(n, 'credit', sector_id)- total_classe(n, 'debit', sector_id)).round(2)
   end
 
-  def resultat
-    sold_classe(7) + sold_classe(6)
+  def resultat(sector_id = nil)
+    sold_classe(7, sector_id) + sold_classe(6, sector_id)
   end
 
+### Partie pour lister les comptes utiles pour les différentes vues 
+  
   # utilisé pour les tansferts...
   def list_bank_accounts
     accounts.where('number LIKE ?', '512%')
