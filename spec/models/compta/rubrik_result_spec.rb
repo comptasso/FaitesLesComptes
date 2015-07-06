@@ -3,18 +3,20 @@
 require 'spec_helper'
 
 RSpec.configure do |c| 
-    c.filter = {:wip=>true}
+ #   c.filter = {:wip=>true}
 end
 
 describe Compta::RubrikResult do
   include OrganismFixtureBis
   
-  context 'Avec des mocks' do
+  context 'Avec des mocks', wip:true do
 
     before(:each) do
       @p = mock_model(Period, :resultat=>19)
-      @p.stub_chain(:accounts, :find_by_number).and_return(mock_model(Account, :sold_at=>51.25))
-
+      @p.stub(:accounts).and_return @ar = double(Arel)
+      @ar.stub(:find_by_number).
+        and_return(mock_model(Account, :sold_at=>51.25, sector_id:nil))
+      @ar.stub(:where).with('number LIKE ? AND sector_id IS NOT NULL', '12%').and_return []
     end
 
     it 'se crée avec un exercice' do
@@ -28,7 +30,7 @@ describe Compta::RubrikResult do
     end
 
     it 'ne crée pas d erreur si pas de compte' do
-      @p.stub_chain(:accounts, :find_by_number).and_return(nil)
+      @ar.stub(:find_by_number).and_return(nil)
       @p.stub(:organism).and_return((mock_model(Organism, :title=>'Ma petite affaire')))
       @rr = Compta::RubrikResult.new(@p, :passif, '12')
       @rr.brut.should == 19
@@ -52,7 +54,8 @@ describe Compta::RubrikResult do
         @q = mock_model(Period)
         @q.stub(:organism) {mock_model(Organism, :title=>'Ma petite affaire')}
         @p.should_receive(:previous_period).and_return(@q)
-        @q.stub_chain(:accounts, :find_by_number).and_return(double(Account, :sold_at=>5))
+        @q.stub_chain(:accounts, :find_by_number).
+          and_return(double(Account, :sold_at=>5, sector_id:1))
         @q.should_receive(:resultat).and_return 22
         @rr.previous_net.should == 27
       end
@@ -60,7 +63,7 @@ describe Compta::RubrikResult do
     end
   end
   
-  context 'avec plusieurs secteurs et des comptes de résultats par secteur', wip:true do
+  context 'avec plusieurs secteurs et des comptes de résultats par secteur' do
     
     before(:each) do
       create_organism('Comité d\'entreprise')

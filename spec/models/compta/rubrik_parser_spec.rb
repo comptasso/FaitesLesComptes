@@ -41,11 +41,17 @@ describe Compta::RubrikParser do
     before(:each) do
       p.stub(:accounts).and_return(@ar = double(Arel))
       p.stub(:resultat).and_return 1234.56
-      @ar.stub(:find_by_number).and_return(mock_model(Account, number:'12', sold_at:120.54))
-    end
+      Compta::RubrikResult.any_instance.stub(:resultat_non_sectorise).and_return 1
+   end
     
     it 'renvoie un RubrikResult si le compte est RESULT_ACCOUNT' do
+      @ar.stub(:find_by_number).and_return(mock_model(Account, number:'12', sold_at:120.54))
       subject.rubrik_lines.first.should be_an_instance_of(Compta::RubrikResult) 
+    end
+    
+    it 'de même pour un compte commençant par 12' do
+      @ar.stub(:find_by_number).and_return(mock_model(Account, number:'1201', sold_at:120.54))
+      subject.rubrik_lines.first.should be_an_instance_of(Compta::RubrikResult)
     end
   
   end
