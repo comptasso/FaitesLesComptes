@@ -80,11 +80,12 @@ module Compta
     
     # construit et renvoie la série des rubrik_lines
     def rubrik_lines
+      
       @list.map do |l|
-        if l[:num] != RESULT_ACCOUNT
-          Compta::RubrikLine.new(@period, @sens, l[:num], l[:option])
-        else
+        if l[:num] =~ RESULT_ACCOUNT
           Compta::RubrikResult.new(@period, @sens, l[:num], l[:option])
+        else
+          Compta::RubrikLine.new(@period, @sens, l[:num], l[:option])
         end
       end
     end

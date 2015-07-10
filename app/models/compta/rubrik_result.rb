@@ -12,7 +12,7 @@ module Compta
 
     # les valeurs d'un RubrikResult sont calculés à partir du compte 12
     # et du solde des comptes 6 et 7. Ce dernier est donné par period.resultat
-    def set_value
+    def set_value 
       Rails.logger.warn "RubrikResult appelé par l'organisme #{period.organism.title} sans compte de résultats " unless account
       super
       if @account && @account.sector_id 
@@ -20,19 +20,15 @@ module Compta
       else
         @brut += resultat_non_sectorise
       end
-      return @brut, @amortissement
+      return @brut, @amortissement = BigDecimal.new(0)
     end
 
 
     def previous_net(unused_period=nil)
-      if period.previous_period?
-        pp = period.previous_period
-        acc = pp.accounts.find_by_number(select_num)
-        s = acc ? acc.sold_at(pp.close_date) : 0
-        s += pp.resultat(acc.sector_id)
-      else
-        return 0.0
-      end
+      return 0.0 unless pp = period.previous_period
+      return 0.0 unless acc = pp.accounts.find_by_number(select_num)
+      cr = Compta::RubrikResult.new(pp, 'passif', acc.number)  
+      cr.brut     
     end
     
        

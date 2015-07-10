@@ -11,7 +11,7 @@ describe Compta::RubrikParser do
   include OrganismFixtureBis
 
   let(:p) {mock_model(Period, 
-      :two_period_account_numbers=>%w(12 20 201 206 207 208 2801))}
+      :two_period_account_numbers=>%w(12 1201 20 201 2012 206 207 208 2801))}
 
   describe 'méthode de tri des numéros' do
 
@@ -34,9 +34,7 @@ describe Compta::RubrikParser do
   
   end
   
-  describe 'traitement du compte RESULT_ACCOUNT' do
-
-    subject {Compta::RubrikParser.new(p, :passif, RESULT_ACCOUNT)}
+  describe 'Traitement des comptes de résultats : RubrikParser ' do
     
     before(:each) do
       p.stub(:accounts).and_return(@ar = double(Arel))
@@ -46,12 +44,23 @@ describe Compta::RubrikParser do
     
     it 'renvoie un RubrikResult si le compte est RESULT_ACCOUNT' do
       @ar.stub(:find_by_number).and_return(mock_model(Account, number:'12', sold_at:120.54))
-      subject.rubrik_lines.first.should be_an_instance_of(Compta::RubrikResult) 
+      Compta::RubrikParser.new(p, :passif, '12').rubrik_lines.first.
+        should be_an_instance_of(Compta::RubrikResult) 
     end
     
-    it 'de même pour un compte commençant par 12' do
+    it 'de même pour un compte commençant par 12' do 
       @ar.stub(:find_by_number).and_return(mock_model(Account, number:'1201', sold_at:120.54))
-      subject.rubrik_lines.first.should be_an_instance_of(Compta::RubrikResult)
+      cr = Compta::RubrikParser.new(p, :passif, '1201')
+      # puts cr.inspect  
+      cr.rubrik_lines.first.
+        should be_an_instance_of(Compta::RubrikResult)
+    end
+    
+    it 'mais pas le 2012' do
+      @ar.stub(:find_by_number).and_return(mock_model(Account, number:'2012', sold_at:120.54))
+      cr = Compta::RubrikParser.new(p, :passif, '2012')
+      puts cr.inspect  
+      expect(cr.rubrik_lines.first).not_to be_an_instance_of(Compta::RubrikResult)
     end
   
   end

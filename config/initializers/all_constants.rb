@@ -9,7 +9,7 @@
 # Par ailleurs accountable a été surchargé dans Account pour retourner une instance de RemCheckAccount 
 # si le type est RemCheckAccount.
 REM_CHECK_ACCOUNT = {number:'511', title:'Chèques à l\'encaissement'}.freeze
-RESULT_ACCOUNT = '12'
+RESULT_ACCOUNT = /^12\d*/
 
 
 # constante utilisée pour les éditions de pdf

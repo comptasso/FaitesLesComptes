@@ -3,7 +3,7 @@
 # require 'yaml'
 
 # TODO probablement à rebaptiser en Compta::Folio
-# TODO supprimer Compta::Sheet après 
+
 
 # Sheet est destinées à éditer une liste de rubriks concrètement pour un exercice donné
 # 
@@ -49,7 +49,7 @@ module Compta
     # liste les rubriques et les lignes de compte qui ont permis de les construire
     # 
     # Egalement utilisé par Editions::DetaileSheet. D'où le page number qui n'est
-    # pas à ce stade utilisé. 
+    # pas ici utilisé. 
     #
     def fetch_lines(page_number = 1)
       folio.root.fetch_lines(@period)

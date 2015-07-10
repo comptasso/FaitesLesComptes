@@ -12,7 +12,7 @@ describe Compta::RubrikResult do
   context 'Avec des mocks', wip:true do
 
     before(:each) do
-      @p = mock_model(Period, :resultat=>19)
+      @p = mock_model(Period, :resultat=>19, :previous_period=>nil)
       @p.stub(:accounts).and_return @ar = double(Arel)
       @ar.stub(:find_by_number).
         and_return(mock_model(Account, :sold_at=>51.25, sector_id:nil))
@@ -55,7 +55,7 @@ describe Compta::RubrikResult do
         @q.stub(:organism) {mock_model(Organism, :title=>'Ma petite affaire')}
         @p.should_receive(:previous_period).and_return(@q)
         @q.stub_chain(:accounts, :find_by_number).
-          and_return(double(Account, :sold_at=>5, sector_id:1))
+          and_return(double(Account, :sold_at=>5, sector_id:1, number:'12'))
         @q.should_receive(:resultat).and_return 22
         @rr.previous_net.should == 27
       end
