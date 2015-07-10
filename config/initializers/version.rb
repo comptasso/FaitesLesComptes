@@ -94,4 +94,5 @@
 # FLCVERSION = '1.11.11RC' # Mise en place des statistiques par activités/destinations 
 # FLCVERSION = '1.11.12RC' # Passage à Rails 4.1  
 # FLCVERSION = '1.11.13RC' # Correction bug sur remise de chèques pour les banques en secteur Commun
-FLCVERSION = '1.12.0RC' # mise en place de date_piece pour le FEC 
+# FLCVERSION = '1.12.0RC' # mise en place de date_piece pour le FEC 
+FLCVERSION = '1.12.1RC' # refonte des états suite réglements ANC pour les CE.

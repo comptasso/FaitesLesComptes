@@ -241,7 +241,8 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id
   protected 
   
   def period_open
-    errors.add(:base, 'Exercice clos') if period && !period.open
+    errors.add(:number, 'Exercice clos') if changed_attributes[:number] && period && !period.open 
+    errors.add(:title, 'Exercice clos') if changed_attributes[:title] && period && !period.open
   end
   
   # pour les comités, les deux comptes de résultats imposent que les 

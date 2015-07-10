@@ -132,6 +132,7 @@ Rails.application.routes.draw do
     resources :rooms, :only=>[:index, :show, :new, :create, :destroy] 
     
     resources :organisms do
+      member {post 'reset_folios'}
 
       resources :masks
       resources :subscriptions

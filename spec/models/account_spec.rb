@@ -50,11 +50,29 @@ describe Account do
         subject.period = nil
         subject.should_not be_valid
       end
+      
+      context 'avec un exercice clos' do
         
-      it 'non valide si exercice clos' do
-        subject.stub(:period).and_return(mock_model(Period, open:false))
-        subject.should_not be_valid     
-      end
+        before(:each) do
+          subject.stub(:period).and_return(mock_model(Period, open:false))
+        end
+        
+        it 'non valide si exercice clos pour le titre' do
+          subject.stub(:changed_attributes).and_return({title:'Bonjour'})
+          subject.should_not be_valid     
+        end
+      
+        it 'de meme non valide si exercice clos pour le numéro' do
+          subject.stub(:changed_attributes).and_return({number:'666'})
+          subject.should_not be_valid   
+        end
+      
+        it 'mais on peut changer le secteur' do
+          subject.stub(:changed_attributes).and_return({sector_id:9})
+          subject.should be_valid  
+        end
+      
+      end 
     end
       
     

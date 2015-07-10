@@ -61,6 +61,7 @@ class Admin::AccountsController < Admin::ApplicationController
     end
   end
   
+ 
   # permet de modifier le champ used. Appelé par du javascript de la vue index
   # de admin_destinations
   def toggle_used

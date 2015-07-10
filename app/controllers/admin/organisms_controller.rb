@@ -30,6 +30,19 @@ class Admin::OrganismsController < Admin::ApplicationController
   def edit
     @organism = Organism.find(params[:id])
   end
+  
+   # méthode provisoire pour adaptation du plan comptable des CE aux 
+  # réglement de l'ANC. 
+  # TODO après un certain temps pour la transformation, à retirer. 
+  def reset_folios
+    @organism = Organism.find(params[:id])
+    params.permit(:period_id)
+    @period = @organism.periods.find(params[:period_id])
+    @organism.send(:reset_folios)
+    flash[:notice] = 'La nomenclature des comptes a été reconstruite'
+    redirect_to admin_period_accounts_path(@period)
+  end
+  
 
   
 
