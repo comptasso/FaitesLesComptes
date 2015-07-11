@@ -25,7 +25,8 @@ module Compta
 
 
     def previous_net(unused_period=nil)
-      return 0.0 unless pp = period.previous_period
+      return 0.0 unless period.previous_period? 
+      pp = period.previous_period
       return 0.0 unless acc = pp.accounts.find_by_number(select_num)
       cr = Compta::RubrikResult.new(pp, 'passif', acc.number)  
       cr.brut     
