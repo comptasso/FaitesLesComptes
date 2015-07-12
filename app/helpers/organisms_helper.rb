@@ -14,7 +14,26 @@ module OrganismsHelper
     org.bank_accounts.each  { |ba| m << bank_account_message(ba) }
     org.cashes.each { |ca| m << cash_message(ca) }
     org.subscriptions.each { |sub| m << sub_infos(sub) }
+    m << anc_message(org)
     return m.compact # pour retirer les éventuels messages nil
+  end
+  
+  # création d'un message pour la transformation des comités d'entreprise
+  # Si l'organsime est un commité et qu'il n'y a pas de rubrik AEP, alors
+  # c'est que la transformation n'a pas été faite. 
+  # 
+  # On oriente alors sur la page du site qui traite de sujet...
+  #
+  def anc_message(org)
+    if @organism.status == 'Comité d\'entreprise' &&  Rubrik.where('name LIKE ?', '%AEP').empty?
+      info = {}
+      text = "Suite à la publication du réglement de l'Autorité des Normes Comptables, relatif à la comptabilité des CE, suivez les  "
+      text += link_to 'instructions', 'http://faiteslescomptes.fr/...'
+      text += " pour adapter votre compta à ces nouvelles règles"
+      info[:text] = text.html_safe
+      info
+    end
+    
   end
   
   

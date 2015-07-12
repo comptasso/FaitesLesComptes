@@ -59,7 +59,7 @@ describe Compta::RubrikParser do
     it 'mais pas le 2012' do
       @ar.stub(:find_by_number).and_return(mock_model(Account, number:'2012', sold_at:120.54))
       cr = Compta::RubrikParser.new(p, :passif, '2012')
-      puts cr.inspect  
+      # puts cr.inspect  
       expect(cr.rubrik_lines.first).not_to be_an_instance_of(Compta::RubrikResult)
     end
   

@@ -68,6 +68,6 @@ class Admin::OrganismsController < Admin::ApplicationController
   def admin_organism_params
     params.require(:organism).permit(:title, :comment, :siren, :postcode)
   end
+  
 
- 
 end
