@@ -28,7 +28,8 @@ module OrganismsHelper
     if @organism.status == 'Comité d\'entreprise' &&  Rubrik.where('name LIKE ?', '%AEP').empty?
       info = {}
       text = "Suite à la publication du réglement de l'Autorité des Normes Comptables, relatif à la comptabilité des CE, suivez les  "
-      text += link_to 'instructions', 'http://faiteslescomptes.fr/...'
+      text += link_to 'instructions',
+        'http://faiteslescomptes.fr/index.php/versions/suivi-version/113-version-1-12-1rc-conformite-avec-le-reglement-de-l-anc-pour-la-compta-des-ce'
       text += " pour adapter votre compta à ces nouvelles règles"
       info[:text] = text.html_safe
       info
