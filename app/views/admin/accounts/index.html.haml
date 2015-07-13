@@ -3,7 +3,7 @@
   - if @organism.status == 'Comité d\'entreprise' &&  Rubrik.where('name LIKE ?', '%AEP').empty?
     =icon_to 'hammer-screwdriver.png',
       reset_folios_admin_organism_path(@organism, period_id:@period.id),
-      title: 'Reconstruction des modèles de documents comptables',
+      title: 'Reconstruction des modèles de documents comptables - Lisez les instructions avant de cliquer',
       method: :post
 
 .champ
@@ -27,7 +27,7 @@
           -if @sectorized
             %td= secteur(account)
           %td= account.title
-          %td= render(:partial=>'nature', :collection=>account.natures.all) if account.nb_nats.to_i > 0
+          %td= render(partial:'nature', collection:account.natures.all) if (account.nb_nats.to_i > 0)
           %td.acc_used{id:"td_used_#{account.id}"}
             =check_box_tag("used_#{account.id}", account.id, account.used)
           %td.actions= account_actions(account)

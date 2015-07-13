@@ -18,7 +18,8 @@ class Utilities::NomenclatureChecker
     folios_coherent?
     bilan_balanced?
     bilan_no_doublon?
-    periods_coherent?
+    periods_coherent? # periods au pluriel
+    sectors_result_compliant?
     !nomen.errors.present?
   end
   
@@ -49,6 +50,7 @@ class Utilities::NomenclatureChecker
   
   
   protected
+  
   
   # vérifie la présence des folios et ajoute une erreur à nomen si 
   # nécessaire
@@ -104,6 +106,21 @@ class Utilities::NomenclatureChecker
   # Au pluriel, vérifie la cohérence pour chacun des exercices
   def periods_coherent?
     nomen.organism.periods.each {|p| period_coherent?(p)}
+  end
+  
+  # Une nomenclature ne peut calculer correctement le résultat que si les  
+  # comptes de résultats autre que le 12 sont correctement sectorisés. 
+  def sectors_result_compliant?
+    nomen.organism.periods.each {|p| sector_result_compliant?(p)}
+  end
+  
+  
+  # au singulier, vérifie que l'exercice ne comporte pas de compte 12XX non 
+  # sectorisé
+  def sector_result_compliant?(exercice)
+    if exercice.report_accounts.reject {|a| a.sector_id != nil}.count != 1
+      nomen.errors.add(:resultat, 'Plus d\'un compte de resultat global')
+    end
   end
   
   

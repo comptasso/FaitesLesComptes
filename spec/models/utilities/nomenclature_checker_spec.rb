@@ -25,6 +25,29 @@ describe Utilities::NomenclatureChecker do
     end
   end
   
+  describe 'Contrôle sur les comptes de résultat' do
+    
+    before(:each) do
+      @acc_result = @p.accounts.create!(number:'1220',
+        title:'Résultat du secteur')
+    end
+    
+    after(:each) do
+      @acc_result.destroy
+    end
+        
+    it 'non valable avec un compte de résultat non sectorisé' do
+      subject.should_not be_valid
+    end
+    
+    it 'valable si le compte est sectorisé' do
+      @acc_result.update_attribute(:sector_id, 2)
+      subject.should be_valid
+    end
+    
+    
+  end
+  
   describe 'Présence des folios : ' do
     
     before(:each) do
@@ -34,6 +57,7 @@ describe Utilities::NomenclatureChecker do
       subject.stub(:bilan_balanced?)
       subject.stub(:bilan_no_doublon?)
       subject.stub(:periods_coherent?)
+      subject.stub(:sectors_result_compliant?)
     end
     
     it 'toute nomenclature doit avoir un folio actif' do
@@ -150,6 +174,7 @@ describe Utilities::NomenclatureChecker do
       subject.stub(:folios_coherent?)
       subject.stub(:bilan_balanced?)
       subject.stub(:bilan_no_doublon?)
+      subject.stub(:sectors_result_compliant?)
     end
     
     it 'valid vérifie que chaque exercice est cohérent' do
