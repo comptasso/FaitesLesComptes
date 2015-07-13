@@ -166,9 +166,22 @@ class Period < ActiveRecord::Base
     end
   end
   
+  def report_accounts
+    accounts.where('number LIKE ?', '12%')
+  end
+  
+  # donne le compte de report pour un secteur, par exemple 1201, 1202,...
+  # si pas de compte renvoie alors le compte 12
+  # utile lorsqu'un secteur n'a pas de compte de résultat attaché, ce qui est 
+  # le cas général pour les secteurs Global, et le secteur Commun des CE.
+  def report_account_for_sector(sector)
+    a = accounts.where('number LIKE ? AND sector_id = ?', '12%', sector.id).first
+    a || report_account
+  end
+  
   # renvoie le compte (12) qui sert pour enregistrer le résultat de l'exercice
   def report_account
-    accounts.where('number = ?', '12').first
+    report_accounts.where('number = ?', '12').first
   end
 
   # Renvoie le compte de l'exercice précédent
@@ -235,7 +248,7 @@ class Period < ActiveRecord::Base
         report_comptes_bilan.each { |cl| w.compta_lines << cl }
         
         # puis on intègre la compta_line de report à nouveau
-        w.compta_lines << report_a_nouveau if resultat != 0.0
+        w.compta_lines << report_a_nouveau if resultats.uniq != 0.0
          
         unless w.valid?
           logger.warn  'Dans period#close avec des erreurs sur w'
@@ -283,6 +296,11 @@ class Period < ActiveRecord::Base
 
   def resultat(sector_id = nil)
     sold_classe(7, sector_id) + sold_classe(6, sector_id)
+  end
+  
+  # collection des résultats pour tous les secteurs de l'organisme
+  def resultats
+    organism.sectors.map {|s| resultat(s.id)}
   end
 
 ### Partie pour lister les comptes utiles pour les différentes vues 
@@ -525,8 +543,27 @@ class Period < ActiveRecord::Base
  
   # report_compta_line crée la ligne de report de l'exercice
   def report_a_nouveau
+    sects = organism.sectors.to_a
+    if sects.count == 1
+      report_no_sector
+    else
+      rans = sects.map {|s| report_by_sector(s)}.reject {|cl| cl.debit == 0.0 && cl.credit == 0.0}
+      rans
+    end
+  end
+  
+  def report_no_sector
     res_acc  = next_period.report_account
     ran = ComptaLine.new(account_id:res_acc.id, credit:resultat, debit:0)
+    Rails.logger.warn 'report à nouveau invalide' unless ran.valid?
+    ran
+  end
+  
+  # pour un organisme sectorisé, on fait les reports en prenant en compte
+  # les comptes 12XX du secteur et bien sur le résultat de ce secteur
+  def report_by_sector(sector)
+    res_acc  = next_period.report_account_for_sector(sector)
+    ran = ComptaLine.new(account_id:res_acc.id, credit:resultat(sector.id), debit:0)
     Rails.logger.warn 'report à nouveau invalide' unless ran.valid?
     ran
   end
