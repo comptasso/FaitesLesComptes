@@ -17,8 +17,10 @@ module Compta
       super
       if @account && @account.sector_id 
         @brut += resultat_sectorise
-      else
+      elsif @account && @account.number == '12'
         @brut += resultat_non_sectorise
+      else # traite le cas ou un compte 12XX n'aurait pas été sectorisé
+        @brut += 0
       end
       return @brut, @amortissement = BigDecimal.new(0)
     end

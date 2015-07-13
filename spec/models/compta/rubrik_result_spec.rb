@@ -19,13 +19,25 @@ describe Compta::RubrikResult do
       @ar.stub(:where).with('number LIKE ? AND sector_id IS NOT NULL', '12%').and_return []
     end
 
-    it 'se crée avec un exercice' do
-      Compta::RubrikResult.new(@p, :passif, '12').should be_an_instance_of(Compta::RubrikResult)
+    it 'si le compte n est pas sectorisé, donne juste sa valeur' do
+      @rr = Compta::RubrikResult.new(@p, :passif, '1201')
+      @rr.brut.should == 51.25 # le solde 51.25 sans résultat supplémentaire
+      @rr.amortissement.should == 0
     end
-
-    it 'initialise ses valeurs' do
+    
+    it 'mais rajoute le résultat sectorisé si le compte a un secteur' do
+      @ar.stub(:find_by_number).
+        and_return(mock_model(Account, :sold_at=>51.25, sector_id:1))
+      @rr = Compta::RubrikResult.new(@p, :passif, '1201')
+      @rr.brut.should == 70.25 # le solde 51.25 + 19 de resultat
+      @rr.amortissement.should == 0
+    end
+    
+    it 'pour un compte 12, donne le résultat' do
+      @ar.stub(:find_by_number).
+        and_return(mock_model(Account, :sold_at=>0, sector_id:1))
       @rr = Compta::RubrikResult.new(@p, :passif, '12')
-      @rr.brut.should == 70.25  # le solde 51.25 plus le résultat : 19)
+      @rr.brut.should == 19 # le resultat
       @rr.amortissement.should == 0
     end
 
@@ -33,7 +45,7 @@ describe Compta::RubrikResult do
       @ar.stub(:find_by_number).and_return(nil)
       @p.stub(:organism).and_return((mock_model(Organism, :title=>'Ma petite affaire')))
       @rr = Compta::RubrikResult.new(@p, :passif, '12')
-      @rr.brut.should == 19
+      @rr.brut.should == 0
       @rr.amortissement.should == 0
     end
 
