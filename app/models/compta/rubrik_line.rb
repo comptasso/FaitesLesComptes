@@ -63,7 +63,7 @@ module Compta
     # previous_net renvoie la valeur nette pour l'exercice précédent
     # 
     def previous_net(unused_period = nil)
-      net_value(mise_en_forme(period.previous_account(account).sold_at(period.close_date))) rescue 0
+      net_value(mise_en_forme(previous_account.sold_at(period.close_date))) rescue 0
     end
 
     # TODO ceci a été rajouté car les nouvelles Rubrik ont besoin de period
@@ -91,6 +91,14 @@ module Compta
 
 
     protected
+    
+    def previous_account
+      if account
+        return period.previous_account(account)
+      else
+        return period.previous_period.accounts.find_by_number(@select_num)
+      end
+    end
 
     # Calcule les valeurs brut et amortissements pour le compte
     # retourne [0,0] s'il n'y a pas de compte

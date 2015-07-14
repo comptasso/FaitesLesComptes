@@ -61,7 +61,7 @@ describe Compta::RubrikLine do
     
   end
 
-  it 'to_a rencoie les 5 valeurs' do
+  it 'to_a rencoie les 5 valeurs', wip:true do
     @rl = Compta::RubrikLine.new(p, :actif, '201')
     @rl.to_a.should == ['201 - Un compte', 120,0,120,14]
   end
@@ -85,8 +85,21 @@ describe Compta::RubrikLine do
     @rl = Compta::RubrikLine.new(p, :actif, '201')
     @rl.to_csv.should == "201\t201 - Un compte\t120\t0\t120\t14\n" 
   end
+  
+  describe 'previous_net' do
+    context 'lorsque le compte n existe pas dans l exercice' do
+      
+      it 'recherche le compte dans l exercice précédent' do
+        p.stub_chain(:accounts, :find_by_number).and_return nil
+        pp.should_receive(:accounts).and_return( @ar=double(Arel))
+        @ar.should_receive(:find_by_number).with('385').and_return mock_model(Account, :sold_at=>-150)
+        rl = Compta::RubrikLine.new(p, :actif, '385')
+        rl.previous_net.should == 150.00
+      end
+      
+    end
 
-
+  end
 
   
  
