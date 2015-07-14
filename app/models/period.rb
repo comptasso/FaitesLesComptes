@@ -516,7 +516,6 @@ class Period < ActiveRecord::Base
   # Il faut  que l'exercice soit ouvert, qu'il ait des natures et que toutes 
   # ces natures soient reliées à des comptes
   def accountable?
-    return false unless open
     return false if natures.empty?
     all_natures_linked_to_account?
   end

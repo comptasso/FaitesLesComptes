@@ -180,10 +180,7 @@ describe Organism do
         @o.document(:actif)
       end
 
-      it 'n est pas accountable'  do
-        @o.stub_chain(:periods, :select).and_return []
-        @o.should_not be_accountable
-      end
+     
 
       it 'mais peut écrire des lignes' do
         @o.should be_can_write_line
@@ -257,9 +254,7 @@ describe Organism do
       @p2 = find_second_period
     end
     
-    it 'est accountable'  do
-      @o.should be_accountable
-    end
+   
 
     describe 'find_period' do
 

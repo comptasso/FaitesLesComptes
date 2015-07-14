@@ -114,33 +114,7 @@ describe User do
 
   
 
-  describe 'accountable_organisms_with_rooms' do
-    before(:each) do
-      @r = mock_model(Room, :organism=>o)
-  #    @u.stub(:organisms_with_room).and_return [{:organism=>o, :room=>@r}]
-
-    end
-    
-    it 'doit passer par room.look_for', wip:true do
-      @r.should_receive(:look_for).and_return true
-      @u.should_receive(:rooms).and_return [@r]
-      
-      @u.accountable_organisms_with_room
-    end
-
-    it 'garde les organismes si accountabls?' do
-      @u.stub(:rooms).and_return [@r]
-      @r.stub(:look_for).and_return true
-      @u.accountable_organisms_with_room.should ==  [@r]
-    end
-
-    it 'mais le retire sinon' do
-      @u.stub(:rooms).and_return [@r]
-      @r.stub(:look_for).and_return false
-      @u.accountable_organisms_with_room.should ==  []
-    end
-    
-  end
+  
 
   describe ':status' do
     it 'appelle rooms et relative version' do

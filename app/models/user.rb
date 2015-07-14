@@ -33,9 +33,13 @@ class User < ActiveRecord::Base
   # sont accountable.
   #
   # s'appuie sur organism_with_rooms et ne retient que les accountable?
-  def accountable_organisms_with_room
-    rooms.select {|r|  r.look_for { r.organism.accountable? } }
-  end
+  # 
+  # N'est plus utilisé maintenant que la liste des organismes n'est disponible 
+  # que dans le menu Admin
+  # 
+#  def accountable_organisms_with_room
+#    rooms.select {|r|  r.look_for { r.organism.accountable? } }
+#  end
 
   # retourne un hash pour la zone de Saisie avec seulement les organismes qui
   # ont un exercice

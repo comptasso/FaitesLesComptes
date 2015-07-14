@@ -162,10 +162,12 @@ class Organism < ActiveRecord::Base
   end
 
   # vérifie qu'il y a au moins un exercice pour lequel on peut faire les comptes
-  def accountable?
-    periods.select {|p| p.accountable? }.any?
-  end
-  
+  # 
+  # TODO Non utilisé - à supprimer
+#  def accountable?
+#    periods.select {|p| p.accountable? }.any?
+#  end
+#  
   # renvoie les dates pour lesquelles il est possible d écrire
   # utilisé par le gem adhérent pour savoir un paiement est valide
   def range_date
