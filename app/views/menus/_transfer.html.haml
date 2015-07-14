@@ -3,4 +3,4 @@
   %li{role:'presentation'}
     = link_to 'Afficher', transfers_path({:mois=>'tous'}), {role:'menuitem'}
   %li{role:'presentation'}
-    = link_to 'Nouveau', new_transfer_path, {role:'menuitem'}
+    = link_to_if(@period.open, 'Nouveau', new_transfer_path, {role:'menuitem'})  {|name| content_tag(:span, :class=>'disable') {name} }

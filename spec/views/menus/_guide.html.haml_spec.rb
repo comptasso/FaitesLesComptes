@@ -14,10 +14,11 @@ describe "menus/_guide.html.haml" do
   let(:twomasks) {[mask1, mask2]}
   
   let(:o) {mock_model(Organism, name:'jcl')}
+  let(:p) {mock_model(Period, open:true)}
   
   before(:each) do
     assign(:organism, o)
-    
+    assign(:period, p)
   end
   
   context 'sans masque' do
@@ -33,39 +34,47 @@ describe "menus/_guide.html.haml" do
   
   context 'avec deux masques' do
     
-    
-  before(:each) do
-    o.stub(:masks).and_return twomasks
-    render
-  end
+    before(:each) do
+      o.stub(:masks).and_return twomasks
+      render
+    end
   
-  it 'affiche 4 balises li' do
+    it 'affiche 4 balises li' do
       page.all('li').should have(4).elements
+    end
+  
+    it 'la premiere est un divider' do
+      page.find('li:first')[:class].should == 'divider'
+    end
+  
+    it 'le second affiche le sous titre' do
+      expect(page.find('li:nth-child(2)').text).to match("Modèles d'écriture")
+    end
+  
+    it 'puis des liens avec le titre du masque comme texte' do
+      page.find('li:nth-child(3) a').text.should == mask1.title
+    end
+  
+    it 'le commentaire comme title' do
+      page.find('li:nth-child(3) a')[:title].should == mask1.comment
+    end
+  
+    it 'et pointe sur new_mask_writing_path' do
+      page.find('li:nth-child(3) a')[:href].should == new_mask_writing_path(mask1)
+    end
+  
   end
   
-  it 'la premiere est un divider' do
-    page.find('li:first')[:class].should == 'divider'
-  end
-  
-  it 'le second affiche le sous titre' do
-    expect(page.find('li:nth-child(2)').text).to match("Modèles d'écriture")
-  end
-  
-  it 'puis des liens avec le titre du masque comme texte' do
-    page.find('li:nth-child(3) a').text.should == mask1.title
-  end
-  
-  it 'le commentaire comme title' do
-    page.find('li:nth-child(3) a')[:title].should == mask1.comment
-  end
-  
-  it 'et pointe sur new_mask_writing_path' do
-    page.find('li:nth-child(3) a')[:href].should == new_mask_writing_path(mask1)
-  end
-  
- 
-  
+  context 'avec un exercice fermé' do
+    before(:each) do 
+      p.stub(:open).and_return false 
+      o.stub(:masks).and_return twomasks
+      render
+    end
     
-  
+    it 'les liens sont affichés dans un span class disable' do
+      page.all('span.disable').first.text.should == mask1.title
+      page.all('span.disable').last.text.should == mask2.title
+    end
   end
 end

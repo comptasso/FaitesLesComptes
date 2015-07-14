@@ -4,5 +4,5 @@
     = link_to('Modèles d\'écriture', '#', role:'menuitem') 
   - @organism.masks.each do |mask|
     %li{role:'presentation'}
-      = link_to mask.title, new_mask_writing_path(mask),
-        title:mask.comment, role:'menuitem'
+      = link_to_if(@period.open, mask.title, new_mask_writing_path(mask),
+        title:mask.comment, role:'menuitem') {|name| content_tag(:span, :class=>'disable') {name} }
