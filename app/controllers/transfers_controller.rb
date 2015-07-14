@@ -74,7 +74,9 @@ class TransfersController < ApplicationController
     fill_author(@transfer)
     respond_to do |format|
       if @transfer.update_attributes(params_pre_treatment)
-        format.html { redirect_to transfers_url, notice: 'Transfert mis à jour' }
+        my = MonthYear.from_date(@transfer.date)
+        format.html { redirect_to transfers_url(my.to_french_h),
+          notice: 'Transfert mis à jour' }
         # format.json { head :no_content }
       else
         format.html { render action: "edit" }

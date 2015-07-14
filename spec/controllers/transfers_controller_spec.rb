@@ -247,7 +247,7 @@ describe TransfersController do
     
     before(:each) do
       @controller.stub(:fill_author)
-      @t = mock_model(Transfer)
+      @t = mock_model(Transfer, date:Date.today)
       Transfer.stub(:find).with(@t.id.to_s).and_return(@t)
     end
     
@@ -280,9 +280,9 @@ describe TransfersController do
       end
  
 
-      it "redirects to the transfer index" do
+      it "redirects to transfer index within right month" do
         put :update, {:id => @t.to_param, :transfer => valid_attributes}, valid_session
-        response.should redirect_to(transfers_url)
+        response.should redirect_to(transfers_url(MonthYear.from_date(@t.date).to_french_h))
       end
     end
 
