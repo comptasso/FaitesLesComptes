@@ -9,10 +9,10 @@ end
 describe Compta::RubrikResult do
   include OrganismFixtureBis
   
-  context 'Avec des mocks', wip:true do
+  context 'Avec des mocks' do
 
     before(:each) do
-      @p = mock_model(Period, :resultat=>19, :previous_period=>nil)
+      @p = mock_model(Period, :resultat=>19, 'previous_period_open?'=>false)
       @p.stub(:accounts).and_return @ar = double(Arel)
       @ar.stub(:find_by_number).
         and_return(mock_model(Account, :sold_at=>51.25, sector_id:nil))
@@ -60,16 +60,16 @@ describe Compta::RubrikResult do
         @rr.previous_net.should == 0
       end
 
-      it 'demande le résultat si un period précédent' do
-        @p.stub('previous_period?').and_return true
-        @p.stub(:organism).and_return((mock_model(Organism, :title=>'Ma petite affaire')))
-        @q = mock_model(Period)
-        @q.stub(:organism) {mock_model(Organism, :title=>'Ma petite affaire')}
-        @p.should_receive(:previous_period).and_return(@q)
-        @q.stub_chain(:accounts, :find_by_number).
-          and_return(double(Account, :sold_at=>5, sector_id:1, number:'12'))
-        @q.should_receive(:resultat).and_return 22
-        @rr.previous_net.should == 27
+      it 'demande le résultat si un period précédent', wip:true do
+        @q = mock_model(Period, 'previous_period_open?'=>false)
+        @p.stub('previous_period?').and_return(true)
+        @p.stub(:previous_period).and_return @q
+        @p.stub(:previous_account).and_return(@pac = double(Account, :sold_at=>5, sector_id:1, number:'12'))
+        @q.stub_chain(:accounts, :find_by_number).and_return(@pac)
+        @q.stub(:resultat).and_return 22
+        
+        #Compta::RubrikResult.new(@q, :passif, '12').brut.should == 27
+        Compta::RubrikResult.new(@p, :passif, '12').previous_net.should == 27
       end
 
     end
@@ -117,11 +117,40 @@ describe Compta::RubrikResult do
       cr = Compta::RubrikResult.new(@p, :passif, '12')
       expect(cr.net).to eq 0 
     end
+      
+  end
+  
+  context 'avec deux organisme et des secteurs', wip:true do
     
+    before(:each) do
+      use_test_organism('Comité d\'entreprise')
+      @asc = Sector.where('name = ?', 'ASC').first
+      @acc_asc = @p.depenses_accounts(@asc.id).first
+      @baca_asc = @asc.list_bank_accounts_with_communs(@p).first
+      @b_asc = @asc.outcome_book
+      @n_asc = @b_asc.natures.first
+      
+      @aep = Sector.where('name = ?', 'Fonctionnement').first
+      @acc_aep = @p.depenses_accounts(@aep.id).first
+      @baca_aep = @aep.list_bank_accounts_with_communs(@p).first
+      @b_aep = @aep.outcome_book
+      @n_aep = @b_aep.natures.first
+      
+      create_writing(@b_asc, account_id:@acc_asc.id, nature_id:@n_asc.id, 
+      finance_account_id:@baca_asc.id)
     
+      create_writing(@b_aep, montant:55, account_id:@acc_aep.id, nature_id:@n_aep.id, 
+      finance_account_id:@baca_aep.id)
     
+      @q = find_second_period
+      
+    end
     
-    
+    it 'les résultats sont corrects' do
+      expect(Compta::RubrikResult.new(@p, :passif, '1201').net).to eq -33.33 
+      expect(Compta::RubrikResult.new(@p, :passif, '1202').net).to eq -55
+      expect(Compta::RubrikResult.new(@q, :passif, '1202').net).to eq -55
+    end
     
     
     

@@ -22,21 +22,20 @@ module Compta
       else # traite le cas ou un compte 12XX n'aurait pas été sectorisé
         @brut += 0
       end
+      @brut += previous_net if period.previous_period_open?
       return @brut, @amortissement = BigDecimal.new(0)
     end
 
 
-    def previous_net(unused_period=nil)
+    def previous_net(unused_period=nil) 
       return 0.0 unless period.previous_period? 
-      pp = period.previous_period
-      return 0.0 unless acc = pp.accounts.find_by_number(select_num)
-      cr = Compta::RubrikResult.new(pp, 'passif', acc.number)  
-      cr.brut     
+      return 0.0 unless acc = previous_account # défini dans RubrikLine
+      cr = Compta::RubrikResult.new(period.previous_period, 'passif', acc.number)  
+      cr.brut
     end
     
        
     # calcul de la valeur brute
-    # une méthode indiquant s'il y a des comptes 12 sectorisés
     def resultat_sectorise
       period.resultat(@account.sector_id)
     end 

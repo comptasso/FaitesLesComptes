@@ -21,7 +21,7 @@ describe 'resquest clone' do
   
   after(:each) do
     # on efface toutes les rooms autres que celle d'origine
-    Room.all.reject {|r| r.id == @r.id}.each {|r| r.destroy} 
+    Room.all.reject {|r| r.id == @r.id}.each {|ro| ro.destroy} 
   end
 
 

@@ -3,15 +3,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 RSpec.configure do |c|
-  # c.filter = {:wip=>true}
+  # c.filter = {:wip=>true} 
 end
 
 
 describe Compta::RubrikLine do
   include OrganismFixtureBis
 
-  let(:pp) {mock_model(Period)}
-  let(:p) {mock_model(Period, :close_date=>Date.today.end_of_year, 'previous_period?'=>true, previous_period:pp, :previous_account=>bcc)}
+  let(:pp) {mock_model(Period, 'previous_period_open?'=>false)}
+  let(:p) {mock_model(Period, :close_date=>Date.today.end_of_year,
+      'previous_period?'=>true, previous_period:pp, 'previous_period_open?'=>false,
+      :previous_account=>bcc)}
   let(:acc) {mock_model(Account, :sold_at=>-120, number:'201', title:'Un compte')}
   # TODO il faudrait utiliser ici aussi sold_at plutôt que final_sold pour gagner en rapidité.
   let(:bcc) {mock_model(Account, :sold_at=>-14)}
@@ -42,6 +44,23 @@ describe Compta::RubrikLine do
     @rl = Compta::RubrikLine.new(p, :actif, '2801', :col2)
     @rl.brut.should == 0
     @rl.amortissement.should == - 120 
+  end
+  
+  context 'avec un exercice précédent non clos' do
+    
+    before(:each) {p.stub('previous_period_open?'=>pp)}
+    
+    it 'les valeurs prennent en compte le report pour les comptes de classe 1 à 5' do
+      rl = Compta::RubrikLine.new(p, :actif, '201')
+      rl.brut.should == 134
+      rl.amortissement.should == 0
+    end
+    
+    it 'mais pas pour les autres ' do
+      rl = Compta::RubrikLine.new(p, :actif, '601')
+      rl.brut.should == 120
+      rl.amortissement.should == 0      
+    end
   end
   
   describe 'correspondance entre passif - credit et actif - debit' do
