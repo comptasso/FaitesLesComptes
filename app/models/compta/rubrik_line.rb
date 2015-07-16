@@ -19,6 +19,11 @@ module Compta
   #  et provisions,
   #  - debit : la valeur n'est retenue que si le solde est débiteur
   #  - credit : la valeur n'est retenue que si le solde est créditeur
+  #  
+  #  La difficulté de cette classe est que des comptes peuvent exister sur 
+  #  cet exercice et pas sur le précédent ou l'inverse.
+  #  
+  #  TODO : à tester avec deux exercices ouverts et un fermé.
   #
   class RubrikLine
 
@@ -112,13 +117,17 @@ module Compta
 
     # Renvoie un array comprenant en premier la valeur du montant brut et de l'amortissement pour le compte
     # identifié par selet_num et pour l'exercice identifié par period.
+    # 
     #
     # Tient compte des options demandées pour préparer les valeurs brut et amort
     #
     def brut_amort
-      return [0,0] unless account
-      mise_en_forme(account.sold_at(period.close_date)) # plutôt que final_sold
+      val = account ? account.sold_at(period.close_date) : 0.0
+      if period.previous_period_open? && select_num =~ /^[1-5].*/
+        val += previous_account.sold_at(period.close_date) # plutôt que final_sold
       # pour éviter la requête sur period
+      end
+      mise_en_forme(val) 
     end
 
     # Etant donné deux montants (brut et amortissements dans un tableau), calcule le net

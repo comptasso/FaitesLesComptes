@@ -98,4 +98,5 @@
 # FLCVERSION = '1.12.1RC' # refonte des états suite réglements ANC pour les CE.
 # FLCVERSION = '1.12.2RC' # documents corrects même si un compte n'existe pas dans l'exercice précédent
 # FLCVERSION = '1.12.3RC' # Accès au module Compta même lorsque l'exercice est clos
-FLCVERSION = '1.12.4RC' # Quand on édite un Transfert, on revient vers le bon mois
+# FLCVERSION = '1.12.4RC' # Quand on édite un Transfert, on revient vers le bon mois
+FLCVERSION = '1.12.5RC' # Les comptes de bilan prennent en compte le report de l'exercice précédent non clos

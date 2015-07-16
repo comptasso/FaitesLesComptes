@@ -23,6 +23,8 @@ fr:
     sessions:
       signed_in: "Connecté."
       signed_out: "Déconnecté."
+      user:
+        already_sign_out: Déjà déconnecté
     passwords:
       send_instructions: 'Vous allez recevoir les instructions de réinitialisation du mot de passe dans quelques instants'
       updated: 'Votre mot de passe a été édité avec succès, vous êtes maintenant connecté'

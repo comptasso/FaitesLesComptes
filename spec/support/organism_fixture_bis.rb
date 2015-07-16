@@ -24,11 +24,11 @@ module OrganismFixtureBis
   end
   
   # TODO refactorisé pour obtenir plus facilement une base saine de tests
-  def use_test_organism
+  def use_test_organism(status='Association')
     Apartment::Database.switch(SCHEMA_TEST)
     @o = Organism.first
-    unless @o
-      create_organism # rappel : fait déja un appel à get_organism_instances
+    unless @o && @o.status == status
+      create_organism(status) # rappel : fait déja un appel à get_organism_instances
       return
     end
     @p = @o.periods.first

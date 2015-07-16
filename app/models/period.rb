@@ -111,8 +111,12 @@ class Period < ActiveRecord::Base
     (previous_period.id == id) ? false : true
   end
 
+  # renvoie l'exercice précédent s'il existe et s'il est ouvert
+  # renvoie false autrement. Ce n'est pas tout à fait un retour booléen mais
+  # celà évite un double appel.
   def previous_period_open?
-    previous_period? && !previous_period.closed?
+    pp = previous_period
+    pp.id != id && pp.open? ? pp : false
   end
 
 
