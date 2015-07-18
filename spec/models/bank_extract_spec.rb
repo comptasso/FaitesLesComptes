@@ -214,7 +214,7 @@ describe BankExtract do
 
   describe 'contrôle des bank_extract_lines'  do
     
-    subject {find_bank_extract}
+    subject {find_bank_extract} 
 
     before(:each) do
       use_test_organism

@@ -34,6 +34,7 @@ before(:each) do
     @w = mock_model(InOutWriting, 
       book:book, book_id:1, 
       date:Date.today,
+      piece_number:41,
       support:'DX',
       payment_mode:'Virement',
       'editable?'=>true)
@@ -43,7 +44,7 @@ before(:each) do
     @pl.stub(:writing).and_return @w
     
     render
-    rendered.should have_content 'Pièce n°1 enregistrée'
+    rendered.should have_content 'Pièce n°41 enregistrée'
   end
 
  

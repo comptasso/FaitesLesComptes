@@ -72,9 +72,9 @@ class Book < ActiveRecord::Base
   # des Extract et des Editions
   def to_csv(options = {col_sep:"\t"})
     CSV.generate(options) do |csv|
-      csv << %w(Date Pce Réf Libellé Compte Intitulé Débit Crédit)
+      csv << %w(Date Pièce Réf Libellé Compte Intitulé Débit Crédit)
       compta_lines.each do |cl|
-        csv << [cl.writing.date, cl.writing.id, cl.writing.ref, cl.writing.narration, 
+        csv << [cl.writing.date, cl.writing.piece_number, cl.writing.id, cl.writing.ref, cl.writing.narration, 
           cl.account.number, cl.account.title, cl.debit, cl.credit]
       end
       #        csv << ['Totaux', ''] + total_balance.collect {|val| reformat(val)}

@@ -11,7 +11,7 @@ describe InOutWriting do
   include OrganismFixtureBis
 
   def valid_attributes
-    {date:Date.today, narration:'spec',
+    {date:Date.today, narration:'spec', piece_number:6,
       :compta_lines_attributes=>{'0'=>{account_id:@acc.id, debit:145, payment_mode:'Virement'},
       '1'=>{account_id:@baca.id, credit:145, payment_mode:'Virement'}}}
   end

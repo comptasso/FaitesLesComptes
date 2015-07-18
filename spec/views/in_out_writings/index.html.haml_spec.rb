@@ -15,6 +15,7 @@ describe "in_out_writings/index" do
       book_id:1,
       :ref=>'001',
       :date=>Date.today,
+      piece_number:43,
       :narration=>'le libellé',
       :nature_name=>'une dépense',
       :destination_name=>'destinée', 

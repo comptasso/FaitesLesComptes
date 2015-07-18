@@ -275,7 +275,7 @@ describe Period do
       
     context 'avec des écritures de recettes dans chacun des secteurs' do
         
-      before(:each) do
+      before(:each) do 
         @sasc = Sector.where('name = ?', 'ASC').first
         @sfonc = Sector.where('name = ?', 'Fonctionnement').first
         @sglob = Sector.where('name = ?', 'Commun').first
@@ -325,7 +325,7 @@ describe Period do
        
   end
     
-  context 'avec un exercice' do
+  context 'avec un exercice' do 
       
     before(:each) do
       use_test_organism

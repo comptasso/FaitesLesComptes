@@ -23,52 +23,55 @@ describe Writing do
     end
 
     def valid_parameters
-      {narration:'Première écriture', date:Date.today}
+      {narration:'Première écriture', date:Date.today, piece_number:8}
     end
 
-
-    describe 'other validators' do
+    describe 'test des compta_lines' do
 
       before(:each) do
-        @w = @b.writings.new(valid_parameters)
+        @w = @b.writings.new(valid_parameters) 
         Writing.any_instance.stub(:book).and_return @b
         Writing.any_instance.stub(:total_credit).and_return 10
         Writing.any_instance.stub(:total_debit).and_return 10
         Writing.any_instance.stub_chain(:compta_lines, :each).and_return nil
       end
+ 
+      it 'doit avoir au moins deux lignes' do
+        @w.stub(:compta_lines).and_return([mock_model(ComptaLine, 
+              nature:mock_model(Nature, period:@p),
+              account:mock_model(Account, period:@p))])
+        @w.valid?
+        @w.should_not be_valid
+      end
 
-      
-      
+      it 'valide si les natures sont dans l exercice' do
+        @w.stub(:compta_lines).and_return([
+            mock_model(ComptaLine, nature:mock_model(Nature, period:@p),
+              account:mock_model(Account, period:@p)),
+            mock_model(ComptaLine, nature:nil,
+              account:mock_model(Account, period:@p))])
+        @w.should be_valid
+      end
 
-      describe 'test des compta_lines' do
+      it 'et invalide dans le cas contraire' do
+        @w.stub(:compta_lines).and_return(
+          [mock_model(ComptaLine,
+              nature:mock_model(Nature, period:mock_model(Period)),
+              account:mock_model(Account, period:@p)),
+            mock_model(ComptaLine, nature:nil, 
+              account:mock_model(Account, period:@p))])
+        @w.should_not be_valid
+        @w.errors[:date].should == ['Incohérent avec Nature']
+      end
 
-        it 'doit avoir au moins deux lignes' do
-          @w.stub(:compta_lines).and_return([mock_model(ComptaLine, nature:mock_model(Nature, period:@p), account:mock_model(Account, period:@p))])
-          @w.valid?
-          @w.should_not be_valid
-        end
-
-        it 'valide si les natures sont dans l exercice' do
-          @w.stub(:compta_lines).and_return([mock_model(ComptaLine, nature:mock_model(Nature, period:@p), account:mock_model(Account, period:@p)),
-              mock_model(ComptaLine, nature:nil, account:mock_model(Account, period:@p))])
-          @w.should be_valid
-        end
-
-        it 'et invalide dans le cas contraire' do
-          @w.stub(:compta_lines).and_return([mock_model(ComptaLine, nature:mock_model(Nature, period:mock_model(Period)), account:mock_model(Account, period:@p)),
-              mock_model(ComptaLine, nature:nil, account:mock_model(Account, period:@p))])
-          @w.should_not be_valid
-          @w.errors[:date].should == ['Incohérent avec Nature']
-        end
-
-
-        it 'invalide si les comptes ne sont pas dans l exercice' do
-          @w.stub(:compta_lines).and_return([mock_model(ComptaLine, nature:mock_model(Nature, period:@p), account:mock_model(Account, period:mock_model(Period))),
-              mock_model(ComptaLine, nature:nil, account:mock_model(Account, period:@p))])
-          @w.should_not be_valid
-          @w.errors[:date].should == ['Incohérent avec Compte']
-        end
-
+      it 'invalide si les comptes ne sont pas dans l exercice' do
+        @w.stub(:compta_lines).and_return([
+            mock_model(ComptaLine, nature:mock_model(Nature, period:@p),
+              account:mock_model(Account, period:mock_model(Period))),
+            mock_model(ComptaLine, nature:nil,
+              account:mock_model(Account, period:@p))])
+        @w.should_not be_valid
+        @w.errors[:date].should == ['Incohérent avec Compte']
       end
 
     end
@@ -88,7 +91,7 @@ describe Writing do
       before(:each) do
         @l1 = ComptaLine.new(account_id:@p.accounts.first.id, debit:0, credit:10)
         @l2 = ComptaLine.new(account_id:@p.accounts.last.id, debit:10, credit:0)
-        @r = @od.writings.new(date:Date.today, narration:'Une écriture')
+        @r = @od.writings.new(date:Date.today, narration:'Une écriture', piece_number:3)
         @r.compta_lines<< @l1
         @r.compta_lines<< @l2
       end
@@ -128,7 +131,7 @@ describe Writing do
         it 'conserve la date si elle est donnée' do
           @r.date_piece = Date.today - 5
           @r.save
-          expect(@r.date_piece).to eq(Date.today - 5)
+          expect(@r.date_piece).to eq(Date.today - 5) 
         end
         
         it 'ou reprend la date d écriture' do
@@ -141,7 +144,7 @@ describe Writing do
         
         before(:each) do
           @anb = @o.an_book
-          @w = @anb.writings.new(date:Date.today, narration:'Une écriture')
+          @w = @anb.writings.new(date:Date.today, narration:'Une écriture', piece_number:5)
           @w.compta_lines<< @l1
           @w.compta_lines<< @l2
         end

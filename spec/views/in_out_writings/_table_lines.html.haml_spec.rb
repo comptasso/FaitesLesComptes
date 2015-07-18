@@ -10,6 +10,7 @@ describe "in_out_writings/_table_lines" do
       book_id:1,
       :ref=>'001',
       :date=>Date.today,
+      piece_number:47,
       :narration=>'le libellé',
       :nature_name=>'une dépense',
       :destination_name=>'destinée',
@@ -35,7 +36,7 @@ describe "in_out_writings/_table_lines" do
   
   it 'qui donnent' do
     page.all('td').collect {|tag| tag.text}.join('; ').should ==  
-      "#{l Date.today}; 156; 001; le libellé; une dépense; destinée; 10,00; -; CB; Compte courant;  "
+      "#{l Date.today}; 47; 001; le libellé; une dépense; destinée; 10,00; -; CB; Compte courant;  "
   end
   
 end

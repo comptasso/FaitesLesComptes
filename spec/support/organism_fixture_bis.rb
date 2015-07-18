@@ -211,7 +211,7 @@ module OrganismFixtureBis
     # TODO passer à un outcome_account
     @income_account = @p.accounts.classe_7.first
     ecriture = @ob.in_out_writings.new(
-      {date:Date.today,
+      {date:Date.today, piece_number:1, 
        narration:'ligne créée par la méthode create_outcome_writing',
        :compta_lines_attributes=>{
          '0'=>{account_id:@income_account.id, 
@@ -230,6 +230,7 @@ module OrganismFixtureBis
     
     # gestion des valeurs par défaut et des options
     d = options[:date] || Date.today
+    piece_number= options[:piece_number] || 55
     narration = options[:narration] || 'ligne créée par la méthode create_writing'
     aid = options[:account_id] || @p.accounts.classe_7.first
     if options[:nature_id]
@@ -249,6 +250,7 @@ module OrganismFixtureBis
     # création de l'écriture
       ecriture = book.in_out_writings.new(
       {date:d,
+       piece_number:piece_number,
        narration:narration,
        :compta_lines_attributes=>{
          '0'=>{account_id:aid, 
@@ -283,7 +285,9 @@ module OrganismFixtureBis
     else
       acc_id = @baca.id
     end
-    ecriture = @ib.in_out_writings.new({date:Date.today, narration:'créée par create_in_out_writing',
+    ecriture = @ib.in_out_writings.new({date:Date.today,
+        piece_number:7,
+        narration:'créée par create_in_out_writing',
         :compta_lines_attributes=>{
           '0'=>{account_id:@income_account.id,
             nature:@n, credit:montant, payment_mode:payment},
@@ -298,7 +302,9 @@ module OrganismFixtureBis
   def create_cash_income(montant = 59)
     @income_account = @o.accounts.classe_7.first
      
-    ecriture = @ob.in_out_writings.new({date:Date.today, narration:'ligne créée par la méthode create_cash_income',
+    ecriture = @ob.in_out_writings.new({date:Date.today,
+        piece_number:12,
+        narration:'ligne créée par la méthode create_cash_income',
         :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, credit:montant, payment_mode:'Espèces'},
           '1'=>{account_id:@caca.id, debit:montant, payment_mode:'Espèces'}
         }

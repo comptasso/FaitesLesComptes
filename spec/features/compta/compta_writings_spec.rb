@@ -14,7 +14,9 @@ describe "Writings" do
     compte1 = @p.accounts.classe_7.first
     compte2 = @p.accounts.classe_7.first
     
-    ecriture = @od.writings.new({date:date, narration:'ligne créée par la méthode create_od_writing',
+    ecriture = @od.writings.new({date:date,
+        piece_number:87,
+        narration:'ligne créée par la méthode create_od_writing',
         :compta_lines_attributes=>{'0'=>{account_id:compte1.id, credit:montant},
           '1'=>{account_id:compte2.id, debit:montant}
         }

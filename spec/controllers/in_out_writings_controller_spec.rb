@@ -15,6 +15,7 @@ describe InOutWritingsController do
     @b.stub_chain(:natures, :within_period, :order).and_return(@ar = double(Arel))
     Book.stub(:find).with(@b.id.to_s).and_return @b
     @b.stub_chain(:organism, :find_period).and_return @p
+    
 
   end
 
@@ -125,7 +126,8 @@ describe InOutWritingsController do
   describe 'POST update', wip:true do
 
     def update_parameters
-      {"narration"=>'libellé corrigé', 'compta_lines_attributes'=>{'0'=>{'debit'=>'12', 'credit'=>'0', 'payment_mode'=>'Virement'},
+      {"narration"=>'libellé corrigé', 'piece_number'=>'2',
+        'compta_lines_attributes'=>{'0'=>{'debit'=>'12', 'credit'=>'0', 'payment_mode'=>'Virement'},
           '1'=>{'debit'=>'0', 'credit'=>'12', 'payment_mode'=>'Virement'}}}
     end
 
@@ -193,7 +195,8 @@ describe InOutWritingsController do
   describe 'POST create'  do
 
     def create_parameters
-      {"narration"=>'linellé corrigé', 'compta_lines_attributes'=>{'0'=>{'debit'=>'12', 'credit'=>'0', 'payment_mode'=>'Virement'},
+      {"narration"=>'libellé corrigé', 'piece_number'=>'8', 
+        'compta_lines_attributes'=>{'0'=>{'debit'=>'12', 'credit'=>'0', 'payment_mode'=>'Virement'},
           '1'=>{'debit'=>'0', 'credit'=>'12', 'payment_mode'=>'Virement'}}}
     end
 
@@ -278,6 +281,7 @@ describe InOutWritingsController do
   describe 'Get new'      do
 
     before(:each) do
+      @p.stub(:next_piece_number).and_return 6
       @o.stub(:main_cash_id).and_return(11)
       @o.stub(:main_bank_id).and_return(12)
       @b.stub(:in_out_writings).and_return @a = double(Arel)
@@ -286,7 +290,7 @@ describe InOutWritingsController do
     end
     
     it "fill the default values"  do
-      @a.should_receive(:new).with(date:@d).and_return(@nw)
+      @a.should_receive(:new).with(date:@d, piece_number:6).and_return(@nw)
       @nw.stub_chain(:compta_lines, :build) 
       get :new, {income_book_id: @b.id, :mois=>@d.month.to_s, :an=>@d.year.to_s}, session_attributes
     end
@@ -325,7 +329,7 @@ describe InOutWritingsController do
     
 
       it 'new date est préremplie' do
-        @a.should_receive(:new).with(:date=>Date.today).and_return @nw
+        @a.should_receive(:new).with(:date=>Date.today, piece_number:6).and_return @nw
         @nw.stub_chain(:compta_lines, :build)
         get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes, :date=>Date.today
       end
@@ -335,7 +339,7 @@ describe InOutWritingsController do
     
     context 'quand on vient d un affichage avec tous les mois' do
       it 'rend le template new' do
-        @a.should_receive(:new).with(:date=>Date.today).and_return @nw
+        @a.stub(:new).and_return @nw
         @nw.stub_chain(:compta_lines, :build)
         get :new, {income_book_id: @b.id, :mois=>'tous'}, session_attributes
         response.should render_template('new')

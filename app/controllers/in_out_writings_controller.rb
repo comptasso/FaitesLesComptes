@@ -9,6 +9,7 @@ class InOutWritingsController < ApplicationController
 
   before_filter :find_book # remplit @book
   before_filter :fill_mois, only: [:index, :new]
+  
   before_filter :check_if_has_changed_period, only: :index # car on peut changer de period quand on clique sur une
   # des barres du graphe.qui est affiché par organism#show
   before_filter :fill_natures, :only=>[:new, :edit] # pour faire la saisie des natures en fonction du livre concerné
@@ -34,7 +35,9 @@ class InOutWritingsController < ApplicationController
 
   # GET /in_out_writings/new
   def new
-    @in_out_writing =@book.in_out_writings.new(date: flash[:date] || @monthyear.guess_date)
+    @in_out_writing =@book.in_out_writings.new(
+      date: flash[:date] || @monthyear.guess_date, 
+      piece_number:@period.next_piece_number)
     @line = @in_out_writing.compta_lines.build
     @counter_line = @in_out_writing.compta_lines.build
     if flash[:previous_line_id]
@@ -200,6 +203,8 @@ class InOutWritingsController < ApplicationController
       super
     end
   end
+  
+  
 
 
   # check_if_has_changed_period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice
@@ -232,7 +237,7 @@ class InOutWritingsController < ApplicationController
     
     def in_out_writing_params
       params.require(:in_out_writing).permit(:date, :date_picker, :date_piece,
-        :date_piece_picker, :narration, :ref,
+        :date_piece_picker, :narration, :ref, :piece_number,
         :book_id, :bridge_id, :bridge_type,
         compta_lines_attributes: [:id, :debit, :credit, :writing_id, :account_id, 
     :nature, :nature_id, :destination_id, 

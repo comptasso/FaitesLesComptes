@@ -98,7 +98,7 @@ describe Compta::AnalyticalBalance do
     def ecriture(montant = 1, destination_id=nil, payment='Virement')
       @income_account = @p.accounts.classe_7.first
       ecriture = @ob.in_out_writings.new(
-        {date:Date.today, 
+        {date:Date.today, piece_number:16,
           narration:'ligne créée par la méthode create_outcome_writing',
           :compta_lines_attributes=>{
             '0'=>{account_id:@income_account.id, destination_id:destination_id,

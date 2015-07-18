@@ -12,7 +12,9 @@ end
 describe Extract::InOut do
   before(:each) do
       @ob = mock_model(OutcomeBook)
-      @p = mock_model(Period, start_date:Date.today.beginning_of_year, to_date:Date.today.end_of_year)
+      @p = mock_model(Period,
+        start_date:Date.today.beginning_of_year, 
+        to_date:Date.today.end_of_year)
   end
   
   describe 'création d un extract' do
@@ -58,7 +60,7 @@ describe Extract::InOut do
         debit:debit,
         credit:credit,
         date:date,
-        writing:double(payment_mode:'Chèque'),
+        writing:double(payment_mode:'Chèque', piece_number:29),
         support:'Ma banque',
         locked?:true)
     end

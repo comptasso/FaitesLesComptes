@@ -6,6 +6,7 @@ describe Editions::Book do
 
   def line(date, debit, credit)
       double(ComptaLine, writing_id:1, w_ref:'',w_narration:'Une compta line',
+        w_piece_number:23,
         destination:double(:name=>'La destination'),
         nature:double(:name=>'La nature'),
         debit:debit,
@@ -58,7 +59,7 @@ describe Editions::Book do
   it 'prepare_line' do
     Writing.stub(:find_by_id).and_return(double(Writing, support:'CrédiX', :payment_mode=>'Chèque' ))
     @eb = Editions::Book.new(@period, @extract)
-    @eb.prepare_line(line(Date.today, 1.25, 0.3)).should == [1.to_s, Date.today,
+    @eb.prepare_line(line(Date.today, 1.25, 0.3)).should == [23.to_s, Date.today,
         "",
         "Une compta line",
         "La destination",

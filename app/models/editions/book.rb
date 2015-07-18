@@ -24,10 +24,14 @@ module Editions
       super
       @subtitle  = "Du #{I18n::l @from_date} au #{I18n.l @to_date}"
       # FIXME @stamp  = "provisoire" unless source.all_lines_locked?(@from_date, @to_date)
-      @columns_select = ['writings.date AS w_date', 'writings.ref AS w_ref',
-        'writings.narration AS w_narration', 'destination_id',
-        'nature_id', 'debit', 'credit', 'payment_mode', 'writing_id']
-      @columns_methods = ['writing_id', 'w_date', 'w_ref', 'w_narration',
+      @columns_select = ['writings.date AS w_date', 
+        'writings.piece_number AS w_piece_number',
+        'writings.ref AS w_ref',
+        'writings.narration AS w_narration',
+        'destination_id', 'nature_id',
+        'debit', 'credit',
+        'payment_mode', 'writing_id']
+      @columns_methods = ['w_piece_number', 'w_date', 'w_ref', 'w_narration',
         'destination.name', 'nature.name', 'debit', 'credit',
         'writing_id', 'writing_id' ]
       @columns_titles = %w(Pce Date Réf Libellé Activité Nature Dépenses Recettes Payt Support)

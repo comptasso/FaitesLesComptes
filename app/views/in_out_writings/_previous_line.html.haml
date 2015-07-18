@@ -2,7 +2,7 @@
   .alert.notice
     %a.close(data-dismiss="alert") x
     %strong
-      = "Pièce n°#{@previous_line.writing_id} enregistrée : "
+      = "Pièce n°#{@previous_line.writing.piece_number} enregistrée : "
       = "#{l @previous_line.date} - "
       = "#{@previous_line.ref} - "
       = "#{@previous_line.narration} - "

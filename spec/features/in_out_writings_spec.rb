@@ -72,7 +72,7 @@ describe 'vue lines' do
     it 'cliquer sans remplir doit réafficher la page' do
       visit new_book_in_out_writing_path(@ob)
       click_button 'Enregistrer'
-      page.should have_content('nouvelle ligne')
+      page.should have_content('nouvelle ligne') 
     end
 
 

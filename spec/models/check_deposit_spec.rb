@@ -27,7 +27,7 @@ describe CheckDeposit do
   describe "methodes de classe sur les chèques à déposer" do
 
     it 'total_to pick donne le total' do
-      CheckDeposit.total_to_pick.should == 445
+      CheckDeposit.total_to_pick.should == 445 
     end
 
     it 'pending_checks donne les 3 chèques qui sont à déposer' do

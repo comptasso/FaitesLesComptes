@@ -91,18 +91,18 @@ describe Book do
     
     it 'la première ligne du fichier est' do
       subject.to_csv.split("\n").first.should == 
-        "Date\tPce\tRéf\tLibellé\tCompte\tIntitulé\tDébit\tCrédit"
+        "Date\tPièce\tRéf\tLibellé\tCompte\tIntitulé\tDébit\tCrédit"
     end
     
     context 'avec des lignes' do
       
       before(:each) do
         subject.stub(:compta_lines).and_return   [double(Object, 
-               writing:double(Object, date:'12/04/2013', id:125, ref:125, narration:'une écriture'),
+               writing:double(Object, id: 12, date:'12/04/2013', piece_number:125, ref:125, narration:'une écriture'),
                account:double(Account, number:621, title:'Intérim'),
                debit:12.25, credit:0), 
              double(Object, 
-               writing:double(Object, date:'12/04/2013', id:125, ref:125, narration:'une écriture'),
+               writing:double(Object, id:13, date:'12/04/2013', piece_number:126, ref:125, narration:'une écriture'),
                account:double(Account, number:531, title:'Caisse'),
                debit:0, credit:12.25)] 
              

@@ -56,6 +56,7 @@ class Writing < ActiveRecord::Base
   validates :compta_lines, presence:true, :two_compta_lines_minimum=>true 
   validates :narration, presence:true, :format=>{with:NAME_REGEX}, :length=>{:maximum=>LONG_NAME_LENGTH_MAX}
   validates :ref, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :allow_blank=>true
+  validates :piece_number, presence:true
   
   validate :balanced?
   # les écritures dans le livre de report à nouveau doivent avoir le premier jour

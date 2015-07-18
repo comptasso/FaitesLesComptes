@@ -29,7 +29,7 @@ describe 'Statistiques par activités' do
     end
     
     it 'sans écriture, affiche un flash' do
-      page.should have_content('Aucune donnée à afficher')
+      page.should have_content('Aucune donnée à afficher') 
     end
   end
     

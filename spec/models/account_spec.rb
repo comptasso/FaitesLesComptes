@@ -162,7 +162,9 @@ describe Account do
       end
       
       it 'même avec une écriture dans l exercice' do
-        odw = @od.writings.new(date:@p.start_date, narration:'ecriture d od',
+        odw = @od.writings.new(date:@p.start_date,
+          piece_number:9,
+          narration:'ecriture d od',
           :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:1000},
             '1'=>{account_id:@baca.id, debit:1000}})
         puts odw.errors.messages unless odw.valid?
@@ -172,7 +174,9 @@ describe Account do
       context 'avec report à nouveau' do
       
         before(:each) do
-          @o.an_book.writings.create!(date:Date.today.beginning_of_year, narration:'ecriture d an',
+          @o.an_book.writings.create!(date:Date.today.beginning_of_year,
+            piece_number:19,
+            narration:'ecriture d an',
             :compta_lines_attributes=>{'0'=>{account_id:@acc1.id, credit:66},
               '1'=>{account_id:@baca.id, debit:66}})
         end
@@ -299,7 +303,7 @@ describe Account do
       end
     end
 
-    describe 'cas de destruction impossible'  do
+    describe 'cas de destruction impossible'  do 
       
       it 'un compte avec des écritures' do
         @w1 = create_outcome_writing(97)

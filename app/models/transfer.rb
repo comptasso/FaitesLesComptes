@@ -111,7 +111,7 @@ class Transfer < Writing
   protected
   
   def fill_date_piece
-    self.date_piece = date
+    self.date_piece = date 
   end
 
   private

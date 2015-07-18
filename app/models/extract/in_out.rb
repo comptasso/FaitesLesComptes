@@ -18,7 +18,7 @@ module Extract
     #
     # utilisé par to_csv et to_xls et probablement aussi par to_pdf
     def titles
-     ['Date', 'Réf', 'Libellé', 'Activité', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
+     ['Date', 'Piece', 'Réf', 'Libellé', 'Activité', 'Nature', 'Débit', 'Crédit', 'Paiement', 'Support']
     end
 
     # extract_lines est une méthode de IncomeOutcomeBook qui récupère les compta_lines
@@ -52,6 +52,7 @@ module Extract
     # 
     def prepare_line(line)
       [I18n::l(line.date),
+        line.writing.piece_number, 
         line.ref, line.narration,
         line.destination ? line.destination.name : '',
         line.nature ? line.nature.name : '',

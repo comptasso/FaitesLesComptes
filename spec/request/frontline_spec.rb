@@ -78,7 +78,7 @@ describe Request::Frontline do
       
     it 'une nouvelle écriture est éditable' do
       @frontline = Request::Frontline.fetch(@ib.id, from_date, to_date).first
-      @frontline.should be_editable
+      @frontline.should be_editable 
     end
     
     it 'mais pas si la compta_line est verrouillée' do

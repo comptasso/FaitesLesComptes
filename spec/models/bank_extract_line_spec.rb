@@ -13,7 +13,7 @@ describe BankExtractLine do
   before(:each) do 
     use_test_organism    
 
-    @be = find_bank_extract
+    @be = find_bank_extract 
     @d7 = create_outcome_writing(7)  
     @d29 = create_outcome_writing(29)
     @ch97 = create_in_out_writing(97, 'Chèque') 

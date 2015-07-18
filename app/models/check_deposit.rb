@@ -123,11 +123,16 @@ class CheckDeposit < ActiveRecord::Base
   def pick_all_checks(sector)
     CheckDeposit.pending_checks(sector).each {|l| checks << l}
   end
+  
+  def find_period
+    return nil unless deposit_date 
+    return nil unless bank_account_id
+    @per = bank_account.organism.find_period(deposit_date)
+  end
 
   def rem_check_account
-    return nil unless bank_account_id
-    p = bank_account.organism.find_period(deposit_date)
-    p.rem_check_account
+    @per ||= find_period
+    @per.rem_check_account if @per
   end
   
   def rem_check_account_id
@@ -168,7 +173,9 @@ class CheckDeposit < ActiveRecord::Base
   def create_writing
     book = OdBook.first!
     CheckDeposit.transaction do
-      w = build_check_deposit_writing(date:deposit_date, narration:'Remise chèque', book_id:book.id)
+      w = build_check_deposit_writing(date:deposit_date, 
+        piece_number:find_period.next_piece_number,
+        narration:'Remise chèque', book_id:book.id)
       w.user_ip = user_ip
       w.written_by = written_by
       w.compta_lines.build(check_deposit_id:id, account_id:rem_check_account.id, credit:total_checks)

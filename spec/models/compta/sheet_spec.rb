@@ -14,7 +14,9 @@ describe Compta::Sheet do
     @folio = @o.nomenclature.actif
     
     
-    w = @od.writings.new({date:Date.today, narration:'ligne pour controller rubrik',
+    w = @od.writings.new({date:Date.today, 
+        piece_number:17,
+        narration:'ligne pour controller rubrik',
         :compta_lines_attributes=>{
           '0'=>{account_id:@p.accounts.find_by_number('206').id, debit:100 },
           '1'=>{account_id:@p.accounts.find_by_number('201').id, debit:10},
@@ -27,7 +29,9 @@ describe Compta::Sheet do
       puts w.narration
     end
     w.save!
-    w = @od.writings.new({date:Date.today, narration:'ligne de terrain',
+    w = @od.writings.new({date:Date.today,
+        piece_number:19,
+        narration:'ligne de terrain',
         :compta_lines_attributes=>{'0'=>{account_id:@p.accounts.find_by_number('201').id, debit:1200 },
           '1'=>{account_id:@p.accounts.find_by_number('51201').id, credit:1200}
         }

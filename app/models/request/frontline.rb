@@ -47,6 +47,7 @@ module Request
   column :nature_name, :string
   column :book_id, :integer
   column :id, :integer
+  column :piece_number, :integer
   column :date, :date
   column :date_piece, :date
   column :ref, :string
@@ -76,7 +77,7 @@ module Request
       
       # TODO introduire ici une erreur si le livre n'est pas un income_outcome_book
       sql = <<-hdoc
-      SELECT writings.book_id, writings.id, writings.date,
+      SELECT writings.book_id, writings.id, writings.date, writings.piece_number,
       writings.date_piece, writings.ref,
       writings.narration, writings.type AS writing_type, 
       adherent_payments.id AS adherent_payment_id,

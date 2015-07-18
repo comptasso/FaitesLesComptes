@@ -188,7 +188,8 @@ describe CashControl do
         # on créé une ligne d'écriture par mois relevant de la caisse
         @p.nb_months.times do |i|
           d = date.months_since(i)
-          @ib.in_out_writings.create!({date:d, narration:"test #{i}",
+          @ib.in_out_writings.create!({date:d,
+              piece_number:12, narration:"test #{i}",
               :compta_lines_attributes=>{'0'=>{account_id:@income_account.id, nature:@n, debit:i+1, payment_mode:'Espèces'},
                 '1'=>{account_id:@caca.id, credit:i+1, payment_mode:'Espèces'} } })
         end

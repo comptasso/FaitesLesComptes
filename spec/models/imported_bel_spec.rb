@@ -12,6 +12,7 @@ describe ImportedBel do
   
   def valid_attributes 
     {date:Date.today,
+      
       cat:'D',
       narration:'une ibel',
       debit:56.25,
