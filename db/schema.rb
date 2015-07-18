@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150628052219) do
+ActiveRecord::Schema.define(version: 20150718061649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -419,6 +419,7 @@ ActiveRecord::Schema.define(version: 20150628052219) do
     t.integer  "written_by"
     t.string   "user_ip"
     t.date     "date_piece"
+    t.integer  "piece_number"
   end
 
   add_index "writings", ["date"], name: "index_writings_on_date", using: :btree
