@@ -68,6 +68,8 @@ class Writing < ActiveRecord::Base
   
   before_save :fill_date_piece
   
+  after_destroy :no_fresh_values
+  
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
 
   default_scope -> {order('writings.date ASC, writings.id ASC')}
@@ -230,6 +232,12 @@ class Writing < ActiveRecord::Base
   
 
   protected
+  
+  # Lorsqu'un écriture est détruite, il faut indiquer à la nomenclature 
+  # que les valeurs de ses rubriques ne sont plus fraîche
+  def no_fresh_values
+    book.organism.nomenclature.update_attribute(:job_finished_at, nil)
+  end
   
   def fill_date_piece
     self.date_piece ||= date

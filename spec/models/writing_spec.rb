@@ -75,17 +75,15 @@ describe Writing do
 
   end
   
-  # fin de la partie avec des mock_models
+  ### FIN de la partie avec des mock_models
 
   context 'with real models' do
     
     before(:each) do
       use_test_organism
     end
-    
-    
-   
-    describe 'validations et sauvegarde' , wip:true do
+  
+    describe 'validations et sauvegarde' do
 
       before(:each) do
         @l1 = ComptaLine.new(account_id:@p.accounts.first.id, debit:0, credit:10)
@@ -125,7 +123,7 @@ describe Writing do
         
       end
       
-      describe 'remplissage de date_piece', wip:true do
+      describe 'remplissage de date_piece' do
         
         it 'conserve la date si elle est donnée' do
           @r.date_piece = Date.today - 5
@@ -182,7 +180,6 @@ describe Writing do
         end
       end
 
-
     end
 
 
@@ -193,9 +190,7 @@ describe Writing do
         @w = create_in_out_writing
       end
       
-      after(:each) do
-        Writing.delete_all
-      end
+      after(:each) {erase_writings}
       
       it 'check compta_lines' do
         @w.compta_lines.first.should be_an_instance_of(ComptaLine)
@@ -393,6 +388,23 @@ describe Writing do
       end
       
     end
+      
+    describe 'la suppression d une écriture' do
+        
+      before(:each) do
+        use_test_organism
+        @w = create_in_out_writing
+        @o.nomenclature.update_attribute(:job_finished_at, Time.now)
+      end
+        
+        
+      it 'met le champ job_finished_at de la nomenclature à nil' do
+        @w.destroy
+        expect(@o.nomenclature(true).job_finished_at).to be_nil
+      end
+
+    end
+    
   end
 
 end

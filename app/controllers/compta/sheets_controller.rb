@@ -23,8 +23,6 @@ class Compta::SheetsController < Compta::ApplicationController
   before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
   def index
-    
-    
     # @docs est une collection de Compta::Sheet
     @docs = params[:collection].map do |c|
       # TODO mettre cela dans le modèle
@@ -36,13 +34,11 @@ class Compta::SheetsController < Compta::ApplicationController
       send_export_token # pour gérer le spinner lors de la préparation du document
       format.html 
       format.csv {
-        
         datas = ''
         @docs.each {|doc| datas += doc.to_index_csv } 
         send_data datas, :filename=>export_filename(@docs, :csv, params[:title])
       }
       format.xls {
-        
         datas = ''
         @docs.each {|doc| datas += doc.to_index_xls}
         send_data datas, :filename=>export_filename(@docs, :csv, params[:title])
@@ -130,7 +126,7 @@ class Compta::SheetsController < Compta::ApplicationController
   
   # la période demandée est adéquate quand toutes les rubriques sont effectivement
   # remplies avec des valeurs relevant de l'exercice voulu
-  # donc : un seul exercice et le bon
+  # en clair : un seul exercice et le bon
   def period_adhoc?
     rsu = ::Rubrik.select(:period_id).uniq
     rsu.count == 1 && rsu.to_a.first.period_id == @period.id

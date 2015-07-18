@@ -14,12 +14,10 @@ describe 'vue natures index' do
   include OrganismFixtureBis  
 
   before(:each) do
-    
     use_test_user
     use_test_organism
     login_as('quidam')
   end
-
 
   describe 'new nature' do
     
@@ -27,7 +25,6 @@ describe 'vue natures index' do
       visit new_admin_organism_period_nature_path(@o, @p) 
       page.should have_content("Nouvelle Nature")
       page.should have_content('Livre')
-      
     end
 
     it 'reaffiche la page'  do
@@ -54,8 +51,7 @@ describe 'vue natures index' do
         @nouvelle_nature.book.should == OutcomeBook.first
         current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures\?book_id=#{@ob.id}$/
       end
-    
-    
+   
     end
 
   end
@@ -73,7 +69,6 @@ describe 'vue natures index' do
     end
 
     it 'dans la vue index,une nature peut être détruite', :js=>true do 
-      
       find_second_nature
       nb_nats = @ob.natures.count
       visit admin_organism_period_natures_path(@o, @p, book_id:@ob.id)
@@ -86,7 +81,6 @@ describe 'vue natures index' do
       alert.accept
       current_url.should match /.*\/admin\/organisms\/#{@o.id.to_s}\/periods\/#{@p.id.to_s}\/natures\?book_id=#{@ob.id}$/
       page.all("tbody tr").size.should == (nb_nats - 1)
-    
     end
 
     it 'cliquer sur modifier une nature affiche la vue edit'do
@@ -107,6 +101,18 @@ describe 'vue natures index' do
       current_url.should match /natures\?book_id=\d*$/
     end
 
+  end
+  
+  describe 'changement d exercice' do
+    before(:each) do
+      @np = find_second_period
+      visit admin_organism_period_natures_path(@o, @p, book_id:@ob.id)
+    end
+    
+    it 'reaffiche correctement la vue index si on change d exercice' do
+      click_link @np.long_exercice
+      page.find('h3').should have_content('Natures du livre Dépenses')
+    end
   end
 
 

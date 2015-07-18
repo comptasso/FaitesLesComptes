@@ -91,9 +91,14 @@ class Nomenclature < ActiveRecord::Base
     job_finished_at.present?  
   end
   
-  # indique si les rubriques ont été fraichement remplies en les comparant 
+  # Indique si les rubriques ont été fraichement remplies en les comparant 
   # avec la date de modification de la table des ComptaLine.
   #
+  # Cette méthode pose un problème lorsque la dernière modification est en 
+  # fait une destruction d'écriture. Pour éviter celà et considérant que 
+  # mettre en place un observer serait un peu excessif pour ce seul point, 
+  # on a mis en place un callback after_destroy dans writing.  
+  # 
   # Si les rubriques ne sont pas fraiches, alors remet le champ job_finished_at
   # à nil; ce qui permettra ensuite au controller de constater plus vite que 
   # le travail de mise à jour n'est pas encore fini. Sachant que celui-ci est 
@@ -109,8 +114,7 @@ class Nomenclature < ActiveRecord::Base
     return true unless derniere_ecriture # oui car pas d'écriture
     fresh = derniere_ecriture < job_finished_at &&  dernier_compte < job_finished_at 
     # une écriture au moins a été modifiée après la construction des données
-    # du coup on met le champ job_finished_at à nil puisque c'est l'existence
-    # d'une valeur qui va définir si le travail est fini.
+    # du coup on met le champ job_finished_at à nil.  
     update_attribute(:job_finished_at, nil) unless fresh
     fresh
   end

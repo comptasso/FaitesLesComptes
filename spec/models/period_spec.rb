@@ -261,15 +261,8 @@ describe Period do
   context 'avec un comité d entreprise et 2 exercices' do
       
     before(:each) do
-      create_organism('Comité d\'entreprise')
-      @p2 = @o.periods.create!(start_date:(@p.close_date + 1),
-        close_date:(@p.close_date >> 12))
-      @p2.create_datas
-      
-    end
-      
-    after(:each) do
-      clean_organism
+      use_test_organism('Comité d\'entreprise')
+      @p2 = find_second_period   
     end
       
     it 'report_accounts retourne 3 comptes' do
@@ -367,15 +360,10 @@ describe Period do
       
     before(:each) do
       use_test_organism
-      @p2 = @o.periods.create!(start_date:(@p.close_date + 1),
-        close_date:(@p.close_date >> 12))
-      @p2.create_datas
+      @p2 = find_second_period
     end
       
-    after(:each) do
-      @p2.destroy
-    end
-   
+      
     describe 'period_next'  do
       it "p doit répondre p2" do
         @p.next_period.should == @p2
@@ -471,8 +459,7 @@ describe Period do
   describe 'destruction d un exercice' do
     
     before(:each) do
-      create_minimal_organism
-      
+      use_test_organism
     end
     
     it 'la destruction de l exercice entraîne celle des comptes' do
@@ -501,7 +488,7 @@ describe Period do
     describe 'détruit les bank_extract et leurs bank_extract_lines'  do
 
        
-      before(:each) do
+      before(:each) do 
         BankExtractLine.delete_all
         @w = create_in_out_writing
         @be =  @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month, begin_sold:0, total_debit:0, total_credit:99)
