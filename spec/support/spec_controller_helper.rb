@@ -29,7 +29,8 @@ module SpecControllerHelper
       organism:@o,
       guess_date:Date.today,
       guess_month:MonthYear.from_date(Date.today),
-      guess_month_from_params:MonthYear.from_date(Date.today))
+      guess_month_from_params:MonthYear.from_date(Date.today), 
+      next_piece_number:777)
     
     @sect = mock_model(Sector)
     

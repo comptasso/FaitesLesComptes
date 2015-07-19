@@ -12,7 +12,8 @@ describe 'PeriodCoherentValidator' do
   let(:b) {stub_model(Book, :type=>'IncomeBook')} # stub car on utilise plus loin b.writings
  
   before(:each) do
-     @w = b.writings.new(date:Date.today, narration:'test du validator')
+     @w = b.writings.new(date:Date.today, narration:'test du validator', 
+     piece_number:1)
      @cl1 = @w.compta_lines.new(nature:n, account_id:a1.id, debit:5)
      @cl2 = @w.compta_lines.new(account_id:a2.id, credit:5)
      @w.stub(:period).and_return(p)

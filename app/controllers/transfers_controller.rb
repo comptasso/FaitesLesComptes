@@ -52,9 +52,10 @@ class TransfersController < ApplicationController
   # POST /transfers
   # POST /transfers.json
   def create
-    
     @transfer = @book.transfers.new(params_pre_treatment)
     fill_author(@transfer)
+    
+    
     respond_to do |format|
       if @transfer.save
         my = MonthYear.from_date(@transfer.date)
@@ -69,9 +70,9 @@ class TransfersController < ApplicationController
   # PUT /transfers/1
   # PUT /transfers/1.json
   def update
-    
     @transfer = Transfer.find(params[:id])
     fill_author(@transfer)
+    
     respond_to do |format|
       if @transfer.update_attributes(params_pre_treatment)
         my = MonthYear.from_date(@transfer.date)

@@ -161,13 +161,14 @@ class Organism < ActiveRecord::Base
     end
   end
 
-  # vérifie qu'il y a au moins un exercice pour lequel on peut faire les comptes
-  # 
-  # TODO Non utilisé - à supprimer
-#  def accountable?
-#    periods.select {|p| p.accountable? }.any?
-#  end
-#  
+  
+   # Donne le prochain numéro de pièce disponibles pour une écriture
+  def next_piece_number
+    mpn = writings.maximum(:piece_number)
+    mpn ||= 1
+    mpn.next
+  end
+  
   # renvoie les dates pour lesquelles il est possible d écrire
   # utilisé par le gem adhérent pour savoir un paiement est valide
   def range_date

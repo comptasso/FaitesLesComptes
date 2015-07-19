@@ -63,14 +63,11 @@ describe Period do
       @p.errors[:start_date].first.should match 'ne peut avoir un trou dans les dates'
     end
 
-      
-
     it 'n est pas valide si plus de deux exercices ouverts' do
       @p.stub(:max_open_periods?).and_return true
       expect {@p.save}.not_to change {Period.count}
       @p.save
       @p.errors[:base].first.should == 'Impossible d\'avoir plus de deux exercices ouverts'
-        
     end
 
   end
@@ -136,7 +133,6 @@ describe Period do
       @p.close_date = Date.today.beginning_of_year.months_since(6)
       @p.should_not be_include_month(8)
     end
-
   end
   
   describe 'two_period_accounts'  do
@@ -167,7 +163,6 @@ describe Period do
       @ar.should_receive(:find_by_number).with('2801').and_return(acc10 = mock_model(Account))
       @p2.previous_account(acc13).should == acc10
     end
-
 
     it 'sans compte corresondant previous_account retourne nil' do
       @p2.stub(:previous_period?).and_return true
@@ -207,6 +202,7 @@ describe Period do
     it 'p feut être fermé' do
       @p.closable?.should == true
     end
+    
     context 'test des messages d erreur' do
 
       it 'ne peut être ferme si on ne peut pas passer une écriture' do
@@ -252,10 +248,7 @@ describe Period do
         @p.closable?
         @p.errors[:close].should == [@od_error]
       end
-
-
     end
-
   end
 
   context 'avec un comité d entreprise et 2 exercices' do
@@ -320,9 +313,7 @@ describe Period do
         @p2.accounts.where('number = ?', '12').first.sold_at(@p2.close_date).should == 0.0 
   
       end
-         
     end
-       
   end
     
   context 'avec un exercice' do 
@@ -354,7 +345,6 @@ describe Period do
 
     end
   end
-
     
   context 'avec deux exercices'  do
       
@@ -433,10 +423,10 @@ describe Period do
         end
 
       end
+
     end
     
   end
-  
   
   describe 'provisoire?' do
     before(:each) do
@@ -469,10 +459,11 @@ describe Period do
       Account.count.should == nb_accounts - nb_period_accounts
     end
 
-    it 'détruit les natures' do
-      Nature.count.should > 0
+    it 'ainsi que celles des natures' do
+      nb_natures = Nature.count
+      nb_period_natures = @p.natures.count
       @p.destroy
-      Nature.count.should == 0
+      Nature.count.should == nb_natures - nb_period_natures
     end
 
     it 'détruit les écritures' do
@@ -486,12 +477,14 @@ describe Period do
     end
 
     describe 'détruit les bank_extract et leurs bank_extract_lines'  do
-
        
       before(:each) do 
         BankExtractLine.delete_all
         @w = create_in_out_writing
-        @be =  @ba.bank_extracts.create!(begin_date:@p.start_date, end_date:@p.start_date.end_of_month, begin_sold:0, total_debit:0, total_credit:99)
+        @be =  @ba.bank_extracts.create!(begin_date:@p.start_date,
+          end_date:@p.start_date.end_of_month,
+          begin_sold:0,
+          total_debit:0, total_credit:99)
         @be.bank_extract_lines.create!(:compta_line_id=>@w.support_line.id)
       end
 
@@ -505,10 +498,8 @@ describe Period do
         BankExtractLine.count.should == 0
       end
 
-      
-
     end
-
   
   end
+  
 end

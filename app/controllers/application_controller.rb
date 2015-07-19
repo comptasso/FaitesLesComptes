@@ -235,7 +235,7 @@ class ApplicationController < ActionController::Base
     writing.written_by = current_user.id
     writing.user_ip = current_user.current_sign_in_ip
   end
-
+  
   # raccourci pour avoir la configuration
   #
   # abc pour ActiverecordBaseConnection_config

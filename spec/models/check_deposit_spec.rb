@@ -11,7 +11,7 @@ end
 # A refactoriser car il y a des doublons dans les tests (création écriture notamment)
 
 describe CheckDeposit do   
-  include OrganismFixtureBis
+  include OrganismFixtureBis 
  
   before(:each) do  
     use_test_organism
@@ -54,18 +54,15 @@ describe CheckDeposit do
         @sect2 = mock_model(Sector, name:'Commun')
         expect(CheckDeposit.nb_to_pick(@sect2)).to eq(3)
       end
-      
-      
     end
-
-   
   end
 
   describe "création d'une remise de chèque" do 
-    it "save the right date"  do 
+    it "save the right date", wip:true  do 
       d = @p.start_date.months_since(4)
       cd = @ba.check_deposits.new deposit_date_picker:I18n::l(d, :format=>:date_picker)
       cd.pick_all_checks(@sector)
+      puts cd.errors.messages unless cd.valid?
       cd.save!
       cd.deposit_date.should == d
     end

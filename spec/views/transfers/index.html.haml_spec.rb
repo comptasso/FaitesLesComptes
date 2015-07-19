@@ -48,12 +48,11 @@ describe "transfers/index" do
 
     it 'with a thead and titles' do 
       thead = page.find('thead')
-      thead.find('th:nth-child(1)').should have_content 'Date'
-      thead.find('th:nth-child(2)').should have_content 'Libellé'
-      thead.find('th:nth-child(3)').should have_content 'Montant'
-      thead.find('th:nth-child(4)').should have_content 'De'
-      thead.find('th:nth-child(5)').should have_content 'Vers'
-      thead.find('th:nth-child(6)').should have_content 'Actions' 
+      titres = %w(Date Pièce Libellé Montant De Vers Actions)
+      7.times do |i|
+        thead.find("th:nth-child(#{i+1})").should have_content titres[i]
+      end
+      
     end
 
     it 'with a tbody with two rows' do

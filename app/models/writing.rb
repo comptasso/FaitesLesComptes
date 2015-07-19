@@ -67,6 +67,7 @@ class Writing < ActiveRecord::Base
   # S'appuie sur ContinuValidator
   validates :continuous_id, continu:true, :allow_blank=>true  
   
+  before_validation :fill_piece_number
   before_save :fill_date_piece
   
   after_destroy :no_fresh_values
@@ -242,6 +243,12 @@ class Writing < ActiveRecord::Base
   
   def fill_date_piece
     self.date_piece ||= date
+  end
+  
+  # remplit le numéro de pièce avec 
+  def fill_piece_number
+    return nil unless b = book
+    self.piece_number ||= b.organism.next_piece_number
   end
   
   def self.last_continuous_id

@@ -10,6 +10,7 @@
     %thead
       %tr
         %th.date-euro Date
+        %th Pièce
         %th Libellé
         %th.numeric Montant
         %th De
@@ -19,6 +20,7 @@
     %tbody
       %tr
         %td= l @transfer.date
+        %td= @transfer.piece_number
         %td= @transfer.narration
         %td.numeric= number_with_precision(@transfer.amount, :precision=> 2) 
         %td= @transfer.line_from.account.accountable.nickname

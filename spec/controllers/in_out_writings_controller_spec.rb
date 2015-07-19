@@ -290,7 +290,7 @@ describe InOutWritingsController do
     end
     
     it "fill the default values"  do
-      @a.should_receive(:new).with(date:@d, piece_number:6).and_return(@nw)
+      @a.should_receive(:new).with(date:@d).and_return(@nw)
       @nw.stub_chain(:compta_lines, :build) 
       get :new, {income_book_id: @b.id, :mois=>@d.month.to_s, :an=>@d.year.to_s}, session_attributes
     end
@@ -329,7 +329,7 @@ describe InOutWritingsController do
     
 
       it 'new date est préremplie' do
-        @a.should_receive(:new).with(:date=>Date.today, piece_number:6).and_return @nw
+        @a.should_receive(:new).with(:date=>Date.today).and_return @nw
         @nw.stub_chain(:compta_lines, :build)
         get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes, :date=>Date.today
       end

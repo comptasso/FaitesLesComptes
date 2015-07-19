@@ -9,6 +9,7 @@ describe "transfers/show" do
     @tr = stub_model(Transfer,
       :narration => "Premier transfert", 
       :date=> Date.today,
+      piece_number:1101,
       amount:125.14
       
     )    
@@ -27,12 +28,12 @@ describe "transfers/show" do
   end
   
   it 'rendant la ligne de titre' do
-    page.first('table tr').text.should == "\nDate\nLibellé\nMontant\nDe\nVers\nActions\n"
+    page.first('table tr').text.should == "\nDate\nPièce\nLibellé\nMontant\nDe\nVers\nActions\n"
   end
     
   it 'et la ligne de détail du transfert' do
     page.find('tbody tr').text.should ==
-      "\n#{I18n.l(Date.today)}\nPremier transfert\n125,14\nle compte\nla caisse\n\n\n\n\n"
+      "\n#{I18n.l(Date.today)}\n1101\nPremier transfert\n125,14\nle compte\nla caisse\n\n\n\n\n"
   end
   
   

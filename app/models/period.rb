@@ -233,12 +233,7 @@ class Period < ActiveRecord::Base
     open ? false : true
   end
   
-  # Donne le prochain numéro de pièce disponibles pour une écriture
-  def next_piece_number
-    mpn = organism.writings.maximum(:piece_number)
-    mpn ||= 1
-    mpn.next
-  end
+ 
 
   # Effectue la clôture de l'exercice.
   #
@@ -252,10 +247,10 @@ class Period < ActiveRecord::Base
       an_book = organism.books.find_by_type('AnBook')
       date = next_p.start_date
 
-      Period.transaction do
+      Period.transaction do 
         
         w = an_book.writings.new(date:date,
-          piece_number:next_piece_number,
+          piece_number:organism.next_piece_number,
           narration:'A nouveau')
         # on fait d'abord les compta_lines du compte de bilan
         report_comptes_bilan.each { |cl| w.compta_lines << cl }

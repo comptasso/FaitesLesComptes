@@ -35,20 +35,21 @@ class CheckDeposit < ActiveRecord::Base
     ->(owner) { where('account_id = ? AND debit > 0', owner.rem_check_account_id) },
     class_name: 'ComptaLine',
     # conditions: proc { ['account_id = ? AND debit > 0', rem_check_account_id] },
-    dependent: :nullify,
+  dependent: :nullify,
     before_remove: :cant_if_pointed, #on ne peut retirer un chèque 
-    # si la remise de chèque a été pointée avec le compte bancaire
-    before_add: :cant_if_pointed
+  # si la remise de chèque a été pointée avec le compte bancaire
+  before_add: :cant_if_pointed
  
   # utile pour les méthode credit_compta_line et debit_compta_line
   has_many  :compta_lines, :through=>:check_deposit_writing
   
-  alias children compta_lines
+  alias children compta_lines 
 
   # book_id est nécessaire car on construit les écritures
   # attr_accessible :deposit_date, :deposit_date_picker, :check_ids, :bank_account_id
 
-  scope :within_period, lambda {|p| where(['deposit_date >= ? and deposit_date <= ?', p.start_date, p.close_date])}
+  scope :within_period, lambda {|p| where(['deposit_date >= ? and deposit_date <= ?',
+        p.start_date, p.close_date])}
  
   validates :bank_account_id, :deposit_date, :presence=>true
   validates :bank_account_id, :deposit_date, :cant_change=>true, :if=> :pointed?
@@ -56,7 +57,7 @@ class CheckDeposit < ActiveRecord::Base
   # TODO ne semble plus vrai
   validate :not_empty # une remise chèque vide n'a pas de sens
 
-  after_create :create_writing
+  after_create :create_writing 
   before_destroy :check_pointed
   after_update :update_writing 
   
@@ -174,14 +175,15 @@ class CheckDeposit < ActiveRecord::Base
     book = OdBook.first!
     CheckDeposit.transaction do
       w = build_check_deposit_writing(date:deposit_date, 
-        piece_number:find_period.next_piece_number,
         narration:'Remise chèque', book_id:book.id)
+      
       w.user_ip = user_ip
       w.written_by = written_by
       w.compta_lines.build(check_deposit_id:id, account_id:rem_check_account.id, credit:total_checks)
       w.compta_lines.build(check_deposit_id:id, debit:total_checks, account_id:bank_account_account.id)
+      # puts w.errors.messages unless w.valid?
       w.save!
-      self.update_attribute(:writing_id, w.id) 
+      self.update_attribute(:writing_id, w.id)
     end
   end
 

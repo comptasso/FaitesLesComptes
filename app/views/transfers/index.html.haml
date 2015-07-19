@@ -13,6 +13,7 @@
     %thead
       %tr
         %th.date-euro Date
+        %th Pièce
         %th Libellé
         %th.numeric Montant
         %th De
@@ -23,6 +24,7 @@
       - @transfers.each do |transfer|
         %tr
           %td= l transfer.date
+          %td= transfer.piece_number
           %td= transfer.narration
           %td.numeric= two_decimals transfer.amount
           %td= transfer.line_from.account.accountable.nickname

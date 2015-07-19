@@ -29,8 +29,8 @@ describe TransfersController do
 
   before(:each) do
     minimal_instances
-
-    @ba = mock_model(BankAccount, name:'Debix', number:'123Z')
+    
+    @ba = mock_model(BankAccount, name:'Debix', number:'123Z') 
     @bb = mock_model(BankAccount, name:'Debix', number:'784AZ')
     @od = mock_model(OdBook)
     @o.stub(:od_books).and_return(double(:first=>@od))
@@ -45,8 +45,10 @@ describe TransfersController do
   # update the return value of this method accordingly. 
   def valid_attributes
     { "amount"=>1245.to_s, 'book_id'=>@od.to_param,
-      "narration"=>'Premier virement', "date"=>Date.today.to_formatted_s('%d-%m-%Y'),
-      :compta_lines_attributes=>{'0'=>{account_id:@ba.to_param}, '1'=>{account_id:@bb.to_param}}
+      "narration"=>'Premier virement',
+      "date"=>Date.today.to_formatted_s('%d-%m-%Y'),
+      :compta_lines_attributes=>{'0'=>{account_id:@ba.to_param},
+        '1'=>{account_id:@bb.to_param}}
     }
   end
 
@@ -54,8 +56,9 @@ describe TransfersController do
   # les attributs sont modifiés au début de l'action create pour transmettre aux lignes
   # le paramètre montant
   def modified_attributes
-    {  'book_id'=>@od.to_param,
-      "narration"=>'Premier virement', "date"=>Date.today.to_formatted_s('%d-%m-%Y'),
+    { 'book_id'=>@od.to_param,
+      "narration"=>'Premier virement',
+      "date"=>Date.today.to_formatted_s('%d-%m-%Y'),
       'compta_lines_attributes'=>{'0'=>{'account_id'=>@ba.to_param, 'credit'=>'1245'},
         '1'=>{'account_id'=>@bb.to_param, 'debit'=>'1245'} }
     }
@@ -165,23 +168,23 @@ describe TransfersController do
       @controller.stub(:fill_author)
     end
 
-
     it "receives new with modified_params" do
       @a.should_receive(:new).with(modified_attributes).and_return(@t = double(Transfer))
       @t.should_receive(:save).and_return(true)
       @t.stub(:id).and_return 999
       @t.stub(:date).and_return(Date.today) 
+      @t.stub(:piece_number=)
       post :create, {:transfer => valid_attributes}, valid_session
     end
     
-   
-
     describe "with valid params" do
 
       before(:each) do
-        @a.stub(:new).with(modified_attributes).and_return @t= mock_model(Transfer).as_new_record
+        @a.stub(:new).with(modified_attributes).and_return @t = 
+          mock_model(Transfer).as_new_record
         @t.stub(:date).and_return(Date.today) # car sinon le mock_model ne transforme pas la date
         @t.stub(:save).and_return true
+        @t.stub(:piece_number=)
       end
       
       it 'recoit fill_author' do
@@ -189,7 +192,6 @@ describe TransfersController do
         post :create, {:transfer => valid_attributes}, valid_session
       end
       
-
       it "assigns a newly created transfer as @transfer" do
         post :create, {:transfer => valid_attributes}, valid_session
         assigns(:transfer).should == @t
@@ -210,8 +212,10 @@ describe TransfersController do
 
     describe "with invalid params" do
       before(:each) do
-        @a.stub(:new).with(modified_attributes).and_return @t= mock_model(Transfer).as_new_record
+        @a.stub(:new).with(modified_attributes).and_return @t=
+          mock_model(Transfer).as_new_record
         @t.stub(:save).and_return false
+        @t.stub(:piece_number=)
       end
 
       it "assigns a newly created but unsaved transfer as @transfer" do

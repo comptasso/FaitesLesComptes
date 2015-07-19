@@ -42,7 +42,7 @@ describe 'vue lines' do
     page.should have_content('nouvelle ligne') 
  end
 
-  it 'remplir correctement le formulaire crée une nouvelle ligne' do 
+  it 'remplir correctement le formulaire crée une nouvelle ligne', wip:true do 
     visit new_book_in_out_writing_path(@ob)
    
     fill_in 'in_out_writing_date_picker', :with=>I18n::l(Date.today, :format=>:date_picker)
@@ -52,7 +52,7 @@ describe 'vue lines' do
     select 'Virement'
     select 'Compte courant'
     click_button 'Enregistrer'
-    Writing.count.should == 1
+    Writing.count.should == 1 
     ComptaLine.count.should == 2 # avec sa contrepartie
   end 
 

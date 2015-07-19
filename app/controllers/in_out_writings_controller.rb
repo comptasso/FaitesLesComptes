@@ -36,8 +36,7 @@ class InOutWritingsController < ApplicationController
   # GET /in_out_writings/new
   def new
     @in_out_writing =@book.in_out_writings.new(
-      date: flash[:date] || @monthyear.guess_date, 
-      piece_number:@period.next_piece_number)
+      date: flash[:date] || @monthyear.guess_date)
     @line = @in_out_writing.compta_lines.build
     @counter_line = @in_out_writing.compta_lines.build
     if flash[:previous_line_id]
