@@ -3,7 +3,7 @@
 
 require 'spec_helper'
 
-RSpec.configure do |config| 
+RSpec.configure do |config|  
    # config.filter =  {wip:true} 
 end
 
@@ -15,7 +15,8 @@ describe 'Edition PDF des MonthlyExtract' do
       mock_model(ComptaLine, 
         nature:double(Object, name:'Cotisations'), 
         destination:double(Object, name:'Adhérents'),
-        w_date:I18n::l(Date.today), w_ref:'Pièce 27', w_narration:'une écriture',
+        w_date:I18n::l(Date.today), w_piece_number:1974,
+        w_ref:'Pièce 27', w_narration:'une écriture',
         debit:12,
         credit:0)  
     end

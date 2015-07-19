@@ -5,7 +5,9 @@ require 'spec_helper'
 describe Extract::Cash do
 
   before(:each) do
-    @ec = Extract::Cash.new(@b = mock_model(Book), @p = mock_model(Period, :start_date=>Date.today.beginning_of_month, :close_date=>Date.today.end_of_month))
+    @ec = Extract::Cash.new(@b = mock_model(Book), 
+      @p = mock_model(Period, :start_date=>Date.today.beginning_of_month,
+        :close_date=>Date.today.end_of_month))
   end
 
   it 'est une instance' do
@@ -25,12 +27,19 @@ describe Extract::Cash do
 
   it 'to_csv prépare les lignes' do
     @ec.stub(:lines).and_return([double(ComptaLine, date:Date.today,
+        piece_number:1974,
         narration:'un libellé', ref:'001', :credit=>0,
         destination:double(:name=>'la destinée'),
         nature:double(:name=>'ecolo'),
         :debit=>'125.56')])
 
-    @ec.to_csv.should == "Date\tRéf\tLibellé\tActivité\tNature\tSorties\tEntrées\n#{I18n.l(Date.today, :format=>'%d/%m/%Y')}\t001\tun libellé\tla destinée\tecolo\t0,00\t125.56\n"
+    result =  <<-EOF 
+Date\tPièce\tRéf\tLibellé\tActivité\tNature\tSorties\tEntrées\n
+§#{I18n.l(Date.today, :format=>'%d/%m/%Y')}\t1974\t001\tun libellé\t
+§la destinée\tecolo\t0,00\t125.56
+EOF
+    # Note : un heredoc rajoute un \n 
+    @ec.to_csv.should == result.gsub(/\n§/, '') 
   end
 
 

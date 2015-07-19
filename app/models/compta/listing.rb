@@ -85,11 +85,11 @@ module Compta
     def to_csv(options = {col_sep:"\t"})
       CSV.generate(options) do |csv|
         csv << ["Liste des écritures du compte #{account.number}",'', '',  '', '', '','', '']
-        csv << %w(Date Journal Référence Libellé Nature Activité Débit Crédit)
+        csv << %w(Date Pièce Journal Référence Libellé Nature Activité Débit Crédit)
         csv << ["Soldes au #{I18n::l from_date}",'', '', '', '','',
           reformat(solde_debit_avant), reformat(solde_credit_avant) ]
         lines.each do |l|
-          csv << [I18n::l(l.w_date.to_date), l.b_abbreviation, l.w_ref,
+          csv << [I18n::l(l.w_date.to_date), l.w_piece_number, l.b_abbreviation, l.w_ref,
             l.w_narration, l.nat_name, l.dest_name,
             reformat(l.debit), reformat(l.credit)]
         end

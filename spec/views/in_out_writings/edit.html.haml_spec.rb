@@ -14,7 +14,8 @@ let(:d) {stub_model(Destination, name:'destination')}
 let(:sector) {stub_model(Sector, organism:o)}
 
 before(:each) do
-    assign(:in_out_writing, @iow = stub_model(InOutWriting, book_id:1, date:Date.today))
+    assign(:in_out_writing, @iow = stub_model(InOutWriting, book_id:1,
+        date:Date.today, piece_number:1975))
     assign(:line, stub_model(ComptaLine, ref:nil).as_new_record)
     assign(:counter_line, stub_model(ComptaLine).as_new_record)
     assign(:book, stub_model(IncomeBook, :title=>'Recettes', sector:sector))
@@ -25,7 +26,7 @@ before(:each) do
    
   it 'donne en h3 le numéro de l écriture modifiées' do
     render
-    assert_select "h3", "Recettes : modification de ligne n° #{@iow.to_param}" 
+    assert_select "h3", "Recettes : modification de ligne n° 1975" 
   end
 
 #  it "renders new line  form" do

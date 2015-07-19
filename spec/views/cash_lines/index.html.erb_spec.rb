@@ -10,7 +10,8 @@ describe "cash_lines/index" do
   include JcCapybara
 
   def mock_cash_line(montant)
-    mock_model(ComptaLine,
+    mock_model(ComptaLine, 
+      :piece_number=>13,
       :debit=>montant,
       :date=>Date.today,
       :narration=>'le libellé',
@@ -54,7 +55,7 @@ describe "cash_lines/index" do
 
   it 'avec une ligne de titre' do
     titles = page.all('thead th').collect {|el| el.text}
-    titles.should == %w(Date Réf Libellé Activité Nature Sorties Entrées Actions)
+    titles.should == %w(Date Pièce Réf Libellé Activité Nature Sorties Entrées Actions)
 
   end
   it 'deux lignes' do
@@ -63,13 +64,14 @@ describe "cash_lines/index" do
 
   it 'une ligne se compose de ...' do
     ligne = page.all('table tbody tr:first td')
-    ligne.first.text.should == I18n.l(Date.today, :format=>'%d/%m/%Y')
-    ligne[1].text.should == '001'
-    ligne[2].text.should == 'le libellé'
-    ligne[3].text.should == 'destinée'
-    ligne[4].text.should == 'une dépense'
-    ligne[5].text.should == '-'
-    ligne[6].text.should == '10,00'
+    ligne.first.text.should == I18n.l(Date.today)
+    ligne[1].text.should == '13'
+    ligne[2].text.should == '001'
+    ligne[3].text.should == 'le libellé'
+    ligne[4].text.should == 'destinée'
+    ligne[5].text.should == 'une dépense'
+    ligne[6].text.should == '-'
+    ligne[7].text.should == '10,00'
   end
 
   

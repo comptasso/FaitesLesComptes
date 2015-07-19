@@ -15,7 +15,7 @@ describe 'compta/listings/show' do
       close_date:Date.today.end_of_year)}
   let(:l) {Compta::Listing.new( account_id:a.id,
       from_date:Date.today.beginning_of_year, to_date:Date.today.end_of_year)}
-  let(:line) {double(ComptaLine, w_id:1, w_date:Date.today,
+  let(:line) {double(ComptaLine, w_piece_number:1, w_date:Date.today,
       b_abbreviation:'OD',
       w_ref:'',
       w_narration:'ligne test',

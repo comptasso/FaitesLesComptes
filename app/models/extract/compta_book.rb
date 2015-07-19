@@ -65,7 +65,7 @@ module Extract
     # On ne tronque pas les informations car celà est destiné à l'export vers un fichier csv ou xls
     # 
     def prepare_line(line)
-      [I18n::l(line.writing.date), line.writing.id, line.writing.ref, line.writing.narration, 
+      [I18n::l(line.writing.date), line.writing.piece_number, line.writing.ref, line.writing.narration, 
            line.account.number, line.account.title, french_format(line.debit), french_format(line.credit)]
     end
 

@@ -41,6 +41,7 @@ RACINE_BANK = '512'
 RACINE_CASH = '53'
 
 LISTING_SELECT = ['writings.id AS w_id', 'writings.date AS w_date',
+      'writings.piece_number AS w_piece_number',
       'books.abbreviation AS b_abbreviation', 'writings.ref AS w_ref', 
       'writings.narration AS w_narration', 'natures.name AS nat_name',
       'destinations.name AS dest_name', 'debit',  'credit']

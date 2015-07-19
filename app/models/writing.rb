@@ -227,7 +227,7 @@ class Writing < ActiveRecord::Base
   # Attention, un changement du nombre de colonne doit être fait sur les 
   # deux méthodes.
   def to_pdf
-    ['', "#{I18n::l(date)} - N°: #{id} - Réf: #{ref} - Libellé : #{narration}", nil, nil]
+    ['', "#{I18n::l(date)} - Pce: #{piece_number} - Réf: #{ref} - Libellé : #{narration}", nil, nil]
   end
   
   

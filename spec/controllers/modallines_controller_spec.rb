@@ -5,7 +5,7 @@ RSpec.configure do |c|
 end
  
 describe ModallinesController do 
-  include SpecControllerHelper
+  include SpecControllerHelper 
 
  
   def valid_arguments
@@ -28,6 +28,7 @@ describe ModallinesController do
     InOutWriting.any_instance.stub_chain(:book, :organism).and_return(@o)
     InOutWriting.any_instance.stub(:counter_line).and_return(mock_model(ComptaLine, payment_mode:'Virement'))
     @o.stub(:find_period).and_return @p
+    @o.stub(:next_piece_number).and_return 1975
     @p.stub(:guess_month).and_return(Date.today.month - 1) 
   end
 

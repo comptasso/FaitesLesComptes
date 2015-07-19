@@ -2,30 +2,21 @@
 
 module Pdflc
   
-    BOOK_TITLES = %w(N° Date Jnl Réf Libellé Nature Activité Débit Crédit)
-    BOOK_WIDTHS = [6, 8, 6, 8, 24, 15, 15, 9, 9]
+    BOOK_TITLES = %w(Date Pce Jnl Réf Libellé Nature Activité Débit Crédit)
+    BOOK_WIDTHS = [8, 6, 6, 8, 24, 15, 15, 9, 9]
     BOOK_ALIGNMENTS = 7.times.collect {:left} + 2.times.collect {:right}
-    BOOK_FIELDS =  ['w_id', 'w_date', 'b_abbreviation', 'w_ref', 'w_narration',
-      'nat_name', 'dest_name', 'debit', 'credit']
-    # TODO identique à LISTING_SELECT, à refactoriser
-    BOOK_SELECT =  ['writings.id AS w_id', 'writings.date AS w_date',
-      'books.abbreviation AS b_abbreviation', 'writings.ref AS w_ref', 
-      'writings.narration AS w_narration', 'natures.name AS nat_name',
-      'destinations.name AS dest_name', 'debit',  'credit']
-  
+    BOOK_FIELDS =  ['w_date', 'w_piece_number', 'b_abbreviation', 'w_ref',
+      'w_narration', 'nat_name', 'dest_name', 'debit', 'credit']
+    # LISTING_SELECT est défini dans config/all_constants
   
   # Cette classe permet de produire les fichiers pdf pour un listing de compte
   # La table connait l'information sur le compte 
-  # 
-  
-  class FlcListing
-    
-    
+  #   
+  class FlcListing 
     
     attr_accessor :from_account
     attr_reader :period, :from_date, :to_date, :pdf
     attr_reader :table
-   
     
     def initialize(options={})
       @from_account = options[:from_account]
@@ -50,7 +41,7 @@ module Pdflc
         @reports, @table, @trame, fond:@fond)
       @pdf.draw_pdf(false) 
         
-      @pdf.numerote 
+      @pdf.numerote
       @pdf  
 
     end 
@@ -65,7 +56,7 @@ module Pdflc
       account.compta_lines.with_writing_and_book.
         joins('LEFT OUTER JOIN destinations ON compta_lines.destination_id = destinations.id').
         joins('LEFT OUTER JOIN natures ON compta_lines.nature_id = natures.id').
-        select(BOOK_SELECT).without_AN.
+        select(LISTING_SELECT).without_AN.
         range_date(from_date, to_date).
         order('writings.id')
     end
@@ -84,9 +75,12 @@ module Pdflc
       set_trame_title_and_subtitle(account)
     end
     
+    # Rappel : les arguments de Pdflc::FlcTable.new sont l'arel source, le nombre
+    # de lignes par page, les méthodes à utiliser, les colonnes à totaliser
+    # et les colonnes de format date. 
     def set_table(account)
       @table = Pdflc::FlcTable.new(
-        book_arel(account), 22, BOOK_FIELDS, [7,8], [1] 
+        book_arel(account), 22, BOOK_FIELDS, [7,8], [2] 
       )
     end
     

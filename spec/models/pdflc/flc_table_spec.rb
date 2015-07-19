@@ -27,10 +27,6 @@ describe Pdflc::FlcTable do
       @arel.should_receive(:limit).with(22).and_return @arel
       @table.lines
     end
-    
-    
-    
-    
   end
   
   describe 'avec une base réelle' do
@@ -43,7 +39,7 @@ describe Pdflc::FlcTable do
       
       @ar = ComptaLine.
         with_writing_and_book.
-        select(['writings.id AS w_id', 'writings.date AS w_date', 'debit']).
+        select([ 'writings.date AS w_date', 'writings.id AS w_id','debit']).
         without_AN.range_date(@p.start_date, @p.close_date).
         order(['writings.id ASC'])
       
@@ -75,18 +71,19 @@ describe Pdflc::FlcTable do
       @w = create_outcome_writing(10000)
       @ar = ComptaLine.
         with_writing_and_book.
-        select(['writings.id AS w_id', 'writings.date AS w_date', 'debit', 'credit']).
+        select([ 'writings.date AS w_date',
+          'writings.piece_number AS w_pn', 'debit', 'credit']).
         without_AN.range_date(@p.start_date, @p.close_date).
-        order(['w_date ASC', 'w_id ASC'])
-      @pdf = Pdflc::FlcTable.new(@ar, 22, [:w_id, :w_date, :debit, :credit],
-        [2, 3], [1] )
+        order(['w_date ASC', 'w_pn ASC'])
+      @pdf = Pdflc::FlcTable.new(@ar, 22, [:w_date, :w_pn, :debit, :credit],
+        [2, 3])
     end
     
     it 'sait mettre en forme les lignes' do
-      d = I18n::l(Date.today, format:'%d-%m-%Y') 
+      d = I18n::l(Date.today) 
       @pdf.prepared_lines.should == [
-        [@w.id, d, '10 000,00', '0,00'],
-        [@w.id, d, '0,00', '10 000,00']
+        [d, @w.piece_number, '10 000,00', '0,00'],
+        [d, @w.piece_number, '0,00', '10 000,00']
       ]
     end
   end

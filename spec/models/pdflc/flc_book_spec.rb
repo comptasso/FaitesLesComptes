@@ -1,7 +1,7 @@
 #coding: utf-8
 
 require 'spec_helper' 
-
+ 
 RSpec.configure do |c| 
   # c.filter = {:wip=>true}
 end
@@ -26,7 +26,7 @@ describe Pdflc::FlcBook do
   def twenty_two_lines
     22.times.collect do |i|
       double(ComptaLine, 
-        w_id:i+1,
+        w_piece_number:i+1,
         w_date:Date.today,
         b_abbreviation:'AB',
         w_ref:nil,

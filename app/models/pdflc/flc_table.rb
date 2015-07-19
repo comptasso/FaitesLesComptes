@@ -18,6 +18,9 @@ module Pdflc
   # 
   class FlcTable
     
+    # TODO date_fields n'est plus utilisé pour les listings; voir si on peut
+    # le supprimer totalement.
+    
     attr_reader :columns_to_totalize, :fields, :date_fields
     attr_accessor :arel
     
@@ -55,7 +58,7 @@ module Pdflc
         @fields.collect.with_index do |f, i| 
           v = l.send(f)
           v = french_format(v) if i.in?(columns_to_totalize)
-          v = I18n.l(v.to_date, format:'%d-%m-%Y') if i.in?(date_fields)
+          v = I18n.l(v) if v.is_a? Date
           v ||= '' # pour gérer les nil
           v
         end

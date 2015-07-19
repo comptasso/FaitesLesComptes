@@ -2,15 +2,18 @@
 
 require 'spec_helper'
 
-describe 'CounterLineWithPaymentModeValidator' do
+describe 'CounterLineWithPaymentModeValidator' do 
   let(:b) {stub_model(IncomeBook)}
   let(:cl) {stub_model(ComptaLine)}
 
   def valid_attributes
-    {"date_picker"=>"01/03/2013", "ref"=>"",
+    {"date_picker"=>"01/03/2013", "piece_number"=>"1974", "ref"=>"",
             "narration"=>"essa",
-            "compta_lines_attributes"=>{'0'=>{"nature_id"=>"", "destination_id"=>"", "credit"=>"0", "debit"=>"0", "payment_mode"=>"Virement" },
-              '1'=>{"account_id"=>"144", "check_number"=>"", "credit"=>"0", "debit"=>"0", "payment_mode"=>"" }}}
+            "compta_lines_attributes"=>{'0'=>{"nature_id"=>"",
+                "destination_id"=>"", "credit"=>"0", "debit"=>"0",
+                "payment_mode"=>"Virement" },
+              '1'=>{"account_id"=>"144", "check_number"=>"",
+                "credit"=>"0", "debit"=>"0", "payment_mode"=>"" }}}
   end
   
 

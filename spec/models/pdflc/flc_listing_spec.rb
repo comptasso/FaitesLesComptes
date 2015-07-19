@@ -23,8 +23,9 @@ describe Pdflc::FlcListing do
   def twenty_two_lines
     22.times.collect do |i|
       double(ComptaLine, 
-        w_id:i+1,
+        
         w_date:Date.today,
+        w_piece_number:11,
         b_abbreviation:'AB',
         w_ref:nil,
         w_narration:'Ecriture',
@@ -52,7 +53,7 @@ describe Pdflc::FlcListing do
   
   # le pdf fera 8 pages, 2 pages pour chacun des comptes sauf pour le second
   # qui n'a pas de lignes.  
-  it 'peut rendre le texte avec un fond' do
+  it 'peut rendre le texte avec un fond', wip:true  do
     @b = Pdflc::FlcListing.new(from_account:@fas, 
     from_date:Date.today.beginning_of_year,
     to_date:Date.today.end_of_year,
