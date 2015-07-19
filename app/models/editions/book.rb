@@ -5,8 +5,11 @@ module Editions
 
   # Classe destinée à imprimer un livre ou un extrait de livre en format pdf
   # Il s'agit ici plus d'imprimer
+  # 
+  # La classe s'initialise avec un exercie et l'argument source 
   #
-  # Cette classe hérite de PdfDocument::Totalized et prepare_line
+  # Cette classe hérite de PdfDocument::Totalized et prepare_line, méthode 
+  # qui est surchargée. 
   class Book < PdfDocument::Default
 
     def initialize(period, source)
@@ -31,12 +34,12 @@ module Editions
         'destination_id', 'nature_id',
         'debit', 'credit',
         'payment_mode', 'writing_id']
-      @columns_methods = ['w_piece_number', 'w_date', 'w_ref', 'w_narration',
+      @columns_methods = ['w_date', 'w_piece_number', 'w_ref', 'w_narration',
         'destination.name', 'nature.name', 'debit', 'credit',
         'writing_id', 'writing_id' ]
-      @columns_titles = %w(Pce Date Réf Libellé Activité Nature Dépenses Recettes Payt Support)
+      @columns_titles = %w(Date Pce Réf Libellé Activité Nature Dépenses Recettes Payt Support)
       
-      @columns_widths = [5, 8, 6, 20 ,10 , 10, 10, 10, 7, 14]
+      @columns_widths = [8, 5, 6, 20 ,10 , 10, 10, 10, 7, 14]
       @columns_to_totalize = [6, 7]
       @columns_alignements = [:left, :left, :left, :left, :left, :left, :right, :right, :left, :left]
     end
@@ -48,11 +51,11 @@ module Editions
     # TODO voir en fonction des performances s'il ne faudrait pas faire une requête qui
     # récupère les données plutôt que de rechercher encore l'écriture.
     # 
-    def prepare_line(line)
+    def prepare_line(line)  
       pl = super
-      pl[0] = pl[0].to_s # pour éviter que format_line ne transforme ce chiffre
+      pl[1] = pl[1].to_s # pour éviter que format_line (défini dans
+      # lib/pdf_document/page.rb) ne transforme ce chiffre
       # comme si c'était un montant en euros
-      pl[1] = I18n::l(Date.parse(pl[1])) rescue pl[1]
       w = Writing.find_by_id(pl.last)
       pl[-1] = w.support # récupération du support
       pl[-2] = w.payment_mode

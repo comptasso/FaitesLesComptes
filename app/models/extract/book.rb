@@ -47,7 +47,7 @@ module Extract
     #
     # utilisé par to_csv et to_xls
     def titles
-     %w(Date Pce Réf Libellé Compte Intitulé Débit Crédit)
+     %w(Date Pièce Réf Libellé Compte Intitulé Débit Crédit)
     end
 
     def title

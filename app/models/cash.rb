@@ -51,7 +51,9 @@ class Cash < ActiveRecord::Base
   # TODO supprimer le recours à extract_lines (probablement inutile) car la méthode lines
   # de Extract::Book est suffisante, puis supprimer cette méthode.
   def extract_lines(from_date, to_date)
-    in_out_lines.joins(:writing).where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date')
+    in_out_lines.joins(:writing).
+      where('writings.date >= ? AND writings.date <= ?', from_date, to_date).
+      order('writings.date')
   end
 
   

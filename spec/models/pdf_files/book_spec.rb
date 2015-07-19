@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.configure do |config| 
+RSpec.configure do |config|  
   #  config.filter =  {wip:true} 
 end
 
@@ -38,7 +38,7 @@ describe 'Editions::Book qui est l édition d un listing de compte' do
       writing_id:t,
       
       w_date:I18n::l(Date.today),
-      w_piece_number:31,
+      w_piece_number:'31',
       b_abbreviation:(t.even? ? 'VE' : 'AC'),
       w_ref:"Réf #{t}",
       w_narration:"Ecriture n° #{t}",

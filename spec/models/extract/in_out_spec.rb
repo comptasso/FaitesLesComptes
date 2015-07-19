@@ -59,8 +59,8 @@ describe Extract::InOut do
         nature:double(:name=>'La nature'),
         debit:debit,
         credit:credit,
-        date:date,
-        writing:double(payment_mode:'Chèque', piece_number:29),
+        date:date, piece_number:2,
+        payment_mode:'Chèque',
         support:'Ma banque',
         locked?:true)
     end

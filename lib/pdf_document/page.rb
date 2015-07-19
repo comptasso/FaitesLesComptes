@@ -115,6 +115,7 @@ module PdfDocument
     # TODO faire un module qui gère ce sujet car utile également pour table.rb
     def french_format(r)
       return '' if r.nil?
+      return I18n::l(r) if r.is_a? Date
       return ActionController::Base.helpers.number_with_precision(r, :precision=>document.precision)  if r.is_a? Numeric
       r
     end

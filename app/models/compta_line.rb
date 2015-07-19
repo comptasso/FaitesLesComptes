@@ -70,7 +70,7 @@ class ComptaLine < ActiveRecord::Base
     where("(books.abbreviation != 'AN') AND NOT EXISTS (SELECT * FROM BANK_EXTRACT_LINES WHERE COMPTA_LINE_ID = COMPTA_LINES.ID)").
     order('writings.date')}
 
-  delegate :date, :narration, :ref, :book, :support, :lock, :to=>:writing
+  delegate :date, :narration, :ref, :book, :support, :lock, :piece_number, :to=>:writing
 
   def nature_name
     nature ? nature.name : ''

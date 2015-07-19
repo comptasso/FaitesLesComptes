@@ -4,7 +4,7 @@
 
 .champ
   %h3
-    "Caisse #{@cash.name}" 
+    "Caisse #{@cash.name}"
     %ul.mois
       = submenu_mois(@period, 
         {action:'index', controller:'cash_lines', :cash_id=>@cash.id}) 

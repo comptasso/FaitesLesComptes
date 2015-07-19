@@ -4,15 +4,13 @@ require 'month_year'
 
 module Extract
 
-
   # un extrait d'un livre donné avec capacité à calculer les totaux et les soldes.
   # se crée avec deux paramètres : le livre et l'exercice.
   # 
   # Un enfant de cette classe MonthlyInOutExtract permet d'avoir des extraits mensuels
   # se créé en appelant new avec un book et une date quelconque du mois souhaité
   # my_hash est un hash :year=>xxxx, :month=>yy
-  class InOut < Extract::Book
-
+  class InOut < Extract::Book 
     
     # renvoie les titres des colonnes pour une édition ou un export
     #
@@ -52,13 +50,13 @@ module Extract
     # 
     def prepare_line(line)
       [I18n::l(line.date),
-        line.writing.piece_number, 
+        line.piece_number, 
         line.ref, line.narration,
         line.destination ? line.destination.name : '',
         line.nature ? line.nature.name : '',
         french_format(line.debit),
         french_format(line.credit),
-        line.writing.payment_mode,
+        line.payment_mode,
         line.support
       ]
     end 

@@ -10,7 +10,7 @@ end
 # Classe de test ayant pour objet d'écrire concrètement un fichier pdf 
 describe 'Edition PDF des MonthlyExtract' do 
   
-  def extract_lines
+  def extract_lines 
     100.times.collect do |t|
       mock_model(ComptaLine, 
         nature:double(Object, name:'Cotisations'), 
