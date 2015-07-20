@@ -14,7 +14,8 @@ class User < ActiveRecord::Base
 
   strip_before_validation :name
 
-  validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
+  validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX},
+    :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :role, presence: true, :inclusion=>{:in=>['standard', 'expert'] }
 
   # renvoie les rooms qui sont détenues par le user

@@ -76,7 +76,7 @@ gem 'coffee-script'
 gem 'jquery-rails', "3.1.2"
 gem 'jquery-ui-rails', '5.0.2'
 
-
+gem 'milia', '>= 1.0'
 # Deploy with Capistrano
 # gem 'capistrano'
 
@@ -107,3 +107,6 @@ group :development, :test do
 
 
 end
+
+gem "recaptcha", require: "recaptcha/rails"
+gem "activerecord-session_store", github: "rails/activerecord-session_store"
