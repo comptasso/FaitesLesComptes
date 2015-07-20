@@ -24,7 +24,6 @@ gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (sourc
 
 
 
-gem 'apartment', '~> 0.24.3' # pour la gestion des schemas
 gem 'devise' # pour l'authentification
 gem "devise-async" # pour avoir l'envoi des mails en background
 gem 'ofx' # pour la lecture des fichiers bancaires au format ofx
