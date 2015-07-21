@@ -184,11 +184,11 @@ fr:
     Title: Titre
     Used: Utilisé
     Destination: Activité
-    
-  
-    
-    
-    
+
+
+
+
+
   owner: Propriétaire
   guest: Invité
   Line: ligne
@@ -206,7 +206,7 @@ fr:
     account: Compte
     end_date: date de fin
     begin_date: date de début
-    
+
 
 
   activerecord:
@@ -243,8 +243,8 @@ fr:
         number: "N° de compte"
         nickname: Surnom
         sector: Secteur
-        
-       
+
+
       check_deposit:
         bank_account: 'Numéro de compte'
         deposit_date: 'Date'
@@ -266,6 +266,8 @@ fr:
         number: Numéro
         used: Utilisé
         sector: Secteur
+      tenant:
+        name: Organisme
       user:
         name: Nom
         email: E-mail
@@ -315,11 +317,6 @@ fr:
         date_picker: Date
         narration: Libellé
         ref: Réf.
-        
-      
-      
-        
-    
 
     errors:
       messages:
@@ -339,7 +336,7 @@ fr:
         invalid: Caractères non admis
         too_short: Trop court
         too_long: Trop long
-        
+
       models:
         cash_control:
           attributes:
@@ -383,7 +380,7 @@ fr:
           attributes:
             password:
               confirmation: Les deux mots de passe doivent être identiques
-            
+
         imported_bel:
           attributes:
             values:
@@ -391,14 +388,14 @@ fr:
               both_full: Montant débit et crédit tous deux remplis
             narration:
               invalid: Caractères non admis dans le libellé
-              
+
         adherent/payment:
           attributes:
             base:
               writing_uneditable: L'écriture correspondante ne peut être modifiée ni supprimée car verrouillée ou pointée dans un compte bancaire
               ref: Erreur sur la référence (probablement trop longue ou avec des caractères invalides)
-              
- 
+
+
   helpers:
     select:
       prompt: "Veuillez sélectionner"
@@ -477,5 +474,5 @@ fr:
           attributes:
             sens:
               inclusion: ne peut être que :actif ou :passif
-        
+
 

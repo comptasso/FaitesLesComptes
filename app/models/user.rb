@@ -5,8 +5,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :confirmable,
     :recoverable, :rememberable, :trackable, :validatable, :async
 
-  # Setup accessible (or protected) attributes for your model
-  # attr_accessible :name, :email, :password, :password_confirmation, :remember_me
+# ajout lié au gem Milia
+  acts_as_universal_and_determines_account
 
   has_many :holders, :dependent=>:destroy
   has_many :rooms, :through=>:holders
