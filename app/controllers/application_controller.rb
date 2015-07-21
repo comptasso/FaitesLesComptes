@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_tenant!
 
-#  before_filter :find_organism, :current_period, :unless=>('devise_or_bottom_action?')
+  before_filter :find_organism, :current_period, :unless=>('milia_or_bottom_action?')
 
   helper_method :two_decimals, :virgule, :current_user, :current_period?, :abc # (pour ActiveRecord::Base.connection
 
@@ -54,14 +54,14 @@ class ApplicationController < ActionController::Base
 
   # bottom_action est une actions qui relève de bottom_controller, controller
   # appelé par les liens en bas de page (manuels, contact, ...)
-  def devise_or_bottom_action?
-    params[:controller] =~ /^devise/ || params[:controller] =~ /^bottom/
+  def milia_or_bottom_action?
+    params[:controller] =~ /^Milia/ || params[:controller] =~ /^bottom/
   end
 
   # on est dans une action du gem devise si on n'est pas loggé ou
   # si l'action n'est pas précisément de se déconnecter
-  def devise_action?
-    params[:controller] =~ /^devise/
+  def milia_action?
+    params[:controller] =~ /^Milia/
   end
 
   # Overwriting the sign_out redirect path method
@@ -73,45 +73,31 @@ class ApplicationController < ActionController::Base
   #
   # Lorsqu'il n'y a pas d'organisme, il faut afficher soit la vue
   # admin/rooms#index soit la vue organism selon qu'il y a plusieurs bases ou une seule
-  # TODO pourrait être un peu plus simple en renvoyant une partie de la logique
-  # vers le admin_rooms_controller
   #
   def after_sign_in_path_for(user)
-    session[:org_db] = nil
-    case current_user.rooms.count
+    session[:org_id] = nil
+    case current_user.organisms.count
     when 0
       flash[:notice]=premier_accueil(user)
-      new_admin_room_url
+      new_admin_organism_url
     when 1
-      r = current_user.rooms.first
-      session[:org_db] = r.database_name
-      if r.connect_to_organism && (@organism = Organism.first)
-        organism_url(@organism)
-      else
-        # TODO vérifier que tous les cas sont bien couverts. Cas où il y aurait eu interruption dans la création de l'org
-        admin_rooms_url
-      end
+      @organism = current_user.organisms.first
+      session[:org_id] = @organism.id
+      organism_url(@organism)
     else
-      admin_rooms_url
+      admin_organisms_url
     end
   end
 
-
-  # se connecte à la base de données indiquée par session[:org_db]
-  # et instancie @organism
-  # TODO voir s'il ne faudrait pas faire un cache
-  # A REVOIR
+# assigne la variable @organism ou renvoie vers l'index des organismes
   def find_organism
-
-    # utile pour remettre le système cohérent
-    use_main_connection if session[:org_db] == nil
-    r = current_user.rooms.find_by_database_name(session[:org_db]) if session[:org_db]
-    if r # on doit avoir trouvé une room
-      r.connect_to_organism
-      @organism = Organism.first # il n'y a qu'un organisme par base
+    puts 'je suis dans find organism'
+    logger.debug "Controller #{current_user.inspect}"
+    if session[:org_id]
+      @organism = Organism.find_by_id(session[:org_id])
     else
-      # si pas d organisme (cas d une base corrompue)
-      redirect_to admin_rooms_url and return
+      @organism = current_user.organisms.first
+      session[:org_id] = @organism.id if @organism
     end
   end
 
@@ -119,7 +105,6 @@ class ApplicationController < ActionController::Base
   # A REVOIR
   # si pas de session, on prend le premier exercice non clos
   def current_period
-
     unless @organism
       logger.warn 'Appel de current_period sans @organism'
       return nil

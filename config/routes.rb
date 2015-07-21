@@ -2,12 +2,13 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  mount Adherent::Engine, at: "/adherent"
 
   as :user do
     match 'user/confirmation' => 'milia/confirmations#update', :via=>:put,
       :as=>:update_user_confirmation
   end
+
+  mount Adherent::Engine, at: "/adherent"
 
   devise_for :users, :controllers =>{
     :registrations => 'milia/registrations',

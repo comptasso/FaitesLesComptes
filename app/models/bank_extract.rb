@@ -1,15 +1,16 @@
 # -*- encoding : utf-8 -*-
 
-class BankExtract < ActiveRecord::Base 
+class BankExtract < ActiveRecord::Base
   include Utilities::PickDateExtension
 
+  acts_as_tenant
   # utilise le module Utilities::PickDateExtension pour créer des virtual attributes
   # begin_date_picker et end_date_picker
   pick_date_for :begin_date, :end_date
 
   # attr_accessible :reference, :begin_date, :end_date, :begin_sold, :total_debit,
   #  :total_credit, :begin_date_picker, :end_date_picker
-  
+
   # Valide que le close_date est bien postérieur au start_date
   class BankExtractChronoValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)
@@ -18,23 +19,23 @@ class BankExtract < ActiveRecord::Base
       end
     end
   end
-  
-  belongs_to :bank_account 
+
+  belongs_to :bank_account
   has_many :bank_extract_lines, dependent: :destroy
 
   strip_before_validation :reference
-  
+
   validates :reference, :format=>{with:NAME_REGEX}, :length=>{maximum:15}, :allow_blank=>true
 
   validates :begin_sold, :total_debit, :total_credit,:presence=>true, :numericality=>true, :two_decimals => true
   validates :begin_sold, :total_debit, :total_credit, :begin_date, :end_date , :cant_edit=>true, :if=>'locked'
 
-  validates :begin_date, :end_date, :within_period=>true, :presence=>true 
+  validates :begin_date, :end_date, :within_period=>true, :presence=>true
   validates :end_date, :bank_extract_chrono=>true
- 
+
   # TODO n'est utile que la première fois
-  before_save :lock_lines, :if=>'locked' 
-  
+  before_save :lock_lines, :if=>'locked'
+
   scope :period, lambda {|p| where('begin_date >= ? AND end_date <= ?' ,
       p.start_date, p.close_date).order(:begin_date) }
   scope :unlocked, ->{where('locked = ?', false)}
@@ -50,7 +51,7 @@ class BankExtract < ActiveRecord::Base
   def lockable?
     !self.locked? && self.equality?
   end
-  
+
   # calcul du solde final à partir des 3 autres données
   def end_sold
     begin_sold+total_credit-total_debit
@@ -75,11 +76,11 @@ class BankExtract < ActiveRecord::Base
   def diff_debit
     total_debit - total_lines_credit
   end
-  
+
   def diff_debit?
     diff_debit != 0
   end
-  
+
   def diff_credit
     total_credit - total_lines_debit
   end
@@ -88,10 +89,10 @@ class BankExtract < ActiveRecord::Base
     diff_credit != 0
   end
 
-  # vérifie sir les montants debit et credit sont en ligne avec les 
+  # vérifie sir les montants debit et credit sont en ligne avec les
   # totaux des lignes du relevé
   def equality?
-    (self.diff_debit.abs < 0.001) && (self.diff_credit.abs < 0.001) 
+    (self.diff_debit.abs < 0.001) && (self.diff_credit.abs < 0.001)
   end
 
   # donne le solde à partir des lignes du relevé
@@ -109,9 +110,9 @@ class BankExtract < ActiveRecord::Base
   def period
     bank_account.organism.find_period(begin_date) rescue nil
   end
-  
-  
-  
+
+
+
   private
 
   # appelé par before save mais vérifie d'abord l'équality

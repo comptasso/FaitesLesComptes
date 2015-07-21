@@ -13,29 +13,29 @@
 #
 # Il y a un compte comptable par exercices, ce qui explique qu'il y a has_many :accounts
 # Ce lien permet d'accéder aux compta_lines
-# 
-# La classe VirtualBook permet de générer un Livre de banque virtuel. La méthode 
-# #virtual_book crée cette classe et retourne un VirtualBook. VirtualBook hérite de Book et 
+#
+# La classe VirtualBook permet de générer un Livre de banque virtuel. La méthode
+# #virtual_book crée cette classe et retourne un VirtualBook. VirtualBook hérite de Book et
 # inclut donc les modules Sold et Graphic
 #
 #
-class BankAccount < ActiveRecord::Base  
+class BankAccount < ActiveRecord::Base
   include Utilities::Sold
- 
+  acts_as_tenant
 
   belongs_to :organism
   belongs_to :sector
   has_many :check_deposits
   has_many :bank_extracts
-  
+
   # un compte bancaire a un compte comptable par exercice
   has_many :accounts, :as=> :accountable
-  
+
   has_many :compta_lines, :through=>:accounts
   has_many :imported_bels, dependent: :destroy
-  
+
   has_one :export_pdf, as: :exportable
-  
+
   # extrait les lignes comptables entre deux date et les restitue par ordre de date
   # scope :extract_lines, lambda {|from_date, to_date| compta_lines.joins(:writing).where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date') }
 
@@ -52,19 +52,19 @@ class BankAccount < ActiveRecord::Base
   validates :bank_name, :nickname , presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
   validates :organism_id, :sector_id, presence:true
-  
- 
+
+
   after_create :create_accounts, :if=>lambda {organism.periods.opened.any? }
   after_update :change_account_title, :if=> lambda {nickname_changed? }
-  
+
   scope :communs, ->{includes(:sector).where('sectors.name = ?', 'Commun').references(:sector)}
-  
+
   def name
     nickname
   end
-  
-  
-  # renvoie le premier (mais en fait l'unique) compte comptable correspondant 
+
+
+  # renvoie le premier (mais en fait l'unique) compte comptable correspondant
   # à ce compte banciare pour un exercice donné
   def current_account(period)
     accounts.where('period_id = ?', period.id).first
@@ -72,7 +72,7 @@ class BankAccount < ActiveRecord::Base
 
   # renvoie le solde du compte bancaire à une date donnée et pour :debit ou :credit
   # arguments à fournir : la date et le sens (:debit ou :credit).
-  # 
+  #
   # Renvoie 0 s'il n'y a pas d'écriture ou si un exercice n'existe pas
   # Ce peut être le cas avec un premier exercice commencé en cours d'année
   # quand on est dans l'exerice suivant qui lui est en année pleine.
@@ -81,26 +81,26 @@ class BankAccount < ActiveRecord::Base
     return 0 unless p && acc = current_account(p)
     acc.cumulated_at(date, dc)
   end
- 
+
   # On veut que le solde prenne en compte le solde de l'exercice précédent tant
   # que l'écriture d'à nouveau n'a pas été générée.
-  # 
+  #
   # On cherche donc l'exercice précédent et on rajoute son solde si cet exercice
   # est ouvert (ce qui veut dire que l'écriture d'A Nouveau n'est pas encore passée).
-  # 
-  # Lorsque l'exercice a été clos, les écritures d'AN ont été passées et le solde 
+  #
+  # Lorsque l'exercice a été clos, les écritures d'AN ont été passées et le solde
   # donne donc la bonne valeur.
   #
   def sold_at(date)
     reponse = super
     p = organism.find_period(date)
-    if p && p.previous_period? 
+    if p && p.previous_period?
       pp = p.previous_period
       reponse += sold_at(pp.close_date) if pp.open
-    end 
+    end
     reponse
   end
-  
+
   # créé un nouvel extrait bancaire rempli à partir des informations du précédent
   # le mois courant et solde zéro si c'est le premier
   def new_bank_extract(period)
@@ -122,7 +122,7 @@ class BankAccount < ActiveRecord::Base
 
   # trouve toutes les lignes non pointées et qui ont pour compte comptable le
   # numéro correspondant à ce compte bancaire.
-  # 
+  #
   # Renvoie un objet de la classe Utilities::NotPointedLines
   #
   def not_pointed_lines(before_date = nil)
@@ -135,13 +135,13 @@ class BankAccount < ActiveRecord::Base
   def np_lines
     not_pointed_lines.lines
   end
-  
+
   # donne le solde du compte bancaire à une date donnée
   #  def sold_at(date)
   #    cumulated_at(date, :credit) - cumulated_at(date, :debit)
   #  end
-  
-  
+
+
   def first_bank_extract_to_point
     bank_extracts.where('locked = ?', false).order('begin_date ASC').first
   end
@@ -149,33 +149,33 @@ class BankAccount < ActiveRecord::Base
   def unpointed_bank_extract?
     bank_extracts.where('locked = ?', false).any?
   end
- 
+
   def virtual_book
     vb = VirtualBook.new
-    vb.organism_id = organism.id 
+    vb.organism_id = organism.id
     vb.virtual = self
     vb
   end
- 
-  # définit son compte racine (utile pour que organism.create_accounts_for puisse 
+
+  # définit son compte racine (utile pour que organism.create_accounts_for puisse
   # créer les comptes comptables lors de la création d'un nouveau compte bancaire
   def self.compte_racine
     RACINE_BANK
   end
 
 
- 
+
 
   protected
 
-  # renvoie le dernier relevé de compte (par date de fin) 
+  # renvoie le dernier relevé de compte (par date de fin)
   # faisant partie de l'exercice fourni en argument
   def last_bank_extract(period)
-    bank_extracts.where('begin_date >= ? AND end_date <= ?', 
+    bank_extracts.where('begin_date >= ? AND end_date <= ?',
       period.start_date, period.close_date).order(:end_date).last
   end
-  
-  # cherche le dernier relevé de l'exercice précédent et renvoie son 
+
+  # cherche le dernier relevé de l'exercice précédent et renvoie son
   # son solde final
   def previous_period_last_bank_extract_sold(period)
     return 0 unless period.previous_period?
@@ -185,11 +185,11 @@ class BankAccount < ActiveRecord::Base
   end
 
 
-  # appelé par le callback after_create, demande à l'organisme de lui créer les 
+  # appelé par le callback after_create, demande à l'organisme de lui créer les
   # comptes comptables associés (ce qui ne sera fait que pour chacun des exercices
   # ouverts).
   def create_accounts
-    logger.debug 'création des comptes liés au compte bancaire' 
+    logger.debug 'création des comptes liés au compte bancaire'
     Utilities::PlanComptable.create_financial_accounts(self)
   end
 
@@ -198,8 +198,8 @@ class BankAccount < ActiveRecord::Base
   def change_account_title
     accounts.each {|acc| acc.update_attribute(:title, nickname)}
   end
- 
- 
+
+
 
 end
 

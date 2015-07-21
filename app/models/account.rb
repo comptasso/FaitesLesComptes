@@ -1,4 +1,4 @@
-# coding: utf-8 
+# coding: utf-8
 
 # classe des comptes
 #
@@ -7,7 +7,7 @@
 #
 
 # Les comptes peuvent être actifs ou non. Etre actif signifie qu'on peut
-# enregistrer des écritures. 
+# enregistrer des écritures.
 
 # TODO gestion des Foreign keys cf. p 400 de Agile Web Development
 
@@ -21,18 +21,18 @@ class Account < ActiveRecord::Base
   include Utilities::Sold
   include Comparable
 
-
+  acts_as_tenant
   belongs_to :period
   has_one :organism, through: :period
   belongs_to :accountable, polymorphic:true
   belongs_to :sector
-  
+
   has_one :export_pdf, as: :exportable
   has_many :natures
 
   # les lignes sont trouvées par account_id
   has_many :compta_lines
-  
+
 
   # un compte peut avoir plusieurs transferts (en fait c'est limité aux comptes bancaires et caisses)
   #
@@ -49,14 +49,14 @@ class Account < ActiveRecord::Base
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:maximum=>80}
   validates_uniqueness_of :number , :scope=>:period_id
   validate :period_open
-  # TODO ceci est très spécifique aux comités d'entreprise. Devra être revu 
+  # TODO ceci est très spécifique aux comités d'entreprise. Devra être revu
   # si on veut étendre les possibilités de la sectorisation
   validate :sectorise_for_67
-  
+
   before_destroy :non_accountable, :no_line, :no_nature
-  
-  
- 
+
+
+
 
   default_scope -> {order('accounts.number ASC')}
 
@@ -66,21 +66,21 @@ class Account < ActiveRecord::Base
   scope :classe_6_and_7, ->{where('number LIKE ? OR number LIKE ?', '6%', '7%')}
   scope :classe_1_to_5, ->{where('number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ?', '1%', '2%', '3%', '4%', '5%').order('number ASC')}
   scope :rem_check_accounts, -> {where('number = ?', '511')}
-  
-  # Liste tous les comptes pour un exercice donné. Cette requête permet de limiter 
+
+  # Liste tous les comptes pour un exercice donné. Cette requête permet de limiter
   # grandement le nombre d'interrogations de la base dans l'affichage de la vue index
-  # qui a besoin de connaître pour chaque compte s'il a une nature (pour les afficher et icone supprimer) 
+  # qui a besoin de connaître pour chaque compte s'il a une nature (pour les afficher et icone supprimer)
   # et s'il a des compta_lines (pour l'affichage de l'icone supprimer).
-  scope :list_for, lambda {|period| joins("LEFT OUTER JOIN natures ON (accounts.id = natures.account_id) 
+  scope :list_for, lambda {|period| joins("LEFT OUTER JOIN natures ON (accounts.id = natures.account_id)
 LEFT OUTER JOIN compta_lines ON (accounts.id = compta_lines.account_id)
 LEFT OUTER JOIN sectors ON (sectors.id = accounts.sector_id)").
       select("sectors.name AS s_name, accounts.id, number, title, used, accountable_id, COUNT(compta_lines) AS nb_cls, COUNT(natures) AS nb_nats").
       where("accounts.period_id = ?", period.id ).
       group("accounts.id", "sectors.name").
       order("number") }
-  
+
   # pour avoir les fonctionnalités enumerable sur le champ number
-  def <=>(other) 
+  def <=>(other)
     number <=> other.number
   end
 
@@ -106,15 +106,15 @@ LEFT OUTER JOIN sectors ON (sectors.id = accounts.sector_id)").
           where('date <= ? AND account_id = ?', date, id).sum(dc))
     end
   end
-  
+
   # méthode redéfinie pour réduire les appels à la base de données
   def sold_at(date)
-    sql = %Q(SELECT SUM(credit) AS sum_credit, SUM(debit) AS sum_debit FROM "writings" INNER JOIN "compta_lines" 
+    sql = %Q(SELECT SUM(credit) AS sum_credit, SUM(debit) AS sum_debit FROM "writings" INNER JOIN "compta_lines"
 ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id = ?))
     result = Writing.find_by_sql([sql, date, id]).first
     BigDecimal.new(result.sum_credit || 0) - BigDecimal.new(result.sum_debit || 0)
   end
-  
+
 
   # surcharge de accountable pour gérer le cas des remises chèques
   # il n'y a pas de table RemCheckAccount et donc on traite ce cas en premier
@@ -133,15 +133,15 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id
   def nickname
     accountable.nickname rescue long_name
   end
-  
-  
+
+
 
   # Méthode utilisée lors de la création des comptes de caisse ou de banque
   #
   # Renvoie le numéro de compte disponible commençant par number et en incrémentant une liste
   def self.available(number)
     raise ArgumentError, 'le numéro du compte demandé doit être 53 ou 512' unless number.match(/^53$|^512$/)
-    # TODO : voir pour gérer cette anomalie dans le controller au moment de la création 
+    # TODO : voir pour gérer cette anomalie dans le controller au moment de la création
     # de la caisse ou de la banque et en faire éventuellement une validation côté modèle
     as = Account.where('number LIKE ?', "#{number}%").order('number ASC').last
     raise RangeError, 'Déjà 99 comptes de ce type, limite atteinte' if as && as.number.match(/\d*99$/)
@@ -150,7 +150,7 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id
     else
       as.number.succ
     end
-  end 
+  end
 
   # Retourne le premier caractère du numéro de compte
   #
@@ -175,7 +175,7 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id
     anb = period.organism.an_book
     BigDecimal.new(Writing.joins(:compta_lines).select(dc).
         where('book_id = ? AND account_id = ?', anb.id, id).sum(dc))
-        
+
   end
 
   # Montant du solde d'à nouveau débit
@@ -202,7 +202,7 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id
   end
 
 
-  
+
   # TODO cette méthode n'est utilisée qu'une fois pour edition de Account listing.
   # la mettre ailleurs d'autant qu'il s'agit d'un sujet de présentation
   #
@@ -213,7 +213,7 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id
       ActionController::Base.helpers.number_with_precision(cumulated_credit_before(date), precision:2)]
   end
 
- 
+
   # Indique s'il n'y a aucune écriture sur la période concernée
   def lines_empty?(from =  period.start_date, to = period.close_date)
     compta_lines.range_date(from, to).empty?
@@ -234,36 +234,36 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id
       pdf.columns_widths = [20,80]
       pdf.columns_titles = %w(Numéro Libellé)
     end
-    
+
     pdf
   end
-  
-  protected 
-  
+
+  protected
+
   def period_open
-    errors.add(:number, 'Exercice clos') if changed_attributes[:number] && period && !period.open 
+    errors.add(:number, 'Exercice clos') if changed_attributes[:number] && period && !period.open
     errors.add(:title, 'Exercice clos') if changed_attributes[:title] && period && !period.open
   end
-  
-  # pour les comités, les deux comptes de résultats imposent que les 
+
+  # pour les comités, les deux comptes de résultats imposent que les
   # comptes 6 et 7 soient affectés à un secteur
   def sectorise_for_67
     if organism.sectored?
-      if number =~ /\A(6|7).*/ && !sector_id  
+      if number =~ /\A(6|7).*/ && !sector_id
         errors.add(:sector_id, 'Un secteur est obligatoire pour ce compte')
       end
     end
   end
-  
+
   # indique si un compte est relié à une caisse ou une banque
   # utilisé par before_destroy pour interdire la destruction d'un tel compte
   def non_accountable
-    if accountable_id 
+    if accountable_id
       errors[:base] << "On ne peut supprimer un compte rattaché à une banque ou à une caisse"
       return false
     end
   end
-  
+
   # callback before_destroy pour vérifier qu'il n'y aucune ligne attachée à ce
   # compte
   def no_line
@@ -272,11 +272,11 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id
       return false
     end
   end
-  
-  # callback before_destroy pour interdire la suppression d'un compte 
+
+  # callback before_destroy pour interdire la suppression d'un compte
   # utilisé par une nature
   def no_nature
-    if natures.any? 
+    if natures.any?
       errors[:base] << "On ne peut supprimer un compte utilisé par une nature"
       return false
     end

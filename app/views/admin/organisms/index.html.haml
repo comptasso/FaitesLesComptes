@@ -1,0 +1,30 @@
+=  content_for :menu do
+  = icon_to  'nouveau.png',
+    new_admin_organism_path if current_user.allowed_to_create_organism?
+
+.champ
+  %h3 Liste des organismes
+
+
+%table(cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed" id="admin_organism_table")
+  %thead
+    %tr
+      %th.pc15 Titre
+      %th.pc25 Commentaire
+      %th.pc10 Statut
+      %th.pc10 Vous êtes
+      %th.pc10 Base de données
+      %th.pc10 Actions
+
+
+  %tbody
+    - @organisms.each do |organ|
+      %tr
+        %td= organ.title
+        %td= organ.comment
+        %td= organ.status
+        %td= r_status(organ)
+        %td
+          = icon_to 'afficher.png', organ, title: 'affichage dans la partie saisie'
+          = icon_to 'detail.png', [:admin, organ]
+

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150720191320) do
+ActiveRecord::Schema.define(version: 20150721092709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,7 +26,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.string   "accountable_type"
     t.integer  "accountable_id"
     t.integer  "sector_id"
+    t.integer  "tenant_id"
   end
+
+  add_index "accounts", ["tenant_id"], name: "index_accounts_on_tenant_id", using: :btree
 
   create_table "adherent_adhesions", force: true do |t|
     t.date     "from_date"
@@ -35,9 +38,11 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.integer  "member_id"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.integer  "tenant_id"
   end
 
   add_index "adherent_adhesions", ["member_id"], name: "index_adherent_adhesions_on_member_id", using: :btree
+  add_index "adherent_adhesions", ["tenant_id"], name: "index_adherent_adhesions_on_tenant_id", using: :btree
 
   create_table "adherent_bridges", force: true do |t|
     t.integer  "organism_id"
@@ -48,7 +53,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.integer  "income_book_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "tenant_id"
   end
+
+  add_index "adherent_bridges", ["tenant_id"], name: "index_adherent_bridges_on_tenant_id", using: :btree
 
   create_table "adherent_coords", force: true do |t|
     t.string   "mail"
@@ -61,7 +69,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.integer  "member_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "tenant_id"
   end
+
+  add_index "adherent_coords", ["tenant_id"], name: "index_adherent_coords_on_tenant_id", using: :btree
 
   create_table "adherent_members", force: true do |t|
     t.string   "number"
@@ -71,7 +82,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "organism_id"
+    t.integer  "tenant_id"
   end
+
+  add_index "adherent_members", ["tenant_id"], name: "index_adherent_members_on_tenant_id", using: :btree
 
   create_table "adherent_payments", force: true do |t|
     t.date     "date"
@@ -81,9 +95,11 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "comment"
+    t.integer  "tenant_id"
   end
 
   add_index "adherent_payments", ["member_id"], name: "index_adherent_payments_on_member_id", using: :btree
+  add_index "adherent_payments", ["tenant_id"], name: "index_adherent_payments_on_tenant_id", using: :btree
 
   create_table "adherent_reglements", force: true do |t|
     t.decimal  "amount",      precision: 10, scale: 2
@@ -91,10 +107,12 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.integer  "payment_id"
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
+    t.integer  "tenant_id"
   end
 
   add_index "adherent_reglements", ["adhesion_id"], name: "index_adherent_reglements_on_adhesion_id", using: :btree
   add_index "adherent_reglements", ["payment_id"], name: "index_adherent_reglements_on_payment_id", using: :btree
+  add_index "adherent_reglements", ["tenant_id"], name: "index_adherent_reglements_on_tenant_id", using: :btree
 
   create_table "bank_accounts", force: true do |t|
     t.string   "number"
@@ -105,7 +123,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "updated_at"
     t.string   "nickname"
     t.integer  "sector_id"
+    t.integer  "tenant_id"
   end
+
+  add_index "bank_accounts", ["tenant_id"], name: "index_bank_accounts_on_tenant_id", using: :btree
 
   create_table "bank_extract_lines", force: true do |t|
     t.integer  "position"
@@ -113,9 +134,11 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "compta_line_id"
+    t.integer  "tenant_id"
   end
 
   add_index "bank_extract_lines", ["compta_line_id"], name: "index_bank_extract_lines_on_compta_line_id", using: :btree
+  add_index "bank_extract_lines", ["tenant_id"], name: "index_bank_extract_lines_on_tenant_id", using: :btree
 
   create_table "bank_extracts", force: true do |t|
     t.integer  "bank_account_id"
@@ -128,7 +151,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.decimal  "begin_sold",      precision: 10, scale: 2, default: 0.0
     t.decimal  "total_debit",     precision: 10, scale: 2, default: 0.0
     t.decimal  "total_credit",    precision: 10, scale: 2, default: 0.0
+    t.integer  "tenant_id"
   end
+
+  add_index "bank_extracts", ["tenant_id"], name: "index_bank_extracts_on_tenant_id", using: :btree
 
   create_table "books", force: true do |t|
     t.string   "title"
@@ -139,7 +165,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.string   "type"
     t.string   "abbreviation"
     t.integer  "sector_id"
+    t.integer  "tenant_id"
   end
+
+  add_index "books", ["tenant_id"], name: "index_books_on_tenant_id", using: :btree
 
   create_table "cash_controls", force: true do |t|
     t.integer  "cash_id"
@@ -148,7 +177,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "updated_at"
     t.boolean  "locked",                              default: false
     t.decimal  "amount",     precision: 10, scale: 2, default: 0.0
+    t.integer  "tenant_id"
   end
+
+  add_index "cash_controls", ["tenant_id"], name: "index_cash_controls_on_tenant_id", using: :btree
 
   create_table "cashes", force: true do |t|
     t.integer  "organism_id"
@@ -157,7 +189,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "updated_at"
     t.text     "comment"
     t.integer  "sector_id"
+    t.integer  "tenant_id"
   end
+
+  add_index "cashes", ["tenant_id"], name: "index_cashes_on_tenant_id", using: :btree
 
   create_table "check_deposits", force: true do |t|
     t.integer  "bank_account_id"
@@ -168,7 +203,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.integer  "writing_id"
     t.integer  "written_by"
     t.string   "user_ip"
+    t.integer  "tenant_id"
   end
+
+  add_index "check_deposits", ["tenant_id"], name: "index_check_deposits_on_tenant_id", using: :btree
 
   create_table "compta_lines", force: true do |t|
     t.integer  "nature_id"
@@ -183,9 +221,11 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.integer  "writing_id"
     t.decimal  "debit",            precision: 10, scale: 2, default: 0.0
     t.decimal  "credit",           precision: 10, scale: 2, default: 0.0
+    t.integer  "tenant_id"
   end
 
   add_index "compta_lines", ["account_id"], name: "index_lines_on_account_id", using: :btree
+  add_index "compta_lines", ["tenant_id"], name: "index_compta_lines_on_tenant_id", using: :btree
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -211,7 +251,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "updated_at"
     t.integer  "sector_id"
     t.boolean  "used",        default: true
+    t.integer  "tenant_id"
   end
+
+  add_index "destinations", ["tenant_id"], name: "index_destinations_on_tenant_id", using: :btree
 
   create_table "export_pdfs", force: true do |t|
     t.binary   "content"
@@ -220,7 +263,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.string   "status"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "tenant_id"
   end
+
+  add_index "export_pdfs", ["tenant_id"], name: "index_export_pdfs_on_tenant_id", using: :btree
 
   create_table "folios", force: true do |t|
     t.string   "name"
@@ -230,15 +276,21 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "sector_id"
+    t.integer  "tenant_id"
   end
+
+  add_index "folios", ["tenant_id"], name: "index_folios_on_tenant_id", using: :btree
 
   create_table "holders", force: true do |t|
     t.integer  "user_id"
-    t.integer  "room_id"
+    t.integer  "organism_id"
     t.string   "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "tenant_id"
   end
+
+  add_index "holders", ["tenant_id"], name: "index_holders_on_tenant_id", using: :btree
 
   create_table "imported_bels", force: true do |t|
     t.integer  "position"
@@ -256,7 +308,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.string   "ref"
     t.integer  "writing_id"
     t.date     "writing_date"
+    t.integer  "tenant_id"
   end
+
+  add_index "imported_bels", ["tenant_id"], name: "index_imported_bels_on_tenant_id", using: :btree
 
   create_table "lines", force: true do |t|
     t.date     "line_date"
@@ -269,7 +324,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.boolean  "locked",                                  default: false
     t.datetime "created_at",                                              null: false
     t.datetime "updated_at",                                              null: false
+    t.integer  "tenant_id"
   end
+
+  add_index "lines", ["tenant_id"], name: "index_lines_on_tenant_id", using: :btree
 
   create_table "listings", force: true do |t|
     t.string   "title"
@@ -278,7 +336,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "organism_id"
+    t.integer  "tenant_id"
   end
+
+  add_index "listings", ["tenant_id"], name: "index_listings_on_tenant_id", using: :btree
 
   create_table "masks", force: true do |t|
     t.string   "title"
@@ -294,9 +355,11 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.string   "counterpart"
     t.string   "ref"
     t.decimal  "amount"
+    t.integer  "tenant_id"
   end
 
   add_index "masks", ["organism_id"], name: "index_masks_on_organism_id", using: :btree
+  add_index "masks", ["tenant_id"], name: "index_masks_on_tenant_id", using: :btree
 
   create_table "natures", force: true do |t|
     t.string   "name"
@@ -307,14 +370,20 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.integer  "account_id"
     t.integer  "position"
     t.integer  "book_id"
+    t.integer  "tenant_id"
   end
+
+  add_index "natures", ["tenant_id"], name: "index_natures_on_tenant_id", using: :btree
 
   create_table "nomenclatures", force: true do |t|
     t.integer  "organism_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.datetime "job_finished_at"
+    t.integer  "tenant_id"
   end
+
+  add_index "nomenclatures", ["tenant_id"], name: "index_nomenclatures_on_tenant_id", using: :btree
 
   create_table "organisms", force: true do |t|
     t.string   "title"
@@ -326,7 +395,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.string   "comment"
     t.string   "siren"
     t.string   "postcode"
+    t.integer  "tenant_id"
   end
+
+  add_index "organisms", ["tenant_id"], name: "index_organisms_on_tenant_id", using: :btree
 
   create_table "organisms_users", id: false, force: true do |t|
     t.integer "organism_id", null: false
@@ -344,13 +416,19 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "updated_at"
     t.boolean  "nomenclature_ok", default: false
     t.boolean  "prepared",        default: false
+    t.integer  "tenant_id"
   end
+
+  add_index "periods", ["tenant_id"], name: "index_periods_on_tenant_id", using: :btree
 
   create_table "rooms", force: true do |t|
     t.string   "database_name"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "tenant_id"
   end
+
+  add_index "rooms", ["tenant_id"], name: "index_rooms_on_tenant_id", using: :btree
 
   create_table "rubriks", force: true do |t|
     t.string   "name"
@@ -365,14 +443,20 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.decimal  "brut",          precision: 10, scale: 2, default: 0.0
     t.decimal  "amortissement", precision: 10, scale: 2, default: 0.0
     t.decimal  "previous_net",  precision: 10, scale: 2, default: 0.0
+    t.integer  "tenant_id"
   end
+
+  add_index "rubriks", ["tenant_id"], name: "index_rubriks_on_tenant_id", using: :btree
 
   create_table "sectors", force: true do |t|
     t.integer  "organism_id"
     t.string   "name"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "tenant_id"
   end
+
+  add_index "sectors", ["tenant_id"], name: "index_sectors_on_tenant_id", using: :btree
 
   create_table "sessions", force: true do |t|
     t.string   "session_id", null: false
@@ -392,9 +476,11 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.boolean  "permanent",  default: false
+    t.integer  "tenant_id"
   end
 
   add_index "subscriptions", ["mask_id"], name: "index_subscriptions_on_mask_id", using: :btree
+  add_index "subscriptions", ["tenant_id"], name: "index_subscriptions_on_tenant_id", using: :btree
 
   create_table "tenants", force: true do |t|
     t.integer  "tenant_id"
@@ -456,8 +542,10 @@ ActiveRecord::Schema.define(version: 20150720191320) do
     t.string   "user_ip"
     t.date     "date_piece"
     t.integer  "piece_number"
+    t.integer  "tenant_id"
   end
 
   add_index "writings", ["date"], name: "index_writings_on_date", using: :btree
+  add_index "writings", ["tenant_id"], name: "index_writings_on_tenant_id", using: :btree
 
 end

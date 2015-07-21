@@ -40,6 +40,7 @@ class Organism < ActiveRecord::Base
 
   # attr_accessible :title, :database_name, :status, :comment, :racine
 
+  acts_as_tenant
   has_one :nomenclature, dependent: :destroy
   has_many :sectors, dependent: :destroy
   has_many :books, dependent: :destroy
@@ -61,7 +62,7 @@ class Organism < ActiveRecord::Base
   has_many :virtual_books # les virtual_books ne sont pas persisted? donc inutile d'avoir un callback
   has_many :accounts, through: :periods
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
-  # has_many :transfers
+  has_many :holders, dependent: :destroy
 
   # La table adherent_bridges a été mise en place pour eneregistrer les informations
   # permettant de faire le lien avec le gem adhérent.
@@ -93,7 +94,6 @@ class Organism < ActiveRecord::Base
 
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
-  validates :database_name, uniqueness:true, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*(_[0-9]*)?\z/}
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
   validates :siren, allow_blank:true, :length=>{:is=>9}, format:/\A\d*\z/
   validates :postcode, allow_blank:true, :length=>{:within=>2..5}, format:/\A\d*\z/
@@ -147,7 +147,7 @@ class Organism < ActiveRecord::Base
 
   # on ne peut avoir plus de deux exercices ouverts pour chaque organisme
   def max_open_periods?
-    nb_open_periods >=2 ? true :false
+    (nb_open_periods >= 2) ? true : false
   end
 
   # indique si organisme peut écrire des lignes de comptes, ce qui exige qu'il y ait des livres
@@ -227,11 +227,16 @@ class Organism < ActiveRecord::Base
 
   # recherche la pièce où est logé Organism sur la base de la similitude des
   # champs database_name de ces deux tables
-  def room
-    look_for {Room.find_by_database_name(database_name)}
+#   def room
+#     look_for {Room.find_by_database_name(database_name)}
+#   end
+#
+
+  # la room cherche dans ses holders celui qui correspond au user demandé
+  # et renvoie son statut
+  def user_status(user)
+    holders.where('user_id = ?', user.id).first.status
   end
-
-
 
 
 

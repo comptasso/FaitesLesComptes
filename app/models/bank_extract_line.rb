@@ -12,28 +12,29 @@
 #
 # Acts as list permet d'utiliser le champ position pour ordonner les lignes du relevé
 #
-class BankExtractLine < ActiveRecord::Base 
+class BankExtractLine < ActiveRecord::Base
 
-  
+
+  acts_as_tenant
 
   belongs_to :bank_extract
 
-  belongs_to :compta_line 
- 
+  belongs_to :compta_line
+
   acts_as_list :scope => :bank_extract
-  
+
   # attr_accessible :compta_lines
   # attr_accessible :compta_line_id, :bank_extract_id, :date, :narration, :debit, :credit
-  
+
   delegate :narration, :debit, :credit, :date, :payment_mode,  :to=>:compta_line
-  
+
   validates :bank_extract_id, :compta_line_id, :presence=>true
   validates :compta_line_id, :uniqueness=>true
 
   # Lock_line verrouille les lignes d'écriture associées à une bank_extract_line,
   # ce qui entraîne également le verrouillage de tous les siblings et éventuellement
   # des chèques si la compta_line est une remise de chèque.
-  # 
+  #
   # Cette méthode est appelée par bank_extract (after_save)
   # lorsque l'on verrouille le relevé
   #

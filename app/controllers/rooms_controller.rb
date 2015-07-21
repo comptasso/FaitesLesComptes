@@ -15,7 +15,7 @@
 class RoomsController < ApplicationController
 
   skip_before_filter :find_organism, :current_period
- 
+
   # trouve la pièce demandée, connecte la base
   # trouve l'organisme de cette base
   # et redirige vers le controller organism

@@ -15,7 +15,7 @@ Rails.application.configure do
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false # true auparavant
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' } # pour Devise
+  config.action_mailer.default_url_options = { :host => 'localhost:5000' } # pour Devise
   config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
 
   # Print deprecation notices to the Rails logger.
@@ -33,8 +33,8 @@ Rails.application.configure do
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
-  
-  # repris de la version précédente 
+
+  # repris de la version précédente
   # pour éviter que le serveur utilise les assets précompilés dans le mode développement
   config.assets.prefix = "/dev-assets"
 

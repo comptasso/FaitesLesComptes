@@ -3,14 +3,14 @@ module Utilities
     # class de base utilisée pour créer les différents enregistrements
     # qui suivent la création d'un organisme.
     #
-    # Des enfants viennent spécialiser ou surcharger les méthodes pour 
+    # Des enfants viennent spécialiser ou surcharger les méthodes pour
     # adapter les créations aux particularités des statuts
     class Organism
-      
+
       def initialize(org)
         @org = org
       end
-      
+
       def remplit
         remplit_sectors
         remplit_books
@@ -18,15 +18,15 @@ module Utilities
         remplit_destinations
         remplit_nomenclature
       end
-      
+
       protected
-      
+
       def remplit_sectors
         @org.sectors.create!(name:'Global')
         @sect = @org.sectors.first
       end
-      
-      def remplit_books 
+
+      def remplit_books
         # les 4 livres
         Rails.logger.debug 'Création des livres par défaut'
         @org.income_books.create(abbreviation:'VE', title:'Recettes',
@@ -41,30 +41,31 @@ module Utilities
         @org.create_an_book(abbreviation:'AN', :title=>'A nouveau',
           description:'A nouveau')
       end
-  
+
       def remplit_finances
-        @org.cashes.create(name:'La Caisse', sector_id:@sect.id)
+        Cash.create!(name:'La Caisse', sector_id:@sect.id, organism_id:@org.id)
         Rails.logger.debug 'creation de la caisse par défaut'
-        @org.bank_accounts.create(bank_name:'La Banque',
+        BankAccount.create!(bank_name:'La Banque',
           number:'Le Numéro de Compte', nickname:'Compte courant',
-          sector_id:@sect.id)
+          sector_id:@sect.id,
+          organism_id:@org.id)
         Rails.logger.debug 'creation la banque par défaut'
       end
-  
+
       def remplit_destinations
         @org.destinations.create(name:'Non affecté', sector_id:@sect.id)
-        @org.destinations.create(name:'Activité principale', sector_id:@sect.id) 
+        @org.destinations.create(name:'Activité principale', sector_id:@sect.id)
       end
-  
-      def remplit_nomenclature 
+
+      def remplit_nomenclature
         if @org.status
           path = File.join Rails.root, 'lib', 'parametres',
             @org.send(:status_class).downcase, 'nomenclature.yml'
-          n = @org.create_nomenclature 
+          n = @org.create_nomenclature
           n.read_and_fill_folios(path)
         end
       end
-  
+
     end
   end
 end

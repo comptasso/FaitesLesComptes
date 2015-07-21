@@ -1,18 +1,19 @@
 # -*- encoding : utf-8 -*-
 
-# La classe Destination permet d'avoir un axe d'analyse pour les données de la 
+# La classe Destination permet d'avoir un axe d'analyse pour les données de la
 # comptabilité.
-# 
-# Il n'y a pas d'obligation d'avoir une ou des destinations. Les destinations 
+#
+# Il n'y a pas d'obligation d'avoir une ou des destinations. Les destinations
 # enregistrent les dépenses comme les recettes et donc permettent d'avoir des
 # résultats économiques par destinations.
-# 
+#
 class Destination < ActiveRecord::Base
   # utilities::sold définit les méthodes cumulated_debit_before(date) et
   # cumulated_debit_at(date) et les contreparties correspondantes.
   include Utilities::Sold
 
 
+  acts_as_tenant
 
   belongs_to :organism
   belongs_to :sector
@@ -24,20 +25,20 @@ class Destination < ActiveRecord::Base
   validates :organism_id, :presence=>true
   validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
-  
+
 
   default_scope {order('name ASC')}
-  
+
   scope :used_filtered, -> {where('used = ?', true)}
 
   before_destroy :ensure_no_lines
-  
+
   # Méthode exigée par Utilities::Sold
-  # permet d'avoir toutes les méthodes de sold.... 
-  # 
+  # permet d'avoir toutes les méthodes de sold....
+  #
   # Ici, il faut filter les compta_lines sur les seuls comptes qui appartiennent
-  # à l'exercice. 
-  # 
+  # à l'exercice.
+  #
   def cumulated_at(date, sens)
     exercice = organism.find_period(date)
     raise 'Aucun exercice trouvé pour cette date' unless exercice
@@ -45,11 +46,11 @@ class Destination < ActiveRecord::Base
         :conditions=>['date <= ? AND destination_id = ? AND accounts.period_id = ?', date, id, exercice.id],
         :joins=>[:compta_lines=>:account]))
   end
-  
-  # ab pour AnalyticalBalance lines. 
+
+  # ab pour AnalyticalBalance lines.
   # Donne les totaux débit et crédit des comptes qui ont eu des mouvements
   # à une date donnée.
-  # 
+  #
   # Renvoie une collection de comptes avec le libellé, et les totaux débit
   # et crédit qui sont accessibles avec les méthodes t_debit et t_credit
   def ab_lines(period_id, from_date, to_date)
@@ -58,7 +59,7 @@ class Destination < ActiveRecord::Base
       debit:debit,
       credit:credit}
   end
-  
+
 
   def lines(period_id, from_date, to_date)
     @lines ||= Account.joins(:compta_lines=>:writing).
@@ -67,19 +68,19 @@ class Destination < ActiveRecord::Base
       id, period_id, from_date, to_date).
       group(:title,:number)
   end
-  
+
   def debit
     @lines.to_a.sum {|l| l.t_debit.to_d}
   end
-  
+
   def credit
     @lines.to_a.sum {|l| l.t_credit.to_d}
   end
-  
+
   def name_with_sector
     organism.sectored? ? "#{name} (#{sector.name})" : name
   end
-  
+
   protected
 
   def ensure_no_lines

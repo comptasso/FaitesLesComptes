@@ -2,18 +2,18 @@
 
 class ComptaLine < ActiveRecord::Base
 
-  # belongs_to :book
+  acts_as_tenant
   belongs_to :destination
   belongs_to :nature
   belongs_to :account
   belongs_to :check_deposit
-  
+
   # les lignes appartiennent à un writing
   belongs_to :writing
   has_one :bank_extract_line
 
-#  attr_accessible :debit, :credit, :writing_id, :account_id, 
-#    :nature, :nature_id, :destination_id, 
+#  attr_accessible :debit, :credit, :writing_id, :account_id,
+#    :nature, :nature_id, :destination_id,
 #    :check_number, :payment_mode, :check_deposit_id
 
   # La présence est assurée par la valeur par défaut
@@ -26,10 +26,10 @@ class ComptaLine < ActiveRecord::Base
 
   # les natures et les comptes doivent être cohérents avec l'exercice
   validates :nature_id, :account_id, :belongs_to_period=>true
-   
+
   # TODO faire les tests
   validates :nature_id, :destination_id, :debit, :credit, :created_at, :payment_mode, :cant_edit=>true, :if=>Proc.new {|r| r.locked? }
-  # validates :account_id, :cant_edit=>true, :if=>"pointed?" 
+  # validates :account_id, :cant_edit=>true, :if=>"pointed?"
 
   before_save  :fill_account, :if=> lambda {nature && nature.account}
   before_destroy :not_locked
@@ -47,14 +47,14 @@ class ComptaLine < ActiveRecord::Base
   scope :range_date, lambda {|from, to| with_writings.extract(from, to)}
   # extract est comme range_date mais n'inclut pas with_writings
   scope :extract, lambda {|from, to| where('writings.date >= ? AND writings.date <= ?', from, to ).order('writings.date')}
-  
-  
+
+
   scope :listing, lambda {|from, to| with_writing_and_book.where('books.abbreviation != ?', 'AN').where('date >= ? AND date <= ?', from, to ).order('date')}
   scope :before_including_day, lambda {|d| with_writings.where('date <= ?',d)}
   scope :unlocked, -> {where('locked = ?', false)}
   scope :definitive, -> {where('locked = ?', true)} # remplacé le nom du scope locked par definitive car
   # engendrait un conflit avec les arel de Rails
-  scope :classe, lambda {|n| where('number LIKE ?', "#{n}%").order('number ASC')} 
+  scope :classe, lambda {|n| where('number LIKE ?', "#{n}%").order('number ASC')}
 
   # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
   # et du champ check_deposit_id
@@ -62,7 +62,7 @@ class ComptaLine < ActiveRecord::Base
       where('books.sector_id'=>sector.id, :account_id=>Account.rem_check_accounts.map {|a| a.id},
       :check_deposit_id => nil).order('compta_lines.id') }
   scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil).order('id') }
-  
+
   # renvoie les lignes non pointées (appelé par BankExtract), ce qui ne prend pas en compte le journal A nouveau
   scope :not_pointed, -> {
     includes(:writing).
@@ -93,7 +93,7 @@ class ComptaLine < ActiveRecord::Base
   def editable?
     !(pointed? || locked? || deposited?)
   end
-  
+
   # une compta line est associée à une remise de chèque dès lors que son champ check_deposit_id
   # est différent de nil
   def deposited?
@@ -104,27 +104,27 @@ class ComptaLine < ActiveRecord::Base
   def label
     "#{I18n.l date, :format=>'%d-%m'} - #{narration} - #{format('%.2f',debit)}"
   end
-  
+
   # méthode utilisée dans l'édition des livres dans la partie compta.
   # Une méthode similaire existe pour ComptaLine, ce qui permet d'avoir
   # indifféremment des lignes de type Writing et ComptaLine dans la collection
-  # 
-  # Attention, un changement du nombre de colonne doit être fait sur les 
+  #
+  # Attention, un changement du nombre de colonne doit être fait sur les
   # deux méthodes.
   def to_pdf
-    [account.number, account.title, 
+    [account.number, account.title,
       ActionController::Base.helpers.number_with_precision(debit, :precision=>2),
       ActionController::Base.helpers.number_with_precision(credit, :precision=>2)]
   end
-  
-  
+
+
   protected
-  
+
   # utilisé par Writing dans une Transaction pour verrouiller ses compta_lines
   # Quand une compta_line est une remise de chèque, l'action verrouille également
   # les chèques associés.
-  # 
-  # Ne devrait pas être appelé directement. 
+  #
+  # Ne devrait pas être appelé directement.
   def verrouillage
     unless locked?
       update_attribute(:locked, true)
@@ -135,7 +135,7 @@ class ComptaLine < ActiveRecord::Base
     end
   end
 
-  
+
 
   # remplit le champ account_id avec celui associé à nature si nature est effectivement associée à un compte.
   # appelé par before save
@@ -148,6 +148,6 @@ class ComptaLine < ActiveRecord::Base
     !locked
   end
 
- 
+
 
 end

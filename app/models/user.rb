@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   acts_as_universal_and_determines_account
 
   has_many :holders, :dependent=>:destroy
-  has_many :rooms, :through=>:holders
+  has_many :organisms, :through=>:holders
 
 
   strip_before_validation :name
@@ -19,16 +19,16 @@ class User < ActiveRecord::Base
   validates :role, presence: true, :inclusion=>{:in=>['standard', 'expert'] }
 
   # renvoie les rooms qui sont détenues par le user
-  def owned_rooms
-    holders.where('status = ?', 'owner').map(&:room)
+  def owned_organisms
+    holders.where('status = ?', 'owner').map(&:organism)
   end
 
   # retourne un array de hash des organismes et des chambres appartenat à cet user
   # le hash ne comprend que les organimes qui ont pu être effectivement trouvés
-  def organisms_with_room
-    owrs = rooms(true).collect { |r| {organism:r.organism, room:r} }
-    owrs.select {|o| o[:organism] != nil}
-  end
+#   def organisms_with_room
+#     owrs = rooms(true).collect { |r| {organism:r.organism, room:r} }
+#     owrs.select {|o| o[:organism] != nil}
+#   end
 
   # retourne un hash pour la zone Compta avec les seulement les organismes qui
   # sont accountable.
@@ -45,10 +45,10 @@ class User < ActiveRecord::Base
   # retourne un hash pour la zone de Saisie avec seulement les organismes qui
   # ont un exercice
   #
-  # s'appuie sur organism_ith_rooms et ne retient que ceux qui ont un organisme
-  def saisieable_organisms_with_room
-    rooms.select {|r| r.look_for {r.organism.periods.any?} }
-  end
+  # s'appuie sur organism_with_rooms et ne retient que ceux qui ont un organisme
+#   def saisieable_organisms_with_room
+#     rooms.select {|r| r.look_for {r.organism.periods.any?} }
+#   end
 
   # up_to_date effectue un contrôle des bases de l'utilisateur
   # sur la totalité des rooms qui lui appartiennent.
@@ -60,19 +60,19 @@ class User < ActiveRecord::Base
   #
   # Renvoie également true s'il n'y pas de base
   #
-  def up_to_date?
-    return true if status.empty?
-    status == [:same_migration] ? true : false
-  end
+#   def up_to_date?
+#     return true if status.empty?
+#     status == [:same_migration] ? true : false
+#   end
 
   # status collecte les différents statuts des bases de données appartenant
   # au user
-  def status
-    rooms.map {|r| r.relative_version}.uniq
-  end
+#   def status
+#     rooms.map {|r| r.relative_version}.uniq
+#   end
 
 
-  def allowed_to_create_room?
+  def allowed_to_create_organism?
     return true if role == 'expert'
     holders.where('status = ?', 'owner').count < 4
   end
