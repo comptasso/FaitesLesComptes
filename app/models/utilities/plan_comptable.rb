@@ -72,8 +72,11 @@ class Utilities::PlanComptable
     from_period.natures.find_each do |n|
       nn = {name: n.name, comment: n.comment, book_id: n.book_id} # on commence à construire le hash
       if n.account_id # cas où il y avait un rattachement à un compte
-        previous_account=from_period.accounts.find(n.account_id) # on identifie le compte de rattachement
-        nn[:account_id] = period.accounts.find_by_number(previous_account.number).id # et on recherche son correspondant dans le nouvel exercice
+  # on identifie le compte de rattachement
+        previous_account=from_period.accounts.find(n.account_id)
+        nn[:account_id] = period.accounts.
+          find_by_number(previous_account.number).id
+        # et on recherche son correspondant dans le nouvel exercice
       end
       period.natures.create!(nn) # et on créé maintenant une nature avec les attributs qui restent
     end

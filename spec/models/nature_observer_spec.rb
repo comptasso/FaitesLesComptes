@@ -17,7 +17,7 @@ describe  NatureObserver do
 
 
   before(:each) do
-
+    Tenant.set_current_tenant 1
     clean_organism
     @nature = Nature.new(name:'ecolo', :account_id => 1, book_id:1)
     @nature.period_id = 1

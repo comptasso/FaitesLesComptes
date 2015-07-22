@@ -14,20 +14,20 @@ describe Organism do
 
   def valid_attributes
     {:title =>'Test ASSO',
-      database_name:'assotest',
       :status=>'Association'
     }
   end
 
 
   describe 'validations' do
+    Tenant.set_current_tenant(1)
     before(:each) do
       clean_organism
       @o= Organism.new valid_attributes
       puts @o.errors.messages unless @o.valid?
     end
 
-    it 'should be valid with a title and a database_name' do
+    it 'should be valid with a title and a status' do
       @o.should be_valid
     end
 
@@ -219,7 +219,6 @@ describe Organism do
       before(:each) do
         clean_organism
         @o = Organism.create!({:title =>'Mon Entreprise',
-            database_name:SCHEMA_TEST,
             :status=>'Entreprise' })
 
       end

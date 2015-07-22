@@ -1,13 +1,13 @@
-# coding: utf-8 
+# coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |config|  
+RSpec.configure do |config|
 # config.filter = {wip:true}
 end
 
 
-describe ComptaLine do   
+describe ComptaLine do
 
   include OrganismFixtureBis
   let(:per) {mock_model(Period)}
@@ -17,11 +17,13 @@ describe ComptaLine do
   let(:bo) {mock_model(Book)}
 
   def valid_attributes
-    {writing_id:1, account_id:acc.id, nature:nat, nature_id:nat.id, credit:15.2, payment_mode:'Virement'}
+    {writing_id:1, account_id:acc.id, nature:nat,
+     nature_id:nat.id, credit:15.2,
+     payment_mode:'Virement', tenant_id:1}
   end
 
   before(:each) do
- 
+    Tenant.set_current_tenant(1)
     @cl = ComptaLine.new(valid_attributes)
     @cl.stub(:account).and_return acc
     @cl.stub(:writing).and_return(@w = mock_model(Writing, date:Date.today, narration:'Ecriture', :book_id=>bo.id))
@@ -34,7 +36,7 @@ describe ComptaLine do
   end
 
   describe 'cohérence comptes et nature avec date' do
-    
+
     it 'une compta line ne peut avoir qu une nature appartenant à l exercice' do
       @w.stub_chain(:book, :organism, :find_period, :id).and_return(per.id + 1)
       @cl.should_not be_valid
@@ -48,31 +50,31 @@ describe ComptaLine do
     end
 
   end
-    
+
   describe 'les états d une compta_line' do
-    
-    
-    
+
+
+
     describe 'une compta_line est editable' do
-      
+
       it 'si elle n est pas pointée' do
         @cl.stub(:bank_extract_line).and_return('oui')
         @cl.should_not be_editable
       end
-      
+
       it 'ni verrouillée' do
         @cl.locked = true
         @cl.should_not be_editable
       end
-      
+
       it 'ni associée à une remise de chèque' do
         @cl.check_deposit_id = 1
         @cl.should_not be_editable
       end
-      
+
     end
-    
-    
+
+
   end
 
   describe 'methods' do
@@ -100,36 +102,36 @@ describe ComptaLine do
       @cl.destination_name.should be_blank
     end
 
-    
+
   end
-  
+
   describe 'scope not_pointed_lines'  do
-    
+
     before(:each) do
       use_test_organism
-    end  
-    
+    end
+
     after(:each) do
       Writing.delete_all
       ComptaLine.delete_all
     end
-    
-    context 'pas encore d écritures' do    
+
+    context 'pas encore d écritures' do
       it 'et donc zero lignes non pointées' do
         ComptaLine.not_pointed.count.should == 0
       end
     end
-    
+
     context 'avec une écriture' , wip:true do
-                      
+
       it 'la banque a une ligne non pointée' do
         @ecriture = create_outcome_writing
         @baca.compta_lines.not_pointed.count.should == 1
       end
-      
+
     end
-    
-    
+
+
   end
- 
+
 end

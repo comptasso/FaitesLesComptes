@@ -16,6 +16,7 @@ module OrganismFixtureBis
 
   # TODO refactorisé pour obtenir plus facilement une base saine de tests
   def use_test_organism(status='Association')
+    create_only_user # ce qui crée également le tenant
     @o = Organism.first
     unless @o && @o.status == status
       create_organism(status) # rappel : fait déja un appel à get_organism_instances
@@ -36,7 +37,8 @@ module OrganismFixtureBis
     # tests
     create_only_tenant
     return if @cu = User.first
-    @cu =  User.new(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1' )
+    @cu =  User.new(name:'quidam', :email=>'bonjour@example.com',
+       password:'bonjour1' )
     @cu.confirmed_at = Time.now
     @cu.save!
   end
@@ -55,10 +57,10 @@ module OrganismFixtureBis
   def create_user
     create_only_tenant
     create_only_user
-    @h = @cu.holders.new(status:'owner')
-    puts @h.errors.messages unless @h.valid?
-    @h.save!
-    @cu
+    # @h = @cu.holders.new(status:'owner', tenant_id:@t.id)
+    # puts @h.errors.messages unless @h.valid?
+    # @h.save!
+     @cu
   end
 
   def use_test_user
@@ -146,7 +148,8 @@ module OrganismFixtureBis
   end
 
   def create_second_period
-    p = @o.periods.create!(:start_date=>(@p.close_date + 1), close_date:(@p.close_date.years_since(1)))
+    p = @o.periods.create!(:start_date=>(@p.close_date + 1),
+       close_date:(@p.close_date.years_since(1)))
     p.create_datas
     p
   end

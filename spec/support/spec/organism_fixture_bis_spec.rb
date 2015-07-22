@@ -8,39 +8,30 @@ end
 
 # fichier destiné à tester les méthodes de support
 
-describe OrganismFixtureBis do  
-  include OrganismFixtureBis 
+describe OrganismFixtureBis do
+  include OrganismFixtureBis
 
 
-  describe 'create_user'  do 
-  
+  describe 'create_user'  do
 
-    before(:each) do 
+
+    before(:each) do
       create_user
     end
 
 
     it 'should create a user' do
-      @cu.should be_an_instance_of(User) 
+      @cu.should be_an_instance_of(User)
     end
 
-    it 'should create room' do
-      @r.should be_an_instance_of(Room)
+    it 'should create tenant' do
+      @t.should be_an_instance_of(Tenant)
     end
-    
+
     it 'les deux sont reliées' do
-      @cu.rooms.should == [@r]
-      @cu.rooms.first.should == @r 
+      @cu.tenants.should == [@t]
+      @t.users.should == [@cu]
     end
-    
-    it 'le user est propriétaire de la room' do
-      @r.owner.should == @cu
-    end
-    
-    it 'cu est owner de room' do
-      @r.owner.should == @cu
-    end
-
 
   end
 
@@ -49,26 +40,18 @@ describe OrganismFixtureBis do
       create_organism
     end
 
-    it 'a un organisme dans la base SCHEMA_TEST' do
-      Apartment::Database.switch(SCHEMA_TEST)
+    it 'a un organisme dans la base' do
       Organism.should have(1).elements
-    end
-    
-    it 'et n en a pas dans la base principale' do
-      pending 'il y a une création d organisme dans la base principale'
-      Apartment::Database.switch()
-      Organism.should have(0).elements
     end
 
     it '@o représente cet organisme' do
       @o.should be_an_instance_of(Organism)
     end
-    
+
     it 'les instances existent' , wip:true do
-    @ba.should be_an_instance_of(BankAccount) 
-    @ib.should be_an_instance_of(IncomeBook) 
+    @ba.should be_an_instance_of(BankAccount)
+    @ib.should be_an_instance_of(IncomeBook)
     @od.should be_an_instance_of(OdBook)
-    
     @c.should be_an_instance_of(Cash)
     @baca.should be_an_instance_of(Account) # pour baca pour BankAccount Current Account
     @caca.should be_an_instance_of(Account)  # pour caca pour CashAccount Current Account
@@ -78,11 +61,9 @@ describe OrganismFixtureBis do
 
   end
 
-  
-
-  describe 'create_minimal_organism' do
+  describe 'create_organism' do
     before(:each) do
-      create_minimal_organism
+      create_organism
     end
 
     it 'check organism' do
@@ -95,6 +76,17 @@ describe OrganismFixtureBis do
     end
 
 
+  end
+
+  describe 'create_second_period' do
+    before(:each) do
+      create_organism
+    end
+
+    it 'peut créer un deuxième exercice' do
+      p2 = create_second_period
+      p2.should be_an_instance_of(Period)
+    end
   end
 
 

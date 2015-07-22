@@ -15,7 +15,7 @@ describe VirtualBook do
     @vb.virtual.should == @c
   end
 
- 
+
   it 'lines appelles compta_lines de la caisse ou de la banque' do
     @c.should_receive(:compta_lines).and_return 'bonjour'
     @vb.lines.should == 'bonjour'

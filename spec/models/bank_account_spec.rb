@@ -11,7 +11,7 @@ describe BankAccount do
 
   def valid_attributes
     {:bank_name=>'Crédit Universel', :number=>'1254LM',
-      :nickname=>'Compte courant', sector_id:1}
+      :nickname=>'Compte courant', sector_id:1, tenant_id:1}
   end
 
   def new_bank_account
@@ -25,7 +25,9 @@ describe BankAccount do
     @bb ||= new_bank_account
   end
 
-
+  before(:each) do
+    Tenant.set_current_tenant(1)
+  end
 
   describe 'controle des validités' do
 

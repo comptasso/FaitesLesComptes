@@ -10,8 +10,9 @@ describe Utilities::Filler::Organism do
   describe 'remplissage des différentes tables' do
 
     def create_comite
+      Tenant.set_current_tenant(1)
       clean_organism
-      @o = Organism.create!(title: 'ASSO TEST', database_name:SCHEMA_TEST,
+      @o = Organism.create!(title: 'ASSO TEST',
         comment: 'Un comité', status:'Comité d\'entreprise')
       @p = @o.periods.create!(start_date: Date.today.beginning_of_year, close_date: Date.today.end_of_year)
       @p.create_datas

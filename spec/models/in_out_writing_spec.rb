@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
   # config.filter = {wip:true}
@@ -17,13 +17,14 @@ describe InOutWriting do
   end
 
 
+  before(:each) {Tenant.set_current_tenant(1)}
 
 
   describe 'support' , wip:true do
 
     before(:each) do
       @w = InOutWriting.new
-      
+
     end
 
     it 'interroge counter_line et account' do
@@ -65,7 +66,7 @@ describe InOutWriting do
     @acc = @p.accounts.classe_6.first
     @w = @ob.in_out_writings.new(valid_attributes)
     end
-    
+
     after(:each) do
       Writing.delete_all
     end
@@ -86,7 +87,7 @@ describe InOutWriting do
 
     it 'not balanced' do
       @w.compta_lines.first.debit = 1455
-      @w.should_not be_valid 
+      @w.should_not be_valid
     end
 
     it 'two lines' , wip:true do
@@ -142,22 +143,22 @@ describe InOutWriting do
 
 
   end
-  
+
   describe 'une écriture est editable' do
     let(:cl1) {double(ComptaLine, editable?:true)}
     let(:cl2) {double(ComptaLine, editable?:true)}
-    
+
     before(:each) do
       @w = InOutWriting.new
-      
-      
+
+
     end
-    
+
     it 'si toutes ses compta lines sont editable' do
       @w.stub(:comptalines).and_return([cl1, cl2])
       @w.should be_editable
     end
-    
+
     it 'mais pas dans le cas  contraire' do
       cl2.stub('editable?').and_return false
       @w.stub(:compta_lines).and_return([cl1, cl2])
