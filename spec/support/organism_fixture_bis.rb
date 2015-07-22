@@ -4,13 +4,9 @@
 # A utiliser en mettant include OrganismFixture dans la fichier spec ou on utilisera la méthode
 module OrganismFixtureBis
 
-
   def clean_main_base
-    drop_non_public_schemas_except_schema_test
-    find_or_create_schema_test
     User.delete_all
-    Holder.delete_all
-    Room.delete_all
+    Tenant.delete_all
   end
 
   def erase_writings
@@ -35,33 +31,38 @@ module OrganismFixtureBis
     @o
   end
 
-
   def create_only_user
     # TODO enlever le clean_main_base en nettoyant au fil des
     # tests
-    clean_main_base
+    create_only_tenant
+    return if @cu = User.first
     @cu =  User.new(name:'quidam', :email=>'bonjour@example.com', password:'bonjour1' )
     @cu.confirmed_at = Time.now
     @cu.save!
   end
 
+  def create_only_tenant
+    @t = Tenant.first
+    unless @t
+      @t = Tenant.new(name:'OrganismTest')
+      puts @t.errors.messages unless @t.valid?
+      @t.save!
+    end
+      Tenant.set_current_tenant(@t)
+  end
+
 
   def create_user
+    create_only_tenant
     create_only_user
     @h = @cu.holders.new(status:'owner')
-    @r = Room.where('database_name =  ?', SCHEMA_TEST).first
-    @r  ||= Room.new(database_name:SCHEMA_TEST, title:'Asso test',
-      status:'Association')
-    puts @r.errors.messages unless @r.valid?
-    @r.save!
-    @h.room_id = @r.id
+    puts @h.errors.messages unless @h.valid?
     @h.save!
     @cu
   end
 
   def use_test_user
     @cu = User.first || create_user
-    @r = @cu.rooms.first
   end
 
   def clean_organism
@@ -78,7 +79,6 @@ module OrganismFixtureBis
       Nomenclature.delete_all
       Rubrik.delete_all
       Sector.delete_all
-
   end
 
 
@@ -91,7 +91,7 @@ module OrganismFixtureBis
   # Par défaut, une association
   def create_organism(status='Association')
     clean_organism
-    @o = Organism.create!(title: 'ASSO TEST', database_name:SCHEMA_TEST,
+    @o = Organism.create!(title: 'ASSO TEST',
       comment: 'Un commentaire', status:status)
     @p = @o.periods.create!(start_date: Date.today.beginning_of_year,
       close_date: Date.today.end_of_year)

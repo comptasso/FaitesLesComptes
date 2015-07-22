@@ -21,11 +21,11 @@ module Jobs
   #
   #
   #
-  class BasePdfFiller < Struct.new(:db_name, :export_pdf_id, :options)
+  class BasePdfFiller < Struct.new(:tenant_id, :export_pdf_id, :options)
 
     def before(job)
       Rails.logger.debug 'Dans before job de Jobs::StatsPdfFiller'
-#      Apartment::Database.process(db_name) do
+      Tenant.set_current_tenant(tenant_id)
         # trouve le exportable
         @export_pdf = ExportPdf.find(export_pdf_id)
         @export_pdf.update_attribute(:status, 'processing')
@@ -42,6 +42,7 @@ module Jobs
     def perform
         Rails.logger.debug 'performing le job'
 #        Apartment::Database.process(db_name) do
+      Tenant.set_current_tenant(tenant_id)
           Rails.logger.debug @document
           @export_pdf.content = @document.to_pdf.render
           @export_pdf.save
@@ -50,6 +51,7 @@ module Jobs
 
     def success(job)
 #      Apartment::Database.process(db_name) do
+      Tenant.set_current_tenant(tenant_id)
           @export_pdf.update_attribute(:status, 'ready')
 #        end
     end

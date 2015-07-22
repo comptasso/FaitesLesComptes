@@ -534,7 +534,7 @@ class Period < ActiveRecord::Base
 
   # appelle la création du plan comptable en arrière plan
   def create_datas
-    Delayed::Job.enqueue Jobs::PeriodPlan.new(organism.database_name, id)
+    Delayed::Job.enqueue Jobs::PeriodPlan.new(tenant_id, id)
   end
 
   # Destiné à rendre persistant la vérification que la nomenclature est OK, ceci

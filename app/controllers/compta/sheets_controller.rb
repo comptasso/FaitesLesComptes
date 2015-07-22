@@ -14,9 +14,9 @@
 require 'pdf_document/base'
 
 class Compta::SheetsController < Compta::ApplicationController
-  
+
   include Pdf::Controller # apporte les méthodes pour les delayed_export_jobs
-  
+
   before_filter :check_nomenclature, :only=>[:index, :show]
   # on effectue la construction des données si elle ne sont pas à jour.
   before_filter :fill_rubrik_values, :only=>[:index]
@@ -29,13 +29,13 @@ class Compta::SheetsController < Compta::ApplicationController
       fol = @nomenclature.folios.find_by_name(c.to_s)
       @nomenclature.sheet(@period, fol)
     end
-    
+
     respond_to do |format|
       send_export_token # pour gérer le spinner lors de la préparation du document
-      format.html 
+      format.html
       format.csv {
         datas = ''
-        @docs.each {|doc| datas += doc.to_index_csv } 
+        @docs.each {|doc| datas += doc.to_index_csv }
         send_data datas, :filename=>export_filename(@docs, :csv, params[:title])
       }
       format.xls {
@@ -46,22 +46,22 @@ class Compta::SheetsController < Compta::ApplicationController
 
     end
   end
-  
+
   # l'action show montre la construction de la sheet en détaillant pour chaque rubrique
-  # les comptes qui ont contribué au calcul. 
-  # 
+  # les comptes qui ont contribué au calcul.
+  #
   # La variable d'instance @rubriks est donc constituée ici de rubriks et de rubrik_lines
   #
   def show
     folio = @nomenclature.folios.find(params[:id])
     @sheet = @nomenclature.sheet(@period, folio)
-    
+
     if @sheet && @sheet.valid?
 
       respond_to do |format|
         send_export_token # pour gérer le spinner lors de la préparation du document
         format.html {@rubriks = @sheet.fetch_lines}
-        format.csv { send_data @sheet.to_csv, filename:export_filename(folio, :csv) } 
+        format.csv { send_data @sheet.to_csv, filename:export_filename(folio, :csv) }
         format.xls { send_data @sheet.to_xls, filename:export_filename(folio, :csv) }
         #        format.pdf do
         #          pdf = @sheet.to_detailed_pdf
@@ -76,7 +76,7 @@ class Compta::SheetsController < Compta::ApplicationController
     end
   end
 
-  # bilans est une action accessoire qui renvoie vers index avec actif et passif comme 
+  # bilans est une action accessoire qui renvoie vers index avec actif et passif comme
   # paramètres de collection
   def bilans
     redirect_to compta_sheets_url(:collection=>[:actif, :passif], :title=>'Bilan')
@@ -100,30 +100,30 @@ class Compta::SheetsController < Compta::ApplicationController
   def benevolats
     redirect_to compta_sheets_url(:collection=>[:benevolat], :title=>'Bénévolat')
   end
-  
-  # l'action values_ready est appelée par le javascript de la page preparing 
-  # par un polling et répond 'vrai' ou 'faux' selon que les valeurs 
+
+  # l'action values_ready est appelée par le javascript de la page preparing
+  # par un polling et répond 'vrai' ou 'faux' selon que les valeurs
   # demandées ont été construites.
-  # 
+  #
   #
   def values_ready
     render :text=>"#{@organism.nomenclature.job_finished_at ? 'ready' : 'processing'}"
   end
-  
+
   protected
-  
+
   # action permettant de remplir les rubriques avec les valeurs en cours
-  # et de signaler au record Nomenclature quand cela a été fait. 
+  # et de signaler au record Nomenclature quand cela a été fait.
   def fill_rubrik_values
     frais = @organism.nomenclature.fresh_values? && period_adhoc?
-    unless frais 
+    unless frais
       @organism.nomenclature.fill_rubrik_with_values(@period)
       # affichage d'une vue d'attente
       render 'preparing' and return
     end
     frais
   end
-  
+
   # la période demandée est adéquate quand toutes les rubriques sont effectivement
   # remplies avec des valeurs relevant de l'exercice voulu
   # en clair : un seul exercice et le bon
@@ -131,8 +131,8 @@ class Compta::SheetsController < Compta::ApplicationController
     rsu = ::Rubrik.select(:period_id).uniq
     rsu.count == 1 && rsu.to_a.first.period_id == @period.id
   end
-  
-  
+
+
 
   # appelé par before_filter pour s'assurer que la nomenclature est valide
   def check_nomenclature
@@ -140,29 +140,24 @@ class Compta::SheetsController < Compta::ApplicationController
     if !@period.nomenclature_ok
       flash[:alert] = collect_errors(@nomenclature) unless @nomenclature.coherent?
     end
-  end 
-  
+  end
+
   # créé les variables d'instance attendues par le module PdfController
   def set_exporter
     @exporter = @period
   end
-  
+
   # création du job et insertion dans la queue
-  # on utilise le params :collection pour savoir si on est dans la publication d'une 
+  # on utilise le params :collection pour savoir si on est dans la publication d'une
   # collection (une action primitive :index) ou un show.
-  # Car comme l'action est chaque fois produce_pdf, il faut un autre moyen de 
-  # différentier les deux. 
+  # Car comme l'action est chaque fois produce_pdf, il faut un autre moyen de
+  # différentier les deux.
   def enqueue(pdf_export)
-    if params[:collection] 
-      Delayed::Job.enqueue Jobs::SheetsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, collection:params[:collection]})
+    if params[:collection]
+      Delayed::Job.enqueue Jobs::SheetsPdfFiller.new(@tenant.id, pdf_export.id, {period_id:@period.id, collection:params[:collection]})
     else # cas de l'action show
-      Delayed::Job.enqueue Jobs::SheetPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, folio_id:params[:id]})
+      Delayed::Job.enqueue Jobs::SheetPdfFiller.new(@tenant.id, pdf_export.id, {period_id:@period.id, folio_id:params[:id]})
     end
   end
-  
-  
-  
- 
 
 end
-

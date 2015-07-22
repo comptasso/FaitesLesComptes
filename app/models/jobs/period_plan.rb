@@ -2,16 +2,15 @@ module Jobs
 
   # class permettant de remplir en arrière plan toutes les données d'un nouvel
   # exercice
-  class PeriodPlan < Struct.new(:db_name, :period_id)
+  class PeriodPlan < Struct.new(:tenant_id, :period_id)
 
     def before(job)
-#      Apartment::Database.process(db_name) do
+      Tenant.set_current_tenant(tenant_id)
         @period = Period.find(period_id)
-#      end
     end
 
     def perform
-#      Apartment::Database.process(db_name) do
+      Tenant.set_current_tenant(tenant_id)
 
 
         pc = plan_comptable
@@ -28,10 +27,11 @@ module Jobs
         @period.check_nomenclature
         # TODO probablement inutile si pas asssociation
         pc.fill_bridge
-#      end
     end
 
     def success(job)
+      Tenant.set_current_tenant(tenant_id)
+#      end
 #      Apartment::Database.process(db_name) do
         @period = Period.find(period_id)
         @period.update_attribute(:prepared, true)

@@ -26,6 +26,7 @@ module Jobs
     # pour les vues détaillées et un pour les collections non détaillées.
     def perform
  #     Apartment::Database.process(db_name) do
+      Tenant.set_current_tenant(tenant_id)
           @export_pdf.content = @document.to_detailed_pdf.render
           @export_pdf.save
  #     end

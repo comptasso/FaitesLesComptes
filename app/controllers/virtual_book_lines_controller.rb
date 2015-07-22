@@ -6,10 +6,10 @@
 
 class VirtualBookLinesController < ApplicationController
   include Pdf::Controller
-  
+
   before_filter :find_bank_account, :fill_mois
   before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
-  
+
   def index
     @virtual_book = @bank_account.virtual_book
     if params[:mois] == 'tous'
@@ -17,10 +17,10 @@ class VirtualBookLinesController < ApplicationController
     else
       @monthly_extract = Extract::MonthlyBankAccount.new(@virtual_book, year:params[:an], month:params[:mois])
     end
-    
-    
-    
-    send_export_token # envoie un token pour l'affichage du message Juste un instant 
+
+
+
+    send_export_token # envoie un token pour l'affichage du message Juste un instant
     # pour les exports
     respond_to do |format|
       format.html
@@ -28,10 +28,10 @@ class VirtualBookLinesController < ApplicationController
       format.xls { send_data @monthly_extract.to_xls, :filename=>export_filename(@monthly_extract, :csv)  }
     end
   end
-  
-  
-  
-  
+
+
+
+
   protected
   # on surcharge fill_mois pour gérer le params[:mois] 'tous'
   def fill_mois
@@ -41,20 +41,20 @@ class VirtualBookLinesController < ApplicationController
       super
     end
   end
-  
+
   def find_bank_account
     @bank_account = BankAccount.find(params[:bank_account_id])
   end
-  
+
   # créé les variables d'instance attendues par le module PdfController
   def set_exporter
     @exporter = @bank_account.virtual_book
     @pdf_file_title = "#{@bank_account.bank_name} #{@bank_account.number}"
   end
-  
+
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::VirtualBookPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
+    Delayed::Job.enqueue Jobs::VirtualBookPdfFiller.new(@tenant.id, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
   end
-  
+
 end

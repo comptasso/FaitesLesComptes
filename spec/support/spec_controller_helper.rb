@@ -19,28 +19,30 @@ module SpecControllerHelper
   # définit les instances et les stub nécessaires pour passer les before filter (log_in?
   # find_organism, current_period, current_user
   def minimal_instances
-    @cu = mock_model(User) # cu pour current_user
+    @t = mock_model(Tenant)
+    @cu = mock_model(User, tenant_id:@t.id) # cu pour current_user
+    Tenant.set_current_tenant(@t)
     @o = mock_model(Organism,
       title:'le titre',
       sectored?:false,
-      database_name:SCHEMA_TEST)
+      tenant_id:@t.id)
     @p = mock_model(Period, :start_date=>Date.today.beginning_of_year,
       close_date:Date.today.end_of_year, open?:true,
       organism:@o,
       guess_date:Date.today,
       guess_month:MonthYear.from_date(Date.today),
-      guess_month_from_params:MonthYear.from_date(Date.today), 
-      next_piece_number:777)
-    
-    @sect = mock_model(Sector)
-    
+      guess_month_from_params:MonthYear.from_date(Date.today),
+      next_piece_number:777, tenant_id:@t.id)
 
+    @cu.stub(:tenants).and_return [@t]
+    @cu.stub(:organisms).and_return([@o])
+    @sect = mock_model(Sector, tenant_id:@t.id)
+
+    Tenant.stub(:find_by_id).with(@t.id).and_return @t
     Organism.stub(:first).and_return(@o)
     User.stub(:find_by_id).with(@cu.id).and_return @cu
     Period.stub(:find_by_id).with(@p.id).and_return @p
 
-    @cu.stub_chain(:rooms, :find_by_database_name).and_return(@r = mock_model(Room))
-    @r.stub(:connect_to_organism)
 
     @o.stub_chain(:periods, :find_by_id).and_return @p
     @o.stub_chain(:periods, :order, :last).and_return(@p)
@@ -49,17 +51,17 @@ module SpecControllerHelper
     @o.stub_chain(:periods, :last).and_return(@p)
     @o.stub_chain(:books, :in_outs, :all).and_return [1,2]
     @o.stub_chain(:sectors, :first).and_return @sect
-    
+
     sign_in(@cu) # introduit suite à Devise
   end
 
 
   # définit les attributs de session systématiques
   def session_attributes
-    {period:@p.id, org_db:'test'}
+    {period:@p.id, org_db:@o.id}
   end
 
-  # cet alias permet d'utiliser les spec créés par scaffold sans avoir à rebaptiser 
+  # cet alias permet d'utiliser les spec créés par scaffold sans avoir à rebaptiser
   # session_attributes
   alias  valid_session session_attributes
 end

@@ -8,9 +8,9 @@
 #
 # Les before_filter find_book et fill_mois sont une surcharge de ceux définis dans
 # in_out_writings_controller
-# 
-# TODO : on devrait vérifier que les autres actions de ce controller ne sont 
-# pas accessibles. 
+#
+# TODO : on devrait vérifier que les autres actions de ce controller ne sont
+# pas accessibles.
 #
 class CashLinesController < InOutWritingsController
 
@@ -21,7 +21,7 @@ class CashLinesController < InOutWritingsController
     else
       @monthly_extract = Extract::MonthlyCash.new(@cash, {year:params[:an], month:params[:mois]})
     end
-    send_export_token # envoie un token pour l'affichage du message Juste un instant 
+    send_export_token # envoie un token pour l'affichage du message Juste un instant
     # pour les exports
     respond_to do |format|
       format.html
@@ -29,7 +29,7 @@ class CashLinesController < InOutWritingsController
       format.pdf do
         pdf = @monthly_extract.to_pdf
         send_data pdf.render, :filename=>export_filename(pdf, :pdf)
-      end       
+      end
       format.csv { send_data @monthly_extract.to_csv, filename:export_filename(@monthly_extract, :csv)  }  # pour éviter le problème des virgules
       format.xls { send_data @monthly_extract.to_xls, filename:export_filename(@monthly_extract, :csv)  }
     end
@@ -41,18 +41,18 @@ class CashLinesController < InOutWritingsController
   def find_book
     @cash = Cash.find(params[:cash_id])
   end
-  
+
   # créé les variables d'instance attendues par le module PdfController
   def set_exporter
     @exporter = @cash
     @pdf_file_title = "Livre de caisse : #{@cash.name}"
   end
-  
+
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::VirtualCashPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
+    Delayed::Job.enqueue Jobs::VirtualCashPdfFiller.new(@tenant.id, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
   end
 
-  
+
 
 end

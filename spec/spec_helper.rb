@@ -17,7 +17,7 @@ require 'simplecov'
   require 'capybara/rails'
   require 'email_spec'
   require 'active_model/forbidden_attributes_protection'
-
+  require File.expand_path(File.dirname(__FILE__) + '/support/organism_fixture_bis.rb')
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
 
