@@ -10,7 +10,6 @@
 #
 module Adherent
 class Writing < ::Writing
-  acts as tenant
 
   validates :counter_line ,:counter_line_with_payment_mode=>true
 

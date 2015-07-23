@@ -140,6 +140,7 @@ describe Adherent::Payment do
 
     describe 'mise à jour des informations'  do
 
+
       after(:each) {@o.members.find_each {|m| m.destroy}}
 
       it 'met à jour la date' do

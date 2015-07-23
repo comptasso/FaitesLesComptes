@@ -2,17 +2,17 @@
 
 module Admin::OrganismsHelper
 
- 
+include Admin::MenusHelper
   # indique si le current_user est le propriétaire de l'organisme
   def owner?(organism)
-    rid = Room.find_by_database_name(organism.database_name)
-    current_user.holders.where('status = ? AND room_id = ?', 'owner', rid).any?
+    current_user.holders.where('status = ? AND organism_id = ?',
+         'owner', @organism.id).any?
   end
-  
-  # destiné à indiquer dans la vue show quand a été faite la dernière 
-  # construction des valeurs des différentes rubriques utilisées dans 
-  # les folios. 
-  # 
+
+  # destiné à indiquer dans la vue show quand a été faite la dernière
+  # construction des valeurs des différentes rubriques utilisées dans
+  # les folios.
+  #
   # Indique jamais si ce n'a pas encore été fait
   def last_data_build(organism)
     nomen = organism.nomenclature

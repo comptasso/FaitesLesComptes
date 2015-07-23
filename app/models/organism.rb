@@ -99,10 +99,10 @@ class Organism < ActiveRecord::Base
   validates :postcode, allow_blank:true, :length=>{:within=>2..5}, format:/\A\d*\z/
 
 
-
-
-
-
+  # renvoie le propriétaire de la base
+  def owner
+    holders.where('status = ?', 'owner').first.user
+  end
 
   # Retourne la dernière migration effectuée pour la base de données représentant cet organisme
   def self.migration_version

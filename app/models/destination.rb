@@ -23,7 +23,7 @@ class Destination < ActiveRecord::Base
   strip_before_validation :name, :comment
 
   validates :organism_id, :presence=>true
-  validates :name, presence: true, uniqueness:true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
+  validates :name, presence: true, uniqueness:{scope: :organism_id}, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
 
 

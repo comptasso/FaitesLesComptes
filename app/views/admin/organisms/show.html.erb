@@ -2,11 +2,12 @@
 <%= content_for :menu do %>
   <% if owner?(@organism) %>
     <%= icon_to 'modifier.png', edit_admin_organism_path(@organism)   %>
-    <%= icon_to 'sauvegarde.png', new_admin_clone_path, :title=>"Fait un clone de l'organisme" if current_user.allowed_to_create_room? %>
-    <%= icon_to 'supprimer.png', [:admin, @organism.room], data:{confirm:"Cette action est irréversible \nEtes vous sûr ?"}, :method=>:delete %>
+    <%= icon_to 'sauvegarde.png', new_admin_clone_path,
+        :title=>"Fait un clone de l'organisme" if current_user.allowed_to_create_organism? %>
+    <%= icon_to 'supprimer.png', [:admin, @organism], data:{confirm:"Cette action est irréversible \nEtes vous sûr ?"}, :method=>:delete %>
   <% end -%>
   <%= icon_to 'retour.png', :back %>
-  
+
 <% end -%>
 
 
@@ -17,7 +18,7 @@
 </div>
   <div class="inner-champ">
 
-   
+
 <p>
   <b>Titre :</b>
   <%= @organism.title %>

@@ -13,7 +13,6 @@
       %th.pc25 Commentaire
       %th.pc10 Statut
       %th.pc10 Vous êtes
-      %th.pc10 Base de données
       %th.pc10 Actions
 
 
@@ -23,7 +22,7 @@
         %td= organ.title
         %td= organ.comment
         %td= organ.status
-        %td= r_status(organ)
+        %td= 'ici on doit voir le status du user'
         %td
           = icon_to 'afficher.png', organ, title: 'affichage dans la partie saisie'
           = icon_to 'detail.png', [:admin, organ]

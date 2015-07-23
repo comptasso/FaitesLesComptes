@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
 
 # assigne la variable @organism ou renvoie vers l'index des organismes
   def find_organism
-    puts 'je suis dans find organism'
+    logger.debug 'Dans find_organism de ApplicationController'
     logger.debug "Controller #{current_user.inspect}"
     if session[:org_id]
       @organism = Organism.find_by_id(session[:org_id])
@@ -99,6 +99,7 @@ class ApplicationController < ActionController::Base
       @organism = current_user.organisms.first
       session[:org_id] = @organism.id if @organism
     end
+    logger.debug "@organism non instancié" unless @organism
   end
 
 
@@ -147,19 +148,20 @@ class ApplicationController < ActionController::Base
 #   Apartment::Database.switch()
   end
 
-  # Méthode à appeler dans les controller rooms pour
+  # Méthode à appeler dans les controller organisms pour
   # mettre à jour la session lorsqu'il y a un changement d'organisme
-  # Récupère également les variables d'instance @organism et @period si cela a du sens.
+  # Récupère également les variables d'instance @organism et @period
+  # si cela a du sens.
+  # L'argument groom est un organisme.
   #
   def organism_has_changed?(groom = nil)
     change = false
-    # premier cas : il y a une chambre et on vient de changer
-    if groom && session[:org_db] != groom.database_name
-      logger.debug "Passage à l'organisation #{groom.database_name}"
+    # premier cas : il y a un organisme et on vient de changer
+    if groom && session[:org_db] != groom.id
+      logger.debug "Passage à l'organisation #{groom.title}"
       session[:period] = nil
-      session[:org_db]  = groom.database_name
-      groom.connect_to_organism
-      @organism  = Organism.first
+      session[:org_db]  = groom.id
+      @organism  = groom
       if @organism && @organism.periods.any?
         @period = @organism.periods.last
         session[:period] = @period.id
@@ -169,18 +171,16 @@ class ApplicationController < ActionController::Base
 
     # deuxième cas : il n'y a pas ou plus de chambre
     if groom == nil #: on vient d'arriver ou de supprimer un organisme
-      logger.debug "Aucune chambre sélectionné"
-      use_main_connection
+      logger.debug "Aucun organismse sélectionné"
       session[:period] = nil
       session[:org_db] = nil
       change = true
     end
 
     # troisème cas : on reste dans la même pièce
-    if groom && session[:org_db] == groom.database_name
-      logger.debug "On reste à l'organisation #{groom.database_name}"
-      groom.connect_to_organism
-      @organism = Organism.first
+    if groom && session[:org_db] == groom.id
+      logger.debug "On reste à l'organisation #{groom.title}"
+      @organism = groom
       logger.warn 'pas d\'organisme trouvé par has_changed_organism?' unless @organism
       current_period
       change = false

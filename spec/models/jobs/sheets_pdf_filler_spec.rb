@@ -11,20 +11,21 @@ end
 describe Jobs::SheetsPdfFiller do
 
   let(:p) {mock_model(Period, :organism=>mock_model(Organism, :nomenclature=>nomen))}
-  let(:expdf) {ExportPdf.new}
+  let(:expdf) {ExportPdf.new(tenant_id:1)}
   let(:nomen) {Nomenclature.new}
   let(:folio) {Folio.new(:name=>'resultat')}
 
   before(:each) do
+    Tenant.set_current_tenant(1)
     Period.stub(:find).and_return p
     ExportPdf.stub(:find).and_return(expdf)
-    Tenant.set_current_tenant(1)
   end
 
   subject {Jobs::SheetsPdfFiller.new(1, expdf.id, period_id:p.id, collection:['actif', 'passif'])}
 
   it 'crée une instance' do
     subject.should be_an_instance_of(Jobs::SheetsPdfFiller)
+    puts subject.inspect
   end
 
   describe(:before) do

@@ -28,6 +28,7 @@ module Jobs
       Tenant.set_current_tenant(tenant_id)
         # trouve le exportable
         @export_pdf = ExportPdf.find(export_pdf_id)
+        puts @export_pdf.inspect
         @export_pdf.update_attribute(:status, 'processing')
         set_document(options)
 
