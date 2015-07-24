@@ -99,7 +99,10 @@ class ApplicationController < ActionController::Base
       @organism = current_user.organisms.first
       session[:org_id] = @organism.id if @organism
     end
-    logger.debug "@organism non instancié" unless @organism
+    unless @organism
+      logger.debug "@organism non instancié"
+      redirect_to new_admin_organism_url and return
+    end
   end
 
 

@@ -17,10 +17,8 @@ module Jobs
     # de documents (on pourrait aussi créer une classe dédiée à ça mais pour l'instant
     # je n'ai l'utilisation que pour Sheets.
     def perform
-#      Apartment::Database.process(db_name) do
           @export_pdf.content = produce_pdf(@docs).render
           @export_pdf.save
-#        end
     end
 
 

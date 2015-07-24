@@ -30,11 +30,7 @@ class Book < ActiveRecord::Base
 
   strip_before_validation :title, :description, :abbreviation
 
-  # ATTENTION si on abandonne la logique des schémas pour la base de données, alors
-  # il faudrait modifier les uniqueness pour introduire un scope.
-
-  validates :title, presence: true,
-    uniqueness:{scope: :organism_id},
+  validates :title, presence: true, uniqueness:{scope: :organism_id},
     :format=>{:with=>NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :abbreviation, presence: true, :format=>{:with=>/\A[A-Z]{1}[A-Z0-9]{1,3}\Z/}
   validates_uniqueness_of :abbreviation, scope: :organism_id

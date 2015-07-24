@@ -100,7 +100,7 @@ describe CheckDeposit do
   describe "controle de la validité : un check_deposit" do
 
     before(:each) do
-      @check_deposit = CheckDeposit.new(deposit_date: (Date.today +1))
+      @check_deposit = CheckDeposit.new(:deposit_date=>(Date.today + 1))
     end
 
     it "n'est valide qu'avec un bank_account" do
@@ -324,7 +324,8 @@ describe CheckDeposit do
     describe "le rattachement à un extrait de compte" do
       before(:each) do
         @check_deposit.should have(3).checks
-        @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
+        @be = @ba.bank_extracts.create!(:end_date=>((Date.today) +15),
+           :begin_date=>((Date.today) -15))
         @bel = @be.bank_extract_lines.create!(:compta_line_id=>@check_deposit.debit_line.id)
 
       end
