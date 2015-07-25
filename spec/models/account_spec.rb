@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |config|
-#    config.filter =  {wip:true}
+#  config.filter =  {wip:true}
 end
 
 
@@ -22,18 +22,19 @@ describe Account do
     Account.new(valid_attributes)
   end
 
-  before(:each) do
-    Tenant.set_current_tenant 1
-  end
+    before(:each) do
+      Tenant.set_current_tenant( tenants( :tenant_1 ).id )
+      subject.stub(:organism).and_return(double(Organism, sectored?:false))
+    end
 
+    it 'le tenant est créé', wip:true do
+      t = tenants(:tenant_1)
+      t.should_not be_nil
+    end
 
   describe 'validations', wip:true do
 
    subject {valid_account}
-
-    before(:each) do
-      subject.stub(:organism).and_return(double(Organism, sectored?:false))
-    end
 
     it "should be valid", wip:true   do
       subject.should be_valid

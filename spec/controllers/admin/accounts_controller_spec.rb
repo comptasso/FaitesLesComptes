@@ -23,6 +23,10 @@ require 'support/spec_controller_helper'
 describe Admin::AccountsController do
   include SpecControllerHelper
 
+  RSpec.configure do |config|
+#    config.filter =  {wip:true}
+  end
+
   let(:a1) {mock_model(Account, long_name:'999 compte de test')}
 
 
@@ -31,13 +35,11 @@ describe Admin::AccountsController do
   end
 
   before(:each) do
-    Tenant.set_current_tenant(tenants(:tenant_1).id)
     minimal_instances
     @p.stub(:accounts).and_return @a = double(Arel)
-
   end
 
-  describe "GET index" do
+  describe "GET index", wip:true do
 
     it 'demande à Account sa list de compte pour la périod' do
       Account.should_receive(:list_for).with(@p).and_return [1,2]

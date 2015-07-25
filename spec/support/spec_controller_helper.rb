@@ -20,8 +20,11 @@ module SpecControllerHelper
   # définit les instances et les stub nécessaires pour passer les before filter (log_in?
   # find_organism, current_period, current_user
   def minimal_instances
-    @t = mock_model(Tenant)
-    @cu = mock_model(User, tenant_id:@t.id) # cu pour current_user
+    # Tenant.set_current_tenant(tenants(:tenant_1).id)
+    @t = tenants(:tenant_1)
+    @cu = users(:quentin)
+
+#    @cu = mock_model(User, tenant_id:@t.id) # cu pour current_user
     Tenant.set_current_tenant(@t)
     @o = mock_model(Organism,
       title:'le titre',
@@ -54,6 +57,7 @@ module SpecControllerHelper
     @o.stub_chain(:sectors, :first).and_return @sect
 
     sign_in(@cu) # introduit suite à Devise
+    controller.stub :current_user=>@cu
   end
 
 
