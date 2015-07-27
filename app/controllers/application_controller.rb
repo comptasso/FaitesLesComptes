@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
   # bottom_action est une actions qui relève de bottom_controller, controller
   # appelé par les liens en bas de page (manuels, contact, ...)
   def milia_or_bottom_action?
-    params[:controller] =~ /^Milia/ || params[:controller] =~ /^bottom/
+    params[:controller] =~ /^milia/ || params[:controller] =~ /^bottom/ || params[:controller] =~ /^devise/
   end
 
   # on est dans une action du gem devise si on n'est pas loggé ou
@@ -65,34 +65,36 @@ class ApplicationController < ActionController::Base
   end
 
   # Overwriting the sign_out redirect path method
-  def after_sign_out_path_for(user)
-    devise_sessions_bye_url
-  end
+  # def after_sign_out_path_for(user)
+  #   devise_sessions_bye_url
+  # end
 
-  # Devise : surcharge de l'action après sign_in
+  # Milia : Après l'authentification
   #
   # Lorsqu'il n'y a pas d'organisme, il faut afficher soit la vue
-  # admin/rooms#index soit la vue organism selon qu'il y a plusieurs bases ou une seule
+  # admin#index soit la vue organism selon qu'il y a plusieurs bases ou une seule
   #
-  def after_sign_in_path_for(user)
-    session[:org_id] = nil
-    case current_user.organisms.count
-    when 0
-      flash[:notice]=premier_accueil(user)
-      new_admin_organism_url
-    when 1
-      @organism = current_user.organisms.first
-      session[:org_id] = @organism.id
-      organism_url(@organism)
-    else
-      admin_organisms_url
-    end
-  end
+#  def callback_authenticate_tenant
+    # Rails.logger.debug 'Dans le callback after_authenticate_tenant'
+    # session[:org_id] = nil
+    # # case current_user.organisms.count
+    # when 0
+    #   flash[:notice]=premier_accueil(user)
+    #   new_admin_organism_url
+    # when 1
+    #   @organism = current_user.organisms.first
+    #   session[:org_id] = @organism.id
+    #   organism_url(@organism)
+    # else
+    #   admin_organisms_url
+    # end
+#  end
 
 # assigne la variable @organism ou renvoie vers l'index des organismes
   def find_organism
     logger.debug 'Dans find_organism de ApplicationController'
-    logger.debug "Controller #{current_user.inspect}"
+    logger.debug "Controller #{params[:controller]}"
+
     if session[:org_id]
       @organism = Organism.find_by_id(session[:org_id])
     else
@@ -146,10 +148,10 @@ class ApplicationController < ActionController::Base
 
   # se connecte à la base principale
   # NOSCHEMA : à supprimer ensuite
-  def use_main_connection
-    Rails.logger.debug "use_main_connection : Passage à la base principale"
+#  def use_main_connection
+#    Rails.logger.debug "use_main_connection : Passage à la base principale"
 #   Apartment::Database.switch()
-  end
+#  end
 
   # Méthode à appeler dans les controller organisms pour
   # mettre à jour la session lorsqu'il y a un changement d'organisme

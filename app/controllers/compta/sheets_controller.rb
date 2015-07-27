@@ -154,9 +154,11 @@ class Compta::SheetsController < Compta::ApplicationController
   # différentier les deux.
   def enqueue(pdf_export)
     if params[:collection]
-      Delayed::Job.enqueue Jobs::SheetsPdfFiller.new(@tenant.id, pdf_export.id, {period_id:@period.id, collection:params[:collection]})
+      Delayed::Job.enqueue Jobs::SheetsPdfFiller.new( Tenant.current_tenant.id,
+       pdf_export.id, {period_id:@period.id, collection:params[:collection]})
     else # cas de l'action show
-      Delayed::Job.enqueue Jobs::SheetPdfFiller.new(@tenant.id, pdf_export.id, {period_id:@period.id, folio_id:params[:id]})
+      Delayed::Job.enqueue Jobs::SheetPdfFiller.new( Tenant.current_tenant.id,
+       pdf_export.id, {period_id:@period.id, folio_id:params[:id]})
     end
   end
 

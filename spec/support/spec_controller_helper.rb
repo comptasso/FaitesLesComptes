@@ -26,6 +26,8 @@ module SpecControllerHelper
 
 #    @cu = mock_model(User, tenant_id:@t.id) # cu pour current_user
     Tenant.set_current_tenant(@t)
+    sign_in(@cu) # introduit suite à Devise
+    controller.stub :current_user=>@cu
     @o = mock_model(Organism,
       title:'le titre',
       sectored?:false,
@@ -39,7 +41,9 @@ module SpecControllerHelper
       next_piece_number:777, tenant_id:@t.id)
 
     @cu.stub(:tenants).and_return [@t]
-    @cu.stub(:organisms).and_return([@o])
+    @cu.stub(:organisms).and_return(@or = double(Arel))
+    @or.stub(:find).and_return @o
+    @or.stub(:first).and_return @o
     @sect = mock_model(Sector, tenant_id:@t.id)
 
     Tenant.stub(:find_by_id).with(@t.id).and_return @t
@@ -56,8 +60,6 @@ module SpecControllerHelper
     @o.stub_chain(:books, :in_outs, :all).and_return [1,2]
     @o.stub_chain(:sectors, :first).and_return @sect
 
-    sign_in(@cu) # introduit suite à Devise
-    controller.stub :current_user=>@cu
   end
 
 

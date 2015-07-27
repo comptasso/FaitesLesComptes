@@ -36,7 +36,8 @@ class Compta::TwoPeriodsBalancesController < Compta::ApplicationController
 
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::TwoPeriodsBalancePdfFiller.new(@tenant.id, pdf_export.id, {period_id:@period.id})
+    Delayed::Job.enqueue Jobs::TwoPeriodsBalancePdfFiller.new( Tenant.current_tenant.id,
+       pdf_export.id, {period_id:@period.id})
   end
 
 

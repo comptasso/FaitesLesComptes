@@ -112,7 +112,7 @@ class Compta::ListingsController < Compta::ApplicationController
 
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::ListingPdfFiller.new(@tenant.id,
+    Delayed::Job.enqueue Jobs::ListingPdfFiller.new(Tenant.current_tenant.id,
       pdf_export.id, {account_id:@account.id,
         params_listing:listing_params})
   end

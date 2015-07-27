@@ -26,7 +26,7 @@ class Compta::GeneralLedgersController < Compta::ApplicationController
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
     Delayed::Job.enqueue Jobs::GeneralLedgerPdfFiller.new(
-      @tenant.id, pdf_export.id, {period_id:@period.id})
+       Tenant.current_tenant.id, pdf_export.id, {period_id:@period.id})
   end
 
 

@@ -188,7 +188,8 @@ class Compta::WritingsController < Compta::ApplicationController
 
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::ComptaBookPdfFiller.new(@tenant.id, pdf_export.id, {period_id:@period.id, from_date:@from_date, to_date:@to_date})
+    Delayed::Job.enqueue Jobs::ComptaBookPdfFiller.new( Tenant.current_tenant.id,
+      pdf_export.id, {period_id:@period.id, from_date:@from_date, to_date:@to_date})
   end
 
   def compta_writing_params

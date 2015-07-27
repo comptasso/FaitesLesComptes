@@ -42,7 +42,8 @@ class NaturesController < ApplicationController
 
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::StatsPdfFiller.new(@tenant.id, pdf_export.id, {period_id:@period.id, destination:[@filter]})
+    Delayed::Job.enqueue Jobs::StatsPdfFiller.new(Tenant.current_tenant.id,
+      pdf_export.id, {period_id:@period.id, destination:[@filter]})
   end
 
 

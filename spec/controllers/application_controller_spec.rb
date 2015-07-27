@@ -14,13 +14,12 @@ end
 # des informations de sessions
 describe Admin::PeriodsController do
   include SpecControllerHelper
-  let(:cu) {mock_model(User, 'up_to_date?'=>true)}
   let(:p) {mock_model(Period)}
   let(:o) {mock_model(Organism)}
 
   before(:each) do
-    Tenant.set_current_tenant 1
-    cu.stub(:tenants).and_return [double(Tenant, id:1)]
+    Tenant.set_current_tenant(tenants(:tenant_1))
+    @cu = users(:quentin)
     o.stub(:periods).and_return(@br = double(Arel))
     @br.stub(:order).and_return [p]
     @br.stub('empty?').and_return false
@@ -33,13 +32,13 @@ describe Admin::PeriodsController do
     context 'signed' do
 
       before(:each) do
-        sign_in(cu)
-        cu.stub(:organisms).and_return [o]
+        sign_in(@cu)
+        @cu.stub(:organisms).and_return [o]
       end
 
       describe 'find_organism'  do
         it 'pas d organisme si pas de session de org_db ni d organismes pour le user', wip:true do
-          cu.stub(:organisms).and_return []
+          @cu.stub(:organisms).and_return []
           get :index
           assigns(:organism).should == nil
         end
@@ -53,16 +52,17 @@ describe Admin::PeriodsController do
 
       end
 
-      describe 'current_period' do
+      describe 'current_period', wip:true do
 
         before(:each) do
-          Organism.stub(:first).and_return o
+          sign_in(@cu)
+          Organism.stub(:find_by_id).and_return o
         end
 
         context 'sans organisme' do
 
         it 'rien sans organisme' do
-          cu.stub(:organisms).and_return [nil]
+          @cu.stub(:organisms).and_return [nil]
           get :index, {}
           assigns(:organism).should be_nil
           assigns(:period).should be_nil
@@ -72,6 +72,15 @@ describe Admin::PeriodsController do
 
         context 'avec un organisme' do
 
+        before(:each) do
+          @cu.stub(:organisms).and_return [o]
+        end
+
+        it 'assigne l organisme' do
+          get :index, {}, {user:@cu.id, org_id:o.id}
+          assigns(:organism).should == o
+        end
+
         it 'look for period when there is no session period', wip:true do
           # 3 fois : 1 pour periods.empty?
           # 1 pour period.last, 1 pour period.order de l'action index
@@ -80,16 +89,22 @@ describe Admin::PeriodsController do
           o.should_receive(:periods).exactly(3).times.and_return(@a = double(Arel, order:self))
           @a.stub(:empty?).and_return(false)
           @a.should_receive(:last).and_return(p)
-          get :index, {}, {user:cu.id, org_db:o.id}
-          assigns(:period).should == p
+          get :index, {}, {user:@cu.id, org_id:o.id}
+        end
+
+        it 'la session de period est renseignée si elle n était pas renseignée' do
+          o.stub(:periods).and_return(@a = double(Arel, order:self))
+           @a.stub(:empty?).and_return(false)
+          @a.should_receive(:last).and_return(p)
+          @a.stub(:find_by_id).and_return(p)
+          get :index,{}, {user:@cu.id, org_id:o.id}
           session[:period].should == p.id
         end
 
-        it 'look for period from session when there is one (current_period)' do
-
-          o.should_receive(:periods).exactly(2).times.and_return(@a=double(Arel, order:self))
-          @a.should_receive(:find_by_id).with(p.id).and_return p
-          get :index,{}, {user:cu.id, org_db:o.id, period:p.id}
+        it 'cas où on fournit les sessions de org et de period' do
+          o.stub(:periods).and_return(@a = double(Arel, order:self))
+          @a.stub(:find_by_id).and_return(p)
+          get :index,{}, {user:@cu.id, org_id:o.id, period:p.id}
           assigns(:period).should == p
           session[:period].should == p.id
         end

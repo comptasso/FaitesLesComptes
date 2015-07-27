@@ -32,7 +32,8 @@ class Compta::GeneralBooksController < Compta::ApplicationController
 
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::GeneralBookPdfFiller.new(@tenant.id, pdf_export.id, @params_gb)
+    Delayed::Job.enqueue Jobs::GeneralBookPdfFiller.new(Tenant.current_tenant.id,
+    pdf_export.id, @params_gb)
   end
 
 

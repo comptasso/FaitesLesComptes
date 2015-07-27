@@ -54,7 +54,8 @@ class VirtualBookLinesController < ApplicationController
 
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::VirtualBookPdfFiller.new(@tenant.id, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
+    Delayed::Job.enqueue Jobs::VirtualBookPdfFiller.new( Tenant.current_tenant.id,
+      pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
   end
 
 end

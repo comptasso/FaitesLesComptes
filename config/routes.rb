@@ -3,6 +3,17 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
 
+  # les chemins pour les liens qui sont dans le bandeau en bas de chaque page
+  get "bottom/credit"
+  get "bottom/contact"
+  get "bottom/apropos"
+  get "bottom/manuals"
+
+
+  root :to => 'admin/organisms#index'
+
+
+
   as :user do
     match 'user/confirmation' => 'milia/confirmations#update', :via=>:put,
       :as=>:update_user_confirmation
@@ -14,8 +25,9 @@ Rails.application.routes.draw do
     :registrations => 'milia/registrations',
     :confirmations => 'milia/confirmations',
     :sessions => 'milia/sessions',
-    :passwords => 'milia/passwords',
+    :passwords => 'milia/passwords'
   }
+
 
 
 #  devise_for :users,
@@ -23,17 +35,10 @@ Rails.application.routes.draw do
 #                      :confirmations => "devise_confirmations"
 #                    }
 
-  devise_scope :user do
-    get "devise/sessions/bye"
-    get 'devise/registrations/waitingconfirmation'
-    root :to => "devise/sessions#new"
-  end
-
-  # les chemins pour les liens qui sont dans le bandeau en bas de chaque page
-  get "bottom/credit"
-  get "bottom/contact"
-  get "bottom/apropos"
-  get "bottom/manuals"
+  # devise_scope :user do
+  #   # get "devise/sessions/bye"
+  #   get 'devise/registrations/waitingconfirmation'
+  # end
 
   concern :exportable do
     collection do
