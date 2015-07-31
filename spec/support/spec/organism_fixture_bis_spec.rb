@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
- #  c.filter = {wip:true}
+  #  c.filter = {wip:true}
 end
 
 # fichier destiné à tester les méthodes de support
@@ -14,11 +14,9 @@ describe OrganismFixtureBis do
 
   describe 'create_user'  do
 
-
     before(:each) do
       create_user
     end
-
 
     it 'should create a user' do
       @cu.should be_an_instance_of(User)
@@ -30,7 +28,7 @@ describe OrganismFixtureBis do
 
     it 'les deux sont reliées' do
       @cu.tenants.should == [@t]
-      @t.users.should == [@cu]
+      @t.users.should include @cu
     end
 
   end
@@ -49,13 +47,13 @@ describe OrganismFixtureBis do
     end
 
     it 'les instances existent' , wip:true do
-    @ba.should be_an_instance_of(BankAccount)
-    @ib.should be_an_instance_of(IncomeBook)
-    @od.should be_an_instance_of(OdBook)
-    @c.should be_an_instance_of(Cash)
-    @baca.should be_an_instance_of(Account) # pour baca pour BankAccount Current Account
-    @caca.should be_an_instance_of(Account)  # pour caca pour CashAccount Current Account
-    @n.should be_an_instance_of(Nature)
+      @ba.should be_an_instance_of(BankAccount)
+      @ib.should be_an_instance_of(IncomeBook)
+      @od.should be_an_instance_of(OdBook)
+      @c.should be_an_instance_of(Cash)
+      @baca.should be_an_instance_of(Account) # pour baca pour BankAccount Current Account
+      @caca.should be_an_instance_of(Account)  # pour caca pour CashAccount Current Account
+      @n.should be_an_instance_of(Nature)
     end
 
 

@@ -7,9 +7,6 @@ uw_2:
 uw_3:
   tenant_id: 3
   user_id:  3
-uw_4:
-  tenant_id: 2
-  user_id:  1
-uw_5:
-  tenant_id: 2
-  user_id:  3
+uw_6:
+  tenant_id: 1
+  user_id: 4

@@ -1,5 +1,6 @@
 # coding: utf-8
 
+require 'support/jc_capybara.rb'
 # Module regroupant des méthodes pour générer les éléments minimaux d'organisation
 # A utiliser en mettant include OrganismFixture dans la fichier spec ou on utilisera la méthode
 module OrganismFixtureBis
@@ -7,6 +8,7 @@ module OrganismFixtureBis
   def clean_main_base
     User.delete_all
     Tenant.delete_all
+    Tenant.find_by_sql('DELETE FROM tenants_users;')
   end
 
   def erase_writings
@@ -16,7 +18,7 @@ module OrganismFixtureBis
 
   # TODO refactorisé pour obtenir plus facilement une base saine de tests
   def use_test_organism(status='Association')
-    create_only_user # ce qui crée également le tenant
+    create_user # ce qui crée également le tenant
     @o = Organism.first
     unless @o && @o.status == status
       create_organism(status) # rappel : fait déja un appel à get_organism_instances
@@ -33,42 +35,28 @@ module OrganismFixtureBis
   end
 
   def create_only_user
-    # TODO enlever le clean_main_base en nettoyant au fil des
-    # tests
-    create_only_tenant
-    return if @cu = User.first
-    @cu =  User.new(name:'quidam', :email=>'bonjour@example.com',
-       password:'bonjour1' )
-    @cu.confirmed_at = Time.now
-    @cu.save!
+    @cu = users(:quentin)
   end
 
   def create_only_tenant
-    @t = Tenant.first
-    unless @t
-      @t = Tenant.new(name:'OrganismTest')
-      puts @t.errors.messages unless @t.valid?
-      @t.save!
-    end
-      Tenant.set_current_tenant(@t)
+    @t = tenants(:tenant_1)
+    Tenant.set_current_tenant(@t)
   end
-
 
   def create_user
     create_only_tenant
     create_only_user
-    # @h = @cu.holders.new(status:'owner', tenant_id:@t.id)
-    # puts @h.errors.messages unless @h.valid?
-    # @h.save!
-     @cu
   end
 
+  # A pour effet d'assigner @cu comme current_user, ainsi que @t comme Tenant
   def use_test_user
-    @cu = User.first || create_user
+    create_user
   end
 
   def clean_organism
+      create_only_tenant
       Organism.delete_all
+      Holder.delete_all
       Period.delete_all
       Book.delete_all
       Nature.delete_all
@@ -88,17 +76,24 @@ module OrganismFixtureBis
     create_organism
   end
 
-  # créé un organisme dans la base SCHEMA_TEST
   # l'argument status permet de choisir le type d'organisme
   # Par défaut, une association
   def create_organism(status='Association')
+    use_test_user
     clean_organism
     @o = Organism.create!(title: 'ASSO TEST',
       comment: 'Un commentaire', status:status)
+    create_holder(@cu, @o)
     @p = @o.periods.create!(start_date: Date.today.beginning_of_year,
       close_date: Date.today.end_of_year)
     @p.create_datas
     get_organism_instances
+  end
+
+  def create_holder(user, org, status='owner')
+    h = Holder.new(user_id:user.id, organism_id:org.id, status:status)
+    puts h.errors.messages unless h.valid?
+    h.save!
   end
 
 
@@ -173,10 +168,10 @@ module OrganismFixtureBis
 
   # utile pour les requests qui nécessitent d'être identifié
   # il faut appeler avant create_user (pour pouvoir utiliser login_as('quidam')
-  def login_as(name)
+  def login_as(user, pw = 'passwOrd')
     visit '/'
-    fill_in 'user_email', :with=>'bonjour@example.com'
-    fill_in 'user_password', :with=>'bonjour1'
+    fill_in 'user_email', :with=>user.email
+    fill_in 'user_password', :with=>pw
     click_button 'Valider'
   end
 

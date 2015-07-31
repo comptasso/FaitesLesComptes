@@ -6,20 +6,20 @@ require 'spec_helper'
 describe "Periods" do
   include OrganismFixtureBis
 
-  before(:each) do 
+  before(:each) do
     use_test_user
-    login_as('quidam')
-    use_test_organism 
+    login_as(@cu, 'MonkeyMocha')
+    use_test_organism
     @next_period = find_second_period
     # puts "début #{@next_period.inspect}"
   end
-  
+
   after(:each) do
     # puts @next_period.inspect
-    @next_period.destroy if @next_period 
+    @next_period.destroy if @next_period
     # puts "nombre d exercice #{Period.count}"
   end
-  
+
      it 'deux exercices' do
        @o.should have(2).periods
      end
@@ -30,12 +30,12 @@ describe "Periods" do
      end
 
     it 'change period' do
-   
+
       visit organism_path(@o)
       visit change_organism_period_path(@o, @next_period)
       page.find('a#home').should have_content "#{(Date.today.year) + 1}"
       visit change_organism_period_path(@o, @p)
       page.find('a#home').should have_content "#{Date.today.year}"
     end
-  
-end 
+
+end

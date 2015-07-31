@@ -1,45 +1,45 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
-describe 'Cash Control Requests' do  
+describe 'Cash Control Requests' do
   include OrganismFixtureBis
 
   before(:each) do
     use_test_user
-    use_test_organism 
-    login_as('quidam')
+    use_test_organism
+    login_as(@cu, 'MonkeyMocha')
   end
-  
+
   after(:each) do
     CashControl.delete_all
   end
-  
-  describe 'new cash_control' do  
+
+  describe 'new cash_control' do
     before(:each) do
-      
-      visit new_cash_cash_control_path(@c)  
+
+      visit new_cash_cash_control_path(@c)
     end
 
 
     it "affiche la page new" do
-      current_url.should match new_cash_cash_control_path(@c) 
+      current_url.should match new_cash_cash_control_path(@c)
       page.should have_content("Enregistrement d'un contrôle de la caisse")
       all('form div.form-group').should have(2).elements # date et amount
 
-    end  
+    end
 
     it 'remplir correctement le formulaire cree une nouvelle ligne' do
 
       fill_in 'cash_control[date_picker]', :with=> I18n::l(Date.today, :format=>:date_picker)
       fill_in 'cash_control[amount]', :with=>20.52
       click_button "Enregistrer"
-      current_url.should match cash_cash_controls_path(@c)  
+      current_url.should match cash_cash_controls_path(@c)
       all('tbody tr').should have(1).rows
 
     end
@@ -75,18 +75,18 @@ describe 'Cash Control Requests' do
 
     it 'on peut le choisir dans la vue index pour le modifier' do
       @c.should have(1).cash_controls
-      visit cash_cash_controls_path(@c)  
+      visit cash_cash_controls_path(@c)
       click_link "icon_modifier_cash_control_#{@cc.id.to_s}"
-      current_url.should match(edit_cash_cash_control_path(@c,@cc)) 
+      current_url.should match(edit_cash_cash_control_path(@c,@cc))
     end
 
   end
 
-  describe 'edit' do 
+  describe 'edit' do
 
     before(:each) do
      @c.cash_controls.create!(amount: 20, date: Date.today)
-     @cc = @c.cash_controls.first 
+     @cc = @c.cash_controls.first
    end
 
     it 'On peut changer les deux autres champs et revenir à la vue index' do
@@ -95,7 +95,7 @@ describe 'Cash Control Requests' do
       fill_in 'cash_control[amount]', :with=> 22.12
       click_button 'Enregistrer'
       current_url.should match cash_cash_controls_path(@c)
-      find('tbody tr td:nth-child(2)').text.should == '22,12' 
+      find('tbody tr td:nth-child(2)').text.should == '22,12'
 
     end
 

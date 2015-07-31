@@ -8,14 +8,14 @@ class Admin::BankAccountsController < Admin::ApplicationController
   # GET /bank_accounts.json
   def index
     @bank_accounts = @organism.bank_accounts.to_a
-    
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @bank_accounts }
     end
   end
 
-  
+
   # GET /bank_accounts/new
   # GET /bank_accounts/new.json
   def new
@@ -30,13 +30,13 @@ class Admin::BankAccountsController < Admin::ApplicationController
   # GET /bank_accounts/1/edit
   def edit
     @bank_account = BankAccount.find(params[:id])
-   
+
   end
 
   # POST /bank_accounts
   # POST /bank_accounts.json
   def create
-   
+
     @bank_account = @organism.bank_accounts.new(bank_account_params)
 
     respond_to do |format|
@@ -53,7 +53,7 @@ class Admin::BankAccountsController < Admin::ApplicationController
   # PUT /bank_accounts/1
   # PUT /bank_accounts/1.json
   def update
-   
+
     @bank_account = BankAccount.find(params[:id])
 
     respond_to do |format|
@@ -80,9 +80,9 @@ class Admin::BankAccountsController < Admin::ApplicationController
 #  end
 
   private
-  
+
   def bank_account_params
-    params.require(:bank_account).permit(:number, :bank_name, 
+    params.require(:bank_account).permit(:number, :bank_name,
       :comment, :nickname, :sector_id, :organism_id)
   end
 end

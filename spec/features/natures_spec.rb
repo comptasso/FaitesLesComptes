@@ -7,19 +7,19 @@ RSpec.configure do |c|
   #  c.exclusion_filter = {:js=> true }
 end
 
-describe 'Statistiques' do 
+describe 'Statistiques' do
   include OrganismFixtureBis
-  
+
 
   before(:each) do
     use_test_user
-    login_as('quidam')
-    use_test_organism 
+    login_as(@cu, 'MonkeyMocha')
+    use_test_organism
   end
 
   describe 'stats' do
     before(:each) do
-      visit organism_period_natures_path(@o, @p) 
+      visit organism_period_natures_path(@o, @p)
     end
 
     it 'should be a succes' do
@@ -28,7 +28,7 @@ describe 'Statistiques' do
 
     it 'choisir un filtre et rafraichir réaffiche la page' do
       pending 'en attente de fixtures plus complètes'
-      
+
     end
   end
 end

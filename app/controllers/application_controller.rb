@@ -4,6 +4,7 @@
 # et indiquait s'il y avait un problème
 
 class ApplicationController < ActionController::Base
+  include ModalsHelper
   protect_from_forgery
 
   before_action :authenticate_tenant!
@@ -116,14 +117,17 @@ class ApplicationController < ActionController::Base
       return nil
     end
     if session[:period]
-      @period = @organism.periods.find_by_id(session[:period]) rescue nil
-    else
-      return nil if @organism.periods.empty?
-      @period = @organism.periods.last
-      session[:period] = @period.id
+      @period = @organism.periods.find_by_id(session[:period])
+    end
+    # A ce stade @period peut être nil, on tente donc une autre approche
+    unless @period
+      @period = @organism.guess_period
+      session[:period] = @period.id if @period
     end
     @period
   end
+
+
 
   def current_period?(p)
     p == current_period

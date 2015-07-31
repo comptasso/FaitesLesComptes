@@ -6,7 +6,7 @@ class Admin::OrganismsController < Admin::ApplicationController
   class NomenclatureError < StandardError; end
 
 
-  skip_before_action :find_organism, :current_period, only:[:index, :show, :new]
+  skip_before_action :find_organism, :current_period, only:[:index, :show, :new, :create]
 
   before_filter :owner_only, only:[:destroy]
   after_filter :clear_org_cache, only:[:create, :update, :destroy]

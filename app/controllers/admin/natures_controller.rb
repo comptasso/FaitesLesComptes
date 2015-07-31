@@ -1,13 +1,13 @@
 # -*- encoding : utf-8 -*-
 
 class Admin::NaturesController < Admin::ApplicationController
-  
- 
+
+
 
 
   # GET /natures
   # GET /natures.json
-  def index 
+  def index
     @book = @organism.in_out_books.find(params[:book_id]) rescue @organism.in_out_books.first
     @natures = @book.natures.includes('account').within_period(@period).order(:position)
   end
@@ -16,9 +16,9 @@ class Admin::NaturesController < Admin::ApplicationController
   # transmis sont les suivants :
   #
   #  - id :- id of the row that is moved. This information is set in the id attribute of the TR element.
-  #  - toPosition : new position where row is dropped. 
+  #  - toPosition : new position where row is dropped.
   #  This value will be placed in the indexing column of the row.
-  #  
+  #
   # Plutôt que de faire un render de la table, reorder renvoie ok ou bad_request
   # et laisse javascript mettre à jour la vue, en l'occurence juste réécrire les positions
   # puisque il n'y a que ça de changé.
@@ -31,12 +31,12 @@ class Admin::NaturesController < Admin::ApplicationController
     head :bad_request
   end
 
- 
 
- 
+
+
   # GET /natures/new
   # GET /natures/new.json
-  def new 
+  def new
     @books =  @organism.income_books + @organism.outcome_books
     @nature = @period.natures.new
     @nature.book_id = params[:book_id] || @organism.in_out_books.first.id
@@ -54,10 +54,10 @@ class Admin::NaturesController < Admin::ApplicationController
   # POST /natures.json
   def create
     @nature = @period.natures.new(admin_nature_params)
-
+    # puts @nature.errors.messages unless @nature.valid?
     respond_to do |format|
       if @nature.save
-        format.html { redirect_to admin_organism_period_natures_path(@organism, 
+        format.html { redirect_to admin_organism_period_natures_path(@organism,
             @period, book_id:@nature.book_id), notice: 'La Nature a été créée.' }
         format.json { render json: @nature, status: :created, location: @nature }
       else
@@ -100,16 +100,16 @@ class Admin::NaturesController < Admin::ApplicationController
       format.json { head :ok }
     end
   end
-  
-  
-  private 
-  
+
+
+  private
+
   def admin_nature_params
     params.require(:nature).
       permit(:name, :comment, :account, :account_id, :book_id, :period_id)
   end
-  
- 
+
+
 
 
 end
