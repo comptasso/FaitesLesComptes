@@ -92,6 +92,7 @@ class ApplicationController < ActionController::Base
 #  end
 
 # assigne la variable @organism ou renvoie vers l'index des organismes
+
   def find_organism
     logger.debug 'Dans find_organism de ApplicationController'
     logger.debug "Controller #{params[:controller]}"
@@ -150,30 +151,25 @@ class ApplicationController < ActionController::Base
   end
 
 
-  # se connecte à la base principale
-  # NOSCHEMA : à supprimer ensuite
-#  def use_main_connection
-#    Rails.logger.debug "use_main_connection : Passage à la base principale"
-#   Apartment::Database.switch()
-#  end
 
   # Méthode à appeler dans les controller organisms pour
   # mettre à jour la session lorsqu'il y a un changement d'organisme
   # Récupère également les variables d'instance @organism et @period
   # si cela a du sens.
   # L'argument groom est un organisme.
+  # TODO A déplacer dans le helper de Admin/Organism
   #
   def organism_has_changed?(groom = nil)
     change = false
     # premier cas : il y a un organisme et on vient de changer
-    if groom && session[:org_db] != groom.id
+    if groom && session[:org_id] != groom.id
       logger.debug "Passage à l'organisation #{groom.title}"
       session[:period] = nil
-      session[:org_db]  = groom.id
+      session[:org_id]  = groom.id
       @organism  = groom
-      if @organism && @organism.periods.any?
-        @period = @organism.periods.last
-        session[:period] = @period.id
+      if @organism
+        @period = @organism.guess_period
+        session[:period] = @period.id if @period
       end
       change =true
     end
@@ -182,12 +178,12 @@ class ApplicationController < ActionController::Base
     if groom == nil #: on vient d'arriver ou de supprimer un organisme
       logger.debug "Aucun organismse sélectionné"
       session[:period] = nil
-      session[:org_db] = nil
+      session[:org_id] = nil
       change = true
     end
 
     # troisème cas : on reste dans la même pièce
-    if groom && session[:org_db] == groom.id
+    if groom && session[:org_id] == groom.id
       logger.debug "On reste à l'organisation #{groom.title}"
       @organism = groom
       logger.warn 'pas d\'organisme trouvé par has_changed_organism?' unless @organism

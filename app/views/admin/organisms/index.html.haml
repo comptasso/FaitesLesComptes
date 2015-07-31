@@ -22,7 +22,7 @@
         %td= organ.title
         %td= organ.comment
         %td= organ.status
-        %td= 'ici on doit voir le status du user'
+        %td= holder_status(organ)
         %td
           = icon_to 'afficher.png', organ, title: 'affichage dans la partie saisie'
           = icon_to 'detail.png', [:admin, organ]

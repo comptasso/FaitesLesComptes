@@ -3,7 +3,7 @@
 
 <%= content_for :menu do %>
 <%= icon_to 'detail.png', [:admin,@organism] %>
-<%= icon_to 'navigation90.png', admin_rooms_path %>
+<%= icon_to 'navigation90.png', admin_organisms_path %>
 <% end -%>
 
 <div class="champ">
@@ -12,7 +12,7 @@
   </h3><div class="inner-champ">
 
 <div class="panel-body">
-<%= simple_form_for([:admin,@organism],  
+<%= simple_form_for([:admin,@organism],
   :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form) do |f| %>
 <%= f.error_notification %>
 

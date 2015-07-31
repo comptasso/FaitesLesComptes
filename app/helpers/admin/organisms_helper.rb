@@ -21,5 +21,10 @@ include Admin::MenusHelper
       include_seconds:true)
   end
 
+  # donne le statut de l'utilisateur actuel pour l'organisme en arguement
+  def holder_status(organism)
+    I18n.t(organism.user_status(current_user))
+  end
+
 
 end

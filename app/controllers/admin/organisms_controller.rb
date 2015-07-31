@@ -87,8 +87,6 @@ class Admin::OrganismsController < Admin::ApplicationController
 
   # détruit la pièce ainsi que la base associée.
   #
-  # Le before_filter only_owner instancie @room
-  #
   def destroy
     title = @organism.title
     Rails.logger.info "Destruction de la base #{title}  - méthode organisms_controller#destroy}"

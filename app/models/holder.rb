@@ -1,5 +1,4 @@
 class Holder < ActiveRecord::Base
-  # attr_accessible :room_id, :status, :user_id
 
   acts_as_tenant
   belongs_to :organism

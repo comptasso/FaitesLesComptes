@@ -5,17 +5,17 @@ function MessageAttente(mess) {
 }
 
 jQuery(function () {
-  $('#new_admin_room').submit(function () {
+  $('#new_admin_organism').submit(function () {
     $('.inner-champ').block({ message: '<h4 id="message-d-attente">Juste un instant...</h4>' });
     setTimeout(function () {
                  MessageAttente('Création de votre espace de données...');
-                      }, 
+                      },
                       1000);
-                      
+
     setTimeout(function () {
                  MessageAttente('Création des tables et initialisation...');
-                      }, 
+                      },
                       2000);
-      });      
+      });
 
 });
