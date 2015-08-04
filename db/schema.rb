@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150721092709) do
+ActiveRecord::Schema.define(version: 20150803060417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,14 @@ ActiveRecord::Schema.define(version: 20150721092709) do
   end
 
   add_index "export_pdfs", ["tenant_id"], name: "index_export_pdfs_on_tenant_id", using: :btree
+
+  create_table "flccloner", force: true do |t|
+    t.string  "name"
+    t.integer "old_id"
+    t.integer "new_id"
+    t.integer "old_org_id"
+    t.integer "new_org_id"
+  end
 
   create_table "folios", force: true do |t|
     t.string   "name"
