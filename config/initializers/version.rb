@@ -100,4 +100,5 @@
 # FLCVERSION = '1.12.3RC' # Accès au module Compta même lorsque l'exercice est clos
 # FLCVERSION = '1.12.4RC' # Quand on édite un Transfert, on revient vers le bon mois
 # FLCVERSION = '1.12.5RC' # Les comptes de bilan prennent en compte le report de l'exercice précédent non clos
-FLCVERSION = '1.13.0RC' # Mise en place de piece_number pour les Writings
+# FLCVERSION = '1.13.0RC' # Mise en place de piece_number pour les Writings
+FLCVERSION = '1.13.1RC' # Suppression des tables lines et listings réapparues suite à une fusion 
