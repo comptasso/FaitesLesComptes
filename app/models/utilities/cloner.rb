@@ -25,11 +25,17 @@ module Utilities
       # création du nouvel organisme
       create_new_org(comment)
       # on copie les différentes données des tables
-      clonage
+      new_org_id  = clonage
+      # La création du holder doit se faire dans le controller car c'est lui
+      # qui a la connaissance du user
+
+      new_org = Organism.find(new_org_id)
+      # reconstruire les rubriks
+      new_org.send(:reset_folios)
       # ON efface les données de la table flccloner
-      delete_trace
+      # delete_trace
       # on renvoie le nouvel id
-      # ou un message d'anomalie si besoin
+      return new_org_id
 
 
     end
@@ -65,6 +71,7 @@ module Utilities
         requete << "SELECT #{f}(#{infos.old_org_id}, #{infos.new_org_id});"
         end
       Utilities::Cloner.connection.execute(requete)
+      return infos.new_org_id
 
     end
 
@@ -76,10 +83,15 @@ module Utilities
       Organism.find_by_sql("WITH ret AS
 (INSERT INTO organisms(title, created_at, updated_at,
            status, version, comment, siren, postcode, tenant_id)
-           VALUES ('#{@org_source.title}', '#{@org_source.created_at}'::timestamp,
-           '#{@org_source.updated_at}'::timestamp, '#{@org_source.status}', '#{@org_source.version}',
-            '#{new_comment(comment)}', '#{@org_source.siren}', '#{@org_source.postcode}',
-            '#{@org_source.tenant_id}')
+           VALUES ('#{quote_string @org_source.title}',
+           '#{@org_source.created_at}'::timestamp,
+           '#{@org_source.updated_at}'::timestamp,
+           '#{quote_string @org_source.status}',
+           '#{quote_string @org_source.version}',
+           '#{quote_string new_comment(comment)}',
+           '#{quote_string @org_source.siren}',
+           '#{quote_string @org_source.postcode}',
+           '#{@org_source.tenant_id}')
             RETURNING id )
 INSERT INTO flccloner(name, old_id, new_id, old_org_id, new_org_id)
 VALUES('Organism',
@@ -143,10 +155,11 @@ VALUES('Organism',
 
       create_clone_mask_functions
       create_clone_bank_functions
-      # et enfin les données du bridge adhérent
+      # les données du bridge adhérent
       create_function(sql_copy_n_refs('organism_id',
         %w(bank_account_id cash_id destination_id income_book_id),
         'adherent_bridges', {modele:Adherent::Bridge, income_book_id:Book}))
+      # et enfin le holder
 
     end
 
@@ -179,7 +192,10 @@ VALUES('Organism',
         'adherent_reglements', modele:Adherent::Reglement))
     end
 
-
+    def quote_string(s)
+      return unless s
+      s.gsub(/\\/, '\&\&').gsub(/'/, "''")
+    end
 
 
     def self.create_function(sql)
@@ -336,7 +352,7 @@ $BODY$
     def self.value_to_insert(champ_id, champ = nil)
       raise ArgumentError, 'L\'argument doit être de la forme wwww_id' unless
       champ_id =~ /.*_id$/
-      champ ||= champ_id[0..-4].capitalize
+      champ =  champ_id[0..-4].capitalize if champ.blank?
       "(SELECT flccloner.new_id FROM flccloner WHERE name = '#{champ}'
            AND flccloner.old_id = (r).#{champ_id}
            AND old_org_id = from_id AND new_org_id = to_id)"

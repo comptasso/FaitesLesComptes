@@ -20,7 +20,7 @@ after(:each) do
 end
 
 it 'clone_organism crée un nouvel organisme' do
-  expect {@cl.clone_organism('testclone')}.to change{Organism.count}.by(1)
+  expect {@cl.clone_organism("aujourd'hui")}.to change{Organism.count}.by(1)
 end
 
 it 'clone copie les secteurs' do
@@ -49,9 +49,9 @@ it 'les secteurs sont identiques' do
   end
 end
 
-it 'cet organisme a le même user'
-
-it 'cet organisme a le même holder'
+it 'cet organisme a le même user avec le même statut' do
+  @norg.user_status(@cu).should == @o.user_status(@cu)
+end
 
 it 'toutes les données sont recopiées à l identique'
 
