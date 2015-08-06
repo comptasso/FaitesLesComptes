@@ -135,11 +135,14 @@ VALUES('Organism',
       # avec un seul champ dépendant
       create_function(sql_copy_one_ref('bank_account_id', 'bank_extracts'))
       create_function(sql_copy_one_ref('cash_id', 'cash_controls'))
-      create_function(sql_copy_one_ref('book_id', 'natures'))
 
       # la partie comptabilité avec les comptes
-      create_function(sql_copy_n_refs('period_id', ['sector_id'], 'accounts'))
-      # les écritures
+      create_function(sql_copy_n_refs('period_id',
+          ['sector_id', 'accountable_id'], 'accounts',
+           :polymorphic=>'accountable_id'))
+      # les natures
+      create_function(sql_copy_n_refs('book_id', %w(period_id account_id), 'natures'))
+      # puis les écritures
       create_function(sql_copy_n_refs('book_id', ['bridge_id'], 'writings',
          bridge_id:Adherent::Member))
       # les remises de chèques (attention à l'ordre)
@@ -225,15 +228,10 @@ VALUES('Organism',
     # champ (champ_id) d'une autre table. La différence avec la méthode
     # précédente est juste que organism_id n'est pas le champ_id par défaut.
     #
-    # On doit préciser le modèle sous-jacent
-    # à la table si le programme ne sait pas le déduire par l'option
-    # {:modele=>NomDuModele}.
+    # Voir les commentaires de sql_copy_n_refs pour les arguments table et
+    # les options
     #
     # Exemple d'utilisation : sql_copy_one_ref('cash_id', 'cash_controls')
-    #
-    # La méthode renvoie un texte sql qui peut alors être utilisé pour créer
-    # dans la base la fonction de recopie par un appel de type
-    # Organism.find_by_sql(la requête renvoyée).
     #
     def self.sql_copy_one_ref(champ_id, table, options={})
       sql_copy_n_refs(champ_id, [], table, options)
@@ -299,7 +297,11 @@ vous devez le fournir en deuxième argument'
       # flc_cloner
       values = champ_ids.collect do |cid|
         mod = options[cid.to_sym].to_s
-        value_to_insert(cid, mod)
+        if options[:polymorphic] == cid
+          value_to_insert(cid, mod, polymorphic:true)
+        else
+          value_to_insert(cid, mod)
+        end
       end.join(', ')
 
 
@@ -349,13 +351,33 @@ $BODY$
     # peut être déduit de champ_id. C'est notamment le cas pour
     # la table des Writing dont le champ bridge_id fait référence à
     # Adherent::Member
-    def self.value_to_insert(champ_id, champ = nil)
+    #
+    # On peut précisier via le hash options si le champ est polymorphique
+    def self.value_to_insert(champ_id, champ = nil, options={})
       raise ArgumentError, 'L\'argument doit être de la forme wwww_id' unless
       champ_id =~ /.*_id$/
-      champ =  champ_id[0..-4].capitalize if champ.blank?
-      "(SELECT flccloner.new_id FROM flccloner WHERE name = '#{champ}'
+      champname = champ_to_search(champ_id, champ, options)
+      "(SELECT flccloner.new_id FROM flccloner
+           WHERE name = #{champname}
            AND flccloner.old_id = (r).#{champ_id}
            AND old_org_id = from_id AND new_org_id = to_id)"
+    end
+
+    # trouve le nom du champ à rechercher dans la table de correspondance
+    # des id (flccloner).
+    # Si le champ est polymorphique (cas dans la table Account des
+    # BankAccount et Cash (ce qui donne accountable_type et accountable_id)
+    def self.champ_to_search(champ_id, champ, options={})
+
+      if options[:polymorphic]
+        s =champ_id[0..-4]+'_type'
+        s = "(r).#{s}"
+      else
+        s = champ.blank? ? champ_id[0..-4].capitalize : champ
+        s = "'#{s}'"
+      end
+      return s
+
     end
 
   end

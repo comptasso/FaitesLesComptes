@@ -49,8 +49,37 @@ it 'les secteurs sont identiques' do
   end
 end
 
-it 'cet organisme a le même user avec le même statut' do
-  @norg.user_status(@cu).should == @o.user_status(@cu)
+it 'les natures sont identiques pour les champs conservés' do
+  expect(@o.natures.count).to eq(@norg.natures(true).count)
+  champs_identiques = Nature.column_names.reject do |f|
+    f == 'id' || f == 'book_id' || f == 'period_id' || f == 'account_id'
+  end
+  @norg.in_out_books.each do |b|
+    oldbook = @o.books.where('title = ?', b.title).first
+
+  b.natures.each do |r|
+    oldnat = oldbook.natures.where('name = ?', r.name).first
+    champs_identiques.each do |champ|
+      expect(r.send(champ)).to eq oldnat.send(champ)
+    end
+  end
+  end
+end
+
+it 'la banque et le compte de la banque sont disponibles' do
+  nba = @norg.bank_accounts.first
+  np = @norg.periods.first
+  expect(nba.number).to eq(@ba.number)
+  expect(nba.current_account(np)).to eq @baca
+end
+
+it 'la caisse et le compte de la caisse sont disponibles' do
+  nca = @norg.cashes.first
+  np = @norg.periods.first
+  puts np.inspect
+  puts nca.current_account(np).inspect
+  expect(nca.name).to eq @c.name
+  expect(nca.current_account(np)).to eq @caca
 end
 
 it 'toutes les données sont recopiées à l identique'
