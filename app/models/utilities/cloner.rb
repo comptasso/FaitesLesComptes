@@ -61,7 +61,7 @@ module Utilities
       copy_nomenclatures copy_adherent_payments copy_adherent_coords
       copy_adherent_adhesions copy_adherent_reglements
       copy_bank_accounts copy_cashes copy_bank_extracts copy_cash_controls
-      copy_books copy_destinations copy_natures copy_accounts
+      copy_books copy_destinations copy_accounts copy_natures
       copy_writings copy_check_deposits copy_compta_lines copy_imported_bels
       copy_masks copy_subscriptions copy_adherent_bridges)
 
@@ -150,7 +150,7 @@ VALUES('Organism',
         ['writing_id'], 'check_deposits'))
       # les compta_lines
       create_function(sql_copy_n_refs('writing_id',
-        %w(nature_id destination_id account_id writing_id), 'compta_lines'))
+        %w(nature_id destination_id account_id), 'compta_lines'))
       # et enfin les folios
       create_function(sql_copy_n_refs('nomenclature_id',
         %w(sector_id), 'folios'))

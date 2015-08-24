@@ -160,7 +160,7 @@ class Compta::Balance < ActiveRecord::Base
             fin.fin_debit AS movement_debit,
             fin.fin_credit AS movement_credit, fin.no_empty
  FROM
-accounts,
+ accounts,
 
 (SELECT accounts.id AS acco_id, accounts.number AS num, COALESCE(deb_debit, 0.00) AS deb_debit, COALESCE(deb_credit, 0.00) AS deb_credit
  FROM accounts LEFT JOIN

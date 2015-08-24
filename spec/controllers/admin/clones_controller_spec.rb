@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'support/spec_controller_helper'
 
 describe Admin::ClonesController do
   include SpecControllerHelper
@@ -7,23 +8,23 @@ describe Admin::ClonesController do
     minimal_instances
     sign_in(@cu)
     @r.stub('title=').and_return @o.title
-    @r.stub('status=').and_return @o.status 
-    
+    @r.stub('status=').and_return @o.status
+
   end
-  
+
   context 'le current_user est le owner' do
 
     before(:each) {@controller.stub(:owner_only).and_return true}
- 
+
     describe "GET 'new'" do
-      it "returns http success" do 
+      it "returns http success" do
         get 'new', {}, valid_session
         response.should be_success
       end
     end
 
-    describe "GET 'create'" do 
-    
+    describe "GET 'create'" do
+
       before(:each) do
         @o.stub(:room).and_return @r
         @comment = 'un test de création de clone'
@@ -55,21 +56,21 @@ describe Admin::ClonesController do
 
 
     end
-  
+
   end
-  
+
   context 'quand le user n est pas le owner' do
-    
+
     before(:each) do
       @o.stub(:room).and_return @r
       @r.stub(:owner).and_return(User.new) # donc évidemment pas le même que @cu
     end
-    
+
     it 'redirige vers admin_rooms_url' do
       get 'new', {}, valid_session
       response.should redirect_to admin_rooms_url
     end
-    
+
   end
 
 end

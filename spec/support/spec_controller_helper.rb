@@ -51,7 +51,7 @@ module SpecControllerHelper
     User.stub(:find_by_id).with(@cu.id).and_return @cu
     Period.stub(:find_by_id).with(@p.id).and_return @p
 
-
+    @o.stub(:guess_period).and_return(@p)
     @o.stub_chain(:periods, :find_by_id).and_return @p
     @o.stub_chain(:periods, :order, :last).and_return(@p)
     @o.stub_chain(:periods, :empty?).and_return false

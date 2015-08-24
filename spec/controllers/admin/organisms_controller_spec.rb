@@ -18,7 +18,7 @@ describe Admin::OrganismsController do
   describe 'GET show' do
 
     it 'redirige vers la création d un exercice si pas de period' do
-      @controller.stub(:current_period).and_return nil
+      @o.stub(:guess_period).and_return nil
       get :show, {id:'1'}, valid_session
       response.should redirect_to new_admin_organism_period_url(@o)
     end

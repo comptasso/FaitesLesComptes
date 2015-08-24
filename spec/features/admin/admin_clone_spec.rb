@@ -16,12 +16,12 @@ describe 'resquest clone' do
     use_test_user
     login_as(@cu, 'MonkeyMocha')
     use_test_organism
-    visit admin_room_path(@r)
+    visit admin_organism_path(@o)
   end
 
   after(:each) do
     # on efface toutes les rooms autres que celle d'origine
-    Room.all.reject {|r| r.id == @r.id}.each {|ro| ro.destroy}
+    Organism.all.reject {|o| o.id == @o.id}.each {|o| o.destroy}
   end
 
 
@@ -34,11 +34,11 @@ describe 'resquest clone' do
     end
 
     it 'remplir la vue et cliquer sur le bouton crée une nouvelle base', js:true do
-      nb_rooms = @cu.rooms.count
+      nb_organisms = @cu.organisms.count
       visit new_admin_clone_path
       fill_in 'organism[comment]', :with=>'test clonage'
       click_button 'clone_button'
-      @cu.rooms(true).count.should == (nb_rooms + 1)
+      @cu.organisms(true).count.should == (nb_organisms + 1)
     end
 
 
