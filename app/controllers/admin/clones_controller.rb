@@ -20,15 +20,13 @@ class Admin::ClonesController < Admin::ApplicationController
 
   # @organism est fourni par le before_filter find_organism
   def create
-    r = @organism.room
-    r.title, r.status = @organism.title, @organism.status
-    comment = params[:organism][:comment]
-    if r.clone_db(comment)
+    ucl = Utilities::Cloner.create(:old_org_id=>@organism.id)
+    if ucl && ucl.clone_organism(admin_cloner_params[:comment])
       flash[:notice] = 'Un clone de votre base a été créé'
     else
       flash[:alert] = 'Une erreur s\'est produite lors de la création du clone de votre base'
     end
-    redirect_to admin_rooms_url
+    redirect_to admin_organisms_url
   end
 
   protected
@@ -40,5 +38,9 @@ class Admin::ClonesController < Admin::ApplicationController
       redirect_to admin_organisms_url
     end
 
+  end
+
+  def admin_cloner_params
+    params.require(:organism).permit(:comment)
   end
 end
