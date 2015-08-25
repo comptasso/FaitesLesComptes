@@ -32,7 +32,7 @@ describe OrganismsController do
     context 'en l\'absence d\'exercice' do
 
       before(:each) do
-        @o.stub(:periods).and_return([])
+        @controller.stub(:current_period).and_return nil
       end
 
       it 'remplit un flash d alerte' do

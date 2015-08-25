@@ -11,10 +11,6 @@ end
 describe 'Session' do
   include OrganismFixtureBis
 
-  before(:each) do
-  #  clean_main_base
-  end
-
   context 'non logge' do
 
     it 'non loggé, renvoie sur sign_in'  do
@@ -30,6 +26,10 @@ describe 'Session' do
   end
 
   context 'loggé'  do
+
+    before(:each) do
+      Organism.find_each {|o| o.destroy }
+    end
 
     it 'sans organisme, renvoie sur la page de création' do
       create_only_user

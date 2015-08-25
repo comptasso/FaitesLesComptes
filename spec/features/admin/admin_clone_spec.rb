@@ -33,7 +33,7 @@ describe 'resquest clone' do
       current_url.should match new_admin_clone_path
     end
 
-    it 'remplir la vue et cliquer sur le bouton crée une nouvelle base', js:true do
+    it 'remplir la vue et cliquer sur le bouton crée une nouvelle base' do
       nb_organisms = @cu.organisms.count
       visit new_admin_clone_path
       fill_in 'organism[comment]', :with=>'test clonage'

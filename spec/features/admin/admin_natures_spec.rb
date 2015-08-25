@@ -115,9 +115,6 @@ describe 'vue natures index' do
     end
 
     it 'on est dans la vue nature', wip:true do
-      puts @o.inspect
-      puts @p.inspect
-      puts @np.inspect
       page.should have_content('Exercice 2016')
       page.find('h3').should have_content('Natures du livre')
       click_link('Exercice 2016')
@@ -126,7 +123,7 @@ describe 'vue natures index' do
 
     it 'reaffiche correctement la vue index si on change d exercice', wip:true do
       click_link @np.long_exercice
-      page.all('h3').each {|h| puts h.text }
+      # page.all('h3').each {|h| puts h.text }
       page.find('h3').should have_content('Natures du livre Dépenses')
     end
   end

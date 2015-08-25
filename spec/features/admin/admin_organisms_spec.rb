@@ -37,7 +37,9 @@ describe "admin organisms" do
       end
 
       after(:each) do
-        Organism.order('created_at ASC').last.destroy if Organism.count > 1
+        if Organism.count > 1
+          Organism.order('created_at ASC').offset(1).each {|o| o.destroy}
+        end
       end
 
       it 'cliquer sur le bouton crée un organisme'  do
@@ -51,8 +53,8 @@ describe "admin organisms" do
 
       it "et met à jour le cache" do
         click_button 'Créer l\'organisme'
-        nb = Organism.count # puis plus 2 pour Liste des organismes et le divider
-        page.all('#admin_organisms_menu ul li a').should have(nb+2).elements
+        nb = Organism.count # puis plus 1 pour Liste des organismes
+        page.all('#admin_organisms_menu ul li a').should have(nb+1).elements
         page.first('#admin_organisms_menu ul li a').text.should == 'Liste des organismes'
         page.find('#admin_organisms_menu ul li:last a').text.should == 'Mon association'
       end

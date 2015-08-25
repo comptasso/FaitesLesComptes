@@ -33,7 +33,7 @@ module Utilities
       # reconstruire les rubriks
       new_org.send(:reset_folios)
       # ON efface les données de la table flccloner
-      # delete_trace
+      delete_trace
       # on renvoie le nouvel id
       return new_org_id
 

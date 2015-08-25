@@ -21,7 +21,10 @@ class Admin::ClonesController < Admin::ApplicationController
   # @organism est fourni par le before_filter find_organism
   def create
     ucl = Utilities::Cloner.create(:old_org_id=>@organism.id)
-    if ucl && ucl.clone_organism(admin_cloner_params[:comment])
+    if ucl && new_id = ucl.clone_organism(admin_cloner_params[:comment])
+      # l'organisme est créé. Reste à créer son holder.
+      Holder.create(user_id:current_user.id, organism_id:new_id,
+        status:'owner') # car seul le owner est habilité (voir le before_filter)
       flash[:notice] = 'Un clone de votre base a été créé'
     else
       flash[:alert] = 'Une erreur s\'est produite lors de la création du clone de votre base'
@@ -31,7 +34,7 @@ class Admin::ClonesController < Admin::ApplicationController
 
   protected
 
-  # l action destroy ne sont permises que si le current_user est le owner
+  # les actions ne sont permises que si le current_user est le owner
   def owner_only
     unless current_user == @organism.owner
       flash[:alert] = "Vous ne pouvez executer cette action car vous n'êtes pas le propriétaire de la base"
