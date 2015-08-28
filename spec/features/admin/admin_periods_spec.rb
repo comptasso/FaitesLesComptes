@@ -11,13 +11,10 @@ describe "Periods" do
     login_as(@cu, 'MonkeyMocha')
     use_test_organism
     @next_period = find_second_period
-    # puts "début #{@next_period.inspect}"
   end
 
   after(:each) do
-    # puts @next_period.inspect
     @next_period.destroy if @next_period
-    # puts "nombre d exercice #{Period.count}"
   end
 
      it 'deux exercices' do

@@ -143,6 +143,9 @@ module OrganismFixtureBis
   end
 
   def create_second_period
+    # Certains tests semblent effacer les folios donc on ajoute
+    # cette ligne pour que la construction de second_period n'échoue pas
+    @o.send(:reset_folios) if @o.nomenclature.folios.empty?
     p = @o.periods.create!(:start_date=>(@p.close_date + 1),
        close_date:(@p.close_date.years_since(1)))
     p.create_datas

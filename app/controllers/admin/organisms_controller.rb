@@ -30,7 +30,7 @@ class Admin::OrganismsController < Admin::ApplicationController
 
  # GET /organisms/new
   def new
-    redirect to admin_organisms_path unless current_user.allowed_to_create_organism?
+    redirect_to admin_organisms_path unless current_user.allowed_to_create_organism?
     title = current_user.tenants.first.name rescue 'Inconnu'
     @organism = Organism.new(title:title)
   end

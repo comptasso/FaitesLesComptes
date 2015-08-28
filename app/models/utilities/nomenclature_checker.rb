@@ -43,8 +43,10 @@ class Utilities::NomenclatureChecker
     validity
   end
 
-  # fournir une méthode de classe pour simplifier l'appel à cette logique
+  # Fournit une méthode de classe pour simplifier l'appel à cette logique
   # dans le modèle Period.
+  # new(exercice...) crée un NomenclatureChecker à partir de la nomenclature
+  # et va le contrôler avec period_coherent? pour l'exercice.
   def self.period_coherent?(exercice)
     new(exercice.organism.nomenclature).period_coherent?(exercice)
   end

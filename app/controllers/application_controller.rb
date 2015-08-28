@@ -56,7 +56,10 @@ class ApplicationController < ActionController::Base
   # bottom_action est une actions qui relève de bottom_controller, controller
   # appelé par les liens en bas de page (manuels, contact, ...)
   def milia_or_bottom_action?
-    params[:controller] =~ /^milia/ || params[:controller] =~ /^bottom/ || params[:controller] =~ /^devise/
+    params[:controller] =~ /^milia/ ||
+      params[:controller] =~ /^bottom/ ||
+      params[:controller] =~ /^devise/ ||
+      params[:controller] =~ /^home/
   end
 
   # on est dans une action du gem devise si on n'est pas loggé ou

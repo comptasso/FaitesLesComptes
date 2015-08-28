@@ -12,28 +12,6 @@ end
 describe 'vue bank_accounts index' do
   include OrganismFixtureBis
 
-  # describe 'connexion', wip:true do
-
-  #   before(:each) do
-  #     use_test_user
-  #   end
-
-  #   it 'est connecté' do
-  #     puts Tenant.current_tenant.inspect
-  #     puts @cu.inspect
-  #     @cu.tenants.each {|t| puts t.id}
-  #     login_as(@cu, 'MonkeyMocha')
-  #     page.should have_content 'Liste des organismes'
-  #   end
-
-
-
-
-  # end
-
-describe 'le vrai test' do
-
-
   before(:each) do
     use_test_user
     login_as(@cu, 'MonkeyMocha')
@@ -100,7 +78,6 @@ describe 'le vrai test' do
     end
 
 
-
     it 'on peut le choisir dans la vue index pour le modifier'  do
       visit admin_organism_bank_accounts_path(@o)
 
@@ -119,12 +96,9 @@ describe 'le vrai test' do
       fill_in 'bank_account[bank_name]', :with=>'DebiX'
       click_button 'Enregistrer'
       current_url.should match admin_organism_bank_accounts_path(@o)
-      first('tbody tr td').text.should == 'DebiX'
-
-
+      find('tbody tr:last td:first').text.should == 'DebiX'
     end
 
   end
 
-end
 end

@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   get "bottom/apropos"
   get "bottom/manuals"
 
-
-  root :to => 'admin/organisms#index'
+  get 'home/index'
+  root :to => 'home#index'
 
 
 

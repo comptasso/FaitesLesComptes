@@ -14,7 +14,7 @@ describe 'Session' do
   context 'non logge' do
 
     it 'non loggé, renvoie sur sign_in'  do
-      visit '/admin/rooms'
+      visit '/admin/organisms'
       page.find('h3').should have_content 'Entrée'
     end
 
@@ -38,27 +38,21 @@ describe 'Session' do
     end
 
     it 'avec un organisme, renvoie sur le dashboard' do
-      create_user
-      create_organism
+      use_test_organism
       login_as(@cu, 'MonkeyMocha')
+      @cu.stub(:organisms).and_return [@o]
       current_url.should match(/http:\/\/www.example.com\/organisms\/\d*/)
     end
 
     it 'avec plusieures organisme, renvoie sur la liste' do
-      create_user
-      create_organism
+      use_test_organism
       # plutôt que de créer réellement plusieurs bases, on fait un stub
       ApplicationController.any_instance.stub(:current_user).and_return @cu
-
-      @cu.stub(:rooms).and_return(@ar = double(Arel, count:2))
       @ar.stub(:includes).and_return(@arr = double(Arel))
-      @arr.stub(:references).and_return([@r, @r])
-      @arr.stub(:collect).and_return([:same_migration, :same_migration])
       # nécessaire pour l'affichage du menu des organismes
-      @cu.stub(:organisms_with_room).and_return([{organism:@o, room:@r}, {organism:@o, room:@r}])
+      @cu.stub(:organisms).and_return([@o, @o])
       login_as(@cu, 'MonkeyMocha')
       page.find('h3').should have_content 'Liste des organismes'
-
     end
 
   end
@@ -143,8 +137,8 @@ describe 'Session' do
 
       it 'il est loggé' do
         visit user_confirmation_path(confirmation_token: @raw)
-        page.find('.notice').should have_content 'Félicitations'
-        page.find('h3').text.should == 'Nouvel organisme'
+        page.find('.notice').should have_content 'Votre compte a été validé'
+        page.find('h3').text.should have_content 'Entrée'
       end
 
     end
