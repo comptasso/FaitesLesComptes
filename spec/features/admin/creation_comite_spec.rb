@@ -28,7 +28,7 @@ describe "creation d un comité" do
       end
 
       after(:each) do
-        Organism.order('created_at ASC').last.destroy if Organism.count > 1
+        Organism.order('created_at ASC').offset(1).each {|o| o.destroy}
       end
 
       it 'cliquer sur le bouton crée un organisme'  do

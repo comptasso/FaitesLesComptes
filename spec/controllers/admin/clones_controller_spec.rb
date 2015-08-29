@@ -81,6 +81,10 @@ describe Admin::ClonesController do
       @o.stub(:owner).and_return(User.new) # donc évidemment pas le même que @cu
     end
 
+    after(:each) do
+      @o.stub(:owner).and_return(@cu)
+    end
+
     it 'redirige vers admin_rooms_url' do
       get 'new', {}, valid_session
       response.should redirect_to admin_organisms_url

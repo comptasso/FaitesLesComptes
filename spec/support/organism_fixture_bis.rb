@@ -16,12 +16,26 @@ module OrganismFixtureBis
     ComptaLine.delete_all
   end
 
-  # TODO refactorisé pour obtenir plus facilement une base saine de tests
+  # TODO voir a mieux détruire les organismes créés pendant les tests pour
+  # éviter d'avoir besoin de cette méthode.
+  def erase_holders
+    ho = @cu.holders.where('organism_id = ?', @o.id).first
+    @cu.holders.offset(1).each {|h| h.destroy if h.id != ho.id}
+  end
+
+  # TODO voir à mieux gérer les tests sur la nomenclature et les folios
+  # pour éviter d'avoir besoin de cette méthode
+  def rebuild_folios
+    @o.send(:reset_folios)
+  end
+
+  # TODO refactoriser pour obtenir plus facilement une base saine de tests
   def use_test_organism(status='Association')
     create_user # ce qui crée également le tenant
     @o = Organism.first
     unless @o && @o.status == status
-      create_organism(status) # rappel : fait déja un appel à get_organism_instances
+      create_organism(status)
+      # return car create_organismfait déja un appel à get_organism_instances
       return
     end
     @p = @o.periods.first
@@ -29,6 +43,8 @@ module OrganismFixtureBis
       create_organism
       return
     end
+    erase_holders if @cu.holders.count > 1
+    rebuild_folios if @o.nomenclature.folios.empty?
     erase_writings
     get_organism_instances
     @o

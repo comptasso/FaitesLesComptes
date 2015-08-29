@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get "bottom/contact"
   get "bottom/apropos"
   get "bottom/manuals"
-
+  get 'home/welcome', as: :welcome
   get 'home/index'
   root :to => 'home#index'
 
@@ -19,8 +19,6 @@ Rails.application.routes.draw do
       :as=>:update_user_confirmation
   end
 
-  mount Adherent::Engine, at: "/adherent"
-
   devise_for :users, :controllers =>{
     :registrations => 'milia/registrations',
     :confirmations => 'milia/confirmations',
@@ -28,7 +26,7 @@ Rails.application.routes.draw do
     :passwords => 'milia/passwords'
   }
 
-
+  mount Adherent::Engine, at: "/adherent"
 
 #  devise_for :users,
 #    :controllers => { :registrations => "devise_registrations",

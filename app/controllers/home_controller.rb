@@ -2,11 +2,7 @@ class HomeController < ApplicationController
 
   skip_before_action :authenticate_tenant!, :only=>[:index]
 
-  def index
-    if user_signed_in?
-      # pour être certain qu'un flash s'affiche si il y a eu un précédent
-      # message
-      flash[:notice] = flash[:error] unless flash[:error].blank?
+  def welcome
       session[:org_id] = nil
       case current_user.organisms.count
       when 0
@@ -19,6 +15,16 @@ class HomeController < ApplicationController
       else
         redirect_to admin_organisms_url
       end
+
+  end
+
+
+  def index
+    if user_signed_in?
+      # pour être certain qu'un flash s'affiche si il y a eu un précédent
+      # message
+      flash[:notice] = flash[:error] unless flash[:error].blank?
+      redirect_to welcome_url
     else
       redirect_to new_user_session_path
     end

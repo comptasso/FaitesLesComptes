@@ -59,31 +59,24 @@ describe 'vue bank_accounts index' do
       it  'le number est obligatoire' do
         visit new_admin_organism_bank_account_path(@o)
         fill_in 'bank_account[bank_name]', :with=>@ba.bank_name
-
         click_button "Créer le compte" # le compte'
         page.should have_content('obligatoire')
       end
 
     end
 
-
   end
 
   describe 'index'    do
-
 
     it 'la vue index est affichée'   do
       visit admin_organism_bank_accounts_path(@o)
       current_url.should match(admin_organism_bank_accounts_path(@o))
     end
 
-
     it 'on peut le choisir dans la vue index pour le modifier'  do
       visit admin_organism_bank_accounts_path(@o)
-
-      # save_and_open_page
       click_link "icon_modifier_bank_account_#{@ba.id.to_s}"
-      # save_and_open_page
       current_url.should match(edit_admin_organism_bank_account_path(@o,@ba))
     end
 

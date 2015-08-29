@@ -37,9 +37,7 @@ describe "admin organisms" do
       end
 
       after(:each) do
-        if Organism.count > 1
-          Organism.order('created_at ASC').offset(1).each {|o| o.destroy}
-        end
+        Organism.order('created_at ASC').offset(1).each {|o| o.destroy}
       end
 
       it 'cliquer sur le bouton crée un organisme'  do
