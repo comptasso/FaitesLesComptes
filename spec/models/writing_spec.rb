@@ -357,13 +357,13 @@ describe Writing do
         end
 
         it 'la numérotation est continue' do
-          Writing.should_receive(:last_continuous_id).and_return(100)
+          @w.should_receive(:last_continuous_id).and_return(100)
           @w.lock
           @w.continuous_id.should == 101
         end
 
         it 'attribuer un numéro non continu rend invalide'  do
-          Writing.should_receive(:last_continuous_id).at_least(1).times.and_return(100)
+          @w.stub(:last_continuous_id).and_return(100)
           @w.continuous_id = 50
           @w.should_not be_valid
 
@@ -374,7 +374,7 @@ describe Writing do
       describe 'support' do
 
         it 'support_line renoie la ligne de compte 5 de contrepartie' do
-          @w.support_line.account.number.should match /^5/
+          @w.support_line.account.number.should match(/^5/)
         end
 
         it 'retourne le long_name du support' do

@@ -168,7 +168,7 @@ class Writing < ActiveRecord::Base
   #
   def lock
     Writing.transaction do
-      cid = Writing.last_continuous_id
+      cid = last_continuous_id
       compta_lines.each { |cl| cl.send(:verrouillage) } # utilisation volontaire
       # d'une méthode protected car verrouillage ne devrait pas être appelée directement
       self.continuous_id = cid.succ
@@ -232,6 +232,9 @@ class Writing < ActiveRecord::Base
   end
 
 
+  def last_continuous_id
+    book.organism.writings.maximum(:continuous_id) || 0
+  end
 
 
   protected
@@ -254,9 +257,6 @@ class Writing < ActiveRecord::Base
     self.piece_number ||= b.organism.next_piece_number
   end
 
-  def self.last_continuous_id
-    Writing.maximum(:continuous_id) || 0
-  end
 
   # méthode de validation utilisée pour vérifier que les écritures sur le
   # journal d'A Nouveau sont passées au premier jour de l'exercice

@@ -27,20 +27,17 @@ describe 'Session' do
 
   context 'loggé'  do
 
-    before(:each) do
-      Organism.find_each {|o| o.destroy }
-    end
-
-    it 'sans organisme, renvoie sur la page de création' do
+    it 'sans organisme, renvoie sur la page de création', wip:true do
       create_only_user
+      ApplicationController.any_instance.stub(:current_user).and_return @cu
+      @cu.stub(:organisms).and_return []
       login_as(@cu, 'MonkeyMocha')
-      page.find('h3').should have_content 'Nouvel organisme'
+      current_url.should == new_admin_organism_url
     end
 
     it 'avec un organisme, renvoie sur le dashboard' do
       use_test_organism
       login_as(@cu, 'MonkeyMocha')
-      @cu.stub(:organisms).and_return [@o]
       current_url.should match(/http:\/\/www.example.com\/organisms\/\d*/)
     end
 
@@ -48,7 +45,6 @@ describe 'Session' do
       use_test_organism
       # plutôt que de créer réellement plusieurs bases, on fait un stub
       ApplicationController.any_instance.stub(:current_user).and_return @cu
-      @ar.stub(:includes).and_return(@arr = double(Arel))
       # nécessaire pour l'affichage du menu des organismes
       @cu.stub(:organisms).and_return([@o, @o])
       login_as(@cu, 'MonkeyMocha')
@@ -63,14 +59,15 @@ describe 'Session' do
       User.delete_all
     end
 
-    it 'permet de créer un compte et renvoie sur la page merci de votre inscription' do
+    it 'permet de créer un compte et renvoie sur la page merci de votre inscription', wip:true do
       visit '/users/sign_up'
       fill_in 'user_name', with:'test'
       fill_in 'user_email', :with=>'test@example.com'
       fill_in 'user_password', :with=>'testtest'
       fill_in 'user_password_confirmation', :with=>'testtest'
       click_button 'S\'inscrire'
-      page.find('h3').should have_content 'Merci pour votre inscription et à très bientôt'
+      page.find('.alert').
+        should have_content('Un message contenant un lien de confirmation a été envoyé')
     end
 
     it 'envoie un mail par UserObserver' do
