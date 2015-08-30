@@ -9,7 +9,5 @@ class Compta::NomenclaturesController < Compta::ApplicationController
     @nomenclature = @organism.nomenclature
   end
 
-
- 
 end
 

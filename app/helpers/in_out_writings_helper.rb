@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-
+require 'options_for_association_select'
 
 module InOutWritingsHelper
 

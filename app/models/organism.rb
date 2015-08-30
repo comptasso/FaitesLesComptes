@@ -289,8 +289,7 @@ class Organism < ActiveRecord::Base
   #
   # utilisé lors de la mise au point de ces classes
   def reset_folios
-    Folio.delete_all
-    Rubrik.delete_all
+    nomenclature.folios.find_each {|f| f.destroy}
     path = File.join Rails.root, 'lib', 'parametres', status_class.downcase, 'nomenclature.yml'
     nomenclature.read_and_fill_folios(path)
   end
