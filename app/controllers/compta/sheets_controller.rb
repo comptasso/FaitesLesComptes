@@ -128,7 +128,7 @@ class Compta::SheetsController < Compta::ApplicationController
   # remplies avec des valeurs relevant de l'exercice voulu
   # en clair : un seul exercice et le bon
   def period_adhoc?
-    rsu = ::Rubrik.select(:period_id).uniq
+    rsu = @nomenclature.rubriks.select(:period_id).uniq
     rsu.count == 1 && rsu.to_a.first.period_id == @period.id
   end
 
