@@ -1,6 +1,15 @@
 <ul class="nav navbar-nav" id="main_nav">
 
-  <li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> " id="admin_organisms_menu">
+<% if current_user.role == 'expert' %>
+  <li class="dropdown <%= 'active' if controller.controller_name.in? ['rooms']   %>" >
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">ESPACES<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+      <li><%= link_to 'Vos espaces', admin_rooms_path  %></li>
+    </ul>
+  </li>
+<% end %>
+
+<li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> " id="admin_organisms_menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role='button'>
       ORGANISMES
       <b class="caret"></b>
@@ -104,8 +113,6 @@
             <% end %>
          </ul>
         </li>
-
-
 
 
 

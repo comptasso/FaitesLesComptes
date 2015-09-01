@@ -143,7 +143,7 @@ Rails.application.routes.draw do
     #      resources :rooms
     #    end
 
-    resources :rooms, :only=>[:index, :show, :new, :create, :destroy]
+    resources :rooms, :only=>[:index, :show]
 
     resources :organisms do
       member {post 'reset_folios'}
