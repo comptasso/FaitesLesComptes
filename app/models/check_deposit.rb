@@ -64,21 +64,22 @@ class CheckDeposit < ActiveRecord::Base
 
   # permet de trouver les cheques à encaisser pour  tout l'organisme ou pour un
   # secteur donné
-  def self.pending_checks(sector = nil)
+  def self.pending_checks(sector)
+    o = sector.organism
     if sector && sector.name != 'Commun'
-      ComptaLine.sectored_pending_checks(sector).to_a
+      o.compta_lines.sectored_pending_checks(o, sector).to_a
     else
-      ComptaLine.pending_checks.to_a
+      o.compta_lines.pending_checks(o).to_a
     end
   end
 
   # donne le total des chèques à encaisser pour cet organisme
-  def self.total_to_pick(sector = nil)
+  def self.total_to_pick(sector)
     pending_checks(sector).sum(&:debit)
   end
 
   # donne le nombre total des chèques à encaisser pour un organisme
-  def self.nb_to_pick(sector = nil)
+  def self.nb_to_pick(sector)
     pending_checks(sector).size
   end
 

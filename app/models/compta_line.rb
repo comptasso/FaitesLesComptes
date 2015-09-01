@@ -58,10 +58,10 @@ class ComptaLine < ActiveRecord::Base
 
   # trouve tous les chèques en attente d'encaissement à partir des comptes de chèques à l'encaissement
   # et du champ check_deposit_id
-  scope :sectored_pending_checks, lambda { |sector| includes(:writing=>:book).
-      where('books.sector_id'=>sector.id, :account_id=>Account.rem_check_accounts.map {|a| a.id},
+  scope :sectored_pending_checks, lambda { |org, sector| includes(:writing=>:book).
+                                           where('books.sector_id'=>sector.id, :account_id=>org.accounts.rem_check_accounts.map {|a| a.id},
       :check_deposit_id => nil).order('compta_lines.id') }
-  scope :pending_checks, lambda { where(:account_id=>Account.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil).order('id') }
+  scope :pending_checks, lambda { |org| where(:account_id=>org.accounts.rem_check_accounts.map {|a| a.id}, :check_deposit_id => nil).order('id') }
 
   # renvoie les lignes non pointées (appelé par BankExtract), ce qui ne prend pas en compte le journal A nouveau
   scope :not_pointed, -> {

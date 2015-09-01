@@ -65,6 +65,7 @@ class Account < ActiveRecord::Base
   scope :classe_7, ->{classe(7)}
   scope :classe_6_and_7, ->{where('number LIKE ? OR number LIKE ?', '6%', '7%')}
   scope :classe_1_to_5, ->{where('number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ? OR number LIKE ?', '1%', '2%', '3%', '4%', '5%').order('number ASC')}
+  # supprimé car non adapté à la version sans schéma
   scope :rem_check_accounts, -> {where('number = ?', '511')}
 
   # Liste tous les comptes pour un exercice donné. Cette requête permet de limiter
@@ -229,10 +230,10 @@ ON "compta_lines"."writing_id" = "writings"."id" WHERE (date <= ? AND account_id
     pdf = PdfDocument::Simple.new(period, period,
       title:"Plan comptable",
       select_method:'accounts.order(:number)',
-      nb_lines_per_page:27) do |pdf|  # 27 lignes car il n'y pas de total ni de sous totel
-      pdf.columns_methods = %w(number title)
-      pdf.columns_widths = [20,80]
-      pdf.columns_titles = %w(Numéro Libellé)
+      nb_lines_per_page:27) do |df|  # 27 lignes car il n'y pas de total ni de sous totel
+      df.columns_methods = %w(number title)
+      df.columns_widths = [20,80]
+      df.columns_titles = %w(Numéro Libellé)
     end
 
     pdf

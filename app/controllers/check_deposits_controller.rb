@@ -2,27 +2,27 @@
 
 class CheckDepositsController < ApplicationController
 
-  before_filter :find_bank_account     
-  
+  before_filter :find_bank_account # remplit également @sector
+
   # GET /check_deposits
   def index
-    @nb_to_pick=CheckDeposit.nb_to_pick
+    @nb_to_pick=CheckDeposit.nb_to_pick(@sector)
     if @nb_to_pick > 0
-      @total_lines_credit=CheckDeposit.total_to_pick
+      @total_lines_credit=CheckDeposit.total_to_pick(@sector)
       flash.now[:alert] = "Il reste \
 #{ActionController::Base.helpers.pluralize @nb_to_pick, 'chèque'} \
 à remettre à l'encaissement \
-pour un montant de #{virgule @total_lines_credit} €" 
-      end
+pour un montant de #{virgule @total_lines_credit} €"
+    end
     @check_deposits = @bank_account.check_deposits.
-      within_period(@period).order('deposit_date ASC') 
+      within_period(@period).order('deposit_date ASC')
   end
-  
+
   # GET /check_deposits/1
   # GET /check_deposits/1.json
   def show
     @check_deposit = CheckDeposit.find(params[:id])
-    @nb_to_pick=CheckDeposit.nb_to_pick
+    @nb_to_pick=CheckDeposit.nb_to_pick(@sector)
   end
 
   # GET /check_deposits/new
@@ -40,7 +40,7 @@ pour un montant de #{virgule @total_lines_credit} €"
   # GET /check_deposits/1/edit
   def edit
     @check_deposit = CheckDeposit.find(params[:id])
-    @nb_to_pick=CheckDeposit.nb_to_pick
+    @nb_to_pick=CheckDeposit.nb_to_pick(@sector)
   end
 
   # POST /check_deposits
@@ -50,13 +50,13 @@ pour un montant de #{virgule @total_lines_credit} €"
     @check_deposit = @bank_account.check_deposits.new(check_deposit_params)
     fill_author(@check_deposit)
     logger.debug @check_deposit.errors.messages unless @check_deposit.valid?
-    if @check_deposit.save     
+    if @check_deposit.save
       redirect_to  organism_bank_account_check_deposits_url,
         notice: "La remise de chèques a été créée ; pièce n° #{@check_deposit.writing_id}"
     else
       render action: "new"
     end
-    
+
   end
 
   # PUT /check_deposits/1
@@ -71,7 +71,7 @@ pour un montant de #{virgule @total_lines_credit} €"
     else
       render action: "edit"
     end
-    
+
   end
 
   # DELETE /check_deposits/1
@@ -84,15 +84,15 @@ pour un montant de #{virgule @total_lines_credit} €"
 
   private
 
-  
+
   def find_bank_account
     @bank_account = BankAccount.find(params[:bank_account_id])
     @sector = @bank_account.sector
   end
-  
+
   def check_deposit_params
-    params.require(:check_deposit).permit(:deposit_date, :deposit_date_picker, 
+    params.require(:check_deposit).permit(:deposit_date, :deposit_date_picker,
       {check_ids: []}, :bank_account_id)
   end
-  
+
 end
