@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+require 'in_out_writings_helper'
 
 module BankExtractLinesHelper
   include ModalsHelper

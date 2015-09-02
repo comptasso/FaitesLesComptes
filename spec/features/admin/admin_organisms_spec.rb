@@ -54,7 +54,7 @@ describe "admin organisms" do
         nb = Organism.count # puis plus 1 pour Liste des organismes
         page.all('#admin_organisms_menu ul li a').should have(nb+1).elements
         page.first('#admin_organisms_menu ul li a').text.should == 'Liste des organismes'
-        page.find('#admin_organisms_menu ul li:last a').text.should == 'Mon association'
+        page.all('#admin_organisms_menu ul li a').map(&:text).should include('Mon association')
       end
 
     end
