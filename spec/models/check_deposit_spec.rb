@@ -27,31 +27,30 @@ describe CheckDeposit do
   describe "methodes de classe sur les chèques à déposer" do
 
     it 'total_to pick donne le total' do
-      CheckDeposit.total_to_pick.should == 445
+      CheckDeposit.total_to_pick(@sector).should == 445
     end
 
     it 'pending_checks donne les 3 chèques qui sont à déposer' do
-      CheckDeposit.pending_checks.should have(3).elements
-      CheckDeposit.pending_checks.should == [@w1.children.last,@w2.children.last,@w3.children.last]
+      CheckDeposit.pending_checks(@sector).should have(3).elements
+      CheckDeposit.pending_checks(@sector).should == [@w1.children.last,@w2.children.last,@w3.children.last]
     end
 
     it 'nb_to_pick renvoie le nombre de chèques à encaisser' do
-      CheckDeposit.nb_to_pick.should == 3
+      CheckDeposit.nb_to_pick(@sector).should == 3
     end
 
     context 'quand on précise un secteur', wip:true  do
 
-      before(:each) {@sect2 = mock_model(Sector, name:'ASC')}
+      before(:each) {@sect2 = mock_model(Sector, name:'ASC', organism:@o)}
       # after(:each) {@ba.update_attribute(sector_id:@sid) unless @ba.sector_id == @sid}
 
       it 'pending_checks ne renvoie pas de chèques si le secteur demandé est différent' do
-        @sect2 = mock_model(Sector)
         expect(CheckDeposit.nb_to_pick(@sector)).to eq(3)
         expect(CheckDeposit.nb_to_pick(@sect2)).to eq(0)
       end
 
       it 'si le secteur est commun, alors on prend tous les chèques' do
-        @sect2 = mock_model(Sector, name:'Commun')
+        @sect2 = mock_model(Sector, name:'Commun', organism:@o)
         expect(CheckDeposit.nb_to_pick(@sect2)).to eq(3)
       end
     end
@@ -308,9 +307,9 @@ describe CheckDeposit do
 
       it 'lorsqu on détruit la remise les lignes sont mises à jour'do
         # CheckDeposit.pending_checks.each {|c| puts c.inspect}
-        CheckDeposit.nb_to_pick.should == 0
+        CheckDeposit.nb_to_pick(@sector).should == 0
         @check_deposit.destroy
-        CheckDeposit.nb_to_pick.should == 3
+        CheckDeposit.nb_to_pick(@sector).should == 3
       end
 
       it 'l ecriture est détruite'   do

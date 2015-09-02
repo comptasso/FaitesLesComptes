@@ -2,25 +2,21 @@
 
 require 'spec_helper'
 
-RSpec.configure do |c| 
+RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe "menus/_menu.html.erb" do   
-  include JcCapybara 
+describe "menus/_menu.html.erb" do
+  include JcCapybara
 
-  let(:o) {mock_model(Organism, main_bank_id:1, status:'Association') }
-  let(:ibook) {stub_model(IncomeBook, :title=>'Recettes') } 
-  let(:obook) { stub_model(OutcomeBook, title: 'Dépenses')}
-  let(:p2012) {stub_model(Period, start_date: Date.civil(2012,01,01), close_date: Date.civil(2012,12,31))}
-  let(:p2011) {stub_model(Period, start_date: Date.civil(2011,01,01), close_date: Date.civil(2011,12,31)) }
- 
-  let(:cu) {mock_model(User, name:'jcl')}
-  let(:sect) {stub_model(Sector, name:'Global', query_monthly_datas:{'11-2012'=>'10.20', '12-2012'=>'15.25'})}
+  include OrganismFixtureBis
 
   before(:each) do
-    assign(:user, cu)
+    use_test_organism
+    assign(:organism, @o)
+    assign(:user, @cu)
     view.stub('user_signed_in?').and_return true
+    view.stub('menu_bank').and_return(@ba)
   end
 
   context 'sans organisme car on se loggue' do
@@ -31,15 +27,15 @@ describe "menus/_menu.html.erb" do
       view.stub_chain(:devise_mapping, 'registerable?').and_return true
       view.stub_chain(:devise_mapping, 'rememberable?').and_return true
       view.stub(:resource_name).and_return('user')
-      view.stub(:resource).and_return(cu)
-      cu.stub(:remember_me).and_return true
-      
+      view.stub(:resource).and_return(@cu)
+      @cu.stub(:remember_me).and_return true
+
     end
 
     it 'upper_menu ne doit pas s afficher' do
       @request.path = '/'
       render :template=>'devise/sessions/new', :layout=>'layouts/application'
-      page.all('#upper_menu').count.should == 0 
+      page.all('#upper_menu').count.should == 0
     end
 
     it 'le menu général ne doit pas s afficher' do
@@ -55,64 +51,35 @@ describe "menus/_menu.html.erb" do
     # le menu Analyses avec deux secteurs est testé par un fichier spécifique
     # TODO ce fichier ne teste qu'un petit bout du menu; à compléter
     before(:each) do
-    
-      assign(:organism, o)
-      assign(:user, cu)
-      o.stub(:periods).and_return(@par=double(Arel))
-      @par.stub(:order).and_return([p2011,p2012])
-      o.stub(:bank_accounts).and_return([@ba = mock_model(BankAccount, sector:sect,
-            bank_extracts:[], :check_deposits=>[], 'unpointed_bank_extract?'=>false)])
-      o.stub(:cashes).and_return([mock_model(Cash, cash_controls:[])])
-      o.stub(:in_out_books).and_return [ibook,obook]
-      o.stub('can_write_line?').and_return true
-      o.stub(:masks).and_return [mock_model(Mask, title:'un masque de saisie', comment:'no comment')]
-      o.stub(:subscriptions).and_return []
-      o.stub(:sectors).and_return [double(Sector)]
-
-      o.stub(:find_period).and_return(p2012)
-      p2012.stub(:previous_period?).and_return(true)
-      p2012.stub(:previous_period).and_return(p2011)
-      ibook.stub(:organism).and_return(o)
-      obook.stub(:organism).and_return(o)
-      assign(:books, [ibook,obook])
-      assign(:period, p2012 )
-      o.stub_chain(:destinations, :all).and_return(%w(lille dunkerque))
-      assign(:paves, [ibook, obook, sect])
-     
-      @ba.stub_chain(:bank_extracts, :period, :unlocked).and_return []
-
-
+      assign(:period, @p )
+      assign(:paves, [@ib, @ob, @sect])
       view.stub(:current_period?).and_return(p)
-      view.stub(:current_user?).and_return true
-      view.stub(:current_user).and_return cu
-      view.stub(:saisie_consult_organism_list).and_return 'liste des organismes avec lien'
-      
-      
+      view.stub(:current_user).and_return @cu
     end
-    
+
     describe 'lien adherent de l upper_menu' do
       before(:each) do
-         @request.path = '/admin/oragnisms'
+         @request.path = '/admin/organisms'
       end
-      
-      it 'une association rend le lien vers adherent' do 
+
+      it 'une association rend le lien vers adherent' do
         render :template=>'/organisms/show', :layout=>'layouts/application'
         page.find('#upper-menu li:first a').should have_content('ADHERENTS')
       end
-      
+
       it 'une non association n a que 3 liens' do
-        o.stub(:status).and_return 'Entreprise'
+        @o.stub(:status).and_return 'Entreprise'
         render :template=>'/organisms/show', :layout=>'layouts/application'
         page.all('ul.nav-pills li').should have(3).elements
       end
-                    
+
     end
 
-    describe 'Partie Virements du menu' do 
+    describe 'Partie Virements du menu' do
 
       before(:each) do
-         @request.path = '/'
-         render :template=>'organisms/show', :layout=>'layouts/application'
+#         @request.path = '/'
+         render :template=>'menus/_menu' #, :layout=>'layouts/application'
       end
 
       it 'affiche le menu Virement' do
@@ -131,8 +98,8 @@ describe "menus/_menu.html.erb" do
     describe 'Partie Exercices du menu' do
 
       before(:each) do
-        @request.path = '/'
-        render :template=>'organisms/show', :layout=>'layouts/application'
+  #      @request.path = '/'
+        render :template=>'menus/_menu' #, :layout=>'layouts/application'
       end
 
       it 'affiche la partie Exercices du menu' do
@@ -140,13 +107,10 @@ describe "menus/_menu.html.erb" do
       end
 
       it "affiche le sous menu exercice" do
-        rendered.should match( organism_period_path(o, p2011)) 
+        rendered.should match( organism_period_path(@o, @p))
       end
-
-
-
     end
-    
- 
+
   end
+
 end

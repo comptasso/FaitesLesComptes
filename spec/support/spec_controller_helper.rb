@@ -44,7 +44,7 @@ module SpecControllerHelper
     @cu.stub(:organisms).and_return(@or = double(Arel))
     @or.stub(:find).and_return @o
     @or.stub(:first).and_return @o
-    @sect = mock_model(Sector, tenant_id:@t.id)
+    @sect = mock_model(Sector, tenant_id:@t.id, organism:@o)
 
     Tenant.stub(:find_by_id).with(@t.id).and_return @t
     Organism.stub(:first).and_return(@o)
