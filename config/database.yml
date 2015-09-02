@@ -1,10 +1,10 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: restau20150218
+  database: restau201508
   pool: 5
-  username: jcl
-  password: flc
+  username: jean-claude
+  password:
   timeout: 5000
 
 production:

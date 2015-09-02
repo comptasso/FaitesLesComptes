@@ -1,12 +1,12 @@
 source 'http://rubygems.org'
-ruby "2.2.1"
+ruby "2.2.2"
 
 
 gem 'rails', "~> 4.1"
 # gem 'protected_attributes' # pour la transition vers Rails 4
 gem 'rails-observers' # idem
 gem 'actionpack-page_caching'
-gem 'actionpack-action_caching' 
+gem 'actionpack-action_caching'
 
 gem 'rack', '~>1.5'
 # gem 'therubyracer' execjs sous windows
@@ -33,8 +33,8 @@ gem 'delayed_job_active_record', '= 4.0.2'
 # gem 'unicorn'
 gem 'puma'
 
- gem 'adherent', '~>0.3' 
-# gem 'adherent', :path=>'../../Adherent'  
+ gem 'adherent', '~>0.3'
+# gem 'adherent', :path=>'../../Adherent'
 
 
 
@@ -46,22 +46,22 @@ group :production, :staging do
   # conseil de heroku - utilisé par le fichier intializers/timeout.rb
   # on le désactive pour development et test car gêne les test features
   # et complique les logs de develoment
-  gem 'rack-timeout' 
+  gem 'rack-timeout'
 end
 
 group :production, :staging, :development do
-  gem 'rails_12factor' # conseillé sinon imposé par Heroku 
+  gem 'rails_12factor' # conseillé sinon imposé par Heroku
 end
 
 # permet de ne pas avoir les log indiquant les assets dans le mode development
-gem 'quiet_assets', group: :development 
+gem 'quiet_assets', group: :development
 
 
 
 gem 'bootstrap-sass', '~> 3.3.4.0'
-  
+
 gem 'autoprefixer-rails'
- 
+
 # gem 'twitter-bootstrap-rails'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.2'
@@ -104,7 +104,7 @@ group :development, :test do
   gem 'capybara', '2.4.4'
   # gem 'capybara-webkit'
   gem 'email_spec'
-  
+
 
 
 end
