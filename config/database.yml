@@ -1,7 +1,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: compta
+  database: restau201508
   pool: 5
   username: jean-claude
   password:

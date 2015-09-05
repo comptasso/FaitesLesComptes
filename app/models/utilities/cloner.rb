@@ -5,7 +5,7 @@ module Utilities
   class Cloner < ActiveRecord::Base
 
     self.table_name = 'flccloner'
-
+    attr_accessor :org_source
 
     # trouve l'organisme que l'on souhaite copier à l'aide de l'attribut
     # old_org_id
@@ -112,8 +112,7 @@ VALUES('Organism',
     def new_comment(comment)
       raise StandardError, '@org_source, n\'a pas été instancié' unless @org_source
       return comment if comment
-      return @org_source.comment + ' CLONE' unless @org_source.comment.blank?
-      return 'CLONE'
+      return @org_source.comment unless @org_source.comment.blank?
     end
 
 
