@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
-
 module OrganismsHelper
+  include SubscriptionsHelper
 
   # Méthode pour afficher les messages venant des différents modèles.
   #

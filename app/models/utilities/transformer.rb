@@ -61,75 +61,99 @@ module Utilities
       return new_nb_rooms - nb_rooms
     end
 
-    # trouve l'organisme que l'on souhaite copier à l'aide de l'attribut
-    # old_org_id
-    def from_org
-      raise 'Vous devez préciser l\'attribut old_org_id' unless old_org_id
-      Organism.find(old_org_id)
+    # A FAIRE
+    # ici on remplit la table des holders en complétant le champ organism_id
+    # On prend l'ensemble des holders, on prend la room, on trouve l'organisme
+    # correspondant et on remplit le champ organism_id
+    def etape2
+      Tenant.find_each do |t|
+        Tenant.set_current_tenant t
+        Holder.find_each do |h|
+          r = Room.find(h.room_id)
+          h.organism_id = r.new_org_id
+          h.save
+        end
+      end
+    end
+
+    # étape 3 On dispose maintenant de quelques tables remplies
+    # Chaque User a son tenant;
+    # La table des organismes est remplie, y compris le champ database_name
+    # même si celui-ci pourra être supprimé après la transformation.
+    # Chaque Room a été remplie avec le tenant et l'id de l'organisme
+    # qui a été créé à l'étape 1.
+    #
+    # L'étape 2 consiste alors à recopier les différentes tables venant d'un
+    # schéma en respectant les relations.
+    # Il faut donc lire les tables dans le schéma, connaître les champs
+    # references à remplacer, rechercher dans la table flccloner les nouvelles
+    # références. Puis enregistrer la nouvelle row ainsi construite ainsi que
+    # son id et l'ancien id pour pouvoir passer à la copie d'une table ayant
+    # également des références.
+    #
+    # Dans flccloner, old_org_id devrait toujours être égal à 1.
+    #
+    def etape3
+      delete_trace
+      Room.where('tenant_id IS NOT NULL').find_each do |r|
+        transformation(r)
+
+      end
     end
 
 
 
-    # # Duplique un organisme en effectuant une copie de tous les enregistrements
-    # # qui en dépendent en maintenant les références.
-    # # Le seul champ modifié est le champ commentaire de l'organisme
-    # def clone_organism(comment=nil)
-    #   # TODO : rajouter une transaction
-
-    #   # on trouve l'organisme demandé par le clone
-    #   @org_source = from_org
-    #   # création du nouvel organisme
-    #   create_new_org(comment)
-    #   # on copie les différentes données des tables
-    #   new_org_id  = clonage
-    #   # La création du holder doit se faire dans le controller car c'est lui
-    #   # qui a la connaissance du user
-
-    #   new_org = Organism.find(new_org_id)
-    #   # reconstruire les rubriks
-    #   new_org.send(:reset_folios)
-    #   # ON efface les données de la table flccloner
-    #   delete_trace
-    #   # on renvoie le nouvel id
-    #   return new_org_id
 
 
-    # end
 
-    # # Appelle successivement les différentes fonctions SQL permettant
-    # # la recopie des lignes voulues avec maintien des références
-    # #
-    # # Attention à l'ordre des tables, puisqu'il y a des dépendances à
-    # # respecter
-    # #
-    # # Toute modification du schéma doit être étudiée ici pour
-    # # vérifier qu'il n'y a pas d'impact ou modifier en conséquence
-    # #
-    # #
-    # def clonage
-    #   # Lecture du nouvel id dans la table
-    #   infos = Utilities::Transformer.where('name = ? AND old_org_id = ?',
-    #     'Organism', @org_source.id).first
-    #   # puis utilisation des ces infos pour appeler successivement toutes
-    #   # les fonctions SQL nécessaires dans l'ordre des demandes
-    #   #
-    #   functions = %w(copy_sectors copy_periods copy_adherent_members
-    #   copy_nomenclatures copy_adherent_payments copy_adherent_coords
-    #   copy_adherent_adhesions copy_adherent_reglements
-    #   copy_bank_accounts copy_cashes copy_bank_extracts copy_cash_controls
-    #   copy_books copy_destinations copy_accounts copy_natures
-    #   copy_writings copy_check_deposits copy_compta_lines copy_imported_bels
-    #   copy_masks copy_subscriptions copy_adherent_bridges)
+    # Appelle successivement les différentes fonctions SQL permettant
+    # la recopie des lignes voulues avec maintien des références
+    # Attention à l'ordre des tables, puisqu'il y a des dépendances à
+    # respecter
+    #
+    # Toute modification du schéma doit être étudiée ici pour
+    # vérifier qu'il n'y a pas d'impact et modifier en conséquence
+    #
+    #
+    def transformation(room)
+      if room.transformed?
+        puts 'la pièce a déjà été transformée'
+        return
+      end
+
+      raise 'new_org_id manquant' unless room.new_org_id
+      raise 'tenant_id manquant' unless room.tenant_id
+      Tenant.set_current_tenant room.tenant_id
+        puts "Traitement de la base #{room.database_name}"
+        delete_trace
+        # ici ajouter l'entrée de l'organisme que l'on va traiter
+        # dans la table flccloner.
+        uc = Utilities::Cloner.new(name:'Organism', old_id:1, new_id:room.new_org_id,
+            old_org_id:1, new_org_id:room.new_org_id)
+        uc.save!
+
+      # puis utilisation des ces infos pour appeler successivement toutes
+      # les fonctions SQL nécessaires dans l'ordre des demandes
+      #
+      functions = %w(transform_sectors transform_periods transform_adherent_members
+      transform_nomenclatures transform_adherent_payments transform_adherent_coords
+      transform_adherent_adhesions transform_adherent_reglements
+      transform_bank_accounts transform_cashes transform_bank_extracts transform_cash_controls
+      transform_books transform_destinations transform_accounts transform_natures
+      transform_writings transform_check_deposits transform_compta_lines transform_imported_bels
+      transform_masks transform_subscriptions transform_adherent_bridges)
 
 
-    #   requete = ''
-    #   functions.each do |f|
-    #     requete << "SELECT #{f}(#{infos.old_org_id}, #{infos.new_org_id});"
-    #     end
-    #   Utilities::Transformer.connection.execute(requete)
-    #   return infos.new_org_id
+      requete = ''
+      functions.each do |f|
+        requete << "SELECT #{f}('#{room.database_name}', #{1}, #{room.new_org_id}, #{room.tenant_id});"
+      end
+      Room.transaction do
+        Room.connection.execute(requete)
+      end
+      room.update_attribute(:transformed, true)
 
-    # end
+    end
 
 
     #   # Création d'un organisme copie de @org_source par
@@ -137,300 +161,291 @@ module Utilities
     #   # flccloner
     def create_new_org(db_name)
       Room.find_by_sql("WITH ret AS
-(INSERT INTO organisms(title, created_at, updated_at,
+(INSERT INTO organisms(title, created_at, updated_at, database_name,
            status, version, comment, siren, postcode, tenant_id)
            VALUES ('#{quote_string @org_source.title}',
            '#{@org_source.created_at}'::timestamp,
            '#{@org_source.updated_at}'::timestamp,
+           '#{db_name}',
            '#{quote_string @org_source.status}',
            '#{quote_string @org_source.version}',
            '#{quote_string @org_source.comment}',
            '#{quote_string @org_source.siren}',
            '#{quote_string @org_source.postcode}',
-            #{Tenant.current_tenant_id})
+                       #{Tenant.current_tenant_id})
             RETURNING id )
 UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
   WHERE database_name = '#{db_name}' RETURNING new_org_id;")
 
     end
 
-    # # On retire tous les enregistrements qui font référence à l'organisme
-    # # source
-    # def delete_trace
-    #   Utilities::Transformer.find_by_sql("DELETE FROM flccloner WHERE
-    #      old_org_id = #{@org_source.id};")
-    # end
-
-    # def new_comment(comment)
-    #   raise StandardError, '@org_source, n\'a pas été instancié' unless @org_source
-    #   return comment if comment
-    #   return @org_source.comment + ' CLONE' unless @org_source.comment.blank?
-    #   return 'CLONE'
-    # end
+    # # On retire tous les enregistrements de la table flccloner
+    def delete_trace
+      Room.connection.execute("DELETE FROM flccloner;")
+    end
 
 
-    # # méthode de création des fonctions nécessaires à la recopie
-    # # Sera utilisé dans une migration après mise au point
-    # def self.create_clone_functions
-    #   # on commence par les classes de premier niveau
-    #   %w(nomenclatures sectors periods).each do |t|
-    #     create_function(sql_copy_first_level(t))
-    #   end
-    #   # partie Adhérents
-    #   create_clone_adherent_functions
-    #   # les classes de second niveau : bank_account, cash, books et destinations
-    #   # lesquelles ont toutes comme champ secondaire sector_id
-    #   %w(bank_accounts cashes books destinations).each do |t|
-    #     create_function(sql_copy_n_refs('organism_id', ['sector_id'], t))
-    #   end
-    #   # les classes qui découlent directement des précédentes
-    #   # avec un seul champ dépendant
-    #   create_function(sql_copy_one_ref('bank_account_id', 'bank_extracts'))
-    #   create_function(sql_copy_one_ref('cash_id', 'cash_controls'))
 
-    #   # la partie comptabilité avec les comptes
-    #   create_function(sql_copy_n_refs('period_id',
-    #       ['sector_id', 'accountable_id'], 'accounts',
-    #        :polymorphic=>'accountable_id'))
-    #   # les natures
-    #   create_function(sql_copy_n_refs('book_id', %w(period_id account_id), 'natures'))
-    #   # puis les écritures
-    #   create_function(sql_copy_n_refs('book_id', ['bridge_id'], 'writings',
-    #      bridge_id:Adherent::Member))
-    #   # les remises de chèques (attention à l'ordre)
-    #   create_function(sql_copy_n_refs('bank_account_id',
-    #     ['writing_id'], 'check_deposits'))
-    #   # les compta_lines
-    #   create_function(sql_copy_n_refs('writing_id',
-    #     %w(nature_id destination_id account_id), 'compta_lines'))
-    #   # et enfin les folios
-    #   create_function(sql_copy_n_refs('nomenclature_id',
-    #     %w(sector_id), 'folios'))
+    # méthode de création des fonctions nécessaires à la recopie
+    # Sera utilisé dans une migration après mise au point
+    def self.create_transformer_functions
+      # on commence par les classes de premier niveau
+      %w(nomenclatures sectors periods).each do |t|
+        create_function(sql_transform_first_level(t))
+      end
+      # partie Adhérents
+      create_clone_adherent_functions
+      # les classes de second niveau : bank_account, cash, books et destinations
+      # lesquelles ont toutes comme champ secondaire sector_id
+      %w(bank_accounts cashes books destinations).each do |t|
+        create_function(sql_transform_n_refs('organism_id', ['sector_id'], t))
+      end
+      # les classes qui découlent directement des précédentes
+      # avec un seul champ dépendant
+      create_function(sql_transform_one_ref('bank_account_id', 'bank_extracts'))
+      create_function(sql_transform_one_ref('cash_id', 'cash_controls'))
 
-
-    #   create_clone_mask_functions
-    #   create_clone_bank_functions
-    #   # les données du bridge adhérent
-    #   create_function(sql_copy_n_refs('organism_id',
-    #     %w(bank_account_id cash_id destination_id income_book_id),
-    #     'adherent_bridges', {modele:Adherent::Bridge, income_book_id:Book}))
-    #   # et enfin le holder
-
-    # end
+      # la partie comptabilité avec les comptes
+      create_function(sql_transform_n_refs('period_id',
+                                           ['sector_id', 'accountable_id'], 'accounts',
+                                           :polymorphic=>'accountable_id'))
+      # les natures
+      create_function(sql_transform_n_refs('book_id', %w(period_id account_id), 'natures'))
+      # puis les écritures
+      create_function(sql_transform_n_refs('book_id', ['bridge_id'], 'writings',
+                                           bridge_id:Adherent::Member))
+      # les remises de chèques (attention à l'ordre)
+      create_function(sql_transform_n_refs('bank_account_id',
+                                           ['writing_id'], 'check_deposits'))
+      # les compta_lines
+      create_function(sql_transform_n_refs('writing_id',
+                                           %w(nature_id destination_id account_id), 'compta_lines'))
+      # et enfin les folios
+      create_function(sql_transform_n_refs('nomenclature_id',
+                                           %w(sector_id), 'folios'))
 
 
-    # def self.create_clone_mask_functions
-    #   create_function(sql_copy_n_refs('organism_id',
-    #     %w(book_id destination_id), 'masks'))
-    #   create_function(sql_copy_one_ref('mask_id', 'subscriptions'))
-    # end
+      create_clone_mask_functions
+      create_clone_bank_functions
+      # les données du bridge adhérent
+      create_function(sql_transform_n_refs('organism_id',
+                                           %w(bank_account_id cash_id destination_id income_book_id),
+                                           'adherent_bridges', {modele:Adherent::Bridge, income_book_id:Book}))
+      # et enfin le holder
 
-    # def self.create_clone_bank_functions
-    #   create_function(sql_copy_n_refs('bank_extract_id',
-    #     %w(compta_line_id), 'bank_extract_lines'))
-    #   create_function(sql_copy_n_refs('bank_account_id',
-    #     %w(writing_id nature_id destination_id), 'imported_bels'))
-    # end
+    end
 
-    # def self.create_clone_adherent_functions
-    #   # plus Adherent::Member
-    #   create_function(sql_copy_first_level('adherent_members',
-    #     modele:Adherent::Member))
-    #   # puis les 3 tables qui découlent de Adherent::Member
-    #   create_function(sql_copy_one_ref('member_id', 'adherent_payments',
-    #     modele:Adherent::Payment))
-    #   create_function(sql_copy_one_ref('member_id', 'adherent_coords',
-    #     modele:Adherent::Member))
-    #   create_function(sql_copy_one_ref('member_id', 'adherent_adhesions',
-    #     modele:Adherent::Adhesion))
-    #   create_function(sql_copy_n_refs('payment_id', ['adhesion_id'],
-    #     'adherent_reglements', modele:Adherent::Reglement))
-    # end
+
+    def self.create_clone_mask_functions
+      create_function(sql_transform_n_refs('organism_id',
+                                           %w(book_id destination_id), 'masks'))
+      create_function(sql_transform_one_ref('mask_id', 'subscriptions'))
+    end
+
+    def self.create_clone_bank_functions
+      create_function(sql_transform_n_refs('bank_extract_id',
+                                           %w(compta_line_id), 'bank_extract_lines'))
+      create_function(sql_transform_n_refs('bank_account_id',
+                                           %w(writing_id nature_id destination_id), 'imported_bels'))
+    end
+
+    def self.create_clone_adherent_functions
+      # plus Adherent::Member
+      create_function(sql_transform_first_level('adherent_members',
+                                                modele:Adherent::Member))
+      # puis les 3 tables qui découlent de Adherent::Member
+      create_function(sql_transform_one_ref('member_id', 'adherent_payments',
+                                            modele:Adherent::Payment))
+      create_function(sql_transform_one_ref('member_id', 'adherent_coords',
+                                            modele:Adherent::Member))
+      create_function(sql_transform_one_ref('member_id', 'adherent_adhesions',
+                                            modele:Adherent::Adhesion))
+      create_function(sql_transform_n_refs('payment_id', ['adhesion_id'],
+                                           'adherent_reglements', modele:Adherent::Reglement))
+    end
 
     def quote_string(s)
       return unless s
       s.gsub(/\\/, '\&\&').gsub(/'/, "''")
     end
 
-    # # execute la commande sql
-    # def self.create_function(sql)
-    #   Organism.find_by_sql(sql)
-    # end
+    # execute la commande sql
+    def self.create_function(sql)
+      Room.find_by_sql(sql)
+    end
 
-    # # Méthodes ayant pour effet de fournir des textes SQL pour création des
-    # # fonctions nécessaires à la copie des données.
-    # #
-    # # sql_copy_first traite les descendants directs de Organism tels
-    # # Sector, Period, Nomenclature, et Adherent::Member
-    # #
-    # # Les arguments sont le nom de la table (par exemple sectors), et
-    # # éventuellement une option pour préciser le modèle,
-    # # ce qui est nécessaire lorsqu'il n'est pas
-    # # possible de récupérer le nom du modèle par la table (cas des
-    # # Adherent::Members par exemple, on écrira alors en options
-    # # :modele=>Adherent::Member)
-    # def self.sql_copy_first_level(table, options={})
-    #   sql_copy_n_refs('organism_id', [], table, options)
-    # end
-
-
-
-    # # Réalise des copies des enregistrements
-    # # d'une table (argument table) faisant référence à un
-    # # champ (champ_id) d'une autre table. La différence avec la méthode
-    # # précédente est juste que organism_id n'est pas le champ_id par défaut.
-    # #
-    # # Voir les commentaires de sql_copy_n_refs pour les arguments table et
-    # # les options
-    # #
-    # # Exemple d'utilisation : sql_copy_one_ref('cash_id', 'cash_controls')
-    # #
-    # def self.sql_copy_one_ref(champ_id, table, options={})
-    #   sql_copy_n_refs(champ_id, [], table, options)
-    # end
-
-    # # Réalise des copies des enregistrements
-    # # d'une table (argument table) faisant référence à un champ principal
-    # # (champ_id) et une série de champs secondaires (sous le format champ_id)
-    # # qui devront être mis à jour simultanément.
-    # #
-    # # Ainsi, le premier champ est le champ de référence (par exemple
-    # # pour Account, c'est period_id),
-    # # le second champ est un array de champs qui doivent
-    # # être mis à jour (pour Account, c'est [sector_id])
-    # #
-    # # Pour des compta_lines, le champ principal est writing_id, tandis que le
-    # # tableau des autres champs sera [destination_id, account_id, nature_id,
-    # # check_deposit_id].
-    # #
-    # # Il est possible de fournir un array vide []
-    # #
-    # # Exemple d'utilisation :
-    # # sql_copy_n_refs('writing_id', ['nature_id', 'destination_id',
-    # # 'account_id', 'check_deposit_id], 'compta_lines')
-    # #
-    # # La méthode renvoie un texte sql qui peut alors être utilisé pour créer
-    # # dans la base la fonction de recopie.
-    # #
-    # # Les options sont un hash facultatif permettant de préciser
-    # #  - le modèle à traiter lorsqu'il ne peut être déduit du nom de la table
-    # #  C'est typiquement le cas pour la famille des tables adherent_members
-    # #  qui fait référence à Adherent::Member. Dans ce cas, on précise dans les
-    # #  options :modele=>Adherent::Member
-    # #  - le nom du champ lorsqu'il ne peut être déduit de champ_ids, le seul
-    # #  cas actuellement étant bridge_id qui fait référence à un
-    # #  Adherent::Member. Dans ce cas, on mettra dans les options
-    # #  :bridge_id=>Adherent::Member
-    # #
-    # #
-    # def self.sql_copy_n_refs(champ_id, champ_ids, table, options= {})
-
-    #   # on définit ici les variables dont on aura besoin dans le texte sql
-    #   nom_fonction = 'copy_' + table
-
-    #   begin
-    #     modele = options[:modele] || table.classify.constantize
-    #   rescue NameError
-    #     raise NameError, 'Impossible d\'identifier le modèle ;
-# vous devez le fournir en deuxième argument'
-    #   end
-
-    #   # le nom du modèle que l'on cherchera dans la table flc_cloner
-    #   champ = champ_id[0..-4].capitalize
-    #   # récupération de tous les champs dont on assure la recopie à l'identique
-    #   # ne sont donc pas recopiés le champ id, et les arguments  champ_ids
-    #   list_cols = modele.column_names
-    #   list_cols = list_cols.reject { |c| c == 'id' || c == champ_id || c.in?(champ_ids)}
-    #   list  = list_cols.join(', ')
-    #   r_list = list_cols.map { |c| '(r).'+c}.join(', ')
-
-    #   list_champ = champ_ids.join(', ')
-    #   # construction des requêtes cherchant les valeurs dans la table
-    #   # flc_cloner
-    #   values = champ_ids.collect do |cid|
-    #     mod = options[cid.to_sym].to_s
-    #     if options[:polymorphic] == cid
-    #       value_to_insert(cid, mod, polymorphic:true)
-    #     else
-    #       value_to_insert(cid, mod)
-    #     end
-    #   end.join(', ')
+    # Méthodes ayant pour effet de fournir des textes SQL pour création des
+    # fonctions nécessaires à la copie des données.
+    #
+    # sql_copy_first traite les descendants directs de Organism tels
+    # Sector, Period, Nomenclature, et Adherent::Member
+    #
+    # Les arguments sont le nom de la table (par exemple sectors), et
+    # éventuellement une option pour préciser le modèle,
+    # ce qui est nécessaire lorsqu'il n'est pas
+    # possible de récupérer le nom du modèle par la table (cas des
+    # Adherent::Members par exemple, on écrira alors en options
+    # :modele=>Adherent::Member)
+    def self.sql_transform_first_level(table, options={})
+      sql_transform_n_refs('organism_id', [], table, options)
+    end
 
 
-    #   sql = <<-EOF
-   # CREATE OR REPLACE FUNCTION #{nom_fonction}(from_id integer, to_id integer)
-   # RETURNS SETOF #{table} AS
-# $BODY$
-# DECLARE
-  # r #{table}%rowtype;
-  # new_id int;
-# BEGIN
-  # FOR r in SELECT * FROM #{table} WHERE #{champ_id} IN (
-    # SELECT old_id FROM flccloner WHERE name = '#{champ}' AND old_org_id = from_id
-    #   AND new_org_id = to_id
-# )
 
-  # LOOP
-    # WITH  correspondance AS
-    # ( INSERT INTO #{table}
-    #    (#{champ_id},
-    #     #{ list_champ + ', ' unless list_champ.empty?}
-    #     #{list})
-    #   VALUES (#{value_to_insert(champ_id)},
-    #   #{values + ', ' unless values.empty?}
-    #   #{r_list})
-    #  RETURNING id, (r).id  oldid)
-    #   INSERT INTO flccloner (name, old_id, new_id, old_org_id, new_org_id)
-    #   VALUES ('#{modele}', (r).id,
-    #   (SELECT id FROM correspondance WHERE oldid = (r).id ), from_id, to_id);
-    # RETURN NEXT r;
-  # END LOOP;
-  # RETURN;
-# END
-# $BODY$
-  # LANGUAGE plpgsql VOLATILE;
-    #   EOF
+    # Réalise des copies des enregistrements
+    # d'une table (argument table) faisant référence à un
+    # champ (champ_id) d'une autre table. La différence avec la méthode
+    # précédente est juste que organism_id n'est pas le champ_id par défaut.
+    #
+    # Voir les commentaires de sql_copy_n_refs pour les arguments table et
+    # les options
+    #
+    # Exemple d'utilisation : sql_copy_one_ref('cash_id', 'cash_controls')
+    #
+    def self.sql_transform_one_ref(champ_id, table, options={})
+      sql_transform_n_refs(champ_id, [], table, options)
+    end
 
-    #   sql
-    # end
+    # Réalise des copies des enregistrements
+    # d'une table (argument table) faisant référence à un champ principal
+    # (champ_id) et une série de champs secondaires (sous le format champ_id)
+    # qui devront être mis à jour simultanément.
+    #
+    # Ainsi, le premier champ est le champ de référence (par exemple
+    # pour Account, c'est period_id),
+    # le second champ est un array de champs qui doivent
+    # être mis à jour (pour Account, c'est [sector_id])
+    #
+    # Pour des compta_lines, le champ principal est writing_id, tandis que le
+    # tableau des autres champs sera [destination_id, account_id, nature_id,
+    # check_deposit_id].
+    #
+    # Il est possible de fournir un array vide []
+    #
+    # Exemple d'utilisation :
+    # sql_copy_n_refs('writing_id', ['nature_id', 'destination_id',
+    # 'account_id', 'check_deposit_id], 'compta_lines')
+    #
+    # La méthode renvoie un texte sql qui peut alors être utilisé pour créer
+    # dans la base la fonction de recopie.
+    #
+    # Les options sont un hash facultatif permettant de préciser
+    #  - le modèle à traiter lorsqu'il ne peut être déduit du nom de la table
+    #  C'est typiquement le cas pour la famille des tables adherent_members
+    #  qui fait référence à Adherent::Member. Dans ce cas, on précise dans les
+    #  options :modele=>Adherent::Member
+    #  - le nom du champ lorsqu'il ne peut être déduit de champ_ids, le seul
+    #  cas actuellement étant bridge_id qui fait référence à un
+    #  Adherent::Member. Dans ce cas, on mettra dans les options
+    #  :bridge_id=>Adherent::Member
+    #
+    #
+    def self.sql_transform_n_refs(champ_id, champ_ids, table, options= {})
+
+      # on définit ici les variables dont on aura besoin dans le texte sql
+      nom_fonction = 'transform_' + table
+
+      begin
+        modele = options[:modele] || table.classify.constantize
+      rescue NameError
+        raise NameError, 'Impossible d\'identifier le modèle ;
+vous devez le fournir en deuxième argument'
+      end
+
+      # le nom du modèle que l'on cherchera dans la table flc_cloner
+      champ = champ_id[0..-4].capitalize
+      # récupération de tous les champs dont on assure la recopie à l'identique
+      # ne sont donc pas recopiés le champ id, et les arguments  champ_ids
+      list_cols = modele.column_names
+      list_cols = list_cols.reject { |c| c == 'id' || c == champ_id || c.in?(champ_ids) || c == 'tenant_id'}
+      list  = list_cols.join(', ')
+      r_list = list_cols.map { |c| '(r).'+c}.join(', ')
+
+      list_champ = champ_ids.join(', ')
+      # construction des requêtes cherchant les valeurs dans la table
+      # flc_cloner
+      values = champ_ids.collect do |cid|
+        mod = options[cid.to_sym].to_s
+        if options[:polymorphic] == cid
+          value_to_insert(cid, mod, polymorphic:true)
+        else
+          value_to_insert(cid, mod)
+        end
+      end.join(', ')
+
+
+      sql = <<-EOF
+   CREATE OR REPLACE FUNCTION #{nom_fonction}(from_schema text, from_id integer, to_id integer, tenant_id integer)
+   RETURNS SETOF #{table} AS
+$BODY$
+DECLARE
+  r #{table}%rowtype;
+  new_id int;
+BEGIN
+FOR r in EXECUTE format('SELECT *, $1 FROM %I.#{table} WHERE #{champ_id} IN (
+    SELECT old_id FROM flccloner WHERE name = %L AND old_org_id = %L AND new_org_id = %L)',
+    from_schema, '#{champ}', from_id, to_id)
+   USING tenant_id
+  LOOP
+    WITH  correspondance AS
+    ( INSERT INTO #{table}
+       (tenant_id, #{champ_id},
+      #{ list_champ + ', ' unless list_champ.empty?}
+      #{list})
+      VALUES (tenant_id, #{value_to_insert(champ_id)},
+      #{values + ', ' unless values.empty?}
+      #{r_list})
+     RETURNING id, (r).id  oldid)
+      INSERT INTO flccloner (name, old_id, new_id, old_org_id, new_org_id)
+      VALUES ('#{modele}', (r).id,
+      (SELECT id FROM correspondance WHERE oldid = (r).id ), from_id, to_id);
+    RETURN NEXT r;
+  END LOOP;
+  RETURN;
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE;
+      EOF
+
+      sql
+    end
 
     # protected
 
-    # # Définit le morceau de requête qui permet de trouver dans la table
-    # # flccloner la valeur souhaitée pour mettre à jour les références.
-    # #
-    # # Le deuxième champ permet de préciser le nom du modèle lorsqu'il ne
-    # # peut être déduit de champ_id. C'est notamment le cas pour
-    # # la table des Writing dont le champ bridge_id fait référence à
-    # # Adherent::Member
-    # #
-    # # On peut précisier via le hash options si le champ est polymorphique
-    # def self.value_to_insert(champ_id, champ = nil, options={})
-    #   raise ArgumentError, 'L\'argument doit être de la forme wwww_id' unless
-    #   champ_id =~ /.*_id$/
-    #   champname = champ_to_search(champ_id, champ, options)
-    #   "(SELECT flccloner.new_id FROM flccloner
-    #        WHERE name = #{champname}
-    #        AND flccloner.old_id = (r).#{champ_id}
-    #        AND old_org_id = from_id AND new_org_id = to_id)"
-    # end
+    # Définit le morceau de requête qui permet de trouver dans la table
+    # flccloner la valeur souhaitée pour mettre à jour les références.
+    #
+    # Le deuxième champ permet de préciser le nom du modèle lorsqu'il ne
+    # peut être déduit de champ_id. C'est notamment le cas pour
+    # la table des Writing dont le champ bridge_id fait référence à
+    # Adherent::Member
+    #
+    # On peut précisier via le hash options si le champ est polymorphique
+    def self.value_to_insert(champ_id, champ = nil, options={})
+      raise ArgumentError, 'L\'argument doit être de la forme wwww_id' unless
+      champ_id =~ /.*_id$/
+      champname = champ_to_search(champ_id, champ, options)
+      "(SELECT flccloner.new_id FROM flccloner
+           WHERE name = #{champname}
+           AND flccloner.old_id = (r).#{champ_id}
+           AND old_org_id = from_id AND new_org_id = to_id)"
+    end
 
-    # # trouve le nom du champ à rechercher dans la table de correspondance
-    # # des id (flccloner).
-    # # Si le champ est polymorphique (cas dans la table Account des
-    # # BankAccount et Cash (ce qui donne accountable_type et accountable_id)
-    # def self.champ_to_search(champ_id, champ, options={})
+    # trouve le nom du champ à rechercher dans la table de correspondance
+    # des id (flccloner).
+    # Si le champ est polymorphique (cas dans la table Account des
+    # BankAccount et Cash (ce qui donne accountable_type et accountable_id)
+    def self.champ_to_search(champ_id, champ, options={})
+      if options[:polymorphic]
+        s =champ_id[0..-4]+'_type'
+        s = "(r).#{s}"
+      else
+        s = champ.blank? ? champ_id[0..-4].capitalize : champ
+        s = "'#{s}'"
+      end
+      return s
 
-    #   if options[:polymorphic]
-    #     s =champ_id[0..-4]+'_type'
-    #     s = "(r).#{s}"
-    #   else
-    #     s = champ.blank? ? champ_id[0..-4].capitalize : champ
-    #     s = "'#{s}'"
-    #   end
-    #   return s
-
-    # end
+    end
 
   end
 
