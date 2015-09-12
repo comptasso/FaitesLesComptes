@@ -333,7 +333,7 @@ class Period < ActiveRecord::Base
   end
 
   # renvoie le premier (et normalement l'unique) compte de remise de chèque
-   def rem_check_account
+  def rem_check_account
     rem_check_accounts.first
   end
 
@@ -662,7 +662,7 @@ class Period < ActiveRecord::Base
     Writing.period(self).each do |w|
       w.compta_lines.each {|cl| cl.delete }
       w.check_deposit.delete if w.is_a? CheckDepositWriting
-      w.destroy
+      w.delete
     end
   end
 
