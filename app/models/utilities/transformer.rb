@@ -121,11 +121,8 @@ module Utilities
     end
 
 
-    def etape4
-      # pour chaque base, reconstruction des folios et rubriks
-    end
 
-    def etape5
+    def etape4
       # suppression des schémas
     end
 
@@ -170,7 +167,8 @@ module Utilities
       transform_books transform_destinations transform_accounts transform_natures
       transform_writings transform_compta_lines
       transform_bank_extract_lines transform_check_deposits transform_imported_bels
-      transform_masks transform_subscriptions transform_adherent_bridges)
+      transform_masks transform_subscriptions transform_adherent_bridges
+      refill_check_deposits)
 
 
       requete = ''

@@ -89,7 +89,7 @@ class Compta::SheetsController < Compta::ApplicationController
   end
 
   def liasse
-    redirect_to compta_sheets_url(:collection=>@organism.nomenclature.folios.collect(&:name),
+    redirect_to compta_sheets_url(:collection=>@organism.nomenclature.folios.order(:id).collect(&:name),
       :title=>'Liasse complète')
   end
 
