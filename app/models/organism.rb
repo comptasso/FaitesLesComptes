@@ -44,9 +44,9 @@ class Organism < ActiveRecord::Base
   has_one :nomenclature, dependent: :destroy
   has_many :sectors, dependent: :destroy
   has_many :books, dependent: :destroy
-  has_many :destinations, dependent: :destroy
+  has_many :destinations, dependent: :delete_all
   has_many :natures, through: :periods
-  has_many :bank_accounts, dependent: :destroy
+  has_many :bank_accounts, dependent: :delete_all
   has_many :bank_extracts, through: :bank_accounts
   has_many :bank_extract_lines, through: :bank_extracts
   has_many :writings, :through=>:books

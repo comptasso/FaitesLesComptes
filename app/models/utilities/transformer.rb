@@ -49,7 +49,6 @@ module Utilities
             # si le user est le owner, on va créer un organisme
             if r.owner == u
               r.update_attribute(:tenant_id, t.id)
-              @org_source = Organism.find_by_sql("select * from #{r.database_name}.organisms limit 1").first
               create_new_org(r.database_name)
               Rails.logger.debug "Traitement de l'organisme #{r.database_name}"
             end
@@ -61,8 +60,29 @@ module Utilities
       return new_nb_rooms - nb_rooms
     end
 
-    # A FAIRE
-    # ici on remplit la table des holders en complétant le champ organism_id
+    # # Petite méthode reprise pour corriger une erreur de efface_tout
+    # def etape1bis
+    #   Room.find_each do |r|
+    #     next if !r.tenant_id || r.new_org_id
+    #     Tenant.set_current_tenant r.tenant_id
+    #     @org_source = Organism.find_by_sql("select * from #{r.database_name}.organisms limit 1").first
+    #     create_new_org(r.database_name)
+    #   end
+    # end
+
+    # # remplissage des holders à partir des rooms
+    # def etape1ter
+    #   Room.find_each do |r|
+    #     next unless r.tenant_id
+    #     Tenant.set_current_tenant r.tenant_id
+    #     u = Tenant.current_tenant.users.first
+    #     Holder.create!(room_id:r.id, user_id:u.id, status:'owner',
+    #                   tenant_id:r.tenant_id, organism_id:r.new_org_id)
+
+    #   end
+    # end
+
+    # Ici on remplit la table des holders en complétant le champ organism_id
     # On prend l'ensemble des holders, on prend la room, on trouve l'organisme
     # correspondant et on remplit le champ organism_id
     def etape2
@@ -83,7 +103,7 @@ module Utilities
     # Chaque Room a été remplie avec le tenant et l'id de l'organisme
     # qui a été créé à l'étape 1.
     #
-    # L'étape 2 consiste alors à recopier les différentes tables venant d'un
+    # L'étape 3 consiste alors à recopier les différentes tables venant d'un
     # schéma en respectant les relations.
     # Il faut donc lire les tables dans le schéma, connaître les champs
     # references à remplacer, rechercher dans la table flccloner les nouvelles
@@ -97,8 +117,16 @@ module Utilities
       delete_trace
       Room.where('tenant_id IS NOT NULL').find_each do |r|
         transformation(r)
-
       end
+    end
+
+
+    def etape4
+      # pour chaque base, reconstruction des folios et rubriks
+    end
+
+    def etape5
+      # suppression des schémas
     end
 
 
@@ -140,7 +168,8 @@ module Utilities
       transform_adherent_adhesions transform_adherent_reglements
       transform_bank_accounts transform_cashes transform_bank_extracts transform_cash_controls
       transform_books transform_destinations transform_accounts transform_natures
-      transform_writings transform_check_deposits transform_compta_lines transform_imported_bels
+      transform_writings transform_compta_lines
+      transform_bank_extract_lines transform_check_deposits transform_imported_bels
       transform_masks transform_subscriptions transform_adherent_bridges)
 
 
@@ -151,8 +180,81 @@ module Utilities
       Room.transaction do
         Room.connection.execute(requete)
       end
+      # reconstruction des folios
+      o = Organism.find(room.new_org_id)
+      o.send(:reset_folios)
       room.update_attribute(:transformed, true)
 
+    end
+
+    def self.efface_tout
+      sql = <<-EOF
+        DELETE FROM periods;
+        DELETE FROM sectors;
+        DELETE FROM accounts;
+        DELETE FROM adherent_adhesions;
+        DELETE FROM adherent_bridges;
+        DELETE FROM adherent_coords;
+        DELETE FROM adherent_members;
+        DELETE FROM adherent_payments;
+        DELETE FROM adherent_reglements;
+        DELETE FROM bank_accounts;
+        DELETE FROM bank_extract_lines;
+        DELETE FROM bank_extracts;
+        DELETE FROM books;
+        DELETE FROM cash_controls;
+        DELETE FROM cashes;
+        DELETE FROM check_deposits;
+        DELETE FROM compta_lines;
+        DELETE FROM destinations;
+        DELETE FROM export_pdfs;
+        DELETE FROM folios;
+        DELETE FROM imported_bels;
+        DELETE FROM listings;
+        DELETE FROM masks;
+        DELETE FROM natures;
+        DELETE FROM nomenclatures;
+        DELETE FROM rubriks;
+        DELETE FROM subscriptions;
+        DELETE FROM writings;
+        UPDATE rooms SET transformed = FALSE;
+
+      EOF
+      Room.transaction do
+        Room.connection.execute(sql)
+
+      end
+    end
+
+    def self.create_refill_check_deposit_function
+      sql = <<-EOF
+CREATE OR REPLACE FUNCTION refill_check_deposits(from_schema text, from_id integer, to_id integer, tenant_id integer)
+  RETURNS SETOF check_deposits AS
+$BODY$
+DECLARE
+  r RECORD;
+BEGIN
+FOR r in EXECUTE format('SELECT *, $1 FROM %I.compta_lines WHERE check_deposit_id IN (
+    SELECT old_id FROM flccloner WHERE name = %L AND old_org_id = %L AND new_org_id = %L)',
+    from_schema, 'CheckDeposit', from_id, to_id)
+   USING tenant_id
+  LOOP
+
+    UPDATE compta_lines SET check_deposit_id = (SELECT flccloner.new_id FROM flccloner
+           WHERE name = 'CheckDeposit'
+           AND flccloner.old_id = r.check_deposit_id
+           AND old_org_id = from_id AND new_org_id = to_id) WHERE
+           compta_lines.id = (SELECT flccloner.new_id FROM flccloner
+           WHERE name = 'ComptaLine'
+           AND flccloner.old_id = r.id
+           AND old_org_id = from_id AND new_org_id = to_id);
+
+  END LOOP;
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE;
+EOF
+create_function(sql)
     end
 
 
@@ -160,6 +262,7 @@ module Utilities
     #   # une reqûete sql avec insertion de l'enregistrement dans la table
     #   # flccloner
     def create_new_org(db_name)
+      @org_source = Organism.find_by_sql("select * from #{db_name}.organisms limit 1").first
       Room.find_by_sql("WITH ret AS
 (INSERT INTO organisms(title, created_at, updated_at, database_name,
            status, version, comment, siren, postcode, tenant_id)
@@ -231,6 +334,7 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
       create_function(sql_transform_n_refs('organism_id',
                                            %w(bank_account_id cash_id destination_id income_book_id),
                                            'adherent_bridges', {modele:Adherent::Bridge, income_book_id:Book}))
+      create_refill_check_deposit_function
       # et enfin le holder
 
     end
@@ -338,6 +442,9 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
     #  cas actuellement étant bridge_id qui fait référence à un
     #  Adherent::Member. Dans ce cas, on mettra dans les options
     #  :bridge_id=>Adherent::Member
+    #  - le nom du modèle lorsque le champ est polymorphique par
+    #  une option. Exemple: :polymorphic=>'accountable_id' pour la table Accounts
+    #  -
     #
     #
     def self.sql_transform_n_refs(champ_id, champ_ids, table, options= {})
@@ -353,13 +460,15 @@ vous devez le fournir en deuxième argument'
       end
 
       # le nom du modèle que l'on cherchera dans la table flc_cloner
-      champ = champ_id[0..-4].capitalize
+      champ = champ_id[0..-4].classify
       # récupération de tous les champs dont on assure la recopie à l'identique
       # ne sont donc pas recopiés le champ id, et les arguments  champ_ids
       list_cols = modele.column_names
       list_cols = list_cols.reject { |c| c == 'id' || c == champ_id || c.in?(champ_ids) || c == 'tenant_id'}
       list  = list_cols.join(', ')
-      r_list = list_cols.map { |c| '(r).'+c}.join(', ')
+      r_list = list_cols.map { |c| 'r."'+c+'"'}.join(', ')
+      # on rajoute des guillemets à cause du champ open de Period, un mot
+      # reservé de fait.
 
       list_champ = champ_ids.join(', ')
       # construction des requêtes cherchant les valeurs dans la table
@@ -379,7 +488,7 @@ vous devez le fournir en deuxième argument'
    RETURNS SETOF #{table} AS
 $BODY$
 DECLARE
-  r #{table}%rowtype;
+  r RECORD;
   new_id int;
 BEGIN
 FOR r in EXECUTE format('SELECT *, $1 FROM %I.#{table} WHERE #{champ_id} IN (
@@ -395,13 +504,11 @@ FOR r in EXECUTE format('SELECT *, $1 FROM %I.#{table} WHERE #{champ_id} IN (
       VALUES (tenant_id, #{value_to_insert(champ_id)},
       #{values + ', ' unless values.empty?}
       #{r_list})
-     RETURNING id, (r).id  oldid)
+     RETURNING id, r.id  oldid)
       INSERT INTO flccloner (name, old_id, new_id, old_org_id, new_org_id)
-      VALUES ('#{modele}', (r).id,
-      (SELECT id FROM correspondance WHERE oldid = (r).id ), from_id, to_id);
-    RETURN NEXT r;
+      VALUES ('#{modele}', r.id,
+      (SELECT id FROM correspondance WHERE oldid = r.id ), from_id, to_id);
   END LOOP;
-  RETURN;
 END
 $BODY$
   LANGUAGE plpgsql VOLATILE;
@@ -427,9 +534,10 @@ $BODY$
       champname = champ_to_search(champ_id, champ, options)
       "(SELECT flccloner.new_id FROM flccloner
            WHERE name = #{champname}
-           AND flccloner.old_id = (r).#{champ_id}
+           AND flccloner.old_id = r.#{champ_id}
            AND old_org_id = from_id AND new_org_id = to_id)"
     end
+
 
     # trouve le nom du champ à rechercher dans la table de correspondance
     # des id (flccloner).
@@ -438,9 +546,9 @@ $BODY$
     def self.champ_to_search(champ_id, champ, options={})
       if options[:polymorphic]
         s =champ_id[0..-4]+'_type'
-        s = "(r).#{s}"
+        s = "r.#{s}"
       else
-        s = champ.blank? ? champ_id[0..-4].capitalize : champ
+        s = champ.blank? ? champ_id[0..-4].classify : champ
         s = "'#{s}'"
       end
       return s

@@ -20,7 +20,7 @@ class Book < ActiveRecord::Base
   # attr_accessible :title, :description, :abbreviation
 
   belongs_to :organism
-  has_many :writings, :dependent=>:destroy
+  has_many :writings, :dependent=>:delete_all
   has_many :compta_lines, :through=>:writings
 
   # utilisé pour les delayed_jobs

@@ -242,7 +242,7 @@ class Writing < ActiveRecord::Base
   # Lorsqu'un écriture est détruite, il faut indiquer à la nomenclature
   # que les valeurs de ses rubriques ne sont plus fraîches
   def no_fresh_values
-    if book && book.organism && n = book.organism.nomenclature
+    if book && book.organism && n = book.organism.nomenclature(true)
       n.update_attribute(:job_finished_at, nil)
     end
   end
