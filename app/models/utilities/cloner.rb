@@ -22,6 +22,8 @@ module Utilities
 
       # on trouve l'organisme demandé par le clone
       @org_source = from_org
+      # ON efface les données de la table flccloner
+      delete_trace
       # création du nouvel organisme
       create_new_org(comment)
       # on copie les différentes données des tables
@@ -32,8 +34,6 @@ module Utilities
       new_org = Organism.find(new_org_id)
       # reconstruire les rubriks
       new_org.send(:reset_folios)
-      # ON efface les données de la table flccloner
-      delete_trace
       # on renvoie le nouvel id
       return new_org_id
 
@@ -62,8 +62,9 @@ module Utilities
       copy_adherent_adhesions copy_adherent_reglements
       copy_bank_accounts copy_cashes copy_bank_extracts copy_cash_controls
       copy_books copy_destinations copy_accounts copy_natures
-      copy_writings copy_check_deposits copy_compta_lines copy_imported_bels
-      copy_masks copy_subscriptions copy_adherent_bridges)
+      copy_writings copy_compta_lines copy_bank_extract_lines copy_check_deposits
+      copy_imported_bels copy_masks copy_subscriptions copy_adherent_bridges
+      refill_check_deposits)
 
 
       requete = ''
@@ -161,6 +162,10 @@ VALUES('Organism',
       create_function(sql_copy_n_refs('organism_id',
         %w(bank_account_id cash_id destination_id income_book_id),
         'adherent_bridges', {modele:Adherent::Bridge, income_book_id:Book}))
+      # on reremplit les compta_lines.check_deposit_id car la structure de la
+      # base de données ne permet pas de trouver un enchaintement pour ce
+      # champ
+      create_refill_check_deposit_function
       # et enfin le holder
 
     end
@@ -283,7 +288,7 @@ vous devez le fournir en deuxième argument'
       end
 
       # le nom du modèle que l'on cherchera dans la table flc_cloner
-      champ = champ_id[0..-4].capitalize
+      champ = champ_id[0..-4].classify
       # récupération de tous les champs dont on assure la recopie à l'identique
       # ne sont donc pas recopiés le champ id, et les arguments  champ_ids
       list_cols = modele.column_names
@@ -341,6 +346,38 @@ $BODY$
       sql
     end
 
+    def self.create_refill_check_deposit_function
+      sql = <<-EOF
+CREATE OR REPLACE FUNCTION refill_check_deposits(from_id integer, to_id integer)
+  RETURNS SETOF check_deposits AS
+$BODY$
+DECLARE
+  r RECORD;
+BEGIN
+FOR r in EXECUTE format('SELECT * FROM compta_lines WHERE check_deposit_id IN (
+    SELECT old_id FROM flccloner
+    WHERE name = %L AND old_org_id = %L AND new_org_id = %L)', 'CheckDeposit',
+    from_id, to_id)
+
+  LOOP
+
+    UPDATE compta_lines SET check_deposit_id = (SELECT flccloner.new_id FROM flccloner
+           WHERE name = 'CheckDeposit'
+           AND flccloner.old_id = r.check_deposit_id
+           AND old_org_id = from_id AND new_org_id = to_id) WHERE
+           compta_lines.id = (SELECT flccloner.new_id FROM flccloner
+           WHERE name = 'ComptaLine'
+           AND flccloner.old_id = r.id
+           AND old_org_id = from_id AND new_org_id = to_id);
+
+  END LOOP;
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE;
+EOF
+      create_function(sql)
+    end
+
     protected
 
     # Définit le morceau de requête qui permet de trouver dans la table
@@ -372,7 +409,7 @@ $BODY$
         s =champ_id[0..-4]+'_type'
         s = "(r).#{s}"
       else
-        s = champ.blank? ? champ_id[0..-4].capitalize : champ
+        s = champ.blank? ? champ_id[0..-4].classify : champ
         s = "'#{s}'"
       end
       return s
