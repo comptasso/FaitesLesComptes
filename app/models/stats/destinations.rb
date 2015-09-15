@@ -33,7 +33,7 @@ module Stats
 
     def initialize(period, options = {})
       super(period)
-      @sector = options[:sector] || Sector.first
+      @sector = options[:sector] || period.organism.sectors.first
       @books =  @sector.books.order(:type)
       @dests = find_destinations
       @title_line = title

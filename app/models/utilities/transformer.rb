@@ -123,7 +123,41 @@ module Utilities
 
 
     def etape4
-      # suppression des schémas
+      # remplissage des tenants.name avec le user.name
+      Tenant.find_each do |t|
+        next if t.name
+        Tenant.set_current_tenant t.id
+        hs = Holder.where('status = ?', 'owner')
+        t.update_attribute(:name, hs.first.organism.title) if hs.any?
+      end
+      # rajouter un sector 'Commun' aux CE qui n'en ont pas
+      # remplissage des tenants_users pour les holders qui sont des guests
+      hs = Holder.find_by_sql("SELECT * FROM holders WHERE status = 'guest';")
+      hs.each do |h|
+        os = Organism.find_by_sql("SELECT * FROM organisms WHERE id = #{h.organism_id};")
+        if os.any?
+          o = os.first
+          # on remplace le tenant de ce holder par celui qui détient l'organisme
+          Holder.connection.execute(
+            "UPDATE holders SET tenant_id = #{o.tenant_id} WHERE id = #{h.id};"
+          ) if h.tenant_id != o.tenant_id
+          Tenant.set_current_tenant o.tenant_id
+          t = Tenant.current_tenant
+          u = h.user
+          u.tenants << t unless t.in? u.tenants
+        end
+      end
+
+    end
+
+    # suppression des schémas
+    def etape5
+      Room.find_each do |r|
+        Room.conection.execute("DROP SCHEMA IF EXISTS #{r.database_name} CASCADE;")
+      end
+      # Il sera possible ensuite de détruire la table Room mais on le fera
+      # après dans une migration car elle contient des infos importantes
+      # au cas où la transformation se passe mal
     end
 
 

@@ -1,6 +1,6 @@
 class Holder < ActiveRecord::Base
 
-  acts_as_tenant
+  # acts_as_tenant
   belongs_to :organism
   belongs_to :user
   belongs_to :room

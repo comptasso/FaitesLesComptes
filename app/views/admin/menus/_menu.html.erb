@@ -1,6 +1,6 @@
 <ul class="nav navbar-nav" id="main_nav">
 
-<% if current_user.role == 'expert' %>
+<% if current_user.tenants.many? %>
   <li class="dropdown <%= 'active' if controller.controller_name.in? ['rooms']   %>" >
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">ESPACES<b class="caret"></b></a>
     <ul class="dropdown-menu">

@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 
   has_many :holders, :dependent=>:destroy
   has_many :organisms, :through=>:holders
-  has_many :rooms, :through=>:holders
+  # has_many :rooms, :through=>:holders
 
   strip_before_validation :name
 
@@ -18,60 +18,16 @@ class User < ActiveRecord::Base
     :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :role, presence: true, :inclusion=>{:in=>['standard', 'expert'] }
 
+  before_destroy :destroy_owned_organisms
+  after_destroy :destroy_related_tenant
+
   # renvoie les rooms qui sont détenues par le user
   def owned_organisms
     holders.where('status = ?', 'owner').map(&:organism)
   end
 
-  # retourne un array de hash des organismes et des chambres appartenat à cet user
-  # le hash ne comprend que les organimes qui ont pu être effectivement trouvés
-#   def organisms_with_room
-#     owrs = rooms(true).collect { |r| {organism:r.organism, room:r} }
-#     owrs.select {|o| o[:organism] != nil}
-#   end
-
-  # retourne un hash pour la zone Compta avec les seulement les organismes qui
-  # sont accountable.
-  #
-  # s'appuie sur organism_with_rooms et ne retient que les accountable?
-  #
-  # N'est plus utilisé maintenant que la liste des organismes n'est disponible
-  # que dans le menu Admin
-  #
-#  def accountable_organisms_with_room
-#    rooms.select {|r|  r.look_for { r.organism.accountable? } }
-#  end
-
-  # retourne un hash pour la zone de Saisie avec seulement les organismes qui
-  # ont un exercice
-  #
-  # s'appuie sur organism_with_rooms et ne retient que ceux qui ont un organisme
-#   def saisieable_organisms_with_room
-#     rooms.select {|r| r.look_for {r.organism.periods.any?} }
-#   end
-
-  # up_to_date effectue un contrôle des bases de l'utilisateur
-  # sur la totalité des rooms qui lui appartiennent.
-  #
-  # Pour chaque base, up_to_date? collecte les données de relative_version.
-  #
-  # Si toutes les bases renvoient :same_migration, alors up_to_date? renvoie
-  # true, false sinon;
-  #
-  # Renvoie également true s'il n'y pas de base
-  #
-#   def up_to_date?
-#     return true if status.empty?
-#     status == [:same_migration] ? true : false
-#   end
-
-  # status collecte les différents statuts des bases de données appartenant
-  # au user
-#   def status
-#     rooms.map {|r| r.relative_version}.uniq
-#   end
-
-
+  # Un User est autorisé à créer un organisme s'il a le rôle Expert
+  # ou si le nombre de ses comptas est inférieurs à 4
   def allowed_to_create_organism?
     return true if role == 'expert'
     holders.where('status = ?', 'owner').count < 4
@@ -79,7 +35,18 @@ class User < ActiveRecord::Base
 
   protected
 
+  def destroy_owned_organisms
+    owned_organisms.each do |o|
+      o.destroy
+      # TODO destruction des users qui n'ont d'autre rôle que guest sur cet
+      # organisme -> à faire dans un before_destroy de Organism
+    end
+  end
 
+  def destroy_related_tenant
+    # TODO voir comment détruire un tenant si ce user était le dernier
+    # en lien avec ce tenant.
+  end
 
 
 end

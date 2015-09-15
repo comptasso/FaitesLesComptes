@@ -3,7 +3,7 @@
   <head>
     <title>Faites les comptes !</title>
 
-    
+
 
     <noscript>
     <meta http-equiv="refresh" content="1;url=/no_javascript.html" />
@@ -14,7 +14,7 @@
 
 <%= javascript_include_tag "application" %>
 
- 
+
 
     <%= csrf_meta_tags %>
   </head>
@@ -29,22 +29,30 @@
             <%= render 'menus/menu'  %>
         </div>
       <% end %>
-      
+
+      <% if user_signed_in? && controller_name == 'registrations' && action_name == 'edit' %>
+<!-- pas très bien nommé, la suite affiche les icones -->
+  <ul class="nav navbar-nav" id="main_nav">
+<li class="horizontal_icons">
+  <%= yield :menu %>
+</li>
+</ul>
+<% end %>
     </nav>
-    
-    <div> 
+
+    <div>
       <%=  yield :modal %>
     </div>
-    
+
     <div class="container-fluid" >
 
       <div id="main-zone">
-          <div id="flashpartial"><%= render 'layouts/flash_partial' %></div>  
-          <div id="message"> </div><%# pour les messages utilisés par produce_pdf.js_erb%> 
+          <div id="flashpartial"><%= render 'layouts/flash_partial' %></div>
+          <div id="message"> </div><%# pour les messages utilisés par produce_pdf.js_erb%>
           <%= yield %>
-          
+
         </div>
-      
+
 
       <div class ="push"></div>
     </div>

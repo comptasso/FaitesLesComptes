@@ -238,7 +238,7 @@ describe Compta::SheetsController do
 
 
       it 'et liasse avec tous es folios' do
-        @o.stub_chain(:nomenclature, :folios, :collect).and_return(['actif', 'passif', 'resultat', 'benevolat'])
+        @o.stub_chain(:nomenclature, :folios, :order, :collect).and_return(['actif', 'passif', 'resultat', 'benevolat'])
         get :liasse, {}, valid_session
         response.should redirect_to compta_sheets_path(collection:['actif', 'passif', 'resultat', 'benevolat'], title:'Liasse complète')
       end

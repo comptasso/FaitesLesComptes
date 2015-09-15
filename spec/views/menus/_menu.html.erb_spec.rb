@@ -29,7 +29,6 @@ describe "menus/_menu.html.erb" do
       view.stub(:resource_name).and_return('user')
       view.stub(:resource).and_return(@cu)
       @cu.stub(:remember_me).and_return true
-
     end
 
     it 'upper_menu ne doit pas s afficher' do

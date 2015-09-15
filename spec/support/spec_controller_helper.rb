@@ -5,20 +5,9 @@
 #
 module SpecControllerHelper
 
-#   def sign_in(user = double('user'))
-#     if user.nil?
-#       request.env['warden'].stub(:authenticate!).
-#         and_throw(:warden, {:scope => :user})
-#       controller.stub :current_user => nil
-#     else
-#       puts "Dans sign_in Warden : #{request.env['warden']}"
-#       request.env['warden'].stub :authenticate! => user
-#       controller.stub :current_user => user
-#     end
-#   end
 
-  # définit les instances et les stub nécessaires pour passer les before filter (log_in?
-  # find_organism, current_period, current_user
+  # définit les instances et les stub nécessaires pour passer
+  # les before filter (log_in?, find_organism, current_period, current_user)
   def minimal_instances
     # Tenant.set_current_tenant(tenants(:tenant_1).id)
     @t = tenants(:tenant_1)

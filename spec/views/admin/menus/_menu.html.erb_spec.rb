@@ -12,7 +12,10 @@ describe "admin/menus/_menu.html.erb" do
 
   let(:o) {mock_model(Organism, main_bank_id:1, status:'Association', room:mock_model(Room),
       writings:[], created_at:Time.now, updated_at:Time.now) }
-  let(:cu) {mock_model(User, name:'jcl', 'allowed_to_create_organism?'=>true)}
+  let(:t) {mock_model(Tenant)}
+  let(:cu) {mock_model(User, name:'jcl',
+                      'allowed_to_create_organism?'=>true,
+                      :tenants=>[t])}
 
   before(:each) do
     assign(:user, cu)
