@@ -103,4 +103,5 @@
 # FLCVERSION = '1.13.0RC' # Mise en place de piece_number pour les Writings
 # FLCVERSION = '1.13.1RC' # Suppression des tables lines et listings réapparues suite à une fusion 
 # FLCVERSION = '1.13.2RC' # Correction de l'affichage des totaux pour les Caisses 
-FLCVERSION = '1.13.3RC' # Corr. affichage stats par activité si tte écritures affectée
+# FLCVERSION = '1.13.3RC' # Corr. affichage stats par activité si tte écritures affectée
+FLCVERSION = '1.13.4RC' # Passage à Ruby 2.2.2
