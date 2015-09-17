@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
     :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :role, presence: true, :inclusion=>{:in=>['standard', 'expert'] }
 
-  before_destroy :destroy_owned_organisms
+  before_destroy :destroy_owned_organisms, prepend:true
   after_destroy :destroy_related_tenant
 
   # renvoie les rooms qui sont détenues par le user
