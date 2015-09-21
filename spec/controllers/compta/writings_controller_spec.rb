@@ -1,16 +1,17 @@
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'support/spec_controller_helper'
 
 RSpec.configure do |config|
    # config.filter = {wip:true}
 end
 
 describe Compta::WritingsController do
-  include SpecControllerHelper  
+  include SpecControllerHelper
 
   before(:each) do
-    minimal_instances 
+    minimal_instances
     @my = MonthYear.from_date(Date.today)
     @p.stub(:all_natures_linked_to_account?).and_return true
     @p.stub(:guess_month).and_return(MonthYear.from_date(Date.today))
@@ -18,12 +19,10 @@ describe Compta::WritingsController do
     Book.stub(:find).and_return(@b)
   end
 
- 
   describe "GET index"  do
     it "assigns all writings as @writings" do
       Extract::Book.should_receive(:new).with(@b, @p, @p.start_date, @p.close_date).and_return @a = double(Arel)
       @a.should_receive(:writings).and_return(@a)
-            
       get :index, {book_id:@b.id, mois:'tous' }, valid_session
       assigns(:writings).should == @a
     end
@@ -38,7 +37,8 @@ describe Compta::WritingsController do
 
     it 'sans params et pas d AnBook, redirige' do
        get :index, {book_id:@b.id  }, valid_session
-       response.should redirect_to(compta_book_writings_url(@b, :mois=>@my.month, :an=>@my.year))
+       response.should redirect_to(compta_book_writings_url(@b.id,
+       :mois=>@my.month, :an=>@my.year))
     end
 
     it 'avec params mois et an, wherche les writings du mois' do
@@ -49,10 +49,9 @@ describe Compta::WritingsController do
 
   end
 
-  
 
   describe "GET new"  do
-    
+
     it "assigns a new writing as @writing" do
       @b.stub_chain(:writings, :new).and_return(Writing.new)
       get :new, {book_id:@b.to_param}, valid_session
@@ -77,14 +76,14 @@ describe Compta::WritingsController do
   end
 
   describe "POST create"  do
-    
+
     before(:each) do
       @controller.stub(:fill_author)
       @r = mock_model(Writing)
       @b.stub(:writings).and_return @a = double(Arel)
     end
 
-   
+
     describe "with valid params"  do
 
       before(:each) do
@@ -96,7 +95,7 @@ describe Compta::WritingsController do
         post :create, {book_id:@b.to_param, :writing => {} }, valid_session
         assigns(:writing).should be_a(Writing)
       end
-      
+
       it 'appelle fill_author' do
         @r.stub(:save).and_return(@r)
         @controller.should_receive(:fill_author).with(@r)
@@ -150,7 +149,7 @@ describe Compta::WritingsController do
 
     describe "with valid params" do
       it "updates the requested writing" do
-     
+
         # Assuming there are no other writings in the database, this
         # specifies that the Writing created on the previous line
         # receives the :update_attributes message with whatever params are
@@ -158,14 +157,14 @@ describe Compta::WritingsController do
         @w.should_receive(:update_attributes).with({'book_id'=>'5'}).and_return @w
         put :update, {book_id:@b.id, :id => @w.to_param, :writing => {"book_id"=>'5'}}, valid_session
       end
-      
+
       it 'appelle fill_author' do
         @controller.should_receive(:fill_author).with(@w)
         put :update, {book_id:@b.id, :id => @w.to_param, :writing => {'these' => 'params'}}, valid_session
       end
 
       it "assigns the requested writing as @writing" do
-        
+
         put :update, {book_id:@b.id, :id => @w.to_param, :writing => {'these' => 'params'}}, valid_session
         assigns(:writing).should eq(@w)
       end
@@ -179,7 +178,7 @@ describe Compta::WritingsController do
 
     describe "with invalid params"  do
       it "assigns the writing as @writing" do
-        
+
         # Trigger the behavior that occurs when invalid params are submitted
         @w.stub(:update_attributes).and_return false
         put :update, {book_id:@b.id, :id => @w.to_param, :writing => {book_id:5}}, valid_session
@@ -196,9 +195,9 @@ describe Compta::WritingsController do
   end
 
   describe "DELETE destroy" do
-    
+
     before(:each) do
-     
+
       @w = mock_model(Writing, :date=>Date.today)
       Writing.stub(:find).and_return(@w)
     end
@@ -245,56 +244,55 @@ describe Compta::WritingsController do
       response.should redirect_to compta_book_writings_url(@b)
     end
   end
-  
+
   describe 'production du pdf', wip:true do
-    
+
     def pdf_attributes
-      {book_id:@b.to_param, an:Date.today.year.to_s, mois:Date.today.month.to_s} 
+      {book_id:@b.to_param, an:Date.today.year.to_s, mois:Date.today.month.to_s}
     end
-    
+
     def merged_attributes
       {period_id:@p.id,
         from_date:Date.today.beginning_of_month, to_date:Date.today.end_of_month }
     end
-    
-       
+
+
     describe 'produce_pdf' do
-      
-      it 'lance la production du pdf' do 
+
+      it 'lance la production du pdf' do
         @b.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
         @b.stub(:create_export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
         Jobs::ComptaBookPdfFiller.stub(:new).and_return double(Object, perform:'delayed_job')
-        xhr :get, :produce_pdf, pdf_attributes.merge({format:'js'}), session_attributes 
+        xhr :get, :produce_pdf, pdf_attributes.merge({format:'js'}), session_attributes
       end
-      
+
       it 'en le mettant dans la queue' do
         @b.stub(:export_pdf)
         @b.stub(:create_export_pdf).and_return(@expdf =  mock_model(ExportPdf, status:'new'))
         Jobs::ComptaBookPdfFiller.should_receive(:new).
-          with(@o.database_name, @expdf.id, merged_attributes).and_return(@gb_filler = double(Jobs::GeneralBookPdfFiller))
+          with(@t.id, @expdf.id, merged_attributes).and_return(@gb_filler = double(Jobs::GeneralBookPdfFiller))
         Delayed::Job.should_receive(:enqueue).with @gb_filler
         xhr :get, :produce_pdf, pdf_attributes.merge(format:'js'), session_attributes
       end
-      
+
     end
 
-    describe 'pdf_ready' do 
+    describe 'pdf_ready' do
       it 'interroge si prêt' do
         @b.stub(:export_pdf).and_return(mock_model(ExportPdf, status:'mon statut'))
         xhr :get, :pdf_ready, {:book_id=>@b.to_param, format:'js'}, session_attributes
-        response.body.should == 'mon statut' 
+        response.body.should == 'mon statut'
       end
     end
-   
-  
-    describe 'GET deliver_pdf' do 
+
+    describe 'GET deliver_pdf' do
       it 'rend le fichier' do
         @b.should_receive(:export_pdf).and_return(mock_model(ExportPdf, status:'ready'))
         get :deliver_pdf, {:book_id=>@b.to_param, format:'js'}, session_attributes
-        response.content_type.should == "application/pdf" 
+        response.content_type.should == "application/pdf"
       end
     end
-  
+
   end
 
 

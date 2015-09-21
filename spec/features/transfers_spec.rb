@@ -7,43 +7,43 @@ RSpec.configure do |c|
   # c.exclusion_filter = {:js=> true }
 end
 
-describe 'vue transfer index'do 
+describe 'vue transfer index'do
   include OrganismFixtureBis
-  
+
   # méthode accessoire pour création de transfer
   def create_transfer(amount = 10000, piece_number=1)
     Transfer.create!(book_id:@od.id, date:(Date.today),
         piece_number:piece_number, narration: 'création',
-        :compta_lines_attributes=> {'0'=>{account_id:@baca.id, credit:amount}, 
+        :compta_lines_attributes=> {'0'=>{account_id:@baca.id, credit:amount},
           '1'=>{account_id:@bbca.id, debit:amount}})
   end
-  
-  
-  before(:each) do  
-    use_test_user 
-    login_as('quidam')
-    use_test_organism 
+
+
+  before(:each) do
+    use_test_user
+    login_as(@cu, 'MonkeyMocha')
+    use_test_organism
     @bb = find_second_bank
     @bbca = @bb.current_account(@p) # ca pour Current Account
-    
+
   end
-  
+
   after(:each) do
-    Transfer.delete_all 
+    Transfer.delete_all
   end
 
   describe 'new transfer'  do
-    
+
     it "affiche la page new" do
       visit new_transfer_path
-      page.should have_content("Nouveau virement") 
+      page.should have_content("Nouveau virement")
       page.should have_css('form')
     end
 
     it 'remplir correctement le formulaire crée un nouveau transfert' do
       visit new_transfer_path
       fill_in 'transfer[date_picker]', :with=>I18n::l(Date.today, :format=>:date_picker)
-      fill_in 'transfer[narration]', :with=>'Premier virement' 
+      fill_in 'transfer[narration]', :with=>'Premier virement'
       fill_in 'transfer[amount]', :with=>'123.50'
       within('#transfer_compta_lines_attributes_0_account_id') do
         select(@ba.nickname)
@@ -67,7 +67,7 @@ describe 'vue transfer index'do
         fill_in 'transfer[date_picker]', :with=>I18n::l(Date.today, :format=>:date_picker)
         fill_in 'transfer[narration]', :with=>'Premier virement'
         fill_in 'transfer[amount]', :with=>'123.50'
-      
+
         within('#transfer_compta_lines_attributes_0_account_id') do
           select(@ba.nickname)
         end
@@ -91,19 +91,19 @@ describe 'vue transfer index'do
     end
 
   end
-  
-  
- 
+
+
+
   describe 'index' do
 
     before(:each) do
       # création de deux transfers
       @t1 = create_transfer
       @t2 = create_transfer(999990, 53)
-      
+
       visit transfers_path
     end
-    
+
     after(:each) do
       Transfer.delete_all
     end
@@ -116,7 +116,7 @@ describe 'vue transfer index'do
     it 'dans la vue virement,un virement peut être détruit si ', :js=>true do
       # à ce stade aucun virement n'est confirmé et peut être détruit
       within 'tbody tr:nth-child(2)' do
-        click_link 'Supprimer' 
+        click_link 'Supprimer'
       end
       alert = page.driver.browser.switch_to.alert
       alert.accept
@@ -126,18 +126,18 @@ describe 'vue transfer index'do
 
     it 'on peut le choisir dans la vue index pour le modifier', wip:true do
       within 'tbody tr:nth-child(2)' do
-        @lien =  find('a[title="Modifier"]')['href'] 
+        @lien =  find('a[title="Modifier"]')['href']
         click_link 'Modifier'
-      end 
+      end
       current_url.should match /.*#{@lien}\z/
-    end 
+    end
 
   end
 
   describe 'edit'  do
 
     before(:each) do
-      @bb = find_second_bank 
+      @bb = find_second_bank
       @t1 = create_transfer
     end
 

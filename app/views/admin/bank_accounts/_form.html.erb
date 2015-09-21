@@ -1,7 +1,7 @@
 <div class="panel-body">
   <%= simple_form_for([:admin,@organism,@bank_account],
     :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form) do |f| %>
-      <%= f.error_notification %> 
+      <%= f.error_notification %>
 
       <div class='form-inputs'>
         <%= f.input :bank_name, my_wrapper_html: {class: "col-lg-3"}%>
@@ -13,11 +13,13 @@
         <% if @organism.sectored? %>
 
           <%= f.association :sector,  my_wrapper_html: {class: "col-lg-3"},
-              prompt:'Choisissez un secteur', 
+              prompt:'Choisissez un secteur',
+              collection: @organism.sectors,
               hint:'L\'utilisation de comptes communs est possible mais déconseillée' %>
           <% else %>
             <%= f.association :sector,  my_wrapper_html: {class: "col-lg-3"},
                 prompt:'Choisissez un secteur',
+                collection: @organism.sectors,
                 required:true, as: :hidden %>
         <% end %>
 

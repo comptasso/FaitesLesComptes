@@ -3,5 +3,5 @@
 
 .row
   %ul.document_list
-    - @nomenclature.folios.each do |fol|
+    - @folios.each do |fol|
       %li= link_to fol.title.capitalize, compta_sheet_path(fol)

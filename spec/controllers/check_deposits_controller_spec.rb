@@ -1,23 +1,24 @@
 # coding: utf-8
 
-require 'spec_helper'  
+require 'spec_helper'
+require 'support/spec_controller_helper'
 
 RSpec.configure do |c|
  # c.filter = {wip:true}
 end
 
-describe CheckDepositsController do 
+describe CheckDepositsController do
   include SpecControllerHelper
 
   let(:ba) {mock_model(BankAccount, name: 'IBAN', number: '124578A', organism_id:@o.id, sector:@sect)}
   let(:ba2) {mock_model(BankAccount, name: 'IBAN', number: '124578B', organism_id:@o.id, sector:@sect)}
   let(:be) {mock_model(BankExtract, bank_account_id: ba.id, begin_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month,
       begin_sold: 120, debit: 450, credit: 1000, end_sold: 120+1000-450)}
-  
-  
+
+
   let(:cd) {mock_model(CheckDeposit)}
 
-  
+
 before(:each) do
    minimal_instances
    BankAccount.stub(:find).with(ba.to_param).and_return ba
@@ -39,10 +40,10 @@ before(:each) do
         assigns[:period].should == @p
         assigns[:organism].should == @o
         assigns[:bank_account].should == ba
-        assigns(:check_deposits).should == [1,2] 
+        assigns(:check_deposits).should == [1,2]
       end
 
-      
+
 
       it "bank_account doit recevoir la requête check_deposits et wihtin_period" do
         ba.should_receive(:check_deposits).and_return(@ar = double(Arel))
@@ -66,7 +67,7 @@ before(:each) do
         flash[:alert].should == "Il reste 2 chèques à remettre à l'encaissement pour un montant de 401,00 €"
 
       end
-     
+
       it "rend le template index" do
         ba.stub_chain(:check_deposits, :within_period, :order).and_return [1,2]
         get :index, {:bank_account_id=>ba.id,  :organism_id=>@o.id.to_s}, valid_session
@@ -74,15 +75,15 @@ before(:each) do
       end
     end
 
-    
+
   end # fin de index
 
   describe 'GET show' do
 
     before(:each) do
-      @o.stub(:pending_checks).and_return [double(ComptaLine)]
+     @o.stub_chain(:compta_lines, :sectored_pending_checks).and_return [double(ComptaLine)]
     end
-  
+
     it 'should retrieve the value' do
       CheckDeposit.should_receive(:find).with(cd.id.to_s)
       get :show, {:bank_account_id=>ba.id,  :organism_id=>@o.id.to_s, id:cd.id}, valid_session
@@ -99,13 +100,13 @@ before(:each) do
       get :show, {:bank_account_id=>ba.id,  :organism_id=>@o.id.to_s, id:cd.id}, valid_session
       response.should render_template('show')
     end
-    
+
   end
 
   describe 'GET edit' do
 
     before(:each) do
-      @o.stub(:pending_checks).and_return [double(ComptaLine)]
+     @o.stub_chain(:compta_lines, :sectored_pending_checks).and_return [double(ComptaLine)]
     end
 
     it 'should retrieve the value' do
@@ -156,7 +157,7 @@ before(:each) do
 
      it 'le params de bank_account_id est fixé et utilisé pour check_deposit' do
         CheckDeposit.stub(:new).and_return @cd = mock_model(CheckDeposit).as_new_record
-        
+
         ba2.should_receive(:check_deposits).and_return(@a = double(Arel))
         @a.should_receive(:new).and_return(@cd = mock_model( CheckDeposit, :bank_account_id=>ba2.id).as_new_record)
         @cd.should_receive(:pick_all_checks)
@@ -176,7 +177,7 @@ before(:each) do
           ba.stub_chain(:check_deposits, :new).and_return(@cd = mock_model( CheckDeposit, :bank_account_id=>ba.id).as_new_record)
           @cd.stub(:pick_all_checks)
           get :new, {:organism_id=>@o.id.to_s, :bank_account_id=>ba.id}, valid_session
-          response.should render_template('new') 
+          response.should render_template('new')
 
         end
 
@@ -210,9 +211,9 @@ before(:each) do
       post :create, {:bank_account_id=>ba.id, :organism_id=>@o.id.to_s,
           :check_deposit=>{bank_account_id:2} }, valid_session
     end
-    
+
     it 'le controlleur reçoit fill_author' do
-      
+
       ba.stub_chain(:check_deposits, :new).
         and_return @cd=mock_model(CheckDeposit)
       @controller.should_receive(:fill_author).with(@cd)
@@ -237,11 +238,11 @@ before(:each) do
           :check_deposit=>{param:'value'} }, valid_session
       response.should render_template('new')
     end
-    
+
   end
 
   describe 'GET update' do
-    
+
     before(:each) do
       @controller.stub(:fill_author)
     end
@@ -252,9 +253,9 @@ before(:each) do
       post :update, {:bank_account_id=>ba.id, :organism_id=>@o.id.to_s, id:cd.id,
           :check_deposit=>{param:'value'} }, valid_session
     end
-    
+
     it 'le controlleur reçoit fill_author' do
-      
+
       CheckDeposit.stub(:find).with(cd.id.to_s).and_return cd
       @controller.should_receive(:fill_author).with(cd)
       cd.stub(:update_attributes).and_return true

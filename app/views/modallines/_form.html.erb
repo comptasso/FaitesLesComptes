@@ -1,5 +1,3 @@
-
-
 <div class="modal-body" id="form_bank_extract_line" >
 
 <%=  simple_form_for(@in_out_writing,
@@ -10,7 +8,7 @@
 <%= f.error_notification %>
 
   <div class='form-inputs'>
-<%= f.input :livre, include_blank:false, required:true, 
+<%= f.input :livre, include_blank:false, required:true,
   my_wrapper_html:{class:'col-lg-6'} do %>
   <%= f.select :book_id,
   @organism.in_out_books.map{ |b| [b.title, b.id, {'data-type'=> b.type, 'data-id'=>b.id}] },
@@ -19,7 +17,7 @@
 
 
 
-<%= f.input :date_picker, :label=> 'Date', 
+<%= f.input :date_picker, :label=> 'Date',
     my_wrapper_html:{class:'col-lg-6'},
     input_html: {date_min:@period.start_date, date_max:@period.close_date},
     :required => true, :as=>:date_picker %>
@@ -55,7 +53,7 @@
 
         <%= build.association :account, :label=> 'Contrepartie',
           my_wrapper_html: {class: "col-lg-6"}, :collection=>[@counter_line.account],
-            :label_method=>:title, :disabled=>true, 
+            :label_method=>:title, :disabled=>true,
             :include_blank=>false, as: :hidden  %>
         <%= build.input :check_number, label:'N° ch.',
           my_wrapper_html:{class: "col-lg-6" } %>
@@ -64,7 +62,7 @@
 
         <% end %>
 
-  
+
     <div class='form-group'>
           <%=  f.button :submit, id: 'new_line_button', class: "btn-primary col-lg-4 col-lg-offset-3" %>
     </div>

@@ -1,9 +1,9 @@
 class BankExtractLinesController < ApplicationController
-  
-  # TODO on pourrait modifier les routes pour avoir juste 
-  # bank_extract_bank_extract_line 
+
+  # TODO on pourrait modifier les routes pour avoir juste
+  # bank_extract_bank_extract_line
   # et récupérer les variables d'instances nécessaires
- 
+
   before_filter :find_params
 
   def index
@@ -16,11 +16,11 @@ class BankExtractLinesController < ApplicationController
   #
   def pointage
     if @bank_extract.locked
-      flash[:notice] = 'Extrait verrouillé, 
+      flash[:notice] = 'Extrait verrouillé,
 redirection vers la liste des lignes restant à pointer'
-      redirect_to lines_to_point_bank_account_bank_extracts_url(@bank_account) 
+      redirect_to lines_to_point_bank_account_bank_extracts_url(@bank_account)
     end
-      @previous_line = ComptaLine.find_by_id(flash[:previous_line_id]) if 
+      @previous_line = ComptaLine.find_by_id(flash[:previous_line_id]) if
         flash[:previous_line_id]
     prepare_modal_box_instances
     # les variables d'instances pour l'affichage de la vue pointage
@@ -28,25 +28,25 @@ redirection vers la liste des lignes restant à pointer'
       includes(:compta_line=>:writing).order(:position)
     @lines_to_point = @bank_account.not_pointed_lines
   end
-  
- 
+
+
   # action qui sera appelée par ajax pour enregistrer les nouvelles positions et les
   # lignes qui sont dans la partie bank_extract_lines de la vue pointage
   #
   # Le javascript envoir les params sous la forme suivante :
   #  Parameters: {"lines"=>{"0"=>"17"}, {"1", "20"}}, "bank_extract_id"=>"7"}
-  # 
-  #  ou le premier chiffre est la position et le second l'id de la ligne 
-  #  
+  #
+  #  ou le premier chiffre est la position et le second l'id de la ligne
+  #
   #  Le bouton Enregistrer qui est dans la vue (avec un button_tag) se voit associer
   #  un appel ajax avec du javascript (voir le fichier pointage.js.coffee).
-  #  
-  #  La vue appelée ne fait qu'ajouter une notice (les partial flash_error ou 
-  #  _flash_success. Une autre partie de l'action est traitée dans le javascript 
+  #
+  #  La vue appelée ne fait qu'ajouter une notice (les partial flash_error ou
+  #  _flash_success. Une autre partie de l'action est traitée dans le javascript
   #  qui réaffiche les icones qui sont utilisées dans la vue pointage.
   #
   def enregistrer
-    # on efface toutes les bank_extract_lines de cet extrait avant de les reconstruire 
+    # on efface toutes les bank_extract_lines de cet extrait avant de les reconstruire
     @bank_extract.bank_extract_lines.each {|bel| bel.destroy}
     @ok = true
     if params[:lines]
@@ -58,8 +58,8 @@ redirection vers la liste des lignes restant à pointer'
           @ok = false unless bel.save
         end
       end
-    end  
-    
+    end
+
   end
 
   # Insert est appelée par le drag and drop de la vue pointage lorsqu'une
@@ -78,9 +78,9 @@ redirection vers la liste des lignes restant à pointer'
     respond_to do |format|
       if @bel.save
         @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
-        format.js 
+        format.js
       else
-        
+
       end
     end
   end
@@ -90,11 +90,11 @@ redirection vers la liste des lignes restant à pointer'
   # reorder est appelé par le drag and drop de la vue . Les paramètres
   # transmis sont les suivants :
   #
-  #  - id :- id of the row that is moved. This information is 
+  #  - id :- id of the row that is moved. This information is
   #  set in the id attribute of the TR element.
   #  - fromPosition : initial position of the row that is moved.
   #   This was value in the indexing cell of the row that is moved.
-  #  - toPosition : new position where row is dropped. This value will 
+  #  - toPosition : new position where row is dropped. This value will
   #  be placed in the indexing column of the row.
   def reorder
     @bank_extract_line = BankExtractLine.find(params[:id])
@@ -112,20 +112,20 @@ redirection vers la liste des lignes restant à pointer'
     head :bad_request
   end
 
-  
+
 
   private
 
   def find_params
-    
+
     @bank_extract=BankExtract.find(params[:bank_extract_id])
-    # TODO ? ici il faut changer d'exercice si les dates du bank_extract 
+    # TODO ? ici il faut changer d'exercice si les dates du bank_extract
     # ne sont pas dans l'exercice
     @bank_account = @bank_extract.bank_account
     # @organism = @bank_account.organism
   end
-  
-  # La vue pointage comprend une boite modale pour ajouter des écritures sans 
+
+  # La vue pointage comprend une boite modale pour ajouter des écritures sans
   # revenir à la vue de saisie. Cette boîte a besoin de variable d'instances
   # pour que le formulaire soit opérationnel quand il s'affiche.
   def prepare_modal_box_instances

@@ -1,12 +1,12 @@
 # -*- encoding : utf-8 -*-
 class Admin::SubscriptionsController < Admin::ApplicationController
-  
+
   before_filter :limit_year, :complete_masks, :only=>[:new, :edit]
-  
+
   def index
     @subs = @organism.subscriptions
   end
-  
+
   def new
     if @completed.empty?
       flash[:notice] = "Vous n'avez pas de guide de saisie permettant de générer une écriture périodique"
@@ -14,7 +14,7 @@ class Admin::SubscriptionsController < Admin::ApplicationController
     end
     @subscription = @organism.subscriptions.new
   end
-  
+
   def create
     @sub = Subscription.new(subscription_params)
     if @sub.save
@@ -24,9 +24,9 @@ class Admin::SubscriptionsController < Admin::ApplicationController
       render 'new'
     end
   end
-  
+
   def edit
-     if @completed.empty?
+    if @completed.empty?
       flash[:notice] = "Vous n'avez plus de guide de saisie permettant de générer une écriture périodique"
       redirect_to :back
     end
@@ -36,19 +36,19 @@ class Admin::SubscriptionsController < Admin::ApplicationController
       redirect_to admin_organism_subscriptions_url(@organism)
     end
   end
-  
+
   def update
     @subscription = Subscription.find(params[:id])
-    
+
     if @subscription.update_attributes(subscription_params)
       flash[:notice] = "L'écriture périodique '#{@subscription.title}' a été mise à jour"
       redirect_to admin_organism_subscriptions_url(@organism)
     else
       render 'edit'
     end
-    
+
   end
-  
+
   def destroy
     @sub = Subscription.find(params[:id])
     if @sub && @sub.destroy
@@ -58,28 +58,25 @@ class Admin::SubscriptionsController < Admin::ApplicationController
     end
     redirect_to admin_organism_subscriptions_url(@organism)
   end
-  
+
   protected
-  
+
   def limit_year
     # TODO peut être mettre le plus vieux des abonnements existants
     @begin_year = @organism.periods.opened.order(:start_date).first.start_date.year
     @end_year = Date.today.year + 20
   end
-  
-  # renvoie la liste des masques complets donc susceptibles d'être acceptés pour 
+
+  # renvoie la liste des masques complets donc susceptibles d'être acceptés pour
   # un abonnement
   def complete_masks
     @completed = @organism.masks.select {|m| m.complete?}
   end
-  
+
   private
-  
+
   def subscription_params
     params.require(:subscription).permit(:day, :end_date, :mask_id, :title, :permanent)
   end
-  
-  
-  
-  
+
 end

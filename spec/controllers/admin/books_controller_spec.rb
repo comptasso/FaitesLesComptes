@@ -3,6 +3,7 @@
 # TODO finir ce spec
 
 require 'spec_helper'
+require 'support/spec_controller_helper'
 
 describe Admin::BooksController do
 
@@ -42,7 +43,7 @@ describe Admin::BooksController do
 
 
   describe "GET edit" do
-    it "assigns the requested book as @book" do 
+    it "assigns the requested book as @book" do
       @o.should_receive(:books).and_return(@ar = double(Arel))
       @ar.should_receive(:find).with('7').and_return(@bo = mock_model(Book))
       get :edit, {organism_id:@o.id, :id => '7'}, valid_session
@@ -56,14 +57,14 @@ describe Admin::BooksController do
 #      @o.should_receive(:income_books).and_return(@ar = double(Arel))
 #      @ar.stub(:build).and_return(double(Book, :save=>true))
 #      post :create, {:organism_id=>@o.to_param, :book => {:book_type=>'IncomeBook'} }, valid_session
-#      
+#
 #    end
 #
 #    it 'avec un outcome_book crée un outcome_book' do
 #      @o.should_receive(:outcome_books).and_return(@ar = double(Arel))
 #      @ar.stub(:build).and_return(double(Book, :save=>true))
 #      post :create, {:organism_id=>@o.to_param, :book => {:book_type=>'OutcomeBook'} }, valid_session
-#      
+#
 #    end
 #
 #    it 'doit recevoir save et rediriger si true' do
@@ -97,7 +98,7 @@ describe Admin::BooksController do
       end
 
       it "assigns the requested @bo as @@bo" do
-        
+
         @bo.stub(:update_attributes).and_return true
         put :update,{:organism_id=>@o.id.to_s,
           :id => @bo.id, :book => valid_attributes}, valid_session
@@ -105,7 +106,7 @@ describe Admin::BooksController do
       end
 
       it "redirects to index" do
-        
+
         @bo.stub(:update_attributes).and_return true
         put :update, {:organism_id=>@o.id.to_s,
           :id => @bo.id, :book => valid_attributes}, valid_session
@@ -115,7 +116,7 @@ describe Admin::BooksController do
 
     describe "with invalid params" do
       it "assigns the @bo as @@bo" do
-        
+
         @bo.stub(:update_attributes).and_return false
         put :update, {:organism_id=>@o.id.to_s,
           :id => @bo.id.to_s, :book => {description:'test'}}, valid_session
@@ -123,7 +124,7 @@ describe Admin::BooksController do
       end
 
       it "re-renders the 'edit' template" do
-       
+
         @bo.stub(:update_attributes).and_return false
         Cash.any_instance.stub(:save).and_return(false)
         put :update,{:organism_id=>@o.id.to_s,

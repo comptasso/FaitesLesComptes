@@ -1,38 +1,33 @@
 # -*- encoding : utf-8 -*-
 
 require 'spec_helper'
-
+require 'support/spec_controller_helper'
 
 RSpec.configure do |c|
   # c.filter = {:wip=> true }
 end
 
-describe Admin::OrganismsController do 
+describe Admin::OrganismsController do
   include SpecControllerHelper
- 
-  
-  
 
   before(:each) do
     minimal_instances
-    # minimal instance donne @cu pour current_user et @r comme room
-    Room.stub('version_update?').and_return true
-    
+    # minimal instance donne @cu pour current_user
   end
 
   describe 'GET show' do
 
     it 'redirige vers la création d un exercice si pas de period' do
-      @controller.stub(:current_period).and_return nil
+      @o.stub(:guess_period).and_return nil
       get :show, {id:'1'}, valid_session
-      response.should redirect_to new_admin_organism_period_url(@o) 
+      response.should redirect_to new_admin_organism_period_url(@o)
     end
 
-    it 'l assigne à organism' do
+    it 'assigne organism' do
       get :show, {id:'1'}, valid_session
       assigns[:organism].should == @o
     end
-    
+
     it 'puis rend la vue show' do
       Organism.stub(:find).with('1').and_return('bonjour')
       get :show, {id:'1'}, valid_session
@@ -48,7 +43,7 @@ describe Admin::OrganismsController do
       Organism.should_receive(:find).with('1').and_return(mock_model(Organism))
       get :edit, {id:'1'}, valid_session
       response.should render_template 'edit'
-    end 
+    end
   end
 
   describe 'PUT update' do
@@ -61,7 +56,7 @@ describe Admin::OrganismsController do
       Organism.should_receive(:find).with('1').and_return(stub_model(Organism))
       put :update, {id:'1', organism:{title:'Bizarre'}}, valid_session
     end
-    
+
     it 'met à jour l organisme' do
       @o.should_receive(:update_attributes).with({'title'=>'Bizarre'}).and_return true
       put :update, {id:'1', organism:{title:'Bizarre'}}, valid_session
@@ -82,7 +77,7 @@ describe Admin::OrganismsController do
   end
 
 
- 
+
 #  describe "GET index" do
 #
 #    before(:each) do
@@ -136,6 +131,6 @@ describe Admin::OrganismsController do
 #    end
 #  end
 
-  
+
 
 end

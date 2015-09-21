@@ -1,44 +1,45 @@
 # coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-
+require 'support/spec_controller_helper'
 describe CashLinesController do
 
-  include SpecControllerHelper  
+  include SpecControllerHelper
 
   let(:ca) {mock_model(Cash, :organism=>@o, :name=>'Magasin')}
   let(:ccs) { [ mock_model(CashControl, :date=>Date.today, amount: 3, :locked=>false),
-      mock_model(CashControl, :date=>Date.today - 1.day, amount: 1, :locked=>false) ] }  
-  
-  
+      mock_model(CashControl, :date=>Date.today - 1.day, amount: 1, :locked=>false) ] }
+
+
   def current_month
-   '%02d' % Date.today.month 
+   '%02d' % Date.today.month
   end
 
   def current_year
     '%04d' % Date.today.year
-  end
+ end
 
-  
 
-  before(:each) do
+
+   before(:each) do
     minimal_instances
     Cash.stub(:find).with(ca.to_param).and_return(ca)
     ca.stub_chain(:organism, :find_period).and_return @p
   end
 
-  
+
   describe 'GET index' do
 
      before(:each) do
-       @p.stub_chain(:list_months, :include?).and_return true 
+       @p.stub_chain(:list_months, :include?).and_return true
      end
 
 
     it "should find the right cash" do
-      get :index, {:cash_id=>ca.to_param, :mois=>current_month, :an=>current_year}, valid_session
+      get :index, {:cash_id=>ca.to_param, :mois=>current_month,
+                   :an=>current_year}, valid_session
       assigns[:cash].should == ca
-      assigns[:period].should == @p  
+      assigns[:period].should == @p
     end
 
     it "should create a monthly_book_extract" do
@@ -53,7 +54,7 @@ describe CashLinesController do
       get :index, {:cash_id=>ca.to_param, :mois=>current_month, :an=>current_year}, valid_session
     end
 
-    
+
     it "should render index view" do
        get :index, {:cash_id=>ca.to_param, :mois=>current_month, :an=>current_year}, valid_session
       response.should render_template(:index)
@@ -71,6 +72,6 @@ describe CashLinesController do
        assigns[:monthly_extract].should == 'coucou'
     end
   end
- 
+
 end
 

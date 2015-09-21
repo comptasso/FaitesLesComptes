@@ -2,33 +2,32 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c|  
+RSpec.configure do |c|
   #  c.filter = {:js=> true }
   #  c.filter = {:wip=> true }
-  #  c.exclusion_filter = {:js=> true } 
+  #  c.exclusion_filter = {:js=> true }
 end
 
 describe Organism do
-  include OrganismFixtureBis 
+  include OrganismFixtureBis
 
 
-  def valid_attributes   
+  def valid_attributes
     {:title =>'Test ASSO',
-      database_name:'assotest',
       :status=>'Association'
     }
   end
 
 
   describe 'validations' do
+    Tenant.set_current_tenant(1)
     before(:each) do
       clean_organism
-      Apartment::Database.switch(SCHEMA_TEST)
       @o= Organism.new valid_attributes
       puts @o.errors.messages unless @o.valid?
     end
 
-    it 'should be valid with a title and a database_name' do
+    it 'should be valid with a title and a status' do
       @o.should be_valid
     end
 
@@ -53,15 +52,15 @@ describe Organism do
       @o.siren = 'abc123def'; @o.should_not be_valid
       @o.siren = '12456'; @o.should_not be_valid
     end
-    
+
     it 'le code postal peut être nul ou contenir 2 à 5 chiffres' do
       @o.postcode = '29'; @o.should be_valid
       @o.postcode = '59000'; @o.should be_valid
       @o.postcode = 'abc56'; @o.should_not be_valid
     end
-    
-    
-    
+
+
+
 
   end
 
@@ -69,7 +68,7 @@ describe Organism do
   describe 'can_write_line'  do
 
     before(:each) do
-      
+
       @o= Organism.new(valid_attributes)
     end
 
@@ -78,7 +77,7 @@ describe Organism do
       @o.can_write_line?.should be_false
       @o.stub(:bank_accounts).and_return([1])
       @o.can_write_line?.should be_true
-     
+
     end
 
     it 'avec un outcome' do
@@ -105,35 +104,35 @@ describe Organism do
 
 
   end
-  
+
   describe 'main_bank_id' do
-    
+
     subject {Organism.new(valid_attributes)}
-    
+
     it 'main_bank_id should returns the first one' do
       subject.should_receive(:bank_accounts).exactly(2).times.and_return(@ar = double(Arel, 'any?'=>true))
       @ar.should_receive(:order).with('id').and_return @ar
       @ar.should_receive(:first).and_return(double(BankAccount, id:999))
       subject.main_bank_id.should == 999
     end
-          
+
     it 'ou nil si pas de compte bancaire' do
       subject.should_receive(:bank_accounts).and_return(@ar = double(Arel, 'any?'=>false))
       subject.main_bank_id.should == nil
     end
   end
-  
+
   describe 'main_cash_id' do
-    
+
     subject {Organism.new(valid_attributes)}
-    
+
     it 'main_bank_id should returns the first one' do
       subject.should_receive(:cashes).exactly(2).times.and_return(@ar = double(Arel, 'any?'=>true))
       @ar.should_receive(:order).with('id').and_return @ar
       @ar.should_receive(:first).and_return(double(Cash, id:999))
       subject.main_cash_id.should == 999
     end
-          
+
     it 'ou nil si pas de compte bancaire' do
       subject.should_receive(:cashes).and_return(@ar = double(Arel, 'any?'=>false))
       subject.main_cash_id.should == nil
@@ -142,20 +141,20 @@ describe Organism do
 
 
   describe 'after create' do
-    
+
     after(:each) do
         clean_organism
       end
-    
-    context 'une association'  do 
+
+    context 'une association'  do
       before(:each) do
         clean_organism
-        use_test_organism 
+        use_test_organism
       end
-      
-      
-      
-      
+
+
+
+
       it 'on a tous les éléments' do
         @o.should have(4).books # 4 livres
         @o.should have(1).income_book
@@ -166,7 +165,7 @@ describe Organism do
         @o.should have(1).bank_accounts
       end
 
-     
+
       it 'income_outcome_books renvoie les livres recettes et dépenses' do
         @o.in_out_books.should have(2).books
         @o.in_out_books.first.title.should == 'Recettes'
@@ -180,81 +179,79 @@ describe Organism do
         @o.document(:actif)
       end
 
-     
+
 
       it 'mais peut écrire des lignes' do
         @o.should be_can_write_line
       end
 
-      
-      
+
+
       describe 'bridge vers adherent' do
-        
+
         before(:each) do
           Adherent::Bridge.any_instance.stub(:nature_coherent_with_book).and_return true
           @o.fill_bridge
-          
+
         end
-        
+
         it 'crée un bridge vers le module adhérent' do
           @o.bridge.should be_an_instance_of Adherent::Bridge
         end
-        
-        it 'avec les bonnes valeurs' do 
+
+        it 'avec les bonnes valeurs' do
           b = @o.bridge
           b.bank_account = @o.bank_accounts.first
           b.cash = @o.cashes.first
           b.income_book = @o.income_books.first
           b.destination = @o.destinations.find_by_name('Adhérents')
           b.nature_name = 'Cotisations des adhérents'
-          
-        end 
-      
+
+        end
+
       end
     end
-    
-    
+
+
     # TODO partie à transférer dans les tests des filler puisque cette interface
     # a été transformée en classe.
-    context 'une non association' do 
+    context 'une non association' do
       before(:each) do
         clean_organism
-        Apartment::Database.switch(SCHEMA_TEST)
         @o = Organism.create!({:title =>'Mon Entreprise',
-            database_name:SCHEMA_TEST,
             :status=>'Entreprise' })
-         
+
       end
-      
-      
-      
+
+
+
       it 'ne crée pas de bridge vers adhérent' do
         @o.bridge.should == nil
       end
-      
+
       it 'créé 3 destinations' do
         @o.destinations.count.should == 3
       end
-      
+
       it 'dont Non affecté' do
         @o.destinations.find_by_name('Non affecté').should be_an_instance_of(Destination)
       end
 
     end
-    
 
-    
+
+
   end
 
 
-  context 'avec des exercices', wip:true  do 
+  context 'avec des exercices', wip:true  do
 
     before(:each) do
       use_test_organism
       @p2 = find_second_period
     end
-    
-   
+
+
 
     describe 'find_period' do
 
@@ -276,16 +273,16 @@ describe Organism do
 
       it 'si la date est future renvoie le plus récent'  do
         @o.guess_period(Date.today >> 36).should == @p2
-      end 
+      end
 
       it 'si la date est trop ancienne, renvoie le plus vieux' do
         @o.guess_period(Date.today.years_ago 10).should == @p
       end
-      
+
    end
-    
-    
- 
+
+
+
     describe 'max_open_periods?' do
       it 'nb_open_periods.should == 2' do
         @o.nb_open_periods.should == 2

@@ -7,7 +7,7 @@
 #
 #
 class BottomController < ApplicationController
-  
+
   def credit
   end
 
@@ -18,8 +18,6 @@ class BottomController < ApplicationController
   end
 
   def manuals
-    
-   end
-  
+  end
 
 end

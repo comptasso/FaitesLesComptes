@@ -1,64 +1,63 @@
-# coding: utf-8 
+# coding: utf-8
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
 RSpec.configure do |c|
-  # c.filter = {:wip=> true }  
+  # c.filter = {:wip=> true }
 end
-# TODO on pourrait accélérer ces tests en testant pending_checks 
+# TODO on pourrait accélérer ces tests en testant pending_checks
 # dans ComptaLine et après ensuite en utilisant des stubs
 # A refactoriser car il y a des doublons dans les tests (création écriture notamment)
 
-describe CheckDeposit do   
-  include OrganismFixtureBis 
- 
-  before(:each) do  
+describe CheckDeposit do
+  include OrganismFixtureBis
+
+  before(:each) do
     use_test_organism
-    @w1 = create_in_out_writing(44, 'Chèque') 
+    @w1 = create_in_out_writing(44, 'Chèque')
     @w2 = create_in_out_writing(101, 'Chèque')
     @w3 = create_in_out_writing(300, 'Chèque')
     @w4 = create_in_out_writing(50000, 'Virement')
     @ch= CheckDeposit.new
-  end 
-  
+  end
+
   after(:each) { erase_writings }
- 
+
   describe "methodes de classe sur les chèques à déposer" do
 
     it 'total_to pick donne le total' do
-      CheckDeposit.total_to_pick.should == 445 
+      CheckDeposit.total_to_pick(@sector).should == 445
     end
 
     it 'pending_checks donne les 3 chèques qui sont à déposer' do
-      CheckDeposit.pending_checks.should have(3).elements
-      CheckDeposit.pending_checks.should == [@w1.children.last,@w2.children.last,@w3.children.last]
-    end    
+      CheckDeposit.pending_checks(@sector).should have(3).elements
+      CheckDeposit.pending_checks(@sector).should == [@w1.children.last,@w2.children.last,@w3.children.last]
+    end
 
     it 'nb_to_pick renvoie le nombre de chèques à encaisser' do
-      CheckDeposit.nb_to_pick.should == 3
+      CheckDeposit.nb_to_pick(@sector).should == 3
     end
-    
-    context 'quand on précise un secteur', wip:true  do 
-      
-      before(:each) {@sect2 = mock_model(Sector, name:'ASC')}
+
+    context 'quand on précise un secteur', wip:true  do
+
+      before(:each) {@sect2 = mock_model(Sector, name:'ASC', organism:@o)}
       # after(:each) {@ba.update_attribute(sector_id:@sid) unless @ba.sector_id == @sid}
-      
+
       it 'pending_checks ne renvoie pas de chèques si le secteur demandé est différent' do
-        @sect2 = mock_model(Sector)
         expect(CheckDeposit.nb_to_pick(@sector)).to eq(3)
         expect(CheckDeposit.nb_to_pick(@sect2)).to eq(0)
       end
-      
+
       it 'si le secteur est commun, alors on prend tous les chèques' do
-        @sect2 = mock_model(Sector, name:'Commun')
+        @sect2 = mock_model(Sector, name:'Commun', organism:@o)
         expect(CheckDeposit.nb_to_pick(@sect2)).to eq(3)
       end
     end
   end
 
-  describe "création d'une remise de chèque" do 
-    it "save the right date", wip:true  do 
+  describe "création d'une remise de chèque" do
+    it "save the right date", wip:true  do
       d = @p.start_date.months_since(4)
       cd = @ba.check_deposits.new deposit_date_picker:I18n::l(d, :format=>:date_picker)
       cd.pick_all_checks(@sector)
@@ -70,7 +69,7 @@ describe CheckDeposit do
     describe 'creation d une écriture'  do
 
       before(:each) do
-        @cd = @ba.check_deposits.new deposit_date:Date.today 
+        @cd = @ba.check_deposits.new deposit_date:Date.today
         @cd.pick_all_checks(@sector)
 
       end
@@ -95,19 +94,19 @@ describe CheckDeposit do
 
 
     end
-  end 
+  end
 
   describe "controle de la validité : un check_deposit" do
 
     before(:each) do
-      @check_deposit = CheckDeposit.new(deposit_date: (Date.today +1))
+      @check_deposit = CheckDeposit.new(:deposit_date=>(Date.today + 1))
     end
 
     it "n'est valide qu'avec un bank_account" do
       @check_deposit.should have(1).errors_on(:bank_account_id)
     end
-    
-    
+
+
     it "n'est valide qu avec au moins une ligne" do
       @check_deposit.bank_account_id = @ba.id
       @check_deposit.checks.should be_empty
@@ -122,7 +121,7 @@ describe CheckDeposit do
       @check_deposit.should have(1).errors_on(:deposit_date)
       @check_deposit.save.should == false
     end
-  
+
     it 'est valide avec un compte bancaire et au moins un chèque' do
       @check_deposit.bank_account=@ba
       @check_deposit.pick_all_checks(@sector)
@@ -132,7 +131,7 @@ describe CheckDeposit do
     end
 
   end
- 
+
 
   describe "Controle des méthodes"  do
 
@@ -146,7 +145,7 @@ describe CheckDeposit do
     end
 
     it "un nouvel enregistrement a son total à zero" do
-      @check_deposit.total_checks.should == 0 
+      @check_deposit.total_checks.should == 0
     end
 
     context "lorsque la remise est un nouvel enregistrement, la fonction total fonctionne" do
@@ -175,14 +174,14 @@ describe CheckDeposit do
 
     end
 
-    
+
 
   end
 
   describe "l'action de sauver"  do
- 
+
     before(:each) do
-      # attention pose un problème si 
+      # attention pose un problème si
       date = @p.start_date + 2
       @check_deposit = @ba.check_deposits.new(deposit_date: date)
       @check_deposit.user_ip = '127.0.0.1'
@@ -191,19 +190,19 @@ describe CheckDeposit do
       @check_deposit.save!
     end
 
-    
+
     describe 'crée une écriture'  do
 
       it 'a une écriture' do
         @check_deposit.check_deposit_writing.should be_an_instance_of(CheckDepositWriting)
       end
-      
+
       it 'dont les champs written_by et uesr_ip sont remplis' do
         cdw = @check_deposit.check_deposit_writing
         cdw.written_by.should == @check_deposit.written_by
         cdw.user_ip.should == @check_deposit.user_ip
       end
-      
+
       it 'avec une ligne au credit du 511'  do
         cl = @check_deposit.credit_line
         cl.date.should == @check_deposit.deposit_date
@@ -218,8 +217,8 @@ describe CheckDeposit do
         dl.account.should == @check_deposit.bank_account.current_account(@p)
         dl.debit.should == @check_deposit.total_checks
       end
-      
-      
+
+
 
     end
 
@@ -237,15 +236,15 @@ describe CheckDeposit do
 
 
 
-    describe 'edition' do 
+    describe 'edition' do
 
       it 'enlever un chèque modifie le montant total de la remise'  do
         l2 = @w2.children.last
         @check_deposit.checks.delete(l2)
         @check_deposit.total_checks.should == 344
         @check_deposit.save!
-        # TODO vérifier la modif sur les lignes débit crédit 
-        
+        # TODO vérifier la modif sur les lignes débit crédit
+
       end
 
       it 'after_update met à jour le montant des compta_lines'  do
@@ -268,39 +267,39 @@ describe CheckDeposit do
         @check_deposit.save
         @check_deposit.check_deposit_writing.date.should == Date.today
       end
-      
+
       describe 'avec deux banques', wip:true do
-        
+
         before(:each) do
-          # crée une deuxième banque 
+          # crée une deuxième banque
            @ba2 = @o.bank_accounts.new(bank_name:'CMNE', number:'8887',
              nickname:'Livret', sector_id:1)
            puts @ba2.errors.messages if @ba2.errors.any?
            @ba2.save!
         end
-        
+
         after(:each) do
           # détruit cette deuxième banque
           @ba2.destroy
         end
-        
+
         it 'after_update met à jour la banque de la compta_line débitée', wip:true do
           @check_deposit.bank_account_id = @ba2.id
           @check_deposit.save!
           @check_deposit.debit_line.account_id.should == @ba2.current_account(@p).id
         end
-      
+
       end
-      
-      it "on peut changer le compte bancaire" do  
-        @check_deposit.bank_account_id = 9999 
-        @check_deposit.should be_valid 
+
+      it "on peut changer le compte bancaire" do
+        @check_deposit.bank_account_id = 9999
+        @check_deposit.should be_valid
       end
 
     end
-    
+
     describe 'destruction' do
-    
+
 
       it 'on peut détruire la remise'  do
         expect {@check_deposit.destroy}.to change{CheckDeposit.count}.by(-1)
@@ -308,9 +307,9 @@ describe CheckDeposit do
 
       it 'lorsqu on détruit la remise les lignes sont mises à jour'do
         # CheckDeposit.pending_checks.each {|c| puts c.inspect}
-        CheckDeposit.nb_to_pick.should == 0
+        CheckDeposit.nb_to_pick(@sector).should == 0
         @check_deposit.destroy
-        CheckDeposit.nb_to_pick.should == 3
+        CheckDeposit.nb_to_pick(@sector).should == 3
       end
 
       it 'l ecriture est détruite'   do
@@ -319,27 +318,28 @@ describe CheckDeposit do
 
     end
 
-    
+
 
     describe "le rattachement à un extrait de compte" do
       before(:each) do
         @check_deposit.should have(3).checks
-        @be = @ba.bank_extracts.create!(end_date: (Date.today +15), begin_date: (Date.today -15))
+        @be = @ba.bank_extracts.create!(:end_date=>((Date.today) +15),
+           :begin_date=>((Date.today) -15))
         @bel = @be.bank_extract_lines.create!(:compta_line_id=>@check_deposit.debit_line.id)
-        
+
       end
 
       it 'fait que la remise de chèque est pointée' do
         @check_deposit.should be_pointed
       end
 
-     
+
       it "que la date ne peut plus être modifiée" do
         @check_deposit.deposit_date = Date.today+6
         @check_deposit.should_not be_valid
       end
 
-      it "que la banque ne peut plus être modifiée" do 
+      it "que la banque ne peut plus être modifiée" do
         @check_deposit.bank_account = find_second_bank
         @check_deposit.should_not be_valid
       end
@@ -359,15 +359,15 @@ describe CheckDeposit do
       it "ni en ajouter" do
         @w5 = create_in_out_writing(44, 'Chèque')
         expect {@check_deposit.checks << @w5.supportline}.to raise_error
-        
+
       end
-   
+
     end # fin du rattachement à un extrait de compte
-  end 
+  end
 
- 
 
-  
+
+
 
 end
 

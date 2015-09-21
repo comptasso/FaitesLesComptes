@@ -6,10 +6,8 @@
 class Compta::NomenclaturesController < Compta::ApplicationController
 
   def show
-    @nomenclature = @organism.nomenclature
+    @folios = @organism.nomenclature.folios.order(:id)
   end
 
-
- 
 end
 

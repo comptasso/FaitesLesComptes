@@ -6,7 +6,7 @@ gem 'rails', "~> 4.1"
 # gem 'protected_attributes' # pour la transition vers Rails 4
 gem 'rails-observers' # idem
 gem 'actionpack-page_caching'
-gem 'actionpack-action_caching' 
+gem 'actionpack-action_caching'
 
 gem 'rack', '~>1.5'
 # gem 'therubyracer' execjs sous windows
@@ -24,7 +24,6 @@ gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (sourc
 
 
 
-gem 'apartment', '~> 0.24.3' # pour la gestion des schemas
 gem 'devise' # pour l'authentification
 gem "devise-async" # pour avoir l'envoi des mails en background
 gem 'ofx' # pour la lecture des fichiers bancaires au format ofx
@@ -33,8 +32,8 @@ gem 'delayed_job_active_record', '= 4.0.2'
 # gem 'unicorn'
 gem 'puma'
 
- gem 'adherent', '~>0.3' 
-# gem 'adherent', :path=>'../../Adherent'  
+ gem 'adherent', '~>0.3'
+# gem 'adherent', :path=>'../../Adherent'
 
 
 
@@ -46,22 +45,22 @@ group :production, :staging do
   # conseil de heroku - utilisé par le fichier intializers/timeout.rb
   # on le désactive pour development et test car gêne les test features
   # et complique les logs de develoment
-  gem 'rack-timeout' 
+  gem 'rack-timeout'
 end
 
 group :production, :staging, :development do
-  gem 'rails_12factor' # conseillé sinon imposé par Heroku 
+  gem 'rails_12factor' # conseillé sinon imposé par Heroku
 end
 
 # permet de ne pas avoir les log indiquant les assets dans le mode development
-gem 'quiet_assets', group: :development 
+gem 'quiet_assets', group: :development
 
 
 
 gem 'bootstrap-sass', '~> 3.3.4.0'
-  
+
 gem 'autoprefixer-rails'
- 
+
 # gem 'twitter-bootstrap-rails'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.2'
@@ -77,7 +76,7 @@ gem 'coffee-script'
 gem 'jquery-rails', "3.1.2"
 gem 'jquery-ui-rails', '5.0.2'
 
-
+gem 'milia', '>= 1.0'
 # Deploy with Capistrano
 # gem 'capistrano'
 
@@ -104,7 +103,10 @@ group :development, :test do
   gem 'capybara', '2.4.4'
   # gem 'capybara-webkit'
   gem 'email_spec'
-  
+
 
 
 end
+
+gem "recaptcha", require: "recaptcha/rails"
+gem "activerecord-session_store", github: "rails/activerecord-session_store"

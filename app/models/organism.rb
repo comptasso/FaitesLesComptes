@@ -2,29 +2,29 @@
 
 # La classe Organisme est quasiment la tête de toutes les classes du programme.
 # Un organisme a des livres de recettes et de dépenses, mais aussi un livre d'OD et
-# un d'A Nouveau. De même un organisme a un ou des comptes bancaires et une ou 
+# un d'A Nouveau. De même un organisme a un ou des comptes bancaires et une ou
 # des caisses.
-# 
+#
 # Un organisme a également des exercices (Period), lesquels ont à leur tour des
 # comptes.
-# 
-# Les champs obligatoires sont le titre de l'organisme, la base de donnée associée, et 
+#
+# Les champs obligatoires sont le titre de l'organisme, la base de donnée associée, et
 # le statut (association ou entreprise).
-# 
+#
 #  Précision sur la base de données : Pour faciliter les sauvegardes, chaque organisme
 #  dispose de sa propre base de données (dont le nom doit bien sur être unique).
-#  
+#
 #  Concrètement, ce sujet est traité par la classe Room, qui est celle qui effectue
 #  la création de la base (et qui en vérifie l'unicité). La mention uniqueness => true
-#  pour database_name est donc ici peu utile puisqu'il ne peut y avoir qu'un seul 
+#  pour database_name est donc ici peu utile puisqu'il ne peut y avoir qu'un seul
 #  organisme par base.
-#  
+#
 #  Le formulaire de création demande si on choisit le statut, lequel ne peut plus être
 #  modifié ensuite : actuellement deux possibilités, association ou entreprise.
-#  
+#
 #  La nomenclature, un Hash décrivant la construction des documents (Bilan, Compte
-#  de Résultats) est également stockée à la création. Mais contrairement au statut, on 
-#  peut modifier une nomenclature pour importer un autre type de fichier. Le but est 
+#  de Résultats) est également stockée à la création. Mais contrairement au statut, on
+#  peut modifier une nomenclature pour importer un autre type de fichier. Le but est
 #  de pouvoir adapter les éditions au cas où on ajouterait des comptes non prévus dans
 #  la nomenclature fournie par défaut.
 #
@@ -37,15 +37,16 @@
 #
 #
 class Organism < ActiveRecord::Base
-  
+
   # attr_accessible :title, :database_name, :status, :comment, :racine
 
+  acts_as_tenant
   has_one :nomenclature, dependent: :destroy
   has_many :sectors, dependent: :destroy
   has_many :books, dependent: :destroy
-  has_many :destinations, dependent: :destroy
+  has_many :destinations, dependent: :delete_all
   has_many :natures, through: :periods
-  has_many :bank_accounts, dependent: :destroy
+  has_many :bank_accounts, dependent: :delete_all
   has_many :bank_extracts, through: :bank_accounts
   has_many :bank_extract_lines, through: :bank_extracts
   has_many :writings, :through=>:books
@@ -61,48 +62,47 @@ class Organism < ActiveRecord::Base
   has_many :virtual_books # les virtual_books ne sont pas persisted? donc inutile d'avoir un callback
   has_many :accounts, through: :periods
   has_many :pending_checks, through: :accounts # est utilisé pour l'affichage du message dans le dashboard
-  # has_many :transfers
-  
+  has_many :holders, dependent: :destroy
+
   # La table adherent_bridges a été mise en place pour eneregistrer les informations
   # permettant de faire le lien avec le gem adhérent.
-  # 
+  #
   # Cette table enregistre ainsi les données (nature, compte bancaire, caisse, livre
   # recevant les règlements)
-  # 
+  #
   has_one :bridge, class_name:'Adherent::Bridge'
-  
+
   # liaison avec le gem adherent
   has_many :members, class_name: 'Adherent::Member'
   has_many :payments, :through=>:members, class_name:'Adherent::Payment'
-  
+
   # gestion des masques d'écritures
   has_many :masks
   has_many :subscriptions, :through=>:masks
-  
+
   # renvoie juste les secteurs ASC et Fonctionnement d'un CE
-  has_many :ce_sectors, 
+  has_many :ce_sectors,
     -> {where "sectors.name = 'Fonctionnement' OR sectors.name = 'ASC' "},
-    class_name:'Sector' 
-  
+    class_name:'Sector'
+
   before_validation :fill_version
   after_create :fill_children
   # sector, :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
-  
 
-  strip_before_validation :title, :comment, :database_name 
+
+  strip_before_validation :title, :comment, :database_name
 
   validates :title, presence: true, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}
   validates :comment, :format=>{with:NAME_REGEX}, :length=>{:maximum=>MAX_COMMENT_LENGTH}, :allow_blank=>true
-  validates :database_name, uniqueness:true, presence:true, :format=>{:with=>/\A[a-z][a-z0-9]*(_[0-9]*)?\z/}
   validates :status, presence:true, :inclusion=>{:in=>LIST_STATUS}
   validates :siren, allow_blank:true, :length=>{:is=>9}, format:/\A\d*\z/
-  validates :postcode, allow_blank:true, :length=>{:within=>2..5}, format:/\A\d*\z/  
+  validates :postcode, allow_blank:true, :length=>{:within=>2..5}, format:/\A\d*\z/
 
-  
-  
 
-  
- 
+  # renvoie le propriétaire de la base
+  def owner
+    holders.where('status = ?', 'owner').first.user
+  end
 
   # Retourne la dernière migration effectuée pour la base de données représentant cet organisme
   def self.migration_version
@@ -135,7 +135,7 @@ class Organism < ActiveRecord::Base
       vb
     end
   end
-  
+
   def sectored?
     sectors.count > 1
   end
@@ -147,8 +147,8 @@ class Organism < ActiveRecord::Base
 
   # on ne peut avoir plus de deux exercices ouverts pour chaque organisme
   def max_open_periods?
-    nb_open_periods >=2 ? true :false
-  end  
+    (nb_open_periods >= 2) ? true : false
+  end
 
   # indique si organisme peut écrire des lignes de comptes, ce qui exige qu'il y ait des livres
   # et aussi un compte bancaire ou une caisse
@@ -161,14 +161,14 @@ class Organism < ActiveRecord::Base
     end
   end
 
-  
+
    # Donne le prochain numéro de pièce disponibles pour une écriture
   def next_piece_number
     mpn = writings.maximum(:piece_number)
     mpn ||= 1
     mpn.next
   end
-  
+
   # renvoie les dates pour lesquelles il est possible d écrire
   # utilisé par le gem adhérent pour savoir un paiement est valide
   def range_date
@@ -179,7 +179,7 @@ class Organism < ActiveRecord::Base
       return opers.first.start_date..opers.last.close_date
     end
   end
-  
+
   # Renvoie la caisse principale (utilisée en priorité)
   # en l'occurence actuellement la première trouvée ou nil s'il n'y en a pas
   # TODO ? à mettre dans le modèle Cash en méthode de classe par exemple ?
@@ -188,25 +188,25 @@ class Organism < ActiveRecord::Base
   def main_cash_id
     cashes.any?  ? cashes.order('id').first.id  :  nil
   end
-  
+
   # renvoie le compte bancaire principal, en l'occurence, le premier
   def main_bank_id
     bank_accounts.any?  ? bank_accounts.order('id').first.id  :  nil
   end
 
 
-  
+
   # find_period trouve l'exercice relatif à une date donnée
   # utilisé par exemple pour calculer le solde d'une caisse à une date donnée
   # par défaut la date est celle du jour
-  # 
-  # find_period est différent de #guess_period en ce qu'il renvoie un exercice 
+  #
+  # find_period est différent de #guess_period en ce qu'il renvoie un exercice
   # que si la date correspond à un exercice existant.
   #
   def find_period(date=Date.today)
     p = periods.where('? BETWEEN start_date AND close_date', date).first
     Rails.logger.warn "organism#find_period a été appelée avec une date pour laquelle il n y a pas d'exercice : #{date} - Organism : #{self.inspect}" if p.nil?
-    p    
+    p
   end
 
   # trouve l'exercice le plus adapté à la date demandée
@@ -222,25 +222,22 @@ class Organism < ActiveRecord::Base
     return ps.first if date < ps.first.start_date
     return ps.last if date > ps.last.close_date
     # on a traité les cas où la date demandée est hors limite
-    ps.select {|p| p.start_date <= date && p.close_date >= date}.first  
+    ps.select {|p| p.start_date <= date && p.close_date >= date}.first
   end
 
   # recherche la pièce où est logé Organism sur la base de la similitude des
   # champs database_name de ces deux tables
-  def room
-    look_for {Room.find_by_database_name(database_name)}
+#   def room
+#     look_for {Room.find_by_database_name(database_name)}
+#   end
+#
+
+  # la room cherche dans ses holders celui qui correspond au user demandé
+  # et renvoie son statut
+  def user_status(user)
+    holders.where('user_id = ?', user.id).first.status
   end
 
-  
-  
-  # #look_for permet de chercher quelque chose dans la base principale
-  #
-  # Apartment::Database.default_db est défini dans l'initializer Apartment
-  # et de revenir dans la base de l'organisme.
-  # Voir la méthode #room pour un exemple
-  def look_for(&block) 
-    Apartment::Database.process(Apartment::Database.default_db) {block.call}
-  end
 
 
   # méthode produisant le document demandé par l'argument page, avec
@@ -250,16 +247,16 @@ class Organism < ActiveRecord::Base
   def document(page, period = Period.last)
     Compta::Nomenclature.new(period).sheet(page)
   end
-  
+
   # TODO voir comment gérer les exceptions
-  # remplit les éléments qui permettent de faire le pont entre le module 
+  # remplit les éléments qui permettent de faire le pont entre le module
   # Adhérents (et plus précisément, sa partie Payment) et le PaymentObserver
   # qui écrit sur le livre des recettes.
-  # 
+  #
   # Cette méthode est appelée par after_create de Period pour créer les éléments du bridge
   # uniquement si le statut est association et si le bridge n'existe pas déjà.
   #
-  def fill_bridge 
+  def fill_bridge
     return unless status == 'Association'
     return if bridge
     b = build_bridge
@@ -270,33 +267,32 @@ class Organism < ActiveRecord::Base
     b.income_book_id = income_books.first.id
     b.save!
   end
-  
-  
+
+
   private
 
   def fill_version
     self.version = FLCVERSION
   end
-  
+
   def fill_children
     filler = "Utilities::Filler::#{status_class}".constantize
-    filler.new(self).remplit    
+    filler.new(self).remplit
   end
-  
+
   def status_class
     status == 'Comité d\'entreprise' ? 'Comite' : status
   end
-  
-  # méthode permettant de remettre les folios et les rubriques 
+
+  # méthode permettant de remettre les folios et les rubriques
   # comme ils étaient à l'origine
   #
   # utilisé lors de la mise au point de ces classes
   def reset_folios
-    Folio.delete_all
-    Rubrik.delete_all
+    nomenclature.folios.find_each {|f| f.destroy}
     path = File.join Rails.root, 'lib', 'parametres', status_class.downcase, 'nomenclature.yml'
     nomenclature.read_and_fill_folios(path)
   end
- 
-  
+
+
 end

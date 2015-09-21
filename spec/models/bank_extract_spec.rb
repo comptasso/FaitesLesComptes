@@ -1,18 +1,18 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-  # c.filter = {:wip=> true }   
+  # c.filter = {:wip=> true }
 end
 
-describe BankExtract do   
+describe BankExtract do
   include OrganismFixtureBis
-  
-  def valid_bank_extract 
+
+  def valid_bank_extract
     @ba.bank_extracts.create!(valid_attributes)
   end
-  
+
   def  valid_attributes
     {begin_date: Date.today.beginning_of_month,
       end_date: Date.today.end_of_month,
@@ -20,22 +20,22 @@ describe BankExtract do
       total_credit: 11,
       total_debit: 10}
   end
-  
-  
-  describe 'date_pickers', wip:true do 
-    
-    subject { BankExtract.new(valid_attributes) }  
-         
+
+
+  describe 'date_pickers', wip:true do
+
+    subject { BankExtract.new(valid_attributes) }
+
     its(:begin_date_picker) {should == I18n.l(subject.begin_date)}
-    
+
     its(:end_date_picker) {should == I18n.l(subject.end_date)}
-    
-    
+
+
     it 'begin_date=' do
       subject.begin_date_picker = I18n.l Date.today
       subject.begin_date.should == Date.today
     end
-    
+
     it 'end_date=' do
       subject.end_date_picker = I18n.l Date.tomorrow
       subject.end_date.should == Date.tomorrow
@@ -43,7 +43,7 @@ describe BankExtract do
 
     it 'invalid model if date not acceptable' do
       subject.begin_date_picker = 'bonjour'
-      subject.should_not be_valid      
+      subject.should_not be_valid
       subject.errors[:begin_date_picker].should ==  ['Date invalide','obligatoire']
     end
   end
@@ -66,7 +66,7 @@ describe BankExtract do
     end
 
     it 'la date de début doit être dans l\'exercice' do
-      @be.begin_date = @p.start_date - 1 
+      @be.begin_date = @p.start_date - 1
       @be.should_not be_valid
     end
 
@@ -74,12 +74,12 @@ describe BankExtract do
       @be.begin_date = @p.close_date + 1
       @be.should_not be_valid
     end
-    
+
     it 'la date de fin doit être après la date de début', wip:true do
       @be.begin_date, @be.end_date = @be.end_date, @be.begin_date
       @be.should_not be_valid
     end
-    
+
 
     it 'les deux dates doivent être dans le même exercice' do
       @second_period = find_second_period
@@ -92,12 +92,12 @@ describe BankExtract do
       @be.begin_sold = nil
       @be.should_not be_valid
       # puts @be.errors.messages
-      @be.should have(3).errors_on(:begin_sold) # numericality presence et format 
+      @be.should have(3).errors_on(:begin_sold) # numericality presence et format
     end
 
-    it 'pas valide sans begin_date' do 
+    it 'pas valide sans begin_date' do
       @be.begin_date = nil
-      @be.should_not be_valid 
+      @be.should_not be_valid
     end
 
     it 'pas valide sans end_date' do
@@ -119,7 +119,7 @@ describe BankExtract do
       @be.begin_sold = 'bonjour'
       @be.begin_sold.should  == 0
     end
-   
+
 
     it 'testing two decimals validators with valid values' do
       vals = [+1, -1, +1.1, -1.1, +1.12, -1.12, 1.1, 1.12, 256, 256.1, '-.01']
@@ -133,116 +133,116 @@ describe BankExtract do
       vals = ['b1', -1.254 , '+1.1b', 1.254]
       vals.each do |v|
         @be.begin_sold = v
-        @be.should_not be_valid      
+        @be.should_not be_valid
         @be.errors[:begin_sold].should have_at_least(1).messages
       end
     end
   end
-  
+
   describe 'lockable'  do
-    
+
     before(:each) do
       use_test_organism
     end
-  
+
     after(:each) do
       BankExtract.delete_all
       Writing.delete_all
       BankExtractLine.delete_all
     end
-  
-    
+
+
     subject {find_bank_extract}
-    
+
     before(:each) do
       @w1 = create_in_out_writing(2 , 'Virement')
       @bel = subject.bank_extract_lines.create!(:compta_line_id=>@w1.support_line.id)
     end
-    
+
     it 'n est pas lockable' do
       subject.should_not be_equality
       subject.should_not be_lockable
     end
-    
+
     it 'lock est refusé car bank_extract n est pas équilibré' do
       subject.locked = true
       subject.save.should be_false
       @w1.should_not be_locked
     end
-    
+
     it 'mais accepté si le bank_extract est équilibré' do
       subject.stub('equality?').and_return true
       subject.locked = true
       subject.save.should be_true
       @w1.should be_locked
     end
-     
- 
 
-    describe 'when locked' do   
-      
+
+
+    describe 'when locked' do
+
       before(:each) do
         subject.stub(:equality?).and_return true
         subject.locked = true
         subject.save!
       end
-   
+
 
       it 'cant be edited' do
         subject.begin_sold = 0
         subject.should_not be_valid
         subject.errors.should have(1).error_on(:begin_sold)
       end
-    
-      it 'toutes les lignes comtpables de l extrait sont verrouillées' do 
+
+      it 'toutes les lignes comtpables de l extrait sont verrouillées' do
         subject.bank_extract_lines.each do |bels|
           bels.compta_line(true).should be_locked
         end
       end
-    
+
       # TODO supprimer car à tester dans le lock de compta_line
       it 'toutes les siblings sont verrouillés' do
         subject.bank_extract_lines.each do |bels|
           bels.compta_line.siblings.each {|l| l.should be_locked}
-        end 
+        end
       end
 
 
     end
-  
+
   end
 
   describe 'contrôle des bank_extract_lines'  do
-    
-    subject {find_bank_extract} 
+
+    subject {find_bank_extract}
 
     before(:each) do
       use_test_organism
-      @l1 = create_in_out_writing(97, 'Chèque') 
+      @l1 = create_in_out_writing(97, 'Chèque')
       @cd = @ba.check_deposits.new(deposit_date:(Date.today + 1.day))
       @cd.checks << @l1.children.last
       @cd.save!
-      
+
       @bel1 = subject.bank_extract_lines.new(:compta_line_id=>@cd.debit_line.id)
       @bel1.save!
 
       @l2 = create_outcome_writing(13)
       @bel2 = subject.bank_extract_lines.create!(compta_line_id:@l2.support_line.id)
     end
-    
+
     after(:each) do
       CheckDeposit.delete_all
       Writing.delete_all
       BankExtractLine.delete_all
     end
 
-     
+
 
     it "should have two bank_extract_lines" do
-      subject.bank_extract_lines.count.should == 2 
+      subject.bank_extract_lines.count.should == 2
     end
 
-    
+
     it 'total lines debit' do
       subject.total_lines_debit.should == 97
     end
@@ -256,7 +256,7 @@ describe BankExtract do
 
 
     it 'total lines credit' do
-      subject.total_lines_credit.should == 13 
+      subject.total_lines_credit.should == 13
     end
 
     it 'diff credit? si ecart' do
@@ -280,14 +280,14 @@ describe BankExtract do
     end
 
     describe 'suppression du bank_extract' do
-      
+
       it 'la destruction du bank_extract supprime les bank_extract_lines'  do
         expect {subject.destroy}.to change {BankExtractLine.count}.by(-2)
       end
- 
-      it 'et les lines peuvent être de nouveau rattachées' do 
+
+      it 'et les lines peuvent être de nouveau rattachées' do
         subject.destroy
-        debut_mois = @p.start_date.months_since(10) 
+        debut_mois = @p.start_date.months_since(10)
         @be3= @ba.bank_extracts.create!( begin_date: debut_mois, end_date: debut_mois.end_of_month, begin_sold: 2012, total_credit: 11, total_debit: 10)
         @bel3 = @be3.bank_extract_lines.create!(compta_line_id:@l2.support_line.id)
         @l2.support_line.bank_extract_line.should_not be_nil
@@ -296,9 +296,9 @@ describe BankExtract do
 
     end
 
-    
 
-  
+
+
   end
 
 
