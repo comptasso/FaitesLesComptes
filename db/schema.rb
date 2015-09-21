@@ -322,34 +322,6 @@ ActiveRecord::Schema.define(version: 20150915170739) do
 
   add_index "imported_bels", ["tenant_id"], name: "index_imported_bels_on_tenant_id", using: :btree
 
-  create_table "lines", force: true do |t|
-    t.date     "line_date"
-    t.string   "narration"
-    t.integer  "nature_id"
-    t.integer  "destination_id"
-    t.decimal  "debit",          precision: 10, scale: 2
-    t.decimal  "credit",         precision: 10, scale: 2
-    t.integer  "listing_id"
-    t.boolean  "locked",                                  default: false
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-    t.integer  "tenant_id"
-  end
-
-  add_index "lines", ["tenant_id"], name: "index_lines_on_tenant_id", using: :btree
-
-  create_table "listings", force: true do |t|
-    t.string   "title"
-    t.text     "description"
-    t.string   "image_url"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "organism_id"
-    t.integer  "tenant_id"
-  end
-
-  add_index "listings", ["tenant_id"], name: "index_listings_on_tenant_id", using: :btree
-
   create_table "masks", force: true do |t|
     t.string   "title"
     t.text     "comment"
