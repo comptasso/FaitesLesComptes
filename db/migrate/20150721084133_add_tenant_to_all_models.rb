@@ -44,10 +44,8 @@ class AddTenantToAllModels < ActiveRecord::Migration
     add_index :holders, :tenant_id
     add_column :imported_bels, :tenant_id, :integer
     add_index  :imported_bels, :tenant_id
-    add_column :lines, :tenant_id, :integer
-    add_index :lines, :tenant_id
-    add_column :listings, :tenant_id, :integer
-    add_index :listings, :tenant_id
+    
+    
     add_column :masks, :tenant_id, :integer
     add_index :masks, :tenant_id
     add_column :natures, :tenant_id, :integer

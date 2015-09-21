@@ -127,8 +127,13 @@ module Utilities
       Tenant.find_each do |t|
         next if t.name
         Tenant.set_current_tenant t.id
-        hs = Holder.where('status = ?', 'owner')
-        t.update_attribute(:name, hs.first.organism.title) if hs.any?
+        hs = Holder.where('status = ? AND tenant_id = ?', 'owner', t.id )
+        if hs.any? 
+           org = hs.first.organism
+           title = org ? org.title : 'Inconnu'
+           t.update_attribute(:name, title) if hs.any?
+        end
+       
       end
       # rajouter un sector 'Commun' aux CE qui n'en ont pas
       # remplissage des tenants_users pour les holders qui sont des guests
@@ -153,7 +158,7 @@ module Utilities
     # suppression des schémas
     def etape5
       Room.find_each do |r|
-        Room.conection.execute("DROP SCHEMA IF EXISTS #{r.database_name} CASCADE;")
+        Room.connection.execute("DROP SCHEMA IF EXISTS #{r.database_name} CASCADE;")
       end
       # Il sera possible ensuite de détruire la table Room mais on le fera
       # après dans une migration car elle contient des infos importantes

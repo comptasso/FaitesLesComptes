@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 
   has_many :holders, :dependent=>:destroy
   has_many :organisms, :through=>:holders
-  # has_many :rooms, :through=>:holders
+  has_many :rooms, :through=>:holders
 
   strip_before_validation :name
 

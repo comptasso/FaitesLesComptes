@@ -1,9 +1,9 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: nouvresto
+  database: restau20150218
   pool: 5
-  username: jean-claude
+  username: jcl
   password: flc
   timeout: 5000
 
@@ -30,6 +30,6 @@ test:
   encoding: unicode
   database: pgtestflc
   pool: 5
-  username: jean-claude
+  username: jcl
   password:
   timeout: 5000
