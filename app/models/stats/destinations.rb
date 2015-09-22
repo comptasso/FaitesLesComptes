@@ -17,10 +17,9 @@ module Stats
   # ordonnée par livre et position.
   # 
   # Les méthode #to_csv (héritée de la classe Statistics) permet l'export.
-  # TODO à vérifier
   # TODO voir pour pouvoir filtrer sur un jeu de destinations
   # TODO on pourrait aussi donner plus de flexibilité sur les dates. 
-  # TODO faire les tests
+  # TODO améliorer avec une requete sql plus complète et faire les tests
   # 
   # #to_pdf n'est pas défini car le nombre fluctuant de destinations ne permet 
   # pas de faire la mise en page. 
@@ -116,7 +115,11 @@ EOF
     end
     
     
-    # à partir d'une table de valeur, on doit prendre la liste des destinations
+    # TODO on pourrait s'affranchir de cette gymnastique compliquée en 
+    # améliorant nettement le requête SQL pour obtenir directement la 
+    # table de résultats
+    # 
+    # A partir d'une table de valeur, on doit prendre la liste des destinations
     # Il faut gérer le cas où toutes les écritures sont avec une destinations
     # et donc il n'y a pas besoin d'une colonne additionnelle
     # ainsi que celui où à l'inverse, aucune écriture n'a de destinations, et 
@@ -130,15 +133,13 @@ EOF
         # si la destination n'a pas été utilisée, on a des nil
         hash_vals.last['f1']= (sup+1) if  hash_vals.last['f1'] == nil
       end
-      # définition de la taille du tableau
-      taille = @additional_column ? (ids.max) + 1 : ids.max
-      # que l'on créé      
-      valeurs = Array.new(taille,0) 
+      # on crée un tableau ayant autant d'index que ids pour y ranger les valeur
+      # au bon endroit avant de ne reprendre de ce tableau que 
+      # celles que l'on veut
+      valeurs = Array.new((ids.max + 1), 0) 
       # pour chaque destination recherchée on cherche l'item qui a cet id en 
       # f1 et on récupère le montant en f2
       hash_vals.each {|f| valeurs[f['f1']] = f['f2'] } 
-      # ici valeurs est un array avec trop de valeurs puisqu'on a toutes les 
-      # destinations existant et pas seulement celles avec des mouvements
       val_sel = ids.collect {|id| valeurs[id]}
       # reste à totaliser
       val_sel << val_sel.sum.to_d # pour avoir un big_decimal
