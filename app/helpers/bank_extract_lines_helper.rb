@@ -4,6 +4,7 @@ require 'in_out_writings_helper'
 module BankExtractLinesHelper
   include ModalsHelper
   include ModallinesHelper
+  include InOutWritingsHelper
 
   # Affiche le détail des lignes d'un extrait de compte lorsque celles-ci sont regroupées
   def details_for_popover(bel)

@@ -120,6 +120,21 @@ module Utilities
       end
     end
 
+    def etape3bis
+      Room.find_each do |r|
+        next unless r.tenant_id
+        Tenant.set_current_tenant r.tenant_id
+      # création du secteur commun si le statut est CE et que ce secteur
+      # n'existe pas
+      o = Organism.find(r.new_org_id)
+      if o.status == 'Comité d\'entreprise' && o.sectors.where('name = ?', 'Commun').empty?
+        o.sectors.create(name:'Commun')
+      end
+      # reconstruction des folios
+      o.send(:reset_folios)
+      Rails.logger.info "Reconstruction des folios de #{o.title}"
+      end
+    end
 
 
     def etape4
@@ -128,12 +143,12 @@ module Utilities
         next if t.name
         Tenant.set_current_tenant t.id
         hs = Holder.where('status = ? AND tenant_id = ?', 'owner', t.id )
-        if hs.any? 
+        if hs.any?
            org = hs.first.organism
            title = org ? org.title : 'Inconnu'
            t.update_attribute(:name, title) if hs.any?
         end
-       
+
       end
       # rajouter un sector 'Commun' aux CE qui n'en ont pas
       # remplissage des tenants_users pour les holders qui sont des guests
@@ -217,9 +232,6 @@ module Utilities
       Room.transaction do
         Room.connection.execute(requete)
       end
-      # reconstruction des folios
-      o = Organism.find(room.new_org_id)
-      o.send(:reset_folios)
       room.update_attribute(:transformed, true)
 
     end
@@ -247,7 +259,6 @@ module Utilities
         DELETE FROM export_pdfs;
         DELETE FROM folios;
         DELETE FROM imported_bels;
-        DELETE FROM listings;
         DELETE FROM masks;
         DELETE FROM natures;
         DELETE FROM nomenclatures;
@@ -396,13 +407,13 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
                                                 :modele=>Adherent::Member))
       # puis les 3 tables qui découlent de Adherent::Member
       create_function(sql_transform_one_ref('member_id', 'adherent_payments',
-                                            :modele=>Adherent::Payment))
+              champ:Adherent::Member,  :modele=>Adherent::Payment))
       create_function(sql_transform_one_ref('member_id', 'adherent_coords',
-                                            :modele=>Adherent::Member))
+             champ:Adherent::Member, :modele=>Adherent::Coord))
       create_function(sql_transform_one_ref('member_id', 'adherent_adhesions',
-                                            :modele=>Adherent::Adhesion))
+            champ:Adherent::Member,  :modele=>Adherent::Adhesion))
       create_function(sql_transform_n_refs('payment_id', ['adhesion_id'],
-                                           'adherent_reglements', :modele=>Adherent::Reglement))
+             'adherent_reglements', champ:Adherent::Member, modele:Adherent::Reglement))
     end
 
     def quote_string(s)
@@ -481,7 +492,9 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
     #  :bridge_id=>Adherent::Member
     #  - le nom du modèle lorsque le champ est polymorphique par
     #  une option. Exemple: :polymorphic=>'accountable_id' pour la table Accounts
-    #  -
+    #  - le nom du champ lorsqu'il ne peut être déduit de champ_id, par
+    #  exemple champ:Adherent::Member
+    #
     #
     #
     def self.sql_transform_n_refs(champ_id, champ_ids, table, options= {})
@@ -497,7 +510,7 @@ vous devez le fournir en deuxième argument'
       end
 
       # le nom du modèle que l'on cherchera dans la table flc_cloner
-      champ = champ_id[0..-4].classify
+      champ =  champ_to_search(champ_id, options[:champ])
       # récupération de tous les champs dont on assure la recopie à l'identique
       # ne sont donc pas recopiés le champ id, et les arguments  champ_ids
       list_cols = modele.column_names
@@ -530,7 +543,7 @@ DECLARE
 BEGIN
 FOR r in EXECUTE format('SELECT *, $1 FROM %I.#{table} WHERE #{champ_id} IN (
     SELECT old_id FROM flccloner WHERE name = %L AND old_org_id = %L AND new_org_id = %L)',
-    from_schema, '#{champ}', from_id, to_id)
+    from_schema, #{champ}, from_id, to_id)
    USING tenant_id
   LOOP
     WITH  correspondance AS
@@ -538,7 +551,8 @@ FOR r in EXECUTE format('SELECT *, $1 FROM %I.#{table} WHERE #{champ_id} IN (
        (tenant_id, #{champ_id},
       #{ list_champ + ', ' unless list_champ.empty?}
       #{list})
-      VALUES (tenant_id, #{value_to_insert(champ_id)},
+      VALUES (tenant_id, #{value_to_insert(champ_id, options[:champ])},
+
       #{values + ', ' unless values.empty?}
       #{r_list})
      RETURNING id, r.id  oldid)

@@ -190,13 +190,13 @@ VALUES('Organism',
         modele:Adherent::Member))
       # puis les 3 tables qui découlent de Adherent::Member
       create_function(sql_copy_one_ref('member_id', 'adherent_payments',
-        modele:Adherent::Payment))
+        champ:Adherent::Member, modele:Adherent::Payment))
       create_function(sql_copy_one_ref('member_id', 'adherent_coords',
-        modele:Adherent::Member))
+        champ:Adherent::Member, modele:Adherent::Member))
       create_function(sql_copy_one_ref('member_id', 'adherent_adhesions',
-        modele:Adherent::Adhesion))
+        champ:Adherent::Member, modele:Adherent::Adhesion))
       create_function(sql_copy_n_refs('payment_id', ['adhesion_id'],
-        'adherent_reglements', modele:Adherent::Reglement))
+        'adherent_reglements', champ:Adherent::Member,modele:Adherent::Reglement))
     end
 
     def quote_string(s)
@@ -288,7 +288,7 @@ vous devez le fournir en deuxième argument'
       end
 
       # le nom du modèle que l'on cherchera dans la table flc_cloner
-      champ = champ_id[0..-4].classify
+      champ = champ_to_search(champ_id, options[:champ])
       # récupération de tous les champs dont on assure la recopie à l'identique
       # ne sont donc pas recopiés le champ id, et les arguments  champ_ids
       list_cols = modele.column_names
@@ -328,7 +328,7 @@ BEGIN
        (#{champ_id},
         #{ list_champ + ', ' unless list_champ.empty?}
         #{list})
-      VALUES (#{value_to_insert(champ_id)},
+      VALUES (#{value_to_insert(champ_idi, options[:champ])},
       #{values + ', ' unless values.empty?}
       #{r_list})
      RETURNING id, (r).id  oldid)

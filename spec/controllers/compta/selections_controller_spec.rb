@@ -1,6 +1,7 @@
 # coding: utf-8
 
 require 'spec_helper'
+require 'support/spec_controller_helper'
 
 describe Compta::SelectionsController do
   include SpecControllerHelper
@@ -10,21 +11,23 @@ describe Compta::SelectionsController do
     @p.stub(:all_natures_linked_to_account?).and_return true
   end
 
-  describe "GET 'index'" do 
+  describe "GET 'index'" do
     it "returns http success" do
+      @o.stub_chain(:writings, :period, :unlocked, :includes).and_return [1,2]
       get :index,{ :period_id=>@p.to_param, :scope_condition=>'unlocked'}, valid_session
-      response.should be_success 
+      response.should be_success
     end
 
     it 'Récupère les écritures en incluant livre, compta_lines et account' do
-      Writing.should_receive(:period).with(@p).and_return(@ar = double(Arel))
+      @o.should_receive(:writings).and_return(@ar = double(Arel))
+      @ar.should_receive(:period).with(@p).and_return @ar
       @ar.should_receive(:unlocked).and_return @ar
       @ar.should_receive(:includes).with([:book, compta_lines: :account]).and_return [1,2]
       get :index,{ :period_id=>@p.to_param, :scope_condition=>'unlocked'}, valid_session
     end
 
     it 'assigns @writings' do
-      Writing.stub_chain(:period, :unlocked, :includes).and_return [1,2]
+      @o.stub_chain(:writings, :period, :unlocked, :includes).and_return [1,2]
       get :index,{ :period_id=>@p.to_param, :scope_condition=>'unlocked'}, valid_session
       assigns(:writings).should == [1,2]
     end
