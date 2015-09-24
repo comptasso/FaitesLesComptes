@@ -318,7 +318,7 @@ DECLARE
   new_id int;
 BEGIN
   FOR r in SELECT * FROM #{table} WHERE #{champ_id} IN (
-    SELECT old_id FROM flccloner WHERE name = '#{champ}' AND old_org_id = from_id
+    SELECT old_id FROM flccloner WHERE name = #{champ} AND old_org_id = from_id
       AND new_org_id = to_id
 )
 
