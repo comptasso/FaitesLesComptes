@@ -328,7 +328,7 @@ BEGIN
        (#{champ_id},
         #{ list_champ + ', ' unless list_champ.empty?}
         #{list})
-      VALUES (#{value_to_insert(champ_idi, options[:champ])},
+      VALUES (#{value_to_insert(champ_id, options[:champ])},
       #{values + ', ' unless values.empty?}
       #{r_list})
      RETURNING id, (r).id  oldid)
