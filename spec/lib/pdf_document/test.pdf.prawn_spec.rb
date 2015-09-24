@@ -39,7 +39,7 @@ describe 'test pdf prawn' do
   context 'le document est créé' do
     before(:each) do
       @pdf = PdfDocument::Default.new(@p, @account, title:@o.title, subtitle:'Essai')
-      @pdf.columns_select =  ['writings.date AS w_date', 'nature_id', 'debit', 'credit']
+      @pdf.columns_select =  ['writings.date AS date', 'nature_id', 'debit', 'credit']
       @pdf.columns_titles = %w(Date Nature Débit Crédit)
       
       @pdf.columns_methods = ['w_date', 'nature.name', nil, nil]

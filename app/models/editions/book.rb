@@ -55,6 +55,12 @@ module Editions
         select(columns_select).
         offset(offset).limit(limit)
     end
+    
+    def set_nb_pages
+      nb_lines = @source.compta_lines.count
+      return 1 if nb_lines == 0
+      (nb_lines/nb_lines_per_page.to_f).ceil
+    end
 
 
      

@@ -61,8 +61,7 @@ module PdfDocument
       limit = nb_lines_per_page
       offset = (page_number - 1)*nb_lines_per_page
       @source.compta_lines.joins(:writing=>:book).
-        select(columns_select).
-        where('date >= ? AND date <= ?', from_date, to_date).
+        select(columns_select).range_date(from_date, to_date).
         offset(offset).limit(limit)
     end
 
@@ -116,7 +115,7 @@ module PdfDocument
     
     def set_nb_pages
       nb_lines = @source.send(@select_method).
-        where('date >= ? AND date <= ?', from_date, to_date).count
+        range_date(from_date, to_date).count
       return 1 if nb_lines == 0
       (nb_lines/nb_lines_per_page.to_f).ceil
     end
