@@ -24,8 +24,8 @@ describe Admin::PeriodsController do
     before(:each) do
       @o.stub(:periods).and_return(@ar = double(Arel))
       @ar.stub(:find_by_id).and_return @p
-      @ar.stub(:order).with('start_date ASC').
-        and_return [mock_model(Period), mock_model(Period)]
+      @ar.stub(:order).with(:close_date).
+        and_return [mock_model(Period), mock_model(Period)] 
 
     end
 
@@ -206,7 +206,7 @@ describe Admin::PeriodsController do
         @o.stub(:periods).and_return @a = double(Arel)
         @a.stub(:any?).and_return true
         @a.stub(:empty?).and_return(!(@a.any?))
-        @a.stub_chain(:last, :close_date).and_return @p.close_date
+        @a.stub_chain(:order, :last, :close_date).and_return @p.close_date
         @a.stub(:find_by_id).and_return(@p)
       end
 

@@ -88,7 +88,7 @@ module Utilities
     def etape2
       Tenant.find_each do |t|
         Tenant.set_current_tenant t
-        Holder.find_each do |h|
+        Holder.where('tenant_id = ?', t.id).find_each do |h|
           r = Room.find(h.room_id)
           h.organism_id = r.new_org_id
           h.save
@@ -192,8 +192,8 @@ module Utilities
         delete_trace
         # ici ajouter l'entrée de l'organisme que l'on va traiter
         # dans la table flccloner.
-        uc = Utilities::Cloner.new(name:'Organism', old_id:1, new_id:room.new_org_id,
-            old_org_id:1, new_org_id:room.new_org_id)
+        uc = Utilities::Cloner.new(name:'Organism', :old_id=>1, :new_id=>room.new_org_id,
+            :old_org_id=>1, :new_org_id=>room.new_org_id)
         uc.save!
 
       # puis utilisation des ces infos pour appeler successivement toutes
@@ -353,7 +353,7 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
       create_function(sql_transform_n_refs('book_id', %w(period_id account_id), 'natures'))
       # puis les écritures
       create_function(sql_transform_n_refs('book_id', ['bridge_id'], 'writings',
-                                           bridge_id:Adherent::Member))
+                                           :bridge_id=>Adherent::Member))
       # les remises de chèques (attention à l'ordre)
       create_function(sql_transform_n_refs('bank_account_id',
                                            ['writing_id'], 'check_deposits'))
@@ -370,7 +370,7 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
       # les données du bridge adhérent
       create_function(sql_transform_n_refs('organism_id',
                                            %w(bank_account_id cash_id destination_id income_book_id),
-                                           'adherent_bridges', {modele:Adherent::Bridge, income_book_id:Book}))
+                                           'adherent_bridges', {:modele=>Adherent::Bridge, :income_book_id=>Book}))
       create_refill_check_deposit_function
       # et enfin le holder
 
@@ -393,16 +393,16 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
     def self.create_clone_adherent_functions
       # plus Adherent::Member
       create_function(sql_transform_first_level('adherent_members',
-                                                modele:Adherent::Member))
+                                                :modele=>Adherent::Member))
       # puis les 3 tables qui découlent de Adherent::Member
       create_function(sql_transform_one_ref('member_id', 'adherent_payments',
-                                            modele:Adherent::Payment))
+                                            :modele=>Adherent::Payment))
       create_function(sql_transform_one_ref('member_id', 'adherent_coords',
-                                            modele:Adherent::Member))
+                                            :modele=>Adherent::Member))
       create_function(sql_transform_one_ref('member_id', 'adherent_adhesions',
-                                            modele:Adherent::Adhesion))
+                                            :modele=>Adherent::Adhesion))
       create_function(sql_transform_n_refs('payment_id', ['adhesion_id'],
-                                           'adherent_reglements', modele:Adherent::Reglement))
+                                           'adherent_reglements', :modele=>Adherent::Reglement))
     end
 
     def quote_string(s)
@@ -513,7 +513,7 @@ vous devez le fournir en deuxième argument'
       values = champ_ids.collect do |cid|
         mod = options[cid.to_sym].to_s
         if options[:polymorphic] == cid
-          value_to_insert(cid, mod, polymorphic:true)
+          value_to_insert(cid, mod, :polymorphic=>true)
         else
           value_to_insert(cid, mod)
         end

@@ -41,8 +41,9 @@ describe Editions::Book do
    Editions::Book.new(@period, @extract)
  end
 
+  # TODO faire une spec sans stub (dans les features de préférence)
  
-# FIXME prepare_line semble être rendu appelé 150 fois, ce qui laisse penser
+# FIXME prepare_line semble être appelé 150 fois, ce qui laisse penser
 # que perpare_line est appelé à chaque page pour l'ensemble des 50 lignes
 # et non simplement pour les 22 lignes de la page
   it 'et peut alors rendre un pdf' do
