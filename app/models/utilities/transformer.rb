@@ -413,7 +413,9 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
       create_function(sql_transform_one_ref('member_id', 'adherent_adhesions',
             champ:Adherent::Member,  :modele=>Adherent::Adhesion))
       create_function(sql_transform_n_refs('payment_id', ['adhesion_id'],
-             'adherent_reglements', champ:Adherent::Member, modele:Adherent::Reglement))
+             'adherent_reglements', champ:Adherent::Payment,
+             adhesion_id:Adherent::Adhesion,
+             modele:Adherent::Reglement))
     end
 
     def quote_string(s)
@@ -486,10 +488,8 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
     #  C'est typiquement le cas pour la famille des tables adherent_members
     #  qui fait référence à Adherent::Member. Dans ce cas, on précise dans les
     #  options :modele=>Adherent::Member
-    #  - le nom du champ lorsqu'il ne peut être déduit de champ_ids, le seul
-    #  cas actuellement étant bridge_id qui fait référence à un
-    #  Adherent::Member. Dans ce cas, on mettra dans les options
-    #  :bridge_id=>Adherent::Member
+    #  - le nom du champ lorsqu'il ne peut être déduit de champ_ids, par 
+    #  exemple :bridge_id=>Adherent::Member
     #  - le nom du modèle lorsque le champ est polymorphique par
     #  une option. Exemple: :polymorphic=>'accountable_id' pour la table Accounts
     #  - le nom du champ lorsqu'il ne peut être déduit de champ_id, par
