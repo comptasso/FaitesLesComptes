@@ -413,9 +413,9 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
       create_function(sql_transform_one_ref('member_id', 'adherent_adhesions',
             champ:Adherent::Member,  :modele=>Adherent::Adhesion))
       create_function(sql_transform_n_refs('payment_id', ['adhesion_id'],
-             'adherent_reglements', champ:Adherent::Payment,
+             'adherent_reglements', {champ:Adherent::Payment,
              adhesion_id:Adherent::Adhesion,
-             modele:Adherent::Reglement))
+             modele:Adherent::Reglement}))
     end
 
     def quote_string(s)

@@ -195,7 +195,7 @@ VALUES('Organism',
         champ:Adherent::Member, modele:Adherent::Member))
       create_function(sql_copy_one_ref('member_id', 'adherent_adhesions',
         champ:Adherent::Member, modele:Adherent::Adhesion))
-      create_function(sql_transform_n_refs('payment_id', ['adhesion_id'],
+      create_function(sql_copy_n_refs('payment_id', ['adhesion_id'],
              'adherent_reglements', champ:Adherent::Payment,
              adhesion_id:Adherent::Adhesion,
              modele:Adherent::Reglement))
