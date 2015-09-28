@@ -25,8 +25,6 @@ describe 'bank_extract_lines' do
     login_as(@cu, 'MonkeyMocha')
     use_test_organism
     bank_extract_test
-   # visit admin_room_path(@r)
-
   end
 
   after(:each) do
@@ -35,22 +33,17 @@ describe 'bank_extract_lines' do
 
   context 'on part du bank_extract' do
 
-
     before(:each) do
       visit bank_account_bank_extracts_path(@ba)
     end
 
     it 'cliquer sur afficher affiche les lignes' do
-
       within('table') do
         click_link('Afficher')
       end
       current_path.should == bank_extract_bank_extract_lines_path(@be)
-
     end
 
   end
-
-
 
 end

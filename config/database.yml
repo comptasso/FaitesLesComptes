@@ -1,9 +1,9 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: nouvresto2
+  database: nouvresto
   pool: 5
-  username: jcl
+  username: jean-claude
   password: flc
   timeout: 5000
 

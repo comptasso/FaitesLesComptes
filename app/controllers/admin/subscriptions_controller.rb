@@ -16,7 +16,7 @@ class Admin::SubscriptionsController < Admin::ApplicationController
   end
 
   def create
-    @sub = Subscription.new(subscription_params)
+    @sub = @organism.subscriptions.new(subscription_params)
     if @sub.save
       flash[:notice] = "L'écriture périodique '#{@sub.title}' a été créée"
       redirect_to admin_organism_subscriptions_url(@organism)

@@ -15,10 +15,10 @@
 #
 # La méthode #support permet de renvoyer le long_name du compte de la counterline (utilisé dans les éditions)
 #
-class  InOutWriting < Writing 
+class  InOutWriting < Writing
 
   validates :counter_line ,:counter_line_with_payment_mode=>true
-  
+
   # revoie la ligne de recettes ou de dépenses de cette écriture
   #
   # S'il n'y en a pas, la construit
@@ -38,11 +38,11 @@ class  InOutWriting < Writing
   # est émis et la méthode retourne le long_name du compte.
   def support
     acc = counter_line.account if counter_line && counter_line.account
-    
+
     return acc.title if acc.number == '511'
     return acc.accountable.nickname if (acc.number =~ /^5[13]\d*/ )
-    
-    Rails.logger.warn "InOutWriting#support appelée avec un compte qui n'est pas de classe 5 : account.number : #{acc.number}"
+
+    Rails.logger.warn "#{self.class}#support appelée avec un compte qui n'est pas de classe 5 : account.number : #{acc.number}"
     acc.long_name # pour les autres cas
   end
 end

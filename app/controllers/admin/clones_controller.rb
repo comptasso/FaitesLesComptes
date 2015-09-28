@@ -24,7 +24,7 @@ class Admin::ClonesController < Admin::ApplicationController
     if ucl && new_id = ucl.clone_organism(admin_cloner_params[:comment])
       # l'organisme est créé. Reste à créer son holder.
       Holder.create(user_id:current_user.id, organism_id:new_id,
-        status:'owner') # car seul le owner est habilité (voir le before_filter)
+                    status:'owner', tenant_id:Tenant.current_tenant.id) # car seul le owner est habilité (voir le before_filter)
       flash[:notice] = 'Un clone de votre base a été créé'
     else
       flash[:alert] = 'Une erreur s\'est produite lors de la création du clone de votre base'

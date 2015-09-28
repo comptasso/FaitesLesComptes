@@ -2,24 +2,28 @@
   <h3>Réinitialisation du mot de passe</h3>
 <div class="inner-champ">
 
-
-  <div class='panel-body'>
-<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), 
-  html: {class: 'form-horizontal', method: :put }) do |f| %>
+<div class="panel-body">
+<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name),
+                    html: {class: 'form-horizontal'},
+                    wrapper: :horizontal_form,
+                    method: :put ) do |f| %>
   <%= f.error_notification %>
 
+  <div class='form-inputs'>
   <%= f.input :reset_password_token, as: :hidden %>
   <%= f.full_error :reset_password_token %>
 
- 
-    <%= f.input :password, :required => true, :hint=>'8 caractères minimum', :autofocus => true,  my_wrapper_html: {class: "col-lg-3"}  %>
-    <%= f.input :password_confirmation, :required => true,  my_wrapper_html: {class: "col-lg-3"}  %>
-  
+
+  <%= f.input :password, :required => true, :hint=>'8 caractères minimum',
+      :autofocus => true,  my_wrapper_html: {class: "col-lg-3"}  %>
+  <%= f.input :password_confirmation, :required => true,
+      my_wrapper_html: {class: "col-lg-3"}  %>
+ </div>
 
   <div class="form-actions">
     <%= f.button :submit, "Valider", class: "btn-primary col-lg-3 col-lg-offset-2"  %>
   </div>
 <% end %>
-  </div>
+</div>
 </div>
 </div>

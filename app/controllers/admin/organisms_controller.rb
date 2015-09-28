@@ -105,7 +105,8 @@ class Admin::OrganismsController < Admin::ApplicationController
 
   #TODO faire spec de cette méthode
   def fill_holder
-    current_user.holders.create(organism_id:@organism.id, status:'owner')
+    current_user.holders.create(organism_id:@organism.id,
+         status:'owner', tenant_id:Tenant.current_tenant.id)
   end
 
 

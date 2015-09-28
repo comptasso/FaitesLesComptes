@@ -174,7 +174,7 @@ class CheckDeposit < ActiveRecord::Base
 
 
   def create_writing
-    book = OdBook.first!
+    book = bank_account.organism.od_books.first!
     CheckDeposit.transaction do
       w = build_check_deposit_writing(date:deposit_date,
         narration:'Remise chèque', book_id:book.id)

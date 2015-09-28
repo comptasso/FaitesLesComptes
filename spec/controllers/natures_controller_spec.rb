@@ -67,9 +67,9 @@ describe NaturesController do
 
     it 'with filter' do
       filt = 1
-      Destination.should_receive(:find).with(filt).and_return(double(Object, :name=>'mock'))
+      @o.should_receive(:destinations).and_return(@ar = double(Arel))
+      @ar.should_receive(:find).with(filt).and_return(double(Object, name:'mock'))
       Stats::Natures.should_receive(:new).with(@p, [1]).and_return('sn')
-
       get :index, {:organism_id=>@o.id.to_s, :period_id=>@p.id.to_s, :destination=>filt.to_s},  session_attributes
       assigns(:filter).should == filt
     end

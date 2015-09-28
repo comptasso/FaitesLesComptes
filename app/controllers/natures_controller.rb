@@ -31,7 +31,7 @@ class NaturesController < ApplicationController
 
   def set_stats_filter
     @filter = params[:destination].to_i || 0
-    @filter_name = Destination.find(@filter).name if @filter != 0
+    @filter_name = @organism.destinations.find(@filter).name if @filter != 0
   end
 
   # créé les variables d'instance attendues par le module PdfController
