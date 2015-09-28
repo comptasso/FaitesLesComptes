@@ -364,7 +364,7 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
       create_function(sql_transform_n_refs('book_id', %w(period_id account_id), 'natures'))
       # puis les écritures
       create_function(sql_transform_n_refs('book_id', ['bridge_id'], 'writings',
-                                           :bridge_id=>Adherent::Member))
+                                           :bridge_id=>Adherent::Payment))
       # les remises de chèques (attention à l'ordre)
       create_function(sql_transform_n_refs('bank_account_id',
                                            ['writing_id'], 'check_deposits'))
