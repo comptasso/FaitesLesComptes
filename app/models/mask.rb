@@ -45,7 +45,7 @@
 class Mask < ActiveRecord::Base
   acts_as_tenant
   belongs_to :organism
-  has_one :subscription
+  has_one :subscription, dependent: :destroy
 
   has_many :writings, as: :bridge
 

@@ -123,7 +123,7 @@ class InOutWritingsController < ApplicationController
         mois = sprintf('%.02d',@in_out_writing.date.month); an =  @in_out_writing.date.year
         format.html { redirect_to url_for(book_id:@book.id,
             action:actio, mois:mois, an:an),
-            notice:"Ecriture #{@in_out_writing.id} modifiée" }
+            notice:"Ecriture #{@in_out_writing.piece_number} modifiée" }
         format.json { head :ok }
       else
         format.html { render action: "edit" }

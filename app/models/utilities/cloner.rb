@@ -71,6 +71,8 @@ module Utilities
       functions.each do |f|
         requete << "SELECT #{f}(#{infos.old_org_id}, #{infos.new_org_id});"
         end
+      requete << "SELECT clone_fill_bridge_id(#{infos.old_org_id}, #{infos.new_org_id});"
+
       Utilities::Cloner.connection.execute(requete)
       return infos.new_org_id
 
@@ -166,8 +168,8 @@ VALUES('Organism',
       # base de données ne permet pas de trouver un enchaintement pour ce
       # champ
       create_refill_check_deposit_function
-      # et enfin le holder
-
+      #
+      create_clone_fill_bridge_id
     end
 
 
@@ -374,6 +376,47 @@ FOR r in EXECUTE format('SELECT * FROM compta_lines WHERE check_deposit_id IN (
            AND old_org_id = from_id AND new_org_id = to_id);
 
   END LOOP;
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE;
+EOF
+      create_function(sql)
+    end
+
+    # Pour les Writings, la transformation fait perdre le bridge_id lorsque
+    # le bridge_type est Mask.
+    # Pour cette classe, on va donc créer une fonction spécifique qui ne fait
+    # que transformer le champ bridge_id.
+    #
+    # Le principe est de prendre tous les Writings qui sont référencés
+    # dans la table flc_cloner, puis seulement celle qui ont le champ
+    # bridge_type rempli avec 'Mask'; et pour celles-ci de faire un update
+    # de bridge_id avec l'id du Mask que l'on va aller chercher dans flc_cloner
+    #
+    # On veut toutes les writings qui sont dans flc_cloner avec to_id qui nous
+    # est fourni
+    #
+    def self.create_clone_fill_bridge_id
+      sql = <<-EOF
+        CREATE OR REPLACE FUNCTION clone_fill_bridge_id(from_id integer, to_id integer)
+        RETURNS SETOF writings AS
+        $BODY$
+        DECLARE
+          r RECORD;
+        BEGIN
+FOR r in EXECUTE format('SELECT * FROM writings WHERE writings.id IN (
+    SELECT id FROM flccloner
+    WHERE name = %L AND old_org_id = %L AND new_org_id = %L AND
+    writings.bridge_type = %L)', 'Writing',
+    from_id, to_id, 'Mask')
+LOOP
+UPDATE writings SET bridge_id = (SELECT new_id FROM flccloner WHERE
+      name = 'Mask' AND new_org_id = to_id AND old_org_id = from_id
+      AND old_id = r.bridge_id)
+
+WHERE writings.id = (SELECT new_id FROM flccloner WHERE name = 'Writing'
+  AND flccloner.old_id = r.id AND new_org_id = to_id AND old_org_id = from_id);
+END LOOP;
 END
 $BODY$
   LANGUAGE plpgsql VOLATILE;

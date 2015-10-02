@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
-  #  c.filter = {:wip=> true }
+  # c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
@@ -14,7 +14,7 @@ describe Organism do
 
   def valid_attributes
     {:title =>'Test ASSO',
-      :status=>'Association'
+     :status=>'Association'
     }
   end
 
@@ -68,7 +68,6 @@ describe Organism do
   describe 'can_write_line'  do
 
     before(:each) do
-
       @o= Organism.new(valid_attributes)
     end
 
@@ -101,7 +100,6 @@ describe Organism do
       @o.stub(:cashes).and_return([1])
       @o.can_write_line?.should be_true
     end
-
 
   end
 
@@ -143,17 +141,14 @@ describe Organism do
   describe 'after create' do
 
     after(:each) do
-        clean_organism
-      end
+      clean_organism
+    end
 
     context 'une association'  do
       before(:each) do
         clean_organism
         use_test_organism
       end
-
-
-
 
       it 'on a tous les éléments' do
         @o.should have(4).books # 4 livres
@@ -179,20 +174,15 @@ describe Organism do
         @o.document(:actif)
       end
 
-
-
       it 'mais peut écrire des lignes' do
         @o.should be_can_write_line
       end
-
-
 
       describe 'bridge vers adherent' do
 
         before(:each) do
           Adherent::Bridge.any_instance.stub(:nature_coherent_with_book).and_return true
           @o.fill_bridge
-
         end
 
         it 'crée un bridge vers le module adhérent' do
@@ -206,9 +196,7 @@ describe Organism do
           b.income_book = @o.income_books.first
           b.destination = @o.destinations.find_by_name('Adhérents')
           b.nature_name = 'Cotisations des adhérents'
-
         end
-
       end
     end
 
@@ -219,7 +207,7 @@ describe Organism do
       before(:each) do
         clean_organism
         @o = Organism.create!({:title =>'Mon Entreprise',
-            :status=>'Entreprise' })
+                               :status=>'Entreprise' })
 
       end
 
@@ -244,14 +232,12 @@ describe Organism do
   end
 
 
-  context 'avec des exercices', wip:true  do
+  context 'avec des exercices' do
 
     before(:each) do
       use_test_organism
       @p2 = find_second_period
     end
-
-
 
     describe 'find_period' do
 
@@ -279,9 +265,7 @@ describe Organism do
         @o.guess_period(Date.today.years_ago 10).should == @p
       end
 
-   end
-
-
+    end
 
     describe 'max_open_periods?' do
       it 'nb_open_periods.should == 2' do
@@ -296,6 +280,32 @@ describe Organism do
         @o.stub(:nb_open_periods).and_return(1)
         @o.max_open_periods?.should be_false
       end
+    end
+
+  end
+
+  describe 'destruction d un exercice', wip:true do
+
+    before(:each) do
+      use_test_organism
+      @nbm = Adherent::Member.count
+    end
+
+    after(:each) do
+      Adherent::Member.find_each {|m| m.destroy }
+    end
+
+    it 'on peut détruire l organisme' do
+      expect{@o.destroy}.not_to raise_error
+    end
+
+    it 'la destruction entraine celle des membres' do
+      @m = @o.members.new(number:'12A', name:'Membre Test', forname:'Test')
+      puts @m.errors.messages unless @m.valid?
+      @m.save!
+      expect(Adherent::Member.count).to eq @nbm+1
+      @o.destroy
+      expect(Adherent::Member.count).to eq 0
     end
 
   end

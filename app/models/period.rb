@@ -652,14 +652,16 @@ class Period < ActiveRecord::Base
   # avant la destruction d'un exercice
   #
   def destroy_cash_controls
-    Cash.all.each do |ca|
+    organism.cashes.each do |ca|
       ca.cash_controls.for_period(self).each {|cc| cc.destroy }
     end
   end
 
   # suppression des écritures et des remises de chèques
   def destroy_writings
-    Writing.period(self).each do |w|
+    # TODO revoir la logique d'effacement des enregistrements
+    # pour avoir un enchaînement plus naturel.
+    organism.writings.period(self).each do |w|
       w.compta_lines.each {|cl| cl.delete }
       w.check_deposit.delete if w.is_a? CheckDepositWriting
       w.delete
