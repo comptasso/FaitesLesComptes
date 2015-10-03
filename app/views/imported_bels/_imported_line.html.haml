@@ -8,8 +8,8 @@
 %td.numeric= debit_credit imported_line.credit
 %td= support imported_line
 %td
-  = imported_line.writing_id
+  = imported_line.writing.piece_number
   = icon_to('supprimer.png',
     [@bank_account, imported_line], :method => :delete,
     title: 'Supprime cette ligne mais pas l\'écriture associée',
-    remote:true, class:'ibel_delete') 
+    remote:true, class:'ibel_delete')
