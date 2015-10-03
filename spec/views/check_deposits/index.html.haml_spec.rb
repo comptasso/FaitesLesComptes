@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 
- 
-describe "check_deposits/index" do  
+
+describe "check_deposits/index" do
   include JcCapybara
 
   let(:o) {mock_model(Organism, title: 'spec cd')}
@@ -14,16 +14,17 @@ describe "check_deposits/index" do
   let(:cd2) {mock_model(CheckDeposit, bank_account_id: ba.id,
       deposit_date: Date.today - 20)}
 
-  10.times do |t| 
+  10.times do |t|
     s=('l'+t.to_s).to_sym
     let(s) {mock_model(Line, :amount=>(t+1))}
   end
 
- 
+
 
   before(:each) do
     [cd1, cd2].each do |cd|
       cd.stub(:bank_account).and_return(ba)
+      cd.stub_chain(:check_deposit_writing, :piece_number).and_return 888
     end
     ba.stub(:to_s).and_return('124578AZ')
     cd1.stub(:pointed?).and_return(true) # la remise de chèque n° 1 est pointée
@@ -40,7 +41,7 @@ describe "check_deposits/index" do
 
   end
 
-   
+
   describe "controle du corps" do
 
     before(:each) do
@@ -51,18 +52,18 @@ describe "check_deposits/index" do
       assert_select "h3",
         :text => "Compte courant : liste des remises de chèques"
     end
-    
+
     it "affiche la table desw remises de chèques" do
       assert_select "table tbody", count: 1
     end
-    
+
     it "affiche les lignes (ici deux)" do
       assert_select "tbody tr", count: 2
     end
 
-    
+
     context "chaque ligne affiche ..." do
-      
+
       it 'le numéro de pièce' do
         assert_select('tr:nth-child(2) td:nth-child(1)',
           :text=>cd2.writing_id)
@@ -76,7 +77,7 @@ describe "check_deposits/index" do
        assert_select('tr:nth-child(2) td:nth-child(3)',
          :text=>I18n::l(cd2.deposit_date))
       end
-      
+
       it "le montant (formatté avec une virgule et deux décimales)" do
         assert_select('tr:nth-child(2) td:nth-child(5)', :text=>'35,00')
       end
@@ -87,7 +88,7 @@ describe "check_deposits/index" do
           organism_bank_account_check_deposit_path(o,ba, cd2))
       end
 
-      
+
 
       it "le lien pour la modification" do
         assert_select('tbody tr:nth-child(2) td:nth-child(6) img[src=?]',
@@ -103,7 +104,7 @@ describe "check_deposits/index" do
           organism_bank_account_check_deposit_path(o,ba, cd2))
       end
 
-    
+
     end
 
     context "quand la remise de chèque est pointée,

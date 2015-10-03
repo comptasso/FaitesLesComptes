@@ -2,36 +2,23 @@ fr:
   conseils:
     BelsImporterController:
       new: >
-             Votre fichier csv doit avoir une ligne de titre et 4 colonnes ; 
-             contenant dans l'ordre, la date, le libellé, le débit et le crédit 
+             Votre fichier csv doit avoir une ligne de titre et 4 colonnes ;
+             contenant dans l'ordre, la date, le libellé, le débit et le crédit
              de vos écritures en banque
-    
+
     ImportedBelsController:
       index: >
-               Modifiez et complétez les différents champs pour chaque ligne que 
-               vous souhaitez importer, puis 
-               cliquer sur l'icone + qui apparaîtra, permettant de 
+               Modifiez et complétez les différents champs pour chaque ligne que
+               vous souhaitez importer, puis
+               cliquer sur l'icone + qui apparaîtra, permettant de
                créer l'écriture.</p>
-               N'oubliez pas de noter le numéro de l'écriture (qui apparaîtra 
+               N'oubliez pas de noter le numéro de l'écriture (qui apparaîtra
                alors à la place de l'icône +) sur la pièce justificative.</p>
                Pour les virements internes, modifiez le type en 'T', puis
-               sélectionnez la contrepartie dans la colonne Mode Pt ; 
+               sélectionnez la contrepartie dans la colonne Mode Pt ;
                attention à ne pas créer l'écriture
-               en double lorsque vous importerez les écritures de vos autres 
+               en double lorsque vous importerez les écritures de vos autres
                comptes.
-    InOutWritingsController:
-      new: >
-                Le champ "Date pièce" a été ajouté pour la conformité au format
-                du fichier des écritues comptables défini par le fisc.<br/>Sera rempli
-                avec la date de l'opération si laissé en blanc.<br/>Voir le site 
-                <a href="http://faiteslescomptes.fr/index.php/versions/suivi-version/111-version-1-12-0rc-nouveau-champ-date-piece">
-                FaitesLesComptes</a> pour plus de détail. 
-      edit: >
-                Le champ "Date pièce" a été ajouté pour la conformité au format
-                du fichier des écritues comptables défini par le fisc. <br/>Sera rempli
-                avec la date de l'opération si laissé en blanc. <br/>Voir le site 
-                <a href="http://faiteslescomptes.fr/index.php/versions/suivi-version/111-version-1-12-0rc-nouveau-champ-date-piece">
-                FaitesLesComptes</a> pour plus de détail. 
     Admin:
       NaturesController:
         index: >
@@ -41,15 +28,15 @@ fr:
       DestinationsController:
         index: >
                 Activez ou désactivez les activités en cliquant sur les
-                cases à cocher de la colonne 'Actif'. 
+                cases à cocher de la colonne 'Actif'.
       BankAccountsController:
         new: >
-               Par précaution, nous vous conseillons de rentrer le numéro de 
-               compte avec une partie masquée, par exemple 12345XXX789      
+               Par précaution, nous vous conseillons de rentrer le numéro de
+               compte avec une partie masquée, par exemple 12345XXX789
         edit: >
-               Par précaution, nous vous conseillons de rentrer le numéro de 
-               compte avec une partie masquée, par exemple 12345XXX789   
-               
+               Par précaution, nous vous conseillons de rentrer le numéro de
+               compte avec une partie masquée, par exemple 12345XXX789
+
     Compta:
       GeneralBooksController:
         new: >

@@ -71,6 +71,8 @@ module Utilities
       functions.each do |f|
         requete << "SELECT #{f}(#{infos.old_org_id}, #{infos.new_org_id});"
         end
+      requete << "SELECT clone_fill_bridge_id(#{infos.old_org_id}, #{infos.new_org_id});"
+
       Utilities::Cloner.connection.execute(requete)
       return infos.new_org_id
 
@@ -166,8 +168,8 @@ VALUES('Organism',
       # base de données ne permet pas de trouver un enchaintement pour ce
       # champ
       create_refill_check_deposit_function
-      # et enfin le holder
-
+      #
+      create_clone_fill_bridge_id
     end
 
 
@@ -192,13 +194,13 @@ VALUES('Organism',
       create_function(sql_copy_one_ref('member_id', 'adherent_payments',
         champ:Adherent::Member, modele:Adherent::Payment))
       create_function(sql_copy_one_ref('member_id', 'adherent_coords',
-        champ:Adherent::Member, modele:Adherent::Member))
+        champ:Adherent::Member, modele:Adherent::Coord))
       create_function(sql_copy_one_ref('member_id', 'adherent_adhesions',
         champ:Adherent::Member, modele:Adherent::Adhesion))
       create_function(sql_copy_n_refs('payment_id', ['adhesion_id'],
-             'adherent_reglements', champ:Adherent::Payment,
+             'adherent_reglements', {champ:Adherent::Payment,
              adhesion_id:Adherent::Adhesion,
-             modele:Adherent::Reglement))
+             modele:Adherent::Reglement}))
     end
 
     def quote_string(s)
@@ -294,9 +296,10 @@ vous devez le fournir en deuxième argument'
       # récupération de tous les champs dont on assure la recopie à l'identique
       # ne sont donc pas recopiés le champ id, et les arguments  champ_ids
       list_cols = modele.column_names
-      list_cols = list_cols.reject { |c| c == 'id' || c == champ_id || c.in?(champ_ids)}
+      list_cols = list_cols.reject { |c| c == 'id' || c == champ_id ||
+            c.in?(champ_ids) }
       list  = list_cols.join(', ')
-      r_list = list_cols.map { |c| '(r).'+c}.join(', ')
+      r_list = list_cols.map { |c| 'r."'+c+'"'}.join(', ')
 
       list_champ = champ_ids.join(', ')
       # construction des requêtes cherchant les valeurs dans la table
@@ -316,7 +319,7 @@ vous devez le fournir en deuxième argument'
    RETURNS SETOF #{table} AS
 $BODY$
 DECLARE
-  r #{table}%rowtype;
+  r RECORD;
   new_id int;
 BEGIN
   FOR r in SELECT * FROM #{table} WHERE #{champ_id} IN (
@@ -333,10 +336,10 @@ BEGIN
       VALUES (#{value_to_insert(champ_id, options[:champ])},
       #{values + ', ' unless values.empty?}
       #{r_list})
-     RETURNING id, (r).id  oldid)
+     RETURNING id, r.id  oldid)
       INSERT INTO flccloner (name, old_id, new_id, old_org_id, new_org_id)
-      VALUES ('#{modele}', (r).id,
-      (SELECT id FROM correspondance WHERE oldid = (r).id ), from_id, to_id);
+      VALUES ('#{modele}', r.id,
+      (SELECT id FROM correspondance WHERE oldid = r.id ), from_id, to_id);
     RETURN NEXT r;
   END LOOP;
   RETURN;
@@ -380,10 +383,50 @@ EOF
       create_function(sql)
     end
 
+    # Pour les Writings, la transformation fait perdre le bridge_id lorsque
+    # le bridge_type est Mask.
+    # Pour cette classe, on va donc créer une fonction spécifique qui ne fait
+    # que transformer le champ bridge_id.
+    #
+    # Le principe est de prendre tous les Writings qui sont référencés
+    # dans la table flc_cloner, puis seulement celle qui ont le champ
+    # bridge_type rempli avec 'Mask'; et pour celles-ci de faire un update
+    # de bridge_id avec l'id du Mask que l'on va aller chercher dans flc_cloner
+    #
+    # On veut toutes les writings qui sont dans flc_cloner avec to_id qui nous
+    # est fourni
+    #
+    def self.create_clone_fill_bridge_id
+      sql = <<-EOF
+        CREATE OR REPLACE FUNCTION clone_fill_bridge_id(from_id integer, to_id integer)
+        RETURNS SETOF writings AS
+        $BODY$
+        DECLARE
+          r RECORD;
+        BEGIN
+FOR r in EXECUTE format('SELECT * FROM writings WHERE writings.id IN (
+    SELECT id FROM flccloner
+    WHERE name = %L AND old_org_id = %L AND new_org_id = %L AND
+    writings.bridge_type = %L)', 'Writing',
+    from_id, to_id, 'Mask')
+LOOP
+UPDATE writings SET bridge_id = (SELECT new_id FROM flccloner WHERE
+      name = 'Mask' AND new_org_id = to_id AND old_org_id = from_id
+      AND old_id = r.bridge_id)
+
+WHERE writings.id = (SELECT new_id FROM flccloner WHERE name = 'Writing'
+  AND flccloner.old_id = r.id AND new_org_id = to_id AND old_org_id = from_id);
+END LOOP;
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE;
+EOF
+      create_function(sql)
+    end
+
     protected
 
-    # Définit le morceau de requête qui permet de trouver dans la table
-    # flccloner la valeur souhaitée pour mettre à jour les références.
+    # Définit le morceau de requête qui permet de trouver dans la table# flccloner la valeur souhaitée pour mettre à jour les références.
     #
     # Le deuxième champ permet de préciser le nom du modèle lorsqu'il ne
     # peut être déduit de champ_id. C'est notamment le cas pour
@@ -397,7 +440,7 @@ EOF
       champname = champ_to_search(champ_id, champ, options)
       "(SELECT flccloner.new_id FROM flccloner
            WHERE name = #{champname}
-           AND flccloner.old_id = (r).#{champ_id}
+           AND flccloner.old_id = r.#{champ_id}
            AND old_org_id = from_id AND new_org_id = to_id)"
     end
 
@@ -409,7 +452,7 @@ EOF
 
       if options[:polymorphic]
         s =champ_id[0..-4]+'_type'
-        s = "(r).#{s}"
+        s = "r.#{s}"
       else
         s = champ.blank? ? champ_id[0..-4].classify : champ
         s = "'#{s}'"
@@ -419,5 +462,4 @@ EOF
     end
 
   end
-
 end

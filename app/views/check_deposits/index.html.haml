@@ -10,14 +10,14 @@
         %tr
           %th.pc5 Pièce
           %th.pc15 Compte numéro
-          %th.pc15 Date de la remise 
+          %th.pc15 Date de la remise
           %th.pc10 Nb chèques
           %th.pc15 Montant total
           %th.pc10 Actions
       %tbody
         - @check_deposits.each do |check_deposit|
           %tr
-            %td= check_deposit.writing_id
+            %td= check_deposit.check_deposit_writing.piece_number
             %td= check_deposit.bank_account.number
             %td= l check_deposit.deposit_date
             %td.numeric= check_deposit.checks.size

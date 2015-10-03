@@ -41,6 +41,8 @@ class Organism < ActiveRecord::Base
   # attr_accessible :title, :database_name, :status, :comment, :racine
 
   acts_as_tenant
+  has_many :periods, dependent: :destroy
+  before_destroy :detruit_periods
   has_one :nomenclature, dependent: :destroy
   has_many :sectors, dependent: :destroy
   has_many :books, dependent: :destroy
@@ -52,7 +54,6 @@ class Organism < ActiveRecord::Base
   has_many :writings, :through=>:books
   has_many :compta_lines, :through=>:writings
   has_many :check_deposits, through: :bank_accounts
-  has_many :periods, dependent: :destroy
   has_many :cashes, dependent: :destroy
   has_many :cash_controls, through: :cashes
   has_many :income_books, dependent: :destroy
@@ -70,14 +71,14 @@ class Organism < ActiveRecord::Base
   # Cette table enregistre ainsi les données (nature, compte bancaire, caisse, livre
   # recevant les règlements)
   #
-  has_one :bridge, class_name:'Adherent::Bridge'
+  has_one :bridge, class_name:'Adherent::Bridge', dependent: :destroy
 
   # liaison avec le gem adherent
-  has_many :members, class_name: 'Adherent::Member'
+  has_many :members, class_name: 'Adherent::Member', dependent: :destroy
   has_many :payments, :through=>:members, class_name:'Adherent::Payment'
 
   # gestion des masques d'écritures
-  has_many :masks
+  has_many :masks, dependent: :destroy
   has_many :subscriptions, :through=>:masks
 
   # renvoie juste les secteurs ASC et Fonctionnement d'un CE
@@ -278,6 +279,13 @@ class Organism < ActiveRecord::Base
   def fill_children
     filler = "Utilities::Filler::#{status_class}".constantize
     filler.new(self).remplit
+  end
+
+  def detruit_periods
+    periods.each do |p|
+      logger.debug "Destruction de l'exercice #{p.id} de l'organisme #{p.organism_id} début : #{p.start_date}"
+      p.destroy
+    end
   end
 
   def status_class

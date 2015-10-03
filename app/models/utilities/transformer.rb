@@ -229,6 +229,7 @@ module Utilities
       functions.each do |f|
         requete << "SELECT #{f}('#{room.database_name}', #{1}, #{room.new_org_id}, #{room.tenant_id});"
       end
+        requete << "SELECT fill_bridge_id('#{room.database_name}', #{room.new_org_id});"
       Room.transaction do
         Room.connection.execute(requete)
       end
@@ -273,6 +274,45 @@ module Utilities
 
       end
     end
+
+    # Pour les Writings, la transformation fait perdre le bridge_id lorsque
+    # le bridge_type est Mask.
+    # Pour cette classe, on va donc créer une fonction spécifique qui ne fait
+    # que transformer le champ bridge_id.
+    #
+    # Le principe est de prendre tous les Writings qui sont référencés
+    # dans la table flc_cloner, puis seulement celle qui ont le champ
+    # bridge_type rempli avec 'Mask'; et pour celles-ci de faire un update
+    # de bridge_id avec l'id du Mask que l'on va aller chercher dans flc_cloner
+    #
+    # On veut toutes les writings qui sont dans flc_cloner avec to_id qui nous
+    # est fourni
+    #
+    def self.create_function_fill_bridge_id
+      sql = <<-EOF
+        CREATE OR REPLACE FUNCTION fill_bridge_id(from_schema text, to_id integer)
+        RETURNS SETOF writings AS
+        $BODY$
+        DECLARE
+          r RECORD;
+        BEGIN
+       FOR r in EXECUTE format('SELECT * FROM %I.writings WHERE
+       bridge_type = %L', from_schema, 'Mask')
+LOOP
+UPDATE writings SET bridge_id = (SELECT new_id FROM flccloner WHERE
+      name = 'Mask'AND new_org_id = to_id AND old_id = r.bridge_id)
+
+WHERE writings.id = (SELECT new_id FROM flccloner WHERE name = 'Writing'
+  AND flccloner.old_id = r.id AND new_org_id = to_id);
+END LOOP;
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE;
+EOF
+      create_function(sql)
+    end
+
+
 
     def self.create_refill_check_deposit_function
       sql = <<-EOF
@@ -380,8 +420,8 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
       create_clone_bank_functions
       # les données du bridge adhérent
       create_function(sql_transform_n_refs('organism_id',
-                                           %w(bank_account_id cash_id destination_id income_book_id),
-                                           'adherent_bridges', {:modele=>Adherent::Bridge, :income_book_id=>Book}))
+        %w(bank_account_id cash_id destination_id income_book_id),
+        'adherent_bridges', {:modele=>Adherent::Bridge, :income_book_id=>Book}))
       create_refill_check_deposit_function
       # et enfin le holder
 
@@ -488,7 +528,7 @@ UPDATE rooms SET new_org_id = (SELECT id FROM ret LIMIT 1)
     #  C'est typiquement le cas pour la famille des tables adherent_members
     #  qui fait référence à Adherent::Member. Dans ce cas, on précise dans les
     #  options :modele=>Adherent::Member
-    #  - le nom du champ lorsqu'il ne peut être déduit de champ_ids, par 
+    #  - le nom du champ lorsqu'il ne peut être déduit de champ_ids, par
     #  exemple :bridge_id=>Adherent::Member
     #  - le nom du modèle lorsque le champ est polymorphique par
     #  une option. Exemple: :polymorphic=>'accountable_id' pour la table Accounts
