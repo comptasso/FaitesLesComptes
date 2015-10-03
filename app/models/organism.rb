@@ -76,6 +76,7 @@ class Organism < ActiveRecord::Base
   # liaison avec le gem adherent
   has_many :members, class_name: 'Adherent::Member', dependent: :destroy
   has_many :payments, :through=>:members, class_name:'Adherent::Payment'
+  has_many :adhesions, :through=>:members, class_name:'Adherent::Adhesion'
 
   # gestion des masques d'écritures
   has_many :masks, dependent: :destroy
