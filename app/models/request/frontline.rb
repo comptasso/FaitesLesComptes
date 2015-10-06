@@ -42,6 +42,8 @@ module Request
   # TODO on pourrait probablement supprimer adherent_member_id en modifiant
   # les méthodes frontline_actions.
   #
+  # Le champ id est celui de la Writing rattachée
+  #
 
   column :writing_type, :string
   column :nature_name, :string

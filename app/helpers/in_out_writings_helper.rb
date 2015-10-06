@@ -176,6 +176,12 @@ module InOutWritingsHelper
 
   # Pour éviter de renvoyer vers un adhérent supprimé, on teste member_id
   # et on affiche des icones et actions en conséquence.
+  #
+  # En clair, lorsque l'adhérent a été supprimé, on affiche une loupe en
+  # noir et blanc indiquant qu'on ne sait pas retrouver le membre à l'origine
+  # du paiement.
+  # Mais pour permettre de supprimer ce paiement, on rajoute une action de
+  # suppression (La logique d'une édition ne parait pas vraiment pertinent)
   def frontline_actions_for_adherent_writing(frontline)
     if frontline.member_id
       icon_to('detail.png',
@@ -184,7 +190,10 @@ module InOutWritingsHelper
         title:'Paiment à l\'origine de cette écriture')
     else
       image_tag('icones/nb_detail.png',
-        title:'L\'adhérent semble avoir été effacé - Impossible d\'afficher l\'origine de ce paiement')
+        title:'L\'adhérent semble avoir été effacé - Impossible d\'afficher l\'origine de ce paiement')+
+        icon_to('supprimer.png', book_in_out_writing_path(frontline.book_id, frontline.id),
+                data:{confirm: 'Etes vous sûr?'}, method: :delete) if frontline.editable?
+
     end
   end
 

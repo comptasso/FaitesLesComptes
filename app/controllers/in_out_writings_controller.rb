@@ -135,10 +135,10 @@ class InOutWritingsController < ApplicationController
   # DELETE /lines/1
   # DELETE /lines/1.json
   def destroy
-    @w = @book.in_out_writings.find(params[:id])
+    @w = @book.writings.find(params[:id])
     my = MonthYear.from_date(@w.date)
     if @w.destroy
-      flash[:notice] = 'L\'écriture a été détruite'
+      flash[:notice] = "L'écriture #{@w.piece_number} a été détruite"
     else
       flash[:alert] = 'Une anomalie est survenue, l\'écriture n\'a pu être détruite'
     end
