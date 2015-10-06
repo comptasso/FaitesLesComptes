@@ -12,12 +12,12 @@
   </h3>
   <div class="inner-champ">
     <div class='panel-body'>
-    
 
-      <%= simple_form_for(resource, 
+
+      <%= simple_form_for(resource,
         :as => resource_name,
-        :url => session_path(resource_name), 
-        :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form, 
+        :url => session_path(resource_name),
+        :html=> {class: 'form-horizontal'}, wrapper: :horizontal_form,
         wrapper_mappings:{boolean: :horizontal_boolean}) do |f| %>
       <div class="form-inputs">
           <%= f.input :email, :required => false,
@@ -33,5 +33,5 @@
     <% end %>
 
     </div>
-          </div>
-        </div>
+  </div>
+</div>

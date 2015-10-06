@@ -15,20 +15,21 @@ class CashControl < ActiveRecord::Base
   include Utilities::PickDateExtension
 
   # attr_accessible :date, :amount, :date_picker
-   
+
+  acts_as_tenant
   belongs_to :cash
 
   validates :date, :cash_id, :amount, presence: true
   validates :amount, two_decimals:true
   validates_numericality_of :amount, :greater_than_or_equal_to=>0.0
   validate :date_within_limit
-  
+
   pick_date_for :date
-  
+
   scope :for_period, lambda {|p| where('date >= ? and date <= ?', p.start_date, p.close_date).order('date ASC')}
 
   # sélectionne tous les contrôles de caisse relevant d'un mois donné pour une période donnée
-  scope :mois, lambda {|p,mois| where('date >= ? AND date <= ?', 
+  scope :mois, lambda {|p,mois| where('date >= ? AND date <= ?',
       p.start_date.months_since(mois.to_i).beginning_of_month, p.start_date.months_since(mois.to_i).end_of_month).order('date ASC')}
 
   scope :monthyear, lambda {|my| where('date >= ? AND date <= ?',
@@ -54,7 +55,7 @@ class CashControl < ActiveRecord::Base
 
   # renvoie la date minimum que peut prendre un new cash_control
   # en fonction de l'exercice en cours d'utilisation
-  # 
+  #
   def min_date(period)
     period.start_date
   end
@@ -93,7 +94,7 @@ class CashControl < ActiveRecord::Base
 
   private
 
-  def date_within_limit 
+  def date_within_limit
     if period
       errors[:date] <<  'Date interdite' if self.date < min_date(period)
       errors[:date] << 'Date impossible' if self.date > max_date(period)

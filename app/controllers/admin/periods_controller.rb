@@ -18,7 +18,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   # GET /periods
   # GET /periods.json
   def index
-    @periods = @organism.periods.order('start_date ASC')
+    @periods = @organism.periods.order(:close_date)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @periods } 
@@ -31,7 +31,7 @@ class Admin::PeriodsController < Admin::ApplicationController
   def new
     if @organism.periods.any?
       @disable_start_date = true
-      start_date = (@organism.periods.last.close_date) +1
+      start_date = (@organism.periods.order(:close_date).last.close_date) +1
       # begin_year and end_year limit the select in the the view
       @begin_year = start_date.year
       @end_year = @begin_year + 2 #
@@ -75,7 +75,7 @@ class Admin::PeriodsController < Admin::ApplicationController
     # on fixe la date de départ s'il existe déjà un exercice
     # TODO déplacer cette logique dans le modèle en faisant un 
     # before_validation
-    start_date = (@organism.periods.last.close_date) +1 if @organism.periods.any?
+    start_date = (@organism.periods.order(:close_date).last.close_date) +1 if @organism.periods.any?
     @period = @organism.periods.new(admin_period_params)
     @period.start_date = start_date if start_date
     

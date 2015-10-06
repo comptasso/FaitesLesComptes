@@ -1,21 +1,30 @@
 <ul class="nav navbar-nav" id="main_nav">
 
-  <li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> " id="admin_organisms_menu">
+<% if current_user.tenants.many? %>
+  <li class="dropdown <%= 'active' if controller.controller_name.in? ['rooms']   %>" >
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">ESPACES<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+      <li><%= link_to 'Vos espaces', admin_rooms_path  %></li>
+    </ul>
+  </li>
+<% end %>
+
+<li class="dropdown <%= 'active' if controller.controller_name =='organisms'  %> " id="admin_organisms_menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role='button'>
       ORGANISMES
       <b class="caret"></b>
     </a>
     <ul class="dropdown-menu" role='menu'>
       <li role='presentation'>
-        <%= link_to 'Liste des organismes', admin_rooms_path, role:'menuitem' %>
+        <%= link_to 'Liste des organismes', admin_organisms_path, role:'menuitem' %>
       </li>
       <%= content_tag(:li, :class=>"divider"){} %>
-      <% cache("admin_#{current_user.name}")  do %>
-        <% current_user.organisms_with_room.each do |groom| %>
+       <% cache("admin_#{current_user.name}")  do %>
+        <% current_user.organisms.each do |org| %>
           <li role='presentation'>
-            <%= link_to(groom[:organism].title,
-              admin_room_path(groom[:room]),
-              {title:groom[:organism].comment, role:'menuitem'})    %>
+            <%= link_to(org.title,
+              admin_organism_path(org),
+              {title:org.comment, role:'menuitem'})    %>
           </li>
           <%  end %>
         <% end %>
@@ -23,7 +32,7 @@
   </li>
 
   <% if (@organism  && @organism.persisted?) %>
-  
+
    <li class="dropdown <%= 'active' if controller.controller_name =='bank_accounts'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">BANQUES<b class="caret"></b></a>
       <%= admin_menu('bank_account') %>
@@ -33,7 +42,7 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">CAISSES<b class="caret"></b></a>
       <%= admin_menu('cash') %>
     </li>
-  
+
     <li class="dropdown <%= 'active' if controller.controller_name =='destinations'  %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">ACTIVITES<b class="caret"></b></a>
       <ul class="dropdown-menu">
@@ -41,33 +50,33 @@
         <li><%=link_to  'Nouveau', new_admin_organism_destination_path(@organism)  %></li>
       </ul>
     </li>
-  
-   
-    
-   
+
+
+
+
 
      <% if  @period && @period.persisted? %>
 
 
     <%=  render :partial=>'admin/menus/nature'  %>
-   
+
 
       <li class="dropdown <%= 'active' if controller.controller_name =='accounts'  %>">
-         
+
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">COMPTES<b class="caret"></b></a>
         <ul class="dropdown-menu">
           <%=  content_tag(:li, link_to('Afficher', admin_period_accounts_path(@period)))  %>
           <%= content_tag(:li, link_to('Nouveau', new_admin_period_account_path(@period))) %>
-         
-          
-        
-         
+
+
+
+
          </ul>
 
       </li>
-   <% end %>    
+   <% end %>
 
-    
+
  <li class="dropdown <%= 'active' if controller.controller_name =='masks' || controller.controller_name == 'subscriptions' %>">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">GUIDES DE SAISIE<b class="caret"></b></a>
       <ul class="dropdown-menu" >
@@ -76,7 +85,7 @@
         <%= admin_sub_menu('abonnements', 'subscription') %>
       </ul>
     </li>
-   
+
 
 
     <li class="dropdown <%= 'active' if controller.controller_name =='periods'  %>">
@@ -86,34 +95,32 @@
         <%=  content_tag(:li, :class=>"divider"){} %>
         <% @organism.periods.order('start_date ASC').reject {|r| r.new_record? }.each do |p| %>
           <li><%= link_to_unless(current_period?(p), p.long_exercice, change_admin_organism_period_path(@organism, p)) {|name| content_tag(:span, :class=>'disable') {name} } %></li>
-         
+
         <% end %>
         <%=  content_tag(:li, :class=>"divider"){} %>
         <li><%= link_to_unless(@organism.max_open_periods?, 'Nouveau', new_admin_organism_period_path(@organism)) {|name| content_tag(:span, :class=>'disable') {name} }%></li>
       </ul>
     </li>
 
-   
+
       <li class="dropdown <%= 'active' if controller.controller_name.in? ['books', 'bridges']   %>" >
          <a href="#" class="dropdown-toggle" data-toggle="dropdown">DIVERS<b class="caret"></b></a>
          <ul class="dropdown-menu">
-      
-            <li><%= link_to 'Livres', admin_organism_books_path(@organism)  %></li> 
-            <% if @organism.status == 'Association' %>  
-               <li><%= link_to 'Adhérents', admin_organism_bridge_path(@organism)  %></li> 
+
+            <li><%= link_to 'Livres', admin_organism_books_path(@organism)  %></li>
+            <% if @organism.status == 'Association' %>
+               <li><%= link_to 'Adhérents', admin_organism_bridge_path(@organism)  %></li>
             <% end %>
          </ul>
         </li>
 
-  
-      
-       
-      
-      
-        
-    
-      
-     
+
+
+
+
+
+
+
 
 <% end %>
 <!-- pas très bien nommé, la suite affiche les icones -->

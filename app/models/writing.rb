@@ -21,43 +21,44 @@
 # Chaque écriture de recettes ou de dépenses a pour contrepartie une compta_line
 # de classe 5 (soit un compte bancaire, soit une caisse). Cette ligne est appelée support_line
 # et accessible par la méthode du même nom.
-# 
+#
 # Deux champs bridge_id et bridge_type permettent de faire le lien avec des modules
-# extérieurs. Ils ont été ajoutés pour le module Adhérent. Ainsi un payement 
+# extérieurs. Ils ont été ajoutés pour le module Adhérent. Ainsi un payement
 # enregistré dans ce module génère une écriture qui enregistre en bridge_type Adherent
 # et en bridge id l'id du payement qui est à l'origine de cette écriture.
 #
 class Writing < ActiveRecord::Base
   include Utilities::PickDateExtension # apporte les méthodes pick_date_for
-  
+  acts_as_tenant
+
   # TODO voir si encore utile avec simple_form_for (voir utilisation date_piece)
   pick_date_for :date, :date_piece
 
   # book_id est nécessaire car des classes comme check_deposit ont besoin de
   # créér une écriture en remplissant le champ book_id
-#  attr_accessible :date, :date_picker, :narration, :ref, :compta_lines_attributes, :book_id, 
+#  attr_accessible :date, :date_picker, :narration, :ref, :compta_lines_attributes, :book_id,
 #    :bridge_id, :bridge_type
 
   belongs_to :book
   belongs_to :bridgeable, polymorphic:true
   belongs_to :user, foreign_key:'written_by'
- 
+
   has_many :compta_lines, :dependent=>:destroy
   alias children compta_lines
-  
+
   has_one :imported_bel
 
-  strip_before_validation :narration, :ref 
-  
+  strip_before_validation :narration, :ref
+
   validates :book_id,  presence:true
   validates :date, presence:true
   validates :date, :within_open_period=>true,
     :nested_period_coherent=>{:nested=>:compta_lines, :fields=>[:nature, :account]} , :unless => 'date.nil?'
-  validates :compta_lines, presence:true, :two_compta_lines_minimum=>true 
+  validates :compta_lines, presence:true, :two_compta_lines_minimum=>true
   validates :narration, presence:true, :format=>{with:NAME_REGEX}, :length=>{:maximum=>LONG_NAME_LENGTH_MAX}
   validates :ref, :format=>{with:NAME_REGEX}, :length=>{:within=>NAME_LENGTH_LIMITS}, :allow_blank=>true
   validates :piece_number, presence:true
-  
+
   validate :balanced?
   # les écritures dans le livre de report à nouveau doivent avoir le premier jour
   # de l'exercice comme date
@@ -65,34 +66,34 @@ class Writing < ActiveRecord::Base
   # contraint la numérotation continue des écritures (numérotation qui est faite
   # au moment du verrouillage). Ne pas confondre ce numéro avec le numéro de pièce.
   # S'appuie sur ContinuValidator
-  validates :continuous_id, continu:true, :allow_blank=>true  
-  
+  validates :continuous_id, continu:true, :allow_blank=>true
+
   before_validation :fill_piece_number
   before_save :fill_date_piece
-  
+
   after_destroy :no_fresh_values
-  
+
   accepts_nested_attributes_for :compta_lines, :allow_destroy=>true
 
   default_scope -> {order('writings.date ASC, writings.id ASC')}
-  
+
   scope :period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
   scope :within_period, lambda {|p| where('date >= ? AND date <= ?', p.start_date, p.close_date)}
   scope :mois, lambda { |date| where('date >= ? AND date <= ?', date.beginning_of_month, date.end_of_month) }
   scope :laps, lambda {|from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
   # scope :not_transfer, where('type != ?', 'Transfer')
-  
+
   scope :unlocked, ->{ where('locked_at IS NULL')}
   scope :no_type, -> {where('writings.type IS NULL')}
   scope :an_od_book, -> {joins(:book).where('books.type'=>['OdBook', 'AnBook'])}
   scope :compta_editable, -> {unlocked.an_od_book.no_type}
-  
+
   # Fait le total des debit des compta_lines
   # la méthode utilisée permet de neutraliser les nil éventuels
   # utile notamment pour les tests de validité
   def total_debit
     compta_lines.inject(0) do |tot, cl|
-      if cl.marked_for_destruction? 
+      if cl.marked_for_destruction?
         tot
       else
         cl.debit ? tot + cl.debit  : tot
@@ -105,18 +106,18 @@ class Writing < ActiveRecord::Base
   # ne prend pas en compte les éventuels marqués pour destruction
   def total_credit
     compta_lines.inject(0) do |tot, cl|
-      if cl.marked_for_destruction? 
+      if cl.marked_for_destruction?
         tot
       else
         cl.credit ? tot + cl.credit  : tot
       end
-      
+
     end
   end
 
   # trouve l'exercice correspondant à la date de l'écriture
   def period
-    book.organism.find_period(date) rescue nil 
+    book.organism.find_period(date) rescue nil
   end
 
   # Support renvoie le long_name du compte de la première ligne
@@ -135,7 +136,7 @@ class Writing < ActiveRecord::Base
     s = compta_lines.select {|cl| cl.account && cl.account.number =~ /^5.*/}
     s.first if s
   end
-  
+
   # retourne le mode de payment associé à cette écriture
   def payment_mode
     support_line.payment_mode if support_line
@@ -157,29 +158,29 @@ class Writing < ActiveRecord::Base
 
   # lock verrouille toutes les lignes de l'écriture
   # Une compta_line peut recevoir lock mais la classe ComptaLine délègue cet
-  # appel à Writing. 
-  # L'objectif est qu'il soit impossible de verrouiller une ligne 
-  # sans verrouiller les autres lignes de l'écriture. 
-  # 
+  # appel à Writing.
+  # L'objectif est qu'il soit impossible de verrouiller une ligne
+  # sans verrouiller les autres lignes de l'écriture.
+  #
   # De plus le champ locked_at est rempli avec le jour de verrouillage
   # et le champ continuous_id est rempli avec le numéro unique incrémenté
   # qui est demandé par la réglementation.
-  # 
+  #
   def lock
-    Writing.transaction do 
-      cid = Writing.last_continuous_id
+    Writing.transaction do
+      cid = last_continuous_id
       compta_lines.each { |cl| cl.send(:verrouillage) } # utilisation volontaire
       # d'une méthode protected car verrouillage ne devrait pas être appelée directement
       self.continuous_id = cid.succ
       self.locked_at =  Date.today
-      save validate:false # les validations sont inutiles ici      
+      save validate:false # les validations sont inutiles ici
     end
   end
-  
-  
+
+
   # TODO changer ceci pour utiliser le nouveau champ locked_at
   # et voir peut-être à supprimer le champ locked des compta_lines
-  # 
+  #
   # Une écriture doit répondre qu'elle est verrouillée
   # dès lors qu'une seule de ses lignes l'est
   def locked?
@@ -214,50 +215,50 @@ class Writing < ActiveRecord::Base
   def compta_editable?
     od_editable? || an_editable?
   end
-  
+
   # une écriture est editable? si toutes ses compta_lines sont editable?
   def editable?
     compta_lines.all? {|cl| cl.editable?}
   end
-  
+
   # méthode utilisée dans l'édition des livres dans la partie compta.
   # Une méthode similaire existe pour ComptaLine, ce qui permet d'avoir
   # indifféremment des lignes de type Writing et ComptaLine dans la collection
-  # 
-  # Attention, un changement du nombre de colonne doit être fait sur les 
+  #
+  # Attention, un changement du nombre de colonne doit être fait sur les
   # deux méthodes.
   def to_pdf
     ['', "#{I18n::l(date)} - Pce: #{piece_number} - Réf: #{ref} - Libellé : #{narration}", nil, nil]
   end
-  
-  
-  
+
+
+  def last_continuous_id
+    book.organism.writings.maximum(:continuous_id) || 0
+  end
+
 
   protected
-  
-  # Lorsqu'un écriture est détruite, il faut indiquer à la nomenclature 
-  # que les valeurs de ses rubriques ne sont plus fraîche
+
+  # Lorsqu'un écriture est détruite, il faut indiquer à la nomenclature
+  # que les valeurs de ses rubriques ne sont plus fraîches
   def no_fresh_values
-    if book && book.organism && n = book.organism.nomenclature
+    if book && book.organism && n = book.organism.nomenclature(true)
       n.update_attribute(:job_finished_at, nil)
     end
   end
-  
+
   def fill_date_piece
     self.date_piece ||= date
   end
-  
-  # remplit le numéro de pièce avec 
+
+  # remplit le numéro de pièce avec
   def fill_piece_number
     return nil unless b = book
     self.piece_number ||= b.organism.next_piece_number
   end
-  
-  def self.last_continuous_id
-    Writing.maximum(:continuous_id) || 0
-  end
 
-  # méthode de validation utilisée pour vérifier que les écritures sur le 
+
+  # méthode de validation utilisée pour vérifier que les écritures sur le
   # journal d'A Nouveau sont passées au premier jour de l'exercice
   def period_start_date
     p = book.organism.find_period(date)
@@ -268,10 +269,10 @@ class Writing < ActiveRecord::Base
       true
     end
   end
-  
 
-  
 
- 
-  
+
+
+
+
 end

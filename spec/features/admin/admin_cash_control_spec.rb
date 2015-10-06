@@ -2,21 +2,21 @@
 
 require 'spec_helper'
 
-RSpec.configure do |c| 
+RSpec.configure do |c|
   #  c.filter = {:js=> true }
   #  c.exclusion_filter = {:js=> true }
-end 
+end
 
 # spec request for testing admin cashes
 
-describe 'admin cash_control' do 
+describe 'admin cash_control' do
   include OrganismFixtureBis
-  
-  
+
+
   before(:each) do
     use_test_user
-    login_as('quidam')
-    use_test_organism 
+    login_as(@cu, 'MonkeyMocha')
+    use_test_organism
   end
 
 

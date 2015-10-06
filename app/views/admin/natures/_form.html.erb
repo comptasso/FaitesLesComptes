@@ -16,7 +16,7 @@
           required:true, my_wrapper_html: {class:'col-lg-4'} do %>
           <%=  f.select(:account_id,
             option_groups_from_collection_for_select_with_datas(
-              comite_options_for_natures(@period),
+              comite_options_for_natures_without_commun(@period),
               :options, :title,
               :id, :long_name), {include_blank:true}, {size: 10, class:'col-lg-12'} ) if @period.accounts.any? %>
         <% end %> 

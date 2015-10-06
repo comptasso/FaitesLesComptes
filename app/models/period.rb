@@ -1,14 +1,14 @@
 # -*- encoding : utf-8 -*-
 
-require 'list_months'  
- 
+require 'list_months'
+
 
 # == Schema Information
 # Schema version: 20110515121214
 #
 # Table name: periods
 #
-#  id                 :integer         not null, primary key 
+#  id                 :integer         not null, primary key
 #  start_date         :date
 #  close_date         :date
 #  organism_id       :integer
@@ -25,13 +25,13 @@ require 'list_months'
 # on demande donc la date de début (qui peut être n'importe quoi (mais on
 # va fixer un début de mois et la date de fin qui va être une fin de mois
 # à distance max de deux ans
-# 
+#
 # Cela impose sa date de début et une valeur par défaut de 12 mois pour la date de
 # fin.
-# 
+#
 #
 # La cloture d'un exercice doit être précédée des opérations de cloture.
-# 
+#
 # La date de cloture doit forcément être postérieure à la date d'ouverture
 #
 #
@@ -43,14 +43,15 @@ require 'list_months'
 #
 # La méthode has_many :used_accounts est utilisée uniquement pour limiter
 # la liste des comptes qui sont affichés dans la partie Compta->Journaux->Ecrire.
-# 
 #
-class Period < ActiveRecord::Base 
+#
+class Period < ActiveRecord::Base
+  acts_as_tenant
 
   include Utilities::JcGraphic
 
   # attr_accessible :start_date, :close_date
-  
+
   # Les classes ...validator sont ici des classes spécifiques de validator pour les exercices
   # on ne les met pas dans lib/validators car elles sont réellement dédiées
 
@@ -70,34 +71,34 @@ class Period < ActiveRecord::Base
     end
   end
 
- 
+
   belongs_to :organism
   has_many :books, :through=>:organism
 
   has_many :accounts, :dependent=>:delete_all
   has_many :used_accounts, -> {where('used = ?', true)}, class_name:'Account'
   has_many :natures
-  has_many :compta_lines, :through=>:accounts 
+  has_many :compta_lines, :through=>:accounts
   has_one :balance, :class_name=>'Compta::Balance'
   has_one :listing, :class_name=>'Compta::Listing'
   has_one :export_pdf, as: :exportable
 
- 
+
   validates :organism_id, :presence=>true
   validates :open, :cant_become_true=>true
   validates :close_date, :presence=>true,:chrono=>true, :cant_edit=>true
   validates :start_date, :presence=>true, :contiguous => true, :cant_edit=>true
   validate :should_not_exceed_24_months
-  
-  
+
+
   before_validation :fix_days
-  before_create :should_not_have_more_than_two_open_periods 
+  before_create :should_not_have_more_than_two_open_periods
   before_destroy  :destroy_writings,:destroy_cash_controls,
     :destroy_bank_extracts, :destroy_natures
-  
+
 
   scope :opened, -> {where('open = ?', true)}
- 
+
   # trouve l'exercice précédent en recherchant le premier exercice
   # avec la date de cloture < au start_date de l'exercice actuel
   # renvoie lui même s'il n'y en a pas
@@ -139,7 +140,7 @@ class Period < ActiveRecord::Base
   def last_period?
     !next_period?
   end
-  
+
   def max_open_periods?
     organism.periods.opened.count >=2
   end
@@ -169,20 +170,20 @@ class Period < ActiveRecord::Base
       accounts.collect(&:number)
     end
   end
-  
+
   def report_accounts
     accounts.where('number LIKE ?', '12%')
   end
-  
+
   # donne le compte de report pour un secteur, par exemple 1201, 1202,...
   # si pas de compte renvoie alors le compte 12
-  # utile lorsqu'un secteur n'a pas de compte de résultat attaché, ce qui est 
+  # utile lorsqu'un secteur n'a pas de compte de résultat attaché, ce qui est
   # le cas général pour les secteurs Global, et le secteur Commun des CE.
   def report_account_for_sector(sector)
     a = accounts.where('number LIKE ? AND sector_id = ?', '12%', sector.id).first
     a || report_account
   end
-  
+
   # renvoie le compte (12) qui sert pour enregistrer le résultat de l'exercice
   def report_account
     report_accounts.where('number = ?', '12').first
@@ -201,14 +202,14 @@ class Period < ActiveRecord::Base
   def provisoire?
     compta_lines.unlocked.any?
   end
-  
-  
+
+
   # Les conditions pour qu'un exercice puisse être fermé sont :
   # qu'il soit ouvert
   # que tous ses journaux soit fermés
   # que l'exercice précédent soit fermé
   def closable?
-    
+
     self.errors.add(:close, 'Exercice déja fermé') unless open
     # tous les journaux doivent être fermés
     self.errors.add(:close, "L'exercice précédent n'est pas fermé") if previous_period? && previous_period.open
@@ -217,7 +218,7 @@ class Period < ActiveRecord::Base
     # toutes les lignes doivent être verrouillées
     self.errors.add(:close, "Toutes les lignes d'écritures ne sont pas verrouillées") if provisoire?
     # il faut un exercice suivant
-    self.errors.add(:close, "Pas d'exercice suivant") unless next_period? 
+    self.errors.add(:close, "Pas d'exercice suivant") unless next_period?
     # il faut un livre d'OD
     self.errors.add(:close, "Il manque un livre d'OD pour passer l'écriture de report") if organism.od_books.empty?
     # il faut un compte pour le report du résultat
@@ -232,44 +233,44 @@ class Period < ActiveRecord::Base
   def closed?
     open ? false : true
   end
-  
- 
+
+
 
   # Effectue la clôture de l'exercice.
   #
   # La clôture de l'exercice doit effectuer une écriture de report dans le livre
   # d'OD à partir du résultat => il faut un compte report à nouveau pour mouvementer
   # le résultat de l'exercice vers le report.
-  # 
+  #
   def close
     if closable?
       next_p = next_period
       an_book = organism.books.find_by_type('AnBook')
       date = next_p.start_date
 
-      Period.transaction do 
-        
+      Period.transaction do
+
         w = an_book.writings.new(date:date,
           piece_number:organism.next_piece_number,
           narration:'A nouveau')
         # on fait d'abord les compta_lines du compte de bilan
         report_comptes_bilan.each { |cl| w.compta_lines << cl }
-        
+
         # puis on intègre la compta_line de report à nouveau
         w.compta_lines << report_a_nouveau if resultats.uniq != 0.0
-         
+
         unless w.valid?
           logger.warn  'Dans period#close avec des erreurs sur w'
           logger.warn  w.errors.messages
           w.compta_lines.each { |cl| logger.warn(cl.inspect) unless cl.valid?}
           return false
         end
-        
+
         if w.save
           logger.info 'Clôture de l\'exercice effectuée'
           # finir la transaction en verrouillant l'exercice
           update_attribute(:open, false)
-          
+
         else
           logger.info "Une erreur s'est produite lors de la clôture #{w.inspect}"
           return false
@@ -280,7 +281,7 @@ class Period < ActiveRecord::Base
     return closed?
   end
 
-### Partie consacrée au calcul de soldes 
+### Partie consacrée au calcul de soldes
 # TODO voir si tout ça ne crée pas trop d'appel à la base de données
 
   # renvoie le total des comptes commençant par n
@@ -292,7 +293,7 @@ class Period < ActiveRecord::Base
     else
       compta_lines.classe(n).sum(dc)
     end
-    
+
   end
 
   # renvoie le solde des comptes de la classe transmis en argument.
@@ -305,14 +306,14 @@ class Period < ActiveRecord::Base
   def resultat(sector_id = nil)
     sold_classe(7, sector_id) + sold_classe(6, sector_id)
   end
-  
+
   # collection des résultats pour tous les secteurs de l'organisme
   def resultats
     organism.sectors.map {|s| resultat(s.id)}
   end
 
-### Partie pour lister les comptes utiles pour les différentes vues 
-  
+### Partie pour lister les comptes utiles pour les différentes vues
+
   # utilisé pour les tansferts...
   def list_bank_accounts
     accounts.where('number LIKE ?', '512%')
@@ -330,19 +331,19 @@ class Period < ActiveRecord::Base
   def rem_check_accounts
     accounts.where('number = ?', REM_CHECK_ACCOUNT[:number])
   end
-  
+
   # renvoie le premier (et normalement l'unique) compte de remise de chèque
-   def rem_check_account
+  def rem_check_account
     rem_check_accounts.first
   end
 
 
 
   # renvoie un array de tous les comptes de classe 7
-  # TODO ajouter une gestion d'erreur si pas de sector fourni alors que 
+  # TODO ajouter une gestion d'erreur si pas de sector fourni alors que
   # l'organisme est sectorisé
   def recettes_accounts(sector_id = nil)
-    if organism.sectored? 
+    if organism.sectored?
       accounts.classe_7.where('sector_id = ?', sector_id)
     else
       accounts.classe_7
@@ -352,7 +353,7 @@ class Period < ActiveRecord::Base
 
   # renvoie un array de tous les comptes de classe 6
   def depenses_accounts(sector_id = nil)
-    if organism.sectored? 
+    if organism.sectored?
       accounts.classe_6.where('sector_id = ?', sector_id)
     else
       accounts.classe_6
@@ -363,7 +364,7 @@ class Period < ActiveRecord::Base
   def recettes_natures
     natures.recettes
   end
-  
+
   def nature_name_exists?(name)
     natures.find_by_name(name) ? true : false
   end
@@ -372,7 +373,7 @@ class Period < ActiveRecord::Base
   def depenses_natures
     natures.depenses
   end
- 
+
   # le nombre de mois de l'exercice
   #
   # également disponible sous #length
@@ -382,7 +383,7 @@ class Period < ActiveRecord::Base
 
   alias :length  :nb_months
 
-    
+
   # list_months renvoye un tableau d'instance de mois (MonthYear)
   # permettant notamment de faire les entêtes de vues listant les
   # mois de l'exercice
@@ -404,7 +405,7 @@ class Period < ActiveRecord::Base
   end
 
   # permet d'indiquer l'exercice sans le mot Exercice,
-  # par exemple 2012 au lieu de Exercice 2012. 
+  # par exemple 2012 au lieu de Exercice 2012.
   # Utilisé dans le titre général et dans les graphiques
   def short_exercice
     r=''
@@ -420,7 +421,7 @@ class Period < ActiveRecord::Base
     end
     r
   end
-  
+
   # long exercice rajoute Exercice si on est dans un texte court par exemple
   # 2013 ou Exercice\n si on est dans un texte plus long par exemple
   # Exercice\n mai à juin 2014
@@ -432,7 +433,7 @@ class Period < ActiveRecord::Base
       text
     end
   end
-  
+
   # permet d'indiquer l'exercice sous la forme d'une chaine de caractère
   # du type Exercice 2011 si period correspond à une année pleine
   # ou de Mars 2011 à Février 2012 si c'est à cheval sur l'année civile.
@@ -448,7 +449,7 @@ class Period < ActiveRecord::Base
   def previous_exercice
     previous_period? ? previous_period.short_exercice : ''
   end
-  
+
   # renvoie le mois le plus adapté pour un exercice
   #   si la date du jour est au sein de l'exercice, renvoie le mois correspondant
   #   si la date du jour est avant l'exercice, renvoie le premier mois
@@ -457,9 +458,9 @@ class Period < ActiveRecord::Base
   def guess_month(date=Date.today)
     date = start_date if date < start_date
     date = close_date if date > close_date
-    MonthYear.from_date(date) 
+    MonthYear.from_date(date)
   end
-  
+
   # renvoie le mois le plus adapté à partir d'un Hash structuré comme un MonthYear
   # h[:year] et h[:month]
   def guess_month_from_params(h)
@@ -479,7 +480,7 @@ class Period < ActiveRecord::Base
   end
 
 
- 
+
 
   # permet de renvoyer la liste des mois de l'exercice correspondant à un mois spécifique
   # généralement un seul mais il peut y en avoir deux en cas d'exercice de plus d'un an
@@ -491,7 +492,7 @@ class Period < ActiveRecord::Base
     list_months.select {|my| my.month == month}
   end
 
-  
+
 
 
 
@@ -512,42 +513,42 @@ class Period < ActiveRecord::Base
     ms.first unless ms.empty?
   end
 
- 
-  
+
+
 
   # informe si toutes les natures sont bien reliées à un compte
   def all_natures_linked_to_account?
-    natures.without_account.empty?  
+    natures.without_account.empty?
   end
 
   # boolean : indique si l'on peut faire de la comptabilité
-  # Il faut  que l'exercice soit ouvert, qu'il ait des natures et que toutes 
+  # Il faut  que l'exercice soit ouvert, qu'il ait des natures et que toutes
   # ces natures soient reliées à des comptes
   def accountable?
     return false if natures.empty?
     all_natures_linked_to_account?
   end
-  
-     
-  
-  
-  # appelle la création du plan comptable en arrière plan 
-  def create_datas 
-    Delayed::Job.enqueue Jobs::PeriodPlan.new(organism.database_name, id)
+
+
+
+
+  # appelle la création du plan comptable en arrière plan
+  def create_datas
+    Delayed::Job.enqueue Jobs::PeriodPlan.new(tenant_id, id)
   end
-  
-  # Destiné à rendre persistant la vérification que la nomenclature est OK, ceci 
+
+  # Destiné à rendre persistant la vérification que la nomenclature est OK, ceci
   # pour éviter d'avoir à faire cette vérification à chaque usage de la nomenclature.
-  # Ce contrôle est délégué à une classe interface entre Nomenclature et 
+  # Ce contrôle est délégué à une classe interface entre Nomenclature et
   # Period, et aussi Compta::Nomenclature
   def check_nomenclature
     Utilities::NomenclatureChecker.period_coherent?(self)
   end
 
 
-  
+
   protected
- 
+
   # report_compta_line crée la ligne de report de l'exercice
   def report_a_nouveau
     sects = organism.sectors.to_a
@@ -558,14 +559,14 @@ class Period < ActiveRecord::Base
       rans
     end
   end
-  
+
   def report_no_sector
     res_acc  = next_period.report_account
     ran = ComptaLine.new(account_id:res_acc.id, credit:resultat, debit:0)
     Rails.logger.warn 'report à nouveau invalide' unless ran.valid?
     ran
   end
-  
+
   # pour un organisme sectorisé, on fait les reports en prenant en compte
   # les comptes 12XX du secteur et bien sur le résultat de ce secteur
   def report_by_sector(sector)
@@ -575,7 +576,7 @@ class Period < ActiveRecord::Base
     ran
   end
 
- 
+
   # Pour les comptes de classe 1 à 5
   # crée un tableau de compta_lines reprenant le solde du compte
   def report_comptes_bilan
@@ -598,14 +599,14 @@ class Period < ActiveRecord::Base
     return rcb
   end
 
-   
+
 
   def should_not_have_more_than_two_open_periods
     if max_open_periods?
       self.errors.add(:base, "Impossible d'avoir plus de deux exercices ouverts")
       return false
     end
-     
+
   end
 
   def should_not_exceed_24_months
@@ -622,23 +623,23 @@ class Period < ActiveRecord::Base
     self.start_date = start_date.beginning_of_month if start_date
     self.close_date = close_date.end_of_month if close_date
   end
-  
-  
- 
-  
+
+
+
+
   protected
-  
+
 
 
   # TODO voir à réintroduire organism dans les callbacks de destroy au cas où
   # on reviendrait à une seule base de données.
-  
-  # supprime les extraits bancaires 
+
+  # supprime les extraits bancaires
   # avant la destruction d'un exercice
   #
   # TODO voir si on peut se passer de la requête sql; actuellement cela bloque
   # probablement par le verrouillage qu'il y a sur l'une ou l'autre des tables
-  # A revoir après modification de la logique des bank_extract_lines_lines, ou 
+  # A revoir après modification de la logique des bank_extract_lines_lines, ou
   # en utilisant delete_all
   #
   def destroy_bank_extracts
@@ -651,26 +652,28 @@ class Period < ActiveRecord::Base
   # avant la destruction d'un exercice
   #
   def destroy_cash_controls
-    Cash.all.each do |ca|
+    organism.cashes.each do |ca|
       ca.cash_controls.for_period(self).each {|cc| cc.destroy }
     end
   end
 
   # suppression des écritures et des remises de chèques
   def destroy_writings
-    Writing.period(self).each do |w|
+    # TODO revoir la logique d'effacement des enregistrements
+    # pour avoir un enchaînement plus naturel.
+    organism.writings.period(self).each do |w|
       w.compta_lines.each {|cl| cl.delete }
       w.check_deposit.delete if w.is_a? CheckDepositWriting
-      w.destroy
+      w.delete
     end
   end
 
   # suppression des natures
   def destroy_natures
-    natures.each { |n| n.delete} 
+    natures.each { |n| n.delete}
   end
-  
- 
 
- 
+
+
+
 end

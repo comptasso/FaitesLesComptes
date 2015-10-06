@@ -17,11 +17,9 @@ describe BankExtractLinesHelper do
 
     it 'donne le détail de lignes chainées' do
       result =  ["<ul><li>#{I18n.l(Date.today)} - ligne1 - 10.00 - 0.00</td></li></ul>", "<ul><li>#{I18n.l(Date.today)} - ligne2 - 0.00 - 205.00</td></li></ul>"]
-      helper.details_for_popover(@bel).should == result 
+      helper.details_for_popover(@bel).should == result
     end
 
-
   end
-
 
 end

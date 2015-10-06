@@ -1,21 +1,21 @@
 # -*- encoding : utf-8 -*-
 
-class InOutWritingsController < ApplicationController 
- 
+class InOutWritingsController < ApplicationController
+
   include Pdf::Controller
-  
+
   # TODO voir pour utiliser ChangePeriod plutôt que check_if_has_changed_period
   # ce qui permettrait probablement de ne pas surcharger fill_mois
 
   before_filter :find_book # remplit @book
   before_filter :fill_mois, only: [:index, :new]
-  
+
   before_filter :check_if_has_changed_period, only: :index # car on peut changer de period quand on clique sur une
   # des barres du graphe.qui est affiché par organism#show
   before_filter :fill_natures, :only=>[:new, :edit] # pour faire la saisie des natures en fonction du livre concerné
   before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf] # pour l'édition des pdf
   # voir le wiki sur ce sujet
-  
+
   # GET /in_out_writings
   # TODO changer @monthly_extract en @extract
   def index
@@ -26,9 +26,9 @@ class InOutWritingsController < ApplicationController
     end
     send_export_token
     respond_to do |format|
-      
+
       format.html  # index.html.erb
-      format.csv { send_data @monthly_extract.to_csv, :filename=>export_filename(@book, :csv)  } 
+      format.csv { send_data @monthly_extract.to_csv, :filename=>export_filename(@book, :csv)  }
       format.xls { send_data @monthly_extract.to_xls, :filename=>export_filename(@book, :csv) }
     end
   end
@@ -43,7 +43,7 @@ class InOutWritingsController < ApplicationController
       @previous_line = ComptaLine.find_by_id(flash[:previous_line_id])
       @line.payment_mode = @previous_line.payment_mode
     end
-    
+
   end
 
 
@@ -59,14 +59,14 @@ class InOutWritingsController < ApplicationController
       if @in_out_writing.save
         flash[:date]=@in_out_writing.date # permet de transmettre la date à l'écriture suivante
         flash[:previous_line_id]=@line.id
-        
+
         mois = sprintf('%.02d',@in_out_writing.date.month); an = @in_out_writing.date.year
-        format.html { 
+        format.html {
           if flash[:retour] && flash[:retour] =~ /pointage\z/
             redirect_to flash[:retour]
           else
-            redirect_to new_book_in_out_writing_url(@book, mois:mois, an:an) 
-          end 
+            redirect_to new_book_in_out_writing_url(@book, mois:mois, an:an)
+          end
           }
       else
         Rails.logger.warn("erreur dans create_line")
@@ -78,7 +78,7 @@ class InOutWritingsController < ApplicationController
       end
     end
   end
-  
+
   def show
     # TODO avec une frontline, on pourrait avoir moins de requêtes
     # TODO remplacer les counter_line par support_line
@@ -88,20 +88,20 @@ class InOutWritingsController < ApplicationController
     @account = @line.account
     @counter_account = @counter_line.account
     @author = @in_out_writing.user
-    
-    
-  end
-  
-  
-  
- 
 
-  # flash[:origin] et la méthode comes_from permet de déterminer la route à reprendre 
-  # lorsqu'on sera dans update. Soit on vient de index et y retourne. Soit on vient 
+
+  end
+
+
+
+
+
+  # flash[:origin] et la méthode comes_from permet de déterminer la route à reprendre
+  # lorsqu'on sera dans update. Soit on vient de index et y retourne. Soit on vient
   # de new mais on a fait une modif lors de la saisie et on retourne alors dans new
   def edit
     flash[:origin] = comes_from
-    
+
     @in_out_writing = @book.in_out_writings.find(params[:id])
     @line = @in_out_writing.in_out_line
     @counter_line = @in_out_writing.counter_line
@@ -123,7 +123,7 @@ class InOutWritingsController < ApplicationController
         mois = sprintf('%.02d',@in_out_writing.date.month); an =  @in_out_writing.date.year
         format.html { redirect_to url_for(book_id:@book.id,
             action:actio, mois:mois, an:an),
-            notice:"Ecriture #{@in_out_writing.id} modifiée" }
+            notice:"Ecriture modifiée pour la pièce #{@in_out_writing.piece_number}" }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -150,19 +150,20 @@ class InOutWritingsController < ApplicationController
   end
 
   protected
-  
-  
+
+
   # créé les variables d'instance attendues par le module PdfController
   def set_exporter
     @exporter = @book
     @pdf_file_title = @book.title
   end
-  
+
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::WritingsPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
+    Delayed::Job.enqueue Jobs::WritingsPdfFiller.new(Tenant.current_tenant.id,
+      pdf_export.id, {period_id:@period.id, mois:params[:mois], an:params[:an]})
   end
-  
+
 
   # permet de savoir si on vient d'une action new
   # utilisé par edit pour remplir un flash qui sera à son tour utilisé par update.
@@ -170,8 +171,8 @@ class InOutWritingsController < ApplicationController
     request.env['HTTP_REFERER'][/(\w*)\?/]
     @origin = ($1 == 'new') ? 'new' : 'index'
   end
-  
-  
+
+
 
 
   # complète les informations pour la counter_line en remplissant les
@@ -188,13 +189,14 @@ class InOutWritingsController < ApplicationController
     @book = Book.find(params[:book_id] || params[:income_book_id] || params[:outcome_book_id] )
   end
 
-  
+
   def fill_natures
     @natures=@book.natures.within_period(@period).order(:position)
   end
 
   # on surcharge fill_mois pour gérer le params[:mois] 'tous'
   def fill_mois
+    logger.debug "éléments de session: org : #{session[:org_db]} Exercice : #{session[:period]}"
     if params[:mois] == 'tous'
       @mois = 'tous'
       @monthyear= @period.guess_month
@@ -202,8 +204,8 @@ class InOutWritingsController < ApplicationController
       super
     end
   end
-  
-  
+
+
 
 
   # check_if_has_changed_period est rendu nécessaire car on peut accéder directement aux lignes d'un exercice
@@ -231,16 +233,16 @@ class InOutWritingsController < ApplicationController
 
   end
 
-  
-  private 
-    
+
+  private
+
     def in_out_writing_params
       params.require(:in_out_writing).permit(:date, :date_picker, :date_piece,
         :date_piece_picker, :narration, :ref, :piece_number,
         :book_id, :bridge_id, :bridge_type,
-        compta_lines_attributes: [:id, :debit, :credit, :writing_id, :account_id, 
-    :nature, :nature_id, :destination_id, 
-    :check_number, :payment_mode, :check_deposit_id] )  
+        compta_lines_attributes: [:id, :debit, :credit, :writing_id, :account_id,
+    :nature, :nature_id, :destination_id,
+    :check_number, :payment_mode, :check_deposit_id] )
     end
 
 

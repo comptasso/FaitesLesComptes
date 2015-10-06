@@ -24,7 +24,6 @@ gem 'browser', '0.1.6' # utilisé pour détecter la version du navigateur (sourc
 
 
 
-gem 'apartment', '~> 0.24.3' # pour la gestion des schemas
 gem 'devise' # pour l'authentification
 gem "devise-async" # pour avoir l'envoi des mails en background
 gem 'ofx' # pour la lecture des fichiers bancaires au format ofx
@@ -33,7 +32,7 @@ gem 'delayed_job_active_record', '= 4.0.2'
 # gem 'unicorn'
 gem 'puma'
 
- gem 'adherent', '~>0.3'
+gem 'adherent', '~>0.3', '>=0.3.4'
 # gem 'adherent', :path=>'../../Adherent'
 
 
@@ -77,7 +76,7 @@ gem 'coffee-script'
 gem 'jquery-rails', "3.1.2"
 gem 'jquery-ui-rails', '5.0.2'
 
-
+gem 'milia', '>= 1.0'
 # Deploy with Capistrano
 # gem 'capistrano'
 
@@ -108,3 +107,6 @@ group :development, :test do
 
 
 end
+
+gem "recaptcha", require: "recaptcha/rails"
+gem "activerecord-session_store", github: "rails/activerecord-session_store"

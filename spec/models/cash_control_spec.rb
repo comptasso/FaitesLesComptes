@@ -3,24 +3,24 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 
-RSpec.configure do |c| 
+RSpec.configure do |c|
   #  c.filter = {:wip => true }
-  #  c.exclusion_filter = {:js=> true } 
+  #  c.exclusion_filter = {:js=> true }
 end
 
-describe CashControl do   
+describe CashControl do
   include OrganismFixtureBis
 
   before(:each) do
     use_test_organism
     @cash_control = @c.cash_controls.new(date: Date.today, amount: 123.45)
   end
-  
+
   after(:each) {CashControl.delete_all}
 
-  
+
   context 'test constraints' do
-    
+
     it "should be valid" do
       @cash_control.should be_valid
     end
@@ -40,7 +40,7 @@ describe CashControl do
       @cash_control.should_not be_valid
     end
 
-  
+
     it "nor without amount" do
       @cash_control.amount = nil
       @cash_control.should_not be_valid
@@ -66,7 +66,7 @@ describe CashControl do
         10.times { @c.cash_controls.create(date: (@p.start_date + rand(laps).days), amount: rand(1000)) }
       end
 
-      
+
       it 'cash_controls order date' , wip:true do
         @c.cash_controls.create(date:Date.today, amount:0)
         @c.cash_controls.create(date:(Date.today - 1), amount:0)
@@ -112,9 +112,9 @@ describe CashControl do
       @cash_control.should_not_receive(:lock_lines)
       @cash_control.amount = 27
       @cash_control.save!
-      
+
     end
-    
+
     describe 'period' do
 
       it 'should knows its period' do
@@ -136,7 +136,7 @@ describe CashControl do
       end
     end
 
-    describe 'min_ and max_date' do 
+    describe 'min_ and max_date' do
 
       it 'la date est le début de l exercice' do
         @cash_control.min_date(@p).should == @p.start_date
@@ -155,22 +155,22 @@ describe CashControl do
     end
 
     describe 'previous' do
-      
-      
+
+
 
       it 'returns the previous cash_control' do
         previous_cash_control = @c.cash_controls.create!(date: Date.today - 1.day, amount: 1)
         @cash_control.previous.should == previous_cash_control
         previous_cash_control.delete
       end
-      
+
       it 'but nil if no previous cash_control' do
         @cash_control.previous.should be_nil
       end
 
       it 'a new cash_control also knows the previous one' do
         @c.cash_controls.new(date:Date.today).previous.should == @cash_control
-        
+
       end
 
       it 'if it has a date, nil otherwise' do
@@ -194,30 +194,30 @@ describe CashControl do
                 '1'=>{account_id:@caca.id, credit:i+1, payment_mode:'Espèces'} } })
         end
       end
-      
-      after(:each) do 
+
+      after(:each) do
         Writing.delete_all
-        ComptaLine.delete_all 
-      end 
+        ComptaLine.delete_all
+      end
 
       it 'vérification de la recherche des lignes à verrouiller' do
         @cash_control.cash.compta_lines.count.should == @p.nb_months
         @cash_control.cash.compta_lines.before_including_day(Date.today).should have(Date.today.month).elements
       end
 
-      it 'lock cash_control locked lines anterior to cash_control'  do 
+      it 'lock cash_control locked lines anterior to cash_control'  do
         ComptaLine.where('locked = ?', false).should have(24).elements
         @cash_control.locked = true
         @cash_control.save
         ComptaLine.where('locked = ?', false).should have(24 - 2*@cash_control.date.month).elements
       end
 
-      
+
     end
 
   end
 
- 
+
 
 end
 

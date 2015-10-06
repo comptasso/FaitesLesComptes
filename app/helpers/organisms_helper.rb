@@ -1,9 +1,9 @@
 # -*- encoding : utf-8 -*-
-
 module OrganismsHelper
- 
+  include SubscriptionsHelper
+
   # Méthode pour afficher les messages venant des différents modèles.
-  # 
+  #
   # infos appelle successivement les différents méthodes pour chacun des objets
   # générant des messages.
   #
@@ -17,11 +17,11 @@ module OrganismsHelper
     m << anc_message(org)
     return m.compact # pour retirer les éventuels messages nil
   end
-  
+
   # création d'un message pour la transformation des comités d'entreprise
   # Si l'organsime est un commité et qu'il n'y a pas de rubrik AEP, alors
-  # c'est que la transformation n'a pas été faite. 
-  # 
+  # c'est que la transformation n'a pas été faite.
+  #
   # On oriente alors sur la page du site qui traite de sujet...
   #
   def anc_message(org)
@@ -34,30 +34,30 @@ module OrganismsHelper
       info[:text] = text.html_safe
       info
     end
-    
-  end
-  
-  
 
-  # Appelé par la vue organism#show pour dessiner chacun des pavés qui figurent 
+  end
+
+
+
+  # Appelé par la vue organism#show pour dessiner chacun des pavés qui figurent
   # dans le dash board.
-  # 
+  #
   # Le dashboard comprend plusieurs types de pavés :
   # - ceux correspondant aux livres de recettes et de dépenses
   # - ceux correspondant aux secteur
-  # - enfin ceux correspondant aux caisses et aux comptes bancaires (générés par 
+  # - enfin ceux correspondant aux caisses et aux comptes bancaires (générés par
   # des cash_books ou des bank_books)
   # - un des pavé de type resultat est généré par period et cumule donc les résultats des
   # pavés des secteurs
-  # 
-  # 
+  #
+  #
   # html_class, permet d'associer des classes à chacun des pavés, sachant qu'actuellement
   # l'appel dans la vue show est systématiquement fait avec la classe span4
-  # 
-  # 
+  #
+  #
   def draw_pave(source, period, html_class)
     if source
-      render partial: "organisms/#{pave_partial(source)}", object: source,  
+      render partial: "organisms/#{pave_partial(source)}", object: source,
         locals: {:local_classes => "#{local_class(source)} #{html_class}", :graph=>source.graphic(period) }
     else
       ''
@@ -74,30 +74,35 @@ module OrganismsHelper
     html += image_tag 'icones/mail-open.png', id: 'mail_img' unless num == 0
     html.html_safe
   end
-  
+
   protected
-  
+
   # Produit les messages lié à la présence de chèques à déposer
-  # 
+  #
   # Les arguments sont org (l'organisme) et cdnb, le nombre de chèques à déposer
   # On utilise directement la table CheckDeposit car on est dans une logique de
   # schéma.
-  # 
-  # TODO : voir si on garde cette logique au cas où on voudrait revenir à une 
+  #
+  # TODO : voir si on garde cette logique au cas où on voudrait revenir à une
   # logique plus classique.
   #
   def check_deposit_message(org)
-     if (cdnb = CheckDeposit.nb_to_pick) > 0
+    # nb_to_pick exige un sector; pour avoir la totalité des chèques
+    # en attente, il faut soit le secteur Commun pour les CE soit le
+    # secteur Global pour les autres structures.
+    # selon qu'on est un CE ou non
+    sect = org.sectored? ? org.sectors.where('name = ?', 'Commun').first : org.sectors.first
+     if (cdnb = CheckDeposit.nb_to_pick(sect)) > 0
       info= {}
       info[:text] = "<b>#{cdnb} chèques à déposer</b> pour \
-            un montant total de #{number_to_currency CheckDeposit.total_to_pick}".html_safe
-      info[:icon] = icon_to('nouveau.png', new_organism_bank_account_check_deposit_path(org, org.main_bank_id))
+            un montant total de #{number_to_currency CheckDeposit.total_to_pick(sect)}".html_safe
+#      info[:icon] = icon_to('nouveau.png', new_organism_bank_account_check_deposit_path(org, org.main_bank_id))
      else
       info = nil
      end
      info
   end
-  
+
   # Une banque peut envoyer un message s'il y a un relevé de compte non pointé
   # Renvoie nil sinon
   def bank_account_message(ba)
@@ -111,7 +116,7 @@ module OrganismsHelper
       end
     info
   end
-  
+
   def cash_message(ca)
     info = {}
       if ca.cash_controls.any?
@@ -128,17 +133,17 @@ module OrganismsHelper
       end
     info
   end
-  
+
   # indique quelle est la classe css à appliquer pour la graphique dont la source est
   # donnée par source
   def local_class(source)
     case source.class.name
       when 'VirtualBook' then source.virtual.class.name.underscore
-    else 
+    else
       source.class.name.underscore
     end
   end
-  
+
   def pave_partial(source)
     case source.class.name
     when "Sector" then 'sector_pave'
@@ -148,7 +153,7 @@ module OrganismsHelper
   end
 
 
-  
+
 
 
 

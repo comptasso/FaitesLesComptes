@@ -1,29 +1,30 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'support/spec_controller_helper'
 
-RSpec.configure do |c| 
+RSpec.configure do |c|
   # c.filter = {:wip=>true}
 end
 
-describe InOutWritingsController do 
+describe InOutWritingsController do
   include SpecControllerHelper
 
   before(:each) do
-    minimal_instances 
+    minimal_instances
     @b = mock_model(Book)
     @b.stub_chain(:natures, :within_period, :order).and_return(@ar = double(Arel))
     Book.stub(:find).with(@b.id.to_s).and_return @b
     @b.stub_chain(:organism, :find_period).and_return @p
-    
+
 
   end
 
-  describe 'before_filters' , wip:true do 
+  describe 'before_filters' , wip:true do
     # ici on fait les spec du filter change_if_has_changed_period
 
     before(:each) do
-      @p.stub(:list_months).and_return([]) 
+      @p.stub(:list_months).and_return([])
     end
 
     it 'doit redirigé vers la bonne vue ' do
@@ -41,7 +42,7 @@ describe InOutWritingsController do
       response.should redirect_to :back
     end
   end
-  
+
   describe 'GET index' do
 
     before(:each) do
@@ -52,7 +53,7 @@ describe InOutWritingsController do
       get :index , {:book_id=>@b.id, mois:'04', an:'2012'}, session_attributes
       assigns(:organism).should == @o
       assigns(:period).should == @p
-      assigns(:book). should == @b 
+      assigns(:book). should == @b
     end
 
     it "should render index view" do
@@ -71,7 +72,7 @@ describe InOutWritingsController do
       get :index,{ :outcome_book_id=>@b.id}, session_attributes
       response.should redirect_to(outcome_book_in_out_writings_path(@b, :mois=>my.month, :an=>my.year))
     end
-  
+
   end
 
   describe 'GET edit'  do
@@ -81,9 +82,9 @@ describe InOutWritingsController do
       request.env["HTTP_REFERER"] = 'http://period/1/in_out_writings'
     end
 
-   
 
-   
+
+
 
     it 'should look_for the line' do
       @b.should_receive(:in_out_writings).and_return a = double(Arel)
@@ -111,8 +112,8 @@ describe InOutWritingsController do
       assigns[:line].should == @l
       assigns[:counter_line].should == @cl
     end
-    
-    
+
+
     it "should render edit" do
       @b.stub_chain(:in_out_writings, :find).and_return(@w)
       @w.stub(:in_out_line).and_return mock_model(ComptaLine)
@@ -122,7 +123,7 @@ describe InOutWritingsController do
     end
   end
 
-  
+
   describe 'POST update', wip:true do
 
     def update_parameters
@@ -132,12 +133,12 @@ describe InOutWritingsController do
     end
 
     before(:each) do
-      @w = mock_model(InOutWriting, date:Date.today) 
+      @w = mock_model(InOutWriting, date:Date.today)
       @b.stub_chain(:in_out_writings, :find).with(@w.to_param).and_return(@w)
       @w.stub(:in_out_line).and_return(mock_model(ComptaLine))
       @w.stub(:counter_line).and_return(mock_model(ComptaLine))
     end
-    
+
     it 'appelle fill author' do
       @controller.should_receive(:fill_author).with(@w)
       @w.stub(:update_attributes).with( update_parameters).and_return(true)
@@ -161,8 +162,8 @@ describe InOutWritingsController do
     end
   end
 
-  
-  
+
+
 
   describe 'POST delete' do
     before(:each) do
@@ -191,11 +192,11 @@ describe InOutWritingsController do
       flash[:alert].should == 'Une anomalie est survenue, l\'écriture n\'a pu être détruite'
     end
   end
- 
+
   describe 'POST create'  do
 
     def create_parameters
-      {"narration"=>'libellé corrigé', 'piece_number'=>'8', 
+      {"narration"=>'libellé corrigé', 'piece_number'=>'8',
         'compta_lines_attributes'=>{'0'=>{'debit'=>'12', 'credit'=>'0', 'payment_mode'=>'Virement'},
           '1'=>{'debit'=>'0', 'credit'=>'12', 'payment_mode'=>'Virement'}}}
     end
@@ -208,7 +209,7 @@ describe InOutWritingsController do
       @controller.stub(:fill_author)
     end
 
-    
+
     it "creates a writing" do
       @b.stub(:in_out_writings).and_return a =double(Arel)
       a.should_receive(:build).with(create_parameters).and_return(@nw)
@@ -221,7 +222,7 @@ describe InOutWritingsController do
       assigns(:line).should == @iol
       assigns(:counter_line).should == @cl
     end
-      
+
     it 'appelle fill author' do
       @b.stub_chain(:in_out_writings, :build).and_return @nw
         @nw.stub(:in_out_line).and_return @iol
@@ -274,8 +275,8 @@ describe InOutWritingsController do
 
     end
 
-     
-   
+
+
   end
 
   describe 'Get new'      do
@@ -288,10 +289,10 @@ describe InOutWritingsController do
       @nw = mock_model(InOutWriting, date:Date.civil(2012,4,1)).as_new_record
       @d = Date.today
     end
-    
+
     it "fill the default values"  do
       @a.should_receive(:new).with(date:@d).and_return(@nw)
-      @nw.stub_chain(:compta_lines, :build) 
+      @nw.stub_chain(:compta_lines, :build)
       get :new, {income_book_id: @b.id, :mois=>@d.month.to_s, :an=>@d.year.to_s}, session_attributes
     end
 
@@ -313,20 +314,20 @@ describe InOutWritingsController do
 
     context 'Avec une ligne créée précédemment' do
 
-      it 'assigns previous line if one' do 
+      it 'assigns previous line if one' do
         @b.stub_chain(:in_out_writings, :new).and_return(@nw)
         @nw.stub_chain(:compta_lines, :build).and_return(@cl1 = mock_model(ComptaLine))
 
 
         ComptaLine.should_receive(:find_by_id).with(20).and_return(@l = mock_model(ComptaLine, payment_mode:'Virement'))
         @cl1.should_receive(:payment_mode=).with('Virement')
-        
-        
+
+
         get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes, :previous_line_id=>20
         assigns(:in_out_writing).should == @nw
         assigns(:previous_line).should == @l
       end
-    
+
 
       it 'new date est préremplie' do
         @a.should_receive(:new).with(:date=>Date.today).and_return @nw
@@ -334,9 +335,9 @@ describe InOutWritingsController do
         get :new, {income_book_id: @b.id, :mois=>'04', :an=>'2012'}, session_attributes, :date=>Date.today
       end
 
-     
+
     end
-    
+
     context 'quand on vient d un affichage avec tous les mois' do
       it 'rend le template new' do
         @a.stub(:new).and_return @nw

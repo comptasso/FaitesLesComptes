@@ -1,33 +1,33 @@
 # coding: utf-8
 
-require 'spec_helper' 
+require 'spec_helper'
 
 RSpec.configure do |c|
  #  c.filter = {:wip=> true }
-end 
+end
 
 
-describe BankExtractLine do  
+describe BankExtractLine do
   include OrganismFixtureBis
 
-  before(:each) do 
-    use_test_organism    
+  before(:each) do
+    use_test_organism
 
-    @be = find_bank_extract 
-    @d7 = create_outcome_writing(7)  
+    @be = find_bank_extract
+    @d7 = create_outcome_writing(7)
     @d29 = create_outcome_writing(29)
-    @ch97 = create_in_out_writing(97, 'Chèque') 
+    @ch97 = create_in_out_writing(97, 'Chèque')
     @ch5 = create_in_out_writing(5, 'Chèque')
     @cr = create_in_out_writing(27) # une recette
-    @cd = @ba.check_deposits.new(deposit_date:(Date.today + 1.day)) 
+    @cd = @ba.check_deposits.new(deposit_date:(Date.today + 1.day))
     @cd.checks << @ch97.support_line << @ch5.support_line
     @cd.save!
 
   end
-  
+
   after(:each) do
     BankExtract.delete_all
-    Writing.delete_all 
+    Writing.delete_all
     CheckDeposit.delete_all
   end
 
@@ -44,7 +44,7 @@ describe BankExtractLine do
       bel.should_not be_valid
       bel.errors.messages[:compta_line_id].should == ['obligatoire']
     end
-    
+
     it 'le champ bank_extract_id est obligatoire' do
       bel = BankExtractLine.new(:compta_line_id=>1)
       bel.should_not be_valid
@@ -62,8 +62,8 @@ describe BankExtractLine do
       @be.bank_extract_lines.new(:compta_line_id=>@d29.support_line.id)
       @be.bank_extract_lines.new(:compta_line_id=>@cd.debit_line.id)
       puts @be.errors.messages unless @be.valid?
-      
-      @be.save! 
+
+      @be.save!
     end
 
 
@@ -78,22 +78,22 @@ describe BankExtractLine do
       @be.bank_extract_lines.to_a.map {|bel| bel.position}.should == [1,2,3]
     end
 
-   
-    
+
+
     describe 'lock_line'  do
-      
+
       subject {BankExtractLine.new(bank_extract_id:5, compta_line_id:6)}
-      
+
       it 'appelle lock de sa compta_line' do
         subject.should_receive(:compta_line).and_return(@cl = mock_model(ComptaLine))
         @cl.should_receive(:lock).and_return true
         subject.lock_line
       end
-      
-    end
-    
 
-   
+    end
+
+
+
     describe 'testing move_higher and move_lower' do
 
       before(:each) do
@@ -116,7 +116,7 @@ describe BankExtractLine do
 
     end
 
-   
+
   end
 
 

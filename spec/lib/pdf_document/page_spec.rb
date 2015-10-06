@@ -68,7 +68,7 @@ describe PdfDocument::Page do
 
     it 'repond à stamp' do
       @page.stamp.should == doc.stamp
-    end
+    end 
 
     describe 'lines total et reports'  do
 

@@ -8,7 +8,7 @@
 class Admin::ClonesController < Admin::ApplicationController
 
   skip_before_filter :current_period
-  
+
   before_filter :owner_only
 
   after_filter :clear_org_cache, only:[:create]
@@ -20,25 +20,30 @@ class Admin::ClonesController < Admin::ApplicationController
 
   # @organism est fourni par le before_filter find_organism
   def create
-    r = @organism.room
-    r.title, r.status = @organism.title, @organism.status
-    comment = params[:organism][:comment]
-    if r.clone_db(comment)
+    ucl = Utilities::Cloner.create(:old_org_id=>@organism.id)
+    if ucl && new_id = ucl.clone_organism(admin_cloner_params[:comment])
+      # l'organisme est créé. Reste à créer son holder.
+      Holder.create(user_id:current_user.id, organism_id:new_id,
+                    status:'owner', tenant_id:Tenant.current_tenant.id) # car seul le owner est habilité (voir le before_filter)
       flash[:notice] = 'Un clone de votre base a été créé'
     else
       flash[:alert] = 'Une erreur s\'est produite lors de la création du clone de votre base'
     end
-    redirect_to admin_rooms_url
+    redirect_to admin_organisms_url
   end
-  
+
   protected
-  
-  # l action destroy ne sont permises que si le current_user est le owner
+
+  # les actions ne sont permises que si le current_user est le owner
   def owner_only
-    unless current_user == @organism.room.owner
+    unless current_user == @organism.owner
       flash[:alert] = "Vous ne pouvez executer cette action car vous n'êtes pas le propriétaire de la base"
-      redirect_to admin_rooms_url
+      redirect_to admin_organisms_url
     end
-    
+
+  end
+
+  def admin_cloner_params
+    params.require(:organism).permit(:comment)
   end
 end

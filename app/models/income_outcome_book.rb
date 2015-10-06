@@ -1,41 +1,41 @@
 # coding: utf-8
 
-# Représente les livres de recettes et de dépenses. 
+# Représente les livres de recettes et de dépenses.
 #
 # Ces livres enregistrent les écritures de recettes et de dépenses (InOutWriting)
-# mais aussi les écritures (toujours de recettes et de dépenses) qui viennent d'un 
-# gem complémentaire (actuellement seulement Adherent). D'où la présence de 
+# mais aussi les écritures (toujours de recettes et de dépenses) qui viennent d'un
+# gem complémentaire (actuellement seulement Adherent). D'où la présence de
 # has_many adherent_writings.
-# 
+#
 # Chaque écriture Writing (ou ses héritiers) a au moins deux compta_lines. La compta_line
-# principale étant celle qui enregistre une nature. 
-# 
+# principale étant celle qui enregistre une nature.
+#
 # Le has_many :in_out_lines, :through=>:writings permet de récupérer ces compta_lines grâce
 # à la condition Nature IS NOT NULL.
 #
 class IncomeOutcomeBook < Book
-  
+
   # attr_accessible :sector_id
-  
-  
+
+
   belongs_to :sector
-  has_many :writings,  foreign_key:'book_id'
+  has_many :writings,  foreign_key:'book_id', dependent: :destroy
   has_many :natures, foreign_key:'book_id'
-  
+
   has_many :in_out_writings,  foreign_key:'book_id'
   has_many :adherent_writings,  foreign_key:'book_id', class_name:'Adherent::Writing'
 
   has_many :in_out_lines, ->{where('nature_id IS NOT ?', nil)},
-    :through=>:writings, :source=>:compta_lines, foreign_key:'writing_id' 
+    :through=>:writings, :source=>:compta_lines, foreign_key:'writing_id'
 
-  has_one :export_pdf, :as=>:exportable 
-  
+  has_one :export_pdf, :as=>:exportable
+
   # extrait les lignes entre deux dates. Cette méthode ne sélectionne pas sur un exercice.
   def extract_lines(from_date, to_date)
     in_out_lines.where('writings.date >= ? AND writings.date <= ?', from_date, to_date).order('writings.date')
   end
-  
-  
+
+
 
   # surchargée car l'affichage des montants et des lignes dans la vue ne doit prendre en
   # compte que les lignes qui ont une nature et être limité à l'exercice.

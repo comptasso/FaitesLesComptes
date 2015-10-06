@@ -15,18 +15,14 @@
           :wrapper_html=>{:class=>'col-lg-6'},
           :disabled=>@transfer.partial_locked?
         = f.input :amount,
-          :wrapper_html=> {class: "col-lg-2"}, 
+          :wrapper_html=> {class: "col-lg-2"},
           input_html: {class: "numeric decimal", value: two_decimals(@transfer.amount) },
           :disabled=>@transfer.partial_locked?,
           label: 'Montant', :required => true
 
-    
       .row
         =f.fields_for :compta_lines do |build|
           = render :partial=>'compta_line_fields', :locals=>{:builder=>build}
-  
 
-    
-      
       .form-actions
         = f.button :submit, id: 'new_line_button', class: "btn-primary col-lg-2 col-lg-offset-6"

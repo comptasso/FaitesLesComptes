@@ -43,6 +43,25 @@ module Editions
       @columns_to_totalize = [6, 7]
       @columns_alignements = [:left, :left, :left, :left, :left, :left, :right, :right, :left, :left]
     end
+    
+    # renvoie les lignes de la page demandées
+    def fetch_lines(page_number)
+      limit = nb_lines_per_page
+      offset = (page_number - 1)*nb_lines_per_page
+      # on ne limite pas les dates ni joins :writing=>:book
+      # car la méthode compta_lines de la source (un livre), le fait 
+      # déjà (et doubler ces conditions crée une erreur avec Milia)
+      @source.compta_lines.
+        select(columns_select).
+        offset(offset).limit(limit)
+    end
+    
+    def set_nb_pages
+      nb_lines = @source.compta_lines.count
+      return 1 if nb_lines == 0
+      (nb_lines/nb_lines_per_page.to_f).ceil
+    end
+
 
      
     # Ne pas confondre ce prepare_line pour le pdf avec celui qui est dans 

@@ -31,5 +31,5 @@ test:
   database: pgtestflc
   pool: 5
   username: jcl
-  password: flc
+  password:
   timeout: 5000

@@ -7,7 +7,7 @@ require 'spec_helper'
 describe 'bank_extract_lines' do
 
   include OrganismFixtureBis
-  
+
   def bank_extract_test
     @be = @ba.bank_extracts.create!(begin_date:Date.today.beginning_of_month, end_date:Date.today.end_of_month,
       begin_sold:10, :total_debit=>12.25, :total_credit=>50)
@@ -22,35 +22,29 @@ describe 'bank_extract_lines' do
 
   before(:each) do
     use_test_user
-    login_as('quidam')
-    use_test_organism 
+    login_as(@cu, 'MonkeyMocha')
+    use_test_organism
     bank_extract_test
-   # visit admin_room_path(@r)    
- 
   end
-  
+
   after(:each) do
-    BankExtract.delete_all 
+    BankExtract.delete_all
   end
 
   context 'on part du bank_extract' do
-
 
     before(:each) do
       visit bank_account_bank_extracts_path(@ba)
     end
 
     it 'cliquer sur afficher affiche les lignes' do
-      
       within('table') do
-        click_link('Afficher') 
+        click_link('Afficher')
       end
       current_path.should == bank_extract_bank_extract_lines_path(@be)
-      
+
     end
 
   end
-
- 
 
 end

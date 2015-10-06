@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 module Importer
-  module BelsImporterHelper
+  module BelsImportersHelper
     
     
     # affiche explicitement les erreurs rencontrées lors de l'importation

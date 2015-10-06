@@ -2,35 +2,41 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |config|  
-  #  config.filter =  {wip:true}
+RSpec.configure do |config|
+#  config.filter =  {wip:true}
 end
 
 
-describe Account do   
-  include OrganismFixtureBis  
-  
+describe Account do
+  include OrganismFixtureBis
+
   def valid_attributes
     {number:'6011',
       title:'Titre du compte',
-      period_id:1
+      period_id:1,
+      tenant_id:1
     }
   end
-  
+
   def valid_account
     Account.new(valid_attributes)
   end
-   
 
-  describe 'validations' do
-      
-    subject {valid_account}
-    
     before(:each) do
+      Tenant.set_current_tenant( tenants( :tenant_1 ).id )
       subject.stub(:organism).and_return(double(Organism, sectored?:false))
     end
-      
-    it "should be valid"  do
+
+    it 'le tenant est créé', wip:true do
+      t = tenants(:tenant_1)
+      t.should_not be_nil
+    end
+
+  describe 'validations', wip:true do
+
+   subject {valid_account}
+
+    it "should be valid", wip:true   do
       subject.should be_valid
     end
 
@@ -50,58 +56,58 @@ describe Account do
         subject.period = nil
         subject.should_not be_valid
       end
-      
+
       context 'avec un exercice clos' do
-        
+
         before(:each) do
           subject.stub(:period).and_return(mock_model(Period, open:false))
         end
-        
+
         it 'non valide si exercice clos pour le titre' do
           subject.stub(:changed_attributes).and_return({title:'Bonjour'})
-          subject.should_not be_valid     
+          subject.should_not be_valid
         end
-      
+
         it 'de meme non valide si exercice clos pour le numéro' do
           subject.stub(:changed_attributes).and_return({number:'666'})
-          subject.should_not be_valid   
+          subject.should_not be_valid
         end
-      
+
         it 'mais on peut changer le secteur' do
           subject.stub(:changed_attributes).and_return({sector_id:9})
-          subject.should be_valid  
+          subject.should be_valid
         end
-      
-      end 
+
+      end
     end
-      
-    
+
+
   end
-  
+
   context 'avec un comite d entreprise' do
-    
+
     subject {valid_account}
-    
+
     before(:each) do
       subject.stub(:organism).and_return(double(Organism, sectored?:true))
     end
-    
+
     # OPTIMIZE on pourrait imposer un secteur pour tous les comptes
-    # par exemple ASC/FONCTIONNEMENT pour les 6 et 7 et COMMON pour les autres 
+    # par exemple ASC/FONCTIONNEMENT pour les 6 et 7 et COMMON pour les autres
     it 'un compte de classe 6 ou 7 invalide sans sector_id' do
       subject.should_not be_valid
       subject.errors.messages.should == {sector_id:['Un secteur est obligatoire pour ce compte']}
     end
-    
+
     it 'et valide avec sector_id' do
       subject.sector_id = 1
       subject.should be_valid
-      
+
     end
-    
-    
+
+
   end
-  
+
   context  'méthode de classe' do
 
     describe 'available' do
@@ -117,13 +123,13 @@ describe Account do
         @ar.stub_chain(:last, :number).and_return '5301'
         Account.available('53').should == '5302'
       end
-        
+
       it 'y compris le passage des dizaines' do
         Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
         @ar.stub_chain(:last, :number).and_return '5329'
         Account.available('53').should == '5330'
       end
-        
+
       it 'bloque à 99' do
         Account.stub_chain(:where, :order).and_return(@ar = double(Arel))
         @ar.stub_chain(:last, :number).and_return '5399'
@@ -132,9 +138,9 @@ describe Account do
     end
   end
 
- 
+
   context 'avec un organisme' do
-    
+
     def new_with_real_attributes
       acc = Account.new(valid_attributes)
       acc.period_id = @p.id
@@ -142,25 +148,25 @@ describe Account do
     end
 
     before(:each) do
-      use_test_organism 
+      use_test_organism
     end
-    
+
     after(:each) do
       Writing.delete_all
     end
-  
+
     describe 'solde initial' do
 
       before(:each) do
         @acc1 = @p.accounts.first
       end
-      
-      
+
+
       it 'sans exercice précédent, et sans report à nouveau, zero' do
         @acc1.init_sold_debit.should == 0
         @acc1.init_sold_credit.should == 0
       end
-      
+
       it 'même avec une écriture dans l exercice' do
         odw = @od.writings.new(date:@p.start_date,
           piece_number:9,
@@ -170,9 +176,9 @@ describe Account do
         puts odw.errors.messages unless odw.valid?
         odw.save!
       end
-    
+
       context 'avec report à nouveau' do
-      
+
         before(:each) do
           @o.an_book.writings.create!(date:Date.today.beginning_of_year,
             piece_number:19,
@@ -186,7 +192,7 @@ describe Account do
           @acc1.init_sold_credit.should == 66
         end
 
-        it 'donne un an_sold' do 
+        it 'donne un an_sold' do
           @acc1.init_sold('debit').should == 0
           @acc1.init_sold('credit').should == 66
         end
@@ -210,15 +216,15 @@ describe Account do
         end
 
       end
-   
+
     end
 
     describe 'solde final' do
-      
+
       before(:each) do
         @acc1 = @p.accounts.first
       end
-      
+
       it 'final_sold' do
         @acc1.should_receive(:sold_at).with(@p.close_date).and_return(1000)
         @acc1.final_sold
@@ -237,10 +243,10 @@ describe Account do
         @acc1.previous_sold.should == 105
       end
 
-   
+
 
     end
- 
+
     describe 'polymorphic' do
       it 'la création d\'une banque entraîne celle d\'un compte' do
         @ba.should have(1).accounts
@@ -252,25 +258,23 @@ describe Account do
     end
 
     describe 'all_lines_locked?' do
-      
-      
 
       it 'vrai si pas de lignes' do
         new_with_real_attributes.should be_all_lines_locked
       end
 
       context 'avec des lignes'  do
-    
+
         before(:each) do
           @w1 = create_outcome_writing(97)
           @w2 = create_outcome_writing(3)
           @ac = @w1.compta_lines.first.account
         end
-        
+
         it 'faux si plusieurs lignes ne sont pas verrouillées' do
           @ac.should_not be_all_lines_locked
         end
-    
+
         it 'faux si une ligne est non verrouillée' do
           @w1.lock
           @ac.should_not be_all_lines_locked
@@ -284,13 +288,13 @@ describe Account do
       end
 
     end
-  
+
     describe 'to_pdf' do
       it 'on peut créer un listing' do
         # Account.create!(valid_attributes)
         Account.to_pdf(@p).should be_a_instance_of(PdfDocument::Simple)
       end
-      
+
       it 'et le rendre' do
         Account.to_pdf(@p).render
       end
@@ -303,8 +307,8 @@ describe Account do
       end
     end
 
-    describe 'cas de destruction impossible'  do 
-      
+    describe 'cas de destruction impossible'  do
+
       it 'un compte avec des écritures' do
         @w1 = create_outcome_writing(97)
         @abc = @w1.compta_lines.first.account
@@ -315,7 +319,7 @@ describe Account do
       end
       it 'un compte relié à une banque' do
         @baca.destroy.should be_false
-      end 
+      end
       it 'le compte cotisation pour une association' do
         n = @p.natures.recettes.find_by_name(@o.bridge.nature_name)
         a = n.account
@@ -325,20 +329,28 @@ describe Account do
         a = @n.account
         a.destroy.should be_false
       end
-      
-      
+
+
     end
-    
-    describe 'mais on peut détruire'  do
+
+    describe 'mais on peut détruire' , wip:true do
+
+      after(:each) do
+        a = Account.new(number:'106', period_id:@p.id, tenant_id:1,
+                        title:'capital ou qqc comme çà')
+        puts a.errors.messages unless a.valid?
+        a.save!
+      end
+
       it 'un compte sans attache ni lignes' do
         a = Account.where('number = ?', '106').first
         expect {a.destroy}.to change{Account.count}.by(-1)
       end
     end
-    
+
 
   end
 
-  
-end 
+
+end
 

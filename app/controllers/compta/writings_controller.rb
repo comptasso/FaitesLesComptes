@@ -1,20 +1,20 @@
 # -*- encoding : utf-8 -*-
 
 class Compta::WritingsController < Compta::ApplicationController
-  
+
   include Pdf::Controller
- 
+
 
   before_filter :find_book
   before_filter :prefill_date, :only=>:new
-  
+
   before_filter :set_exporter, :only=>[:produce_pdf, :pdf_ready, :deliver_pdf]
 
   # GET /writings
   # GET /writings.json
   def index
     # pas de sélection par mois pour la AnBook
-    if @book.type == 'AnBook' 
+    if @book.type == 'AnBook'
       params[:mois] = 'tous'
       params[:an] = nil
     end
@@ -25,17 +25,17 @@ class Compta::WritingsController < Compta::ApplicationController
       redirect_to compta_book_writings_url(@book, mois:my.month, an:my.year) and return
     end
     send_export_token
-    
+
     respond_to do |format|
       format.html # index.html.erb
       format.csv { send_data @extract.to_csv, filename:export_filename(@extract, :csv)  }
       format.xls { send_data @extract.to_xls, filename:export_filename(@extract, :csv)  }
-      
+
     end
   end
 
 
-   
+
   # GET /writings/new
   # GET /writings/new.json
   def new
@@ -50,19 +50,19 @@ class Compta::WritingsController < Compta::ApplicationController
       format.json { render json: @writing }
     end
   end
-  
+
   # action javascript pour rajouter une ligne au formulaire de saisie
   # cette action est définie deux foix dans routes, une en tant que member
-  # lorsqu'on est en édition, l'autre en tant que collection quand on est en 
+  # lorsqu'on est en édition, l'autre en tant que collection quand on est en
   # nouvelle écriture.
-  # 
+  #
   # Cette méthode est appellée par l'appel ajax de $deal_icon_plus défini
-  # dans compta::writing.js 
-  # 
-  # La seule chose que fasse add_line est de définir une instance quelconque 
+  # dans compta::writing.js
+  #
+  # La seule chose que fasse add_line est de définir une instance quelconque
   # de Writing (pour que le partiel simple_form_for connaisse les compta_lines
-  # et de fixer le numéro de ligne du formulaire de compta_line qui sera ajouté. 
-  #  
+  # et de fixer le numéro de ligne du formulaire de compta_line qui sera ajouté.
+  #
   def add_line
     params.permit(:num_line)
     @num_line = params[:num_line].to_i + 1
@@ -91,7 +91,7 @@ class Compta::WritingsController < Compta::ApplicationController
   def all_lock
     find_writings
     @writings.unlocked.each {|w| w.lock if w.compta_editable?}
-    redirect_to compta_book_writings_url(@book) 
+    redirect_to compta_book_writings_url(@book)
   end
 
   # POST /writings
@@ -155,7 +155,7 @@ class Compta::WritingsController < Compta::ApplicationController
     @extract = Extract::ComptaBook.new(@book, @period, @from_date, @to_date)
     @writings = @extract.writings
   end
-  
+
   def find_dates
     if params[:mois] && params[:an]
       @mois = params[:mois]
@@ -176,32 +176,32 @@ class Compta::WritingsController < Compta::ApplicationController
     @d = @period.start_date if @book.type == 'AnBook' # mais toujours le début de l'éxercice si livre d'A Nouveau
     @d ||= @period.guess_date # sinon par défaut, on devine
   end
-  
+
   private
-  
+
   # créé les variables d'instance attendues par le module PdfController
   def set_exporter
     @exporter = @book
     @pdf_file_title = @book.title
     find_dates
   end
-  
+
   # création du job et insertion dans la queue
   def enqueue(pdf_export)
-    Delayed::Job.enqueue Jobs::ComptaBookPdfFiller.new(@organism.database_name, pdf_export.id, {period_id:@period.id, from_date:@from_date, to_date:@to_date})
+    Delayed::Job.enqueue Jobs::ComptaBookPdfFiller.new( Tenant.current_tenant.id,
+      pdf_export.id, {period_id:@period.id, from_date:@from_date, to_date:@to_date})
   end
-  
+
   def compta_writing_params
-    
     params.require(:writing).permit(:id,
       :date, :date_picker, :date_piece, :date_piece_picker,
       :narration, :ref,
       :book_id, :bridge_id, :bridge_type,
-      compta_lines_attributes: [:id, :_destroy, :debit, :credit, 
-        :writing_id, :account_id, 
-        :nature, :nature_id, :destination_id, 
-        :check_number, :payment_mode, :check_deposit_id] )  
-    
+      compta_lines_attributes: [:id, :_destroy, :debit, :credit,
+        :writing_id, :account_id,
+        :nature, :nature_id, :destination_id,
+        :check_number, :payment_mode, :check_deposit_id] )
+
   end
 
 

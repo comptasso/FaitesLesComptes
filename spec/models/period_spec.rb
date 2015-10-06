@@ -1,23 +1,28 @@
-# coding: utf-8 
+# coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-RSpec.configure do |c|  
-  #  c.filter = {wip:true}
+RSpec.configure do |c|
+#    c.filter = {wip:true}
 end
 
-describe Period do  
-  include OrganismFixtureBis 
-  
+describe Period do
+  include OrganismFixtureBis
+
   def valid_params
-    {start_date:Date.today.beginning_of_year, close_date:Date.today.end_of_year}
+    {start_date:Date.today.beginning_of_year,
+     close_date:Date.today.end_of_year}
   end
 
-  describe 'validations' do
+  before(:each) do
+    create_only_tenant
+  end
+
+  describe 'validations', wip:true do
 
     before(:each) do
       @org = mock_model(Organism)
-      @p  = Period.new(valid_params)
+      @p  = Period.new(valid_params.merge(tenant_id:@t.id))
       @p.organism_id = @org.id
     end
 
@@ -36,7 +41,7 @@ describe Period do
     end
 
     it 'non valide si close date est < start_date' do
-      @p.close_date = @p.start_date - 60 
+      @p.close_date = @p.start_date - 60
       @p.should_not be_valid
     end
 
@@ -71,25 +76,25 @@ describe Period do
     end
 
   end
-    
+
   describe 'max_open_periods?'  do
-      
+
     subject {Period.new}
-      
+
     it 'faux si moins de deux exercices ouverts pour cet organisme' do
       subject.stub_chain(:organism, :periods, :opened, :count).and_return 1
       subject.max_open_periods?.should be_false
     end
-      
+
     it 'vrai si moins de deux exercices ouverts pour cet organisme' do
       subject.stub_chain(:organism, :periods, :opened, :count).and_return 2
       subject.max_open_periods?.should be_true
     end
-          
+
   end
 
   describe 'un exercice est destroyable?' do
-     
+
     subject {Period.new(valid_params)}
 
     it 's il est le premier' do
@@ -111,7 +116,7 @@ describe Period do
   end
 
   describe 'les fonctionnalités pour trouver un mois'   do
-      
+
     before(:each )do
       # un exercice de mars NN à avril NN+1
       @p = Period.new(start_date: Date.today.beginning_of_year.months_since(2), close_date:Date.today.end_of_year.months_since(4))
@@ -134,7 +139,7 @@ describe Period do
       @p.should_not be_include_month(8)
     end
   end
-  
+
   describe 'two_period_accounts'  do
 
     before(:each) do
@@ -202,7 +207,7 @@ describe Period do
     it 'p feut être fermé' do
       @p.closable?.should == true
     end
-    
+
     context 'test des messages d erreur' do
 
       it 'ne peut être ferme si on ne peut pas passer une écriture' do
@@ -211,7 +216,7 @@ describe Period do
         @p.errors[:close].should == [@nat_error]
       end
 
-      
+
 
       it 'un exercice déja fermé ne peut être fermé' do
         @p.should_receive(:open).and_return(false)
@@ -252,76 +257,76 @@ describe Period do
   end
 
   context 'avec un comité d entreprise et 2 exercices' do
-      
+
     before(:each) do
       use_test_organism('Comité d\'entreprise')
-      @p2 = find_second_period   
+      @p2 = find_second_period
     end
-      
+
     it 'report_accounts retourne 3 comptes' do
       expect(@p2.report_accounts.count).to eq 3
     end
-      
+
     it 'report_account ne retourne que le compte 12' do
       expect(@p.report_account.number).to eq '12'
     end
-      
+
     context 'avec des écritures de recettes dans chacun des secteurs' do
-        
-      before(:each) do 
+
+      before(:each) do
         @sasc = Sector.where('name = ?', 'ASC').first
         @sfonc = Sector.where('name = ?', 'Fonctionnement').first
         @sglob = Sector.where('name = ?', 'Commun').first
-          
+
         @basc = @sasc.income_book
         @bfonc = @sfonc.income_book
-          
+
         @accasc = @p.accounts.where('sector_id = ?', @sasc.id).classe_7.first
         @accfonc = @p.accounts.where('sector_id = ?', @sfonc.id).classe_7.first
-          
+
         @nasc = @basc.natures.first
         @nfonc = @bfonc.natures.first
-          
+
         w1 = create_writing(@basc, nature_id:@nasc.id, account_id:@accasc.id)
         w2 = create_writing(@bfonc, nature_id:@nfonc.id, account_id:@accfonc.id, montant:66)
-          
+
         [w1, w2].each {|l| l.lock}
       end
-        
+
       it 'calcul du résultat' do
         cr = Compta::RubrikResult.new(@p, 'passif', '1201')
-        expect(cr.brut).to eq -33.33
+        expect(cr.brut).to eq(-33.33)
       end
-        
+
       it 'sait trouver le compte de report' do
         @p2.report_account_for_sector(@sasc).should be_an_instance_of(Account)
-        expect(@p2.report_account_for_sector(@sglob).number).to eq '12' 
+        expect(@p2.report_account_for_sector(@sglob).number).to eq '12'
       end
-        
+
       it 'report à nouveau crée 2 lignes' do
         ran = @p.send(:report_a_nouveau)
         # ran.each {|r| puts r.inspect}
-        expect(ran.count).to eq 2          
+        expect(ran.count).to eq 2
       end
-        
+
       it 'les reports sont sur les bons comptes' do
         @p.close
         expect(@p.open).to be_false
         # @p2.compta_lines.find_each { |cl| puts cl.inspect}
-        @p2.accounts.where('number = ?', '1201').first.sold_at(@p2.close_date).should == -33.33 
+        @p2.accounts.where('number = ?', '1201').first.sold_at(@p2.close_date).should == -33.33
         @p2.accounts.where('number = ?', '1202').first.sold_at(@p2.close_date).should == -66
-        @p2.accounts.where('number = ?', '12').first.sold_at(@p2.close_date).should == 0.0 
-  
+        @p2.accounts.where('number = ?', '12').first.sold_at(@p2.close_date).should == 0.0
+
       end
     end
   end
-    
-  context 'avec un exercice' do 
-      
+
+  context 'avec un exercice' do
+
     before(:each) do
       use_test_organism
     end
-      
+
     describe 'methodes diverses'  do
 
       it 'used_accounts ne prend que les comptes actifs' do
@@ -338,22 +343,22 @@ describe Period do
       it 'report à nouveau renvoie une ComptaLine dont le montant est le résultat et le compte 12'  do
         @p.send(:report_a_nouveau).should be_an_instance_of(ComptaLine)
       end
-        
+
       it 'un exercice a un export_pdf' do
         expect {@p.build_export_pdf}.not_to raise_error
       end
 
     end
   end
-    
+
   context 'avec deux exercices'  do
-      
+
     before(:each) do
       use_test_organism
       @p2 = find_second_period
     end
-      
-      
+
+
     describe 'period_next'  do
       it "p doit répondre p2" do
         @p.next_period.should == @p2
@@ -372,13 +377,13 @@ describe Period do
       end
 
       context 'l exerice est closable' do
-      
+
         before(:each) do
           @l6 = create_in_out_writing(60)
           @l7 = create_in_out_writing(55)
           [@l6, @l7].each {|l| l.lock}
         end
-        
+
         after(:each) do
           Writing.delete_all
           ComptaLine.delete_all
@@ -394,7 +399,7 @@ describe Period do
           # TODO à tester ailleurs (avec next_period probablement)
           @p.previous_period_open?.should be_false
         end
-      
+
         it '1 lignes ont été créées' do
           expect {@p.close}.to change {Writing.count}.by(1)
         end
@@ -425,21 +430,21 @@ describe Period do
       end
 
     end
-    
+
   end
-  
+
   describe 'provisoire?' do
     before(:each) do
       @p = Period.new
       @p.stub(:compta_lines).and_return @r = double(Arel)
       @r.stub(:unlocked).and_return @r
     end
-        
+
     it 'est provisoire si des lignes ne sont pas verrouillées' do
       @r.should_receive(:any?).and_return true
       expect(@p.provisoire?).to be_true
     end
-        
+
     it 'et ne l est pas si toutes les lignes sont verrouillées' do
       @r.should_receive(:any?).and_return false
       expect(@p.provisoire?).to be_false
@@ -447,11 +452,11 @@ describe Period do
   end
 
   describe 'destruction d un exercice' do
-    
+
     before(:each) do
       use_test_organism
     end
-    
+
     it 'la destruction de l exercice entraîne celle des comptes' do
       nb_accounts = Account.count
       nb_period_accounts = @p.accounts.count
@@ -469,7 +474,7 @@ describe Period do
     it 'détruit les écritures' do
       Writing.delete_all
       @w = create_in_out_writing
-      @p.compta_lines.count.should > 0 
+      @p.compta_lines.count.should > 0
       Writing.count.should > 0
       @p.destroy
       Writing.count.should == 0
@@ -477,8 +482,8 @@ describe Period do
     end
 
     describe 'détruit les bank_extract et leurs bank_extract_lines'  do
-       
-      before(:each) do 
+
+      before(:each) do
         BankExtractLine.delete_all
         @w = create_in_out_writing
         @be =  @ba.bank_extracts.create!(begin_date:@p.start_date,
@@ -499,7 +504,7 @@ describe Period do
       end
 
     end
-  
+
   end
-  
+
 end
