@@ -1,6 +1,7 @@
 # coding: utf-8
 
 module Compta::ListingsHelper
+  include ModalsHelper
 
   def open_sold_ordinalized(date)
     if date == @period.start_date

@@ -1,4 +1,5 @@
 module Compta::AnalyticalBalancesHelper
+  include ModalsHelper
 
   def destination_and_sector_name(dest_name, sector_name)
     if @organism.sectored?

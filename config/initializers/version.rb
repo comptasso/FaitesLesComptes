@@ -105,4 +105,5 @@
 # FLCVERSION = '1.13.2RC' # Correction de l'affichage des totaux pour les Caisses
 # FLCVERSION = '1.13.3RC' # Corr. affichage stats par activité si tte écritures affectée
 # FLCVERSION = '1.13.4RC' # Passage à Ruby 2.2.2
-FLCVERSION = '1.14.0RC' # Passage à une version sans schéma
+# FLCVERSION = '1.14.0RC' # Passage à une version sans schéma
+FLCVERSION = '1.14.1RC' # Adherent 0.3.4 et include ModalsForm dans 2 Helpers
