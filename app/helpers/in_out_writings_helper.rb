@@ -181,20 +181,22 @@ module InOutWritingsHelper
   # noir et blanc indiquant qu'on ne sait pas retrouver le membre à l'origine
   # du paiement.
   # Mais pour permettre de supprimer ce paiement, on rajoute une action de
-  # suppression (La logique d'une édition ne parait pas vraiment pertinent)
+  # suppression (La logique d'une édition ne parait pas vraiment pertinent).
+  #
+  # Rappel : frontline.id fait référence à l'id de la Writing
   def frontline_actions_for_adherent_writing(frontline)
     if frontline.member_id
-      icon_to('detail.png',
+      action = icon_to('detail.png',
         adherent.member_payment_path(frontline.member_id,
           frontline.adherent_payment_id ),
         title:'Paiment à l\'origine de cette écriture')
     else
-      image_tag('icones/nb_detail.png',
-        title:'L\'adhérent semble avoir été effacé - Impossible d\'afficher l\'origine de ce paiement')+
-        icon_to('supprimer.png', book_in_out_writing_path(frontline.book_id, frontline.id),
+      action = image_tag('icones/nb_detail.png',
+        title:'L\'adhérent semble avoir été effacé - Impossible d\'afficher l\'origine de ce paiement')
+      action +=  icon_to('supprimer.png', book_in_out_writing_path(frontline.book_id, frontline.id),
                 data:{confirm: 'Etes vous sûr?'}, method: :delete) if frontline.editable?
-
     end
+    action
   end
 
 

@@ -167,8 +167,8 @@ describe InOutWritingsController do
 
   describe 'POST delete' do
     before(:each) do
-      @w = mock_model(InOutWriting, date:Date.today)
-      @b.stub_chain(:in_out_writings, :find).and_return(@w)
+      @w = mock_model(InOutWriting, date:Date.today, piece_number:145)
+      @b.stub_chain(:writings, :find).and_return(@w)
       @my = MonthYear.from_date(Date.today)
     end
 
@@ -181,7 +181,7 @@ describe InOutWritingsController do
       @w.should_receive(:destroy).and_return true
       get :destroy,{:outcome_book_id=>@b.id, :id=>@w.id,  :method=>:delete}, session_attributes
       response.should redirect_to(book_in_out_writings_path(:book_id=>@b.id, :mois=>@my.month, :an=>@my.year) )
-      flash[:notice].should == 'L\'écriture a été détruite'
+      flash[:notice].should == 'L\'écriture 145 a été détruite'
     end
 
     it 'cas où la suppression échoue' do

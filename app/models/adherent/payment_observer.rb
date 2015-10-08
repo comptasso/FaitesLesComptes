@@ -54,6 +54,10 @@ module Adherent
         record.errors.add(:base, :writing_uneditable)
         return false
       end
+      cl = w.compta_lines.where('nature_id IS NOT NULL').first
+      # puts "COMPTA_LINE : #{cl.inspect}"
+      sl = w.support_line
+      # puts " SUPPORT LINE : #{sl.inspect}"
 
       retour =  true
       set_variables(record)
@@ -66,10 +70,8 @@ module Adherent
       retour = retour && w.update_attributes(new_values)  # passe retour à false si update_attributes échoue
       # puts w.inspect
       Rails.logger.debug w.errors.messages unless retour
-      cl = w.compta_lines.first
       retour = retour && cl.update_attributes(compta_line_attributes(record))
       Rails.logger.debug cl.errors.messages unless retour
-      sl = w.support_line
       retour = retour && sl.update_attributes(counter_line_attributes(record))
       Rails.logger.debug sl.errors.messages unless retour
       copy_writing_errors(w, record) unless retour
@@ -128,6 +130,7 @@ module Adherent
       # si c'est en Espèces, c'est la caisse, si c'est un chèque, c'est le
       # compte de remise de chèque, autrement, c'est la banque
       account_id =  case record.mode
+
       when 'Espèces' then bridge_values[:cash_account_id]
       when 'Chèque' then period.rem_check_account.id
       else
