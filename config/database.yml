@@ -30,6 +30,6 @@ test:
   encoding: unicode
   database: pgtestflc
   pool: 5
-  username: jean-claude
+  username: jcl
   password:
   timeout: 5000
