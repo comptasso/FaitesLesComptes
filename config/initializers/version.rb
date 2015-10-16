@@ -107,4 +107,5 @@
 # FLCVERSION = '1.13.4RC' # Passage à Ruby 2.2.2
 # FLCVERSION = '1.14.0RC' # Passage à une version sans schéma
 # FLCVERSION = '1.14.1RC' # Adherent 0.3.4 et include ModalsForm dans 2 Helpers
- FLCVERSION = '1.14.2RC' # Un paiement sans adhérent peut être supprimé + correction Observer
+# FLCVERSION = '1.14.2RC' # Un paiement sans adhérent peut être supprimé + correction Observer
+FLCVERSION = '1.14.3RC' # Amélioration module Adhérent (rapidité, icone nb_supprimer) 
