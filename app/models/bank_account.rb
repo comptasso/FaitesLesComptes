@@ -58,6 +58,8 @@ class BankAccount < ActiveRecord::Base
   after_update :change_account_title, :if=> lambda {nickname_changed? }
 
   scope :communs, ->{includes(:sector).where('sectors.name = ?', 'Commun').references(:sector)}
+  scope :sectored_and_communs, ->(sid) { includes(:sector).
+      where('sectors.name = ? OR sectors.id = ?', 'Commun', sid).references(:sector)} 
 
   def name
     nickname

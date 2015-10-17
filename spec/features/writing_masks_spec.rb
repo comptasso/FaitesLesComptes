@@ -51,7 +51,7 @@ describe 'création d une écriture à partir d un guide' do
 
   it 'compléter le formulaire et valider crée une écriture' do
     select 'Non affecté'
-    select 'Compte courant'
+    select 'Compte courant'  
     expect {click_button('Enregistrer')}.to change {InOutWriting.count}.by(1)
   end
 

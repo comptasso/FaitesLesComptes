@@ -93,6 +93,11 @@ describe BankAccount do
       it 'communs renvoient les comptes bancaires du secteur commun' do
         expect(BankAccount.communs.to_a).to eq([@bc])
       end
+      
+      it 'sectored_and_communs renvoie les comptes des deux secteurs' , wip:true do
+        sid = @o.sectors.first.id
+        expect(BankAccount.sectored_and_communs(sid)).to eq([@ba, @bc])
+      end
     end
 
   end
