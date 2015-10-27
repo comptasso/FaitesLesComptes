@@ -57,14 +57,16 @@ class Sector < ActiveRecord::Base
   # pour l'exercice demandé et ajoute d'éventuels comptes bancaires relevant
   # du secteur Commun s'il en existe
   def list_bank_accounts_with_communs(period)
-    list_bank_accounts(period) + list_common_bank_accounts(period)
+    organism.bank_accounts.order('bank_accounts.id ASC').
+      sectored_and_communs(self.id).collect {|ba| ba.current_account(period)}
+    # list_bank_accounts(period) + list_common_bank_accounts(period)
   end
 
 
   # renvoie les comptes comptables correspondant aux caisses de ce secteur pour l'exercice
   # demandé
   def list_cash_accounts(period)
-    cashes.collect {|ca| ca.current_account(period)}
+    cashes.order('cashes.id ASC').collect {|ca| ca.current_account(period)}
   end
 
 
@@ -112,19 +114,19 @@ hdoc
 
    end
 
- protected
-
-  # renvoie les comptes comptables correspondant aux banques de ce secteur pour l'exercice
-  # demandé
-  def list_bank_accounts(period)
-    bank_accounts.collect {|ba| ba.current_account(period)}
-  end
-
-  # renvoie la liste des comptes bancaire communs
-  def list_common_bank_accounts(period)
-    organism.bank_accounts.communs.collect {|ba| ba.current_account(period)}
-  end
-
+# protected
+#
+#  # renvoie les comptes comptables correspondant aux banques de ce secteur pour l'exercice
+#  # demandé
+#  def list_bank_accounts(period)
+#    bank_accounts.order('bank_accounts.id ASC').collect {|ba| ba.current_account(period)}
+#  end
+#
+#  # renvoie la liste des comptes bancaire communs
+#  def list_common_bank_accounts(period)
+#    organism.bank_accounts.order('bank_accounts.id ASC').communs.collect {|ba| ba.current_account(period)}
+#  end
+#
 
 
 

@@ -93,6 +93,12 @@ describe BankAccount do
       it 'communs renvoient les comptes bancaires du secteur commun' do
         expect(BankAccount.communs.to_a).to eq([@bc])
       end
+      
+      it 'sectored_and_communs renvoie les comptes des deux secteurs' , wip:true do
+        sid = @o.sectors.first.id
+        expect(BankAccount.sectored_and_communs(sid).order('bank_accounts.id ASC')). 
+          to eq(@p.organism.bank_accounts.order('bank_accounts.id ASC'))
+      end
     end
 
   end
@@ -119,22 +125,16 @@ describe BankAccount do
     it 'incrémente les numéros de compte' do
       pending 'A tester dans PlanComptable'
       numb = @ba.accounts.order(:number).last.number
-
-
       @bb.save
-
       @bb.accounts.first.number.should == numb.succ
     end
 
-
-
     it 'changer le nick_name du compte bancaire change le compte du compte comptable' do
-      @ba.nickname = 'Un autre nom'
-      @ba.save
-      @ba.accounts.last.title.should == 'Un autre nom'
+      @bb.save; @bb.reload
+      @bb.nickname = 'Un nom bizarre'
+      @bb.save; @bb.reload
+      @bb.accounts.last.title.should == 'Un nom bizarre'
     end
-
-
 
     context 'avec deux exercices' do
 
