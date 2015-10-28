@@ -8,13 +8,15 @@
   }
   
   
-  #bels_table {
+  table.dataTable#bels_table {
     margin-top: 8px;
+    
     tbody {
       cursor: move;
     }
-    th {padding-left:10;
-      padding-right:10;
+    thead > tr > th {
+      padding-left:10px;
+      padding-right:10px;
       ul {
         padding-left:0px;
         padding-right:0px;
