@@ -109,5 +109,6 @@
 # FLCVERSION = '1.14.1RC' # Adherent 0.3.4 et include ModalsForm dans 2 Helpers
 # FLCVERSION = '1.14.2RC' # Un paiement sans adhérent peut être supprimé + correction Observer
 # FLCVERSION = '1.14.3RC' # Amélioration module Adhérent (rapidité, icone nb_supprimer) 
-FLCVERSION = '1.14.4RC' # Les banques et caisses sont ordonnées par leur id
+# FLCVERSION = '1.14.4RC' # Les banques et caisses sont ordonnées par leur id
+FLCVERSION = '1.14.5RC' # Refactorisation des bank_extract_lines et démarrage des écritures à 1
  
