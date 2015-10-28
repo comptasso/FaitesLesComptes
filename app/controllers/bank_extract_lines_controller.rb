@@ -69,21 +69,23 @@ redirection vers la liste des lignes restant à pointer'
   # type_id (ex line_545)
   #
   # params[:at] indique à quelle position insérer la ligne dans la liste
+  # 
+  # TODO : à supprimer ? non utilisé ?
   #
-  def insert
-    id = params[:html_id][/\d+$/].to_s
-    l = ComptaLine.find(id)
-    @bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[l])
-    @bel.position = params[:at].to_i
-    respond_to do |format|
-      if @bel.save
-        @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
-        format.js
-      else
-
-      end
-    end
-  end
+#  def insert
+#    id = params[:html_id][/\d+$/].to_s
+#    l = ComptaLine.find(id)
+#    @bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[l])
+#    @bel.position = params[:at].to_i
+#    respond_to do |format|
+#      if @bel.save
+#        @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
+#        format.js
+#      else
+#
+#      end
+#    end
+#  end
 
 
 
