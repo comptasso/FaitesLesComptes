@@ -1,4 +1,5 @@
 module ModallinesHelper
+  include LtpsHelper # définit ltps_actions utilisé dans le partial rendu
 
   # le but est d'obtenir ici les natures regroupées par livre d'appartenance
   # en mettant un data_id au label de regroupement.
