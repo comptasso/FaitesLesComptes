@@ -4,6 +4,9 @@
 # qui est inclus dans ModallinesHelper et dans BankExtractLinesHelper
 # Ce pourquoi il a fallu en faire un module spécifique
 module LtpsHelper
+  include InOutWritingsHelper # définit actions_for_editable 
+  # et actions_for_not_editable
+  
   # les actions pour line_to_point
   def ltps_actions(ltp, editable=true)
     # on sait déja que la ligne n'est pas pointée, donc ce qui doit encore

@@ -4,7 +4,6 @@ require 'in_out_writings_helper'
 module BankExtractLinesHelper
   include ModalsHelper
   include ModallinesHelper
-  include InOutWritingsHelper
   include LtpsHelper # définit les ltps_actions
   # ces actions ont été mises dans un module car on en a besoin également
   # pour l'action create de modallines_controller.
