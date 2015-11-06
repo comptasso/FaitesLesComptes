@@ -126,6 +126,7 @@ class InOutWritingsController < ApplicationController
             notice:"Ecriture modifiée pour la pièce #{@in_out_writing.piece_number}" }
         format.json { head :ok }
       else
+        fill_natures
         format.html { render action: "edit" }
         format.json { render json: @line.errors, status: :unprocessable_entity }
       end
