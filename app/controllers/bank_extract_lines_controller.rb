@@ -47,17 +47,17 @@ redirection vers la liste des lignes restant à pointer'
   #
   def enregistrer
     # on efface toutes les bank_extract_lines de cet extrait avant de les reconstruire
-    @bank_extract.bank_extract_lines.each {|bel| bel.destroy}
+    @bank_extract.bank_extract_lines.delete_all
     @ok = true
     if params[:lines]
       params[:lines].each do |key, clparam|
         cl = @organism.compta_lines.find_by_id(clparam)
         if cl
-          bel = @bank_extract.bank_extract_lines.new(:compta_line_id=>cl.id)
-          bel.position = key
-          @ok = false unless bel.save
+          @bank_extract.bank_extract_lines.
+            new(:compta_line_id=>cl.id, :position=>key)
         end
       end
+      @ok = false unless @bank_extract.save
     end
 
   end
@@ -69,21 +69,23 @@ redirection vers la liste des lignes restant à pointer'
   # type_id (ex line_545)
   #
   # params[:at] indique à quelle position insérer la ligne dans la liste
+  # 
+  # TODO : à supprimer ? non utilisé ?
   #
-  def insert
-    id = params[:html_id][/\d+$/].to_s
-    l = ComptaLine.find(id)
-    @bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[l])
-    @bel.position = params[:at].to_i
-    respond_to do |format|
-      if @bel.save
-        @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
-        format.js
-      else
-
-      end
-    end
-  end
+#  def insert
+#    id = params[:html_id][/\d+$/].to_s
+#    l = ComptaLine.find(id)
+#    @bel = @bank_extract.bank_extract_lines.new(:compta_lines=>[l])
+#    @bel.position = params[:at].to_i
+#    respond_to do |format|
+#      if @bel.save
+#        @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
+#        format.js
+#      else
+#
+#      end
+#    end
+#  end
 
 
 
@@ -96,21 +98,21 @@ redirection vers la liste des lignes restant à pointer'
   #   This was value in the indexing cell of the row that is moved.
   #  - toPosition : new position where row is dropped. This value will
   #  be placed in the indexing column of the row.
-  def reorder
-    @bank_extract_line = BankExtractLine.find(params[:id])
-    from_position = params[:fromPosition].to_i
-    to_position = params[:toPosition].to_i
-    if from_position > to_position
-      # on remonte vers le haut de la liste
-      (from_position - to_position).times { @bank_extract_line.move_higher }
-    else
-      (to_position - from_position).times { @bank_extract_line.move_lower }
-    end
-    @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
-    render :format=>:js
-  rescue
-    head :bad_request
-  end
+#  def reorder
+#    @bank_extract_line = BankExtractLine.find(params[:id])
+#    from_position = params[:fromPosition].to_i
+#    to_position = params[:toPosition].to_i
+#    if from_position > to_position
+#      # on remonte vers le haut de la liste
+#      (from_position - to_position).times { @bank_extract_line.move_higher }
+#    else
+#      (to_position - from_position).times { @bank_extract_line.move_lower }
+#    end
+#    @bank_extract_lines = @bank_extract.bank_extract_lines.order(:position)
+#    render :format=>:js
+#  rescue
+#    head :bad_request
+#  end
 
 
 

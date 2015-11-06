@@ -5,25 +5,39 @@
   
   #ltps_table {
     margin-top: 8px;
-      }
+  }
   
-
-  #bels_table {
+  
+  table.dataTable#bels_table {
     margin-top: 8px;
+    
     tbody {
       cursor: move;
     }
+    thead > tr > th {
+      padding-left:10px;
+      padding-right:10px;
+      ul {
+        padding-left:0px;
+        padding-right:0px;
+      }
+      li.numeric {
+        padding-left:0px;
+        padding-right:0px;
+      }
+      
+    }
     
   }
-
-
+  
+  
   .inner-champ ul {
     list-style: inside none;
     font-weight: bold;
   }
   
   .row_detail {
-
+    
     font-style: italic;
     td {
       font-size: 10px;
@@ -32,7 +46,7 @@
   .toggle-detail {
     cursor: pointer;
   }
-
+  
   tfoot{
     font-weight: bold;
     .droite {
@@ -43,5 +57,5 @@
   .dataTables_scrollHeadInner table {
     margin-bottom: 0px;
   }
-
+  
 }

@@ -58,9 +58,12 @@ describe BankExtractLine do
   describe 'un extrait bancaire avec les différents éléments' do
 
     before(:each) do
-      @be.bank_extract_lines.new(:compta_line_id=>@d7.support_line.id)
-      @be.bank_extract_lines.new(:compta_line_id=>@d29.support_line.id)
-      @be.bank_extract_lines.new(:compta_line_id=>@cd.debit_line.id)
+      @be.bank_extract_lines.
+        new(:compta_line_id=>@d7.support_line.id, position:1)
+      @be.bank_extract_lines.
+        new(:compta_line_id=>@d29.support_line.id, position:2)
+      @be.bank_extract_lines.
+        new(:compta_line_id=>@cd.debit_line.id, position:3)
       puts @be.errors.messages unless @be.valid?
 
       @be.save!
@@ -94,27 +97,7 @@ describe BankExtractLine do
 
 
 
-    describe 'testing move_higher and move_lower' do
-
-      before(:each) do
-        @bel7, @bel29, @bel102 = *@be.bank_extract_lines.to_a
-      end
-
-      it 'test du splat' do
-        @be.bank_extract_lines.order('position').to_a.should  == [@bel7, @bel29, @bel102]
-      end
-
-      it '@bel7 is in first position' do
-        @bel7.position.should == 1
-      end
-
-      it 'move lower' do
-        @bel7.move_lower
-        @be.bank_extract_lines.order('position').to_a.should  == [@bel29, @bel7, @bel102]
-      end
-
-
-    end
+    
 
 
   end

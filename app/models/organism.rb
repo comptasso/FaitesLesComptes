@@ -167,7 +167,7 @@ class Organism < ActiveRecord::Base
    # Donne le prochain numéro de pièce disponibles pour une écriture
   def next_piece_number
     mpn = writings.maximum(:piece_number)
-    mpn ||= 1
+    mpn ||= 0
     mpn.next
   end
 

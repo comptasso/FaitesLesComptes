@@ -23,7 +23,7 @@
         - @lines_to_point.each_line do |ltp|
           %tr{'class'=>'ltp', 'id'=>"#{ltp.id}" }
             %td= l ltp.date
-            %td= ltp.id
+            %td= ltp.piece_number
             %td= ltp.ref
             %td= ltp.narration
             %td.numeric.debit= debit_credit ltp.credit

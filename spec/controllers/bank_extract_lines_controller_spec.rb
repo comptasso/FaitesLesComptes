@@ -1,6 +1,7 @@
 # coding: utf-8
 
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
+require 'support/spec_controller_helper'
 
 RSpec.configure do |c|
   # c.filter = {wip:true} 
@@ -70,9 +71,8 @@ describe BankExtractLinesController do
      
     it 'récupère d abord toutes les bank_extract_lines du bank_extract et les efface' do
       be.should_receive(:bank_extract_lines).
-        and_return([@bel1 = double(BankExtractLine), @bel2 = double(BankExtractLine)])
-      @bel1.should_receive(:destroy)
-      @bel2.should_receive(:destroy)
+        and_return(@ar = double(Arel))
+      @ar.should_receive(:delete_all)
       post :enregistrer, {"bank_extract_id"=>be.to_param, :format=>:js}, valid_session
     end
      
@@ -80,19 +80,18 @@ describe BankExtractLinesController do
       
       before(:each) do
         be.stub(:bank_extract_lines).and_return(@ar = double(Arel))
-        @ar.stub(:each).and_return nil # on a déjà testé la destruction des bank_extract_lines
-        @ar.stub(:new).and_return(mock_model(BankExtractLine, 'position='=>true, :save=>true).as_new_record)
+        @ar.stub(:delete_all).and_return nil # on a déjà testé la destruction des bank_extract_lines
+        @ar.stub(:new).and_return(mock_model(BankExtractLine, 'position='=>true).as_new_record)
+        be.stub(:save).and_return true
       end
            
       it 'assigne le bank_extract' do
-        
         @o.stub_chain(:compta_lines, :find_by_id).and_return(double(ComptaLine, id:'1'))
         post :enregistrer, valid_params, valid_session
         assigns[:bank_extract].should == be
       end
       
       it 'cherche les 3 compta_lines indiquées par valid_session' do
-        
         @o.stub(:compta_lines).and_return(@ar2 =double(Arel))
         @ar2.should_receive(:find_by_id).with('25').and_return(double(ComptaLine, id:'3'))
         @ar2.should_receive(:find_by_id).with('53').and_return(double(ComptaLine, id:'5'))
@@ -106,28 +105,22 @@ describe BankExtractLinesController do
         @ar2.stub(:find_by_id).with('25').and_return(@cl1 = double(ComptaLine, id:'7'))
         @ar2.stub(:find_by_id).with('53').and_return(@cl2 = double(ComptaLine, id:'8'))
         @ar2.stub(:find_by_id).with('89').and_return(@cl3 = double(ComptaLine, id:'9'))
-        @ar.should_receive(:new).with(:compta_line_id=>@cl1.id).and_return(double(BankExtractLine, 'position='=>true, :save=>true))
-        @ar.should_receive(:new).with(:compta_line_id=>@cl2.id).and_return(double(BankExtractLine, 'position='=>true, :save=>true))
-        @ar.should_receive(:new).with(:compta_line_id=>@cl3.id).and_return(double(BankExtractLine, 'position='=>true, :save=>true))
+        @ar.should_receive(:new).with(:compta_line_id=>@cl1.id, position:"0").
+          and_return(double(BankExtractLine, 'position='=>true, :save=>true))
+        @ar.should_receive(:new).with(:compta_line_id=>@cl2.id, position:"1").
+          and_return(double(BankExtractLine, 'position='=>true, :save=>true))
+        @ar.should_receive(:new).with(:compta_line_id=>@cl3.id, position:"2").
+          and_return(double(BankExtractLine, 'position='=>true, :save=>true))
         post :enregistrer, valid_params, valid_session
         
       end
       
-      it 'affecte leurs positions' do
-        @o.stub(:compta_lines).and_return(@ar2 =double(Arel))
-        @ar2.stub(:find_by_id).and_return(double(ComptaLine, id:'10'))
-        @ar.stub(:new).and_return(@new_bel = double(BankExtractLine, :save=>true))
-        @new_bel.should_receive('position=').with('0')
-        @new_bel.should_receive('position=').with('1')
-        @new_bel.should_receive('position=').with('2')
-        post :enregistrer, valid_params, valid_session     
-      end 
       
-      it 'et les sauve' do
+      it 'et les sauve en sauvant l extrait' do
         @o.stub(:compta_lines).and_return(@ar2 =double(Arel))
         @ar2.stub(:find_by_id).and_return(double(ComptaLine, id:'11'))
         @ar.stub(:new).and_return(@new_bel = double(BankExtractLine, 'position='=>true))
-        @new_bel.should_receive(:save).exactly(3).times
+        be.should_receive(:save).exactly(1).times
         post :enregistrer, valid_params, valid_session     
       end
       
@@ -139,14 +132,11 @@ describe BankExtractLinesController do
         assigns[:ok].should be_true
       end
       
-      it 'si une bel n est pas sauvée, @ok vaut false' do
+      it 'si le bank_extract n est pas sauvée, @ok vaut false' do
         @o.stub(:compta_lines).and_return(@ar2 =double(Arel))
         @ar2.stub(:find_by_id).and_return(double(ComptaLine, id:'13'))
-        @ar.stub(:new).and_return(
-          double(BankExtractLine, 'position='=>true, :save=>true),
-          double(BankExtractLine, 'position='=>true, :save=>false),
-          double(BankExtractLine, 'position='=>true, :save=>true)
-        )
+        @ar.stub(:new).and_return
+        be.stub(:save).and_return false
         post :enregistrer, valid_params, valid_session    
         assigns[:ok].should be_false
       end
