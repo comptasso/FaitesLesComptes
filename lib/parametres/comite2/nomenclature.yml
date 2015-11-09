@@ -1,0 +1,160 @@
+---
+  :actif:
+    :title: BILAN ACTIF
+    :sens: :actif
+    :rubriks:
+      :TOTAL ACTIF:
+        :IMMOBILISATIONS:
+          :Immobilisations incorporelles:
+            :Logiciels et droits similaires: 205 -2805 
+            :Autres: 20 -280 !205 !2805
+          :Immobilisations corporelles:
+            :Terrains: 211 -2811
+            :Agencements: 212 -2812
+            :Constructions: 213 -2813
+            :Installations techniques, matériel et outillage: 215 -2815
+            :Autres: 218 -2818
+            :Immobilisations en cours: '23' 
+          :Immobilisations financières:
+            :Immobilisations financières: 26 27 -296 -297
+        :ACTIF CIRCULANT:
+          :Stocks et encours:
+            :Marchandises: 37 -397
+          :Créances:
+            :Avances et acomptes versés sur commandes: '409'
+            :Créances usagers et comptes rattachés: 41 !419 -491 -492
+            :Autres: 43D 44D 45D 46D 47D -495 -496
+        :DISPONIBILITES ET AUTRES:
+          :Disponibilités:
+            :Valeurs mobilières de placement: 50 -590
+            :Banques: '51D'
+            :Disponibilités: '53'
+          :Autres actifs:
+            :Charges constatées d'avance: '486'
+            :Charges à répartir sur plusiseurs exercices: '481'
+
+  :passif:
+    :title: BILAN PASSIF
+    :sens: :passif
+    :rubriks:
+      :TOTAL PASSIF:
+        :FONDS PERMANENTS:
+          :Fonds propres non affectés:
+            :Réserve initiale: '106 !1061 !1062'
+            :Résultat de l'exercice: '12 !1201 !1202'
+          :Fonds propres ASC:
+            :Réserves ASC: '1061'
+            :Résultat de l'exercice: '1201'
+            :Subvention d'investissement: '1301'
+          :Fonds propres AEP:  
+            :Réserves fonctionnement: '1062'
+            :Résultat de l'exercice: '1202'
+            :Subventions d'investissement: '102 13 !1301'
+          :Provisions:
+            :Provisions pour risques et charges: '15'
+        :DETTES ENVERS LES TIERS:
+          :Dettes bancaires:
+            :Emprunts et dettes assimilées: '16'
+            :Emprunts et dettes auprès de participants: '17'
+            :Emprunts et dettes auprès des établissements de crédit: 51C
+          :Dettes courantes:
+            :Fournisseurs et comptes rattachés: '40 !409'
+            :Usagers créditeurs: '419'
+            :Personnel et charges sociales: 421 428
+            :Produits constatés d'avance: '487'
+            :Autres: 43C 44C 45C 46C 47C
+
+  :resultatASC:
+    :sector: ASC
+    :title: Compte de résultats ASC
+    :sens: :passif
+    :rubriks:
+      :EXCEDENT (DEFICIT):
+        :RESULTAT D'EXPLOITATION:
+          :Produits d'exploitation:
+            :Ventes de marchandises: '707'
+            :Participation salariés: '706'
+            :Variation stocks production: '713'
+            :Production immobilisée: '72'
+            :Subventions reçues: '74 756'
+            :Autres produits: '75 701 !756'
+            :Reprises sur provisions, amortissements et transferts de charge: '781'
+            :Transferts de charges: '791'
+          :Charges d'exploitation:
+            :Achats de marchandises: '-60 !603 !604'
+            :Variation stocks de marchandises: '603'
+            :Achats prestations sur activités: '604'
+            :Charges externes: '61'
+            :Autres charges externes: '62'
+            :Impôts et taxes: '63'
+            :Salaires et traitements: '64 !645'
+            :Charges sociales: '645'
+            :Dotations aux amortissements et provisions: '681'
+            :Autres charges: '65'
+        
+        :RESULTAT FINANCIER:
+          :Produits financiers:
+            :Produits financiers: '76'
+            :Reprises sur provisions financières: '786'
+          :Charges financières:
+            :Charges financières: '-66'
+            :Dotations aux provisions financières: '686'
+        :RESULTAT EXCEPTIONNEL:
+          :Produits exceptionnels:
+            :Produits exceptionnels: '77'
+            :Reprises sur provisions exceptionnelles: '787'
+            :Report des ressources non utilisées: '789'
+          :Charges exceptionnelles:
+            :Charges exceptionnelles: '-67'
+            :Dotations aux provisions exceptionnelles: '-687'
+            :Engagements à réaliser: '-689'
+            
+        
+
+  :resultatfonc:
+    :sector: Fonctionnement
+    :title: Compte de résultats Fonctionnement
+    :sens: :passif
+    :rubriks:
+      :RESULTAT NET:
+        :RESULTAT D'EXPLOITATION:
+          :Produits d'exploitation:
+            :Subventions: '74 756'
+            :Autres produits: '70 71 72 73 75 !756 78 !786 !787'
+            :Transferts de charges: '79'
+          :Charges d'exploitation:
+            :Achats matières et fourn. non stockables : '606'
+            :Autres achats: '60 !606'
+            :Charges externes: '61'
+            :Autres services extérieurs: '62'
+            :Impôts, taxes et versements assimilés: '63'
+            :Salaires et traitements: '641'
+            :Charges sociales et assimilés: '64 !641'
+            :Dotations aux amortissements et provisions: '68 !686 !687'
+            :Autres charges: '65'
+        :RESULTAT FINANCIER:
+          :Produits financiers:
+            :Produits financiers: '76'
+            :Reprises sur provisions financières: '786'
+          :Charges financières:
+            :Charges financières: '-66'
+            :Dotations aux provisions financières: '686'
+        :RESULTAT EXCEPTIONNEL:
+          :Produits exceptionnels:
+            :Produits exceptionnels: '77'
+            :Reprises sur provisions exceptionnelles: '787'
+          :Charges exceptionnelles:
+            :Charges exceptionnelles: '-67'
+            :Dotations aux provisions exceptionnelles: '-687'
+        :IMPOTS:
+          :IS au taux réduit: '695'
+
+  :benevolat:
+    :title: Bénévolat
+    :sens: :passif
+    :rubriks:
+      :BENEVOLAT:
+        :Produits:
+          :Contributions en nature: 87
+        :Charges:
+          :Charges en nature: 86 

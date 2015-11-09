@@ -1,0 +1,157 @@
+---
+- :name: Bons d'achats
+  :comment: ''
+  :acc: '602'
+  :book: Dépenses ASC
+- :name: Achats restauration, boissons
+  :comment: ''
+  :acc: '602'
+  :book: Dépenses ASC
+- :name: Achats Prestations activités
+  :comment: Par exemple dépenses voyagiste, spectacle de cirque,...
+  :acc: '604'
+  :book: Dépenses ASC
+- :name: Fournitures de bureau
+  :comment: et plus généralement achats non stockés de matières et fournitures
+  :acc: '606'
+  :book: Dépenses fonctionnement
+- :name: Dons et secours
+  :comment: ''
+  :acc: '6238'
+  :book: Dépenses ASC
+- :name: Charges financières
+  :comment: Les intérêts débités par la banque, mais pas les frais bancaire
+  :acc: '6601'
+  :book: Dépenses ASC
+- :name: Charges financières
+  :comment: Les intérêts débités par la banque, mais pas les frais bancaire
+  :acc: '6602'
+  :book: Dépenses fonctionnement
+- :name: Sous traitance
+  :comment: ''
+  :acc: '611'
+  :book: Dépenses fonctionnement
+- :name: Crédit bail
+  :comment: ''
+  :acc: '612'
+  :book: Dépenses fonctionnement
+- :name: Location
+  :comment: ''
+  :acc: '613'
+  :book: Dépenses fonctionnement
+- :name: Charges locatives
+  :comment: ''
+  :acc: '614'
+  :book: Dépenses fonctionnement
+- :name: Entretien réparation
+  :comment: ''
+  :acc: '615'
+  :book: Dépenses fonctionnement
+- :name: Assurances
+  :comment: ''
+  :acc: '616'
+  :book: Dépenses fonctionnement
+- :name: Etudes et recherches
+  :comment: ''
+  :acc: '617'
+  :book: Dépenses fonctionnement
+- :name: Documentation générale
+  :comment: ''
+  :acc: '618'
+  :book: Dépenses fonctionnement
+- :name: Honoraires et frais d'actes
+  :comment: ''
+  :acc: '622'
+  :book: Dépenses fonctionnement
+- :name: Catalogue et imprimés
+  :comment: ''
+  :acc: '6236'
+  :book: Dépenses fonctionnement
+- :name: Déplacements
+  :comment: ''
+  :acc: '625'
+  :book: Dépenses fonctionnement
+- :name: Téléphone, timbres, internet
+  :comment: ''
+  :acc: '626'
+  :book: Dépenses fonctionnement
+- :name: Services bancaires
+  :comment: ''
+  :acc: '627'
+  :book: Dépenses fonctionnement
+- :name: Cotisations adhésions
+  :comment: ''
+  :acc: '6281'
+  :book: Dépenses fonctionnement
+- :name: Frais de formations
+  :comment: ''
+  :acc: '6282'
+  :book: Dépenses fonctionnement
+- :name: Taxe sur les salaires
+  :comment: ''
+  :acc: '631'
+  :book: Dépenses fonctionnement
+- :name: Autres frais et taxes
+  :comment: ''
+  :acc: '633'
+  :book: Dépenses fonctionnement
+- :name: Rémunérations du personnel
+  :comment: ''
+  :acc: '641'
+  :book: Dépenses fonctionnement
+- :name: Charges organismes sociaux
+  :comment: ''
+  :acc: '645'
+  :book: Dépenses fonctionnement
+- :name: Autres charges courantes
+  :comment: ''
+  :acc: '650'
+  :book: Dépenses fonctionnement
+- :name: Charges exceptionnelles
+  :comment: ''
+  :acc: '6701'
+  :book: Dépenses ASC
+- :name: Charges exceptionnelles
+  :comment: ''
+  :acc: '6702'
+  :book: Dépenses fonctionnement
+- :name: Participation des salariés 
+  :comment: ''
+  :acc: '706'
+  :book: Recettes ASC
+- :name: Subventions ASC
+  :comment: ''
+  :acc: '75602'
+  :book: Recettes ASC
+- :name: Subventions fonctionnement
+  :comment: ''
+  :acc: '75601'
+  :book: Recettes fonctionnement
+- :name: Subventions CCE
+  :comment: ''
+  :acc: '743'
+  :book: Recettes ASC
+- :name: Autres subventions
+  :comment: ''
+  :acc: '748'
+  :book: Recettes ASC
+- :name: Produits divers
+  :comment: ''
+  :acc: '758'
+  :book: Recettes fonctionnement
+- :name: Produits financiers
+  :comment: ''
+  :acc: '7601'
+  :book: Recettes ASC
+- :name: Produits financiers
+  :comment: ''
+  :acc: '7602'
+  :book: Recettes fonctionnement
+- :name: Produits exceptionnels
+  :comment: ''
+  :acc: '7701'
+  :book: Recettes ASC
+- :name: Produits exceptionnels
+  :comment: ''
+  :acc: '7702'
+  :book: Recettes fonctionnement

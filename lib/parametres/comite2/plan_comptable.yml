@@ -1,0 +1,254 @@
+no_sector:
+- number: '1060'
+  title: 'reserve initiale'
+- number: '1101'
+  title: Report à nouveau AEP (solde créditeur)
+- number: '1102'
+  title: Report à nouveau ASC (solde créditeur)
+- number: '1301'
+  title: Subvention d'investissement AEP
+- number: '1302'
+  title: Subvention d'investissement ASC
+- number: '151'
+  title: Provisions pour risques et charges
+- number: '160'
+  title: Emprunts et dettes assimilées
+- number: '170'
+  title: Dettes envers participants
+- number: '205'
+  title: Logiciels
+- number: '208'
+  title: Autres immobilisations corporelles
+- number: '211'
+  title: Terrains
+- number: '212'
+  title: Agenct et aménagt terrains
+- number: '213'
+  title: Constructions
+- number: '214'
+  title: Constructions sur sold d'autrui
+- number: '215'
+  title: Installations techniques, matériel et outillage industriel
+- number: '2181'
+  title: Agencements et installations
+- number: '2182'
+  title: Matériel de transport
+- number: '2183'
+  title: Matériel de bureau et informatique
+- number: '2184'
+  title: Mobilier
+- number: '231'
+  title: Immobilisations corporelles en cours
+- number: '232'
+  title: Immobilisations incorporelles en cours
+- number: '237'
+  title: Avances et acomptes sur immo incorp
+- number: '238'
+  title: Avances et acomptes sur immo corporelles
+- number: '261'
+  title: Titres de participation
+- number: '2743'
+  title: Prêts aux salariés
+- number: '2748'
+  title: Autres prêts
+- number: '2751'
+  title: Dépôts et cautionnements versés
+- number: '2805'
+  title: Amortissements des logiciels
+- number: '2808'
+  title: Amortissements des autres immo incorporelles
+- number: '2812'
+  title: Amortissements agenct aménagt terrains
+- number: '2813'
+  title: Amortissements constructions
+- number: '2814'
+  title: Amortissements constructions sur sol d'autrui
+- number: '2815'
+  title: Amortissements install techniques
+- number: '28181'
+  title: Amortissements des agencements et installations
+- number: '28182'
+  title: Amortissements mat. de transport
+- number: '28183'
+  title: Amortissements mat. de bureau et informatique
+- number: '28184'
+  title: Amortissements mobilier
+- number: '29748'
+  title: Dépréciation des autres prêts
+- number: '29743'
+  title: Dépréciation des prêts aux salariés
+- number: '371'
+  title: Stocks d'activités
+- number: '3971'
+  title: Provisions sur stocks d'activités
+- number: '401'
+  title: Fournisseurs et Comptes rattachés
+- number: '404'
+  title: Fournisseur d'immoblisations
+- number: '408'
+  title: Fournisseurs factures non parvenues
+- number: '409'
+  title: Fournisseurs débiteurs
+- number: '411'
+  title: Bénéficiaires
+- number: '419'
+  title: Bénéficiaires créditeurs
+- number: '421'
+  title: Personnel - Rémunérations dues
+- number: '428'
+  title: Personnel - Charges à payer et produits à recevoir
+- number: '431'
+  title: Sécurité sociale
+- number: '437'
+  title: Autres organismes sociaux
+- number: '438'
+  title: Organismes sociaux - charges à payer et produits à recevoir
+- number: '447'
+  title: Autres impôts, taxes et versements assimilés
+- number: '448'
+  title: Etat - charges à payer et produits à recevoir
+- number: '4511'
+  title: CC Direction AEP
+- number: '4512'
+  title: CC Direction ASC
+- number: '4513'
+  title: CC Direction autres prestations
+- number: '4521'
+  title: CC CCE
+- number: '4686'
+  title: Charges à payer
+- number: '4687'
+  title: Produits à recevoir
+- number: '471'
+  title: Comptes transitoires ou d'attente
+- number: '486'
+  title: Charges constatées d'avance
+- number: '487'
+  title: Produits constatés d'avance
+- number: '491'
+  title: Dépréciation des créances Participants
+- number: '495'
+  title: Dépréciation des autres créances
+- number: '503'
+  title: Valeurs mobiliéres de placement
+- number: '590'
+  title: Provisions pour dépréciation des valeurs mobiliéres de placement
+
+ASC:
+- number: '1062'
+  title: Réserves ASC
+- number: '1202'
+  title: Résultat de l'exercice ASC
+- number: '1292'
+  title: Résultat de l'exercice ASC (déficit)
+- number: '607'
+  title: Achats marchandises
+- number: '603'
+  title: Variations des stocks
+- number: '604'
+  title: Achats de prestations pour activités
+- number: '6238'
+  title: Dons et secours
+- number: '6602'
+  title: Charges financiéres ASC
+- number: '6702'
+  title: Charges exceptionnelles ASC
+- number: '706'
+  title: Participation des salariés aux activités
+- number: '75602'
+  title: Subventions ASC
+- number: '7403'
+  title: Autres subventions
+- number: '7602'
+  title: Produits financiers ASC
+- number: '7702'
+  title: Produits exceptionnels ASC
+- number: '78173'
+  title: Reprises sur provisions sur stocks
+- number: '78174'
+  title: Reprises sur provisions sur actifs circulants
+- number: '7912'
+  title: Transferts de charges ASC
+
+Fonctionnement:
+- number: '1061'
+  title: Réserves AEP
+- number: '1201'
+  title: Résultat de l'exercice AEP
+- number: '1291'
+  title: Résultat de l'exercice AEP (déficit)
+- number: '606'
+  title: Achats non stockés matières et fournitures
+- number: '611'
+  title: Sous traitance
+- number: '612'
+  title: Crédit bail
+- number: '613'
+  title: Location
+- number: '614'
+  title: Charges locatives
+- number: '615'
+  title: Entretien réparation
+- number: '616'
+  title: Assurances
+- number: '617'
+  title: Etudes et recherches
+- number: '618'
+  title: Documentation générale
+- number: '622'
+  title: Honoraires et frais d'actes
+- number: '6236'
+  title: Catalogue et imprimés
+- number: '625'
+  title: Voyages, déplacements, missions
+- number: '626'
+  title: Téléphone, télécopie, affranchissement
+- number: '627'
+  title: Services bancaires
+- number: '6281'
+  title: Cotisations adhésions
+- number: '6282'
+  title: Frais de formations
+- number: '631'
+  title: Impôts, taxes sur rémunération
+- number: '633'
+  title: Autres frais et taxes sur rémunérat°
+- number: '641'
+  title: Rémunérations du personnel
+- number: '645'
+  title: Charges de sécurité sociale et de prévoyance
+- number: '650'
+  title: Autres charges de gestion courante
+- number: '657'
+  title: 'Subventions allouées aux ayants droits'
+- number: '6601'
+  title: Charges financières FONC
+- number: '6701'
+  title: Charges exceptionnelles FONC
+- number: '6811'
+  title: Dotations aux amortissements
+- number: '68173'
+  title: Dotations aux provisions pour dép. de stocks
+- number: '68174'
+  title: Dotations aux provisions pour dép. actifs circulants
+- number: '686'
+  title: Dotations aux amortissements et aux provisions - Charges financiéres
+- number: '687'
+  title: Dotations aux amortissements et aux provisions - Charges exceptionnelles
+- number: '695'
+  title: IS au taux réduit
+- number: '75601'
+  title: Subventions fonctionnement reçue de l'employeur
+- number: '758'
+  title: Produits divers de gestion courante
+- number: '7601'
+  title: Produits financiers AEP
+- number: '7701'
+  title: Produits exceptionnels AEP
+- number: '786'
+  title: Reprises sur provisions pour risques (financiers)
+- number: '787'
+  title: Reprises sur provisions (exceptionnel)
+- number: '7911'
+  title: Transferts de charges fonctionnement
+
