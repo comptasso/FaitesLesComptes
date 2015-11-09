@@ -40,6 +40,7 @@ class Admin::NaturesController < Admin::ApplicationController
     @books =  @organism.income_books + @organism.outcome_books
     @nature = @period.natures.new
     @nature.book_id = params[:book_id] || @organism.in_out_books.first.id
+    @account_id = nil
     @book = @nature.book
   end
 
@@ -47,6 +48,7 @@ class Admin::NaturesController < Admin::ApplicationController
   def edit
     @books =  @organism.income_books + @organism.outcome_books
     @nature = @period.natures.find(params[:id])
+    @account_id = @nature.account ? @nature.account.id : nil
     @book = @nature.book
   end
 
