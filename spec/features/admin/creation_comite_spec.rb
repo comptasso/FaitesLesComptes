@@ -61,8 +61,8 @@ describe "creation d un comité" do
           expect(@p).to be_an_instance_of(Period)
         end
 
-        it 'et 39 natures' do
-          expect(@p.natures.count).to eq(39)
+        it 'et 38 natures' do
+          expect(@p.natures.count).to eq(38)
         end
 
         it 'la nomenclature est ok' do

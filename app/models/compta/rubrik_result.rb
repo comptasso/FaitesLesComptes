@@ -12,10 +12,10 @@ module Compta
 
     # les valeurs d'un RubrikResult sont calculés à partir du compte 12
     # et du solde des comptes 6 et 7. Ce dernier est donné par period.resultat
-    def set_value 
+    def set_value
       Rails.logger.warn "RubrikResult appelé par l'organisme #{period.organism.title} sans compte de résultats " unless account
       super
-      if @account && @account.sector_id 
+      if @account && @account.sector_id
         @brut += resultat_sectorise
       elsif @account && @account.number == '12'
         @brut += resultat_non_sectorise
@@ -27,29 +27,32 @@ module Compta
     end
 
 
-    def previous_net(unused_period=nil) 
-      return 0.0 unless period.previous_period? 
+    def previous_net(unused_period=nil)
+      return 0.0 unless period.previous_period?
       return 0.0 unless acc = previous_account # défini dans RubrikLine
-      cr = Compta::RubrikResult.new(period.previous_period, 'passif', acc.number)  
+      cr = Compta::RubrikResult.new(period.previous_period, 'passif', acc.number)
       cr.brut
     end
-    
-       
+
     # calcul de la valeur brute
     def resultat_sectorise
       period.resultat(@account.sector_id)
-    end 
-    
+    end
+
     def total_resultat_sectorise
       sacs = period.accounts.where('number LIKE ? AND sector_id IS NOT NULL', '12%')
+      # pour éviter de prendre en compte 2 fois le résultat lorsqu'il y a 2
+      # comptes de résultats rattachés au même secteur (1201 et 1291 par exemple)
+      # ce qui est normalement le cas pour gérer les résultats positifs et
+      # négatifs
+      sacs.to_a.uniq! {|i| i.sector_id}
       sacs.inject(0) { |sum, acc| sum + period.resultat(acc.sector_id)}
     end
-    
+
     def resultat_non_sectorise
       period.resultat - total_resultat_sectorise
     end
-    
-    
+
   end
 
 end

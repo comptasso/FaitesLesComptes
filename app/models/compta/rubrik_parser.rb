@@ -31,16 +31,16 @@ module Compta
   # [@col2_nums] pour les comptes qui doivent s'inscrire en deuxième colonne d'un document (amortissement ou provision à l'actif d'un bilan)
   # [@credit_nums] pour les comptes qui ne sont retenus que lorsqu'ils sont créditeurs
   # [@debit_nums] pour les comptes qui ne sont retenus que lorsqu'ils sont débiteurs
-  # 
-  # 
+  #
+  #
   # === #list
   # #list renvoie la liste des numéros trouvés sous la forme d'un hash de deux éléments
   # :num qui donne le numéro et :option qui indique si le montant est dans la colonne
   # amortissement ou à prendre en négatif. Une option nil indique qu'il n'y a rien de spécial.
-  # 
-  # #rubrik_lines renvoie la collection de Compta::RubrikLine correspondante. Lorsque le 
+  #
+  # #rubrik_lines renvoie la collection de Compta::RubrikLine correspondante. Lorsque le
   # compte est RESULT_ACCOUNT, la classe retournée est un RubrikResult, descendant de RubrikLine.
-  # Ceci permet de surcharger les méthodes donnant les valeurs à afficher pour inclure le 
+  # Ceci permet de surcharger les méthodes donnant les valeurs à afficher pour inclure le
   # résultat de l'exercice.
   #
   class RubrikParser
@@ -55,7 +55,7 @@ module Compta
     # * deuxième étape, il crée les RubrikLine correspondantes
     # il fait ça pour les comptes des deux exercices (celui demandé et
     # précédent s'il existe).
-    # 
+    #
     # Un argument sector permet de filtrer les comptes selon le secteur choisi.
     # Typiquement pour les comités d'entreprises, ASC et Fonctionnement.
     #
@@ -72,15 +72,14 @@ module Compta
       @col2_nums = []
       @debit_nums = []
       @credit_nums = []
-      
+
       set_numbers # déclanche le parsing
       set_lines # construit et réordonne les numéros trouvés
-      
+
     end
-    
+
     # construit et renvoie la série des rubrik_lines
     def rubrik_lines
-      
       @list.map do |l|
         if l[:num] =~ RESULT_ACCOUNT
           Compta::RubrikResult.new(@period, @sens, l[:num], l[:option])
@@ -89,7 +88,7 @@ module Compta
         end
       end
     end
-    
+
     # renvoie la liste des numéros de compte qui ont été retenus
     # cela est utilisé dans nomenclature pour vérifier que tous les comptes sont repris
     def list_numbers
@@ -98,7 +97,7 @@ module Compta
 
     protected
 
-    # appelle parse_numbers pour chacun des éléments de la liste fournie 
+    # appelle parse_numbers pour chacun des éléments de la liste fournie
     # en argument de l'instance de RubrikLine
     def set_numbers
       @numeros.each {|num| parse_num(num)}
@@ -135,7 +134,7 @@ module Compta
       @list.sort!{|a,b| a[:num] <=> b[:num]}
     end
 
-    
+
     # prend un élément de la liste et selon sa constitution appelle la méthode
     # qui permet de l'ajouter à l'une des variables d'instance de la classe
     def parse_num(num)
@@ -180,18 +179,18 @@ module Compta
       @credit_nums += numbers.select {|n| n =~ /^#{num}\d*/}
     end
 
-    # ajoute les numéros à la liste des numéros à logique de crédit
+    # ajoute les numéros à la liste des numéros à logique de debit
     # mais avant les retire de la liste générale au cas où ils y seraient
     def add_debit_numbers(num)
       @select_nums.reject! {|n| n =~ /^#{num}\d*/}
       @debit_nums += numbers.select {|n| n =~ /^#{num}\d*/}
     end
-    
+
     # Donne tous les numéros de comptes existant pour les deux exercice
     # celui demandé et le précédent.
     def numbers
       @numbers ||= @period.two_period_account_numbers(@sector)
     end
-    
+
   end
 end

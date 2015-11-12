@@ -116,7 +116,9 @@ class Folio < ActiveRecord::Base
 
   # renvoie la list des numéros avec leurs options (sens
   def all_numbers_with_option(period)
-    all_instructions.map {|accounts| Compta::RubrikParser.new(period, :actif, accounts, sector).list}.flatten
+    all_instructions.map do |accounts|
+      Compta::RubrikParser.new(period, :actif, accounts, sector).list
+    end.flatten
   end
 
   # surcharge de title pour gérer les CE qui affichent en subtitle leur secteur

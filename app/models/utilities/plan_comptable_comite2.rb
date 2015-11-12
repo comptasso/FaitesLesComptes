@@ -6,8 +6,8 @@ class Utilities::PlanComptableComite2 < Utilities::PlanComptable
   def initialize(period)
     @status = 'comite2'
     @period = period
-    @asc_id = Sector.where('name LIKE ?', 'ASC').first.id
-    @fonc_id = Sector.where('name LIKE ?', 'AEP').first.id
+    @asc_id = period.organism.sectors.where('name LIKE ?', 'ASC').first.id
+    @fonc_id = period.organism.sectors.where('name LIKE ?', 'AEP').first.id
   end
 
   # crée des comptes à partir d'un fichier source

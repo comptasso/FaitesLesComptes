@@ -33,7 +33,7 @@ describe Utilities::Filler::Organism do
 
       it {subject.count.should == 2}
       it {subject.order(:title).first.sector.name.should == 'ASC'}
-      it {subject.order(:title).last.sector.name.should == 'Fonctionnement'}
+      it {subject.order(:title).last.sector.name.should == 'AEP'}
 
     end
 
