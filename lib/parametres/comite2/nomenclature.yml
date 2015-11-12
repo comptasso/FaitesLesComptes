@@ -6,15 +6,15 @@
       :TOTAL ACTIF:
         :IMMOBILISATIONS:
           :Immobilisations incorporelles:
-            :Logiciels et droits similaires: 205 -2805 
-            :Autres: 20 -280 !205 !2805
+            :Logiciels et droits similaires: '205 -2805'
+            :Autres: '20 -280 !205 !2805'
           :Immobilisations corporelles:
-            :Terrains: 211 -2811
+            :Terrains: '211 -2811'
             :Agencements: 212 -2812
             :Constructions: 213 -2813
             :Installations techniques, matériel et outillage: 215 -2815
             :Autres: 218 -2818
-            :Immobilisations en cours: '23' 
+            :Immobilisations en cours: '23'
           :Immobilisations financières:
             :Immobilisations financières: 26 27 -296 -297
         :ACTIF CIRCULANT:
@@ -46,7 +46,7 @@
             :Réserves ASC: '1061'
             :Résultat de l'exercice: '1201'
             :Subvention d'investissement: '1301'
-          :Fonds propres AEP:  
+          :Fonds propres AEP:
             :Réserves fonctionnement: '1062'
             :Résultat de l'exercice: '1202'
             :Subventions d'investissement: '102 13 !1301'
@@ -91,7 +91,7 @@
             :Charges sociales: '645'
             :Dotations aux amortissements et provisions: '681'
             :Autres charges: '65'
-        
+
         :RESULTAT FINANCIER:
           :Produits financiers:
             :Produits financiers: '76'
@@ -108,11 +108,11 @@
             :Charges exceptionnelles: '-67'
             :Dotations aux provisions exceptionnelles: '-687'
             :Engagements à réaliser: '-689'
-            
-        
+
+
 
   :resultatfonc:
-    :sector: Fonctionnement
+    :sector: AEP
     :title: Compte de résultats Fonctionnement
     :sens: :passif
     :rubriks:
@@ -157,4 +157,4 @@
         :Produits:
           :Contributions en nature: 87
         :Charges:
-          :Charges en nature: 86 
+          :Charges en nature: 86

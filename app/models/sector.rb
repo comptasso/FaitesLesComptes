@@ -40,7 +40,7 @@ class Sector < ActiveRecord::Base
   has_many :accounts # rajouté lors de la sectorisation des comptes
 
   validates :organism_id, presence:true
-  validates :name, inclusion:{in:%w(Global Fonctionnement ASC Commun)}
+  validates :name, inclusion:{in:%w(Global Fonctionnement ASC AEP Commun)}
 
   # permet d'ajouter les livres de ce secteur et lui même dans la collection des graphes
   def paves

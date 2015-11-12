@@ -290,7 +290,7 @@ class Organism < ActiveRecord::Base
   end
 
   def status_class
-    status == 'Comité d\'entreprise' ? 'Comite' : status
+    status == 'Comité d\'entreprise' ? 'Comite2' : status
   end
 
   # méthode permettant de remettre les folios et les rubriques

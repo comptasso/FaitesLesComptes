@@ -44,7 +44,9 @@ module Jobs
     def plan_comptable
       # TODO vraiment pas terrible de voir que Period doit solliciter organism.send(:status_class)
       statut = @period.organism.send(:status_class)
-      if statut == 'Comite'
+      if statut == 'Comite2'
+        Utilities::PlanComptableComite2.new(@period)
+      elsif statut == 'Comite'
         Utilities::PlanComptableComite.new(@period)
       else
         Utilities::PlanComptable.new(@period, statut)

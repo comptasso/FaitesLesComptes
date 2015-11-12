@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
-#    c.filter = {wip:true}
+ #  c.filter = {wip:true}
 end
 
 describe Period do
@@ -18,7 +18,59 @@ describe Period do
     create_only_tenant
   end
 
-  describe 'validations', wip:true do
+  describe 'exercice d un comite2' do
+
+    before(:each) do
+      @o2 = Organism.new(title:'Comite deux', status:'Comité d\'entreprise')
+      puts @o2.errors.messages unless @o2.valid?
+      @o2.save!
+    end
+
+    after(:each) {@o2.destroy if @o2.id}
+
+    it 'on peut créer un exercice' do
+      p =  @o2.periods.new(start_date:Date.today.beginning_of_year,
+                      close_date:Date.today.end_of_year)
+      p.save!
+    end
+
+    it 'et remplir les données de cet exercice' do
+      p =  @o2.periods.create!(start_date:Date.today.beginning_of_year,
+                      close_date:Date.today.end_of_year)
+      p.create_datas
+
+    end
+
+    it 'il y a 128 comptes + 5 financiers' do
+      # le fichier comprend 127 comptes mais il s'y rajoute
+      # un compte 511 pour les chèques à l'encaissement
+      # et 2 comptes de banques (AEP et ASC) et 2 comptes
+      # de caisse (AEP et ASC)
+      p =  @o2.periods.create!(start_date:Date.today.beginning_of_year,
+                      close_date:Date.today.end_of_year)
+      p.create_datas
+      # finacs =  p.accounts.where('number LIKE ?', '5%')
+      # finacs.each {|a| puts a.inspect }
+      # puts "Nombre de comptes financiers #{finacs.count} "
+      expect(p.accounts(true).count).to eq(133)
+    end
+
+    it 'et 39 natures toutes reliées à des comptes', wip:true do
+      p =  @o2.periods.create!(start_date:Date.today.beginning_of_year,
+                      close_date:Date.today.end_of_year)
+      p.create_datas
+      expect(p.natures.count).to eq(38)
+      p.natures.each do |n|
+        a = n.account
+        puts n.name unless a
+        expect(a).not_to be_nil
+      end
+
+    end
+
+  end
+
+  describe 'validations' do
 
     before(:each) do
       @org = mock_model(Organism)
@@ -216,8 +268,6 @@ describe Period do
         @p.errors[:close].should == [@nat_error]
       end
 
-
-
       it 'un exercice déja fermé ne peut être fermé' do
         @p.should_receive(:open).and_return(false)
         @p.closable?
@@ -263,19 +313,20 @@ describe Period do
       @p2 = find_second_period
     end
 
-    it 'report_accounts retourne 3 comptes' do
-      expect(@p2.report_accounts.count).to eq 3
+    it 'report_accounts retourne 5 comptes', wip:true do
+      racs = @p2.report_accounts
+      expect(racs.count).to eq 5
     end
 
-    it 'report_account ne retourne que le compte 12' do
-      expect(@p.report_account.number).to eq '12'
+    it 'report_account ne retourne que le compte 12', wip:true do
+      expect(@p2.report_account.number).to eq '12'
     end
 
     context 'avec des écritures de recettes dans chacun des secteurs' do
 
       before(:each) do
         @sasc = Sector.where('name = ?', 'ASC').first
-        @sfonc = Sector.where('name = ?', 'Fonctionnement').first
+        @sfonc = Sector.where('name = ?', 'AEP').first
         @sglob = Sector.where('name = ?', 'Commun').first
 
         @basc = @sasc.income_book
@@ -288,6 +339,7 @@ describe Period do
         @nfonc = @bfonc.natures.first
 
         w1 = create_writing(@basc, nature_id:@nasc.id, account_id:@accasc.id)
+        # donc avec le montant par défaut de 33,33 €
         w2 = create_writing(@bfonc, nature_id:@nfonc.id, account_id:@accfonc.id, montant:66)
 
         [w1, w2].each {|l| l.lock}
@@ -295,6 +347,8 @@ describe Period do
 
       it 'calcul du résultat' do
         cr = Compta::RubrikResult.new(@p, 'passif', '1201')
+        expect(cr.brut).to eq(-66)
+        cr = Compta::RubrikResult.new(@p, 'passif', '1202')
         expect(cr.brut).to eq(-33.33)
       end
 
@@ -313,8 +367,8 @@ describe Period do
         @p.close
         expect(@p.open).to be_false
         # @p2.compta_lines.find_each { |cl| puts cl.inspect}
-        @p2.accounts.where('number = ?', '1201').first.sold_at(@p2.close_date).should == -33.33
-        @p2.accounts.where('number = ?', '1202').first.sold_at(@p2.close_date).should == -66
+        @p2.accounts.where('number = ?', '1201').first.sold_at(@p2.close_date).should == -66
+        @p2.accounts.where('number = ?', '1202').first.sold_at(@p2.close_date).should == -33.33
         @p2.accounts.where('number = ?', '12').first.sold_at(@p2.close_date).should == 0.0
 
       end

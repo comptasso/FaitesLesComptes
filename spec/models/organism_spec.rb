@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 RSpec.configure do |c|
   #  c.filter = {:js=> true }
-  # c.filter = {:wip=> true }
+  #  c.filter = {:wip=> true }
   #  c.exclusion_filter = {:js=> true }
 end
 
@@ -16,6 +16,20 @@ describe Organism do
     {:title =>'Test ASSO',
      :status=>'Association'
     }
+  end
+
+  describe 'comite2', wip:true do
+
+    after(:each) {@o.destroy if @o.id}
+
+    it 'on peut créer un organisme de statut comite2' do
+      @o = Organism.new(title:'Nouveau comité', status:'Comité d\'entreprise')
+      puts @o.errors.messages unless @o.valid?
+      @o.save!
+      expect(@o.send(:status_class)).to eq('Comite2')
+    end
+
+
   end
 
 
@@ -284,7 +298,7 @@ describe Organism do
 
   end
 
-  describe 'destruction d un exercice', wip:true do
+  describe 'destruction d un exercice' do
 
     before(:each) do
       use_test_organism

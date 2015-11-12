@@ -3,8 +3,14 @@ no_sector:
   title: 'reserve initiale'
 - number: '1101'
   title: Report à nouveau AEP (solde créditeur)
+- number: '1191'
+  title: Report à nouveau AEP (solde débiteur)
 - number: '1102'
   title: Report à nouveau ASC (solde créditeur)
+- number: '1192'
+  title: Report à nouveau ASC (solde débiteur)
+- number: '12'
+  title: Résultat
 - number: '1301'
   title: Subvention d'investissement AEP
 - number: '1302'
@@ -95,6 +101,8 @@ no_sector:
   title: Bénéficiaires créditeurs
 - number: '421'
   title: Personnel - Rémunérations dues
+- number: '425'
+  title: Personnel - Avances et acomptes
 - number: '428'
   title: Personnel - Charges à payer et produits à recevoir
 - number: '431'
@@ -170,7 +178,7 @@ ASC:
 - number: '7912'
   title: Transferts de charges ASC
 
-Fonctionnement:
+AEP:
 - number: '1061'
   title: Réserves AEP
 - number: '1201'
@@ -212,7 +220,7 @@ Fonctionnement:
 - number: '631'
   title: Impôts, taxes sur rémunération
 - number: '633'
-  title: Autres frais et taxes sur rémunérat°
+  title: Autres frais et taxes sur rémunérations
 - number: '641'
   title: Rémunérations du personnel
 - number: '645'
