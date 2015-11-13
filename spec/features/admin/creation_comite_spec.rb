@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
-  # c.filter = {wip:true}
+   c.filter = {wip:true}
 end
 
 describe "creation d un comité" do
@@ -65,7 +65,27 @@ describe "creation d un comité" do
           expect(@p.natures.count).to eq(38)
         end
 
-        it 'la nomenclature est ok' do
+        it 'avec 133 comptes' do
+          expect(@p.accounts.count).to eq 133
+        end
+
+        it 'les comptes ont des secteurs de l organisme' do
+          osids = @o.sectors.map(&:id)
+          # puts "Les secteurs #{osids}"
+          sids = @p.accounts.map(&:sector_id).reject {|s| s == nil }.uniq!
+          # puts "Les secteurs des comptes #{sids}"
+          sids.each do |sid|
+            # puts "secteur testé : #{sid}"
+            expect(sid).to be_in(osids)
+          end
+        end
+
+        it 'la nomenclature est cohérente', wip:true do
+          cn =  Compta::Nomenclature.new(@p, @o.nomenclature)
+          expect(cn).to be_valid
+        end
+
+        it 'la nomenclature est ok', wip:true do
           expect(Utilities::NomenclatureChecker).to be_period_coherent(@p)
         end
 

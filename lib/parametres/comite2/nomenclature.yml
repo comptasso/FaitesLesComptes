@@ -12,6 +12,7 @@
             :Terrains: '211 -2811'
             :Agencements: 212 -2812
             :Constructions: 213 -2813
+            :Constructions sur sol d'autrui: 214 -2814
             :Installations techniques, matériel et outillage: 215 -2815
             :Autres: 218 -2818
             :Immobilisations en cours: '23'
@@ -23,7 +24,7 @@
           :Créances:
             :Avances et acomptes versés sur commandes: '409'
             :Créances usagers et comptes rattachés: 41 !419 -491 -492
-            :Autres: 43D 44D 45D 46D 47D -495 -496
+            :Autres: 42D 43D 44D 45D 46D 47D -495 -496
         :DISPONIBILITES ET AUTRES:
           :Disponibilités:
             :Valeurs mobilières de placement: 50 -590
@@ -44,10 +45,12 @@
             :Résultat de l'exercice: '12 !1201 !1202'
           :Fonds propres ASC:
             :Réserves ASC: '1061'
+            :Report à nouveau: '1101 1191'
             :Résultat de l'exercice: '1201'
             :Subvention d'investissement: '1301'
           :Fonds propres AEP:
             :Réserves fonctionnement: '1062'
+            :Report à nouveau: '1102 1192'
             :Résultat de l'exercice: '1202'
             :Subventions d'investissement: '102 13 !1301'
           :Provisions:
@@ -60,7 +63,7 @@
           :Dettes courantes:
             :Fournisseurs et comptes rattachés: '40 !409'
             :Usagers créditeurs: '419'
-            :Personnel et charges sociales: 421 428
+            :Personnel et charges sociales: 42C
             :Produits constatés d'avance: '487'
             :Autres: 43C 44C 45C 46C 47C
 
