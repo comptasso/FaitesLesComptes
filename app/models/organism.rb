@@ -82,12 +82,12 @@ class Organism < ActiveRecord::Base
   has_many :masks, dependent: :destroy
   has_many :subscriptions, :through=>:masks
 
-  # renvoie juste les secteurs ASC et Fonctionnement d'un CE
+  # renvoie juste les secteurs ASC et Fonctionnement (ou AEP) d'un CE
   has_many :ce_sectors,
-    -> {where "sectors.name = 'Fonctionnement' OR sectors.name = 'ASC' "},
+    -> {where "sectors.name = 'Fonctionnement' OR sectors.name = 'ASC' OR sectors.name = 'AEP' "},
     class_name:'Sector'
 
-  before_validation :fill_version
+  before_validation :fill_version, :fill_status
   after_create :fill_children
   # sector, :fill_books, :fill_finances, :fill_destinations, :fill_nomenclature
 
@@ -277,6 +277,10 @@ class Organism < ActiveRecord::Base
     self.version = FLCVERSION
   end
 
+  def fill_status
+    self.status = (status == 'Comité d\'entreprise' ? 'Comite2' : status)
+  end
+
   def fill_children
     filler = "Utilities::Filler::#{status_class}".constantize
     filler.new(self).remplit
@@ -289,6 +293,8 @@ class Organism < ActiveRecord::Base
     end
   end
 
+  # TODO à supprimer une fois que les statuts des comités seront Comite1 ou
+  # Comite2
   def status_class
     status == 'Comité d\'entreprise' ? 'Comite2' : status
   end

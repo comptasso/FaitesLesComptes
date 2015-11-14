@@ -2,11 +2,11 @@
 
 
 # REM_CHECK_ACCOUNT sert à créer retrouver le compte remise chèque
-# 
+#
 # TODO A revoir ???
 # Il a donc has_many :accounts, :as=>accountable pour que accountable fonctionne
 # et to_s qui retourne 'Chèque à l'encaissement'
-# Par ailleurs accountable a été surchargé dans Account pour retourner une instance de RemCheckAccount 
+# Par ailleurs accountable a été surchargé dans Account pour retourner une instance de RemCheckAccount
 # si le type est RemCheckAccount.
 REM_CHECK_ACCOUNT = {number:'511', title:'Chèques à l\'encaissement'}.freeze
 RESULT_ACCOUNT = /^12\d*/
@@ -22,7 +22,12 @@ BANK_PAYMENT_MODES = %w(CB Chèque Prélèvement Virement)
 DIRECT_BANK_PAYMENT_MODES = %w(CB Prélèvement Virement)
 
 
-LIST_STATUS = ['Association', 'Comité d\'entreprise', 'Entreprise' ]
+LIST_STATUS_FOR_FORM = ['Association', 'Comité d\'entreprise', 'Entreprise' ]
+# La version Comite1 s'entend du début (juillet 2013) à novembre 2015, date
+# à partir de laquelle le logicie a été adapté au plan comptable des CE
+# adoptés par l'ANC.
+# Les CE de la version 1 ont eu une modification du champ status en Comite1
+LIST_STATUS = ['Association', 'Comite1', 'Comite2', 'Entreprise' ]
 
 # limites de validation
 NAME_LENGTH_MIN = 3
@@ -42,6 +47,6 @@ RACINE_CASH = '53'
 
 LISTING_SELECT = ['writings.id AS w_id', 'writings.date AS w_date',
       'writings.piece_number AS w_piece_number',
-      'books.abbreviation AS b_abbreviation', 'writings.ref AS w_ref', 
+      'books.abbreviation AS b_abbreviation', 'writings.ref AS w_ref',
       'writings.narration AS w_narration', 'natures.name AS nat_name',
       'destinations.name AS dest_name', 'debit',  'credit']
