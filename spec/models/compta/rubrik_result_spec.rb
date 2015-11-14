@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.configure do |c|
- # c.filter = {:wip=>true}
+  # c.filter = {:wip=>true}
 end
 
 describe Compta::RubrikResult do
@@ -28,17 +28,17 @@ describe Compta::RubrikResult do
     it 'mais rajoute le résultat sectorisé si le compte a un secteur' do
       @ar.stub(:find_by_number).
         and_return(mock_model(Account, :sold_at=>51.25, sector_id:1))
-      @rr = Compta::RubrikResult.new(@p, :passif, '1201')
-      @rr.brut.should == 70.25 # le solde 51.25 + 19 de resultat
-      @rr.amortissement.should == 0
+      rr = Compta::RubrikResult.new(@p, :passif, '1201')
+      rr.brut.should == 51.25 # le solde 51.25
+      rr.amortissement.should == 0
     end
 
     it 'pour un compte 12, donne le résultat' do
       @ar.stub(:find_by_number).
-        and_return(mock_model(Account, :sold_at=>0, sector_id:1))
-      @rr = Compta::RubrikResult.new(@p, :passif, '12')
-      @rr.brut.should == 19 # le resultat
-      @rr.amortissement.should == 0
+        and_return(mock_model(Account, number:'12', :sold_at=>0, sector_id:nil))
+      rr = Compta::RubrikResult.new(@p, :passif, '12')
+      rr.brut.should == 19 # le resultat
+      rr.amortissement.should == 0
     end
 
     it 'ne crée pas d erreur si pas de compte' do
@@ -51,25 +51,30 @@ describe Compta::RubrikResult do
 
     describe 'previous_net' do
 
-      before(:each) do
-        @rr = Compta::RubrikResult.new(@p, :passif, '12')
-      end
-
       it 'previous net renvoie 0 si pas de previous_period' do
         @p.stub('previous_period?').and_return false
-        @rr.previous_net.should == 0
+        rr = Compta::RubrikResult.new(@p, :passif, '12')
+        rr.previous_net.should == 0
       end
 
       it 'demande le résultat si un period précédent', wip:true do
+      @ar.stub(:find_by_number).
+        and_return(mock_model(Account, :sold_at=>1.25, sector_id:1, number:'12'))
         @q = mock_model(Period, 'previous_period_open?'=>false)
+        @p.stub('previous_period_open?').and_return(true)
         @p.stub('previous_period?').and_return(true)
         @p.stub(:previous_period).and_return @q
-        @p.stub(:previous_account).and_return(@pac = double(Account, :sold_at=>5, sector_id:1, number:'12'))
+        @p.stub(:previous_account).
+          and_return(@pac = double(Account, :sold_at=>2.50, sector_id:1, number:'12'))
         @q.stub_chain(:accounts, :find_by_number).and_return(@pac)
-        @q.stub(:resultat).and_return 22
+        @q.stub(:resultat).and_return nil #9.99
+        rr = Compta::RubrikResult.new(@p, :passif, '12')
 
-        #Compta::RubrikResult.new(@q, :passif, '12').brut.should == 27
-        Compta::RubrikResult.new(@p, :passif, '12').previous_net.should == 27
+      # puts "Resultat sectorisé : #{rr.resultat_sectorise}"
+      # puts "Total resultat sectorise : #{rr.total_resultat_sectorise}"
+      # puts "Resultat non sectorisé : #{rr.resultat_non_sectorise}"
+      rr.brut.should == 6.25
+      rr.previous_net.should == 2.5
       end
 
     end
@@ -104,23 +109,23 @@ describe Compta::RubrikResult do
     end
 
     it 'le résultat du compte 1201 est calculé' do
-      cr = Compta::RubrikResult.new(@p, :passif, '1202')
+      cr = Compta::RubrikResult.new(@p, :passif, '1292')
       expect(cr.brut).to eq(-33.33)
     end
 
     it 'le résultat du compte 1202 est calculé' do
-      cr = Compta::RubrikResult.new(@p, :passif, '1201')
+      cr = Compta::RubrikResult.new(@p, :passif, '1291')
       expect(cr.brut).to eq(-55)
     end
 
-    it 'le résultat sectorisé ne doit pas être compté deux fois, même s il y 2 comptes (120x et 129x)', wip:true do
+    it 'le résultat sectorisé ne doit pas être compté deux fois, même s il y 2 comptes (120x et 129x)' do
       cr = Compta::RubrikResult.new(@p, :passif, '12')
 #      puts "premier total sectorisé : #{cr.total_resultat_sectorise}"
       expect(cr.total_resultat_sectorise).to eq(-88.33)
     end
 
 
-    it 'le résultat du compte 12 ne reprend pas les autres', wip:true do
+    it 'le résultat du compte 12 ne reprend pas les autres' do
       cr = Compta::RubrikResult.new(@p, :passif, '12')
     #  puts "previous_net : #{cr.previous_net}"
     #  puts "total sectorisé : #{cr.total_resultat_sectorise}"
@@ -158,9 +163,9 @@ describe Compta::RubrikResult do
     end
 
     it 'les résultats sont corrects' do
-      expect(Compta::RubrikResult.new(@p, :passif, '1202').net).to eq(-33.33)
-      expect(Compta::RubrikResult.new(@p, :passif, '1201').net).to eq(-55)
-      expect(Compta::RubrikResult.new(@q, :passif, '1201').net).to eq(-55)
+      expect(Compta::RubrikResult.new(@p, :passif, '1292').net).to eq(-33.33)
+      expect(Compta::RubrikResult.new(@p, :passif, '1291').net).to eq(-55)
+      expect(Compta::RubrikResult.new(@q, :passif, '1291').net).to eq(-55)
     end
 
 

@@ -42,16 +42,16 @@
         :FONDS PERMANENTS:
           :Fonds propres non affectés:
             :Réserve initiale: '106 !1061 !1062'
-            :Résultat de l'exercice: '12 !1201 !1202'
+            :Résultat de l'exercice: '12 !1201 !1202 !1291 !1292'
           :Fonds propres ASC:
             :Réserves ASC: '1061'
             :Report à nouveau: '1101 1191'
-            :Résultat de l'exercice: '1201'
+            :Résultat de l'exercice: '1201 1291'
             :Subvention d'investissement: '1301'
           :Fonds propres AEP:
             :Réserves fonctionnement: '1062'
             :Report à nouveau: '1102 1192'
-            :Résultat de l'exercice: '1202'
+            :Résultat de l'exercice: '1202 1292'
             :Subventions d'investissement: '102 13 !1301'
           :Provisions:
             :Provisions pour risques et charges: '15'
@@ -119,7 +119,7 @@
     :title: Compte de résultats Fonctionnement
     :sens: :passif
     :rubriks:
-      :RESULTAT NET:
+      :EXCEDENT (DEFICIT):
         :RESULTAT D'EXPLOITATION:
           :Produits d'exploitation:
             :Subventions: '74 756'
