@@ -11,8 +11,8 @@ describe Utilities::PlanComptableComite do
 
   before(:each) do
     Tenant.set_current_tenant(1)
-    Sector.create(organism_id:1, name:'ASC')
-    Sector.create(organism_id:1, name:'Fonctionnement')
+    @s1 = Sector.create(organism_id:1, name:'ASC')
+    @s2 = Sector.create(organism_id:1, name:'Fonctionnement')
     Period.any_instance.stub(:organism).and_return o
     Account.any_instance.stub(:organism).and_return o
 
@@ -22,6 +22,10 @@ describe Utilities::PlanComptableComite do
     @p.stub(:should_not_have_more_than_two_open_periods).and_return(true)
     @p.stub(:check_nomenclature).and_return true
     @p.save
+    
+    o.stub(:sectors).and_return(@ar = double(Arel))
+    @ar.stub(:where).with('name LIKE ?', 'ASC').and_return [@s1]
+    @ar.stub(:where).with('name LIKE ?', 'Fonctionnement').and_return [@s2]
 
   end
 
