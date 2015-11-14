@@ -43,12 +43,12 @@
           :Fonds propres non affectés:
             :Réserve initiale: '106 !1061 !1062'
             :Résultat de l'exercice: '12 !1201 !1202 !1291 !1292'
-          :Fonds propres ASC:
-            :Réserves ASC: '1061'
+          :Fonds propres AEP:
+            :Réserves AEP: '1061'
             :Report à nouveau: '1101 1191'
             :Résultat de l'exercice: '1201 1291'
             :Subvention d'investissement: '1301'
-          :Fonds propres AEP:
+          :Fonds propres ASC:
             :Réserves fonctionnement: '1062'
             :Report à nouveau: '1102 1192'
             :Résultat de l'exercice: '1202 1292'

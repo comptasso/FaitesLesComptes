@@ -346,9 +346,9 @@ describe Period do
       end
 
       it 'calcul du résultat' do
-        cr = Compta::RubrikResult.new(@p, 'passif', '1201')
+        cr = Compta::RubrikResult.new(@p, 'passif', '1291')
         expect(cr.brut).to eq(-66)
-        cr = Compta::RubrikResult.new(@p, 'passif', '1202')
+        cr = Compta::RubrikResult.new(@p, 'passif', '1292')
         expect(cr.brut).to eq(-33.33)
       end
 
@@ -528,8 +528,8 @@ describe Period do
     it 'détruit les écritures' do
       Writing.delete_all
       @w = create_in_out_writing
-      @p.compta_lines.count.should > 0
-      Writing.count.should > 0
+      @p.compta_lines.count.should >(0)
+      Writing.count.should >(0)
       @p.destroy
       Writing.count.should == 0
       @p.compta_lines(true).count.should == 0
