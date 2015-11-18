@@ -24,7 +24,7 @@
         <%= f.input :siren, my_wrapper_html: {class: "col-lg-3"}, hint:'Utile pour nommer le fichier des écritures comptables' %>
         <%= f.input :postcode, my_wrapper_html: {class: "col-lg-2"} %>
         <%= f.input :status, :label=>'Statut', input_html:{class:'col_lg-offset-2'},
-             :collection=>LIST_STATUS, :as=>:inline_radio_buttons %>
+             :collection=>LIST_STATUS_FOR_FORM, :as=>:inline_radio_buttons %>
       </div>
       <div class="form-actions">
         <%= f.button :submit, class: "btn-primary col-lg-2 col-lg-offset-2", id:'new_admin_organism' %>
