@@ -112,6 +112,6 @@
 # FLCVERSION = '1.14.4RC' # Les banques et caisses sont ordonnées par leur id
 # FLCVERSION = '1.14.5RC' # Refactorisation des bank_extract_lines et démarrage des écritures à 1
 # FLCVERSION = '1.14.6RC' # Correction lines_to_point affichage piece_number et non id
-# FLCVERSION = '1.14.7RC' # Correction bug affichage natures si update d'une in_out_writing échoue
+# FLCVERSION = '1.14.7RC' # Correction bug affichage natures si update d'une in_out_writing échoue et bug plan_comptable_comite
 # FLCVERSION = '1.14.8RC' # edit nature sait afficher le compte associé
 FLCVERSION = '1.14.9RC' # Nouveau plan comptable pour les CE conforme réglement ANC
