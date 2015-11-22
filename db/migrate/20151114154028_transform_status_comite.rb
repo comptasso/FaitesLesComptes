@@ -4,21 +4,13 @@ class TransformStatusComite < ActiveRecord::Migration
   # se transforme en comité 1.
   # Les nouveaux comités ayant ensuite le statut de Comite2
   def up
-    Organism.find_each do |o|
-      if  o.status == 'Comité d\'entreprise'
-        o.update_attribut(:status, 'Comite1')
-      end
-    end
+    Organism.connection.execute("UPDATE organisms SET status = 'Comite1' WHERE status = E'Comité d\\'entreprise'; ")
   end
 
   # Tous les organismes ayant Comite1 comme statut sont ramenés à
   # Comité d'entreprise
   def down
-    Organism.find_each do |o|
-      if  o.status == 'Comite1'
-        o.update_attribut(:status, 'Comite1')
-      end
-    end
-
+    Organism.connection.execute("UPDATE organisms SET status = E'Comité d\\'entreprise' WHERE status = 'Comite1'; ")
   end
+
 end

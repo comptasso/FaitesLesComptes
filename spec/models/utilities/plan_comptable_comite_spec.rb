@@ -7,7 +7,7 @@ require 'utilities/plan_comptable'
 
 describe Utilities::PlanComptableComite do
 
-  let(:o) {double(Organism, sectored?:false)}
+  let(:o) {double(Organism, sectored?:false, status:'Comite1')}
 
   before(:each) do
     Tenant.set_current_tenant(1)
@@ -22,7 +22,7 @@ describe Utilities::PlanComptableComite do
     @p.stub(:should_not_have_more_than_two_open_periods).and_return(true)
     @p.stub(:check_nomenclature).and_return true
     @p.save
-    
+
     o.stub(:sectors).and_return(@ar = double(Arel))
     @ar.stub(:where).with('name LIKE ?', 'ASC').and_return [@s1]
     @ar.stub(:where).with('name LIKE ?', 'Fonctionnement').and_return [@s2]
