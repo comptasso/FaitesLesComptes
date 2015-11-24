@@ -20,4 +20,5 @@ spec/models/pdf_files/test_pdf_files
 spec/models/pdflc/pdf_files
 spec/models/compta/pdf_files
 public/dev-assets
-nbproject/
+nbproject/private/*.*
+nbproject/project.properties
