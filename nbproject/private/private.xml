@@ -3,9 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/jcl/rails_project/faiteslescomptes/FaitesLesComptes/spec/controllers/natures_controller_spec.rb</file>
-            <file>file:/home/jcl/rails_project/faiteslescomptes/FaitesLesComptes/app/controllers/natures_controller.rb</file>
-            <file>file:/home/jcl/rails_project/faiteslescomptes/FaitesLesComptes/app/models/utilities/plan_comptable_comite.rb</file>
+            <file>file:/home/jcl/rails_project/faiteslescomptes/FaitesLesComptes/app/helpers/compta/accounts_helper.rb</file>
+            <file>file:/home/jcl/rails_project/faiteslescomptes/FaitesLesComptes/app/helpers/admin/accounts_helper.rb</file>
         </group>
     </open-files>
 </project-private>
